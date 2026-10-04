@@ -110,6 +110,8 @@ Versiunile exportului și ale schemelor permit migrare explicită. Un fișier de
 
 ## Invariante comune
 
+PBI 005 implementează parserele runtime publice pentru VehicleCommand, VehicleState, Ride, InterventionSegment, DrivingProfile și 16 tipuri de SimulationEvent. [Schema concretă și limitele validării](data-contracts.md) documentează schemaVersion=1, SI, sessionId/worldEpoch pentru date live, payloaduri discriminate exacte, copiile defensive înghețate și testele. ProfileSnapshot bootstrap rămâne separat. Validarea structurală nu activează chei rezervate, nu verifică checksum criptografic și nu substituie registry-ul/controllerul viitor; versiunile necunoscute sunt respinse explicit. Nu sunt implementate servicii de gameplay prin aceste contracte.
+
 Există maximum un vehicul în MANUAL sau LEARNING. Fiecare corp fizic are un entityId stabil; mesh-ul este reprezentarea sa. Taxiurile și civilii au aceeași versiune după tick-ul de activare. Numai LEARNING eligibil produce demonstrații; AUTO/MANUAL și replay-ul nu contribuie la learning. Selecția mută camera și nu preia implicit autoritatea. Joburile unei learningEpoch invalidate nu se aplică peste ținta nouă. Ledger-ele de revenue, reviews, rewards și XP sunt idempotente, cu un singur writer live. Niciun parametru neimplementat nu este raportat ca învățat. Variantele V2 și V3 adaugă contexte fără să schimbe unitățile sau identitatea profilurilor existente.
 
 ## Contracte economice și de progres

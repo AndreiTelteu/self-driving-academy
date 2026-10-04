@@ -1,6 +1,9 @@
 import { createProfileSnapshot } from '../profiles';
 import type { ProfileSnapshot } from '../profiles';
 
+export { parseSimulationEvent } from './events';
+export type { SimulationEvent } from './events';
+
 /** Read model only. Physics and tick progression belong to later PBIs. */
 export interface SimulationSnapshot {
   readonly tick: number;

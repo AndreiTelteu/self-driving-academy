@@ -1,4 +1,12 @@
-/** Minimal bootstrap read model; complete DrivingProfile belongs to PBI 005. */
+export {
+  parseDrivingProfile,
+  parseParameterEvidence,
+  parameterUnits,
+  parameterSources,
+} from './contracts';
+export type { DrivingProfile, ParameterEvidence } from './contracts';
+
+/** Minimal bootstrap read model, separate from the versioned DrivingProfile import contract. */
 export interface ProfileSnapshot {
   readonly profileId: string;
   readonly versionId: string;

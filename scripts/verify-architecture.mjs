@@ -1,6 +1,5 @@
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
-import { registerHooks, stripTypeScriptTypes } from 'node:module';
 import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { createScanner, SyntaxKind } from 'typescript/unstable/ast';
@@ -147,25 +146,7 @@ errors.length = 0;
 console.log('Architecture negative probes: PASS (6 forbidden dependencies rejected)');
 
 // Execute the real public TypeScript entry points without DOM, Babylon, Vite or generated files.
-const hooks = registerHooks({
-  resolve(specifier, context, nextResolve) {
-    if (specifier.startsWith('.') && context.parentURL?.endsWith('.ts')) {
-      const candidate = moduleFile(fileURLToPath(new URL(specifier, context.parentURL)));
-      if (candidate) return { url: pathToFileURL(candidate).href, shortCircuit: true };
-    }
-    return nextResolve(specifier, context);
-  },
-  load(url, context, nextLoad) {
-    if (url.startsWith(pathToFileURL(src).href) && url.endsWith('.ts')) {
-      return {
-        format: 'module',
-        source: stripTypeScriptTypes(readFileSync(fileURLToPath(url), 'utf8')),
-        shortCircuit: true,
-      };
-    }
-    return nextLoad(url, context);
-  },
-});
+const { hooks } = await import('./register-typescript.mjs');
 try {
   const { createApplication } = await import(pathToFileURL(join(src, 'app/index.ts')).href);
   const { createMemorySnapshotStore } = await import(

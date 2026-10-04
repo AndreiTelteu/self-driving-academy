@@ -40,6 +40,10 @@ npm run check
 - [Workflow pentru agenți](PBI/AGENTS.md): To Do → In Progress → Done, cu mutare fizică obligatorie la finalizare.
 - [Catalogul parametrilor](Docs/11-catalog-parametri.md): 80 de parametri planificați; 24 pentru prima versiune.
 
+## Teste și scenarii
+
+`npm test` rulează testele de domeniu TypeScript în Node, iar `npm run test:domain` execută exemplul headless. `npm run check` include testele. Harnessul browser este disponibil în dev la `http://localhost:5173/tests/browser/`: seed 41 și 12 tick-uri capturează 13 stări și un eveniment verificat. [Ghidul harnessului](Docs/test-harness.md) explică runnerul reutilizabil, fixture-ul de test și verificarea separată în browser real.
+
 ## Verificarea boardului
 
 Din rădăcina proiectului, în PowerShell:

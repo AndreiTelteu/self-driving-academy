@@ -1,0 +1,85 @@
+npm warn Unknown env config "msvs-version". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> self-driving-academy@0.1.0 check
+> npm run typecheck && npm run lint && npm run format:check && npm run check:architecture && npm test
+
+npm warn Unknown env config "msvs-version". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> self-driving-academy@0.1.0 typecheck
+> tsc --noEmit && tsc -p tsconfig.tests.json --noEmit
+
+npm warn Unknown env config "msvs-version". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> self-driving-academy@0.1.0 lint
+> eslint . --max-warnings 0
+
+npm warn Unknown env config "msvs-version". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> self-driving-academy@0.1.0 format:check
+> prettier --check "src/**/*.{ts,css}" "tests/**/*.ts" "tests/**/*.html" "scripts/**/*.mjs" "*.{json,js,html}"
+
+Checking formatting...
+All matched files use Prettier code style!
+npm warn Unknown env config "msvs-version". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> self-driving-academy@0.1.0 check:architecture
+> node scripts/verify-architecture.mjs
+
+Architecture imports: PASS (29 TypeScript files)
+Architecture negative probes: PASS (6 forbidden dependencies rejected)
+Renderer injection, readonly snapshots, defensive persistence and lifecycle: PASS
+(node:104800) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+npm warn Unknown env config "msvs-version". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> self-driving-academy@0.1.0 test
+> node --import ./scripts/register-typescript.mjs --test "tests/**/*.test.ts"
+
+(node:89804) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ VehicleCommand: JSON roundtrip, immutable defensive copy (2.4289ms)
+✔ VehicleCommand: rejects all nonfinite numeric leaves (1.8215ms)
+✔ VehicleCommand: rejects unknown shape, extra/missing fields, unsupported versions (0.8194ms)
+✔ VehicleState: JSON roundtrip, immutable defensive copy (0.5933ms)
+✔ VehicleState: rejects all nonfinite numeric leaves (2.3838ms)
+✔ VehicleState: rejects unknown shape, extra/missing fields, unsupported versions (0.5211ms)
+✔ Ride: JSON roundtrip, immutable defensive copy (0.4491ms)
+✔ Ride: rejects all nonfinite numeric leaves (0.4833ms)
+✔ Ride: rejects unknown shape, extra/missing fields, unsupported versions (0.6812ms)
+✔ SimulationEvent: JSON roundtrip, immutable defensive copy (0.5606ms)
+✔ SimulationEvent: rejects all nonfinite numeric leaves (0.5724ms)
+✔ SimulationEvent: rejects unknown shape, extra/missing fields, unsupported versions (0.4158ms)
+✔ InterventionSegment: JSON roundtrip, immutable defensive copy (0.9096ms)
+✔ InterventionSegment: rejects all nonfinite numeric leaves (9.0623ms)
+✔ InterventionSegment: rejects unknown shape, extra/missing fields, unsupported versions (0.9407ms)
+✔ TelemetrySample: JSON roundtrip, immutable defensive copy (0.2925ms)
+✔ TelemetrySample: rejects all nonfinite numeric leaves (4.4707ms)
+✔ TelemetrySample: rejects unknown shape, extra/missing fields, unsupported versions (0.5568ms)
+✔ DrivingProfile: JSON roundtrip, immutable defensive copy (1.5891ms)
+✔ DrivingProfile: rejects all nonfinite numeric leaves (0.5848ms)
+✔ DrivingProfile: rejects unknown shape, extra/missing fields, unsupported versions (0.43ms)
+✔ ParameterEvidence: JSON roundtrip, immutable defensive copy (0.0962ms)
+✔ ParameterEvidence: rejects all nonfinite numeric leaves (0.2265ms)
+✔ ParameterEvidence: rejects unknown shape, extra/missing fields, unsupported versions (0.3087ms)
+✔ unknown data never executes getters or coercion; inherited fields/symbols/sparse arrays rejected (0.505ms)
+✔ vehicle normalized controls, tick identity, quaternion and enums (0.3939ms)
+✔ ride terminal metadata and assignment chronology (0.3941ms)
+✔ all event discriminants roundtrip with their specific validated payload (2.6492ms)
+✔ event payload discrimination, entity references and reset/activation chronology (0.5512ms)
+✔ segments reject mode eligibility, mismatched world/vehicle/source, unordered ticks and partial closure (1.2698ms)
+✔ profiles preserve unknown observations and reserved data without fabricated evidence (0.8995ms)
+✔ current design catalog can be carried structurally without implementing its parameter registry (2.2904ms)
+(node:19028) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ headless: advances 12 ticks and captures states/events without renderer (1.7625ms)
+✔ zero ticks captures initial state and validates seed/tick boundaries (0.9214ms)
+✔ capture owns copies even when an adapter reuses mutable state and events (0.2759ms)
+✔ scenario oracle rejects corrupted state and event evidence (1.3246ms)
+ℹ tests 36
+ℹ suites 0
+ℹ pass 36
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 227.5585

@@ -30,7 +30,7 @@ export default [
     languageOptions: { globals: globals.node },
   },
   {
-    files: ['src/**/*.ts'],
+    files: ['src/**/*.ts', 'tests/**/*.ts'],
     languageOptions: {
       parser: babelParser,
       globals: globals.browser,
