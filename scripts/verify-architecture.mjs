@@ -21,6 +21,7 @@ const domain = new Set([
   'progression',
   'sessions',
   'settings',
+  'workers',
   'challenges',
   'destructibles',
 ]);

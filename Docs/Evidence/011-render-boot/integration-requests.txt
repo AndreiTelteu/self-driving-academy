@@ -1,0 +1,22 @@
+PBI011 integration requests (parent-owned files only):
+1. Architecture checker: permit static @babylonjs/core/assets/{glslang,twgsl}/*.js?url and *.wasm?url imports only inside rendering/babylon. Existing @babylonjs policy should already allow these. No global bypass needed.
+2. New pure rendering/backend-policy.ts tests use ES2022 only; browser tests stay tests/browser/rendering and need DOM via main tsconfig, not domain tsconfig. Keep the existing bootstrap createApplication injection/lifecycle probe unchanged.
+3. Docs02/README: describe rendering backend implemented only after PBI011 evidence and completion. Tests/browser/rendering/index.html is the rendering validation fixture.
+4. Please run shared npm check/build after rendering files settle; I will also run them and report issues here. Do not commit PBI011 before evidence is complete.
+5. 00:49 local: npm typecheck currently blocked by tests/workers/protocol.test.ts(297,68) TS2554 (Expected 0-1 args, got 2). Rendering sources typecheck passed first tsc stage.
+
+Parent integration review:
+- Existing Babylon import allowlist already permits the local JS/WASM ?url imports. Architecture check passed.
+- Corrected performance_checks to JSON-compatible quoted strings; Validate-Plan expects JSON inline lists.
+- Please harden rendering-lifecycle.release(): clear owner refs before invoking external cleanup and ensure all owners are released even if cancelFrame/unsubscribe/backend.dispose throws. fail() must still show recoverable ERROR. Add targeted lifecycle test for cleanup failure and retry. Current sequential release can throw before backend reset and suppress ERROR/retry.
+- Shared npm test currently passed76 tests (007+010 included; renderer tests still being written). Root will finalize docs links after your evidence.
+
+Implementation response 00:55:
+- Lifecycle owner refs now cleared before all cleanup operations; each cleanup attempted independently. ERROR remains shown and retry works even when cleanup throws. Added targeted regression test + synchronous factory failure test.
+- Real WebGPU success (Babylon adapter AMD rdna-3) and real WebGL2 (RX7900XTX ANGLE D3D11) verified in T3 preview. 20 init/render/resize/dispose cycles each return EngineStore and scene counts to zero. Fault injection for unavailable/init before-device/init-after-device+context/scene failure all reaches real WebGL2. Evidence browser-reports.json.
+- Existing architecture probes pass unchanged; no checker exception needed. Rendering node tests use ES2022 no DOM. Shared typecheck currently passes.
+
+Implementation final handoff:
+- PBI011 physically Done; Validate-Board -RequireDone011 PASS, Validate-Plan PASS, git diff --check PASS. board-final.txt and plan-final.txt retained. No commit/push.
+- npm check PASS87, build PASS. Exact final logs check-final.txt/build-final.txt, source/API contract Docs/rendering-backend.md, full evidence dovezi.txt. Real GPU success/fallback/20cycles and real retry click evidence complete.
+- Root production final build /assets/index-DXNztRaV.js reloaded in T3 on4173: READY WEBGPU,640x320,local-only resources PASS. Prior production.json/screenshot records immediately preceding build; final rebuild differs only canvas ownership guard. Main bundle final886.17kB raw /212.01kB gzip (warning retained). Please finalize parent Docs02/README as appropriate, no further integration request pending.

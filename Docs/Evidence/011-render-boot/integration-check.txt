@@ -1,0 +1,153 @@
+npm warn Unknown env config "msvs-version". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> self-driving-academy@0.1.0 check
+> npm run typecheck && npm run lint && npm run format:check && npm run check:architecture && npm test
+
+npm warn Unknown env config "msvs-version". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> self-driving-academy@0.1.0 typecheck
+> tsc --noEmit && tsc -p tsconfig.tests.json --noEmit
+
+npm warn Unknown env config "msvs-version". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> self-driving-academy@0.1.0 lint
+> eslint . --max-warnings 0
+
+npm warn Unknown env config "msvs-version". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> self-driving-academy@0.1.0 format:check
+> prettier --check "src/**/*.{ts,css}" "tests/**/*.ts" "tests/**/*.html" "scripts/**/*.mjs" "*.{json,js,html}"
+
+Checking formatting...
+All matched files use Prettier code style!
+npm warn Unknown env config "msvs-version". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> self-driving-academy@0.1.0 check:architecture
+> node scripts/verify-architecture.mjs
+
+Architecture imports: PASS (46 TypeScript files)
+Architecture negative probes: PASS (6 forbidden dependencies rejected)
+Renderer injection, readonly snapshots, defensive persistence and lifecycle: PASS
+(node:88524) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+npm warn Unknown env config "msvs-version". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> self-driving-academy@0.1.0 test
+> node --import ./scripts/register-typescript.mjs --test "tests/**/*.test.ts"
+
+(node:67560) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ VehicleCommand: JSON roundtrip, immutable defensive copy (3.8975ms)
+✔ VehicleCommand: rejects all nonfinite numeric leaves (1.6873ms)
+✔ VehicleCommand: rejects unknown shape, extra/missing fields, unsupported versions (0.8973ms)
+✔ VehicleState: JSON roundtrip, immutable defensive copy (0.4653ms)
+✔ VehicleState: rejects all nonfinite numeric leaves (4.666ms)
+✔ VehicleState: rejects unknown shape, extra/missing fields, unsupported versions (1.1006ms)
+✔ Ride: JSON roundtrip, immutable defensive copy (0.994ms)
+✔ Ride: rejects all nonfinite numeric leaves (1.4179ms)
+✔ Ride: rejects unknown shape, extra/missing fields, unsupported versions (0.9386ms)
+✔ SimulationEvent: JSON roundtrip, immutable defensive copy (1.207ms)
+✔ SimulationEvent: rejects all nonfinite numeric leaves (1.4162ms)
+✔ SimulationEvent: rejects unknown shape, extra/missing fields, unsupported versions (0.5038ms)
+✔ InterventionSegment: JSON roundtrip, immutable defensive copy (1.1297ms)
+✔ InterventionSegment: rejects all nonfinite numeric leaves (12.5032ms)
+✔ InterventionSegment: rejects unknown shape, extra/missing fields, unsupported versions (1.1631ms)
+✔ TelemetrySample: JSON roundtrip, immutable defensive copy (0.3859ms)
+✔ TelemetrySample: rejects all nonfinite numeric leaves (4.9783ms)
+✔ TelemetrySample: rejects unknown shape, extra/missing fields, unsupported versions (0.2773ms)
+✔ DrivingProfile: JSON roundtrip, immutable defensive copy (0.6928ms)
+✔ DrivingProfile: rejects all nonfinite numeric leaves (0.9378ms)
+✔ DrivingProfile: rejects unknown shape, extra/missing fields, unsupported versions (0.8372ms)
+✔ ParameterEvidence: JSON roundtrip, immutable defensive copy (0.1434ms)
+✔ ParameterEvidence: rejects all nonfinite numeric leaves (0.3721ms)
+✔ ParameterEvidence: rejects unknown shape, extra/missing fields, unsupported versions (0.4535ms)
+✔ unknown data never executes getters or coercion; inherited fields/symbols/sparse arrays rejected (0.6528ms)
+✔ vehicle normalized controls, tick identity, quaternion and enums (0.701ms)
+✔ ride terminal metadata and assignment chronology (0.5958ms)
+✔ all event discriminants roundtrip with their specific validated payload (1.9382ms)
+✔ event payload discrimination, entity references and reset/activation chronology (0.6509ms)
+✔ segments reject mode eligibility, mismatched world/vehicle/source, unordered ticks and partial closure (2.0261ms)
+✔ profiles preserve unknown observations and reserved data without fabricated evidence (0.6631ms)
+✔ current design catalog can be carried structurally without implementing its parameter registry (2.1459ms)
+(node:96952) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ duplicates and retries consume each identity once even after listeners fail (3.5611ms)
+✔ stable declared order, type filtering and publication order within tick (1.1751ms)
+✔ unsubscribe is idempotent and immediate; subscribe during dispatch starts next event (0.5535ms)
+✔ rejects invalid, stale, foreign and late events without consuming capacity (0.5952ms)
+✔ dedup is fail-closed at capacity; epoch invalidation rejects retired worlds (1.0147ms)
+✔ reentrant publication and lifecycle changes fail before nested effects (0.4232ms)
+✔ validated copies are immutable and owned; resources are capped and disposed (0.6962ms)
+(node:32644) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ headless: advances 12 ticks and captures states/events without renderer (2.6176ms)
+✔ zero ticks captures initial state and validates seed/tick boundaries (0.6433ms)
+✔ capture owns copies even when an adapter reuses mutable state and events (0.2399ms)
+✔ scenario oracle rejects corrupted state and event evidence (1.4842ms)
+(node:47080) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ versioned identity and RNG golden vectors fix encoding and algorithm (4.0821ms)
+✔ IDs preserve boundaries, namespace, kind and exact Unicode code units (0.4288ms)
+✔ inserted events and reversed evaluation preserve addressed opportunity samples (1.0222ms)
+✔ seed scopes and sample purpose/index distinguish fixed fixtures (0.3132ms)
+✔ JSON restart reproduces samples from version, seed, purpose and index only (0.2668ms)
+✔ unit samples are exact uint32 fractions in the half-open unit interval (16.7937ms)
+✔ unknown invalid inputs fail without coercion or accessor execution (2.1468ms)
+(node:69104) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ 80 unique keys, 24 M targets; planned stages grant no capabilities (3.6285ms)
+✔ every key validates default, inclusive bounds, canonical unit and finite range (7.4355ms)
+✔ publication gate rejects LEARNED and manual tuning for all unsupported keys (18.8412ms)
+✔ publication gate rejects unknown keys, wrong units and invalid ranges for all provenance (0.7363ms)
+✔ publication retains structural evidence and provenance checks and roundtrip (0.4283ms)
+✔ malformed catalog rejects schema, shape, duplicate/unknown keys and invalid definitions (10.8873ms)
+✔ registry and parsed catalog are defensive immutable data (1.1469ms)
+✔ generated runtime catalog is synchronized with canonical JSON (298.1607ms)
+(node:102380) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ WebGPU preferred, scene owned, disposal exactly once in dependency order (2.3365ms)
+✔ unavailable or throwing support check uses only WebGL2 (0.379ms)
+✔ WebGL2 preference skips WebGPU support completely (0.2858ms)
+✔ init failure cleans engine before fallback on a distinct canvas (0.1943ms)
+✔ scene failure reconstructs a new scene after disposing all tentative resources (1.8289ms)
+✔ both fail with recoverable aggregate; cleanup exceptions do not stop engine/canvas release (0.7192ms)
+(node:105448) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ error then retry, one frame/resize subscription, idempotent disposal (1.3084ms)
+✔ concurrent retry is coalesced; dispose during pending initialization releases late backend (0.2957ms)
+✔ render failure stops loop, cleans resources and exposes retry (0.4606ms)
+✔ cleanup failures clear every owner and still permit retry (0.7396ms)
+✔ synchronous factory failure does not poison the pending retry promise (0.2684ms)
+(node:7744) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ defaults and valid alternate settings round-trip as deeply frozen owned data (2.8873ms)
+✔ all control sliders enforce finite UI domains, FOV degrees and version bounds (1.4472ms)
+✔ binding conflicts, unknown actions and unsupported keys are rejected (0.6394ms)
+✔ units, quality and launch configuration reject invalid or learned fields (0.8745ms)
+✔ data readers reject accessors and exotic objects without executing getters (0.6212ms)
+✔ replacement is atomic, owns input copies and enforces player/control version (1.7432ms)
+✔ reset restores settings independently and cannot touch profiles or progression (0.7246ms)
+✔ revision exhaustion rejects reset without changing the snapshot (0.3295ms)
+✔ quality and launch reset preserve control identity and stay independent of population (0.3756ms)
+(node:51416) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ strict envelope validates identities, discriminants, bytes and controls (1.6312ms)
+✔ late, duplicate, out-of-order and mismatched packets cannot publish (1.3045ms)
+✔ cancel sends one control, late result remains cancelled; worker errors release capacity (0.6436ms)
+✔ queue/history/bytes/age stay bounded and do not silently admit protected work (4.9048ms)
+✔ runtime throttles progress at 5Hz and disposes task resources (10.0159ms)
+(node:51416) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ real worker yields to cancellation, runs next job, transfers buffers and handles task failure (72.8872ms)
+ℹ {"cancelMs":0.573599999999999,"trackedJobs":0,"trackedBytes":0}
+✔ cleanup and progress observer exceptions cannot block later jobs (4.8822ms)
+✔ runtime watermark rejects old replay after history eviction; byte cap rejects excessive queue (5.4179ms)
+✔ parser rejects nonenumerable identities and fields without invoking getters (0.2355ms)
+ℹ tests 87
+ℹ suites 0
+ℹ pass 87
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 678.5334

@@ -1,4 +1,5 @@
 import type { SimulationSnapshot } from '../simulation';
+export type { BackendPreference, RendererKind } from './backend-policy';
 
 export interface Renderer {
   present(snapshot: SimulationSnapshot): void;

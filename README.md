@@ -2,7 +2,7 @@
 
 Joc 3D pentru browser în care jucătorul conduce manual, iar taxiurile autonome și civilii îi adoptă stilul, inclusiv greșelile. Învățarea se face doar în LEARNING; MANUAL permite condus fără învățare. KPI-urile flotei, trei misiuni zilnice și XP urmăresc consecințele și progresul. Engine-ul ales este Babylon.js.
 
-Aplicația browser are bootstrap TypeScript/Vite și pachete Babylon.js ES modules. Pagina confirmă încărcarea modulului Babylon; gameplay-ul și inițializarea backendului de randare sunt planificate în PBI-urile următoare.
+Aplicația browser are bootstrap TypeScript/Vite și randare Babylon.js: preferă WebGPU, revine la WebGL2 verificat și oferă reîncercare după eșecul inițializării. Scena de bootstrap conține o cameră fixă și un cadru de culoare; gameplay-ul rămâne în PBI-urile următoare.
 
 ## Dezvoltare locală
 
@@ -49,6 +49,10 @@ Fundația de [identificatori și random determinist](Docs/identity-random.md) p�
 [Setările runtime](Docs/runtime-settings.md) separă preferințele de input, afișare, calitate și scenariu de profilurile învățate și progres; resetul afectează numai setările.
 
 [Registry-ul parametrilor](Docs/parameter-registry.md) validează cele 80 de definiții și blochează publicarea drept învățate a cheilor nesuportate. După modificarea catalogului canonic, rulează `npm run generate:parameter-catalog`; `npm run check:parameter-catalog` verifică sincronizarea, inclusă și în `npm test`.
+
+[Event bus](Docs/event-bus.md) livrează evenimente validate și deduplicate în ordinea listenerelor. [Protocolul workers](Docs/worker-protocol.md) separă execuția joburilor de publicarea rezultatelor în lumea activă.
+
+[Backendul Babylon](Docs/rendering-backend.md) documentează inițializarea, fallbackul și eliberarea resurselor. Fixture-ul `/tests/browser/rendering/` verifică backendurile reale, eșecurile injectate și retry-ul; dovezile disting aceste probe de benchmarkurile viitoare de gameplay/FPS.
 
 ## Verificarea boardului
 

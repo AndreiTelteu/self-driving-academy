@@ -1,7 +1,8 @@
 import { Engine } from '@babylonjs/core/Engines/engine';
 import type { BootstrapView, Renderer } from '../index';
+export { createRenderingBackend, type RenderingBackend } from './backend';
 
-/** Metadata adapter; scene/backend initialization belongs to PBI 011. */
+/** Preserved metadata-only fixture for bootstrap regression probes. */
 export function createBabylonBootstrapRenderer(view: BootstrapView): Renderer {
   return {
     present: () => {

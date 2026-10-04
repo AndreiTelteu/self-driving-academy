@@ -1,6 +1,6 @@
 # Layoutul modular implementat în 002
 
-Compoziția browser pornește în `src/main.ts`: construiește view-ul DOM, adaptorul Babylon și store-ul volatil, apoi le injectează în `createApplication` din `src/app/index.ts`. Aplicația depinde de porturile publice `Renderer` și `SnapshotStore`; exemplul din `scripts/verify-architecture.mjs` injectează un renderer de înregistrare și rulează fără DOM sau Babylon.
+Compoziția browser pornește în `src/main.ts`: construiește view-ul DOM și injectează fabrica asincronă Babylon în `createRenderingLifecycle` din `src/app/index.ts`. Fundația inițială `createApplication`, cu porturile publice `Renderer` și `SnapshotStore`, rămâne disponibilă pentru proba din `scripts/verify-architecture.mjs`; aceasta injectează un renderer de înregistrare și rulează fără DOM sau Babylon.
 
 ## Module și entry points
 
@@ -10,13 +10,15 @@ Importurile dintre module trec numai prin `<modul>/index.ts`; un `index.ts` inte
 
 Lista pachetelor externe permise este politica bootstrapului 002. La introducerea fizicii, validării sau altor biblioteci, PBI-ul dedicat extinde explicit politica pentru adaptoarele potrivite; interdicția actuală nu reprezintă o limitare permanentă a produsului.
 
+`workers` extinde lista modulelor pure cu protocolul, clientul și runtime-ul cooperativ. Transportul este un port injectat; implementarea nu importă API-uri Node, Babylon sau starea lumii. Adaptorul structural `messageTransport` poate primi un Worker/MessagePort din composition root. Modulul are aceleași restricții de import ca domeniul; schedulerul global rămâne în PBI 221.
+
 ## Read models și proprietatea datelor
 
 `SimulationSnapshot` expune un tick și un `ProfileSnapshot` minimal, cu identificator, versiune și parametri numerici readonly. Sunt modele pentru bootstrap; nu înlocuiesc `DrivingProfile`, schema savefile-ului sau contractele complete din 005. Simularea oferă exclusiv `getSnapshot`, fără mutator de profil. Copia parametrilor și snapshoturile sunt înghețate și la runtime, inclusiv când un consumator JavaScript încearcă să scrie în ele.
 
 `SnapshotStore.save` primește doar read modelul public. Adaptorul în memorie face propria copie defensivă a profilului și îngheață rezultatul înainte de expunerea prin `load`; modificarea obiectului inițial nu schimbă datele salvate. Store-ul este volatil, fără IndexedDB, migrare sau restaurare a unei simulări. Acestea aparțin PBI-urilor de persistență.
 
-Rendererul bootstrap Babylon afișează metadata versiunii, păstrând ecranul din 001. Nu creează scenă, engine GPU sau buclă de randare; inițializarea backendului aparține 011. `start` și `dispose` sunt idempotente; după disposal, aplicația respinge pornirea și salvarea. HMR eliberează view-ul înainte de recreare.
+Rendererul metadata din 002 este păstrat pentru probele inițiale. Aplicația browser folosește [backendul din 011](rendering-backend.md), cu engine/scenă reale, frame-uri și resize, fallback și retry. Lifecycle-ul asincron reunește pornirile concurente și eliberează resursele la HMR/disposal. În API-ul inițial `createApplication`, `start` și `dispose` rămân idempotente; după disposal, pornirea și salvarea sunt respinse.
 
 ## Verificare
 

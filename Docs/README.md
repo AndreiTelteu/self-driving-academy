@@ -44,7 +44,7 @@ Versiune 0.5 · 4 octombrie 2026. Aceste fișiere Markdown sunt planul curent al
 
 ## Stare și istoric
 
-Bootstrapul aplicației browser TypeScript/Vite/Babylon.js este implementat; [README-ul proiectului](../README.md) documentează versiunile și comenzile locale. Gameplay-ul, backendul de randare și restul sistemelor sunt încă planificate. Valorile de calibrare, hardware-ul și performanța sunt ținte de verificat. Task-urile nu sunt executate prin simpla creare a planului.
+Bootstrapul aplicației browser TypeScript/Vite/Babylon.js și [backendul WebGPU/WebGL2](rendering-backend.md) sunt implementate; [README-ul proiectului](../README.md) documentează versiunile și comenzile locale. Fundația include contracte validate, identitate/random determinist, setări, registry-ul parametrilor, [event bus](event-bus.md) și [protocol workers](worker-protocol.md). Gameplay-ul și sistemele următoare rămân planificate. Valorile de calibrare și bugetele de performanță ale jocului sunt ținte de verificat. Task-urile nu sunt executate prin simpla creare a planului.
 
 [Planul inițial v0.1](Archive/GAME_DESIGN-v0.1.md) este păstrat pentru istoric. Page-ul creat anterior este tot o referință v0.1; nu este sincronizat automat cu documentele Markdown. Modificările viitoare de plan se fac în aceste module și în PBI-urile aferente.
 

@@ -3,6 +3,16 @@ import type { ProfileSnapshot } from '../profiles';
 
 export { parseSimulationEvent } from './events';
 export type { SimulationEvent } from './events';
+export { createEventBus } from './event-bus';
+export type {
+  EventBus,
+  EventBusOptions,
+  EventBusStats,
+  EventListener,
+  ListenerOptions,
+  ListenerFailure,
+  PublishResult,
+} from './event-bus';
 
 /** Read model only. Physics and tick progression belong to later PBIs. */
 export interface SimulationSnapshot {

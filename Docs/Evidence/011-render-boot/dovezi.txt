@@ -1,0 +1,37 @@
+PBI011-render_boot — Codex gpt-6.1-sol, medium, implementation agent
+Workspace F:\Sites\self-driving-academy; base 7260b3e plus uncommitted PBI011 and parallel parent/007/010 work. No commit/push performed.
+
+Scope and implementation
+- Read root AGENTS.md, PBI/AGENTS.md, PBI011, Docs README/02/03/17/25, settings and existing bootstrap. Dependencies 001/009 physically Done before start.
+- Physically moved To Do -> In Progress at real 2026-10-05T00:44:54.9548776+03:00; board validator passed. Added performance_checks loading,memory before implementation (parent normalized quoted JSON-compatible list).
+- Async createRenderingBackend(canvas, preference), WebGPU preferred / actual WebGL2 fallback; never accepts WebGL1. Every attempt clones/replaces canvas, owns engine and scene before async work, rebuilds scene after fallback. render wraps Babylon beginFrame/endFrame. resize/dispose guarded, disposal idempotent. Partial WebGPU init cleanup covers Babylon9.29 helper assumptions; actual WebGL context released.
+- Minimal accessible LOADING/READY/ERROR UI, native retry button, serial coalesced retry, pending-init disposal, frame/resize release including cleanup exceptions. Default backend comes from existing validated runtime settings. No gameplay, assets registry, vehicle camera or other PBI implementation.
+- Preserved existing createApplication / metadata renderer probes; architecture checker injection/immutability/disposal regression passes without browser/GPU.
+
+Executed verification
+- npm run check: PASS exit0. Full exact output check-final.txt: typecheck (main DOM + Node ES2022-only), lint, format, architecture positive/6 negative probes and bootstrap lifecycle, 87 tests passed, 0 failed. Includes 11 rendering policy/lifecycle tests; failure/success domain tests are simulated and do not substitute GPU tests.
+- npm run build: PASS exit0; build-final.txt. Fixed Babylon9.29 ESM and locally emitted glslang/twgsl JS/WASM. Vite reports >500kB chunk warning (886.17kB uncompressed main, 212.01kB gzip); no warning suppression. npm environment msvs-version and Node stripTypeScriptTypes experimental warnings are preexisting/environmental.
+- git diff --check: PASS exit0. Validate-Board.ps1 and Validate-Plan.ps1: PASS before final transition. Final RequireDone011 result is saved separately in board-final.txt after physical move.
+
+Browser (all through T3 preview tools, tab_2)
+- preview_status initially available=false, preview_open initialized tab. Used preview_navigate/evaluate/snapshot/wait_for/click. Existing servers 5173 and4173 reused, never stopped.
+- Real success: WebGPU, Babylon getInfo vendor amd / renderer rdna-3; Chromium152/Electron44 Windows. Real WebGL2 context VERSION "WebGL 2.0 (OpenGL ES 3.0 Chromium)", ANGLE AMD Radeon RX7900XTX D3D11. Browser-reported GPU only; CPU/RAM/driver/power not independently identified.
+- browser-reports.json: 20 init/render/resize/dispose cycles WebGPU and20 WebGL2, one engine/scene/camera during each attempt, zero engines/scenes after each disposal, canvas0x0. render/resize after double-dispose no-op. Bootstrap scene has0 meshes/textures.
+- Faults simulated in fixture only: WebGPU unavailable; init failure before device; init failure after real device/context initialized; scene initialization failure after real WebGPU init. ALL recover via real WebGL2 and return engines/scenes to0. The initialized-failed path proves a WebGPU-bound canvas is not reused for fallback.
+- Both unavailable simulated via support and context fault -> recoverable ERROR, zero leaked engines. Actual T3 click on Reîncearcă -> LOADING/ERROR/LOADING/READY, real WebGL2. retry.json confirms one canvas, one resize listener while ready; disposal leaves0 listeners and0 canvases. error.png captures error state.
+- Root dev and production show Bootstrap pregătit/Babylon/WEBGPU. production.json verifies local-only requested assets and640x320 canvas at1280x800,DPR1; production.png captures root. Scene is intentionally a clear frame, no gameplay proof claimed.
+- Initial Vite dependency optimization produced transient504 Outdated Optimize Dep on first navigation after new imports. A corrected reload after optimizer completion resolved it; final probes/build passed. No server restarts or alternate automation used.
+
+Performance scope loading,memory (provisional before203)
+- Baseline immutable baseline.json: same root dev fixture, navigation438.8ms / DCL438.3ms, approximate usedJSHeap8432055 bytes,0 engines/scenes before implementation. Final same root dev final-bootstrap.json: navigation46.7ms / DCL45.8ms, approximate heap24397450 bytes, WebGPU640x320. Cache/optimizer state differs; timing improvement is NOT asserted as a performance gain. Heap difference15965395 bytes (~15.23MiB) is explicitly the new rendering/module footprint; heap snapshot is approximate, not precise GPU memory or a comparable steady-state regression sample.
+- Same original bootstrap injection/lifecycle probe preserved and executed by architecture checker, PASS. New GPU ownership cost reported separately: at most1 successful engine/scene/camera, zero owned meshes/textures; transient owners fully released before fallback. 20 cycles each backend return tracked owners to baseline0. No total-memory leak claim from owner counters alone.
+- New warm init/render/resize cost,20 samples each in browser-reports.json: WebGPU p50 40.5ms / p95 57.0ms / min21.6,max57.7; WebGL2 p50 15.2ms / p95 19.6ms / min13.6,max71.6. Empty-scene fixture, no network shaping, no gameplay steady-state or GPU timer/FPS claims.
+- Production separate smoke: navigation447.5ms, DCL447.2ms; approximate heap26155412 bytes. Requested critical JS/CSS ~234kB transfer including HTTP overhead; local JS/WASM compilers emitted2.737MB raw but lazy and not requested by empty scene. Proposed8MiB critical-transfer ceiling is not exceeded by this bootstrap smoke; full-game12s/cold network budget not tested or claimed.
+- Exact GPU memory unavailable. Hardware manifest/budgets203, gameplay frame benchmarks and shader/asset budgets remain future PBIs. No baseline update to accept regression, invented FPS or inferred laptop budget.
+
+Files
+src/rendering/backend-policy.ts, src/rendering/index.ts, src/rendering/babylon/{backend,index}.ts; src/app/{index,rendering-lifecycle}.ts; src/main.ts; src/ui/{index,rendering-view}.ts; src/style.css; tests/rendering/*.test.ts; tests/browser/rendering/{index.html,main.ts}; Docs/rendering-backend.md; Docs03 implemented-contract paragraph; PBI011 and this evidence directory. index.html unchanged.
+Parent-owned package/config/checker/Docs02/README not edited by this agent; requests/review/responses in integration-requests.txt. Parent independently integrated documentation/checker for parallel work.
+
+Limitations
+No gameplay, moving scene content, device-loss session recovery, local export service/UI, preset budgets, fixed hardware benchmark, exact GPU memory or FPS. Startup failures and retries are implemented and tested; later systems are not declared complete. Partial Babylon cleanup must be rechecked when upgrading9.29.

@@ -20,6 +20,8 @@ WebGPUEngine folosește initAsync; documentația proiectului arată și selecți
 
 Contractul aplicației este createRenderingBackend(canvas, preference) → backend cu rendererKind, scene, render, resize și dispose. Acesta este un contract propriu. Nu presupunem că un obiect de scenă cu resurse create pentru WebGPU poate fi reutilizat direct pe WebGL. La schimbarea backendului reconstruim reprezentarea din snapshotul simulării.
 
+PBI011 implementează [bootstrapul asincron și lifecycle-ul](rendering-backend.md): WebGPU preferat, context WebGL2 și versiune efectivă verificate, cleanup la inițializare/scene failed, LOADING/ERROR și retry. Backendul expune suplimentar `canvas`, deoarece fiecare tentativă înlocuiește canvasul pentru a evita contextul incompatibil. Scena bootstrap are numai cameră fixă și clear; reprezentările din snapshot, camerele de vehicul, registry-ul și recuperarea unei sesiuni după device loss aparțin PBI-urilor ulterioare. Compilatoarele provin din pachetul local Babylon 9.29.0.
+
 ## Scene și obiecte
 
 O scenă Babylon reprezintă lumea vizuală. Fiecare vehicul are un nod rădăcină legat de entityId, mesh pentru caroserie, reprezentări ale roților, lumini și efecte. Starea fizică alimentează transformările interpolate; animația roților citește starea vehiculului. Constructorul vizual nu creează o a doua simulare de trafic.

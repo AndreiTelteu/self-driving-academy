@@ -1,6 +1,7 @@
 import { createBootstrapSimulation } from '../simulation';
 import type { SnapshotStore } from '../persistence';
 import type { Renderer } from '../rendering';
+export { createRenderingLifecycle, type RenderingState } from './rendering-lifecycle';
 
 export interface ApplicationServices {
   readonly renderer: Renderer;

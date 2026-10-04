@@ -1,4 +1,5 @@
 import type { BootstrapView } from '../rendering';
+export { createRenderingView } from './rendering-view';
 
 export function createBootstrapView(root: HTMLDivElement): BootstrapView {
   const title = document.createElement('h1');

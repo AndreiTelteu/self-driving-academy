@@ -1,0 +1,15 @@
+PBI010 — dovezi reale
+Revizie: base commit 7260b3e40ca63ad037220d0e570d3c6613bfecad + working tree; SHA256 surse în source-manifest.json.
+Baseline capturat înainte de implementare: clone-4096x1000-v1, 5 repetări în baseline.json; final aceeași probă în final.json.
+Node v24.21.0; OS win32; CPU AMD Ryzen 9 7950X3D 16-Core Processor; RAM 50337325056 bytes observată.
+Backend CPU Node/worker_threads; GPU nefolosit; powerState neobservat; fără afirmație FPS/browser/gate203.
+Mediană clone baseline 5.5151 ms; final 5.0396 ms; variație -8.62%. Nici o regresie confirmată în 3/5 repetări.
+Cost NOU separat, cinci thread-uri: startup 58.937–65.379 ms; max felie 2.596 ms ≤10 ms; cancel max 4.207 ms ≤100 ms; nextJob max 0.942 ms.
+100 joburi seriale 15.147–22.899 ms; 3 mesaje progres în 450 ms (inițial, ≥200ms, ≥400ms): plafon cadență5Hz.
+Memorie: heap worker observat 11510960–14207240 bytes, RSS proces 105652224–106688512 bytes; nu sunt măsurare GPU ori dovadă de soak/retention exactă.
+Capacități explicite: 8joburi inclusiv activ,8MiB payload pending,30s lease,64identități diagnostic,watermark replayO(1). După fiecare probă jobs0/bytes0/history64. Testele resping bytes overflow,replay după100rezultate și detached/resizable.
+Verificări: tests.txt 9/9PASS incl thread real; typecheck și lint PASS; format.txt PASS pentru fișiere010; build.txt PASS (avertisment Vite chunk>500kB bootstrap/rendering); check:architecture PASS; plan.txt Validtrue.
+check.txt: npm check global exit1 la format:check pe cinci fișiere011 încă în lucru. Ownerul root rulează verificarea integrată după finalizarea011; nu pretindem că această execuție a trecut.
+Comenzi: node --import ./scripts/register-typescript.mjs --test tests/workers/protocol.test.ts; npm run typecheck; npm run lint; npm run build; npm run check:architecture; npx prettier --check src/workers tests/workers/protocol.test.ts tests/browser/workers/transport-types.ts scripts/benchmark-workers.mjs; ./PBI/Validate-Plan.ps1.
+Performanță: node --import ./scripts/register-typescript.mjs scripts/benchmark-workers.mjs Docs/Evidence/010-workers/final.json --new.
+Limitări: deadline cooperativ nu preempție JS; trebuie algoritmi care respectă deadline; PBI221 governor și integrarea learning/experimente rămân viitoare. Nu are writer pentru world/profile. Adapter Browser Worker este verificat static în transport-types.ts, iar anularea/detachment sunt demonstrate în worker_threads real; nu este benchmark WebWorker browser.

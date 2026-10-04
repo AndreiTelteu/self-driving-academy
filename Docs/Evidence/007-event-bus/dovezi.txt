@@ -1,0 +1,35 @@
+PBI 007 — transport local idempotent, fără gameplay sau ledger de rewards fictiv.
+Base commit: 7260b3e40ca63ad037220d0e570d3c6613bfecad; implementare în working tree.
+Hashuri SHA256 ale codului/testului și timpul real: performance-summary.txt.
+
+Implementare:
+- API public createEventBus, subscribe/unsubscribe, publish, advanceTick, advanceWorldEpoch, getStats, dispose.
+- Validare unknown prin schema SimulationEvent existentă; copii înghețate, sessionId/worldEpoch strict.
+- Ordine sincronă: apeluri publish, apoi order crescător/ordinea înregistrării.
+- Dedup per epoch păstrează identitatea înainte de listeners. Duplicate/retry nu reexecută niciun listener.
+- Conflicte de identitate, reentrancy, tick vechi, lumi străine și capacități depășite sunt respinse.
+- Listener failures sunt colectate, restul listeners continuă. At-most-once, fără rollback/tranzacții externe.
+- Ledger plafonat fail-closed; nicio evictare. Epoch crește explicit, vechea lume rămâne invalidă.
+
+Verificări:
+- event-tests.txt: 7/7 teste bus PASS, Node v24.21.0 cu loader TypeScript real.
+- lint.txt: ESLint asupra celor 4 fișiere cod/test/script deținute PASS (exit 0).
+- format.txt: Prettier asupra acelorași 4 fișiere PASS (exit 0).
+- architecture.txt: verificarea arhitecturii și cele 6 probe negative PASS.
+- build.txt: npm run build (ambele typechecks + Vite build) PASS.
+- check.txt: primul check global a trecut typecheck/lint, apoi a găsit formatare încă în lucru în rendering/backend-policy.ts și rendering/babylon/backend.ts, deținute de 011.
+- tests.txt: prima probă globală 67 PASS/1 fail în testul 010 workers/protocol.test.ts, parameter property incompatibilă strip-only; responsabilul notificat. Testele007 trec. Verificarea finală integrată este deținută de agentul părinte.
+- board-validation.txt: validator final obligatoriu după mutarea fizică.
+
+Performanță (scope și performance_checks actualizate înaintea codului):
+- baseline.txt: înainte, seeded-counter-v1/seed42, 10000 ticks, 1 warmup + 5 probe.
+- after.txt: același fixture după; 5 probe separate cu 10000 events validate/1 listener.
+- Hardware observat: AMD Ryzen 9 7950X3D, Windows 10.0.26200, Node24.21.0 CPU, fără renderer; preset/rezoluție/GPU indisponibile.
+- Fixture batch median înainte 0.3526 ms, după 0.4037 ms; +0.0511 ms pe 10000 ticks (fixture test-only nemodificat, măsurare scurtă sensibilă la warmup/GC). Nu se interpretează ca p95 al simulării.
+- Cost nou total bus: 58.7643–64.1113 ms/10000 events, median61.5326 ms; medie batch ~0.006153 ms/event, nu percentilă per-event/tick.
+- Fiecare probă: exact10000 deliveries, 10000 identități, 1967780 code units retenție; dispose→0 identități/0code units/0listeners.
+- Plafoane implicite: 10000events/epoch, 16384code units/event,128listeners; fail-closed testat. Code units nu sunt heap/RAM exact.
+- Buget: provizoriu înainte de203; ținta desktop whole-tick p95≤5.5ms din Docs25 nu este închisă de această probă. Nu există FPS hardware inventat; jocul/rendererul/fizica/soak-ul complet sunt în afara007.
+
+Fișiere: src/simulation/event-bus.ts, src/simulation/index.ts, tests/events/event-bus.test.ts, scripts/benchmark-event-bus.mjs, Docs/event-bus.md, PBI007 și artefactele acestui folder. Părintele deține linkurile Docs02/README.
+Limitări: dedup volatil pe durata busului/epochului; după restart/recreare trebuie ledger durabil propriu. Async listeners interziși prin tip și documentație; busul nu anulează efectele unui callback care încalcă contractul. Efectele externe, input temporar mare, durata listeners și exact heap nu sunt plafonate/tranzacționate de transport. Capacitatea necesită suspendare și recuperare explicită, nu reset fictiv de epoch.
