@@ -4,7 +4,8 @@ title: "Asseturi auto roți lumini și LOD"
 status: "To Do"
 release: "V1"
 module: "Asseturi și audio"
-depends_on: ["015","023","014"]
+depends_on: ["015","023","014","220","223"]
+performance_checks: ["assets", "frame", "memory"]
 owner: null
 started_at: null
 completed_at: null
@@ -18,6 +19,8 @@ Livrează două clase vizuale cu pivoturi și variante de detaliu.
 
 ## Context și plan
 
+[Contractul de performanță](../../Docs/25-performanta-contracte-si-benchmark.md) definește probele și bugetele performance_checks.
+
 [16-asseturi-vizual-si-audio.md](../../Docs/16-asseturi-vizual-si-audio.md) descrie regulile și contractele acestei funcționalități. Citește și [workflow-ul PBI](../AGENTS.md) înainte de implementare.
 
 ## Dependențe
@@ -25,11 +28,15 @@ Livrează două clase vizuale cu pivoturi și variante de detaliu.
 - PBI 015 trebuie să existe în Done înainte de începere.
 - PBI 023 trebuie să existe în Done înainte de începere.
 - PBI 014 trebuie să existe în Done înainte de începere.
+- PBI 220 trebuie să existe în Done înainte de începere.
+- PBI 223 trebuie să existe în Done înainte de începere.
 
 ## Criterii de acceptare
 
 - [ ] Axele și roțile corespund configurației mecanice.
 - [ ] LOD nu schimbă colliderele sau entityId.
+
+- [ ] Manifestul trece bugetele 223; materialele/LOD și uploadul primei utilizări sunt măsurate pe instanțe dinamice.
 
 ## Verificare
 
@@ -60,3 +67,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '145' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Revizia 0.4 adaugă contracte/verificări de performanță; implementarea rămâne neîncepută.

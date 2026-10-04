@@ -4,7 +4,8 @@ title: "Estimator în worker cu coadă serială"
 status: "To Do"
 release: "V1"
 module: "Învățare"
-depends_on: ["102","010"]
+depends_on: ["102","010","221"]
+performance_checks: ["workers", "memory", "frame"]
 owner: null
 started_at: null
 completed_at: null
@@ -18,18 +19,23 @@ Rulează joburi în ordinea intervențiilor și verifică baza versionată.
 
 ## Context și plan
 
+[Contractul de performanță](../../Docs/25-performanta-contracte-si-benchmark.md) definește probele și bugetele performance_checks.
+
 [10-invatarea-stilului.md](../../Docs/10-invatarea-stilului.md) descrie regulile și contractele acestei funcționalități. Citește și [workflow-ul PBI](../AGENTS.md) înainte de implementare.
 
 ## Dependențe
 
 - PBI 102 trebuie să existe în Done înainte de începere.
 - PBI 010 trebuie să existe în Done înainte de începere.
+- PBI 221 trebuie să existe în Done înainte de începere.
 
 ## Criterii de acceptare
 
 - [ ] Jobul include playerId/profileId/learningEpoch/baseVersionId/segmentId; se acceptă numai LEARNING eligibil.
 - [ ] Rezultatul vechi din aceeași generație este recompus serial; altă generație este invalidată.
 - [ ] Anularea și erorile lasă coada funcțională.
+
+- [ ] Estimatorul folosește admiterea/prioritățile din 221; latența end-to-end include coada și este măsurată când rulează un job secundar.
 
 ## Verificare
 
@@ -62,3 +68,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '103' d
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
 
 - 2026-10-04: Plan revizuit la v0.3; implementarea rămâne neîncepută.
+
+- 2026-10-04: Revizia 0.4 adaugă contracte/verificări de performanță; implementarea rămâne neîncepută.

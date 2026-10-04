@@ -1,6 +1,6 @@
 # Milestone timpuriu și închiderea contractelor
 
-Versiune 0.3 · 4 octombrie 2026. Parte din [planul complet](README.md). Acest modul consemnează corecțiile auditului; nu declară implementări sau playtesturi executate.
+Versiune 0.4 · 4 octombrie 2026. Parte din [planul complet](README.md). Acest modul consemnează corecțiile auditului; nu declară implementări sau playtesturi executate.
 
 ## Ordine de validare
 
@@ -36,3 +36,7 @@ Confortul comenzilor și incidentul pasagerului au indicatori separați, utiliza
 Task-urile 203–217 sunt adăugate la V1 fără renumerotarea 001–202. Ordinea se obține din depends_on, nu din sortarea numerică. Un ID mai mic poate depinde de unul nou mai mare, dacă nu există ciclu. Workflow-ul alege cel mai mic ID eligibil. Noile task-uri de implementare rămân To Do în timpul lucrului exclusiv la documentație.
 
 Validate-Plan.ps1 verifică boardul, indexul PBI, linkurile locale, catalogul Markdown/JSON și fiecare legătură politică/estimare/gate. PBI-urile de politică și estimare declară parameter_keys în frontmatter pentru a permite verificarea semantică a matricei. Counts și scope-ul din README-uri se actualizează odată cu backlogul. Gates V1/V2/V3 trebuie să includă toate PBI-urile din etapa lor și etapele anterioare.
+
+## Verificarea performanței încă din prototip
+
+204 folosește 218/219/221 pentru măsurarea fixture-ului timpuriu, fără a cere 220/flota completă. 203 fixează bugetele pe hardware real; 220 verifică apoi 20–30 de taxiuri și până la 40 civile înainte de campanie și asseturi finale. Aceste dependențe păstrează rolul prototipului devreme. Regresia de semantică și regresia de performanță sunt verificate împreună, conform [modulului 25](25-performanta-contracte-si-benchmark.md).

@@ -5,6 +5,7 @@ status: "To Do"
 release: "V1"
 module: "Telemetrie"
 depends_on: ["069","044","025"]
+performance_checks: ["simulation", "memory"]
 owner: null
 started_at: null
 completed_at: null
@@ -18,6 +19,8 @@ completed_at: null
 
 ## Context și plan
 
+[Contractul de performanță](../../Docs/25-performanta-contracte-si-benchmark.md) definește probele și bugetele performance_checks.
+
 [09-telemetrie-si-oportunitati.md](../../Docs/09-telemetrie-si-oportunitati.md) descrie regulile și contractele acestei funcționalități. Citește și [workflow-ul PBI](../AGENTS.md) înainte de implementare.
 
 ## Dependențe
@@ -30,6 +33,8 @@ completed_at: null
 
 - [ ] Eșantioanele au SI, tick, controlMode, profileId, learningEpoch și learningEligible fixat la deschidere.
 - [ ] AUTO și MANUAL nu devin demonstrații; MANUAL rămâne disponibil pentru metrici și istoric.
+
+- [ ] Eșantioanele folosesc buffere cu capacitate măsurată; costul colectării nu depinde de serializare JSON la fiecare tick.
 
 ## Verificare
 
@@ -62,3 +67,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '085' d
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
 
 - 2026-10-04: Plan revizuit la v0.3; implementarea rămâne neîncepută.
+
+- 2026-10-04: Revizia 0.4 adaugă contracte/verificări de performanță; implementarea rămâne neîncepută.

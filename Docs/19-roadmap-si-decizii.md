@@ -1,6 +1,6 @@
 # Roadmap și decizii
 
-Versiune 0.3 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
+Versiune 0.4 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
 
 ## Etape de implementare
 
@@ -63,7 +63,7 @@ Researchul pentru WebGPU și motoare a folosit documentație oficială și surse
 
 ## Backlog complet și sursă de adevăr
 
-[PBI/README.md](../PBI/README.md) indexează 217 task-uri: 177 pentru V1, 28 pentru V2 și 12 pentru V3. Revizia 0.3 adaugă 203–217 pentru corecții și scope V1. ID-urile sunt identități stabile, nu ordinea de implementare; dependențele pot avea numere mai mari și sunt validate ca graf fără cicluri. Se alege cel mai mic ID eligibil, nu se începe un task cu dependențe nefinalizate.
+[PBI/README.md](../PBI/README.md) indexează 224 task-uri: 184 pentru V1, 28 pentru V2 și 12 pentru V3. Revizia 0.3 adaugă 203–217 pentru corecții și scope V1; revizia 0.4 adaugă 218–224 pentru performanță progresivă. ID-urile sunt identități stabile, nu ordinea de implementare; dependențele pot avea numere mai mari și sunt validate ca graf fără cicluri. Se alege cel mai mic ID eligibil, nu se începe un task cu dependențe nefinalizate.
 
 Documentele din Docs sunt sursa de adevăr actuală. [Planul v0.1](Archive/GAME_DESIGN-v0.1.md) și Page-ul creat anterior sunt referințe istorice, nu versiuni sincronizate automat. Documentul de arhitectură din v0.3 fixează Babylon.js și înlocuiește comparația anterioară de engine-uri.
 
@@ -74,3 +74,7 @@ Documentele din Docs sunt sursa de adevăr actuală. [Planul v0.1](Archive/GAME_
 Confirmate de utilizator: învățare din mașini civile; stil comun adoptat și de civili; AUTO/MANUAL/LEARNING cu învățare numai în LEARNING; KPI revenue lunar și ratings 0–5 cu istoric; trei misiuni noi pe zi și XP din misiuni/timp activ, cu pierdere pentru deteriorarea atribuibilă a KPI-urilor. Formulele, tarifele, pragurile și ritmul calendarului economic sunt propuneri versionate de calibrare în modulele 22–23.
 
 Corecțiile auditului, închiderea contractelor și ordinea milestone-urilor sunt în [modulul 24](24-milestone-timpuriu-si-contracte.md). Nu se adaugă în această revizie task-uri de publicare socială, multiplayer sau hosting extern.
+
+## Revizia 0.4: performanță verificată progresiv
+
+218/203 stabilesc harness-ul și bugetele înainte de extindere. 219 distribuie tick-urile/deciziile și tratează suprasarcina; 221 admite worker-ele. După 065/115, gate-ul 220 validează flota înainte de 116/145/146. 222 integrează datele fără sacadare și 223 impune limite asseturilor; 224 condiționează CI/release-ul. Optimizările finale 157/158 rămân după profilare, fără a amâna toate măsurătorile până la ele. [Analiza și probele](25-performanta-contracte-si-benchmark.md) păstrează simularea tuturor taxiurilor și civililor.

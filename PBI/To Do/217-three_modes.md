@@ -5,6 +5,7 @@ status: "To Do"
 release: "V1"
 module: "Control manual"
 depends_on: ["067","069","085","112","073","080"]
+performance_checks: ["frame", "simulation"]
 owner: null
 started_at: null
 completed_at: null
@@ -17,6 +18,8 @@ completed_at: null
 Verifică cele trei moduri de la hotkey și HUD până la estimator/profil, inclusiv taxiuri și civile.
 
 ## Context și plan
+
+[Contractul de performanță](../../Docs/25-performanta-contracte-si-benchmark.md) definește probele și bugetele performance_checks.
 
 - [08-interfata-camera-si-control.md](../../Docs/08-interfata-camera-si-control.md)
 - [09-telemetrie-si-oportunitati.md](../../Docs/09-telemetrie-si-oportunitati.md)
@@ -38,6 +41,8 @@ Citește și [workflow-ul PBI](../AGENTS.md).
 - [ ] MANUAL produce telemetrie pentru indicatori și istoric fără a modifica parametrii sau dovezile; LEARNING eligibil publică automat.
 - [ ] Toate cele șase tranziții separă segmentele, păstrează fizica și maximum un vehicul condus de jucător.
 - [ ] M/L sunt remapabile, focusul este corect, iar selecția nouă nu preia implicit controlul.
+
+- [ ] Inputul celor trei moduri și schimbarea selecției au latență măsurată inclusiv cu worker ocupat.
 
 ## Verificare
 
@@ -67,3 +72,5 @@ Verificare finală: Validate-Board.ps1 -RequireDone '217'.
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do în revizia 0.3; implementarea nu a început.
+
+- 2026-10-04: Revizia 0.4 adaugă contracte/verificări de performanță; implementarea rămâne neîncepută.

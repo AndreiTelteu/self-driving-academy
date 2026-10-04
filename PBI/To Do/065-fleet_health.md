@@ -5,6 +5,7 @@ status: "To Do"
 release: "V1"
 module: "Flotă și curse"
 depends_on: ["058","063","029","064"]
+performance_checks: ["simulation", "frame"]
 owner: null
 started_at: null
 completed_at: null
@@ -17,6 +18,8 @@ completed_at: null
 Leagă disponibilitatea flotei, recuperările și resetul lumii.
 
 ## Context și plan
+
+[Contractul de performanță](../../Docs/25-performanta-contracte-si-benchmark.md) definește probele și bugetele performance_checks.
 
 [07-flota-si-curse.md](../../Docs/07-flota-si-curse.md) descrie regulile și contractele acestei funcționalități. Citește și [workflow-ul PBI](../AGENTS.md) înainte de implementare.
 
@@ -31,6 +34,8 @@ Leagă disponibilitatea flotei, recuperările și resetul lumii.
 
 - [ ] Resetul nu lasă curse alocate unor vehicule dispărute.
 - [ ] Statisticile și profilele sunt păstrate sau resetate conform opțiunii explicite.
+
+- [ ] Fixture-ul 20/24/30 taxiuri plus până la 40 civile este reproductibil și reutilizabil în gate-ul 220.
 
 ## Verificare
 
@@ -61,3 +66,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '065' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Revizia 0.4 adaugă contracte/verificări de performanță; implementarea rămâne neîncepută.

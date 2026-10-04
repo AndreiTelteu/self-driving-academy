@@ -4,7 +4,8 @@ title: "Atribuirea impactului intervenției și penalizarea XP"
 status: "To Do"
 release: "V1"
 module: "Progres"
-depends_on: ["213","144","209","206","207"]
+depends_on: ["213","144","209","206","207","221","222"]
+performance_checks: ["workers", "memory", "frame"]
 owner: null
 started_at: null
 completed_at: null
@@ -18,6 +19,8 @@ Evaluează efectele directe/indirecte ale MANUAL/LEARNING pe revenue și ratings
 
 ## Context și plan
 
+[Contractul de performanță](../../Docs/25-performanta-contracte-si-benchmark.md) definește probele și bugetele performance_checks.
+
 - [23-misiuni-zilnice-si-experienta.md](../../Docs/23-misiuni-zilnice-si-experienta.md)
 - [14-experimente-si-indicatori.md](../../Docs/14-experimente-si-indicatori.md)
 
@@ -30,6 +33,8 @@ Citește și [workflow-ul PBI](../AGENTS.md).
 - PBI 209 trebuie să existe în Done înainte de începere.
 - PBI 206 trebuie să existe în Done înainte de începere.
 - PBI 207 trebuie să existe în Done înainte de începere.
+- PBI 221 trebuie să existe în Done înainte de începere.
+- PBI 222 trebuie să existe în Done înainte de începere.
 
 ## Criterii de acceptare
 
@@ -37,6 +42,8 @@ Citește și [workflow-ul PBI](../AGENTS.md).
 - [ ] Scăderea atribuibilă a oricăruia dintre cei doi KPI produce pierdere, fără compensare ascunsă de celălalt.
 - [ ] Intervențiile suprapuse sunt grupate; aceeași cauză/incident nu este penalizată direct și indirect de două ori.
 - [ ] Ledgerul și UI păstrează formulele, pragurile, cauzele și dovezile, cu worker anulabil.
+
+- [ ] A/B și seed-urile rulează secvențial prin 221, cu lumi/payloaduri plafonate și reluare; PENDING nu produce penalizări presupuse sau cauze pierdute.
 
 ## Verificare
 
@@ -66,3 +73,5 @@ Verificare finală: Validate-Board.ps1 -RequireDone '214'.
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do în revizia 0.3; implementarea nu a început.
+
+- 2026-10-04: Revizia 0.4 adaugă contracte/verificări de performanță; implementarea rămâne neîncepută.

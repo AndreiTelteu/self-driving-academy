@@ -5,6 +5,7 @@ status: "To Do"
 release: "V1"
 module: "Persistență"
 depends_on: ["131","207"]
+performance_checks: ["storage", "memory"]
 owner: null
 started_at: null
 completed_at: null
@@ -18,6 +19,8 @@ Gestionează separat retenția telemetriei intervențiilor și recorderului lumi
 
 ## Context și plan
 
+[Contractul de performanță](../../Docs/25-performanta-contracte-si-benchmark.md) definește probele și bugetele performance_checks.
+
 [15-salvare-si-import-export.md](../../Docs/15-salvare-si-import-export.md) descrie regulile și contractele acestei funcționalități. Citește și [workflow-ul PBI](../AGENTS.md) înainte de implementare.
 
 ## Dependențe
@@ -29,6 +32,8 @@ Gestionează separat retenția telemetriei intervențiilor și recorderului lumi
 
 - [ ] Cota plină oferă export și curățare selectivă; clipurile parțiale sunt declarate.
 - [ ] Profilul, progresul, checkpointul activ și ledger-ele necesare deduplicării nu sunt șterse automat.
+
+- [ ] Limitele RAM/DB și retenția sunt în bytes, nu doar durate; la capacitate sunt protejate cauzele/ledger-ele și replay-ul parțial este declarat.
 
 ## Verificare
 
@@ -61,3 +66,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '132' d
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
 
 - 2026-10-04: Plan revizuit la v0.3; implementarea rămâne neîncepută.
+
+- 2026-10-04: Revizia 0.4 adaugă contracte/verificări de performanță; implementarea rămâne neîncepută.

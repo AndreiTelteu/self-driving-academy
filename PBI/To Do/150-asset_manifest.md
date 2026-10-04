@@ -5,6 +5,7 @@ status: "To Do"
 release: "V1"
 module: "Asseturi și audio"
 depends_on: ["146","145","147","149"]
+performance_checks: ["assets", "loading"]
 owner: null
 started_at: null
 completed_at: null
@@ -17,6 +18,8 @@ completed_at: null
 Versionează fișierele, cache-ul și inventarul asseturilor.
 
 ## Context și plan
+
+[Contractul de performanță](../../Docs/25-performanta-contracte-si-benchmark.md) definește probele și bugetele performance_checks.
 
 [16-asseturi-vizual-si-audio.md](../../Docs/16-asseturi-vizual-si-audio.md) descrie regulile și contractele acestei funcționalități. Citește și [workflow-ul PBI](../AGENTS.md) înainte de implementare.
 
@@ -31,6 +34,8 @@ Versionează fișierele, cache-ul și inventarul asseturilor.
 
 - [ ] Un build nou invalidează numai cache-ul necesar.
 - [ ] Lipsa unui asset critic este detectată înainte de release.
+
+- [ ] CI verifică bytes transferați și resurse decodate estimate, inclusiv WASM/decodere, fără a confunda compresia cu memoria rezidentă.
 
 ## Verificare
 
@@ -61,3 +66,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '150' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Revizia 0.4 adaugă contracte/verificări de performanță; implementarea rămâne neîncepută.

@@ -1,6 +1,6 @@
 # Salvare și import export
 
-Versiune 0.3 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
+Versiune 0.4 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
 
 ## Date salvate și export
 
@@ -31,3 +31,7 @@ Joburile neacceptate sunt persistate ca descrieri reluabile, nu ca thread-uri ac
 ## Autoritatea salvării între taburi
 
 O singură pagină are drept de scriere pentru playerId/sessionId. A doua pagină este read-only sau oferă transfer explicit de sesiune; nu pornește un al doilea autosave concurent. Protocolul tratează page close, tab suspendat și DB upgrade blocat. Transferul și importul de sesiune nu dublează reward-urile sau XP. Profilele de driving exportate separat nu conțin progresul jucătorului. Retenția replay-ului poate șterge chunkuri vechi, dar nu checkpointul activ, ledgerul comercial sau dovezile XP necesare deduplicării.
+
+## Buget de captură și commit
+
+Snapshotul Rapier și copierea coerentă a stării au un cost sincron măsurat. Asincronia IndexedDB nu elimină acest cost. 222 pregătește/encodează datele incremental sau în worker, cu maximum o generație în pregătire și una în commit; cererile periodice redundante sunt coalesced, păstrând evenimentele comerciale/reward și invalidările. Tranzacția care publică checkpointul nu așteaptă mesaje de worker. Shutdownul nu garantează un ultim commit. Vârsta salvării și datele nesalvate sunt explicite; limitele și probele cu storage lent sunt în [modulul 25](25-performanta-contracte-si-benchmark.md).

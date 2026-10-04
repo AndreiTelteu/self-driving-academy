@@ -5,6 +5,7 @@ status: "To Do"
 release: "V1"
 module: "Experimente și indicatori"
 depends_on: ["137","088","121"]
+performance_checks: ["simulation"]
 owner: null
 started_at: null
 completed_at: null
@@ -17,6 +18,8 @@ completed_at: null
 Calculează accelerație, accelerație laterală și jerk în intervalele cu pasager pentru toate taxiurile, în AUTO, MANUAL și LEARNING.
 
 ## Context și plan
+
+[Contractul de performanță](../../Docs/25-performanta-contracte-si-benchmark.md) definește probele și bugetele performance_checks.
 
 [14-experimente-si-indicatori.md](../../Docs/14-experimente-si-indicatori.md) descrie regulile și contractele acestei funcționalități. Citește și [workflow-ul PBI](../AGENTS.md) înainte de implementare.
 
@@ -32,6 +35,7 @@ Calculează accelerație, accelerație laterală și jerk în intervalele cu pas
 - [ ] Teleportările și impulsurile de impact nu devin confort al comenzii.
 - [ ] Impactul real rămâne consecință a experienței pasagerului și intră separat în review.
 - [ ] Misiunea, dashboardul și modelul review citesc aceleași agregări.
+- [ ] Agregările per pasager se actualizează incremental, cu cost măsurat în toate modurile și pentru taxiuri nevizibile.
 
 ## Verificare
 
@@ -64,3 +68,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '139' d
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
 
 - 2026-10-04: Plan revizuit la v0.3; implementarea rămâne neîncepută.
+
+- 2026-10-04: Revizia 0.4 adaugă probe de performanță; implementarea rămâne neîncepută.

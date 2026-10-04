@@ -5,6 +5,7 @@ status: "To Do"
 release: "V1"
 module: "Vehicule și fizică"
 depends_on: ["023","008"]
+performance_checks: ["simulation"]
 owner: null
 started_at: null
 completed_at: null
@@ -18,6 +19,8 @@ Aplică throttle, brake, steering, handbrake și semnalizare printr-un singur co
 
 ## Context și plan
 
+[Contractul de performanță](../../Docs/25-performanta-contracte-si-benchmark.md) definește probele și bugetele performance_checks.
+
 [05-vehicule-si-fizica.md](../../Docs/05-vehicule-si-fizica.md) descrie regulile și contractele acestei funcționalități. Citește și [workflow-ul PBI](../AGENTS.md) înainte de implementare.
 
 ## Dependențe
@@ -29,6 +32,8 @@ Aplică throttle, brake, steering, handbrake și semnalizare printr-un singur co
 
 - [ ] Manual și autonom pot utiliza exact aceeași VehicleCommand.
 - [ ] Comenzile simultane sau invalide au reguli determinate.
+
+- [ ] Comenzile/controllerul sunt realizate la fiecare tick fizic, chiar dacă deciziile de nivel înalt au 10 Hz.
 
 ## Verificare
 
@@ -59,3 +64,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '024' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Revizia 0.4 adaugă contracte/verificări de performanță; implementarea rămâne neîncepută.

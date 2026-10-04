@@ -4,7 +4,8 @@ title: "Recorder pentru replay taxiuri civile și incidente AUTO"
 status: "To Do"
 release: "V1"
 module: "Experimente"
-depends_on: ["014","065","028","007","206"]
+depends_on: ["014","065","028","007","206","221"]
+performance_checks: ["memory", "storage", "frame"]
 owner: null
 started_at: null
 completed_at: null
@@ -18,6 +19,8 @@ completed_at: null
 
 ## Context și plan
 
+[Contractul de performanță](../../Docs/25-performanta-contracte-si-benchmark.md) definește probele și bugetele performance_checks.
+
 - [14-experimente-si-indicatori.md](../../Docs/14-experimente-si-indicatori.md)
 - [09-telemetrie-si-oportunitati.md](../../Docs/09-telemetrie-si-oportunitati.md)
 
@@ -30,12 +33,15 @@ Citește și [workflow-ul PBI](../AGENTS.md).
 - PBI 028 trebuie să existe în Done înainte de începere.
 - PBI 007 trebuie să existe în Done înainte de începere.
 - PBI 206 trebuie să existe în Done înainte de începere.
+- PBI 221 trebuie să existe în Done înainte de începere.
 
 ## Criterii de acceptare
 
 - [ ] Entitățile nevizibile, AUTO, fazele și crearea/eliminarea au date suficiente pentru replay.
 - [ ] Evenimentele păstrează tick exact; interpolarea și ferestrele parțiale sunt declarate.
 - [ ] Bufferul circular și salvarea chunkurilor au limite de resurse și nu devin demonstrații LEARNING.
+
+- [ ] RAM, bytes/sec și rata de chunkuri sunt plafonate; presiunea nu oprește simularea vehiculelor nevizibile sau colectarea evenimentelor exacte.
 
 ## Verificare
 
@@ -65,3 +71,5 @@ Verificare finală: Validate-Board.ps1 -RequireDone '207'.
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do în revizia 0.3; implementarea nu a început.
+
+- 2026-10-04: Revizia 0.4 adaugă contracte/verificări de performanță; implementarea rămâne neîncepută.

@@ -1,6 +1,6 @@
 # Asseturi vizual și audio
 
-Versiune 0.3 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
+Versiune 0.4 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
 
 ## Direcția vizuală și sunetul
 
@@ -17,3 +17,7 @@ Sunetul include motor, variație cu sarcina, anvelope, frâne, coliziuni, claxon
 Fiecare asset are ID, tip, versiune/hash, rol critic/opțional, sursă și licență. Buildul include manifestul și fișierele WASM necesare. Asseturile auto păstrează pivoturile roților, scara și rădăcina entityId. Orașul folosește LOD și instanțiere numai după măsurare și verificarea selecției.
 
 Scenele de gameplay folosesc asseturi simple în prototip, apoi se înlocuiesc prin registry fără a modifica semantica rutieră. V1 reprezintă pasagerii simplificat; pietonii autonomi V2 și personajul V3 au asseturi și animații distincte.
+
+## Admiterea asseturilor finale
+
+145/146 depind de gate-ul de flotă 220 și bugetele 223. Manifestul include costuri transferate/decodate, texturi estimate, LOD/materiale, decodere/WASM și startup critic separat de decorul opțional. Batchurile statice sunt locale; calitatea nu schimbă colliderele sau simularea. Audio are plafon de voci și reutilizare/disposal. 150 verifică automat manifestul și capacitățile conform [modulului 25](25-performanta-contracte-si-benchmark.md).

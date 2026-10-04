@@ -1,6 +1,6 @@
 # Misiuni zilnice și experiența jucătorului
 
-Versiune 0.3 · 4 octombrie 2026. Parte din [planul complet](README.md). Scope V1 confirmat; recompensele și pragurile sunt propuneri de calibrare.
+Versiune 0.4 · 4 octombrie 2026. Parte din [planul complet](README.md). Scope V1 confirmat; recompensele și pragurile sunt propuneri de calibrare.
 
 ## Trei misiuni noi pe zi
 
@@ -43,3 +43,7 @@ Evaluatorul folosește lumea izolată și worker cu anulare/progres; nu consumă
 ## Acceptare și transparență
 
 Sunt verificate trei misiuni per zi, seed stabil, capabilități insuficiente, tranziția la miezul nopții, DST, clock rollback/forward, reward primit lângă expirare și reload. Pentru XP se verifică minut fracționar, pauză, AUTO activ, AFK, reset de profil și reward duplicat. Pentru pierderi: rating în scădere/revenue în creștere, inversul, ambii în scădere, niciunul în scădere, eșantion insuficient, trafic divergent, grupuri suprapuse, civil în MANUAL, profil LEARNING nou și crash după aplicare. UI arată de ce s-a acordat sau scăzut fiecare sumă.
+
+## Bugetul evaluatorului XP
+
+A/B-ul folosește admiterea 221, cu lumi și seed-uri secvențiale, felii, progres și checkpoint de job reluabil. Presiunea amână evaluarea, fără pierderea cauzei sau penalizare presupusă. Procesarea reia în idle/pauză cu buget dedicat; la imposibilitatea păstrării datelor protejate, sesiunea se suspendă explicit. Nu simplificăm fizica definitivă sau populația civilă pentru a obține XP mai repede. Latența cozii, resursele și efectul asupra inputului sunt măsurate în [modulul 25](25-performanta-contracte-si-benchmark.md).

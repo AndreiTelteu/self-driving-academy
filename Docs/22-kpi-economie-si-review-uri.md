@@ -1,6 +1,6 @@
 # KPI-uri, economie și review-uri
 
-Versiune 0.3 · 4 octombrie 2026. Parte din [planul complet](README.md). Scope V1 confirmat; formulele și valorile numerice sunt propuneri de calibrare, nu rezultate implementate.
+Versiune 0.4 · 4 octombrie 2026. Parte din [planul complet](README.md). Scope V1 confirmat; formulele și valorile numerice sunt propuneri de calibrare, nu rezultate implementate.
 
 ## Experiența jucătorului
 
@@ -47,3 +47,7 @@ Graficele marchează intervențiile MANUAL/LEARNING și activările de profil, c
 Ledgerul, review-urile, bucketurile și configurațiile sunt salvate împreună cu checkpointul și au migrare explicită. Exportul unei sesiuni poate include aceste date; exportul unui DrivingProfile nu include revenue sau progres. Resetul stilului nu șterge istoria comercială. Resetul explicit al scenariului economic începe un epoch nou și nu rescrie seria precedentă.
 
 Scenariile verifică: taxiuri nevizibile; curse mixte de control; finalizare duplicată; anulare înainte/după experiență; impact filtrat din stil dar prezent în review; medii ponderate; perioadă fără review-uri; graniță de zi/lună; lună parțială; reload și rambursare. Un scenariu comparabil demonstrează eficiență cu ratings bune și unul throughput mai mare cu ratings mai slabe. Sunt necesare rezultate din simulare, nu ajustări UI pentru a forța exemplul.
+
+## Costul istoricului și al popup-ului
+
+209 actualizează ledgerul și bucketurile incremental. 210 citește agregări/pagini, plafonează punctele graficului la rezoluția afișată și păstrează datele exacte pentru tabel/tooltip. Un panou închis nu reconstruiește grafice, iar refresh-ul HUD nu rescanează ledgerul. Probe: 12 luni sintetice de istoric, review-uri paginate, trafic AUTO cu popup/recorder/autosave și reluarea condusului după închiderea popup-ului în MANUAL/LEARNING, conform [modulului 25](25-performanta-contracte-si-benchmark.md).

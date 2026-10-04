@@ -5,6 +5,7 @@ status: "To Do"
 release: "V1"
 module: "Fundație"
 depends_on: ["001","004","019"]
+performance_checks: ["frame", "loading", "memory"]
 owner: null
 started_at: null
 completed_at: null
@@ -17,6 +18,8 @@ completed_at: null
 Fixează configurații reale și bugete/măsurători de referință înaintea extinderii.
 
 ## Context și plan
+
+[Contractul de performanță](../../Docs/25-performanta-contracte-si-benchmark.md) definește probele și bugetele performance_checks.
 
 - [17-webgpu-si-performanta.md](../../Docs/17-webgpu-si-performanta.md)
 - [24-milestone-timpuriu-si-contracte.md](../../Docs/24-milestone-timpuriu-si-contracte.md)
@@ -33,6 +36,8 @@ Citește și [workflow-ul PBI](../AGENTS.md).
 
 - [ ] Desktopul și laptopul de referință, browser/OS/GPU/rezoluție și metoda de măsurare sunt identificate.
 - [ ] Bugetele CPU/GPU/memorie/încărcare și latența estimatorului au context și nu sunt declarate deja îndeplinite.
+
+- [ ] Manifestul fixează workload normal/stres, percentilele/inputul/debitul, startup cold și capacități; pragurile propuse din modulul 25 sunt calibrate, nu declarate atinse.
 
 ## Verificare
 
@@ -62,3 +67,5 @@ Verificare finală: Validate-Board.ps1 -RequireDone '203'.
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do în revizia 0.3; implementarea nu a început.
+
+- 2026-10-04: Revizia 0.4 adaugă contracte/verificări de performanță; implementarea rămâne neîncepută.

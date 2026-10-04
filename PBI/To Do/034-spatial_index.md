@@ -5,6 +5,7 @@ status: "To Do"
 release: "V1"
 module: "Oraș"
 depends_on: ["033","022"]
+performance_checks: ["simulation"]
 owner: null
 started_at: null
 completed_at: null
@@ -18,6 +19,8 @@ Implementează căutări locale de vehicule, obstacole și zone.
 
 ## Context și plan
 
+[Contractul de performanță](../../Docs/25-performanta-contracte-si-benchmark.md) definește probele și bugetele performance_checks.
+
 [04-oras-si-retea-rutiera.md](../../Docs/04-oras-si-retea-rutiera.md) descrie regulile și contractele acestei funcționalități. Citește și [workflow-ul PBI](../AGENTS.md) înainte de implementare.
 
 ## Dependențe
@@ -29,6 +32,8 @@ Implementează căutări locale de vehicule, obstacole și zone.
 
 - [ ] Query-urile includ numai vecinii geometric relevanți.
 - [ ] Entitățile mutate sau eliminate nu rămân în celule vechi.
+
+- [ ] Workload aglomerat și granițele celulelor au contoare/costuri; plafonarea nu elimină vecini relevanți.
 
 ## Verificare
 
@@ -59,3 +64,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '034' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Revizia 0.4 adaugă contracte/verificări de performanță; implementarea rămâne neîncepută.

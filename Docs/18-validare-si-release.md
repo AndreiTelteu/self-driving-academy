@@ -1,6 +1,6 @@
 # Validare și release
 
-Versiune 0.3 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
+Versiune 0.4 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
 
 ## Criterii de acceptare pentru prima versiune
 
@@ -34,7 +34,7 @@ Pentru validarea inversă generăm demonstrații din profiluri cunoscute și ver
 
 Scenariile de trafic includ semafor cu prim vehicul și coadă, STOP liber și aglomerat, conflict cu prioritate, urmărire, schimbare de bandă, drum blocat, vehicul avariat și reintrare după manual. Profilurile de probă includ prudent, impulsiv, neregulamentar și mixt; acestea sunt configurații de test, nu personalități ascunse ale taxiurilor.
 
-QA vizual verifică lizibilitatea HUD la 1280×720 și 1920×1080, panoul flotei cu 30 de taxiuri, contrastul, remaparea tastelor, modul de pauză, focusul, mesajele de învățare și recuperarea după pierderea GPU. Benchmarkul include sesiuni de cel puțin 30 de minute pentru stabilitatea memoriei și a flotei.
+QA vizual verifică lizibilitatea HUD la 1280×720 și 1920×1080, panoul flotei cu 30 de taxiuri, contrastul, remaparea tastelor, modul de pauză, focusul, mesajele de învățare și recuperarea după pierderea GPU. Benchmarkul include sesiuni de cel puțin 60 de minute pentru stabilitatea memoriei și a flotei.
 
 În această etapă se verifică documentația și consistența catalogului. Testele de joc de mai sus vor fi executate după implementare; documentul nu susține că ele au trecut deja.
 
@@ -58,3 +58,9 @@ CI rulează verificările statice, scenariile și buildul reproductibil. Livrare
 - PBI 216 verifică împreună contractele 205–215 și 217 înaintea gate-ului 162. Gates V2/V3 reexecută aceste regresii.
 
 Verificarea planului folosește PBI/Validate-Plan.ps1: board, linkuri locale, index, catalog, matrice și metadate per parametru. Verificarea planului nu reprezintă dovadă de gameplay implementat.
+
+## Gates de performanță ale reviziei 0.4
+
+Se execută [protocolul modulului 25](25-performanta-contracte-si-benchmark.md): preset/rezoluție fixate, hardware real, cinci repetări, percentile, input, debit de simulare, cold/first-use și lucrul de fundal concomitent. 220 condiționează campania/asseturile finale; 224 condiționează livrarea. Testele headless verifică algoritmi și capacități, fără a demonstra FPS pe GPU integrat. Lipsa raportului hardware menține gate-ul nevalidat.
+
+Soak-ul are minimum 60 minute și 20 de cicluri de lifecycle, cu retenție, cozi și resurse la platou. Se probează și throttlingul termic al laptopului. Suprasarcina 30/80 este separată de workload-ul normal 30/40; o pauză de suprasarcină în workload normal este eșec de buget, nu timp eliminat din benchmark. PerformanceReport identifică aceeași revizie ca artefactul de release.

@@ -5,6 +5,7 @@ status: "To Do"
 release: "V3"
 module: "Mers pe jos V3"
 depends_on: ["200","189"]
+performance_checks: ["frame", "simulation", "soak"]
 owner: null
 started_at: null
 completed_at: null
@@ -18,6 +19,8 @@ Verifică coliziuni, camere, input, misiuni, învățare și performanță.
 
 ## Context și plan
 
+[Contractul de performanță](../../Docs/25-performanta-contracte-si-benchmark.md) definește probele și bugetele performance_checks.
+
 [20-extensii-si-mers-pe-jos.md](../../Docs/20-extensii-si-mers-pe-jos.md) descrie regulile și contractele acestei funcționalități. Citește și [workflow-ul PBI](../AGENTS.md) înainte de implementare.
 
 ## Dependențe
@@ -29,6 +32,8 @@ Verifică coliziuni, camere, input, misiuni, învățare și performanță.
 
 - [ ] Toate fluxurile manual/AUTO funcționează și după intrare/ieșire.
 - [ ] Catalogul și indicatorii nu sunt alterați de mers.
+
+- [ ] Cele trei moduri, personajul și streamingul vizual trec contractul 25; workload/bugete V3 sunt explicit versionate.
 
 ## Verificare
 
@@ -59,3 +64,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '201' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Revizia 0.4 adaugă contracte/verificări de performanță; implementarea rămâne neîncepută.

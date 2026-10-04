@@ -1,6 +1,6 @@
 # Telemetrie și oportunități
 
-Versiune 0.3 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
+Versiune 0.4 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
 
 ## Date înregistrate și extragerea contextului
 
@@ -23,3 +23,7 @@ Validatorul verifică monotonia tick-urilor, entityId, contexte, input source ș
 Telemetria intervențiilor MANUAL și LEARNING păstrează sursa și eligibilitatea; replay-ul lumii înregistrează separat toate taxiurile și civilele, inclusiv în AUTO. Nici replay-ul, nici review-urile sau KPI-urile nu sunt convertite în demonstrații de driving. Contractul recorderului și retenția sunt în [experimente](14-experimente-si-indicatori.md).
 
 Pentru timpi de reacție, stimulul trebuie să fie observabil din perspectiva jucătorului: fereastră de vizibilitate sau fixture controlat, cu tick de debut. Un pericol ascuns în spatele unei clădiri nu justifică o reacție personală lentă. Nu se introduce percepție LiDAR sau camere AI; este o regulă de eligibilitate a demonstrației.
+
+## Capacități și transferuri
+
+090/222 folosesc chunkuri și buffere numerice cu plafon în bytes, păstrând timpii evenimentelor. Intervențiile lungi pot avea rollover cu continuitate declarată; oportunitățile nu sunt dublate sau eliminate tacit. Transferul de buffer are ownership explicit și nu detașează datele live. Limitele RAM/coadă și pressure policy sunt definite în [modulul 25](25-performanta-contracte-si-benchmark.md); replay-ul opțional este primul candidat la retenție, nu dovezile de learning.

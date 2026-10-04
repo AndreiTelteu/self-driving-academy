@@ -5,6 +5,7 @@ status: "To Do"
 release: "V1"
 module: "UI"
 depends_on: ["209","075","082","084"]
+performance_checks: ["ui", "frame"]
 owner: null
 started_at: null
 completed_at: null
@@ -17,6 +18,8 @@ completed_at: null
 Deschide prin buton KPIs/K un pop-up detaliat pentru revenue lunar, ratings și agregări zilnice.
 
 ## Context și plan
+
+[Contractul de performanță](../../Docs/25-performanta-contracte-si-benchmark.md) definește probele și bugetele performance_checks.
 
 - [22-kpi-economie-si-review-uri.md](../../Docs/22-kpi-economie-si-review-uri.md)
 - [08-interfata-camera-si-control.md](../../Docs/08-interfata-camera-si-control.md)
@@ -35,6 +38,8 @@ Citește și [workflow-ul PBI](../AGENTS.md).
 - [ ] Graficele arată revenue lunar efectiv/proiectat, curse/zi, review-uri/zi, media și distribuția notelor.
 - [ ] Media ponderată, zero/lipsă date, luni parțiale și sample count sunt afișate corect.
 - [ ] Focusul, tabelul accesibil, Escape și pauza MANUAL/LEARNING funcționează la rezoluțiile țintă.
+
+- [ ] Istoricul de 12 luni este paginat/downsampled numai vizual, fără medii greșite; panoul închis nu reconstruiește grafice.
 
 ## Verificare
 
@@ -64,3 +69,5 @@ Verificare finală: Validate-Board.ps1 -RequireDone '210'.
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do în revizia 0.3; implementarea nu a început.
+
+- 2026-10-04: Revizia 0.4 adaugă contracte/verificări de performanță; implementarea rămâne neîncepută.

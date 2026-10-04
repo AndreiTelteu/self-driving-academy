@@ -4,7 +4,7 @@ title: "Definiții și lifecycle de misiuni"
 status: "To Do"
 release: "V1"
 module: "Misiuni"
-depends_on: ["115","007","005"]
+depends_on: ["115","007","005","220"]
 owner: null
 started_at: null
 completed_at: null
@@ -25,6 +25,7 @@ Definește ID, versiune, obiective, stare, recompense și reluare.
 - PBI 115 trebuie să existe în Done înainte de începere.
 - PBI 007 trebuie să existe în Done înainte de începere.
 - PBI 005 trebuie să existe în Done înainte de începere.
+- PBI 220 trebuie să existe în Done înainte de începere.
 
 ## Criterii de acceptare
 
@@ -60,3 +61,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '116' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Revizia 0.4 adaugă contracte/verificări de performanță; implementarea rămâne neîncepută.

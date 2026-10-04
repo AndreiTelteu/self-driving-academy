@@ -1,6 +1,6 @@
 # Experimente și indicatori
 
-Versiune 0.3 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
+Versiune 0.4 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
 
 ## Indicatori și comparații
 
@@ -33,3 +33,7 @@ Snapshotul pentru rerulare folosește checkpointul complet al lumii din [persist
 ## KPI-uri și atribuirea schimbărilor
 
 Revenue-ul, review-urile și istoricul lor sunt în [economia flotei](22-kpi-economie-si-review-uri.md). Comparația pentru o penalizare XP folosește baseline și fereastră comparabile, conform [XP](23-misiuni-zilnice-si-experienta.md). Dashboardul distinge corelația temporală de atribuirea evaluată. Confortul comenzilor exclude impulsurile de impact; experiența pasagerului și ratingul includ distinct incidentul real, astfel încât o coliziune nu poate produce un rating bun doar fiindcă accelerațiile au fost filtrate.
+
+## Resurse pentru comparații și evaluări
+
+Experimentele și A/B-ul XP folosesc admiterea comună 221: lumi control/tratament și seed-uri rulate secvențial, felii măsurate, anulare și progres plafonat. Learning-ul interactiv poate întrerupe cooperativ un lot secundar. PENDING și reluarea sunt explicite; un proxy cu fizică simplificată nu poate fundamenta o penalizare definitivă. Recorderul și capturile au limite în bytes și raport de cost prin 222. [Protocolul de performanță](25-performanta-contracte-si-benchmark.md).

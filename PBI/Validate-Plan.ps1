@@ -27,6 +27,15 @@ foreach ($planColumn in @('To Do', 'In Progress', 'Done')) {
         $planId = Read-HeaderJson $planHeader 'id'
         $planRoleMatch = [regex]::Match($planHeader, '(?m)^parameter_role: (.+)$')
         $planKeysMatch = [regex]::Match($planHeader, '(?m)^parameter_keys: (.+)$')
+        $planPerformanceMatch = [regex]::Match($planHeader, '(?m)^performance_checks: (.+)$')
+        $planPerformanceChecks = @()
+        if ($planPerformanceMatch.Success) {
+            $planPerformanceChecks = @($planPerformanceMatch.Groups[1].Value | ConvertFrom-Json)
+            if ($planPerformanceChecks.Count -eq 0 -or @($planPerformanceChecks | Select-Object -Unique).Count -ne $planPerformanceChecks.Count) { throw "Performance checks goale/duplicate: $planId" }
+            foreach ($planPerformanceCheck in $planPerformanceChecks) {
+                if ($planPerformanceCheck -cnotin @('frame','simulation','memory','workers','storage','loading','ui','assets','soak')) { throw "Performance check necunoscut: $planPerformanceCheck în $planId" }
+            }
+        }
         $planRole = $null
         $planKeys = @()
         if ($planRoleMatch.Success -ne $planKeysMatch.Success) { throw "Metadate per parametru incomplete: $planId" }
@@ -44,6 +53,7 @@ foreach ($planColumn in @('To Do', 'In Progress', 'Done')) {
             Dependencies = @(Read-HeaderJson $planHeader 'depends_on')
             Role = $planRole
             Keys = $planKeys
+            PerformanceChecks = $planPerformanceChecks
         }
     }
 }
@@ -154,6 +164,62 @@ foreach ($planLateId in @('042','057','065','108','115','162')) {
 if (-not (Get-PlanAncestors '042').ContainsKey('204') -or -not (Get-PlanAncestors '021').ContainsKey('203')) { throw 'Milestone-urile timpurii nu condiționează extinderea' }
 if ((Get-PlanAncestors '112').ContainsKey('108')) { throw 'Integrarea este încă blocată de gate-ul final de 24' }
 
+$planRequiredPerformance = [ordered]@{
+    '008' = @('simulation','frame')
+    '019' = @('frame','memory')
+    '021' = @('simulation')
+    '034' = @('simulation')
+    '103' = @('workers')
+    '131' = @('storage','frame')
+    '139' = @('simulation')
+    '144' = @('workers')
+    '145' = @('assets')
+    '146' = @('assets')
+    '150' = @('assets','loading')
+    '159' = @('soak','memory')
+    '160' = @('frame')
+    '203' = @('frame','memory','loading')
+    '204' = @('frame','workers')
+    '206' = @('storage','frame')
+    '207' = @('memory','storage')
+    '210' = @('ui','frame')
+    '214' = @('workers','frame')
+    '218' = @('frame','simulation','memory')
+    '219' = @('simulation','frame')
+    '220' = @('frame','simulation','workers','memory')
+    '221' = @('workers','memory','frame')
+    '222' = @('storage','memory','frame')
+    '223' = @('assets','loading','frame','memory')
+    '224' = @('frame','memory','workers','storage','assets','soak')
+}
+foreach ($planPerformanceId in $planRequiredPerformance.Keys) {
+    if (-not $planTasks.ContainsKey($planPerformanceId)) { throw "PBI de performanță lipsă: $planPerformanceId" }
+    foreach ($planPerformanceCheck in $planRequiredPerformance[$planPerformanceId]) {
+        if ($planPerformanceCheck -cnotin $planTasks[$planPerformanceId].PerformanceChecks) { throw "PBI $planPerformanceId fără performance_checks obligatoriu: $planPerformanceCheck" }
+    }
+}
+$planPerformancePrerequisites = [ordered]@{
+    '021' = @('218')
+    '204' = @('218','219','221')
+    '116' = @('220')
+    '145' = @('220','223')
+    '146' = @('220','223')
+    '103' = @('221')
+    '144' = @('221')
+    '131' = @('222')
+    '214' = @('221','222')
+    '160' = @('224')
+}
+foreach ($planPerformanceId in $planPerformancePrerequisites.Keys) {
+    $planPerformanceAncestors = Get-PlanAncestors $planPerformanceId
+    foreach ($planPrerequisiteId in $planPerformancePrerequisites[$planPerformanceId]) {
+        if (-not $planPerformanceAncestors.ContainsKey($planPrerequisiteId)) { throw "PBI $planPerformanceId nu include gate-ul de performanță $planPrerequisiteId" }
+    }
+}
+foreach ($planLateId in @('116','145','146','150','162')) {
+    if ((Get-PlanAncestors '220').ContainsKey($planLateId)) { throw "Gate-ul timpuriu de flotă depinde de scope ulterior: $planLateId" }
+}
+
 $planMarkdownFiles = @(Get-Item -LiteralPath (Join-Path $planRoot 'README.md'), (Join-Path $planRoot 'AGENTS.md')) + @(Get-ChildItem -LiteralPath (Join-Path $planRoot 'Docs'), $planBoardRoot -Recurse -File -Filter '*.md')
 $planCheckedLinks = 0
 foreach ($planFile in $planMarkdownFiles) {
@@ -187,4 +253,6 @@ foreach ($planStage in @('V1','V2','V3')) {
     InitialParameterCount = $planInitialCount
     CheckedLocalLinks = $planCheckedLinks
     EarlyPrototypePrerequisites = $planEarlyAncestors.Count
+    PerformanceTaskCount = @($planTasks.Values | Where-Object { $_.PerformanceChecks.Count -gt 0 }).Count
+    PerformanceDependencyChecks = $planPerformancePrerequisites.Count
 } | ConvertTo-Json -Depth 5

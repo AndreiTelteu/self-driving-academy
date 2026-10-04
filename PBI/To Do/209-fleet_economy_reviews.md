@@ -5,6 +5,7 @@ status: "To Do"
 release: "V1"
 module: "Economie"
 depends_on: ["063","065","137","139","208"]
+performance_checks: ["simulation", "storage"]
 owner: null
 started_at: null
 completed_at: null
@@ -17,6 +18,8 @@ completed_at: null
 Implementează tarife versionate, încasări/rambursări și review-uri simulate ale experienței pasagerului.
 
 ## Context și plan
+
+[Contractul de performanță](../../Docs/25-performanta-contracte-si-benchmark.md) definește probele și bugetele performance_checks.
 
 - [22-kpi-economie-si-review-uri.md](../../Docs/22-kpi-economie-si-review-uri.md)
 
@@ -35,6 +38,8 @@ Citește și [workflow-ul PBI](../AGENTS.md).
 - [ ] Fiecare rezultat comercial și review este idempotent, inclusiv după schimbarea modelului de review; civilii nu intră în veniturile flotei.
 - [ ] Ratingul 0–5 include confort, întârziere și incidente reale, cu motive explicabile.
 - [ ] Scenarii comparabile arată eficiență cu ratings bune și throughput mai mare cu ratings mai slabe.
+
+- [ ] Bucketurile și reviews sunt actualizate incremental; citirea KPI-urilor nu reprocesează întregul ledger.
 
 ## Verificare
 
@@ -64,3 +69,5 @@ Verificare finală: Validate-Board.ps1 -RequireDone '209'.
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do în revizia 0.3; implementarea nu a început.
+
+- 2026-10-04: Revizia 0.4 adaugă contracte/verificări de performanță; implementarea rămâne neîncepută.

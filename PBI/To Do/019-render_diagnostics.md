@@ -5,6 +5,7 @@ status: "To Do"
 release: "V1"
 module: "Babylon"
 depends_on: ["011","014"]
+performance_checks: ["frame", "memory"]
 owner: null
 started_at: null
 completed_at: null
@@ -18,6 +19,8 @@ Expune backend, timpi, draw calls și resurse; inspector doar în dezvoltare.
 
 ## Context și plan
 
+[Contractul de performanță](../../Docs/25-performanta-contracte-si-benchmark.md) definește probele și bugetele performance_checks.
+
 [03-babylon-engine.md](../../Docs/03-babylon-engine.md) descrie regulile și contractele acestei funcționalități. Citește și [workflow-ul PBI](../AGENTS.md) înainte de implementare.
 
 ## Dependențe
@@ -29,6 +32,8 @@ Expune backend, timpi, draw calls și resurse; inspector doar în dezvoltare.
 
 - [ ] Diagnosticarea nu actualizează întregul HUD în fiecare frame.
 - [ ] Buildul de producție exclude inspectorul și codul de debug nefolosit.
+
+- [ ] Raportul separă CPU, GPU când este disponibil, frame time, tick/debt și bytes/cozi; colectorul are buffer limitat și overhead măsurat.
 
 ## Verificare
 
@@ -59,3 +64,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '019' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Revizia 0.4 adaugă contracte/verificări de performanță; implementarea rămâne neîncepută.

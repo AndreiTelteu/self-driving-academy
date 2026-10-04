@@ -5,6 +5,7 @@ status: "To Do"
 release: "V1"
 module: "Validare și release"
 depends_on: ["157","158"]
+performance_checks: ["soak", "memory", "storage", "workers"]
 owner: null
 started_at: null
 completed_at: null
@@ -14,9 +15,11 @@ completed_at: null
 
 ## Obiectiv
 
-Rulează cel puțin 30 de minute cu curse, intervenții și reseturi.
+Rulează cel puțin 60 de minute cu curse, intervenții, reseturi și cicluri de lifecycle.
 
 ## Context și plan
+
+[Contractul de performanță](../../Docs/25-performanta-contracte-si-benchmark.md) definește probele și bugetele performance_checks.
 
 [18-validare-si-release.md](../../Docs/18-validare-si-release.md) descrie regulile și contractele acestei funcționalități. Citește și [workflow-ul PBI](../AGENTS.md) înainte de implementare.
 
@@ -29,6 +32,8 @@ Rulează cel puțin 30 de minute cu curse, intervenții și reseturi.
 
 - [ ] Nu există creștere necontrolată de resurse sau cozi blocate.
 - [ ] Blocajele flotei și quota sunt raportate și recuperabile.
+
+- [ ] Soak-ul durează minimum 60 minute și include 20 de cicluri lifecycle; memoria/cozile/retention ajung la platou și throttlingul laptopului este raportat.
 
 ## Verificare
 
@@ -59,3 +64,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '159' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Revizia 0.4 adaugă contracte/verificări de performanță; implementarea rămâne neîncepută.

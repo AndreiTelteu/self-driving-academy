@@ -108,3 +108,9 @@ Crearea documentației sau a backlogului nu implementează jocul. Pentru lucrul 
 ## Dependențe după extinderea backlogului
 
 ID-ul nu este o poziție în plan. Task-uri adăugate ulterior pot fi prerequisite pentru IDs existente; nu renumerota fișierele pentru a păstra o ordine numerică topologică. Respectă graful depends_on și verifică lipsa ciclurilor. Pentru modificări de plan rulează și Validate-Plan.ps1; un audit de documentație nu mută PBI-uri de implementare în Done.
+
+## Performanță în PBI-urile relevante
+
+Când frontmatterul include performance_checks, citește [contractul de performanță](../Docs/25-performanta-contracte-si-benchmark.md). Înainte de 203 folosește pragurile propuse și probele de bootstrap, marcate provizorii; după 203 folosește manifestul de bugete fixat. Păstrează un baseline pe fixture-ul disponibil înainte de schimbare; la final compară aceeași probă și completează Dovezi cu raportul, build/commit, hardware/backend/preset, metricile și bugetul. Pentru o funcționalitate nouă raportează separat costul suplimentar. Nu substitui o măsurare hardware cu FPS headless/software și nu actualiza automat baseline-ul pentru a accepta o regresie. Dacă un PBI fără performance_checks introduce lucru pe tick/frame, transferuri mari, resurse sau istoric, actualizează scope-ul/verificările înainte de implementare.
+
+Nu este obligatoriu să rulezi jocul complet pentru un contract timpuriu, dar probele relevante ale scope-ului trebuie executate. Gate-urile 220 și 224, precum și dependențele 221–223, sunt obligatorii în ordinea indicată. Optimizările păstrează semantica fizicii, learning-ului și KPI/XP. Lucrul la acest plan nu mută task-urile în Done.

@@ -5,6 +5,7 @@ status: "To Do"
 release: "V1"
 module: "Interfață"
 depends_on: ["073","057","064","068"]
+performance_checks: ["ui"]
 owner: null
 started_at: null
 completed_at: null
@@ -17,6 +18,8 @@ completed_at: null
 Afișează toate taxiurile cu stare, cursă, ETA și profil.
 
 ## Context și plan
+
+[Contractul de performanță](../../Docs/25-performanta-contracte-si-benchmark.md) definește probele și bugetele performance_checks.
 
 [08-interfata-camera-si-control.md](../../Docs/08-interfata-camera-si-control.md) descrie regulile și contractele acestei funcționalități. Citește și [workflow-ul PBI](../AGENTS.md) înainte de implementare.
 
@@ -31,6 +34,8 @@ Afișează toate taxiurile cu stare, cursă, ETA și profil.
 
 - [ ] Lista este stabilă și poate selecta orice taxi din hartă.
 - [ ] Filtrele nu ascund implicit taxiul urmărit sau un blocaj important.
+
+- [ ] Actualizările/sortarea sunt plafonate și păstrează identitatea rândurilor; panoul închis nu reconstruiește lista.
 
 ## Verificare
 
@@ -61,3 +66,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '075' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Revizia 0.4 adaugă contracte/verificări de performanță; implementarea rămâne neîncepută.

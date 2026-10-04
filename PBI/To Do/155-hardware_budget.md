@@ -4,7 +4,8 @@ title: "Verificarea finală a hardware-ului și bugetelor stabilite"
 status: "To Do"
 release: "V1"
 module: "Validare și release"
-depends_on: ["154","019","203"]
+depends_on: ["154","019","203","220","222","223"]
+performance_checks: ["frame", "simulation", "memory", "loading"]
 owner: null
 started_at: null
 completed_at: null
@@ -18,6 +19,8 @@ Verifică pe jocul complet configurațiile și bugetele fixate în 203, fără r
 
 ## Context și plan
 
+[Contractul de performanță](../../Docs/25-performanta-contracte-si-benchmark.md) definește probele și bugetele performance_checks.
+
 [18-validare-si-release.md](../../Docs/18-validare-si-release.md) descrie regulile și contractele acestei funcționalități. Citește și [workflow-ul PBI](../AGENTS.md) înainte de implementare.
 
 ## Dependențe
@@ -25,11 +28,16 @@ Verifică pe jocul complet configurațiile și bugetele fixate în 203, fără r
 - PBI 154 trebuie să existe în Done înainte de începere.
 - PBI 019 trebuie să existe în Done înainte de începere.
 - PBI 203 trebuie să existe în Done înainte de începere.
+- PBI 220 trebuie să existe în Done înainte de începere.
+- PBI 222 trebuie să existe în Done înainte de începere.
+- PBI 223 trebuie să existe în Done înainte de începere.
 
 ## Criterii de acceptare
 
 - [ ] FPS/frame time/memorie/încărcare sunt măsurate pe configurațiile fixate.
 - [ ] Se raportează abaterile și costurile learning, recorderului, KPI-urilor și evaluatorului XP.
+
+- [ ] Configurația exactă, percentilele, inputul și debitul simulat respectă manifestul 203 și probele 218; GPU/memoria indisponibile sunt declarate.
 
 ## Verificare
 
@@ -62,3 +70,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '155' d
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
 
 - 2026-10-04: Plan revizuit la v0.3; implementarea rămâne neîncepută.
+
+- 2026-10-04: Revizia 0.4 adaugă contracte/verificări de performanță; implementarea rămâne neîncepută.

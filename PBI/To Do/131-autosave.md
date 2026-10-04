@@ -4,7 +4,8 @@ title: "Autosave și închiderea sesiunii"
 status: "To Do"
 release: "V1"
 module: "Persistență"
-depends_on: ["128","129","130","206"]
+depends_on: ["128","129","130","206","222"]
+performance_checks: ["storage", "frame"]
 owner: null
 started_at: null
 completed_at: null
@@ -18,6 +19,8 @@ Leagă salvările periodice și evenimentele de închidere.
 
 ## Context și plan
 
+[Contractul de performanță](../../Docs/25-performanta-contracte-si-benchmark.md) definește probele și bugetele performance_checks.
+
 [15-salvare-si-import-export.md](../../Docs/15-salvare-si-import-export.md) descrie regulile și contractele acestei funcționalități. Citește și [workflow-ul PBI](../AGENTS.md) înainte de implementare.
 
 ## Dependențe
@@ -26,11 +29,14 @@ Leagă salvările periodice și evenimentele de închidere.
 - PBI 129 trebuie să existe în Done înainte de începere.
 - PBI 130 trebuie să existe în Done înainte de începere.
 - PBI 206 trebuie să existe în Done înainte de începere.
+- PBI 222 trebuie să existe în Done înainte de începere.
 
 ## Criterii de acceptare
 
 - [ ] UI indică pending, succes și eroare fără a pretinde o salvare neterminată.
 - [ ] Timpul de salvare este separat de timpul simulat.
+
+- [ ] Autosave folosește pipeline-ul 222; cererile redundante sunt coalesced fără a pierde evenimente protejate și fără salvare finală garantată la shutdown.
 
 ## Verificare
 
@@ -63,3 +69,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '131' d
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
 
 - 2026-10-04: Plan revizuit la v0.3; implementarea rămâne neîncepută.
+
+- 2026-10-04: Revizia 0.4 adaugă contracte/verificări de performanță; implementarea rămâne neîncepută.

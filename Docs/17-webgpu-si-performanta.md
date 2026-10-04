@@ -1,12 +1,12 @@
 # WebGPU și performanță
 
-Versiune 0.3 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
+Versiune 0.4 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
 
 ## WebGPU și compatibilitate
 
 WebGPU oferă randare și calcule paralele pe GPU, cu shadere WGSL. Pentru prima versiune îl folosim în primul rând pentru oraș și vehicule. Compute pentru efecte, culling sau simulare se introduce numai când măsurătorile arată un beneficiu. Învățarea statistică inițială și logica rutieră pot rula pe CPU. Acestea sunt alegeri de arhitectură. [WebGPU API](https://developer.mozilla.org/en-US/docs/Web/API/WebGPU_API)
 
-La 4 octombrie 2026, pagina de implementare documentează WebGPU în Chromium pe Windows x86/x64, macOS și ChromeOS, plus subseturi de Android și Linux; Firefox pe Windows și configurații macOS suportate; Safari 26 pe platformele Apple indicate. Detectarea la runtime și testarea pe dispozitive reale rămân necesare. [Implementation Status](https://github.com/gpuweb/gpuweb/wiki/Implementation-Status)
+Compatibilitatea depinde de combinația browser/OS/GPU/driver și de funcțiile disponibile efectiv. Se detectează la runtime și se testează matricea reală aleasă în 203; lista de implementări este o referință actualizabilă, nu o garanție pentru orice dispozitiv. [Implementation Status](https://github.com/gpuweb/gpuweb/wiki/Implementation-Status)
 
 Aplicația publicată folosește HTTPS. Bootstrapul verifică suportul și inițializarea reală a engine-ului. Propunere: dacă WebGPU nu este disponibil sau inițializarea eșuează, reconstruiește scena pe WebGL 2 înainte de începerea sesiunii. Paritatea urmărită privește gameplay-ul; nivelul de efecte vizuale poate diferi.
 
@@ -29,3 +29,9 @@ Experimentele automate rulează în loturi într-un worker cu anulare și progre
 ## Bugete înainte de extindere
 
 PBI 203 fixează configurațiile și metoda de măsurare înaintea prototipului de fizică și a extinderii orașului; hardware-ul exact nu este inventat în documentație. PBI 155 verifică bugetul pe jocul complet și raportează abaterile. Recorderul întregii lumi, graficele KPI, generarea zilnică și evaluările XP au bugete separate; evaluările contrafactuale rulează cu progres, anulare și limite de resurse în worker.
+
+## Contract obligatoriu în procesul PBI
+
+[Modulul 25](25-performanta-contracte-si-benchmark.md) detaliază auditul, bugetele numerice propuse, workload-urile, frecvențele, admiterea worker-elor, capturile coerente, asseturile și probele de regresie. 218 furnizează harness-ul devreme; 219 schedulerul; 220 validează flota înainte de campanie/asseturi; 221 controlează worker-ele; 222 datele și autosave; 223 randarea/asseturile; 224 închide regresiile înainte de livrare. PBI-urile relevante declară performance_checks și păstrează probe înainte/după.
+
+Țintele FPS sunt completate cu p95/p99 frame time, latență de input și raport timp simulat/timp real. Rezoluția internă și calitatea sunt parte din rezultat. Optimizarea nu reduce populația simulată, fizica sau regulile KPI/XP; se amână mai întâi lucrul secundar și se ajustează grafica. Un renderer mai rapid nu garantează că evaluatorul A/B și serializarea checkpointului sunt în buget.

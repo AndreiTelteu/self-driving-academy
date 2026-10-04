@@ -4,8 +4,8 @@ Joc 3D pentru browser în care jucătorul conduce manual, iar taxiurile autonome
 
 Proiectul se află în etapa de documentație și planificare. Implementarea jocului nu a început.
 
-- [Planul modular](Docs/README.md): 24 de documente de produs și arhitectură.
-- [Backlog Kanban](PBI/README.md): 217 task-uri cu ID-uri stabile și dependențe explicite.
+- [Planul modular](Docs/README.md): 25 de documente de produs și arhitectură.
+- [Backlog Kanban](PBI/README.md): 224 task-uri cu ID-uri stabile și dependențe explicite.
 - [Workflow pentru agenți](PBI/AGENTS.md): To Do → In Progress → Done, cu mutare fizică obligatorie la finalizare.
 - [Catalogul parametrilor](Docs/11-catalog-parametri.md): 80 de parametri planificați; 24 pentru prima versiune.
 

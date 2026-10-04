@@ -5,6 +5,7 @@ status: "To Do"
 release: "V1"
 module: "Persistență"
 depends_on: ["214","210","212","131","136"]
+performance_checks: ["storage", "memory"]
 owner: null
 started_at: null
 completed_at: null
@@ -17,6 +18,8 @@ completed_at: null
 Extinde checkpointul/exportul de sesiune cu calendar economic/daily, ledger comercial, review-uri, bucketuri și XP.
 
 ## Context și plan
+
+[Contractul de performanță](../../Docs/25-performanta-contracte-si-benchmark.md) definește probele și bugetele performance_checks.
 
 - [15-salvare-si-import-export.md](../../Docs/15-salvare-si-import-export.md)
 - [22-kpi-economie-si-review-uri.md](../../Docs/22-kpi-economie-si-review-uri.md)
@@ -37,6 +40,8 @@ Citește și [workflow-ul PBI](../AGENTS.md).
 - [ ] Reload/migrarea păstrează sumele, media, daily set și XP fără duplicate.
 - [ ] Commitul lumii și ledger-elor este coerent; exportul de DrivingProfile nu transferă progres.
 - [ ] Cota plină, importul invalid și clock rollback nu corup sau dublează recompensele.
+
+- [ ] Commiturile comerciale/XP respectă pipeline-ul 222; datele sintetice de istoric și storage lent au costuri și limite măsurate.
 
 ## Verificare
 
@@ -66,3 +71,5 @@ Verificare finală: Validate-Board.ps1 -RequireDone '215'.
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do în revizia 0.3; implementarea nu a început.
+
+- 2026-10-04: Revizia 0.4 adaugă contracte/verificări de performanță; implementarea rămâne neîncepută.

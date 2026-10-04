@@ -4,7 +4,8 @@ title: "Prototip timpuriu cu trei parametri și oraș care imită"
 status: "To Do"
 release: "V1"
 module: "Produs"
-depends_on: ["010","017","031","033","046","049","051","066","069","085","092","203"]
+depends_on: ["010","017","031","033","046","049","051","066","069","085","092","203","218","219","221"]
+performance_checks: ["frame", "simulation", "workers"]
 owner: null
 started_at: null
 completed_at: null
@@ -17,6 +18,8 @@ completed_at: null
 Livrează pe fixture mic bucla LEARNING→estimare→profil→AUTO pentru speed_delta_urban, desired_acceleration și stop_full_probability, înainte de cartier/flota completă.
 
 ## Context și plan
+
+[Contractul de performanță](../../Docs/25-performanta-contracte-si-benchmark.md) definește probele și bugetele performance_checks.
 
 - [24-milestone-timpuriu-si-contracte.md](../../Docs/24-milestone-timpuriu-si-contracte.md)
 - [08-interfata-camera-si-control.md](../../Docs/08-interfata-camera-si-control.md)
@@ -38,12 +41,17 @@ Citește și [workflow-ul PBI](../AGENTS.md).
 - PBI 085 trebuie să existe în Done înainte de începere.
 - PBI 092 trebuie să existe în Done înainte de începere.
 - PBI 203 trebuie să existe în Done înainte de începere.
+- PBI 218 trebuie să existe în Done înainte de începere.
+- PBI 219 trebuie să existe în Done înainte de începere.
+- PBI 221 trebuie să existe în Done înainte de începere.
 
 ## Criterii de acceptare
 
 - [ ] Trei taxiuri și două civile adoptă același stil; fiecare din cele trei chei are o demonstrație eligibilă și efect real.
 - [ ] MANUAL nu învață; adaptoarele minime păstrează contractele reutilizabile și nu revendică suportul complet de 24.
 - [ ] Playtestul și ținta primei schimbări în cinci minute sunt consemnate conform modulului 24; nicio dovadă nu este inventată.
+
+- [ ] Harness-ul 218, schedulerul 219 și admiterea 221 măsoară prima buclă pe fixture mic fără a cere artificial flota completă.
 
 ## Verificare
 
@@ -73,3 +81,5 @@ Verificare finală: Validate-Board.ps1 -RequireDone '204'.
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do în revizia 0.3; implementarea nu a început.
+
+- 2026-10-04: Revizia 0.4 adaugă contracte/verificări de performanță; implementarea rămâne neîncepută.

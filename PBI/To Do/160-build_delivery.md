@@ -4,7 +4,8 @@ title: "Build producție CI și livrare statică"
 status: "To Do"
 release: "V1"
 module: "Validare și release"
-depends_on: ["159","003","151"]
+depends_on: ["159","003","151","224"]
+performance_checks: ["assets", "frame"]
 owner: null
 started_at: null
 completed_at: null
@@ -18,6 +19,8 @@ Configurează pipeline de verificare și build static cu asseturi și WASM.
 
 ## Context și plan
 
+[Contractul de performanță](../../Docs/25-performanta-contracte-si-benchmark.md) definește probele și bugetele performance_checks.
+
 [18-validare-si-release.md](../../Docs/18-validare-si-release.md) descrie regulile și contractele acestei funcționalități. Citește și [workflow-ul PBI](../AGENTS.md) înainte de implementare.
 
 ## Dependențe
@@ -25,11 +28,14 @@ Configurează pipeline de verificare și build static cu asseturi și WASM.
 - PBI 159 trebuie să existe în Done înainte de începere.
 - PBI 003 trebuie să existe în Done înainte de începere.
 - PBI 151 trebuie să existe în Done înainte de începere.
+- PBI 224 trebuie să existe în Done înainte de începere.
 
 ## Criterii de acceptare
 
 - [ ] Buildul include asseturi/WASM și exclude debug; CI rulează și Validate-Plan.ps1.
 - [ ] CI eșuează la verificări obligatorii și nu livrează un rezultat eșuat.
+
+- [ ] Pipeline-ul include gate-ul 224; lipsa rezultatului pe hardware real nu este substituită de FPS headless/software.
 
 ## Verificare
 
@@ -62,3 +68,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '160' d
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
 
 - 2026-10-04: Plan revizuit la v0.3; implementarea rămâne neîncepută.
+
+- 2026-10-04: Revizia 0.4 adaugă contracte/verificări de performanță; implementarea rămâne neîncepută.

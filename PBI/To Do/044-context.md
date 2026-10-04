@@ -5,6 +5,7 @@ status: "To Do"
 release: "V1"
 module: "Autonomie"
 depends_on: ["034","036","038"]
+performance_checks: ["simulation"]
 owner: null
 started_at: null
 completed_at: null
@@ -18,6 +19,8 @@ Produce context cu bandă, lider, semnal aplicabil, conflicte și obstacole.
 
 ## Context și plan
 
+[Contractul de performanță](../../Docs/25-performanta-contracte-si-benchmark.md) definește probele și bugetele performance_checks.
+
 [06-autonomie-si-trafic.md](../../Docs/06-autonomie-si-trafic.md) descrie regulile și contractele acestei funcționalități. Citește și [workflow-ul PBI](../AGENTS.md) înainte de implementare.
 
 ## Dependențe
@@ -30,6 +33,8 @@ Produce context cu bandă, lider, semnal aplicabil, conflicte și obstacole.
 
 - [ ] Contextul este derivat din starea simulării și păstrează tick-ul.
 - [ ] Vehiculele de pe benzi necorelate nu devin lideri falși.
+
+- [ ] Contextul folosește indexul spațial și poate fi invalidat urgent; samplingul AI nu schimbă timpii oportunităților sau telemetriei.
 
 ## Verificare
 
@@ -60,3 +65,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '044' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Revizia 0.4 adaugă contracte/verificări de performanță; implementarea rămâne neîncepută.

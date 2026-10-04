@@ -5,6 +5,7 @@ status: "To Do"
 release: "V1"
 module: "Babylon"
 depends_on: ["013","009"]
+performance_checks: ["frame", "assets"]
 owner: null
 started_at: null
 completed_at: null
@@ -18,6 +19,8 @@ Creează iluminarea zilei și setările de umbre/materiale cu paritate de gamepl
 
 ## Context și plan
 
+[Contractul de performanță](../../Docs/25-performanta-contracte-si-benchmark.md) definește probele și bugetele performance_checks.
+
 [03-babylon-engine.md](../../Docs/03-babylon-engine.md) descrie regulile și contractele acestei funcționalități. Citește și [workflow-ul PBI](../AGENTS.md) înainte de implementare.
 
 ## Dependențe
@@ -29,6 +32,8 @@ Creează iluminarea zilei și setările de umbre/materiale cu paritate de gamepl
 
 - [ ] Semnalele și marcajele sunt lizibile la nivelurile de calitate alese.
 - [ ] Schimbarea calității nu schimbă regulile sau fizica.
+
+- [ ] Rezoluția internă/DPR și presetul sunt explicite; ajustarea automată are histerezis și păstrează regulile simulării.
 
 ## Verificare
 
@@ -59,3 +64,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '016' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Revizia 0.4 adaugă contracte/verificări de performanță; implementarea rămâne neîncepută.

@@ -23,13 +23,22 @@ function Test-PlanRejectsMutation {
         [string]$RelativePath,
         [string]$Original,
         [string]$Replacement,
-        [string]$ExpectedError
+        [string]$ExpectedError,
+        [object[]]$AdditionalChanges = @()
     )
-    $planTestFile = Join-Path $planTestFixture $RelativePath
-    $planTestBefore = [IO.File]::ReadAllText($planTestFile)
-    if (-not $planTestBefore.Contains($Original)) { throw "Fixture nepotrivit: $Name" }
+    $planTestChanges = @([pscustomobject]@{ RelativePath = $RelativePath; Original = $Original; Replacement = $Replacement }) + @($AdditionalChanges)
+    $planTestBeforeByPath = @{}
+    foreach ($planTestChange in $planTestChanges) {
+        $planTestFile = Join-Path $planTestFixture $planTestChange.RelativePath
+        $planTestBefore = [IO.File]::ReadAllText($planTestFile)
+        if (-not $planTestBefore.Contains($planTestChange.Original)) { throw "Fixture nepotrivit: $Name" }
+        $planTestBeforeByPath[$planTestFile] = $planTestBefore
+    }
     try {
-        [IO.File]::WriteAllText($planTestFile, $planTestBefore.Replace($Original, $Replacement), $planTestEncoding)
+        foreach ($planTestChange in $planTestChanges) {
+            $planTestFile = Join-Path $planTestFixture $planTestChange.RelativePath
+            [IO.File]::WriteAllText($planTestFile, $planTestBeforeByPath[$planTestFile].Replace($planTestChange.Original, $planTestChange.Replacement), $planTestEncoding)
+        }
         $planTestError = $null
         try { $null = & $planTestValidator -ProjectRoot $planTestFixture }
         catch { $planTestError = $_.Exception.Message }
@@ -37,7 +46,11 @@ function Test-PlanRejectsMutation {
         if ($planTestError -notmatch $ExpectedError) { throw "Eroare neașteptată pentru $Name : $planTestError" }
         $planTestPassed.Add($Name)
     }
-    finally { [IO.File]::WriteAllText($planTestFile, $planTestBefore, $planTestEncoding) }
+    finally {
+        foreach ($planTestFile in $planTestBeforeByPath.Keys) {
+            [IO.File]::WriteAllText($planTestFile, $planTestBeforeByPath[$planTestFile], $planTestEncoding)
+        }
+    }
 }
 
 try {
@@ -81,6 +94,29 @@ try {
         -Original '(22-kpi-economie-si-review-uri.md)' `
         -Replacement '(modul-kpi-inexistent.md)' `
         -ExpectedError 'Link local rupt.*modul-kpi-inexistent'
+
+    Test-PlanRejectsMutation -Name 'Planul respinge un performance_check necunoscut' `
+        -RelativePath 'PBI/To Do/218-performance_harness.md' `
+        -Original 'performance_checks: ["frame", "simulation", "memory"]' `
+        -Replacement 'performance_checks: ["unknown"]' `
+        -ExpectedError 'Performance check necunoscut: unknown în 218'
+
+    Test-PlanRejectsMutation -Name 'Harness-ul nu poate pierde declarația de performanță' `
+        -RelativePath 'PBI/To Do/218-performance_harness.md' `
+        -Original 'performance_checks: ["frame", "simulation", "memory"]' `
+        -Replacement '' `
+        -ExpectedError 'PBI 218 fără performance_checks obligatoriu'
+
+    Test-PlanRejectsMutation -Name 'Campania nu poate ocoli gate-ul de flotă' `
+        -RelativePath 'PBI/To Do/116-mission_schema.md' `
+        -Original 'depends_on: ["115","007","005","220"]' `
+        -Replacement 'depends_on: ["115","007","005"]' `
+        -AdditionalChanges @([pscustomobject]@{
+            RelativePath = 'PBI/README.md'
+            Original = '| 116 | Definiții și lifecycle de misiuni | Misiuni | V1 | 115, 007, 005, 220 |'
+            Replacement = '| 116 | Definiții și lifecycle de misiuni | Misiuni | V1 | 115, 007, 005 |'
+        }) `
+        -ExpectedError 'PBI 116 nu include gate-ul de performanță 220'
 
     $planTestFinal = & $planTestValidator -ProjectRoot $planTestFixture | ConvertFrom-Json
     if (-not $planTestFinal.Valid) { throw 'Restaurarea fixture-ului a eșuat' }

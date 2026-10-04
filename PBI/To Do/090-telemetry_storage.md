@@ -5,6 +5,7 @@ status: "To Do"
 release: "V1"
 module: "Telemetrie"
 depends_on: ["089","010"]
+performance_checks: ["memory", "workers", "frame"]
 owner: null
 started_at: null
 completed_at: null
@@ -18,6 +19,8 @@ Compactează la frecvența de analiză și păstrează timpii evenimentelor.
 
 ## Context și plan
 
+[Contractul de performanță](../../Docs/25-performanta-contracte-si-benchmark.md) definește probele și bugetele performance_checks.
+
 [09-telemetrie-si-oportunitati.md](../../Docs/09-telemetrie-si-oportunitati.md) descrie regulile și contractele acestei funcționalități. Citește și [workflow-ul PBI](../AGENTS.md) înainte de implementare.
 
 ## Dependențe
@@ -29,6 +32,8 @@ Compactează la frecvența de analiză și păstrează timpii evenimentelor.
 
 - [ ] Bufferul are limite și finalizează segmentul fără a bloca frame-ul.
 - [ ] Evenimentele de oprire și reacție nu pierd rezoluția tick-ului.
+
+- [ ] Chunkurile/rollover-ul păstrează continuitatea și oportunitățile; se măsoară bytes și transferul fără detașarea datelor live.
 
 ## Verificare
 
@@ -59,3 +64,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '090' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Revizia 0.4 adaugă contracte/verificări de performanță; implementarea rămâne neîncepută.

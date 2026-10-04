@@ -5,6 +5,7 @@ status: "To Do"
 release: "V1"
 module: "Babylon"
 depends_on: ["012","015","014"]
+performance_checks: ["memory", "frame"]
 owner: null
 started_at: null
 completed_at: null
@@ -18,6 +19,8 @@ Implementează resize, cleanup și reconstrucția scenei din snapshot după pier
 
 ## Context și plan
 
+[Contractul de performanță](../../Docs/25-performanta-contracte-si-benchmark.md) definește probele și bugetele performance_checks.
+
 [03-babylon-engine.md](../../Docs/03-babylon-engine.md) descrie regulile și contractele acestei funcționalități. Citește și [workflow-ul PBI](../AGENTS.md) înainte de implementare.
 
 ## Dependențe
@@ -30,6 +33,8 @@ Implementează resize, cleanup și reconstrucția scenei din snapshot după pier
 
 - [ ] Resize/disposal/pierderea GPU reconstruiesc rendererul din snapshotul în RAM, fără dublarea resurselor.
 - [ ] Un eșec repetat păstrează starea în RAM și oferă reluare; salvarea durabilă este integrată și verificată în 206/216.
+
+- [ ] Resize/reload/recovery repetate nu cresc numărul de listeners, texturi sau observers peste plafonul fixat.
 
 ## Verificare
 
@@ -62,3 +67,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '020' d
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
 
 - 2026-10-04: Plan revizuit la v0.3; implementarea rămâne neîncepută.
+
+- 2026-10-04: Revizia 0.4 adaugă contracte/verificări de performanță; implementarea rămâne neîncepută.

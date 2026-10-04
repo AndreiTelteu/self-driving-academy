@@ -5,6 +5,7 @@ status: "To Do"
 release: "V1"
 module: "Babylon"
 depends_on: ["013"]
+performance_checks: ["assets", "loading", "memory"]
 owner: null
 started_at: null
 completed_at: null
@@ -18,6 +19,8 @@ Configurează loaderul versiunii Babylon fixate, progres, cache și placeholder.
 
 ## Context și plan
 
+[Contractul de performanță](../../Docs/25-performanta-contracte-si-benchmark.md) definește probele și bugetele performance_checks.
+
 [03-babylon-engine.md](../../Docs/03-babylon-engine.md) descrie regulile și contractele acestei funcționalități. Citește și [workflow-ul PBI](../AGENTS.md) înainte de implementare.
 
 ## Dependențe
@@ -28,6 +31,8 @@ Configurează loaderul versiunii Babylon fixate, progres, cache și placeholder.
 
 - [ ] Asseturile critice au erori explicite; decorul lipsă poate folosi placeholder.
 - [ ] Load și unload eliberează resurse și nu dublează materiale.
+
+- [ ] Încărcarea critică/opțională, cache-ul și decode/upload au limite și timpi raportați; disposal păstrează resursele partajate încă folosite.
 
 ## Verificare
 
@@ -58,3 +63,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '015' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Revizia 0.4 adaugă contracte/verificări de performanță; implementarea rămâne neîncepută.

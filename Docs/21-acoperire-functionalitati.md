@@ -1,6 +1,6 @@
 # Acoperirea funcționalităților prin PBI
 
-Versiune 0.3 · 4 octombrie 2026. Parte din [planul complet](README.md).
+Versiune 0.4 · 4 octombrie 2026. Parte din [planul complet](README.md).
 
 ## Module și intervale de task-uri
 
@@ -32,6 +32,9 @@ ID-urile rămân stabile la mutarea între coloane. Găsește task-ul prin prefi
 | Trei misiuni zilnice și XP | 211, 212, 213, 214 | [Document](23-misiuni-zilnice-si-experienta.md) |
 | Salvare și QA ale reviziei V1 | 215, 216 | [Document](18-validare-si-release.md) |
 | AUTO/MANUAL/LEARNING integrate | 217 | [Document](08-interfata-camera-si-control.md) |
+| Harness, scheduler și gate timpuriu de flotă | 218, 219, 220 | [Document](25-performanta-contracte-si-benchmark.md) |
+| Bugete workers, date și randare/asseturi | 221, 222, 223 | [Document](25-performanta-contracte-si-benchmark.md) |
+| Gate CI și soak de performanță | 224 | [Document](25-performanta-contracte-si-benchmark.md) |
 
 ## Acoperirea celor 80 de parametri
 

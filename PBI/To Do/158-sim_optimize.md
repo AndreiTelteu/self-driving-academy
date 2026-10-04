@@ -4,7 +4,8 @@ title: "Optimizare simulare și estimare"
 status: "To Do"
 release: "V1"
 module: "Validare și release"
-depends_on: ["156","034","103"]
+depends_on: ["156","034","103","219","221","222"]
+performance_checks: ["simulation", "workers", "memory"]
 owner: null
 started_at: null
 completed_at: null
@@ -18,6 +19,8 @@ Reduce costurile CPU și transferurile fără schimbarea semanticii.
 
 ## Context și plan
 
+[Contractul de performanță](../../Docs/25-performanta-contracte-si-benchmark.md) definește probele și bugetele performance_checks.
+
 [18-validare-si-release.md](../../Docs/18-validare-si-release.md) descrie regulile și contractele acestei funcționalități. Citește și [workflow-ul PBI](../AGENTS.md) înainte de implementare.
 
 ## Dependențe
@@ -25,11 +28,16 @@ Reduce costurile CPU și transferurile fără schimbarea semanticii.
 - PBI 156 trebuie să existe în Done înainte de începere.
 - PBI 034 trebuie să existe în Done înainte de începere.
 - PBI 103 trebuie să existe în Done înainte de începere.
+- PBI 219 trebuie să existe în Done înainte de începere.
+- PBI 221 trebuie să existe în Done înainte de începere.
+- PBI 222 trebuie să existe în Done înainte de începere.
 
 ## Criterii de acceptare
 
 - [ ] Contextul și denominatoarele rămân echivalente în scenariile de regresie.
 - [ ] Estimarea nu blochează inputul pe hardware-ul de referință.
+
+- [ ] Costurile de alocare, transfer și coadă sunt măsurate; optimizarea păstrează fizica/seed-urile și nu substituie A/B cu proxy pentru XP.
 
 ## Verificare
 
@@ -60,3 +68,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '158' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Revizia 0.4 adaugă contracte/verificări de performanță; implementarea rămâne neîncepută.

@@ -5,6 +5,7 @@ status: "To Do"
 release: "V1"
 module: "Babylon"
 depends_on: ["013","017"]
+performance_checks: ["frame"]
 owner: null
 started_at: null
 completed_at: null
@@ -18,6 +19,8 @@ Mapează clickurile pe mesh/instance la intenții de selecție.
 
 ## Context și plan
 
+[Contractul de performanță](../../Docs/25-performanta-contracte-si-benchmark.md) definește probele și bugetele performance_checks.
+
 [03-babylon-engine.md](../../Docs/03-babylon-engine.md) descrie regulile și contractele acestei funcționalități. Citește și [workflow-ul PBI](../AGENTS.md) înainte de implementare.
 
 ## Dependențe
@@ -29,6 +32,8 @@ Mapează clickurile pe mesh/instance la intenții de selecție.
 
 - [ ] Se poate selecta orice mașină vizibilă fără a depinde de mesh unic.
 - [ ] Un dialog modal consumă clickul și nu selectează vehicule în spate.
+
+- [ ] Pickingul instanțelor/batchurilor păstrează entityId; mișcarea pointerului nu scanează permanent scena dacă nu cere hover.
 
 ## Verificare
 
@@ -59,3 +64,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '018' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Revizia 0.4 adaugă contracte/verificări de performanță; implementarea rămâne neîncepută.

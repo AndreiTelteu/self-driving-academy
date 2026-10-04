@@ -5,6 +5,7 @@ status: "To Do"
 release: "V1"
 module: "Asseturi și audio"
 depends_on: ["145","028","009"]
+performance_checks: ["memory", "frame"]
 owner: null
 started_at: null
 completed_at: null
@@ -18,6 +19,8 @@ Leagă sunetele de viteza, sarcina și contactele fizice.
 
 ## Context și plan
 
+[Contractul de performanță](../../Docs/25-performanta-contracte-si-benchmark.md) definește probele și bugetele performance_checks.
+
 [16-asseturi-vizual-si-audio.md](../../Docs/16-asseturi-vizual-si-audio.md) descrie regulile și contractele acestei funcționalități. Citește și [workflow-ul PBI](../AGENTS.md) înainte de implementare.
 
 ## Dependențe
@@ -30,6 +33,8 @@ Leagă sunetele de viteza, sarcina și contactele fizice.
 
 - [ ] Audio pornește după gestul jucătorului și are volume separate.
 - [ ] Mute nu afectează simularea sau informațiile esențiale vizuale.
+
+- [ ] Vocile și bufferele audio au plafon și ownership; vehiculele neaudibile nu consumă toate aceeași procesare audio.
 
 ## Verificare
 
@@ -60,3 +65,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '148' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Revizia 0.4 adaugă contracte/verificări de performanță; implementarea rămâne neîncepută.

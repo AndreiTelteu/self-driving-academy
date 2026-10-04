@@ -5,6 +5,7 @@ status: "To Do"
 release: "V1"
 module: "Fundație"
 depends_on: ["005","006"]
+performance_checks: ["workers", "memory"]
 owner: null
 started_at: null
 completed_at: null
@@ -18,6 +19,8 @@ Definește jobId, segmentId, baseVersionId, progres, rezultat și anulare.
 
 ## Context și plan
 
+[Contractul de performanță](../../Docs/25-performanta-contracte-si-benchmark.md) definește probele și bugetele performance_checks.
+
 [02-arhitectura-si-contracte.md](../../Docs/02-arhitectura-si-contracte.md) descrie regulile și contractele acestei funcționalități. Citește și [workflow-ul PBI](../AGENTS.md) înainte de implementare.
 
 ## Dependențe
@@ -29,6 +32,8 @@ Definește jobId, segmentId, baseVersionId, progres, rezultat și anulare.
 
 - [ ] Rezultatele întârziate se pot identifica și nu scriu direct starea lumii.
 - [ ] Un job anulat nu blochează workerul pentru jobul următor.
+
+- [ ] Protocolul expune bytes/ownership și prioritate; anularea/progresul nu generează trafic de mesaje neplafonat.
 
 ## Verificare
 
@@ -59,3 +64,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '010' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Revizia 0.4 adaugă contracte/verificări de performanță; implementarea rămâne neîncepută.

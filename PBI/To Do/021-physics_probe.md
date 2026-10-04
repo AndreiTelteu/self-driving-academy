@@ -4,7 +4,8 @@ title: "Prototip Rapier și decizia de fizică"
 status: "To Do"
 release: "V1"
 module: "Vehicule și fizică"
-depends_on: ["001","004","203"]
+depends_on: ["001","004","203","218"]
+performance_checks: ["simulation", "frame"]
 owner: null
 started_at: null
 completed_at: null
@@ -18,6 +19,8 @@ Validează controllerul auto Rapier în scene de frânare, viraj, bordură și c
 
 ## Context și plan
 
+[Contractul de performanță](../../Docs/25-performanta-contracte-si-benchmark.md) definește probele și bugetele performance_checks.
+
 [05-vehicule-si-fizica.md](../../Docs/05-vehicule-si-fizica.md) descrie regulile și contractele acestei funcționalități. Citește și [workflow-ul PBI](../AGENTS.md) înainte de implementare.
 
 ## Dependențe
@@ -25,11 +28,14 @@ Validează controllerul auto Rapier în scene de frânare, viraj, bordură și c
 - PBI 001 trebuie să existe în Done înainte de începere.
 - PBI 004 trebuie să existe în Done înainte de începere.
 - PBI 203 trebuie să existe în Done înainte de începere.
+- PBI 218 trebuie să existe în Done înainte de începere.
 
 ## Criterii de acceptare
 
 - [ ] Aderența și frânarea pot fi calibrate pentru experiența realistă cerută.
 - [ ] Decizia și limitele observate sunt documentate; Babylon rămâne engine-ul.
+
+- [ ] Pasul fizic, query-urile și bridge-ul JS/WASM sunt măsurate cu multe contacte și collidere calibrate; setările solver/CCD nu se schimbă cu FPS.
 
 ## Verificare
 
@@ -62,3 +68,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '021' d
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
 
 - 2026-10-04: Plan revizuit la v0.3; implementarea rămâne neîncepută.
+
+- 2026-10-04: Revizia 0.4 adaugă contracte/verificări de performanță; implementarea rămâne neîncepută.

@@ -5,6 +5,7 @@ status: "To Do"
 release: "V1"
 module: "Validare și release"
 depends_on: ["155","065","144"]
+performance_checks: ["frame", "simulation", "workers"]
 owner: null
 started_at: null
 completed_at: null
@@ -18,6 +19,8 @@ Măsoară 20/24/30 de taxiuri și densități civile variate.
 
 ## Context și plan
 
+[Contractul de performanță](../../Docs/25-performanta-contracte-si-benchmark.md) definește probele și bugetele performance_checks.
+
 [18-validare-si-release.md](../../Docs/18-validare-si-release.md) descrie regulile și contractele acestei funcționalități. Citește și [workflow-ul PBI](../AGENTS.md) înainte de implementare.
 
 ## Dependențe
@@ -30,6 +33,8 @@ Măsoară 20/24/30 de taxiuri și densități civile variate.
 
 - [ ] Taxiurile nevizibile rămân simulate și incluse în expunere.
 - [ ] CPU de fizică, decizii, UI și GPU sunt raportate separat.
+
+- [ ] Matricea include driving cu learning, recorder+autosave și XP A/B, plus trafic agresiv/contacte, cold/first-use și suprasarcină etichetată.
 
 ## Verificare
 
@@ -60,3 +65,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '156' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Revizia 0.4 adaugă contracte/verificări de performanță; implementarea rămâne neîncepută.

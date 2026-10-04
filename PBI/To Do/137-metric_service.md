@@ -5,6 +5,7 @@ status: "To Do"
 release: "V1"
 module: "Experimente și indicatori"
 depends_on: ["063","028","085"]
+performance_checks: ["simulation"]
 owner: null
 started_at: null
 completed_at: null
@@ -18,6 +19,8 @@ Calculează durate, finalizări, kilometri-vehicul și timp blocat.
 
 ## Context și plan
 
+[Contractul de performanță](../../Docs/25-performanta-contracte-si-benchmark.md) definește probele și bugetele performance_checks.
+
 [14-experimente-si-indicatori.md](../../Docs/14-experimente-si-indicatori.md) descrie regulile și contractele acestei funcționalități. Citește și [workflow-ul PBI](../AGENTS.md) înainte de implementare.
 
 ## Dependențe
@@ -30,6 +33,8 @@ Calculează durate, finalizări, kilometri-vehicul și timp blocat.
 
 - [ ] Denominatoarele includ toată flota și au unități.
 - [ ] Expunerea zero produce indisponibil, nu o rată aparent perfectă.
+
+- [ ] Agregările sunt incrementale pe evenimente idempotente; nu se rescanează istoricul întreg la fiecare tick sau refresh HUD.
 
 ## Verificare
 
@@ -60,3 +65,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '137' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Revizia 0.4 adaugă contracte/verificări de performanță; implementarea rămâne neîncepută.

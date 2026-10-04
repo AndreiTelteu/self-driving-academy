@@ -1,6 +1,6 @@
 # Arhitectură și contracte
 
-Versiune 0.3 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
+Versiune 0.4 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
 
 ## Stack ales
 
@@ -104,3 +104,7 @@ Există maximum un vehicul în MANUAL sau LEARNING. Fiecare corp fizic are un en
 ## Contracte economice și de progres
 
 economy consumă rezultate ale curselor și consecințe pentru tarife/reviews/KPI-uri. progression consumă mission rewards, timp activ și evaluări de impact, fără a modifica DrivingProfile. Worker-ele de experimente folosesc lumi și ledger-e izolate. SessionCheckpoint, WorldReplayChunk și agregările din modulele 22–23 sunt scheme distincte. Timpul economic, timpul calendaristic daily și minutele active XP nu se substituie reciproc.
+
+## Contracte de resurse și performanță
+
+PerformanceReport și manifestul de bugete au versiuni proprii, hardware/backend/preset și fixture identificabile. WorkerJob include payloadBytes, ownership, prioritate, stare de admitere și progres. Un singur coordonator bugetează joburile grele; UI nu poate lansa câte o lume pentru fiecare cauză XP. Captura checkpointului este separată de encode/commit și are cost sincron măsurat. [Modulul 25](25-performanta-contracte-si-benchmark.md) definește ordinea, backpressure-ul și performance_checks din PBI.

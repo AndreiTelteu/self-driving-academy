@@ -1,6 +1,6 @@
 # Babylon.js și integrarea engine-ului
 
-Versiune 0.3 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
+Versiune 0.4 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
 
 ## Decizia de engine
 
@@ -55,3 +55,7 @@ Un panou de diagnostic arată backendul, tick, draw calls, FPS și timpi CPU, nu
 ## Acceptare
 
 Bootstrapul, resize-ul, încărcarea, selecția, camera și disposal funcționează pe WebGPU și WebGL 2. Un scenariu păstrează aceleași reguli și comenzi la schimbarea backendului. Aspectul poate varia în limitele nivelului de calitate declarat; învățarea și cursele nu depind de un shader specific.
+
+## Contractul de randare și asseturi
+
+Bugetele și setările DPR/rezoluție internă sunt fixate înainte de asseturile finale prin 203/223. Decorul repetat folosește batchuri locale; vehiculele dinamice păstrează pickingul/entityId și actualizările vizuale. Materialele/transformările sunt înghețate numai dacă sunt statice; nu se îngheață global lista orașului dinamic. Startup-ul, prima utilizare a shaderelor, uploadul GPU și disposal repetat au probe distincte. Calitatea adaptivă afectează numai prezentarea. [Contractul și sursele](25-performanta-contracte-si-benchmark.md) definesc comparația și limitele.
