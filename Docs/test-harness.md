@@ -20,6 +20,6 @@ Pornește `npm run dev -- --host 127.0.0.1 --port 5173 --strictPort`, apoi desch
 
 `scripts/register-typescript.mjs` înregistrează hooks Node 24 pentru sursele TypeScript reale, folosind `stripTypeScriptTypes`; rezolvă importuri relative explicite `.ts`, fără extensie și directory/index.ts. Este folosit și de verificarea arhitecturii, eliminând loaderul duplicat. Suportă sintaxa TS erasable; `tsc` strict verifică separat semantica, loaderul nu face typecheck. Node 24 afișează avertismentul experimental stripTypeScriptTypes.
 
-`tsconfig.json` verifică aplicația și codul browser/scenariile cu DOM; `tsconfig.tests.json` verifică testele/harnessul/contracts cu tipurile Node și lib ES2022. Lintul și Prettier includ `tests`. Tipurile Node sunt devDependency fixată și nu intră în bundle.
+`tsconfig.json` verifică aplicația și codul browser/scenariile cu DOM; `tsconfig.tests.json` include toate directoarele din `tests`, cu excepția `tests/browser`, folosind tipurile Node și lib ES2022. Astfel, suitele de domeniu noi intră automat în verificarea tipurilor. Lintul și Prettier includ `tests`. Tipurile Node sunt devDependency fixată și nu intră în bundle.
 
 [Dovezi executate](Evidence/004-test-harness/README.md).

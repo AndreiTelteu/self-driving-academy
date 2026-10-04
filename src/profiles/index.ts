@@ -5,6 +5,20 @@ export {
   parameterSources,
 } from './contracts';
 export type { DrivingProfile, ParameterEvidence } from './contracts';
+export {
+  parseParameterCatalog,
+  parameterRegistry,
+  parameterDefinitions,
+  getParameterDefinition,
+  validateParameterValue,
+  parsePublishableDrivingProfile,
+} from './parameter-registry';
+export type {
+  ParameterKey,
+  ParameterUnit,
+  ParameterStage,
+  ParameterDefinition,
+} from './parameter-registry';
 
 /** Minimal bootstrap read model, separate from the versioned DrivingProfile import contract. */
 export interface ProfileSnapshot {

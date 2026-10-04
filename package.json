@@ -17,6 +17,8 @@
     "format": "prettier --write \"src/**/*.{ts,css}\" \"tests/**/*.ts\" \"tests/**/*.html\" \"scripts/**/*.mjs\" \"*.{json,js,html}\"",
     "format:check": "prettier --check \"src/**/*.{ts,css}\" \"tests/**/*.ts\" \"tests/**/*.html\" \"scripts/**/*.mjs\" \"*.{json,js,html}\"",
     "check:architecture": "node scripts/verify-architecture.mjs",
+    "generate:parameter-catalog": "node scripts/generate-parameter-catalog.mjs",
+    "check:parameter-catalog": "node scripts/generate-parameter-catalog.mjs --check",
     "check": "npm run typecheck && npm run lint && npm run format:check && npm run check:architecture && npm test",
     "test": "node --import ./scripts/register-typescript.mjs --test \"tests/**/*.test.ts\"",
     "test:domain": "node --import ./scripts/register-typescript.mjs --test \"tests/harness/*.test.ts\""

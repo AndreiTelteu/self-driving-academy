@@ -20,6 +20,7 @@ const domain = new Set([
   'economy',
   'progression',
   'sessions',
+  'settings',
   'challenges',
   'destructibles',
 ]);

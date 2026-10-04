@@ -13,6 +13,7 @@ Rapier este propunerea de bază pentru controllerul auto. PBI-ul de calibrare ve
 | Modul | Responsabilitate | Contract către restul aplicației |
 | --- | --- | --- |
 | app | Bootstrap și lifecycle | AppState și servicii injectate |
+| settings | Preferințe validate și configurația scenariului, separate de stil | RuntimeSettings și ControlPreferences |
 | simulation | Tick-uri și starea autoritară | Snapshot și evenimente |
 | world | Benzi, intersecții și reguli | RoadGraph și query-uri semantice |
 | vehicles | Fizică și comenzi comune | VehicleCommand și VehicleState |
@@ -36,11 +37,17 @@ Rendererul primește stări și nu decide comportamentul. UI trimite intenții �
 
 ## Layout modular
 
-src/app, src/simulation, src/world, src/vehicles, src/autonomy, src/fleet, src/rendering/babylon, src/ui, src/input, src/telemetry, src/learning, src/profiles, src/experiments, src/persistence, src/missions, src/economy, src/progression, src/sessions, src/challenges, src/destructibles și src/audio. public/assets conține asseturi versionate; scenariile și datele hărții sunt separate de cod. tests/scenarios păstrează cazurile reproductibile.
+src/app, src/settings, src/simulation, src/world, src/vehicles, src/autonomy, src/fleet, src/rendering/babylon, src/ui, src/input, src/telemetry, src/learning, src/profiles, src/experiments, src/persistence, src/missions, src/economy, src/progression, src/sessions, src/challenges, src/destructibles și src/audio. public/assets conține asseturi versionate; scenariile și datele hărții sunt separate de cod. tests/scenarios păstrează cazurile reproductibile.
 
 002 creează entry points publice `index.ts` pentru toate modulele și separă bootstrapul în composition root, simulare, profil, renderer, view DOM și store volatil. [Layoutul implementat](module-layout.md) descrie direcțiile de import și verificarea `npm run check:architecture`. Modulele fără servicii încă au entry points rezervate; contractele complete, gameplay-ul și backendul GPU rămân în PBI-urile dedicate. Profilul și snapshotul bootstrap sunt readonly și înghețate defensiv la runtime; adaptoarele nu primesc starea mutabilă internă.
 
 [Convențiile de dezvoltare](development-conventions.md) documentează verificările statice, unitățile SI și validarea datelor `unknown` la limitele aplicației.
+
+[Identitatea și randomul determinist](identity-random.md) definesc API-ul pur din `sessions`: ID-uri cu delimitare neambiguă și eșantioane adresate prin seed, cheie și index explicit. Versiunile algoritmului sunt separate de versiunile lumii; inserarea altor evenimente nu consumă randomul unei oportunități.
+
+[Setările runtime](runtime-settings.md) definesc preferințele validate din `settings`. Resetul și înlocuirea atomică afectează exclusiv setările jucătorului; profilurile, progresul și lumea nu sunt deținute de acest modul. Mapările de input și limitele grafice provizorii rămân distincte de calibrarea ulterioară.
+
+[Registry-ul parametrilor](parameter-registry.md) încarcă cele 80 de definiții și verifică unitățile, intervalele și suportul înaintea publicării unui profil. Cele 24 de ținte inițiale nu acordă automat suport în politică sau estimator. Catalogul runtime este generat din sursa JSON, iar testele verifică sincronizarea.
 
 ## Ordinea unui tick
 

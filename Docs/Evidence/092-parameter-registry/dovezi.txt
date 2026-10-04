@@ -1,0 +1,47 @@
+PBI092 - parameter registry
+Owner: Codex gpt-6.1-sol, reasoning medium (implementation sub-agent).
+Workspace: F:/Sites/self-driving-academy. No commit or push performed.
+Canonical source: Docs/driving-parameters.json, unchanged.
+
+Implementation:
+80 unique known keys, 24 initial-learning targets; generated literal ParameterKey union.
+Strict catalog parsing: schema/shape/date/keys/stage, finite inclusive min/default/max,
+canonical profile units plus preserved sourceUnit semantics, immutable owned records.
+All runtime capabilities implemented=false and estimable=false, distinct from M/R.
+parsePublishableDrivingProfile is the concrete gate above unchanged parseDrivingProfile:
+unknown keys/unit/range rejected for all provenance; LEARNED needs implemented AND
+estimable, MANUAL_TUNING needs implemented. Both are currently rejected for all keys.
+BASE/IMPORTED can carry valid reserved catalog data without policy capability.
+
+Executed verification:
+- npm run check: PASS on 2026-10-05, exit 0. Strict source/test typecheck, ESLint,
+  Prettier, architecture checker (36 TS files; 6 negative probes), 59/59 tests.
+  8 registry tests cover 80/24, all bounds/defaults/units, support/provenance gate,
+  unknown/malformed catalog, immutable copies and exact generated-source sync.
+  The shared suite also includes concurrently developed PBI006/PBI009 tests;
+  PBI092 only owns tests/parameters.
+- npm run build: PASS on 2026-10-05, exit 0, Vite production build, 265 modules.
+- node scripts/generate-parameter-catalog.mjs --check: PASS, output catalog-sync.txt.
+- Dedicated Node TS registry run: PASS 8/8, output tests.txt.
+- Initial dedicated run: 7/8; fixed incorrect Reflect.set exception assertion.
+  Reflect.set on frozen record returns false; final tests confirm this correctly.
+- Board transition into In Progress: Valid=true, 235 total, 5 Done at that point.
+- Final RequireDone092 validator output is stored in board-validation.txt after move.
+
+Owned files changed:
+src/profiles/parameter-registry.ts; src/profiles/parameter-catalog.generated.ts;
+src/profiles/index.ts; scripts/generate-parameter-catalog.mjs;
+tests/parameters/registry.test.ts; Docs/parameter-registry.md;
+Docs/data-contracts.md; PBI092 board file; this evidence directory.
+
+Limitations/follow-up:
+No policy, estimator, controller, live publishing service, engine compatibility,
+checksum verification, learningEpoch barrier, delta or fleet propagation implemented.
+Future writers must use this gate before publication and add those service checks.
+Enabling runtime capabilities requires explicit verified policy/estimator implementation;
+changing a design M/R label or implemented flag does not enable support.
+No browser/playtest required for this pure data-contract task.
+Parent-owned tsconfig.tests now includes tests, so parameters strict typecheck is active.
+No package/config/checker/Docs02/README or other-agent source files edited by PBI092.
+Integration suggestions are in integration-requests.txt.
+Warnings observed: npm msvs-version env config and Node stripTypeScriptTypes experimental.

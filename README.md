@@ -44,6 +44,12 @@ npm run check
 
 `npm test` rulează testele de domeniu TypeScript în Node, iar `npm run test:domain` execută exemplul headless. `npm run check` include testele. Harnessul browser este disponibil în dev la `http://localhost:5173/tests/browser/`: seed 41 și 12 tick-uri capturează 13 stări și un eveniment verificat. [Ghidul harnessului](Docs/test-harness.md) explică runnerul reutilizabil, fixture-ul de test și verificarea separată în browser real.
 
+Fundația de [identificatori și random determinist](Docs/identity-random.md) păstrează eșantionarea pe scenariu, vehicul și oportunitate independentă de ordinea altor evenimente.
+
+[Setările runtime](Docs/runtime-settings.md) separă preferințele de input, afișare, calitate și scenariu de profilurile învățate și progres; resetul afectează numai setările.
+
+[Registry-ul parametrilor](Docs/parameter-registry.md) validează cele 80 de definiții și blochează publicarea drept învățate a cheilor nesuportate. După modificarea catalogului canonic, rulează `npm run generate:parameter-catalog`; `npm run check:parameter-catalog` verifică sincronizarea, inclusă și în `npm test`.
+
 ## Verificarea boardului
 
 Din rădăcina proiectului, în PowerShell:
