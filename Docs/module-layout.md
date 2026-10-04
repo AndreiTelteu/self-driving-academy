@@ -1,0 +1,25 @@
+# Layoutul modular implementat în 002
+
+Compoziția browser pornește în `src/main.ts`: construiește view-ul DOM, adaptorul Babylon și store-ul volatil, apoi le injectează în `createApplication` din `src/app/index.ts`. Aplicația depinde de porturile publice `Renderer` și `SnapshotStore`; exemplul din `scripts/verify-architecture.mjs` injectează un renderer de înregistrare și rulează fără DOM sau Babylon.
+
+## Module și entry points
+
+Fiecare modul din layoutul planificat are un `index.ts` public. `app`, `simulation`, `profiles`, `rendering`, `rendering/babylon`, `ui` și `persistence` conțin fundația bootstrapului. `world`, `vehicles`, `autonomy`, `fleet`, `input`, `telemetry`, `learning`, `experiments`, `missions`, `economy`, `progression`, `sessions`, `challenges`, `destructibles` și `audio` au entry points rezervate, fără implementare de gameplay. Aceste module vor primi serviciile și contractele lor în PBI-urile dedicate.
+
+Importurile dintre module trec numai prin `<modul>/index.ts`; un `index.ts` intern nu devine automat public. Excepția explicită este composition root (`main.ts` sau `app`) către `rendering/babylon/index.ts`, pentru construirea adaptorului. Modulele de domeniu pot importa alte module de domeniu, fără cicluri. Nu importă `app`, `rendering`, `ui`, `input`, `persistence` sau `audio`, pachete externe ori identificatori DOM. Babylon este importat numai în `rendering/babylon`. Randarea, UI și input consumă contractele domeniului prin `import type`, fără executarea serviciilor lui. Composition root este locul care leagă porturile de adaptoare.
+
+Lista pachetelor externe permise este politica bootstrapului 002. La introducerea fizicii, validării sau altor biblioteci, PBI-ul dedicat extinde explicit politica pentru adaptoarele potrivite; interdicția actuală nu reprezintă o limitare permanentă a produsului.
+
+## Read models și proprietatea datelor
+
+`SimulationSnapshot` expune un tick și un `ProfileSnapshot` minimal, cu identificator, versiune și parametri numerici readonly. Sunt modele pentru bootstrap; nu înlocuiesc `DrivingProfile`, schema savefile-ului sau contractele complete din 005. Simularea oferă exclusiv `getSnapshot`, fără mutator de profil. Copia parametrilor și snapshoturile sunt înghețate și la runtime, inclusiv când un consumator JavaScript încearcă să scrie în ele.
+
+`SnapshotStore.save` primește doar read modelul public. Adaptorul în memorie face propria copie defensivă a profilului și îngheață rezultatul înainte de expunerea prin `load`; modificarea obiectului inițial nu schimbă datele salvate. Store-ul este volatil, fără IndexedDB, migrare sau restaurare a unei simulări. Acestea aparțin PBI-urilor de persistență.
+
+Rendererul bootstrap Babylon afișează metadata versiunii, păstrând ecranul din 001. Nu creează scenă, engine GPU sau buclă de randare; inițializarea backendului aparține 011. `start` și `dispose` sunt idempotente; după disposal, aplicația respinge pornirea și salvarea. HMR eliberează view-ul înainte de recreare.
+
+## Verificare
+
+Rulează `npm run check:architecture`. Scannerul lexical TypeScript 7 verifică entry points, importuri/reexporturi, izolarea domeniului, importurile Babylon și ciclurile. Importurile dinamice și `require` sunt respinse până la definirea unei politici explicite. Șase probe negative verifică efectiv respingerea UI, Babylon, DOM și importului dinamic din simulare, plus accesul unui consumator la un entry point intern al altui modul.
+
+Apoi comanda încarcă modulele TypeScript reale prin hooks Node 24 și verifică injecția rendererului, pornirea/eliberarea idempotentă, readonly la runtime și copiile defensive ale profilului și persistenței. Nu generează fișiere și nu necesită browser. `stripTypeScriptTypes` din Node afișează în versiunea fixată un avertisment experimental; verificările trec cu acesta. Verificarea TypeScript a contractelor este separată: `npm run typecheck`.

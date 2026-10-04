@@ -4,7 +4,7 @@ Versiune 0.5 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon
 
 ## Stack ales
 
-Aplicație TypeScript cu Vite; Babylon.js pentru scene, randare, camere, picking și asseturi; Rapier 3D pentru fizică prin adaptor propriu; HTML și CSS pentru HUD; IndexedDB pentru persistență; Web Workers pentru estimare și experimente. Versiunile exacte se aleg și se fixează în lockfile în primul PBI de bootstrap. Nu folosim o versiune flotantă la release.
+Aplicație TypeScript cu Vite; Babylon.js pentru scene, randare, camere, picking și asseturi; Rapier 3D pentru fizică prin adaptor propriu; HTML și CSS pentru HUD; IndexedDB pentru persistență; Web Workers pentru estimare și experimente. Bootstrapul 001 fixează Vite 8.3.2, TypeScript 7.0.2 și pachetele Babylon.js core/loaders 9.29.0 în package.json și package-lock.json; runtime verificat Node.js 24.21.0 și npm 11.19.0. [Comenzile locale](../README.md#dezvoltare-locală) folosesc npm ci pentru instalare reproductibilă. Pachetele pentru fizică și persistență se introduc în scope-ul lor; nu folosim o versiune flotantă la release.
 
 Rapier este propunerea de bază pentru controllerul auto. PBI-ul de calibrare verifică dacă poate realiza aderența, suspensia și frânarea cerute. Dacă baza nu este potrivită, se înregistrează o decizie de fizică și se actualizează contractele și task-urile afectate; Babylon.js rămâne engine-ul ales. Nu rulează două motoare fizice pentru aceeași mașină.
 
@@ -34,9 +34,13 @@ Rapier este propunerea de bază pentru controllerul auto. PBI-ul de calibrare ve
 
 Rendererul primește stări și nu decide comportamentul. UI trimite intenții și nu modifică direct corpurile fizice. Workerul nu scrie direct profilul activ; serviciul de profiluri validează rezultatul. Starea unei misiuni se derivă din evenimente idempotente, nu din mesaje HUD.
 
-## Layout propus pentru implementare
+## Layout modular
 
 src/app, src/simulation, src/world, src/vehicles, src/autonomy, src/fleet, src/rendering/babylon, src/ui, src/input, src/telemetry, src/learning, src/profiles, src/experiments, src/persistence, src/missions, src/economy, src/progression, src/sessions, src/challenges, src/destructibles și src/audio. public/assets conține asseturi versionate; scenariile și datele hărții sunt separate de cod. tests/scenarios păstrează cazurile reproductibile.
+
+002 creează entry points publice `index.ts` pentru toate modulele și separă bootstrapul în composition root, simulare, profil, renderer, view DOM și store volatil. [Layoutul implementat](module-layout.md) descrie direcțiile de import și verificarea `npm run check:architecture`. Modulele fără servicii încă au entry points rezervate; contractele complete, gameplay-ul și backendul GPU rămân în PBI-urile dedicate. Profilul și snapshotul bootstrap sunt readonly și înghețate defensiv la runtime; adaptoarele nu primesc starea mutabilă internă.
+
+[Convențiile de dezvoltare](development-conventions.md) documentează verificările statice, unitățile SI și validarea datelor `unknown` la limitele aplicației.
 
 ## Ordinea unui tick
 
