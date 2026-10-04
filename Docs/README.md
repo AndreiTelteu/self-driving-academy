@@ -48,6 +48,8 @@ Bootstrapul aplicației browser TypeScript/Vite/Babylon.js și [backendul WebGPU
 
 [Planul inițial v0.1](Archive/GAME_DESIGN-v0.1.md) este păstrat pentru istoric. Page-ul creat anterior este tot o referință v0.1; nu este sincronizat automat cu documentele Markdown. Modificările viitoare de plan se fac în aceste module și în PBI-urile aferente.
 
+Fundațiile suplimentare implementate sunt [bucla cu pas fix](fixed-tick.md), [maparea entităților în scenă](scene-adapter.md) și [schema hărții cu validare semantică](map-schema.md). Probe separate verifică timpul simulat, lifecycle-ul vizual și referințele rutiere; acestea nu reprezintă încă o sesiune de gameplay completă.
+
 ## Revizia 0.3
 
 Învățarea are loc numai în LEARNING; MANUAL permite intervenții fără schimbarea stilului. Taxiurile și civilii adoptă stilul comun. V1 include revenue și ratings cu grafice KPIs, trei misiuni zilnice și XP din misiuni/timp activ, fără pierderi XP, conform reviziei 0.5. Valorile economice și pragurile sunt propuneri de calibrare. Verifică boardul și planul cu PBI/Validate-Board.ps1 și PBI/Validate-Plan.ps1.

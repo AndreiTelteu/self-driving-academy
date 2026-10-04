@@ -16,6 +16,8 @@ Decizie confirmată: segmentele LEARNING din taxiuri și mașini civile contribu
 
 Formatul de hartă include mapId, schemaVersion, units, bounds, lanes, intersections, signals, stopLines, crosswalks, serviceZones și recoveryPoints. Fiecare referință este validată; graful se verifică pentru conectivitate la toate punctele de serviciu. Limitele de viteză sunt proprietăți ale hărții.
 
+PBI032 implementează [schema runtime și validatorul semantic](map-schema.md) în `world`: geometrie distinctă de reguli, referințe/endpointuri direcționate, faze de semnal complete, conflicte GREEN declarate și accesibilitate orientată per clasă către toate serviciile eligibile. Rezultatul este o copie readonly înghețată; limitele geometrice efective și fixture-urile negative sunt documentate explicit. Nu generează cartierul și nu implementează routing/meshuri.
+
 Pipeline-ul construiește întâi fixture-uri semantice mici, apoi cartierul. Un validator produce IDs și poziții pentru erori. Decorul nu schimbă banda sau coliziunile fără o actualizare a datelor. Rutele civile și taxiurile folosesc același graf; un segment manual în afara grafului rămâne înregistrat fără a inventa o bandă.
 
 ## Repere pentru distracție și provocări

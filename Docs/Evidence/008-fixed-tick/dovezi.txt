@@ -1,0 +1,41 @@
+PBI 008 — buclă pură de simulare la 60 Hz și port generic de interpolare.
+Base commit b6d513bdc21b4e2196799e601f87d80aba866f22, working tree.
+Hashurile SHA256 pentru cod/test și ora probei: performance-summary.txt.
+
+Implementare:
+- createFixedTickLoop<T,View>, frame(nowMs), pause(nowMs,reason), resume(nowMs), getState(), dispose().
+- Prima frame ancorează clockul; step primește tick consecutiv și dtSeconds constant 1/60.
+- Maximum 4 ticks/frame, restul accumulatorului păstrat; debt >250 ms oprește înainte de ticks.
+- Overload este distinct de recovery explicit: recovery execută ticks reale, fără timp activ nou.
+- Manual/background exclud timpul oprit, păstrează debt și reancorează clockul la resume.
+- Snapshot previous/current copiat/înghețat defensiv; alpha fracționar sau plafonat la 1 în backlog.
+- Fault terminal pentru step/capture/interpolate; fără retry al stepului posibil executat, fără rollback extern.
+- Reentrancy respinsă, clocks invalide/regresive respinse fără coruperea clockului; disposal elimină snapshots deținute.
+- Nu există Babylon, fizică, comenzi/gameplay/rewards/XP fictive, RAF/visibility adapter sau scheduler219 în acest core.
+
+Verificări executate:
+- tests.txt: 13/13 PASS cu Node24.21.0 și loader TypeScript real.
+- 30 vs60 cadre/secundă sintetice: 10 minute, 36000 ticks, aceeași secvență tick-addressed și aceeași stare finală; simulated=activeReal=600 secunde, fără overload.
+- Teste fractional boundaries/interpolare, catchup4/debt, threshold250, stall1000ms, explicit recovery, manual/background, pause în recovery, clock invalid/regresiv, snapshot ownership/dispose și erori step/capture/interpolate/reentrancy.
+- typecheck-scope.txt: npx tsc --ignoreConfig --noEmit --target ES2022 --module ESNext --moduleResolution Bundler --strict --noUnusedLocals --noUnusedParameters --skipLibCheck --allowImportingTsExtensions --types node --lib ES2022,DOM src/simulation/fixed-tick.ts tests/fixed-tick/fixed-tick.test.ts PASS.
+- lint.txt: ESLint asupra codului/exportului/testului/scriptului008 PASS.
+- format.txt: Prettier asupra acelorași fișiere PASS.
+- build.txt: npm run build PASS, incluzând ambele proiecte TypeScript și Vite; warning chunk >500 kB al aplicației concurente, nu eroare de build.
+- check.txt: typecheck, lint, format și arhitectură PASS. Suite globală 153 PASS/1 fail în tests/world/map-schema.test.ts al032 încă în lucru: neighbors require reciprocal links and compatible directed corridors; eroare map.lanes[0].neighbors.right [lane-a], Neighbor must be distinct and reciprocal. Parent notificat; check integrat final deținut de parent. Nu este pretins global PASS.
+- Prima încercare typecheck în timp ce013/032 scriau a întâlnit world/parser import semantics lipsă/scalar unused și browser scene-adapter AbstractEngine.getInfo; ulterior build/typecheck global PASS. Prima comandă tsc scoped a cerut flag --ignoreConfig (TS7); corectată și rulată PASS.
+- board-start.txt: board valid după tranziția fizică ToDo→InProgress.
+- board-validation.txt: rezultatul final -RequireDone008 după mutarea fizică.
+
+Performanță:
+- baseline.txt păstrat înaintea implementării coreului: seeded-counter-v1/seed42, 10000 ticks, 1 warmup +5 probe.
+- after.txt repetă exact fixture-ul și măsoară separat costul loopului nou cu 10000 frames sintetice, snapshot {value}, 1 step/frame și interpolare numerică; 1 warmup +5 probe.
+- Hardware observat AMD Ryzen9 7950X3D, Windows10.0.26200, Node24.21.0 CPU. Browser/GPU/preset/rezoluție indisponibile; fără FPS hardware sau p95 Rapier/joc inventate.
+- Fixture batch median înainte0.1057ms, după0.1752ms, diferență0.0695ms/10000ticks; fixture nemodificat, proba scurtă/timer/warmup sensibilă. Acesta nu este tick autoritar și nu închide un gate de regresie hardware.
+- Cost loop nou observator inactiv: 16.9300–20.7776ms/10000frames, median18.3259ms (medie batch~0.00183259ms/frame, nu p95).
+- Observator activ: total17.8403–23.6561ms, median20.8054ms; diferență median2.4795ms/batch față de inactiv, incluzând sampling/sortare și variația probei. Samples plafonate la10000/repetare.
+- CPU loop frame p50:0.0015–0.0022ms, p95:0.0023–0.0027ms, p99:0.0030–0.0054ms. Timerele și fixture-ul compact limitează interpretarea; nu reprezintă render FPS.
+- Toate probele loop: exact10000 ticks/value, simulated166.6666666667s, activeReal166.6666666667s, debt~1.94e-14s; 2 snapshots înainte de disposal, 0 snapshots deținute după disposal.
+- Bugetul pre203 este provizoriu: Docs25 whole-tick desktop p95≤5.5ms/frame interval p95≤18.5ms. Proba acestei bucle izolate nu închide bugetele whole-tick/frame ale jocului; workload/fizică/randare/soak vor fi validate în scope-urile dedicate.
+
+Fișiere: src/simulation/fixed-tick.ts, export src/simulation/index.ts, tests/fixed-tick/fixed-tick.test.ts, scripts/benchmark-fixed-tick.mjs, Docs/fixed-tick.md, PBI008, artefactele008. Parent deține linkurile Docs02/README.
+Limitări/follow-up: clock/RAF/visibility se integrează ulterior prin composition root; fără notificare background, coreul poate observa doar stall/overload. Porturi sincrone, snapshots plain-data cu depth≤64; copierea/interpolarea scalează cu mărimea proiecției și trebuie măsurate la integrare. Fără rollback/persistență sau retry automat; fault necesită recuperare explicită a lumii înainte de instanță nouă. Instanța reține numai previous/current, dar apelantul poate reține rezultate vechi. Probe CPU sintetice, fără gate hardware închis.

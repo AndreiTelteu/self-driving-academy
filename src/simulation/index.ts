@@ -3,6 +3,23 @@ import type { ProfileSnapshot } from '../profiles';
 
 export { parseSimulationEvent } from './events';
 export type { SimulationEvent } from './events';
+export {
+  createFixedTickLoop,
+  FIXED_TICK_HZ,
+  FIXED_DT_SECONDS,
+  MAX_STEPS_PER_FRAME,
+  OVERLOAD_DEBT_MS,
+} from './fixed-tick';
+export type {
+  SnapshotReadonly,
+  FixedTickStatus,
+  FixedTickStep,
+  FixedTickFault,
+  FixedTickState,
+  FixedTickFrame,
+  FixedTickOptions,
+  FixedTickLoop,
+} from './fixed-tick';
 export { createEventBus } from './event-bus';
 export type {
   EventBus,

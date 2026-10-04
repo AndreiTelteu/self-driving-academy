@@ -26,6 +26,8 @@ PBI011 implementează [bootstrapul asincron și lifecycle-ul](rendering-backend.
 
 O scenă Babylon reprezintă lumea vizuală. Fiecare vehicul are un nod rădăcină legat de entityId, mesh pentru caroserie, reprezentări ale roților, lumini și efecte. Starea fizică alimentează transformările interpolate; animația roților citește starea vehiculului. Constructorul vizual nu creează o a doua simulare de trafic.
 
+PBI013 implementează [adaptorul de scenă](scene-adapter.md): scene root și TransformNode stabil per entityId, înlocuire atomică după validarea candidatei, ownership separat pentru noduri/materiale/texturi și remove/dispose idempotente. Convenția concretă este Y-up, metri, left-handed, +Z înainte/+X dreapta; pivotul domeniului rămâne zero, pivoturile assetului rămân în copil. Adaptorul copiază forma publică VehicleState.transform fără scrieri în domeniu, verifică sessionId/worldEpoch/tick și păstrează istoric plafonat pentru ID-uri reutilizate. Maparea descendenților pentru picking nu implementează selecția UI 014. Backendul bootstrap nu creează resurse de gameplay.
+
 Sectorizarea organizează clădirile, străzile și vegetația. Asseturile repetate pot folosi instanțiere; alegerea între instanțe obișnuite și thin instances se măsoară și ține cont de picking și bounding volumes. Nu folosim un mesh distinct pentru fiecare decor identic fără evaluarea costului. [Thin instances](https://github.com/BabylonJS/Documentation/blob/master/content/features/featuresDeepDive/mesh/copies/thinInstances.md)
 
 ## Cameră și picking

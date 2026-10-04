@@ -56,6 +56,8 @@ src/app, src/settings, src/simulation, src/world, src/vehicles, src/autonomy, sr
 
 ## Ordinea unui tick
 
+[Core-ul implementat în 008](fixed-tick.md) oferă accumulator la 60 Hz, snapshots defensive și interpolare prin callback. Execută maximum patru pași per cadru, păstrează datoria și intră în pauză explicită peste 250 ms. Pauza/background-ul nu acumulează timp; recuperarea execută pași reali fără admiterea unui interval nou de timp real. Integrarea cu visibility/RAF și sistemele lumii aparține composition root; ordinea sistemelor de mai jos rămâne contractul integrării viitoare.
+
 1. Aplică intențiile valide și activările programate de profil.
 2. Actualizează fazele semafoarelor și stările evenimentelor rutiere.
 3. Evaluează deciziile autonome programate și evenimentele urgente.

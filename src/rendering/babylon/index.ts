@@ -1,6 +1,7 @@
 import { Engine } from '@babylonjs/core/Engines/engine';
 import type { BootstrapView, Renderer } from '../index';
 export { createRenderingBackend, type RenderingBackend } from './backend';
+export { BabylonSceneAdapter, type VisualRepresentation } from './scene-adapter';
 
 /** Preserved metadata-only fixture for bootstrap regression probes. */
 export function createBabylonBootstrapRenderer(view: BootstrapView): Renderer {

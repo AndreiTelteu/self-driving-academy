@@ -1,0 +1,435 @@
+{
+  "schemaVersion": 1,
+  "units": "SI",
+  "mapId": "minimal-road-v1",
+  "bounds": {
+    "minM": {
+      "x": -5,
+      "y": 0,
+      "z": -5
+    },
+    "maxM": {
+      "x": 25,
+      "y": 0,
+      "z": 25
+    }
+  },
+  "geometry": {
+    "nodes": [
+      {
+        "id": "n-a",
+        "positionM": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      },
+      {
+        "id": "n-b",
+        "positionM": {
+          "x": 9,
+          "y": 0,
+          "z": 0
+        }
+      },
+      {
+        "id": "n-c",
+        "positionM": {
+          "x": 11,
+          "y": 0,
+          "z": 0
+        }
+      },
+      {
+        "id": "n-d",
+        "positionM": {
+          "x": 20,
+          "y": 0,
+          "z": 0
+        }
+      },
+      {
+        "id": "n-loop",
+        "positionM": {
+          "x": 20,
+          "y": 0,
+          "z": 20
+        }
+      },
+      {
+        "id": "j1",
+        "positionM": {
+          "x": 8,
+          "y": 0,
+          "z": -2
+        }
+      },
+      {
+        "id": "j2",
+        "positionM": {
+          "x": 12,
+          "y": 0,
+          "z": -2
+        }
+      },
+      {
+        "id": "j3",
+        "positionM": {
+          "x": 12,
+          "y": 0,
+          "z": 2
+        }
+      },
+      {
+        "id": "j4",
+        "positionM": {
+          "x": 8,
+          "y": 0,
+          "z": 2
+        }
+      },
+      {
+        "id": "s1",
+        "positionM": {
+          "x": -1,
+          "y": 0,
+          "z": -1
+        }
+      },
+      {
+        "id": "s2",
+        "positionM": {
+          "x": 1,
+          "y": 0,
+          "z": -1
+        }
+      },
+      {
+        "id": "s3",
+        "positionM": {
+          "x": 1,
+          "y": 0,
+          "z": 1
+        }
+      },
+      {
+        "id": "s4",
+        "positionM": {
+          "x": -1,
+          "y": 0,
+          "z": 1
+        }
+      },
+      {
+        "id": "line-a",
+        "positionM": {
+          "x": 8.5,
+          "y": 0,
+          "z": -1
+        }
+      },
+      {
+        "id": "line-b",
+        "positionM": {
+          "x": 8.5,
+          "y": 0,
+          "z": 1
+        }
+      },
+      {
+        "id": "walk-a",
+        "positionM": {
+          "x": 19,
+          "y": 0,
+          "z": 18
+        }
+      },
+      {
+        "id": "walk-b",
+        "positionM": {
+          "x": 21,
+          "y": 0,
+          "z": 18
+        }
+      },
+      {
+        "id": "walk-c",
+        "positionM": {
+          "x": 21,
+          "y": 0,
+          "z": 21
+        }
+      },
+      {
+        "id": "walk-d",
+        "positionM": {
+          "x": 19,
+          "y": 0,
+          "z": 21
+        }
+      },
+      {
+        "id": "wline-a",
+        "positionM": {
+          "x": 19,
+          "y": 0,
+          "z": 19
+        }
+      },
+      {
+        "id": "wline-b",
+        "positionM": {
+          "x": 21,
+          "y": 0,
+          "z": 19
+        }
+      }
+    ],
+    "paths": [
+      {
+        "id": "g-a",
+        "nodeIds": [
+          "n-a",
+          "n-b"
+        ]
+      },
+      {
+        "id": "g-b",
+        "nodeIds": [
+          "n-c",
+          "n-d"
+        ]
+      },
+      {
+        "id": "g-c",
+        "nodeIds": [
+          "n-d",
+          "n-loop",
+          "n-a"
+        ]
+      },
+      {
+        "id": "g-move",
+        "nodeIds": [
+          "n-b",
+          "n-c"
+        ]
+      },
+      {
+        "id": "g-stop",
+        "nodeIds": [
+          "line-a",
+          "line-b"
+        ]
+      },
+      {
+        "id": "g-cross-stop",
+        "nodeIds": [
+          "wline-a",
+          "wline-b"
+        ]
+      }
+    ],
+    "areas": [
+      {
+        "id": "g-junction",
+        "vertexNodeIds": [
+          "j1",
+          "j2",
+          "j3",
+          "j4"
+        ]
+      },
+      {
+        "id": "g-service",
+        "vertexNodeIds": [
+          "s1",
+          "s2",
+          "s3",
+          "s4"
+        ]
+      },
+      {
+        "id": "g-crosswalk",
+        "vertexNodeIds": [
+          "walk-a",
+          "walk-b",
+          "walk-c",
+          "walk-d"
+        ]
+      }
+    ]
+  },
+  "lanes": [
+    {
+      "id": "lane-a",
+      "geometryId": "g-a",
+      "direction": "FORWARD",
+      "widthM": 3.5,
+      "speedLimitMps": 13.4,
+      "access": [
+        "TAXI",
+        "CIVIL"
+      ],
+      "neighbors": {
+        "left": null,
+        "right": null
+      },
+      "successorIds": [
+        "lane-b"
+      ],
+      "fromIntersectionId": null,
+      "toIntersectionId": "junction"
+    },
+    {
+      "id": "lane-b",
+      "geometryId": "g-b",
+      "direction": "FORWARD",
+      "widthM": 3.5,
+      "speedLimitMps": 13.4,
+      "access": [
+        "TAXI",
+        "CIVIL"
+      ],
+      "neighbors": {
+        "left": null,
+        "right": null
+      },
+      "successorIds": [
+        "lane-c"
+      ],
+      "fromIntersectionId": "junction",
+      "toIntersectionId": null
+    },
+    {
+      "id": "lane-c",
+      "geometryId": "g-c",
+      "direction": "FORWARD",
+      "widthM": 3.5,
+      "speedLimitMps": 13.4,
+      "access": [
+        "TAXI",
+        "CIVIL"
+      ],
+      "neighbors": {
+        "left": null,
+        "right": null
+      },
+      "successorIds": [
+        "lane-a"
+      ],
+      "fromIntersectionId": null,
+      "toIntersectionId": null
+    }
+  ],
+  "intersections": [
+    {
+      "id": "junction",
+      "geometryId": "g-junction",
+      "incomingLaneIds": [
+        "lane-a"
+      ],
+      "outgoingLaneIds": [
+        "lane-b"
+      ],
+      "conflictZones": [
+        {
+          "id": "conflict",
+          "geometryId": "g-junction"
+        }
+      ],
+      "movements": [
+        {
+          "id": "move",
+          "geometryId": "g-move",
+          "fromLaneId": "lane-a",
+          "toLaneId": "lane-b",
+          "conflictZoneIds": [
+            "conflict"
+          ]
+        }
+      ]
+    }
+  ],
+  "signals": [
+    {
+      "id": "signal",
+      "intersectionId": "junction",
+      "phases": [
+        {
+          "id": "green",
+          "durationS": 15,
+          "movementStates": [
+            {
+              "movementId": "move",
+              "state": "GREEN"
+            }
+          ]
+        },
+        {
+          "id": "red",
+          "durationS": 3,
+          "movementStates": [
+            {
+              "movementId": "move",
+              "state": "RED"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "stopLines": [
+    {
+      "id": "signal-stop",
+      "geometryId": "g-stop",
+      "laneId": "lane-a",
+      "anchorNodeId": "n-b",
+      "kind": "SIGNAL",
+      "intersectionId": "junction",
+      "signalId": "signal"
+    },
+    {
+      "id": "cross-stop",
+      "geometryId": "g-cross-stop",
+      "laneId": "lane-c",
+      "anchorNodeId": "n-loop",
+      "kind": "CROSSWALK",
+      "intersectionId": null,
+      "signalId": null
+    }
+  ],
+  "crosswalks": [
+    {
+      "id": "crosswalk",
+      "geometryId": "g-crosswalk",
+      "laneIds": [
+        "lane-c"
+      ],
+      "stopLineIds": [
+        "cross-stop"
+      ]
+    }
+  ],
+  "serviceZones": [
+    {
+      "id": "service",
+      "geometryId": "g-service",
+      "laneId": "lane-a",
+      "anchorNodeId": "n-a",
+      "access": [
+        "TAXI",
+        "CIVIL"
+      ],
+      "kind": "BOTH"
+    }
+  ],
+  "recoveryPoints": [
+    {
+      "id": "recovery",
+      "nodeId": "n-d",
+      "laneId": "lane-b",
+      "headingRad": 0
+    }
+  ]
+}

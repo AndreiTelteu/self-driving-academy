@@ -1,2 +1,18 @@
-/** Public entry point reserved for the world module; no gameplay implementation yet. */
-export {};
+export { parseRoadMap, mapSchemaLimits } from './parser';
+export { MapValidationError } from './errors';
+export type {
+  RoadMap,
+  Lane,
+  RoadAccess,
+  GeometryNode,
+  GeometryPath,
+  GeometryArea,
+  Movement,
+  Intersection,
+  RoadSignal,
+  SignalPhase,
+  StopLine,
+  Crosswalk,
+  ServiceZone,
+  RecoveryPoint,
+} from './schema';
