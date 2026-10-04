@@ -1,6 +1,6 @@
 # Extensii și mers pe jos
 
-Versiune 0.3 · 4 octombrie 2026. Parte din [planul complet](README.md).
+Versiune 0.5 · 4 octombrie 2026. Parte din [planul complet](README.md).
 
 ## V2 întregul catalog
 

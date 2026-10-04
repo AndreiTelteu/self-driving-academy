@@ -1,6 +1,6 @@
 # KPI-uri, economie și review-uri
 
-Versiune 0.4 · 4 octombrie 2026. Parte din [planul complet](README.md). Scope V1 confirmat; formulele și valorile numerice sunt propuneri de calibrare, nu rezultate implementate.
+Versiune 0.5 · 4 octombrie 2026. Parte din [planul complet](README.md). Scope V1 confirmat; formulele și valorile numerice sunt propuneri de calibrare, nu rezultate implementate.
 
 ## Experiența jucătorului
 
@@ -40,7 +40,7 @@ FleetKpiBucket are periodId, start/endTick, economyClockVersion, currency, reven
 
 Revenue se agregă pe luna simulată; cursele, numărul de review-uri, media și distribuția notelor pe zi simulată. Fiecare cursă terminală intră în bucketul tick-ului terminal; rambursările sunt ajustări înregistrate, cu referința tranzacției. UI permite zi/lună și fereastră recentă, marchează perioada curentă parțială și nu unește golurile din istoric cu rezultate fictive.
 
-Graficele marchează intervențiile MANUAL/LEARNING și activările de profil, cu posibilitatea de a inspecta cursele/review-urile sursă. O linie temporală sugerează asocierea; atribuirea unei penalizări XP are un protocol separat. Replay-ul și experimentele izolate nu scriu ledgerul live.
+Graficele marchează intervențiile MANUAL/LEARNING și activările de profil, cu posibilitatea de a inspecta cursele/review-urile sursă. O linie temporală sugerează asocierea, fără a pretinde atribuirea exactă; modificările KPI nu retrag XP. Replay-ul și experimentele izolate nu scriu ledgerul live.
 
 ## Persistență și acceptare
 
@@ -51,3 +51,7 @@ Scenariile verifică: taxiuri nevizibile; curse mixte de control; finalizare dup
 ## Costul istoricului și al popup-ului
 
 209 actualizează ledgerul și bucketurile incremental. 210 citește agregări/pagini, plafonează punctele graficului la rezoluția afișată și păstrează datele exacte pentru tabel/tooltip. Un panou închis nu reconstruiește grafice, iar refresh-ul HUD nu rescanează ledgerul. Probe: 12 luni sintetice de istoric, review-uri paginate, trafic AUTO cu popup/recorder/autosave și reluarea condusului după închiderea popup-ului în MANUAL/LEARNING, conform [modulului 25](25-performanta-contracte-si-benchmark.md).
+
+## Economie și sesiuni în revizia 0.5
+
+Ledgerul comercial live aparține Academiei. Haos are statistici separate și nu modifică revenue/ratings Academie. R cu pasager și resetul lumii produc rezultate comerciale explicite conform [modulului 26](26-joaca-libera-haos-si-distrugere.md), fără ștergerea istoricului sau XP negativ. Review-urile pot include replici comice bazate pe reasonCodes reale; umorul nu falsifică ratingul.

@@ -15,7 +15,7 @@ completed_at: null
 
 ## Obiectiv
 
-Implementează admitere globală, priorități logice, felii de lucru și ownership de payload pentru learning, XP și comparații.
+Implementează admitere globală, priorități logice, felii de lucru și ownership de payload pentru learning, encode/hash și comparații.
 
 ## Context și plan
 
@@ -34,11 +34,11 @@ Citește și [workflow-ul PBI](../AGENTS.md).
 
 - [ ] Limitele de joburi/lumi/bytes sunt versionate; learning-ul interactiv poate întrerupe cooperativ un lot secundar fără ordine greșită sau publicare duplicată.
 - [ ] Anularea/progresul și timpul de coadă sunt măsurate; transferul de ArrayBuffer nu detașează starea live sau dovezi încă folosite.
-- [ ] Presiunea nu pierde cauze XP sau date protejate; PENDING, reluarea în idle/pauză și capacitatea insuficientă sunt explicite.
+- [ ] Presiunea nu pierde dovezi learning, credite XP sau date protejate; PENDING, reluarea în idle/pauză și capacitatea insuficientă sunt explicite.
 
 ## Verificare
 
-Folosește joburi sintetice lungi/scurte pentru a măsura admiterea unui job interactiv în timpul unui lot secundar, anulare, restart, payload detașat și RAM/cozi plafonate. Integrarea learning/A/B real se verifică ulterior în 103/144/214/224, care depind de acest protocol; nu condiționa protocolul de implementarea lor.
+Folosește joburi sintetice lungi/scurte pentru a măsura admiterea unui job interactiv în timpul unui lot secundar, anulare, restart, payload detașat și RAM/cozi plafonate. Integrarea learning/A/B real se verifică ulterior în 103/144/234/224, care depind de acest protocol; nu condiționa protocolul de implementarea lor.
 
 Păstrează comenzile, configurația, rapoartele și limitările reale. Nu declara verificări fără execuție.
 

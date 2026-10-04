@@ -183,7 +183,7 @@ $planRequiredPerformance = [ordered]@{
     '206' = @('storage','frame')
     '207' = @('memory','storage')
     '210' = @('ui','frame')
-    '214' = @('workers','frame')
+    '214' = @('ui','frame')
     '218' = @('frame','simulation','memory')
     '219' = @('simulation','frame')
     '220' = @('frame','simulation','workers','memory')
@@ -191,6 +191,9 @@ $planRequiredPerformance = [ordered]@{
     '222' = @('storage','memory','frame')
     '223' = @('assets','loading','frame','memory')
     '224' = @('frame','memory','workers','storage','assets','soak')
+    '227' = @('simulation','assets','memory','frame')
+    '234' = @('storage','memory','workers','ui')
+    '235' = @('frame','simulation','memory','workers','storage','assets','soak')
 }
 foreach ($planPerformanceId in $planRequiredPerformance.Keys) {
     if (-not $planTasks.ContainsKey($planPerformanceId)) { throw "PBI de performanță lipsă: $planPerformanceId" }
@@ -207,7 +210,7 @@ $planPerformancePrerequisites = [ordered]@{
     '103' = @('221')
     '144' = @('221')
     '131' = @('222')
-    '214' = @('221','222')
+    '234' = @('221','222')
     '160' = @('224')
 }
 foreach ($planPerformanceId in $planPerformancePrerequisites.Keys) {

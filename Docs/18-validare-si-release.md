@@ -1,6 +1,6 @@
 # Validare și release
 
-Versiune 0.4 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
+Versiune 0.5 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
 
 ## Criterii de acceptare pentru prima versiune
 
@@ -54,7 +54,7 @@ CI rulează verificările statice, scenariile și buildul reproductibil. Livrare
 - Butonul KPIs și K deschid grafice istorice de revenue lunar, ratings 0–5, curse/zi și review-uri/zi, cu sume, număr de observații și medii ponderate corect. Lunile parțiale și proiecțiile sunt etichetate.
 - Stilul eficient și confortabil poate îmbunătăți revenue și ratings în condiții comparabile; un scenariu agresiv poate crește revenue și reduce ratings. Coliziunile rămân în evaluarea pasagerului.
 - Exact trei misiuni noi sunt create per zi calendaristică; refresh/reload nu le rerandomizează. Schimbarea de zi, fusul orar și clock rollback nu dublează recompensele.
-- Misiunile și timpul activ acordă XP o singură dată. O scădere atribuibilă a oricăruia dintre cele două KPI-uri principale produce penalizarea documentată; zgomotul, resetarea perioadei și replay-ul nu o produc. Sunt verificate atât MANUAL, cât și LEARNING.
+- Misiunile, provocările eligibile și timpul activ acordă credite XP o singură dată. Scăderea revenue/ratings, accidentele și eșecul/refuzul obiectivelor nu retrag XP sau nivel în MANUAL/LEARNING/AUTO; nu există evaluator de penalizare.
 - PBI 216 verifică împreună contractele 205–215 și 217 înaintea gate-ului 162. Gates V2/V3 reexecută aceste regresii.
 
 Verificarea planului folosește PBI/Validate-Plan.ps1: board, linkuri locale, index, catalog, matrice și metadate per parametru. Verificarea planului nu reprezintă dovadă de gameplay implementat.
@@ -64,3 +64,14 @@ Verificarea planului folosește PBI/Validate-Plan.ps1: board, linkuri locale, in
 Se execută [protocolul modulului 25](25-performanta-contracte-si-benchmark.md): preset/rezoluție fixate, hardware real, cinci repetări, percentile, input, debit de simulare, cold/first-use și lucrul de fundal concomitent. 220 condiționează campania/asseturile finale; 224 condiționează livrarea. Testele headless verifică algoritmi și capacități, fără a demonstra FPS pe GPU integrat. Lipsa raportului hardware menține gate-ul nevalidat.
 
 Soak-ul are minimum 60 minute și 20 de cicluri de lifecycle, cu retenție, cozi și resurse la platou. Se probează și throttlingul termic al laptopului. Suprasarcina 30/80 este separată de workload-ul normal 30/40; o pauză de suprasarcină în workload normal este eșec de buget, nu timp eliminat din benchmark. PerformanceReport identifică aceeași revizie ca artefactul de release.
+
+## Acceptare V1 pentru revizia 0.5
+
+- Academie/Haos sunt sesiuni izolate, cu profiluri/recorduri proprii; tranziția/reload nu transferă accidental XP, daily, ledger sau rezultate worker.
+- R deblochează rapid mașina; „Oraș proaspăt, păstrează stilul” reconstruiește traficul/decorul fără pierdere de progres, joburi stale sau recompense duplicate.
+- Decorul destructibil cedează și are sunet/fragmente plafonate; coliziunile AI în afara camerei și replay-ul păstrează rezultatul corect. Zona de rampă/drift/demolare este accesibilă.
+- Popup-ul separă preferințele de control de editarea stilului; aplicarea MANUAL_TUNING este restaurabilă, nu inventează dovezi și nu îndeplinește misiuni LEARNING.
+- HUD simplu, camera din spate/first-person, privirea/recenter și reglajele de confort trec verificarea cu tastatură și viewport mic.
+- Catalogul minim de provocări, ofertele realizabile, refuzul, cooldown-ul, reluarea și recompensele respectă modulul 28; daily rămâne exact trei.
+- Savefile-ul complet face roundtrip; editarea fără recalcularea checksumului este respinsă înaintea migrării/commitului și păstrează sesiunea curentă.
+- 235 verifică împreună aceste cerințe după 216 și gate-ul performant 224; 162 nu se închide fără 235. Se consemnează playtesturi reale pentru control, învățare vizibilă, distrugere și dorința de a relua o provocare, fără estimări de retenție prezentate ca rezultate.

@@ -18,6 +18,8 @@ Adaugă arhivă de sesiune cu structură și mărime explicite.
 
 ## Context și plan
 
+- [29-savefile-si-integritate.md](../../Docs/29-savefile-si-integritate.md)
+
 [15-salvare-si-import-export.md](../../Docs/15-salvare-si-import-export.md) descrie regulile și contractele acestei funcționalități. Citește și [workflow-ul PBI](../AGENTS.md) înainte de implementare.
 
 ## Dependențe
@@ -31,6 +33,8 @@ Adaugă arhivă de sesiune cu structură și mărime explicite.
 
 - [ ] Importul este validat și atomic; checkpointul lumii și referințele stil/progres sunt coerente.
 - [ ] Sesiunea importată înlocuiește starea, fără adunarea recompenselor; arhiva invalidă păstrează sesiunea curentă.
+
+- [ ] Exportul de sesiune furnizează snapshot coerent pentru envelope-ul și verificarea checksum din 234; importul de profil/scenariu nu este bypass pentru Load game.
 
 ## Verificare
 
@@ -63,3 +67,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '135' d
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
 
 - 2026-10-04: Plan revizuit la v0.3; implementarea rămâne neîncepută.
+
+- 2026-10-04: Revizia 0.5 actualizează scope-ul și verificările; implementarea rămâne în To Do.

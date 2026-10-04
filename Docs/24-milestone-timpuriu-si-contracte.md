@@ -1,6 +1,6 @@
 # Milestone timpuriu și închiderea contractelor
 
-Versiune 0.4 · 4 octombrie 2026. Parte din [planul complet](README.md). Acest modul consemnează corecțiile auditului; nu declară implementări sau playtesturi executate.
+Versiune 0.5 · 4 octombrie 2026. Parte din [planul complet](README.md). Acest modul consemnează corecțiile auditului; nu declară implementări sau playtesturi executate.
 
 ## Ordine de validare
 
@@ -40,3 +40,7 @@ Validate-Plan.ps1 verifică boardul, indexul PBI, linkurile locale, catalogul Ma
 ## Verificarea performanței încă din prototip
 
 204 folosește 218/219/221 pentru măsurarea fixture-ului timpuriu, fără a cere 220/flota completă. 203 fixează bugetele pe hardware real; 220 verifică apoi 20–30 de taxiuri și până la 40 civile înainte de campanie și asseturi finale. Aceste dependențe păstrează rolul prototipului devreme. Regresia de semantică și regresia de performanță sunt verificate împreună, conform [modulului 25](25-performanta-contracte-si-benchmark.md).
+
+## Corecțiile de experiență ale reviziei 0.5
+
+Prototipul timpuriu 204 păstrează scope-ul cu trei chei. 225–235 adaugă experiențele acceptate fără a bloca retroactiv fixture-ul. 214 se redefinește pentru feedbackul consecințelor și protejarea XP/nivelului, fără A/B de penalizare. 224 verifică costul noilor sisteme, 235 integrarea și playtestul, iar 162 depinde de 235. Counts, index și matrice includ noile task-uri. Toate rămân în To Do în acest audit de documentație.

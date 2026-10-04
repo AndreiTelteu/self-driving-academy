@@ -18,6 +18,8 @@ Implementează W/S/A/D, revenirea direcției și sensibilitatea la viteză.
 
 ## Context și plan
 
+- [27-reglaje-hud-si-camera.md](../../Docs/27-reglaje-hud-si-camera.md)
+
 [05-vehicule-si-fizica.md](../../Docs/05-vehicule-si-fizica.md) descrie regulile și contractele acestei funcționalități. Citește și [workflow-ul PBI](../AGENTS.md) înainte de implementare.
 
 ## Dependențe
@@ -29,6 +31,8 @@ Implementează W/S/A/D, revenirea direcției și sensibilitatea la viteză.
 
 - [ ] Inputul brut și comanda filtrată sunt disponibile separat.
 - [ ] Pierderea focusului eliberează comenzile fără tastă rămasă activă.
+
+- [ ] Filtrarea are ControlPreferences versionat cu limite calibrate, pregătit pentru popup-ul 229; input brut/comandă efectivă rămân distincte.
 
 ## Verificare
 
@@ -59,3 +63,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '025' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Revizia 0.5 actualizează scope-ul și verificările; implementarea rămâne în To Do.

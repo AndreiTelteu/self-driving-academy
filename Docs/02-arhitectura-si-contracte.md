@@ -1,6 +1,6 @@
 # Arhitectură și contracte
 
-Versiune 0.4 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
+Versiune 0.5 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
 
 ## Stack ales
 
@@ -20,7 +20,10 @@ Rapier este propunerea de bază pentru controllerul auto. PBI-ul de calibrare ve
 | fleet | Curse și dispecerizare | FleetState și Ride |
 | economy | Tarife, review-uri și agregări | RevenueEntry, RideReview și FleetKpiBucket |
 | missions | Campanie și seturi zilnice | MissionProgress și DailyMissionSet |
-| progression | XP, nivel și evaluări de impact | PlayerProgress, XpEntry și KpiImpactEvaluation |
+| progression | Credite XP și nivel fără pierderi | PlayerProgress și XpEntry |
+| sessions | Academie/Haos și resetul lumii | SessionKind, worldEpoch și checkpoint activ |
+| challenges | Provocări random și recorduri | ChallengeTemplate și ChallengeInstance |
+| destructibles | Decor interactiv și evenimente de impact | DestructibleDefinition și DestructibleState |
 | rendering | Adaptor Babylon | Transformări interpolate și entityId |
 | ui/input | Comenzi ale jucătorului și afișare | Intenții pentru următorul tick |
 | telemetry | Segmente și oportunități | InterventionSegment |
@@ -33,7 +36,7 @@ Rendererul primește stări și nu decide comportamentul. UI trimite intenții �
 
 ## Layout propus pentru implementare
 
-src/app, src/simulation, src/world, src/vehicles, src/autonomy, src/fleet, src/rendering/babylon, src/ui, src/input, src/telemetry, src/learning, src/profiles, src/experiments, src/persistence, src/missions, src/economy, src/progression și src/audio. public/assets conține asseturi versionate; scenariile și datele hărții sunt separate de cod. tests/scenarios păstrează cazurile reproductibile.
+src/app, src/simulation, src/world, src/vehicles, src/autonomy, src/fleet, src/rendering/babylon, src/ui, src/input, src/telemetry, src/learning, src/profiles, src/experiments, src/persistence, src/missions, src/economy, src/progression, src/sessions, src/challenges, src/destructibles și src/audio. public/assets conține asseturi versionate; scenariile și datele hărții sunt separate de cod. tests/scenarios păstrează cazurile reproductibile.
 
 ## Ordinea unui tick
 
@@ -65,8 +68,8 @@ flowchart TD
   Publish --> Profiles
   Snapshot --> Missions[Misiuni]
   Snapshot --> Metrics
-  Metrics --> Progress[Evaluare de impact și XP]
-  Missions --> Progress
+  Metrics --> Feedback[Consecințe și feedback]
+  Missions --> Progress[Credite XP și nivel]
   Snapshot --> Save[IndexedDB]
 ```
 
@@ -91,7 +94,11 @@ Datele motorului folosesc unități SI, identificatori stabili și timp de simul
 | FleetKpiBucket | periodId, revenueMinorUnits, completedRides, reviewCount, ratingSum, ratingHistogram, exposureSeconds |
 | DailyMissionSet | playerId, dailyDate, calendarTimeZone, generatorVersion, seed, capabilitySnapshot, instances, expiresAt |
 | PlayerProgress / XpEntry | playerId, xpBalance, level, ruleVersion, entryId, amount, causeId, evidence |
-| KpiImpactEvaluation | causeId, segmentIds, baselineCheckpoint, evaluationWindow, controlRun, treatmentRun, deltas, uncertainty, status |
+| SessionIdentity | sessionId, sessionKind, worldEpoch, activeCheckpointId |
+| ControlPreferences | version, steeringSensitivity, returnRate, speedAttenuation, throttleRamp, brakeRamp, cameraMotion, fov |
+| ChallengeInstance | instanceId, sessionId, worldEpoch, templateVersion, objectiveSnapshot, status, deadlineTick, rewardId |
+| DestructibleState | objectId, archetype, state, transform, lastEventId |
+| SavefileEnvelope | format, formatVersion, integrityVersion, createdAt, payload, checksum |
 
 Evenimentele au eventId, type, tick, entityIds și payload validat. Comenzile de input și activările de profil sunt procesate la limite de tick. Evenimentele de UI primesc copii sau proiecții și nu modifică direct motorul. workerJobId, segmentId, baseVersionId, profileId și learningEpoch leagă rezultatele estimării de cauza și ținta lor.
 
@@ -103,8 +110,12 @@ Există maximum un vehicul în MANUAL sau LEARNING. Fiecare corp fizic are un en
 
 ## Contracte economice și de progres
 
-economy consumă rezultate ale curselor și consecințe pentru tarife/reviews/KPI-uri. progression consumă mission rewards, timp activ și evaluări de impact, fără a modifica DrivingProfile. Worker-ele de experimente folosesc lumi și ledger-e izolate. SessionCheckpoint, WorldReplayChunk și agregările din modulele 22–23 sunt scheme distincte. Timpul economic, timpul calendaristic daily și minutele active XP nu se substituie reciproc.
+economy consumă rezultate ale curselor și consecințe pentru tarife/reviews/KPI-uri. progression consumă credite din misiuni/provocări eligibile și timp activ Academie, fără a modifica DrivingProfile. Worker-ele de experimente folosesc lumi și ledger-e izolate. SessionCheckpoint, WorldReplayChunk și agregările din modulele 22–23 sunt scheme distincte. Timpul economic, timpul calendaristic daily și minutele active XP nu se substituie reciproc.
 
 ## Contracte de resurse și performanță
 
-PerformanceReport și manifestul de bugete au versiuni proprii, hardware/backend/preset și fixture identificabile. WorkerJob include payloadBytes, ownership, prioritate, stare de admitere și progres. Un singur coordonator bugetează joburile grele; UI nu poate lansa câte o lume pentru fiecare cauză XP. Captura checkpointului este separată de encode/commit și are cost sincron măsurat. [Modulul 25](25-performanta-contracte-si-benchmark.md) definește ordinea, backpressure-ul și performance_checks din PBI.
+PerformanceReport și manifestul de bugete au versiuni proprii, hardware/backend/preset și fixture identificabile. WorkerJob include payloadBytes, ownership, prioritate, stare de admitere și progres. Un singur coordonator bugetează joburile grele; UI nu poate lansa lumi de comparație nelimitate; XP nu are evaluator în worker. Captura checkpointului este separată de encode/commit și are cost sincron măsurat. [Modulul 25](25-performanta-contracte-si-benchmark.md) definește ordinea, backpressure-ul și performance_checks din PBI.
+
+## Contracte V1 pentru distracție
+
+[Modulele 26](26-joaca-libera-haos-si-distrugere.md), [27](27-reglaje-hud-si-camera.md), [28](28-provocari-random-si-revenire.md) și [29](29-savefile-si-integritate.md) definesc izolarea sesiunilor, reseturile, proveniența sliderelor, evaluatorii provocărilor și checksumul. Evenimentele/comenzile/joburile includ sessionId/worldEpoch; comparațiile au context izolat. Tick-ul produce tranzițiile destructibile după contacte, apoi obiectivele/creditele idempotente. Resetul schimbă generația lumii înaintea oricărui eveniment nou. Savefile-ul validează integritatea înaintea activării oricărei stări.

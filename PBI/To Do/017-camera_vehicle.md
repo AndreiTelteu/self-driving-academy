@@ -1,6 +1,6 @@
 ---
 id: "017"
-title: "Camera din spatele mașinii"
+title: "Camere din spate și first-person"
 status: "To Do"
 release: "V1"
 module: "Babylon"
@@ -10,13 +10,15 @@ started_at: null
 completed_at: null
 ---
 
-# 017 Camera din spatele mașinii
+# 017 Camere din spate și first-person
 
 ## Obiectiv
 
 Implementează urmărire amortizată, adaptare la viteză și evitare de obstacole.
 
 ## Context și plan
+
+- [27-reglaje-hud-si-camera.md](../../Docs/27-reglaje-hud-si-camera.md)
 
 [03-babylon-engine.md](../../Docs/03-babylon-engine.md) descrie regulile și contractele acestei funcționalități. Citește și [workflow-ul PBI](../AGENTS.md) înainte de implementare.
 
@@ -29,6 +31,9 @@ Implementează urmărire amortizată, adaptare la viteză și evitare de obstaco
 
 - [ ] Camera urmărește entityId selectat și poate schimba ținta fără mutarea vehiculului.
 - [ ] Intensitatea mișcării și distanța sunt reglabile.
+
+- [ ] Camera first-person din poziția șoferului și camera din spate sunt disponibile în V1 prin C; nu se rezumă la vedere pe capotă.
+- [ ] FOV/mișcare reglabilă, mouse look/recenter și captură explicită/Escape funcționează fără clipping la viraj/impact sau transfer de autoritate.
 
 ## Verificare
 
@@ -59,3 +64,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '017' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Revizia 0.5 actualizează scope-ul și verificările; implementarea rămâne în To Do.

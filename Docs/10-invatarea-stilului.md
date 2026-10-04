@@ -1,6 +1,6 @@
 # Învățarea stilului
 
-Versiune 0.3 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
+Versiune 0.5 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
 
 ## Estimarea stilului
 
@@ -38,6 +38,10 @@ Intervalul de urmărire și minimum gap sunt estimate separat numai când viteze
 
 ## Efecte economice și validarea cu jucători
 
-Revenue-ul, ratings și XP evaluează consecințele și nu corectează automat stilul estimat. Un profil agresiv numeric valid poate fi publicat și poate produce o penalizare XP pentru deteriorarea atribuibilă a KPI-urilor. MANUAL poate afecta rezultatul unei curse fără a modifica stilul orașului.
+Revenue-ul și ratings evaluează consecințele fără să corecteze automat stilul estimat. Un profil agresiv numeric valid poate fi publicat și poate deteriora serviciul, fără pierdere XP sau scădere de nivel. MANUAL poate afecta o cursă fără să modifice stilul orașului. Sliderele de stil sunt o sursă MANUAL_TUNING distinctă de demonstrațiile LEARNING, conform [modulului 27](27-reglaje-hud-si-camera.md).
 
 Prototipul timpuriu validează trei chei înaintea gate-ului complet de 24. Testele sintetice sunt completate prin playtest: jucătorul recunoaște schimbarea, distinge MANUAL de LEARNING și poate indica observația care a susținut delta. Pragurile și criteriile sunt în [milestone](24-milestone-timpuriu-si-contracte.md).
+
+## Reglaje și schimbări de lume
+
+Aplicarea unui reglaj de stil invalidează joburile vechi prin learningEpoch și nu inventează dovezi; demonstrațiile eligibile ulterioare pot modifica din nou valorile. ControlPreferences este înregistrat în segment, distinct de profil. Joburile păstrează sessionId/worldEpoch pentru a nu publica peste o lume resetată sau peste sesiunea Academie când au fost lansate în Haos. UI arată observațiile lipsă și exemple reale, fără să promită învățarea driftului sau a distrugerii.

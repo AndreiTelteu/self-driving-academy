@@ -36,6 +36,8 @@ Citește și [workflow-ul PBI](../AGENTS.md).
 - [ ] Pauză/background/AFK/replay/experimente/offline nu acordă XP; AUTO activ poate conta.
 - [ ] Soldul, nivelul și istoricul sunt explicabile; resetul/importul stilului nu resetează XP.
 
+- [ ] Creditele sunt nenegative; soldul/nivelul nu scad prin KPI, incident, eșec/refuz sau zi ratată. XP de timp se acordă numai în Academie.
+
 ## Verificare
 
 Testează minut fracționar, activitate AUTO, pause/AFK, recompensă duplicată și profil de driving nou.
@@ -64,3 +66,5 @@ Verificare finală: Validate-Board.ps1 -RequireDone '213'.
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do în revizia 0.3; implementarea nu a început.
+
+- 2026-10-04: Revizia 0.5 actualizează scope-ul și verificările; implementarea rămâne în To Do.

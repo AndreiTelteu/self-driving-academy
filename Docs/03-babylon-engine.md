@@ -1,6 +1,6 @@
 # Babylon.js și integrarea engine-ului
 
-Versiune 0.4 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
+Versiune 0.5 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
 
 ## Decizia de engine
 
@@ -59,3 +59,7 @@ Bootstrapul, resize-ul, încărcarea, selecția, camera și disposal funcționea
 ## Contractul de randare și asseturi
 
 Bugetele și setările DPR/rezoluție internă sunt fixate înainte de asseturile finale prin 203/223. Decorul repetat folosește batchuri locale; vehiculele dinamice păstrează pickingul/entityId și actualizările vizuale. Materialele/transformările sunt înghețate numai dacă sunt statice; nu se îngheață global lista orașului dinamic. Startup-ul, prima utilizare a shaderelor, uploadul GPU și disposal repetat au probe distincte. Calitatea adaptivă afectează numai prezentarea. [Contractul și sursele](25-performanta-contracte-si-benchmark.md) definesc comparația și limitele.
+
+## Camere și decor interactiv în V1
+
+Camera din spate și first-person din poziția șoferului sunt obligatorii în 017, cu FOV/mișcare reglabile, privire/recenter și captură de mouse explicită conform [modulului 27](27-reglaje-hud-si-camera.md). Decorul destructibil are entityId și stări independente de mesh; tranzițiile/pool-urile din [modulul 26](26-joaca-libera-haos-si-distrugere.md) păstrează pickingul și disposal-ul după reset.

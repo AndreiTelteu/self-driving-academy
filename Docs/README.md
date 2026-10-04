@@ -1,6 +1,6 @@
 # Documentația Self Driving Academy
 
-Versiune 0.4 · 4 octombrie 2026. Aceste fișiere Markdown sunt planul curent al proiectului. Babylon.js este engine-ul confirmat. Gameplay-ul include condus realist, misiuni și o flotă care învață inclusiv greșelile jucătorului.
+Versiune 0.5 · 4 octombrie 2026. Aceste fișiere Markdown sunt planul curent al proiectului. Babylon.js este engine-ul confirmat. Gameplay-ul include condus realist, misiuni și o flotă care învață inclusiv greșelile jucătorului.
 
 ## Module
 
@@ -28,13 +28,17 @@ Versiune 0.4 · 4 octombrie 2026. Aceste fișiere Markdown sunt planul curent al
 | [Extensii și mers pe jos](20-extensii-si-mers-pe-jos.md) | Extensii și mers pe jos |
 | [Acoperirea funcționalităților prin PBI](21-acoperire-functionalitati.md) | Acoperirea funcționalităților prin PBI |
 | [KPI-uri economie și review-uri](22-kpi-economie-si-review-uri.md) | Revenue lunar, ratings și grafice istorice |
-| [Misiuni zilnice și experiență](23-misiuni-zilnice-si-experienta.md) | Trei misiuni pe zi, XP și penalizări atribuite |
+| [Misiuni zilnice și experiență](23-misiuni-zilnice-si-experienta.md) | Trei misiuni pe zi și XP fără pierderi |
 | [Milestone timpuriu și contracte](24-milestone-timpuriu-si-contracte.md) | Corecțiile auditului și validarea ideii înaintea extinderii |
 | [Contracte de performanță și benchmark](25-performanta-contracte-si-benchmark.md) | Bugete, scheduler, workers, date/asseturi și gates progresive |
+| [Joacă liberă Haos și distrugere](26-joaca-libera-haos-si-distrugere.md) | Sesiuni, recuperare, decor destructibil și feedback |
+| [Reglaje HUD și cameră](27-reglaje-hud-si-camera.md) | Slidere pentru control/stil, HUD simplu și first-person |
+| [Provocări random și revenire](28-provocari-random-si-revenire.md) | Clienți neobișnuiți, catalog, director, reluare și recorduri |
+| [Savefile și integritate](29-savefile-si-integritate.md) | Backup complet, checksum în browser și încărcare atomică |
 
 ## Implementare și Kanban
 
-[Backlogul PBI](../PBI/README.md) conține 224 task-uri: V1 are 184 (001–162 și 203–224), V2 are 28 (163–190), V3 are 12 (191–202). IDs sunt stabile; ordinea de lucru rezultă din graful dependențelor, inclusiv dependențe spre IDs noi mai mari. Toate sunt inițial în To Do. [Regulile pentru agenți](../PBI/AGENTS.md) cer mutarea efectivă To Do → In Progress → Done și verificarea finală obligatorie.
+[Backlogul PBI](../PBI/README.md) conține 235 task-uri: V1 are 195 (001–162 și 203–235), V2 are 28 (163–190), V3 are 12 (191–202). IDs sunt stabile; ordinea de lucru rezultă din graful dependențelor, inclusiv dependențe spre IDs noi mai mari. Toate sunt inițial în To Do. [Regulile pentru agenți](../PBI/AGENTS.md) cer mutarea efectivă To Do → In Progress → Done și verificarea finală obligatorie.
 
 [Catalogul JSON](driving-parameters.json) conține 80 de parametri propuși. [Matricea de acoperire](21-acoperire-functionalitati.md) leagă fiecare parametru de politică, estimare și gate de validare. V1 țintește 24; V2 extinde la 80; V3 adaugă mersul pe jos.
 
@@ -46,8 +50,12 @@ Jocul nu este implementat în această etapă. Valorile de calibrare, hardware-u
 
 ## Revizia 0.3
 
-Învățarea are loc numai în LEARNING; MANUAL permite intervenții fără schimbarea stilului. Taxiurile și civilii adoptă stilul comun. V1 include revenue și ratings cu grafice KPIs, trei misiuni zilnice și XP din misiuni/timp activ, cu penalizări pentru deteriorări atribuite. Valorile economice și pragurile sunt propuneri de calibrare. Verifică boardul și planul cu PBI/Validate-Board.ps1 și PBI/Validate-Plan.ps1.
+Învățarea are loc numai în LEARNING; MANUAL permite intervenții fără schimbarea stilului. Taxiurile și civilii adoptă stilul comun. V1 include revenue și ratings cu grafice KPIs, trei misiuni zilnice și XP din misiuni/timp activ, fără pierderi XP, conform reviziei 0.5. Valorile economice și pragurile sunt propuneri de calibrare. Verifică boardul și planul cu PBI/Validate-Board.ps1 și PBI/Validate-Plan.ps1.
 
 ## Revizia 0.4
 
 Performanța devine o condiție progresivă de implementare: 218–224 adaugă harness, scheduler, gate de flotă înainte de campanie/asseturi, bugete workers/date/randare și gate CI/soak. PBI-urile relevante declară performance_checks. Pragurile sunt propuneri calibrate în 203 și verificate pe hardware real, nu rezultate deja măsurate.
+
+## Revizia 0.5
+
+Se elimină global pierderea XP și scăderea nivelului. V1 adaugă Academie/Haos, resetul orașului cu stil păstrat, decor destructibil cu sunet/fragmente, HUD simplu, first-person, reglaje prin slidere, provocări random opționale și savefile complet cu checksum. Modulele 26–29 și PBI 225–235 descriu scope-ul; 214 păstrează identitatea, cu scope nou de feedback fără penalizare. Cerințele curente nu folosesc alte jocuri ca referință; arhiva rămâne istoric. Planul nu declară funcții sau playtesturi implementate.

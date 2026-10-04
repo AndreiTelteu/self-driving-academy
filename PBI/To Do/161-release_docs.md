@@ -14,9 +14,11 @@ completed_at: null
 
 ## Obiectiv
 
-Documentează cele trei moduri, KPIs, timp economic/calendar zilnic, XP și penalizări, salvare/export și recuperare.
+Documentează cele trei moduri, KPIs, timp economic/calendar zilnic, XP fără pierderi, salvare/export și recuperare.
 
 ## Context și plan
+
+- [26-joaca-libera-haos-si-distrugere.md](../../Docs/26-joaca-libera-haos-si-distrugere.md)
 
 [18-validare-si-release.md](../../Docs/18-validare-si-release.md) descrie regulile și contractele acestei funcționalități. Citește și [workflow-ul PBI](../AGENTS.md) înainte de implementare.
 
@@ -28,6 +30,8 @@ Documentează cele trei moduri, KPIs, timp economic/calendar zilnic, XP și pena
 
 - [ ] Instrucțiunile corespund fluxurilor implementate și versiunii reale.
 - [ ] Indicatorii și limitările învățării sunt explicați fără promisiuni nevalidate.
+
+- [ ] Manualul descrie Academie/Haos, R/reset, slidere, first-person, provocări și savefile cu limitele checksumului; nu include fluxuri de penalizare XP.
 
 ## Verificare
 
@@ -60,3 +64,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '161' d
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
 
 - 2026-10-04: Plan revizuit la v0.3; implementarea rămâne neîncepută.
+
+- 2026-10-04: Revizia 0.5 actualizează scope-ul și verificările; implementarea rămâne în To Do.

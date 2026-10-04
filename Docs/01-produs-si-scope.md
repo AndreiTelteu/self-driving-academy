@@ -1,25 +1,25 @@
 # Produs și scope
 
-Versiune 0.3 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
+Versiune 0.5 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
 
 ## Cerințe confirmate
 
 | Domeniu | Decizie |
 | --- | --- |
 | Platformă | Browser pe PC și laptop, cu tastatură și mouse |
-| Perspectivă | Oraș 3D și cameră din spatele mașinii |
+| Perspectivă | Oraș 3D, cameră din spate și first-person din poziția șoferului |
 | Vehicule | Jucătorul poate conduce orice mașină și poate selecta rapid orice taxi |
 | Flotă inițială | Aproximativ 20–30 de taxiuri, într-un cartier compact, alături de trafic obișnuit |
-| Interfață | Inspirație GTA San Andreas, listă a taxiurilor și a curselor, mod de control vizibil |
+| Interfață | HUD simplu, listă de taxiuri/curse la cerere, mod vizibil și popup de reglaje accesibile |
 | Control | AUTO, MANUAL fără învățare și LEARNING cu învățare; maximum un vehicul condus de jucător |
 | Învățare | Numai din LEARNING, inclusiv în mașini civile, din curse complete și intervenții de câteva străzi |
 | Propagare | Automat după segmente LEARNING eligibile, către taxiuri și civili; civilii imită stilul comun al orașului |
 | Greșeli | Flota copiază inclusiv condusul agresiv și încălcările regulilor |
 | Fizică | Mai realistă, cu aderență, frânare și control al mașinii importante |
-| Gameplay | Campanie, trei misiuni noi pe zi calendaristică, XP din misiuni și timp activ; penalizări pentru deteriorarea atribuibilă a KPI-urilor |
+| Gameplay | Campanie, trei misiuni noi pe zi calendaristică, XP din misiuni și timp activ, fără pierderi XP sau scădere de nivel; provocări random opționale și Haos |
 | KPI flotă | Revenue lunar, ratings 0–5, curse și review-uri pe zi; buton KPIs cu pop-up și grafice istorice |
-| Oraș | Cartier fictiv cu atmosferă americană, apropiată de GTA San Andreas |
-| Persistență | Single-player, salvare locală în browser și export/import de profil |
+| Oraș | Cartier fictiv cu atmosferă americană, stilizată, cu repere și zone de joacă proprii |
+| Persistență | Single-player, autosave local, export/import de profil și savefile complet cu checksum verificat |
 | Mers pe jos | Extensie ulterioară |
 
 ## Propuneri de calibrare
@@ -40,13 +40,13 @@ Un exemplu de sesiune: profilul inițial păstrează distanță mare și pleacă
 
 Prima versiune include conducere manuală, autonomie pe un graf de benzi, curse cu pickup și dropoff, trafic obișnuit, semafoare, STOP, priorități, coliziuni, profiluri versionate, telemetrie și comparații. Condusul liber permite abateri de la traseu și contact cu borduri sau alte vehicule.
 
-Mersul pe jos, interioarele, multiplayer-ul, percepția prin camere sau LiDAR simulat, vremea dinamică și antrenarea unei rețele neuronale sunt extensii. Autonomia folosește inițial informațiile structurale ale simulării. Învățarea parametrilor este nucleul produsului și nu presupune apeluri la un model conversațional.
+Mersul pe jos, interioarele complexe, multiplayer-ul, percepția prin camere sau LiDAR simulat, vremea dinamică și antrenarea unei rețele neuronale sunt extensii. Autonomia folosește inițial informațiile structurale ale simulării. Învățarea parametrilor este nucleul produsului și nu presupune apeluri la un model conversațional.
 
 Manevrele pe care politica autonomă nu le poate reprezenta, precum cascadoriile sau condusul deliberat pe trotuar, rămân vizibile în înregistrare și în statistici. Interfața le marchează ca comportamente nereproduse de profil; nu pretinde că le-a învățat.
 
 ## Etapele produsului
 
-V1 este jocul complet pentru PC în browser cu 20–30 de taxiuri, condus realist, curse, campanie, 24 de parametri învățabili, profil comun pentru oraș, comparații, KPI-uri economice și ratings, trei misiuni zilnice, XP și salvare locală. V2 implementează și validează întregul catalog de 80 de parametri, inclusiv contexte suplimentare de pietoni, pericole, rutare și serviciu. V3 adaugă personajul și mersul pe jos, păstrând schimbarea rapidă a taxiului.
+V1 este jocul complet pentru PC în browser cu 20–30 de taxiuri, condus realist, curse, campanie, 24 de parametri învățabili, profil comun pentru oraș, comparații, KPI-uri economice și ratings, trei misiuni zilnice, XP fără pierderi și salvare locală/savefile. Include Haos, decor destructibil, slidere, first-person și provocări random conform reviziei 0.5. V2 implementează și validează întregul catalog de 80 de parametri, inclusiv contexte suplimentare de pietoni, pericole, rutare și serviciu. V3 adaugă personajul și mersul pe jos, păstrând schimbarea rapidă a taxiului.
 
 Multiplayer-ul, vremea dinamică, interioarele complexe, percepția prin camere sau LiDAR și rețelele neuronale nu intră în backlogul confirmat. Implementarea lor ar necesita o extindere explicită a scope-ului. Diferența V1/V2/V3 este o ordine de livrare, nu omiterea funcționalităților planificate.
 
@@ -59,3 +59,7 @@ Engine-ul de joc și randare ales este Babylon.js. Three.js și PlayCanvas nu ma
 MANUAL nu actualizează stilul; LEARNING folosește aceleași comenzi și fizică și publică automat când există dovezi. Mașinile civile sunt prezentate ca șoferi umani care imită stilul orașului, deși sunt simulate de aceeași politică de comportament. Nu sunt personalități fixe de control în sesiunea live. KPI-urile economice aparțin numai flotei de taxiuri; civilii le pot influența indirect prin trafic.
 
 [Economia și review-urile](22-kpi-economie-si-review-uri.md), [misiunile zilnice și XP](23-misiuni-zilnice-si-experienta.md) și [milestone-urile timpurii](24-milestone-timpuriu-si-contracte.md) completează scope-ul V1. Viralizarea rămâne o oportunitate ulterioară; această revizie prioritizează fidelizarea prin misiuni și progres.
+
+## Decizii confirmate în revizia 0.5
+
+V1 include [Academie și Haos, recuperare și decor destructibil](26-joaca-libera-haos-si-distrugere.md), [control reglabil, editarea stilului prin slidere, HUD simplu și first-person](27-reglaje-hud-si-camera.md), [provocări random cu clienți și obiective neobișnuite](28-provocari-random-si-revenire.md) și [savefile complet cu checksum](29-savefile-si-integritate.md). Pierderea XP este eliminată global; revenue, ratings și eșecul unei misiuni rămân consecințe de gameplay în Academie. Haos are lumea/profilul/recordurile sale, fără progres sau deteriorare a campaniei. Învățarea din demonstrații rămâne exclusiv LEARNING; ajustarea manuală publică versiuni cu proveniență distinctă, fără dovezi fabricate. Camera first-person nu implică mers pe jos V3. Cerințele vizuale și de interfață sunt descrise direct, fără referințe la alte jocuri.

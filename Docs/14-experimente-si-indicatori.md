@@ -1,6 +1,6 @@
 # Experimente și indicatori
 
-Versiune 0.4 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
+Versiune 0.5 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
 
 ## Indicatori și comparații
 
@@ -32,8 +32,12 @@ Snapshotul pentru rerulare folosește checkpointul complet al lumii din [persist
 
 ## KPI-uri și atribuirea schimbărilor
 
-Revenue-ul, review-urile și istoricul lor sunt în [economia flotei](22-kpi-economie-si-review-uri.md). Comparația pentru o penalizare XP folosește baseline și fereastră comparabile, conform [XP](23-misiuni-zilnice-si-experienta.md). Dashboardul distinge corelația temporală de atribuirea evaluată. Confortul comenzilor exclude impulsurile de impact; experiența pasagerului și ratingul includ distinct incidentul real, astfel încât o coliziune nu poate produce un rating bun doar fiindcă accelerațiile au fost filtrate.
+Revenue-ul, review-urile și istoricul lor sunt în [economia flotei](22-kpi-economie-si-review-uri.md). Comparațiile sunt experimente opționale, fără acordare sau retragere XP. Dashboardul distinge corelația temporală de rezultatul comparabil, fără să atribuie un accident jucătorului dacă dovezile nu permit. Confortul comenzilor exclude impulsurile de impact; ratingul include incidentul real.
 
 ## Resurse pentru comparații și evaluări
 
-Experimentele și A/B-ul XP folosesc admiterea comună 221: lumi control/tratament și seed-uri rulate secvențial, felii măsurate, anulare și progres plafonat. Learning-ul interactiv poate întrerupe cooperativ un lot secundar. PENDING și reluarea sunt explicite; un proxy cu fizică simplificată nu poate fundamenta o penalizare definitivă. Recorderul și capturile au limite în bytes și raport de cost prin 222. [Protocolul de performanță](25-performanta-contracte-si-benchmark.md).
+Experimentele folosesc admiterea comună 221: lumi și seed-uri rulate secvențial, felii măsurate, anulare și progres plafonat. Learning-ul interactiv poate întrerupe un lot secundar. Recorderul/capturile au limite în bytes prin 222. Nu există A/B automat pentru penalizare XP. [Protocolul de performanță](25-performanta-contracte-si-benchmark.md).
+
+## Replay pentru distrugere și provocări
+
+Recorderul include stările decorului, DESTRUCTIBLE_BROKEN și tranzițiile de provocare, cu sessionId/worldEpoch. Resetul marchează o discontinuitate explicită. Scorul provine numai din evenimente live autoritare; vizionarea unei filmări de influencer sau replay-ul unui carambol nu acordă recompense. [Modulul 26](26-joaca-libera-haos-si-distrugere.md) și [modulul 28](28-provocari-random-si-revenire.md) definesc aceste extensii.

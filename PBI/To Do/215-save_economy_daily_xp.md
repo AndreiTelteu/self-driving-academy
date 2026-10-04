@@ -19,6 +19,8 @@ Extinde checkpointul/exportul de sesiune cu calendar economic/daily, ledger come
 
 ## Context și plan
 
+- [29-savefile-si-integritate.md](../../Docs/29-savefile-si-integritate.md)
+
 [Contractul de performanță](../../Docs/25-performanta-contracte-si-benchmark.md) definește probele și bugetele performance_checks.
 
 - [15-salvare-si-import-export.md](../../Docs/15-salvare-si-import-export.md)
@@ -43,9 +45,11 @@ Citește și [workflow-ul PBI](../AGENTS.md).
 
 - [ ] Commiturile comerciale/XP respectă pipeline-ul 222; datele sintetice de istoric și storage lent au costuri și limite măsurate.
 
+- [ ] XP persistat conține credite nenegative și nicio evaluare de penalizare; savefile complet verificat este extensia 234.
+
 ## Verificare
 
-Roundtrip sesiune și crash la review/reward/penalizare, migrare din schema anterioară, două taburi și quota.
+Roundtrip sesiune și crash la review/reward/credit XP, migrare din schema anterioară, două taburi și quota.
 
 Păstrează comenzile, scenariile și rezultatele reale; nu declara trecere fără execuție.
 
@@ -73,3 +77,5 @@ Verificare finală: Validate-Board.ps1 -RequireDone '215'.
 - 2026-10-04: PBI creat în To Do în revizia 0.3; implementarea nu a început.
 
 - 2026-10-04: Revizia 0.4 adaugă contracte/verificări de performanță; implementarea rămâne neîncepută.
+
+- 2026-10-04: Revizia 0.5 actualizează scope-ul și verificările; implementarea rămâne în To Do.

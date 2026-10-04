@@ -1,12 +1,12 @@
 # Vehicule și fizică
 
-Versiune 0.4 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
+Versiune 0.5 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
 
 ## Fizica și senzația de condus
 
 Realismul primei versiuni înseamnă distanțe de frânare dependente de viteză și aderență, transfer credibil al sarcinii, pierderea aderenței în viraje, suspensie, inerție și diferențe între clasele vehiculelor. Modelul final se alege prin prototip. Un controller cu ray casting este o bază de evaluare, nu o garanție că întreaga dinamică a anvelopelor este simulată fidel.
 
-Inputul digital al tastaturii este filtrat printr-o curbă de accelerație, frână și direcție, cu viteză de revenire și sensibilitate dependentă de viteză. Această asistență de input este fixă și documentată; estimatorul observă atât tastele, cât și comenzile efective. Nu învață ca preferință personală oscilațiile produse de limita tastaturii.
+Inputul digital al tastaturii este filtrat prin curbe de accelerație, frână și direcție, cu revenire și sensibilitate dependentă de viteză. Asistențele sunt configurabile prin ControlPreferences versionat și sliderele din [modulul 27](27-reglaje-hud-si-camera.md), în limite calibrate care păstrează mecanica vehiculului. Estimatorul observă inputul brut, comenzile efective și versiunea setărilor; nu învață oscilațiile produse de limita tastaturii drept preferință personală.
 
 Pragurile mecanice aparțin configurației vehiculului. Profilul șoferului exprimă accelerații dorite și spații acceptate, apoi controllerul le realizează în limita aderenței și puterii. Condusul agresiv poate produce derapaje, frânare insuficientă și coliziuni. Sistemul nu adaugă imunitate fizică taxiurilor autonome.
 
@@ -21,3 +21,7 @@ Daunele V1 pot avea un model simplu, documentat: efect asupra disponibilității
 ## Costul fizicii și frecvențele
 
 Controllerul și fizica rămân la 60 Hz; doar deciziile de nivel înalt au 10 Hz distribuiți prin scheduler. Colliderele/query-urile sunt simplificate și filtrate cu regresii de contact/vecini; camera nu dezactivează fizica civililor sau a taxiurilor. Solver/CCD nu se reduc automat cu FPS. 021 măsoară pasul fizic, query-urile și bridge-ul WASM pe trafic/contacte, pe hardware-ul fixat în 203. Acumularea de timp este plafonată și suprasarcina explicită, conform [modulului 25](25-performanta-contracte-si-benchmark.md).
+
+## Recuperare și impacturi distractive
+
+[Modulul 26](26-joaca-libera-haos-si-distrugere.md) diferențiază R/deblocarea mașinii de resetul lumii cu stil păstrat și definește contactele cu decor destructibil. Fizica este aceeași în Academie/Haos și MANUAL/LEARNING/AUTO. Reglajele de input schimbă realizarea comenzilor jucătorului; sliderele de stil schimbă țintele politicii, fără modificarea ascunsă a masei, aderenței sau puterii.

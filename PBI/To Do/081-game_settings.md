@@ -18,6 +18,8 @@ Creează panoul de preferințe și aplicare coerentă.
 
 ## Context și plan
 
+- [27-reglaje-hud-si-camera.md](../../Docs/27-reglaje-hud-si-camera.md)
+
 [08-interfata-camera-si-control.md](../../Docs/08-interfata-camera-si-control.md) descrie regulile și contractele acestei funcționalități. Citește și [workflow-ul PBI](../AGENTS.md) înainte de implementare.
 
 ## Dependențe
@@ -30,6 +32,8 @@ Creează panoul de preferințe și aplicare coerentă.
 
 - [ ] Unitățile de afișare nu schimbă SI în simulare.
 - [ ] Modificarea camerei sau graficii nu modifică stilul flotei.
+
+- [ ] Preferințele de confort/cameră și schema ControlPreferences sunt persistabile; editorul de stil este distinct și nu schimbă AI-ul prin acest panou.
 
 ## Verificare
 
@@ -60,3 +64,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '081' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Revizia 0.5 actualizează scope-ul și verificările; implementarea rămâne în To Do.

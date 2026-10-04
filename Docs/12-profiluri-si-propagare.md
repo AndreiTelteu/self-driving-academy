@@ -1,6 +1,6 @@
 # Profiluri și propagare în flotă
 
-Versiune 0.3 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
+Versiune 0.5 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
 
 ## Versiuni și aplicarea în flotă
 
@@ -25,3 +25,7 @@ learningEpoch este o generație monotonă a țintei de învățare, distinctă d
 Restore, import validat și profil nou se rezolvă la limita unui tick: se închide segmentul existent cu motiv explicit, se invalidează joburile și activările nepublicate din generația veche, se incrementează learningEpoch și se activează ținta. Dovezile vechi rămân în istoric cu statut CANCELLED_BY_PROFILE_CHANGE. Un segment LEARNING reluat are o nouă identitate și noua generație. Importul invalid nu produce barieră și nu anulează joburile curente. Rezultatele întârziate ale joburilor invalidate sunt ignorate și explicate în UI.
 
 Se testează restore cu worker în curs, import invalid/valid, profil nou, rezultat sosit după anulare, aceeași intervenție livrată de două ori și un crash în jurul commitului. Bariera și activarea sunt persistate împreună; reluarea nu aplică din nou segmente deja acceptate.
+
+## MANUAL_TUNING și izolarea lumilor
+
+DrivingProfile/ProfileDelta includ proveniența valorii (LEARNED/MANUAL_TUNING/BASE/IMPORTED), iar dovezile anterioare rămân istorice. Aplicarea sliderelor validează draft/baseVersionId, închide segmentul, invalidează learningEpoch și publică o versiune nouă la tick comun; anularea sau lipsa diferențelor nu creează versiuni. Contractul este în [modulul 27](27-reglaje-hud-si-camera.md). Academie și Haos au profile țintă distincte; joburile și activările verifică sessionId/worldEpoch. Copierea explicită a stilului între sesiuni folosește validarea/importul comun, fără transfer XP, conform [modulului 26](26-joaca-libera-haos-si-distrugere.md).

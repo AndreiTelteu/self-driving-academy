@@ -18,6 +18,8 @@ Afișează analiză în curs, rezultat, lipsă dovezi și eroare.
 
 ## Context și plan
 
+- [27-reglaje-hud-si-camera.md](../../Docs/27-reglaje-hud-si-camera.md)
+
 [08-interfata-camera-si-control.md](../../Docs/08-interfata-camera-si-control.md) descrie regulile și contractele acestei funcționalități. Citește și [workflow-ul PBI](../AGENTS.md) înainte de implementare.
 
 ## Dependențe
@@ -29,6 +31,8 @@ Afișează analiză în curs, rezultat, lipsă dovezi și eroare.
 
 - [ ] Mesajele sunt legate de segmentul și jobul corect.
 - [ ] O eroare de worker nu este afișată drept profil publicat.
+
+- [ ] Mesajele indică concret observațiile lipsă și un rezultat scurt, fără dovezi inventate sau spam; alternativa vizuală însoțește sunetul.
 
 ## Verificare
 
@@ -59,3 +63,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '079' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Revizia 0.5 actualizează scope-ul și verificările; implementarea rămâne în To Do.

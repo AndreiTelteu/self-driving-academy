@@ -1,6 +1,6 @@
 # Oraș și rețea rutieră
 
-Versiune 0.3 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
+Versiune 0.5 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
 
 ## Orașul și vehiculele
 
@@ -17,3 +17,7 @@ Decizie confirmată: segmentele LEARNING din taxiuri și mașini civile contribu
 Formatul de hartă include mapId, schemaVersion, units, bounds, lanes, intersections, signals, stopLines, crosswalks, serviceZones și recoveryPoints. Fiecare referință este validată; graful se verifică pentru conectivitate la toate punctele de serviciu. Limitele de viteză sunt proprietăți ale hărții.
 
 Pipeline-ul construiește întâi fixture-uri semantice mici, apoi cartierul. Un validator produce IDs și poziții pentru erori. Decorul nu schimbă banda sau coliziunile fără o actualizare a datelor. Rutele civile și taxiurile folosesc același graf; un segment manual în afara grafului rămâne înregistrat fără a inventa o bandă.
+
+## Repere pentru distracție și provocări
+
+V1 include zone de serviciu fictive pentru spital/maternitate, toalete publice sau benzinării/cafenele și terminal, plus parcare pentru drift, rampă și alee destructibilă. [Provocările](28-provocari-random-si-revenire.md) verifică accesibilitatea acestor zone înainte de ofertă. Distrugerea mobilierului decorativ nu elimină semantica STOP/semafor/benzi; obstacolele deplasate sunt raportate contextului fizic, conform [modulului 26](26-joaca-libera-haos-si-distrugere.md).

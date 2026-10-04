@@ -1,6 +1,6 @@
 # WebGPU și performanță
 
-Versiune 0.4 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
+Versiune 0.5 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
 
 ## WebGPU și compatibilitate
 
@@ -28,10 +28,10 @@ Experimentele automate rulează în loturi într-un worker cu anulare și progre
 
 ## Bugete înainte de extindere
 
-PBI 203 fixează configurațiile și metoda de măsurare înaintea prototipului de fizică și a extinderii orașului; hardware-ul exact nu este inventat în documentație. PBI 155 verifică bugetul pe jocul complet și raportează abaterile. Recorderul întregii lumi, graficele KPI, generarea zilnică și evaluările XP au bugete separate; evaluările contrafactuale rulează cu progres, anulare și limite de resurse în worker.
+PBI 203 fixează configurațiile și metoda de măsurare înaintea prototipului de fizică și a extinderii orașului; hardware-ul exact nu este inventat în documentație. PBI 155 verifică bugetul pe jocul complet și raportează abaterile. Recorderul întregii lumi, graficele KPI, generarea zilnică, directorul provocărilor și distrugerea au bugete separate; comparațiile opționale rulează cu progres, anulare și limite de resurse în worker.
 
 ## Contract obligatoriu în procesul PBI
 
 [Modulul 25](25-performanta-contracte-si-benchmark.md) detaliază auditul, bugetele numerice propuse, workload-urile, frecvențele, admiterea worker-elor, capturile coerente, asseturile și probele de regresie. 218 furnizează harness-ul devreme; 219 schedulerul; 220 validează flota înainte de campanie/asseturi; 221 controlează worker-ele; 222 datele și autosave; 223 randarea/asseturile; 224 închide regresiile înainte de livrare. PBI-urile relevante declară performance_checks și păstrează probe înainte/după.
 
-Țintele FPS sunt completate cu p95/p99 frame time, latență de input și raport timp simulat/timp real. Rezoluția internă și calitatea sunt parte din rezultat. Optimizarea nu reduce populația simulată, fizica sau regulile KPI/XP; se amână mai întâi lucrul secundar și se ajustează grafica. Un renderer mai rapid nu garantează că evaluatorul A/B și serializarea checkpointului sunt în buget.
+Țintele FPS sunt completate cu p95/p99 frame time, latență de input și raport timp simulat/timp real. Rezoluția internă și calitatea sunt parte din rezultat. Optimizarea nu reduce populația simulată, fizica sau regulile KPI/XP; se amână mai întâi lucrul secundar și se ajustează grafica. Un renderer mai rapid nu garantează că experimentele A/B și serializarea checkpointului sunt în buget.

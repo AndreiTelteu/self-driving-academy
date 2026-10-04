@@ -1,6 +1,6 @@
 # Acoperirea funcționalităților prin PBI
 
-Versiune 0.4 · 4 octombrie 2026. Parte din [planul complet](README.md).
+Versiune 0.5 · 4 octombrie 2026. Parte din [planul complet](README.md).
 
 ## Module și intervale de task-uri
 
@@ -29,12 +29,19 @@ ID-urile rămân stabile la mutarea între coloane. Găsește task-ul prin prefi
 | Barieră learning, checkpoint și recorder | 205, 206, 207 | [Document](15-salvare-si-import-export.md) |
 | Stil comun pentru civili | 208 | [Document](12-profiluri-si-propagare.md) |
 | Economie, reviews și grafice KPIs | 209, 210 | [Document](22-kpi-economie-si-review-uri.md) |
-| Trei misiuni zilnice și XP | 211, 212, 213, 214 | [Document](23-misiuni-zilnice-si-experienta.md) |
+| Trei misiuni zilnice, credite XP și feedback fără pierderi | 211, 212, 213, 214 | [Document](23-misiuni-zilnice-si-experienta.md) |
 | Salvare și QA ale reviziei V1 | 215, 216 | [Document](18-validare-si-release.md) |
 | AUTO/MANUAL/LEARNING integrate | 217 | [Document](08-interfata-camera-si-control.md) |
 | Harness, scheduler și gate timpuriu de flotă | 218, 219, 220 | [Document](25-performanta-contracte-si-benchmark.md) |
 | Bugete workers, date și randare/asseturi | 221, 222, 223 | [Document](25-performanta-contracte-si-benchmark.md) |
 | Gate CI și soak de performanță | 224 | [Document](25-performanta-contracte-si-benchmark.md) |
+| Academie/Haos și recuperarea lumii | 225, 226 | [Document](26-joaca-libera-haos-si-distrugere.md) |
+| Decor destructibil, sunet, efecte și replay | 227, 228 | [Document](26-joaca-libera-haos-si-distrugere.md) |
+| Slidere de control și stil | 229, 230 | [Document](27-reglaje-hud-si-camera.md) |
+| Cameră first-person și HUD simplu | 017, 073, 079, 081 | [Document](27-reglaje-hud-si-camera.md) |
+| Catalog/director/UI provocări random | 231, 232, 233 | [Document](28-provocari-random-si-revenire.md) |
+| Savefile complet cu checksum | 234 | [Document](29-savefile-si-integritate.md) |
+| Regresii experiență și playtest | 235 | [Document](18-validare-si-release.md) |
 
 ## Acoperirea celor 80 de parametri
 

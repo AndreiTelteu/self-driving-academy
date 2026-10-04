@@ -34,7 +34,7 @@ Măsoară 20/24/30 de taxiuri și densități civile variate.
 - [ ] Taxiurile nevizibile rămân simulate și incluse în expunere.
 - [ ] CPU de fizică, decizii, UI și GPU sunt raportate separat.
 
-- [ ] Matricea include driving cu learning, recorder+autosave și XP A/B, plus trafic agresiv/contacte, cold/first-use și suprasarcină etichetată.
+- [ ] Matricea include driving cu learning, recorder+autosave și credite XP, plus trafic agresiv/contacte, cold/first-use și suprasarcină etichetată.
 
 ## Verificare
 

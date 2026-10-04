@@ -1,6 +1,6 @@
 # Flotă și curse
 
-Versiune 0.3 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
+Versiune 0.5 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
 
 ## Sistemul de curse și flotă
 
@@ -17,3 +17,7 @@ Lista flotei afișează ID, mod de control, etapa cursei, pickup, destinație, E
 Fiecare cursă terminală produce un rezultat comercial idempotent și, când există experiență evaluabilă, un review simulat 0–5. MANUAL, LEARNING și AUTO folosesc aceleași reguli de tarif și evaluare. O cursă mixtă păstrează intervalele de autoritate și versiunile aplicate pentru atribuirea consecințelor. Civilii nu generează încasări sau review-uri ale flotei.
 
 Prețul acceptat, încasarea și eventualele rambursări sunt separate. Viteza eficientă poate crește numărul de curse, iar agresivitatea poate reduce ratingul chiar dacă revenue-ul crește. Definițiile, timpul economic și graficele sunt în [KPI-uri](22-kpi-economie-si-review-uri.md).
+
+## Curse speciale și recuperare
+
+[Directorul provocărilor](28-provocari-random-si-revenire.md) rezervă un taxi eligibil la acceptare și utilizează lifecycle-ul comun, fără a abandona pasagerul unei curse existente. Provocările sunt opționale; refuzul nu generează review negativ sau pierdere XP. [Recuperarea](26-joaca-libera-haos-si-distrugere.md) definește FAILED la R cu pasager și SCENARIO_RESET la refacerea lumii, o singură dată; stilul și progresul rămân separate de disponibilitatea vehiculelor.

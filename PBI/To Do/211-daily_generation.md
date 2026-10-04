@@ -18,6 +18,8 @@ Generează exact trei misiuni zilnice realizabile, cu seed, zi/fus orar și snap
 
 ## Context și plan
 
+- [28-provocari-random-si-revenire.md](../../Docs/28-provocari-random-si-revenire.md)
+
 - [23-misiuni-zilnice-si-experienta.md](../../Docs/23-misiuni-zilnice-si-experienta.md)
 
 Citește și [workflow-ul PBI](../AGENTS.md).
@@ -35,6 +37,8 @@ Citește și [workflow-ul PBI](../AGENTS.md).
 - [ ] Refresh/reload/profil nou nu rerandomizează setul; instanțele și parametrii sunt variați pe zile.
 - [ ] Cel puțin un obiectiv permite MANUAL fără learning; obiectivele de învățare cer LEARNING explicit.
 - [ ] Midnight, DST, clock rollback/forward și capabilități insuficiente au rezultate definite.
+
+- [ ] Generatorul acceptă familii de șabloane versionate; integrarea provocărilor din 231 se face în 233, fără a bloca generatorul de bază.
 
 ## Verificare
 
@@ -64,3 +68,5 @@ Verificare finală: Validate-Board.ps1 -RequireDone '211'.
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do în revizia 0.3; implementarea nu a început.
+
+- 2026-10-04: Revizia 0.5 actualizează scope-ul și verificările; implementarea rămâne în To Do.

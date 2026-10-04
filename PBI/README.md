@@ -1,6 +1,6 @@
 # Backlog Kanban Self Driving Academy
 
-224 task-uri de implementare cu IDs stabile 001–224. Ordinea de implementare este definită de depends_on; IDs nu mai constituie o ordine topologică numerică. Toate sunt create inițial în To Do. Prefixele rămân stabile la mutarea între coloane.
+235 task-uri de implementare cu IDs stabile 001–235. Ordinea de implementare este definită de depends_on; IDs nu mai constituie o ordine topologică numerică. Toate sunt create inițial în To Do. Prefixele rămân stabile la mutarea între coloane.
 
 ## Coloane și workflow
 
@@ -14,7 +14,7 @@
 
 | Etapă | IDs | Număr | Livrabil |
 | --- | --- | --- | --- |
-| V1 | 001–162 și 203–224 | 184 | Joc PC browser, trei moduri, stil comun taxi/civil, 24 parametri, KPIs, daily, XP, salvare și comparații |
+| V1 | 001–162 și 203–235 | 195 | Joc PC browser, trei moduri, stil comun taxi/civil, 24 parametri, KPIs, daily, XP, salvare și comparații |
 | V2 | 163–190 | 28 | Toți cei 80 de parametri, pietoni, pericole și provocări extinse |
 | V3 | 191–202 | 12 | Personaj, mers pe jos și intrare/ieșire din mașini |
 
@@ -40,7 +40,7 @@ Statutul curent se citește din coloana fișierului și frontmatter. Indexul pă
 | 014 | Sincronizarea snapshoturilor și interpolare | Babylon | V1 | 013, 008 |
 | 015 | Registry asseturi și încărcare GLB | Babylon | V1 | 013 |
 | 016 | Materiale lumină și niveluri de calitate | Babylon | V1 | 013, 009 |
-| 017 | Camera din spatele mașinii | Babylon | V1 | 014, 009 |
+| 017 | Camere din spate și first-person | Babylon | V1 | 014, 009 |
 | 018 | Picking și selectarea mașinilor | Babylon | V1 | 013, 017 |
 | 019 | Diagnostic Babylon și resurse | Babylon | V1 | 011, 014 |
 | 020 | Resize disposal și recuperare GPU | Babylon | V1 | 012, 015, 014 |
@@ -185,7 +185,7 @@ Statutul curent se citește din coloana fișierului și frontmatter. Indexul pă
 | 159 | Sesiune lungă memorie și stabilitatea flotei | Validare și release | V1 | 157, 158 |
 | 160 | Build producție CI și livrare statică | Validare și release | V1 | 159, 003, 151, 224 |
 | 161 | Instrucțiuni de utilizare și operare | Validare și release | V1 | 160 |
-| 162 | Gate și închiderea release-ului V1 | Validare și release | V1 | 161, 154, 152, 108, 039, 076, 141, 216, 217 |
+| 162 | Gate și închiderea release-ului V1 | Validare și release | V1 | 161, 154, 152, 108, 039, 076, 141, 216, 217, 235 |
 | 163 | Scenarii și telemetrie pentru parametrii V2 | Extindere V2 | V2 | 162, 140 |
 | 164 | Pietoni autonomi și traversări | Extindere V2 | V2 | 163, 039, 022 |
 | 165 | Pericole obstacole și claxon în scenarii | Extindere V2 | V2 | 164, 024 |
@@ -237,7 +237,7 @@ Statutul curent se citește din coloana fișierului și frontmatter. Indexul pă
 | 211 | Trei misiuni noi pe zi și calendar stabil | Misiuni | V1 | 116, 117, 006, 009, 209 |
 | 212 | Progres și interfață pentru misiunile zilei | Misiuni | V1 | 211, 126, 063, 209 |
 | 213 | XP din misiuni și timp activ al jucătorului | Progres | V1 | 212, 125, 008, 009, 209 |
-| 214 | Atribuirea impactului intervenției și penalizarea XP | Progres | V1 | 213, 144, 209, 206, 207, 221, 222 |
+| 214 | Feedbackul consecințelor fără pierdere XP | Progres | V1 | 213, 209, 073 |
 | 215 | Persistență pentru KPI-uri misiuni zilnice și XP | Persistență | V1 | 214, 210, 212, 131, 136 |
 | 216 | Regresii V1 pentru moduri KPI-uri daily și XP | Validare | V1 | 215, 141, 108, 208, 217, 205 |
 | 217 | Integrare AUTO MANUAL și LEARNING fără învățare accidentală | Control manual | V1 | 067, 069, 085, 112, 073, 080 |
@@ -247,12 +247,27 @@ Statutul curent se citește din coloana fișierului și frontmatter. Indexul pă
 | 221 | Buget comun priorități și backpressure pentru workers | Fundație | V1 | 010, 203, 218 |
 | 222 | Pipeline plafonat pentru recorder checkpoint și autosave | Persistență | V1 | 090, 206, 207, 221, 218 |
 | 223 | Bugete de asseturi randare și calitate adaptivă | Babylon | V1 | 015, 016, 018, 203, 218 |
-| 224 | Gate de regresii performanță CI și soak complet | Validare | V1 | 159, 220, 221, 222, 223, 218 |
+| 224 | Gate de regresii performanță CI și soak complet | Validare | V1 | 159, 220, 221, 222, 223, 218, 228, 229, 230, 233, 234 |
+| 225 | Sesiuni Academie și Joacă liberă Haos | Experiență | V1 | 215, 205, 065, 070 |
+| 226 | Deblocare rapidă și resetul orașului cu stil păstrat | Experiență | V1 | 225, 030, 065, 206, 207 |
+| 227 | Decor destructibil și zone de joacă | Oraș și fizică | V1 | 226, 028, 042, 044, 223 |
+| 228 | Feedback audio vizual și replay al distrugerii | Asseturi și audio | V1 | 227, 148, 149, 207, 141 |
+| 229 | Popup cu slidere pentru control și confort | Interfață | V1 | 025, 081, 085, 070 |
+| 230 | Slidere de stil și versiuni MANUAL_TUNING | Profiluri și interfață | V1 | 229, 110, 114, 205, 102, 092 |
+| 231 | Catalog de provocări neobișnuite și evaluatori | Misiuni | V1 | 116, 040, 031, 227, 139 |
+| 232 | Director de provocări random și curse speciale | Misiuni | V1 | 231, 225, 061, 063, 064, 219 |
+| 233 | Interfață reluare recorduri și recompense pentru provocări | Misiuni și interfață | V1 | 232, 211, 212, 213, 126, 073, 225 |
+| 234 | Savefile complet cu checksum și încărcare atomică | Persistență | V1 | 135, 215, 225, 227, 229, 230, 233, 222 |
+| 235 | Regresii și playtest pentru distracție și revenire | Validare | V1 | 216, 224, 226, 228, 229, 230, 233, 234, 084 |
 
 ## Verificarea consistenței planului
 
-Rulează Validate-Board.ps1 pentru coloane/metadate/dependențe și Validate-Plan.ps1 pentru index, catalog, matrice și linkuri. Test-Validate-Plan.ps1 verifică detectarea regresiilor pe o copie temporară izolată. Noile IDs 203–224 aparțin V1 și sunt prerequisite ale unor task-uri cu IDs mai mici; se respectă graful, fără renumerotare. Lucrul la documentație nu finalizează aceste task-uri.
+Rulează Validate-Board.ps1 pentru coloane/metadate/dependențe și Validate-Plan.ps1 pentru index, catalog, matrice și linkuri. Test-Validate-Plan.ps1 verifică detectarea regresiilor pe o copie temporară izolată. Noile IDs 203–235 aparțin V1 și sunt prerequisite ale unor task-uri cu IDs mai mici; se respectă graful, fără renumerotare. Lucrul la documentație nu finalizează aceste task-uri.
 
 ## Revizia 0.4: verificări de performanță
 
 218–224 și actualizările PBI existente implementează [contractul progresiv](../Docs/25-performanta-contracte-si-benchmark.md). performance_checks marchează probele necesare. Gate-ul 220 precede campania/asseturile finale; 224 precede livrarea. Noile task-uri sunt în To Do, fără rezultate de benchmark inventate.
+
+## Revizia 0.5
+
+225–235 adaugă Haos/reset/distrugere, slidere, provocări random și savefile verificat. 017 include first-person, iar 214 este redefinit ca feedback/regresie fără pierdere XP, păstrând ID-ul și numele fișierului. 224 verifică costurile funcțiilor noi; 235 verifică integrarea/playtestul și condiționează 162. Toate task-urile rămân To Do; revizia documentației nu implementează jocul.

@@ -1,6 +1,6 @@
 # Misiuni și progres
 
-Versiune 0.3 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
+Versiune 0.5 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
 
 ## Misiuni și progres
 
@@ -31,6 +31,10 @@ Reluarea păstrează profilul curent dacă obiectivul nu declară un snapshot fi
 
 ## Misiuni zilnice și experiență
 
-V1 include exact trei misiuni noi pe zi calendaristică, separate de campanie și de zilele economice simulate. Obiectivele provin dintr-un catalog de activități normale cu parametri randomizați și condiții realizabile: curse MANUAL, confort, eficiență și demonstrații LEARNING explicite. MANUAL rămâne o cale de progres fără schimbarea profilului comun.
+V1 include exact trei misiuni noi pe zi calendaristică, separate de campanie și de zilele economice simulate. Obiectivele provin dintr-un catalog de activități de serviciu, experimente și provocări neobișnuite cu parametri randomizați și condiții realizabile: curse MANUAL, confort, eficiență și demonstrații LEARNING explicite. MANUAL rămâne o cale de progres fără schimbarea profilului comun.
 
-PlayerProgress conține XP și nivelul; fiecare misiune eligibilă și timpul activ contribuie la XP. Deteriorarea atribuibilă a revenue-ului sau ratingului după o intervenție MANUAL/LEARNING poate scădea XP, chiar când celălalt KPI crește. Sunt afișate cauza și dovezile; fidelitatea imitației rămâne un rezultat separat. [Contractul zilnic și XP](23-misiuni-zilnice-si-experienta.md) definește resetarea, formulele, idempotența și cazurile fără dovezi.
+PlayerProgress conține XP și nivelul; misiunile eligibile, provocările conform politicii lor și timpul activ Academie contribuie la XP. Revenue și ratingul pot scădea, dar nu retrag XP și nu coboară nivelul. Fidelitatea imitației rămâne un rezultat separat. [Contractul zilnic și XP](23-misiuni-zilnice-si-experienta.md) definește calendarul și creditele idempotente; [provocările random](28-provocari-random-si-revenire.md) adaugă varietate fără a schimba numărul de trei daily.
+
+## Joacă liberă și provocări opționale
+
+[Haos](26-joaca-libera-haos-si-distrugere.md) este disponibil de la început, cu progres/recorduri separate și reluare rapidă. [Modulul 28](28-provocari-random-si-revenire.md) definește urgențe la spital/toaletă, filmări pentru influenceri, livrări comice, drift și demolare, cu prerechizite și obiective calculabile. Editarea sliderelor nu îndeplinește misiuni care cer demonstrații LEARNING. Resetul lumii păstrează progresul acumulat, fără finalizări artificiale.

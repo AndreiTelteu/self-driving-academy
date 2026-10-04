@@ -1,21 +1,21 @@
 ---
 id: "214"
-title: "Atribuirea impactului intervenției și penalizarea XP"
+title: "Feedbackul consecințelor fără pierdere XP"
 status: "To Do"
 release: "V1"
 module: "Progres"
-depends_on: ["213","144","209","206","207","221","222"]
-performance_checks: ["workers", "memory", "frame"]
+depends_on: ["213","209","073"]
+performance_checks: ["ui", "frame"]
 owner: null
 started_at: null
 completed_at: null
 ---
 
-# 214 Atribuirea impactului intervenției și penalizarea XP
+# 214 Feedbackul consecințelor fără pierdere XP
 
 ## Obiectiv
 
-Evaluează efectele directe/indirecte ale MANUAL/LEARNING pe revenue și ratings și aplică pierderea XP numai cu dovezi.
+Arată consecințele comerciale ale MANUAL/LEARNING și verifică invarianta că XP/nivelul nu scad prin gameplay. Nu implementează evaluare contrafactuală sau worker pentru penalizare.
 
 ## Context și plan
 
@@ -29,27 +29,21 @@ Citește și [workflow-ul PBI](../AGENTS.md).
 ## Dependențe
 
 - PBI 213 trebuie să existe în Done înainte de începere.
-- PBI 144 trebuie să existe în Done înainte de începere.
 - PBI 209 trebuie să existe în Done înainte de începere.
-- PBI 206 trebuie să existe în Done înainte de începere.
-- PBI 207 trebuie să existe în Done înainte de începere.
-- PBI 221 trebuie să existe în Done înainte de începere.
-- PBI 222 trebuie să existe în Done înainte de începere.
+- PBI 073 trebuie să existe în Done înainte de începere.
 
 ## Criterii de acceptare
 
-- [ ] Controlul/tratamentul au checkpoint, cerere, seeds și expuneri comparabile; eșantionul insuficient nu este penalizat.
-- [ ] Scăderea atribuibilă a oricăruia dintre cei doi KPI produce pierdere, fără compensare ascunsă de celălalt.
-- [ ] Intervențiile suprapuse sunt grupate; aceeași cauză/incident nu este penalizată direct și indirect de două ori.
-- [ ] Ledgerul și UI păstrează formulele, pragurile, cauzele și dovezile, cu worker anulabil.
-
-- [ ] A/B și seed-urile rulează secvențial prin 221, cu lumi/payloaduri plafonate și reluare; PENDING nu produce penalizări presupuse sau cauze pierdute.
+- [ ] Revenue/ratings și reviews reflectă incidentele reale; feedbackul scurt arată efectele fără mesaje de pierdere XP.
+- [ ] Scăderea unuia sau ambilor KPI, accidentele și eșecul/refuzul obiectivelor nu debitează XP și nu coboară nivelul.
+- [ ] PlayerProgress/ledger acceptă numai credite nenegative; nicio cale AUTO/MANUAL/LEARNING nu lansează evaluări negative sau joburi contrafactuale.
+- [ ] UI separă rezultatul misiunii, fidelitatea stilului și consecințele de serviciu; reset/import de profil nu resetează XP.
+- [ ] Actualizarea HUD este plafonată, fără reconstruirea istoricului pe frame.
 
 ## Verificare
 
-Testează revenue↑/rating↓, inversul, ambele↓, zgomot, lipsă date, civil MANUAL, learning publicat, suprapuneri și rezultat duplicat.
+Testează revenue↑/rating↓, inversul, ambele↓, impact MANUAL/LEARNING/AUTO, reward duplicat și restore de profil. Păstrează soldul/nivelul înainte și după, inclusiv feedbackul vizual.
 
-Păstrează comenzile, scenariile și rezultatele reale; nu declara trecere fără execuție.
 
 ## Dovezi de finalizare
 
@@ -75,3 +69,5 @@ Verificare finală: Validate-Board.ps1 -RequireDone '214'.
 - 2026-10-04: PBI creat în To Do în revizia 0.3; implementarea nu a început.
 
 - 2026-10-04: Revizia 0.4 adaugă contracte/verificări de performanță; implementarea rămâne neîncepută.
+
+- 2026-10-04: Revizia 0.5 elimină pierderea XP și evaluatorul A/B; ID-ul/fișierul rămân stabile, scope-ul este feedback și regresie, status To Do.

@@ -36,6 +36,8 @@ Citește și [workflow-ul PBI](../AGENTS.md).
 - [ ] Recompensa se produce o singură dată; expirarea și evenimentele de la limita zilei sunt coerente.
 - [ ] UI arată obiective, progres, XP promis, fus/reset și motivul neeligibilității.
 
+- [ ] Consumatorul filtrează sessionId/worldEpoch; Haos/replay nu îndeplinesc daily Academie.
+
 ## Verificare
 
 Testează finalizare, duplicate, reluare, cursă mixtă, expirare și event înainte de reset cu commit ulterior.
@@ -64,3 +66,5 @@ Verificare finală: Validate-Board.ps1 -RequireDone '212'.
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do în revizia 0.3; implementarea nu a început.
+
+- 2026-10-04: Revizia 0.5 actualizează scope-ul și verificările; implementarea rămâne în To Do.

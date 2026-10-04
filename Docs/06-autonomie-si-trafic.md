@@ -1,6 +1,6 @@
 # Autonomie și trafic
 
-Versiune 0.4 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
+Versiune 0.5 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
 
 ## Motorul autonom
 
@@ -21,3 +21,7 @@ Planificarea de traseu, alegerea manevrei și controlul longitudinal/lateral sun
 ## Scheduler și rutare
 
 219 distribuie deciziile periodice determinist între tick-uri; evenimentele urgente invalidează contextul fără a adăuga un corector ascuns de stil. Query-urile folosesc indexul spațial și au scenarii dense/granițe comparate cu referința brută. Cache-ul de rutare este plafonat și invalidat după graf/blocaje/costuri, inclusiv costurile de profil V2. Vehiculele în afara camerei păstrează aceeași autonomie și participare la trafic. [Bugete și probe](25-performanta-contracte-si-benchmark.md).
+
+## Reglaje explicite și obstacole
+
+Sliderele din [modulul 27](27-reglaje-hud-si-camera.md) activează versiuni MANUAL_TUNING prin contractul comun de profil, fără personalități AI ascunse. Obiectele destructibile deplasate rămân obstacole reale pentru context/controller; fragmentele cosmetice nu intră în planificare. [Resetul lumii](26-joaca-libera-haos-si-distrugere.md) invalidează rutele/contextul vechi și păstrează stilul ales.

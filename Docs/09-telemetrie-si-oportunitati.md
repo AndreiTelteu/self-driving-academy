@@ -1,6 +1,6 @@
 # Telemetrie și oportunități
 
-Versiune 0.4 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
+Versiune 0.5 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
 
 ## Date înregistrate și extragerea contextului
 
@@ -27,3 +27,7 @@ Pentru timpi de reacție, stimulul trebuie să fie observabil din perspectiva ju
 ## Capacități și transferuri
 
 090/222 folosesc chunkuri și buffere numerice cu plafon în bytes, păstrând timpii evenimentelor. Intervențiile lungi pot avea rollover cu continuitate declarată; oportunitățile nu sunt dublate sau eliminate tacit. Transferul de buffer are ownership explicit și nu detașează datele live. Limitele RAM/coadă și pressure policy sunt definite în [modulul 25](25-performanta-contracte-si-benchmark.md); replay-ul opțional este primul candidat la retenție, nu dovezile de learning.
+
+## Proveniența reglajelor și a sesiunii
+
+InterventionSegment include sessionId, worldEpoch și controlPreferencesVersion. Schimbarea asistențelor închide segmentul la tick și păstrează comenzile brute/efective. Resetul sau schimbarea Academie/Haos închide segmentele și invalidează joburile lumii vechi. Distrugerea și driftul au evenimente pentru provocări și replay, fără a fi convertite în parametri de driving. Contractele sunt în [modulele 26](26-joaca-libera-haos-si-distrugere.md) și [27](27-reglaje-hud-si-camera.md).

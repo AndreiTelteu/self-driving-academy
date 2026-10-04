@@ -1,6 +1,6 @@
 # Catalogul parametrilor
 
-Versiune 0.3 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
+Versiune 0.5 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
 
 ## Catalogul parametrilor
 
@@ -167,3 +167,7 @@ Opriri intenționate în zone de serviciu și segmente cu pasager. Aceste prefer
 [driving-parameters.json](driving-parameters.json) este catalogul de proiectare. implemented este false pentru toate cheile până la implementare și verificare; etapa inițială are 24 de ținte M și extensia 56 R. Starea suportului din aplicație va fi derivată din registry-ul implementat, fără a confunda planul cu un runtime existent.
 
 [Acoperirea funcționalităților](21-acoperire-functionalitati.md) mapează fiecare cheie la PBI de politică, estimare și validare. Activarea unei chei este acceptată numai când toate componentele ei sunt verificate.
+
+## Editare simplificată fără extinderea catalogului
+
+[Modulul 27](27-reglaje-hud-si-camera.md) mapează opt slidere de stil la chei existente și domeniile acestui catalog. Nu adaugă parametri de driving și nu transformă o valoare ajustată în valoare învățată. ControlPreferences este o schemă distinctă de asistențe ale inputului.

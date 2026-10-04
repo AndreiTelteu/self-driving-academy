@@ -35,7 +35,7 @@ Verifică pe jocul complet configurațiile și bugetele fixate în 203, fără r
 ## Criterii de acceptare
 
 - [ ] FPS/frame time/memorie/încărcare sunt măsurate pe configurațiile fixate.
-- [ ] Se raportează abaterile și costurile learning, recorderului, KPI-urilor și evaluatorului XP.
+- [ ] Se raportează abaterile și costurile learning, recorderului, KPI-urilor, creditelor XP, provocărilor și distrugerii.
 
 - [ ] Configurația exactă, percentilele, inputul și debitul simulat respectă manifestul 203 și probele 218; GPU/memoria indisponibile sunt declarate.
 

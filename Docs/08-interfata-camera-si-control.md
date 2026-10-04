@@ -1,10 +1,10 @@
 # Interfață cameră și control
 
-Versiune 0.3 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
+Versiune 0.5 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
 
 ## Camera și interfața
 
-HUD propus: minimap și rută în stânga jos; viteză în dreapta jos; ID taxi, modul de control și profilul activ sus; etapa cursei și următorul obiectiv într-o zonă compactă; notificări temporare pentru învățare. Culorile modurilor sunt însoțite de text și simbol, astfel încât diferența să rămână lizibilă fără distingerea culorilor.
+HUD implicit: minimap/rută, viteză, mod de control cu text și simbol, tipul sesiunii și următorul obiectiv. ID-ul mașinii și versiunea profilului sunt în detalii la cerere. Rezultatele apar întâi prin acțiune, sunet și reacții scurte; graficele și panourile de analiză rămân opționale. [Reglajele și camera](27-reglaje-hud-si-camera.md) definesc popup-ul cu slidere, first-person și accesibilitatea. Culorile nu sunt singura diferență între moduri.
 
 Panoul flotei permite selectarea oricărui taxi fără a muta fizic vehiculele. Mașinile civile se selectează prin click pe vehiculul vizibil sau pe markerul lui de pe hartă, apoi prin aceeași acțiune de preluare a controlului. Traficul civil are destinații sau rute proprii pe care le reia la eliberare. Camera trece către taxiul ales. În modul autonom jucătorul îl observă; după alegerea MANUAL sau LEARNING îl conduce. Dacă părăsește un vehicul în MANUAL sau LEARNING, segmentul se închide și vehiculul revine în AUTO cu ruta/cursa păstrată. Noua selecție schimbă doar ținta camerei; noul vehicul rămâne în AUTO până la preluarea explicită. În V3 selecția distantă păstrează personajul și nu îi transferă implicit autoritatea.
 
@@ -25,7 +25,7 @@ Tabloul orașului arată curse finalizate, timpi, distanță parcursă, încălc
 | Tab | Deschidere sau închidere listă flotă |
 | Click pe taxi în listă | Selectare taxi și mutare cameră |
 | Q / E | Semnalizare stânga / dreapta |
-| C | Schimbare cameră din spate / capotă, dacă a doua cameră este activată |
+| C | Comutare cameră din spate / first-person din poziția șoferului |
 | P | Panou profil și istoric |
 | Escape | Pauză și meniu |
 | R | Recuperare la ultimul punct valid, după afișarea consecinței |
@@ -48,4 +48,8 @@ La revenirea la autonomie în afara unei benzi, politica caută o reintrare feza
 
 AUTO arată „Conduce AI-ul”; MANUAL arată „Conduci · învățare oprită”; LEARNING arată „Conduci · orașul învață”. Textul și simbolurile însoțesc culoarea. Tutorialul explică MANUAL înainte de prima demonstrație LEARNING. ANALYZING este starea unui job, nu un al patrulea mod de conducere. La reload se pornește în pauză, cu selecția păstrată și vehiculele în AUTO; reluarea MANUAL/LEARNING cere o acțiune explicită și deschide un segment nou.
 
-Butonul KPIs din panoul flotei și hotkey-ul K sunt disponibile de la început. Pop-up-ul are grafice pentru revenue lunar, rating mediu, curse pe zi și număr de review-uri; arată unitățile, perioada, eșantionul și datele insuficiente. Panoul misiunilor arată cele trei obiective ale zilei, resetarea și XP; profilul jucătorului arată XP și istoricul câștigurilor/penalizărilor. Focusul, Escape și pauza respectă aceleași reguli ca celelalte panouri.
+Butonul KPIs din panoul flotei și hotkey-ul K sunt disponibile de la început. Pop-up-ul are grafice pentru revenue lunar, rating mediu, curse pe zi și număr de review-uri; arată unitățile, perioada, eșantionul și datele insuficiente. Panoul misiunilor arată cele trei obiective ale zilei, resetarea și XP; profilul jucătorului arată XP și istoricul câștigurilor, fără pierderi sau retrogradare. Focusul, Escape și pauza respectă aceleași reguli ca celelalte panouri.
+
+## Experiențe și acțiuni suplimentare
+
+Academie/Haos se aleg ca sesiuni, fără a înlocui AUTO/MANUAL/LEARNING. Meniul oferă „Reglaje”, „Oraș proaspăt, păstrează stilul”, „Salvează jocul în fișier” și „Încarcă jocul din fișier”. Popup-ul Reglaje pune simularea pe pauză inclusiv în AUTO. Schimbarea sesiunii și resetul au reguli în [modulul 26](26-joaca-libera-haos-si-distrugere.md); confirmarea înlocuirii după verificarea savefile-ului este în [modulul 29](29-savefile-si-integritate.md). Provocările [random](28-provocari-random-si-revenire.md) arată o ofertă discretă și un singur obiectiv activ, fără întreruperea cursei existente.
