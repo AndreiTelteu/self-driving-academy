@@ -27,8 +27,9 @@ Rulează joburi în ordinea intervențiilor și verifică baza versionată.
 
 ## Criterii de acceptare
 
-- [ ] Rezultatul întârziat nu suprascrie un profil mai nou.
-- [ ] Anularea și erorile lasă coada capabilă să continue.
+- [ ] Jobul include playerId/profileId/learningEpoch/baseVersionId/segmentId; se acceptă numai LEARNING eligibil.
+- [ ] Rezultatul vechi din aceeași generație este recompus serial; altă generație este invalidată.
+- [ ] Anularea și erorile lasă coada funcțională.
 
 ## Verificare
 
@@ -59,3 +60,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '103' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Plan revizuit la v0.3; implementarea rămâne neîncepută.

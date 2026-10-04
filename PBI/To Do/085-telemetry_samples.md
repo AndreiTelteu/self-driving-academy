@@ -28,8 +28,8 @@ completed_at: null
 
 ## Criterii de acceptare
 
-- [ ] Eșantioanele au unități SI, tick și schema necesară estimării.
-- [ ] Intervalele AUTO nu sunt etichetate ca demonstrații manuale.
+- [ ] Eșantioanele au SI, tick, controlMode, profileId, learningEpoch și learningEligible fixat la deschidere.
+- [ ] AUTO și MANUAL nu devin demonstrații; MANUAL rămâne disponibil pentru metrici și istoric.
 
 ## Verificare
 
@@ -60,3 +60,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '085' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Plan revizuit la v0.3; implementarea rămâne neîncepută.

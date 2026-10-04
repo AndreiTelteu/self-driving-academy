@@ -4,7 +4,7 @@ title: "Integrare intervenție estimator și publicare"
 status: "To Do"
 release: "V1"
 module: "Profiluri"
-depends_on: ["111","103","108"]
+depends_on: ["111","103","204"]
 owner: null
 started_at: null
 completed_at: null
@@ -14,7 +14,7 @@ completed_at: null
 
 ## Obiectiv
 
-Leagă segmentul închis de job și activarea rezultatului.
+Integrează serviciile extinse de segment, estimator și activare; gate-ul final 108 nu blochează integrarea înainte de release.
 
 ## Context și plan
 
@@ -24,12 +24,12 @@ Leagă segmentul închis de job și activarea rezultatului.
 
 - PBI 111 trebuie să existe în Done înainte de începere.
 - PBI 103 trebuie să existe în Done înainte de începere.
-- PBI 108 trebuie să existe în Done înainte de începere.
+- PBI 204 trebuie să existe în Done înainte de începere.
 
 ## Criterii de acceptare
 
-- [ ] Toate intervențiile sunt analizate automat fără confirmare manuală.
-- [ ] No-change nu generează profil nou; rezultatele depășite sunt recalculate explicit.
+- [ ] Segmentele LEARNING sunt analizate automat; MANUAL nu creează joburi de learning sau versiuni.
+- [ ] No-change nu creează profil; rezultatele depășite în aceeași generație sunt recompuse explicit.
 
 ## Verificare
 
@@ -60,3 +60,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '112' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Plan revizuit la v0.3; implementarea rămâne neîncepută.

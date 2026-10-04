@@ -14,7 +14,7 @@ completed_at: null
 
 ## Obiectiv
 
-Creează tutorial pentru selectare, M, condus și cursă completă.
+Creează tutorial pentru selecție, M/L, AUTO/MANUAL/LEARNING și cursă completă fără learning accidental.
 
 ## Context și plan
 
@@ -59,3 +59,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '117' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Plan revizuit la v0.3; implementarea rămâne neîncepută.

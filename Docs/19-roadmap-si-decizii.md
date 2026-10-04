@@ -1,6 +1,6 @@
 # Roadmap și decizii
 
-Versiune 0.2 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
+Versiune 0.3 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
 
 ## Etape de implementare
 
@@ -9,14 +9,14 @@ Versiune 0.2 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon
 | 0 | Registrul deciziilor și scenariile de referință | Scope, hardware și primele scene de calibrare definite |
 | 1 | Prototip de fizică și renderer | O mașină manuală, aderență și frânare credibile; inițializare WebGPU și fallback verificate |
 | 2 | Traseu și autonomie de bază | Un taxi parcurge benzi, semafoare, STOP și pickup/dropoff cu același controller |
-| 3 | Buclă completă de demonstrație | Manual → telemetrie → estimare → profil → autonomie, inițial pentru un set restrâns de parametri |
-| 4 | Flotă și trafic | 20–30 de taxiuri, dispecerizare, mașini civile, listă flotă și publicare comună |
+| 3 | Prototip timpuriu PBI 204 | LEARNING → telemetrie → estimare → profil → AUTO, trei chei și câteva vehicule înaintea cartierului complet |
+| 4 | Flotă și trafic | 20–30 de taxiuri, dispecerizare, civili care imită același stil și publicare comună |
 | 5 | Catalogul inițial de învățare | Cei 24 de parametri M au dovezi, explicații și validare în contexte independente |
-| 6 | Campanie și progres | Misiuni, obiective, recompense și persistență funcționale |
+| 6 | Campanie, economie și fidelizare | KPI-uri și review-uri, trei misiuni zilnice, XP și persistență funcționale |
 | 7 | Comparații și istoric | Scenarii, versiuni, replay și indicatori comparabili |
 | 8 | Release pentru PC în browser | QA, compatibilitate, benchmark și export/import trec criteriile stabilite |
 
-Etapa 3 trebuie să demonstreze ideea jocului înainte de extinderea orașului. O primă buclă poate folosi viteza preferată, accelerația, frânarea, distanța de urmărire, oprirea la STOP și reacția la verde. Definiția completă a profilului rămâne versionată pentru extinderea la 24 și ulterior la 80 de parametri.
+Etapa 3 trebuie să demonstreze ideea jocului înainte de extinderea orașului. Prima buclă folosește speed_delta_urban, desired_acceleration și stop_full_probability pe fixture-uri mici. PBI 042 depinde de 204; arbitrajul 066 și registry-ul 092 sunt disponibile fără flota completă. PBI 115 verifică apoi integrarea extinsă a orașului, iar gate-ul 108 rămâne obligatoriu la release, fără a bloca demonstrația timpurie. Definiția completă a profilului rămâne versionată pentru extinderea la 24 și ulterior la 80 de parametri.
 
 Nu se estimează calendarul până când etapa 1 oferă un cost de implementare observat și există o echipă cunoscută. Etapele au dependențe reale; construirea campaniei depinde de evenimentele și comportamentele validate.
 
@@ -29,7 +29,7 @@ Nu se estimează calendarul până când etapa 1 oferă un cost de implementare 
 5. Graf de benzi și intersecție cu zone de conflict.
 6. Controller autonom și explicația deciziei.
 7. Cursă completă, pickup și dropoff.
-8. Moduri manual/autonom și înregistrarea segmentului.
+8. Modurile AUTO/MANUAL/LEARNING și înregistrarea segmentului.
 9. Primii estimatori și publicare de profil.
 10. Teste de lipsă a dovezilor și de copiere a încălcărilor.
 11. Dispecer, flotă și trafic obișnuit.
@@ -55,7 +55,7 @@ Nu se estimează calendarul până când etapa 1 oferă un cost de implementare 
 
 Cerințele principale de produs au fost confirmate. Rămân de calibrat hardware-ul de referință, dimensiunea exactă a hărții, densitatea traficului, setarea tastaturii, pragurile de învățare și dificultatea misiunilor. Aceste decizii se rezolvă prin prototip și playtesting; nu blochează redactarea acestui plan.
 
-Propunerile care pot necesita alegerea jucătorului la o revizie sunt numele final, direcția vizuală exactă, contribuția condusului în mașini civile la profil, nivelul de reprezentare a pietonilor și ordinea extinderii celor 56 de parametri R. Mersul pe jos rămâne în etapa ulterioară confirmată.
+Propunerile care pot necesita alegerea jucătorului la o revizie sunt numele final, direcția vizuală exactă, nivelul de reprezentare a pietonilor și ordinea extinderii celor 56 de parametri R. Mersul pe jos rămâne în etapa ulterioară confirmată.
 
 ## Proveniența tehnică
 
@@ -63,8 +63,14 @@ Researchul pentru WebGPU și motoare a folosit documentație oficială și surse
 
 ## Backlog complet și sursă de adevăr
 
-[PBI/README.md](../PBI/README.md) indexează 202 de task-uri: 162 pentru V1, 28 pentru V2 și 12 pentru V3. Ordinea numerică este topologică: toate dependențele au numere mai mici. Numerotarea este stabilă, iar folderul și frontmatterul definesc statusul.
+[PBI/README.md](../PBI/README.md) indexează 217 task-uri: 177 pentru V1, 28 pentru V2 și 12 pentru V3. Revizia 0.3 adaugă 203–217 pentru corecții și scope V1. ID-urile sunt identități stabile, nu ordinea de implementare; dependențele pot avea numere mai mari și sunt validate ca graf fără cicluri. Se alege cel mai mic ID eligibil, nu se începe un task cu dependențe nefinalizate.
 
-Documentele din Docs sunt sursa de adevăr actuală. [Planul v0.1](Archive/GAME_DESIGN-v0.1.md) și Page-ul creat anterior sunt referințe istorice, nu versiuni sincronizate automat. Documentul de arhitectură din v0.2 fixează Babylon.js și înlocuiește comparația anterioară de engine-uri.
+Documentele din Docs sunt sursa de adevăr actuală. [Planul v0.1](Archive/GAME_DESIGN-v0.1.md) și Page-ul creat anterior sunt referințe istorice, nu versiuni sincronizate automat. Documentul de arhitectură din v0.3 fixează Babylon.js și înlocuiește comparația anterioară de engine-uri.
 
 Înaintea implementării se citește [workflow-ul Kanban](../PBI/AGENTS.md). Crearea backlogului nu execută task-urile și nu justifică mutarea lor în Done. Toate pornesc în To Do.
+
+## Decizii ale reviziei 0.3
+
+Confirmate de utilizator: învățare din mașini civile; stil comun adoptat și de civili; AUTO/MANUAL/LEARNING cu învățare numai în LEARNING; KPI revenue lunar și ratings 0–5 cu istoric; trei misiuni noi pe zi și XP din misiuni/timp activ, cu pierdere pentru deteriorarea atribuibilă a KPI-urilor. Formulele, tarifele, pragurile și ritmul calendarului economic sunt propuneri versionate de calibrare în modulele 22–23.
+
+Corecțiile auditului, închiderea contractelor și ordinea milestone-urilor sunt în [modulul 24](24-milestone-timpuriu-si-contracte.md). Nu se adaugă în această revizie task-uri de publicare socială, multiplayer sau hosting extern.

@@ -5,6 +5,8 @@ status: "To Do"
 release: "V1"
 module: "Autonomie"
 depends_on: ["048","049","044"]
+parameter_role: "policy"
+parameter_keys: ["lane_change_front_gap","lane_change_back_gap","lane_change_speed_gain","lane_change_cooldown"]
 owner: null
 started_at: null
 completed_at: null

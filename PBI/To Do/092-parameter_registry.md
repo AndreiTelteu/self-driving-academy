@@ -4,7 +4,7 @@ title: "Schema celor 80 de parametri și stări de suport"
 status: "To Do"
 release: "V1"
 module: "Învățare"
-depends_on: ["005","091"]
+depends_on: ["005"]
 owner: null
 started_at: null
 completed_at: null
@@ -14,7 +14,7 @@ completed_at: null
 
 ## Obiectiv
 
-Încarcă catalogul în registry tipizat și distinge M/R, fix, implementat și estimabil.
+Încarcă independent de telemetrie catalogul în registry tipizat: chei, unități, intervale, default, implementat și estimabil.
 
 ## Context și plan
 
@@ -23,7 +23,6 @@ completed_at: null
 ## Dependențe
 
 - PBI 005 trebuie să existe în Done înainte de începere.
-- PBI 091 trebuie să existe în Done înainte de începere.
 
 ## Criterii de acceptare
 
@@ -59,3 +58,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '092' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Plan revizuit la v0.3; implementarea rămâne neîncepută.

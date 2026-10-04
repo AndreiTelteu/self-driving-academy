@@ -4,7 +4,7 @@ title: "Demonstrarea orașului care copiază jucătorul"
 status: "To Do"
 release: "V1"
 module: "Profiluri"
-depends_on: ["114","072"]
+depends_on: ["114","072","208","217"]
 owner: null
 started_at: null
 completed_at: null
@@ -14,7 +14,7 @@ completed_at: null
 
 ## Obiectiv
 
-Livrează vertical slice cu manual, învățare și flotă comună.
+Verifică integrarea extinsă a orașului după prototipul 204, cu learning și stil comun taxi/civil.
 
 ## Context și plan
 
@@ -24,11 +24,13 @@ Livrează vertical slice cu manual, învățare și flotă comună.
 
 - PBI 114 trebuie să existe în Done înainte de începere.
 - PBI 072 trebuie să existe în Done înainte de începere.
+- PBI 208 trebuie să existe în Done înainte de începere.
+- PBI 217 trebuie să existe în Done înainte de începere.
 
 ## Criterii de acceptare
 
-- [ ] Stilul repetat inclusiv greșelile este vizibil la taxiurile autonome.
-- [ ] Explicația diferențiază dovezile și contexte neobservate.
+- [ ] Stilul demonstrat în LEARNING este vizibil la taxiuri și civili, inclusiv greșelile.
+- [ ] MANUAL nu modifică stilul; explicația arată dovezile și contexte neobservate.
 
 ## Verificare
 
@@ -59,3 +61,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '115' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Plan revizuit la v0.3; implementarea rămâne neîncepută.

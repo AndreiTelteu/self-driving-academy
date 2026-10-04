@@ -14,7 +14,7 @@ completed_at: null
 
 ## Obiectiv
 
-Publică activarea la un tick comun tuturor taxiurilor.
+Publică activarea la un tick comun tuturor taxiurilor și civililor.
 
 ## Context și plan
 
@@ -28,8 +28,8 @@ Publică activarea la un tick comun tuturor taxiurilor.
 
 ## Criterii de acceptare
 
-- [ ] După tick fiecare taxi raportează exact aceeași versiune.
-- [ ] Taxiurile nevizibile și cel manual primesc referința nouă.
+- [ ] După tick toate vehiculele existente raportează aceeași versiune, inclusiv cele nevizibile și conduse de jucător.
+- [ ] Vehiculele create ulterior primesc versiunea curentă; rutele și stările fizice sunt păstrate.
 
 ## Verificare
 
@@ -60,3 +60,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '110' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Plan revizuit la v0.3; implementarea rămâne neîncepută.

@@ -28,8 +28,8 @@ Implementează resize, cleanup și reconstrucția scenei din snapshot după pier
 
 ## Criterii de acceptare
 
-- [ ] Resursele vechi sunt eliberate, iar sesiunea este păstrată la recuperare.
-- [ ] Un eșec repetat oferă reluare fără pierderea profilului salvat.
+- [ ] Resize/disposal/pierderea GPU reconstruiesc rendererul din snapshotul în RAM, fără dublarea resurselor.
+- [ ] Un eșec repetat păstrează starea în RAM și oferă reluare; salvarea durabilă este integrată și verificată în 206/216.
 
 ## Verificare
 
@@ -60,3 +60,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '020' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Plan revizuit la v0.3; implementarea rămâne neîncepută.

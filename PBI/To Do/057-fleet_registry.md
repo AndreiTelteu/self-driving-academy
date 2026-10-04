@@ -27,8 +27,8 @@ Creează 24 de taxiuri configurabile între 20 și 30 și vehicule civile.
 
 ## Criterii de acceptare
 
-- [ ] Fiecare vehicul are ID, clasă, mod și stare independentă de cameră.
-- [ ] Taxiurile folosesc un stil comun, civilele profile fixe.
+- [ ] Fiecare vehicul are ID, clasă, driverKind și stare independentă de cameră.
+- [ ] Taxiurile și civilele sunt legate de profilul comun al orașului; vehiculele noi primesc versiunea activă.
 
 ## Verificare
 
@@ -59,3 +59,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '057' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Plan revizuit la v0.3; implementarea rămâne neîncepută.

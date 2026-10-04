@@ -14,7 +14,7 @@ completed_at: null
 
 ## Obiectiv
 
-Construiește un traseu cu dovezi suficiente pentru o schimbare explicabilă.
+Construiește un traseu LEARNING cu dovezi suficiente și acțiunea Vezi un exemplu pentru efectul publicat.
 
 ## Context și plan
 
@@ -27,8 +27,8 @@ Construiește un traseu cu dovezi suficiente pentru o schimbare explicabilă.
 
 ## Criterii de acceptare
 
-- [ ] Misiunea cere un delta justificat și activare observată.
-- [ ] Demonstrația prea scurtă explică no-change fără blocaj definitiv.
+- [ ] Misiunea cere un delta justificat și activare observată, fără fabricația datelor.
+- [ ] Demonstrația fără dovezi explică no-change; exemplul live sau experimentul separat este etichetat.
 
 ## Verificare
 
@@ -59,3 +59,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '118' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Plan revizuit la v0.3; implementarea rămâne neîncepută.

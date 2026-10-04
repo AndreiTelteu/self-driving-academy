@@ -14,7 +14,7 @@ completed_at: null
 
 ## Obiectiv
 
-Verifică învățarea din mașini civile și transferul către taxiuri.
+Verifică învățarea LEARNING din taxiuri și civile, normalizarea între clase și efectul profilului comun asupra ambelor categorii.
 
 ## Context și plan
 
@@ -27,7 +27,8 @@ Verifică învățarea din mașini civile și transferul către taxiuri.
 
 ## Criterii de acceptare
 
-- [ ] Transferul schimbă tendințele fără copierea capacităților mecanice.
+- [ ] Transferul păstrează tendințele fără a copia capacitățile mecanice.
+- [ ] Același traseu în MANUAL nu schimbă profilul; LEARNING eligibil îl poate schimba.
 - [ ] Comportamentele nereprezentabile sunt raportate ca atare.
 
 ## Verificare
@@ -59,3 +60,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '106' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Plan revizuit la v0.3; implementarea rămâne neîncepută.

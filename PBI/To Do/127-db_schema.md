@@ -28,14 +28,14 @@ Creează stores pentru profile, segmente, scenarii, progres și setări.
 
 ## Criterii de acceptare
 
-- [ ] Deschiderea și upgrade-ul DB au stări de eroare explicite.
-- [ ] Datele din altă versiune nu sunt interpretate fără migrare.
+- [ ] Schema include stores de stil/progres și checkpointuri, cu tranzacții coerente și migrare explicită.
+- [ ] Un singur tab deține dreptul de scriere; al doilea tab și DB upgrade blocat au stări explicite.
 
 ## Verificare
 
-Testează DB nouă, upgrade și eroare de deschidere.
+Testează DB nouă, upgrade, două taburi, transfer de writer și eroare de deschidere.
 
-Rulează verificările relevante ale proiectului și păstrează rezultatul exact. Dacă aplicația sau comanda necesară nu există încă, creeaz-o în scope-ul acestui PBI ori raportează blocajul; nu declara verificarea trecută fără execuție.
+Rulează verificările relevante ale proiectului și păstrează rezultatul exact. Nu declara verificări trecute fără execuție.
 
 ## Dovezi de finalizare
 
@@ -60,3 +60,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '127' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Plan revizuit la v0.3; implementarea rămâne neîncepută.

@@ -5,6 +5,8 @@ status: "To Do"
 release: "V2"
 module: "Învățare V2"
 depends_on: ["171","163"]
+parameter_role: "estimator"
+parameter_keys: ["cutin_brake_response","closing_ttc_threshold","leader_change_delay","following_hysteresis"]
 owner: null
 started_at: null
 completed_at: null

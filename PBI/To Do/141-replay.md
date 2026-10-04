@@ -4,7 +4,7 @@ title: "Replay vizual din stări înregistrate"
 status: "To Do"
 release: "V1"
 module: "Experimente și indicatori"
-depends_on: ["140","014"]
+depends_on: ["140","014","207"]
 owner: null
 started_at: null
 completed_at: null
@@ -24,11 +24,12 @@ Redă stări și evenimente fără a recalcula politica.
 
 - PBI 140 trebuie să existe în Done înainte de începere.
 - PBI 014 trebuie să existe în Done înainte de începere.
+- PBI 207 trebuie să existe în Done înainte de începere.
 
 ## Criterii de acceptare
 
-- [ ] Replayul este etichetat distinct de rerulare.
-- [ ] Seek și pauză nu modifică profilul sau progresul original.
+- [ ] Recorderul poate reda incidente exclusiv AUTO și vehicule nevizibile, inclusiv create/eliminate.
+- [ ] Seek și replay nu modifică profilul, revenue, ratings, misiunile sau XP; lipsa datelor este declarată.
 
 ## Verificare
 
@@ -59,3 +60,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '141' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Plan revizuit la v0.3; implementarea rămâne neîncepută.

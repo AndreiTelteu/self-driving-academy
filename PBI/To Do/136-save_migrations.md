@@ -4,7 +4,7 @@ title: "Migrare și restaurare după restart"
 status: "To Do"
 release: "V1"
 module: "Persistență"
-depends_on: ["135","132"]
+depends_on: ["135","132","206"]
 owner: null
 started_at: null
 completed_at: null
@@ -24,11 +24,13 @@ Implementează migrarea schemelor și continuarea sesiunii.
 
 - PBI 135 trebuie să existe în Done înainte de începere.
 - PBI 132 trebuie să existe în Done înainte de începere.
+- PBI 206 trebuie să existe în Done înainte de începere.
 
 ## Criterii de acceptare
 
-- [ ] DB veche migrabilă păstrează profilele și recompensele.
-- [ ] Migrarea eșuată oferă recuperare/export fără corupere în tăcere.
+- [ ] Restartul reia pozițiile, cursele, pasagerii și ledger-ele din ultimul checkpoint valid; pornește în pauză/AUTO.
+- [ ] Segmentele active devin incomplete, inputul este eliberat și joburile sunt reluate numai în learningEpoch valid.
+- [ ] Migrarea eșuată oferă export și recuperare fără corupere.
 
 ## Verificare
 
@@ -59,3 +61,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '136' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Plan revizuit la v0.3; implementarea rămâne neîncepută.

@@ -4,7 +4,7 @@ title: "Autosave și închiderea sesiunii"
 status: "To Do"
 release: "V1"
 module: "Persistență"
-depends_on: ["128","129","130"]
+depends_on: ["128","129","130","206"]
 owner: null
 started_at: null
 completed_at: null
@@ -25,6 +25,7 @@ Leagă salvările periodice și evenimentele de închidere.
 - PBI 128 trebuie să existe în Done înainte de începere.
 - PBI 129 trebuie să existe în Done înainte de începere.
 - PBI 130 trebuie să existe în Done înainte de începere.
+- PBI 206 trebuie să existe în Done înainte de începere.
 
 ## Criterii de acceptare
 
@@ -60,3 +61,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '131' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Plan revizuit la v0.3; implementarea rămâne neîncepută.

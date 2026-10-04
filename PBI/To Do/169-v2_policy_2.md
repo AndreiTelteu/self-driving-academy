@@ -5,6 +5,8 @@ status: "To Do"
 release: "V2"
 module: "Parametri V2"
 depends_on: ["166","047"]
+parameter_role: "policy"
+parameter_keys: ["braking_jerk","throttle_release_delay","launch_intensity","coasting_bias"]
 owner: null
 started_at: null
 completed_at: null

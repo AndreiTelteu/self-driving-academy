@@ -5,6 +5,8 @@ status: "To Do"
 release: "V1"
 module: "Autonomie"
 depends_on: ["045","031"]
+parameter_role: "policy"
+parameter_keys: ["speed_delta_urban","speed_delta_residential","curve_lateral_accel","intersection_approach_speed"]
 owner: null
 started_at: null
 completed_at: null

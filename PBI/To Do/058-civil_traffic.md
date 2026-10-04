@@ -1,6 +1,6 @@
 ---
 id: "058"
-title: "Trafic civil cu rute și profiluri fixe"
+title: "Trafic civil cu rute proprii și stilul comun al orașului"
 status: "To Do"
 release: "V1"
 module: "Flotă și curse"
@@ -10,11 +10,11 @@ started_at: null
 completed_at: null
 ---
 
-# 058 Trafic civil cu rute și profiluri fixe
+# 058 Trafic civil cu rute proprii și stilul comun al orașului
 
 ## Obiectiv
 
-Generează rute civile și reluarea lor după eliberarea mașinii.
+Generează rute civile și reluarea lor în AUTO cu profilul comun, explicată ca imitație a stilului taxiurilor.
 
 ## Context și plan
 
@@ -27,8 +27,8 @@ Generează rute civile și reluarea lor după eliberarea mașinii.
 
 ## Criterii de acceptare
 
-- [ ] Vehiculele civile interacționează fizic și semantic cu taxiurile.
-- [ ] Stilul învățat al flotei nu suprascrie profilele civile.
+- [ ] Civilii interacționează fizic și semantic cu taxiurile și folosesc aceiași parametri de stil.
+- [ ] Eliberarea unei mașini civile păstrează ruta și reia profilul comun; nu revine la un profil fix ascuns.
 
 ## Verificare
 
@@ -59,3 +59,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '058' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Plan revizuit la v0.3; implementarea rămâne neîncepută.

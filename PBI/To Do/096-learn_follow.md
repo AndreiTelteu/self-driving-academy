@@ -5,6 +5,8 @@ status: "To Do"
 release: "V1"
 module: "Învățare"
 depends_on: ["093","048"]
+parameter_role: "estimator"
+parameter_keys: ["following_time_headway","following_min_gap","queue_standstill_gap","following_speed_gain"]
 owner: null
 started_at: null
 completed_at: null

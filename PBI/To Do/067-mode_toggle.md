@@ -1,6 +1,6 @@
 ---
 id: "067"
-title: "Hotkey M și starea vizibilă de control"
+title: "Hotkey-uri M/L și cele trei moduri vizibile"
 status: "To Do"
 release: "V1"
 module: "Control manual"
@@ -10,11 +10,11 @@ started_at: null
 completed_at: null
 ---
 
-# 067 Hotkey M și starea vizibilă de control
+# 067 Hotkey-uri M/L și cele trei moduri vizibile
 
 ## Obiectiv
 
-Implementează comutarea M și evenimentele pentru mod.
+Implementează AUTO, MANUAL fără învățare și LEARNING cu învățare, plus comenzile M/L remapabile.
 
 ## Context și plan
 
@@ -27,14 +27,14 @@ Implementează comutarea M și evenimentele pentru mod.
 
 ## Criterii de acceptare
 
-- [ ] Modul HUD corespunde autorității motorului.
-- [ ] Tasta nu comută când un input text sau dialog are focus.
+- [ ] M comută AUTO↔MANUAL și LEARNING→AUTO; L comută AUTO/MANUAL→LEARNING și LEARNING→MANUAL.
+- [ ] Textul/simbolul HUD arată modul real și eligibilitatea; focusul UI și key repeat nu produc tranziții accidentale.
 
 ## Verificare
 
-Testează toggle rapid, key repeat și focus UI.
+Testează cele șase tranziții, toggle rapid, key repeat, focus și pauză.
 
-Rulează verificările relevante ale proiectului și păstrează rezultatul exact. Dacă aplicația sau comanda necesară nu există încă, creeaz-o în scope-ul acestui PBI ori raportează blocajul; nu declara verificarea trecută fără execuție.
+Rulează verificările relevante ale proiectului și păstrează rezultatul exact. Nu declara verificări trecute fără execuție.
 
 ## Dovezi de finalizare
 
@@ -59,3 +59,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '067' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Plan revizuit la v0.3; implementarea rămâne neîncepută.

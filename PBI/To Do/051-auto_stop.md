@@ -5,6 +5,8 @@ status: "To Do"
 release: "V1"
 module: "Autonomie"
 depends_on: ["047","037","006"]
+parameter_role: "policy"
+parameter_keys: ["stop_full_probability","stop_dwell_time","stop_line_offset"]
 owner: null
 started_at: null
 completed_at: null

@@ -27,8 +27,8 @@ Leagă intrarea/ieșirea de închiderea segmentelor de condus.
 
 ## Criterii de acceptare
 
-- [ ] Mersul nu este folosit ca demonstrație de driving.
-- [ ] Ieșirea și schimbarea mașinii declanșează analiza segmentului valid.
+- [ ] Mersul nu este demonstrație de driving; numai LEARNING închis produce estimator.
+- [ ] Intrarea/ieșirea și selectarea distantă păstrează autoritatea unică și modurile explicit alese.
 
 ## Verificare
 
@@ -59,3 +59,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '198' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Plan revizuit la v0.3; implementarea rămâne neîncepută.

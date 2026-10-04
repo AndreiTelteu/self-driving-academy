@@ -5,6 +5,8 @@ status: "To Do"
 release: "V1"
 module: "Învățare"
 depends_on: ["093","051","052"]
+parameter_role: "estimator"
+parameter_keys: ["stop_full_probability","stop_dwell_time","stop_line_offset","yield_time_gap"]
 owner: null
 started_at: null
 completed_at: null

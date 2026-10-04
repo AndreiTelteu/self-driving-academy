@@ -4,7 +4,7 @@ title: "Restaurare și profil nou de la bază"
 status: "To Do"
 release: "V1"
 module: "Profiluri"
-depends_on: ["113"]
+depends_on: ["113","205"]
 owner: null
 started_at: null
 completed_at: null
@@ -23,11 +23,12 @@ Implementează activare cu proveniență pentru versiune veche și reset de stil
 ## Dependențe
 
 - PBI 113 trebuie să existe în Done înainte de începere.
+- PBI 205 trebuie să existe în Done înainte de începere.
 
 ## Criterii de acceptare
 
-- [ ] Restaurarea nu rescrie istoria și se propagă la același tick.
-- [ ] Resetul stilului nu resetează implicit misiunile.
+- [ ] Restore, import valid și profil nou folosesc bariera learningEpoch și o activare comună nouă.
+- [ ] Importul invalid nu schimbă profilul/coada; resetul stilului nu resetează misiunile sau XP.
 
 ## Verificare
 
@@ -58,3 +59,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '114' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Plan revizuit la v0.3; implementarea rămâne neîncepută.

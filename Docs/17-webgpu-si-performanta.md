@@ -1,6 +1,6 @@
 # WebGPU și performanță
 
-Versiune 0.2 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
+Versiune 0.3 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
 
 ## WebGPU și compatibilitate
 
@@ -25,3 +25,7 @@ Indexul spațial limitează vecinii consultați de fiecare vehicul. Meshe-urile 
 Măsurăm separat timp CPU de fizică, decizii, UI, colectare și estimare; timp GPU și costul cadrelor; memoria; încărcarea inițială; percentilele timpului de cadru. Flotele de 20, 24 și 30 de taxiuri și densități diferite de trafic fac parte din matricea de benchmark. Nu estimăm scalarea la sute de taxiuri dintr-un test cu 24.
 
 Experimentele automate rulează în loturi într-un worker cu anulare și progres. Un model de trafic simplificat pentru experimente rapide este etichetat separat și nu substituie măsurarea fizicii complete.
+
+## Bugete înainte de extindere
+
+PBI 203 fixează configurațiile și metoda de măsurare înaintea prototipului de fizică și a extinderii orașului; hardware-ul exact nu este inventat în documentație. PBI 155 verifică bugetul pe jocul complet și raportează abaterile. Recorderul întregii lumi, graficele KPI, generarea zilnică și evaluările XP au bugete separate; evaluările contrafactuale rulează cu progres, anulare și limite de resurse în worker.

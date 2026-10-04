@@ -1,6 +1,6 @@
 # Oraș și rețea rutieră
 
-Versiune 0.2 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
+Versiune 0.3 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
 
 ## Orașul și vehiculele
 
@@ -10,7 +10,7 @@ Geometria vizuală și semantica rutieră sunt separate. Fiecare bandă are dire
 
 Vehiculele împărtășesc un contract de comandă: accelerație, frână, direcție, frână de mână și semnalizare. Controlul manual și controlul autonom folosesc aceeași fizică și aceleași limite mecanice. Masa, aderența, puterea, capacitatea de frânare și raza de viraj sunt caracteristici ale vehiculului, separate de stilul șoferului.
 
-Propunere: toate intervențiile manuale pot contribui la profilul jucătorului, inclusiv cele realizate în mașini civile. Estimarea normalizează capacitățile vehiculului, astfel încât o mașină puternică să nu fie confundată cu o intenție mai agresivă. Vehiculele civile revin la profilul lor fix când sunt eliberate; actualizarea stilului jucătorului afectează numai taxiurile.
+Decizie confirmată: segmentele LEARNING din taxiuri și mașini civile contribuie la profilul comun al orașului. MANUAL nu contribuie la învățare. Estimarea normalizează capacitățile vehiculului. Taxiurile și civilii adoptă aceeași versiune la tick-ul de activare; mașinile civile păstrează destinațiile proprii și reiau AUTO cu stilul comun când sunt eliberate. Explicația de produs este imitația stilului taxiurilor de către șoferii civili. Nu se implementează un al doilea proces de antrenare ascuns pentru civili.
 
 ## Validarea și authoringul hărții
 

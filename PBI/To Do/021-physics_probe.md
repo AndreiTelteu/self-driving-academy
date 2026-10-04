@@ -4,7 +4,7 @@ title: "Prototip Rapier și decizia de fizică"
 status: "To Do"
 release: "V1"
 module: "Vehicule și fizică"
-depends_on: ["001","004"]
+depends_on: ["001","004","203"]
 owner: null
 started_at: null
 completed_at: null
@@ -24,6 +24,7 @@ Validează controllerul auto Rapier în scene de frânare, viraj, bordură și c
 
 - PBI 001 trebuie să existe în Done înainte de începere.
 - PBI 004 trebuie să existe în Done înainte de începere.
+- PBI 203 trebuie să existe în Done înainte de începere.
 
 ## Criterii de acceptare
 
@@ -59,3 +60,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '021' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Plan revizuit la v0.3; implementarea rămâne neîncepută.

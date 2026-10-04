@@ -27,8 +27,8 @@ Persistă poziția, camera și autoritatea personajului și migrează sesiunile.
 
 ## Criterii de acceptare
 
-- [ ] Sesiunile V1/V2 primesc o stare validă de personaj.
-- [ ] Reload nu creează două autorități sau corpuri duplicate.
+- [ ] Migrarea păstrează lumea, personajul, KPI-urile, calendarul daily și ledgerul XP.
+- [ ] Reload pornește în pauză cu autoritate coerentă; nu creează corpuri/autoritate/reward-uri duplicate.
 
 ## Verificare
 
@@ -59,3 +59,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '200' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Plan revizuit la v0.3; implementarea rămâne neîncepută.

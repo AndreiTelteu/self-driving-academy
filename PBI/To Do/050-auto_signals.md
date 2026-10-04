@@ -5,6 +5,8 @@ status: "To Do"
 release: "V1"
 module: "Autonomie"
 depends_on: ["047","036","006"]
+parameter_role: "policy"
+parameter_keys: ["red_stop_probability","green_start_delay","red_stop_line_offset","late_red_brake_threshold"]
 owner: null
 started_at: null
 completed_at: null

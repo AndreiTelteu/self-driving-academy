@@ -5,6 +5,8 @@ status: "To Do"
 release: "V2"
 module: "Învățare V2"
 depends_on: ["177","163"]
+parameter_role: "estimator"
+parameter_keys: ["lane_change_duration","signal_lead_time","signal_use_probability","pass_on_right_probability"]
 owner: null
 started_at: null
 completed_at: null

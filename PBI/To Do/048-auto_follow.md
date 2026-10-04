@@ -5,6 +5,8 @@ status: "To Do"
 release: "V1"
 module: "Autonomie"
 depends_on: ["047","044"]
+parameter_role: "policy"
+parameter_keys: ["following_time_headway","following_min_gap","queue_standstill_gap","following_speed_gain"]
 owner: null
 started_at: null
 completed_at: null

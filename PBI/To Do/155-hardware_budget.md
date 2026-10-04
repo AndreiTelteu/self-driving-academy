@@ -1,20 +1,20 @@
 ---
 id: "155"
-title: "Hardware de referință și bugete"
+title: "Verificarea finală a hardware-ului și bugetelor stabilite"
 status: "To Do"
 release: "V1"
 module: "Validare și release"
-depends_on: ["154","019"]
+depends_on: ["154","019","203"]
 owner: null
 started_at: null
 completed_at: null
 ---
 
-# 155 Hardware de referință și bugete
+# 155 Verificarea finală a hardware-ului și bugetelor stabilite
 
 ## Obiectiv
 
-Fixează configurațiile de desktop/laptop și țintele măsurabile.
+Verifică pe jocul complet configurațiile și bugetele fixate în 203, fără redefinirea lor retroactivă.
 
 ## Context și plan
 
@@ -24,11 +24,12 @@ Fixează configurațiile de desktop/laptop și țintele măsurabile.
 
 - PBI 154 trebuie să existe în Done înainte de începere.
 - PBI 019 trebuie să existe în Done înainte de începere.
+- PBI 203 trebuie să existe în Done înainte de începere.
 
 ## Criterii de acceptare
 
-- [ ] FPS, frame time, memorie și încărcare au contexte de măsurare.
-- [ ] Ținta de publicare precizează durata segmentului și densitatea traficului.
+- [ ] FPS/frame time/memorie/încărcare sunt măsurate pe configurațiile fixate.
+- [ ] Se raportează abaterile și costurile learning, recorderului, KPI-urilor și evaluatorului XP.
 
 ## Verificare
 
@@ -59,3 +60,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '155' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Plan revizuit la v0.3; implementarea rămâne neîncepută.

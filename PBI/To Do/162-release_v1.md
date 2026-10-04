@@ -4,7 +4,7 @@ title: "Gate și închiderea release-ului V1"
 status: "To Do"
 release: "V1"
 module: "Validare și release"
-depends_on: ["161","154","152","108","039","076","141"]
+depends_on: ["161","154","152","108","039","076","141","216","217"]
 owner: null
 started_at: null
 completed_at: null
@@ -29,6 +29,8 @@ Verifică toate criteriile V1 și pregătește artefactul de livrare.
 - PBI 039 trebuie să existe în Done înainte de începere.
 - PBI 076 trebuie să existe în Done înainte de începere.
 - PBI 141 trebuie să existe în Done înainte de începere.
+- PBI 216 trebuie să existe în Done înainte de începere.
+- PBI 217 trebuie să existe în Done înainte de începere.
 
 ## Criterii de acceptare
 
@@ -64,3 +66,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '162' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Plan revizuit la v0.3; implementarea rămâne neîncepută.

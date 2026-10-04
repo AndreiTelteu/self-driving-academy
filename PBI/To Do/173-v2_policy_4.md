@@ -5,6 +5,8 @@ status: "To Do"
 release: "V2"
 module: "Parametri V2"
 depends_on: ["166","050"]
+parameter_role: "policy"
+parameter_keys: ["yellow_stop_probability","red_run_gap_acceptance","yellow_commit_time","green_launch_acceleration"]
 owner: null
 started_at: null
 completed_at: null

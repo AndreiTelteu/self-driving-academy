@@ -1,10 +1,10 @@
 # Învățarea stilului
 
-Versiune 0.2 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
+Versiune 0.3 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
 
 ## Estimarea stilului
 
-Fluxul propus este: validare segment, etichetare contexte, extragere caracteristici, estimare pe parametri eligibili, verificare a dovezilor, validare în scenarii scurte și compunere a unui delta. Estimatorul rulează în worker; simularea continuă cu profilul existent până când rezultatul poate fi publicat.
+Fluxul pentru segmente LEARNING eligibile este: validare segment și learningEpoch, etichetare contexte, extragere caracteristici, estimare pe parametri eligibili, verificare a dovezilor, validare în scenarii scurte și compunere a unui delta. Estimatorul rulează în worker; simularea continuă cu profilul existent până când rezultatul poate fi publicat.
 
 Pentru viteza preferată se folosesc ferestre în trafic liber. Pentru distanțe se estimează relația gap ≈ minimumGap + timeHeadway × speed. Separarea celor două valori necesită observații la viteze suficient de variate; la o singură viteză se păstrează parametrul slab identificat. Pentru accelerație și frânare se folosesc statistici robuste din intervale intenționate, normalizate după capacitățile vehiculului.
 
@@ -20,7 +20,7 @@ Propunere de praguri inițiale: trei oportunități distincte pentru o primă es
 
 Actualizarea propusă este newValue = oldValue + learningWeight × (estimate − oldValue). Ponderea depinde de calitate, numărul efectiv de episoade și incertitudine. Are o limită de calibrare pentru a evita salturi provocate de zgomot; demonstrațiile repetate pot modifica puternic profilul. Această regularizare păstrează și stilurile riscante dacă dovezile sunt consistente.
 
-Istoricul recent primește o pondere mai mare decât demonstrațiile foarte vechi, astfel încât jucătorul să își poată schimba stilul. Jucătorul poate crea un profil nou de la bază și poate restaura versiuni. Nu există un lock de învățare activ implicit care ar contrazice aplicarea automată cerută.
+Istoricul recent primește o pondere mai mare decât demonstrațiile foarte vechi, astfel încât jucătorul să își poată schimba stilul. Jucătorul poate crea un profil nou de la bază și poate restaura versiuni. MANUAL nu produce învățare; în LEARNING analiza și publicarea rămân automate, fără confirmare după fiecare segment. Restaurarea sau schimbarea profilului creează o barieră learningEpoch, conform contractului profilurilor.
 
 Validarea verifică numere finite, intervale, unități, parametri implementați și compatibilitate cu controllerul. Nu respinge o versiune doar pentru că produce încălcări sau coliziuni: acestea pot fi rezultatul urmărit al imitației. Un candidat instabil numeric este respins, iar dovezile și motivul rămân disponibile.
 
@@ -35,3 +35,9 @@ Fidelitatea se evaluează în contexte comparabile prin distribuții de viteză,
 Intervalul de urmărire și minimum gap sunt estimate separat numai când vitezele și episoadele permit identificarea. Pragurile acceptării spațiilor cer și oportunități refuzate sau un experiment dedicat. Reacția la frână și orizontul specific de frânare la roșu folosesc scenarii diferite.
 
 În V2, ponderile rutării au convenție canonică de normalizare; numai raportul lor poate fi observabil din anumite alegeri. Estimatorul explică această constrângere și nu pretinde două valori absolute independente din aceeași alegere. Modificatorii de pasager sunt estimați numai din situații comparabile cu și fără pasager. Valorile neidentificabile rămân neobservate până la date suficiente.
+
+## Efecte economice și validarea cu jucători
+
+Revenue-ul, ratings și XP evaluează consecințele și nu corectează automat stilul estimat. Un profil agresiv numeric valid poate fi publicat și poate produce o penalizare XP pentru deteriorarea atribuibilă a KPI-urilor. MANUAL poate afecta rezultatul unei curse fără a modifica stilul orașului.
+
+Prototipul timpuriu validează trei chei înaintea gate-ului complet de 24. Testele sintetice sunt completate prin playtest: jucătorul recunoaște schimbarea, distinge MANUAL de LEARNING și poate indica observația care a susținut delta. Pragurile și criteriile sunt în [milestone](24-milestone-timpuriu-si-contracte.md).

@@ -14,7 +14,7 @@ completed_at: null
 
 ## Obiectiv
 
-Documentează controale, salvare, export, limite și recuperarea erorilor.
+Documentează cele trei moduri, KPIs, timp economic/calendar zilnic, XP și penalizări, salvare/export și recuperare.
 
 ## Context și plan
 
@@ -58,3 +58,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '161' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Plan revizuit la v0.3; implementarea rămâne neîncepută.

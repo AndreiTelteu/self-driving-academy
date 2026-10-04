@@ -27,14 +27,14 @@ Etichetează trafic liber, lider, verde blocat, limită mecanică și impact.
 
 ## Criterii de acceptare
 
-- [ ] Verdele blocat de lider nu este folosit ca reacție personală la verde.
-- [ ] Frânarea la coadă nu este atribuită automat STOP.
+- [ ] Verdele blocat, limita mecanică și impactul nu sunt interpretate ca preferințe personale.
+- [ ] Timpii de reacție cer un stimul observabil din camera jucătorului sau fixture controlat.
 
 ## Verificare
 
-Testează contexte fără lider, coadă, impact și limitare mecanică.
+Testează context eligibil, stimul ascuns, coadă, impact și limitare mecanică.
 
-Rulează verificările relevante ale proiectului și păstrează rezultatul exact. Dacă aplicația sau comanda necesară nu există încă, creeaz-o în scope-ul acestui PBI ori raportează blocajul; nu declara verificarea trecută fără execuție.
+Rulează verificările relevante ale proiectului și păstrează rezultatul exact. Nu declara verificări trecute fără execuție.
 
 ## Dovezi de finalizare
 
@@ -59,3 +59,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '087' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Plan revizuit la v0.3; implementarea rămâne neîncepută.

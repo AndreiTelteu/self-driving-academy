@@ -1,10 +1,10 @@
 # Extensii și mers pe jos
 
-Versiune 0.2 · 4 octombrie 2026. Parte din [planul complet](README.md).
+Versiune 0.3 · 4 octombrie 2026. Parte din [planul complet](README.md).
 
 ## V2 întregul catalog
 
-V1 livrează 24 de chei M. V2 implementează cele 56 R rămase, cu efecte reale în politica autonomă, contexte, estimatori, incertitudine și teste independente. Catalogul rămâne comun pentru întreaga flotă. Starea de suport și defaulturile se migrează explicit pentru profilele V1.
+V1 livrează 24 de chei M. V2 implementează cele 56 R rămase, cu efecte reale în politica autonomă, contexte, estimatori, incertitudine și teste independente. Catalogul rămâne comun pentru taxiuri și civili. Starea de suport și defaulturile se migrează explicit pentru profilele V1.
 
 | Categorie | Context suplimentar și livrabil |
 | --- | --- |
@@ -29,9 +29,9 @@ Jucătorul are personaj third person cu mers, alergare, idle, cameră și colizi
 
 Autoritatea este una singură: personaj sau vehicul. Selectarea unui taxi distant poate muta camera fără a clona personajul. UI arată entitatea controlată și modul; la revenirea în personaj se reia starea sa fizică. Mașina eliberată continuă cursa sau ruta prin politica potrivită.
 
-Ieșirea și schimbarea vehiculului închid intervenția manuală și lansează analiza datelor valide. Mersul pe jos nu contribuie la profilul de driving. O mașină în mișcare sau cu ieșire blocată folosește reguli explicite pentru transferul controlului; personajul nu apare într-un collider.
+Ieșirea și schimbarea vehiculului închid segmentul MANUAL/LEARNING; analiza se lansează numai pentru LEARNING eligibil. Selectarea distantă mută doar camera; MANUAL/LEARNING preiau explicit vehiculul și suspendă inputul personajului, păstrându-i corpul fizic. Revenirea la personaj eliberează vehiculul în AUTO. Mersul pe jos nu contribuie la profilul de driving. O mașină în mișcare sau cu ieșire blocată folosește reguli explicite pentru transferul controlului; personajul nu apare într-un collider.
 
-Salvarea V3 păstrează poziția personajului, camera și autoritatea. Sesiunile vechi primesc o stare validă prin migrare. Tutorialul nou nu blochează accesul la taxiuri. Testele includ coliziuni, intrare/ieșire, focus, schimbare rapidă, telemetrie și regresii de flotă.
+Salvarea V3 păstrează poziția personajului, camera și autoritatea. Sesiunile vechi primesc o stare validă prin migrare. Tutorialul nou nu blochează accesul la taxiuri. Testele includ coliziuni, intrare/ieșire, focus, schimbare rapidă, cele trei moduri, telemetrie eligibilă, KPI-uri, misiuni zilnice, XP și regresii de flotă. Mersul activ poate contribui la XP de timp, fără a deveni demonstrație de driving.
 
 ## Scope ulterior neangajat
 

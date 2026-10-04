@@ -1,6 +1,6 @@
 # Flotă și curse
 
-Versiune 0.2 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
+Versiune 0.3 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
 
 ## Sistemul de curse și flotă
 
@@ -11,3 +11,9 @@ Pickup și dropoff se finalizează când taxiul intră în zona definită, ajung
 Dispecerizarea folosește inițial un cost simplu bazat pe timp estimat până la pickup și disponibilitate. Nu este învățată din stilul de condus. Traseele și alocările sunt păstrate când jucătorul schimbă taxiul. Un taxi blocat sau avariat primește un statut explicit, iar recuperarea sa este înregistrată.
 
 Lista flotei afișează ID, mod de control, etapa cursei, pickup, destinație, ETA estimat, viteză, profil aplicat și eventualul motiv al blocajului. Sortarea după ID este stabilă; filtrele permit taxiuri disponibile, în cursă, blocate și selectate.
+
+## Rezultate comerciale și experiența pasagerului
+
+Fiecare cursă terminală produce un rezultat comercial idempotent și, când există experiență evaluabilă, un review simulat 0–5. MANUAL, LEARNING și AUTO folosesc aceleași reguli de tarif și evaluare. O cursă mixtă păstrează intervalele de autoritate și versiunile aplicate pentru atribuirea consecințelor. Civilii nu generează încasări sau review-uri ale flotei.
+
+Prețul acceptat, încasarea și eventualele rambursări sunt separate. Viteza eficientă poate crește numărul de curse, iar agresivitatea poate reduce ratingul chiar dacă revenue-ul crește. Definițiile, timpul economic și graficele sunt în [KPI-uri](22-kpi-economie-si-review-uri.md).

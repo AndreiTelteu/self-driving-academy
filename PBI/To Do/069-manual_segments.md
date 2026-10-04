@@ -14,7 +14,7 @@ completed_at: null
 
 ## Obiectiv
 
-Deschide și închide segmente la toggle, schimbare, final de cursă și recuperare.
+Deschide și închide segmente MANUAL/LEARNING la schimbarea modului, vehiculului, cursei și recuperare; fixează learningEligible și learningEpoch la deschidere.
 
 ## Context și plan
 
@@ -28,8 +28,9 @@ Deschide și închide segmente la toggle, schimbare, final de cursă și recuper
 
 ## Criterii de acceptare
 
-- [ ] Fiecare segment are motiv și interval clar; pauza îl suspendă.
-- [ ] Finalul cursei în manual închide și redeschide segmentul fără a forța AUTO.
+- [ ] MANUAL→LEARNING și invers separă segmentele fără gol de input; numai LEARNING închis intră în estimator.
+- [ ] Pauza suspendă segmentul; finalul cursei redeschide segmentul în același mod.
+- [ ] Restore/import valid închid segmentul cu motiv explicit; generația veche nu se aplică ulterior.
 
 ## Verificare
 
@@ -60,3 +61,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '069' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Plan revizuit la v0.3; implementarea rămâne neîncepută.

@@ -14,7 +14,7 @@ completed_at: null
 
 ## Obiectiv
 
-Calculează accelerație, lateral și jerk în intervalele cu pasager.
+Calculează accelerație, accelerație laterală și jerk în intervalele cu pasager pentru toate taxiurile, în AUTO, MANUAL și LEARNING.
 
 ## Context și plan
 
@@ -28,12 +28,14 @@ Calculează accelerație, lateral și jerk în intervalele cu pasager.
 
 ## Criterii de acceptare
 
+- [ ] Intervalele cu pasager sunt agregate în toate modurile, inclusiv pentru taxiuri în afara camerei, independent de eligibilitatea pentru learning.
 - [ ] Teleportările și impulsurile de impact nu devin confort al comenzii.
-- [ ] Misiunea și dashboardul citesc aceleași agregări.
+- [ ] Impactul real rămâne consecință a experienței pasagerului și intră separat în review.
+- [ ] Misiunea, dashboardul și modelul review citesc aceleași agregări.
 
 ## Verificare
 
-Testează curse lină, bruscă și cu incident.
+Testează curse lină, bruscă și cu incident în AUTO, MANUAL și LEARNING, inclusiv o cursă mixtă și un taxi nevizibil.
 
 Rulează verificările relevante ale proiectului și păstrează rezultatul exact. Dacă aplicația sau comanda necesară nu există încă, creeaz-o în scope-ul acestui PBI ori raportează blocajul; nu declara verificarea trecută fără execuție.
 
@@ -60,3 +62,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '139' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Plan revizuit la v0.3; implementarea rămâne neîncepută.

@@ -5,6 +5,8 @@ status: "To Do"
 release: "V2"
 module: "Învățare V2"
 depends_on: ["173","163"]
+parameter_role: "estimator"
+parameter_keys: ["yellow_stop_probability","red_run_gap_acceptance","yellow_commit_time","green_launch_acceleration"]
 owner: null
 started_at: null
 completed_at: null

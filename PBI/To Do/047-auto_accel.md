@@ -5,6 +5,8 @@ status: "To Do"
 release: "V1"
 module: "Autonomie"
 depends_on: ["046","024"]
+parameter_role: "policy"
+parameter_keys: ["desired_acceleration","comfort_deceleration","acceleration_jerk","brake_reaction_delay"]
 owner: null
 started_at: null
 completed_at: null

@@ -5,6 +5,8 @@ status: "To Do"
 release: "V2"
 module: "Parametri V2"
 depends_on: ["166","051"]
+parameter_role: "policy"
+parameter_keys: ["rolling_stop_speed","priority_assertiveness","allway_stop_patience","blocked_intersection_entry_probability"]
 owner: null
 started_at: null
 completed_at: null

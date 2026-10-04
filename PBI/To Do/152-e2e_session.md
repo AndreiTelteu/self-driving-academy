@@ -14,7 +14,7 @@ completed_at: null
 
 ## Obiectiv
 
-Parcurge manual, AUTO, publicare, misiuni, export și restart.
+Parcurge AUTO/MANUAL/LEARNING, activare taxi/civil, KPIs, daily missions, XP, export și restart.
 
 ## Context și plan
 
@@ -58,3 +58,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '152' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Plan revizuit la v0.3; implementarea rămâne neîncepută.

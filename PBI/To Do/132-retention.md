@@ -4,7 +4,7 @@ title: "Retenția datelor și cote locale"
 status: "To Do"
 release: "V1"
 module: "Persistență"
-depends_on: ["131"]
+depends_on: ["131","207"]
 owner: null
 started_at: null
 completed_at: null
@@ -14,7 +14,7 @@ completed_at: null
 
 ## Obiectiv
 
-Gestionează fereastra de telemetrie și segmente fixate.
+Gestionează separat retenția telemetriei intervențiilor și recorderului lumii, cu cote și segmente/chunkuri fixate.
 
 ## Context și plan
 
@@ -23,11 +23,12 @@ Gestionează fereastra de telemetrie și segmente fixate.
 ## Dependențe
 
 - PBI 131 trebuie să existe în Done înainte de începere.
+- PBI 207 trebuie să existe în Done înainte de începere.
 
 ## Criterii de acceptare
 
-- [ ] Cota plină oferă export și curățare selectivă.
-- [ ] Profilul curent și progresul nu sunt șterse automat.
+- [ ] Cota plină oferă export și curățare selectivă; clipurile parțiale sunt declarate.
+- [ ] Profilul, progresul, checkpointul activ și ledger-ele necesare deduplicării nu sunt șterse automat.
 
 ## Verificare
 
@@ -58,3 +59,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '132' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Plan revizuit la v0.3; implementarea rămâne neîncepută.

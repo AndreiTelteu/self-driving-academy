@@ -5,6 +5,8 @@ status: "To Do"
 release: "V2"
 module: "Învățare V2"
 depends_on: ["175","163"]
+parameter_role: "estimator"
+parameter_keys: ["rolling_stop_speed","priority_assertiveness","allway_stop_patience","blocked_intersection_entry_probability"]
 owner: null
 started_at: null
 completed_at: null

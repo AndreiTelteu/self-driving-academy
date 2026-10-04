@@ -5,6 +5,8 @@ status: "To Do"
 release: "V1"
 module: "Învățare"
 depends_on: ["093","050"]
+parameter_role: "estimator"
+parameter_keys: ["red_stop_probability","green_start_delay","red_stop_line_offset","late_red_brake_threshold"]
 owner: null
 started_at: null
 completed_at: null

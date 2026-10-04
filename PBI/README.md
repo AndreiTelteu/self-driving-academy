@@ -1,6 +1,6 @@
 # Backlog Kanban Self Driving Academy
 
-202 de task-uri de implementare, numerotate 001–202 în ordine crescătoare și topologică. Toate sunt create inițial în To Do. Prefixele rămân stabile la mutarea între coloane.
+217 task-uri de implementare cu IDs stabile 001–217. Ordinea de implementare este definită de depends_on; IDs nu mai constituie o ordine topologică numerică. Toate sunt create inițial în To Do. Prefixele rămân stabile la mutarea între coloane.
 
 ## Coloane și workflow
 
@@ -14,7 +14,7 @@
 
 | Etapă | IDs | Număr | Livrabil |
 | --- | --- | --- | --- |
-| V1 | 001–162 | 162 | Joc PC browser, 24 parametri, flotă, campanie, salvare și comparații |
+| V1 | 001–162 și 203–217 | 177 | Joc PC browser, trei moduri, stil comun taxi/civil, 24 parametri, KPIs, daily, XP, salvare și comparații |
 | V2 | 163–190 | 28 | Toți cei 80 de parametri, pietoni, pericole și provocări extinse |
 | V3 | 191–202 | 12 | Personaj, mers pe jos și intrare/ieșire din mașini |
 
@@ -44,7 +44,7 @@ Statutul curent se citește din coloana fișierului și frontmatter. Indexul pă
 | 018 | Picking și selectarea mașinilor | Babylon | V1 | 013, 017 |
 | 019 | Diagnostic Babylon și resurse | Babylon | V1 | 011, 014 |
 | 020 | Resize disposal și recuperare GPU | Babylon | V1 | 012, 015, 014 |
-| 021 | Prototip Rapier și decizia de fizică | Vehicule și fizică | V1 | 001, 004 |
+| 021 | Prototip Rapier și decizia de fizică | Vehicule și fizică | V1 | 001, 004, 203 |
 | 022 | Adaptor fizică și conversii de coordonate | Vehicule și fizică | V1 | 021, 005, 013 |
 | 023 | Configurații pentru două clase de mașini | Vehicule și fizică | V1 | 022, 009 |
 | 024 | Controller auto și comenzi comune | Vehicule și fizică | V1 | 023, 008 |
@@ -65,7 +65,7 @@ Statutul curent se citește din coloana fișierului și frontmatter. Indexul pă
 | 039 | Treceri de pietoni și semantică de pericol | Oraș | V1 | 032 |
 | 040 | Zone de pickup dropoff și puncte valide | Oraș | V1 | 033, 030 |
 | 041 | Rutare A star și rute valide | Oraș | V1 | 033, 038, 040 |
-| 042 | Construirea cartierului în Babylon | Oraș | V1 | 015, 016, 032, 040 |
+| 042 | Construirea cartierului în Babylon | Oraș | V1 | 015, 016, 032, 040, 204 |
 | 043 | Validarea integrității întregii hărți | Oraș | V1 | 042, 041, 036 |
 | 044 | Context rutier pentru fiecare vehicul | Autonomie | V1 | 034, 036, 038 |
 | 045 | Mașina de stări comportamentale | Autonomie | V1 | 044, 005 |
@@ -81,7 +81,7 @@ Statutul curent se citește din coloana fișierului și frontmatter. Indexul pă
 | 055 | Motive de decizie și observabilitate | Autonomie | V1 | 050, 051, 052, 053, 054 |
 | 056 | Suita autonomiei de bază | Autonomie | V1 | 055, 043 |
 | 057 | Registry flotă și mașini civile | Flotă și curse | V1 | 056, 023 |
-| 058 | Trafic civil cu rute și profiluri fixe | Flotă și curse | V1 | 057, 041 |
+| 058 | Trafic civil cu rute proprii și stilul comun al orașului | Flotă și curse | V1 | 057, 041 |
 | 059 | Cereri de curse și program de scenariu | Flotă și curse | V1 | 057, 040, 006 |
 | 060 | Dispecerizare după disponibilitate și cost | Flotă și curse | V1 | 059, 041 |
 | 061 | Lifecycle cursă și eșecuri | Flotă și curse | V1 | 060, 007 |
@@ -89,8 +89,8 @@ Statutul curent se citește din coloana fișierului și frontmatter. Indexul pă
 | 063 | Dropoff și finalizarea cursei | Flotă și curse | V1 | 062 |
 | 064 | ETA și progresul traseului | Flotă și curse | V1 | 063, 041 |
 | 065 | Blocaje avarii și reset de scenariu | Flotă și curse | V1 | 058, 063, 029, 064 |
-| 066 | Arbitraj de comenzi și autoritate | Control manual | V1 | 065, 025, 007 |
-| 067 | Hotkey M și starea vizibilă de control | Control manual | V1 | 066, 009 |
+| 066 | Arbitraj de comenzi și autoritate | Control manual | V1 | 024, 025, 007 |
+| 067 | Hotkey-uri M/L și cele trei moduri vizibile | Control manual | V1 | 066, 009 |
 | 068 | Schimbare rapidă între taxiuri și civile | Control manual | V1 | 067, 018, 017 |
 | 069 | Lifecycle de intervenție manuală | Control manual | V1 | 068, 005, 007 |
 | 070 | Pauză focus și modalitate de input | Control manual | V1 | 069, 012 |
@@ -115,7 +115,7 @@ Statutul curent se citește din coloana fișierului și frontmatter. Indexul pă
 | 089 | Normalizarea după clasa vehiculului | Telemetrie | V1 | 088, 023, 031 |
 | 090 | Compactare buffer și finalizare segment | Telemetrie | V1 | 089, 010 |
 | 091 | Validator și fixtures pentru demonstrații | Telemetrie | V1 | 090, 004 |
-| 092 | Schema celor 80 de parametri și stări de suport | Învățare | V1 | 005, 091 |
+| 092 | Schema celor 80 de parametri și stări de suport | Învățare | V1 | 005 |
 | 093 | Eligibilitate și dovezi pe parametru | Învățare | V1 | 092, 091 |
 | 094 | Estimator viteză curbe și apropiere | Învățare | V1 | 093, 046 |
 | 095 | Estimator accelerație frânare jerk și reacție | Învățare | V1 | 093, 047, 089 |
@@ -135,10 +135,10 @@ Statutul curent se citește din coloana fișierului și frontmatter. Indexul pă
 | 109 | Profile imuabile și istoric versionat | Profiluri | V1 | 092, 102 |
 | 110 | Activare atomică în întreaga flotă | Profiluri | V1 | 109, 057, 008 |
 | 111 | Manevre în curs și profil publicat | Profiluri | V1 | 110, 053, 050, 066 |
-| 112 | Integrare intervenție estimator și publicare | Profiluri | V1 | 111, 103, 108 |
+| 112 | Integrare intervenție estimator și publicare | Profiluri | V1 | 111, 103, 204 |
 | 113 | Conectarea UI la profiluri reale | Profiluri | V1 | 112, 077, 078, 104 |
-| 114 | Restaurare și profil nou de la bază | Profiluri | V1 | 113 |
-| 115 | Demonstrarea orașului care copiază jucătorul | Profiluri | V1 | 114, 072 |
+| 114 | Restaurare și profil nou de la bază | Profiluri | V1 | 113, 205 |
+| 115 | Demonstrarea orașului care copiază jucătorul | Profiluri | V1 | 114, 072, 208, 217 |
 | 116 | Definiții și lifecycle de misiuni | Misiuni | V1 | 115, 007, 005 |
 | 117 | Misiunea primul taxi și tutorialul de control | Misiuni | V1 | 116, 073 |
 | 118 | Misiunea prima demonstrație și dovezi | Misiuni | V1 | 117, 112 |
@@ -154,17 +154,17 @@ Statutul curent se citește din coloana fișierului și frontmatter. Indexul pă
 | 128 | Tranzacții pentru profil și activare | Persistență | V1 | 127, 110 |
 | 129 | Salvarea segmentelor și checkpointuri | Persistență | V1 | 127, 090 |
 | 130 | Persistența misiunilor și setărilor | Persistență | V1 | 127, 126, 081 |
-| 131 | Autosave și închiderea sesiunii | Persistență | V1 | 128, 129, 130 |
-| 132 | Retenția datelor și cote locale | Persistență | V1 | 131 |
+| 131 | Autosave și închiderea sesiunii | Persistență | V1 | 128, 129, 130, 206 |
+| 132 | Retenția datelor și cote locale | Persistență | V1 | 131, 207 |
 | 133 | Export JSON de profil | Persistență | V1 | 128 |
 | 134 | Import validat și activare de profil | Persistență | V1 | 133, 114, 092 |
-| 135 | Export import de sesiune și scenarii | Persistență | V1 | 134, 129, 130 |
-| 136 | Migrare și restaurare după restart | Persistență | V1 | 135, 132 |
+| 135 | Export import de sesiune și scenarii | Persistență | V1 | 134, 129, 130, 206 |
+| 136 | Migrare și restaurare după restart | Persistență | V1 | 135, 132, 206 |
 | 137 | Indicatori de serviciu și expunere | Experimente și indicatori | V1 | 063, 028, 085 |
 | 138 | Indicatori de stil și încălcări | Experimente și indicatori | V1 | 137, 086 |
 | 139 | Indicatori de confort cu pasager | Experimente și indicatori | V1 | 137, 088, 121 |
-| 140 | Snapshot complet pentru experiment | Experimente și indicatori | V1 | 138, 139, 136 |
-| 141 | Replay vizual din stări înregistrate | Experimente și indicatori | V1 | 140, 014 |
+| 140 | Snapshot complet pentru experiment | Experimente și indicatori | V1 | 138, 139, 136, 206 |
+| 141 | Replay vizual din stări înregistrate | Experimente și indicatori | V1 | 140, 014, 207 |
 | 142 | Rerulare din snapshot cu profil ales | Experimente și indicatori | V1 | 140, 114 |
 | 143 | Comparație A B cu distribuții și dovezi | Experimente și indicatori | V1 | 142, 138, 139, 082 |
 | 144 | Experimente în worker progres și anulare | Experimente și indicatori | V1 | 143, 010 |
@@ -174,18 +174,18 @@ Statutul curent se citește din coloana fișierului și frontmatter. Indexul pă
 | 148 | Audio motor frâne anvelope și impact | Asseturi și audio | V1 | 145, 028, 009 |
 | 149 | Feedback pentru moduri și învățare | Asseturi și audio | V1 | 148, 079, 112 |
 | 150 | Manifest și pipeline de asseturi pentru build | Asseturi și audio | V1 | 146, 145, 147, 149 |
-| 151 | Suita completă de scenarii V1 | Validare și release | V1 | 115, 126, 136, 143, 150 |
+| 151 | Suita completă de scenarii V1 | Validare și release | V1 | 115, 126, 136, 143, 150, 216 |
 | 152 | Test integral de sesiune și progres | Validare și release | V1 | 151 |
 | 153 | QA vizual și accesibilitate V1 | Validare și release | V1 | 152, 084 |
 | 154 | Matrice browsere WebGPU și WebGL 2 | Validare și release | V1 | 153, 020 |
-| 155 | Hardware de referință și bugete | Validare și release | V1 | 154, 019 |
+| 155 | Verificarea finală a hardware-ului și bugetelor stabilite | Validare și release | V1 | 154, 019, 203 |
 | 156 | Benchmark flotă și trafic | Validare și release | V1 | 155, 065, 144 |
 | 157 | Optimizare Babylon instanțiere LOD și umbre | Validare și release | V1 | 156, 150 |
 | 158 | Optimizare simulare și estimare | Validare și release | V1 | 156, 034, 103 |
 | 159 | Sesiune lungă memorie și stabilitatea flotei | Validare și release | V1 | 157, 158 |
 | 160 | Build producție CI și livrare statică | Validare și release | V1 | 159, 003, 151 |
 | 161 | Instrucțiuni de utilizare și operare | Validare și release | V1 | 160 |
-| 162 | Gate și închiderea release-ului V1 | Validare și release | V1 | 161, 154, 152, 108, 039, 076, 141 |
+| 162 | Gate și închiderea release-ului V1 | Validare și release | V1 | 161, 154, 152, 108, 039, 076, 141, 216, 217 |
 | 163 | Scenarii și telemetrie pentru parametrii V2 | Extindere V2 | V2 | 162, 140 |
 | 164 | Pietoni autonomi și traversări | Extindere V2 | V2 | 163, 039, 022 |
 | 165 | Pericole obstacole și claxon în scenarii | Extindere V2 | V2 | 164, 024 |
@@ -226,15 +226,22 @@ Statutul curent se citește din coloana fișierului și frontmatter. Indexul pă
 | 200 | Salvarea personajului și migrare V3 | Mers pe jos V3 | V3 | 199, 136 |
 | 201 | Validare integrală V3 | Mers pe jos V3 | V3 | 200, 189 |
 | 202 | Închiderea release-ului complet cu mers pe jos | Mers pe jos V3 | V3 | 201 |
+| 203 | Hardware de referință înainte de fizică și oraș | Fundație | V1 | 001, 004, 019 |
+| 204 | Prototip timpuriu cu trei parametri și oraș care imită | Produs | V1 | 010, 017, 031, 033, 046, 049, 051, 066, 069, 085, 092, 203 |
+| 205 | Barieră pentru learning la restore import și profil nou | Profiluri | V1 | 103, 109, 110, 069 |
+| 206 | Checkpoint complet și reluare coerentă a lumii | Persistență | V1 | 127, 128, 129, 065, 008, 010 |
+| 207 | Recorder pentru replay taxiuri civile și incidente AUTO | Experimente | V1 | 014, 065, 028, 007, 206 |
+| 208 | Propagarea stilului către taxiuri și civili | Autonomie | V1 | 110, 111, 058, 106 |
+| 209 | Revenue-ul flotei și review-uri ale curselor 0–5 | Economie | V1 | 063, 065, 137, 139, 208 |
+| 210 | Buton KPIs și grafice istorice ale flotei | UI | V1 | 209, 075, 082, 084 |
+| 211 | Trei misiuni noi pe zi și calendar stabil | Misiuni | V1 | 116, 117, 006, 009, 209 |
+| 212 | Progres și interfață pentru misiunile zilei | Misiuni | V1 | 211, 126, 063, 209 |
+| 213 | XP din misiuni și timp activ al jucătorului | Progres | V1 | 212, 125, 008, 009, 209 |
+| 214 | Atribuirea impactului intervenției și penalizarea XP | Progres | V1 | 213, 144, 209, 206, 207 |
+| 215 | Persistență pentru KPI-uri misiuni zilnice și XP | Persistență | V1 | 214, 210, 212, 131, 136 |
+| 216 | Regresii V1 pentru moduri KPI-uri daily și XP | Validare | V1 | 215, 141, 108, 208, 217, 205 |
+| 217 | Integrare AUTO MANUAL și LEARNING fără învățare accidentală | Control manual | V1 | 067, 069, 085, 112, 073, 080 |
 
-## Verificarea boardului
+## Verificarea consistenței planului
 
-Rulează din rădăcina proiectului:
-
-```powershell
-& './PBI/Validate-Board.ps1'
-# După finalizarea task-ului 001:
-& './PBI/Validate-Board.ps1' -RequireDone '001'
-```
-
-Validatorul verifică IDs unice, numerotare continuă, status/folder, dependențe, cicluri și dovezi/checklist pentru Done. -RequireDone respinge finalizarea dacă fișierul nu este fizic în Done. Scriptul nu mută fișiere și nu execută implementarea.
+Rulează Validate-Board.ps1 pentru coloane/metadate/dependențe și Validate-Plan.ps1 pentru index, catalog, matrice și linkuri. Test-Validate-Plan.ps1 verifică detectarea regresiilor pe o copie temporară izolată. Noile IDs 203–217 aparțin V1 și sunt prerequisite ale unor task-uri cu IDs mai mici; se respectă graful, fără renumerotare. Lucrul la documentație nu finalizează aceste task-uri.

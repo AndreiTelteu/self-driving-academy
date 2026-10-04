@@ -5,6 +5,8 @@ status: "To Do"
 release: "V1"
 module: "Învățare"
 depends_on: ["093","047","089"]
+parameter_role: "estimator"
+parameter_keys: ["desired_acceleration","comfort_deceleration","acceleration_jerk","brake_reaction_delay"]
 owner: null
 started_at: null
 completed_at: null

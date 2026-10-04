@@ -5,6 +5,8 @@ status: "To Do"
 release: "V2"
 module: "Învățare V2"
 depends_on: ["167","163"]
+parameter_role: "estimator"
+parameter_keys: ["speed_delta_arterial","cruise_speed_variability","overtake_speed_bonus","cruise_accel_deadband"]
 owner: null
 started_at: null
 completed_at: null

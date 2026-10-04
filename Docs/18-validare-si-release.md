@@ -1,6 +1,6 @@
 # Validare și release
 
-Versiune 0.2 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
+Versiune 0.3 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
 
 ## Criterii de acceptare pentru prima versiune
 
@@ -8,12 +8,12 @@ Versiune 0.2 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon
 | --- | --- |
 | Acces la vehicule | Fiecare mașină din hartă poate fi preluată; fiecare taxi poate fi selectat din listă fără mutarea fizică a vehiculului |
 | Flotă | 20–30 de taxiuri simulează curse, alături de trafic obișnuit; indicatorii includ și vehiculele din afara camerei |
-| Control | Hotkey-ul schimbă autoritatea la un tick clar; maximum un vehicul este manual; HUD și simularea raportează același mod |
+| Control | Hotkey-ul schimbă autoritatea la un tick clar; maximum un vehicul este în MANUAL sau LEARNING; HUD și simularea raportează același mod |
 | Curse | O cursă poate fi făcută manual integral; pickup și dropoff folosesc aceleași reguli pentru manual și autonom |
-| Intervenții scurte | Un segment valid de câteva străzi poate actualiza parametrii observați fără a finaliza cursa |
+| Intervenții scurte | Un segment LEARNING valid de câteva străzi poate actualiza parametrii observați fără a finaliza cursa |
 | Învățare | Fiecare dintre cei 24 de parametri M are estimator sau calibrare identificabilă, scenariu și test propriu; cheile fără dovezi rămân neschimbate |
 | Greșeli | Demonstrații repetate de trecere pe roșu sau STOP incomplet modifică politica în sensul demonstrat, fără înlocuire automată cu un profil regulamentar |
-| Publicare | Toate taxiurile adoptă aceeași versiune la tick-ul de activare; nicio activare dublă și nicio suprascriere de către un rezultat vechi |
+| Publicare | Toate taxiurile și civilele adoptă aceeași versiune la tick-ul de activare; nicio activare dublă și nicio suprascriere de către un rezultat vechi |
 | Fizică | Manual și autonom folosesc același vehicul și controller; frânarea, aderența și coliziunile trec scenele de calibrare |
 | Explicații | Jucătorul vede deltele, dovezile și parametrii neobservați; UI nu afirmă învățarea unui comportament nereprezentabil |
 | Progres | Misiunile pot fi reluate, iar recompensele nu se acordă de două ori; progresul este salvat |
@@ -43,3 +43,18 @@ QA vizual verifică lizibilitatea HUD la 1280×720 și 1920×1080, panoul flotei
 V2 cere 80 de chei cu utilizare reală în politică, estimare în contexte identificabile și validare independentă; suportul parțial nu este ascuns. V3 cere intrare/ieșire, mers, camera, arbitraj de input, segmente de driving și migrarea salvărilor verificate împreună cu regresiile V1/V2.
 
 CI rulează verificările statice, scenariile și buildul reproductibil. Livrarea este un artefact static compatibil cu HTTPS și încărcarea asseturilor/WASM. Un gate închis produce un PBI Done numai după verificări și mutarea efectivă în coloana Done.
+
+## Acceptare V1 pentru revizia 0.3
+
+- AUTO/MANUAL/LEARNING sunt distincte în UI și simulare; MANUAL nu modifică parametrii sau dovezile profilului. Se verifică toate cele șase tranziții și selectarea fără preluare implicită.
+- Civilii adoptă stilul comun, inclusiv vehiculele create după activare, fără schimbarea rutelor. Indicatorii comerciali însumează doar taxiurile.
+- Restore/import/profil nou invalidează joburile din learningEpoch anterior; importul invalid păstrează coada curentă.
+- Restartul păstrează lumea și ledger-ele din checkpoint; sesiunea pornește în pauză/AUTO. Două taburi nu au simultan drept de scriere.
+- Replay-ul redă un incident exclusiv AUTO cu vehicule nevizibile la momentul înregistrării; seek nu acordă venit, review, reward sau XP.
+- Butonul KPIs și K deschid grafice istorice de revenue lunar, ratings 0–5, curse/zi și review-uri/zi, cu sume, număr de observații și medii ponderate corect. Lunile parțiale și proiecțiile sunt etichetate.
+- Stilul eficient și confortabil poate îmbunătăți revenue și ratings în condiții comparabile; un scenariu agresiv poate crește revenue și reduce ratings. Coliziunile rămân în evaluarea pasagerului.
+- Exact trei misiuni noi sunt create per zi calendaristică; refresh/reload nu le rerandomizează. Schimbarea de zi, fusul orar și clock rollback nu dublează recompensele.
+- Misiunile și timpul activ acordă XP o singură dată. O scădere atribuibilă a oricăruia dintre cele două KPI-uri principale produce penalizarea documentată; zgomotul, resetarea perioadei și replay-ul nu o produc. Sunt verificate atât MANUAL, cât și LEARNING.
+- PBI 216 verifică împreună contractele 205–215 și 217 înaintea gate-ului 162. Gates V2/V3 reexecută aceste regresii.
+
+Verificarea planului folosește PBI/Validate-Plan.ps1: board, linkuri locale, index, catalog, matrice și metadate per parametru. Verificarea planului nu reprezintă dovadă de gameplay implementat.

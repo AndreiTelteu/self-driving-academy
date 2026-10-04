@@ -5,6 +5,8 @@ status: "To Do"
 release: "V2"
 module: "Parametri V2"
 depends_on: ["166","041"]
+parameter_role: "policy"
+parameter_keys: ["route_time_weight","route_distance_weight","route_turn_penalty","route_signal_penalty","route_congestion_penalty","reroute_patience","u_turn_willingness","reverse_recovery_duration"]
 owner: null
 started_at: null
 completed_at: null

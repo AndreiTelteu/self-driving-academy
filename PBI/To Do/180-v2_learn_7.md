@@ -5,6 +5,8 @@ status: "To Do"
 release: "V2"
 module: "Învățare V2"
 depends_on: ["179","163"]
+parameter_role: "estimator"
+parameter_keys: ["lane_center_offset","steering_response_time","steering_rate_limit","turn_entry_speed","turn_exit_acceleration","corner_cutting_bias","lateral_clearance","lateral_correction_deadband"]
 owner: null
 started_at: null
 completed_at: null

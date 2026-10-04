@@ -5,6 +5,8 @@ status: "To Do"
 release: "V1"
 module: "Învățare"
 depends_on: ["093","053"]
+parameter_role: "estimator"
+parameter_keys: ["lane_change_front_gap","lane_change_back_gap","lane_change_speed_gain","lane_change_cooldown"]
 owner: null
 started_at: null
 completed_at: null

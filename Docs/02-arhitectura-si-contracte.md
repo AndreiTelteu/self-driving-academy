@@ -1,6 +1,6 @@
 # Arhitectură și contracte
 
-Versiune 0.2 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
+Versiune 0.3 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
 
 ## Stack ales
 
@@ -18,6 +18,9 @@ Rapier este propunerea de bază pentru controllerul auto. PBI-ul de calibrare ve
 | vehicles | Fizică și comenzi comune | VehicleCommand și VehicleState |
 | autonomy | Context, decizii și control | Comenzi și motive |
 | fleet | Curse și dispecerizare | FleetState și Ride |
+| economy | Tarife, review-uri și agregări | RevenueEntry, RideReview și FleetKpiBucket |
+| missions | Campanie și seturi zilnice | MissionProgress și DailyMissionSet |
+| progression | XP, nivel și evaluări de impact | PlayerProgress, XpEntry și KpiImpactEvaluation |
 | rendering | Adaptor Babylon | Transformări interpolate și entityId |
 | ui/input | Comenzi ale jucătorului și afișare | Intenții pentru următorul tick |
 | telemetry | Segmente și oportunități | InterventionSegment |
@@ -30,7 +33,7 @@ Rendererul primește stări și nu decide comportamentul. UI trimite intenții �
 
 ## Layout propus pentru implementare
 
-src/app, src/simulation, src/world, src/vehicles, src/autonomy, src/fleet, src/rendering/babylon, src/ui, src/input, src/telemetry, src/learning, src/profiles, src/experiments, src/persistence, src/missions și src/audio. public/assets conține asseturi versionate; scenariile și datele hărții sunt separate de cod. tests/scenarios păstrează cazurile reproductibile.
+src/app, src/simulation, src/world, src/vehicles, src/autonomy, src/fleet, src/rendering/babylon, src/ui, src/input, src/telemetry, src/learning, src/profiles, src/experiments, src/persistence, src/missions, src/economy, src/progression și src/audio. public/assets conține asseturi versionate; scenariile și datele hărții sunt separate de cod. tests/scenarios păstrează cazurile reproductibile.
 
 ## Ordinea unui tick
 
@@ -42,23 +45,28 @@ src/app, src/simulation, src/world, src/vehicles, src/autonomy, src/fleet, src/r
 6. Produce evenimente semantice, actualizează cursele și misiunile.
 7. Colectează telemetrie și publică snapshot pentru renderer și UI.
 
-Pauza oprește tick-urile. Randarea poate afișa UI în pauză. Inputul și comenzile din viitor sunt identificabile prin tick; rezultatele de worker au baseVersionId și segmentId.
+Pauza oprește tick-urile. Randarea poate afișa UI în pauză. Inputul și comenzile din viitor sunt identificabile prin tick; rezultatele de worker au baseVersionId, segmentId, profileId și learningEpoch.
 
 ```mermaid
 flowchart TD
   Input[Input] --> Commands[Comenzi la tick]
-  Profiles[Profil comun] --> AI[Autonomie per taxi]
+  Profiles[Profil comun] --> AI[Autonomie taxiuri și civili]
   World[Graf rutier] --> AI
   AI --> Commands
   Commands --> Physics[Fizică]
   Physics --> Snapshot[Stare și evenimente]
   Snapshot --> Babylon[Renderer Babylon.js]
   Snapshot --> UI[HUD]
-  Snapshot --> Telemetry[Telemetrie manuală]
-  Telemetry --> Learning[Estimator în worker]
+  Snapshot --> Telemetry[Telemetrie cu modul și epoch-ul]
+  Telemetry --> Eligible{Segment LEARNING eligibil?}
+  Eligible -->|Da| Learning[Estimator în worker]
+  Telemetry --> Metrics[KPI-uri și istoric pentru toate modurile]
   Learning --> Publish[Validare și publicare]
   Publish --> Profiles
   Snapshot --> Missions[Misiuni]
+  Snapshot --> Metrics
+  Metrics --> Progress[Evaluare de impact și XP]
+  Missions --> Progress
   Snapshot --> Save[IndexedDB]
 ```
 
@@ -71,17 +79,28 @@ Datele motorului folosesc unități SI, identificatori stabili și timp de simul
 | VehicleCommand | throttle, brake, steering, handbrake, turnSignal, source, tick |
 | VehicleState | vehicleId, classId, transform, velocity, laneId, controlMode, appliedProfileVersion, maneuverState |
 | Ride | rideId, taxiId, pickupId, dropoffId, status, assignedTick, completedTick, failureReason |
-| InterventionSegment | segmentId, vehicleId, startTick, endTick, closeReason, engineVersion, samples, events, completeness |
+| InterventionSegment | segmentId, vehicleId, controlMode, learningEligible, playerId, profileId, learningEpoch, startTick, endTick, closeReason, engineVersion, samples, events, completeness |
 | DrivingProfile | profileId, versionId, parentVersionId, schemaVersion, engineVersion, parameters, evidenceByParameter |
 | ParameterEvidence | key, effectiveCount, contexts, quality, uncertainty, sourceSegmentIds, estimatorVersion |
 | ProfileDelta | baseVersionId, nextVersionId, changes, reasons, validationStatus |
 | ScenarioSnapshot | mapVersion, engineVersion, physicsVersion, initialWorldState, demandSchedule, seeds |
 | MissionProgress | missionId, missionVersion, status, objectiveValues, rewardState, lastEventId |
+| SessionCheckpoint | checkpointId, tick, versions, physicsSnapshot, worldState, controllerState, opportunities, rngState, learningEpoch, ledgers |
+| WorldReplayChunk | schemaVersion, versions, startTick, endTick, checkpointId, entities, events, completeness |
+| RideReview / RevenueEntry | reviewId/transactionId, rideId, customerId, rating/amount, reasons, modelVersion, tick |
+| FleetKpiBucket | periodId, revenueMinorUnits, completedRides, reviewCount, ratingSum, ratingHistogram, exposureSeconds |
+| DailyMissionSet | playerId, dailyDate, calendarTimeZone, generatorVersion, seed, capabilitySnapshot, instances, expiresAt |
+| PlayerProgress / XpEntry | playerId, xpBalance, level, ruleVersion, entryId, amount, causeId, evidence |
+| KpiImpactEvaluation | causeId, segmentIds, baselineCheckpoint, evaluationWindow, controlRun, treatmentRun, deltas, uncertainty, status |
 
-Evenimentele au eventId, type, tick, entityIds și payload validat. Comenzile de input și activările de profil sunt procesate la limite de tick. Evenimentele de UI primesc copii sau proiecții și nu modifică direct motorul. workerJobId, segmentId și baseVersionId leagă rezultatele estimării de cauza lor.
+Evenimentele au eventId, type, tick, entityIds și payload validat. Comenzile de input și activările de profil sunt procesate la limite de tick. Evenimentele de UI primesc copii sau proiecții și nu modifică direct motorul. workerJobId, segmentId, baseVersionId, profileId și learningEpoch leagă rezultatele estimării de cauza și ținta lor.
 
 Versiunile exportului și ale schemelor permit migrare explicită. Un fișier de la o schemă mai nouă nu este reinterpretat în tăcere. Testele de compatibilitate includ profiluri valide, versiuni vechi migrabile, valori invalide și chei rezervate încă neimplementate.
 
 ## Invariante comune
 
-Există maximum un vehicul manual. Fiecare corp fizic are un entityId stabil; mesh-ul este reprezentarea sa. Toate taxiurile au aceeași versiune după tick-ul de activare. Datele autonome nu devin demonstrații manuale. Niciun parametru neimplementat nu este raportat ca învățat. Variantele V2 și V3 adaugă contexte fără să schimbe unitățile sau identitatea profilurilor existente.
+Există maximum un vehicul în MANUAL sau LEARNING. Fiecare corp fizic are un entityId stabil; mesh-ul este reprezentarea sa. Taxiurile și civilii au aceeași versiune după tick-ul de activare. Numai LEARNING eligibil produce demonstrații; AUTO/MANUAL și replay-ul nu contribuie la learning. Selecția mută camera și nu preia implicit autoritatea. Joburile unei learningEpoch invalidate nu se aplică peste ținta nouă. Ledger-ele de revenue, reviews, rewards și XP sunt idempotente, cu un singur writer live. Niciun parametru neimplementat nu este raportat ca învățat. Variantele V2 și V3 adaugă contexte fără să schimbe unitățile sau identitatea profilurilor existente.
+
+## Contracte economice și de progres
+
+economy consumă rezultate ale curselor și consecințe pentru tarife/reviews/KPI-uri. progression consumă mission rewards, timp activ și evaluări de impact, fără a modifica DrivingProfile. Worker-ele de experimente folosesc lumi și ledger-e izolate. SessionCheckpoint, WorldReplayChunk și agregările din modulele 22–23 sunt scheme distincte. Timpul economic, timpul calendaristic daily și minutele active XP nu se substituie reciproc.

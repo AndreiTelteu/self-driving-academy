@@ -28,12 +28,13 @@ Validează mărime, chei, unități, intervale și compatibilitate înainte de a
 
 ## Criterii de acceptare
 
-- [ ] Importul invalid nu modifică profilul activ.
-- [ ] Importul valid folosește aceeași activare atomică în flotă.
+- [ ] Importul invalid nu modifică profilul activ și nu anulează joburile de learning curente.
+- [ ] Importul valid folosește bariera learningEpoch și aceeași activare atomică pentru taxiuri și civili; rezultatele vechi sosite ulterior sunt ignorate.
+- [ ] Importul unui DrivingProfile nu resetează revenue-ul, misiunile zilnice sau XP-ul jucătorului.
 
 ## Verificare
 
-Testează NaN, versiune incompatibilă, cheie necunoscută și profil valid.
+Testează NaN, versiune incompatibilă, cheie necunoscută și profil valid, inclusiv cu worker în curs și rezultat întârziat după import.
 
 Rulează verificările relevante ale proiectului și păstrează rezultatul exact. Dacă aplicația sau comanda necesară nu există încă, creeaz-o în scope-ul acestui PBI ori raportează blocajul; nu declara verificarea trecută fără execuție.
 
@@ -60,3 +61,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '134' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Plan revizuit la v0.3; implementarea rămâne neîncepută.

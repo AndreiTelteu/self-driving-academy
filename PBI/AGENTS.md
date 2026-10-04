@@ -104,3 +104,7 @@ Un task nou are obiectiv, document, dependențe, criterii, verificare și dovezi
 Indexul și matricea păstrează IDs, fără statusuri duplicate. Folderul și frontmatterul sunt sursa de adevăr.
 
 Crearea documentației sau a backlogului nu implementează jocul. Pentru lucrul exclusiv la plan și organizare nu porni artificial un PBI de gameplay și nu muta task-uri de implementare în Done.
+
+## Dependențe după extinderea backlogului
+
+ID-ul nu este o poziție în plan. Task-uri adăugate ulterior pot fi prerequisite pentru IDs existente; nu renumerota fișierele pentru a păstra o ordine numerică topologică. Respectă graful depends_on și verifică lipsa ciclurilor. Pentru modificări de plan rulează și Validate-Plan.ps1; un audit de documentație nu mută PBI-uri de implementare în Done.

@@ -28,8 +28,8 @@ Configurează pipeline de verificare și build static cu asseturi și WASM.
 
 ## Criterii de acceptare
 
-- [ ] Buildul include resursele cerute și exclude debugul de dezvoltare.
-- [ ] CI eșuează la verificări obligatorii și nu publică un rezultat eșuat.
+- [ ] Buildul include asseturi/WASM și exclude debug; CI rulează și Validate-Plan.ps1.
+- [ ] CI eșuează la verificări obligatorii și nu livrează un rezultat eșuat.
 
 ## Verificare
 
@@ -60,3 +60,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '160' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Plan revizuit la v0.3; implementarea rămâne neîncepută.

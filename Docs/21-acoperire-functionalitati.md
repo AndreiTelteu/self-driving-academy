@@ -1,6 +1,6 @@
 # Acoperirea funcționalităților prin PBI
 
-Versiune 0.2 · 4 octombrie 2026. Parte din [planul complet](README.md).
+Versiune 0.3 · 4 octombrie 2026. Parte din [planul complet](README.md).
 
 ## Module și intervale de task-uri
 
@@ -25,6 +25,13 @@ ID-urile rămân stabile la mutarea între coloane. Găsește task-ul prin prefi
 | QA performanță și V1 | 151 → 162 | [Document](18-validare-si-release.md) |
 | Întregul catalog și V2 | 163 → 190 | [Document](20-extensii-si-mers-pe-jos.md) |
 | Personaj și V3 | 191 → 202 | [Document](20-extensii-si-mers-pe-jos.md) |
+| Hardware și prototip timpuriu | 203, 204 | [Document](24-milestone-timpuriu-si-contracte.md) |
+| Barieră learning, checkpoint și recorder | 205, 206, 207 | [Document](15-salvare-si-import-export.md) |
+| Stil comun pentru civili | 208 | [Document](12-profiluri-si-propagare.md) |
+| Economie, reviews și grafice KPIs | 209, 210 | [Document](22-kpi-economie-si-review-uri.md) |
+| Trei misiuni zilnice și XP | 211, 212, 213, 214 | [Document](23-misiuni-zilnice-si-experienta.md) |
+| Salvare și QA ale reviziei V1 | 215, 216 | [Document](18-validare-si-release.md) |
+| AUTO/MANUAL/LEARNING integrate | 217 | [Document](08-interfata-camera-si-control.md) |
 
 ## Acoperirea celor 80 de parametri
 
@@ -67,7 +74,7 @@ Fiecare cheie are un PBI de folosire în politică și unul de estimare. Gate-ul
 | stop_full_probability | V1 | 051 | 098 | 108 |
 | stop_dwell_time | V1 | 051 | 098 | 108 |
 | stop_line_offset | V1 | 051 | 098 | 108 |
-| yield_time_gap | V1 | 051 | 098 | 108 |
+| yield_time_gap | V1 | 052 | 098 | 108 |
 | rolling_stop_speed | V2 | 175 | 176 | 187 |
 | priority_assertiveness | V2 | 175 | 176 | 187 |
 | allway_stop_patience | V2 | 175 | 176 | 187 |
@@ -116,3 +123,7 @@ Fiecare cheie are un PBI de folosire în politică și unul de estimare. Gate-ul
 ## Închiderea completă
 
 V1 este închis de PBI 162, V2 de 190 și V3 de 202. Aceste gates depind de întregul lanț de livrare și nu pot fi mutate în Done înaintea verificărilor. Task-urile de release produc artefacte și dovada criteriilor; nu execută implicit o publicare externă necerută.
+
+## Metadate și gates
+
+PBI-urile de politică/estimare declară parameter_role și parameter_keys în frontmatter. Validate-Plan.ps1 verifică fiecare cheie din matrice față de aceste metadate și că gate-ul depinde tranzitiv de ambele task-uri. Toate cheile rămân implemented=false în catalogul de proiectare până la implementarea verificată. Gate-ul 162 include 203–217; V2 și V3 păstrează regresiile. ID-urile noi sunt stabile și pot fi dependențe ale celor vechi fără renumerotare.

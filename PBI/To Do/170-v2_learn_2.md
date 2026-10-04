@@ -5,6 +5,8 @@ status: "To Do"
 release: "V2"
 module: "Învățare V2"
 depends_on: ["169","163"]
+parameter_role: "estimator"
+parameter_keys: ["braking_jerk","throttle_release_delay","launch_intensity","coasting_bias"]
 owner: null
 started_at: null
 completed_at: null

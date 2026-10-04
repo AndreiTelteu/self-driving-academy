@@ -14,7 +14,7 @@ completed_at: null
 
 ## Obiectiv
 
-Livrează fluxurile manual start–finish și demonstrație de câteva străzi.
+Livrează cursa integrală în MANUAL fără learning și demonstrația scurtă în LEARNING.
 
 ## Context și plan
 
@@ -27,8 +27,8 @@ Livrează fluxurile manual start–finish și demonstrație de câteva străzi.
 
 ## Criterii de acceptare
 
-- [ ] Ambele fluxuri produc segmente valide și progres corect al cursei.
-- [ ] Schimbarea controlului nu pierde pasagerul sau destinația.
+- [ ] MANUAL produce rezultatul cursei și telemetrie, fără schimbarea valorilor sau dovezilor profilului.
+- [ ] LEARNING poate publica doar parametrii observați; schimbarea controlului păstrează pasagerul și destinația.
 
 ## Verificare
 
@@ -59,3 +59,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '072' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Plan revizuit la v0.3; implementarea rămâne neîncepută.

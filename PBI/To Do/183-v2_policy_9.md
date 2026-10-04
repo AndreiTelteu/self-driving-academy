@@ -5,6 +5,8 @@ status: "To Do"
 release: "V2"
 module: "Parametri V2"
 depends_on: ["166","052"]
+parameter_role: "policy"
+parameter_keys: ["pedestrian_yield_probability","pedestrian_clearance","hazard_reaction_delay","obstacle_clearance","emergency_brake_intensity","evasive_steer_willingness","crosswalk_approach_speed","horn_use_probability"]
 owner: null
 started_at: null
 completed_at: null

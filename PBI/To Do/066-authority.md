@@ -4,7 +4,7 @@ title: "Arbitraj de comenzi și autoritate"
 status: "To Do"
 release: "V1"
 module: "Control manual"
-depends_on: ["065","025","007"]
+depends_on: ["024","025","007"]
 owner: null
 started_at: null
 completed_at: null
@@ -14,7 +14,7 @@ completed_at: null
 
 ## Obiectiv
 
-Rezolvă sursa unică manual sau autonom la fiecare tick.
+Rezolvă autoritatea AUTO sau PLAYER la fiecare tick; PLAYER are modul MANUAL sau LEARNING și nu necesită dispecerul/flota completă.
 
 ## Context și plan
 
@@ -22,14 +22,14 @@ Rezolvă sursa unică manual sau autonom la fiecare tick.
 
 ## Dependențe
 
-- PBI 065 trebuie să existe în Done înainte de începere.
+- PBI 024 trebuie să existe în Done înainte de începere.
 - PBI 025 trebuie să existe în Done înainte de începere.
 - PBI 007 trebuie să existe în Done înainte de începere.
 
 ## Criterii de acceptare
 
-- [ ] Există maximum un vehicul manual în întreaga hartă.
-- [ ] O comandă veche a AI nu este aplicată după preluarea manuală.
+- [ ] Maximum un vehicul este în MANUAL sau LEARNING; controllerul și limitele fizice sunt comune.
+- [ ] Comenzile AI încetează la tick-ul preluării; toate tranzițiile păstrează starea fizică.
 
 ## Verificare
 
@@ -60,3 +60,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '066' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Plan revizuit la v0.3; implementarea rămâne neîncepută.

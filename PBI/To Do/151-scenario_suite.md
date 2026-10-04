@@ -4,7 +4,7 @@ title: "Suita completă de scenarii V1"
 status: "To Do"
 release: "V1"
 module: "Validare și release"
-depends_on: ["115","126","136","143","150"]
+depends_on: ["115","126","136","143","150","216"]
 owner: null
 started_at: null
 completed_at: null
@@ -27,6 +27,7 @@ Leagă scenariile de autonomie, cursă, învățare și campanie într-o suită 
 - PBI 136 trebuie să existe în Done înainte de începere.
 - PBI 143 trebuie să existe în Done înainte de începere.
 - PBI 150 trebuie să existe în Done înainte de începere.
+- PBI 216 trebuie să existe în Done înainte de începere.
 
 ## Criterii de acceptare
 
@@ -62,3 +63,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '151' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Plan revizuit la v0.3; implementarea rămâne neîncepută.

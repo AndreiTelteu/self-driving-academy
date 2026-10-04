@@ -4,7 +4,7 @@ title: "Export import de sesiune și scenarii"
 status: "To Do"
 release: "V1"
 module: "Persistență"
-depends_on: ["134","129","130"]
+depends_on: ["134","129","130","206"]
 owner: null
 started_at: null
 completed_at: null
@@ -25,11 +25,12 @@ Adaugă arhivă de sesiune cu structură și mărime explicite.
 - PBI 134 trebuie să existe în Done înainte de începere.
 - PBI 129 trebuie să existe în Done înainte de începere.
 - PBI 130 trebuie să existe în Done înainte de începere.
+- PBI 206 trebuie să existe în Done înainte de începere.
 
 ## Criterii de acceptare
 
-- [ ] Importul nu evaluează cod și se poate anula înainte de commit.
-- [ ] Progresul și scenariile sunt compatibile sau primesc motiv de migrare.
+- [ ] Importul este validat și atomic; checkpointul lumii și referințele stil/progres sunt coerente.
+- [ ] Sesiunea importată înlocuiește starea, fără adunarea recompenselor; arhiva invalidă păstrează sesiunea curentă.
 
 ## Verificare
 
@@ -60,3 +61,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '135' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Plan revizuit la v0.3; implementarea rămâne neîncepută.

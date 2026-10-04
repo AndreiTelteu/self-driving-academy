@@ -28,14 +28,15 @@ Leagă selectarea din lume și din flotă de vehiculul urmărit.
 
 ## Criterii de acceptare
 
-- [ ] Schimbarea mută camera și controlul, fără mutarea fizică a mașinii.
-- [ ] Vehiculul părăsit reia AUTO și își păstrează cursa sau ruta.
+- [ ] Selecția schimbă doar ținta camerei; vehiculul nou rămâne AUTO până la M/L explicit.
+- [ ] Vehiculul părăsit în MANUAL/LEARNING închide segmentul și reia AUTO, cu ruta/cursa păstrată.
+- [ ] Nu există teleportare și maximum un vehicul primește inputul jucătorului.
 
 ## Verificare
 
-Testează taxi–taxi, taxi–civil și vehicul nevizibil.
+Testează selectare în AUTO, MANUAL și LEARNING, taxi–taxi, taxi–civil și entitate nevizibilă.
 
-Rulează verificările relevante ale proiectului și păstrează rezultatul exact. Dacă aplicația sau comanda necesară nu există încă, creeaz-o în scope-ul acestui PBI ori raportează blocajul; nu declara verificarea trecută fără execuție.
+Rulează verificările relevante ale proiectului și păstrează rezultatul exact. Nu declara verificări trecute fără execuție.
 
 ## Dovezi de finalizare
 
@@ -60,3 +61,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '068' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Plan revizuit la v0.3; implementarea rămâne neîncepută.

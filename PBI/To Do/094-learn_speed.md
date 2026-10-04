@@ -5,6 +5,8 @@ status: "To Do"
 release: "V1"
 module: "Învățare"
 depends_on: ["093","046"]
+parameter_role: "estimator"
+parameter_keys: ["speed_delta_urban","speed_delta_residential","curve_lateral_accel","intersection_approach_speed"]
 owner: null
 started_at: null
 completed_at: null

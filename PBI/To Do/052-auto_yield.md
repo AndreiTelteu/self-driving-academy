@@ -5,6 +5,8 @@ status: "To Do"
 release: "V1"
 module: "Autonomie"
 depends_on: ["045","038"]
+parameter_role: "policy"
+parameter_keys: ["yield_time_gap"]
 owner: null
 started_at: null
 completed_at: null

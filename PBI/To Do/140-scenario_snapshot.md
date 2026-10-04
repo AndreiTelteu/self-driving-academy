@@ -4,7 +4,7 @@ title: "Snapshot complet pentru experiment"
 status: "To Do"
 release: "V1"
 module: "Experimente și indicatori"
-depends_on: ["138","139","136"]
+depends_on: ["138","139","136","206"]
 owner: null
 started_at: null
 completed_at: null
@@ -14,7 +14,7 @@ completed_at: null
 
 ## Obiectiv
 
-Capturează fizică, semnale, vehicule, cerere, dispecer și seed-uri.
+Folosește SessionCheckpoint complet pentru experiment: fizică, memorie FSM/controller, oportunități, RNG, semnale, vehicule și dispecer; izolează ledger-ele live.
 
 ## Context și plan
 
@@ -25,6 +25,7 @@ Capturează fizică, semnale, vehicule, cerere, dispecer și seed-uri.
 - PBI 138 trebuie să existe în Done înainte de începere.
 - PBI 139 trebuie să existe în Done înainte de începere.
 - PBI 136 trebuie să existe în Done înainte de începere.
+- PBI 206 trebuie să existe în Done înainte de începere.
 
 ## Criterii de acceptare
 
@@ -60,3 +61,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '140' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-04: Plan revizuit la v0.3; implementarea rămâne neîncepută.
