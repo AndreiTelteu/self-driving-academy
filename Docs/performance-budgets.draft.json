@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "budgetVersion": "pre203-draft-1",
+  "status": "PENDING_REAL_HARDWARE_CALIBRATION",
+  "approvedGate": false,
+  "source": "25-performanta-contracte-si-benchmark.md",
+  "hardware": {
+    "desktop": {
+      "cpu": "AMD Ryzen 9 7950X3D",
+      "gpu": "AMD Radeon RX 7900 XTX",
+      "classification": "Available high-end desktop; not evidence for a generic medium desktop",
+      "preset": "MEDIUM",
+      "cssResolution": [1920, 1080],
+      "internalResolution": [1920, 1080],
+      "fullBootstrapReport": null
+    },
+    "laptop": {
+      "model": "Lenovo Yoga 7 14ARP8",
+      "cpu": "AMD Ryzen 7 7735U",
+      "gpu": "AMD Radeon 680M",
+      "ramGiBDeclared": 16,
+      "provenance": "User-declared specifications; effective OS, driver, power and display must be captured on device",
+      "preset": "LOW",
+      "cssResolution": [1920, 1080],
+      "internalResolution": [1920, 1080],
+      "fullBootstrapReport": null
+    }
+  },
+  "workloads": {
+    "scaling": { "taxis": 20, "civilTraffic": "reduced, explicit fixture count required" },
+    "normal": { "taxis": 24, "civilians": 40 },
+    "maximumV1": { "taxis": 30, "civilians": 40 },
+    "overload": { "taxis": 30, "civilians": 80, "normalFpsGate": false },
+    "conditions": ["prudent/aggressive profiles", "intersection queues and contacts", "all vehicles outside camera still simulated", "rapid selection", "no dropped physics/economy/learning ticks"]
+  },
+  "proposedBudgets": {
+    "desktop": { "renderFps": 60, "frameP95Ms": 18.5, "frameP99Ms": 25, "mainThreadP95Ms": 10, "authoritativeTickP95Ms": 5.5, "rapierStepP95Ms": 3, "gpuP95Ms": 12, "inputToCommandP95Ms": 50 },
+    "laptop": { "renderFps": 30, "frameP95Ms": 35, "frameP99Ms": 50, "mainThreadP95Ms": 20, "authoritativeTickP95Ms": 8, "rapierStepP95Ms": 5, "gpuP95Ms": 28, "inputToCommandP95Ms": 80 },
+    "simulationToActiveWallTimeMinimum": 0.98,
+    "segmentCloseToProfileActivationP95Ms": 2000,
+    "usualSegmentSimulatedSecondsMaximum": 120,
+    "coldFirstAcceptedCommandP95Ms": 12000,
+    "normalSteadyStateApplicationLongTaskMaximumMs": 50
+  },
+  "proposedCapacities": {
+    "recorderRamBytes": 33554432,
+    "pendingWorkerPayloadBytes": 16777216,
+    "optionalReplayStorageBytes": 134217728,
+    "criticalJsWasmTransferBytes": 8388608,
+    "firstRideAssetsTransferBytes": 20971520,
+    "estimatedResidentTexturesLowBytes": 268435456,
+    "estimatedResidentTexturesMediumBytes": 402653184,
+    "heavyBackgroundJobs": 1,
+    "preparingCheckpoints": 1,
+    "committingCheckpoints": 1,
+    "diagnosticSamples": 4096,
+    "recoveryRamSnapshotEstimatedBytes": 33554432,
+    "totalHeapBytes": null,
+    "wasmBytes": null,
+    "drawCalls": null,
+    "babylonObjects": null,
+    "destructionBodies": null,
+    "twoSessionCheckpointBytes": null,
+    "challengeHistoryEntries": null,
+    "unfixedReason": "Null capacities require actual fixture calibration; they are not unlimited or approved."
+  },
+  "protocol": {
+    "productionBuild": true,
+    "inspectorClosed": true,
+    "foregroundRequired": true,
+    "adaptiveQuality": false,
+    "warmupSeconds": 30,
+    "measuredSeconds": 120,
+    "repetitions": 5,
+    "percentiles": [50, 95, 99],
+    "compareObserverEnabledDisabled": true,
+    "coldNetwork": { "megabitsPerSecond": 25, "roundTripLatencyMs": 40, "httpCache": "empty", "status": "protocol target; local probe is explicitly unthrottled" },
+    "memory": "Do not sum overlapping JS/backing-buffer/WASM categories; exact unavailable values are null, resource ownership counters remain separate.",
+    "gpu": "Available timer results only; unsupported or pending is null.",
+    "bootstrapScope": "Empty Babylon scene; not evidence that full workload budgets are achieved."
+  },
+  "regressionProposal": {
+    "p95RelativeIncrease": 0.1,
+    "p95AbsoluteIncreaseMs": 1,
+    "memoryRelativeIncrease": 0.1,
+    "memoryAbsoluteIncreaseBytes": 5242880,
+    "confirmationsOutOfFive": 3,
+    "absoluteBudgetsStillApply": true,
+    "automaticBaselineReplacement": false
+  }
+}

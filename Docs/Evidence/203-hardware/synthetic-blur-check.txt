@@ -1,0 +1,12 @@
+npm warn Unknown env config "msvs-version". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+### Result
+{
+  "error": "Error: Tab ascuns sau focus pierdut în timpul probei.",
+  "staleResult": false,
+  "exportDisabled": true,
+  "startEnabled": true
+}
+### Ran Playwright code
+```js
+await page.evaluate('() => ({error:window.hardwareProbeError,staleResult:!!window.hardwareProbeResult,exportDisabled:document.getElementById(\'export\').disabled,startEnabled:!document.getElementById(\'start\').disabled})');
+```

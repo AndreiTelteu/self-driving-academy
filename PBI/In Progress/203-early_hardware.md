@@ -1,13 +1,13 @@
 ---
 id: "203"
 title: "Hardware de referință înainte de fizică și oraș"
-status: "To Do"
+status: "In Progress"
 release: "V1"
 module: "Fundație"
 depends_on: ["001","004","019"]
 performance_checks: ["frame", "loading", "memory"]
-owner: null
-started_at: null
+owner: "Codex /root"
+started_at: "2026-10-05T03:50:45.4947870+03:00"
 completed_at: null
 ---
 
@@ -47,13 +47,13 @@ Păstrează comenzile, scenariile și rezultatele reale; nu declara trecere făr
 
 ## Dovezi de finalizare
 
-Rezultat implementare: De completat.
+Rezultat implementare: Unealtă portabilă de măsurare bootstrap în producție, identificare locală PowerShell și export JSON cu proveniența surselor/artefactelor. Desktop identificat local; laptop Lenovo Yoga7/Ryzen7735U/Radeon680M declarat de utilizator. Calibrarea este în lucru.
 
-Verificări executate și rezultat: De completat.
+Verificări executate și rezultat: Smoke Chrome/WebGPU real și invalidare la context loss WebGL, plus blur sintetic PASS. Rezultatul scurt este explicit neeligibil ca baseline. [Dovezi](../../Docs/Evidence/203-hardware/verification.md). Baseline-urile complete pe ambele dispozitive și calibrarea manifestului rămân necesare.
 
-Fișiere și documente actualizate: De completat.
+Fișiere și documente actualizate: scripts/Run-HardwareProbe.ps1, scripts/hardware-probe-server.mjs, tests/browser/hardware-bootstrap, Docs/hardware-reference.md, Docs/performance-budgets.draft.json și Docs/Evidence/203-hardware.
 
-Limitări sau follow-up: De completat.
+Limitări sau follow-up: Accesul sau rularea probei pe laptop necesită acțiunea utilizatorului. Bootstrapul gol nu certifică workloadul complet, fizica, estimatorul ori cold-startul de gameplay. GPU timer indisponibil este null; capacitățile necalibrate nu sunt aprobate. Taskul rămâne In Progress până la măsurătorile reale și manifestul calibrat.
 
 ## Definition of Done
 
@@ -69,3 +69,4 @@ Verificare finală: Validate-Board.ps1 -RequireDone '203'.
 - 2026-10-04: PBI creat în To Do în revizia 0.3; implementarea nu a început.
 
 - 2026-10-04: Revizia 0.4 adaugă contracte/verificări de performanță; implementarea rămâne neîncepută.
+- 2026-10-05T03:50:45.4973133+03:00: Dependențele001/004/019 sunt Done. Utilizatorul a identificat laptopul Lenovo Yoga7 14ARP8, Ryzen7 7735U, Radeon680M,16GB RAM,512GB SSD,OLED WUXGA14in. Specificațiile sunt declarate de utilizator, nu măsurători. Pregătim proba locală și exportul; accesul/rularea pe laptop rămâne necesară. Taskurile independente continuă în paralel.
