@@ -1,0 +1,4660 @@
+{
+  "identity": {
+    "commit": "4096b8d83b6399a01e7bf0db16b28e5faae32479",
+    "sourceHash": "995b6fbaa5d2f9cd42bca0bac4c9dc70f2dac89df85ae92c3705b7f14f78bcb3",
+    "inputs": [
+      "Docs/performance-budgets.json",
+      "package-lock.json",
+      "package.json",
+      "scripts/scheduling-hardware-probe-server.mjs",
+      "src/autonomy/index.ts",
+      "src/autonomy/road-context.ts",
+      "src/profiles/contracts.ts",
+      "src/profiles/index.ts",
+      "src/profiles/parameter-catalog.generated.ts",
+      "src/profiles/parameter-registry.ts",
+      "src/rendering/asset-budgets.ts",
+      "src/rendering/babylon/asset-contract.ts",
+      "src/rendering/babylon/asset-registry.ts",
+      "src/rendering/babylon/backend.ts",
+      "src/rendering/babylon/cell-batches.ts",
+      "src/rendering/babylon/daylight.ts",
+      "src/rendering/babylon/dev-inspector.ts",
+      "src/rendering/babylon/diagnostics-adapter.ts",
+      "src/rendering/babylon/index.ts",
+      "src/rendering/babylon/recovery-session.ts",
+      "src/rendering/babylon/scene-adapter.ts",
+      "src/rendering/babylon/snapshot-presenter.ts",
+      "src/rendering/babylon/vehicle-camera-input.ts",
+      "src/rendering/babylon/vehicle-camera.ts",
+      "src/rendering/babylon/vehicle-picking-input.ts",
+      "src/rendering/babylon/vehicle-picking-registry.ts",
+      "src/rendering/babylon/vehicle-picking.ts",
+      "src/rendering/backend-policy.ts",
+      "src/rendering/camera-collision.ts",
+      "src/rendering/diagnostics.ts",
+      "src/rendering/quality-policy.ts",
+      "src/rendering/render-sync.ts",
+      "src/rendering/scene-contract.ts",
+      "src/rendering/vehicle-camera.ts",
+      "src/sessions/identity.ts",
+      "src/sessions/index.ts",
+      "src/sessions/random.ts",
+      "src/sessions/validation.ts",
+      "src/simulation/collision-events.ts",
+      "src/simulation/event-bus.ts",
+      "src/simulation/events.ts",
+      "src/simulation/fixed-tick.ts",
+      "src/simulation/index.ts",
+      "src/simulation/scheduling.ts",
+      "src/telemetry/contracts.ts",
+      "src/telemetry/index.ts",
+      "src/telemetry/performance.ts",
+      "src/vehicles/body-port.ts",
+      "src/vehicles/body-registry.ts",
+      "src/vehicles/collision-episodes.ts",
+      "src/vehicles/collision-port.ts",
+      "src/vehicles/contracts.ts",
+      "src/vehicles/controller-port.ts",
+      "src/vehicles/controller.ts",
+      "src/vehicles/index.ts",
+      "src/vehicles/physics.ts",
+      "src/vehicles/rapier/index.ts",
+      "src/vehicles/vehicle-classes.ts",
+      "src/world/crosswalk-zones.ts",
+      "src/world/errors.ts",
+      "src/world/index.ts",
+      "src/world/intersection-conflict-geometry.ts",
+      "src/world/intersection-conflicts.ts",
+      "src/world/lane-graph.ts",
+      "src/world/parser.ts",
+      "src/world/priority-arrival.ts",
+      "src/world/priority-policy.ts",
+      "src/world/priority-rules.ts",
+      "src/world/semantics.ts",
+      "src/world/signals.ts",
+      "src/world/spatial-index.ts",
+      "src/world/stop-rules.ts",
+      "tests/autonomy/road-context-reference.ts",
+      "tests/browser/simulation-scheduling/index.html",
+      "tests/browser/simulation-scheduling/main.ts",
+      "tests/browser/simulation-scheduling/protocol.ts",
+      "tests/browser/simulation-scheduling/workload.ts",
+      "tests/simulation/scheduling-reference.ts",
+      "tests/world/intersection-conflicts-fixture.ts",
+      "tests/world/spatial-index-reference.ts"
+    ],
+    "budgetVersion": "203-initial-1",
+    "physicsVersion": "0.21.0",
+    "engineVersion": "9.29.0"
+  },
+  "artifactHash": "784022537c183d72b1c001e243fc16b5dc573f7834e7e3747a8b4beb4d51dc50",
+  "captureId": "20261005T170121469Z",
+  "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+  "renderer": "WEBGL2",
+  "actualGpuInfo": {
+    "vendor": "Google Inc. (AMD)",
+    "renderer": "ANGLE (AMD, AMD Radeon RX 7900 XTX (0x0000744C) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)"
+  },
+  "preset": "MEDIUM_FIXED_EARLY_FIXTURE",
+  "adaptiveQuality": false,
+  "cssResolution": [
+    1920,
+    1080
+  ],
+  "internalResolution": [
+    1920,
+    1080
+  ],
+  "dpr": 1,
+  "network": "local unthrottled warm assets",
+  "inspector": "closed required",
+  "workload": "70 physical mixed cars,67 anonymous obstacles; synthetic route decisions, actual024 controller and028 collision publication",
+  "chronologicalBaseline": "Original preimplementation Node before preserved; hardware reference is a postimplementation control on identical build.",
+  "kind": "comparison",
+  "arm": "BOTH",
+  "semanticCheckpointsEqual": true,
+  "budgets": {
+    "frameP95Ms": 18.5,
+    "frameP99Ms": 25,
+    "mainThreadP95Ms": 10,
+    "applicationLongTaskMaximumMs": 50
+  },
+  "frameBudgetFailures": [],
+  "regressionPairs": [
+    {
+      "repeat": 1,
+      "observe": false,
+      "frameP95DeltaMs": 0,
+      "mainThreadP95DeltaMs": -0.5,
+      "regressed": false
+    },
+    {
+      "repeat": 1,
+      "observe": true,
+      "frameP95DeltaMs": 0,
+      "mainThreadP95DeltaMs": -0.5,
+      "regressed": false
+    },
+    {
+      "repeat": 2,
+      "observe": true,
+      "frameP95DeltaMs": 0,
+      "mainThreadP95DeltaMs": -0.3999999761581421,
+      "regressed": false
+    },
+    {
+      "repeat": 2,
+      "observe": false,
+      "frameP95DeltaMs": 0,
+      "mainThreadP95DeltaMs": -0.40000009536743164,
+      "regressed": false
+    },
+    {
+      "repeat": 3,
+      "observe": false,
+      "frameP95DeltaMs": 0,
+      "mainThreadP95DeltaMs": -0.5999999046325684,
+      "regressed": false
+    },
+    {
+      "repeat": 3,
+      "observe": true,
+      "frameP95DeltaMs": 0,
+      "mainThreadP95DeltaMs": 0.29999983310699463,
+      "regressed": false
+    },
+    {
+      "repeat": 4,
+      "observe": true,
+      "frameP95DeltaMs": 0,
+      "mainThreadP95DeltaMs": 0.09999990463256836,
+      "regressed": false
+    },
+    {
+      "repeat": 4,
+      "observe": false,
+      "frameP95DeltaMs": 0,
+      "mainThreadP95DeltaMs": -0.09999990463256836,
+      "regressed": false
+    },
+    {
+      "repeat": 5,
+      "observe": false,
+      "frameP95DeltaMs": 0,
+      "mainThreadP95DeltaMs": -0.6000000238418579,
+      "regressed": false
+    },
+    {
+      "repeat": 5,
+      "observe": true,
+      "frameP95DeltaMs": 0,
+      "mainThreadP95DeltaMs": -0.19999992847442627,
+      "regressed": false
+    }
+  ],
+  "confirmedRegression": false,
+  "acceptance": "EARLY_FIXTURE_FRAME_PASS",
+  "results": [
+    {
+      "capturedAt": "2026-10-05T17:26:23.121Z",
+      "arm": "UNPHASED_REFERENCE",
+      "metadata": {
+        "identity": {
+          "commit": "4096b8d83b6399a01e7bf0db16b28e5faae32479",
+          "sourceHash": "995b6fbaa5d2f9cd42bca0bac4c9dc70f2dac89df85ae92c3705b7f14f78bcb3",
+          "inputs": [
+            "Docs/performance-budgets.json",
+            "package-lock.json",
+            "package.json",
+            "scripts/scheduling-hardware-probe-server.mjs",
+            "src/autonomy/index.ts",
+            "src/autonomy/road-context.ts",
+            "src/profiles/contracts.ts",
+            "src/profiles/index.ts",
+            "src/profiles/parameter-catalog.generated.ts",
+            "src/profiles/parameter-registry.ts",
+            "src/rendering/asset-budgets.ts",
+            "src/rendering/babylon/asset-contract.ts",
+            "src/rendering/babylon/asset-registry.ts",
+            "src/rendering/babylon/backend.ts",
+            "src/rendering/babylon/cell-batches.ts",
+            "src/rendering/babylon/daylight.ts",
+            "src/rendering/babylon/dev-inspector.ts",
+            "src/rendering/babylon/diagnostics-adapter.ts",
+            "src/rendering/babylon/index.ts",
+            "src/rendering/babylon/recovery-session.ts",
+            "src/rendering/babylon/scene-adapter.ts",
+            "src/rendering/babylon/snapshot-presenter.ts",
+            "src/rendering/babylon/vehicle-camera-input.ts",
+            "src/rendering/babylon/vehicle-camera.ts",
+            "src/rendering/babylon/vehicle-picking-input.ts",
+            "src/rendering/babylon/vehicle-picking-registry.ts",
+            "src/rendering/babylon/vehicle-picking.ts",
+            "src/rendering/backend-policy.ts",
+            "src/rendering/camera-collision.ts",
+            "src/rendering/diagnostics.ts",
+            "src/rendering/quality-policy.ts",
+            "src/rendering/render-sync.ts",
+            "src/rendering/scene-contract.ts",
+            "src/rendering/vehicle-camera.ts",
+            "src/sessions/identity.ts",
+            "src/sessions/index.ts",
+            "src/sessions/random.ts",
+            "src/sessions/validation.ts",
+            "src/simulation/collision-events.ts",
+            "src/simulation/event-bus.ts",
+            "src/simulation/events.ts",
+            "src/simulation/fixed-tick.ts",
+            "src/simulation/index.ts",
+            "src/simulation/scheduling.ts",
+            "src/telemetry/contracts.ts",
+            "src/telemetry/index.ts",
+            "src/telemetry/performance.ts",
+            "src/vehicles/body-port.ts",
+            "src/vehicles/body-registry.ts",
+            "src/vehicles/collision-episodes.ts",
+            "src/vehicles/collision-port.ts",
+            "src/vehicles/contracts.ts",
+            "src/vehicles/controller-port.ts",
+            "src/vehicles/controller.ts",
+            "src/vehicles/index.ts",
+            "src/vehicles/physics.ts",
+            "src/vehicles/rapier/index.ts",
+            "src/vehicles/vehicle-classes.ts",
+            "src/world/crosswalk-zones.ts",
+            "src/world/errors.ts",
+            "src/world/index.ts",
+            "src/world/intersection-conflict-geometry.ts",
+            "src/world/intersection-conflicts.ts",
+            "src/world/lane-graph.ts",
+            "src/world/parser.ts",
+            "src/world/priority-arrival.ts",
+            "src/world/priority-policy.ts",
+            "src/world/priority-rules.ts",
+            "src/world/semantics.ts",
+            "src/world/signals.ts",
+            "src/world/spatial-index.ts",
+            "src/world/stop-rules.ts",
+            "tests/autonomy/road-context-reference.ts",
+            "tests/browser/simulation-scheduling/index.html",
+            "tests/browser/simulation-scheduling/main.ts",
+            "tests/browser/simulation-scheduling/protocol.ts",
+            "tests/browser/simulation-scheduling/workload.ts",
+            "tests/simulation/scheduling-reference.ts",
+            "tests/world/intersection-conflicts-fixture.ts",
+            "tests/world/spatial-index-reference.ts"
+          ],
+          "budgetVersion": "203-initial-1",
+          "physicsVersion": "0.21.0",
+          "engineVersion": "9.29.0"
+        },
+        "artifactHash": "784022537c183d72b1c001e243fc16b5dc573f7834e7e3747a8b4beb4d51dc50",
+        "captureId": "20261005T170121469Z",
+        "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+        "renderer": "WEBGL2",
+        "actualGpuInfo": {
+          "vendor": "Google Inc. (AMD)",
+          "renderer": "ANGLE (AMD, AMD Radeon RX 7900 XTX (0x0000744C) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+          "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)"
+        },
+        "preset": "MEDIUM_FIXED_EARLY_FIXTURE",
+        "adaptiveQuality": false,
+        "cssResolution": [
+          1920,
+          1080
+        ],
+        "internalResolution": [
+          1920,
+          1080
+        ],
+        "dpr": 1,
+        "network": "local unthrottled warm assets",
+        "inspector": "closed required",
+        "workload": "70 physical mixed cars,67 anonymous obstacles; synthetic route decisions, actual024 controller and028 collision publication",
+        "chronologicalBaseline": "Original preimplementation Node before preserved; hardware reference is a postimplementation control on identical build."
+      },
+      "fixtureVersion": "219-physical70-scheduling-v1",
+      "protocol": {
+        "repetitions": 5,
+        "warmupMs": 30000,
+        "measureMs": 120000,
+        "foreground": true,
+        "clock": "actualRAF",
+        "sampleCapacity": 60000,
+        "observer": "common frame/main CPU timer both; optional per-authoritative-tick CPU samples on"
+      },
+      "runs": [
+        {
+          "repeat": 1,
+          "observe": false,
+          "startedAtRafMs": 1919.3,
+          "warmupElapsedMs": 30000.7,
+          "measuredElapsedMs": 120007.29999995232,
+          "measuredRafSpanMs": 120002.6,
+          "frameMs": {
+            "count": 17280,
+            "p50": 6.900000000008731,
+            "p95": 7,
+            "p99": 7.100000000005821,
+            "min": 4.300000000017462,
+            "max": 9.39999999999418,
+            "mean": 6.944594907407441,
+            "overBudget": null,
+            "histogram": [
+              0,
+              0,
+              17278,
+              2,
+              0,
+              0,
+              0
+            ]
+          },
+          "mainThreadMs": {
+            "count": 17280,
+            "p50": 0.5,
+            "p95": 4.299999952316284,
+            "p99": 5.400000095367432,
+            "min": 0.09999990463256836,
+            "max": 8.100000023841858,
+            "mean": 1.658755787158454,
+            "overBudget": null,
+            "histogram": [
+              10064,
+              5971,
+              1244,
+              1,
+              0,
+              0,
+              0
+            ]
+          },
+          "optionalTickCpuMs": null,
+          "counts": {
+            "vehicles": 70,
+            "decisions": 115656,
+            "controllers": 630000,
+            "physicsSteps": 9000,
+            "lastContextSourceTick": 8999,
+            "lastDecisionTick": 9000
+          },
+          "finalState": {
+            "tick": 9000,
+            "debtSeconds": 0.0033000000000012655,
+            "status": "running",
+            "simulatedSeconds": 150,
+            "activeRealSeconds": 150.00330000000002
+          },
+          "simulatedSecondsDuringMeasure": 120,
+          "simulatedToWallRatio": 0.9999783338027676,
+          "semanticCheckpoints": [
+            {
+              "tick": 6,
+              "commandsDigest": "068ce3cd",
+              "posesDigest": "0c96db7f",
+              "authoritativeEventsDigest": "811c9dc5"
+            },
+            {
+              "tick": 600,
+              "commandsDigest": "f01e64a5",
+              "posesDigest": "b237aa08",
+              "authoritativeEventsDigest": "4cc5418c"
+            },
+            {
+              "tick": 1200,
+              "commandsDigest": "36d3a405",
+              "posesDigest": "f0fe73b8",
+              "authoritativeEventsDigest": "ced7f513"
+            },
+            {
+              "tick": 1800,
+              "commandsDigest": "ee1bb7e5",
+              "posesDigest": "33ec0109",
+              "authoritativeEventsDigest": "b6670752"
+            },
+            {
+              "tick": 2400,
+              "commandsDigest": "3b778f45",
+              "posesDigest": "3d45b173",
+              "authoritativeEventsDigest": "2cb68322"
+            },
+            {
+              "tick": 3000,
+              "commandsDigest": "8b566a25",
+              "posesDigest": "5d1682a0",
+              "authoritativeEventsDigest": "3c185d98"
+            },
+            {
+              "tick": 3600,
+              "commandsDigest": "8ad60f85",
+              "posesDigest": "8c71a85f",
+              "authoritativeEventsDigest": "8d2313d1"
+            },
+            {
+              "tick": 4200,
+              "commandsDigest": "b6231b65",
+              "posesDigest": "9cbc9ea1",
+              "authoritativeEventsDigest": "7ba684b4"
+            },
+            {
+              "tick": 4800,
+              "commandsDigest": "b62026c5",
+              "posesDigest": "246aa73f",
+              "authoritativeEventsDigest": "8a5f3e87"
+            },
+            {
+              "tick": 5400,
+              "commandsDigest": "52214da5",
+              "posesDigest": "f66e4ea7",
+              "authoritativeEventsDigest": "519abb03"
+            },
+            {
+              "tick": 6000,
+              "commandsDigest": "18014505",
+              "posesDigest": "c5400f6b",
+              "authoritativeEventsDigest": "710ba891"
+            },
+            {
+              "tick": 6600,
+              "commandsDigest": "cc4d28e5",
+              "posesDigest": "bbb576a3",
+              "authoritativeEventsDigest": "dd28b13c"
+            },
+            {
+              "tick": 7200,
+              "commandsDigest": "d6886045",
+              "posesDigest": "ae86301a",
+              "authoritativeEventsDigest": "d1ae102b"
+            },
+            {
+              "tick": 7800,
+              "commandsDigest": "ec952725",
+              "posesDigest": "5adc4d4d",
+              "authoritativeEventsDigest": "dc0d9326"
+            },
+            {
+              "tick": 8400,
+              "commandsDigest": "d311cc85",
+              "posesDigest": "20b039b6",
+              "authoritativeEventsDigest": "406b99ef"
+            }
+          ],
+          "admittedRealSecondsDuringMeasure": 120.00260000000003,
+          "longTasks": {
+            "supported": true,
+            "count": 0,
+            "maxMs": 0,
+            "overflow": false
+          },
+          "cleanup": {
+            "worldDisposed": true,
+            "mappedVehicles": 0,
+            "subscriptions": 0,
+            "ownedMeshes": 0,
+            "schedulerJobs": 0,
+            "schedulerCache": 0,
+            "schedulerIdentities": 0,
+            "schedulerUrgent": 0,
+            "collisionPairs": 0,
+            "pendingCollisionEvents": 0,
+            "busSubscriptions": 0,
+            "gpuInstruments": 0
+          },
+          "ownedDiagnosticBytes": 960000,
+          "gpuTimer": {
+            "status": "disabled: observer-off",
+            "samples": null,
+            "pendingResults": null,
+            "pendingReason": "Public Babylon instrumentation does not expose outstanding query count",
+            "association": "Asynchronous fresh counter results, not associated with the current CPU frame; first fresh boundary result discarded"
+          },
+          "exactPageMemoryBytes": null,
+          "framesOver18_5Ms": 0,
+          "framesOver25Ms": 0
+        },
+        {
+          "repeat": 1,
+          "observe": true,
+          "startedAtRafMs": 152894.8,
+          "warmupElapsedMs": 30000.800000000017,
+          "measuredElapsedMs": 120007.4,
+          "measuredRafSpanMs": 120002.69999999998,
+          "frameMs": {
+            "count": 17280,
+            "p50": 6.900000000023283,
+            "p95": 7,
+            "p99": 7.100000000005821,
+            "min": 5.400000000023283,
+            "max": 8.200000000011642,
+            "mean": 6.944600694444444,
+            "overBudget": null,
+            "histogram": [
+              0,
+              0,
+              17277,
+              3,
+              0,
+              0,
+              0
+            ]
+          },
+          "mainThreadMs": {
+            "count": 17280,
+            "p50": 0.5,
+            "p95": 4.399999976158142,
+            "p99": 5.5,
+            "min": 0.09999990463256836,
+            "max": 8.599999904632568,
+            "mean": 1.7071990738519365,
+            "overBudget": null,
+            "histogram": [
+              10062,
+              5925,
+              1291,
+              2,
+              0,
+              0,
+              0
+            ]
+          },
+          "optionalTickCpuMs": {
+            "count": 7200,
+            "p50": 2.8000000715255737,
+            "p95": 4.700000047683716,
+            "p99": 5.100000023841858,
+            "min": 1.8000000715255737,
+            "max": 8,
+            "mean": 2.975611110660765,
+            "overBudget": null,
+            "histogram": [
+              0,
+              6367,
+              832,
+              1,
+              0,
+              0,
+              0
+            ]
+          },
+          "counts": {
+            "vehicles": 70,
+            "decisions": 115656,
+            "controllers": 630000,
+            "physicsSteps": 9000,
+            "lastContextSourceTick": 8999,
+            "lastDecisionTick": 9000
+          },
+          "finalState": {
+            "tick": 9000,
+            "debtSeconds": 0.003499999999998,
+            "status": "running",
+            "simulatedSeconds": 150,
+            "activeRealSeconds": 150.0035
+          },
+          "simulatedSecondsDuringMeasure": 120,
+          "simulatedToWallRatio": 0.9999775005062388,
+          "semanticCheckpoints": [
+            {
+              "tick": 6,
+              "commandsDigest": "068ce3cd",
+              "posesDigest": "0c96db7f",
+              "authoritativeEventsDigest": "811c9dc5"
+            },
+            {
+              "tick": 600,
+              "commandsDigest": "f01e64a5",
+              "posesDigest": "b237aa08",
+              "authoritativeEventsDigest": "4cc5418c"
+            },
+            {
+              "tick": 1200,
+              "commandsDigest": "36d3a405",
+              "posesDigest": "f0fe73b8",
+              "authoritativeEventsDigest": "ced7f513"
+            },
+            {
+              "tick": 1800,
+              "commandsDigest": "ee1bb7e5",
+              "posesDigest": "33ec0109",
+              "authoritativeEventsDigest": "b6670752"
+            },
+            {
+              "tick": 2400,
+              "commandsDigest": "3b778f45",
+              "posesDigest": "3d45b173",
+              "authoritativeEventsDigest": "2cb68322"
+            },
+            {
+              "tick": 3000,
+              "commandsDigest": "8b566a25",
+              "posesDigest": "5d1682a0",
+              "authoritativeEventsDigest": "3c185d98"
+            },
+            {
+              "tick": 3600,
+              "commandsDigest": "8ad60f85",
+              "posesDigest": "8c71a85f",
+              "authoritativeEventsDigest": "8d2313d1"
+            },
+            {
+              "tick": 4200,
+              "commandsDigest": "b6231b65",
+              "posesDigest": "9cbc9ea1",
+              "authoritativeEventsDigest": "7ba684b4"
+            },
+            {
+              "tick": 4800,
+              "commandsDigest": "b62026c5",
+              "posesDigest": "246aa73f",
+              "authoritativeEventsDigest": "8a5f3e87"
+            },
+            {
+              "tick": 5400,
+              "commandsDigest": "52214da5",
+              "posesDigest": "f66e4ea7",
+              "authoritativeEventsDigest": "519abb03"
+            },
+            {
+              "tick": 6000,
+              "commandsDigest": "18014505",
+              "posesDigest": "c5400f6b",
+              "authoritativeEventsDigest": "710ba891"
+            },
+            {
+              "tick": 6600,
+              "commandsDigest": "cc4d28e5",
+              "posesDigest": "bbb576a3",
+              "authoritativeEventsDigest": "dd28b13c"
+            },
+            {
+              "tick": 7200,
+              "commandsDigest": "d6886045",
+              "posesDigest": "ae86301a",
+              "authoritativeEventsDigest": "d1ae102b"
+            },
+            {
+              "tick": 7800,
+              "commandsDigest": "ec952725",
+              "posesDigest": "5adc4d4d",
+              "authoritativeEventsDigest": "dc0d9326"
+            },
+            {
+              "tick": 8400,
+              "commandsDigest": "d311cc85",
+              "posesDigest": "20b039b6",
+              "authoritativeEventsDigest": "406b99ef"
+            }
+          ],
+          "admittedRealSecondsDuringMeasure": 120.00269999999999,
+          "longTasks": {
+            "supported": true,
+            "count": 0,
+            "maxMs": 0,
+            "overflow": false
+          },
+          "cleanup": {
+            "worldDisposed": true,
+            "mappedVehicles": 0,
+            "subscriptions": 0,
+            "ownedMeshes": 0,
+            "schedulerJobs": 0,
+            "schedulerCache": 0,
+            "schedulerIdentities": 0,
+            "schedulerUrgent": 0,
+            "collisionPairs": 0,
+            "pendingCollisionEvents": 0,
+            "busSubscriptions": 0,
+            "gpuInstruments": 0
+          },
+          "ownedDiagnosticBytes": 1920000,
+          "gpuTimer": {
+            "status": "available: asynchronous fresh timer in milliseconds",
+            "samples": {
+              "count": 7443,
+              "p50": 0.02396,
+              "p95": 0.03008,
+              "p99": 0.0374,
+              "min": 0.02036,
+              "max": 3.91489,
+              "mean": 0.024932066371087542,
+              "overBudget": null,
+              "histogram": [
+                7442,
+                1,
+                0,
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            "pendingResults": null,
+            "pendingReason": "Public Babylon instrumentation does not expose outstanding query count",
+            "association": "Asynchronous fresh counter results, not associated with the current CPU frame; first fresh boundary result discarded"
+          },
+          "exactPageMemoryBytes": null,
+          "framesOver18_5Ms": 0,
+          "framesOver25Ms": 0
+        },
+        {
+          "repeat": 2,
+          "observe": true,
+          "startedAtRafMs": 302981.7,
+          "warmupElapsedMs": 30000.70000000001,
+          "measuredElapsedMs": 120008.20000002382,
+          "measuredRafSpanMs": 120002.79999999999,
+          "frameMs": {
+            "count": 17280,
+            "p50": 6.900000000023283,
+            "p95": 7,
+            "p99": 7.100000000034925,
+            "min": 3,
+            "max": 10.200000000011642,
+            "mean": 6.944606481481481,
+            "overBudget": null,
+            "histogram": [
+              0,
+              1,
+              17270,
+              9,
+              0,
+              0,
+              0
+            ]
+          },
+          "mainThreadMs": {
+            "count": 17280,
+            "p50": 0.5,
+            "p95": 4.399999976158142,
+            "p99": 5.599999904632568,
+            "min": 0.09999990463256836,
+            "max": 9.700000047683716,
+            "mean": 1.6978298609938334,
+            "overBudget": null,
+            "histogram": [
+              10062,
+              5898,
+              1318,
+              2,
+              0,
+              0,
+              0
+            ]
+          },
+          "optionalTickCpuMs": {
+            "count": 7200,
+            "p50": 2.8000000715255737,
+            "p95": 4.699999928474426,
+            "p99": 5.100000023841858,
+            "min": 1.899999976158142,
+            "max": 8,
+            "mean": 2.960486111227009,
+            "overBudget": null,
+            "histogram": [
+              0,
+              6399,
+              800,
+              1,
+              0,
+              0,
+              0
+            ]
+          },
+          "counts": {
+            "vehicles": 70,
+            "decisions": 115656,
+            "controllers": 630000,
+            "physicsSteps": 9000,
+            "lastContextSourceTick": 8999,
+            "lastDecisionTick": 9000
+          },
+          "finalState": {
+            "tick": 9000,
+            "debtSeconds": 0.0034999999999982307,
+            "status": "running",
+            "simulatedSeconds": 150,
+            "activeRealSeconds": 150.0035
+          },
+          "simulatedSecondsDuringMeasure": 120,
+          "simulatedToWallRatio": 0.9999766672110985,
+          "semanticCheckpoints": [
+            {
+              "tick": 6,
+              "commandsDigest": "068ce3cd",
+              "posesDigest": "0c96db7f",
+              "authoritativeEventsDigest": "811c9dc5"
+            },
+            {
+              "tick": 600,
+              "commandsDigest": "f01e64a5",
+              "posesDigest": "b237aa08",
+              "authoritativeEventsDigest": "4cc5418c"
+            },
+            {
+              "tick": 1200,
+              "commandsDigest": "36d3a405",
+              "posesDigest": "f0fe73b8",
+              "authoritativeEventsDigest": "ced7f513"
+            },
+            {
+              "tick": 1800,
+              "commandsDigest": "ee1bb7e5",
+              "posesDigest": "33ec0109",
+              "authoritativeEventsDigest": "b6670752"
+            },
+            {
+              "tick": 2400,
+              "commandsDigest": "3b778f45",
+              "posesDigest": "3d45b173",
+              "authoritativeEventsDigest": "2cb68322"
+            },
+            {
+              "tick": 3000,
+              "commandsDigest": "8b566a25",
+              "posesDigest": "5d1682a0",
+              "authoritativeEventsDigest": "3c185d98"
+            },
+            {
+              "tick": 3600,
+              "commandsDigest": "8ad60f85",
+              "posesDigest": "8c71a85f",
+              "authoritativeEventsDigest": "8d2313d1"
+            },
+            {
+              "tick": 4200,
+              "commandsDigest": "b6231b65",
+              "posesDigest": "9cbc9ea1",
+              "authoritativeEventsDigest": "7ba684b4"
+            },
+            {
+              "tick": 4800,
+              "commandsDigest": "b62026c5",
+              "posesDigest": "246aa73f",
+              "authoritativeEventsDigest": "8a5f3e87"
+            },
+            {
+              "tick": 5400,
+              "commandsDigest": "52214da5",
+              "posesDigest": "f66e4ea7",
+              "authoritativeEventsDigest": "519abb03"
+            },
+            {
+              "tick": 6000,
+              "commandsDigest": "18014505",
+              "posesDigest": "c5400f6b",
+              "authoritativeEventsDigest": "710ba891"
+            },
+            {
+              "tick": 6600,
+              "commandsDigest": "cc4d28e5",
+              "posesDigest": "bbb576a3",
+              "authoritativeEventsDigest": "dd28b13c"
+            },
+            {
+              "tick": 7200,
+              "commandsDigest": "d6886045",
+              "posesDigest": "ae86301a",
+              "authoritativeEventsDigest": "d1ae102b"
+            },
+            {
+              "tick": 7800,
+              "commandsDigest": "ec952725",
+              "posesDigest": "5adc4d4d",
+              "authoritativeEventsDigest": "dc0d9326"
+            },
+            {
+              "tick": 8400,
+              "commandsDigest": "d311cc85",
+              "posesDigest": "20b039b6",
+              "authoritativeEventsDigest": "406b99ef"
+            }
+          ],
+          "admittedRealSecondsDuringMeasure": 120.0028,
+          "longTasks": {
+            "supported": true,
+            "count": 0,
+            "maxMs": 0,
+            "overflow": false
+          },
+          "cleanup": {
+            "worldDisposed": true,
+            "mappedVehicles": 0,
+            "subscriptions": 0,
+            "ownedMeshes": 0,
+            "schedulerJobs": 0,
+            "schedulerCache": 0,
+            "schedulerIdentities": 0,
+            "schedulerUrgent": 0,
+            "collisionPairs": 0,
+            "pendingCollisionEvents": 0,
+            "busSubscriptions": 0,
+            "gpuInstruments": 0
+          },
+          "ownedDiagnosticBytes": 1920000,
+          "gpuTimer": {
+            "status": "available: asynchronous fresh timer in milliseconds",
+            "samples": {
+              "count": 7486,
+              "p50": 0.02436,
+              "p95": 0.03724,
+              "p99": 0.03816,
+              "min": 0.02076,
+              "max": 0.62684,
+              "mean": 0.028439551162169677,
+              "overBudget": null,
+              "histogram": [
+                7486,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            "pendingResults": null,
+            "pendingReason": "Public Babylon instrumentation does not expose outstanding query count",
+            "association": "Asynchronous fresh counter results, not associated with the current CPU frame; first fresh boundary result discarded"
+          },
+          "exactPageMemoryBytes": null,
+          "framesOver18_5Ms": 0,
+          "framesOver25Ms": 0
+        },
+        {
+          "repeat": 2,
+          "observe": false,
+          "startedAtRafMs": 453051.864,
+          "warmupElapsedMs": 30003.435999999987,
+          "measuredElapsedMs": 120007.20000000001,
+          "measuredRafSpanMs": 120002.79999999999,
+          "frameMs": {
+            "count": 17280,
+            "p50": 6.900000000023283,
+            "p95": 7,
+            "p99": 7.099999999976717,
+            "min": 5.099999999976717,
+            "max": 8.79999999993015,
+            "mean": 6.944606481481481,
+            "overBudget": null,
+            "histogram": [
+              0,
+              0,
+              17275,
+              5,
+              0,
+              0,
+              0
+            ]
+          },
+          "mainThreadMs": {
+            "count": 17280,
+            "p50": 0.5,
+            "p95": 4.5,
+            "p99": 5.5,
+            "min": 0.10000002384185791,
+            "max": 7.5,
+            "mean": 1.661030092469796,
+            "overBudget": null,
+            "histogram": [
+              10064,
+              6087,
+              1129,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "optionalTickCpuMs": null,
+          "counts": {
+            "vehicles": 70,
+            "decisions": 115656,
+            "controllers": 630000,
+            "physicsSteps": 9000,
+            "lastContextSourceTick": 8999,
+            "lastDecisionTick": 9000
+          },
+          "finalState": {
+            "tick": 9000,
+            "debtSeconds": 0.006235999999964662,
+            "status": "running",
+            "simulatedSeconds": 150,
+            "activeRealSeconds": 150.00623599999997
+          },
+          "simulatedSecondsDuringMeasure": 120,
+          "simulatedToWallRatio": 0.9999766672110985,
+          "semanticCheckpoints": [
+            {
+              "tick": 6,
+              "commandsDigest": "068ce3cd",
+              "posesDigest": "0c96db7f",
+              "authoritativeEventsDigest": "811c9dc5"
+            },
+            {
+              "tick": 600,
+              "commandsDigest": "f01e64a5",
+              "posesDigest": "b237aa08",
+              "authoritativeEventsDigest": "4cc5418c"
+            },
+            {
+              "tick": 1200,
+              "commandsDigest": "36d3a405",
+              "posesDigest": "f0fe73b8",
+              "authoritativeEventsDigest": "ced7f513"
+            },
+            {
+              "tick": 1800,
+              "commandsDigest": "ee1bb7e5",
+              "posesDigest": "33ec0109",
+              "authoritativeEventsDigest": "b6670752"
+            },
+            {
+              "tick": 2400,
+              "commandsDigest": "3b778f45",
+              "posesDigest": "3d45b173",
+              "authoritativeEventsDigest": "2cb68322"
+            },
+            {
+              "tick": 3000,
+              "commandsDigest": "8b566a25",
+              "posesDigest": "5d1682a0",
+              "authoritativeEventsDigest": "3c185d98"
+            },
+            {
+              "tick": 3600,
+              "commandsDigest": "8ad60f85",
+              "posesDigest": "8c71a85f",
+              "authoritativeEventsDigest": "8d2313d1"
+            },
+            {
+              "tick": 4200,
+              "commandsDigest": "b6231b65",
+              "posesDigest": "9cbc9ea1",
+              "authoritativeEventsDigest": "7ba684b4"
+            },
+            {
+              "tick": 4800,
+              "commandsDigest": "b62026c5",
+              "posesDigest": "246aa73f",
+              "authoritativeEventsDigest": "8a5f3e87"
+            },
+            {
+              "tick": 5400,
+              "commandsDigest": "52214da5",
+              "posesDigest": "f66e4ea7",
+              "authoritativeEventsDigest": "519abb03"
+            },
+            {
+              "tick": 6000,
+              "commandsDigest": "18014505",
+              "posesDigest": "c5400f6b",
+              "authoritativeEventsDigest": "710ba891"
+            },
+            {
+              "tick": 6600,
+              "commandsDigest": "cc4d28e5",
+              "posesDigest": "bbb576a3",
+              "authoritativeEventsDigest": "dd28b13c"
+            },
+            {
+              "tick": 7200,
+              "commandsDigest": "d6886045",
+              "posesDigest": "ae86301a",
+              "authoritativeEventsDigest": "d1ae102b"
+            },
+            {
+              "tick": 7800,
+              "commandsDigest": "ec952725",
+              "posesDigest": "5adc4d4d",
+              "authoritativeEventsDigest": "dc0d9326"
+            },
+            {
+              "tick": 8400,
+              "commandsDigest": "d311cc85",
+              "posesDigest": "20b039b6",
+              "authoritativeEventsDigest": "406b99ef"
+            }
+          ],
+          "admittedRealSecondsDuringMeasure": 120.00279999999998,
+          "longTasks": {
+            "supported": true,
+            "count": 0,
+            "maxMs": 0,
+            "overflow": false
+          },
+          "cleanup": {
+            "worldDisposed": true,
+            "mappedVehicles": 0,
+            "subscriptions": 0,
+            "ownedMeshes": 0,
+            "schedulerJobs": 0,
+            "schedulerCache": 0,
+            "schedulerIdentities": 0,
+            "schedulerUrgent": 0,
+            "collisionPairs": 0,
+            "pendingCollisionEvents": 0,
+            "busSubscriptions": 0,
+            "gpuInstruments": 0
+          },
+          "ownedDiagnosticBytes": 960000,
+          "gpuTimer": {
+            "status": "disabled: observer-off",
+            "samples": null,
+            "pendingResults": null,
+            "pendingReason": "Public Babylon instrumentation does not expose outstanding query count",
+            "association": "Asynchronous fresh counter results, not associated with the current CPU frame; first fresh boundary result discarded"
+          },
+          "exactPageMemoryBytes": null,
+          "framesOver18_5Ms": 0,
+          "framesOver25Ms": 0
+        },
+        {
+          "repeat": 3,
+          "observe": false,
+          "startedAtRafMs": 603113.6,
+          "warmupElapsedMs": 30000.599999999977,
+          "measuredElapsedMs": 120008.59999995236,
+          "measuredRafSpanMs": 120002.70000000007,
+          "frameMs": {
+            "count": 17279,
+            "p50": 6.900000000023283,
+            "p95": 7,
+            "p99": 7.099999999976717,
+            "min": 3.200000000069849,
+            "max": 13.800000000046566,
+            "mean": 6.945002604317383,
+            "overBudget": null,
+            "histogram": [
+              0,
+              1,
+              17269,
+              9,
+              0,
+              0,
+              0
+            ]
+          },
+          "mainThreadMs": {
+            "count": 17279,
+            "p50": 0.5,
+            "p95": 4.599999904632568,
+            "p99": 5.5,
+            "min": 0.10000002384185791,
+            "max": 9.700000047683716,
+            "mean": 1.6889519068272938,
+            "overBudget": null,
+            "histogram": [
+              10063,
+              6013,
+              1200,
+              3,
+              0,
+              0,
+              0
+            ]
+          },
+          "optionalTickCpuMs": null,
+          "counts": {
+            "vehicles": 70,
+            "decisions": 115656,
+            "controllers": 630000,
+            "physicsSteps": 9000,
+            "lastContextSourceTick": 8999,
+            "lastDecisionTick": 9000
+          },
+          "finalState": {
+            "tick": 9000,
+            "debtSeconds": 0.003300000000045294,
+            "status": "running",
+            "simulatedSeconds": 150,
+            "activeRealSeconds": 150.00330000000005
+          },
+          "simulatedSecondsDuringMeasure": 120,
+          "simulatedToWallRatio": 0.999977500506238,
+          "semanticCheckpoints": [
+            {
+              "tick": 6,
+              "commandsDigest": "068ce3cd",
+              "posesDigest": "0c96db7f",
+              "authoritativeEventsDigest": "811c9dc5"
+            },
+            {
+              "tick": 600,
+              "commandsDigest": "f01e64a5",
+              "posesDigest": "b237aa08",
+              "authoritativeEventsDigest": "4cc5418c"
+            },
+            {
+              "tick": 1200,
+              "commandsDigest": "36d3a405",
+              "posesDigest": "f0fe73b8",
+              "authoritativeEventsDigest": "ced7f513"
+            },
+            {
+              "tick": 1800,
+              "commandsDigest": "ee1bb7e5",
+              "posesDigest": "33ec0109",
+              "authoritativeEventsDigest": "b6670752"
+            },
+            {
+              "tick": 2400,
+              "commandsDigest": "3b778f45",
+              "posesDigest": "3d45b173",
+              "authoritativeEventsDigest": "2cb68322"
+            },
+            {
+              "tick": 3000,
+              "commandsDigest": "8b566a25",
+              "posesDigest": "5d1682a0",
+              "authoritativeEventsDigest": "3c185d98"
+            },
+            {
+              "tick": 3600,
+              "commandsDigest": "8ad60f85",
+              "posesDigest": "8c71a85f",
+              "authoritativeEventsDigest": "8d2313d1"
+            },
+            {
+              "tick": 4200,
+              "commandsDigest": "b6231b65",
+              "posesDigest": "9cbc9ea1",
+              "authoritativeEventsDigest": "7ba684b4"
+            },
+            {
+              "tick": 4800,
+              "commandsDigest": "b62026c5",
+              "posesDigest": "246aa73f",
+              "authoritativeEventsDigest": "8a5f3e87"
+            },
+            {
+              "tick": 5400,
+              "commandsDigest": "52214da5",
+              "posesDigest": "f66e4ea7",
+              "authoritativeEventsDigest": "519abb03"
+            },
+            {
+              "tick": 6000,
+              "commandsDigest": "18014505",
+              "posesDigest": "c5400f6b",
+              "authoritativeEventsDigest": "710ba891"
+            },
+            {
+              "tick": 6600,
+              "commandsDigest": "cc4d28e5",
+              "posesDigest": "bbb576a3",
+              "authoritativeEventsDigest": "dd28b13c"
+            },
+            {
+              "tick": 7200,
+              "commandsDigest": "d6886045",
+              "posesDigest": "ae86301a",
+              "authoritativeEventsDigest": "d1ae102b"
+            },
+            {
+              "tick": 7800,
+              "commandsDigest": "ec952725",
+              "posesDigest": "5adc4d4d",
+              "authoritativeEventsDigest": "dc0d9326"
+            },
+            {
+              "tick": 8400,
+              "commandsDigest": "d311cc85",
+              "posesDigest": "20b039b6",
+              "authoritativeEventsDigest": "406b99ef"
+            }
+          ],
+          "admittedRealSecondsDuringMeasure": 120.00270000000008,
+          "longTasks": {
+            "supported": true,
+            "count": 0,
+            "maxMs": 0,
+            "overflow": false
+          },
+          "cleanup": {
+            "worldDisposed": true,
+            "mappedVehicles": 0,
+            "subscriptions": 0,
+            "ownedMeshes": 0,
+            "schedulerJobs": 0,
+            "schedulerCache": 0,
+            "schedulerIdentities": 0,
+            "schedulerUrgent": 0,
+            "collisionPairs": 0,
+            "pendingCollisionEvents": 0,
+            "busSubscriptions": 0,
+            "gpuInstruments": 0
+          },
+          "ownedDiagnosticBytes": 960000,
+          "gpuTimer": {
+            "status": "disabled: observer-off",
+            "samples": null,
+            "pendingResults": null,
+            "pendingReason": "Public Babylon instrumentation does not expose outstanding query count",
+            "association": "Asynchronous fresh counter results, not associated with the current CPU frame; first fresh boundary result discarded"
+          },
+          "exactPageMemoryBytes": null,
+          "framesOver18_5Ms": 0,
+          "framesOver25Ms": 0
+        },
+        {
+          "repeat": 3,
+          "observe": true,
+          "startedAtRafMs": 753186.3,
+          "warmupElapsedMs": 30000.599999999977,
+          "measuredElapsedMs": 120007.30000004766,
+          "measuredRafSpanMs": 120002.5,
+          "frameMs": {
+            "count": 17280,
+            "p50": 6.900000000023283,
+            "p95": 7,
+            "p99": 7.099999999976717,
+            "min": 4.200000000069849,
+            "max": 9.699999999953434,
+            "mean": 6.94458912037037,
+            "overBudget": null,
+            "histogram": [
+              0,
+              0,
+              17274,
+              6,
+              0,
+              0,
+              0
+            ]
+          },
+          "mainThreadMs": {
+            "count": 17280,
+            "p50": 0.5,
+            "p95": 3.9000000953674316,
+            "p99": 5.100000023841858,
+            "min": 0.09999990463256836,
+            "max": 6.5,
+            "mean": 1.5506828705400781,
+            "overBudget": null,
+            "histogram": [
+              10051,
+              6371,
+              858,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "optionalTickCpuMs": {
+            "count": 7200,
+            "p50": 2.5999999046325684,
+            "p95": 4.100000023841858,
+            "p99": 4.899999976158142,
+            "min": 1.7999999523162842,
+            "max": 5.800000071525574,
+            "mean": 2.72184722163611,
+            "overBudget": null,
+            "histogram": [
+              0,
+              6764,
+              436,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "counts": {
+            "vehicles": 70,
+            "decisions": 115656,
+            "controllers": 630000,
+            "physicsSteps": 9000,
+            "lastContextSourceTick": 8999,
+            "lastDecisionTick": 9000
+          },
+          "finalState": {
+            "tick": 9000,
+            "debtSeconds": 0.003099999999975871,
+            "status": "running",
+            "simulatedSeconds": 150,
+            "activeRealSeconds": 150.0031
+          },
+          "simulatedSecondsDuringMeasure": 120,
+          "simulatedToWallRatio": 0.9999791671006855,
+          "semanticCheckpoints": [
+            {
+              "tick": 6,
+              "commandsDigest": "068ce3cd",
+              "posesDigest": "0c96db7f",
+              "authoritativeEventsDigest": "811c9dc5"
+            },
+            {
+              "tick": 600,
+              "commandsDigest": "f01e64a5",
+              "posesDigest": "b237aa08",
+              "authoritativeEventsDigest": "4cc5418c"
+            },
+            {
+              "tick": 1200,
+              "commandsDigest": "36d3a405",
+              "posesDigest": "f0fe73b8",
+              "authoritativeEventsDigest": "ced7f513"
+            },
+            {
+              "tick": 1800,
+              "commandsDigest": "ee1bb7e5",
+              "posesDigest": "33ec0109",
+              "authoritativeEventsDigest": "b6670752"
+            },
+            {
+              "tick": 2400,
+              "commandsDigest": "3b778f45",
+              "posesDigest": "3d45b173",
+              "authoritativeEventsDigest": "2cb68322"
+            },
+            {
+              "tick": 3000,
+              "commandsDigest": "8b566a25",
+              "posesDigest": "5d1682a0",
+              "authoritativeEventsDigest": "3c185d98"
+            },
+            {
+              "tick": 3600,
+              "commandsDigest": "8ad60f85",
+              "posesDigest": "8c71a85f",
+              "authoritativeEventsDigest": "8d2313d1"
+            },
+            {
+              "tick": 4200,
+              "commandsDigest": "b6231b65",
+              "posesDigest": "9cbc9ea1",
+              "authoritativeEventsDigest": "7ba684b4"
+            },
+            {
+              "tick": 4800,
+              "commandsDigest": "b62026c5",
+              "posesDigest": "246aa73f",
+              "authoritativeEventsDigest": "8a5f3e87"
+            },
+            {
+              "tick": 5400,
+              "commandsDigest": "52214da5",
+              "posesDigest": "f66e4ea7",
+              "authoritativeEventsDigest": "519abb03"
+            },
+            {
+              "tick": 6000,
+              "commandsDigest": "18014505",
+              "posesDigest": "c5400f6b",
+              "authoritativeEventsDigest": "710ba891"
+            },
+            {
+              "tick": 6600,
+              "commandsDigest": "cc4d28e5",
+              "posesDigest": "bbb576a3",
+              "authoritativeEventsDigest": "dd28b13c"
+            },
+            {
+              "tick": 7200,
+              "commandsDigest": "d6886045",
+              "posesDigest": "ae86301a",
+              "authoritativeEventsDigest": "d1ae102b"
+            },
+            {
+              "tick": 7800,
+              "commandsDigest": "ec952725",
+              "posesDigest": "5adc4d4d",
+              "authoritativeEventsDigest": "dc0d9326"
+            },
+            {
+              "tick": 8400,
+              "commandsDigest": "d311cc85",
+              "posesDigest": "20b039b6",
+              "authoritativeEventsDigest": "406b99ef"
+            }
+          ],
+          "admittedRealSecondsDuringMeasure": 120.00250000000001,
+          "longTasks": {
+            "supported": true,
+            "count": 0,
+            "maxMs": 0,
+            "overflow": false
+          },
+          "cleanup": {
+            "worldDisposed": true,
+            "mappedVehicles": 0,
+            "subscriptions": 0,
+            "ownedMeshes": 0,
+            "schedulerJobs": 0,
+            "schedulerCache": 0,
+            "schedulerIdentities": 0,
+            "schedulerUrgent": 0,
+            "collisionPairs": 0,
+            "pendingCollisionEvents": 0,
+            "busSubscriptions": 0,
+            "gpuInstruments": 0
+          },
+          "ownedDiagnosticBytes": 1920000,
+          "gpuTimer": {
+            "status": "available: asynchronous fresh timer in milliseconds",
+            "samples": {
+              "count": 7834,
+              "p50": 0.02424,
+              "p95": 0.0248,
+              "p99": 0.03708,
+              "min": 0.02084,
+              "max": 0.55444,
+              "mean": 0.02451957620628197,
+              "overBudget": null,
+              "histogram": [
+                7834,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            "pendingResults": null,
+            "pendingReason": "Public Babylon instrumentation does not expose outstanding query count",
+            "association": "Asynchronous fresh counter results, not associated with the current CPU frame; first fresh boundary result discarded"
+          },
+          "exactPageMemoryBytes": null,
+          "framesOver18_5Ms": 0,
+          "framesOver25Ms": 0
+        },
+        {
+          "repeat": 4,
+          "observe": true,
+          "startedAtRafMs": 903253.298,
+          "warmupElapsedMs": 30006.20200000005,
+          "measuredElapsedMs": 120002.70000004768,
+          "measuredRafSpanMs": 120002.5,
+          "frameMs": {
+            "count": 17280,
+            "p50": 6.900000000023283,
+            "p95": 7,
+            "p99": 7.099999999976717,
+            "min": 4.599999999976717,
+            "max": 9.20000000006985,
+            "mean": 6.94458912037037,
+            "overBudget": null,
+            "histogram": [
+              0,
+              0,
+              17276,
+              4,
+              0,
+              0,
+              0
+            ]
+          },
+          "mainThreadMs": {
+            "count": 17280,
+            "p50": 0.5,
+            "p95": 4,
+            "p99": 5.299999952316284,
+            "min": 0.09999990463256836,
+            "max": 6.700000047683716,
+            "mean": 1.5681944445810385,
+            "overBudget": null,
+            "histogram": [
+              10058,
+              6323,
+              899,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "optionalTickCpuMs": {
+            "count": 7200,
+            "p50": 2.600000023841858,
+            "p95": 4.299999952316284,
+            "p99": 4.899999976158142,
+            "min": 1.7999999523162842,
+            "max": 6.100000023841858,
+            "mean": 2.7388888885080815,
+            "overBudget": null,
+            "histogram": [
+              0,
+              6683,
+              517,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "counts": {
+            "vehicles": 70,
+            "decisions": 115656,
+            "controllers": 630000,
+            "physicsSteps": 9000,
+            "lastContextSourceTick": 8999,
+            "lastDecisionTick": 9000
+          },
+          "finalState": {
+            "tick": 9000,
+            "debtSeconds": 0.00870200000003777,
+            "status": "running",
+            "simulatedSeconds": 150,
+            "activeRealSeconds": 150.00870200000006
+          },
+          "simulatedSecondsDuringMeasure": 120,
+          "simulatedToWallRatio": 0.9999791671006855,
+          "semanticCheckpoints": [
+            {
+              "tick": 6,
+              "commandsDigest": "068ce3cd",
+              "posesDigest": "0c96db7f",
+              "authoritativeEventsDigest": "811c9dc5"
+            },
+            {
+              "tick": 600,
+              "commandsDigest": "f01e64a5",
+              "posesDigest": "b237aa08",
+              "authoritativeEventsDigest": "4cc5418c"
+            },
+            {
+              "tick": 1200,
+              "commandsDigest": "36d3a405",
+              "posesDigest": "f0fe73b8",
+              "authoritativeEventsDigest": "ced7f513"
+            },
+            {
+              "tick": 1800,
+              "commandsDigest": "ee1bb7e5",
+              "posesDigest": "33ec0109",
+              "authoritativeEventsDigest": "b6670752"
+            },
+            {
+              "tick": 2400,
+              "commandsDigest": "3b778f45",
+              "posesDigest": "3d45b173",
+              "authoritativeEventsDigest": "2cb68322"
+            },
+            {
+              "tick": 3000,
+              "commandsDigest": "8b566a25",
+              "posesDigest": "5d1682a0",
+              "authoritativeEventsDigest": "3c185d98"
+            },
+            {
+              "tick": 3600,
+              "commandsDigest": "8ad60f85",
+              "posesDigest": "8c71a85f",
+              "authoritativeEventsDigest": "8d2313d1"
+            },
+            {
+              "tick": 4200,
+              "commandsDigest": "b6231b65",
+              "posesDigest": "9cbc9ea1",
+              "authoritativeEventsDigest": "7ba684b4"
+            },
+            {
+              "tick": 4800,
+              "commandsDigest": "b62026c5",
+              "posesDigest": "246aa73f",
+              "authoritativeEventsDigest": "8a5f3e87"
+            },
+            {
+              "tick": 5400,
+              "commandsDigest": "52214da5",
+              "posesDigest": "f66e4ea7",
+              "authoritativeEventsDigest": "519abb03"
+            },
+            {
+              "tick": 6000,
+              "commandsDigest": "18014505",
+              "posesDigest": "c5400f6b",
+              "authoritativeEventsDigest": "710ba891"
+            },
+            {
+              "tick": 6600,
+              "commandsDigest": "cc4d28e5",
+              "posesDigest": "bbb576a3",
+              "authoritativeEventsDigest": "dd28b13c"
+            },
+            {
+              "tick": 7200,
+              "commandsDigest": "d6886045",
+              "posesDigest": "ae86301a",
+              "authoritativeEventsDigest": "d1ae102b"
+            },
+            {
+              "tick": 7800,
+              "commandsDigest": "ec952725",
+              "posesDigest": "5adc4d4d",
+              "authoritativeEventsDigest": "dc0d9326"
+            },
+            {
+              "tick": 8400,
+              "commandsDigest": "d311cc85",
+              "posesDigest": "20b039b6",
+              "authoritativeEventsDigest": "406b99ef"
+            }
+          ],
+          "admittedRealSecondsDuringMeasure": 120.00250000000001,
+          "longTasks": {
+            "supported": true,
+            "count": 0,
+            "maxMs": 0,
+            "overflow": false
+          },
+          "cleanup": {
+            "worldDisposed": true,
+            "mappedVehicles": 0,
+            "subscriptions": 0,
+            "ownedMeshes": 0,
+            "schedulerJobs": 0,
+            "schedulerCache": 0,
+            "schedulerIdentities": 0,
+            "schedulerUrgent": 0,
+            "collisionPairs": 0,
+            "pendingCollisionEvents": 0,
+            "busSubscriptions": 0,
+            "gpuInstruments": 0
+          },
+          "ownedDiagnosticBytes": 1920000,
+          "gpuTimer": {
+            "status": "available: asynchronous fresh timer in milliseconds",
+            "samples": {
+              "count": 7680,
+              "p50": 0.02428,
+              "p95": 0.02472,
+              "p99": 0.03048,
+              "min": 0.02084,
+              "max": 0.55964,
+              "mean": 0.024303166666668492,
+              "overBudget": null,
+              "histogram": [
+                7680,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            "pendingResults": null,
+            "pendingReason": "Public Babylon instrumentation does not expose outstanding query count",
+            "association": "Asynchronous fresh counter results, not associated with the current CPU frame; first fresh boundary result discarded"
+          },
+          "exactPageMemoryBytes": null,
+          "framesOver18_5Ms": 0,
+          "framesOver25Ms": 0
+        },
+        {
+          "repeat": 4,
+          "observe": false,
+          "startedAtRafMs": 1053331.4,
+          "warmupElapsedMs": 30000.600000000093,
+          "measuredElapsedMs": 120006.29999995232,
+          "measuredRafSpanMs": 120002.5,
+          "frameMs": {
+            "count": 17279,
+            "p50": 6.900000000139698,
+            "p95": 7,
+            "p99": 7.100000000093132,
+            "min": 4.699999999953434,
+            "max": 16.399999999906868,
+            "mean": 6.944991029573471,
+            "overBudget": null,
+            "histogram": [
+              0,
+              0,
+              17271,
+              8,
+              0,
+              0,
+              0
+            ]
+          },
+          "mainThreadMs": {
+            "count": 17279,
+            "p50": 0.5,
+            "p95": 4.199999928474426,
+            "p99": 5.399999976158142,
+            "min": 0.09999990463256836,
+            "max": 11.899999976158142,
+            "mean": 1.6194629324580159,
+            "overBudget": null,
+            "histogram": [
+              10066,
+              6136,
+              1076,
+              1,
+              0,
+              0,
+              0
+            ]
+          },
+          "optionalTickCpuMs": null,
+          "counts": {
+            "vehicles": 70,
+            "decisions": 115656,
+            "controllers": 630000,
+            "physicsSteps": 9000,
+            "lastContextSourceTick": 8999,
+            "lastDecisionTick": 9000
+          },
+          "finalState": {
+            "tick": 9000,
+            "debtSeconds": 0.0031000000000924997,
+            "status": "running",
+            "simulatedSeconds": 150,
+            "activeRealSeconds": 150.0031000000001
+          },
+          "simulatedSecondsDuringMeasure": 120,
+          "simulatedToWallRatio": 0.9999791671006855,
+          "semanticCheckpoints": [
+            {
+              "tick": 6,
+              "commandsDigest": "068ce3cd",
+              "posesDigest": "0c96db7f",
+              "authoritativeEventsDigest": "811c9dc5"
+            },
+            {
+              "tick": 600,
+              "commandsDigest": "f01e64a5",
+              "posesDigest": "b237aa08",
+              "authoritativeEventsDigest": "4cc5418c"
+            },
+            {
+              "tick": 1200,
+              "commandsDigest": "36d3a405",
+              "posesDigest": "f0fe73b8",
+              "authoritativeEventsDigest": "ced7f513"
+            },
+            {
+              "tick": 1800,
+              "commandsDigest": "ee1bb7e5",
+              "posesDigest": "33ec0109",
+              "authoritativeEventsDigest": "b6670752"
+            },
+            {
+              "tick": 2400,
+              "commandsDigest": "3b778f45",
+              "posesDigest": "3d45b173",
+              "authoritativeEventsDigest": "2cb68322"
+            },
+            {
+              "tick": 3000,
+              "commandsDigest": "8b566a25",
+              "posesDigest": "5d1682a0",
+              "authoritativeEventsDigest": "3c185d98"
+            },
+            {
+              "tick": 3600,
+              "commandsDigest": "8ad60f85",
+              "posesDigest": "8c71a85f",
+              "authoritativeEventsDigest": "8d2313d1"
+            },
+            {
+              "tick": 4200,
+              "commandsDigest": "b6231b65",
+              "posesDigest": "9cbc9ea1",
+              "authoritativeEventsDigest": "7ba684b4"
+            },
+            {
+              "tick": 4800,
+              "commandsDigest": "b62026c5",
+              "posesDigest": "246aa73f",
+              "authoritativeEventsDigest": "8a5f3e87"
+            },
+            {
+              "tick": 5400,
+              "commandsDigest": "52214da5",
+              "posesDigest": "f66e4ea7",
+              "authoritativeEventsDigest": "519abb03"
+            },
+            {
+              "tick": 6000,
+              "commandsDigest": "18014505",
+              "posesDigest": "c5400f6b",
+              "authoritativeEventsDigest": "710ba891"
+            },
+            {
+              "tick": 6600,
+              "commandsDigest": "cc4d28e5",
+              "posesDigest": "bbb576a3",
+              "authoritativeEventsDigest": "dd28b13c"
+            },
+            {
+              "tick": 7200,
+              "commandsDigest": "d6886045",
+              "posesDigest": "ae86301a",
+              "authoritativeEventsDigest": "d1ae102b"
+            },
+            {
+              "tick": 7800,
+              "commandsDigest": "ec952725",
+              "posesDigest": "5adc4d4d",
+              "authoritativeEventsDigest": "dc0d9326"
+            },
+            {
+              "tick": 8400,
+              "commandsDigest": "d311cc85",
+              "posesDigest": "20b039b6",
+              "authoritativeEventsDigest": "406b99ef"
+            }
+          ],
+          "admittedRealSecondsDuringMeasure": 120.00250000000001,
+          "longTasks": {
+            "supported": true,
+            "count": 0,
+            "maxMs": 0,
+            "overflow": false
+          },
+          "cleanup": {
+            "worldDisposed": true,
+            "mappedVehicles": 0,
+            "subscriptions": 0,
+            "ownedMeshes": 0,
+            "schedulerJobs": 0,
+            "schedulerCache": 0,
+            "schedulerIdentities": 0,
+            "schedulerUrgent": 0,
+            "collisionPairs": 0,
+            "pendingCollisionEvents": 0,
+            "busSubscriptions": 0,
+            "gpuInstruments": 0
+          },
+          "ownedDiagnosticBytes": 960000,
+          "gpuTimer": {
+            "status": "disabled: observer-off",
+            "samples": null,
+            "pendingResults": null,
+            "pendingReason": "Public Babylon instrumentation does not expose outstanding query count",
+            "association": "Asynchronous fresh counter results, not associated with the current CPU frame; first fresh boundary result discarded"
+          },
+          "exactPageMemoryBytes": null,
+          "framesOver18_5Ms": 0,
+          "framesOver25Ms": 0
+        },
+        {
+          "repeat": 5,
+          "observe": false,
+          "startedAtRafMs": 1203396.9,
+          "warmupElapsedMs": 30000.700000000186,
+          "measuredElapsedMs": 120008.00000002375,
+          "measuredRafSpanMs": 120002.3999999999,
+          "frameMs": {
+            "count": 17280,
+            "p50": 6.900000000139698,
+            "p95": 7,
+            "p99": 7.100000000093132,
+            "min": 2.5999999998603016,
+            "max": 11.600000000093132,
+            "mean": 6.944583333333328,
+            "overBudget": null,
+            "histogram": [
+              0,
+              1,
+              17272,
+              7,
+              0,
+              0,
+              0
+            ]
+          },
+          "mainThreadMs": {
+            "count": 17280,
+            "p50": 0.40000009536743164,
+            "p95": 4.5,
+            "p99": 5.399999976158142,
+            "min": 0.09999990463256836,
+            "max": 7.299999952316284,
+            "mean": 1.635480324227225,
+            "overBudget": null,
+            "histogram": [
+              10076,
+              6084,
+              1120,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "optionalTickCpuMs": null,
+          "counts": {
+            "vehicles": 70,
+            "decisions": 115656,
+            "controllers": 630000,
+            "physicsSteps": 9000,
+            "lastContextSourceTick": 8999,
+            "lastDecisionTick": 9000
+          },
+          "finalState": {
+            "tick": 9000,
+            "debtSeconds": 0.003100000000092358,
+            "status": "running",
+            "simulatedSeconds": 150,
+            "activeRealSeconds": 150.0031000000001
+          },
+          "simulatedSecondsDuringMeasure": 120,
+          "simulatedToWallRatio": 0.9999800003999928,
+          "semanticCheckpoints": [
+            {
+              "tick": 6,
+              "commandsDigest": "068ce3cd",
+              "posesDigest": "0c96db7f",
+              "authoritativeEventsDigest": "811c9dc5"
+            },
+            {
+              "tick": 600,
+              "commandsDigest": "f01e64a5",
+              "posesDigest": "b237aa08",
+              "authoritativeEventsDigest": "4cc5418c"
+            },
+            {
+              "tick": 1200,
+              "commandsDigest": "36d3a405",
+              "posesDigest": "f0fe73b8",
+              "authoritativeEventsDigest": "ced7f513"
+            },
+            {
+              "tick": 1800,
+              "commandsDigest": "ee1bb7e5",
+              "posesDigest": "33ec0109",
+              "authoritativeEventsDigest": "b6670752"
+            },
+            {
+              "tick": 2400,
+              "commandsDigest": "3b778f45",
+              "posesDigest": "3d45b173",
+              "authoritativeEventsDigest": "2cb68322"
+            },
+            {
+              "tick": 3000,
+              "commandsDigest": "8b566a25",
+              "posesDigest": "5d1682a0",
+              "authoritativeEventsDigest": "3c185d98"
+            },
+            {
+              "tick": 3600,
+              "commandsDigest": "8ad60f85",
+              "posesDigest": "8c71a85f",
+              "authoritativeEventsDigest": "8d2313d1"
+            },
+            {
+              "tick": 4200,
+              "commandsDigest": "b6231b65",
+              "posesDigest": "9cbc9ea1",
+              "authoritativeEventsDigest": "7ba684b4"
+            },
+            {
+              "tick": 4800,
+              "commandsDigest": "b62026c5",
+              "posesDigest": "246aa73f",
+              "authoritativeEventsDigest": "8a5f3e87"
+            },
+            {
+              "tick": 5400,
+              "commandsDigest": "52214da5",
+              "posesDigest": "f66e4ea7",
+              "authoritativeEventsDigest": "519abb03"
+            },
+            {
+              "tick": 6000,
+              "commandsDigest": "18014505",
+              "posesDigest": "c5400f6b",
+              "authoritativeEventsDigest": "710ba891"
+            },
+            {
+              "tick": 6600,
+              "commandsDigest": "cc4d28e5",
+              "posesDigest": "bbb576a3",
+              "authoritativeEventsDigest": "dd28b13c"
+            },
+            {
+              "tick": 7200,
+              "commandsDigest": "d6886045",
+              "posesDigest": "ae86301a",
+              "authoritativeEventsDigest": "d1ae102b"
+            },
+            {
+              "tick": 7800,
+              "commandsDigest": "ec952725",
+              "posesDigest": "5adc4d4d",
+              "authoritativeEventsDigest": "dc0d9326"
+            },
+            {
+              "tick": 8400,
+              "commandsDigest": "d311cc85",
+              "posesDigest": "20b039b6",
+              "authoritativeEventsDigest": "406b99ef"
+            }
+          ],
+          "admittedRealSecondsDuringMeasure": 120.00239999999991,
+          "longTasks": {
+            "supported": true,
+            "count": 0,
+            "maxMs": 0,
+            "overflow": false
+          },
+          "cleanup": {
+            "worldDisposed": true,
+            "mappedVehicles": 0,
+            "subscriptions": 0,
+            "ownedMeshes": 0,
+            "schedulerJobs": 0,
+            "schedulerCache": 0,
+            "schedulerIdentities": 0,
+            "schedulerUrgent": 0,
+            "collisionPairs": 0,
+            "pendingCollisionEvents": 0,
+            "busSubscriptions": 0,
+            "gpuInstruments": 0
+          },
+          "ownedDiagnosticBytes": 960000,
+          "gpuTimer": {
+            "status": "disabled: observer-off",
+            "samples": null,
+            "pendingResults": null,
+            "pendingReason": "Public Babylon instrumentation does not expose outstanding query count",
+            "association": "Asynchronous fresh counter results, not associated with the current CPU frame; first fresh boundary result discarded"
+          },
+          "exactPageMemoryBytes": null,
+          "framesOver18_5Ms": 0,
+          "framesOver25Ms": 0
+        },
+        {
+          "repeat": 5,
+          "observe": true,
+          "startedAtRafMs": 1353462.4,
+          "warmupElapsedMs": 30000.600000000093,
+          "measuredElapsedMs": 120007.39999997616,
+          "measuredRafSpanMs": 120002.5,
+          "frameMs": {
+            "count": 17280,
+            "p50": 6.900000000139698,
+            "p95": 7,
+            "p99": 7.100000000093132,
+            "min": 1.4000000001396984,
+            "max": 12.099999999860302,
+            "mean": 6.94458912037037,
+            "overBudget": null,
+            "histogram": [
+              0,
+              1,
+              17272,
+              7,
+              0,
+              0,
+              0
+            ]
+          },
+          "mainThreadMs": {
+            "count": 17280,
+            "p50": 0.5,
+            "p95": 4.199999928474426,
+            "p99": 5.300000071525574,
+            "min": 0.09999990463256836,
+            "max": 6.899999976158142,
+            "mean": 1.5965914351451729,
+            "overBudget": null,
+            "histogram": [
+              10073,
+              6141,
+              1066,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "optionalTickCpuMs": {
+            "count": 7200,
+            "p50": 2.6999999284744263,
+            "p95": 4.5,
+            "p99": 4.900000095367432,
+            "min": 1.7999999523162842,
+            "max": 6.200000047683716,
+            "mean": 2.817055555548933,
+            "overBudget": null,
+            "histogram": [
+              0,
+              6535,
+              665,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "counts": {
+            "vehicles": 70,
+            "decisions": 115656,
+            "controllers": 630000,
+            "physicsSteps": 9000,
+            "lastContextSourceTick": 8999,
+            "lastDecisionTick": 9000
+          },
+          "finalState": {
+            "tick": 9000,
+            "debtSeconds": 0.0031000000000923934,
+            "status": "running",
+            "simulatedSeconds": 150,
+            "activeRealSeconds": 150.0031000000001
+          },
+          "simulatedSecondsDuringMeasure": 120,
+          "simulatedToWallRatio": 0.9999791671006855,
+          "semanticCheckpoints": [
+            {
+              "tick": 6,
+              "commandsDigest": "068ce3cd",
+              "posesDigest": "0c96db7f",
+              "authoritativeEventsDigest": "811c9dc5"
+            },
+            {
+              "tick": 600,
+              "commandsDigest": "f01e64a5",
+              "posesDigest": "b237aa08",
+              "authoritativeEventsDigest": "4cc5418c"
+            },
+            {
+              "tick": 1200,
+              "commandsDigest": "36d3a405",
+              "posesDigest": "f0fe73b8",
+              "authoritativeEventsDigest": "ced7f513"
+            },
+            {
+              "tick": 1800,
+              "commandsDigest": "ee1bb7e5",
+              "posesDigest": "33ec0109",
+              "authoritativeEventsDigest": "b6670752"
+            },
+            {
+              "tick": 2400,
+              "commandsDigest": "3b778f45",
+              "posesDigest": "3d45b173",
+              "authoritativeEventsDigest": "2cb68322"
+            },
+            {
+              "tick": 3000,
+              "commandsDigest": "8b566a25",
+              "posesDigest": "5d1682a0",
+              "authoritativeEventsDigest": "3c185d98"
+            },
+            {
+              "tick": 3600,
+              "commandsDigest": "8ad60f85",
+              "posesDigest": "8c71a85f",
+              "authoritativeEventsDigest": "8d2313d1"
+            },
+            {
+              "tick": 4200,
+              "commandsDigest": "b6231b65",
+              "posesDigest": "9cbc9ea1",
+              "authoritativeEventsDigest": "7ba684b4"
+            },
+            {
+              "tick": 4800,
+              "commandsDigest": "b62026c5",
+              "posesDigest": "246aa73f",
+              "authoritativeEventsDigest": "8a5f3e87"
+            },
+            {
+              "tick": 5400,
+              "commandsDigest": "52214da5",
+              "posesDigest": "f66e4ea7",
+              "authoritativeEventsDigest": "519abb03"
+            },
+            {
+              "tick": 6000,
+              "commandsDigest": "18014505",
+              "posesDigest": "c5400f6b",
+              "authoritativeEventsDigest": "710ba891"
+            },
+            {
+              "tick": 6600,
+              "commandsDigest": "cc4d28e5",
+              "posesDigest": "bbb576a3",
+              "authoritativeEventsDigest": "dd28b13c"
+            },
+            {
+              "tick": 7200,
+              "commandsDigest": "d6886045",
+              "posesDigest": "ae86301a",
+              "authoritativeEventsDigest": "d1ae102b"
+            },
+            {
+              "tick": 7800,
+              "commandsDigest": "ec952725",
+              "posesDigest": "5adc4d4d",
+              "authoritativeEventsDigest": "dc0d9326"
+            },
+            {
+              "tick": 8400,
+              "commandsDigest": "d311cc85",
+              "posesDigest": "20b039b6",
+              "authoritativeEventsDigest": "406b99ef"
+            }
+          ],
+          "admittedRealSecondsDuringMeasure": 120.00250000000001,
+          "longTasks": {
+            "supported": true,
+            "count": 0,
+            "maxMs": 0,
+            "overflow": false
+          },
+          "cleanup": {
+            "worldDisposed": true,
+            "mappedVehicles": 0,
+            "subscriptions": 0,
+            "ownedMeshes": 0,
+            "schedulerJobs": 0,
+            "schedulerCache": 0,
+            "schedulerIdentities": 0,
+            "schedulerUrgent": 0,
+            "collisionPairs": 0,
+            "pendingCollisionEvents": 0,
+            "busSubscriptions": 0,
+            "gpuInstruments": 0
+          },
+          "ownedDiagnosticBytes": 1920000,
+          "gpuTimer": {
+            "status": "available: asynchronous fresh timer in milliseconds",
+            "samples": {
+              "count": 7685,
+              "p50": 0.02424,
+              "p95": 0.02472,
+              "p99": 0.03652,
+              "min": 0.02084,
+              "max": 0.56872,
+              "mean": 0.024423994795056764,
+              "overBudget": null,
+              "histogram": [
+                7685,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            "pendingResults": null,
+            "pendingReason": "Public Babylon instrumentation does not expose outstanding query count",
+            "association": "Asynchronous fresh counter results, not associated with the current CPU frame; first fresh boundary result discarded"
+          },
+          "exactPageMemoryBytes": null,
+          "framesOver18_5Ms": 0,
+          "framesOver25Ms": 0
+        }
+      ],
+      "scope": "Actual headed early physical/controller/context fixture, not complete gameplay or laptop gate. GPU timers reported when supported; exact page memory unavailable; smoke cannot be fullprotocolbaseline."
+    },
+    {
+      "capturedAt": "2026-10-05T17:51:24.735Z",
+      "arm": "ENTITY_PHASED",
+      "metadata": {
+        "identity": {
+          "commit": "4096b8d83b6399a01e7bf0db16b28e5faae32479",
+          "sourceHash": "995b6fbaa5d2f9cd42bca0bac4c9dc70f2dac89df85ae92c3705b7f14f78bcb3",
+          "inputs": [
+            "Docs/performance-budgets.json",
+            "package-lock.json",
+            "package.json",
+            "scripts/scheduling-hardware-probe-server.mjs",
+            "src/autonomy/index.ts",
+            "src/autonomy/road-context.ts",
+            "src/profiles/contracts.ts",
+            "src/profiles/index.ts",
+            "src/profiles/parameter-catalog.generated.ts",
+            "src/profiles/parameter-registry.ts",
+            "src/rendering/asset-budgets.ts",
+            "src/rendering/babylon/asset-contract.ts",
+            "src/rendering/babylon/asset-registry.ts",
+            "src/rendering/babylon/backend.ts",
+            "src/rendering/babylon/cell-batches.ts",
+            "src/rendering/babylon/daylight.ts",
+            "src/rendering/babylon/dev-inspector.ts",
+            "src/rendering/babylon/diagnostics-adapter.ts",
+            "src/rendering/babylon/index.ts",
+            "src/rendering/babylon/recovery-session.ts",
+            "src/rendering/babylon/scene-adapter.ts",
+            "src/rendering/babylon/snapshot-presenter.ts",
+            "src/rendering/babylon/vehicle-camera-input.ts",
+            "src/rendering/babylon/vehicle-camera.ts",
+            "src/rendering/babylon/vehicle-picking-input.ts",
+            "src/rendering/babylon/vehicle-picking-registry.ts",
+            "src/rendering/babylon/vehicle-picking.ts",
+            "src/rendering/backend-policy.ts",
+            "src/rendering/camera-collision.ts",
+            "src/rendering/diagnostics.ts",
+            "src/rendering/quality-policy.ts",
+            "src/rendering/render-sync.ts",
+            "src/rendering/scene-contract.ts",
+            "src/rendering/vehicle-camera.ts",
+            "src/sessions/identity.ts",
+            "src/sessions/index.ts",
+            "src/sessions/random.ts",
+            "src/sessions/validation.ts",
+            "src/simulation/collision-events.ts",
+            "src/simulation/event-bus.ts",
+            "src/simulation/events.ts",
+            "src/simulation/fixed-tick.ts",
+            "src/simulation/index.ts",
+            "src/simulation/scheduling.ts",
+            "src/telemetry/contracts.ts",
+            "src/telemetry/index.ts",
+            "src/telemetry/performance.ts",
+            "src/vehicles/body-port.ts",
+            "src/vehicles/body-registry.ts",
+            "src/vehicles/collision-episodes.ts",
+            "src/vehicles/collision-port.ts",
+            "src/vehicles/contracts.ts",
+            "src/vehicles/controller-port.ts",
+            "src/vehicles/controller.ts",
+            "src/vehicles/index.ts",
+            "src/vehicles/physics.ts",
+            "src/vehicles/rapier/index.ts",
+            "src/vehicles/vehicle-classes.ts",
+            "src/world/crosswalk-zones.ts",
+            "src/world/errors.ts",
+            "src/world/index.ts",
+            "src/world/intersection-conflict-geometry.ts",
+            "src/world/intersection-conflicts.ts",
+            "src/world/lane-graph.ts",
+            "src/world/parser.ts",
+            "src/world/priority-arrival.ts",
+            "src/world/priority-policy.ts",
+            "src/world/priority-rules.ts",
+            "src/world/semantics.ts",
+            "src/world/signals.ts",
+            "src/world/spatial-index.ts",
+            "src/world/stop-rules.ts",
+            "tests/autonomy/road-context-reference.ts",
+            "tests/browser/simulation-scheduling/index.html",
+            "tests/browser/simulation-scheduling/main.ts",
+            "tests/browser/simulation-scheduling/protocol.ts",
+            "tests/browser/simulation-scheduling/workload.ts",
+            "tests/simulation/scheduling-reference.ts",
+            "tests/world/intersection-conflicts-fixture.ts",
+            "tests/world/spatial-index-reference.ts"
+          ],
+          "budgetVersion": "203-initial-1",
+          "physicsVersion": "0.21.0",
+          "engineVersion": "9.29.0"
+        },
+        "artifactHash": "784022537c183d72b1c001e243fc16b5dc573f7834e7e3747a8b4beb4d51dc50",
+        "captureId": "20261005T170121469Z",
+        "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+        "renderer": "WEBGL2",
+        "actualGpuInfo": {
+          "vendor": "Google Inc. (AMD)",
+          "renderer": "ANGLE (AMD, AMD Radeon RX 7900 XTX (0x0000744C) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+          "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)"
+        },
+        "preset": "MEDIUM_FIXED_EARLY_FIXTURE",
+        "adaptiveQuality": false,
+        "cssResolution": [
+          1920,
+          1080
+        ],
+        "internalResolution": [
+          1920,
+          1080
+        ],
+        "dpr": 1,
+        "network": "local unthrottled warm assets",
+        "inspector": "closed required",
+        "workload": "70 physical mixed cars,67 anonymous obstacles; synthetic route decisions, actual024 controller and028 collision publication",
+        "chronologicalBaseline": "Original preimplementation Node before preserved; hardware reference is a postimplementation control on identical build."
+      },
+      "fixtureVersion": "219-physical70-scheduling-v1",
+      "protocol": {
+        "repetitions": 5,
+        "warmupMs": 30000,
+        "measureMs": 120000,
+        "foreground": true,
+        "clock": "actualRAF",
+        "sampleCapacity": 60000,
+        "observer": "common frame/main CPU timer both; optional per-authoritative-tick CPU samples on"
+      },
+      "runs": [
+        {
+          "repeat": 1,
+          "observe": false,
+          "startedAtRafMs": 1503598.798,
+          "warmupElapsedMs": 30006.20200000005,
+          "measuredElapsedMs": 120002.79999995232,
+          "measuredRafSpanMs": 120002.3999999999,
+          "frameMs": {
+            "count": 17280,
+            "p50": 6.900000000139698,
+            "p95": 7,
+            "p99": 7.100000000093132,
+            "min": 4.800000000046566,
+            "max": 9.100000000093132,
+            "mean": 6.944583333333328,
+            "overBudget": null,
+            "histogram": [
+              0,
+              0,
+              17273,
+              7,
+              0,
+              0,
+              0
+            ]
+          },
+          "mainThreadMs": {
+            "count": 17280,
+            "p50": 0.40000009536743164,
+            "p95": 3.799999952316284,
+            "p99": 4.200000047683716,
+            "min": 0.09999990463256836,
+            "max": 6.199999928474426,
+            "mean": 1.5539236112877175,
+            "overBudget": null,
+            "histogram": [
+              10068,
+              6707,
+              505,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "optionalTickCpuMs": null,
+          "counts": {
+            "vehicles": 70,
+            "decisions": 113725,
+            "controllers": 630000,
+            "physicsSteps": 9000,
+            "lastContextSourceTick": 8999,
+            "lastDecisionTick": 9000
+          },
+          "finalState": {
+            "tick": 9000,
+            "debtSeconds": 0.008601999999944638,
+            "status": "running",
+            "simulatedSeconds": 150,
+            "activeRealSeconds": 150.00860199999997
+          },
+          "simulatedSecondsDuringMeasure": 120,
+          "simulatedToWallRatio": 0.9999800003999928,
+          "semanticCheckpoints": [
+            {
+              "tick": 6,
+              "commandsDigest": "068ce3cd",
+              "posesDigest": "0c96db7f",
+              "authoritativeEventsDigest": "811c9dc5"
+            },
+            {
+              "tick": 600,
+              "commandsDigest": "f01e64a5",
+              "posesDigest": "b237aa08",
+              "authoritativeEventsDigest": "4cc5418c"
+            },
+            {
+              "tick": 1200,
+              "commandsDigest": "36d3a405",
+              "posesDigest": "f0fe73b8",
+              "authoritativeEventsDigest": "ced7f513"
+            },
+            {
+              "tick": 1800,
+              "commandsDigest": "ee1bb7e5",
+              "posesDigest": "33ec0109",
+              "authoritativeEventsDigest": "b6670752"
+            },
+            {
+              "tick": 2400,
+              "commandsDigest": "3b778f45",
+              "posesDigest": "3d45b173",
+              "authoritativeEventsDigest": "2cb68322"
+            },
+            {
+              "tick": 3000,
+              "commandsDigest": "8b566a25",
+              "posesDigest": "5d1682a0",
+              "authoritativeEventsDigest": "3c185d98"
+            },
+            {
+              "tick": 3600,
+              "commandsDigest": "8ad60f85",
+              "posesDigest": "8c71a85f",
+              "authoritativeEventsDigest": "8d2313d1"
+            },
+            {
+              "tick": 4200,
+              "commandsDigest": "b6231b65",
+              "posesDigest": "9cbc9ea1",
+              "authoritativeEventsDigest": "7ba684b4"
+            },
+            {
+              "tick": 4800,
+              "commandsDigest": "b62026c5",
+              "posesDigest": "246aa73f",
+              "authoritativeEventsDigest": "8a5f3e87"
+            },
+            {
+              "tick": 5400,
+              "commandsDigest": "52214da5",
+              "posesDigest": "f66e4ea7",
+              "authoritativeEventsDigest": "519abb03"
+            },
+            {
+              "tick": 6000,
+              "commandsDigest": "18014505",
+              "posesDigest": "c5400f6b",
+              "authoritativeEventsDigest": "710ba891"
+            },
+            {
+              "tick": 6600,
+              "commandsDigest": "cc4d28e5",
+              "posesDigest": "bbb576a3",
+              "authoritativeEventsDigest": "dd28b13c"
+            },
+            {
+              "tick": 7200,
+              "commandsDigest": "d6886045",
+              "posesDigest": "ae86301a",
+              "authoritativeEventsDigest": "d1ae102b"
+            },
+            {
+              "tick": 7800,
+              "commandsDigest": "ec952725",
+              "posesDigest": "5adc4d4d",
+              "authoritativeEventsDigest": "dc0d9326"
+            },
+            {
+              "tick": 8400,
+              "commandsDigest": "d311cc85",
+              "posesDigest": "20b039b6",
+              "authoritativeEventsDigest": "406b99ef"
+            }
+          ],
+          "admittedRealSecondsDuringMeasure": 120.00239999999992,
+          "longTasks": {
+            "supported": true,
+            "count": 0,
+            "maxMs": 0,
+            "overflow": false
+          },
+          "cleanup": {
+            "worldDisposed": true,
+            "mappedVehicles": 0,
+            "subscriptions": 0,
+            "ownedMeshes": 0,
+            "schedulerJobs": 0,
+            "schedulerCache": 0,
+            "schedulerIdentities": 0,
+            "schedulerUrgent": 0,
+            "collisionPairs": 0,
+            "pendingCollisionEvents": 0,
+            "busSubscriptions": 0,
+            "gpuInstruments": 0
+          },
+          "ownedDiagnosticBytes": 960000,
+          "gpuTimer": {
+            "status": "disabled: observer-off",
+            "samples": null,
+            "pendingResults": null,
+            "pendingReason": "Public Babylon instrumentation does not expose outstanding query count",
+            "association": "Asynchronous fresh counter results, not associated with the current CPU frame; first fresh boundary result discarded"
+          },
+          "exactPageMemoryBytes": null,
+          "framesOver18_5Ms": 0,
+          "framesOver25Ms": 0
+        },
+        {
+          "repeat": 1,
+          "observe": true,
+          "startedAtRafMs": 1653669.9,
+          "warmupElapsedMs": 30000.600000000093,
+          "measuredElapsedMs": 120005.79999995232,
+          "measuredRafSpanMs": 120002.30000000005,
+          "frameMs": {
+            "count": 17280,
+            "p50": 6.900000000139698,
+            "p95": 7,
+            "p99": 7.100000000093132,
+            "min": 4.7000000001862645,
+            "max": 9.199999999953434,
+            "mean": 6.944577546296299,
+            "overBudget": null,
+            "histogram": [
+              0,
+              0,
+              17269,
+              11,
+              0,
+              0,
+              0
+            ]
+          },
+          "mainThreadMs": {
+            "count": 17280,
+            "p50": 0.5,
+            "p95": 3.899999976158142,
+            "p99": 4.399999976158142,
+            "min": 0.09999990463256836,
+            "max": 9.200000047683716,
+            "mean": 1.6114814819078203,
+            "overBudget": null,
+            "histogram": [
+              10051,
+              6503,
+              725,
+              1,
+              0,
+              0,
+              0
+            ]
+          },
+          "optionalTickCpuMs": {
+            "count": 7200,
+            "p50": 2.799999952316284,
+            "p95": 3.5,
+            "p99": 4,
+            "min": 1.899999976158142,
+            "max": 8.299999952316284,
+            "mean": 2.8246527773969703,
+            "overBudget": null,
+            "histogram": [
+              0,
+              7107,
+              92,
+              1,
+              0,
+              0,
+              0
+            ]
+          },
+          "counts": {
+            "vehicles": 70,
+            "decisions": 113725,
+            "controllers": 630000,
+            "physicsSteps": 9000,
+            "lastContextSourceTick": 8999,
+            "lastDecisionTick": 9000
+          },
+          "finalState": {
+            "tick": 9000,
+            "debtSeconds": 0.002900000000139368,
+            "status": "running",
+            "simulatedSeconds": 150,
+            "activeRealSeconds": 150.00290000000015
+          },
+          "simulatedSecondsDuringMeasure": 120,
+          "simulatedToWallRatio": 0.999980833700687,
+          "semanticCheckpoints": [
+            {
+              "tick": 6,
+              "commandsDigest": "068ce3cd",
+              "posesDigest": "0c96db7f",
+              "authoritativeEventsDigest": "811c9dc5"
+            },
+            {
+              "tick": 600,
+              "commandsDigest": "f01e64a5",
+              "posesDigest": "b237aa08",
+              "authoritativeEventsDigest": "4cc5418c"
+            },
+            {
+              "tick": 1200,
+              "commandsDigest": "36d3a405",
+              "posesDigest": "f0fe73b8",
+              "authoritativeEventsDigest": "ced7f513"
+            },
+            {
+              "tick": 1800,
+              "commandsDigest": "ee1bb7e5",
+              "posesDigest": "33ec0109",
+              "authoritativeEventsDigest": "b6670752"
+            },
+            {
+              "tick": 2400,
+              "commandsDigest": "3b778f45",
+              "posesDigest": "3d45b173",
+              "authoritativeEventsDigest": "2cb68322"
+            },
+            {
+              "tick": 3000,
+              "commandsDigest": "8b566a25",
+              "posesDigest": "5d1682a0",
+              "authoritativeEventsDigest": "3c185d98"
+            },
+            {
+              "tick": 3600,
+              "commandsDigest": "8ad60f85",
+              "posesDigest": "8c71a85f",
+              "authoritativeEventsDigest": "8d2313d1"
+            },
+            {
+              "tick": 4200,
+              "commandsDigest": "b6231b65",
+              "posesDigest": "9cbc9ea1",
+              "authoritativeEventsDigest": "7ba684b4"
+            },
+            {
+              "tick": 4800,
+              "commandsDigest": "b62026c5",
+              "posesDigest": "246aa73f",
+              "authoritativeEventsDigest": "8a5f3e87"
+            },
+            {
+              "tick": 5400,
+              "commandsDigest": "52214da5",
+              "posesDigest": "f66e4ea7",
+              "authoritativeEventsDigest": "519abb03"
+            },
+            {
+              "tick": 6000,
+              "commandsDigest": "18014505",
+              "posesDigest": "c5400f6b",
+              "authoritativeEventsDigest": "710ba891"
+            },
+            {
+              "tick": 6600,
+              "commandsDigest": "cc4d28e5",
+              "posesDigest": "bbb576a3",
+              "authoritativeEventsDigest": "dd28b13c"
+            },
+            {
+              "tick": 7200,
+              "commandsDigest": "d6886045",
+              "posesDigest": "ae86301a",
+              "authoritativeEventsDigest": "d1ae102b"
+            },
+            {
+              "tick": 7800,
+              "commandsDigest": "ec952725",
+              "posesDigest": "5adc4d4d",
+              "authoritativeEventsDigest": "dc0d9326"
+            },
+            {
+              "tick": 8400,
+              "commandsDigest": "d311cc85",
+              "posesDigest": "20b039b6",
+              "authoritativeEventsDigest": "406b99ef"
+            }
+          ],
+          "admittedRealSecondsDuringMeasure": 120.00230000000006,
+          "longTasks": {
+            "supported": true,
+            "count": 0,
+            "maxMs": 0,
+            "overflow": false
+          },
+          "cleanup": {
+            "worldDisposed": true,
+            "mappedVehicles": 0,
+            "subscriptions": 0,
+            "ownedMeshes": 0,
+            "schedulerJobs": 0,
+            "schedulerCache": 0,
+            "schedulerIdentities": 0,
+            "schedulerUrgent": 0,
+            "collisionPairs": 0,
+            "pendingCollisionEvents": 0,
+            "busSubscriptions": 0,
+            "gpuInstruments": 0
+          },
+          "ownedDiagnosticBytes": 1920000,
+          "gpuTimer": {
+            "status": "available: asynchronous fresh timer in milliseconds",
+            "samples": {
+              "count": 7790,
+              "p50": 0.02148,
+              "p95": 0.02452,
+              "p99": 0.02496,
+              "min": 0.02072,
+              "max": 0.5606,
+              "mean": 0.022540241335044876,
+              "overBudget": null,
+              "histogram": [
+                7790,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            "pendingResults": null,
+            "pendingReason": "Public Babylon instrumentation does not expose outstanding query count",
+            "association": "Asynchronous fresh counter results, not associated with the current CPU frame; first fresh boundary result discarded"
+          },
+          "exactPageMemoryBytes": null,
+          "framesOver18_5Ms": 0,
+          "framesOver25Ms": 0
+        },
+        {
+          "repeat": 2,
+          "observe": true,
+          "startedAtRafMs": 1804534,
+          "warmupElapsedMs": 30000.600000000093,
+          "measuredElapsedMs": 120006.50000002375,
+          "measuredRafSpanMs": 120002.29999999981,
+          "frameMs": {
+            "count": 17280,
+            "p50": 6.900000000139698,
+            "p95": 7,
+            "p99": 7.100000000093132,
+            "min": 4.7999999998137355,
+            "max": 9.300000000046566,
+            "mean": 6.944577546296285,
+            "overBudget": null,
+            "histogram": [
+              0,
+              0,
+              17277,
+              3,
+              0,
+              0,
+              0
+            ]
+          },
+          "mainThreadMs": {
+            "count": 17280,
+            "p50": 0.5,
+            "p95": 4,
+            "p99": 4.399999976158142,
+            "min": 0.09999990463256836,
+            "max": 6.299999952316284,
+            "mean": 1.636163194022245,
+            "overBudget": null,
+            "histogram": [
+              10062,
+              6171,
+              1047,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "optionalTickCpuMs": {
+            "count": 7200,
+            "p50": 2.899999976158142,
+            "p95": 3.5999999046325684,
+            "p99": 4.100000023841858,
+            "min": 1.9000000953674316,
+            "max": 5.5,
+            "mean": 2.8951388886902065,
+            "overBudget": null,
+            "histogram": [
+              0,
+              7108,
+              92,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "counts": {
+            "vehicles": 70,
+            "decisions": 113725,
+            "controllers": 630000,
+            "physicsSteps": 9000,
+            "lastContextSourceTick": 8999,
+            "lastDecisionTick": 9000
+          },
+          "finalState": {
+            "tick": 9000,
+            "debtSeconds": 0.0028999999999064306,
+            "status": "running",
+            "simulatedSeconds": 150,
+            "activeRealSeconds": 150.0028999999999
+          },
+          "simulatedSecondsDuringMeasure": 120,
+          "simulatedToWallRatio": 0.9999808337006889,
+          "semanticCheckpoints": [
+            {
+              "tick": 6,
+              "commandsDigest": "068ce3cd",
+              "posesDigest": "0c96db7f",
+              "authoritativeEventsDigest": "811c9dc5"
+            },
+            {
+              "tick": 600,
+              "commandsDigest": "f01e64a5",
+              "posesDigest": "b237aa08",
+              "authoritativeEventsDigest": "4cc5418c"
+            },
+            {
+              "tick": 1200,
+              "commandsDigest": "36d3a405",
+              "posesDigest": "f0fe73b8",
+              "authoritativeEventsDigest": "ced7f513"
+            },
+            {
+              "tick": 1800,
+              "commandsDigest": "ee1bb7e5",
+              "posesDigest": "33ec0109",
+              "authoritativeEventsDigest": "b6670752"
+            },
+            {
+              "tick": 2400,
+              "commandsDigest": "3b778f45",
+              "posesDigest": "3d45b173",
+              "authoritativeEventsDigest": "2cb68322"
+            },
+            {
+              "tick": 3000,
+              "commandsDigest": "8b566a25",
+              "posesDigest": "5d1682a0",
+              "authoritativeEventsDigest": "3c185d98"
+            },
+            {
+              "tick": 3600,
+              "commandsDigest": "8ad60f85",
+              "posesDigest": "8c71a85f",
+              "authoritativeEventsDigest": "8d2313d1"
+            },
+            {
+              "tick": 4200,
+              "commandsDigest": "b6231b65",
+              "posesDigest": "9cbc9ea1",
+              "authoritativeEventsDigest": "7ba684b4"
+            },
+            {
+              "tick": 4800,
+              "commandsDigest": "b62026c5",
+              "posesDigest": "246aa73f",
+              "authoritativeEventsDigest": "8a5f3e87"
+            },
+            {
+              "tick": 5400,
+              "commandsDigest": "52214da5",
+              "posesDigest": "f66e4ea7",
+              "authoritativeEventsDigest": "519abb03"
+            },
+            {
+              "tick": 6000,
+              "commandsDigest": "18014505",
+              "posesDigest": "c5400f6b",
+              "authoritativeEventsDigest": "710ba891"
+            },
+            {
+              "tick": 6600,
+              "commandsDigest": "cc4d28e5",
+              "posesDigest": "bbb576a3",
+              "authoritativeEventsDigest": "dd28b13c"
+            },
+            {
+              "tick": 7200,
+              "commandsDigest": "d6886045",
+              "posesDigest": "ae86301a",
+              "authoritativeEventsDigest": "d1ae102b"
+            },
+            {
+              "tick": 7800,
+              "commandsDigest": "ec952725",
+              "posesDigest": "5adc4d4d",
+              "authoritativeEventsDigest": "dc0d9326"
+            },
+            {
+              "tick": 8400,
+              "commandsDigest": "d311cc85",
+              "posesDigest": "20b039b6",
+              "authoritativeEventsDigest": "406b99ef"
+            }
+          ],
+          "admittedRealSecondsDuringMeasure": 120.0022999999998,
+          "longTasks": {
+            "supported": true,
+            "count": 0,
+            "maxMs": 0,
+            "overflow": false
+          },
+          "cleanup": {
+            "worldDisposed": true,
+            "mappedVehicles": 0,
+            "subscriptions": 0,
+            "ownedMeshes": 0,
+            "schedulerJobs": 0,
+            "schedulerCache": 0,
+            "schedulerIdentities": 0,
+            "schedulerUrgent": 0,
+            "collisionPairs": 0,
+            "pendingCollisionEvents": 0,
+            "busSubscriptions": 0,
+            "gpuInstruments": 0
+          },
+          "ownedDiagnosticBytes": 1920000,
+          "gpuTimer": {
+            "status": "available: asynchronous fresh timer in milliseconds",
+            "samples": {
+              "count": 7674,
+              "p50": 0.02424,
+              "p95": 0.03,
+              "p99": 0.03728,
+              "min": 0.02076,
+              "max": 0.56012,
+              "mean": 0.024681892103207207,
+              "overBudget": null,
+              "histogram": [
+                7674,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            "pendingResults": null,
+            "pendingReason": "Public Babylon instrumentation does not expose outstanding query count",
+            "association": "Asynchronous fresh counter results, not associated with the current CPU frame; first fresh boundary result discarded"
+          },
+          "exactPageMemoryBytes": null,
+          "framesOver18_5Ms": 0,
+          "framesOver25Ms": 0
+        },
+        {
+          "repeat": 2,
+          "observe": false,
+          "startedAtRafMs": 1954592.6,
+          "warmupElapsedMs": 30000.59999999986,
+          "measuredElapsedMs": 120006.1999999762,
+          "measuredRafSpanMs": 120002.30000000005,
+          "frameMs": {
+            "count": 17279,
+            "p50": 6.900000000139698,
+            "p95": 7,
+            "p99": 7.100000000093132,
+            "min": 2.2999999998137355,
+            "max": 18.600000000093132,
+            "mean": 6.944979454829564,
+            "overBudget": null,
+            "histogram": [
+              0,
+              1,
+              17269,
+              8,
+              1,
+              0,
+              0
+            ]
+          },
+          "mainThreadMs": {
+            "count": 17279,
+            "p50": 0.5,
+            "p95": 4.099999904632568,
+            "p99": 4.400000095367432,
+            "min": 0.10000002384185791,
+            "max": 8.399999976158142,
+            "mean": 1.7226344119123345,
+            "overBudget": null,
+            "histogram": [
+              10063,
+              5812,
+              1403,
+              1,
+              0,
+              0,
+              0
+            ]
+          },
+          "optionalTickCpuMs": null,
+          "counts": {
+            "vehicles": 70,
+            "decisions": 113725,
+            "controllers": 630000,
+            "physicsSteps": 9000,
+            "lastContextSourceTick": 8999,
+            "lastDecisionTick": 9000
+          },
+          "finalState": {
+            "tick": 9000,
+            "debtSeconds": 0.002899999999906573,
+            "status": "running",
+            "simulatedSeconds": 150,
+            "activeRealSeconds": 150.0028999999999
+          },
+          "simulatedSecondsDuringMeasure": 120,
+          "simulatedToWallRatio": 0.999980833700687,
+          "semanticCheckpoints": [
+            {
+              "tick": 6,
+              "commandsDigest": "068ce3cd",
+              "posesDigest": "0c96db7f",
+              "authoritativeEventsDigest": "811c9dc5"
+            },
+            {
+              "tick": 600,
+              "commandsDigest": "f01e64a5",
+              "posesDigest": "b237aa08",
+              "authoritativeEventsDigest": "4cc5418c"
+            },
+            {
+              "tick": 1200,
+              "commandsDigest": "36d3a405",
+              "posesDigest": "f0fe73b8",
+              "authoritativeEventsDigest": "ced7f513"
+            },
+            {
+              "tick": 1800,
+              "commandsDigest": "ee1bb7e5",
+              "posesDigest": "33ec0109",
+              "authoritativeEventsDigest": "b6670752"
+            },
+            {
+              "tick": 2400,
+              "commandsDigest": "3b778f45",
+              "posesDigest": "3d45b173",
+              "authoritativeEventsDigest": "2cb68322"
+            },
+            {
+              "tick": 3000,
+              "commandsDigest": "8b566a25",
+              "posesDigest": "5d1682a0",
+              "authoritativeEventsDigest": "3c185d98"
+            },
+            {
+              "tick": 3600,
+              "commandsDigest": "8ad60f85",
+              "posesDigest": "8c71a85f",
+              "authoritativeEventsDigest": "8d2313d1"
+            },
+            {
+              "tick": 4200,
+              "commandsDigest": "b6231b65",
+              "posesDigest": "9cbc9ea1",
+              "authoritativeEventsDigest": "7ba684b4"
+            },
+            {
+              "tick": 4800,
+              "commandsDigest": "b62026c5",
+              "posesDigest": "246aa73f",
+              "authoritativeEventsDigest": "8a5f3e87"
+            },
+            {
+              "tick": 5400,
+              "commandsDigest": "52214da5",
+              "posesDigest": "f66e4ea7",
+              "authoritativeEventsDigest": "519abb03"
+            },
+            {
+              "tick": 6000,
+              "commandsDigest": "18014505",
+              "posesDigest": "c5400f6b",
+              "authoritativeEventsDigest": "710ba891"
+            },
+            {
+              "tick": 6600,
+              "commandsDigest": "cc4d28e5",
+              "posesDigest": "bbb576a3",
+              "authoritativeEventsDigest": "dd28b13c"
+            },
+            {
+              "tick": 7200,
+              "commandsDigest": "d6886045",
+              "posesDigest": "ae86301a",
+              "authoritativeEventsDigest": "d1ae102b"
+            },
+            {
+              "tick": 7800,
+              "commandsDigest": "ec952725",
+              "posesDigest": "5adc4d4d",
+              "authoritativeEventsDigest": "dc0d9326"
+            },
+            {
+              "tick": 8400,
+              "commandsDigest": "d311cc85",
+              "posesDigest": "20b039b6",
+              "authoritativeEventsDigest": "406b99ef"
+            }
+          ],
+          "admittedRealSecondsDuringMeasure": 120.00230000000003,
+          "longTasks": {
+            "supported": true,
+            "count": 0,
+            "maxMs": 0,
+            "overflow": false
+          },
+          "cleanup": {
+            "worldDisposed": true,
+            "mappedVehicles": 0,
+            "subscriptions": 0,
+            "ownedMeshes": 0,
+            "schedulerJobs": 0,
+            "schedulerCache": 0,
+            "schedulerIdentities": 0,
+            "schedulerUrgent": 0,
+            "collisionPairs": 0,
+            "pendingCollisionEvents": 0,
+            "busSubscriptions": 0,
+            "gpuInstruments": 0
+          },
+          "ownedDiagnosticBytes": 960000,
+          "gpuTimer": {
+            "status": "disabled: observer-off",
+            "samples": null,
+            "pendingResults": null,
+            "pendingReason": "Public Babylon instrumentation does not expose outstanding query count",
+            "association": "Asynchronous fresh counter results, not associated with the current CPU frame; first fresh boundary result discarded"
+          },
+          "exactPageMemoryBytes": null,
+          "framesOver18_5Ms": 1,
+          "framesOver25Ms": 0
+        },
+        {
+          "repeat": 3,
+          "observe": false,
+          "startedAtRafMs": 2104651.1,
+          "warmupElapsedMs": 30000.600000000093,
+          "measuredElapsedMs": 120006.5000000475,
+          "measuredRafSpanMs": 120002.3999999999,
+          "frameMs": {
+            "count": 17278,
+            "p50": 6.900000000372529,
+            "p95": 7,
+            "p99": 7.100000000093132,
+            "min": 4.2000000001862645,
+            "max": 17.699999999720603,
+            "mean": 6.945387197592309,
+            "overBudget": null,
+            "histogram": [
+              0,
+              0,
+              17274,
+              3,
+              1,
+              0,
+              0
+            ]
+          },
+          "mainThreadMs": {
+            "count": 17278,
+            "p50": 0.5,
+            "p95": 4,
+            "p99": 4.400000095367432,
+            "min": 0.09999990463256836,
+            "max": 16,
+            "mean": 1.7023266581269736,
+            "overBudget": null,
+            "histogram": [
+              10065,
+              5921,
+              1291,
+              1,
+              0,
+              0,
+              0
+            ]
+          },
+          "optionalTickCpuMs": null,
+          "counts": {
+            "vehicles": 70,
+            "decisions": 113725,
+            "controllers": 630000,
+            "physicsSteps": 9000,
+            "lastContextSourceTick": 8999,
+            "lastDecisionTick": 9000
+          },
+          "finalState": {
+            "tick": 9000,
+            "debtSeconds": 0.0029999999999993855,
+            "status": "running",
+            "simulatedSeconds": 150,
+            "activeRealSeconds": 150.003
+          },
+          "simulatedSecondsDuringMeasure": 120,
+          "simulatedToWallRatio": 0.9999800003999928,
+          "semanticCheckpoints": [
+            {
+              "tick": 6,
+              "commandsDigest": "068ce3cd",
+              "posesDigest": "0c96db7f",
+              "authoritativeEventsDigest": "811c9dc5"
+            },
+            {
+              "tick": 600,
+              "commandsDigest": "f01e64a5",
+              "posesDigest": "b237aa08",
+              "authoritativeEventsDigest": "4cc5418c"
+            },
+            {
+              "tick": 1200,
+              "commandsDigest": "36d3a405",
+              "posesDigest": "f0fe73b8",
+              "authoritativeEventsDigest": "ced7f513"
+            },
+            {
+              "tick": 1800,
+              "commandsDigest": "ee1bb7e5",
+              "posesDigest": "33ec0109",
+              "authoritativeEventsDigest": "b6670752"
+            },
+            {
+              "tick": 2400,
+              "commandsDigest": "3b778f45",
+              "posesDigest": "3d45b173",
+              "authoritativeEventsDigest": "2cb68322"
+            },
+            {
+              "tick": 3000,
+              "commandsDigest": "8b566a25",
+              "posesDigest": "5d1682a0",
+              "authoritativeEventsDigest": "3c185d98"
+            },
+            {
+              "tick": 3600,
+              "commandsDigest": "8ad60f85",
+              "posesDigest": "8c71a85f",
+              "authoritativeEventsDigest": "8d2313d1"
+            },
+            {
+              "tick": 4200,
+              "commandsDigest": "b6231b65",
+              "posesDigest": "9cbc9ea1",
+              "authoritativeEventsDigest": "7ba684b4"
+            },
+            {
+              "tick": 4800,
+              "commandsDigest": "b62026c5",
+              "posesDigest": "246aa73f",
+              "authoritativeEventsDigest": "8a5f3e87"
+            },
+            {
+              "tick": 5400,
+              "commandsDigest": "52214da5",
+              "posesDigest": "f66e4ea7",
+              "authoritativeEventsDigest": "519abb03"
+            },
+            {
+              "tick": 6000,
+              "commandsDigest": "18014505",
+              "posesDigest": "c5400f6b",
+              "authoritativeEventsDigest": "710ba891"
+            },
+            {
+              "tick": 6600,
+              "commandsDigest": "cc4d28e5",
+              "posesDigest": "bbb576a3",
+              "authoritativeEventsDigest": "dd28b13c"
+            },
+            {
+              "tick": 7200,
+              "commandsDigest": "d6886045",
+              "posesDigest": "ae86301a",
+              "authoritativeEventsDigest": "d1ae102b"
+            },
+            {
+              "tick": 7800,
+              "commandsDigest": "ec952725",
+              "posesDigest": "5adc4d4d",
+              "authoritativeEventsDigest": "dc0d9326"
+            },
+            {
+              "tick": 8400,
+              "commandsDigest": "d311cc85",
+              "posesDigest": "20b039b6",
+              "authoritativeEventsDigest": "406b99ef"
+            }
+          ],
+          "admittedRealSecondsDuringMeasure": 120.0023999999999,
+          "longTasks": {
+            "supported": true,
+            "count": 0,
+            "maxMs": 0,
+            "overflow": false
+          },
+          "cleanup": {
+            "worldDisposed": true,
+            "mappedVehicles": 0,
+            "subscriptions": 0,
+            "ownedMeshes": 0,
+            "schedulerJobs": 0,
+            "schedulerCache": 0,
+            "schedulerIdentities": 0,
+            "schedulerUrgent": 0,
+            "collisionPairs": 0,
+            "pendingCollisionEvents": 0,
+            "busSubscriptions": 0,
+            "gpuInstruments": 0
+          },
+          "ownedDiagnosticBytes": 960000,
+          "gpuTimer": {
+            "status": "disabled: observer-off",
+            "samples": null,
+            "pendingResults": null,
+            "pendingReason": "Public Babylon instrumentation does not expose outstanding query count",
+            "association": "Asynchronous fresh counter results, not associated with the current CPU frame; first fresh boundary result discarded"
+          },
+          "exactPageMemoryBytes": null,
+          "framesOver18_5Ms": 0,
+          "framesOver25Ms": 0
+        },
+        {
+          "repeat": 3,
+          "observe": true,
+          "startedAtRafMs": 2254723.7,
+          "warmupElapsedMs": 30000.399999999907,
+          "measuredElapsedMs": 120006.19999995222,
+          "measuredRafSpanMs": 120002.5,
+          "frameMs": {
+            "count": 17280,
+            "p50": 6.900000000372529,
+            "p95": 7,
+            "p99": 7.100000000093132,
+            "min": 5.2999999998137355,
+            "max": 8.5,
+            "mean": 6.94458912037037,
+            "overBudget": null,
+            "histogram": [
+              0,
+              0,
+              17278,
+              2,
+              0,
+              0,
+              0
+            ]
+          },
+          "mainThreadMs": {
+            "count": 17280,
+            "p50": 0.5,
+            "p95": 4.199999928474426,
+            "p99": 4.600000023841858,
+            "min": 0.09999990463256836,
+            "max": 8.599999904632568,
+            "mean": 1.792187500482908,
+            "overBudget": null,
+            "histogram": [
+              10062,
+              5148,
+              2069,
+              1,
+              0,
+              0,
+              0
+            ]
+          },
+          "optionalTickCpuMs": {
+            "count": 7200,
+            "p50": 3.100000023841858,
+            "p95": 3.6999999284744263,
+            "p99": 4.699999928474426,
+            "min": 2,
+            "max": 6.600000023841858,
+            "mean": 3.103722221536769,
+            "overBudget": null,
+            "histogram": [
+              0,
+              7033,
+              167,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "counts": {
+            "vehicles": 70,
+            "decisions": 113725,
+            "controllers": 630000,
+            "physicsSteps": 9000,
+            "lastContextSourceTick": 8999,
+            "lastDecisionTick": 9000
+          },
+          "finalState": {
+            "tick": 9000,
+            "debtSeconds": 0.0028999999999066795,
+            "status": "running",
+            "simulatedSeconds": 150,
+            "activeRealSeconds": 150.0028999999999
+          },
+          "simulatedSecondsDuringMeasure": 120,
+          "simulatedToWallRatio": 0.9999791671006855,
+          "semanticCheckpoints": [
+            {
+              "tick": 6,
+              "commandsDigest": "068ce3cd",
+              "posesDigest": "0c96db7f",
+              "authoritativeEventsDigest": "811c9dc5"
+            },
+            {
+              "tick": 600,
+              "commandsDigest": "f01e64a5",
+              "posesDigest": "b237aa08",
+              "authoritativeEventsDigest": "4cc5418c"
+            },
+            {
+              "tick": 1200,
+              "commandsDigest": "36d3a405",
+              "posesDigest": "f0fe73b8",
+              "authoritativeEventsDigest": "ced7f513"
+            },
+            {
+              "tick": 1800,
+              "commandsDigest": "ee1bb7e5",
+              "posesDigest": "33ec0109",
+              "authoritativeEventsDigest": "b6670752"
+            },
+            {
+              "tick": 2400,
+              "commandsDigest": "3b778f45",
+              "posesDigest": "3d45b173",
+              "authoritativeEventsDigest": "2cb68322"
+            },
+            {
+              "tick": 3000,
+              "commandsDigest": "8b566a25",
+              "posesDigest": "5d1682a0",
+              "authoritativeEventsDigest": "3c185d98"
+            },
+            {
+              "tick": 3600,
+              "commandsDigest": "8ad60f85",
+              "posesDigest": "8c71a85f",
+              "authoritativeEventsDigest": "8d2313d1"
+            },
+            {
+              "tick": 4200,
+              "commandsDigest": "b6231b65",
+              "posesDigest": "9cbc9ea1",
+              "authoritativeEventsDigest": "7ba684b4"
+            },
+            {
+              "tick": 4800,
+              "commandsDigest": "b62026c5",
+              "posesDigest": "246aa73f",
+              "authoritativeEventsDigest": "8a5f3e87"
+            },
+            {
+              "tick": 5400,
+              "commandsDigest": "52214da5",
+              "posesDigest": "f66e4ea7",
+              "authoritativeEventsDigest": "519abb03"
+            },
+            {
+              "tick": 6000,
+              "commandsDigest": "18014505",
+              "posesDigest": "c5400f6b",
+              "authoritativeEventsDigest": "710ba891"
+            },
+            {
+              "tick": 6600,
+              "commandsDigest": "cc4d28e5",
+              "posesDigest": "bbb576a3",
+              "authoritativeEventsDigest": "dd28b13c"
+            },
+            {
+              "tick": 7200,
+              "commandsDigest": "d6886045",
+              "posesDigest": "ae86301a",
+              "authoritativeEventsDigest": "d1ae102b"
+            },
+            {
+              "tick": 7800,
+              "commandsDigest": "ec952725",
+              "posesDigest": "5adc4d4d",
+              "authoritativeEventsDigest": "dc0d9326"
+            },
+            {
+              "tick": 8400,
+              "commandsDigest": "d311cc85",
+              "posesDigest": "20b039b6",
+              "authoritativeEventsDigest": "406b99ef"
+            }
+          ],
+          "admittedRealSecondsDuringMeasure": 120.0025,
+          "longTasks": {
+            "supported": true,
+            "count": 0,
+            "maxMs": 0,
+            "overflow": false
+          },
+          "cleanup": {
+            "worldDisposed": true,
+            "mappedVehicles": 0,
+            "subscriptions": 0,
+            "ownedMeshes": 0,
+            "schedulerJobs": 0,
+            "schedulerCache": 0,
+            "schedulerIdentities": 0,
+            "schedulerUrgent": 0,
+            "collisionPairs": 0,
+            "pendingCollisionEvents": 0,
+            "busSubscriptions": 0,
+            "gpuInstruments": 0
+          },
+          "ownedDiagnosticBytes": 1920000,
+          "gpuTimer": {
+            "status": "available: asynchronous fresh timer in milliseconds",
+            "samples": {
+              "count": 7353,
+              "p50": 0.02428,
+              "p95": 0.03684,
+              "p99": 0.03776,
+              "min": 0.02088,
+              "max": 0.5596,
+              "mean": 0.025495590915274157,
+              "overBudget": null,
+              "histogram": [
+                7353,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            "pendingResults": null,
+            "pendingReason": "Public Babylon instrumentation does not expose outstanding query count",
+            "association": "Asynchronous fresh counter results, not associated with the current CPU frame; first fresh boundary result discarded"
+          },
+          "exactPageMemoryBytes": null,
+          "framesOver18_5Ms": 0,
+          "framesOver25Ms": 0
+        },
+        {
+          "repeat": 4,
+          "observe": true,
+          "startedAtRafMs": 2404809.9,
+          "warmupElapsedMs": 30000.700000000186,
+          "measuredElapsedMs": 120005.29999997607,
+          "measuredRafSpanMs": 120002.29999999981,
+          "frameMs": {
+            "count": 17280,
+            "p50": 6.900000000372529,
+            "p95": 7,
+            "p99": 7.100000000093132,
+            "min": 5.5,
+            "max": 8.400000000372529,
+            "mean": 6.944577546296285,
+            "overBudget": null,
+            "histogram": [
+              0,
+              0,
+              17275,
+              5,
+              0,
+              0,
+              0
+            ]
+          },
+          "mainThreadMs": {
+            "count": 17280,
+            "p50": 0.5,
+            "p95": 4.099999904632568,
+            "p99": 4.399999976158142,
+            "min": 0.10000002384185791,
+            "max": 7.5,
+            "mean": 1.7405787040444989,
+            "overBudget": null,
+            "histogram": [
+              10066,
+              5744,
+              1470,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "optionalTickCpuMs": {
+            "count": 7200,
+            "p50": 3.100000023841858,
+            "p95": 3.600000023841858,
+            "p99": 4.600000023841858,
+            "min": 2,
+            "max": 6.900000095367432,
+            "mean": 3.063180556082063,
+            "overBudget": null,
+            "histogram": [
+              0,
+              7070,
+              130,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "counts": {
+            "vehicles": 70,
+            "decisions": 113725,
+            "controllers": 630000,
+            "physicsSteps": 9000,
+            "lastContextSourceTick": 8999,
+            "lastDecisionTick": 9000
+          },
+          "finalState": {
+            "tick": 9000,
+            "debtSeconds": 0.0029999999999994562,
+            "status": "running",
+            "simulatedSeconds": 150,
+            "activeRealSeconds": 150.003
+          },
+          "simulatedSecondsDuringMeasure": 120,
+          "simulatedToWallRatio": 0.9999808337006889,
+          "semanticCheckpoints": [
+            {
+              "tick": 6,
+              "commandsDigest": "068ce3cd",
+              "posesDigest": "0c96db7f",
+              "authoritativeEventsDigest": "811c9dc5"
+            },
+            {
+              "tick": 600,
+              "commandsDigest": "f01e64a5",
+              "posesDigest": "b237aa08",
+              "authoritativeEventsDigest": "4cc5418c"
+            },
+            {
+              "tick": 1200,
+              "commandsDigest": "36d3a405",
+              "posesDigest": "f0fe73b8",
+              "authoritativeEventsDigest": "ced7f513"
+            },
+            {
+              "tick": 1800,
+              "commandsDigest": "ee1bb7e5",
+              "posesDigest": "33ec0109",
+              "authoritativeEventsDigest": "b6670752"
+            },
+            {
+              "tick": 2400,
+              "commandsDigest": "3b778f45",
+              "posesDigest": "3d45b173",
+              "authoritativeEventsDigest": "2cb68322"
+            },
+            {
+              "tick": 3000,
+              "commandsDigest": "8b566a25",
+              "posesDigest": "5d1682a0",
+              "authoritativeEventsDigest": "3c185d98"
+            },
+            {
+              "tick": 3600,
+              "commandsDigest": "8ad60f85",
+              "posesDigest": "8c71a85f",
+              "authoritativeEventsDigest": "8d2313d1"
+            },
+            {
+              "tick": 4200,
+              "commandsDigest": "b6231b65",
+              "posesDigest": "9cbc9ea1",
+              "authoritativeEventsDigest": "7ba684b4"
+            },
+            {
+              "tick": 4800,
+              "commandsDigest": "b62026c5",
+              "posesDigest": "246aa73f",
+              "authoritativeEventsDigest": "8a5f3e87"
+            },
+            {
+              "tick": 5400,
+              "commandsDigest": "52214da5",
+              "posesDigest": "f66e4ea7",
+              "authoritativeEventsDigest": "519abb03"
+            },
+            {
+              "tick": 6000,
+              "commandsDigest": "18014505",
+              "posesDigest": "c5400f6b",
+              "authoritativeEventsDigest": "710ba891"
+            },
+            {
+              "tick": 6600,
+              "commandsDigest": "cc4d28e5",
+              "posesDigest": "bbb576a3",
+              "authoritativeEventsDigest": "dd28b13c"
+            },
+            {
+              "tick": 7200,
+              "commandsDigest": "d6886045",
+              "posesDigest": "ae86301a",
+              "authoritativeEventsDigest": "d1ae102b"
+            },
+            {
+              "tick": 7800,
+              "commandsDigest": "ec952725",
+              "posesDigest": "5adc4d4d",
+              "authoritativeEventsDigest": "dc0d9326"
+            },
+            {
+              "tick": 8400,
+              "commandsDigest": "d311cc85",
+              "posesDigest": "20b039b6",
+              "authoritativeEventsDigest": "406b99ef"
+            }
+          ],
+          "admittedRealSecondsDuringMeasure": 120.00229999999979,
+          "longTasks": {
+            "supported": true,
+            "count": 0,
+            "maxMs": 0,
+            "overflow": false
+          },
+          "cleanup": {
+            "worldDisposed": true,
+            "mappedVehicles": 0,
+            "subscriptions": 0,
+            "ownedMeshes": 0,
+            "schedulerJobs": 0,
+            "schedulerCache": 0,
+            "schedulerIdentities": 0,
+            "schedulerUrgent": 0,
+            "collisionPairs": 0,
+            "pendingCollisionEvents": 0,
+            "busSubscriptions": 0,
+            "gpuInstruments": 0
+          },
+          "ownedDiagnosticBytes": 1920000,
+          "gpuTimer": {
+            "status": "available: asynchronous fresh timer in milliseconds",
+            "samples": {
+              "count": 7464,
+              "p50": 0.02428,
+              "p95": 0.02472,
+              "p99": 0.0368,
+              "min": 0.02088,
+              "max": 0.56,
+              "mean": 0.024508172561631143,
+              "overBudget": null,
+              "histogram": [
+                7464,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            "pendingResults": null,
+            "pendingReason": "Public Babylon instrumentation does not expose outstanding query count",
+            "association": "Asynchronous fresh counter results, not associated with the current CPU frame; first fresh boundary result discarded"
+          },
+          "exactPageMemoryBytes": null,
+          "framesOver18_5Ms": 0,
+          "framesOver25Ms": 0
+        },
+        {
+          "repeat": 4,
+          "observe": false,
+          "startedAtRafMs": 2554875.4,
+          "warmupElapsedMs": 30000.600000000093,
+          "measuredElapsedMs": 120006.5,
+          "measuredRafSpanMs": 120002.3999999999,
+          "frameMs": {
+            "count": 17280,
+            "p50": 6.900000000372529,
+            "p95": 7,
+            "p99": 7.100000000093132,
+            "min": 5.2999999998137355,
+            "max": 8.700000000186265,
+            "mean": 6.944583333333328,
+            "overBudget": null,
+            "histogram": [
+              0,
+              0,
+              17277,
+              3,
+              0,
+              0,
+              0
+            ]
+          },
+          "mainThreadMs": {
+            "count": 17280,
+            "p50": 0.5,
+            "p95": 4.100000023841858,
+            "p99": 4.400000095367432,
+            "min": 0.19999992847442627,
+            "max": 6.399999976158142,
+            "mean": 1.7370717588674138,
+            "overBudget": null,
+            "histogram": [
+              10067,
+              5604,
+              1609,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "optionalTickCpuMs": null,
+          "counts": {
+            "vehicles": 70,
+            "decisions": 113725,
+            "controllers": 630000,
+            "physicsSteps": 9000,
+            "lastContextSourceTick": 8999,
+            "lastDecisionTick": 9000
+          },
+          "finalState": {
+            "tick": 9000,
+            "debtSeconds": 0.002999999999999332,
+            "status": "running",
+            "simulatedSeconds": 150,
+            "activeRealSeconds": 150.003
+          },
+          "simulatedSecondsDuringMeasure": 120,
+          "simulatedToWallRatio": 0.9999800003999928,
+          "semanticCheckpoints": [
+            {
+              "tick": 6,
+              "commandsDigest": "068ce3cd",
+              "posesDigest": "0c96db7f",
+              "authoritativeEventsDigest": "811c9dc5"
+            },
+            {
+              "tick": 600,
+              "commandsDigest": "f01e64a5",
+              "posesDigest": "b237aa08",
+              "authoritativeEventsDigest": "4cc5418c"
+            },
+            {
+              "tick": 1200,
+              "commandsDigest": "36d3a405",
+              "posesDigest": "f0fe73b8",
+              "authoritativeEventsDigest": "ced7f513"
+            },
+            {
+              "tick": 1800,
+              "commandsDigest": "ee1bb7e5",
+              "posesDigest": "33ec0109",
+              "authoritativeEventsDigest": "b6670752"
+            },
+            {
+              "tick": 2400,
+              "commandsDigest": "3b778f45",
+              "posesDigest": "3d45b173",
+              "authoritativeEventsDigest": "2cb68322"
+            },
+            {
+              "tick": 3000,
+              "commandsDigest": "8b566a25",
+              "posesDigest": "5d1682a0",
+              "authoritativeEventsDigest": "3c185d98"
+            },
+            {
+              "tick": 3600,
+              "commandsDigest": "8ad60f85",
+              "posesDigest": "8c71a85f",
+              "authoritativeEventsDigest": "8d2313d1"
+            },
+            {
+              "tick": 4200,
+              "commandsDigest": "b6231b65",
+              "posesDigest": "9cbc9ea1",
+              "authoritativeEventsDigest": "7ba684b4"
+            },
+            {
+              "tick": 4800,
+              "commandsDigest": "b62026c5",
+              "posesDigest": "246aa73f",
+              "authoritativeEventsDigest": "8a5f3e87"
+            },
+            {
+              "tick": 5400,
+              "commandsDigest": "52214da5",
+              "posesDigest": "f66e4ea7",
+              "authoritativeEventsDigest": "519abb03"
+            },
+            {
+              "tick": 6000,
+              "commandsDigest": "18014505",
+              "posesDigest": "c5400f6b",
+              "authoritativeEventsDigest": "710ba891"
+            },
+            {
+              "tick": 6600,
+              "commandsDigest": "cc4d28e5",
+              "posesDigest": "bbb576a3",
+              "authoritativeEventsDigest": "dd28b13c"
+            },
+            {
+              "tick": 7200,
+              "commandsDigest": "d6886045",
+              "posesDigest": "ae86301a",
+              "authoritativeEventsDigest": "d1ae102b"
+            },
+            {
+              "tick": 7800,
+              "commandsDigest": "ec952725",
+              "posesDigest": "5adc4d4d",
+              "authoritativeEventsDigest": "dc0d9326"
+            },
+            {
+              "tick": 8400,
+              "commandsDigest": "d311cc85",
+              "posesDigest": "20b039b6",
+              "authoritativeEventsDigest": "406b99ef"
+            }
+          ],
+          "admittedRealSecondsDuringMeasure": 120.0023999999999,
+          "longTasks": {
+            "supported": true,
+            "count": 0,
+            "maxMs": 0,
+            "overflow": false
+          },
+          "cleanup": {
+            "worldDisposed": true,
+            "mappedVehicles": 0,
+            "subscriptions": 0,
+            "ownedMeshes": 0,
+            "schedulerJobs": 0,
+            "schedulerCache": 0,
+            "schedulerIdentities": 0,
+            "schedulerUrgent": 0,
+            "collisionPairs": 0,
+            "pendingCollisionEvents": 0,
+            "busSubscriptions": 0,
+            "gpuInstruments": 0
+          },
+          "ownedDiagnosticBytes": 960000,
+          "gpuTimer": {
+            "status": "disabled: observer-off",
+            "samples": null,
+            "pendingResults": null,
+            "pendingReason": "Public Babylon instrumentation does not expose outstanding query count",
+            "association": "Asynchronous fresh counter results, not associated with the current CPU frame; first fresh boundary result discarded"
+          },
+          "exactPageMemoryBytes": null,
+          "framesOver18_5Ms": 0,
+          "framesOver25Ms": 0
+        },
+        {
+          "repeat": 5,
+          "observe": false,
+          "startedAtRafMs": 2704940.9,
+          "warmupElapsedMs": 30000.700000000186,
+          "measuredElapsedMs": 120006.29999997607,
+          "measuredRafSpanMs": 120002.3999999999,
+          "frameMs": {
+            "count": 17280,
+            "p50": 6.900000000372529,
+            "p95": 7,
+            "p99": 7.100000000093132,
+            "min": 5.2999999998137355,
+            "max": 8.700000000186265,
+            "mean": 6.944583333333328,
+            "overBudget": null,
+            "histogram": [
+              0,
+              0,
+              17278,
+              2,
+              0,
+              0,
+              0
+            ]
+          },
+          "mainThreadMs": {
+            "count": 17280,
+            "p50": 0.5,
+            "p95": 3.899999976158142,
+            "p99": 4.399999976158142,
+            "min": 0.09999990463256836,
+            "max": 8.900000095367432,
+            "mean": 1.6117534718510729,
+            "overBudget": null,
+            "histogram": [
+              10065,
+              6487,
+              727,
+              1,
+              0,
+              0,
+              0
+            ]
+          },
+          "optionalTickCpuMs": null,
+          "counts": {
+            "vehicles": 70,
+            "decisions": 113725,
+            "controllers": 630000,
+            "physicsSteps": 9000,
+            "lastContextSourceTick": 8999,
+            "lastDecisionTick": 9000
+          },
+          "finalState": {
+            "tick": 9000,
+            "debtSeconds": 0.00310000000009234,
+            "status": "running",
+            "simulatedSeconds": 150,
+            "activeRealSeconds": 150.0031000000001
+          },
+          "simulatedSecondsDuringMeasure": 120,
+          "simulatedToWallRatio": 0.9999800003999928,
+          "semanticCheckpoints": [
+            {
+              "tick": 6,
+              "commandsDigest": "068ce3cd",
+              "posesDigest": "0c96db7f",
+              "authoritativeEventsDigest": "811c9dc5"
+            },
+            {
+              "tick": 600,
+              "commandsDigest": "f01e64a5",
+              "posesDigest": "b237aa08",
+              "authoritativeEventsDigest": "4cc5418c"
+            },
+            {
+              "tick": 1200,
+              "commandsDigest": "36d3a405",
+              "posesDigest": "f0fe73b8",
+              "authoritativeEventsDigest": "ced7f513"
+            },
+            {
+              "tick": 1800,
+              "commandsDigest": "ee1bb7e5",
+              "posesDigest": "33ec0109",
+              "authoritativeEventsDigest": "b6670752"
+            },
+            {
+              "tick": 2400,
+              "commandsDigest": "3b778f45",
+              "posesDigest": "3d45b173",
+              "authoritativeEventsDigest": "2cb68322"
+            },
+            {
+              "tick": 3000,
+              "commandsDigest": "8b566a25",
+              "posesDigest": "5d1682a0",
+              "authoritativeEventsDigest": "3c185d98"
+            },
+            {
+              "tick": 3600,
+              "commandsDigest": "8ad60f85",
+              "posesDigest": "8c71a85f",
+              "authoritativeEventsDigest": "8d2313d1"
+            },
+            {
+              "tick": 4200,
+              "commandsDigest": "b6231b65",
+              "posesDigest": "9cbc9ea1",
+              "authoritativeEventsDigest": "7ba684b4"
+            },
+            {
+              "tick": 4800,
+              "commandsDigest": "b62026c5",
+              "posesDigest": "246aa73f",
+              "authoritativeEventsDigest": "8a5f3e87"
+            },
+            {
+              "tick": 5400,
+              "commandsDigest": "52214da5",
+              "posesDigest": "f66e4ea7",
+              "authoritativeEventsDigest": "519abb03"
+            },
+            {
+              "tick": 6000,
+              "commandsDigest": "18014505",
+              "posesDigest": "c5400f6b",
+              "authoritativeEventsDigest": "710ba891"
+            },
+            {
+              "tick": 6600,
+              "commandsDigest": "cc4d28e5",
+              "posesDigest": "bbb576a3",
+              "authoritativeEventsDigest": "dd28b13c"
+            },
+            {
+              "tick": 7200,
+              "commandsDigest": "d6886045",
+              "posesDigest": "ae86301a",
+              "authoritativeEventsDigest": "d1ae102b"
+            },
+            {
+              "tick": 7800,
+              "commandsDigest": "ec952725",
+              "posesDigest": "5adc4d4d",
+              "authoritativeEventsDigest": "dc0d9326"
+            },
+            {
+              "tick": 8400,
+              "commandsDigest": "d311cc85",
+              "posesDigest": "20b039b6",
+              "authoritativeEventsDigest": "406b99ef"
+            }
+          ],
+          "admittedRealSecondsDuringMeasure": 120.00239999999991,
+          "longTasks": {
+            "supported": true,
+            "count": 0,
+            "maxMs": 0,
+            "overflow": false
+          },
+          "cleanup": {
+            "worldDisposed": true,
+            "mappedVehicles": 0,
+            "subscriptions": 0,
+            "ownedMeshes": 0,
+            "schedulerJobs": 0,
+            "schedulerCache": 0,
+            "schedulerIdentities": 0,
+            "schedulerUrgent": 0,
+            "collisionPairs": 0,
+            "pendingCollisionEvents": 0,
+            "busSubscriptions": 0,
+            "gpuInstruments": 0
+          },
+          "ownedDiagnosticBytes": 960000,
+          "gpuTimer": {
+            "status": "disabled: observer-off",
+            "samples": null,
+            "pendingResults": null,
+            "pendingReason": "Public Babylon instrumentation does not expose outstanding query count",
+            "association": "Asynchronous fresh counter results, not associated with the current CPU frame; first fresh boundary result discarded"
+          },
+          "exactPageMemoryBytes": null,
+          "framesOver18_5Ms": 0,
+          "framesOver25Ms": 0
+        },
+        {
+          "repeat": 5,
+          "observe": true,
+          "startedAtRafMs": 2855085.596,
+          "warmupElapsedMs": 30004.804000000004,
+          "measuredElapsedMs": 120002.80000004778,
+          "measuredRafSpanMs": 120002.3999999999,
+          "frameMs": {
+            "count": 17280,
+            "p50": 6.900000000372529,
+            "p95": 7,
+            "p99": 7.100000000093132,
+            "min": 5.099999999627471,
+            "max": 8.800000000279397,
+            "mean": 6.944583333333328,
+            "overBudget": null,
+            "histogram": [
+              0,
+              0,
+              17277,
+              3,
+              0,
+              0,
+              0
+            ]
+          },
+          "mainThreadMs": {
+            "count": 17280,
+            "p50": 0.5,
+            "p95": 4,
+            "p99": 4.399999976158142,
+            "min": 0.09999990463256836,
+            "max": 6,
+            "mean": 1.6244270831277525,
+            "overBudget": null,
+            "histogram": [
+              10061,
+              6328,
+              891,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "optionalTickCpuMs": {
+            "count": 7200,
+            "p50": 2.799999952316284,
+            "p95": 3.600000023841858,
+            "p99": 4,
+            "min": 1.8000000715255737,
+            "max": 5.399999976158142,
+            "mean": 2.850236110306448,
+            "overBudget": null,
+            "histogram": [
+              0,
+              7118,
+              82,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "counts": {
+            "vehicles": 70,
+            "decisions": 113725,
+            "controllers": 630000,
+            "physicsSteps": 9000,
+            "lastContextSourceTick": 8999,
+            "lastDecisionTick": 9000
+          },
+          "finalState": {
+            "tick": 9000,
+            "debtSeconds": 0.0072039999998999345,
+            "status": "running",
+            "simulatedSeconds": 150,
+            "activeRealSeconds": 150.00720399999992
+          },
+          "simulatedSecondsDuringMeasure": 120,
+          "simulatedToWallRatio": 0.9999800003999928,
+          "semanticCheckpoints": [
+            {
+              "tick": 6,
+              "commandsDigest": "068ce3cd",
+              "posesDigest": "0c96db7f",
+              "authoritativeEventsDigest": "811c9dc5"
+            },
+            {
+              "tick": 600,
+              "commandsDigest": "f01e64a5",
+              "posesDigest": "b237aa08",
+              "authoritativeEventsDigest": "4cc5418c"
+            },
+            {
+              "tick": 1200,
+              "commandsDigest": "36d3a405",
+              "posesDigest": "f0fe73b8",
+              "authoritativeEventsDigest": "ced7f513"
+            },
+            {
+              "tick": 1800,
+              "commandsDigest": "ee1bb7e5",
+              "posesDigest": "33ec0109",
+              "authoritativeEventsDigest": "b6670752"
+            },
+            {
+              "tick": 2400,
+              "commandsDigest": "3b778f45",
+              "posesDigest": "3d45b173",
+              "authoritativeEventsDigest": "2cb68322"
+            },
+            {
+              "tick": 3000,
+              "commandsDigest": "8b566a25",
+              "posesDigest": "5d1682a0",
+              "authoritativeEventsDigest": "3c185d98"
+            },
+            {
+              "tick": 3600,
+              "commandsDigest": "8ad60f85",
+              "posesDigest": "8c71a85f",
+              "authoritativeEventsDigest": "8d2313d1"
+            },
+            {
+              "tick": 4200,
+              "commandsDigest": "b6231b65",
+              "posesDigest": "9cbc9ea1",
+              "authoritativeEventsDigest": "7ba684b4"
+            },
+            {
+              "tick": 4800,
+              "commandsDigest": "b62026c5",
+              "posesDigest": "246aa73f",
+              "authoritativeEventsDigest": "8a5f3e87"
+            },
+            {
+              "tick": 5400,
+              "commandsDigest": "52214da5",
+              "posesDigest": "f66e4ea7",
+              "authoritativeEventsDigest": "519abb03"
+            },
+            {
+              "tick": 6000,
+              "commandsDigest": "18014505",
+              "posesDigest": "c5400f6b",
+              "authoritativeEventsDigest": "710ba891"
+            },
+            {
+              "tick": 6600,
+              "commandsDigest": "cc4d28e5",
+              "posesDigest": "bbb576a3",
+              "authoritativeEventsDigest": "dd28b13c"
+            },
+            {
+              "tick": 7200,
+              "commandsDigest": "d6886045",
+              "posesDigest": "ae86301a",
+              "authoritativeEventsDigest": "d1ae102b"
+            },
+            {
+              "tick": 7800,
+              "commandsDigest": "ec952725",
+              "posesDigest": "5adc4d4d",
+              "authoritativeEventsDigest": "dc0d9326"
+            },
+            {
+              "tick": 8400,
+              "commandsDigest": "d311cc85",
+              "posesDigest": "20b039b6",
+              "authoritativeEventsDigest": "406b99ef"
+            }
+          ],
+          "admittedRealSecondsDuringMeasure": 120.00239999999991,
+          "longTasks": {
+            "supported": true,
+            "count": 0,
+            "maxMs": 0,
+            "overflow": false
+          },
+          "cleanup": {
+            "worldDisposed": true,
+            "mappedVehicles": 0,
+            "subscriptions": 0,
+            "ownedMeshes": 0,
+            "schedulerJobs": 0,
+            "schedulerCache": 0,
+            "schedulerIdentities": 0,
+            "schedulerUrgent": 0,
+            "collisionPairs": 0,
+            "pendingCollisionEvents": 0,
+            "busSubscriptions": 0,
+            "gpuInstruments": 0
+          },
+          "ownedDiagnosticBytes": 1920000,
+          "gpuTimer": {
+            "status": "available: asynchronous fresh timer in milliseconds",
+            "samples": {
+              "count": 7682,
+              "p50": 0.02428,
+              "p95": 0.02988,
+              "p99": 0.03728,
+              "min": 0.02088,
+              "max": 0.596,
+              "mean": 0.024912626920074635,
+              "overBudget": null,
+              "histogram": [
+                7682,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            "pendingResults": null,
+            "pendingReason": "Public Babylon instrumentation does not expose outstanding query count",
+            "association": "Asynchronous fresh counter results, not associated with the current CPU frame; first fresh boundary result discarded"
+          },
+          "exactPageMemoryBytes": null,
+          "framesOver18_5Ms": 0,
+          "framesOver25Ms": 0
+        }
+      ],
+      "scope": "Actual headed early physical/controller/context fixture, not complete gameplay or laptop gate. GPU timers reported when supported; exact page memory unavailable; smoke cannot be fullprotocolbaseline."
+    }
+  ],
+  "smoke": false,
+  "createdAt": "2026-10-05T17:51:24.802Z",
+  "hardware": {
+    "source": "current CIM at fixture server startup",
+    "capturedAt": "2026-10-05T18:17:19.9618348+03:00",
+    "cpu": [
+      {
+        "Name": "AMD Ryzen 9 7950X3D 16-Core Processor          ",
+        "NumberOfCores": 16,
+        "NumberOfLogicalProcessors": 32
+      }
+    ],
+    "gpu": [
+      {
+        "Name": "Parsec Virtual Display Adapter",
+        "DriverVersion": "0.45.0.0",
+        "AdapterRAM": null,
+        "CurrentHorizontalResolution": null,
+        "CurrentVerticalResolution": null,
+        "CurrentRefreshRate": null
+      },
+      {
+        "Name": "Meta Virtual Monitor",
+        "DriverVersion": "15.52.32.370",
+        "AdapterRAM": null,
+        "CurrentHorizontalResolution": 3840,
+        "CurrentVerticalResolution": 2160,
+        "CurrentRefreshRate": 144
+      },
+      {
+        "Name": "Virtual Desktop Monitor",
+        "DriverVersion": "13.50.53.699",
+        "AdapterRAM": null,
+        "CurrentHorizontalResolution": null,
+        "CurrentVerticalResolution": null,
+        "CurrentRefreshRate": null
+      },
+      {
+        "Name": "AMD Radeon RX 7900 XTX",
+        "DriverVersion": "32.0.31041.1004",
+        "AdapterRAM": 4293918720,
+        "CurrentHorizontalResolution": 3840,
+        "CurrentVerticalResolution": 2160,
+        "CurrentRefreshRate": 144
+      },
+      {
+        "Name": "AMD Radeon(TM) Graphics",
+        "DriverVersion": "32.0.21045.5002",
+        "AdapterRAM": 536870912,
+        "CurrentHorizontalResolution": null,
+        "CurrentVerticalResolution": null,
+        "CurrentRefreshRate": null
+      }
+    ],
+    "memory": [
+      {
+        "Capacity": 25769803776,
+        "Speed": 5200
+      },
+      {
+        "Capacity": 25769803776,
+        "Speed": 5200
+      }
+    ],
+    "os": [
+      {
+        "Caption": "Microsoft Windows 11 Pro",
+        "Version": "10.0.26200",
+        "BuildNumber": "26200",
+        "TotalVisibleMemorySize": 49157544
+      }
+    ],
+    "battery": [],
+    "powerScheme": "Power Scheme GUID: 381b4222-f694-41f0-9685-ff5bb260df2e  (Balanced)"
+  }
+}

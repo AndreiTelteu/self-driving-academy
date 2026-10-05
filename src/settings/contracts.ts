@@ -1,10 +1,10 @@
 import { boolean, choice, fields, number, requireContract, text, tick } from '../sessions';
 
-/** UI values only: physical input mapping awaits calibration in PBI 203/025. */
+/** Versioned UI preferences; legacy provisional values require explicit upgrade for live input. */
 export interface ControlPreferences {
   readonly schemaVersion: 1;
   readonly version: number;
-  readonly mappingVersion: 'provisional-v1';
+  readonly mappingVersion: 'provisional-v1' | '025-keyboard-v1';
   readonly steeringSensitivity: number;
   readonly returnRate: number;
   readonly speedAttenuation: number;
@@ -85,11 +85,11 @@ export function parseControlPreferences(value: unknown): ControlPreferences {
     'fov',
   ]);
   requireContract(data.schemaVersion === 1, 'Unsupported control preferences schema');
-  requireContract(data.mappingVersion === 'provisional-v1', 'Unsupported input mapping version');
+  const mappingVersion = choice(data.mappingVersion, ['provisional-v1', '025-keyboard-v1']);
   return Object.freeze({
     schemaVersion: 1,
     version: tick(data.version),
-    mappingVersion: 'provisional-v1',
+    mappingVersion,
     steeringSensitivity: number(data.steeringSensitivity, 0, 100),
     returnRate: number(data.returnRate, 0, 100),
     speedAttenuation: number(data.speedAttenuation, 0, 100),

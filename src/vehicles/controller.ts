@@ -9,6 +9,7 @@ import {
   requireContract,
   text,
   tick,
+  record,
 } from '../sessions';
 import type { ContractContext } from '../sessions';
 import { controlModes, parseVehicleCommand } from './contracts';
@@ -16,12 +17,21 @@ import type { ControlMode, VehicleCommand } from './contracts';
 import type { BodyIdentity } from './body-port';
 import type { PhysicsCosts } from './physics';
 import { CONTROLLER_LIMITS } from './controller-port';
+import {
+  DRIVETRAIN_LIMITS,
+  createDrivetrainState,
+  drivetrainNeedsMotion,
+  readDrivetrainMotion,
+  realizeDrivetrain,
+} from './drivetrain';
+import type { DrivetrainState } from './drivetrain';
 import type {
   VehicleActuationInput,
   VehicleActuationPort,
   VehicleControlProjection,
   VehicleController,
   VehicleControllerFrame,
+  VehicleControllerOptions,
 } from './controller-port';
 
 interface Entry {
@@ -29,6 +39,7 @@ interface Entry {
   mode: ControlMode;
   target: VehicleCommand | null;
   control: VehicleControlProjection | null;
+  drivetrain: DrivetrainState | null;
 }
 const sourceFor = (mode: ControlMode): VehicleCommand['source'] =>
   mode === 'AUTO' ? 'AUTONOMY' : 'PLAYER';
@@ -74,9 +85,23 @@ export function createVehicleController(
   context: ContractContext,
   port: VehicleActuationPort,
   initialTick = 0,
+  options: VehicleControllerOptions = {},
 ): VehicleController {
   const world = Object.freeze(readContext(fields(context, contextFields)));
   boundedId(world.sessionId);
+  const configuration = record(options);
+  requireContract(
+    Object.keys(configuration).every((key) => key === 'drivetrainVersion'),
+    'Unknown controller option',
+  );
+  const drivetrainEnabled = Object.hasOwn(configuration, 'drivetrainVersion');
+  if (drivetrainEnabled) {
+    requireContract(
+      configuration.drivetrainVersion === DRIVETRAIN_LIMITS.version,
+      'Unsupported drivetrain version',
+    );
+    requireContract(typeof port.readBody === 'function', 'Drivetrain needs current body readback');
+  }
   requireContract(
     typeof port.bodyIdentity === 'function' && typeof port.step === 'function',
     'Controller actuation port',
@@ -118,7 +143,13 @@ export function createVehicleController(
         const active = activeCopy();
         requireContract(!active.has(id), 'Controller vehicle already registered');
         requireContract(active.size < CONTROLLER_LIMITS.vehicles, 'Controller vehicle capacity');
-        active.set(id, { identity, mode: 'AUTO', target: null, control: null });
+        active.set(id, {
+          identity,
+          mode: 'AUTO',
+          target: null,
+          control: null,
+          drivetrain: drivetrainEnabled ? createDrivetrainState() : null,
+        });
         entries = active;
       });
     },
@@ -154,6 +185,8 @@ export function createVehicleController(
           changed.add(change.id);
           const entry = active.get(change.id)!;
           if (sourceFor(entry.mode) !== sourceFor(change.mode)) entry.target = null;
+          if (entry.mode !== change.mode && drivetrainEnabled)
+            entry.drivetrain = createDrivetrainState();
           entry.mode = change.mode;
         }
         requireContract(
@@ -163,6 +196,10 @@ export function createVehicleController(
         const addressed = batch(packets, CONTROLLER_LIMITS.packets, (value) => {
           const data = fields(value, ['identity', 'command']);
           const command = parseVehicleCommand(data.command);
+          requireContract(
+            !command.driveIntent || drivetrainEnabled,
+            'Direction intent requires explicit027 controller opt-in',
+          );
           boundedId(command.vehicleId);
           boundedId(command.sessionId);
           requireContract(
@@ -186,6 +223,7 @@ export function createVehicleController(
         const controls: VehicleControlProjection[] = [];
         const ignoredCommands: VehicleControllerFrame['ignoredCommands'][number][] = [];
         const physicalInputs = new Map<string, VehicleActuationInput>();
+        let drivetrainCpuMs = 0;
         for (const [id, entry] of active) {
           const source = sourceFor(entry.mode),
             sources = candidates.get(id);
@@ -204,7 +242,7 @@ export function createVehicleController(
           if (entry.target && nextTick - entry.target.tick >= CONTROLLER_LIMITS.targetTicks)
             entry.target = null;
           const raw = submitted ?? (entry.mode === 'AUTO' ? entry.target : null);
-          const command: VehicleCommand = Object.freeze({
+          let command: VehicleCommand = Object.freeze({
             ...world,
             vehicleId: id,
             tick: nextTick,
@@ -214,7 +252,41 @@ export function createVehicleController(
             steering: raw?.steering ?? 0,
             handbrake: raw?.handbrake ?? false,
             turnSignal: raw?.turnSignal ?? 'OFF',
+            ...(raw?.driveIntent ? { driveIntent: raw.driveIntent } : {}),
           });
+          let drivetrain: VehicleControlProjection['drivetrain'];
+          if (entry.drivetrain) {
+            const started = measure ? performance.now() : 0;
+            const body = drivetrainNeedsMotion(entry.drivetrain, command)
+              ? actuationPort!.readBody!(entry.identity)
+              : null;
+            requireContract(
+              body === null || body.identity === entry.identity,
+              'Drivetrain body readback identity',
+            );
+            const realization = realizeDrivetrain(
+              entry.drivetrain,
+              command,
+              body ? readDrivetrainMotion(body) : null,
+            );
+            entry.drivetrain = realization.state;
+            drivetrain = realization.projection;
+            command = Object.freeze({
+              ...command,
+              throttle: realization.throttle,
+              brake: realization.brake,
+              ...(command.driveIntent
+                ? {
+                    driveIntent: Object.freeze({
+                      ...command.driveIntent,
+                      direction: drivetrain.engagedDirection,
+                      shiftBrake: 0,
+                    }),
+                  }
+                : {}),
+            });
+            if (measure) drivetrainCpuMs += performance.now() - started;
+          }
           const signalStartedTick =
             command.turnSignal === 'OFF'
               ? null
@@ -236,13 +308,14 @@ export function createVehicleController(
               on && (command.turnSignal === 'LEFT' || command.turnSignal === 'HAZARD'),
             rightIndicatorOn:
               on && (command.turnSignal === 'RIGHT' || command.turnSignal === 'HAZARD'),
+            ...(drivetrain ? { drivetrain } : {}),
           });
           entry.control = control;
           controls.push(control);
           physicalInputs.set(
             id,
             Object.freeze({
-              throttle: command.throttle,
+              throttle: drivetrain?.physicalInput.throttle ?? command.throttle,
               brake: command.brake,
               steering: command.steering,
               handbrake: command.handbrake,
@@ -271,6 +344,7 @@ export function createVehicleController(
           controls: Object.freeze(controls),
           ignoredCommands: Object.freeze(ignoredCommands),
           physics,
+          ...(drivetrainEnabled ? { drivetrainCpuMs } : {}),
         });
       });
     },
@@ -286,6 +360,8 @@ export function createVehicleController(
       mutate(() => {
         suspended = true;
         for (const entry of entries.values()) entry.target = null;
+        if (drivetrainEnabled)
+          for (const entry of entries.values()) entry.drivetrain = createDrivetrainState();
       });
     },
     resume() {
@@ -306,6 +382,19 @@ export function createVehicleController(
         suspended,
         disposed,
         fault,
+        ...(drivetrainEnabled
+          ? {
+              drivetrain: Object.freeze({
+                states: entries.size,
+                enabled: [...entries.values()].filter((entry) => entry.drivetrain?.enabled).length,
+                shifting: [...entries.values()].filter(
+                  (entry) =>
+                    entry.drivetrain?.pendingDirection !== null && entry.drivetrain !== null,
+                ).length,
+                retainedHistory: 0 as const,
+              }),
+            }
+          : {}),
       });
     },
     dispose() {

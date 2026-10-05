@@ -1,0 +1,138 @@
+import { choice, number, requireContract, text } from '../sessions';
+
+export const COLLISION_LIMITS = Object.freeze({
+  vehicles: 110,
+  obstacles: 96,
+  colliders: 256,
+  contacts: 131072,
+  pairs: 16555,
+  pending: 16555,
+  idCodeUnits: 256,
+});
+export type CollisionKind = 'VEHICLE' | 'OBSTACLE';
+export interface CollisionIdentity {
+  readonly entityId: string;
+  readonly kind: CollisionKind;
+  readonly serial: number;
+  readonly colliderHandle: number;
+}
+/** Read-only identity fence; native registry mutation remains world-owned. */
+export interface CollisionIdentitySource {
+  isCurrent(identity: CollisionIdentity): boolean;
+}
+export interface CollisionContact {
+  readonly first: CollisionIdentity;
+  readonly second: CollisionIdentity;
+  /** Sum of normal solver impulses over actual manifold contacts, in N*s. */
+  readonly impulseNs: number;
+}
+export interface CollisionReadback {
+  readonly contactToleranceM: number;
+  readonly contacts: readonly CollisionContact[];
+  readonly candidatePairs: number;
+  readonly manifoldContacts: number;
+  readonly ignoredGroundPairs: number;
+  readonly ignoredSensorPairs: number;
+  readonly ignoredUnmappedPairs: number;
+  readonly ignoredObstaclePairs: number;
+}
+export interface CollisionBoxOptions {
+  readonly dynamic?: boolean;
+  readonly sensor?: boolean;
+}
+export interface PhysicsCollisionPort {
+  readonly collisionSource: CollisionIdentitySource;
+  collisionIdentity(entityId: string): CollisionIdentity | undefined;
+  collisionForColliderHandle(handle: number): CollisionIdentity | undefined;
+  addNamedBox(
+    entityId: string,
+    positionM: Readonly<{ x: number; y: number; z: number }>,
+    halfSizeM: Readonly<{ x: number; y: number; z: number }>,
+    options?: CollisionBoxOptions,
+  ): CollisionIdentity;
+  removeCollisionEntity(identity: CollisionIdentity): boolean;
+  readCollisionContacts(): CollisionReadback;
+  collisionResources(): {
+    vehicles: number;
+    obstacles: number;
+    colliders: number;
+    disposed: boolean;
+  };
+}
+
+/** One native world's exact registrations. Never reconstruct tokens from handle values. */
+export class CollisionRegistry {
+  private readonly entities = new Map<string, CollisionIdentity>();
+  private readonly handles = new Map<number, CollisionIdentity>();
+  private readonly live = new Set<CollisionIdentity>();
+  private serial = 0;
+  private vehicles = 0;
+  private obstacles = 0;
+  private disposed = false;
+
+  admit(entityId: string, kind: CollisionKind): void {
+    requireContract(!this.disposed, 'Collision registry disposed');
+    const id = text(entityId);
+    choice(kind, ['VEHICLE', 'OBSTACLE']);
+    requireContract(id.length <= COLLISION_LIMITS.idCodeUnits, 'Collision entity ID capacity');
+    requireContract(!this.entities.has(id), 'Collision entity already registered');
+    requireContract(this.live.size < COLLISION_LIMITS.colliders, 'Collision collider capacity');
+    requireContract(
+      this.serial < Number.MAX_SAFE_INTEGER,
+      'Collision registration serial exhausted',
+    );
+    requireContract(
+      kind === 'VEHICLE'
+        ? this.vehicles < COLLISION_LIMITS.vehicles
+        : this.obstacles < COLLISION_LIMITS.obstacles,
+      'Collision entity kind capacity',
+    );
+  }
+  register(entityId: string, kind: CollisionKind, colliderHandle: number): CollisionIdentity {
+    this.admit(entityId, kind);
+    number(colliderHandle);
+    requireContract(!this.handles.has(colliderHandle), 'Collision collider already registered');
+    const identity = Object.freeze({ entityId, kind, serial: ++this.serial, colliderHandle });
+    this.entities.set(entityId, identity);
+    this.handles.set(colliderHandle, identity);
+    this.live.add(identity);
+    if (kind === 'VEHICLE') this.vehicles++;
+    else this.obstacles++;
+    return identity;
+  }
+  identity(entityId: string): CollisionIdentity | undefined {
+    return this.entities.get(entityId);
+  }
+  forHandle(handle: number): CollisionIdentity | undefined {
+    return this.handles.get(handle);
+  }
+  isCurrent(identity: CollisionIdentity): boolean {
+    return !this.disposed && this.live.has(identity);
+  }
+  remove(identity: CollisionIdentity): boolean {
+    if (!this.isCurrent(identity)) return false;
+    this.live.delete(identity);
+    this.entities.delete(identity.entityId);
+    this.handles.delete(identity.colliderHandle);
+    if (identity.kind === 'VEHICLE') this.vehicles--;
+    else this.obstacles--;
+    return true;
+  }
+  getStats() {
+    return {
+      vehicles: this.vehicles,
+      obstacles: this.obstacles,
+      colliders: this.live.size,
+      disposed: this.disposed,
+    };
+  }
+  dispose(): void {
+    if (this.disposed) return;
+    this.entities.clear();
+    this.handles.clear();
+    this.live.clear();
+    this.vehicles = 0;
+    this.obstacles = 0;
+    this.disposed = true;
+  }
+}

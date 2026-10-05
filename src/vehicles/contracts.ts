@@ -9,8 +9,10 @@ import {
   requireContract,
   text,
   tick,
+  record,
 } from '../sessions';
 import type { ContractContext } from '../sessions';
+import type { DriveIntent } from './drivetrain';
 
 export const controlModes = ['AUTO', 'MANUAL', 'LEARNING'] as const;
 export type ControlMode = (typeof controlModes)[number];
@@ -32,10 +34,13 @@ export interface VehicleCommand extends ContractContext {
   readonly handbrake: boolean;
   readonly turnSignal: 'OFF' | 'LEFT' | 'RIGHT' | 'HAZARD';
   readonly source: 'AUTONOMY' | 'PLAYER';
+  readonly driveIntent?: DriveIntent;
 }
 
 export function parseVehicleCommand(value: unknown): VehicleCommand {
-  const data = fields(value, [
+  const own = record(value);
+  const directional = Object.hasOwn(own, 'driveIntent');
+  const data = fields(own, [
     ...contextFields,
     'vehicleId',
     'tick',
@@ -45,7 +50,25 @@ export function parseVehicleCommand(value: unknown): VehicleCommand {
     'handbrake',
     'turnSignal',
     'source',
+    ...(directional ? ['driveIntent'] : []),
   ]);
+  let driveIntent: DriveIntent | undefined;
+  if (directional) {
+    const intent = fields(data.driveIntent, ['version', 'direction', 'shiftBrake']);
+    requireContract(
+      intent.version === '027-braking-reverse-v1',
+      'Unsupported drivetrain intent version',
+    );
+    driveIntent = Object.freeze({
+      version: '027-braking-reverse-v1',
+      direction: choice(intent.direction, ['NONE', 'FORWARD', 'REVERSE']),
+      shiftBrake: number(intent.shiftBrake, 0, 1),
+    });
+    requireContract(
+      driveIntent.direction !== 'NONE' || data.throttle === 0,
+      'Neutral direction cannot request propulsion',
+    );
+  }
   return Object.freeze({
     ...readContext(data),
     vehicleId: text(data.vehicleId),
@@ -56,6 +79,7 @@ export function parseVehicleCommand(value: unknown): VehicleCommand {
     handbrake: boolean(data.handbrake),
     turnSignal: choice(data.turnSignal, ['OFF', 'LEFT', 'RIGHT', 'HAZARD']),
     source: choice(data.source, ['AUTONOMY', 'PLAYER']),
+    ...(driveIntent ? { driveIntent } : {}),
   });
 }
 

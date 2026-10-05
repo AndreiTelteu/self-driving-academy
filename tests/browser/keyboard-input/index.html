@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>025 keyboard driving and focus fixture</title>
+    <link rel="icon" href="data:," />
+    <style>
+      body {
+        margin: 0;
+        background: #14202d;
+        color: #f3f7fb;
+        font: 16px system-ui;
+      }
+      .controls {
+        position: fixed;
+        top: 12px;
+        left: 12px;
+        z-index: 1;
+        background: #14202ded;
+        padding: 12px;
+        max-width: 760px;
+      }
+      pre {
+        max-height: 220px;
+        overflow: auto;
+        white-space: pre-wrap;
+      }
+      canvas {
+        display: block;
+        width: 1920px;
+        height: 1080px;
+      }
+      .hidden {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="controls">
+      <strong>025 — keyboard ramps and focus release</strong>
+      <p>
+        Run the two-class protocol, then press W/S/A/D on the canvas and type W in the input to
+        verify trusted keyboard capture and editable release.
+      </p>
+      <select id="backend">
+        <option>AUTO</option>
+        <option>WEBGL2</option></select
+      ><button id="run">Run keyboard protocol</button
+      ><button id="finish" disabled>Finish and export after keyboard checks</button
+      ><input id="typing" placeholder="Type W here; vehicle must stay neutral" />
+      <pre id="status">Not run. Exclusive foreground browser slot required.</pre>
+    </div>
+    <canvas id="canvas" tabindex="0" width="1920" height="1080"></canvas>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

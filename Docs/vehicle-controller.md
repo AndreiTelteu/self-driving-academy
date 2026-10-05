@@ -10,6 +10,8 @@ Un pas are trei faze: validare integrală, arbitraj, aplicare fizică o singură
 
 Comanda raw rămâne distinctă de comanda efectivă. Dacă brake>0 sau handbrake=true, throttle efectiv este0. Direcția este păstrată. Semnalizarea OFF/LEFT/RIGHT/HAZARD este starea autoritară a comenzii selectate pentru ambele surse, expusă rendererului separat de fizică. O eventuală fază luminoasă se derivă numai din tick, astfel încât pauza nu continuă clipirea.
 
+[Extensia027](braking-reverse.md) este activată explicit prin opțiunea `drivetrainVersion`. Controllerul legacy păstrează comenzile anterioare; intentul de sens nou este respins fără opt-in. Extensia realizează oprirea/dwell-ul înaintea inversării și expune separat magnitudinea comenzii efective și `drivetrain.physicalInput` semnat, cu aceeași identitate fizică și același pas Rapier.
+
 Portul Rapier primește handbrake opțional (absența păstrează comportamentul anterior). Frâna de mână acționează cele două roți spate cu plafonul per roată deja calibrat021; per roată se folosește maximum dintre frâna de serviciu și comanda handbrake, fără însumare peste plafon. Roțile față primesc numai frâna de serviciu. Această conectare fizică nu declară calibrarea027, ABS, frânare→marșarier sau stabilitatea în viraj implementate.
 
 Readbackul `wheelBrakeImpulseLimitNs` citește cele patru plafoane configurate native, în N·s. API-ul Rapier le numește explicit maximum braking impulse; ele nu reprezintă impulsul realizat efectiv de solver. Distanța și viteza măsurată în scenariul de frânare sunt dovada efectului fizic.

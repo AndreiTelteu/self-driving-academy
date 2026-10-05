@@ -22,6 +22,7 @@ export type {
 } from './fixed-tick';
 export { createEventBus } from './event-bus';
 export * from './collision-events';
+export * from './scheduling';
 export type {
   EventBus,
   EventBusOptions,

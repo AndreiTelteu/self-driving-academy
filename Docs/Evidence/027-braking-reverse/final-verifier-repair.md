@@ -1,0 +1,7 @@
+# Final verifier environment repair
+
+After both real browser exports arrived, the original strict command reached artifact ZIP rehashing but failed because `Get-FileHash` was unavailable in its child `powershell.exe -NoProfile` environment. The verifier-only PowerShell script now uses its existing .NET SHA256 helper for the unchanged ZIP and .NET FileInfo for length. This preserves identical saved ZIP/entry/manifest/hardware digests; no source-at-capture, build artifact, native algorithm or original captured report was changed.
+
+Durable native bytes were copied after runs at the timestamp in native/archive-metadata.json and match the chronologically recorded BEFORE/AFTER/calibration digests. Historical verification now hashes that relative durable copy; current-source verification additionally checks the original installed file. These stronger archive checks do not relax source/current-byte equality. The separate integration audit is explicitly for later staged Git blobs and EOL-only checkout differences.
+
+The isolated staged integration audit passed114/114current raw-byte and GitINDEX matches, with zero EOL-only differences. Production/tests/dedicatedDocs `git diff --cached --check` passed. A separate all-evidence whitespace scan reported trailing spaces and a final blank line in original PowerShell failure/Vite logs; these actual historical log bytes are deliberately preserved, rather than stripped to manufacture an all-evidence whitespace PASS. This does not affect the passing global source formatting checks or strict archive hashes.

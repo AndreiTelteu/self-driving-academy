@@ -20,6 +20,8 @@ Butonul „Reglaje” deschide un popup cu două taburi: „Cum controlez mașin
 
 ControlPreferences este separat de DrivingProfile și se salvează per jucător. Valorile 0–100 se mapează monoton în limite calibrate/versionate; nu sunt unități fizice. Preseturile Accesibil/Echilibrat/Direct și limitele sliderelor păstrează frânarea, aderența și mecanica aceleiași mașini. Nu oferă imunitate sau schimbări de masă/putere. Aplicarea directă nu schimbă stilul AI; comportamentul efectiv demonstrat ulterior în LEARNING poate furniza dovezi normale.
 
+[025](keyboard-input.md) implementează filtrul și maparea `025-keyboard-v1`, calibrate la reglaje0/50/100 pe sedan/compact. Upgrade-ul mapării provizorii este explicit, iar înlocuirea preferințelor este adresată unui tick. Popup-ul și tranzacțiile sale draft/aplicare/anulare rămân în229; filtrul nu le simulează.
+
 Filtrarea nu mai este o asistență fixă globală. Segmentul de telemetrie păstrează controlPreferencesVersion, inputul brut și comanda efectivă. Schimbarea preferințelor închide segmentul la un tick, aplică setările și începe un segment nou dacă se reia condusul. Estimatorul nu interpretează limita tastaturii drept oscilație intenționată. Se validează extremele reglajelor și cele două clase de vehicul.
 
 ## Editarea manuală a stilului comun

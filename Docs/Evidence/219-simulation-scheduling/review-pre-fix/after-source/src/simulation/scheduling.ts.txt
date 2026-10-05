@@ -1,0 +1,666 @@
+import { fields, record } from '../sessions';
+
+export interface ScheduledActor {
+  readonly id: string;
+  readonly incarnation: number;
+}
+export interface SchedulingScope {
+  readonly sessionId: string;
+  readonly worldEpoch: number;
+}
+export interface SchedulerStep extends SchedulingScope {
+  readonly tick: number;
+  readonly dtSeconds: number;
+}
+export interface RouteVersions {
+  readonly graphVersion: string;
+  readonly costVersion: string;
+}
+export interface ScheduledRouteRequest extends RouteVersions, SchedulingScope {
+  readonly actor: ScheduledActor;
+  readonly origin: string;
+  readonly destination: string;
+  readonly access: 'TAXI' | 'CIVIL';
+  readonly priority: 'urgent' | 'normal';
+}
+export interface RouteTask {
+  /** Owner must bound internal work by maxExpansions and private task resources. */
+  step(budget: { readonly tick: number; readonly maxExpansions: number }): {
+    readonly done: boolean;
+    readonly path: readonly string[] | null;
+  };
+  dispose(): void;
+}
+export interface ScheduledRouteResult {
+  readonly sessionId: string;
+  readonly worldEpoch: number;
+  readonly ticket: number;
+  readonly actor: ScheduledActor;
+  readonly requestTick: number;
+  readonly completedTick: number;
+  readonly status: 'READY' | 'BLOCKED' | 'EXPIRED' | 'CANCELLED';
+  readonly path: readonly string[] | null;
+}
+export interface SchedulingUrgency extends SchedulingScope {
+  readonly actors: readonly ScheduledActor[];
+}
+export interface SchedulingPorts {
+  /** False fails before any input/controller/physics effects; owner may instead pause before submitting a tick. */
+  readonly beforeStep?: (step: SchedulerStep) => boolean;
+  readonly input: (tick: number) => void | SchedulingUrgency;
+  readonly decision: (actor: ScheduledActor, decisionTick: number, urgent: boolean) => void;
+  readonly controller: (actor: ScheduledActor, tick: number, dtSeconds: number) => void;
+  readonly physics: (tick: number, dtSeconds: number) => void;
+  readonly afterTick?: (tick: number) => void | SchedulingUrgency;
+  readonly dispatch?: (tick: number) => void;
+  readonly ui?: (tick: number) => void;
+  readonly createRouteTask?: (request: ScheduledRouteRequest) => RouteTask;
+  readonly routeResult?: (result: ScheduledRouteResult) => void;
+}
+export const SCHEDULING_LIMITS = Object.freeze({
+  actors: 110,
+  identitiesPerEpoch: 1024,
+  urgentEntries: 110,
+  routeJobs: 16,
+  routeCache: 64,
+  pathLanes: 256,
+  routeSlicesPerTick: 4,
+  expansionsPerSlice: 16,
+  routeAgeTicks: 120,
+});
+export interface SchedulingOptions {
+  readonly sessionId: string;
+  readonly worldEpoch: number;
+  readonly initialTick?: number;
+  readonly ports: SchedulingPorts;
+}
+export interface SchedulingStats {
+  readonly sessionId: string;
+  readonly worldEpoch: number;
+  readonly tick: number;
+  readonly actors: number;
+  readonly identities: number;
+  readonly retiredIdentities: number;
+  readonly urgent: number;
+  readonly routeJobs: number;
+  readonly residentRouteTasks: number;
+  readonly routeCache: number;
+  readonly routeCachePathCodeUnits: number;
+  readonly routeVersions: RouteVersions | null;
+  readonly fault: { readonly stage: string; readonly attemptedTick: number } | null;
+  readonly disposed: boolean;
+}
+export interface SimulationScheduler {
+  setActors(actors: readonly ScheduledActor[], scope: SchedulingScope): void;
+  markUrgent(actor: ScheduledActor, scope: SchedulingScope): boolean;
+  step(step: SchedulerStep): undefined;
+  setRouteVersions(versions: RouteVersions, scope: SchedulingScope): void;
+  requestRoute(request: ScheduledRouteRequest): {
+    readonly status: 'QUEUED' | 'CACHED';
+    readonly ticket: number | null;
+    readonly path: readonly string[] | null;
+  };
+  cancelRoute(ticket: number, scope: SchedulingScope): boolean;
+  reset(sessionId: string, worldEpoch: number, initialTick?: number): void;
+  dispose(): void;
+  getStats(): SchedulingStats;
+}
+const lexical = (a: string, b: string) => (a < b ? -1 : a > b ? 1 : 0);
+function text(value: unknown, maximum = 256): string {
+  if (
+    typeof value !== 'string' ||
+    !value.length ||
+    value.length > maximum ||
+    value.trim() !== value
+  )
+    throw new Error('Invalid scheduler identifier');
+  return value;
+}
+function integer(value: unknown): number {
+  if (typeof value !== 'number' || !Number.isSafeInteger(value) || value < 0)
+    throw new Error('Invalid scheduler integer');
+  return value;
+}
+function array(value: unknown, maximum: number): readonly unknown[] {
+  if (
+    !Array.isArray(value) ||
+    Object.getPrototypeOf(value) !== Array.prototype ||
+    value.length > maximum ||
+    Reflect.ownKeys(value).length !== value.length + 1
+  )
+    throw new Error('Invalid bounded scheduler array');
+  const result: unknown[] = [];
+  for (let index = 0; index < value.length; index++) {
+    const descriptor = Object.getOwnPropertyDescriptor(value, String(index));
+    if (!descriptor || !('value' in descriptor) || !descriptor.enumerable)
+      throw new Error('Scheduler array accessors/sparse entries forbidden');
+    result.push(descriptor.value);
+  }
+  return result;
+}
+function actor(value: unknown): ScheduledActor {
+  const data = fields(value, ['id', 'incarnation']);
+  return Object.freeze({ id: text(data.id), incarnation: integer(data.incarnation) });
+}
+function versions(value: unknown): RouteVersions {
+  const data = fields(value, ['graphVersion', 'costVersion']);
+  return Object.freeze({
+    graphVersion: text(data.graphVersion, 128),
+    costVersion: text(data.costVersion, 128),
+  });
+}
+/** Stable UTF-16 FNV-1a; no locale, camera, population or insertion-order dependency. */
+export function entityDecisionPhase(entityId: string): number {
+  const id = text(entityId);
+  let hash = 2166136261;
+  for (let i = 0; i < id.length; i++) hash = Math.imul(hash ^ id.charCodeAt(i), 16777619) >>> 0;
+  return hash % 6;
+}
+interface Job {
+  readonly ticket: number;
+  request: ScheduledRouteRequest;
+  readonly key: string;
+  readonly requestTick: number;
+  task: RouteTask | null;
+}
+interface CachedRoute {
+  readonly path: readonly string[] | null;
+  lastUsed: number;
+}
+
+/** Pure tick consumer. It does not own a render clock, physical world, policy, context or worker transport. */
+export function createSimulationScheduler(input: SchedulingOptions): SimulationScheduler {
+  const options = record(input);
+  for (const key of Object.keys(options))
+    if (!['sessionId', 'worldEpoch', 'initialTick', 'ports'].includes(key))
+      throw new Error('Unknown scheduling option');
+  let sessionId = text(options.sessionId),
+    worldEpoch = integer(options.worldEpoch),
+    tick = integer(options.initialTick ?? 0);
+  const values = record(options.ports);
+  const required = ['input', 'decision', 'controller', 'physics'],
+    optional = ['beforeStep', 'afterTick', 'dispatch', 'ui', 'createRouteTask', 'routeResult'];
+  for (const key of Object.keys(values))
+    if (![...required, ...optional].includes(key)) throw new Error('Unknown scheduler port');
+  for (const key of required)
+    if (typeof values[key] !== 'function') throw new Error('Missing scheduler port');
+  for (const key of optional)
+    if (values[key] !== undefined && typeof values[key] !== 'function')
+      throw new Error('Invalid scheduler port');
+  const boundPorts: Record<string, unknown> = {};
+  for (const [key, value] of Object.entries(values))
+    if (typeof value === 'function')
+      boundPorts[key] = (...args: unknown[]) => Reflect.apply(value, options.ports, args);
+  const ports = Object.freeze(boundPorts) as unknown as SchedulingPorts;
+  let actors: readonly ScheduledActor[] = Object.freeze([]);
+  const live = new Map<string, ScheduledActor>(),
+    history = new Map<string, number>(),
+    retired = new Set<string>(),
+    urgent = new Set<string>();
+  const jobs = new Map<number, Job>(),
+    cache = new Map<string, CachedRoute>();
+  let routeVersions: RouteVersions | null = null,
+    activeTicket: number | null = null,
+    nextTicket = 0,
+    busy = false,
+    disposed = false;
+  let fault: SchedulingStats['fault'] = null;
+  const available = () => {
+    if (disposed || busy || fault) throw new Error('Scheduler disposed, reentrant or faulted');
+  };
+  const sync = (result: unknown) => {
+    if (result !== undefined)
+      throw new Error('Scheduler effects must synchronously return undefined');
+  };
+  function assertScope(inputScope: SchedulingScope) {
+    const scope = fields(inputScope, ['sessionId', 'worldEpoch']);
+    if (text(scope.sessionId) !== sessionId || integer(scope.worldEpoch) !== worldEpoch)
+      throw new Error('Stale/foreign scheduling scope');
+  }
+  function admitUrgency(result: unknown) {
+    if (result === undefined) return;
+    const value = fields(result, ['sessionId', 'worldEpoch', 'actors']);
+    assertScope({ sessionId: value.sessionId as string, worldEpoch: value.worldEpoch as number });
+    const identities = array(value.actors, SCHEDULING_LIMITS.urgentEntries).map(actor);
+    for (const identity of identities)
+      if (live.get(identity.id)?.incarnation === identity.incarnation) urgent.add(identity.id);
+  }
+  function terminal(stage: string, attemptedTick: number, error: unknown): never {
+    fault = Object.freeze({ stage, attemptedTick });
+    throw error;
+  }
+  function disposeTask(job: Job) {
+    const task = job.task;
+    job.task = null;
+    if (activeTicket === job.ticket) activeTicket = null;
+    if (task) sync(task.dispose());
+  }
+  function finish(
+    job: Job,
+    status: ScheduledRouteResult['status'],
+    at: number,
+    path: readonly string[] | null = null,
+  ) {
+    jobs.delete(job.ticket);
+    disposeTask(job);
+    if (ports.routeResult)
+      sync(
+        ports.routeResult(
+          Object.freeze({
+            sessionId,
+            worldEpoch,
+            ticket: job.ticket,
+            actor: job.request.actor,
+            requestTick: job.requestTick,
+            completedTick: at,
+            status,
+            path,
+          }),
+        ),
+      );
+  }
+  function clearJobs(notify: boolean) {
+    const pending = [...jobs.values()].sort((a, b) => a.ticket - b.ticket);
+    let firstFailure: unknown,
+      failed = false;
+    for (const job of pending)
+      try {
+        if (notify) finish(job, 'CANCELLED', tick);
+        else {
+          jobs.delete(job.ticket);
+          disposeTask(job);
+        }
+      } catch (error) {
+        if (!failed) {
+          failed = true;
+          firstFailure = error;
+        }
+      }
+    jobs.clear();
+    activeTicket = null;
+    if (failed) throw firstFailure;
+  }
+  function cacheRoute(key: string, path: readonly string[] | null, at: number) {
+    if (!cache.has(key) && cache.size >= SCHEDULING_LIMITS.routeCache) {
+      const oldest = [...cache.entries()].sort(
+        (a, b) => a[1].lastUsed - b[1].lastUsed || lexical(a[0], b[0]),
+      )[0];
+      cache.delete(oldest[0]);
+    }
+    cache.set(key, { path, lastUsed: at });
+  }
+  function routeWork(at: number) {
+    for (const job of [...jobs.values()].sort((a, b) => a.ticket - b.ticket))
+      if (at - job.requestTick > SCHEDULING_LIMITS.routeAgeTicks) finish(job, 'EXPIRED', at);
+    for (let slice = 0; slice < SCHEDULING_LIMITS.routeSlicesPerTick; slice++) {
+      let job = activeTicket === null ? undefined : jobs.get(activeTicket);
+      if (!job) {
+        job = [...jobs.values()].sort(
+          (a, b) =>
+            (a.request.priority === 'urgent' ? 0 : 1) - (b.request.priority === 'urgent' ? 0 : 1) ||
+            a.requestTick - b.requestTick ||
+            lexical(a.request.actor.id, b.request.actor.id) ||
+            a.ticket - b.ticket,
+        )[0];
+        if (!job) break;
+        const reused = cache.get(job.key);
+        if (reused) {
+          reused.lastUsed = at;
+          finish(job, reused.path ? 'READY' : 'BLOCKED', at, reused.path);
+          continue;
+        }
+        if (!ports.createRouteTask) throw new Error('Route task port unavailable');
+        const original = ports.createRouteTask(job.request);
+        const task = fields(original, ['step', 'dispose']);
+        if (typeof task.step !== 'function' || typeof task.dispose !== 'function')
+          throw new Error('Invalid cooperative route task');
+        const taskStep = task.step as RouteTask['step'],
+          taskDispose = task.dispose as RouteTask['dispose'];
+        job.task = Object.freeze({
+          step: (budget: Parameters<RouteTask['step']>[0]) =>
+            Reflect.apply(taskStep, original, [budget]) as ReturnType<RouteTask['step']>,
+          dispose: () => Reflect.apply(taskDispose, original, []) as void,
+        });
+        activeTicket = job.ticket;
+      }
+      const result = fields(
+        job.task!.step(
+          Object.freeze({ tick: at, maxExpansions: SCHEDULING_LIMITS.expansionsPerSlice }),
+        ),
+        ['done', 'path'],
+      );
+      if (typeof result.done !== 'boolean' || (!result.done && result.path !== null))
+        throw new Error('Invalid route task result');
+      if (result.done) {
+        const path =
+          result.path === null
+            ? null
+            : Object.freeze(
+                array(result.path, SCHEDULING_LIMITS.pathLanes).map((lane) => text(lane)),
+              );
+        if (
+          path &&
+          (!path.length ||
+            path[0] !== job.request.origin ||
+            path[path.length - 1] !== job.request.destination)
+        )
+          throw new Error('Route task endpoints mismatch');
+        cacheRoute(job.key, path, at);
+        finish(job, path ? 'READY' : 'BLOCKED', at, path);
+      }
+    }
+  }
+  return Object.freeze({
+    setActors(inputActors: readonly ScheduledActor[], scope: SchedulingScope) {
+      available();
+      busy = true;
+      try {
+        assertScope(scope);
+        const next = array(inputActors, SCHEDULING_LIMITS.actors)
+          .map(actor)
+          .sort((a, b) => lexical(a.id, b.id));
+        const ids = new Set<string>();
+        let additions = 0;
+        for (const value of next) {
+          if (ids.has(value.id)) throw new Error('Duplicate scheduled actor');
+          ids.add(value.id);
+          const previous = history.get(value.id);
+          if (
+            previous !== undefined &&
+            (value.incarnation < previous ||
+              (retired.has(value.id) && value.incarnation <= previous))
+          )
+            throw new Error('Stale scheduled actor incarnation');
+          if (previous === undefined) additions++;
+        }
+        if (history.size + additions > SCHEDULING_LIMITS.identitiesPerEpoch)
+          throw new Error('Scheduler identity admission exceeded');
+        const cancelled = [...jobs.values()].filter(
+          (job) =>
+            !next.some(
+              (value) =>
+                value.id === job.request.actor.id &&
+                value.incarnation === job.request.actor.incarnation,
+            ),
+        );
+        for (const previous of actors) if (!ids.has(previous.id)) retired.add(previous.id);
+        for (const id of urgent)
+          if (next.find((value) => value.id === id)?.incarnation !== live.get(id)?.incarnation)
+            urgent.delete(id);
+        actors = Object.freeze(next);
+        live.clear();
+        for (const value of next) {
+          live.set(value.id, value);
+          history.set(value.id, value.incarnation);
+          retired.delete(value.id);
+        }
+        for (const id of urgent) if (!live.has(id)) urgent.delete(id);
+        for (const job of cancelled)
+          try {
+            finish(job, 'CANCELLED', tick);
+          } catch (error) {
+            terminal('actor-removal', tick, error);
+          }
+      } finally {
+        busy = false;
+      }
+    },
+    markUrgent(value: ScheduledActor, scope: SchedulingScope) {
+      available();
+      busy = true;
+      try {
+        assertScope(scope);
+        const identity = actor(value);
+        if (live.get(identity.id)?.incarnation !== identity.incarnation) return false;
+        urgent.add(identity.id);
+        return true;
+      } finally {
+        busy = false;
+      }
+    },
+    step(inputStep: SchedulerStep) {
+      available();
+      busy = true;
+      let at = tick,
+        stage = 'validation',
+        effectsStarted = false;
+      try {
+        const value = fields(inputStep, ['sessionId', 'worldEpoch', 'tick', 'dtSeconds']);
+        assertScope({
+          sessionId: value.sessionId as string,
+          worldEpoch: value.worldEpoch as number,
+        });
+        at = integer(value.tick);
+        if (at !== tick + 1 || value.dtSeconds !== 1 / 60)
+          throw new Error('Scheduler requires consecutive60Hz authoritative steps');
+        stage = 'admission';
+        effectsStarted = true;
+        if (
+          ports.beforeStep &&
+          ports.beforeStep(
+            Object.freeze({ sessionId, worldEpoch, tick: at, dtSeconds: 1 / 60 }),
+          ) !== true
+        )
+          throw new Error('Physical step admission refused');
+        stage = 'input';
+        admitUrgency(ports.input(at));
+        stage = 'decision';
+        for (const value of actors)
+          if (urgent.has(value.id) || entityDecisionPhase(value.id) === at % 6) {
+            const isUrgent = urgent.has(value.id);
+            sync(ports.decision(value, at, isUrgent));
+            urgent.delete(value.id);
+          }
+        stage = 'controller';
+        for (const value of actors) sync(ports.controller(value, at, 1 / 60));
+        stage = 'physics';
+        sync(ports.physics(at, 1 / 60));
+        stage = 'afterTick';
+        if (ports.afterTick) admitUrgency(ports.afterTick(at));
+        stage = 'routing';
+        routeWork(at);
+        if (at % 6 === 0) {
+          stage = 'dispatch';
+          if (ports.dispatch) sync(ports.dispatch(at));
+          stage = 'ui';
+          if (ports.ui) sync(ports.ui(at));
+        }
+        tick = at;
+        return undefined;
+      } catch (error) {
+        if (effectsStarted) terminal(stage, at, error);
+        throw error;
+      } finally {
+        busy = false;
+      }
+    },
+    setRouteVersions(inputVersions: RouteVersions, scope: SchedulingScope) {
+      available();
+      busy = true;
+      try {
+        assertScope(scope);
+        const next = versions(inputVersions);
+        if (
+          routeVersions?.graphVersion === next.graphVersion &&
+          routeVersions.costVersion === next.costVersion
+        )
+          return;
+        cache.clear();
+        routeVersions = next;
+        try {
+          clearJobs(true);
+        } catch (error) {
+          terminal('route-version-change', tick, error);
+        }
+      } finally {
+        busy = false;
+      }
+    },
+    requestRoute(inputRequest: ScheduledRouteRequest) {
+      available();
+      busy = true;
+      try {
+        const data = fields(inputRequest, [
+          'sessionId',
+          'worldEpoch',
+          'actor',
+          'graphVersion',
+          'costVersion',
+          'origin',
+          'destination',
+          'access',
+          'priority',
+        ]);
+        assertScope({ sessionId: data.sessionId as string, worldEpoch: data.worldEpoch as number });
+        const identity = actor(data.actor),
+          requestVersions = versions({
+            graphVersion: data.graphVersion,
+            costVersion: data.costVersion,
+          });
+        if (live.get(identity.id)?.incarnation !== identity.incarnation)
+          throw new Error('Foreign/stale route actor');
+        if (
+          !routeVersions ||
+          requestVersions.graphVersion !== routeVersions.graphVersion ||
+          requestVersions.costVersion !== routeVersions.costVersion
+        )
+          throw new Error('Unknown/stale route versions');
+        if (
+          !['TAXI', 'CIVIL'].includes(data.access as string) ||
+          !['urgent', 'normal'].includes(data.priority as string)
+        )
+          throw new Error('Invalid route access/priority');
+        const request = Object.freeze({
+          sessionId,
+          worldEpoch,
+          actor: identity,
+          ...requestVersions,
+          origin: text(data.origin),
+          destination: text(data.destination),
+          access: data.access as 'TAXI' | 'CIVIL',
+          priority: data.priority as 'urgent' | 'normal',
+        });
+        const key = JSON.stringify([
+          request.graphVersion,
+          request.costVersion,
+          request.origin,
+          request.destination,
+          request.access,
+        ]);
+        const cached = cache.get(key);
+        if (cached) {
+          cached.lastUsed = tick;
+          return Object.freeze({ status: 'CACHED' as const, ticket: null, path: cached.path });
+        }
+        for (const job of jobs.values())
+          if (job.request.actor.id === identity.id) {
+            if (job.key !== key) throw new Error('Actor already has a different pending route');
+            if (request.priority === 'urgent' && job.request.priority === 'normal')
+              job.request = Object.freeze({ ...job.request, priority: 'urgent' });
+            return Object.freeze({ status: 'QUEUED' as const, ticket: job.ticket, path: null });
+          }
+        if (
+          !ports.createRouteTask ||
+          jobs.size >= SCHEDULING_LIMITS.routeJobs ||
+          nextTicket === Number.MAX_SAFE_INTEGER
+        )
+          throw new Error('Route job admission refused');
+        const ticket = ++nextTicket;
+        jobs.set(ticket, { ticket, request, key, requestTick: tick, task: null });
+        return Object.freeze({ status: 'QUEUED' as const, ticket, path: null });
+      } finally {
+        busy = false;
+      }
+    },
+    cancelRoute(inputTicket: number, scope: SchedulingScope) {
+      available();
+      const ticket = integer(inputTicket);
+      busy = true;
+      try {
+        assertScope(scope);
+        const job = jobs.get(ticket);
+        if (!job) return false;
+        try {
+          finish(job, 'CANCELLED', tick);
+        } catch (error) {
+          terminal('route-cancel', tick, error);
+        }
+        return true;
+      } finally {
+        busy = false;
+      }
+    },
+    reset(inputSession: string, inputEpoch: number, initialTick = 0) {
+      if (disposed || busy) throw new Error('Scheduler disposed or reentrant');
+      const nextSession = text(inputSession),
+        nextEpoch = integer(inputEpoch),
+        nextTick = integer(initialTick);
+      if (nextSession === sessionId && nextEpoch <= worldEpoch)
+        throw new Error('Scheduler reset must advance epoch');
+      busy = true;
+      try {
+        let cleanupFailure: unknown,
+          failed = false;
+        try {
+          clearJobs(false);
+        } catch (error) {
+          failed = true;
+          cleanupFailure = error;
+        }
+        actors = Object.freeze([]);
+        live.clear();
+        history.clear();
+        retired.clear();
+        urgent.clear();
+        cache.clear();
+        routeVersions = null;
+        sessionId = nextSession;
+        worldEpoch = nextEpoch;
+        tick = nextTick;
+        fault = null;
+        if (failed) terminal('reset-cleanup', tick, cleanupFailure);
+      } finally {
+        busy = false;
+      }
+    },
+    dispose() {
+      if (disposed) return;
+      if (busy) throw new Error('Scheduler reentrant dispose');
+      busy = true;
+      disposed = true;
+      try {
+        clearJobs(false);
+      } finally {
+        actors = Object.freeze([]);
+        live.clear();
+        history.clear();
+        retired.clear();
+        urgent.clear();
+        cache.clear();
+        routeVersions = null;
+        busy = false;
+      }
+    },
+    getStats() {
+      return Object.freeze({
+        sessionId,
+        worldEpoch,
+        tick,
+        actors: actors.length,
+        identities: history.size,
+        retiredIdentities: retired.size,
+        urgent: urgent.size,
+        routeJobs: jobs.size,
+        residentRouteTasks: activeTicket === null ? 0 : 1,
+        routeCache: cache.size,
+        routeCachePathCodeUnits: [...cache.values()].reduce(
+          (total, value) => total + (value.path?.reduce((sum, lane) => sum + lane.length, 0) ?? 0),
+          0,
+        ),
+        routeVersions,
+        fault,
+        disposed,
+      });
+    },
+  });
+}

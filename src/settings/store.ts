@@ -1,7 +1,7 @@
 import { requireContract } from '../sessions';
 import { parseRuntimeSettings, type RuntimeSettings } from './contracts';
 
-/** Defaults are proposed fixtures, not hardware budgets or calibrated mappings. */
+/** Defaults are declarative;025 input mapping does not alter vehicle mechanics or hardware budgets. */
 export function createDefaultSettings(playerId: string, controlVersion = 0): RuntimeSettings {
   return parseRuntimeSettings({
     schemaVersion: 1,
@@ -28,7 +28,7 @@ export function createDefaultSettings(playerId: string, controlVersion = 0): Run
       control: {
         schemaVersion: 1,
         version: controlVersion,
-        mappingVersion: 'provisional-v1',
+        mappingVersion: '025-keyboard-v1',
         steeringSensitivity: 50,
         returnRate: 50,
         speedAttenuation: 50,

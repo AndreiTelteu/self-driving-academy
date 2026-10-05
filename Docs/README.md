@@ -105,3 +105,11 @@ Se elimină global pierderea XP și scăderea nivelului. V1 adaugă Academie/Hao
 [Contactele și incidentele028](collision-events.md) leagă identitățile fizice de contactele Rapier și de evenimente COLLISION, cu episoade persistente, cooldown și retry fără repetarea fizicii. Probele native și playtesturile headed WebGPU/WebGL2 verifică impactul și eliberarea resurselor; măsurătorile CPU rămân separate de gate-ul întregului joc.
 
 [Controllerul comun024](vehicle-controller.md) aplică aceeași comandă pentru PLAYER și AUTONOMY la fiecare tick fizic, cu arbitraj atomic, ținte AUTO bounded, frână de mână și semnalizare autoritară. Testele Rapier și probele vizibile Chrome pe WebGPU/WebGL2 verifică paritatea celor două surse, preluarea și cleanup-ul; calibrarea dinamicii și inputul filtrat continuă în PBI-urile dedicate.
+
+[Schedulerul219](simulation-scheduling.md) distribuie deciziile periodice la 10 Hz, păstrând controllerul și fizica la 60 Hz, inputul urgent și datoria buclei fixe. Cozile și cache-urile au limite și invalidare deterministă. Probele complete Chrome WebGPU/WebGL2 pe fixture-ul fizic timpuriu verifică frame-urile, paritatea semantică și cleanup-ul; politica 045, jocul complet și hardware-ul laptop rămân în afara acestei acceptări.
+
+[Inputul de tastatură025](keyboard-input.md) separă inputul brut de comanda filtrată la 60 Hz, cu revenire, sensibilitate la viteză și preferințe versionate. Calibrarea sedan/compact și probele manuale Chrome WebGPU/WebGL2 verifică reglajele, focusul și inputul fizic; popup-ul 229 și marșarierul 027 rămân task-uri separate.
+
+[Mașina de stări045](behavior-fsm.md) oferă șase stări și reason codes din contextul044 și fapte explicite de politică, cu decizii periodice/urgente prin219 și ownership plafonat. Testele și20lumi native AFTER verifică semantica, costul și cleanup-ul contractului timpuriu; manevrele fizice și performanța hardware a jocului complet continuă în task-urile dedicate.
+
+[Frânarea și marșarierul027](braking-reverse.md) adaugă transmisie opt-in cu oprire și dwell fizic înaintea inversării, input brut distinct de comanda fizică semnată și frână de mână pe roțile spate. Calibrarea celor două clase și driving-ul Chrome WebGPU/WebGL2 sunt verificate; ABS, transmisia completă și performanța întregului joc rămân în afara acestei probe.
