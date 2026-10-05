@@ -8,6 +8,8 @@ Proba portabilă construiește bootstrapul Babylon în producție și îl serve�
 
 Review-ul independent a verificat focusul inițial/final, pierderea rendererului, identitatea pagină/manifest/hardware și clasificarea long tasks după startTime. Finalizarea cedează un task real înaintea drenării observatorului. Bufferele de cadre și long tasks au plafoane și nu trunchiază tacit rezultate valide.
 
-Lipsesc încă baseline-ul complet desktop și măsurarea reală pe Lenovo Yoga7. Bugetele și capacitățile din [draft](../../performance-budgets.draft.json) nu sunt aprobate. PBI203 rămâne In Progress; commitul uneltei permite rularea ei pe laptop fără a închide taskul.
+Baseline-ul complet desktop a fost ulterior executat: [raport și limite](desktop-report.md). Măsurarea reală pe Lenovo Yoga7 rămâne în așteptare. Bugetele și capacitățile din [draft](../../performance-budgets.draft.json) nu sunt aprobate. PBI203 rămâne In Progress; commitul uneltei permite rularea ei pe laptop fără a închide taskul.
 
 Verificarea izolată a uneltei din indexul Git: [check](staged-check.txt) PASS255, [build](staged-build.txt) PASS, Validate-Board și Validate-Plan PASS. Boardul păstrează203 In Progress.
+
+Baseline complet și sumarizator:7teste dedicate PASS; integrare izolată [check](baseline-staged-check.txt) PASS262 și [build](baseline-staged-build.txt) PASS, Board/Plan PASS. Include numai schimbările203, fără implementarea038 din lucru paralel.

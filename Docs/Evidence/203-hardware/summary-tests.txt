@@ -1,0 +1,54 @@
+Offline hardware-probe summary validation
+After desktop measurement release; synthetic parser tests are not hardware evidence.
+
+Actual desktop CLI: node scripts/summarize-hardware-probe.mjs Docs/Evidence/203-hardware/desktop-baseline.json
+Exit code 0; output persisted in desktop-summary.json as one compact JSON record.
+Actual report: ten unique paired runs; RAF activeDurationMs 120002.5..120002.80000000005; CPU/frame samples per run 17275..17280.
+CPU p95 median disabled/enabled: 0.20000004768371582ms / 0.20000004768371582ms.
+Frame interval p95 median disabled/enabled: 7ms / 7ms.
+Observer CPU p95 raw paired deltas: 0,0,0,0.09999990463256836,0ms.
+Long-task API supported, all recorded phase counts zero; overflow false.
+Actual Babylon GPU info retained: vendor amd, renderer rdna-3, version unknown version. GPU timer unsupported in all enabled runs, aggregated GPU null.
+Owned nodes/meshes/materials/textures/geometries final-phase counts all zero; drawCalls available zero in five enabled runs, unavailable in five disabled runs.
+No gameplay gate approved; no budget or source baseline modified.
+
+Focused tests
+Command: node --import ./scripts/register-typescript.mjs --test tests/harness/hardware-probe-summary.test.ts
+Exit code: 0
+[ERROR] - (starship::print): Under a 'dumb' terminal (TERM=dumb).
+
+(node:45060) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ five-repeat medians/ranges preserve paired negative observer deltas and counters (3.7104ms)
+✔ unsupported/pending GPU remains null; partial availability reports actual repetitions (1.0326ms)
+✔ rejects smoke, interrupted protocol, invalid dimensions and lost focus (6.2453ms)
+✔ rejects missing/duplicate pairs and inconsistent/nonfinite sample statistics (1.4496ms)
+✔ rejects hardware/profile/build/digest inconsistency and wrong phase attribution (1.6629ms)
+✔ phase wall delta does not invalidate a full RAF duration when callback latencies differ (0.3776ms)
+✔ explicit-path CLI emits one compact JSON record, rejects invalid input, and never rewrites evidence (267.3848ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 417.6014
+
+Typecheck
+Command: npm run typecheck
+Exit code: 0
+[ERROR] - (starship::print): Under a 'dumb' terminal (TERM=dumb).
+
+npm warn Unknown env config "msvs-version". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> self-driving-academy@0.1.0 typecheck
+> tsc --noEmit && tsc -p tsconfig.tests.json --noEmit
+
+
+Scoped lint
+Command: npx eslint scripts/summarize-hardware-probe.mjs tests/harness/hardware-probe-summary.test.ts --max-warnings 0
+Exit code: 0
+[ERROR] - (starship::print): Under a 'dumb' terminal (TERM=dumb).
+
+npm warn Unknown env config "msvs-version". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.

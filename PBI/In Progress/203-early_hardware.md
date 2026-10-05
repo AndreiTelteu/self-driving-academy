@@ -49,7 +49,7 @@ Păstrează comenzile, scenariile și rezultatele reale; nu declara trecere făr
 
 Rezultat implementare: Unealtă portabilă de măsurare bootstrap în producție, identificare locală PowerShell și export JSON cu proveniența surselor/artefactelor. Desktop identificat local; laptop Lenovo Yoga7/Ryzen7735U/Radeon680M declarat de utilizator. Calibrarea este în lucru.
 
-Verificări executate și rezultat: Smoke Chrome/WebGPU real și invalidare la context loss WebGL, plus blur sintetic PASS. Rezultatul scurt este explicit neeligibil ca baseline. [Dovezi](../../Docs/Evidence/203-hardware/verification.md). Baseline-urile complete pe ambele dispozitive și calibrarea manifestului rămân necesare.
+Verificări executate și rezultat: Smoke Chrome/WebGPU real și invalidare la context loss WebGL, plus blur sintetic PASS. Baseline complet desktop: cinci perechi30s/120s, validBaseline=true, CPU p95 median0,20ms și interval p95 de7ms pe bootstrap gol, GPU timer indisponibil. [Dovezi](../../Docs/Evidence/203-hardware/verification.md), [raport desktop](../../Docs/Evidence/203-hardware/desktop-report.md). Baseline-ul laptopului și calibrarea manifestului rămân necesare.
 
 Fișiere și documente actualizate: scripts/Run-HardwareProbe.ps1, scripts/hardware-probe-server.mjs, tests/browser/hardware-bootstrap, Docs/hardware-reference.md, Docs/performance-budgets.draft.json și Docs/Evidence/203-hardware.
 
@@ -70,3 +70,5 @@ Verificare finală: Validate-Board.ps1 -RequireDone '203'.
 
 - 2026-10-04: Revizia 0.4 adaugă contracte/verificări de performanță; implementarea rămâne neîncepută.
 - 2026-10-05T03:50:45.4973133+03:00: Dependențele001/004/019 sunt Done. Utilizatorul a identificat laptopul Lenovo Yoga7 14ARP8, Ryzen7 7735U, Radeon680M,16GB RAM,512GB SSD,OLED WUXGA14in. Specificațiile sunt declarate de utilizator, nu măsurători. Pregătim proba locală și exportul; accesul/rularea pe laptop rămâne necesară. Taskurile independente continuă în paralel.
+
+- 2026-10-05T04:51:29.2722836+03:00: Baseline complet desktop Chrome/WebGPU pe1044d0f, cinci perechi30s/120s, validBaseline=true; raport și sumar păstrate. Utilizatorul a ales să ruleze personal proba pe laptop; rezultatul este în așteptare.203 rămâne In Progress.

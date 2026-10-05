@@ -11,6 +11,8 @@ Proba se construiește local în producție, fără HMR, cu sursele și commitul
 
 ## Rulare pe laptop
 
+Baseline-ul complet al desktopului este disponibil în [raportul203](Evidence/203-hardware/desktop-report.md): cinci repetări cu observator oprit/pornit, Chrome/WebGPU,1920×1080, fără pierdere de focus. CPU p95 median0,20ms și interval de cadru p95 de7ms sunt valori ale bootstrapului gol pe display144Hz, fără certificare de gameplay. [Sumarizatorul offline](hardware-probe-summary.md) verifică protocolul și calculează medianele fără modificarea dovezilor.
+
 Înainte de pornirea scriptului, conectează laptopul la alimentare, oprește economisirea bateriei și închide alte aplicații care folosesc GPU-ul. Păstrează aceste condiții până la finalul măsurării. Scriptul capturează alimentarea și hardware-ul la pornirea serverului; dacă schimbi condițiile, oprește serverul și rulează din nou scriptul pentru metadata noi.
 
 În checkout-ul proiectului, cu Node 24.21 și npm 11.19 instalate:
