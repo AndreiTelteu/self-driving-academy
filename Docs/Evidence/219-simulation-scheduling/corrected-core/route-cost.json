@@ -1,0 +1,843 @@
+{
+  "capturedAt": "2026-10-05T14:42:42.421Z",
+  "commit": "94e1f1c080c37c77a483b252fe828ffdf3139613",
+  "runtime": "v24.21.0",
+  "hardware": {
+    "cpu": "AMD Ryzen 9 7950X3D 16-Core Processor          ",
+    "os": "win32 10.0.26200"
+  },
+  "sourceHashes": {
+    "scripts/benchmark-scheduling-route-work.mjs": "0b6cb898447d287ab8b8250a64765db91963d73a1bbff1d8daea4cbf1eca080a",
+    "tests/simulation/route-work-fixture.ts": "816bf77c2ba673f4b4c870b79dca5376b91713a1baa413291cc40e9f6105e531",
+    "tests/simulation/scheduling-reference.ts": "afb6cdcac1467d8448beae59b3d43ab45ae64da86f179d7b98497d4a25661ea7",
+    "tests/autonomy/road-context-reference.ts": "c5fe61c330db951f2bb1f97b3ea6d75bb92228e7f38864197e21378602ddd6f7",
+    "src/simulation/scheduling.ts": "f33fa5e1d8360953b94d74008e6ac407a1ea90c4dc71b6ebc9fb192dbdb3d1bd",
+    "src/world/lane-graph.ts": "8094ffbc7d85ed8fc4fc9400e02f5ca071d83408c04b66be12aef3c7bb8685aa",
+    "src/telemetry/performance.ts": "00bf6d83aced2e8b84135e93578fb6c3a75c814b5fc21eea55fb992773af8d81",
+    "src/simulation/collision-events.ts": "ddbe4c8053a0895e8c45f5ba6890b7f51b24d011bfebc1fa32cfcd33e8fcde04",
+    "src/simulation/event-bus.ts": "c9787f3a7aab936eab1c29c4d0aacbdde45fce1dbe571b6d76d8ffeb893ffea7",
+    "src/simulation/events.ts": "460226ea56abc17731716ee76e7d76d4e7514f35b48566f494d15b31317b43c7",
+    "src/simulation/fixed-tick.ts": "420520d6cfc69b2f87182f03c3b189e94eb14161af86ff985cf6be0447a01847",
+    "src/simulation/index.ts": "abdcfce7ea83b5b3d6ed9c7cf914069d9c8dd6aeb7a01b068ee2af740383c60c",
+    "src/autonomy/index.ts": "b443f74b5034de452986f09028cd02e39a316f05d3ea0b970752d7837c380279",
+    "src/autonomy/road-context.ts": "49bdfaa3cff2dcd467ee70df655d9b72336774e40997b1958ef6625f708ccbb9",
+    "src/world/crosswalk-zones.ts": "4813f137dfd772be1f485a64b9eb27dd805ea143ec2f5f58b8ec40a012b880c2",
+    "src/world/errors.ts": "f235ae1964bd9869e100d8b8401a4eeaa62285b90ca5a2606ff9b314faeed641",
+    "src/world/index.ts": "1a3798f0dd33cb77d41c749e691677bf27461b2f09909102cf3d680da34dc482",
+    "src/world/intersection-conflict-geometry.ts": "945a889e84bc5ce34ab94f3cf476fd2d9c0617796623099badc137caca841bd8",
+    "src/world/intersection-conflicts.ts": "839b50c028410ba40c6f1e7949bfd1086346559c867ed16ee482513b648acef8",
+    "src/world/parser.ts": "ab9079f43c08855a8e57cfa291f531cd55ddba81389c8edaa42e06906cff0233",
+    "src/world/priority-arrival.ts": "e22dcd8dabd5a1ec6fc97798067967c6fe13bc826c8b4d6a15eed52bb8e48f92",
+    "src/world/priority-policy.ts": "2b833212e55423faa52108bc4d80dd74368c16d8310a178490c2e9219187540a",
+    "src/world/priority-rules.ts": "17d71afed6d2bd0fc59e3352f133da02426d57e4e5b478e91b009fe46ef916a9",
+    "src/world/schema.ts": "35434e3006a4d3f360157f7c9549f7381ec7c1f345399d54061fa03b17097a85",
+    "src/world/semantics.ts": "8beba5bcbd38c23390be34d4d7b6879a62cffe8efdfb94fe94d3326aab87a16c",
+    "src/world/signals.ts": "772142b68ba6aa90e9df5d19ee19f35aed6d6ea74e51155e53d4b20b12a2452b",
+    "src/world/spatial-index.ts": "06de004e8d9a4241cda9cfa84d83550342b4b7a71e81840835d6c2eb00a7e8df",
+    "src/world/stop-rules.ts": "094906d03e625d586c46ae9a3c4ac1ab8ca5e5ec4503081762054526b575e60c",
+    "src/vehicles/body-port.ts": "a9bd1045aedb6cf2a7bae07fd3cb094ef2bb922bf962d5143fd90ed84763eaf4",
+    "src/vehicles/body-registry.ts": "2b7fddf9487091a767e1342377f9ddfe6c0dd6e5c012bfc64c0b62f003f00ba6",
+    "src/vehicles/collision-episodes.ts": "87763d10f12326f64bb24d188073872d372ee48efea64a5cab65a6bcd0b17608",
+    "src/vehicles/collision-port.ts": "4d85f4b40d915a5adcb6cfc05f94772605df66cf953f27fc4ac7eba930a5bea1",
+    "src/vehicles/contracts.ts": "6639f51a1ab6326c2edcb4eb572cee3501612779e72af038c6831ddaa0494c26",
+    "src/vehicles/controller-port.ts": "5c5a570c9dc20694fddacf1c870c811565b2d8f513d763ef04fdfc04bb9bdc6e",
+    "src/vehicles/controller.ts": "609f508c3049e91b95f9584cb98592f72b2e6f12feb7e1288884db063ed811df",
+    "src/vehicles/index.ts": "13702b7c8ad6ae44ba08d3bd202f97b2d49c835002148ee7561ebaa185e76886",
+    "src/vehicles/physics.ts": "62b17a32c361b351c6494a885e1ea1eedfbf09b54de4a7a654e336fa9d930458",
+    "src/vehicles/vehicle-classes.ts": "43eed5576928ac07616200837f58bfbfd10bb41bd111b4bc7369f7ac0bc40fb2",
+    "src/sessions/identity.ts": "f4b78b20857fc65704857a7bb78ef5a604083f173153ec7f5582bc450c6d76a6",
+    "src/sessions/index.ts": "960b676877c9876575d1f4fb425be83f603dbc038fe7c9f99aefc2c2be82c343",
+    "src/sessions/random.ts": "2b16fab5b74cf38e00f8847c747f8810cdcbc3850b013f35805f776e2d141fa0",
+    "src/sessions/validation.ts": "e129d68c9e0209875c6eede9b857ec3710ae9aa90e1f46b5208237d0be9efb79",
+    "src/telemetry/contracts.ts": "088052b5cadf460e26be100f85bf3c70005e3b1558e421440b83e8ad1ed68b96",
+    "src/telemetry/index.ts": "8f3def251b44844243b712d1abed814766e6bffedba34e13aaf65bbcb4ea227f"
+  },
+  "sourceHashScope": "Declared primary harness/fixtures plus all top-level simulation/autonomy/world/vehicles/sessions/telemetry TS files; not a verified full transitive closure",
+  "fixtureVersion": "219-route-cost-v1",
+  "protocol": {
+    "repetitions": 5,
+    "warmupBatches": 20,
+    "measuredBatches": 80,
+    "routesPerBatch": 16,
+    "schedulerTicksPerBatch": 4,
+    "observer": "alternating off/on; reference search,queue admission,whole4tick processing timers in both; optional eachtick subtimers on",
+    "sampleCapacity": 80,
+    "tickSampleCapacity": 320,
+    "bufferBytes": 4480,
+    "warmupSeconds": null,
+    "measuredSeconds": null
+  },
+  "scope": "Supplemental unpacedCPU added queue/cache pipeline cost, not chronological beforebaseline or045gameplay/fulltick/FPSgate. Reference is preserved original synchronous graph-search semantics; cache invalidated eachbatch to measure16unique coldkeys, including blocked results.",
+  "runs": [
+    {
+      "repeat": 1,
+      "observe": false,
+      "elapsedWallMs": 31.052999999999997,
+      "rawSearchCpuMs": {
+        "count": 80,
+        "p50": 0.010400000000004184,
+        "p95": 0.01859999999999218,
+        "p99": 0.1564999999999941,
+        "min": 0.007799999999974716,
+        "max": 0.1564999999999941,
+        "mean": 0.015793750000006313,
+        "overBudget": null,
+        "histogram": [
+          80,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "queueAdmissionCpuMs": {
+        "count": 80,
+        "p50": 0.07400000000001228,
+        "p95": 0.14400000000000546,
+        "p99": 0.21100000000001273,
+        "min": 0.05169999999998254,
+        "max": 0.21100000000001273,
+        "mean": 0.08401125000000072,
+        "overBudget": null,
+        "histogram": [
+          80,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "fourTickProcessingCpuMs": {
+        "count": 80,
+        "p50": 0.08289999999999509,
+        "p95": 0.16870000000000118,
+        "p99": 0.4297000000000253,
+        "min": 0.0554000000000201,
+        "max": 0.4297000000000253,
+        "mean": 0.09466999999999821,
+        "overBudget": null,
+        "histogram": [
+          80,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "optionalTickCpuMs": null,
+      "callbacks": 1600,
+      "tasks": 1600,
+      "cleanups": 1600,
+      "checksum": 4300,
+      "schedulerTicks": 400
+    },
+    {
+      "repeat": 1,
+      "observe": true,
+      "elapsedWallMs": 22.40889999999996,
+      "rawSearchCpuMs": {
+        "count": 80,
+        "p50": 0.008800000000007913,
+        "p95": 0.02780000000001337,
+        "p99": 0.15059999999999718,
+        "min": 0.007499999999993179,
+        "max": 0.15059999999999718,
+        "mean": 0.015112499999998618,
+        "overBudget": null,
+        "histogram": [
+          80,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "queueAdmissionCpuMs": {
+        "count": 80,
+        "p50": 0.059599999999988995,
+        "p95": 0.10050000000001091,
+        "p99": 0.20580000000001064,
+        "min": 0.051400000000001,
+        "max": 0.20580000000001064,
+        "mean": 0.06869999999999976,
+        "overBudget": null,
+        "histogram": [
+          80,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "fourTickProcessingCpuMs": {
+        "count": 80,
+        "p50": 0.07169999999996435,
+        "p95": 0.15970000000004347,
+        "p99": 0.28649999999998954,
+        "min": 0.0554000000000201,
+        "max": 0.28649999999998954,
+        "mean": 0.08530249999999881,
+        "overBudget": null,
+        "histogram": [
+          80,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "optionalTickCpuMs": {
+        "count": 320,
+        "p50": 0.01619999999996935,
+        "p95": 0.033299999999997,
+        "p99": 0.13620000000003074,
+        "min": 0.01269999999999527,
+        "max": 0.2401999999999589,
+        "mean": 0.021116875000000056,
+        "overBudget": null,
+        "histogram": [
+          320,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "callbacks": 1600,
+      "tasks": 1600,
+      "cleanups": 1600,
+      "checksum": 4300,
+      "schedulerTicks": 400
+    },
+    {
+      "repeat": 2,
+      "observe": true,
+      "elapsedWallMs": 23.798000000000002,
+      "rawSearchCpuMs": {
+        "count": 80,
+        "p50": 0.01089999999999236,
+        "p95": 0.015499999999974534,
+        "p99": 0.13540000000000418,
+        "min": 0.0070999999999799,
+        "max": 0.13540000000000418,
+        "mean": 0.012808749999997815,
+        "overBudget": null,
+        "histogram": [
+          80,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "queueAdmissionCpuMs": {
+        "count": 80,
+        "p50": 0.0776000000000181,
+        "p95": 0.11240000000003647,
+        "p99": 0.23019999999996799,
+        "min": 0.05170000000003938,
+        "max": 0.23019999999996799,
+        "mean": 0.08085625000000433,
+        "overBudget": null,
+        "histogram": [
+          80,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "fourTickProcessingCpuMs": {
+        "count": 80,
+        "p50": 0.07980000000003429,
+        "p95": 0.11919999999997799,
+        "p99": 0.2961999999999989,
+        "min": 0.05480000000000018,
+        "max": 0.2961999999999989,
+        "mean": 0.08221625000000188,
+        "overBudget": null,
+        "histogram": [
+          80,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "optionalTickCpuMs": {
+        "count": 320,
+        "p50": 0.019700000000000273,
+        "p95": 0.028200000000026648,
+        "p99": 0.05809999999996762,
+        "min": 0.01269999999999527,
+        "max": 0.2299000000000433,
+        "mean": 0.020371874999999484,
+        "overBudget": null,
+        "histogram": [
+          320,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "callbacks": 1600,
+      "tasks": 1600,
+      "cleanups": 1600,
+      "checksum": 4300,
+      "schedulerTicks": 400
+    },
+    {
+      "repeat": 2,
+      "observe": false,
+      "elapsedWallMs": 19.865099999999984,
+      "rawSearchCpuMs": {
+        "count": 80,
+        "p50": 0.009000000000014552,
+        "p95": 0.019400000000018736,
+        "p99": 0.11250000000001137,
+        "min": 0.006899999999973261,
+        "max": 0.11250000000001137,
+        "mean": 0.011433750000001908,
+        "overBudget": null,
+        "histogram": [
+          80,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "queueAdmissionCpuMs": {
+        "count": 80,
+        "p50": 0.057900000000017826,
+        "p95": 0.10700000000002774,
+        "p99": 0.15859999999997854,
+        "min": 0.0513000000000261,
+        "max": 0.15859999999997854,
+        "mean": 0.0661037499999999,
+        "overBudget": null,
+        "histogram": [
+          80,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "fourTickProcessingCpuMs": {
+        "count": 80,
+        "p50": 0.06040000000001555,
+        "p95": 0.11700000000001864,
+        "p99": 0.2525999999999726,
+        "min": 0.052700000000015734,
+        "max": 0.2525999999999726,
+        "mean": 0.07106249999999789,
+        "overBudget": null,
+        "histogram": [
+          80,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "optionalTickCpuMs": null,
+      "callbacks": 1600,
+      "tasks": 1600,
+      "cleanups": 1600,
+      "checksum": 4300,
+      "schedulerTicks": 400
+    },
+    {
+      "repeat": 3,
+      "observe": false,
+      "elapsedWallMs": 20.920799999999986,
+      "rawSearchCpuMs": {
+        "count": 80,
+        "p50": 0.009100000000046293,
+        "p95": 0.017399999999952342,
+        "p99": 0.18370000000004438,
+        "min": 0.0070999999999799,
+        "max": 0.18370000000004438,
+        "mean": 0.013286249999999455,
+        "overBudget": null,
+        "histogram": [
+          80,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "queueAdmissionCpuMs": {
+        "count": 80,
+        "p50": 0.05960000000004584,
+        "p95": 0.09899999999998954,
+        "p99": 0.2145999999999617,
+        "min": 0.04349999999999454,
+        "max": 0.2145999999999617,
+        "mean": 0.07038124999999625,
+        "overBudget": null,
+        "histogram": [
+          80,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "fourTickProcessingCpuMs": {
+        "count": 80,
+        "p50": 0.07609999999999673,
+        "p95": 0.129099999999994,
+        "p99": 0.2606999999999857,
+        "min": 0.053799999999966985,
+        "max": 0.2606999999999857,
+        "mean": 0.08032625000000024,
+        "overBudget": null,
+        "histogram": [
+          80,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "optionalTickCpuMs": null,
+      "callbacks": 1600,
+      "tasks": 1600,
+      "cleanups": 1600,
+      "checksum": 4300,
+      "schedulerTicks": 400
+    },
+    {
+      "repeat": 3,
+      "observe": true,
+      "elapsedWallMs": 18.970799999999997,
+      "rawSearchCpuMs": {
+        "count": 80,
+        "p50": 0.008199999999987995,
+        "p95": 0.015499999999974534,
+        "p99": 0.029699999999991178,
+        "min": 0.006599999999991724,
+        "max": 0.029699999999991178,
+        "mean": 0.009348749999999484,
+        "overBudget": null,
+        "histogram": [
+          80,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "queueAdmissionCpuMs": {
+        "count": 80,
+        "p50": 0.04510000000004766,
+        "p95": 0.12450000000001182,
+        "p99": 0.1812999999999647,
+        "min": 0.043000000000006366,
+        "max": 0.1812999999999647,
+        "mean": 0.057257500000001474,
+        "overBudget": null,
+        "histogram": [
+          80,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "fourTickProcessingCpuMs": {
+        "count": 80,
+        "p50": 0.06059999999996535,
+        "p95": 0.11419999999998254,
+        "p99": 0.4479000000000042,
+        "min": 0.054100000000005366,
+        "max": 0.4479000000000042,
+        "mean": 0.07389500000000168,
+        "overBudget": null,
+        "histogram": [
+          80,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "optionalTickCpuMs": {
+        "count": 320,
+        "p50": 0.014799999999979718,
+        "p95": 0.0262000000000171,
+        "p99": 0.04939999999999145,
+        "min": 0.01259999999996353,
+        "max": 0.38250000000005,
+        "mean": 0.018317187500000463,
+        "overBudget": null,
+        "histogram": [
+          320,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "callbacks": 1600,
+      "tasks": 1600,
+      "cleanups": 1600,
+      "checksum": 4300,
+      "schedulerTicks": 400
+    },
+    {
+      "repeat": 4,
+      "observe": true,
+      "elapsedWallMs": 17.671500000000037,
+      "rawSearchCpuMs": {
+        "count": 80,
+        "p50": 0.008300000000019736,
+        "p95": 0.013300000000015189,
+        "p99": 0.0624000000000251,
+        "min": 0.006900000000030104,
+        "max": 0.0624000000000251,
+        "mean": 0.0098600000000026,
+        "overBudget": null,
+        "histogram": [
+          80,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "queueAdmissionCpuMs": {
+        "count": 80,
+        "p50": 0.046499999999980446,
+        "p95": 0.07450000000000045,
+        "p99": 0.3503000000000043,
+        "min": 0.043299999999987904,
+        "max": 0.3503000000000043,
+        "mean": 0.05574999999999832,
+        "overBudget": null,
+        "histogram": [
+          80,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "fourTickProcessingCpuMs": {
+        "count": 80,
+        "p50": 0.06110000000001037,
+        "p95": 0.14639999999997144,
+        "p99": 0.20739999999995007,
+        "min": 0.054199999999980264,
+        "max": 0.20739999999995007,
+        "mean": 0.07224000000000216,
+        "overBudget": null,
+        "histogram": [
+          80,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "optionalTickCpuMs": {
+        "count": 320,
+        "p50": 0.01439999999996644,
+        "p95": 0.027100000000018554,
+        "p99": 0.10360000000002856,
+        "min": 0.012400000000013733,
+        "max": 0.11349999999998772,
+        "mean": 0.01778093750000025,
+        "overBudget": null,
+        "histogram": [
+          320,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "callbacks": 1600,
+      "tasks": 1600,
+      "cleanups": 1600,
+      "checksum": 4300,
+      "schedulerTicks": 400
+    },
+    {
+      "repeat": 4,
+      "observe": false,
+      "elapsedWallMs": 17.29060000000004,
+      "rawSearchCpuMs": {
+        "count": 80,
+        "p50": 0.007999999999981355,
+        "p95": 0.012800000000027012,
+        "p99": 0.015199999999992997,
+        "min": 0.006799999999998363,
+        "max": 0.015199999999992997,
+        "mean": 0.008493750000000943,
+        "overBudget": null,
+        "histogram": [
+          80,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "queueAdmissionCpuMs": {
+        "count": 80,
+        "p50": 0.04480000000000928,
+        "p95": 0.07749999999998636,
+        "p99": 0.1432999999999538,
+        "min": 0.043099999999981264,
+        "max": 0.1432999999999538,
+        "mean": 0.05063499999999621,
+        "overBudget": null,
+        "histogram": [
+          80,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "fourTickProcessingCpuMs": {
+        "count": 80,
+        "p50": 0.05510000000003856,
+        "p95": 0.08789999999999054,
+        "p99": 0.22550000000001091,
+        "min": 0.048900000000003274,
+        "max": 0.22550000000001091,
+        "mean": 0.06545624999999973,
+        "overBudget": null,
+        "histogram": [
+          80,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "optionalTickCpuMs": null,
+      "callbacks": 1600,
+      "tasks": 1600,
+      "cleanups": 1600,
+      "checksum": 4300,
+      "schedulerTicks": 400
+    },
+    {
+      "repeat": 5,
+      "observe": false,
+      "elapsedWallMs": 16.175999999999988,
+      "rawSearchCpuMs": {
+        "count": 80,
+        "p50": 0.007900000000006457,
+        "p95": 0.013500000000021828,
+        "p99": 0.016200000000026193,
+        "min": 0.006799999999998363,
+        "max": 0.016200000000026193,
+        "mean": 0.008742500000002451,
+        "overBudget": null,
+        "histogram": [
+          80,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "queueAdmissionCpuMs": {
+        "count": 80,
+        "p50": 0.0443000000000211,
+        "p95": 0.07430000000005066,
+        "p99": 0.17689999999998918,
+        "min": 0.043000000000006366,
+        "max": 0.17689999999998918,
+        "mean": 0.05159749999999761,
+        "overBudget": null,
+        "histogram": [
+          80,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "fourTickProcessingCpuMs": {
+        "count": 80,
+        "p50": 0.052399999999977354,
+        "p95": 0.09230000000002292,
+        "p99": 0.1524000000000001,
+        "min": 0.048199999999951615,
+        "max": 0.1524000000000001,
+        "mean": 0.05975749999999991,
+        "overBudget": null,
+        "histogram": [
+          80,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "optionalTickCpuMs": null,
+      "callbacks": 1600,
+      "tasks": 1600,
+      "cleanups": 1600,
+      "checksum": 4300,
+      "schedulerTicks": 400
+    },
+    {
+      "repeat": 5,
+      "observe": true,
+      "elapsedWallMs": 19.51769999999999,
+      "rawSearchCpuMs": {
+        "count": 80,
+        "p50": 0.009799999999984266,
+        "p95": 0.015499999999974534,
+        "p99": 0.050900000000012824,
+        "min": 0.006500000000016826,
+        "max": 0.050900000000012824,
+        "mean": 0.010566250000002952,
+        "overBudget": null,
+        "histogram": [
+          80,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "queueAdmissionCpuMs": {
+        "count": 80,
+        "p50": 0.0543999999999869,
+        "p95": 0.0776000000000181,
+        "p99": 0.19509999999996808,
+        "min": 0.04259999999999309,
+        "max": 0.19509999999996808,
+        "mean": 0.05977250000000325,
+        "overBudget": null,
+        "histogram": [
+          80,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "fourTickProcessingCpuMs": {
+        "count": 80,
+        "p50": 0.0766999999999598,
+        "p95": 0.14440000000001874,
+        "p99": 0.21039999999999281,
+        "min": 0.0484000000000151,
+        "max": 0.21039999999999281,
+        "mean": 0.07604874999999964,
+        "overBudget": null,
+        "histogram": [
+          80,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "optionalTickCpuMs": {
+        "count": 320,
+        "p50": 0.018100000000004002,
+        "p95": 0.0261000000000422,
+        "p99": 0.10460000000000491,
+        "min": 0.011399999999980537,
+        "max": 0.14929999999998245,
+        "mean": 0.018890625000000584,
+        "overBudget": null,
+        "histogram": [
+          320,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "callbacks": 1600,
+      "tasks": 1600,
+      "cleanups": 1600,
+      "checksum": 4300,
+      "schedulerTicks": 400
+    }
+  ]
+}
