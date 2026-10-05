@@ -8,6 +8,10 @@ export const QUALITY_PRESETS = Object.freeze({
     shadowDistance: 0,
     maxShadowCasters: 0,
     materialLights: 2,
+    lodDistance: 45,
+    maxTextureDimension: 1024,
+    maxTransparentMeshes: 32,
+    maxVisualEffects: 16,
   }),
   MEDIUM: Object.freeze({
     maxDpr: 1.5,
@@ -15,6 +19,10 @@ export const QUALITY_PRESETS = Object.freeze({
     shadowDistance: 60,
     maxShadowCasters: 48,
     materialLights: 2,
+    lodDistance: 90,
+    maxTextureDimension: 2048,
+    maxTransparentMeshes: 64,
+    maxVisualEffects: 32,
   }),
   HIGH: Object.freeze({
     maxDpr: 2,
@@ -22,9 +30,36 @@ export const QUALITY_PRESETS = Object.freeze({
     shadowDistance: 100,
     maxShadowCasters: 96,
     materialLights: 2,
+    lodDistance: 150,
+    maxTextureDimension: 2048,
+    maxTransparentMeshes: 96,
+    maxVisualEffects: 64,
   }),
 });
 const presets: readonly QualityPreset[] = ['LOW', 'MEDIUM', 'HIGH'];
+/** Admit optional presentation resources before creation; never reject a simulated entity. */
+export function checkVisualResources(
+  preset: QualityPreset,
+  usage: { textureDimension: number; transparentMeshes: number; visualEffects: number },
+) {
+  if (!presets.includes(preset)) throw new Error('Unknown quality preset');
+  const limits = QUALITY_PRESETS[preset];
+  const diagnostics: { metric: string; actual: number; limit: number }[] = [];
+  for (const [metric, limit] of [
+    ['textureDimension', limits.maxTextureDimension],
+    ['transparentMeshes', limits.maxTransparentMeshes],
+    ['visualEffects', limits.maxVisualEffects],
+  ] as const) {
+    const actual = usage[metric];
+    if (!Number.isSafeInteger(actual) || actual < 0)
+      throw new Error('Invalid visual resource count');
+    if (actual > limit) diagnostics.push({ metric, actual, limit });
+  }
+  return Object.freeze({
+    accepted: diagnostics.length === 0,
+    diagnostics: Object.freeze(diagnostics),
+  });
+}
 function finite(value: number, min: number, max: number): number {
   if (!Number.isFinite(value) || value < min || value > max)
     throw new Error('Invalid quality value');

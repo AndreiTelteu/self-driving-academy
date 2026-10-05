@@ -36,6 +36,38 @@ export class VehiclePickingRegistry {
   get size(): number {
     return this.bindings.size;
   }
+  /** Nonmutating admission for an atomic matrix/identity update of multiple LOD hosts. */
+  validateThinBatchTransaction(
+    replacements: readonly { mesh: Mesh; entityIds: readonly (string | null)[] }[],
+  ): void {
+    if (replacements.length > this.maxBindings)
+      throw new Error('Picking binding capacity exceeded');
+    const incoming = new Map<Node, readonly (string | null)[]>();
+    for (const { mesh, entityIds } of replacements) {
+      this.assertNode(mesh);
+      if (
+        !(mesh instanceof Mesh) ||
+        incoming.has(mesh) ||
+        !Array.isArray(entityIds) ||
+        entityIds.length < 1 ||
+        entityIds.length > this.maxThinInstances
+      )
+        throw new Error('Invalid thin batch transaction');
+      for (const id of entityIds) if (id !== null) validateEntityId(id);
+      incoming.set(mesh, entityIds);
+    }
+    let count = this.bindings.size,
+      identities = 0;
+    for (const [node, binding] of this.bindings) {
+      if (!incoming.has(node) && Array.isArray(binding.ids)) identities += binding.ids.length;
+    }
+    for (const [node, ids] of incoming) {
+      if (!this.bindings.has(node)) count++;
+      identities += ids.length;
+    }
+    if (count > this.maxBindings || identities > this.maxThinInstances)
+      throw new Error('Picking transaction capacity exceeded');
+  }
   /** A root covers descendants; regular instances may be registered separately. */
   register(node: Node, entityId: string): void {
     this.assertNode(node);

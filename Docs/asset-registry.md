@@ -1,5 +1,7 @@
 # Registry de asseturi Babylon (PBI015)
 
+Extensia223 adaugă declarații `budget` opționale, maximum256 definiții și raportarea separată geometryGpuBytes/textureGpuBytes. Admiterea agregată, fazele decoderelor și costul primei utilizări sunt în [contractul de bugete](render-asset-budgets.md). Workspace-ul decoderului nativ și memoria GPU exactă rămân `null`; WASM-ul decoderelor de extensie este0 pe calea core GLB actuală. Registry-ul verifică bugetul individual înaintea decodării și păstrează API-ul015 compatibil.
+
 `BabylonAssetRegistry(scene, manifest, limits?)` este un serviciu de prezentare local scenei. Manifestul conține `id`, `version`, `url`, `critical`, `source`, `license`; definițiile sunt validate, copiate și înghețate. Același ID este unic în manifest, inclusiv versiunea lui. O versiune nouă cere alt registry sau alt ID, evitând resurse stale. Nu deține scena, engine-ul sau datele simulării și nu adaugă decor la bootstrap.
 
 Loaderul Babylon **9.29.0** se înregistrează prin `@babylonjs/loaders/glTF/2.0/glTFLoader`, conform sursei pachetului instalat. Acest entry point înregistrează pluginul GLB/glTF și glTF2 fără glTF1 și fără registrul tuturor extensiilor. Importul este static; costul de bundle este documentat în [dovezi](Evidence/015-asset-registry/report.md).

@@ -1,0 +1,3968 @@
+{
+  "schemaVersion": 1,
+  "identity": {
+    "commit": "01b595a96d777064e82461e558f2f6473684e4fb",
+    "sourceHash": "616a63b445f1da5d6b907eb4e4c6dcd545dcd00ced8bb3b0a3232c8c4c0a9af2",
+    "budgetVersion": "203-initial-1",
+    "capVersion": "223-initial-1",
+    "engineVersion": "9.29.0",
+    "inputs": [
+      "tests/browser/render-asset-budgets/main.ts",
+      "tests/browser/render-asset-budgets/index.html",
+      "tests/browser/asset-registry/glb-fixture.ts",
+      "scripts/render-asset-budgets-server.mjs",
+      "package-lock.json",
+      "Docs/performance-budgets.json",
+      "src/rendering/asset-budgets.ts",
+      "src/rendering/babylon/asset-contract.ts",
+      "src/rendering/babylon/asset-registry.ts",
+      "src/rendering/babylon/backend.ts",
+      "src/rendering/babylon/cell-batches.ts",
+      "src/rendering/babylon/daylight.ts",
+      "src/rendering/babylon/dev-inspector.ts",
+      "src/rendering/babylon/diagnostics-adapter.ts",
+      "src/rendering/babylon/index.ts",
+      "src/rendering/babylon/recovery-session.ts",
+      "src/rendering/babylon/scene-adapter.ts",
+      "src/rendering/babylon/snapshot-presenter.ts",
+      "src/rendering/babylon/vehicle-camera-input.ts",
+      "src/rendering/babylon/vehicle-camera.ts",
+      "src/rendering/babylon/vehicle-picking-input.ts",
+      "src/rendering/babylon/vehicle-picking-registry.ts",
+      "src/rendering/babylon/vehicle-picking.ts",
+      "src/rendering/backend-policy.ts",
+      "src/rendering/camera-collision.ts",
+      "src/rendering/diagnostics.ts",
+      "src/rendering/index.ts",
+      "src/rendering/quality-policy.ts",
+      "src/rendering/render-sync.ts",
+      "src/rendering/scene-contract.ts",
+      "src/rendering/vehicle-camera.ts"
+    ]
+  },
+  "fixtureVersion": "223-render-assets-v1-SMOKE",
+  "capturedAt": "2026-10-05T09:04:59.203Z",
+  "backend": "WEBGPU",
+  "hardware": {
+    "capturedAt": "2026-10-05T05:18:33.7882194+03:00",
+    "profile": "desktop",
+    "manufacturer": "Micro-Star International Co., Ltd.",
+    "model": "MS-7E26",
+    "cpu": [
+      {
+        "Name": "AMD Ryzen 9 7950X3D 16-Core Processor          ",
+        "NumberOfCores": 16,
+        "NumberOfLogicalProcessors": 32
+      }
+    ],
+    "gpu": [
+      {
+        "Name": "Parsec Virtual Display Adapter",
+        "DriverVersion": "0.45.0.0",
+        "CurrentHorizontalResolution": null,
+        "CurrentVerticalResolution": null,
+        "CurrentRefreshRate": null
+      },
+      {
+        "Name": "Meta Virtual Monitor",
+        "DriverVersion": "15.52.32.370",
+        "CurrentHorizontalResolution": 3840,
+        "CurrentVerticalResolution": 2160,
+        "CurrentRefreshRate": 144
+      },
+      {
+        "Name": "Virtual Desktop Monitor",
+        "DriverVersion": "13.50.53.699",
+        "CurrentHorizontalResolution": null,
+        "CurrentVerticalResolution": null,
+        "CurrentRefreshRate": null
+      },
+      {
+        "Name": "AMD Radeon RX 7900 XTX",
+        "DriverVersion": "32.0.31041.1004",
+        "CurrentHorizontalResolution": 3840,
+        "CurrentVerticalResolution": 2160,
+        "CurrentRefreshRate": 144
+      },
+      {
+        "Name": "AMD Radeon(TM) Graphics",
+        "DriverVersion": "32.0.21045.5002",
+        "CurrentHorizontalResolution": null,
+        "CurrentVerticalResolution": null,
+        "CurrentRefreshRate": null
+      }
+    ],
+    "ramBytes": 50337325056,
+    "os": {
+      "build": "26200",
+      "name": "Microsoft Windows 11 Pro",
+      "version": "10.0.26200"
+    },
+    "powerScheme": "Power Scheme GUID: 381b4222-f694-41f0-9685-ff5bb260df2e  (Balanced)",
+    "battery": []
+  },
+  "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+  "gpuInfo": {
+    "vendor": "amd",
+    "renderer": "rdna-3",
+    "version": "unknown version"
+  },
+  "devicePixelRatio": 1,
+  "cssResolution": [
+    0,
+    0
+  ],
+  "runs": [
+    {
+      "mode": "global-normal",
+      "role": "SMOKE",
+      "repeat": 1,
+      "warmupMs": 100,
+      "measuredMs": 504.69999998807907,
+      "frame": {
+        "count": 57,
+        "p50": 7,
+        "p95": 7,
+        "p99": 7,
+        "min": 6.799999999999272,
+        "max": 7,
+        "mean": 6.945614035087745,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          57,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "mainThread": {
+        "count": 57,
+        "p50": 1,
+        "p95": 1.399999976158142,
+        "p99": 2,
+        "min": 0.5999999642372131,
+        "max": 2,
+        "mean": 0.996491227233619,
+        "overBudget": null,
+        "histogram": [
+          26,
+          31,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "drawCalls": {
+        "count": 57,
+        "p50": 4,
+        "p95": 4,
+        "p99": 4,
+        "min": 4,
+        "max": 4,
+        "mean": 4,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          57,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "activeMeshes": {
+        "count": 57,
+        "p50": 73,
+        "p95": 73,
+        "p99": 73,
+        "min": 73,
+        "max": 73,
+        "mean": 73,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          57
+        ]
+      },
+      "gpuMs": null,
+      "resources": {
+        "meshes": 77,
+        "materials": 8,
+        "geometries": 6,
+        "textures": 2,
+        "lights": 2,
+        "nodes": 0
+      },
+      "trackedCounters": {
+        "drawCalls": 4,
+        "babylonObjects": 95,
+        "matrixBufferBytes": 65536
+      },
+      "diagnostics": [],
+      "longTasks": {
+        "available": true,
+        "durationsMs": [],
+        "maxMs": 0,
+        "dropped": 0
+      },
+      "quality": {
+        "preset": "MEDIUM",
+        "limits": {
+          "maxDpr": 1.5,
+          "shadowMapSize": 1024,
+          "shadowDistance": 60,
+          "maxShadowCasters": 48,
+          "materialLights": 2,
+          "lodDistance": 90,
+          "maxTextureDimension": 2048,
+          "maxTransparentMeshes": 64,
+          "maxVisualEffects": 32
+        },
+        "cssWidth": 1920,
+        "cssHeight": 1080,
+        "deviceDpr": 1,
+        "effectiveDpr": 1,
+        "resolutionScale": 1,
+        "internalWidth": 1920,
+        "internalHeight": 1080
+      },
+      "authorityUnchanged": true
+    },
+    {
+      "mode": "local-thin",
+      "role": "SMOKE",
+      "repeat": 1,
+      "warmupMs": 100,
+      "measuredMs": 506.39999997615814,
+      "frame": {
+        "count": 72,
+        "p50": 6.900000000001455,
+        "p95": 7,
+        "p99": 7,
+        "min": 6.899999999997817,
+        "max": 7,
+        "mean": 6.944444444444445,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          72,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "mainThread": {
+        "count": 72,
+        "p50": 0.800000011920929,
+        "p95": 1.199999988079071,
+        "p99": 1.4000000357627869,
+        "min": 0.40000003576278687,
+        "max": 1.4000000357627869,
+        "mean": 0.8097222215599484,
+        "overBudget": null,
+        "histogram": [
+          56,
+          16,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "drawCalls": {
+        "count": 72,
+        "p50": 19,
+        "p95": 19,
+        "p99": 19,
+        "min": 19,
+        "max": 19,
+        "mean": 19,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          0,
+          0,
+          72,
+          0,
+          0
+        ]
+      },
+      "activeMeshes": {
+        "count": 72,
+        "p50": 19,
+        "p95": 19,
+        "p99": 19,
+        "min": 19,
+        "max": 19,
+        "mean": 19,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          0,
+          0,
+          72,
+          0,
+          0
+        ]
+      },
+      "gpuMs": null,
+      "resources": {
+        "meshes": 48,
+        "materials": 40,
+        "geometries": 6,
+        "textures": 2,
+        "lights": 2,
+        "nodes": 0
+      },
+      "trackedCounters": {
+        "drawCalls": 19,
+        "babylonObjects": 98,
+        "matrixBufferBytes": 140032
+      },
+      "diagnostics": [],
+      "longTasks": {
+        "available": true,
+        "durationsMs": [],
+        "maxMs": 0,
+        "dropped": 0
+      },
+      "quality": {
+        "preset": "MEDIUM",
+        "limits": {
+          "maxDpr": 1.5,
+          "shadowMapSize": 1024,
+          "shadowDistance": 60,
+          "maxShadowCasters": 48,
+          "materialLights": 2,
+          "lodDistance": 90,
+          "maxTextureDimension": 2048,
+          "maxTransparentMeshes": 64,
+          "maxVisualEffects": 32
+        },
+        "cssWidth": 1920,
+        "cssHeight": 1080,
+        "deviceDpr": 1,
+        "effectiveDpr": 1,
+        "resolutionScale": 1,
+        "internalWidth": 1920,
+        "internalHeight": 1080
+      },
+      "authorityUnchanged": true
+    },
+    {
+      "mode": "global-normal",
+      "role": "SMOKE",
+      "repeat": 2,
+      "warmupMs": 100,
+      "measuredMs": 500.0999999642372,
+      "frame": {
+        "count": 71,
+        "p50": 6.900000000001455,
+        "p95": 7,
+        "p99": 7,
+        "min": 6.799999999999272,
+        "max": 7,
+        "mean": 6.943661971830986,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          71,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "mainThread": {
+        "count": 71,
+        "p50": 0.699999988079071,
+        "p95": 1.100000023841858,
+        "p99": 1.300000011920929,
+        "min": 0.40000003576278687,
+        "max": 1.300000011920929,
+        "mean": 0.7211267645929901,
+        "overBudget": null,
+        "histogram": [
+          63,
+          8,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "drawCalls": {
+        "count": 71,
+        "p50": 4,
+        "p95": 4,
+        "p99": 4,
+        "min": 4,
+        "max": 4,
+        "mean": 4,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          71,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "activeMeshes": {
+        "count": 71,
+        "p50": 73,
+        "p95": 73,
+        "p99": 73,
+        "min": 73,
+        "max": 73,
+        "mean": 73,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          71
+        ]
+      },
+      "gpuMs": null,
+      "resources": {
+        "meshes": 77,
+        "materials": 8,
+        "geometries": 6,
+        "textures": 2,
+        "lights": 2,
+        "nodes": 0
+      },
+      "trackedCounters": {
+        "drawCalls": 4,
+        "babylonObjects": 95,
+        "matrixBufferBytes": 65536
+      },
+      "diagnostics": [],
+      "longTasks": {
+        "available": true,
+        "durationsMs": [],
+        "maxMs": 0,
+        "dropped": 0
+      },
+      "quality": {
+        "preset": "MEDIUM",
+        "limits": {
+          "maxDpr": 1.5,
+          "shadowMapSize": 1024,
+          "shadowDistance": 60,
+          "maxShadowCasters": 48,
+          "materialLights": 2,
+          "lodDistance": 90,
+          "maxTextureDimension": 2048,
+          "maxTransparentMeshes": 64,
+          "maxVisualEffects": 32
+        },
+        "cssWidth": 1920,
+        "cssHeight": 1080,
+        "deviceDpr": 1,
+        "effectiveDpr": 1,
+        "resolutionScale": 1,
+        "internalWidth": 1920,
+        "internalHeight": 1080
+      },
+      "authorityUnchanged": true
+    },
+    {
+      "mode": "local-thin",
+      "role": "SMOKE",
+      "repeat": 2,
+      "warmupMs": 100,
+      "measuredMs": 506.80000001192093,
+      "frame": {
+        "count": 72,
+        "p50": 6.900000000001455,
+        "p95": 7,
+        "p99": 7.099999999998545,
+        "min": 6.799999999999272,
+        "max": 7.099999999998545,
+        "mean": 6.944444444444445,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          72,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "mainThread": {
+        "count": 72,
+        "p50": 0.699999988079071,
+        "p95": 0.9000000357627869,
+        "p99": 1.399999976158142,
+        "min": 0.3999999761581421,
+        "max": 1.399999976158142,
+        "mean": 0.6986111112766795,
+        "overBudget": null,
+        "histogram": [
+          70,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "drawCalls": {
+        "count": 72,
+        "p50": 19,
+        "p95": 19,
+        "p99": 19,
+        "min": 19,
+        "max": 19,
+        "mean": 19,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          0,
+          0,
+          72,
+          0,
+          0
+        ]
+      },
+      "activeMeshes": {
+        "count": 72,
+        "p50": 19,
+        "p95": 19,
+        "p99": 19,
+        "min": 19,
+        "max": 19,
+        "mean": 19,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          0,
+          0,
+          72,
+          0,
+          0
+        ]
+      },
+      "gpuMs": null,
+      "resources": {
+        "meshes": 48,
+        "materials": 40,
+        "geometries": 6,
+        "textures": 2,
+        "lights": 2,
+        "nodes": 0
+      },
+      "trackedCounters": {
+        "drawCalls": 19,
+        "babylonObjects": 98,
+        "matrixBufferBytes": 140032
+      },
+      "diagnostics": [],
+      "longTasks": {
+        "available": true,
+        "durationsMs": [],
+        "maxMs": 0,
+        "dropped": 0
+      },
+      "quality": {
+        "preset": "MEDIUM",
+        "limits": {
+          "maxDpr": 1.5,
+          "shadowMapSize": 1024,
+          "shadowDistance": 60,
+          "maxShadowCasters": 48,
+          "materialLights": 2,
+          "lodDistance": 90,
+          "maxTextureDimension": 2048,
+          "maxTransparentMeshes": 64,
+          "maxVisualEffects": 32
+        },
+        "cssWidth": 1920,
+        "cssHeight": 1080,
+        "deviceDpr": 1,
+        "effectiveDpr": 1,
+        "resolutionScale": 1,
+        "internalWidth": 1920,
+        "internalHeight": 1080
+      },
+      "authorityUnchanged": true
+    },
+    {
+      "mode": "global-normal",
+      "role": "SMOKE",
+      "repeat": 3,
+      "warmupMs": 100,
+      "measuredMs": 500.30000001192093,
+      "frame": {
+        "count": 71,
+        "p50": 6.900000000001455,
+        "p95": 7,
+        "p99": 7,
+        "min": 6.799999999999272,
+        "max": 7,
+        "mean": 6.946478873239447,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          71,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "mainThread": {
+        "count": 71,
+        "p50": 0.699999988079071,
+        "p95": 0.9000000357627869,
+        "p99": 1,
+        "min": 0.5,
+        "max": 1,
+        "mean": 0.6830985932282998,
+        "overBudget": null,
+        "histogram": [
+          69,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "drawCalls": {
+        "count": 71,
+        "p50": 4,
+        "p95": 4,
+        "p99": 4,
+        "min": 4,
+        "max": 4,
+        "mean": 4,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          71,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "activeMeshes": {
+        "count": 71,
+        "p50": 73,
+        "p95": 73,
+        "p99": 73,
+        "min": 73,
+        "max": 73,
+        "mean": 73,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          71
+        ]
+      },
+      "gpuMs": null,
+      "resources": {
+        "meshes": 77,
+        "materials": 8,
+        "geometries": 6,
+        "textures": 2,
+        "lights": 2,
+        "nodes": 0
+      },
+      "trackedCounters": {
+        "drawCalls": 4,
+        "babylonObjects": 95,
+        "matrixBufferBytes": 65536
+      },
+      "diagnostics": [],
+      "longTasks": {
+        "available": true,
+        "durationsMs": [],
+        "maxMs": 0,
+        "dropped": 0
+      },
+      "quality": {
+        "preset": "MEDIUM",
+        "limits": {
+          "maxDpr": 1.5,
+          "shadowMapSize": 1024,
+          "shadowDistance": 60,
+          "maxShadowCasters": 48,
+          "materialLights": 2,
+          "lodDistance": 90,
+          "maxTextureDimension": 2048,
+          "maxTransparentMeshes": 64,
+          "maxVisualEffects": 32
+        },
+        "cssWidth": 1920,
+        "cssHeight": 1080,
+        "deviceDpr": 1,
+        "effectiveDpr": 1,
+        "resolutionScale": 1,
+        "internalWidth": 1920,
+        "internalHeight": 1080
+      },
+      "authorityUnchanged": true
+    },
+    {
+      "mode": "local-thin",
+      "role": "SMOKE",
+      "repeat": 3,
+      "warmupMs": 100,
+      "measuredMs": 506.80000001192093,
+      "frame": {
+        "count": 72,
+        "p50": 6.900000000001455,
+        "p95": 7,
+        "p99": 7.100000000002183,
+        "min": 6.799999999999272,
+        "max": 7.100000000002183,
+        "mean": 6.943055555555576,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          72,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "mainThread": {
+        "count": 72,
+        "p50": 0.800000011920929,
+        "p95": 1.199999988079071,
+        "p99": 1.899999976158142,
+        "min": 0.3999999761581421,
+        "max": 1.899999976158142,
+        "mean": 0.8124999983443154,
+        "overBudget": null,
+        "histogram": [
+          58,
+          14,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "drawCalls": {
+        "count": 72,
+        "p50": 19,
+        "p95": 19,
+        "p99": 19,
+        "min": 19,
+        "max": 19,
+        "mean": 19,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          0,
+          0,
+          72,
+          0,
+          0
+        ]
+      },
+      "activeMeshes": {
+        "count": 72,
+        "p50": 19,
+        "p95": 19,
+        "p99": 19,
+        "min": 19,
+        "max": 19,
+        "mean": 19,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          0,
+          0,
+          72,
+          0,
+          0
+        ]
+      },
+      "gpuMs": null,
+      "resources": {
+        "meshes": 48,
+        "materials": 40,
+        "geometries": 6,
+        "textures": 2,
+        "lights": 2,
+        "nodes": 0
+      },
+      "trackedCounters": {
+        "drawCalls": 19,
+        "babylonObjects": 98,
+        "matrixBufferBytes": 140032
+      },
+      "diagnostics": [],
+      "longTasks": {
+        "available": true,
+        "durationsMs": [],
+        "maxMs": 0,
+        "dropped": 0
+      },
+      "quality": {
+        "preset": "MEDIUM",
+        "limits": {
+          "maxDpr": 1.5,
+          "shadowMapSize": 1024,
+          "shadowDistance": 60,
+          "maxShadowCasters": 48,
+          "materialLights": 2,
+          "lodDistance": 90,
+          "maxTextureDimension": 2048,
+          "maxTransparentMeshes": 64,
+          "maxVisualEffects": 32
+        },
+        "cssWidth": 1920,
+        "cssHeight": 1080,
+        "deviceDpr": 1,
+        "effectiveDpr": 1,
+        "resolutionScale": 1,
+        "internalWidth": 1920,
+        "internalHeight": 1080
+      },
+      "authorityUnchanged": true
+    },
+    {
+      "mode": "global-normal",
+      "role": "SMOKE",
+      "repeat": 4,
+      "warmupMs": 100,
+      "measuredMs": 500,
+      "frame": {
+        "count": 71,
+        "p50": 6.900000000001455,
+        "p95": 7,
+        "p99": 7.100000000002183,
+        "min": 6.799999999999272,
+        "max": 7.100000000002183,
+        "mean": 6.94225352112673,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          71,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "mainThread": {
+        "count": 71,
+        "p50": 0.5999999642372131,
+        "p95": 0.7000000476837158,
+        "p99": 1.199999988079071,
+        "min": 0.3999999761581421,
+        "max": 1.199999988079071,
+        "mean": 0.5732394398098261,
+        "overBudget": null,
+        "histogram": [
+          70,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "drawCalls": {
+        "count": 71,
+        "p50": 4,
+        "p95": 4,
+        "p99": 4,
+        "min": 4,
+        "max": 4,
+        "mean": 4,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          71,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "activeMeshes": {
+        "count": 71,
+        "p50": 73,
+        "p95": 73,
+        "p99": 73,
+        "min": 73,
+        "max": 73,
+        "mean": 73,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          71
+        ]
+      },
+      "gpuMs": null,
+      "resources": {
+        "meshes": 77,
+        "materials": 8,
+        "geometries": 6,
+        "textures": 2,
+        "lights": 2,
+        "nodes": 0
+      },
+      "trackedCounters": {
+        "drawCalls": 4,
+        "babylonObjects": 95,
+        "matrixBufferBytes": 65536
+      },
+      "diagnostics": [],
+      "longTasks": {
+        "available": true,
+        "durationsMs": [],
+        "maxMs": 0,
+        "dropped": 0
+      },
+      "quality": {
+        "preset": "MEDIUM",
+        "limits": {
+          "maxDpr": 1.5,
+          "shadowMapSize": 1024,
+          "shadowDistance": 60,
+          "maxShadowCasters": 48,
+          "materialLights": 2,
+          "lodDistance": 90,
+          "maxTextureDimension": 2048,
+          "maxTransparentMeshes": 64,
+          "maxVisualEffects": 32
+        },
+        "cssWidth": 1920,
+        "cssHeight": 1080,
+        "deviceDpr": 1,
+        "effectiveDpr": 1,
+        "resolutionScale": 1,
+        "internalWidth": 1920,
+        "internalHeight": 1080
+      },
+      "authorityUnchanged": true
+    },
+    {
+      "mode": "local-thin",
+      "role": "SMOKE",
+      "repeat": 4,
+      "warmupMs": 100,
+      "measuredMs": 500,
+      "frame": {
+        "count": 71,
+        "p50": 6.900000000001455,
+        "p95": 7,
+        "p99": 7,
+        "min": 6.799999999999272,
+        "max": 7,
+        "mean": 6.945070422535242,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          71,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "mainThread": {
+        "count": 71,
+        "p50": 0.5999999642372131,
+        "p95": 0.800000011920929,
+        "p99": 1.100000023841858,
+        "min": 0.3999999761581421,
+        "max": 1.100000023841858,
+        "mean": 0.5999999986567968,
+        "overBudget": null,
+        "histogram": [
+          69,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "drawCalls": {
+        "count": 71,
+        "p50": 19,
+        "p95": 19,
+        "p99": 19,
+        "min": 19,
+        "max": 19,
+        "mean": 19,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          0,
+          0,
+          71,
+          0,
+          0
+        ]
+      },
+      "activeMeshes": {
+        "count": 71,
+        "p50": 19,
+        "p95": 19,
+        "p99": 19,
+        "min": 19,
+        "max": 19,
+        "mean": 19,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          0,
+          0,
+          71,
+          0,
+          0
+        ]
+      },
+      "gpuMs": null,
+      "resources": {
+        "meshes": 48,
+        "materials": 40,
+        "geometries": 6,
+        "textures": 2,
+        "lights": 2,
+        "nodes": 0
+      },
+      "trackedCounters": {
+        "drawCalls": 19,
+        "babylonObjects": 98,
+        "matrixBufferBytes": 140032
+      },
+      "diagnostics": [],
+      "longTasks": {
+        "available": true,
+        "durationsMs": [],
+        "maxMs": 0,
+        "dropped": 0
+      },
+      "quality": {
+        "preset": "MEDIUM",
+        "limits": {
+          "maxDpr": 1.5,
+          "shadowMapSize": 1024,
+          "shadowDistance": 60,
+          "maxShadowCasters": 48,
+          "materialLights": 2,
+          "lodDistance": 90,
+          "maxTextureDimension": 2048,
+          "maxTransparentMeshes": 64,
+          "maxVisualEffects": 32
+        },
+        "cssWidth": 1920,
+        "cssHeight": 1080,
+        "deviceDpr": 1,
+        "effectiveDpr": 1,
+        "resolutionScale": 1,
+        "internalWidth": 1920,
+        "internalHeight": 1080
+      },
+      "authorityUnchanged": true
+    },
+    {
+      "mode": "global-normal",
+      "role": "SMOKE",
+      "repeat": 5,
+      "warmupMs": 100,
+      "measuredMs": 500,
+      "frame": {
+        "count": 71,
+        "p50": 6.900000000001455,
+        "p95": 7,
+        "p99": 7.100000000002183,
+        "min": 6.799999999999272,
+        "max": 7.100000000002183,
+        "mean": 6.945070422535191,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          71,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "mainThread": {
+        "count": 71,
+        "p50": 0.5,
+        "p95": 0.6000000238418579,
+        "p99": 0.699999988079071,
+        "min": 0.30000001192092896,
+        "max": 0.699999988079071,
+        "mean": 0.49718310127795584,
+        "overBudget": null,
+        "histogram": [
+          71,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "drawCalls": {
+        "count": 71,
+        "p50": 4,
+        "p95": 4,
+        "p99": 4,
+        "min": 4,
+        "max": 4,
+        "mean": 4,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          71,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "activeMeshes": {
+        "count": 71,
+        "p50": 73,
+        "p95": 73,
+        "p99": 73,
+        "min": 73,
+        "max": 73,
+        "mean": 73,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          71
+        ]
+      },
+      "gpuMs": null,
+      "resources": {
+        "meshes": 77,
+        "materials": 8,
+        "geometries": 6,
+        "textures": 2,
+        "lights": 2,
+        "nodes": 0
+      },
+      "trackedCounters": {
+        "drawCalls": 4,
+        "babylonObjects": 95,
+        "matrixBufferBytes": 65536
+      },
+      "diagnostics": [],
+      "longTasks": {
+        "available": true,
+        "durationsMs": [],
+        "maxMs": 0,
+        "dropped": 0
+      },
+      "quality": {
+        "preset": "MEDIUM",
+        "limits": {
+          "maxDpr": 1.5,
+          "shadowMapSize": 1024,
+          "shadowDistance": 60,
+          "maxShadowCasters": 48,
+          "materialLights": 2,
+          "lodDistance": 90,
+          "maxTextureDimension": 2048,
+          "maxTransparentMeshes": 64,
+          "maxVisualEffects": 32
+        },
+        "cssWidth": 1920,
+        "cssHeight": 1080,
+        "deviceDpr": 1,
+        "effectiveDpr": 1,
+        "resolutionScale": 1,
+        "internalWidth": 1920,
+        "internalHeight": 1080
+      },
+      "authorityUnchanged": true
+    },
+    {
+      "mode": "local-thin",
+      "role": "SMOKE",
+      "repeat": 5,
+      "warmupMs": 100,
+      "measuredMs": 506.89999997615814,
+      "frame": {
+        "count": 72,
+        "p50": 6.900000000001455,
+        "p95": 7,
+        "p99": 7.100000000002183,
+        "min": 6.799999999999272,
+        "max": 7.100000000002183,
+        "mean": 6.944444444444445,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          72,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "mainThread": {
+        "count": 72,
+        "p50": 0.5999999642372131,
+        "p95": 0.7000000476837158,
+        "p99": 0.800000011920929,
+        "min": 0.2999999523162842,
+        "max": 0.800000011920929,
+        "mean": 0.5624999983443154,
+        "overBudget": null,
+        "histogram": [
+          72,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "drawCalls": {
+        "count": 72,
+        "p50": 19,
+        "p95": 19,
+        "p99": 19,
+        "min": 19,
+        "max": 19,
+        "mean": 19,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          0,
+          0,
+          72,
+          0,
+          0
+        ]
+      },
+      "activeMeshes": {
+        "count": 72,
+        "p50": 19,
+        "p95": 19,
+        "p99": 19,
+        "min": 19,
+        "max": 19,
+        "mean": 19,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          0,
+          0,
+          72,
+          0,
+          0
+        ]
+      },
+      "gpuMs": null,
+      "resources": {
+        "meshes": 48,
+        "materials": 40,
+        "geometries": 6,
+        "textures": 2,
+        "lights": 2,
+        "nodes": 0
+      },
+      "trackedCounters": {
+        "drawCalls": 19,
+        "babylonObjects": 98,
+        "matrixBufferBytes": 140032
+      },
+      "diagnostics": [],
+      "longTasks": {
+        "available": true,
+        "durationsMs": [],
+        "maxMs": 0,
+        "dropped": 0
+      },
+      "quality": {
+        "preset": "MEDIUM",
+        "limits": {
+          "maxDpr": 1.5,
+          "shadowMapSize": 1024,
+          "shadowDistance": 60,
+          "maxShadowCasters": 48,
+          "materialLights": 2,
+          "lodDistance": 90,
+          "maxTextureDimension": 2048,
+          "maxTransparentMeshes": 64,
+          "maxVisualEffects": 32
+        },
+        "cssWidth": 1920,
+        "cssHeight": 1080,
+        "deviceDpr": 1,
+        "effectiveDpr": 1,
+        "resolutionScale": 1,
+        "internalWidth": 1920,
+        "internalHeight": 1080
+      },
+      "authorityUnchanged": true
+    },
+    {
+      "mode": "local-normal",
+      "role": "SMOKE",
+      "repeat": 1,
+      "warmupMs": 100,
+      "measuredMs": 500.5999999642372,
+      "frame": {
+        "count": 71,
+        "p50": 6.900000000001455,
+        "p95": 7,
+        "p99": 7.100000000002183,
+        "min": 6.799999999999272,
+        "max": 7.100000000002183,
+        "mean": 6.945070422535242,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          71,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "mainThread": {
+        "count": 71,
+        "p50": 0.6000000238418579,
+        "p95": 0.800000011920929,
+        "p99": 1.0999999642372131,
+        "min": 0.30000001192092896,
+        "max": 1.0999999642372131,
+        "mean": 0.6253521148587616,
+        "overBudget": null,
+        "histogram": [
+          70,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "drawCalls": {
+        "count": 71,
+        "p50": 15,
+        "p95": 15,
+        "p99": 15,
+        "min": 15,
+        "max": 15,
+        "mean": 15,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          0,
+          71,
+          0,
+          0,
+          0
+        ]
+      },
+      "activeMeshes": {
+        "count": 71,
+        "p50": 84,
+        "p95": 84,
+        "p99": 84,
+        "min": 84,
+        "max": 84,
+        "mean": 84,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          71
+        ]
+      },
+      "gpuMs": null,
+      "resources": {
+        "meshes": 108,
+        "materials": 40,
+        "geometries": 6,
+        "textures": 2,
+        "lights": 2,
+        "nodes": 0
+      },
+      "trackedCounters": {
+        "drawCalls": 15,
+        "babylonObjects": 158,
+        "matrixBufferBytes": 131072
+      },
+      "diagnostics": [],
+      "longTasks": {
+        "available": true,
+        "durationsMs": [],
+        "maxMs": 0,
+        "dropped": 0
+      },
+      "quality": {
+        "preset": "MEDIUM",
+        "limits": {
+          "maxDpr": 1.5,
+          "shadowMapSize": 1024,
+          "shadowDistance": 60,
+          "maxShadowCasters": 48,
+          "materialLights": 2,
+          "lodDistance": 90,
+          "maxTextureDimension": 2048,
+          "maxTransparentMeshes": 64,
+          "maxVisualEffects": 32
+        },
+        "cssWidth": 1920,
+        "cssHeight": 1080,
+        "deviceDpr": 1,
+        "effectiveDpr": 1,
+        "resolutionScale": 1,
+        "internalWidth": 1920,
+        "internalHeight": 1080
+      },
+      "authorityUnchanged": true
+    },
+    {
+      "mode": "local-normal",
+      "role": "SMOKE",
+      "repeat": 2,
+      "warmupMs": 100,
+      "measuredMs": 500,
+      "frame": {
+        "count": 71,
+        "p50": 6.900000000001455,
+        "p95": 7,
+        "p99": 7.099999999998545,
+        "min": 6.799999999999272,
+        "max": 7.099999999998545,
+        "mean": 6.945070422535191,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          71,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "mainThread": {
+        "count": 71,
+        "p50": 0.800000011920929,
+        "p95": 1,
+        "p99": 1.100000023841858,
+        "min": 0.5999999642372131,
+        "max": 1.100000023841858,
+        "mean": 0.8267605632123812,
+        "overBudget": null,
+        "histogram": [
+          59,
+          12,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "drawCalls": {
+        "count": 71,
+        "p50": 15,
+        "p95": 15,
+        "p99": 15,
+        "min": 15,
+        "max": 15,
+        "mean": 15,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          0,
+          71,
+          0,
+          0,
+          0
+        ]
+      },
+      "activeMeshes": {
+        "count": 71,
+        "p50": 84,
+        "p95": 84,
+        "p99": 84,
+        "min": 84,
+        "max": 84,
+        "mean": 84,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          71
+        ]
+      },
+      "gpuMs": null,
+      "resources": {
+        "meshes": 108,
+        "materials": 40,
+        "geometries": 6,
+        "textures": 2,
+        "lights": 2,
+        "nodes": 0
+      },
+      "trackedCounters": {
+        "drawCalls": 15,
+        "babylonObjects": 158,
+        "matrixBufferBytes": 131072
+      },
+      "diagnostics": [],
+      "longTasks": {
+        "available": true,
+        "durationsMs": [],
+        "maxMs": 0,
+        "dropped": 0
+      },
+      "quality": {
+        "preset": "MEDIUM",
+        "limits": {
+          "maxDpr": 1.5,
+          "shadowMapSize": 1024,
+          "shadowDistance": 60,
+          "maxShadowCasters": 48,
+          "materialLights": 2,
+          "lodDistance": 90,
+          "maxTextureDimension": 2048,
+          "maxTransparentMeshes": 64,
+          "maxVisualEffects": 32
+        },
+        "cssWidth": 1920,
+        "cssHeight": 1080,
+        "deviceDpr": 1,
+        "effectiveDpr": 1,
+        "resolutionScale": 1,
+        "internalWidth": 1920,
+        "internalHeight": 1080
+      },
+      "authorityUnchanged": true
+    },
+    {
+      "mode": "local-normal",
+      "role": "SMOKE",
+      "repeat": 3,
+      "warmupMs": 100,
+      "measuredMs": 506.69999998807907,
+      "frame": {
+        "count": 72,
+        "p50": 6.900000000001455,
+        "p95": 7,
+        "p99": 7.099999999998545,
+        "min": 6.80000000000291,
+        "max": 7.099999999998545,
+        "mean": 6.944444444444445,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          72,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "mainThread": {
+        "count": 72,
+        "p50": 0.8999999761581421,
+        "p95": 1.0999999642372131,
+        "p99": 1.4000000357627869,
+        "min": 0.5999999642372131,
+        "max": 1.4000000357627869,
+        "mean": 0.8347222208976746,
+        "overBudget": null,
+        "histogram": [
+          59,
+          13,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "drawCalls": {
+        "count": 72,
+        "p50": 15,
+        "p95": 15,
+        "p99": 15,
+        "min": 15,
+        "max": 15,
+        "mean": 15,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          0,
+          72,
+          0,
+          0,
+          0
+        ]
+      },
+      "activeMeshes": {
+        "count": 72,
+        "p50": 84,
+        "p95": 84,
+        "p99": 84,
+        "min": 84,
+        "max": 84,
+        "mean": 84,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          72
+        ]
+      },
+      "gpuMs": null,
+      "resources": {
+        "meshes": 108,
+        "materials": 40,
+        "geometries": 6,
+        "textures": 2,
+        "lights": 2,
+        "nodes": 0
+      },
+      "trackedCounters": {
+        "drawCalls": 15,
+        "babylonObjects": 158,
+        "matrixBufferBytes": 131072
+      },
+      "diagnostics": [],
+      "longTasks": {
+        "available": true,
+        "durationsMs": [],
+        "maxMs": 0,
+        "dropped": 0
+      },
+      "quality": {
+        "preset": "MEDIUM",
+        "limits": {
+          "maxDpr": 1.5,
+          "shadowMapSize": 1024,
+          "shadowDistance": 60,
+          "maxShadowCasters": 48,
+          "materialLights": 2,
+          "lodDistance": 90,
+          "maxTextureDimension": 2048,
+          "maxTransparentMeshes": 64,
+          "maxVisualEffects": 32
+        },
+        "cssWidth": 1920,
+        "cssHeight": 1080,
+        "deviceDpr": 1,
+        "effectiveDpr": 1,
+        "resolutionScale": 1,
+        "internalWidth": 1920,
+        "internalHeight": 1080
+      },
+      "authorityUnchanged": true
+    },
+    {
+      "mode": "local-normal",
+      "role": "SMOKE",
+      "repeat": 4,
+      "warmupMs": 100,
+      "measuredMs": 500.0999999642372,
+      "frame": {
+        "count": 71,
+        "p50": 6.900000000001455,
+        "p95": 7,
+        "p99": 7.099999999998545,
+        "min": 6.799999999999272,
+        "max": 7.099999999998545,
+        "mean": 6.945070422535242,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          71,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "mainThread": {
+        "count": 71,
+        "p50": 0.6000000238418579,
+        "p95": 1,
+        "p99": 1.2999999523162842,
+        "min": 0.30000001192092896,
+        "max": 1.2999999523162842,
+        "mean": 0.6492957741441862,
+        "overBudget": null,
+        "histogram": [
+          65,
+          6,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "drawCalls": {
+        "count": 71,
+        "p50": 15,
+        "p95": 15,
+        "p99": 15,
+        "min": 15,
+        "max": 15,
+        "mean": 15,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          0,
+          71,
+          0,
+          0,
+          0
+        ]
+      },
+      "activeMeshes": {
+        "count": 71,
+        "p50": 84,
+        "p95": 84,
+        "p99": 84,
+        "min": 84,
+        "max": 84,
+        "mean": 84,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          71
+        ]
+      },
+      "gpuMs": null,
+      "resources": {
+        "meshes": 108,
+        "materials": 40,
+        "geometries": 6,
+        "textures": 2,
+        "lights": 2,
+        "nodes": 0
+      },
+      "trackedCounters": {
+        "drawCalls": 15,
+        "babylonObjects": 158,
+        "matrixBufferBytes": 131072
+      },
+      "diagnostics": [],
+      "longTasks": {
+        "available": true,
+        "durationsMs": [],
+        "maxMs": 0,
+        "dropped": 0
+      },
+      "quality": {
+        "preset": "MEDIUM",
+        "limits": {
+          "maxDpr": 1.5,
+          "shadowMapSize": 1024,
+          "shadowDistance": 60,
+          "maxShadowCasters": 48,
+          "materialLights": 2,
+          "lodDistance": 90,
+          "maxTextureDimension": 2048,
+          "maxTransparentMeshes": 64,
+          "maxVisualEffects": 32
+        },
+        "cssWidth": 1920,
+        "cssHeight": 1080,
+        "deviceDpr": 1,
+        "effectiveDpr": 1,
+        "resolutionScale": 1,
+        "internalWidth": 1920,
+        "internalHeight": 1080
+      },
+      "authorityUnchanged": true
+    },
+    {
+      "mode": "local-normal",
+      "role": "SMOKE",
+      "repeat": 5,
+      "warmupMs": 100,
+      "measuredMs": 500.19999998807907,
+      "frame": {
+        "count": 71,
+        "p50": 6.900000000001455,
+        "p95": 7,
+        "p99": 7.100000000002183,
+        "min": 6.799999999999272,
+        "max": 7.100000000002183,
+        "mean": 6.945070422535191,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          71,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "mainThread": {
+        "count": 71,
+        "p50": 0.6000000238418579,
+        "p95": 0.8999999761581421,
+        "p99": 1,
+        "min": 0.3999999761581421,
+        "max": 1,
+        "mean": 0.6169014061000985,
+        "overBudget": null,
+        "histogram": [
+          70,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "drawCalls": {
+        "count": 71,
+        "p50": 15,
+        "p95": 15,
+        "p99": 15,
+        "min": 15,
+        "max": 15,
+        "mean": 15,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          0,
+          71,
+          0,
+          0,
+          0
+        ]
+      },
+      "activeMeshes": {
+        "count": 71,
+        "p50": 84,
+        "p95": 84,
+        "p99": 84,
+        "min": 84,
+        "max": 84,
+        "mean": 84,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          71
+        ]
+      },
+      "gpuMs": null,
+      "resources": {
+        "meshes": 108,
+        "materials": 40,
+        "geometries": 6,
+        "textures": 2,
+        "lights": 2,
+        "nodes": 0
+      },
+      "trackedCounters": {
+        "drawCalls": 15,
+        "babylonObjects": 158,
+        "matrixBufferBytes": 131072
+      },
+      "diagnostics": [],
+      "longTasks": {
+        "available": true,
+        "durationsMs": [],
+        "maxMs": 0,
+        "dropped": 0
+      },
+      "quality": {
+        "preset": "MEDIUM",
+        "limits": {
+          "maxDpr": 1.5,
+          "shadowMapSize": 1024,
+          "shadowDistance": 60,
+          "maxShadowCasters": 48,
+          "materialLights": 2,
+          "lodDistance": 90,
+          "maxTextureDimension": 2048,
+          "maxTransparentMeshes": 64,
+          "maxVisualEffects": 32
+        },
+        "cssWidth": 1920,
+        "cssHeight": 1080,
+        "deviceDpr": 1,
+        "effectiveDpr": 1,
+        "resolutionScale": 1,
+        "internalWidth": 1920,
+        "internalHeight": 1080
+      },
+      "authorityUnchanged": true
+    },
+    {
+      "mode": "global-thin",
+      "role": "SMOKE",
+      "repeat": 1,
+      "warmupMs": 100,
+      "measuredMs": 506.80000001192093,
+      "frame": {
+        "count": 72,
+        "p50": 6.900000000001455,
+        "p95": 7,
+        "p99": 7.099999999998545,
+        "min": 6.799999999999272,
+        "max": 7.099999999998545,
+        "mean": 6.944444444444445,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          72,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "mainThread": {
+        "count": 72,
+        "p50": 0.5,
+        "p95": 0.6000000238418579,
+        "p99": 0.7000000476837158,
+        "min": 0.2999999523162842,
+        "max": 0.7000000476837158,
+        "mean": 0.4541666681567828,
+        "overBudget": null,
+        "histogram": [
+          72,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "drawCalls": {
+        "count": 72,
+        "p50": 8,
+        "p95": 8,
+        "p99": 8,
+        "min": 8,
+        "max": 8,
+        "mean": 8,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          0,
+          72,
+          0,
+          0,
+          0
+        ]
+      },
+      "activeMeshes": {
+        "count": 72,
+        "p50": 8,
+        "p95": 8,
+        "p99": 8,
+        "min": 8,
+        "max": 8,
+        "mean": 8,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          0,
+          72,
+          0,
+          0,
+          0
+        ]
+      },
+      "gpuMs": null,
+      "resources": {
+        "meshes": 17,
+        "materials": 8,
+        "geometries": 6,
+        "textures": 2,
+        "lights": 2,
+        "nodes": 0
+      },
+      "trackedCounters": {
+        "drawCalls": 8,
+        "babylonObjects": 35,
+        "matrixBufferBytes": 74496
+      },
+      "diagnostics": [],
+      "longTasks": {
+        "available": true,
+        "durationsMs": [],
+        "maxMs": 0,
+        "dropped": 0
+      },
+      "quality": {
+        "preset": "MEDIUM",
+        "limits": {
+          "maxDpr": 1.5,
+          "shadowMapSize": 1024,
+          "shadowDistance": 60,
+          "maxShadowCasters": 48,
+          "materialLights": 2,
+          "lodDistance": 90,
+          "maxTextureDimension": 2048,
+          "maxTransparentMeshes": 64,
+          "maxVisualEffects": 32
+        },
+        "cssWidth": 1920,
+        "cssHeight": 1080,
+        "deviceDpr": 1,
+        "effectiveDpr": 1,
+        "resolutionScale": 1,
+        "internalWidth": 1920,
+        "internalHeight": 1080
+      },
+      "authorityUnchanged": true
+    },
+    {
+      "mode": "global-thin",
+      "role": "SMOKE",
+      "repeat": 2,
+      "warmupMs": 100,
+      "measuredMs": 500.30000001192093,
+      "frame": {
+        "count": 71,
+        "p50": 6.900000000001455,
+        "p95": 7,
+        "p99": 7.100000000002183,
+        "min": 6.799999999999272,
+        "max": 7.100000000002183,
+        "mean": 6.945070422535191,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          71,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "mainThread": {
+        "count": 71,
+        "p50": 0.6000000238418579,
+        "p95": 0.800000011920929,
+        "p99": 0.8999999761581421,
+        "min": 0.3999999761581421,
+        "max": 0.8999999761581421,
+        "mean": 0.6112676061375041,
+        "overBudget": null,
+        "histogram": [
+          71,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "drawCalls": {
+        "count": 71,
+        "p50": 8,
+        "p95": 8,
+        "p99": 8,
+        "min": 8,
+        "max": 8,
+        "mean": 8,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          0,
+          71,
+          0,
+          0,
+          0
+        ]
+      },
+      "activeMeshes": {
+        "count": 71,
+        "p50": 8,
+        "p95": 8,
+        "p99": 8,
+        "min": 8,
+        "max": 8,
+        "mean": 8,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          0,
+          71,
+          0,
+          0,
+          0
+        ]
+      },
+      "gpuMs": null,
+      "resources": {
+        "meshes": 17,
+        "materials": 8,
+        "geometries": 6,
+        "textures": 2,
+        "lights": 2,
+        "nodes": 0
+      },
+      "trackedCounters": {
+        "drawCalls": 8,
+        "babylonObjects": 35,
+        "matrixBufferBytes": 74496
+      },
+      "diagnostics": [],
+      "longTasks": {
+        "available": true,
+        "durationsMs": [],
+        "maxMs": 0,
+        "dropped": 0
+      },
+      "quality": {
+        "preset": "MEDIUM",
+        "limits": {
+          "maxDpr": 1.5,
+          "shadowMapSize": 1024,
+          "shadowDistance": 60,
+          "maxShadowCasters": 48,
+          "materialLights": 2,
+          "lodDistance": 90,
+          "maxTextureDimension": 2048,
+          "maxTransparentMeshes": 64,
+          "maxVisualEffects": 32
+        },
+        "cssWidth": 1920,
+        "cssHeight": 1080,
+        "deviceDpr": 1,
+        "effectiveDpr": 1,
+        "resolutionScale": 1,
+        "internalWidth": 1920,
+        "internalHeight": 1080
+      },
+      "authorityUnchanged": true
+    },
+    {
+      "mode": "global-thin",
+      "role": "SMOKE",
+      "repeat": 3,
+      "warmupMs": 100,
+      "measuredMs": 500.19999998807907,
+      "frame": {
+        "count": 71,
+        "p50": 6.900000000001455,
+        "p95": 7,
+        "p99": 7,
+        "min": 6.899999999997817,
+        "max": 7,
+        "mean": 6.943661971830986,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          71,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "mainThread": {
+        "count": 71,
+        "p50": 0.5999999642372131,
+        "p95": 0.7000000476837158,
+        "p99": 0.800000011920929,
+        "min": 0.3999999761581421,
+        "max": 0.800000011920929,
+        "mean": 0.564788732730167,
+        "overBudget": null,
+        "histogram": [
+          71,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "drawCalls": {
+        "count": 71,
+        "p50": 8,
+        "p95": 8,
+        "p99": 8,
+        "min": 8,
+        "max": 8,
+        "mean": 8,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          0,
+          71,
+          0,
+          0,
+          0
+        ]
+      },
+      "activeMeshes": {
+        "count": 71,
+        "p50": 8,
+        "p95": 8,
+        "p99": 8,
+        "min": 8,
+        "max": 8,
+        "mean": 8,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          0,
+          71,
+          0,
+          0,
+          0
+        ]
+      },
+      "gpuMs": null,
+      "resources": {
+        "meshes": 17,
+        "materials": 8,
+        "geometries": 6,
+        "textures": 2,
+        "lights": 2,
+        "nodes": 0
+      },
+      "trackedCounters": {
+        "drawCalls": 8,
+        "babylonObjects": 35,
+        "matrixBufferBytes": 74496
+      },
+      "diagnostics": [],
+      "longTasks": {
+        "available": true,
+        "durationsMs": [],
+        "maxMs": 0,
+        "dropped": 0
+      },
+      "quality": {
+        "preset": "MEDIUM",
+        "limits": {
+          "maxDpr": 1.5,
+          "shadowMapSize": 1024,
+          "shadowDistance": 60,
+          "maxShadowCasters": 48,
+          "materialLights": 2,
+          "lodDistance": 90,
+          "maxTextureDimension": 2048,
+          "maxTransparentMeshes": 64,
+          "maxVisualEffects": 32
+        },
+        "cssWidth": 1920,
+        "cssHeight": 1080,
+        "deviceDpr": 1,
+        "effectiveDpr": 1,
+        "resolutionScale": 1,
+        "internalWidth": 1920,
+        "internalHeight": 1080
+      },
+      "authorityUnchanged": true
+    },
+    {
+      "mode": "global-thin",
+      "role": "SMOKE",
+      "repeat": 4,
+      "warmupMs": 100,
+      "measuredMs": 506.80000001192093,
+      "frame": {
+        "count": 72,
+        "p50": 6.900000000001455,
+        "p95": 7,
+        "p99": 7.100000000002183,
+        "min": 6.799999999999272,
+        "max": 7.100000000002183,
+        "mean": 6.943055555555576,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          72,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "mainThread": {
+        "count": 72,
+        "p50": 0.6000000238418579,
+        "p95": 0.7000000476837158,
+        "p99": 1,
+        "min": 0.3999999761581421,
+        "max": 1,
+        "mean": 0.6375000013245476,
+        "overBudget": null,
+        "histogram": [
+          71,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "drawCalls": {
+        "count": 72,
+        "p50": 8,
+        "p95": 8,
+        "p99": 8,
+        "min": 8,
+        "max": 8,
+        "mean": 8,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          0,
+          72,
+          0,
+          0,
+          0
+        ]
+      },
+      "activeMeshes": {
+        "count": 72,
+        "p50": 8,
+        "p95": 8,
+        "p99": 8,
+        "min": 8,
+        "max": 8,
+        "mean": 8,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          0,
+          72,
+          0,
+          0,
+          0
+        ]
+      },
+      "gpuMs": null,
+      "resources": {
+        "meshes": 17,
+        "materials": 8,
+        "geometries": 6,
+        "textures": 2,
+        "lights": 2,
+        "nodes": 0
+      },
+      "trackedCounters": {
+        "drawCalls": 8,
+        "babylonObjects": 35,
+        "matrixBufferBytes": 74496
+      },
+      "diagnostics": [],
+      "longTasks": {
+        "available": true,
+        "durationsMs": [],
+        "maxMs": 0,
+        "dropped": 0
+      },
+      "quality": {
+        "preset": "MEDIUM",
+        "limits": {
+          "maxDpr": 1.5,
+          "shadowMapSize": 1024,
+          "shadowDistance": 60,
+          "maxShadowCasters": 48,
+          "materialLights": 2,
+          "lodDistance": 90,
+          "maxTextureDimension": 2048,
+          "maxTransparentMeshes": 64,
+          "maxVisualEffects": 32
+        },
+        "cssWidth": 1920,
+        "cssHeight": 1080,
+        "deviceDpr": 1,
+        "effectiveDpr": 1,
+        "resolutionScale": 1,
+        "internalWidth": 1920,
+        "internalHeight": 1080
+      },
+      "authorityUnchanged": true
+    },
+    {
+      "mode": "global-thin",
+      "role": "SMOKE",
+      "repeat": 5,
+      "warmupMs": 100,
+      "measuredMs": 506.69999998807907,
+      "frame": {
+        "count": 72,
+        "p50": 6.900000000001455,
+        "p95": 7,
+        "p99": 7.100000000002183,
+        "min": 6.799999999999272,
+        "max": 7.100000000002183,
+        "mean": 6.944444444444445,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          72,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "mainThread": {
+        "count": 72,
+        "p50": 0.5999999642372131,
+        "p95": 0.7000000476837158,
+        "p99": 0.800000011920929,
+        "min": 0.3999999761581421,
+        "max": 0.800000011920929,
+        "mean": 0.5722222195731269,
+        "overBudget": null,
+        "histogram": [
+          72,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "drawCalls": {
+        "count": 72,
+        "p50": 8,
+        "p95": 8,
+        "p99": 8,
+        "min": 8,
+        "max": 8,
+        "mean": 8,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          0,
+          72,
+          0,
+          0,
+          0
+        ]
+      },
+      "activeMeshes": {
+        "count": 72,
+        "p50": 8,
+        "p95": 8,
+        "p99": 8,
+        "min": 8,
+        "max": 8,
+        "mean": 8,
+        "overBudget": null,
+        "histogram": [
+          0,
+          0,
+          0,
+          72,
+          0,
+          0,
+          0
+        ]
+      },
+      "gpuMs": null,
+      "resources": {
+        "meshes": 17,
+        "materials": 8,
+        "geometries": 6,
+        "textures": 2,
+        "lights": 2,
+        "nodes": 0
+      },
+      "trackedCounters": {
+        "drawCalls": 8,
+        "babylonObjects": 35,
+        "matrixBufferBytes": 74496
+      },
+      "diagnostics": [],
+      "longTasks": {
+        "available": true,
+        "durationsMs": [],
+        "maxMs": 0,
+        "dropped": 0
+      },
+      "quality": {
+        "preset": "MEDIUM",
+        "limits": {
+          "maxDpr": 1.5,
+          "shadowMapSize": 1024,
+          "shadowDistance": 60,
+          "maxShadowCasters": 48,
+          "materialLights": 2,
+          "lodDistance": 90,
+          "maxTextureDimension": 2048,
+          "maxTransparentMeshes": 64,
+          "maxVisualEffects": 32
+        },
+        "cssWidth": 1920,
+        "cssHeight": 1080,
+        "deviceDpr": 1,
+        "effectiveDpr": 1,
+        "resolutionScale": 1,
+        "internalWidth": 1920,
+        "internalHeight": 1080
+      },
+      "authorityUnchanged": true
+    }
+  ],
+  "functional": [
+    {
+      "mode": "global-normal",
+      "pickNear": "vehicle-0",
+      "pickMoving": "vehicle-0",
+      "distant": "vehicle-0",
+      "remapPick": null,
+      "removalPick": null,
+      "signalMutable": true,
+      "qualitySwitch": {
+        "low": {
+          "preset": "LOW",
+          "limits": {
+            "maxDpr": 1,
+            "shadowMapSize": 0,
+            "shadowDistance": 0,
+            "maxShadowCasters": 0,
+            "materialLights": 2,
+            "lodDistance": 45,
+            "maxTextureDimension": 1024,
+            "maxTransparentMeshes": 32,
+            "maxVisualEffects": 16
+          },
+          "cssWidth": 1920,
+          "cssHeight": 1080,
+          "deviceDpr": 1,
+          "effectiveDpr": 1,
+          "resolutionScale": 0.5,
+          "internalWidth": 960,
+          "internalHeight": 540
+        },
+        "restored": {
+          "preset": "MEDIUM",
+          "limits": {
+            "maxDpr": 1.5,
+            "shadowMapSize": 1024,
+            "shadowDistance": 60,
+            "maxShadowCasters": 48,
+            "materialLights": 2,
+            "lodDistance": 90,
+            "maxTextureDimension": 2048,
+            "maxTransparentMeshes": 64,
+            "maxVisualEffects": 32
+          },
+          "cssWidth": 1920,
+          "cssHeight": 1080,
+          "deviceDpr": 1,
+          "effectiveDpr": 1,
+          "resolutionScale": 1,
+          "internalWidth": 1920,
+          "internalHeight": 1080
+        },
+        "authorityUnchanged": true
+      },
+      "spawnPrepareMs": 16.80000001192093,
+      "firstRenderCpuMs": 4.400000035762787,
+      "counts": {
+        "meshes": 77,
+        "materials": 8,
+        "geometries": 6,
+        "textures": 2,
+        "lights": 2,
+        "nodes": 0
+      },
+      "batches": {
+        "cells": 0,
+        "batches": 0,
+        "instances": 0,
+        "distantBatches": 0,
+        "meshes": 0,
+        "frozenMaterials": 0,
+        "matrixBufferBytes": 0
+      }
+    },
+    {
+      "mode": "local-thin",
+      "pickNear": "vehicle-0",
+      "pickMoving": "vehicle-0",
+      "distant": "vehicle-0",
+      "remapPick": "vehicle-0",
+      "removalPick": "vehicle-0",
+      "signalMutable": true,
+      "qualitySwitch": {
+        "low": {
+          "preset": "LOW",
+          "limits": {
+            "maxDpr": 1,
+            "shadowMapSize": 0,
+            "shadowDistance": 0,
+            "maxShadowCasters": 0,
+            "materialLights": 2,
+            "lodDistance": 45,
+            "maxTextureDimension": 1024,
+            "maxTransparentMeshes": 32,
+            "maxVisualEffects": 16
+          },
+          "cssWidth": 1920,
+          "cssHeight": 1080,
+          "deviceDpr": 1,
+          "effectiveDpr": 1,
+          "resolutionScale": 0.5,
+          "internalWidth": 960,
+          "internalHeight": 540
+        },
+        "restored": {
+          "preset": "MEDIUM",
+          "limits": {
+            "maxDpr": 1.5,
+            "shadowMapSize": 1024,
+            "shadowDistance": 60,
+            "maxShadowCasters": 48,
+            "materialLights": 2,
+            "lodDistance": 90,
+            "maxTextureDimension": 2048,
+            "maxTransparentMeshes": 64,
+            "maxVisualEffects": 32
+          },
+          "cssWidth": 1920,
+          "cssHeight": 1080,
+          "deviceDpr": 1,
+          "effectiveDpr": 1,
+          "resolutionScale": 1,
+          "internalWidth": 1920,
+          "internalHeight": 1080
+        },
+        "authorityUnchanged": true
+      },
+      "spawnPrepareMs": 3.5,
+      "firstRenderCpuMs": 2.099999964237213,
+      "counts": {
+        "meshes": 48,
+        "materials": 40,
+        "geometries": 6,
+        "textures": 2,
+        "lights": 2,
+        "nodes": 0
+      },
+      "batches": {
+        "cells": 21,
+        "batches": 21,
+        "instances": 1094,
+        "distantBatches": 17,
+        "meshes": 42,
+        "frozenMaterials": 32,
+        "matrixBufferBytes": 140032
+      }
+    },
+    {
+      "mode": "global-normal",
+      "pickNear": "vehicle-0",
+      "pickMoving": "vehicle-0",
+      "distant": "vehicle-0",
+      "remapPick": null,
+      "removalPick": null,
+      "signalMutable": true,
+      "qualitySwitch": {
+        "low": {
+          "preset": "LOW",
+          "limits": {
+            "maxDpr": 1,
+            "shadowMapSize": 0,
+            "shadowDistance": 0,
+            "maxShadowCasters": 0,
+            "materialLights": 2,
+            "lodDistance": 45,
+            "maxTextureDimension": 1024,
+            "maxTransparentMeshes": 32,
+            "maxVisualEffects": 16
+          },
+          "cssWidth": 1920,
+          "cssHeight": 1080,
+          "deviceDpr": 1,
+          "effectiveDpr": 1,
+          "resolutionScale": 0.5,
+          "internalWidth": 960,
+          "internalHeight": 540
+        },
+        "restored": {
+          "preset": "MEDIUM",
+          "limits": {
+            "maxDpr": 1.5,
+            "shadowMapSize": 1024,
+            "shadowDistance": 60,
+            "maxShadowCasters": 48,
+            "materialLights": 2,
+            "lodDistance": 90,
+            "maxTextureDimension": 2048,
+            "maxTransparentMeshes": 64,
+            "maxVisualEffects": 32
+          },
+          "cssWidth": 1920,
+          "cssHeight": 1080,
+          "deviceDpr": 1,
+          "effectiveDpr": 1,
+          "resolutionScale": 1,
+          "internalWidth": 1920,
+          "internalHeight": 1080
+        },
+        "authorityUnchanged": true
+      },
+      "spawnPrepareMs": 0.699999988079071,
+      "firstRenderCpuMs": 0.9000000357627869,
+      "counts": {
+        "meshes": 77,
+        "materials": 8,
+        "geometries": 6,
+        "textures": 2,
+        "lights": 2,
+        "nodes": 0
+      },
+      "batches": {
+        "cells": 0,
+        "batches": 0,
+        "instances": 0,
+        "distantBatches": 0,
+        "meshes": 0,
+        "frozenMaterials": 0,
+        "matrixBufferBytes": 0
+      }
+    },
+    {
+      "mode": "local-thin",
+      "pickNear": "vehicle-0",
+      "pickMoving": "vehicle-0",
+      "distant": "vehicle-0",
+      "remapPick": "vehicle-0",
+      "removalPick": "vehicle-0",
+      "signalMutable": true,
+      "qualitySwitch": {
+        "low": {
+          "preset": "LOW",
+          "limits": {
+            "maxDpr": 1,
+            "shadowMapSize": 0,
+            "shadowDistance": 0,
+            "maxShadowCasters": 0,
+            "materialLights": 2,
+            "lodDistance": 45,
+            "maxTextureDimension": 1024,
+            "maxTransparentMeshes": 32,
+            "maxVisualEffects": 16
+          },
+          "cssWidth": 1920,
+          "cssHeight": 1080,
+          "deviceDpr": 1,
+          "effectiveDpr": 1,
+          "resolutionScale": 0.5,
+          "internalWidth": 960,
+          "internalHeight": 540
+        },
+        "restored": {
+          "preset": "MEDIUM",
+          "limits": {
+            "maxDpr": 1.5,
+            "shadowMapSize": 1024,
+            "shadowDistance": 60,
+            "maxShadowCasters": 48,
+            "materialLights": 2,
+            "lodDistance": 90,
+            "maxTextureDimension": 2048,
+            "maxTransparentMeshes": 64,
+            "maxVisualEffects": 32
+          },
+          "cssWidth": 1920,
+          "cssHeight": 1080,
+          "deviceDpr": 1,
+          "effectiveDpr": 1,
+          "resolutionScale": 1,
+          "internalWidth": 1920,
+          "internalHeight": 1080
+        },
+        "authorityUnchanged": true
+      },
+      "spawnPrepareMs": 3.799999952316284,
+      "firstRenderCpuMs": 0.800000011920929,
+      "counts": {
+        "meshes": 48,
+        "materials": 40,
+        "geometries": 6,
+        "textures": 2,
+        "lights": 2,
+        "nodes": 0
+      },
+      "batches": {
+        "cells": 21,
+        "batches": 21,
+        "instances": 1094,
+        "distantBatches": 17,
+        "meshes": 42,
+        "frozenMaterials": 32,
+        "matrixBufferBytes": 140032
+      }
+    },
+    {
+      "mode": "global-normal",
+      "pickNear": "vehicle-0",
+      "pickMoving": "vehicle-0",
+      "distant": "vehicle-0",
+      "remapPick": null,
+      "removalPick": null,
+      "signalMutable": true,
+      "qualitySwitch": {
+        "low": {
+          "preset": "LOW",
+          "limits": {
+            "maxDpr": 1,
+            "shadowMapSize": 0,
+            "shadowDistance": 0,
+            "maxShadowCasters": 0,
+            "materialLights": 2,
+            "lodDistance": 45,
+            "maxTextureDimension": 1024,
+            "maxTransparentMeshes": 32,
+            "maxVisualEffects": 16
+          },
+          "cssWidth": 1920,
+          "cssHeight": 1080,
+          "deviceDpr": 1,
+          "effectiveDpr": 1,
+          "resolutionScale": 0.5,
+          "internalWidth": 960,
+          "internalHeight": 540
+        },
+        "restored": {
+          "preset": "MEDIUM",
+          "limits": {
+            "maxDpr": 1.5,
+            "shadowMapSize": 1024,
+            "shadowDistance": 60,
+            "maxShadowCasters": 48,
+            "materialLights": 2,
+            "lodDistance": 90,
+            "maxTextureDimension": 2048,
+            "maxTransparentMeshes": 64,
+            "maxVisualEffects": 32
+          },
+          "cssWidth": 1920,
+          "cssHeight": 1080,
+          "deviceDpr": 1,
+          "effectiveDpr": 1,
+          "resolutionScale": 1,
+          "internalWidth": 1920,
+          "internalHeight": 1080
+        },
+        "authorityUnchanged": true
+      },
+      "spawnPrepareMs": 0.3999999761581421,
+      "firstRenderCpuMs": 0.7000000476837158,
+      "counts": {
+        "meshes": 77,
+        "materials": 8,
+        "geometries": 6,
+        "textures": 2,
+        "lights": 2,
+        "nodes": 0
+      },
+      "batches": {
+        "cells": 0,
+        "batches": 0,
+        "instances": 0,
+        "distantBatches": 0,
+        "meshes": 0,
+        "frozenMaterials": 0,
+        "matrixBufferBytes": 0
+      }
+    },
+    {
+      "mode": "local-thin",
+      "pickNear": "vehicle-0",
+      "pickMoving": "vehicle-0",
+      "distant": "vehicle-0",
+      "remapPick": "vehicle-0",
+      "removalPick": "vehicle-0",
+      "signalMutable": true,
+      "qualitySwitch": {
+        "low": {
+          "preset": "LOW",
+          "limits": {
+            "maxDpr": 1,
+            "shadowMapSize": 0,
+            "shadowDistance": 0,
+            "maxShadowCasters": 0,
+            "materialLights": 2,
+            "lodDistance": 45,
+            "maxTextureDimension": 1024,
+            "maxTransparentMeshes": 32,
+            "maxVisualEffects": 16
+          },
+          "cssWidth": 1920,
+          "cssHeight": 1080,
+          "deviceDpr": 1,
+          "effectiveDpr": 1,
+          "resolutionScale": 0.5,
+          "internalWidth": 960,
+          "internalHeight": 540
+        },
+        "restored": {
+          "preset": "MEDIUM",
+          "limits": {
+            "maxDpr": 1.5,
+            "shadowMapSize": 1024,
+            "shadowDistance": 60,
+            "maxShadowCasters": 48,
+            "materialLights": 2,
+            "lodDistance": 90,
+            "maxTextureDimension": 2048,
+            "maxTransparentMeshes": 64,
+            "maxVisualEffects": 32
+          },
+          "cssWidth": 1920,
+          "cssHeight": 1080,
+          "deviceDpr": 1,
+          "effectiveDpr": 1,
+          "resolutionScale": 1,
+          "internalWidth": 1920,
+          "internalHeight": 1080
+        },
+        "authorityUnchanged": true
+      },
+      "spawnPrepareMs": 2.299999952316284,
+      "firstRenderCpuMs": 0.800000011920929,
+      "counts": {
+        "meshes": 48,
+        "materials": 40,
+        "geometries": 6,
+        "textures": 2,
+        "lights": 2,
+        "nodes": 0
+      },
+      "batches": {
+        "cells": 21,
+        "batches": 21,
+        "instances": 1094,
+        "distantBatches": 17,
+        "meshes": 42,
+        "frozenMaterials": 32,
+        "matrixBufferBytes": 140032
+      }
+    },
+    {
+      "mode": "global-normal",
+      "pickNear": "vehicle-0",
+      "pickMoving": "vehicle-0",
+      "distant": "vehicle-0",
+      "remapPick": null,
+      "removalPick": null,
+      "signalMutable": true,
+      "qualitySwitch": {
+        "low": {
+          "preset": "LOW",
+          "limits": {
+            "maxDpr": 1,
+            "shadowMapSize": 0,
+            "shadowDistance": 0,
+            "maxShadowCasters": 0,
+            "materialLights": 2,
+            "lodDistance": 45,
+            "maxTextureDimension": 1024,
+            "maxTransparentMeshes": 32,
+            "maxVisualEffects": 16
+          },
+          "cssWidth": 1920,
+          "cssHeight": 1080,
+          "deviceDpr": 1,
+          "effectiveDpr": 1,
+          "resolutionScale": 0.5,
+          "internalWidth": 960,
+          "internalHeight": 540
+        },
+        "restored": {
+          "preset": "MEDIUM",
+          "limits": {
+            "maxDpr": 1.5,
+            "shadowMapSize": 1024,
+            "shadowDistance": 60,
+            "maxShadowCasters": 48,
+            "materialLights": 2,
+            "lodDistance": 90,
+            "maxTextureDimension": 2048,
+            "maxTransparentMeshes": 64,
+            "maxVisualEffects": 32
+          },
+          "cssWidth": 1920,
+          "cssHeight": 1080,
+          "deviceDpr": 1,
+          "effectiveDpr": 1,
+          "resolutionScale": 1,
+          "internalWidth": 1920,
+          "internalHeight": 1080
+        },
+        "authorityUnchanged": true
+      },
+      "spawnPrepareMs": 0.5,
+      "firstRenderCpuMs": 0.5999999642372131,
+      "counts": {
+        "meshes": 77,
+        "materials": 8,
+        "geometries": 6,
+        "textures": 2,
+        "lights": 2,
+        "nodes": 0
+      },
+      "batches": {
+        "cells": 0,
+        "batches": 0,
+        "instances": 0,
+        "distantBatches": 0,
+        "meshes": 0,
+        "frozenMaterials": 0,
+        "matrixBufferBytes": 0
+      }
+    },
+    {
+      "mode": "local-thin",
+      "pickNear": "vehicle-0",
+      "pickMoving": "vehicle-0",
+      "distant": "vehicle-0",
+      "remapPick": "vehicle-0",
+      "removalPick": "vehicle-0",
+      "signalMutable": true,
+      "qualitySwitch": {
+        "low": {
+          "preset": "LOW",
+          "limits": {
+            "maxDpr": 1,
+            "shadowMapSize": 0,
+            "shadowDistance": 0,
+            "maxShadowCasters": 0,
+            "materialLights": 2,
+            "lodDistance": 45,
+            "maxTextureDimension": 1024,
+            "maxTransparentMeshes": 32,
+            "maxVisualEffects": 16
+          },
+          "cssWidth": 1920,
+          "cssHeight": 1080,
+          "deviceDpr": 1,
+          "effectiveDpr": 1,
+          "resolutionScale": 0.5,
+          "internalWidth": 960,
+          "internalHeight": 540
+        },
+        "restored": {
+          "preset": "MEDIUM",
+          "limits": {
+            "maxDpr": 1.5,
+            "shadowMapSize": 1024,
+            "shadowDistance": 60,
+            "maxShadowCasters": 48,
+            "materialLights": 2,
+            "lodDistance": 90,
+            "maxTextureDimension": 2048,
+            "maxTransparentMeshes": 64,
+            "maxVisualEffects": 32
+          },
+          "cssWidth": 1920,
+          "cssHeight": 1080,
+          "deviceDpr": 1,
+          "effectiveDpr": 1,
+          "resolutionScale": 1,
+          "internalWidth": 1920,
+          "internalHeight": 1080
+        },
+        "authorityUnchanged": true
+      },
+      "spawnPrepareMs": 1.9000000357627869,
+      "firstRenderCpuMs": 0.699999988079071,
+      "counts": {
+        "meshes": 48,
+        "materials": 40,
+        "geometries": 6,
+        "textures": 2,
+        "lights": 2,
+        "nodes": 0
+      },
+      "batches": {
+        "cells": 21,
+        "batches": 21,
+        "instances": 1094,
+        "distantBatches": 17,
+        "meshes": 42,
+        "frozenMaterials": 32,
+        "matrixBufferBytes": 140032
+      }
+    },
+    {
+      "mode": "global-normal",
+      "pickNear": "vehicle-0",
+      "pickMoving": "vehicle-0",
+      "distant": "vehicle-0",
+      "remapPick": null,
+      "removalPick": null,
+      "signalMutable": true,
+      "qualitySwitch": {
+        "low": {
+          "preset": "LOW",
+          "limits": {
+            "maxDpr": 1,
+            "shadowMapSize": 0,
+            "shadowDistance": 0,
+            "maxShadowCasters": 0,
+            "materialLights": 2,
+            "lodDistance": 45,
+            "maxTextureDimension": 1024,
+            "maxTransparentMeshes": 32,
+            "maxVisualEffects": 16
+          },
+          "cssWidth": 1920,
+          "cssHeight": 1080,
+          "deviceDpr": 1,
+          "effectiveDpr": 1,
+          "resolutionScale": 0.5,
+          "internalWidth": 960,
+          "internalHeight": 540
+        },
+        "restored": {
+          "preset": "MEDIUM",
+          "limits": {
+            "maxDpr": 1.5,
+            "shadowMapSize": 1024,
+            "shadowDistance": 60,
+            "maxShadowCasters": 48,
+            "materialLights": 2,
+            "lodDistance": 90,
+            "maxTextureDimension": 2048,
+            "maxTransparentMeshes": 64,
+            "maxVisualEffects": 32
+          },
+          "cssWidth": 1920,
+          "cssHeight": 1080,
+          "deviceDpr": 1,
+          "effectiveDpr": 1,
+          "resolutionScale": 1,
+          "internalWidth": 1920,
+          "internalHeight": 1080
+        },
+        "authorityUnchanged": true
+      },
+      "spawnPrepareMs": 0.30000001192092896,
+      "firstRenderCpuMs": 0.40000003576278687,
+      "counts": {
+        "meshes": 77,
+        "materials": 8,
+        "geometries": 6,
+        "textures": 2,
+        "lights": 2,
+        "nodes": 0
+      },
+      "batches": {
+        "cells": 0,
+        "batches": 0,
+        "instances": 0,
+        "distantBatches": 0,
+        "meshes": 0,
+        "frozenMaterials": 0,
+        "matrixBufferBytes": 0
+      }
+    },
+    {
+      "mode": "local-thin",
+      "pickNear": "vehicle-0",
+      "pickMoving": "vehicle-0",
+      "distant": "vehicle-0",
+      "remapPick": "vehicle-0",
+      "removalPick": "vehicle-0",
+      "signalMutable": true,
+      "qualitySwitch": {
+        "low": {
+          "preset": "LOW",
+          "limits": {
+            "maxDpr": 1,
+            "shadowMapSize": 0,
+            "shadowDistance": 0,
+            "maxShadowCasters": 0,
+            "materialLights": 2,
+            "lodDistance": 45,
+            "maxTextureDimension": 1024,
+            "maxTransparentMeshes": 32,
+            "maxVisualEffects": 16
+          },
+          "cssWidth": 1920,
+          "cssHeight": 1080,
+          "deviceDpr": 1,
+          "effectiveDpr": 1,
+          "resolutionScale": 0.5,
+          "internalWidth": 960,
+          "internalHeight": 540
+        },
+        "restored": {
+          "preset": "MEDIUM",
+          "limits": {
+            "maxDpr": 1.5,
+            "shadowMapSize": 1024,
+            "shadowDistance": 60,
+            "maxShadowCasters": 48,
+            "materialLights": 2,
+            "lodDistance": 90,
+            "maxTextureDimension": 2048,
+            "maxTransparentMeshes": 64,
+            "maxVisualEffects": 32
+          },
+          "cssWidth": 1920,
+          "cssHeight": 1080,
+          "deviceDpr": 1,
+          "effectiveDpr": 1,
+          "resolutionScale": 1,
+          "internalWidth": 1920,
+          "internalHeight": 1080
+        },
+        "authorityUnchanged": true
+      },
+      "spawnPrepareMs": 1.600000023841858,
+      "firstRenderCpuMs": 0.7999999523162842,
+      "counts": {
+        "meshes": 48,
+        "materials": 40,
+        "geometries": 6,
+        "textures": 2,
+        "lights": 2,
+        "nodes": 0
+      },
+      "batches": {
+        "cells": 21,
+        "batches": 21,
+        "instances": 1094,
+        "distantBatches": 17,
+        "meshes": 42,
+        "frozenMaterials": 32,
+        "matrixBufferBytes": 140032
+      }
+    },
+    {
+      "mode": "local-normal",
+      "pickNear": "vehicle-0",
+      "pickMoving": "vehicle-0",
+      "distant": "vehicle-0",
+      "remapPick": null,
+      "removalPick": null,
+      "signalMutable": true,
+      "qualitySwitch": {
+        "low": {
+          "preset": "LOW",
+          "limits": {
+            "maxDpr": 1,
+            "shadowMapSize": 0,
+            "shadowDistance": 0,
+            "maxShadowCasters": 0,
+            "materialLights": 2,
+            "lodDistance": 45,
+            "maxTextureDimension": 1024,
+            "maxTransparentMeshes": 32,
+            "maxVisualEffects": 16
+          },
+          "cssWidth": 1920,
+          "cssHeight": 1080,
+          "deviceDpr": 1,
+          "effectiveDpr": 1,
+          "resolutionScale": 0.5,
+          "internalWidth": 960,
+          "internalHeight": 540
+        },
+        "restored": {
+          "preset": "MEDIUM",
+          "limits": {
+            "maxDpr": 1.5,
+            "shadowMapSize": 1024,
+            "shadowDistance": 60,
+            "maxShadowCasters": 48,
+            "materialLights": 2,
+            "lodDistance": 90,
+            "maxTextureDimension": 2048,
+            "maxTransparentMeshes": 64,
+            "maxVisualEffects": 32
+          },
+          "cssWidth": 1920,
+          "cssHeight": 1080,
+          "deviceDpr": 1,
+          "effectiveDpr": 1,
+          "resolutionScale": 1,
+          "internalWidth": 1920,
+          "internalHeight": 1080
+        },
+        "authorityUnchanged": true
+      },
+      "spawnPrepareMs": 1.9000000357627869,
+      "firstRenderCpuMs": 1.5999999642372131,
+      "counts": {
+        "meshes": 108,
+        "materials": 40,
+        "geometries": 6,
+        "textures": 2,
+        "lights": 2,
+        "nodes": 0
+      },
+      "batches": {
+        "cells": 16,
+        "batches": 16,
+        "instances": 1024,
+        "distantBatches": 16,
+        "meshes": 32,
+        "frozenMaterials": 32,
+        "matrixBufferBytes": 131072
+      }
+    },
+    {
+      "mode": "global-thin",
+      "pickNear": "vehicle-0",
+      "pickMoving": "vehicle-0",
+      "distant": "vehicle-0",
+      "remapPick": "vehicle-0",
+      "removalPick": "vehicle-0",
+      "signalMutable": true,
+      "qualitySwitch": {
+        "low": {
+          "preset": "LOW",
+          "limits": {
+            "maxDpr": 1,
+            "shadowMapSize": 0,
+            "shadowDistance": 0,
+            "maxShadowCasters": 0,
+            "materialLights": 2,
+            "lodDistance": 45,
+            "maxTextureDimension": 1024,
+            "maxTransparentMeshes": 32,
+            "maxVisualEffects": 16
+          },
+          "cssWidth": 1920,
+          "cssHeight": 1080,
+          "deviceDpr": 1,
+          "effectiveDpr": 1,
+          "resolutionScale": 0.5,
+          "internalWidth": 960,
+          "internalHeight": 540
+        },
+        "restored": {
+          "preset": "MEDIUM",
+          "limits": {
+            "maxDpr": 1.5,
+            "shadowMapSize": 1024,
+            "shadowDistance": 60,
+            "maxShadowCasters": 48,
+            "materialLights": 2,
+            "lodDistance": 90,
+            "maxTextureDimension": 2048,
+            "maxTransparentMeshes": 64,
+            "maxVisualEffects": 32
+          },
+          "cssWidth": 1920,
+          "cssHeight": 1080,
+          "deviceDpr": 1,
+          "effectiveDpr": 1,
+          "resolutionScale": 1,
+          "internalWidth": 1920,
+          "internalHeight": 1080
+        },
+        "authorityUnchanged": true
+      },
+      "spawnPrepareMs": 0.7000000476837158,
+      "firstRenderCpuMs": 0.5,
+      "counts": {
+        "meshes": 17,
+        "materials": 8,
+        "geometries": 6,
+        "textures": 2,
+        "lights": 2,
+        "nodes": 0
+      },
+      "batches": {
+        "cells": 5,
+        "batches": 5,
+        "instances": 70,
+        "distantBatches": 1,
+        "meshes": 10,
+        "frozenMaterials": 0,
+        "matrixBufferBytes": 8960
+      }
+    }
+  ],
+  "loading": [
+    {
+      "repeat": 1,
+      "coldMs": 76,
+      "warmMs": 5.699999988079071,
+      "firstUseMs": 9.300000011920929,
+      "id": "triangle",
+      "critical": true,
+      "queueMs": 0,
+      "transferMs": 2.5,
+      "decodeUploadMs": 15.199999988079071,
+      "shaderPrepareMs": 54.10000002384186,
+      "preparedShaderVariants": 2,
+      "totalMs": 72,
+      "transferBytes": 1028,
+      "decodedResourceBytes": 72,
+      "geometryGpuBytes": 66,
+      "textureGpuBytes": 6,
+      "decoderWasmBytes": 0,
+      "nativeDecoderWorkspaceBytes": null,
+      "exactGpuBytes": null,
+      "status": "ready",
+      "error": null,
+      "diagnostics": []
+    },
+    {
+      "repeat": 2,
+      "coldMs": 17,
+      "warmMs": 1.100000023841858,
+      "firstUseMs": 2.799999952316284,
+      "id": "triangle",
+      "critical": true,
+      "queueMs": 0,
+      "transferMs": 1.9000000357627869,
+      "decodeUploadMs": 12.900000035762787,
+      "shaderPrepareMs": 0.7999999523162842,
+      "preparedShaderVariants": 2,
+      "totalMs": 15.699999988079071,
+      "transferBytes": 1028,
+      "decodedResourceBytes": 72,
+      "geometryGpuBytes": 66,
+      "textureGpuBytes": 6,
+      "decoderWasmBytes": 0,
+      "nativeDecoderWorkspaceBytes": null,
+      "exactGpuBytes": null,
+      "status": "ready",
+      "error": null,
+      "diagnostics": []
+    },
+    {
+      "repeat": 3,
+      "coldMs": 4.700000047683716,
+      "warmMs": 1,
+      "firstUseMs": 1.899999976158142,
+      "id": "triangle",
+      "critical": true,
+      "queueMs": 0,
+      "transferMs": 0.800000011920929,
+      "decodeUploadMs": 2,
+      "shaderPrepareMs": 0.5999999642372131,
+      "preparedShaderVariants": 2,
+      "totalMs": 3.600000023841858,
+      "transferBytes": 1028,
+      "decodedResourceBytes": 72,
+      "geometryGpuBytes": 66,
+      "textureGpuBytes": 6,
+      "decoderWasmBytes": 0,
+      "nativeDecoderWorkspaceBytes": null,
+      "exactGpuBytes": null,
+      "status": "ready",
+      "error": null,
+      "diagnostics": []
+    },
+    {
+      "repeat": 4,
+      "coldMs": 3.699999988079071,
+      "warmMs": 0.800000011920929,
+      "firstUseMs": 1.800000011920929,
+      "id": "triangle",
+      "critical": true,
+      "queueMs": 0,
+      "transferMs": 0.800000011920929,
+      "decodeUploadMs": 1.899999976158142,
+      "shaderPrepareMs": 0.3999999761581421,
+      "preparedShaderVariants": 2,
+      "totalMs": 3.099999964237213,
+      "transferBytes": 1028,
+      "decodedResourceBytes": 72,
+      "geometryGpuBytes": 66,
+      "textureGpuBytes": 6,
+      "decoderWasmBytes": 0,
+      "nativeDecoderWorkspaceBytes": null,
+      "exactGpuBytes": null,
+      "status": "ready",
+      "error": null,
+      "diagnostics": []
+    },
+    {
+      "repeat": 5,
+      "coldMs": 4.099999964237213,
+      "warmMs": 0.9000000357627869,
+      "firstUseMs": 1.300000011920929,
+      "id": "triangle",
+      "critical": true,
+      "queueMs": 0,
+      "transferMs": 0.8999999761581421,
+      "decodeUploadMs": 2,
+      "shaderPrepareMs": 0.40000003576278687,
+      "preparedShaderVariants": 2,
+      "totalMs": 3.300000011920929,
+      "transferBytes": 1028,
+      "decodedResourceBytes": 72,
+      "geometryGpuBytes": 66,
+      "textureGpuBytes": 6,
+      "decoderWasmBytes": 0,
+      "nativeDecoderWorkspaceBytes": null,
+      "exactGpuBytes": null,
+      "status": "ready",
+      "error": null,
+      "diagnostics": []
+    }
+  ],
+  "oversized": {
+    "accepted": false,
+    "totals": {
+      "transferBytes": 1028,
+      "geometryGpuBytes": 66,
+      "textureGpuBytes": 402653185,
+      "shaderVariants": 2
+    },
+    "diagnostics": [
+      {
+        "metric": "textureGpuBytes",
+        "actual": 402653185,
+        "limit": 402653184,
+        "assetId": null
+      }
+    ]
+  },
+  "rejectedAsset": {
+    "error": "Error: Critical asset triangle (blob:http://127.0.0.1:5195/2c79743b-b3b0-4e09-8ff0-827285d394f4): Asset admission over budget: [{\"metric\":\"geometryGpuBytes\",\"actual\":66,\"limit\":0,\"assetId\":\"triangle\"}]",
+    "decodeLoads": 0,
+    "reports": [
+      {
+        "id": "triangle",
+        "critical": true,
+        "queueMs": 0,
+        "transferMs": 1.300000011920929,
+        "decodeUploadMs": 0,
+        "shaderPrepareMs": 0,
+        "preparedShaderVariants": 0,
+        "totalMs": 1.399999976158142,
+        "transferBytes": 1028,
+        "decodedResourceBytes": 72,
+        "geometryGpuBytes": 66,
+        "textureGpuBytes": 6,
+        "decoderWasmBytes": 0,
+        "nativeDecoderWorkspaceBytes": null,
+        "exactGpuBytes": null,
+        "status": "error",
+        "error": "Asset admission over budget: [{\"metric\":\"geometryGpuBytes\",\"actual\":66,\"limit\":0,\"assetId\":\"triangle\"}]"
+      }
+    ]
+  },
+  "adaptation": {
+    "samples": "Synthetic GPU-bound/hysteresis controller input; functional proof, not measured GPU timing",
+    "beforeQuality": {
+      "preset": "MEDIUM",
+      "limits": {
+        "maxDpr": 1.5,
+        "shadowMapSize": 1024,
+        "shadowDistance": 60,
+        "maxShadowCasters": 48,
+        "materialLights": 2,
+        "lodDistance": 90,
+        "maxTextureDimension": 2048,
+        "maxTransparentMeshes": 64,
+        "maxVisualEffects": 32
+      },
+      "cssWidth": 1920,
+      "cssHeight": 1080,
+      "deviceDpr": 1,
+      "effectiveDpr": 1,
+      "resolutionScale": 1,
+      "internalWidth": 1920,
+      "internalHeight": 1080
+    },
+    "downgraded": {
+      "preset": "LOW",
+      "limits": {
+        "maxDpr": 1,
+        "shadowMapSize": 0,
+        "shadowDistance": 0,
+        "maxShadowCasters": 0,
+        "materialLights": 2,
+        "lodDistance": 45,
+        "maxTextureDimension": 1024,
+        "maxTransparentMeshes": 32,
+        "maxVisualEffects": 16
+      },
+      "cssWidth": 1920,
+      "cssHeight": 1080,
+      "deviceDpr": 1,
+      "effectiveDpr": 1,
+      "resolutionScale": 1,
+      "internalWidth": 1920,
+      "internalHeight": 1080
+    },
+    "upgraded": {
+      "preset": "MEDIUM",
+      "limits": {
+        "maxDpr": 1.5,
+        "shadowMapSize": 1024,
+        "shadowDistance": 60,
+        "maxShadowCasters": 48,
+        "materialLights": 2,
+        "lodDistance": 90,
+        "maxTextureDimension": 2048,
+        "maxTransparentMeshes": 64,
+        "maxVisualEffects": 32
+      },
+      "cssWidth": 1920,
+      "cssHeight": 1080,
+      "deviceDpr": 1,
+      "effectiveDpr": 1,
+      "resolutionScale": 1,
+      "internalWidth": 1920,
+      "internalHeight": 1080
+    },
+    "adaptCounters": {
+      "meshes": 6,
+      "materials": 8,
+      "geometries": 6,
+      "textures": 1,
+      "lights": 2,
+      "nodes": 0
+    },
+    "authority": {
+      "vehicleCount": 70,
+      "taxis": 30,
+      "civilians": 40,
+      "physicsHz": 60,
+      "learningVersion": 3,
+      "revenue": 2500,
+      "xp": 200,
+      "dt": 0.016666666666666666
+    }
+  },
+  "cycles": [
+    {
+      "meshes": 6,
+      "materials": 8,
+      "geometries": 6,
+      "textures": 2,
+      "lights": 2,
+      "nodes": 0
+    },
+    {
+      "meshes": 6,
+      "materials": 8,
+      "geometries": 6,
+      "textures": 2,
+      "lights": 2,
+      "nodes": 0
+    },
+    {
+      "meshes": 6,
+      "materials": 8,
+      "geometries": 6,
+      "textures": 2,
+      "lights": 2,
+      "nodes": 0
+    },
+    {
+      "meshes": 6,
+      "materials": 8,
+      "geometries": 6,
+      "textures": 2,
+      "lights": 2,
+      "nodes": 0
+    },
+    {
+      "meshes": 6,
+      "materials": 8,
+      "geometries": 6,
+      "textures": 2,
+      "lights": 2,
+      "nodes": 0
+    },
+    {
+      "meshes": 6,
+      "materials": 8,
+      "geometries": 6,
+      "textures": 2,
+      "lights": 2,
+      "nodes": 0
+    },
+    {
+      "meshes": 6,
+      "materials": 8,
+      "geometries": 6,
+      "textures": 2,
+      "lights": 2,
+      "nodes": 0
+    },
+    {
+      "meshes": 6,
+      "materials": 8,
+      "geometries": 6,
+      "textures": 2,
+      "lights": 2,
+      "nodes": 0
+    },
+    {
+      "meshes": 6,
+      "materials": 8,
+      "geometries": 6,
+      "textures": 2,
+      "lights": 2,
+      "nodes": 0
+    },
+    {
+      "meshes": 6,
+      "materials": 8,
+      "geometries": 6,
+      "textures": 2,
+      "lights": 2,
+      "nodes": 0
+    },
+    {
+      "meshes": 6,
+      "materials": 8,
+      "geometries": 6,
+      "textures": 2,
+      "lights": 2,
+      "nodes": 0
+    },
+    {
+      "meshes": 6,
+      "materials": 8,
+      "geometries": 6,
+      "textures": 2,
+      "lights": 2,
+      "nodes": 0
+    },
+    {
+      "meshes": 6,
+      "materials": 8,
+      "geometries": 6,
+      "textures": 2,
+      "lights": 2,
+      "nodes": 0
+    },
+    {
+      "meshes": 6,
+      "materials": 8,
+      "geometries": 6,
+      "textures": 2,
+      "lights": 2,
+      "nodes": 0
+    },
+    {
+      "meshes": 6,
+      "materials": 8,
+      "geometries": 6,
+      "textures": 2,
+      "lights": 2,
+      "nodes": 0
+    },
+    {
+      "meshes": 6,
+      "materials": 8,
+      "geometries": 6,
+      "textures": 2,
+      "lights": 2,
+      "nodes": 0
+    },
+    {
+      "meshes": 6,
+      "materials": 8,
+      "geometries": 6,
+      "textures": 2,
+      "lights": 2,
+      "nodes": 0
+    },
+    {
+      "meshes": 6,
+      "materials": 8,
+      "geometries": 6,
+      "textures": 2,
+      "lights": 2,
+      "nodes": 0
+    },
+    {
+      "meshes": 6,
+      "materials": 8,
+      "geometries": 6,
+      "textures": 2,
+      "lights": 2,
+      "nodes": 0
+    },
+    {
+      "meshes": 6,
+      "materials": 8,
+      "geometries": 6,
+      "textures": 2,
+      "lights": 2,
+      "nodes": 0
+    }
+  ],
+  "cleanup": {
+    "before": {
+      "meshes": 0,
+      "materials": 1,
+      "geometries": 0,
+      "textures": 1,
+      "lights": 0,
+      "nodes": 0
+    },
+    "after": {
+      "meshes": 0,
+      "materials": 1,
+      "geometries": 0,
+      "textures": 1,
+      "lights": 0,
+      "nodes": 0
+    }
+  },
+  "manifest": {
+    "version": "223-core-fixture-v1",
+    "criticalCodeTransferBytes": 6005371,
+    "decoderWasmBytes": 0,
+    "decoderWorkspaceBytes": 0,
+    "assets": [
+      {
+        "id": "triangle",
+        "firstRide": true,
+        "transferBytes": 1028,
+        "geometryGpuBytes": 66,
+        "textureGpuBytes": 6,
+        "shaderVariants": 2
+      }
+    ]
+  },
+  "protocol": {
+    "foreground": true,
+    "production": true,
+    "inspector": false,
+    "network": "Blob original GLB; unthrottled local; HTTP/OS/driver shader caches uncontrolled; registry cold vs warm separately",
+    "scope": "Early presentation fixture:1024 static objects and70 visual projections. No claim of full physical fleet/gameplay/laptop gate.",
+    "gpu": "exact timing and memory unavailable; CPU submission and estimated resource bytes separate",
+    "provisional": true
+  }
+}

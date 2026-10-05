@@ -91,3 +91,5 @@ Performanța devine o condiție progresivă de implementare: 218–224 adaugă h
 Se elimină global pierderea XP și scăderea nivelului. V1 adaugă Academie/Haos, resetul orașului cu stil păstrat, decor destructibil cu sunet/fragmente, HUD simplu, first-person, reglaje prin slidere, provocări random opționale și savefile complet cu checksum. Modulele 26–29 și PBI 225–235 descriu scope-ul; 214 păstrează identitatea, cu scope nou de feedback fără penalizare. Cerințele curente nu folosesc alte jocuri ca referință; arhiva rămâne istoric. Planul nu declară funcții sau playtesturi implementate.
 
 [Prototipul de fizică Rapier](physics-prototype.md) oferă calibrare SI, contacte reale și probele de performanță021, cu limita explicită a controllerului raycast și fără validarea jocului complet.
+
+[Bugetele de randare și asseturi](render-asset-budgets.md) adaugă admitere finită, batchuri locale/LOD cu identități de picking păstrate, ownership/disposal și calitate exclusiv vizuală. Fixture-ul timpuriu este verificat prin cinci perechi complete pe WebGPU/WebGL2 reale; limitele pentru jocul complet și laptop rămân provizorii.

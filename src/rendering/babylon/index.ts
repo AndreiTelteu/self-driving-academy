@@ -13,6 +13,8 @@ export {
   type VehiclePickingRegistryOptions,
 } from './vehicle-picking-registry';
 export { BabylonVehiclePicker, type SelectVehicleIntent } from './vehicle-picking';
+export { BabylonCellBatches, type BatchInstance, type CellBatchDefinition } from './cell-batches';
+export { analyzeRegistryGlb } from './asset-contract';
 export { bindVehiclePickingInput, type VehiclePickingInputOptions } from './vehicle-picking-input';
 export {
   createBabylonRecoverySession,

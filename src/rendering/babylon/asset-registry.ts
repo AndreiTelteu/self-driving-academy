@@ -1,5 +1,5 @@
 import '@babylonjs/loaders/glTF/2.0/glTFLoader';
-import { DEFAULT_ASSET_LIMITS, validateRegistryGlb, type AssetLimits } from './asset-contract';
+import { DEFAULT_ASSET_LIMITS, analyzeRegistryGlb, type AssetLimits } from './asset-contract';
 export { DEFAULT_ASSET_LIMITS, validateRegistryGlb, type AssetLimits } from './asset-contract';
 import { LoadAssetContainerAsync } from '@babylonjs/core/Loading/sceneLoader';
 import { TransformNode } from '@babylonjs/core/Meshes/transformNode';
@@ -8,6 +8,12 @@ import { StandardMaterial } from '@babylonjs/core/Materials/standardMaterial';
 import { Color3 } from '@babylonjs/core/Maths/math.color';
 import type { Scene } from '@babylonjs/core/scene';
 import type { AssetContainer } from '@babylonjs/core/assetContainer';
+import {
+  checkAssetUsage,
+  checkAssetManifest,
+  RENDER_ASSET_CAPS,
+  type BudgetedAsset,
+} from '../asset-budgets';
 
 export interface AssetDefinition {
   readonly id: string;
@@ -16,6 +22,7 @@ export interface AssetDefinition {
   readonly critical: boolean;
   readonly source: string;
   readonly license: string;
+  readonly budget?: BudgetedAsset;
 }
 export interface AssetProgress {
   readonly id: string;
@@ -31,9 +38,16 @@ export interface AssetLoadReport {
   /** Babylon's combined CPU decode/resource submission; not a GPU timer. */
   readonly decodeUploadMs: number;
   readonly shaderPrepareMs: number;
+  readonly preparedShaderVariants: number;
   readonly totalMs: number;
   readonly transferBytes: number;
   readonly decodedResourceBytes: number;
+  readonly geometryGpuBytes: number;
+  readonly textureGpuBytes: number;
+  /** No WASM extension decoder is admitted by the core GLB contract. */
+  readonly decoderWasmBytes: number;
+  readonly nativeDecoderWorkspaceBytes: null;
+  readonly exactGpuBytes: null;
   readonly status: 'ready' | 'error';
   readonly error: string | null;
 }
@@ -87,6 +101,8 @@ export class BabylonAssetRegistry {
       if (!Number.isSafeInteger(value) || value < 1)
         throw new Error('Asset limits must be positive integers');
     if (scene.isDisposed) throw new Error('Asset registry requires a live scene');
+    if (definitions.length > RENDER_ASSET_CAPS.maxAssetDefinitions)
+      throw new Error('Asset manifest definition capacity');
     for (const definition of definitions) {
       if (
         [
@@ -101,7 +117,29 @@ export class BabylonAssetRegistry {
         throw new Error('Invalid asset manifest');
       if (this.definitions.has(definition.id))
         throw new Error(`Duplicate asset ID: ${definition.id}`);
-      this.definitions.set(definition.id, Object.freeze({ ...definition }));
+      if (definition.budget && definition.budget.id !== definition.id)
+        throw new Error('Asset budget ID mismatch');
+      if (definition.budget) {
+        const result = checkAssetManifest(
+          {
+            version: 'registry-asset',
+            criticalCodeTransferBytes: 0,
+            decoderWasmBytes: 0,
+            decoderWorkspaceBytes: 0,
+            assets: [definition.budget],
+          },
+          'HIGH',
+        );
+        if (!result.accepted)
+          throw new Error(`Asset budget invalid: ${JSON.stringify(result.diagnostics)}`);
+      }
+      this.definitions.set(
+        definition.id,
+        Object.freeze({
+          ...definition,
+          budget: definition.budget ? Object.freeze({ ...definition.budget }) : undefined,
+        }),
+      );
     }
     const observer = scene.onDisposeObservable.addOnce(() => this.dispose());
     this.removeSceneObserver = () => scene.onDisposeObservable.remove(observer);
@@ -225,8 +263,11 @@ export class BabylonAssetRegistry {
         let transferMs = 0,
           decodeUploadMs = 0,
           shaderPrepareMs = 0,
+          preparedShaderVariants = 0,
           transferBytes = 0,
-          decodedResourceBytes = 0;
+          decodedResourceBytes = 0,
+          geometryGpuBytes = 0,
+          textureGpuBytes = 0;
         let container: AssetContainer | undefined;
         let failure: string | null = null;
         try {
@@ -234,7 +275,20 @@ export class BabylonAssetRegistry {
           const bytes = await this.fetchBytes(definition);
           transferBytes = bytes.byteLength;
           transferMs = performance.now() - started;
-          decodedResourceBytes = validateRegistryGlb(bytes, this.limits);
+          const analysis = analyzeRegistryGlb(bytes, this.limits);
+          ({ decodedResourceBytes, geometryGpuBytes, textureGpuBytes } = analysis);
+          if (definition.budget) {
+            const diagnostics = checkAssetUsage(definition.budget, {
+              transferBytes,
+              geometryGpuBytes,
+              textureGpuBytes,
+              decodeMs: 0,
+              shaderPrepareMs: 0,
+              firstUseMs: 0,
+            });
+            if (diagnostics.length)
+              throw new Error(`Asset admission over budget: ${JSON.stringify(diagnostics)}`);
+          }
           entry.bytes = transferBytes + decodedResourceBytes;
           if (this.metrics.reservedBytes > this.limits.maxResidentBytes)
             throw new Error('Asset resident budget exceeded before decode');
@@ -256,10 +310,15 @@ export class BabylonAssetRegistry {
             if (mesh.material && !prepared.has(mesh.material)) {
               prepared.add(mesh.material);
               await mesh.material.forceCompilationAsync(mesh);
+              preparedShaderVariants++;
+              await mesh.material.forceCompilationAsync(mesh, { useInstances: true });
+              preparedShaderVariants++;
               this.assertLive();
             }
           }
           shaderPrepareMs = performance.now() - shaderStart;
+          if (definition.budget && preparedShaderVariants > definition.budget.shaderVariants)
+            throw new Error('Asset prepared shader variants exceed declared budget');
           if (shaderPrepareMs > this.limits.decodeUploadBudgetMs)
             throw new Error('Asset shader preparation CPU budget exceeded');
           if (this.metrics.reservedBytes > this.limits.maxResidentBytes)
@@ -280,9 +339,15 @@ export class BabylonAssetRegistry {
             transferMs,
             decodeUploadMs,
             shaderPrepareMs,
+            preparedShaderVariants,
             totalMs: performance.now() - queuedAt,
             transferBytes,
             decodedResourceBytes,
+            geometryGpuBytes,
+            textureGpuBytes,
+            decoderWasmBytes: 0,
+            nativeDecoderWorkspaceBytes: null,
+            exactGpuBytes: null,
             status: failure ? 'error' : 'ready',
             error: failure,
           });

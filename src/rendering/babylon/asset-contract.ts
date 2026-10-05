@@ -31,10 +31,7 @@ export const DEFAULT_ASSET_LIMITS: AssetLimits = Object.freeze({
   maxTextureBytes: 16 * 1024 * 1024,
 });
 /** Embedded geometry and PNG/JPEG textures. External resources/extension decoders reject. */
-export function validateRegistryGlb(
-  bytes: Uint8Array,
-  limits: AssetLimits = DEFAULT_ASSET_LIMITS,
-): number {
+export function analyzeRegistryGlb(bytes: Uint8Array, limits: AssetLimits = DEFAULT_ASSET_LIMITS) {
   const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
   if (
     bytes.length < 20 ||
@@ -170,6 +167,18 @@ export function validateRegistryGlb(
   textureBytes *= Math.max(1, textures.length);
   if (textureBytes > limits.maxTextureBytes)
     throw new Error('Asset decoded texture budget exceeded');
-  decoded += textureBytes;
-  return decoded;
+  return Object.freeze({
+    geometryGpuBytes: decoded,
+    textureGpuBytes: textureBytes,
+    decodedResourceBytes: decoded + textureBytes,
+    decoderWasmBytes: 0,
+    decoderWorkspaceBytes: 0,
+    codecs: 'CORE_GLB_PNG_JPEG' as const,
+  });
+}
+export function validateRegistryGlb(
+  bytes: Uint8Array,
+  limits: AssetLimits = DEFAULT_ASSET_LIMITS,
+): number {
+  return analyzeRegistryGlb(bytes, limits).decodedResourceBytes;
 }

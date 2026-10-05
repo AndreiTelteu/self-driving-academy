@@ -1,5 +1,7 @@
 # Selectarea vehiculelor (PBI018)
 
+223 adaugă `validateThinBatchTransaction(replacements)`, verificare readonly a capacităților cumulate pentru hosturile unui update near/far. Callerul o execută înaintea schimbării matricilor, apoi aplică sincron matricile și `registerThinBatch` pentru fiecare host. O tranzacție respinsă nu modifică bindings; [ownerul de batchuri locale](render-asset-budgets.md) păstrează identitatea după motion/reorder/removal/LOD.
+
 Pickingul este o compoziție explicită de prezentare: `VehiclePickingRegistry(scene)` păstrează identitatea, `BabylonVehiclePicker(scene, registry)` face query-ul Babylon, iar `bindVehiclePickingInput(options)` traduce un click pe canvas în `{ type: 'SELECT_VEHICLE', entityId }`. Callbackul `onSelect` livrează intenția callerului; acesta poate actualiza vehiculul urmărit de camera017 și UI. Nu există comandă MANUAL, modificare de VehicleCommand, tick sau corp fizic. Selecția din lista flotei poate folosi direct același ID, fără picking.
 
 Registry-ul poate primi `entityIdFor: node => sceneAdapter.entityIdFor(node)` pentru reprezentările013. `register(root, entityId)` acoperă descendenții; o instanță obișnuită se înregistrează separat dacă nu are acel root. Identitatea nu se deduce din numele meshului, ordinea listei de vehicule ori metadata externă.

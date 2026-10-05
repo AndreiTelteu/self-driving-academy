@@ -1,5 +1,7 @@
 # Iluminare de zi și calitate (PBI016)
 
+223 completează presetările cu limite LOD/texturi/transparență/efecte și `checkVisualResources`, documentate în [contractul de bugete](render-asset-budgets.md). Adaptarea016 păstrează aceleași ferestre, histerezis și override manual; nu există port de modificare a stării autoritare.
+
 `createDaylight(scene, QualityPreferences, { width, height, dpr })` instalează două lumini Babylon (ambient hemisferic și soare direcțional), șapte materiale Standard și o singură hartă de umbre când presetul o cere. Este compoziție explicită pentru o scenă reală, la fel ca adaptorul013 și presenterul014; scena bootstrap goală nu construiește artificial un oraș. Nu deține RAF, listeners, corpuri fizice sau autoritate asupra simulării.
 
 Materialele `road`, `marking`, `vehicle`, `signalHousing`, `red`, `amber`, `green` folosesc aceeași paletă în toate presetările. Marcajele și lămpile sunt emissive/unlit pentru lizibilitate independentă de umbre. Procesarea ACES, exposure 1 și contrast 1 este locală materialelor, identică pentru WebGPU/WebGL2; nu rescrie procesarea materialelor altor owneri. Lumina zilei rămâne constantă la schimbarea presetului. Nu înghețăm global active meshes/transformări.

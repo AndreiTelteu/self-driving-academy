@@ -3,7 +3,20 @@ export type { BackendPreference, RendererKind } from './backend-policy';
 export type { VisualTransform, VisualVehicleState, VisualWorldIdentity } from './scene-contract';
 export { interpolateRenderSnapshots, validateRenderSnapshot } from './render-sync';
 export type { RenderSnapshot, RenderVehiclePose, RenderWheelPose } from './render-sync';
-export { resolveQuality, createAdaptiveQuality, QUALITY_PRESETS } from './quality-policy';
+export {
+  resolveQuality,
+  createAdaptiveQuality,
+  QUALITY_PRESETS,
+  checkVisualResources,
+} from './quality-policy';
+export {
+  RENDER_ASSET_CAPS,
+  checkAssetManifest,
+  admitAssetManifest,
+  checkAssetUsage,
+  checkRenderingCounters,
+} from './asset-budgets';
+export type { AssetBudgetManifest, BudgetedAsset, BudgetDiagnostic } from './asset-budgets';
 export type { QualityPreset, QualitySample } from './quality-policy';
 export { VehicleCameraController, validateCameraPreferences } from './vehicle-camera';
 export type {
