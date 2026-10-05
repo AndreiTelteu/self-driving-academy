@@ -111,3 +111,5 @@ Se elimină global pierderea XP și scăderea nivelului. V1 adaugă Academie/Hao
 [Inputul de tastatură025](keyboard-input.md) separă inputul brut de comanda filtrată la 60 Hz, cu revenire, sensibilitate la viteză și preferințe versionate. Calibrarea sedan/compact și probele manuale Chrome WebGPU/WebGL2 verifică reglajele, focusul și inputul fizic; popup-ul 229 și marșarierul 027 rămân task-uri separate.
 
 [Mașina de stări045](behavior-fsm.md) oferă șase stări și reason codes din contextul044 și fapte explicite de politică, cu decizii periodice/urgente prin219 și ownership plafonat. Testele și20lumi native AFTER verifică semantica, costul și cleanup-ul contractului timpuriu; manevrele fizice și performanța hardware a jocului complet continuă în task-urile dedicate.
+
+[Frânarea și marșarierul027](braking-reverse.md) adaugă transmisie opt-in cu oprire și dwell fizic înaintea inversării, input brut distinct de comanda fizică semnată și frână de mână pe roțile spate. Calibrarea celor două clase și driving-ul Chrome WebGPU/WebGL2 sunt verificate; ABS, transmisia completă și performanța întregului joc rămân în afara acestei probe.
