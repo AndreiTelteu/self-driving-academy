@@ -39,7 +39,7 @@ Validate-Plan.ps1 verifică boardul, indexul PBI, linkurile locale, catalogul Ma
 
 ## Verificarea performanței încă din prototip
 
-204 folosește 218/219/221 pentru măsurarea fixture-ului timpuriu, fără a cere 220/flota completă. 203 fixează bugetele pe hardware real; 220 verifică apoi 20–30 de taxiuri și până la 40 civile înainte de campanie și asseturi finale. Aceste dependențe păstrează rolul prototipului devreme. Regresia de semantică și regresia de performanță sunt verificate împreună, conform [modulului 25](25-performanta-contracte-si-benchmark.md).
+204 folosește 218/219/221 pentru măsurarea fixture-ului timpuriu, fără a cere 220/flota completă. 203 fixează contractul inițial cu baseline desktop real și bugete gameplay provizorii; testul laptopului din 203 este omis prin derogarea explicită din 5 octombrie 2026, fără a valida performanța laptopului; 220 verifică apoi 20–30 de taxiuri și până la 40 civile înainte de campanie și asseturi finale. Aceste dependențe păstrează rolul prototipului devreme. Regresia de semantică și regresia de performanță sunt verificate împreună, conform [modulului 25](25-performanta-contracte-si-benchmark.md).
 
 ## Corecțiile de experiență ale reviziei 0.5
 

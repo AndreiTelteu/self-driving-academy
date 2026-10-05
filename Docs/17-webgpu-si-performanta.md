@@ -28,7 +28,7 @@ Experimentele automate rulează în loturi într-un worker cu anulare și progre
 
 ## Bugete înainte de extindere
 
-PBI 203 fixează configurațiile și metoda de măsurare înaintea prototipului de fizică și a extinderii orașului; hardware-ul exact nu este inventat în documentație. PBI 155 verifică bugetul pe jocul complet și raportează abaterile. Recorderul întregii lumi, graficele KPI, generarea zilnică, directorul provocărilor și distrugerea au bugete separate; comparațiile opționale rulează cu progres, anulare și limite de resurse în worker.
+PBI 203 fixează configurațiile și metoda de măsurare înaintea prototipului de fizică și a extinderii orașului; hardware-ul exact nu este inventat în documentație. [Manifestul inițial 203](performance-budgets.json) păstrează baseline-ul desktop real și bugete gameplay provizorii; testul laptopului din 203 a fost omis prin derogarea explicită a utilizatorului din 5 octombrie 2026. PBI 155 verifică bugetul pe jocul complet și raportează abaterile; derogarea 203 nu omite gate-urile hardware ulterioare. Recorderul întregii lumi, graficele KPI, generarea zilnică, directorul provocărilor și distrugerea au bugete separate; comparațiile opționale rulează cu progres, anulare și limite de resurse în worker.
 
 ## Contract obligatoriu în procesul PBI
 

@@ -18,4 +18,4 @@ Scena are numai cameră/clear, fără vehicule, fizică, materiale sau UI de gam
 
 Pe durata celor25minute am suspendat testele/buildurile și benchmarkurile Node ale agenților. Au continuat editări/review-uri și verificări administrative scurte ale stării browserului; mediul Windows nu este un runner dedicat izolat de toate procesele OS. Nu am schimbat buildul sau profilul în timpul probei.
 
-Proba validează baseline-ul desktop și costul observatorului. Nu închide PBI203 singură: raportul laptopului și fixarea manifestului inițial rămân necesare; gate-urile de gameplay, cold-start, memorie și flotă rămân distincte.
+Proba validează baseline-ul desktop și costul observatorului. La momentul măsurării nu închidea PBI203 singură. Ulterior, utilizatorul a omis explicit testul laptopului pentru 203, iar manifestul inițial a fost fixat cu bugete gameplay provizorii; gate-urile de gameplay, cold-start, memorie și flotă rămân distincte.

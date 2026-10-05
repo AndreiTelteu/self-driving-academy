@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "budgetVersion": "pre203-draft-1",
-  "status": "PENDING_REAL_HARDWARE_CALIBRATION",
+  "budgetVersion": "203-initial-1",
+  "status": "FIXED_INITIAL_CONTRACT_WITH_PROVISIONAL_GAMEPLAY_BUDGETS",
   "approvedGate": false,
   "source": "25-performanta-contracte-si-benchmark.md",
   "hardware": {
@@ -19,14 +19,32 @@
         1080
       ],
       "fullBootstrapReport": "Evidence/203-hardware/desktop-baseline.json",
-      "summary": "Evidence/203-hardware/desktop-summary.json"
+      "summary": "Evidence/203-hardware/desktop-summary.json",
+      "identification": "Evidence/203-hardware/desktop-identification.json",
+      "provenance": "Local CIM identification and real Chrome/Babylon production baseline",
+      "os": {
+        "name": "Microsoft Windows 11 Pro",
+        "version": "10.0.26200",
+        "build": "26200"
+      },
+      "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+      "driver": "32.0.31041.1004",
+      "actualBackend": "WEBGPU",
+      "devicePixelRatio": 1,
+      "powerScheme": "Power Scheme GUID: 381b4222-f694-41f0-9685-ff5bb260df2e  (Balanced)",
+      "activeDisplayResolution": [
+        3840,
+        2160
+      ],
+      "activeDisplayRefreshHz": 144,
+      "ramBytes": 50337325056
     },
     "laptop": {
       "model": "Lenovo Yoga 7 14ARP8",
       "cpu": "AMD Ryzen 7 7735U",
       "gpu": "AMD Radeon 680M",
       "ramGiBDeclared": 16,
-      "provenance": "User-declared specifications; effective OS, driver, power and display must be captured on device",
+      "provenance": "User-declared specifications; no on-device identification or measurement. Effective fields are unknown; target resolutions/preset are protocol only.",
       "preset": "LOW",
       "cssResolution": [
         1920,
@@ -36,7 +54,15 @@
         1920,
         1080
       ],
-      "fullBootstrapReport": null
+      "fullBootstrapReport": null,
+      "measurementStatus": "SKIPPED_USER_WAIVER",
+      "os": null,
+      "browser": null,
+      "driver": null,
+      "actualBackend": null,
+      "powerState": null,
+      "devicePixelRatio": null,
+      "effectiveRefreshHz": null
     }
   },
   "workloads": {
@@ -137,7 +163,11 @@
     },
     "memory": "Do not sum overlapping JS/backing-buffer/WASM categories; exact unavailable values are null, resource ownership counters remain separate.",
     "gpu": "Available timer results only; unsupported or pending is null.",
-    "bootstrapScope": "Empty Babylon scene; not evidence that full workload budgets are achieved."
+    "bootstrapScope": "Empty Babylon scene; not evidence that full workload budgets are achieved.",
+    "baselineConfigurations203": [
+      "desktop"
+    ],
+    "laptopBaseline203": "Skipped by explicit user waiver; portable tool remains available for future real measurements."
   },
   "regressionProposal": {
     "p95RelativeIncrease": 0.1,
@@ -174,7 +204,7 @@
     },
     "totalHeapBytes": {
       "owner": "203/218/224",
-      "fixture": "Both real bootstrap reports plus later steady-state and soak; exact API may remain unavailable"
+      "fixture": "Available real desktop bootstrap plus later steady-state/soak on target devices; laptop bootstrap omitted for 203 only. Exact API may remain unavailable."
     },
     "challengeHistoryEntries": {
       "owner": "231/232/233/234",
@@ -188,5 +218,63 @@
       "owner": "021/221/224",
       "fixture": "Live physics and one experiment world; ownership counters, no overlapping RAM sum"
     }
+  },
+  "fixedAt": "2026-10-05T05:04:57.114372+03:00",
+  "acceptance": {
+    "pbi203": "ACCEPTED_WITH_EXPLICIT_USER_WAIVER",
+    "laptopBootstrap": "SKIPPED_USER_WAIVER",
+    "userInstruction": "Ignore the laptop test in 203 and continue as successful; recorded as scope waiver, not measured PASS.",
+    "hardwareGameplayGate": "NOT_VALIDATED",
+    "scope": "Desktop bootstrap baseline and versioned protocol fixed. Gameplay budgets remain provisional until relevant fixtures and hardware gates.",
+    "futureGatesRequired": [
+      "021",
+      "218",
+      "220",
+      "221",
+      "222",
+      "223",
+      "224",
+      "155"
+    ],
+    "waiverScope": "203 laptop bootstrap only; no waiver of later gameplay, cold-start, soak or release gates."
+  },
+  "calibration": {
+    "bootstrapDesktop": "MEASURED_VALID_BASELINE",
+    "bootstrapLaptop": "SKIPPED_USER_WAIVER",
+    "gameplayBudgets": "PROVISIONAL_UNCALIBRATED",
+    "resourceCapacities": "PROVISIONAL_UNCALIBRATED",
+    "nullCapacityPolicy": "Not unlimited. Owning PBI must establish a finite admission cap before introducing the resource, then measure the listed fixture. Exact unavailable memory APIs may remain null with ownership counters."
+  },
+  "measuredBootstrap": {
+    "desktop": {
+      "fixture": "203-bootstrap-empty-v1",
+      "capturedAt": "2026-10-05T01:49:07.187Z",
+      "build": {
+        "commit": "1044d0f2a2748077c54c785fd70cc0185b4bb529",
+        "sourceHash": "c861caba67e917405e6d5ad21340cc75cafbdc13e7c41468028b02c133ff19ee",
+        "inputs": [
+          "tests/browser/hardware-bootstrap/main.ts",
+          "tests/browser/hardware-bootstrap/index.html",
+          "scripts/hardware-probe-server.mjs",
+          "src/rendering/backend-policy.ts",
+          "src/rendering/babylon/backend.ts",
+          "src/rendering/babylon/recovery-session.ts",
+          "src/rendering/babylon/diagnostics-adapter.ts",
+          "src/rendering/diagnostics.ts",
+          "package-lock.json"
+        ],
+        "profile": "desktop",
+        "artifactHash": "08dedc353ddd15e231439fe602988d4f4798dda4c6a91b9bc30228e7b34b9eb3",
+        "artifactCount": 129
+      },
+      "cpuP95EnabledMedianMs": 0.20000004768371582,
+      "frameP95EnabledMedianMs": 7,
+      "gpuP95Ms": null,
+      "backendStartupSingleObservationMs": 120,
+      "exactPageMemoryBytes": null,
+      "observerBufferBytes": 131072,
+      "scope": "Empty scene on high-end desktop. Not calibrated full-game, input, learning, memory or cold network budget."
+    },
+    "laptop": null
   }
 }

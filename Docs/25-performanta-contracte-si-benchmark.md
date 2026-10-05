@@ -1,6 +1,6 @@
 # Contracte de performanță și benchmark progresiv
 
-Versiune 0.5 · 4 octombrie 2026. Parte din [planul complet](README.md). Acesta este un plan de implementare și acceptare; jocul nu are încă măsurători. Bugetele de mai jos sunt propuneri pe care PBI 203 le calibrează și le fixează pe hardware real, înainte de fizică și de extinderea orașului.
+Versiune 0.5 · 4 octombrie 2026. Parte din [planul complet](README.md). Acesta este un plan de implementare și acceptare; jocul nu are încă măsurători. [Manifestul 203-initial-1](performance-budgets.json) fixează contractul inițial înainte de fizică și extinderea orașului, folosind baseline-ul real al desktopului disponibil. La 5 octombrie 2026, utilizatorul a omis explicit testul laptopului din 203; nicio măsurătoare sau trecere laptop nu este declarată. Bugetele gameplay și capacitățile nemăsurate de bootstrap rămân provizorii, cu owner/fixture de calibrare. Derogarea privește numai testul laptop din 203; gate-urile ulterioare de hardware/gameplay/release rămân obligatorii.
 
 ## Probleme identificate în planul anterior
 
@@ -18,7 +18,7 @@ Versiune 0.5 · 4 octombrie 2026. Parte din [planul complet](README.md). Acesta 
 
 ## Hardware, workload și bugete
 
-PBI 203 produce un manifest versionat de bugete și identifică efectiv CPU, GPU, RAM, OS, browser/versiune, driver, backend, alimentare, refresh rate, rezoluție CSS, devicePixelRatio și rezoluție internă. Configurații de referință: desktop mediu la 1920×1080/Medium și laptop cu GPU integrat la 1920×1080/Low. Rezoluția internă exactă se fixează separat; nu se presupune că un canvas CSS 1080p randează automat 1080p pe un ecran cu DPR mare. Nu declarăm modele hardware sau rezultate fictive.
+PBI 203 produce un manifest versionat de bugete și identifică efectiv, pe desktopul măsurat, CPU, GPU, RAM, OS, browser/versiune, driver, backend, alimentare, refresh rate, rezoluție CSS, devicePixelRatio și rezoluție internă. Configurații de referință: desktop mediu la 1920×1080/Medium și laptop cu GPU integrat la 1920×1080/Low. Rezoluția internă exactă se fixează separat; nu se presupune că un canvas CSS 1080p randează automat 1080p pe un ecran cu DPR mare. Nu declarăm modele hardware sau rezultate fictive.
 
 Workload-ul uzual are 24 de taxiuri și 40 de civile; workload-ul maxim V1 validat are 30 de taxiuri și 40 de civile. 20 de taxiuri și trafic redus verifică scalarea. 30 de taxiuri plus 80 de civile este un test de suprasarcină, separat de cerința normală de FPS. Toate mașinile rămân în lumea fizică, inclusiv în afara camerei. Profilurile prudent/agresiv și cozile/contactele sunt parte din workload, deoarece modifică și costul simulării.
 
@@ -39,7 +39,7 @@ Workload-ul uzual are 24 de taxiuri și 40 de civile; workload-ul maxim V1 valid
 
 Bugetele CPU și GPU nu se adună ca și cum ar fi operații seriale; intervalul de cadru se verifică independent. Manifestul fixează și limite pentru heap disponibil, memoria WASM, texturi estimate, obiecte Babylon, draw calls, dimensiuni de chunk/checkpoint, tranzacții și cozi. Aceste limite se aleg din baseline-ul real; în lipsa unui API de memorie portabil se folosesc contoare de resurse deținute de aplicație și capturi externe. Heap, backing buffers și WASM pot avea suprapuneri în instrumentare; raportul nu însumează categorii suprapuse ca „RAM totală”.
 
-Propuneri pentru asseturi: JS+WASM critice ≤8 MiB transferate, întregul set necesar primei curse ≤20 MiB transferate, texturi rezidente estimate ≤256 MiB Low / ≤384 MiB Medium. Dimensiunea comprimată nu reprezintă memoria după decodare. 223 verifică bugetele aprobate în 203 și include costul decoderelor, mipmap-urilor și variantelor de shader. O depășire nu se repară schimbând pragul retroactiv; se optimizează sau se consemnează explicit o revizie a cerinței și baseline-ului.
+Propuneri pentru asseturi: JS+WASM critice ≤8 MiB transferate, întregul set necesar primei curse ≤20 MiB transferate, texturi rezidente estimate ≤256 MiB Low / ≤384 MiB Medium. Dimensiunea comprimată nu reprezintă memoria după decodare. 223 calibrează și verifică bugetele provizorii fixate în manifestul 203 și include costul decoderelor, mipmap-urilor și variantelor de shader. O depășire nu se repară schimbând pragul retroactiv; se optimizează sau se consemnează explicit o revizie a cerinței și baseline-ului.
 
 ## Tick-uri, controller și decizii
 

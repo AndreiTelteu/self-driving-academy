@@ -84,7 +84,7 @@ Fundațiile suplimentare implementate sunt [bucla cu pas fix](fixed-tick.md), [m
 
 ## Revizia 0.4
 
-Performanța devine o condiție progresivă de implementare: 218–224 adaugă harness, scheduler, gate de flotă înainte de campanie/asseturi, bugete workers/date/randare și gate CI/soak. PBI-urile relevante declară performance_checks. Pragurile sunt propuneri calibrate în 203 și verificate pe hardware real, nu rezultate deja măsurate.
+Performanța devine o condiție progresivă de implementare: 218–224 adaugă harness, scheduler, gate de flotă înainte de campanie/asseturi, bugete workers/date/randare și gate CI/soak. PBI-urile relevante declară performance_checks. [Manifestul inițial 203](performance-budgets.json) fixează protocolul și baseline-ul desktop real; testul laptopului din 203 a fost omis prin derogarea explicită a utilizatorului din 5 octombrie 2026. Pragurile gameplay/capacitățile rămân provizorii, de calibrat în fixture-urile relevante și gate-urile hardware ulterioare obligatorii.
 
 ## Revizia 0.5
 

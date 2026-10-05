@@ -1,15 +1,17 @@
-# Hardware de referință — PBI203 în lucru
+# Hardware de referință — contract inițial PBI203
 
-PBI203 rămâne **In Progress** până la primirea măsurătorilor reale de pe ambele configurații. Specificațiile unui model nu înlocuiesc rularea probei.
+PBI203 închide contractul inițial cu derogarea explicită a utilizatorului din 5 octombrie 2026: testul laptopului este **omis**, fără rezultat PASS și fără măsurători inventate. [Manifestul versionat](performance-budgets.json) fixează protocolul, baseline-ul desktop și țintele provizorii. Specificațiile declarate ale laptopului nu înlocuiesc rularea probei; gate-ul hardware de gameplay rămâne nevalidat.
 
 | Configurație | Identificare | Proveniență și stare |
 | --- | --- | --- |
 | Desktop local | AMD Ryzen 9 7950X3D, Radeon RX 7900 XTX, RAM disponibilă sistemului 50.337.325.056 bytes, Windows 11 Pro 10.0.26200, driver 32.0.31041.1004 | CIM local și rapoarte Babylon/Chrome din PBI019. Este un desktop performant, nu o demonstrație a cerinței generale pentru un desktop mediu. |
-| Laptop | Lenovo Yoga 7 14ARP8, Ryzen 7 7735U, Radeon 680M, 16 GB RAM, SSD 512 GB, ecran 14" OLED WUXGA | Specificații furnizate de utilizator. OS, driver, browser, alimentare, rezoluție și refresh efective vor fi citite pe laptop. Măsurători încă lipsă. |
+| Laptop | Lenovo Yoga 7 14ARP8, Ryzen 7 7735U, Radeon 680M, 16 GB RAM, SSD 512 GB, ecran 14" OLED WUXGA | Specificații furnizate de utilizator. OS, driver, browser, alimentare, rezoluție și refresh efective sunt necunoscute. Test omis prin derogare explicită pentru 203; nicio măsurătoare laptop. |
 
 Proba se construiește local în producție, fără HMR, cu sursele și commitul înscrise în raport. Scena este bootstrapul gol (cameră și clear), distinctă de jocul cu 70 de vehicule. Rezoluția CSS și cea internă sunt fixate separat la 1920×1080; DPR-ul real este raportat. Contextul de calitate propus este Medium desktop și Low laptop, dar scena goală nu are asseturi/umbre care să testeze diferența dintre presetări.
 
-## Rulare pe laptop
+## Rulare opțională viitoare pe laptop
+
+Procedura rămâne disponibilă; nu este o verificare executată sau obligatorie pentru închiderea 203 după derogare. Gate-urile hardware ulterioare păstrează propriile cerințe.
 
 Baseline-ul complet al desktopului este disponibil în [raportul203](Evidence/203-hardware/desktop-report.md): cinci repetări cu observator oprit/pornit, Chrome/WebGPU,1920×1080, fără pierdere de focus. CPU p95 median0,20ms și interval de cadru p95 de7ms sunt valori ale bootstrapului gol pe display144Hz, fără certificare de gameplay. [Sumarizatorul offline](hardware-probe-summary.md) verifică protocolul și calculează medianele fără modificarea dovezilor.
 
@@ -35,6 +37,6 @@ Cinci repetări compară colectorul oprit și pornit. Fiecare fază are 30 s în
 
 Proba raportează long tasks când API-ul există, plus limitele observatorului. Fazele sunt atribuite după startTime și granițele înregistrate, nu după momentul livrării callbackului. Înainte de închidere se cedează un task real pentru publicarea ultimului RAF, se drenează observerul și se reverifică focusul/rendererul înainte de export. Numărul obiectelor Babylon nu este prezentat ca memorie GPU exactă. Memoria paginii/GPU exactă rămâne indisponibilă dacă nu există o măsurare separată. Scena fără fizică nu măsoară costul tickului, input → comandă, debitul simulării sau latența estimatorului.
 
-Încărcarea uneltei este HTTP local fără cache HTTP și fără limitare de rețea; cache-urile OS/driver nu sunt controlate. Timpul de creare a backendului este separat de navigare. Aceste valori nu închid ținta cold de 25 Mbit/s și RTT 40 ms. Manifestul va păstra distinct protocolul cold obligatoriu și rezultatele disponibile, fără să transforme această probă locală în gate de startup sau gameplay.
+Încărcarea uneltei este HTTP local fără cache HTTP și fără limitare de rețea; cache-urile OS/driver nu sunt controlate. Timpul de creare a backendului este separat de navigare. Aceste valori nu închid ținta cold de 25 Mbit/s și RTT 40 ms. Manifestul păstrează distinct protocolul cold obligatoriu și rezultatele disponibile, fără să transforme această probă locală în gate de startup sau gameplay.
 
-Baseline-ul inițial disponibil înaintea acestei unelte este [proba bootstrap019](Evidence/019-diagnostics/report.md), cu 640×360 și timer de pacing, nu FPS de display. Proba203 are un protocol diferit, declarat explicit, și nu înlocuiește retroactiv acel baseline. Bugetele din modulul25 rămân propuneri până la calibrarea pe desktop și laptop.
+Baseline-ul inițial disponibil înaintea acestei unelte este [proba bootstrap019](Evidence/019-diagnostics/report.md), cu 640×360 și timer de pacing, nu FPS de display. Proba203 are un protocol diferit, declarat explicit, și nu înlocuiește retroactiv acel baseline. Bugetele gameplay și capacitățile din modulul25 rămân provizorii în manifestul inițial fixat. Ownerii și fixture-urile din capacityValidation trebuie să fixeze plafoane finite înaintea introducerii resurselor și să le valideze prin probe reale; null nu înseamnă nelimitat. O revizie schimbă budgetVersion, explică motivul și compară baseline-ul, fără acceptarea automată a regresiilor.
