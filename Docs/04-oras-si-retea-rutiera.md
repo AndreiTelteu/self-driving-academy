@@ -35,3 +35,5 @@ PBI038 adaugă [politica explicită de prioritate și evaluarea spațiilor](prio
 ## Repere pentru distracție și provocări
 
 V1 include zone de serviciu fictive pentru spital/maternitate, toalete publice sau benzinării/cafenele și terminal, plus parcare pentru drift, rampă și alee destructibilă. [Provocările](28-provocari-random-si-revenire.md) verifică accesibilitatea acestor zone înainte de ofertă. Distrugerea mobilierului decorativ nu elimină semantica STOP/semafor/benzi; obstacolele deplasate sunt raportate contextului fizic, conform [modulului 26](26-joaca-libera-haos-si-distrugere.md).
+
+PBI034 adaugă [indexul spațial local](spatial-index.md) pentru observații autoritare de vehicule, obstacole și zone. Query-urile au filtrare geometrică3D, ownership finit și fallback complet pentru obiecte/query-uri mari; granițele, mișcarea și remove/recreate sunt comparate cu referința brută. Probe CPU și cleanup suplimentare sunt păstrate separat de gate-urile jocului complet.

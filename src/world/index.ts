@@ -78,3 +78,4 @@ export type {
   ServiceZone,
   RecoveryPoint,
 } from './schema';
+export * from './spatial-index';

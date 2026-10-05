@@ -1,0 +1,667 @@
+{
+  "capturedAt": "2026-10-05T11:28:46.377Z",
+  "mode": "BEFORE_EXHAUSTIVE",
+  "commit": "89ab82d4c67fbe0ba96dfd5eb5b93c296a130e0a",
+  "sourceHashes": {
+    "scripts/benchmark-spatial-index.mjs": "5ece649cd76548fb40a6452a0494438ae9c1660fc8fedd545144cf0e6a931a6d",
+    "tests/world/spatial-index-reference.ts": "af7fba31c940e52c1ea5e11ec54b784a21275225cbcba412e4f74ec89dc379fd"
+  },
+  "hardware": {
+    "cpu": "AMD Ryzen 9 7950X3D 16-Core Processor          ",
+    "logicalCpus": 32,
+    "ramBytes": 50337325056,
+    "os": "win32 10.0.26200"
+  },
+  "runtime": "v24.21.0",
+  "budgetVersion": "203-initial-1",
+  "fixtureVersion": "034-local-mutable-v1",
+  "scope": "CPU Node algorithm fixture, no browser, renderer, GPU, FPS or full authoritative tick claim",
+  "protocol": {
+    "warmupS": null,
+    "durationS": null,
+    "repetitions": 5,
+    "tickHz": null,
+    "probe": "bounded supplementalCPU; 100warmup ticks+600measured ticks per observer configuration per repetition; unpaced wall time measured, no realtime throughput claim",
+    "observer": "on/off paired within each repetition; <=7201 tick samples per observer configuration",
+    "workloads": [
+      "normal64vehicles32obstacles24zones",
+      "dense110vehicles96obstacles256zones",
+      "moving-boundaries",
+      "remove-recreate"
+    ],
+    "query": "one query per 64 normal and 110 dense vehicles per tick; radius12m; exact3D shapes",
+    "budget": "No fixed isolated index CPU budget; compare5.5ms provisional whole-tick ceiling and >10% AND >1ms regression3/5"
+  },
+  "runs": [
+    {
+      "repetition": 0,
+      "observe": false,
+      "wallMs": 2611.014,
+      "ticks": 700,
+      "measuredTicks": 600,
+      "workloads": [
+        {
+          "dense": false,
+          "checksum": 121952,
+          "queryCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "updateCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "tickCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "stats": {
+            "entities": 120,
+            "references": 0,
+            "cells": 0
+          }
+        },
+        {
+          "dense": true,
+          "checksum": 3075603,
+          "queryCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "updateCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "tickCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "stats": {
+            "entities": 462,
+            "references": 0,
+            "cells": 0
+          }
+        }
+      ]
+    },
+    {
+      "repetition": 0,
+      "observe": true,
+      "wallMs": 2524.1666999999998,
+      "ticks": 700,
+      "measuredTicks": 600,
+      "workloads": [
+        {
+          "dense": false,
+          "checksum": 121952,
+          "queryCpuMs": {
+            "count": 600,
+            "p50": 0.2547999999997046,
+            "p95": 0.3769000000002052,
+            "p99": 0.4501000000000204
+          },
+          "updateCpuMs": {
+            "count": 600,
+            "p50": 0.0003000000001520675,
+            "p95": 0.0009000000000014552,
+            "p99": 0.0017000000007101335
+          },
+          "tickCpuMs": {
+            "count": 600,
+            "p50": 0.2559000000001106,
+            "p95": 0.38110000000051514,
+            "p99": 0.45240000000012515
+          },
+          "stats": {
+            "entities": 120,
+            "references": 0,
+            "cells": 0
+          }
+        },
+        {
+          "dense": true,
+          "checksum": 3075603,
+          "queryCpuMs": {
+            "count": 600,
+            "p50": 3.0250999999998385,
+            "p95": 4.196399999999812,
+            "p99": 4.5231000000003405
+          },
+          "updateCpuMs": {
+            "count": 600,
+            "p50": 0.00020000000040454324,
+            "p95": 0.0005000000001018634,
+            "p99": 0.000600000000304135
+          },
+          "tickCpuMs": {
+            "count": 600,
+            "p50": 3.026400000000649,
+            "p95": 4.1995999999999185,
+            "p99": 4.528999999999542
+          },
+          "stats": {
+            "entities": 462,
+            "references": 0,
+            "cells": 0
+          }
+        }
+      ]
+    },
+    {
+      "repetition": 1,
+      "observe": false,
+      "wallMs": 2823.086300000001,
+      "ticks": 700,
+      "measuredTicks": 600,
+      "workloads": [
+        {
+          "dense": false,
+          "checksum": 121952,
+          "queryCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "updateCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "tickCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "stats": {
+            "entities": 120,
+            "references": 0,
+            "cells": 0
+          }
+        },
+        {
+          "dense": true,
+          "checksum": 3075603,
+          "queryCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "updateCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "tickCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "stats": {
+            "entities": 462,
+            "references": 0,
+            "cells": 0
+          }
+        }
+      ]
+    },
+    {
+      "repetition": 1,
+      "observe": true,
+      "wallMs": 3065.6886999999997,
+      "ticks": 700,
+      "measuredTicks": 600,
+      "workloads": [
+        {
+          "dense": false,
+          "checksum": 121952,
+          "queryCpuMs": {
+            "count": 600,
+            "p50": 0.3557999999993626,
+            "p95": 0.43220000000110304,
+            "p99": 0.5259000000005472
+          },
+          "updateCpuMs": {
+            "count": 600,
+            "p50": 0.0005000000001018634,
+            "p95": 0.001399999999193824,
+            "p99": 0.0019000000011146767
+          },
+          "tickCpuMs": {
+            "count": 600,
+            "p50": 0.3576999999986583,
+            "p95": 0.43440000000009604,
+            "p99": 0.5277000000005501
+          },
+          "stats": {
+            "entities": 120,
+            "references": 0,
+            "cells": 0
+          }
+        },
+        {
+          "dense": true,
+          "checksum": 3075603,
+          "queryCpuMs": {
+            "count": 600,
+            "p50": 4.003000000000611,
+            "p95": 4.3726000000006024,
+            "p99": 4.558800000000701
+          },
+          "updateCpuMs": {
+            "count": 600,
+            "p50": 0.00030000000151630957,
+            "p95": 0.0007000000005064066,
+            "p99": 0.0008999999990919605
+          },
+          "tickCpuMs": {
+            "count": 600,
+            "p50": 4.005800000000818,
+            "p95": 4.378899999999703,
+            "p99": 4.564099999999598
+          },
+          "stats": {
+            "entities": 462,
+            "references": 0,
+            "cells": 0
+          }
+        }
+      ]
+    },
+    {
+      "repetition": 2,
+      "observe": false,
+      "wallMs": 3108.2196999999996,
+      "ticks": 700,
+      "measuredTicks": 600,
+      "workloads": [
+        {
+          "dense": false,
+          "checksum": 121952,
+          "queryCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "updateCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "tickCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "stats": {
+            "entities": 120,
+            "references": 0,
+            "cells": 0
+          }
+        },
+        {
+          "dense": true,
+          "checksum": 3075603,
+          "queryCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "updateCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "tickCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "stats": {
+            "entities": 462,
+            "references": 0,
+            "cells": 0
+          }
+        }
+      ]
+    },
+    {
+      "repetition": 2,
+      "observe": true,
+      "wallMs": 3119.3788000000022,
+      "ticks": 700,
+      "measuredTicks": 600,
+      "workloads": [
+        {
+          "dense": false,
+          "checksum": 121952,
+          "queryCpuMs": {
+            "count": 600,
+            "p50": 0.3577999999979511,
+            "p95": 0.40600000000085856,
+            "p99": 0.529500000000553
+          },
+          "updateCpuMs": {
+            "count": 600,
+            "p50": 0.0005000000001018634,
+            "p95": 0.00120000000060827,
+            "p99": 0.0018000000000029104
+          },
+          "tickCpuMs": {
+            "count": 600,
+            "p50": 0.35970000000088476,
+            "p95": 0.4124999999985448,
+            "p99": 0.5309999999990396
+          },
+          "stats": {
+            "entities": 120,
+            "references": 0,
+            "cells": 0
+          }
+        },
+        {
+          "dense": true,
+          "checksum": 3075603,
+          "queryCpuMs": {
+            "count": 600,
+            "p50": 4.069799999997485,
+            "p95": 4.330699999998615,
+            "p99": 4.5702000000001135
+          },
+          "updateCpuMs": {
+            "count": 600,
+            "p50": 0.00029999999969732016,
+            "p95": 0.0006000000012136297,
+            "p99": 0.0008999999990919605
+          },
+          "tickCpuMs": {
+            "count": 600,
+            "p50": 4.072499999998399,
+            "p95": 4.335399999999936,
+            "p99": 4.576700000001438
+          },
+          "stats": {
+            "entities": 462,
+            "references": 0,
+            "cells": 0
+          }
+        }
+      ]
+    },
+    {
+      "repetition": 3,
+      "observe": false,
+      "wallMs": 3228.1228999999985,
+      "ticks": 700,
+      "measuredTicks": 600,
+      "workloads": [
+        {
+          "dense": false,
+          "checksum": 121952,
+          "queryCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "updateCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "tickCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "stats": {
+            "entities": 120,
+            "references": 0,
+            "cells": 0
+          }
+        },
+        {
+          "dense": true,
+          "checksum": 3075603,
+          "queryCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "updateCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "tickCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "stats": {
+            "entities": 462,
+            "references": 0,
+            "cells": 0
+          }
+        }
+      ]
+    },
+    {
+      "repetition": 3,
+      "observe": true,
+      "wallMs": 3183.7767999999996,
+      "ticks": 700,
+      "measuredTicks": 600,
+      "workloads": [
+        {
+          "dense": false,
+          "checksum": 121952,
+          "queryCpuMs": {
+            "count": 600,
+            "p50": 0.3613999999979569,
+            "p95": 0.4294999999983702,
+            "p99": 0.5194999999985157
+          },
+          "updateCpuMs": {
+            "count": 600,
+            "p50": 0.000499999998282874,
+            "p95": 0.0012000000024272595,
+            "p99": 0.001799999998183921
+          },
+          "tickCpuMs": {
+            "count": 600,
+            "p50": 0.3632999999972526,
+            "p95": 0.4308000000019092,
+            "p99": 0.5231999999996333
+          },
+          "stats": {
+            "entities": 120,
+            "references": 0,
+            "cells": 0
+          }
+        },
+        {
+          "dense": true,
+          "checksum": 3075603,
+          "queryCpuMs": {
+            "count": 600,
+            "p50": 4.095100000002276,
+            "p95": 4.768400000000838,
+            "p99": 5.443300000002637
+          },
+          "updateCpuMs": {
+            "count": 600,
+            "p50": 0.00029999999969732016,
+            "p95": 0.0005999999993946403,
+            "p99": 0.000800000001618173
+          },
+          "tickCpuMs": {
+            "count": 600,
+            "p50": 4.098500000000058,
+            "p95": 4.772499999999127,
+            "p99": 5.445700000000215
+          },
+          "stats": {
+            "entities": 462,
+            "references": 0,
+            "cells": 0
+          }
+        }
+      ]
+    },
+    {
+      "repetition": 4,
+      "observe": false,
+      "wallMs": 3242.9595999999983,
+      "ticks": 700,
+      "measuredTicks": 600,
+      "workloads": [
+        {
+          "dense": false,
+          "checksum": 121952,
+          "queryCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "updateCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "tickCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "stats": {
+            "entities": 120,
+            "references": 0,
+            "cells": 0
+          }
+        },
+        {
+          "dense": true,
+          "checksum": 3075603,
+          "queryCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "updateCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "tickCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "stats": {
+            "entities": 462,
+            "references": 0,
+            "cells": 0
+          }
+        }
+      ]
+    },
+    {
+      "repetition": 4,
+      "observe": true,
+      "wallMs": 3148.985999999997,
+      "ticks": 700,
+      "measuredTicks": 600,
+      "workloads": [
+        {
+          "dense": false,
+          "checksum": 121952,
+          "queryCpuMs": {
+            "count": 600,
+            "p50": 0.3558000000011816,
+            "p95": 0.404500000000553,
+            "p99": 0.533899999998539
+          },
+          "updateCpuMs": {
+            "count": 600,
+            "p50": 0.0004000000008090865,
+            "p95": 0.0010000000002037268,
+            "p99": 0.0014000000010128133
+          },
+          "tickCpuMs": {
+            "count": 600,
+            "p50": 0.3569000000024971,
+            "p95": 0.4054999999971187,
+            "p99": 0.5368000000016764
+          },
+          "stats": {
+            "entities": 120,
+            "references": 0,
+            "cells": 0
+          }
+        },
+        {
+          "dense": true,
+          "checksum": 3075603,
+          "queryCpuMs": {
+            "count": 600,
+            "p50": 4.0504000000000815,
+            "p95": 4.280800000000454,
+            "p99": 4.350399999999354
+          },
+          "updateCpuMs": {
+            "count": 600,
+            "p50": 0.00029999999969732016,
+            "p95": 0.0005000000019208528,
+            "p99": 0.000800000001618173
+          },
+          "tickCpuMs": {
+            "count": 600,
+            "p50": 4.052299999999377,
+            "p95": 4.284599999999045,
+            "p99": 4.354600000002392
+          },
+          "stats": {
+            "entities": 462,
+            "references": 0,
+            "cells": 0
+          }
+        }
+      ]
+    }
+  ]
+}

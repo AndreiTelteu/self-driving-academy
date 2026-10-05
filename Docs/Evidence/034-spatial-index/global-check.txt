@@ -1,0 +1,465 @@
+npm warn Unknown env config "msvs-version". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> self-driving-academy@0.1.0 check
+> npm run typecheck && npm run lint && npm run format:check && npm run check:architecture && npm test
+
+npm warn Unknown env config "msvs-version". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> self-driving-academy@0.1.0 typecheck
+> tsc --noEmit && tsc -p tsconfig.tests.json --noEmit
+
+npm warn Unknown env config "msvs-version". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> self-driving-academy@0.1.0 lint
+> eslint . --max-warnings 0
+
+npm warn Unknown env config "msvs-version". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> self-driving-academy@0.1.0 format:check
+> prettier --check "src/**/*.{ts,css}" "tests/**/*.ts" "tests/**/*.html" "scripts/**/*.mjs" "*.{json,js,html}"
+
+Checking formatting...
+All matched files use Prettier code style!
+npm warn Unknown env config "msvs-version". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> self-driving-academy@0.1.0 check:architecture
+> node scripts/verify-architecture.mjs
+
+Architecture imports: PASS (92 TypeScript files)
+Architecture negative probes: PASS (6 forbidden dependencies rejected)
+Inspector exception negative probes: PASS (4 forbidden imports rejected)
+Rapier adapter negative probes: PASS (3 forbidden imports rejected)
+Renderer injection, readonly snapshots, defensive persistence and lifecycle: PASS
+(node:106600) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+npm warn Unknown env config "msvs-version". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> self-driving-academy@0.1.0 test
+> node --import ./scripts/register-typescript.mjs --test "tests/**/*.test.ts"
+
+(node:93204) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ ready and manual pause render without advancing ticks; resume excludes paused time (2.5661ms)
+✔ visibility resumes only background pause; overload requires explicit recovery (1.0274ms)
+✔ reload coalesces requests and never duplicates frames/listeners; errors and disposal release owners (0.3249ms)
+✔ disposal during loading releases a late backend and never installs subscriptions (0.2251ms)
+✔ initially hidden ready cannot start until foreground (0.2609ms)
+✔ projection is frozen, presentation faults terminate, cleanup attempts every owner (0.367ms)
+✔ fixed-step faults and synchronous loader errors expose ERROR without retrying a step (0.346ms)
+(node:85956) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ loss captures the same authoritative tick/body after suspension, retries preserve immutable RAM (2.5472ms)
+✔ twenty reload/resize cycles plateau, coalescing and old loss callback cannot recreate a session (1.0879ms)
+✔ failure in resize reconstructs once; invalid capture disables stale checkpoint retry (0.3429ms)
+✔ disposal during pending construction releases late candidate; no renderer resurrection (0.2883ms)
+✔ GPU loss while factory is pending becomes retryable ERROR and candidate disposed (0.2438ms)
+✔ RAM capture rejects accessors, nonfinite, cycles, sparse arrays and capacity without reading getters (0.8101ms)
+✔ application keeps its simulation, tick, RAF and subscriptions across renderer failure/retry (1.7628ms)
+(node:8568) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ VehicleCommand: JSON roundtrip, immutable defensive copy (2.1045ms)
+✔ VehicleCommand: rejects all nonfinite numeric leaves (1.2465ms)
+✔ VehicleCommand: rejects unknown shape, extra/missing fields, unsupported versions (1.4954ms)
+✔ VehicleState: JSON roundtrip, immutable defensive copy (0.4988ms)
+✔ VehicleState: rejects all nonfinite numeric leaves (2.0009ms)
+✔ VehicleState: rejects unknown shape, extra/missing fields, unsupported versions (0.653ms)
+✔ Ride: JSON roundtrip, immutable defensive copy (0.5451ms)
+✔ Ride: rejects all nonfinite numeric leaves (0.7134ms)
+✔ Ride: rejects unknown shape, extra/missing fields, unsupported versions (2.2628ms)
+✔ SimulationEvent: JSON roundtrip, immutable defensive copy (0.7462ms)
+✔ SimulationEvent: rejects all nonfinite numeric leaves (0.734ms)
+✔ SimulationEvent: rejects unknown shape, extra/missing fields, unsupported versions (0.6617ms)
+✔ InterventionSegment: JSON roundtrip, immutable defensive copy (1.211ms)
+✔ InterventionSegment: rejects all nonfinite numeric leaves (11.6484ms)
+✔ InterventionSegment: rejects unknown shape, extra/missing fields, unsupported versions (0.91ms)
+✔ TelemetrySample: JSON roundtrip, immutable defensive copy (0.5309ms)
+✔ TelemetrySample: rejects all nonfinite numeric leaves (4.8606ms)
+✔ TelemetrySample: rejects unknown shape, extra/missing fields, unsupported versions (0.4262ms)
+✔ DrivingProfile: JSON roundtrip, immutable defensive copy (0.6062ms)
+✔ DrivingProfile: rejects all nonfinite numeric leaves (0.645ms)
+✔ DrivingProfile: rejects unknown shape, extra/missing fields, unsupported versions (0.7208ms)
+✔ ParameterEvidence: JSON roundtrip, immutable defensive copy (0.1297ms)
+✔ ParameterEvidence: rejects all nonfinite numeric leaves (0.3551ms)
+✔ ParameterEvidence: rejects unknown shape, extra/missing fields, unsupported versions (0.3072ms)
+✔ unknown data never executes getters or coercion; inherited fields/symbols/sparse arrays rejected (0.5394ms)
+✔ vehicle normalized controls, tick identity, quaternion and enums (0.5993ms)
+✔ ride terminal metadata and assignment chronology (0.3502ms)
+✔ all event discriminants roundtrip with their specific validated payload (2.7184ms)
+✔ event payload discrimination, entity references and reset/activation chronology (0.6485ms)
+✔ segments reject mode eligibility, mismatched world/vehicle/source, unordered ticks and partial closure (1.7751ms)
+✔ profiles preserve unknown observations and reserved data without fabricated evidence (0.6379ms)
+✔ current design catalog can be carried structurally without implementing its parameter registry (2.5681ms)
+(node:19984) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ duplicates and retries consume each identity once even after listeners fail (2.0999ms)
+✔ stable declared order, type filtering and publication order within tick (0.9852ms)
+✔ unsubscribe is idempotent and immediate; subscribe during dispatch starts next event (0.3362ms)
+✔ rejects invalid, stale, foreign and late events without consuming capacity (0.4381ms)
+✔ dedup is fail-closed at capacity; epoch invalidation rejects retired worlds (0.4872ms)
+✔ reentrant publication and lifecycle changes fail before nested effects (0.3095ms)
+✔ validated copies are immutable and owned; resources are capped and disposed (0.4582ms)
+(node:95556) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ 30/60 frame schedules preserve tick-addressed commands and duration over ten simulated minutes (365.3539ms)
+✔ first frame anchors time; fractional boundaries produce previous/current interpolation (0.3616ms)
+✔ catchup executes at most four constant steps and retains the rest of debt (0.2863ms)
+✔ overload pauses before steps; explicit recovery drains preserved debt without new wall time (0.5199ms)
+✔ 250 ms threshold is inclusive and a larger debt explicitly overloads (0.2067ms)
+✔ manual and background pauses exclude stopped time and retain fractional debt (0.2823ms)
+✔ pause accounts only the active interval to its boundary, and recovery can itself pause (0.4434ms)
+✔ invalid or regressing clocks are rejected without poisoning clock or loop state (0.6514ms)
+✔ snapshot ownership is defensive, nested immutable and safe after later steps/disposal (0.4439ms)
+✔ step/capture/interpolate failures are explicit terminal faults and never retry an executed step (0.54ms)
+✔ reentrant operations are rejected; uncaught reentrancy produces a fault (0.2712ms)
+✔ snapshot plain-tree boundary rejects accessors/cycles/exotic objects; null snapshots are valid (0.6122ms)
+✔ initial tick keeps addressed identity while elapsed simulated time starts at zero (0.2131ms)
+(node:101816) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ five-repeat medians/ranges preserve paired negative observer deltas and counters (5.0464ms)
+✔ unsupported/pending GPU remains null; partial availability reports actual repetitions (1.8926ms)
+✔ rejects smoke, interrupted protocol, invalid dimensions and lost focus (10.6362ms)
+✔ rejects missing/duplicate pairs and inconsistent/nonfinite sample statistics (1.5388ms)
+✔ rejects hardware/profile/build/digest inconsistency and wrong phase attribution (2.5455ms)
+✔ phase wall delta does not invalidate a full RAF duration when callback latencies differ (0.392ms)
+✔ explicit-path CLI emits one compact JSON record, rejects invalid input, and never rewrites evidence (413.4389ms)
+(node:51024) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ nearest rank percentiles, histogram and strict budget on known data (1.057ms)
+✔ collector caps allocations, reports overflow and rejects lifecycle misuse (0.967ms)
+✔ disabled collector allocates no sample buffers and unavailable APIs never become zero (0.1104ms)
+✔ reports require five complete pairs, own metadata, preserve missing data and reject nonfinite values (3.7817ms)
+✔ hardware baseline rejects short durations, overflow and missing pair identity (0.7203ms)
+(node:21288) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ headless: advances 12 ticks and captures states/events without renderer (2.0012ms)
+✔ zero ticks captures initial state and validates seed/tick boundaries (0.6556ms)
+✔ capture owns copies even when an adapter reuses mutable state and events (0.3374ms)
+✔ scenario oracle rejects corrupted state and event evidence (1.2065ms)
+(node:91180) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ versioned identity and RNG golden vectors fix encoding and algorithm (1.9433ms)
+✔ IDs preserve boundaries, namespace, kind and exact Unicode code units (1.5488ms)
+✔ inserted events and reversed evaluation preserve addressed opportunity samples (1.0684ms)
+✔ seed scopes and sample purpose/index distinguish fixed fixtures (0.4394ms)
+✔ JSON restart reproduces samples from version, seed, purpose and index only (0.2849ms)
+✔ unit samples are exact uint32 fractions in the half-open unit interval (11.3136ms)
+✔ unknown invalid inputs fail without coercion or accessor execution (1.437ms)
+(node:55712) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ 80 unique keys, 24 M targets; planned stages grant no capabilities (3.8066ms)
+✔ every key validates default, inclusive bounds, canonical unit and finite range (7.8705ms)
+✔ publication gate rejects LEARNED and manual tuning for all unsupported keys (14.4187ms)
+✔ publication gate rejects unknown keys, wrong units and invalid ranges for all provenance (0.6302ms)
+✔ publication retains structural evidence and provenance checks and roundtrip (0.3671ms)
+✔ malformed catalog rejects schema, shape, duplicate/unknown keys and invalid definitions (12.3641ms)
+✔ registry and parsed catalog are defensive immutable data (1.2774ms)
+✔ generated runtime catalog is synchronized with canonical JSON (356.3669ms)
+(node:45640) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ GLB preflight accepts original embedded geometry and bounds decoded bytes (2.1972ms)
+✔ GLB header and truncated JSON reject before Babylon resource creation (0.3445ms)
+✔ embedded PNG size is admitted before decode and oversized dimensions reject (0.432ms)
+✔ geometry primitive vertex budget rejects before Babylon (0.2725ms)
+(node:11600) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ WebGPU preferred, scene owned, disposal exactly once in dependency order (1.8995ms)
+✔ unavailable or throwing support check uses only WebGL2 (0.3058ms)
+✔ WebGL2 preference skips WebGPU support completely (0.1466ms)
+✔ init failure cleans engine before fallback on a distinct canvas (0.1967ms)
+✔ scene failure reconstructs a new scene after disposing all tentative resources (1.8095ms)
+✔ both fail with recoverable aggregate; cleanup exceptions do not stop engine/canvas release (0.6912ms)
+(node:51392) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ fixed ring retains recent values, exact percentiles and bounded numeric bytes (1.7615ms)
+✔ missing timers stay unavailable; fresh measured GPU zero remains valid (0.2019ms)
+✔ disabled collector performs no admission and reenabling starts a fresh window (0.351ms)
+✔ counter projections are copied/frozen and invalid capacity/counters reject (0.2666ms)
+(node:8644) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ error then retry, one frame/resize subscription, idempotent disposal (1.6804ms)
+✔ concurrent retry is coalesced; dispose during pending initialization releases late backend (0.3465ms)
+✔ render failure stops loop, cleans resources and exposes retry (0.2847ms)
+✔ cleanup failures clear every owner and still permit retry (0.7157ms)
+✔ synchronous factory failure does not poison the pending retry promise (0.2263ms)
+BJS - [14:41:57]: Babylon.js v9.29.0 - Null engine
+BJS - [14:41:57]: Babylon.js v9.29.0 - Null engine
+BJS - [14:41:57]: Babylon.js v9.29.0 - Null engine
+BJS - [14:41:57]: Babylon.js v9.29.0 - Null engine
+(node:98488) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ explicit DPR caps/resolution scaling, immutable limits and invalid input rejection (1.2992ms)
+✔ adaptive windows require GPU evidence, hysteresis/cooldown and manual override (1.5607ms)
+✔ daylight quality switches preserve materials/signals/domain and release shadows without accumulation (62.2636ms)
+✔ bounded caster registry and atomic quality validation (12.7893ms)
+✔ removed active caster is refilled deterministically; foreign/disposed meshes rejected (5.7476ms)
+✔ automatic presentation port applies GPU downgrade and manual preferences stop it (2.2697ms)
+BJS - [14:41:57]: Babylon.js v9.29.0 - Null engine
+BJS - [14:41:57]: Babylon.js v9.29.0 - Null engine
+BJS - [14:41:57]: Babylon.js v9.29.0 - Null engine
+BJS - [14:41:57]: Babylon.js v9.29.0 - Null engine
+(node:33416) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ manifest rejects cumulative first-ride/decoder/GPU/shader budgets without confusing transfer with residency (3.1068ms)
+✔ local LOD batches preserve picking after motion/removal/reorder, copy inputs and dispose owned resources (30.9731ms)
+✔ two LOD hosts admit identity capacity atomically before changing any matrix/count (5.3747ms)
+✔ LOD retains near detail when a large scaled source reaches the camera (4.489ms)
+✔ twenty static material lifecycle cycles plateau; capacity admission preserves existing batches (35.4554ms)
+(node:108368) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ known tick midpoint, endpoints, wheel continuous rotations and frozen authority (1.9389ms)
+✔ fixed loop alpha drives render projection without altering the captured body (1.2978ms)
+✔ shortest arc slerp of orientations and equivalent negative quaternion (0.3541ms)
+✔ missing, reset, reused, skipped and backwards snapshots snap to current (0.5118ms)
+✔ alpha clamps, nonfinite snaps, invalid snapshot rejected before presentation (0.8561ms)
+(node:59144) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ visual boundary accepts readonly domain pose without changing it (0.8019ms)
+✔ visual identity validates epochs at presentation boundary (0.1522ms)
+(node:43668) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ selection changes only camera, target identity is independent of authority (1.5218ms)
+✔ damping is time-based, stable zero-motion and speed-dependent distance brakes inward (0.6151ms)
+✔ driver eye is inside cabin and follows turn/roll exactly with adjustable FOV (2.0766ms)
+✔ look clamps and recenter, reuse resets visual damping and look (0.3392ms)
+✔ expanded-AABB sphere sweep prevents thin-wall tunneling and corrects start penetration (0.4379ms)
+✔ collision correction runs after damping and on motion path, fail-safe and invalid input (0.3646ms)
+BJS - [14:41:57]: Babylon.js v9.29.0 - Null engine
+BJS - [14:41:57]: Babylon.js v9.29.0 - Null engine
+BJS - [14:41:57]: Babylon.js v9.29.0 - Null engine
+BJS - [14:41:57]: Babylon.js v9.29.0 - Null engine
+BJS - [14:41:57]: Babylon.js v9.29.0 - Null engine
+BJS - [14:41:57]: Babylon.js v9.29.0 - Null engine
+(node:69792) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ nearest mesh/root and ordinary instance identities remain distinct; decor blocks (34.5188ms)
+✔ thin batch maps real ray hit index, remaps atomically, and rejects stale count (7.9449ms)
+✔ foreign/disposed objects, malformed IDs and capacity are rejected without destructive replacement (4.7895ms)
+✔ optional013 resolver maps descendants while thin instances never inherit host identity (2.7302ms)
+✔ native pointer scans are disabled and restored; disposed picker does not scan (0.9837ms)
+✔ input maps CSS to render pixels once; move is scan-free; modal/drag/cancel/UI/cleanup block clicks (4.3892ms)
+✔ hover is explicit opt-in, disabled/modal state prevents scans (0.4283ms)
+✔ hardware scaling and aggregate thin capacity retain correct identity (4.2379ms)
+(node:56824) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ defaults and valid alternate settings round-trip as deeply frozen owned data (3.97ms)
+✔ all control sliders enforce finite UI domains, FOV degrees and version bounds (2.4416ms)
+✔ binding conflicts, unknown actions and unsupported keys are rejected (0.5376ms)
+✔ units, quality and launch configuration reject invalid or learned fields (1.05ms)
+✔ data readers reject accessors and exotic objects without executing getters (0.5356ms)
+✔ replacement is atomic, owns input copies and enforces player/control version (1.8328ms)
+✔ reset restores settings independently and cannot touch profiles or progression (0.847ms)
+✔ revision exhaustion rejects reset without changing the snapshot (0.3734ms)
+✔ quality and launch reset preserve control identity and stay independent of population (0.537ms)
+(node:98524) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ opaque fractional/subnormal handles are fenced by exact registration, without tombstones (2.7116ms)
+✔ admission caps subscriptions and active entities before registration (2.392ms)
+✔ old unsubscribe never decrements subscriptions belonging to a reused entity (0.2084ms)
+✔ dispatch rejects stale ticks, removal/recreation and reentrant newer publication (0.3039ms)
+✔ conversions copy SI values and quaternion exactly; invalid quaternion is rejected (0.3182ms)
+✔ same-tick reentrant publication delivers only the fresh state to later callbacks (0.2478ms)
+(node:61592) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ real Rapier readback drives Babylon Matrix: translated +90Y, +Z becomes +X, velocity stays SI (85.3636ms)
+✔ 20 full-capacity create/remove cycles release controllers, colliders, maps and callbacks (367.7891ms)
+✔ callback removes a body during dispatch and another world rejects its old token (4.2791ms)
+✔ same-tick nested Rapier publication fences stale callbacks and later bodies in outer batch (1.0506ms)
+(node:85612) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ braking curves are speed squared, brake strength and grip dependent (374.4534ms)
+✔ curb suspension, car collision transfer and CCD wall remain finite (73.8342ms)
+✔ steering changes trajectory under low and high grip (20.3883ms)
+✔ identical 60Hz physics at 30/60/144 render FPS, including settings (35.75ms)
+✔ many-contact fixture retains cars and simplified colliders outside camera (2516.8091ms)
+✔ invalid batch is rejected before applying commands; caps prevent admission (1.6941ms)
+(node:72492) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ mechanical catalog is immutable/versioned and excluded from player preferences (1.2942ms)
+✔ two actual Rapier classes differ in acceleration, braking and same-flat-scene turning (444.2872ms)
+✔ Rapier native mass, wheel geometry and controls match classes including orientation and power caps (12.3988ms)
+✔ 20 mixed-class lifecycle cycles preserve vehicle and subscription caps, remove/recreate cleanup (120.7541ms)
+(node:96864) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ global serial priority, cancel acknowledgement and restart publish once (7.5518ms)
+✔ queue/bytes caps reject optional while protected capacity suspends without detachment (17.4657ms)
+✔ pressure pending, idle resume, cancellation preserves exact protected evidence (2.2238ms)
+✔ optional lease bounded history, errors and disposal release ownership (13.8587ms)
+✔ deferred persistence ingress is separately bounded at a full execution queue (1.246ms)
+✔ operation identity distinct, completed durable proposals do not execute twice (2.1754ms)
+✔ dispose during deferred retention preserves evidence and releases ingress reservations (50.0145ms)
+✔ cancel during async protected completion retains evidence without recoverable result (2.8436ms)
+✔ persistence failure never publishes, observer exceptions do not leak ownership (0.7402ms)
+✔ dispose during async completion withdraws proposal while retaining evidence (1.4172ms)
+(node:96864) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ real worker transfer leaves live buffers attached and preempts between slices (168.0559ms)
+(node:54320) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ strict envelope validates identities, discriminants, bytes and controls (2.2421ms)
+✔ late, duplicate, out-of-order and mismatched packets cannot publish (1.1867ms)
+✔ cancel sends one control, late result remains cancelled; worker errors release capacity (0.5442ms)
+✔ queue/history/bytes/age stay bounded and do not silently admit protected work (6.3134ms)
+✔ runtime throttles progress at 5Hz and disposes task resources (11.0164ms)
+(node:54320) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ real worker yields to cancellation, runs next job, transfers buffers and handles task failure (108.6988ms)
+ℹ {"cancelMs":5.008200000000016,"trackedJobs":0,"trackedBytes":0}
+✔ cleanup and progress observer exceptions cannot block later jobs (6.5777ms)
+✔ runtime watermark rejects old replay after history eviction; byte cap rejects excessive queue (8.2905ms)
+✔ parser rejects nonenumerable identities and fields without invoking getters (0.293ms)
+(node:107112) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ swept traversal detects a zone and stop line even when both endpoints are outside (6.9274ms)
+✔ empty, hidden, inactive or geometrically irrelevant pedestrians create no exposure (1.4484ms)
+✔ obstacles have separate identities and do not count as pedestrian exposure (0.9803ms)
+✔ stationary points, tangential travel and line departure do not duplicate a crossing (1.5285ms)
+✔ concave polygons use their actual footprint rather than bounding boxes (1.246ms)
+✔ data is owned/frozen; observations remain bounded and input failures are explicit (1.5054ms)
+✔ capacity retains every relevant observation and never truncates a last pedestrian (18.1195ms)
+(node:33072) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ cross separates perpendicular crossing from parallel opposing travel (13.2341ms)
+✔ T crossing, shared entry, and separated turns produce different relations (3.5937ms)
+✔ turn merges are explicit semantic conflicts and separated right turns remain compatible (3.0763ms)
+✔ authored conflict zones remain independent from geometry and never imply priority (1.5391ms)
+✔ stable identities symmetric queries, readonly snapshots and bounded retained state (12.5977ms)
+✔ corridor width, tangency, collinear overlap and bridge height are explicit geometric semantics (0.316ms)
+✔ invalid data/options fail rather than silently dropping semantic conflicts (1.6617ms)
+✔ geometry construction budget aborts explicitly on authored pathological paths (1127.4773ms)
+✔ pair capacity rejects the whole map before quadratic geometry, never truncates conflicts (17.0767ms)
+✔ shared authored geometry reuses immutable trajectories and zone arrays (0.945ms)
+(node:104064) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ one-way topology never invents reverse edges or undeclared turns (7.4872ms)
+✔ parallel neighbors and all edges respect source/destination access classes (2.6059ms)
+✔ REVERSE reverses geometry, direction, progress and allowed successors (1.3246ms)
+✔ current lane uses directed polyline projection/width/height and no meshes; off-graph remains null (2.3047ms)
+✔ intersection gaps do not fabricate lanes from movement or visual geometry (1.7883ms)
+✔ deterministic ambiguity ties ignore lane input order; heading disambiguates (2.6363ms)
+✔ owned graph data/projections are frozen and unaffected by caller mutations (1.745ms)
+✔ unknown IDs return empty results; invalid queries/maps/classes fail before execution (2.0552ms)
+✔ schema-size ring remains finite and loop-safe without recursive graph traversal (116.1673ms)
+✔ height and slope distinguish an overpass from overlapping planar geometry (1.7648ms)
+✔ bounded index matches exhaustive projection and oversized geometry always uses complete fallback (14.4779ms)
+✔ spatial reference capacity falls back without dropping a permitted lane (86.6775ms)
+(node:20512) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ minimal semantic map is deterministic and deeply immutable (10.1352ms)
+✔ rejects duplicate geometry ID (1.1667ms)
+✔ rejects duplicate semantic ID (1.8113ms)
+✔ rejects dangling geometry node (0.8175ms)
+✔ rejects dangling lane geometry (1.1292ms)
+✔ rejects duplicate successor (0.9101ms)
+✔ rejects dangling successor (0.9643ms)
+✔ rejects self successor (3.0195ms)
+✔ rejects direct continuation opposite endpoints (0.9766ms)
+✔ rejects intersection directed endpoint outside footprint (0.6358ms)
+✔ rejects intersection omitted membership (0.7447ms)
+✔ rejects intersection dangling membership (0.8613ms)
+✔ rejects movement missing successor (0.8521ms)
+✔ rejects successor without movement (1.0728ms)
+✔ rejects movement endpoint direction (0.7934ms)
+✔ rejects movement incoming to incoming (0.6786ms)
+✔ rejects dangling conflict zone (0.6768ms)
+✔ rejects duplicate movement pair (1.1991ms)
+✔ rejects neighbor dangling (0.8295ms)
+✔ rejects neighbor self (1.0766ms)
+✔ rejects neighbor not reciprocal (0.6508ms)
+✔ rejects signal dangling intersection (0.6827ms)
+✔ rejects phase unknown movement (0.7897ms)
+✔ rejects phase repeated assignment (0.7533ms)
+✔ rejects phase incomplete (0.7219ms)
+✔ rejects stop dangling lane (1.8183ms)
+✔ rejects stop wrong anchor (0.7221ms)
+✔ rejects stop signal absent (0.6306ms)
+✔ rejects stop signal dangling (1.315ms)
+✔ rejects STOP missing intersection (0.6212ms)
+✔ rejects crosswalk wrong stop kind (0.9204ms)
+✔ rejects crosswalk lane not covered (0.4757ms)
+✔ rejects crosswalk orphan stop (0.5612ms)
+✔ rejects service wrong anchor (0.7314ms)
+✔ rejects service anchor outside area bbox (0.8236ms)
+✔ rejects service inaccessible class (0.6004ms)
+✔ rejects service unreachable graph (0.8305ms)
+✔ rejects recovery dangling node (0.496ms)
+✔ rejects recovery off lane (0.5335ms)
+✔ rejects bounds reversed (0.3465ms)
+✔ rejects position out of bounds (0.3379ms)
+✔ rejects path zero length alias (0.4238ms)
+✔ rejects area degenerate (0.6383ms)
+✔ rejects width zero (0.7268ms)
+✔ rejects access repeated (0.4454ms)
+✔ signal programs permit separated movement phases and reject conflicting simultaneous greens (1.3092ms)
+✔ class-specific connectivity ignores lanes inaccessible to that class (1.446ms)
+✔ neighbors require reciprocal links and compatible directed corridors (1.2953ms)
+✔ errors carry offending ID, position and stable field path (0.5158ms)
+✔ strict structure rejects hidden fields, accessors, prototypes, symbols and sparse arrays (1.685ms)
+✔ all numeric fields reject nonfinite data and numeric strings (112.2979ms)
+✔ array capacity rejects before graph traversal and finite cycles terminate deterministically (1.1795ms)
+✔ input mutations after parsing and rejected validation never alter published data (0.6927ms)
+✔ STOP regulation and reversed stored geometry remain valid when their semantic direction agrees (0.5351ms)
+✔ signal phases reject foreign-intersection movements and simultaneous merges (3.2311ms)
+✔ structural field errors retain a validated object ID without executing accessors (0.4542ms)
+(node:39168) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ strict exhaustive authored policy roundtrips JSON; reciprocal queries return the same rule (14.6459ms)
+✔ T-junction policy uses only its authored geometric straight and turning conflicts (4.4388ms)
+✔ priority policy rejects omissions, contradictory pairs, wrong map, foreign winners and compatible geometry (15.0835ms)
+✔ TTC uses metres/metres-per-second; stationary approach, occupying and cleared remain distinct (0.3833ms)
+✔ absent/inactive/stationary-before-entry/cleared traffic never records refusal or yield (16.1696ms)
+✔ eligible higher-priority traffic exposes blocked gap and one continuous hold records yield (42.8752ms)
+✔ geometric crossing with actual priority exposure is observed; available gap produces no refusal evidence (7.1157ms)
+✔ EQUAL stays unresolved and never invents a universal right-side or yielding obligation (4.1822ms)
+✔ unknown traffic coverage/distance/route and discontinuity fail closed rather than reporting a safe gap (16.5929ms)
+✔ multiple opponents for one relation never duplicate the physical yield observation (41.1111ms)
+✔ cumulative movement invalidates hold even when each small step is below tolerance (4.3245ms)
+✔ new incarnation/epoch never inherits evidence; bounded history and tombstones fail closed (5.2366ms)
+✔ malformed, duplicated, oversized and conflicting observations reject before history mutation (5.854ms)
+✔ active unobservable traffic masks known blocked pairs independently of actor ordering (8.2137ms)
+✔ stationary at the conflict entry is occupying and cannot record a pre-entry yield (3.4007ms)
+✔ a continuous sweep through full clearance retains actual occupied-priority crossing evidence (10.0585ms)
+✔ simultaneous conflict pairs share one physical yield and changed exposure cannot inherit elapsed hold (9.4011ms)
+(node:50556) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ full cycles query only the selected movement and preserve exact tick boundaries (19.041ms)
+✔ phase state/events remain readonly and independent from caller map mutation (4.4969ms)
+✔ GREEN phase validates geometric conflict despite missing shared-zone authoring (5.0807ms)
+✔ fixed-tick loop pause and resume do not advance signal phases in wall time (4.1635ms)
+✔ listener failures are returned once, reentry rejected, and retry same tick does not duplicate events (2.7205ms)
+✔ event transport capacity failure retains a bounded transition and never advances time silently (4.275ms)
+✔ phase event JSON decoding is defensive and rejects malformed or ambiguous states (2.7145ms)
+✔ single immutable phase emits no false change; fractional duration quantizes upward deterministically (3.0149ms)
+✔ stale world is rejected even for a duplicate controller tick (2.3283ms)
+✔ failed publication rejects signal queries until explicit retry/recovery (6.0927ms)
+✔ multi-signal publication failure preserves accepted-prefix failures and retries only the remainder (6.3774ms)
+(node:19928) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ benchmark query identity sets match the brute oracle outside all timed measurements (902.2353ms)
+✔ normal/dense mutable query IDs match exhaustive geometry, including boundaries and overpasses (33.6039ms)
+✔ sphere tangency, negative boundaries, height, kind and exact identity exclusion (0.7588ms)
+✔ concave prism rejects bounding-box false positives and preserves vertical corner tangencies (0.6816ms)
+✔ moves remove old cells, remove/recreate identity fences and invalid updates are atomic (1.6049ms)
+✔ admission rejects before retained allocation; exhausted cell budgets use complete fallback (1.3878ms)
+✔ all admitted dense-cell neighbors returned, independent of insertion order (1.6915ms)
+✔ ownership snapshots frozen;20 reset/dispose cycles return bounded resources to zero (14.9096ms)
+✔ invalid query and polygon data never mutate ownership (0.52ms)
+(node:17668) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ full stop uses observed consecutive dwell; crossing is a separate idempotent bus event (18.9286ms)
+✔ rolling stop, slow reported speed with drift, and no-brake passage never fabricate FULL_STOP (23.7002ms)
+✔ line contact permits stationary stop; actual forward passage then emits crossing exactly once (3.3951ms)
+✔ speed threshold, far upstream and wrong heading cannot create complete-stop evidence (9.6258ms)
+✔ missing ticks, teleport, reverse crossing, height and finite line ends do not invent traversal (8.001ms)
+✔ stale/conflicting ticks, context and nonfinite data reject without advancing history (3.2151ms)
+✔ ID reuse cannot inherit stop evidence or admit a retired incarnation; real epoch resets history (1.9295ms)
+✔ bounded history fails closed; frozen map geometry and transverse direction stay stable (2.8828ms)
+✔ directed reverse geometry and consecutive STOP lines preserve distinct opportunities (3.8098ms)
+✔ calibration/accessor boundaries and long valid identities remain safe (1.7858ms)
+ℹ tests 329
+ℹ suites 0
+ℹ pass 329
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3752.4883

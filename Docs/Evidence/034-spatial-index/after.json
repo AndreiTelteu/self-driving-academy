@@ -1,0 +1,980 @@
+{
+  "capturedAt": "2026-10-05T11:37:41.223Z",
+  "mode": "AFTER_INDEX",
+  "commit": "89ab82d4c67fbe0ba96dfd5eb5b93c296a130e0a",
+  "sourceHashes": {
+    "scripts/benchmark-spatial-index.mjs": "c5004a8ffd4f1276539aa74cb967950b808d2b3b3758deabb763268b79860bbb",
+    "tests/world/spatial-index-reference.ts": "677359ccbce1d13f8df0d3f17878c1496fce71f9ea9395a2f25d941b817a9618",
+    "src/world/spatial-index.ts": "06de004e8d9a4241cda9cfa84d83550342b4b7a71e81840835d6c2eb00a7e8df"
+  },
+  "hardware": {
+    "cpu": "AMD Ryzen 9 7950X3D 16-Core Processor          ",
+    "logicalCpus": 32,
+    "ramBytes": 50337325056,
+    "os": "win32 10.0.26200",
+    "powerScheme": "Power Scheme GUID: 381b4222-f694-41f0-9685-ff5bb260df2e  (Balanced)"
+  },
+  "runtime": "v24.21.0",
+  "budgetVersion": "203-initial-1",
+  "fixtureVersion": "034-local-mutable-v1",
+  "scope": "CPU Node algorithm fixture, no browser, renderer, GPU, FPS or full authoritative tick claim",
+  "protocol": {
+    "warmupS": null,
+    "durationS": null,
+    "repetitions": 5,
+    "tickHz": null,
+    "probe": "bounded supplementalCPU; 100warmup ticks+600measured ticks per observer configuration per repetition; unpaced wall time measured, no realtime throughput claim",
+    "observer": "on/off paired within each repetition; external whole-tick timer on both, optional query/update sub-timers on; admitted7201 samples per array",
+    "seed": "none; deterministic integer grid and tick modulo fixture; same700iterations both configs in CPU probe",
+    "workloads": [
+      "normal64vehicles32obstacles24zones",
+      "dense110vehicles96obstacles256zones",
+      "moving-boundaries",
+      "remove-recreate"
+    ],
+    "query": "one query per 64 normal and 110 dense vehicles per tick; radius12m; exact3D shapes",
+    "budget": "No fixed isolated index CPU budget; compare5.5ms provisional whole-tick ceiling and >10% AND >1ms regression3/5"
+  },
+  "runs": [
+    {
+      "repetition": 0,
+      "observe": false,
+      "wallMs": 1276.1431,
+      "ticks": 700,
+      "measuredTicks": 600,
+      "workloads": [
+        {
+          "dense": false,
+          "checksum": 121952,
+          "queryCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "updateCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "tickCpuMs": {
+            "count": 600,
+            "p50": 0.05910000000005766,
+            "p95": 0.11249999999995453,
+            "p99": 0.20990000000006148
+          },
+          "stats": {
+            "entities": 120,
+            "vehicles": 64,
+            "obstacles": 32,
+            "zones": 24,
+            "zoneVertices": 96,
+            "cells": 277,
+            "spatialReferences": 407,
+            "fallbackEntities": 1,
+            "generation": 0,
+            "disposed": false,
+            "lastQuery": {
+              "cellsVisited": 4,
+              "candidates": 3,
+              "exactTests": 3,
+              "matches": 3,
+              "exhaustive": false
+            }
+          }
+        },
+        {
+          "dense": true,
+          "checksum": 3075603,
+          "queryCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "updateCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "tickCpuMs": {
+            "count": 600,
+            "p50": 1.0316000000000258,
+            "p95": 1.5325000000000273,
+            "p99": 1.878500000000031
+          },
+          "stats": {
+            "entities": 462,
+            "vehicles": 110,
+            "obstacles": 96,
+            "zones": 256,
+            "zoneVertices": 1024,
+            "cells": 36,
+            "spatialReferences": 791,
+            "fallbackEntities": 1,
+            "generation": 0,
+            "disposed": false,
+            "lastQuery": {
+              "cellsVisited": 4,
+              "candidates": 13,
+              "exactTests": 13,
+              "matches": 12,
+              "exhaustive": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "repetition": 0,
+      "observe": true,
+      "wallMs": 1274.3589999999997,
+      "ticks": 700,
+      "measuredTicks": 600,
+      "workloads": [
+        {
+          "dense": false,
+          "checksum": 121952,
+          "queryCpuMs": {
+            "count": 600,
+            "p50": 0.06210000000010041,
+            "p95": 0.10339999999996508,
+            "p99": 0.2436000000002423
+          },
+          "updateCpuMs": {
+            "count": 600,
+            "p50": 0.003699999999753345,
+            "p95": 0.006899999999859574,
+            "p99": 0.010299999999915599
+          },
+          "tickCpuMs": {
+            "count": 600,
+            "p50": 0.06680000000005748,
+            "p95": 0.11089999999990141,
+            "p99": 0.24729999999999563
+          },
+          "stats": {
+            "entities": 120,
+            "vehicles": 64,
+            "obstacles": 32,
+            "zones": 24,
+            "zoneVertices": 96,
+            "cells": 277,
+            "spatialReferences": 407,
+            "fallbackEntities": 1,
+            "generation": 0,
+            "disposed": false,
+            "lastQuery": {
+              "cellsVisited": 4,
+              "candidates": 3,
+              "exactTests": 3,
+              "matches": 3,
+              "exhaustive": false
+            }
+          }
+        },
+        {
+          "dense": true,
+          "checksum": 3075603,
+          "queryCpuMs": {
+            "count": 600,
+            "p50": 1.1082000000001244,
+            "p95": 1.6110999999996238,
+            "p99": 1.7681000000002314
+          },
+          "updateCpuMs": {
+            "count": 600,
+            "p50": 0.0016999999998006388,
+            "p95": 0.003500000000030923,
+            "p99": 0.005099999999856664
+          },
+          "tickCpuMs": {
+            "count": 600,
+            "p50": 1.1120999999998276,
+            "p95": 1.6141999999999825,
+            "p99": 1.7881999999999607
+          },
+          "stats": {
+            "entities": 462,
+            "vehicles": 110,
+            "obstacles": 96,
+            "zones": 256,
+            "zoneVertices": 1024,
+            "cells": 36,
+            "spatialReferences": 791,
+            "fallbackEntities": 1,
+            "generation": 0,
+            "disposed": false,
+            "lastQuery": {
+              "cellsVisited": 4,
+              "candidates": 13,
+              "exactTests": 13,
+              "matches": 12,
+              "exhaustive": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "repetition": 1,
+      "observe": false,
+      "wallMs": 1315.9591,
+      "ticks": 700,
+      "measuredTicks": 600,
+      "workloads": [
+        {
+          "dense": false,
+          "checksum": 121952,
+          "queryCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "updateCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "tickCpuMs": {
+            "count": 600,
+            "p50": 0.06350000000020373,
+            "p95": 0.10649999999986903,
+            "p99": 0.20139999999992142
+          },
+          "stats": {
+            "entities": 120,
+            "vehicles": 64,
+            "obstacles": 32,
+            "zones": 24,
+            "zoneVertices": 96,
+            "cells": 277,
+            "spatialReferences": 407,
+            "fallbackEntities": 1,
+            "generation": 0,
+            "disposed": false,
+            "lastQuery": {
+              "cellsVisited": 4,
+              "candidates": 3,
+              "exactTests": 3,
+              "matches": 3,
+              "exhaustive": false
+            }
+          }
+        },
+        {
+          "dense": true,
+          "checksum": 3075603,
+          "queryCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "updateCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "tickCpuMs": {
+            "count": 600,
+            "p50": 1.115900000000238,
+            "p95": 1.615599999999631,
+            "p99": 1.8590999999996711
+          },
+          "stats": {
+            "entities": 462,
+            "vehicles": 110,
+            "obstacles": 96,
+            "zones": 256,
+            "zoneVertices": 1024,
+            "cells": 36,
+            "spatialReferences": 791,
+            "fallbackEntities": 1,
+            "generation": 0,
+            "disposed": false,
+            "lastQuery": {
+              "cellsVisited": 4,
+              "candidates": 13,
+              "exactTests": 13,
+              "matches": 12,
+              "exhaustive": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "repetition": 1,
+      "observe": true,
+      "wallMs": 1294.0891000000001,
+      "ticks": 700,
+      "measuredTicks": 600,
+      "workloads": [
+        {
+          "dense": false,
+          "checksum": 121952,
+          "queryCpuMs": {
+            "count": 600,
+            "p50": 0.06260000000020227,
+            "p95": 0.10840000000007421,
+            "p99": 0.18219999999928405
+          },
+          "updateCpuMs": {
+            "count": 600,
+            "p50": 0.0034000000005107722,
+            "p95": 0.00650000000041473,
+            "p99": 0.009799999999813735
+          },
+          "tickCpuMs": {
+            "count": 600,
+            "p50": 0.06700000000000728,
+            "p95": 0.1147000000000844,
+            "p99": 0.19500000000061846
+          },
+          "stats": {
+            "entities": 120,
+            "vehicles": 64,
+            "obstacles": 32,
+            "zones": 24,
+            "zoneVertices": 96,
+            "cells": 277,
+            "spatialReferences": 407,
+            "fallbackEntities": 1,
+            "generation": 0,
+            "disposed": false,
+            "lastQuery": {
+              "cellsVisited": 4,
+              "candidates": 3,
+              "exactTests": 3,
+              "matches": 3,
+              "exhaustive": false
+            }
+          }
+        },
+        {
+          "dense": true,
+          "checksum": 3075603,
+          "queryCpuMs": {
+            "count": 600,
+            "p50": 1.1162999999996828,
+            "p95": 1.6291000000001077,
+            "p99": 1.84729999999945
+          },
+          "updateCpuMs": {
+            "count": 600,
+            "p50": 0.0016999999998006388,
+            "p95": 0.0033999999996012775,
+            "p99": 0.0072000000000116415
+          },
+          "tickCpuMs": {
+            "count": 600,
+            "p50": 1.1193999999995867,
+            "p95": 1.6323999999995067,
+            "p99": 1.8501999999998588
+          },
+          "stats": {
+            "entities": 462,
+            "vehicles": 110,
+            "obstacles": 96,
+            "zones": 256,
+            "zoneVertices": 1024,
+            "cells": 36,
+            "spatialReferences": 791,
+            "fallbackEntities": 1,
+            "generation": 0,
+            "disposed": false,
+            "lastQuery": {
+              "cellsVisited": 4,
+              "candidates": 13,
+              "exactTests": 13,
+              "matches": 12,
+              "exhaustive": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "repetition": 2,
+      "observe": false,
+      "wallMs": 1331.6058999999996,
+      "ticks": 700,
+      "measuredTicks": 600,
+      "workloads": [
+        {
+          "dense": false,
+          "checksum": 121952,
+          "queryCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "updateCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "tickCpuMs": {
+            "count": 600,
+            "p50": 0.07049999999981083,
+            "p95": 0.11480000000028667,
+            "p99": 0.18059999999968568
+          },
+          "stats": {
+            "entities": 120,
+            "vehicles": 64,
+            "obstacles": 32,
+            "zones": 24,
+            "zoneVertices": 96,
+            "cells": 277,
+            "spatialReferences": 407,
+            "fallbackEntities": 1,
+            "generation": 0,
+            "disposed": false,
+            "lastQuery": {
+              "cellsVisited": 4,
+              "candidates": 3,
+              "exactTests": 3,
+              "matches": 3,
+              "exhaustive": false
+            }
+          }
+        },
+        {
+          "dense": true,
+          "checksum": 3075603,
+          "queryCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "updateCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "tickCpuMs": {
+            "count": 600,
+            "p50": 1.1440000000002328,
+            "p95": 1.6138999999993757,
+            "p99": 1.7547999999997046
+          },
+          "stats": {
+            "entities": 462,
+            "vehicles": 110,
+            "obstacles": 96,
+            "zones": 256,
+            "zoneVertices": 1024,
+            "cells": 36,
+            "spatialReferences": 791,
+            "fallbackEntities": 1,
+            "generation": 0,
+            "disposed": false,
+            "lastQuery": {
+              "cellsVisited": 4,
+              "candidates": 13,
+              "exactTests": 13,
+              "matches": 12,
+              "exhaustive": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "repetition": 2,
+      "observe": true,
+      "wallMs": 1267.6247999999996,
+      "ticks": 700,
+      "measuredTicks": 600,
+      "workloads": [
+        {
+          "dense": false,
+          "checksum": 121952,
+          "queryCpuMs": {
+            "count": 600,
+            "p50": 0.059200000000600994,
+            "p95": 0.10040000000026339,
+            "p99": 0.17260000000078435
+          },
+          "updateCpuMs": {
+            "count": 600,
+            "p50": 0.0030000000006111804,
+            "p95": 0.005799999999908323,
+            "p99": 0.010299999999915599
+          },
+          "tickCpuMs": {
+            "count": 600,
+            "p50": 0.06259999999929278,
+            "p95": 0.10819999999966967,
+            "p99": 0.17769999999927677
+          },
+          "stats": {
+            "entities": 120,
+            "vehicles": 64,
+            "obstacles": 32,
+            "zones": 24,
+            "zoneVertices": 96,
+            "cells": 277,
+            "spatialReferences": 407,
+            "fallbackEntities": 1,
+            "generation": 0,
+            "disposed": false,
+            "lastQuery": {
+              "cellsVisited": 4,
+              "candidates": 3,
+              "exactTests": 3,
+              "matches": 3,
+              "exhaustive": false
+            }
+          }
+        },
+        {
+          "dense": true,
+          "checksum": 3075603,
+          "queryCpuMs": {
+            "count": 600,
+            "p50": 1.060699999999997,
+            "p95": 1.56670000000031,
+            "p99": 1.7764999999999418
+          },
+          "updateCpuMs": {
+            "count": 600,
+            "p50": 0.0015000000003055902,
+            "p95": 0.0029999999997016857,
+            "p99": 0.004700000000411819
+          },
+          "tickCpuMs": {
+            "count": 600,
+            "p50": 1.0625,
+            "p95": 1.568699999999808,
+            "p99": 1.7800999999999476
+          },
+          "stats": {
+            "entities": 462,
+            "vehicles": 110,
+            "obstacles": 96,
+            "zones": 256,
+            "zoneVertices": 1024,
+            "cells": 36,
+            "spatialReferences": 791,
+            "fallbackEntities": 1,
+            "generation": 0,
+            "disposed": false,
+            "lastQuery": {
+              "cellsVisited": 4,
+              "candidates": 13,
+              "exactTests": 13,
+              "matches": 12,
+              "exhaustive": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "repetition": 3,
+      "observe": false,
+      "wallMs": 1336.265300000001,
+      "ticks": 700,
+      "measuredTicks": 600,
+      "workloads": [
+        {
+          "dense": false,
+          "checksum": 121952,
+          "queryCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "updateCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "tickCpuMs": {
+            "count": 600,
+            "p50": 0.07579999999870779,
+            "p95": 0.11679999999978463,
+            "p99": 0.16959999999926367
+          },
+          "stats": {
+            "entities": 120,
+            "vehicles": 64,
+            "obstacles": 32,
+            "zones": 24,
+            "zoneVertices": 96,
+            "cells": 277,
+            "spatialReferences": 407,
+            "fallbackEntities": 1,
+            "generation": 0,
+            "disposed": false,
+            "lastQuery": {
+              "cellsVisited": 4,
+              "candidates": 3,
+              "exactTests": 3,
+              "matches": 3,
+              "exhaustive": false
+            }
+          }
+        },
+        {
+          "dense": true,
+          "checksum": 3075603,
+          "queryCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "updateCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "tickCpuMs": {
+            "count": 600,
+            "p50": 1.2172000000009575,
+            "p95": 1.680000000000291,
+            "p99": 1.9292999999997846
+          },
+          "stats": {
+            "entities": 462,
+            "vehicles": 110,
+            "obstacles": 96,
+            "zones": 256,
+            "zoneVertices": 1024,
+            "cells": 36,
+            "spatialReferences": 791,
+            "fallbackEntities": 1,
+            "generation": 0,
+            "disposed": false,
+            "lastQuery": {
+              "cellsVisited": 4,
+              "candidates": 13,
+              "exactTests": 13,
+              "matches": 12,
+              "exhaustive": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "repetition": 3,
+      "observe": true,
+      "wallMs": 1274.6314000000002,
+      "ticks": 700,
+      "measuredTicks": 600,
+      "workloads": [
+        {
+          "dense": false,
+          "checksum": 121952,
+          "queryCpuMs": {
+            "count": 600,
+            "p50": 0.0591999999996915,
+            "p95": 0.09989999999925203,
+            "p99": 0.12629999999990105
+          },
+          "updateCpuMs": {
+            "count": 600,
+            "p50": 0.002899999999499414,
+            "p95": 0.006299999999100692,
+            "p99": 0.01149999999870488
+          },
+          "tickCpuMs": {
+            "count": 600,
+            "p50": 0.06260000000111177,
+            "p95": 0.10720000000037544,
+            "p99": 0.13099999999940337
+          },
+          "stats": {
+            "entities": 120,
+            "vehicles": 64,
+            "obstacles": 32,
+            "zones": 24,
+            "zoneVertices": 96,
+            "cells": 277,
+            "spatialReferences": 407,
+            "fallbackEntities": 1,
+            "generation": 0,
+            "disposed": false,
+            "lastQuery": {
+              "cellsVisited": 4,
+              "candidates": 3,
+              "exactTests": 3,
+              "matches": 3,
+              "exhaustive": false
+            }
+          }
+        },
+        {
+          "dense": true,
+          "checksum": 3075603,
+          "queryCpuMs": {
+            "count": 600,
+            "p50": 1.0416000000004715,
+            "p95": 1.6458000000002357,
+            "p99": 1.9935000000004948
+          },
+          "updateCpuMs": {
+            "count": 600,
+            "p50": 0.0014000000010128133,
+            "p95": 0.002800000000206637,
+            "p99": 0.0036999999992985977
+          },
+          "tickCpuMs": {
+            "count": 600,
+            "p50": 1.0429999999996653,
+            "p95": 1.648800000000847,
+            "p99": 1.9976000000006024
+          },
+          "stats": {
+            "entities": 462,
+            "vehicles": 110,
+            "obstacles": 96,
+            "zones": 256,
+            "zoneVertices": 1024,
+            "cells": 36,
+            "spatialReferences": 791,
+            "fallbackEntities": 1,
+            "generation": 0,
+            "disposed": false,
+            "lastQuery": {
+              "cellsVisited": 4,
+              "candidates": 13,
+              "exactTests": 13,
+              "matches": 12,
+              "exhaustive": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "repetition": 4,
+      "observe": false,
+      "wallMs": 1265.3533000000007,
+      "ticks": 700,
+      "measuredTicks": 600,
+      "workloads": [
+        {
+          "dense": false,
+          "checksum": 121952,
+          "queryCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "updateCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "tickCpuMs": {
+            "count": 600,
+            "p50": 0.06300000000010186,
+            "p95": 0.10100000000056752,
+            "p99": 0.1224000000001979
+          },
+          "stats": {
+            "entities": 120,
+            "vehicles": 64,
+            "obstacles": 32,
+            "zones": 24,
+            "zoneVertices": 96,
+            "cells": 277,
+            "spatialReferences": 407,
+            "fallbackEntities": 1,
+            "generation": 0,
+            "disposed": false,
+            "lastQuery": {
+              "cellsVisited": 4,
+              "candidates": 3,
+              "exactTests": 3,
+              "matches": 3,
+              "exhaustive": false
+            }
+          }
+        },
+        {
+          "dense": true,
+          "checksum": 3075603,
+          "queryCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "updateCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "tickCpuMs": {
+            "count": 600,
+            "p50": 1.083200000000943,
+            "p95": 1.5483000000003813,
+            "p99": 1.6931000000004133
+          },
+          "stats": {
+            "entities": 462,
+            "vehicles": 110,
+            "obstacles": 96,
+            "zones": 256,
+            "zoneVertices": 1024,
+            "cells": 36,
+            "spatialReferences": 791,
+            "fallbackEntities": 1,
+            "generation": 0,
+            "disposed": false,
+            "lastQuery": {
+              "cellsVisited": 4,
+              "candidates": 13,
+              "exactTests": 13,
+              "matches": 12,
+              "exhaustive": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "repetition": 4,
+      "observe": true,
+      "wallMs": 1283.2188999999998,
+      "ticks": 700,
+      "measuredTicks": 600,
+      "workloads": [
+        {
+          "dense": false,
+          "checksum": 121952,
+          "queryCpuMs": {
+            "count": 600,
+            "p50": 0.0635999999994965,
+            "p95": 0.11369999999988067,
+            "p99": 0.16699999999946158
+          },
+          "updateCpuMs": {
+            "count": 600,
+            "p50": 0.0030000000006111804,
+            "p95": 0.005899999998291605,
+            "p99": 0.010100000001330045
+          },
+          "tickCpuMs": {
+            "count": 600,
+            "p50": 0.06720000000132131,
+            "p95": 0.11830000000009022,
+            "p99": 0.16979999999966822
+          },
+          "stats": {
+            "entities": 120,
+            "vehicles": 64,
+            "obstacles": 32,
+            "zones": 24,
+            "zoneVertices": 96,
+            "cells": 277,
+            "spatialReferences": 407,
+            "fallbackEntities": 1,
+            "generation": 0,
+            "disposed": false,
+            "lastQuery": {
+              "cellsVisited": 4,
+              "candidates": 3,
+              "exactTests": 3,
+              "matches": 3,
+              "exhaustive": false
+            }
+          }
+        },
+        {
+          "dense": true,
+          "checksum": 3075603,
+          "queryCpuMs": {
+            "count": 600,
+            "p50": 1.1440999999995256,
+            "p95": 1.6803999999992811,
+            "p99": 1.8964000000014494
+          },
+          "updateCpuMs": {
+            "count": 600,
+            "p50": 0.0015000000003055902,
+            "p95": 0.0032000000010157237,
+            "p99": 0.004600000000209548
+          },
+          "tickCpuMs": {
+            "count": 600,
+            "p50": 1.1462999999985186,
+            "p95": 1.6851000000006024,
+            "p99": 1.9013000000013562
+          },
+          "stats": {
+            "entities": 462,
+            "vehicles": 110,
+            "obstacles": 96,
+            "zones": 256,
+            "zoneVertices": 1024,
+            "cells": 36,
+            "spatialReferences": 791,
+            "fallbackEntities": 1,
+            "generation": 0,
+            "disposed": false,
+            "lastQuery": {
+              "cellsVisited": 4,
+              "candidates": 13,
+              "exactTests": 13,
+              "matches": 12,
+              "exhaustive": false
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "medians": [
+    {
+      "observe": false,
+      "dense": false,
+      "tickP95MedianMs": 0.11249999999995453,
+      "queryP95MedianMs": null,
+      "updateP95MedianMs": null
+    },
+    {
+      "observe": false,
+      "dense": true,
+      "tickP95MedianMs": 1.6138999999993757,
+      "queryP95MedianMs": null,
+      "updateP95MedianMs": null
+    },
+    {
+      "observe": true,
+      "dense": false,
+      "tickP95MedianMs": 0.11089999999990141,
+      "queryP95MedianMs": 0.10339999999996508,
+      "updateP95MedianMs": 0.006299999999100692
+    },
+    {
+      "observe": true,
+      "dense": true,
+      "tickP95MedianMs": 1.6323999999995067,
+      "queryP95MedianMs": 1.6291000000001077,
+      "updateP95MedianMs": 0.0032000000010157237
+    }
+  ]
+}

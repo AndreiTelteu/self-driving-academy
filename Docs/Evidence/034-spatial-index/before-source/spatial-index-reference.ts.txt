@@ -1,0 +1,55 @@
+// Exhaustive reference prepared before PBI034's production algorithm.
+export interface ReferencePoint { x: number; y: number; z: number }
+export type ReferenceEntity = {
+  id: string; incarnation: number; kind: 'VEHICLE' | 'OBSTACLE';
+  shape: { type: 'SPHERE'; centerM: ReferencePoint; radiusM: number };
+} | {
+  id: string; incarnation: number; kind: 'ZONE';
+  shape: { type: 'PRISM'; verticesM: ReferencePoint[]; minHeightM: number; maxHeightM: number };
+};
+export interface ReferenceQuery { centerM: ReferencePoint; radiusM: number }
+export function bruteQuery(entities: Iterable<ReferenceEntity>, query: ReferenceQuery): string[] {
+  const found: string[] = [];
+  for (const entity of entities) {
+    const shape = entity.shape;
+    let distance: number;
+    if (shape.type === 'SPHERE') {
+      distance = Math.max(0, Math.hypot(query.centerM.x - shape.centerM.x,
+        query.centerM.y - shape.centerM.y, query.centerM.z - shape.centerM.z) - shape.radiusM);
+    } else {
+      let inside = false, edgeDistance = Infinity;
+      const p = query.centerM;
+      for (let i = 0; i < shape.verticesM.length; i++) {
+        const a = shape.verticesM[i], b = shape.verticesM[(i + 1) % shape.verticesM.length];
+        if ((a.z > p.z) !== (b.z > p.z) && p.x < (b.x - a.x) * (p.z - a.z) / (b.z - a.z) + a.x)
+          inside = !inside;
+        const dx = b.x - a.x, dz = b.z - a.z;
+        const t = Math.max(0, Math.min(1, ((p.x - a.x) * dx + (p.z - a.z) * dz) / (dx * dx + dz * dz)));
+        edgeDistance = Math.min(edgeDistance, Math.hypot(p.x - a.x - t * dx, p.z - a.z - t * dz));
+      }
+      const dy = Math.max(shape.minHeightM - p.y, p.y - shape.maxHeightM, 0);
+      distance = Math.hypot(inside ? 0 : edgeDistance, dy);
+    }
+    if (distance <= query.radiusM) found.push(entity.id);
+  }
+  return found.sort();
+}
+export function spatialFixture(dense: boolean): ReferenceEntity[] {
+  const entities: ReferenceEntity[] = [];
+  const cars = dense ? 110 : 64, obstacles = dense ? 96 : 32, zones = dense ? 256 : 24;
+  for (let i = 0; i < cars + obstacles; i++) {
+    entities.push({ id: `${i < cars ? 'vehicle' : 'obstacle'}-${i}`, incarnation: 1,
+      kind: i < cars ? 'VEHICLE' : 'OBSTACLE',
+      shape: { type: 'SPHERE', radiusM: i < cars ? 2.5 : 1,
+        centerM: { x: dense ? (i % 16) - 8 : (i % 16) * 32 - 256,
+          y: i % 17 === 0 ? 12 : 0, z: dense ? Math.floor(i / 16) - 8 : Math.floor(i / 16) * 32 - 128 } } });
+  }
+  for (let i = 0; i < zones; i++) {
+    const x = dense ? (i % 16) - 8 : (i % 8) * 64 - 256, z = dense ? Math.floor(i / 16) - 8 : Math.floor(i / 8) * 64 - 128;
+    const extent = i === 0 ? 10000 : 4;
+    entities.push({ id: `zone-${i}`, incarnation: 1, kind: 'ZONE', shape: { type: 'PRISM',
+      minHeightM: i % 13 === 0 ? 10 : -1, maxHeightM: i % 13 === 0 ? 13 : 1,
+      verticesM: [{ x, y: 0, z }, { x: x + extent, y: 0, z }, { x: x + extent, y: 0, z: z + extent }, { x, y: 0, z: z + extent }] } });
+  }
+  return entities;
+}

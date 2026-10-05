@@ -1,0 +1,200 @@
+import { cpus, platform, release, totalmem } from 'node:os';
+import { performance } from 'node:perf_hooks';
+import { execFileSync } from 'node:child_process';
+import { readFileSync, writeFileSync, mkdirSync, renameSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { bruteQuery, spatialFixture } from '../tests/world/spatial-index-reference.ts';
+
+const baseline = process.argv.includes('--baseline');
+const smoke = process.argv.includes('--smoke');
+const cpuProbe = process.argv.includes('--cpu-probe');
+const durationS = smoke ? 1 : 120,
+  warmupS = smoke ? 0 : 30,
+  repetitions = smoke ? 1 : 5;
+const evidence = 'Docs/Evidence/034-spatial-index';
+mkdirSync(evidence, { recursive: true });
+if (baseline && process.argv.includes('--preserve-trial'))
+  renameSync(`${evidence}/before.json`, `${evidence}/before-trial.json`);
+const sources = ['scripts/benchmark-spatial-index.mjs', 'tests/world/spatial-index-reference.ts'];
+if (!baseline) sources.push('src/world/spatial-index.ts');
+const report = {
+  capturedAt: new Date().toISOString(),
+  mode: baseline ? 'BEFORE_EXHAUSTIVE' : 'AFTER_INDEX',
+  commit: execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(),
+  sourceHashes: Object.fromEntries(
+    sources.map((source) => [
+      source,
+      createHash('sha256').update(readFileSync(source)).digest('hex'),
+    ]),
+  ),
+  hardware: {
+    cpu: cpus()[0]?.model,
+    logicalCpus: cpus().length,
+    ramBytes: totalmem(),
+    os: `${platform()} ${release()}`,
+    powerScheme:
+      platform() === 'win32'
+        ? execFileSync('powercfg', ['/getactivescheme'], { encoding: 'utf8' }).trim()
+        : null,
+  },
+  runtime: process.version,
+  budgetVersion: '203-initial-1',
+  fixtureVersion: '034-local-mutable-v1',
+  scope:
+    'CPU Node algorithm fixture, no browser, renderer, GPU, FPS or full authoritative tick claim',
+  protocol: {
+    warmupS: cpuProbe ? null : warmupS,
+    durationS: cpuProbe ? null : durationS,
+    repetitions,
+    tickHz: cpuProbe ? null : 60,
+    probe: cpuProbe
+      ? 'bounded supplementalCPU; 100warmup ticks+600measured ticks per observer configuration per repetition; unpaced wall time measured, no realtime throughput claim'
+      : 'paced wall steady-state',
+    observer:
+      'on/off paired within each repetition; external whole-tick timer on both, optional query/update sub-timers on; admitted7201 samples per array',
+    seed: 'none; deterministic integer grid and tick modulo fixture; same700iterations both configs in CPU probe',
+    workloads: [
+      'normal64vehicles32obstacles24zones',
+      'dense110vehicles96obstacles256zones',
+      'moving-boundaries',
+      'remove-recreate',
+    ],
+    query: 'one query per 64 normal and 110 dense vehicles per tick; radius12m; exact3D shapes',
+    budget:
+      'No fixed isolated index CPU budget; compare5.5ms provisional whole-tick ceiling and >10% AND >1ms regression3/5',
+  },
+  runs: [],
+};
+const createIndex = baseline
+  ? null
+  : (await import('../src/world/spatial-index.ts')).createSpatialIndex;
+function context(dense) {
+  const entities = spatialFixture(dense),
+    map = new Map(entities.map((entity) => [entity.id, entity]));
+  const index = createIndex?.();
+  if (index) for (const entity of entities) index.upsert(entity);
+  return { dense, entities, map, index };
+}
+function tick(ctx, tickNumber, observe) {
+  const { entities, map, index } = ctx;
+  const mutationStart = observe ? performance.now() : 0;
+  const car = entities[tickNumber % (ctx.dense ? 110 : 64)];
+  // Every tick crosses a signed cell boundary; every30th removes/recreates identity.
+  if (tickNumber % 30 === 0) {
+    map.delete(car.id);
+    index?.remove(car.id, car.incarnation);
+    car.incarnation++;
+  }
+  car.shape.centerM.x = ((tickNumber % 9) - 4) * 32;
+  map.set(car.id, car);
+  index?.upsert(car);
+  const mutationMs = observe ? performance.now() - mutationStart : null;
+  const queryStart = observe ? performance.now() : 0;
+  let checksum = 0;
+  for (let i = 0; i < (ctx.dense ? 110 : 64); i++) {
+    const query = { centerM: entities[i].shape.centerM, radiusM: 12 };
+    checksum += index ? index.query(query).length : bruteQuery(map.values(), query).length;
+  }
+  return { mutationMs, queryMs: observe ? performance.now() - queryStart : null, checksum };
+}
+const percentile = (samples, fraction) =>
+  samples.slice().sort((a, b) => a - b)[Math.floor((samples.length - 1) * fraction)] ?? null;
+function summary(samples) {
+  return {
+    count: samples.length,
+    p50: percentile(samples, 0.5),
+    p95: percentile(samples, 0.95),
+    p99: percentile(samples, 0.99),
+  };
+}
+function pushBounded(samples, value) {
+  if (samples.length >= 7201) throw new Error('Benchmark sample capacity exceeded');
+  samples.push(value);
+}
+for (let repetition = 0; repetition < repetitions; repetition++) {
+  for (const observe of [false, true]) {
+    const contexts = [context(false), context(true)];
+    const samples = contexts.map(() => ({ query: [], mutation: [], tick: [], checksum: 0 }));
+    const started = performance.now();
+    let ticks = 0,
+      measuredTicks = 0;
+    while (cpuProbe ? ticks < 700 : performance.now() - started < (warmupS + durationS) * 1000) {
+      const measuring = cpuProbe ? ticks >= 100 : performance.now() - started >= warmupS * 1000;
+      for (let i = 0; i < contexts.length; i++) {
+        const t = performance.now(),
+          result = tick(contexts[i], ticks, observe && measuring);
+        if (measuring) {
+          const sample = samples[i];
+          sample.checksum += result.checksum;
+          pushBounded(sample.tick, performance.now() - t);
+          if (observe) {
+            pushBounded(sample.query, result.queryMs);
+            pushBounded(sample.mutation, result.mutationMs);
+          }
+        }
+      }
+      if (measuring) measuredTicks++;
+      ticks++;
+      const remaining = started + (ticks * 1000) / 60 - performance.now();
+      if (!cpuProbe && remaining > 0)
+        await new Promise((resolve) => setTimeout(resolve, remaining));
+    }
+    report.runs.push({
+      repetition,
+      observe,
+      wallMs: performance.now() - started,
+      ticks,
+      measuredTicks,
+      workloads: samples.map((sample, i) => ({
+        dense: contexts[i].dense,
+        checksum: sample.checksum,
+        queryCpuMs: summary(sample.query),
+        updateCpuMs: summary(sample.mutation),
+        tickCpuMs: summary(sample.tick),
+        stats: contexts[i].index?.getStats() ?? {
+          entities: contexts[i].map.size,
+          references: 0,
+          cells: 0,
+        },
+      })),
+    });
+    writeFileSync(
+      `${evidence}/${baseline ? 'before' : 'after'}${smoke ? '-smoke' : ''}.json`,
+      JSON.stringify(report, null, 2),
+    );
+    console.log(`034 ${report.mode} repetition ${repetition + 1}/${repetitions} saved`);
+    for (const ctx of contexts) ctx.index?.dispose();
+  }
+}
+report.medians = [false, true].flatMap((observe) =>
+  [false, true].map((dense) => {
+    const rows = report.runs
+      .filter((run) => run.observe === observe)
+      .map((run) => run.workloads.find((row) => row.dense === dense));
+    return {
+      observe,
+      dense,
+      tickP95MedianMs: percentile(
+        rows.map((row) => row.tickCpuMs.p95),
+        0.5,
+      ),
+      queryP95MedianMs: observe
+        ? percentile(
+            rows.map((row) => row.queryCpuMs.p95),
+            0.5,
+          )
+        : null,
+      updateP95MedianMs: observe
+        ? percentile(
+            rows.map((row) => row.updateCpuMs.p95),
+            0.5,
+          )
+        : null,
+    };
+  }),
+);
+writeFileSync(
+  `${evidence}/${baseline ? 'before' : 'after'}${smoke ? '-smoke' : ''}.json`,
+  JSON.stringify(report, null, 2),
+);
+console.log(`034 ${report.mode} complete`);
