@@ -1,6 +1,12 @@
 export { parseRoadMap, mapSchemaLimits } from './parser';
 export { MapValidationError } from './errors';
 export {
+  createStopRules,
+  type StopObservation,
+  type StopRuleOptions,
+  type StopZone,
+} from './stop-rules';
+export {
   createSignalController,
   type SignalState,
   type MovementSignal,

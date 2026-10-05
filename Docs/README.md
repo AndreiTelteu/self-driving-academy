@@ -74,6 +74,8 @@ Fundațiile suplimentare implementate sunt [bucla cu pas fix](fixed-tick.md), [m
 
 ## Revizia 0.3
 
+[Regulile STOP](stop-rules.md) disting oprirea completă de traversarea liniei și de rolling stop, pe observații autoritare consecutive.
+
 [Controllerul de semafoare](signals.md) gestionează fazele la tick autoritar și semnalele pe mișcare, cu verificarea conflictelor și publicare deterministă.
 
 Învățarea are loc numai în LEARNING; MANUAL permite intervenții fără schimbarea stilului. Taxiurile și civilii adoptă stilul comun. V1 include revenue și ratings cu grafice KPIs, trei misiuni zilnice și XP din misiuni/timp activ, fără pierderi XP, conform reviziei 0.5. Valorile economice și pragurile sunt propuneri de calibrare. Verifică boardul și planul cu PBI/Validate-Board.ps1 și PBI/Validate-Plan.ps1.

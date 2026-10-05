@@ -28,6 +28,8 @@ PBI039 oferă [zonele de trecere și contextul de pericol](crosswalk-zones.md): 
 
 ## Repere pentru distracție și provocări
 
+PBI037 oferă [zonele și dovezile STOP](stop-rules.md): apropiere, staționare continuă lângă linie și traversare distinctă, folosind bara frontală autoritară. Istoricul limitat și identificarea oportunităților împiedică transferul dovezii între respawn, reseturi și STOP-uri consecutive.
+
 PBI036 implementează [controllerul de semafoare](signals.md): faze deterministe la 60 Hz, semnal consultat pentru mișcarea concretă și evenimente unice pentru tranziții. Configurația respinge mișcări GREEN incompatibile, iar retry-ul publicării păstrează prefixul deja acceptat fără repetarea evenimentelor.
 
 V1 include zone de serviciu fictive pentru spital/maternitate, toalete publice sau benzinării/cafenele și terminal, plus parcare pentru drift, rampă și alee destructibilă. [Provocările](28-provocari-random-si-revenire.md) verifică accesibilitatea acestor zone înainte de ofertă. Distrugerea mobilierului decorativ nu elimină semantica STOP/semafor/benzi; obstacolele deplasate sunt raportate contextului fizic, conform [modulului 26](26-joaca-libera-haos-si-distrugere.md).
