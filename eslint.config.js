@@ -27,6 +27,7 @@ export default [
     ignores: [
       'dist/**',
       'node_modules/**',
+      '.worktrees/**',
       'Docs/**',
       'PBI/**',
       '.pbi-validation-*/**',

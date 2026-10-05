@@ -10,3 +10,5 @@ export * from './controller';
 export * from './keyboard-filter';
 export * from './damage-port';
 export * from './damage-state';
+export * from './drivetrain';
+export * from './braking-reverse-input';

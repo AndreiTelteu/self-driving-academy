@@ -1,6 +1,7 @@
 import type { VehicleAvailabilityProvider } from './damage-port';
 import type { ContractContext } from '../sessions';
-import type { BodyIdentity } from './body-port';
+import type { BodyIdentity, BodyState } from './body-port';
+import type { DrivetrainProjection } from './drivetrain';
 import type { ControlMode, VehicleCommand } from './contracts';
 import type { PhysicsCosts, PhysicsInput } from './physics';
 
@@ -19,7 +20,12 @@ export interface VehicleActuationInput extends PhysicsInput {
 /** World stays caller-owned. This port cannot teleport or change vehicle mechanics. */
 export interface VehicleActuationPort {
   bodyIdentity(entityId: string): BodyIdentity | undefined;
+  readBody?(identity: BodyIdentity): BodyState;
   step(inputs: ReadonlyMap<string, VehicleActuationInput>, measure?: boolean): PhysicsCosts;
+}
+export interface VehicleControllerOptions {
+  readonly drivetrainVersion?: '027-braking-reverse-v1';
+  readonly availability?: VehicleAvailabilityProvider;
 }
 export interface VehicleCommandPacket {
   readonly identity: BodyIdentity;
@@ -44,6 +50,7 @@ export interface VehicleControlProjection {
   readonly signalStartedTick: number | null;
   readonly leftIndicatorOn: boolean;
   readonly rightIndicatorOn: boolean;
+  readonly drivetrain?: DrivetrainProjection;
 }
 export interface VehicleControllerFrame {
   readonly tick: number;
@@ -54,6 +61,7 @@ export interface VehicleControllerFrame {
     readonly reason: 'NO_AUTHORITY';
   }[];
   readonly physics: PhysicsCosts;
+  readonly drivetrainCpuMs?: number;
 }
 export interface VehicleController {
   register(identity: BodyIdentity): void;
@@ -79,10 +87,12 @@ export interface VehicleController {
     readonly suspended: boolean;
     readonly disposed: boolean;
     readonly fault: { readonly attemptedTick: number; readonly stage: 'ACTUATION' } | null;
+    readonly drivetrain?: {
+      readonly states: number;
+      readonly enabled: number;
+      readonly shifting: number;
+      readonly retainedHistory: 0;
+    };
   };
   dispose(): void;
-}
-
-export interface VehicleControllerOptions {
-  readonly availability?: VehicleAvailabilityProvider;
 }
