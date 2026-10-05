@@ -1,0 +1,27 @@
+### Result
+{
+  "focus": true,
+  "status": "Proba finalizată; raport disponibil pentru export.",
+  "report": {
+    "fixture": "218-browser-counter-v1-SMOKE",
+    "runs": 10,
+    "gpu": {
+      "vendor": "amd",
+      "renderer": "rdna-3",
+      "version": "unknown version"
+    }
+  },
+  "exported": {
+    "saved": "browser-smoke.json"
+  }
+}
+### Ran Playwright code
+```js
+await page.evaluate('async () => ({focus:document.hasFocus(),status:document.getElementById(\'status\').textContent,error:window.performanceHarnessError,report:window.performanceHarnessReport ? {fixture:window.performanceHarnessReport.identity.fixtureVersion,runs:window.performanceHarnessReport.runs.length,gpu:window.performanceHarnessReport.identity.hardware.browserGpu} : null,exported:window.performanceHarnessReport ? await fetch(\'/export\',{method:\'POST\',body:JSON.stringify(window.performanceHarnessReport)}).then(r=>r.json()) : null})');
+```
+### Page
+- Page URL: http://127.0.0.1:5190/
+- Page Title: Performance harness 218
+- Console: 1 errors, 0 warnings
+### Events
+- New console entries: .playwright-cli\console-2026-10-05T06-27-08-785Z.log#L5-L6

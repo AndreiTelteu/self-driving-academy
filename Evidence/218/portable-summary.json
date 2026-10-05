@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-10-05T02:18:18.868Z",
+  "identity": {
+    "commit": "bf37fd91a6a906faa98992308bd76fddd40420c6",
+    "sourceHash": "d1d6bf4c9ce25bd0f1389f6763b0158b95dcda0c296b9467fe272c8fe9e4bf30",
+    "budgetVersion": "203-initial-1",
+    "fixtureVersion": "218-fixed-counter-v1/20000-frames",
+    "engineVersion": "not rendered",
+    "physicsVersion": null,
+    "mapVersion": null,
+    "seeds": [
+      42
+    ],
+    "hardware": {
+      "cpu": "AMD Ryzen 9 7950X3D 16-Core Processor          ",
+      "ramBytes": 50337325056,
+      "os": "win32 10.0.26200",
+      "runtime": "v24.21.0",
+      "inputs": [
+        "scripts/benchmark-performance-harness.mjs",
+        "src/telemetry/performance.ts",
+        "src/simulation/fixed-tick.ts",
+        "package-lock.json"
+      ]
+    },
+    "browser": null,
+    "backend": "Node CPU; synthetic clock",
+    "preset": "not applicable",
+    "cssResolution": null,
+    "internalResolution": null,
+    "devicePixelRatio": null,
+    "cache": "warm JS after one identical pass per arm",
+    "network": "not applicable",
+    "powerState": "not captured; portable CPU probe"
+  },
+  "role": "portable-cpu",
+  "scope": "Real fixed-tick core with deterministic counter, synthetic 60Hz clock; no physics, renderer or hardware FPS",
+  "gameplayGate": "NOT_VALIDATED",
+  "modes": [
+    {
+      "enabled": false,
+      "repeats": 5,
+      "cpuP95Ms": {
+        "min": 0.002299999999991087,
+        "median": 0.002599999999972624,
+        "max": 0.0033999999999991815
+      },
+      "frameP95Ms": null,
+      "simulationRatio": {
+        "min": 0.9999999999999998,
+        "median": 0.9999999999999998,
+        "max": 0.9999999999999998
+      },
+      "collectorOwnedBytes": {
+        "min": 44,
+        "median": 44,
+        "max": 44
+      },
+      "dropped": 0
+    },
+    {
+      "enabled": true,
+      "repeats": 5,
+      "cpuP95Ms": {
+        "min": 0.0026000000000294676,
+        "median": 0.0027000000000043656,
+        "max": 0.0028999999999541615
+      },
+      "frameP95Ms": null,
+      "simulationRatio": {
+        "min": 0.9999999999999998,
+        "median": 0.9999999999999998,
+        "max": 0.9999999999999998
+      },
+      "collectorOwnedBytes": {
+        "min": 1760044,
+        "median": 1760044,
+        "max": 1760044
+      },
+      "dropped": 0
+    }
+  ],
+  "pairedCpuP95OverheadMs": {
+    "min": -0.0006999999999948159,
+    "median": 0.00029999999992469384,
+    "max": 0.0004000000000132786
+  },
+  "overhead": [
+    {
+      "repeat": 1,
+      "cpuP95DeltaMs": -0.0006999999999948159,
+      "totalWallDeltaMs": -6.5020999999999844
+    },
+    {
+      "repeat": 2,
+      "cpuP95DeltaMs": 5.684341886080802e-14,
+      "totalWallDeltaMs": -4.579800000000034
+    },
+    {
+      "repeat": 3,
+      "cpuP95DeltaMs": 0.00029999999992469384,
+      "totalWallDeltaMs": 2.8000999999999294
+    },
+    {
+      "repeat": 4,
+      "cpuP95DeltaMs": 0.0004000000000132786,
+      "totalWallDeltaMs": 13.58339999999987
+    },
+    {
+      "repeat": 5,
+      "cpuP95DeltaMs": 0.0004000000000132786,
+      "totalWallDeltaMs": 13.51380000000006
+    }
+  ],
+  "coldLoad": [],
+  "warmLoad": [],
+  "unavailable": {
+    "gpu": "No renderer/API",
+    "frame": "Synthetic clock is not hardware cadence",
+    "input": "Authoritative driving input unimplemented",
+    "learning": "Learning pipeline unimplemented",
+    "memory": "Exact application memory unavailable; owned collector bytes and snapshots reported"
+  },
+  "exclusions": [
+    "CPU loop wall throughput is not gameplay real-time throughput; simulation ratio refers to admitted synthetic clock",
+    "Cold browser loading is a separate hardware fixture"
+  ]
+}
