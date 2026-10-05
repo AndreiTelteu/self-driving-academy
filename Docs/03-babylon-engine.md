@@ -36,6 +36,8 @@ PBI014 adaugă [interpolarea snapshoturilor](render-sync.md): poziții, orientă
 
 Camera din spate este un controller propriu peste camerele Babylon, cu amortizare, distanță dependentă de viteză și evitare a obstacolelor. Controllerul urmărește vehiculul selectat, nu autoritatea inputului. Schimbarea taxiului păstrează ID-ul și direcția acestuia și mută doar camera.
 
+PBI017 implementează [camera din spate și first-person](vehicle-camera.md), cu poziția șoferului calibrată, FOV/mișcare reglabile, obstacole și ownership al vizibilității caroseriei. Captura explicită a mouse-ului, privirea, recenter și Escape au fost verificate în Chrome pe WebGL2 și WebGPU; limitarea pointer lock a hostului T3 este păstrată în dovezi.
+
 Pickingul mapează mesh sau instance la entityId. Clickul pe o mașină produce SELECT_VEHICLE; preluarea manuală este o comandă separată. UI nu poate trimite selecții în timp ce un dialog modal consumă pointerul. Selectarea din lista flotei folosește direct ID-ul și nu depinde de vizibilitatea mesh-ului.
 
 ## Materiale iluminare și asseturi

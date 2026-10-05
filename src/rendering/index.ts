@@ -20,3 +20,13 @@ export interface BootstrapView {
   show(presentation: BootstrapPresentation): void;
   dispose(): void;
 }
+export { VehicleCameraController, validateCameraPreferences } from './vehicle-camera';
+export type {
+  VehicleCameraMode,
+  CameraPreferences,
+  CameraTarget,
+  VehicleCameraPose,
+  CameraSweep,
+} from './vehicle-camera';
+export { resolveCameraObstacles } from './camera-collision';
+export type { CameraPoint, CameraObstacle } from './camera-collision';

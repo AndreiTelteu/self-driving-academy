@@ -27,3 +27,5 @@ export function createBabylonBootstrapRenderer(view: BootstrapView): Renderer {
     dispose: () => view.dispose(),
   };
 }
+export { BabylonVehicleCamera, type BabylonVehicleCameraOptions } from './vehicle-camera';
+export { bindVehicleCameraInput, type VehicleCameraInputOptions } from './vehicle-camera-input';
