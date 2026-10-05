@@ -9,6 +9,12 @@ export { bindVehicleCameraInput, type VehicleCameraInputOptions } from './vehicl
 export { diagnoseBackend, type BabylonDiagnostics } from './diagnostics-adapter';
 export { showDevelopmentInspector } from './dev-inspector';
 export {
+  VehiclePickingRegistry,
+  type VehiclePickingRegistryOptions,
+} from './vehicle-picking-registry';
+export { BabylonVehiclePicker, type SelectVehicleIntent } from './vehicle-picking';
+export { bindVehiclePickingInput, type VehiclePickingInputOptions } from './vehicle-picking-input';
+export {
   createBabylonRecoverySession,
   subscribeRenderingLoss,
   type RecoverySceneSnapshot,

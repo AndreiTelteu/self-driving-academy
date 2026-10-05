@@ -70,6 +70,8 @@ Fundațiile suplimentare implementate sunt [bucla cu pas fix](fixed-tick.md), [m
 
 [Conflictele intersecțiilor](intersection-conflicts.md) combină restricțiile semantice cu geometria traiectoriilor și oferă query-uri fără dependență de randare sau prioritate dedusă din texturi.
 
+[Pickingul vehiculelor](vehicle-picking.md) păstrează identitatea la meshuri și instanțe, respectă ocluzia și modalurile și emite numai intenția de selecție.
+
 ## Revizia 0.3
 
 Învățarea are loc numai în LEARNING; MANUAL permite intervenții fără schimbarea stilului. Taxiurile și civilii adoptă stilul comun. V1 include revenue și ratings cu grafice KPIs, trei misiuni zilnice și XP din misiuni/timp activ, fără pierderi XP, conform reviziei 0.5. Valorile economice și pragurile sunt propuneri de calibrare. Verifică boardul și planul cu PBI/Validate-Board.ps1 și PBI/Validate-Plan.ps1.

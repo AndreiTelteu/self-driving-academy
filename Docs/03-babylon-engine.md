@@ -40,6 +40,8 @@ PBI017 implementează [camera din spate și first-person](vehicle-camera.md), cu
 
 Pickingul mapează mesh sau instance la entityId. Clickul pe o mașină produce SELECT_VEHICLE; preluarea manuală este o comandă separată. UI nu poate trimite selecții în timp ce un dialog modal consumă pointerul. Selectarea din lista flotei folosește direct ID-ul și nu depinde de vizibilitatea mesh-ului.
 
+PBI018 implementează [selecția prin picking](vehicle-picking.md), cu registry de identități pentru meshuri, instanțe obișnuite și batchuri thin-instance. Ray pickingul verifică obiectul vizibil cel mai apropiat; decorul poate obtura un vehicul. Modalul blochează selecția, iar mișcarea pointerului nu scanează scena implicit. Intenția de selecție nu transferă controlul manual.
+
 ## Materiale iluminare și asseturi
 
 Direcția inițială folosește materiale simple sau PBR moderat, lumină ambientală și direcțională, umbre limitate și niveluri de calitate. Orașul este stilizat cu atmosferă americană; fizica realistă nu obligă fotorealismul. Tonemappingul și spațiul de culoare rămân coerente între backenduri.
