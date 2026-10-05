@@ -2,6 +2,13 @@ import { createBootstrapSimulation } from '../simulation';
 import type { SnapshotStore } from '../persistence';
 import type { Renderer } from '../rendering';
 export { createRenderingLifecycle, type RenderingState } from './rendering-lifecycle';
+export {
+  createRendererRecovery,
+  ownRecoverySnapshot,
+  type RecoveryRenderer,
+  type RendererRecoveryState,
+  type RendererRecoveryServices,
+} from './renderer-recovery';
 
 export interface ApplicationServices {
   readonly renderer: Renderer;

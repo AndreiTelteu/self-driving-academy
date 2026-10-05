@@ -64,6 +64,8 @@ Bucla de render primește snapshoturile și alpha de interpolare. Resize, modifi
 
 La pierderea dispozitivului se suspendă sesiunea și se salvează starea înainte de recuperare; resursele vizuale se recreează din registry și snapshot. [GPUDevice lost](https://developer.mozilla.org/en-US/docs/Web/API/GPUDevice/lost)
 
+PBI020 implementează [recuperarea GPU din checkpoint RAM](gpu-recovery.md): pierderea nativă suspendă bucla existentă, reconstruiește registry-ul și reprezentările pe un backend nou și păstrează tick-ul și starea autoritară. Retry după eșec folosește același checkpoint; reluarea este explicită. Probe separate verifică 20 de cicluri reale WebGL2/WebGPU și integrarea în bootstrap. Persistența durabilă rămâne în PBI-urile de salvare.
+
 Un panou de diagnostic arată backendul, tick, draw calls, FPS și timpi CPU, număr de entități, versiunea profilului și starea workerului. Datele de profiler nu sunt actualizate în fiecare componentă UI. Inspectorul este o unealtă de dezvoltare; nu este parte din fluxul de joc.
 
 PBI019 conectează [diagnosticele Babylon](render-diagnostics.md) în bootstrap: colector cu memorie plafonată, CPU și interval de cadru separate de GPU, contoare disponibile și panou actualizat la cel mult 5 Hz. Valorile fără instrumentare reală sunt indisponibile. Inspectorul se încarcă numai în dezvoltare și este exclus din graful buildului de producție; limitarea internă de cleanup a versiunii 9.29.0 este documentată în dovezi.

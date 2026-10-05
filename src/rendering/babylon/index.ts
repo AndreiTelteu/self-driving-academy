@@ -4,6 +4,16 @@ export { createRenderingBackend, type RenderingBackend } from './backend';
 export { BabylonSceneAdapter, type VisualRepresentation } from './scene-adapter';
 export { BabylonSnapshotPresenter, type WheelNodeResolver } from './snapshot-presenter';
 export { createDaylight, type DaylightMaterial, type QualityViewport } from './daylight';
+export { BabylonVehicleCamera, type BabylonVehicleCameraOptions } from './vehicle-camera';
+export { bindVehicleCameraInput, type VehicleCameraInputOptions } from './vehicle-camera-input';
+export { diagnoseBackend, type BabylonDiagnostics } from './diagnostics-adapter';
+export { showDevelopmentInspector } from './dev-inspector';
+export {
+  createBabylonRecoverySession,
+  subscribeRenderingLoss,
+  type RecoverySceneSnapshot,
+  type BabylonRecoverySession,
+} from './recovery-session';
 export {
   BabylonAssetRegistry,
   DEFAULT_ASSET_LIMITS,
@@ -27,7 +37,3 @@ export function createBabylonBootstrapRenderer(view: BootstrapView): Renderer {
     dispose: () => view.dispose(),
   };
 }
-export { BabylonVehicleCamera, type BabylonVehicleCameraOptions } from './vehicle-camera';
-export { bindVehicleCameraInput, type VehicleCameraInputOptions } from './vehicle-camera-input';
-export { diagnoseBackend, type BabylonDiagnostics } from './diagnostics-adapter';
-export { showDevelopmentInspector } from './dev-inspector';
