@@ -61,6 +61,7 @@ SimulationEvent are eventId, type, tick, entityIds unice și payload exact pentr
 | MANUAL_START / MANUAL_END | vehicleId, controlMode MANUAL/LEARNING |
 | LEADER_ACQUIRED | vehicleId, leaderId distinct, gapM ≥0 |
 | SIGNAL_CHANGED | signalId, state RED/YELLOW/GREEN |
+| SIGNAL_PHASE_CHANGED | signalId, intersectionId, fromPhaseId/toPhaseId distincte, movementStates (1..128 IDs unice + RED/YELLOW/GREEN) |
 | STOP_APPROACH / STOP_LINE_CROSSED | vehicleId, opportunityId, stopLineId |
 | FULL_STOP | vehicleId, opportunityId, durationS ≥0 |
 | LANE_CHANGE_STARTED / LANE_CHANGE_COMPLETED | vehicleId, opportunityId, fromLaneId/toLaneId distincte |
@@ -70,6 +71,8 @@ SimulationEvent are eventId, type, tick, entityIds unice și payload exact pentr
 | VEHICLE_RECOVERED | vehicleId, recoveryPointId |
 | WORLD_RESET | previousWorldEpoch, reason SCENARIO_RESET; worldEpoch=previousWorldEpoch+1 |
 | DESTRUCTIBLE_BROKEN | objectId, instigatorId nullable, impulseNs ≥0 |
+
+PBI036 adaugă explicit SIGNAL_PHASE_CHANGED pentru o fază cu stări diferite per mișcare; SIGNAL_CHANGED rămâne compatibil. SignalId este în entityIds; intersectionId/movementId/phaseId sunt repere semantice. Evenimentul are tick-ul schimbării și ID stabil per sesiune/epoch/hartă/semafor/tick, fără un singur color global inventat. Parserul copiază și îngheață lista și respinge duplicate/liste goale ori peste128. [Controllerul de semafoare](signals.md) validează GREEN și emite prin event bus.
 
 PROFILE_ACTIVATE descrie o publicare programată; WORLD_RESET descrie commitul în noua generație. Tipurile viitoare primesc payload/parser specific și teste în PBI-ul proprietar, cu schimbare explicită de schemă sau migrare când compatibilitatea o cere. Nu există fallback arbitrar pentru tip necunoscut.
 

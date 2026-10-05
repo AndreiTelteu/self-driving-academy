@@ -19,6 +19,16 @@ interface EventPayloadMap {
   MANUAL_END: { readonly vehicleId: string; readonly controlMode: ControlMode };
   LEADER_ACQUIRED: { readonly vehicleId: string; readonly leaderId: string; readonly gapM: number };
   SIGNAL_CHANGED: { readonly signalId: string; readonly state: 'RED' | 'YELLOW' | 'GREEN' };
+  SIGNAL_PHASE_CHANGED: {
+    readonly signalId: string;
+    readonly intersectionId: string;
+    readonly fromPhaseId: string;
+    readonly toPhaseId: string;
+    readonly movementStates: readonly {
+      readonly movementId: string;
+      readonly state: 'RED' | 'YELLOW' | 'GREEN';
+    }[];
+  };
   STOP_APPROACH: {
     readonly vehicleId: string;
     readonly opportunityId: string;
@@ -125,6 +135,46 @@ export function parseSimulationEvent(value: unknown): SimulationEvent {
         payload: Object.freeze({
           signalId: referencedEntity(p.signalId),
           state: choice(p.state, ['RED', 'YELLOW', 'GREEN']),
+        }),
+      });
+    }
+    case 'SIGNAL_PHASE_CHANGED': {
+      const p = fields(data.payload, [
+        'signalId',
+        'intersectionId',
+        'fromPhaseId',
+        'toPhaseId',
+        'movementStates',
+      ]);
+      requireContract(
+        Array.isArray(p.movementStates) &&
+          p.movementStates.length > 0 &&
+          p.movementStates.length <= 128,
+        'Expected one to128 movement states',
+      );
+      const movementStates = list(p.movementStates, (value) => {
+        const state = fields(value, ['movementId', 'state']);
+        return Object.freeze({
+          movementId: text(state.movementId),
+          state: choice(state.state, ['RED', 'YELLOW', 'GREEN']),
+        });
+      });
+      requireContract(
+        new Set(movementStates.map((state) => state.movementId)).size === movementStates.length,
+        'Duplicate signal movement state',
+      );
+      const fromPhaseId = text(p.fromPhaseId),
+        toPhaseId = text(p.toPhaseId);
+      requireContract(fromPhaseId !== toPhaseId, 'Phase change requires distinct phases');
+      return Object.freeze({
+        ...base,
+        type: data.type,
+        payload: Object.freeze({
+          signalId: referencedEntity(p.signalId),
+          intersectionId: text(p.intersectionId),
+          fromPhaseId,
+          toPhaseId,
+          movementStates,
         }),
       });
     }

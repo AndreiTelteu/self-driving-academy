@@ -1,0 +1,23 @@
+# Dovezi PBI036 — semafoare la tick
+
+Controller CPU pur cu query pe intersecție+mișcare, durate60Hz, faze și evenimente stabile. Constructorul validează fiecare GREEN contra035, inclusiv traversarea geometrică fără conflictZone comun declarat. Evenimentul nou SIGNAL_PHASE_CHANGED reprezintă stări mixte per mișcare și păstrează legacy SIGNAL_CHANGED. Contract/documentație: [signals.md](../../signals.md), [data-contracts.md](../../data-contracts.md).
+
+[Tests](tests.txt):11teste proprii PASS: cicluri și sensuri diferite, tick boundaries, eventIds unice, repeated tick fără eveniment, readonly, GREEN unsafe/compatible, pause/resume008, listener failure/reentry, capacity fault, JSONdecode malformed, quantization/singlephase, staleepoch, query suspended și2signal partialpublication/retry. Prefixul deja acceptat nu repetă listenerii și nu pierde failures; state/tick commit după întregul batch. Query în publicație/pending refuzat, event payload este noua stare autoritativă pentru listeneri. [Check](check.txt):typecheck/lint/format/architecture și253teste PASS, exit0. [Build](build.txt): production PASS.
+
+## Probe înainte/final și cost nou
+
+[Before](before.json) capturat înaintea implementării; [after](after.json) păstrează același fixture intersection-CROSS-v1 și aceleași10000conflict lookups035 +10000tick-uri008 fără controller. O warmup+5repetări. Baseline parentf902555 plus020/018WIP independent; final working tree cu controller036 și schimbări independente ale celorlalți agenți; revisionul parent la review/finalizare este f1c7520. Nu este un benchmark pe checkout izolat al acelui commit. Node24.21.0, Ryzen9 7950X3D, Windows10.0.26200 măsurate prin Node OS; GPU/browser/driver/preset/refresh/power nu sunt măsurate. Procesele browser independente pot concura; sunt probe algoritmice CPU, nu FPS, nu hardwaregate gameplay.
+
+Median batch conflictQueries10000=3,3835ms înainte/2,5447ms după; fixedTicks10000=26,2998ms înainte/19,3271ms după. Nu atribuim scăderea unei optimizări a algoritmilor existenți; acestea au rămas neschimbate. Checksumurile arată10000query și10000ticks, fără salturi ale timpului simulat.
+
+Cost nou separat pe1semafor/4faze/7mișcări (durate intenționat scurte2/1/1/2tick): median construction1,1627ms;10000step-uri158,7684ms, incluzând6667evenimente reale validate/published007 și disposal, fără listeneri. Acest fixture generează mai multe schimbări decât un program rutier realist; nu este traficgameplay. Observatorul fixed10000Float64=80000bytes: același batch observat median165,4202ms; ultima repetare p50tickCPU0,0178ms/p95=0,0336ms/p99=0,0553ms. Acest tick măsoară numai controller+bus, nu fizică/controllervehicul/snapshot complet; nu închide bugetul de5,5ms al tickului autoritar complet.
+
+20cicluri create/120step/drop/dispose, cu GC explicit, sunt păstrate în after.json. În fiecare: înainte1program/4faze/28stateEntries/0pending, bus80events/53076codeunits/0listeners. După disposal controller0programs/0phases/0states/0pending și bus0events/0codeunits/0listeners. HeapV8 dupăGC variază10.252.880..10.344.088bytes, primul10.330.760 și ultim10.263.696. Nu pretindem totalRAM sau garbagecollection identică. Controllerul nu reține ledger;007 deține dedup bounded (batch configurat12000events, default10000). Constructor/state/pending sunt limitate prin schema032; prefix publication results sunt eliberate la commit/dispose și primite de apelant.
+
+## Reproducere și limite
+
+`node --import ./scripts/register-typescript.mjs scripts/benchmark-signals.mjs --before`; final `node --expose-gc --import ./scripts/register-typescript.mjs scripts/benchmark-signals.mjs`. Scriptul păstrează5repetări și toate checksumurile; source revision este identificarea de la parent, fără Git calls. [Board](board.txt) păstrează RequireDone036 după mutarea fizică.
+
+Bugete provizorii pre203; nu se închid220/224 și nu se măsoară întreaga flotă. Nu există UI/mesh de semafor, vehicule/controllerdriving sau restoredcheckpoint; initialTick începe prima fază. Contextul/epoch-ul schimbat cere lifecycle nou. EventBus capacity fault cere suspendare/recovery explicită, fără evictare sau epoch fictiv. Un listener care a produs efect și a eșuat nu este rulat din nou; failures sunt returnate. Payload128IDs lungi poate necesita maxEventCodeUnits007 mărit explicit. Controllerul nu dispune busul extern. Nu există criteriu vizual/browser în acest modul CPU pur.
+
+Integrarea finală izolată din indexul Git: [check](staged-check.txt) cu245teste PASS și [build](staged-build.txt) PASS; Validate-Board -RequireDone036 și Validate-Plan PASS. Această verificare exclude lucrul paralel037/203.

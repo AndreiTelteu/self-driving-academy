@@ -1,6 +1,16 @@
 export { parseRoadMap, mapSchemaLimits } from './parser';
 export { MapValidationError } from './errors';
 export {
+  createSignalController,
+  type SignalState,
+  type MovementSignal,
+  type SignalControllerSnapshot,
+  type SignalControllerStep,
+  type SignalControllerStats,
+  type SignalController,
+  type SignalControllerOptions,
+} from './signals';
+export {
   createIntersectionConflicts,
   INTERSECTION_CONFLICT_LIMITS,
   type IntersectionConflictReason,
