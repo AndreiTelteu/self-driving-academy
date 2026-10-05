@@ -22,7 +22,7 @@ npm run build
 npm run preview -- --host 127.0.0.1 --port 4173 --strictPort
 ```
 
-Buildul verifică TypeScript și generează bundle-ul în `dist/`. Preview servește acel build la `http://localhost:4173`; este pentru verificare locală. Pentru instalarea reproductibilă folosește `npm ci`, fără regenerarea lockfile-ului. Loaderul glTF este disponibil ca pachet; integrarea asseturilor urmează contractele din modulul 03.
+Buildul verifică TypeScript și generează bundle-ul în `dist/`. Preview servește acel build la `http://localhost:4173`; este pentru verificare locală. Pentru instalarea reproductibilă folosește `npm ci`, fără regenerarea lockfile-ului. [Registry-ul GLB2](Docs/asset-registry.md) folosește loaderul Babylon cu cache, texturi PNG/JPEG embedded și ownership explicit al resurselor comune.
 
 Verificările statice și formatul codului:
 

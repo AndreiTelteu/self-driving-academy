@@ -44,6 +44,8 @@ Direcția inițială folosește materiale simple sau PBR moderat, lumină ambien
 
 Formatul de asset principal propus este glTF/GLB; loaderul, registry-ul, cache-ul și eliberarea resurselor sunt tratate explicit. Asseturile necesare pornirii au prioritate; decorul poate veni ulterior. O lipsă de decor permite placeholder, iar lipsa datelor de hartă sau a mașinii de bază blochează pornirea cu explicație. [Încărcarea formatelor](https://github.com/BabylonJS/Documentation/blob/master/content/features/featuresDeepDive/importers/loadingFileTypes.md)
 
+PBI015 implementează [registry-ul GLB2](asset-registry.md), cu PNG/JPEG embedded, cache comun și lease-uri pentru instanțe, încărcare critică prioritară, placeholder opțional și limite explicite pentru transferuri/resurse. Materialele și texturile partajate supraviețuiesc până la eliberarea ultimului lease; rapoartele separă transferul, decode/upload CPU și pregătirea shaderelor.
+
 ## Integrarea fizicii
 
 Baza planificată este Rapier 3D cu adaptor propriu. Babylon oferă integrare Havok, dar aceasta nu este aleasă automat pentru vehiculele deja planificate pe Rapier. Mesh picking și scene graph rămân Babylon. Controllerul manual și autonom livrează aceeași VehicleCommand către același vehicul fizic. [Rapier vehicle controller](https://rapier.rs/javascript3d/classes/DynamicRayCastVehicleController.html)
