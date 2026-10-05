@@ -63,7 +63,13 @@ function inspect(file, source) {
     if (token.text === 'require')
       errors.push(`${file}: require is forbidden; use static ESM imports`);
     if (token.text === 'import' && tokens[index + 1]?.text === '(') {
-      errors.push(`${file}: dynamic imports require an explicit architecture policy`);
+      const permitted =
+        file.replaceAll('\\', '/') === 'rendering/babylon/dev-inspector.ts' &&
+        tokens[index + 2]?.kind === SyntaxKind.StringLiteral &&
+        tokens[index + 2]?.value === '@babylonjs/inspector' &&
+        tokens[index + 3]?.text === ')';
+      if (!permitted)
+        errors.push(`${file}: dynamic imports require an explicit architecture policy`);
     }
     if (token.kind !== SyntaxKind.StringLiteral) continue;
     const previous = tokens[index - 1]?.text;
@@ -146,6 +152,20 @@ inspect('ui/architecture-negative-probe.ts', "export * from '../rendering/babylo
 assert(errors.some((error) => error.includes('public index.ts')));
 errors.length = 0;
 console.log('Architecture negative probes: PASS (6 forbidden dependencies rejected)');
+inspect('rendering/babylon/dev-inspector.ts', "const module = import('@babylonjs/inspector');");
+assert.equal(errors.length, 0, 'Explicit local inspector dynamic import rejected');
+for (const [file, source] of [
+  ['simulation/architecture-negative-probe.ts', "const module = import('@babylonjs/inspector');"],
+  ['rendering/babylon/not-inspector.ts', "const module = import('@babylonjs/inspector');"],
+  ['rendering/babylon/dev-inspector.ts', "const module = import('../ui');"],
+  ['rendering/babylon/dev-inspector.ts', 'const module = import(name);'],
+]) {
+  errors.length = 0;
+  inspect(file, source);
+  assert(errors.length > 0, `Inspector exception leaked into ${file}: ${source}`);
+}
+errors.length = 0;
+console.log('Inspector exception negative probes: PASS (4 forbidden imports rejected)');
 
 // Execute the real public TypeScript entry points without DOM, Babylon, Vite or generated files.
 const { hooks } = await import('./register-typescript.mjs');

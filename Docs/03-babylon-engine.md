@@ -66,6 +66,8 @@ La pierderea dispozitivului se suspendă sesiunea și se salvează starea înain
 
 Un panou de diagnostic arată backendul, tick, draw calls, FPS și timpi CPU, număr de entități, versiunea profilului și starea workerului. Datele de profiler nu sunt actualizate în fiecare componentă UI. Inspectorul este o unealtă de dezvoltare; nu este parte din fluxul de joc.
 
+PBI019 conectează [diagnosticele Babylon](render-diagnostics.md) în bootstrap: colector cu memorie plafonată, CPU și interval de cadru separate de GPU, contoare disponibile și panou actualizat la cel mult 5 Hz. Valorile fără instrumentare reală sunt indisponibile. Inspectorul se încarcă numai în dezvoltare și este exclus din graful buildului de producție; limitarea internă de cleanup a versiunii 9.29.0 este documentată în dovezi.
+
 ## Acceptare
 
 Bootstrapul, resize-ul, încărcarea, selecția, camera și disposal funcționează pe WebGPU și WebGL 2. Un scenariu păstrează aceleași reguli și comenzi la schimbarea backendului. Aspectul poate varia în limitele nivelului de calitate declarat; învățarea și cursele nu depind de un shader specific.

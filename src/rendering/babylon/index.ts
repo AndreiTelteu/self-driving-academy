@@ -29,3 +29,5 @@ export function createBabylonBootstrapRenderer(view: BootstrapView): Renderer {
 }
 export { BabylonVehicleCamera, type BabylonVehicleCameraOptions } from './vehicle-camera';
 export { bindVehicleCameraInput, type VehicleCameraInputOptions } from './vehicle-camera-input';
+export { diagnoseBackend, type BabylonDiagnostics } from './diagnostics-adapter';
+export { showDevelopmentInspector } from './dev-inspector';
