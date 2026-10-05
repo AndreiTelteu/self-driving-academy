@@ -18,6 +18,8 @@ Formatul de hartă include mapId, schemaVersion, units, bounds, lanes, intersect
 
 PBI032 implementează [schema runtime și validatorul semantic](map-schema.md) în `world`: geometrie distinctă de reguli, referințe/endpointuri direcționate, faze de semnal complete, conflicte GREEN declarate și accesibilitate orientată per clasă către toate serviciile eligibile. Rezultatul este o copie readonly înghețată; limitele geometrice efective și fixture-urile negative sunt documentate explicit. Nu generează cartierul și nu implementează routing/meshuri.
 
+PBI033 adaugă [graful direcționat de benzi](lane-graph.md): vecini, succesori și conexiuni de viraj filtrate după acces TAXI/CIVIL, plus proiecția poziției pe geometria orientată a benzii. Query-urile țin cont de lățime, înălțime și direcție; în afara grafului întorc null. Indexul spațial are limite explicite și păstrează o căutare completă pentru geometria care depășește capacitatea indexului.
+
 Pipeline-ul construiește întâi fixture-uri semantice mici, apoi cartierul. Un validator produce IDs și poziții pentru erori. Decorul nu schimbă banda sau coliziunile fără o actualizare a datelor. Rutele civile și taxiurile folosesc același graf; un segment manual în afara grafului rămâne înregistrat fără a inventa o bandă.
 
 ## Repere pentru distracție și provocări

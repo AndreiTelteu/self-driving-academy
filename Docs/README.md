@@ -60,6 +60,8 @@ Fundațiile suplimentare implementate sunt [bucla cu pas fix](fixed-tick.md), [m
 
 [Camerele de vehicul](vehicle-camera.md) urmăresc ținta selectată, oferă vedere din spate și din poziția șoferului, reglaje de confort și captură explicită a mouse-ului fără transfer de autoritate.
 
+[Graful de benzi](lane-graph.md) oferă query-uri direcționate și localizare geometrică independentă de mesh, cu restricții de acces și index spațial plafonat.
+
 ## Revizia 0.3
 
 Învățarea are loc numai în LEARNING; MANUAL permite intervenții fără schimbarea stilului. Taxiurile și civilii adoptă stilul comun. V1 include revenue și ratings cu grafice KPIs, trei misiuni zilnice și XP din misiuni/timp activ, fără pierderi XP, conform reviziei 0.5. Valorile economice și pragurile sunt propuneri de calibrare. Verifică boardul și planul cu PBI/Validate-Board.ps1 și PBI/Validate-Plan.ps1.

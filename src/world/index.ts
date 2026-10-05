@@ -1,5 +1,16 @@
 export { parseRoadMap, mapSchemaLimits } from './parser';
 export { MapValidationError } from './errors';
+export {
+  createLaneGraph,
+  LANE_GRAPH_LIMITS,
+  type LaneGraph,
+  type LaneGraphStats,
+  type DirectedLanePath,
+  type LaneConnection,
+  type LaneNeighbors,
+  type LaneLocationQuery,
+  type LaneProjection,
+} from './lane-graph';
 export type {
   RoadMap,
   Lane,

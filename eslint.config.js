@@ -23,7 +23,19 @@ const projectRules = {
 };
 
 export default [
-  { ignores: ['dist/**', 'node_modules/**', 'Docs/**', 'PBI/**'] },
+  {
+    ignores: [
+      'dist/**',
+      'node_modules/**',
+      'Docs/**',
+      'PBI/**',
+      '.pbi-validation-*/**',
+      '.camera-preview017/**',
+      '.vite-camera017/**',
+      '.playwright-cli/**',
+      'output/playwright/**',
+    ],
+  },
   {
     files: ['scripts/**/*.mjs', '*.js'],
     ...js.configs.recommended,
