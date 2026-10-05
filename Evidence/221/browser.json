@@ -1,0 +1,959 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-10-05T09:00:36.415Z",
+  "fixtureVersion": "221-browser-worker-raf-v1",
+  "build": {
+    "commit": "01b595a96d777064e82461e558f2f6473684e4fb",
+    "sourceHash": "65c2ea53d7ec002156c7f00f4f66d8ae059c86100267512e28d69da94855bea2",
+    "inputs": [
+      "src/workers/index.ts",
+      "src/workers/governor.ts",
+      "src/workers/protocol.ts",
+      "src/workers/runtime.ts",
+      "src/workers/client.ts",
+      "src/workers/transport.ts",
+      "src/telemetry/performance.ts",
+      "tests/harness/governor-probe.ts",
+      "tests/harness/governor-task.ts",
+      "tests/harness/governor-store.ts",
+      "tests/browser/worker-governor/index.html",
+      "tests/browser/worker-governor/main.ts",
+      "tests/browser/worker-governor/worker.ts",
+      "scripts/worker-governor-server.mjs",
+      "package-lock.json"
+    ]
+  },
+  "hardware": {
+    "capturedAt": "2026-10-05T11:59:45.8527172+03:00",
+    "cpu": [
+      {
+        "Name": "AMD Ryzen 9 7950X3D 16-Core Processor          ",
+        "NumberOfCores": 16,
+        "NumberOfLogicalProcessors": 32
+      }
+    ],
+    "gpu": [
+      {
+        "Name": "Parsec Virtual Display Adapter",
+        "DriverVersion": "0.45.0.0",
+        "CurrentHorizontalResolution": null,
+        "CurrentVerticalResolution": null,
+        "CurrentRefreshRate": null
+      },
+      {
+        "Name": "Meta Virtual Monitor",
+        "DriverVersion": "15.52.32.370",
+        "CurrentHorizontalResolution": 3840,
+        "CurrentVerticalResolution": 2160,
+        "CurrentRefreshRate": 144
+      },
+      {
+        "Name": "Virtual Desktop Monitor",
+        "DriverVersion": "13.50.53.699",
+        "CurrentHorizontalResolution": null,
+        "CurrentVerticalResolution": null,
+        "CurrentRefreshRate": null
+      },
+      {
+        "Name": "AMD Radeon RX 7900 XTX",
+        "DriverVersion": "32.0.31041.1004",
+        "CurrentHorizontalResolution": 3840,
+        "CurrentVerticalResolution": 2160,
+        "CurrentRefreshRate": 144
+      },
+      {
+        "Name": "AMD Radeon(TM) Graphics",
+        "DriverVersion": "32.0.21045.5002",
+        "CurrentHorizontalResolution": null,
+        "CurrentVerticalResolution": null,
+        "CurrentRefreshRate": null
+      }
+    ],
+    "ramBytes": 50337325056,
+    "os": {
+      "build": "26200",
+      "version": "10.0.26200",
+      "name": "Microsoft Windows 11 Pro"
+    },
+    "powerScheme": "Power Scheme GUID: 381b4222-f694-41f0-9685-ff5bb260df2e  (Balanced)",
+    "scope": "Observed desktop identity; synthetic worker/rAF protocol, no gameplay/GPU gate"
+  },
+  "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+  "backend": "Native browser Worker and foreground requestAnimationFrame; no renderer/GPU gameplay",
+  "cssResolution": [
+    1889,
+    2003
+  ],
+  "devicePixelRatio": 1,
+  "budgetVersion": "203-initial-1",
+  "foreground": {
+    "visibleAndFocusedThroughout": true,
+    "checkedEveryAnimationFrame": true
+  },
+  "workerBudgetVersion": "221-synthetic-1",
+  "limits": {
+    "version": "221-synthetic-1",
+    "jobs": 8,
+    "payloadBytes": 16777216,
+    "persistenceIngressJobs": 8,
+    "persistenceIngressBytes": 16777216,
+    "heavyJobs": 1,
+    "residentExperimentWorlds": 1,
+    "optionalAgeMs": 30000,
+    "history": 64
+  },
+  "scope": "221-event-burst5pairs1sphase: lifecycle/preemption long-short jobs and incremental frame burst;1s percentile estimates coarse, no30s warmup/120s steady-state/gameplay gate",
+  "collector": {
+    "enabled": true,
+    "capacityPerMetric": 64,
+    "bufferBytes": 5676,
+    "dropped": 0,
+    "complete": true,
+    "metrics": {
+      "frameMs": {
+        "status": "unavailable",
+        "reason": "No samples supplied for this scope",
+        "distribution": null
+      },
+      "mainThreadMs": {
+        "status": "unavailable",
+        "reason": "No samples supplied for this scope",
+        "distribution": null
+      },
+      "tickCpuMs": {
+        "status": "unavailable",
+        "reason": "No samples supplied for this scope",
+        "distribution": null
+      },
+      "simulationCpuMs": {
+        "status": "unavailable",
+        "reason": "No samples supplied for this scope",
+        "distribution": null
+      },
+      "debtMs": {
+        "status": "unavailable",
+        "reason": "No samples supplied for this scope",
+        "distribution": null
+      },
+      "gpuMs": {
+        "status": "unavailable",
+        "reason": "No samples supplied for this scope",
+        "distribution": null
+      },
+      "inputToCommandMs": {
+        "status": "unavailable",
+        "reason": "No samples supplied for this scope",
+        "distribution": null
+      },
+      "learningQueueMs": {
+        "status": "available",
+        "reason": null,
+        "distribution": {
+          "count": 5,
+          "p50": 2.099999964237213,
+          "p95": 2.100000023841858,
+          "p99": 2.100000023841858,
+          "min": 1.800000011920929,
+          "max": 2.100000023841858,
+          "mean": 2.019999992847443,
+          "overBudget": null,
+          "histogram": [
+            0,
+            5,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "learningServiceMs": {
+        "status": "available",
+        "reason": null,
+        "distribution": {
+          "count": 5,
+          "p50": 0.20000004768371582,
+          "p95": 1.0999999642372131,
+          "p99": 1.0999999642372131,
+          "min": 0.19999998807907104,
+          "max": 1.0999999642372131,
+          "mean": 0.42000000476837157,
+          "overBudget": null,
+          "histogram": [
+            4,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "learningEndToEndMs": {
+        "status": "available",
+        "reason": null,
+        "distribution": {
+          "count": 5,
+          "p50": 2.300000011920929,
+          "p95": 2.899999976158142,
+          "p99": 2.899999976158142,
+          "min": 2.199999988079071,
+          "max": 2.899999976158142,
+          "mean": 2.439999997615814,
+          "overBudget": 0,
+          "histogram": [
+            0,
+            5,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "checkpointAgeMs": {
+        "status": "unavailable",
+        "reason": "No samples supplied for this scope",
+        "distribution": null
+      }
+    }
+  },
+  "repeats": [
+    {
+      "repeat": 1,
+      "baseline": {
+        "count": 143,
+        "p50": 7,
+        "p95": 7.099999999998545,
+        "p99": 7.200000000000728,
+        "min": 6.600000000002183,
+        "max": 7.200000000000728,
+        "mean": 6.944055944055944,
+        "overBudget": 0,
+        "histogram": [
+          0,
+          0,
+          143,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "workerFrames": {
+        "count": 144,
+        "p50": 6.900000000001455,
+        "p95": 7.100000000002183,
+        "p99": 7.100000000002183,
+        "min": 6.69999999999709,
+        "max": 7.100000000002183,
+        "mean": 6.944444444444445,
+        "overBudget": 0,
+        "histogram": [
+          0,
+          0,
+          144,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "probe": {
+        "startupMs": 10,
+        "interactiveEndToEndMs": 3.200000047683716,
+        "progressCount": 6,
+        "progressEvents": [
+          {
+            "jobId": "1",
+            "atMs": 20864.19999998808
+          },
+          {
+            "jobId": "3",
+            "atMs": 20871.19999998808
+          },
+          {
+            "jobId": "3",
+            "atMs": 21077.5
+          },
+          {
+            "jobId": "3",
+            "atMs": 21283.5
+          },
+          {
+            "jobId": "3",
+            "atMs": 21485.30000001192
+          },
+          {
+            "jobId": "4",
+            "atMs": 21647.400000035763
+          }
+        ],
+        "maxSliceMs": 2.699999988079071,
+        "worldTokensMaximum": 1,
+        "logicalComparisonResults": 1,
+        "attemptedComparisonStarts": 2,
+        "liveBufferAttached": true,
+        "measurements": [
+          {
+            "key": "[\"comparison\",\"probe1\",1,1,\"p1\",\"v1\",\"comparison-long\"]",
+            "attempt": 1,
+            "status": "cancelled",
+            "queueMs": 0.09999996423721313,
+            "serviceMs": 11.400000035762787,
+            "endToEndMs": 11.5,
+            "cancellationMs": 1.800000011920929,
+            "preempted": true
+          },
+          {
+            "key": "[\"learning\",\"probe1\",1,1,\"p1\",\"v1\",\"learning-short\"]",
+            "attempt": 1,
+            "status": "result",
+            "queueMs": 1.800000011920929,
+            "serviceMs": 1.0999999642372131,
+            "endToEndMs": 2.899999976158142,
+            "cancellationMs": null,
+            "preempted": false
+          },
+          {
+            "key": "[\"comparison\",\"probe1\",1,1,\"p1\",\"v1\",\"comparison-long\"]",
+            "attempt": 2,
+            "status": "result",
+            "queueMs": 1.199999988079071,
+            "serviceMs": 777.8000000119209,
+            "endToEndMs": 790.5,
+            "cancellationMs": null,
+            "preempted": false
+          },
+          {
+            "key": "[\"comparison\",\"probe1\",1,1,\"p1\",\"v1\",\"cancel-long\"]",
+            "attempt": 1,
+            "status": "cancelled",
+            "queueMs": 0,
+            "serviceMs": 26.100000023841858,
+            "endToEndMs": 26.100000023841858,
+            "cancellationMs": 5.100000023841858,
+            "preempted": false
+          }
+        ],
+        "usage": {
+          "version": "221-synthetic-1",
+          "jobs": 0,
+          "bytes": 0,
+          "persistenceIngressJobs": 0,
+          "persistenceIngressBytes": 0,
+          "activeHeavyJobs": 0,
+          "history": 4,
+          "transport": {
+            "jobs": 0,
+            "bytes": 0,
+            "history": 4
+          },
+          "pressure": false,
+          "context": "active",
+          "suspendedReason": null
+        },
+        "storeAfterAcknowledgement": {
+          "records": 0,
+          "bytes": 0
+        },
+        "durationMs": 817.3000000119209
+      },
+      "p95DeltaMs": 3.637978807091713e-12,
+      "measuredBaselineMs": 1000.6000000238419,
+      "measuredWorkerMs": 1002.3999999761581
+    },
+    {
+      "repeat": 2,
+      "baseline": {
+        "count": 143,
+        "p50": 7,
+        "p95": 7.099999999998545,
+        "p99": 7.200000000000728,
+        "min": 6.69999999999709,
+        "max": 7.200000000000728,
+        "mean": 6.945454545454525,
+        "overBudget": 0,
+        "histogram": [
+          0,
+          0,
+          143,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "workerFrames": {
+        "count": 143,
+        "p50": 6.900000000001455,
+        "p95": 7.100000000002183,
+        "p99": 7.200000000000728,
+        "min": 6.700000000000728,
+        "max": 7.200000000000728,
+        "mean": 6.943356643356654,
+        "overBudget": 0,
+        "histogram": [
+          0,
+          0,
+          143,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "probe": {
+        "startupMs": 11.900000035762787,
+        "interactiveEndToEndMs": 2.599999964237213,
+        "progressCount": 6,
+        "progressEvents": [
+          {
+            "jobId": "1",
+            "atMs": 22869.400000035763
+          },
+          {
+            "jobId": "3",
+            "atMs": 22874.100000023842
+          },
+          {
+            "jobId": "3",
+            "atMs": 23090.19999998808
+          },
+          {
+            "jobId": "3",
+            "atMs": 23291.30000001192
+          },
+          {
+            "jobId": "3",
+            "atMs": 23492.30000001192
+          },
+          {
+            "jobId": "4",
+            "atMs": 23666.900000035763
+          }
+        ],
+        "maxSliceMs": 2.100000023841858,
+        "worldTokensMaximum": 1,
+        "logicalComparisonResults": 1,
+        "attemptedComparisonStarts": 2,
+        "liveBufferAttached": true,
+        "measurements": [
+          {
+            "key": "[\"comparison\",\"probe1\",1,1,\"p1\",\"v1\",\"comparison-long\"]",
+            "attempt": 1,
+            "status": "cancelled",
+            "queueMs": 0,
+            "serviceMs": 14,
+            "endToEndMs": 14,
+            "cancellationMs": 2.099999964237213,
+            "preempted": true
+          },
+          {
+            "key": "[\"learning\",\"probe1\",1,1,\"p1\",\"v1\",\"learning-short\"]",
+            "attempt": 1,
+            "status": "result",
+            "queueMs": 2.099999964237213,
+            "serviceMs": 0.20000004768371582,
+            "endToEndMs": 2.300000011920929,
+            "cancellationMs": null,
+            "preempted": false
+          },
+          {
+            "key": "[\"comparison\",\"probe1\",1,1,\"p1\",\"v1\",\"comparison-long\"]",
+            "attempt": 2,
+            "status": "result",
+            "queueMs": 0.20000004768371582,
+            "serviceMs": 792.7999999523163,
+            "endToEndMs": 807,
+            "cancellationMs": null,
+            "preempted": false
+          },
+          {
+            "key": "[\"comparison\",\"probe1\",1,1,\"p1\",\"v1\",\"cancel-long\"]",
+            "attempt": 1,
+            "status": "cancelled",
+            "queueMs": 0,
+            "serviceMs": 25.100000023841858,
+            "endToEndMs": 25.100000023841858,
+            "cancellationMs": 4.600000023841858,
+            "preempted": false
+          }
+        ],
+        "usage": {
+          "version": "221-synthetic-1",
+          "jobs": 0,
+          "bytes": 0,
+          "persistenceIngressJobs": 0,
+          "persistenceIngressBytes": 0,
+          "activeHeavyJobs": 0,
+          "history": 4,
+          "transport": {
+            "jobs": 0,
+            "bytes": 0,
+            "history": 4
+          },
+          "pressure": false,
+          "context": "active",
+          "suspendedReason": null
+        },
+        "storeAfterAcknowledgement": {
+          "records": 0,
+          "bytes": 0
+        },
+        "durationMs": 832.4000000357628
+      },
+      "p95DeltaMs": 3.637978807091713e-12,
+      "measuredBaselineMs": 1000.6999999880791,
+      "measuredWorkerMs": 1001.9000000357628
+    },
+    {
+      "repeat": 3,
+      "baseline": {
+        "count": 143,
+        "p50": 6.900000000001455,
+        "p95": 7.099999999998545,
+        "p99": 7.100000000002183,
+        "min": 6.69999999999709,
+        "max": 7.200000000000728,
+        "mean": 6.9447552447552345,
+        "overBudget": 0,
+        "histogram": [
+          0,
+          0,
+          143,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "workerFrames": {
+        "count": 144,
+        "p50": 6.900000000001455,
+        "p95": 7.100000000002183,
+        "p99": 7.200000000000728,
+        "min": 6.700000000000728,
+        "max": 7.200000000000728,
+        "mean": 6.945833333333338,
+        "overBudget": 0,
+        "histogram": [
+          0,
+          0,
+          144,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "probe": {
+        "startupMs": 8.5,
+        "interactiveEndToEndMs": 2.199999988079071,
+        "progressCount": 6,
+        "progressEvents": [
+          {
+            "jobId": "1",
+            "atMs": 24869
+          },
+          {
+            "jobId": "3",
+            "atMs": 24873.19999998808
+          },
+          {
+            "jobId": "3",
+            "atMs": 25078.19999998808
+          },
+          {
+            "jobId": "3",
+            "atMs": 25278.600000023842
+          },
+          {
+            "jobId": "3",
+            "atMs": 25480.80000001192
+          },
+          {
+            "jobId": "4",
+            "atMs": 25644.400000035763
+          }
+        ],
+        "maxSliceMs": 2.199999988079071,
+        "worldTokensMaximum": 1,
+        "logicalComparisonResults": 1,
+        "attemptedComparisonStarts": 2,
+        "liveBufferAttached": true,
+        "measurements": [
+          {
+            "key": "[\"comparison\",\"probe1\",1,1,\"p1\",\"v1\",\"comparison-long\"]",
+            "attempt": 1,
+            "status": "cancelled",
+            "queueMs": 0,
+            "serviceMs": 10.399999976158142,
+            "endToEndMs": 10.399999976158142,
+            "cancellationMs": 2,
+            "preempted": true
+          },
+          {
+            "key": "[\"learning\",\"probe1\",1,1,\"p1\",\"v1\",\"learning-short\"]",
+            "attempt": 1,
+            "status": "result",
+            "queueMs": 2,
+            "serviceMs": 0.19999998807907104,
+            "endToEndMs": 2.199999988079071,
+            "cancellationMs": null,
+            "preempted": false
+          },
+          {
+            "key": "[\"comparison\",\"probe1\",1,1,\"p1\",\"v1\",\"comparison-long\"]",
+            "attempt": 2,
+            "status": "result",
+            "queueMs": 0.19999998807907104,
+            "serviceMs": 771,
+            "endToEndMs": 781.5999999642372,
+            "cancellationMs": null,
+            "preempted": false
+          },
+          {
+            "key": "[\"comparison\",\"probe1\",1,1,\"p1\",\"v1\",\"cancel-long\"]",
+            "attempt": 1,
+            "status": "cancelled",
+            "queueMs": 0,
+            "serviceMs": 26.19999998807907,
+            "endToEndMs": 26.19999998807907,
+            "cancellationMs": 5.300000011920929,
+            "preempted": false
+          }
+        ],
+        "usage": {
+          "version": "221-synthetic-1",
+          "jobs": 0,
+          "bytes": 0,
+          "persistenceIngressJobs": 0,
+          "persistenceIngressBytes": 0,
+          "activeHeavyJobs": 0,
+          "history": 4,
+          "transport": {
+            "jobs": 0,
+            "bytes": 0,
+            "history": 4
+          },
+          "pressure": false,
+          "context": "active",
+          "suspendedReason": null
+        },
+        "storeAfterAcknowledgement": {
+          "records": 0,
+          "bytes": 0
+        },
+        "durationMs": 808
+      },
+      "p95DeltaMs": 3.637978807091713e-12,
+      "measuredBaselineMs": 1000.8000000119209,
+      "measuredWorkerMs": 1000.4000000357628
+    },
+    {
+      "repeat": 4,
+      "baseline": {
+        "count": 143,
+        "p50": 6.900000000001455,
+        "p95": 7.100000000002183,
+        "p99": 7.200000000000728,
+        "min": 6.600000000002183,
+        "max": 7.200000000000728,
+        "mean": 6.944055944055944,
+        "overBudget": 0,
+        "histogram": [
+          0,
+          0,
+          143,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "workerFrames": {
+        "count": 143,
+        "p50": 6.900000000001455,
+        "p95": 7.100000000002183,
+        "p99": 7.100000000002183,
+        "min": 6.599999999998545,
+        "max": 7.19999999999709,
+        "mean": 6.9447552447552345,
+        "overBudget": 0,
+        "histogram": [
+          0,
+          0,
+          143,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "probe": {
+        "startupMs": 15.199999988079071,
+        "interactiveEndToEndMs": 2.600000023841858,
+        "progressCount": 6,
+        "progressEvents": [
+          {
+            "jobId": "1",
+            "atMs": 26876.80000001192
+          },
+          {
+            "jobId": "3",
+            "atMs": 26881.600000023842
+          },
+          {
+            "jobId": "3",
+            "atMs": 27087.19999998808
+          },
+          {
+            "jobId": "3",
+            "atMs": 27290.100000023842
+          },
+          {
+            "jobId": "3",
+            "atMs": 27491.80000001192
+          },
+          {
+            "jobId": "4",
+            "atMs": 27652.30000001192
+          }
+        ],
+        "maxSliceMs": 2,
+        "worldTokensMaximum": 1,
+        "logicalComparisonResults": 1,
+        "attemptedComparisonStarts": 2,
+        "liveBufferAttached": true,
+        "measurements": [
+          {
+            "key": "[\"comparison\",\"probe1\",1,1,\"p1\",\"v1\",\"comparison-long\"]",
+            "attempt": 1,
+            "status": "cancelled",
+            "queueMs": 0,
+            "serviceMs": 17.399999976158142,
+            "endToEndMs": 17.399999976158142,
+            "cancellationMs": 2.099999964237213,
+            "preempted": true
+          },
+          {
+            "key": "[\"learning\",\"probe1\",1,1,\"p1\",\"v1\",\"learning-short\"]",
+            "attempt": 1,
+            "status": "result",
+            "queueMs": 2.099999964237213,
+            "serviceMs": 0.40000003576278687,
+            "endToEndMs": 2.5,
+            "cancellationMs": null,
+            "preempted": false
+          },
+          {
+            "key": "[\"comparison\",\"probe1\",1,1,\"p1\",\"v1\",\"comparison-long\"]",
+            "attempt": 2,
+            "status": "result",
+            "queueMs": 0.40000003576278687,
+            "serviceMs": 770.5999999642372,
+            "endToEndMs": 788.3999999761581,
+            "cancellationMs": null,
+            "preempted": false
+          },
+          {
+            "key": "[\"comparison\",\"probe1\",1,1,\"p1\",\"v1\",\"cancel-long\"]",
+            "attempt": 1,
+            "status": "cancelled",
+            "queueMs": 0,
+            "serviceMs": 26.30000001192093,
+            "endToEndMs": 26.30000001192093,
+            "cancellationMs": 5.200000047683716,
+            "preempted": false
+          }
+        ],
+        "usage": {
+          "version": "221-synthetic-1",
+          "jobs": 0,
+          "bytes": 0,
+          "persistenceIngressJobs": 0,
+          "persistenceIngressBytes": 0,
+          "activeHeavyJobs": 0,
+          "history": 4,
+          "transport": {
+            "jobs": 0,
+            "bytes": 0,
+            "history": 4
+          },
+          "pressure": false,
+          "context": "active",
+          "suspendedReason": null
+        },
+        "storeAfterAcknowledgement": {
+          "records": 0,
+          "bytes": 0
+        },
+        "durationMs": 814.8000000119209
+      },
+      "p95DeltaMs": 0,
+      "measuredBaselineMs": 1000.4000000357628,
+      "measuredWorkerMs": 1001.3000000119209
+    },
+    {
+      "repeat": 5,
+      "baseline": {
+        "count": 143,
+        "p50": 6.900000000001455,
+        "p95": 7.100000000002183,
+        "p99": 7.200000000000728,
+        "min": 6.69999999999709,
+        "max": 7.299999999999272,
+        "mean": 6.9447552447552345,
+        "overBudget": 0,
+        "histogram": [
+          0,
+          0,
+          143,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "workerFrames": {
+        "count": 143,
+        "p50": 6.900000000001455,
+        "p95": 7.100000000002183,
+        "p99": 7.200000000000728,
+        "min": 6.69999999999709,
+        "max": 7.299999999999272,
+        "mean": 6.944055944055944,
+        "overBudget": 0,
+        "histogram": [
+          0,
+          0,
+          143,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "probe": {
+        "startupMs": 9,
+        "interactiveEndToEndMs": 2.5,
+        "progressCount": 6,
+        "progressEvents": [
+          {
+            "jobId": "1",
+            "atMs": 28873.100000023842
+          },
+          {
+            "jobId": "3",
+            "atMs": 28877.600000023842
+          },
+          {
+            "jobId": "3",
+            "atMs": 29081.80000001192
+          },
+          {
+            "jobId": "3",
+            "atMs": 29287.80000001192
+          },
+          {
+            "jobId": "3",
+            "atMs": 29488.69999998808
+          },
+          {
+            "jobId": "4",
+            "atMs": 29697.5
+          }
+        ],
+        "maxSliceMs": 3.100000023841858,
+        "worldTokensMaximum": 1,
+        "logicalComparisonResults": 1,
+        "attemptedComparisonStarts": 2,
+        "liveBufferAttached": true,
+        "measurements": [
+          {
+            "key": "[\"comparison\",\"probe1\",1,1,\"p1\",\"v1\",\"comparison-long\"]",
+            "attempt": 1,
+            "status": "cancelled",
+            "queueMs": 0,
+            "serviceMs": 11.100000023841858,
+            "endToEndMs": 11.100000023841858,
+            "cancellationMs": 2.100000023841858,
+            "preempted": true
+          },
+          {
+            "key": "[\"learning\",\"probe1\",1,1,\"p1\",\"v1\",\"learning-short\"]",
+            "attempt": 1,
+            "status": "result",
+            "queueMs": 2.100000023841858,
+            "serviceMs": 0.19999998807907104,
+            "endToEndMs": 2.300000011920929,
+            "cancellationMs": null,
+            "preempted": false
+          },
+          {
+            "key": "[\"comparison\",\"probe1\",1,1,\"p1\",\"v1\",\"comparison-long\"]",
+            "attempt": 2,
+            "status": "result",
+            "queueMs": 0.30000001192092896,
+            "serviceMs": 819.5999999642372,
+            "endToEndMs": 831,
+            "cancellationMs": null,
+            "preempted": false
+          },
+          {
+            "key": "[\"comparison\",\"probe1\",1,1,\"p1\",\"v1\",\"cancel-long\"]",
+            "attempt": 1,
+            "status": "cancelled",
+            "queueMs": 0,
+            "serviceMs": 25.69999998807907,
+            "endToEndMs": 25.69999998807907,
+            "cancellationMs": 4.599999964237213,
+            "preempted": false
+          }
+        ],
+        "usage": {
+          "version": "221-synthetic-1",
+          "jobs": 0,
+          "bytes": 0,
+          "persistenceIngressJobs": 0,
+          "persistenceIngressBytes": 0,
+          "activeHeavyJobs": 0,
+          "history": 4,
+          "transport": {
+            "jobs": 0,
+            "bytes": 0,
+            "history": 4
+          },
+          "pressure": false,
+          "context": "active",
+          "suspendedReason": null
+        },
+        "storeAfterAcknowledgement": {
+          "records": 0,
+          "bytes": 0
+        },
+        "durationMs": 856.8999999761581
+      },
+      "p95DeltaMs": 0,
+      "measuredBaselineMs": 1000.9000000357628,
+      "measuredWorkerMs": 1000.5
+    }
+  ],
+  "longTasks": {
+    "supported": true,
+    "count": null,
+    "maximumMs": null,
+    "reason": "Not collected; frame intervals measured independently"
+  },
+  "exactPageMemoryBytes": null,
+  "gpuMs": null,
+  "residentRapierWorlds": "not implemented; one synthetic task world token",
+  "protectedStore": "bounded16MiB/8record memory persistence double; IndexedDB integration future222/234",
+  "gameplayGate": "NOT_VALIDATED",
+  "laptop": "NOT_MEASURED",
+  "artifactHash": "6c33fe0cdb318bab7626b31c3c9ccd5933821ea9add25651b68d67091138904b"
+}
