@@ -103,3 +103,5 @@ Se elimină global pierderea XP și scăderea nivelului. V1 adaugă Academie/Hao
 [Contextul rutier044](road-context.md) derivă bandă, lider, semnal, conflicte și obstacole din cadre autoritare, cu cache bounded, tick de sursă și invalidare urgentă. Completitudinea observațiilor și limitele acoperirii locale sunt explicite; samplingul AI nu avansează oportunitățile sau telemetria.
 
 [Contactele și incidentele028](collision-events.md) leagă identitățile fizice de contactele Rapier și de evenimente COLLISION, cu episoade persistente, cooldown și retry fără repetarea fizicii. Probele native și playtesturile headed WebGPU/WebGL2 verifică impactul și eliberarea resurselor; măsurătorile CPU rămân separate de gate-ul întregului joc.
+
+[Controllerul comun024](vehicle-controller.md) aplică aceeași comandă pentru PLAYER și AUTONOMY la fiecare tick fizic, cu arbitraj atomic, ținte AUTO bounded, frână de mână și semnalizare autoritară. Testele Rapier și probele vizibile Chrome pe WebGPU/WebGL2 verifică paritatea celor două surse, preluarea și cleanup-ul; calibrarea dinamicii și inputul filtrat continuă în PBI-urile dedicate.

@@ -1,0 +1,5009 @@
+{
+  "fixtureVersion": "024-controller-drive-v1",
+  "identity": {
+    "commit": "94e1f1c080c37c77a483b252fe828ffdf3139613",
+    "sourceHash": "6b559f9972525b994d7370ea35784a0965ea29ccff5688c175a70436d6c0abcf",
+    "inputs": [
+      "Docs/performance-budgets.json",
+      "package-lock.json",
+      "package.json",
+      "src/rendering/asset-budgets.ts",
+      "src/rendering/babylon/asset-contract.ts",
+      "src/rendering/babylon/asset-registry.ts",
+      "src/rendering/babylon/backend.ts",
+      "src/rendering/babylon/cell-batches.ts",
+      "src/rendering/babylon/daylight.ts",
+      "src/rendering/babylon/dev-inspector.ts",
+      "src/rendering/babylon/diagnostics-adapter.ts",
+      "src/rendering/babylon/index.ts",
+      "src/rendering/babylon/recovery-session.ts",
+      "src/rendering/babylon/scene-adapter.ts",
+      "src/rendering/babylon/snapshot-presenter.ts",
+      "src/rendering/babylon/vehicle-camera-input.ts",
+      "src/rendering/babylon/vehicle-camera.ts",
+      "src/rendering/babylon/vehicle-picking-input.ts",
+      "src/rendering/babylon/vehicle-picking-registry.ts",
+      "src/rendering/babylon/vehicle-picking.ts",
+      "src/rendering/backend-policy.ts",
+      "src/rendering/camera-collision.ts",
+      "src/rendering/diagnostics.ts",
+      "src/rendering/quality-policy.ts",
+      "src/rendering/render-sync.ts",
+      "src/rendering/scene-contract.ts",
+      "src/rendering/vehicle-camera.ts",
+      "src/sessions/identity.ts",
+      "src/sessions/index.ts",
+      "src/sessions/random.ts",
+      "src/sessions/validation.ts",
+      "src/simulation/fixed-tick.ts",
+      "src/vehicles/body-port.ts",
+      "src/vehicles/body-registry.ts",
+      "src/vehicles/collision-episodes.ts",
+      "src/vehicles/collision-port.ts",
+      "src/vehicles/contracts.ts",
+      "src/vehicles/controller-port.ts",
+      "src/vehicles/controller.ts",
+      "src/vehicles/index.ts",
+      "src/vehicles/physics.ts",
+      "src/vehicles/rapier/index.ts",
+      "src/vehicles/vehicle-classes.ts",
+      "tests/browser/vehicle-controller/index.html",
+      "tests/browser/vehicle-controller/main.ts",
+      "tests/browser/vehicle-controller/server.mjs"
+    ],
+    "budgetVersion": "203-initial-1",
+    "physicsVersion": "0.21.0",
+    "engineVersion": "9.29.0"
+  },
+  "artifactHash": "f50d3f55f5736fa855fcc82706f67ed4d601972979fb6f90924dd61be87a823e",
+  "createdAt": "2026-10-05T15:04:35.089Z",
+  "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+  "renderer": "WEBGL2",
+  "actualGpuInfo": {
+    "vendor": "Google Inc. (AMD)",
+    "renderer": "ANGLE (AMD, AMD Radeon RX 7900 XTX (0x0000744C) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)"
+  },
+  "foreground": true,
+  "cssResolution": [
+    1920,
+    1080
+  ],
+  "internalResolution": [
+    1920,
+    1080
+  ],
+  "dpr": 1,
+  "classes": [
+    {
+      "classId": "sedan",
+      "ticks": 961,
+      "elapsedWallMs": 15997.600000023842,
+      "maxParityError": 0.0000762939453125,
+      "takeoverIgnored": 1,
+      "handbrakeStart": 0,
+      "checkpoints": [
+        {
+          "tick": 60,
+          "physical": [
+            {
+              "id": "player",
+              "position": {
+                "x": -5,
+                "y": 0.7589147090911865,
+                "z": 0
+              },
+              "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0,
+                "w": 1
+              },
+              "velocity": {
+                "x": 0,
+                "y": 0.4108547270298004,
+                "z": 0
+              },
+              "speed": 0,
+              "suspension": [
+                0.2889147400856018,
+                0.2889147400856018,
+                0.2889147400856018,
+                0.2889147400856018
+              ],
+              "wheelContacts": 4
+            },
+            {
+              "id": "autonomy",
+              "position": {
+                "x": 5,
+                "y": 0.7589147090911865,
+                "z": 0
+              },
+              "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0,
+                "w": 1
+              },
+              "velocity": {
+                "x": 0,
+                "y": 0.4108547270298004,
+                "z": 0
+              },
+              "speed": 0,
+              "suspension": [
+                0.2889147400856018,
+                0.2889147400856018,
+                0.2889147400856018,
+                0.2889147400856018
+              ],
+              "wheelContacts": 4
+            }
+          ],
+          "controls": [
+            {
+              "identity": {
+                "entityId": "player",
+                "handle": 0,
+                "generation": 1
+              },
+              "mode": "MANUAL",
+              "tick": 60,
+              "targetTick": 60,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "player",
+                "tick": 60,
+                "throttle": 0,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF",
+                "source": "PLAYER"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "player",
+                "tick": 60,
+                "source": "PLAYER",
+                "throttle": 0,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF"
+              },
+              "turnSignal": "OFF",
+              "signalStartedTick": null,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            },
+            {
+              "identity": {
+                "entityId": "autonomy",
+                "handle": 5e-324,
+                "generation": 2
+              },
+              "mode": "AUTO",
+              "tick": 60,
+              "targetTick": 55,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "autonomy",
+                "tick": 55,
+                "throttle": 0,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF",
+                "source": "AUTONOMY"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "autonomy",
+                "tick": 60,
+                "source": "AUTONOMY",
+                "throttle": 0,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF"
+              },
+              "turnSignal": "OFF",
+              "signalStartedTick": null,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            }
+          ],
+          "brakes": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "tick": 120,
+          "physical": [
+            {
+              "id": "player",
+              "position": {
+                "x": -5,
+                "y": 0.7589147090911865,
+                "z": 0
+              },
+              "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0,
+                "w": 1
+              },
+              "velocity": {
+                "x": 0,
+                "y": 0.41115060448646545,
+                "z": 0
+              },
+              "speed": 0,
+              "suspension": [
+                0.2889147400856018,
+                0.2889147400856018,
+                0.2889147400856018,
+                0.2889147400856018
+              ],
+              "wheelContacts": 4
+            },
+            {
+              "id": "autonomy",
+              "position": {
+                "x": 5,
+                "y": 0.7589147090911865,
+                "z": 0
+              },
+              "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0,
+                "w": 1
+              },
+              "velocity": {
+                "x": 0,
+                "y": 0.41115060448646545,
+                "z": 0
+              },
+              "speed": 0,
+              "suspension": [
+                0.2889147400856018,
+                0.2889147400856018,
+                0.2889147400856018,
+                0.2889147400856018
+              ],
+              "wheelContacts": 4
+            }
+          ],
+          "controls": [
+            {
+              "identity": {
+                "entityId": "player",
+                "handle": 0,
+                "generation": 1
+              },
+              "mode": "MANUAL",
+              "tick": 120,
+              "targetTick": 120,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "player",
+                "tick": 120,
+                "throttle": 0,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF",
+                "source": "PLAYER"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "player",
+                "tick": 120,
+                "source": "PLAYER",
+                "throttle": 0,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF"
+              },
+              "turnSignal": "OFF",
+              "signalStartedTick": null,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            },
+            {
+              "identity": {
+                "entityId": "autonomy",
+                "handle": 5e-324,
+                "generation": 2
+              },
+              "mode": "AUTO",
+              "tick": 120,
+              "targetTick": 115,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "autonomy",
+                "tick": 115,
+                "throttle": 0,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF",
+                "source": "AUTONOMY"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "autonomy",
+                "tick": 120,
+                "source": "AUTONOMY",
+                "throttle": 0,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF"
+              },
+              "turnSignal": "OFF",
+              "signalStartedTick": null,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            }
+          ],
+          "brakes": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "tick": 180,
+          "physical": [
+            {
+              "id": "player",
+              "position": {
+                "x": -5,
+                "y": 0.7589147090911865,
+                "z": 0
+              },
+              "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0,
+                "w": 1
+              },
+              "velocity": {
+                "x": 0,
+                "y": 0.41115060448646545,
+                "z": 0
+              },
+              "speed": 0,
+              "suspension": [
+                0.2889147400856018,
+                0.2889147400856018,
+                0.2889147400856018,
+                0.2889147400856018
+              ],
+              "wheelContacts": 4
+            },
+            {
+              "id": "autonomy",
+              "position": {
+                "x": 5,
+                "y": 0.7589147090911865,
+                "z": 0
+              },
+              "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0,
+                "w": 1
+              },
+              "velocity": {
+                "x": 0,
+                "y": 0.41115060448646545,
+                "z": 0
+              },
+              "speed": 0,
+              "suspension": [
+                0.2889147400856018,
+                0.2889147400856018,
+                0.2889147400856018,
+                0.2889147400856018
+              ],
+              "wheelContacts": 4
+            }
+          ],
+          "controls": [
+            {
+              "identity": {
+                "entityId": "player",
+                "handle": 0,
+                "generation": 1
+              },
+              "mode": "MANUAL",
+              "tick": 180,
+              "targetTick": 180,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "player",
+                "tick": 180,
+                "throttle": 0,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF",
+                "source": "PLAYER"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "player",
+                "tick": 180,
+                "source": "PLAYER",
+                "throttle": 0,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF"
+              },
+              "turnSignal": "OFF",
+              "signalStartedTick": null,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            },
+            {
+              "identity": {
+                "entityId": "autonomy",
+                "handle": 5e-324,
+                "generation": 2
+              },
+              "mode": "AUTO",
+              "tick": 180,
+              "targetTick": 175,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "autonomy",
+                "tick": 175,
+                "throttle": 0,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF",
+                "source": "AUTONOMY"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "autonomy",
+                "tick": 180,
+                "source": "AUTONOMY",
+                "throttle": 0,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF"
+              },
+              "turnSignal": "OFF",
+              "signalStartedTick": null,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            }
+          ],
+          "brakes": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "tick": 240,
+          "physical": [
+            {
+              "id": "player",
+              "position": {
+                "x": -5,
+                "y": 0.7588831782341003,
+                "z": 1.8131728172302246
+              },
+              "rotation": {
+                "x": -0.005688540171831846,
+                "y": 0,
+                "z": 0,
+                "w": 0.9999839067459106
+              },
+              "velocity": {
+                "x": 0,
+                "y": -0.07152468711137772,
+                "z": 3.6208651065826416
+              },
+              "speed": 3.6208651065826416,
+              "suspension": [
+                0.30429214239120483,
+                0.30429214239120483,
+                0.2735726833343506,
+                0.2735726833343506
+              ],
+              "wheelContacts": 4
+            },
+            {
+              "id": "autonomy",
+              "position": {
+                "x": 5,
+                "y": 0.7588831782341003,
+                "z": 1.8131728172302246
+              },
+              "rotation": {
+                "x": -0.005688540171831846,
+                "y": 0,
+                "z": 0,
+                "w": 0.9999839067459106
+              },
+              "velocity": {
+                "x": 0,
+                "y": -0.07152468711137772,
+                "z": 3.6208651065826416
+              },
+              "speed": 3.6208651065826416,
+              "suspension": [
+                0.30429214239120483,
+                0.30429214239120483,
+                0.2735726833343506,
+                0.2735726833343506
+              ],
+              "wheelContacts": 4
+            }
+          ],
+          "controls": [
+            {
+              "identity": {
+                "entityId": "player",
+                "handle": 0,
+                "generation": 1
+              },
+              "mode": "MANUAL",
+              "tick": 240,
+              "targetTick": 240,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "player",
+                "tick": 240,
+                "throttle": 0.8,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF",
+                "source": "PLAYER"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "player",
+                "tick": 240,
+                "source": "PLAYER",
+                "throttle": 0.8,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF"
+              },
+              "turnSignal": "OFF",
+              "signalStartedTick": null,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            },
+            {
+              "identity": {
+                "entityId": "autonomy",
+                "handle": 5e-324,
+                "generation": 2
+              },
+              "mode": "AUTO",
+              "tick": 240,
+              "targetTick": 235,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "autonomy",
+                "tick": 235,
+                "throttle": 0.8,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF",
+                "source": "AUTONOMY"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "autonomy",
+                "tick": 240,
+                "source": "AUTONOMY",
+                "throttle": 0.8,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF"
+              },
+              "turnSignal": "OFF",
+              "signalStartedTick": null,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            }
+          ],
+          "brakes": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "tick": 300,
+          "physical": [
+            {
+              "id": "player",
+              "position": {
+                "x": -5,
+                "y": 0.7588819861412048,
+                "z": 7.286309719085693
+              },
+              "rotation": {
+                "x": -0.005688569974154234,
+                "y": 0,
+                "z": 0,
+                "w": 0.9999839067459106
+              },
+              "velocity": {
+                "x": 0,
+                "y": -0.07151344418525696,
+                "z": 7.253087520599365
+              },
+              "speed": 7.253087520599365,
+              "suspension": [
+                0.30429089069366455,
+                0.30429089069366455,
+                0.2735711336135864,
+                0.2735711336135864
+              ],
+              "wheelContacts": 4
+            },
+            {
+              "id": "autonomy",
+              "position": {
+                "x": 5,
+                "y": 0.7588819861412048,
+                "z": 7.286309719085693
+              },
+              "rotation": {
+                "x": -0.005688569974154234,
+                "y": 0,
+                "z": 0,
+                "w": 0.9999839067459106
+              },
+              "velocity": {
+                "x": 0,
+                "y": -0.07151344418525696,
+                "z": 7.253087520599365
+              },
+              "speed": 7.253087520599365,
+              "suspension": [
+                0.30429089069366455,
+                0.30429089069366455,
+                0.2735711336135864,
+                0.2735711336135864
+              ],
+              "wheelContacts": 4
+            }
+          ],
+          "controls": [
+            {
+              "identity": {
+                "entityId": "player",
+                "handle": 0,
+                "generation": 1
+              },
+              "mode": "MANUAL",
+              "tick": 300,
+              "targetTick": 300,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "player",
+                "tick": 300,
+                "throttle": 0.8,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF",
+                "source": "PLAYER"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "player",
+                "tick": 300,
+                "source": "PLAYER",
+                "throttle": 0.8,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF"
+              },
+              "turnSignal": "OFF",
+              "signalStartedTick": null,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            },
+            {
+              "identity": {
+                "entityId": "autonomy",
+                "handle": 5e-324,
+                "generation": 2
+              },
+              "mode": "AUTO",
+              "tick": 300,
+              "targetTick": 295,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "autonomy",
+                "tick": 295,
+                "throttle": 0.8,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF",
+                "source": "AUTONOMY"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "autonomy",
+                "tick": 300,
+                "source": "AUTONOMY",
+                "throttle": 0.8,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF"
+              },
+              "turnSignal": "OFF",
+              "signalStartedTick": null,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            }
+          ],
+          "brakes": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "tick": 360,
+          "physical": [
+            {
+              "id": "player",
+              "position": {
+                "x": -5,
+                "y": 0.7588819861412048,
+                "z": 16.365055084228516
+              },
+              "rotation": {
+                "x": -0.005688569974154234,
+                "y": 0,
+                "z": 0,
+                "w": 0.9999839067459106
+              },
+              "velocity": {
+                "x": 0,
+                "y": -0.07151342183351517,
+                "z": 10.831245422363281
+              },
+              "speed": 10.831245422363281,
+              "suspension": [
+                0.30429089069366455,
+                0.30429089069366455,
+                0.2735711336135864,
+                0.2735711336135864
+              ],
+              "wheelContacts": 4
+            },
+            {
+              "id": "autonomy",
+              "position": {
+                "x": 5,
+                "y": 0.7588819861412048,
+                "z": 16.365055084228516
+              },
+              "rotation": {
+                "x": -0.005688569974154234,
+                "y": 0,
+                "z": 0,
+                "w": 0.9999839067459106
+              },
+              "velocity": {
+                "x": 0,
+                "y": -0.07151342183351517,
+                "z": 10.831245422363281
+              },
+              "speed": 10.831245422363281,
+              "suspension": [
+                0.30429089069366455,
+                0.30429089069366455,
+                0.2735711336135864,
+                0.2735711336135864
+              ],
+              "wheelContacts": 4
+            }
+          ],
+          "controls": [
+            {
+              "identity": {
+                "entityId": "player",
+                "handle": 0,
+                "generation": 1
+              },
+              "mode": "MANUAL",
+              "tick": 360,
+              "targetTick": 360,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "player",
+                "tick": 360,
+                "throttle": 0.8,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF",
+                "source": "PLAYER"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "player",
+                "tick": 360,
+                "source": "PLAYER",
+                "throttle": 0.8,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF"
+              },
+              "turnSignal": "OFF",
+              "signalStartedTick": null,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            },
+            {
+              "identity": {
+                "entityId": "autonomy",
+                "handle": 5e-324,
+                "generation": 2
+              },
+              "mode": "AUTO",
+              "tick": 360,
+              "targetTick": 355,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "autonomy",
+                "tick": 355,
+                "throttle": 0.8,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF",
+                "source": "AUTONOMY"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "autonomy",
+                "tick": 360,
+                "source": "AUTONOMY",
+                "throttle": 0.8,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF"
+              },
+              "turnSignal": "OFF",
+              "signalStartedTick": null,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            }
+          ],
+          "brakes": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "tick": 420,
+          "physical": [
+            {
+              "id": "player",
+              "position": {
+                "x": -1.864224910736084,
+                "y": 0.7589020729064941,
+                "z": 27.667789459228516
+              },
+              "rotation": {
+                "x": -0.002843622351065278,
+                "y": 0.2311464548110962,
+                "z": 0.003154256148263812,
+                "w": 0.972909688949585
+              },
+              "velocity": {
+                "x": 6.317868709564209,
+                "y": -0.07152247428894043,
+                "z": 11.21369743347168
+              },
+              "speed": 12.870993557637261,
+              "suspension": [
+                0.2940515875816345,
+                0.3026863932609558,
+                0.2751725912094116,
+                0.28380733728408813
+              ],
+              "wheelContacts": 4
+            },
+            {
+              "id": "autonomy",
+              "position": {
+                "x": 8.135772705078125,
+                "y": 0.7589020729064941,
+                "z": 27.667789459228516
+              },
+              "rotation": {
+                "x": -0.002843624446541071,
+                "y": 0.23114646971225739,
+                "z": 0.003154260106384754,
+                "w": 0.972909688949585
+              },
+              "velocity": {
+                "x": 6.317868709564209,
+                "y": -0.07152251154184341,
+                "z": 11.21369743347168
+              },
+              "speed": 12.870993557637261,
+              "suspension": [
+                0.29405176639556885,
+                0.3026863932609558,
+                0.2751726508140564,
+                0.2838072180747986
+              ],
+              "wheelContacts": 4
+            }
+          ],
+          "controls": [
+            {
+              "identity": {
+                "entityId": "player",
+                "handle": 0,
+                "generation": 1
+              },
+              "mode": "MANUAL",
+              "tick": 420,
+              "targetTick": 420,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "player",
+                "tick": 420,
+                "throttle": 0.5,
+                "brake": 0,
+                "steering": 0.25,
+                "handbrake": false,
+                "turnSignal": "LEFT",
+                "source": "PLAYER"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "player",
+                "tick": 420,
+                "source": "PLAYER",
+                "throttle": 0.5,
+                "brake": 0,
+                "steering": 0.25,
+                "handbrake": false,
+                "turnSignal": "LEFT"
+              },
+              "turnSignal": "LEFT",
+              "signalStartedTick": 361,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            },
+            {
+              "identity": {
+                "entityId": "autonomy",
+                "handle": 5e-324,
+                "generation": 2
+              },
+              "mode": "AUTO",
+              "tick": 420,
+              "targetTick": 415,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "autonomy",
+                "tick": 415,
+                "throttle": 0.5,
+                "brake": 0,
+                "steering": 0.25,
+                "handbrake": false,
+                "turnSignal": "LEFT",
+                "source": "AUTONOMY"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "autonomy",
+                "tick": 420,
+                "source": "AUTONOMY",
+                "throttle": 0.5,
+                "brake": 0,
+                "steering": 0.25,
+                "handbrake": false,
+                "turnSignal": "LEFT"
+              },
+              "turnSignal": "LEFT",
+              "signalStartedTick": 361,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            }
+          ],
+          "brakes": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "tick": 480,
+          "physical": [
+            {
+              "id": "player",
+              "position": {
+                "x": 8.025979042053223,
+                "y": 0.7588972449302673,
+                "z": 37.172813415527344
+              },
+              "rotation": {
+                "x": -0.001247495412826538,
+                "y": 0.49801748991012573,
+                "z": 0.004436016548424959,
+                "w": 0.8671547770500183
+              },
+              "velocity": {
+                "x": 13.167829513549805,
+                "y": -0.0715159922838211,
+                "z": 6.9084649085998535
+              },
+              "speed": 14.870057884597117,
+              "suspension": [
+                0.2920525074005127,
+                0.30361950397491455,
+                0.27423936128616333,
+                0.2858063578605652
+              ],
+              "wheelContacts": 4
+            },
+            {
+              "id": "autonomy",
+              "position": {
+                "x": 18.026004791259766,
+                "y": 0.7588971257209778,
+                "z": 37.172813415527344
+              },
+              "rotation": {
+                "x": -0.0012474858667701483,
+                "y": 0.4980175495147705,
+                "z": 0.004436025861650705,
+                "w": 0.8671547770500183
+              },
+              "velocity": {
+                "x": 13.167835235595703,
+                "y": -0.071515291929245,
+                "z": 6.908466339111328
+              },
+              "speed": 14.870063616220007,
+              "suspension": [
+                0.29205238819122314,
+                0.30361950397491455,
+                0.27423912286758423,
+                0.28580623865127563
+              ],
+              "wheelContacts": 4
+            }
+          ],
+          "controls": [
+            {
+              "identity": {
+                "entityId": "player",
+                "handle": 0,
+                "generation": 1
+              },
+              "mode": "MANUAL",
+              "tick": 480,
+              "targetTick": 480,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "player",
+                "tick": 480,
+                "throttle": 0.5,
+                "brake": 0,
+                "steering": 0.25,
+                "handbrake": false,
+                "turnSignal": "LEFT",
+                "source": "PLAYER"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "player",
+                "tick": 480,
+                "source": "PLAYER",
+                "throttle": 0.5,
+                "brake": 0,
+                "steering": 0.25,
+                "handbrake": false,
+                "turnSignal": "LEFT"
+              },
+              "turnSignal": "LEFT",
+              "signalStartedTick": 361,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            },
+            {
+              "identity": {
+                "entityId": "autonomy",
+                "handle": 5e-324,
+                "generation": 2
+              },
+              "mode": "AUTO",
+              "tick": 480,
+              "targetTick": 475,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "autonomy",
+                "tick": 475,
+                "throttle": 0.5,
+                "brake": 0,
+                "steering": 0.25,
+                "handbrake": false,
+                "turnSignal": "LEFT",
+                "source": "AUTONOMY"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "autonomy",
+                "tick": 480,
+                "source": "AUTONOMY",
+                "throttle": 0.5,
+                "brake": 0,
+                "steering": 0.25,
+                "handbrake": false,
+                "turnSignal": "LEFT"
+              },
+              "turnSignal": "LEFT",
+              "signalStartedTick": 361,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            }
+          ],
+          "brakes": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "tick": 540,
+          "physical": [
+            {
+              "id": "player",
+              "position": {
+                "x": 23.336999893188477,
+                "y": 0.7588936686515808,
+                "z": 39.57482147216797
+              },
+              "rotation": {
+                "x": 0.0009830002672970295,
+                "y": 0.7469307780265808,
+                "z": 0.004777223337441683,
+                "w": 0.664884090423584
+              },
+              "velocity": {
+                "x": 16.375892639160156,
+                "y": -0.07151620090007782,
+                "z": -2.6189098358154297
+              },
+              "speed": 16.583984697817066,
+              "suspension": [
+                0.28978538513183594,
+                0.30384165048599243,
+                0.2740181088447571,
+                0.288074254989624
+              ],
+              "wheelContacts": 4
+            },
+            {
+              "id": "autonomy",
+              "position": {
+                "x": 33.3370246887207,
+                "y": 0.7588935494422913,
+                "z": 39.57482147216797
+              },
+              "rotation": {
+                "x": 0.0009829987538978457,
+                "y": 0.746930718421936,
+                "z": 0.004777224734425545,
+                "w": 0.6648839712142944
+              },
+              "velocity": {
+                "x": 16.375892639160156,
+                "y": -0.0715150311589241,
+                "z": -2.618911027908325
+              },
+              "speed": 16.583984886070045,
+              "suspension": [
+                0.28978508710861206,
+                0.303841233253479,
+                0.2740177512168884,
+                0.2880740165710449
+              ],
+              "wheelContacts": 4
+            }
+          ],
+          "controls": [
+            {
+              "identity": {
+                "entityId": "player",
+                "handle": 0,
+                "generation": 1
+              },
+              "mode": "MANUAL",
+              "tick": 540,
+              "targetTick": 540,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "player",
+                "tick": 540,
+                "throttle": 0.5,
+                "brake": 0,
+                "steering": 0.25,
+                "handbrake": false,
+                "turnSignal": "LEFT",
+                "source": "PLAYER"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "player",
+                "tick": 540,
+                "source": "PLAYER",
+                "throttle": 0.5,
+                "brake": 0,
+                "steering": 0.25,
+                "handbrake": false,
+                "turnSignal": "LEFT"
+              },
+              "turnSignal": "LEFT",
+              "signalStartedTick": 361,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            },
+            {
+              "identity": {
+                "entityId": "autonomy",
+                "handle": 5e-324,
+                "generation": 2
+              },
+              "mode": "AUTO",
+              "tick": 540,
+              "targetTick": 535,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "autonomy",
+                "tick": 535,
+                "throttle": 0.5,
+                "brake": 0,
+                "steering": 0.25,
+                "handbrake": false,
+                "turnSignal": "LEFT",
+                "source": "AUTONOMY"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "autonomy",
+                "tick": 540,
+                "source": "AUTONOMY",
+                "throttle": 0.5,
+                "brake": 0,
+                "steering": 0.25,
+                "handbrake": false,
+                "turnSignal": "LEFT"
+              },
+              "turnSignal": "LEFT",
+              "signalStartedTick": 361,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            }
+          ],
+          "brakes": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "tick": 600,
+          "physical": [
+            {
+              "id": "player",
+              "position": {
+                "x": 36.569580078125,
+                "y": 0.7587943077087402,
+                "z": 37.745994567871094
+              },
+              "rotation": {
+                "x": 0.0064422572031617165,
+                "y": 0.7534054517745972,
+                "z": -0.007381152827292681,
+                "w": 0.6574833393096924
+              },
+              "velocity": {
+                "x": 10.027708053588867,
+                "y": -0.0715150460600853,
+                "z": -1.3698490858078003
+              },
+              "speed": 10.120840643242017,
+              "suspension": [
+                0.2624824643135071,
+                0.26248520612716675,
+                0.3153945803642273,
+                0.31539732217788696
+              ],
+              "wheelContacts": 4
+            },
+            {
+              "id": "autonomy",
+              "position": {
+                "x": 46.56950759887695,
+                "y": 0.7587943077087402,
+                "z": 37.745994567871094
+              },
+              "rotation": {
+                "x": 0.006442245561629534,
+                "y": 0.7534055113792419,
+                "z": -0.007381157483905554,
+                "w": 0.6574832797050476
+              },
+              "velocity": {
+                "x": 10.0277099609375,
+                "y": -0.07151506096124649,
+                "z": -1.3698514699935913
+              },
+              "speed": 10.1208428557373,
+              "suspension": [
+                0.2624824643135071,
+                0.26248520612716675,
+                0.3153945803642273,
+                0.31539732217788696
+              ],
+              "wheelContacts": 4
+            }
+          ],
+          "controls": [
+            {
+              "identity": {
+                "entityId": "player",
+                "handle": 0,
+                "generation": 1
+              },
+              "mode": "MANUAL",
+              "tick": 600,
+              "targetTick": 600,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "player",
+                "tick": 600,
+                "throttle": 0,
+                "brake": 0.8,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF",
+                "source": "PLAYER"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "player",
+                "tick": 600,
+                "source": "PLAYER",
+                "throttle": 0,
+                "brake": 0.8,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF"
+              },
+              "turnSignal": "OFF",
+              "signalStartedTick": null,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            },
+            {
+              "identity": {
+                "entityId": "autonomy",
+                "handle": 5e-324,
+                "generation": 2
+              },
+              "mode": "AUTO",
+              "tick": 600,
+              "targetTick": 595,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "autonomy",
+                "tick": 595,
+                "throttle": 0,
+                "brake": 0.8,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF",
+                "source": "AUTONOMY"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "autonomy",
+                "tick": 600,
+                "source": "AUTONOMY",
+                "throttle": 0,
+                "brake": 0.8,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF"
+              },
+              "turnSignal": "OFF",
+              "signalStartedTick": null,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            }
+          ],
+          "brakes": [
+            37.33333206176758,
+            37.33333206176758,
+            37.33333206176758,
+            37.33333206176758
+          ]
+        },
+        {
+          "tick": 660,
+          "physical": [
+            {
+              "id": "player",
+              "position": {
+                "x": 43.31622314453125,
+                "y": 0.758794367313385,
+                "z": 36.82451629638672
+              },
+              "rotation": {
+                "x": 0.006441776640713215,
+                "y": 0.7534054517745972,
+                "z": -0.007381637115031481,
+                "w": 0.6574833393096924
+              },
+              "velocity": {
+                "x": 3.5854458808898926,
+                "y": -0.07151350378990173,
+                "z": -0.48979151248931885
+              },
+              "speed": 3.618745347561344,
+              "suspension": [
+                0.2624838352203369,
+                0.26248371601104736,
+                0.315396249294281,
+                0.3153960108757019
+              ],
+              "wheelContacts": 4
+            },
+            {
+              "id": "autonomy",
+              "position": {
+                "x": 53.3161506652832,
+                "y": 0.758794367313385,
+                "z": 36.82451629638672
+              },
+              "rotation": {
+                "x": 0.006441776175051928,
+                "y": 0.7534055113792419,
+                "z": -0.007381638046354055,
+                "w": 0.6574832797050476
+              },
+              "velocity": {
+                "x": 3.5854477882385254,
+                "y": -0.07151369005441666,
+                "z": -0.4897923171520233
+              },
+              "speed": 3.6187473462685515,
+              "suspension": [
+                0.2624838352203369,
+                0.26248371601104736,
+                0.315396249294281,
+                0.3153960108757019
+              ],
+              "wheelContacts": 4
+            }
+          ],
+          "controls": [
+            {
+              "identity": {
+                "entityId": "player",
+                "handle": 0,
+                "generation": 1
+              },
+              "mode": "MANUAL",
+              "tick": 660,
+              "targetTick": 660,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "player",
+                "tick": 660,
+                "throttle": 0,
+                "brake": 0.8,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF",
+                "source": "PLAYER"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "player",
+                "tick": 660,
+                "source": "PLAYER",
+                "throttle": 0,
+                "brake": 0.8,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF"
+              },
+              "turnSignal": "OFF",
+              "signalStartedTick": null,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            },
+            {
+              "identity": {
+                "entityId": "autonomy",
+                "handle": 5e-324,
+                "generation": 2
+              },
+              "mode": "AUTO",
+              "tick": 660,
+              "targetTick": 655,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "autonomy",
+                "tick": 655,
+                "throttle": 0,
+                "brake": 0.8,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF",
+                "source": "AUTONOMY"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "autonomy",
+                "tick": 660,
+                "source": "AUTONOMY",
+                "throttle": 0,
+                "brake": 0.8,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF"
+              },
+              "turnSignal": "OFF",
+              "signalStartedTick": null,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            }
+          ],
+          "brakes": [
+            37.33333206176758,
+            37.33333206176758,
+            37.33333206176758,
+            37.33333206176758
+          ]
+        },
+        {
+          "tick": 720,
+          "physical": [
+            {
+              "id": "player",
+              "position": {
+                "x": 44.280487060546875,
+                "y": 0.7589005827903748,
+                "z": 36.69268035888672
+              },
+              "rotation": {
+                "x": -0.00009371044143335894,
+                "y": 0.7534409761428833,
+                "z": 0.000107400024717208,
+                "w": 0.6575155258178711
+              },
+              "velocity": {
+                "x": -0.0007497010519728065,
+                "y": -0.07091046124696732,
+                "z": 0.00010230133921140805
+              },
+              "speed": 0.0007566486842211385,
+              "suspension": [
+                0.28926533460617065,
+                0.2892654538154602,
+                0.28851550817489624,
+                0.2885156273841858
+              ],
+              "wheelContacts": 4
+            },
+            {
+              "id": "autonomy",
+              "position": {
+                "x": 54.28041458129883,
+                "y": 0.7589005827903748,
+                "z": 36.69268035888672
+              },
+              "rotation": {
+                "x": -0.000093711496447213,
+                "y": 0.7534410357475281,
+                "z": 0.00010739950084825978,
+                "w": 0.6575154662132263
+              },
+              "velocity": {
+                "x": -0.0007496487814933062,
+                "y": -0.0709105059504509,
+                "z": 0.00010249474871670827
+              },
+              "speed": 0.0007566230693739782,
+              "suspension": [
+                0.28926533460617065,
+                0.2892654538154602,
+                0.2885156273841858,
+                0.2885156273841858
+              ],
+              "wheelContacts": 4
+            }
+          ],
+          "controls": [
+            {
+              "identity": {
+                "entityId": "player",
+                "handle": 0,
+                "generation": 1
+              },
+              "mode": "MANUAL",
+              "tick": 720,
+              "targetTick": 720,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "player",
+                "tick": 720,
+                "throttle": 0,
+                "brake": 0.8,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF",
+                "source": "PLAYER"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "player",
+                "tick": 720,
+                "source": "PLAYER",
+                "throttle": 0,
+                "brake": 0.8,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF"
+              },
+              "turnSignal": "OFF",
+              "signalStartedTick": null,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            },
+            {
+              "identity": {
+                "entityId": "autonomy",
+                "handle": 5e-324,
+                "generation": 2
+              },
+              "mode": "AUTO",
+              "tick": 720,
+              "targetTick": 715,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "autonomy",
+                "tick": 715,
+                "throttle": 0,
+                "brake": 0.8,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF",
+                "source": "AUTONOMY"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "autonomy",
+                "tick": 720,
+                "source": "AUTONOMY",
+                "throttle": 0,
+                "brake": 0.8,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF"
+              },
+              "turnSignal": "OFF",
+              "signalStartedTick": null,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            }
+          ],
+          "brakes": [
+            37.33333206176758,
+            37.33333206176758,
+            37.33333206176758,
+            37.33333206176758
+          ]
+        },
+        {
+          "tick": 780,
+          "physical": [
+            {
+              "id": "player",
+              "position": {
+                "x": -5,
+                "y": 0.7588768005371094,
+                "z": 12.872546195983887
+              },
+              "rotation": {
+                "x": 0.006125888787209988,
+                "y": -8.617845992375806e-7,
+                "z": 6.78890277328037e-9,
+                "w": 0.9999812841415405
+              },
+              "velocity": {
+                "x": -0.000018754684788291343,
+                "y": -0.07154171168804169,
+                "z": 10.812965393066406
+              },
+              "speed": 10.81296539308267,
+              "suspension": [
+                0.27239346504211426,
+                0.2723933458328247,
+                0.30547499656677246,
+                0.30547499656677246
+              ],
+              "wheelContacts": 4
+            },
+            {
+              "id": "autonomy",
+              "position": {
+                "x": 5,
+                "y": 0.7588768005371094,
+                "z": 12.872546195983887
+              },
+              "rotation": {
+                "x": 0.006125889718532562,
+                "y": -8.617436151325819e-7,
+                "z": 3.849479401907274e-9,
+                "w": 0.9999812841415405
+              },
+              "velocity": {
+                "x": -0.000018762253603199497,
+                "y": -0.07154170423746109,
+                "z": 10.812965393066406
+              },
+              "speed": 10.812965393082683,
+              "suspension": [
+                0.27239346504211426,
+                0.2723933458328247,
+                0.30547499656677246,
+                0.30547499656677246
+              ],
+              "wheelContacts": 4
+            }
+          ],
+          "controls": [
+            {
+              "identity": {
+                "entityId": "player",
+                "handle": 0,
+                "generation": 1
+              },
+              "mode": "MANUAL",
+              "tick": 780,
+              "targetTick": 780,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "player",
+                "tick": 780,
+                "throttle": 0,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": true,
+                "turnSignal": "HAZARD",
+                "source": "PLAYER"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "player",
+                "tick": 780,
+                "source": "PLAYER",
+                "throttle": 0,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": true,
+                "turnSignal": "HAZARD"
+              },
+              "turnSignal": "HAZARD",
+              "signalStartedTick": 721,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            },
+            {
+              "identity": {
+                "entityId": "autonomy",
+                "handle": 5e-324,
+                "generation": 2
+              },
+              "mode": "AUTO",
+              "tick": 780,
+              "targetTick": 775,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "autonomy",
+                "tick": 775,
+                "throttle": 0,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": true,
+                "turnSignal": "HAZARD",
+                "source": "AUTONOMY"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "autonomy",
+                "tick": 780,
+                "source": "AUTONOMY",
+                "throttle": 0,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": true,
+                "turnSignal": "HAZARD"
+              },
+              "turnSignal": "HAZARD",
+              "signalStartedTick": 721,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            }
+          ],
+          "brakes": [
+            0,
+            0,
+            46.66666793823242,
+            46.66666793823242
+          ]
+        },
+        {
+          "tick": 840,
+          "physical": [
+            {
+              "id": "player",
+              "position": {
+                "x": -5,
+                "y": 0.758874773979187,
+                "z": 21.582782745361328
+              },
+              "rotation": {
+                "x": 0.006125918589532375,
+                "y": -8.608000712229114e-7,
+                "z": 7.867936524519337e-9,
+                "w": 0.9999812841415405
+              },
+              "velocity": {
+                "x": -0.000011511685443110764,
+                "y": -0.07151304185390472,
+                "z": 6.682315826416016
+              },
+              "speed": 6.68231582642593,
+              "suspension": [
+                0.2723907232284546,
+                0.2723907232284546,
+                0.30547261238098145,
+                0.30547261238098145
+              ],
+              "wheelContacts": 4
+            },
+            {
+              "id": "autonomy",
+              "position": {
+                "x": 5,
+                "y": 0.758874773979187,
+                "z": 21.582782745361328
+              },
+              "rotation": {
+                "x": 0.00612591952085495,
+                "y": -8.607186146036838e-7,
+                "z": 3.198099118861819e-9,
+                "w": 0.9999812841415405
+              },
+              "velocity": {
+                "x": -0.0000114847207441926,
+                "y": -0.07151377946138382,
+                "z": 6.682315826416016
+              },
+              "speed": 6.682315826425884,
+              "suspension": [
+                0.27239084243774414,
+                0.27239084243774414,
+                0.305472731590271,
+                0.305472731590271
+              ],
+              "wheelContacts": 4
+            }
+          ],
+          "controls": [
+            {
+              "identity": {
+                "entityId": "player",
+                "handle": 0,
+                "generation": 1
+              },
+              "mode": "MANUAL",
+              "tick": 840,
+              "targetTick": 840,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "player",
+                "tick": 840,
+                "throttle": 0,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": true,
+                "turnSignal": "HAZARD",
+                "source": "PLAYER"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "player",
+                "tick": 840,
+                "source": "PLAYER",
+                "throttle": 0,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": true,
+                "turnSignal": "HAZARD"
+              },
+              "turnSignal": "HAZARD",
+              "signalStartedTick": 721,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            },
+            {
+              "identity": {
+                "entityId": "autonomy",
+                "handle": 5e-324,
+                "generation": 2
+              },
+              "mode": "AUTO",
+              "tick": 840,
+              "targetTick": 835,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "autonomy",
+                "tick": 835,
+                "throttle": 0,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": true,
+                "turnSignal": "HAZARD",
+                "source": "AUTONOMY"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "autonomy",
+                "tick": 840,
+                "source": "AUTONOMY",
+                "throttle": 0,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": true,
+                "turnSignal": "HAZARD"
+              },
+              "turnSignal": "HAZARD",
+              "signalStartedTick": 721,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            }
+          ],
+          "brakes": [
+            0,
+            0,
+            46.66666793823242,
+            46.66666793823242
+          ]
+        },
+        {
+          "tick": 900,
+          "physical": [
+            {
+              "id": "player",
+              "position": {
+                "x": -5,
+                "y": 0.758874773979187,
+                "z": 26.192691802978516
+              },
+              "rotation": {
+                "x": 0.006125918589532375,
+                "y": -8.597905321039434e-7,
+                "z": 8.5732567711716e-9,
+                "w": 0.9999812841415405
+              },
+              "velocity": {
+                "x": -0.000004478351002035197,
+                "y": -0.07151298969984055,
+                "z": 2.6131932735443115
+              },
+              "speed": 2.613193273548149,
+              "suspension": [
+                0.2723907232284546,
+                0.2723907232284546,
+                0.30547261238098145,
+                0.30547261238098145
+              ],
+              "wheelContacts": 4
+            },
+            {
+              "id": "autonomy",
+              "position": {
+                "x": 5,
+                "y": 0.7588748335838318,
+                "z": 26.192691802978516
+              },
+              "rotation": {
+                "x": 0.00612591952085495,
+                "y": -8.597504574936465e-7,
+                "z": 6.03896710416052e-9,
+                "w": 0.9999812841415405
+              },
+              "velocity": {
+                "x": -0.000004472318778425688,
+                "y": -0.07151369005441666,
+                "z": 2.6131932735443115
+              },
+              "speed": 2.6131932735481382,
+              "suspension": [
+                0.27239084243774414,
+                0.27239084243774414,
+                0.305472731590271,
+                0.305472731590271
+              ],
+              "wheelContacts": 4
+            }
+          ],
+          "controls": [
+            {
+              "identity": {
+                "entityId": "player",
+                "handle": 0,
+                "generation": 1
+              },
+              "mode": "MANUAL",
+              "tick": 900,
+              "targetTick": 900,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "player",
+                "tick": 900,
+                "throttle": 0,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": true,
+                "turnSignal": "HAZARD",
+                "source": "PLAYER"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "player",
+                "tick": 900,
+                "source": "PLAYER",
+                "throttle": 0,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": true,
+                "turnSignal": "HAZARD"
+              },
+              "turnSignal": "HAZARD",
+              "signalStartedTick": 721,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            },
+            {
+              "identity": {
+                "entityId": "autonomy",
+                "handle": 5e-324,
+                "generation": 2
+              },
+              "mode": "AUTO",
+              "tick": 900,
+              "targetTick": 895,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "autonomy",
+                "tick": 895,
+                "throttle": 0,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": true,
+                "turnSignal": "HAZARD",
+                "source": "AUTONOMY"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "autonomy",
+                "tick": 900,
+                "source": "AUTONOMY",
+                "throttle": 0,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": true,
+                "turnSignal": "HAZARD"
+              },
+              "turnSignal": "HAZARD",
+              "signalStartedTick": 721,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            }
+          ],
+          "brakes": [
+            0,
+            0,
+            46.66666793823242,
+            46.66666793823242
+          ]
+        },
+        {
+          "tick": 960,
+          "physical": [
+            {
+              "id": "player",
+              "position": {
+                "x": -5,
+                "y": 0.7589151859283447,
+                "z": 29.72616958618164
+              },
+              "rotation": {
+                "x": -0.002844788832589984,
+                "y": -8.605937864558655e-7,
+                "z": -4.6460055247443677e-10,
+                "w": 0.9999960064888
+              },
+              "velocity": {
+                "x": -0.00000760318607717636,
+                "y": -0.07151387631893158,
+                "z": 4.417355060577393
+              },
+              "speed": 4.417355060583936,
+              "suspension": [
+                0.296608567237854,
+                0.296608567237854,
+                0.281246542930603,
+                0.281246542930603
+              ],
+              "wheelContacts": 4
+            },
+            {
+              "id": "autonomy",
+              "position": {
+                "x": 5,
+                "y": 0.7589151859283447,
+                "z": 29.72616958618164
+              },
+              "rotation": {
+                "x": -0.0028447876684367657,
+                "y": -8.605691732554988e-7,
+                "z": 1.2460146248116644e-9,
+                "w": 0.9999960064888
+              },
+              "velocity": {
+                "x": -0.000007614146397827426,
+                "y": -0.0715138390660286,
+                "z": 4.417355060577393
+              },
+              "speed": 4.417355060583954,
+              "suspension": [
+                0.296608567237854,
+                0.296608567237854,
+                0.281246542930603,
+                0.281246542930603
+              ],
+              "wheelContacts": 4
+            }
+          ],
+          "controls": [
+            {
+              "identity": {
+                "entityId": "player",
+                "handle": 0,
+                "generation": 1
+              },
+              "mode": "AUTO",
+              "tick": 960,
+              "targetTick": 955,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "player",
+                "tick": 955,
+                "throttle": 0.4,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "RIGHT",
+                "source": "AUTONOMY"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "player",
+                "tick": 960,
+                "source": "AUTONOMY",
+                "throttle": 0.4,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "RIGHT"
+              },
+              "turnSignal": "RIGHT",
+              "signalStartedTick": 901,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            },
+            {
+              "identity": {
+                "entityId": "autonomy",
+                "handle": 5e-324,
+                "generation": 2
+              },
+              "mode": "MANUAL",
+              "tick": 960,
+              "targetTick": 960,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "autonomy",
+                "tick": 960,
+                "throttle": 0.4,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "RIGHT",
+                "source": "PLAYER"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 0,
+                "vehicleId": "autonomy",
+                "tick": 960,
+                "source": "PLAYER",
+                "throttle": 0.4,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "RIGHT"
+              },
+              "turnSignal": "RIGHT",
+              "signalStartedTick": 901,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            }
+          ],
+          "brakes": [
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "resumedNeutral": true,
+      "overloadCount": 0
+    },
+    {
+      "classId": "compact",
+      "ticks": 961,
+      "elapsedWallMs": 16004,
+      "maxParityError": 0.0000705718994140625,
+      "takeoverIgnored": 1,
+      "handbrakeStart": 0,
+      "checkpoints": [
+        {
+          "tick": 60,
+          "physical": [
+            {
+              "id": "player",
+              "position": {
+                "x": -5,
+                "y": 0.7289314270019531,
+                "z": 0
+              },
+              "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0,
+                "w": 1
+              },
+              "velocity": {
+                "x": 0,
+                "y": 0.4103448987007141,
+                "z": 0
+              },
+              "speed": 0,
+              "suspension": [
+                0.2889314591884613,
+                0.2889314591884613,
+                0.2889314591884613,
+                0.2889314591884613
+              ],
+              "wheelContacts": 4
+            },
+            {
+              "id": "autonomy",
+              "position": {
+                "x": 5,
+                "y": 0.7289314270019531,
+                "z": 0
+              },
+              "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0,
+                "w": 1
+              },
+              "velocity": {
+                "x": 0,
+                "y": 0.4103448987007141,
+                "z": 0
+              },
+              "speed": 0,
+              "suspension": [
+                0.2889314591884613,
+                0.2889314591884613,
+                0.2889314591884613,
+                0.2889314591884613
+              ],
+              "wheelContacts": 4
+            }
+          ],
+          "controls": [
+            {
+              "identity": {
+                "entityId": "player",
+                "handle": 0,
+                "generation": 1
+              },
+              "mode": "MANUAL",
+              "tick": 60,
+              "targetTick": 60,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "player",
+                "tick": 60,
+                "throttle": 0,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF",
+                "source": "PLAYER"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "player",
+                "tick": 60,
+                "source": "PLAYER",
+                "throttle": 0,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF"
+              },
+              "turnSignal": "OFF",
+              "signalStartedTick": null,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            },
+            {
+              "identity": {
+                "entityId": "autonomy",
+                "handle": 5e-324,
+                "generation": 2
+              },
+              "mode": "AUTO",
+              "tick": 60,
+              "targetTick": 55,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "autonomy",
+                "tick": 55,
+                "throttle": 0,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF",
+                "source": "AUTONOMY"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "autonomy",
+                "tick": 60,
+                "source": "AUTONOMY",
+                "throttle": 0,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF"
+              },
+              "turnSignal": "OFF",
+              "signalStartedTick": null,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            }
+          ],
+          "brakes": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "tick": 120,
+          "physical": [
+            {
+              "id": "player",
+              "position": {
+                "x": -5,
+                "y": 0.7289314270019531,
+                "z": 0
+              },
+              "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0,
+                "w": 1
+              },
+              "velocity": {
+                "x": 0,
+                "y": 0.4110381007194519,
+                "z": 0
+              },
+              "speed": 0,
+              "suspension": [
+                0.2889314591884613,
+                0.2889314591884613,
+                0.2889314591884613,
+                0.2889314591884613
+              ],
+              "wheelContacts": 4
+            },
+            {
+              "id": "autonomy",
+              "position": {
+                "x": 5,
+                "y": 0.7289314270019531,
+                "z": 0
+              },
+              "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0,
+                "w": 1
+              },
+              "velocity": {
+                "x": 0,
+                "y": 0.4110381007194519,
+                "z": 0
+              },
+              "speed": 0,
+              "suspension": [
+                0.2889314591884613,
+                0.2889314591884613,
+                0.2889314591884613,
+                0.2889314591884613
+              ],
+              "wheelContacts": 4
+            }
+          ],
+          "controls": [
+            {
+              "identity": {
+                "entityId": "player",
+                "handle": 0,
+                "generation": 1
+              },
+              "mode": "MANUAL",
+              "tick": 120,
+              "targetTick": 120,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "player",
+                "tick": 120,
+                "throttle": 0,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF",
+                "source": "PLAYER"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "player",
+                "tick": 120,
+                "source": "PLAYER",
+                "throttle": 0,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF"
+              },
+              "turnSignal": "OFF",
+              "signalStartedTick": null,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            },
+            {
+              "identity": {
+                "entityId": "autonomy",
+                "handle": 5e-324,
+                "generation": 2
+              },
+              "mode": "AUTO",
+              "tick": 120,
+              "targetTick": 115,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "autonomy",
+                "tick": 115,
+                "throttle": 0,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF",
+                "source": "AUTONOMY"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "autonomy",
+                "tick": 120,
+                "source": "AUTONOMY",
+                "throttle": 0,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF"
+              },
+              "turnSignal": "OFF",
+              "signalStartedTick": null,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            }
+          ],
+          "brakes": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "tick": 180,
+          "physical": [
+            {
+              "id": "player",
+              "position": {
+                "x": -5,
+                "y": 0.7289314270019531,
+                "z": 0
+              },
+              "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0,
+                "w": 1
+              },
+              "velocity": {
+                "x": 0,
+                "y": 0.4110381007194519,
+                "z": 0
+              },
+              "speed": 0,
+              "suspension": [
+                0.2889314591884613,
+                0.2889314591884613,
+                0.2889314591884613,
+                0.2889314591884613
+              ],
+              "wheelContacts": 4
+            },
+            {
+              "id": "autonomy",
+              "position": {
+                "x": 5,
+                "y": 0.7289314270019531,
+                "z": 0
+              },
+              "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0,
+                "w": 1
+              },
+              "velocity": {
+                "x": 0,
+                "y": 0.4110381007194519,
+                "z": 0
+              },
+              "speed": 0,
+              "suspension": [
+                0.2889314591884613,
+                0.2889314591884613,
+                0.2889314591884613,
+                0.2889314591884613
+              ],
+              "wheelContacts": 4
+            }
+          ],
+          "controls": [
+            {
+              "identity": {
+                "entityId": "player",
+                "handle": 0,
+                "generation": 1
+              },
+              "mode": "MANUAL",
+              "tick": 180,
+              "targetTick": 180,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "player",
+                "tick": 180,
+                "throttle": 0,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF",
+                "source": "PLAYER"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "player",
+                "tick": 180,
+                "source": "PLAYER",
+                "throttle": 0,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF"
+              },
+              "turnSignal": "OFF",
+              "signalStartedTick": null,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            },
+            {
+              "identity": {
+                "entityId": "autonomy",
+                "handle": 5e-324,
+                "generation": 2
+              },
+              "mode": "AUTO",
+              "tick": 180,
+              "targetTick": 175,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "autonomy",
+                "tick": 175,
+                "throttle": 0,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF",
+                "source": "AUTONOMY"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "autonomy",
+                "tick": 180,
+                "source": "AUTONOMY",
+                "throttle": 0,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF"
+              },
+              "turnSignal": "OFF",
+              "signalStartedTick": null,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            }
+          ],
+          "brakes": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "tick": 240,
+          "physical": [
+            {
+              "id": "player",
+              "position": {
+                "x": -5,
+                "y": 0.7288082242012024,
+                "z": 2.4730100631713867
+              },
+              "rotation": {
+                "x": -0.009535178542137146,
+                "y": 0,
+                "z": 0,
+                "w": 0.9999546408653259
+              },
+              "velocity": {
+                "x": 0,
+                "y": -0.07152687013149261,
+                "z": 4.950566291809082
+              },
+              "speed": 4.950566291809082,
+              "suspension": [
+                0.3118281662464142,
+                0.3118281662464142,
+                0.2660534083843231,
+                0.2660534083843231
+              ],
+              "wheelContacts": 4
+            },
+            {
+              "id": "autonomy",
+              "position": {
+                "x": 5,
+                "y": 0.7288082242012024,
+                "z": 2.4730100631713867
+              },
+              "rotation": {
+                "x": -0.009535178542137146,
+                "y": 0,
+                "z": 0,
+                "w": 0.9999546408653259
+              },
+              "velocity": {
+                "x": 0,
+                "y": -0.07152687013149261,
+                "z": 4.950566291809082
+              },
+              "speed": 4.950566291809082,
+              "suspension": [
+                0.3118281662464142,
+                0.3118281662464142,
+                0.2660534083843231,
+                0.2660534083843231
+              ],
+              "wheelContacts": 4
+            }
+          ],
+          "controls": [
+            {
+              "identity": {
+                "entityId": "player",
+                "handle": 0,
+                "generation": 1
+              },
+              "mode": "MANUAL",
+              "tick": 240,
+              "targetTick": 240,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "player",
+                "tick": 240,
+                "throttle": 0.8,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF",
+                "source": "PLAYER"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "player",
+                "tick": 240,
+                "source": "PLAYER",
+                "throttle": 0.8,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF"
+              },
+              "turnSignal": "OFF",
+              "signalStartedTick": null,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            },
+            {
+              "identity": {
+                "entityId": "autonomy",
+                "handle": 5e-324,
+                "generation": 2
+              },
+              "mode": "AUTO",
+              "tick": 240,
+              "targetTick": 235,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "autonomy",
+                "tick": 235,
+                "throttle": 0.8,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF",
+                "source": "AUTONOMY"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "autonomy",
+                "tick": 240,
+                "source": "AUTONOMY",
+                "throttle": 0.8,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF"
+              },
+              "turnSignal": "OFF",
+              "signalStartedTick": null,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            }
+          ],
+          "brakes": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "tick": 300,
+          "physical": [
+            {
+              "id": "player",
+              "position": {
+                "x": -5,
+                "y": 0.7288067936897278,
+                "z": 9.962451934814453
+              },
+              "rotation": {
+                "x": -0.009535513818264008,
+                "y": 0,
+                "z": 0,
+                "w": 0.9999546408653259
+              },
+              "velocity": {
+                "x": 0,
+                "y": -0.07151321321725845,
+                "z": 9.929162979125977
+              },
+              "speed": 9.929162979125977,
+              "suspension": [
+                0.31182751059532166,
+                0.31182751059532166,
+                0.266050785779953,
+                0.266050785779953
+              ],
+              "wheelContacts": 4
+            },
+            {
+              "id": "autonomy",
+              "position": {
+                "x": 5,
+                "y": 0.7288067936897278,
+                "z": 9.962451934814453
+              },
+              "rotation": {
+                "x": -0.009535513818264008,
+                "y": 0,
+                "z": 0,
+                "w": 0.9999546408653259
+              },
+              "velocity": {
+                "x": 0,
+                "y": -0.07151321321725845,
+                "z": 9.929162979125977
+              },
+              "speed": 9.929162979125977,
+              "suspension": [
+                0.31182751059532166,
+                0.31182751059532166,
+                0.266050785779953,
+                0.266050785779953
+              ],
+              "wheelContacts": 4
+            }
+          ],
+          "controls": [
+            {
+              "identity": {
+                "entityId": "player",
+                "handle": 0,
+                "generation": 1
+              },
+              "mode": "MANUAL",
+              "tick": 300,
+              "targetTick": 300,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "player",
+                "tick": 300,
+                "throttle": 0.8,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF",
+                "source": "PLAYER"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "player",
+                "tick": 300,
+                "source": "PLAYER",
+                "throttle": 0.8,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF"
+              },
+              "turnSignal": "OFF",
+              "signalStartedTick": null,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            },
+            {
+              "identity": {
+                "entityId": "autonomy",
+                "handle": 5e-324,
+                "generation": 2
+              },
+              "mode": "AUTO",
+              "tick": 300,
+              "targetTick": 295,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "autonomy",
+                "tick": 295,
+                "throttle": 0.8,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF",
+                "source": "AUTONOMY"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "autonomy",
+                "tick": 300,
+                "source": "AUTONOMY",
+                "throttle": 0.8,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF"
+              },
+              "turnSignal": "OFF",
+              "signalStartedTick": null,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            }
+          ],
+          "brakes": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "tick": 360,
+          "physical": [
+            {
+              "id": "player",
+              "position": {
+                "x": -5,
+                "y": 0.7288616895675659,
+                "z": 22.095407485961914
+              },
+              "rotation": {
+                "x": -0.007045292295515537,
+                "y": 0,
+                "z": 0,
+                "w": 0.9999752640724182
+              },
+              "velocity": {
+                "x": 0,
+                "y": -0.07147863507270813,
+                "z": 14.009607315063477
+              },
+              "speed": 14.009607315063477,
+              "suspension": [
+                0.30591878294944763,
+                0.30591878294944763,
+                0.27194932103157043,
+                0.27194932103157043
+              ],
+              "wheelContacts": 4
+            },
+            {
+              "id": "autonomy",
+              "position": {
+                "x": 5,
+                "y": 0.7288616895675659,
+                "z": 22.095407485961914
+              },
+              "rotation": {
+                "x": -0.007045292295515537,
+                "y": 0,
+                "z": 0,
+                "w": 0.9999752640724182
+              },
+              "velocity": {
+                "x": 0,
+                "y": -0.07147863507270813,
+                "z": 14.009607315063477
+              },
+              "speed": 14.009607315063477,
+              "suspension": [
+                0.30591878294944763,
+                0.30591878294944763,
+                0.27194932103157043,
+                0.27194932103157043
+              ],
+              "wheelContacts": 4
+            }
+          ],
+          "controls": [
+            {
+              "identity": {
+                "entityId": "player",
+                "handle": 0,
+                "generation": 1
+              },
+              "mode": "MANUAL",
+              "tick": 360,
+              "targetTick": 360,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "player",
+                "tick": 360,
+                "throttle": 0.8,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF",
+                "source": "PLAYER"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "player",
+                "tick": 360,
+                "source": "PLAYER",
+                "throttle": 0.8,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF"
+              },
+              "turnSignal": "OFF",
+              "signalStartedTick": null,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            },
+            {
+              "identity": {
+                "entityId": "autonomy",
+                "handle": 5e-324,
+                "generation": 2
+              },
+              "mode": "AUTO",
+              "tick": 360,
+              "targetTick": 355,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "autonomy",
+                "tick": 355,
+                "throttle": 0.8,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF",
+                "source": "AUTONOMY"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "autonomy",
+                "tick": 360,
+                "source": "AUTONOMY",
+                "throttle": 0.8,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF"
+              },
+              "turnSignal": "OFF",
+              "signalStartedTick": null,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            }
+          ],
+          "brakes": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "tick": 420,
+          "physical": [
+            {
+              "id": "player",
+              "position": {
+                "x": 0.21167926490306854,
+                "y": 0.7288687229156494,
+                "z": 35.575504302978516
+              },
+              "rotation": {
+                "x": -0.0015835331287235022,
+                "y": 0.3446599245071411,
+                "z": 0.006435002665966749,
+                "w": 0.9387041926383972
+              },
+              "velocity": {
+                "x": 10.673667907714844,
+                "y": -0.07151318341493607,
+                "z": 11.436636924743652
+              },
+              "speed": 15.64365209126666,
+              "suspension": [
+                0.2890545427799225,
+                0.30662664771080017,
+                0.27123895287513733,
+                0.28881099820137024
+              ],
+              "wheelContacts": 4
+            },
+            {
+              "id": "autonomy",
+              "position": {
+                "x": 10.211681365966797,
+                "y": 0.7288686633110046,
+                "z": 35.575504302978516
+              },
+              "rotation": {
+                "x": -0.0015835375525057316,
+                "y": 0.34465980529785156,
+                "z": 0.006434997543692589,
+                "w": 0.938704252243042
+              },
+              "velocity": {
+                "x": 10.673663139343262,
+                "y": -0.07151341438293457,
+                "z": 11.436638832092285
+              },
+              "speed": 15.643650232215506,
+              "suspension": [
+                0.2890545427799225,
+                0.30662670731544495,
+                0.27123895287513733,
+                0.2888111174106598
+              ],
+              "wheelContacts": 4
+            }
+          ],
+          "controls": [
+            {
+              "identity": {
+                "entityId": "player",
+                "handle": 0,
+                "generation": 1
+              },
+              "mode": "MANUAL",
+              "tick": 420,
+              "targetTick": 420,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "player",
+                "tick": 420,
+                "throttle": 0.5,
+                "brake": 0,
+                "steering": 0.25,
+                "handbrake": false,
+                "turnSignal": "LEFT",
+                "source": "PLAYER"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "player",
+                "tick": 420,
+                "source": "PLAYER",
+                "throttle": 0.5,
+                "brake": 0,
+                "steering": 0.25,
+                "handbrake": false,
+                "turnSignal": "LEFT"
+              },
+              "turnSignal": "LEFT",
+              "signalStartedTick": 361,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            },
+            {
+              "identity": {
+                "entityId": "autonomy",
+                "handle": 5e-324,
+                "generation": 2
+              },
+              "mode": "AUTO",
+              "tick": 420,
+              "targetTick": 415,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "autonomy",
+                "tick": 415,
+                "throttle": 0.5,
+                "brake": 0,
+                "steering": 0.25,
+                "handbrake": false,
+                "turnSignal": "LEFT",
+                "source": "AUTONOMY"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "autonomy",
+                "tick": 420,
+                "source": "AUTONOMY",
+                "throttle": 0.5,
+                "brake": 0,
+                "steering": 0.25,
+                "handbrake": false,
+                "turnSignal": "LEFT"
+              },
+              "turnSignal": "LEFT",
+              "signalStartedTick": 361,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            }
+          ],
+          "brakes": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "tick": 480,
+          "physical": [
+            {
+              "id": "player",
+              "position": {
+                "x": 14.806682586669922,
+                "y": 0.7288705706596375,
+                "z": 42.149845123291016
+              },
+              "rotation": {
+                "x": 0.0012598130851984024,
+                "y": 0.6714031100273132,
+                "z": 0.006404259707778692,
+                "w": 0.74106365442276
+              },
+              "velocity": {
+                "x": 17.039772033691406,
+                "y": -0.07151271402835846,
+                "z": 1.016059398651123
+              },
+              "speed": 17.070038302879084,
+              "suspension": [
+                0.28807756304740906,
+                0.30596956610679626,
+                0.2718959152698517,
+                0.2897878587245941
+              ],
+              "wheelContacts": 4
+            },
+            {
+              "id": "autonomy",
+              "position": {
+                "x": 24.806705474853516,
+                "y": 0.7288705110549927,
+                "z": 42.149845123291016
+              },
+              "rotation": {
+                "x": 0.0012598105240613222,
+                "y": 0.6714030504226685,
+                "z": 0.006404269486665726,
+                "w": 0.7410637140274048
+              },
+              "velocity": {
+                "x": 17.039772033691406,
+                "y": -0.07151293009519577,
+                "z": 1.0160613059997559
+              },
+              "speed": 17.07003841641025,
+              "suspension": [
+                0.28807732462882996,
+                0.3059694468975067,
+                0.27189579606056213,
+                0.28978779911994934
+              ],
+              "wheelContacts": 4
+            }
+          ],
+          "controls": [
+            {
+              "identity": {
+                "entityId": "player",
+                "handle": 0,
+                "generation": 1
+              },
+              "mode": "MANUAL",
+              "tick": 480,
+              "targetTick": 480,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "player",
+                "tick": 480,
+                "throttle": 0.5,
+                "brake": 0,
+                "steering": 0.25,
+                "handbrake": false,
+                "turnSignal": "LEFT",
+                "source": "PLAYER"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "player",
+                "tick": 480,
+                "source": "PLAYER",
+                "throttle": 0.5,
+                "brake": 0,
+                "steering": 0.25,
+                "handbrake": false,
+                "turnSignal": "LEFT"
+              },
+              "turnSignal": "LEFT",
+              "signalStartedTick": 361,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            },
+            {
+              "identity": {
+                "entityId": "autonomy",
+                "handle": 5e-324,
+                "generation": 2
+              },
+              "mode": "AUTO",
+              "tick": 480,
+              "targetTick": 475,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "autonomy",
+                "tick": 475,
+                "throttle": 0.5,
+                "brake": 0,
+                "steering": 0.25,
+                "handbrake": false,
+                "turnSignal": "LEFT",
+                "source": "AUTONOMY"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "autonomy",
+                "tick": 480,
+                "source": "AUTONOMY",
+                "throttle": 0.5,
+                "brake": 0,
+                "steering": 0.25,
+                "handbrake": false,
+                "turnSignal": "LEFT"
+              },
+              "turnSignal": "LEFT",
+              "signalStartedTick": 361,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            }
+          ],
+          "brakes": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "tick": 540,
+          "physical": [
+            {
+              "id": "player",
+              "position": {
+                "x": 31.296228408813477,
+                "y": 0.728871762752533,
+                "z": 36.862308502197266
+              },
+              "rotation": {
+                "x": 0.003586395177990198,
+                "y": 0.8890851736068726,
+                "z": 0.005367256700992584,
+                "w": 0.4576963186264038
+              },
+              "velocity": {
+                "x": 14.4824800491333,
+                "y": -0.07151297479867935,
+                "z": -11.092140197753906
+              },
+              "speed": 18.24219840206142,
+              "suspension": [
+                0.2874225080013275,
+                0.30548611283302307,
+                0.2723788321018219,
+                0.29044243693351746
+              ],
+              "wheelContacts": 4
+            },
+            {
+              "id": "autonomy",
+              "position": {
+                "x": 41.29617691040039,
+                "y": 0.7288717031478882,
+                "z": 36.862308502197266
+              },
+              "rotation": {
+                "x": 0.0035864030942320824,
+                "y": 0.8890851736068726,
+                "z": 0.0053672525100409985,
+                "w": 0.4576963186264038
+              },
+              "velocity": {
+                "x": 14.4824800491333,
+                "y": -0.07151293754577637,
+                "z": -11.092143058776855
+              },
+              "speed": 18.24220014170209,
+              "suspension": [
+                0.28742238879203796,
+                0.3054859936237335,
+                0.2723788321018219,
+                0.29044243693351746
+              ],
+              "wheelContacts": 4
+            }
+          ],
+          "controls": [
+            {
+              "identity": {
+                "entityId": "player",
+                "handle": 0,
+                "generation": 1
+              },
+              "mode": "MANUAL",
+              "tick": 540,
+              "targetTick": 540,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "player",
+                "tick": 540,
+                "throttle": 0.5,
+                "brake": 0,
+                "steering": 0.25,
+                "handbrake": false,
+                "turnSignal": "LEFT",
+                "source": "PLAYER"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "player",
+                "tick": 540,
+                "source": "PLAYER",
+                "throttle": 0.5,
+                "brake": 0,
+                "steering": 0.25,
+                "handbrake": false,
+                "turnSignal": "LEFT"
+              },
+              "turnSignal": "LEFT",
+              "signalStartedTick": 361,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            },
+            {
+              "identity": {
+                "entityId": "autonomy",
+                "handle": 5e-324,
+                "generation": 2
+              },
+              "mode": "AUTO",
+              "tick": 540,
+              "targetTick": 535,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "autonomy",
+                "tick": 535,
+                "throttle": 0.5,
+                "brake": 0,
+                "steering": 0.25,
+                "handbrake": false,
+                "turnSignal": "LEFT",
+                "source": "AUTONOMY"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "autonomy",
+                "tick": 540,
+                "source": "AUTONOMY",
+                "throttle": 0.5,
+                "brake": 0,
+                "steering": 0.25,
+                "handbrake": false,
+                "turnSignal": "LEFT"
+              },
+              "turnSignal": "LEFT",
+              "signalStartedTick": 361,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            }
+          ],
+          "brakes": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "tick": 600,
+          "physical": [
+            {
+              "id": "player",
+              "position": {
+                "x": 42.986671447753906,
+                "y": 0.7286874055862427,
+                "z": 28.14621353149414
+              },
+              "rotation": {
+                "x": 0.006051324307918549,
+                "y": 0.8934705853462219,
+                "z": -0.01204153522849083,
+                "w": 0.44891947507858276
+              },
+              "velocity": {
+                "x": 8.779172897338867,
+                "y": -0.07151942700147629,
+                "z": -6.530948638916016
+              },
+              "speed": 10.941990992754851,
+              "suspension": [
+                0.2565979063510895,
+                0.25660160183906555,
+                0.3213029205799103,
+                0.3213065564632416
+              ],
+              "wheelContacts": 4
+            },
+            {
+              "id": "autonomy",
+              "position": {
+                "x": 52.98660659790039,
+                "y": 0.7286874651908875,
+                "z": 28.146198272705078
+              },
+              "rotation": {
+                "x": 0.006051319185644388,
+                "y": 0.8934706449508667,
+                "z": -0.012041532434523106,
+                "w": 0.44891947507858276
+              },
+              "velocity": {
+                "x": 8.779180526733398,
+                "y": -0.07151925563812256,
+                "z": -6.530953884124756
+              },
+              "speed": 10.942000244815349,
+              "suspension": [
+                0.25659796595573425,
+                0.2566015422344208,
+                0.3213029205799103,
+                0.321306437253952
+              ],
+              "wheelContacts": 4
+            }
+          ],
+          "controls": [
+            {
+              "identity": {
+                "entityId": "player",
+                "handle": 0,
+                "generation": 1
+              },
+              "mode": "MANUAL",
+              "tick": 600,
+              "targetTick": 600,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "player",
+                "tick": 600,
+                "throttle": 0,
+                "brake": 0.8,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF",
+                "source": "PLAYER"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "player",
+                "tick": 600,
+                "source": "PLAYER",
+                "throttle": 0,
+                "brake": 0.8,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF"
+              },
+              "turnSignal": "OFF",
+              "signalStartedTick": null,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            },
+            {
+              "identity": {
+                "entityId": "autonomy",
+                "handle": 5e-324,
+                "generation": 2
+              },
+              "mode": "AUTO",
+              "tick": 600,
+              "targetTick": 595,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "autonomy",
+                "tick": 595,
+                "throttle": 0,
+                "brake": 0.8,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF",
+                "source": "AUTONOMY"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "autonomy",
+                "tick": 600,
+                "source": "AUTONOMY",
+                "throttle": 0,
+                "brake": 0.8,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF"
+              },
+              "turnSignal": "OFF",
+              "signalStartedTick": null,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            }
+          ],
+          "brakes": [
+            33,
+            33,
+            33,
+            33
+          ]
+        },
+        {
+          "tick": 660,
+          "physical": [
+            {
+              "id": "player",
+              "position": {
+                "x": 48.77930450439453,
+                "y": 0.7286871671676636,
+                "z": 23.83707046508789
+              },
+              "rotation": {
+                "x": 0.006050493568181992,
+                "y": 0.8934705853462219,
+                "z": -0.012042183429002762,
+                "w": 0.44891947507858276
+              },
+              "velocity": {
+                "x": 2.915461778640747,
+                "y": -0.07151341438293457,
+                "z": -2.16884708404541
+              },
+              "speed": 3.633705416883343,
+              "suspension": [
+                0.25659897923469543,
+                0.2565988600254059,
+                0.3213050663471222,
+                0.3213048279285431
+              ],
+              "wheelContacts": 4
+            },
+            {
+              "id": "autonomy",
+              "position": {
+                "x": 58.77927017211914,
+                "y": 0.7286871671676636,
+                "z": 23.837055206298828
+              },
+              "rotation": {
+                "x": 0.006050499621778727,
+                "y": 0.8934706449508667,
+                "z": -0.012042165733873844,
+                "w": 0.44891947507858276
+              },
+              "velocity": {
+                "x": 2.9154675006866455,
+                "y": -0.07151325792074203,
+                "z": -2.168851852416992
+              },
+              "speed": 3.633712853995573,
+              "suspension": [
+                0.25659891963005066,
+                0.25659891963005066,
+                0.32130494713783264,
+                0.3213048279285431
+              ],
+              "wheelContacts": 4
+            }
+          ],
+          "controls": [
+            {
+              "identity": {
+                "entityId": "player",
+                "handle": 0,
+                "generation": 1
+              },
+              "mode": "MANUAL",
+              "tick": 660,
+              "targetTick": 660,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "player",
+                "tick": 660,
+                "throttle": 0,
+                "brake": 0.8,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF",
+                "source": "PLAYER"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "player",
+                "tick": 660,
+                "source": "PLAYER",
+                "throttle": 0,
+                "brake": 0.8,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF"
+              },
+              "turnSignal": "OFF",
+              "signalStartedTick": null,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            },
+            {
+              "identity": {
+                "entityId": "autonomy",
+                "handle": 5e-324,
+                "generation": 2
+              },
+              "mode": "AUTO",
+              "tick": 660,
+              "targetTick": 655,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "autonomy",
+                "tick": 655,
+                "throttle": 0,
+                "brake": 0.8,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF",
+                "source": "AUTONOMY"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "autonomy",
+                "tick": 660,
+                "source": "AUTONOMY",
+                "throttle": 0,
+                "brake": 0.8,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF"
+              },
+              "turnSignal": "OFF",
+              "signalStartedTick": null,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            }
+          ],
+          "brakes": [
+            33,
+            33,
+            33,
+            33
+          ]
+        },
+        {
+          "tick": 720,
+          "physical": [
+            {
+              "id": "player",
+              "position": {
+                "x": 49.47174835205078,
+                "y": 0.7289072275161743,
+                "z": 23.322010040283203
+              },
+              "rotation": {
+                "x": -0.00017571073840372264,
+                "y": 0.8935515284538269,
+                "z": 0.0003497069119475782,
+                "w": 0.4489605128765106
+              },
+              "velocity": {
+                "x": 0.002245796611532569,
+                "y": -0.07090156525373459,
+                "z": -0.001670078025199473
+              },
+              "speed": 0.0027987073856738467,
+              "suspension": [
+                0.28991952538490295,
+                0.2899194061756134,
+                0.2878749668598175,
+                0.28787484765052795
+              ],
+              "wheelContacts": 4
+            },
+            {
+              "id": "autonomy",
+              "position": {
+                "x": 59.47171401977539,
+                "y": 0.7289072275161743,
+                "z": 23.32199478149414
+              },
+              "rotation": {
+                "x": -0.00017571089847479016,
+                "y": 0.8935515880584717,
+                "z": 0.0003497133147902787,
+                "w": 0.4489605128765106
+              },
+              "velocity": {
+                "x": 0.002245648531243205,
+                "y": -0.07090122997760773,
+                "z": -0.0016700982814654708
+              },
+              "speed": 0.0027986006495441043,
+              "suspension": [
+                0.2899194657802582,
+                0.2899194657802582,
+                0.28787490725517273,
+                0.2878747880458832
+              ],
+              "wheelContacts": 4
+            }
+          ],
+          "controls": [
+            {
+              "identity": {
+                "entityId": "player",
+                "handle": 0,
+                "generation": 1
+              },
+              "mode": "MANUAL",
+              "tick": 720,
+              "targetTick": 720,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "player",
+                "tick": 720,
+                "throttle": 0,
+                "brake": 0.8,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF",
+                "source": "PLAYER"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "player",
+                "tick": 720,
+                "source": "PLAYER",
+                "throttle": 0,
+                "brake": 0.8,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF"
+              },
+              "turnSignal": "OFF",
+              "signalStartedTick": null,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            },
+            {
+              "identity": {
+                "entityId": "autonomy",
+                "handle": 5e-324,
+                "generation": 2
+              },
+              "mode": "AUTO",
+              "tick": 720,
+              "targetTick": 715,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "autonomy",
+                "tick": 715,
+                "throttle": 0,
+                "brake": 0.8,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF",
+                "source": "AUTONOMY"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "autonomy",
+                "tick": 720,
+                "source": "AUTONOMY",
+                "throttle": 0,
+                "brake": 0.8,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "OFF"
+              },
+              "turnSignal": "OFF",
+              "signalStartedTick": null,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            }
+          ],
+          "brakes": [
+            33,
+            33,
+            33,
+            33
+          ]
+        },
+        {
+          "tick": 780,
+          "physical": [
+            {
+              "id": "player",
+              "position": {
+                "x": -5.000114440917969,
+                "y": 0.7288355827331543,
+                "z": 12.833283424377441
+              },
+              "rotation": {
+                "x": 0.008429734967648983,
+                "y": 8.760212111269539e-9,
+                "z": -1.7686595299437613e-8,
+                "w": 0.9999644756317139
+              },
+              "velocity": {
+                "x": -1.101853754903459e-7,
+                "y": -0.07155822962522507,
+                "z": 10.532515525817871
+              },
+              "speed": 10.532515525817871,
+              "suspension": [
+                0.2687065303325653,
+                0.2687065303325653,
+                0.3091733753681183,
+                0.30917325615882874
+              ],
+              "wheelContacts": 4
+            },
+            {
+              "id": "autonomy",
+              "position": {
+                "x": 4.999885559082031,
+                "y": 0.7288355827331543,
+                "z": 12.833283424377441
+              },
+              "rotation": {
+                "x": 0.008429729379713535,
+                "y": 8.652911276385566e-9,
+                "z": -1.98949798857484e-8,
+                "w": 0.9999644756317139
+              },
+              "velocity": {
+                "x": -1.2972773788533232e-7,
+                "y": -0.07155819237232208,
+                "z": 10.532515525817871
+              },
+              "speed": 10.532515525817871,
+              "suspension": [
+                0.2687065303325653,
+                0.2687065303325653,
+                0.3091733753681183,
+                0.30917325615882874
+              ],
+              "wheelContacts": 4
+            }
+          ],
+          "controls": [
+            {
+              "identity": {
+                "entityId": "player",
+                "handle": 0,
+                "generation": 1
+              },
+              "mode": "MANUAL",
+              "tick": 780,
+              "targetTick": 780,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "player",
+                "tick": 780,
+                "throttle": 0,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": true,
+                "turnSignal": "HAZARD",
+                "source": "PLAYER"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "player",
+                "tick": 780,
+                "source": "PLAYER",
+                "throttle": 0,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": true,
+                "turnSignal": "HAZARD"
+              },
+              "turnSignal": "HAZARD",
+              "signalStartedTick": 721,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            },
+            {
+              "identity": {
+                "entityId": "autonomy",
+                "handle": 5e-324,
+                "generation": 2
+              },
+              "mode": "AUTO",
+              "tick": 780,
+              "targetTick": 775,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "autonomy",
+                "tick": 775,
+                "throttle": 0,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": true,
+                "turnSignal": "HAZARD",
+                "source": "AUTONOMY"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "autonomy",
+                "tick": 780,
+                "source": "AUTONOMY",
+                "throttle": 0,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": true,
+                "turnSignal": "HAZARD"
+              },
+              "turnSignal": "HAZARD",
+              "signalStartedTick": 721,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            }
+          ],
+          "brakes": [
+            0,
+            0,
+            41.25,
+            41.25
+          ]
+        },
+        {
+          "tick": 840,
+          "physical": [
+            {
+              "id": "player",
+              "position": {
+                "x": -5.000114440917969,
+                "y": 0.7288328409194946,
+                "z": 21.012197494506836
+              },
+              "rotation": {
+                "x": 0.008429965935647488,
+                "y": 9.47809475349004e-9,
+                "z": -3.597315556547187e-9,
+                "w": 0.9999644756317139
+              },
+              "velocity": {
+                "x": 1.127576680914899e-7,
+                "y": -0.07151340693235397,
+                "z": 5.909849643707275
+              },
+              "speed": 5.909849643707276,
+              "suspension": [
+                0.26870235800743103,
+                0.26870235800743103,
+                0.30917051434516907,
+                0.30917051434516907
+              ],
+              "wheelContacts": 4
+            },
+            {
+              "id": "autonomy",
+              "position": {
+                "x": 4.999885559082031,
+                "y": 0.7288328409194946,
+                "z": 21.012197494506836
+              },
+              "rotation": {
+                "x": 0.008429967798292637,
+                "y": 8.998007672289532e-9,
+                "z": -1.2839452834256804e-9,
+                "w": 0.9999644756317139
+              },
+              "velocity": {
+                "x": 1.0700420460807436e-7,
+                "y": -0.07151340693235397,
+                "z": 5.909849643707275
+              },
+              "speed": 5.909849643707275,
+              "suspension": [
+                0.26870235800743103,
+                0.26870235800743103,
+                0.30917051434516907,
+                0.30917051434516907
+              ],
+              "wheelContacts": 4
+            }
+          ],
+          "controls": [
+            {
+              "identity": {
+                "entityId": "player",
+                "handle": 0,
+                "generation": 1
+              },
+              "mode": "MANUAL",
+              "tick": 840,
+              "targetTick": 840,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "player",
+                "tick": 840,
+                "throttle": 0,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": true,
+                "turnSignal": "HAZARD",
+                "source": "PLAYER"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "player",
+                "tick": 840,
+                "source": "PLAYER",
+                "throttle": 0,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": true,
+                "turnSignal": "HAZARD"
+              },
+              "turnSignal": "HAZARD",
+              "signalStartedTick": 721,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            },
+            {
+              "identity": {
+                "entityId": "autonomy",
+                "handle": 5e-324,
+                "generation": 2
+              },
+              "mode": "AUTO",
+              "tick": 840,
+              "targetTick": 835,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "autonomy",
+                "tick": 835,
+                "throttle": 0,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": true,
+                "turnSignal": "HAZARD",
+                "source": "AUTONOMY"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "autonomy",
+                "tick": 840,
+                "source": "AUTONOMY",
+                "throttle": 0,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": true,
+                "turnSignal": "HAZARD"
+              },
+              "turnSignal": "HAZARD",
+              "signalStartedTick": 721,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            }
+          ],
+          "brakes": [
+            0,
+            0,
+            41.25,
+            41.25
+          ]
+        },
+        {
+          "tick": 900,
+          "physical": [
+            {
+              "id": "player",
+              "position": {
+                "x": -5.000114440917969,
+                "y": 0.7288328409194946,
+                "z": 24.602453231811523
+              },
+              "rotation": {
+                "x": 0.008429965935647488,
+                "y": 9.853225790834585e-9,
+                "z": -3.968139594690001e-9,
+                "w": 0.9999644756317139
+              },
+              "velocity": {
+                "x": 2.7385764767018372e-8,
+                "y": -0.07151340693235397,
+                "z": 1.3560222387313843
+              },
+              "speed": 1.3560222387313845,
+              "suspension": [
+                0.26870235800743103,
+                0.26870235800743103,
+                0.30917051434516907,
+                0.30917051434516907
+              ],
+              "wheelContacts": 4
+            },
+            {
+              "id": "autonomy",
+              "position": {
+                "x": 4.999885559082031,
+                "y": 0.7288328409194946,
+                "z": 24.602453231811523
+              },
+              "rotation": {
+                "x": 0.008429967798292637,
+                "y": 8.994170741516427e-9,
+                "z": -1.749599465306062e-9,
+                "w": 0.9999644756317139
+              },
+              "velocity": {
+                "x": 2.4958060507174196e-8,
+                "y": -0.07151340693235397,
+                "z": 1.3560222387313843
+              },
+              "speed": 1.3560222387313845,
+              "suspension": [
+                0.26870235800743103,
+                0.26870235800743103,
+                0.30917051434516907,
+                0.30917051434516907
+              ],
+              "wheelContacts": 4
+            }
+          ],
+          "controls": [
+            {
+              "identity": {
+                "entityId": "player",
+                "handle": 0,
+                "generation": 1
+              },
+              "mode": "MANUAL",
+              "tick": 900,
+              "targetTick": 900,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "player",
+                "tick": 900,
+                "throttle": 0,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": true,
+                "turnSignal": "HAZARD",
+                "source": "PLAYER"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "player",
+                "tick": 900,
+                "source": "PLAYER",
+                "throttle": 0,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": true,
+                "turnSignal": "HAZARD"
+              },
+              "turnSignal": "HAZARD",
+              "signalStartedTick": 721,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            },
+            {
+              "identity": {
+                "entityId": "autonomy",
+                "handle": 5e-324,
+                "generation": 2
+              },
+              "mode": "AUTO",
+              "tick": 900,
+              "targetTick": 895,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "autonomy",
+                "tick": 895,
+                "throttle": 0,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": true,
+                "turnSignal": "HAZARD",
+                "source": "AUTONOMY"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "autonomy",
+                "tick": 900,
+                "source": "AUTONOMY",
+                "throttle": 0,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": true,
+                "turnSignal": "HAZARD"
+              },
+              "turnSignal": "HAZARD",
+              "signalStartedTick": 721,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            }
+          ],
+          "brakes": [
+            0,
+            0,
+            41.25,
+            41.25
+          ]
+        },
+        {
+          "tick": 960,
+          "physical": [
+            {
+              "id": "player",
+              "position": {
+                "x": -5.000114440917969,
+                "y": 0.7288965582847595,
+                "z": 27.2360897064209
+              },
+              "rotation": {
+                "x": -0.0047699688002467155,
+                "y": 9.876615969517388e-9,
+                "z": -5.405878522601881e-11,
+                "w": 0.9999886751174927
+              },
+              "velocity": {
+                "x": 7.595733109155844e-8,
+                "y": -0.07151540368795395,
+                "z": 3.8619816303253174
+              },
+              "speed": 3.8619816303253183,
+              "suspension": [
+                0.3003779351711273,
+                0.3003779351711273,
+                0.27748146653175354,
+                0.27748146653175354
+              ],
+              "wheelContacts": 4
+            },
+            {
+              "id": "autonomy",
+              "position": {
+                "x": 4.999885559082031,
+                "y": 0.7288965582847595,
+                "z": 27.2360897064209
+              },
+              "rotation": {
+                "x": -0.004769971128553152,
+                "y": 8.907141690883691e-9,
+                "z": -1.7225640358553562e-10,
+                "w": 0.9999886751174927
+              },
+              "velocity": {
+                "x": 1.786235372946976e-7,
+                "y": -0.07151548564434052,
+                "z": 3.8619816303253174
+              },
+              "speed": 3.861981630325322,
+              "suspension": [
+                0.3003779351711273,
+                0.30037805438041687,
+                0.27748146653175354,
+                0.27748146653175354
+              ],
+              "wheelContacts": 4
+            }
+          ],
+          "controls": [
+            {
+              "identity": {
+                "entityId": "player",
+                "handle": 0,
+                "generation": 1
+              },
+              "mode": "AUTO",
+              "tick": 960,
+              "targetTick": 955,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "player",
+                "tick": 955,
+                "throttle": 0.4,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "RIGHT",
+                "source": "AUTONOMY"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "player",
+                "tick": 960,
+                "source": "AUTONOMY",
+                "throttle": 0.4,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "RIGHT"
+              },
+              "turnSignal": "RIGHT",
+              "signalStartedTick": 901,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            },
+            {
+              "identity": {
+                "entityId": "autonomy",
+                "handle": 5e-324,
+                "generation": 2
+              },
+              "mode": "MANUAL",
+              "tick": 960,
+              "targetTick": 960,
+              "raw": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "autonomy",
+                "tick": 960,
+                "throttle": 0.4,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "RIGHT",
+                "source": "PLAYER"
+              },
+              "command": {
+                "schemaVersion": 1,
+                "units": "SI",
+                "sessionId": "024-browser",
+                "worldEpoch": 1,
+                "vehicleId": "autonomy",
+                "tick": 960,
+                "source": "PLAYER",
+                "throttle": 0.4,
+                "brake": 0,
+                "steering": 0,
+                "handbrake": false,
+                "turnSignal": "RIGHT"
+              },
+              "turnSignal": "RIGHT",
+              "signalStartedTick": 901,
+              "leftIndicatorOn": false,
+              "rightIndicatorOn": false
+            }
+          ],
+          "brakes": [
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "resumedNeutral": true,
+      "overloadCount": 0
+    }
+  ],
+  "scope": "Functional real headed driving/playtest; no steady-state frame budget or FPS claim. Before/after CPU and20-cycle memory evidence are separate.",
+  "hardware": {
+    "source": "current CIM at fixture server startup",
+    "capturedAt": "2026-10-05T18:00:32.3890402+03:00",
+    "cpu": [
+      {
+        "Name": "AMD Ryzen 9 7950X3D 16-Core Processor          ",
+        "NumberOfCores": 16,
+        "NumberOfLogicalProcessors": 32
+      }
+    ],
+    "gpu": [
+      {
+        "Name": "Parsec Virtual Display Adapter",
+        "DriverVersion": "0.45.0.0",
+        "AdapterRAM": null,
+        "CurrentHorizontalResolution": null,
+        "CurrentVerticalResolution": null,
+        "CurrentRefreshRate": null
+      },
+      {
+        "Name": "Meta Virtual Monitor",
+        "DriverVersion": "15.52.32.370",
+        "AdapterRAM": null,
+        "CurrentHorizontalResolution": 3840,
+        "CurrentVerticalResolution": 2160,
+        "CurrentRefreshRate": 144
+      },
+      {
+        "Name": "Virtual Desktop Monitor",
+        "DriverVersion": "13.50.53.699",
+        "AdapterRAM": null,
+        "CurrentHorizontalResolution": null,
+        "CurrentVerticalResolution": null,
+        "CurrentRefreshRate": null
+      },
+      {
+        "Name": "AMD Radeon RX 7900 XTX",
+        "DriverVersion": "32.0.31041.1004",
+        "AdapterRAM": 4293918720,
+        "CurrentHorizontalResolution": 3840,
+        "CurrentVerticalResolution": 2160,
+        "CurrentRefreshRate": 144
+      },
+      {
+        "Name": "AMD Radeon(TM) Graphics",
+        "DriverVersion": "32.0.21045.5002",
+        "AdapterRAM": 536870912,
+        "CurrentHorizontalResolution": null,
+        "CurrentVerticalResolution": null,
+        "CurrentRefreshRate": null
+      }
+    ],
+    "memory": [
+      {
+        "Capacity": 25769803776,
+        "Speed": 5200
+      },
+      {
+        "Capacity": 25769803776,
+        "Speed": 5200
+      }
+    ],
+    "os": [
+      {
+        "Caption": "Microsoft Windows 11 Pro",
+        "Version": "10.0.26200",
+        "BuildNumber": "26200",
+        "TotalVisibleMemorySize": 49157544
+      }
+    ],
+    "battery": [],
+    "powerScheme": "Power Scheme GUID: 381b4222-f694-41f0-9685-ff5bb260df2e  (Balanced)"
+  }
+}
