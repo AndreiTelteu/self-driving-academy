@@ -31,3 +31,5 @@ Controllerul și fizica rămân la 60 Hz; doar deciziile de nivel înalt au 10 H
 [Prototipul Rapier](physics-prototype.md) documentează portul, calibrarea, decizia, limitele observate și probele desktop reale. Babylon rămâne engine-ul. Fizica finală și integrarea gameplay continuă în PBI-urile dedicate.
 
 [Adaptorul022](physics-adapter.md) extinde portul cu mapare reală pentru vehicule, pose/velocity SI, remove și subscriptions cu fencing de generație. Implementarea și probele Rapier/Babylon sunt verificate; cinci perechi complete direct/bridge pe WebGPU/WebGL2 reale și20cycles/backend trec bugetele adaptorului timpuriu și cleanupul. Jocul complet și laptopul nu sunt validate de această probă.
+
+[Clasele mecanice023](vehicle-classes.md) definesc două configurații versionate independente de preferințele jucătorului. Masa, puterea, frâna și geometria roților sunt aplicate controllerului Rapier; probele pe aceeași suprafață verifică diferențele de accelerație, frânare și viraj. Portul implicit păstrează mecanica021, iar clasele noi sunt selectate explicit. Calibrarea finală a dinamicii și integrarea controllerului comun continuă în PBI-urile dedicate.

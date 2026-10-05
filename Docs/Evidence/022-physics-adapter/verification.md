@@ -35,3 +35,7 @@ Cleanup per-arm și20cycles verifică scene resources la baseline,0entity/0subsc
 Fixture timpuriu, fără certificare a jocului complet, laptopului sau gate220/224. Caps sunt admitere finită provizorie, nu calibrare gameplay. Ownership counts și buffere sunt bounded; memoria exactă WASM/GPU și GPUtimer sunt indisponibile și raportate null, nu zero. Warm module/HTTPno-store, fără control cold OS/driver cache. Baseline-ul este direct pe aceeași fixture, nu schimbat pentru acceptarea unei regresii.
 
 Tranziție finală:2026-10-05 14:23+03, fișierul există numai în PBI/Done/022-physics_adapter.md; Validate-Board -RequireDone '022' PASS (235total,201ToDo,0InProgress,34Done) și Validate-Plan PASS1069localLinks. Rezultate: [board-validation](board-validation.txt), [plan-validation](plan-validation.txt). DedicatedChrome/serverclosed; hardware released.
+
+## Verificare istorică după extinderea023
+
+Cele52 de surse consumate de buildul022 au fost arhivate byte-exact înaintea modificării mecanicii023 în [source-at-capture](source-at-capture/README.md). `node scripts/verify-physics-adapter-evidence.mjs --historical` a trecut după modificări: sursa originală și cele142 de artefacte originale sunt verificate împotriva hashurilor capturate. [Rezultat separat](historical-summary.json), [log executat](historical-verifier.txt). Modul implicit continuă să respingă surse curente modificate; opțiunea istorică este explicită. Rapoartele brute, summary-ul original și identitățile măsurate022 nu au fost rescrise. Această reconciliere aparține publicării023.

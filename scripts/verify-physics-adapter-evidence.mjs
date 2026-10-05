@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto';
 import { resolve, sep } from 'node:path';
 
 const smoke = process.argv.includes('--smoke');
+const historical = process.argv.includes('--historical');
 const evidence = resolve('Docs/Evidence/022-physics-adapter');
 const build = resolve('.pbi-validation-022/build');
 const json = async (path) => JSON.parse(await readFile(path, 'utf8'));
@@ -21,7 +22,7 @@ assert(Array.isArray(manifest.inputs) && manifest.inputs.length > 0);
 assert.equal(new Set(manifest.inputs).size, manifest.inputs.length);
 const workspace = resolve('.') + sep;
 for (const input of manifest.inputs) {
-  const path = resolve(input);
+  const path = historical ? resolve(evidence, 'source-at-capture', input) : resolve(input);
   assert(path.startsWith(workspace), 'Source outside workspace');
   source.update(input).update(await readFile(path));
 }
@@ -215,7 +216,10 @@ for (const backend of ['WEBGPU', 'WEBGL2']) {
   });
 }
 await writeFile(
-  resolve(evidence, smoke ? 'smoke-summary.json' : 'summary.json'),
+  resolve(
+    evidence,
+    `${historical ? 'historical-' : ''}${smoke ? 'smoke-summary.json' : 'summary.json'}`,
+  ),
   JSON.stringify(
     {
       fixtureVersion: smoke ? '022-paired-v1-SMOKE' : '022-paired-v1',
@@ -223,6 +227,12 @@ await writeFile(
       sourceHash: manifest.sourceHash,
       artifactHash: manifest.artifactHash,
       artifactsVerified: manifest.artifacts.length,
+      ...(historical
+        ? {
+            historicalSources:
+              'Explicit --historical: exact source closure archived before PBI023 extended vehicle mechanics; original report identity and artifact bytes verified unchanged',
+          }
+        : {}),
       budgetVersion: manifest.budgetVersion,
       verification: smoke
         ? 'SMOKE_ONLY_NOT_PERFORMANCE_ACCEPTANCE'
