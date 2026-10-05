@@ -20,6 +20,8 @@ PBI032 implementează [schema runtime și validatorul semantic](map-schema.md) �
 
 PBI033 adaugă [graful direcționat de benzi](lane-graph.md): vecini, succesori și conexiuni de viraj filtrate după acces TAXI/CIVIL, plus proiecția poziției pe geometria orientată a benzii. Query-urile țin cont de lățime, înălțime și direcție; în afara grafului întorc null. Indexul spațial are limite explicite și păstrează o căutare completă pentru geometria care depășește capacitatea indexului.
 
+PBI035 construiește [relațiile de conflict ale intersecțiilor](intersection-conflicts.md) din mișcări, zone declarate și coridoare geometrice. Relațiile au IDs stabile și motive distincte; ocuparea incompatibilă nu atribuie prioritate. Geometria este reutilizată, iar construirea are limite explicite pentru perechi și comparații.
+
 Pipeline-ul construiește întâi fixture-uri semantice mici, apoi cartierul. Un validator produce IDs și poziții pentru erori. Decorul nu schimbă banda sau coliziunile fără o actualizare a datelor. Rutele civile și taxiurile folosesc același graf; un segment manual în afara grafului rămâne înregistrat fără a inventa o bandă.
 
 PBI039 oferă [zonele de trecere și contextul de pericol](crosswalk-zones.md): traversări geometrice, linii cu IDs și observații explicite de pietoni/obstacole. O trecere goală nu produce expunere la pietoni sau dovezi de cedare. Implementarea semantică rămâne independentă de meshuri și de viitoarele NPC-uri.

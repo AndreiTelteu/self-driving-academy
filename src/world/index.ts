@@ -1,6 +1,16 @@
 export { parseRoadMap, mapSchemaLimits } from './parser';
 export { MapValidationError } from './errors';
 export {
+  createIntersectionConflicts,
+  INTERSECTION_CONFLICT_LIMITS,
+  type IntersectionConflictReason,
+  type IntersectionMovement,
+  type IntersectionConflictZone,
+  type IntersectionConflictRelation,
+  type IntersectionConflictStats,
+  type IntersectionConflicts,
+} from './intersection-conflicts';
+export {
   createCrosswalkZones,
   MAX_HAZARD_OBSERVATIONS,
   type HazardObservation,
