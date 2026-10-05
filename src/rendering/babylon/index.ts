@@ -3,6 +3,7 @@ import type { BootstrapView, Renderer } from '../index';
 export { createRenderingBackend, type RenderingBackend } from './backend';
 export { BabylonSceneAdapter, type VisualRepresentation } from './scene-adapter';
 export { BabylonSnapshotPresenter, type WheelNodeResolver } from './snapshot-presenter';
+export { createDaylight, type DaylightMaterial, type QualityViewport } from './daylight';
 export {
   BabylonAssetRegistry,
   DEFAULT_ASSET_LIMITS,

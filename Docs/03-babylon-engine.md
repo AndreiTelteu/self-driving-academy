@@ -42,6 +42,8 @@ Pickingul mapează mesh sau instance la entityId. Clickul pe o mașină produce 
 
 Direcția inițială folosește materiale simple sau PBR moderat, lumină ambientală și direcțională, umbre limitate și niveluri de calitate. Orașul este stilizat cu atmosferă americană; fizica realistă nu obligă fotorealismul. Tonemappingul și spațiul de culoare rămân coerente între backenduri.
 
+PBI016 implementează [iluminarea de zi și presetările de calitate](lighting-quality.md), cu materiale semantice lizibile, umbre plafonate și rezoluție internă/DPR explicite. Ajustarea automată folosește ferestre limitate, histerezis și metrici GPU disponibile; setările afectează numai prezentarea.
+
 Formatul de asset principal propus este glTF/GLB; loaderul, registry-ul, cache-ul și eliberarea resurselor sunt tratate explicit. Asseturile necesare pornirii au prioritate; decorul poate veni ulterior. O lipsă de decor permite placeholder, iar lipsa datelor de hartă sau a mașinii de bază blochează pornirea cu explicație. [Încărcarea formatelor](https://github.com/BabylonJS/Documentation/blob/master/content/features/featuresDeepDive/importers/loadingFileTypes.md)
 
 PBI015 implementează [registry-ul GLB2](asset-registry.md), cu PNG/JPEG embedded, cache comun și lease-uri pentru instanțe, încărcare critică prioritară, placeholder opțional și limite explicite pentru transferuri/resurse. Materialele și texturile partajate supraviețuiesc până la eliberarea ultimului lease; rapoartele separă transferul, decode/upload CPU și pregătirea shaderelor.
