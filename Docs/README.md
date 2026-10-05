@@ -62,6 +62,8 @@ Fundațiile suplimentare implementate sunt [bucla cu pas fix](fixed-tick.md), [m
 
 [Graful de benzi](lane-graph.md) oferă query-uri direcționate și localizare geometrică independentă de mesh, cu restricții de acces și index spațial plafonat.
 
+[Zonele de trecere](crosswalk-zones.md) separă traversarea geometrică de expunerea observabilă la pietoni și obstacole, fără dovezi fictive de cedare.
+
 ## Revizia 0.3
 
 Învățarea are loc numai în LEARNING; MANUAL permite intervenții fără schimbarea stilului. Taxiurile și civilii adoptă stilul comun. V1 include revenue și ratings cu grafice KPIs, trei misiuni zilnice și XP din misiuni/timp activ, fără pierderi XP, conform reviziei 0.5. Valorile economice și pragurile sunt propuneri de calibrare. Verifică boardul și planul cu PBI/Validate-Board.ps1 și PBI/Validate-Plan.ps1.

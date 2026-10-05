@@ -22,6 +22,8 @@ PBI033 adaugă [graful direcționat de benzi](lane-graph.md): vecini, succesori 
 
 Pipeline-ul construiește întâi fixture-uri semantice mici, apoi cartierul. Un validator produce IDs și poziții pentru erori. Decorul nu schimbă banda sau coliziunile fără o actualizare a datelor. Rutele civile și taxiurile folosesc același graf; un segment manual în afara grafului rămâne înregistrat fără a inventa o bandă.
 
+PBI039 oferă [zonele de trecere și contextul de pericol](crosswalk-zones.md): traversări geometrice, linii cu IDs și observații explicite de pietoni/obstacole. O trecere goală nu produce expunere la pietoni sau dovezi de cedare. Implementarea semantică rămâne independentă de meshuri și de viitoarele NPC-uri.
+
 ## Repere pentru distracție și provocări
 
 V1 include zone de serviciu fictive pentru spital/maternitate, toalete publice sau benzinării/cafenele și terminal, plus parcare pentru drift, rampă și alee destructibilă. [Provocările](28-provocari-random-si-revenire.md) verifică accesibilitatea acestor zone înainte de ofertă. Distrugerea mobilierului decorativ nu elimină semantica STOP/semafor/benzi; obstacolele deplasate sunt raportate contextului fizic, conform [modulului 26](26-joaca-libera-haos-si-distrugere.md).

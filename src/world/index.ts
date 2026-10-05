@@ -1,6 +1,14 @@
 export { parseRoadMap, mapSchemaLimits } from './parser';
 export { MapValidationError } from './errors';
 export {
+  createCrosswalkZones,
+  MAX_HAZARD_OBSERVATIONS,
+  type HazardObservation,
+  type CrosswalkQuery,
+  type CrosswalkZone,
+  type CrosswalkExposure,
+} from './crosswalk-zones';
+export {
   createLaneGraph,
   LANE_GRAPH_LIMITS,
   type LaneGraph,
