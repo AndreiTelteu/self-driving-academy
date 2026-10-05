@@ -1,5 +1,22 @@
 export { parseRoadMap, mapSchemaLimits } from './parser';
 export { MapValidationError } from './errors';
+export { predictPriorityArrival, type PriorityArrival } from './priority-arrival';
+export {
+  parseMapPriorityPolicy,
+  type MapPriorityRule,
+  type MapPriorityPolicy,
+} from './priority-policy';
+export {
+  createPriorityRules,
+  type ConflictDistance,
+  type PriorityActor,
+  type PriorityObservation,
+  type PriorityGap,
+  type PriorityEvidence,
+  type PriorityEvaluation,
+  type PriorityRuleOptions,
+  type PriorityRules,
+} from './priority-rules';
 export {
   createStopRules,
   type StopObservation,

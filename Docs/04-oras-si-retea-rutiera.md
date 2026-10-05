@@ -26,10 +26,12 @@ Pipeline-ul construiește întâi fixture-uri semantice mici, apoi cartierul. Un
 
 PBI039 oferă [zonele de trecere și contextul de pericol](crosswalk-zones.md): traversări geometrice, linii cu IDs și observații explicite de pietoni/obstacole. O trecere goală nu produce expunere la pietoni sau dovezi de cedare. Implementarea semantică rămâne independentă de meshuri și de viitoarele NPC-uri.
 
-## Repere pentru distracție și provocări
-
 PBI037 oferă [zonele și dovezile STOP](stop-rules.md): apropiere, staționare continuă lângă linie și traversare distinctă, folosind bara frontală autoritară. Istoricul limitat și identificarea oportunităților împiedică transferul dovezii între respawn, reseturi și STOP-uri consecutive.
 
 PBI036 implementează [controllerul de semafoare](signals.md): faze deterministe la 60 Hz, semnal consultat pentru mișcarea concretă și evenimente unice pentru tranziții. Configurația respinge mișcări GREEN incompatibile, iar retry-ul publicării păstrează prefixul deja acceptat fără repetarea evenimentelor.
+
+PBI038 adaugă [politica explicită de prioritate și evaluarea spațiilor](priority-rules.md): relații de hartă exhaustive, timp până la conflict în secunde și dovezi bazate pe trafic observabil. Absența traficului și acoperirea necunoscută nu devin dovezi de refuz sau cedare; schimbările de traseu și discontinuitățile invalidează continuitatea observării.
+
+## Repere pentru distracție și provocări
 
 V1 include zone de serviciu fictive pentru spital/maternitate, toalete publice sau benzinării/cafenele și terminal, plus parcare pentru drift, rampă și alee destructibilă. [Provocările](28-provocari-random-si-revenire.md) verifică accesibilitatea acestor zone înainte de ofertă. Distrugerea mobilierului decorativ nu elimină semantica STOP/semafor/benzi; obstacolele deplasate sunt raportate contextului fizic, conform [modulului 26](26-joaca-libera-haos-si-distrugere.md).
