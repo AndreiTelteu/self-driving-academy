@@ -1,6 +1,6 @@
 # Layoutul modular implementat în 002
 
-Compoziția browser pornește în `src/main.ts`: construiește view-ul DOM și injectează fabrica asincronă Babylon în `createRenderingLifecycle` din `src/app/index.ts`. Fundația inițială `createApplication`, cu porturile publice `Renderer` și `SnapshotStore`, rămâne disponibilă pentru proba din `scripts/verify-architecture.mjs`; aceasta injectează un renderer de înregistrare și rulează fără DOM sau Babylon.
+Compoziția browser pornește în `src/main.ts`: construiește view-ul DOM și injectează fabrica asincronă Babylon și simularea cu pas fix în `createApplicationLifecycle` din `src/app/index.ts`. Contractul anterior `createRenderingLifecycle` rămâne pentru probele 011. Fundația inițială `createApplication`, cu porturile publice `Renderer` și `SnapshotStore`, rămâne disponibilă pentru proba din `scripts/verify-architecture.mjs`; aceasta injectează un renderer de înregistrare și rulează fără DOM sau Babylon.
 
 ## Module și entry points
 

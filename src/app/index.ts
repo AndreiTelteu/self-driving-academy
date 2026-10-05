@@ -40,3 +40,4 @@ export function createApplication(services: ApplicationServices): Application {
     },
   };
 }
+export { createApplicationLifecycle, type ApplicationState } from './application-lifecycle';

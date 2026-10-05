@@ -1,0 +1,11 @@
+# Lifecycle-ul aplicației
+
+PBI012 exportă `createApplicationLifecycle` din `src/app/index.ts`. Composition root din `src/main.ts` folosește acest owner pentru backendul Babylon, bucla pură de 60Hz și browser RAF/resize/visibility. `createRenderingLifecycle` rămâne disponibil pentru compatibilitatea contractului PBI011; composition root nu creează ambele bucle.
+
+Stările sunt LOADING, READY, PLAYING, PAUSED (manual/background/overload), ERROR și DISPOSED. `load(preference)` inițializează un backend și o simulare nouă; cererile concurente sunt coalesced. READY nu avansează timpul. `play()` din READY/PAUSED reancorează clockul; numai PLAYING apelează `loop.frame`. Pauza păstrează renderingul și controalele UI. Pauza manuală nu este anulată de revenirea în foreground. Background suspendă o sesiune PLAYING și o reia la revenire; o sesiune READY încărcată într-un tab ascuns nu pornește implicit. Overload păstrează datoria și cere `play()` explicit; recuperarea folosește regulile 008.
+
+Serviciul opțional `present(frame)` primește proiecția frozen `frame.interpolated` și `frame.state.alpha` înainte de render. Adaptorul vizual poate consuma această pereche fără o a doua buclă și fără a scrie în domeniu. În pauză backendul păstrează ultima proiecție. Bootstrapul actual numără tick-uri; nu există încă fizică, misiuni sau trafic în această sesiune.
+
+Reload eliberează RAF, listeners, loop și backend înainte de recreare. O inițializare care termină după disposal își eliberează backendul fără să instaleze callbacks. Erorile de backend, resize, tick/interpolare sau present opresc sesiunea, eliberează toți ownerii și expun retry. Cleanup încearcă fiecare owner chiar dacă altul aruncă; `dispose` este idempotent și expune DISPOSED inclusiv la cleanup failure. HMR/pagehide eliberează și view-ul. Device-loss checkpoint/recovery, exportul datelor salvate și gameplayul aparțin contractelor ulterioare.
+
+Verificări: `tests/app/lifecycle.test.ts` (7 teste), fixture real Babylon WebGL2 în `tests/browser/app-lifecycle/`, bootstrap real WebGPU la `/`. Dovezile și limitele probei CPU sunt în [raport](Evidence/012-app-lifecycle/verification.md). Nu sunt măsurări FPS pe hardware sau închiderea gate-urilor 203/218–224.

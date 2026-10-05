@@ -56,6 +56,8 @@ Fundația de [identificatori și random determinist](Docs/identity-random.md) p�
 
 [Bucla cu pas fix](Docs/fixed-tick.md) rulează la 60 Hz, cu recuperare plafonată și pauză explicită de suprasarcină. [Adaptorul de scenă](Docs/scene-adapter.md) păstrează identitatea entităților la înlocuirea reprezentării vizuale. [Schema hărții](Docs/map-schema.md) separă geometria de regulile rutiere și validează legăturile, mișcările și accesibilitatea serviciilor. Aceste API-uri sunt fundații testate; bootstrapul browser nu conține încă o lume rutieră sau vehicule simulate.
 
+[Lifecycle-ul aplicației](Docs/app-lifecycle.md) oferă Pornește/Pauză/Reia/Reîncarcă în bootstrap și exclude timpul petrecut în pauză sau background din simulare. Fixture-ul `/tests/browser/app-lifecycle/` verifică tranzițiile, erorile și cleanup-ul repetat.
+
 ## Verificarea boardului
 
 Din rădăcina proiectului, în PowerShell:

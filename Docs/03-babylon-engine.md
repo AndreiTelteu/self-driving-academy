@@ -50,6 +50,8 @@ Transformările trec prin convenția unică aleasă în proiect: Y în sus, metr
 
 ## Lifecycle și diagnostic
 
+PBI012 implementează [lifecycle-ul aplicației](app-lifecycle.md), folosit în composition root: loading, ready, playing, pauză manuală/background/suprasarcină, eroare și disposal. Un singur owner coordonează RAF, bucla 008 și listeners; numai playing admite timp simulat. Proiecția interpolată poate fi livrată prin portul `present(frame)` înainte de randare.
+
 Bucla de render primește snapshoturile și alpha de interpolare. Resize, modificarea rezoluției interne și pauza sunt gestionate separat de timpul fizicii. Disposal eliberează observers, mesh-uri, materiale, texturi, audio, cache și engine. Reîncărcarea unei hărți nu dublează listeners sau corpuri fizice.
 
 La pierderea dispozitivului se suspendă sesiunea și se salvează starea înainte de recuperare; resursele vizuale se recreează din registry și snapshot. [GPUDevice lost](https://developer.mozilla.org/en-US/docs/Web/API/GPUDevice/lost)
