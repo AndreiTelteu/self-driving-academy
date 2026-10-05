@@ -52,6 +52,8 @@ Fundațiile suplimentare implementate sunt [bucla cu pas fix](fixed-tick.md), [m
 
 [Lifecycle-ul aplicației](app-lifecycle.md) conectează bucla cu pas fix la bootstrapul browser: start, pauză, reluare, reload și cleanup. Lumea rutieră și vehiculele simulate rămân în PBI-urile următoare.
 
+[Interpolarea snapshoturilor](render-sync.md) conectează proiecțiile readonly la reprezentările Babylon, inclusiv orientarea și mișcarea roților, cu verificări pe WebGPU și WebGL2.
+
 ## Revizia 0.3
 
 Învățarea are loc numai în LEARNING; MANUAL permite intervenții fără schimbarea stilului. Taxiurile și civilii adoptă stilul comun. V1 include revenue și ratings cu grafice KPIs, trei misiuni zilnice și XP din misiuni/timp activ, fără pierderi XP, conform reviziei 0.5. Valorile economice și pragurile sunt propuneri de calibrare. Verifică boardul și planul cu PBI/Validate-Board.ps1 și PBI/Validate-Plan.ps1.

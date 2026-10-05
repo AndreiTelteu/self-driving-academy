@@ -30,6 +30,8 @@ PBI013 implementează [adaptorul de scenă](scene-adapter.md): scene root și Tr
 
 Sectorizarea organizează clădirile, străzile și vegetația. Asseturile repetate pot folosi instanțiere; alegerea între instanțe obișnuite și thin instances se măsoară și ține cont de picking și bounding volumes. Nu folosim un mesh distinct pentru fiecare decor identic fără evaluarea costului. [Thin instances](https://github.com/BabylonJS/Documentation/blob/master/content/features/featuresDeepDive/mesh/copies/thinInstances.md)
 
+PBI014 adaugă [interpolarea snapshoturilor](render-sync.md): poziții, orientări și roți proiectate readonly prin alpha din bucla fixă. Presenterul Babylon actualizează reprezentările existente, respinge tickurile/epochurile expirate și păstrează autoritatea fizicii.
+
 ## Cameră și picking
 
 Camera din spate este un controller propriu peste camerele Babylon, cu amortizare, distanță dependentă de viteză și evitare a obstacolelor. Controllerul urmărește vehiculul selectat, nu autoritatea inputului. Schimbarea taxiului păstrează ID-ul și direcția acestuia și mută doar camera.
