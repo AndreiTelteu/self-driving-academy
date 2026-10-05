@@ -101,3 +101,5 @@ Se elimină global pierderea XP și scăderea nivelului. V1 adaugă Academie/Hao
 [Indexul spațial034](spatial-index.md) oferă vecini geometric relevanți, update/remove/reset și fallback fără trunchiere; comparațiile CPU normale/dense și probele de ownership sunt documentate separat de bugetul întregului tick.
 
 [Contextul rutier044](road-context.md) derivă bandă, lider, semnal, conflicte și obstacole din cadre autoritare, cu cache bounded, tick de sursă și invalidare urgentă. Completitudinea observațiilor și limitele acoperirii locale sunt explicite; samplingul AI nu avansează oportunitățile sau telemetria.
+
+[Contactele și incidentele028](collision-events.md) leagă identitățile fizice de contactele Rapier și de evenimente COLLISION, cu episoade persistente, cooldown și retry fără repetarea fizicii. Probele native și playtesturile headed WebGPU/WebGL2 verifică impactul și eliberarea resurselor; măsurătorile CPU rămân separate de gate-ul întregului joc.

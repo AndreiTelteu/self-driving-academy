@@ -1,0 +1,397 @@
+import RAPIER from '@dimforge/rapier3d-compat';
+import { PHYSICS_CONFIG, SEDAN } from '../physics';
+import type { CarTuning, PhysicsInput, PhysicsProbe, PhysicsVector } from '../physics';
+import { copyBodyTransform, copyBodyVector } from '../body-port';
+import type { BodyIdentity, BodyState } from '../body-port';
+import { PhysicsBodyRegistry } from '../body-registry';
+import { tractiveForceN, vehicleClass } from '../vehicle-classes';
+import type { VehicleClassId } from '../vehicle-classes';
+
+let initialized: Promise<void> | undefined;
+let activeWorlds = 0;
+const zero = Object.freeze({ throttle: 0, brake: 0, steering: 0 });
+function finite(value: number, min: number, max: number) {
+  if (!Number.isFinite(value) || value < min || value > max)
+    throw new RangeError('Invalid physics value');
+}
+function vector(v: PhysicsVector) {
+  for (const k of ['x', 'y', 'z'] as const) finite(v[k], -10000, 10000);
+}
+
+/** One world owns every admitted body; visibility/FPS cannot change solver, CCD or dt. */
+export async function createRapierProbe(
+  clock: () => number = () => performance.now(),
+): Promise<PhysicsProbe> {
+  await (initialized ??= RAPIER.init());
+  if (activeWorlds >= PHYSICS_CONFIG.worlds)
+    throw new RangeError('Physics world admission capacity');
+  const world = new RAPIER.World({ x: 0, y: -9.81, z: 0 });
+  activeWorlds++;
+  world.timestep = 1 / PHYSICS_CONFIG.hz;
+  world.numSolverIterations = PHYSICS_CONFIG.solverIterations;
+  world.maxCcdSubsteps = PHYSICS_CONFIG.ccdSubsteps;
+  world.createCollider(
+    RAPIER.ColliderDesc.cuboid(500, 0.5, 500).setTranslation(0, -0.5, 0).setFriction(0.8),
+  );
+  const cars = new Map<
+    string,
+    {
+      body: RAPIER.RigidBody;
+      controller: RAPIER.DynamicRayCastVehicleController;
+      tuning: CarTuning;
+      classId: VehicleClassId | null;
+      mechanicsVersion: string;
+    }
+  >();
+  const dynamicColliders: RAPIER.Collider[] = [];
+  const registry = new PhysicsBodyRegistry();
+  let publication: object | undefined;
+  let lastPublicationTick = -1;
+  let obstacles = 0,
+    disposed = false;
+  const ray = new RAPIER.Ray({ x: 0, y: 0, z: 0 }, { x: 0, y: -1, z: 0 });
+  const assertAlive = () => {
+    if (disposed) throw new Error('Physics world disposed');
+  };
+  const car = (id: string) => {
+    assertAlive();
+    const item = cars.get(id);
+    if (!item) throw new Error('Unknown vehicle');
+    return item;
+  };
+  const admit = (body: boolean) => {
+    assertAlive();
+    if (
+      world.colliders.len() >= PHYSICS_CONFIG.colliders ||
+      (body && world.bodies.len() >= PHYSICS_CONFIG.bodies)
+    )
+      throw new RangeError('Physics admission capacity');
+  };
+  const snapshot = (id: string) => {
+    const { body, controller } = car(id);
+    const v = body.linvel();
+    return Object.freeze({
+      id,
+      position: Object.freeze(body.translation()),
+      rotation: Object.freeze(body.rotation()),
+      velocity: Object.freeze(v),
+      speed: Math.hypot(v.x, v.z),
+      suspension: Object.freeze(
+        Array.from({ length: 4 }, (_, i) => controller.wheelSuspensionLength(i) ?? 0),
+      ),
+      wheelContacts: [0, 1, 2, 3].filter((i) => controller.wheelIsInContact(i)).length,
+    });
+  };
+  const readBody = (identity: BodyIdentity): BodyState => {
+    assertAlive();
+    registry.assertCurrent(identity);
+    const { body } = car(identity.entityId);
+    return Object.freeze({
+      identity,
+      transform: copyBodyTransform({
+        positionM: body.translation(),
+        rotationQuaternion: body.rotation(),
+      }),
+      velocityMps: copyBodyVector(body.linvel()),
+    });
+  };
+  const probe: PhysicsProbe = {
+    addCar(id, position, tuning = SEDAN) {
+      admit(true);
+      registry.admit(id);
+      vector(position);
+      if (!id || cars.has(id) || cars.size >= PHYSICS_CONFIG.vehicles)
+        throw new RangeError('Vehicle identity/capacity');
+      finite(tuning.massKg, 600, 4000);
+      finite(tuning.grip, 0.1, 4);
+      finite(tuning.brakeAcceleration, 1, 12);
+      finite(tuning.engineForceN, 0, 20000);
+      finite(tuning.steeringRadians, 0.05, 0.7);
+      finite(tuning.suspensionStiffness, 10, 100);
+      if (tuning.powerW !== undefined) finite(tuning.powerW, 1000, 500000);
+      const wheels = tuning.wheels ?? { radiusM: 0.32, wheelbaseM: 2.7, trackM: 1.8 };
+      finite(wheels.radiusM, 0.2, 0.6);
+      finite(wheels.wheelbaseM, 1.5, 3.8);
+      finite(wheels.trackM, 1.2, 2.4);
+      const config = Object.freeze({ ...tuning, wheels: Object.freeze({ ...wheels }) });
+      const body = world.createRigidBody(
+        RAPIER.RigidBodyDesc.dynamic()
+          .setTranslation(position.x, position.y, position.z)
+          .setCcdEnabled(true)
+          .setLinearDamping(0.015)
+          .setAngularDamping(0.3),
+      );
+      let controller: RAPIER.DynamicRayCastVehicleController | undefined;
+      try {
+        dynamicColliders.push(
+          world.createCollider(
+            RAPIER.ColliderDesc.cuboid(0.85, 0.3, 2)
+              .setMass(config.massKg)
+              .setFriction(0.5)
+              .setRestitution(0),
+            body,
+          ),
+        );
+        controller = world.createVehicleController(body);
+        controller.indexUpAxis = 1;
+        controller.setIndexForwardAxis = 2;
+        for (const z of [wheels.wheelbaseM / 2, -wheels.wheelbaseM / 2])
+          for (const x of [-wheels.trackM / 2, wheels.trackM / 2]) {
+            const i = controller.numWheels();
+            controller.addWheel(
+              { x, y: -0.15, z },
+              { x: 0, y: -1, z: 0 },
+              { x: -1, y: 0, z: 0 },
+              0.35,
+              wheels.radiusM,
+            );
+            controller.setWheelSuspensionStiffness(i, config.suspensionStiffness);
+            controller.setWheelSuspensionCompression(i, 4.4);
+            controller.setWheelSuspensionRelaxation(i, 5.2);
+            controller.setWheelMaxSuspensionTravel(i, 0.2);
+            controller.setWheelMaxSuspensionForce(i, config.massKg * 9.81);
+            controller.setWheelFrictionSlip(i, config.grip);
+            controller.setWheelSideFrictionStiffness(i, 1);
+          }
+        cars.set(id, {
+          body,
+          controller,
+          tuning: config,
+          classId: null,
+          mechanicsVersion:
+            tuning.powerW === undefined && tuning.wheels === undefined
+              ? PHYSICS_CONFIG.version
+              : '023-custom-mechanics-v1',
+        });
+        registry.register(id, body.handle);
+      } catch (error) {
+        cars.delete(id);
+        for (let i = dynamicColliders.length - 1; i >= 0; i--)
+          if (dynamicColliders[i]!.parent()?.handle === body.handle) dynamicColliders.splice(i, 1);
+        if (controller) world.removeVehicleController(controller);
+        world.removeRigidBody(body);
+        throw error;
+      }
+    },
+    addClassCar(id, position, classId, version) {
+      const config = vehicleClass(classId, version);
+      probe.addCar(id, position, config);
+      car(id).classId = classId;
+    },
+    readVehicleMechanics(id) {
+      const { body, controller, tuning, classId, mechanicsVersion } = car(id);
+      const wheels = Object.freeze({
+        radiusM: controller.wheelRadius(0)!,
+        wheelbaseM:
+          controller.wheelChassisConnectionPointCs(0)!.z -
+          controller.wheelChassisConnectionPointCs(2)!.z,
+        trackM:
+          controller.wheelChassisConnectionPointCs(1)!.x -
+          controller.wheelChassisConnectionPointCs(0)!.x,
+      });
+      return Object.freeze({
+        classId,
+        version: classId ? vehicleClass(classId).version : mechanicsVersion,
+        massKg: body.mass(),
+        powerW: tuning.powerW ?? null,
+        grip: controller.wheelFrictionSlip(0)!,
+        brakeAccelerationMps2: tuning.brakeAcceleration,
+        wheels,
+        turningRadiusM: wheels.wheelbaseM / Math.tan(tuning.steeringRadians),
+        appliedEngineForceN: Object.freeze(
+          Array.from({ length: 4 }, (_, i) => controller.wheelEngineForce(i)!),
+        ),
+        appliedSteeringRadians: Object.freeze(
+          Array.from({ length: 4 }, (_, i) => controller.wheelSteering(i)!),
+        ),
+      });
+    },
+    addBox(position, halfSize, dynamic = false) {
+      admit(dynamic);
+      vector(position);
+      vector(halfSize);
+      for (const k of ['x', 'y', 'z'] as const) finite(halfSize[k], 0.01, 500);
+      if (obstacles >= PHYSICS_CONFIG.obstacles) throw new RangeError('Obstacle capacity');
+      const desc = RAPIER.ColliderDesc.cuboid(halfSize.x, halfSize.y, halfSize.z)
+        .setFriction(0.8)
+        .setRestitution(0);
+      if (dynamic) {
+        const body = world.createRigidBody(
+          RAPIER.RigidBodyDesc.dynamic()
+            .setTranslation(position.x, position.y, position.z)
+            .setCcdEnabled(true),
+        );
+        dynamicColliders.push(world.createCollider(desc.setMass(40), body));
+      } else world.createCollider(desc.setTranslation(position.x, position.y, position.z));
+      obstacles++;
+    },
+    setVelocity(id, velocity) {
+      vector(velocity);
+      car(id).body.setLinvel(velocity, true);
+    },
+    bodyIdentity: (id) => registry.identity(id),
+    entityForBodyHandle: (handle) => registry.forHandle(handle),
+    readBody,
+    setPose(identity, transform) {
+      assertAlive();
+      registry.assertCurrent(identity);
+      const pose = copyBodyTransform(transform);
+      vector(pose.positionM);
+      const { body } = car(identity.entityId);
+      body.setTranslation(pose.positionM, true);
+      body.setRotation(pose.rotationQuaternion, true);
+    },
+    setBodyVelocity(identity, velocity) {
+      registry.assertCurrent(identity);
+      vector(velocity);
+      car(identity.entityId).body.setLinvel(velocity, true);
+    },
+    removeBody(identity) {
+      if (!registry.isCurrent(identity)) return false;
+      const { body, controller } = car(identity.entityId);
+      // Invalidate callbacks before releasing native handles, which Rapier may reuse.
+      registry.remove(identity);
+      cars.delete(identity.entityId);
+      for (let i = dynamicColliders.length - 1; i >= 0; i--)
+        if (dynamicColliders[i]!.parent()?.handle === body.handle) dynamicColliders.splice(i, 1);
+      world.removeVehicleController(controller);
+      world.removeRigidBody(body); // Rapier also removes every attached collider.
+      return true;
+    },
+    subscribeBody: (identity, listener) => registry.subscribe(identity, listener),
+    publishBodies(tick, measure = true) {
+      assertAlive();
+      if (!Number.isSafeInteger(tick) || tick < 0) throw new RangeError('Invalid body tick');
+      if (tick < lastPublicationTick) return { readbackMs: 0, dispatchMs: 0, bodies: 0 };
+      lastPublicationTick = tick;
+      const batchPublication = {};
+      publication = batchPublication;
+      const now = measure ? clock : () => 0;
+      const start = now();
+      const states = [...cars.keys()].map((id) => readBody(registry.identity(id)!));
+      const readbackEnd = now();
+      for (const state of states) {
+        if (disposed || publication !== batchPublication) break;
+        registry.publish(state, tick);
+      }
+      return {
+        readbackMs: readbackEnd - start,
+        dispatchMs: now() - readbackEnd,
+        bodies: states.length,
+      };
+    },
+    bodyResources: () => registry.counts(),
+    step(inputs, measure = true) {
+      assertAlive();
+      const now = measure ? clock : () => 0;
+      const start = now();
+      // Validate the entire command batch before mutating any body.
+      for (const [id, input] of inputs) {
+        car(id);
+        finite(input.throttle, -1, 1);
+        finite(input.brake, 0, 1);
+        finite(input.steering, -1, 1);
+      }
+      let bridgeCalls = 0;
+      for (const [id, { body, controller, tuning }] of cars) {
+        const input: PhysicsInput = inputs.get(id) ?? zero;
+        if (input.throttle || input.brake || input.steering) body.wakeUp();
+        let force = tuning.engineForceN;
+        if (tuning.powerW !== undefined) {
+          // Current velocity in the chassis forward axis; controller's cached speed may
+          // still describe the previous tick after setPose/setVelocity or a collision.
+          const v = body.linvel(),
+            q = body.rotation();
+          const speed =
+            v.x * 2 * (q.x * q.z + q.w * q.y) +
+            v.y * 2 * (q.y * q.z - q.w * q.x) +
+            v.z * (1 - 2 * (q.x * q.x + q.y * q.y));
+          force = tractiveForceN(
+            { powerW: tuning.powerW, engineForceN: tuning.engineForceN },
+            speed,
+          );
+          bridgeCalls += 2;
+        }
+        for (let i = 0; i < 4; i++) {
+          controller.setWheelEngineForce(i, i >= 2 ? (input.throttle * force) / 2 : 0);
+          controller.setWheelBrake(
+            i,
+            (input.brake * tuning.massKg * tuning.brakeAcceleration) / PHYSICS_CONFIG.hz / 4,
+          );
+          controller.setWheelSteering(i, i < 2 ? input.steering * tuning.steeringRadians : 0);
+          bridgeCalls += 3;
+        }
+        // No dynamic-body exclusion: wheels may contact another car or debris.
+        controller.updateVehicle(world.timestep, RAPIER.QueryFilterFlags.EXCLUDE_SENSORS);
+      }
+      const controllerEnd = now();
+      world.step();
+      const stepEnd = now();
+      for (const { body } of cars.values()) {
+        const p = body.translation();
+        ray.origin.x = p.x;
+        ray.origin.y = p.y;
+        ray.origin.z = p.z;
+        world.castRay(
+          ray,
+          5,
+          true,
+          RAPIER.QueryFilterFlags.EXCLUDE_SENSORS,
+          undefined,
+          undefined,
+          body,
+        );
+      }
+      const queryEnd = now();
+      // Separate representative read-back crossings, excluding controllers/queries and solver.
+      for (const { body, controller } of cars.values()) {
+        body.translation();
+        body.rotation();
+        body.linvel();
+        for (let i = 0; i < 4; i++) {
+          controller.wheelSuspensionLength(i);
+          controller.wheelIsInContact(i);
+        }
+        bridgeCalls += 11;
+      }
+      const end = now();
+      return {
+        controllerMs: controllerEnd - start,
+        stepMs: stepEnd - controllerEnd,
+        queryMs: queryEnd - stepEnd,
+        bridgeMs: end - queryEnd,
+        totalMs: end - start,
+        queryCount: cars.size,
+        bridgeCalls,
+      };
+    },
+    project: snapshot,
+    contacts() {
+      assertAlive();
+      let count = 0;
+      for (const collider of dynamicColliders)
+        world.contactPairsWith(collider, (other) => {
+          if (other.handle < collider.handle && other.parent() !== null) return;
+          world.contactPair(collider, other, (manifold) => {
+            count += manifold.numSolverContacts();
+          });
+        });
+      return count;
+    },
+    counts() {
+      assertAlive();
+      return { vehicles: cars.size, bodies: world.bodies.len(), colliders: world.colliders.len() };
+    },
+    dispose() {
+      if (disposed) return;
+      disposed = true;
+      registry.dispose();
+      for (const { controller } of cars.values()) world.removeVehicleController(controller);
+      cars.clear();
+      dynamicColliders.length = 0;
+      world.free();
+      activeWorlds--;
+    },
+  };
+  return probe;
+}

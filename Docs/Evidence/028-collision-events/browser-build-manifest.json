@@ -1,0 +1,822 @@
+{
+  "commit": "fd8c12fa15cbbdb8e4f0dcedbe3177bf23cf58b4",
+  "sourceHash": "b852d4a3e519dacdd5fae213f5e13151131e8a7678d1ae59dc16e111e0bf631f",
+  "inputs": [
+    "package-lock.json",
+    "package.json",
+    "scripts/collision-events-server.mjs",
+    "src/profiles/contracts.ts",
+    "src/profiles/index.ts",
+    "src/profiles/parameter-catalog.generated.ts",
+    "src/profiles/parameter-registry.ts",
+    "src/rendering/asset-budgets.ts",
+    "src/rendering/babylon/asset-contract.ts",
+    "src/rendering/babylon/asset-registry.ts",
+    "src/rendering/babylon/backend.ts",
+    "src/rendering/babylon/cell-batches.ts",
+    "src/rendering/babylon/daylight.ts",
+    "src/rendering/babylon/dev-inspector.ts",
+    "src/rendering/babylon/diagnostics-adapter.ts",
+    "src/rendering/babylon/index.ts",
+    "src/rendering/babylon/recovery-session.ts",
+    "src/rendering/babylon/scene-adapter.ts",
+    "src/rendering/babylon/snapshot-presenter.ts",
+    "src/rendering/babylon/vehicle-camera-input.ts",
+    "src/rendering/babylon/vehicle-camera.ts",
+    "src/rendering/babylon/vehicle-picking-input.ts",
+    "src/rendering/babylon/vehicle-picking-registry.ts",
+    "src/rendering/babylon/vehicle-picking.ts",
+    "src/rendering/backend-policy.ts",
+    "src/rendering/camera-collision.ts",
+    "src/rendering/diagnostics.ts",
+    "src/rendering/quality-policy.ts",
+    "src/rendering/render-sync.ts",
+    "src/rendering/scene-contract.ts",
+    "src/rendering/vehicle-camera.ts",
+    "src/sessions/identity.ts",
+    "src/sessions/index.ts",
+    "src/sessions/random.ts",
+    "src/sessions/validation.ts",
+    "src/simulation/collision-events.ts",
+    "src/simulation/event-bus.ts",
+    "src/simulation/events.ts",
+    "src/simulation/fixed-tick.ts",
+    "src/simulation/index.ts",
+    "src/vehicles/body-port.ts",
+    "src/vehicles/body-registry.ts",
+    "src/vehicles/collision-episodes.ts",
+    "src/vehicles/collision-port.ts",
+    "src/vehicles/contracts.ts",
+    "src/vehicles/index.ts",
+    "src/vehicles/physics.ts",
+    "src/vehicles/rapier/index.ts",
+    "src/vehicles/vehicle-classes.ts",
+    "tests/browser/collision-events/index.html",
+    "tests/browser/collision-events/main.ts"
+  ],
+  "hashes": {
+    "package-lock.json": "a50a27bb30ddb5ca3313cda07e8ad767c10b44203073791b5ecbf4583bb97c0e",
+    "package.json": "1e64429a25209c1c2174b416e476c6c5210f96c85dfbe8f3241b29f558fe1e8c",
+    "scripts/collision-events-server.mjs": "2f034c7fc5235c7be3ff9a62f4309e5addde362008079ef53589b44247a29b48",
+    "src/profiles/contracts.ts": "963bb805a63d20636279bf1e84fecc774853585fd9b468b79c31200442037dc9",
+    "src/profiles/index.ts": "2559107e7c04454d92aa933892c5e1b41165f7cc2c2696f7b52e822fb39a3e76",
+    "src/profiles/parameter-catalog.generated.ts": "d6fe67bebc167f20b4d17cd171da556443c50dd26d6ad8caff0b65a3516c39d1",
+    "src/profiles/parameter-registry.ts": "187ad92f38242706190a160bc8c0c4ba937428a6289118de17e24f742c6f35b3",
+    "src/rendering/asset-budgets.ts": "2624bfb69cecc51f4a3685211b6b12ddd89ea5e53750d21ceff4c7287d6bdce9",
+    "src/rendering/babylon/asset-contract.ts": "6ca5d2cda547f593d5f96be5573d85104534fad77d28a2bac96d27b66c6d5986",
+    "src/rendering/babylon/asset-registry.ts": "4dba8b0eeb60731898bea48041848796da507aa69b3dd282d3c6c2267ae23fdd",
+    "src/rendering/babylon/backend.ts": "2185ebc63999730646f618311f261ded8f53f633df45ae6a1d48543d37813012",
+    "src/rendering/babylon/cell-batches.ts": "b1d148e62a3f8f4d0b8b5b9c94b60a1f87a4336416418874b842e274bfd38513",
+    "src/rendering/babylon/daylight.ts": "7cd0ad488ca32e6a63b197adad55750ec23f15eee50665c123a2fdc268f10073",
+    "src/rendering/babylon/dev-inspector.ts": "a77d47a1933a6ba094cc1d906b21bd3a56a8a37af17f67359aff3c201358ad26",
+    "src/rendering/babylon/diagnostics-adapter.ts": "7b44dd24b0f2a00e0f5b3310f8c62f6bdde10f01026bb2e70670631cdcc96e7a",
+    "src/rendering/babylon/index.ts": "373f24e7b1122ef870bb8f7586ad26b12f61128df9e361730493b0e5dfc780ee",
+    "src/rendering/babylon/recovery-session.ts": "2e1b6de35c90af54b86a29ab789e421ed3e31775b970da9cf935ae60c3ebdabf",
+    "src/rendering/babylon/scene-adapter.ts": "09bf7a68595268fce4a32f7cd00766837fc587bd1124f2642774677d24682e0f",
+    "src/rendering/babylon/snapshot-presenter.ts": "71234092d73f27ae6f4014260ab979bc9d7761225ef8948223366c5856055ba7",
+    "src/rendering/babylon/vehicle-camera-input.ts": "5fede818828cf35bdae419221a64d5c538005b64f4de892f2ae4219f38b0b671",
+    "src/rendering/babylon/vehicle-camera.ts": "2bcf12fd2389dab275c252d568f65af1b32a723f3967b155334d6765ae10ffbd",
+    "src/rendering/babylon/vehicle-picking-input.ts": "2a8df24cf0057727bf03fb76ceaa93d685d763948b30cdde94bd71eb52b33a9c",
+    "src/rendering/babylon/vehicle-picking-registry.ts": "9076c1ab6be3bfa1a972ca5bbee5564978d636348fcfcf3d164eddea1862f966",
+    "src/rendering/babylon/vehicle-picking.ts": "0253849179e265576c07c5efb1afdc5dde60468650b4a14688f6406072943954",
+    "src/rendering/backend-policy.ts": "03909e68c522b4ea4c9abec732c23f2fd32720ef9a3ff661eb3324b263047101",
+    "src/rendering/camera-collision.ts": "a1efa0847a84eb945334d6c39f5e7375d436e9ff399d47cf85480a7d2956e08d",
+    "src/rendering/diagnostics.ts": "6816cd784b5481a02bd05343b6f132cf9ee4bea8498bc33504fbb91685bbdcca",
+    "src/rendering/quality-policy.ts": "2b3ddb4c2b68d35181a557a5078bc8471d21f23a92a268d5f844810db6638ec4",
+    "src/rendering/render-sync.ts": "2537f9f7c8b3e7548fa57c199d4d15cddbbdb216becad8ae96845aac5a8fae85",
+    "src/rendering/scene-contract.ts": "29a9c5bb71b1424ca2e79db7c700e4620c173c94c3944009191a920bc458ea4b",
+    "src/rendering/vehicle-camera.ts": "75d86d8353d516b5dadfe5e163a179a3eb8d9cfe8ba4b45e1fab2ea8c73a2307",
+    "src/sessions/identity.ts": "f4b78b20857fc65704857a7bb78ef5a604083f173153ec7f5582bc450c6d76a6",
+    "src/sessions/index.ts": "960b676877c9876575d1f4fb425be83f603dbc038fe7c9f99aefc2c2be82c343",
+    "src/sessions/random.ts": "2b16fab5b74cf38e00f8847c747f8810cdcbc3850b013f35805f776e2d141fa0",
+    "src/sessions/validation.ts": "e129d68c9e0209875c6eede9b857ec3710ae9aa90e1f46b5208237d0be9efb79",
+    "src/simulation/collision-events.ts": "ddbe4c8053a0895e8c45f5ba6890b7f51b24d011bfebc1fa32cfcd33e8fcde04",
+    "src/simulation/event-bus.ts": "c9787f3a7aab936eab1c29c4d0aacbdde45fce1dbe571b6d76d8ffeb893ffea7",
+    "src/simulation/events.ts": "460226ea56abc17731716ee76e7d76d4e7514f35b48566f494d15b31317b43c7",
+    "src/simulation/fixed-tick.ts": "420520d6cfc69b2f87182f03c3b189e94eb14161af86ff985cf6be0447a01847",
+    "src/simulation/index.ts": "38cea58878fc5a2bda9603e4831cbe692ce2d4f6a6922c9000d3b43b0afd25e2",
+    "src/vehicles/body-port.ts": "a9bd1045aedb6cf2a7bae07fd3cb094ef2bb922bf962d5143fd90ed84763eaf4",
+    "src/vehicles/body-registry.ts": "2b7fddf9487091a767e1342377f9ddfe6c0dd6e5c012bfc64c0b62f003f00ba6",
+    "src/vehicles/collision-episodes.ts": "87763d10f12326f64bb24d188073872d372ee48efea64a5cab65a6bcd0b17608",
+    "src/vehicles/collision-port.ts": "4d85f4b40d915a5adcb6cfc05f94772605df66cf953f27fc4ac7eba930a5bea1",
+    "src/vehicles/contracts.ts": "6639f51a1ab6326c2edcb4eb572cee3501612779e72af038c6831ddaa0494c26",
+    "src/vehicles/index.ts": "2e3dddc572cf0eb3a714abc66527ee6edad502f6df675c80eaa62fa1a32df069",
+    "src/vehicles/physics.ts": "759671a55182818a1ac8748f1b06e8e2530a188bc39df801064016a4e247c6c2",
+    "src/vehicles/rapier/index.ts": "2a882bacc16412cee38f44b8fe4f7ed1e21f9ffa1a80c564b06f2593d8cac0cd",
+    "src/vehicles/vehicle-classes.ts": "43eed5576928ac07616200837f58bfbfd10bb41bd111b4bc7369f7ac0bc40fb2",
+    "tests/browser/collision-events/index.html": "ae370a0eee7c04e75647d1802fa75841bf4be239f31286787b0f9799cba9b46b",
+    "tests/browser/collision-events/main.ts": "5258587393c660da9c3f61e5b84a6e2e72e0d353c6b110a461d597bce416335d"
+  },
+  "artifacts": [
+    {
+      "path": "assets/abstractAudioBus-DukkxEs3.js",
+      "bytes": 119,
+      "sha256": "4be7d6b5ebb28ce587fc83263a5c4b82a3c944ed780a9e238aca38eef3599cff"
+    },
+    {
+      "path": "assets/abstractSoundInstance-U06T67Vg.js",
+      "bytes": 3077,
+      "sha256": "e48498ef8f9b5e950a6990a84e1324c56418f66bf15d8d00965056f65778374f"
+    },
+    {
+      "path": "assets/abstractSoundSource-DRQaesR-.js",
+      "bytes": 1484,
+      "sha256": "bc841717d4ad8b4b72f57bd340568e7000b1167a8f9729048c833a2d8149e9cc"
+    },
+    {
+      "path": "assets/animation.pure-D5RBjXby.js",
+      "bytes": 26667,
+      "sha256": "bf6026963373b3604765575d7ea46606ef4eb7adee73cf111181828f62159747"
+    },
+    {
+      "path": "assets/animationGroup.pure-ChCZvQ9e.js",
+      "bytes": 42158,
+      "sha256": "a12e6bdf39e1be95d81be09760f682b35ee7bae3fe90ce284bfc93b81524e335"
+    },
+    {
+      "path": "assets/baseTexture.pure-Df4pQArG.js",
+      "bytes": 15107,
+      "sha256": "45b6495150a303fd3836c301feed9915f29f379a74c028c87ea0788588865839"
+    },
+    {
+      "path": "assets/basisTextureLoader-dq6Fc99p.js",
+      "bytes": 8158,
+      "sha256": "89acaeccf325af7536e03db515e0d20c708cf2bf161e55572465211d936037e2"
+    },
+    {
+      "path": "assets/brdfTextureTools-BKkaDFbY.js",
+      "bytes": 62295,
+      "sha256": "4854a961e17b0e56ee561dad9c9505d73c2e90499676775992519f5c5006664f"
+    },
+    {
+      "path": "assets/buffer.pure-BKpRSwna.js",
+      "bytes": 7403,
+      "sha256": "59002e075f9c2397eee56c3a58030f0305dc57f2a56398b4f7afba414b2062d6"
+    },
+    {
+      "path": "assets/bumpFragment-CuiSf1tw.js",
+      "bytes": 6862,
+      "sha256": "2ca75b61a92b7a6c32d752683405136fbe3d1745adf656ddc19a6a85add23340"
+    },
+    {
+      "path": "assets/bumpFragment-D2NLTOb5.js",
+      "bytes": 8067,
+      "sha256": "5a6c665d9c6bf4b2b6b2bbf3a3f1c2c9e763dee877e76e2107e7388236ada1e9"
+    },
+    {
+      "path": "assets/bumpVertex-CWhdIpqj.js",
+      "bytes": 522,
+      "sha256": "0566f87b964a6c179999bb6cf54b4c82463bf6ad42cb87c5aa24e9e0d51a63f2"
+    },
+    {
+      "path": "assets/bumpVertex-DRq4BZvD.js",
+      "bytes": 699,
+      "sha256": "74176a269e6216de48f6ef20164ced661a06dfa6efd4d48bc0cb648cc02463c6"
+    },
+    {
+      "path": "assets/bumpVertexDeclaration-Cb04kLz9.js",
+      "bytes": 341,
+      "sha256": "d4ed775da7490ad120f0146e0c32df1bf166693679d7b09b3e4aa490ef3d5701"
+    },
+    {
+      "path": "assets/bumpVertexDeclaration-I4Guxw_q.js",
+      "bytes": 394,
+      "sha256": "2ed968a556173636bc88fe322aef8e0057e4d160ff89be53a87336f2936383c5"
+    },
+    {
+      "path": "assets/clipPlaneFragment-Ct2VqHzk.js",
+      "bytes": 1274,
+      "sha256": "455c46fc4b13fe2a93164783c7bfba27f2611f7a8e5c0c160cf0798dd7926275"
+    },
+    {
+      "path": "assets/clipPlaneFragment-DVK0wgyZ.js",
+      "bytes": 1174,
+      "sha256": "74fd12d190430b96092bbaf47daa9916639ccf578b14fc8f90fee322f820b073"
+    },
+    {
+      "path": "assets/clipPlaneVertex-B1wJvZTt.js",
+      "bytes": 5121,
+      "sha256": "79d36c691499cb27eab1942703233c6bf210fe2dbcf257d3ae2f85e4b635d720"
+    },
+    {
+      "path": "assets/clipPlaneVertex-BgCTjwUU.js",
+      "bytes": 9705,
+      "sha256": "ccf24e983b9b3dc27b95733f45f18afcd0dec5942ad4bcfb11ee760a66e92b8c"
+    },
+    {
+      "path": "assets/color.fragment-CbJP31yK.js",
+      "bytes": 1037,
+      "sha256": "e9dae782167d32901e20679ab315477933c7c47d6d776541961a2e4eeabe1693"
+    },
+    {
+      "path": "assets/color.fragment-CxH-oW8C.js",
+      "bytes": 929,
+      "sha256": "6c19811bcafc31d92808a8b0b8099399b797e39c3b50f32d6a43bdb0cc6a6012"
+    },
+    {
+      "path": "assets/color.vertex-DCm2P3oG.js",
+      "bytes": 1455,
+      "sha256": "212664aa271671905c2dd002646a3827fdae61b568bc4f277c5609352bee7ac2"
+    },
+    {
+      "path": "assets/color.vertex-DUNlaYyZ.js",
+      "bytes": 1433,
+      "sha256": "7a08219cd09e8e65caf129bca620f8bce977767a119c86f47ac6e5e2f2d3b615"
+    },
+    {
+      "path": "assets/cubemapToSphericalPolynomial-CNprmsTZ.js",
+      "bytes": 3704,
+      "sha256": "6d3edf3bfd8e0554a217deb0faf82c25ba4eb0a47d017620cd247c0fd8950c9d"
+    },
+    {
+      "path": "assets/dds.pure-wdSVXsO0.js",
+      "bytes": 6931,
+      "sha256": "d5504dae1835d5252efca1882206b623ae4c070daaffb7dfad8e7e386ac49769"
+    },
+    {
+      "path": "assets/ddsTextureLoader-BhNjh2TK.js",
+      "bytes": 1257,
+      "sha256": "6e5997cb6f3180535e213cdbe46886912c433db84523dd8bec2ee2516edad30c"
+    },
+    {
+      "path": "assets/decorators-D5uwmq6c.js",
+      "bytes": 3806,
+      "sha256": "ad00ff645fe3572ebe2fd4868087b2316cc4d6544d280f460c472c41d9313f1f"
+    },
+    {
+      "path": "assets/default.fragment-C27Rh775.js",
+      "bytes": 25930,
+      "sha256": "59a83dfac616085c171621ca0d107105f04255e14e51914d8d830fa6983bffd9"
+    },
+    {
+      "path": "assets/default.fragment-CImgPyQt.js",
+      "bytes": 25335,
+      "sha256": "c3c358f7ea0fa11714760b915edc1d923326dda11496677afe22d0bf89e6c3ff"
+    },
+    {
+      "path": "assets/default.vertex-DLIzVMEF.js",
+      "bytes": 8016,
+      "sha256": "8811c51a1c246041b876173177d3f0fe4d724c348ca05065f4e7e5878d6481b8"
+    },
+    {
+      "path": "assets/default.vertex-hYiiP5x8.js",
+      "bytes": 9297,
+      "sha256": "222a2b0e4597d7a56dd74ab0cd67c8cc8ddbaa1802faf0611d53053d7ec4d993"
+    },
+    {
+      "path": "assets/defaultUboDeclaration-09OFCEYj.js",
+      "bytes": 1570,
+      "sha256": "9e08b591bc5a5d1c1d61939cced7bfd734d1f66b3c33796f0487999ac819e2ba"
+    },
+    {
+      "path": "assets/defaultUboDeclaration-COomfCG5.js",
+      "bytes": 1263,
+      "sha256": "4bb4fdcf8dae6d7e1775c8e5cd0670edf1b0ccb86552d2eccd1e35bd67321d8c"
+    },
+    {
+      "path": "assets/dumpTools.pure-DkM0lRMz.js",
+      "bytes": 4013,
+      "sha256": "02e8342668a51c65da41d70c7aa3ebb3eb554cc1b038e70e4a7993a8e8a3ce58"
+    },
+    {
+      "path": "assets/effectRenderer.pure-iQ4nLHsi.js",
+      "bytes": 8156,
+      "sha256": "696f6db99151ea3d13edae753768a5bc6518109c4ebd65a37bdb6a15e723b4d3"
+    },
+    {
+      "path": "assets/engineStore-e38OvQA7.js",
+      "bytes": 364,
+      "sha256": "1149137099e563d52b5aea2b0b1a40716cc6ed18e64ebdca8813a5ea0315e770"
+    },
+    {
+      "path": "assets/envTextureLoader-yqoRHwN6.js",
+      "bytes": 8950,
+      "sha256": "17769f5027160bea033860bfc8f70917d65cd6ebc820dbb81c9634d5640a49d5"
+    },
+    {
+      "path": "assets/exrTextureLoader-B66B_OJW.js",
+      "bytes": 13138,
+      "sha256": "3c50f499ae520a88cf1b2fe968ae6fc8428ee7ab075ff4b48e8f63057140783c"
+    },
+    {
+      "path": "assets/fogFragment-CISE_m3s.js",
+      "bytes": 1084,
+      "sha256": "16bc7ec0e6e4d42ecf24c19ad1103704765052f1f19408cc1b9255ce6a121dad"
+    },
+    {
+      "path": "assets/fogFragment-EikOP4pH.js",
+      "bytes": 1214,
+      "sha256": "8b08b73a42fed9785b5ddf87d49fcd43876f1c2c56ba88367b62dc2b7f60add0"
+    },
+    {
+      "path": "assets/geometry.fragment-D13zAY9p.js",
+      "bytes": 11275,
+      "sha256": "5c0123b59bc1d7f1d5e8f2f66c6c1cdf9e1abc0a09d93bb066c64559089d2c80"
+    },
+    {
+      "path": "assets/geometry.fragment-DDU9CCB9.js",
+      "bytes": 11721,
+      "sha256": "16056297b6a1a33c23f0bc4d7dca272f8ef2e13d555d6726e787f194b06da310"
+    },
+    {
+      "path": "assets/geometry.vertex-RgEVmGXB.js",
+      "bytes": 8993,
+      "sha256": "3199e30420eed057a5e5bd522bae5b19e4d97cfad15fdb123ef20a3bec2c4ad5"
+    },
+    {
+      "path": "assets/geometry.vertex-fDXindyo.js",
+      "bytes": 7797,
+      "sha256": "97927df45ca4d1186b5f9f21b8c6e612278e69bef633da8ed050a78b18b221e0"
+    },
+    {
+      "path": "assets/glTFLoaderAnimation.pure-CIQI7rjO.js",
+      "bytes": 1824,
+      "sha256": "e031fc5ff7f37113bad5fae73d4763b7fb6182ac38e714b1a3f33bfe2f9f1d35"
+    },
+    {
+      "path": "assets/glslang-DqqdIFnr.js",
+      "bytes": 16030,
+      "sha256": "c3a3c2a47284b16b60293fa08a5842fbe8689ac617edc857ab6cb8134a590db4"
+    },
+    {
+      "path": "assets/glslang-G7Yt_-32.wasm",
+      "bytes": 943680,
+      "sha256": "d79453e0803ebcdf3753c6b1d8d51543b52fed96f7f0d4aec94acd847e225169"
+    },
+    {
+      "path": "assets/halfFloat-Ce77JD5z.js",
+      "bytes": 1290,
+      "sha256": "e364d38c88e676a0e9ced31660c08e156b244af07b1729fb8ea38e1ad6cffbb7"
+    },
+    {
+      "path": "assets/harmonicsFunctions-CMr56qfT.js",
+      "bytes": 1421,
+      "sha256": "27091372e529570da5fbff6e233ee6485c27d5ad0ca206d9582d8d8bd7ff4b32"
+    },
+    {
+      "path": "assets/harmonicsFunctions-QSz_WdsQ.js",
+      "bytes": 1126,
+      "sha256": "157c8e9336e59c7b83bcc254dda83652512d04a97041476979053d0ead47d887"
+    },
+    {
+      "path": "assets/hdrTextureLoader-BQVwkxK1.js",
+      "bytes": 2313,
+      "sha256": "c1dfa7a7928d2c03e86324a093297ad10c35caefff14518691c5fe4d4172447a"
+    },
+    {
+      "path": "assets/helperFunctions-gEnZbjN3.js",
+      "bytes": 6815,
+      "sha256": "25cb5a62b09965a1f9d12f999eb40672c9f80924b8cf2353120e9809d11a03ba"
+    },
+    {
+      "path": "assets/iesTextureLoader-3O5bSkSd.js",
+      "bytes": 2477,
+      "sha256": "ba6cbc6a680efda56c5507ab3ca58c7d7ed0d986242c005828a60fe6cec0892a"
+    },
+    {
+      "path": "assets/imageProcessing-CWp_5P-u.js",
+      "bytes": 18606,
+      "sha256": "d24a5f61a08f2e5976234009653282fddc457fbc0a610118a6e41faed7a74a06"
+    },
+    {
+      "path": "assets/index-KH47_8tR.js",
+      "bytes": 5607468,
+      "sha256": "6595529a7ced8cbedf62f4672483877e0d64d4aebc3b314257ccda70de54688c"
+    },
+    {
+      "path": "assets/internalTexture--UEgW48C.js",
+      "bytes": 7883,
+      "sha256": "6a8792a204780aa77110b119274d21dfbccb672d75ad57dc3d868bf122cc6e35"
+    },
+    {
+      "path": "assets/ktxTextureLoader-Cr0f_Rtz.js",
+      "bytes": 16411,
+      "sha256": "012c6c7bdedd764abb4f4b274977be588df3c785cc4d2b776d7840e76d207bd7"
+    },
+    {
+      "path": "assets/lightConstants-C8Agw7Vg.js",
+      "bytes": 18247,
+      "sha256": "f02f84a3d4964f15f75ca0281a241362f9ee54e685f0e2bdda59ecf155f8aab0"
+    },
+    {
+      "path": "assets/lightFragment-B2GfWPKU.js",
+      "bytes": 22164,
+      "sha256": "359e0a27b127169133eada9c528c358f3ddff32d5f02a6a85b4f0a6c7afda6d8"
+    },
+    {
+      "path": "assets/lightFragment-x7Xpl9uU.js",
+      "bytes": 20567,
+      "sha256": "c89db96c1503ef9dfad4049ca2ca2428e2fff2f4961478b2f9baebb55f825195"
+    },
+    {
+      "path": "assets/logDepthDeclaration-BYs2zDV7.js",
+      "bytes": 462,
+      "sha256": "61254b8bed5eefb3669eae7f2044d23f1a7c2e5b5890f65b9fce7e8312d8637d"
+    },
+    {
+      "path": "assets/logDepthDeclaration-wCvYk_Kr.js",
+      "bytes": 728,
+      "sha256": "2640418366798b2c1b6b298df8945cfb248b3b67df0eba702a40b520a101aa34"
+    },
+    {
+      "path": "assets/logDepthVertex-DbaC19x4.js",
+      "bytes": 7091,
+      "sha256": "ed5f8325590fcc92acfa02da61cef57c1aa0f8d6d62b7851d6f35508906db9b9"
+    },
+    {
+      "path": "assets/logDepthVertex-DgpvUSZJ.js",
+      "bytes": 21930,
+      "sha256": "e832675c3731487f475bbbfdd3f52541555f372e7a9921f948e5c0ba85a7b85e"
+    },
+    {
+      "path": "assets/logger-CuBYPcDK.js",
+      "bytes": 1881,
+      "sha256": "30a999582eace71f2e78a479182e71e943508bbda9574b17e5b29575c49a3b9e"
+    },
+    {
+      "path": "assets/material.pure-vjAr2GZp.js",
+      "bytes": 78804,
+      "sha256": "8c33466ca6a4e99246486ff81d9463cc5b7335dd8eb377487608863268741926"
+    },
+    {
+      "path": "assets/math.color.pure-tnjpV39e.js",
+      "bytes": 12514,
+      "sha256": "8fec10dc56dcd0c524122cc049d0d90a715c5ef8d53e144a2b9362f793a7e589"
+    },
+    {
+      "path": "assets/math.plane-B8NUBKuy.js",
+      "bytes": 1811,
+      "sha256": "47f52766c008ce0d7e26703bce8ea7aceb1a48b51c3bf4ba15eeecaf05eee943"
+    },
+    {
+      "path": "assets/math.scalar.functions-lnL7TJ7T.js",
+      "bytes": 764,
+      "sha256": "4a5ef6436ef4c8fd85de14835c3bf62ccf5d1fbe38f71c727cc79760f1a1ff79"
+    },
+    {
+      "path": "assets/math.size-DGSrTBVr.js",
+      "bytes": 5662,
+      "sha256": "12742b16e1987734d44ece74e1530589e07d719aa8593c1f60cbde2e09b21c46"
+    },
+    {
+      "path": "assets/math.vector.pure-BI_ulypP.js",
+      "bytes": 64627,
+      "sha256": "b9b18d61a2f8ae08549615e5b72a5b0395a18e0bf6c41f09de6cf791170231dd"
+    },
+    {
+      "path": "assets/mesh.vertexData.functions-CD4JOR2q.js",
+      "bytes": 930,
+      "sha256": "bdeb852116676b6289101b6ef271fb52200959188fba6863858942ec2e068338"
+    },
+    {
+      "path": "assets/morphTargetsVertex-6N5r7oF1.js",
+      "bytes": 4379,
+      "sha256": "7e231dfccd87db548f33cf4bb21a0e7fcbf9907bdb54cde2776876fc9c52c34e"
+    },
+    {
+      "path": "assets/morphTargetsVertex-OlIh-Lzh.js",
+      "bytes": 6405,
+      "sha256": "55af13b4ebad6636788f652ede1cb6c4919f9d37542ae9846914dd16c0b3a8ea"
+    },
+    {
+      "path": "assets/observable.pure-B5E8yEYx.js",
+      "bytes": 3205,
+      "sha256": "156313d871c0a1956dd917336e2a32478ccc52b9d27c0acca2120cfe0148ba6a"
+    },
+    {
+      "path": "assets/oitFragment-BMjpbSa2.js",
+      "bytes": 53414,
+      "sha256": "40eaa74a6058a286592a92ed23e6aacd1b13cbc50cc9161ebc053c3e74563b8e"
+    },
+    {
+      "path": "assets/oitFragment-ByezL1dB.js",
+      "bytes": 53464,
+      "sha256": "9902b46b514287ca08b94f929145f9374264f77c697eed8f6899200ad31ebd04"
+    },
+    {
+      "path": "assets/openpbr.fragment-CX-IXgYN.js",
+      "bytes": 90327,
+      "sha256": "1ad520855be3bc3a0e1770524583ac9468592b694ea8211fdac0a191a8f21146"
+    },
+    {
+      "path": "assets/openpbr.fragment-DOwyU8wG.js",
+      "bytes": 88643,
+      "sha256": "afd0b478affaf6ecf5d7c91ba7332f60509cf9c1126ec36296c02011d4013acd"
+    },
+    {
+      "path": "assets/openpbr.vertex-DpRNpgWu.js",
+      "bytes": 17174,
+      "sha256": "1b83332f369657d37b75c3bd9305e65c7fc13008e3ce1d9c49174434d8cc9f8c"
+    },
+    {
+      "path": "assets/openpbr.vertex-niL4iXsc.js",
+      "bytes": 20577,
+      "sha256": "c0710dd8ced25a32ac12bd7440efda81817faddb2c7d5b69fb1002b0e9eff1c0"
+    },
+    {
+      "path": "assets/openpbrMaterial.pure-CYVJ-Dd-.js",
+      "bytes": 141445,
+      "sha256": "ed9d8a249f78d96cd97eb2414989e70eab58f4e80e031bef43bb42f6dbfd0c56"
+    },
+    {
+      "path": "assets/openpbrMaterialLoadingAdapter-DxZFpqsm.js",
+      "bytes": 33677,
+      "sha256": "1e1ba6c33e1f0b7e59c171097c8e69dc0497f47d1f9e5b8e18b1e1146f8d2a80"
+    },
+    {
+      "path": "assets/openpbrTransmissionLayerData-BRi1vGnu.js",
+      "bytes": 17355,
+      "sha256": "23fb7f071942396abb748dba5529f4dc83abda84d3bc2d0d800e50078681c10d"
+    },
+    {
+      "path": "assets/openpbrTransmissionLayerData-CbssVoWF.js",
+      "bytes": 18461,
+      "sha256": "f92d0aaf10cdb9738525fe3b51b207e5eae236e81c65499195cab6b1f1d664ed"
+    },
+    {
+      "path": "assets/openpbrUboDeclaration-4Sk3IJ7F.js",
+      "bytes": 5167,
+      "sha256": "18039a78af984d5b2c775b0ca616e4358b3bb5bcd7614e485ea60c897761026e"
+    },
+    {
+      "path": "assets/openpbrUboDeclaration-dcWCwMT2.js",
+      "bytes": 3876,
+      "sha256": "34d5c02d2813c428bfe07365a2c7dcb6a0d92e39512150037733c68cd99bbda5"
+    },
+    {
+      "path": "assets/pass.fragment-Cvd2TCWC.js",
+      "bytes": 318,
+      "sha256": "9360b4269aa9ef2e3f7c40e8671692d8efa20ef17ef57f3207ce34b5cd3751e2"
+    },
+    {
+      "path": "assets/pbr.fragment-8XJ03Zbv.js",
+      "bytes": 93473,
+      "sha256": "631c237458152be62ca5d68f91b8e3478de8f64184c9d355997907566c01b93e"
+    },
+    {
+      "path": "assets/pbr.fragment-ChJf8OJW.js",
+      "bytes": 97349,
+      "sha256": "ede7a74ca8e8ab2c9a6007620859c30c282f625cadcdfaec87bf74922d556e2c"
+    },
+    {
+      "path": "assets/pbr.vertex-Cb79SIfK.js",
+      "bytes": 16889,
+      "sha256": "f269c3179b66689a024a1b334c333f6e9230b7ba85b617bac9938568cd7bafa5"
+    },
+    {
+      "path": "assets/pbr.vertex-Dd0q8aAp.js",
+      "bytes": 14299,
+      "sha256": "6c9f5e0fb480a52b373ea20dcf4d1cf5e3456baf88a87c7420885c0c4f40ed2c"
+    },
+    {
+      "path": "assets/pbrBRDFFunctions-BCNINF-p.js",
+      "bytes": 11931,
+      "sha256": "61b464dc57e87e6d27224049b6920679ffb6ca96e3b9b5a1b2896c23f0aeea80"
+    },
+    {
+      "path": "assets/pbrBRDFFunctions-DxfbxN23.js",
+      "bytes": 12761,
+      "sha256": "6498fd73a62404b2bdd281d8ffabe8b59d14e1927a32216b467847763a412ed0"
+    },
+    {
+      "path": "assets/pbrDebug-BE0WC03C.js",
+      "bytes": 38056,
+      "sha256": "8d9ec4e2b72c0c36adaa466a82e9887de95ed8fb076240ddfef351b70e7536ea"
+    },
+    {
+      "path": "assets/pbrDebug-DewMBbAj.js",
+      "bytes": 45347,
+      "sha256": "3c169bcb3af22ec0f6535ef2c386ea1ec7ee0ee2ccac0b187be5224df6260754"
+    },
+    {
+      "path": "assets/pbrIBLFunctions-CSlJv7qb.js",
+      "bytes": 2522,
+      "sha256": "5537af51297ac954c4125dc6ff8490e4fd120f2239ebb2c00331e06d053395a1"
+    },
+    {
+      "path": "assets/pbrIBLFunctions-b8fwQKtH.js",
+      "bytes": 2719,
+      "sha256": "d45fb4d76f370e711f5dc73a6a24dfff983ebf62c5068f8de006ebfe2e2c1874"
+    },
+    {
+      "path": "assets/pbrMaterial.pure-D-oKoLyi.js",
+      "bytes": 136134,
+      "sha256": "c45fab8d390ae1c8dfed82dfcb9edf9ad89722970f7c1b3139df68d4996021e2"
+    },
+    {
+      "path": "assets/pbrMaterialLoadingAdapter-ePgqJd7Y.js",
+      "bytes": 12503,
+      "sha256": "baeebf445c30ef1db237ca9bb9145d8b5bf8edbeccfd882f8c8fc8aab8490fae"
+    },
+    {
+      "path": "assets/pbrUboDeclaration-C3goPwfE.js",
+      "bytes": 1802,
+      "sha256": "6884af9f6c7de7ed8a348d96f5d4589b22c5d5f86ceb83dd5af66191463e9911"
+    },
+    {
+      "path": "assets/pbrUboDeclaration-CDCiFpEz.js",
+      "bytes": 2344,
+      "sha256": "418de958cd5d7610387503cad1d1e440b58be6f85bcba91c18a98d6389bedcf0"
+    },
+    {
+      "path": "assets/performanceConfigurator-UtxC_Odd.js",
+      "bytes": 500,
+      "sha256": "18ac183db602e06e8f22bb36ef5a1b0127170dfa0401d3e6aff4f81dc5d76b26"
+    },
+    {
+      "path": "assets/postProcess.pure-DRYfXJ37.js",
+      "bytes": 18404,
+      "sha256": "e880ae3c2803c10a2504fa35853b119c17a5d30dd5f618f1aa07589c8c77e03d"
+    },
+    {
+      "path": "assets/postprocess.vertex-CmVXXq2T.js",
+      "bytes": 584,
+      "sha256": "7f3cb8f402651e0c1378f484fdd319a6859ce17c20cb877ede973037d487ca79"
+    },
+    {
+      "path": "assets/postprocess.vertex-DJCmMhI8.js",
+      "bytes": 460,
+      "sha256": "520bb6e9e2851654258b110a11a5d138f1e77aaaaa22013e6d723cdd59bdeacd"
+    },
+    {
+      "path": "assets/precisionDate-CfCevjl-.js",
+      "bytes": 390,
+      "sha256": "ca81e6b450810d0472b8ea1d02e169f7c206f21994ba8fd557a0fdde51bb1e67"
+    },
+    {
+      "path": "assets/preload-helper-sgD8ztR-.js",
+      "bytes": 2130,
+      "sha256": "39effbf0adda1a867781afb26166fdc500cf5265d9586659fab4ea39adad24aa"
+    },
+    {
+      "path": "assets/procedural.vertex-C47TVAon.js",
+      "bytes": 473,
+      "sha256": "0cf20bd5c3a7e80a7ba4d4ffd233a0b5b235a29acf926ebf62af8bf8de7b0f61"
+    },
+    {
+      "path": "assets/procedural.vertex-D3o6xkF2.js",
+      "bytes": 613,
+      "sha256": "4fb7d38a1b7e1c89c5ea8627a340763c85e73e5748663b32c965ff9264f026e9"
+    },
+    {
+      "path": "assets/reflectionFunction-3knPrqsc.js",
+      "bytes": 5629,
+      "sha256": "2565c4cc7abbacd8d737bec705bdd5a8d91730c8058453e6987eee6a70d32d82"
+    },
+    {
+      "path": "assets/reflectionFunction-BTwp8RXV.js",
+      "bytes": 5093,
+      "sha256": "f51734641430c8d433a9f5c198f00298847b282b3a233636e2d030416fb817d8"
+    },
+    {
+      "path": "assets/renderTargetTexture.pure-BloPKnIE.js",
+      "bytes": 32269,
+      "sha256": "0411204b2af5dc1ce42ef478bcdeaa6fbc340d838e14f43a215232ff61b4dd64"
+    },
+    {
+      "path": "assets/renderingManager-DZKbiUML.js",
+      "bytes": 17914,
+      "sha256": "afee540ba07fc1ce1313547471fc2595676c07303d8af2ee370247284968a8c2"
+    },
+    {
+      "path": "assets/rgbdDecode.fragment-Cdz2Tveq.js",
+      "bytes": 520,
+      "sha256": "bee2fc90a9d5fad759b42d5df5a6f2e1302957a5d4bdd56bc8a4e78891d589da"
+    },
+    {
+      "path": "assets/rgbdDecode.fragment-O0P-LSvy.js",
+      "bytes": 658,
+      "sha256": "15b474eb100c7f30b7f32819c7619b737fb7accf92a1d44564d14b6ee3f816c1"
+    },
+    {
+      "path": "assets/rgbdEncode.fragment-CVg4Fcse.js",
+      "bytes": 512,
+      "sha256": "dfd45fc4a88d859371441b9e928d3f9adc81a60ec9bdcdad16363e159077defb"
+    },
+    {
+      "path": "assets/rgbdEncode.fragment-DMBdLQO_.js",
+      "bytes": 649,
+      "sha256": "5113f137bf458b7386211366741fb4cb9df2c497bf968d82a98892790f6a7687"
+    },
+    {
+      "path": "assets/sceneUboDeclaration-B5VhSG0v.js",
+      "bytes": 364,
+      "sha256": "bb44727afcb0fe70461ca9bdb0d212901fa0a18067c8a62d1577506c6d347b95"
+    },
+    {
+      "path": "assets/shaderStore-D-XQlhUT.js",
+      "bytes": 469,
+      "sha256": "db600316439f2fedb7bfd3bcbc61b24d30c2b2646828dcea1c7c778cd07d5e3e"
+    },
+    {
+      "path": "assets/smartArray-BRfcgNbX.js",
+      "bytes": 1186,
+      "sha256": "8dc20e14af937dfe98d73e0190bd449c7724164eee863b08caa8dd5a4cfc019f"
+    },
+    {
+      "path": "assets/spatialWebAudio-9CJPgV1y.js",
+      "bytes": 14134,
+      "sha256": "33022c710cc136983ee5953669b5be71d640225be127a7d33f800e3770f393ba"
+    },
+    {
+      "path": "assets/texture.pure-BEKfqVqw.js",
+      "bytes": 19442,
+      "sha256": "43e52d970b57bb33cfc40d8582c469cc9aa527b041fb98040087d50965013d2a"
+    },
+    {
+      "path": "assets/textureProcessor.fragment-B-hqHgey.js",
+      "bytes": 4378,
+      "sha256": "5e86123c86314febf84a63b67986711686eacc80d215bae6a719368d8097c9cc"
+    },
+    {
+      "path": "assets/textureProcessor.fragment-D-awtrDP.js",
+      "bytes": 3491,
+      "sha256": "cb04efe695c7b5f2f6cbf62aa035df9a85f3c4b220aa3ef7b08288e6181ee6f3"
+    },
+    {
+      "path": "assets/tgaTextureLoader-CqhhocF6.js",
+      "bytes": 3408,
+      "sha256": "7edd7f23ff0ade28e79de5a87b7c966629d4e26d815fa3321589c50632179ae0"
+    },
+    {
+      "path": "assets/thinEngine.pure-DRh1TxQF.js",
+      "bytes": 127859,
+      "sha256": "c302fbdf57cb5ef523009b35b4e391498b3f9955682f0ac6b842ec11a7cd66c8"
+    },
+    {
+      "path": "assets/timingTools-BVXVNp4w.js",
+      "bytes": 12879,
+      "sha256": "1abccf73e9ba4e1b62a8941639c664781019676653580420dbf67c7c56a76d20"
+    },
+    {
+      "path": "assets/tools.pure-BGVbH2Lq.js",
+      "bytes": 27643,
+      "sha256": "9465bdf865e6f1dec5a2414d2b067a32b76d32a5baa766560d6cc6f766529b46"
+    },
+    {
+      "path": "assets/twgsl-CB--yrSG.wasm",
+      "bytes": 1702916,
+      "sha256": "a434c2decdbb38caadf5f486d806384a1543554828c983c77922b2d92579914c"
+    },
+    {
+      "path": "assets/twgsl-DqdFeK3J.js",
+      "bytes": 74555,
+      "sha256": "b4f1f66263b801210f955f74aa71f1939be647ce0fd80ea5befd12a78499d5ff"
+    },
+    {
+      "path": "assets/typeStore-Cu_sj2zM.js",
+      "bytes": 80,
+      "sha256": "ac5c1cd88e21454d0753d41e04c62cf8a19b88778746954785b5d32d0f1b66d8"
+    },
+    {
+      "path": "assets/vertexColorMixing-B7dmaeCQ.js",
+      "bytes": 751,
+      "sha256": "68d82a964aabd8eeda1ba7c3cd653451e641d39dcf6a8aeeb8be79b4a93495ac"
+    },
+    {
+      "path": "assets/vertexColorMixing-D2Z31hvR.js",
+      "bytes": 1004,
+      "sha256": "0f6f6437050eefbec655e3a0fe84e3adbbfa20020cc4d2a97c042d5e24aad9b7"
+    },
+    {
+      "path": "assets/webAudioBaseSubGraph-D5MI-0W-.js",
+      "bytes": 8497,
+      "sha256": "e6880ab37cad7e73beb126b3ad8527b5da472755527510465d13204c688ea2fc"
+    },
+    {
+      "path": "assets/webAudioBus-DF-xPNNy.js",
+      "bytes": 2276,
+      "sha256": "b6ce71527aca1aa34cedb0ae25ea8295df4d3984c20ac6525bfe32e04169c14a"
+    },
+    {
+      "path": "assets/webAudioMainBus-C_A0OQBE.js",
+      "bytes": 917,
+      "sha256": "6d0add9a17c630d9ddc7bc95e9f439fdc1c0a3c863a9ebcae33434d5a4c3ad73"
+    },
+    {
+      "path": "assets/webAudioSoundSource-DATQZpG8.js",
+      "bytes": 2327,
+      "sha256": "ba50c9b41f984bc927e65c484de597c0d78c7b9c209dd974a63bfeb805ed0451"
+    },
+    {
+      "path": "assets/webAudioStaticSound-MfLzz-hY.js",
+      "bytes": 9368,
+      "sha256": "cf595b91a56e280573e4fab31b8e3b99a8e1ee1528dbe40dd446e0ac88fd3eac"
+    },
+    {
+      "path": "assets/webAudioStreamingSound-CQrvV6bS.js",
+      "bytes": 8393,
+      "sha256": "849771cfa43ddacc87bcb0867eb04b37b67b940a3bdbb8dc0cd72bcfa956b3cb"
+    },
+    {
+      "path": "assets/webRequest-dqz0dHXK.js",
+      "bytes": 2941,
+      "sha256": "d4a0d83706cc2f7681ca2895f9b827fbadfe11ed77025bc19fbf9ef40dd9d01d"
+    },
+    {
+      "path": "index.html",
+      "bytes": 3568,
+      "sha256": "c2067d8b029431b185286215afebb2671c099dacc2ef64883a2d101cd3927e2b"
+    }
+  ]
+}

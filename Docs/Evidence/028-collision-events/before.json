@@ -1,0 +1,876 @@
+{
+  "capturedAt": "2026-10-05T12:52:02.171Z",
+  "mode": "BEFORE_LEGACY_CONTACT_QUERY",
+  "commit": "cc861f5ed4d3bdf310a679d26f76e37d2f72e95a",
+  "sourceHashes": {
+    "scripts/benchmark-collision-events.mjs": "22da0d4e00247db903c78149755a665e29765cdb6418ed2cf867a70f217f93af",
+    "tests/vehicles/collision-baseline-fixture.ts": "75e1819255e8662b5f84132e0d9d2a167182fe0cb7b051b0e964a47689c8906a",
+    "tests/vehicles/physics-fixture.ts": "78354e9ac9f57929e9ddcc3cbbb1a2fb8adcd5846f2e7361a168af275d663867",
+    "src/vehicles/physics.ts": "606aab5f738712df304b7be3fbf8f005541accc36831339074831cbd9d0e43c6",
+    "src/vehicles/rapier/index.ts": "6703e52df32675ce71e4974ae4199379f69832f4fab6039b2573cb1f822a4dda",
+    "src/vehicles/body-port.ts": "a9bd1045aedb6cf2a7bae07fd3cb094ef2bb922bf962d5143fd90ed84763eaf4",
+    "src/vehicles/body-registry.ts": "2b7fddf9487091a767e1342377f9ddfe6c0dd6e5c012bfc64c0b62f003f00ba6",
+    "src/vehicles/vehicle-classes.ts": "43eed5576928ac07616200837f58bfbfd10bb41bd111b4bc7369f7ac0bc40fb2",
+    "src/vehicles/index.ts": "86d502c526cce86942dcc42dd4e8ecd10a96d1216aafc6d50f252d72275cf2b1",
+    "src/vehicles/contracts.ts": "6639f51a1ab6326c2edcb4eb572cee3501612779e72af038c6831ddaa0494c26",
+    "src/sessions/index.ts": "960b676877c9876575d1f4fb425be83f603dbc038fe7c9f99aefc2c2be82c343",
+    "src/sessions/validation.ts": "e129d68c9e0209875c6eede9b857ec3710ae9aa90e1f46b5208237d0be9efb79",
+    "src/sessions/identity.ts": "f4b78b20857fc65704857a7bb78ef5a604083f173153ec7f5582bc450c6d76a6",
+    "src/sessions/random.ts": "2b16fab5b74cf38e00f8847c747f8810cdcbc3850b013f35805f776e2d141fa0",
+    "node_modules/@dimforge/rapier3d-compat/package.json": "5abcda69edc27faac2516ab958bf3bb8b1f912ee1e47df4d2b9aea67535a20b3",
+    "node_modules/@dimforge/rapier3d-compat/dist/rapier.mjs": "02dc6a4e2fffc013bab08fbb44fa68f501d8303615e9afe4c7d89ad4eedda0d0",
+    "package-lock.json": "a50a27bb30ddb5ca3313cda07e8ad767c10b44203073791b5ecbf4583bb97c0e"
+  },
+  "beforeAlgorithmProof": {
+    "productionFilesAbsent": [
+      "src/vehicles/collision-port.ts",
+      "src/vehicles/collision-episodes.ts",
+      "src/simulation/collision-events.ts"
+    ],
+    "owner": "Codex gpt-6.1-sol medium PBI028",
+    "sourceArchive": "Docs/Evidence/028-collision-events/source-before"
+  },
+  "runtime": "v24.21.0",
+  "physicsVersion": "Rapier0.21.0 /021-raycast-v1",
+  "fixture": {
+    "version": "028-legacy-native-contacts-v1",
+    "warmupTicks": 100,
+    "measuredTicks": 600,
+    "repetitions": 5,
+    "sampleCapacity": 600,
+    "normalVehicles": 70,
+    "denseVehicles": 110,
+    "anonymousObstacles": 67
+  },
+  "budgetVersion": "203-initial-1",
+  "hardware": {
+    "cpu": "AMD Ryzen 9 7950X3D 16-Core Processor          ",
+    "logicalCpus": 32,
+    "ramBytes": 50337325056,
+    "os": "win32 10.0.26200",
+    "powerScheme": "Power Scheme GUID: 381b4222-f694-41f0-9685-ff5bb260df2e  (Balanced)"
+  },
+  "scope": "Supplemental sequential Node CPU; no renderer, GPU, FPS, real-time throughput, 120s wall-time or complete-tick budget claim",
+  "protocol": {
+    "tickHz": 60,
+    "simulatedWarmupSeconds": 1.6666666666666667,
+    "simulatedMeasuredSeconds": 10,
+    "wallWarmupSeconds": null,
+    "wallMeasuredSeconds": null,
+    "observer": "paired off/on: external contact query and whole-tick timing always; bounded sub-timer around native query only on",
+    "seed": "none; existing deterministic manyContacts grid and commands",
+    "retainedTimingSamplesPerRun": 1800,
+    "timingNumericPayloadBoundBytesPerRun": 14400,
+    "contactsMeaning": "legacy numSolverContacts summed for native dynamic collider pairs, includes ground and anonymous obstacles; not incident count or impulse",
+    "memory": "forced-GC heap diagnostic if available; application-owned entity/subscription counts; exact WASM allocator memory unavailable"
+  },
+  "runs": [
+    {
+      "repetition": 0,
+      "observe": false,
+      "dense": false,
+      "counts": {
+        "vehicles": 70,
+        "bodies": 134,
+        "colliders": 138
+      },
+      "checksum": 441321,
+      "maxContacts": 721,
+      "elapsedWallMs": 1312.7877,
+      "queryCpuMs": {
+        "count": 600,
+        "p50": 0.24769999999989523,
+        "p95": 0.45319999999992433,
+        "p99": 0.629099999999994
+      },
+      "stepAndQueryCpuMs": {
+        "count": 600,
+        "p50": 1.7233999999999696,
+        "p95": 2.3381000000001677,
+        "p99": 2.8978000000000748
+      },
+      "observerQueryCpuMs": {
+        "count": 0,
+        "p50": null,
+        "p95": null,
+        "p99": null
+      },
+      "heapBeforeBytes": 17639536,
+      "heapAfterBytes": 18085568,
+      "forcedGc": true,
+      "disposed": {
+        "entities": 0,
+        "subscriptions": 0
+      },
+      "disposedReadRejected": true
+    },
+    {
+      "repetition": 0,
+      "observe": false,
+      "dense": true,
+      "counts": {
+        "vehicles": 110,
+        "bodies": 174,
+        "colliders": 178
+      },
+      "checksum": 543906,
+      "maxContacts": 828,
+      "elapsedWallMs": 1352.4255999999998,
+      "queryCpuMs": {
+        "count": 600,
+        "p50": 0.23959999999988213,
+        "p95": 0.4687000000003536,
+        "p99": 0.607300000000123
+      },
+      "stepAndQueryCpuMs": {
+        "count": 600,
+        "p50": 1.8917999999998756,
+        "p95": 2.6003999999998086,
+        "p99": 3.002100000000155
+      },
+      "observerQueryCpuMs": {
+        "count": 0,
+        "p50": null,
+        "p95": null,
+        "p99": null
+      },
+      "heapBeforeBytes": 18024184,
+      "heapAfterBytes": 8783400,
+      "forcedGc": true,
+      "disposed": {
+        "entities": 0,
+        "subscriptions": 0
+      },
+      "disposedReadRejected": true
+    },
+    {
+      "repetition": 0,
+      "observe": true,
+      "dense": false,
+      "counts": {
+        "vehicles": 70,
+        "bodies": 134,
+        "colliders": 138
+      },
+      "checksum": 441321,
+      "maxContacts": 721,
+      "elapsedWallMs": 931.6457999999998,
+      "queryCpuMs": {
+        "count": 600,
+        "p50": 0.1797999999998865,
+        "p95": 0.3949999999999818,
+        "p99": 0.5423999999998159
+      },
+      "stepAndQueryCpuMs": {
+        "count": 600,
+        "p50": 1.3468000000002576,
+        "p95": 1.877599999999802,
+        "p99": 2.10129999999981
+      },
+      "observerQueryCpuMs": {
+        "count": 600,
+        "p50": 0.17949999999973443,
+        "p95": 0.394800000000032,
+        "p99": 0.5419000000001688
+      },
+      "heapBeforeBytes": 8691664,
+      "heapAfterBytes": 8876696,
+      "forcedGc": true,
+      "disposed": {
+        "entities": 0,
+        "subscriptions": 0
+      },
+      "disposedReadRejected": true
+    },
+    {
+      "repetition": 0,
+      "observe": true,
+      "dense": true,
+      "counts": {
+        "vehicles": 110,
+        "bodies": 174,
+        "colliders": 178
+      },
+      "checksum": 543906,
+      "maxContacts": 828,
+      "elapsedWallMs": 1219.9180999999999,
+      "queryCpuMs": {
+        "count": 600,
+        "p50": 0.22029999999995198,
+        "p95": 0.38540000000011787,
+        "p99": 0.5698000000002139
+      },
+      "stepAndQueryCpuMs": {
+        "count": 600,
+        "p50": 1.7249000000001615,
+        "p95": 2.3407999999999447,
+        "p99": 2.720900000000256
+      },
+      "observerQueryCpuMs": {
+        "count": 600,
+        "p50": 0.21979999999985012,
+        "p95": 0.3850000000002183,
+        "p99": 0.5693999999994048
+      },
+      "heapBeforeBytes": 8726792,
+      "heapAfterBytes": 8891968,
+      "forcedGc": true,
+      "disposed": {
+        "entities": 0,
+        "subscriptions": 0
+      },
+      "disposedReadRejected": true
+    },
+    {
+      "repetition": 1,
+      "observe": true,
+      "dense": false,
+      "counts": {
+        "vehicles": 70,
+        "bodies": 134,
+        "colliders": 138
+      },
+      "checksum": 441321,
+      "maxContacts": 721,
+      "elapsedWallMs": 993.0708000000004,
+      "queryCpuMs": {
+        "count": 600,
+        "p50": 0.19020000000000437,
+        "p95": 0.3941000000004351,
+        "p99": 0.5363999999999578
+      },
+      "stepAndQueryCpuMs": {
+        "count": 600,
+        "p50": 1.3760000000002037,
+        "p95": 2.007300000000214,
+        "p99": 2.3720000000002983
+      },
+      "observerQueryCpuMs": {
+        "count": 600,
+        "p50": 0.18989999999939755,
+        "p95": 0.3937999999998283,
+        "p99": 0.5361000000002605
+      },
+      "heapBeforeBytes": 8681248,
+      "heapAfterBytes": 8895384,
+      "forcedGc": true,
+      "disposed": {
+        "entities": 0,
+        "subscriptions": 0
+      },
+      "disposedReadRejected": true
+    },
+    {
+      "repetition": 1,
+      "observe": true,
+      "dense": true,
+      "counts": {
+        "vehicles": 110,
+        "bodies": 174,
+        "colliders": 178
+      },
+      "checksum": 543906,
+      "maxContacts": 828,
+      "elapsedWallMs": 1250.3386,
+      "queryCpuMs": {
+        "count": 600,
+        "p50": 0.21060000000034051,
+        "p95": 0.3985000000002401,
+        "p99": 0.5070000000005166
+      },
+      "stepAndQueryCpuMs": {
+        "count": 600,
+        "p50": 1.7247999999999593,
+        "p95": 2.4739999999992506,
+        "p99": 2.920799999999872
+      },
+      "observerQueryCpuMs": {
+        "count": 600,
+        "p50": 0.21039999999993597,
+        "p95": 0.39829999999983556,
+        "p99": 0.5065999999997075
+      },
+      "heapBeforeBytes": 8753176,
+      "heapAfterBytes": 8911024,
+      "forcedGc": true,
+      "disposed": {
+        "entities": 0,
+        "subscriptions": 0
+      },
+      "disposedReadRejected": true
+    },
+    {
+      "repetition": 1,
+      "observe": false,
+      "dense": false,
+      "counts": {
+        "vehicles": 70,
+        "bodies": 134,
+        "colliders": 138
+      },
+      "checksum": 441321,
+      "maxContacts": 721,
+      "elapsedWallMs": 968.3734999999997,
+      "queryCpuMs": {
+        "count": 600,
+        "p50": 0.2076999999999316,
+        "p95": 0.34180000000014843,
+        "p99": 0.48179999999956635
+      },
+      "stepAndQueryCpuMs": {
+        "count": 600,
+        "p50": 1.4395999999997002,
+        "p95": 1.907600000000457,
+        "p99": 2.234200000000783
+      },
+      "observerQueryCpuMs": {
+        "count": 0,
+        "p50": null,
+        "p95": null,
+        "p99": null
+      },
+      "heapBeforeBytes": 8710104,
+      "heapAfterBytes": 8800488,
+      "forcedGc": true,
+      "disposed": {
+        "entities": 0,
+        "subscriptions": 0
+      },
+      "disposedReadRejected": true
+    },
+    {
+      "repetition": 1,
+      "observe": false,
+      "dense": true,
+      "counts": {
+        "vehicles": 110,
+        "bodies": 174,
+        "colliders": 178
+      },
+      "checksum": 543906,
+      "maxContacts": 828,
+      "elapsedWallMs": 1523.2212,
+      "queryCpuMs": {
+        "count": 600,
+        "p50": 0.29210000000057335,
+        "p95": 0.5734000000011292,
+        "p99": 0.8011000000005879
+      },
+      "stepAndQueryCpuMs": {
+        "count": 600,
+        "p50": 2.187900000000809,
+        "p95": 3.1111000000000786,
+        "p99": 3.907100000000355
+      },
+      "observerQueryCpuMs": {
+        "count": 0,
+        "p50": null,
+        "p95": null,
+        "p99": null
+      },
+      "heapBeforeBytes": 8760096,
+      "heapAfterBytes": 8818136,
+      "forcedGc": true,
+      "disposed": {
+        "entities": 0,
+        "subscriptions": 0
+      },
+      "disposedReadRejected": true
+    },
+    {
+      "repetition": 2,
+      "observe": false,
+      "dense": false,
+      "counts": {
+        "vehicles": 70,
+        "bodies": 134,
+        "colliders": 138
+      },
+      "checksum": 441321,
+      "maxContacts": 721,
+      "elapsedWallMs": 1262.1738999999998,
+      "queryCpuMs": {
+        "count": 600,
+        "p50": 0.2952000000004773,
+        "p95": 0.5370000000002619,
+        "p99": 0.638200000001234
+      },
+      "stepAndQueryCpuMs": {
+        "count": 600,
+        "p50": 1.8704000000016094,
+        "p95": 2.3827000000001135,
+        "p99": 2.865400000000591
+      },
+      "observerQueryCpuMs": {
+        "count": 0,
+        "p50": null,
+        "p95": null,
+        "p99": null
+      },
+      "heapBeforeBytes": 8787288,
+      "heapAfterBytes": 8910320,
+      "forcedGc": true,
+      "disposed": {
+        "entities": 0,
+        "subscriptions": 0
+      },
+      "disposedReadRejected": true
+    },
+    {
+      "repetition": 2,
+      "observe": false,
+      "dense": true,
+      "counts": {
+        "vehicles": 110,
+        "bodies": 174,
+        "colliders": 178
+      },
+      "checksum": 543906,
+      "maxContacts": 828,
+      "elapsedWallMs": 1494.2978999999996,
+      "queryCpuMs": {
+        "count": 600,
+        "p50": 0.285200000000259,
+        "p95": 0.49800000000141154,
+        "p99": 0.6172000000005937
+      },
+      "stepAndQueryCpuMs": {
+        "count": 600,
+        "p50": 2.126699999998891,
+        "p95": 2.486699999999473,
+        "p99": 2.9812000000001717
+      },
+      "observerQueryCpuMs": {
+        "count": 0,
+        "p50": null,
+        "p95": null,
+        "p99": null
+      },
+      "heapBeforeBytes": 8864816,
+      "heapAfterBytes": 8917992,
+      "forcedGc": true,
+      "disposed": {
+        "entities": 0,
+        "subscriptions": 0
+      },
+      "disposedReadRejected": true
+    },
+    {
+      "repetition": 2,
+      "observe": true,
+      "dense": false,
+      "counts": {
+        "vehicles": 70,
+        "bodies": 134,
+        "colliders": 138
+      },
+      "checksum": 441321,
+      "maxContacts": 721,
+      "elapsedWallMs": 1248.5781000000006,
+      "queryCpuMs": {
+        "count": 600,
+        "p50": 0.2889000000013766,
+        "p95": 0.4400999999998021,
+        "p99": 0.6833999999998923
+      },
+      "stepAndQueryCpuMs": {
+        "count": 600,
+        "p50": 1.8670000000001892,
+        "p95": 2.2677999999996246,
+        "p99": 2.6150000000016007
+      },
+      "observerQueryCpuMs": {
+        "count": 600,
+        "p50": 0.28870000000097207,
+        "p95": 0.4398000000001048,
+        "p99": 0.6824999999989814
+      },
+      "heapBeforeBytes": 8819496,
+      "heapAfterBytes": 9023992,
+      "forcedGc": true,
+      "disposed": {
+        "entities": 0,
+        "subscriptions": 0
+      },
+      "disposedReadRejected": true
+    },
+    {
+      "repetition": 2,
+      "observe": true,
+      "dense": true,
+      "counts": {
+        "vehicles": 110,
+        "bodies": 174,
+        "colliders": 178
+      },
+      "checksum": 543906,
+      "maxContacts": 828,
+      "elapsedWallMs": 1492.4817999999996,
+      "queryCpuMs": {
+        "count": 600,
+        "p50": 0.2820000000010623,
+        "p95": 0.48619999999937136,
+        "p99": 0.6444999999985157
+      },
+      "stepAndQueryCpuMs": {
+        "count": 600,
+        "p50": 2.1002000000007683,
+        "p95": 2.564199999998891,
+        "p99": 3.0341000000007625
+      },
+      "observerQueryCpuMs": {
+        "count": 600,
+        "p50": 0.281699999999546,
+        "p95": 0.4860000000007858,
+        "p99": 0.6442999999999302
+      },
+      "heapBeforeBytes": 8873432,
+      "heapAfterBytes": 9031864,
+      "forcedGc": true,
+      "disposed": {
+        "entities": 0,
+        "subscriptions": 0
+      },
+      "disposedReadRejected": true
+    },
+    {
+      "repetition": 3,
+      "observe": true,
+      "dense": false,
+      "counts": {
+        "vehicles": 70,
+        "bodies": 134,
+        "colliders": 138
+      },
+      "checksum": 441321,
+      "maxContacts": 721,
+      "elapsedWallMs": 1251.4746000000014,
+      "queryCpuMs": {
+        "count": 600,
+        "p50": 0.28870000000097207,
+        "p95": 0.48730000000068685,
+        "p99": 0.6735000000007858
+      },
+      "stepAndQueryCpuMs": {
+        "count": 600,
+        "p50": 1.8557999999993626,
+        "p95": 2.3954000000012456,
+        "p99": 2.7638000000006286
+      },
+      "observerQueryCpuMs": {
+        "count": 600,
+        "p50": 0.28849999999874854,
+        "p95": 0.4871000000002823,
+        "p99": 0.6732000000010885
+      },
+      "heapBeforeBytes": 8838728,
+      "heapAfterBytes": 9042832,
+      "forcedGc": true,
+      "disposed": {
+        "entities": 0,
+        "subscriptions": 0
+      },
+      "disposedReadRejected": true
+    },
+    {
+      "repetition": 3,
+      "observe": true,
+      "dense": true,
+      "counts": {
+        "vehicles": 110,
+        "bodies": 174,
+        "colliders": 178
+      },
+      "checksum": 543906,
+      "maxContacts": 828,
+      "elapsedWallMs": 1496.3440999999984,
+      "queryCpuMs": {
+        "count": 600,
+        "p50": 0.2769000000007509,
+        "p95": 0.3989000000001397,
+        "p99": 0.5961999999999534
+      },
+      "stepAndQueryCpuMs": {
+        "count": 600,
+        "p50": 2.09059999999954,
+        "p95": 2.544799999999668,
+        "p99": 2.998300000002928
+      },
+      "observerQueryCpuMs": {
+        "count": 600,
+        "p50": 0.2767999999996391,
+        "p95": 0.39869999999791617,
+        "p99": 0.5959000000002561
+      },
+      "heapBeforeBytes": 8891344,
+      "heapAfterBytes": 9049736,
+      "forcedGc": true,
+      "disposed": {
+        "entities": 0,
+        "subscriptions": 0
+      },
+      "disposedReadRejected": true
+    },
+    {
+      "repetition": 3,
+      "observe": false,
+      "dense": false,
+      "counts": {
+        "vehicles": 70,
+        "bodies": 134,
+        "colliders": 138
+      },
+      "checksum": 441321,
+      "maxContacts": 721,
+      "elapsedWallMs": 1232.4941,
+      "queryCpuMs": {
+        "count": 600,
+        "p50": 0.28879999999844586,
+        "p95": 0.40060000000084983,
+        "p99": 0.6503999999986263
+      },
+      "stepAndQueryCpuMs": {
+        "count": 600,
+        "p50": 1.8521999999975378,
+        "p95": 2.3489000000008673,
+        "p99": 2.7357000000010885
+      },
+      "observerQueryCpuMs": {
+        "count": 0,
+        "p50": null,
+        "p95": null,
+        "p99": null
+      },
+      "heapBeforeBytes": 8844504,
+      "heapAfterBytes": 8916992,
+      "forcedGc": true,
+      "disposed": {
+        "entities": 0,
+        "subscriptions": 0
+      },
+      "disposedReadRejected": true
+    },
+    {
+      "repetition": 3,
+      "observe": false,
+      "dense": true,
+      "counts": {
+        "vehicles": 110,
+        "bodies": 174,
+        "colliders": 178
+      },
+      "checksum": 543906,
+      "maxContacts": 828,
+      "elapsedWallMs": 1418.6439000000028,
+      "queryCpuMs": {
+        "count": 600,
+        "p50": 0.27080000000205473,
+        "p95": 0.35310000000026776,
+        "p99": 0.5877000000000407
+      },
+      "stepAndQueryCpuMs": {
+        "count": 600,
+        "p50": 2.050999999999476,
+        "p95": 2.4205999999976484,
+        "p99": 2.7229999999981374
+      },
+      "observerQueryCpuMs": {
+        "count": 0,
+        "p50": null,
+        "p95": null,
+        "p99": null
+      },
+      "heapBeforeBytes": 8872120,
+      "heapAfterBytes": 8926200,
+      "forcedGc": true,
+      "disposed": {
+        "entities": 0,
+        "subscriptions": 0
+      },
+      "disposedReadRejected": true
+    },
+    {
+      "repetition": 4,
+      "observe": false,
+      "dense": false,
+      "counts": {
+        "vehicles": 70,
+        "bodies": 134,
+        "colliders": 138
+      },
+      "checksum": 441321,
+      "maxContacts": 721,
+      "elapsedWallMs": 1199.2363000000005,
+      "queryCpuMs": {
+        "count": 600,
+        "p50": 0.27669999999852735,
+        "p95": 0.38220000000001164,
+        "p99": 0.6378999999978987
+      },
+      "stepAndQueryCpuMs": {
+        "count": 600,
+        "p50": 1.802400000000489,
+        "p95": 2.3065000000024156,
+        "p99": 2.6984000000011292
+      },
+      "observerQueryCpuMs": {
+        "count": 0,
+        "p50": null,
+        "p95": null,
+        "p99": null
+      },
+      "heapBeforeBytes": 8843192,
+      "heapAfterBytes": 8941824,
+      "forcedGc": true,
+      "disposed": {
+        "entities": 0,
+        "subscriptions": 0
+      },
+      "disposedReadRejected": true
+    },
+    {
+      "repetition": 4,
+      "observe": false,
+      "dense": true,
+      "counts": {
+        "vehicles": 110,
+        "bodies": 174,
+        "colliders": 178
+      },
+      "checksum": 543906,
+      "maxContacts": 828,
+      "elapsedWallMs": 1473.4046999999991,
+      "queryCpuMs": {
+        "count": 600,
+        "p50": 0.27709999999933643,
+        "p95": 0.3830999999991036,
+        "p99": 0.6014000000031956
+      },
+      "stepAndQueryCpuMs": {
+        "count": 600,
+        "p50": 2.0900999999976193,
+        "p95": 2.5076000000008207,
+        "p99": 3.05370000000039
+      },
+      "observerQueryCpuMs": {
+        "count": 0,
+        "p50": null,
+        "p95": null,
+        "p99": null
+      },
+      "heapBeforeBytes": 8903824,
+      "heapAfterBytes": 8950952,
+      "forcedGc": true,
+      "disposed": {
+        "entities": 0,
+        "subscriptions": 0
+      },
+      "disposedReadRejected": true
+    },
+    {
+      "repetition": 4,
+      "observe": true,
+      "dense": false,
+      "counts": {
+        "vehicles": 70,
+        "bodies": 134,
+        "colliders": 138
+      },
+      "checksum": 441321,
+      "maxContacts": 721,
+      "elapsedWallMs": 1295.0727000000006,
+      "queryCpuMs": {
+        "count": 600,
+        "p50": 0.2915000000029977,
+        "p95": 0.4348999999965599,
+        "p99": 0.7499000000025262
+      },
+      "stepAndQueryCpuMs": {
+        "count": 600,
+        "p50": 1.8973000000005413,
+        "p95": 2.4464999999981956,
+        "p99": 3.2175999999999476
+      },
+      "observerQueryCpuMs": {
+        "count": 600,
+        "p50": 0.29139999999824795,
+        "p95": 0.43470000000161235,
+        "p99": 0.7494000000006054
+      },
+      "heapBeforeBytes": 8849728,
+      "heapAfterBytes": 9051800,
+      "forcedGc": true,
+      "disposed": {
+        "entities": 0,
+        "subscriptions": 0
+      },
+      "disposedReadRejected": true
+    },
+    {
+      "repetition": 4,
+      "observe": true,
+      "dense": true,
+      "counts": {
+        "vehicles": 110,
+        "bodies": 174,
+        "colliders": 178
+      },
+      "checksum": 543906,
+      "maxContacts": 828,
+      "elapsedWallMs": 1563.9347000000016,
+      "queryCpuMs": {
+        "count": 600,
+        "p50": 0.2828000000008615,
+        "p95": 0.4389000000010128,
+        "p99": 0.6854999999995925
+      },
+      "stepAndQueryCpuMs": {
+        "count": 600,
+        "p50": 2.1957000000002154,
+        "p95": 2.959100000000035,
+        "p99": 3.596400000002177
+      },
+      "observerQueryCpuMs": {
+        "count": 600,
+        "p50": 0.28250000000116415,
+        "p95": 0.4385000000002037,
+        "p99": 0.6850999999987835
+      },
+      "heapBeforeBytes": 8899480,
+      "heapAfterBytes": 9063208,
+      "forcedGc": true,
+      "disposed": {
+        "entities": 0,
+        "subscriptions": 0
+      },
+      "disposedReadRejected": true
+    }
+  ],
+  "medians": [
+    {
+      "observe": false,
+      "dense": false,
+      "queryP95MedianMs": 0.40060000000084983,
+      "stepAndQueryP95MedianMs": 2.3381000000001677
+    },
+    {
+      "observe": false,
+      "dense": true,
+      "queryP95MedianMs": 0.4687000000003536,
+      "stepAndQueryP95MedianMs": 2.5076000000008207
+    },
+    {
+      "observe": true,
+      "dense": false,
+      "queryP95MedianMs": 0.4348999999965599,
+      "stepAndQueryP95MedianMs": 2.2677999999996246
+    },
+    {
+      "observe": true,
+      "dense": true,
+      "queryP95MedianMs": 0.3989000000001397,
+      "stepAndQueryP95MedianMs": 2.544799999999668
+    }
+  ],
+  "completedAt": "2026-10-05T12:52:28.730Z"
+}

@@ -1,0 +1,2106 @@
+{
+  "capturedAt": "2026-10-05T14:01:52.563Z",
+  "mode": "AFTER_COLLISION_COMPOSITION",
+  "commit": "fd8c12fa15cbbdb8e4f0dcedbe3177bf23cf58b4",
+  "beforeSha256": "d2b79476cb5585facd70d7615a95ea9cd61a65eb72a1283fb5c7a750c9c4951e",
+  "sourceHashes": {
+    "scripts/benchmark-collision-events.mjs": "22da0d4e00247db903c78149755a665e29765cdb6418ed2cf867a70f217f93af",
+    "tests/vehicles/collision-baseline-fixture.ts": "75e1819255e8662b5f84132e0d9d2a167182fe0cb7b051b0e964a47689c8906a",
+    "tests/vehicles/physics-fixture.ts": "78354e9ac9f57929e9ddcc3cbbb1a2fb8adcd5846f2e7361a168af275d663867",
+    "src/vehicles/physics.ts": "759671a55182818a1ac8748f1b06e8e2530a188bc39df801064016a4e247c6c2",
+    "src/vehicles/rapier/index.ts": "2a882bacc16412cee38f44b8fe4f7ed1e21f9ffa1a80c564b06f2593d8cac0cd",
+    "src/vehicles/body-port.ts": "a9bd1045aedb6cf2a7bae07fd3cb094ef2bb922bf962d5143fd90ed84763eaf4",
+    "src/vehicles/body-registry.ts": "2b7fddf9487091a767e1342377f9ddfe6c0dd6e5c012bfc64c0b62f003f00ba6",
+    "src/vehicles/vehicle-classes.ts": "43eed5576928ac07616200837f58bfbfd10bb41bd111b4bc7369f7ac0bc40fb2",
+    "src/vehicles/index.ts": "2e3dddc572cf0eb3a714abc66527ee6edad502f6df675c80eaa62fa1a32df069",
+    "src/vehicles/contracts.ts": "6639f51a1ab6326c2edcb4eb572cee3501612779e72af038c6831ddaa0494c26",
+    "src/sessions/index.ts": "960b676877c9876575d1f4fb425be83f603dbc038fe7c9f99aefc2c2be82c343",
+    "src/sessions/validation.ts": "e129d68c9e0209875c6eede9b857ec3710ae9aa90e1f46b5208237d0be9efb79",
+    "src/sessions/identity.ts": "f4b78b20857fc65704857a7bb78ef5a604083f173153ec7f5582bc450c6d76a6",
+    "src/sessions/random.ts": "2b16fab5b74cf38e00f8847c747f8810cdcbc3850b013f35805f776e2d141fa0",
+    "node_modules/@dimforge/rapier3d-compat/package.json": "5abcda69edc27faac2516ab958bf3bb8b1f912ee1e47df4d2b9aea67535a20b3",
+    "node_modules/@dimforge/rapier3d-compat/dist/rapier.mjs": "02dc6a4e2fffc013bab08fbb44fa68f501d8303615e9afe4c7d89ad4eedda0d0",
+    "package-lock.json": "a50a27bb30ddb5ca3313cda07e8ad767c10b44203073791b5ecbf4583bb97c0e",
+    "scripts/benchmark-collision-events-after.mjs": "8876ab778d61ba0cbd62c49e47c19dcadba67d12eabab7a051ea767fe138715c",
+    "src/vehicles/collision-port.ts": "4d85f4b40d915a5adcb6cfc05f94772605df66cf953f27fc4ac7eba930a5bea1",
+    "src/vehicles/collision-episodes.ts": "87763d10f12326f64bb24d188073872d372ee48efea64a5cab65a6bcd0b17608",
+    "src/simulation/collision-events.ts": "ddbe4c8053a0895e8c45f5ba6890b7f51b24d011bfebc1fa32cfcd33e8fcde04",
+    "src/simulation/event-bus.ts": "c9787f3a7aab936eab1c29c4d0aacbdde45fce1dbe571b6d76d8ffeb893ffea7",
+    "src/simulation/events.ts": "460226ea56abc17731716ee76e7d76d4e7514f35b48566f494d15b31317b43c7",
+    "src/simulation/index.ts": "38cea58878fc5a2bda9603e4831cbe692ce2d4f6a6922c9000d3b43b0afd25e2"
+  },
+  "sourceArchive": "Docs/Evidence/028-collision-events/source-after",
+  "runtime": "v24.21.0",
+  "physicsVersion": "Rapier0.21.0 /021-raycast-v1",
+  "fixture": {
+    "version": "028-legacy-native-contacts-v1",
+    "warmupTicks": 100,
+    "measuredTicks": 600,
+    "repetitions": 5,
+    "sampleCapacity": 600,
+    "normalVehicles": 70,
+    "denseVehicles": 110,
+    "anonymousObstacles": 67
+  },
+  "budgetVersion": "203-initial-1",
+  "hardware": {
+    "cpu": "AMD Ryzen 9 7950X3D 16-Core Processor          ",
+    "logicalCpus": 32,
+    "ramBytes": 50337325056,
+    "os": "win32 10.0.26200",
+    "powerScheme": "Power Scheme GUID: 381b4222-f694-41f0-9685-ff5bb260df2e  (Balanced)"
+  },
+  "scope": "Supplemental sequential Node CPU; no renderer, GPU, FPS, real-time throughput, 120s wall-time or complete-tick budget claim",
+  "protocol": {
+    "tickHz": 60,
+    "warmupTicks": 100,
+    "measuredTicks": 600,
+    "repetitions": 5,
+    "worlds": 20,
+    "observer": "paired off/on; external legacy query/full pipeline/native readback/bus timers always, extra bounded capture sub-timer on only",
+    "legacy": "same existing physical fixture and query; stepAndQuery begins after composition admission and ends before collision capture",
+    "readback": "real native numContacts/contactDist/contactImpulse readback, ground/anonymous filtered; no invented IDs",
+    "trackerAndComposition": "capture elapsed minus native readback and synchronous bus publish; includes validation, episode update/drain and adapter overhead",
+    "diagnostics": "only car candidates enumerated; obs-obs and sensor counter zero does not prove native absence",
+    "retainedTimingSamplesPerRun": 4200,
+    "timingNumericPayloadBoundBytesPerRun": 33600,
+    "memory": "forced-GC heap diagnostic if available; application-owned entity/subscription counts; exact WASM allocator memory unavailable"
+  },
+  "runs": [
+    {
+      "repetition": 0,
+      "observe": false,
+      "dense": false,
+      "counts": {
+        "vehicles": 70,
+        "bodies": 134,
+        "colliders": 138
+      },
+      "checksum": 441321,
+      "maxContacts": 721,
+      "mappedContacts": 35700,
+      "maxMappedContacts": 60,
+      "emitted": 61,
+      "received": 61,
+      "impulseSumNs": 13088708.38289482,
+      "elapsedWallMs": 1315.76,
+      "metrics": {
+        "query": {
+          "count": 600,
+          "p50": 0.185799999999972,
+          "p95": 0.36389999999994416,
+          "p99": 0.5065999999999349
+        },
+        "stepAndQuery": {
+          "count": 600,
+          "p50": 1.4183000000000447,
+          "p95": 2.023400000000038,
+          "p99": 2.424699999999916
+        },
+        "pipeline": {
+          "count": 600,
+          "p50": 1.6552999999998974,
+          "p95": 2.373899999999935,
+          "p99": 2.855899999999906
+        },
+        "readback": {
+          "count": 600,
+          "p50": 0.08259999999995671,
+          "p95": 0.1571999999999889,
+          "p99": 0.3430000000000746
+        },
+        "bus": {
+          "count": 600,
+          "p50": 0,
+          "p95": 0,
+          "p99": 0.04899999999997817
+        },
+        "trackerAndComposition": {
+          "count": 600,
+          "p50": 0.12149999999996908,
+          "p95": 0.2281999999999016,
+          "p99": 0.35750000000007276
+        },
+        "observerCapture": {
+          "count": 0,
+          "p50": null,
+          "p95": null,
+          "p99": null
+        }
+      },
+      "heapBeforeBytes": 17858032,
+      "heapAfterBytes": 18956808,
+      "forcedGc": true,
+      "disposed": {
+        "body": {
+          "entities": 0,
+          "subscriptions": 0
+        },
+        "collision": {
+          "vehicles": 0,
+          "obstacles": 0,
+          "colliders": 0,
+          "disposed": true
+        },
+        "adapter": {
+          "trackedPairs": 0,
+          "activePairs": 0,
+          "pending": 0,
+          "lastTick": 699,
+          "worldEpoch": 1,
+          "disposed": true,
+          "lastPhysicsTick": 699,
+          "physicsStepSerial": 700,
+          "preparedTick": null,
+          "faulted": false
+        },
+        "bus": {
+          "sessionId": "028-probe-0-false-false",
+          "worldEpoch": 1,
+          "watermarkTick": 177,
+          "retainedEvents": 0,
+          "retainedCodeUnits": 0,
+          "listeners": 0,
+          "disposed": true
+        }
+      },
+      "disposedReadRejected": true
+    },
+    {
+      "repetition": 0,
+      "observe": false,
+      "dense": true,
+      "counts": {
+        "vehicles": 110,
+        "bodies": 174,
+        "colliders": 178
+      },
+      "checksum": 543906,
+      "maxContacts": 828,
+      "mappedContacts": 46273,
+      "maxMappedContacts": 74,
+      "emitted": 83,
+      "received": 83,
+      "impulseSumNs": 17486606.533990253,
+      "elapsedWallMs": 1364.5452999999998,
+      "metrics": {
+        "query": {
+          "count": 600,
+          "p50": 0.1914999999999054,
+          "p95": 0.3259000000002743,
+          "p99": 0.5198999999997795
+        },
+        "stepAndQuery": {
+          "count": 600,
+          "p50": 1.6502000000000407,
+          "p95": 2.181999999999789,
+          "p99": 2.4358000000001994
+        },
+        "pipeline": {
+          "count": 600,
+          "p50": 1.9225999999998749,
+          "p95": 2.551800000000185,
+          "p99": 2.9108000000001084
+        },
+        "readback": {
+          "count": 600,
+          "p50": 0.10529999999994288,
+          "p95": 0.17229999999995016,
+          "p99": 0.347700000000259
+        },
+        "bus": {
+          "count": 600,
+          "p50": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "trackerAndComposition": {
+          "count": 600,
+          "p50": 0.136000000000422,
+          "p95": 0.2075999999999567,
+          "p99": 0.36950000000024374
+        },
+        "observerCapture": {
+          "count": 0,
+          "p50": null,
+          "p95": null,
+          "p99": null
+        }
+      },
+      "heapBeforeBytes": 18516872,
+      "heapAfterBytes": 9739440,
+      "forcedGc": true,
+      "disposed": {
+        "body": {
+          "entities": 0,
+          "subscriptions": 0
+        },
+        "collision": {
+          "vehicles": 0,
+          "obstacles": 0,
+          "colliders": 0,
+          "disposed": true
+        },
+        "adapter": {
+          "trackedPairs": 0,
+          "activePairs": 0,
+          "pending": 0,
+          "lastTick": 699,
+          "worldEpoch": 1,
+          "disposed": true,
+          "lastPhysicsTick": 699,
+          "physicsStepSerial": 700,
+          "preparedTick": null,
+          "faulted": false
+        },
+        "bus": {
+          "sessionId": "028-probe-0-false-true",
+          "worldEpoch": 1,
+          "watermarkTick": 365,
+          "retainedEvents": 0,
+          "retainedCodeUnits": 0,
+          "listeners": 0,
+          "disposed": true
+        }
+      },
+      "disposedReadRejected": true
+    },
+    {
+      "repetition": 0,
+      "observe": true,
+      "dense": false,
+      "counts": {
+        "vehicles": 70,
+        "bodies": 134,
+        "colliders": 138
+      },
+      "checksum": 441321,
+      "maxContacts": 721,
+      "mappedContacts": 35700,
+      "maxMappedContacts": 60,
+      "emitted": 61,
+      "received": 61,
+      "impulseSumNs": 13088708.38289482,
+      "elapsedWallMs": 1132.2837999999997,
+      "metrics": {
+        "query": {
+          "count": 600,
+          "p50": 0.20580000000018117,
+          "p95": 0.35760000000027503,
+          "p99": 0.5153000000000247
+        },
+        "stepAndQuery": {
+          "count": 600,
+          "p50": 1.4471999999996115,
+          "p95": 1.9100000000003092,
+          "p99": 2.1900000000000546
+        },
+        "pipeline": {
+          "count": 600,
+          "p50": 1.6698999999998705,
+          "p95": 2.2216000000003078,
+          "p99": 2.521600000000035
+        },
+        "readback": {
+          "count": 600,
+          "p50": 0.08010000000012951,
+          "p95": 0.13940000000002328,
+          "p99": 0.3106999999999971
+        },
+        "bus": {
+          "count": 600,
+          "p50": 0,
+          "p95": 0,
+          "p99": 0.0363999999999578
+        },
+        "trackerAndComposition": {
+          "count": 600,
+          "p50": 0.12330000000019936,
+          "p95": 0.1900999999998021,
+          "p99": 0.37150000000019645
+        },
+        "observerCapture": {
+          "count": 600,
+          "p50": 0.21030000000018845,
+          "p95": 0.3546000000001186,
+          "p99": 0.5709999999999127
+        }
+      },
+      "heapBeforeBytes": 9292752,
+      "heapAfterBytes": 9869496,
+      "forcedGc": true,
+      "disposed": {
+        "body": {
+          "entities": 0,
+          "subscriptions": 0
+        },
+        "collision": {
+          "vehicles": 0,
+          "obstacles": 0,
+          "colliders": 0,
+          "disposed": true
+        },
+        "adapter": {
+          "trackedPairs": 0,
+          "activePairs": 0,
+          "pending": 0,
+          "lastTick": 699,
+          "worldEpoch": 1,
+          "disposed": true,
+          "lastPhysicsTick": 699,
+          "physicsStepSerial": 700,
+          "preparedTick": null,
+          "faulted": false
+        },
+        "bus": {
+          "sessionId": "028-probe-0-true-false",
+          "worldEpoch": 1,
+          "watermarkTick": 177,
+          "retainedEvents": 0,
+          "retainedCodeUnits": 0,
+          "listeners": 0,
+          "disposed": true
+        }
+      },
+      "disposedReadRejected": true
+    },
+    {
+      "repetition": 0,
+      "observe": true,
+      "dense": true,
+      "counts": {
+        "vehicles": 110,
+        "bodies": 174,
+        "colliders": 178
+      },
+      "checksum": 543906,
+      "maxContacts": 828,
+      "mappedContacts": 46273,
+      "maxMappedContacts": 74,
+      "emitted": 83,
+      "received": 83,
+      "impulseSumNs": 17486606.533990253,
+      "elapsedWallMs": 1364.4462000000003,
+      "metrics": {
+        "query": {
+          "count": 600,
+          "p50": 0.20119999999951688,
+          "p95": 0.3132999999997992,
+          "p99": 0.5644000000002052
+        },
+        "stepAndQuery": {
+          "count": 600,
+          "p50": 1.6751000000003842,
+          "p95": 2.1644999999998618,
+          "p99": 2.3580999999994674
+        },
+        "pipeline": {
+          "count": 600,
+          "p50": 1.9528000000000247,
+          "p95": 2.523599999999533,
+          "p99": 2.771600000000035
+        },
+        "readback": {
+          "count": 600,
+          "p50": 0.11659999999938009,
+          "p95": 0.18220000000019354,
+          "p99": 0.40540000000055443
+        },
+        "bus": {
+          "count": 600,
+          "p50": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "trackerAndComposition": {
+          "count": 600,
+          "p50": 0.14509999999972933,
+          "p95": 0.21770000000014988,
+          "p99": 0.3896999999997206
+        },
+        "observerCapture": {
+          "count": 600,
+          "p50": 0.2662000000000262,
+          "p95": 0.4481000000005224,
+          "p99": 0.5927000000001499
+        }
+      },
+      "heapBeforeBytes": 9452048,
+      "heapAfterBytes": 9920184,
+      "forcedGc": true,
+      "disposed": {
+        "body": {
+          "entities": 0,
+          "subscriptions": 0
+        },
+        "collision": {
+          "vehicles": 0,
+          "obstacles": 0,
+          "colliders": 0,
+          "disposed": true
+        },
+        "adapter": {
+          "trackedPairs": 0,
+          "activePairs": 0,
+          "pending": 0,
+          "lastTick": 699,
+          "worldEpoch": 1,
+          "disposed": true,
+          "lastPhysicsTick": 699,
+          "physicsStepSerial": 700,
+          "preparedTick": null,
+          "faulted": false
+        },
+        "bus": {
+          "sessionId": "028-probe-0-true-true",
+          "worldEpoch": 1,
+          "watermarkTick": 365,
+          "retainedEvents": 0,
+          "retainedCodeUnits": 0,
+          "listeners": 0,
+          "disposed": true
+        }
+      },
+      "disposedReadRejected": true
+    },
+    {
+      "repetition": 1,
+      "observe": true,
+      "dense": false,
+      "counts": {
+        "vehicles": 70,
+        "bodies": 134,
+        "colliders": 138
+      },
+      "checksum": 441321,
+      "maxContacts": 721,
+      "mappedContacts": 35700,
+      "maxMappedContacts": 60,
+      "emitted": 61,
+      "received": 61,
+      "impulseSumNs": 13088708.38289482,
+      "elapsedWallMs": 1135.4674000000005,
+      "metrics": {
+        "query": {
+          "count": 600,
+          "p50": 0.1929999999993015,
+          "p95": 0.31790000000000873,
+          "p99": 0.5214999999998327
+        },
+        "stepAndQuery": {
+          "count": 600,
+          "p50": 1.4420000000000073,
+          "p95": 1.9425000000001091,
+          "p99": 2.3202000000001135
+        },
+        "pipeline": {
+          "count": 600,
+          "p50": 1.6503999999995358,
+          "p95": 2.264100000000326,
+          "p99": 2.694800000000214
+        },
+        "readback": {
+          "count": 600,
+          "p50": 0.07800000000042928,
+          "p95": 0.1342000000004191,
+          "p99": 0.3526000000001659
+        },
+        "bus": {
+          "count": 600,
+          "p50": 0,
+          "p95": 0,
+          "p99": 0.030600000000049477
+        },
+        "trackerAndComposition": {
+          "count": 600,
+          "p50": 0.11149999999997817,
+          "p95": 0.18000000000029104,
+          "p99": 0.39829999999983556
+        },
+        "observerCapture": {
+          "count": 600,
+          "p50": 0.1912000000002081,
+          "p95": 0.3258000000005268,
+          "p99": 0.5218000000004395
+        }
+      },
+      "heapBeforeBytes": 9279792,
+      "heapAfterBytes": 9915272,
+      "forcedGc": true,
+      "disposed": {
+        "body": {
+          "entities": 0,
+          "subscriptions": 0
+        },
+        "collision": {
+          "vehicles": 0,
+          "obstacles": 0,
+          "colliders": 0,
+          "disposed": true
+        },
+        "adapter": {
+          "trackedPairs": 0,
+          "activePairs": 0,
+          "pending": 0,
+          "lastTick": 699,
+          "worldEpoch": 1,
+          "disposed": true,
+          "lastPhysicsTick": 699,
+          "physicsStepSerial": 700,
+          "preparedTick": null,
+          "faulted": false
+        },
+        "bus": {
+          "sessionId": "028-probe-1-true-false",
+          "worldEpoch": 1,
+          "watermarkTick": 177,
+          "retainedEvents": 0,
+          "retainedCodeUnits": 0,
+          "listeners": 0,
+          "disposed": true
+        }
+      },
+      "disposedReadRejected": true
+    },
+    {
+      "repetition": 1,
+      "observe": true,
+      "dense": true,
+      "counts": {
+        "vehicles": 110,
+        "bodies": 174,
+        "colliders": 178
+      },
+      "checksum": 543906,
+      "maxContacts": 828,
+      "mappedContacts": 46273,
+      "maxMappedContacts": 74,
+      "emitted": 83,
+      "received": 83,
+      "impulseSumNs": 17486606.533990253,
+      "elapsedWallMs": 1324.0862000000006,
+      "metrics": {
+        "query": {
+          "count": 600,
+          "p50": 0.16609999999946012,
+          "p95": 0.3125999999992928,
+          "p99": 0.525300000000243
+        },
+        "stepAndQuery": {
+          "count": 600,
+          "p50": 1.4921999999996842,
+          "p95": 2.210900000000038,
+          "p99": 2.413499999999658
+        },
+        "pipeline": {
+          "count": 600,
+          "p50": 1.728700000000572,
+          "p95": 2.5505999999995765,
+          "p99": 2.8005999999995765
+        },
+        "readback": {
+          "count": 600,
+          "p50": 0.09519999999974971,
+          "p95": 0.16240000000016153,
+          "p99": 0.2294000000001688
+        },
+        "bus": {
+          "count": 600,
+          "p50": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "trackerAndComposition": {
+          "count": 600,
+          "p50": 0.12039999999979045,
+          "p95": 0.1967000000004191,
+          "p99": 0.2673000000004322
+        },
+        "observerCapture": {
+          "count": 600,
+          "p50": 0.21750000000065484,
+          "p95": 0.36049999999977445,
+          "p99": 0.48799999999937427
+        }
+      },
+      "heapBeforeBytes": 9492656,
+      "heapAfterBytes": 9994384,
+      "forcedGc": true,
+      "disposed": {
+        "body": {
+          "entities": 0,
+          "subscriptions": 0
+        },
+        "collision": {
+          "vehicles": 0,
+          "obstacles": 0,
+          "colliders": 0,
+          "disposed": true
+        },
+        "adapter": {
+          "trackedPairs": 0,
+          "activePairs": 0,
+          "pending": 0,
+          "lastTick": 699,
+          "worldEpoch": 1,
+          "disposed": true,
+          "lastPhysicsTick": 699,
+          "physicsStepSerial": 700,
+          "preparedTick": null,
+          "faulted": false
+        },
+        "bus": {
+          "sessionId": "028-probe-1-true-true",
+          "worldEpoch": 1,
+          "watermarkTick": 365,
+          "retainedEvents": 0,
+          "retainedCodeUnits": 0,
+          "listeners": 0,
+          "disposed": true
+        }
+      },
+      "disposedReadRejected": true
+    },
+    {
+      "repetition": 1,
+      "observe": false,
+      "dense": false,
+      "counts": {
+        "vehicles": 70,
+        "bodies": 134,
+        "colliders": 138
+      },
+      "checksum": 441321,
+      "maxContacts": 721,
+      "mappedContacts": 35700,
+      "maxMappedContacts": 60,
+      "emitted": 61,
+      "received": 61,
+      "impulseSumNs": 13088708.38289482,
+      "elapsedWallMs": 1079.5038000000004,
+      "metrics": {
+        "query": {
+          "count": 600,
+          "p50": 0.17479999999886786,
+          "p95": 0.3220999999994092,
+          "p99": 0.48849999999947613
+        },
+        "stepAndQuery": {
+          "count": 600,
+          "p50": 1.358299999999872,
+          "p95": 1.8944999999985157,
+          "p99": 1.9909999999999854
+        },
+        "pipeline": {
+          "count": 600,
+          "p50": 1.564300000000003,
+          "p95": 2.155899999999747,
+          "p99": 2.2806000000000495
+        },
+        "readback": {
+          "count": 600,
+          "p50": 0.07300000000032014,
+          "p95": 0.12519999999858555,
+          "p99": 0.1710000000002765
+        },
+        "bus": {
+          "count": 600,
+          "p50": 0,
+          "p95": 0,
+          "p99": 0.02780000000166183
+        },
+        "trackerAndComposition": {
+          "count": 600,
+          "p50": 0.10780000000158907,
+          "p95": 0.1643000000021857,
+          "p99": 0.19830000000183645
+        },
+        "observerCapture": {
+          "count": 0,
+          "p50": null,
+          "p95": null,
+          "p99": null
+        }
+      },
+      "heapBeforeBytes": 9314472,
+      "heapAfterBytes": 9784112,
+      "forcedGc": true,
+      "disposed": {
+        "body": {
+          "entities": 0,
+          "subscriptions": 0
+        },
+        "collision": {
+          "vehicles": 0,
+          "obstacles": 0,
+          "colliders": 0,
+          "disposed": true
+        },
+        "adapter": {
+          "trackedPairs": 0,
+          "activePairs": 0,
+          "pending": 0,
+          "lastTick": 699,
+          "worldEpoch": 1,
+          "disposed": true,
+          "lastPhysicsTick": 699,
+          "physicsStepSerial": 700,
+          "preparedTick": null,
+          "faulted": false
+        },
+        "bus": {
+          "sessionId": "028-probe-1-false-false",
+          "worldEpoch": 1,
+          "watermarkTick": 177,
+          "retainedEvents": 0,
+          "retainedCodeUnits": 0,
+          "listeners": 0,
+          "disposed": true
+        }
+      },
+      "disposedReadRejected": true
+    },
+    {
+      "repetition": 1,
+      "observe": false,
+      "dense": true,
+      "counts": {
+        "vehicles": 110,
+        "bodies": 174,
+        "colliders": 178
+      },
+      "checksum": 543906,
+      "maxContacts": 828,
+      "mappedContacts": 46273,
+      "maxMappedContacts": 74,
+      "emitted": 83,
+      "received": 83,
+      "impulseSumNs": 17486606.533990253,
+      "elapsedWallMs": 1361.4992000000002,
+      "metrics": {
+        "query": {
+          "count": 600,
+          "p50": 0.1870999999991909,
+          "p95": 0.29019999999945867,
+          "p99": 0.5069999999996071
+        },
+        "stepAndQuery": {
+          "count": 600,
+          "p50": 1.6167999999997846,
+          "p95": 2.205200000000332,
+          "p99": 2.7686999999987165
+        },
+        "pipeline": {
+          "count": 600,
+          "p50": 1.8841999999986,
+          "p95": 2.5318000000006577,
+          "p99": 3.058099999998376
+        },
+        "readback": {
+          "count": 600,
+          "p50": 0.10419999999976426,
+          "p95": 0.16649999999935972,
+          "p99": 0.2723999999998341
+        },
+        "bus": {
+          "count": 600,
+          "p50": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "trackerAndComposition": {
+          "count": 600,
+          "p50": 0.13580000000001746,
+          "p95": 0.19829999999819847,
+          "p99": 0.34729999999944994
+        },
+        "observerCapture": {
+          "count": 0,
+          "p50": null,
+          "p95": null,
+          "p99": null
+        }
+      },
+      "heapBeforeBytes": 9383400,
+      "heapAfterBytes": 9871440,
+      "forcedGc": true,
+      "disposed": {
+        "body": {
+          "entities": 0,
+          "subscriptions": 0
+        },
+        "collision": {
+          "vehicles": 0,
+          "obstacles": 0,
+          "colliders": 0,
+          "disposed": true
+        },
+        "adapter": {
+          "trackedPairs": 0,
+          "activePairs": 0,
+          "pending": 0,
+          "lastTick": 699,
+          "worldEpoch": 1,
+          "disposed": true,
+          "lastPhysicsTick": 699,
+          "physicsStepSerial": 700,
+          "preparedTick": null,
+          "faulted": false
+        },
+        "bus": {
+          "sessionId": "028-probe-1-false-true",
+          "worldEpoch": 1,
+          "watermarkTick": 365,
+          "retainedEvents": 0,
+          "retainedCodeUnits": 0,
+          "listeners": 0,
+          "disposed": true
+        }
+      },
+      "disposedReadRejected": true
+    },
+    {
+      "repetition": 2,
+      "observe": false,
+      "dense": false,
+      "counts": {
+        "vehicles": 70,
+        "bodies": 134,
+        "colliders": 138
+      },
+      "checksum": 441321,
+      "maxContacts": 721,
+      "mappedContacts": 35700,
+      "maxMappedContacts": 60,
+      "emitted": 61,
+      "received": 61,
+      "impulseSumNs": 13088708.38289482,
+      "elapsedWallMs": 1098.0836,
+      "metrics": {
+        "query": {
+          "count": 600,
+          "p50": 0.17919999999867287,
+          "p95": 0.30420000000049185,
+          "p99": 0.47890000000006694
+        },
+        "stepAndQuery": {
+          "count": 600,
+          "p50": 1.4005999999990308,
+          "p95": 1.911999999998443,
+          "p99": 2.290399999999863
+        },
+        "pipeline": {
+          "count": 600,
+          "p50": 1.5902999999998428,
+          "p95": 2.22400000000016,
+          "p99": 2.6794000000008964
+        },
+        "readback": {
+          "count": 600,
+          "p50": 0.07090000000061991,
+          "p95": 0.12490000000070722,
+          "p99": 0.200699999999415
+        },
+        "bus": {
+          "count": 600,
+          "p50": 0,
+          "p95": 0,
+          "p99": 0.0290000000022701
+        },
+        "trackerAndComposition": {
+          "count": 600,
+          "p50": 0.10690000000067812,
+          "p95": 0.174300000000585,
+          "p99": 0.3220999999994092
+        },
+        "observerCapture": {
+          "count": 0,
+          "p50": null,
+          "p95": null,
+          "p99": null
+        }
+      },
+      "heapBeforeBytes": 9559720,
+      "heapAfterBytes": 10065488,
+      "forcedGc": true,
+      "disposed": {
+        "body": {
+          "entities": 0,
+          "subscriptions": 0
+        },
+        "collision": {
+          "vehicles": 0,
+          "obstacles": 0,
+          "colliders": 0,
+          "disposed": true
+        },
+        "adapter": {
+          "trackedPairs": 0,
+          "activePairs": 0,
+          "pending": 0,
+          "lastTick": 699,
+          "worldEpoch": 1,
+          "disposed": true,
+          "lastPhysicsTick": 699,
+          "physicsStepSerial": 700,
+          "preparedTick": null,
+          "faulted": false
+        },
+        "bus": {
+          "sessionId": "028-probe-2-false-false",
+          "worldEpoch": 1,
+          "watermarkTick": 177,
+          "retainedEvents": 0,
+          "retainedCodeUnits": 0,
+          "listeners": 0,
+          "disposed": true
+        }
+      },
+      "disposedReadRejected": true
+    },
+    {
+      "repetition": 2,
+      "observe": false,
+      "dense": true,
+      "counts": {
+        "vehicles": 110,
+        "bodies": 174,
+        "colliders": 178
+      },
+      "checksum": 543906,
+      "maxContacts": 828,
+      "mappedContacts": 46273,
+      "maxMappedContacts": 74,
+      "emitted": 83,
+      "received": 83,
+      "impulseSumNs": 17486606.533990253,
+      "elapsedWallMs": 1340.944599999999,
+      "metrics": {
+        "query": {
+          "count": 600,
+          "p50": 0.17970000000059372,
+          "p95": 0.30090000000018335,
+          "p99": 0.4164999999993597
+        },
+        "stepAndQuery": {
+          "count": 600,
+          "p50": 1.586699999999837,
+          "p95": 2.13169999999991,
+          "p99": 2.305900000001202
+        },
+        "pipeline": {
+          "count": 600,
+          "p50": 1.8536999999996624,
+          "p95": 2.4377000000004045,
+          "p99": 2.674199999999473
+        },
+        "readback": {
+          "count": 600,
+          "p50": 0.10100000000056752,
+          "p95": 0.1702000000004773,
+          "p99": 0.35390000000006694
+        },
+        "bus": {
+          "count": 600,
+          "p50": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "trackerAndComposition": {
+          "count": 600,
+          "p50": 0.12729999999828578,
+          "p95": 0.19980000000032305,
+          "p99": 0.3786000000000058
+        },
+        "observerCapture": {
+          "count": 0,
+          "p50": null,
+          "p95": null,
+          "p99": null
+        }
+      },
+      "heapBeforeBytes": 9527000,
+      "heapAfterBytes": 9954216,
+      "forcedGc": true,
+      "disposed": {
+        "body": {
+          "entities": 0,
+          "subscriptions": 0
+        },
+        "collision": {
+          "vehicles": 0,
+          "obstacles": 0,
+          "colliders": 0,
+          "disposed": true
+        },
+        "adapter": {
+          "trackedPairs": 0,
+          "activePairs": 0,
+          "pending": 0,
+          "lastTick": 699,
+          "worldEpoch": 1,
+          "disposed": true,
+          "lastPhysicsTick": 699,
+          "physicsStepSerial": 700,
+          "preparedTick": null,
+          "faulted": false
+        },
+        "bus": {
+          "sessionId": "028-probe-2-false-true",
+          "worldEpoch": 1,
+          "watermarkTick": 365,
+          "retainedEvents": 0,
+          "retainedCodeUnits": 0,
+          "listeners": 0,
+          "disposed": true
+        }
+      },
+      "disposedReadRejected": true
+    },
+    {
+      "repetition": 2,
+      "observe": true,
+      "dense": false,
+      "counts": {
+        "vehicles": 70,
+        "bodies": 134,
+        "colliders": 138
+      },
+      "checksum": 441321,
+      "maxContacts": 721,
+      "mappedContacts": 35700,
+      "maxMappedContacts": 60,
+      "emitted": 61,
+      "received": 61,
+      "impulseSumNs": 13088708.38289482,
+      "elapsedWallMs": 1054.0293999999994,
+      "metrics": {
+        "query": {
+          "count": 600,
+          "p50": 0.16669999999976426,
+          "p95": 0.3091999999996915,
+          "p99": 0.42870000000039
+        },
+        "stepAndQuery": {
+          "count": 600,
+          "p50": 1.2986000000000786,
+          "p95": 1.83009999999922,
+          "p99": 1.9917999999997846
+        },
+        "pipeline": {
+          "count": 600,
+          "p50": 1.4976999999998952,
+          "p95": 2.101200000000972,
+          "p99": 2.305899999999383
+        },
+        "readback": {
+          "count": 600,
+          "p50": 0.07109999999920547,
+          "p95": 0.13210000000071886,
+          "p99": 0.3127999999996973
+        },
+        "bus": {
+          "count": 600,
+          "p50": 0,
+          "p95": 0,
+          "p99": 0.03540000000066357
+        },
+        "trackerAndComposition": {
+          "count": 600,
+          "p50": 0.10049999999864667,
+          "p95": 0.15760000000045693,
+          "p99": 0.1985999999978958
+        },
+        "observerCapture": {
+          "count": 600,
+          "p50": 0.17509999999856518,
+          "p95": 0.29390000000057626,
+          "p99": 0.49359999999978754
+        }
+      },
+      "heapBeforeBytes": 9512064,
+      "heapAfterBytes": 10132928,
+      "forcedGc": true,
+      "disposed": {
+        "body": {
+          "entities": 0,
+          "subscriptions": 0
+        },
+        "collision": {
+          "vehicles": 0,
+          "obstacles": 0,
+          "colliders": 0,
+          "disposed": true
+        },
+        "adapter": {
+          "trackedPairs": 0,
+          "activePairs": 0,
+          "pending": 0,
+          "lastTick": 699,
+          "worldEpoch": 1,
+          "disposed": true,
+          "lastPhysicsTick": 699,
+          "physicsStepSerial": 700,
+          "preparedTick": null,
+          "faulted": false
+        },
+        "bus": {
+          "sessionId": "028-probe-2-true-false",
+          "worldEpoch": 1,
+          "watermarkTick": 177,
+          "retainedEvents": 0,
+          "retainedCodeUnits": 0,
+          "listeners": 0,
+          "disposed": true
+        }
+      },
+      "disposedReadRejected": true
+    },
+    {
+      "repetition": 2,
+      "observe": true,
+      "dense": true,
+      "counts": {
+        "vehicles": 110,
+        "bodies": 174,
+        "colliders": 178
+      },
+      "checksum": 543906,
+      "maxContacts": 828,
+      "mappedContacts": 46273,
+      "maxMappedContacts": 74,
+      "emitted": 83,
+      "received": 83,
+      "impulseSumNs": 17486606.533990253,
+      "elapsedWallMs": 1323.1416000000008,
+      "metrics": {
+        "query": {
+          "count": 600,
+          "p50": 0.17119999999886204,
+          "p95": 0.3419000000012602,
+          "p99": 0.5331999999998516
+        },
+        "stepAndQuery": {
+          "count": 600,
+          "p50": 1.530399999999645,
+          "p95": 2.20430000000124,
+          "p99": 2.595999999999549
+        },
+        "pipeline": {
+          "count": 600,
+          "p50": 1.7652999999991152,
+          "p95": 2.5460999999995693,
+          "p99": 3.0318999999999505
+        },
+        "readback": {
+          "count": 600,
+          "p50": 0.09439999999995052,
+          "p95": 0.17439999999987776,
+          "p99": 0.3371999999999389
+        },
+        "bus": {
+          "count": 600,
+          "p50": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "trackerAndComposition": {
+          "count": 600,
+          "p50": 0.12119999999958964,
+          "p95": 0.19849999999860302,
+          "p99": 0.29130000000077416
+        },
+        "observerCapture": {
+          "count": 600,
+          "p50": 0.21850000000085856,
+          "p95": 0.3724999999994907,
+          "p99": 0.5041000000001077
+        }
+      },
+      "heapBeforeBytes": 9692112,
+      "heapAfterBytes": 10194864,
+      "forcedGc": true,
+      "disposed": {
+        "body": {
+          "entities": 0,
+          "subscriptions": 0
+        },
+        "collision": {
+          "vehicles": 0,
+          "obstacles": 0,
+          "colliders": 0,
+          "disposed": true
+        },
+        "adapter": {
+          "trackedPairs": 0,
+          "activePairs": 0,
+          "pending": 0,
+          "lastTick": 699,
+          "worldEpoch": 1,
+          "disposed": true,
+          "lastPhysicsTick": 699,
+          "physicsStepSerial": 700,
+          "preparedTick": null,
+          "faulted": false
+        },
+        "bus": {
+          "sessionId": "028-probe-2-true-true",
+          "worldEpoch": 1,
+          "watermarkTick": 365,
+          "retainedEvents": 0,
+          "retainedCodeUnits": 0,
+          "listeners": 0,
+          "disposed": true
+        }
+      },
+      "disposedReadRejected": true
+    },
+    {
+      "repetition": 3,
+      "observe": true,
+      "dense": false,
+      "counts": {
+        "vehicles": 70,
+        "bodies": 134,
+        "colliders": 138
+      },
+      "checksum": 441321,
+      "maxContacts": 721,
+      "mappedContacts": 35700,
+      "maxMappedContacts": 60,
+      "emitted": 61,
+      "received": 61,
+      "impulseSumNs": 13088708.38289482,
+      "elapsedWallMs": 1166.246799999999,
+      "metrics": {
+        "query": {
+          "count": 600,
+          "p50": 0.2011000000002241,
+          "p95": 0.3214000000007218,
+          "p99": 0.5447999999996682
+        },
+        "stepAndQuery": {
+          "count": 600,
+          "p50": 1.4829999999965366,
+          "p95": 2.085799999998926,
+          "p99": 2.5491000000001804
+        },
+        "pipeline": {
+          "count": 600,
+          "p50": 1.7030000000013388,
+          "p95": 2.3950000000004366,
+          "p99": 3.086800000000949
+        },
+        "readback": {
+          "count": 600,
+          "p50": 0.08860000000277068,
+          "p95": 0.13869999999951688,
+          "p99": 0.20999999999912689
+        },
+        "bus": {
+          "count": 600,
+          "p50": 0,
+          "p95": 0,
+          "p99": 0.030599999998230487
+        },
+        "trackerAndComposition": {
+          "count": 600,
+          "p50": 0.11620000000038999,
+          "p95": 0.18480000000090513,
+          "p99": 0.2705999999998312
+        },
+        "observerCapture": {
+          "count": 600,
+          "p50": 0.20859999999993306,
+          "p95": 0.3305999999993219,
+          "p99": 0.5093000000015309
+        }
+      },
+      "heapBeforeBytes": 9506464,
+      "heapAfterBytes": 10072016,
+      "forcedGc": true,
+      "disposed": {
+        "body": {
+          "entities": 0,
+          "subscriptions": 0
+        },
+        "collision": {
+          "vehicles": 0,
+          "obstacles": 0,
+          "colliders": 0,
+          "disposed": true
+        },
+        "adapter": {
+          "trackedPairs": 0,
+          "activePairs": 0,
+          "pending": 0,
+          "lastTick": 699,
+          "worldEpoch": 1,
+          "disposed": true,
+          "lastPhysicsTick": 699,
+          "physicsStepSerial": 700,
+          "preparedTick": null,
+          "faulted": false
+        },
+        "bus": {
+          "sessionId": "028-probe-3-true-false",
+          "worldEpoch": 1,
+          "watermarkTick": 177,
+          "retainedEvents": 0,
+          "retainedCodeUnits": 0,
+          "listeners": 0,
+          "disposed": true
+        }
+      },
+      "disposedReadRejected": true
+    },
+    {
+      "repetition": 3,
+      "observe": true,
+      "dense": true,
+      "counts": {
+        "vehicles": 110,
+        "bodies": 174,
+        "colliders": 178
+      },
+      "checksum": 543906,
+      "maxContacts": 828,
+      "mappedContacts": 46273,
+      "maxMappedContacts": 74,
+      "emitted": 83,
+      "received": 83,
+      "impulseSumNs": 17486606.533990253,
+      "elapsedWallMs": 1542.1869000000006,
+      "metrics": {
+        "query": {
+          "count": 600,
+          "p50": 0.2540000000008149,
+          "p95": 0.3536000000021886,
+          "p99": 0.5812999999980093
+        },
+        "stepAndQuery": {
+          "count": 600,
+          "p50": 1.9485999999997148,
+          "p95": 2.4373000000014144,
+          "p99": 2.7391999999999825
+        },
+        "pipeline": {
+          "count": 600,
+          "p50": 2.2577999999994063,
+          "p95": 2.81079999999929,
+          "p99": 3.198099999997794
+        },
+        "readback": {
+          "count": 600,
+          "p50": 0.12989999999990687,
+          "p95": 0.19029999999838765,
+          "p99": 0.3585000000020955
+        },
+        "bus": {
+          "count": 600,
+          "p50": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "trackerAndComposition": {
+          "count": 600,
+          "p50": 0.1617000000042026,
+          "p95": 0.22290000000066357,
+          "p99": 0.27849999999671127
+        },
+        "observerCapture": {
+          "count": 600,
+          "p50": 0.29460000000108266,
+          "p95": 0.4261999999980617,
+          "p99": 0.5669999999990978
+        }
+      },
+      "heapBeforeBytes": 9579544,
+      "heapAfterBytes": 10156360,
+      "forcedGc": true,
+      "disposed": {
+        "body": {
+          "entities": 0,
+          "subscriptions": 0
+        },
+        "collision": {
+          "vehicles": 0,
+          "obstacles": 0,
+          "colliders": 0,
+          "disposed": true
+        },
+        "adapter": {
+          "trackedPairs": 0,
+          "activePairs": 0,
+          "pending": 0,
+          "lastTick": 699,
+          "worldEpoch": 1,
+          "disposed": true,
+          "lastPhysicsTick": 699,
+          "physicsStepSerial": 700,
+          "preparedTick": null,
+          "faulted": false
+        },
+        "bus": {
+          "sessionId": "028-probe-3-true-true",
+          "worldEpoch": 1,
+          "watermarkTick": 365,
+          "retainedEvents": 0,
+          "retainedCodeUnits": 0,
+          "listeners": 0,
+          "disposed": true
+        }
+      },
+      "disposedReadRejected": true
+    },
+    {
+      "repetition": 3,
+      "observe": false,
+      "dense": false,
+      "counts": {
+        "vehicles": 70,
+        "bodies": 134,
+        "colliders": 138
+      },
+      "checksum": 441321,
+      "maxContacts": 721,
+      "mappedContacts": 35700,
+      "maxMappedContacts": 60,
+      "emitted": 61,
+      "received": 61,
+      "impulseSumNs": 13088708.38289482,
+      "elapsedWallMs": 1450.5555000000022,
+      "metrics": {
+        "query": {
+          "count": 600,
+          "p50": 0.27660000000105356,
+          "p95": 0.40309999999954016,
+          "p99": 0.6091999999989639
+        },
+        "stepAndQuery": {
+          "count": 600,
+          "p50": 1.8562000000019907,
+          "p95": 2.465700000000652,
+          "p99": 2.9231999999974505
+        },
+        "pipeline": {
+          "count": 600,
+          "p50": 2.143899999999121,
+          "p95": 2.779500000000553,
+          "p99": 3.4108000000014727
+        },
+        "readback": {
+          "count": 600,
+          "p50": 0.11290000000008149,
+          "p95": 0.17309999999997672,
+          "p99": 0.2764999999999418
+        },
+        "bus": {
+          "count": 600,
+          "p50": 0,
+          "p95": 0,
+          "p99": 0.04170000000158325
+        },
+        "trackerAndComposition": {
+          "count": 600,
+          "p50": 0.15799999999944703,
+          "p95": 0.22520000000076834,
+          "p99": 0.31260000000474975
+        },
+        "observerCapture": {
+          "count": 0,
+          "p50": null,
+          "p95": null,
+          "p99": null
+        }
+      },
+      "heapBeforeBytes": 9663120,
+      "heapAfterBytes": 10116880,
+      "forcedGc": true,
+      "disposed": {
+        "body": {
+          "entities": 0,
+          "subscriptions": 0
+        },
+        "collision": {
+          "vehicles": 0,
+          "obstacles": 0,
+          "colliders": 0,
+          "disposed": true
+        },
+        "adapter": {
+          "trackedPairs": 0,
+          "activePairs": 0,
+          "pending": 0,
+          "lastTick": 699,
+          "worldEpoch": 1,
+          "disposed": true,
+          "lastPhysicsTick": 699,
+          "physicsStepSerial": 700,
+          "preparedTick": null,
+          "faulted": false
+        },
+        "bus": {
+          "sessionId": "028-probe-3-false-false",
+          "worldEpoch": 1,
+          "watermarkTick": 177,
+          "retainedEvents": 0,
+          "retainedCodeUnits": 0,
+          "listeners": 0,
+          "disposed": true
+        }
+      },
+      "disposedReadRejected": true
+    },
+    {
+      "repetition": 3,
+      "observe": false,
+      "dense": true,
+      "counts": {
+        "vehicles": 110,
+        "bodies": 174,
+        "colliders": 178
+      },
+      "checksum": 543906,
+      "maxContacts": 828,
+      "mappedContacts": 46273,
+      "maxMappedContacts": 74,
+      "emitted": 83,
+      "received": 83,
+      "impulseSumNs": 17486606.533990253,
+      "elapsedWallMs": 1657.9274000000005,
+      "metrics": {
+        "query": {
+          "count": 600,
+          "p50": 0.26600000000325963,
+          "p95": 0.3702999999986787,
+          "p99": 0.5540000000000873
+        },
+        "stepAndQuery": {
+          "count": 600,
+          "p50": 2.04229999999734,
+          "p95": 2.5724000000009255,
+          "p99": 3.154500000000553
+        },
+        "pipeline": {
+          "count": 600,
+          "p50": 2.362700000001496,
+          "p95": 2.964299999999639,
+          "p99": 3.675200000001496
+        },
+        "readback": {
+          "count": 600,
+          "p50": 0.13839999999981956,
+          "p95": 0.20750000000043656,
+          "p99": 0.30310000000099535
+        },
+        "bus": {
+          "count": 600,
+          "p50": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "trackerAndComposition": {
+          "count": 600,
+          "p50": 0.1691999999966356,
+          "p95": 0.24090000000069267,
+          "p99": 0.3629000000000815
+        },
+        "observerCapture": {
+          "count": 0,
+          "p50": null,
+          "p95": null,
+          "p99": null
+        }
+      },
+      "heapBeforeBytes": 9575424,
+      "heapAfterBytes": 10035376,
+      "forcedGc": true,
+      "disposed": {
+        "body": {
+          "entities": 0,
+          "subscriptions": 0
+        },
+        "collision": {
+          "vehicles": 0,
+          "obstacles": 0,
+          "colliders": 0,
+          "disposed": true
+        },
+        "adapter": {
+          "trackedPairs": 0,
+          "activePairs": 0,
+          "pending": 0,
+          "lastTick": 699,
+          "worldEpoch": 1,
+          "disposed": true,
+          "lastPhysicsTick": 699,
+          "physicsStepSerial": 700,
+          "preparedTick": null,
+          "faulted": false
+        },
+        "bus": {
+          "sessionId": "028-probe-3-false-true",
+          "worldEpoch": 1,
+          "watermarkTick": 365,
+          "retainedEvents": 0,
+          "retainedCodeUnits": 0,
+          "listeners": 0,
+          "disposed": true
+        }
+      },
+      "disposedReadRejected": true
+    },
+    {
+      "repetition": 4,
+      "observe": false,
+      "dense": false,
+      "counts": {
+        "vehicles": 70,
+        "bodies": 134,
+        "colliders": 138
+      },
+      "checksum": 441321,
+      "maxContacts": 721,
+      "mappedContacts": 35700,
+      "maxMappedContacts": 60,
+      "emitted": 61,
+      "received": 61,
+      "impulseSumNs": 13088708.38289482,
+      "elapsedWallMs": 1374.2407999999996,
+      "metrics": {
+        "query": {
+          "count": 600,
+          "p50": 0.2669000000023516,
+          "p95": 0.34649999999965075,
+          "p99": 0.6291000000019267
+        },
+        "stepAndQuery": {
+          "count": 600,
+          "p50": 1.8075000000026193,
+          "p95": 2.3417000000008557,
+          "p99": 2.7111000000004424
+        },
+        "pipeline": {
+          "count": 600,
+          "p50": 2.0649000000012165,
+          "p95": 2.651499999999942,
+          "p99": 3.0771999999997206
+        },
+        "readback": {
+          "count": 600,
+          "p50": 0.10900000000037835,
+          "p95": 0.14549999999871943,
+          "p99": 0.2809000000015658
+        },
+        "bus": {
+          "count": 600,
+          "p50": 0,
+          "p95": 0,
+          "p99": 0.03870000000097207
+        },
+        "trackerAndComposition": {
+          "count": 600,
+          "p50": 0.14120000000184518,
+          "p95": 0.1875,
+          "p99": 0.2448000000040338
+        },
+        "observerCapture": {
+          "count": 0,
+          "p50": null,
+          "p95": null,
+          "p99": null
+        }
+      },
+      "heapBeforeBytes": 9590992,
+      "heapAfterBytes": 10119112,
+      "forcedGc": true,
+      "disposed": {
+        "body": {
+          "entities": 0,
+          "subscriptions": 0
+        },
+        "collision": {
+          "vehicles": 0,
+          "obstacles": 0,
+          "colliders": 0,
+          "disposed": true
+        },
+        "adapter": {
+          "trackedPairs": 0,
+          "activePairs": 0,
+          "pending": 0,
+          "lastTick": 699,
+          "worldEpoch": 1,
+          "disposed": true,
+          "lastPhysicsTick": 699,
+          "physicsStepSerial": 700,
+          "preparedTick": null,
+          "faulted": false
+        },
+        "bus": {
+          "sessionId": "028-probe-4-false-false",
+          "worldEpoch": 1,
+          "watermarkTick": 177,
+          "retainedEvents": 0,
+          "retainedCodeUnits": 0,
+          "listeners": 0,
+          "disposed": true
+        }
+      },
+      "disposedReadRejected": true
+    },
+    {
+      "repetition": 4,
+      "observe": false,
+      "dense": true,
+      "counts": {
+        "vehicles": 110,
+        "bodies": 174,
+        "colliders": 178
+      },
+      "checksum": 543906,
+      "maxContacts": 828,
+      "mappedContacts": 46273,
+      "maxMappedContacts": 74,
+      "emitted": 83,
+      "received": 83,
+      "impulseSumNs": 17486606.533990253,
+      "elapsedWallMs": 1690.9945000000007,
+      "metrics": {
+        "query": {
+          "count": 600,
+          "p50": 0.26269999999931315,
+          "p95": 0.3452000000033877,
+          "p99": 0.4478999999992084
+        },
+        "stepAndQuery": {
+          "count": 600,
+          "p50": 2.054500000002008,
+          "p95": 2.5720000000001164,
+          "p99": 3.0007000000005064
+        },
+        "pipeline": {
+          "count": 600,
+          "p50": 2.377999999996973,
+          "p95": 2.976299999998446,
+          "p99": 3.456900000001042
+        },
+        "readback": {
+          "count": 600,
+          "p50": 0.14210000000093714,
+          "p95": 0.20390000000043074,
+          "p99": 0.30610000000160653
+        },
+        "bus": {
+          "count": 600,
+          "p50": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "trackerAndComposition": {
+          "count": 600,
+          "p50": 0.17309999999997672,
+          "p95": 0.23229999999966822,
+          "p99": 0.34950000000026193
+        },
+        "observerCapture": {
+          "count": 0,
+          "p50": null,
+          "p95": null,
+          "p99": null
+        }
+      },
+      "heapBeforeBytes": 9783720,
+      "heapAfterBytes": 10177392,
+      "forcedGc": true,
+      "disposed": {
+        "body": {
+          "entities": 0,
+          "subscriptions": 0
+        },
+        "collision": {
+          "vehicles": 0,
+          "obstacles": 0,
+          "colliders": 0,
+          "disposed": true
+        },
+        "adapter": {
+          "trackedPairs": 0,
+          "activePairs": 0,
+          "pending": 0,
+          "lastTick": 699,
+          "worldEpoch": 1,
+          "disposed": true,
+          "lastPhysicsTick": 699,
+          "physicsStepSerial": 700,
+          "preparedTick": null,
+          "faulted": false
+        },
+        "bus": {
+          "sessionId": "028-probe-4-false-true",
+          "worldEpoch": 1,
+          "watermarkTick": 365,
+          "retainedEvents": 0,
+          "retainedCodeUnits": 0,
+          "listeners": 0,
+          "disposed": true
+        }
+      },
+      "disposedReadRejected": true
+    },
+    {
+      "repetition": 4,
+      "observe": true,
+      "dense": false,
+      "counts": {
+        "vehicles": 70,
+        "bodies": 134,
+        "colliders": 138
+      },
+      "checksum": 441321,
+      "maxContacts": 721,
+      "mappedContacts": 35700,
+      "maxMappedContacts": 60,
+      "emitted": 61,
+      "received": 61,
+      "impulseSumNs": 13088708.38289482,
+      "elapsedWallMs": 1286.4359999999979,
+      "metrics": {
+        "query": {
+          "count": 600,
+          "p50": 0.260999999998603,
+          "p95": 0.31420000000071013,
+          "p99": 0.5401000000019849
+        },
+        "stepAndQuery": {
+          "count": 600,
+          "p50": 1.7551999999996042,
+          "p95": 1.99029999999766,
+          "p99": 2.477200000001176
+        },
+        "pipeline": {
+          "count": 600,
+          "p50": 1.998199999998178,
+          "p95": 2.314299999998184,
+          "p99": 2.815099999999802
+        },
+        "readback": {
+          "count": 600,
+          "p50": 0.10429999999905704,
+          "p95": 0.1297999999987951,
+          "p99": 0.19210000000020955
+        },
+        "bus": {
+          "count": 600,
+          "p50": 0,
+          "p95": 0,
+          "p99": 0.03410000000076252
+        },
+        "trackerAndComposition": {
+          "count": 600,
+          "p50": 0.13449999999647844,
+          "p95": 0.16809999999895808,
+          "p99": 0.26529999999911524
+        },
+        "observerCapture": {
+          "count": 600,
+          "p50": 0.24010000000271248,
+          "p95": 0.30380000000150176,
+          "p99": 0.4239000000015949
+        }
+      },
+      "heapBeforeBytes": 9581312,
+      "heapAfterBytes": 10162488,
+      "forcedGc": true,
+      "disposed": {
+        "body": {
+          "entities": 0,
+          "subscriptions": 0
+        },
+        "collision": {
+          "vehicles": 0,
+          "obstacles": 0,
+          "colliders": 0,
+          "disposed": true
+        },
+        "adapter": {
+          "trackedPairs": 0,
+          "activePairs": 0,
+          "pending": 0,
+          "lastTick": 699,
+          "worldEpoch": 1,
+          "disposed": true,
+          "lastPhysicsTick": 699,
+          "physicsStepSerial": 700,
+          "preparedTick": null,
+          "faulted": false
+        },
+        "bus": {
+          "sessionId": "028-probe-4-true-false",
+          "worldEpoch": 1,
+          "watermarkTick": 177,
+          "retainedEvents": 0,
+          "retainedCodeUnits": 0,
+          "listeners": 0,
+          "disposed": true
+        }
+      },
+      "disposedReadRejected": true
+    },
+    {
+      "repetition": 4,
+      "observe": true,
+      "dense": true,
+      "counts": {
+        "vehicles": 110,
+        "bodies": 174,
+        "colliders": 178
+      },
+      "checksum": 543906,
+      "maxContacts": 828,
+      "mappedContacts": 46273,
+      "maxMappedContacts": 74,
+      "emitted": 83,
+      "received": 83,
+      "impulseSumNs": 17486606.533990253,
+      "elapsedWallMs": 1621.2212999999974,
+      "metrics": {
+        "query": {
+          "count": 600,
+          "p50": 0.26050000000032014,
+          "p95": 0.32070000000021537,
+          "p99": 0.41050000000177533
+        },
+        "stepAndQuery": {
+          "count": 600,
+          "p50": 2.0317999999970198,
+          "p95": 2.4284000000006927,
+          "p99": 2.8031000000009954
+        },
+        "pipeline": {
+          "count": 600,
+          "p50": 2.3466000000007625,
+          "p95": 2.8149000000012165,
+          "p99": 3.259200000000419
+        },
+        "readback": {
+          "count": 600,
+          "p50": 0.13580000000001746,
+          "p95": 0.18539999999848078,
+          "p99": 0.23500000000058208
+        },
+        "bus": {
+          "count": 600,
+          "p50": 0,
+          "p95": 0,
+          "p99": 0
+        },
+        "trackerAndComposition": {
+          "count": 600,
+          "p50": 0.16639999999824795,
+          "p95": 0.22459999999773572,
+          "p99": 0.3892999999989115
+        },
+        "observerCapture": {
+          "count": 600,
+          "p50": 0.3037999999978638,
+          "p95": 0.42109999999956926,
+          "p99": 0.7113000000026659
+        }
+      },
+      "heapBeforeBytes": 9655352,
+      "heapAfterBytes": 10262728,
+      "forcedGc": true,
+      "disposed": {
+        "body": {
+          "entities": 0,
+          "subscriptions": 0
+        },
+        "collision": {
+          "vehicles": 0,
+          "obstacles": 0,
+          "colliders": 0,
+          "disposed": true
+        },
+        "adapter": {
+          "trackedPairs": 0,
+          "activePairs": 0,
+          "pending": 0,
+          "lastTick": 699,
+          "worldEpoch": 1,
+          "disposed": true,
+          "lastPhysicsTick": 699,
+          "physicsStepSerial": 700,
+          "preparedTick": null,
+          "faulted": false
+        },
+        "bus": {
+          "sessionId": "028-probe-4-true-true",
+          "worldEpoch": 1,
+          "watermarkTick": 365,
+          "retainedEvents": 0,
+          "retainedCodeUnits": 0,
+          "listeners": 0,
+          "disposed": true
+        }
+      },
+      "disposedReadRejected": true
+    }
+  ],
+  "medians": [
+    {
+      "observe": false,
+      "dense": false,
+      "metrics": {
+        "query": 0.34649999999965075,
+        "stepAndQuery": 2.023400000000038,
+        "pipeline": 2.373899999999935,
+        "readback": 0.14549999999871943,
+        "bus": 0,
+        "trackerAndComposition": 0.1875,
+        "observerCapture": null
+      }
+    },
+    {
+      "observe": false,
+      "dense": true,
+      "metrics": {
+        "query": 0.3259000000002743,
+        "stepAndQuery": 2.205200000000332,
+        "pipeline": 2.551800000000185,
+        "readback": 0.17229999999995016,
+        "bus": 0,
+        "trackerAndComposition": 0.2075999999999567,
+        "observerCapture": null
+      }
+    },
+    {
+      "observe": true,
+      "dense": false,
+      "metrics": {
+        "query": 0.31790000000000873,
+        "stepAndQuery": 1.9425000000001091,
+        "pipeline": 2.264100000000326,
+        "readback": 0.1342000000004191,
+        "bus": 0,
+        "trackerAndComposition": 0.18000000000029104,
+        "observerCapture": 0.3258000000005268
+      }
+    },
+    {
+      "observe": true,
+      "dense": true,
+      "metrics": {
+        "query": 0.32070000000021537,
+        "stepAndQuery": 2.210900000000038,
+        "pipeline": 2.5505999999995765,
+        "readback": 0.18220000000019354,
+        "bus": 0,
+        "trackerAndComposition": 0.21770000000014988,
+        "observerCapture": 0.42109999999956926
+      }
+    }
+  ],
+  "completedAt": "2026-10-05T14:02:19.865Z"
+}

@@ -109,6 +109,7 @@ test('rejects invalid, stale, foreign and late events without consuming capacity
 
 test('dedup is fail-closed at capacity; epoch invalidation rejects retired worlds', () => {
   const transport = bus(2);
+  assert.equal(transport.getStats().sessionId, context.sessionId);
   transport.publish(next('a'));
   transport.publish(next('b'));
   assert.throws(() => transport.publish(next('c')), /capacity/);
@@ -116,6 +117,7 @@ test('dedup is fail-closed at capacity; epoch invalidation rejects retired world
   assert.equal(transport.getStats().retainedEvents, 2);
   assert.throws(() => transport.advanceWorldEpoch(2), /increase/);
   transport.advanceWorldEpoch(3);
+  assert.equal(transport.getStats().sessionId, context.sessionId);
   assert.equal(transport.getStats().retainedEvents, 0);
   assert.throws(() => transport.publish(next('a')), /world/);
   assert.equal(transport.publish({ ...next('a', 0), worldEpoch: 3 }).status, 'delivered');
@@ -156,6 +158,7 @@ test('validated copies are immutable and owned; resources are capped and dispose
   assert.ok(transport.getStats().retainedCodeUnits <= 512);
   transport.dispose();
   transport.dispose();
+  assert.equal(transport.getStats().sessionId, context.sessionId);
   assert.equal(transport.getStats().retainedEvents, 0);
   assert.equal(transport.getStats().listeners, 0);
   assert.throws(() => transport.publish(event()), /disposed/);

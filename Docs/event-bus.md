@@ -20,6 +20,8 @@ La capacitate, evenimentele noi sunt respinse explicit înaintea efectelor; dupl
 
 ## Verificări și performanță
 
+Compoziția fizică028 verifică identitatea busului înainte de admiterea unui pas: `getStats()` expune și `sessionId` readonly, alături de epoch și disposed. Sesiunea rămâne aceeași după avansarea epoch-ului și disposal; aceste date permit respingerea unei compoziții străine înainte de efecte, fără publicarea unui eveniment de probă.
+
 `tests/events/event-bus.test.ts` verifică duplicate/retry după efect și eroare, conflicte de identitate, ordinea în tick, filtrare, unsubscribe imediat, înregistrare în timpul dispatchului, lumi/tick-uri invalide, reentrancy, copii defensive, plafoane și disposal. `scripts/benchmark-event-bus.mjs` se rulează cu loaderul TypeScript al proiectului; `--baseline` măsoară fixture-ul disponibil înainte de implementare. Fără flag măsoară același fixture și separat 10.000 de evenimente validate cu un listener. Cele cinci repetări păstrează durata totală, deliveries și contoarele înainte/după disposal.
 
 Artefactele sunt în `Docs/Evidence/007-event-bus`. Proba CPU Node nu măsoară p95 al tick-ului complet, FPS, GPU sau browser. Pragul de 5,5 ms pentru tick desktop din Docs/25 rămâne propunere înainte de 203; costul batchului nu îl închide. Proba scurtă nu înlocuiește benchmarkul steady-state al jocului sau gate-urile 218–224.

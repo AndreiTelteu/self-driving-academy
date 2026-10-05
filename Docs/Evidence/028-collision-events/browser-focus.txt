@@ -1,0 +1,11 @@
+npm warn Unknown env config "msvs-version". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+### Result
+{
+  "focused": true,
+  "visible": "visible",
+  "at": "2026-10-05T14:10:59.495Z"
+}
+### Ran Playwright code
+```js
+await page.evaluate('() => ((() => { if (!document.hasFocus() || document.visibilityState !== \'visible\') throw new Error(\'Foreground preflight failed\'); return {focused: document.hasFocus(), visible: document.visibilityState, at: new Date().toISOString()}; })())');
+```
