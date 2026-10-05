@@ -6,6 +6,8 @@ import type { BodyIdentity, BodyState } from '../body-port';
 import { PhysicsBodyRegistry } from '../body-registry';
 import { tractiveForceN, vehicleClass } from '../vehicle-classes';
 import type { VehicleClassId } from '../vehicle-classes';
+import { roadSurface } from '../road-surfaces';
+import type { RoadSurfaceId } from '../road-surfaces';
 import { COLLISION_LIMITS, CollisionRegistry } from '../collision-port';
 import type { CollisionContact, CollisionIdentity, CollisionBoxOptions } from '../collision-port';
 import { boolean, fields, number, record, requireContract } from '../../sessions';
@@ -24,7 +26,9 @@ function vector(v: PhysicsVector) {
 /** One world owns every admitted body; visibility/FPS cannot change solver, CCD or dt. */
 export async function createRapierProbe(
   clock: () => number = () => performance.now(),
+  surfaceId: RoadSurfaceId = 'dry-asphalt',
 ): Promise<PhysicsProbe> {
+  const surface = roadSurface(surfaceId);
   await (initialized ??= RAPIER.init());
   if (activeWorlds >= PHYSICS_CONFIG.worlds)
     throw new RangeError('Physics world admission capacity');
@@ -34,7 +38,9 @@ export async function createRapierProbe(
   world.numSolverIterations = PHYSICS_CONFIG.solverIterations;
   world.maxCcdSubsteps = PHYSICS_CONFIG.ccdSubsteps;
   const ground = world.createCollider(
-    RAPIER.ColliderDesc.cuboid(500, 0.5, 500).setTranslation(0, -0.5, 0).setFriction(0.8),
+    RAPIER.ColliderDesc.cuboid(500, 0.5, 500)
+      .setTranslation(0, -0.5, 0)
+      .setFriction(surface.groundFriction),
   );
   const cars = new Map<
     string,
@@ -82,16 +88,39 @@ export async function createRapierProbe(
   const snapshot = (id: string) => {
     const { body, controller } = car(id);
     const v = body.linvel();
+    const wheels = Object.freeze(
+      Array.from({ length: 4 }, (_, i) => {
+        const connection = controller.wheelChassisConnectionPointCs(i)!;
+        const length = controller.wheelSuspensionLength(i)!;
+        const inContact = controller.wheelIsInContact(i);
+        return Object.freeze({
+          wheelId: ['front-left', 'front-right', 'rear-left', 'rear-right'][i]!,
+          localPositionM: Object.freeze({
+            x: connection.x,
+            y: connection.y - length,
+            z: connection.z,
+          }),
+          radiusM: controller.wheelRadius(i)!,
+          spinRad: controller.wheelRotation(i)!,
+          steeringRad: controller.wheelSteering(i)!,
+          suspensionLengthM: length,
+          suspensionForceN: controller.wheelSuspensionForce(i)!,
+          inContact,
+          contactPointM: inContact ? Object.freeze(controller.wheelContactPoint(i)!) : null,
+          contactNormal: inContact ? Object.freeze(controller.wheelContactNormal(i)!) : null,
+        });
+      }),
+    );
     return Object.freeze({
       id,
       position: Object.freeze(body.translation()),
       rotation: Object.freeze(body.rotation()),
       velocity: Object.freeze(v),
+      angularVelocityRadps: Object.freeze(body.angvel()),
       speed: Math.hypot(v.x, v.z),
-      suspension: Object.freeze(
-        Array.from({ length: 4 }, (_, i) => controller.wheelSuspensionLength(i) ?? 0),
-      ),
-      wheelContacts: [0, 1, 2, 3].filter((i) => controller.wheelIsInContact(i)).length,
+      suspension: Object.freeze(wheels.map((wheel) => wheel.suspensionLengthM)),
+      wheelContacts: wheels.filter((wheel) => wheel.inContact).length,
+      wheels,
     });
   };
   const readBody = (identity: BodyIdentity): BodyState => {
@@ -235,7 +264,7 @@ export async function createRapierProbe(
             controller.setWheelSuspensionRelaxation(i, 5.2);
             controller.setWheelMaxSuspensionTravel(i, 0.2);
             controller.setWheelMaxSuspensionForce(i, config.massKg * 9.81);
-            controller.setWheelFrictionSlip(i, config.grip);
+            controller.setWheelFrictionSlip(i, config.grip * surface.tireGripScale);
             controller.setWheelSideFrictionStiffness(i, 1);
           }
         cars.set(id, {
@@ -283,6 +312,8 @@ export async function createRapierProbe(
         massKg: body.mass(),
         powerW: tuning.powerW ?? null,
         grip: controller.wheelFrictionSlip(0)!,
+        surface,
+        nativeGroundFriction: ground.friction(),
         brakeAccelerationMps2: tuning.brakeAcceleration,
         wheels,
         turningRadiusM: wheels.wheelbaseM / Math.tan(tuning.steeringRadians),

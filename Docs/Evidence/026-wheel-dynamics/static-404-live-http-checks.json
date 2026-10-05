@@ -1,0 +1,41 @@
+{
+  "checkedAt": "2026-10-05T19:16:23.257Z",
+  "purpose": "Actual missing favicon followed by legitimate static GET and invalid export; never hardware evidence",
+  "rows": [
+    {
+      "path": "/favicon.ico",
+      "method": "GET",
+      "status": 404,
+      "bytes": 14,
+      "reason": "File not found"
+    },
+    {
+      "path": "/",
+      "method": "GET",
+      "status": 200,
+      "bytes": 3793,
+      "reason": "Known file returned"
+    },
+    {
+      "path": "/export",
+      "method": "POST",
+      "status": 400,
+      "bytes": 23,
+      "reason": "Invalid report identity"
+    },
+    {
+      "path": "/build-manifest.json",
+      "method": "GET",
+      "status": 200,
+      "bytes": 27437,
+      "reason": "Known file returned"
+    },
+    {
+      "path": "/",
+      "method": "GET",
+      "status": 200,
+      "bytes": 3793,
+      "reason": "Known file returned"
+    }
+  ]
+}

@@ -1,0 +1,258 @@
+// Preparation only: run after the coordinator releases the PBI223 hardware lock.
+import { build } from 'vite';
+import { createServer } from 'node:http';
+import { readFile, readdir, stat, writeFile, mkdir, copyFile } from 'node:fs/promises';
+import { resolve, extname, sep, dirname, relative } from 'node:path';
+import { existsSync } from 'node:fs';
+import { createScanner, SyntaxKind } from 'typescript/unstable/ast';
+import { execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
+import { readEvidenceJson, EvidenceTransportError, writeImmutableEvidence } from './transport.mjs';
+
+const port = Number(process.argv[2] ?? 5197);
+if (!Number.isInteger(port) || port < 1024 || port > 65535) throw new Error('Invalid port');
+const root = resolve('.pbi-validation-026/build');
+// Follow actual local executable imports/re-exports, including public barrels.
+// Ignore type-only declarations: they cannot contribute bytes to this Vite build.
+const consumed = new Set();
+async function consume(path) {
+  const absolute = resolve(path);
+  if (consumed.has(absolute)) return;
+  consumed.add(absolute);
+  if (!['.ts', '.mjs', '.js'].includes(extname(absolute))) return;
+  const scanner = createScanner(true);
+  scanner.setText(await readFile(absolute, 'utf8'));
+  const tokens = [];
+  while (scanner.scan() !== SyntaxKind.EndOfFile)
+    tokens.push({
+      kind: scanner.getToken(),
+      text: scanner.getTokenText(),
+      value: scanner.getTokenValue(),
+    });
+  for (let index = 0; index < tokens.length; index++) {
+    const token = tokens[index];
+    if (
+      token.kind !== SyntaxKind.StringLiteral ||
+      !['from', 'import'].includes(tokens[index - 1]?.text)
+    )
+      continue;
+    let declarationStart = index - 1;
+    while (
+      declarationStart >= 0 &&
+      !['import', 'export', ';'].includes(tokens[declarationStart].text)
+    )
+      declarationStart--;
+    if (declarationStart < 0 || !['import', 'export'].includes(tokens[declarationStart].text))
+      continue;
+    const clause = tokens.slice(declarationStart + 1, index - 1).map((item) => item.text);
+    if (clause[0] === 'type') continue;
+    if (clause[0] === '{' && clause.at(-1) === '}') {
+      const elements = clause
+        .slice(1, -1)
+        .join(' ')
+        .split(',')
+        .map((element) => element.trim())
+        .filter(Boolean);
+      if (elements.length && elements.every((element) => /^type\s+(?!as\b)\S+/.test(element)))
+        continue;
+    }
+    const specifier = token.value;
+    if (!specifier.startsWith('.')) continue;
+    const target = resolve(dirname(absolute), specifier.split('?')[0]);
+    const candidate = [target, `${target}.ts`, resolve(target, 'index.ts')].find(
+      (item) => existsSync(item) && extname(item),
+    );
+    if (!candidate) throw new Error(`Unresolved consumed source: ${absolute}: ${specifier}`);
+    await consume(candidate);
+  }
+}
+await consume('tests/browser/wheel-dynamics/main.ts');
+await consume('tests/browser/wheel-dynamics/transport.mjs');
+const inputs = [
+  ...[...consumed].map((path) => relative(resolve('.'), path).replaceAll('\\', '/')),
+  'tests/browser/wheel-dynamics/index.html',
+  'tests/browser/wheel-dynamics/server.mjs',
+  'package.json',
+  'package-lock.json',
+  'Docs/performance-budgets.json',
+].sort();
+const hash = createHash('sha256');
+for (const input of inputs) hash.update(input).update(await readFile(input));
+const packages = JSON.parse(await readFile('package.json', 'utf8'));
+const budgets = JSON.parse(await readFile('Docs/performance-budgets.json', 'utf8'));
+const identity = {
+  commit: execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(),
+  sourceHash: hash.digest('hex'),
+  inputs,
+  budgetVersion: budgets.budgetVersion,
+  physicsVersion: packages.dependencies['@dimforge/rapier3d-compat'],
+  engineVersion: packages.dependencies['@babylonjs/core'],
+};
+const hardware = JSON.parse(
+  execFileSync(
+    'powershell.exe',
+    [
+      '-NoProfile',
+      '-Command',
+      `
+  [Console]::OutputEncoding = [Text.UTF8Encoding]::new($false)
+  $hardware026 = [ordered]@{
+    source = 'current CIM at fixture server startup'
+    capturedAt = (Get-Date -Format o)
+    cpu = @(Get-CimInstance Win32_Processor | Select-Object Name, NumberOfCores, NumberOfLogicalProcessors)
+    gpu = @(Get-CimInstance Win32_VideoController | Select-Object Name, DriverVersion, AdapterRAM, CurrentHorizontalResolution, CurrentVerticalResolution, CurrentRefreshRate)
+    memory = @(Get-CimInstance Win32_PhysicalMemory | Select-Object Capacity, Speed)
+    os = @(Get-CimInstance Win32_OperatingSystem | Select-Object Caption, Version, BuildNumber, TotalVisibleMemorySize)
+    battery = @(Get-CimInstance Win32_Battery | Select-Object BatteryStatus, EstimatedChargeRemaining)
+    powerScheme = (powercfg /getactivescheme | Out-String).Trim()
+  }
+  $hardware026 | ConvertTo-Json -Depth 6 -Compress
+`,
+    ],
+    { encoding: 'utf8' },
+  ).trim(),
+);
+await build({
+  configFile: false,
+  root: resolve('tests/browser/wheel-dynamics'),
+  base: './',
+  cacheDir: resolve('.pbi-validation-026/cache'),
+  define: { __WHEEL_BUILD__: JSON.stringify(identity) },
+  build: { outDir: root, emptyOutDir: true },
+});
+const artifacts = [];
+for (const file of (await readdir(root, { recursive: true })).sort()) {
+  const path = resolve(root, file);
+  if (!(await stat(path)).isFile()) continue;
+  const bytes = await readFile(path);
+  artifacts.push({
+    path: file.replaceAll('\\', '/'),
+    bytes: bytes.length,
+    sha256: createHash('sha256').update(bytes).digest('hex'),
+  });
+}
+const artifactHash = createHash('sha256').update(JSON.stringify(artifacts)).digest('hex');
+await writeFile(
+  resolve(root, 'build-manifest.json'),
+  JSON.stringify(
+    {
+      ...identity,
+      artifactHash,
+      artifacts,
+      note: 'All Vite-emitted files hashed before adding manifest and startup hardware metadata.',
+    },
+    null,
+    2,
+  ),
+);
+await writeFile(resolve(root, 'hardware.json'), JSON.stringify(hardware, null, 2));
+const mime = {
+  '.html': 'text/html',
+  '.js': 'text/javascript',
+  '.wasm': 'application/wasm',
+  '.json': 'application/json',
+  '.css': 'text/css',
+};
+
+const destination = resolve('Docs/Evidence/026-wheel-dynamics');
+await mkdir(destination, { recursive: true });
+// Preserve exact executable source bytes for the generated production artifact.
+const sourceArchive = resolve(destination, `browser-source-${identity.sourceHash}`);
+if (!existsSync(sourceArchive)) {
+  await mkdir(sourceArchive, { recursive: true });
+  await writeFile(resolve(sourceArchive, '.gitattributes'), '* -text\n');
+  for (const input of inputs) {
+    const target = resolve(sourceArchive, input);
+    await mkdir(dirname(target), { recursive: true });
+    await copyFile(input, target);
+  }
+}
+createServer(async (request, response) => {
+  try {
+    if (request.method === 'POST' && request.url === '/failure') {
+      const report = await readEvidenceJson(request);
+      if (
+        report.identity?.sourceHash !== identity.sourceHash ||
+        !['WEBGPU', 'WEBGL2', null].includes(report.renderer) ||
+        report.fixtureVersion !== '026-wheel-dynamics-v1'
+      ) {
+        response.writeHead(400).end();
+        return;
+      }
+      const failureName = `failed-${Date.now()}-${report.renderer ?? 'startup'}.json`;
+      await writeImmutableEvidence(resolve(destination, failureName), {
+        ...report,
+        hardware,
+        artifactHash,
+      });
+      response.writeHead(200).end(failureName);
+      return;
+    }
+    if (request.method === 'POST' && request.url === '/export') {
+      const report = await readEvidenceJson(request);
+      if (
+        report.fixtureVersion !== '026-wheel-dynamics-v1' ||
+        report.identity?.sourceHash !== identity.sourceHash ||
+        !['WEBGPU', 'WEBGL2'].includes(report.renderer) ||
+        report.foreground !== true ||
+        report.full !== true ||
+        report.runs?.length !== 10 ||
+        report.calibration?.length !== 8 ||
+        report.calibration.some(
+          (run) =>
+            !['braking', 'turning'].includes(run.scenario) ||
+            !Array.isArray(run.curve) ||
+            run.curve.length > (run.scenario === 'braking' ? 300 : 30),
+        ) ||
+        report.artifactHash !== artifactHash
+      ) {
+        response.writeHead(400).end('Invalid report identity');
+        return;
+      }
+      const filename = `drive-${report.renderer.toLowerCase()}.json`;
+      if (existsSync(resolve(destination, filename))) {
+        response.writeHead(409).end('Immutable report exists');
+        return;
+      }
+      const currentHash = createHash('sha256');
+      for (const input of inputs) currentHash.update(input).update(await readFile(input));
+      if (currentHash.digest('hex') !== identity.sourceHash) {
+        response.writeHead(409).end('Source changed during capture');
+        return;
+      }
+      await writeImmutableEvidence(resolve(destination, filename), { ...report, hardware });
+      await writeFile(
+        resolve(destination, 'build-manifest.json'),
+        await readFile(resolve(root, 'build-manifest.json')),
+      );
+      await writeFile(resolve(destination, 'hardware.json'), JSON.stringify(hardware, null, 2));
+      response.writeHead(200).end(filename);
+      return;
+    }
+    if (request.method !== 'GET') {
+      response.writeHead(405).end();
+      return;
+    }
+    const url = new URL(request.url ?? '/', `http://127.0.0.1:${port}`);
+    const path = resolve(
+      root,
+      `.${decodeURIComponent(url.pathname === '/' ? '/index.html' : url.pathname)}`,
+    );
+    if (!path.startsWith(root + sep)) {
+      response.writeHead(403).end();
+      return;
+    }
+    response
+      .writeHead(200, {
+        'Content-Type': mime[extname(path)] ?? 'application/octet-stream',
+        'Cache-Control': 'no-store',
+      })
+      .end(await readFile(path));
+  } catch (error) {
+    console.error(error);
+    if (error instanceof EvidenceTransportError)
+      response.writeHead(error.status).end(error.message);
+    else if (error.code === 'EEXIST') response.writeHead(409).end('Immutable report exists');
+    else response.writeHead(500).end('Evidence request failed');
+  }
+}).listen(port, '127.0.0.1', () => console.log(`026 fixture: http://127.0.0.1:${port}`));

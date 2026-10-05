@@ -51,3 +51,4 @@ export interface BootstrapView {
   show(presentation: BootstrapPresentation): void;
   dispose(): void;
 }
+export * from './physical-wheels';

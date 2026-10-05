@@ -1,5 +1,7 @@
 export * from './contracts';
 export * from './physics';
+export * from './road-surfaces';
+export * from './wheel-slip';
 export * from './body-port';
 export * from './body-registry';
 export * from './vehicle-classes';
