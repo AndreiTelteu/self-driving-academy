@@ -93,3 +93,5 @@ Se elimină global pierderea XP și scăderea nivelului. V1 adaugă Academie/Hao
 [Prototipul de fizică Rapier](physics-prototype.md) oferă calibrare SI, contacte reale și probele de performanță021, cu limita explicită a controllerului raycast și fără validarea jocului complet.
 
 [Bugetele de randare și asseturi](render-asset-budgets.md) adaugă admitere finită, batchuri locale/LOD cu identități de picking păstrate, ownership/disposal și calitate exclusiv vizuală. Fixture-ul timpuriu este verificat prin cinci perechi complete pe WebGPU/WebGL2 reale; limitele pentru jocul complet și laptop rămân provizorii.
+
+[Adaptorul fizic022](physics-adapter.md) oferă mapare entityId↔bodyhandle, SI pose/velocity, remove și callbacks generation-fenced. Probele desktop timpurii Rapier/Babylon și comparațiile direct/bridge pe ambele backenduri sunt verificate; jocul complet și laptopul rămân nevalidate.

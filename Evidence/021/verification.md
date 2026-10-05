@@ -38,3 +38,5 @@ Limitări: model raycast simplificat, un singur sedan configurabil, fără anvel
 
 Verificarea finală a boardului: Validate-Board.ps1 -RequireDone '021' a trecut la 12:00+03, cu taskul existent numai în PBI/Done/021-physics_probe.md. Rezultatul read-only este păstrat în board-validation.json. Root a raportat și check-ul global PASS: 306 teste, typecheck, lint, format și architecture; Validate-Plan PASS, 1022 linkuri.
 
+
+În PBI022, extinderea necesară a API-ului modifică src/vehicles/rapier/index.ts, physics.ts și index.ts. Copiile byte-exact publicate anterior sunt păstrate în source-at-capture/src/vehicles, extrase din commitca41dae înainte de verificarea022. Verifierul raportează explicit această substituție și continuă să compare cu sourceHash-ul original021; raportul brut și hashurile capturate nu sunt rescrise. La 2026-10-05 13:23+03, npm run check a trecut (316 teste, inclusiv probele fizice021 și adaptor022, typecheck/lint/format/architecture), iar node scripts/verify-physics-evidence.mjs a trecut cu sursele istorice și identitatea originală021. Logurile complete sunt incluse în dovezile022; raportul brut021 rămâne neschimbat.

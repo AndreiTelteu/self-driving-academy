@@ -1,4 +1,3 @@
-import type { PhysicsBodyPort } from './body-port';
 /** SI units; no Rapier objects escape this port. Prototype configuration, not driver style. */
 export const PHYSICS_CONFIG = Object.freeze({
   version: '021-raycast-v1',
@@ -63,7 +62,7 @@ export interface PhysicsCosts {
   readonly queryCount: number;
   readonly bridgeCalls: number;
 }
-export interface PhysicsProbe extends PhysicsBodyPort {
+export interface PhysicsProbe {
   addCar(id: string, position: PhysicsVector, tuning?: CarTuning): void;
   addBox(position: PhysicsVector, halfSize: PhysicsVector, dynamic?: boolean): void;
   setVelocity(id: string, velocity: PhysicsVector): void;

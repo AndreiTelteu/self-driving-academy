@@ -15,17 +15,20 @@ const hash = createHash('sha256');
 const historicalInputs = [];
 for (const input of report.identity.inputs) {
   const current = await readFile(input);
-  const snapshot = 'Evidence/021/performance-budgets-at-capture.json';
-  const bytes =
-    input === 'Docs/performance-budgets.json' && existsSync(snapshot)
-      ? await readFile(snapshot)
-      : current;
+  const archivedSource = `Evidence/021/source-at-capture/${input}`;
+  const snapshot =
+    input === 'Docs/performance-budgets.json'
+      ? 'Evidence/021/performance-budgets-at-capture.json'
+      : archivedSource;
+  const bytes = existsSync(snapshot) ? await readFile(snapshot) : current;
   if (!bytes.equals(current))
     historicalInputs.push({
       input,
       snapshot,
       reason:
-        'Subsequent admission subcontracts; measured protocol/thresholds preserved in snapshot',
+        input === 'Docs/performance-budgets.json'
+          ? 'Subsequent admission subcontracts; measured protocol/thresholds preserved in snapshot'
+          : 'Subsequent body adapter PBI022; exact measured source bytes preserved before extending the API',
     });
   hash.update(input).update(bytes);
 }

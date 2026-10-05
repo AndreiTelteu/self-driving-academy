@@ -1,0 +1,2924 @@
+{
+  "schemaVersion": 1,
+  "identity": {
+    "commit": "3006d726c70495f0fb024f803c25baa113c1da66",
+    "sourceHash": "40c307245299faed0f40636791974b7a52af94253978a4271131001132382a7e",
+    "inputs": [
+      "Docs/performance-budgets.json",
+      "package-lock.json",
+      "package.json",
+      "scripts/physics-adapter-server.mjs",
+      "src/profiles/contracts.ts",
+      "src/profiles/index.ts",
+      "src/profiles/parameter-catalog.generated.ts",
+      "src/profiles/parameter-registry.ts",
+      "src/rendering/asset-budgets.ts",
+      "src/rendering/babylon/asset-contract.ts",
+      "src/rendering/babylon/asset-registry.ts",
+      "src/rendering/babylon/backend.ts",
+      "src/rendering/babylon/cell-batches.ts",
+      "src/rendering/babylon/daylight.ts",
+      "src/rendering/babylon/dev-inspector.ts",
+      "src/rendering/babylon/diagnostics-adapter.ts",
+      "src/rendering/babylon/index.ts",
+      "src/rendering/babylon/recovery-session.ts",
+      "src/rendering/babylon/scene-adapter.ts",
+      "src/rendering/babylon/snapshot-presenter.ts",
+      "src/rendering/babylon/vehicle-camera-input.ts",
+      "src/rendering/babylon/vehicle-camera.ts",
+      "src/rendering/babylon/vehicle-picking-input.ts",
+      "src/rendering/babylon/vehicle-picking-registry.ts",
+      "src/rendering/babylon/vehicle-picking.ts",
+      "src/rendering/backend-policy.ts",
+      "src/rendering/camera-collision.ts",
+      "src/rendering/diagnostics.ts",
+      "src/rendering/quality-policy.ts",
+      "src/rendering/render-sync.ts",
+      "src/rendering/scene-contract.ts",
+      "src/rendering/vehicle-camera.ts",
+      "src/sessions/identity.ts",
+      "src/sessions/index.ts",
+      "src/sessions/random.ts",
+      "src/sessions/validation.ts",
+      "src/simulation/event-bus.ts",
+      "src/simulation/events.ts",
+      "src/simulation/fixed-tick.ts",
+      "src/simulation/index.ts",
+      "src/telemetry/contracts.ts",
+      "src/telemetry/index.ts",
+      "src/telemetry/performance.ts",
+      "src/vehicles/body-port.ts",
+      "src/vehicles/body-registry.ts",
+      "src/vehicles/contracts.ts",
+      "src/vehicles/index.ts",
+      "src/vehicles/physics.ts",
+      "src/vehicles/rapier/index.ts",
+      "tests/browser/physics-adapter/index.html",
+      "tests/browser/physics-adapter/main.ts",
+      "tests/vehicles/physics-fixture.ts"
+    ],
+    "budgetVersion": "203-initial-1",
+    "physicsVersion": "0.21.0",
+    "engineVersion": "9.29.0"
+  },
+  "artifactHash": "d031a823a05ab66ea08108bda16a5d2bd2d992ca867ab92fd95bd0c901f9a711",
+  "fixtureVersion": "022-paired-v1",
+  "createdAt": "2026-10-05T11:19:37.095Z",
+  "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+  "renderer": "WEBGL2",
+  "actualGpuInfo": {
+    "vendor": "Google Inc. (AMD)",
+    "renderer": "ANGLE (AMD, AMD Radeon RX 7900 XTX (0x0000744C) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)"
+  },
+  "resolution": [
+    1920,
+    1080
+  ],
+  "dpr": 1,
+  "limits": {
+    "physics": {
+      "version": "021-raycast-v1",
+      "hz": 60,
+      "solverIterations": 8,
+      "ccdSubsteps": 4,
+      "vehicles": 110,
+      "worlds": 1,
+      "obstacles": 96,
+      "bodies": 207,
+      "colliders": 256,
+      "queryScratchBytes": 4096,
+      "ownedWasmEstimateBytes": 33554432
+    },
+    "mapping": {
+      "entities": 110,
+      "subscriptionsPerBody": 8,
+      "subscriptions": 880
+    }
+  },
+  "protocol": {
+    "production": true,
+    "foreground": true,
+    "preset": "MEDIUM prototype simplified cuboids, no shadows",
+    "cssResolution": [
+      1920,
+      1080
+    ],
+    "internalResolution": [
+      1920,
+      1080
+    ],
+    "warmupS": 30,
+    "measuredTargetS": 120,
+    "pairs": 5,
+    "cache": "HTTP no-store; module/WASM warm after first arm; OS/driver cache uncontrolled",
+    "network": "local unthrottled",
+    "coldNavigationControlled": false,
+    "inspector": "must remain closed; not detected automatically",
+    "refreshRateHz": null,
+    "displayRefreshRateReason": "No portable display refresh query; attach external hardware metadata",
+    "headed": null,
+    "headedReason": "Must be confirmed by coordinator using real visible Chrome; not inferred from userAgent"
+  },
+  "runs": [
+    {
+      "mode": "direct",
+      "epoch": 0,
+      "warmupS": 30,
+      "measuredS": 120.00303400004772,
+      "callbacks": 630000,
+      "simulatedToReal": 1.0001136026829034,
+      "distributions": {
+        "frame": {
+          "count": 17280,
+          "p50": 6.900000000139698,
+          "p95": 7,
+          "p99": 7.100000000093132,
+          "min": 6,
+          "max": 7.800000000046566,
+          "mean": 6.944583333333341,
+          "overBudget": null,
+          "histogram": [
+            0,
+            0,
+            17280,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "main": {
+          "count": 17280,
+          "p50": 0.5,
+          "p95": 2.699999988079071,
+          "p99": 3,
+          "min": 0.09999996423721313,
+          "max": 8.5,
+          "mean": 1.1932986110276371,
+          "overBudget": null,
+          "histogram": [
+            10045,
+            7222,
+            12,
+            1,
+            0,
+            0,
+            0
+          ]
+        },
+        "tick": {
+          "count": 7201,
+          "p50": 1.899999976158142,
+          "p95": 2.200000047683716,
+          "p99": 2.5,
+          "min": 1.2999999523162842,
+          "max": 4.699999988079071,
+          "mean": 1.8369393134395242,
+          "overBudget": null,
+          "histogram": [
+            0,
+            7200,
+            1,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "step": {
+          "count": 7201,
+          "p50": 1.399999976158142,
+          "p95": 1.699999988079071,
+          "p99": 1.800000011920929,
+          "min": 0.8999999761581421,
+          "max": 3.300000011920929,
+          "mean": 1.3761977503455658,
+          "overBudget": null,
+          "histogram": [
+            2,
+            7199,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "readback": {
+          "count": 7201,
+          "p50": 0,
+          "p95": 0.10000002384185791,
+          "p99": 0.10000002384185791,
+          "min": 0,
+          "max": 0.5,
+          "mean": 0.035328426521331995,
+          "overBudget": null,
+          "histogram": [
+            7201,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "dispatch": {
+          "count": 7201,
+          "p50": 0,
+          "p95": 0.10000002384185791,
+          "p99": 0.10000002384185791,
+          "min": 0,
+          "max": 1.100000023841858,
+          "mean": 0.025801971759618677,
+          "overBudget": null,
+          "histogram": [
+            7200,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "sampleBytes": 2880000,
+      "physics": {
+        "vehicles": 70,
+        "bodies": 134,
+        "colliders": 138
+      },
+      "mapping": {
+        "entities": 70,
+        "subscriptions": 0
+      },
+      "scene": {
+        "meshes": 70,
+        "nodes": 71,
+        "materials": 1,
+        "textures": 0
+      },
+      "cleanup": {
+        "sceneBaseline": {
+          "meshes": 0,
+          "nodes": 0,
+          "materials": 1,
+          "textures": 0
+        },
+        "sceneAfter": {
+          "meshes": 0,
+          "nodes": 0,
+          "materials": 1,
+          "textures": 0
+        },
+        "mappingAfter": {
+          "entities": 0,
+          "subscriptions": 0
+        },
+        "physicsBeforeWorldDispose": {
+          "vehicles": 0,
+          "bodies": 64,
+          "colliders": 68
+        },
+        "worldDisposeCompleted": true
+      },
+      "validity": {
+        "foreground": true,
+        "visibilityLost": false,
+        "deviceLost": false,
+        "overloadCount": 0
+      },
+      "longTasks": {
+        "supported": true,
+        "count": 0,
+        "maxMs": 0,
+        "measuredStartTimestamp": 1670941.666,
+        "measuredEndTimestamp": 1790944.7000000477,
+        "boundaryRule": "startTime in [start,end); full task duration, including end overlap; exclude start overlap from warmup",
+        "finalTaskYieldedAndDrained": true
+      },
+      "exactGpuMemory": null,
+      "exactWasmMemory": null,
+      "gpuTimer": null,
+      "unavailableReasons": {
+        "exactGpuMemory": "No portable exact GPU allocator measurement",
+        "exactWasmMemory": "Rapier public API exposes no exact WASM allocation size",
+        "gpuTimer": "Fixture has no GPU timer instrumentation"
+      }
+    },
+    {
+      "mode": "bridge",
+      "epoch": 1,
+      "warmupS": 30,
+      "measuredS": 120.00560000003571,
+      "callbacks": 630000,
+      "simulatedToReal": 1.0000922179184217,
+      "distributions": {
+        "frame": {
+          "count": 17281,
+          "p50": 6.900000000139698,
+          "p95": 7,
+          "p99": 7.100000000093132,
+          "min": 5.400000000139698,
+          "max": 8.5,
+          "mean": 6.944586540130787,
+          "overBudget": null,
+          "histogram": [
+            0,
+            0,
+            17280,
+            1,
+            0,
+            0,
+            0
+          ]
+        },
+        "main": {
+          "count": 17281,
+          "p50": 0.5999999642372131,
+          "p95": 2.899999976158142,
+          "p99": 3.299999952316284,
+          "min": 0.09999996423721313,
+          "max": 10.100000023841858,
+          "mean": 1.2836815000725499,
+          "overBudget": null,
+          "histogram": [
+            10013,
+            7238,
+            29,
+            1,
+            0,
+            0,
+            0
+          ]
+        },
+        "tick": {
+          "count": 7201,
+          "p50": 1.9000000357627869,
+          "p95": 2.399999976158142,
+          "p99": 2.700000047683716,
+          "min": 1.199999988079071,
+          "max": 9.200000047683716,
+          "mean": 1.9356756008858318,
+          "overBudget": null,
+          "histogram": [
+            0,
+            7194,
+            6,
+            1,
+            0,
+            0,
+            0
+          ]
+        },
+        "step": {
+          "count": 7201,
+          "p50": 1.4000000357627869,
+          "p95": 1.7999999523162842,
+          "p99": 2,
+          "min": 1,
+          "max": 6.5,
+          "mean": 1.4345507573839724,
+          "overBudget": null,
+          "histogram": [
+            0,
+            7199,
+            2,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "readback": {
+          "count": 7201,
+          "p50": 0,
+          "p95": 0.10000002384185791,
+          "p99": 0.19999998807907104,
+          "min": 0,
+          "max": 0.20000004768371582,
+          "mean": 0.03810581879853507,
+          "overBudget": null,
+          "histogram": [
+            7201,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "dispatch": {
+          "count": 7201,
+          "p50": 0,
+          "p95": 0.10000002384185791,
+          "p99": 0.10000002384185791,
+          "min": 0,
+          "max": 0.20000004768371582,
+          "mean": 0.033148173821699184,
+          "overBudget": null,
+          "histogram": [
+            7201,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "sampleBytes": 2880000,
+      "physics": {
+        "vehicles": 70,
+        "bodies": 134,
+        "colliders": 138
+      },
+      "mapping": {
+        "entities": 70,
+        "subscriptions": 70
+      },
+      "scene": {
+        "meshes": 70,
+        "nodes": 71,
+        "materials": 1,
+        "textures": 0
+      },
+      "cleanup": {
+        "sceneBaseline": {
+          "meshes": 0,
+          "nodes": 0,
+          "materials": 1,
+          "textures": 0
+        },
+        "sceneAfter": {
+          "meshes": 0,
+          "nodes": 0,
+          "materials": 1,
+          "textures": 0
+        },
+        "mappingAfter": {
+          "entities": 0,
+          "subscriptions": 0
+        },
+        "physicsBeforeWorldDispose": {
+          "vehicles": 0,
+          "bodies": 64,
+          "colliders": 68
+        },
+        "worldDisposeCompleted": true
+      },
+      "validity": {
+        "foreground": true,
+        "visibilityLost": false,
+        "deviceLost": false,
+        "overloadCount": 0
+      },
+      "longTasks": {
+        "supported": true,
+        "count": 0,
+        "maxMs": 0,
+        "measuredStartTimestamp": 1820955.8,
+        "measuredEndTimestamp": 1940961.4000000358,
+        "boundaryRule": "startTime in [start,end); full task duration, including end overlap; exclude start overlap from warmup",
+        "finalTaskYieldedAndDrained": true
+      },
+      "exactGpuMemory": null,
+      "exactWasmMemory": null,
+      "gpuTimer": null,
+      "unavailableReasons": {
+        "exactGpuMemory": "No portable exact GPU allocator measurement",
+        "exactWasmMemory": "Rapier public API exposes no exact WASM allocation size",
+        "gpuTimer": "Fixture has no GPU timer instrumentation"
+      }
+    },
+    {
+      "mode": "bridge",
+      "epoch": 2,
+      "warmupS": 30,
+      "measuredS": 120.0056000000476,
+      "callbacks": 630000,
+      "simulatedToReal": 1.0000922179183227,
+      "distributions": {
+        "frame": {
+          "count": 17276,
+          "p50": 6.900000000139698,
+          "p95": 7,
+          "p99": 7.100000000093132,
+          "min": 5.600000000093132,
+          "max": 34.800000000046566,
+          "mean": 6.9465906459828695,
+          "overBudget": null,
+          "histogram": [
+            0,
+            0,
+            17273,
+            2,
+            0,
+            1,
+            0
+          ]
+        },
+        "main": {
+          "count": 17276,
+          "p50": 0.5,
+          "p95": 2.699999988079071,
+          "p99": 3,
+          "min": 0.09999996423721313,
+          "max": 17.69999998807907,
+          "mean": 1.1836188931408842,
+          "overBudget": null,
+          "histogram": [
+            10031,
+            7224,
+            19,
+            1,
+            1,
+            0,
+            0
+          ]
+        },
+        "tick": {
+          "count": 7201,
+          "p50": 1.800000011920929,
+          "p95": 2.199999988079071,
+          "p99": 2.5,
+          "min": 1.199999988079071,
+          "max": 5.399999976158142,
+          "mean": 1.8216081104946045,
+          "overBudget": null,
+          "histogram": [
+            0,
+            7196,
+            5,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "step": {
+          "count": 7201,
+          "p50": 1.399999976158142,
+          "p95": 1.699999988079071,
+          "p99": 1.800000011920929,
+          "min": 0.8999999761581421,
+          "max": 4.899999976158142,
+          "mean": 1.3546868492175996,
+          "overBudget": null,
+          "histogram": [
+            9,
+            7190,
+            2,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "readback": {
+          "count": 7201,
+          "p50": 0,
+          "p95": 0.10000002384185791,
+          "p99": 0.10000002384185791,
+          "min": 0,
+          "max": 0.20000004768371582,
+          "mean": 0.03556450495801358,
+          "overBudget": null,
+          "histogram": [
+            7201,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "dispatch": {
+          "count": 7201,
+          "p50": 0,
+          "p95": 0.10000002384185791,
+          "p99": 0.10000002384185791,
+          "min": 0,
+          "max": 0.20000004768371582,
+          "mean": 0.028134981793937478,
+          "overBudget": null,
+          "histogram": [
+            7201,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "sampleBytes": 2880000,
+      "physics": {
+        "vehicles": 70,
+        "bodies": 134,
+        "colliders": 138
+      },
+      "mapping": {
+        "entities": 70,
+        "subscriptions": 70
+      },
+      "scene": {
+        "meshes": 70,
+        "nodes": 71,
+        "materials": 1,
+        "textures": 0
+      },
+      "cleanup": {
+        "sceneBaseline": {
+          "meshes": 0,
+          "nodes": 0,
+          "materials": 1,
+          "textures": 0
+        },
+        "sceneAfter": {
+          "meshes": 0,
+          "nodes": 0,
+          "materials": 1,
+          "textures": 0
+        },
+        "mappingAfter": {
+          "entities": 0,
+          "subscriptions": 0
+        },
+        "physicsBeforeWorldDispose": {
+          "vehicles": 0,
+          "bodies": 64,
+          "colliders": 68
+        },
+        "worldDisposeCompleted": true
+      },
+      "validity": {
+        "foreground": true,
+        "visibilityLost": false,
+        "deviceLost": false,
+        "overloadCount": 0
+      },
+      "longTasks": {
+        "supported": true,
+        "count": 0,
+        "maxMs": 0,
+        "measuredStartTimestamp": 1970972.6,
+        "measuredEndTimestamp": 2090978.2000000477,
+        "boundaryRule": "startTime in [start,end); full task duration, including end overlap; exclude start overlap from warmup",
+        "finalTaskYieldedAndDrained": true
+      },
+      "exactGpuMemory": null,
+      "exactWasmMemory": null,
+      "gpuTimer": null,
+      "unavailableReasons": {
+        "exactGpuMemory": "No portable exact GPU allocator measurement",
+        "exactWasmMemory": "Rapier public API exposes no exact WASM allocation size",
+        "gpuTimer": "Fixture has no GPU timer instrumentation"
+      }
+    },
+    {
+      "mode": "direct",
+      "epoch": 3,
+      "warmupS": 30,
+      "measuredS": 120.00550000002374,
+      "callbacks": 630000,
+      "simulatedToReal": 1.0000930512905069,
+      "distributions": {
+        "frame": {
+          "count": 17281,
+          "p50": 6.900000000372529,
+          "p95": 7,
+          "p99": 7.100000000093132,
+          "min": 5.7999999998137355,
+          "max": 7.900000000372529,
+          "mean": 6.944586540130774,
+          "overBudget": null,
+          "histogram": [
+            0,
+            0,
+            17281,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "main": {
+          "count": 17281,
+          "p50": 0.5,
+          "p95": 2.699999988079071,
+          "p99": 3,
+          "min": 0.09999996423721313,
+          "max": 4.800000011920929,
+          "mean": 1.2034373007282313,
+          "overBudget": null,
+          "histogram": [
+            10043,
+            7231,
+            7,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "tick": {
+          "count": 7201,
+          "p50": 1.800000011920929,
+          "p95": 2.199999988079071,
+          "p99": 2.5,
+          "min": 1.199999988079071,
+          "max": 3.5,
+          "mean": 1.8221635879981586,
+          "overBudget": null,
+          "histogram": [
+            0,
+            7201,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "step": {
+          "count": 7201,
+          "p50": 1.399999976158142,
+          "p95": 1.699999988079071,
+          "p99": 1.800000011920929,
+          "min": 0.8999999761581421,
+          "max": 2.400000035762787,
+          "mean": 1.3593806419963887,
+          "overBudget": null,
+          "histogram": [
+            3,
+            7198,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "readback": {
+          "count": 7201,
+          "p50": 0,
+          "p95": 0.10000002384185791,
+          "p99": 0.19999998807907104,
+          "min": 0,
+          "max": 0.20000004768371582,
+          "mean": 0.034981252625325934,
+          "overBudget": null,
+          "histogram": [
+            7201,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "dispatch": {
+          "count": 7201,
+          "p50": 0,
+          "p95": 0.10000002384185791,
+          "p99": 0.10000002384185791,
+          "min": 0,
+          "max": 0.20000004768371582,
+          "mean": 0.020149979462575258,
+          "overBudget": null,
+          "histogram": [
+            7201,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "sampleBytes": 2880000,
+      "physics": {
+        "vehicles": 70,
+        "bodies": 134,
+        "colliders": 138
+      },
+      "mapping": {
+        "entities": 70,
+        "subscriptions": 0
+      },
+      "scene": {
+        "meshes": 70,
+        "nodes": 71,
+        "materials": 1,
+        "textures": 0
+      },
+      "cleanup": {
+        "sceneBaseline": {
+          "meshes": 0,
+          "nodes": 0,
+          "materials": 1,
+          "textures": 0
+        },
+        "sceneAfter": {
+          "meshes": 0,
+          "nodes": 0,
+          "materials": 1,
+          "textures": 0
+        },
+        "mappingAfter": {
+          "entities": 0,
+          "subscriptions": 0
+        },
+        "physicsBeforeWorldDispose": {
+          "vehicles": 0,
+          "bodies": 64,
+          "colliders": 68
+        },
+        "worldDisposeCompleted": true
+      },
+      "validity": {
+        "foreground": true,
+        "visibilityLost": false,
+        "deviceLost": false,
+        "overloadCount": 0
+      },
+      "longTasks": {
+        "supported": true,
+        "count": 0,
+        "maxMs": 0,
+        "measuredStartTimestamp": 2120989.6,
+        "measuredEndTimestamp": 2240995.100000024,
+        "boundaryRule": "startTime in [start,end); full task duration, including end overlap; exclude start overlap from warmup",
+        "finalTaskYieldedAndDrained": true
+      },
+      "exactGpuMemory": null,
+      "exactWasmMemory": null,
+      "gpuTimer": null,
+      "unavailableReasons": {
+        "exactGpuMemory": "No portable exact GPU allocator measurement",
+        "exactWasmMemory": "Rapier public API exposes no exact WASM allocation size",
+        "gpuTimer": "Fixture has no GPU timer instrumentation"
+      }
+    },
+    {
+      "mode": "direct",
+      "epoch": 4,
+      "warmupS": 30,
+      "measuredS": 120.00530000001191,
+      "callbacks": 630000,
+      "simulatedToReal": 1.000094718038743,
+      "distributions": {
+        "frame": {
+          "count": 17274,
+          "p50": 6.900000000372529,
+          "p95": 7,
+          "p99": 7.100000000093132,
+          "min": 5.600000000093132,
+          "max": 34.60000000009313,
+          "mean": 6.9474007178418375,
+          "overBudget": null,
+          "histogram": [
+            0,
+            0,
+            17269,
+            4,
+            0,
+            1,
+            0
+          ]
+        },
+        "main": {
+          "count": 17274,
+          "p50": 0.5,
+          "p95": 2.699999988079071,
+          "p99": 3,
+          "min": 0.09999996423721313,
+          "max": 10.800000011920929,
+          "mean": 1.2130079889850953,
+          "overBudget": null,
+          "histogram": [
+            10040,
+            7216,
+            15,
+            3,
+            0,
+            0,
+            0
+          ]
+        },
+        "tick": {
+          "count": 7201,
+          "p50": 1.800000011920929,
+          "p95": 2.200000047683716,
+          "p99": 2.5,
+          "min": 1.2999999523162842,
+          "max": 10.100000023841858,
+          "mean": 1.816178308271928,
+          "overBudget": null,
+          "histogram": [
+            0,
+            7198,
+            1,
+            2,
+            0,
+            0,
+            0
+          ]
+        },
+        "step": {
+          "count": 7201,
+          "p50": 1.300000011920929,
+          "p95": 1.699999988079071,
+          "p99": 1.899999976158142,
+          "min": 0.8999999761581421,
+          "max": 2.600000023841858,
+          "mean": 1.3525899183483625,
+          "overBudget": null,
+          "histogram": [
+            8,
+            7193,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "readback": {
+          "count": 7201,
+          "p50": 0,
+          "p95": 0.10000002384185791,
+          "p99": 0.10000002384185791,
+          "min": 0,
+          "max": 7,
+          "mean": 0.03393973047378046,
+          "overBudget": null,
+          "histogram": [
+            7200,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "dispatch": {
+          "count": 7201,
+          "p50": 0,
+          "p95": 0.10000002384185791,
+          "p99": 0.10000002384185791,
+          "min": 0,
+          "max": 1.199999988079071,
+          "mean": 0.02227468390280034,
+          "overBudget": null,
+          "histogram": [
+            7200,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "sampleBytes": 2880000,
+      "physics": {
+        "vehicles": 70,
+        "bodies": 134,
+        "colliders": 138
+      },
+      "mapping": {
+        "entities": 70,
+        "subscriptions": 0
+      },
+      "scene": {
+        "meshes": 70,
+        "nodes": 71,
+        "materials": 1,
+        "textures": 0
+      },
+      "cleanup": {
+        "sceneBaseline": {
+          "meshes": 0,
+          "nodes": 0,
+          "materials": 1,
+          "textures": 0
+        },
+        "sceneAfter": {
+          "meshes": 0,
+          "nodes": 0,
+          "materials": 1,
+          "textures": 0
+        },
+        "mappingAfter": {
+          "entities": 0,
+          "subscriptions": 0
+        },
+        "physicsBeforeWorldDispose": {
+          "vehicles": 0,
+          "bodies": 64,
+          "colliders": 68
+        },
+        "worldDisposeCompleted": true
+      },
+      "validity": {
+        "foreground": true,
+        "visibilityLost": false,
+        "deviceLost": false,
+        "overloadCount": 0
+      },
+      "longTasks": {
+        "supported": true,
+        "count": 0,
+        "maxMs": 0,
+        "measuredStartTimestamp": 2270999.5,
+        "measuredEndTimestamp": 2391004.800000012,
+        "boundaryRule": "startTime in [start,end); full task duration, including end overlap; exclude start overlap from warmup",
+        "finalTaskYieldedAndDrained": true
+      },
+      "exactGpuMemory": null,
+      "exactWasmMemory": null,
+      "gpuTimer": null,
+      "unavailableReasons": {
+        "exactGpuMemory": "No portable exact GPU allocator measurement",
+        "exactWasmMemory": "Rapier public API exposes no exact WASM allocation size",
+        "gpuTimer": "Fixture has no GPU timer instrumentation"
+      }
+    },
+    {
+      "mode": "bridge",
+      "epoch": 5,
+      "warmupS": 30,
+      "measuredS": 120.0065,
+      "callbacks": 630000,
+      "simulatedToReal": 1.0000847176333505,
+      "distributions": {
+        "frame": {
+          "count": 17281,
+          "p50": 6.900000000372529,
+          "p95": 7,
+          "p99": 7.100000000093132,
+          "min": 4.899999999906868,
+          "max": 8.799999999813735,
+          "mean": 6.944586540130774,
+          "overBudget": null,
+          "histogram": [
+            0,
+            0,
+            17279,
+            2,
+            0,
+            0,
+            0
+          ]
+        },
+        "main": {
+          "count": 17281,
+          "p50": 0.5999999642372131,
+          "p95": 2.700000047683716,
+          "p99": 3.099999964237213,
+          "min": 0.09999996423721313,
+          "max": 9,
+          "mean": 1.230380185782706,
+          "overBudget": null,
+          "histogram": [
+            10035,
+            7227,
+            18,
+            1,
+            0,
+            0,
+            0
+          ]
+        },
+        "tick": {
+          "count": 7201,
+          "p50": 1.800000011920929,
+          "p95": 2.299999952316284,
+          "p99": 2.5,
+          "min": 1.199999988079071,
+          "max": 5.699999988079071,
+          "mean": 1.8382863494575463,
+          "overBudget": null,
+          "histogram": [
+            0,
+            7200,
+            1,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "step": {
+          "count": 7201,
+          "p50": 1.399999976158142,
+          "p95": 1.699999988079071,
+          "p99": 1.899999976158142,
+          "min": 0.8999999761581421,
+          "max": 4.699999988079071,
+          "mean": 1.3636439383700396,
+          "overBudget": null,
+          "histogram": [
+            10,
+            7190,
+            1,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "readback": {
+          "count": 7201,
+          "p50": 0,
+          "p95": 0.10000002384185791,
+          "p99": 0.19999998807907104,
+          "min": 0,
+          "max": 0.3999999761581421,
+          "mean": 0.036550479371619544,
+          "overBudget": null,
+          "histogram": [
+            7201,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "dispatch": {
+          "count": 7201,
+          "p50": 0,
+          "p95": 0.10000002384185791,
+          "p99": 0.10000002384185791,
+          "min": 0,
+          "max": 0.40000003576278687,
+          "mean": 0.027690598417066763,
+          "overBudget": null,
+          "histogram": [
+            7201,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "sampleBytes": 2880000,
+      "physics": {
+        "vehicles": 70,
+        "bodies": 134,
+        "colliders": 138
+      },
+      "mapping": {
+        "entities": 70,
+        "subscriptions": 70
+      },
+      "scene": {
+        "meshes": 70,
+        "nodes": 71,
+        "materials": 1,
+        "textures": 0
+      },
+      "cleanup": {
+        "sceneBaseline": {
+          "meshes": 0,
+          "nodes": 0,
+          "materials": 1,
+          "textures": 0
+        },
+        "sceneAfter": {
+          "meshes": 0,
+          "nodes": 0,
+          "materials": 1,
+          "textures": 0
+        },
+        "mappingAfter": {
+          "entities": 0,
+          "subscriptions": 0
+        },
+        "physicsBeforeWorldDispose": {
+          "vehicles": 0,
+          "bodies": 64,
+          "colliders": 68
+        },
+        "worldDisposeCompleted": true
+      },
+      "validity": {
+        "foreground": true,
+        "visibilityLost": false,
+        "deviceLost": false,
+        "overloadCount": 0
+      },
+      "longTasks": {
+        "supported": true,
+        "count": 0,
+        "maxMs": 0,
+        "measuredStartTimestamp": 2421009.5,
+        "measuredEndTimestamp": 2541016,
+        "boundaryRule": "startTime in [start,end); full task duration, including end overlap; exclude start overlap from warmup",
+        "finalTaskYieldedAndDrained": true
+      },
+      "exactGpuMemory": null,
+      "exactWasmMemory": null,
+      "gpuTimer": null,
+      "unavailableReasons": {
+        "exactGpuMemory": "No portable exact GPU allocator measurement",
+        "exactWasmMemory": "Rapier public API exposes no exact WASM allocation size",
+        "gpuTimer": "Fixture has no GPU timer instrumentation"
+      }
+    },
+    {
+      "mode": "bridge",
+      "epoch": 6,
+      "warmupS": 30,
+      "measuredS": 120.00540000001202,
+      "callbacks": 630000,
+      "simulatedToReal": 1.0000938846639789,
+      "distributions": {
+        "frame": {
+          "count": 17280,
+          "p50": 6.900000000372529,
+          "p95": 7,
+          "p99": 7.100000000093132,
+          "min": 6.600000000093132,
+          "max": 13.900000000372529,
+          "mean": 6.944988425925921,
+          "overBudget": null,
+          "histogram": [
+            0,
+            0,
+            17279,
+            1,
+            0,
+            0,
+            0
+          ]
+        },
+        "main": {
+          "count": 17280,
+          "p50": 0.5999999642372131,
+          "p95": 2.800000011920929,
+          "p99": 3.199999988079071,
+          "min": 0.09999996423721313,
+          "max": 18.899999976158142,
+          "mean": 1.2740219907317725,
+          "overBudget": null,
+          "histogram": [
+            9990,
+            7266,
+            22,
+            1,
+            1,
+            0,
+            0
+          ]
+        },
+        "tick": {
+          "count": 7201,
+          "p50": 1.899999976158142,
+          "p95": 2.300000011920929,
+          "p99": 2.600000023841858,
+          "min": 1.2999999523162842,
+          "max": 11.100000023841858,
+          "mean": 1.8903902233714711,
+          "overBudget": null,
+          "histogram": [
+            0,
+            7197,
+            3,
+            1,
+            0,
+            0,
+            0
+          ]
+        },
+        "step": {
+          "count": 7201,
+          "p50": 1.399999976158142,
+          "p95": 1.7000000476837158,
+          "p99": 1.9000000357627869,
+          "min": 0.8999999761581421,
+          "max": 10.600000023841858,
+          "mean": 1.4027773923401103,
+          "overBudget": null,
+          "histogram": [
+            2,
+            7197,
+            1,
+            1,
+            0,
+            0,
+            0
+          ]
+        },
+        "readback": {
+          "count": 7201,
+          "p50": 0,
+          "p95": 0.10000002384185791,
+          "p99": 0.19999998807907104,
+          "min": 0,
+          "max": 0.20000004768371582,
+          "mean": 0.036508818299153534,
+          "overBudget": null,
+          "histogram": [
+            7201,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "dispatch": {
+          "count": 7201,
+          "p50": 0,
+          "p95": 0.10000002384185791,
+          "p99": 0.10000002384185791,
+          "min": 0,
+          "max": 0.20000004768371582,
+          "mean": 0.033620330272921425,
+          "overBudget": null,
+          "histogram": [
+            7201,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "sampleBytes": 2880000,
+      "physics": {
+        "vehicles": 70,
+        "bodies": 134,
+        "colliders": 138
+      },
+      "mapping": {
+        "entities": 70,
+        "subscriptions": 70
+      },
+      "scene": {
+        "meshes": 70,
+        "nodes": 71,
+        "materials": 1,
+        "textures": 0
+      },
+      "cleanup": {
+        "sceneBaseline": {
+          "meshes": 0,
+          "nodes": 0,
+          "materials": 1,
+          "textures": 0
+        },
+        "sceneAfter": {
+          "meshes": 0,
+          "nodes": 0,
+          "materials": 1,
+          "textures": 0
+        },
+        "mappingAfter": {
+          "entities": 0,
+          "subscriptions": 0
+        },
+        "physicsBeforeWorldDispose": {
+          "vehicles": 0,
+          "bodies": 64,
+          "colliders": 68
+        },
+        "worldDisposeCompleted": true
+      },
+      "validity": {
+        "foreground": true,
+        "visibilityLost": false,
+        "deviceLost": false,
+        "overloadCount": 0
+      },
+      "longTasks": {
+        "supported": true,
+        "count": 0,
+        "maxMs": 0,
+        "measuredStartTimestamp": 2571026.4,
+        "measuredEndTimestamp": 2691031.800000012,
+        "boundaryRule": "startTime in [start,end); full task duration, including end overlap; exclude start overlap from warmup",
+        "finalTaskYieldedAndDrained": true
+      },
+      "exactGpuMemory": null,
+      "exactWasmMemory": null,
+      "gpuTimer": null,
+      "unavailableReasons": {
+        "exactGpuMemory": "No portable exact GPU allocator measurement",
+        "exactWasmMemory": "Rapier public API exposes no exact WASM allocation size",
+        "gpuTimer": "Fixture has no GPU timer instrumentation"
+      }
+    },
+    {
+      "mode": "direct",
+      "epoch": 7,
+      "warmupS": 30,
+      "measuredS": 120.00550000003585,
+      "callbacks": 630000,
+      "simulatedToReal": 1.000093051290406,
+      "distributions": {
+        "frame": {
+          "count": 17281,
+          "p50": 6.900000000372529,
+          "p95": 7,
+          "p99": 7.100000000093132,
+          "min": 6.600000000093132,
+          "max": 7.300000000279397,
+          "mean": 6.944586540130774,
+          "overBudget": null,
+          "histogram": [
+            0,
+            0,
+            17281,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "main": {
+          "count": 17281,
+          "p50": 0.5,
+          "p95": 2.700000047683716,
+          "p99": 3.099999964237213,
+          "min": 0.09999996423721313,
+          "max": 8.600000023841858,
+          "mean": 1.2137897110055713,
+          "overBudget": null,
+          "histogram": [
+            10030,
+            7238,
+            12,
+            1,
+            0,
+            0,
+            0
+          ]
+        },
+        "tick": {
+          "count": 7201,
+          "p50": 1.800000011920929,
+          "p95": 2.200000047683716,
+          "p99": 2.5,
+          "min": 1.199999988079071,
+          "max": 8,
+          "mean": 1.8370642965244859,
+          "overBudget": null,
+          "histogram": [
+            0,
+            7199,
+            1,
+            1,
+            0,
+            0,
+            0
+          ]
+        },
+        "step": {
+          "count": 7201,
+          "p50": 1.399999976158142,
+          "p95": 1.699999988079071,
+          "p99": 1.899999976158142,
+          "min": 0.8999999761581421,
+          "max": 7.5,
+          "mean": 1.3746562976172327,
+          "overBudget": null,
+          "histogram": [
+            9,
+            7190,
+            2,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "readback": {
+          "count": 7201,
+          "p50": 0,
+          "p95": 0.10000002384185791,
+          "p99": 0.10000002384185791,
+          "min": 0,
+          "max": 0.30000001192092896,
+          "mean": 0.03349534785014162,
+          "overBudget": null,
+          "histogram": [
+            7201,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "dispatch": {
+          "count": 7201,
+          "p50": 0,
+          "p95": 0.10000002384185791,
+          "p99": 0.10000002384185791,
+          "min": 0,
+          "max": 0.20000004768371582,
+          "mean": 0.020830440158695666,
+          "overBudget": null,
+          "histogram": [
+            7201,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "sampleBytes": 2880000,
+      "physics": {
+        "vehicles": 70,
+        "bodies": 134,
+        "colliders": 138
+      },
+      "mapping": {
+        "entities": 70,
+        "subscriptions": 0
+      },
+      "scene": {
+        "meshes": 70,
+        "nodes": 71,
+        "materials": 1,
+        "textures": 0
+      },
+      "cleanup": {
+        "sceneBaseline": {
+          "meshes": 0,
+          "nodes": 0,
+          "materials": 1,
+          "textures": 0
+        },
+        "sceneAfter": {
+          "meshes": 0,
+          "nodes": 0,
+          "materials": 1,
+          "textures": 0
+        },
+        "mappingAfter": {
+          "entities": 0,
+          "subscriptions": 0
+        },
+        "physicsBeforeWorldDispose": {
+          "vehicles": 0,
+          "bodies": 64,
+          "colliders": 68
+        },
+        "worldDisposeCompleted": true
+      },
+      "validity": {
+        "foreground": true,
+        "visibilityLost": false,
+        "deviceLost": false,
+        "overloadCount": 0
+      },
+      "longTasks": {
+        "supported": true,
+        "count": 0,
+        "maxMs": 0,
+        "measuredStartTimestamp": 2721036.4,
+        "measuredEndTimestamp": 2841041.9000000358,
+        "boundaryRule": "startTime in [start,end); full task duration, including end overlap; exclude start overlap from warmup",
+        "finalTaskYieldedAndDrained": true
+      },
+      "exactGpuMemory": null,
+      "exactWasmMemory": null,
+      "gpuTimer": null,
+      "unavailableReasons": {
+        "exactGpuMemory": "No portable exact GPU allocator measurement",
+        "exactWasmMemory": "Rapier public API exposes no exact WASM allocation size",
+        "gpuTimer": "Fixture has no GPU timer instrumentation"
+      }
+    },
+    {
+      "mode": "direct",
+      "epoch": 8,
+      "warmupS": 30,
+      "measuredS": 120.00570000000019,
+      "callbacks": 630000,
+      "simulatedToReal": 1.0000913845481212,
+      "distributions": {
+        "frame": {
+          "count": 17281,
+          "p50": 6.900000000372529,
+          "p95": 7,
+          "p99": 7.100000000093132,
+          "min": 6.2000000001862645,
+          "max": 7.699999999720603,
+          "mean": 6.944586540130774,
+          "overBudget": null,
+          "histogram": [
+            0,
+            0,
+            17281,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "main": {
+          "count": 17281,
+          "p50": 0.5999999642372131,
+          "p95": 2.800000011920929,
+          "p99": 3.199999988079071,
+          "min": 0.09999996423721313,
+          "max": 9.5,
+          "mean": 1.238464209473414,
+          "overBudget": null,
+          "histogram": [
+            10020,
+            7239,
+            21,
+            1,
+            0,
+            0,
+            0
+          ]
+        },
+        "tick": {
+          "count": 7201,
+          "p50": 1.899999976158142,
+          "p95": 2.300000011920929,
+          "p99": 2.699999988079071,
+          "min": 1.2000000476837158,
+          "max": 8.699999988079071,
+          "mean": 1.875725593761907,
+          "overBudget": null,
+          "histogram": [
+            0,
+            7198,
+            2,
+            1,
+            0,
+            0,
+            0
+          ]
+        },
+        "step": {
+          "count": 7201,
+          "p50": 1.399999976158142,
+          "p95": 1.7000000476837158,
+          "p99": 2,
+          "min": 0.8999999761581421,
+          "max": 8.099999964237213,
+          "mean": 1.3931120677451891,
+          "overBudget": null,
+          "histogram": [
+            3,
+            7196,
+            1,
+            1,
+            0,
+            0,
+            0
+          ]
+        },
+        "readback": {
+          "count": 7201,
+          "p50": 0,
+          "p95": 0.10000002384185791,
+          "p99": 0.10000002384185791,
+          "min": 0,
+          "max": 0.30000001192092896,
+          "mean": 0.0362171920417597,
+          "overBudget": null,
+          "histogram": [
+            7201,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "dispatch": {
+          "count": 7201,
+          "p50": 0,
+          "p95": 0.10000002384185791,
+          "p99": 0.10000002384185791,
+          "min": 0,
+          "max": 0.30000001192092896,
+          "mean": 0.031398416889854446,
+          "overBudget": null,
+          "histogram": [
+            7201,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "sampleBytes": 2880000,
+      "physics": {
+        "vehicles": 70,
+        "bodies": 134,
+        "colliders": 138
+      },
+      "mapping": {
+        "entities": 70,
+        "subscriptions": 0
+      },
+      "scene": {
+        "meshes": 70,
+        "nodes": 71,
+        "materials": 1,
+        "textures": 0
+      },
+      "cleanup": {
+        "sceneBaseline": {
+          "meshes": 0,
+          "nodes": 0,
+          "materials": 1,
+          "textures": 0
+        },
+        "sceneAfter": {
+          "meshes": 0,
+          "nodes": 0,
+          "materials": 1,
+          "textures": 0
+        },
+        "mappingAfter": {
+          "entities": 0,
+          "subscriptions": 0
+        },
+        "physicsBeforeWorldDispose": {
+          "vehicles": 0,
+          "bodies": 64,
+          "colliders": 68
+        },
+        "worldDisposeCompleted": true
+      },
+      "validity": {
+        "foreground": true,
+        "visibilityLost": false,
+        "deviceLost": false,
+        "overloadCount": 0
+      },
+      "longTasks": {
+        "supported": true,
+        "count": 0,
+        "maxMs": 0,
+        "measuredStartTimestamp": 2871046.3,
+        "measuredEndTimestamp": 2991052,
+        "boundaryRule": "startTime in [start,end); full task duration, including end overlap; exclude start overlap from warmup",
+        "finalTaskYieldedAndDrained": true
+      },
+      "exactGpuMemory": null,
+      "exactWasmMemory": null,
+      "gpuTimer": null,
+      "unavailableReasons": {
+        "exactGpuMemory": "No portable exact GPU allocator measurement",
+        "exactWasmMemory": "Rapier public API exposes no exact WASM allocation size",
+        "gpuTimer": "Fixture has no GPU timer instrumentation"
+      }
+    },
+    {
+      "mode": "bridge",
+      "epoch": 9,
+      "warmupS": 30,
+      "measuredS": 120.0050000000121,
+      "callbacks": 630000,
+      "simulatedToReal": 1.000097218171364,
+      "distributions": {
+        "frame": {
+          "count": 17280,
+          "p50": 6.900000000372529,
+          "p95": 7,
+          "p99": 7.100000000093132,
+          "min": 6.399999999906868,
+          "max": 13.800000000279397,
+          "mean": 6.944982638888878,
+          "overBudget": null,
+          "histogram": [
+            0,
+            0,
+            17279,
+            1,
+            0,
+            0,
+            0
+          ]
+        },
+        "main": {
+          "count": 17280,
+          "p50": 0.6000000238418579,
+          "p95": 2.899999976158142,
+          "p99": 3.199999988079071,
+          "min": 0.09999996423721313,
+          "max": 6.199999988079071,
+          "mean": 1.3029745372081245,
+          "overBudget": null,
+          "histogram": [
+            9991,
+            7275,
+            14,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "tick": {
+          "count": 7201,
+          "p50": 1.899999976158142,
+          "p95": 2.300000011920929,
+          "p99": 2.600000023841858,
+          "min": 1.2999999523162842,
+          "max": 5.299999952316284,
+          "mean": 1.8910012499704376,
+          "overBudget": null,
+          "histogram": [
+            0,
+            7200,
+            1,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "step": {
+          "count": 7201,
+          "p50": 1.399999976158142,
+          "p95": 1.699999988079071,
+          "p99": 1.9000000357627869,
+          "min": 0.8999999761581421,
+          "max": 4.5,
+          "mean": 1.392542702624275,
+          "overBudget": null,
+          "histogram": [
+            4,
+            7196,
+            1,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "readback": {
+          "count": 7201,
+          "p50": 0,
+          "p95": 0.10000002384185791,
+          "p99": 0.19999998807907104,
+          "min": 0,
+          "max": 0.3999999761581421,
+          "mean": 0.04034161903745283,
+          "overBudget": null,
+          "histogram": [
+            7201,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "dispatch": {
+          "count": 7201,
+          "p50": 0,
+          "p95": 0.10000002384185791,
+          "p99": 0.19999998807907104,
+          "min": 0,
+          "max": 0.3999999761581421,
+          "mean": 0.038716845116074296,
+          "overBudget": null,
+          "histogram": [
+            7201,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "sampleBytes": 2880000,
+      "physics": {
+        "vehicles": 70,
+        "bodies": 134,
+        "colliders": 138
+      },
+      "mapping": {
+        "entities": 70,
+        "subscriptions": 70
+      },
+      "scene": {
+        "meshes": 70,
+        "nodes": 71,
+        "materials": 1,
+        "textures": 0
+      },
+      "cleanup": {
+        "sceneBaseline": {
+          "meshes": 0,
+          "nodes": 0,
+          "materials": 1,
+          "textures": 0
+        },
+        "sceneAfter": {
+          "meshes": 0,
+          "nodes": 0,
+          "materials": 1,
+          "textures": 0
+        },
+        "mappingAfter": {
+          "entities": 0,
+          "subscriptions": 0
+        },
+        "physicsBeforeWorldDispose": {
+          "vehicles": 0,
+          "bodies": 64,
+          "colliders": 68
+        },
+        "worldDisposeCompleted": true
+      },
+      "validity": {
+        "foreground": true,
+        "visibilityLost": false,
+        "deviceLost": false,
+        "overloadCount": 0
+      },
+      "longTasks": {
+        "supported": true,
+        "count": 0,
+        "maxMs": 0,
+        "measuredStartTimestamp": 3021056.3,
+        "measuredEndTimestamp": 3141061.300000012,
+        "boundaryRule": "startTime in [start,end); full task duration, including end overlap; exclude start overlap from warmup",
+        "finalTaskYieldedAndDrained": true
+      },
+      "exactGpuMemory": null,
+      "exactWasmMemory": null,
+      "gpuTimer": null,
+      "unavailableReasons": {
+        "exactGpuMemory": "No portable exact GPU allocator measurement",
+        "exactWasmMemory": "Rapier public API exposes no exact WASM allocation size",
+        "gpuTimer": "Fixture has no GPU timer instrumentation"
+      }
+    }
+  ],
+  "lifecycle": {
+    "baseline": {
+      "meshes": 0,
+      "nodes": 0,
+      "materials": 1,
+      "textures": 0
+    },
+    "after": {
+      "meshes": 0,
+      "nodes": 0,
+      "materials": 1,
+      "textures": 0
+    },
+    "cycles": [
+      {
+        "cycle": 0,
+        "physics": {
+          "vehicles": 70,
+          "bodies": 134,
+          "colliders": 138
+        },
+        "mapping": {
+          "entities": 70,
+          "subscriptions": 1
+        },
+        "peakMapping": {
+          "entities": 70,
+          "subscriptions": 2
+        },
+        "staleCalls": 1,
+        "oldUnsubscribeDidNotAffectNew": true,
+        "cleanup": {
+          "sceneBaseline": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "sceneAfter": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "mappingAfter": {
+            "entities": 0,
+            "subscriptions": 0
+          },
+          "physicsBeforeWorldDispose": {
+            "vehicles": 0,
+            "bodies": 64,
+            "colliders": 68
+          },
+          "worldDisposeCompleted": true
+        }
+      },
+      {
+        "cycle": 1,
+        "physics": {
+          "vehicles": 70,
+          "bodies": 134,
+          "colliders": 138
+        },
+        "mapping": {
+          "entities": 70,
+          "subscriptions": 1
+        },
+        "peakMapping": {
+          "entities": 70,
+          "subscriptions": 2
+        },
+        "staleCalls": 1,
+        "oldUnsubscribeDidNotAffectNew": true,
+        "cleanup": {
+          "sceneBaseline": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "sceneAfter": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "mappingAfter": {
+            "entities": 0,
+            "subscriptions": 0
+          },
+          "physicsBeforeWorldDispose": {
+            "vehicles": 0,
+            "bodies": 64,
+            "colliders": 68
+          },
+          "worldDisposeCompleted": true
+        }
+      },
+      {
+        "cycle": 2,
+        "physics": {
+          "vehicles": 70,
+          "bodies": 134,
+          "colliders": 138
+        },
+        "mapping": {
+          "entities": 70,
+          "subscriptions": 1
+        },
+        "peakMapping": {
+          "entities": 70,
+          "subscriptions": 2
+        },
+        "staleCalls": 1,
+        "oldUnsubscribeDidNotAffectNew": true,
+        "cleanup": {
+          "sceneBaseline": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "sceneAfter": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "mappingAfter": {
+            "entities": 0,
+            "subscriptions": 0
+          },
+          "physicsBeforeWorldDispose": {
+            "vehicles": 0,
+            "bodies": 64,
+            "colliders": 68
+          },
+          "worldDisposeCompleted": true
+        }
+      },
+      {
+        "cycle": 3,
+        "physics": {
+          "vehicles": 70,
+          "bodies": 134,
+          "colliders": 138
+        },
+        "mapping": {
+          "entities": 70,
+          "subscriptions": 1
+        },
+        "peakMapping": {
+          "entities": 70,
+          "subscriptions": 2
+        },
+        "staleCalls": 1,
+        "oldUnsubscribeDidNotAffectNew": true,
+        "cleanup": {
+          "sceneBaseline": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "sceneAfter": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "mappingAfter": {
+            "entities": 0,
+            "subscriptions": 0
+          },
+          "physicsBeforeWorldDispose": {
+            "vehicles": 0,
+            "bodies": 64,
+            "colliders": 68
+          },
+          "worldDisposeCompleted": true
+        }
+      },
+      {
+        "cycle": 4,
+        "physics": {
+          "vehicles": 70,
+          "bodies": 134,
+          "colliders": 138
+        },
+        "mapping": {
+          "entities": 70,
+          "subscriptions": 1
+        },
+        "peakMapping": {
+          "entities": 70,
+          "subscriptions": 2
+        },
+        "staleCalls": 1,
+        "oldUnsubscribeDidNotAffectNew": true,
+        "cleanup": {
+          "sceneBaseline": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "sceneAfter": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "mappingAfter": {
+            "entities": 0,
+            "subscriptions": 0
+          },
+          "physicsBeforeWorldDispose": {
+            "vehicles": 0,
+            "bodies": 64,
+            "colliders": 68
+          },
+          "worldDisposeCompleted": true
+        }
+      },
+      {
+        "cycle": 5,
+        "physics": {
+          "vehicles": 70,
+          "bodies": 134,
+          "colliders": 138
+        },
+        "mapping": {
+          "entities": 70,
+          "subscriptions": 1
+        },
+        "peakMapping": {
+          "entities": 70,
+          "subscriptions": 2
+        },
+        "staleCalls": 1,
+        "oldUnsubscribeDidNotAffectNew": true,
+        "cleanup": {
+          "sceneBaseline": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "sceneAfter": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "mappingAfter": {
+            "entities": 0,
+            "subscriptions": 0
+          },
+          "physicsBeforeWorldDispose": {
+            "vehicles": 0,
+            "bodies": 64,
+            "colliders": 68
+          },
+          "worldDisposeCompleted": true
+        }
+      },
+      {
+        "cycle": 6,
+        "physics": {
+          "vehicles": 70,
+          "bodies": 134,
+          "colliders": 138
+        },
+        "mapping": {
+          "entities": 70,
+          "subscriptions": 1
+        },
+        "peakMapping": {
+          "entities": 70,
+          "subscriptions": 2
+        },
+        "staleCalls": 1,
+        "oldUnsubscribeDidNotAffectNew": true,
+        "cleanup": {
+          "sceneBaseline": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "sceneAfter": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "mappingAfter": {
+            "entities": 0,
+            "subscriptions": 0
+          },
+          "physicsBeforeWorldDispose": {
+            "vehicles": 0,
+            "bodies": 64,
+            "colliders": 68
+          },
+          "worldDisposeCompleted": true
+        }
+      },
+      {
+        "cycle": 7,
+        "physics": {
+          "vehicles": 70,
+          "bodies": 134,
+          "colliders": 138
+        },
+        "mapping": {
+          "entities": 70,
+          "subscriptions": 1
+        },
+        "peakMapping": {
+          "entities": 70,
+          "subscriptions": 2
+        },
+        "staleCalls": 1,
+        "oldUnsubscribeDidNotAffectNew": true,
+        "cleanup": {
+          "sceneBaseline": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "sceneAfter": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "mappingAfter": {
+            "entities": 0,
+            "subscriptions": 0
+          },
+          "physicsBeforeWorldDispose": {
+            "vehicles": 0,
+            "bodies": 64,
+            "colliders": 68
+          },
+          "worldDisposeCompleted": true
+        }
+      },
+      {
+        "cycle": 8,
+        "physics": {
+          "vehicles": 70,
+          "bodies": 134,
+          "colliders": 138
+        },
+        "mapping": {
+          "entities": 70,
+          "subscriptions": 1
+        },
+        "peakMapping": {
+          "entities": 70,
+          "subscriptions": 2
+        },
+        "staleCalls": 1,
+        "oldUnsubscribeDidNotAffectNew": true,
+        "cleanup": {
+          "sceneBaseline": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "sceneAfter": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "mappingAfter": {
+            "entities": 0,
+            "subscriptions": 0
+          },
+          "physicsBeforeWorldDispose": {
+            "vehicles": 0,
+            "bodies": 64,
+            "colliders": 68
+          },
+          "worldDisposeCompleted": true
+        }
+      },
+      {
+        "cycle": 9,
+        "physics": {
+          "vehicles": 70,
+          "bodies": 134,
+          "colliders": 138
+        },
+        "mapping": {
+          "entities": 70,
+          "subscriptions": 1
+        },
+        "peakMapping": {
+          "entities": 70,
+          "subscriptions": 2
+        },
+        "staleCalls": 1,
+        "oldUnsubscribeDidNotAffectNew": true,
+        "cleanup": {
+          "sceneBaseline": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "sceneAfter": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "mappingAfter": {
+            "entities": 0,
+            "subscriptions": 0
+          },
+          "physicsBeforeWorldDispose": {
+            "vehicles": 0,
+            "bodies": 64,
+            "colliders": 68
+          },
+          "worldDisposeCompleted": true
+        }
+      },
+      {
+        "cycle": 10,
+        "physics": {
+          "vehicles": 70,
+          "bodies": 134,
+          "colliders": 138
+        },
+        "mapping": {
+          "entities": 70,
+          "subscriptions": 1
+        },
+        "peakMapping": {
+          "entities": 70,
+          "subscriptions": 2
+        },
+        "staleCalls": 1,
+        "oldUnsubscribeDidNotAffectNew": true,
+        "cleanup": {
+          "sceneBaseline": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "sceneAfter": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "mappingAfter": {
+            "entities": 0,
+            "subscriptions": 0
+          },
+          "physicsBeforeWorldDispose": {
+            "vehicles": 0,
+            "bodies": 64,
+            "colliders": 68
+          },
+          "worldDisposeCompleted": true
+        }
+      },
+      {
+        "cycle": 11,
+        "physics": {
+          "vehicles": 70,
+          "bodies": 134,
+          "colliders": 138
+        },
+        "mapping": {
+          "entities": 70,
+          "subscriptions": 1
+        },
+        "peakMapping": {
+          "entities": 70,
+          "subscriptions": 2
+        },
+        "staleCalls": 1,
+        "oldUnsubscribeDidNotAffectNew": true,
+        "cleanup": {
+          "sceneBaseline": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "sceneAfter": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "mappingAfter": {
+            "entities": 0,
+            "subscriptions": 0
+          },
+          "physicsBeforeWorldDispose": {
+            "vehicles": 0,
+            "bodies": 64,
+            "colliders": 68
+          },
+          "worldDisposeCompleted": true
+        }
+      },
+      {
+        "cycle": 12,
+        "physics": {
+          "vehicles": 70,
+          "bodies": 134,
+          "colliders": 138
+        },
+        "mapping": {
+          "entities": 70,
+          "subscriptions": 1
+        },
+        "peakMapping": {
+          "entities": 70,
+          "subscriptions": 2
+        },
+        "staleCalls": 1,
+        "oldUnsubscribeDidNotAffectNew": true,
+        "cleanup": {
+          "sceneBaseline": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "sceneAfter": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "mappingAfter": {
+            "entities": 0,
+            "subscriptions": 0
+          },
+          "physicsBeforeWorldDispose": {
+            "vehicles": 0,
+            "bodies": 64,
+            "colliders": 68
+          },
+          "worldDisposeCompleted": true
+        }
+      },
+      {
+        "cycle": 13,
+        "physics": {
+          "vehicles": 70,
+          "bodies": 134,
+          "colliders": 138
+        },
+        "mapping": {
+          "entities": 70,
+          "subscriptions": 1
+        },
+        "peakMapping": {
+          "entities": 70,
+          "subscriptions": 2
+        },
+        "staleCalls": 1,
+        "oldUnsubscribeDidNotAffectNew": true,
+        "cleanup": {
+          "sceneBaseline": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "sceneAfter": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "mappingAfter": {
+            "entities": 0,
+            "subscriptions": 0
+          },
+          "physicsBeforeWorldDispose": {
+            "vehicles": 0,
+            "bodies": 64,
+            "colliders": 68
+          },
+          "worldDisposeCompleted": true
+        }
+      },
+      {
+        "cycle": 14,
+        "physics": {
+          "vehicles": 70,
+          "bodies": 134,
+          "colliders": 138
+        },
+        "mapping": {
+          "entities": 70,
+          "subscriptions": 1
+        },
+        "peakMapping": {
+          "entities": 70,
+          "subscriptions": 2
+        },
+        "staleCalls": 1,
+        "oldUnsubscribeDidNotAffectNew": true,
+        "cleanup": {
+          "sceneBaseline": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "sceneAfter": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "mappingAfter": {
+            "entities": 0,
+            "subscriptions": 0
+          },
+          "physicsBeforeWorldDispose": {
+            "vehicles": 0,
+            "bodies": 64,
+            "colliders": 68
+          },
+          "worldDisposeCompleted": true
+        }
+      },
+      {
+        "cycle": 15,
+        "physics": {
+          "vehicles": 70,
+          "bodies": 134,
+          "colliders": 138
+        },
+        "mapping": {
+          "entities": 70,
+          "subscriptions": 1
+        },
+        "peakMapping": {
+          "entities": 70,
+          "subscriptions": 2
+        },
+        "staleCalls": 1,
+        "oldUnsubscribeDidNotAffectNew": true,
+        "cleanup": {
+          "sceneBaseline": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "sceneAfter": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "mappingAfter": {
+            "entities": 0,
+            "subscriptions": 0
+          },
+          "physicsBeforeWorldDispose": {
+            "vehicles": 0,
+            "bodies": 64,
+            "colliders": 68
+          },
+          "worldDisposeCompleted": true
+        }
+      },
+      {
+        "cycle": 16,
+        "physics": {
+          "vehicles": 70,
+          "bodies": 134,
+          "colliders": 138
+        },
+        "mapping": {
+          "entities": 70,
+          "subscriptions": 1
+        },
+        "peakMapping": {
+          "entities": 70,
+          "subscriptions": 2
+        },
+        "staleCalls": 1,
+        "oldUnsubscribeDidNotAffectNew": true,
+        "cleanup": {
+          "sceneBaseline": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "sceneAfter": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "mappingAfter": {
+            "entities": 0,
+            "subscriptions": 0
+          },
+          "physicsBeforeWorldDispose": {
+            "vehicles": 0,
+            "bodies": 64,
+            "colliders": 68
+          },
+          "worldDisposeCompleted": true
+        }
+      },
+      {
+        "cycle": 17,
+        "physics": {
+          "vehicles": 70,
+          "bodies": 134,
+          "colliders": 138
+        },
+        "mapping": {
+          "entities": 70,
+          "subscriptions": 1
+        },
+        "peakMapping": {
+          "entities": 70,
+          "subscriptions": 2
+        },
+        "staleCalls": 1,
+        "oldUnsubscribeDidNotAffectNew": true,
+        "cleanup": {
+          "sceneBaseline": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "sceneAfter": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "mappingAfter": {
+            "entities": 0,
+            "subscriptions": 0
+          },
+          "physicsBeforeWorldDispose": {
+            "vehicles": 0,
+            "bodies": 64,
+            "colliders": 68
+          },
+          "worldDisposeCompleted": true
+        }
+      },
+      {
+        "cycle": 18,
+        "physics": {
+          "vehicles": 70,
+          "bodies": 134,
+          "colliders": 138
+        },
+        "mapping": {
+          "entities": 70,
+          "subscriptions": 1
+        },
+        "peakMapping": {
+          "entities": 70,
+          "subscriptions": 2
+        },
+        "staleCalls": 1,
+        "oldUnsubscribeDidNotAffectNew": true,
+        "cleanup": {
+          "sceneBaseline": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "sceneAfter": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "mappingAfter": {
+            "entities": 0,
+            "subscriptions": 0
+          },
+          "physicsBeforeWorldDispose": {
+            "vehicles": 0,
+            "bodies": 64,
+            "colliders": 68
+          },
+          "worldDisposeCompleted": true
+        }
+      },
+      {
+        "cycle": 19,
+        "physics": {
+          "vehicles": 70,
+          "bodies": 134,
+          "colliders": 138
+        },
+        "mapping": {
+          "entities": 70,
+          "subscriptions": 1
+        },
+        "peakMapping": {
+          "entities": 70,
+          "subscriptions": 2
+        },
+        "staleCalls": 1,
+        "oldUnsubscribeDidNotAffectNew": true,
+        "cleanup": {
+          "sceneBaseline": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "sceneAfter": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "mappingAfter": {
+            "entities": 0,
+            "subscriptions": 0
+          },
+          "physicsBeforeWorldDispose": {
+            "vehicles": 0,
+            "bodies": 64,
+            "colliders": 68
+          },
+          "worldDisposeCompleted": true
+        }
+      }
+    ]
+  },
+  "hardware": {
+    "source": "current CIM at fixture server startup",
+    "capturedAt": "2026-10-05T13:26:59.9547920+03:00",
+    "cpu": [
+      {
+        "Name": "AMD Ryzen 9 7950X3D 16-Core Processor          ",
+        "NumberOfCores": 16,
+        "NumberOfLogicalProcessors": 32
+      }
+    ],
+    "gpu": [
+      {
+        "Name": "Parsec Virtual Display Adapter",
+        "DriverVersion": "0.45.0.0",
+        "AdapterRAM": null,
+        "CurrentHorizontalResolution": null,
+        "CurrentVerticalResolution": null,
+        "CurrentRefreshRate": null
+      },
+      {
+        "Name": "Meta Virtual Monitor",
+        "DriverVersion": "15.52.32.370",
+        "AdapterRAM": null,
+        "CurrentHorizontalResolution": 3840,
+        "CurrentVerticalResolution": 2160,
+        "CurrentRefreshRate": 144
+      },
+      {
+        "Name": "Virtual Desktop Monitor",
+        "DriverVersion": "13.50.53.699",
+        "AdapterRAM": null,
+        "CurrentHorizontalResolution": null,
+        "CurrentVerticalResolution": null,
+        "CurrentRefreshRate": null
+      },
+      {
+        "Name": "AMD Radeon RX 7900 XTX",
+        "DriverVersion": "32.0.31041.1004",
+        "AdapterRAM": 4293918720,
+        "CurrentHorizontalResolution": 3840,
+        "CurrentVerticalResolution": 2160,
+        "CurrentRefreshRate": 144
+      },
+      {
+        "Name": "AMD Radeon(TM) Graphics",
+        "DriverVersion": "32.0.21045.5002",
+        "AdapterRAM": 536870912,
+        "CurrentHorizontalResolution": null,
+        "CurrentVerticalResolution": null,
+        "CurrentRefreshRate": null
+      }
+    ],
+    "memory": [
+      {
+        "Capacity": 25769803776,
+        "Speed": 5200
+      },
+      {
+        "Capacity": 25769803776,
+        "Speed": 5200
+      }
+    ],
+    "os": [
+      {
+        "Caption": "Microsoft Windows 11 Pro",
+        "Version": "10.0.26200",
+        "BuildNumber": "26200",
+        "TotalVisibleMemorySize": 49157544
+      }
+    ],
+    "battery": [],
+    "powerScheme": "Power Scheme GUID: 381b4222-f694-41f0-9685-ff5bb260df2e  (Balanced)"
+  }
+}

@@ -1,0 +1,1428 @@
+{
+  "schemaVersion": 1,
+  "identity": {
+    "commit": "3006d726c70495f0fb024f803c25baa113c1da66",
+    "sourceHash": "40c307245299faed0f40636791974b7a52af94253978a4271131001132382a7e",
+    "inputs": [
+      "Docs/performance-budgets.json",
+      "package-lock.json",
+      "package.json",
+      "scripts/physics-adapter-server.mjs",
+      "src/profiles/contracts.ts",
+      "src/profiles/index.ts",
+      "src/profiles/parameter-catalog.generated.ts",
+      "src/profiles/parameter-registry.ts",
+      "src/rendering/asset-budgets.ts",
+      "src/rendering/babylon/asset-contract.ts",
+      "src/rendering/babylon/asset-registry.ts",
+      "src/rendering/babylon/backend.ts",
+      "src/rendering/babylon/cell-batches.ts",
+      "src/rendering/babylon/daylight.ts",
+      "src/rendering/babylon/dev-inspector.ts",
+      "src/rendering/babylon/diagnostics-adapter.ts",
+      "src/rendering/babylon/index.ts",
+      "src/rendering/babylon/recovery-session.ts",
+      "src/rendering/babylon/scene-adapter.ts",
+      "src/rendering/babylon/snapshot-presenter.ts",
+      "src/rendering/babylon/vehicle-camera-input.ts",
+      "src/rendering/babylon/vehicle-camera.ts",
+      "src/rendering/babylon/vehicle-picking-input.ts",
+      "src/rendering/babylon/vehicle-picking-registry.ts",
+      "src/rendering/babylon/vehicle-picking.ts",
+      "src/rendering/backend-policy.ts",
+      "src/rendering/camera-collision.ts",
+      "src/rendering/diagnostics.ts",
+      "src/rendering/quality-policy.ts",
+      "src/rendering/render-sync.ts",
+      "src/rendering/scene-contract.ts",
+      "src/rendering/vehicle-camera.ts",
+      "src/sessions/identity.ts",
+      "src/sessions/index.ts",
+      "src/sessions/random.ts",
+      "src/sessions/validation.ts",
+      "src/simulation/event-bus.ts",
+      "src/simulation/events.ts",
+      "src/simulation/fixed-tick.ts",
+      "src/simulation/index.ts",
+      "src/telemetry/contracts.ts",
+      "src/telemetry/index.ts",
+      "src/telemetry/performance.ts",
+      "src/vehicles/body-port.ts",
+      "src/vehicles/body-registry.ts",
+      "src/vehicles/contracts.ts",
+      "src/vehicles/index.ts",
+      "src/vehicles/physics.ts",
+      "src/vehicles/rapier/index.ts",
+      "tests/browser/physics-adapter/index.html",
+      "tests/browser/physics-adapter/main.ts",
+      "tests/vehicles/physics-fixture.ts"
+    ],
+    "budgetVersion": "203-initial-1",
+    "physicsVersion": "0.21.0",
+    "engineVersion": "9.29.0"
+  },
+  "artifactHash": "d031a823a05ab66ea08108bda16a5d2bd2d992ca867ab92fd95bd0c901f9a711",
+  "fixtureVersion": "022-paired-v1-SMOKE",
+  "createdAt": "2026-10-05T10:28:18.990Z",
+  "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+  "renderer": "WEBGL2",
+  "actualGpuInfo": {
+    "vendor": "Google Inc. (AMD)",
+    "renderer": "ANGLE (AMD, AMD Radeon RX 7900 XTX (0x0000744C) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)"
+  },
+  "resolution": [
+    1920,
+    1080
+  ],
+  "dpr": 1,
+  "limits": {
+    "physics": {
+      "version": "021-raycast-v1",
+      "hz": 60,
+      "solverIterations": 8,
+      "ccdSubsteps": 4,
+      "vehicles": 110,
+      "worlds": 1,
+      "obstacles": 96,
+      "bodies": 207,
+      "colliders": 256,
+      "queryScratchBytes": 4096,
+      "ownedWasmEstimateBytes": 33554432
+    },
+    "mapping": {
+      "entities": 110,
+      "subscriptionsPerBody": 8,
+      "subscriptions": 880
+    }
+  },
+  "protocol": {
+    "production": true,
+    "foreground": true,
+    "preset": "MEDIUM prototype simplified cuboids, no shadows",
+    "cssResolution": [
+      1920,
+      1080
+    ],
+    "internalResolution": [
+      1920,
+      1080
+    ],
+    "warmupS": 1,
+    "measuredTargetS": 3,
+    "pairs": 1,
+    "cache": "HTTP no-store; module/WASM warm after first arm; OS/driver cache uncontrolled",
+    "network": "local unthrottled",
+    "coldNavigationControlled": false,
+    "inspector": "must remain closed; not detected automatically",
+    "refreshRateHz": null,
+    "displayRefreshRateReason": "No portable display refresh query; attach external hardware metadata",
+    "headed": null,
+    "headedReason": "Must be confirmed by coordinator using real visible Chrome; not inferred from userAgent"
+  },
+  "runs": [
+    {
+      "mode": "direct",
+      "epoch": 0,
+      "warmupS": 1,
+      "measuredS": 3.006434000000001,
+      "callbacks": 16800,
+      "simulatedToReal": 1.0034035893243176,
+      "distributions": {
+        "frame": {
+          "count": 433,
+          "p50": 6.900000000001455,
+          "p95": 7,
+          "p99": 7,
+          "min": 6.799999999995634,
+          "max": 7.099999999998545,
+          "mean": 6.944341801385668,
+          "overBudget": null,
+          "histogram": [
+            0,
+            0,
+            433,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "main": {
+          "count": 433,
+          "p50": 0.6000000238418579,
+          "p95": 2.600000023841858,
+          "p99": 2.800000011920929,
+          "min": 0.19999998807907104,
+          "max": 3.100000023841858,
+          "mean": 1.2013856816787367,
+          "overBudget": null,
+          "histogram": [
+            252,
+            181,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "tick": {
+          "count": 181,
+          "p50": 1.699999988079071,
+          "p95": 2,
+          "p99": 2.399999976158142,
+          "min": 0.5,
+          "max": 2.5,
+          "mean": 1.622099448962765,
+          "overBudget": null,
+          "histogram": [
+            9,
+            172,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "step": {
+          "count": 181,
+          "p50": 1.199999988079071,
+          "p95": 1.5,
+          "p99": 1.7000000476837158,
+          "min": 0.09999996423721313,
+          "max": 1.7000000476837158,
+          "mean": 1.112707179883567,
+          "overBudget": null,
+          "histogram": [
+            38,
+            143,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "readback": {
+          "count": 181,
+          "p50": 0,
+          "p95": 0.10000002384185791,
+          "p99": 0.10000002384185791,
+          "min": 0,
+          "max": 0.19999998807907104,
+          "mean": 0.03812154814683271,
+          "overBudget": null,
+          "histogram": [
+            181,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "dispatch": {
+          "count": 181,
+          "p50": 0,
+          "p95": 0.10000002384185791,
+          "p99": 0.10000002384185791,
+          "min": 0,
+          "max": 0.10000002384185791,
+          "mean": 0.03204419863158168,
+          "overBudget": null,
+          "histogram": [
+            181,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "sampleBytes": 2880000,
+      "physics": {
+        "vehicles": 70,
+        "bodies": 134,
+        "colliders": 138
+      },
+      "mapping": {
+        "entities": 70,
+        "subscriptions": 0
+      },
+      "scene": {
+        "meshes": 70,
+        "nodes": 71,
+        "materials": 1,
+        "textures": 0
+      },
+      "cleanup": {
+        "sceneBaseline": {
+          "meshes": 0,
+          "nodes": 0,
+          "materials": 1,
+          "textures": 0
+        },
+        "sceneAfter": {
+          "meshes": 0,
+          "nodes": 0,
+          "materials": 1,
+          "textures": 0
+        },
+        "mappingAfter": {
+          "entities": 0,
+          "subscriptions": 0
+        },
+        "physicsBeforeWorldDispose": {
+          "vehicles": 0,
+          "bodies": 64,
+          "colliders": 68
+        },
+        "worldDisposeCompleted": true
+      },
+      "validity": {
+        "foreground": true,
+        "visibilityLost": false,
+        "deviceLost": false,
+        "overloadCount": 0
+      },
+      "longTasks": {
+        "supported": true,
+        "count": 0,
+        "maxMs": 0,
+        "measuredStartTimestamp": 55949.066,
+        "measuredEndTimestamp": 58955.5,
+        "boundaryRule": "startTime in [start,end); full task duration, including end overlap; exclude start overlap from warmup",
+        "finalTaskYieldedAndDrained": true
+      },
+      "exactGpuMemory": null,
+      "exactWasmMemory": null,
+      "gpuTimer": null,
+      "unavailableReasons": {
+        "exactGpuMemory": "No portable exact GPU allocator measurement",
+        "exactWasmMemory": "Rapier public API exposes no exact WASM allocation size",
+        "gpuTimer": "Fixture has no GPU timer instrumentation"
+      }
+    },
+    {
+      "mode": "bridge",
+      "epoch": 1,
+      "warmupS": 1,
+      "measuredS": 3.0026999999999973,
+      "callbacks": 16800,
+      "simulatedToReal": 1.0046513693231656,
+      "distributions": {
+        "frame": {
+          "count": 432,
+          "p50": 6.900000000001455,
+          "p95": 7,
+          "p99": 7.099999999998545,
+          "min": 6.799999999995634,
+          "max": 7.100000000005821,
+          "mean": 6.94467592592594,
+          "overBudget": null,
+          "histogram": [
+            0,
+            0,
+            432,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "main": {
+          "count": 432,
+          "p50": 0.5999999642372131,
+          "p95": 2.5,
+          "p99": 2.799999952316284,
+          "min": 0.19999998807907104,
+          "max": 3.100000023841858,
+          "mean": 1.172453705083441,
+          "overBudget": null,
+          "histogram": [
+            249,
+            183,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "tick": {
+          "count": 181,
+          "p50": 1.699999988079071,
+          "p95": 2,
+          "p99": 2.200000047683716,
+          "min": 0.6000000238418579,
+          "max": 2.300000011920929,
+          "mean": 1.6320442010684566,
+          "overBudget": null,
+          "histogram": [
+            8,
+            173,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "step": {
+          "count": 181,
+          "p50": 1.199999988079071,
+          "p95": 1.5,
+          "p99": 1.5,
+          "min": 0.09999996423721313,
+          "max": 1.600000023841858,
+          "mean": 1.1430939231788255,
+          "overBudget": null,
+          "histogram": [
+            34,
+            147,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "readback": {
+          "count": 181,
+          "p50": 0,
+          "p95": 0.10000002384185791,
+          "p99": 0.10000002384185791,
+          "min": 0,
+          "max": 0.10000002384185791,
+          "mean": 0.03204419896088911,
+          "overBudget": null,
+          "histogram": [
+            181,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "dispatch": {
+          "count": 181,
+          "p50": 0,
+          "p95": 0.10000002384185791,
+          "p99": 0.10000002384185791,
+          "min": 0,
+          "max": 0.19999998807907104,
+          "mean": 0.0419889530424255,
+          "overBudget": null,
+          "histogram": [
+            181,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "sampleBytes": 2880000,
+      "physics": {
+        "vehicles": 70,
+        "bodies": 134,
+        "colliders": 138
+      },
+      "mapping": {
+        "entities": 70,
+        "subscriptions": 70
+      },
+      "scene": {
+        "meshes": 70,
+        "nodes": 71,
+        "materials": 1,
+        "textures": 0
+      },
+      "cleanup": {
+        "sceneBaseline": {
+          "meshes": 0,
+          "nodes": 0,
+          "materials": 1,
+          "textures": 0
+        },
+        "sceneAfter": {
+          "meshes": 0,
+          "nodes": 0,
+          "materials": 1,
+          "textures": 0
+        },
+        "mappingAfter": {
+          "entities": 0,
+          "subscriptions": 0
+        },
+        "physicsBeforeWorldDispose": {
+          "vehicles": 0,
+          "bodies": 64,
+          "colliders": 68
+        },
+        "worldDisposeCompleted": true
+      },
+      "validity": {
+        "foreground": true,
+        "visibilityLost": false,
+        "deviceLost": false,
+        "overloadCount": 0
+      },
+      "longTasks": {
+        "supported": true,
+        "count": 0,
+        "maxMs": 0,
+        "measuredStartTimestamp": 59960.3,
+        "measuredEndTimestamp": 62963,
+        "boundaryRule": "startTime in [start,end); full task duration, including end overlap; exclude start overlap from warmup",
+        "finalTaskYieldedAndDrained": true
+      },
+      "exactGpuMemory": null,
+      "exactWasmMemory": null,
+      "gpuTimer": null,
+      "unavailableReasons": {
+        "exactGpuMemory": "No portable exact GPU allocator measurement",
+        "exactWasmMemory": "Rapier public API exposes no exact WASM allocation size",
+        "gpuTimer": "Fixture has no GPU timer instrumentation"
+      }
+    }
+  ],
+  "lifecycle": {
+    "baseline": {
+      "meshes": 0,
+      "nodes": 0,
+      "materials": 1,
+      "textures": 0
+    },
+    "after": {
+      "meshes": 0,
+      "nodes": 0,
+      "materials": 1,
+      "textures": 0
+    },
+    "cycles": [
+      {
+        "cycle": 0,
+        "physics": {
+          "vehicles": 70,
+          "bodies": 134,
+          "colliders": 138
+        },
+        "mapping": {
+          "entities": 70,
+          "subscriptions": 1
+        },
+        "peakMapping": {
+          "entities": 70,
+          "subscriptions": 2
+        },
+        "staleCalls": 1,
+        "oldUnsubscribeDidNotAffectNew": true,
+        "cleanup": {
+          "sceneBaseline": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "sceneAfter": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "mappingAfter": {
+            "entities": 0,
+            "subscriptions": 0
+          },
+          "physicsBeforeWorldDispose": {
+            "vehicles": 0,
+            "bodies": 64,
+            "colliders": 68
+          },
+          "worldDisposeCompleted": true
+        }
+      },
+      {
+        "cycle": 1,
+        "physics": {
+          "vehicles": 70,
+          "bodies": 134,
+          "colliders": 138
+        },
+        "mapping": {
+          "entities": 70,
+          "subscriptions": 1
+        },
+        "peakMapping": {
+          "entities": 70,
+          "subscriptions": 2
+        },
+        "staleCalls": 1,
+        "oldUnsubscribeDidNotAffectNew": true,
+        "cleanup": {
+          "sceneBaseline": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "sceneAfter": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "mappingAfter": {
+            "entities": 0,
+            "subscriptions": 0
+          },
+          "physicsBeforeWorldDispose": {
+            "vehicles": 0,
+            "bodies": 64,
+            "colliders": 68
+          },
+          "worldDisposeCompleted": true
+        }
+      },
+      {
+        "cycle": 2,
+        "physics": {
+          "vehicles": 70,
+          "bodies": 134,
+          "colliders": 138
+        },
+        "mapping": {
+          "entities": 70,
+          "subscriptions": 1
+        },
+        "peakMapping": {
+          "entities": 70,
+          "subscriptions": 2
+        },
+        "staleCalls": 1,
+        "oldUnsubscribeDidNotAffectNew": true,
+        "cleanup": {
+          "sceneBaseline": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "sceneAfter": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "mappingAfter": {
+            "entities": 0,
+            "subscriptions": 0
+          },
+          "physicsBeforeWorldDispose": {
+            "vehicles": 0,
+            "bodies": 64,
+            "colliders": 68
+          },
+          "worldDisposeCompleted": true
+        }
+      },
+      {
+        "cycle": 3,
+        "physics": {
+          "vehicles": 70,
+          "bodies": 134,
+          "colliders": 138
+        },
+        "mapping": {
+          "entities": 70,
+          "subscriptions": 1
+        },
+        "peakMapping": {
+          "entities": 70,
+          "subscriptions": 2
+        },
+        "staleCalls": 1,
+        "oldUnsubscribeDidNotAffectNew": true,
+        "cleanup": {
+          "sceneBaseline": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "sceneAfter": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "mappingAfter": {
+            "entities": 0,
+            "subscriptions": 0
+          },
+          "physicsBeforeWorldDispose": {
+            "vehicles": 0,
+            "bodies": 64,
+            "colliders": 68
+          },
+          "worldDisposeCompleted": true
+        }
+      },
+      {
+        "cycle": 4,
+        "physics": {
+          "vehicles": 70,
+          "bodies": 134,
+          "colliders": 138
+        },
+        "mapping": {
+          "entities": 70,
+          "subscriptions": 1
+        },
+        "peakMapping": {
+          "entities": 70,
+          "subscriptions": 2
+        },
+        "staleCalls": 1,
+        "oldUnsubscribeDidNotAffectNew": true,
+        "cleanup": {
+          "sceneBaseline": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "sceneAfter": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "mappingAfter": {
+            "entities": 0,
+            "subscriptions": 0
+          },
+          "physicsBeforeWorldDispose": {
+            "vehicles": 0,
+            "bodies": 64,
+            "colliders": 68
+          },
+          "worldDisposeCompleted": true
+        }
+      },
+      {
+        "cycle": 5,
+        "physics": {
+          "vehicles": 70,
+          "bodies": 134,
+          "colliders": 138
+        },
+        "mapping": {
+          "entities": 70,
+          "subscriptions": 1
+        },
+        "peakMapping": {
+          "entities": 70,
+          "subscriptions": 2
+        },
+        "staleCalls": 1,
+        "oldUnsubscribeDidNotAffectNew": true,
+        "cleanup": {
+          "sceneBaseline": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "sceneAfter": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "mappingAfter": {
+            "entities": 0,
+            "subscriptions": 0
+          },
+          "physicsBeforeWorldDispose": {
+            "vehicles": 0,
+            "bodies": 64,
+            "colliders": 68
+          },
+          "worldDisposeCompleted": true
+        }
+      },
+      {
+        "cycle": 6,
+        "physics": {
+          "vehicles": 70,
+          "bodies": 134,
+          "colliders": 138
+        },
+        "mapping": {
+          "entities": 70,
+          "subscriptions": 1
+        },
+        "peakMapping": {
+          "entities": 70,
+          "subscriptions": 2
+        },
+        "staleCalls": 1,
+        "oldUnsubscribeDidNotAffectNew": true,
+        "cleanup": {
+          "sceneBaseline": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "sceneAfter": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "mappingAfter": {
+            "entities": 0,
+            "subscriptions": 0
+          },
+          "physicsBeforeWorldDispose": {
+            "vehicles": 0,
+            "bodies": 64,
+            "colliders": 68
+          },
+          "worldDisposeCompleted": true
+        }
+      },
+      {
+        "cycle": 7,
+        "physics": {
+          "vehicles": 70,
+          "bodies": 134,
+          "colliders": 138
+        },
+        "mapping": {
+          "entities": 70,
+          "subscriptions": 1
+        },
+        "peakMapping": {
+          "entities": 70,
+          "subscriptions": 2
+        },
+        "staleCalls": 1,
+        "oldUnsubscribeDidNotAffectNew": true,
+        "cleanup": {
+          "sceneBaseline": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "sceneAfter": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "mappingAfter": {
+            "entities": 0,
+            "subscriptions": 0
+          },
+          "physicsBeforeWorldDispose": {
+            "vehicles": 0,
+            "bodies": 64,
+            "colliders": 68
+          },
+          "worldDisposeCompleted": true
+        }
+      },
+      {
+        "cycle": 8,
+        "physics": {
+          "vehicles": 70,
+          "bodies": 134,
+          "colliders": 138
+        },
+        "mapping": {
+          "entities": 70,
+          "subscriptions": 1
+        },
+        "peakMapping": {
+          "entities": 70,
+          "subscriptions": 2
+        },
+        "staleCalls": 1,
+        "oldUnsubscribeDidNotAffectNew": true,
+        "cleanup": {
+          "sceneBaseline": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "sceneAfter": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "mappingAfter": {
+            "entities": 0,
+            "subscriptions": 0
+          },
+          "physicsBeforeWorldDispose": {
+            "vehicles": 0,
+            "bodies": 64,
+            "colliders": 68
+          },
+          "worldDisposeCompleted": true
+        }
+      },
+      {
+        "cycle": 9,
+        "physics": {
+          "vehicles": 70,
+          "bodies": 134,
+          "colliders": 138
+        },
+        "mapping": {
+          "entities": 70,
+          "subscriptions": 1
+        },
+        "peakMapping": {
+          "entities": 70,
+          "subscriptions": 2
+        },
+        "staleCalls": 1,
+        "oldUnsubscribeDidNotAffectNew": true,
+        "cleanup": {
+          "sceneBaseline": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "sceneAfter": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "mappingAfter": {
+            "entities": 0,
+            "subscriptions": 0
+          },
+          "physicsBeforeWorldDispose": {
+            "vehicles": 0,
+            "bodies": 64,
+            "colliders": 68
+          },
+          "worldDisposeCompleted": true
+        }
+      },
+      {
+        "cycle": 10,
+        "physics": {
+          "vehicles": 70,
+          "bodies": 134,
+          "colliders": 138
+        },
+        "mapping": {
+          "entities": 70,
+          "subscriptions": 1
+        },
+        "peakMapping": {
+          "entities": 70,
+          "subscriptions": 2
+        },
+        "staleCalls": 1,
+        "oldUnsubscribeDidNotAffectNew": true,
+        "cleanup": {
+          "sceneBaseline": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "sceneAfter": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "mappingAfter": {
+            "entities": 0,
+            "subscriptions": 0
+          },
+          "physicsBeforeWorldDispose": {
+            "vehicles": 0,
+            "bodies": 64,
+            "colliders": 68
+          },
+          "worldDisposeCompleted": true
+        }
+      },
+      {
+        "cycle": 11,
+        "physics": {
+          "vehicles": 70,
+          "bodies": 134,
+          "colliders": 138
+        },
+        "mapping": {
+          "entities": 70,
+          "subscriptions": 1
+        },
+        "peakMapping": {
+          "entities": 70,
+          "subscriptions": 2
+        },
+        "staleCalls": 1,
+        "oldUnsubscribeDidNotAffectNew": true,
+        "cleanup": {
+          "sceneBaseline": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "sceneAfter": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "mappingAfter": {
+            "entities": 0,
+            "subscriptions": 0
+          },
+          "physicsBeforeWorldDispose": {
+            "vehicles": 0,
+            "bodies": 64,
+            "colliders": 68
+          },
+          "worldDisposeCompleted": true
+        }
+      },
+      {
+        "cycle": 12,
+        "physics": {
+          "vehicles": 70,
+          "bodies": 134,
+          "colliders": 138
+        },
+        "mapping": {
+          "entities": 70,
+          "subscriptions": 1
+        },
+        "peakMapping": {
+          "entities": 70,
+          "subscriptions": 2
+        },
+        "staleCalls": 1,
+        "oldUnsubscribeDidNotAffectNew": true,
+        "cleanup": {
+          "sceneBaseline": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "sceneAfter": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "mappingAfter": {
+            "entities": 0,
+            "subscriptions": 0
+          },
+          "physicsBeforeWorldDispose": {
+            "vehicles": 0,
+            "bodies": 64,
+            "colliders": 68
+          },
+          "worldDisposeCompleted": true
+        }
+      },
+      {
+        "cycle": 13,
+        "physics": {
+          "vehicles": 70,
+          "bodies": 134,
+          "colliders": 138
+        },
+        "mapping": {
+          "entities": 70,
+          "subscriptions": 1
+        },
+        "peakMapping": {
+          "entities": 70,
+          "subscriptions": 2
+        },
+        "staleCalls": 1,
+        "oldUnsubscribeDidNotAffectNew": true,
+        "cleanup": {
+          "sceneBaseline": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "sceneAfter": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "mappingAfter": {
+            "entities": 0,
+            "subscriptions": 0
+          },
+          "physicsBeforeWorldDispose": {
+            "vehicles": 0,
+            "bodies": 64,
+            "colliders": 68
+          },
+          "worldDisposeCompleted": true
+        }
+      },
+      {
+        "cycle": 14,
+        "physics": {
+          "vehicles": 70,
+          "bodies": 134,
+          "colliders": 138
+        },
+        "mapping": {
+          "entities": 70,
+          "subscriptions": 1
+        },
+        "peakMapping": {
+          "entities": 70,
+          "subscriptions": 2
+        },
+        "staleCalls": 1,
+        "oldUnsubscribeDidNotAffectNew": true,
+        "cleanup": {
+          "sceneBaseline": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "sceneAfter": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "mappingAfter": {
+            "entities": 0,
+            "subscriptions": 0
+          },
+          "physicsBeforeWorldDispose": {
+            "vehicles": 0,
+            "bodies": 64,
+            "colliders": 68
+          },
+          "worldDisposeCompleted": true
+        }
+      },
+      {
+        "cycle": 15,
+        "physics": {
+          "vehicles": 70,
+          "bodies": 134,
+          "colliders": 138
+        },
+        "mapping": {
+          "entities": 70,
+          "subscriptions": 1
+        },
+        "peakMapping": {
+          "entities": 70,
+          "subscriptions": 2
+        },
+        "staleCalls": 1,
+        "oldUnsubscribeDidNotAffectNew": true,
+        "cleanup": {
+          "sceneBaseline": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "sceneAfter": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "mappingAfter": {
+            "entities": 0,
+            "subscriptions": 0
+          },
+          "physicsBeforeWorldDispose": {
+            "vehicles": 0,
+            "bodies": 64,
+            "colliders": 68
+          },
+          "worldDisposeCompleted": true
+        }
+      },
+      {
+        "cycle": 16,
+        "physics": {
+          "vehicles": 70,
+          "bodies": 134,
+          "colliders": 138
+        },
+        "mapping": {
+          "entities": 70,
+          "subscriptions": 1
+        },
+        "peakMapping": {
+          "entities": 70,
+          "subscriptions": 2
+        },
+        "staleCalls": 1,
+        "oldUnsubscribeDidNotAffectNew": true,
+        "cleanup": {
+          "sceneBaseline": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "sceneAfter": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "mappingAfter": {
+            "entities": 0,
+            "subscriptions": 0
+          },
+          "physicsBeforeWorldDispose": {
+            "vehicles": 0,
+            "bodies": 64,
+            "colliders": 68
+          },
+          "worldDisposeCompleted": true
+        }
+      },
+      {
+        "cycle": 17,
+        "physics": {
+          "vehicles": 70,
+          "bodies": 134,
+          "colliders": 138
+        },
+        "mapping": {
+          "entities": 70,
+          "subscriptions": 1
+        },
+        "peakMapping": {
+          "entities": 70,
+          "subscriptions": 2
+        },
+        "staleCalls": 1,
+        "oldUnsubscribeDidNotAffectNew": true,
+        "cleanup": {
+          "sceneBaseline": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "sceneAfter": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "mappingAfter": {
+            "entities": 0,
+            "subscriptions": 0
+          },
+          "physicsBeforeWorldDispose": {
+            "vehicles": 0,
+            "bodies": 64,
+            "colliders": 68
+          },
+          "worldDisposeCompleted": true
+        }
+      },
+      {
+        "cycle": 18,
+        "physics": {
+          "vehicles": 70,
+          "bodies": 134,
+          "colliders": 138
+        },
+        "mapping": {
+          "entities": 70,
+          "subscriptions": 1
+        },
+        "peakMapping": {
+          "entities": 70,
+          "subscriptions": 2
+        },
+        "staleCalls": 1,
+        "oldUnsubscribeDidNotAffectNew": true,
+        "cleanup": {
+          "sceneBaseline": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "sceneAfter": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "mappingAfter": {
+            "entities": 0,
+            "subscriptions": 0
+          },
+          "physicsBeforeWorldDispose": {
+            "vehicles": 0,
+            "bodies": 64,
+            "colliders": 68
+          },
+          "worldDisposeCompleted": true
+        }
+      },
+      {
+        "cycle": 19,
+        "physics": {
+          "vehicles": 70,
+          "bodies": 134,
+          "colliders": 138
+        },
+        "mapping": {
+          "entities": 70,
+          "subscriptions": 1
+        },
+        "peakMapping": {
+          "entities": 70,
+          "subscriptions": 2
+        },
+        "staleCalls": 1,
+        "oldUnsubscribeDidNotAffectNew": true,
+        "cleanup": {
+          "sceneBaseline": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "sceneAfter": {
+            "meshes": 0,
+            "nodes": 0,
+            "materials": 1,
+            "textures": 0
+          },
+          "mappingAfter": {
+            "entities": 0,
+            "subscriptions": 0
+          },
+          "physicsBeforeWorldDispose": {
+            "vehicles": 0,
+            "bodies": 64,
+            "colliders": 68
+          },
+          "worldDisposeCompleted": true
+        }
+      }
+    ]
+  },
+  "hardware": {
+    "source": "current CIM at fixture server startup",
+    "capturedAt": "2026-10-05T13:26:59.9547920+03:00",
+    "cpu": [
+      {
+        "Name": "AMD Ryzen 9 7950X3D 16-Core Processor          ",
+        "NumberOfCores": 16,
+        "NumberOfLogicalProcessors": 32
+      }
+    ],
+    "gpu": [
+      {
+        "Name": "Parsec Virtual Display Adapter",
+        "DriverVersion": "0.45.0.0",
+        "AdapterRAM": null,
+        "CurrentHorizontalResolution": null,
+        "CurrentVerticalResolution": null,
+        "CurrentRefreshRate": null
+      },
+      {
+        "Name": "Meta Virtual Monitor",
+        "DriverVersion": "15.52.32.370",
+        "AdapterRAM": null,
+        "CurrentHorizontalResolution": 3840,
+        "CurrentVerticalResolution": 2160,
+        "CurrentRefreshRate": 144
+      },
+      {
+        "Name": "Virtual Desktop Monitor",
+        "DriverVersion": "13.50.53.699",
+        "AdapterRAM": null,
+        "CurrentHorizontalResolution": null,
+        "CurrentVerticalResolution": null,
+        "CurrentRefreshRate": null
+      },
+      {
+        "Name": "AMD Radeon RX 7900 XTX",
+        "DriverVersion": "32.0.31041.1004",
+        "AdapterRAM": 4293918720,
+        "CurrentHorizontalResolution": 3840,
+        "CurrentVerticalResolution": 2160,
+        "CurrentRefreshRate": 144
+      },
+      {
+        "Name": "AMD Radeon(TM) Graphics",
+        "DriverVersion": "32.0.21045.5002",
+        "AdapterRAM": 536870912,
+        "CurrentHorizontalResolution": null,
+        "CurrentVerticalResolution": null,
+        "CurrentRefreshRate": null
+      }
+    ],
+    "memory": [
+      {
+        "Capacity": 25769803776,
+        "Speed": 5200
+      },
+      {
+        "Capacity": 25769803776,
+        "Speed": 5200
+      }
+    ],
+    "os": [
+      {
+        "Caption": "Microsoft Windows 11 Pro",
+        "Version": "10.0.26200",
+        "BuildNumber": "26200",
+        "TotalVisibleMemorySize": 49157544
+      }
+    ],
+    "battery": [],
+    "powerScheme": "Power Scheme GUID: 381b4222-f694-41f0-9685-ff5bb260df2e  (Balanced)"
+  }
+}
