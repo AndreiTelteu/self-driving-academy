@@ -25,3 +25,7 @@ Controllerul și fizica rămân la 60 Hz; doar deciziile de nivel înalt au 10 H
 ## Recuperare și impacturi distractive
 
 [Modulul 26](26-joaca-libera-haos-si-distrugere.md) diferențiază R/deblocarea mașinii de resetul lumii cu stil păstrat și definește contactele cu decor destructibil. Fizica este aceeași în Academie/Haos și MANUAL/LEARNING/AUTO. Reglajele de input schimbă realizarea comenzilor jucătorului; sliderele de stil schimbă țintele politicii, fără modificarea ascunsă a masei, aderenței sau puterii.
+
+## Prototip implementat021
+
+[Prototipul Rapier](physics-prototype.md) documentează portul, calibrarea, decizia, limitele observate și probele desktop reale. Babylon rămâne engine-ul. Fizica finală și integrarea gameplay continuă în PBI-urile dedicate.

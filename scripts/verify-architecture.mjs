@@ -77,10 +77,16 @@ function inspect(file, source) {
     const specifier = token.value;
     if (file === 'main.ts' && specifier === './style.css') continue;
     if (!specifier.startsWith('.')) {
-      if (!(
-        file.replaceAll('\\', '/').startsWith('rendering/babylon/') &&
-        specifier.startsWith('@babylonjs/')
-      )) {
+      if (
+        !(
+          file.replaceAll('\\', '/').startsWith('rendering/babylon/') &&
+          specifier.startsWith('@babylonjs/')
+        ) &&
+        !(
+          file.replaceAll('\\', '/') === 'vehicles/rapier/index.ts' &&
+          specifier === '@dimforge/rapier3d-compat'
+        )
+      ) {
         errors.push(`${file}: external import ${specifier} outside Babylon adapter`);
       }
       continue;
@@ -166,6 +172,15 @@ for (const [file, source] of [
 }
 errors.length = 0;
 console.log('Inspector exception negative probes: PASS (4 forbidden imports rejected)');
+for (const file of ['vehicles/physics.ts', 'simulation/probe.ts', 'vehicles/rapier/other.ts']) {
+  errors.length = 0;
+  inspect(file, "import RAPIER from '@dimforge/rapier3d-compat';");
+  assert(errors.length > 0, `Rapier exception leaked into ${file}`);
+}
+errors.length = 0;
+inspect('vehicles/rapier/index.ts', "import RAPIER from '@dimforge/rapier3d-compat';");
+assert.equal(errors.length, 0, 'Explicit Rapier adapter import rejected');
+console.log('Rapier adapter negative probes: PASS (3 forbidden imports rejected)');
 
 // Execute the real public TypeScript entry points without DOM, Babylon, Vite or generated files.
 const { hooks } = await import('./register-typescript.mjs');
