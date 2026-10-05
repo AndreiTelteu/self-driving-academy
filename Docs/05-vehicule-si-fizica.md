@@ -8,6 +8,8 @@ Realismul primei versiuni înseamnă distanțe de frânare dependente de viteză
 
 Inputul digital al tastaturii este filtrat prin curbe de accelerație, frână și direcție, cu revenire și sensibilitate dependentă de viteză. Asistențele sunt configurabile prin ControlPreferences versionat și sliderele din [modulul 27](27-reglaje-hud-si-camera.md), în limite calibrate care păstrează mecanica vehiculului. Estimatorul observă inputul brut, comenzile efective și versiunea setărilor; nu învață oscilațiile produse de limita tastaturii drept preferință personală.
 
+[Implementarea025](keyboard-input.md) publică raw/held/comanda efectivă la tick-ul autoritar. Maparea `025-keyboard-v1` are capete calibrate sedan/compact; valorile vechi `provisional-v1` cer upgrade explicit. Pierderea focusului și editarea într-un câmp eliberează comenzile. S este frână, iar marșarierul rămâne în027.
+
 Pragurile mecanice aparțin configurației vehiculului. Profilul șoferului exprimă accelerații dorite și spații acceptate, apoi controllerul le realizează în limita aderenței și puterii. Condusul agresiv poate produce derapaje, frânare insuficientă și coliziuni. Sistemul nu adaugă imunitate fizică taxiurilor autonome.
 
 Scenele de calibrare includ frânare de la viteze repetabile, viraje cu rază fixă, schimbare de bandă, impact cu bordură și contact între două mașini. Se verifică stabilitatea numerelor și coerența manual versus autonom înainte de construirea campaniei.
