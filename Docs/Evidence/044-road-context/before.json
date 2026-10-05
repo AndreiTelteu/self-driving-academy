@@ -1,0 +1,1048 @@
+{
+  "capturedAt": "2026-10-05T12:00:16.567Z",
+  "mode": "BEFORE_EXHAUSTIVE",
+  "commit": "cc861f5ed4d3bdf310a679d26f76e37d2f72e95a",
+  "sourceHashes": {
+    "scripts/benchmark-road-context.mjs": "b4a369f7eed43cf7a7830a0c272d5462f658616e2f7b38a3ad122de832288306",
+    "tests/autonomy/road-context-reference.ts": "c5fe61c330db951f2bb1f97b3ea6d75bb92228e7f38864197e21378602ddd6f7",
+    "tests/world/intersection-conflicts-fixture.ts": "f159c5b3852b57e456e28b797c1cfa20182d4a58c13e426095ca622cd4a6fbd7",
+    "tests/world/spatial-index-reference.ts": "677359ccbce1d13f8df0d3f17878c1496fce71f9ea9395a2f25d941b817a9618",
+    "src/world/lane-graph.ts": "8094ffbc7d85ed8fc4fc9400e02f5ca071d83408c04b66be12aef3c7bb8685aa",
+    "src/world/signals.ts": "772142b68ba6aa90e9df5d19ee19f35aed6d6ea74e51155e53d4b20b12a2452b",
+    "src/world/spatial-index.ts": "06de004e8d9a4241cda9cfa84d83550342b4b7a71e81840835d6c2eb00a7e8df"
+  },
+  "hardware": {
+    "cpu": "AMD Ryzen 9 7950X3D 16-Core Processor          ",
+    "logicalCpus": 32,
+    "ramBytes": 50337325056,
+    "os": "win32 10.0.26200",
+    "powerScheme": "Power Scheme GUID: 381b4222-f694-41f0-9685-ff5bb260df2e  (Balanced)"
+  },
+  "runtime": "v24.21.0",
+  "budgetVersion": "203-initial-1",
+  "fixtureVersion": "044-road-context-cross-v1",
+  "protocol": {
+    "repetitions": 5,
+    "warmupIterations": 20,
+    "measuredIterations": 80,
+    "observer": "paired off/on; whole-query batch externally timed both; optional individual-context sub-timers on",
+    "warmupSeconds": null,
+    "measuredSeconds": null,
+    "tickHz": null,
+    "batchSampleCapacity": 80,
+    "individualSampleCapacity": 8800,
+    "diagnosticPayloadBoundBytes": 71680,
+    "workload": "64/110 vehicles;32/96 obstacles;24/256 zones; 4 junction approaches and parallel overpass; real036signal controller advances consecutive ticks; explicit routes and supplied per-relation distances",
+    "seed": "none; deterministic position grid and tick modulo",
+    "budget": "Supplemental CPU only; no isolated context budget fixed;5.5ms provisional full-tick ceiling is not approved by isolated probe"
+  },
+  "scope": "CPU Node context/reference algorithm, no renderer/browser/GPU/FPS/realtime throughput claim",
+  "runs": [
+    {
+      "repetition": 0,
+      "observe": false,
+      "workloads": [
+        {
+          "dense": false,
+          "vehicles": 64,
+          "obstacles": 32,
+          "zones": 24,
+          "elapsedWallMs": 210.3302,
+          "checksum": 101454,
+          "queryBatchCpuMs": {
+            "count": 80,
+            "p50": 1.9091999999999985,
+            "p95": 2.8506999999999607,
+            "p99": 3.289100000000019
+          },
+          "updateCpuMs": {
+            "count": 80,
+            "p50": 0.0002000000000066393,
+            "p95": 0.0004999999999881766,
+            "p99": 0.0006000000000199179
+          },
+          "individualContextCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "heapBeforeBytes": 11038072,
+          "heapAfterBytes": 11349864,
+          "forcedGc": true,
+          "exactContextBytes": null,
+          "ownership": {
+            "referenceVehicles": 64,
+            "referenceObstacles": 32,
+            "referenceZones": 24,
+            "indexCells": 0,
+            "indexReferences": 0,
+            "cachedContexts": 0
+          },
+          "signal": {
+            "tick": 99,
+            "signals": 1,
+            "phases": 2,
+            "stateEntries": 14,
+            "pendingEvents": 0,
+            "disposed": false
+          }
+        },
+        {
+          "dense": true,
+          "vehicles": 110,
+          "obstacles": 96,
+          "zones": 256,
+          "elapsedWallMs": 831.2163999999999,
+          "checksum": 813387,
+          "queryBatchCpuMs": {
+            "count": 80,
+            "p50": 7.824500000000171,
+            "p95": 10.45029999999997,
+            "p99": 11.53469999999993
+          },
+          "updateCpuMs": {
+            "count": 80,
+            "p50": 0.0001999999999497959,
+            "p95": 0.0003000000000383807,
+            "p99": 0.0004999999999881766
+          },
+          "individualContextCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "heapBeforeBytes": 11705288,
+          "heapAfterBytes": 11616400,
+          "forcedGc": true,
+          "exactContextBytes": null,
+          "ownership": {
+            "referenceVehicles": 110,
+            "referenceObstacles": 96,
+            "referenceZones": 256,
+            "indexCells": 0,
+            "indexReferences": 0,
+            "cachedContexts": 0
+          },
+          "signal": {
+            "tick": 99,
+            "signals": 1,
+            "phases": 2,
+            "stateEntries": 14,
+            "pendingEvents": 0,
+            "disposed": false
+          }
+        }
+      ]
+    },
+    {
+      "repetition": 0,
+      "observe": true,
+      "workloads": [
+        {
+          "dense": false,
+          "vehicles": 64,
+          "obstacles": 32,
+          "zones": 24,
+          "elapsedWallMs": 139.55269999999996,
+          "checksum": 101454,
+          "queryBatchCpuMs": {
+            "count": 80,
+            "p50": 1.322499999999991,
+            "p95": 1.8496000000000095,
+            "p99": 1.993600000000015
+          },
+          "updateCpuMs": {
+            "count": 80,
+            "p50": 0.00009999999997489795,
+            "p95": 0.00029999999992469384,
+            "p99": 0.00040000000012696546
+          },
+          "individualContextCpuMs": {
+            "count": 5120,
+            "p50": 0.019000000000005457,
+            "p95": 0.036100000000033106,
+            "p99": 0.06349999999997635
+          },
+          "heapBeforeBytes": 11795488,
+          "heapAfterBytes": 12500768,
+          "forcedGc": true,
+          "exactContextBytes": null,
+          "ownership": {
+            "referenceVehicles": 64,
+            "referenceObstacles": 32,
+            "referenceZones": 24,
+            "indexCells": 0,
+            "indexReferences": 0,
+            "cachedContexts": 0
+          },
+          "signal": {
+            "tick": 99,
+            "signals": 1,
+            "phases": 2,
+            "stateEntries": 14,
+            "pendingEvents": 0,
+            "disposed": false
+          }
+        },
+        {
+          "dense": true,
+          "vehicles": 110,
+          "obstacles": 96,
+          "zones": 256,
+          "elapsedWallMs": 869.0213000000001,
+          "checksum": 813387,
+          "queryBatchCpuMs": {
+            "count": 80,
+            "p50": 7.922699999999622,
+            "p95": 10.252899999999954,
+            "p99": 12.130599999999959
+          },
+          "updateCpuMs": {
+            "count": 80,
+            "p50": 0.00010000000020227162,
+            "p95": 0.0005000000001018634,
+            "p99": 0.0005999999998493877
+          },
+          "individualContextCpuMs": {
+            "count": 8800,
+            "p50": 0.07009999999991123,
+            "p95": 0.12980000000015934,
+            "p99": 0.21109999999998763
+          },
+          "heapBeforeBytes": 11820480,
+          "heapAfterBytes": 13664728,
+          "forcedGc": true,
+          "exactContextBytes": null,
+          "ownership": {
+            "referenceVehicles": 110,
+            "referenceObstacles": 96,
+            "referenceZones": 256,
+            "indexCells": 0,
+            "indexReferences": 0,
+            "cachedContexts": 0
+          },
+          "signal": {
+            "tick": 99,
+            "signals": 1,
+            "phases": 2,
+            "stateEntries": 14,
+            "pendingEvents": 0,
+            "disposed": false
+          }
+        }
+      ]
+    },
+    {
+      "repetition": 1,
+      "observe": false,
+      "workloads": [
+        {
+          "dense": false,
+          "vehicles": 64,
+          "obstacles": 32,
+          "zones": 24,
+          "elapsedWallMs": 171.067,
+          "checksum": 101454,
+          "queryBatchCpuMs": {
+            "count": 80,
+            "p50": 1.5695000000000618,
+            "p95": 2.155999999999949,
+            "p99": 2.499499999999898
+          },
+          "updateCpuMs": {
+            "count": 80,
+            "p50": 0.00009999999974752427,
+            "p95": 0.00010000000020227162,
+            "p99": 0.0001999999999497959
+          },
+          "individualContextCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "heapBeforeBytes": 11539496,
+          "heapAfterBytes": 11564440,
+          "forcedGc": true,
+          "exactContextBytes": null,
+          "ownership": {
+            "referenceVehicles": 64,
+            "referenceObstacles": 32,
+            "referenceZones": 24,
+            "indexCells": 0,
+            "indexReferences": 0,
+            "cachedContexts": 0
+          },
+          "signal": {
+            "tick": 99,
+            "signals": 1,
+            "phases": 2,
+            "stateEntries": 14,
+            "pendingEvents": 0,
+            "disposed": false
+          }
+        },
+        {
+          "dense": true,
+          "vehicles": 110,
+          "obstacles": 96,
+          "zones": 256,
+          "elapsedWallMs": 832.4861999999998,
+          "checksum": 813387,
+          "queryBatchCpuMs": {
+            "count": 80,
+            "p50": 8.253299999999854,
+            "p95": 10.49850000000015,
+            "p99": 12.191499999999905
+          },
+          "updateCpuMs": {
+            "count": 80,
+            "p50": 0.00010000000020227162,
+            "p95": 0.0001999999999497959,
+            "p99": 0.00029999999969732016
+          },
+          "individualContextCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "heapBeforeBytes": 11857728,
+          "heapAfterBytes": 11774144,
+          "forcedGc": true,
+          "exactContextBytes": null,
+          "ownership": {
+            "referenceVehicles": 110,
+            "referenceObstacles": 96,
+            "referenceZones": 256,
+            "indexCells": 0,
+            "indexReferences": 0,
+            "cachedContexts": 0
+          },
+          "signal": {
+            "tick": 99,
+            "signals": 1,
+            "phases": 2,
+            "stateEntries": 14,
+            "pendingEvents": 0,
+            "disposed": false
+          }
+        }
+      ]
+    },
+    {
+      "repetition": 1,
+      "observe": true,
+      "workloads": [
+        {
+          "dense": false,
+          "vehicles": 64,
+          "obstacles": 32,
+          "zones": 24,
+          "elapsedWallMs": 163.29460000000017,
+          "checksum": 101454,
+          "queryBatchCpuMs": {
+            "count": 80,
+            "p50": 1.4041999999999462,
+            "p95": 2.1882000000000517,
+            "p99": 2.497200000000248
+          },
+          "updateCpuMs": {
+            "count": 80,
+            "p50": 0.00009999999974752427,
+            "p95": 0.00010000000020227162,
+            "p99": 0.00010000000020227162
+          },
+          "individualContextCpuMs": {
+            "count": 5120,
+            "p50": 0.021200000000135333,
+            "p95": 0.04129999999986467,
+            "p99": 0.0660000000002583
+          },
+          "heapBeforeBytes": 11878448,
+          "heapAfterBytes": 12689608,
+          "forcedGc": true,
+          "exactContextBytes": null,
+          "ownership": {
+            "referenceVehicles": 64,
+            "referenceObstacles": 32,
+            "referenceZones": 24,
+            "indexCells": 0,
+            "indexReferences": 0,
+            "cachedContexts": 0
+          },
+          "signal": {
+            "tick": 99,
+            "signals": 1,
+            "phases": 2,
+            "stateEntries": 14,
+            "pendingEvents": 0,
+            "disposed": false
+          }
+        },
+        {
+          "dense": true,
+          "vehicles": 110,
+          "obstacles": 96,
+          "zones": 256,
+          "elapsedWallMs": 876.2234000000003,
+          "checksum": 813387,
+          "queryBatchCpuMs": {
+            "count": 80,
+            "p50": 7.825399999999718,
+            "p95": 11.678499999999985,
+            "p99": 13.201900000000023
+          },
+          "updateCpuMs": {
+            "count": 80,
+            "p50": 0.00009999999974752427,
+            "p95": 0.00010000000020227162,
+            "p99": 0.00020000000040454324
+          },
+          "individualContextCpuMs": {
+            "count": 8800,
+            "p50": 0.07180000000016662,
+            "p95": 0.135899999999765,
+            "p99": 0.20539999999982683
+          },
+          "heapBeforeBytes": 11904968,
+          "heapAfterBytes": 13672504,
+          "forcedGc": true,
+          "exactContextBytes": null,
+          "ownership": {
+            "referenceVehicles": 110,
+            "referenceObstacles": 96,
+            "referenceZones": 256,
+            "indexCells": 0,
+            "indexReferences": 0,
+            "cachedContexts": 0
+          },
+          "signal": {
+            "tick": 99,
+            "signals": 1,
+            "phases": 2,
+            "stateEntries": 14,
+            "pendingEvents": 0,
+            "disposed": false
+          }
+        }
+      ]
+    },
+    {
+      "repetition": 2,
+      "observe": false,
+      "workloads": [
+        {
+          "dense": false,
+          "vehicles": 64,
+          "obstacles": 32,
+          "zones": 24,
+          "elapsedWallMs": 152.20349999999962,
+          "checksum": 101454,
+          "queryBatchCpuMs": {
+            "count": 80,
+            "p50": 1.5733000000000175,
+            "p95": 1.8912000000000262,
+            "p99": 2.058799999999792
+          },
+          "updateCpuMs": {
+            "count": 80,
+            "p50": 0.00010000000020227162,
+            "p95": 0.00010000000020227162,
+            "p99": 0.00010000000020227162
+          },
+          "individualContextCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "heapBeforeBytes": 11940888,
+          "heapAfterBytes": 11609688,
+          "forcedGc": true,
+          "exactContextBytes": null,
+          "ownership": {
+            "referenceVehicles": 64,
+            "referenceObstacles": 32,
+            "referenceZones": 24,
+            "indexCells": 0,
+            "indexReferences": 0,
+            "cachedContexts": 0
+          },
+          "signal": {
+            "tick": 99,
+            "signals": 1,
+            "phases": 2,
+            "stateEntries": 14,
+            "pendingEvents": 0,
+            "disposed": false
+          }
+        },
+        {
+          "dense": true,
+          "vehicles": 110,
+          "obstacles": 96,
+          "zones": 256,
+          "elapsedWallMs": 805.8748999999998,
+          "checksum": 813387,
+          "queryBatchCpuMs": {
+            "count": 80,
+            "p50": 7.593200000000252,
+            "p95": 10.531199999999444,
+            "p99": 10.999299999999494
+          },
+          "updateCpuMs": {
+            "count": 80,
+            "p50": 0.00010000000020227162,
+            "p95": 0.00010000000020227162,
+            "p99": 0.00020000000040454324
+          },
+          "individualContextCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "heapBeforeBytes": 11842560,
+          "heapAfterBytes": 11800536,
+          "forcedGc": true,
+          "exactContextBytes": null,
+          "ownership": {
+            "referenceVehicles": 110,
+            "referenceObstacles": 96,
+            "referenceZones": 256,
+            "indexCells": 0,
+            "indexReferences": 0,
+            "cachedContexts": 0
+          },
+          "signal": {
+            "tick": 99,
+            "signals": 1,
+            "phases": 2,
+            "stateEntries": 14,
+            "pendingEvents": 0,
+            "disposed": false
+          }
+        }
+      ]
+    },
+    {
+      "repetition": 2,
+      "observe": true,
+      "workloads": [
+        {
+          "dense": false,
+          "vehicles": 64,
+          "obstacles": 32,
+          "zones": 24,
+          "elapsedWallMs": 163.95139999999992,
+          "checksum": 101454,
+          "queryBatchCpuMs": {
+            "count": 80,
+            "p50": 1.692800000000716,
+            "p95": 2.147100000000137,
+            "p99": 2.308899999999994
+          },
+          "updateCpuMs": {
+            "count": 80,
+            "p50": 0.00010000000020227162,
+            "p95": 0.00010000000020227162,
+            "p99": 0.00020000000040454324
+          },
+          "individualContextCpuMs": {
+            "count": 5120,
+            "p50": 0.02309999999943102,
+            "p95": 0.04389999999966676,
+            "p99": 0.05790000000069995
+          },
+          "heapBeforeBytes": 11905064,
+          "heapAfterBytes": 12728168,
+          "forcedGc": true,
+          "exactContextBytes": null,
+          "ownership": {
+            "referenceVehicles": 64,
+            "referenceObstacles": 32,
+            "referenceZones": 24,
+            "indexCells": 0,
+            "indexReferences": 0,
+            "cachedContexts": 0
+          },
+          "signal": {
+            "tick": 99,
+            "signals": 1,
+            "phases": 2,
+            "stateEntries": 14,
+            "pendingEvents": 0,
+            "disposed": false
+          }
+        },
+        {
+          "dense": true,
+          "vehicles": 110,
+          "obstacles": 96,
+          "zones": 256,
+          "elapsedWallMs": 765.3241000000007,
+          "checksum": 813387,
+          "queryBatchCpuMs": {
+            "count": 80,
+            "p50": 7.05370000000039,
+            "p95": 9.132400000000416,
+            "p99": 9.47689999999966
+          },
+          "updateCpuMs": {
+            "count": 80,
+            "p50": 0.00010000000020227162,
+            "p95": 0.00010000000020227162,
+            "p99": 0.00010000000020227162
+          },
+          "individualContextCpuMs": {
+            "count": 8800,
+            "p50": 0.057999999999992724,
+            "p95": 0.11760000000049331,
+            "p99": 0.16740000000027067
+          },
+          "heapBeforeBytes": 11953896,
+          "heapAfterBytes": 13682376,
+          "forcedGc": true,
+          "exactContextBytes": null,
+          "ownership": {
+            "referenceVehicles": 110,
+            "referenceObstacles": 96,
+            "referenceZones": 256,
+            "indexCells": 0,
+            "indexReferences": 0,
+            "cachedContexts": 0
+          },
+          "signal": {
+            "tick": 99,
+            "signals": 1,
+            "phases": 2,
+            "stateEntries": 14,
+            "pendingEvents": 0,
+            "disposed": false
+          }
+        }
+      ]
+    },
+    {
+      "repetition": 3,
+      "observe": false,
+      "workloads": [
+        {
+          "dense": false,
+          "vehicles": 64,
+          "obstacles": 32,
+          "zones": 24,
+          "elapsedWallMs": 140.39469999999983,
+          "checksum": 101454,
+          "queryBatchCpuMs": {
+            "count": 80,
+            "p50": 1.29070000000047,
+            "p95": 1.7614999999996144,
+            "p99": 1.8395000000000437
+          },
+          "updateCpuMs": {
+            "count": 80,
+            "p50": 0.00010000000020227162,
+            "p95": 0.00010000000020227162,
+            "p99": 0.00010000000020227162
+          },
+          "individualContextCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "heapBeforeBytes": 11979288,
+          "heapAfterBytes": 11638440,
+          "forcedGc": true,
+          "exactContextBytes": null,
+          "ownership": {
+            "referenceVehicles": 64,
+            "referenceObstacles": 32,
+            "referenceZones": 24,
+            "indexCells": 0,
+            "indexReferences": 0,
+            "cachedContexts": 0
+          },
+          "signal": {
+            "tick": 99,
+            "signals": 1,
+            "phases": 2,
+            "stateEntries": 14,
+            "pendingEvents": 0,
+            "disposed": false
+          }
+        },
+        {
+          "dense": true,
+          "vehicles": 110,
+          "obstacles": 96,
+          "zones": 256,
+          "elapsedWallMs": 796.6395000000002,
+          "checksum": 813387,
+          "queryBatchCpuMs": {
+            "count": 80,
+            "p50": 7.754699999999502,
+            "p95": 9.872000000000298,
+            "p99": 10.258100000000013
+          },
+          "updateCpuMs": {
+            "count": 80,
+            "p50": 0.00010000000020227162,
+            "p95": 0.00020000000040454324,
+            "p99": 0.00020000000040454324
+          },
+          "individualContextCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "heapBeforeBytes": 11908520,
+          "heapAfterBytes": 11862984,
+          "forcedGc": true,
+          "exactContextBytes": null,
+          "ownership": {
+            "referenceVehicles": 110,
+            "referenceObstacles": 96,
+            "referenceZones": 256,
+            "indexCells": 0,
+            "indexReferences": 0,
+            "cachedContexts": 0
+          },
+          "signal": {
+            "tick": 99,
+            "signals": 1,
+            "phases": 2,
+            "stateEntries": 14,
+            "pendingEvents": 0,
+            "disposed": false
+          }
+        }
+      ]
+    },
+    {
+      "repetition": 3,
+      "observe": true,
+      "workloads": [
+        {
+          "dense": false,
+          "vehicles": 64,
+          "obstacles": 32,
+          "zones": 24,
+          "elapsedWallMs": 195.9412999999995,
+          "checksum": 101454,
+          "queryBatchCpuMs": {
+            "count": 80,
+            "p50": 1.9537000000000262,
+            "p95": 2.72649999999976,
+            "p99": 2.9416000000001077
+          },
+          "updateCpuMs": {
+            "count": 80,
+            "p50": 0.00010000000020227162,
+            "p95": 0.00010000000020227162,
+            "p99": 0.00019999999949504854
+          },
+          "individualContextCpuMs": {
+            "count": 5120,
+            "p50": 0.02580000000034488,
+            "p95": 0.05249999999978172,
+            "p99": 0.08680000000003929
+          },
+          "heapBeforeBytes": 11968256,
+          "heapAfterBytes": 12768736,
+          "forcedGc": true,
+          "exactContextBytes": null,
+          "ownership": {
+            "referenceVehicles": 64,
+            "referenceObstacles": 32,
+            "referenceZones": 24,
+            "indexCells": 0,
+            "indexReferences": 0,
+            "cachedContexts": 0
+          },
+          "signal": {
+            "tick": 99,
+            "signals": 1,
+            "phases": 2,
+            "stateEntries": 14,
+            "pendingEvents": 0,
+            "disposed": false
+          }
+        },
+        {
+          "dense": true,
+          "vehicles": 110,
+          "obstacles": 96,
+          "zones": 256,
+          "elapsedWallMs": 911.6564999999991,
+          "checksum": 813387,
+          "queryBatchCpuMs": {
+            "count": 80,
+            "p50": 9.229099999999562,
+            "p95": 11.604300000000876,
+            "p99": 12.73320000000058
+          },
+          "updateCpuMs": {
+            "count": 80,
+            "p50": 0.00010000000020227162,
+            "p95": 0.00029999999969732016,
+            "p99": 0.0005999999993946403
+          },
+          "individualContextCpuMs": {
+            "count": 8800,
+            "p50": 0.07669999999961874,
+            "p95": 0.14159999999992579,
+            "p99": 0.24089999999978318
+          },
+          "heapBeforeBytes": 11936208,
+          "heapAfterBytes": 13843288,
+          "forcedGc": true,
+          "exactContextBytes": null,
+          "ownership": {
+            "referenceVehicles": 110,
+            "referenceObstacles": 96,
+            "referenceZones": 256,
+            "indexCells": 0,
+            "indexReferences": 0,
+            "cachedContexts": 0
+          },
+          "signal": {
+            "tick": 99,
+            "signals": 1,
+            "phases": 2,
+            "stateEntries": 14,
+            "pendingEvents": 0,
+            "disposed": false
+          }
+        }
+      ]
+    },
+    {
+      "repetition": 4,
+      "observe": false,
+      "workloads": [
+        {
+          "dense": false,
+          "vehicles": 64,
+          "obstacles": 32,
+          "zones": 24,
+          "elapsedWallMs": 176.77560000000085,
+          "checksum": 101454,
+          "queryBatchCpuMs": {
+            "count": 80,
+            "p50": 1.5363999999990483,
+            "p95": 2.759200000000419,
+            "p99": 3.6129999999993743
+          },
+          "updateCpuMs": {
+            "count": 80,
+            "p50": 0.00009999999929277692,
+            "p95": 0.00019999999858555384,
+            "p99": 0.0003999999989900971
+          },
+          "individualContextCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "heapBeforeBytes": 11699360,
+          "heapAfterBytes": 11687488,
+          "forcedGc": true,
+          "exactContextBytes": null,
+          "ownership": {
+            "referenceVehicles": 64,
+            "referenceObstacles": 32,
+            "referenceZones": 24,
+            "indexCells": 0,
+            "indexReferences": 0,
+            "cachedContexts": 0
+          },
+          "signal": {
+            "tick": 99,
+            "signals": 1,
+            "phases": 2,
+            "stateEntries": 14,
+            "pendingEvents": 0,
+            "disposed": false
+          }
+        },
+        {
+          "dense": true,
+          "vehicles": 110,
+          "obstacles": 96,
+          "zones": 256,
+          "elapsedWallMs": 937.4879000000001,
+          "checksum": 813387,
+          "queryBatchCpuMs": {
+            "count": 80,
+            "p50": 9.085100000000239,
+            "p95": 12.024400000000242,
+            "p99": 13.52690000000075
+          },
+          "updateCpuMs": {
+            "count": 80,
+            "p50": 0.00009999999929277692,
+            "p95": 0.00010000000111176632,
+            "p99": 0.00020000000040454324
+          },
+          "individualContextCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "heapBeforeBytes": 11919624,
+          "heapAfterBytes": 11877712,
+          "forcedGc": true,
+          "exactContextBytes": null,
+          "ownership": {
+            "referenceVehicles": 110,
+            "referenceObstacles": 96,
+            "referenceZones": 256,
+            "indexCells": 0,
+            "indexReferences": 0,
+            "cachedContexts": 0
+          },
+          "signal": {
+            "tick": 99,
+            "signals": 1,
+            "phases": 2,
+            "stateEntries": 14,
+            "pendingEvents": 0,
+            "disposed": false
+          }
+        }
+      ]
+    },
+    {
+      "repetition": 4,
+      "observe": true,
+      "workloads": [
+        {
+          "dense": false,
+          "vehicles": 64,
+          "obstacles": 32,
+          "zones": 24,
+          "elapsedWallMs": 189.98189999999886,
+          "checksum": 101454,
+          "queryBatchCpuMs": {
+            "count": 80,
+            "p50": 1.7759000000005472,
+            "p95": 2.7388000000009924,
+            "p99": 3.143100000001141
+          },
+          "updateCpuMs": {
+            "count": 80,
+            "p50": 0.00009999999929277692,
+            "p95": 0.00029999999969732016,
+            "p99": 0.0009000000009109499
+          },
+          "individualContextCpuMs": {
+            "count": 5120,
+            "p50": 0.024600000000646105,
+            "p95": 0.06030000000100699,
+            "p99": 0.09389999999984866
+          },
+          "heapBeforeBytes": 12013632,
+          "heapAfterBytes": 12823200,
+          "forcedGc": true,
+          "exactContextBytes": null,
+          "ownership": {
+            "referenceVehicles": 64,
+            "referenceObstacles": 32,
+            "referenceZones": 24,
+            "indexCells": 0,
+            "indexReferences": 0,
+            "cachedContexts": 0
+          },
+          "signal": {
+            "tick": 99,
+            "signals": 1,
+            "phases": 2,
+            "stateEntries": 14,
+            "pendingEvents": 0,
+            "disposed": false
+          }
+        },
+        {
+          "dense": true,
+          "vehicles": 110,
+          "obstacles": 96,
+          "zones": 256,
+          "elapsedWallMs": 923.3204999999998,
+          "checksum": 813387,
+          "queryBatchCpuMs": {
+            "count": 80,
+            "p50": 8.617400000000998,
+            "p95": 12.687599999999293,
+            "p99": 13.20470000000023
+          },
+          "updateCpuMs": {
+            "count": 80,
+            "p50": 0.00009999999929277692,
+            "p95": 0.00010000000111176632,
+            "p99": 0.00020000000040454324
+          },
+          "individualContextCpuMs": {
+            "count": 8800,
+            "p50": 0.07550000000082946,
+            "p95": 0.14170000000012806,
+            "p99": 0.22229999999944994
+          },
+          "heapBeforeBytes": 11978368,
+          "heapAfterBytes": 13817272,
+          "forcedGc": true,
+          "exactContextBytes": null,
+          "ownership": {
+            "referenceVehicles": 110,
+            "referenceObstacles": 96,
+            "referenceZones": 256,
+            "indexCells": 0,
+            "indexReferences": 0,
+            "cachedContexts": 0
+          },
+          "signal": {
+            "tick": 99,
+            "signals": 1,
+            "phases": 2,
+            "stateEntries": 14,
+            "pendingEvents": 0,
+            "disposed": false
+          }
+        }
+      ]
+    }
+  ],
+  "medians": [
+    {
+      "observe": false,
+      "dense": false,
+      "queryBatchP95MedianMs": 2.155999999999949,
+      "updateP95MedianMs": 0.00010000000020227162
+    },
+    {
+      "observe": false,
+      "dense": true,
+      "queryBatchP95MedianMs": 10.49850000000015,
+      "updateP95MedianMs": 0.0001999999999497959
+    },
+    {
+      "observe": true,
+      "dense": false,
+      "queryBatchP95MedianMs": 2.1882000000000517,
+      "updateP95MedianMs": 0.00010000000020227162
+    },
+    {
+      "observe": true,
+      "dense": true,
+      "queryBatchP95MedianMs": 11.604300000000876,
+      "updateP95MedianMs": 0.00010000000111176632
+    }
+  ]
+}

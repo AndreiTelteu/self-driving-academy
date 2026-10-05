@@ -1,0 +1,1537 @@
+{
+  "capturedAt": "2026-10-05T12:48:46.362Z",
+  "mode": "AFTER_INDEXED_CONTEXT",
+  "commit": "cc861f5ed4d3bdf310a679d26f76e37d2f72e95a",
+  "sourceHashes": {
+    "scripts/benchmark-road-context.mjs": "15386fe5874bfa90910f1b50cf98bfd187aa96273162310099ee0e27578c19c0",
+    "tests/autonomy/road-context-reference.ts": "c5fe61c330db951f2bb1f97b3ea6d75bb92228e7f38864197e21378602ddd6f7",
+    "tests/world/intersection-conflicts-fixture.ts": "f159c5b3852b57e456e28b797c1cfa20182d4a58c13e426095ca622cd4a6fbd7",
+    "tests/world/spatial-index-reference.ts": "677359ccbce1d13f8df0d3f17878c1496fce71f9ea9395a2f25d941b817a9618",
+    "src/world/lane-graph.ts": "8094ffbc7d85ed8fc4fc9400e02f5ca071d83408c04b66be12aef3c7bb8685aa",
+    "src/world/signals.ts": "772142b68ba6aa90e9df5d19ee19f35aed6d6ea74e51155e53d4b20b12a2452b",
+    "src/world/spatial-index.ts": "06de004e8d9a4241cda9cfa84d83550342b4b7a71e81840835d6c2eb00a7e8df",
+    "src/autonomy/index.ts": "b443f74b5034de452986f09028cd02e39a316f05d3ea0b970752d7837c380279",
+    "src/autonomy/road-context.ts": "23b27314f0c294c60a2f94edc0fef86fd9dc10d171ca5d2a2185f9f300b6c2ce",
+    "src/world/crosswalk-zones.ts": "4813f137dfd772be1f485a64b9eb27dd805ea143ec2f5f58b8ec40a012b880c2",
+    "src/world/errors.ts": "f235ae1964bd9869e100d8b8401a4eeaa62285b90ca5a2606ff9b314faeed641",
+    "src/world/index.ts": "1a3798f0dd33cb77d41c749e691677bf27461b2f09909102cf3d680da34dc482",
+    "src/world/intersection-conflict-geometry.ts": "945a889e84bc5ce34ab94f3cf476fd2d9c0617796623099badc137caca841bd8",
+    "src/world/intersection-conflicts.ts": "839b50c028410ba40c6f1e7949bfd1086346559c867ed16ee482513b648acef8",
+    "src/world/parser.ts": "ab9079f43c08855a8e57cfa291f531cd55ddba81389c8edaa42e06906cff0233",
+    "src/world/priority-arrival.ts": "e22dcd8dabd5a1ec6fc97798067967c6fe13bc826c8b4d6a15eed52bb8e48f92",
+    "src/world/priority-policy.ts": "2b833212e55423faa52108bc4d80dd74368c16d8310a178490c2e9219187540a",
+    "src/world/priority-rules.ts": "17d71afed6d2bd0fc59e3352f133da02426d57e4e5b478e91b009fe46ef916a9",
+    "src/world/schema.ts": "35434e3006a4d3f360157f7c9549f7381ec7c1f345399d54061fa03b17097a85",
+    "src/world/semantics.ts": "8beba5bcbd38c23390be34d4d7b6879a62cffe8efdfb94fe94d3326aab87a16c",
+    "src/world/stop-rules.ts": "094906d03e625d586c46ae9a3c4ac1ab8ca5e5ec4503081762054526b575e60c",
+    "src/simulation/event-bus.ts": "53d6f15a5d5bb3e57a10a90dcbc48b1051ac32cc932be73094ef642cf7733ca6",
+    "src/simulation/events.ts": "460226ea56abc17731716ee76e7d76d4e7514f35b48566f494d15b31317b43c7",
+    "src/simulation/fixed-tick.ts": "420520d6cfc69b2f87182f03c3b189e94eb14161af86ff985cf6be0447a01847",
+    "src/simulation/index.ts": "1c64698368b021cf2c6365f1f226b600e7ae43c7430dc56a3ba7a57885e25dba",
+    "src/sessions/identity.ts": "f4b78b20857fc65704857a7bb78ef5a604083f173153ec7f5582bc450c6d76a6",
+    "src/sessions/index.ts": "960b676877c9876575d1f4fb425be83f603dbc038fe7c9f99aefc2c2be82c343",
+    "src/sessions/random.ts": "2b16fab5b74cf38e00f8847c747f8810cdcbc3850b013f35805f776e2d141fa0",
+    "src/sessions/validation.ts": "e129d68c9e0209875c6eede9b857ec3710ae9aa90e1f46b5208237d0be9efb79",
+    "src/vehicles/body-port.ts": "a9bd1045aedb6cf2a7bae07fd3cb094ef2bb922bf962d5143fd90ed84763eaf4",
+    "src/vehicles/body-registry.ts": "2b7fddf9487091a767e1342377f9ddfe6c0dd6e5c012bfc64c0b62f003f00ba6",
+    "src/vehicles/contracts.ts": "6639f51a1ab6326c2edcb4eb572cee3501612779e72af038c6831ddaa0494c26",
+    "src/vehicles/index.ts": "86d502c526cce86942dcc42dd4e8ecd10a96d1216aafc6d50f252d72275cf2b1",
+    "src/vehicles/physics.ts": "606aab5f738712df304b7be3fbf8f005541accc36831339074831cbd9d0e43c6",
+    "src/vehicles/vehicle-classes.ts": "43eed5576928ac07616200837f58bfbfd10bb41bd111b4bc7369f7ac0bc40fb2"
+  },
+  "sourceHashScope": "Declared fixture/reference plus all top-level TS source files in autonomy/world/simulation/sessions/vehicles; includes primary priority/conflict/parser/contracts/barrels; not a verified transitive dependency closure",
+  "hardware": {
+    "cpu": "AMD Ryzen 9 7950X3D 16-Core Processor          ",
+    "logicalCpus": 32,
+    "ramBytes": 50337325056,
+    "os": "win32 10.0.26200",
+    "powerScheme": "Power Scheme GUID: 381b4222-f694-41f0-9685-ff5bb260df2e  (Balanced)"
+  },
+  "runtime": "v24.21.0",
+  "budgetVersion": "203-initial-1",
+  "fixtureVersion": "044-road-context-cross-v1",
+  "protocol": {
+    "repetitions": 5,
+    "warmupIterations": 20,
+    "measuredIterations": 80,
+    "observer": "paired off/on; whole-query batch externally timed both; optional individual-context sub-timers on",
+    "warmupSeconds": null,
+    "measuredSeconds": null,
+    "tickHz": null,
+    "batchSampleCapacity": 80,
+    "individualSampleCapacity": 8800,
+    "diagnosticPayloadBoundBytes": 71680,
+    "workload": "64/110 vehicles;32/96 obstacles;24/256 zones; 4 junction approaches and parallel overpass; real036signal controller advances consecutive ticks; explicit routes and supplied per-relation distances",
+    "seed": "none; deterministic position grid and tick modulo",
+    "budget": "Supplemental CPU only; no isolated context budget fixed;5.5ms provisional full-tick ceiling is not approved by isolated probe"
+  },
+  "scope": "CPU Node context/reference algorithm, no renderer/browser/GPU/FPS/realtime throughput claim",
+  "runs": [
+    {
+      "repetition": 0,
+      "observe": false,
+      "workloads": [
+        {
+          "dense": false,
+          "vehicles": 64,
+          "obstacles": 32,
+          "zones": 24,
+          "elapsedWallMs": 460.4652,
+          "checksum": 101454,
+          "queryBatchCpuMs": {
+            "count": 80,
+            "p50": 2.098899999999958,
+            "p95": 3.268199999999979,
+            "p99": 3.429900000000032
+          },
+          "updateCpuMs": {
+            "count": 80,
+            "p50": 1.4724999999999682,
+            "p95": 2.334899999999948,
+            "p99": 2.5067999999999984
+          },
+          "individualContextCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "heapBeforeBytes": 11254480,
+          "heapAfterBytes": 12421440,
+          "forcedGc": true,
+          "exactContextBytes": null,
+          "ownership": {
+            "tick": 99,
+            "sessionId": "context-fixture",
+            "worldEpoch": 0,
+            "vehicles": 64,
+            "cachedContexts": 64,
+            "invalidatedContexts": 0,
+            "fingerprintCodeUnits": 55156,
+            "identities": 120,
+            "retiredIdentities": 0,
+            "disposed": false,
+            "index": {
+              "entities": 120,
+              "vehicles": 64,
+              "obstacles": 32,
+              "zones": 24,
+              "zoneVertices": 96,
+              "cells": 28,
+              "spatialReferences": 146,
+              "fallbackEntities": 0,
+              "generation": 0,
+              "disposed": false,
+              "lastQuery": {
+                "cellsVisited": 64,
+                "candidates": 12,
+                "exactTests": 11,
+                "matches": 11,
+                "exhaustive": false
+              }
+            }
+          },
+          "signal": {
+            "tick": 99,
+            "signals": 1,
+            "phases": 2,
+            "stateEntries": 14,
+            "pendingEvents": 0,
+            "disposed": false
+          }
+        },
+        {
+          "dense": true,
+          "vehicles": 110,
+          "obstacles": 96,
+          "zones": 256,
+          "elapsedWallMs": 1342.1288,
+          "checksum": 813387,
+          "queryBatchCpuMs": {
+            "count": 80,
+            "p50": 7.315200000000004,
+            "p95": 11.166799999999967,
+            "p99": 11.82100000000014
+          },
+          "updateCpuMs": {
+            "count": 80,
+            "p50": 4.097999999999956,
+            "p95": 6.546600000000126,
+            "p99": 6.893100000000004
+          },
+          "individualContextCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "heapBeforeBytes": 12329584,
+          "heapAfterBytes": 13380744,
+          "forcedGc": true,
+          "exactContextBytes": null,
+          "ownership": {
+            "tick": 99,
+            "sessionId": "context-fixture",
+            "worldEpoch": 0,
+            "vehicles": 110,
+            "cachedContexts": 110,
+            "invalidatedContexts": 0,
+            "fingerprintCodeUnits": 144577,
+            "identities": 462,
+            "retiredIdentities": 0,
+            "disposed": false,
+            "index": {
+              "entities": 462,
+              "vehicles": 110,
+              "obstacles": 96,
+              "zones": 256,
+              "zoneVertices": 1024,
+              "cells": 48,
+              "spatialReferences": 675,
+              "fallbackEntities": 0,
+              "generation": 0,
+              "disposed": false,
+              "lastQuery": {
+                "cellsVisited": 72,
+                "candidates": 27,
+                "exactTests": 26,
+                "matches": 26,
+                "exhaustive": false
+              }
+            }
+          },
+          "signal": {
+            "tick": 99,
+            "signals": 1,
+            "phases": 2,
+            "stateEntries": 14,
+            "pendingEvents": 0,
+            "disposed": false
+          }
+        }
+      ]
+    },
+    {
+      "repetition": 0,
+      "observe": true,
+      "workloads": [
+        {
+          "dense": false,
+          "vehicles": 64,
+          "obstacles": 32,
+          "zones": 24,
+          "elapsedWallMs": 345.3487,
+          "checksum": 101454,
+          "queryBatchCpuMs": {
+            "count": 80,
+            "p50": 1.8564000000001215,
+            "p95": 2.66379999999981,
+            "p99": 3.078899999999976
+          },
+          "updateCpuMs": {
+            "count": 80,
+            "p50": 1.1809000000002925,
+            "p95": 1.7469999999998436,
+            "p99": 2.0417999999999665
+          },
+          "individualContextCpuMs": {
+            "count": 5120,
+            "p50": 0.02529999999978827,
+            "p95": 0.05690000000004147,
+            "p99": 0.09409999999979846
+          },
+          "heapBeforeBytes": 12294968,
+          "heapAfterBytes": 13585840,
+          "forcedGc": true,
+          "exactContextBytes": null,
+          "ownership": {
+            "tick": 99,
+            "sessionId": "context-fixture",
+            "worldEpoch": 0,
+            "vehicles": 64,
+            "cachedContexts": 64,
+            "invalidatedContexts": 0,
+            "fingerprintCodeUnits": 55156,
+            "identities": 120,
+            "retiredIdentities": 0,
+            "disposed": false,
+            "index": {
+              "entities": 120,
+              "vehicles": 64,
+              "obstacles": 32,
+              "zones": 24,
+              "zoneVertices": 96,
+              "cells": 28,
+              "spatialReferences": 146,
+              "fallbackEntities": 0,
+              "generation": 0,
+              "disposed": false,
+              "lastQuery": {
+                "cellsVisited": 64,
+                "candidates": 12,
+                "exactTests": 11,
+                "matches": 11,
+                "exhaustive": false
+              }
+            }
+          },
+          "signal": {
+            "tick": 99,
+            "signals": 1,
+            "phases": 2,
+            "stateEntries": 14,
+            "pendingEvents": 0,
+            "disposed": false
+          }
+        },
+        {
+          "dense": true,
+          "vehicles": 110,
+          "obstacles": 96,
+          "zones": 256,
+          "elapsedWallMs": 1481.6728000000003,
+          "checksum": 813387,
+          "queryBatchCpuMs": {
+            "count": 80,
+            "p50": 9.350500000000011,
+            "p95": 10.460500000000138,
+            "p99": 11.219900000000052
+          },
+          "updateCpuMs": {
+            "count": 80,
+            "p50": 5.172299999999723,
+            "p95": 5.938500000000204,
+            "p99": 6.0659999999998035
+          },
+          "individualContextCpuMs": {
+            "count": 8800,
+            "p50": 0.044499999999970896,
+            "p95": 0.20620000000008076,
+            "p99": 0.30070000000023356
+          },
+          "heapBeforeBytes": 12567368,
+          "heapAfterBytes": 15394312,
+          "forcedGc": true,
+          "exactContextBytes": null,
+          "ownership": {
+            "tick": 99,
+            "sessionId": "context-fixture",
+            "worldEpoch": 0,
+            "vehicles": 110,
+            "cachedContexts": 110,
+            "invalidatedContexts": 0,
+            "fingerprintCodeUnits": 144577,
+            "identities": 462,
+            "retiredIdentities": 0,
+            "disposed": false,
+            "index": {
+              "entities": 462,
+              "vehicles": 110,
+              "obstacles": 96,
+              "zones": 256,
+              "zoneVertices": 1024,
+              "cells": 48,
+              "spatialReferences": 675,
+              "fallbackEntities": 0,
+              "generation": 0,
+              "disposed": false,
+              "lastQuery": {
+                "cellsVisited": 72,
+                "candidates": 27,
+                "exactTests": 26,
+                "matches": 26,
+                "exhaustive": false
+              }
+            }
+          },
+          "signal": {
+            "tick": 99,
+            "signals": 1,
+            "phases": 2,
+            "stateEntries": 14,
+            "pendingEvents": 0,
+            "disposed": false
+          }
+        }
+      ]
+    },
+    {
+      "repetition": 1,
+      "observe": false,
+      "workloads": [
+        {
+          "dense": false,
+          "vehicles": 64,
+          "obstacles": 32,
+          "zones": 24,
+          "elapsedWallMs": 445.4630000000002,
+          "checksum": 101454,
+          "queryBatchCpuMs": {
+            "count": 80,
+            "p50": 2.313000000000102,
+            "p95": 3.739400000000387,
+            "p99": 3.9769999999998618
+          },
+          "updateCpuMs": {
+            "count": 80,
+            "p50": 1.5617999999994936,
+            "p95": 2.197400000000016,
+            "p99": 2.5039000000006126
+          },
+          "individualContextCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "heapBeforeBytes": 12333720,
+          "heapAfterBytes": 12604216,
+          "forcedGc": true,
+          "exactContextBytes": null,
+          "ownership": {
+            "tick": 99,
+            "sessionId": "context-fixture",
+            "worldEpoch": 0,
+            "vehicles": 64,
+            "cachedContexts": 64,
+            "invalidatedContexts": 0,
+            "fingerprintCodeUnits": 55156,
+            "identities": 120,
+            "retiredIdentities": 0,
+            "disposed": false,
+            "index": {
+              "entities": 120,
+              "vehicles": 64,
+              "obstacles": 32,
+              "zones": 24,
+              "zoneVertices": 96,
+              "cells": 28,
+              "spatialReferences": 146,
+              "fallbackEntities": 0,
+              "generation": 0,
+              "disposed": false,
+              "lastQuery": {
+                "cellsVisited": 64,
+                "candidates": 12,
+                "exactTests": 11,
+                "matches": 11,
+                "exhaustive": false
+              }
+            }
+          },
+          "signal": {
+            "tick": 99,
+            "signals": 1,
+            "phases": 2,
+            "stateEntries": 14,
+            "pendingEvents": 0,
+            "disposed": false
+          }
+        },
+        {
+          "dense": true,
+          "vehicles": 110,
+          "obstacles": 96,
+          "zones": 256,
+          "elapsedWallMs": 1526.5682000000006,
+          "checksum": 813387,
+          "queryBatchCpuMs": {
+            "count": 80,
+            "p50": 9.010400000000118,
+            "p95": 10.306899999999587,
+            "p99": 10.734400000000278
+          },
+          "updateCpuMs": {
+            "count": 80,
+            "p50": 5.1153000000003885,
+            "p95": 6.112799999999879,
+            "p99": 6.599899999999252
+          },
+          "individualContextCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "heapBeforeBytes": 12756168,
+          "heapAfterBytes": 13462024,
+          "forcedGc": true,
+          "exactContextBytes": null,
+          "ownership": {
+            "tick": 99,
+            "sessionId": "context-fixture",
+            "worldEpoch": 0,
+            "vehicles": 110,
+            "cachedContexts": 110,
+            "invalidatedContexts": 0,
+            "fingerprintCodeUnits": 144577,
+            "identities": 462,
+            "retiredIdentities": 0,
+            "disposed": false,
+            "index": {
+              "entities": 462,
+              "vehicles": 110,
+              "obstacles": 96,
+              "zones": 256,
+              "zoneVertices": 1024,
+              "cells": 48,
+              "spatialReferences": 675,
+              "fallbackEntities": 0,
+              "generation": 0,
+              "disposed": false,
+              "lastQuery": {
+                "cellsVisited": 72,
+                "candidates": 27,
+                "exactTests": 26,
+                "matches": 26,
+                "exhaustive": false
+              }
+            }
+          },
+          "signal": {
+            "tick": 99,
+            "signals": 1,
+            "phases": 2,
+            "stateEntries": 14,
+            "pendingEvents": 0,
+            "disposed": false
+          }
+        }
+      ]
+    },
+    {
+      "repetition": 1,
+      "observe": true,
+      "workloads": [
+        {
+          "dense": false,
+          "vehicles": 64,
+          "obstacles": 32,
+          "zones": 24,
+          "elapsedWallMs": 428.84579999999914,
+          "checksum": 101454,
+          "queryBatchCpuMs": {
+            "count": 80,
+            "p50": 2.2968999999993684,
+            "p95": 2.8179000000000087,
+            "p99": 3.0753999999997177
+          },
+          "updateCpuMs": {
+            "count": 80,
+            "p50": 1.505099999999402,
+            "p95": 2.0641999999998006,
+            "p99": 2.2658000000001266
+          },
+          "individualContextCpuMs": {
+            "count": 5120,
+            "p50": 0.030200000000149885,
+            "p95": 0.06210000000010041,
+            "p99": 0.08429999999952997
+          },
+          "heapBeforeBytes": 12616448,
+          "heapAfterBytes": 13753776,
+          "forcedGc": true,
+          "exactContextBytes": null,
+          "ownership": {
+            "tick": 99,
+            "sessionId": "context-fixture",
+            "worldEpoch": 0,
+            "vehicles": 64,
+            "cachedContexts": 64,
+            "invalidatedContexts": 0,
+            "fingerprintCodeUnits": 55156,
+            "identities": 120,
+            "retiredIdentities": 0,
+            "disposed": false,
+            "index": {
+              "entities": 120,
+              "vehicles": 64,
+              "obstacles": 32,
+              "zones": 24,
+              "zoneVertices": 96,
+              "cells": 28,
+              "spatialReferences": 146,
+              "fallbackEntities": 0,
+              "generation": 0,
+              "disposed": false,
+              "lastQuery": {
+                "cellsVisited": 64,
+                "candidates": 12,
+                "exactTests": 11,
+                "matches": 11,
+                "exhaustive": false
+              }
+            }
+          },
+          "signal": {
+            "tick": 99,
+            "signals": 1,
+            "phases": 2,
+            "stateEntries": 14,
+            "pendingEvents": 0,
+            "disposed": false
+          }
+        },
+        {
+          "dense": true,
+          "vehicles": 110,
+          "obstacles": 96,
+          "zones": 256,
+          "elapsedWallMs": 1476.7033000000001,
+          "checksum": 813387,
+          "queryBatchCpuMs": {
+            "count": 80,
+            "p50": 8.646600000000035,
+            "p95": 10.157100000000355,
+            "p99": 10.613999999999578
+          },
+          "updateCpuMs": {
+            "count": 80,
+            "p50": 4.941299999999501,
+            "p95": 5.957699999999932,
+            "p99": 6.1270000000004075
+          },
+          "individualContextCpuMs": {
+            "count": 8800,
+            "p50": 0.04179999999996653,
+            "p95": 0.19130000000041036,
+            "p99": 0.25830000000041764
+          },
+          "heapBeforeBytes": 12704200,
+          "heapAfterBytes": 15652856,
+          "forcedGc": true,
+          "exactContextBytes": null,
+          "ownership": {
+            "tick": 99,
+            "sessionId": "context-fixture",
+            "worldEpoch": 0,
+            "vehicles": 110,
+            "cachedContexts": 110,
+            "invalidatedContexts": 0,
+            "fingerprintCodeUnits": 144577,
+            "identities": 462,
+            "retiredIdentities": 0,
+            "disposed": false,
+            "index": {
+              "entities": 462,
+              "vehicles": 110,
+              "obstacles": 96,
+              "zones": 256,
+              "zoneVertices": 1024,
+              "cells": 48,
+              "spatialReferences": 675,
+              "fallbackEntities": 0,
+              "generation": 0,
+              "disposed": false,
+              "lastQuery": {
+                "cellsVisited": 72,
+                "candidates": 27,
+                "exactTests": 26,
+                "matches": 26,
+                "exhaustive": false
+              }
+            }
+          },
+          "signal": {
+            "tick": 99,
+            "signals": 1,
+            "phases": 2,
+            "stateEntries": 14,
+            "pendingEvents": 0,
+            "disposed": false
+          }
+        }
+      ]
+    },
+    {
+      "repetition": 2,
+      "observe": false,
+      "workloads": [
+        {
+          "dense": false,
+          "vehicles": 64,
+          "obstacles": 32,
+          "zones": 24,
+          "elapsedWallMs": 406.0045,
+          "checksum": 101454,
+          "queryBatchCpuMs": {
+            "count": 80,
+            "p50": 2.1671000000005733,
+            "p95": 2.4930999999996857,
+            "p99": 2.5830000000005384
+          },
+          "updateCpuMs": {
+            "count": 80,
+            "p50": 1.5915999999997439,
+            "p95": 1.9167000000006738,
+            "p99": 2.308899999999994
+          },
+          "individualContextCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "heapBeforeBytes": 13062152,
+          "heapAfterBytes": 13003128,
+          "forcedGc": true,
+          "exactContextBytes": null,
+          "ownership": {
+            "tick": 99,
+            "sessionId": "context-fixture",
+            "worldEpoch": 0,
+            "vehicles": 64,
+            "cachedContexts": 64,
+            "invalidatedContexts": 0,
+            "fingerprintCodeUnits": 55156,
+            "identities": 120,
+            "retiredIdentities": 0,
+            "disposed": false,
+            "index": {
+              "entities": 120,
+              "vehicles": 64,
+              "obstacles": 32,
+              "zones": 24,
+              "zoneVertices": 96,
+              "cells": 28,
+              "spatialReferences": 146,
+              "fallbackEntities": 0,
+              "generation": 0,
+              "disposed": false,
+              "lastQuery": {
+                "cellsVisited": 64,
+                "candidates": 12,
+                "exactTests": 11,
+                "matches": 11,
+                "exhaustive": false
+              }
+            }
+          },
+          "signal": {
+            "tick": 99,
+            "signals": 1,
+            "phases": 2,
+            "stateEntries": 14,
+            "pendingEvents": 0,
+            "disposed": false
+          }
+        },
+        {
+          "dense": true,
+          "vehicles": 110,
+          "obstacles": 96,
+          "zones": 256,
+          "elapsedWallMs": 1479.2787000000008,
+          "checksum": 813387,
+          "queryBatchCpuMs": {
+            "count": 80,
+            "p50": 8.600399999999354,
+            "p95": 9.634299999999712,
+            "p99": 10.243900000001304
+          },
+          "updateCpuMs": {
+            "count": 80,
+            "p50": 4.938400000000911,
+            "p95": 5.65440000000126,
+            "p99": 5.772699999999531
+          },
+          "individualContextCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "heapBeforeBytes": 12959464,
+          "heapAfterBytes": 13899272,
+          "forcedGc": true,
+          "exactContextBytes": null,
+          "ownership": {
+            "tick": 99,
+            "sessionId": "context-fixture",
+            "worldEpoch": 0,
+            "vehicles": 110,
+            "cachedContexts": 110,
+            "invalidatedContexts": 0,
+            "fingerprintCodeUnits": 144577,
+            "identities": 462,
+            "retiredIdentities": 0,
+            "disposed": false,
+            "index": {
+              "entities": 462,
+              "vehicles": 110,
+              "obstacles": 96,
+              "zones": 256,
+              "zoneVertices": 1024,
+              "cells": 48,
+              "spatialReferences": 675,
+              "fallbackEntities": 0,
+              "generation": 0,
+              "disposed": false,
+              "lastQuery": {
+                "cellsVisited": 72,
+                "candidates": 27,
+                "exactTests": 26,
+                "matches": 26,
+                "exhaustive": false
+              }
+            }
+          },
+          "signal": {
+            "tick": 99,
+            "signals": 1,
+            "phases": 2,
+            "stateEntries": 14,
+            "pendingEvents": 0,
+            "disposed": false
+          }
+        }
+      ]
+    },
+    {
+      "repetition": 2,
+      "observe": true,
+      "workloads": [
+        {
+          "dense": false,
+          "vehicles": 64,
+          "obstacles": 32,
+          "zones": 24,
+          "elapsedWallMs": 395.6363000000001,
+          "checksum": 101454,
+          "queryBatchCpuMs": {
+            "count": 80,
+            "p50": 2.1238000000012107,
+            "p95": 2.4631999999983236,
+            "p99": 2.608299999999872
+          },
+          "updateCpuMs": {
+            "count": 80,
+            "p50": 1.4879000000000815,
+            "p95": 1.816000000000713,
+            "p99": 2.3197999999993044
+          },
+          "individualContextCpuMs": {
+            "count": 5120,
+            "p50": 0.027700000000550062,
+            "p95": 0.056300000000192085,
+            "p99": 0.06909999999879801
+          },
+          "heapBeforeBytes": 13054816,
+          "heapAfterBytes": 14146032,
+          "forcedGc": true,
+          "exactContextBytes": null,
+          "ownership": {
+            "tick": 99,
+            "sessionId": "context-fixture",
+            "worldEpoch": 0,
+            "vehicles": 64,
+            "cachedContexts": 64,
+            "invalidatedContexts": 0,
+            "fingerprintCodeUnits": 55156,
+            "identities": 120,
+            "retiredIdentities": 0,
+            "disposed": false,
+            "index": {
+              "entities": 120,
+              "vehicles": 64,
+              "obstacles": 32,
+              "zones": 24,
+              "zoneVertices": 96,
+              "cells": 28,
+              "spatialReferences": 146,
+              "fallbackEntities": 0,
+              "generation": 0,
+              "disposed": false,
+              "lastQuery": {
+                "cellsVisited": 64,
+                "candidates": 12,
+                "exactTests": 11,
+                "matches": 11,
+                "exhaustive": false
+              }
+            }
+          },
+          "signal": {
+            "tick": 99,
+            "signals": 1,
+            "phases": 2,
+            "stateEntries": 14,
+            "pendingEvents": 0,
+            "disposed": false
+          }
+        },
+        {
+          "dense": true,
+          "vehicles": 110,
+          "obstacles": 96,
+          "zones": 256,
+          "elapsedWallMs": 1389.1350000000002,
+          "checksum": 813387,
+          "queryBatchCpuMs": {
+            "count": 80,
+            "p50": 8.392400000000634,
+            "p95": 9.22649999999885,
+            "p99": 9.35989999999947
+          },
+          "updateCpuMs": {
+            "count": 80,
+            "p50": 4.658499999999549,
+            "p95": 5.399900000000343,
+            "p99": 5.453800000001138
+          },
+          "individualContextCpuMs": {
+            "count": 8800,
+            "p50": 0.04010000000016589,
+            "p95": 0.18369999999958964,
+            "p99": 0.22420000000056461
+          },
+          "heapBeforeBytes": 13062256,
+          "heapAfterBytes": 15775800,
+          "forcedGc": true,
+          "exactContextBytes": null,
+          "ownership": {
+            "tick": 99,
+            "sessionId": "context-fixture",
+            "worldEpoch": 0,
+            "vehicles": 110,
+            "cachedContexts": 110,
+            "invalidatedContexts": 0,
+            "fingerprintCodeUnits": 144577,
+            "identities": 462,
+            "retiredIdentities": 0,
+            "disposed": false,
+            "index": {
+              "entities": 462,
+              "vehicles": 110,
+              "obstacles": 96,
+              "zones": 256,
+              "zoneVertices": 1024,
+              "cells": 48,
+              "spatialReferences": 675,
+              "fallbackEntities": 0,
+              "generation": 0,
+              "disposed": false,
+              "lastQuery": {
+                "cellsVisited": 72,
+                "candidates": 27,
+                "exactTests": 26,
+                "matches": 26,
+                "exhaustive": false
+              }
+            }
+          },
+          "signal": {
+            "tick": 99,
+            "signals": 1,
+            "phases": 2,
+            "stateEntries": 14,
+            "pendingEvents": 0,
+            "disposed": false
+          }
+        }
+      ]
+    },
+    {
+      "repetition": 3,
+      "observe": false,
+      "workloads": [
+        {
+          "dense": false,
+          "vehicles": 64,
+          "obstacles": 32,
+          "zones": 24,
+          "elapsedWallMs": 382.8292000000001,
+          "checksum": 101454,
+          "queryBatchCpuMs": {
+            "count": 80,
+            "p50": 2.031699999999546,
+            "p95": 2.371100000000297,
+            "p99": 2.55409999999938
+          },
+          "updateCpuMs": {
+            "count": 80,
+            "p50": 1.4546000000009371,
+            "p95": 1.772899999999936,
+            "p99": 2.119300000000294
+          },
+          "individualContextCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "heapBeforeBytes": 13130136,
+          "heapAfterBytes": 13048256,
+          "forcedGc": true,
+          "exactContextBytes": null,
+          "ownership": {
+            "tick": 99,
+            "sessionId": "context-fixture",
+            "worldEpoch": 0,
+            "vehicles": 64,
+            "cachedContexts": 64,
+            "invalidatedContexts": 0,
+            "fingerprintCodeUnits": 55156,
+            "identities": 120,
+            "retiredIdentities": 0,
+            "disposed": false,
+            "index": {
+              "entities": 120,
+              "vehicles": 64,
+              "obstacles": 32,
+              "zones": 24,
+              "zoneVertices": 96,
+              "cells": 28,
+              "spatialReferences": 146,
+              "fallbackEntities": 0,
+              "generation": 0,
+              "disposed": false,
+              "lastQuery": {
+                "cellsVisited": 64,
+                "candidates": 12,
+                "exactTests": 11,
+                "matches": 11,
+                "exhaustive": false
+              }
+            }
+          },
+          "signal": {
+            "tick": 99,
+            "signals": 1,
+            "phases": 2,
+            "stateEntries": 14,
+            "pendingEvents": 0,
+            "disposed": false
+          }
+        },
+        {
+          "dense": true,
+          "vehicles": 110,
+          "obstacles": 96,
+          "zones": 256,
+          "elapsedWallMs": 1447.9122000000007,
+          "checksum": 813387,
+          "queryBatchCpuMs": {
+            "count": 80,
+            "p50": 8.652400000000853,
+            "p95": 9.487100000000282,
+            "p99": 10.232399999998961
+          },
+          "updateCpuMs": {
+            "count": 80,
+            "p50": 4.85399999999936,
+            "p95": 5.637800000000425,
+            "p99": 6.1273999999993976
+          },
+          "individualContextCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "heapBeforeBytes": 13041040,
+          "heapAfterBytes": 13932528,
+          "forcedGc": true,
+          "exactContextBytes": null,
+          "ownership": {
+            "tick": 99,
+            "sessionId": "context-fixture",
+            "worldEpoch": 0,
+            "vehicles": 110,
+            "cachedContexts": 110,
+            "invalidatedContexts": 0,
+            "fingerprintCodeUnits": 144577,
+            "identities": 462,
+            "retiredIdentities": 0,
+            "disposed": false,
+            "index": {
+              "entities": 462,
+              "vehicles": 110,
+              "obstacles": 96,
+              "zones": 256,
+              "zoneVertices": 1024,
+              "cells": 48,
+              "spatialReferences": 675,
+              "fallbackEntities": 0,
+              "generation": 0,
+              "disposed": false,
+              "lastQuery": {
+                "cellsVisited": 72,
+                "candidates": 27,
+                "exactTests": 26,
+                "matches": 26,
+                "exhaustive": false
+              }
+            }
+          },
+          "signal": {
+            "tick": 99,
+            "signals": 1,
+            "phases": 2,
+            "stateEntries": 14,
+            "pendingEvents": 0,
+            "disposed": false
+          }
+        }
+      ]
+    },
+    {
+      "repetition": 3,
+      "observe": true,
+      "workloads": [
+        {
+          "dense": false,
+          "vehicles": 64,
+          "obstacles": 32,
+          "zones": 24,
+          "elapsedWallMs": 410.8033999999989,
+          "checksum": 101454,
+          "queryBatchCpuMs": {
+            "count": 80,
+            "p50": 2.1921000000002095,
+            "p95": 2.656599999998434,
+            "p99": 2.772100000000137
+          },
+          "updateCpuMs": {
+            "count": 80,
+            "p50": 1.503999999998996,
+            "p95": 1.9490999999998166,
+            "p99": 2.355999999999767
+          },
+          "individualContextCpuMs": {
+            "count": 5120,
+            "p50": 0.028300000001763692,
+            "p95": 0.058100000000194996,
+            "p99": 0.07999999999992724
+          },
+          "heapBeforeBytes": 13088496,
+          "heapAfterBytes": 14226792,
+          "forcedGc": true,
+          "exactContextBytes": null,
+          "ownership": {
+            "tick": 99,
+            "sessionId": "context-fixture",
+            "worldEpoch": 0,
+            "vehicles": 64,
+            "cachedContexts": 64,
+            "invalidatedContexts": 0,
+            "fingerprintCodeUnits": 55156,
+            "identities": 120,
+            "retiredIdentities": 0,
+            "disposed": false,
+            "index": {
+              "entities": 120,
+              "vehicles": 64,
+              "obstacles": 32,
+              "zones": 24,
+              "zoneVertices": 96,
+              "cells": 28,
+              "spatialReferences": 146,
+              "fallbackEntities": 0,
+              "generation": 0,
+              "disposed": false,
+              "lastQuery": {
+                "cellsVisited": 64,
+                "candidates": 12,
+                "exactTests": 11,
+                "matches": 11,
+                "exhaustive": false
+              }
+            }
+          },
+          "signal": {
+            "tick": 99,
+            "signals": 1,
+            "phases": 2,
+            "stateEntries": 14,
+            "pendingEvents": 0,
+            "disposed": false
+          }
+        },
+        {
+          "dense": true,
+          "vehicles": 110,
+          "obstacles": 96,
+          "zones": 256,
+          "elapsedWallMs": 1423.2151999999987,
+          "checksum": 813387,
+          "queryBatchCpuMs": {
+            "count": 80,
+            "p50": 8.528299999999945,
+            "p95": 9.294600000001083,
+            "p99": 9.684599999998682
+          },
+          "updateCpuMs": {
+            "count": 80,
+            "p50": 4.881900000000314,
+            "p95": 5.6393000000007305,
+            "p99": 5.876599999999598
+          },
+          "individualContextCpuMs": {
+            "count": 8800,
+            "p50": 0.04050000000097498,
+            "p95": 0.18680000000131258,
+            "p99": 0.23170000000027358
+          },
+          "heapBeforeBytes": 13123816,
+          "heapAfterBytes": 15853416,
+          "forcedGc": true,
+          "exactContextBytes": null,
+          "ownership": {
+            "tick": 99,
+            "sessionId": "context-fixture",
+            "worldEpoch": 0,
+            "vehicles": 110,
+            "cachedContexts": 110,
+            "invalidatedContexts": 0,
+            "fingerprintCodeUnits": 144577,
+            "identities": 462,
+            "retiredIdentities": 0,
+            "disposed": false,
+            "index": {
+              "entities": 462,
+              "vehicles": 110,
+              "obstacles": 96,
+              "zones": 256,
+              "zoneVertices": 1024,
+              "cells": 48,
+              "spatialReferences": 675,
+              "fallbackEntities": 0,
+              "generation": 0,
+              "disposed": false,
+              "lastQuery": {
+                "cellsVisited": 72,
+                "candidates": 27,
+                "exactTests": 26,
+                "matches": 26,
+                "exhaustive": false
+              }
+            }
+          },
+          "signal": {
+            "tick": 99,
+            "signals": 1,
+            "phases": 2,
+            "stateEntries": 14,
+            "pendingEvents": 0,
+            "disposed": false
+          }
+        }
+      ]
+    },
+    {
+      "repetition": 4,
+      "observe": false,
+      "workloads": [
+        {
+          "dense": false,
+          "vehicles": 64,
+          "obstacles": 32,
+          "zones": 24,
+          "elapsedWallMs": 419.34180000000015,
+          "checksum": 101454,
+          "queryBatchCpuMs": {
+            "count": 80,
+            "p50": 2.179600000001301,
+            "p95": 2.456500000000233,
+            "p99": 2.6986000000015338
+          },
+          "updateCpuMs": {
+            "count": 80,
+            "p50": 1.6147999999993772,
+            "p95": 2.2008999999998196,
+            "p99": 2.3567999999995664
+          },
+          "individualContextCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "heapBeforeBytes": 13198760,
+          "heapAfterBytes": 13118528,
+          "forcedGc": true,
+          "exactContextBytes": null,
+          "ownership": {
+            "tick": 99,
+            "sessionId": "context-fixture",
+            "worldEpoch": 0,
+            "vehicles": 64,
+            "cachedContexts": 64,
+            "invalidatedContexts": 0,
+            "fingerprintCodeUnits": 55156,
+            "identities": 120,
+            "retiredIdentities": 0,
+            "disposed": false,
+            "index": {
+              "entities": 120,
+              "vehicles": 64,
+              "obstacles": 32,
+              "zones": 24,
+              "zoneVertices": 96,
+              "cells": 28,
+              "spatialReferences": 146,
+              "fallbackEntities": 0,
+              "generation": 0,
+              "disposed": false,
+              "lastQuery": {
+                "cellsVisited": 64,
+                "candidates": 12,
+                "exactTests": 11,
+                "matches": 11,
+                "exhaustive": false
+              }
+            }
+          },
+          "signal": {
+            "tick": 99,
+            "signals": 1,
+            "phases": 2,
+            "stateEntries": 14,
+            "pendingEvents": 0,
+            "disposed": false
+          }
+        },
+        {
+          "dense": true,
+          "vehicles": 110,
+          "obstacles": 96,
+          "zones": 256,
+          "elapsedWallMs": 1425.7110000000011,
+          "checksum": 813387,
+          "queryBatchCpuMs": {
+            "count": 80,
+            "p50": 8.497200000001612,
+            "p95": 9.684300000000803,
+            "p99": 10.347499999999854
+          },
+          "updateCpuMs": {
+            "count": 80,
+            "p50": 4.860200000000987,
+            "p95": 5.773199999999633,
+            "p99": 6.059300000000803
+          },
+          "individualContextCpuMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "heapBeforeBytes": 13066312,
+          "heapAfterBytes": 14071232,
+          "forcedGc": true,
+          "exactContextBytes": null,
+          "ownership": {
+            "tick": 99,
+            "sessionId": "context-fixture",
+            "worldEpoch": 0,
+            "vehicles": 110,
+            "cachedContexts": 110,
+            "invalidatedContexts": 0,
+            "fingerprintCodeUnits": 144577,
+            "identities": 462,
+            "retiredIdentities": 0,
+            "disposed": false,
+            "index": {
+              "entities": 462,
+              "vehicles": 110,
+              "obstacles": 96,
+              "zones": 256,
+              "zoneVertices": 1024,
+              "cells": 48,
+              "spatialReferences": 675,
+              "fallbackEntities": 0,
+              "generation": 0,
+              "disposed": false,
+              "lastQuery": {
+                "cellsVisited": 72,
+                "candidates": 27,
+                "exactTests": 26,
+                "matches": 26,
+                "exhaustive": false
+              }
+            }
+          },
+          "signal": {
+            "tick": 99,
+            "signals": 1,
+            "phases": 2,
+            "stateEntries": 14,
+            "pendingEvents": 0,
+            "disposed": false
+          }
+        }
+      ]
+    },
+    {
+      "repetition": 4,
+      "observe": true,
+      "workloads": [
+        {
+          "dense": false,
+          "vehicles": 64,
+          "obstacles": 32,
+          "zones": 24,
+          "elapsedWallMs": 398.97279999999955,
+          "checksum": 101454,
+          "queryBatchCpuMs": {
+            "count": 80,
+            "p50": 2.0681000000004133,
+            "p95": 2.588999999999942,
+            "p99": 2.79229999999734
+          },
+          "updateCpuMs": {
+            "count": 80,
+            "p50": 1.431799999998475,
+            "p95": 1.975800000000163,
+            "p99": 2.406200000001263
+          },
+          "individualContextCpuMs": {
+            "count": 5120,
+            "p50": 0.02779999999984284,
+            "p95": 0.05819999999948777,
+            "p99": 0.07849999999962165
+          },
+          "heapBeforeBytes": 12850464,
+          "heapAfterBytes": 14319888,
+          "forcedGc": true,
+          "exactContextBytes": null,
+          "ownership": {
+            "tick": 99,
+            "sessionId": "context-fixture",
+            "worldEpoch": 0,
+            "vehicles": 64,
+            "cachedContexts": 64,
+            "invalidatedContexts": 0,
+            "fingerprintCodeUnits": 55156,
+            "identities": 120,
+            "retiredIdentities": 0,
+            "disposed": false,
+            "index": {
+              "entities": 120,
+              "vehicles": 64,
+              "obstacles": 32,
+              "zones": 24,
+              "zoneVertices": 96,
+              "cells": 28,
+              "spatialReferences": 146,
+              "fallbackEntities": 0,
+              "generation": 0,
+              "disposed": false,
+              "lastQuery": {
+                "cellsVisited": 64,
+                "candidates": 12,
+                "exactTests": 11,
+                "matches": 11,
+                "exhaustive": false
+              }
+            }
+          },
+          "signal": {
+            "tick": 99,
+            "signals": 1,
+            "phases": 2,
+            "stateEntries": 14,
+            "pendingEvents": 0,
+            "disposed": false
+          }
+        },
+        {
+          "dense": true,
+          "vehicles": 110,
+          "obstacles": 96,
+          "zones": 256,
+          "elapsedWallMs": 1389.190200000001,
+          "checksum": 813387,
+          "queryBatchCpuMs": {
+            "count": 80,
+            "p50": 8.389999999999418,
+            "p95": 9.437999999998283,
+            "p99": 9.640699999999924
+          },
+          "updateCpuMs": {
+            "count": 80,
+            "p50": 4.683000000000902,
+            "p95": 5.841199999998935,
+            "p99": 6.090799999998126
+          },
+          "individualContextCpuMs": {
+            "count": 8800,
+            "p50": 0.04010000000198488,
+            "p95": 0.1838000000025204,
+            "p99": 0.22110000000247965
+          },
+          "heapBeforeBytes": 13310624,
+          "heapAfterBytes": 16107696,
+          "forcedGc": true,
+          "exactContextBytes": null,
+          "ownership": {
+            "tick": 99,
+            "sessionId": "context-fixture",
+            "worldEpoch": 0,
+            "vehicles": 110,
+            "cachedContexts": 110,
+            "invalidatedContexts": 0,
+            "fingerprintCodeUnits": 144577,
+            "identities": 462,
+            "retiredIdentities": 0,
+            "disposed": false,
+            "index": {
+              "entities": 462,
+              "vehicles": 110,
+              "obstacles": 96,
+              "zones": 256,
+              "zoneVertices": 1024,
+              "cells": 48,
+              "spatialReferences": 675,
+              "fallbackEntities": 0,
+              "generation": 0,
+              "disposed": false,
+              "lastQuery": {
+                "cellsVisited": 72,
+                "candidates": 27,
+                "exactTests": 26,
+                "matches": 26,
+                "exhaustive": false
+              }
+            }
+          },
+          "signal": {
+            "tick": 99,
+            "signals": 1,
+            "phases": 2,
+            "stateEntries": 14,
+            "pendingEvents": 0,
+            "disposed": false
+          }
+        }
+      ]
+    }
+  ],
+  "medians": [
+    {
+      "observe": false,
+      "dense": false,
+      "queryBatchP95MedianMs": 2.4930999999996857,
+      "updateP95MedianMs": 2.197400000000016
+    },
+    {
+      "observe": false,
+      "dense": true,
+      "queryBatchP95MedianMs": 9.684300000000803,
+      "updateP95MedianMs": 5.773199999999633
+    },
+    {
+      "observe": true,
+      "dense": false,
+      "queryBatchP95MedianMs": 2.656599999998434,
+      "updateP95MedianMs": 1.9490999999998166
+    },
+    {
+      "observe": true,
+      "dense": true,
+      "queryBatchP95MedianMs": 9.437999999998283,
+      "updateP95MedianMs": 5.841199999998935
+    }
+  ]
+}

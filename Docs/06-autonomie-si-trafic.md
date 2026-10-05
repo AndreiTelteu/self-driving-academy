@@ -25,3 +25,5 @@ Planificarea de traseu, alegerea manevrei și controlul longitudinal/lateral sun
 ## Reglaje explicite și obstacole
 
 Sliderele din [modulul 27](27-reglaje-hud-si-camera.md) activează versiuni MANUAL_TUNING prin contractul comun de profil, fără personalități AI ascunse. Obiectele destructibile deplasate rămân obstacole reale pentru context/controller; fragmentele cosmetice nu intră în planificare. [Resetul lumii](26-joaca-libera-haos-si-distrugere.md) invalidează rutele/contextul vechi și păstrează stilul ales.
+
+[Contextul rutier044](road-context.md) consumă cadre autoritare identificate și indexul034 pentru bandă, lider, semnal aplicabil, conflicte și obstacole. Cache-ul păstrează tick-ul sursei și permite invalidare urgentă; observațiile incomplete și acoperirea locală rămân explicite. Contextul nu emite oportunități sau telemetrie și nu deduce un gap global disponibil din absența vecinilor locali.

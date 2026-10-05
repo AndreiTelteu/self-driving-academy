@@ -97,3 +97,5 @@ Se elimină global pierderea XP și scăderea nivelului. V1 adaugă Academie/Hao
 [Adaptorul fizic022](physics-adapter.md) oferă mapare entityId↔bodyhandle, SI pose/velocity, remove și callbacks generation-fenced. Probele desktop timpurii Rapier/Babylon și comparațiile direct/bridge pe ambele backenduri sunt verificate; jocul complet și laptopul rămân nevalidate.
 
 [Indexul spațial034](spatial-index.md) oferă vecini geometric relevanți, update/remove/reset și fallback fără trunchiere; comparațiile CPU normale/dense și probele de ownership sunt documentate separat de bugetul întregului tick.
+
+[Contextul rutier044](road-context.md) derivă bandă, lider, semnal, conflicte și obstacole din cadre autoritare, cu cache bounded, tick de sursă și invalidare urgentă. Completitudinea observațiilor și limitele acoperirii locale sunt explicite; samplingul AI nu avansează oportunitățile sau telemetria.

@@ -1,0 +1,1480 @@
+{
+  "capturedAt": "2026-10-05T12:51:10.734Z",
+  "commit": "cc861f5ed4d3bdf310a679d26f76e37d2f72e95a",
+  "sourceHashes": {
+    "scripts/measure-road-context-memory.mjs": "a69b99c5d3ac2c25b7fce419d7a6e64b2c5dfb4767e98df17f83452be70b1d3b",
+    "tests/autonomy/road-context-reference.ts": "c5fe61c330db951f2bb1f97b3ea6d75bb92228e7f38864197e21378602ddd6f7",
+    "tests/world/intersection-conflicts-fixture.ts": "f159c5b3852b57e456e28b797c1cfa20182d4a58c13e426095ca622cd4a6fbd7",
+    "src/autonomy/index.ts": "b443f74b5034de452986f09028cd02e39a316f05d3ea0b970752d7837c380279",
+    "src/autonomy/road-context.ts": "49bdfaa3cff2dcd467ee70df655d9b72336774e40997b1958ef6625f708ccbb9",
+    "src/world/crosswalk-zones.ts": "4813f137dfd772be1f485a64b9eb27dd805ea143ec2f5f58b8ec40a012b880c2",
+    "src/world/errors.ts": "f235ae1964bd9869e100d8b8401a4eeaa62285b90ca5a2606ff9b314faeed641",
+    "src/world/index.ts": "1a3798f0dd33cb77d41c749e691677bf27461b2f09909102cf3d680da34dc482",
+    "src/world/intersection-conflict-geometry.ts": "945a889e84bc5ce34ab94f3cf476fd2d9c0617796623099badc137caca841bd8",
+    "src/world/intersection-conflicts.ts": "839b50c028410ba40c6f1e7949bfd1086346559c867ed16ee482513b648acef8",
+    "src/world/lane-graph.ts": "8094ffbc7d85ed8fc4fc9400e02f5ca071d83408c04b66be12aef3c7bb8685aa",
+    "src/world/parser.ts": "ab9079f43c08855a8e57cfa291f531cd55ddba81389c8edaa42e06906cff0233",
+    "src/world/priority-arrival.ts": "e22dcd8dabd5a1ec6fc97798067967c6fe13bc826c8b4d6a15eed52bb8e48f92",
+    "src/world/priority-policy.ts": "2b833212e55423faa52108bc4d80dd74368c16d8310a178490c2e9219187540a",
+    "src/world/priority-rules.ts": "17d71afed6d2bd0fc59e3352f133da02426d57e4e5b478e91b009fe46ef916a9",
+    "src/world/schema.ts": "35434e3006a4d3f360157f7c9549f7381ec7c1f345399d54061fa03b17097a85",
+    "src/world/semantics.ts": "8beba5bcbd38c23390be34d4d7b6879a62cffe8efdfb94fe94d3326aab87a16c",
+    "src/world/signals.ts": "772142b68ba6aa90e9df5d19ee19f35aed6d6ea74e51155e53d4b20b12a2452b",
+    "src/world/spatial-index.ts": "06de004e8d9a4241cda9cfa84d83550342b4b7a71e81840835d6c2eb00a7e8df",
+    "src/world/stop-rules.ts": "094906d03e625d586c46ae9a3c4ac1ab8ca5e5ec4503081762054526b575e60c",
+    "src/simulation/event-bus.ts": "53d6f15a5d5bb3e57a10a90dcbc48b1051ac32cc932be73094ef642cf7733ca6",
+    "src/simulation/events.ts": "460226ea56abc17731716ee76e7d76d4e7514f35b48566f494d15b31317b43c7",
+    "src/simulation/fixed-tick.ts": "420520d6cfc69b2f87182f03c3b189e94eb14161af86ff985cf6be0447a01847",
+    "src/simulation/index.ts": "1c64698368b021cf2c6365f1f226b600e7ae43c7430dc56a3ba7a57885e25dba",
+    "src/sessions/identity.ts": "f4b78b20857fc65704857a7bb78ef5a604083f173153ec7f5582bc450c6d76a6",
+    "src/sessions/index.ts": "960b676877c9876575d1f4fb425be83f603dbc038fe7c9f99aefc2c2be82c343",
+    "src/sessions/random.ts": "2b16fab5b74cf38e00f8847c747f8810cdcbc3850b013f35805f776e2d141fa0",
+    "src/sessions/validation.ts": "e129d68c9e0209875c6eede9b857ec3710ae9aa90e1f46b5208237d0be9efb79",
+    "src/vehicles/body-port.ts": "a9bd1045aedb6cf2a7bae07fd3cb094ef2bb922bf962d5143fd90ed84763eaf4",
+    "src/vehicles/body-registry.ts": "2b7fddf9487091a767e1342377f9ddfe6c0dd6e5c012bfc64c0b62f003f00ba6",
+    "src/vehicles/contracts.ts": "6639f51a1ab6326c2edcb4eb572cee3501612779e72af038c6831ddaa0494c26",
+    "src/vehicles/index.ts": "86d502c526cce86942dcc42dd4e8ecd10a96d1216aafc6d50f252d72275cf2b1",
+    "src/vehicles/physics.ts": "606aab5f738712df304b7be3fbf8f005541accc36831339074831cbd9d0e43c6",
+    "src/vehicles/vehicle-classes.ts": "43eed5576928ac07616200837f58bfbfd10bb41bd111b4bc7369f7ac0bc40fb2"
+  },
+  "sourceHashScope": "Declared harness/fixtures and all top-level autonomy/world/simulation/sessions/vehicles TS files; includes public barrels and primary contracts, not a verified transitive dependency closure",
+  "runtime": "v24.21.0",
+  "cpu": "AMD Ryzen 9 7950X3D 16-Core Processor          ",
+  "os": "win32 10.0.26200",
+  "fixture": "044-road-context-cross-v1 dense110/96/256;110cachedcontexts;20epoch-reset cycles",
+  "forcedGc": true,
+  "beforeHeapBytes": 11130704,
+  "afterHeapBytes": 11877640,
+  "cycles": [
+    {
+      "epoch": 0,
+      "populated": {
+        "tick": 0,
+        "sessionId": "context-fixture",
+        "worldEpoch": 0,
+        "vehicles": 110,
+        "cachedContexts": 110,
+        "laneProjections": 110,
+        "invalidatedContexts": 0,
+        "fingerprintCodeUnits": 144357,
+        "identities": 462,
+        "retiredIdentities": 0,
+        "disposed": false,
+        "index": {
+          "entities": 462,
+          "vehicles": 110,
+          "obstacles": 96,
+          "zones": 256,
+          "zoneVertices": 1024,
+          "cells": 48,
+          "spatialReferences": 675,
+          "fallbackEntities": 0,
+          "generation": 0,
+          "disposed": false,
+          "lastQuery": {
+            "cellsVisited": 72,
+            "candidates": 27,
+            "exactTests": 26,
+            "matches": 26,
+            "exhaustive": false
+          }
+        }
+      },
+      "cleared": {
+        "tick": null,
+        "sessionId": "context-fixture",
+        "worldEpoch": 1,
+        "vehicles": 0,
+        "cachedContexts": 0,
+        "laneProjections": 0,
+        "invalidatedContexts": 0,
+        "fingerprintCodeUnits": 0,
+        "identities": 0,
+        "retiredIdentities": 0,
+        "disposed": false,
+        "index": {
+          "entities": 0,
+          "vehicles": 0,
+          "obstacles": 0,
+          "zones": 0,
+          "zoneVertices": 0,
+          "cells": 0,
+          "spatialReferences": 0,
+          "fallbackEntities": 0,
+          "generation": 0,
+          "disposed": false,
+          "lastQuery": {
+            "cellsVisited": 0,
+            "candidates": 0,
+            "exactTests": 0,
+            "matches": 0,
+            "exhaustive": false
+          }
+        }
+      },
+      "rejectedAtomically": true,
+      "heapBytes": 11857896
+    },
+    {
+      "epoch": 1,
+      "populated": {
+        "tick": 0,
+        "sessionId": "context-fixture",
+        "worldEpoch": 1,
+        "vehicles": 110,
+        "cachedContexts": 110,
+        "laneProjections": 110,
+        "invalidatedContexts": 0,
+        "fingerprintCodeUnits": 144357,
+        "identities": 462,
+        "retiredIdentities": 0,
+        "disposed": false,
+        "index": {
+          "entities": 462,
+          "vehicles": 110,
+          "obstacles": 96,
+          "zones": 256,
+          "zoneVertices": 1024,
+          "cells": 48,
+          "spatialReferences": 675,
+          "fallbackEntities": 0,
+          "generation": 0,
+          "disposed": false,
+          "lastQuery": {
+            "cellsVisited": 72,
+            "candidates": 27,
+            "exactTests": 26,
+            "matches": 26,
+            "exhaustive": false
+          }
+        }
+      },
+      "cleared": {
+        "tick": null,
+        "sessionId": "context-fixture",
+        "worldEpoch": 2,
+        "vehicles": 0,
+        "cachedContexts": 0,
+        "laneProjections": 0,
+        "invalidatedContexts": 0,
+        "fingerprintCodeUnits": 0,
+        "identities": 0,
+        "retiredIdentities": 0,
+        "disposed": false,
+        "index": {
+          "entities": 0,
+          "vehicles": 0,
+          "obstacles": 0,
+          "zones": 0,
+          "zoneVertices": 0,
+          "cells": 0,
+          "spatialReferences": 0,
+          "fallbackEntities": 0,
+          "generation": 0,
+          "disposed": false,
+          "lastQuery": {
+            "cellsVisited": 0,
+            "candidates": 0,
+            "exactTests": 0,
+            "matches": 0,
+            "exhaustive": false
+          }
+        }
+      },
+      "rejectedAtomically": true,
+      "heapBytes": 11866312
+    },
+    {
+      "epoch": 2,
+      "populated": {
+        "tick": 0,
+        "sessionId": "context-fixture",
+        "worldEpoch": 2,
+        "vehicles": 110,
+        "cachedContexts": 110,
+        "laneProjections": 110,
+        "invalidatedContexts": 0,
+        "fingerprintCodeUnits": 144357,
+        "identities": 462,
+        "retiredIdentities": 0,
+        "disposed": false,
+        "index": {
+          "entities": 462,
+          "vehicles": 110,
+          "obstacles": 96,
+          "zones": 256,
+          "zoneVertices": 1024,
+          "cells": 48,
+          "spatialReferences": 675,
+          "fallbackEntities": 0,
+          "generation": 0,
+          "disposed": false,
+          "lastQuery": {
+            "cellsVisited": 72,
+            "candidates": 27,
+            "exactTests": 26,
+            "matches": 26,
+            "exhaustive": false
+          }
+        }
+      },
+      "cleared": {
+        "tick": null,
+        "sessionId": "context-fixture",
+        "worldEpoch": 3,
+        "vehicles": 0,
+        "cachedContexts": 0,
+        "laneProjections": 0,
+        "invalidatedContexts": 0,
+        "fingerprintCodeUnits": 0,
+        "identities": 0,
+        "retiredIdentities": 0,
+        "disposed": false,
+        "index": {
+          "entities": 0,
+          "vehicles": 0,
+          "obstacles": 0,
+          "zones": 0,
+          "zoneVertices": 0,
+          "cells": 0,
+          "spatialReferences": 0,
+          "fallbackEntities": 0,
+          "generation": 0,
+          "disposed": false,
+          "lastQuery": {
+            "cellsVisited": 0,
+            "candidates": 0,
+            "exactTests": 0,
+            "matches": 0,
+            "exhaustive": false
+          }
+        }
+      },
+      "rejectedAtomically": true,
+      "heapBytes": 11905976
+    },
+    {
+      "epoch": 3,
+      "populated": {
+        "tick": 0,
+        "sessionId": "context-fixture",
+        "worldEpoch": 3,
+        "vehicles": 110,
+        "cachedContexts": 110,
+        "laneProjections": 110,
+        "invalidatedContexts": 0,
+        "fingerprintCodeUnits": 144357,
+        "identities": 462,
+        "retiredIdentities": 0,
+        "disposed": false,
+        "index": {
+          "entities": 462,
+          "vehicles": 110,
+          "obstacles": 96,
+          "zones": 256,
+          "zoneVertices": 1024,
+          "cells": 48,
+          "spatialReferences": 675,
+          "fallbackEntities": 0,
+          "generation": 0,
+          "disposed": false,
+          "lastQuery": {
+            "cellsVisited": 72,
+            "candidates": 27,
+            "exactTests": 26,
+            "matches": 26,
+            "exhaustive": false
+          }
+        }
+      },
+      "cleared": {
+        "tick": null,
+        "sessionId": "context-fixture",
+        "worldEpoch": 4,
+        "vehicles": 0,
+        "cachedContexts": 0,
+        "laneProjections": 0,
+        "invalidatedContexts": 0,
+        "fingerprintCodeUnits": 0,
+        "identities": 0,
+        "retiredIdentities": 0,
+        "disposed": false,
+        "index": {
+          "entities": 0,
+          "vehicles": 0,
+          "obstacles": 0,
+          "zones": 0,
+          "zoneVertices": 0,
+          "cells": 0,
+          "spatialReferences": 0,
+          "fallbackEntities": 0,
+          "generation": 0,
+          "disposed": false,
+          "lastQuery": {
+            "cellsVisited": 0,
+            "candidates": 0,
+            "exactTests": 0,
+            "matches": 0,
+            "exhaustive": false
+          }
+        }
+      },
+      "rejectedAtomically": true,
+      "heapBytes": 11847648
+    },
+    {
+      "epoch": 4,
+      "populated": {
+        "tick": 0,
+        "sessionId": "context-fixture",
+        "worldEpoch": 4,
+        "vehicles": 110,
+        "cachedContexts": 110,
+        "laneProjections": 110,
+        "invalidatedContexts": 0,
+        "fingerprintCodeUnits": 144357,
+        "identities": 462,
+        "retiredIdentities": 0,
+        "disposed": false,
+        "index": {
+          "entities": 462,
+          "vehicles": 110,
+          "obstacles": 96,
+          "zones": 256,
+          "zoneVertices": 1024,
+          "cells": 48,
+          "spatialReferences": 675,
+          "fallbackEntities": 0,
+          "generation": 0,
+          "disposed": false,
+          "lastQuery": {
+            "cellsVisited": 72,
+            "candidates": 27,
+            "exactTests": 26,
+            "matches": 26,
+            "exhaustive": false
+          }
+        }
+      },
+      "cleared": {
+        "tick": null,
+        "sessionId": "context-fixture",
+        "worldEpoch": 5,
+        "vehicles": 0,
+        "cachedContexts": 0,
+        "laneProjections": 0,
+        "invalidatedContexts": 0,
+        "fingerprintCodeUnits": 0,
+        "identities": 0,
+        "retiredIdentities": 0,
+        "disposed": false,
+        "index": {
+          "entities": 0,
+          "vehicles": 0,
+          "obstacles": 0,
+          "zones": 0,
+          "zoneVertices": 0,
+          "cells": 0,
+          "spatialReferences": 0,
+          "fallbackEntities": 0,
+          "generation": 0,
+          "disposed": false,
+          "lastQuery": {
+            "cellsVisited": 0,
+            "candidates": 0,
+            "exactTests": 0,
+            "matches": 0,
+            "exhaustive": false
+          }
+        }
+      },
+      "rejectedAtomically": true,
+      "heapBytes": 11895840
+    },
+    {
+      "epoch": 5,
+      "populated": {
+        "tick": 0,
+        "sessionId": "context-fixture",
+        "worldEpoch": 5,
+        "vehicles": 110,
+        "cachedContexts": 110,
+        "laneProjections": 110,
+        "invalidatedContexts": 0,
+        "fingerprintCodeUnits": 144357,
+        "identities": 462,
+        "retiredIdentities": 0,
+        "disposed": false,
+        "index": {
+          "entities": 462,
+          "vehicles": 110,
+          "obstacles": 96,
+          "zones": 256,
+          "zoneVertices": 1024,
+          "cells": 48,
+          "spatialReferences": 675,
+          "fallbackEntities": 0,
+          "generation": 0,
+          "disposed": false,
+          "lastQuery": {
+            "cellsVisited": 72,
+            "candidates": 27,
+            "exactTests": 26,
+            "matches": 26,
+            "exhaustive": false
+          }
+        }
+      },
+      "cleared": {
+        "tick": null,
+        "sessionId": "context-fixture",
+        "worldEpoch": 6,
+        "vehicles": 0,
+        "cachedContexts": 0,
+        "laneProjections": 0,
+        "invalidatedContexts": 0,
+        "fingerprintCodeUnits": 0,
+        "identities": 0,
+        "retiredIdentities": 0,
+        "disposed": false,
+        "index": {
+          "entities": 0,
+          "vehicles": 0,
+          "obstacles": 0,
+          "zones": 0,
+          "zoneVertices": 0,
+          "cells": 0,
+          "spatialReferences": 0,
+          "fallbackEntities": 0,
+          "generation": 0,
+          "disposed": false,
+          "lastQuery": {
+            "cellsVisited": 0,
+            "candidates": 0,
+            "exactTests": 0,
+            "matches": 0,
+            "exhaustive": false
+          }
+        }
+      },
+      "rejectedAtomically": true,
+      "heapBytes": 11855288
+    },
+    {
+      "epoch": 6,
+      "populated": {
+        "tick": 0,
+        "sessionId": "context-fixture",
+        "worldEpoch": 6,
+        "vehicles": 110,
+        "cachedContexts": 110,
+        "laneProjections": 110,
+        "invalidatedContexts": 0,
+        "fingerprintCodeUnits": 144357,
+        "identities": 462,
+        "retiredIdentities": 0,
+        "disposed": false,
+        "index": {
+          "entities": 462,
+          "vehicles": 110,
+          "obstacles": 96,
+          "zones": 256,
+          "zoneVertices": 1024,
+          "cells": 48,
+          "spatialReferences": 675,
+          "fallbackEntities": 0,
+          "generation": 0,
+          "disposed": false,
+          "lastQuery": {
+            "cellsVisited": 72,
+            "candidates": 27,
+            "exactTests": 26,
+            "matches": 26,
+            "exhaustive": false
+          }
+        }
+      },
+      "cleared": {
+        "tick": null,
+        "sessionId": "context-fixture",
+        "worldEpoch": 7,
+        "vehicles": 0,
+        "cachedContexts": 0,
+        "laneProjections": 0,
+        "invalidatedContexts": 0,
+        "fingerprintCodeUnits": 0,
+        "identities": 0,
+        "retiredIdentities": 0,
+        "disposed": false,
+        "index": {
+          "entities": 0,
+          "vehicles": 0,
+          "obstacles": 0,
+          "zones": 0,
+          "zoneVertices": 0,
+          "cells": 0,
+          "spatialReferences": 0,
+          "fallbackEntities": 0,
+          "generation": 0,
+          "disposed": false,
+          "lastQuery": {
+            "cellsVisited": 0,
+            "candidates": 0,
+            "exactTests": 0,
+            "matches": 0,
+            "exhaustive": false
+          }
+        }
+      },
+      "rejectedAtomically": true,
+      "heapBytes": 11879392
+    },
+    {
+      "epoch": 7,
+      "populated": {
+        "tick": 0,
+        "sessionId": "context-fixture",
+        "worldEpoch": 7,
+        "vehicles": 110,
+        "cachedContexts": 110,
+        "laneProjections": 110,
+        "invalidatedContexts": 0,
+        "fingerprintCodeUnits": 144357,
+        "identities": 462,
+        "retiredIdentities": 0,
+        "disposed": false,
+        "index": {
+          "entities": 462,
+          "vehicles": 110,
+          "obstacles": 96,
+          "zones": 256,
+          "zoneVertices": 1024,
+          "cells": 48,
+          "spatialReferences": 675,
+          "fallbackEntities": 0,
+          "generation": 0,
+          "disposed": false,
+          "lastQuery": {
+            "cellsVisited": 72,
+            "candidates": 27,
+            "exactTests": 26,
+            "matches": 26,
+            "exhaustive": false
+          }
+        }
+      },
+      "cleared": {
+        "tick": null,
+        "sessionId": "context-fixture",
+        "worldEpoch": 8,
+        "vehicles": 0,
+        "cachedContexts": 0,
+        "laneProjections": 0,
+        "invalidatedContexts": 0,
+        "fingerprintCodeUnits": 0,
+        "identities": 0,
+        "retiredIdentities": 0,
+        "disposed": false,
+        "index": {
+          "entities": 0,
+          "vehicles": 0,
+          "obstacles": 0,
+          "zones": 0,
+          "zoneVertices": 0,
+          "cells": 0,
+          "spatialReferences": 0,
+          "fallbackEntities": 0,
+          "generation": 0,
+          "disposed": false,
+          "lastQuery": {
+            "cellsVisited": 0,
+            "candidates": 0,
+            "exactTests": 0,
+            "matches": 0,
+            "exhaustive": false
+          }
+        }
+      },
+      "rejectedAtomically": true,
+      "heapBytes": 11901104
+    },
+    {
+      "epoch": 8,
+      "populated": {
+        "tick": 0,
+        "sessionId": "context-fixture",
+        "worldEpoch": 8,
+        "vehicles": 110,
+        "cachedContexts": 110,
+        "laneProjections": 110,
+        "invalidatedContexts": 0,
+        "fingerprintCodeUnits": 144357,
+        "identities": 462,
+        "retiredIdentities": 0,
+        "disposed": false,
+        "index": {
+          "entities": 462,
+          "vehicles": 110,
+          "obstacles": 96,
+          "zones": 256,
+          "zoneVertices": 1024,
+          "cells": 48,
+          "spatialReferences": 675,
+          "fallbackEntities": 0,
+          "generation": 0,
+          "disposed": false,
+          "lastQuery": {
+            "cellsVisited": 72,
+            "candidates": 27,
+            "exactTests": 26,
+            "matches": 26,
+            "exhaustive": false
+          }
+        }
+      },
+      "cleared": {
+        "tick": null,
+        "sessionId": "context-fixture",
+        "worldEpoch": 9,
+        "vehicles": 0,
+        "cachedContexts": 0,
+        "laneProjections": 0,
+        "invalidatedContexts": 0,
+        "fingerprintCodeUnits": 0,
+        "identities": 0,
+        "retiredIdentities": 0,
+        "disposed": false,
+        "index": {
+          "entities": 0,
+          "vehicles": 0,
+          "obstacles": 0,
+          "zones": 0,
+          "zoneVertices": 0,
+          "cells": 0,
+          "spatialReferences": 0,
+          "fallbackEntities": 0,
+          "generation": 0,
+          "disposed": false,
+          "lastQuery": {
+            "cellsVisited": 0,
+            "candidates": 0,
+            "exactTests": 0,
+            "matches": 0,
+            "exhaustive": false
+          }
+        }
+      },
+      "rejectedAtomically": true,
+      "heapBytes": 11934000
+    },
+    {
+      "epoch": 9,
+      "populated": {
+        "tick": 0,
+        "sessionId": "context-fixture",
+        "worldEpoch": 9,
+        "vehicles": 110,
+        "cachedContexts": 110,
+        "laneProjections": 110,
+        "invalidatedContexts": 0,
+        "fingerprintCodeUnits": 144357,
+        "identities": 462,
+        "retiredIdentities": 0,
+        "disposed": false,
+        "index": {
+          "entities": 462,
+          "vehicles": 110,
+          "obstacles": 96,
+          "zones": 256,
+          "zoneVertices": 1024,
+          "cells": 48,
+          "spatialReferences": 675,
+          "fallbackEntities": 0,
+          "generation": 0,
+          "disposed": false,
+          "lastQuery": {
+            "cellsVisited": 72,
+            "candidates": 27,
+            "exactTests": 26,
+            "matches": 26,
+            "exhaustive": false
+          }
+        }
+      },
+      "cleared": {
+        "tick": null,
+        "sessionId": "context-fixture",
+        "worldEpoch": 10,
+        "vehicles": 0,
+        "cachedContexts": 0,
+        "laneProjections": 0,
+        "invalidatedContexts": 0,
+        "fingerprintCodeUnits": 0,
+        "identities": 0,
+        "retiredIdentities": 0,
+        "disposed": false,
+        "index": {
+          "entities": 0,
+          "vehicles": 0,
+          "obstacles": 0,
+          "zones": 0,
+          "zoneVertices": 0,
+          "cells": 0,
+          "spatialReferences": 0,
+          "fallbackEntities": 0,
+          "generation": 0,
+          "disposed": false,
+          "lastQuery": {
+            "cellsVisited": 0,
+            "candidates": 0,
+            "exactTests": 0,
+            "matches": 0,
+            "exhaustive": false
+          }
+        }
+      },
+      "rejectedAtomically": true,
+      "heapBytes": 11888968
+    },
+    {
+      "epoch": 10,
+      "populated": {
+        "tick": 0,
+        "sessionId": "context-fixture",
+        "worldEpoch": 10,
+        "vehicles": 110,
+        "cachedContexts": 110,
+        "laneProjections": 110,
+        "invalidatedContexts": 0,
+        "fingerprintCodeUnits": 144358,
+        "identities": 462,
+        "retiredIdentities": 0,
+        "disposed": false,
+        "index": {
+          "entities": 462,
+          "vehicles": 110,
+          "obstacles": 96,
+          "zones": 256,
+          "zoneVertices": 1024,
+          "cells": 48,
+          "spatialReferences": 675,
+          "fallbackEntities": 0,
+          "generation": 0,
+          "disposed": false,
+          "lastQuery": {
+            "cellsVisited": 72,
+            "candidates": 27,
+            "exactTests": 26,
+            "matches": 26,
+            "exhaustive": false
+          }
+        }
+      },
+      "cleared": {
+        "tick": null,
+        "sessionId": "context-fixture",
+        "worldEpoch": 11,
+        "vehicles": 0,
+        "cachedContexts": 0,
+        "laneProjections": 0,
+        "invalidatedContexts": 0,
+        "fingerprintCodeUnits": 0,
+        "identities": 0,
+        "retiredIdentities": 0,
+        "disposed": false,
+        "index": {
+          "entities": 0,
+          "vehicles": 0,
+          "obstacles": 0,
+          "zones": 0,
+          "zoneVertices": 0,
+          "cells": 0,
+          "spatialReferences": 0,
+          "fallbackEntities": 0,
+          "generation": 0,
+          "disposed": false,
+          "lastQuery": {
+            "cellsVisited": 0,
+            "candidates": 0,
+            "exactTests": 0,
+            "matches": 0,
+            "exhaustive": false
+          }
+        }
+      },
+      "rejectedAtomically": true,
+      "heapBytes": 11918888
+    },
+    {
+      "epoch": 11,
+      "populated": {
+        "tick": 0,
+        "sessionId": "context-fixture",
+        "worldEpoch": 11,
+        "vehicles": 110,
+        "cachedContexts": 110,
+        "laneProjections": 110,
+        "invalidatedContexts": 0,
+        "fingerprintCodeUnits": 144358,
+        "identities": 462,
+        "retiredIdentities": 0,
+        "disposed": false,
+        "index": {
+          "entities": 462,
+          "vehicles": 110,
+          "obstacles": 96,
+          "zones": 256,
+          "zoneVertices": 1024,
+          "cells": 48,
+          "spatialReferences": 675,
+          "fallbackEntities": 0,
+          "generation": 0,
+          "disposed": false,
+          "lastQuery": {
+            "cellsVisited": 72,
+            "candidates": 27,
+            "exactTests": 26,
+            "matches": 26,
+            "exhaustive": false
+          }
+        }
+      },
+      "cleared": {
+        "tick": null,
+        "sessionId": "context-fixture",
+        "worldEpoch": 12,
+        "vehicles": 0,
+        "cachedContexts": 0,
+        "laneProjections": 0,
+        "invalidatedContexts": 0,
+        "fingerprintCodeUnits": 0,
+        "identities": 0,
+        "retiredIdentities": 0,
+        "disposed": false,
+        "index": {
+          "entities": 0,
+          "vehicles": 0,
+          "obstacles": 0,
+          "zones": 0,
+          "zoneVertices": 0,
+          "cells": 0,
+          "spatialReferences": 0,
+          "fallbackEntities": 0,
+          "generation": 0,
+          "disposed": false,
+          "lastQuery": {
+            "cellsVisited": 0,
+            "candidates": 0,
+            "exactTests": 0,
+            "matches": 0,
+            "exhaustive": false
+          }
+        }
+      },
+      "rejectedAtomically": true,
+      "heapBytes": 11871936
+    },
+    {
+      "epoch": 12,
+      "populated": {
+        "tick": 0,
+        "sessionId": "context-fixture",
+        "worldEpoch": 12,
+        "vehicles": 110,
+        "cachedContexts": 110,
+        "laneProjections": 110,
+        "invalidatedContexts": 0,
+        "fingerprintCodeUnits": 144358,
+        "identities": 462,
+        "retiredIdentities": 0,
+        "disposed": false,
+        "index": {
+          "entities": 462,
+          "vehicles": 110,
+          "obstacles": 96,
+          "zones": 256,
+          "zoneVertices": 1024,
+          "cells": 48,
+          "spatialReferences": 675,
+          "fallbackEntities": 0,
+          "generation": 0,
+          "disposed": false,
+          "lastQuery": {
+            "cellsVisited": 72,
+            "candidates": 27,
+            "exactTests": 26,
+            "matches": 26,
+            "exhaustive": false
+          }
+        }
+      },
+      "cleared": {
+        "tick": null,
+        "sessionId": "context-fixture",
+        "worldEpoch": 13,
+        "vehicles": 0,
+        "cachedContexts": 0,
+        "laneProjections": 0,
+        "invalidatedContexts": 0,
+        "fingerprintCodeUnits": 0,
+        "identities": 0,
+        "retiredIdentities": 0,
+        "disposed": false,
+        "index": {
+          "entities": 0,
+          "vehicles": 0,
+          "obstacles": 0,
+          "zones": 0,
+          "zoneVertices": 0,
+          "cells": 0,
+          "spatialReferences": 0,
+          "fallbackEntities": 0,
+          "generation": 0,
+          "disposed": false,
+          "lastQuery": {
+            "cellsVisited": 0,
+            "candidates": 0,
+            "exactTests": 0,
+            "matches": 0,
+            "exhaustive": false
+          }
+        }
+      },
+      "rejectedAtomically": true,
+      "heapBytes": 11903904
+    },
+    {
+      "epoch": 13,
+      "populated": {
+        "tick": 0,
+        "sessionId": "context-fixture",
+        "worldEpoch": 13,
+        "vehicles": 110,
+        "cachedContexts": 110,
+        "laneProjections": 110,
+        "invalidatedContexts": 0,
+        "fingerprintCodeUnits": 144358,
+        "identities": 462,
+        "retiredIdentities": 0,
+        "disposed": false,
+        "index": {
+          "entities": 462,
+          "vehicles": 110,
+          "obstacles": 96,
+          "zones": 256,
+          "zoneVertices": 1024,
+          "cells": 48,
+          "spatialReferences": 675,
+          "fallbackEntities": 0,
+          "generation": 0,
+          "disposed": false,
+          "lastQuery": {
+            "cellsVisited": 72,
+            "candidates": 27,
+            "exactTests": 26,
+            "matches": 26,
+            "exhaustive": false
+          }
+        }
+      },
+      "cleared": {
+        "tick": null,
+        "sessionId": "context-fixture",
+        "worldEpoch": 14,
+        "vehicles": 0,
+        "cachedContexts": 0,
+        "laneProjections": 0,
+        "invalidatedContexts": 0,
+        "fingerprintCodeUnits": 0,
+        "identities": 0,
+        "retiredIdentities": 0,
+        "disposed": false,
+        "index": {
+          "entities": 0,
+          "vehicles": 0,
+          "obstacles": 0,
+          "zones": 0,
+          "zoneVertices": 0,
+          "cells": 0,
+          "spatialReferences": 0,
+          "fallbackEntities": 0,
+          "generation": 0,
+          "disposed": false,
+          "lastQuery": {
+            "cellsVisited": 0,
+            "candidates": 0,
+            "exactTests": 0,
+            "matches": 0,
+            "exhaustive": false
+          }
+        }
+      },
+      "rejectedAtomically": true,
+      "heapBytes": 11906720
+    },
+    {
+      "epoch": 14,
+      "populated": {
+        "tick": 0,
+        "sessionId": "context-fixture",
+        "worldEpoch": 14,
+        "vehicles": 110,
+        "cachedContexts": 110,
+        "laneProjections": 110,
+        "invalidatedContexts": 0,
+        "fingerprintCodeUnits": 144358,
+        "identities": 462,
+        "retiredIdentities": 0,
+        "disposed": false,
+        "index": {
+          "entities": 462,
+          "vehicles": 110,
+          "obstacles": 96,
+          "zones": 256,
+          "zoneVertices": 1024,
+          "cells": 48,
+          "spatialReferences": 675,
+          "fallbackEntities": 0,
+          "generation": 0,
+          "disposed": false,
+          "lastQuery": {
+            "cellsVisited": 72,
+            "candidates": 27,
+            "exactTests": 26,
+            "matches": 26,
+            "exhaustive": false
+          }
+        }
+      },
+      "cleared": {
+        "tick": null,
+        "sessionId": "context-fixture",
+        "worldEpoch": 15,
+        "vehicles": 0,
+        "cachedContexts": 0,
+        "laneProjections": 0,
+        "invalidatedContexts": 0,
+        "fingerprintCodeUnits": 0,
+        "identities": 0,
+        "retiredIdentities": 0,
+        "disposed": false,
+        "index": {
+          "entities": 0,
+          "vehicles": 0,
+          "obstacles": 0,
+          "zones": 0,
+          "zoneVertices": 0,
+          "cells": 0,
+          "spatialReferences": 0,
+          "fallbackEntities": 0,
+          "generation": 0,
+          "disposed": false,
+          "lastQuery": {
+            "cellsVisited": 0,
+            "candidates": 0,
+            "exactTests": 0,
+            "matches": 0,
+            "exhaustive": false
+          }
+        }
+      },
+      "rejectedAtomically": true,
+      "heapBytes": 11922744
+    },
+    {
+      "epoch": 15,
+      "populated": {
+        "tick": 0,
+        "sessionId": "context-fixture",
+        "worldEpoch": 15,
+        "vehicles": 110,
+        "cachedContexts": 110,
+        "laneProjections": 110,
+        "invalidatedContexts": 0,
+        "fingerprintCodeUnits": 144358,
+        "identities": 462,
+        "retiredIdentities": 0,
+        "disposed": false,
+        "index": {
+          "entities": 462,
+          "vehicles": 110,
+          "obstacles": 96,
+          "zones": 256,
+          "zoneVertices": 1024,
+          "cells": 48,
+          "spatialReferences": 675,
+          "fallbackEntities": 0,
+          "generation": 0,
+          "disposed": false,
+          "lastQuery": {
+            "cellsVisited": 72,
+            "candidates": 27,
+            "exactTests": 26,
+            "matches": 26,
+            "exhaustive": false
+          }
+        }
+      },
+      "cleared": {
+        "tick": null,
+        "sessionId": "context-fixture",
+        "worldEpoch": 16,
+        "vehicles": 0,
+        "cachedContexts": 0,
+        "laneProjections": 0,
+        "invalidatedContexts": 0,
+        "fingerprintCodeUnits": 0,
+        "identities": 0,
+        "retiredIdentities": 0,
+        "disposed": false,
+        "index": {
+          "entities": 0,
+          "vehicles": 0,
+          "obstacles": 0,
+          "zones": 0,
+          "zoneVertices": 0,
+          "cells": 0,
+          "spatialReferences": 0,
+          "fallbackEntities": 0,
+          "generation": 0,
+          "disposed": false,
+          "lastQuery": {
+            "cellsVisited": 0,
+            "candidates": 0,
+            "exactTests": 0,
+            "matches": 0,
+            "exhaustive": false
+          }
+        }
+      },
+      "rejectedAtomically": true,
+      "heapBytes": 11874656
+    },
+    {
+      "epoch": 16,
+      "populated": {
+        "tick": 0,
+        "sessionId": "context-fixture",
+        "worldEpoch": 16,
+        "vehicles": 110,
+        "cachedContexts": 110,
+        "laneProjections": 110,
+        "invalidatedContexts": 0,
+        "fingerprintCodeUnits": 144358,
+        "identities": 462,
+        "retiredIdentities": 0,
+        "disposed": false,
+        "index": {
+          "entities": 462,
+          "vehicles": 110,
+          "obstacles": 96,
+          "zones": 256,
+          "zoneVertices": 1024,
+          "cells": 48,
+          "spatialReferences": 675,
+          "fallbackEntities": 0,
+          "generation": 0,
+          "disposed": false,
+          "lastQuery": {
+            "cellsVisited": 72,
+            "candidates": 27,
+            "exactTests": 26,
+            "matches": 26,
+            "exhaustive": false
+          }
+        }
+      },
+      "cleared": {
+        "tick": null,
+        "sessionId": "context-fixture",
+        "worldEpoch": 17,
+        "vehicles": 0,
+        "cachedContexts": 0,
+        "laneProjections": 0,
+        "invalidatedContexts": 0,
+        "fingerprintCodeUnits": 0,
+        "identities": 0,
+        "retiredIdentities": 0,
+        "disposed": false,
+        "index": {
+          "entities": 0,
+          "vehicles": 0,
+          "obstacles": 0,
+          "zones": 0,
+          "zoneVertices": 0,
+          "cells": 0,
+          "spatialReferences": 0,
+          "fallbackEntities": 0,
+          "generation": 0,
+          "disposed": false,
+          "lastQuery": {
+            "cellsVisited": 0,
+            "candidates": 0,
+            "exactTests": 0,
+            "matches": 0,
+            "exhaustive": false
+          }
+        }
+      },
+      "rejectedAtomically": true,
+      "heapBytes": 11938536
+    },
+    {
+      "epoch": 17,
+      "populated": {
+        "tick": 0,
+        "sessionId": "context-fixture",
+        "worldEpoch": 17,
+        "vehicles": 110,
+        "cachedContexts": 110,
+        "laneProjections": 110,
+        "invalidatedContexts": 0,
+        "fingerprintCodeUnits": 144358,
+        "identities": 462,
+        "retiredIdentities": 0,
+        "disposed": false,
+        "index": {
+          "entities": 462,
+          "vehicles": 110,
+          "obstacles": 96,
+          "zones": 256,
+          "zoneVertices": 1024,
+          "cells": 48,
+          "spatialReferences": 675,
+          "fallbackEntities": 0,
+          "generation": 0,
+          "disposed": false,
+          "lastQuery": {
+            "cellsVisited": 72,
+            "candidates": 27,
+            "exactTests": 26,
+            "matches": 26,
+            "exhaustive": false
+          }
+        }
+      },
+      "cleared": {
+        "tick": null,
+        "sessionId": "context-fixture",
+        "worldEpoch": 18,
+        "vehicles": 0,
+        "cachedContexts": 0,
+        "laneProjections": 0,
+        "invalidatedContexts": 0,
+        "fingerprintCodeUnits": 0,
+        "identities": 0,
+        "retiredIdentities": 0,
+        "disposed": false,
+        "index": {
+          "entities": 0,
+          "vehicles": 0,
+          "obstacles": 0,
+          "zones": 0,
+          "zoneVertices": 0,
+          "cells": 0,
+          "spatialReferences": 0,
+          "fallbackEntities": 0,
+          "generation": 0,
+          "disposed": false,
+          "lastQuery": {
+            "cellsVisited": 0,
+            "candidates": 0,
+            "exactTests": 0,
+            "matches": 0,
+            "exhaustive": false
+          }
+        }
+      },
+      "rejectedAtomically": true,
+      "heapBytes": 11907368
+    },
+    {
+      "epoch": 18,
+      "populated": {
+        "tick": 0,
+        "sessionId": "context-fixture",
+        "worldEpoch": 18,
+        "vehicles": 110,
+        "cachedContexts": 110,
+        "laneProjections": 110,
+        "invalidatedContexts": 0,
+        "fingerprintCodeUnits": 144358,
+        "identities": 462,
+        "retiredIdentities": 0,
+        "disposed": false,
+        "index": {
+          "entities": 462,
+          "vehicles": 110,
+          "obstacles": 96,
+          "zones": 256,
+          "zoneVertices": 1024,
+          "cells": 48,
+          "spatialReferences": 675,
+          "fallbackEntities": 0,
+          "generation": 0,
+          "disposed": false,
+          "lastQuery": {
+            "cellsVisited": 72,
+            "candidates": 27,
+            "exactTests": 26,
+            "matches": 26,
+            "exhaustive": false
+          }
+        }
+      },
+      "cleared": {
+        "tick": null,
+        "sessionId": "context-fixture",
+        "worldEpoch": 19,
+        "vehicles": 0,
+        "cachedContexts": 0,
+        "laneProjections": 0,
+        "invalidatedContexts": 0,
+        "fingerprintCodeUnits": 0,
+        "identities": 0,
+        "retiredIdentities": 0,
+        "disposed": false,
+        "index": {
+          "entities": 0,
+          "vehicles": 0,
+          "obstacles": 0,
+          "zones": 0,
+          "zoneVertices": 0,
+          "cells": 0,
+          "spatialReferences": 0,
+          "fallbackEntities": 0,
+          "generation": 0,
+          "disposed": false,
+          "lastQuery": {
+            "cellsVisited": 0,
+            "candidates": 0,
+            "exactTests": 0,
+            "matches": 0,
+            "exhaustive": false
+          }
+        }
+      },
+      "rejectedAtomically": true,
+      "heapBytes": 11926352
+    },
+    {
+      "epoch": 19,
+      "populated": {
+        "tick": 0,
+        "sessionId": "context-fixture",
+        "worldEpoch": 19,
+        "vehicles": 110,
+        "cachedContexts": 110,
+        "laneProjections": 110,
+        "invalidatedContexts": 0,
+        "fingerprintCodeUnits": 144358,
+        "identities": 462,
+        "retiredIdentities": 0,
+        "disposed": false,
+        "index": {
+          "entities": 462,
+          "vehicles": 110,
+          "obstacles": 96,
+          "zones": 256,
+          "zoneVertices": 1024,
+          "cells": 48,
+          "spatialReferences": 675,
+          "fallbackEntities": 0,
+          "generation": 0,
+          "disposed": false,
+          "lastQuery": {
+            "cellsVisited": 72,
+            "candidates": 27,
+            "exactTests": 26,
+            "matches": 26,
+            "exhaustive": false
+          }
+        }
+      },
+      "cleared": {
+        "tick": null,
+        "sessionId": "context-fixture",
+        "worldEpoch": 20,
+        "vehicles": 0,
+        "cachedContexts": 0,
+        "laneProjections": 0,
+        "invalidatedContexts": 0,
+        "fingerprintCodeUnits": 0,
+        "identities": 0,
+        "retiredIdentities": 0,
+        "disposed": false,
+        "index": {
+          "entities": 0,
+          "vehicles": 0,
+          "obstacles": 0,
+          "zones": 0,
+          "zoneVertices": 0,
+          "cells": 0,
+          "spatialReferences": 0,
+          "fallbackEntities": 0,
+          "generation": 0,
+          "disposed": false,
+          "lastQuery": {
+            "cellsVisited": 0,
+            "candidates": 0,
+            "exactTests": 0,
+            "matches": 0,
+            "exhaustive": false
+          }
+        }
+      },
+      "rejectedAtomically": true,
+      "heapBytes": 11877640
+    }
+  ],
+  "disposed": {
+    "tick": null,
+    "sessionId": null,
+    "worldEpoch": null,
+    "vehicles": 0,
+    "cachedContexts": 0,
+    "laneProjections": 0,
+    "invalidatedContexts": 0,
+    "fingerprintCodeUnits": 0,
+    "identities": 0,
+    "retiredIdentities": 0,
+    "disposed": true,
+    "index": {
+      "entities": 0,
+      "vehicles": 0,
+      "obstacles": 0,
+      "zones": 0,
+      "zoneVertices": 0,
+      "cells": 0,
+      "spatialReferences": 0,
+      "fallbackEntities": 0,
+      "generation": 1,
+      "disposed": true,
+      "lastQuery": {
+        "cellsVisited": 0,
+        "candidates": 0,
+        "exactTests": 0,
+        "matches": 0,
+        "exhaustive": false
+      }
+    }
+  },
+  "transientAdmissionBounds": {
+    "populatedIndexes": 2,
+    "spatialReferences": 32768,
+    "cells": 32768,
+    "indexEntities": 1436,
+    "indexZoneVertices": 131072,
+    "validatedTemporaryZoneVertices": 65536,
+    "emptyIndexEntities": 0,
+    "fingerprintCodeUnits": 16777216,
+    "identityEntries": 1024,
+    "cacheEntries": 110,
+    "laneProjectionEntries": 110
+  },
+  "exactContextBytes": null,
+  "listeners": 0,
+  "timers": 0,
+  "historicalFrameLists": 0,
+  "scope": "Node forcedGC heap diagnostic; current-index stats are not transient peak allocations. Declared peak bounds are admission arithmetic, not measured allocator RAM. Fixture/static map and bounded stats rows remain harness-owned; no GPU/WASM/full-game soak."
+}
