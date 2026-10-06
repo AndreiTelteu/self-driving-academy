@@ -1,0 +1,42 @@
+npm warn Unknown env config "msvs-version". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> self-driving-academy@0.1.0 check:architecture
+> node scripts/verify-architecture.mjs
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Module dependency policy violations
++ actual - expected
+
++ [
++   'autonomy\\lateral-controller.ts: cross-module import must use a public index.ts: ../world/lane-graph',
++   'autonomy\\lateral-controller.ts: cross-module import must use a public index.ts: ../world/parser',
++   'autonomy\\lateral-controller.ts: cross-module import must use a public index.ts: ../vehicles/vehicle-classes',
++   'autonomy\\lateral-controller.ts: cross-module import must use a public index.ts: ../vehicles/vehicle-classes',
++   'autonomy\\lateral-controller.ts: cross-module import must use a public index.ts: ../vehicles/contracts',
++   'autonomy\\lateral-controller.ts: cross-module import must use a public index.ts: ../world/schema'
++ ]
+- []
+
+    at file:///F:/Sites/self-driving-academy/.worktrees/lateral-controller-01/scripts/verify-architecture.mjs:141:8
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: [
+    'autonomy\\lateral-controller.ts: cross-module import must use a public index.ts: ../world/lane-graph',
+    'autonomy\\lateral-controller.ts: cross-module import must use a public index.ts: ../world/parser',
+    'autonomy\\lateral-controller.ts: cross-module import must use a public index.ts: ../vehicles/vehicle-classes',
+    'autonomy\\lateral-controller.ts: cross-module import must use a public index.ts: ../vehicles/vehicle-classes',
+    'autonomy\\lateral-controller.ts: cross-module import must use a public index.ts: ../vehicles/contracts',
+    'autonomy\\lateral-controller.ts: cross-module import must use a public index.ts: ../world/schema'
+  ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

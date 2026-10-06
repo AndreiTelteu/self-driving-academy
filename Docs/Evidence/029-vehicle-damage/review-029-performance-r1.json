@@ -1,0 +1,126 @@
+{
+  "reviewRound": "029-performance-r1",
+  "reviewedAt": "2026-10-05T19:26:21.904371+00:00",
+  "verdict": "CHANGES_REQUIRED_NO_ACCEPTANCE",
+  "workspace": "F:/Sites/self-driving-academy/.worktrees/vehicle-damage-01",
+  "branch": "loop-pbi/vehicle-damage-01",
+  "baseHead": "d80bf721e536ff1400dc48e1656169ac2fecfa61",
+  "scope": "Independent read-only production/evidence review; only these two review artifacts written. No tests/build/benchmark/browser/git/board mutation.",
+  "authoritativeContract": "Root Docs/performance-budgets.json, Docs25 and PBI/AGENTS; local budget JSON semantically equal (line endings differ).",
+  "originalV4Regression": {
+    "confirmations": 4,
+    "passed": false,
+    "baselineReplacementAuthorized": false
+  },
+  "diagnostic": {
+    "sourceHash": "9637b93d5195019cfb0e591116e906785e5b4e87f1e4ec52856dd5d83998b5da",
+    "cpuConfirmations": 0,
+    "heapEndpointThresholdConfirmations": 5,
+    "pairs": [
+      {
+        "pair": 0,
+        "archived024P95Ms": 2.80199999999968,
+        "current029P95Ms": 2.563100000000304,
+        "deltaMs": -0.23889999999937572,
+        "relativeIncrease": -0.08526052819393398,
+        "cpuThresholdExceeded": false,
+        "archived024IncrementalP95Ms": 0.43070000000079744,
+        "current029IncrementalP95Ms": 0.38650000000052387,
+        "archived024RapierStepP95Ms": 2.0176000000001295,
+        "current029RapierStepP95Ms": 1.8463000000001557,
+        "heapEndpointDeltaBytes": 6797600,
+        "heapEndpointRelativeIncrease": 0.18560235138542097,
+        "heapEndpointThresholdExceeded": true,
+        "postDisposeGcHeapDeltaBytes": 13416
+      },
+      {
+        "pair": 1,
+        "archived024P95Ms": 2.7339999999985594,
+        "current029P95Ms": 2.7171000000007552,
+        "deltaMs": -0.016899999997804116,
+        "relativeIncrease": -0.00618141916525714,
+        "cpuThresholdExceeded": false,
+        "archived024IncrementalP95Ms": 0.3790000000008149,
+        "current029IncrementalP95Ms": 0.4062999999996464,
+        "archived024RapierStepP95Ms": 1.984999999998763,
+        "current029RapierStepP95Ms": 1.9973000000009051,
+        "heapEndpointDeltaBytes": 7269352,
+        "heapEndpointRelativeIncrease": 0.19898169227144244,
+        "heapEndpointThresholdExceeded": true,
+        "postDisposeGcHeapDeltaBytes": -55256
+      },
+      {
+        "pair": 2,
+        "archived024P95Ms": 2.7691000000013446,
+        "current029P95Ms": 3.121100000000297,
+        "deltaMs": 0.35199999999895226,
+        "relativeIncrease": 0.12711711386327013,
+        "cpuThresholdExceeded": false,
+        "archived024IncrementalP95Ms": 0.388200000001234,
+        "current029IncrementalP95Ms": 0.482399999997142,
+        "archived024RapierStepP95Ms": 1.9500999999982014,
+        "current029RapierStepP95Ms": 2.298899999997957,
+        "heapEndpointDeltaBytes": 5621472,
+        "heapEndpointRelativeIncrease": 0.1596617556740063,
+        "heapEndpointThresholdExceeded": true,
+        "postDisposeGcHeapDeltaBytes": 37560
+      },
+      {
+        "pair": 3,
+        "archived024P95Ms": 2.8967000000011467,
+        "current029P95Ms": 3.0032000000028347,
+        "deltaMs": 0.10650000000168802,
+        "relativeIncrease": 0.03676597507565363,
+        "cpuThresholdExceeded": false,
+        "archived024IncrementalP95Ms": 0.4227999999966414,
+        "current029IncrementalP95Ms": 0.4275000000016007,
+        "archived024RapierStepP95Ms": 2.0627999999996973,
+        "current029RapierStepP95Ms": 2.2098000000005413,
+        "heapEndpointDeltaBytes": 7037216,
+        "heapEndpointRelativeIncrease": 0.2041991599451601,
+        "heapEndpointThresholdExceeded": true,
+        "postDisposeGcHeapDeltaBytes": -29344
+      },
+      {
+        "pair": 4,
+        "archived024P95Ms": 2.7282000000013795,
+        "current029P95Ms": 2.859999999996944,
+        "deltaMs": 0.13179999999556458,
+        "relativeIncrease": 0.048310241183013684,
+        "cpuThresholdExceeded": false,
+        "archived024IncrementalP95Ms": 0.42669999999998254,
+        "current029IncrementalP95Ms": 0.457299999998213,
+        "archived024RapierStepP95Ms": 1.9926000000014028,
+        "current029RapierStepP95Ms": 2.0502999999989697,
+        "heapEndpointDeltaBytes": 5651336,
+        "heapEndpointRelativeIncrease": 0.15959310160508752,
+        "heapEndpointThresholdExceeded": true,
+        "postDisposeGcHeapDeltaBytes": 39448
+      }
+    ],
+    "interpretation": "No same-process paired CPU threshold exceedance. Nonstationarity demonstrated; host causality not established. Heap endpoint exceeds memory thresholds 5/5, but GC phase is uncontrolled during measurement, so leak/steady-state cause is unproven. Neither observation overrides chronological failed gate."
+  },
+  "integrity": {
+    "beforeV2V3V4DiagnosticSourceArchives": "ALL_INPUT_BYTES_SHA256_AND_AGGREGATE_VERIFIED",
+    "nativeBeforeV4Diagnostic": "4340292 bytes; SHA256 02dc6a4e2fffc013bab08fbb44fa68f501d8303615e9afe4c7d89ad4eedda0d0 verified",
+    "currentDiagnosticInputs": "all 50 matched at review",
+    "v4DiagnosticProductionSources": "identical",
+    "diagnosticExactPhysicalTracesAndFinalHashes": "20/20 matched chronological before",
+    "diagnosticCleanup": "20/20 checked zero entities/subscriptions, disposed collisions and rejected stale read"
+  },
+  "recordedChecks": {
+    "nativeControllerDamageTests": "24 PASS recorded; not rerun",
+    "typecheck06": "recorded successful",
+    "lint05": "recorded successful",
+    "hardwareFunctional": "NOT_VALIDATED_FOR_CURRENT_SOURCE",
+    "fullHardwareFrameBudget": "NOT_VALIDATED"
+  },
+  "unresolved": [
+    "Original whole-controller CPU regression 4/5 remains blocking under unchanged contract.",
+    "Measured heap endpoint threshold exceeded 5/5; allocation/GC/retained memory attribution unresolved.",
+    "Current-source foreground Chrome WebGPU/WebGL2 damage-motion and lifecycle functional evidence absent.",
+    "Parent merge after027 requires signed magnitude cap and truthful effective physical projection; current positive-only branch is not that integration.",
+    "Shared docs/checks/physical board move and RequireDone029 remain parent work."
+  ],
+  "recommendedNextStep": "Parent should keep029 In Progress, reconcile CPU failure and memory red flag under unchanged criteria through authorized profiling/evidence or explicit requirement revision; do not replace baseline. After decision, build fresh5199 source-identified fixture and run real foreground functional checks on both backends; rerun integration checks after027 merge."
+}

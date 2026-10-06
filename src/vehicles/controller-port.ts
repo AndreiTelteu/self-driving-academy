@@ -1,3 +1,4 @@
+import type { VehicleAvailabilityProvider } from './damage-port';
 import type { ContractContext } from '../sessions';
 import type { BodyIdentity, BodyState } from './body-port';
 import type { DrivetrainProjection } from './drivetrain';
@@ -24,6 +25,7 @@ export interface VehicleActuationPort {
 }
 export interface VehicleControllerOptions {
   readonly drivetrainVersion?: '027-braking-reverse-v1';
+  readonly availability?: VehicleAvailabilityProvider;
 }
 export interface VehicleCommandPacket {
   readonly identity: BodyIdentity;

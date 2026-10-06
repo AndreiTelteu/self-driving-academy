@@ -1,0 +1,563 @@
+{
+  "reviewRound": "029-performance-r2-gc",
+  "clientRequestId": "loop-pbi-029-performance-review-20261005-r2-gc-diagnostic",
+  "reviewedAt": "2026-10-05T19:34:54.971445+00:00",
+  "verdict": "CHANGES_REQUIRED_NO_ACCEPTANCE",
+  "workspace": "F:/Sites/self-driving-academy/.worktrees/vehicle-damage-01",
+  "branch": "loop-pbi/vehicle-damage-01",
+  "head": "d80bf721e536ff1400dc48e1656169ac2fecfa61",
+  "scope": "Read-only independent review; only distinct r2 md/json written. No source, shared docs, board, Git, build, benchmark or UI mutation. Original r1 read in full.",
+  "evidence": {
+    "raw": "same-host-gc-diagnostic.json",
+    "summary": "same-host-gc-diagnostic-summary.json",
+    "sourceHash": "db9c0f0f2cb351d66dbfea7f7079001efae42cbd5cd19c20297c7ec962383f40",
+    "inputsVerified": 50,
+    "currentInputDifferences": [],
+    "v4ProductionFilesCompared": 18,
+    "v4ProductionDifferences": [],
+    "nativeBytes": 4340292,
+    "nativeSha256": "02dc6a4e2fffc013bab08fbb44fa68f501d8303615e9afe4c7d89ad4eedda0d0",
+    "exactChronologicalTraceInputFinalMatches": 20,
+    "cleanupVerified": 20,
+    "rootWorktreeBudgetSemanticEquality": true
+  },
+  "chronologicalV4CpuGate": {
+    "confirmations": 4,
+    "passed": false,
+    "baselineReplacement": false
+  },
+  "supplementalGcDiagnostic": {
+    "cpuJointFlagsOn": 0,
+    "rawImmediateHeapJointFlagsOn": 1,
+    "liveAfterGcHeapJointFlagsOn": 0,
+    "gcObservation": {
+      "supported": true,
+      "capacity": 4096,
+      "retainedEvents": 565,
+      "observedOutsideMeasuredWindows": 232,
+      "deliveredAsynchronously": true,
+      "scope": "ObservedNodeGCevents; unsupported/delayed/missingevents cannot proveabsence, sums cannot decompose tickp95."
+    },
+    "pairs": [
+      {
+        "pair": 0,
+        "observer": false,
+        "referenceP95Ms": null,
+        "currentP95Ms": null,
+        "heapLiveBeforeMeasuredGc": {
+          "referenceBytes": 19555216,
+          "currentBytes": 19678016,
+          "deltaBytes": 122800,
+          "jointThresholdExceeded": false
+        },
+        "heapRawImmediateAfterLoop": {
+          "referenceBytes": 31041688,
+          "currentBytes": 33280400,
+          "deltaBytes": 2238712,
+          "jointThresholdExceeded": false
+        },
+        "heapLiveAfterMeasuredGc": {
+          "referenceBytes": 19550920,
+          "currentBytes": 19574744,
+          "deltaBytes": 23824,
+          "jointThresholdExceeded": false
+        },
+        "heapAfterDisposedGc": {
+          "referenceBytes": 19014384,
+          "currentBytes": 19185872,
+          "deltaBytes": 171488,
+          "jointThresholdExceeded": false
+        },
+        "netRawGrowthDeltaBytes": 2115912,
+        "gc": {
+          "reference": {
+            "count": 52,
+            "durationSumMs": 15.954299926757812,
+            "maximumDurationMs": 0.7797999382019043,
+            "kinds": [
+              1
+            ]
+          },
+          "current": {
+            "count": 41,
+            "durationSumMs": 11.413700342178345,
+            "maximumDurationMs": 0.4179999828338623,
+            "kinds": [
+              1
+            ]
+          }
+        }
+      },
+      {
+        "pair": 1,
+        "observer": false,
+        "referenceP95Ms": null,
+        "currentP95Ms": null,
+        "heapLiveBeforeMeasuredGc": {
+          "referenceBytes": 10540000,
+          "currentBytes": 10483712,
+          "deltaBytes": -56288,
+          "jointThresholdExceeded": false
+        },
+        "heapRawImmediateAfterLoop": {
+          "referenceBytes": 24280720,
+          "currentBytes": 28505032,
+          "deltaBytes": 4224312,
+          "jointThresholdExceeded": false
+        },
+        "heapLiveAfterMeasuredGc": {
+          "referenceBytes": 10494664,
+          "currentBytes": 10384056,
+          "deltaBytes": -110608,
+          "jointThresholdExceeded": false
+        },
+        "heapAfterDisposedGc": {
+          "referenceBytes": 10124096,
+          "currentBytes": 10021280,
+          "deltaBytes": -102816,
+          "jointThresholdExceeded": false
+        },
+        "netRawGrowthDeltaBytes": 4280600,
+        "gc": {
+          "reference": {
+            "count": 20,
+            "durationSumMs": 7.647500038146973,
+            "maximumDurationMs": 0.7531000375747681,
+            "kinds": [
+              1
+            ]
+          },
+          "current": {
+            "count": 20,
+            "durationSumMs": 7.512399911880493,
+            "maximumDurationMs": 0.6355999708175659,
+            "kinds": [
+              1
+            ]
+          }
+        }
+      },
+      {
+        "pair": 2,
+        "observer": false,
+        "referenceP95Ms": null,
+        "currentP95Ms": null,
+        "heapLiveBeforeMeasuredGc": {
+          "referenceBytes": 10576264,
+          "currentBytes": 10672512,
+          "deltaBytes": 96248,
+          "jointThresholdExceeded": false
+        },
+        "heapRawImmediateAfterLoop": {
+          "referenceBytes": 23337128,
+          "currentBytes": 27654432,
+          "deltaBytes": 4317304,
+          "jointThresholdExceeded": false
+        },
+        "heapLiveAfterMeasuredGc": {
+          "referenceBytes": 10539336,
+          "currentBytes": 10595120,
+          "deltaBytes": 55784,
+          "jointThresholdExceeded": false
+        },
+        "heapAfterDisposedGc": {
+          "referenceBytes": 10223488,
+          "currentBytes": 10245376,
+          "deltaBytes": 21888,
+          "jointThresholdExceeded": false
+        },
+        "netRawGrowthDeltaBytes": 4221056,
+        "gc": {
+          "reference": {
+            "count": 10,
+            "durationSumMs": 4.926599979400635,
+            "maximumDurationMs": 1.1554999351501465,
+            "kinds": [
+              1
+            ]
+          },
+          "current": {
+            "count": 10,
+            "durationSumMs": 3.839699864387512,
+            "maximumDurationMs": 0.48959994316101074,
+            "kinds": [
+              1
+            ]
+          }
+        }
+      },
+      {
+        "pair": 3,
+        "observer": false,
+        "referenceP95Ms": null,
+        "currentP95Ms": null,
+        "heapLiveBeforeMeasuredGc": {
+          "referenceBytes": 10841784,
+          "currentBytes": 10834352,
+          "deltaBytes": -7432,
+          "jointThresholdExceeded": false
+        },
+        "heapRawImmediateAfterLoop": {
+          "referenceBytes": 23429680,
+          "currentBytes": 27001376,
+          "deltaBytes": 3571696,
+          "jointThresholdExceeded": false
+        },
+        "heapLiveAfterMeasuredGc": {
+          "referenceBytes": 10806128,
+          "currentBytes": 10762256,
+          "deltaBytes": -43872,
+          "jointThresholdExceeded": false
+        },
+        "heapAfterDisposedGc": {
+          "referenceBytes": 10461152,
+          "currentBytes": 10403400,
+          "deltaBytes": -57752,
+          "jointThresholdExceeded": false
+        },
+        "netRawGrowthDeltaBytes": 3579128,
+        "gc": {
+          "reference": {
+            "count": 10,
+            "durationSumMs": 3.809799909591675,
+            "maximumDurationMs": 0.4973999261856079,
+            "kinds": [
+              1
+            ]
+          },
+          "current": {
+            "count": 10,
+            "durationSumMs": 4.587200045585632,
+            "maximumDurationMs": 0.9103999137878418,
+            "kinds": [
+              1
+            ]
+          }
+        }
+      },
+      {
+        "pair": 4,
+        "observer": false,
+        "referenceP95Ms": null,
+        "currentP95Ms": null,
+        "heapLiveBeforeMeasuredGc": {
+          "referenceBytes": 10882592,
+          "currentBytes": 10951968,
+          "deltaBytes": 69376,
+          "jointThresholdExceeded": false
+        },
+        "heapRawImmediateAfterLoop": {
+          "referenceBytes": 23321160,
+          "currentBytes": 27686688,
+          "deltaBytes": 4365528,
+          "jointThresholdExceeded": false
+        },
+        "heapLiveAfterMeasuredGc": {
+          "referenceBytes": 10841360,
+          "currentBytes": 10878240,
+          "deltaBytes": 36880,
+          "jointThresholdExceeded": false
+        },
+        "heapAfterDisposedGc": {
+          "referenceBytes": 10494856,
+          "currentBytes": 10520960,
+          "deltaBytes": 26104,
+          "jointThresholdExceeded": false
+        },
+        "netRawGrowthDeltaBytes": 4296152,
+        "gc": {
+          "reference": {
+            "count": 10,
+            "durationSumMs": 4.725800037384033,
+            "maximumDurationMs": 0.8947999477386475,
+            "kinds": [
+              1
+            ]
+          },
+          "current": {
+            "count": 10,
+            "durationSumMs": 4.466999888420105,
+            "maximumDurationMs": 1.0504999160766602,
+            "kinds": [
+              1
+            ]
+          }
+        }
+      },
+      {
+        "pair": 0,
+        "observer": true,
+        "referenceP95Ms": 2.583099999999831,
+        "currentP95Ms": 2.704099999999926,
+        "cpuDeltaMs": 0.12100000000009459,
+        "cpuRelativeIncrease": 0.046842940652743796,
+        "cpuJointThresholdExceeded": false,
+        "heapLiveBeforeMeasuredGc": {
+          "referenceBytes": 19689688,
+          "currentBytes": 19689744,
+          "deltaBytes": 56,
+          "jointThresholdExceeded": false
+        },
+        "heapRawImmediateAfterLoop": {
+          "referenceBytes": 39356864,
+          "currentBytes": 38503736,
+          "deltaBytes": -853128,
+          "jointThresholdExceeded": false
+        },
+        "heapLiveAfterMeasuredGc": {
+          "referenceBytes": 19586456,
+          "currentBytes": 19593232,
+          "deltaBytes": 6776,
+          "jointThresholdExceeded": false
+        },
+        "heapAfterDisposedGc": {
+          "referenceBytes": 19247400,
+          "currentBytes": 19237008,
+          "deltaBytes": -10392,
+          "jointThresholdExceeded": false
+        },
+        "netRawGrowthDeltaBytes": -853184,
+        "gc": {
+          "reference": {
+            "count": 20,
+            "durationSumMs": 7.166700124740601,
+            "maximumDurationMs": 0.7152999639511108,
+            "kinds": [
+              1
+            ]
+          },
+          "current": {
+            "count": 20,
+            "durationSumMs": 7.901699662208557,
+            "maximumDurationMs": 1.3888999223709106,
+            "kinds": [
+              1
+            ]
+          }
+        }
+      },
+      {
+        "pair": 1,
+        "observer": true,
+        "referenceP95Ms": 2.7135999999991327,
+        "currentP95Ms": 2.876299999999901,
+        "cpuDeltaMs": 0.16270000000076834,
+        "cpuRelativeIncrease": 0.05995725235879287,
+        "cpuJointThresholdExceeded": false,
+        "heapLiveBeforeMeasuredGc": {
+          "referenceBytes": 10446888,
+          "currentBytes": 19759336,
+          "deltaBytes": 9312448,
+          "jointThresholdExceeded": true
+        },
+        "heapRawImmediateAfterLoop": {
+          "referenceBytes": 24532472,
+          "currentBytes": 38348440,
+          "deltaBytes": 13815968,
+          "jointThresholdExceeded": true
+        },
+        "heapLiveAfterMeasuredGc": {
+          "referenceBytes": 10366144,
+          "currentBytes": 10365544,
+          "deltaBytes": -600,
+          "jointThresholdExceeded": false
+        },
+        "heapAfterDisposedGc": {
+          "referenceBytes": 10024112,
+          "currentBytes": 9989728,
+          "deltaBytes": -34384,
+          "jointThresholdExceeded": false
+        },
+        "netRawGrowthDeltaBytes": 4503520,
+        "gc": {
+          "reference": {
+            "count": 20,
+            "durationSumMs": 7.305500030517578,
+            "maximumDurationMs": 0.715499997138977,
+            "kinds": [
+              1
+            ]
+          },
+          "current": {
+            "count": 20,
+            "durationSumMs": 7.503299832344055,
+            "maximumDurationMs": 0.5354999303817749,
+            "kinds": [
+              1
+            ]
+          }
+        }
+      },
+      {
+        "pair": 2,
+        "observer": true,
+        "referenceP95Ms": 2.6507000000019616,
+        "currentP95Ms": 2.6319000000003143,
+        "cpuDeltaMs": -0.018800000001647277,
+        "cpuRelativeIncrease": -0.007092466141635554,
+        "cpuJointThresholdExceeded": false,
+        "heapLiveBeforeMeasuredGc": {
+          "referenceBytes": 10663352,
+          "currentBytes": 10732720,
+          "deltaBytes": 69368,
+          "jointThresholdExceeded": false
+        },
+        "heapRawImmediateAfterLoop": {
+          "referenceBytes": 23503184,
+          "currentBytes": 27720648,
+          "deltaBytes": 4217464,
+          "jointThresholdExceeded": false
+        },
+        "heapLiveAfterMeasuredGc": {
+          "referenceBytes": 10633584,
+          "currentBytes": 10670960,
+          "deltaBytes": 37376,
+          "jointThresholdExceeded": false
+        },
+        "heapAfterDisposedGc": {
+          "referenceBytes": 10295520,
+          "currentBytes": 10299208,
+          "deltaBytes": 3688,
+          "jointThresholdExceeded": false
+        },
+        "netRawGrowthDeltaBytes": 4148096,
+        "gc": {
+          "reference": {
+            "count": 10,
+            "durationSumMs": 4.769000172615051,
+            "maximumDurationMs": 0.9112000465393066,
+            "kinds": [
+              1
+            ]
+          },
+          "current": {
+            "count": 10,
+            "durationSumMs": 4.557700157165527,
+            "maximumDurationMs": 0.8244999647140503,
+            "kinds": [
+              1
+            ]
+          }
+        }
+      },
+      {
+        "pair": 3,
+        "observer": true,
+        "referenceP95Ms": 2.7788000000000466,
+        "currentP95Ms": 2.733700000000681,
+        "cpuDeltaMs": -0.045099999999365536,
+        "cpuRelativeIncrease": -0.01623002734970663,
+        "cpuJointThresholdExceeded": false,
+        "heapLiveBeforeMeasuredGc": {
+          "referenceBytes": 10742384,
+          "currentBytes": 10754056,
+          "deltaBytes": 11672,
+          "jointThresholdExceeded": false
+        },
+        "heapRawImmediateAfterLoop": {
+          "referenceBytes": 23651488,
+          "currentBytes": 27944000,
+          "deltaBytes": 4292512,
+          "jointThresholdExceeded": false
+        },
+        "heapLiveAfterMeasuredGc": {
+          "referenceBytes": 10701912,
+          "currentBytes": 10675936,
+          "deltaBytes": -25976,
+          "jointThresholdExceeded": false
+        },
+        "heapAfterDisposedGc": {
+          "referenceBytes": 10355368,
+          "currentBytes": 10318192,
+          "deltaBytes": -37176,
+          "jointThresholdExceeded": false
+        },
+        "netRawGrowthDeltaBytes": 4280840,
+        "gc": {
+          "reference": {
+            "count": 10,
+            "durationSumMs": 3.7169997692108154,
+            "maximumDurationMs": 0.43439996242523193,
+            "kinds": [
+              1
+            ]
+          },
+          "current": {
+            "count": 10,
+            "durationSumMs": 3.7202998399734497,
+            "maximumDurationMs": 0.5051000118255615,
+            "kinds": [
+              1
+            ]
+          }
+        }
+      },
+      {
+        "pair": 4,
+        "observer": true,
+        "referenceP95Ms": 2.6934999999975844,
+        "currentP95Ms": 2.61449999999968,
+        "cpuDeltaMs": -0.07899999999790452,
+        "cpuRelativeIncrease": -0.0293298682004735,
+        "cpuJointThresholdExceeded": false,
+        "heapLiveBeforeMeasuredGc": {
+          "referenceBytes": 10955232,
+          "currentBytes": 11004520,
+          "deltaBytes": 49288,
+          "jointThresholdExceeded": false
+        },
+        "heapRawImmediateAfterLoop": {
+          "referenceBytes": 23836984,
+          "currentBytes": 27998104,
+          "deltaBytes": 4161120,
+          "jointThresholdExceeded": false
+        },
+        "heapLiveAfterMeasuredGc": {
+          "referenceBytes": 10887328,
+          "currentBytes": 10932448,
+          "deltaBytes": 45120,
+          "jointThresholdExceeded": false
+        },
+        "heapAfterDisposedGc": {
+          "referenceBytes": 10537568,
+          "currentBytes": 10578368,
+          "deltaBytes": 40800,
+          "jointThresholdExceeded": false
+        },
+        "netRawGrowthDeltaBytes": 4111832,
+        "gc": {
+          "reference": {
+            "count": 10,
+            "durationSumMs": 3.7350000143051147,
+            "maximumDurationMs": 0.4565999507904053,
+            "kinds": [
+              1
+            ]
+          },
+          "current": {
+            "count": 10,
+            "durationSumMs": 4.852999687194824,
+            "maximumDurationMs": 0.7867999076843262,
+            "kinds": [
+              1
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "interpretation": {
+    "retention": "No multi-MiB current-minus-reference retained live-world heap excess reproduced after forced GC in this AVAILABLE fixture; supports short-run collectability, not a general leak/steady-state/history-memory PASS.",
+    "transient": "Pre/post-GC gaps demonstrate a large collectable process-heap component. Earlier r1 endpoint cause and exact damage RAM remain unassigned. Raw current-reference differences persist, with 1/5 joint flags in this changed protocol.",
+    "gc": "Observed window-attributed minor-GC totals do not show consistently more current events/time. No per-tick unsorted timestamp association; assertions/packet work share window. Cannot assign original p95 failure to GC, closures or host.",
+    "conditions": "Extra live-world forced GC, drains and cadence sampling perturb prior protocol; this is diagnostic only and cannot replace chronological baseline."
+  },
+  "unresolved": [
+    "Chronological v4 CPU FAIL4/5 remains blocking under unchanged criteria.",
+    "Runtime transient allocation/heap-pressure attribution unresolved; retained multi-MiB excess not reproduced in GC-aligned short AVAILABLE fixture.",
+    "Current-source foreground Chrome WebGPU/WebGL2 functional evidence missing; unpaced Node is not frame/main-thread/FPS or30s/120s hardware validation.",
+    "027 signed direction/magnitude cap and actual physical projection integration pending.",
+    "Parent owns final checks, truthful shared-doc updates, physical Done move and RequireDone029."
+  ],
+  "recommendedNextStep": "Parent can remove the hot readAvailability per-call callback via a direct guarded try/finally path, preserving all fences and busy/disposed semantics; this is a source-supported allocation candidate, not proven byte attribution. Validate malformed/accessor/mutable/stale/reentrant/retry behavior, then measure new source with unchanged chronological CPU gate and consistent raw/live/GC channels; retain all failed archives. Use bounded allocation sampling with stacks if attribution remains needed. No new benchmark or waiver authorized by review."
+}

@@ -91,7 +91,9 @@ export function createVehicleController(
   boundedId(world.sessionId);
   const configuration = record(options);
   requireContract(
-    Object.keys(configuration).every((key) => key === 'drivetrainVersion'),
+    Object.keys(configuration).every(
+      (key) => key === 'drivetrainVersion' || key === 'availability',
+    ),
     'Unknown controller option',
   );
   const drivetrainEnabled = Object.hasOwn(configuration, 'drivetrainVersion');
@@ -105,6 +107,14 @@ export function createVehicleController(
   requireContract(
     typeof port.bodyIdentity === 'function' && typeof port.step === 'function',
     'Controller actuation port',
+  );
+  let availability = configuration.availability as VehicleControllerOptions['availability'];
+  let validatedMobility:
+    | { readonly source: unknown; readonly throttleLimit: number; readonly minimumBrake: number }
+    | undefined;
+  requireContract(
+    availability === undefined || typeof availability.readAvailability === 'function',
+    'Controller availability provider',
   );
   let actuationPort: VehicleActuationPort | undefined = port;
   let entries = new Map<string, Entry>();
@@ -242,13 +252,33 @@ export function createVehicleController(
           if (entry.target && nextTick - entry.target.tick >= CONTROLLER_LIMITS.targetTicks)
             entry.target = null;
           const raw = submitted ?? (entry.mode === 'AUTO' ? entry.target : null);
+          let throttleLimit = 1,
+            minimumBrake = 0;
+          if (availability !== undefined) {
+            const supplied = availability.readAvailability(entry.identity, world, nextTick);
+            if (validatedMobility !== undefined && validatedMobility.source === supplied) {
+              throttleLimit = validatedMobility.throttleLimit;
+              minimumBrake = validatedMobility.minimumBrake;
+            } else {
+              const mobility = fields(supplied, ['throttleMagnitudeLimit', 'minimumBrake']);
+              throttleLimit = number(mobility.throttleMagnitudeLimit, 0, 1);
+              minimumBrake = number(mobility.minimumBrake, 0, 1);
+              // fields() proved exact own DATA descriptors and plain prototype before caching.
+              // A frozen accessor is rejected; mutable outputs are always fully revalidated.
+              if (Object.isFrozen(supplied))
+                validatedMobility = { source: supplied, throttleLimit, minimumBrake };
+            }
+          }
+          const effectiveBrake = Math.max(raw?.brake ?? 0, minimumBrake);
           let command: VehicleCommand = Object.freeze({
             ...world,
             vehicleId: id,
             tick: nextTick,
             source,
-            throttle: raw && raw.brake === 0 && !raw.handbrake ? raw.throttle : 0,
-            brake: raw?.brake ?? 0,
+            // Minimum service brake must inhibit gearbox dwell before realization.
+            // The damage magnitude cap applies only after the engaged direction is known.
+            throttle: raw && effectiveBrake === 0 && !raw.handbrake ? raw.throttle : 0,
+            brake: effectiveBrake,
             steering: raw?.steering ?? 0,
             handbrake: raw?.handbrake ?? false,
             turnSignal: raw?.turnSignal ?? 'OFF',
@@ -287,6 +317,34 @@ export function createVehicleController(
             });
             if (measure) drivetrainCpuMs += performance.now() - started;
           }
+          let finalPhysicalInput: Readonly<VehicleActuationInput> =
+            drivetrain?.physicalInput ??
+            Object.freeze({
+              throttle: command.throttle,
+              brake: command.brake,
+              steering: command.steering,
+              handbrake: command.handbrake,
+            });
+          if (availability !== undefined) {
+            command = Object.freeze({
+              ...command,
+              throttle:
+                command.brake === 0 && !command.handbrake
+                  ? Math.min(command.throttle, throttleLimit)
+                  : 0,
+            });
+            finalPhysicalInput = Object.freeze({
+              throttle:
+                command.throttle === 0
+                  ? 0
+                  : command.throttle * (drivetrain?.engagedDirection === 'REVERSE' ? -1 : 1),
+              brake: command.brake,
+              steering: command.steering,
+              handbrake: command.handbrake,
+            });
+            if (drivetrain)
+              drivetrain = Object.freeze({ ...drivetrain, physicalInput: finalPhysicalInput });
+          }
           const signalStartedTick =
             command.turnSignal === 'OFF'
               ? null
@@ -312,15 +370,7 @@ export function createVehicleController(
           });
           entry.control = control;
           controls.push(control);
-          physicalInputs.set(
-            id,
-            Object.freeze({
-              throttle: drivetrain?.physicalInput.throttle ?? command.throttle,
-              brake: command.brake,
-              steering: command.steering,
-              handbrake: command.handbrake,
-            }),
-          );
+          physicalInputs.set(id, finalPhysicalInput);
         }
         // Untrusted descriptor/proxy reads above may have replaced a native body.
         // Reject the whole batch before ID-based actuation can reach its replacement.
@@ -403,6 +453,8 @@ export function createVehicleController(
       disposed = true;
       entries.clear();
       actuationPort = undefined;
+      availability = undefined;
+      validatedMobility = undefined;
       lastIgnoredCount = 0;
     },
   };

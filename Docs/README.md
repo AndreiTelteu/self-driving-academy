@@ -112,4 +112,10 @@ Se elimină global pierderea XP și scăderea nivelului. V1 adaugă Academie/Hao
 
 [Mașina de stări045](behavior-fsm.md) oferă șase stări și reason codes din contextul044 și fapte explicite de politică, cu decizii periodice/urgente prin219 și ownership plafonat. Testele și20lumi native AFTER verifică semantica, costul și cleanup-ul contractului timpuriu; manevrele fizice și performanța hardware a jocului complet continuă în task-urile dedicate.
 
+[Controllerul lateral049](lateral-controller.md) urmărește trasee directionate și TURN-uri authored prin aceeași mecanică024, cu direcție, motive de nefezabilitate și viteză consultativă. Baseline-urile native, AFTER70/110, calibrarea22+4 și driving-ul real WebGPU/WebGL2 validează scope-ul empiric; nu certifică FPS-ul flotei ori laptopul.
+
 [Frânarea și marșarierul027](braking-reverse.md) adaugă transmisie opt-in cu oprire și dwell fizic înaintea inversării, input brut distinct de comanda fizică semnată și frână de mână pe roțile spate. Calibrarea celor două clase și driving-ul Chrome WebGPU/WebGL2 sunt verificate; ABS, transmisia completă și performanța întregului joc rămân în afara acestei probe.
+
+[Autoritatea066](control-authority.md) coordonează un singur vehicul PLAYER prin controllerul024, cu transfer simultan, identități native exacte și input025 adresat explicit. Cele34 de scenarii native păstrează rezultatele fizice inițiale și trec comparația CPU; probele Chrome WebGPU/WebGL2 verifică preluarea și continuitatea pentru sedan și compact. Selecția camerei, segmentele LEARNING și dispecerul flotei au contracte separate.
+
+[Comenzile M/L și HUD-ul067](mode-controls.md) publică modul fizic acceptat, eligibilitatea explicită și ținta butoanelor, cu input remapabil și protecții pentru focus, repeat și pauză. Cele34 de lumi native și probele Chrome WebGPU/WebGL2 verifică tranzițiile, paritatea și cleanup-ul. Evenimentele DOM ale probei sunt sintetice; segmentele de învățare, jocul complet și memoria totală rămân în afara acestei verificări.

@@ -18,6 +18,8 @@ Ruta, clasa și starea traficului diferă între vehicule; taxiurile și civilii
 
 Planificarea de traseu, alegerea manevrei și controlul longitudinal/lateral sunt straturi distincte. Schimbarea parametrilor de viteză nu obligă schimbarea rutei. Refuzul unei manevre din lipsă de suport este raportat ca limitare a politicii, nu ca învățare de comportament prudent.
 
+[Controllerul lateral049](lateral-controller.md) compilează trasee directionate032/033 cu geometria authored a TURN-urilor și produce direcție la60Hz, fezabilitate fizică și viteză de viraj consultativă. Nu introduce frânare longitudinală ori limite de stil ascunse. Ownership-ul este plafonat la110actori,256puncte/traseu și1024identități pe epoch. Comparația nativă70/110 și paritatea Manual/AUTO,22manevre valide/4infezabile și câte6manevre reale în Chrome WebGPU/WebGL2 verifică acest contract; FPS-ul flotei și laptopul rămân probe separate.
+
 ## Scheduler și rutare
 
 219 distribuie deciziile periodice determinist între tick-uri; evenimentele urgente invalidează contextul fără a adăuga un corector ascuns de stil. Query-urile folosesc indexul spațial și au scenarii dense/granițe comparate cu referința brută. Cache-ul de rutare este plafonat și invalidat după graf/blocaje/costuri, inclusiv costurile de profil V2. Vehiculele în afara camerei păstrează aceeași autonomie și participare la trafic. [Bugete și probe](25-performanta-contracte-si-benchmark.md).
