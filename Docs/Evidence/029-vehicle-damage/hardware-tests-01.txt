@@ -1,0 +1,55 @@
+(node:79088) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ full-window rank includes every observation and finite overflow rather than clipping old samples (2.6128ms)
+✔ boundary membership is conservative for exact, adjacent IEEE, zero and range-edge observations (1.4559ms)
+✔ interval gates preserve uncertainty near absolute and joint relative thresholds (0.1885ms)
+✔ snapshot distribution rejects tampered totals, sparse duplicates and invalid overflow without trusting client percentiles (0.3415ms)
+✔ immutable metric identity binds source/backend/run and verifier recomputes ranks (1.0815ms)
+✔ bounded observation capacity fails before mutation and export counters stay independent of raw sample cap (10.1768ms)
+(node:102748) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✖ run manifest independently rejects required-null and per-tick/RAF count forgery (3.8966ms)
+✔ full-window immutable trace and raw heap peak are independently recomputed (2.2664ms)
+(node:73724) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ actual server transport seam rejects wrong origin/content type and bounded multipart overflow (1.6332ms)
+✔ immutable real store preserves wx partials and rejects source/run/canonical sequence drift (30.5773ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 9
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 212.954
+
+✖ failing tests:
+
+test at tests\vehicles\damage-hardware-manifest.test.ts:137:1
+✖ run manifest independently rejects required-null and per-tick/RAF count forgery (3.8966ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /Required timing/. Input:
+  
+  'Error: Explicit actual persistent typed-buffer ownership'
+  
+      at TestContext.<anonymous> (file:///F:/Sites/self-driving-academy/.worktrees/vehicle-damage-01/tests/vehicles/damage-hardware-manifest.test.ts:146:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: Error: Explicit actual persistent typed-buffer ownership
+        at check (file:///F:/Sites/self-driving-academy/.worktrees/vehicle-damage-01/tests/browser/vehicle-damage/hardware-run-manifest.ts:78:21)
+        at verifyRunManifest (file:///F:/Sites/self-driving-academy/.worktrees/vehicle-damage-01/tests/browser/vehicle-damage/hardware-run-manifest.ts:179:3)
+        at file:///F:/Sites/self-driving-academy/.worktrees/vehicle-damage-01/tests/vehicles/damage-hardware-manifest.test.ts:147:11
+        at getActual (node:assert:611:5)
+        at strict.throws (node:assert:759:24)
+        at TestContext.<anonymous> (file:///F:/Sites/self-driving-academy/.worktrees/vehicle-damage-01/tests/vehicles/damage-hardware-manifest.test.ts:146:10)
+        at Test.runInAsyncScope (node:async_hooks:227:14)
+        at Test.run (node:internal/test_runner/test:1402:25)
+        at Test.start (node:internal/test_runner/test:1262:17)
+        at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17),
+    expected: /Required timing/,
+    operator: 'throws',
+    diff: 'simple'
+  }
