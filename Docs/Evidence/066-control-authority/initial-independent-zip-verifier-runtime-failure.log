@@ -1,0 +1,57 @@
+Method invocation failed because [System.Convert] does not contain a method named 'ToHexString'.
+At line:1 char:415
++ ... ]::Create();$digest066=[Convert]::ToHexString($sha066.ComputeHash($st ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation: (:) [], RuntimeException
+    + FullyQualifiedErrorId : MethodNotFound
+ 
+node:internal/errors:986
+  const err = new Error(message);
+              ^
+
+Error: Command failed: powershell.exe -NoProfile -Command [Console]::OutputEncoding=[Text.UTF8Encoding]::new($false); Add-Type -AssemblyName System.IO.Compression.FileSystem; $zip066=[IO.Compression.ZipFile]::OpenRead([IO.Path]::GetFullPath('Docs/Evidence/066-control-authority/build-at-capture.zip')); try { $rows066=@(); foreach($entry066 in $zip066.Entries){if(!$entry066.Name){continue};$stream066=$entry066.Open();try{$sha066=[Security.Cryptography.SHA256]::Create();$digest066=[Convert]::ToHexString($sha066.ComputeHash($stream066)).ToLowerInvariant();$sha066.Dispose()}finally{$stream066.Dispose()};$rows066 += [ordered]@{path=$entry066.FullName.Replace('\','/');bytes=$entry066.Length;sha256=$digest066}};ConvertTo-Json -InputObject $rows066 -Depth 5 -Compress }finally{$zip066.Dispose()}
+Method invocation failed because [System.Convert] does not contain a method named 'ToHexString'.
+
+At line:1 char:415
+
++ ... ]::Create();$digest066=[Convert]::ToHexString($sha066.ComputeHash($st ...
+
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    + CategoryInfo          : InvalidOperation: (:) [], RuntimeException
+
+    + FullyQualifiedErrorId : MethodNotFound
+
+ 
+
+
+    at genericNodeError (node:internal/errors:986:15)
+    at wrappedFn (node:internal/errors:540:14)
+    at checkExecSyncError (node:child_process:942:11)
+    at execFileSync (node:child_process:978:15)
+    at file:///F:/Sites/self-driving-academy/.worktrees/authority-01/Docs/Evidence/066-control-authority/verify-build.mjs:5:32 {
+  status: 1,
+  signal: null,
+  output: [
+    null,
+    '',
+    "Method invocation failed because [System.Convert] does not contain a method named 'ToHexString'.\r\n" +
+      'At line:1 char:415\r\n' +
+      '+ ... ]::Create();$digest066=[Convert]::ToHexString($sha066.ComputeHash($st ...\r\n' +
+      '+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\r\n' +
+      '    + CategoryInfo          : InvalidOperation: (:) [], RuntimeException\r\n' +
+      '    + FullyQualifiedErrorId : MethodNotFound\r\n' +
+      ' \r\n'
+  ],
+  pid: 60812,
+  stdout: '',
+  stderr: "Method invocation failed because [System.Convert] does not contain a method named 'ToHexString'.\r\n" +
+    'At line:1 char:415\r\n' +
+    '+ ... ]::Create();$digest066=[Convert]::ToHexString($sha066.ComputeHash($st ...\r\n' +
+    '+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\r\n' +
+    '    + CategoryInfo          : InvalidOperation: (:) [], RuntimeException\r\n' +
+    '    + FullyQualifiedErrorId : MethodNotFound\r\n' +
+    ' \r\n'
+}
+
+Node.js v24.21.0
