@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>029 current signed damage verification</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        background: #15191f;
+        color: #fff;
+        font: 14px system-ui;
+      }
+      #canvas {
+        display: block;
+        width: 1920px;
+        height: 1080px;
+      }
+      #panel {
+        position: fixed;
+        z-index: 2;
+        top: 8px;
+        left: 8px;
+        padding: 12px;
+        background: #15191fea;
+        max-width: 700px;
+      }
+      #status {
+        white-space: pre-wrap;
+        max-height: 240px;
+        overflow: auto;
+      }
+      button,
+      select {
+        font: inherit;
+        margin: 4px;
+        padding: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <section id="panel">
+      <strong>029 scoped current-source verification</strong><br /><select id="backend">
+        <option value="AUTO">AUTO / actual WebGPU required</option>
+        <option value="WEBGL2">Explicit WebGL2</option></select
+      ><button id="functional">Functional / 20 ownership cycles</button
+      ><button id="steady">Full 20-run backend (~50 minutes)</button>
+      <pre id="status">
+Pending. Run only after coordinator grant; retain real foreground focus.</pre>
+    </section>
+    <canvas id="canvas" width="1920" height="1080"></canvas>
+    <script type="module" src="./hardware-entry.ts"></script>
+  </body>
+</html>
