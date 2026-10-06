@@ -1,0 +1,3466 @@
+{
+  "fixtureVersion": "049-lateral-drive-v1",
+  "identity": {
+    "commit": "f1c6428034c1d52ae0eb3e88857fb6f61ffd43ce",
+    "sourceHash": "2de345e932deba57167c61214c0c72c3d83ca76ca9684993ff1826932d7d6877",
+    "inputs": [
+      "Docs/performance-budgets.json",
+      "package-lock.json",
+      "package.json",
+      "src/autonomy/lateral-controller.ts",
+      "src/profiles/contracts.ts",
+      "src/profiles/index.ts",
+      "src/profiles/parameter-catalog.generated.ts",
+      "src/profiles/parameter-registry.ts",
+      "src/rendering/asset-budgets.ts",
+      "src/rendering/babylon/asset-contract.ts",
+      "src/rendering/babylon/asset-registry.ts",
+      "src/rendering/babylon/backend.ts",
+      "src/rendering/babylon/cell-batches.ts",
+      "src/rendering/babylon/daylight.ts",
+      "src/rendering/babylon/dev-inspector.ts",
+      "src/rendering/babylon/diagnostics-adapter.ts",
+      "src/rendering/babylon/index.ts",
+      "src/rendering/babylon/recovery-session.ts",
+      "src/rendering/babylon/scene-adapter.ts",
+      "src/rendering/babylon/snapshot-presenter.ts",
+      "src/rendering/babylon/vehicle-camera-input.ts",
+      "src/rendering/babylon/vehicle-camera.ts",
+      "src/rendering/babylon/vehicle-picking-input.ts",
+      "src/rendering/babylon/vehicle-picking-registry.ts",
+      "src/rendering/babylon/vehicle-picking.ts",
+      "src/rendering/backend-policy.ts",
+      "src/rendering/camera-collision.ts",
+      "src/rendering/diagnostics.ts",
+      "src/rendering/quality-policy.ts",
+      "src/rendering/render-sync.ts",
+      "src/rendering/scene-contract.ts",
+      "src/rendering/vehicle-camera.ts",
+      "src/sessions/identity.ts",
+      "src/sessions/index.ts",
+      "src/sessions/random.ts",
+      "src/sessions/validation.ts",
+      "src/settings/contracts.ts",
+      "src/settings/control-mapping.ts",
+      "src/settings/index.ts",
+      "src/settings/store.ts",
+      "src/simulation/collision-events.ts",
+      "src/simulation/event-bus.ts",
+      "src/simulation/events.ts",
+      "src/simulation/fixed-tick.ts",
+      "src/simulation/index.ts",
+      "src/simulation/scheduling.ts",
+      "src/vehicles/body-port.ts",
+      "src/vehicles/body-registry.ts",
+      "src/vehicles/braking-reverse-input.ts",
+      "src/vehicles/collision-episodes.ts",
+      "src/vehicles/collision-port.ts",
+      "src/vehicles/contracts.ts",
+      "src/vehicles/controller-port.ts",
+      "src/vehicles/controller.ts",
+      "src/vehicles/drivetrain.ts",
+      "src/vehicles/index.ts",
+      "src/vehicles/keyboard-filter.ts",
+      "src/vehicles/physics.ts",
+      "src/vehicles/rapier/index.ts",
+      "src/vehicles/vehicle-classes.ts",
+      "src/world/crosswalk-zones.ts",
+      "src/world/errors.ts",
+      "src/world/index.ts",
+      "src/world/intersection-conflict-geometry.ts",
+      "src/world/intersection-conflicts.ts",
+      "src/world/lane-graph.ts",
+      "src/world/parser.ts",
+      "src/world/priority-arrival.ts",
+      "src/world/priority-policy.ts",
+      "src/world/priority-rules.ts",
+      "src/world/semantics.ts",
+      "src/world/signals.ts",
+      "src/world/spatial-index.ts",
+      "src/world/stop-rules.ts",
+      "tests/autonomy/lateral-controller-fixture.ts",
+      "tests/autonomy/lateral-controller-reference.ts",
+      "tests/browser/lateral-controller/index.html",
+      "tests/browser/lateral-controller/main.ts",
+      "tests/browser/lateral-controller/server.mjs",
+      "tests/world/fixture.ts"
+    ],
+    "budgetVersion": "203-initial-1",
+    "physicsVersion": "0.21.0",
+    "engineVersion": "9.29.0"
+  },
+  "artifactHash": "88709e69f22b7a17ccc17e06d729122ba71668c4f64a7dc30193b8667a8ae1f5",
+  "createdAt": "2026-10-06T00:32:32.989Z",
+  "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+  "renderer": "WEBGPU",
+  "actualGpuInfo": {
+    "vendor": "amd",
+    "renderer": "rdna-3",
+    "version": "unknown version"
+  },
+  "foreground": true,
+  "cssResolution": [
+    1920,
+    1080
+  ],
+  "internalResolution": [
+    1920,
+    1080
+  ],
+  "dpr": 1,
+  "arms": [
+    {
+      "classId": "sedan",
+      "kind": "STRAIGHT",
+      "requestedSpeedMps": 5,
+      "ticks": 234,
+      "elapsedWallMs": 3910.399999976158,
+      "completed": true,
+      "sawCurve": false,
+      "authoredTurnCount": 0,
+      "maximumCrossTrackM": 7.24538040230982e-7,
+      "maximumDisplacementM": 0.08587646484375062,
+      "minimumSpeedMps": 5.142732620239261,
+      "maximumSpeedMps": 5.151611328125009,
+      "initialPoseWrites": 1,
+      "initialVelocityWrites": 1,
+      "drivingPoseWrites": 0,
+      "drivingVelocityWrites": 0,
+      "overloadCount": 0,
+      "startup": {
+        "warmupFrames": 30,
+        "warmupElapsedMs": 372.8000000715256,
+        "physicsTicks": 0
+      },
+      "maxRafGapMs": 55.599999999999454,
+      "checkpoints": [
+        {
+          "tick": 60,
+          "sourceTick": 59,
+          "steering": -2.9635646391241025e-7,
+          "reason": "TRACKING",
+          "crossTrackM": 1.1167262670142009e-7,
+          "advisorySpeedLimitMps": 100,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -34.896392822265625,
+              "y": 0.7589282393455505,
+              "z": 1.1941936861603608e-7
+            },
+            "rotation": {
+              "x": -0.00008630574302515015,
+              "y": 0.7071068286895752,
+              "z": 0.00008631002128822729,
+              "w": 0.7071068286895752
+            },
+            "velocity": {
+              "x": 5.145443439483643,
+              "y": -0.07153874635696411,
+              "z": 4.646895206406043e-7
+            },
+            "speed": 5.145443439483663,
+            "suspension": [
+              0.28928983211517334,
+              0.28928983211517334,
+              0.28856730461120605,
+              0.28856730461120605
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 0,
+            "vehicleId": "car",
+            "tick": 60,
+            "source": "AUTONOMY",
+            "throttle": 0.03972031116484632,
+            "brake": 0,
+            "steering": -2.9635646391241025e-7,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        },
+        {
+          "tick": 120,
+          "sourceTick": 119,
+          "steering": -1.4726829798322196e-7,
+          "reason": "TRACKING",
+          "crossTrackM": 4.3095451474073343e-7,
+          "advisorySpeedLimitMps": 100,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -29.747894287109375,
+              "y": 0.7589265704154968,
+              "z": 4.3390195969550405e-7
+            },
+            "rotation": {
+              "x": -0.00008482945850118995,
+              "y": 0.7071068286895752,
+              "z": 0.00008482640259899199,
+              "w": 0.7071068286895752
+            },
+            "velocity": {
+              "x": 5.1489410400390625,
+              "y": -0.07151349633932114,
+              "z": 1.7679781194601674e-7
+            },
+            "speed": 5.148941040039065,
+            "suspension": [
+              0.2892216444015503,
+              0.2892216444015503,
+              0.2886313199996948,
+              0.2886313199996948
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 0,
+            "vehicleId": "car",
+            "tick": 120,
+            "source": "AUTONOMY",
+            "throttle": 0.0384619379043576,
+            "brake": 0,
+            "steering": -1.4726829798322196e-7,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        },
+        {
+          "tick": 180,
+          "sourceTick": 179,
+          "steering": -8.141071311150036e-8,
+          "reason": "TRACKING",
+          "crossTrackM": 6.282893991738092e-7,
+          "advisorySpeedLimitMps": 100,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -24.599472045898438,
+              "y": 0.758926510810852,
+              "z": 6.33140643913066e-7
+            },
+            "rotation": {
+              "x": -0.00008048668678384274,
+              "y": 0.7071068286895752,
+              "z": 0.0000804871233412996,
+              "w": 0.7071068286895752
+            },
+            "velocity": {
+              "x": 5.143484592437744,
+              "y": -0.07151348143815994,
+              "z": 2.9099109610797314e-7
+            },
+            "speed": 5.143484592437752,
+            "suspension": [
+              0.28930699825286865,
+              0.28930699825286865,
+              0.28854596614837646,
+              0.2885458469390869
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 0,
+            "vehicleId": "car",
+            "tick": 180,
+            "source": "AUTONOMY",
+            "throttle": 0,
+            "brake": 0.04524106979370117,
+            "steering": -8.141071311150036e-8,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        }
+      ],
+      "final": {
+        "id": "car",
+        "position": {
+          "x": -19.965850830078125,
+          "y": 0.7589265704154968,
+          "z": 7.243957043101545e-7
+        },
+        "rotation": {
+          "x": -0.00008057655213633552,
+          "y": 0.7071068286895752,
+          "z": 0.0000805727977422066,
+          "w": 0.7071068286895752
+        },
+        "velocity": {
+          "x": 5.145794868469238,
+          "y": -0.07151345163583755,
+          "z": -8.5502724900266e-9
+        },
+        "speed": 5.145794868469238,
+        "suspension": [
+          0.28925466537475586,
+          0.28925466537475586,
+          0.28859829902648926,
+          0.28859829902648926
+        ],
+        "wheelContacts": 4
+      },
+      "mechanics": {
+        "classId": "sedan",
+        "version": "023-mechanics-v1",
+        "massKg": 1400,
+        "powerW": 90000,
+        "grip": 1.2999999523162842,
+        "brakeAccelerationMps2": 8,
+        "wheels": {
+          "radiusM": 0.3199999928474426,
+          "wheelbaseM": 2.700000047683716,
+          "trackM": 1.7999999523162842
+        },
+        "turningRadiusM": 5.589424974226069,
+        "appliedEngineForceN": [
+          0,
+          0,
+          128.680419921875,
+          128.680419921875
+        ],
+        "appliedSteeringRadians": [
+          3.95735071379022e-8,
+          3.95735071379022e-8,
+          0,
+          0
+        ],
+        "wheelBrakeImpulseLimitNs": [
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "classId": "sedan",
+      "kind": "LEFT",
+      "requestedSpeedMps": 3,
+      "ticks": 1080,
+      "elapsedWallMs": 18007.700000047684,
+      "completed": true,
+      "sawCurve": true,
+      "authoredTurnCount": 1,
+      "maximumCrossTrackM": 0.3748958955717461,
+      "maximumDisplacementM": 0.0525515467503619,
+      "minimumSpeedMps": 3.1429906700409,
+      "maximumSpeedMps": 3.1521192734808903,
+      "initialPoseWrites": 1,
+      "initialVelocityWrites": 1,
+      "drivingPoseWrites": 0,
+      "drivingVelocityWrites": 0,
+      "overloadCount": 0,
+      "startup": {
+        "warmupFrames": 30,
+        "warmupElapsedMs": 304.2999999523163,
+        "physicsTicks": 0
+      },
+      "maxRafGapMs": 8.099999999998545,
+      "checkpoints": [
+        {
+          "tick": 60,
+          "sourceTick": 59,
+          "steering": -2.435699955883227e-7,
+          "reason": "TRACKING",
+          "crossTrackM": 2.164444907748475e-7,
+          "advisorySpeedLimitMps": 7.483314773547834,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -36.891571044921875,
+              "y": 0.7589282989501953,
+              "z": 2.1949834660972556e-7
+            },
+            "rotation": {
+              "x": -0.0000519126006111037,
+              "y": 0.7071068286895752,
+              "z": 0.00005191187301534228,
+              "w": 0.7071068286895752
+            },
+            "velocity": {
+              "x": 3.148656129837036,
+              "y": -0.07153943181037903,
+              "z": 1.8318830541375064e-7
+            },
+            "speed": 3.148656129837041,
+            "suspension": [
+              0.2891054153442383,
+              0.2891054153442383,
+              0.28875184059143066,
+              0.28875184059143066
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 1,
+            "vehicleId": "car",
+            "tick": 60,
+            "source": "AUTONOMY",
+            "throttle": 0.03874415397643872,
+            "brake": 0,
+            "steering": -2.435699955883227e-7,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        },
+        {
+          "tick": 120,
+          "sourceTick": 119,
+          "steering": -1.4788493518395494e-7,
+          "reason": "TRACKING",
+          "crossTrackM": 3.698026773690799e-7,
+          "advisorySpeedLimitMps": 7.483314773547834,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -33.74334716796875,
+              "y": 0.758926510810852,
+              "z": 3.717339893682947e-7
+            },
+            "rotation": {
+              "x": -0.0000418985728174448,
+              "y": 0.7071068286895752,
+              "z": 0.00004189664468867704,
+              "w": 0.7071068286895752
+            },
+            "velocity": {
+              "x": 3.145981550216675,
+              "y": -0.07151322066783905,
+              "z": 1.1585238013367416e-7
+            },
+            "speed": 3.145981550216677,
+            "suspension": [
+              0.28909313678741455,
+              0.28909313678741455,
+              0.288759708404541,
+              0.288759708404541
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 1,
+            "vehicleId": "car",
+            "tick": 120,
+            "source": "AUTONOMY",
+            "throttle": 0.03970662593841475,
+            "brake": 0,
+            "steering": -1.4788493518395494e-7,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        },
+        {
+          "tick": 180,
+          "sourceTick": 179,
+          "steering": -9.482660209243294e-8,
+          "reason": "TRACKING",
+          "crossTrackM": 4.715269312782766e-7,
+          "advisorySpeedLimitMps": 7.483314773547834,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -30.59515380859375,
+              "y": 0.7589265704154968,
+              "z": 4.7303987571467587e-7
+            },
+            "rotation": {
+              "x": -0.000044432592403609306,
+              "y": 0.7071068286895752,
+              "z": 0.00004443271609488875,
+              "w": 0.7071068286895752
+            },
+            "velocity": {
+              "x": 3.143355369567871,
+              "y": -0.07151355594396591,
+              "z": 9.075146323311856e-8
+            },
+            "speed": 3.1433553695678724,
+            "suspension": [
+              0.28915703296661377,
+              0.28915703296661377,
+              0.28869593143463135,
+              0.28869593143463135
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 1,
+            "vehicleId": "car",
+            "tick": 180,
+            "source": "AUTONOMY",
+            "throttle": 0,
+            "brake": 0.04504423141479532,
+            "steering": -9.482660209243294e-8,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        },
+        {
+          "tick": 240,
+          "sourceTick": 239,
+          "steering": -4.963853724841591e-8,
+          "reason": "TRACKING",
+          "crossTrackM": 5.402997658165987e-7,
+          "advisorySpeedLimitMps": 7.483314773547834,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -27.44683837890625,
+              "y": 0.7589265704154968,
+              "z": 5.409891628005425e-7
+            },
+            "rotation": {
+              "x": -0.00006132235284894705,
+              "y": 0.7071068286895752,
+              "z": 0.00006132481939857826,
+              "w": 0.7071068286895752
+            },
+            "velocity": {
+              "x": 3.149646043777466,
+              "y": -0.07151364535093307,
+              "z": 4.1354994095854636e-8
+            },
+            "speed": 3.149646043777466,
+            "suspension": [
+              0.289139986038208,
+              0.289139986038208,
+              0.28871309757232666,
+              0.28871309757232666
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 1,
+            "vehicleId": "car",
+            "tick": 240,
+            "source": "AUTONOMY",
+            "throttle": 0.03838808774948089,
+            "brake": 0,
+            "steering": -4.963853724841591e-8,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        },
+        {
+          "tick": 300,
+          "sourceTick": 299,
+          "steering": -1.623595072611259e-8,
+          "reason": "TRACKING",
+          "crossTrackM": 5.846976591783459e-7,
+          "advisorySpeedLimitMps": 7.483314773547834,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -24.298477172851562,
+              "y": 0.7589265704154968,
+              "z": 5.832997658217209e-7
+            },
+            "rotation": {
+              "x": -0.00004271642683306709,
+              "y": 0.7071068286895752,
+              "z": 0.00004271863144822419,
+              "w": 0.7071068286895752
+            },
+            "velocity": {
+              "x": 3.1466708183288574,
+              "y": -0.0715135857462883,
+              "z": -8.385932659393802e-8
+            },
+            "speed": 3.1466708183288583,
+            "suspension": [
+              0.2890983819961548,
+              0.2890983819961548,
+              0.28875458240509033,
+              0.2887547016143799
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 1,
+            "vehicleId": "car",
+            "tick": 300,
+            "source": "AUTONOMY",
+            "throttle": 0.03945853948593109,
+            "brake": 0,
+            "steering": -1.623595072611259e-8,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        },
+        {
+          "tick": 360,
+          "sourceTick": 359,
+          "steering": -1.1666735636896613e-8,
+          "reason": "TRACKING",
+          "crossTrackM": 6.057670134396176e-7,
+          "advisorySpeedLimitMps": 7.483314773547834,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -21.150192260742188,
+              "y": 0.7589265704154968,
+              "z": 6.060639634597464e-7
+            },
+            "rotation": {
+              "x": -0.00004343003820395097,
+              "y": 0.7071068286895752,
+              "z": 0.00004342916508903727,
+              "w": 0.7071068286895752
+            },
+            "velocity": {
+              "x": 3.143843173980713,
+              "y": -0.07151361554861069,
+              "z": 1.7800234175524565e-8
+            },
+            "speed": 3.143843173980713,
+            "suspension": [
+              0.28915321826934814,
+              0.28915321826934814,
+              0.288699746131897,
+              0.288699746131897
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 1,
+            "vehicleId": "car",
+            "tick": 360,
+            "source": "AUTONOMY",
+            "throttle": 0,
+            "brake": 0.04519658088684148,
+            "steering": -1.1666735636896613e-8,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        },
+        {
+          "tick": 420,
+          "sourceTick": 419,
+          "steering": -0.0738910899829104,
+          "reason": "TRACKING",
+          "crossTrackM": 0.023332012817263603,
+          "advisorySpeedLimitMps": 7.483314773547834,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -18.002212524414062,
+              "y": 0.758926510810852,
+              "z": 0.024796081706881523
+            },
+            "rotation": {
+              "x": -0.00010700506391003728,
+              "y": 0.7028464078903198,
+              "z": 0.000012652836630877573,
+              "w": 0.7113417387008667
+            },
+            "velocity": {
+              "x": 3.1486644744873047,
+              "y": -0.07151348143815994,
+              "z": 0.08782203495502472
+            },
+            "speed": 3.149888995301589,
+            "suspension": [
+              0.2892290949821472,
+              0.28899675607681274,
+              0.2888562083244324,
+              0.2886238694190979
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 1,
+            "vehicleId": "car",
+            "tick": 420,
+            "source": "AUTONOMY",
+            "throttle": 0.03828958773697591,
+            "brake": 0,
+            "steering": -0.0738910899829104,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        },
+        {
+          "tick": 480,
+          "sourceTick": 479,
+          "steering": -0.21315905767418541,
+          "reason": "TRACKING",
+          "crossTrackM": 0.19782918091283966,
+          "advisorySpeedLimitMps": 7.483314773547834,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -14.863801002502441,
+              "y": 0.758926510810852,
+              "z": 0.2582629323005676
+            },
+            "rotation": {
+              "x": -0.00016884722572285682,
+              "y": 0.6759008169174194,
+              "z": -0.00003969238241552375,
+              "w": 0.736992597579956
+            },
+            "velocity": {
+              "x": 3.1236307621002197,
+              "y": -0.07151313126087189,
+              "z": 0.4160212576389313
+            },
+            "speed": 3.1512129132678863,
+            "suspension": [
+              0.28940749168395996,
+              0.28889918327331543,
+              0.28895366191864014,
+              0.2884453535079956
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 1,
+            "vehicleId": "car",
+            "tick": 480,
+            "source": "AUTONOMY",
+            "throttle": 0.03778082765242613,
+            "brake": 0,
+            "steering": -0.21315905767418541,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        },
+        {
+          "tick": 540,
+          "sourceTick": 539,
+          "steering": -0.30984507938771777,
+          "reason": "TRACKING",
+          "crossTrackM": 0.318434009759449,
+          "advisorySpeedLimitMps": 7.483314773547834,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -11.787606239318848,
+              "y": 0.7589264512062073,
+              "z": 0.9114647507667542
+            },
+            "rotation": {
+              "x": -0.00018094528059009463,
+              "y": 0.6234872341156006,
+              "z": -0.00009005072934087366,
+              "w": 0.7818335294723511
+            },
+            "velocity": {
+              "x": 3.0155041217803955,
+              "y": -0.07151319831609726,
+              "z": 0.9046376347541809
+            },
+            "speed": 3.1482748226112967,
+            "suspension": [
+              0.2894640564918518,
+              0.2888121008872986,
+              0.289040744304657,
+              0.28838878870010376
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 1,
+            "vehicleId": "car",
+            "tick": 540,
+            "source": "AUTONOMY",
+            "throttle": 0.03881171487911678,
+            "brake": 0,
+            "steering": -0.30984507938771777,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        },
+        {
+          "tick": 600,
+          "sourceTick": 599,
+          "steering": -0.35825505318839207,
+          "reason": "TRACKING",
+          "crossTrackM": 0.35588869586768906,
+          "advisorySpeedLimitMps": 7.483314773547834,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -8.872658729553223,
+              "y": 0.7589264512062073,
+              "z": 2.088732957839966
+            },
+            "rotation": {
+              "x": -0.00019707292085513473,
+              "y": 0.5526527166366577,
+              "z": -0.00011441120295785367,
+              "w": 0.8334116339683533
+            },
+            "velocity": {
+              "x": 2.798295259475708,
+              "y": -0.07151325047016144,
+              "z": 1.447526454925537
+            },
+            "speed": 3.1505220514882155,
+            "suspension": [
+              0.28953003883361816,
+              0.28880250453948975,
+              0.2890505790710449,
+              0.28832292556762695
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 1,
+            "vehicleId": "car",
+            "tick": 600,
+            "source": "AUTONOMY",
+            "throttle": 0.03798875533343756,
+            "brake": 0,
+            "steering": -0.35825505318839207,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        },
+        {
+          "tick": 660,
+          "sourceTick": 659,
+          "steering": -0.3778514014057547,
+          "reason": "TRACKING",
+          "crossTrackM": 0.36513653781061917,
+          "advisorySpeedLimitMps": 7.483314773547834,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -6.237183570861816,
+              "y": 0.7589264512062073,
+              "z": 3.8014137744903564
+            },
+            "rotation": {
+              "x": -0.0001930074067786336,
+              "y": 0.47001978754997253,
+              "z": -0.00013690309424418956,
+              "w": 0.8826558589935303
+            },
+            "velocity": {
+              "x": 2.4616029262542725,
+              "y": -0.07151331007480621,
+              "z": 1.9670062065124512
+            },
+            "speed": 3.1509684833400193,
+            "suspension": [
+              0.28954482078552246,
+              0.2887902855873108,
+              0.2890626788139343,
+              0.2883082628250122
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 1,
+            "vehicleId": "car",
+            "tick": 660,
+            "source": "AUTONOMY",
+            "throttle": 0.03782473083837318,
+            "brake": 0,
+            "steering": -0.3778514014057547,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        },
+        {
+          "tick": 720,
+          "sourceTick": 719,
+          "steering": -0.3838864943918459,
+          "reason": "TRACKING",
+          "crossTrackM": 0.3673132268737733,
+          "advisorySpeedLimitMps": 7.483314773547834,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -3.9926953315734863,
+              "y": 0.7589264512062073,
+              "z": 6.001650810241699
+            },
+            "rotation": {
+              "x": -0.00017277478764299303,
+              "y": 0.3799745738506317,
+              "z": -0.0001562992256367579,
+              "w": 0.9249969720840454
+            },
+            "velocity": {
+              "x": 2.020393133163452,
+              "y": -0.07151295989751816,
+              "z": 2.4172465801239014
+            },
+            "speed": 3.150407821481963,
+            "suspension": [
+              0.28953951597213745,
+              0.28878968954086304,
+              0.28906315565109253,
+              0.2883133292198181
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 1,
+            "vehicleId": "car",
+            "tick": 720,
+            "source": "AUTONOMY",
+            "throttle": 0.0380272054639602,
+            "brake": 0,
+            "steering": -0.3838864943918459,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        },
+        {
+          "tick": 780,
+          "sourceTick": 779,
+          "steering": -0.3845876024445024,
+          "reason": "TRACKING",
+          "crossTrackM": 0.3689787490635218,
+          "advisorySpeedLimitMps": 7.483314773547834,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -2.2333474159240723,
+              "y": 0.7589264512062073,
+              "z": 8.605891227722168
+            },
+            "rotation": {
+              "x": -0.00015205774980131537,
+              "y": 0.28518322110176086,
+              "z": -0.00017204653704538941,
+              "w": 0.9584730267524719
+            },
+            "velocity": {
+              "x": 1.496081829071045,
+              "y": -0.07151361554861069,
+              "z": 2.7720470428466797
+            },
+            "speed": 3.150000896354092,
+            "suspension": [
+              0.2895238399505615,
+              0.2887808084487915,
+              0.28907227516174316,
+              0.2883293032646179
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 1,
+            "vehicleId": "car",
+            "tick": 780,
+            "source": "AUTONOMY",
+            "throttle": 0.03817651366905704,
+            "brake": 0,
+            "steering": -0.3845876024445024,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        },
+        {
+          "tick": 840,
+          "sourceTick": 839,
+          "steering": -0.3834333891810688,
+          "reason": "TRACKING",
+          "crossTrackM": 0.3715943185611154,
+          "advisorySpeedLimitMps": 7.483314773547834,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -1.0312165021896362,
+              "y": 0.7589264512062073,
+              "z": 11.509699821472168
+            },
+            "rotation": {
+              "x": -0.0001259998680325225,
+              "y": 0.18729014694690704,
+              "z": -0.0001849936379585415,
+              "w": 0.9823046922683716
+            },
+            "velocity": {
+              "x": 0.911403238773346,
+              "y": -0.07151337713003159,
+              "z": 3.014888286590576
+            },
+            "speed": 3.149636049493275,
+            "suspension": [
+              0.2894972562789917,
+              0.28876519203186035,
+              0.28908783197402954,
+              0.2883557081222534
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 1,
+            "vehicleId": "car",
+            "tick": 840,
+            "source": "AUTONOMY",
+            "throttle": 0.03831114746111891,
+            "brake": 0,
+            "steering": -0.3834333891810688,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        },
+        {
+          "tick": 900,
+          "sourceTick": 899,
+          "steering": -0.28831757899884625,
+          "reason": "TRACKING",
+          "crossTrackM": 0.3265604686996399,
+          "advisorySpeedLimitMps": 7.483314773547834,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -0.3919025659561157,
+              "y": 0.7589264512062073,
+              "z": 14.5889310836792
+            },
+            "rotation": {
+              "x": -0.0000787032549851574,
+              "y": 0.09725760668516159,
+              "z": -0.00012014466483378783,
+              "w": 0.9952592849731445
+            },
+            "velocity": {
+              "x": 0.41563156247138977,
+              "y": -0.07151305675506592,
+              "z": 3.1208014488220215
+            },
+            "speed": 3.148356917297027,
+            "suspension": [
+              0.28930938243865967,
+              0.288854718208313,
+              0.288998007774353,
+              0.2885434627532959
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 1,
+            "vehicleId": "car",
+            "tick": 900,
+            "source": "AUTONOMY",
+            "throttle": 0.03884427301763805,
+            "brake": 0,
+            "steering": -0.28831757899884625,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        },
+        {
+          "tick": 960,
+          "sourceTick": 959,
+          "steering": -0.14919647914477885,
+          "reason": "TRACKING",
+          "crossTrackM": 0.12674903869628906,
+          "advisorySpeedLimitMps": 7.483314773547834,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -0.12411489337682724,
+              "y": 0.758926510810852,
+              "z": 17.724193572998047
+            },
+            "rotation": {
+              "x": -0.00007215023651951924,
+              "y": 0.041200656443834305,
+              "z": -0.0000543705937161576,
+              "w": 0.9991509318351746
+            },
+            "velocity": {
+              "x": 0.15800796449184418,
+              "y": -0.0715136006474495,
+              "z": 3.143843173980713
+            },
+            "speed": 3.147811369734213,
+            "suspension": [
+              0.2891920208930969,
+              0.28898757696151733,
+              0.28886550664901733,
+              0.2886609435081482
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 1,
+            "vehicleId": "car",
+            "tick": 960,
+            "source": "AUTONOMY",
+            "throttle": 0.03905355374972926,
+            "brake": 0,
+            "steering": -0.14919647914477885,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        },
+        {
+          "tick": 1020,
+          "sourceTick": 1019,
+          "steering": -0.06316697417677442,
+          "reason": "TRACKING",
+          "crossTrackM": 0.030298765748739243,
+          "advisorySpeedLimitMps": 7.483314773547834,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -0.029463406652212143,
+              "y": 0.758926510810852,
+              "z": 20.870922088623047
+            },
+            "rotation": {
+              "x": -0.000060688413213938475,
+              "y": 0.014778496697545052,
+              "z": -0.000020323670469224453,
+              "w": 0.9998908638954163
+            },
+            "velocity": {
+              "x": 0.05010935664176941,
+              "y": -0.07151336222887039,
+              "z": 3.14526104927063
+            },
+            "speed": 3.1456601875730366,
+            "suspension": [
+              0.289134681224823,
+              0.2890581488609314,
+              0.28879493474960327,
+              0.28871840238571167
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 1,
+            "vehicleId": "car",
+            "tick": 1020,
+            "source": "AUTONOMY",
+            "throttle": 0.03982419429468578,
+            "brake": 0,
+            "steering": -0.06316697417677442,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        },
+        {
+          "tick": 1080,
+          "sourceTick": 1079,
+          "steering": -0.022687489104485276,
+          "reason": "TRACKING",
+          "crossTrackM": 0.002445829100906849,
+          "advisorySpeedLimitMps": 7.483314773547834,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -0.0022463398054242134,
+              "y": 0.7589264512062073,
+              "z": 24.01894760131836
+            },
+            "rotation": {
+              "x": -0.00006335288344416767,
+              "y": 0.004353771917521954,
+              "z": -0.000006354555353027536,
+              "w": 0.9999905824661255
+            },
+            "velocity": {
+              "x": 0.011966309510171413,
+              "y": -0.07151361554861069,
+              "z": 3.1432082653045654
+            },
+            "speed": 3.1432310433123156,
+            "suspension": [
+              0.28917139768600464,
+              0.28914517164230347,
+              0.2887076735496521,
+              0.2886814475059509
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 1,
+            "vehicleId": "car",
+            "tick": 1080,
+            "source": "AUTONOMY",
+            "throttle": 0,
+            "brake": 0.045004925383625195,
+            "steering": -0.022687489104485276,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        }
+      ],
+      "final": {
+        "id": "car",
+        "position": {
+          "x": -0.0022463398054242134,
+          "y": 0.7589264512062073,
+          "z": 24.01894760131836
+        },
+        "rotation": {
+          "x": -0.00006335288344416767,
+          "y": 0.004353771917521954,
+          "z": -0.000006354555353027536,
+          "w": 0.9999905824661255
+        },
+        "velocity": {
+          "x": 0.011966309510171413,
+          "y": -0.07151361554861069,
+          "z": 3.1432082653045654
+        },
+        "speed": 3.1432310433123156,
+        "suspension": [
+          0.28917139768600464,
+          0.28914517164230347,
+          0.2887076735496521,
+          0.2886814475059509
+        ],
+        "wheelContacts": 4
+      },
+      "mechanics": {
+        "classId": "sedan",
+        "version": "023-mechanics-v1",
+        "massKg": 1400,
+        "powerW": 90000,
+        "grip": 1.2999999523162842,
+        "brakeAccelerationMps2": 8,
+        "wheels": {
+          "radiusM": 0.3199999928474426,
+          "wheelbaseM": 2.700000047683716,
+          "trackM": 1.7999999523162842
+        },
+        "turningRadiusM": 5.589424974226069,
+        "appliedEngineForceN": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "appliedSteeringRadians": [
+          -0.010209370404481888,
+          -0.010209370404481888,
+          0,
+          0
+        ],
+        "wheelBrakeImpulseLimitNs": [
+          2.1002297401428223,
+          2.1002297401428223,
+          2.1002297401428223,
+          2.1002297401428223
+        ]
+      }
+    },
+    {
+      "classId": "sedan",
+      "kind": "RIGHT",
+      "requestedSpeedMps": 7,
+      "ticks": 474,
+      "elapsedWallMs": 7910.300000071526,
+      "completed": true,
+      "sawCurve": true,
+      "authoredTurnCount": 1,
+      "maximumCrossTrackM": 0.5437525466382445,
+      "maximumDisplacementM": 0.11921702098638755,
+      "minimumSpeedMps": 7.141513420378762,
+      "maximumSpeedMps": 7.151207463609704,
+      "initialPoseWrites": 1,
+      "initialVelocityWrites": 1,
+      "drivingPoseWrites": 0,
+      "drivingVelocityWrites": 0,
+      "overloadCount": 0,
+      "startup": {
+        "warmupFrames": 30,
+        "warmupElapsedMs": 300.10000002384186,
+        "physicsTicks": 0
+      },
+      "maxRafGapMs": 8,
+      "checkpoints": [
+        {
+          "tick": 60,
+          "sourceTick": 59,
+          "steering": -2.026665359521574e-8,
+          "reason": "TRACKING",
+          "crossTrackM": 9.413702883875885e-8,
+          "advisorySpeedLimitMps": 7.483314773547834,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -32.902923583984375,
+              "y": 0.7589281797409058,
+              "z": 9.26783130239528e-8
+            },
+            "rotation": {
+              "x": -0.00015526451170444489,
+              "y": 0.7071067690849304,
+              "z": 0.00015526649076491594,
+              "w": 0.7071067690849304
+            },
+            "velocity": {
+              "x": 7.144555568695068,
+              "y": -0.07153841108083725,
+              "z": -8.750252078471021e-8
+            },
+            "speed": 7.144555568695068,
+            "suspension": [
+              0.2895893454551697,
+              0.2895893454551697,
+              0.2882680892944336,
+              0.2882680892944336
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 2,
+            "vehicleId": "car",
+            "tick": 60,
+            "source": "AUTONOMY",
+            "throttle": 0.039859833717346194,
+            "brake": 0,
+            "steering": -2.026665359521574e-8,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        },
+        {
+          "tick": 120,
+          "sourceTick": 119,
+          "steering": -1.314608783731553e-7,
+          "reason": "TRACKING",
+          "crossTrackM": 5.576504804594151e-7,
+          "advisorySpeedLimitMps": 7.483314773547834,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -25.754371643066406,
+              "y": 0.7589265704154968,
+              "z": 5.636699711430992e-7
+            },
+            "rotation": {
+              "x": -0.00010739143908722326,
+              "y": 0.7071068286895752,
+              "z": 0.00010739100252976641,
+              "w": 0.7071068286895752
+            },
+            "velocity": {
+              "x": 7.145575046539307,
+              "y": -0.07151313126087189,
+              "z": 3.6106951029069023e-7
+            },
+            "speed": 7.145575046539315,
+            "suspension": [
+              0.2893400192260742,
+              0.2893400192260742,
+              0.28851306438446045,
+              0.28851306438446045
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 2,
+            "vehicleId": "car",
+            "tick": 120,
+            "source": "AUTONOMY",
+            "throttle": 0.03949300289153711,
+            "brake": 0,
+            "steering": -1.314608783731553e-7,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        },
+        {
+          "tick": 180,
+          "sourceTick": 179,
+          "steering": 0.07776402091819669,
+          "reason": "TRACKING",
+          "crossTrackM": 0.038585416972637177,
+          "advisorySpeedLimitMps": 7.483314773547834,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -18.606285095214844,
+              "y": 0.7589263916015625,
+              "z": -0.042643360793590546
+            },
+            "rotation": {
+              "x": 0.00008332182187587023,
+              "y": 0.7136085033416748,
+              "z": 0.000294104334898293,
+              "w": 0.7005447149276733
+            },
+            "velocity": {
+              "x": 7.141038417816162,
+              "y": -0.07151343673467636,
+              "z": -0.24341565370559692
+            },
+            "speed": 7.1451858523900755,
+            "suspension": [
+              0.2888965606689453,
+              0.28978490829467773,
+              0.2880680561065674,
+              0.2889564037322998
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 2,
+            "vehicleId": "car",
+            "tick": 180,
+            "source": "AUTONOMY",
+            "throttle": 0.03957289860383196,
+            "brake": 0,
+            "steering": 0.07776402091819669,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        },
+        {
+          "tick": 240,
+          "sourceTick": 239,
+          "steering": 0.2946004298290376,
+          "reason": "TRACKING",
+          "crossTrackM": 0.4881294866049546,
+          "advisorySpeedLimitMps": 7.483314773547834,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -11.568572998046875,
+              "y": 0.7589250206947327,
+              "z": -1.1470741033554077
+            },
+            "rotation": {
+              "x": 0.0006031797383911908,
+              "y": 0.7905661463737488,
+              "z": 0.0007386734359897673,
+              "w": 0.6123759746551514
+            },
+            "velocity": {
+              "x": 6.801579475402832,
+              "y": -0.07151347398757935,
+              "z": -2.2012884616851807
+            },
+            "speed": 7.148926790209099,
+            "suspension": [
+              0.2878243923187256,
+              0.29115819931030273,
+              0.28669440746307373,
+              0.2900282144546509
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 2,
+            "vehicleId": "car",
+            "tick": 240,
+            "source": "AUTONOMY",
+            "throttle": 0.03810054850410146,
+            "brake": 0,
+            "steering": 0.2946004298290376,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        },
+        {
+          "tick": 300,
+          "sourceTick": 299,
+          "steering": 0.3805507917407849,
+          "reason": "TRACKING",
+          "crossTrackM": 0.5196796817416398,
+          "advisorySpeedLimitMps": 7.483314773547834,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -5.435882568359375,
+              "y": 0.7589243650436401,
+              "z": -4.709568023681641
+            },
+            "rotation": {
+              "x": 0.0009656223701313138,
+              "y": 0.8994393944740295,
+              "z": 0.0007129000150598586,
+              "w": 0.43704384565353394
+            },
+            "velocity": {
+              "x": 5.258686542510986,
+              "y": -0.0715140774846077,
+              "z": -4.844083309173584
+            },
+            "speed": 7.149750153578812,
+            "suspension": [
+              0.28739577531814575,
+              0.29163986444473267,
+              0.2862134575843811,
+              0.29045742750167847
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 2,
+            "vehicleId": "car",
+            "tick": 300,
+            "source": "AUTONOMY",
+            "throttle": 0.03770665683987003,
+            "brake": 0,
+            "steering": 0.3805507917407849,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        },
+        {
+          "tick": 360,
+          "sourceTick": 359,
+          "steering": 0.386063862727219,
+          "reason": "TRACKING",
+          "crossTrackM": 0.49109481311283854,
+          "advisorySpeedLimitMps": 7.483314773547834,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -1.4824360609054565,
+              "y": 0.7589244842529297,
+              "z": -10.587955474853516
+            },
+            "rotation": {
+              "x": 0.0011071107583120465,
+              "y": 0.9754066467285156,
+              "z": 0.00047024645027704537,
+              "w": 0.2204095721244812
+            },
+            "velocity": {
+              "x": 2.552316904067993,
+              "y": -0.07151307910680771,
+              "z": -6.678099155426025
+            },
+            "speed": 7.149218832046828,
+            "suspension": [
+              0.28736740350723267,
+              0.29163438081741333,
+              0.28621894121170044,
+              0.2904859185218811
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 2,
+            "vehicleId": "car",
+            "tick": 360,
+            "source": "AUTONOMY",
+            "throttle": 0.03793663765587124,
+            "brake": 0,
+            "steering": 0.386063862727219,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        },
+        {
+          "tick": 420,
+          "sourceTick": 419,
+          "steering": 0.16491332169080491,
+          "reason": "TRACKING",
+          "crossTrackM": 0.1452912539243698,
+          "advisorySpeedLimitMps": 7.483314773547834,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -0.13672666251659393,
+              "y": 0.758926272392273,
+              "z": -17.58283042907715
+            },
+            "rotation": {
+              "x": 0.0004514563479460776,
+              "y": 0.9986010789871216,
+              "z": 0.0001651173661230132,
+              "w": 0.05287565663456917
+            },
+            "velocity": {
+              "x": 0.5137439966201782,
+              "y": -0.0715128481388092,
+              "z": -7.129111289978027
+            },
+            "speed": 7.14759824549166,
+            "suspension": [
+              0.28844326734542847,
+              0.2901328206062317,
+              0.2877201437950134,
+              0.2894098162651062
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 2,
+            "vehicleId": "car",
+            "tick": 420,
+            "source": "AUTONOMY",
+            "throttle": 0.038804713548380186,
+            "brake": 0,
+            "steering": 0.16491332169080491,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        }
+      ],
+      "final": {
+        "id": "car",
+        "position": {
+          "x": 0.04368631914258003,
+          "y": 0.758926510810852,
+          "z": -24.012670516967773
+        },
+        "rotation": {
+          "x": 0.00009224047244060785,
+          "y": 0.9999849200248718,
+          "z": 0.00014586502220481634,
+          "w": 0.005496593192219734
+        },
+        "velocity": {
+          "x": 0.02559901773929596,
+          "y": -0.07151328772306442,
+          "z": -7.144045352935791
+        },
+        "speed": 7.144091216838758,
+        "suspension": [
+          0.2891780734062195,
+          0.2895253300666809,
+          0.2883276343345642,
+          0.28867489099502563
+        ],
+        "wheelContacts": 4
+      },
+      "mechanics": {
+        "classId": "sedan",
+        "version": "023-mechanics-v1",
+        "massKg": 1400,
+        "powerW": 90000,
+        "grip": 1.2999999523162842,
+        "brakeAccelerationMps2": 8,
+        "wheels": {
+          "radiusM": 0.3199999928474426,
+          "wheelbaseM": 2.700000047683716,
+          "trackM": 1.7999999523162842
+        },
+        "turningRadiusM": 5.589424974226069,
+        "appliedEngineForceN": [
+          0,
+          0,
+          130.10145568847656,
+          130.10145568847656
+        ],
+        "appliedSteeringRadians": [
+          0.016222132369875908,
+          0.016222132369875908,
+          0,
+          0
+        ],
+        "wheelBrakeImpulseLimitNs": [
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "classId": "compact",
+      "kind": "STRAIGHT",
+      "requestedSpeedMps": 5,
+      "ticks": 234,
+      "elapsedWallMs": 3910.399999976158,
+      "completed": true,
+      "sawCurve": false,
+      "authoredTurnCount": 0,
+      "maximumCrossTrackM": 8.122853500935889e-7,
+      "maximumDisplacementM": 0.08590698242187542,
+      "minimumSpeedMps": 5.142036437988281,
+      "maximumSpeedMps": 5.1525750160217445,
+      "initialPoseWrites": 1,
+      "initialVelocityWrites": 1,
+      "drivingPoseWrites": 0,
+      "drivingVelocityWrites": 0,
+      "overloadCount": 0,
+      "startup": {
+        "warmupFrames": 30,
+        "warmupElapsedMs": 302.5,
+        "physicsTicks": 0
+      },
+      "maxRafGapMs": 7.30000000000291,
+      "checkpoints": [
+        {
+          "tick": 60,
+          "sourceTick": 59,
+          "steering": -1.9621323065618467e-7,
+          "reason": "TRACKING",
+          "crossTrackM": 1.846292718710174e-7,
+          "advisorySpeedLimitMps": 100,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -34.887481689453125,
+              "y": 0.7289291620254517,
+              "z": 1.9124323102914786e-7
+            },
+            "rotation": {
+              "x": -0.00010670103074517101,
+              "y": 0.7071068286895752,
+              "z": 0.00010670044866856188,
+              "w": 0.7071068286895752
+            },
+            "velocity": {
+              "x": 5.149881362915039,
+              "y": -0.07155648618936539,
+              "z": 3.967375619140512e-7
+            },
+            "speed": 5.149881362915054,
+            "suspension": [
+              0.28926828503608704,
+              0.28926828503608704,
+              0.28859129548072815,
+              0.28859129548072815
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 3,
+            "vehicleId": "car",
+            "tick": 60,
+            "source": "AUTONOMY",
+            "throttle": 0.038520851135248,
+            "brake": 0,
+            "steering": -1.9621323065618467e-7,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        },
+        {
+          "tick": 120,
+          "sourceTick": 119,
+          "steering": -9.000147154590693e-8,
+          "reason": "TRACKING",
+          "crossTrackM": 5.030794341109868e-7,
+          "advisorySpeedLimitMps": 100,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -29.738739013671875,
+              "y": 0.7289265990257263,
+              "z": 5.062040031589277e-7
+            },
+            "rotation": {
+              "x": -0.00008261928451247513,
+              "y": 0.7071068286895752,
+              "z": 0.00008261823677457869,
+              "w": 0.7071068286895752
+            },
+            "velocity": {
+              "x": 5.1450276374816895,
+              "y": -0.07151290029287338,
+              "z": 1.8742119323178486e-7
+            },
+            "speed": 5.145027637481693,
+            "suspension": [
+              0.2892214357852936,
+              0.2892214357852936,
+              0.2886313498020172,
+              0.2886313498020172
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 3,
+            "vehicleId": "car",
+            "tick": 120,
+            "source": "AUTONOMY",
+            "throttle": 0.040285577774046295,
+            "brake": 0,
+            "steering": -9.000147154590693e-8,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        },
+        {
+          "tick": 180,
+          "sourceTick": 179,
+          "steering": -3.3932895855034285e-8,
+          "reason": "TRACKING",
+          "crossTrackM": 7.015470941951207e-7,
+          "advisorySpeedLimitMps": 100,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -24.59002685546875,
+              "y": 0.7289265394210815,
+              "z": 7.040718514872424e-7
+            },
+            "rotation": {
+              "x": -0.00011063193960580975,
+              "y": 0.7071068286895752,
+              "z": 0.00011062902922276407,
+              "w": 0.7071068286895752
+            },
+            "velocity": {
+              "x": 5.1511688232421875,
+              "y": -0.07151352614164352,
+              "z": 1.514396927859707e-7
+            },
+            "speed": 5.15116882324219,
+            "suspension": [
+              0.28925076127052307,
+              0.28925076127052307,
+              0.28860214352607727,
+              0.28860214352607727
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 3,
+            "vehicleId": "car",
+            "tick": 180,
+            "source": "AUTONOMY",
+            "throttle": 0.03805271625518768,
+            "brake": 0,
+            "steering": -3.3932895855034285e-8,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        }
+      ],
+      "final": {
+        "id": "car",
+        "position": {
+          "x": -19.956207275390625,
+          "y": 0.7289265394210815,
+          "z": 8.106064228741161e-7
+        },
+        "rotation": {
+          "x": -0.00011063797865062952,
+          "y": 0.7071068286895752,
+          "z": 0.00011063646525144577,
+          "w": 0.7071068286895752
+        },
+        "velocity": {
+          "x": 5.151167869567871,
+          "y": -0.07151354104280472,
+          "z": -4.409210063727187e-8
+        },
+        "speed": 5.151167869567871,
+        "suspension": [
+          0.28925076127052307,
+          0.28925076127052307,
+          0.28860214352607727,
+          0.28860214352607727
+        ],
+        "wheelContacts": 4
+      },
+      "mechanics": {
+        "classId": "compact",
+        "version": "023-mechanics-v1",
+        "massKg": 1100,
+        "powerW": 70000,
+        "grip": 1.5,
+        "brakeAccelerationMps2": 9,
+        "wheels": {
+          "radiusM": 0.28999999165534973,
+          "wheelbaseM": 2.4000000953674316,
+          "trackM": 1.600000023841858
+        },
+        "turningRadiusM": 3.9144995725872658,
+        "appliedEngineForceN": [
+          0,
+          0,
+          133.1856689453125,
+          133.1856689453125
+        ],
+        "appliedSteeringRadians": [
+          5.711852324452593e-8,
+          5.711852324452593e-8,
+          0,
+          0
+        ],
+        "wheelBrakeImpulseLimitNs": [
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "classId": "compact",
+      "kind": "LEFT",
+      "requestedSpeedMps": 7,
+      "ticks": 475,
+      "elapsedWallMs": 7924.199999928474,
+      "completed": true,
+      "sawCurve": true,
+      "authoredTurnCount": 1,
+      "maximumCrossTrackM": 0.5001862569953434,
+      "maximumDisplacementM": 0.11923734667816438,
+      "minimumSpeedMps": 7.141031196195476,
+      "maximumSpeedMps": 7.1522949533595215,
+      "initialPoseWrites": 1,
+      "initialVelocityWrites": 1,
+      "drivingPoseWrites": 0,
+      "drivingVelocityWrites": 0,
+      "overloadCount": 0,
+      "startup": {
+        "warmupFrames": 30,
+        "warmupElapsedMs": 300.60000002384186,
+        "physicsTicks": 0
+      },
+      "maxRafGapMs": 7.5,
+      "checkpoints": [
+        {
+          "tick": 60,
+          "sourceTick": 59,
+          "steering": 2.33296241562311e-8,
+          "reason": "TRACKING",
+          "crossTrackM": 1.279876755688747e-7,
+          "advisorySpeedLimitMps": 7.483314773547834,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -32.890655517578125,
+              "y": 0.7289291024208069,
+              "z": 1.2829190154661774e-7
+            },
+            "rotation": {
+              "x": -0.00014855786866974086,
+              "y": 0.7071067690849304,
+              "z": 0.00014855987683404237,
+              "w": 0.7071067690849304
+            },
+            "velocity": {
+              "x": 7.1496500968933105,
+              "y": -0.07155732810497284,
+              "z": 1.8247350297428966e-8
+            },
+            "speed": 7.1496500968933105,
+            "suspension": [
+              0.2893989384174347,
+              0.2893989384174347,
+              0.28846076130867004,
+              0.28846076130867004
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 4,
+            "vehicleId": "car",
+            "tick": 60,
+            "source": "AUTONOMY",
+            "throttle": 0.03842321872711182,
+            "brake": 0,
+            "steering": 2.33296241562311e-8,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        },
+        {
+          "tick": 120,
+          "sourceTick": 119,
+          "steering": 2.8298989796455406e-8,
+          "reason": "TRACKING",
+          "crossTrackM": 1.5456151913895155e-7,
+          "advisorySpeedLimitMps": 7.483314773547834,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -25.74188232421875,
+              "y": 0.7289263606071472,
+              "z": 1.531727207293443e-7
+            },
+            "rotation": {
+              "x": -0.00014355107850860804,
+              "y": 0.7071067690849304,
+              "z": 0.00014354447193909436,
+              "w": 0.7071067690849304
+            },
+            "velocity": {
+              "x": 7.148158073425293,
+              "y": -0.07151326537132263,
+              "z": -8.330695067115812e-8
+            },
+            "speed": 7.148158073425293,
+            "suspension": [
+              0.28940001130104065,
+              0.28940001130104065,
+              0.2884528934955597,
+              0.2884528934955597
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 4,
+            "vehicleId": "car",
+            "tick": 120,
+            "source": "AUTONOMY",
+            "throttle": 0.03896562099456725,
+            "brake": 0,
+            "steering": 2.8298989796455406e-8,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        },
+        {
+          "tick": 180,
+          "sourceTick": 179,
+          "steering": -0.05781657503774183,
+          "reason": "TRACKING",
+          "crossTrackM": 0.03628626838326454,
+          "advisorySpeedLimitMps": 7.483314773547834,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -18.593490600585938,
+              "y": 0.7289262413978577,
+              "z": 0.0401441790163517
+            },
+            "rotation": {
+              "x": -0.00035861998912878335,
+              "y": 0.700553834438324,
+              "z": -0.00008003034599823877,
+              "w": 0.7135995030403137
+            },
+            "velocity": {
+              "x": 7.141580104827881,
+              "y": -0.07151340693235397,
+              "z": 0.23141682147979736
+            },
+            "speed": 7.145328553603202,
+            "suspension": [
+              0.28988614678382874,
+              0.28896525502204895,
+              0.2888874113559723,
+              0.2879665195941925
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 4,
+            "vehicleId": "car",
+            "tick": 180,
+            "source": "AUTONOMY",
+            "throttle": 0.039934956855702725,
+            "brake": 0,
+            "steering": -0.05781657503774183,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        },
+        {
+          "tick": 240,
+          "sourceTick": 239,
+          "steering": -0.21786503164249785,
+          "reason": "TRACKING",
+          "crossTrackM": 0.4596977241747848,
+          "advisorySpeedLimitMps": 7.483314773547834,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -11.551576614379883,
+              "y": 0.7289244532585144,
+              "z": 1.1215511560440063
+            },
+            "rotation": {
+              "x": -0.0008710770634934306,
+              "y": 0.6112399697303772,
+              "z": -0.0007584259728901088,
+              "w": 0.7914445400238037
+            },
+            "velocity": {
+              "x": 6.802536487579346,
+              "y": -0.07151412218809128,
+              "z": 2.173297166824341
+            },
+            "speed": 7.141269021691807,
+            "suspension": [
+              0.2913568317890167,
+              0.2877240478992462,
+              0.2901287376880646,
+              0.28649595379829407
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 4,
+            "vehicleId": "car",
+            "tick": 240,
+            "source": "AUTONOMY",
+            "throttle": 0,
+            "brake": 0.04509414506322535,
+            "steering": -0.21786503164249785,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        },
+        {
+          "tick": 300,
+          "sourceTick": 299,
+          "steering": -0.27882559822530456,
+          "reason": "TRACKING",
+          "crossTrackM": 0.46730449761473797,
+          "advisorySpeedLimitMps": 7.483314773547834,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -5.407624244689941,
+              "y": 0.7289236187934875,
+              "z": 4.664073467254639
+            },
+            "rotation": {
+              "x": -0.0008348374394699931,
+              "y": 0.4340430796146393,
+              "z": -0.0011934179347008467,
+              "w": 0.9008909463882446
+            },
+            "velocity": {
+              "x": 5.2656989097595215,
+              "y": -0.07151524722576141,
+              "z": 4.82514762878418
+            },
+            "speed": 7.1421029569591195,
+            "suspension": [
+              0.29187825322151184,
+              0.2872544229030609,
+              0.2905988395214081,
+              0.28597524762153625
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 4,
+            "vehicleId": "car",
+            "tick": 300,
+            "source": "AUTONOMY",
+            "throttle": 0,
+            "brake": 0.04541921371592474,
+            "steering": -0.27882559822530456,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        },
+        {
+          "tick": 360,
+          "sourceTick": 359,
+          "steering": -0.2808835287781704,
+          "reason": "TRACKING",
+          "crossTrackM": 0.43271886402955556,
+          "advisorySpeedLimitMps": 7.483314773547834,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -1.439901351928711,
+              "y": 0.7289238572120667,
+              "z": 10.532694816589355
+            },
+            "rotation": {
+              "x": -0.0005111125647090375,
+              "y": 0.21674560010433197,
+              "z": -0.0013604424893856049,
+              "w": 0.9762271046638489
+            },
+            "velocity": {
+              "x": 2.567115068435669,
+              "y": -0.07151209563016891,
+              "z": 6.667923450469971
+            },
+            "speed": 7.145018048676773,
+            "suspension": [
+              0.2917206585407257,
+              0.28711411356925964,
+              0.2907395660877228,
+              0.2861330211162567
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 4,
+            "vehicleId": "car",
+            "tick": 360,
+            "source": "AUTONOMY",
+            "throttle": 0.03988900586671221,
+            "brake": 0,
+            "steering": -0.2808835287781704,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        },
+        {
+          "tick": 420,
+          "sourceTick": 419,
+          "steering": -0.1182084232689463,
+          "reason": "TRACKING",
+          "crossTrackM": 0.10532127320766449,
+          "advisorySpeedLimitMps": 7.483314773547834,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -0.09712640941143036,
+              "y": 0.7289261817932129,
+              "z": 17.52730369567871
+            },
+            "rotation": {
+              "x": -0.00020480969396885484,
+              "y": 0.049052443355321884,
+              "z": -0.0005663135088980198,
+              "w": 0.9987960457801819
+            },
+            "velocity": {
+              "x": 0.4915695786476135,
+              "y": -0.07151391357183456,
+              "z": 7.12630558013916
+            },
+            "speed": 7.143239592242047,
+            "suspension": [
+              0.29035475850105286,
+              0.2884576618671417,
+              0.2893959581851959,
+              0.28749874234199524
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 4,
+            "vehicleId": "car",
+            "tick": 420,
+            "source": "AUTONOMY",
+            "throttle": 0,
+            "brake": 0.045520006280081036,
+            "steering": -0.1182084232689463,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        }
+      ],
+      "final": {
+        "id": "car",
+        "position": {
+          "x": 0.06101017817854881,
+          "y": 0.7289264798164368,
+          "z": 24.077077865600586
+        },
+        "rotation": {
+          "x": -0.00017473657499067485,
+          "y": 0.0028465506620705128,
+          "z": -0.00010461675992701203,
+          "w": 0.9999960064888
+        },
+        "velocity": {
+          "x": 0.0004834740830119699,
+          "y": -0.07151271402835846,
+          "z": 7.144033432006836
+        },
+        "speed": 7.144033448366446,
+        "suspension": [
+          0.289537638425827,
+          0.28918763995170593,
+          0.28866514563560486,
+          0.2883150279521942
+        ],
+        "wheelContacts": 4
+      },
+      "mechanics": {
+        "classId": "compact",
+        "version": "023-mechanics-v1",
+        "massKg": 1100,
+        "powerW": 70000,
+        "grip": 1.5,
+        "brakeAccelerationMps2": 9,
+        "wheels": {
+          "radiusM": 0.28999999165534973,
+          "wheelbaseM": 2.4000000953674316,
+          "trackM": 1.600000023841858
+        },
+        "turningRadiusM": 3.9144995725872658,
+        "appliedEngineForceN": [
+          0,
+          0,
+          141.64166259765625,
+          141.64166259765625
+        ],
+        "appliedSteeringRadians": [
+          -0.012463211081922054,
+          -0.012463211081922054,
+          0,
+          0
+        ],
+        "wheelBrakeImpulseLimitNs": [
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "classId": "compact",
+      "kind": "RIGHT",
+      "requestedSpeedMps": 3,
+      "ticks": 1081,
+      "elapsedWallMs": 18028.799999952316,
+      "completed": true,
+      "sawCurve": true,
+      "authoredTurnCount": 1,
+      "maximumCrossTrackM": 0.3373439058025105,
+      "maximumDisplacementM": 0.052573629134119476,
+      "minimumSpeedMps": 3.1424450431268798,
+      "maximumSpeedMps": 3.153175208484648,
+      "initialPoseWrites": 1,
+      "initialVelocityWrites": 1,
+      "drivingPoseWrites": 0,
+      "drivingVelocityWrites": 0,
+      "overloadCount": 0,
+      "startup": {
+        "warmupFrames": 30,
+        "warmupElapsedMs": 301.39999997615814,
+        "physicsTicks": 0
+      },
+      "maxRafGapMs": 10.19999999999709,
+      "checkpoints": [
+        {
+          "tick": 60,
+          "sourceTick": 59,
+          "steering": -2.270139583128585e-7,
+          "reason": "TRACKING",
+          "crossTrackM": 1.2579330643802678e-7,
+          "advisorySpeedLimitMps": 7.483314773547834,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -36.885040283203125,
+              "y": 0.7289291620254517,
+              "z": 1.2954099304351985e-7
+            },
+            "rotation": {
+              "x": -0.00007826248474884778,
+              "y": 0.7071068286895752,
+              "z": 0.00007826385262887925,
+              "w": 0.7071068286895752
+            },
+            "velocity": {
+              "x": 3.1519289016723633,
+              "y": -0.07155667245388031,
+              "z": 2.2480826089577022e-7
+            },
+            "speed": 3.151928901672371,
+            "suspension": [
+              0.2891576588153839,
+              0.2891576588153839,
+              0.2887019217014313,
+              0.2887019217014313
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 5,
+            "vehicleId": "car",
+            "tick": 60,
+            "source": "AUTONOMY",
+            "throttle": 0.037958171367642624,
+            "brake": 0,
+            "steering": -2.270139583128585e-7,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        },
+        {
+          "tick": 120,
+          "sourceTick": 119,
+          "steering": -1.5100227383885736e-7,
+          "reason": "TRACKING",
+          "crossTrackM": 3.0782726412326156e-7,
+          "advisorySpeedLimitMps": 7.483314773547834,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -33.736541748046875,
+              "y": 0.7289265394210815,
+              "z": 3.103431538420409e-7
+            },
+            "rotation": {
+              "x": -0.00006015611143084243,
+              "y": 0.7071068286895752,
+              "z": 0.00006015640974510461,
+              "w": 0.7071068286895752
+            },
+            "velocity": {
+              "x": 3.1440346240997314,
+              "y": -0.07151340693235397,
+              "z": 1.5091987393134332e-7
+            },
+            "speed": 3.144034624099735,
+            "suspension": [
+              0.2891867458820343,
+              0.2891867458820343,
+              0.28866615891456604,
+              0.28866615891456604
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 5,
+            "vehicleId": "car",
+            "tick": 120,
+            "source": "AUTONOMY",
+            "throttle": 0,
+            "brake": 0.045493268966675604,
+            "steering": -1.5100227383885736e-7,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        },
+        {
+          "tick": 180,
+          "sourceTick": 179,
+          "steering": -8.332960857067386e-8,
+          "reason": "TRACKING",
+          "crossTrackM": 4.319335005220637e-7,
+          "advisorySpeedLimitMps": 7.483314773547834,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -30.587905883789062,
+              "y": 0.7289265394210815,
+              "z": 4.332027003783878e-7
+            },
+            "rotation": {
+              "x": -0.000052187104301992804,
+              "y": 0.7071068286895752,
+              "z": 0.00005218586011324078,
+              "w": 0.7071068286895752
+            },
+            "velocity": {
+              "x": 3.146923780441284,
+              "y": -0.07151328027248383,
+              "z": 7.613129326955459e-8
+            },
+            "speed": 3.146923780441285,
+            "suspension": [
+              0.2891066372394562,
+              0.2891066372394562,
+              0.28874626755714417,
+              0.28874626755714417
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 5,
+            "vehicleId": "car",
+            "tick": 180,
+            "source": "AUTONOMY",
+            "throttle": 0.039777972698211206,
+            "brake": 0,
+            "steering": -8.332960857067386e-8,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        },
+        {
+          "tick": 240,
+          "sourceTick": 239,
+          "steering": -4.064720895069707e-8,
+          "reason": "TRACKING",
+          "crossTrackM": 5.263842695057974e-7,
+          "advisorySpeedLimitMps": 7.483314773547834,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -27.439285278320312,
+              "y": 0.7289265394210815,
+              "z": 5.271277814244968e-7
+            },
+            "rotation": {
+              "x": -0.00006249039870453998,
+              "y": 0.7071068286895752,
+              "z": 0.00006249993020901456,
+              "w": 0.7071068286895752
+            },
+            "velocity": {
+              "x": 3.1499288082122803,
+              "y": -0.07151324301958084,
+              "z": 4.4611500271685145e-8
+            },
+            "speed": 3.1499288082122803,
+            "suspension": [
+              0.2891029417514801,
+              0.2891029417514801,
+              0.28874996304512024,
+              0.28874996304512024
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 5,
+            "vehicleId": "car",
+            "tick": 240,
+            "source": "AUTONOMY",
+            "throttle": 0.038685407638549496,
+            "brake": 0,
+            "steering": -4.064720895069707e-8,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        },
+        {
+          "tick": 300,
+          "sourceTick": 299,
+          "steering": -2.0623356460624924e-8,
+          "reason": "TRACKING",
+          "crossTrackM": 5.760063004345284e-7,
+          "advisorySpeedLimitMps": 7.483314773547834,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -24.290557861328125,
+              "y": 0.7289265394210815,
+              "z": 5.766988806499285e-7
+            },
+            "rotation": {
+              "x": -0.00007495404861401767,
+              "y": 0.7071068286895752,
+              "z": 0.00007495788304368034,
+              "w": 0.7071068286895752
+            },
+            "velocity": {
+              "x": 3.152686834335327,
+              "y": -0.07151327282190323,
+              "z": 4.155366539748684e-8
+            },
+            "speed": 3.152686834335327,
+            "suspension": [
+              0.2891196310520172,
+              0.2891196310520172,
+              0.28873327374458313,
+              0.28873327374458313
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 5,
+            "vehicleId": "car",
+            "tick": 300,
+            "source": "AUTONOMY",
+            "throttle": 0.03768263101577759,
+            "brake": 0,
+            "steering": -2.0623356460624924e-8,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        },
+        {
+          "tick": 360,
+          "sourceTick": 359,
+          "steering": -1.7507471652731895e-8,
+          "reason": "TRACKING",
+          "crossTrackM": 6.099486427046941e-7,
+          "advisorySpeedLimitMps": 7.483314773547834,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -21.141891479492188,
+              "y": 0.7289265394210815,
+              "z": 6.109900141382241e-7
+            },
+            "rotation": {
+              "x": -0.00006207144178915769,
+              "y": 0.7071068286895752,
+              "z": 0.00006207077240105718,
+              "w": 0.7071068286895752
+            },
+            "velocity": {
+              "x": 3.1444091796875,
+              "y": -0.07151331007480621,
+              "z": 6.24712370722591e-8
+            },
+            "speed": 3.144409179687501,
+            "suspension": [
+              0.28919532895088196,
+              0.28919532895088196,
+              0.2886575758457184,
+              0.2886575758457184
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 5,
+            "vehicleId": "car",
+            "tick": 360,
+            "source": "AUTONOMY",
+            "throttle": 0,
+            "brake": 0.04561107158660888,
+            "steering": -1.7507471652731895e-8,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        },
+        {
+          "tick": 420,
+          "sourceTick": 419,
+          "steering": 0.05475014401137673,
+          "reason": "TRACKING",
+          "crossTrackM": 0.021926648914813995,
+          "advisorySpeedLimitMps": 7.483314773547834,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -17.993515014648438,
+              "y": 0.7289264798164368,
+              "z": -0.023309729993343353
+            },
+            "rotation": {
+              "x": -0.000006083030257286737,
+              "y": 0.7113670110702515,
+              "z": 0.00011281048500677571,
+              "w": 0.7028207182884216
+            },
+            "velocity": {
+              "x": 3.146017551422119,
+              "y": -0.07151350378990173,
+              "z": -0.08296392858028412
+            },
+            "speed": 3.147111286132332,
+            "suspension": [
+              0.28901299834251404,
+              0.2892487943172455,
+              0.28860411047935486,
+              0.2888399064540863
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 5,
+            "vehicleId": "car",
+            "tick": 420,
+            "source": "AUTONOMY",
+            "throttle": 0.039699498532111216,
+            "brake": 0,
+            "steering": 0.05475014401137673,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        },
+        {
+          "tick": 480,
+          "sourceTick": 479,
+          "steering": 0.15815626719240777,
+          "reason": "TRACKING",
+          "crossTrackM": 0.1882167454696915,
+          "advisorySpeedLimitMps": 7.483314773547834,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -14.854560852050781,
+              "y": 0.7289264798164368,
+              "z": -0.24890832602977753
+            },
+            "rotation": {
+              "x": 0.00007093470048857853,
+              "y": 0.7373913526535034,
+              "z": 0.00016653977218084037,
+              "w": 0.6754657626152039
+            },
+            "velocity": {
+              "x": 3.1197726726531982,
+              "y": -0.07151325792074203,
+              "z": -0.40476736426353455
+            },
+            "speed": 3.1459208744351037,
+            "suspension": [
+              0.28884878754615784,
+              0.28937235474586487,
+              0.2884804308414459,
+              0.28900399804115295
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 5,
+            "vehicleId": "car",
+            "tick": 480,
+            "source": "AUTONOMY",
+            "throttle": 0.04010403103632312,
+            "brake": 0,
+            "steering": 0.15815626719240777,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        },
+        {
+          "tick": 540,
+          "sourceTick": 539,
+          "steering": 0.22948856689894526,
+          "reason": "TRACKING",
+          "crossTrackM": 0.2965927599718727,
+          "advisorySpeedLimitMps": 7.483314773547834,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -11.775733947753906,
+              "y": 0.728926420211792,
+              "z": -0.8917441964149475
+            },
+            "rotation": {
+              "x": 0.00010050441778730601,
+              "y": 0.7829177975654602,
+              "z": 0.00022961934155318886,
+              "w": 0.6221250891685486
+            },
+            "velocity": {
+              "x": 3.0209481716156006,
+              "y": -0.07151349633932114,
+              "z": -0.8953150510787964
+            },
+            "speed": 3.150827969958986,
+            "suspension": [
+              0.28882458806037903,
+              0.2895248234272003,
+              0.2883282005786896,
+              0.28902849555015564
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 5,
+            "vehicleId": "car",
+            "tick": 540,
+            "source": "AUTONOMY",
+            "throttle": 0.03829250169987862,
+            "brake": 0,
+            "steering": 0.22948856689894526,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        },
+        {
+          "tick": 600,
+          "sourceTick": 599,
+          "steering": 0.26397969951397093,
+          "reason": "TRACKING",
+          "crossTrackM": 0.32417728544087543,
+          "advisorySpeedLimitMps": 7.483314773547834,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -8.856964111328125,
+              "y": 0.7289264798164368,
+              "z": -2.060932159423828
+            },
+            "rotation": {
+              "x": 0.00013860878243576735,
+              "y": 0.835020899772644,
+              "z": 0.00023604567104484886,
+              "w": 0.5502181053161621
+            },
+            "velocity": {
+              "x": 2.803506851196289,
+              "y": -0.07151316851377487,
+              "z": -1.4415184259414673
+            },
+            "speed": 3.1524000439400606,
+            "suspension": [
+              0.28877583146095276,
+              0.28955015540122986,
+              0.28830280900001526,
+              0.2890770137310028
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 5,
+            "vehicleId": "car",
+            "tick": 600,
+            "source": "AUTONOMY",
+            "throttle": 0.037709246243311276,
+            "brake": 0,
+            "steering": 0.26397969951397093,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        },
+        {
+          "tick": 660,
+          "sourceTick": 659,
+          "steering": 0.2770035345056182,
+          "reason": "TRACKING",
+          "crossTrackM": 0.32729936831110784,
+          "advisorySpeedLimitMps": 7.483314773547834,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -6.2179388999938965,
+              "y": 0.7289263010025024,
+              "z": -3.7684707641601562
+            },
+            "rotation": {
+              "x": 0.00017264664347749203,
+              "y": 0.8843977451324463,
+              "z": 0.00019257553503848612,
+              "w": 0.4667339622974396
+            },
+            "velocity": {
+              "x": 2.4583170413970947,
+              "y": -0.07151330262422562,
+              "z": -1.9579403400421143
+            },
+            "speed": 3.142746100337664,
+            "suspension": [
+              0.28880152106285095,
+              0.2896040976047516,
+              0.2882486879825592,
+              0.2890513837337494
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 5,
+            "vehicleId": "car",
+            "tick": 660,
+            "source": "AUTONOMY",
+            "throttle": 0,
+            "brake": 0.045145889830631704,
+            "steering": 0.2770035345056182,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        },
+        {
+          "tick": 720,
+          "sourceTick": 719,
+          "steering": 0.28042089477787874,
+          "reason": "TRACKING",
+          "crossTrackM": 0.32623976268868016,
+          "advisorySpeedLimitMps": 7.483314773547834,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -3.97017240524292,
+              "y": 0.7289263606071472,
+              "z": -5.965232849121094
+            },
+            "rotation": {
+              "x": 0.00018890752107836306,
+              "y": 0.9265377521514893,
+              "z": 0.00018670693680178374,
+              "w": 0.3762015700340271
+            },
+            "velocity": {
+              "x": 2.0195276737213135,
+              "y": -0.07151391357183456,
+              "z": -2.409874200820923
+            },
+            "speed": 3.144198735561813,
+            "suspension": [
+              0.2888140380382538,
+              0.28962573409080505,
+              0.2882274091243744,
+              0.28903910517692566
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 5,
+            "vehicleId": "car",
+            "tick": 720,
+            "source": "AUTONOMY",
+            "throttle": 0,
+            "brake": 0.045600134255205656,
+            "steering": 0.28042089477787874,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        },
+        {
+          "tick": 780,
+          "sourceTick": 779,
+          "steering": 0.2802465156978232,
+          "reason": "TRACKING",
+          "crossTrackM": 0.32634838672791994,
+          "advisorySpeedLimitMps": 7.483314773547834,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -2.2069525718688965,
+              "y": 0.7289263606071472,
+              "z": -8.566854476928711
+            },
+            "rotation": {
+              "x": 0.0002075191878248006,
+              "y": 0.9596405029296875,
+              "z": 0.00015227982657961547,
+              "w": 0.281229704618454
+            },
+            "velocity": {
+              "x": 1.4982242584228516,
+              "y": -0.07151312381029129,
+              "z": -2.7663509845733643
+            },
+            "speed": 3.1460091701037247,
+            "suspension": [
+              0.2887555658817291,
+              0.28953078389167786,
+              0.28832200169563293,
+              0.2890973389148712
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 5,
+            "vehicleId": "car",
+            "tick": 780,
+            "source": "AUTONOMY",
+            "throttle": 0.04005354009630516,
+            "brake": 0,
+            "steering": 0.2802465156978232,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        },
+        {
+          "tick": 840,
+          "sourceTick": 839,
+          "steering": 0.2792093896686223,
+          "reason": "TRACKING",
+          "crossTrackM": 0.32813737689299327,
+          "advisorySpeedLimitMps": 7.483314773547834,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -0.9996452927589417,
+              "y": 0.7289264798164368,
+              "z": -11.468664169311523
+            },
+            "rotation": {
+              "x": 0.00021928387286607176,
+              "y": 0.983044445514679,
+              "z": 0.00014498221571557224,
+              "w": 0.18336763978004456
+            },
+            "velocity": {
+              "x": 0.9160164594650269,
+              "y": -0.07151321321725845,
+              "z": -3.011307954788208
+            },
+            "speed": 3.1475485306157847,
+            "suspension": [
+              0.28878310322761536,
+              0.2895595133304596,
+              0.2882932722568512,
+              0.28906968235969543
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 5,
+            "vehicleId": "car",
+            "tick": 840,
+            "source": "AUTONOMY",
+            "throttle": 0.03949730900081783,
+            "brake": 0,
+            "steering": 0.2792093896686223,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        },
+        {
+          "tick": 900,
+          "sourceTick": 899,
+          "steering": 0.20947469350278827,
+          "reason": "TRACKING",
+          "crossTrackM": 0.2901934304807096,
+          "advisorySpeedLimitMps": 7.483314773547834,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -0.35757213830947876,
+              "y": 0.7289265394210815,
+              "z": -14.547460556030273
+            },
+            "rotation": {
+              "x": 0.00014595355605706573,
+              "y": 0.9956423044204712,
+              "z": 0.00009916460840031505,
+              "w": 0.09325458854436874
+            },
+            "velocity": {
+              "x": 0.41287896037101746,
+              "y": -0.0715138390660286,
+              "z": -3.117661952972412
+            },
+            "speed": 3.1448823648792983,
+            "suspension": [
+              0.28891274333000183,
+              0.2894311845302582,
+              0.2884220778942108,
+              0.2889403998851776
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 5,
+            "vehicleId": "car",
+            "tick": 900,
+            "source": "AUTONOMY",
+            "throttle": 0,
+            "brake": 0.045753274863243876,
+            "steering": 0.20947469350278827,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        },
+        {
+          "tick": 960,
+          "sourceTick": 959,
+          "steering": 0.10636873948698199,
+          "reason": "TRACKING",
+          "crossTrackM": 0.09878995269536972,
+          "advisorySpeedLimitMps": 7.483314773547834,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -0.09631635993719101,
+              "y": 0.7289265394210815,
+              "z": -17.68421173095703
+            },
+            "rotation": {
+              "x": 0.00006663951353402808,
+              "y": 0.9992968440055847,
+              "z": 0.00008284301293315366,
+              "w": 0.037494927644729614
+            },
+            "velocity": {
+              "x": 0.14837832748889923,
+              "y": -0.07151343673467636,
+              "z": -3.145946502685547
+            },
+            "speed": 3.1494436851335865,
+            "suspension": [
+              0.2889702022075653,
+              0.28919145464897156,
+              0.2886616885662079,
+              0.2888828217983246
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 5,
+            "vehicleId": "car",
+            "tick": 960,
+            "source": "AUTONOMY",
+            "throttle": 0.03886784792197991,
+            "brake": 0,
+            "steering": 0.10636873948698199,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        },
+        {
+          "tick": 1020,
+          "sourceTick": 1019,
+          "steering": 0.04278490016002331,
+          "reason": "TRACKING",
+          "crossTrackM": 0.012615839019417763,
+          "advisorySpeedLimitMps": 7.483314773547834,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": -0.011943401768803596,
+              "y": 0.7289265394210815,
+              "z": -20.83161163330078
+            },
+            "rotation": {
+              "x": 0.000024598270101705566,
+              "y": 0.9999279975891113,
+              "z": 0.00011344343511154875,
+              "w": 0.012000222690403461
+            },
+            "velocity": {
+              "x": 0.040336258709430695,
+              "y": -0.07151375710964203,
+              "z": -3.1528499126434326
+            },
+            "speed": 3.1531079247977503,
+            "suspension": [
+              0.28909847140312195,
+              0.289180725812912,
+              0.28867241740226746,
+              0.2887546718120575
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 5,
+            "vehicleId": "car",
+            "tick": 1020,
+            "source": "AUTONOMY",
+            "throttle": 0.03753115104526413,
+            "brake": 0,
+            "steering": 0.04278490016002331,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        },
+        {
+          "tick": 1080,
+          "sourceTick": 1079,
+          "steering": 0.013739314605889404,
+          "reason": "TRACKING",
+          "crossTrackM": 0.006770464591681957,
+          "advisorySpeedLimitMps": 7.483314773547834,
+          "physical": {
+            "id": "car",
+            "position": {
+              "x": 0.0068571073934435844,
+              "y": 0.7289264798164368,
+              "z": -23.980140686035156
+            },
+            "rotation": {
+              "x": 0.000006573016889888095,
+              "y": 0.999996542930603,
+              "z": 0.00008853816689224914,
+              "w": 0.0026291045360267162
+            },
+            "velocity": {
+              "x": 0.005197356455028057,
+              "y": -0.07151363044977188,
+              "z": -3.1450631618499756
+            },
+            "speed": 3.145067456278146,
+            "suspension": [
+              0.2891685664653778,
+              0.2891920506954193,
+              0.28866055607795715,
+              0.28868409991264343
+            ],
+            "wheelContacts": 4
+          },
+          "command": {
+            "schemaVersion": 1,
+            "units": "SI",
+            "sessionId": "049-browser",
+            "worldEpoch": 5,
+            "vehicleId": "car",
+            "tick": 1080,
+            "source": "AUTONOMY",
+            "throttle": 0,
+            "brake": 0.04581750499492534,
+            "steering": 0.013739314605889404,
+            "handbrake": false,
+            "turnSignal": "OFF"
+          }
+        }
+      ],
+      "final": {
+        "id": "car",
+        "position": {
+          "x": 0.006939302198588848,
+          "y": 0.7289264798164368,
+          "z": -24.032630920410156
+        },
+        "rotation": {
+          "x": 0.000006482213848357787,
+          "y": 0.9999967813491821,
+          "z": 0.00009169251279672608,
+          "w": 0.0025477781891822815
+        },
+        "velocity": {
+          "x": 0.004930444993078709,
+          "y": -0.07151348143815994,
+          "z": -3.148437976837158
+        },
+        "speed": 3.1484418373662693,
+        "suspension": [
+          0.28912803530693054,
+          0.28914985060691833,
+          0.28870317339897156,
+          0.2887248694896698
+        ],
+        "wheelContacts": 4
+      },
+      "mechanics": {
+        "classId": "compact",
+        "version": "023-mechanics-v1",
+        "massKg": 1100,
+        "powerW": 70000,
+        "grip": 1.5,
+        "brakeAccelerationMps2": 9,
+        "wheels": {
+          "radiusM": 0.28999999165534973,
+          "wheelbaseM": 2.4000000953674316,
+          "trackM": 1.600000023841858
+        },
+        "turningRadiusM": 3.9144995725872658,
+        "appliedEngineForceN": [
+          0,
+          0,
+          137.29237365722656,
+          137.29237365722656
+        ],
+        "appliedSteeringRadians": [
+          0.007404543459415436,
+          0.007404543459415436,
+          0,
+          0
+        ],
+        "wheelBrakeImpulseLimitNs": [
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    }
+  ],
+  "guards": {
+    "version": "049-lateral-v1",
+    "trajectoryVersion": "049-directed-trajectory-v1",
+    "actors": 110,
+    "verticesPerTrajectory": 256,
+    "retainedVertices": 28160,
+    "identitiesPerEpoch": 1024,
+    "idCodeUnits": 256,
+    "routeIdCodeUnits": 128,
+    "laneIdsPerTrajectory": 64,
+    "maximumObservationAgeTicks": 1,
+    "retainedHistory": 0,
+    "endpointToleranceM": 0.000001,
+    "maximumCornerAccelerationMps2": 3.5,
+    "maximumPolylineHeadingStepRad": 0.3490658503988659,
+    "maximumGrade": 0.08,
+    "previewBaseM": 3,
+    "previewSeconds": 0.45
+  },
+  "scope": "Actual visible native049 steering through unchanged024 physics. Authored033straight/LEFT/RIGHT curves, varied3/5/7mps and bothclasses. Explicit fixture speedgovernor; no driving pose/velocity writes. No fleetFPS/laptop/fullgame claim.",
+  "hardware": {
+    "source": "current CIM at fixture server startup",
+    "capturedAt": "2026-10-06T03:30:41.6235515+03:00",
+    "cpu": [
+      {
+        "Name": "AMD Ryzen 9 7950X3D 16-Core Processor          ",
+        "NumberOfCores": 16,
+        "NumberOfLogicalProcessors": 32
+      }
+    ],
+    "gpu": [
+      {
+        "Name": "Parsec Virtual Display Adapter",
+        "DriverVersion": "0.45.0.0",
+        "AdapterRAM": null,
+        "CurrentHorizontalResolution": null,
+        "CurrentVerticalResolution": null,
+        "CurrentRefreshRate": null
+      },
+      {
+        "Name": "Meta Virtual Monitor",
+        "DriverVersion": "15.52.32.370",
+        "AdapterRAM": null,
+        "CurrentHorizontalResolution": 3840,
+        "CurrentVerticalResolution": 2160,
+        "CurrentRefreshRate": 144
+      },
+      {
+        "Name": "Virtual Desktop Monitor",
+        "DriverVersion": "13.50.53.699",
+        "AdapterRAM": null,
+        "CurrentHorizontalResolution": null,
+        "CurrentVerticalResolution": null,
+        "CurrentRefreshRate": null
+      },
+      {
+        "Name": "AMD Radeon RX 7900 XTX",
+        "DriverVersion": "32.0.31041.1004",
+        "AdapterRAM": 4293918720,
+        "CurrentHorizontalResolution": 3840,
+        "CurrentVerticalResolution": 2160,
+        "CurrentRefreshRate": 144
+      },
+      {
+        "Name": "AMD Radeon(TM) Graphics",
+        "DriverVersion": "32.0.21045.5002",
+        "AdapterRAM": 536870912,
+        "CurrentHorizontalResolution": null,
+        "CurrentVerticalResolution": null,
+        "CurrentRefreshRate": null
+      }
+    ],
+    "memory": [
+      {
+        "Capacity": 25769803776,
+        "Speed": 5200
+      },
+      {
+        "Capacity": 25769803776,
+        "Speed": 5200
+      }
+    ],
+    "os": [
+      {
+        "Caption": "Microsoft Windows 11 Pro",
+        "Version": "10.0.26200",
+        "BuildNumber": "26200",
+        "TotalVisibleMemorySize": 49157544
+      }
+    ],
+    "battery": [],
+    "powerScheme": "Power Scheme GUID: 381b4222-f694-41f0-9685-ff5bb260df2e  (Balanced)"
+  }
+}

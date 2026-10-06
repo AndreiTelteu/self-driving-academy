@@ -112,4 +112,6 @@ Se elimină global pierderea XP și scăderea nivelului. V1 adaugă Academie/Hao
 
 [Mașina de stări045](behavior-fsm.md) oferă șase stări și reason codes din contextul044 și fapte explicite de politică, cu decizii periodice/urgente prin219 și ownership plafonat. Testele și20lumi native AFTER verifică semantica, costul și cleanup-ul contractului timpuriu; manevrele fizice și performanța hardware a jocului complet continuă în task-urile dedicate.
 
+[Controllerul lateral049](lateral-controller.md) urmărește trasee directionate și TURN-uri authored prin aceeași mecanică024, cu direcție, motive de nefezabilitate și viteză consultativă. Baseline-urile native, AFTER70/110, calibrarea22+4 și driving-ul real WebGPU/WebGL2 validează scope-ul empiric; nu certifică FPS-ul flotei ori laptopul.
+
 [Frânarea și marșarierul027](braking-reverse.md) adaugă transmisie opt-in cu oprire și dwell fizic înaintea inversării, input brut distinct de comanda fizică semnată și frână de mână pe roțile spate. Calibrarea celor două clase și driving-ul Chrome WebGPU/WebGL2 sunt verificate; ABS, transmisia completă și performanța întregului joc rămân în afara acestei probe.

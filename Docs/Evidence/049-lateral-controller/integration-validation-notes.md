@@ -1,0 +1,3 @@
+The first parent finish invocation passed the three historical capture verifiers but failed the subsequent Git-index audit. The historical AFTER verifier refreshes its derived summary timestamp, so the summary no longer matched the previously staged version. No raw capture, source archive, numerical gate or native artifact changed; the task remained In Progress.
+
+The corrected order runs historical checks, completes the physical board transition and validators, stages their updated derived summaries, then runs the independent Git-index audit before committing. The original strict capture verifiers and audit byte comparisons remain unchanged.
