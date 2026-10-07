@@ -1,0 +1,230 @@
+import assert from 'node:assert/strict';
+import { readFile, readdir } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
+import { verifyOriginalSteadyFailure as verifyV1 } from './verify-steady-original-failure-v2.mjs';
+const sha = (b) => createHash('sha256').update(b).digest('hex');
+const EXPECTED = {
+  status: 'IMMUTABLE_V2_FULL_FAILED',
+  sourceHash: 'fada7e2b787fc8e455ec651ad4c308069f7b37b80a81121af8dd1de8c5b51655',
+  rows: [
+    {
+      path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v2-01/build-manifest.json',
+      bytes: 32735,
+      sha256: '8722e97b9a50ad65355ee3109be7fcdb07e90dc17fae8c262193edde69194d5c',
+    },
+    {
+      path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v2-01/build-archive.json',
+      bytes: 24571,
+      sha256: 'ea2638836f610dbf9cb2b464b562d16a9acbc7179b79fb8bba50c9595225f105',
+    },
+    {
+      path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v2-01/build-started.json',
+      bytes: 151,
+      sha256: 'b2480400d1b8e948d24f6d83ceaf8114bbc0154e2ada11bcbab3b70b57974f1e',
+    },
+    {
+      path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v2-01/build-complete.json',
+      bytes: 263,
+      sha256: '1e1fc36c93dcbcd071f1d422b49156944f77dc9f37a958f374df31369634f120',
+    },
+    {
+      path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v2-01/native.json',
+      bytes: 252,
+      sha256: '175e6cdb82dac4ec7895289231267a67be2866d97450870e94f203318ae456c7',
+    },
+    {
+      path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v2-01/failure-webgpu.json',
+      bytes: 10938,
+      sha256: '007d96cb5350f7a933c89b9ceda6586c2c6cc2657ac61b91ea406cb4a2261201',
+    },
+    {
+      path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v2-01/capture-webgpu-started.json',
+      bytes: 425,
+      sha256: '5b1eec4ac7ca7784d2e401e7d4670f0f85553633a21e2fdd582fd391c4b8e839',
+    },
+    {
+      path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v2-01/capture-webgpu-terminal.json',
+      bytes: 356,
+      sha256: '6b46514ca15929c63310c121212e49a8fc4d4aa06d8dc1b55c333473e54cff68',
+    },
+    {
+      path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v2-01/build-at-capture.zip',
+      bytes: 3460928,
+      sha256: '90cb1f6a54a7238e44bf404978c6b5b662cc2cab85f7dfda4373be7289107e33',
+    },
+  ],
+  worlds: [
+    {
+      ordinal: 0,
+      bytes: 5030989,
+      sha256: '36da9cd7da0ab69d0483c8b07ba0a8bfd7f2728d40477c0d827539ae2cc23ad6',
+      status: 'PASS',
+      parts: [
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v2-01/fada7e2b787fc8e455ec651ad4c308069f7b37b80a81121af8dd1de8c5b51655-webgpu/world-0-part-0.bin',
+          bytes: 524288,
+          sha256: '391a86e1ac2b0916715fae23f7a60a72b0da278a2eec191098b6e99585ec36b6',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v2-01/fada7e2b787fc8e455ec651ad4c308069f7b37b80a81121af8dd1de8c5b51655-webgpu/world-0-part-1.bin',
+          bytes: 524288,
+          sha256: '3397ee4f82f81c908a903ef6596a1c87ab47b2d3721c7243978f2a23057d2df3',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v2-01/fada7e2b787fc8e455ec651ad4c308069f7b37b80a81121af8dd1de8c5b51655-webgpu/world-0-part-2.bin',
+          bytes: 524288,
+          sha256: '51fd1666cdfe1dc7f9481782165f223a6100bb45a17edcd1eaf0455a453360c7',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v2-01/fada7e2b787fc8e455ec651ad4c308069f7b37b80a81121af8dd1de8c5b51655-webgpu/world-0-part-3.bin',
+          bytes: 524288,
+          sha256: '034329ee0c7756ecee18ee40756fe590bac642712785a389a076789844073ad3',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v2-01/fada7e2b787fc8e455ec651ad4c308069f7b37b80a81121af8dd1de8c5b51655-webgpu/world-0-part-4.bin',
+          bytes: 524288,
+          sha256: 'e394175b9a3451c4979cd11438f1a2faf48ca6fec570ecba51cda0e9b0cf45ba',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v2-01/fada7e2b787fc8e455ec651ad4c308069f7b37b80a81121af8dd1de8c5b51655-webgpu/world-0-part-5.bin',
+          bytes: 524288,
+          sha256: 'd7653950196106a1b214b3728b2964efc57530c6e9df612286ef287ef7dac5b5',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v2-01/fada7e2b787fc8e455ec651ad4c308069f7b37b80a81121af8dd1de8c5b51655-webgpu/world-0-part-6.bin',
+          bytes: 524288,
+          sha256: '5a240cf7f16e7476e4c08a7121bf6cc7ce505f1897337cfe2c12f8a6143277d6',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v2-01/fada7e2b787fc8e455ec651ad4c308069f7b37b80a81121af8dd1de8c5b51655-webgpu/world-0-part-7.bin',
+          bytes: 524288,
+          sha256: '611e6dfcf3dbc926645c11ad3f60298b49f8f3cfb7f415e07496ab29bbe939a3',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v2-01/fada7e2b787fc8e455ec651ad4c308069f7b37b80a81121af8dd1de8c5b51655-webgpu/world-0-part-8.bin',
+          bytes: 524288,
+          sha256: 'e25f37b65cf22505789cfaaec820b405423e1fb747a64940388a42bebc60a472',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v2-01/fada7e2b787fc8e455ec651ad4c308069f7b37b80a81121af8dd1de8c5b51655-webgpu/world-0-part-9.bin',
+          bytes: 312397,
+          sha256: 'a2914cefe4f0a4c3afd8e3d38cfb7cf6e9edce1c12750f1e52a3f9378eb85c1d',
+        },
+      ],
+      terminal: {
+        path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v2-01/fada7e2b787fc8e455ec651ad4c308069f7b37b80a81121af8dd1de8c5b51655-webgpu/world-0-terminal.json',
+        bytes: 159,
+        sha256: '382c2966baa8a4eb81b8da1ed575519acd734f578a4ace6aeb49ab8a814e9f00',
+      },
+      metadata: [
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v2-01/fada7e2b787fc8e455ec651ad4c308069f7b37b80a81121af8dd1de8c5b51655-webgpu/world-0-begin.json',
+          bytes: 310,
+          sha256: 'e2bc44f5c24cb042fc1fec784a8c74ee0203dc8e346b431092f28b9b4fcc2716',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v2-01/fada7e2b787fc8e455ec651ad4c308069f7b37b80a81121af8dd1de8c5b51655-webgpu/world-0-started.json',
+          bytes: 339,
+          sha256: 'ee4f9cfaeb215c9fbb7b7773eaf306608f29143c8563b2099f012d0c118d6099',
+        },
+      ],
+    },
+    {
+      ordinal: 1,
+      bytes: 69087,
+      sha256: '85c11176b44087c7f9d23c52f8efb2a012ebf4f32393efc2b6c5900b74a629df',
+      status: 'FAILED',
+      parts: [
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v2-01/fada7e2b787fc8e455ec651ad4c308069f7b37b80a81121af8dd1de8c5b51655-webgpu/world-1-part-0.bin',
+          bytes: 69087,
+          sha256: '85c11176b44087c7f9d23c52f8efb2a012ebf4f32393efc2b6c5900b74a629df',
+        },
+      ],
+      terminal: {
+        path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v2-01/fada7e2b787fc8e455ec651ad4c308069f7b37b80a81121af8dd1de8c5b51655-webgpu/world-1-terminal.json',
+        bytes: 158,
+        sha256: '75c39a7e541fac169af95954a660a9af2401bbc4eeb036e8b9263ce27a4c3a2b',
+      },
+      metadata: [
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v2-01/fada7e2b787fc8e455ec651ad4c308069f7b37b80a81121af8dd1de8c5b51655-webgpu/world-1-begin.json',
+          bytes: 309,
+          sha256: '3a326953038c237557e6631065ba6b5f3099741ce4d06dce086520ad61bd900d',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v2-01/fada7e2b787fc8e455ec651ad4c308069f7b37b80a81121af8dd1de8c5b51655-webgpu/world-1-started.json',
+          bytes: 336,
+          sha256: '3d9a16dab029fffbddf40f86a583c0b97eeedef37fac4b4f48d444251035f413',
+        },
+      ],
+    },
+  ],
+};
+
+export async function verifyOriginalSteadyFailure() {
+  const v1 = await verifyV1();
+  const raw = await readFile('Docs/Evidence/068-vehicle-switch/steady-v3-v2-failure-proof.json');
+  const proof = JSON.parse(raw);
+  assert.deepEqual(proof, EXPECTED);
+  assert.deepEqual(
+    proof.worlds.map((w) => w.ordinal),
+    [0, 1],
+  );
+  const capture =
+    'Docs/Evidence/068-vehicle-switch/browser-steady-v2-01/' + proof.sourceHash + '-webgpu';
+  const names = (await readdir(capture)).sort();
+  const expected = proof.worlds
+    .flatMap((w) => [w.terminal, ...w.metadata, ...w.parts])
+    .map((r) => r.path.slice(capture.length + 1))
+    .sort();
+  assert.deepEqual(
+    names,
+    expected,
+    'Exact V2 world inventory; no unbound partial or extra ordinal',
+  );
+  for (const row of [
+    ...proof.rows,
+    ...proof.worlds.flatMap((w) => [w.terminal, ...w.metadata, ...w.parts]),
+  ]) {
+    assert.ok(
+      row.path.startsWith('Docs/Evidence/068-vehicle-switch/browser-steady-v2-01/') &&
+        !row.path.includes('..'),
+    );
+    const b = await readFile(row.path);
+    assert.equal(b.length, row.bytes);
+    assert.equal(sha(b), row.sha256);
+  }
+  for (const w of proof.worlds) {
+    const chunks = [];
+    for (const r of w.parts) chunks.push(await readFile(r.path));
+    const b = Buffer.concat(chunks);
+    assert.equal(b.length, w.bytes);
+    assert.equal(sha(b), w.sha256);
+    const t = JSON.parse(await readFile(w.terminal.path));
+    assert.equal(t.status, w.status);
+    assert.equal(t.sha256, w.sha256);
+    assert.equal(t.parts, w.parts.length);
+  }
+  const base = 'Docs/Evidence/068-vehicle-switch/browser-steady-v2-01';
+  const t = JSON.parse(await readFile(base + '/capture-webgpu-terminal.json'));
+  assert.equal(t.status, 'FAILED');
+  assert.equal(t.incomplete, true);
+  const m = JSON.parse(await readFile(base + '/build-manifest.json'));
+  assert.equal(m.sourceHash, proof.sourceHash);
+  const agg = createHash('sha256');
+  for (const path of m.inputs) {
+    assert.ok(!path.includes('..') && !path.startsWith('/'));
+    agg.update(path).update(await readFile(base + '/source-at-capture/' + path));
+  }
+  assert.equal(agg.digest('hex'), m.sourceHash);
+  const n = JSON.parse(await readFile(base + '/native.json')),
+    nb = await readFile(base + '/native/rapier.mjs');
+  assert.equal(nb.length, n.bytes);
+  assert.equal(sha(nb), n.sha256);
+  return {
+    status: 'V1_V2_ORIGINAL_FULL_FAILURES_PRESERVED',
+    v1,
+    v2: { sourceHash: m.sourceHash, worlds: 2 },
+  };
+}

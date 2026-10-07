@@ -1,0 +1,319 @@
+{
+  "id": "guard-sedan",
+  "status": "PASS",
+  "sourceHash": "0f1c5376bb69c047e520133f04c66f1326e90641b97faf81bcc085db6654cb07",
+  "startedAt": "2026-10-06T12:51:39.609Z",
+  "completedAt": "2026-10-06T12:51:39.613Z",
+  "result": {
+    "classId": "sedan",
+    "mutationGuard": {
+      "nativeInputDigest": "2dac78a4254c326a003e8e91294a99f70f55ccab6b72a7fd1a557f5dabf28527",
+      "phase": "SETUP",
+      "setupLabel": "RETIRED_GENERATION_PROBE_AFTER_HOST_FAULT",
+      "setupCalls": [
+        {
+          "label": "INITIAL_FIXTURE",
+          "path": "addClassCar",
+          "entityId": "car-0",
+          "classId": "sedan",
+          "nativeStepSerial": 0
+        },
+        {
+          "label": "INITIAL_FIXTURE",
+          "path": "addClassCar",
+          "entityId": "car-1",
+          "classId": "sedan",
+          "nativeStepSerial": 0
+        },
+        {
+          "label": "RETIRED_GENERATION_PROBE_AFTER_HOST_FAULT",
+          "path": "removeBody",
+          "entityId": "car-1",
+          "classId": null,
+          "nativeStepSerial": 4
+        },
+        {
+          "label": "RETIRED_GENERATION_PROBE_AFTER_HOST_FAULT",
+          "path": "addClassCar",
+          "entityId": "car-1",
+          "classId": "sedan",
+          "nativeStepSerial": 4
+        }
+      ],
+      "drivingCalls": {
+        "setPose": 0,
+        "setBodyVelocity": 0,
+        "setVelocity": 0,
+        "addCar": 0,
+        "addClassCar": 0,
+        "addBox": 0,
+        "addNamedBox": 0,
+        "removeBody": 0,
+        "removeCollisionEntity": 0,
+        "subscribeBody": 0,
+        "publishBodies": 0,
+        "dispose": 0
+      },
+      "nativeSteps": 4,
+      "selectionStepAttempts": 0,
+      "selectionProofs": [
+        {
+          "tick": 2,
+          "nativeStepSerial": 2,
+          "bodies": 2,
+          "beforeHash": "0613f26c06e5df69a7f3fa22d7fa9e0cee05b1d9292b9ad7e99213fab86c7a3a",
+          "afterHash": "0613f26c06e5df69a7f3fa22d7fa9e0cee05b1d9292b9ad7e99213fab86c7a3a",
+          "selected": "car-1"
+        }
+      ],
+      "modeSettlementProofs": [],
+      "auditedMethods": [
+        "addBox",
+        "addCar",
+        "addClassCar",
+        "addNamedBox",
+        "bodyIdentity",
+        "bodyResources",
+        "collisionForColliderHandle",
+        "collisionIdentity",
+        "collisionResources",
+        "collisionStepSerial",
+        "contacts",
+        "counts",
+        "dispose",
+        "entityForBodyHandle",
+        "project",
+        "publishBodies",
+        "readBody",
+        "readCollisionContacts",
+        "readVehicleMechanics",
+        "removeBody",
+        "removeCollisionEntity",
+        "setBodyVelocity",
+        "setPose",
+        "setVelocity",
+        "step",
+        "subscribeBody"
+      ]
+    },
+    "hiddenRejected": true,
+    "civilFleetRejected": true,
+    "retiredGenerationRejected": true,
+    "retiredGenerationEvidence": {
+      "owner": "actual068-independent-admission-owner",
+      "currentGeneration": 3,
+      "retiredGeneration": 2,
+      "authorityTick": 4,
+      "nativeSteps": 4
+    },
+    "boundaryMismatchBeforePhysicsRejected": true,
+    "pausedPhysicalTicks": 0,
+    "acceptedReleaseBeforeClosureFault": true,
+    "faultScope": "Actual068 terminal selection owner after accepted066 release; injected real store mismatch",
+    "trace": [
+      {
+        "tick": 2,
+        "seat": null,
+        "closure": "CLOSED",
+        "pausedPhysicalTicks": 0
+      },
+      {
+        "tick": 4,
+        "seat": null,
+        "closure": "OPEN",
+        "terminalHostFault": "SEGMENT_CLOSE_AFTER_PHYSICAL_ACCEPTANCE"
+      }
+    ],
+    "finalPhysicalHash": "31570fbec09b74a9ec8064b9f5f5d412f9360605b23d8db8d52f0171c6619c22",
+    "drivingPoseWrites": 0,
+    "drivingVelocityWrites": 0,
+    "cleanup": {
+      "body": {
+        "entities": 0,
+        "subscriptions": 0
+      },
+      "collision": {
+        "vehicles": 0,
+        "obstacles": 0,
+        "colliders": 0,
+        "disposed": true
+      },
+      "controller": {
+        "context": {
+          "schemaVersion": 1,
+          "units": "SI",
+          "sessionId": "controller-024-fixture",
+          "worldEpoch": 0
+        },
+        "tick": 4,
+        "vehicles": 0,
+        "targets": 0,
+        "projections": 0,
+        "players": 0,
+        "retainedBatches": 0,
+        "lastIgnoredCount": 0,
+        "suspended": false,
+        "disposed": true,
+        "fault": null
+      },
+      "keyboard": {
+        "tick": 0,
+        "heldKeys": 0,
+        "retainedFrames": 0,
+        "pendingPreferences": false,
+        "disposed": true
+      },
+      "authority": {
+        "context": {
+          "schemaVersion": 1,
+          "units": "SI",
+          "sessionId": "controller-024-fixture",
+          "worldEpoch": 0
+        },
+        "tick": 4,
+        "vehicles": 0,
+        "players": 0,
+        "seat": null,
+        "suspended": false,
+        "disposed": true,
+        "fault": null,
+        "retainedHistory": 0,
+        "retainedBatches": 0
+      },
+      "segment": {
+        "opened": 2,
+        "closed": 1,
+        "retainedSegments": 0,
+        "disposed": true,
+        "retainedHistory": 0
+      },
+      "cameraTarget": null,
+      "selection": {
+        "vehicles": 0,
+        "pending": 0,
+        "inFlight": 0,
+        "projection": null,
+        "conflict": false,
+        "disposed": true,
+        "fault": "SELECTION_SETTLEMENT: Error: Segment boundary mismatch",
+        "retainedHistory": 0
+      },
+      "retiredAdmission": {
+        "vehicles": 0,
+        "pending": 0,
+        "inFlight": 0,
+        "projection": null,
+        "conflict": false,
+        "disposed": true,
+        "fault": null,
+        "retainedHistory": 0
+      },
+      "errors": [],
+      "attempts": [
+        "retiredAdmission",
+        "selection",
+        "cameraTarget",
+        "segment",
+        "authority",
+        "keyboard",
+        "controller",
+        "world"
+      ]
+    }
+  },
+  "partial": null,
+  "cleanup": {
+    "body": {
+      "entities": 0,
+      "subscriptions": 0
+    },
+    "collision": {
+      "vehicles": 0,
+      "obstacles": 0,
+      "colliders": 0,
+      "disposed": true
+    },
+    "controller": {
+      "context": {
+        "schemaVersion": 1,
+        "units": "SI",
+        "sessionId": "controller-024-fixture",
+        "worldEpoch": 0
+      },
+      "tick": 4,
+      "vehicles": 0,
+      "targets": 0,
+      "projections": 0,
+      "players": 0,
+      "retainedBatches": 0,
+      "lastIgnoredCount": 0,
+      "suspended": false,
+      "disposed": true,
+      "fault": null
+    },
+    "keyboard": {
+      "tick": 0,
+      "heldKeys": 0,
+      "retainedFrames": 0,
+      "pendingPreferences": false,
+      "disposed": true
+    },
+    "authority": {
+      "context": {
+        "schemaVersion": 1,
+        "units": "SI",
+        "sessionId": "controller-024-fixture",
+        "worldEpoch": 0
+      },
+      "tick": 4,
+      "vehicles": 0,
+      "players": 0,
+      "seat": null,
+      "suspended": false,
+      "disposed": true,
+      "fault": null,
+      "retainedHistory": 0,
+      "retainedBatches": 0
+    },
+    "segment": {
+      "opened": 2,
+      "closed": 1,
+      "retainedSegments": 0,
+      "disposed": true,
+      "retainedHistory": 0
+    },
+    "cameraTarget": null,
+    "selection": {
+      "vehicles": 0,
+      "pending": 0,
+      "inFlight": 0,
+      "projection": null,
+      "conflict": false,
+      "disposed": true,
+      "fault": "SELECTION_SETTLEMENT: Error: Segment boundary mismatch",
+      "retainedHistory": 0
+    },
+    "retiredAdmission": {
+      "vehicles": 0,
+      "pending": 0,
+      "inFlight": 0,
+      "projection": null,
+      "conflict": false,
+      "disposed": true,
+      "fault": null,
+      "retainedHistory": 0
+    },
+    "errors": [],
+    "attempts": [
+      "retiredAdmission",
+      "selection",
+      "cameraTarget",
+      "segment",
+      "authority",
+      "keyboard",
+      "controller",
+      "world"
+    ]
+  },
+  "errors": []
+}

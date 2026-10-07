@@ -1,0 +1,1665 @@
+import assert from 'node:assert/strict';
+import { readFile, readdir } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
+import { verifyOriginalSteadyFailure as verifyEarlier } from './verify-steady-original-failure-v3.mjs';
+const sha = (b) => createHash('sha256').update(b).digest('hex');
+const EXPECTED = {
+  status: 'IMMUTABLE_V3_FULL_FAILED_NOT_ACCEPTED',
+  sourceHash: '08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693',
+  rows: [
+    {
+      path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/build-manifest.json',
+      bytes: 33175,
+      sha256: '2684df95675c19b56d83b41f11558519a32e4fe5016d92447718b518cdc08013',
+    },
+    {
+      path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/build-archive.json',
+      bytes: 24571,
+      sha256: '268496d967512f345fee64d256d9ad44211586e377b68f49c0037ddc0cd203b8',
+    },
+    {
+      path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/build-started.json',
+      bytes: 151,
+      sha256: 'e3043a639f8acfd63c3d633dc9d7a7a1d3eaf6abba07cddbc40aca379b2eaba7',
+    },
+    {
+      path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/build-complete.json',
+      bytes: 263,
+      sha256: 'd57de75f2802fe5eec6e5b64ddb18968396a19bc8422f8ff68c5d9743c5fc7d5',
+    },
+    {
+      path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/native.json',
+      bytes: 252,
+      sha256: 'adbaebfb43ed6dd4b0d364270402d6c9039b976c59c88e51ad0bde4852655be1',
+    },
+    {
+      path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/failure-webgpu.json',
+      bytes: 35288,
+      sha256: 'd9c43092868104057798582da1e7587d5c6adf6f9e473dd128aa64f3d46d20b0',
+    },
+    {
+      path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/capture-webgpu-started.json',
+      bytes: 425,
+      sha256: 'a33181bf8ef885afb107ef274740020b2a913b1a53db10a34b87dc505281c568',
+    },
+    {
+      path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/capture-webgpu-terminal.json',
+      bytes: 356,
+      sha256: '88b3e9acc19e56f70fdfce50667332d03fb428ae8005ce60b069db9811fca384',
+    },
+    {
+      path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/build-at-capture.zip',
+      bytes: 3461611,
+      sha256: '4bafdee836abee74871e64b26ad7ce66446653ef9d3ea9ce7b812be850cfaba4',
+    },
+  ],
+  worlds: [
+    {
+      ordinal: 0,
+      status: 'PASS',
+      bytes: 5031712,
+      sha256: '605d433a15146a1024d59a218f4f3e8f703c6605f4998c6ef7fc89c55f24c7a2',
+      parts: [
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-0-part-0.bin',
+          bytes: 524288,
+          sha256: 'c2854e87ec5e1bfffa17ae3b6894b1c1a1ef0f149cec625f3f4519640b2518b0',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-0-part-1.bin',
+          bytes: 524288,
+          sha256: '3f7e513691b7e74d7e462b1b47660a49eceba5da6191f954e306288eca033774',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-0-part-2.bin',
+          bytes: 524288,
+          sha256: '4538c30df7a55ce07bae71659f9a60d0fbac527a210c36f942d3adabb68bb725',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-0-part-3.bin',
+          bytes: 524288,
+          sha256: 'ed6e6e8024486114e7e2ca6fd84bf4fd130d842c92cba318f99fcc5e86fe0e93',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-0-part-4.bin',
+          bytes: 524288,
+          sha256: 'c61fd95456f6f170ca445ca99b14ff5466b4b874fd2e48e6ad000ae4cf87b035',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-0-part-5.bin',
+          bytes: 524288,
+          sha256: '0b0bfe87a589f3b8f33b1358c5bae3897e60c8f7b417493f84fb9cc4ad943ad6',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-0-part-6.bin',
+          bytes: 524288,
+          sha256: 'c8fbe4813055eb65af5054faedf29b7ed5759bb31de31aaf7def32c8d1db057d',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-0-part-7.bin',
+          bytes: 524288,
+          sha256: 'a51e8fd52db903ddcce6bc91cc6a062ac60eae91ffaacae6ee13cdfc0ef50687',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-0-part-8.bin',
+          bytes: 524288,
+          sha256: 'c13a598b31b14711f4eb129ae6aeeff3ca6dde82d21c41376178b70b8ea3811c',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-0-part-9.bin',
+          bytes: 313120,
+          sha256: 'f3db3305f120b5cbf9fcdf363862679a3f67a1a4f19a48b1d4f8a67373961418',
+        },
+      ],
+      metadata: [
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-0-begin.json',
+          bytes: 310,
+          sha256: '1f202b5ba92d39e30f2f9daaffd0612797f0f159e9806cc4f16f21148753c315',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-0-started.json',
+          bytes: 339,
+          sha256: '39bdad485bdbb65b6dbfba22c5f06e52bd9b7b3a927bed946cfb2e9dedd9a9ef',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-0-terminal.json',
+          bytes: 159,
+          sha256: 'a5811b4a6bbfa1cc56b6785b2cf4d0ef65f91354ef8cf3e697569a0803677b9e',
+        },
+      ],
+    },
+    {
+      ordinal: 1,
+      status: 'PASS',
+      bytes: 5293118,
+      sha256: 'ed5738282dce0d48800ed035dc74d29b2bba5f03b73a6507cabf28e5a6c6255e',
+      parts: [
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-1-part-0.bin',
+          bytes: 524288,
+          sha256: 'ef8a86e431c8de7e0a0dea7bfb8072d167e983cf63665c385a46d2c1c06915a1',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-1-part-1.bin',
+          bytes: 524288,
+          sha256: '29e7c22bd98a2ade3a7eb3ebf459f407297b84d0928dd225df84c4beb1191c41',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-1-part-2.bin',
+          bytes: 524288,
+          sha256: '90ee5ca6a85ccf12aafdf1ffb12798c33f13dd439eaf27d42db89769a4bd07dd',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-1-part-3.bin',
+          bytes: 524288,
+          sha256: '166a58876a61ca139e85857f9d171754a1dfaa7de78ddb7b75a8b11426d9eef7',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-1-part-4.bin',
+          bytes: 524288,
+          sha256: 'bbb51ab5899f1f28289029807fd80a0e8574cccbadf6b95526a10d3d6932ca72',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-1-part-5.bin',
+          bytes: 524288,
+          sha256: '50d02cac6dd11333f66035d64eea54342f9b1868e10be51be5f4c45925a90a7f',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-1-part-6.bin',
+          bytes: 524288,
+          sha256: '11fc7e281c5d7d4d6fa1cfe059b53924b69303b876d71e4f8b6906bd14e6e97e',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-1-part-7.bin',
+          bytes: 524288,
+          sha256: 'b00f4c92b5514a6d9b6da5a3a637ddd2dab83ad2da10f7b7486e56cd9ff0b60a',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-1-part-8.bin',
+          bytes: 524288,
+          sha256: '09476fbf55fb05a889329b01755f8d4389d67b90386c086a1fddbbbd5b3673a6',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-1-part-9.bin',
+          bytes: 524288,
+          sha256: '13aec8b4bc55289b0a3faf3fc8e82ccbc8f79d1a760c9265e9fc9fdf517b89fb',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-1-part-10.bin',
+          bytes: 50238,
+          sha256: '6bb204d1c86bbdb284c0557b1a6d82b98b21025f785045e0e6231e7626e2b748',
+        },
+      ],
+      metadata: [
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-1-begin.json',
+          bytes: 309,
+          sha256: '1bf0e884a2c3eea8b153fd5076c73e8fe97ed7a6dfed30b613cca5184d34e5e8',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-1-started.json',
+          bytes: 340,
+          sha256: 'f59055154d714103de454d186ce5a08f31e24e1a7cbaf5362dee0f116f8221e5',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-1-terminal.json',
+          bytes: 159,
+          sha256: 'bcb3339b1b6e42f064c36a13c1e8aae0558812efc0a3b5d390775ac041c074a4',
+        },
+      ],
+    },
+    {
+      ordinal: 2,
+      status: 'PASS',
+      bytes: 5111999,
+      sha256: 'd181494aff2d30a426b8e0a14928964ac078953da70b1642e29c1743c926fd6c',
+      parts: [
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-2-part-0.bin',
+          bytes: 524288,
+          sha256: 'e80432cb625427a12f43c4702832facb69bf7cd93df80c84d5e1f9a93c630a04',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-2-part-1.bin',
+          bytes: 524288,
+          sha256: 'c8faffb789be35a6059b923e12136a8806c63a50d6a75de1939ed48ab01201ac',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-2-part-2.bin',
+          bytes: 524288,
+          sha256: '72aad71227c4533e0c2362bbaa9e65121c7b9c38ed312561e72a18b9a131cf47',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-2-part-3.bin',
+          bytes: 524288,
+          sha256: '15d44f183982246105b1a45cc1e94bf28d79c77d85a00eabf2df4f3af0225852',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-2-part-4.bin',
+          bytes: 524288,
+          sha256: '721cd006c2f38ec773e13efa752f2484c0df2dd1978f0d0eaa5388da36b56f7b',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-2-part-5.bin',
+          bytes: 524288,
+          sha256: 'ff0821799d0ba23c62b861f029b21be124e121abd964f2693e738cbf98a502f1',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-2-part-6.bin',
+          bytes: 524288,
+          sha256: '9d219af070918403367240cc265f9488d5472e7d502fcd60d4f66f29d3116bf2',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-2-part-7.bin',
+          bytes: 524288,
+          sha256: '8b6137e8492e24be2a4eb431c9f6d10e59149e86f04eec393b76238d99136008',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-2-part-8.bin',
+          bytes: 524288,
+          sha256: '8c68d963c42ab8afb22b05770927e6262422e9a0a56ce11414d73bc58590593b',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-2-part-9.bin',
+          bytes: 393407,
+          sha256: '7c2975b335ecb0b625d7dade23b6729d485e24d2554682e38b068d5715edea64',
+        },
+      ],
+      metadata: [
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-2-begin.json',
+          bytes: 301,
+          sha256: 'b429c3caa97e00f38a3d403614564bcf77bf2863db151dce662a2d659b4bd357',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-2-started.json',
+          bytes: 340,
+          sha256: 'f332f4e62d81c2eb72acc25f930f1b5471258c8310d8cf43572678f89d9236b2',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-2-terminal.json',
+          bytes: 159,
+          sha256: 'fa6f8f95f9c14514305fcfb8ad36124bdfbdd64b5aa2a931cd275faecb0d69c9',
+        },
+      ],
+    },
+    {
+      ordinal: 3,
+      status: 'PASS',
+      bytes: 5373600,
+      sha256: '2f61769c8c83f0da9eae64c0e63cb72838e9b4007c7d73ec7872d289e13d26ee',
+      parts: [
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-3-part-0.bin',
+          bytes: 524288,
+          sha256: '830396a8124f5b56baafcf1ec05b74d22b5e1c81723313c2e0fca2dd01e4de96',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-3-part-1.bin',
+          bytes: 524288,
+          sha256: 'acca856bb016caf31b25b76ab5498438624f79b71e5669808ffd8bca200258a8',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-3-part-2.bin',
+          bytes: 524288,
+          sha256: '3fce2f64e41628d53a600a694677498325a6243737648a6f380fc1452830f904',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-3-part-3.bin',
+          bytes: 524288,
+          sha256: 'fade0d576acfd14afc0877eebad9fd409b7eadcb564a60cc487878d6b508540c',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-3-part-4.bin',
+          bytes: 524288,
+          sha256: '92c590471164a265f4b279cec3b6cae3d01e67aca24952a10c6db9ac01230771',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-3-part-5.bin',
+          bytes: 524288,
+          sha256: '99e9e3dfe10790b108df4b13b55a4fa1bb923315bd52a58c68bdcfd187f14ad7',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-3-part-6.bin',
+          bytes: 524288,
+          sha256: 'bec32c2fa1c89f0db89c7bee560930f3f95348e0e12af5be1fec5ec4a81b89a3',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-3-part-7.bin',
+          bytes: 524288,
+          sha256: '38aefd4acb7add809f8b2eab61abd8e75b9fdbde9b5d0289401a700e026ac9ba',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-3-part-8.bin',
+          bytes: 524288,
+          sha256: 'a141a01d13028e16aa04e166a3794d731d320093a87536d880e299934ca52c10',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-3-part-9.bin',
+          bytes: 524288,
+          sha256: '4a79a3ad1fb8854e43db64d11b97e6ff95c65cabc8c1fceeca03edd56f215c37',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-3-part-10.bin',
+          bytes: 130720,
+          sha256: 'ba781109a174b8ee0e0a39aaa8da5a66d0c229a93bf24a25c4c9120b6544bc43',
+        },
+      ],
+      metadata: [
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-3-begin.json',
+          bytes: 300,
+          sha256: '8e462caa2aaa2e06c05ad7e7def2f1fd786583df289fe3848a2aa14052ba97c1',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-3-started.json',
+          bytes: 340,
+          sha256: '879f4e3b3e634423d7ccdef3811c5e0db1b69d4627da0de110a47fb13bf5b6cd',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-3-terminal.json',
+          bytes: 159,
+          sha256: '538f83cb3932365aed7160ff12b882ff069050f3bda90fbd86647938f31e5f25',
+        },
+      ],
+    },
+    {
+      ordinal: 4,
+      status: 'PASS',
+      bytes: 5373619,
+      sha256: '67a6a520d715b7be61128d6c037ae80e63fc306d025919c9e4ffd15cb33060dc',
+      parts: [
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-4-part-0.bin',
+          bytes: 524288,
+          sha256: '06517a8ca04b597229e41df4ee9103dd1d7d12348faae777aff7d6af5591d9c9',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-4-part-1.bin',
+          bytes: 524288,
+          sha256: 'e720738ad6cfb980eb9bb48418892f3b159575454b87279a04c793cdb0d8e820',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-4-part-2.bin',
+          bytes: 524288,
+          sha256: 'f112ce8c79f2d92a203273b48621bfb0807e9ff4ab6e6a6cfe8d2d198941ced1',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-4-part-3.bin',
+          bytes: 524288,
+          sha256: '017857b06bea950097488cf2f412bcde74aeec70baed623846e09e4d94aec831',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-4-part-4.bin',
+          bytes: 524288,
+          sha256: 'e9a384ed59692db653a6ce1a761aea70cd96c941948768d5ae52eadeec5d742f',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-4-part-5.bin',
+          bytes: 524288,
+          sha256: 'f9895920f70cb9e9078f9d33a1b1023cdc9a2b15b61fbfea636c6ae7174fb553',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-4-part-6.bin',
+          bytes: 524288,
+          sha256: '8da0d1c6ca79b6d633fe79dad7f6480be75272209c535da407d5674e30b44ac2',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-4-part-7.bin',
+          bytes: 524288,
+          sha256: '460b43b8f1c03dd594abd678a4121ea363bd2e4656d3183aaadf2e320cf9be8a',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-4-part-8.bin',
+          bytes: 524288,
+          sha256: '5897341653a19e569486333ee59f11e4f4146811d71fb2c55e235462ba159777',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-4-part-9.bin',
+          bytes: 524288,
+          sha256: '4660c022acb4c8574f3cef15a4018d6c857a0da8977f80ffe3efeca719931998',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-4-part-10.bin',
+          bytes: 130739,
+          sha256: 'a965bc32c8dc6add99976a2a01d581dfbc35b5b6346e6c9f18dbc982652cc48c',
+        },
+      ],
+      metadata: [
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-4-begin.json',
+          bytes: 300,
+          sha256: '165e17d6e2c98c845f5e19a3520c1ff4d288f31b738638a089bdd87bb8e83605',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-4-started.json',
+          bytes: 340,
+          sha256: 'b1dfad6a1cd7ac1a47445b74413db59a46356914b762dc18f704d85bac01a4e2',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-4-terminal.json',
+          bytes: 159,
+          sha256: 'fda64a962319464ff8557dc3082a1196a12af394b63136cb331a1bd78a7e43ac',
+        },
+      ],
+    },
+    {
+      ordinal: 5,
+      status: 'PASS',
+      bytes: 5112283,
+      sha256: 'e965b3d35d5d10c0376cb167e7a34c1b067ab330ef4784fb2e96ce1ccf06066b',
+      parts: [
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-5-part-0.bin',
+          bytes: 524288,
+          sha256: '4b38faa6f8b50ff7cf9a5d2032233873ad7547634eed877503c99b005687e1ca',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-5-part-1.bin',
+          bytes: 524288,
+          sha256: '4840640a991d3ced53d2dd682db682a6dee32848b66d824d0f33b857ef47cb12',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-5-part-2.bin',
+          bytes: 524288,
+          sha256: '84ddb3afba18edd27e62e7372c1ac3946b7a3d5b4a5ac3e73d8d6b2fa20d19b2',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-5-part-3.bin',
+          bytes: 524288,
+          sha256: '6e307598a269d0e60e425f7b3ca0e66e8b0b03d104c7df6c1f10e8f35deb8099',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-5-part-4.bin',
+          bytes: 524288,
+          sha256: '47a7d05c9d2cb8b806e9f1d08e219858f8d4bbaa14827f4a107aa932d277d11b',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-5-part-5.bin',
+          bytes: 524288,
+          sha256: 'b2e31e932415f9383fd7a0ad00db3cb2bdde6d9f57fe0aa68a262914499a5bf0',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-5-part-6.bin',
+          bytes: 524288,
+          sha256: 'bbb9ec3d208d0112af4d2162be632c7436f72694bb06850cc9db365d14e0750b',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-5-part-7.bin',
+          bytes: 524288,
+          sha256: '7a83c45604dc04c8d07a0de4401096e467b4c561fface081efef58c447923389',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-5-part-8.bin',
+          bytes: 524288,
+          sha256: '6f0b1b4ec459af660c55e0bd3787d9c418f604e771541f7b40943e3f6705536c',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-5-part-9.bin',
+          bytes: 393691,
+          sha256: '1a87cbb06329ff34d1ee94babe4d5e30211f53eb091a20b9998007312a083f20',
+        },
+      ],
+      metadata: [
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-5-begin.json',
+          bytes: 301,
+          sha256: 'ef66ab664114710fe37f199c4327b602882118e9a8e253ae3a4ce05fab3e3ca4',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-5-started.json',
+          bytes: 340,
+          sha256: '03b4822d0b3e374ad7de7c38f9aa7de9af77cb1c9d46be34c0051c23c681298a',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-5-terminal.json',
+          bytes: 159,
+          sha256: '8cd2282daf143132e2e6eb39efa05bfc1cf77517d266093612748f473f71e295',
+        },
+      ],
+    },
+    {
+      ordinal: 6,
+      status: 'PASS',
+      bytes: 5293144,
+      sha256: 'c0e89316c9bb3655dd395ed0735a6d4e55e528109d3f10afd95c7d9e32e35f4b',
+      parts: [
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-6-part-0.bin',
+          bytes: 524288,
+          sha256: 'ba282a511709666c40b66499c94673c0a8245d7d7507a5414214ba5bcad3d8b6',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-6-part-1.bin',
+          bytes: 524288,
+          sha256: '071f1bfbfe70b95e260577e440f4a8e52724e91d16a4670ca9472d61f62b424d',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-6-part-2.bin',
+          bytes: 524288,
+          sha256: 'fbb6f66bdf56fdb330a5165a43a10c489d64feb4e60e5f9facfef1946dcbf899',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-6-part-3.bin',
+          bytes: 524288,
+          sha256: 'abe57d8388d85b8d7ed4ece1c510f6fb50d04ab352d8b349d0574f083abbe077',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-6-part-4.bin',
+          bytes: 524288,
+          sha256: 'e4e750a9c8cefc786974a186fe4b931807e1d7c84b1c0e7c3ad77f70019b086a',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-6-part-5.bin',
+          bytes: 524288,
+          sha256: 'a8a1635a1915be1f0988b37cf26d530b5225b084146f8d22e966bd27db5a82ba',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-6-part-6.bin',
+          bytes: 524288,
+          sha256: 'f8ecd4440a4307b4cb740ed2b2d23cc6024294e1c3b011e589a37fcdef143808',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-6-part-7.bin',
+          bytes: 524288,
+          sha256: '821ce20ac13a2b70fbdbfb3d9d7a7457f371a3ff3dd166e1e728d22e0821c9bd',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-6-part-8.bin',
+          bytes: 524288,
+          sha256: '81ab6d4cec6c336d60743b49c3382fcd2d5a02e65ecc5ced24c339ad15820815',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-6-part-9.bin',
+          bytes: 524288,
+          sha256: '4fafd1a68dff026bc5c0a312c430993cd6277120bcce8daca0ab97657b1e89dc',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-6-part-10.bin',
+          bytes: 50264,
+          sha256: '7680b8b51bbbfb93e8dd1d187371527d21fd1a332a9d984f286b01b5ea30a9b5',
+        },
+      ],
+      metadata: [
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-6-begin.json',
+          bytes: 309,
+          sha256: 'b2b95247bb95b2d6acf0225ff0745c8d4b952b25c071cf5e01c99385623cb26c',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-6-started.json',
+          bytes: 340,
+          sha256: '51e7ccad1854d7be3b5161e0c173dc95731fd2739b3d465557c048c530d7db20',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-6-terminal.json',
+          bytes: 159,
+          sha256: 'fe5d8603b17cf67a0abd67b9a2d61b7b0d93177191462191b00f35f16952c8d4',
+        },
+      ],
+    },
+    {
+      ordinal: 7,
+      status: 'PASS',
+      bytes: 5031881,
+      sha256: '6cf930e980c924e808bb9b75900d382ac5edb198072637f2175c732ce5d39de1',
+      parts: [
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-7-part-0.bin',
+          bytes: 524288,
+          sha256: '3180e4faa24a08e1acc6310670484403fef4d14135c9887e3f0b6a333352227c',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-7-part-1.bin',
+          bytes: 524288,
+          sha256: 'cf81282dd56162a37e051697e26b818ad735a93445c9a91f56651cf51d9c6837',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-7-part-2.bin',
+          bytes: 524288,
+          sha256: 'fa70176d0bfdf83262d77c4140527ed73544e0089403e82665bddb72438bcdd5',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-7-part-3.bin',
+          bytes: 524288,
+          sha256: '49955102795de69f1224c6dda2d61f0353e7cd7610ec2756b4c30b622898645e',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-7-part-4.bin',
+          bytes: 524288,
+          sha256: 'f51a72125430ed1a6287fe10362b8f44a442a3cc8adf80604ba7cbf7b693b7e0',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-7-part-5.bin',
+          bytes: 524288,
+          sha256: '5eea4bdfc9d9b690116798ee5f4c5abbfb64e9cd1c3778e57515b473c1590bec',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-7-part-6.bin',
+          bytes: 524288,
+          sha256: 'dfcece483615dd638bbf7071a8d071223212c1a797b85c7698a6e5f831f67a0d',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-7-part-7.bin',
+          bytes: 524288,
+          sha256: '1eb4444b4c4b9ef64f12f91511d79914185aac76aa4821f771a89f1a76062547',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-7-part-8.bin',
+          bytes: 524288,
+          sha256: '9c4343098864d5edc83d55d9693d09a2df119f6ca1ffc235ae54cf07a64f021c',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-7-part-9.bin',
+          bytes: 313289,
+          sha256: 'b7bb0639b432d2b38940ea6ee0271258a8f7754df3d8480581bdf27bd1242fc5',
+        },
+      ],
+      metadata: [
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-7-begin.json',
+          bytes: 310,
+          sha256: '858431b8a31806b401463a7d892b24f8f5119dea6199c1e2b3981d151c7d5168',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-7-started.json',
+          bytes: 340,
+          sha256: 'f8fd02e0ad4297ce317fe5b35e41e698f8497aba9d6c22cddb82242910fb8b91',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-7-terminal.json',
+          bytes: 159,
+          sha256: '13ec32c76933cfa004ab837aec2198290843d3b203449fe2ba4f53d4d379aa43',
+        },
+      ],
+    },
+    {
+      ordinal: 8,
+      status: 'PASS',
+      bytes: 5031939,
+      sha256: '47774822a6101f3e85e44d1e9af25dd27d44f104dbba53cdbbf381df8209770c',
+      parts: [
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-8-part-0.bin',
+          bytes: 524288,
+          sha256: '5bd856409a330dfcceeb0405f5bfd61ac339c35b975f2fafcdead17f2c4dc4bd',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-8-part-1.bin',
+          bytes: 524288,
+          sha256: '1bf522e43da647f77e5c4f648208f26f042d94bde889708453b6d44f1f464f72',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-8-part-2.bin',
+          bytes: 524288,
+          sha256: '052c70e7843b6feadfd209b3407331f0ffbe2857aa4b7f0c7746dc26d90e46ef',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-8-part-3.bin',
+          bytes: 524288,
+          sha256: '72ed0b3601b2a632494276c21f597230d7bf6c2dafcdad7d1224182d1a56970d',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-8-part-4.bin',
+          bytes: 524288,
+          sha256: '06fd4bd4248f40bd68f6e633dacd1068328b162c13860ea4cb1e166b76df0fd0',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-8-part-5.bin',
+          bytes: 524288,
+          sha256: '0c916244df120534fdd2226477170d63de30e117b29ac851abc8cf6d0e82238d',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-8-part-6.bin',
+          bytes: 524288,
+          sha256: 'bc0a3debb9860f59a5cf32c92d8682b18f01897841c14028ea127c5d50b88622',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-8-part-7.bin',
+          bytes: 524288,
+          sha256: '47a9dc53ddb13c3eb980449f8221c5ba026b4c045fc38e2709a9e737f29ae592',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-8-part-8.bin',
+          bytes: 524288,
+          sha256: '6d12bcf6982a355057aa2af32a31472d7d6d3bfcf8bd434911ae036424017efc',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-8-part-9.bin',
+          bytes: 313347,
+          sha256: '7e08ed337cb3ccb58b43dc4d030383bf78930754528043a955f3e0350dc2e71f',
+        },
+      ],
+      metadata: [
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-8-begin.json',
+          bytes: 310,
+          sha256: '803af4d30a99223ce25c091efdfd941c096d6dccae8a96a329dcd37cb4e771c2',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-8-started.json',
+          bytes: 340,
+          sha256: '917f7ff01ced15214cfeb8aea3d3bce73abddfdd3ca7296d3abdbc4b8e6d4941',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-8-terminal.json',
+          bytes: 159,
+          sha256: '53db284564cf1ec0db0cd1100ae4296624aec27d42f562741dfcc60fe83e60c1',
+        },
+      ],
+    },
+    {
+      ordinal: 9,
+      status: 'PASS',
+      bytes: 5293103,
+      sha256: '46e36a22f53eec769a03afa982f1b7f5b139520d680eadcbc9deb37cc426f08c',
+      parts: [
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-9-part-0.bin',
+          bytes: 524288,
+          sha256: '4eb7256f9dd2efbb17efa831a367eadb195a9ed8daf1b9f21e18b763acdc07d6',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-9-part-1.bin',
+          bytes: 524288,
+          sha256: 'e2135a37c8e142dd125f8014e86e3152091f4a74a83008cac0d3872867fb9ec4',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-9-part-2.bin',
+          bytes: 524288,
+          sha256: '6ca9e91c0f0c35830b52ef6f7fa30e903807a10571f8b207bd0fbc75d347b93f',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-9-part-3.bin',
+          bytes: 524288,
+          sha256: '77d6042d95ad3f0ded07dbbaaf393f8e7000f9a2da42741fd72796567fcbb860',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-9-part-4.bin',
+          bytes: 524288,
+          sha256: 'b215842b53bbd97d7c944dd6a14f83385d7e29c2749e4027fb7c0d4d940becae',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-9-part-5.bin',
+          bytes: 524288,
+          sha256: '7128ef6ade6868d0c975b7c9a2397848119fc59aafef41e03321702b0f5805b4',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-9-part-6.bin',
+          bytes: 524288,
+          sha256: 'cd9a44df764b84d7490d163828a34f4d9addad8bf375e1cf4ec1421760f42f50',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-9-part-7.bin',
+          bytes: 524288,
+          sha256: 'b910cf2db81913d938871dc1e9d0dcf61dcb43076a3fcf7032bb1f28efa32e39',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-9-part-8.bin',
+          bytes: 524288,
+          sha256: 'bd49db46e8d7372ce112a8df8faab17121135d6f81f7ae40b52575e1a94ea955',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-9-part-9.bin',
+          bytes: 524288,
+          sha256: '5dfe0c785ed3f879c9d773a2180e4fbae20b0f2fed8935303857c48e4616111f',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-9-part-10.bin',
+          bytes: 50223,
+          sha256: '42ce71b41835629247d17d2dc7f58f8b140a6d4032de6586e34908c8906dcfec',
+        },
+      ],
+      metadata: [
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-9-begin.json',
+          bytes: 309,
+          sha256: '089bc49b81ba733b7ca498f4ead990b7520260b0c90bcece62d3cf4f133069ba',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-9-started.json',
+          bytes: 341,
+          sha256: '2519d842a9e4d3da0551602fc87914e41ff980fa7189e52b8c443625b2a8814c',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-9-terminal.json',
+          bytes: 159,
+          sha256: '3621c8b537c49bf86f5b744281783ac3cace9291f7234f550d5c4488bc636f1b',
+        },
+      ],
+    },
+    {
+      ordinal: 10,
+      status: 'PASS',
+      bytes: 5111874,
+      sha256: '1f06a6a5516d5ef8fa4a46e7441aad2e882cbcf4ce3bb11b94d40b016aa55f44',
+      parts: [
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-10-part-0.bin',
+          bytes: 524288,
+          sha256: '5cc2524c99b9e8a717d557abf9900a0122c6f6b8c0b863668a9a80bc52933a88',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-10-part-1.bin',
+          bytes: 524288,
+          sha256: 'bc7e1526ae6ca1cc77be3a0f2dd31474becc94276ba34ddfed4efd47ed1257c1',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-10-part-2.bin',
+          bytes: 524288,
+          sha256: 'c77a4b92e8532a2010b625c2f7f2d068940faab003017f6517ba36a4e9ec2a0b',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-10-part-3.bin',
+          bytes: 524288,
+          sha256: 'f140b8f1ab65f6c3e1bd3cd3b9aec7387e0b39bbc32312dc9d6a829abe888e54',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-10-part-4.bin',
+          bytes: 524288,
+          sha256: '47ca19903a36bedf7f7fac1e4cfb773f62b4855518b37926d05e2246df088b74',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-10-part-5.bin',
+          bytes: 524288,
+          sha256: 'd7f2af5b9292517ccaac6b7ecc633692462a85e37d1e1901062b2b2aa98fbafa',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-10-part-6.bin',
+          bytes: 524288,
+          sha256: '32c7a19d9755e37fc9114e11e4fb5fb2c00b930a53e21ec55b65cca907e14bf7',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-10-part-7.bin',
+          bytes: 524288,
+          sha256: 'f1be3204920459cf0df04641a289bb04ce84d3703959a7bd9566ce2900fde182',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-10-part-8.bin',
+          bytes: 524288,
+          sha256: '886ab27953b53f56554339e360d3857dd614fec112dc9951df22b2f4ddd0a991',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-10-part-9.bin',
+          bytes: 393282,
+          sha256: '6f4f30df44a65a2debf008c318b701e6a6502ffce6bf6b33b14e1d435fcaa7ce',
+        },
+      ],
+      metadata: [
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-10-begin.json',
+          bytes: 303,
+          sha256: 'c84abd05eef4dfa91d38603949f302ad9e7c9a1d4e2b12e0bff63c6784d8694b',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-10-started.json',
+          bytes: 342,
+          sha256: 'e39a625abc3fa2673f62dc9857759de4ebc63a38f0644cbb56e8b5cca393e2aa',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-10-terminal.json',
+          bytes: 159,
+          sha256: '51aa91f908017866b033c668624e929d35930ea2ea0bcfd36addb87ab8467285',
+        },
+      ],
+    },
+    {
+      ordinal: 11,
+      status: 'PASS',
+      bytes: 5373306,
+      sha256: '7aed0ceef73314efb040fb16f20f64f2940cc0681aab3bc523841b20ae9964cf',
+      parts: [
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-11-part-0.bin',
+          bytes: 524288,
+          sha256: '387ab5dff343ce3bbd8cb102b5294a2c5b54854290f8baa9c5fe94d2122014be',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-11-part-1.bin',
+          bytes: 524288,
+          sha256: 'cce470f4e274565a9c81d3a1395a1bc4252daaff399bc195b6c7d047b034c403',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-11-part-2.bin',
+          bytes: 524288,
+          sha256: '3daf8c8f060600220024eec130274a4380950cc3522f0788d6f2b31666338dc9',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-11-part-3.bin',
+          bytes: 524288,
+          sha256: '0b4621f9027f2eb203dbd4585ab3dcbe4e01cb1a633b636ff3a9e7783faaf6bc',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-11-part-4.bin',
+          bytes: 524288,
+          sha256: '1f595882d1157430dae1441244b9a7ee97b2e7a9e45405c0f6f23d8e59ac4660',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-11-part-5.bin',
+          bytes: 524288,
+          sha256: '41cd3c6dad0c13c23ec3d36145a5239226aada4904ed95da1d577909c1cc0ea9',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-11-part-6.bin',
+          bytes: 524288,
+          sha256: 'e1b4d54dd0e63c15f087afb1c478ff1a632db3a9011d0bf3cdd476045d1975d6',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-11-part-7.bin',
+          bytes: 524288,
+          sha256: 'd1d870eaa472a41e435b11cb3ae7763e04547839f6f24a4ea9fa3f6ff48ee9e4',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-11-part-8.bin',
+          bytes: 524288,
+          sha256: 'f46265822370736b52ee651950b4f3aec08ac5542dad5f1f0ba11a77f3534c23',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-11-part-9.bin',
+          bytes: 524288,
+          sha256: 'f431793b8cf22e3f0cf94b640cb1cf73d9b64e3c888ec52abec17e5b26b4851f',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-11-part-10.bin',
+          bytes: 130426,
+          sha256: 'a2ac3599a3a800b9db417716b845fc10b4dc264bd0018d27ed4b09ad70707869',
+        },
+      ],
+      metadata: [
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-11-begin.json',
+          bytes: 302,
+          sha256: '096aec18211b4376086eac7efbfe31d29fd58ac90883d777d60adc33f865bcdf',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-11-started.json',
+          bytes: 342,
+          sha256: 'f4ae0f3d9310e83a8af6f5521ce25343041f4b663f51378cbf72a364efcc4a49',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-11-terminal.json',
+          bytes: 159,
+          sha256: '5f743c86faf097583e7cd3250b25eacd02e5e161072f84dba535b6e76776eef0',
+        },
+      ],
+    },
+    {
+      ordinal: 12,
+      status: 'PASS',
+      bytes: 5373244,
+      sha256: '199debbb38a37e2b80ad481dbcebd355464c8ac9428c569ccb1830a53262aa62',
+      parts: [
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-12-part-0.bin',
+          bytes: 524288,
+          sha256: '8dd4b573f2ab873afdd34c4d5336b6432bb23dfaa1fe4c30fd60c500c4ca62bc',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-12-part-1.bin',
+          bytes: 524288,
+          sha256: '07203ca248cc76a45a9adde05a0084708ed6dc51f4e1518164cb57426a657816',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-12-part-2.bin',
+          bytes: 524288,
+          sha256: '1a0a7901fa52d985d638363574daf395169f6010dc12d9d2e66a76dec0f46960',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-12-part-3.bin',
+          bytes: 524288,
+          sha256: '655ec2e419da990ccccbd9f79229f93e3fbb210de997cb6a992930c929e95293',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-12-part-4.bin',
+          bytes: 524288,
+          sha256: 'd33d49bb8d03ec799d0624defe8d91255933aee92389c6dd47b00b0f85d7b474',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-12-part-5.bin',
+          bytes: 524288,
+          sha256: 'ed16a06412d34cdc8bcc97f422aaaa406d44343fb9d7c6e9566d46f13c23ab54',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-12-part-6.bin',
+          bytes: 524288,
+          sha256: '678d60c2427074260de831d96d56782eacf7380cc9449667645ba77a16c7573c',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-12-part-7.bin',
+          bytes: 524288,
+          sha256: '020931479f23d54f75c7d079788bc6029ba9fe7e099391a7762e94b531a6349d',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-12-part-8.bin',
+          bytes: 524288,
+          sha256: '584f7637b8abeccf6e0f30d9ead7ae9058612e03903a6aba196d28392a03ac35',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-12-part-9.bin',
+          bytes: 524288,
+          sha256: '38231761effca87b96b76fc068418a2b0804db12b3370a046b8af1ef051e9433',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-12-part-10.bin',
+          bytes: 130364,
+          sha256: 'e81003d3d6b2fad28b228cb06aed6805ff1600e72f7b5800e8dcb78936729ceb',
+        },
+      ],
+      metadata: [
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-12-begin.json',
+          bytes: 302,
+          sha256: 'a8f57d69423bc300f6406f389a809159328f97135485fd3c012c715a1b4da0ad',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-12-started.json',
+          bytes: 342,
+          sha256: '2516cd7d842b761c36645db9e05eddbff785afa483699716854e964713d24ddc',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-12-terminal.json',
+          bytes: 159,
+          sha256: '24e48cf5fc8cc510cfb181331729e33152cf6ee169be0e33ff4cdf5f4e768e5d',
+        },
+      ],
+    },
+    {
+      ordinal: 13,
+      status: 'PASS',
+      bytes: 5112350,
+      sha256: '6a99a9cfbd1f0491c737d949256ca685a07c135c3df2f9ae68d28ca931e1dafd',
+      parts: [
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-13-part-0.bin',
+          bytes: 524288,
+          sha256: '3a0c5af733f5043479f468cdf44cf12104b813d9b8acdb93ca690d0dbeee82e3',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-13-part-1.bin',
+          bytes: 524288,
+          sha256: 'fe9aa537da610b191ba162aadd38eaf51882431eeae2ad79c60ec38e316c98d9',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-13-part-2.bin',
+          bytes: 524288,
+          sha256: 'f6a6f695488c78e0c67f40ca17225ab61f29b2c95ac71235bec9dad581ad51c8',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-13-part-3.bin',
+          bytes: 524288,
+          sha256: 'b649fa3ef4e27aa1b307965c229b3a10797033ca8c9dabab0acfe4dc607971af',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-13-part-4.bin',
+          bytes: 524288,
+          sha256: '471bbf4df4e3d34051178cc8caf75e342cf84c7028158719986e2a898d91788f',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-13-part-5.bin',
+          bytes: 524288,
+          sha256: 'da228109507155e74ce60b013c85fea59fdcaa39648fdd93edbcbd58c88ce79b',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-13-part-6.bin',
+          bytes: 524288,
+          sha256: 'a0427ac3d701a75dbc65bb3af6d984eee80620c0c3444538b265edc1de85e17f',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-13-part-7.bin',
+          bytes: 524288,
+          sha256: '3e39a725b7d50c309e56f15fa87cc1d853dbdb87daca573fc2e43139dc502722',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-13-part-8.bin',
+          bytes: 524288,
+          sha256: '9631b7040f3b2527067b4444174a00a689b9d4454ab18d8ea1f5b8bf65d29c44',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-13-part-9.bin',
+          bytes: 393758,
+          sha256: 'a07172ed62078ed17b296bd62bc67d99bf30a6e4a08b8723ad193975fba1fc1f',
+        },
+      ],
+      metadata: [
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-13-begin.json',
+          bytes: 303,
+          sha256: 'd9af27aaa8cdaf3dbdd98ee24593dfade8f42b0d4b8fb37deb376fe0e7b708fe',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-13-started.json',
+          bytes: 342,
+          sha256: '1cfafc0e79b33626c28b20ccaa83d0f047bfcb20d7f0e31e5e732eaa23e7e95a',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-13-terminal.json',
+          bytes: 159,
+          sha256: '93c3c57287bdd9760829f24930880dddff1af17c554c2cf73f878efbcc2be332',
+        },
+      ],
+    },
+    {
+      ordinal: 14,
+      status: 'PASS',
+      bytes: 5293191,
+      sha256: '589dd68e28c90702d6e8cf640e2627e561f758dd260d07789bcf69a643988cdf',
+      parts: [
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-14-part-0.bin',
+          bytes: 524288,
+          sha256: 'f7da7df9e49066eeb4505cb6a61bfcbb8959a6559dc9dd481da3a16d84957a1b',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-14-part-1.bin',
+          bytes: 524288,
+          sha256: '18b2dcdc6a6bc1e4b280e312ad03afd29d0a58de52f6d7c90288ee476a52deba',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-14-part-2.bin',
+          bytes: 524288,
+          sha256: '97d6321506d86d66393dd4861d9a68612dc7eac6086589b2e37a68944cf2ec04',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-14-part-3.bin',
+          bytes: 524288,
+          sha256: 'f88b60ac154e0f6cd729842da06506f971d4938575f377d674079b8557f72f91',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-14-part-4.bin',
+          bytes: 524288,
+          sha256: 'fb93cb17880c3c31b9d7c2f8d666bae58dec24b64d2e8bf4b3a6ce1d35980fed',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-14-part-5.bin',
+          bytes: 524288,
+          sha256: 'e7623df0e0ded513b0d904d4a1605168e3b8bcad742bc7b8c46b125e8b61f595',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-14-part-6.bin',
+          bytes: 524288,
+          sha256: '9938ff2c6a0eb6d912c60603b740decde1f40f07f93a37415d423bdaba5a7b45',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-14-part-7.bin',
+          bytes: 524288,
+          sha256: 'a0183511c2653b0c72ebb2f1203fe5ac94d0627dd57c72fd6b323242bc9eb661',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-14-part-8.bin',
+          bytes: 524288,
+          sha256: 'dda154b7102c5b1534e686c6f225e83485b737586a562f293cda38c200fa54d9',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-14-part-9.bin',
+          bytes: 524288,
+          sha256: '21ebcaca5b5a963bc287879fd9487476f7fe8b76824ca2ad22aeb81a3454032d',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-14-part-10.bin',
+          bytes: 50311,
+          sha256: '05aab37b3377ed31e532e256851fa80a9253a39e2ed01fd8a85a4f8fba4ea7ac',
+        },
+      ],
+      metadata: [
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-14-begin.json',
+          bytes: 311,
+          sha256: '275b331afebc185acaa2d76af651743ddae11c61e25a1686c2d1cf930ced9dd9',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-14-started.json',
+          bytes: 342,
+          sha256: '11f6e973d5102845b2d662d88483115316b6ff1e1c3ad14d1cc95a2d2f48a3c1',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-14-terminal.json',
+          bytes: 159,
+          sha256: '6d6194ba851d1e5b6d459a69e8457cb107e312a26c0a889f3a07925838f19aa1',
+        },
+      ],
+    },
+    {
+      ordinal: 15,
+      status: 'PASS',
+      bytes: 5031888,
+      sha256: 'f123de1c5a490b7155d66b44cf78f23c64e166e9fe70631c1fe13422db0cd286',
+      parts: [
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-15-part-0.bin',
+          bytes: 524288,
+          sha256: 'dc9b3f986be265caf438487d36026bbd5e7702d65aa4155b736487b79bd2f659',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-15-part-1.bin',
+          bytes: 524288,
+          sha256: 'a736578ab608d337a54d388f967280a5e734a61a03e39ae04135410ba062f94c',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-15-part-2.bin',
+          bytes: 524288,
+          sha256: '0ca3e5e839f25c647e7a3d5d5c7bbac9ff7db82bb9d45dad15d625710fefc6c7',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-15-part-3.bin',
+          bytes: 524288,
+          sha256: 'fcd362baac6dc60d93affd1770ebae22990e98b62c7e3955da65c7c78392deda',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-15-part-4.bin',
+          bytes: 524288,
+          sha256: 'fe32447d80134ba908151361b3d9e7baaa6e73044f07e1d2c18bffbc1522222e',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-15-part-5.bin',
+          bytes: 524288,
+          sha256: '80092cebfee9607917de737886f01b6d0a11a2511e171de57b3eb36b3c1f75d8',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-15-part-6.bin',
+          bytes: 524288,
+          sha256: '7c1ba823e32f0854b918ed43820dd9c9dbaf2b91e7ad7a71acde19c0fda87ebc',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-15-part-7.bin',
+          bytes: 524288,
+          sha256: '6b5a11ad808c4b990a03a2e7f1a1730e015ce6edf5e5322ed75acce1f602572f',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-15-part-8.bin',
+          bytes: 524288,
+          sha256: 'f721fdd951de84e37eb9344804933aaa04b0b25f31c21c3657fb5dd18484cc11',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-15-part-9.bin',
+          bytes: 313296,
+          sha256: 'c322a5ae9a65b31fb26c6090325ff9ada72dd6bbb08adfba7a053cd5e7f6362f',
+        },
+      ],
+      metadata: [
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-15-begin.json',
+          bytes: 312,
+          sha256: 'b375aa80fbf33699bf5e348d5859b6d3e953704ae6d16fee04c78bde6cd98853',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-15-started.json',
+          bytes: 342,
+          sha256: '1e7065d76b78e93e99249d8a912089ed3e8777d7003fa53bca52291bc9138790',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-15-terminal.json',
+          bytes: 159,
+          sha256: '1ac456e7c456c475671093ff66e8c4bfff7f8d9fae89afc410d2a5aab646c9cd',
+        },
+      ],
+    },
+    {
+      ordinal: 16,
+      status: 'PASS',
+      bytes: 5031912,
+      sha256: '53dc6fbc1a0df5f9c05f5f243b76d1a60203c29c8d15db30d960f69534b227c9',
+      parts: [
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-16-part-0.bin',
+          bytes: 524288,
+          sha256: 'f07b6cae3ccdda7a846dc0a63f1e8a67eb065cade1fb319a67a93892b3ff5a9a',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-16-part-1.bin',
+          bytes: 524288,
+          sha256: 'a54c0d680d56d64925cbe892a773c08c10fdd795a736844ebc5d27d322087855',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-16-part-2.bin',
+          bytes: 524288,
+          sha256: 'f3bfc27e30130b323f08a5149bcc46636ee8d346d17781f11968378f6043ea5b',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-16-part-3.bin',
+          bytes: 524288,
+          sha256: 'c8df49a24b2518170227f780a64ab69779f6702dcedeba4e5ead3de153c59a71',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-16-part-4.bin',
+          bytes: 524288,
+          sha256: '284807f98e683a03e9c70940aa596c0f2de06ae39b86b4359fdeb4a0f8818ad2',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-16-part-5.bin',
+          bytes: 524288,
+          sha256: '4dc004eb1a0a5d12e027359f051558c67b738c8d348778362c3de38a1ac3a984',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-16-part-6.bin',
+          bytes: 524288,
+          sha256: '95fd6e0bea357694bf5eb9146f40a0ae49547da71c9f54a6af43039aa4b01622',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-16-part-7.bin',
+          bytes: 524288,
+          sha256: '73de8fc527a9706789129af8bb104f06c481aafa96b3e9c67bdb80c542ba8b76',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-16-part-8.bin',
+          bytes: 524288,
+          sha256: '93579f832498e96aa9906806ae063a6b7881ca173a1a4ad221751a2ac895364b',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-16-part-9.bin',
+          bytes: 313320,
+          sha256: '3d6c7ca429ad419cc28a67a0503a79e29f1b7a893e6c58ae3cdf7463a49dd3b8',
+        },
+      ],
+      metadata: [
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-16-begin.json',
+          bytes: 312,
+          sha256: '74e49efe3e0795fdc7273d544e53c358bd8eb1529641cf1c0272bec6e09623a0',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-16-started.json',
+          bytes: 342,
+          sha256: 'ffb1878e4f1fd00040f81ac829396baece14480300f20596a8d96daaa0a6559a',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-16-terminal.json',
+          bytes: 159,
+          sha256: 'fa379c9b85ae6dea57108941732988a5d0351b254d1ef64d88433f4617127ede',
+        },
+      ],
+    },
+    {
+      ordinal: 17,
+      status: 'PASS',
+      bytes: 5293112,
+      sha256: '16b9147c3e16a60f3137e756e75900a764a7f6888f62f99f12e4ae5b0e442f0b',
+      parts: [
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-17-part-0.bin',
+          bytes: 524288,
+          sha256: 'd6c3f0971fa3b17762ae2b14a0c6b9c4fecfe858ce9d2e316edee2676dff8d04',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-17-part-1.bin',
+          bytes: 524288,
+          sha256: 'e24a8c1ad60bcb063e157699cf7588cccd5561bfee742204fbed0222b2f4a4b7',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-17-part-2.bin',
+          bytes: 524288,
+          sha256: 'a5df1d8040c85379c9a89d6ce097ddeb1a2b1c8b9f1b61421379b3d250a99bc1',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-17-part-3.bin',
+          bytes: 524288,
+          sha256: '8eea8fe039415813ab84c538f237cd343e2e963df5aa05ed695fedd22b946faa',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-17-part-4.bin',
+          bytes: 524288,
+          sha256: '29c6a08bbafde3b7e6adf9f12aee214f1f88246e469ae84bc7a883e81a4947ca',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-17-part-5.bin',
+          bytes: 524288,
+          sha256: 'ac904ed33767a2b4185bad50991efa21e06313d8e110a019d8fbcb0817c9cdc6',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-17-part-6.bin',
+          bytes: 524288,
+          sha256: 'a2fcf4f9f2d71f04921d503449bb58740542a7255b8d9bec14657910e8d901ee',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-17-part-7.bin',
+          bytes: 524288,
+          sha256: 'c7ce1b567573be2f3a4147aed3a258b38c4d771747456b5312a72263d527bd59',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-17-part-8.bin',
+          bytes: 524288,
+          sha256: 'fdf4183aa0d6afe9c78273211886dabf58596718d1e2962f2c0b023067f222b5',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-17-part-9.bin',
+          bytes: 524288,
+          sha256: '379892fa84f703d38ae89ca14beb257684d6cbd80fc5c378348a003181a1ac6f',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-17-part-10.bin',
+          bytes: 50232,
+          sha256: '63dd4c6b3375b38eb345cf6b0160fa798f7ec4e4a9d081681ff070cca7f15e29',
+        },
+      ],
+      metadata: [
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-17-begin.json',
+          bytes: 311,
+          sha256: '17677ebcf8b6bf668d6323df66ab27c6f19b1daee018cfcf765a1c8b1fab09e7',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-17-started.json',
+          bytes: 342,
+          sha256: 'a6722d4f55ced9508c5bb2a743b79f592d8a6c19457e05298c7442a35960863a',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-17-terminal.json',
+          bytes: 159,
+          sha256: '6e1a96de97587dc92aaca8d46be97fb950d00042927c8b0d4578dcf2c73e1bab',
+        },
+      ],
+    },
+    {
+      ordinal: 18,
+      status: 'PASS',
+      bytes: 5111532,
+      sha256: '70914cbe1539c1a0d4892376b0fb2c0e040a266e0cd010620eeb8365f80b9d7e',
+      parts: [
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-18-part-0.bin',
+          bytes: 524288,
+          sha256: '400dc7cf932e07aa98f09e9af049a94f072fcd4b971b6893efee93b2cdfa4b0c',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-18-part-1.bin',
+          bytes: 524288,
+          sha256: '3629d2af1cc0e0180aa242f5d9df15d6286beb510bd9b31dd89e03271eb26a34',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-18-part-2.bin',
+          bytes: 524288,
+          sha256: 'f733a8b3fab6b6f50f2077d2a57b4e87b8f6d0035482b0f33082bf8c313fd4af',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-18-part-3.bin',
+          bytes: 524288,
+          sha256: '5824f16841a9f7033b4249795df8dc2472fb82ba1520018492082a41c276b364',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-18-part-4.bin',
+          bytes: 524288,
+          sha256: '3e6f862a0392ae05a06115128dbd7bbcb31eb75a21af15b809ee44d3f60a78a5',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-18-part-5.bin',
+          bytes: 524288,
+          sha256: 'f406e0abb817d0dcbab4b36da0e5ecd9d70b1e837a8a476dd3bbaedcfbe956de',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-18-part-6.bin',
+          bytes: 524288,
+          sha256: 'bd85a79971c2ff37bdbeb858997fd2d6e4b027f54630772096dc8f0430bf4235',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-18-part-7.bin',
+          bytes: 524288,
+          sha256: 'e0fbe317bedc58e1f0ab0b460c2d47a2210e7ceeab615d6f221e21a39cf7457e',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-18-part-8.bin',
+          bytes: 524288,
+          sha256: 'e1ed0304dda024c1b9fb19e6cd3bfb7a15c2f4d03938e51ccab982e96a1349c9',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-18-part-9.bin',
+          bytes: 392940,
+          sha256: '80b5dcac2ac1c198facc0f7dbdd163c27a3d7ba8ec2babab176d6d9c146bde0e',
+        },
+      ],
+      metadata: [
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-18-begin.json',
+          bytes: 303,
+          sha256: '4b69b73883dd11fa8080c5f86789126ff765dbf7617d01c33516959a3a788ce5',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-18-started.json',
+          bytes: 342,
+          sha256: 'c9581f65967a9f895219524adf9bf02e8929ffeceef8c65463e7ec4fdc5434a2',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-18-terminal.json',
+          bytes: 159,
+          sha256: '1044e4b61212a1c39fec1c1bceb63534d91767a709e2caa79dc3a8f3aa43f1f5',
+        },
+      ],
+    },
+    {
+      ordinal: 19,
+      status: 'PASS',
+      bytes: 5373195,
+      sha256: '1ef845ad5aa3d42aa716c026db86d4f0d4ea78f04fc6e18da2bd9e2aae9ca19c',
+      parts: [
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-19-part-0.bin',
+          bytes: 524288,
+          sha256: '19f0cd8ec18eb1e5042ab43916f7e39bbd50225e6a264f5184d0c60e1b89f22c',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-19-part-1.bin',
+          bytes: 524288,
+          sha256: 'eb5c8f428c0eacac0bca3db4d61f22b7ebba633d6dea1322cb08f340f38d0201',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-19-part-2.bin',
+          bytes: 524288,
+          sha256: '9af0ae610e60eeea9bf8f4c577ce82ccc39562c2344f50d5e29c6fef1ce3b722',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-19-part-3.bin',
+          bytes: 524288,
+          sha256: 'b137bc0022786836c064a599bdeb1dd7b9ce15908ee66906a33ede3184b0b989',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-19-part-4.bin',
+          bytes: 524288,
+          sha256: 'ec382f827aa93ae5f4645a0ecc156ddf9e2c80999918bb1757fe22f29a892b1a',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-19-part-5.bin',
+          bytes: 524288,
+          sha256: 'ce4f95ea94c4c5ff4baace734c3556bb69f4a4d6525e14a6a6529ef668fb2c53',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-19-part-6.bin',
+          bytes: 524288,
+          sha256: 'a81839a78eaefd138627920dfac3d612f01d843b7a810ecf725d56fd36cd7315',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-19-part-7.bin',
+          bytes: 524288,
+          sha256: 'a375797e576c595ae3a3ced9987f3250206b1622774cb6736f9ae28c84423675',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-19-part-8.bin',
+          bytes: 524288,
+          sha256: '12c64b9036d9b1ff66c8f9b34e2322a940d9923a0565c304a8258cceffb34afe',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-19-part-9.bin',
+          bytes: 524288,
+          sha256: '3ce3f1345b9d1ea7e623e6702343680548cec7ec323a1398a5f3b789c3f196cc',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-19-part-10.bin',
+          bytes: 130315,
+          sha256: '6aca042b13fb2262400c1d39cdd6d2608c9731acc627806d1ae24b80d0117c97',
+        },
+      ],
+      metadata: [
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-19-begin.json',
+          bytes: 302,
+          sha256: '9e67be777a431f995517f7ecee5c611f848922f2cc582d4d2f38b4c6262427be',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-19-started.json',
+          bytes: 343,
+          sha256: 'fe032ed21e85ce502ee151b2076b350758e6f444f870c8c7a7aea20aa366d993',
+        },
+        {
+          path: 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01/08ece12f1c58faef806d234441c2746b8dabe7176c2b9af3299bebddf395f693-webgpu/world-19-terminal.json',
+          bytes: 159,
+          sha256: '597deb3d03bb15ca1e01aed9cd911fec07a65fa744c3d165ec8ccc67f423df2a',
+        },
+      ],
+    },
+  ],
+};
+export async function verifyOriginalSteadyFailure() {
+  const earlier = await verifyEarlier();
+  const proof = JSON.parse(
+    await readFile('Docs/Evidence/068-vehicle-switch/steady-v4-v3-failure-proof.json'),
+  );
+  assert.deepEqual(proof, EXPECTED);
+  assert.deepEqual(
+    proof.worlds.map((w) => w.ordinal),
+    Array.from({ length: 20 }, (_, i) => i),
+  );
+  const base = 'Docs/Evidence/068-vehicle-switch/browser-steady-v3-01';
+  const capture = base + '/' + proof.sourceHash + '-webgpu';
+  assert.deepEqual(
+    (await readdir(capture)).sort(),
+    proof.worlds
+      .flatMap((w) => [...w.metadata, ...w.parts])
+      .map((r) => r.path.slice(capture.length + 1))
+      .sort(),
+  );
+  for (const r of [...proof.rows, ...proof.worlds.flatMap((w) => [...w.metadata, ...w.parts])]) {
+    assert.ok(r.path.startsWith(base + '/') && !r.path.includes('..'));
+    const b = await readFile(r.path);
+    assert.equal(b.length, r.bytes);
+    assert.equal(sha(b), r.sha256);
+  }
+  for (const w of proof.worlds) {
+    const chunks = [];
+    for (const r of w.parts) chunks.push(await readFile(r.path));
+    const b = Buffer.concat(chunks);
+    assert.equal(b.length, w.bytes);
+    assert.equal(sha(b), w.sha256);
+    assert.equal(w.status, 'PASS');
+    const t = JSON.parse(await readFile(w.metadata[2].path));
+    assert.equal(t.sha256, w.sha256);
+    assert.equal(t.parts, w.parts.length);
+  }
+  const terminal = JSON.parse(await readFile(base + '/capture-webgpu-terminal.json'));
+  assert.equal(terminal.status, 'FAILED');
+  assert.equal(terminal.incomplete, true);
+  const m = JSON.parse(await readFile(base + '/build-manifest.json'));
+  assert.equal(m.sourceHash, proof.sourceHash);
+  const agg = createHash('sha256');
+  for (const p of m.inputs) {
+    assert.ok(!p.includes('..') && !p.startsWith('/'));
+    agg.update(p).update(await readFile(base + '/source-at-capture/' + p));
+  }
+  assert.equal(agg.digest('hex'), m.sourceHash);
+  const n = JSON.parse(await readFile(base + '/native.json')),
+    nb = await readFile(base + '/native/rapier.mjs');
+  assert.equal(nb.length, n.bytes);
+  assert.equal(sha(nb), n.sha256);
+  return {
+    status: 'ALL_V1_V2_V3_FULL_FAILURES_PRESERVED',
+    earlier,
+    v3: { sourceHash: m.sourceHash, rawArms: 20, full: 'FAILED' },
+  };
+}
