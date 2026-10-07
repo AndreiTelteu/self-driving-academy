@@ -1,0 +1,34 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { createHumanGuidance, ACTIONS } from './user-guidance';
+test('passive countdown uses exact supplied deadline and cannot extend 90s; labels do not publish per frame', () => {
+  const messages: string[] = [];
+  const guide = createHumanGuidance((s) => messages.push(s));
+  guide.begin('NO_POINT', 'sedan', 91000, 1000);
+  assert.match(messages.at(-1)!, /90s/);
+  guide.refresh(1001);
+  guide.refresh(1002);
+  assert.equal(messages.length, 1);
+  guide.refresh(2000);
+  assert.match(messages.at(-1)!, /89s/);
+  guide.refresh(92000);
+  assert.match(messages.at(-1)!, /0s rămase/);
+  guide.stop('STOP: eliberează toate tastele');
+  guide.refresh(93000);
+  assert.equal(messages.at(-1), 'STOP: eliberează toate tastele');
+});
+test('all human phases have explicit actions; repeat release appears only after actual observer notification', () => {
+  const messages: string[] = [];
+  const guide = createHumanGuidance((s) => messages.push(s));
+  assert.equal(Object.keys(ACTIONS).length, 11);
+  guide.begin('REPEAT', 'compact', 90000, 0);
+  assert.match(messages.at(-1)!, /Ține R/);
+  guide.repeatObserved();
+  guide.refresh(1);
+  assert.match(messages.at(-1)!, /ELIBEREAZĂ R/);
+  guide.begin('NEW_T', 'compact', 90000, 2);
+  assert.match(messages.at(-1)!, /eliberează T/);
+  guide.repeatObserved();
+  guide.refresh(3);
+  assert(!messages.at(-1)!.includes('ELIBEREAZĂ R'));
+});

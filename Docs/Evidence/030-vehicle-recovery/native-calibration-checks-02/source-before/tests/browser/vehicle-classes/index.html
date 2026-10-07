@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="ro">
+  <head>
+    <meta charset="utf-8" />
+    <title>023 mechanical classes fixture</title>
+    <link rel="icon" href="data:," />
+    <style>
+      body {
+        margin: 0;
+      }
+      .controls {
+        position: fixed;
+        top: 8px;
+        left: 8px;
+        z-index: 1;
+        padding: 8px;
+        background: #ffffffed;
+      }
+      pre {
+        max-height: 220px;
+        overflow: auto;
+        margin: 6px 0;
+      }
+      canvas {
+        display: block;
+        width: 1920px;
+        height: 1080px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="controls">
+      <p>023: Chrome headed, foreground. Five paired runs: 30s warmup + 120s each arm.</p>
+      <select id="backend">
+        <option>AUTO</option>
+        <option>WEBGL2</option>
+      </select>
+      <button id="run">Run default/mixed benchmark and 20 lifecycle cycles</button>
+      <button id="classes">Drive both classes: acceleration, brake, turn</button>
+      <label
+        ><input id="diagnostic" type="checkbox" />DIAGNOSTIC only: 5s warmup / 60s measurement, one
+        pair; not a full gate</label
+      >
+      <label
+        ><input id="smoke" type="checkbox" />SMOKE only: 1s warmup / 3s measurement, one pair</label
+      >
+      <button id="calibration">Show/close +90Y calibration</button>
+      <button id="recreate">Calibration remove/recreate stale probe</button>
+      <pre id="calibration-state">Calibration not run</pre>
+      <pre id="status">Not run. Probes require the exclusive hardware slot.</pre>
+    </div>
+    <canvas id="canvas" width="1920" height="1080"></canvas>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

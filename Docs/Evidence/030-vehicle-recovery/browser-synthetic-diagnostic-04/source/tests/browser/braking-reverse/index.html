@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>027 braking reverse and handbrake fixture</title>
+    <link rel="icon" href="data:," />
+    <style>
+      body {
+        margin: 0;
+        background: #14202d;
+        color: #f3f7fb;
+        font: 16px system-ui;
+      }
+      .controls {
+        position: fixed;
+        top: 12px;
+        left: 12px;
+        z-index: 1;
+        background: #14202ded;
+        padding: 12px;
+        max-width: 760px;
+      }
+      pre {
+        max-height: 240px;
+        overflow: auto;
+        white-space: pre-wrap;
+      }
+      canvas {
+        display: block;
+        width: 1920px;
+        height: 1080px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="controls">
+      <h3>027 — stop, reverse, forward and rear handbrake turn</h3>
+      <p>
+        Run the visible sedan/compact protocol. Keep Chrome focused. Scripted DOM S/W/Space commands
+        drive actual Rapier; raw input, direction intent and signed physical command stay distinct.
+      </p>
+      <select id="backend">
+        <option>AUTO</option>
+        <option>WEBGL2</option>
+      </select>
+      <button id="run">Run driving protocol</button>
+      <pre id="status">Not run. Exclusive foreground hardware slot required.</pre>
+    </div>
+    <canvas id="canvas" width="1920" height="1080" tabindex="0"></canvas>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

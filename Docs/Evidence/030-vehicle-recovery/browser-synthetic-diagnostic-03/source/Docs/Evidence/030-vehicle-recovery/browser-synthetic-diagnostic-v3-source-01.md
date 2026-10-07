@@ -1,0 +1,7 @@
+# Synthetic diagnostic v3: StandardMaterial registration restoration
+
+Only substantive source change: new sibling browser-entry.ts adds exact original V4 entry import `@babylonjs/core/Materials/standardMaterial` before runtime import. All gameplay/driver/proof/005/native/timing/capacity logic unchanged. Distinct vehicle-recovery-synthetic-diagnostic-v3 directory, manifest revision030-SYNTHETIC_DIAGNOSTIC_ONLY-v3, browser-synthetic-diagnostic-03/build-synthetic-diagnostic-03 namespace, future port5227. Original494 captured current/archive inputs and all prior failures remain immutable.
+
+Confirmed V2 capture20261007T113030547Z, started11:30:30.537Z/completed11:30:30.692Z, INCOMPLETE primary StandardMaterial missing side-effect registration. Keys and native rows are empty, but native/setup owners already existed: case16acquisitions/16cleanupattempts and root4/4, every actual resource readback zero. Empty rows do not prove no native initialization. Original raw remains failure; no successful physical/gameplay/performance inference.
+
+Narrow affected entry format/lint plus BOTH TypeScript configs authorized; unchanged pure suites not repeated. All new build and hardware execution pending. Only after source/static acceptance may root grant ONE new builder and strict build-only verifier. Native/source/archive/ZIP proof remains same mechanism and original physical trust proof is untouched. Synthetic isTrustedfalse/physicalAcceptancefalse unchanged.

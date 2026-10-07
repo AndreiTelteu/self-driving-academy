@@ -1,0 +1,41 @@
+#030 shared seam proposal — source only, after accepted CPU BEFORE
+
+The accepted native BEFORE sourcee7e5241c.../124inputs remains immutable. These are proposed interfaces and behavior; no production/controller/native changes are authored or authorized by this document.
+
+## Native placement port
+
+Prefer a dedicated optional structural PhysicsRecoveryPort obtained once from the actual probe with a copied006 context bound to that world lifetime. Do not change BodyState or existing setPose/setBodyVelocity behavior. Existing probes without opt-in retain exact legacy behavior. A second conflicting context binding fails. Replacing/resetting the world invalidates/disposes the port; it never keeps another live world or silently accepts a caller-supplied new epoch.
+
+Prospective contracts:
+
+- inspectPlacement(identity, context, expectedPhysicsSerial, transform, roadSupportProof): copied result SAFE/BLOCKED/INVALID_SUPPORT with actual token/serial/native support shape and at most one blocking collider handle. Diagnostic inspection never constitutes authorization for a later mutation.
+- applyPlacement(identity, context, expectedPhysicsSerial, transform, roadSupportProof): fresh revalidation and commit in one synchronous busy-guarded native call. Return exact before/after native pose, linear velocity, angular velocity, collider/readback identity, native serial, setter stage and support/occupancy outcome. No external callback, published event, command realization, or extra world.step inside this call.
+- release(): idempotent, no world disposal. Report bounded active port/probe ownership only; angular vectors live in this dedicated readback, not a shared BodyState contract expansion.
+
+Validate exact own-data descriptors/context/token and finite copied transform before WASM; verify world live/registered exact pointer/current generation and native step serial immediately before queries and again before setters. Propagate modified body positions to colliders using installedRapier API before a scene query; verify the installed query semantics and a blocker moved without physics step in meaningful native tests. Broadphase synchronization must not imply an unexecuted physics tick.
+
+Current actual ground is a fixed cuboid halfsize(500,.5,500) at(0,-.5,0), topY0; actual chassis is cuboid(.85,.3,2). Query all solid colliders, including anonymous fixed/dynamic boxes and cars, excluding only the addressed native body. A bounded first-hit result is sufficient for denial and must not truncate the searched world. Sensor handling is explicitly non-solid, according to installed native isSensor; an unknown shape/state/query failure denies placement. No 028 contact list or nearest-neighbor subset is used as proof of free space.
+
+Support scope initially accepts only the existing actual flat fixed ground cuboid with complete footprint inside its top surface and authored ground-level road corridor. Validate the convex oriented chassis and mechanical wheel-envelope footprint wholly inside one supported straight-lane segment rectangle, correct direction/access and ground height; near joins, unsupported bridges/slopes/holes or unknown geometry fail closed. Do not infer full support from four sampled ray hits. Other solid overlaps are independently queried at the complete3D placement shape; chassis grounding/clearance tolerances must be calibrated from existing actual native settled poses, never a changed tuning/position allowance. Include any mechanical wheel envelope exceeding the chassis in conservative shape safety; do not invent wheel colliders.
+
+If SAFE, set translation and stored valid upright quaternion, zero native linear velocity and angular velocity, update query collider transforms and read back exact f32 state. Do not modify mass/friction/damping/dt/solver/wheels. A setter/readback error after movement yields a truthful partial fault with attempted/completed setter stages and actual readback where available; do not claim transactional rollback. No retry of the same operation teleports again.
+
+## Addressed027 realization invalidation
+
+Add a narrowly reviewed controller operation, provisionally invalidateRealization(identity, expectedCurrentTick, expectedMode), using existing mutate/reentrancy guard. Require exact controller registration AND current physical port token, current tick and existing MANUAL/LEARNING mode; retain mode/player authority/tick and every other entry. Clear only addressed entry.target/control and replace only its drivetrain with createDrivetrainState. Preserve immutable availability effect-cache checks and all other token/source/fault fences. A removed projection is explicit invalidation until the next ordinary60Hz controller step, not a fabricated neutral physical frame. No global suspend/resume, extra step or clear of other actors.
+
+Host clears the addressed keyboard/067 mode-intent queue at the accepted R boundary and proves no held-throttle replay; authority stays MANUAL/LEARNING. Prospective host action ordering must be reviewed against prevalidation: admit explicit R and ledger capacity; validate actual005 boundary/context/seat; native fresh query+placement; record actual teleport immediately; invalidate only addressed027 realization; close005 segment RECOVERY; append029 recover record preserving incident prefix; publish one derived007 VEHICLE_RECOVERED event with stable006 operation identity. Any postmovement failure preserves physical truth and pauses further recovery admission; retries can deliver remaining stages but never move again. A failure before movement never claims recovery or closes a successful teleport record.
+
+005 uses existing RECOVERY closeReason and TELEPORT exclusion. R is explicit intent and learningEligible:false, not a command trained into autonomy.029 recover is its existing append-only operation, not history reset.007 listener failure after at-most-once admission is recorded as delivered-with-failures, never listener replay. Full recorder/passenger226/full city reset remain outside030.
+
+## Required verification before accepting the seam
+
+Native bothclasses: exact empty placement, overturned angular motion reset, named+anonymous fixed/dynamic/othercar blockers, moved collider without step, ground boundary/full footprint/offroad/height/access denial, no-point, stale generation/context/serial, partial setter fault/readback truth. Other body pose/velocity, native tick/serial and mechanics unchanged by recovery call. Pure027 combined tests: old pendingREVERSE/gear/heldcommand cleared onlytarget, other gearstate preserved, mode/player count/tick retained, stale/proxy/reentrant/fault calls rejected and no hidden authority change. Callback generation replacements at005/029/007 boundaries preserve partial truth.
+
+Exact signature and placement ordering remain parent-review decisions; this is not permission to implement shared seams. Browser BEFORE below must be chronologically captured before production030 tracking/query changes.
+
+### Native freshness disposition
+
+propagateModifiedBodyPositionsToColliders is not evidence that scene-query broadphase is fresh. A finite controlled native test must move an anonymous fixed/dynamic blocker through native setters without world.step and demonstrate fresh occupancy denial with unchanged native serial, then move it out and demonstrate safety. Preserve both exact snapshots and query results.
+
+If that broadphase freshness cannot be proven, prefer complete enumeration of every actual current solid collider and installed Shape.intersectsShape using actual fresh native translation/rotation and oriented candidate shape. Search must include anonymous/static/dynamic/ground/othercars and exclude only target body's colliders. Internal enumeration callback cannot run external caller code or mutate the world. Declare maximum world/collider admission from actual supported native limits; if exceeded or enumeration incomplete, deny without movement rather than truncating. Query cost is proportional to actual collider count and must be measured under70/110 fullactor and contact geometry after accepted BEFORE; not called O(1) or budgetfree. This alternate exact narrow-phase traversal still needs actual fresh native proof and the same no-extra-step/identity fences/support validation.

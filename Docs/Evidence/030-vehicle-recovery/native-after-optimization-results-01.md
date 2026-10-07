@@ -1,0 +1,15 @@
+# PBI030 optimization finite verification — actual results
+
+The SOURCE-only snapshot and its unexecuted status record the earlier authoring phase. The subsequently authorized finite verification passed. No new AFTER benchmark, browser build or hardware capture was executed; PBI030 performance acceptance remains pending, and the original AFTER remains FAILED.
+
+- Scoped formatter write/check, both TypeScript configurations, scoped ESLint, architecture and changed MJS syntax: EXIT0. Exact commands, timestamps, exits and stdout/stderr are retained in `native-after-optimization-checks-01`.
+- Owner and functional pure suites: 31/31 PASS, 410.7475ms. This includes the nine new fresh boundary/callback/fallback cases; actual controller actuation failure leaves accepted tick unchanged and is exposed by scalar readback.
+- Three native suites run sequentially: 10/10 PASS, 2633.6258ms. The expanded actual anonymous collider assertions verify movement, sensor changes, shape changes and orientation changes at unchanged native serial, complete collider count, and equality of the previous public shape query and new live collider query. No geometry cache or extra physical step was used.
+
+`native-calibration-checks-03/source-native-before-world.json` archives 405 actual inputs. Archive completion was 2026-10-07T01:23:42.363Z, before native child start 01:23:42.364Z; child completion was 01:23:45.071Z. Source identity is `3be99a310e8d68daa6623ea717c28f41c27f166ac793a22761473f5028cbf4e1`; installed/archive native is `02dc6a4e2fffc013bab08fbb44fa68f501d8303615e9afe4c7d89ad4eedda0d0`, 4,340,292 bytes.
+
+Actual support/impulse calibration rows remain in `native-calibration-checks-03/native-03.stdout.txt`. Requested 0/4/6-degree setup poses settled to actual measured poses: all six support observations had four contacts and SAFE support queries, with native serials 186/192/198. The requested 6-degree pose settled inside the five-degree tracking threshold; this does not prove owner admission at six degrees. Wall impulses were 62664.693359375Ns sedan and 49234.720703125Ns compact at serial378. Explicit native helper partial setter evidence remains 2 attempted/1 completed and is not owner-R acceptance. Both class cleanup readbacks have bodies/colliders/subscriptions/recoveryPorts zero; all three acquired resources were attempted once with no causes.
+
+`native-after-optimization-checks-01/immutability.json` independently verifies original CPU BEFORE124 inputs, failed AFTER141 inputs, all20 failed raw worlds and all20 original raw worlds unchanged. It also rehashes original browser136 inputs/58 artifacts/native and whole ZIP `48d75c0ebe13323865541668613d22023f36124fa3080b716ad2e372bd9d42dc` (5,037,202 bytes). Original source archives are HISTORICAL: current source differs in10 BEFORE inputs and7 failed AFTER inputs, as expected after implementation. No old capture is relabeled CURRENT or PASS.
+
+CPU is released. A distinct AFTER2 runner/folder and unchanged-original-baseline comparison require a separate parent grant; these finite tests establish correctness of the source changes, not their CPU benefit or browser/memory acceptance.
