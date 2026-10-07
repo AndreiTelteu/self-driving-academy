@@ -1,0 +1,15 @@
+import {execFile,execFileSync} from 'node:child_process';
+import {promisify} from 'node:util';
+import {readFile,writeFile} from 'node:fs/promises';
+import {createHash} from 'node:crypto';
+import assert from 'node:assert/strict';
+const root='F:/Sites/self-driving-academy/.worktrees/vehicle-recovery-01',ns='Docs/Evidence/030-vehicle-recovery/after-scoped-checks-01';assert.equal(process.cwd().replaceAll('\\','/'),root);
+assert.equal(execFileSync('git',['branch','--show-current'],{encoding:'utf8'}).trim(),'loop-pbi/vehicle-recovery-01');
+const files=execFileSync('rg',['--files','tests/browser/vehicle-recovery-after'],{encoding:'utf8'}).trim().split(/\r?\n/).map(p=>p.replaceAll('\\','/')).concat(['src/input/recovery-input.ts','src/ui/recovery-hud.ts','src/app/vehicle-recovery.ts','tests/input/recovery-input.test.ts','tests/vehicles/recovery-support-calibration.test.ts','tests/vehicles/recovery-after-browser-observation.test.mjs','tests/vehicles/recovery-after-browser-boundaries.test.mjs','tests/vehicles/recovery-after-relative.test.mjs','tests/vehicles/recovery-after-functional.test.mjs','Docs/Evidence/030-vehicle-recovery/browser-after-source-handoff.md']).sort();
+const rows=[],aggregate=createHash('sha256');for(const path of files){const bytes=await readFile(path);aggregate.update(path).update(bytes);rows.push({path,bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex')});}
+await writeFile(ns+'/source-before-checks-07.json',JSON.stringify({recordedAt:new Date().toISOString(),sourceOnly:true,files:rows,fingerprint:aggregate.digest('hex')},null,2),{flag:'wx'});
+const bin='F:/Sites/self-driving-academy/node_modules/';
+const commands=[['format-write',[bin+'prettier/bin/prettier.cjs','--write',...files]],['format-check',[bin+'prettier/bin/prettier.cjs','--check',...files]],['type-source',[bin+'typescript/bin/tsc','--noEmit']],['type-tests',[bin+'typescript/bin/tsc','-p','tsconfig.tests.json','--noEmit']],['lint',[bin+'eslint/bin/eslint.js',...files.filter(p=>p.endsWith('.ts')),'--max-warnings','0']],['architecture',['scripts/verify-architecture.mjs']],...files.filter(p=>p.endsWith('.mjs')).map((p,i)=>['syntax-'+String(i).padStart(2,'0'),['--check',p]]),['pure',['--import','./scripts/register-typescript.mjs','--test','tests/vehicles/recovery-after-functional.test.mjs']]];
+for(const[label,args]of commands){const startedAt=new Date().toISOString();let out='',err='',exit=0;try{const result=await promisify(execFile)(process.execPath,args,{cwd:root,maxBuffer:8*1024*1024});out=result.stdout;err=result.stderr;}catch(error){out=error.stdout??'';err=error.stderr??String(error);exit=Number.isInteger(error.code)?error.code:1;}await writeFile(ns+'/'+label+'-07.stdout.txt',out,{flag:'wx'});await writeFile(ns+'/'+label+'-07.stderr.txt',err,{flag:'wx'});await writeFile(ns+'/'+label+'-07.json',JSON.stringify({command:process.execPath,args,workdir:root,startedAt,finishedAt:new Date().toISOString(),exit},null,2),{flag:'wx'});console.log(label+' EXIT '+exit);if(exit){process.exitCode=exit;break;}}
+
+

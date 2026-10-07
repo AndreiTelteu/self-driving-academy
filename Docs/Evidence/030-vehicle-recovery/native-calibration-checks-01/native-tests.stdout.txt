@@ -1,0 +1,117 @@
+(node:94596) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✖ 030 sedan actual wall impulse -> explicit R ->005 close ->029 retained prefix ->007 once (149.6504ms)
+✖ 030 sedan actual full wheel support and named dynamic/other-car occupancy cannot be bypassed (15.8866ms)
+✖ 030 compact actual wall impulse -> explicit R ->005 close ->029 retained prefix ->007 once (11.7844ms)
+✖ 030 compact actual full wheel support and named dynamic/other-car occupancy cannot be bypassed (7.334ms)
+(node:40576) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ 030 actual sedan full native placement resets angular/linear state without extra physics or other body mutation (150.4716ms)
+✔ 030 actual compact full native placement resets angular/linear state without extra physics or other body mutation (14.5041ms)
+✖ 030 moved anonymous native blocker is detected without world.step; partial setter fault never pretends rollback (2.0223ms)
+✔ 030 twenty110-token port lifetimes retain no additional native world/collider/subscription or stale port capability (17.658ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 3
+ℹ fail 5
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 990.6463
+
+✖ failing tests:
+
+test at tests\vehicles\recovery-functional-native.test.ts:68:3
+✖ 030 sedan actual wall impulse -> explicit R ->005 close ->029 retained prefix ->007 once (149.6504ms)
+  Error [AggregateError]: Actual native functional/setup/cleanup failure
+      at ownedNative (file:///F:/Sites/self-driving-academy/.worktrees/vehicle-recovery-01/tests/vehicles/recovery-functional-native.test.ts:61:11)
+      at async TestContext.<anonymous> (file:///F:/Sites/self-driving-academy/.worktrees/vehicle-recovery-01/tests/vehicles/recovery-functional-native.test.ts:69:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    [errors]: [
+      ContractValidationError: Expected plain data object
+          at requireContract (file:///F:/Sites/self-driving-academy/.worktrees/vehicle-recovery-01/src/sessions/validation.ts:10:25)
+          at record (file:///F:/Sites/self-driving-academy/.worktrees/vehicle-recovery-01/src/sessions/validation.ts:19:3)
+          at fields (file:///F:/Sites/self-driving-academy/.worktrees/vehicle-recovery-01/src/sessions/validation.ts:38:16)
+          at recoveryTransform (file:///F:/Sites/self-driving-academy/.worktrees/vehicle-recovery-01/src/vehicles/recovery-port.ts:63:13)
+          at Object.locate (file:///F:/Sites/self-driving-academy/.worktrees/vehicle-recovery-01/src/app/vehicle-recovery-road.ts:17:19)
+          at file:///F:/Sites/self-driving-academy/.worktrees/vehicle-recovery-01/src/vehicles/recovery-state.ts:330:35
+          at mutate (file:///F:/Sites/self-driving-academy/.worktrees/vehicle-recovery-01/src/vehicles/recovery-state.ts:149:14)
+          at Object.observe (file:///F:/Sites/self-driving-academy/.worktrees/vehicle-recovery-01/src/vehicles/recovery-state.ts:301:7)
+          at step (file:///F:/Sites/self-driving-academy/.worktrees/vehicle-recovery-01/tests/vehicles/recovery-functional-native.test.ts:174:18)
+          at file:///F:/Sites/self-driving-academy/.worktrees/vehicle-recovery-01/tests/vehicles/recovery-functional-native.test.ts:177:35
+    ]
+  }
+
+test at tests\vehicles\recovery-functional-native.test.ts:238:3
+✖ 030 sedan actual full wheel support and named dynamic/other-car occupancy cannot be bypassed (15.8866ms)
+  Error [AggregateError]: Actual native functional/setup/cleanup failure
+      at ownedNative (file:///F:/Sites/self-driving-academy/.worktrees/vehicle-recovery-01/tests/vehicles/recovery-functional-native.test.ts:61:11)
+      at async TestContext.<anonymous> (file:///F:/Sites/self-driving-academy/.worktrees/vehicle-recovery-01/tests/vehicles/recovery-functional-native.test.ts:239:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    [errors]: [
+      ContractValidationError: Expected plain data object
+          at requireContract (file:///F:/Sites/self-driving-academy/.worktrees/vehicle-recovery-01/src/sessions/validation.ts:10:25)
+          at record (file:///F:/Sites/self-driving-academy/.worktrees/vehicle-recovery-01/src/sessions/validation.ts:19:3)
+          at fields (file:///F:/Sites/self-driving-academy/.worktrees/vehicle-recovery-01/src/sessions/validation.ts:38:16)
+          at recoveryTransform (file:///F:/Sites/self-driving-academy/.worktrees/vehicle-recovery-01/src/vehicles/recovery-port.ts:63:13)
+          at Object.locate (file:///F:/Sites/self-driving-academy/.worktrees/vehicle-recovery-01/src/app/vehicle-recovery-road.ts:17:19)
+          at file:///F:/Sites/self-driving-academy/.worktrees/vehicle-recovery-01/tests/vehicles/recovery-functional-native.test.ts:255:76
+          at ownedNative (file:///F:/Sites/self-driving-academy/.worktrees/vehicle-recovery-01/tests/vehicles/recovery-functional-native.test.ts:35:5)
+          at async TestContext.<anonymous> (file:///F:/Sites/self-driving-academy/.worktrees/vehicle-recovery-01/tests/vehicles/recovery-functional-native.test.ts:239:5)
+          at async Test.run (node:internal/test_runner/test:1409:7)
+          at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+    ]
+  }
+
+test at tests\vehicles\recovery-functional-native.test.ts:68:3
+✖ 030 compact actual wall impulse -> explicit R ->005 close ->029 retained prefix ->007 once (11.7844ms)
+  Error [AggregateError]: Actual native functional/setup/cleanup failure
+      at ownedNative (file:///F:/Sites/self-driving-academy/.worktrees/vehicle-recovery-01/tests/vehicles/recovery-functional-native.test.ts:61:11)
+      at async TestContext.<anonymous> (file:///F:/Sites/self-driving-academy/.worktrees/vehicle-recovery-01/tests/vehicles/recovery-functional-native.test.ts:69:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    [errors]: [
+      ContractValidationError: Expected plain data object
+          at requireContract (file:///F:/Sites/self-driving-academy/.worktrees/vehicle-recovery-01/src/sessions/validation.ts:10:25)
+          at record (file:///F:/Sites/self-driving-academy/.worktrees/vehicle-recovery-01/src/sessions/validation.ts:19:3)
+          at fields (file:///F:/Sites/self-driving-academy/.worktrees/vehicle-recovery-01/src/sessions/validation.ts:38:16)
+          at recoveryTransform (file:///F:/Sites/self-driving-academy/.worktrees/vehicle-recovery-01/src/vehicles/recovery-port.ts:63:13)
+          at Object.locate (file:///F:/Sites/self-driving-academy/.worktrees/vehicle-recovery-01/src/app/vehicle-recovery-road.ts:17:19)
+          at file:///F:/Sites/self-driving-academy/.worktrees/vehicle-recovery-01/src/vehicles/recovery-state.ts:330:35
+          at mutate (file:///F:/Sites/self-driving-academy/.worktrees/vehicle-recovery-01/src/vehicles/recovery-state.ts:149:14)
+          at Object.observe (file:///F:/Sites/self-driving-academy/.worktrees/vehicle-recovery-01/src/vehicles/recovery-state.ts:301:7)
+          at step (file:///F:/Sites/self-driving-academy/.worktrees/vehicle-recovery-01/tests/vehicles/recovery-functional-native.test.ts:174:18)
+          at file:///F:/Sites/self-driving-academy/.worktrees/vehicle-recovery-01/tests/vehicles/recovery-functional-native.test.ts:177:35
+    ]
+  }
+
+test at tests\vehicles\recovery-functional-native.test.ts:238:3
+✖ 030 compact actual full wheel support and named dynamic/other-car occupancy cannot be bypassed (7.334ms)
+  Error [AggregateError]: Actual native functional/setup/cleanup failure
+      at ownedNative (file:///F:/Sites/self-driving-academy/.worktrees/vehicle-recovery-01/tests/vehicles/recovery-functional-native.test.ts:61:11)
+      at async TestContext.<anonymous> (file:///F:/Sites/self-driving-academy/.worktrees/vehicle-recovery-01/tests/vehicles/recovery-functional-native.test.ts:239:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    [errors]: [
+      ContractValidationError: Expected plain data object
+          at requireContract (file:///F:/Sites/self-driving-academy/.worktrees/vehicle-recovery-01/src/sessions/validation.ts:10:25)
+          at record (file:///F:/Sites/self-driving-academy/.worktrees/vehicle-recovery-01/src/sessions/validation.ts:19:3)
+          at fields (file:///F:/Sites/self-driving-academy/.worktrees/vehicle-recovery-01/src/sessions/validation.ts:38:16)
+          at recoveryTransform (file:///F:/Sites/self-driving-academy/.worktrees/vehicle-recovery-01/src/vehicles/recovery-port.ts:63:13)
+          at Object.locate (file:///F:/Sites/self-driving-academy/.worktrees/vehicle-recovery-01/src/app/vehicle-recovery-road.ts:17:19)
+          at file:///F:/Sites/self-driving-academy/.worktrees/vehicle-recovery-01/tests/vehicles/recovery-functional-native.test.ts:255:76
+          at ownedNative (file:///F:/Sites/self-driving-academy/.worktrees/vehicle-recovery-01/tests/vehicles/recovery-functional-native.test.ts:35:5)
+          at async TestContext.<anonymous> (file:///F:/Sites/self-driving-academy/.worktrees/vehicle-recovery-01/tests/vehicles/recovery-functional-native.test.ts:239:5)
+          at async Test.run (node:internal/test_runner/test:1409:7)
+          at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+    ]
+  }
+
+test at tests\vehicles\recovery-native.test.ts:107:1
+✖ 030 moved anonymous native blocker is detected without world.step; partial setter fault never pretends rollback (2.0223ms)
+  TypeError: Cannot read properties of undefined (reading 'setTranslation')
+      at TestContext.<anonymous> (file:///F:/Sites/self-driving-academy/.worktrees/vehicle-recovery-01/tests/vehicles/recovery-native.test.ts:150:13)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)

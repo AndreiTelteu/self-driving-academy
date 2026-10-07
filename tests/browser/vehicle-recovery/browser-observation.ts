@@ -1,0 +1,229 @@
+import { validateHistogram } from '../vehicle-damage/hardware-collector';
+import type { HistogramSnapshot } from '../vehicle-damage/hardware-collector';
+const check = (v: unknown, reason: string) => {
+  if (!v) throw Error(reason);
+};
+export function ownPresentationLatch(
+  win: Pick<Window, 'addEventListener' | 'removeEventListener'>,
+  doc: Pick<Document, 'addEventListener' | 'removeEventListener' | 'visibilityState' | 'hasFocus'>,
+  own: (label: string, release: () => unknown) => unknown,
+) {
+  let lost = doc.visibilityState !== 'visible' || !doc.hasFocus();
+  const blur = () => {
+      lost = true;
+    },
+    visibility = () => {
+      if (doc.visibilityState !== 'visible') lost = true;
+    };
+  win.addEventListener('blur', blur);
+  own('rootblur', () => win.removeEventListener('blur', blur));
+  doc.addEventListener('visibilitychange', visibility);
+  own('rootvisibility', () => doc.removeEventListener('visibilitychange', visibility));
+  return {
+    get lost() {
+      return lost;
+    },
+  };
+}
+export interface RafProof {
+  previousMs: number;
+  firstMs: number;
+  lastMs: number;
+  firstDeltaMs: number;
+  lastDeltaMs: number;
+  sumMs: number;
+  frames: number;
+  nativeBefore: number;
+  nativeAfter: number;
+}
+export function verifyRafProof(p: RafProof, h: HistogramSnapshot, wallMs: number, ticks: number) {
+  check(Object.values(p).every(Number.isFinite), 'FiniteRAFproof');
+  check(
+    Number.isSafeInteger(p.frames) && p.frames > 0 && p.frames === h.observations,
+    'EveryRAFobservation',
+  );
+  check(
+    Number.isSafeInteger(p.nativeBefore) &&
+      p.nativeBefore >= 0 &&
+      Number.isSafeInteger(p.nativeAfter) &&
+      p.nativeAfter - p.nativeBefore === ticks,
+    'Realnativecounterboundary',
+  );
+  check(p.firstMs > p.previousMs && p.lastMs >= p.firstMs, 'ObservedRAFendpoints');
+  check(
+    Math.abs(p.firstDeltaMs - (p.firstMs - p.previousMs)) <= 1e-6 &&
+      p.firstDeltaMs > 0 &&
+      p.firstDeltaMs <= 250 &&
+      p.lastDeltaMs > 0 &&
+      p.lastDeltaMs <= 250,
+    'Actualendpointdeltas',
+  );
+  check(
+    Math.abs(p.sumMs - (p.lastMs - p.previousMs)) <= 1e-6 && Math.abs(p.sumMs - wallMs) <= 1e-6,
+    'AllrawRAFdelta sum',
+  );
+  validateHistogram(h);
+  let lower = 0,
+    upper = 0;
+  for (const [index, count] of h.entries) {
+    lower += index * h.widthMs * count;
+    upper += (index + 1) * h.widthMs * count;
+    check(index * h.widthMs <= 250, 'Actualframegapcap');
+  }
+  if (h.overflowCount) {
+    check(h.overflowMaxMs! <= 250, 'Actualoverflowframegapcap');
+    lower += h.overflowCount * h.overflowMinMs!;
+    upper += h.overflowCount * h.overflowMaxMs!;
+  }
+  check(
+    p.sumMs >= lower - 1e-6 && p.sumMs <= upper + 1e-6,
+    'Histogramaggregatecoversactualfullwall',
+  );
+}
+export interface HeapPoint {
+  phase: string;
+  timeMs: number;
+  usedBytes: number | null;
+  totalBytes: number | null;
+  limitBytes: number | null;
+}
+export function verifyHeap(
+  points: HeapPoint[],
+  rows: number[],
+  observer: boolean,
+  measuredWallMs: number,
+  sampleCount: number,
+  peak: number | null,
+) {
+  check(
+    points.length === 3 &&
+      JSON.stringify(points.map((p) => p.phase)) ===
+        JSON.stringify(['BEFORE_WARMUP', 'BEFORE_MEASURE', 'AFTER_MEASURE']),
+    'Exactheappointphases',
+  );
+  check(
+    points.every((p) => Number.isFinite(p.timeMs)) &&
+      points[0].timeMs < points[1].timeMs &&
+      points[1].timeMs < points[2].timeMs,
+    'Realheappointchronology',
+  );
+  check(
+    Math.abs(points[2].timeMs - points[1].timeMs - measuredWallMs) <= 250,
+    'Heapclockboundtoactualmeasurement',
+  );
+  const available = (p: HeapPoint) =>
+    [p.usedBytes, p.totalBytes, p.limitBytes].every(
+      (v) => v !== null && Number.isFinite(v) && v! > 0,
+    );
+  for (const p of points) {
+    const present = [p.usedBytes, p.totalBytes, p.limitBytes].filter((v) => v !== null).length;
+    check(present === 0 || present === 3, 'PartialheapAPIdata');
+    if (present)
+      check(
+        available(p) && p.usedBytes! <= p.totalBytes! && p.totalBytes! <= p.limitBytes!,
+        'Actualheapsizeordering',
+      );
+  }
+  check(
+    Array.isArray(rows) &&
+      Number.isSafeInteger(sampleCount) &&
+      sampleCount >= 0 &&
+      sampleCount <= 256 &&
+      rows.length === sampleCount * 4 &&
+      rows.every(Number.isFinite),
+    'Boundedrawheapsamples',
+  );
+  if (!observer) {
+    check(sampleCount === 0 && peak === null, 'OFFhasnoONpeak');
+    return available(points[1]) && available(points[2]) ? 'RAW_PROXY_BASELINE' : 'UNVALIDATED';
+  }
+  const both = available(points[1]) && available(points[2]);
+  if (both) check(sampleCount > 0, 'Availableheapcannotomitobservations');
+  if (!sampleCount) {
+    check(peak === null, 'Nosamplescannotclaimpeak');
+    return 'UNVALIDATED';
+  }
+  const used: number[] = [];
+  let last = -Infinity,
+    cadence = true;
+  for (let i = 0; i < sampleCount; i++) {
+    const [time, u, total, limit] = rows.slice(i * 4, i * 4 + 4);
+    check(
+      time >= points[1].timeMs && time <= points[2].timeMs && time > last,
+      'Distinctactualheaptimes',
+    );
+    if (
+      time - points[1].timeMs < i * 1000 - 250 ||
+      time - points[1].timeMs > (i + 1) * 1000 + 250 ||
+      (i && (time - last < 500 || time - last > 1500))
+    )
+      cadence = false;
+    check(u > 0 && u <= total && total <= limit, 'Actualsampleheapordering');
+    used.push(u);
+    last = time;
+  }
+  check(peak === Math.max(...used), 'Observedpeakrecomputed');
+  const complete =
+    sampleCount >= Math.floor(measuredWallMs / 1000) &&
+    sampleCount <= Math.ceil(measuredWallMs / 1000) + 1;
+  return both && complete && cadence ? 'RAW_PROXY_BASELINE' : 'UNVALIDATED';
+}
+export function describeCause(error: unknown, depth = 0): unknown {
+  if (depth >= 3) return { message: String(error).slice(0, 1024), truncated: true };
+  return {
+    message: String(error).slice(0, 4096),
+    causes:
+      error instanceof AggregateError
+        ? Array.from(error.errors)
+            .slice(0, 16)
+            .map((e) => describeCause(e, depth + 1))
+        : [],
+    diagnostics:
+      error instanceof Error
+        ? ((error as Error & { diagnostics?: unknown }).diagnostics ?? null)
+        : null,
+  };
+}
+export function fixedTickFault(
+  fault: { error: unknown; stage: string; attemptedTick: number },
+  state: unknown,
+) {
+  return Object.assign(
+    new AggregateError([fault.error], 'Fixedtick ' + fault.stage + ' tick' + fault.attemptedTick),
+    { diagnostics: state },
+  );
+}
+export async function exportRunParts(
+  metadata: unknown,
+  parts: { id: string; part: unknown }[],
+  post: (path: string, value: unknown) => Promise<unknown>,
+) {
+  check(
+    parts.length <= 16 && new Set(parts.map((p) => p.id)).size === parts.length,
+    'Boundeduniqueplannedparts',
+  );
+  const attempted: string[] = [],
+    acknowledged: string[] = [],
+    causes: unknown[] = [];
+  try {
+    await post('run-submitted', metadata);
+  } catch (error) {
+    causes.push(error);
+  }
+  for (const { id, part } of parts) {
+    attempted.push(id);
+    try {
+      const ack = (await post('part', { partId: id, part })) as { partId?: string };
+      check(ack.partId === id, 'IndividualpartACK');
+      acknowledged.push(id);
+    } catch (error) {
+      causes.push(error);
+    }
+  }
+  if (causes.length)
+    throw Object.assign(
+      new AggregateError(causes, 'Rawexportfailed; remainingdistinctpartsattempted withoutretry'),
+      { diagnostics: { attempted, acknowledged, planned: parts.map((p) => p.id) } },
+    );
+  return { attempted, acknowledged };
+}

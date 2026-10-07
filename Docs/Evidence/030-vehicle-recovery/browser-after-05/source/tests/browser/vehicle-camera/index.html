@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>PBI017 vehicle cameras</title>
+  </head>
+  <body>
+    <h1>Vehicle cameras · driver seat and chase</h1>
+    <p>
+      C toggles camera. Capture mouse explicitly; Escape releases it. Camera selection never changes
+      vehicle authority.
+    </p>
+    <div>
+      <button id="capture">Capture mouse look</button><button id="recenter">Recenter look</button>
+      <button id="select">Select other car</button><button id="turn">Turn 90°</button
+      ><button id="brake">Brake</button><button id="impact">Impact near wall</button
+      ><button id="reset">Reset scenario</button>
+    </div>
+    <label>Field of view <input id="fov" type="range" min="60" max="100" value="80" /></label>
+    <label>Camera motion <input id="motion" type="range" min="0" max="100" value="50" /></label>
+    <label>Chase distance <input id="distance" type="range" min="2" max="15" value="6" /></label>
+    <p id="status">Ready</p>
+    <div id="host"></div>
+    <pre id="result">Ready</pre>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

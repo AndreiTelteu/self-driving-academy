@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="ro">
+  <head>
+    <meta charset="UTF-8" />
+    <title>030 — probă funcțională ghidată</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+      }
+      #canvas {
+        display: block;
+        width: 1920px;
+        height: 1080px;
+      }
+      #controls {
+        position: fixed;
+        top: 8px;
+        left: 8px;
+        z-index: 10;
+        background: #fff;
+        padding: 8px;
+        font: 14px sans-serif;
+        max-width: 1000px;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas"></canvas>
+    <div id="controls">
+      <select id="backend">
+        <option>AUTO</option>
+        <option>WEBGL2</option></select
+      ><button id="run">Run full AFTER 10 runs (~25min/backend)</button
+      ><button id="functional">START funcțional — taste fizice, după citirea ghidului</button
+      ><span id="status"
+        >Proba nu a început. Citește ghidul înainte de Start; prima acțiune va fi click în canvas,
+        apoi apasă și eliberează R.</span
+      >
+      <details id="human-guide" open style="max-height: 340px; overflow: auto">
+        <summary>Ghid complet — citește înainte să pornești</summary>
+        <p>
+          Alege backendul cerut. Păstrează această fereastră în prim-plan și urmărește instrucțiunea
+          curentă din pagină, fără să aștepți mesaje în chat. Fiecare pas care cere input are
+          aceeași limită de 90s. Nu apăsa taste în timpul etapelor automate. Secvența se repetă
+          pentru sedan și compact.
+        </p>
+        <ol>
+          <li>
+            Fără punct sigur: click în canvas; apasă și eliberează R o singură dată. Refuzul este
+            așteptat.
+          </li>
+          <li>
+            După calibrarea automată: click în canvas; ține W împreună cu A sau D până apare STOP.
+            Eliberează imediat toate tastele la STOP, nu după un număr estimat de secunde.
+          </li>
+          <li>
+            După impactul și răsturnarea automate: click în canvas; apasă și eliberează R o dată. Nu
+            continua să conduci.
+          </li>
+          <li>
+            Loc blocat: click în canvas; apasă și eliberează R o dată. Recuperarea trebuie refuzată.
+          </li>
+          <li>
+            Repetare: click în canvas; ține R până pagina spune „Repetarea a fost observată”. Atunci
+            eliberează R.
+          </li>
+          <li>
+            Remapare: când se cere vechiul R, apasă și eliberează R o dată. La instrucțiunea
+            următoare apasă și eliberează T o dată. Nu apăsa simultan R și T.
+          </li>
+          <li>
+            HUD activ: click o singură dată pe butonul real „Deblochează mașina” din HUD. Nu apăsa R
+            în acest pas.
+          </li>
+          <li>
+            HUD fără loc PLAYER: în AUTO, click o dată pe butonul HUD încă vizibil, apoi click în
+            canvas. Așteaptă instrucțiunea următoare.
+          </li>
+          <li>AUTO fără loc PLAYER: apasă și eliberează R o dată. Mașina nu trebuie mutată.</li>
+          <li>
+            Eroare nativă controlată: click în canvas; apasă și eliberează R o dată. Nu reîncerca;
+            urmează verificări automate și curățare.
+          </li>
+          <li>
+            Pentru compact, reia aceeași secvență numai când pagina o cere. La SALVAT sau EȘUAT
+            oprește toate tastele. Nu apăsa din nou Start pentru același backend.
+          </li>
+        </ol>
+        <p>
+          Probele sunt cu taste fizice și clickuri reale. Nu schimba tabul, nu minimiza fereastra și
+          nu completa formulare în timpul probei. Backendul al doilea se pornește separat, numai
+          după verificarea primului.
+        </p>
+      </details>
+      <label
+        ><input id="guide-read" type="checkbox" /> Am citit; sunt pregătit să urmăresc pagina și să
+        apăs tastele fizice imediat după Start.</label
+      >
+    </div>
+    <script type="module" src="./browser-entry.ts"></script>
+  </body>
+</html>

@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Vehicle picking018</title>
+    <style>
+      body {
+        margin: 20px;
+        background: #101c29;
+        color: #eef4fa;
+        font: 16px system-ui;
+      }
+      button {
+        padding: 10px;
+        margin: 4px;
+        background: #ddeaf5;
+        color: #101c29;
+        border: 0;
+        border-radius: 5px;
+      }
+      #host {
+        position: relative;
+        width: 800px;
+        height: 450px;
+      }
+      canvas {
+        width: 800px;
+        height: 450px;
+        display: block;
+      }
+      #overlay {
+        position: absolute;
+        inset: 0;
+        background: #17263bdd;
+        display: none;
+        align-items: center;
+        justify-content: center;
+      }
+      #result {
+        white-space: pre-wrap;
+        max-height: 180px;
+        overflow: auto;
+      }
+      #ui {
+        position: absolute;
+        right: 12px;
+        top: 12px;
+      }
+      #selected {
+        min-height: 30px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Vehicle selection — mesh, instance and thin batch</h1>
+    <p>
+      Left to right: taxi mesh, civil regular instance, two thin vehicles. Selection leaves AUTO
+      control unchanged.
+    </p>
+    <button id="gl">WebGL2 probe</button><button id="gpu">WebGPU probe</button
+    ><button id="remap">Swap thin IDs</button><button id="modal">Open modal</button
+    ><button id="decor">Toggle taxi occluder</button>
+    <div id="selected">No selection · authority AUTO</div>
+    <div id="host">
+      <div id="overlay"><button id="close">Close modal</button></div>
+      <button id="ui">UI over canvas</button>
+    </div>
+    <pre id="result">Ready</pre>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

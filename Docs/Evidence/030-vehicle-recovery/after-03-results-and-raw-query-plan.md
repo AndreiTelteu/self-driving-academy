@@ -1,0 +1,23 @@
+# AFTER3 actual failure; inspection-scoped raw query proposal
+
+The single AFTER3 capture remains FAILED. Launcher format/write/check, syntax and loader no-world checks EXIT0; capture EXIT1 at2026-10-07T02:03:11.992Z. Start02:01:37.094Z, archive02:01:46.138Z, first-world02:01:46.159Z, failure02:03:11.916Z. Source141 inputs `563fee8d39bfe67b674b77a6abd6a64b37248f05880c896b34fce67ff0f20ca1`; native4,340,292B `02dc6a4e2fffc013bab08fbb44fa68f501d8303615e9afe4c7d89ad4eedda0d0`.
+
+All20 original780/600-tick raw worlds remain. The additive `failed-after-03-independent.json` verifies current/archive source bytes, original checkpoints/physical/control/native-input/mechanics parity and five-owner once/zero cleanup. Normal absolute5.5ms passed0 failures; original joint relative regression failed5/5 for each population. Acceptance readers were not run as PASS because the wrapper stopped at capture failure.
+
+Normal70 p95s: `[5.0752,4.8280,4.9679,4.9380,4.8797]`ms; original deltas `[1.9642,1.7432,1.9818,2.0105,1.9117]`ms. Stress110 p95s: `[6.6818,6.7567,6.9330,6.7178,6.6803]`ms; deltas `[2.9378,2.8936,3.0514,3.0811,3.3034]`ms. All exceed both10% and1ms. This capture does not establish that the preceding allocation changes reduced CPU. Exact ignored retained logs are in `native-after-checks-04/ignored-owned-files.txt`. No retry/AFTER4/build/browser/Git action occurred; CPU is released.
+
+## Read-only installed primary API inspection
+
+Installed Rapier0.21 declarations publicly expose `ColliderSet.raw` (`dist/geometry/collider_set.d.ts:11`), `RawColliderSet.coIntersectsShape(handle,shape,pos,rot)` (`dist/rapier_wasm3d.d.ts:129`), `Shape.intoRaw()` (`dist/geometry/shape.d.ts:9`), `VectorOps.intoRaw()` and `RotationOps.intoRaw()` (`dist/math.d.ts:20,46`). Math exports are re-exported by `dist/exports.d.ts`. Returned raw objects declare explicit `free()`.
+
+The actual `rapier.mjs.map` primary `gen3d/geometry/collider.ts` implementation allocates raw position, raw rotation and raw shape for every public `Collider.intersectsShape` call, invokes `colliderSet.raw.coIntersectsShape(this.handle,...)`, then frees all three. Thus every eligible collider currently converts the same candidate shape/pose again. This is source evidence about allocation count, not measured cost attribution.
+
+## Proposed next source boundary; NOT IMPLEMENTED/EXECUTED
+
+Allocate that same position/rotation/shape once per valid inspection, using the same documented conversion functions and allocation order. Keep all current per-collider live translation/rotation reads, finite guards, sensor/ground/own-body decisions and full counting. Replace only each wrapper conversion with the same `world.colliders.raw.coIntersectsShape(other.handle,rawShape,rawPos,rawRot)` call. No collider shape export/cache, broadphase candidate filter, query omission, early exit, changed propagation or additional physics step. The three raw values describe only this inspection's candidate and cannot escape it or survive its completion.
+
+Immediately own each acquired raw resource before attempting the next conversion. A finally block must independently attempt every acquired `free()` once on success, allocation failure, full traversal/deferred native failure and post-query token/serial failure. Preserve the original failure with every cleanup failure in a bounded aggregate; never skip a later disposer or pretend success after failed cleanup. Free only candidate buffers, never the world-owned ColliderSet/raw/native body. Keep the existing native busy guard around the whole operation and defer callback exceptions until borrowed traversal has returned.
+
+Meaningful proposed validation: actual query equivalence against the existing public wrapper for moved/resized/oriented/anonymous/sensor current colliders at unchanged serial; three candidate allocations per complete inspection with query count/handles equal to the previous full traversal; injected allocation failures at each conversion and independent throwing disposers with primary preservation; native intersection throw/deferred traversal and post-fence failure with once-only cleanup; existing21 invalid getter cases and both class-placement/partial/lifetime/support suites. Test instrumentation must restore all methods and explicitly label injected failures. No raw pointer arithmetic, undocumented WASM exports or native-world result cache.
+
+This proposal requires root source approval before implementation, then finite correctness checks before any separately authorized distinct capture. Original baseline and all three failed AFTER archives remain historical immutable evidence. Performance benefit and hardware/memory/functional acceptance remain unproven.

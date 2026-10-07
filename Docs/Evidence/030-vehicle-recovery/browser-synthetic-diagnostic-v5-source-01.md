@@ -1,0 +1,5 @@
+# Synthetic diagnostic V5: acknowledged candidate
+V4 remains FAILED and immutable. Its native post-step391 quaternion contains tiny nonzero x/z; strict recoveryTransform correctly rejects it as an authored placement.
+V5 retains raw restored391 for moving blocker/native evidence. Only unsupported/fault placement fixtures use recovered.after.subject.transform, validated through unchanged recoveryTransform. Setup provenance labels exact canonical transform, accepted current tick and native serial. No native normalization, gate/threshold/product changes. Existing actual two-participant damage registration remains.
+New pure test checks raw rejection, canonical road acceptance, and unchanged original objects. Scoped checks pending at this source snapshot; browser/native execution and physical acceptance are not implied.
+Distinct namespace browser-synthetic-diagnostic-05/build-synthetic-diagnostic-05; port5229. Parent owns future build/server/UI grants.
