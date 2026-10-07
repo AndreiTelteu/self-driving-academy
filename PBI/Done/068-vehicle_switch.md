@@ -118,4 +118,3 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '068' d
 - 2026-10-07: Implementare0bf31b3 integrată serial în main; toate verificările proiectului577teste și cele4readere originale istorice PASS. Auditul2740blobs de dovezi este exact, inclusiv arhivele eșuate; corecția type-only păstrează codul runtime. Criteriile sunt închise în scope timpuriu, cu limitele documentate și fără relaxarea gates. Mutare fizică Done și verificare RequireDone068 urmează în aceeași tranzacție de livrare.
 
 - 2026-10-07: Fișierul mutat fizic în Done, RequireDone068 PASS; ValidatePlan235/1254links PASS după includerea explicită a179loguri ignorate global. Toate probele și erorile istorice sunt păstrate, iar boardul are48Done/3InProgress/184ToDo. Publicarea urmează commitului de integrare.
-
