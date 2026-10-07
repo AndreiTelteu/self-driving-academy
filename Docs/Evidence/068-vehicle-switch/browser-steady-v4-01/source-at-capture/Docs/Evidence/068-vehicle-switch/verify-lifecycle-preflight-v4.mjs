@@ -1,0 +1,89 @@
+import assert from 'node:assert/strict';
+import { readFile, readdir } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
+import { validateLifecycle } from './lifecycle-checks-v4.mjs';
+import './verify-browser-steady-v4-build.mjs';
+const folder = 'Docs/Evidence/068-vehicle-switch/browser-steady-v4-01',
+  json = async (p) => JSON.parse(await readFile(p)),
+  sha = (b) => createHash('sha256').update(b).digest('hex');
+const m = await json(folder + '/build-manifest.json');
+const rootFiles = await readdir(folder);
+assert.ok(!rootFiles.some((n) => /preflight.*(failure|rejected|incomplete)/i.test(n)));
+assert.deepEqual(
+  rootFiles.filter((n) => n.includes('-preflight-')).sort(),
+  ['webgl2', 'webgpu'].map((b) => m.sourceHash + '-preflight-' + b).sort(),
+);
+for (const renderer of ['WEBGPU', 'WEBGL2']) {
+  const captureId = m.sourceHash + '-preflight-' + renderer.toLowerCase(),
+    root = folder + '/' + captureId,
+    start = await json(root + '/started.json'),
+    terminal = await json(root + '/terminal.json');
+  assert.equal(start.status, 'STARTED');
+  assert.equal(start.scope, 'LIFECYCLE_PREFLIGHT_ONLY');
+  assert.equal(start.captureId, captureId);
+  assert.equal(start.sourceHash, m.sourceHash);
+  assert.equal(start.artifactHash, m.artifactHash);
+  assert.equal(start.renderer, renderer);
+  assert.equal(start.requestedBackend, renderer === 'WEBGPU' ? 'AUTO' : 'WEBGL2');
+  assert.equal(terminal.status, 'PASS');
+  assert.equal(terminal.incomplete, false);
+  assert.equal(terminal.captureId, captureId);
+  assert.equal(terminal.sourceHash, m.sourceHash);
+  assert.equal(terminal.artifactHash, m.artifactHash);
+  assert.equal(terminal.filename, 'report.json');
+  assert.equal(terminal.parts.length, 20);
+  assert.deepEqual(
+    terminal.parts.map((p) => p.ordinal),
+    Array.from({ length: 20 }, (_, i) => i),
+  );
+  const expected = ['started.json', 'terminal.json', 'report.json'];
+  let bytesTotal = 0;
+  for (const [ordinal, p] of terminal.parts.entries()) {
+    assert.equal(p.filename, 'cycle-' + ordinal + '-part-0.json');
+    expected.push(p.filename);
+    const b = await readFile(root + '/' + p.filename);
+    assert.ok(b.length <= 131072);
+    assert.equal(b.length, p.bytes);
+    assert.equal(sha(b), p.sha256);
+    bytesTotal += b.length;
+    const value = JSON.parse(b);
+    assert.equal(value.captureId, captureId);
+    assert.equal(value.requestedBackend, start.requestedBackend);
+    assert.equal(value.ordinal, ordinal);
+    validateLifecycle(value.record, ordinal, renderer);
+  }
+  const raw = await readFile(root + '/report.json');
+  assert.ok(raw.length <= 131072);
+  assert.equal(raw.length, terminal.bytes);
+  assert.equal(sha(raw), terminal.sha256);
+  const report = JSON.parse(raw);
+  assert.equal(report.status, 'PASS');
+  assert.equal(report.renderer, renderer);
+  assert.equal(report.sourceHash, m.sourceHash);
+  assert.equal(report.artifactHash, m.artifactHash);
+  assert.equal(report.scope, 'PREFLIGHT_ONLY_NOT_FULL_ACCEPTANCE');
+  assert.equal(report.captureId, captureId);
+  assert.equal(report.requestedBackend, start.requestedBackend);
+  assert.equal(report.cycles, 20);
+  assert.equal(report.worldsCreated, 20);
+  assert.equal(report.listeners, 0);
+  assert.equal(report.foreground, true);
+  assert.equal(report.invalidated, null);
+  assert.deepEqual(report.causes, []);
+  assert.equal(report.startedAt, start.startedAt);
+  assert.ok(
+    Date.parse(start.createdAt) <= Date.parse(report.createdAt) &&
+      Date.parse(report.createdAt) <= Date.parse(terminal.createdAt),
+  );
+  assert.deepEqual((await readdir(root)).sort(), expected.sort());
+  assert.ok(bytesTotal <= 20 * 131072);
+}
+console.log(
+  JSON.stringify({
+    status: 'BOTH_LIFECYCLE_PREFLIGHT_PASS_ONLY',
+    sourceHash: m.sourceHash,
+    artifactHash: m.artifactHash,
+    fullAcceptance: false,
+    cyclesPerBackend: 20,
+  }),
+);

@@ -1,0 +1,20 @@
+COMMAND ["cmd.exe", "/d", "/c", "npm run typecheck"]
+npm warn Unknown env config "msvs-version". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> self-driving-academy@0.1.0 typecheck
+> tsc --noEmit && tsc -p tsconfig.tests.json --noEmit
+
+tests/browser/vehicle-selection-actual/main.ts(314,5): error TS2322: Type '(identity: BodyIdentity) => { context: { schemaVersion: 1; units: "SI"; sessionId: string; worldEpoch: number; }; identity: BodyIdentity; segmentId: string; ... 4 more ...; closeReason: "CONTROL_PREFERENCES_CHANGE" | ... 11 more ... | null; } | null' is not assignable to type '(identity: BodyIdentity) => SelectionSegmentBoundary | null'.
+  Type '{ context: { schemaVersion: 1; units: "SI"; sessionId: string; worldEpoch: number; }; identity: BodyIdentity; segmentId: string; mode: "LEARNING" | "MANUAL"; startTick: number; endTick: number | null; completeness: "CLOSED" | "OPEN"; closeReason: "CONTROL_PREFERENCES_CHANGE" | ... 11 more ... | null; } | null' is not assignable to type 'SelectionSegmentBoundary | null'.
+    Type '{ context: { schemaVersion: 1; units: 'SI'; sessionId: string; worldEpoch: number; }; identity: BodyIdentity; segmentId: string; mode: "LEARNING" | "MANUAL"; startTick: number; endTick: number | null; completeness: "CLOSED" | "OPEN"; closeReason: "CONTROL_PREFERENCES_CHANGE" | ... 11 more ... | null; }' is not assignable to type 'SelectionSegmentBoundary'.
+      Types of property 'closeReason' are incompatible.
+        Type '"CONTROL_PREFERENCES_CHANGE" | "DATA_LOSS" | "MODE_CHANGE" | "PROFILE_CHANGE" | "RECOVERY" | "RETURN_TO_AUTO" | "RIDE_COMPLETED" | "ROLLOVER" | "SESSION_CHANGE" | "SHUTDOWN" | "VEHICLE_SWITCH" | "WORLD_RESET" | null' is not assignable to type '"VEHICLE_SWITCH" | null'.
+          Type '"CONTROL_PREFERENCES_CHANGE"' is not assignable to type '"VEHICLE_SWITCH"'.
+tests/browser/vehicle-selection-steady/host.ts(267,7): error TS2322: Type '(identity: BodyIdentity) => { context: { schemaVersion: 1; units: "SI"; sessionId: string; worldEpoch: number; }; identity: BodyIdentity; segmentId: string; ... 4 more ...; closeReason: "CONTROL_PREFERENCES_CHANGE" | ... 11 more ... | null; } | null' is not assignable to type '(identity: BodyIdentity) => SelectionSegmentBoundary | null'.
+  Type '{ context: { schemaVersion: 1; units: "SI"; sessionId: string; worldEpoch: number; }; identity: BodyIdentity; segmentId: string; mode: "LEARNING" | "MANUAL"; startTick: number; endTick: number | null; completeness: "CLOSED" | "OPEN"; closeReason: "CONTROL_PREFERENCES_CHANGE" | ... 11 more ... | null; } | null' is not assignable to type 'SelectionSegmentBoundary | null'.
+    Type '{ context: { schemaVersion: 1; units: 'SI'; sessionId: string; worldEpoch: number; }; identity: BodyIdentity; segmentId: string; mode: "LEARNING" | "MANUAL"; startTick: number; endTick: number | null; completeness: "CLOSED" | "OPEN"; closeReason: "CONTROL_PREFERENCES_CHANGE" | ... 11 more ... | null; }' is not assignable to type 'SelectionSegmentBoundary'.
+      Types of property 'closeReason' are incompatible.
+        Type '"CONTROL_PREFERENCES_CHANGE" | "DATA_LOSS" | "MODE_CHANGE" | "PROFILE_CHANGE" | "RECOVERY" | "RETURN_TO_AUTO" | "RIDE_COMPLETED" | "ROLLOVER" | "SESSION_CHANGE" | "SHUTDOWN" | "VEHICLE_SWITCH" | "WORLD_RESET" | null' is not assignable to type '"VEHICLE_SWITCH" | null'.
+          Type '"CONTROL_PREFERENCES_CHANGE"' is not assignable to type '"VEHICLE_SWITCH"'.
+
+EXIT 1

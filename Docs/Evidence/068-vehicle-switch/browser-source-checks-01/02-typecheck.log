@@ -1,0 +1,27 @@
+COMMAND ["cmd.exe", "/d", "/c", "npm run typecheck"]
+npm warn Unknown env config "msvs-version". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> self-driving-academy@0.1.0 typecheck
+> tsc --noEmit && tsc -p tsconfig.tests.json --noEmit
+
+tests/browser/vehicle-selection-actual/main.ts(310,5): error TS2322: Type '(identity: BodyIdentity) => { context: { schemaVersion: 1; units: "SI"; sessionId: string; worldEpoch: number; }; identity: BodyIdentity; segmentId: string; ... 4 more ...; closeReason: "CONTROL_PREFERENCES_CHANGE" | ... 11 more ... | null; } | null' is not assignable to type '(identity: BodyIdentity) => SelectionSegmentBoundary | null'.
+  Type '{ context: { schemaVersion: 1; units: "SI"; sessionId: string; worldEpoch: number; }; identity: BodyIdentity; segmentId: string; mode: "LEARNING" | "MANUAL"; startTick: number; endTick: number | null; completeness: "CLOSED" | ... 1 more ... | "OPEN"; closeReason: "CONTROL_PREFERENCES_CHANGE" | ... 11 more ... | null...' is not assignable to type 'SelectionSegmentBoundary | null'.
+    Type '{ context: { schemaVersion: 1; units: 'SI'; sessionId: string; worldEpoch: number; }; identity: BodyIdentity; segmentId: string; mode: "LEARNING" | "MANUAL"; startTick: number; endTick: number | null; completeness: "CLOSED" | ... 1 more ... | "OPEN"; closeReason: "CONTROL_PREFERENCES_CHANGE" | ... 11 more ... | null...' is not assignable to type 'SelectionSegmentBoundary'.
+      Types of property 'completeness' are incompatible.
+        Type '"CLOSED" | "INCOMPLETE" | "OPEN"' is not assignable to type '"CLOSED" | "OPEN"'.
+          Type '"INCOMPLETE"' is not assignable to type '"CLOSED" | "OPEN"'.
+tests/browser/vehicle-selection-steady/host.ts(248,5): error TS2322: Type '(identity: BodyIdentity) => { context: { schemaVersion: 1; units: "SI"; sessionId: string; worldEpoch: number; }; identity: BodyIdentity; segmentId: string; ... 4 more ...; closeReason: "CONTROL_PREFERENCES_CHANGE" | ... 11 more ... | null; } | null' is not assignable to type '(identity: BodyIdentity) => SelectionSegmentBoundary | null'.
+  Type '{ context: { schemaVersion: 1; units: "SI"; sessionId: string; worldEpoch: number; }; identity: BodyIdentity; segmentId: string; mode: "LEARNING" | "MANUAL"; startTick: number; endTick: number | null; completeness: "CLOSED" | ... 1 more ... | "OPEN"; closeReason: "CONTROL_PREFERENCES_CHANGE" | ... 11 more ... | null...' is not assignable to type 'SelectionSegmentBoundary | null'.
+    Type '{ context: { schemaVersion: 1; units: 'SI'; sessionId: string; worldEpoch: number; }; identity: BodyIdentity; segmentId: string; mode: "LEARNING" | "MANUAL"; startTick: number; endTick: number | null; completeness: "CLOSED" | ... 1 more ... | "OPEN"; closeReason: "CONTROL_PREFERENCES_CHANGE" | ... 11 more ... | null...' is not assignable to type 'SelectionSegmentBoundary'.
+      Types of property 'completeness' are incompatible.
+        Type '"CLOSED" | "INCOMPLETE" | "OPEN"' is not assignable to type '"CLOSED" | "OPEN"'.
+          Type '"INCOMPLETE"' is not assignable to type '"CLOSED" | "OPEN"'.
+tests/browser/vehicle-selection-steady/lifecycle.ts(48,37): error TS2345: Argument of type 'unknown' is not assignable to parameter of type '{}'.
+tests/browser/vehicle-selection-steady/main.ts(81,60): error TS2345: Argument of type 'unknown' is not assignable to parameter of type '{}'.
+tests/browser/vehicle-selection-steady/main.ts(82,102): error TS2345: Argument of type 'unknown' is not assignable to parameter of type '{}'.
+tests/browser/vehicle-selection-steady/main.ts(87,124): error TS2339: Property 'cssResolution' does not exist on type 'never'.
+tests/browser/vehicle-selection-steady/main.ts(87,184): error TS2339: Property 'internalResolution' does not exist on type 'never'.
+tests/browser/vehicle-selection-steady/main.ts(87,234): error TS2339: Property 'dpr' does not exist on type 'never'.
+tests/browser/vehicle-selection-steady/main.ts(95,19): error TS2345: Argument of type 'unknown' is not assignable to parameter of type '{}'.
+
+EXIT 1
