@@ -53,6 +53,11 @@ console.log(
       role: report.role,
       scope: report.scope,
       gameplayGate: report.gameplayGate,
+      validationTier: report.identity.fixtureVersion.endsWith('-DEV')
+        ? 'DEVELOPMENT_ONLY'
+        : report.identity.fixtureVersion.endsWith('-SMOKE')
+          ? 'PREFLIGHT_ONLY'
+          : 'FULL_PROTOCOL_REQUIRES_HARDWARE_VERIFIER',
       modes,
       pairedCpuP95OverheadMs: range(report.overhead.map((run) => run.cpuP95DeltaMs)),
       overhead: report.overhead,

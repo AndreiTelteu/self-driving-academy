@@ -42,3 +42,6 @@ node --import ./scripts/register-typescript.mjs scripts/verify-performance-evide
 ```
 
 Aceasta validează scope-ul minim și colectorul218. Nu validează fizică/gameplay, laptop, rețeaua cold controlată sau țintele finale de resurse. Manifestul203 și baseline-ul său sunt nemodificate; gate-urile ulterioare păstrează propriile cerințe.
+## Validare eficientă — 8 octombrie 2026
+
+[Politica de validare](validation-policy.md) diferențiază verificările locale de gate-urile full/soak și permite corectitudinea izolată în paralel. Harness-ul comun are preflight export, profil DEV 3 × 2 × (15 s + 30 s), salvare automată fără suprascriere și checkpoint-uri imutabile de perechi. După preflight, folosește butonul Dezvoltare pentru cost local; proba completă rămâne pentru gate-uri. Pentru reluare, păstrează ID-ul sesiunii și confirmă condițiile comparabile; perechea întreruptă reîncepe integral. DEV/SMOKE nu certifică hardware/release. Aceste instrumente noi necesită propria verificare browser înainte de folosirea lor ca dovadă hardware; nu sunt prezentate ca probe executate.

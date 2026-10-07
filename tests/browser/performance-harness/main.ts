@@ -1,3 +1,7 @@
+import {
+  VALIDATION_PROFILES,
+  type ValidationProfile,
+} from '../../../src/telemetry/validation-protocol';
 import { createRenderingBackend } from '../../../src/rendering/babylon/backend';
 import { diagnoseBackend } from '../../../src/rendering/babylon/diagnostics-adapter';
 import { subscribeRenderingLoss } from '../../../src/rendering/babylon/recovery-session';
@@ -19,18 +23,48 @@ declare const __HARNESS_BUILD__: {
 const element = (id: string) => document.getElementById(id)!;
 let running = false;
 let exported: unknown;
+let preflightBackend: string | undefined;
 const nextFrame = () => new Promise<number>((resolve) => requestAnimationFrame(resolve));
-async function run(short: boolean) {
+async function run(profile: ValidationProfile) {
   if (running) return;
+  const requestedBackend = (element('backend') as HTMLSelectElement).value as
+    'AUTO' | 'WEBGPU' | 'WEBGL2';
+  if (profile !== 'smoke' && preflightBackend !== requestedBackend)
+    throw new Error('Run transport preflight first');
+  if (profile === 'smoke') preflightBackend = undefined;
   running = true;
+  for (const id of ['backend', 'session', 'resume-confirm', 'start', 'development', 'smoke'])
+    (element(id) as HTMLInputElement).disabled = true;
   exported = undefined;
   (element('export') as HTMLButtonElement).disabled = true;
   Object.assign(window, {
     performanceHarnessReport: undefined,
     performanceHarnessError: undefined,
   });
-  const warmupMs = short ? 100 : 30000,
-    durationMs = short ? 400 : 120000;
+  const protocol = VALIDATION_PROFILES[profile];
+  const warmupMs = protocol.warmupMs,
+    durationMs = protocol.measuredMs;
+  const checkpointIdentity = {
+    build: __HARNESS_BUILD__,
+    profile,
+    browser: navigator.userAgent,
+    devicePixelRatio,
+    requestedBackend,
+  };
+  const sessionField = element('session') as HTMLInputElement;
+  const sessionId =
+    profile === 'smoke' ? crypto.randomUUID() : sessionField.value.trim() || crypto.randomUUID();
+  if (profile !== 'smoke') sessionField.value = sessionId;
+  const post = async (path: string, body: unknown) => {
+    const response = await fetch(path, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    if (!response.ok)
+      throw new Error(`Export/checkpoint ${response.status}: ${await response.text()}`);
+    return await response.text();
+  };
   let hidden = document.hidden,
     blurred = !document.hasFocus(),
     lost: unknown;
@@ -48,10 +82,13 @@ async function run(short: boolean) {
         `Invalid foreground or GPU context: hidden=${hidden}, blurred=${blurred}, loss=${String(lost)}`,
       );
   };
+  let leaseAcquired = false;
   let backend: Awaited<ReturnType<typeof createRenderingBackend>> | undefined;
   let diagnostic: ReturnType<typeof diagnoseBackend> | undefined;
   let unsubscribe: (() => void) | undefined;
   try {
+    await post('/lease', { sessionId, action: 'acquire' });
+    leaseAcquired = true;
     const hardware = (await fetch('/hardware.json', { cache: 'no-store' }).then((r) =>
       r.json(),
     )) as Record<string, unknown>;
@@ -75,24 +112,59 @@ async function run(short: boolean) {
       warmLoad = [];
     const runs: PerformanceRun[] = [];
     let gpuInfo: unknown = null;
-    for (let repeat = 1; repeat <= 5; repeat++) {
+    let observedBackend: string = requestedBackend;
+    const identity = { ...checkpointIdentity, hardware, buildManifest };
+    const savedResponse = await fetch(`/checkpoints/${sessionId}`, { cache: 'no-store' });
+    if (!savedResponse.ok) throw new Error('Checkpoint read failed');
+    const saved = (await savedResponse.json()) as {
+      identity: unknown;
+      pair: number;
+      payload: {
+        runs: PerformanceRun[];
+        cold: {
+          repeat: number;
+          freshBackendStartupMs: number;
+          firstRenderCpuMs: number;
+          context: string;
+        };
+        warm: { repeat: number; secondRenderCpuMs: number; context: string };
+        gpuInfo: unknown;
+        observedBackend: string;
+      };
+    }[];
+    if (saved.length && !(element('resume-confirm') as HTMLInputElement).checked)
+      throw new Error('Confirm comparable hardware/power/thermal conditions before resuming');
+    for (const record of saved) {
+      if (
+        JSON.stringify(record.identity) !== JSON.stringify(identity) ||
+        record.pair > protocol.pairs
+      )
+        throw new Error('Resume identity mismatch; start a new session');
+      runs.push(...record.payload.runs);
+      coldLoad.push(record.payload.cold);
+      warmLoad.push(record.payload.warm);
+      gpuInfo = record.payload.gpuInfo;
+      observedBackend = record.payload.observedBackend;
+    }
+    for (let repeat = saved.length + 1; repeat <= protocol.pairs; repeat++) {
       check();
       element('status').textContent =
-        `Repetarea ${repeat}/5: backend fresh și primul render; cache HTTP no-store, OS/driver cache necontrolat.`;
+        `Repetarea ${repeat}/${protocol.pairs}: backend fresh și primul render; cache HTTP no-store, OS/driver cache necontrolat.`;
       const canvas = document.createElement('canvas');
       canvas.width = 1920;
       canvas.height = 1080;
       element('host').replaceChildren(canvas);
       const startup = performance.now();
-      backend = await createRenderingBackend(canvas, 'WEBGPU');
+      backend = await createRenderingBackend(canvas, requestedBackend);
+      observedBackend = backend.rendererKind;
       unsubscribe = subscribeRenderingLoss(backend, (reason) => {
         lost = reason;
       });
       const initialized = performance.now();
       const engine = backend.scene.getEngine();
       engine.setSize(1920, 1080);
-      if (backend.rendererKind !== 'WEBGPU')
-        throw new Error('Requested hardware WebGPU not obtained');
+      if (requestedBackend !== 'AUTO' && backend.rendererKind !== requestedBackend)
+        throw new Error('Requested hardware backend not obtained');
       gpuInfo =
         'getInfo' in engine ? (engine as typeof engine & { getInfo(): unknown }).getInfo() : null;
       const first = performance.now();
@@ -116,7 +188,7 @@ async function run(short: boolean) {
       for (const enabled of repeat % 2 ? [false, true] : [true, false]) {
         check();
         element('status').textContent =
-          `Repetarea ${repeat}/5, colector ${enabled ? 'pornit' : 'oprit'}, warmup ${warmupMs}ms + measure ${durationMs}ms.`;
+          `Repetarea ${repeat}/${protocol.pairs}, colector ${enabled ? 'pornit' : 'oprit'}, warmup ${warmupMs}ms + measure ${durationMs}ms.`;
         const collector = createPerformanceCollector(60000, enabled);
         collector.record(
           'inputToCommandMs',
@@ -264,19 +336,43 @@ async function run(short: boolean) {
       diagnostic = undefined;
       backend.dispose();
       backend = undefined;
+      check();
+      await post('/checkpoint', {
+        sessionId,
+        identity,
+        pair: repeat,
+        payload: {
+          runs: runs.slice(-2),
+          cold: coldLoad.at(-1),
+          warm: warmLoad.at(-1),
+          gpuInfo,
+          observedBackend,
+        },
+      });
     }
     check();
     exported = createPerformanceReport({
       role: 'hardware-browser',
       identity: {
         ...__HARNESS_BUILD__,
-        fixtureVersion: short ? '218-browser-counter-v1-SMOKE' : '218-browser-counter-v1',
+        fixtureVersion: `218-browser-counter-v2${protocol.suffix}`,
         physicsVersion: null,
         mapVersion: null,
         seeds: [42],
-        hardware: { ...hardware, browserGpu: gpuInfo, buildManifest },
+        hardware: {
+          ...hardware,
+          browserGpu: gpuInfo,
+          buildManifest,
+          resume: {
+            sessionId,
+            resumedPairs: saved.length,
+            confirmedComparable: saved.length
+              ? (element('resume-confirm') as HTMLInputElement).checked
+              : false,
+          },
+        },
         browser: navigator.userAgent,
-        backend: 'WEBGPU',
+        backend: observedBackend,
         preset: 'MEDIUM context; empty scene has no preset-dependent assets',
         cssResolution: [1920, 1080],
         internalResolution: [1920, 1080],
@@ -302,16 +398,30 @@ async function run(short: boolean) {
           'HTTP no-store fresh backend only; no traffic shaping or controlled OS/driver cache',
       },
       exclusions: [
-        short
-          ? 'SMOKE: short durations, never baseline'
-          : 'Full 30s warmup + minimum120s steady-state,5 paired repeats',
+        `Profile ${profile}: ${protocol.pairs} pairs, ${warmupMs}ms warmup + ${durationMs}ms measured; DEV/SMOKE never close release gates`,
+        'Complete pairs are immutable; resumed pairs recreate backend and repeat warmup; thermal state must be reviewed independently',
         'Warmup excluded from steady-state, fresh-engine first-use retained separately for each repetition',
         'Common reference observer always active; overhead delta includes optional collector+diagnostic GPU observer; negative deltas are noise, not causal speedups',
         'simulationCpuMs measures complete fixed-loop frame work including snapshots/interpolation; authoritative tickCpuMs remains unavailable',
         'Unavailable subsystems not assigned zero or PASS; gameplay thresholds only provisional context',
       ],
     });
-    element('result').textContent = JSON.stringify({ completed: true, short, repeats: 5 });
+    const receipt = JSON.parse(await post('/export', exported)) as { saved: string };
+    const readback = await fetch(`/reports/${receipt.saved}`, { cache: 'no-store' });
+    if (!readback.ok || JSON.stringify(await readback.json()) !== JSON.stringify(exported))
+      throw new Error('Independent export readback mismatch');
+    if (profile === 'smoke') {
+      preflightBackend = requestedBackend;
+      (element('start') as HTMLButtonElement).disabled = false;
+      (element('development') as HTMLButtonElement).disabled = false;
+    }
+    element('result').textContent = JSON.stringify({
+      completed: true,
+      profile,
+      repeats: protocol.pairs,
+      sessionId,
+      acceptance: 'INDEPENDENT_VERIFICATION_REQUIRED',
+    });
     element('status').textContent = 'Proba finalizată; raport disponibil pentru export.';
     Object.assign(window, { performanceHarnessReport: exported });
     (element('export') as HTMLButtonElement).disabled = false;
@@ -324,14 +434,36 @@ async function run(short: boolean) {
     backend?.dispose();
     document.removeEventListener('visibilitychange', hide);
     window.removeEventListener('blur', blur);
+    if (leaseAcquired) {
+      try {
+        await post('/lease', { sessionId, action: 'release' });
+      } catch (error) {
+        console.error('Lease release failed; restart the owned server before another probe', error);
+      }
+    }
+    if (profile !== 'smoke') preflightBackend = undefined;
+    for (const id of ['backend', 'session', 'resume-confirm', 'smoke'])
+      (element(id) as HTMLInputElement).disabled = false;
+    for (const id of ['start', 'development'])
+      (element(id) as HTMLButtonElement).disabled =
+        preflightBackend !== (element('backend') as HTMLSelectElement).value;
     running = false;
   }
 }
+element('backend').addEventListener('change', () => {
+  preflightBackend = undefined;
+  (element('start') as HTMLButtonElement).disabled = true;
+  (element('development') as HTMLButtonElement).disabled = true;
+  (element('session') as HTMLInputElement).value = '';
+});
 element('start').addEventListener('click', () => {
-  void run(false);
+  void run('full');
 });
 element('smoke').addEventListener('click', () => {
-  void run(true);
+  void run('smoke');
+});
+element('development').addEventListener('click', () => {
+  void run('development');
 });
 element('export').addEventListener('click', () => {
   if (!exported || running) return;

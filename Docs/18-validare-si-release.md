@@ -75,3 +75,7 @@ Soak-ul are minimum 60 minute și 20 de cicluri de lifecycle, cu retenție, cozi
 - Catalogul minim de provocări, ofertele realizabile, refuzul, cooldown-ul, reluarea și recompensele respectă modulul 28; daily rămâne exact trei.
 - Savefile-ul complet face roundtrip; editarea fără recalcularea checksumului este respinsă înaintea migrării/commitului și păstrează sesiunea curentă.
 - 235 verifică împreună aceste cerințe după 216 și gate-ul performant 224; 162 nu se închide fără 235. Se consemnează playtesturi reale pentru control, învățare vizibilă, distrugere și dorința de a relua o provocare, fără estimări de retenție prezentate ca rezultate.
+
+## Validare eficientă — 8 octombrie 2026
+
+[Politica de validare](validation-policy.md) diferențiază verificările locale de gate-urile full/soak și permite corectitudinea izolată în paralel. Harness-ul comun are preflight export, profil DEV 3 × 2 × (15 s + 30 s), salvare automată fără suprascriere și checkpoint-uri imutabile de perechi. După preflight, folosește butonul Dezvoltare pentru cost local; proba completă rămâne pentru gate-uri. Pentru reluare, păstrează ID-ul sesiunii și confirmă condițiile comparabile; perechea întreruptă reîncepe integral. DEV/SMOKE nu certifică hardware/release. Aceste instrumente noi necesită propria verificare browser înainte de folosirea lor ca dovadă hardware; nu sunt prezentate ca probe executate.

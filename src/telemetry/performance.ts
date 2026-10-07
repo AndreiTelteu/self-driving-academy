@@ -1,3 +1,4 @@
+import { profileForFixture, VALIDATION_PROFILES } from './validation-protocol';
 /** Portable, bounded instrumentation. Never reads browser globals or modifies game state. */
 export const PERFORMANCE_METRICS = [
   'frameMs',
@@ -234,10 +235,16 @@ export function createPerformanceReport(
     !identity.seeds.every((seed) => Number.isSafeInteger(seed) && seed >= 0)
   )
     throw new Error('Invalid seeds');
-  if (runs.length !== 10 || input.coldLoad.length > 5 || input.warmLoad.length > 5)
-    throw new Error('Five bounded paired repetitions required');
+  const protocol = VALIDATION_PROFILES[profileForFixture(identity.fixtureVersion)];
+  const repetitions = protocol.pairs;
+  if (
+    runs.length !== repetitions * 2 ||
+    input.coldLoad.length > repetitions ||
+    input.warmLoad.length > repetitions
+  )
+    throw new Error('Complete bounded paired repetitions required');
   const overhead = [];
-  for (let repeat = 1; repeat <= 5; repeat++) {
+  for (let repeat = 1; repeat <= repetitions; repeat++) {
     const pair = runs.filter((run) => run.repeat === repeat);
     const on = pair.find((run) => run.enabled),
       off = pair.find((run) => !run.enabled);
@@ -262,10 +269,12 @@ export function createPerformanceReport(
       if (
         input.role === 'hardware-browser' &&
         !identity.fixtureVersion.endsWith('-SMOKE') &&
-        (run.warmupMs < 30000 || run.activeDurationMs < 120000 || run.longTasks?.overflow)
+        (run.warmupMs < protocol.warmupMs ||
+          run.activeDurationMs < protocol.measuredMs ||
+          run.longTasks?.overflow)
       )
         throw new Error(
-          'Hardware baseline requires 30s warmup and 120s measurement without overflow',
+          `Hardware protocol requires ${protocol.warmupMs / 1000}s warmup and ${protocol.measuredMs / 1000}s measurement without overflow`,
         );
     }
     overhead.push({

@@ -21,5 +21,5 @@ $hardware = [ordered]@{
   battery = @(Get-CimInstance Win32_Battery | Select-Object BatteryStatus, EstimatedChargeRemaining)
 }
 [IO.File]::WriteAllText((Join-Path $outputRoot 'hardware.json'), ($hardware | ConvertTo-Json -Depth 8))
-node scripts/performance-harness-server.mjs $Port
+node --import ./scripts/register-typescript.mjs scripts/performance-harness-server.mjs $Port
 exit $LASTEXITCODE

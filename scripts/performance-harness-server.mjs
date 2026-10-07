@@ -1,9 +1,12 @@
+import { createPerformanceReport } from '../src/telemetry/performance.ts';
+import { VALIDATION_PROFILES } from '../src/telemetry/validation-protocol.ts';
+import { readPairCheckpoints, savePairCheckpoint } from './validation-checkpoints.ts';
 import { build } from 'vite';
 import { createServer } from 'node:http';
 import { readFile, stat, readdir, writeFile, mkdir } from 'node:fs/promises';
 import { resolve, extname, sep } from 'node:path';
 import { execFileSync } from 'node:child_process';
-import { createHash } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
 
 const profile = 'desktop';
 const port = Number(process.argv[2] ?? 5190);
@@ -27,6 +30,8 @@ const inputs = [
   'src/rendering/diagnostics.ts',
   'package-lock.json',
   'src/telemetry/performance.ts',
+  'src/telemetry/validation-protocol.ts',
+  'scripts/validation-checkpoints.ts',
   'src/simulation/fixed-tick.ts',
   'src/sessions/validation.ts',
   'src/sessions/index.ts',
@@ -89,9 +94,10 @@ const mime = {
   '.json': 'application/json',
   '.css': 'text/css',
 };
+let leaseOwner;
 const server = createServer(async (request, response) => {
   try {
-    if (request.method === 'POST' && request.url === '/export') {
+    if (request.method === 'POST' && ['/export', '/checkpoint', '/lease'].includes(request.url)) {
       let body = '';
       for await (const chunk of request) {
         body += chunk.toString();
@@ -100,22 +106,87 @@ const server = createServer(async (request, response) => {
           return;
         }
       }
-      const report = JSON.parse(body);
+      const parsed = JSON.parse(body);
+      if (request.url === '/lease') {
+        if (!/^[a-f0-9-]{36}$/.test(parsed.sessionId)) throw new Error('Invalid lease owner');
+        if (parsed.action === 'acquire') {
+          if (leaseOwner) {
+            response.writeHead(409).end('Another probe owns this server');
+            return;
+          }
+          leaseOwner = parsed.sessionId;
+        } else if (parsed.action === 'release' && leaseOwner === parsed.sessionId)
+          leaseOwner = undefined;
+        else throw new Error('Invalid lease operation');
+        response.writeHead(200).end('Lease updated');
+        return;
+      }
+      if (request.url === '/checkpoint') {
+        if (parsed.sessionId !== leaseOwner) throw new Error('No active hardware lease');
+        const { identity, pair, payload } = parsed;
+        const protocol = VALIDATION_PROFILES[identity?.profile];
+        if (
+          !protocol ||
+          identity.build?.sourceHash !== sourceDigest ||
+          identity.build?.commit !== commit ||
+          identity.buildManifest?.artifactHash !== artifactHash ||
+          !Number.isInteger(pair) ||
+          pair < 1 ||
+          pair > protocol.pairs ||
+          payload?.runs?.length !== 2 ||
+          payload.cold?.repeat !== pair ||
+          payload.warm?.repeat !== pair
+        )
+          throw new Error('Invalid pair identity');
+        const expectedOrder = pair % 2 ? [false, true] : [true, false];
+        for (const [index, run] of payload.runs.entries()) {
+          if (
+            run.repeat !== pair ||
+            run.enabled !== expectedOrder[index] ||
+            !(Number.isFinite(run.warmupMs) && run.warmupMs >= protocol.warmupMs) ||
+            !(
+              Number.isFinite(run.activeDurationMs) && run.activeDurationMs >= protocol.measuredMs
+            ) ||
+            !run.collector?.complete ||
+            run.collector.enabled !== run.enabled ||
+            !(Number.isFinite(run.wallDurationMs) && run.wallDurationMs >= 0) ||
+            run.collector.dropped !== 0 ||
+            run.longTasks?.overflow ||
+            run.simulation?.overloads !== 0 ||
+            !(
+              Number.isFinite(run.simulation?.ratio) &&
+              run.simulation.ratio >= (identity.profile === 'smoke' ? 0 : 0.98)
+            ) ||
+            !(run.referenceCpuMs?.count > 0) ||
+            run.resources?.retainedSnapshotsAfterDispose !== 0
+          )
+            throw new Error('Incomplete pair');
+        }
+        await savePairCheckpoint(resolve('Evidence/218/checkpoints'), parsed);
+        response.writeHead(200).end('Checkpoint saved; not a PASS');
+        return;
+      }
+      const report = parsed;
+      if (report.identity?.hardware?.resume?.sessionId !== leaseOwner)
+        throw new Error('Export requires active hardware lease');
+      createPerformanceReport(report);
       if (
         report.schemaVersion !== 1 ||
         report.identity?.sourceHash !== sourceDigest ||
         report.identity?.commit !== commit ||
         report.identity?.budgetVersion !== budgets.budgetVersion ||
         report.role !== 'hardware-browser' ||
-        report.runs?.length !== 10
+        ![
+          '218-browser-counter-v2',
+          '218-browser-counter-v2-DEV',
+          '218-browser-counter-v2-SMOKE',
+        ].includes(report.identity?.fixtureVersion)
       ) {
         response.writeHead(400).end('Invalid report identity');
         return;
       }
       await mkdir(resolve('Evidence/218'), { recursive: true });
-      const filename = report.identity.fixtureVersion.endsWith('-SMOKE')
-        ? 'browser-smoke.json'
-        : 'desktop-webgpu.json';
+      const filename = `browser-${report.identity.fixtureVersion}-${Date.now()}-${randomUUID()}.json`;
       await writeFile(resolve('Evidence/218', filename), JSON.stringify(report, null, 2));
       response
         .writeHead(200, { 'Content-Type': 'application/json' })
@@ -128,6 +199,25 @@ const server = createServer(async (request, response) => {
     }
     const url = new URL(request.url ?? '/', `http://127.0.0.1:${port}`);
     const pathname = decodeURIComponent(url.pathname);
+    if (pathname.startsWith('/reports/')) {
+      const name = pathname.slice('/reports/'.length);
+      if (!/^browser-[a-zA-Z0-9.-]+\.json$/.test(name)) throw new Error('Invalid report name');
+      const data = await readFile(resolve('Evidence/218', name));
+      response
+        .writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' })
+        .end(data);
+      return;
+    }
+    if (pathname.startsWith('/checkpoints/')) {
+      const records = await readPairCheckpoints(
+        resolve('Evidence/218/checkpoints'),
+        pathname.slice('/checkpoints/'.length),
+      );
+      response
+        .writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' })
+        .end(JSON.stringify(records));
+      return;
+    }
     const file =
       pathname === '/hardware.json'
         ? resolve('.pbi-validation-218/hardware.json')
@@ -148,7 +238,9 @@ const server = createServer(async (request, response) => {
     });
     response.end(data);
   } catch {
-    response.writeHead(404).end();
+    response
+      .writeHead(request.method === 'POST' ? 400 : 404)
+      .end('Invalid request or incomplete evidence');
   }
 });
 server.listen(port, '127.0.0.1', () => {

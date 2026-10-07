@@ -1,3 +1,4 @@
+import { readPairCheckpoints } from './validation-checkpoints.ts';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
@@ -9,11 +10,17 @@ assert(path, 'Explicit report path required');
 const report = JSON.parse(await readFile(path, 'utf8'));
 assert.equal(report.schemaVersion, 1);
 assert.equal(report.role, 'hardware-browser');
-assert.equal(
-  report.identity.fixtureVersion,
-  '218-browser-counter-v1',
-  'Smoke cannot close hardware validation',
+assert(
+  ['218-browser-counter-v1', '218-browser-counter-v2'].includes(report.identity.fixtureVersion),
+  'Development/smoke cannot close hardware validation',
 );
+const resume = report.identity.hardware.resume;
+if (resume?.resumedPairs > 0) {
+  assert(
+    resume.confirmedComparable === true && process.argv.includes('--allow-resumed-pairs'),
+    'Resumed evidence requires explicit hardware/thermal review and --allow-resumed-pairs',
+  );
+}
 createPerformanceReport({
   role: report.role,
   identity: report.identity,
@@ -24,6 +31,25 @@ createPerformanceReport({
   unavailable: report.unavailable,
   exclusions: report.exclusions,
 });
+if (report.identity.fixtureVersion === '218-browser-counter-v2') {
+  assert(resume && typeof resume.sessionId === 'string', 'Checkpoint session required');
+  const pairs = await readPairCheckpoints(resolve('Evidence/218/checkpoints'), resume.sessionId);
+  assert.equal(pairs.length, 5, 'Five immutable pair checkpoints required');
+  for (const pair of pairs) {
+    assert.equal(pair.identity.profile, 'full');
+    assert.equal(pair.identity.build.sourceHash, report.identity.sourceHash);
+    assert.equal(
+      pair.identity.buildManifest.artifactHash,
+      report.identity.hardware.buildManifest.artifactHash,
+    );
+    assert.deepEqual(
+      pair.payload.runs,
+      report.runs.filter((run) => run.repeat === pair.pair),
+    );
+    assert.deepEqual(pair.payload.cold, report.coldLoad[pair.pair - 1]);
+    assert.deepEqual(pair.payload.warm, report.warmLoad[pair.pair - 1]);
+  }
+}
 assert.equal(report.coldLoad.length, 5);
 assert.equal(report.warmLoad.length, 5);
 const hash = createHash('sha256');
