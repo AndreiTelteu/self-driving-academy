@@ -14,6 +14,8 @@ Pragurile mecanice aparțin configurației vehiculului. Profilul șoferului expr
 
 Scenele de calibrare includ frânare de la viteze repetabile, viraje cu rază fixă, schimbare de bandă, impact cu bordură și contact între două mașini. Se verifică stabilitatea numerelor și coerența manual versus autonom înainte de construirea campaniei.
 
+[Dinamica026](wheel-dynamics.md) este integrată cu suprafețe versionate și proiecții readonly ale suspensiei, contactului, direcției și rotației native a roților. Calibrarea sedan/compact pe două suprafețe, paritatea mecanicii implicite și probele Full WebGPU/WebGL2 în ChromeGuest sunt verificate în [raportul final](Evidence/026-laptop/current-delivery-summary.md). Rendererul Babylon consumă starea fizică și nu o controlează. Materialele sunt empirice și uniforme într-o lume plată, fără model complet de anvelopă sau contact mixt pe patch-uri. Fixture-ul timpuriu nu certifică jocul integrat.
+
 ## Contractul dintre manual și autonomie
 
 Controllerul auto aplică aceeași comandă din oricare sursă. Arbitrajul este realizat înainte de fizică; comenzile AI nu sunt aplicate după preluare. Raw input, commanded input și achieved acceleration sunt valori distincte pentru învățare. Nu antrenăm profilul să reproduce zgomotul de suspensie sau impulsurile de coliziune.

@@ -3,6 +3,7 @@ import type { VehicleClassId, VehicleClass, WheelGeometry } from './vehicle-clas
 import type { PhysicsCollisionPort } from './collision-port';
 import type { ContractContext } from '../sessions';
 import type { PhysicsRecoveryPort } from './recovery-port';
+import type { RoadSurface } from './road-surfaces';
 /** SI units; no Rapier objects escape this port. Prototype configuration, not driver style. */
 export const PHYSICS_CONFIG = Object.freeze({
   version: '021-raycast-v1',
@@ -47,7 +48,20 @@ export interface PhysicsVector {
   readonly y: number;
   readonly z: number;
 }
-export interface CarProjection {
+export interface PhysicalWheelProjection {
+  readonly wheelId: string;
+  readonly localPositionM: PhysicsVector;
+  readonly radiusM: number;
+  /** Native axle rotation, continuously accumulated by Rapier; never wrapped for presentation. */
+  readonly spinRad: number;
+  readonly steeringRad: number;
+  readonly suspensionLengthM: number;
+  readonly suspensionForceN: number;
+  readonly inContact: boolean;
+  readonly contactPointM: PhysicsVector | null;
+  readonly contactNormal: PhysicsVector | null;
+}
+export interface CarVisualProjection {
   readonly id: string;
   readonly position: PhysicsVector;
   readonly rotation: {
@@ -56,10 +70,18 @@ export interface CarProjection {
     readonly z: number;
     readonly w: number;
   };
+  readonly wheels: readonly Pick<
+    PhysicalWheelProjection,
+    'wheelId' | 'localPositionM' | 'steeringRad' | 'spinRad'
+  >[];
+}
+export interface CarProjection extends CarVisualProjection {
   readonly velocity: PhysicsVector;
+  readonly angularVelocityRadps: PhysicsVector;
   readonly speed: number;
   readonly suspension: readonly number[];
   readonly wheelContacts: number;
+  readonly wheels: readonly PhysicalWheelProjection[];
 }
 export interface PhysicsCosts {
   readonly controllerMs: number;
@@ -90,6 +112,8 @@ export interface PhysicsProbe extends PhysicsBodyPort, PhysicsCollisionPort {
     readonly massKg: number;
     readonly powerW: number | null;
     readonly grip: number;
+    readonly surface: RoadSurface;
+    readonly nativeGroundFriction: number;
     readonly brakeAccelerationMps2: number;
     readonly wheels: WheelGeometry;
     readonly turningRadiusM: number;
@@ -102,6 +126,8 @@ export interface PhysicsProbe extends PhysicsBodyPort, PhysicsCollisionPort {
   setVelocity(id: string, velocity: PhysicsVector): void;
   step(inputs: ReadonlyMap<string, PhysicsInput>, measure?: boolean): PhysicsCosts;
   project(id: string): CarProjection;
+  /** Read-only presentation query; omits contact and velocity diagnostics. */
+  projectVisual?(id: string): CarVisualProjection;
   contacts(): number;
   counts(): { vehicles: number; bodies: number; colliders: number };
   dispose(): void;

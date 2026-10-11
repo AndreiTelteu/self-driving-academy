@@ -125,3 +125,9 @@ Se elimină global pierderea XP și scăderea nivelului. V1 adaugă Academie/Hao
 ## Validare eficientă — 8 octombrie 2026
 
 [Politica de validare](validation-policy.md) diferențiază verificările locale de gate-urile full/soak și permite corectitudinea izolată în paralel. Harness-ul comun are preflight export, profil DEV 3 × 2 × (15 s + 30 s), salvare automată fără suprascriere și checkpoint-uri imutabile de perechi. După preflight, folosește butonul Dezvoltare pentru cost local; proba completă rămâne pentru gate-uri. Pentru reluare, păstrează ID-ul sesiunii și confirmă condițiile comparabile; perechea întreruptă reîncepe integral. DEV/SMOKE nu certifică hardware/release. Aceste instrumente noi necesită propria verificare browser înainte de folosirea lor ca dovadă hardware; nu sunt prezentate ca probe executate.
+
+## Mediu laptop — 11 octombrie 2026
+
+[Integrarea026](wheel-dynamics.md) păstrează recuperarea030 și trece689teste pe Node24.21.0/npm11.19.0. Calibrarea28scenarii, paritatea și5perechi native locale sunt verificate. [Raportul final din12octombrie](Evidence/026-laptop/current-delivery-summary.md): Full WebGPU/WebGL2 în ChromeGuest trec cititorul comun și revizuirea fizică, cu zeroLongTaskssteady. Preflight/export/cleanup trec pe aceeași sursă. Istoricul cu extensii păstrează FAIL52ms; cauza nu este atribuită. Acceptarea se limitează la fixture-ul timpuriu026.
+
+Mediul actual este Lenovo Yoga 7 14ARP8/Ryzen7 7735U, identificat prin CIM. [Baseline-ul istoric026 pe laptop](Evidence/026-laptop/summary.json) păstrează separat hardware-ul și datele reale de desktop: CPU și WebGL2 PASS, WebGPU FAIL pentru un LongTask51ms în BEFORE. Raportul final de mai sus folosește sursele integrate și ChromeGuest, cu bugete laptop nemodificate. Aceste probe nu închid gate-ul jocului integrat și nu schimbă derogarea istorică203.

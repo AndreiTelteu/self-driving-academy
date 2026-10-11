@@ -1,0 +1,78 @@
+{
+  "state": "PARENT_REVIEW_PASS_EARLY_026_FIXTURE",
+  "reviewer": "Codex parent /root",
+  "reviewedAt": "2026-10-11T22:06:37.835171+00:00",
+  "numericReportSha256": "9a796699dcce2ac1f4c5f93d98f087c6f10de82f053c0d53a9214180ae170e0c",
+  "sourceHash": "072448e3a600df086ff256163626cf60bab27bff37ed8d6f99c6b75d49a22921",
+  "physicalForeground": {
+    "windowId": 32507982,
+    "profile": "Chrome Guest",
+    "singleTab": "http://127.0.0.1:5220/",
+    "evidence": "User Guest deschis; native window screenshot Guest badge and target HWND; serial progress observations and continuously focused journals",
+    "devTools": "closed",
+    "power": "User confirmed powered; Win32_Battery status2/80percent after both captures"
+  },
+  "physicalDrivingReview": "Real native braking/turning curves in eight calibrations per browser; native28 scenarios also verify fast/slow turning, curb and airborne/recontact. Visual scalar/native parity test and Guest current-scene screenshot reviewed. This is early calibration, not a manual driving or integrated-game certification.",
+  "captures": [
+    {
+      "id": "f88c49af-03eb-4839-a620-7d24adb589a5",
+      "renderer": "WEBGPU",
+      "arms": 10,
+      "calibrations": 8,
+      "steadyLongTasks": 0,
+      "focusJournal": "PASS",
+      "cleanup": "PASS"
+    },
+    {
+      "id": "cc977c20-c79d-4b42-97f8-367e866b85e8",
+      "renderer": "WEBGL2",
+      "arms": 10,
+      "calibrations": 8,
+      "steadyLongTasks": 0,
+      "focusJournal": "PASS",
+      "cleanup": "PASS"
+    }
+  ],
+  "instrumentationReview": {
+    "browser": "Full channels fixed-capacity1.2MB per arm, lifecycle journal bounded4096, no wheel history. Main includes loop/native/query/projection/render and lifecycle boundaries; LongTask observer retains whole event-loop tasks. No diagnostic trace/DevTools in acceptance. No overhead subtraction or claimed exact pure browser observer price.",
+    "nativeObserverOnOff": [
+      {
+        "pair": 0,
+        "offWallMs": 2736.0264,
+        "onWallMs": 2483.9467000000004,
+        "deltaWallMsPerMeasuredTick": -0.42013283333333296
+      },
+      {
+        "pair": 1,
+        "offWallMs": 2085.7842999999993,
+        "onWallMs": 2118.3472999999994,
+        "deltaWallMsPerMeasuredTick": 0.054271666666666836
+      },
+      {
+        "pair": 2,
+        "offWallMs": 2014.7456000000002,
+        "onWallMs": 1939.3683999999994,
+        "deltaWallMsPerMeasuredTick": -0.12562866666666803
+      },
+      {
+        "pair": 3,
+        "offWallMs": 1954.1984000000011,
+        "onWallMs": 2087.1712000000007,
+        "deltaWallMsPerMeasuredTick": 0.2216213333333326
+      },
+      {
+        "pair": 4,
+        "offWallMs": 1961.908800000001,
+        "onWallMs": 1948.7890000000007,
+        "deltaWallMsPerMeasuredTick": -0.021866333333333994
+      }
+    ],
+    "nativePriceScope": "Five actual native observer OFF/ON pairs, matched input/physical checksums. Wall deltas include sampling, noise and scheduling, not isolated browser/GPU overhead."
+  },
+  "limits": [
+    "Early fixture only",
+    "Historical52/129ms cause unproven; profile change is a controlled-condition observation, not causal proof",
+    "Existing Chrome profile with extensions retains FAIL",
+    "GPU/input latency/controlled cold navigation/exact total RAM and WASM are not certified"
+  ]
+}
