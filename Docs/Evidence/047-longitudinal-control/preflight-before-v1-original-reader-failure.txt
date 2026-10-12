@@ -1,0 +1,8 @@
+Original reader command: volta run --node 24.21.0 --npm 11.19.0 node scripts/verify-longitudinal-full.mjs .pbi-validation-047/full-before-v5/Docs/Evidence/047-longitudinal-control/preflight-before-v1 --current-root=.pbi-validation-047/full-before-v5
+Exit code1. Node v24.21.0.
+AssertionError [ERR_ASSERTION]: Native fixed60Hz wall throughput
+at scripts/longitudinal-full-validation.mjs:21:3
+actual:false; expected:true; operator:'=='.
+
+Normal70 OFF: 1500ms simulated /1531.1442ms observed total = approximately0.97966; warmup516.0314ms, measurement1004.5192ms. Other arms total1519.88–1524.43ms. Actual powerAPI/AC1/saver0/GUID, source/native bytes, complete checkpoints and raw observer data are preserved. All92 copied files match original controlled-tree bytes.
+Parent reviewed the1.5s technical-probe distinction: >=0.98 is a full numeric acceptance gate, whereas technical preflight verifies finite minimum wall periods, actual backend/power identification, schema/capacity/export/source/raw/cleanup semantics. The reader-only correction makes throughput diagnostic for preflight while preserving the unchanged full >=0.98 gate and its negative test. No capture, driver, physics, runtime or threshold for full acceptance was edited; original failure stays recorded.

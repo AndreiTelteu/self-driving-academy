@@ -70,6 +70,10 @@ test('80 unique keys, 24 M targets; planned stages grant no capabilities', () =>
       'speed_delta_residential',
       'curve_lateral_accel',
       'intersection_approach_speed',
+      'desired_acceleration',
+      'comfort_deceleration',
+      'acceleration_jerk',
+      'brake_reaction_delay',
     ],
   );
   assert(parseParameterCatalog(catalog()).every((entry) => !entry.implemented && !entry.estimable));

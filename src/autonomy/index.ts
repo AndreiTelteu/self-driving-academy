@@ -3,3 +3,4 @@ export * from './road-context';
 export * from './behavior-fsm';
 export * from './lateral-controller';
 export * from './cruise-targets';
+export * from './longitudinal-control';

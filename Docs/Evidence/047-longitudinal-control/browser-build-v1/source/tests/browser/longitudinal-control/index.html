@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>047 longitudinal driving</title>
+    <style>
+      body {
+        margin: 0;
+        background: #16232c;
+        color: #edf4f6;
+        font: 16px system-ui;
+      }
+      header {
+        padding: 12px 20px;
+      }
+      button {
+        padding: 8px 14px;
+        margin-right: 12px;
+      }
+      canvas {
+        display: block;
+        width: 1280px;
+        height: 720px;
+      }
+      #results {
+        padding: 10px 20px;
+        white-space: pre-wrap;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <button id="run">Run normal stop and delayed obstacle</button
+      ><span id="status">Ready — actual Rapier, scripted AUTO targets, visible 60 Hz driving.</span>
+    </header>
+    <canvas id="canvas" width="1280" height="720" tabindex="0"></canvas>
+    <div id="results">
+      Normal profile: 0.2 s delay, 2.5 m/s² comfort. Risky profile: 1.5 s delay, 0.3 m/s² comfort.
+      Both sedan and compact.
+    </div>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>
