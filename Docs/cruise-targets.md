@@ -1,0 +1,43 @@
+# Cruise targets046
+
+Validation level is targeted, declared before production: simulation and memory. The native adapter uses published044 road context, actual045 decisions,024 controller and real Rapier bodies on the authored incoming lanes from the common044 fixture. It uses70normal/110overload actors, three alternating observer pairs,180warm/600measured ticks. The explicit six-phase decision caller mirrors the cadence without claiming219 integration. All physical commands remain fixed brake1, independent of targets;047 owns longitudinal actuation. No visual/input/driving criterion is introduced, so no new browser capture is needed for this pure policy contract. This probe does not certify FPS or integrated-game hardware performance.
+
+The preproduction oracle independently compares scalar candidates: posted limit plus the applicable style delta, preferred curve speed sqrt(style acceleration × radius), approach preference, the empirical coverage ceiling30m/s and explicit045 stop/yield/blocked/service holds. A radius below the declared class full-lock bicycle radius is mechanically infeasible. Published031 measures both classes on dry/reduced surfaces through30m/s; the ceiling is a versioned coverage bound, not a measured top speed or universally safe driving envelope. Surface is explicit; no invented tyre-friction formula is applied.
+
+Urban/residential category, curve radius and intersection approach require explicit versioned authored facts. Schema032 does not supply these categories and044 does not derive radius/approach. The adapter labels synthetic authored facts separately; posted speed is read from the actual044 lane. Facts must preserve the044 scope, identity, sourceTick and lane. Unknown category/curvature is not inferred from road IDs, signals or posted speed.
+
+049 retains its empirical3.5m/s² advisory execution envelope.046's preferred style range0.5–8m/s² is intentionally different: an aggressive target can exceed049's advisory and be rejected by that execution contract. No silent legal or comfort correction is introduced. Actual integration tests must expose this distinction before acceptance.
+
+`compileCruiseProfile` runs the existing publication gate on a bounded detached descriptor snapshot. Admission allows at most80profile parameters/evidence maps,1024source IDs per source list and32evidence contexts, all strings bounded. The returned frozen token retains only four values, canonical units, provenance, profileId/versionId and bounded applicationengineVersion. A weak provenance set admits only actual compiled tokens; serialized copies are rejected. The policy version `046-cruise-v1` is distinct from application compatibility, which remains the activation owner's responsibility. Only four registry policies are implemented; all estimators remain unsupported. Compilation cannot grant LEARNED support from forged positive evidence.
+
+`evaluateCruiseTarget` is stateless. It requires explicit AUTO authority, same scope/actor/incarnation, exact045decision tick, matching profile version and sourceTick, and fresh compact044 data (age≤6ticks). Road facts bind the same source/lane; null radius explicitly asserts no curve, while missing facts/UNKNOWN category produce target0 and a diagnostic. STOP/YIELD/BLOCKED/SERVICE target0 only from validated045state/reason pairs. YIELD is the existing accepted conflict policy, with no new priority inference. FOLLOW_LEADER preserves the cruise reference;048 owns following-distance policy. CHANGE_LANE preserves the cruise reference; no lane/service mechanics are introduced.
+
+The result exposes road/curve/approach preferences, their combined style request, final coverage-capped target, posted-limit deviation, exact045reason and the049advisory comparison. Invalid/foreign/weak input returns explicit target0 with unknown preferences represented by null; malformed fields/units/versions/nonfinite values throw. The stateless evaluator has no private clock, current-target cache, actor table, subscriptions, physics resources or retained decision history.045 and profile activation callers own monotonic admission, current identity, authority and epoch lifecycle. Caller-retained tokens/results remain caller ownership; releasing these references has no explicit dispose requirement and does not claim deterministic GC.
+
+Native captures are immutable, include durable source/native bytes and finite raw timing arrays, and report CAPTURE_COMPLETE until the independent reader checks integrity, cleanup, scalar traces and provisional laptop normal tick8ms/Rapier5ms budgets. Overload110 is separate. Relative regressions above10% AND1ms in at least2/3 observed pairs require escalation. Historical failures stay preserved. Exact JS heap/WASM memory is unavailable; ownership counters and caller-owned bounded tokens remain distinct from exact allocator bytes.
+
+## Verified local results
+
+The accepted chronological BEFORE-v3 was captured before policy/registry implementation, source `b596b329edcd141eec8929882af53793a13c424a64e5b01e8ae9f614919a4f71`. AFTER-v1 source `a035d5ad3f450cba2df2110dde51b78041a6ee2a5cf421cf2ed2555e2bc96cbb` passed both current and historical independent verification against that baseline. The common runner differs only by the reviewed cleanup lint annotation, with a strict negative-tested reader exception. Every scalar trace and final real physical hash matches the baseline; all twelve AFTER worlds release body subscriptions and context/FSM/controller ownership.
+
+| Population / metric | BEFORE-v3 observed pairs | AFTER-v1 observed pairs |
+| --- | --- | --- |
+| Normal70 tick p95 ms |5.6781 /5.7811 /5.5054|7.2384 /6.5255 /5.4687|
+| Normal70 Rapier step p95 ms |0.1953 /0.1883 /0.1761|0.2612 /0.2432 /0.1767|
+| Overload110 tick p95 ms |10.4416 /10.0601 /9.9774|10.6589 /8.3836 /9.2730|
+
+All normal observed ticks remain below provisional laptop8ms and Rapier5ms. Normal pair0 exceeds the relative10% AND1ms threshold; one of three confirmations does not meet the declared two-of-three escalation trigger. Overload has zero confirmations and remains a separate diagnostic population. No sample, run or threshold was dropped or adjusted.
+
+The evaluator-only real-clock mean is0.02650 /0.02317 /0.02060ms for70 (7000 measured calls/run), and0.02259 /0.01888 /0.01974ms for110 (11000 measured calls/run). These scalar means are not p95 distributions. Stage timing includes the independent oracle, assertions and request construction, whereas the own-cost bracket surrounds only actual046evaluation. Observer storage is three600-double channels,14400bytes ON and zero OFF; raw arrays are serialized after measurement.
+
+Nineteen scoped policy/registry tests pass, including31,104 independent candidate-oracle cases, four individually effective parameters, actual044/045 integration and actual049 prudent/aggressive behavior for both classes. The aggressive style8 target remains approximately11.31m/s on radius16 and049 explicitly returns REQUESTED_OVERSPEED; prudent style1.5 tracks. Profile token forgery, getters, finite bounds, unknown/foreign/stale facts, epoch/incarnation/authority/profile lifecycle, twenty caller ownership cycles and a late descriptor-array adversary are covered. The reader's separate negative test rejects executable common-runner changes. Scoped typecheck, lint, formatting and architecture pass; parent owns integrated checks, physical board movement and publication.
+
+Reproduction from the repository root uses Node24.21.0/npm11.19.0:
+
+```powershell
+volta run --node 24.21.0 --npm 11.19.0 node --import ./scripts/register-typescript.mjs --test tests/autonomy/cruise-targets.test.ts tests/parameters/registry.test.ts
+volta run --node 24.21.0 --npm 11.19.0 node --test tests/autonomy/cruise-evidence-reader.test.mjs
+volta run --node 24.21.0 --npm 11.19.0 node scripts/verify-cruise-targets.mjs after-v1 before-v3 --current
+```
+
+The benchmark runner requires an exclusive CPU slot and a fresh label; it never overwrites captures. Existing BEFORE absence guards deliberately cannot certify the post-implementation checkout. Captures, failures and current/historical reader commands are described in [the evidence index](Evidence/046-cruise-targets/README.md). The native benchmark uses explicit synthetic curve/category/approach facts and physical brake1; it verifies target selection and local cost, without claiming longitudinal driving, safety, full-game FPS or future-estimator acceptance.

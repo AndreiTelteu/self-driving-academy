@@ -118,7 +118,18 @@ export function parseParameterCatalog(value: unknown): readonly ParameterDefinit
   return definitions;
 }
 
-const definitions = parseParameterCatalog(parameterCatalogData);
+/** Verified policy046 capabilities. Design metadata never grants runtime support. */
+const cruisePolicyKeys = new Set<string>([
+  'speed_delta_urban',
+  'speed_delta_residential',
+  'curve_lateral_accel',
+  'intersection_approach_speed',
+]);
+const definitions = Object.freeze(
+  parseParameterCatalog(parameterCatalogData).map((definition) =>
+    Object.freeze({ ...definition, implemented: cruisePolicyKeys.has(definition.key) }),
+  ),
+);
 const byKey: Record<string, ParameterDefinition> = Object.create(null);
 for (const definition of definitions) byKey[definition.key] = definition;
 Object.freeze(byKey);
