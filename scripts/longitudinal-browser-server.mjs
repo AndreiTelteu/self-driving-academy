@@ -7,15 +7,20 @@ import { execFileSync } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
 import { localClosure, immutable, digest } from './wheel-capture-source.mjs';
 
+const adapter = process.env.PBI_BROWSER_ADAPTER ?? 'longitudinal-control';
+if (!['longitudinal-control', 'following'].includes(adapter))
+  throw new Error('Unknown browser adapter');
+const pbi = adapter === 'following' ? '048' : '047';
+const evidence = adapter === 'following' ? '048-following' : '047-longitudinal-control';
 const port = Number(process.argv[2] ?? 5231);
 const label = process.argv[3] ?? 'browser-build-v1';
 if (!Number.isInteger(port) || port < 1024 || port > 65535 || !/^[a-z0-9-]+$/.test(label))
   throw new Error('Invalid browser capture arguments');
-const folder = resolve(`Docs/Evidence/047-longitudinal-control/${label}`);
-const output = resolve('.pbi-validation-047/browser-build');
+const folder = resolve(`Docs/Evidence/${evidence}/${label}`);
+const output = resolve(`.pbi-validation-${pbi}/browser-build`);
 const paths = await localClosure([
-  'tests/browser/longitudinal-control/main.ts',
-  'tests/browser/longitudinal-control/index.html',
+  `tests/browser/${adapter}/main.ts`,
+  `tests/browser/${adapter}/index.html`,
   'scripts/longitudinal-browser-server.mjs',
   'package.json',
   'package-lock.json',
@@ -50,9 +55,9 @@ const hardware = JSON.parse(
 );
 await build({
   configFile: false,
-  root: resolve('tests/browser/longitudinal-control'),
+  root: resolve(`tests/browser/${adapter}`),
   base: './',
-  cacheDir: resolve('.pbi-validation-047/browser-cache'),
+  cacheDir: resolve(`.pbi-validation-${pbi}/browser-cache`),
   define: { __LONGITUDINAL_BUILD__: JSON.stringify(identity) },
   build: { outDir: output, emptyOutDir: true },
 });

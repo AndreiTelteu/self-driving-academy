@@ -91,6 +91,16 @@ export interface CruiseTarget extends BehaviorScope {
   readonly exceedsLateralAdvisory: boolean;
 }
 const profiles = new WeakSet<object>();
+// Weak ownership follows each caller-held result; this is not an actor or decision cache.
+const targetContexts = new WeakMap<object, BehaviorContext | null>();
+/** Returns only the immutable context actually admitted while producing this exact046 result. */
+export function getCruiseTargetContext(target: unknown): BehaviorContext | null {
+  requireContract(
+    typeof target === 'object' && target !== null && targetContexts.has(target),
+    'Cruise target provenance',
+  );
+  return targetContexts.get(target)!;
+}
 let compiling = false;
 function boundedId(value: unknown, maximum: number = CRUISE_LIMITS.idCodeUnits): string {
   requireContract(
@@ -416,7 +426,7 @@ export function evaluateCruiseTarget(input: unknown): CruiseTarget {
     preferredCurve !== null && road?.curveRadiusM !== null && road !== null
       ? Math.sqrt(LATERAL_LIMITS.maximumCornerAccelerationMps2 * road.curveRadiusM)
       : null;
-  return Object.freeze({
+  const result: CruiseTarget = Object.freeze({
     ...scope,
     version: CRUISE_LIMITS.version,
     actor: subject,
@@ -437,4 +447,6 @@ export function evaluateCruiseTarget(input: unknown): CruiseTarget {
     lateralAdvisoryMps: advisory,
     exceedsLateralAdvisory: advisory !== null && target > advisory,
   });
+  targetContexts.set(result, context);
+  return result;
 }

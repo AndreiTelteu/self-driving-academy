@@ -480,7 +480,7 @@ test('046 compilation retains four immutable values with arbitrary engine metada
   reserved.provenanceByParameter.following_time_headway = 'BASE';
   reserved.evidenceByParameter.following_time_headway = null;
   assert.equal(Object.keys(compileCruiseProfile(reserved).values).length, 4);
-  assert.equal(getParameterDefinition('following_time_headway').implemented, false);
+  assert.equal(getParameterDefinition('cutin_brake_response').implemented, false);
   assert.equal(CRUISE_LIMITS.retainedHistory, 0);
 });
 

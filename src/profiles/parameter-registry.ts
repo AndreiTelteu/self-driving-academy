@@ -128,6 +128,10 @@ const policyKeys = new Set<string>([
   'comfort_deceleration',
   'acceleration_jerk',
   'brake_reaction_delay',
+  'following_time_headway',
+  'following_min_gap',
+  'queue_standstill_gap',
+  'following_speed_gain',
 ]);
 const definitions = Object.freeze(
   parseParameterCatalog(parameterCatalogData).map((definition) =>

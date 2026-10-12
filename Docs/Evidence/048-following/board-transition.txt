@@ -1,0 +1,74 @@
+{
+  "id": "048",
+  "from": "C:\\Users\\aandr\\Sites\\self-driving-academy\\PBI\\In Progress\\048-auto_follow.md",
+  "to": "C:\\Users\\aandr\\Sites\\self-driving-academy\\PBI\\Done\\048-auto_follow.md",
+  "result": {
+    "evidence": "C:\\Users\\aandr\\Sites\\self-driving-academy\\Docs\\Evidence\\048-following\\finalization.json",
+    "checks": [
+      {
+        "argv": [
+          "volta",
+          "run",
+          "--node",
+          "24.21.0",
+          "--npm",
+          "11.19.0",
+          "node",
+          "scripts/verify-following-driving.mjs",
+          "Docs/Evidence/048-following/native-driving-v4",
+          "--current"
+        ],
+        "exitCode": 0,
+        "stdout": "{\"status\":\"PASS\",\"episodes\":2,\"scope\":\"Finite physical queue/movement/standstill/commands/source/cleanup; no exact gap or contact-free assertion.\"}",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "volta",
+          "run",
+          "--node",
+          "24.21.0",
+          "--npm",
+          "11.19.0",
+          "node",
+          "scripts/verify-following-browser.mjs",
+          "Docs/Evidence/048-following/browser-v7",
+          "run-740cae8d-6830-42a2-a755-8e5d29d00498.json",
+          "run-904e2f8a-0cec-4d41-8ab5-d7365adb4a4d.json",
+          "--current"
+        ],
+        "exitCode": 0,
+        "stdout": "{\"status\":\"PASS\",\"renderer\":\"WEBGPU\",\"episodes\":2,\"sourceHash\":\"683bd9e604fd5ce588b76caba4fdae5f7431d7cb8d2f0f4713438e9d796239cf\",\"scope\":\"Short queue integration, export and cleanup; no fleet FPS claim.\"}",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "volta",
+          "run",
+          "--node",
+          "24.21.0",
+          "--npm",
+          "11.19.0",
+          "node",
+          "--import",
+          "./scripts/register-typescript.mjs",
+          "scripts/verify-following-full.mjs",
+          "Docs/Evidence/048-following/full-after-v3",
+          "Docs/Evidence/048-following/full-before-v2",
+          "--current-root=.pbi-validation-048/full-after-v4"
+        ],
+        "exitCode": 0,
+        "stdout": "{\n  \"status\": \"PASS\",\n  \"scope\": \"Full local NORMAL70 only, not fleet/browser FPS\",\n  \"comparison\": {\n    \"mode\": \"full\",\n    \"confirmations\": 0,\n    \"pairs\": [\n      {\n        \"pair\": 0,\n        \"before\": 3.3236000000033528,\n        \"after\": 3.7305000000051223,\n        \"delta\": 0.4069000000017695,\n        \"incrementalOwnMs\": 0.42040000000270084,\n        \"regression\": false\n      },\n      {\n        \"pair\": 1,\n        \"before\": 3.3294999999925494,\n        \"after\": 3.799600000027567,\n        \"delta\": 0.47010000003501773,\n        \"incrementalOwnMs\": 0.4823999999789521,\n        \"regression\": false\n      },\n      {\n        \"pair\": 2,\n        \"before\": 3.2643999999854714,\n        \"after\": 3.6934999999357387,\n        \"delta\": 0.4290999999502674,\n        \"incrementalOwnMs\": 0.39340000005904585,\n        \"regression\": false\n      },\n      {\n        \"pair\": 3,\n        \"before\": 3.253199999919161,\n        \"after\": 3.727900000056252,\n        \"delta\": 0.4747000001370907,\n        \"incrementalOwnMs\": 0.4981000000843778,\n        \"regression\": false\n      },\n      {\n        \"pair\": 4,\n        \"before\": 3.2424000001046807,\n        \"after\": 3.7175000000279397,\n        \"delta\": 0.475099999923259,\n        \"incrementalOwnMs\": 0.46189999976195395,\n        \"regression\": false\n      }\n    ]\n  }\n}",
+        "stderr": "(node:17316) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time\n(Use `node --trace-warnings ...` to show where the warning was created)"
+      }
+    ],
+    "afterMove": [],
+    "validators": []
+  },
+  "overview": {
+    "file": "C:\\Users\\aandr\\Sites\\self-driving-academy\\PBI\\README.md",
+    "modules": 33,
+    "tasks": 235,
+    "changed": true
+  }
+}

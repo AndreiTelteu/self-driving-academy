@@ -1,0 +1,11 @@
+{
+  "id": "048",
+  "criteriaSatisfied": true,
+  "result": "Four profile parameters drive following distance and speed; leader changes and disappearance invalidate prior preferences. Current physical/browser probes and full local comparison pass.",
+  "limitations": "Local NORMAL70 policy workload, not fleet FPS or allocator/release acceptance. Circular gaps and real contacts are disclosed; retrospective common-source reference; historical110 diagnostic only.",
+  "checks": [
+    ["volta", "run", "--node", "24.21.0", "--npm", "11.19.0", "node", "scripts/verify-following-driving.mjs", "Docs/Evidence/048-following/native-driving-v4", "--current"],
+    ["volta", "run", "--node", "24.21.0", "--npm", "11.19.0", "node", "scripts/verify-following-browser.mjs", "Docs/Evidence/048-following/browser-v7", "run-740cae8d-6830-42a2-a755-8e5d29d00498.json", "run-904e2f8a-0cec-4d41-8ab5-d7365adb4a4d.json", "--current"],
+    ["volta", "run", "--node", "24.21.0", "--npm", "11.19.0", "node", "--import", "./scripts/register-typescript.mjs", "scripts/verify-following-full.mjs", "Docs/Evidence/048-following/full-after-v3", "Docs/Evidence/048-following/full-before-v2", "--current-root=.pbi-validation-048/full-after-v4"]
+  ]
+}

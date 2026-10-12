@@ -256,7 +256,7 @@ test('047 only four new policies allow manual publication; positive LEARNED evid
   const manual = compileLongitudinalProfile(candidate);
   assert(LONGITUDINAL_KEYS.every((key) => manual.provenance[key] === 'MANUAL_TUNING'));
   assert.equal(getParameterDefinition('braking_jerk').implemented, false);
-  assert.equal(getParameterDefinition('following_time_headway').implemented, false);
+  assert.equal(getParameterDefinition('cutin_brake_response').implemented, false);
   const learned = {
     ...candidate,
     provenanceByParameter: { ...candidate.provenanceByParameter, desired_acceleration: 'LEARNED' },

@@ -174,7 +174,11 @@ function sameActor(a: BehaviorActor, b: BehaviorActor) {
   return a.id === b.id && a.incarnation === b.incarnation;
 }
 /** Bounded descriptor capture, before either profile compiler parses detached data. */
-function snapshot(value: unknown, depth = 0, budget = { nodes: 0 }): unknown {
+export function captureLongitudinalProfileData(
+  value: unknown,
+  depth = 0,
+  budget = { nodes: 0 },
+): unknown {
   requireContract(
     depth <= 6 && ++budget.nodes <= LONGITUDINAL_LIMITS.profileNodes,
     'Longitudinal profile capacity exceeded',
@@ -210,7 +214,7 @@ function snapshot(value: unknown, depth = 0, budget = { nodes: 0 }): unknown {
         item !== undefined && 'value' in item && item.enumerable === true,
         'Expected profile array data',
       );
-      result.push(snapshot(item.value, depth + 1, budget));
+      result.push(captureLongitudinalProfileData(item.value, depth + 1, budget));
     }
     return Object.freeze(result);
   }
@@ -223,7 +227,7 @@ function snapshot(value: unknown, depth = 0, budget = { nodes: 0 }): unknown {
       item !== undefined && 'value' in item && item.enumerable === true,
       'Expected profile data field',
     );
-    result[key] = snapshot(item.value, depth + 1, budget);
+    result[key] = captureLongitudinalProfileData(item.value, depth + 1, budget);
   }
   return Object.freeze(result);
 }
@@ -231,7 +235,7 @@ export function compileLongitudinalProfile(input: unknown): LongitudinalProfile 
   requireContract(!compiling, 'Reentrant longitudinal profile compilation');
   compiling = true;
   try {
-    const detached = snapshot(input),
+    const detached = captureLongitudinalProfileData(input),
       profile = parsePublishableDrivingProfile(detached);
     const cruise = compileCruiseProfile(detached);
     const values = {} as Record<LongitudinalKey, number>,
@@ -286,6 +290,7 @@ const validTargetReasons = [
   'MECHANICAL_COVERAGE_CAP',
   'INTERSECTION_APPROACH',
   'CURVE_PREFERENCE',
+  'FOLLOWING_PREFERENCE',
   'BEHAVIOR_STOP',
   'BEHAVIOR_YIELD',
   'BEHAVIOR_BLOCKED',
@@ -406,7 +411,9 @@ export function createLongitudinalController(input: BehaviorScope) {
           Array.isArray(inputs) && inputs.length <= 110,
           'Longitudinal actor capacity exceeded',
         );
-        const detached = snapshot(inputs) as unknown as readonly BehaviorActor[],
+        const detached = captureLongitudinalProfileData(
+            inputs,
+          ) as unknown as readonly BehaviorActor[],
           actors = detached.map(actor),
           seen = new Set<string>();
         requireContract(
