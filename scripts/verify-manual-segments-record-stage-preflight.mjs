@@ -5,8 +5,8 @@ import { resolve } from 'node:path';
 import { createHash } from 'node:crypto';
 import { derive } from './prepare-manual-segments-record-stage-diagnostic.mjs';
 const sha = (b) => createHash('sha256').update(b).digest('hex');
-const output = 'Docs/Evidence/069-manual-segments/record-stage-diagnostic-02';
-const runtime = resolve('.pbi-validation-069/record-stage-diagnostic-02/runtime');
+const output = 'Docs/Evidence/069-manual-segments/record-stage-diagnostic-03';
+const runtime = resolve('.pbi-validation-069/record-stage-diagnostic-03/runtime');
 export const EXTRA_COPY_PATHS = Object.freeze([
   'scripts/manual-segments-record-stage-observer.mjs',
   'scripts/manual-segments-record-stage-observer.d.mts',
@@ -31,11 +31,11 @@ export function validateProofRows(proof, original) {
   assert.equal(original.inputs.length, 156);
   assert.equal(
     original.sourceHash,
-    '9fa30829a05b8fa6e2b91ba600efcbb8367fc7eea1fb7e3233417a1b19bb4c10',
+    '13bda6583a6c270416ce0d014e368f6bfbc34c2d4299cf839f9f25beb5f02d73',
   );
   assert.equal(
     original.checkedProductFingerprint,
-    '924c07641a8cd93539479d5e1e597936e259e8f680d462e22acb64b21ad1d708',
+    'fb366a92e4e2c49d747bc92abe917eb56ba11fb484ce3115ea8c320e618cefb0',
   );
   assert.equal(new Set(proof.inputs.map((r) => r.path)).size, 159);
   assert.deepEqual(
@@ -60,19 +60,19 @@ export async function verifyPreflight() {
     'C:/Users/aandr/Sites/self-driving-academy/.worktrees/manual-segments-01',
   );
   const manifestBytes = await readFile(
-    'Docs/Evidence/069-manual-segments/native-after-05/manifest.json',
+    'Docs/Evidence/069-manual-segments/native-after-06/manifest.json',
   );
   assert.equal(
     sha(manifestBytes),
-    'd34552913ae84dd6aaec85aab6456a0170ed00abcdf4ca79eb1e12d5c6356f7b',
+    '62c20980e91349ff25693c1fc68dd038ca73f076e8757a16abaabd62d27713ba',
   );
   const original = JSON.parse(manifestBytes);
   const receiptBytes = await readFile(
-    'Docs/Evidence/069-manual-segments/parsed-record-reuse-checks-01/results-final.json',
+    'Docs/Evidence/069-manual-segments/optimization-checks-01/results-final.json',
   );
   assert.equal(
     sha(receiptBytes),
-    'dbc4e9554c2200da726dbcdce024f7916216513c24829a2c5faa0e482eb6d25c',
+    '515f269fc477da844c26270acd6319abb9276336a8deb78a97fe88d52c954698',
   );
   const receipt = JSON.parse(receiptBytes);
   for (const row of receipt.source) {
@@ -101,7 +101,7 @@ export async function verifyPreflight() {
   const changed = [];
   for (const row of original.inputs) {
     const b = await readFile(
-      'Docs/Evidence/069-manual-segments/native-after-05/source/' + row.path,
+      'Docs/Evidence/069-manual-segments/native-after-06/source/' + row.path,
     );
     assert.equal(b.length, row.bytes);
     assert.equal(sha(b), row.sha256);

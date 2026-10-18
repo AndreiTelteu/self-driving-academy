@@ -100,7 +100,7 @@ assert(!(await absent('src/telemetry/intervention-lifecycle.ts')), 'Real069 life
 assert(!(await absent('src/app/manual-segment-bridge.ts')), 'Real069 bridge required');
 const checked = JSON.parse(
   await readFile(
-    'Docs/Evidence/069-manual-segments/parsed-record-reuse-checks-01/results-final.json',
+    'Docs/Evidence/069-manual-segments/optimization-checks-01/results-final.json',
   ),
 );
 validateCheckedProduct(checked, REUSE_PRODUCT_SHA);
@@ -117,7 +117,7 @@ assert.equal(
   beforeManifest.sourceHash,
   'c88a6e1dba7b8c28adf2d17f371b26af0b3dd2d1ec9487cecf90515507c019af',
 );
-const folder = 'Docs/Evidence/069-manual-segments/native-after-05';
+const folder = 'Docs/Evidence/069-manual-segments/native-after-06';
 assert(await absent(folder), 'Immutable attempt exists');
 await mkdir(folder, { recursive: false });
 const startedAt = new Date().toISOString();
@@ -183,7 +183,7 @@ const files = [
   'package-lock.json',
   'Docs/performance-budgets.json',
   'Docs/Evidence/069-manual-segments/implementation-scoped-checks-03/results-final.json',
-  'Docs/Evidence/069-manual-segments/parsed-record-reuse-checks-01/results-final.json',
+  'Docs/Evidence/069-manual-segments/optimization-checks-01/results-final.json',
   'Docs/Evidence/069-manual-segments/implementation-scoped-checks-03/archive-start.json',
   ...checked.source.map((r) => r.path).filter((p) => !p.startsWith('src/')),
 ]

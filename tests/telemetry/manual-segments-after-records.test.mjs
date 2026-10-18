@@ -270,7 +270,7 @@ test('strict original preflight rejects validly rehashed metric replacement with
   const accepted = JSON.parse(
     await readFile(
       new URL(
-        '../../Docs/Evidence/069-manual-segments/implementation-scoped-checks-03/archive-start.json',
+        '../../Docs/Evidence/069-manual-segments/native-before-02-inventory.json',
         import.meta.url,
       ),
     ),

@@ -4,9 +4,9 @@ import { createHash } from 'node:crypto';
 import { types } from 'node:util';
 export const CHECKED_PRODUCT_SHA =
   'de072b4acb1a3f7879ce62ba94ba13476c1ac40af822f53504720d7a8ed1f1b6';
-export const REUSE_PRODUCT_SHA = '924c07641a8cd93539479d5e1e597936e259e8f680d462e22acb64b21ad1d708';
+export const REUSE_PRODUCT_SHA = 'fb366a92e4e2c49d747bc92abe917eb56ba11fb484ce3115ea8c320e618cefb0';
 export const REUSE_PRODUCT_RECEIPT =
-  'Docs/Evidence/069-manual-segments/parsed-record-reuse-checks-01/results-final.json';
+  'Docs/Evidence/069-manual-segments/optimization-checks-01/results-final.json';
 const ORIGINAL_PRODUCT_RECEIPT =
   'Docs/Evidence/069-manual-segments/implementation-scoped-checks-03/results-final.json';
 function productPath(pin) {

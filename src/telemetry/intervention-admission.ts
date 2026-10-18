@@ -26,9 +26,31 @@ function immutableParserResult(value: unknown): boolean {
   return true;
 }
 
+/** Shared UTF-8 encoder: one instance instead of one per byte-accounting call. */
+const utf8 = new TextEncoder();
+
+/** Exact JSON-literal UTF-8 byte length, identical to `utf8.encode(JSON.stringify(v)).byteLength`.
+ * ASCII strings without quotes/backslashes/escapes — the common case for statuses, ids and
+ * modes — return the quoted length directly and skip both allocations. Every other value
+ * keeps the original stringify+encode accounting byte for byte.
+ */
+function jsonLiteralBytes(v: string | number | boolean | null): number {
+  if (typeof v === 'string') {
+    let simple = true;
+    for (let i = 0; i < v.length; i++) {
+      const c = v.charCodeAt(i);
+      if (c < 0x20 || c > 0x7e || c === 0x22 || c === 0x5c) {
+        simple = false;
+        break;
+      }
+    }
+    if (simple) return v.length + 2;
+  }
+  return utf8.encode(JSON.stringify(v)).byteLength;
+}
+
 /** Bounded own-data preflight before005 record parsing/cloning. */
 export function interventionRecordBytes(value: unknown) {
-  const encoder = new TextEncoder();
   let nodes = 0,
     bytes = 0;
   function add(n: number) {
@@ -36,7 +58,7 @@ export function interventionRecordBytes(value: unknown) {
     if (bytes > INTERVENTION_LIMITS.recordBytes) throw Error('Intervention record byte capacity');
   }
   function literal(v: string | number | boolean | null) {
-    add(encoder.encode(JSON.stringify(v)).byteLength);
+    add(jsonLiteralBytes(v));
   }
   function visit(v: unknown, depth: number, name: string) {
     if (++nodes > 8192 || depth > 16) throw Error('Intervention record traversal capacity');

@@ -7,8 +7,8 @@ import { execFileSync } from 'node:child_process';
 import { verifyModuleClosure } from './manual-segments-archive-closure.mjs';
 const sha = (b) => createHash('sha256').update(b).digest('hex');
 const expected = 'C:/Users/aandr/Sites/self-driving-academy/.worktrees/manual-segments-01';
-const output = 'Docs/Evidence/069-manual-segments/record-stage-diagnostic-02';
-const runtime = resolve('.pbi-validation-069/record-stage-diagnostic-02/runtime');
+const output = 'Docs/Evidence/069-manual-segments/record-stage-diagnostic-03';
+const runtime = resolve('.pbi-validation-069/record-stage-diagnostic-03/runtime');
 const observer = 'scripts/manual-segments-record-stage-observer.mjs';
 const parserPin =
   'sha512-LpGDIYJAzc3Y3PT9x+FxBrGYu2PlWxLmyN7SwPTzaX0LSwEmFJBsRnPBqmaXF2r1v+Zhz6lNiEJ+7yKtM5+Ugg==';
@@ -124,7 +124,7 @@ export async function derive(path, source) {
       changed;
     changed = exactReplace(
       changed,
-      "const folder = 'Docs/Evidence/069-manual-segments/native-after-05';",
+      "const folder = 'Docs/Evidence/069-manual-segments/native-after-06';",
       `const folder = '${output}/capture';`,
     );
     changed = exactReplace(
@@ -191,12 +191,12 @@ export async function prepare() {
   assert.equal(lock.packages['node_modules/@babel/parser'].integrity, parserPin);
   const checked = JSON.parse(
     await readFile(
-      'Docs/Evidence/069-manual-segments/parsed-record-reuse-checks-01/results-final.json',
+      'Docs/Evidence/069-manual-segments/optimization-checks-01/results-final.json',
     ),
   );
   assert.equal(
     checked.sourceFinal,
-    '924c07641a8cd93539479d5e1e597936e259e8f680d462e22acb64b21ad1d708',
+    'fb366a92e4e2c49d747bc92abe917eb56ba11fb484ce3115ea8c320e618cefb0',
   );
   for (const row of checked.source) {
     const bytes = await readFile(row.path);
@@ -204,7 +204,7 @@ export async function prepare() {
     assert.equal(sha(bytes), row.sha256);
   }
   const original = JSON.parse(
-    await readFile('Docs/Evidence/069-manual-segments/native-after-05/manifest.json'),
+    await readFile('Docs/Evidence/069-manual-segments/native-after-06/manifest.json'),
   );
   await mkdir(dirname(runtime), { recursive: true });
   await mkdir(runtime, { recursive: false });

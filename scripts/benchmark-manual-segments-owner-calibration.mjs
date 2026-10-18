@@ -55,7 +55,7 @@ import {
 } from './manual-segments-calibration-proof.mjs';
 const checked = JSON.parse(
   await readFile(
-    'Docs/Evidence/069-manual-segments/parsed-record-reuse-checks-01/results-final.json',
+    'Docs/Evidence/069-manual-segments/optimization-checks-01/results-final.json',
   ),
 );
 validateCheckedProduct(checked, REUSE_PRODUCT_SHA);
