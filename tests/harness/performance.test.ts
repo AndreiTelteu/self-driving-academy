@@ -1,5 +1,9 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import { spawnSync } from 'node:child_process';
+import { mkdtemp, rm, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import {
   createPerformanceCollector,
   distribution,
@@ -157,4 +161,74 @@ test('hardware baseline rejects short durations, overflow and missing pair ident
       }),
     /Invalid paired/,
   );
+});
+
+test('DEV accepts three 15/30s pairs but cannot be relabelled as a full hardware report', () => {
+  const input = reportInput();
+  const dev = {
+    ...input,
+    role: 'hardware-browser' as const,
+    identity: { ...input.identity, fixtureVersion: 'test-DEV' },
+    runs: input.runs
+      .slice(0, 6)
+      .map((run) => ({ ...run, warmupMs: 15000, activeDurationMs: 30000 })),
+  };
+  const report = createPerformanceReport(dev);
+  assert.equal(report.overhead.length, 3);
+  assert.equal(report.gameplayGate, 'NOT_VALIDATED');
+  assert.throws(
+    () =>
+      createPerformanceReport({
+        ...dev,
+        identity: { ...dev.identity, fixtureVersion: 'test-full' },
+      }),
+    /paired repetitions/,
+  );
+  assert.throws(
+    () =>
+      createPerformanceReport({
+        ...dev,
+        runs: dev.runs.map((run) => ({ ...run, activeDurationMs: 29999 })),
+      }),
+    /30s measurement/,
+  );
+  assert.throws(
+    () =>
+      createPerformanceReport({
+        ...dev,
+        runs: dev.runs.map((run) => ({ ...run, warmupMs: 14999 })),
+      }),
+    /15s warmup/,
+  );
+});
+
+test('independent hardware CLI rejects DEV evidence before hardware/artifact certification', async () => {
+  const input = reportInput();
+  const report = createPerformanceReport({
+    ...input,
+    role: 'hardware-browser',
+    identity: { ...input.identity, fixtureVersion: '218-browser-counter-v2-DEV' },
+    runs: input.runs
+      .slice(0, 6)
+      .map((run) => ({ ...run, warmupMs: 15000, activeDurationMs: 30000 })),
+  });
+  const directory = await mkdtemp(join(tmpdir(), 'development-report-'));
+  try {
+    const path = join(directory, 'dev.json');
+    await writeFile(path, JSON.stringify(report));
+    const result = spawnSync(
+      process.execPath,
+      [
+        '--import',
+        './scripts/register-typescript.mjs',
+        'scripts/verify-performance-evidence.mjs',
+        path,
+      ],
+      { encoding: 'utf8', timeout: 10000 },
+    );
+    assert.equal(result.status, 1);
+    assert.match(result.stderr, /Development\/smoke cannot close hardware validation/);
+  } finally {
+    await rm(directory, { recursive: true });
+  }
 });

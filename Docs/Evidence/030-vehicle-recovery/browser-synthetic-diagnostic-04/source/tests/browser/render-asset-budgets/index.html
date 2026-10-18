@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ro">
+  <head>
+    <meta charset="UTF-8" />
+    <title>223 Render asset budgets</title>
+    <style>
+      body {
+        margin: 0;
+        background: #182632;
+        color: #eee;
+        font: 16px system-ui;
+      }
+      button {
+        padding: 12px;
+        margin: 8px;
+      }
+      canvas {
+        width: 1920px;
+        height: 1080px;
+        display: block;
+      }
+      pre {
+        white-space: pre-wrap;
+      }
+      #host {
+        width: 1920px;
+      }
+    </style>
+  </head>
+  <body>
+    <button id="webgpu">WebGPU probe full</button><button id="webgl2">WebGL2 probe full</button
+    ><button id="smoke-gpu">WebGPU smoke</button><button id="smoke-gl">WebGL2 smoke</button>
+    <p id="status">Ready. Keep foreground; production renderer only.</p>
+    <div id="host"></div>
+    <pre id="result"></pre>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

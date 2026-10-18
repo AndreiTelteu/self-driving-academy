@@ -21,7 +21,8 @@
     "check:parameter-catalog": "node scripts/generate-parameter-catalog.mjs --check",
     "check": "npm run typecheck && npm run lint && npm run format:check && npm run check:architecture && npm test",
     "test": "node --import ./scripts/register-typescript.mjs --test \"tests/**/*.test.ts\"",
-    "test:domain": "node --import ./scripts/register-typescript.mjs --test \"tests/harness/*.test.ts\""
+    "test:domain": "node --import ./scripts/register-typescript.mjs --test \"tests/harness/*.test.ts\"",
+    "test:isolated": "node scripts/run-isolated-tests.mjs"
   },
   "dependencies": {
     "@babylonjs/core": "9.29.0",

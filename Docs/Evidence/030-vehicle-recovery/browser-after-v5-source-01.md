@@ -1,0 +1,5 @@
+# Physical AFTER V5 source
+Built from frozen physical V4, with original trusted-event validator and actual physical keyboard/HUD paths unchanged. No synthetic driver, synthetic proof or hook imported.
+Proven fixture corrections: both actual damage participants registered at initial acquisition; explicit unsupported/fault candidates use recoveryTransform(recovered.after.subject.transform). Raw native restored391 remains moving blocker/native evidence. Labeled canonical candidate carries source, tick, serial and transform.
+Existing next OPEN005 boundary, original StandardMaterial registration,1920x1080CSS, Romanian full guide and90s countdown retained. Canvas tabindex0 enables real focus. Functional Start has synchronous per-backend terminal latch; changing to unattempted backend enables its own attempt; no automatic Run/retry. Original first failure remains visible.
+Distinct browser-after-05/build-after-05 revision/UUID generated only future build, port5230. Static checks only; no physical/native/performance acceptance claimed. Original V1–V4 and all synthetic sources/captures immutable.

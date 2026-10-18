@@ -171,3 +171,7 @@ Opriri intenționate în zone de serviciu și segmente cu pasager. Aceste prefer
 ## Editare simplificată fără extinderea catalogului
 
 [Modulul 27](27-reglaje-hud-si-camera.md) mapează opt slidere de stil la chei existente și domeniile acestui catalog. Nu adaugă parametri de driving și nu transformă o valoare ajustată în valoare învățată. ControlPreferences este o schemă distinctă de asistențe ale inputului.
+
+## Suport runtime pentru viteze
+
+[Politica 046](cruise-targets.md) implementează explicit speed_delta_urban, speed_delta_residential, curve_lateral_accel și intersection_approach_speed. Catalogul de proiectare păstrează valorile propuse și flagurile false; [registry-ul runtime](parameter-registry.md) permite MANUAL_TUNING pentru cele patru chei verificate. Estimarea și publicarea LEARNED rămân dezactivate până la implementarea estimatorilor. Valorile și proveniența folosite în decizie sunt păstrate în tokenul compilat al profilului.

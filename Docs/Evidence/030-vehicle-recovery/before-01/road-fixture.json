@@ -1,0 +1,245 @@
+{
+  "map": {
+    "schemaVersion": 1,
+    "units": "SI",
+    "mapId": "030-authored-road-v1",
+    "bounds": {
+      "minM": {
+        "x": -60,
+        "y": 0,
+        "z": -40
+      },
+      "maxM": {
+        "x": 60,
+        "y": 0,
+        "z": 120
+      }
+    },
+    "geometry": {
+      "nodes": [
+        {
+          "id": "road-0",
+          "positionM": {
+            "x": 0,
+            "y": 0,
+            "z": -20
+          }
+        },
+        {
+          "id": "road-1",
+          "positionM": {
+            "x": 0,
+            "y": 0,
+            "z": 100
+          }
+        },
+        {
+          "id": "road-2",
+          "positionM": {
+            "x": 40,
+            "y": 0,
+            "z": 100
+          }
+        },
+        {
+          "id": "road-3",
+          "positionM": {
+            "x": 40,
+            "y": 0,
+            "z": -20
+          }
+        },
+        {
+          "id": "service-0",
+          "positionM": {
+            "x": -2,
+            "y": 0,
+            "z": -22
+          }
+        },
+        {
+          "id": "service-1",
+          "positionM": {
+            "x": 2,
+            "y": 0,
+            "z": -22
+          }
+        },
+        {
+          "id": "service-2",
+          "positionM": {
+            "x": 2,
+            "y": 0,
+            "z": -18
+          }
+        },
+        {
+          "id": "service-3",
+          "positionM": {
+            "x": -2,
+            "y": 0,
+            "z": -18
+          }
+        }
+      ],
+      "paths": [
+        {
+          "id": "path-0",
+          "nodeIds": [
+            "road-0",
+            "road-1"
+          ]
+        },
+        {
+          "id": "path-1",
+          "nodeIds": [
+            "road-1",
+            "road-2"
+          ]
+        },
+        {
+          "id": "path-2",
+          "nodeIds": [
+            "road-2",
+            "road-3"
+          ]
+        },
+        {
+          "id": "path-3",
+          "nodeIds": [
+            "road-3",
+            "road-0"
+          ]
+        }
+      ],
+      "areas": [
+        {
+          "id": "service-area",
+          "vertexNodeIds": [
+            "service-0",
+            "service-1",
+            "service-2",
+            "service-3"
+          ]
+        }
+      ]
+    },
+    "lanes": [
+      {
+        "id": "lane-0",
+        "geometryId": "path-0",
+        "direction": "FORWARD",
+        "widthM": 24,
+        "speedLimitMps": 13.4,
+        "access": [
+          "TAXI",
+          "CIVIL"
+        ],
+        "neighbors": {
+          "left": null,
+          "right": null
+        },
+        "successorIds": [
+          "lane-1"
+        ],
+        "fromIntersectionId": null,
+        "toIntersectionId": null
+      },
+      {
+        "id": "lane-1",
+        "geometryId": "path-1",
+        "direction": "FORWARD",
+        "widthM": 24,
+        "speedLimitMps": 13.4,
+        "access": [
+          "TAXI",
+          "CIVIL"
+        ],
+        "neighbors": {
+          "left": null,
+          "right": null
+        },
+        "successorIds": [
+          "lane-2"
+        ],
+        "fromIntersectionId": null,
+        "toIntersectionId": null
+      },
+      {
+        "id": "lane-2",
+        "geometryId": "path-2",
+        "direction": "FORWARD",
+        "widthM": 24,
+        "speedLimitMps": 13.4,
+        "access": [
+          "TAXI",
+          "CIVIL"
+        ],
+        "neighbors": {
+          "left": null,
+          "right": null
+        },
+        "successorIds": [
+          "lane-3"
+        ],
+        "fromIntersectionId": null,
+        "toIntersectionId": null
+      },
+      {
+        "id": "lane-3",
+        "geometryId": "path-3",
+        "direction": "FORWARD",
+        "widthM": 24,
+        "speedLimitMps": 13.4,
+        "access": [
+          "TAXI",
+          "CIVIL"
+        ],
+        "neighbors": {
+          "left": null,
+          "right": null
+        },
+        "successorIds": [
+          "lane-0"
+        ],
+        "fromIntersectionId": null,
+        "toIntersectionId": null
+      }
+    ],
+    "intersections": [],
+    "signals": [],
+    "stopLines": [],
+    "crosswalks": [],
+    "serviceZones": [
+      {
+        "id": "service",
+        "geometryId": "service-area",
+        "laneId": "lane-0",
+        "anchorNodeId": "road-0",
+        "access": [
+          "TAXI",
+          "CIVIL"
+        ],
+        "kind": "BOTH"
+      }
+    ],
+    "recoveryPoints": [
+      {
+        "id": "point-0",
+        "nodeId": "road-0",
+        "laneId": "lane-0",
+        "headingRad": 1.5707963267948966
+      }
+    ]
+  },
+  "graphStats": {
+    "lanes": 4,
+    "segments": 4,
+    "connections": 4,
+    "spatialCells": 15,
+    "spatialReferences": 29,
+    "fallbackLanes": 0,
+    "geometryVariants": 4,
+    "uniqueSegments": 4
+  }
+}

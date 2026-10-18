@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ro">
+  <head>
+    <meta charset="UTF-8" />
+    <title>021 Rapier calibration</title>
+    <style>
+      body {
+        margin: 0;
+        background: #101b26;
+        color: #e4eef8;
+        font: 15px system-ui;
+      }
+      button,
+      input,
+      select {
+        margin: 5px;
+        padding: 8px;
+      }
+      #host canvas {
+        width: 1920px;
+        height: 1080px;
+        display: block;
+      }
+      #controls {
+        position: fixed;
+        top: 0;
+        left: 0;
+        background: #132333ed;
+        padding: 12px;
+        z-index: 2;
+        max-width: 900px;
+      }
+      #status {
+        white-space: pre-wrap;
+      }
+      h1 {
+        font-size: 20px;
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="controls">
+      <h1>Rapier 0.21.0 · Babylon.js · prototip 021</h1>
+      <label
+        >Aderență <input id="grip" type="range" min="0.3" max="2" step="0.1" value="1.3" /></label
+      ><label
+        >Frână m/s² <input id="brake" type="range" min="2" max="12" step="1" value="8" /></label
+      ><select id="scenario">
+        <option value="manual">Manual: săgeți accelerație/frână/direcție</option>
+        <option value="braking">Frânare 20m/s</option>
+        <option value="turn">Viraj 20m/s</option>
+        <option value="curb">Bordură 18cm</option>
+        <option value="contact">Contact auto</option></select
+      ><button id="reset">Aplică / reset</button><button id="smoke">Smoke hardware</button
+      ><button id="full">Proba completă 5 perechi (~25min)</button>
+      <p id="status">Inițializare...</p>
+    </div>
+    <div id="host"></div>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

@@ -1,5 +1,7 @@
 export * from './contracts';
 export * from './physics';
+export * from './road-surfaces';
+export * from './wheel-slip';
 export * from './body-port';
 export * from './body-registry';
 export * from './vehicle-classes';
@@ -12,3 +14,7 @@ export * from './damage-port';
 export * from './damage-state';
 export * from './drivetrain';
 export * from './braking-reverse-input';
+export * from './recovery-port';
+export * from './recovery-road';
+export * from './recovery-ledger';
+export * from './recovery-state';

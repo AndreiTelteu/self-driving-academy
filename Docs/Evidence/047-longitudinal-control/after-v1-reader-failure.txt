@@ -1,0 +1,14 @@
+Command: volta run --node 24.21.0 --npm 11.19.0 node scripts/verify-longitudinal-control.mjs after-v1 before-v1 --current
+Exit code: 1. Node v24.21.0.
+
+AssertionError [ERR_ASSERTION]: Laptop normal tick budget8ms
+at inspect (scripts/verify-longitudinal-control.mjs:79:7)
+at scripts/verify-longitudinal-control.mjs:86:12
+actual: false; expected: true; operator: '=='.
+
+The immutable after-v1 capture remains CAPTURE_COMPLETE, not independently accepted.
+Source SHA256: f8421e9eefc327dbf6fa75a11a670cf10e10c0f3088146f9de0ac6874065f669
+Normal70 observed tick p95 ms: 8.6824 / 7.4478 / 6.9702.
+Normal70 own047 mean ms/call: 0.0228994 / 0.0214991 / 0.0210367.
+Overload110 observed tick p95 ms: 13.0860 / 14.4218 / 12.3634.
+All three normal pairs also exceed BEFORE by >10% AND >1 ms, satisfying the declared escalation trigger. No pair, sample, threshold or frozen evidence was removed or changed. The parent was informed before any new runtime work or measurement.

@@ -22,6 +22,13 @@ import type {
 } from '../world';
 import type { Vector3 } from '../vehicles';
 
+// No strong ownership or actor history: only exact immutable engine outputs are recognized.
+const generatedContexts = new WeakSet<object>();
+/** Clones, deserialized objects and Proxies never inherit engine provenance. */
+export function isGeneratedRoadContext(value: unknown): value is RoadContext {
+  return typeof value === 'object' && value !== null && generatedContexts.has(value);
+}
+
 export interface RoadContextVehicle {
   readonly id: string;
   readonly incarnation: number;
@@ -609,7 +616,7 @@ export function createRoadContext(
         coverage: 'LOCAL_ONLY',
       });
     });
-    return Object.freeze({
+    const context: RoadContext = Object.freeze({
       tick: frame.tick,
       sessionId: frame.sessionId,
       worldEpoch: frame.worldEpoch,
@@ -635,6 +642,8 @@ export function createRoadContext(
       completeness: frame.completeness,
       discontinuity: frame.discontinuity === true,
     });
+    generatedContexts.add(context);
+    return context;
   }
   function clear() {
     current?.index.dispose();

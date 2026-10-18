@@ -1,0 +1,16 @@
+Preserved first functional test attempt, 2026-10-12. Runtime did not change in response.
+Command: volta run --node 24.21.0 --npm 11.19.0 node --import ./scripts/register-typescript.mjs --test tests/autonomy/longitudinal-control.test.ts
+Exit code: 1. Tests: 9; pass: 7; fail: 2; duration_ms: 2915.7946.
+
+Failing tests:
+047 sedan actual Rapier/024 normal stop and delayed risky obstacle impact stay finite on both surfaces
+047 compact actual Rapier/024 normal stop and delayed risky obstacle impact stay finite on both surfaces
+
+Both failures:
+AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  assert(result.trace.every((row) => row.brakeEventTick === 1))
+at tests/autonomy/longitudinal-control.test.ts:291:11
+actual: false; expected: true; operator: '=='.
+
+Diagnosis: The final pre-actuation speed can enter the explicit 0.1 m/s tracking deadband, ending the observed braking episode and clearing brakeEventTick. It is incorrect to require the initial event forever after stop or native impact. The assertion was narrowed to the entire reaction interval plus first active braking tick. A separate exact first-brake assertion requires stimulusTick + ceil(delay * 60), and actual stop/contact/finite-state assertions remain.
+The corrected suite passed all 9 tests (duration_ms 3209.8542), before adding the separate publication capability test.

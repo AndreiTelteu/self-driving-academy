@@ -71,3 +71,7 @@ Verificare finală: Validate-Board.ps1 -RequireDone '214'.
 - 2026-10-04: Revizia 0.4 adaugă contracte/verificări de performanță; implementarea rămâne neîncepută.
 
 - 2026-10-04: Revizia 0.5 elimină pierderea XP și evaluatorul A/B; ID-ul/fișierul rămân stabile, scope-ul este feedback și regresie, status To Do.
+
+## Nivel de validare — politica 2026-10-08
+
+Nivel: `targeted`. Aplică [politica de validare proporțională](../../Docs/validation-policy.md), inclusiv preflight, scenarii afectate, reutilizarea harness-ului și dovezilor, paralelizare numai pentru corectitudine și checkpoint-uri numai pentru perechi complete independente. Criteriile explicite de gameplay, hardware sau soak rămân obligatorii. DEV nu închide gate-ul de release; rapoartele istorice nu se reclasifică. Alegerea nivelului nu bifează criterii și nu schimbă statusul.

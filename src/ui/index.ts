@@ -24,3 +24,4 @@ export function createBootstrapView(root: HTMLDivElement): BootstrapView {
 
 export { createControlModeHud, CONTROL_MODE_HUD_LIMITS } from './control-mode-hud';
 export type { ControlModeHudView } from './control-mode-hud';
+export * from './recovery-hud';

@@ -14,6 +14,8 @@ Pragurile mecanice aparțin configurației vehiculului. Profilul șoferului expr
 
 Scenele de calibrare includ frânare de la viteze repetabile, viraje cu rază fixă, schimbare de bandă, impact cu bordură și contact între două mașini. Se verifică stabilitatea numerelor și coerența manual versus autonom înainte de construirea campaniei.
 
+[Dinamica026](wheel-dynamics.md) este integrată cu suprafețe versionate și proiecții readonly ale suspensiei, contactului, direcției și rotației native a roților. Calibrarea sedan/compact pe două suprafețe, paritatea mecanicii implicite și probele Full WebGPU/WebGL2 în ChromeGuest sunt verificate în [raportul final](Evidence/026-laptop/current-delivery-summary.md). Rendererul Babylon consumă starea fizică și nu o controlează. Materialele sunt empirice și uniforme într-o lume plată, fără model complet de anvelopă sau contact mixt pe patch-uri. Fixture-ul timpuriu nu certifică jocul integrat.
+
 ## Contractul dintre manual și autonomie
 
 Controllerul auto aplică aceeași comandă din oricare sursă. Arbitrajul este realizat înainte de fizică; comenzile AI nu sunt aplicate după preluare. Raw input, commanded input și achieved acceleration sunt valori distincte pentru învățare. Nu antrenăm profilul să reproduce zgomotul de suspensie sau impulsurile de coliziune.
@@ -27,6 +29,8 @@ Controllerul și fizica rămân la 60 Hz; doar deciziile de nivel înalt au 10 H
 ## Recuperare și impacturi distractive
 
 [Modulul 26](26-joaca-libera-haos-si-distrugere.md) diferențiază R/deblocarea mașinii de resetul lumii cu stil păstrat și definește contactele cu decor destructibil. Fizica este aceeași în Academie/Haos și MANUAL/LEARNING/AUTO. Reglajele de input schimbă realizarea comenzilor jucătorului; sliderele de stil schimbă țintele politicii, fără modificarea ascunsă a masei, aderenței sau puterii.
+
+[Recuperarea030](vehicle-recovery.md) primește explicit R sau comanda HUD în MANUAL/LEARNING. Punctul păstrat trebuie să treacă din nou verificarea rutieră și query-ul nativ pentru toate corpurile înainte de mutare. Operația păstrează incidentele, închide segmentul manual și publică o teleportare etichetată, exclusă din învățare. Dacă livrarea evidenței eșuează după mutarea fizică, retry-ul continuă livrarea fără repetarea teleportării. Probele fizice și complete pe WebGPU/WebGL2 au trecut criteriile obligatorii pentru versiunea capturată; [dovezile](Evidence/030-vehicle-recovery/current-delivery-summary.md) disting aceste capturi de corecția ulterioară a diagnosticelor de eroare. GPU, latența inputului, memoria nativă reținută și jocul complet rămân nemăsurate.
 
 ## Prototip implementat021
 
@@ -43,3 +47,5 @@ Controllerul și fizica rămân la 60 Hz; doar deciziile de nivel înalt au 10 H
 [Frânarea și marșarierul027](braking-reverse.md) folosesc opt-in `027-braking-reverse-v1`: inversarea sensului cere viteza totală≤0,2m/s timp de șase tick-uri fizice consecutive cu frâna eliberată. Comanda brută, sensul cerut, sensul angajat și propulsia fizică semnată rămân distincte. Frâna/frâna de mână domină propulsia, iar pauza și schimbarea autorității invalidează tranziția. Calibrarea sedan/compact și driving-ul Chrome pe WebGPU/WebGL2 sunt verificate; mecanica Rapier rămâne comună. Modelul nu pretinde ABS sau o transmisie completă; disponibilitatea029 plafonează magnitudinea după realizarea sensului.
 
 [Avaria029](vehicle-damage.md) publică stările AVAILABLE/DAMAGED/IMMOBILIZED pe identitatea nativă a vehiculului. Pragurile calibrate de impuls echivalent sunt 2 și 8m/s; avaria plafonează propulsia la 0,5, iar imobilizarea aplică propulsie zero și frână de serviciu 1. Recuperarea păstrează prefixul incidentelor și adaugă o operație etichetată. Probele funcționale și complete pe WebGPU/WebGL2 trec criteriile obligatorii de CPU, cadre și memorie JS agregată; perechile individuale eșuate și istoricul regresiilor rămân în [dovezi](Evidence/029-vehicle-damage/current-delivery-summary.md). GPU, latența inputului, memoria nativă și jocul complet rămân nemăsurate de această probă.
+
+[Calibrarea finală 031](physics-calibration.md) fixează presetul empiric existent și măsoară frânarea, virajul geometric de 17 m, manevra laterală, trecerea peste bordură și contactul între două vehicule pentru sedan/compact pe două suprafețe. Aceleași comenzi PLAYER și AUTONOMY trec prin controllerul comun, cu comparație fizică pe fiecare tick; autonomia decizională și achiziția unei benzi țintă rămân contracte separate.

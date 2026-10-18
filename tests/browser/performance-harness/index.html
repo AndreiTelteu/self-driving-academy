@@ -27,13 +27,33 @@
   <body>
     <h1>Performance harness 218</h1>
     <p>
-      Desktop WebGPU. Cinci perechi oprit/pornit, 30s încălzire + 120s măsurare. Păstrează tabul
-      vizibil și cu focus. Fixture de counter, fără fizică/gameplay.
+      Desktop AUTO/WebGPU/WebGL2. Cinci perechi oprit/pornit, 30s încălzire + 120s măsurare.
+      Păstrează tabul vizibil și cu focus. Fixture de counter, fără fizică/gameplay.
     </p>
-    <button id="start">Rulează proba completă</button
-    ><button id="smoke">Smoke 5 perechi (nu baseline)</button
+    <label
+      >Backend
+      <select id="backend">
+        <option>AUTO</option>
+        <option>WEBGPU</option>
+        <option>WEBGL2</option>
+      </select></label
+    >
+    <button id="start" disabled>Rulează proba completă</button
+    ><button id="development" disabled>Dezvoltare ~4,5 min (nu gate release)</button
+    ><button id="smoke">Preflight export ~5 s</button
     ><button id="export" disabled>Export JSON</button>
-    <p id="status">Pregătit</p>
+    <p>
+      Rulează mai întâi preflight. Pentru reluare, păstrează ID-ul sesiunii; perechea întreruptă
+      reîncepe cu warmup și ambele brațe.
+    </p>
+    <label>Sesiune (gol = nouă): <input id="session" size="40" /></label>
+    <p>
+      <label
+        ><input type="checkbox" id="resume-confirm" /> La reluare: confirm aceleași condiții
+        hardware/alimentare/termice.</label
+      >
+    </p>
+    <p id="status">Pregătit pentru preflight</p>
     <div id="host"></div>
     <pre id="result"></pre>
     <script type="module" src="./main.ts"></script>

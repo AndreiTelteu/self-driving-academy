@@ -1,0 +1,13 @@
+Command: volta run --node 24.21.0 --npm 11.19.0 node scripts/verify-longitudinal-control.mjs after-v4 before-v1 --current
+Reader exit code: 1. Node v24.21.0.
+AssertionError [ERR_ASSERTION]: Laptop normal tick budget8ms
+at scripts/verify-longitudinal-control.mjs:79:7
+actual: false; expected: true; operator: '=='.
+
+Final public-import source SHA256: 0a391f25b7784f7c207f58730958c1c6af0f20937aa2967701f03a5f72955248
+Normal70 observed tick p95 ms: 7.9068 / 8.1458 / 7.9072.
+Normal70 own047 mean ms/call: 0.01263395 / 0.01287070 / 0.01272188.
+Overload110 observed tick p95 ms: 12.8793 / 12.5869 / 12.5416.
+Overload110 own047 mean ms/call: 0.00978716 / 0.00979753 / 0.00997558.
+Relative confirmations against chronological BEFORE-v1: 3/3 normal and 3/3 overload. The ordinary numeric reader therefore remains FAIL. This capture follows the exact two-import architecture correction; no runtime logic was changed from v3. The observed cost difference does not establish its cause. All samples, worlds and immutable captures are preserved. Parent approved the existing full-paced investigation on the frozen final source, without changing thresholds or replacing the original baseline.
+Native-driving-v2 then independently passes strict current-byte physical actuation verification; it does not resolve this performance failure.

@@ -1,7 +1,6 @@
 import { fields, list, number, tick, boolean, choice, requireContract, record } from '../sessions';
-import { validateParameterValue } from '../profiles/parameter-registry';
-import type { DrivingProfile } from '../profiles/contracts';
-import type { PriorityArrival } from '../world/priority-arrival';
+import { validateParameterValue, type DrivingProfile } from '../profiles';
+import type { PriorityArrival } from '../world';
 import type { BehaviorFacts } from './behavior-fsm';
 import { parseBehaviorFacts } from './behavior-fsm';
 

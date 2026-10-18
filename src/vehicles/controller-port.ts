@@ -73,8 +73,22 @@ export interface VehicleController {
     measure?: boolean,
   ): VehicleControllerFrame;
   readControl(identity: BodyIdentity): VehicleControlProjection | undefined;
+  /** Addressed030 boundary: no physics step or authority change. */
+  invalidateRealization?(
+    identity: BodyIdentity,
+    expectedTick: number,
+    mode: 'MANUAL' | 'LEARNING',
+  ): void;
   suspend(): void;
   resume(): void;
+  /** Fresh scalar owner boundary, no fleet projection/drivetrain statistics scan. */
+  readBoundary?(): {
+    readonly context: ContractContext;
+    readonly tick: number;
+    readonly suspended: boolean;
+    readonly disposed: boolean;
+    readonly fault: { readonly attemptedTick: number; readonly stage: 'ACTUATION' } | null;
+  };
   getStats(): {
     readonly context: ContractContext;
     readonly tick: number;

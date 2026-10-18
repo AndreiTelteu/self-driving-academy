@@ -1,0 +1,37 @@
+#030 steady hardware BEFORE proposal — source only
+
+CPU BEFOREe7e5241c... is supplemental; Docs25 steady simulation/memory requires actual renderer/native hardware evidence. No build/server/browser/hardware grant is implied by this plan. Published basead32 and authored road-fixture.ts are frozen before production030 tracking/native/controller seams. Original before-01 source/native/raw records remain untouched.
+
+## Frozen workload and source provenance
+
+Prepare a separate browser reference entry from actual unchangedad32 controller027/availability029/native physics, existing024 fixed60Hz runner and current real Babylon renderer. Consume the exact authored032/033 road fixture plus identical mixedsedan/compact contact geometry and input schedule from native BEFORE. All70 normal cars remain physical. Authority timeline uses actualAUTO/MANUAL/LEARNING source transitions ofcar0, at mostonePLAYER; do not claim full066 keyboard/005/007 recovery composition in this steady reference. Future functionalR composition is separate.
+
+Archive raw full executable import/reexport closure, fixture, validators, budgets/package/lock and installed nativeESM/inlinedWASM before first world. Record actual normalizedGit provenance separately from checkoutbytes/EOL. Emit productionVite artifact once only after finite build grant; durably archive all emitted artifacts+ZIP/hash/manifest before native/browser worlds. Source-only archiver/server/verifier proposals must pass parent review before execution. Assert030 implementation/native port and controller invalidation absent in this reference, not merely a030disabled flag.
+
+## Required actual hardware sequence
+
+Both actual Chrome AMD backendWEBGPU andWEBGL2 at CSS/internal1920x1080,DPR1, actual focused foreground window. PreferredAUTO must report realWEBGPU; WEBGL2 explicitly selected. Backend/device/contextloss/dimensions/focus/visibility guard before acquisition, throughout RAF and after each callback; no headlessFPS, synthetic trusted keyboard proof or background-clock repair. Parent asks real physical foreground availability only after frozen manifest/server ready.
+
+Each backend has10 chronological runs: five alternating OFF/ON observer pairs,30s warmup then120s measured each,1500s approximately25min/backend; bothbackends approximately50min. No omitted arm, shortened warmup, selective resume or automatic rerun. BEFORE hardware is the unchanged ad32 workload. Future AFTER uses that same reference and full sequence; steady030 tracking must preserve no-R control/native/physical checkpoint equality. R teleport discontinuities stay separately labeled functional tests and are not forced into a fake unchanged physical timeline.
+
+Use actual02460Hz accumulator no dt adjustment; explicitly guard measured sim/wall>=.98, warm cadence/debt, all70 physical update counts and frame gaps/overload. Common fixedtick checkpoints must be reachable under accepted real endpoints (do not require an arbitrary exact9000finaltick or add tail steps). Reuse conservative shared checkpoint1920..8760 every120ticks (58), validate warm+measured cadence proves reachability, keep actual variableend tick separate. Exact numeric packet/native/physical codec+SHA and bounded pendinghash64, matching OFF/ON checkpoint observer cost; drain outside measured window. Before memory endpoint is after warm and immediately before measurement; after endpoint is immediately after measured loop BEFORE digest draining/export/ownershipcycles.
+
+## Timing and memory retention
+
+ON fullwindow aggregates4096 Uint32bins at.025ms/channel, explicit finite overflow count/min/max; all samples counted and nearest-rank intervals recomputed offline. Use actual RAF/frame, fixedtick/main/Rapier channels; annotate instrumentation and bounded bytes. OFF minimal RAF/cadence/checkpoint guards and same fixed memory endpoints, no nonexistent native timing or ONpeak comparison. Optional GPU/input measurements genuinely absent are NOT_MEASURED, notzero/unsupported; required CPU/frame/JSproxy memory verdict separate.
+
+Absolute p95/p99 only passes when interval upper<=budget; ambiguous interval never fabricated as exact value. Original relative10%AND1ms>=3/5 gate uses conservative intervals (AFTERlower>1.1*BEFOREupper AND lower-upper>1ms establishes failure; uncertainty remains unvalidated). Normal70 simulation5.5ms/Rapier3ms/main10ms use actual203manifest desktop channels; frame18.5ms p95/25ms p99 and optionalGPU12ms/input50ms bind the exact manifest values before final build; do not substitute genericFPS for fixedtick. Validate active GPU/input budgets when actual data exists; source-only channel list needs parentreview before finalbuild.
+
+Matched performance.memory JS-used-heap raw phase endpoints and ON1Hz observedpeak lowerbound, noforcedGC/summedcategories/totalnativeRAM claim. Required >10%AND5MiB>=3/5 individual pair flags allretained; missing API leaves that memory measurement UNVALIDATED. Separate030 ownership20cycles/110capacity/ledger4096+4MiBfullUTF8 pages64/nativecleanup tests AFTER. No pretend retention proof from these pre030 browser worlds.
+
+## Failure-safe transport and offline proof
+
+Create backend capture STARTED wx identity before first world; immutable per-run STARTED/raw/terminal metadata bounds, acquired-owner list/disposalattempts/currenttick/partial samples/checkpoints/native/context/dimensions/focus and original+cleanup+export failures preserved on every setup or run failure. Export before independent success validation so a legitimate cadence guard failure still has actual raw data (052 lesson). Protect incremental acquisition/whenReadyAsync and every disposer/readback. Attempt every owner once, aggregate boundedcauses, no transport mask of physics failure.
+
+Bound128KiB/part,<=16parts/run, deterministic identities/ACK/hash, no full retained reportgraphs in page. Transport cap is160part files/backend (16maximum×10runs), plus separately declared manifest/STARTED/terminal overhead; preserve that exact maximum total beforebuild. Hist aggregates are distinct from4096 retained diagnostic-sample cap and declare per-channel bytes, objectoverheadunknown. Server validates expectedsource/artifact/native/backend/sequence/phase/focus/all70ticks independently, not assertedpassed:true.
+
+Offline CURRENT/HISTORICAL verifies all source/artifact/native/archive bytes/provenance, exact10run sequence perbackend, everypart<=128KiB/count/ACK, total/rank/hist counts against actual ticks/RAF, all58native checkpoint parity acrosspairarms, all raw memory pairflags/absolute+relative intervals and cleanup. Failure/rejected/incomplete markers disqualify official PASS, even alongside complete-looking data. Portability reads durable canonical relativearchives, normalizedGit index proof separate from CURRENT byteequality. Every failed build/capture retains immutable uniqueidentity and stops for review.
+
+## Later functional input protocol
+
+After accepted BEFORE and implemented/tested/frozen030 production, parent gives user exact focus/vehicle/mode and R-key instructions, waits while user performs actualkey, then independently inspects real receipt/native teleport/history/mode preservation. Neither scripted domain intent nor synthetic DOM key is labeled trustedinput. Overturn/blocked/no-point/bodytoken/nativeangular/005segment/029prefix/eventdelivery/othercarunchanged evidence needed both actualbackends. No full226 UX, passengers, city reset or learnedaction expansion.

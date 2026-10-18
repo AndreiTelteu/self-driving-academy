@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ro">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Bootstrap hardware — PBI203</title>
+    <style>
+      body {
+        font: 16px system-ui;
+        background: #10201b;
+        color: #f1f8f3;
+        margin: 24px;
+      }
+      button,
+      select {
+        font: inherit;
+        padding: 10px;
+        margin: 8px 8px 8px 0;
+      }
+      #status {
+        max-width: 900px;
+      }
+      canvas {
+        width: 1920px;
+        height: 1080px;
+        display: block;
+      }
+      pre {
+        white-space: pre-wrap;
+        max-width: 1000px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Proba bootstrap pe hardware real</h1>
+    <p>
+      Conectează alimentarea, închide aplicațiile GPU și păstrează tabul vizibil. Proba completă
+      durează aproximativ 25 de minute: cinci repetări, colector oprit și pornit, cu 30 s încălzire
+      și 120 s măsurate pentru fiecare.
+    </p>
+    <label
+      >Backend
+      <select id="backend">
+        <option value="AUTO">Automat (WebGPU preferat)</option>
+        <option value="WEBGL2">WebGL2</option>
+        <option value="WEBGPU">WebGPU</option>
+      </select></label
+    >
+    <button id="start">Rulează proba completă</button>
+    <button id="smoke">Verificare scurtă (nu baseline)</button>
+    <button id="export" disabled>Descarcă rezultatul JSON</button>
+    <p id="status" role="status">Pregătit. Nu schimba tabul în timpul măsurării.</p>
+    <div id="host"></div>
+    <pre id="result"></pre>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

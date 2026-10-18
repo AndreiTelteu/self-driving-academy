@@ -1,3 +1,42 @@
+<!-- loop-pbi:progress:start -->
+| Module | Remaining phases | To Do | In Progress | Done / Total | Progress |
+|---|---|---:|---:|---:|---|
+| Asseturi și audio | V1 | 7 | 0 | 0 / 7 | `░░░░░░░░░░` 0% |
+| Autonomie | V1 | 7 | 1 | 6 / 14 | `████░░░░░░` 43% |
+| Babylon | Completed | 0 | 0 | 11 / 11 | `██████████` 100% |
+| Control manual | V1 | 4 | 1 | 3 / 8 | `███░░░░░░░` 38% |
+| Economie | V1 | 1 | 0 | 0 / 1 | `░░░░░░░░░░` 0% |
+| Experiență | V1 | 2 | 0 | 0 / 2 | `░░░░░░░░░░` 0% |
+| Experimente | V1 | 1 | 0 | 0 / 1 | `░░░░░░░░░░` 0% |
+| Experimente și indicatori | V1 | 8 | 0 | 0 / 8 | `░░░░░░░░░░` 0% |
+| Extindere V2 | V2 | 4 | 0 | 0 / 4 | `░░░░░░░░░░` 0% |
+| Flotă și curse | V1 | 9 | 0 | 0 / 9 | `░░░░░░░░░░` 0% |
+| Fundație | Completed | 0 | 0 | 14 / 14 | `██████████` 100% |
+| Interfață | V1 | 13 | 0 | 0 / 13 | `░░░░░░░░░░` 0% |
+| Învățare | V1 | 16 | 0 | 1 / 17 | `░░░░░░░░░░` 6% |
+| Învățare V2 | V2 | 10 | 0 | 0 / 10 | `░░░░░░░░░░` 0% |
+| Mers pe jos V3 | V3 | 12 | 0 | 0 / 12 | `░░░░░░░░░░` 0% |
+| Misiuni | V1 | 15 | 0 | 0 / 15 | `░░░░░░░░░░` 0% |
+| Misiuni și interfață | V1 | 1 | 0 | 0 / 1 | `░░░░░░░░░░` 0% |
+| Misiuni V2 | V2 | 1 | 0 | 0 / 1 | `░░░░░░░░░░` 0% |
+| Oraș | V1 | 3 | 1 | 8 / 12 | `██████░░░░` 67% |
+| Oraș și fizică | V1 | 1 | 0 | 0 / 1 | `░░░░░░░░░░` 0% |
+| Parametri V2 | V2 | 10 | 0 | 0 / 10 | `░░░░░░░░░░` 0% |
+| Persistență | V1 | 14 | 0 | 0 / 14 | `░░░░░░░░░░` 0% |
+| Produs | V1 | 1 | 0 | 0 / 1 | `░░░░░░░░░░` 0% |
+| Profiluri | V1 | 8 | 0 | 0 / 8 | `░░░░░░░░░░` 0% |
+| Profiluri și interfață | V1 | 1 | 0 | 0 / 1 | `░░░░░░░░░░` 0% |
+| Progres | V1 | 2 | 0 | 0 / 2 | `░░░░░░░░░░` 0% |
+| Release V2 | V2 | 1 | 0 | 0 / 1 | `░░░░░░░░░░` 0% |
+| Telemetrie | V1 | 7 | 0 | 0 / 7 | `░░░░░░░░░░` 0% |
+| UI | V1 | 1 | 0 | 0 / 1 | `░░░░░░░░░░` 0% |
+| Validare | V1 | 4 | 0 | 0 / 4 | `░░░░░░░░░░` 0% |
+| Validare și release | V1 | 12 | 0 | 0 / 12 | `░░░░░░░░░░` 0% |
+| Validare V2 | V2 | 2 | 0 | 0 / 2 | `░░░░░░░░░░` 0% |
+| Vehicule și fizică | Completed | 0 | 0 | 11 / 11 | `██████████` 100% |
+| Total | - | 178 | 3 | 54 / 235 | `██░░░░░░░░` 23% |
+<!-- loop-pbi:progress:end -->
+
 # Backlog Kanban Self Driving Academy
 
 235 task-uri de implementare cu IDs stabile 001–235. Ordinea de implementare este definită de depends_on; IDs nu mai constituie o ordine topologică numerică. Toate sunt create inițial în To Do. Prefixele rămân stabile la mutarea între coloane.

@@ -1,0 +1,30 @@
+{
+  "createdAt": "2026-10-06T11:29:51.714Z",
+  "status": "SOURCE_ONLY_UNEXECUTED",
+  "originalPath": "Docs/Evidence/068-vehicle-switch/verify-browser-before.mjs",
+  "originalSha256": "cb1bf697140e171bf6d019d33833a35545b07b114d750ff62eee0bc024978b92",
+  "variantPath": "Docs/Evidence/068-vehicle-switch/verify-browser-before-wire-v2.mjs",
+  "variantSha256": "af0aef33d52eb9ffff5b5b6d681b117cc0e8191121982c2a190cead3430713c3",
+  "readerPath": "Docs/Evidence/068-vehicle-switch/browser-vector-wire-v2.mjs",
+  "readerSha256": "f254808cbc475faac2e4111f15c5646ac1257c898f167ba8ebe768c1b47287d3",
+  "replacements": [
+    [
+      "import assert from 'node:assert/strict';",
+      "import assert from 'node:assert/strict';\nimport { readBabylonPoint } from './browser-vector-wire-v2.mjs';"
+    ],
+    [
+      "        assert.ok(\n          event.worldPick.point.x >= 0 &&\n            event.worldPick.point.x < 1920 &&\n            event.worldPick.point.y >= 0 &&\n            event.worldPick.point.y < 1080,\n        );",
+      "        readBabylonPoint(event.worldPick.point);"
+    ],
+    [
+      "    assert.ok(pick.point.x >= 0 && pick.point.x < 1920 && pick.point.y >= 0 && pick.point.y < 1080);",
+      "    readBabylonPoint(pick.point);"
+    ],
+    [
+      "    assert.ok(\n      pick.offscreenPoint.x < 0 ||\n        pick.offscreenPoint.x >= 1920 ||\n        pick.offscreenPoint.y < 0 ||\n        pick.offscreenPoint.y >= 1080 ||\n        pick.offscreenPoint.z < 0 ||\n        pick.offscreenPoint.z > 1,\n    );",
+      "    const offscreenPoint = readBabylonPoint(pick.offscreenPoint, false);\n    assert.ok(\n      offscreenPoint.x < 0 ||\n        offscreenPoint.x >= 1920 ||\n        offscreenPoint.y < 0 ||\n        offscreenPoint.y >= 1080 ||\n        offscreenPoint.z < 0 ||\n        offscreenPoint.z > 1,\n    );"
+    ]
+  ],
+  "reason": "structuredClone(Vector3) preserves own backing fields; x/y/z accessors are not serialized. Original strict FAIL preserved; no capture/source/build/physics/budget changes.",
+  "scope": "Exact raw wire reader only; remaining original assertions unmodified"
+}

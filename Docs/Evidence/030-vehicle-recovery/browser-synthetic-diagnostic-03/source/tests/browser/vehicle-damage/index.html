@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>029 damage recovery playtest</title>
+    <link rel="icon" href="data:," />
+    <style>
+      body {
+        margin: 0;
+        background: #182333;
+        color: #fff;
+        font: 16px system-ui;
+      }
+      .controls {
+        position: fixed;
+        top: 12px;
+        left: 12px;
+        padding: 12px;
+        background: #182333ed;
+        z-index: 1;
+        max-width: 580px;
+      }
+      pre {
+        max-height: 180px;
+        overflow: auto;
+        font-size: 12px;
+      }
+      canvas {
+        width: 1920px;
+        height: 1080px;
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="controls">
+      <strong>029 actual damage and recovery</strong>
+      <p>Both classes · actual impact · reduced/blocked propulsion · history-preserving recovery</p>
+      <select id="backend">
+        <option>AUTO</option>
+        <option>WEBGL2</option>
+      </select>
+      <button id="run">Run damage and recovery</button>
+      <pre id="status">
+Ready. Real-wall60Hz simulation, native damage and recovery; functional playtest, no FPS claim.</pre>
+    </div>
+    <canvas id="canvas" width="1920" height="1080"></canvas>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

@@ -62,8 +62,29 @@ test('80 unique keys, 24 M targets; planned stages grant no capabilities', () =>
       .length,
     24,
   );
-  assert(parameterDefinitions.every((entry) => !entry.implemented && !entry.estimable));
-  assert.deepEqual(parseParameterCatalog(catalog()), parameterDefinitions);
+  assert(parameterDefinitions.every((entry) => !entry.estimable));
+  assert.deepEqual(
+    parameterDefinitions.filter((entry) => entry.implemented).map((entry) => entry.key),
+    [
+      'speed_delta_urban',
+      'speed_delta_residential',
+      'curve_lateral_accel',
+      'intersection_approach_speed',
+      'desired_acceleration',
+      'comfort_deceleration',
+      'acceleration_jerk',
+      'brake_reaction_delay',
+      'following_time_headway',
+      'following_min_gap',
+      'queue_standstill_gap',
+      'following_speed_gain',
+    ],
+  );
+  assert(parseParameterCatalog(catalog()).every((entry) => !entry.implemented && !entry.estimable));
+  assert.deepEqual(
+    parseParameterCatalog(catalog()),
+    parameterDefinitions.map((entry) => ({ ...entry, implemented: false })),
+  );
 });
 
 test('every key validates default, inclusive bounds, canonical unit and finite range', () => {
@@ -98,7 +119,9 @@ test('publication gate rejects LEARNED and manual tuning for all unsupported key
     for (const source of ['LEARNED', 'MANUAL_TUNING']) {
       const candidate = profile(entry.key, source);
       assert.doesNotThrow(() => parseDrivingProfile(candidate));
-      assert.throws(() => parsePublishableDrivingProfile(candidate), ContractValidationError);
+      if (source === 'MANUAL_TUNING' && entry.implemented)
+        assert.doesNotThrow(() => parsePublishableDrivingProfile(candidate));
+      else assert.throws(() => parsePublishableDrivingProfile(candidate), ContractValidationError);
     }
     for (const source of ['BASE', 'IMPORTED']) {
       const candidate = profile(entry.key, source);

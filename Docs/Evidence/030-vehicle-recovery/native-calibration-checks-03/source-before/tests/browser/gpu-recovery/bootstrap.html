@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="ro">
+  <head>
+    <meta charset="UTF-8" />
+    <title>PBI020 production bootstrap recovery</title>
+    <script>
+      if (new URLSearchParams(location.search).get('backend') === 'WEBGL2')
+        Object.defineProperty(navigator, 'gpu', { value: undefined });
+    </script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="../../../src/main.ts"></script>
+  </body>
+</html>

@@ -1,0 +1,174 @@
+{
+  "scope": "Partial evidence integrity and individual arm numeric validation only",
+  "captureId": "de329df675e21bd24e88ce94f2d68758de7c4e34366be29096bc9d3b7a4dc7ca-webgpu",
+  "status": "FAILED_FULL_CAPTURE",
+  "hardwareFullAccepted": false,
+  "completeArms": 3,
+  "requiredArms": 20,
+  "failureSha256": "aff0fde815f7f5d070256f3157176e9becdc10cb4529b0cf000a0e9795a2e52b",
+  "arms": [
+    {
+      "ordinal": 0,
+      "arm": {
+        "pair": 0,
+        "treatment": "HISTORICAL_REFERENCE",
+        "observer": false,
+        "ordinal": 0
+      },
+      "disposition": "PASS",
+      "tick": 9000,
+      "warmFrames": 4309,
+      "numericValidation": {
+        "status": "PASS"
+      },
+      "warmStarted": 132335.9,
+      "heapBeforeWarmupReadEnded": 132330.70000004768,
+      "distributions": {
+        "frame": {
+          "count": 17280,
+          "p50": 6.900000000023283,
+          "p95": 7,
+          "p99": 7.100000000005821
+        },
+        "work": {
+          "count": 17280,
+          "p50": 1.2999999523162842,
+          "p95": 3.100000023841858,
+          "p99": 3.799999952316284
+        },
+        "tick": {
+          "count": 7200,
+          "p50": 1.7000000476837158,
+          "p95": 2.5,
+          "p99": 3.399999976158142
+        },
+        "rapier": {
+          "count": 7200,
+          "p50": 0.10000002384185791,
+          "p95": 0.20000004768371582,
+          "p99": 0.2999999523162842
+        }
+      },
+      "causes": [],
+      "sha256": "5ecff5f4503e5ab51d11fb13afa32831c938a095f30f9424117954aa21ec8723",
+      "bytes": 5029378
+    },
+    {
+      "ordinal": 1,
+      "arm": {
+        "pair": 0,
+        "treatment": "HISTORICAL_REFERENCE",
+        "observer": true,
+        "ordinal": 1
+      },
+      "disposition": "PASS",
+      "tick": 9000,
+      "warmFrames": 4321,
+      "numericValidation": {
+        "status": "FAILED",
+        "message": "The expression evaluated to a falsy value:\n\n  assert.ok(record.heap.heapBeforeWarmup.readEnded <= record.warmStarted)\n",
+        "stack": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(record.heap.heapBeforeWarmup.readEnded <= record.warmStarted)\n\n    at validateArm (file:///F:/Sites/self-driving-academy/.worktrees/vehicle-switch-01/Docs/Evidence/068-vehicle-switch/steady-numeric-checks.mjs:219:10)\n    at file:///F:/Sites/self-driving-academy/.worktrees/vehicle-switch-01/Docs/Evidence/068-vehicle-switch/verify-parent-steady-partial.mjs:31:7"
+      },
+      "warmStarted": 282737.966,
+      "heapBeforeWarmupReadEnded": 282743.90000009537,
+      "distributions": {
+        "frame": {
+          "count": 17280,
+          "p50": 6.900000000023283,
+          "p95": 7,
+          "p99": 7.099999999976717
+        },
+        "work": {
+          "count": 17280,
+          "p50": 1.2000000476837158,
+          "p95": 3.200000047683716,
+          "p99": 3.799999952316284
+        },
+        "tick": {
+          "count": 7200,
+          "p50": 1.8000000715255737,
+          "p95": 2.5,
+          "p99": 3.399999976158142
+        },
+        "rapier": {
+          "count": 7200,
+          "p50": 0.10000002384185791,
+          "p95": 0.20000004768371582,
+          "p99": 0.30000007152557373
+        }
+      },
+      "causes": [],
+      "sha256": "ee124447d520ac95129b5c191718cfc729d5ba27f5b0db87066afc7b93cfb3d6",
+      "bytes": 5290756
+    },
+    {
+      "ordinal": 2,
+      "arm": {
+        "pair": 0,
+        "treatment": "CURRENT_068",
+        "observer": false,
+        "ordinal": 2
+      },
+      "disposition": "PASS",
+      "tick": 9000,
+      "warmFrames": 4320,
+      "numericValidation": {
+        "status": "PASS"
+      },
+      "warmStarted": 433203.9,
+      "heapBeforeWarmupReadEnded": 433203,
+      "distributions": {
+        "frame": {
+          "count": 17280,
+          "p50": 6.900000000023283,
+          "p95": 7,
+          "p99": 7.099999999976717
+        },
+        "work": {
+          "count": 17280,
+          "p50": 1.1999999284744263,
+          "p95": 3.0999999046325684,
+          "p99": 3.799999952316284
+        },
+        "tick": {
+          "count": 7200,
+          "p50": 1.7999999523162842,
+          "p95": 2.4000000953674316,
+          "p99": 3.4000000953674316
+        },
+        "rapier": {
+          "count": 7200,
+          "p50": 0.10000002384185791,
+          "p95": 0.20000004768371582,
+          "p99": 0.2999999523162842
+        }
+      },
+      "causes": [],
+      "sha256": "49a1505b7e78001caa2a1cfcd128b9d9a881959ce2ec050193d21b97f2db8ed6",
+      "bytes": 5109630
+    },
+    {
+      "ordinal": 3,
+      "arm": {
+        "pair": 0,
+        "treatment": "CURRENT_068",
+        "observer": true,
+        "ordinal": 3
+      },
+      "disposition": "FAILED",
+      "tick": 0,
+      "warmFrames": 0,
+      "numericValidation": {
+        "status": "INCOMPLETE"
+      },
+      "warmStarted": 583578.366,
+      "heapBeforeWarmupReadEnded": 583578.5,
+      "distributions": null,
+      "causes": [
+        "Error: Warm actual RAF debt bound"
+      ],
+      "sha256": "d0e2d2fd7e158305f39b75d822ca6877576b8414a59ab0726d4a9267647356bb",
+      "bytes": 68494
+    }
+  ]
+}

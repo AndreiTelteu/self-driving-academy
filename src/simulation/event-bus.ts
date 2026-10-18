@@ -34,6 +34,8 @@ export interface EventBusStats {
   readonly disposed: boolean;
 }
 export interface EventBus {
+  /** Read-only030 admission probe. No identity consumed or listener invoked. */
+  inspectPublication?(value: unknown): 'new' | 'duplicate';
   publish(value: unknown): PublishResult;
   subscribe(listener: EventListener, options?: ListenerOptions): () => void;
   advanceTick(nextTick: number): void;
@@ -68,6 +70,27 @@ export function createEventBus(options: EventBusOptions): EventBus {
     requireContract(!dispatching, 'Reentrant publication or lifecycle change is unsupported');
   };
   return Object.freeze({
+    inspectPublication(value: unknown): 'new' | 'duplicate' {
+      assertIdle();
+      const event = parseSimulationEvent(value);
+      requireContract(
+        event.sessionId === sessionId && event.worldEpoch === worldEpoch,
+        'Stale or foreign event world',
+      );
+      const fingerprint = JSON.stringify(event);
+      requireContract(fingerprint.length <= maxCodeUnits, 'Event exceeds retained size capacity');
+      const previous = identities.get(event.eventId);
+      if (previous !== undefined) {
+        requireContract(previous === fingerprint, 'Conflicting reuse of eventId');
+        return 'duplicate';
+      }
+      requireContract(event.tick >= watermarkTick, 'Event precedes tick watermark');
+      requireContract(
+        identities.size < maxEvents,
+        'Epoch event capacity exhausted; explicit recovery required',
+      );
+      return 'new';
+    },
     publish(value: unknown): PublishResult {
       assertIdle();
       const event = parseSimulationEvent(value);

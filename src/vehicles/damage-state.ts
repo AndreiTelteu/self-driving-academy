@@ -252,6 +252,51 @@ export function createVehicleDamage(
         });
       });
     },
+    inspectRecovery(
+      identity: BodyIdentity,
+      request: {
+        readonly context: ContractContext;
+        readonly operationId: string;
+        readonly tick: number;
+      },
+    ): void {
+      mutate(() => {
+        const data = fields(request, ['context', 'operationId', 'tick']);
+        sameWorld(data.context as ContractContext);
+        entry(identity);
+        const at = tick(data.tick);
+        const record: DamageHistoryRecord = Object.freeze({
+          ...world,
+          kind: 'RECOVERY',
+          operationId: id(data.operationId, DAMAGE_CONFIG.operationIdCodeUnits),
+          tick: at,
+          vehicleIds: Object.freeze([identity.entityId]),
+          bodyGenerations: Object.freeze([identity.generation]),
+          collisionSerials: Object.freeze([]),
+          impulseNs: null,
+          otherEntityId: null,
+        });
+        const prior = operations.get(record.operationId);
+        if (prior) {
+          requireContract(
+            JSON.stringify(prior) === JSON.stringify(record),
+            'Conflicting damage operation identity',
+          );
+          return;
+        }
+        requireContract(at >= currentTick, 'Damage operation tick cannot decrease');
+        requireContract(
+          history.length < capacity,
+          'Damage history full: preserve/export history before resuming',
+        );
+        const bytes =
+          new TextEncoder().encode(JSON.stringify(record)).byteLength + (history.length ? 1 : 0);
+        requireContract(
+          serializedHistoryBytes + bytes <= DAMAGE_CONFIG.serializedHistoryBytes,
+          'Damage serialized history full: preserve/export before resuming',
+        );
+      });
+    },
     recover(
       identity: BodyIdentity,
       request: {

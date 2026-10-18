@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>030 frozen AFTER hardware</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+      }
+      #canvas {
+        display: block;
+        width: 1920px;
+        height: 1080px;
+      }
+      #controls {
+        position: fixed;
+        top: 8px;
+        left: 8px;
+        z-index: 10;
+        background: #fff;
+        padding: 8px;
+        font: 14px sans-serif;
+        max-width: 1000px;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas"></canvas>
+    <div id="controls">
+      <select id="backend">
+        <option>AUTO</option>
+        <option>WEBGL2</option></select
+      ><button id="run">Run full AFTER 10 runs (~25min/backend)</button
+      ><button id="functional">Run separate trusted-R functional (physical keys required)</button
+      ><span id="status"
+        >Not started; retain physical foreground focus. Performance window rejects R; use separate
+        functional button only when parent requests physical keys.</span
+      >
+    </div>
+    <script type="module" src="./browser-entry.ts"></script>
+  </body>
+</html>

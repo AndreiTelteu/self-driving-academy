@@ -406,6 +406,29 @@ export function createVehicleController(
         ? (entry.control ?? undefined)
         : undefined;
     },
+    invalidateRealization(identity, expectedTick, expectedMode) {
+      mutate(() => {
+        const id = identityId(identity),
+          entry = entries.get(id);
+        requireContract(
+          tick(expectedTick) === currentTick && !suspended,
+          'Recovery controller boundary stale or suspended',
+        );
+        requireContract(
+          expectedMode === 'MANUAL' || expectedMode === 'LEARNING',
+          'Recovery requires PLAYER authority',
+        );
+        requireContract(
+          entry?.identity === identity &&
+            actuationPort!.bodyIdentity(id) === identity &&
+            entry.mode === expectedMode,
+          'Recovery controller token/authority changed',
+        );
+        entry.target = null;
+        entry.control = null;
+        if (drivetrainEnabled) entry.drivetrain = createDrivetrainState();
+      });
+    },
     suspend() {
       mutate(() => {
         suspended = true;
@@ -418,6 +441,9 @@ export function createVehicleController(
       mutate(() => {
         suspended = false;
       });
+    },
+    readBoundary() {
+      return Object.freeze({ context: world, tick: currentTick, suspended, disposed, fault });
     },
     getStats() {
       return Object.freeze({
