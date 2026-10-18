@@ -204,6 +204,21 @@ async function captureNative(
     return mechanics;
   };
   const initialMechanics = ids.map(immutableMechanics);
+  // The shared Rapier probe now also returns per-wheel and angular state. The yield fixture never
+  // reads it, and recording it per trace row and per body multiplied the arm metadata so far that
+  // the bounded report exceeded its transport limit. Record only the stable crossing fields.
+  const recordedBody = (id: string) => {
+    const body = world.project(id);
+    return {
+      id: body.id,
+      position: body.position,
+      rotation: body.rotation,
+      velocity: body.velocity,
+      speed: body.speed,
+      suspension: body.suspension,
+      wheelContacts: body.wheelContacts,
+    };
+  };
   const actor = (id: string, movementId: string) => {
     const body = world.project(id),
       distanceM = -4.85 - (id === 'subject' ? body.position.x : body.position.z);
@@ -292,8 +307,8 @@ async function captureNative(
           tick,
           request,
           decision: last,
-          subject: world.project('subject'),
-          other: world.project('priority'),
+          subject: recordedBody('subject'),
+          other: recordedBody('priority'),
         });
     }
     // Accepted manoeuvre is committed by this fixture owner until clearance, not secretly vetoed.
@@ -388,7 +403,7 @@ async function captureNative(
       actualCounter,
     );
   }
-  const finalBodies = ids.map((id) => world.project(id)),
+  const finalBodies = ids.map((id) => recordedBody(id)),
     owned = {
       controller: controller.getStats(),
       priority: observer.getStats(),
