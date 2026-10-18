@@ -71,4 +71,18 @@ Atribuire pe cele 8 stadii (5 lumi observer, 600 tick-uri/lume, medie):
 
 Stadiile sunt inclusive (nested), iar suma p95 = 5,90 ms ≈ whole tick p95, deci acoperă integral tick-ul. `bridge` include `append` și `bytewalk`. **Ținta de optimizare este stadiul `bridge`** — bridge-ul de manual-segment plus calea de append/admisie a înregistrării — care rulează în fiecare tick. Față de referința fără produs (tick p95 4,10–4,39 ms), produsul adaugă ~1,5–1,8 ms la p95.
 
+## Brief de optimizare (pe baza atribuirii de mai sus)
+
+Cost exclusiv estimat: `bridge` 3,375 este inclusiv, iar din el `append` 1,373 + `bytewalk` 0,996 sunt nested, deci costul propriu al bridge-ului este ≈ 1,0 ms p95.
+
+1. **`bytewalk` (0,996 ms p95, 476 apeluri/lume) — cel mai bun raport câștig/risc.**
+   `src/telemetry/intervention-admission.ts::interventionRecordBytes` face contabilitate de octeți cu `new TextEncoder()` **per apel** și `encoder.encode(JSON.stringify(v))` **per literal**, iar `admitInterventionRecord` o cheamă **de două ori** pe fiecare admitere (odată pe valoarea externă, odată pe recordul parsat, linia 106 și 108).
+   Optimizare propusă, fără schimbare de semantică: encoder la nivel de modul; cale rapidă pentru string-uri ASCII fără escape (lungime UTF-8 = length); lungime numerică fără `JSON.stringify` pentru cazurile uzuale. Testul existent „069 exact UTF8 envelope capacity includes commas/braces and escaped code units” validează exact această contabilitate.
+2. **`append` (1,373 ms p95, 89 apeluri/lume)** — în `src/telemetry/intervention-lifecycle.ts`; instrumentarea actuală învelește funcția întreagă, deci următorul pas de măsurare este sub-instrumentarea în interiorul ei înainte de a optimiza orbește.
+3. **Bridge propriu (~1,0 ms p95)** — verificările de fence/autoritate și copiile din `src/app/manual-segment-bridge.ts`.
+
+**Bucla obligatorie după orice schimbare de produs** (nu există scurtătură, pentru că receipt-ul e pinuit):
+1. editare produs → 2. rulează cele 132 de teste pure; 3. generează un receipt nou de 18 fișiere (`sourceFinal = sha256(path+':'+sha256+'\n' în ordinea fixată)`, verificat de `validateCheckedProduct`); 4. actualizează `REUSE_PRODUCT_SHA`/`REUSE_PRODUCT_RECEIPT` în `scripts/manual-segments-calibration-proof.mjs`; 5. re-captură AFTER (ancoră nouă, `native-after-06`); 6. re-derivare diagnostic + rulare; 7. pereche BEFORE/AFTER finală.
+
+
 
