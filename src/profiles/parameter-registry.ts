@@ -139,6 +139,10 @@ const policyKeys = new Set<string>([
   'stop_full_probability',
   'stop_dwell_time',
   'stop_line_offset',
+  'lane_change_front_gap',
+  'lane_change_back_gap',
+  'lane_change_speed_gain',
+  'lane_change_cooldown',
 ]);
 const definitions = Object.freeze(
   parseParameterCatalog(parameterCatalogData).map((definition) =>
