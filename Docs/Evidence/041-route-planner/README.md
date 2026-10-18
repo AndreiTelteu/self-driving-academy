@@ -1,6 +1,6 @@
 # PBI041 verification — route planner (A*)
 
-PBI041 delivers the real A* routing layer over the PBI033 directed lane graph: a versioned cost model, one-way/access-correct traversal to lane and service-zone destinations, explicit non-route outcomes with bounded termination, a capped and invalidated cache, and the `RouteTask` integration with the PBI219 scheduler queue. This is a `targeted` verification ([validation policy](../validation-policy.md)): isolated correctness plus a local CPU cost comparison. It is not a hardware, FPS, whole-tick or laptop gate.
+PBI041 delivers the real A* routing layer over the PBI033 directed lane graph: a versioned cost model, one-way/access-correct traversal to lane and service-zone destinations, explicit non-route outcomes with bounded termination, a capped and invalidated cache, and the `RouteTask` integration with the PBI219 scheduler queue. This is a `targeted` verification ([validation policy](../../validation-policy.md)): isolated correctness plus a local CPU cost comparison. It is not a hardware, FPS, whole-tick or laptop gate.
 
 ## What was executed
 

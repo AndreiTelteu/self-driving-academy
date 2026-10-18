@@ -2,9 +2,9 @@
 | Module | Remaining phases | To Do | In Progress | Done / Total | Progress |
 |---|---|---:|---:|---:|---|
 | Asseturi și audio | V1 | 7 | 0 | 0 / 7 | `░░░░░░░░░░` 0% |
-| Autonomie | V1 | 7 | 1 | 6 / 14 | `████░░░░░░` 43% |
+| Autonomie | V1 | 7 | 0 | 7 / 14 | `█████░░░░░` 50% |
 | Babylon | Completed | 0 | 0 | 11 / 11 | `██████████` 100% |
-| Control manual | V1 | 4 | 1 | 3 / 8 | `███░░░░░░░` 38% |
+| Control manual | V1 | 4 | 0 | 4 / 8 | `█████░░░░░` 50% |
 | Economie | V1 | 1 | 0 | 0 / 1 | `░░░░░░░░░░` 0% |
 | Experiență | V1 | 2 | 0 | 0 / 2 | `░░░░░░░░░░` 0% |
 | Experimente | V1 | 1 | 0 | 0 / 1 | `░░░░░░░░░░` 0% |
@@ -19,7 +19,7 @@
 | Misiuni | V1 | 15 | 0 | 0 / 15 | `░░░░░░░░░░` 0% |
 | Misiuni și interfață | V1 | 1 | 0 | 0 / 1 | `░░░░░░░░░░` 0% |
 | Misiuni V2 | V2 | 1 | 0 | 0 / 1 | `░░░░░░░░░░` 0% |
-| Oraș | V1 | 3 | 1 | 8 / 12 | `██████░░░░` 67% |
+| Oraș | V1 | 2 | 0 | 10 / 12 | `████████░░` 83% |
 | Oraș și fizică | V1 | 1 | 0 | 0 / 1 | `░░░░░░░░░░` 0% |
 | Parametri V2 | V2 | 10 | 0 | 0 / 10 | `░░░░░░░░░░` 0% |
 | Persistență | V1 | 14 | 0 | 0 / 14 | `░░░░░░░░░░` 0% |
@@ -34,7 +34,7 @@
 | Validare și release | V1 | 12 | 0 | 0 / 12 | `░░░░░░░░░░` 0% |
 | Validare V2 | V2 | 2 | 0 | 0 / 2 | `░░░░░░░░░░` 0% |
 | Vehicule și fizică | Completed | 0 | 0 | 11 / 11 | `██████████` 100% |
-| Total | - | 178 | 3 | 54 / 235 | `██░░░░░░░░` 23% |
+| Total | - | 177 | 0 | 58 / 235 | `██░░░░░░░░` 25% |
 <!-- loop-pbi:progress:end -->
 
 # Backlog Kanban Self Driving Academy
