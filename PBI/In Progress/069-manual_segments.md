@@ -29,9 +29,9 @@ Deschide și închide segmente MANUAL/LEARNING la schimbarea modului, vehicululu
 
 ## Criterii de acceptare
 
-- [ ] MANUAL→LEARNING și invers separă segmentele fără gol de input; numai LEARNING închis intră în estimator.
-- [ ] Pauza suspendă segmentul; finalul cursei redeschide segmentul în același mod.
-- [ ] Restore/import valid închid segmentul cu motiv explicit; generația veche nu se aplică ulterior.
+- [x] MANUAL→LEARNING și invers separă segmentele fără gol de input; numai LEARNING închis intră în estimator.
+- [x] Pauza suspendă segmentul; finalul cursei redeschide segmentul în același mod.
+- [x] Restore/import valid închid segmentul cu motiv explicit; generația veche nu se aplică ulterior.
 
 ## Verificare
 
@@ -41,13 +41,13 @@ Rulează verificările relevante ale proiectului și păstrează rezultatul exac
 
 ## Dovezi de finalizare
 
-Rezultat implementare: De completat.
+Rezultat implementare: Producția 069 este livrată în worktree-ul `manual-segments-01` (branch `loop-pbi/manual-segments-01` la d8e5756): lifecycle de intervenție (`src/telemetry/intervention-*.ts`), bridge-ul app (`src/app/manual-segment-bridge.ts`), motivele 005 noi și contractele aferente, plus instrumentația de diagnostic record-stage. Cele 18 fișiere de producție corespund acum byte-cu-byte receipt-ului pinuit `924c0764…` (18/18 verificate).
 
-Verificări executate și rezultat: De completat.
+Verificări executate și rezultat: Pe această mașină (Ryzen 7 7735U, win32 10.0.26300), cu node v24.21.0 din `.node-version` și `npm ci` din lock-ul pinuit (neschimbat), serial `--test-concurrency=1`, cele 10 suite `tests/telemetry/manual-segments*.test.*` au dat EXIT0, **132/132 pass, 0 fail** (17022,8 ms): manual-segments 28, review 31, bridge 10, admission 8, after-validation 20, after-cleanup 10, after-records 7, after-calibration 5, record-stage-diagnostic 6, reference-records 7. Dovezi: `Docs/Evidence/069-manual-segments/correctness-current-01/`. Nu s-a executat nicio probă nativă, CLI sau lume.
 
-Fișiere și documente actualizate: De completat.
+Fișiere și documente actualizate: `Docs/manual-segments.md`; `Docs/Evidence/069-manual-segments/correctness-current-01/`; acest fișier PBI (criterii bifate, dovezile și istoricul).
 
-Limitări sau follow-up: De completat.
+Limitări sau follow-up: Gate-ul de performanță (capturile nativAFTER) NU a fost reluat, iar diagnosticul record-stage NU a fost executat aici. Baseline-ul `native-before-01` este capturat pe AMD Ryzen 9 7950X3D / win32 10.0.26200 / root `F:\Sites\...`, iar mașina curentă are alt CPU și alt OS, iar harness-urile AFTER/BEFORE își asumă root-ul `F:` (și `rg`). Reluarea gate-ului se face pe mașina de baseline sau printr-o re-baseline explicită.
 
 ## Definition of Done
 
@@ -133,6 +133,8 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '069' d
 - 2026-10-07T21:42:00+03:00 : record-stage SOURCE02: guardCopyRuntime bounded30s/512KiB înainte de prima achiziție și după cleanup, pinning pe originalul AFTER03 (156inputs/sursa683584/raw028fb8) și receipt924c; readerul rulează întâi derivarea/proof și importă numai validatorul copiat verificat; 6teste pure draft; nicio comandă executată.
 
 - 2026-10-07T21:48:28+03:00 : record-stage diagnostic Checks01 FINITE_DIAGNOSTIC_SOURCE_CHECKS_PASS_NO_PREPARATION_OR_WORLDS: 6/6pure, format/types(main+tests)/lint/syntax0, sursă8cai/39751B(891d431b); prima eroare (2importuri nefolosite + avertisment d.mts) păstrată și reparată; preparer/CLI/lumi neexecutate.
+
+- 2026-10-18T15:50:16+03:00 : Probe pure 069 re-executate pe o a doua mașină (Ryzen7 7735U/win3210.0.26300), node24.21.0 și npmci din lock-ul pinuit (neschimbat), sursa18 fișiere byte-identică cu receipt924c: 132/132pass, 0fail în10suite serial (manual-segments28/review31/bridge10/admission8/after-validation20/after-cleanup10/after-records7/after-calibration5/record-stage6/reference-records7); dovezi correctness-current-01. Criteriile funcționale 069 sunt bifate. Capturile nativAFTER și diagnosticul record-stage rămân NEEXECUTATE: baseline-ul e pe Ryzen97950X3D/win3210.0.26200/rootF: și harness-urile asumă F:+rg; gate-ul de performanță se reia pe mașina de baseline sau prin re-baseline explicită. PBI rămâne In Progress.
 
 ## Nivel de validare — politica 2026-10-08
 
