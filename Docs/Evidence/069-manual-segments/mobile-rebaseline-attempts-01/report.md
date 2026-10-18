@@ -99,15 +99,31 @@ Aplicat în `src/telemetry/intervention-admission.ts`: encoder UTF-8 la nivel de
 
 **Blocaj nou, diferit:** captura AFTER tot eșuează, dar la `Original chronological CPU/runtime-heap comparison gate`, nu la tick. Toate cele 5 perechi, la ambele populații, au heap-ul după peste cel dinainte (ratio 1,38–3,38 pe 70, 1,57–1,83 pe 110), cu variație mare între perechi (unele perechi au ratio 0,24) și fără forcedGC. Deci următorul pas este investigarea gate-ului de memorie (retenție reală vs. zgomot GC), nu optimizarea de CPU.
 
-### Analiza gate-ului de memorie (executată)
+### Analiza gate-ului de memorie (executată) — corecție importantă
 
 Regula exactă (`scripts/manual-segments-after-records.mjs:434`): o pereche eșuează dacă `after > 1,1 × before` **și** `delta > 5 MiB`; rândul eșuează la ≥3 din 5 perechi.
 
-Datele pentru count=70 observer (heapUsed post-fereastră, MB): înainte 68,4 / 47,5 / 45,4 / 45,6 / 42,4; după 97,3 / 160,5 / 97,5 / 97,2 / 96,8. **4 din 5 valori „după” sunt strânse la ~97 MB**, deci delta de +30…+55 MB este **consistentă, nu zgomot GC** (doar o pereche e outlier la 160 MB). La count=70 non-observer: după 74–98 MB vs înainte 36–54 MB, aceeași concluzie.
+Prima interpretare (delta consistentă de +30…+55 MB) sugera retenție reală. **Probe cu GC forțat au infirmat-o.** Captura `native-after-07-gcprobe` (același cod, rulează cu `--expose-gc` și `global.gc()` înainte de eșantionarea post-fereastră) dă:
 
-Bugetul declarat al produsului este 64 de înregistrări protejate × 64 KiB = **4 MiB**, dar delta observată este de ~10× atât. Deci diferența nu vine doar din înregistrările protejate: trebuie urmărit ownership-ul pe fereastră (snapshot-uri, receipt-uri, istoric, structuri de fence) — nu doar `process.memoryUsage()`.
+| world | after-06 heap (fără GC) | after-07 heap (cu GC) | before-02 heap (fără GC) |
+|---|---|---|---|
+| 0 | 70,6 MB | **22,1 MB** | 51,1 MB |
+| 1 | 92,8 | **22,5** | 65,3 |
+| 2 | 153,1 | **22,5** | 45,3 |
+| 3 | 93,0 | **22,5** | 44,7 |
+| 4 | 90,9 | **22,5** | 37,9 |
+| 5 | 93,0 | **22,5** | 43,3 |
+| 6 | 92,7 | **22,5** | 43,5 |
+| 7 | 87,1 | **22,7** | 34,3 |
+| 8 | 87,2 | **22,7** | 33,8 |
+| 9 | 92,3 | **22,8** | 40,4 |
 
-Concluzie: gate-ul de memorie funcționează corect și semnalează o problemă reală de retenție în produsul 069, nu o artefactă de măsurare.
+Heap-ul reținut real al produsului este **22,5 MB, stabil la 0,3 MB** pe 10 lumi. Cifrele de 70–153 MB erau **gunoi necolectat**, iar baseline-ul „before” (34–65 MB, fără GC) conține și el gunoi. Deci gate-ul compară garbage, nu retenție: eșecul de memorie este **un artefact de măsurare, nu un defect al produsului**.
+
+Corecția de protocol (necesară pentru un gate valid): `global.gc()` **numai după fereastra măsurată** (în afara buclei de tick), cu `--expose-gc`, pe **ambele** capturi. GC-ul plasat la tick 180 perturbă fereastra (în probe, p95 a urcat la 5,558 pe world 9), deci nu trebuie pus în interiorul buclei.
+
+**Concluzie:** gate-ul de tick trece; gate-ul de memorie trebuie corectat metodologic (GC forțat pe ambele părți) înainte de a putea fi interpretat. Următoarea rundă: implementarea GC-ului post-fereastră în ambele harness-uri, recaptura BEFORE (product-absent, namespace nou) și AFTER, apoi comparația.
+
 
 
 
