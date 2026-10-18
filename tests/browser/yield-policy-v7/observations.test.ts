@@ -1,6 +1,11 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { observeRaf, warmBoundaryObservation, longTaskObservations, LONGTASK_CAPACITY } from './observations';
+import {
+  observeRaf,
+  warmBoundaryObservation,
+  longTaskObservations,
+  LONGTASK_CAPACITY,
+} from './observations';
 import { WarmBoundaryRejection } from './boundary';
 import { armDiagnostics } from './diagnostics';
 import { validateObservationMetadata, validateTimingArm } from './protocol';
@@ -14,20 +19,38 @@ test('ENTRY arriving after original previous rejects once and preserves attempte
   const raw = { rafTime: [29973.6, 29989.6], controllerTick: [1793, 1797] };
   owner.check(undefined, previous, { recordedFrames: 2, diagnosticCounter: entry });
   assert.equal(owner.snapshot().attempted, false);
-  assert.throws(() => owner.check(entry, previous, { recordedFrames: 2, diagnosticCounter: entry }), WarmBoundaryRejection);
+  assert.throws(
+    () => owner.check(entry, previous, { recordedFrames: 2, diagnosticCounter: entry }),
+    WarmBoundaryRejection,
+  );
   // A later permissible previous cannot turn the rejected one-shot attempt into success.
-  owner.check(entry, { ...previous, nativeSerial: 1980, controllerTick: 1800 },
-    { recordedFrames: 3, diagnosticCounter: entry });
-  const exported = JSON.parse(JSON.stringify({
-    status: 'INCOMPLETE', raw, warmBoundary: owner.snapshot(), phaseEntry: entry,
-    previousRaf: previous, recordedFrames: 2,
-  }));
+  owner.check(
+    entry,
+    { ...previous, nativeSerial: 1980, controllerTick: 1800 },
+    { recordedFrames: 3, diagnosticCounter: entry },
+  );
+  const exported = JSON.parse(
+    JSON.stringify({
+      status: 'INCOMPLETE',
+      raw,
+      warmBoundary: owner.snapshot(),
+      phaseEntry: entry,
+      previousRaf: previous,
+      recordedFrames: 2,
+    }),
+  );
   assert.deepEqual(exported.raw, raw);
   assert.equal(exported.warmBoundary.diagnostic.result, 'REJECTED');
-  assert.deepEqual(exported.warmBoundary.diagnostic.diagnosticCounter, { nativeSerial: 1980, controllerTick: 1800 });
+  assert.deepEqual(exported.warmBoundary.diagnostic.diagnosticCounter, {
+    nativeSerial: 1980,
+    controllerTick: 1800,
+  });
   assert.equal(exported.warmBoundary.diagnostic.previousRaf.controllerTick, 1789);
   validateObservationMetadata(exported, false);
-  assert.throws(() => validateObservationMetadata({ ...exported, recordedFrames: 1 }, false), /prefix identity/);
+  assert.throws(
+    () => validateObservationMetadata({ ...exported, recordedFrames: 1 }, false),
+    /prefix identity/,
+  );
 });
 
 test('previous arriving after ENTRY uses RAF trigger and one-shot successful predicate', () => {
@@ -45,18 +68,35 @@ test('previous arriving after ENTRY uses RAF trigger and one-shot successful pre
 test('callback timestamp precedes resolution; continuation clock remains independently delayed', async () => {
   let deliver: ((stamp: number) => void) | undefined;
   let now = 100;
-  const promise = observeRaf((callback) => { deliver = callback; }, () => now);
+  const promise = observeRaf(
+    (callback) => {
+      deliver = callback;
+    },
+    () => now,
+  );
   deliver!(99);
   now = 130; // Synthetic delay between Promise resolution and await continuation, not an observed stall.
   const observation = await promise;
   assert.deepEqual(observation, { stampMs: 99, callbackMs: 100 });
   const diagnostic = armDiagnostics();
-  diagnostic.wait({ tick: 1801, waitStartMs: 90, targetMs: 120,
-    counterBefore: { nativeSerial: 1981, controllerTick: 1801 }, previousRaf: null,
-    recoveryStepsBeforeReset: 1 });
-  diagnostic.returned({ stampMs: observation.stampMs, rafCallbackMs: observation.callbackMs,
-    continuationStartMs: now, continuationReadMs: now, callbackReadMs: now, counterAfter: { nativeSerial: 1981, controllerTick: 1801 },
-    guardReadMs: 131, debtMs: 11 });
+  diagnostic.wait({
+    tick: 1801,
+    waitStartMs: 90,
+    targetMs: 120,
+    counterBefore: { nativeSerial: 1981, controllerTick: 1801 },
+    previousRaf: null,
+    recoveryStepsBeforeReset: 1,
+  });
+  diagnostic.returned({
+    stampMs: observation.stampMs,
+    rafCallbackMs: observation.callbackMs,
+    continuationStartMs: now,
+    continuationReadMs: now,
+    callbackReadMs: now,
+    counterAfter: { nativeSerial: 1981, controllerTick: 1801 },
+    guardReadMs: 131,
+    debtMs: 11,
+  });
   const metadata = { diagnostics: diagnostic.snapshot() };
   validateObservationMetadata(metadata, false);
   assert.equal(metadata.diagnostics.rafAttempt?.callbackReadMs, 130);
@@ -72,9 +112,17 @@ test('partial failure drains queued longtasks before disconnect, retains setup s
   const calls: string[] = [];
   const tasks = longTaskObservations(true, () => 100);
   tasks.ingest([{ startTime: 20, duration: 62 }]);
-  tasks.acquire({ takeRecords() { calls.push('drain'); return [{ startTime: 110, duration: 1658.6 }]; },
-    disconnect() { calls.push('disconnect'); } });
-  tasks.finish(); tasks.finish();
+  tasks.acquire({
+    takeRecords() {
+      calls.push('drain');
+      return [{ startTime: 110, duration: 1658.6 }];
+    },
+    disconnect() {
+      calls.push('disconnect');
+    },
+  });
+  tasks.finish();
+  tasks.finish();
   assert.deepEqual(calls, ['drain', 'disconnect']);
   const snapshot = tasks.snapshot();
   assert.equal(snapshot.count, 1);
@@ -99,8 +147,14 @@ test('callback and drain combined overflow is explicit; no incomplete observatio
   assert.equal(snapshot.maxMs, 80);
   validateObservationMetadata({ longTasks: snapshot }, false);
   assert.throws(() => tasks.assertComplete(), /overflow/);
-  assert.throws(() => validateObservationMetadata({ longTasks: snapshot,
-    measurement: { windowStartMs: 100 } }, true), /incomplete/);
+  assert.throws(
+    () =>
+      validateObservationMetadata(
+        { longTasks: snapshot, measurement: { windowStartMs: 100 } },
+        true,
+      ),
+    /incomplete/,
+  );
   snapshot.observations.overflow = 0;
   assert.throws(() => validateObservationMetadata({ longTasks: snapshot }, false), /accounting/);
 });
@@ -108,7 +162,14 @@ test('callback and drain combined overflow is explicit; no incomplete observatio
 test('drain and disconnect failures retain honest ownership and are not retried', () => {
   let disconnects = 0;
   const drainFailure = longTaskObservations(true, () => null);
-  drainFailure.acquire({ takeRecords() { throw new Error('drain failed'); }, disconnect() { disconnects++; } });
+  drainFailure.acquire({
+    takeRecords() {
+      throw new Error('drain failed');
+    },
+    disconnect() {
+      disconnects++;
+    },
+  });
   assert.throws(() => drainFailure.finish(), /drain failed/);
   drainFailure.finish();
   assert.equal(disconnects, 1);
@@ -117,25 +178,42 @@ test('drain and disconnect failures retain honest ownership and are not retried'
   validateObservationMetadata({ longTasks: drainFailure.snapshot() }, false);
   assert.throws(() => drainFailure.assertComplete(), /incomplete/);
   const disconnectFailure = longTaskObservations(true, () => null);
-  disconnectFailure.acquire({ takeRecords: () => [], disconnect() { throw new Error('disconnect failed'); } });
+  disconnectFailure.acquire({
+    takeRecords: () => [],
+    disconnect() {
+      throw new Error('disconnect failed');
+    },
+  });
   assert.throws(() => disconnectFailure.finish(), /disconnect failed/);
   disconnectFailure.finish();
   assert.equal(disconnectFailure.snapshot().observations.drained, true);
   assert.equal(disconnectFailure.snapshot().observations.disconnected, false);
   assert.throws(() => disconnectFailure.assertComplete(), /incomplete/);
   const both = longTaskObservations(true, () => null);
-  both.acquire({ takeRecords() { throw new Error('drain original'); },
-    disconnect() { throw new Error('disconnect original'); } });
-  assert.throws(() => both.finish(), (error: unknown) => error instanceof AggregateError &&
-    error.errors.length === 2 && String(error.errors[0]).includes('drain original') &&
-    String(error.errors[1]).includes('disconnect original'));
+  both.acquire({
+    takeRecords() {
+      throw new Error('drain original');
+    },
+    disconnect() {
+      throw new Error('disconnect original');
+    },
+  });
+  assert.throws(
+    () => both.finish(),
+    (error: unknown) =>
+      error instanceof AggregateError &&
+      error.errors.length === 2 &&
+      String(error.errors[0]).includes('drain original') &&
+      String(error.errors[1]).includes('disconnect original'),
+  );
   both.finish();
   validateObservationMetadata({ longTasks: both.snapshot() }, false);
 });
 
 test('unsupported API and invalid observations explicitly remain unknown', () => {
   const unsupported = longTaskObservations(false, () => null);
-  unsupported.finish(); unsupported.assertComplete();
+  unsupported.finish();
+  unsupported.assertComplete();
   validateObservationMetadata({ longTasks: unsupported.snapshot() }, false);
   assert.equal(unsupported.snapshot().observations.cause, 'UNKNOWN');
   assert.throws(() => unsupported.acquire({ takeRecords: () => [], disconnect() {} }), /ownership/);
@@ -158,17 +236,32 @@ test('complete diagnostic reader rejects altered original boundary, alias clocks
   const original = { ...previous, controllerTick: 1796, nativeSerial: 1976 };
   owner.check(entry, original, { recordedFrames: 1, diagnosticCounter: entry });
   const diagnostic = armDiagnostics();
-  diagnostic.wait({ tick: 1801, waitStartMs: 90, targetMs: 120,
-    counterBefore: { nativeSerial: 1981, controllerTick: 1801 }, previousRaf: null,
-    recoveryStepsBeforeReset: 1 });
-  diagnostic.returned({ stampMs: 99, rafCallbackMs: 100, continuationStartMs: 130,
-    continuationReadMs: 131, callbackReadMs: 131,
-    counterAfter: { nativeSerial: 1981, controllerTick: 1801 } });
+  diagnostic.wait({
+    tick: 1801,
+    waitStartMs: 90,
+    targetMs: 120,
+    counterBefore: { nativeSerial: 1981, controllerTick: 1801 },
+    previousRaf: null,
+    recoveryStepsBeforeReset: 1,
+  });
+  diagnostic.returned({
+    stampMs: 99,
+    rafCallbackMs: 100,
+    continuationStartMs: 130,
+    continuationReadMs: 131,
+    callbackReadMs: 131,
+    counterAfter: { nativeSerial: 1981, controllerTick: 1801 },
+  });
   const tasks = longTaskObservations(true, () => 30000);
-  tasks.acquire({ takeRecords: () => [], disconnect() {} }); tasks.finish();
-  const meta = { warmBoundary: owner.snapshot(), diagnostics: diagnostic.snapshot(),
-    longTasks: tasks.snapshot(), dualClock: { phaseEntry: entry, previousRaf: original },
-    measurement: { samples: 2, windowStartMs: 30000 } };
+  tasks.acquire({ takeRecords: () => [], disconnect() {} });
+  tasks.finish();
+  const meta = {
+    warmBoundary: owner.snapshot(),
+    diagnostics: diagnostic.snapshot(),
+    longTasks: tasks.snapshot(),
+    dualClock: { phaseEntry: entry, previousRaf: original },
+    measurement: { samples: 2, windowStartMs: 30000 },
+  };
   // This validates diagnostic semantics only; it is not a synthetic full-performance PASS.
   validateObservationMetadata(meta, true, true);
   const wrongPrevious = structuredClone(meta);
@@ -176,7 +269,10 @@ test('complete diagnostic reader rejects altered original boundary, alias clocks
   assert.throws(() => validateObservationMetadata(wrongPrevious, true, true), /original identity/);
   const wrongAlias = structuredClone(meta);
   wrongAlias.diagnostics.rafAttempt!.callbackReadMs = 100;
-  assert.throws(() => validateObservationMetadata(wrongAlias, true, true), /counter-read semantics/);
+  assert.throws(
+    () => validateObservationMetadata(wrongAlias, true, true),
+    /counter-read semantics/,
+  );
   const wrongDisposal = structuredClone(meta);
   wrongDisposal.longTasks.observations.disconnected = false;
   assert.throws(() => validateObservationMetadata(wrongDisposal, true, true), /incomplete/);
@@ -184,9 +280,14 @@ test('complete diagnostic reader rejects altered original boundary, alias clocks
 
 test('callback and continuation-start survive a subsequent failed counter read', () => {
   const diagnostic = armDiagnostics();
-  diagnostic.wait({ tick: 1801, waitStartMs: 90, targetMs: 120,
-    counterBefore: { nativeSerial: 1981, controllerTick: 1801 }, previousRaf: null,
-    recoveryStepsBeforeReset: 1 });
+  diagnostic.wait({
+    tick: 1801,
+    waitStartMs: 90,
+    targetMs: 120,
+    counterBefore: { nativeSerial: 1981, controllerTick: 1801 },
+    previousRaf: null,
+    recoveryStepsBeforeReset: 1,
+  });
   diagnostic.returned({ stampMs: 99, rafCallbackMs: 100, continuationStartMs: 130 });
   const partial = { diagnostics: diagnostic.snapshot() };
   validateObservationMetadata(partial, false);
@@ -199,10 +300,18 @@ test('later partial failure retains a successful boundary check and the longer a
   const owner = warmBoundaryObservation();
   const original = { ...previous, controllerTick: 1796, nativeSerial: 1976 };
   owner.check(entry, original, { recordedFrames: 2, diagnosticCounter: entry });
-  const metadata = { warmBoundary: owner.snapshot(), phaseEntry: entry, previousRaf: original,
-    recordedFrames: 3204, status: 'INCOMPLETE' };
+  const metadata = {
+    warmBoundary: owner.snapshot(),
+    phaseEntry: entry,
+    previousRaf: original,
+    recordedFrames: 3204,
+    status: 'INCOMPLETE',
+  };
   validateObservationMetadata(metadata, false);
   assert.equal(metadata.warmBoundary.diagnostic?.recordedFrames, 2);
   assert.equal(metadata.recordedFrames, 3204);
-  assert.throws(() => validateObservationMetadata({ ...metadata, recordedFrames: 1 }, false), /prefix identity/);
+  assert.throws(
+    () => validateObservationMetadata({ ...metadata, recordedFrames: 1 }, false),
+    /prefix identity/,
+  );
 });

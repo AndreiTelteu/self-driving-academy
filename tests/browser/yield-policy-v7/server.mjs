@@ -14,7 +14,9 @@ import {
 } from '../yield-policy-v2/transport.mjs';
 import { yieldBrowserStore } from '../yield-policy-v5/store.mjs';
 
-const assignedRoot = resolve('C:/Users/aandr/Sites/self-driving-academy/.worktrees/yield-policy-01');
+const assignedRoot = resolve(
+  'C:/Users/aandr/Sites/self-driving-academy/.worktrees/yield-policy-01',
+);
 const normalized = (path) => resolve(path).replaceAll('\\', '/').toLowerCase();
 if (normalized(process.cwd()) !== normalized(assignedRoot))
   throw new Error('052 assigned absolute cwd required');

@@ -34,7 +34,10 @@ export function warmBoundaryObservation() {
 }
 
 export const LONGTASK_CAPACITY = 1024;
-export interface LongTaskEntry { startTime: number; duration: number }
+export interface LongTaskEntry {
+  startTime: number;
+  duration: number;
+}
 export interface LongTaskOwner {
   takeRecords(): readonly LongTaskEntry[];
   disconnect(): void;
@@ -43,14 +46,24 @@ export interface LongTaskOwner {
 /** All delivered entries retained up to the declared cap; overflow remains visible and rejects completion. */
 export function longTaskObservations(supported: boolean, measuredStart: () => number | null) {
   const entries: LongTaskEntry[] = [];
-  let observed = 0, overflow = 0, invalid = 0, count = 0, maxMs = 0;
+  let observed = 0,
+    overflow = 0,
+    invalid = 0,
+    count = 0,
+    maxMs = 0;
   let owner: LongTaskOwner | null = null;
-  let attempted = false, drained = false, disconnected = false;
+  let attempted = false,
+    drained = false,
+    disconnected = false;
   const ingest = (values: readonly LongTaskEntry[]) => {
     for (const entry of values) {
       observed++;
-      if (!Number.isFinite(entry.startTime) || entry.startTime < 0 ||
-          !Number.isFinite(entry.duration) || entry.duration < 0) {
+      if (
+        !Number.isFinite(entry.startTime) ||
+        entry.startTime < 0 ||
+        !Number.isFinite(entry.duration) ||
+        entry.duration < 0
+      ) {
         invalid++;
         continue;
       }
@@ -87,7 +100,8 @@ export function longTaskObservations(supported: boolean, measuredStart: () => nu
         errors.push(error);
       }
       if (errors.length === 1) throw errors[0];
-      if (errors.length === 2) throw new AggregateError(errors, '052 longtask drain and disconnect failed');
+      if (errors.length === 2)
+        throw new AggregateError(errors, '052 longtask drain and disconnect failed');
     },
     assertComplete() {
       if (overflow || invalid || (supported && (!owner || !drained || !disconnected)))
@@ -95,14 +109,24 @@ export function longTaskObservations(supported: boolean, measuredStart: () => nu
     },
     snapshot() {
       return {
-        supported, count, maxMs,
+        supported,
+        count,
+        maxMs,
         observations: {
-          status: 'DIAGNOSTIC_ONLY' as const, performanceAcceptance: false as const,
-          capacity: LONGTASK_CAPACITY, observed, overflow, invalid,
-          acquired: !!owner, drainAttempted: attempted, drained, disconnected,
+          status: 'DIAGNOSTIC_ONLY' as const,
+          performanceAcceptance: false as const,
+          capacity: LONGTASK_CAPACITY,
+          observed,
+          overflow,
+          invalid,
+          acquired: !!owner,
+          drainAttempted: attempted,
+          drained,
+          disconnected,
           measuredStartMs: measuredStart(),
           entries: entries.map((value) => ({ ...value })),
-          coverage: 'delivered callbacks plus takeRecords before disconnect; later delivery unknown',
+          coverage:
+            'delivered callbacks plus takeRecords before disconnect; later delivery unknown',
           cause: 'UNKNOWN',
         },
       };

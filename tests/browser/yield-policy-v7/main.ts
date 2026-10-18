@@ -16,10 +16,19 @@ import { productionYieldReference } from '../../autonomy/yield-policy-production
 import { runBrowserYieldNative } from './runtime';
 import type { YieldNativeOptions, NativePartialDiagnostic } from './runtime';
 import type { ClockPoint, RafPoint } from '../yield-policy-v5/clock-proof';
-declare const __YIELD_BUILD__: { sourceHash: string; commit: string; inputs: string[]; observationRevision: string };
+declare const __YIELD_BUILD__: {
+  sourceHash: string;
+  commit: string;
+  inputs: string[];
+  observationRevision: string;
+};
 const status = document.getElementById('status')!,
   button = document.getElementById('run') as HTMLButtonElement;
-const raf = () => observeRaf((callback) => requestAnimationFrame(callback), () => performance.now());
+const raf = () =>
+  observeRaf(
+    (callback) => requestAnimationFrame(callback),
+    () => performance.now(),
+  );
 function check(value: boolean, message: string): asserts value {
   if (!value) throw new Error(message);
 }
@@ -151,8 +160,9 @@ async function arm(
     const longTasksSupported =
       typeof PerformanceObserver !== 'undefined' &&
       PerformanceObserver.supportedEntryTypes.includes('longtask');
-    const longTasks = longTaskObservations(longTasksSupported,
-      () => firstWall > 0 ? firstWall + warmupSeconds * 1000 : null);
+    const longTasks = longTaskObservations(longTasksSupported, () =>
+      firstWall > 0 ? firstWall + warmupSeconds * 1000 : null,
+    );
     partialSnapshot = () => ({
       status: 'INCOMPLETE',
       diagnostics: diagnostic.snapshot(),
@@ -197,8 +207,11 @@ async function arm(
     if (observer) {
       longTasks.acquire(observer);
       lifetime.own('longtasks', () => {
-        try { longTasks.finish(); }
-        finally { observerDisconnected = longTasks.snapshot().observations.disconnected; }
+        try {
+          longTasks.finish();
+        } finally {
+          observerDisconnected = longTasks.snapshot().observations.disconnected;
+        }
       });
     }
     observer?.observe({ type: 'longtask' });
@@ -218,9 +231,11 @@ async function arm(
       phaseBoundary(kind, point) {
         if (kind === 'ENTRY') {
           phaseEntry = point;
-          boundary.check(phaseEntry, previousRaf, { recordedFrames: frameCount, diagnosticCounter: point });
-        }
-        else phaseCompletion = point;
+          boundary.check(phaseEntry, previousRaf, {
+            recordedFrames: frameCount,
+            diagnosticCounter: point,
+          });
+        } else phaseCompletion = point;
       },
       evaluator: current ? productionYieldReference : referenceYield,
       beforeTick(_world, tick, readCounter) {
@@ -282,10 +297,14 @@ async function arm(
             previousRaf: lastRaf ? { ...lastRaf } : null,
             recoveryStepsBeforeReset: recoverySteps,
           });
-          const returned = await raf(), stamp = returned.stampMs,
+          const returned = await raf(),
+            stamp = returned.stampMs,
             start = performance.now();
-          diagnostic.returned({ stampMs: stamp, rafCallbackMs: returned.callbackMs,
-            continuationStartMs: start });
+          diagnostic.returned({
+            stampMs: stamp,
+            rafCallbackMs: returned.callbackMs,
+            continuationStartMs: start,
+          });
           const actual = { ...actualCounter(), timeMs: stamp, observedAtMs: performance.now() };
           diagnostic.returned({
             stampMs: stamp,
@@ -343,7 +362,10 @@ async function arm(
               measuredPrevious = lastFrame;
               check(!!lastRaf, '052 missing actual previous RAF counter');
               previousRaf = lastRaf;
-              boundary.check(phaseEntry, previousRaf, { recordedFrames: frameCount, diagnosticCounter: actual });
+              boundary.check(phaseEntry, previousRaf, {
+                recordedFrames: frameCount,
+                diagnosticCounter: actual,
+              });
             }
             measuredLast = stamp;
           }

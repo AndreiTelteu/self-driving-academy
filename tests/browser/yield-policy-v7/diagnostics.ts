@@ -65,7 +65,14 @@ export function armDiagnostics() {
     returned(
       value: Pick<
         RafAttempt,
-        'stampMs' | 'callbackReadMs' | 'rafCallbackMs' | 'continuationStartMs' | 'continuationReadMs' | 'counterAfter' | 'guardReadMs' | 'debtMs'
+        | 'stampMs'
+        | 'callbackReadMs'
+        | 'rafCallbackMs'
+        | 'continuationStartMs'
+        | 'continuationReadMs'
+        | 'counterAfter'
+        | 'guardReadMs'
+        | 'debtMs'
       >,
     ) {
       if (!rafAttempt) throw new Error('052 diagnostic RAF return without wait');
