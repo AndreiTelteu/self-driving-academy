@@ -48,3 +48,27 @@ Nu am forțat gardurile: modificarea lor ar invalida exact dovada pe care diagno
 
 Pentru a rula diagnosticul ar fi nevoie de o **re-derivare a lui pe baseline-ul nou** (namespace, root C:, inventar re-pinuit), adică o revizuire de tooling separată — nu de o simplă rulare.
 
+## Diagnostic record-stage re-derivat — executat (`record-stage-diagnostic-02`)
+
+Re-derivat pe baseline-ul nou și **executat efectiv** (prima rulare reală a acestui diagnostic vreodată):
+
+- Ancoră: arhiva `native-after-05` (sourceHash `9fa30829…`), cu produsul verificat byte-exact față de receipt-ul 924c.
+- Fix de tooling necesar: walker-ul de closure (`scripts/manual-segments-archive-closure.mjs`) nu accepta `src/style.css`, importat de `src/main.ts`; acum extensiile non-script sunt tratate ca frunze, ca `.json`.
+- Preparator EXIT0, collector instrumentat (10 lumi, 70 vehicule, 5 perechi OFF/ON, 180/600) EXIT0, reader independent → `VERIFIED_DIAGNOSTIC_ONLY_NOT_ACCEPTANCE`.
+
+Atribuire pe cele 8 stadii (5 lumi observer, 600 tick-uri/lume, medie):
+
+| stadiu (perTick inclusive p95) | ms |
+|---|---|
+| **whole tick** | **5,910** (p50 3,958) |
+| **bridge** | **3,375** |
+| append | 1,373 |
+| bytewalk | 0,996 |
+| parse005 | 0,108 |
+| immutability | 0,037 |
+| authorityStats | 0,012 |
+| cachehit / controllerStats | ≈ 0 |
+
+Stadiile sunt inclusive (nested), iar suma p95 = 5,90 ms ≈ whole tick p95, deci acoperă integral tick-ul. `bridge` include `append` și `bytewalk`. **Ținta de optimizare este stadiul `bridge`** — bridge-ul de manual-segment plus calea de append/admisie a înregistrării — care rulează în fiecare tick. Față de referința fără produs (tick p95 4,10–4,39 ms), produsul adaugă ~1,5–1,8 ms la p95.
+
+
