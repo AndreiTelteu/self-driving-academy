@@ -12,6 +12,10 @@ Diagnostic reutilizat `tests/browser/raf-scheduling-diagnostic` (3 faze × 40 s,
 | `raf-scheduling-20261018T194430232Z` | AUTO (WebGPU) | `COMPLETE_DIAGNOSTIC`, 7183 waits |
 | `raf-scheduling-20261018T194902703Z` | WEBGL2 | `COMPLETE_DIAGNOSTIC`, 7194 waits |
 
+Notă: în `194430232Z` a fost pornit și un al doilea attempt `WEBGL2`, dar exportul lui a fost întrerupt (a rămas
+doar `started.json`), pentru că driverul s-a oprit înainte de ACK-ul POST-ului de 3 MiB. Controlul WEBGL2 a fost
+deci reluat într-o sesiune nouă, cu aceeași identitate de build, iar folderul cu attempt-ul orfan rămâne păstrat.
+
 Ambele sesiuni complete au trecut `verify.mjs --build-only`
 (`DIAGNOSTIC_BUILD_ONLY_PASS`, `source cc147f36…`, `artifact 37c91fd7…`, `native 02dc6a4e…`).
 Identitatea de build e identică între cele două sesiuni complete.
