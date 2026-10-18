@@ -11,7 +11,7 @@ import { diagnosticAdmission } from './admission.mjs';
 
 assert.equal(
   resolve('.').replaceAll('\\', '/'),
-  'F:/Sites/self-driving-academy/.worktrees/vehicle-recovery-01',
+  'C:/Users/aandr/Sites/self-driving-academy/.worktrees/vehicle-recovery-01',
 );
 assert.equal(
   execFileSync('git', ['branch', '--show-current'], { encoding: 'utf8' }).trim(),

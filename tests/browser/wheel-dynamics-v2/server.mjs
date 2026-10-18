@@ -16,7 +16,7 @@ const port = Number(process.argv[2] ?? 5220);
 const buildOnly = process.argv[3] === '--build-only';
 if (port !== 5220 || process.argv.length > (buildOnly ? 4 : 3))
   throw new Error('Only reserved port5220 and optional --build-only');
-const expectedRoot = 'F:/Sites/self-driving-academy/.worktrees/wheel-dynamics-01';
+const expectedRoot = 'C:/Users/aandr/Sites/self-driving-academy/.worktrees/wheel-dynamics-01';
 if (
   resolve('.').replaceAll(String.fromCharCode(92), '/') !== expectedRoot ||
   execFileSync('git', ['branch', '--show-current'], { encoding: 'utf8' }).trim() !==

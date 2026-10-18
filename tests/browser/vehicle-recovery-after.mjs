@@ -16,7 +16,7 @@ import { createRecoveryRoadProvider } from '../../src/app/vehicle-recovery-road.
 import { createEventBus } from '../../src/simulation/event-bus.ts';
 import { CONTROLLER_CONTEXT, controllerCommand } from '../vehicles/controller-reference.ts';
 
-const root = 'F:/Sites/self-driving-academy/.worktrees/vehicle-recovery-01';
+const root = 'C:/Users/aandr/Sites/self-driving-academy/.worktrees/vehicle-recovery-01';
 const expectedCommit = 'ad32db9c609cce1132669c95312ae202a62b87ed';
 assert.equal(resolve('.').replaceAll('\\', '/'), root);
 assert.equal(
