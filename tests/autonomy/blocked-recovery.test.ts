@@ -23,6 +23,12 @@ import { blockedProbeFixture } from './policy-probe-fixture';
 const SESSION = '054-probe';
 const SUBJECT: BehaviorActor = { id: 'taxi-054', incarnation: 1 };
 
+/** Deep freeze used to prove the module has no write path into anything it is given. */
+function deepFreeze<T>(value: T): T {
+  if (typeof value === 'object' && value !== null)
+    for (const entry of Object.values(value)) deepFreeze(entry);
+  return Object.freeze(value);
+}
 function behaviorFacts(): BehaviorFacts {
   return {
     version: '045-decision-facts-v1',
@@ -179,6 +185,33 @@ test('054 rejects foreign observations, keeps the latch fenced and fabricates no
       }),
     /Duplicate blocked lane/,
   );
+  // A deeply frozen observation and planner context can be read but never written: any attempted
+  // write would throw in strict mode, so nothing the module is given can be mutated by it.
+  const frozen = deepFreeze({
+      ...observation(6, { blockedLaneAheadId: 'lane-a' }),
+      planner: {
+        origin: 'lane-in',
+        destination: 'lane-out',
+        access: 'TAXI',
+        graphVersion: '054-graph-v1',
+        costVersion: '054-cost-v1',
+        blocked: ['lane-a'],
+      },
+    } as BlockedRecoveryObservation),
+    frozenSnapshot = JSON.stringify(frozen);
+  const readOnly = evaluateBlockedRecovery({
+    sessionId: SESSION,
+    worldEpoch: 0,
+    actor: SUBJECT,
+    decisionTick: 6,
+    graph: fixture.graph,
+    observation: frozen,
+    state: BLOCKED_RECOVERY_EMPTY_STATE,
+  });
+  assert.equal(readOnly.reason, 'NO_PROGRESS_BLOCKED_LANE_AHEAD');
+  assert.equal(readOnly.action, 'REQUEST_REROUTE');
+  assert.equal(JSON.stringify(frozen), frozenSnapshot);
+  assert.deepEqual(readOnly.reroute?.blocked, ['lane-a']);
   assert.deepEqual(getBlockedRecoveryStats(), {
     evaluating: false,
     retainedActors: 0,
@@ -697,6 +730,35 @@ test('054 re-entry after MANUAL produces a plan and never teleports the vehicle'
     ['teleportsVehicle'],
   );
   assert.deepEqual(pose, { x: 10, y: 0, z: 1.4 }, 'the authoritative pose is unchanged');
+  // The strongest available proof that this module cannot teleport: a deeply frozen observation
+  // (including the authoritative pose) is read without any write, and the module's public API has
+  // no body/pose setter to reach a physical owner at all.
+  const frozen = deepFreeze({
+      version: '054-progress-observation-v1',
+      units: 'SI',
+      tick: 60,
+      access: 'TAXI',
+      positionM: { x: 10, y: 0, z: 1.4 },
+      headingRad: 0,
+      routeStatus: 'READY',
+      destination: 'lane-out',
+      recoveryLaneId: 'lane-in',
+      allowRecoveryEscalation: false,
+    } as AuthorityReentryObservation),
+    frozenSnapshot = JSON.stringify(frozen);
+  const readOnly = evaluateAuthorityReentry({
+    sessionId: SESSION,
+    worldEpoch: 0,
+    actor: SUBJECT,
+    decisionTick: 60,
+    authority: 'AUTO',
+    graph: fixture.graph,
+    observation: frozen,
+  });
+  assert.equal(readOnly.action, 'DRIVE_TO_LANE');
+  assert.equal(readOnly.teleportsVehicle, false);
+  assert.equal(JSON.stringify(frozen), frozenSnapshot, 'no given input was mutated');
+  assert.deepEqual(frozen.positionM, { x: 10, y: 0, z: 1.4 });
   // The drive is only claimed when the real041 planner proved the re-entry route.
   assert.equal(
     planner.findRoute({ origin: 'lane-in', destination: 'lane-out', access: 'TAXI' }).status,
