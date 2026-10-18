@@ -1,0 +1,72 @@
+﻿{
+  "scope": "CORRECTNESS_ONLY_NO_PERFORMANCE_COMPARISON_NO_ACCEPTANCE",
+  "note": "Fresh execution of the 040 functional acceptance suites on a second machine. This is NOT the pinned AFTER performance capture and NOT a hardware acceptance. The pinned AFTER collector (tests/browser/service-zones-after.mjs) was not executed.",
+  "createdAt": "2026-10-18T15:42:28.0507154+03:00",
+  "worktree": "C:\\Users\\aandr\\Sites\\self-driving-academy\\.worktrees\\service-zones-01",
+  "branch": "loop-pbi/service-zones-01",
+  "head": "0853a4d94d5ac7aed00fbacdf4723a0a3de4e906",
+  "collectorExpectedCommit": "0853a4d94d5ac7aed00fbacdf4723a0a3de4e906",
+  "runtime": "v24.21.0",
+  "npm": "11.19+ (npm ci from pinned package-lock.json, lock unchanged)",
+  "nativeArtifact": {
+    "path": "node_modules/@dimforge/rapier3d-compat/dist/rapier.mjs",
+    "sha256": "02dc6a4e2fffc013bab08fbb44fa68f501d8303615e9afe4c7d89ad4eedda0d0"
+  },
+  "pinnedNativeMatch": true,
+  "kernelGraphUnchanged": true,
+  "commands": [
+    {
+      "name": "01-pure",
+      "argv": [
+        "node",
+        "--import",
+        "./scripts/register-typescript.mjs",
+        "--test-concurrency=1",
+        "--test",
+        "tests/world/service-zones.test.ts",
+        "tests/app/service-zones.test.ts",
+        "tests/world/service-zones-after-proof.test.mjs"
+      ],
+      "exit": 0,
+      "stdout": "01-pure.stdout.log",
+      "stderr": "01-pure.stderr.log"
+    },
+    {
+      "name": "02-native",
+      "argv": [
+        "node",
+        "--import",
+        "./scripts/register-typescript.mjs",
+        "--test-concurrency=1",
+        "--test",
+        "tests/app/service-zones-native.test.ts"
+      ],
+      "exit": 0,
+      "stdout": "02-native.stdout.log",
+      "stderr": "02-native.stderr.log"
+    }
+  ],
+  "results": {
+    "pure": { "tests": 16, "pass": 16, "fail": 0, "durationMs": 1850.4325 },
+    "native": { "tests": 2, "pass": 2, "fail": 0, "durationMs": 1957.5354 }
+  },
+  "criteriaCovered": {
+    "zonesAccessibleWithExplicitConditions": "040 actual032 IDs/directed033 route and collinear anchor produce explicit conditions; access/pickup-dropoff conditions independent of static reachability",
+    "recoveryPointsValidatedAgainstObstacles": "actual sedan/compact readonly occupancy, support, same-serial moving/anonymous blockers; notch crossing rejected although all four corners in polygon; slanted/reverse/near-perpendicular headings deny"
+  },
+  "baseline": {
+    "path": "Docs/Evidence/040-service-zones/before-01",
+    "status": "PASS",
+    "untouched": true,
+    "sourceHash": "13224224c7b9c03bb7f676427bb9139babe180d107ca698912d1ee98bb5bcf7d"
+  },
+  "environmentMismatch": {
+    "baselineMachine": { "cpu": "AMD Ryzen 9 7950X3D 16-Core Processor", "os": "win32 10.0.26200", "runtime": "v24.21.0" },
+    "currentMachine": { "cpu": "AMD Ryzen 7 7735U with Radeon Graphics", "os": "win32 10.0.26300", "runtime": "v24.21.0" },
+    "repoRoot": { "baseline": "F:/Sites/self-driving-academy/.worktrees/service-zones-01", "current": "C:/Users/aandr/Sites/self-driving-academy/.worktrees/service-zones-01" },
+    "ripgrepRequiredByCollector": true,
+    "ripgrepAvailable": false
+  },
+  "performanceComparison": "NOT_EXECUTED",
+  "firstFailure": null
+}
