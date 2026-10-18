@@ -91,6 +91,8 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '052' d
 
 - 2026-10-07T21:45:57.8505527+03:00: V7 boundary helper6teste + clockproof8 + diagnostics5 =19/19PASS; staticstrictTS/lintmax0/formatPASS. MODULE_NOT_FOUND inițial și TS5112 păstrate; căile absolute și --ignoreConfig corectează numai comenzile. V6/clockproof/capturile imuabile. SOURCE distinctV7 diagnostic autorizat pentru callback/readclock, boundary fail-fast și longtaskpartial bounded; fără build/hardware/schedulingfix sau Done. Dovezi v7-boundary-scoped-checks-01/02 în checkoutyield-policy-01.
 
+- 2026-10-07T22:14:00+03:00 : handoff sursă V7 R4 (source-only/neexecutat): 9fișiere noi tests/browser/yield-policy-v7/ (main/runtime/diagnostics/observations/observations.test/protocol/index.html/server.mjs/verify.mjs); agregat manual 92intrări fingerprint90de66c8; boundary one-shot cu predicat strict ±4, split callback/continuation-start și contorul de citire, longtask bounded1024 cu export înainte de disconnect; 11teste adverse autorate neexecutate; V6 rămâne FAIL (gap1658.6ms), fără build/native/browser/PASS/Done.
+
 ## Nivel de validare — politica 2026-10-08
 
 Nivel: `targeted`. Aplică [politica de validare proporțională](../../Docs/validation-policy.md), inclusiv preflight, scenarii afectate, reutilizarea harness-ului și dovezilor, paralelizare numai pentru corectitudine și checkpoint-uri numai pentru perechi complete independente. Criteriile explicite de gameplay, hardware sau soak rămân obligatorii. DEV nu închide gate-ul de release; rapoartele istorice nu se reclasifică. Alegerea nivelului nu bifează criterii și nu schimbă statusul.

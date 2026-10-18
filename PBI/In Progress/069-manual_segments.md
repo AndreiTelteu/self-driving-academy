@@ -114,6 +114,26 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '069' d
 
 - 2026-10-07T13:41:49.8365531+03:00 : FIRSTAFTERnative-after-01 EXIT1preflight10:39:05.434–10:39:16.827Z: lexicalscanner interpretsimportkeyword in/Nonliteral module import/regex asstaticimport.155inputs source243b22564f21d1dfa6da0352a1d461f81df5f00166d761d8eae4168d0800cb71/native02dc;failureSHAd4414af8c90dff93349623d5a700fb7cc6685dee672f9ca5ed72622dc3a1701e diagnosticstatus1stderr744B preserved. No firstworld/0worldfiles;CURRENT/cal unexecuted. SOURCE11 boundedregexlexing anddistinctnative-after-02 authorizedsourceonly,oldarchivefail immutable; no nativeacceptance/Done.
 
+- 2026-10-07T13:44:53+03:00 : Checks07 FINITE_PASS_DIAGNOSTIC_FAILED_NO_NATIVE_ACCEPTANCE: 17/17pure, syntax/lint/format0, dar diagnosticul CLI archive-closure EXIT1 la `export type CameraSweep` citit ca module from clause; 15surse183372B(sursa601abf32), archive155/failed01/produs18 neschimbate; 0lumi/native.
+
+- 2026-10-07T20:30:28+03:00 : Checks08 FINITE_AST_CHECKS_PASS_NO_NATIVE_ACCEPTANCE: 15surse184530B(sursa1f131414), 41/41pure, 9syntaxMJS, lint/format-final/BOTHtypes/arhitectura0; before179/failed155/failed01 verificate, produs18 neschimbat; prima eroare de format păstrată; CLIchild real și lumile native neexecutate.
+
+- 2026-10-07T20:35:21+03:00 : native-archive-cli-diagnostic-01 EXIT0: PASS_ARCHIVED_IMPORT_CLOSURE pe native-after-01 (92cai/342muchii/786067B/sursa243b2256), scope DIAGNOSTIC_ONLY_NOT_RETROACTIVE_CAPTURE_PASS; captura eșuată01 rămâne FAIL; 0lumi.
+
+- 2026-10-07T20:49:40+03:00 : AFTER02 native EXIT1: sursa411dd0e2/native02dc, arhivă17:49:31.968Z înaintea primei lumi17:49:32.461Z, eșec17:49:40.683Z la gate-ul normal tick absolut; două lumi păstrate; produs18/before179/failed01 neschimbate; fără retry.
+
+- 2026-10-07T21:00:00+03:00 : parsed-record-reuse: numai intervention-admission.ts schimbat privat (WeakMap pe identitate exactă după traversarea bounded + copia005, bytes din copia normalizată); PASS 77/77pure, BOTHtypes/lint/format/arhitectura0, receipt nou sourceFinal924c0764; originalul de072 și BEFORE/failed01/02 imuabile; after02 FAILED păstrat; nativ neexecutat.
+
+- 2026-10-07T21:09:14+03:00 : after03-binding SOURCE+checks: numai perechea aprobată de072+924c acceptată, manifestul nou leagă checkedProductReceipt/Fingerprint; 8cai116955B(sursa a1466e0b), format/lint/BOTHtypes/arhitectura/4suite pure0; produs924c și capturile vechi imuabile; nativ neexecutat.
+
+- 2026-10-07T21:11:38+03:00 : AFTER03 native EXIT1: sursa683584ea cu receipt924c legat, arhivă18:11:30.082Z înaintea primei lumi18:11:30.596Z, eșec18:11:38.101Z la același gate normal tick absolut; două lumi păstrate; produs924c și capturile anterioare neschimbate; fără retry.
+
+- 2026-10-07T21:28:00+03:00 : record-stage SOURCE01: preparer copie/AST (fără lumi) + reader independent, 8stadii inclusive, 16x600Float64=76800B/lume, 10lumi70 OFF/ON/180warm600measure; diagnostic-only care NU marchează vreun gate PASS; 2teste pure draft neexecutate; produs924c/before/failed01-03 neatinse.
+
+- 2026-10-07T21:42:00+03:00 : record-stage SOURCE02: guardCopyRuntime bounded30s/512KiB înainte de prima achiziție și după cleanup, pinning pe originalul AFTER03 (156inputs/sursa683584/raw028fb8) și receipt924c; readerul rulează întâi derivarea/proof și importă numai validatorul copiat verificat; 6teste pure draft; nicio comandă executată.
+
+- 2026-10-07T21:48:28+03:00 : record-stage diagnostic Checks01 FINITE_DIAGNOSTIC_SOURCE_CHECKS_PASS_NO_PREPARATION_OR_WORLDS: 6/6pure, format/types(main+tests)/lint/syntax0, sursă8cai/39751B(891d431b); prima eroare (2importuri nefolosite + avertisment d.mts) păstrată și reparată; preparer/CLI/lumi neexecutate.
+
 ## Nivel de validare — politica 2026-10-08
 
 Nivel: `targeted`. Aplică [politica de validare proporțională](../../Docs/validation-policy.md), inclusiv preflight, scenarii afectate, reutilizarea harness-ului și dovezilor, paralelizare numai pentru corectitudine și checkpoint-uri numai pentru perechi complete independente. Criteriile explicite de gameplay, hardware sau soak rămân obligatorii. DEV nu închide gate-ul de release; rapoartele istorice nu se reclasifică. Alegerea nivelului nu bifează criterii și nu schimbă statusul.
