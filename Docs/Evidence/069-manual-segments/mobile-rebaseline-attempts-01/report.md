@@ -124,6 +124,19 @@ Corecția de protocol (necesară pentru un gate valid): `global.gc()` **numai du
 
 **Concluzie:** gate-ul de tick trece; gate-ul de memorie trebuie corectat metodologic (GC forțat pe ambele părți) înainte de a putea fi interpretat. Următoarea rundă: implementarea GC-ului post-fereastră în ambele harness-uri, recaptura BEFORE (product-absent, namespace nou) și AFTER, apoi comparația.
 
+### Încercarea de re-baseline cu GC forțat (executată) — GC-ul perturbă cronometrarea
+
+Am implementat GC-ul post-fereastră în ambele harness-uri și am recapturat:
+- **BEFORE `native-before-03`**: PASS, sourceHash `32590b00…`, cititor CURRENT+HISTORICAL `PASS_SUPPLEMENTAL_NATIVE_REFERENCE`.
+- **AFTER `native-after-08`** (cu `--expose-gc`): a picat de două ori la gate-ul de tick (5,5443 și 5,6532 ms), deși aceeași lume dăduse 5,0388 fără `--expose-gc`.
+
+Cauza e sistematică, nu zgomot: **p50 al tick-ului a urcat de la 3,7427 la 4,15 ms** (+0,41 ms) în rulările cu GC. GC-ul complet dintre lumi schimbă starea heap-ului/JIT pentru lumea următoare, deci **deplasează fereastra cronometrată**.
+
+Concluzie de protocol: retenția de memorie **nu poate fi măsurată în procesul cronometrat**. Ea trebuie măsurată într-un **probe separat** (proces dedicat, cu GC, fără gate de tick), iar comparația de memorie trebuie să folosească acel probe — nu `process.memoryUsage()` din captura cronometrată. Altfel orice corecție de memorie strică măsurarea de CPU, și invers.
+
+Ambele capturi de probă rămân ca dovezi (`native-before-03`, `native-after-08`, `native-after-08-rejected-01`, `native-after-07-gcprobe`); harness-urile au fost readuse la starea comisă, ca lanțul de acceptare să rămână consistent.
+
+
 
 
 
