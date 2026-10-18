@@ -1,0 +1,23 @@
+{
+  "scope": "SOURCE ONLY, execution pending; both smoke mandatory; no performance acceptance",
+  "originalVerifierPath": "tests/browser/yield-policy-v2/verify.mjs",
+  "originalVerifierSha256": "1788760dc415bbdd07c65c5897a01c2866c449fc41a22f130a5c1b5b07e5c221",
+  "originalProtocolPath": "tests/browser/yield-policy-v2/protocol.ts",
+  "originalProtocolSha256": "675b3a77cb76e881a3f9ff5025215aab13bdec5a6797d5a8b56a229514047e5f",
+  "derivedVerifierSha256": "b4432abe6b34e6594c3d80702a81f04ffd0a1b4d4b23ff0fb172282768125d95",
+  "replacements": [
+    {
+      "from": "} from './protocol.ts';",
+      "to": "} from '../../../tests/browser/yield-policy-v2/protocol.ts';"
+    },
+    {
+      "from": "validateCaptureInventory(inventory, build.sourceHash);",
+      "to": "function validateSmokeOnlyInventory(\n  rows, sourceHash,\n) {\n  if (\n    rows.length < 2 ||\n    rows.length > 4 ||\n    new Set(rows.map((row) => row.name)).size !== rows.length\n  )\n    throw new Error('052 capture inventory capacity');\n  for (const row of rows) {\n    if (\n      !/^(WEBGPU|WEBGL2)-smoke$/.test(row.name) ||\n      row.start.full !== false || row.name !== row.start.backend + '-smoke' ||\n      row.start.sourceHash !== sourceHash ||\n      row.files.some((file) => /failure|rejected|incomplete/i.test(file)) ||\n      !row.terminal ||\n      row.terminal.captureId !== row.start.captureId ||\n      row.terminal.status !== 'SAVED_PENDING_VERIFICATION' ||\n      row.terminal.arms !== 14 ||\n      !row.files.includes('report.json')\n    )\n      throw new Error('052 unresolved/failed capture inventory');\n  }\n  for (const backend of ['WEBGPU', 'WEBGL2'])\n    if (!rows.some((row) => row.name === backend + '-smoke'))\n      throw new Error('052 smoke backend absent');\n}\n\nvalidateSmokeOnlyInventory(inventory, build.sourceHash);"
+    },
+    {
+      "from": "verified: true,",
+      "to": "verified: true, status: 'SUPPLEMENTAL_BOTH_SMOKE_ONLY', performanceAcceptance: false, hardwareFullAcceptance: false,"
+    }
+  ],
+  "changes": "Import path rebased only; original inventory guard derived to exactly both complete smoke attempts; output explicitly supplemental/no performance. Every remaining source/archive/native/ZIP/AMD/chronology/raw/parity/cleanup assertion unchanged."
+}

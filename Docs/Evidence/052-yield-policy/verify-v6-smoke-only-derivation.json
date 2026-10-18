@@ -1,0 +1,23 @@
+{
+  "frozenVerifierPath": "tests/browser/yield-policy-v6/verify.mjs",
+  "frozenVerifierSha256": "09e13bf9fc548e238bba6bf31e79a1b69e8be15eb3614c6cfca07c062d5428e1",
+  "frozenProtocolPath": "tests/browser/yield-policy-v5/protocol.ts",
+  "frozenProtocolSha256": "8a2a2940565547f9f20291f4f433038b329764933600ab21ee879c3921e55144",
+  "replacements": [
+    {
+      "from": "} from '../yield-policy-v5/protocol.ts';",
+      "to": "} from '../../../tests/browser/yield-policy-v5/protocol.ts';"
+    },
+    {
+      "from": "validateCaptureInventory(inventory, build.sourceHash);",
+      "to": "function validateSmokeOnlyInventory(rows, sourceHash) {\n  if (rows.length !== 2 || new Set(rows.map(row => row.name)).size !== 2)\n    throw new Error('052 BOTH smoke-only inventory must contain exactly two attempts');\n  for (const row of rows) {\n    if (!/^(WEBGPU|WEBGL2)-smoke$/.test(row.name) || row.start.full !== false ||\n        row.name !== row.start.backend + '-smoke' || row.start.sourceHash !== sourceHash ||\n        row.files.some(file => /failure|rejected|incomplete/i.test(file)) ||\n        !row.terminal || row.terminal.captureId !== row.start.captureId ||\n        row.terminal.status !== 'SAVED_PENDING_VERIFICATION' || row.terminal.arms !== 14 ||\n        !row.files.includes('report.json'))\n      throw new Error('052 unresolved/failed smoke capture inventory');\n  }\n  for (const backend of ['WEBGPU', 'WEBGL2'])\n    if (!rows.some(row => row.name === backend + '-smoke')) throw new Error('052 smoke backend absent');\n}\nvalidateSmokeOnlyInventory(inventory, build.sourceHash);"
+    },
+    {
+      "from": "verified: true,",
+      "to": "verified: true, status: 'SUPPLEMENTAL_V6_BOTH_SMOKE_ONLY', performanceAcceptance: false, hardwareFullAcceptance: false,"
+    }
+  ],
+  "scope": "SOURCE-only derivation; exactly BOTH complete V6 smoke; no performance/full acceptance",
+  "executed": false,
+  "supplementalSha256": "18bf5a162c4a28ef76b723e4a63da460b1fefd27516bc70267bc7ffea05b7611"
+}
