@@ -42,6 +42,24 @@ Record actual first-entry/full-clearance ticks from native body poses, raw/effec
 
 Dedicated production fixture, foreground headed Chrome, AUTO/WebGPU and explicitWEBGL2. Short smoke verifies known controls, actual crossing/contact reporting and cleanup. Full hardware comparison uses203 budgetVersion, fixed1920x1080 CSS/internal/DPR1, five alternating reference/current pairs,30seconds warmup and120seconds measurement each. Collect frame/main/tick/native-step/policy distributions, focus/debt/LongTasks and bounded ownership. Exact unavailable GPU/heap values remain null. Both actual backend reports and source/artifact identities are mandatory; Node timing and smoke do not approve hardware FPS.
 
+## Amendament de scope 2026-10-19 (aprobat explicit de utilizator)
+
+PBI052 se închide la nivel **targeted** pe dovada nativă (paritate exactă AFTER/BEFORE) plus **smoke-ul WEBGL2**
+din sesiunea `browser-v7-20261018T204011941Z`, verificat cu derivata hash-guarded
+`Docs/Evidence/052-yield-policy/verify-v7-targeted-smoke.mjs` care emite
+`TARGETED_SMOKE_PASS_NO_HARDWARE_ACCEPTANCE`. Paragraful de mai sus **nu se șterge și nu se relaxează**: cerința
+de rapoarte pe **ambele** backenduri și comparația hardware full rămân valabile și se **deferă explicit** către
+gate-urile 220/224.
+
+Motivație: pe hardware-ul utilizatorului (AMD Ryzen 7 7735U + Radeon 680M, Chrome 155 și Edge 155.0.4283.62),
+calea WebGPU/D3D12 suferă un stall de prezentare de frame, reprodus în două build-uri Chromium independente
+(pragurile de 0.98 ratio și 250 ms debt încălcate, cu muncă de aplicație normală, `nativeSerial` înghețat,
+zero longtask, fără TDR sau hang, fără evenimente de power). Atribuirea completă:
+`Docs/Evidence/052-yield-policy/raf-scheduling-20261018-analysis` (RAF_ONLY curat; scenă goală pe WebGPU →
+214 ms; WEBGL2 curat) și `Docs/Evidence/052-yield-policy/v7-smoke-sessions-20261018/stall-attribution`.
+Eșecurile WebGPU rămân păstrate, iar `limitations.md` obligatoriu din folderul verificat le declară alături de
+deferarea către 220/224. Nu se pretinde acceptare de performanță sau hardware, FPS hardware, gate full ori soak.
+
 Owned paths: `src/autonomy/yield-policy.ts`, dedicated `tests/autonomy/yield-policy*`, `scripts/benchmark-yield-policy*.mjs`, `tests/browser/yield-policy/*`, this document and `Docs/Evidence/052-yield-policy/*`. Parent owns `src/autonomy/index.ts`, shared module documentation, canonical board, integration and publication.
 
 ## Light production authoring under026hardware lock

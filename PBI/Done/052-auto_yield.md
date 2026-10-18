@@ -1,7 +1,7 @@
 ---
 id: "052"
 title: "Politica de prioritate și gap acceptat"
-status: "In Progress"
+status: "Done"
 release: "V1"
 module: "Autonomie"
 depends_on: ["045","038"]
@@ -10,7 +10,7 @@ parameter_role: "policy"
 parameter_keys: ["yield_time_gap"]
 owner: "Codex gpt-6.1-sol medium yield-policy-01"
 started_at: "2026-10-05T19:57:50.574Z"
-completed_at: null
+completed_at: "2026-10-19T00:40:45+03:00"
 ---
 
 # 052 Politica de prioritate și gap acceptat
@@ -30,8 +30,8 @@ Aplică yield time gap în conflictele eligibile.
 
 ## Criterii de acceptare
 
-- [ ] Praguri diferite schimbă momentul traversării.
-- [ ] Încălcările și coliziunile rămân posibile când stilul este riscant.
+- [x] Praguri diferite schimbă momentul traversării.
+- [x] Încălcările și coliziunile rămân posibile când stilul este riscant.
 
 ## Verificare
 
@@ -43,21 +43,21 @@ Rulează verificările relevante ale proiectului și păstrează rezultatul exac
 
 ## Dovezi de finalizare
 
-Rezultat implementare: De completat.
+Rezultat implementare: `src/autonomy/yield-policy.ts` — evaluator pur, versionat (`052-yield-interval-v1`), SI, fără istoric reținut, cu limite de admitere 110 actori / 128 candidați / 4096 perechi / 60 s — plus puntea către FSM-ul 045 (`yieldBehaviorFacts`), exportate din `src/autonomy/index.ts`. Parametrul `yield_time_gap` (0,2–8 s, implicit 3 s) e validat prin registrul existent. Integrat pe main (`f6b5fdfa`, `459ec3f5`); integrarea a expus două regresii, ambele reparate: importurile cross-modul trecute pe barrel-urile publice, cerute de garda de arhitectură, și limita de transport de 4 MiB a raportului de browser, depășită de starea de roți apărută între timp în sonda Rapier (`4aee1dd0`).
 
-Verificări executate și rezultat: De completat.
+Verificări executate și rezultat: toate gate-urile repo-ului sunt verzi pe revizia integrată — `typecheck`, `lint`, `format:check`, `check:architecture`, `check:parameter-catalog`, `npm test` **792/792**, `npm run build`. Proba nativă (`Docs/Evidence/052-yield-policy/after-main029.json`) e `AFTER_NATIVE_PASS`: 34 lumi / 20 rulări, **paritate exactă** cu BEFORE (hash de poze native și hash de comenzi efective), 10 perechi (70 și 110 mașini) fără regresie, tickΔ p95 ≤0,68 ms, policyΔ p95 ≤0,06 ms. Proba browser e verificată de derivata hash-guarded `Docs/Evidence/052-yield-policy/verify-v7-targeted-smoke.mjs`, care rulează toate aserțiunile de integritate ale verificatorului V7 plus aserțiunile de criteriu și cere un `limitations.md` obligatoriu: pe sesiunea `browser-v7-20261018T204011941Z` (source `af3fbf38`, artifact `ea28fef1`) a ieșit **exit 0** cu `TARGETED_SMOKE_PASS_NO_HARDWARE_ACCEPTANCE`, 14/14 brațe, `report.json` 2,79 MB, cleanup zero. Criteriul 1: cu aceleași lumi, 0,2 s acceptă de la tick 1 și intră la 103/98, în timp ce 3 s refuză până la tick 30 și intră la 213/208. Criteriul 2: brațele riscante (0,2 s) contactează cu 8964,39 / 5424,85 N·s, cele prudente (3 s) nu; `minGap 1,497 s` explică acceptul (peste 0,2) și refuzul (sub 3). Aceleași valori apar și în proba nativă, deci criteriile au dovezi pe fizică reală, atât nativ cât și în browser.
 
-Fișiere și documente actualizate: De completat.
+Fișiere și documente actualizate: `src/autonomy/yield-policy.ts`, `src/autonomy/index.ts`, `tests/autonomy/yield-policy*`, `tests/browser/yield-policy*` (inclusiv v2–v7 și `raf-scheduling-diagnostic`), `scripts/benchmark-yield-policy*.mjs`, `scripts/verify-yield-policy-browser.mjs`, `Docs/yield-policy.md` (amendament de scope 2026-10-19), `Docs/Evidence/052-yield-policy/**` și acest task.
 
-Limitări sau follow-up: De completat.
+Limitări sau follow-up: proba browser pe **WebGPU (AUTO)** nu a fost obținută pe acest hardware. Calea WebGPU/D3D12 suferă un stall de prezentare de frame, reprodus în două build-uri Chromium independente (Chrome 155 și Edge 155.0.4283.62) — cu muncă de aplicație normală, `nativeSerial` înghețat, zero longtask, fără TDR/hang; atribuire în `raf-scheduling-20261018-analysis` și `v7-smoke-sessions-20261018/stall-attribution`. Toate eșecurile WebGPU rămân păstrate, iar `limitations.md` din folderul verificat le declară obligatoriu. Comparația hardware full pe ambele backenduri este **deferată explicit** gate-urilor 220/224, conform amendamentului aprobat la 2026-10-19. Nu se pretinde acceptare de performanță sau hardware, FPS hardware, gate full ori soak; GPU/heap/WASM exacte rămân `null`. Follow-up de mediu: HAGS on/off, driver AMD 680M sau altă mașină cu GPU.
 
 ## Definition of Done
 
-- [ ] Criteriile de acceptare sunt îndeplinite și bifate.
-- [ ] Verificările relevante sunt executate, iar dovezile sunt completate.
-- [ ] Contractele și documentația afectate sunt actualizate.
-- [ ] Statusul este Done și completed_at este completat.
-- [ ] Fișierul este mutat fizic în PBI/Done și lipsește din celelalte coloane.
+- [x] Criteriile de acceptare sunt îndeplinite și bifate.
+- [x] Verificările relevante sunt executate, iar dovezile sunt completate.
+- [x] Contractele și documentația afectate sunt actualizate.
+- [x] Statusul este Done și completed_at este completat.
+- [x] Fișierul este mutat fizic în PBI/Done și lipsește din celelalte coloane.
 
 Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '052' după mutarea fizică și păstrează rezultatul.
 
@@ -114,3 +114,5 @@ Nivel: `targeted`. Aplică [politica de validare proporțională](../../Docs/val
 - 2026-10-19T00:24:15+03:00: Testul adaptorului WebGPU, rezultat NEGATIV. Scop: scoaterea căii WebGPU de pe D3D12 pentru a testa ipoteza stall-ului de prezentare. Metodă read-only: flag candidat la pornirea Chrome, apoi citirea „Dawn Info“ din chrome://gpu prin CDP (parcurgere shadow-DOM) și a adaptorului din navigator.gpu. Rezultate: implicit, --use-webgpu-adapter=vulkan, --use-webgpu-adapter=d3d11 și --enable-features=Vulkan raportează toate „<Integrated GPU> D3D12 backend - AMD Radeon(TM) Graphics“; adaptorul rămâne amd/rdna-2. Pe Chrome 155.0.8059.84 backend-ul Dawn nu poate fi schimbat din aceste flag-uri, deci ipoteza nu poate fi testată astfel; nu s-a rulat nicio probă, configurația fiind identică. chrome://gpu listează feature-ul webgpu_on_vk_via_gl_interop (WebGPU-pe-Vulkan doar prin interop GL). Următori discriminatori nescanați: alt build Chromium (Edge 155.0.4283.62 e instalat), HAGS on/off (necesită reboot), driver AMD 680M, altă mașină/CI. Fără modificare de produs; PBI rămâne In Progress. Dovezi: Docs/Evidence/052-yield-policy/v7-adapter-probe-01.
 
 - 2026-10-19T00:30:39+03:00: Edge ca diagnostic, la cererea utilizatorului. Același smoke WebGPU într-un build Chromium independent (Edge 155.0.4283.62, profil temporar curat cu extensii/sync dezactivate, același stack Dawn/D3D12 și același driver AMD) a eșuat identic: captura browser-v7-20261018T212619137Z (sourcesaf3fbf38/artifactca729dca) a fost respinsă la brațul 12 (pair 4) cu „052 native phase simulation/wall ratio“, nativePhaseRatio0.948586/matchedRafRatio0.946138, beforeDebt171.2ms, rafDebt180.6ms, muncă în callback1.3ms și costuri native1.7-2.3ms pe tick, warmBoundary WITHIN_EXISTING_BOUNDARY. Semnătura e identică cu eșecurile Chrome (ratio0.9762; debt524.6ms): timpul se duce în livrarea/prezentarea frame-ului, nu în aplicație. Reproducerea într-un build independent elimină ipoteza „regresie Chrome 155/Dawn“ și indică calea D3D12/WebGPU pe iGPU-ul AMD Radeon 680M (driver sau planificare GPU). Edge a fost folosit doar ca diagnostic, nu ca mediu de acceptare. Rămân: HAGS on/off (necesită utilizator/reboot), driver AMD 680M, altă mașină/CI. Fără modificare de produs; PBI rămâne In Progress. Dovezi: Docs/Evidence/052-yield-policy/v7-edge-probe-01 și browser-v7-20261018T212619137Z.
+
+- 2026-10-19T00:40:45+03:00: �nchidere targeted, aprobata explicit de utilizator. Amendamentul de scope este consemnat �n Docs/yield-policy.md: cerin?a de rapoarte pe ambele backenduri NU se ?terge, ci se defera explicit gate-urilor 220/224. Verificatorul derivat hash-guarded Docs/Evidence/052-yield-policy/verify-v7-targeted-smoke.mjs, cu limitations.md obligatoriu, a trecut cu exit0 pe sesiunea browser-v7-20261018T204011941Z (sourceaf3fbf38/artifactea28fef1), emi?�nd TARGETED_SMOKE_PASS_NO_HARDWARE_ACCEPTANCE (14/14 bra?e, report2.79MB, cleanup zero). Criteriile sunt bifate pe dovezi native (paritate exacta AFTER/BEFORE, 34 lumi, 10 perechi fara regresie) plus browser WEBGL2 cu fizica Rapier reala: 0.2s accepta tick1, intra103(sedan)/98(compact) ?i contacteaza8964.39/5424.85N*s; 3s refuza p�na tick30, intra213/208, fara contact; minGap1.497s explica ambele. Toate gate-urile repo-ului verzi pe revizia integrata (792/792 teste, typecheck, lint, format, arhitectura, catalog, build). WEBGPU ram�ne neob?inut pe acest hardware ?i documentat: stall de prezentare reprodus �n Chrome155 ?i Edge155.0.4283.62, atribuit caii D3D12/WebGPU pe iGPU-ul AMD (fara TDR/longtask), cu toate e?ecurile pastrate. Fi?ier mutat fizic In Progress -> Done; Validate-Board.ps1 -RequireDone '052' rulat dupa mutare.
