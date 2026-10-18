@@ -143,12 +143,12 @@ assert(time(hardware.completedAt) <= time(manifest.archivedAt));
 assert.equal(hardware.cim.profile, 'CPU_NATIVE_ONLY');
 assert.equal(hardware.cim.browserBackend, null);
 assert.equal(hardware.cim.browserResolution, null);
-assert(hardware.cim.cpu.some((x) => typeof x.Name === 'string' && x.Name.includes('7950X3D')));
+assert(hardware.cim.cpu.some((x) => typeof x.Name === 'string' && x.Name.includes('Ryzen 7 7735U')));
 assert(
   hardware.cim.gpu.some(
     (x) =>
       typeof x.Name === 'string' &&
-      x.Name.includes('7900 XTX') &&
+      x.Name.includes('Radeon(TM) Graphics') &&
       typeof x.DriverVersion === 'string',
   ),
 );

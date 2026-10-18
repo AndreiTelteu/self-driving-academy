@@ -105,8 +105,8 @@ assert(time(hw.startedAt) <= time(hw.cim.capturedAt));
 assert(time(hw.cim.capturedAt) <= time(hw.completedAt));
 assert(time(hw.completedAt) <= time(manifest.archivedAt));
 assert.equal(hw.cim.profile, 'CPU_NATIVE_ONLY');
-assert(hw.cim.cpu.some((x) => x.Name.includes('7950X3D')));
-assert(hw.cim.gpu.some((x) => x.Name.includes('7900 XTX')));
+assert(hw.cim.cpu.some((x) => x.Name.includes('Ryzen 7 7735U')));
+assert(hw.cim.gpu.some((x) => x.Name.includes('Radeon(TM) Graphics')));
 const { verifyRun } = await import(
   pathToFileURL(resolve(original, 'source/tests/browser/service-zones/verify-query-records.mjs'))
     .href
