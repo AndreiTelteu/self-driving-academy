@@ -32,6 +32,8 @@ PBI036 implementează [controllerul de semafoare](signals.md): faze deterministe
 
 PBI038 adaugă [politica explicită de prioritate și evaluarea spațiilor](priority-rules.md): relații de hartă exhaustive, timp până la conflict în secunde și dovezi bazate pe trafic observabil. Absența traficului și acoperirea necunoscută nu devin dovezi de refuz sau cedare; schimbările de traseu și discontinuitățile invalidează continuitatea observării.
 
+PBI041 adaugă [planner-ul de rutare A*](route-planner.md) peste graful033: cost explicit și versionat per bandă (metri/limită de viteză plus penalizări de conexiune), trasee doar pe muchii directionate filtrate după acces, destinații de tip bandă sau zonă de serviciu, rezultat explicit când nu există rută, cache plafonat invalidat la schimbarea grafului/blocajelor/costurilor și integrare cu coada schedulerului219. Nu acordă permisie de trecere, nu este fizică și nu este dispecerul de flotă.
+
 ## Repere pentru distracție și provocări
 
 V1 include zone de serviciu fictive pentru spital/maternitate, toalete publice sau benzinării/cafenele și terminal, plus parcare pentru drift, rampă și alee destructibilă. [Provocările](28-provocari-random-si-revenire.md) verifică accesibilitatea acestor zone înainte de ofertă. Distrugerea mobilierului decorativ nu elimină semantica STOP/semafor/benzi; obstacolele deplasate sunt raportate contextului fizic, conform [modulului 26](26-joaca-libera-haos-si-distrugere.md).

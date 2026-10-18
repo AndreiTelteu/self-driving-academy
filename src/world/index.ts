@@ -62,6 +62,19 @@ export {
   type LaneLocationQuery,
   type LaneProjection,
 } from './lane-graph';
+export {
+  createRoutePlanner,
+  ROUTE_COST_MODEL,
+  ROUTE_PLANNER_LIMITS,
+  type RoutePlanner,
+  type RoutePlannerStats,
+  type RoutePlannerOptions,
+  type RoutePlan,
+  type RouteQuery,
+  type RouteDestination,
+  type RouteDestinationKind,
+  type RouteStatus,
+} from './route-planner';
 export type {
   RoadMap,
   Lane,
