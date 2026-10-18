@@ -84,5 +84,21 @@ Cost exclusiv estimat: `bridge` 3,375 este inclusiv, iar din el `append` 1,373 +
 **Bucla obligatorie după orice schimbare de produs** (nu există scurtătură, pentru că receipt-ul e pinuit):
 1. editare produs → 2. rulează cele 132 de teste pure; 3. generează un receipt nou de 18 fișiere (`sourceFinal = sha256(path+':'+sha256+'\n' în ordinea fixată)`, verificat de `validateCheckedProduct`); 4. actualizează `REUSE_PRODUCT_SHA`/`REUSE_PRODUCT_RECEIPT` în `scripts/manual-segments-calibration-proof.mjs`; 5. re-captură AFTER (ancoră nouă, `native-after-06`); 6. re-derivare diagnostic + rulare; 7. pereche BEFORE/AFTER finală.
 
+## Rezultat după prima optimizare (`native-after-06`, diagnostic `-03`)
+
+Aplicat în `src/telemetry/intervention-admission.ts`: encoder UTF-8 la nivel de modul și cale rapidă pentru string-uri ASCII fără escape (aceeași contabilitate, fără `JSON.stringify` + `encode` per literal). Receipt nou de produs: `sourceFinal fb366a92…` (doar `intervention-admission.ts` s-a schimbat din cele 18 fișiere). 132/132 teste pure PASS.
+
+| metric | înainte (`-02`) | după (`-03`) | Δ |
+|---|---|---|---|
+| whole tick p95 (diagnostic) | 5,910 | **5,471** | −0,439 (−7,4%) |
+| bytewalk p95 | 0,996 | **0,453** | −0,543 (−54%) |
+| append p95 | 1,373 | 0,843 | −0,530 (−39%) |
+| parse005 / immutability | 0,108 / 0,037 | 0,109 / 0,037 | ~0 |
+
+**Gate-ul de tick pe protocolul de acceptare (`native-after-06`, count=70, observer): 5,0388 / 4,8660 / 4,8333 / 4,8617 / 4,9715 ms — toate sub 5,5 → PASS** (înainte, `native-after-04` pica la 5,6364).
+
+**Blocaj nou, diferit:** captura AFTER tot eșuează, dar la `Original chronological CPU/runtime-heap comparison gate`, nu la tick. Toate cele 5 perechi, la ambele populații, au heap-ul după peste cel dinainte (ratio 1,38–3,38 pe 70, 1,57–1,83 pe 110), cu variație mare între perechi (unele perechi au ratio 0,24) și fără forcedGC. Deci următorul pas este investigarea gate-ului de memorie (retenție reală vs. zgomot GC), nu optimizarea de CPU.
+
+
 
 
