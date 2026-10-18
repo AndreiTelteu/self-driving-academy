@@ -48,3 +48,4 @@ export function createApplication(services: ApplicationServices): Application {
   };
 }
 export { createApplicationLifecycle, type ApplicationState } from './application-lifecycle';
+export { createManualSegmentBridge, type ManualSegmentStepCause } from './manual-segment-bridge';

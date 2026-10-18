@@ -1,0 +1,5 @@
+# Native AFTER SOURCE11 handoff
+
+SOURCE-only pending parent review. Proposed affected finite commands: scoped syntax/format/lint on changed helper/collector/test; validation pure suite serially, retaining existing closure/lock/template negatives. Optional separately granted real bounded archive proof CLI against native-after-01 may diagnose the frozen old archive using the new proof; it must be labelled supplemental and cannot retroactively mark the failed capture PASS or establish native performance.
+
+No commands executed in this round. Future native-after-02 requires its own reviewed finite PASS and exclusive capture grant. No BEFORE recapture or actual world/calibration/build/browser/Git was started. Current checked15source from checks06 is preserved under native-after-source-original-checked-06. Fingerprint formula remains SHA256 ordered UTF8 path:rawSHA256 newline. Parser remains conservative lexical import proof, not fullsyntax/AST; arbitrary slash ambiguity is explicit rejection.

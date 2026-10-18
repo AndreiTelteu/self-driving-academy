@@ -1,0 +1,16 @@
+  prepare(value:InterventionBoundaryPlan){return run(()=>{
+   requireContract(pending===null,'Intervention pending boundary');const a=authority();requireContract(a.tick===acceptedTick&&!a.suspended&&a.fault===null,'Intervention preparation authority');
+   const d=fields(value,[...contextFields,'version','tick','timing','nextIdentity','nextMode','reason','cause','targetChange']);requireContract(d.version==='069-boundary-plan-v1'&&d.timing==='PREPARED_BEFORE_NEXT_TICK'&&sameInterventionContext(readContext(d),context)&&tick(d.tick)===acceptedTick+1,'Intervention next tick boundary');
+   const identity=d.nextIdentity===null?null:interventionIdentity(d.nextIdentity,ports.bodyIdentity),mode=choice(d.nextMode,['AUTO','MANUAL','LEARNING']);requireContract((identity===null)===(mode==='AUTO'),'Intervention planned seat');
+   const cause=d.cause===null?null:interventionCause(d.cause,ports.bodyIdentity),change=d.targetChange===null?null:interventionTargetChange(d.targetChange);
+   const reason=d.reason===null?null:choice(d.reason,segmentCloseReasons);
+   requireContract(reason===null||!terminalReasons.includes(reason as typeof terminalReasons[number]),'Retirement cause cannot be next-tick mode boundary');
+   if(cause)requireContract(ports.preparedCause(cause.operationId)===d.cause&&sameInterventionContext(cause,context)&&cause.tick===d.tick&&cause.timing===d.timing&&cause.reason===reason&&cause.identity===a.identity,'Intervention cause host admission');
+   if(causedReasons.includes(reason as typeof causedReasons[number]))requireContract(cause!==null,'Intervention real ride/recovery/rollover/preferences cause required');
+   if(change){requireContract(ports.preparedTarget(change.operationId)===d.targetChange&&sameInterventionContext(change,context)&&change.tick===d.tick&&change.reason===reason&&change.reason!=='STATE_IMPORT'&&(change.reason==='CONTROL_PREFERENCES_CHANGE'?change.target.learningEpoch===target.learningEpoch&&change.target.controlPreferencesVersion!==target.controlPreferencesVersion:change.target.learningEpoch>target.learningEpoch),'Intervention profile target admission');}else requireContract(reason!=='PROFILE_CHANGE'&&reason!=='PROFILE_RESTORE'&&reason!=='PROFILE_IMPORT'&&reason!=='CONTROL_PREFERENCES_CHANGE','Intervention target change receipt required');
+   const nextTarget=change?.target??interventionTarget(ports.readTarget());requireContract(change!==null||sameInterventionTarget(nextTarget,target),'Unadmitted target change');
+   if(a.identity===identity&&a.mode!==mode)requireContract(reason==='MODE_CHANGE','Intervention mode close cause');
+   if(a.identity!==identity&&a.identity!==null)requireContract(identity===null?(reason==='RETURN_TO_AUTO'||reason==='VEHICLE_SWITCH'):reason==='VEHICLE_SWITCH','Intervention authority departure cause');
+   requireContract(sequence<Number.MAX_SAFE_INTEGER,'Intervention sequence capacity');sequence++;
+   const plan=Object.freeze({...context,version:'069-boundary-plan-v1' as const,tick:tick(d.tick),timing:'PREPARED_BEFORE_NEXT_TICK' as const,nextIdentity:identity,nextMode:mode,reason,cause,targetChange:change});pending=reserve(plan,nextTarget,'PREPARED_BEFORE_NEXT_TICK');return pending.ticket;
+  });},

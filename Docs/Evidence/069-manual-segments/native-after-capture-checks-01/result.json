@@ -1,0 +1,80 @@
+{
+  "at": "2026-10-07T10:39:53.447997+00:00",
+  "status": "FAILED_ARCHIVE_PREFLIGHT_BEFORE_FIRST_NATIVE_WORLD",
+  "captureExit": 1,
+  "sourceHash": "243b22564f21d1dfa6da0352a1d461f81df5f00166d761d8eae4168d0800cb71",
+  "native": {
+    "archiveRelativePath": "native/rapier.mjs",
+    "bytes": 4340292,
+    "sha256": "02dc6a4e2fffc013bab08fbb44fa68f501d8303615e9afe4c7d89ad4eedda0d0"
+  },
+  "sourceInputs": 155,
+  "worldFiles": 0,
+  "completeExists": false,
+  "firstWorldExists": false,
+  "failure": {
+    "status": "FAIL",
+    "stage": "ARCHIVED_IMPORT_CLOSURE",
+    "sourceHash": "243b22564f21d1dfa6da0352a1d461f81df5f00166d761d8eae4168d0800cb71",
+    "failedAt": "2026-10-07T10:39:16.787Z",
+    "error": {
+      "name": "AggregateError",
+      "message": "Archive preflight subprocess proof failure",
+      "stack": "AggregateError: Archive preflight subprocess proof failure\n    at subprocessFailure (file:///F:/Sites/self-driving-academy/.worktrees/manual-segments-01/scripts/manual-segments-archive-closure.mjs:233:17)\n    at verifyArchiveProofChild (file:///F:/Sites/self-driving-academy/.worktrees/manual-segments-01/scripts/manual-segments-archive-closure.mjs:303:11)\n    at file:///F:/Sites/self-driving-academy/.worktrees/manual-segments-01/scripts/benchmark-manual-segments-after.mjs:275:3",
+      "causes": [
+        {
+          "name": "Error",
+          "message": "Archive source proof subprocess failed",
+          "stack": "Error: Archive source proof subprocess failed\n    at verifyArchiveProofChild (file:///F:/Sites/self-driving-academy/.worktrees/manual-segments-01/scripts/manual-segments-archive-closure.mjs:306:11)\n    at file:///F:/Sites/self-driving-academy/.worktrees/manual-segments-01/scripts/benchmark-manual-segments-after.mjs:275:3"
+        }
+      ]
+    },
+    "processDiagnostics": {
+      "phase": "SPAWN_RESULT_FAILURE",
+      "returned": true,
+      "status": 1,
+      "statusObserved": true,
+      "signal": null,
+      "signalObserved": true,
+      "signalTruncated": false,
+      "stdout": "",
+      "stdoutAvailable": true,
+      "stdoutBytes": 0,
+      "stdoutTruncated": false,
+      "stderr": "{\"status\":\"FAIL_ARCHIVED_IMPORT_CLOSURE\",\"error\":{\"name\":\"AssertionError\",\"message\":\"Unsupported static import form tests/telemetry/manual-segments-after-validation.test.mjs\",\"stack\":\"AssertionError [ERR_ASSERTION]: Unsupported static import form tests/telemetry/manual-segments-after-validation.test.mjs\\n    at verifyModuleClosure (file:///F:/Sites/self-driving-academy/.worktrees/manual-segments-01/scripts/manual-segments-archive-closure.mjs:185:11)\\n    at async verifyArchiveProof (file:///F:/Sites/self-driving-academy/.worktrees/manual-segments-01/scripts/manual-segments-archive-closure.mjs:373:17)\\n    at async file:///F:/Sites/self-driving-academy/.worktrees/manual-segments-01/scripts/manual-segments-archive-closure.mjs:394:19\"}}\n",
+      "stderrAvailable": true,
+      "stderrBytes": 744,
+      "stderrTruncated": false,
+      "timeoutMs": 30000,
+      "maxBufferBytes": 262144
+    }
+  },
+  "failureSha256": "d4414af8c90dff93349623d5a700fb7cc6685dee672f9ca5ed72622dc3a1701e",
+  "currentReader": "NOT_EXECUTED_CAPTURE_FAILED",
+  "calibration": "NOT_EXECUTED",
+  "checkedSourceUnchanged": "532de9a4e96d8fce5bad125980e749a27a27ced21416b4e836dd58f715f2e311",
+  "product18Unchanged": true,
+  "command": {
+    "args": [
+      "node",
+      "--import",
+      "./scripts/register-typescript.mjs",
+      "scripts/benchmark-manual-segments-after.mjs"
+    ],
+    "startedAt": "2026-10-07T10:39:05.434001+00:00",
+    "endedAt": "2026-10-07T10:39:16.827845+00:00",
+    "exit": 1
+  },
+  "logs": [
+    {
+      "path": "01-capture.stderr.log",
+      "bytes": 2325,
+      "sha256": "8a5635a3c85583027f69dd176ebe576d2ade1bbc7d21df26320f53425ac3193c"
+    },
+    {
+      "path": "01-capture.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}

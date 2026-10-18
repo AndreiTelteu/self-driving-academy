@@ -12,7 +12,7 @@ const port = Number(process.argv[2] ?? 5205);
 if (!Number.isInteger(port) || port < 1024 || port > 65535) throw new Error('Invalid port');
 const cwd = resolve('.').replaceAll('\\', '/');
 if (
-  cwd !== 'F:/Sites/self-driving-academy/.worktrees/vehicle-switch-01' ||
+  cwd !== 'C:/Users/aandr/Sites/self-driving-academy/.worktrees/vehicle-switch-01' ||
   execFileSync('git', ['branch', '--show-current'], { encoding: 'utf8' }).trim() !==
     'loop-pbi/vehicle-switch-01' ||
   execFileSync('git', ['rev-parse', '--show-toplevel'], { encoding: 'utf8' }).trim() !== cwd

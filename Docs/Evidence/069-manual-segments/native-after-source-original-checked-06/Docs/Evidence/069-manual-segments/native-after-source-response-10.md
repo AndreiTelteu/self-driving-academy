@@ -1,0 +1,5 @@
+# Native AFTER SOURCE10 declaration provenance response
+
+SOURCE-only; no new execution. The actual AFTER collector now includes scripts/manual-segments-calibration-proof.d.mts. CALIBRATION_CLOSURE includes the same path, so calibration producer and reader require it. Shared captureImportRoots requires the declaration in both CURRENT and HISTORICAL archive inputs and includes .mts in bounded lexical root/file coverage, traversing its real type-only publictelemetry import. Thus both standalone archive preflight and independent AFTER/calibration readers fail on an omitted declaration, even if a selfdeclared reduced inventory is rehashed. No runtime import of the declaration or parser library is introduced into the measured parent.
+
+Added missing-declaration negative to the existing calibration closure test and one pure archive-root negative/positive test. Intended tests35, all new/affected checks UNEXECUTED. Approved18 raw product, original BEFORE and earlier sources/logs are unchanged. Exact15 checked source bytes from checks05 are preserved under native-after-source-original-checked-05; those accepted checks remain historical.
