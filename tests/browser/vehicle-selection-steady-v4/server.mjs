@@ -19,7 +19,7 @@ if (
   throw new Error('Only assigned steady port5217 is permitted');
 const cwd = resolve('.').replaceAll('\\', '/');
 if (
-  cwd !== 'F:/Sites/self-driving-academy/.worktrees/vehicle-switch-01' ||
+  cwd !== 'C:/Users/aandr/Sites/self-driving-academy/.worktrees/vehicle-switch-01' ||
   execFileSync('git', ['branch', '--show-current'], { encoding: 'utf8' }).trim() !==
     'loop-pbi/vehicle-switch-01' ||
   execFileSync('git', ['rev-parse', '--show-toplevel'], { encoding: 'utf8' }).trim() !== cwd

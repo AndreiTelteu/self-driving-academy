@@ -10,7 +10,7 @@ const root = resolve('.'),
   commit = 'ad32db9c609cce1132669c95312ae202a62b87ed';
 assert.equal(
   root.replaceAll('\\', '/'),
-  'F:/Sites/self-driving-academy/.worktrees/vehicle-recovery-01',
+  'C:/Users/aandr/Sites/self-driving-academy/.worktrees/vehicle-recovery-01',
 );
 assert.equal(
   execFileSync('git', ['branch', '--show-current'], { encoding: 'utf8' }).trim(),

@@ -28,7 +28,7 @@ import {
   createReferenceResourceScope,
 } from '../tests/input/vehicle-selection-reference.ts';
 
-const expectedRoot = 'F:/Sites/self-driving-academy/.worktrees/vehicle-switch-01';
+const expectedRoot = 'C:/Users/aandr/Sites/self-driving-academy/.worktrees/vehicle-switch-01';
 assert.equal(resolve('.').replaceAll('\\', '/'), expectedRoot);
 assert.equal(
   execFileSync('git', ['branch', '--show-current'], { encoding: 'utf8' }).trim(),
