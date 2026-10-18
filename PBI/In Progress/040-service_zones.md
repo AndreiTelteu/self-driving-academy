@@ -28,8 +28,8 @@ Definește accesul și spațiul pentru opriri de serviciu și recuperări.
 
 ## Criterii de acceptare
 
-- [ ] Zonele sunt accesibile din graf și au condiții explicite.
-- [ ] Punctele de recuperare sunt validate împotriva obstacolelor.
+- [x] Zonele sunt accesibile din graf și au condiții explicite.
+- [x] Punctele de recuperare sunt validate împotriva obstacolelor.
 
 ## Verificare
 
@@ -41,13 +41,16 @@ Rulează verificările relevante ale proiectului și păstrează rezultatul exac
 
 ## Dovezi de finalizare
 
-Rezultat implementare: De completat.
+Rezultat implementare: Produsul 040 este livrat în worktree-ul `service-zones-01` (branch `loop-pbi/service-zones-01` la 0853a4d): `src/world/service-zones.ts` (catalog din poligon întreg și coridor coliniar dirijat, cu condiții explicite), `src/app/service-zones.ts` (compune contracte publice world/vehicles/sessions și împrumută portul 030 fără a elibera resurse străine), export aditiv în `src/world/index.ts`, teste world/app/native/after-proof, collector și reader browser, `Docs/service-zones.md`.
 
-Verificări executate și rezultat: De completat.
+Verificări executate și rezultat: Pe această mașină (Ryzen 7 7735U, win32 10.0.26300), cu node v24.21.0 din `.node-version`, `npm ci` din lock-ul pinuit (neschimbat) și Rapier nativ byte-identic cu `02dc6a4e…`, la HEAD 0853a4d:
+- `node --import ./scripts/register-typescript.mjs --test-concurrency=1 --test tests/world/service-zones.test.ts tests/app/service-zones.test.ts tests/world/service-zones-after-proof.test.mjs` → EXIT0, 16/16 pass, 0 fail (1850,4 ms).
+- `node --import ./scripts/register-typescript.mjs --test-concurrency=1 --test tests/app/service-zones-native.test.ts` → EXIT0, 2/2 pass (sedan și compact, Rapier real), 1957,5 ms.
+Dovezi: `Docs/Evidence/040-service-zones/correctness-current-01/` (loguri și `result.json`). Baseline-ul `before-01` (sourceHash `13224224…`) rămâne neatins.
 
-Fișiere și documente actualizate: De completat.
+Fișiere și documente actualizate: `Docs/service-zones.md`; `Docs/Evidence/040-service-zones/product-source-handoff-01.md`, `product-source-review-response-02.md`, `product-scoped-checks-01/`, `correctness-current-01/`; acest fișier PBI (criterii bifate, istoric).
 
-Limitări sau follow-up: De completat.
+Limitări sau follow-up: Proba de performanță AFTER (collectorul pinuit `tests/browser/service-zones-after.mjs` și readerul `verify-after.mjs`) NU a fost executată. Baseline-ul BEFORE a fost capturat pe AMD Ryzen 9 7950X3D / win32 10.0.26200 / root `F:\Sites\...`, iar mașina curentă are alt CPU și alt OS, iar collectorul își asumă root-ul `F:` și `rg` (ripgrep), care lipsesc. Comparația hardware relativă din Docs/25 rămâne obligatorie și se reia pe mașina de baseline; o re-baseline pe această mașină cere decizie explicită. Proba browser pe ambele backenduri rămâne de asemenea neexecutată.
 
 ## Definition of Done
 
@@ -70,6 +73,8 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '040' d
 - 2026-10-07T22:17:00+03:00 : răspuns review02 040 închide două contracte la SOURCE: coridorul cere heading exact atan2(dz,dx) al regiunii coliniare dirijate (fără toleranță unghiulară sau shortcut pozitiv), iar envelope-ul orizontal e exact cuboid(.85,.3,2) cu geometria reală de roți (max(.85,track/2+r), max(2,wheelbase/2+r)); 9world+5app+2after-proof=16 pure + 2 native, toate neexecutate; 6cai noi schimbate.
 
 - 2026-10-07T22:29:23+03:00 : product-scoped-checks-01 PASS: 16teste, 14cai(sursa9d5ef89f), terminalul FAILED anterior(5060c342) păstrat; primul eșec 08-pure = aserțiune greșită pe respingerea032 deja existentă a poligonului degenerat, reparată fără schimbare de produs; baseline8/before184 neschimbate; nativ neexecutat. Barrelul world/index.ts are deja linia aditivă; lipsesc numai nativAFTER + browserAFTER.
+
+- 2026-10-18T15:42:28+03:00 : Probe de corectitudine re-executate pe o a doua mașină (Ryzen 7 7735U/win3210.0.26300), node24.21.0 din.node-version și npmci din lock-ul pinuit (neschimbat), Rapier nativ hash02dc6a4e byte-identic, HEAD0853a4d: 16/16pure + 2/2nativ (sedan/compact, Rapier real) EXIT0; dovezi correctness-current-01, before-01 neatins. Criteriile funcționale 040 sunt bifate. Proba AFTER de performanță rămâne NEEXECUTATĂ: baseline-ul e pe Ryzen97950X3D/win3210.0.26200/rootF:, iar collectorul pinuit asumă F: și rg (lipsă); comparația hardware relativă se reia pe mașina de baseline sau printr-o re-baseline explicită. PBI rămâne In Progress.
 
 ## Nivel de validare — politica 2026-10-08
 
