@@ -124,7 +124,7 @@ export async function derive(path, source) {
       changed;
     changed = exactReplace(
       changed,
-      "const folder = 'Docs/Evidence/069-manual-segments/native-after-06';",
+      "const folder = 'Docs/Evidence/069-manual-segments/native-after-10';",
       `const folder = '${output}/capture';`,
     );
     changed = exactReplace(

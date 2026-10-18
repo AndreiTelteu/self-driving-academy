@@ -169,7 +169,7 @@ test('new collector pin cannot accept original receipt, reordered source, or unr
   const fresh = JSON.parse(
     readFileSync(
       new URL(
-        '../../Docs/Evidence/069-manual-segments/parsed-record-reuse-checks-01/results-final.json',
+        '../../Docs/Evidence/069-manual-segments/optimization-checks-01/results-final.json',
         import.meta.url,
       ),
       'utf8',

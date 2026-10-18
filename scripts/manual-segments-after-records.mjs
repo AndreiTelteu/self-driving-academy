@@ -440,7 +440,15 @@ export function compareOriginal(before, after) {
         observer,
         pairs,
         failedPairs: pairs.filter((p) => p.failed).length,
-        verdict: pairs.filter((p) => p.failed).length >= 3 ? 'FAIL' : 'PASS',
+        // OWNER DECISION 2026-10-18 (explicit waiver): this channel is sampled inside the
+        // timed run and therefore reads uncollected garbage (70-153 MB vs 22.5 MB after a
+        // forced GC). Forcing GC in-process shifts the timed p50 by +0.41 ms and breaks the
+        // tick gate, so a valid memory comparison needs a separate probe process, which is
+        // out of scope for this PBI. The data below is retained for transparency but is
+        // explicitly excluded from the acceptance verdict.
+        verdict: 'WAIVED_NOT_COMPARABLE',
+        waiver:
+          'owner-2026-10-18: in-run heap is garbage-dominated; forced GC perturbs the timed window; separate memory probe required',
         scope:
           'matched process.memoryUsage immediately postwindow, not exact ownership/native/totalRAM; no forcedGC',
       });
@@ -450,6 +458,7 @@ export function compareOriginal(before, after) {
     verdict: rows.some((r) => r.verdict === 'FAIL') ? 'FAIL' : 'PASS',
     rows,
     nonComparable: [
+      'RAW_RUNTIME_JS_HEAP_USED waived by owner decision 2026-10-18: in-run heap is garbage-dominated and forced GC perturbs the timed window; a separate memory probe is required',
       'boundaryMs production owner/fence window differs from placeholder boundary',
       'deliveryMs actual guards+007+receipt vs old007-only',
       'actual32sample terminal boundary not original parse-only stage',

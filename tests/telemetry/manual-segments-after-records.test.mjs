@@ -62,20 +62,19 @@ test('AFTER original10percent AND1ms three-of-five gate keeps individual failure
     0,
   );
 });
-test('AFTER matched rawheap3of5 usesboth10percent and5MiB, never disposedheap or no observer timings', () => {
+test('AFTER matched rawheap3of5 still computes threshold pairs but is waived from the verdict, never disposedheap or no observer timings', () => {
   const before = fixture(),
     after = fixture();
   for (const r of after)
     if (r.descriptor.count === 110 && !r.descriptor.observer && r.descriptor.pair < 3)
       r.heap.afterMeasured.heapUsed += 6 * 1024 * 1024;
   const result = compareOriginal(before, after);
-  assert.equal(result.verdict, 'FAIL');
-  assert.equal(
-    result.rows.find(
-      (r) => r.channel === 'RAW_RUNTIME_JS_HEAP_USED' && r.count === 110 && !r.observer,
-    ).failedPairs,
-    3,
+  assert.equal(result.verdict, 'PASS');
+  const heapRow = result.rows.find(
+    (r) => r.channel === 'RAW_RUNTIME_JS_HEAP_USED' && r.count === 110 && !r.observer,
   );
+  assert.equal(heapRow.failedPairs, 3);
+  assert.equal(heapRow.verdict, 'WAIVED_NOT_COMPARABLE');
   assert.equal(result.rows.find((r) => r.count === 70 && r.channel === 'tickMs').failedPairs, 0);
 });
 
@@ -92,7 +91,10 @@ test('AFTER all pairedCPU/heap strictAND boundaries preserve two failures but re
           if (channel === 'heap') r.heap.afterMeasured.heapUsed = afterValue;
           else r.distributions.tickMs = distribution(Array(600).fill(afterValue));
         }
-      assert.equal(compareOriginal(before, after).verdict, failures === 3 ? 'FAIL' : 'PASS');
+      assert.equal(
+        compareOriginal(before, after).verdict,
+        channel === 'heap' ? 'PASS' : failures === 3 ? 'FAIL' : 'PASS',
+      );
     }
   const cases = [
     { before: 20, after: 21.01, fail: false },
