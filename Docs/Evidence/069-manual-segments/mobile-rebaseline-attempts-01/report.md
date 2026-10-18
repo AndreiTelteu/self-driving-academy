@@ -36,3 +36,15 @@ Niciun prag nu a fost relaxat și nicio rulare nu a fost repetată până la un 
 Namespace nou `native-before-02` / `native-after-04`; `PINNED_BEFORE` (sourceHash, manifestSha256), hash-ul `complete.json` și `relativePath` actualizate; inventar BEFORE nou generat (`native-before-02-inventory.json`, 179 rânduri) și `validateOriginalInventory` re-pinuit la digestul lui; `core.autocrlf=false` la checkout-ul surselor, altfel LF→CRLF rupe identitatea byte-exactă a produsului față de receipt-ul 924c.
 
 Capturi respinse păstrate: `native-after-04-rejected-01` (receipt de produs — CRLF) și `native-after-04-rejected-02` (hash manifest BEFORE vechi).
+
+## Diagnostic record-stage — nu poate rula pe acest host (încercat)
+
+Am pornit preparatorul `scripts/prepare-manual-segments-record-stage-diagnostic.mjs` cu precondițiile îndeplinite (HEAD d8e5756, branch corect, produs byte-exact 924c, `native-after-03` prezent, output/runtime absente). S-a oprit **înainte de orice achiziție nativă**, din două motive independente, ambele de proveniență:
+
+1. **Pin pe arborele live.** La liniile 214-217 preparatorul citește fiecare intrare din `native-after-03/manifest.json` și cere ca fișierul live să fie byte-identic cu cel arhivat. `Docs/Evidence/069-manual-segments/verify-after.mjs` are arhivat `cda5f71d…` (14808 B), dar live `87b6e71a…` după adaptările de re-baseline (namespace + hash-uri). Corectarea căilor F:→C: și acest pin nu pot coexista.
+2. **Root F: în runtime-ul derivat.** Chiar dacă pinul ar fi satisfăcut, colectorul derivat păstrează `expectedRoot = 'F:/Sites/self-driving-academy/.worktrees/manual-segments-01'` din arhiva originală, deci ar eșua pe acest host.
+
+Nu am forțat gardurile: modificarea lor ar invalida exact dovada pe care diagnosticul o produce. Artefactele parțiale create de preparator (3 fișiere în output, 3 în runtime) au fost șterse.
+
+Pentru a rula diagnosticul ar fi nevoie de o **re-derivare a lui pe baseline-ul nou** (namespace, root C:, inventar re-pinuit), adică o revizuire de tooling separată — nu de o simplă rulare.
+
