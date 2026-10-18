@@ -118,7 +118,7 @@ export function parseParameterCatalog(value: unknown): readonly ParameterDefinit
   return definitions;
 }
 
-/** Verified policy046/047 capabilities. Design metadata never grants runtime support. */
+/** Verified policy046/047/048/050/051/053 capabilities. Design metadata never grants runtime support. */
 const policyKeys = new Set<string>([
   'speed_delta_urban',
   'speed_delta_residential',
@@ -132,6 +132,10 @@ const policyKeys = new Set<string>([
   'following_min_gap',
   'queue_standstill_gap',
   'following_speed_gain',
+  'red_stop_probability',
+  'green_start_delay',
+  'red_stop_line_offset',
+  'late_red_brake_threshold',
 ]);
 const definitions = Object.freeze(
   parseParameterCatalog(parameterCatalogData).map((definition) =>
