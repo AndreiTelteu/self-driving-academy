@@ -22,12 +22,12 @@ Median of the per-run percentiles in milliseconds (10 runs):
 
 | Region | p50 | p95 | p99 |
 | --- | ---: | ---: | ---: |
-| BEFORE synthetic BFS `syntheticRouteSearch` | 0.00890 | 0.02020 | 0.02965 |
-| AFTER `createRoutePlanner.findRoute` | 0.03970 | 0.06095 | 0.13930 |
-| AFTER 219 queue admission (16 jobs) | 0.06665 | 0.08765 | 0.11920 |
-| AFTER 219 four-tick processing | 0.09055 | 0.13095 | 0.26365 |
+| BEFORE synthetic BFS `syntheticRouteSearch` | 0.00890 | 0.01905 | 0.02975 |
+| AFTER `createRoutePlanner.findRoute` | 0.03895 | 0.06325 | 0.11300 |
+| AFTER 219 queue admission (16 jobs) | 0.06495 | 0.09570 | 0.40655 |
+| AFTER 219 four-tick processing | 0.09000 | 0.13980 | 0.20845 |
 
-ADDED cost of the new feature, reported separately: +0.04075 ms p95 for the direct planner versus the synthetic reference; +0.08765 ms p95 for queue admission and +0.13095 ms p95 for the four-tick pipeline. These regions are never summed into a compound percentile. Individual `p99` values include JIT/GC outliers (0.06–2.0 ms) and are diagnostic only.
+ADDED cost of the new feature, reported separately: +0.04420 ms p95 for the direct planner versus the synthetic reference; +0.09570 ms p95 for queue admission and +0.13980 ms p95 for the four-tick pipeline. These regions are never summed into a compound percentile. Individual `p99` values include JIT/GC outliers (up to ~0.4 ms) and are diagnostic only.
 
 ## Budget comparison and limitations
 
