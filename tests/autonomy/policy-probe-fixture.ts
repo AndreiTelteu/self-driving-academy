@@ -3,7 +3,12 @@
  * engines rather than a toy model: 033 lane graph, 036 signal controller, 037 stop rules and 044
  * road context. Authoritative observations are derived from those outputs only.
  */
-import { createLaneGraph, createSignalController, createStopRules } from '../../src/world';
+import {
+  createLaneGraph,
+  createRoutePlanner,
+  createSignalController,
+  createStopRules,
+} from '../../src/world';
 import type { LaneGraph, RoadAccess, RoadMap, StopZone } from '../../src/world';
 import { createEventBus } from '../../src/simulation';
 import type { SimulationEvent } from '../../src/simulation';
@@ -282,3 +287,223 @@ export function signalProbeFixture() {
 }
 
 export type { RoadContextEngine, SimulationEvent, StopZone };
+
+/**
+ * 054 corridor: lane-in legally branches into lane-a (shorter, therefore cheaper) or the longer
+ * lane-b, and both continuations reach lane-out. Blocking lane-a therefore leaves a real legal
+ * alternative, so a reroute request must actually change the planned path. Authored 033 geometry,
+ * not a toy model; the lateral branch angle keeps lane-b far outside lane-a's corridor, so the
+ * locateLane projection stays unambiguous.
+ */
+export function blockedRecoveryMap(): Mutable<RoadMap> {
+  const point = (id: string, x: number, z: number) => ({ id, positionM: { x, y: 0, z } });
+  return {
+    schemaVersion: 1,
+    units: 'SI',
+    mapId: '054-blocked-corridor-v1',
+    bounds: { minM: { x: -5, y: 0, z: -5 }, maxM: { x: 75, y: 5, z: 15 } },
+    geometry: {
+      nodes: [
+        point('i-a', 0, 0),
+        point('i-b', 20, 0),
+        point('a-a', 21, 0),
+        point('b-a', 21, 12),
+        point('o-a', 40, 0),
+        point('o-b', 70, 0),
+        point('j1', 19, -3),
+        point('j2', 25, -3),
+        point('j3', 25, 14),
+        point('j4', 19, 14),
+        point('s1', 39, -1),
+        point('s2', 41, -1),
+        point('s3', 41, 1),
+        point('s4', 39, 1),
+      ],
+      paths: [
+        { id: 'g-in', nodeIds: ['i-a', 'i-b'] },
+        { id: 'g-a', nodeIds: ['a-a', 'o-a'] },
+        { id: 'g-b', nodeIds: ['b-a', 'o-a'] },
+        { id: 'g-out', nodeIds: ['o-a', 'o-b'] },
+        { id: 'g-move-a', nodeIds: ['i-b', 'a-a'] },
+        { id: 'g-move-b', nodeIds: ['i-b', 'b-a'] },
+      ],
+      areas: [
+        { id: 'g-junction', vertexNodeIds: ['j1', 'j2', 'j3', 'j4'] },
+        { id: 'g-service', vertexNodeIds: ['s1', 's2', 's3', 's4'] },
+      ],
+    },
+    lanes: [
+      {
+        id: 'lane-in',
+        geometryId: 'g-in',
+        direction: 'FORWARD',
+        widthM: 3.5,
+        speedLimitMps: 13.4,
+        access: ['TAXI', 'CIVIL'],
+        neighbors: { left: null, right: null },
+        successorIds: ['lane-a', 'lane-b'],
+        fromIntersectionId: null,
+        toIntersectionId: 'junction',
+      },
+      {
+        id: 'lane-a',
+        geometryId: 'g-a',
+        direction: 'FORWARD',
+        widthM: 3.5,
+        speedLimitMps: 13.4,
+        access: ['TAXI', 'CIVIL'],
+        neighbors: { left: null, right: null },
+        successorIds: ['lane-out'],
+        fromIntersectionId: 'junction',
+        toIntersectionId: null,
+      },
+      {
+        id: 'lane-b',
+        geometryId: 'g-b',
+        direction: 'FORWARD',
+        widthM: 3.5,
+        speedLimitMps: 13.4,
+        access: ['TAXI', 'CIVIL'],
+        neighbors: { left: null, right: null },
+        successorIds: ['lane-out'],
+        fromIntersectionId: 'junction',
+        toIntersectionId: null,
+      },
+      {
+        id: 'lane-out',
+        geometryId: 'g-out',
+        direction: 'FORWARD',
+        widthM: 3.5,
+        speedLimitMps: 13.4,
+        access: ['TAXI', 'CIVIL'],
+        neighbors: { left: null, right: null },
+        successorIds: [],
+        fromIntersectionId: null,
+        toIntersectionId: null,
+      },
+    ],
+    intersections: [
+      {
+        id: 'junction',
+        geometryId: 'g-junction',
+        incomingLaneIds: ['lane-in'],
+        outgoingLaneIds: ['lane-a', 'lane-b'],
+        conflictZones: [],
+        movements: [
+          {
+            id: 'in-a',
+            geometryId: 'g-move-a',
+            fromLaneId: 'lane-in',
+            toLaneId: 'lane-a',
+            conflictZoneIds: [],
+          },
+          {
+            id: 'in-b',
+            geometryId: 'g-move-b',
+            fromLaneId: 'lane-in',
+            toLaneId: 'lane-b',
+            conflictZoneIds: [],
+          },
+        ],
+      },
+    ],
+    signals: [],
+    stopLines: [],
+    crosswalks: [],
+    serviceZones: [
+      {
+        id: 'service-054',
+        geometryId: 'g-service',
+        laneId: 'lane-out',
+        anchorNodeId: 'o-a',
+        access: ['TAXI', 'CIVIL'],
+        kind: 'BOTH',
+      },
+    ],
+    recoveryPoints: [{ id: 'recovery-054', nodeId: 'o-a', laneId: 'lane-b', headingRad: 0 }],
+  };
+}
+
+/**
+ * Real 033/041/044 combination on the 054 corridor plus the real 045 FSM. The frame carries one
+ * subject on lane-in and one leader in the same lane, so the authoritative progress observation is
+ * derived from published044 output only. The mutable `physical` scalars are the authored physical
+ * truth of the fixture (a standstill queue, a released queue and a lateral deviation); 047/048 own
+ * real car-following and 030 owns any physical placement.
+ */
+export function blockedProbeFixture(options: { readonly leaderStopped?: boolean } = {}) {
+  const map = blockedRecoveryMap(),
+    graph = createLaneGraph(map),
+    scope = { sessionId: '054-probe', worldEpoch: 0 },
+    behavior = createBehaviorFSM(scope),
+    context = createRoadContext(map, {}),
+    subject = { id: 'taxi-054', incarnation: 1 },
+    leaderId = 'civil-054',
+    physical = {
+      subjectSpeedMps: 0,
+      leaderSpeedMps: options.leaderStopped === false ? 6 : 0,
+      subjectLateralOffsetM: 0,
+    },
+    compose = (tick: number): RoadContextFrame => ({
+      sessionId: scope.sessionId,
+      worldEpoch: 0,
+      tick,
+      vehicles: [
+        {
+          id: subject.id,
+          incarnation: subject.incarnation,
+          positionM: { x: 10, y: 0, z: physical.subjectLateralOffsetM },
+          headingRad: 0,
+          access: 'TAXI' as const,
+          speedMps: physical.subjectSpeedMps,
+          radiusM: 2.5,
+          route: { intersectionId: 'junction', movementId: 'in-a' },
+          distances: [],
+        },
+        {
+          id: leaderId,
+          incarnation: 1,
+          positionM: { x: 18, y: 0, z: 0 },
+          headingRad: 0,
+          access: 'CIVIL' as const,
+          speedMps: physical.leaderSpeedMps,
+          radiusM: 2.5,
+          route: { intersectionId: 'junction', movementId: 'in-a' },
+          distances: [],
+        },
+      ],
+      obstacles: [],
+      zones: [],
+      signals: [],
+      completeness: { vehicles: true, obstacles: true, zones: true, signals: true },
+    });
+  behavior.setActors([subject], scope);
+  return {
+    map,
+    graph,
+    behavior,
+    context,
+    subject,
+    leaderId,
+    scope,
+    physical,
+    /** A fresh real041 planner over the same graph/map, exactly as the host would build it. */
+    planner: () =>
+      createRoutePlanner({
+        graph,
+        map,
+        graphVersion: '054-graph-v1',
+        costVersion: '054-cost-v1',
+      }),
+    /** Publishes the authored frame for this tick; returns the frame that was actually admitted. */
+    prepare: (tick: number) => {
+      const frame = compose(tick);
+      context.updateFrame(frame);
+      return frame;
+    },
+    dispose() {
+      behavior.dispose();
+      context.dispose();
+    },
+  };
+}

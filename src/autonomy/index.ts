@@ -9,3 +9,4 @@ export * from './yield-policy';
 export * from './signal-policy';
 export * from './stop-policy';
 export * from './lane-change-policy';
+export * from './blocked-recovery';

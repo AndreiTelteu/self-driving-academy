@@ -16,6 +16,7 @@ import {
 import { deriveScenarioSeed, deriveVehicleSeed } from '../src/sessions/index.ts';
 import {
   laneProbeFixture,
+  blockedProbeFixture,
   signalProbeFixture,
   stopApproachProfile,
   stopProbeFixture,
@@ -29,11 +30,12 @@ assert.equal(
 const args = process.argv.slice(2);
 const pbi = args.includes('--pbi') ? args[args.indexOf('--pbi') + 1] : null;
 const phase = args.includes('--before') ? 'before' : 'after';
-assert(['050', '051', '053', 'group'].includes(pbi), 'expected --pbi 050|051|053|group');
+assert(['050', '051', '053', '054', 'group'].includes(pbi), 'expected --pbi 050|051|053|054|group');
 const FOLDER = new Map([
   ['050', 'Docs/Evidence/050-signal-policy'],
   ['051', 'Docs/Evidence/051-stop-policy'],
   ['053', 'Docs/Evidence/053-lane-change'],
+  ['054', 'Docs/Evidence/054-blocked-recovery'],
   ['group', 'Docs/Evidence/autonomy-policies-group'],
 ]).get(pbi);
 mkdirSync(FOLDER, { recursive: true });
@@ -418,10 +420,166 @@ function laneArm(production) {
   };
 }
 
+// ------------------------------------------------------- 054 blocked recovery
+/**
+ * 054 arm on the real 054 corridor: real044 context, real045 FSM, real041 planner and the real219
+ * route port. BEFORE is the identical fixture and cadence without evaluating the new policy: the
+ * caller hard-codes the blocked lane and one new version, exactly as the pre-feature code would.
+ */
+function blockedArm(production) {
+  const fixture = blockedProbeFixture(),
+    sessionId = fixture.scope.sessionId,
+    scope = { sessionId, worldEpoch: 0 },
+    subject = fixture.subject,
+    planner = fixture.planner(),
+    behavior = createBehaviorFSM(scope),
+    costs = [];
+  behavior.setActors([subject], scope);
+  let latch = production ? production.BLOCKED_RECOVERY_EMPTY_STATE : null,
+    blockedLanes = [],
+    task = null,
+    taskDone = false,
+    decisions = 0,
+    blocked = 0,
+    reroutes = 0,
+    escalations = 0,
+    checksum = 0;
+  for (let tick = 1; tick <= PROTOCOL.measuredTicks; tick++) {
+    // Authored physical truth: a standstill queue that is released after ten seconds.
+    fixture.physical.subjectSpeedMps = tick >= 600 ? 8 : 0;
+    fixture.physical.leaderSpeedMps = tick >= 600 ? 8 : 0;
+    const frame = fixture.prepare(tick);
+    if (task !== null && !taskDone)
+      for (let slice = 0; slice < 4 && !taskDone; slice++) {
+        const stepped = task.step({ tick, maxExpansions: 16 });
+        taskDone = stepped.done;
+      }
+    if (tick % 6 !== 0) continue;
+    const began = performance.now();
+    const context = fixture.context.getContext(subject.id);
+    if (context === null) continue;
+    let policyFacts = baseFacts('autonomy-probe-v1'),
+      reroute = null;
+    if (production) {
+      const decision = production.evaluateBlockedRecovery({
+        sessionId,
+        worldEpoch: 0,
+        actor: subject,
+        decisionTick: tick,
+        graph: fixture.graph,
+        observation: {
+          version: production.BLOCKED_RECOVERY_LIMITS.observationVersion,
+          units: 'SI',
+          tick,
+          access: 'TAXI',
+          speedMps: fixture.physical.subjectSpeedMps,
+          laneId: context.laneId,
+          positionM: frame.vehicles[0].positionM,
+          headingRad: 0,
+          leaderId: context.leader?.id ?? null,
+          leaderGapM: context.leader?.gapM ?? null,
+          leaderSpeedMps: context.leader?.speedMps ?? null,
+          routeStatus: 'READY',
+          blockedLaneAheadId: blockedLanes.length === 0 ? 'lane-a' : null,
+          planner: {
+            origin: 'lane-in',
+            destination: 'lane-out',
+            access: 'TAXI',
+            graphVersion: planner.graphVersion,
+            costVersion: planner.costVersion,
+            blocked: blockedLanes,
+          },
+          allowRecoveryEscalation: false,
+        },
+        state: latch,
+      });
+      latch = decision.state;
+      policyFacts = production.blockedRecoveryBehaviorFacts(policyFacts, decision) ?? policyFacts;
+      reroute = decision.reroute;
+      if (decision.recovery !== null) escalations++;
+      if (decision.blocked) blocked++;
+      checksum = (checksum + decision.reason.length * 31 + decision.action.length) >>> 0;
+    } else {
+      // BEFORE: the caller knows the blocked lane and replaces the version once, with no policy.
+      policyFacts = { ...policyFacts, routeBlocked: blockedLanes.length > 0 };
+      if (blockedLanes.length === 0)
+        reroute = {
+          version: '054-before-v1',
+          origin: 'lane-in',
+          destination: 'lane-out',
+          access: 'TAXI',
+          graphVersion: planner.graphVersion,
+          costVersion: '054-cost-v1:b-before-r1',
+          blocked: ['lane-a'],
+          attempt: 1,
+        };
+    }
+    if (reroute !== null) {
+      reroutes++;
+      blockedLanes = [...reroute.blocked];
+      planner.setBlocked(blockedLanes);
+      planner.setVersions({
+        graphVersion: reroute.graphVersion,
+        costVersion: reroute.costVersion,
+      });
+      task = planner.createRouteTask({
+        sessionId,
+        worldEpoch: 0,
+        actor: { id: subject.id, incarnation: subject.incarnation },
+        origin: reroute.origin,
+        destination: reroute.destination,
+        access: reroute.access,
+        graphVersion: reroute.graphVersion,
+        costVersion: reroute.costVersion,
+        priority: 'normal',
+      });
+    }
+    behavior.decide({
+      sessionId,
+      worldEpoch: 0,
+      actor: subject,
+      decisionTick: tick,
+      context: {
+        sessionId,
+        worldEpoch: 0,
+        sourceTick: tick,
+        subject,
+        laneId: context.laneId,
+        leaderId: context.leader?.id ?? null,
+        vehiclesComplete: context.completeness.vehicles,
+        discontinuity: context.discontinuity,
+      },
+      facts: policyFacts,
+    });
+    decisions++;
+    if (tick > PROTOCOL.warmupTicks) costs.push(performance.now() - began);
+  }
+  const owned = {
+    behavior: behavior.getStats(),
+    roadContext: fixture.context.getStats(),
+    blockedRecovery: production ? production.getBlockedRecoveryStats() : null,
+  };
+  behavior.dispose();
+  fixture.dispose();
+  return {
+    fixtureVersion: '054-targeted-blocked-v1',
+    actors: 1,
+    decisions,
+    blocked,
+    reroutes,
+    escalations,
+    rerouteAlternativeTaken: blockedLanes.length === 1 && blockedLanes[0] === 'lane-a' && taskDone,
+    checksum,
+    owned,
+    costs,
+  };
+}
+
 const ARMS = new Map([
   ['050', signalArm],
   ['051', stopArm],
   ['053', laneArm],
+  ['054', blockedArm],
 ]);
 function runArm(name, production) {
   const repetitions = [];
@@ -448,7 +606,13 @@ function runArm(name, production) {
       };
     } else
       result = ARMS.get(name)(
-        name === '050' ? production?.signal : name === '051' ? production?.stop : production?.lane,
+        name === '050'
+          ? production?.signal
+          : name === '051'
+            ? production?.stop
+            : name === '054'
+              ? production?.blocked
+              : production?.lane,
       );
     fixtureVersion = result.fixtureVersion;
     actors = result.actors;
@@ -461,6 +625,12 @@ function runArm(name, production) {
       ...(result.parts ? { parts: result.parts } : {}),
       ...(result.stopRequests === undefined ? {} : { stopRequests: result.stopRequests }),
       ...(result.changes === undefined ? {} : { changes: result.changes }),
+      ...(result.blocked === undefined ? {} : { blocked: result.blocked }),
+      ...(result.reroutes === undefined ? {} : { reroutes: result.reroutes }),
+      ...(result.escalations === undefined ? {} : { escalations: result.escalations }),
+      ...(result.rerouteAlternativeTaken === undefined
+        ? {}
+        : { rerouteAlternativeTaken: result.rerouteAlternativeTaken }),
     });
   }
   return { fixtureVersion, actors, ...summarize(repetitions) };
@@ -472,6 +642,7 @@ function memoryArm(name) {
     if (name === '050' || name === 'group') resources.push(signalProbeFixture());
     if (name === '051' || name === 'group') resources.push(stopProbeFixture());
     if (name === '053' || name === 'group') resources.push(laneProbeFixture());
+    if (name === '054') resources.push(blockedProbeFixture());
     const signal = resources.find((resource) => 'prepare' in resource);
     signal?.prepare(1);
     const before = Object.fromEntries(
@@ -480,7 +651,13 @@ function memoryArm(name) {
         typeof resource.rules?.getStats === 'function'
           ? resource.rules.getStats()
           : typeof resource.context?.getStats === 'function'
-            ? { behavior: resource.behavior.getStats(), roadContext: resource.context.getStats() }
+            ? typeof resource.planner === 'function'
+              ? {
+                  behavior: resource.behavior.getStats(),
+                  roadContext: resource.context.getStats(),
+                  blockedRecovery: production?.blocked?.getBlockedRecoveryStats() ?? null,
+                }
+              : { behavior: resource.behavior.getStats(), roadContext: resource.context.getStats() }
             : { lanes: resource.graph.getStats().lanes },
       ]),
     );
@@ -501,7 +678,7 @@ function memoryArm(name) {
     gcAvailable: Boolean(global.gc),
     cycles,
     countersScope:
-      'Ownership counters only: the three policies are pure and the053 latch is caller-held, so no actor, opportunity or manoeuvre map is retained by the module.',
+      'Ownership counters only: the four policies are pure and the053/054 latches are caller-held, so no actor, opportunity, manoeuvre or episode map is retained by a module.',
   };
 }
 
@@ -511,6 +688,7 @@ const production =
         signal: await import('../src/autonomy/signal-policy.ts'),
         stop: await import('../src/autonomy/stop-policy.ts'),
         lane: await import('../src/autonomy/lane-change-policy.ts'),
+        blocked: await import('../src/autonomy/blocked-recovery.ts'),
       }
     : null;
 const report = {
@@ -521,6 +699,7 @@ const report = {
     ['050', '050-targeted-signal-v1'],
     ['051', '051-targeted-stop-v1'],
     ['053', '053-targeted-lane-v1'],
+    ['054', '054-targeted-blocked-v1'],
     ['group', 'group-targeted-autonomy-v1'],
   ]).get(pbi),
   commit: execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(),
@@ -546,6 +725,7 @@ const report = {
             'src/autonomy/signal-policy.ts',
             'src/autonomy/stop-policy.ts',
             'src/autonomy/lane-change-policy.ts',
+            'src/autonomy/blocked-recovery.ts',
           ]
         : []),
     ],

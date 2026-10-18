@@ -4,6 +4,7 @@ import { createSimulationScheduler, entityDecisionPhase } from '../../src/simula
 import type { SchedulingPorts } from '../../src/simulation/scheduling';
 import { createBehaviorFSM, projectBehaviorContext } from '../../src/autonomy/behavior-fsm';
 import type { BehaviorActor, BehaviorFacts } from '../../src/autonomy/behavior-fsm';
+import type { RoadContextFrame } from '../../src/autonomy/road-context';
 import { compileCruiseProfile, evaluateCruiseTarget } from '../../src/autonomy/cruise-targets';
 import { evaluateFollowingTarget } from '../../src/autonomy/following';
 import { evaluateYieldPolicy, yieldBehaviorFacts } from '../../src/autonomy/yield-policy';
@@ -34,10 +35,19 @@ import {
 } from '../../src/profiles/parameter-registry';
 import {
   laneProbeFixture,
+  blockedProbeFixture,
   signalProbeFixture,
   stopApproachProfile,
   stopProbeFixture,
 } from './policy-probe-fixture';
+import {
+  BLOCKED_RECOVERY_EMPTY_STATE,
+  BLOCKED_RECOVERY_LIMITS,
+  blockedRecoveryBehaviorFacts,
+  evaluateAuthorityReentry,
+  evaluateBlockedRecovery,
+} from '../../src/autonomy/blocked-recovery';
+import type { BlockedRecoveryState } from '../../src/autonomy/blocked-recovery';
 
 const SHARED_KEYS = [
   'speed_delta_urban',
@@ -703,4 +713,268 @@ test('050-053 composition keeps the existing044-049/052 facts intact at the same
   assert.equal(following.reason, 'MISSING_CONTEXT');
   assert.equal(following.target.targetMps, 0);
   assert.equal(following.leader, null);
+});
+test('054 real219/044/045/033/041 chain blocks, reroutes legally, releases and re-enters after MANUAL', () => {
+  const fixture = blockedProbeFixture(),
+    sessionId = fixture.scope.sessionId,
+    scope = { sessionId, worldEpoch: 0 },
+    subject = fixture.subject,
+    leader: BehaviorActor = { id: fixture.leaderId, incarnation: 1 },
+    planner = fixture.planner(),
+    base = planner.findRoute({ origin: 'lane-in', destination: 'lane-out', access: 'TAXI' });
+  assert.deepEqual(base.path, ['lane-in', 'lane-a', 'lane-out']);
+  fixture.behavior.setActors([subject, leader], scope);
+  const policyReasons: { tick: number; reason: string; action: string }[] = [],
+    subjectStates: string[] = [],
+    subjectReasons: string[] = [],
+    leaderStates: string[] = [],
+    taskPaths: (readonly string[] | null)[] = [],
+    reentry: { tick: number; authority: string; action: string; reason: string }[] = [];
+  let latch: BlockedRecoveryState = BLOCKED_RECOVERY_EMPTY_STATE,
+    blockedLanes: string[] = [],
+    task: ReturnType<typeof planner.createRouteTask> | null = null,
+    taskDone = false,
+    manualSet = false,
+    handoverDone = false,
+    admitted: RoadContextFrame = fixture.prepare(0);
+  /** The authored physical truth of the fixture world; 047/048 own real car-following. */
+  const physicalSpeed = (tick: number) => (tick >= 60 ? 8 : 0);
+  const cadenceRun = cadence({
+    sessionId,
+    actors: [subject, leader],
+    ticks: 180,
+    beforeTick: (tick) => {
+      fixture.physical.subjectSpeedMps = physicalSpeed(tick);
+      fixture.physical.leaderSpeedMps = physicalSpeed(tick);
+      // The vehicle drifts off the lane centre during the manual window, then AUTO returns.
+      if (tick >= 156) fixture.physical.subjectLateralOffsetM = 1.4;
+      admitted = fixture.prepare(tick);
+      // The host applies an accepted reroute to the real041 planner, then drives the real219 route
+      // port with its documented 4 slices/tick x16 expansions budget. No second search exists.
+      if (task !== null && !taskDone)
+        for (let slice = 0; slice < 4 && !taskDone; slice++) {
+          const stepped = task.step({ tick, maxExpansions: 16 });
+          taskDone = stepped.done;
+          if (stepped.path !== null) taskPaths.push(stepped.path);
+        }
+    },
+    decide(actor, tick) {
+      const context = fixture.context.getContext(actor.id);
+      assert(context !== null, 'the real044 context exists for every actor');
+      if (actor.id !== subject.id) {
+        // The undisturbed 044→045 chain: the plain follower keeps FOLLOW with an untouched reason.
+        const decision = fixture.behavior.decide({
+          sessionId,
+          worldEpoch: 0,
+          actor,
+          decisionTick: tick,
+          context: projectBehaviorContext(context),
+          facts: facts('policy-path-v1'),
+        });
+        leaderStates.push(decision.state);
+        assert.equal(decision.state, 'FOLLOW');
+        assert(decision.reason.startsWith('FOLLOW_'));
+        return;
+      }
+      // MANUAL window: the human owns the vehicle, so 045 keeps no AUTO decision at all.
+      if (tick >= 126 && tick < 156) {
+        if (!manualSet) {
+          fixture.behavior.setAuthority(subject, 'MANUAL', scope);
+          manualSet = true;
+        }
+        const plan = evaluateAuthorityReentry({
+          sessionId,
+          worldEpoch: 0,
+          actor: subject,
+          decisionTick: tick,
+          authority: 'MANUAL',
+          graph: fixture.graph,
+          observation: {
+            version: '054-progress-observation-v1',
+            units: 'SI',
+            tick,
+            access: 'TAXI',
+            positionM: admitted.vehicles[0].positionM,
+            headingRad: 0,
+            routeStatus: 'READY',
+            destination: 'lane-out',
+            recoveryLaneId: 'lane-in',
+            allowRecoveryEscalation: false,
+          },
+        });
+        reentry.push({ tick, authority: 'MANUAL', action: plan.action, reason: plan.reason });
+        assert.equal(plan.reason, 'MANUAL_AUTHORITY');
+        assert.equal(plan.action, 'CONTINUE');
+        assert.equal(plan.teleportsVehicle, false);
+        assert.equal(
+          fixture.behavior.read(subject, scope),
+          null,
+          'MANUAL clears the AUTO decision',
+        );
+        return;
+      }
+      if (tick >= 156 && !handoverDone) {
+        handoverDone = true;
+        // The vehicle drifted off the lane centre while the driver held authority, then AUTO returns.
+        const pose = Object.freeze({ ...admitted.vehicles[0].positionM });
+        const plan = evaluateAuthorityReentry({
+          sessionId,
+          worldEpoch: 0,
+          actor: subject,
+          decisionTick: tick,
+          authority: 'AUTO',
+          graph: fixture.graph,
+          observation: {
+            version: '054-progress-observation-v1',
+            units: 'SI',
+            tick,
+            access: 'TAXI',
+            positionM: pose,
+            headingRad: 0,
+            routeStatus: planner.findRoute({
+              origin: 'lane-in',
+              destination: 'lane-out',
+              access: 'TAXI',
+            }).status,
+            destination: 'lane-out',
+            recoveryLaneId: 'lane-in',
+            allowRecoveryEscalation: false,
+          },
+        });
+        reentry.push({ tick, authority: 'AUTO', action: plan.action, reason: plan.reason });
+        assert.equal(plan.action, 'DRIVE_TO_LANE');
+        assert.equal(plan.reason, 'OFF_CENTRE_LANE');
+        assert.equal(plan.targetLaneId, 'lane-in');
+        assert(Math.abs(plan.lateralOffsetM! - 1.4) < 1e-9);
+        assert.equal(plan.teleportsVehicle, false);
+        assert(!Object.hasOwn(plan, 'positionM'));
+        assert.deepEqual(pose, { x: 10, y: 0, z: 1.4 });
+        fixture.behavior.setAuthority(subject, 'AUTO', scope);
+      }
+      // Host knowledge on the planned route: lane-a stays untraversable until the reroute lands.
+      const decision = evaluateBlockedRecovery({
+        sessionId,
+        worldEpoch: 0,
+        actor: subject,
+        decisionTick: tick,
+        graph: fixture.graph,
+        observation: {
+          version: '054-progress-observation-v1',
+          units: 'SI',
+          tick,
+          access: 'TAXI',
+          speedMps: physicalSpeed(tick),
+          laneId: context.laneId,
+          positionM: admitted.vehicles[0].positionM,
+          headingRad: 0,
+          leaderId: context.leader?.id ?? null,
+          leaderGapM: context.leader?.gapM ?? null,
+          leaderSpeedMps: context.leader?.speedMps ?? null,
+          routeStatus: 'READY',
+          blockedLaneAheadId: !taskDone && tick < 60 ? 'lane-a' : null,
+          planner: {
+            origin: 'lane-in',
+            destination: 'lane-out',
+            access: 'TAXI',
+            graphVersion: planner.graphVersion,
+            costVersion: planner.costVersion,
+            blocked: blockedLanes,
+          },
+          allowRecoveryEscalation: false,
+        },
+        state: latch,
+      });
+      latch = decision.state;
+      policyReasons.push({ tick, reason: decision.reason, action: decision.action });
+      if (decision.reroute !== null) {
+        blockedLanes = [...decision.reroute.blocked];
+        planner.setBlocked(blockedLanes);
+        planner.setVersions({
+          graphVersion: decision.reroute.graphVersion,
+          costVersion: decision.reroute.costVersion,
+        });
+        task = planner.createRouteTask({
+          sessionId,
+          worldEpoch: 0,
+          actor: subject,
+          origin: decision.reroute.origin,
+          destination: decision.reroute.destination,
+          access: decision.reroute.access,
+          graphVersion: decision.reroute.graphVersion,
+          costVersion: decision.reroute.costVersion,
+          priority: 'normal',
+        });
+      }
+      const fed = fixture.behavior.decide({
+        sessionId,
+        worldEpoch: 0,
+        actor: subject,
+        decisionTick: tick,
+        context: projectBehaviorContext(context),
+        facts: blockedRecoveryBehaviorFacts(facts('policy-path-v1'), decision)!,
+      });
+      subjectStates.push(fed.state);
+      subjectReasons.push(fed.reason);
+    },
+  });
+  // Phase A: the route is structurally unusable, so the block needs no standstill window.
+  const blockedSlices = policyReasons.filter(
+    (entry) => entry.reason === 'NO_PROGRESS_BLOCKED_LANE_AHEAD',
+  );
+  assert.equal(blockedSlices.length, 1, 'one structural episode at the start of the run');
+  assert.equal(blockedSlices[0].action, 'REQUEST_REROUTE');
+  assert.equal(policyReasons[0].reason, 'NO_PROGRESS_BLOCKED_LANE_AHEAD');
+  assert(
+    policyReasons
+      .slice(1, 10)
+      .every((entry) => entry.reason === 'STAGNATION_WITHIN_THRESHOLD' && entry.action === 'WAIT'),
+    'while the vehicle is stopped below the threshold nothing is declared blocked',
+  );
+  assert.equal(
+    policyReasons[0].tick,
+    3,
+    'the subject is addressed on its own219 phase, not on tick6',
+  );
+  assert.equal(subjectStates[0], 'BLOCKED');
+  assert.equal(subjectReasons[0], 'BLOCKED_ROUTE');
+  // The reroute went through the real041 planner and the real219 route port, and it changed the path.
+  assert.deepEqual(blockedLanes, ['lane-a']);
+  assert.deepEqual(taskPaths, [['lane-in', 'lane-b', 'lane-out']]);
+  assert.equal(taskDone, true);
+  assert(planner.getStats().expansions > 0);
+  // Phase B: with the legal alternative accepted the episode releases to the ordinary FOLLOW chain.
+  const firstProgress = policyReasons.find((entry) => entry.reason === 'PROGRESS')!;
+  assert(firstProgress.tick > 60 && firstProgress.tick < 66);
+  assert.equal(firstProgress.action, 'CONTINUE');
+  assert(
+    policyReasons
+      .slice(policyReasons.indexOf(firstProgress))
+      .every((entry) => entry.reason === 'PROGRESS' && entry.action === 'CONTINUE'),
+  );
+  assert(subjectStates[1], 'FOLLOW');
+  assert(subjectStates.slice(1).every((state) => state === 'FOLLOW'));
+  assert(subjectReasons.slice(1).every((reason) => reason.startsWith('FOLLOW_')));
+  assert.equal(latch.stage, 'NONE', 'the released episode keeps no stage');
+  assert.equal(latch.rerouteAttempts, 0);
+  assert.equal(latch.blockedSinceTick, null);
+  assert.equal(latch.stagnantSinceTick, null);
+  assert.equal(BLOCKED_RECOVERY_LIMITS.releaseHoldTicks, 12);
+  // Phase C: the MANUAL handover owns the vehicle, and the re-entry plan is explicit but inert.
+  assert.equal(reentry.filter((entry) => entry.authority === 'MANUAL').length, 5);
+  assert(
+    reentry
+      .filter((entry) => entry.authority === 'MANUAL')
+      .every((entry) => entry.action === 'CONTINUE' && entry.reason === 'MANUAL_AUTHORITY'),
+  );
+  assert.equal(reentry.find((entry) => entry.authority === 'AUTO')!.action, 'DRIVE_TO_LANE');
+  // The 044–048 facts and the 045 reason codes of the other actor stay valid at the same cadence.
+  assert.equal(leaderStates.length, 30);
+  assert(leaderStates.every((state) => state === 'FOLLOW'));
+  assert.equal(subjectStates.length, 25);
+  assert.equal(policyReasons.length, 25);
+  assert.equal(subjectStates.length + 5, 30);
+  assert.equal(fixture.context.getStats().disposed, false);
+  assert.equal(fixture.context.getStats().cachedContexts, 2);
+  cadenceRun.dispose();
+  fixture.dispose();
 });
