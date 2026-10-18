@@ -5,3 +5,4 @@ export * from './lateral-controller';
 export * from './cruise-targets';
 export * from './longitudinal-control';
 export * from './following';
+export * from './yield-policy';
