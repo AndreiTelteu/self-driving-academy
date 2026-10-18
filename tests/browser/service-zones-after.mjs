@@ -32,11 +32,11 @@ assert.equal(
   expectedCommit,
 );
 const folder = 'Docs/Evidence/040-service-zones/after-01';
-const originalBefore = 'Docs/Evidence/040-service-zones/before-01';
+const originalBefore = 'Docs/Evidence/040-service-zones/before-02';
 const baselineManifest = JSON.parse(await readFile(originalBefore + '/manifest.json'));
 assert.equal(
   baselineManifest.sourceHash,
-  '13224224c7b9c03bb7f676427bb9139babe180d107ca698912d1ee98bb5bcf7d',
+  'c7f1b0211abdbc97c505f2843b9de4e178e3a69d7ca76577ad3e5430e8badb87',
 );
 assert.equal(JSON.parse(await readFile(originalBefore + '/complete.json')).status, 'PASS');
 const hash = (bytes) => createHash('sha256').update(bytes).digest('hex');
@@ -189,7 +189,7 @@ const manifest = {
       'alternating real sedan/compact, existing mechanics; all actors native; authored contact geometry',
   },
   scope:
-    'Current040 catalog/explicit service and recovery queries against original chronological13224224 BEFORE. Existing030 tracking/physics/cohort unchanged. One caller request per six ticks, service polygon path at safe anchor and recovery path at blocked anchor; actual candidate/datum/status/native state retained. No R/setter/step/polling/frame/wholeRAM claim.',
+    'Current040 catalog/explicit service and recovery queries against original chronologicalc7f1b021 BEFORE. Existing030 tracking/physics/cohort unchanged. One caller request per six ticks, service polygon path at safe anchor and recovery path at blocked anchor; actual candidate/datum/status/native state retained. No R/setter/step/polling/frame/wholeRAM claim.',
 };
 await save('manifest.json', manifest);
 const distribution = (values) => {

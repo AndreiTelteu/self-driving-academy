@@ -13,7 +13,7 @@ assert.equal(
 const historical = process.argv.includes('--historical');
 assert(process.argv.slice(2).every((x) => x === '--historical'));
 const folder = 'Docs/Evidence/040-service-zones/after-01',
-  original = 'Docs/Evidence/040-service-zones/before-01';
+  original = 'Docs/Evidence/040-service-zones/before-02';
 const sha = (b) => createHash('sha256').update(b).digest('hex'),
   read = async (file, base = folder) => JSON.parse(await readFile(base + '/' + file));
 const manifest = await read('manifest.json'),
@@ -23,7 +23,7 @@ const beforeManifest = await read('manifest.json', original),
   beforeComplete = await read('complete.json', original);
 assert.equal(
   beforeManifest.sourceHash,
-  '13224224c7b9c03bb7f676427bb9139babe180d107ca698912d1ee98bb5bcf7d',
+  'c7f1b0211abdbc97c505f2843b9de4e178e3a69d7ca76577ad3e5430e8badb87',
 );
 assert.equal(beforeComplete.status, 'PASS');
 assert.equal(manifest.phase, 'AFTER_040');

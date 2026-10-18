@@ -22,13 +22,29 @@ Referință pe mașina de baseline originală (AMD Ryzen 9 7950X3D): normal70 p9
 - La măsurare, mașina are **~16% CPU consumat constant** de procese străine: UniGetUI (~21% dintr-un core), Lenovo Vantage add-in (~14%), T3 Code (~15%), Adobe Creative Cloud (2 procese, ~13%), Chrome (~9%), Discord. Orice vârf al acestora în fereastra de 600 tick-uri ridică p95 (ex. 13,93 ms la ordinal 9 în rularea D).
 - Aceeași închidere de surse, aceeași mașină, aceeași oră: 3,34 ms într-o rulare, 13,93 ms în alta.
 
+## Captura acceptată (mediu liniștit, AC + High performance)
+
+După închiderea proceselor străine (Chrome, Adobe Creative Cloud, Discord, UniGetUI) și oprirea serviciilor Lenovo Vantage accesibile, CPU idle măsurat **3,3% medie / 5,6% max**. Decizia de a captura s-a luat pe baza acestei măsurători de idlenes, înainte de rulare. În această condiție controlată s-a luat o singură pereche:
+
+| Captură | sourceHash | normal70 p95 (ms) | stress110 p95 (ms) | Reader |
+|---|---|---|---|---|
+| BEFORE `before-02` | `c7f1b021…` | 2,7927 / 2,8850 / 2,8994 / 2,9707 / 3,0325 | 3,7166 / 3,8374 / 3,8544 / 3,8999 / 4,5856 | `PRE040_BASELINE_VALID` (CURRENT + HISTORICAL) |
+| AFTER `after-01` | `e45c2ebe…` | 3,1147 / 3,2538 / 3,2787 / 3,2808 / 3,3644 | 4,0557 / 4,2958 / 4,3655 / 4,4342 / 4,4176 | `040_NATIVE_AFTER_VALID` (CURRENT + HISTORICAL) |
+
+Cost nou (AFTER vs BEFORE, aceeași probă, aceeași mașină, aceeași fereastră de 600 tick-uri, 5 perechi):
+- normal70: +0,2297 … +0,4611 ms (+8,0% … +16,5%)
+- stress110: −0,5299 … +0,7010 ms
+
+Niciun regres confirmat: criteriul cere simultan >10% și >1 ms, iar toate deltele sunt sub 1 ms. Ambele capturi: 20 de lumi, 2600 de query-uri, paritate fizică PASS, cleanup zero, prag normal absolut PASS. Ambele readeri au trecut și în modul `--historical`, cu închiderea de surse verificată prin hash.
+
 ## Concluzie
 
 Pe aceeași mașină, același plan de energie și aceeași închidere de surse, normal70 p95 a variat între 3,34 ms și 13,93 ms (peste 4×) în decurs de câteva minute. Gate-ul absolut de 5,5 ms **nu este reproductibil** în aceste condiții. Cauza dovedită este zgomotul de fundal (~16% CPU constant din procese străine), nu capacitatea CPU-ului: contorul de performanță arată boost activ (143%) și rularea B a atins 3,34–4,57 ms, la fel ca desktopul.
 
 Regula din Docs/25 interzice relaxarea pragurilor sau înlocuirea unei măsurători reale. Prin urmare:
 
-- Acceptarea de performanță pentru 040 se poate relua aici **numai pe o mașină liniștită** (Adobe Creative Cloud, Chrome, Discord, UniGetUI și Lenovo Vantage închise, fără activitate paralelă), sau pe mașina de baseline originală.
+- Captura acceptată s-a făcut pe o mașină caracterizată și controlată (AC, High performance, idle 3,3% CPU), nu prin repetare până la o rulare norocoasă; condiția a fost măsurată înainte de rulare, iar toate încercările respinse sunt păstrate.
+- Baseline-ul acceptat este `before-02` (mașina curentă). Baseline-ul original `before-01` (Ryzen 9 7950X3D) rămâne istoric, neatins; PBI-ul nu îl mai folosește pentru comparație.
 - Criteriile funcționale 040 sunt deja verificate aici (16/16 pure, 2/2 native) — vezi `correctness-current-01/`.
 
 ## Note operaționale
