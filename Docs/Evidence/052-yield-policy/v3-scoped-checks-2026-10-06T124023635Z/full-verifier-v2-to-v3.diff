@@ -1,0 +1,121 @@
+--- tests/browser/yield-policy-v2/verify.mjs
++++ tests/browser/yield-policy-v3/verify.mjs
+@@ -10,7 +10,7 @@
+   validateSmokeArm,
+   validateCaptureInventory,
+   validateCalibrationNative,
+-} from './protocol.ts';
++} from '../yield-policy-v2/protocol.ts';
+ const args = process.argv.slice(2);
+ if (
+   args.length < 1 ||
+@@ -25,6 +25,25 @@
+ const sha = (bytes) => createHash('sha256').update(bytes).digest('hex');
+ const json = async (path) => JSON.parse(await readFile(path, 'utf8'));
+ const build = await json(resolve(folder, 'build-manifest.json'));
++assert.equal(build.captureRevision, '052-v3-submitted-arm-diagnostics');
++const historical =
++  'Docs/Evidence/052-yield-policy/browser-v2-20261006T122201743Z/captures/WEBGL2-smoke';
++assert.equal(
++  sha(await readFile(resolve(historical, 'rejected.json'))),
++  '7c30a3321834ea3ca866e0828d9661c96641d942f42eab0e9e47081deafdb049',
++);
++assert.equal(
++  sha(await readFile(resolve(historical, 'failure.json'))),
++  '50e03371fdc7ab8ce83d747fc61dad3fd54680cc177a16c5e62afce4d916b362',
++);
++const historicalFailure = await json(resolve(historical, 'failure.json'));
++assert.equal(
++  historicalFailure.identity.sourceHash,
++  '9992f05e5f417f03b21b742e8536eda665891952c60fff683e055ce00c15ade1',
++);
++assert.equal(historicalFailure.failure, 'Error: HTTP500: 052 observed simulation/wall ratio');
++const historicalDisposition =
++  'V2 WEBGL2-smoke FAILED and preserved; V3 is a distinct capture, not retroactive acceptance';
+ const archive = await json(folder + '-archive.json');
+ assert.equal(sha(await readFile(archive.zipPath)), archive.zipSha256);
+ assert.equal(archive.sourceHash, build.sourceHash);
+@@ -83,6 +102,7 @@
+       artifactHash: build.artifactHash,
+       nativeHash: build.nativeHash,
+       zipSha256: archive.zipSha256,
++      historicalDisposition,
+       inputCount: build.inputs.length,
+       artifactCount: build.artifacts.length,
+       scope:
+@@ -119,6 +139,7 @@
+     const start = await json(resolve(capture, 'started.json'));
+     const terminal = await json(resolve(capture, 'terminal.json'));
+     const report = await json(resolve(capture, 'report.json'));
++    const expectedCaptureFiles = new Set(['started.json', 'terminal.json', 'report.json']);
+     assert.equal(start.sourceHash, build.sourceHash);
+     assert.equal(start.backend, backend);
+     assert.equal(terminal.captureId, start.captureId);
+@@ -155,6 +176,7 @@
+     assert.ok(Date.parse(report.createdAt) <= Date.parse(terminal.createdAt));
+     assert.equal(report.runs.length, 10);
+     assert.equal(report.calibration.length, 4);
++    assert.equal(files.filter((file) => /^submitted-arm-\d+\.json$/.test(file)).length, 14);
+     let totalParts = 0,
+       totalBytes = 0;
+     const reconstructed = [];
+@@ -162,12 +184,39 @@
+       const retained = await json(resolve(capture, `arm-${ordinal}.json`));
+       assert.equal(retained.captureId, start.captureId);
+       const meta = retained.metadata;
++      expectedCaptureFiles.add('arm-' + ordinal + '.json');
++      const submittedFile = 'submitted-arm-' + ordinal + '.json';
++      expectedCaptureFiles.add(submittedFile);
++      const submittedEnvelopeBytes = await readFile(resolve(capture, submittedFile));
++      assert.ok(submittedEnvelopeBytes.length <= 4 * 1024 * 1024 + 4096);
++      const submitted = JSON.parse(submittedEnvelopeBytes);
++      assert.deepEqual(Object.keys(submitted).sort(), [
++        'captureId',
++        'ordinal',
++        'parsedRequestBytes',
++        'parsedRequestSha256',
++        'receivedAt',
++        'request',
++      ]);
++      assert.deepEqual(Object.keys(submitted.request).sort(), ['captureId', 'metadata', 'ordinal']);
++      assert.equal(submitted.captureId, start.captureId);
++      assert.equal(submitted.ordinal, ordinal);
++      assert.equal(submitted.request.captureId, start.captureId);
++      assert.equal(submitted.request.ordinal, ordinal);
++      const submittedBytes = Buffer.from(JSON.stringify(submitted.request));
++      assert.equal(submittedBytes.length, submitted.parsedRequestBytes);
++      assert.ok(submittedBytes.length <= 4 * 1024 * 1024);
++      assert.equal(sha(submittedBytes), submitted.parsedRequestSha256);
++      assert.deepEqual(submitted.request.metadata, meta);
++      assert(Date.parse(start.startedAt) <= Date.parse(submitted.receivedAt));
++      assert(Date.parse(submitted.receivedAt) <= Date.parse(report.createdAt));
+       assert.deepEqual(meta, ordinal < 4 ? report.calibration[ordinal] : report.runs[ordinal - 4]);
+       assert.equal(meta.ordinal, ordinal);
+       assert.ok(retained.parts.length <= 64);
+       const raw = { frame: [], main: [], tick: [], step: [], policy: [] };
+       for (const part of retained.parts) {
+         assert.equal(part.file, `arm-${ordinal}-${part.channel}-${part.part}.json`);
++        expectedCaptureFiles.add(part.file);
+         const bytes = await readFile(resolve(capture, part.file));
+         assert.equal(bytes.length, part.bytes);
+         assert.ok(bytes.length <= 128 * 1024);
+@@ -285,6 +334,11 @@
+       }
+       reconstructed.push(meta);
+     }
++    assert.deepEqual(
++      [...files].sort(),
++      [...expectedCaptureFiles].sort(),
++      '052 unknown/diagnostic/incomplete capture file',
++    );
+     assert.equal(totalParts, terminal.totalParts);
+     assert.equal(totalBytes, terminal.totalBytes);
+     assert.ok(totalParts <= 896 && totalBytes <= 112 * 1024 * 1024);
+@@ -339,6 +393,7 @@
+       sourceHash: build.sourceHash,
+       artifactHash: build.artifactHash,
+       zipSha256: archive.zipSha256,
++      historicalDisposition,
+       smokeDisposition,
+       scope:
+         '052 bounded single-subject physical fixture, not fullfleet/game/laptop/heap acceptance',
