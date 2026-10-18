@@ -1,0 +1,65 @@
+﻿{
+  "scope": "CORRECTNESS_ONLY_NO_NATIVE_NO_PERFORMANCE_COMPARISON_NO_ACCEPTANCE",
+  "note": "Fresh execution of all 069 pure suites on a second machine. No native world, no CLI child, no calibration and no performance capture was executed. This is NOT the pending native AFTER acceptance.",
+  "createdAt": "2026-10-18T15:50:16.3082551+03:00",
+  "worktree": "C:\\Users\\aandr\\Sites\\self-driving-academy\\.worktrees\\manual-segments-01",
+  "branch": "loop-pbi/manual-segments-01",
+  "head": "d8e5756c9e06ab091587b58aa6549f2a977c30aa",
+  "runtime": "v24.21.0",
+  "dependencyInstall": "npm ci from pinned package-lock.json (unchanged)",
+  "pinnedProductReceipt": {
+    "path": "Docs/Evidence/069-manual-segments/parsed-record-reuse-checks-01/results-final.json",
+    "sourceFinal": "924c07641a8cd93539479d5e1e597936e259e8f680d462e22acb64b21ad1d708",
+    "filesVerifiedByteIdentical": 18,
+    "filesExpected": 18
+  },
+  "command": [
+    "node",
+    "--import",
+    "./scripts/register-typescript.mjs",
+    "--test-concurrency=1",
+    "--test",
+    "tests/telemetry/manual-segments*.test.{ts,mjs}"
+  ],
+  "exit": 0,
+  "totals": { "tests": 132, "pass": 132, "fail": 0, "cancelled": 0, "skipped": 0, "durationMs": 17022.7634 },
+  "perSuite": {
+    "manual-segments.test.ts": { "tests": 28, "pass": 28, "fail": 0 },
+    "manual-segments-review.test.ts": { "tests": 31, "pass": 31, "fail": 0 },
+    "manual-segments-bridge.test.ts": { "tests": 10, "pass": 10, "fail": 0 },
+    "manual-segments-admission.test.ts": { "tests": 8, "pass": 8, "fail": 0 },
+    "manual-segments-after-validation.test.mjs": { "tests": 20, "pass": 20, "fail": 0 },
+    "manual-segments-after-cleanup.test.ts": { "tests": 10, "pass": 10, "fail": 0 },
+    "manual-segments-after-records.test.mjs": { "tests": 7, "pass": 7, "fail": 0 },
+    "manual-segments-after-calibration.test.ts": { "tests": 5, "pass": 5, "fail": 0 },
+    "manual-segments-record-stage-diagnostic.test.mjs": { "tests": 6, "pass": 6, "fail": 0 },
+    "manual-segments-reference-records.test.mjs": { "tests": 7, "pass": 7, "fail": 0 }
+  },
+  "criteriaCovered": {
+    "manualLearningBoundaryNoInputGapOnlyClosedLearningEntersEstimator": [
+      "069 mode boundary t samples belong only to new OPEN; eligibility is frozen",
+      "069 CLOSED eligible LEARNING only queues real receipt, result token applies at most once",
+      "069 preferences split records at same epoch with frozen old version"
+    ],
+    "pauseSuspendsAndRaceEndReopensSameMode": [
+      "069 pause keeps OPEN/mode and cannot create a native tick or close event",
+      "069 app pause/resume invokes actual066 without close/reopen or extra physical steps",
+      "069 injected committed RECOVERY host fact reopens same mode, absent/failed fact does nothing"
+    ],
+    "restoreImportClosesWithExplicitReasonOldGenerationDoesNotApply": [
+      "069 invalid restore preview/foreign receipt changes nothing",
+      "069 STATE_IMPORT retirement at last accepted t keeps already recorded t and adds no physics",
+      "069 stale generation and copied ticket cannot mutate protected OPEN",
+      "069 P1 cannot rewrite old retained operation into current restored epoch/base"
+    ]
+  },
+  "nativeOrCliExecuted": false,
+  "worldsExecuted": 0,
+  "performanceComparison": "NOT_EXECUTED",
+  "environmentMismatch": {
+    "baselineMachine": { "cpu": "AMD Ryzen 9 7950X3D 16-Core Processor", "os": "win32 10.0.26200", "runtime": "v24.21.0" },
+    "currentMachine": { "cpu": "AMD Ryzen 7 7735U with Radeon Graphics", "os": "win32 10.0.26300", "runtime": "v24.21.0" },
+    "repoRoot": { "baseline": "F:/Sites/self-driving-academy/.worktrees/manual-segments-01", "current": "C:/Users/aandr/Sites/self-driving-academy/.worktrees/manual-segments-01" }
+  },
+  "firstFailure": null
+}
