@@ -7,8 +7,8 @@ import { execFileSync } from 'node:child_process';
 import { verifyModuleClosure } from './manual-segments-archive-closure.mjs';
 const sha = (b) => createHash('sha256').update(b).digest('hex');
 const expected = 'C:/Users/aandr/Sites/self-driving-academy/.worktrees/manual-segments-01';
-const output = 'Docs/Evidence/069-manual-segments/record-stage-diagnostic-01';
-const runtime = resolve('.pbi-validation-069/record-stage-diagnostic-01/runtime');
+const output = 'Docs/Evidence/069-manual-segments/record-stage-diagnostic-02';
+const runtime = resolve('.pbi-validation-069/record-stage-diagnostic-02/runtime');
 const observer = 'scripts/manual-segments-record-stage-observer.mjs';
 const parserPin =
   'sha512-LpGDIYJAzc3Y3PT9x+FxBrGYu2PlWxLmyN7SwPTzaX0LSwEmFJBsRnPBqmaXF2r1v+Zhz6lNiEJ+7yKtM5+Ugg==';
@@ -124,7 +124,7 @@ export async function derive(path, source) {
       changed;
     changed = exactReplace(
       changed,
-      "const folder = 'Docs/Evidence/069-manual-segments/native-after-03';",
+      "const folder = 'Docs/Evidence/069-manual-segments/native-after-05';",
       `const folder = '${output}/capture';`,
     );
     changed = exactReplace(
@@ -204,7 +204,7 @@ export async function prepare() {
     assert.equal(sha(bytes), row.sha256);
   }
   const original = JSON.parse(
-    await readFile('Docs/Evidence/069-manual-segments/native-after-03/manifest.json'),
+    await readFile('Docs/Evidence/069-manual-segments/native-after-05/manifest.json'),
   );
   await mkdir(dirname(runtime), { recursive: true });
   await mkdir(runtime, { recursive: false });

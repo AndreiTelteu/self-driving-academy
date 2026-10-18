@@ -5,8 +5,8 @@ import { resolve } from 'node:path';
 import { createHash } from 'node:crypto';
 import { derive } from './prepare-manual-segments-record-stage-diagnostic.mjs';
 const sha = (b) => createHash('sha256').update(b).digest('hex');
-const output = 'Docs/Evidence/069-manual-segments/record-stage-diagnostic-01';
-const runtime = resolve('.pbi-validation-069/record-stage-diagnostic-01/runtime');
+const output = 'Docs/Evidence/069-manual-segments/record-stage-diagnostic-02';
+const runtime = resolve('.pbi-validation-069/record-stage-diagnostic-02/runtime');
 export const EXTRA_COPY_PATHS = Object.freeze([
   'scripts/manual-segments-record-stage-observer.mjs',
   'scripts/manual-segments-record-stage-observer.d.mts',
@@ -31,7 +31,7 @@ export function validateProofRows(proof, original) {
   assert.equal(original.inputs.length, 156);
   assert.equal(
     original.sourceHash,
-    '683584eaa844008ec047546078c2ab2ad8e9b9c7c89cc9334a23b0ad3b1d06dd',
+    '9fa30829a05b8fa6e2b91ba600efcbb8367fc7eea1fb7e3233417a1b19bb4c10',
   );
   assert.equal(
     original.checkedProductFingerprint,
@@ -60,11 +60,11 @@ export async function verifyPreflight() {
     'C:/Users/aandr/Sites/self-driving-academy/.worktrees/manual-segments-01',
   );
   const manifestBytes = await readFile(
-    'Docs/Evidence/069-manual-segments/native-after-03/manifest.json',
+    'Docs/Evidence/069-manual-segments/native-after-05/manifest.json',
   );
   assert.equal(
     sha(manifestBytes),
-    '028fb8f94cf612bf6be101092646b912867c5d1137d1ee5ca5aa39edc6e8732d',
+    'd34552913ae84dd6aaec85aab6456a0170ed00abcdf4ca79eb1e12d5c6356f7b',
   );
   const original = JSON.parse(manifestBytes);
   const receiptBytes = await readFile(
@@ -101,7 +101,7 @@ export async function verifyPreflight() {
   const changed = [];
   for (const row of original.inputs) {
     const b = await readFile(
-      'Docs/Evidence/069-manual-segments/native-after-03/source/' + row.path,
+      'Docs/Evidence/069-manual-segments/native-after-05/source/' + row.path,
     );
     assert.equal(b.length, row.bytes);
     assert.equal(sha(b), row.sha256);

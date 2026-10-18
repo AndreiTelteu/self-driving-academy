@@ -5,7 +5,7 @@ import { resolve } from 'node:path';
 import { createHash } from 'node:crypto';
 import { pathToFileURL } from 'node:url';
 import { verifyPreflight } from './verify-manual-segments-record-stage-preflight.mjs';
-const root = resolve('Docs/Evidence/069-manual-segments/record-stage-diagnostic-01');
+const root = resolve('Docs/Evidence/069-manual-segments/record-stage-diagnostic-02');
 const json = async (p) => JSON.parse(await readFile(resolve(root, p)));
 const sha = (b) => createHash('sha256').update(b).digest('hex');
 const stages = [
@@ -116,7 +116,7 @@ export async function verify() {
   assert.equal(complete.worlds, 10);
   assert.equal(
     manifest.sourceHash,
-    '683584eaa844008ec047546078c2ab2ad8e9b9c7c89cc9334a23b0ad3b1d06dd',
+    '9fa30829a05b8fa6e2b91ba600efcbb8367fc7eea1fb7e3233417a1b19bb4c10',
   );
   assert.equal(complete.sourceHash, manifest.sourceHash);
   assert.equal(first.sourceHash, manifest.sourceHash);

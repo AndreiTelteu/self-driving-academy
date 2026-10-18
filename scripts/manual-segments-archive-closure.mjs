@@ -123,6 +123,7 @@ export async function verifyModuleClosure({ paths, readSource, roots, lockBytes 
       JSON.parse(data);
       continue;
     }
+    if (/\.(css|html|svg|txt|png|jpg|jpeg|webp|woff2?)$/i.test(path)) continue;
     assert(/\.(ts|mts|tsx|mjs|js)$/.test(path), 'Unsupported imported file type');
     const plugins = [['typescript', { dts: path.endsWith('.d.mts') || path.endsWith('.d.ts') }]];
     if (path.endsWith('.tsx')) plugins.push('jsx');
