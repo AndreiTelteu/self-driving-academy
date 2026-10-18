@@ -1,0 +1,2684 @@
+{
+  "pbi": "050+051+053",
+  "mode": "after",
+  "level": "targeted",
+  "fixtureVersion": "group-targeted-autonomy-v1",
+  "commit": "8059f60de2ec371740e93b8b57a48c3426e151de",
+  "runtime": "v24.21.0",
+  "hardware": {
+    "cpu": "AMD Ryzen 7 7735U with Radeon Graphics         ",
+    "os": "win32 10.0.26300"
+  },
+  "backend": "Node CPU only; browser/GPU/FPS are separate and not measured here",
+  "budget": {
+    "manifest": "Docs/performance-budgets.json",
+    "budgetVersion": "203-initial-1",
+    "calibration": "PROVISIONAL_UNCALIBRATED",
+    "comparison": "The manifest budgets the whole integrated tick; this probe isolates the local policy cost on the real fixture and does not certify the integrated budget.",
+    "absoluteBudgetsStillApply": true
+  },
+  "method": "one warmup +5repetitions of the real serial fixture; per-cadence-tick cost after a180-tick warmup; BEFORE is the same fixture and cadence without evaluating the new policy",
+  "protocol": {
+    "warmupTicks": 180,
+    "measuredTicks": 1200,
+    "repetitions": 5,
+    "cadenceHz": 10,
+    "tickHz": 60
+  },
+  "source": {
+    "inputs": [
+      "tests/autonomy/policy-probe-fixture.ts",
+      "src/autonomy/signal-policy.ts",
+      "src/autonomy/stop-policy.ts",
+      "src/autonomy/lane-change-policy.ts"
+    ]
+  },
+  "base": {
+    "fixtureVersion": "group-targeted-autonomy-v1",
+    "actors": 66,
+    "repetitions": [
+      {
+        "fixtureVersion": "group-targeted-autonomy-v1",
+        "count": 11220,
+        "p50Ms": 0.027899999999817737,
+        "p95Ms": 0.05089999999995598,
+        "p99Ms": 0.0704000000000633,
+        "minMs": 0.004499999999779902,
+        "maxMs": 1.6011000000000877,
+        "checksum": 2540400,
+        "decisions": 13200,
+        "owned": {
+          "signal": {
+            "behavior": {
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "actors": 64,
+              "identities": 64,
+              "retiredIdentities": 0,
+              "decisions": 64,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "roadContext": {
+              "tick": 1200,
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "vehicles": 64,
+              "cachedContexts": 64,
+              "laneProjections": 60,
+              "invalidatedContexts": 0,
+              "fingerprintCodeUnits": 54798,
+              "identities": 120,
+              "retiredIdentities": 0,
+              "disposed": false,
+              "index": {
+                "entities": 120,
+                "vehicles": 64,
+                "obstacles": 32,
+                "zones": 24,
+                "zoneVertices": 96,
+                "cells": 29,
+                "spatialReferences": 151,
+                "fallbackEntities": 0,
+                "generation": 0,
+                "disposed": false,
+                "lastQuery": {
+                  "cellsVisited": 64,
+                  "candidates": 75,
+                  "exactTests": 74,
+                  "matches": 74,
+                  "exhaustive": false
+                }
+              }
+            }
+          },
+          "stop": {
+            "behavior": {
+              "sessionId": "autonomy-probe-stop",
+              "worldEpoch": 0,
+              "actors": 1,
+              "identities": 1,
+              "retiredIdentities": 0,
+              "decisions": 1,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "stopRules": {
+              "mapId": "minimal-road-v1",
+              "worldEpoch": 0,
+              "zones": 1,
+              "vehicles": 1,
+              "trackedIncarnations": 1,
+              "activeOpportunities": 0,
+              "maxVehicles": 128,
+              "maxIncarnations": 4096,
+              "disposed": false
+            }
+          },
+          "lane": {
+            "behavior": {
+              "sessionId": "autonomy-probe-lane",
+              "worldEpoch": 0,
+              "actors": 1,
+              "identities": 1,
+              "retiredIdentities": 0,
+              "decisions": 1,
+              "retainedHistory": 0,
+              "disposed": false
+            }
+          }
+        },
+        "parts": {
+          "signal": {
+            "count": 10880,
+            "p50Ms": 0.028199999999969805,
+            "p95Ms": 0.05110000000001946,
+            "p99Ms": 0.07089999999993779,
+            "minMs": 0.016700000000128057,
+            "maxMs": 1.6011000000000877
+          },
+          "stop": {
+            "count": 170,
+            "p50Ms": 0.005599999999958527,
+            "p95Ms": 0.011099999999942156,
+            "p99Ms": 0.014799999999922875,
+            "minMs": 0.004699999999957072,
+            "maxMs": 0.02970000000004802
+          },
+          "lane": {
+            "count": 170,
+            "p50Ms": 0.004599999999982174,
+            "p95Ms": 0.005400000000008731,
+            "p99Ms": 0.0059000000001105946,
+            "minMs": 0.004499999999779902,
+            "maxMs": 0.015799999999899228
+          }
+        }
+      },
+      {
+        "fixtureVersion": "group-targeted-autonomy-v1",
+        "count": 11220,
+        "p50Ms": 0.0261000000000422,
+        "p95Ms": 0.04610000000002401,
+        "p99Ms": 0.057400000000143336,
+        "minMs": 0.0045999999997548,
+        "maxMs": 0.9263999999998305,
+        "checksum": 2540400,
+        "decisions": 13200,
+        "owned": {
+          "signal": {
+            "behavior": {
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "actors": 64,
+              "identities": 64,
+              "retiredIdentities": 0,
+              "decisions": 64,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "roadContext": {
+              "tick": 1200,
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "vehicles": 64,
+              "cachedContexts": 64,
+              "laneProjections": 60,
+              "invalidatedContexts": 0,
+              "fingerprintCodeUnits": 54798,
+              "identities": 120,
+              "retiredIdentities": 0,
+              "disposed": false,
+              "index": {
+                "entities": 120,
+                "vehicles": 64,
+                "obstacles": 32,
+                "zones": 24,
+                "zoneVertices": 96,
+                "cells": 29,
+                "spatialReferences": 151,
+                "fallbackEntities": 0,
+                "generation": 0,
+                "disposed": false,
+                "lastQuery": {
+                  "cellsVisited": 64,
+                  "candidates": 75,
+                  "exactTests": 74,
+                  "matches": 74,
+                  "exhaustive": false
+                }
+              }
+            }
+          },
+          "stop": {
+            "behavior": {
+              "sessionId": "autonomy-probe-stop",
+              "worldEpoch": 0,
+              "actors": 1,
+              "identities": 1,
+              "retiredIdentities": 0,
+              "decisions": 1,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "stopRules": {
+              "mapId": "minimal-road-v1",
+              "worldEpoch": 0,
+              "zones": 1,
+              "vehicles": 1,
+              "trackedIncarnations": 1,
+              "activeOpportunities": 0,
+              "maxVehicles": 128,
+              "maxIncarnations": 4096,
+              "disposed": false
+            }
+          },
+          "lane": {
+            "behavior": {
+              "sessionId": "autonomy-probe-lane",
+              "worldEpoch": 0,
+              "actors": 1,
+              "identities": 1,
+              "retiredIdentities": 0,
+              "decisions": 1,
+              "retainedHistory": 0,
+              "disposed": false
+            }
+          }
+        },
+        "parts": {
+          "signal": {
+            "count": 10880,
+            "p50Ms": 0.026499999999941792,
+            "p95Ms": 0.04629999999997381,
+            "p99Ms": 0.057999999999992724,
+            "minMs": 0.016099999999823922,
+            "maxMs": 0.9263999999998305
+          },
+          "stop": {
+            "count": 170,
+            "p50Ms": 0.005000000000109139,
+            "p95Ms": 0.0061000000000603904,
+            "p99Ms": 0.006499999999959982,
+            "minMs": 0.0048000000001593435,
+            "maxMs": 0.012400000000070577
+          },
+          "lane": {
+            "count": 170,
+            "p50Ms": 0.004699999999957072,
+            "p95Ms": 0.008699999999862484,
+            "p99Ms": 0.018299999999726424,
+            "minMs": 0.0045999999997548,
+            "maxMs": 0.03510000000005675
+          }
+        }
+      },
+      {
+        "fixtureVersion": "group-targeted-autonomy-v1",
+        "count": 11220,
+        "p50Ms": 0.026899999999841384,
+        "p95Ms": 0.049500000000080036,
+        "p99Ms": 0.07289999999920838,
+        "minMs": 0.004399999999805004,
+        "maxMs": 0.9245999999993728,
+        "checksum": 2540400,
+        "decisions": 13200,
+        "owned": {
+          "signal": {
+            "behavior": {
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "actors": 64,
+              "identities": 64,
+              "retiredIdentities": 0,
+              "decisions": 64,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "roadContext": {
+              "tick": 1200,
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "vehicles": 64,
+              "cachedContexts": 64,
+              "laneProjections": 60,
+              "invalidatedContexts": 0,
+              "fingerprintCodeUnits": 54798,
+              "identities": 120,
+              "retiredIdentities": 0,
+              "disposed": false,
+              "index": {
+                "entities": 120,
+                "vehicles": 64,
+                "obstacles": 32,
+                "zones": 24,
+                "zoneVertices": 96,
+                "cells": 29,
+                "spatialReferences": 151,
+                "fallbackEntities": 0,
+                "generation": 0,
+                "disposed": false,
+                "lastQuery": {
+                  "cellsVisited": 64,
+                  "candidates": 75,
+                  "exactTests": 74,
+                  "matches": 74,
+                  "exhaustive": false
+                }
+              }
+            }
+          },
+          "stop": {
+            "behavior": {
+              "sessionId": "autonomy-probe-stop",
+              "worldEpoch": 0,
+              "actors": 1,
+              "identities": 1,
+              "retiredIdentities": 0,
+              "decisions": 1,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "stopRules": {
+              "mapId": "minimal-road-v1",
+              "worldEpoch": 0,
+              "zones": 1,
+              "vehicles": 1,
+              "trackedIncarnations": 1,
+              "activeOpportunities": 0,
+              "maxVehicles": 128,
+              "maxIncarnations": 4096,
+              "disposed": false
+            }
+          },
+          "lane": {
+            "behavior": {
+              "sessionId": "autonomy-probe-lane",
+              "worldEpoch": 0,
+              "actors": 1,
+              "identities": 1,
+              "retiredIdentities": 0,
+              "decisions": 1,
+              "retainedHistory": 0,
+              "disposed": false
+            }
+          }
+        },
+        "parts": {
+          "signal": {
+            "count": 10880,
+            "p50Ms": 0.027299999999740976,
+            "p95Ms": 0.049799999999777356,
+            "p99Ms": 0.07399999999961437,
+            "minMs": 0.016300000000228465,
+            "maxMs": 0.9245999999993728
+          },
+          "stop": {
+            "count": 170,
+            "p50Ms": 0.004799999999704596,
+            "p95Ms": 0.00650000000041473,
+            "p99Ms": 0.008200000000215368,
+            "minMs": 0.004599999999300053,
+            "maxMs": 0.021400000000539876
+          },
+          "lane": {
+            "count": 170,
+            "p50Ms": 0.004500000000007276,
+            "p95Ms": 0.007700000000113505,
+            "p99Ms": 0.00889999999981228,
+            "minMs": 0.004399999999805004,
+            "maxMs": 0.14480000000003201
+          }
+        }
+      },
+      {
+        "fixtureVersion": "group-targeted-autonomy-v1",
+        "count": 11220,
+        "p50Ms": 0.026800000000548607,
+        "p95Ms": 0.04809999999997672,
+        "p99Ms": 0.06040000000029977,
+        "minMs": 0.004199999999400461,
+        "maxMs": 0.860700000000179,
+        "checksum": 2540400,
+        "decisions": 13200,
+        "owned": {
+          "signal": {
+            "behavior": {
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "actors": 64,
+              "identities": 64,
+              "retiredIdentities": 0,
+              "decisions": 64,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "roadContext": {
+              "tick": 1200,
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "vehicles": 64,
+              "cachedContexts": 64,
+              "laneProjections": 60,
+              "invalidatedContexts": 0,
+              "fingerprintCodeUnits": 54798,
+              "identities": 120,
+              "retiredIdentities": 0,
+              "disposed": false,
+              "index": {
+                "entities": 120,
+                "vehicles": 64,
+                "obstacles": 32,
+                "zones": 24,
+                "zoneVertices": 96,
+                "cells": 29,
+                "spatialReferences": 151,
+                "fallbackEntities": 0,
+                "generation": 0,
+                "disposed": false,
+                "lastQuery": {
+                  "cellsVisited": 64,
+                  "candidates": 75,
+                  "exactTests": 74,
+                  "matches": 74,
+                  "exhaustive": false
+                }
+              }
+            }
+          },
+          "stop": {
+            "behavior": {
+              "sessionId": "autonomy-probe-stop",
+              "worldEpoch": 0,
+              "actors": 1,
+              "identities": 1,
+              "retiredIdentities": 0,
+              "decisions": 1,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "stopRules": {
+              "mapId": "minimal-road-v1",
+              "worldEpoch": 0,
+              "zones": 1,
+              "vehicles": 1,
+              "trackedIncarnations": 1,
+              "activeOpportunities": 0,
+              "maxVehicles": 128,
+              "maxIncarnations": 4096,
+              "disposed": false
+            }
+          },
+          "lane": {
+            "behavior": {
+              "sessionId": "autonomy-probe-lane",
+              "worldEpoch": 0,
+              "actors": 1,
+              "identities": 1,
+              "retiredIdentities": 0,
+              "decisions": 1,
+              "retainedHistory": 0,
+              "disposed": false
+            }
+          }
+        },
+        "parts": {
+          "signal": {
+            "count": 10880,
+            "p50Ms": 0.027199999999538704,
+            "p95Ms": 0.04830000000038126,
+            "p99Ms": 0.061000000000603904,
+            "minMs": 0.016200000000026193,
+            "maxMs": 0.860700000000179
+          },
+          "stop": {
+            "count": 170,
+            "p50Ms": 0.004500000000007276,
+            "p95Ms": 0.005400000000008731,
+            "p99Ms": 0.007900000000518048,
+            "minMs": 0.004299999999602733,
+            "maxMs": 0.009799999999813735
+          },
+          "lane": {
+            "count": 170,
+            "p50Ms": 0.004300000000512227,
+            "p95Ms": 0.0046999999995023245,
+            "p99Ms": 0.005600000000413274,
+            "minMs": 0.004199999999400461,
+            "maxMs": 0.009799999999813735
+          }
+        }
+      },
+      {
+        "fixtureVersion": "group-targeted-autonomy-v1",
+        "count": 11220,
+        "p50Ms": 0.025600000000849832,
+        "p95Ms": 0.045900000000074215,
+        "p99Ms": 0.060499999999592546,
+        "minMs": 0.004499999999097781,
+        "maxMs": 1.016700000000128,
+        "checksum": 2540400,
+        "decisions": 13200,
+        "owned": {
+          "signal": {
+            "behavior": {
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "actors": 64,
+              "identities": 64,
+              "retiredIdentities": 0,
+              "decisions": 64,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "roadContext": {
+              "tick": 1200,
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "vehicles": 64,
+              "cachedContexts": 64,
+              "laneProjections": 60,
+              "invalidatedContexts": 0,
+              "fingerprintCodeUnits": 54798,
+              "identities": 120,
+              "retiredIdentities": 0,
+              "disposed": false,
+              "index": {
+                "entities": 120,
+                "vehicles": 64,
+                "obstacles": 32,
+                "zones": 24,
+                "zoneVertices": 96,
+                "cells": 29,
+                "spatialReferences": 151,
+                "fallbackEntities": 0,
+                "generation": 0,
+                "disposed": false,
+                "lastQuery": {
+                  "cellsVisited": 64,
+                  "candidates": 75,
+                  "exactTests": 74,
+                  "matches": 74,
+                  "exhaustive": false
+                }
+              }
+            }
+          },
+          "stop": {
+            "behavior": {
+              "sessionId": "autonomy-probe-stop",
+              "worldEpoch": 0,
+              "actors": 1,
+              "identities": 1,
+              "retiredIdentities": 0,
+              "decisions": 1,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "stopRules": {
+              "mapId": "minimal-road-v1",
+              "worldEpoch": 0,
+              "zones": 1,
+              "vehicles": 1,
+              "trackedIncarnations": 1,
+              "activeOpportunities": 0,
+              "maxVehicles": 128,
+              "maxIncarnations": 4096,
+              "disposed": false
+            }
+          },
+          "lane": {
+            "behavior": {
+              "sessionId": "autonomy-probe-lane",
+              "worldEpoch": 0,
+              "actors": 1,
+              "identities": 1,
+              "retiredIdentities": 0,
+              "decisions": 1,
+              "retainedHistory": 0,
+              "disposed": false
+            }
+          }
+        },
+        "parts": {
+          "signal": {
+            "count": 10880,
+            "p50Ms": 0.02599999999983993,
+            "p95Ms": 0.046199999999771535,
+            "p99Ms": 0.06109999999989668,
+            "minMs": 0.015900000000328873,
+            "maxMs": 1.016700000000128
+          },
+          "stop": {
+            "count": 170,
+            "p50Ms": 0.0046999999995023245,
+            "p95Ms": 0.005100000000311411,
+            "p99Ms": 0.00559999999950378,
+            "minMs": 0.004500000000007276,
+            "maxMs": 0.005799999999908323
+          },
+          "lane": {
+            "count": 170,
+            "p50Ms": 0.004600000000209548,
+            "p95Ms": 0.005100000000311411,
+            "p99Ms": 0.005600000000413274,
+            "minMs": 0.004499999999097781,
+            "maxMs": 0.04709999999977299
+          }
+        }
+      }
+    ],
+    "medians": {
+      "p50Ms": 0.026800000000548607,
+      "p95Ms": 0.04809999999997672,
+      "p99Ms": 0.060499999999592546
+    },
+    "checksums": [
+      2540400,
+      2540400,
+      2540400,
+      2540400,
+      2540400
+    ]
+  },
+  "after": {
+    "fixtureVersion": "group-targeted-autonomy-v1",
+    "actors": 66,
+    "repetitions": [
+      {
+        "fixtureVersion": "group-targeted-autonomy-v1",
+        "count": 11220,
+        "p50Ms": 0.04099999999925785,
+        "p95Ms": 0.06469999999899301,
+        "p99Ms": 0.09349999999903957,
+        "minMs": 0.012600000000020373,
+        "maxMs": 0.8986000000004424,
+        "checksum": 1965124,
+        "decisions": 13200,
+        "owned": {
+          "signal": {
+            "behavior": {
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "actors": 64,
+              "identities": 64,
+              "retiredIdentities": 0,
+              "decisions": 64,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "roadContext": {
+              "tick": 1200,
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "vehicles": 64,
+              "cachedContexts": 64,
+              "laneProjections": 60,
+              "invalidatedContexts": 0,
+              "fingerprintCodeUnits": 54798,
+              "identities": 120,
+              "retiredIdentities": 0,
+              "disposed": false,
+              "index": {
+                "entities": 120,
+                "vehicles": 64,
+                "obstacles": 32,
+                "zones": 24,
+                "zoneVertices": 96,
+                "cells": 29,
+                "spatialReferences": 151,
+                "fallbackEntities": 0,
+                "generation": 0,
+                "disposed": false,
+                "lastQuery": {
+                  "cellsVisited": 64,
+                  "candidates": 75,
+                  "exactTests": 74,
+                  "matches": 74,
+                  "exhaustive": false
+                }
+              }
+            }
+          },
+          "stop": {
+            "behavior": {
+              "sessionId": "autonomy-probe-stop",
+              "worldEpoch": 0,
+              "actors": 1,
+              "identities": 1,
+              "retiredIdentities": 0,
+              "decisions": 1,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "stopRules": {
+              "mapId": "minimal-road-v1",
+              "worldEpoch": 0,
+              "zones": 1,
+              "vehicles": 1,
+              "trackedIncarnations": 1,
+              "activeOpportunities": 0,
+              "maxVehicles": 128,
+              "maxIncarnations": 4096,
+              "disposed": false
+            }
+          },
+          "lane": {
+            "behavior": {
+              "sessionId": "autonomy-probe-lane",
+              "worldEpoch": 0,
+              "actors": 1,
+              "identities": 1,
+              "retiredIdentities": 0,
+              "decisions": 1,
+              "retainedHistory": 0,
+              "disposed": false
+            }
+          }
+        },
+        "parts": {
+          "signal": {
+            "count": 10880,
+            "p50Ms": 0.04140000000006694,
+            "p95Ms": 0.06489999999939755,
+            "p99Ms": 0.09380000000055588,
+            "minMs": 0.028599999999642023,
+            "maxMs": 0.8986000000004424
+          },
+          "stop": {
+            "count": 170,
+            "p50Ms": 0.014400000000023283,
+            "p95Ms": 0.022199999999429565,
+            "p99Ms": 0.05099999999947613,
+            "minMs": 0.012600000000020373,
+            "maxMs": 0.06009999999878346
+          },
+          "lane": {
+            "count": 170,
+            "p50Ms": 0.016499999999723514,
+            "p95Ms": 0.021600000000034925,
+            "p99Ms": 0.03839999999945576,
+            "minMs": 0.015899999998509884,
+            "maxMs": 0.05280000000129803
+          }
+        }
+      },
+      {
+        "fixtureVersion": "group-targeted-autonomy-v1",
+        "count": 11220,
+        "p50Ms": 0.04039999999986321,
+        "p95Ms": 0.06610000000000582,
+        "p99Ms": 0.0907999999999447,
+        "minMs": 0.011099999999714782,
+        "maxMs": 0.8092999999989843,
+        "checksum": 1965124,
+        "decisions": 13200,
+        "owned": {
+          "signal": {
+            "behavior": {
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "actors": 64,
+              "identities": 64,
+              "retiredIdentities": 0,
+              "decisions": 64,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "roadContext": {
+              "tick": 1200,
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "vehicles": 64,
+              "cachedContexts": 64,
+              "laneProjections": 60,
+              "invalidatedContexts": 0,
+              "fingerprintCodeUnits": 54798,
+              "identities": 120,
+              "retiredIdentities": 0,
+              "disposed": false,
+              "index": {
+                "entities": 120,
+                "vehicles": 64,
+                "obstacles": 32,
+                "zones": 24,
+                "zoneVertices": 96,
+                "cells": 29,
+                "spatialReferences": 151,
+                "fallbackEntities": 0,
+                "generation": 0,
+                "disposed": false,
+                "lastQuery": {
+                  "cellsVisited": 64,
+                  "candidates": 75,
+                  "exactTests": 74,
+                  "matches": 74,
+                  "exhaustive": false
+                }
+              }
+            }
+          },
+          "stop": {
+            "behavior": {
+              "sessionId": "autonomy-probe-stop",
+              "worldEpoch": 0,
+              "actors": 1,
+              "identities": 1,
+              "retiredIdentities": 0,
+              "decisions": 1,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "stopRules": {
+              "mapId": "minimal-road-v1",
+              "worldEpoch": 0,
+              "zones": 1,
+              "vehicles": 1,
+              "trackedIncarnations": 1,
+              "activeOpportunities": 0,
+              "maxVehicles": 128,
+              "maxIncarnations": 4096,
+              "disposed": false
+            }
+          },
+          "lane": {
+            "behavior": {
+              "sessionId": "autonomy-probe-lane",
+              "worldEpoch": 0,
+              "actors": 1,
+              "identities": 1,
+              "retiredIdentities": 0,
+              "decisions": 1,
+              "retainedHistory": 0,
+              "disposed": false
+            }
+          }
+        },
+        "parts": {
+          "signal": {
+            "count": 10880,
+            "p50Ms": 0.0408000000006723,
+            "p95Ms": 0.06649999999899592,
+            "p99Ms": 0.09110000000146101,
+            "minMs": 0.02839999999923748,
+            "maxMs": 0.8092999999989843
+          },
+          "stop": {
+            "count": 170,
+            "p50Ms": 0.012500000000727596,
+            "p95Ms": 0.017299999999522697,
+            "p99Ms": 0.026499999999941792,
+            "minMs": 0.011099999999714782,
+            "maxMs": 0.550199999999677
+          },
+          "lane": {
+            "count": 170,
+            "p50Ms": 0.014999999999417923,
+            "p95Ms": 0.017700000000331784,
+            "p99Ms": 0.03290000000015425,
+            "minMs": 0.01449999999931606,
+            "maxMs": 0.04280000000107975
+          }
+        }
+      },
+      {
+        "fixtureVersion": "group-targeted-autonomy-v1",
+        "count": 11220,
+        "p50Ms": 0.04110000000036962,
+        "p95Ms": 0.06810000000041327,
+        "p99Ms": 0.09110000000146101,
+        "minMs": 0.011099999999714782,
+        "maxMs": 0.8400000000001455,
+        "checksum": 1965124,
+        "decisions": 13200,
+        "owned": {
+          "signal": {
+            "behavior": {
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "actors": 64,
+              "identities": 64,
+              "retiredIdentities": 0,
+              "decisions": 64,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "roadContext": {
+              "tick": 1200,
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "vehicles": 64,
+              "cachedContexts": 64,
+              "laneProjections": 60,
+              "invalidatedContexts": 0,
+              "fingerprintCodeUnits": 54798,
+              "identities": 120,
+              "retiredIdentities": 0,
+              "disposed": false,
+              "index": {
+                "entities": 120,
+                "vehicles": 64,
+                "obstacles": 32,
+                "zones": 24,
+                "zoneVertices": 96,
+                "cells": 29,
+                "spatialReferences": 151,
+                "fallbackEntities": 0,
+                "generation": 0,
+                "disposed": false,
+                "lastQuery": {
+                  "cellsVisited": 64,
+                  "candidates": 75,
+                  "exactTests": 74,
+                  "matches": 74,
+                  "exhaustive": false
+                }
+              }
+            }
+          },
+          "stop": {
+            "behavior": {
+              "sessionId": "autonomy-probe-stop",
+              "worldEpoch": 0,
+              "actors": 1,
+              "identities": 1,
+              "retiredIdentities": 0,
+              "decisions": 1,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "stopRules": {
+              "mapId": "minimal-road-v1",
+              "worldEpoch": 0,
+              "zones": 1,
+              "vehicles": 1,
+              "trackedIncarnations": 1,
+              "activeOpportunities": 0,
+              "maxVehicles": 128,
+              "maxIncarnations": 4096,
+              "disposed": false
+            }
+          },
+          "lane": {
+            "behavior": {
+              "sessionId": "autonomy-probe-lane",
+              "worldEpoch": 0,
+              "actors": 1,
+              "identities": 1,
+              "retiredIdentities": 0,
+              "decisions": 1,
+              "retainedHistory": 0,
+              "disposed": false
+            }
+          }
+        },
+        "parts": {
+          "signal": {
+            "count": 10880,
+            "p50Ms": 0.041500000001178705,
+            "p95Ms": 0.0684000000001106,
+            "p99Ms": 0.09200000000055297,
+            "minMs": 0.027900000000954606,
+            "maxMs": 0.8400000000001455
+          },
+          "stop": {
+            "count": 170,
+            "p50Ms": 0.013200000001234002,
+            "p95Ms": 0.01990000000114378,
+            "p99Ms": 0.030699999999342253,
+            "minMs": 0.011099999999714782,
+            "maxMs": 0.08470000000124855
+          },
+          "lane": {
+            "count": 170,
+            "p50Ms": 0.01419999999961874,
+            "p95Ms": 0.01599999999962165,
+            "p99Ms": 0.020999999998821295,
+            "minMs": 0.013499999999112333,
+            "maxMs": 0.04550000000017462
+          }
+        }
+      },
+      {
+        "fixtureVersion": "group-targeted-autonomy-v1",
+        "count": 11220,
+        "p50Ms": 0.041499999999359716,
+        "p95Ms": 0.066899999999805,
+        "p99Ms": 0.08470000000124855,
+        "minMs": 0.011100000001533772,
+        "maxMs": 0.9182000000000698,
+        "checksum": 1965124,
+        "decisions": 13200,
+        "owned": {
+          "signal": {
+            "behavior": {
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "actors": 64,
+              "identities": 64,
+              "retiredIdentities": 0,
+              "decisions": 64,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "roadContext": {
+              "tick": 1200,
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "vehicles": 64,
+              "cachedContexts": 64,
+              "laneProjections": 60,
+              "invalidatedContexts": 0,
+              "fingerprintCodeUnits": 54798,
+              "identities": 120,
+              "retiredIdentities": 0,
+              "disposed": false,
+              "index": {
+                "entities": 120,
+                "vehicles": 64,
+                "obstacles": 32,
+                "zones": 24,
+                "zoneVertices": 96,
+                "cells": 29,
+                "spatialReferences": 151,
+                "fallbackEntities": 0,
+                "generation": 0,
+                "disposed": false,
+                "lastQuery": {
+                  "cellsVisited": 64,
+                  "candidates": 75,
+                  "exactTests": 74,
+                  "matches": 74,
+                  "exhaustive": false
+                }
+              }
+            }
+          },
+          "stop": {
+            "behavior": {
+              "sessionId": "autonomy-probe-stop",
+              "worldEpoch": 0,
+              "actors": 1,
+              "identities": 1,
+              "retiredIdentities": 0,
+              "decisions": 1,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "stopRules": {
+              "mapId": "minimal-road-v1",
+              "worldEpoch": 0,
+              "zones": 1,
+              "vehicles": 1,
+              "trackedIncarnations": 1,
+              "activeOpportunities": 0,
+              "maxVehicles": 128,
+              "maxIncarnations": 4096,
+              "disposed": false
+            }
+          },
+          "lane": {
+            "behavior": {
+              "sessionId": "autonomy-probe-lane",
+              "worldEpoch": 0,
+              "actors": 1,
+              "identities": 1,
+              "retiredIdentities": 0,
+              "decisions": 1,
+              "retainedHistory": 0,
+              "disposed": false
+            }
+          }
+        },
+        "parts": {
+          "signal": {
+            "count": 10880,
+            "p50Ms": 0.04199999999946158,
+            "p95Ms": 0.06719999999950232,
+            "p99Ms": 0.08539999999993597,
+            "minMs": 0.02810000000135915,
+            "maxMs": 0.9182000000000698
+          },
+          "stop": {
+            "count": 170,
+            "p50Ms": 0.01239999999961583,
+            "p95Ms": 0.013800000000628643,
+            "p99Ms": 0.019699999998920248,
+            "minMs": 0.011100000001533772,
+            "maxMs": 0.03930000000036671
+          },
+          "lane": {
+            "count": 170,
+            "p50Ms": 0.01449999999931606,
+            "p95Ms": 0.015600000000631553,
+            "p99Ms": 0.022100000000136788,
+            "minMs": 0.01389999999992142,
+            "maxMs": 0.055399999999281135
+          }
+        }
+      },
+      {
+        "fixtureVersion": "group-targeted-autonomy-v1",
+        "count": 11220,
+        "p50Ms": 0.04079999999885331,
+        "p95Ms": 0.06459999999970023,
+        "p99Ms": 0.08239999999932479,
+        "minMs": 0.011099999999714782,
+        "maxMs": 0.9866000000001804,
+        "checksum": 1965124,
+        "decisions": 13200,
+        "owned": {
+          "signal": {
+            "behavior": {
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "actors": 64,
+              "identities": 64,
+              "retiredIdentities": 0,
+              "decisions": 64,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "roadContext": {
+              "tick": 1200,
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "vehicles": 64,
+              "cachedContexts": 64,
+              "laneProjections": 60,
+              "invalidatedContexts": 0,
+              "fingerprintCodeUnits": 54798,
+              "identities": 120,
+              "retiredIdentities": 0,
+              "disposed": false,
+              "index": {
+                "entities": 120,
+                "vehicles": 64,
+                "obstacles": 32,
+                "zones": 24,
+                "zoneVertices": 96,
+                "cells": 29,
+                "spatialReferences": 151,
+                "fallbackEntities": 0,
+                "generation": 0,
+                "disposed": false,
+                "lastQuery": {
+                  "cellsVisited": 64,
+                  "candidates": 75,
+                  "exactTests": 74,
+                  "matches": 74,
+                  "exhaustive": false
+                }
+              }
+            }
+          },
+          "stop": {
+            "behavior": {
+              "sessionId": "autonomy-probe-stop",
+              "worldEpoch": 0,
+              "actors": 1,
+              "identities": 1,
+              "retiredIdentities": 0,
+              "decisions": 1,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "stopRules": {
+              "mapId": "minimal-road-v1",
+              "worldEpoch": 0,
+              "zones": 1,
+              "vehicles": 1,
+              "trackedIncarnations": 1,
+              "activeOpportunities": 0,
+              "maxVehicles": 128,
+              "maxIncarnations": 4096,
+              "disposed": false
+            }
+          },
+          "lane": {
+            "behavior": {
+              "sessionId": "autonomy-probe-lane",
+              "worldEpoch": 0,
+              "actors": 1,
+              "identities": 1,
+              "retiredIdentities": 0,
+              "decisions": 1,
+              "retainedHistory": 0,
+              "disposed": false
+            }
+          }
+        },
+        "parts": {
+          "signal": {
+            "count": 10880,
+            "p50Ms": 0.041199999999662396,
+            "p95Ms": 0.06489999999939755,
+            "p99Ms": 0.08280000000013388,
+            "minMs": 0.028200000000651926,
+            "maxMs": 0.9866000000001804
+          },
+          "stop": {
+            "count": 170,
+            "p50Ms": 0.012600000001839362,
+            "p95Ms": 0.01480000000083237,
+            "p99Ms": 0.01750000000174623,
+            "minMs": 0.011099999999714782,
+            "maxMs": 0.02200000000084401
+          },
+          "lane": {
+            "count": 170,
+            "p50Ms": 0.014400000000023283,
+            "p95Ms": 0.01720000000204891,
+            "p99Ms": 0.03499999999985448,
+            "minMs": 0.01389999999810243,
+            "maxMs": 0.07819999999992433
+          }
+        }
+      }
+    ],
+    "medians": {
+      "p50Ms": 0.04099999999925785,
+      "p95Ms": 0.06610000000000582,
+      "p99Ms": 0.0907999999999447
+    },
+    "checksums": [
+      1965124,
+      1965124,
+      1965124,
+      1965124,
+      1965124
+    ]
+  },
+  "delta": {
+    "p50Ms": 0.014199999998709245,
+    "p95Ms": 0.018000000000029104,
+    "p99Ms": 0.030300000000352156,
+    "scope": "ADDED cost of the new policy path measured on the same fixture against the same BEFORE arm"
+  },
+  "memory": {
+    "gcAvailable": true,
+    "cycles": [
+      {
+        "before": {
+          "owner-0": {
+            "behavior": {
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "actors": 64,
+              "identities": 64,
+              "retiredIdentities": 0,
+              "decisions": 0,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "roadContext": {
+              "tick": 1,
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "vehicles": 64,
+              "cachedContexts": 0,
+              "laneProjections": 0,
+              "invalidatedContexts": 0,
+              "fingerprintCodeUnits": 54774,
+              "identities": 120,
+              "retiredIdentities": 0,
+              "disposed": false,
+              "index": {
+                "entities": 120,
+                "vehicles": 64,
+                "obstacles": 32,
+                "zones": 24,
+                "zoneVertices": 96,
+                "cells": 29,
+                "spatialReferences": 151,
+                "fallbackEntities": 0,
+                "generation": 0,
+                "disposed": false,
+                "lastQuery": {
+                  "cellsVisited": 0,
+                  "candidates": 0,
+                  "exactTests": 0,
+                  "matches": 0,
+                  "exhaustive": false
+                }
+              }
+            }
+          },
+          "owner-1": {
+            "mapId": "minimal-road-v1",
+            "worldEpoch": 0,
+            "zones": 1,
+            "vehicles": 0,
+            "trackedIncarnations": 0,
+            "activeOpportunities": 0,
+            "maxVehicles": 128,
+            "maxIncarnations": 4096,
+            "disposed": false
+          },
+          "owner-2": {
+            "lanes": 3
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 14525216,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "behavior": {
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "actors": 64,
+              "identities": 64,
+              "retiredIdentities": 0,
+              "decisions": 0,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "roadContext": {
+              "tick": 1,
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "vehicles": 64,
+              "cachedContexts": 0,
+              "laneProjections": 0,
+              "invalidatedContexts": 0,
+              "fingerprintCodeUnits": 54774,
+              "identities": 120,
+              "retiredIdentities": 0,
+              "disposed": false,
+              "index": {
+                "entities": 120,
+                "vehicles": 64,
+                "obstacles": 32,
+                "zones": 24,
+                "zoneVertices": 96,
+                "cells": 29,
+                "spatialReferences": 151,
+                "fallbackEntities": 0,
+                "generation": 0,
+                "disposed": false,
+                "lastQuery": {
+                  "cellsVisited": 0,
+                  "candidates": 0,
+                  "exactTests": 0,
+                  "matches": 0,
+                  "exhaustive": false
+                }
+              }
+            }
+          },
+          "owner-1": {
+            "mapId": "minimal-road-v1",
+            "worldEpoch": 0,
+            "zones": 1,
+            "vehicles": 0,
+            "trackedIncarnations": 0,
+            "activeOpportunities": 0,
+            "maxVehicles": 128,
+            "maxIncarnations": 4096,
+            "disposed": false
+          },
+          "owner-2": {
+            "lanes": 3
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 14521136,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "behavior": {
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "actors": 64,
+              "identities": 64,
+              "retiredIdentities": 0,
+              "decisions": 0,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "roadContext": {
+              "tick": 1,
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "vehicles": 64,
+              "cachedContexts": 0,
+              "laneProjections": 0,
+              "invalidatedContexts": 0,
+              "fingerprintCodeUnits": 54774,
+              "identities": 120,
+              "retiredIdentities": 0,
+              "disposed": false,
+              "index": {
+                "entities": 120,
+                "vehicles": 64,
+                "obstacles": 32,
+                "zones": 24,
+                "zoneVertices": 96,
+                "cells": 29,
+                "spatialReferences": 151,
+                "fallbackEntities": 0,
+                "generation": 0,
+                "disposed": false,
+                "lastQuery": {
+                  "cellsVisited": 0,
+                  "candidates": 0,
+                  "exactTests": 0,
+                  "matches": 0,
+                  "exhaustive": false
+                }
+              }
+            }
+          },
+          "owner-1": {
+            "mapId": "minimal-road-v1",
+            "worldEpoch": 0,
+            "zones": 1,
+            "vehicles": 0,
+            "trackedIncarnations": 0,
+            "activeOpportunities": 0,
+            "maxVehicles": 128,
+            "maxIncarnations": 4096,
+            "disposed": false
+          },
+          "owner-2": {
+            "lanes": 3
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 14493720,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "behavior": {
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "actors": 64,
+              "identities": 64,
+              "retiredIdentities": 0,
+              "decisions": 0,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "roadContext": {
+              "tick": 1,
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "vehicles": 64,
+              "cachedContexts": 0,
+              "laneProjections": 0,
+              "invalidatedContexts": 0,
+              "fingerprintCodeUnits": 54774,
+              "identities": 120,
+              "retiredIdentities": 0,
+              "disposed": false,
+              "index": {
+                "entities": 120,
+                "vehicles": 64,
+                "obstacles": 32,
+                "zones": 24,
+                "zoneVertices": 96,
+                "cells": 29,
+                "spatialReferences": 151,
+                "fallbackEntities": 0,
+                "generation": 0,
+                "disposed": false,
+                "lastQuery": {
+                  "cellsVisited": 0,
+                  "candidates": 0,
+                  "exactTests": 0,
+                  "matches": 0,
+                  "exhaustive": false
+                }
+              }
+            }
+          },
+          "owner-1": {
+            "mapId": "minimal-road-v1",
+            "worldEpoch": 0,
+            "zones": 1,
+            "vehicles": 0,
+            "trackedIncarnations": 0,
+            "activeOpportunities": 0,
+            "maxVehicles": 128,
+            "maxIncarnations": 4096,
+            "disposed": false
+          },
+          "owner-2": {
+            "lanes": 3
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 13704560,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "behavior": {
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "actors": 64,
+              "identities": 64,
+              "retiredIdentities": 0,
+              "decisions": 0,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "roadContext": {
+              "tick": 1,
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "vehicles": 64,
+              "cachedContexts": 0,
+              "laneProjections": 0,
+              "invalidatedContexts": 0,
+              "fingerprintCodeUnits": 54774,
+              "identities": 120,
+              "retiredIdentities": 0,
+              "disposed": false,
+              "index": {
+                "entities": 120,
+                "vehicles": 64,
+                "obstacles": 32,
+                "zones": 24,
+                "zoneVertices": 96,
+                "cells": 29,
+                "spatialReferences": 151,
+                "fallbackEntities": 0,
+                "generation": 0,
+                "disposed": false,
+                "lastQuery": {
+                  "cellsVisited": 0,
+                  "candidates": 0,
+                  "exactTests": 0,
+                  "matches": 0,
+                  "exhaustive": false
+                }
+              }
+            }
+          },
+          "owner-1": {
+            "mapId": "minimal-road-v1",
+            "worldEpoch": 0,
+            "zones": 1,
+            "vehicles": 0,
+            "trackedIncarnations": 0,
+            "activeOpportunities": 0,
+            "maxVehicles": 128,
+            "maxIncarnations": 4096,
+            "disposed": false
+          },
+          "owner-2": {
+            "lanes": 3
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 13722992,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "behavior": {
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "actors": 64,
+              "identities": 64,
+              "retiredIdentities": 0,
+              "decisions": 0,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "roadContext": {
+              "tick": 1,
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "vehicles": 64,
+              "cachedContexts": 0,
+              "laneProjections": 0,
+              "invalidatedContexts": 0,
+              "fingerprintCodeUnits": 54774,
+              "identities": 120,
+              "retiredIdentities": 0,
+              "disposed": false,
+              "index": {
+                "entities": 120,
+                "vehicles": 64,
+                "obstacles": 32,
+                "zones": 24,
+                "zoneVertices": 96,
+                "cells": 29,
+                "spatialReferences": 151,
+                "fallbackEntities": 0,
+                "generation": 0,
+                "disposed": false,
+                "lastQuery": {
+                  "cellsVisited": 0,
+                  "candidates": 0,
+                  "exactTests": 0,
+                  "matches": 0,
+                  "exhaustive": false
+                }
+              }
+            }
+          },
+          "owner-1": {
+            "mapId": "minimal-road-v1",
+            "worldEpoch": 0,
+            "zones": 1,
+            "vehicles": 0,
+            "trackedIncarnations": 0,
+            "activeOpportunities": 0,
+            "maxVehicles": 128,
+            "maxIncarnations": 4096,
+            "disposed": false
+          },
+          "owner-2": {
+            "lanes": 3
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 13757176,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "behavior": {
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "actors": 64,
+              "identities": 64,
+              "retiredIdentities": 0,
+              "decisions": 0,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "roadContext": {
+              "tick": 1,
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "vehicles": 64,
+              "cachedContexts": 0,
+              "laneProjections": 0,
+              "invalidatedContexts": 0,
+              "fingerprintCodeUnits": 54774,
+              "identities": 120,
+              "retiredIdentities": 0,
+              "disposed": false,
+              "index": {
+                "entities": 120,
+                "vehicles": 64,
+                "obstacles": 32,
+                "zones": 24,
+                "zoneVertices": 96,
+                "cells": 29,
+                "spatialReferences": 151,
+                "fallbackEntities": 0,
+                "generation": 0,
+                "disposed": false,
+                "lastQuery": {
+                  "cellsVisited": 0,
+                  "candidates": 0,
+                  "exactTests": 0,
+                  "matches": 0,
+                  "exhaustive": false
+                }
+              }
+            }
+          },
+          "owner-1": {
+            "mapId": "minimal-road-v1",
+            "worldEpoch": 0,
+            "zones": 1,
+            "vehicles": 0,
+            "trackedIncarnations": 0,
+            "activeOpportunities": 0,
+            "maxVehicles": 128,
+            "maxIncarnations": 4096,
+            "disposed": false
+          },
+          "owner-2": {
+            "lanes": 3
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 13764384,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "behavior": {
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "actors": 64,
+              "identities": 64,
+              "retiredIdentities": 0,
+              "decisions": 0,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "roadContext": {
+              "tick": 1,
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "vehicles": 64,
+              "cachedContexts": 0,
+              "laneProjections": 0,
+              "invalidatedContexts": 0,
+              "fingerprintCodeUnits": 54774,
+              "identities": 120,
+              "retiredIdentities": 0,
+              "disposed": false,
+              "index": {
+                "entities": 120,
+                "vehicles": 64,
+                "obstacles": 32,
+                "zones": 24,
+                "zoneVertices": 96,
+                "cells": 29,
+                "spatialReferences": 151,
+                "fallbackEntities": 0,
+                "generation": 0,
+                "disposed": false,
+                "lastQuery": {
+                  "cellsVisited": 0,
+                  "candidates": 0,
+                  "exactTests": 0,
+                  "matches": 0,
+                  "exhaustive": false
+                }
+              }
+            }
+          },
+          "owner-1": {
+            "mapId": "minimal-road-v1",
+            "worldEpoch": 0,
+            "zones": 1,
+            "vehicles": 0,
+            "trackedIncarnations": 0,
+            "activeOpportunities": 0,
+            "maxVehicles": 128,
+            "maxIncarnations": 4096,
+            "disposed": false
+          },
+          "owner-2": {
+            "lanes": 3
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 13760000,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "behavior": {
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "actors": 64,
+              "identities": 64,
+              "retiredIdentities": 0,
+              "decisions": 0,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "roadContext": {
+              "tick": 1,
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "vehicles": 64,
+              "cachedContexts": 0,
+              "laneProjections": 0,
+              "invalidatedContexts": 0,
+              "fingerprintCodeUnits": 54774,
+              "identities": 120,
+              "retiredIdentities": 0,
+              "disposed": false,
+              "index": {
+                "entities": 120,
+                "vehicles": 64,
+                "obstacles": 32,
+                "zones": 24,
+                "zoneVertices": 96,
+                "cells": 29,
+                "spatialReferences": 151,
+                "fallbackEntities": 0,
+                "generation": 0,
+                "disposed": false,
+                "lastQuery": {
+                  "cellsVisited": 0,
+                  "candidates": 0,
+                  "exactTests": 0,
+                  "matches": 0,
+                  "exhaustive": false
+                }
+              }
+            }
+          },
+          "owner-1": {
+            "mapId": "minimal-road-v1",
+            "worldEpoch": 0,
+            "zones": 1,
+            "vehicles": 0,
+            "trackedIncarnations": 0,
+            "activeOpportunities": 0,
+            "maxVehicles": 128,
+            "maxIncarnations": 4096,
+            "disposed": false
+          },
+          "owner-2": {
+            "lanes": 3
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 13761232,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "behavior": {
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "actors": 64,
+              "identities": 64,
+              "retiredIdentities": 0,
+              "decisions": 0,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "roadContext": {
+              "tick": 1,
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "vehicles": 64,
+              "cachedContexts": 0,
+              "laneProjections": 0,
+              "invalidatedContexts": 0,
+              "fingerprintCodeUnits": 54774,
+              "identities": 120,
+              "retiredIdentities": 0,
+              "disposed": false,
+              "index": {
+                "entities": 120,
+                "vehicles": 64,
+                "obstacles": 32,
+                "zones": 24,
+                "zoneVertices": 96,
+                "cells": 29,
+                "spatialReferences": 151,
+                "fallbackEntities": 0,
+                "generation": 0,
+                "disposed": false,
+                "lastQuery": {
+                  "cellsVisited": 0,
+                  "candidates": 0,
+                  "exactTests": 0,
+                  "matches": 0,
+                  "exhaustive": false
+                }
+              }
+            }
+          },
+          "owner-1": {
+            "mapId": "minimal-road-v1",
+            "worldEpoch": 0,
+            "zones": 1,
+            "vehicles": 0,
+            "trackedIncarnations": 0,
+            "activeOpportunities": 0,
+            "maxVehicles": 128,
+            "maxIncarnations": 4096,
+            "disposed": false
+          },
+          "owner-2": {
+            "lanes": 3
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 13769744,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "behavior": {
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "actors": 64,
+              "identities": 64,
+              "retiredIdentities": 0,
+              "decisions": 0,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "roadContext": {
+              "tick": 1,
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "vehicles": 64,
+              "cachedContexts": 0,
+              "laneProjections": 0,
+              "invalidatedContexts": 0,
+              "fingerprintCodeUnits": 54774,
+              "identities": 120,
+              "retiredIdentities": 0,
+              "disposed": false,
+              "index": {
+                "entities": 120,
+                "vehicles": 64,
+                "obstacles": 32,
+                "zones": 24,
+                "zoneVertices": 96,
+                "cells": 29,
+                "spatialReferences": 151,
+                "fallbackEntities": 0,
+                "generation": 0,
+                "disposed": false,
+                "lastQuery": {
+                  "cellsVisited": 0,
+                  "candidates": 0,
+                  "exactTests": 0,
+                  "matches": 0,
+                  "exhaustive": false
+                }
+              }
+            }
+          },
+          "owner-1": {
+            "mapId": "minimal-road-v1",
+            "worldEpoch": 0,
+            "zones": 1,
+            "vehicles": 0,
+            "trackedIncarnations": 0,
+            "activeOpportunities": 0,
+            "maxVehicles": 128,
+            "maxIncarnations": 4096,
+            "disposed": false
+          },
+          "owner-2": {
+            "lanes": 3
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 13763976,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "behavior": {
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "actors": 64,
+              "identities": 64,
+              "retiredIdentities": 0,
+              "decisions": 0,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "roadContext": {
+              "tick": 1,
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "vehicles": 64,
+              "cachedContexts": 0,
+              "laneProjections": 0,
+              "invalidatedContexts": 0,
+              "fingerprintCodeUnits": 54774,
+              "identities": 120,
+              "retiredIdentities": 0,
+              "disposed": false,
+              "index": {
+                "entities": 120,
+                "vehicles": 64,
+                "obstacles": 32,
+                "zones": 24,
+                "zoneVertices": 96,
+                "cells": 29,
+                "spatialReferences": 151,
+                "fallbackEntities": 0,
+                "generation": 0,
+                "disposed": false,
+                "lastQuery": {
+                  "cellsVisited": 0,
+                  "candidates": 0,
+                  "exactTests": 0,
+                  "matches": 0,
+                  "exhaustive": false
+                }
+              }
+            }
+          },
+          "owner-1": {
+            "mapId": "minimal-road-v1",
+            "worldEpoch": 0,
+            "zones": 1,
+            "vehicles": 0,
+            "trackedIncarnations": 0,
+            "activeOpportunities": 0,
+            "maxVehicles": 128,
+            "maxIncarnations": 4096,
+            "disposed": false
+          },
+          "owner-2": {
+            "lanes": 3
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 13771984,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "behavior": {
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "actors": 64,
+              "identities": 64,
+              "retiredIdentities": 0,
+              "decisions": 0,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "roadContext": {
+              "tick": 1,
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "vehicles": 64,
+              "cachedContexts": 0,
+              "laneProjections": 0,
+              "invalidatedContexts": 0,
+              "fingerprintCodeUnits": 54774,
+              "identities": 120,
+              "retiredIdentities": 0,
+              "disposed": false,
+              "index": {
+                "entities": 120,
+                "vehicles": 64,
+                "obstacles": 32,
+                "zones": 24,
+                "zoneVertices": 96,
+                "cells": 29,
+                "spatialReferences": 151,
+                "fallbackEntities": 0,
+                "generation": 0,
+                "disposed": false,
+                "lastQuery": {
+                  "cellsVisited": 0,
+                  "candidates": 0,
+                  "exactTests": 0,
+                  "matches": 0,
+                  "exhaustive": false
+                }
+              }
+            }
+          },
+          "owner-1": {
+            "mapId": "minimal-road-v1",
+            "worldEpoch": 0,
+            "zones": 1,
+            "vehicles": 0,
+            "trackedIncarnations": 0,
+            "activeOpportunities": 0,
+            "maxVehicles": 128,
+            "maxIncarnations": 4096,
+            "disposed": false
+          },
+          "owner-2": {
+            "lanes": 3
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 13773304,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "behavior": {
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "actors": 64,
+              "identities": 64,
+              "retiredIdentities": 0,
+              "decisions": 0,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "roadContext": {
+              "tick": 1,
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "vehicles": 64,
+              "cachedContexts": 0,
+              "laneProjections": 0,
+              "invalidatedContexts": 0,
+              "fingerprintCodeUnits": 54774,
+              "identities": 120,
+              "retiredIdentities": 0,
+              "disposed": false,
+              "index": {
+                "entities": 120,
+                "vehicles": 64,
+                "obstacles": 32,
+                "zones": 24,
+                "zoneVertices": 96,
+                "cells": 29,
+                "spatialReferences": 151,
+                "fallbackEntities": 0,
+                "generation": 0,
+                "disposed": false,
+                "lastQuery": {
+                  "cellsVisited": 0,
+                  "candidates": 0,
+                  "exactTests": 0,
+                  "matches": 0,
+                  "exhaustive": false
+                }
+              }
+            }
+          },
+          "owner-1": {
+            "mapId": "minimal-road-v1",
+            "worldEpoch": 0,
+            "zones": 1,
+            "vehicles": 0,
+            "trackedIncarnations": 0,
+            "activeOpportunities": 0,
+            "maxVehicles": 128,
+            "maxIncarnations": 4096,
+            "disposed": false
+          },
+          "owner-2": {
+            "lanes": 3
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 13774576,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "behavior": {
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "actors": 64,
+              "identities": 64,
+              "retiredIdentities": 0,
+              "decisions": 0,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "roadContext": {
+              "tick": 1,
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "vehicles": 64,
+              "cachedContexts": 0,
+              "laneProjections": 0,
+              "invalidatedContexts": 0,
+              "fingerprintCodeUnits": 54774,
+              "identities": 120,
+              "retiredIdentities": 0,
+              "disposed": false,
+              "index": {
+                "entities": 120,
+                "vehicles": 64,
+                "obstacles": 32,
+                "zones": 24,
+                "zoneVertices": 96,
+                "cells": 29,
+                "spatialReferences": 151,
+                "fallbackEntities": 0,
+                "generation": 0,
+                "disposed": false,
+                "lastQuery": {
+                  "cellsVisited": 0,
+                  "candidates": 0,
+                  "exactTests": 0,
+                  "matches": 0,
+                  "exhaustive": false
+                }
+              }
+            }
+          },
+          "owner-1": {
+            "mapId": "minimal-road-v1",
+            "worldEpoch": 0,
+            "zones": 1,
+            "vehicles": 0,
+            "trackedIncarnations": 0,
+            "activeOpportunities": 0,
+            "maxVehicles": 128,
+            "maxIncarnations": 4096,
+            "disposed": false
+          },
+          "owner-2": {
+            "lanes": 3
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 13776240,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "behavior": {
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "actors": 64,
+              "identities": 64,
+              "retiredIdentities": 0,
+              "decisions": 0,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "roadContext": {
+              "tick": 1,
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "vehicles": 64,
+              "cachedContexts": 0,
+              "laneProjections": 0,
+              "invalidatedContexts": 0,
+              "fingerprintCodeUnits": 54774,
+              "identities": 120,
+              "retiredIdentities": 0,
+              "disposed": false,
+              "index": {
+                "entities": 120,
+                "vehicles": 64,
+                "obstacles": 32,
+                "zones": 24,
+                "zoneVertices": 96,
+                "cells": 29,
+                "spatialReferences": 151,
+                "fallbackEntities": 0,
+                "generation": 0,
+                "disposed": false,
+                "lastQuery": {
+                  "cellsVisited": 0,
+                  "candidates": 0,
+                  "exactTests": 0,
+                  "matches": 0,
+                  "exhaustive": false
+                }
+              }
+            }
+          },
+          "owner-1": {
+            "mapId": "minimal-road-v1",
+            "worldEpoch": 0,
+            "zones": 1,
+            "vehicles": 0,
+            "trackedIncarnations": 0,
+            "activeOpportunities": 0,
+            "maxVehicles": 128,
+            "maxIncarnations": 4096,
+            "disposed": false
+          },
+          "owner-2": {
+            "lanes": 3
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 13777064,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "behavior": {
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "actors": 64,
+              "identities": 64,
+              "retiredIdentities": 0,
+              "decisions": 0,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "roadContext": {
+              "tick": 1,
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "vehicles": 64,
+              "cachedContexts": 0,
+              "laneProjections": 0,
+              "invalidatedContexts": 0,
+              "fingerprintCodeUnits": 54774,
+              "identities": 120,
+              "retiredIdentities": 0,
+              "disposed": false,
+              "index": {
+                "entities": 120,
+                "vehicles": 64,
+                "obstacles": 32,
+                "zones": 24,
+                "zoneVertices": 96,
+                "cells": 29,
+                "spatialReferences": 151,
+                "fallbackEntities": 0,
+                "generation": 0,
+                "disposed": false,
+                "lastQuery": {
+                  "cellsVisited": 0,
+                  "candidates": 0,
+                  "exactTests": 0,
+                  "matches": 0,
+                  "exhaustive": false
+                }
+              }
+            }
+          },
+          "owner-1": {
+            "mapId": "minimal-road-v1",
+            "worldEpoch": 0,
+            "zones": 1,
+            "vehicles": 0,
+            "trackedIncarnations": 0,
+            "activeOpportunities": 0,
+            "maxVehicles": 128,
+            "maxIncarnations": 4096,
+            "disposed": false
+          },
+          "owner-2": {
+            "lanes": 3
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 13777840,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "behavior": {
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "actors": 64,
+              "identities": 64,
+              "retiredIdentities": 0,
+              "decisions": 0,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "roadContext": {
+              "tick": 1,
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "vehicles": 64,
+              "cachedContexts": 0,
+              "laneProjections": 0,
+              "invalidatedContexts": 0,
+              "fingerprintCodeUnits": 54774,
+              "identities": 120,
+              "retiredIdentities": 0,
+              "disposed": false,
+              "index": {
+                "entities": 120,
+                "vehicles": 64,
+                "obstacles": 32,
+                "zones": 24,
+                "zoneVertices": 96,
+                "cells": 29,
+                "spatialReferences": 151,
+                "fallbackEntities": 0,
+                "generation": 0,
+                "disposed": false,
+                "lastQuery": {
+                  "cellsVisited": 0,
+                  "candidates": 0,
+                  "exactTests": 0,
+                  "matches": 0,
+                  "exhaustive": false
+                }
+              }
+            }
+          },
+          "owner-1": {
+            "mapId": "minimal-road-v1",
+            "worldEpoch": 0,
+            "zones": 1,
+            "vehicles": 0,
+            "trackedIncarnations": 0,
+            "activeOpportunities": 0,
+            "maxVehicles": 128,
+            "maxIncarnations": 4096,
+            "disposed": false
+          },
+          "owner-2": {
+            "lanes": 3
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 13797304,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "behavior": {
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "actors": 64,
+              "identities": 64,
+              "retiredIdentities": 0,
+              "decisions": 0,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "roadContext": {
+              "tick": 1,
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "vehicles": 64,
+              "cachedContexts": 0,
+              "laneProjections": 0,
+              "invalidatedContexts": 0,
+              "fingerprintCodeUnits": 54774,
+              "identities": 120,
+              "retiredIdentities": 0,
+              "disposed": false,
+              "index": {
+                "entities": 120,
+                "vehicles": 64,
+                "obstacles": 32,
+                "zones": 24,
+                "zoneVertices": 96,
+                "cells": 29,
+                "spatialReferences": 151,
+                "fallbackEntities": 0,
+                "generation": 0,
+                "disposed": false,
+                "lastQuery": {
+                  "cellsVisited": 0,
+                  "candidates": 0,
+                  "exactTests": 0,
+                  "matches": 0,
+                  "exhaustive": false
+                }
+              }
+            }
+          },
+          "owner-1": {
+            "mapId": "minimal-road-v1",
+            "worldEpoch": 0,
+            "zones": 1,
+            "vehicles": 0,
+            "trackedIncarnations": 0,
+            "activeOpportunities": 0,
+            "maxVehicles": 128,
+            "maxIncarnations": 4096,
+            "disposed": false
+          },
+          "owner-2": {
+            "lanes": 3
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 13831600,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "behavior": {
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "actors": 64,
+              "identities": 64,
+              "retiredIdentities": 0,
+              "decisions": 0,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "roadContext": {
+              "tick": 1,
+              "sessionId": "context-fixture",
+              "worldEpoch": 0,
+              "vehicles": 64,
+              "cachedContexts": 0,
+              "laneProjections": 0,
+              "invalidatedContexts": 0,
+              "fingerprintCodeUnits": 54774,
+              "identities": 120,
+              "retiredIdentities": 0,
+              "disposed": false,
+              "index": {
+                "entities": 120,
+                "vehicles": 64,
+                "obstacles": 32,
+                "zones": 24,
+                "zoneVertices": 96,
+                "cells": 29,
+                "spatialReferences": 151,
+                "fallbackEntities": 0,
+                "generation": 0,
+                "disposed": false,
+                "lastQuery": {
+                  "cellsVisited": 0,
+                  "candidates": 0,
+                  "exactTests": 0,
+                  "matches": 0,
+                  "exhaustive": false
+                }
+              }
+            }
+          },
+          "owner-1": {
+            "mapId": "minimal-road-v1",
+            "worldEpoch": 0,
+            "zones": 1,
+            "vehicles": 0,
+            "trackedIncarnations": 0,
+            "activeOpportunities": 0,
+            "maxVehicles": 128,
+            "maxIncarnations": 4096,
+            "disposed": false
+          },
+          "owner-2": {
+            "lanes": 3
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 13832952,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      }
+    ],
+    "countersScope": "Ownership counters only: the three policies are pure and the053 latch is caller-held, so no actor, opportunity or manoeuvre map is retained by the module."
+  }
+}

@@ -1,0 +1,914 @@
+{
+  "pbi": "051",
+  "mode": "after",
+  "level": "targeted",
+  "fixtureVersion": "051-targeted-stop-v1",
+  "commit": "8059f60de2ec371740e93b8b57a48c3426e151de",
+  "runtime": "v24.21.0",
+  "hardware": {
+    "cpu": "AMD Ryzen 7 7735U with Radeon Graphics         ",
+    "os": "win32 10.0.26300"
+  },
+  "backend": "Node CPU only; browser/GPU/FPS are separate and not measured here",
+  "budget": {
+    "manifest": "Docs/performance-budgets.json",
+    "budgetVersion": "203-initial-1",
+    "calibration": "PROVISIONAL_UNCALIBRATED",
+    "comparison": "The manifest budgets the whole integrated tick; this probe isolates the local policy cost on the real fixture and does not certify the integrated budget.",
+    "absoluteBudgetsStillApply": true
+  },
+  "method": "one warmup +5repetitions of the real serial fixture; per-cadence-tick cost after a180-tick warmup; BEFORE is the same fixture and cadence without evaluating the new policy",
+  "protocol": {
+    "warmupTicks": 180,
+    "measuredTicks": 1200,
+    "repetitions": 5,
+    "cadenceHz": 10,
+    "tickHz": 60
+  },
+  "source": {
+    "inputs": [
+      "tests/autonomy/policy-probe-fixture.ts",
+      "src/autonomy/signal-policy.ts",
+      "src/autonomy/stop-policy.ts",
+      "src/autonomy/lane-change-policy.ts"
+    ]
+  },
+  "base": {
+    "fixtureVersion": "051-targeted-stop-v1",
+    "actors": 1,
+    "repetitions": [
+      {
+        "fixtureVersion": "051-targeted-stop-v1",
+        "count": 170,
+        "p50Ms": 0.008100000000013097,
+        "p95Ms": 0.016100000000022874,
+        "p99Ms": 0.03700000000000614,
+        "minMs": 0.0069999999999765805,
+        "maxMs": 0.14410000000000878,
+        "checksum": 0,
+        "decisions": 200,
+        "owned": {
+          "behavior": {
+            "sessionId": "autonomy-probe-stop",
+            "worldEpoch": 0,
+            "actors": 1,
+            "identities": 1,
+            "retiredIdentities": 0,
+            "decisions": 1,
+            "retainedHistory": 0,
+            "disposed": false
+          },
+          "stopRules": {
+            "mapId": "minimal-road-v1",
+            "worldEpoch": 0,
+            "zones": 1,
+            "vehicles": 1,
+            "trackedIncarnations": 1,
+            "activeOpportunities": 0,
+            "maxVehicles": 128,
+            "maxIncarnations": 4096,
+            "disposed": false
+          }
+        },
+        "stopRequests": 0
+      },
+      {
+        "fixtureVersion": "051-targeted-stop-v1",
+        "count": 170,
+        "p50Ms": 0.006599999999991724,
+        "p95Ms": 0.00899999999998613,
+        "p99Ms": 0.01269999999999527,
+        "minMs": 0.006200000000006867,
+        "maxMs": 0.33399999999997476,
+        "checksum": 0,
+        "decisions": 200,
+        "owned": {
+          "behavior": {
+            "sessionId": "autonomy-probe-stop",
+            "worldEpoch": 0,
+            "actors": 1,
+            "identities": 1,
+            "retiredIdentities": 0,
+            "decisions": 1,
+            "retainedHistory": 0,
+            "disposed": false
+          },
+          "stopRules": {
+            "mapId": "minimal-road-v1",
+            "worldEpoch": 0,
+            "zones": 1,
+            "vehicles": 1,
+            "trackedIncarnations": 1,
+            "activeOpportunities": 0,
+            "maxVehicles": 128,
+            "maxIncarnations": 4096,
+            "disposed": false
+          }
+        },
+        "stopRequests": 0
+      },
+      {
+        "fixtureVersion": "051-targeted-stop-v1",
+        "count": 170,
+        "p50Ms": 0.006300000000010186,
+        "p95Ms": 0.010000000000019327,
+        "p99Ms": 0.02039999999999509,
+        "minMs": 0.005499999999983629,
+        "maxMs": 0.11160000000000991,
+        "checksum": 0,
+        "decisions": 200,
+        "owned": {
+          "behavior": {
+            "sessionId": "autonomy-probe-stop",
+            "worldEpoch": 0,
+            "actors": 1,
+            "identities": 1,
+            "retiredIdentities": 0,
+            "decisions": 1,
+            "retainedHistory": 0,
+            "disposed": false
+          },
+          "stopRules": {
+            "mapId": "minimal-road-v1",
+            "worldEpoch": 0,
+            "zones": 1,
+            "vehicles": 1,
+            "trackedIncarnations": 1,
+            "activeOpportunities": 0,
+            "maxVehicles": 128,
+            "maxIncarnations": 4096,
+            "disposed": false
+          }
+        },
+        "stopRequests": 0
+      },
+      {
+        "fixtureVersion": "051-targeted-stop-v1",
+        "count": 170,
+        "p50Ms": 0.0049999999999954525,
+        "p95Ms": 0.010199999999997544,
+        "p99Ms": 0.013200000000011869,
+        "minMs": 0.0046999999999854936,
+        "maxMs": 0.18420000000000414,
+        "checksum": 0,
+        "decisions": 200,
+        "owned": {
+          "behavior": {
+            "sessionId": "autonomy-probe-stop",
+            "worldEpoch": 0,
+            "actors": 1,
+            "identities": 1,
+            "retiredIdentities": 0,
+            "decisions": 1,
+            "retainedHistory": 0,
+            "disposed": false
+          },
+          "stopRules": {
+            "mapId": "minimal-road-v1",
+            "worldEpoch": 0,
+            "zones": 1,
+            "vehicles": 1,
+            "trackedIncarnations": 1,
+            "activeOpportunities": 0,
+            "maxVehicles": 128,
+            "maxIncarnations": 4096,
+            "disposed": false
+          }
+        },
+        "stopRequests": 0
+      },
+      {
+        "fixtureVersion": "051-targeted-stop-v1",
+        "count": 170,
+        "p50Ms": 0.005200000000002092,
+        "p95Ms": 0.006799999999998363,
+        "p99Ms": 0.0072999999999865395,
+        "minMs": 0.004799999999988813,
+        "maxMs": 0.008600000000001273,
+        "checksum": 0,
+        "decisions": 200,
+        "owned": {
+          "behavior": {
+            "sessionId": "autonomy-probe-stop",
+            "worldEpoch": 0,
+            "actors": 1,
+            "identities": 1,
+            "retiredIdentities": 0,
+            "decisions": 1,
+            "retainedHistory": 0,
+            "disposed": false
+          },
+          "stopRules": {
+            "mapId": "minimal-road-v1",
+            "worldEpoch": 0,
+            "zones": 1,
+            "vehicles": 1,
+            "trackedIncarnations": 1,
+            "activeOpportunities": 0,
+            "maxVehicles": 128,
+            "maxIncarnations": 4096,
+            "disposed": false
+          }
+        },
+        "stopRequests": 0
+      }
+    ],
+    "medians": {
+      "p50Ms": 0.006300000000010186,
+      "p95Ms": 0.010000000000019327,
+      "p99Ms": 0.013200000000011869
+    },
+    "checksums": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "after": {
+    "fixtureVersion": "051-targeted-stop-v1",
+    "actors": 1,
+    "repetitions": [
+      {
+        "fixtureVersion": "051-targeted-stop-v1",
+        "count": 170,
+        "p50Ms": 0.016899999999964166,
+        "p95Ms": 0.03500000000002501,
+        "p99Ms": 0.14240000000000919,
+        "minMs": 0.01310000000000855,
+        "maxMs": 0.19389999999998508,
+        "checksum": 3084,
+        "decisions": 200,
+        "owned": {
+          "behavior": {
+            "sessionId": "autonomy-probe-stop",
+            "worldEpoch": 0,
+            "actors": 1,
+            "identities": 1,
+            "retiredIdentities": 0,
+            "decisions": 1,
+            "retainedHistory": 0,
+            "disposed": false
+          },
+          "stopRules": {
+            "mapId": "minimal-road-v1",
+            "worldEpoch": 0,
+            "zones": 1,
+            "vehicles": 1,
+            "trackedIncarnations": 1,
+            "activeOpportunities": 0,
+            "maxVehicles": 128,
+            "maxIncarnations": 4096,
+            "disposed": false
+          }
+        },
+        "stopRequests": 18
+      },
+      {
+        "fixtureVersion": "051-targeted-stop-v1",
+        "count": 170,
+        "p50Ms": 0.015600000000006276,
+        "p95Ms": 0.017300000000034288,
+        "p99Ms": 0.029200000000003,
+        "minMs": 0.012999999999976808,
+        "maxMs": 0.21730000000002292,
+        "checksum": 3084,
+        "decisions": 200,
+        "owned": {
+          "behavior": {
+            "sessionId": "autonomy-probe-stop",
+            "worldEpoch": 0,
+            "actors": 1,
+            "identities": 1,
+            "retiredIdentities": 0,
+            "decisions": 1,
+            "retainedHistory": 0,
+            "disposed": false
+          },
+          "stopRules": {
+            "mapId": "minimal-road-v1",
+            "worldEpoch": 0,
+            "zones": 1,
+            "vehicles": 1,
+            "trackedIncarnations": 1,
+            "activeOpportunities": 0,
+            "maxVehicles": 128,
+            "maxIncarnations": 4096,
+            "disposed": false
+          }
+        },
+        "stopRequests": 18
+      },
+      {
+        "fixtureVersion": "051-targeted-stop-v1",
+        "count": 170,
+        "p50Ms": 0.016000000000019554,
+        "p95Ms": 0.03069999999996753,
+        "p99Ms": 0.09890000000001464,
+        "minMs": 0.012000000000000455,
+        "maxMs": 0.1742999999999597,
+        "checksum": 3084,
+        "decisions": 200,
+        "owned": {
+          "behavior": {
+            "sessionId": "autonomy-probe-stop",
+            "worldEpoch": 0,
+            "actors": 1,
+            "identities": 1,
+            "retiredIdentities": 0,
+            "decisions": 1,
+            "retainedHistory": 0,
+            "disposed": false
+          },
+          "stopRules": {
+            "mapId": "minimal-road-v1",
+            "worldEpoch": 0,
+            "zones": 1,
+            "vehicles": 1,
+            "trackedIncarnations": 1,
+            "activeOpportunities": 0,
+            "maxVehicles": 128,
+            "maxIncarnations": 4096,
+            "disposed": false
+          }
+        },
+        "stopRequests": 18
+      },
+      {
+        "fixtureVersion": "051-targeted-stop-v1",
+        "count": 170,
+        "p50Ms": 0.01470000000000482,
+        "p95Ms": 0.024099999999975807,
+        "p99Ms": 0.06420000000002801,
+        "minMs": 0.011499999999955435,
+        "maxMs": 0.1379999999999768,
+        "checksum": 3084,
+        "decisions": 200,
+        "owned": {
+          "behavior": {
+            "sessionId": "autonomy-probe-stop",
+            "worldEpoch": 0,
+            "actors": 1,
+            "identities": 1,
+            "retiredIdentities": 0,
+            "decisions": 1,
+            "retainedHistory": 0,
+            "disposed": false
+          },
+          "stopRules": {
+            "mapId": "minimal-road-v1",
+            "worldEpoch": 0,
+            "zones": 1,
+            "vehicles": 1,
+            "trackedIncarnations": 1,
+            "activeOpportunities": 0,
+            "maxVehicles": 128,
+            "maxIncarnations": 4096,
+            "disposed": false
+          }
+        },
+        "stopRequests": 18
+      },
+      {
+        "fixtureVersion": "051-targeted-stop-v1",
+        "count": 170,
+        "p50Ms": 0.013000000000033651,
+        "p95Ms": 0.016999999999995907,
+        "p99Ms": 0.025000000000034106,
+        "minMs": 0.01140000000003738,
+        "maxMs": 0.033999999999991815,
+        "checksum": 3084,
+        "decisions": 200,
+        "owned": {
+          "behavior": {
+            "sessionId": "autonomy-probe-stop",
+            "worldEpoch": 0,
+            "actors": 1,
+            "identities": 1,
+            "retiredIdentities": 0,
+            "decisions": 1,
+            "retainedHistory": 0,
+            "disposed": false
+          },
+          "stopRules": {
+            "mapId": "minimal-road-v1",
+            "worldEpoch": 0,
+            "zones": 1,
+            "vehicles": 1,
+            "trackedIncarnations": 1,
+            "activeOpportunities": 0,
+            "maxVehicles": 128,
+            "maxIncarnations": 4096,
+            "disposed": false
+          }
+        },
+        "stopRequests": 18
+      }
+    ],
+    "medians": {
+      "p50Ms": 0.015600000000006276,
+      "p95Ms": 0.024099999999975807,
+      "p99Ms": 0.06420000000002801
+    },
+    "checksums": [
+      3084,
+      3084,
+      3084,
+      3084,
+      3084
+    ]
+  },
+  "delta": {
+    "p50Ms": 0.00929999999999609,
+    "p95Ms": 0.01409999999995648,
+    "p99Ms": 0.051000000000016144,
+    "scope": "ADDED cost of the new policy path measured on the same fixture against the same BEFORE arm"
+  },
+  "memory": {
+    "gcAvailable": true,
+    "cycles": [
+      {
+        "before": {
+          "owner-0": {
+            "mapId": "minimal-road-v1",
+            "worldEpoch": 0,
+            "zones": 1,
+            "vehicles": 0,
+            "trackedIncarnations": 0,
+            "activeOpportunities": 0,
+            "maxVehicles": 128,
+            "maxIncarnations": 4096,
+            "disposed": false
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 12213752,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "mapId": "minimal-road-v1",
+            "worldEpoch": 0,
+            "zones": 1,
+            "vehicles": 0,
+            "trackedIncarnations": 0,
+            "activeOpportunities": 0,
+            "maxVehicles": 128,
+            "maxIncarnations": 4096,
+            "disposed": false
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 12174704,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "mapId": "minimal-road-v1",
+            "worldEpoch": 0,
+            "zones": 1,
+            "vehicles": 0,
+            "trackedIncarnations": 0,
+            "activeOpportunities": 0,
+            "maxVehicles": 128,
+            "maxIncarnations": 4096,
+            "disposed": false
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 12175624,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "mapId": "minimal-road-v1",
+            "worldEpoch": 0,
+            "zones": 1,
+            "vehicles": 0,
+            "trackedIncarnations": 0,
+            "activeOpportunities": 0,
+            "maxVehicles": 128,
+            "maxIncarnations": 4096,
+            "disposed": false
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 12164192,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "mapId": "minimal-road-v1",
+            "worldEpoch": 0,
+            "zones": 1,
+            "vehicles": 0,
+            "trackedIncarnations": 0,
+            "activeOpportunities": 0,
+            "maxVehicles": 128,
+            "maxIncarnations": 4096,
+            "disposed": false
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 12060616,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "mapId": "minimal-road-v1",
+            "worldEpoch": 0,
+            "zones": 1,
+            "vehicles": 0,
+            "trackedIncarnations": 0,
+            "activeOpportunities": 0,
+            "maxVehicles": 128,
+            "maxIncarnations": 4096,
+            "disposed": false
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 12070896,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "mapId": "minimal-road-v1",
+            "worldEpoch": 0,
+            "zones": 1,
+            "vehicles": 0,
+            "trackedIncarnations": 0,
+            "activeOpportunities": 0,
+            "maxVehicles": 128,
+            "maxIncarnations": 4096,
+            "disposed": false
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 12071448,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "mapId": "minimal-road-v1",
+            "worldEpoch": 0,
+            "zones": 1,
+            "vehicles": 0,
+            "trackedIncarnations": 0,
+            "activeOpportunities": 0,
+            "maxVehicles": 128,
+            "maxIncarnations": 4096,
+            "disposed": false
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 12074176,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "mapId": "minimal-road-v1",
+            "worldEpoch": 0,
+            "zones": 1,
+            "vehicles": 0,
+            "trackedIncarnations": 0,
+            "activeOpportunities": 0,
+            "maxVehicles": 128,
+            "maxIncarnations": 4096,
+            "disposed": false
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 12074928,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "mapId": "minimal-road-v1",
+            "worldEpoch": 0,
+            "zones": 1,
+            "vehicles": 0,
+            "trackedIncarnations": 0,
+            "activeOpportunities": 0,
+            "maxVehicles": 128,
+            "maxIncarnations": 4096,
+            "disposed": false
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 12075640,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "mapId": "minimal-road-v1",
+            "worldEpoch": 0,
+            "zones": 1,
+            "vehicles": 0,
+            "trackedIncarnations": 0,
+            "activeOpportunities": 0,
+            "maxVehicles": 128,
+            "maxIncarnations": 4096,
+            "disposed": false
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 12075944,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "mapId": "minimal-road-v1",
+            "worldEpoch": 0,
+            "zones": 1,
+            "vehicles": 0,
+            "trackedIncarnations": 0,
+            "activeOpportunities": 0,
+            "maxVehicles": 128,
+            "maxIncarnations": 4096,
+            "disposed": false
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 12077944,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "mapId": "minimal-road-v1",
+            "worldEpoch": 0,
+            "zones": 1,
+            "vehicles": 0,
+            "trackedIncarnations": 0,
+            "activeOpportunities": 0,
+            "maxVehicles": 128,
+            "maxIncarnations": 4096,
+            "disposed": false
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 12081856,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "mapId": "minimal-road-v1",
+            "worldEpoch": 0,
+            "zones": 1,
+            "vehicles": 0,
+            "trackedIncarnations": 0,
+            "activeOpportunities": 0,
+            "maxVehicles": 128,
+            "maxIncarnations": 4096,
+            "disposed": false
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 12078608,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "mapId": "minimal-road-v1",
+            "worldEpoch": 0,
+            "zones": 1,
+            "vehicles": 0,
+            "trackedIncarnations": 0,
+            "activeOpportunities": 0,
+            "maxVehicles": 128,
+            "maxIncarnations": 4096,
+            "disposed": false
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 12079024,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "mapId": "minimal-road-v1",
+            "worldEpoch": 0,
+            "zones": 1,
+            "vehicles": 0,
+            "trackedIncarnations": 0,
+            "activeOpportunities": 0,
+            "maxVehicles": 128,
+            "maxIncarnations": 4096,
+            "disposed": false
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 12079328,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "mapId": "minimal-road-v1",
+            "worldEpoch": 0,
+            "zones": 1,
+            "vehicles": 0,
+            "trackedIncarnations": 0,
+            "activeOpportunities": 0,
+            "maxVehicles": 128,
+            "maxIncarnations": 4096,
+            "disposed": false
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 12079632,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "mapId": "minimal-road-v1",
+            "worldEpoch": 0,
+            "zones": 1,
+            "vehicles": 0,
+            "trackedIncarnations": 0,
+            "activeOpportunities": 0,
+            "maxVehicles": 128,
+            "maxIncarnations": 4096,
+            "disposed": false
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 12079936,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "mapId": "minimal-road-v1",
+            "worldEpoch": 0,
+            "zones": 1,
+            "vehicles": 0,
+            "trackedIncarnations": 0,
+            "activeOpportunities": 0,
+            "maxVehicles": 128,
+            "maxIncarnations": 4096,
+            "disposed": false
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 12080656,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "mapId": "minimal-road-v1",
+            "worldEpoch": 0,
+            "zones": 1,
+            "vehicles": 0,
+            "trackedIncarnations": 0,
+            "activeOpportunities": 0,
+            "maxVehicles": 128,
+            "maxIncarnations": 4096,
+            "disposed": false
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 12080960,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      }
+    ],
+    "countersScope": "Ownership counters only: the three policies are pure and the053 latch is caller-held, so no actor, opportunity or manoeuvre map is retained by the module."
+  }
+}

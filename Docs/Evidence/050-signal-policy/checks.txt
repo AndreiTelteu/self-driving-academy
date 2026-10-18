@@ -1,0 +1,25 @@
+commit=8059f60de2ec371740e93b8b57a48c3426e151de
+runtime=v24.21.0
+npm run typecheck exit=0
+npm run lint exit=0
+npm run format:check exit=0
+npm run check:architecture exit=0
+
+--- npm run typecheck ---
+> tsc --noEmit && tsc -p tsconfig.tests.json --noEmit  (no diagnostics)
+--- npm run lint ---
+> eslint . --max-warnings 0  (no problems)
+--- npm run format:check ---
+Checking formatting...
+All matched files use Prettier code style!
+--- npm run check:architecture ---
+Architecture imports: PASS (140 TypeScript files)
+Architecture negative probes: PASS (6 forbidden dependencies rejected)
+Inspector exception negative probes: PASS (4 forbidden imports rejected)
+Rapier adapter negative probes: PASS (3 forbidden imports rejected)
+Renderer injection, readonly snapshots, defensive persistence and lifecycle: PASS
+--- npm test ---
+ tests 832
+ pass 832
+ fail 0
+ duration_ms 11602.2025

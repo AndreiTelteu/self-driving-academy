@@ -1,0 +1,644 @@
+{
+  "pbi": "053",
+  "mode": "after",
+  "level": "targeted",
+  "fixtureVersion": "053-targeted-lane-v1",
+  "commit": "8059f60de2ec371740e93b8b57a48c3426e151de",
+  "runtime": "v24.21.0",
+  "hardware": {
+    "cpu": "AMD Ryzen 7 7735U with Radeon Graphics         ",
+    "os": "win32 10.0.26300"
+  },
+  "backend": "Node CPU only; browser/GPU/FPS are separate and not measured here",
+  "budget": {
+    "manifest": "Docs/performance-budgets.json",
+    "budgetVersion": "203-initial-1",
+    "calibration": "PROVISIONAL_UNCALIBRATED",
+    "comparison": "The manifest budgets the whole integrated tick; this probe isolates the local policy cost on the real fixture and does not certify the integrated budget.",
+    "absoluteBudgetsStillApply": true
+  },
+  "method": "one warmup +5repetitions of the real serial fixture; per-cadence-tick cost after a180-tick warmup; BEFORE is the same fixture and cadence without evaluating the new policy",
+  "protocol": {
+    "warmupTicks": 180,
+    "measuredTicks": 1200,
+    "repetitions": 5,
+    "cadenceHz": 10,
+    "tickHz": 60
+  },
+  "source": {
+    "inputs": [
+      "tests/autonomy/policy-probe-fixture.ts",
+      "src/autonomy/signal-policy.ts",
+      "src/autonomy/stop-policy.ts",
+      "src/autonomy/lane-change-policy.ts"
+    ]
+  },
+  "base": {
+    "fixtureVersion": "053-targeted-lane-v1",
+    "actors": 1,
+    "repetitions": [
+      {
+        "fixtureVersion": "053-targeted-lane-v1",
+        "count": 170,
+        "p50Ms": 0.00719999999998322,
+        "p95Ms": 0.01269999999999527,
+        "p99Ms": 0.037700000000000955,
+        "minMs": 0.006499999999988404,
+        "maxMs": 0.42200000000002547,
+        "checksum": 0,
+        "decisions": 200,
+        "owned": {
+          "behavior": {
+            "sessionId": "autonomy-probe-lane",
+            "worldEpoch": 0,
+            "actors": 1,
+            "identities": 1,
+            "retiredIdentities": 0,
+            "decisions": 1,
+            "retainedHistory": 0,
+            "disposed": false
+          }
+        },
+        "changes": 0
+      },
+      {
+        "fixtureVersion": "053-targeted-lane-v1",
+        "count": 170,
+        "p50Ms": 0.006500000000016826,
+        "p95Ms": 0.008700000000004593,
+        "p99Ms": 0.015399999999999636,
+        "minMs": 0.006399999999985084,
+        "maxMs": 0.10699999999999932,
+        "checksum": 0,
+        "decisions": 200,
+        "owned": {
+          "behavior": {
+            "sessionId": "autonomy-probe-lane",
+            "worldEpoch": 0,
+            "actors": 1,
+            "identities": 1,
+            "retiredIdentities": 0,
+            "decisions": 1,
+            "retainedHistory": 0,
+            "disposed": false
+          }
+        },
+        "changes": 0
+      },
+      {
+        "fixtureVersion": "053-targeted-lane-v1",
+        "count": 170,
+        "p50Ms": 0.006300000000010186,
+        "p95Ms": 0.009300000000024511,
+        "p99Ms": 0.028500000000008185,
+        "minMs": 0.006100000000003547,
+        "maxMs": 0.3780000000000143,
+        "checksum": 0,
+        "decisions": 200,
+        "owned": {
+          "behavior": {
+            "sessionId": "autonomy-probe-lane",
+            "worldEpoch": 0,
+            "actors": 1,
+            "identities": 1,
+            "retiredIdentities": 0,
+            "decisions": 1,
+            "retainedHistory": 0,
+            "disposed": false
+          }
+        },
+        "changes": 0
+      },
+      {
+        "fixtureVersion": "053-targeted-lane-v1",
+        "count": 170,
+        "p50Ms": 0.005899999999996908,
+        "p95Ms": 0.01310000000000855,
+        "p99Ms": 0.024599999999992406,
+        "minMs": 0.005599999999986949,
+        "maxMs": 0.04740000000001032,
+        "checksum": 0,
+        "decisions": 200,
+        "owned": {
+          "behavior": {
+            "sessionId": "autonomy-probe-lane",
+            "worldEpoch": 0,
+            "actors": 1,
+            "identities": 1,
+            "retiredIdentities": 0,
+            "decisions": 1,
+            "retainedHistory": 0,
+            "disposed": false
+          }
+        },
+        "changes": 0
+      },
+      {
+        "fixtureVersion": "053-targeted-lane-v1",
+        "count": 170,
+        "p50Ms": 0.005500000000012051,
+        "p95Ms": 0.009399999999999409,
+        "p99Ms": 0.011600000000015598,
+        "minMs": 0.00529999999997699,
+        "maxMs": 0.20019999999999527,
+        "checksum": 0,
+        "decisions": 200,
+        "owned": {
+          "behavior": {
+            "sessionId": "autonomy-probe-lane",
+            "worldEpoch": 0,
+            "actors": 1,
+            "identities": 1,
+            "retiredIdentities": 0,
+            "decisions": 1,
+            "retainedHistory": 0,
+            "disposed": false
+          }
+        },
+        "changes": 0
+      }
+    ],
+    "medians": {
+      "p50Ms": 0.006300000000010186,
+      "p95Ms": 0.009399999999999409,
+      "p99Ms": 0.024599999999992406
+    },
+    "checksums": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "after": {
+    "fixtureVersion": "053-targeted-lane-v1",
+    "actors": 1,
+    "repetitions": [
+      {
+        "fixtureVersion": "053-targeted-lane-v1",
+        "count": 170,
+        "p50Ms": 0.01660000000001105,
+        "p95Ms": 0.03340000000000032,
+        "p99Ms": 0.05179999999998586,
+        "minMs": 0.015800000000012915,
+        "maxMs": 0.16840000000001965,
+        "checksum": 4040,
+        "decisions": 200,
+        "owned": {
+          "behavior": {
+            "sessionId": "autonomy-probe-lane",
+            "worldEpoch": 0,
+            "actors": 1,
+            "identities": 1,
+            "retiredIdentities": 0,
+            "decisions": 1,
+            "retainedHistory": 0,
+            "disposed": false
+          }
+        },
+        "changes": 195
+      },
+      {
+        "fixtureVersion": "053-targeted-lane-v1",
+        "count": 170,
+        "p50Ms": 0.015999999999991132,
+        "p95Ms": 0.01830000000001064,
+        "p99Ms": 0.04220000000000823,
+        "minMs": 0.015399999999999636,
+        "maxMs": 0.16450000000000387,
+        "checksum": 4040,
+        "decisions": 200,
+        "owned": {
+          "behavior": {
+            "sessionId": "autonomy-probe-lane",
+            "worldEpoch": 0,
+            "actors": 1,
+            "identities": 1,
+            "retiredIdentities": 0,
+            "decisions": 1,
+            "retainedHistory": 0,
+            "disposed": false
+          }
+        },
+        "changes": 195
+      },
+      {
+        "fixtureVersion": "053-targeted-lane-v1",
+        "count": 170,
+        "p50Ms": 0.015500000000002956,
+        "p95Ms": 0.025100000000009004,
+        "p99Ms": 0.055499999999995,
+        "minMs": 0.014899999999983038,
+        "maxMs": 0.13920000000001664,
+        "checksum": 4040,
+        "decisions": 200,
+        "owned": {
+          "behavior": {
+            "sessionId": "autonomy-probe-lane",
+            "worldEpoch": 0,
+            "actors": 1,
+            "identities": 1,
+            "retiredIdentities": 0,
+            "decisions": 1,
+            "retainedHistory": 0,
+            "disposed": false
+          }
+        },
+        "changes": 195
+      },
+      {
+        "fixtureVersion": "053-targeted-lane-v1",
+        "count": 170,
+        "p50Ms": 0.014499999999998181,
+        "p95Ms": 0.021500000000003183,
+        "p99Ms": 0.061299999999988586,
+        "minMs": 0.013499999999993406,
+        "maxMs": 0.352800000000002,
+        "checksum": 4040,
+        "decisions": 200,
+        "owned": {
+          "behavior": {
+            "sessionId": "autonomy-probe-lane",
+            "worldEpoch": 0,
+            "actors": 1,
+            "identities": 1,
+            "retiredIdentities": 0,
+            "decisions": 1,
+            "retainedHistory": 0,
+            "disposed": false
+          }
+        },
+        "changes": 195
+      },
+      {
+        "fixtureVersion": "053-targeted-lane-v1",
+        "count": 170,
+        "p50Ms": 0.014100000000013324,
+        "p95Ms": 0.015399999999999636,
+        "p99Ms": 0.021099999999989905,
+        "minMs": 0.013599999999996726,
+        "maxMs": 0.19409999999999172,
+        "checksum": 4040,
+        "decisions": 200,
+        "owned": {
+          "behavior": {
+            "sessionId": "autonomy-probe-lane",
+            "worldEpoch": 0,
+            "actors": 1,
+            "identities": 1,
+            "retiredIdentities": 0,
+            "decisions": 1,
+            "retainedHistory": 0,
+            "disposed": false
+          }
+        },
+        "changes": 195
+      }
+    ],
+    "medians": {
+      "p50Ms": 0.015500000000002956,
+      "p95Ms": 0.021500000000003183,
+      "p99Ms": 0.05179999999998586
+    },
+    "checksums": [
+      4040,
+      4040,
+      4040,
+      4040,
+      4040
+    ]
+  },
+  "delta": {
+    "p50Ms": 0.00919999999999277,
+    "p95Ms": 0.012100000000003774,
+    "p99Ms": 0.02719999999999345,
+    "scope": "ADDED cost of the new policy path measured on the same fixture against the same BEFORE arm"
+  },
+  "memory": {
+    "gcAvailable": true,
+    "cycles": [
+      {
+        "before": {
+          "owner-0": {
+            "lanes": 3
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 11845904,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "lanes": 3
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 11842888,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "lanes": 3
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 11841592,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "lanes": 3
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 11834416,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "lanes": 3
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 11741520,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "lanes": 3
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 11743488,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "lanes": 3
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 11752872,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "lanes": 3
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 11746488,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "lanes": 3
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 11753544,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "lanes": 3
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 11753136,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "lanes": 3
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 11752240,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "lanes": 3
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 11754192,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "lanes": 3
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 11754104,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "lanes": 3
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 11754672,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "lanes": 3
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 11754584,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "lanes": 3
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 11755288,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "lanes": 3
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 11765752,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "lanes": 3
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 11759656,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "lanes": 3
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 11769184,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "lanes": 3
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 11760400,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      }
+    ],
+    "countersScope": "Ownership counters only: the three policies are pure and the053 latch is caller-held, so no actor, opportunity or manoeuvre map is retained by the module."
+  }
+}
