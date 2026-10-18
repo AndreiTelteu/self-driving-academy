@@ -79,3 +79,4 @@ export type {
   RecoveryPoint,
 } from './schema';
 export * from './spatial-index';
+export * from './service-zones';
