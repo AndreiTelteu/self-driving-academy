@@ -84,7 +84,7 @@ for (const path of [
   'src/app/manual-segment-lifecycle.ts',
 ])
   assert(await absent(path), '069 source must be absent');
-const folder = 'Docs/Evidence/069-manual-segments/native-before-01';
+const folder = 'Docs/Evidence/069-manual-segments/native-before-02';
 assert(await absent(folder), 'Immutable attempt exists');
 await mkdir(folder, { recursive: false });
 const startedAt = new Date().toISOString();

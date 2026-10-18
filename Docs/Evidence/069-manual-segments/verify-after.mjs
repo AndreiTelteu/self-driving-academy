@@ -69,7 +69,7 @@ export async function verifyOriginalBefore(beforeRoot,manifest,beforeInventory){
   validateOriginalInventory(beforeInventory);
   for(const row of beforeInventory){const data=await readFile(boundedPath(beforeRoot,row.path));assert.equal(data.length,row.bytes);assert.equal(sha256(data),row.sha256,'Original accepted raw BEFORE file '+row.path);}
   const beforeManifest=JSON.parse(beforeManifestBytes),beforeComplete=JSON.parse(await readFile(resolve(beforeRoot,'complete.json')));validateBeforeBinding(beforeManifest,beforeComplete,sha256(beforeManifestBytes),manifest);
-  assert.equal(sha256(await readFile(resolve(beforeRoot,'complete.json'))),'d943d35b90d7774d46bd3cc8efa85a2324247f34894319149bb610f4aa039ef6','Exact accepted original terminal');
+  assert.equal(sha256(await readFile(resolve(beforeRoot,'complete.json'))),'4a7377a04fd3e679898d5d32928c9ad443d18ae2a57cf2d846073442edc41649','Exact accepted original terminal');
   const proof=await verifyReference(beforeRoot,true);assert.equal(proof.status,'PASS_SUPPLEMENTAL_NATIVE_REFERENCE'); // Complete original archive/native/protocol/inventory proof, intentionally HISTORICAL.
   return {sourceHash:PINNED_BEFORE.sourceHash,worlds:24};
 }
@@ -235,8 +235,8 @@ export async function verifyAfter(folder, historical = false) {
       }
     }
   }
-  assert.deepEqual(manifest.before,{relativePath:'../native-before-01',sourceHash:'3f36bba2d86fcc71501056fd599006f5042fe699aa41ee19283e88d48c563cf6',manifestSha256:manifest.before.manifestSha256});
-  const beforeRoot=resolve(root,manifest.before.relativePath);assert.equal(beforeRoot,resolve(root,'../native-before-01'));
+  assert.deepEqual(manifest.before,{relativePath:'../native-before-02',sourceHash:'c88a6e1dba7b8c28adf2d17f371b26af0b3dd2d1ec9487cecf90515507c019af',manifestSha256:manifest.before.manifestSha256});
+  const beforeRoot=resolve(root,manifest.before.relativePath);assert.equal(beforeRoot,resolve(root,'../native-before-02'));
   const beforeInventory=(await json('source/Docs/Evidence/069-manual-segments/implementation-scoped-checks-03/archive-start.json')).beforeFiles;
   await verifyOriginalBefore(beforeRoot,manifest,beforeInventory);
   const before=[];for(const d of descriptors())before.push(JSON.parse(await readFile(resolve(beforeRoot,'worlds/world-'+d.ordinal+'.complete.json'))));

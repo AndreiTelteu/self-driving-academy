@@ -110,21 +110,19 @@ for (const row of checked.source) {
   assert.equal(sha256(data), row.sha256, 'Approved checked product/source drift ' + row.path);
 }
 const beforeManifestBytes = await readFile(
-  'Docs/Evidence/069-manual-segments/native-before-01/manifest.json',
+  'Docs/Evidence/069-manual-segments/native-before-02/manifest.json',
 );
 const beforeManifest = JSON.parse(beforeManifestBytes);
 assert.equal(
   beforeManifest.sourceHash,
-  '3f36bba2d86fcc71501056fd599006f5042fe699aa41ee19283e88d48c563cf6',
+  'c88a6e1dba7b8c28adf2d17f371b26af0b3dd2d1ec9487cecf90515507c019af',
 );
-const folder = 'Docs/Evidence/069-manual-segments/native-after-03';
+const folder = 'Docs/Evidence/069-manual-segments/native-after-04';
 assert(await absent(folder), 'Immutable attempt exists');
 await mkdir(folder, { recursive: false });
 const startedAt = new Date().toISOString();
 const beforeInventory = JSON.parse(
-  await readFile(
-    'Docs/Evidence/069-manual-segments/implementation-scoped-checks-03/archive-start.json',
-  ),
+  await readFile('Docs/Evidence/069-manual-segments/native-before-02-inventory.json'),
 ).beforeFiles;
 
 await immutableJson(folder + '/started.json', {
@@ -136,7 +134,7 @@ await immutableJson(folder + '/started.json', {
 });
 try {
   await verifyOriginalBefore(
-    resolve('Docs/Evidence/069-manual-segments/native-before-01'),
+    resolve('Docs/Evidence/069-manual-segments/native-before-02'),
     {
       before: { manifestSha256: sha256(beforeManifestBytes) },
       startedAt,
@@ -231,7 +229,7 @@ const manifest = {
   sourceHash,
   inputs,
   before: {
-    relativePath: '../native-before-01',
+    relativePath: '../native-before-02',
     sourceHash: beforeManifest.sourceHash,
     manifestSha256: sha256(beforeManifestBytes),
   },
@@ -908,7 +906,7 @@ try {
   for (const d of descriptors()) await run(d);
   const records = await verifyInventory(folder, sourceHash);
   await verifyOriginalBefore(
-    resolve('Docs/Evidence/069-manual-segments/native-before-01'),
+    resolve('Docs/Evidence/069-manual-segments/native-before-02'),
     {
       before: { manifestSha256: sha256(beforeManifestBytes) },
       startedAt,
@@ -921,7 +919,7 @@ try {
     before.push(
       JSON.parse(
         await readFile(
-          'Docs/Evidence/069-manual-segments/native-before-01/worlds/world-' +
+          'Docs/Evidence/069-manual-segments/native-before-02/worlds/world-' +
             d.ordinal +
             '.complete.json',
         ),

@@ -461,8 +461,8 @@ export function compareOriginal(before, after) {
 }
 
 export const PINNED_BEFORE = Object.freeze({
-  sourceHash: '3f36bba2d86fcc71501056fd599006f5042fe699aa41ee19283e88d48c563cf6',
-  manifestSha256: 'fdd431533bd807f4ffc22023bbe25c331a7996b2b187187afeb0b5e4b7bf699c',
+  sourceHash: 'c88a6e1dba7b8c28adf2d17f371b26af0b3dd2d1ec9487cecf90515507c019af',
+  manifestSha256: 'ac17794e0ccbaf7464e252139e9eeb5030233209eea69ed018e689e57eb17989',
   nativeSha256: '02dc6a4e2fffc013bab08fbb44fa68f501d8303615e9afe4c7d89ad4eedda0d0',
   nativeBytes: 4340292,
 });
@@ -490,7 +490,7 @@ export function validateBeforeBinding(beforeManifest, complete, beforeManifestSh
 export function validateOriginalInventory(rows) {
   assert.equal(
     sha256(Buffer.from(JSON.stringify(rows))),
-    'b9e826d2017020473aaca4c7f97acb1de02ebf43a5fcf3c0b1c7a3ecb7038c10',
+    '32ae4002c6bee94c3cab0771f7c6db829b85c0a85771da6d4c6c0534a499a86a',
     'Exact accepted BEFORE179-file inventory',
   );
   assert.equal(rows.length, 179);
