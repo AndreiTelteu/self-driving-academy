@@ -20,6 +20,9 @@ Propunere de praguri inițiale: trei oportunități distincte pentru o primă es
 
 PBI 093 mapează aceste praguri la dovezi descriptive pe fiecare dintre cele 24 de chei M și deduplică după identitatea oportunității 086 plus occurrence, niciodată după cadre. Read model-ul păstrează parametrii fără context eligibil neschimbați și nu produce valori sau delta; specificația și tabelul complet sunt în [learning-evidence](learning-evidence.md). `READY` indică doar suficiența dovezii pentru un estimator ulterior, nu activare sau învățare.
 
+PBI 094 consumă read model-ul 093 și probe reale de viteză/context 087–089 pentru a produce candidați explicabili la viteză, curbă și apropiere; numai `FREE_TRAFFIC` eligibil poate deveni viteză preferată, iar rezultatul rămâne nepublicat și `estimable=false`. Formula, calitatea și proiecția de verificare sunt în [speed-estimator](speed-estimator.md).
+
+
 Actualizarea propusă este newValue = oldValue + learningWeight × (estimate − oldValue). Ponderea depinde de calitate, numărul efectiv de episoade și incertitudine. Are o limită de calibrare pentru a evita salturi provocate de zgomot; demonstrațiile repetate pot modifica puternic profilul. Această regularizare păstrează și stilurile riscante dacă dovezile sunt consistente.
 
 Istoricul recent primește o pondere mai mare decât demonstrațiile foarte vechi, astfel încât jucătorul să își poată schimba stilul. Jucătorul poate crea un profil nou de la bază și poate restaura versiuni. MANUAL nu produce învățare; în LEARNING analiza și publicarea rămân automate, fără confirmare după fiecare segment. Restaurarea sau schimbarea profilului creează o barieră learningEpoch, conform contractului profilurilor.
