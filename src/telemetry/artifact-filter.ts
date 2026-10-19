@@ -934,6 +934,18 @@ export function createArtifactFilter(options: ArtifactFilterOptions = {}): Artif
     causeCounts.set(artifact.cause, (causeCounts.get(artifact.cause) ?? 0) + 1);
   };
 
+  /**
+   * Validates the prospective artefact count **before** mutating the entry, so a refused input never
+   * leaves a partially updated window or a corrupted cumulative counter behind.
+   */
+  const ingest = (entry: InternalWindow, incoming: readonly InternalArtifact[]): void => {
+    let prospective = entry.artifacts.length;
+    for (const artifact of incoming)
+      if (!entry.artifactKeys.has(artifact.dedupeKey)) prospective += 1;
+    requireContract(prospective <= ARTIFACT_MAX_PER_WINDOW, 'Artifact window capacity exceeded');
+    for (const artifact of incoming) addArtifact(entry, artifact);
+  };
+
   /** Re-scores the cumulative window/class/tick denominators after a monotone change. */
   const rescore = (before: FilteredWindowRecord | null, after: FilteredWindowRecord): void => {
     if (before !== null) {
@@ -1072,27 +1084,30 @@ export function createArtifactFilter(options: ArtifactFilterOptions = {}): Artif
           endTick === null || existing.endTick === null || endTick >= existing.endTick,
           'Artifact segment end tick regressed',
         );
-        existing.endTick =
+        // Merge the scalar facts into locals first: nothing is committed until the artefact capacity
+        // is known to be admissible, so a refused input leaves no partial state behind.
+        const mergedEndTick =
           endTick === null ? existing.endTick : Math.max(existing.endTick ?? endTick, endTick);
-        // The input completeness only ever tightens: OPEN -> CLOSED -> INCOMPLETE.
-        existing.segmentCompleteness =
+        const mergedCompleteness =
           segmentCompletenessRank[segmentCompleteness] >
           segmentCompletenessRank[existing.segmentCompleteness]
             ? segmentCompleteness
             : existing.segmentCompleteness;
-        if (closeReason !== null) existing.closeReason = closeReason;
-        if (lostCheckpointTick !== null)
-          existing.lostCheckpointTick =
-            existing.lostCheckpointTick === null
+        const mergedCloseReason = closeReason !== null ? closeReason : existing.closeReason;
+        const mergedLostCheckpoint =
+          lostCheckpointTick === null
+            ? existing.lostCheckpointTick
+            : existing.lostCheckpointTick === null
               ? lostCheckpointTick
               : Math.min(existing.lostCheckpointTick, lostCheckpointTick);
-        if (observationLoss !== null)
-          existing.lostObservationFromTick =
-            existing.lostObservationFromTick === null
+        const mergedLostObservation =
+          observationLoss === null
+            ? existing.lostObservationFromTick
+            : existing.lostObservationFromTick === null
               ? observationLoss.fromTick
               : Math.min(existing.lostObservationFromTick, observationLoss.fromTick);
-        existing.observationGapTicks = Math.max(existing.observationGapTicks, observationGapTicks);
-        for (const artifact of [
+        const mergedGapTicks = Math.max(existing.observationGapTicks, observationGapTicks);
+        const incoming = [
           ...collisions,
           ...recoveries,
           ...suspensions,
@@ -1100,18 +1115,25 @@ export function createArtifactFilter(options: ArtifactFilterOptions = {}): Artif
             sessionId: evaluationSession,
             worldEpoch: evaluationEpoch,
             segmentId: segment,
-            segmentCompleteness: existing.segmentCompleteness,
-            closeReason: existing.closeReason,
-            endTick: existing.endTick,
-            lostCheckpointTick: existing.lostCheckpointTick,
-            observationLossFromTick: existing.lostObservationFromTick,
+            segmentCompleteness: mergedCompleteness,
+            closeReason: mergedCloseReason,
+            endTick: mergedEndTick,
+            lostCheckpointTick: mergedLostCheckpoint,
+            observationLossFromTick: mergedLostObservation,
           }),
-        ])
-          addArtifact(existing, artifact);
-        requireContract(
-          existing.artifacts.length <= ARTIFACT_MAX_PER_WINDOW,
-          'Artifact window capacity exceeded',
-        );
+        ];
+        try {
+          ingest(existing, incoming);
+        } catch (error: unknown) {
+          rejectedTotal += 1;
+          throw error;
+        }
+        existing.endTick = mergedEndTick;
+        existing.segmentCompleteness = mergedCompleteness;
+        existing.closeReason = mergedCloseReason;
+        existing.lostCheckpointTick = mergedLostCheckpoint;
+        existing.lostObservationFromTick = mergedLostObservation;
+        existing.observationGapTicks = mergedGapTicks;
         existing.lastTick = Math.max(existing.lastTick, tick);
         existing.observationCount += 1;
         const after = materialize(existing);
@@ -1162,11 +1184,11 @@ export function createArtifactFilter(options: ArtifactFilterOptions = {}): Artif
         artifactKeys: new Set<string>(),
         artifacts: [],
       };
-      for (const artifact of [...collisions, ...recoveries, ...suspensions, ...proven])
-        addArtifact(opened, artifact);
-      if (opened.artifactKeys.size > ARTIFACT_MAX_PER_WINDOW) {
+      try {
+        ingest(opened, [...collisions, ...recoveries, ...suspensions, ...proven]);
+      } catch (error: unknown) {
         rejectedTotal += 1;
-        throw new Error('Artifact window capacity exceeded');
+        throw error;
       }
       if (lostCheckpointTick !== null) checkpointLosses += 1;
       retained.set(segment, opened);
@@ -1221,6 +1243,8 @@ export function createArtifactFilter(options: ArtifactFilterOptions = {}): Artif
       const byCause = artifactCauses.map((cause) =>
         Object.freeze({
           cause,
+          // The primary owner of the cause; each artefact record still carries its exact source
+          // (a 012 loop pause is counted under SUSPENSION_PAUSE but its record says LOOP_012).
           source: artifactCauseSources[cause][0]!,
           count: causeCounts.get(cause) ?? 0,
         }),

@@ -3,6 +3,7 @@ import { test } from 'node:test';
 import {
   ARTIFACT_CAPACITY,
   ARTIFACT_FILTER_TICK_HZ,
+  ARTIFACT_MAX_PER_WINDOW,
   ARTIFACT_RECORDER_RAM_BYTES,
   ARTIFACT_RECORD_BYTES_CEILING,
   artifactCauseKinds,
@@ -604,6 +605,24 @@ test('088 the bounded store retires oldest-first, keeps cumulative denominators 
       ),
     /finite number in range/,
   );
+
+  // A window above the artefact capacity is refused without leaving partial state behind.
+  const capacity = createArtifactFilter();
+  const tooMany = Array.from({ length: ARTIFACT_MAX_PER_WINDOW + 1 }, (_, index) => ({
+    tick: index + 1,
+    incidentId: `incident-${index}`,
+    impulseNs: 1,
+    otherEntityId: 'wall',
+  }));
+  assert.throws(
+    () => capacity.evaluate(input({ tick: 500, segmentId: 'cap', collisions: tooMany })),
+    /capacity exceeded/,
+  );
+  assert.equal(capacity.getStats().retained, 0, 'a refused window is never retained');
+  assert.equal(capacity.getStats().rejectedTotal, 1);
+  assert.equal(capacity.getDenominators().total, 0, 'a refused window adds no denominator entry');
+  assert.equal(capacity.getDenominators().artifactsTotal, 0, 'a refused window adds no artefact');
+  capacity.dispose();
   other.dispose();
 });
 
