@@ -1,0 +1,241 @@
+{
+  "capturedAt": "2026-10-19T10:45:41.227Z",
+  "pbi": "088",
+  "mode": "BEFORE_FILTER_DISABLED",
+  "commit": "12e30fd194cec1aecd2be6a586eef29d255133ec",
+  "sourceHashes": {
+    "scripts/benchmark-telemetry-artifacts.mjs": "1c28d7871a718758debd39ac843006bed6fa1cfb6effe3f74e49cd02ee6b0b80",
+    "src/telemetry/artifact-filter.ts": "9412c211f0fe5eb1c2dcaf133b6a4e8a685eb39ecdc2d4875d886257183de1f5",
+    "src/telemetry/eligibility-windows.ts": "bd40336572b44ec432d52f612754be26a11a4c348235011d6187b1cb29e3cf62",
+    "src/telemetry/opportunities.ts": "c2ecb5c67a7da7f510a42f36202d9748062edef5417e4e2a319381acac526626",
+    "src/telemetry/tick-samples.ts": "71d55715f2a9a1a0ea87b427f2da7c3e13b319e1c68812b27393e49e60740905",
+    "src/sessions/identity.ts": "f4b78b20857fc65704857a7bb78ef5a604083f173153ec7f5582bc450c6d76a6",
+    "src/vehicles/recovery-ledger.ts": "9e4b65742a5fc85e15dbceb47fdcef8a36c53f6bb1ede85e4eb8c9e082164c58",
+    "src/autonomy/following.ts": "c14c21d6bb8b38017eb7b29da3805502f3e514b5fcf89568ca3bb2d53715cb07",
+    "src/world/signals.ts": "772142b68ba6aa90e9df5d19ee19f35aed6d6ea74e51155e53d4b20b12a2452b",
+    "src/autonomy/road-context.ts": "f9782583c51f9b1b6ab678ba27162f31b95f19b41d180145638fd672c5548dce",
+    "src/vehicles/keyboard-filter.ts": "454b4a750cd0f227910e183e3244930f31a10f95eac33d3934827cc6e97acfca",
+    "tests/autonomy/road-context-reference.ts": "c5fe61c330db951f2bb1f97b3ea6d75bb92228e7f38864197e21378602ddd6f7"
+  },
+  "sourceHashScope": "Probe, artefact filter, eligibility layer, opportunity registry, 006 identity, 030 recovery ledger, 048 following, 036 signals, 044 context, 025 filter and the reused 044 fixture; not a verified transitive dependency closure",
+  "hardware": {
+    "cpu": "AMD Ryzen 7 7735U with Radeon Graphics         ",
+    "logicalCpus": 16,
+    "ramBytes": 14702026752,
+    "os": "win32 10.0.26300",
+    "powerScheme": "Power Scheme GUID: 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c  (High performance)"
+  },
+  "runtime": "v24.21.0",
+  "budgetVersion": "203-initial-1",
+  "fixtureVersion": "088-telemetry-artifacts-native-v1",
+  "validationLevel": "targeted",
+  "protocol": {
+    "repetitions": 5,
+    "warmupIterations": 200,
+    "measuredIterations": 600,
+    "arms": "world / chain / filter per repetition, sequential, one process, no concurrent load",
+    "workload": "1 subject (vehicle-0) observed, real 036 signal controller advancing consecutive ticks over the 044 fixture, real 044 context/leader and 025 keyboard filter; the 088 filter evaluated at the real 219 decision cadence (every 6 ticks) over one 800-tick ride segment (BEFORE/WARMUP + MEASURED), with one injected real-contract 028 collision at tick 300 and one injected real-contract 030 recovery placement at tick 420",
+    "seed": "none; deterministic tick-modulo input pattern and a fixed fixture",
+    "capacity": "default (4096)",
+    "clock": "performance.now only; fixed synthetic tick index (no wall clock in the fixture)",
+    "budget": "Added cost must stay far below the 5.5 ms provisional full-tick p95 ceiling; no isolated budget claimed",
+    "calibration": "PROVISIONAL_UNCALIBRATED",
+    "injected": [
+      "The 044 fixture carries no collision, so the real 028 incident contract and 028 createStableId identity are injected at one tick.",
+      "The 044 fixture carries no recovery, so a real 030 RecoveryRecord-compatible fact is injected at one tick.",
+      "The 044 fixture declares no STOP stop line, so the real 037 event contract and 037 identity are injected with parseSimulationEvent.",
+      "The real 038 priority-yield identity is injected through the registry stimulus port.",
+      "The stimulus observability is declared by a controlled fixture; the 017 camera pose/occlusion path is covered by the unit suite.",
+      "The 10 Hz consumer drains a queue; the world always steps every fixed tick.",
+      "No suspension is injected in the timed ride; the pause arm is covered by the unit suite and the self-check."
+    ]
+  },
+  "scope": "Native Node CPU and owned-memory cost of the 088 artefact filter on top of the real 086/087 chain on the reused 044/085 fixture. No renderer, browser, GPU, FPS or realtime-throughput claim.",
+  "runs": [
+    {
+      "repetition": 1,
+      "mode": "world",
+      "observeLoopMs": {
+        "count": 600,
+        "p50": 0.00009999999997489795,
+        "p95": 0.00020000000006348273,
+        "p99": 0.0004000000000132786,
+        "min": 0,
+        "max": 0.0004999999999881766,
+        "mean": 0.00012166666666483176
+      },
+      "chainCallMs": null,
+      "artifactCallMs": null,
+      "worldBuildMs": {
+        "count": 600,
+        "p50": 0.9932999999999765,
+        "p95": 1.5089999999999577,
+        "p99": 1.9258000000000948,
+        "min": 0.8935000000000173,
+        "max": 2.2761999999999034,
+        "mean": 1.0677013333333325
+      },
+      "wallMs": 894.4182000000001,
+      "observations": 0,
+      "labels": 0,
+      "evaluations": 0,
+      "heapAfterBytes": 32148064,
+      "registryOwnership": null,
+      "eligibilityOwnership": null,
+      "artifactOwnership": null,
+      "artifactDenominators": null
+    },
+    {
+      "repetition": 2,
+      "mode": "world",
+      "observeLoopMs": {
+        "count": 600,
+        "p50": 0.00009999999997489795,
+        "p95": 0.0001999999999497959,
+        "p99": 0.0003999999998995918,
+        "min": 0,
+        "max": 0.0007000000000516593,
+        "mean": 0.00011216666666655328
+      },
+      "chainCallMs": null,
+      "artifactCallMs": null,
+      "worldBuildMs": {
+        "count": 600,
+        "p50": 0.9664999999999964,
+        "p95": 1.2999999999999545,
+        "p99": 1.559800000000223,
+        "min": 0.8958000000000084,
+        "max": 1.7692999999999302,
+        "mean": 1.0003693333333255
+      },
+      "wallMs": 806.7138,
+      "observations": 0,
+      "labels": 0,
+      "evaluations": 0,
+      "heapAfterBytes": 39478960,
+      "registryOwnership": null,
+      "eligibilityOwnership": null,
+      "artifactOwnership": null,
+      "artifactDenominators": null
+    },
+    {
+      "repetition": 3,
+      "mode": "world",
+      "observeLoopMs": {
+        "count": 600,
+        "p50": 0.00010000000020227162,
+        "p95": 0.0001999999999497959,
+        "p99": 0.0003000000001520675,
+        "min": 0,
+        "max": 0.0005999999998493877,
+        "mean": 0.00010950000001306155
+      },
+      "chainCallMs": null,
+      "artifactCallMs": null,
+      "worldBuildMs": {
+        "count": 600,
+        "p50": 0.9616000000000895,
+        "p95": 1.3215000000000146,
+        "p99": 1.64449999999988,
+        "min": 0.8892000000000735,
+        "max": 1.8281999999999243,
+        "mean": 1.0019553333333344
+      },
+      "wallMs": 803.3151,
+      "observations": 0,
+      "labels": 0,
+      "evaluations": 0,
+      "heapAfterBytes": 54343704,
+      "registryOwnership": null,
+      "eligibilityOwnership": null,
+      "artifactOwnership": null,
+      "artifactDenominators": null
+    },
+    {
+      "repetition": 4,
+      "mode": "world",
+      "observeLoopMs": {
+        "count": 600,
+        "p50": 0.00009999999974752427,
+        "p95": 0.00010000000020227162,
+        "p99": 0.0001999999999497959,
+        "min": 0,
+        "max": 0.00040000000035433914,
+        "mean": 0.0000649999999920207
+      },
+      "chainCallMs": null,
+      "artifactCallMs": null,
+      "worldBuildMs": {
+        "count": 600,
+        "p50": 0.9565999999999804,
+        "p95": 1.2798000000002503,
+        "p99": 1.5376000000001113,
+        "min": 0.9012000000002445,
+        "max": 3.1813999999999396,
+        "mean": 1.0053085000000168
+      },
+      "wallMs": 803.6795000000002,
+      "observations": 0,
+      "labels": 0,
+      "evaluations": 0,
+      "heapAfterBytes": 25283184,
+      "registryOwnership": null,
+      "eligibilityOwnership": null,
+      "artifactOwnership": null,
+      "artifactDenominators": null
+    },
+    {
+      "repetition": 5,
+      "mode": "world",
+      "observeLoopMs": {
+        "count": 600,
+        "p50": 0.00009999999974752427,
+        "p95": 0.00010000000020227162,
+        "p99": 0.00020000000040454324,
+        "min": 0,
+        "max": 0.0005000000001018634,
+        "mean": 0.000059666666663057794
+      },
+      "chainCallMs": null,
+      "artifactCallMs": null,
+      "worldBuildMs": {
+        "count": 600,
+        "p50": 0.9558000000006359,
+        "p95": 1.095299999999952,
+        "p99": 1.4704000000001543,
+        "min": 0.8774999999995998,
+        "max": 1.6911000000000058,
+        "mean": 0.9804960000000066
+      },
+      "wallMs": 784.8741,
+      "observations": 0,
+      "labels": 0,
+      "evaluations": 0,
+      "heapAfterBytes": 57312000,
+      "registryOwnership": null,
+      "eligibilityOwnership": null,
+      "artifactOwnership": null,
+      "artifactDenominators": null
+    }
+  ],
+  "paired": [],
+  "memoryRegion": null,
+  "selfCheck": null,
+  "budgets": {
+    "manifest": "Docs/performance-budgets.json",
+    "budgetVersion": "203-initial-1",
+    "capacityCalibration": "PROVISIONAL_UNCALIBRATED",
+    "diagnosticSamplesProposal": 4096,
+    "measuredCapacity": 4096,
+    "recorderRamBytesCap": 33554432,
+    "authoritativeTickP95MsDesktopProvisional": 5.5,
+    "authoritativeTickP95MsLaptopProvisional": 8
+  },
+  "exclusions": [
+    "No browser, renderer, GPU or FPS measurement; the 052 record documents an unresolved WebGPU presentation stall on this laptop.",
+    "Heap counters are diagnostic only; exact ownership is reported from the artefact counters.",
+    "Forced GC between repetitions is not used inside the timed region.",
+    "BEFORE is the same fixture with the 086/087/088 layers disabled, not a historical commit: 088 is purely additive."
+  ],
+  "guard": 0
+}
