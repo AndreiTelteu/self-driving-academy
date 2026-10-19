@@ -26,6 +26,8 @@ PBI 095 produce candidați longitudinali numai din ferestre complete, intențion
 
 PBI 096 separă headway de minimum gap doar cu viteze distincte, păstrează coada oprită în context separat și raportează reziduurile fit-ului; o singură viteză nu identifică interceptul și panta. Formula și motivele de identificare slabă sunt în [following-estimator](following-estimator.md).
 
+PBI 097 folosește denominatorul oportunităților certe 086, exclude oportunitățile RED trunchiate și măsoară reacția GREEN numai la plecări neblocate, între tick-ul de onset și cel de plecare. Formulele și motivele de refuz sunt în [signal-estimator](signal-estimator.md).
+
 
 Actualizarea propusă este newValue = oldValue + learningWeight × (estimate − oldValue). Ponderea depinde de calitate, numărul efectiv de episoade și incertitudine. Are o limită de calibrare pentru a evita salturi provocate de zgomot; demonstrațiile repetate pot modifica puternic profilul. Această regularizare păstrează și stilurile riscante dacă dovezile sunt consistente.
 
