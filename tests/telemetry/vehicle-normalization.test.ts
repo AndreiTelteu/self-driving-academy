@@ -753,7 +753,7 @@ test('089 the bounded store retires oldest-first, keeps cumulative denominators 
   // A malformed sample is refused before any window state is touched.
   assert.throws(
     () => other.observe({ ...base(), samples: [{ ...base().samples[0], extra: true }] } as never),
-    /Missing or unknown contract fields/,
+    /missing or unknown fields/,
   );
   assert.throws(
     () =>

@@ -1,7 +1,6 @@
 import {
   choice,
   createStableId,
-  fields,
   number,
   record,
   requireContract,
@@ -424,6 +423,36 @@ const spanOf = (value: unknown, message: string): { fromTick: number; toTick: nu
   return Object.freeze({ fromTick, toTick });
 };
 
+const sampleFieldSet: ReadonlySet<string> = new Set(sampleFields);
+
+/**
+ * The hot-path sample reader. It still validates the plain prototype, exactly the declared fields
+ * and every value, but it does not copy a descriptor map per sample; the recorder 085 documents the
+ * same lighter boundary for the per-tick path. A sample is plain data supplied by the caller.
+ */
+const readSampleShape = (value: unknown): Record<string, unknown> => {
+  requireContract(
+    typeof value === 'object' && value !== null && !Array.isArray(value),
+    'Normalization sample must be a data object',
+  );
+  const prototype: unknown = Object.getPrototypeOf(value);
+  requireContract(
+    prototype === Object.prototype || prototype === null,
+    'Normalization sample must be a plain data object',
+  );
+  const data = value as Record<string, unknown>;
+  let count = 0;
+  for (const key in data) {
+    count += 1;
+    requireContract(sampleFieldSet.has(key), 'Normalization sample has missing or unknown fields');
+  }
+  requireContract(
+    count === sampleFields.length,
+    'Normalization sample has missing or unknown fields',
+  );
+  return data;
+};
+
 interface EligibilityView {
   readonly windowClass: EligibilityWindowClass;
   readonly windowId: string;
@@ -587,7 +616,7 @@ function collectEvidence(
   let peakDeceleration = 0;
   let peakLateral = 0;
   for (const element of raw) {
-    const data = fields(element, sampleFields);
+    const data = readSampleShape(element);
     const tick = readTick(data.tick);
     requireContract(
       previousTick === null || tick > previousTick,
