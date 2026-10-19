@@ -9,6 +9,7 @@ import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { entityDecisionPhase } from '../src/simulation/scheduling.ts';
 import { createBehaviorFSM } from '../src/autonomy/behavior-fsm.ts';
+import * as signalPolicy from '../src/autonomy/signal-policy.ts';
 import {
   getParameterDefinition,
   parsePublishableDrivingProfile,
@@ -30,12 +31,16 @@ assert.equal(
 const args = process.argv.slice(2);
 const pbi = args.includes('--pbi') ? args[args.indexOf('--pbi') + 1] : null;
 const phase = args.includes('--before') ? 'before' : 'after';
-assert(['050', '051', '053', '054', 'group'].includes(pbi), 'expected --pbi 050|051|053|054|group');
+assert(
+  ['050', '051', '053', '054', '055', 'group'].includes(pbi),
+  'expected --pbi 050|051|053|054|055|group',
+);
 const FOLDER = new Map([
   ['050', 'Docs/Evidence/050-signal-policy'],
   ['051', 'Docs/Evidence/051-stop-policy'],
   ['053', 'Docs/Evidence/053-lane-change'],
   ['054', 'Docs/Evidence/054-blocked-recovery'],
+  ['055', 'Docs/Evidence/055-decision-explanation'],
   ['group', 'Docs/Evidence/autonomy-policies-group'],
 ]).get(pbi);
 mkdirSync(FOLDER, { recursive: true });
@@ -575,11 +580,149 @@ function blockedArm(production) {
   };
 }
 
+// ------------------------------------------------------ 055 decision explanation
+/**
+ * 055 arm on the real219/044/036/050/045 chain. BOTH arms evaluate the same real chain and the same
+ * profile; AFTER additionally collects the frozen explanation on the decision port. BEFORE is the
+ * unchanged decision chain, so the delta isolates the explanation alone. The decision checksum must
+ * match across arms, which proves the collector did not perturb any decision.
+ */
+function explainArm(production) {
+  const fixture = signalProbeFixture(),
+    frame = fixture.frame,
+    sessionId = frame.sessionId,
+    scope = { sessionId, worldEpoch: 0 },
+    actors = frame.vehicles.map(({ id, incarnation }) => ({ id, incarnation })),
+    profile = signalPolicy.projectSignalProfile(
+      publishedProfile(sessionId, { red_stop_probability: 1 }),
+    ),
+    base = baseFacts(profile.versionId),
+    behavior = fixture.behavior,
+    explainer = production ? production.explain.createDecisionExplainer(scope) : null,
+    costs = [];
+  explainer?.setActors(actors, scope);
+  let decisions = 0,
+    stopExplanations = 0,
+    checksum = 0;
+  const drive = (tick) => {
+    fixture.prepare(tick);
+    for (const actor of actors) {
+      if (tick % 6 !== entityDecisionPhase(actor.id)) continue;
+      const began = performance.now();
+      const context = fixture.context.getContext(actor.id);
+      if (context === null) continue;
+      const signal = context.signal,
+        phaseStartedTick =
+          signal === null ? 0 : (fixture.signals.getSignal(signal.signalId)?.phaseStartedTick ?? 0),
+        decision = signalPolicy.evaluateSignalPolicy({
+          sessionId,
+          worldEpoch: 0,
+          actor,
+          decisionTick: tick,
+          speedMps: 8,
+          seed: deriveVehicleSeed(deriveScenarioSeed(1, sessionId), actor.id),
+          opportunityKey: signalPolicy.signalOpportunityKey({
+            sessionId,
+            worldEpoch: 0,
+            vehicleId: actor.id,
+            incarnation: actor.incarnation,
+            intersectionId: signal?.intersectionId ?? 'junction',
+            movementId: signal?.movementId ?? 'west-straight',
+            phaseStartedTick,
+          }),
+          profile,
+          observation:
+            signal === null
+              ? null
+              : {
+                  version: signalPolicy.SIGNAL_POLICY_LIMITS.observationVersion,
+                  units: 'SI',
+                  tick: Math.max(0, tick - 1),
+                  signalId: signal.signalId,
+                  intersectionId: signal.intersectionId,
+                  movementId: signal.movementId,
+                  phaseId: signal.phaseId,
+                  state: signal.state,
+                  phaseElapsedS: Math.max(0, (tick - phaseStartedTick) / 60),
+                  distanceToStopLineM:
+                    context.lane === null || context.laneId === null
+                      ? null
+                      : fixture.stopLineDistanceM(context.laneId, context.lane.positionM),
+                },
+        }),
+        composed = signalPolicy.signalBehaviorFacts(base, decision),
+        outcome = behavior.decide({
+          sessionId,
+          worldEpoch: 0,
+          actor,
+          decisionTick: tick,
+          context: {
+            sessionId: context.sessionId,
+            worldEpoch: context.worldEpoch,
+            sourceTick: context.tick,
+            subject: context.subject,
+            laneId: context.laneId,
+            leaderId: context.leader?.id ?? null,
+            vehiclesComplete: context.completeness.vehicles,
+            discontinuity: context.discontinuity,
+          },
+          facts: composed ?? base,
+        });
+      if (explainer) {
+        // Only the keys the branch actually consumed are declared; the red stop uses the compliance
+        // sample and the line offset, nothing else.
+        const influences = [];
+        if (decision.reason === 'STOP_LINE_APPROACH' || decision.reason === 'STOP_LINE_HOLD')
+          influences.push(
+            ['red_stop_probability', profile.redStopProbability],
+            ['red_stop_line_offset', profile.redStopLineOffsetM],
+          );
+        const explanation = explainer.capture({
+          sessionId,
+          worldEpoch: 0,
+          actor,
+          decisionTick: tick,
+          behavior: outcome,
+          reasons: [decision.reason, outcome.reason],
+          action: decision.action,
+          targets: [
+            { name: 'remainingToStopPointM', value: decision.remainingToStopPointM ?? 0 },
+            { name: 'sampledUnit', value: decision.sampledUnit ?? 0 },
+          ],
+          influences,
+        });
+        if (explanation.influences.length > 0) stopExplanations++;
+      }
+      decisions++;
+      checksum = (checksum + outcome.state.length * 31 + outcome.reason.length) >>> 0;
+      if (tick > PROTOCOL.warmupTicks) costs.push(performance.now() - began);
+    }
+  };
+  for (let tick = 1; tick <= PROTOCOL.measuredTicks; tick++) drive(tick);
+  const owned = {
+    behavior: behavior.getStats(),
+    roadContext: fixture.context.getStats(),
+    explanation: explainer ? explainer.getStats() : null,
+  };
+  explainer?.dispose();
+  fixture.dispose();
+  return {
+    fixtureVersion: '055-targeted-explanation-v1',
+    actors: actors.length,
+    decisions,
+    stopExplanations,
+    checksum,
+    owned,
+    costs,
+  };
+}
+
 const ARMS = new Map([
   ['050', signalArm],
   ['051', stopArm],
   ['053', laneArm],
   ['054', blockedArm],
+  ['055', explainArm],
 ]);
 function runArm(name, production) {
   const repetitions = [];
@@ -604,7 +747,9 @@ function runArm(name, production) {
           lane: distribution(lane.costs),
         },
       };
-    } else
+    } else if (name === '055')
+      result = explainArm(production?.explain ? { explain: production.explain } : null);
+    else
       result = ARMS.get(name)(
         name === '050'
           ? production?.signal
@@ -625,6 +770,9 @@ function runArm(name, production) {
       ...(result.parts ? { parts: result.parts } : {}),
       ...(result.stopRequests === undefined ? {} : { stopRequests: result.stopRequests }),
       ...(result.changes === undefined ? {} : { changes: result.changes }),
+      ...(result.stopExplanations === undefined
+        ? {}
+        : { stopExplanations: result.stopExplanations }),
       ...(result.blocked === undefined ? {} : { blocked: result.blocked }),
       ...(result.reroutes === undefined ? {} : { reroutes: result.reroutes }),
       ...(result.escalations === undefined ? {} : { escalations: result.escalations }),
@@ -639,12 +787,58 @@ function memoryArm(name) {
   const cycles = [];
   for (let cycle = 0; cycle < 20; cycle++) {
     const resources = [];
-    if (name === '050' || name === 'group') resources.push(signalProbeFixture());
+    if (name === '050' || name === 'group' || name === '055') resources.push(signalProbeFixture());
     if (name === '051' || name === 'group') resources.push(stopProbeFixture());
     if (name === '053' || name === 'group') resources.push(laneProbeFixture());
     if (name === '054') resources.push(blockedProbeFixture());
     const signal = resources.find((resource) => 'prepare' in resource);
     signal?.prepare(1);
+    // 055: exercise the bounded collector for two decision ticks over every actor, then dispose it.
+    let explanation = null;
+    if (name === '055') {
+      const scope = { sessionId: signal.frame.sessionId, worldEpoch: 0 },
+        actors = signal.frame.vehicles.map(({ id, incarnation }) => ({ id, incarnation })),
+        explainer = production.explain.createDecisionExplainer(scope);
+      explainer.setActors(actors, scope);
+      for (const tick of [1, 2]) {
+        if (tick === 2) signal.prepare(2);
+        for (const actor of actors) {
+          const context = signal.context.getContext(actor.id);
+          if (context === null) continue;
+          const outcome = signal.behavior.decide({
+            sessionId: scope.sessionId,
+            worldEpoch: 0,
+            actor,
+            decisionTick: tick,
+            context: {
+              sessionId: context.sessionId,
+              worldEpoch: context.worldEpoch,
+              sourceTick: context.tick,
+              subject: context.subject,
+              laneId: context.laneId,
+              leaderId: context.leader?.id ?? null,
+              vehiclesComplete: context.completeness.vehicles,
+              discontinuity: context.discontinuity,
+            },
+            facts: baseFacts('055-memory-v1'),
+          });
+          explainer.capture({
+            sessionId: scope.sessionId,
+            worldEpoch: 0,
+            actor,
+            decisionTick: tick,
+            behavior: outcome,
+            reasons: ['NO_SIGNAL', outcome.reason],
+            action: null,
+            targets: [],
+            influences: [],
+          });
+        }
+      }
+      const stats = explainer.getStats();
+      explainer.dispose();
+      explanation = { ...stats, disposed: explainer.getStats().disposed };
+    }
     const before = Object.fromEntries(
       resources.map((resource, index) => [
         `owner-${index}`,
@@ -657,7 +851,11 @@ function memoryArm(name) {
                   roadContext: resource.context.getStats(),
                   blockedRecovery: production?.blocked?.getBlockedRecoveryStats() ?? null,
                 }
-              : { behavior: resource.behavior.getStats(), roadContext: resource.context.getStats() }
+              : {
+                  behavior: resource.behavior.getStats(),
+                  roadContext: resource.context.getStats(),
+                  ...(explanation ? { explanation } : {}),
+                }
             : { lanes: resource.graph.getStats().lanes },
       ]),
     );
@@ -678,7 +876,7 @@ function memoryArm(name) {
     gcAvailable: Boolean(global.gc),
     cycles,
     countersScope:
-      'Ownership counters only: the four policies are pure and the053/054 latches are caller-held, so no actor, opportunity, manoeuvre or episode map is retained by a module.',
+      'Ownership counters only: the four policies are pure, the053/054 latches are caller-held and the055 collector keeps at most one explanation per admitted actor with retainedHistory0, so no actor, opportunity, manoeuvre, episode or decision-history map is retained by a module.',
   };
 }
 
@@ -689,8 +887,27 @@ const production =
         stop: await import('../src/autonomy/stop-policy.ts'),
         lane: await import('../src/autonomy/lane-change-policy.ts'),
         blocked: await import('../src/autonomy/blocked-recovery.ts'),
+        explain: await import('../src/autonomy/decision-explanation.ts'),
       }
     : null;
+const sourceInputs =
+  pbi === '055'
+    ? [
+        'tests/autonomy/policy-probe-fixture.ts',
+        'src/autonomy/signal-policy.ts',
+        ...(production ? ['src/autonomy/decision-explanation.ts'] : []),
+      ]
+    : [
+        'tests/autonomy/policy-probe-fixture.ts',
+        ...(production
+          ? [
+              'src/autonomy/signal-policy.ts',
+              'src/autonomy/stop-policy.ts',
+              'src/autonomy/lane-change-policy.ts',
+              'src/autonomy/blocked-recovery.ts',
+            ]
+          : []),
+      ];
 const report = {
   pbi: pbi === 'group' ? '050+051+053' : pbi,
   mode: phase,
@@ -700,6 +917,7 @@ const report = {
     ['051', '051-targeted-stop-v1'],
     ['053', '053-targeted-lane-v1'],
     ['054', '054-targeted-blocked-v1'],
+    ['055', '055-targeted-explanation-v1'],
     ['group', 'group-targeted-autonomy-v1'],
   ]).get(pbi),
   commit: execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(),
@@ -717,19 +935,7 @@ const report = {
   method:
     'one warmup +5repetitions of the real serial fixture; per-cadence-tick cost after a180-tick warmup; BEFORE is the same fixture and cadence without evaluating the new policy',
   protocol: PROTOCOL,
-  source: {
-    inputs: [
-      'tests/autonomy/policy-probe-fixture.ts',
-      ...(production
-        ? [
-            'src/autonomy/signal-policy.ts',
-            'src/autonomy/stop-policy.ts',
-            'src/autonomy/lane-change-policy.ts',
-            'src/autonomy/blocked-recovery.ts',
-          ]
-        : []),
-    ],
-  },
+  source: { inputs: sourceInputs },
   base: runArm(pbi, null),
 };
 if (production) {

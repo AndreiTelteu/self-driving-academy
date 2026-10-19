@@ -29,6 +29,7 @@ import {
 } from '../../src/autonomy/lane-change-policy';
 import type { LaneChangeState } from '../../src/autonomy/lane-change-policy';
 import { deriveScenarioSeed, deriveVehicleSeed } from '../../src/sessions';
+import { createDecisionExplainer } from '../../src/autonomy/decision-explanation';
 import {
   getParameterDefinition,
   parsePublishableDrivingProfile,
@@ -977,4 +978,122 @@ test('054 real219/044/045/033/041 chain blocks, reroutes legally, releases and r
   assert.equal(fixture.context.getStats().cachedContexts, 2);
   cadenceRun.dispose();
   fixture.dispose();
+});
+test('055 reads a frozen decision explanation at the real219 cadence without perturbing the chain', () => {
+  const fixture = signalProbeFixture(),
+    frame = fixture.frame,
+    actors = frame.vehicles.map(({ id, incarnation }) => ({ id, incarnation })),
+    sessionId = frame.sessionId,
+    scope = { sessionId, worldEpoch: 0 },
+    profile = projectSignalProfile(sharedProfile(sessionId, { red_stop_probability: 1 })),
+    base = facts(profile.versionId),
+    behavior = fixture.behavior,
+    explainer = createDecisionExplainer(scope);
+  explainer.setActors(actors, scope);
+  // Before any decision the explanation surface reports an explicit none, not a guess.
+  assert.equal(explainer.read(actors[0], scope), null);
+  assert.equal(explainer.view(actors[0], scope).present, false);
+  const stateCounts = new Map<string, number>();
+  let captures = 0,
+    stopExplanations = 0;
+  const run = cadence({
+    sessionId,
+    actors,
+    ticks: 120,
+    beforeTick: (tick) => fixture.prepare(tick),
+    decide(actor, tick) {
+      const context = fixture.context.getContext(actor.id)!,
+        signal = context.signal,
+        phaseStartedTick =
+          signal === null ? 0 : (fixture.signals.getSignal(signal.signalId)?.phaseStartedTick ?? 0),
+        decision = evaluateSignalPolicy({
+          sessionId,
+          worldEpoch: 0,
+          actor,
+          decisionTick: tick,
+          speedMps: 8,
+          seed: deriveVehicleSeed(deriveScenarioSeed(1, sessionId), actor.id),
+          opportunityKey: signalOpportunityKey({
+            sessionId,
+            worldEpoch: 0,
+            vehicleId: actor.id,
+            incarnation: actor.incarnation,
+            intersectionId: signal?.intersectionId ?? 'junction',
+            movementId: signal?.movementId ?? 'west-straight',
+            phaseStartedTick,
+          }),
+          profile,
+          observation:
+            signal === null
+              ? null
+              : {
+                  version: SIGNAL_POLICY_LIMITS.observationVersion,
+                  units: 'SI',
+                  tick: Math.max(0, tick - 1),
+                  signalId: signal.signalId,
+                  intersectionId: signal.intersectionId,
+                  movementId: signal.movementId,
+                  phaseId: signal.phaseId,
+                  state: signal.state,
+                  phaseElapsedS: Math.max(0, (tick - phaseStartedTick) / 60),
+                  distanceToStopLineM:
+                    context.lane === null || context.laneId === null
+                      ? null
+                      : fixture.stopLineDistanceM(context.laneId, context.lane.positionM),
+                },
+        }),
+        composed = signalBehaviorFacts(base, decision),
+        outcome = behavior.decide({
+          sessionId,
+          worldEpoch: 0,
+          actor,
+          decisionTick: tick,
+          context: projectBehaviorContext(context),
+          facts: composed ?? base,
+        });
+      // The explanation is collected on the same219 decision port; it must not change the chain.
+      const influences: (readonly [string, number | null])[] = [];
+      if (decision.reason === 'STOP_LINE_APPROACH' || decision.reason === 'STOP_LINE_HOLD')
+        influences.push(
+          ['red_stop_probability', profile.redStopProbability],
+          ['red_stop_line_offset', profile.redStopLineOffsetM],
+        );
+      const explanation = explainer.capture({
+        sessionId,
+        worldEpoch: 0,
+        actor,
+        decisionTick: tick,
+        behavior: outcome,
+        reasons: [decision.reason, outcome.reason],
+        action: decision.action,
+        targets: [{ name: 'remainingToStopPointM', value: decision.remainingToStopPointM ?? 0 }],
+        influences,
+      });
+      captures++;
+      assert(Object.isFrozen(explanation));
+      assert.equal(explanation.decisionTick, tick);
+      assert.equal(explanation.reasons[explanation.reasons.length - 1], outcome.reason);
+      for (const influence of explanation.influences) {
+        assert.equal(influence.implemented, true);
+        assert.equal(getParameterDefinition(influence.key).implemented, true);
+      }
+      if (outcome.state === 'STOP') stopExplanations++;
+      stateCounts.set(outcome.state, (stateCounts.get(outcome.state) ?? 0) + 1);
+      const view = explainer.view(actor, scope);
+      assert.equal(view.present, true);
+      if (view.present) assert.equal(view.explanation.decisionTick, tick);
+      assert.notEqual(view.present && view.explanation.behavior, outcome);
+    },
+  });
+  // Every actor produced one explanation per addressed decision; the store keeps no history.
+  assert.equal(captures, actors.length * 20);
+  assert.equal(explainer.getStats().explanations, actors.length);
+  assert.equal(explainer.getStats().retainedHistory, 0);
+  // Both the red STOP and the ordinary FOLLOW branches were explained through real decisions.
+  assert((stateCounts.get('STOP') ?? 0) > 0 && (stateCounts.get('FOLLOW') ?? 0) > 0);
+  assert(stopExplanations > 0);
+  assert.equal(fixture.context.getStats().disposed, false);
+  run.dispose();
+  fixture.dispose();
+  explainer.dispose();
 });
