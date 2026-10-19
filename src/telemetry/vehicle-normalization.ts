@@ -2,7 +2,6 @@ import {
   choice,
   createStableId,
   fields,
-  list,
   number,
   record,
   requireContract,
@@ -500,18 +499,6 @@ const readArtifacts = (value: unknown): ArtifactsView => {
   });
 };
 
-const readSample = (value: unknown): VehicleNormalizationSample => {
-  const data = fields(value, sampleFields);
-  return Object.freeze({
-    tick: readTick(data.tick),
-    longitudinalAccelerationMps2: number(data.longitudinalAccelerationMps2, -100, 100),
-    lateralAccelerationMps2: number(data.lateralAccelerationMps2, -100, 100),
-    throttle: number(data.throttle, 0, 1),
-    brake: number(data.brake, 0, 1),
-    steering: number(data.steering, -1, 1),
-  });
-};
-
 /**
  * Deterministic nearest-rank order statistic `sorted[ceil(n·p) − 1]`, clamped; an empty input is 0.
  * Exported so a reader can reproduce the exact feature value instead of trusting a magic scale.
@@ -543,10 +530,31 @@ interface DemandEvidence {
   readonly channels: readonly ChannelEvidence[];
 }
 
+interface CollectedEvidence {
+  readonly sampledTicks: number;
+  readonly usableFromTick: number | null;
+  readonly usableToTick: number | null;
+  readonly evidence: DemandEvidence | null;
+}
+
 const ascending = (values: number[]): number[] => values.sort((left, right) => left - right);
 
+const EMPTY_EVIDENCE: DemandEvidence = Object.freeze({
+  accelerationDemand: 0,
+  decelerationDemand: 0,
+  lateralDemand: 0,
+  raw: Object.freeze({
+    longitudinalAccelerationMps2: 0,
+    longitudinalDecelerationMps2: 0,
+    lateralAccelerationMps2: 0,
+  }),
+  intent: Object.freeze({ throttle: 0, brake: 0, steering: 0 }),
+  channels: Object.freeze([]) as readonly [],
+});
+
 /**
- * The documented normalization formula. For every usable sample:
+ * Validates every supplied sample and accumulates only those inside the usable span, in one pass and
+ * without allocating a per-sample object. The documented normalization formula is:
  *   accelFraction = max(0, a_long) / maxAccelerationMps2
  *   decelFraction = max(0, −a_long) / maxDecelerationMps2
  *   latFraction   = |a_lat| / maxLateralAccelerationMps2
@@ -557,37 +565,51 @@ const ascending = (values: number[]): number[] => values.sort((left, right) => l
  * (`p90(x/k) = p90(x)/k`), the raw magnitudes are sorted once and the fractions are derived by
  * dividing by the class ceiling; the result is identical and no value is rescaled twice.
  */
-function demandEvidence(
-  samples: readonly VehicleNormalizationSample[],
+function collectEvidence(
+  raw: readonly unknown[],
   capability: TickSampleCapabilities,
   saturationFraction: number,
   minSaturatedTicks: number,
-): DemandEvidence {
-  const size = samples.length;
-  const rawAcceleration = new Array<number>(size);
-  const rawDeceleration = new Array<number>(size);
-  const rawLateral = new Array<number>(size);
-  const throttle = new Array<number>(size);
-  const brake = new Array<number>(size);
-  const steering = new Array<number>(size);
+  span: { readonly fromTick: number; readonly toTick: number } | null,
+): CollectedEvidence {
+  const rawAcceleration: number[] = [];
+  const rawDeceleration: number[] = [];
+  const rawLateral: number[] = [];
+  const throttle: number[] = [];
+  const brake: number[] = [];
+  const steering: number[] = [];
+  let previousTick: number | null = null;
+  let sampledTicks = 0;
   let saturatedAcceleration = 0;
   let saturatedDeceleration = 0;
   let saturatedLateral = 0;
   let peakAcceleration = 0;
   let peakDeceleration = 0;
   let peakLateral = 0;
-  for (let index = 0; index < size; index += 1) {
-    const sample = samples[index]!;
-    const value = sample.longitudinalAccelerationMps2;
-    const accelerationMagnitude = value > 0 ? value : 0;
-    const decelerationMagnitude = value < 0 ? -value : 0;
-    const lateralMagnitude = Math.abs(sample.lateralAccelerationMps2);
-    rawAcceleration[index] = accelerationMagnitude;
-    rawDeceleration[index] = decelerationMagnitude;
-    rawLateral[index] = lateralMagnitude;
-    throttle[index] = sample.throttle;
-    brake[index] = sample.brake;
-    steering[index] = Math.abs(sample.steering);
+  for (const element of raw) {
+    const data = fields(element, sampleFields);
+    const tick = readTick(data.tick);
+    requireContract(
+      previousTick === null || tick > previousTick,
+      'Normalization samples must increase monotonically',
+    );
+    previousTick = tick;
+    const longitudinal = number(data.longitudinalAccelerationMps2, -100, 100);
+    const lateral = number(data.lateralAccelerationMps2, -100, 100);
+    const commandedThrottle = number(data.throttle, 0, 1);
+    const commandedBrake = number(data.brake, 0, 1);
+    const commandedSteering = number(data.steering, -1, 1);
+    if (span === null || tick < span.fromTick || tick > span.toTick) continue;
+    sampledTicks += 1;
+    const accelerationMagnitude = longitudinal > 0 ? longitudinal : 0;
+    const decelerationMagnitude = longitudinal < 0 ? -longitudinal : 0;
+    const lateralMagnitude = lateral < 0 ? -lateral : lateral;
+    rawAcceleration.push(accelerationMagnitude);
+    rawDeceleration.push(decelerationMagnitude);
+    rawLateral.push(lateralMagnitude);
+    throttle.push(commandedThrottle);
+    brake.push(commandedBrake);
+    steering.push(commandedSteering < 0 ? -commandedSteering : commandedSteering);
     const accelerationFraction = accelerationMagnitude / capability.maxAccelerationMps2;
     const decelerationFraction = decelerationMagnitude / capability.maxDecelerationMps2;
     const lateralFraction = lateralMagnitude / capability.maxLateralAccelerationMps2;
@@ -598,6 +620,13 @@ function demandEvidence(
     if (decelerationFraction > peakDeceleration) peakDeceleration = decelerationFraction;
     if (lateralFraction > peakLateral) peakLateral = lateralFraction;
   }
+  if (sampledTicks === 0)
+    return {
+      sampledTicks: 0,
+      usableFromTick: span?.fromTick ?? null,
+      usableToTick: span?.toTick ?? null,
+      evidence: EMPTY_EVIDENCE,
+    };
   ascending(rawAcceleration);
   ascending(rawDeceleration);
   ascending(rawLateral);
@@ -629,22 +658,27 @@ function demandEvidence(
     },
   ];
   return {
-    accelerationDemand: rawAccelerationP90 / capability.maxAccelerationMps2,
-    decelerationDemand: rawDecelerationP90 / capability.maxDecelerationMps2,
-    lateralDemand: rawLateralP90 / capability.maxLateralAccelerationMps2,
-    raw: Object.freeze({
-      longitudinalAccelerationMps2: rawAccelerationP90,
-      longitudinalDecelerationMps2: rawDecelerationP90,
-      lateralAccelerationMps2: rawLateralP90,
-    }),
-    intent: Object.freeze({
-      throttle: normalizationPercentile(throttle, fraction),
-      brake: normalizationPercentile(brake, fraction),
-      steering: normalizationPercentile(steering, fraction),
-    }),
-    channels: Object.freeze(
-      candidates.filter((candidate) => candidate.saturatedTicks >= minSaturatedTicks),
-    ),
+    sampledTicks,
+    usableFromTick: span?.fromTick ?? null,
+    usableToTick: span?.toTick ?? null,
+    evidence: {
+      accelerationDemand: rawAccelerationP90 / capability.maxAccelerationMps2,
+      decelerationDemand: rawDecelerationP90 / capability.maxDecelerationMps2,
+      lateralDemand: rawLateralP90 / capability.maxLateralAccelerationMps2,
+      raw: Object.freeze({
+        longitudinalAccelerationMps2: rawAccelerationP90,
+        longitudinalDecelerationMps2: rawDecelerationP90,
+        lateralAccelerationMps2: rawLateralP90,
+      }),
+      intent: Object.freeze({
+        throttle: normalizationPercentile(throttle, fraction),
+        brake: normalizationPercentile(brake, fraction),
+        steering: normalizationPercentile(steering, fraction),
+      }),
+      channels: Object.freeze(
+        candidates.filter((candidate) => candidate.saturatedTicks >= minSaturatedTicks),
+      ),
+    },
   };
 }
 
@@ -813,7 +847,6 @@ export function createVehicleNormalizer(options: NormalizationOptions = {}): Veh
     const classId = choice(data.classId, classIds);
     const eligibility = readEligibility(data.eligibility);
     const artifacts = readArtifacts(data.artifacts);
-    const rawSamples = list(data.samples, readSample);
     // The 087 window and the 088 window must describe the same subject; a mismatch is a contract
     // violation of the caller, never a silent cross-window mix.
     requireContract(
@@ -828,11 +861,7 @@ export function createVehicleNormalizer(options: NormalizationOptions = {}): Veh
       eligibility.openedTick <= tick && eligibility.lastTick <= tick,
       'Normalization window ends after the evaluation tick',
     );
-    for (let index = 1; index < rawSamples.length; index += 1)
-      requireContract(
-        rawSamples[index]!.tick > rawSamples[index - 1]!.tick,
-        'Normalization samples must increase monotonically',
-      );
+    requireContract(Array.isArray(data.samples), 'Normalization samples must be an array');
 
     const capability = mechanicalCapabilities(classId);
     const featureId = createStableId('vehicle-normalization-feature', observationSession, [
@@ -875,12 +904,16 @@ export function createVehicleNormalizer(options: NormalizationOptions = {}): Veh
             toTick: Math.min(artifacts.prefix.toTick, eligibility.lastTick),
           });
     const usableTicks = usable === null ? 0 : Math.max(0, usable.toTick - usable.fromTick + 1);
-    const samples =
-      usable === null || usableTicks === 0
-        ? []
-        : rawSamples.filter(
-            (sample) => sample.tick >= usable.fromTick && sample.tick <= usable.toTick,
-          );
+    // Every supplied sample is validated here, even when the window is refused, and only the samples
+    // inside the usable span take part in the features.
+    const collected = collectEvidence(
+      data.samples as readonly unknown[],
+      capability,
+      saturationFraction,
+      minSaturatedTicks,
+      usable === null || usableTicks === 0 ? null : usable,
+    );
+    const sampledTicks = collected.sampledTicks;
 
     if (artifacts.windowClass === 'FULLY_SUPPRESSED') {
       const entry = refusal({
@@ -889,7 +922,7 @@ export function createVehicleNormalizer(options: NormalizationOptions = {}): Veh
         completeness: artifacts.completeness,
         completenessReason: artifacts.completenessReason,
         usable: null,
-        sampledTicks: samples.length,
+        sampledTicks: 0,
       });
       store(entry);
       return entry;
@@ -901,7 +934,7 @@ export function createVehicleNormalizer(options: NormalizationOptions = {}): Veh
         completeness: artifacts.completeness,
         completenessReason: artifacts.completenessReason,
         usable,
-        sampledTicks: samples.length,
+        sampledTicks: 0,
       });
       store(entry);
       return entry;
@@ -913,12 +946,12 @@ export function createVehicleNormalizer(options: NormalizationOptions = {}): Veh
         completeness: artifacts.completeness,
         completenessReason: artifacts.completenessReason,
         usable,
-        sampledTicks: samples.length,
+        sampledTicks,
       });
       store(entry);
       return entry;
     }
-    if (samples.length === 0) {
+    if (sampledTicks === 0) {
       const entry = refusal({
         ...base,
         refusal: 'NO_USABLE_SAMPLES',
@@ -930,20 +963,20 @@ export function createVehicleNormalizer(options: NormalizationOptions = {}): Veh
       store(entry);
       return entry;
     }
-    if (samples.length < minSamples) {
+    if (sampledTicks < minSamples) {
       const entry = refusal({
         ...base,
         refusal: 'INSUFFICIENT_SAMPLES',
         completeness: artifacts.completeness,
         completenessReason: artifacts.completenessReason,
         usable,
-        sampledTicks: samples.length,
+        sampledTicks,
       });
       store(entry);
       return entry;
     }
 
-    const evidence = demandEvidence(samples, capability, saturationFraction, minSaturatedTicks);
+    const evidence = collected.evidence!;
     const features: NormalizedVehicleFeatures = Object.freeze({
       accelerationDemand: evidence.accelerationDemand,
       decelerationDemand: evidence.decelerationDemand,
@@ -968,14 +1001,14 @@ export function createVehicleNormalizer(options: NormalizationOptions = {}): Veh
       usableFromTick: usable.fromTick,
       usableToTick: usable.toTick,
       usableTicks,
-      sampledTicks: samples.length,
-      sampleCoverage: samples.length / usableTicks,
+      sampledTicks,
+      sampleCoverage: sampledTicks / usableTicks,
       saturationFraction,
       minSaturatedTicks,
       features,
     };
     usableTicksTotal += usableTicks;
-    sampledTicksTotal += samples.length;
+    sampledTicksTotal += sampledTicks;
     normalizedTotal += 1;
     if (evidence.channels.length === 0) {
       intentionalTotal += 1;
@@ -1003,7 +1036,7 @@ export function createVehicleNormalizer(options: NormalizationOptions = {}): Veh
             limitMps2: channel.limitMps2,
             peakFraction: channel.peakFraction,
             saturatedTicks: channel.saturatedTicks,
-            sampledTicks: samples.length,
+            sampledTicks,
             saturationFraction,
           }),
         ),
