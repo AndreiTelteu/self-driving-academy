@@ -1,0 +1,60 @@
+[
+  {
+    "name": "01-format",
+    "args": [
+      "F:\\Sites\\self-driving-academy\\node_modules\\prettier\\bin\\prettier.cjs",
+      "--write",
+      "scripts/benchmark-manual-segments-reference.mjs",
+      "scripts/manual-segments-reference-records.mjs",
+      "tests/telemetry/manual-segments-reference.ts",
+      "Docs/Evidence/069-manual-segments/verify-reference.mjs",
+      "tests/telemetry/manual-segments-reference-records.test.mjs",
+      "Docs/Evidence/069-manual-segments/source-design-01.md",
+      "Docs/Evidence/069-manual-segments/native-reference-plan-01.md",
+      "Docs/Evidence/069-manual-segments/native-reference-source-handoff-01.md"
+    ],
+    "start": "2026-10-07T00:52:12.742Z",
+    "end": "2026-10-07T00:52:13.089Z",
+    "exit": 0,
+    "error": null
+  },
+  {
+    "name": "02-types-production",
+    "args": [
+      "F:\\Sites\\self-driving-academy\\node_modules\\typescript\\bin\\tsc",
+      "--noEmit"
+    ],
+    "start": "2026-10-07T00:52:13.091Z",
+    "end": "2026-10-07T00:52:13.917Z",
+    "exit": 0,
+    "error": null
+  },
+  {
+    "name": "03-types-tests",
+    "args": [
+      "F:\\Sites\\self-driving-academy\\node_modules\\typescript\\bin\\tsc",
+      "-p",
+      "tsconfig.tests.json",
+      "--noEmit"
+    ],
+    "start": "2026-10-07T00:52:13.917Z",
+    "end": "2026-10-07T00:52:14.496Z",
+    "exit": 0,
+    "error": null
+  },
+  {
+    "name": "04-scoped-lint",
+    "args": [
+      "F:\\Sites\\self-driving-academy\\node_modules\\eslint\\bin\\eslint.js",
+      "scripts/benchmark-manual-segments-reference.mjs",
+      "scripts/manual-segments-reference-records.mjs",
+      "tests/telemetry/manual-segments-reference.ts",
+      "--max-warnings",
+      "0"
+    ],
+    "start": "2026-10-07T00:52:14.500Z",
+    "end": "2026-10-07T00:52:15.253Z",
+    "exit": 1,
+    "error": null
+  }
+]

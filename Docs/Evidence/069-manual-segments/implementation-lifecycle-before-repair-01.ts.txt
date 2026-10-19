@@ -1,0 +1,119 @@
+import { fields,contextFields,readContext,requireContract,tick,choice } from '../sessions';
+import type { ContractContext } from '../sessions';
+import type { BodyIdentity } from '../vehicles';
+import type { SimulationEvent } from '../simulation';
+import { segmentCloseReasons,parseTelemetrySample } from './contracts';
+import type { InterventionSegment,TelemetrySample } from './contracts';
+import { admitInterventionRecord } from './intervention-admission';
+import { INTERVENTION_LIMITS } from './intervention-ports';
+import type { InterventionPorts,InterventionBoundaryPlan,InterventionBoundaryTicket,InterventionBoundaryView,InterventionRecordReservation,InterventionEventReservation,InterventionIntakeDescriptor,InterventionFault,InterventionResultToken,InterventionCause,InterventionTarget } from './intervention-ports';
+import { interventionAuthority,interventionTarget,interventionTargetChange,interventionCause,interventionIdentity,interventionText,sameInterventionContext,sameInterventionTarget } from './intervention-validation';
+
+type Pending={ticket:InterventionBoundaryTicket;plan:InterventionBoundaryPlan;target:InterventionTarget;record:InterventionRecordReservation|null;events:InterventionEventReservation|null;intake:InterventionIntakeDescriptor|null;committed:boolean;eventsDone:boolean;intakeDone:boolean;eventsRetryable:boolean;intakeRetryable:boolean};
+const terminalReasons=['STATE_IMPORT','SESSION_CHANGE','WORLD_RESET','SHUTDOWN','DATA_LOSS'] as const;
+const causedReasons=['RIDE_COMPLETED','RECOVERY','ROLLOVER'] as const;
+/** Synchronous metadata owner. It never clears input, steps a world or applies a learned profile. */
+export function createInterventionLifecycle(initialContext:ContractContext,ownerId:string,ports:InterventionPorts) {
+ const context=Object.freeze(readContext(fields(initialContext,contextFields))),id=interventionText(ownerId);
+ let target=interventionTarget(ports.readTarget());requireContract(sameInterventionContext(target,context),'Intervention initial target context');
+ const initial=interventionAuthority(ports.readAuthority(),ports.bodyIdentity);
+ requireContract(sameInterventionContext(initial,context)&&initial.identity===null&&!initial.disposed&&initial.fault===null,'Intervention requires fresh AUTO authority');
+ let acceptedTick=initial.tick,sequence=0,segmentSequence=0,active:InterventionBoundaryView|null=null,lastClosed:InterventionBoundaryView|null=null;
+ let pending:Pending|null=null,completed:InterventionBoundaryTicket|null=null,fault:InterventionFault|null=null,busy=false,disposed=false,retired=false;
+ const results=new Map<string,{descriptor:InterventionIntakeDescriptor;consumed:boolean}>();
+ function run<T>(action:()=>T,allowFault=false):T {requireContract(!busy&&!disposed&&!retired&&(allowFault||fault===null),'Intervention owner lifecycle');busy=true;try{return action();}finally{busy=false;}}
+ function authority(){const a=interventionAuthority(ports.readAuthority(),ports.bodyIdentity);requireContract(sameInterventionContext(a,context)&&!a.disposed,'Intervention authority context/lifecycle');return a;}
+ function fail(stage:InterventionFault['stage'],error:unknown,attemptedTick:number,physicalTickAccepted:boolean){const cause=(error instanceof Error?`${error.name}: ${error.message}`:String(error)).slice(0,1024);fault=Object.freeze({stage,attemptedTick,acceptedTick,physicalTickAccepted,causes:Object.freeze([...(fault?.causes??[]).slice(-7),cause])});}
+ function checkTarget(expected:InterventionTarget){const actual=interventionTarget(ports.readTarget());requireContract(sameInterventionTarget(actual,expected),'Intervention accepted target readback');return actual;}
+ function view(record:InterventionSegment,identity:BodyIdentity):InterventionBoundaryView {return Object.freeze({context,identity,segmentId:record.segmentId,mode:record.controlMode as 'MANUAL'|'LEARNING',startTick:record.startTick,endTick:record.endTick,completeness:record.completeness,closeReason:record.closeReason});}
+ function descriptor(record:InterventionSegment,operationId:string,nextTarget:InterventionTarget):InterventionIntakeDescriptor|null {
+  if(record.controlMode!=='LEARNING'||!record.learningEligible||record.completeness!=='CLOSED'||!sameInterventionContext(record,nextTarget)||record.playerId!==nextTarget.playerId||record.profileId!==nextTarget.profileId||record.learningEpoch!==nextTarget.learningEpoch||record.baseVersionId!==nextTarget.baseVersionId)return null;
+  requireContract(results.size<INTERVENTION_LIMITS.descriptors,'Intervention protected result capacity');
+  const d:InterventionIntakeDescriptor=Object.freeze({...context,version:'069-closed-learning-intake-v1',segmentId:record.segmentId,playerId:record.playerId,profileId:record.profileId,learningEpoch:record.learningEpoch,baseVersionId:record.baseVersionId,endTick:record.endTick!,recordBytes:admitInterventionRecord(record).bytes,operationId});
+  const bytes=2+results.size+[...results.values()].reduce((n,e)=>n+new TextEncoder().encode(JSON.stringify(e.descriptor)).length,0)+new TextEncoder().encode(JSON.stringify(d)).length;requireContract(bytes<=INTERVENTION_LIMITS.descriptorBytes,'Intervention protected result descriptor byte capacity');return d;
+ }
+ function event(type:'MANUAL_START'|'MANUAL_END',record:InterventionSegment,t:number):SimulationEvent {return Object.freeze({...context,eventId:interventionText(`${id}:${sequence}:${type}`),tick:t,entityIds:Object.freeze([record.vehicleId]),type,payload:Object.freeze({vehicleId:record.vehicleId,controlMode:record.controlMode})});}
+ function reserve(plan:InterventionBoundaryPlan,nextTarget:InterventionTarget,timing:'PREPARED_BEFORE_NEXT_TICK'|'AT_LAST_ACCEPTED_TICK'):Pending {
+  const old=active===null?null:ports.records.read(active.segmentId);requireContract(active===null||old?.completeness==='OPEN','Intervention real OPEN readback');
+  if(old&&timing==='PREPARED_BEFORE_NEXT_TICK')requireContract(old.samples.every(s=>s.tick<plan.tick)&&old.events.every(e=>e.tick<=plan.tick),'Intervention boundary sample t belongs exclusively to new segment');
+  const changed=timing==='AT_LAST_ACCEPTED_TICK'||(active?.identity??null)!==plan.nextIdentity||(active?.mode??'AUTO')!==plan.nextMode||plan.reason!==null;
+  if(!changed)return {ticket:Object.freeze({...context,version:'069-boundary-ticket-v1',sequence,tick:plan.tick,baseTick:acceptedTick}),plan,target:nextTarget,record:null,events:null,intake:null,committed:false,eventsDone:true,intakeDone:true,eventsRetryable:true,intakeRetryable:true};
+  requireContract(old===null||plan.reason!==null,'Intervention close reason required');
+  const closed=old===null?null:Object.freeze({...old,endTick:plan.tick,closeReason:plan.reason,completeness:plan.reason==='DATA_LOSS'?'INCOMPLETE' as const:'CLOSED' as const});
+  let opened:InterventionSegment|null=null;
+  if(plan.nextIdentity!==null&&timing!=='AT_LAST_ACCEPTED_TICK') {
+   requireContract(plan.nextMode!=='AUTO'&&segmentSequence<Number.MAX_SAFE_INTEGER,'Intervention new segment identity');
+   opened=Object.freeze({...context,segmentId:interventionText(`${id}:segment:${++segmentSequence}`),vehicleId:plan.nextIdentity.entityId,controlMode:plan.nextMode,learningEligible:plan.reason==='ROLLOVER'&&old!==null?old.learningEligible:plan.nextMode==='LEARNING'&&nextTarget.learningEligible,playerId:nextTarget.playerId,profileId:nextTarget.profileId,baseVersionId:nextTarget.baseVersionId,learningEpoch:nextTarget.learningEpoch,controlPreferencesVersion:nextTarget.controlPreferencesVersion,startTick:plan.tick,endTick:null,closeReason:null,engineVersion:nextTarget.engineVersion,mapVersion:nextTarget.mapVersion,inputType:nextTarget.inputType,samples:Object.freeze([]),events:Object.freeze([]),completeness:'OPEN'});
+  }
+  const operationId=interventionText(`${id}:close:${sequence}`),intake=closed===null||timing==='AT_LAST_ACCEPTED_TICK'?null:descriptor(closed,operationId,nextTarget);
+  let record:InterventionRecordReservation|null=null,events:InterventionEventReservation|null=null,intakeReserved=false;
+  try {
+   record=closed===null&&opened===null?null:ports.records.reserve(closed,opened);
+   events=ports.events.reserve(Object.freeze([...(closed?[event('MANUAL_END',closed,plan.tick)]:[]),...(opened?[event('MANUAL_START',opened,plan.tick)]:[])]));
+   if(intake){ports.reserveIntake(intake);intakeReserved=true;}
+  } catch(error) {
+   const causes:unknown[]=[error];if(intakeReserved)try{ports.rejectIntake(intake!.operationId);}catch(e){causes.push(e);}if(events)try{ports.events.reject(events);}catch(e){causes.push(e);}if(record)try{ports.records.reject(record);}catch(e){causes.push(e);}throw causes.length===1?error:new AggregateError(causes,'Intervention admission cleanup');
+  }
+  return {ticket:Object.freeze({...context,version:'069-boundary-ticket-v1',sequence,tick:plan.tick,baseTick:acceptedTick}),plan,target:nextTarget,record,events,intake,committed:false,eventsDone:events===null,intakeDone:intake===null,eventsRetryable:true,intakeRetryable:true};
+ }
+ function completeRecord(p:Pending) {
+  if(p.committed)return;
+  if(p.record){
+   let error:unknown=null;try{ports.records.commit(p.record);}catch(e){error=e;}
+   let r:ReturnType<InterventionPorts['records']['inspectReceipt']>;try{r=ports.records.inspectReceipt(p.record);}catch(inspectError){throw error===null?inspectError:new AggregateError([error,inspectError],'Intervention commit and receipt readback failures');}if(error!==null)fail('RECORD_COMMIT',error,p.plan.tick,true);requireContract(r?.version==='069-record-receipt-v1'&&r.sequence===p.record.sequence&&r.accepted&&r.closedSegmentId===(p.record.closed?.segmentId??null)&&r.openedSegmentId===(p.record.opened?.segmentId??null),'Intervention actual commit receipt');
+   if(p.record.closed){requireContract(ports.records.read(p.record.closed.segmentId)===p.record.closed,'Intervention closed record readback');lastClosed=view(p.record.closed,active!.identity);}
+   if(p.record.opened){requireContract(ports.records.read(p.record.opened.segmentId)===p.record.opened,'Intervention opened record readback');active=view(p.record.opened,p.plan.nextIdentity!);}else active=null;
+   p.committed=true;target=p.target;if(error!==null){fail('RECORD_COMMIT',error,p.plan.tick,true);throw error;}
+  }else {p.committed=true;target=p.target;}
+ }
+ function flush(p:Pending) {
+  if(!p.eventsDone&&p.events){
+   try{const r=ports.events.commit(p.events);requireContract(r.version==='069-event-receipt-v1'&&r.sequence===p.events.sequence&&r.complete&&r.acceptedCount===p.events.events.length,'Intervention event acceptance receipt');p.eventsDone=true;requireContract(r.listenerFailures===0,'Accepted event listener failures; publication must not be replayed');}catch(e){let r:ReturnType<InterventionPorts['events']['inspectReceipt']>;try{r=ports.events.inspectReceipt(p.events);}catch(inspectError){p.eventsRetryable=false;fail('EVENT_DELIVERY',e,p.plan.tick,true);fail('EVENT_DELIVERY',inspectError,p.plan.tick,true);throw new AggregateError([e,inspectError],'Intervention event delivery and receipt failures');}p.eventsRetryable=r!==null&&r.sequence===p.events.sequence;if(r?.complete&&r.acceptedCount===p.events.events.length)p.eventsDone=true;fail('EVENT_DELIVERY',e,p.plan.tick,true);throw e;}
+  }
+  if(!p.intakeDone&&p.intake){
+   try{const r=ports.acceptIntake(p.intake);requireContract(r.version==='069-intake-receipt-v1'&&r.operationId===p.intake.operationId&&r.segmentId===p.intake.segmentId&&r.accepted,'Intervention actual intake receipt');p.intakeDone=true;results.set(r.operationId,{descriptor:p.intake,consumed:false});}catch(e){let r:ReturnType<InterventionPorts['inspectIntake']>;try{r=ports.inspectIntake(p.intake.operationId);}catch(inspectError){p.intakeRetryable=false;fail('INTAKE',e,p.plan.tick,true);fail('INTAKE',inspectError,p.plan.tick,true);throw new AggregateError([e,inspectError],'Intervention intake delivery and receipt failures');}p.intakeRetryable=r!==null&&r.operationId===p.intake.operationId&&r.segmentId===p.intake.segmentId;if(r?.accepted&&r.operationId===p.intake.operationId&&r.segmentId===p.intake.segmentId){p.intakeDone=true;results.set(r.operationId,{descriptor:p.intake,consumed:false});}fail('INTAKE',e,p.plan.tick,true);throw e;}
+  }
+  if(p.eventsDone&&p.intakeDone){completed=p.ticket;pending=null;if(p.plan.timing==='AT_LAST_ACCEPTED_TICK'){retired=true;results.clear();}}
+ }
+ function settleOwned(ticket:InterventionBoundaryTicket){
+  if(completed===ticket)return 'ACCEPTED' as const;
+  requireContract(pending?.ticket===ticket,'Intervention exact ticket identity');const p=pending,a=authority();
+  if(a.tick===p.ticket.baseTick)return 'PENDING' as const;
+  requireContract(a.tick===p.plan.tick&&a.identity===p.plan.nextIdentity&&a.mode===p.plan.nextMode,'Intervention accepted physical authority mismatch');
+  acceptedTick=a.tick;if(a.identity)interventionIdentity(a.identity,ports.bodyIdentity);checkTarget(p.target);
+  try{completeRecord(p);flush(p);const final=authority();requireContract(final.tick===a.tick&&final.identity===a.identity&&final.mode===a.mode&&final.suspended===a.suspended&&final.fault===a.fault,'Intervention callback changed physical authority');checkTarget(p.target);}catch(e){if(fault===null)fail('RECORD_COMMIT',e,p.plan.tick,true);throw e;}
+  if(a.fault!==null){fail('AUTHORITY',a.fault,p.plan.tick,true);throw new Error('Intervention physical authority accepted with fault');}
+  return 'ACCEPTED' as const;
+ }
+ return Object.freeze({
+  prepare(value:InterventionBoundaryPlan){return run(()=>{
+   requireContract(pending===null,'Intervention pending boundary');const a=authority();requireContract(a.tick===acceptedTick&&!a.suspended&&a.fault===null,'Intervention preparation authority');
+   const d=fields(value,[...contextFields,'version','tick','timing','nextIdentity','nextMode','reason','cause','targetChange']);requireContract(d.version==='069-boundary-plan-v1'&&d.timing==='PREPARED_BEFORE_NEXT_TICK'&&sameInterventionContext(readContext(d),context)&&tick(d.tick)===acceptedTick+1,'Intervention next tick boundary');
+   const identity=d.nextIdentity===null?null:interventionIdentity(d.nextIdentity,ports.bodyIdentity),mode=choice(d.nextMode,['AUTO','MANUAL','LEARNING']);requireContract((identity===null)===(mode==='AUTO'),'Intervention planned seat');
+   const cause=d.cause===null?null:interventionCause(d.cause,ports.bodyIdentity),change=d.targetChange===null?null:interventionTargetChange(d.targetChange);
+   const reason=d.reason===null?null:choice(d.reason,segmentCloseReasons);
+   requireContract(reason===null||!terminalReasons.includes(reason as typeof terminalReasons[number]),'Retirement cause cannot be next-tick mode boundary');
+   if(cause)requireContract(ports.preparedCause(cause.operationId)===d.cause&&sameInterventionContext(cause,context)&&cause.tick===d.tick&&cause.timing===d.timing&&cause.reason===reason&&cause.identity===a.identity,'Intervention cause host admission');
+   if(causedReasons.includes(reason as typeof causedReasons[number]))requireContract(cause!==null,'Intervention real ride/recovery/rollover/preferences cause required');
+   if(change){requireContract(ports.preparedTarget(change.operationId)===d.targetChange&&sameInterventionContext(change,context)&&change.tick===d.tick&&change.reason===reason&&change.reason!=='STATE_IMPORT'&&(change.reason==='CONTROL_PREFERENCES_CHANGE'?change.target.learningEpoch===target.learningEpoch&&change.target.controlPreferencesVersion!==target.controlPreferencesVersion:change.target.learningEpoch>target.learningEpoch),'Intervention profile target admission');}else requireContract(reason!=='PROFILE_CHANGE'&&reason!=='PROFILE_RESTORE'&&reason!=='PROFILE_IMPORT'&&reason!=='CONTROL_PREFERENCES_CHANGE','Intervention target change receipt required');
+   const nextTarget=change?.target??interventionTarget(ports.readTarget());requireContract(change!==null||sameInterventionTarget(nextTarget,target),'Unadmitted target change');
+   if(a.identity===identity&&a.mode!==mode)requireContract(reason==='MODE_CHANGE','Intervention mode close cause');
+   if(a.identity!==identity&&a.identity!==null)requireContract(identity===null?(reason==='RETURN_TO_AUTO'||reason==='VEHICLE_SWITCH'):reason==='VEHICLE_SWITCH','Intervention authority departure cause');
+   requireContract(sequence<Number.MAX_SAFE_INTEGER,'Intervention sequence capacity');sequence++;
+   const plan=Object.freeze({...context,version:'069-boundary-plan-v1' as const,tick:tick(d.tick),timing:'PREPARED_BEFORE_NEXT_TICK' as const,nextIdentity:identity,nextMode:mode,reason,cause,targetChange:change});pending=reserve(plan,nextTarget,'PREPARED_BEFORE_NEXT_TICK');return pending.ticket;
+  });},
+  settle(ticket:InterventionBoundaryTicket){return run(()=>settleOwned(ticket));},
+  /** Retry only concrete reserved delivery; no physics repeat, no replay of accepted007 listeners. */
+  retryDelivery(ticket:InterventionBoundaryTicket){return run(()=>{requireContract(pending?.ticket===ticket&&pending.committed,'Intervention retry requires accepted record prefix');requireContract((pending.eventsDone||pending.eventsRetryable)&&(pending.intakeDone||pending.intakeRetryable),'Intervention delivery acceptance unknown; retry forbidden');flush(pending);return completed===ticket;},true);},
+  reject(ticket:InterventionBoundaryTicket){run(()=>{requireContract(pending?.ticket===ticket&&!pending.committed&&authority().tick===ticket.baseTick,'Cannot reject accepted physical tick');const p=pending,errors:unknown[]=[];if(p.intake)try{ports.rejectIntake(p.intake.operationId);}catch(e){errors.push(e);}if(p.events)try{ports.events.reject(p.events);}catch(e){errors.push(e);}if(p.record)try{ports.records.reject(p.record);}catch(e){errors.push(e);}pending=null;if(errors.length)throw new AggregateError(errors,'Intervention rejection cleanup');});},
+  readBoundary(identity:BodyIdentity){requireContract(!disposed,'Intervention disposed');interventionIdentity(identity,ports.bodyIdentity);return active?.identity===identity?active:lastClosed?.identity===identity?lastClosed:null;},
+  closeSelection(value:{context:ContractContext;identity:BodyIdentity;segmentId:string;mode:'MANUAL'|'LEARNING';tick:number;reason:'VEHICLE_SWITCH'}){return run(()=>{requireContract(pending!==null&&sameInterventionContext(value.context,context)&&value.identity===active?.identity&&value.segmentId===active.segmentId&&value.mode===active.mode&&value.tick===pending.plan.tick&&pending.plan.reason==='VEHICLE_SWITCH'&&value.reason==='VEHICLE_SWITCH','Intervention selection callback identity');settleOwned(pending.ticket);});},
+  retire(value:InterventionCause){run(()=>{requireContract(pending===null,'Intervention cannot retire pending boundary');const cause=interventionCause(value,ports.bodyIdentity),a=authority();requireContract(ports.preparedCause(cause.operationId)===value&&sameInterventionContext(cause,context)&&cause.timing==='AT_LAST_ACCEPTED_TICK'&&cause.tick===a.tick&&a.tick===acceptedTick&&cause.identity===a.identity&&terminalReasons.includes(cause.reason as typeof terminalReasons[number]),'Intervention retirement admission');sequence++;const plan=Object.freeze({...context,version:'069-boundary-plan-v1' as const,tick:a.tick,timing:'AT_LAST_ACCEPTED_TICK' as const,nextIdentity:null,nextMode:'AUTO' as const,reason:cause.reason,cause,targetChange:null});pending=reserve(plan,target,'AT_LAST_ACCEPTED_TICK');completeRecord(pending);flush(pending);retired=true;results.clear();});},
+  admitResult(value:InterventionResultToken){return run(()=>{const d=fields(value,[...contextFields,'version','segmentId','operationId','playerId','profileId','baseVersionId','learningEpoch']);requireContract(d.version==='069-intake-result-token-v1','Intervention result version');const e=results.get(interventionText(d.operationId));if(!e||e.consumed||!sameInterventionContext(readContext(d),context)||d.segmentId!==e.descriptor.segmentId||d.playerId!==target.playerId||d.profileId!==target.profileId||tick(d.learningEpoch)!==target.learningEpoch||d.baseVersionId!==target.baseVersionId)return false;e.consumed=true;return true;});},
+  appendSample(identity:BodyIdentity,value:TelemetrySample){run(()=>{requireContract(pending===null&&active?.identity===identity,'Intervention sample requires settled current OPEN');interventionIdentity(identity,ports.bodyIdentity);const a=authority();requireContract(a.tick===acceptedTick&&a.identity===identity&&a.mode===active.mode&&!a.suspended&&a.fault===null,'Intervention sample accepted authority');const old=ports.records.read(active.segmentId);requireContract(old!==null,'Intervention sample record readback');const admitted=admitInterventionRecord({...old,samples:[...old.samples,value]}),sample=parseTelemetrySample(admitted.record.samples.at(-1));requireContract(sample.tick===acceptedTick&&sample.state.controlMode===active.mode&&sample.state.vehicleId===identity.entityId&&sameInterventionContext(sample.state,context),'Intervention sample physical provenance');ports.records.appendSample(active.segmentId,sample);const actual=ports.records.read(active.segmentId);requireContract(actual?.samples.length===old.samples.length+1&&actual.samples.at(-1)?.tick===acceptedTick,'Intervention appended sample actual readback');interventionIdentity(identity,ports.bodyIdentity);});},
+  acknowledgeResult(operationId:string){run(()=>{const e=results.get(operationId);requireContract(e!==undefined&&(e.consumed||e.descriptor.playerId!==target.playerId||e.descriptor.profileId!==target.profileId||e.descriptor.learningEpoch!==target.learningEpoch||e.descriptor.baseVersionId!==target.baseVersionId),'Unconsumed current intervention result');results.delete(operationId);});},
+  observe(){requireContract(!disposed,'Intervention disposed');const a=authority();if(active)interventionIdentity(active.identity,ports.bodyIdentity);return Object.freeze({context,acceptedTick,active,lastClosed,suspended:a.suspended,retired,fault,pending:pending?.ticket??null,results:results.size});},
+  dispose(){requireContract(!busy&&pending===null,'Intervention cannot dispose pending protected admission');if(disposed)return;requireContract(retired||active===null,'Intervention explicit shutdown retirement required');disposed=true;active=null;lastClosed=null;completed=null;results.clear();},
+ });
+}
+export type InterventionLifecycle=ReturnType<typeof createInterventionLifecycle>;

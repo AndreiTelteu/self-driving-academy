@@ -1,0 +1,97 @@
+{
+  "root": "F:/Sites/self-driving-academy/.worktrees/manual-segments-01",
+  "node": "v24.21.0",
+  "bins": {
+    "prettier": "F:\\Sites\\self-driving-academy\\node_modules\\prettier\\bin\\prettier.cjs",
+    "tsc": "F:\\Sites\\self-driving-academy\\node_modules\\typescript\\bin\\tsc",
+    "eslint": "F:\\Sites\\self-driving-academy\\node_modules\\eslint\\bin\\eslint.js"
+  },
+  "dependencyResolution": "Exact locked versions already installed at canonical ancestor; no install needed. No native world acquired by these commands.",
+  "commands": [
+    [
+      "01-format",
+      [
+        "F:\\Sites\\self-driving-academy\\node_modules\\prettier\\bin\\prettier.cjs",
+        "--write",
+        "scripts/benchmark-manual-segments-reference.mjs",
+        "scripts/manual-segments-reference-records.mjs",
+        "tests/telemetry/manual-segments-reference.ts",
+        "Docs/Evidence/069-manual-segments/verify-reference.mjs",
+        "tests/telemetry/manual-segments-reference-records.test.mjs",
+        "Docs/Evidence/069-manual-segments/source-design-01.md",
+        "Docs/Evidence/069-manual-segments/native-reference-plan-01.md",
+        "Docs/Evidence/069-manual-segments/native-reference-source-handoff-01.md"
+      ]
+    ],
+    [
+      "02-types-production",
+      [
+        "F:\\Sites\\self-driving-academy\\node_modules\\typescript\\bin\\tsc",
+        "--noEmit"
+      ]
+    ],
+    [
+      "03-types-tests",
+      [
+        "F:\\Sites\\self-driving-academy\\node_modules\\typescript\\bin\\tsc",
+        "-p",
+        "tsconfig.tests.json",
+        "--noEmit"
+      ]
+    ],
+    [
+      "04-scoped-lint",
+      [
+        "F:\\Sites\\self-driving-academy\\node_modules\\eslint\\bin\\eslint.js",
+        "scripts/benchmark-manual-segments-reference.mjs",
+        "scripts/manual-segments-reference-records.mjs",
+        "tests/telemetry/manual-segments-reference.ts",
+        "--max-warnings",
+        "0"
+      ]
+    ],
+    [
+      "05-syntax-0",
+      [
+        "--check",
+        "scripts/benchmark-manual-segments-reference.mjs"
+      ]
+    ],
+    [
+      "05-syntax-1",
+      [
+        "--check",
+        "scripts/manual-segments-reference-records.mjs"
+      ]
+    ],
+    [
+      "05-syntax-2",
+      [
+        "--check",
+        "Docs/Evidence/069-manual-segments/verify-reference.mjs"
+      ]
+    ],
+    [
+      "05-syntax-3",
+      [
+        "--check",
+        "tests/telemetry/manual-segments-reference-records.test.mjs"
+      ]
+    ],
+    [
+      "06-pure",
+      [
+        "--import",
+        "./scripts/register-typescript.mjs",
+        "--test",
+        "tests/telemetry/manual-segments-reference-records.test.mjs"
+      ]
+    ],
+    [
+      "07-architecture",
+      [
+        "scripts/verify-architecture.mjs"
+      ]
+    ]
+  ]
+}

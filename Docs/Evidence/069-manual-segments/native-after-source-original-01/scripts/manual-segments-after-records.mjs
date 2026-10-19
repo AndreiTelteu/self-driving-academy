@@ -1,0 +1,205 @@
+// SOURCE-only AFTER records: real production069 and original chronological parity; no world acquisition.
+import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
+import { mkdir, readFile, writeFile, readdir } from 'node:fs/promises';
+import { resolve, dirname } from 'node:path';
+export const sha256 = (bytes) => createHash('sha256').update(bytes).digest('hex');
+export const REFERENCE_PROTOCOL = Object.freeze({
+  version: '069-original-protocol-after-v1',
+  warmupTicks: 180,
+  measuredTicks: 600,
+  hz: 60,
+  pairs: 5,
+  populations: [70, 110],
+  fleetWorlds: 20,
+  semanticWorlds: 4,
+  channels: ['tickMs', 'authorityMs', 'boundaryMs', 'deliveryMs', 'rapierMs'],
+  sampleCount: 600,
+  normalTickP95Ms: 5.5,
+  normalRapierP95Ms: 3,
+  recordByteCap: 65536,
+  recordSampleCap: 32,
+  recordEventCap: 8,
+});
+export function descriptors() {
+  const rows = [];
+  for (const count of REFERENCE_PROTOCOL.populations)
+    for (let pair = 0; pair < 5; pair++)
+      for (const observer of pair % 2 === 0 ? [false, true] : [true, false])
+        rows.push({
+          ordinal: rows.length,
+          count,
+          pair,
+          observer,
+          classId: null,
+          fixedMode: null,
+          kind: 'FLEET',
+        });
+  for (const classId of ['sedan', 'compact'])
+    for (const fixedMode of ['MANUAL', 'LEARNING'])
+      rows.push({
+        ordinal: rows.length,
+        count: 2,
+        pair: 0,
+        observer: true,
+        classId,
+        fixedMode,
+        kind: 'SEMANTIC',
+      });
+  return rows;
+}
+export async function immutableJson(path, value, cap = 4 * 1024 * 1024) {
+  const bytes = Buffer.from(JSON.stringify(value, null, 2) + '\n');
+  assert(bytes.length <= cap, 'Bounded immutable JSON');
+  await mkdir(dirname(path), { recursive: true });
+  await writeFile(path, bytes, { flag: 'wx' });
+  return { bytes: bytes.length, sha256: sha256(bytes) };
+}
+export function nearestRank(values, p) {
+  assert(
+    values.length > 0 && values.every((v) => Number.isFinite(v) && v >= 0),
+    'Finite timing channel',
+  );
+  return [...values].sort((a, b) => a - b)[Math.ceil(p * values.length) - 1];
+}
+export function distribution(values) {
+  return {
+    count: values.length,
+    p50: nearestRank(values, 0.5),
+    p95: nearestRank(values, 0.95),
+    p99: nearestRank(values, 0.99),
+    min: Math.min(...values),
+    max: Math.max(...values),
+  };
+}
+export function validateRecord(record, descriptor, sourceHash) {
+  assert.deepEqual(record.descriptor, descriptor);
+  assert.equal(record.sourceHash, sourceHash);
+  assert.equal(record.status, 'PASS');
+  assert.equal(record.attemptedTick, 780);
+  assert.equal(record.acceptedTick, 780);
+  assert.equal(record.timingSampleCount, descriptor.observer ? 600 : 0);
+  assert.equal(record.nativeStepSerial, 780);
+  assert.equal(record.finiteBodyTickChecks, 780 * descriptor.count);
+  for (const field of ['nativeInputDigest', 'packetDigest', 'physicalDigest', 'rawInputDigest'])
+    assert.match(record[field], /^[a-f0-9]{64}$/);
+  assert.equal(record.checkpoints.length, 13);
+  for (let i = 0; i < 13; i++) {
+    const cp = record.checkpoints[i];
+    assert.equal(cp.tick, (i + 1) * 60);
+    assert.equal(cp.nativeStepSerial, cp.tick);
+    assert.equal(cp.bodies.length, descriptor.count);
+    for (const body of cp.bodies) {
+      assert.equal(typeof body.identity.entityId, 'string');
+      assert(Number.isSafeInteger(body.identity.generation) && body.identity.generation > 0);
+      for (const value of [
+        ...Object.values(body.transform.positionM),
+        ...Object.values(body.transform.rotationQuaternion),
+        ...Object.values(body.velocityMps),
+      ])
+        assert(Number.isFinite(value));
+    }
+  }
+  assert.equal(record.drivingHostMutations, 0);
+  assert.equal(record.cleanup.errors.length, 0);
+  assert.deepEqual(record.cleanup.snapshots.body, { entities: 0, subscriptions: 0 });
+  assert.equal(record.cleanup.snapshots.collision.vehicles, 0);
+  assert.equal(record.cleanup.snapshots.collision.obstacles, 0);
+  assert.equal(record.cleanup.snapshots.collision.colliders, 0);
+  assert.equal(new Set(record.cleanup.attempts).size, record.cleanup.attempts.length);
+  assert.deepEqual(record.cleanup.attempts, [...record.acquiredOwners].reverse());
+  for (const name of ['controller', 'authority', 'mode', 'keyboard', 'segment', 'selection', 'bus','intake','bridge'])
+    assert.equal(record.cleanup.snapshots[name].disposed, true);
+  assert.equal(record.cleanup.snapshots.segment.records, 0);
+  assert.equal(record.cleanup.snapshots.bus.retainedEvents, 0);
+  assert.equal(record.cleanup.snapshots.cameraTarget, null);
+  assert.equal(record.cleanup.disposedReadRejected, true);
+  for (const channel of REFERENCE_PROTOCOL.channels) {
+    if (!descriptor.observer) {
+      assert.equal(record.raw[channel], null);
+      assert.equal(record.distributions[channel], null);
+    } else {
+      assert.equal(record.raw[channel].length, 600);
+      assert.deepEqual(record.distributions[channel], distribution(record.raw[channel]));
+    }
+  }
+  if (descriptor.observer && descriptor.count === 70) {
+    assert(record.distributions.tickMs.p95 <= 5.5, 'Normal tick absolute gate');
+    assert(record.distributions.rapierMs.p95 <= 3, 'Normal Rapier absolute gate');
+  }
+  assert(record.liveRecords.archivedUtf8Bytes <= 32*1024*1024);
+  assert(record.liveRecords.intake.entries+record.liveRecords.intake.acknowledgedReceipts<=64);
+  assert(record.liveRecords.intake.serializedMetadataBytes<=256*1024);
+  assert(record.liveRecords.intake.referencedPayloadBytes<=16*1024*1024);
+  assert.equal(record.cleanup.snapshots.intake.entries,0);assert.equal(record.cleanup.snapshots.intake.pending,0);assert.equal(record.cleanup.snapshots.intake.acknowledgedReceipts,0);assert.equal(record.cleanup.snapshots.intake.referencedPayloadBytes,0);
+  assert.equal(record.cleanup.snapshots.bridge.fault,null);
+  assert.equal(record.lifecycle.length,20);for(let i=0;i<20;i++){const cycle=record.lifecycle[i];assert.equal(cycle.cycle,i);assert.equal(cycle.scope,'ACTUAL_AUTO_EMPTY_OWNER_NO_EXTRA_NATIVE_STEP');assert.equal(cycle.nativeSerialBefore,780);assert.equal(cycle.nativeSerialAfter,780);assert.equal(cycle.beforeHash,cycle.afterHash);assert.equal(cycle.cleanup.errors.length,0);assert.deepEqual(cycle.cleanup.attempts,['bridge','intake','events','store','authority','controller']);for(const name of cycle.cleanup.attempts)assert.equal(cycle.cleanup.snapshots[name].disposed,true);assert.equal(cycle.cleanup.snapshots.store.records,0);assert.equal(cycle.cleanup.snapshots.events.retainedEvents,0);assert.equal(cycle.cleanup.snapshots.intake.entries,0);}
+  assert(record.liveRecords.retainedRecords <= 64);
+  assert(record.segmentRecords.length >= 1 && record.segmentRecords.length <= 64);
+  for (const entry of record.segmentRecords) {
+    assert(entry.samples.length <= 32 && entry.events.length <= 8);
+    assert(Buffer.byteLength(JSON.stringify(entry)) <= 65536);
+    assert.equal(entry.learningEligible,entry.controlMode==='LEARNING','Actual069 OPEN freezes eligibility; reference remains ineligible');
+    assert.equal(entry.completeness, 'CLOSED');
+    assert(
+      entry.samples.every((s) => s.tick >= entry.startTick && s.tick < entry.endTick),
+      'Reference boundary t belongs new segment',
+    );
+  }
+}
+export async function verifyInventory(folder, sourceHash) {
+  const expected = descriptors(),
+    files = await readdir(resolve(folder, 'worlds'));
+  assert.deepEqual(
+    files.sort(),
+    expected
+      .flatMap((v) => [
+        'world-' + v.ordinal + '.started.json',
+        'world-' + v.ordinal + '.complete.json',
+      ])
+      .sort(),
+    'Exact world inventory',
+  );
+  const records = [];
+  for (const d of expected) {
+    const started = JSON.parse(
+      await readFile(resolve(folder, 'worlds/world-' + d.ordinal + '.started.json')),
+    );
+    const record = JSON.parse(
+      await readFile(resolve(folder, 'worlds/world-' + d.ordinal + '.complete.json')),
+    );
+    assert.deepEqual(started.descriptor, d);
+    assert.equal(started.sourceHash, sourceHash);
+    assert(Date.parse(started.startedAt) <= Date.parse(record.completedAt));
+    validateRecord(record, d, sourceHash);
+    records.push({ ...record, worldStartedAt: started.startedAt });
+  }
+  for (const count of [70, 110])
+    for (let pair = 0; pair < 5; pair++) {
+      const arms = records.filter(
+        (v) => v.descriptor.count === count && v.descriptor.pair === pair,
+      );
+      assert.equal(arms.length, 2);
+      for (const field of ['nativeInputDigest', 'packetDigest', 'physicalDigest', 'rawInputDigest'])
+        assert.equal(arms[0][field], arms[1][field], 'OFF/ON ' + field);
+      assert.deepEqual(arms[0].checkpoints, arms[1].checkpoints, 'OFF/ON exact native states');
+    }
+  return records;
+}
+
+export function compareOriginal(before,after){
+ assert.equal(before.length,24);assert.equal(after.length,24);
+ for(let i=0;i<24;i++){
+  const a=after[i],b=before[i];assert.deepEqual(a.descriptor,b.descriptor);
+  for(const field of ['nativeInputDigest','packetDigest','physicalDigest','rawInputDigest'])assert.equal(a[field],b[field],'Original BEFORE exact '+field);
+  assert.deepEqual(a.checkpoints,b.checkpoints,'Original13 checkpoints all native bodies');
+  assert.deepEqual(a.boundaryTrace.map(({tick,mode,reason,completeness})=>({tick,mode,reason,completeness})),b.boundaryTrace.map(({tick,mode,reason,completeness})=>({tick,mode,reason,completeness})),'Original physical mode/trip/selection closure choreography');
+ }
+ const rows=[];for(const count of [70,110]){
+  for(const channel of ['tickMs','authorityMs','rapierMs']){
+   const pairs=[];for(let pair=0;pair<5;pair++){const pick=list=>list.find(r=>r.descriptor.count===count&&r.descriptor.pair===pair&&r.descriptor.observer);const b=pick(before).distributions[channel].p95,a=pick(after).distributions[channel].p95;pairs.push({pair,before:b,after:a,deltaMs:a-b,ratio:a/b,failed:a>1.1*b&&a-b>1});}rows.push({count,channel,pairs,failedPairs:pairs.filter(p=>p.failed).length,verdict:pairs.filter(p=>p.failed).length>=3?'FAIL':'PASS'});
+  }
+  for(const observer of [false,true]){const pairs=[];for(let pair=0;pair<5;pair++){const pick=list=>list.find(r=>r.descriptor.count===count&&r.descriptor.pair===pair&&r.descriptor.observer===observer);const b=pick(before).heap.afterMeasured.heapUsed,a=pick(after).heap.afterMeasured.heapUsed;pairs.push({pair,before:b,after:a,deltaBytes:a-b,ratio:a/b,failed:a>1.1*b&&a-b>5*1024*1024});}rows.push({count,channel:'RAW_RUNTIME_JS_HEAP_USED',observer,pairs,failedPairs:pairs.filter(p=>p.failed).length,verdict:pairs.filter(p=>p.failed).length>=3?'FAIL':'PASS',scope:'matched process.memoryUsage immediately postwindow, not exact ownership/native/totalRAM; no forcedGC'});}
+ }
+ return {verdict:rows.some(r=>r.verdict==='FAIL')?'FAIL':'PASS',rows,nonComparable:['boundaryMs production owner/fence window differs from placeholder boundary','deliveryMs actual guards+007+receipt vs old007-only','actual32sample terminal boundary not original parse-only stage','supportedSchema actual services total vs original synthetic arraypush total'],scope:'Supplemental CPU/rawJSproxy only; no normalFrame/RAF/GPU/inputLatency/exactRAM acceptance'};
+}

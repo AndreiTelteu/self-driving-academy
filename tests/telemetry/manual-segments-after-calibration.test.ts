@@ -1,0 +1,214 @@
+// SOURCE-only actual domain lifecycle/injected authority DTOs; no Rapier acquisition.
+import assert from 'node:assert/strict';
+import test from 'node:test';
+import { readFileSync } from 'node:fs';
+import { segmentFixture } from './manual-segments-fixture';
+import type { InterventionIntakeDescriptor, InterventionIntakeReceipt } from '../../src/telemetry';
+import {
+  validateOwnerIntake,
+  validateCheckedProduct,
+  checkedProductBinding,
+  REUSE_PRODUCT_SHA,
+  REUSE_PRODUCT_RECEIPT,
+  validateCalibrationClosure,
+  CALIBRATION_CLOSURE,
+  CHECKED_PRODUCT_SHA,
+  exportFailurePreserving,
+  serializeDiagnostic,
+} from '../../scripts/manual-segments-calibration-proof.mjs';
+import { retireHealthyAfterFailure } from './manual-segments-after';
+test('calibration binds actual descriptor after34 real lifecycle prepares, never guessed close2', () => {
+  const box: {
+    descriptor: InterventionIntakeDescriptor | null;
+    receipt: InterventionIntakeReceipt | null;
+  } = { descriptor: null, receipt: null };
+  const f = segmentFixture({
+    reserveIntake(d) {
+      f.intake.reserve(d);
+      box.descriptor = d;
+    },
+    acceptIntake(d) {
+      box.receipt = f.intake.accept(d);
+      return box.receipt;
+    },
+  });
+  for (let tick = 1; tick <= 34; tick++) {
+    f.apply(tick === 34 ? 'MANUAL' : 'LEARNING', tick === 34 ? 'MODE_CHANGE' : null);
+    if (tick >= 2 && tick <= 33) f.owner.appendSample(f.identity, f.actualSample(tick, 'LEARNING'));
+  }
+  assert(box.descriptor);
+  assert(box.receipt);
+  assert.notEqual(box.descriptor.operationId, 'tests:close:2');
+  const id = box.descriptor.operationId;
+  const record = f.store.port.read(f.owner.observe().lastClosed!.segmentId)!;
+  assert.equal(record.samples.length, 32);
+  assert.equal(record.endTick, 34);
+  assert.equal(f.intake.inspect(id), box.receipt);
+  validateOwnerIntake(record, f.intake.read(id), box.receipt, f.owner.observe());
+  assert.throws(() => validateOwnerIntake(record, box.descriptor, null, f.owner.observe()));
+  assert.throws(() =>
+    validateOwnerIntake(
+      record,
+      box.descriptor,
+      { ...box.receipt, operationId: 'tests:close:2' },
+      f.owner.observe(),
+    ),
+  );
+  assert.throws(() =>
+    validateOwnerIntake(
+      record,
+      { ...box.descriptor, worldEpoch: 99 },
+      box.receipt,
+      f.owner.observe(),
+    ),
+  );
+});
+test('calibration required transitive helper and18 checked product binding cannot be omitted', () => {
+  const checked = JSON.parse(
+    readFileSync(
+      new URL(
+        '../../Docs/Evidence/069-manual-segments/implementation-scoped-checks-03/results-final.json',
+        import.meta.url,
+      ),
+      'utf8',
+    ),
+  );
+  assert.equal(checked.sourceFinal, CHECKED_PRODUCT_SHA);
+  const paths = [...CALIBRATION_CLOSURE, ...checked.source.map((r: { path: string }) => r.path)];
+  validateCalibrationClosure(paths, checked);
+  assert.throws(() =>
+    validateCalibrationClosure(
+      paths.filter((p) => p !== 'scripts/manual-segments-calibration-proof.d.mts'),
+      checked,
+    ),
+  );
+  assert.throws(() =>
+    validateCalibrationClosure(
+      paths.filter((p) => p !== 'tests/telemetry/manual-segments-reference.ts'),
+      checked,
+    ),
+  );
+  assert.throws(() =>
+    validateCalibrationClosure(paths, { ...checked, sourceFinal: '0'.repeat(64) }),
+  );
+});
+test('retirement and export failures preserve original error references and bounded nested stacks', async () => {
+  const f = segmentFixture();
+  f.apply('LEARNING');
+  const original = new TypeError('original sample failure'),
+    retirement = new RangeError('actual retirement failure'),
+    exportError = new SyntaxError('actual export failure');
+  let aggregate: AggregateError;
+  try {
+    retireHealthyAfterFailure(
+      {
+        lifecycle: {
+          ...f.owner,
+          retire() {
+            throw retirement;
+          },
+        },
+      },
+      () => f.cause('SHUTDOWN', 'AT_LAST_ACCEPTED_TICK'),
+    );
+    throw Error('Expected retirement failure');
+  } catch (error) {
+    aggregate = new AggregateError([original, error], 'original/retirement');
+  }
+  await assert.rejects(
+    exportFailurePreserving(aggregate!, async () => {
+      throw exportError;
+    }),
+    (error: unknown) => {
+      assert(error instanceof AggregateError);
+      assert.equal(error.errors[0], aggregate);
+      assert.equal(error.errors[1], exportError);
+      assert.equal(aggregate.errors[0], original);
+      assert.equal(aggregate.errors[1], retirement);
+      const raw = serializeDiagnostic(error);
+      assert.equal(raw.causes![0].causes![0].name, 'TypeError');
+      assert.match(raw.causes![0].causes![1].stack, /actual retirement failure/);
+      return true;
+    },
+  );
+});
+
+test('AFTER approved18 product fingerprint rejects substituted omitted empty or reordered rows before byte comparisons', () => {
+  const checked = JSON.parse(
+    readFileSync(
+      new URL(
+        '../../Docs/Evidence/069-manual-segments/implementation-scoped-checks-03/results-final.json',
+        import.meta.url,
+      ),
+      'utf8',
+    ),
+  );
+  validateCheckedProduct(checked);
+  validateCheckedProduct(JSON.parse(JSON.stringify(checked)));
+  const substituted = structuredClone(checked);
+  substituted.source[0].sha256 = 'a'.repeat(64);
+  assert.throws(() => validateCheckedProduct(substituted));
+  assert.throws(() => validateCheckedProduct({ ...checked, source: checked.source.slice(1) }));
+  assert.throws(() => validateCheckedProduct({ ...checked, source: [] }));
+  assert.throws(() =>
+    validateCheckedProduct({ ...checked, source: [...checked.source].reverse() }),
+  );
+  let invoked = 0;
+  const getter = {
+    sourceFinal: CHECKED_PRODUCT_SHA,
+    get source() {
+      invoked++;
+      return checked.source;
+    },
+  };
+  assert.throws(() => validateCheckedProduct(getter));
+  assert.equal(invoked, 0);
+});
+
+test('new collector pin cannot accept original receipt, reordered source, or unreviewed manifest pair', () => {
+  const fresh = JSON.parse(
+    readFileSync(
+      new URL(
+        '../../Docs/Evidence/069-manual-segments/optimization-checks-01/results-final.json',
+        import.meta.url,
+      ),
+      'utf8',
+    ),
+  );
+  const old = JSON.parse(
+    readFileSync(
+      new URL(
+        '../../Docs/Evidence/069-manual-segments/implementation-scoped-checks-03/results-final.json',
+        import.meta.url,
+      ),
+      'utf8',
+    ),
+  );
+  validateCheckedProduct(fresh, REUSE_PRODUCT_SHA);
+  validateCheckedProduct(old, CHECKED_PRODUCT_SHA);
+  assert.throws(() => validateCheckedProduct(old, REUSE_PRODUCT_SHA));
+  assert.throws(() =>
+    validateCheckedProduct({ ...fresh, source: [...fresh.source].reverse() }, REUSE_PRODUCT_SHA),
+  );
+  assert.throws(() => validateCheckedProduct({ ...fresh, sourceFinal: '0'.repeat(64) }));
+  assert.deepEqual(
+    checkedProductBinding({
+      checkedProductReceipt: REUSE_PRODUCT_RECEIPT,
+      checkedProductFingerprint: REUSE_PRODUCT_SHA,
+    }),
+    { path: REUSE_PRODUCT_RECEIPT, fingerprint: REUSE_PRODUCT_SHA },
+  );
+  assert.throws(() =>
+    checkedProductBinding({
+      checkedProductReceipt: REUSE_PRODUCT_RECEIPT,
+      checkedProductFingerprint: CHECKED_PRODUCT_SHA,
+    }),
+  );
+  assert.throws(() => checkedProductBinding({ checkedProductFingerprint: REUSE_PRODUCT_SHA }));
+  assert.throws(() =>
+    checkedProductBinding({
+      checkedProductReceipt: REUSE_PRODUCT_RECEIPT,
+      checkedProductFingerprint: '0'.repeat(64),
+    }),
+  );
+});

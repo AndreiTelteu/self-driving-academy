@@ -1,0 +1,9 @@
+# Native AFTER SOURCE12 AST revision
+
+SOURCE-only parser choice authorized by root, no checks executed. Original lexical SOURCE12 is preserved under native-after-source-original-12 and original draft12 manifest untouched. First failed archive01 and all markers remain immutable.
+
+Read actual installed @babel/parser8.0.6 package, public typings parse(source,options), TypeScript plugin and createImportExpressions, plus actual Babeltypes8 TSImportType.source / ImportExpression.source / TSExternalModuleReference.expression definitions. Original package-lock pins parser version/integrity. Helper now lazily loads the public parser only inside verifyModuleClosure, asserts installed version and original raw lock/integrity, and strictly parses TS/JS/d.mts (TSX JSX plugin only when applicable). No new packages or network. Measured parent imports lightweight helper but never invokes AST parsing; bounded archive CLI child/independent readers remain the sole parser realms.
+
+AST traversal bounds100,000 nodes/pending nodes per512KiBfile,512paths/32MiBtotal,8192importedges; traverses true static imports/exports, TS import types/external module refs, literal ImportExpression, require and import.meta.resolve. Nonliteral/computed imports fail. No archived module executes. Regex, templates and type alias identifiers are AST data rather than ad-hoc token ambiguities. External package bodies remain excluded with locked version/integrity disclosure; no total residentRAM/native acceptance claim.
+
+The former implementation-specific ambiguous-slash rejection draft is replaced by a genuine supported-syntax regex-after-function dependency test, still rejecting missing actual import target. All missingcontroller/rehashedclosure/lock/nonliteral/actualfailedregex/typealias fixtures retained. Added malformed syntax negative; intended41cases UNEXECUTED. Gates/baseline/product18 unchanged; future collector02 distinct remains absent.

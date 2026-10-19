@@ -1,0 +1,28 @@
+// SOURCE-only adverse comparison DTO tests. No world/native initialization, server or browser.
+import assert from 'node:assert/strict';
+import test from 'node:test';
+import {descriptors,compareOriginal,distribution,validateSemanticBudgets,validateBeforeBinding,PINNED_BEFORE} from '../../scripts/manual-segments-after-records.mjs';
+const digest='a'.repeat(64);
+function fixture(){return descriptors().map(descriptor=>({descriptor,nativeInputDigest:digest,packetDigest:digest,physicalDigest:digest,rawInputDigest:digest,checkpoints:[{tick:60,nativeStepSerial:60}],boundaryTrace:[{tick:1,mode:'MANUAL',reason:null,completeness:'OPEN'}],distributions:Object.fromEntries(['tickMs','authorityMs','rapierMs'].map(c=>[c,distribution(Array(600).fill(3))])),heap:{afterMeasured:{heapUsed:40*1024*1024}}}));}
+test('AFTER exact original physical/input/closure parity rejects forged native and omitted world',()=>{
+ const before=fixture(),after=fixture();assert.equal(compareOriginal(before,after).verdict,'PASS');after[0].nativeInputDigest='b'.repeat(64);assert.throws(()=>compareOriginal(before,after));assert.throws(()=>compareOriginal(before,after.slice(1)));
+});
+test('AFTER original10percent AND1ms three-of-five gate keeps individual failures and exact borderline',()=>{
+ const before=fixture(),after=fixture();for(const r of after)if(r.descriptor.count===70&&r.descriptor.observer&&r.descriptor.pair<3)r.distributions.tickMs=distribution(Array(600).fill(4.01));const report=compareOriginal(before,after);assert.equal(report.verdict,'FAIL');assert.equal(report.rows.find(r=>r.count===70&&r.channel==='tickMs').failedPairs,3);
+ for(const r of after)if(r.descriptor.count===70&&r.descriptor.observer)r.distributions.tickMs=distribution(Array(600).fill(4));assert.equal(compareOriginal(before,after).rows.find(r=>r.count===70&&r.channel==='tickMs').failedPairs,0);
+});
+test('AFTER matched rawheap3of5 usesboth10percent and5MiB, never disposedheap or no observer timings',()=>{
+ const before=fixture(),after=fixture();for(const r of after)if(r.descriptor.count===110&&!r.descriptor.observer&&r.descriptor.pair<3)r.heap.afterMeasured.heapUsed+=6*1024*1024;const result=compareOriginal(before,after);assert.equal(result.verdict,'FAIL');assert.equal(result.rows.find(r=>r.channel==='RAW_RUNTIME_JS_HEAP_USED'&&r.count===110&&!r.observer).failedPairs,3);assert.equal(result.rows.find(r=>r.count===70&&r.channel==='tickMs').failedPairs,0);
+});
+
+test('AFTER all pairedCPU/heap strictAND boundaries preserve two failures but reject three',()=>{
+ for(const [channel,afterValue] of [['tickMs',4.01],['heap',46*1024*1024]])for(const failures of [2,3]){const before=fixture(),after=fixture();for(const r of after)if(r.descriptor.count===70&&r.descriptor.observer&&r.descriptor.pair<failures){if(channel==='heap')r.heap.afterMeasured.heapUsed=afterValue;else r.distributions.tickMs=distribution(Array(600).fill(afterValue));}assert.equal(compareOriginal(before,after).verdict,failures===3?'FAIL':'PASS');}
+ const cases=[{before:20,after:21.01,fail:false},{before:3,after:4,fail:false},{before:10,after:11,fail:false},{before:3,after:4.01,fail:true}];for(const c of cases){const b=fixture(),a=fixture();for(const r of b)r.distributions.tickMs=distribution(Array(600).fill(c.before));for(const r of a)r.distributions.tickMs=distribution(Array(600).fill(c.after));assert.equal(compareOriginal(b,a).rows.find(r=>r.channel==='tickMs').failedPairs,c.fail?5:0);}
+ for(const c of [{b:100*1024*1024,a:106*1024*1024,fail:false},{b:40*1024*1024,a:45*1024*1024,fail:false},{b:50*1024*1024,a:55*1024*1024,fail:false},{b:40*1024*1024,a:46*1024*1024,fail:true}]){const b=fixture(),a=fixture();for(const r of b)r.heap.afterMeasured.heapUsed=c.b;for(const r of a)r.heap.afterMeasured.heapUsed=c.a;assert.equal(compareOriginal(b,a).rows.find(r=>r.channel==='RAW_RUNTIME_JS_HEAP_USED').failedPairs,c.fail?5:0);}
+});
+test('AFTER generator semantic acceptance rejects nativeboundary or complete schema total over5.5',()=>{
+ const row={descriptor:{kind:'SEMANTIC'},maximumRecord:{samples:32,bytes:64000,scope:'ACTUAL_PRODUCTION_LIFECYCLE_NATIVE_SAMPLES_TERMINAL_BOUNDARY',nativeLifecycleBoundaryMs:5.5},schemaStress:{bytes:65536,record:{samples:Array(32),events:Array(8)},ownerGuardIntakeCoverage:'UNVALIDATED_NO_ACTIVE_RECORD_EVENT_IMPORT_API',timings:Array.from({length:5},()=>({admissionMs:1,reserveMs:1,commitMs:1,readbackMs:1,eventMs:1,intakeMs:.5,totalMs:5.5}))}};validateSemanticBudgets(row);const native=structuredClone(row);native.maximumRecord.nativeLifecycleBoundaryMs=5.5001;assert.throws(()=>validateSemanticBudgets(native));const schema=structuredClone(row);schema.schemaStress.timings[0].intakeMs=.6;schema.schemaStress.timings[0].totalMs=5.6;assert.throws(()=>validateSemanticBudgets(schema));
+});
+test('AFTER pins original acceptedbaseline/native even validself-rehash or forgedchronology',()=>{
+ const native={sha256:PINNED_BEFORE.nativeSha256,bytes:PINNED_BEFORE.nativeBytes},before={sourceHash:PINNED_BEFORE.sourceHash,native},complete={sourceHash:PINNED_BEFORE.sourceHash,status:'PASS',worlds:24,completedAt:'2026-10-07T00:58:42.188Z'},after={native,startedAt:'2026-10-07T03:00:00.000Z'};validateBeforeBinding(before,complete,PINNED_BEFORE.manifestSha256,after);assert.throws(()=>validateBeforeBinding(null,complete,PINNED_BEFORE.manifestSha256,after));assert.throws(()=>validateBeforeBinding({...before,sourceHash:'b'.repeat(64)},complete,'c'.repeat(64),after));assert.throws(()=>validateBeforeBinding(before,complete,PINNED_BEFORE.manifestSha256,{...after,native:{...native,sha256:'d'.repeat(64)}}));assert.throws(()=>validateBeforeBinding(before,complete,PINNED_BEFORE.manifestSha256,{...after,startedAt:'2026-10-07T00:58:42.187Z'}));
+});

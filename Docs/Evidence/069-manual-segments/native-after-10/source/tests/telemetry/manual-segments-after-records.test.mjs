@@ -1,0 +1,293 @@
+// SOURCE-only adverse comparison DTO tests. No world/native initialization, server or browser.
+import assert from 'node:assert/strict';
+import test from 'node:test';
+import {
+  descriptors,
+  compareOriginal,
+  distribution,
+  validateSemanticBudgets,
+  validateBeforeBinding,
+  PINNED_BEFORE,
+} from '../../scripts/manual-segments-after-records.mjs';
+const digest = 'a'.repeat(64);
+function fixture() {
+  return descriptors().map((descriptor) => ({
+    descriptor,
+    nativeInputDigest: digest,
+    packetDigest: digest,
+    physicalDigest: digest,
+    rawInputDigest: digest,
+    checkpoints: [{ tick: 60, nativeStepSerial: 60 }],
+    boundaryTrace: [{ tick: 1, mode: 'MANUAL', reason: null, completeness: 'OPEN' }],
+    distributions: Object.fromEntries(
+      ['tickMs', 'authorityMs', 'rapierMs'].map((c) => [c, distribution(Array(600).fill(3))]),
+    ),
+    heap: Object.fromEntries(
+      ['beforeWarmup', 'afterWarmup', 'afterMeasured'].map((phase) => [
+        phase,
+        {
+          rss: 300 * 1024 * 1024,
+          heapTotal: 256 * 1024 * 1024,
+          heapUsed: 40 * 1024 * 1024,
+          external: 1024,
+          arrayBuffers: 1024,
+        },
+      ]),
+    ),
+  }));
+}
+test('AFTER exact original physical/input/closure parity rejects forged native and omitted world', () => {
+  const before = fixture(),
+    after = fixture();
+  assert.equal(compareOriginal(before, after).verdict, 'PASS');
+  after[0].nativeInputDigest = 'b'.repeat(64);
+  assert.throws(() => compareOriginal(before, after));
+  assert.throws(() => compareOriginal(before, after.slice(1)));
+});
+test('AFTER original10percent AND1ms three-of-five gate keeps individual failures and exact borderline', () => {
+  const before = fixture(),
+    after = fixture();
+  for (const r of after)
+    if (r.descriptor.count === 70 && r.descriptor.observer && r.descriptor.pair < 3)
+      r.distributions.tickMs = distribution(Array(600).fill(4.01));
+  const report = compareOriginal(before, after);
+  assert.equal(report.verdict, 'FAIL');
+  assert.equal(report.rows.find((r) => r.count === 70 && r.channel === 'tickMs').failedPairs, 3);
+  for (const r of after)
+    if (r.descriptor.count === 70 && r.descriptor.observer)
+      r.distributions.tickMs = distribution(Array(600).fill(4));
+  assert.equal(
+    compareOriginal(before, after).rows.find((r) => r.count === 70 && r.channel === 'tickMs')
+      .failedPairs,
+    0,
+  );
+});
+test('AFTER matched rawheap3of5 still computes threshold pairs but is waived from the verdict, never disposedheap or no observer timings', () => {
+  const before = fixture(),
+    after = fixture();
+  for (const r of after)
+    if (r.descriptor.count === 110 && !r.descriptor.observer && r.descriptor.pair < 3)
+      r.heap.afterMeasured.heapUsed += 6 * 1024 * 1024;
+  const result = compareOriginal(before, after);
+  assert.equal(result.verdict, 'PASS');
+  const heapRow = result.rows.find(
+    (r) => r.channel === 'RAW_RUNTIME_JS_HEAP_USED' && r.count === 110 && !r.observer,
+  );
+  assert.equal(heapRow.failedPairs, 3);
+  assert.equal(heapRow.verdict, 'WAIVED_NOT_COMPARABLE');
+  assert.equal(result.rows.find((r) => r.count === 70 && r.channel === 'tickMs').failedPairs, 0);
+});
+
+test('AFTER all pairedCPU/heap strictAND boundaries preserve two failures but reject three', () => {
+  for (const [channel, afterValue] of [
+    ['tickMs', 4.01],
+    ['heap', 46 * 1024 * 1024],
+  ])
+    for (const failures of [2, 3]) {
+      const before = fixture(),
+        after = fixture();
+      for (const r of after)
+        if (r.descriptor.count === 70 && r.descriptor.observer && r.descriptor.pair < failures) {
+          if (channel === 'heap') r.heap.afterMeasured.heapUsed = afterValue;
+          else r.distributions.tickMs = distribution(Array(600).fill(afterValue));
+        }
+      assert.equal(
+        compareOriginal(before, after).verdict,
+        channel === 'heap' ? 'PASS' : failures === 3 ? 'FAIL' : 'PASS',
+      );
+    }
+  const cases = [
+    { before: 20, after: 21.01, fail: false },
+    { before: 3, after: 4, fail: false },
+    { before: 10, after: 11, fail: false },
+    { before: 3, after: 4.01, fail: true },
+  ];
+  for (const c of cases) {
+    const b = fixture(),
+      a = fixture();
+    for (const r of b) r.distributions.tickMs = distribution(Array(600).fill(c.before));
+    for (const r of a) r.distributions.tickMs = distribution(Array(600).fill(c.after));
+    assert.equal(
+      compareOriginal(b, a).rows.find((r) => r.channel === 'tickMs').failedPairs,
+      c.fail ? 5 : 0,
+    );
+  }
+  for (const c of [
+    { b: 100 * 1024 * 1024, a: 106 * 1024 * 1024, fail: false },
+    { b: 40 * 1024 * 1024, a: 45 * 1024 * 1024, fail: false },
+    { b: 50 * 1024 * 1024, a: 55 * 1024 * 1024, fail: false },
+    { b: 40 * 1024 * 1024, a: 46 * 1024 * 1024, fail: true },
+  ]) {
+    const b = fixture(),
+      a = fixture();
+    for (const r of b) r.heap.afterMeasured.heapUsed = c.b;
+    for (const r of a) r.heap.afterMeasured.heapUsed = c.a;
+    assert.equal(
+      compareOriginal(b, a).rows.find((r) => r.channel === 'RAW_RUNTIME_JS_HEAP_USED').failedPairs,
+      c.fail ? 5 : 0,
+    );
+  }
+});
+test('AFTER generator semantic acceptance rejects nativeboundary or complete schema total over5.5', async () => {
+  const original = JSON.parse(
+      await readFile(
+        new URL(
+          '../../Docs/Evidence/069-manual-segments/native-before-01/worlds/world-20.complete.json',
+          import.meta.url,
+        ),
+      ),
+    ),
+    actual = original.segmentRecords[0],
+    scope = 'ACTUAL_PRODUCTION_LIFECYCLE_NATIVE_SAMPLES_TERMINAL_BOUNDARY',
+    identity = original.checkpoints
+      .at(-1)
+      .bodies.find((body) => body.identity.entityId === actual.vehicleId).identity;
+  const row = {
+    descriptor: { kind: 'SEMANTIC' },
+    segmentRecords: [actual],
+    checkpoints: original.checkpoints,
+    nativeBoundaryTotalMs: 5.5,
+    terminalBoundary: {
+      stage: 'SHUTDOWN_AT_LAST_ACCEPTED_TICK',
+      cause: {
+        schemaVersion: actual.schemaVersion,
+        units: actual.units,
+        sessionId: actual.sessionId,
+        worldEpoch: actual.worldEpoch,
+        reason: 'SHUTDOWN',
+        timing: 'AT_LAST_ACCEPTED_TICK',
+        tick: 780,
+        identity,
+      },
+      nativeSerialBefore: 780,
+      nativeSerialAfter: 780,
+      before: { acceptedTick: 780, active: { segmentId: actual.segmentId } },
+      after: {
+        acceptedTick: 780,
+        lastClosed: { segmentId: actual.segmentId },
+        active: null,
+        retired: true,
+      },
+      closed: { segmentId: actual.segmentId },
+      record: actual,
+      boundaryMs: 5.5,
+    },
+    maximumRecord: {
+      segmentId: actual.segmentId,
+      samples: 32,
+      events: 0,
+      bytes: Buffer.byteLength(JSON.stringify(actual)),
+      scope,
+      nativeLifecycleBoundaryMs: 5.5,
+    },
+    schemaStress: {
+      bytes: 65536,
+      record: original.schemaStress.record,
+      ownerGuardIntakeCoverage: 'UNVALIDATED_NO_ACTIVE_RECORD_EVENT_IMPORT_API',
+      timings: Array.from({ length: 5 }, () => ({
+        admissionMs: 1,
+        reserveMs: 1,
+        commitMs: 1,
+        readbackMs: 1,
+        eventMs: 1,
+        intakeMs: 0.5,
+        totalMs: 5.5,
+      })),
+    },
+  };
+  validateSemanticBudgets(row);
+  const native = structuredClone(row);
+  native.maximumRecord.nativeLifecycleBoundaryMs = 5.5001;
+  assert.throws(() => validateSemanticBudgets(native));
+  const schema = structuredClone(row);
+  schema.schemaStress.timings[0].intakeMs = 0.6;
+  schema.schemaStress.timings[0].totalMs = 5.6;
+  assert.throws(() => validateSemanticBudgets(schema));
+  for (const mutate of [
+    (value) => {
+      value.terminalBoundary.record.samples = [];
+    },
+    (value) => {
+      value.maximumRecord.bytes++;
+    },
+    (value) => {
+      value.nativeBoundaryTotalMs = 1;
+    },
+    (value) => {
+      value.maximumRecord.segmentId = 'other';
+    },
+    (value) => {
+      value.terminalBoundary.cause.identity = {
+        ...value.terminalBoundary.cause.identity,
+        generation: value.terminalBoundary.cause.identity.generation + 1,
+      };
+    },
+    (value) => {
+      value.schemaStress.record.samples.pop();
+    },
+  ]) {
+    const bad = structuredClone(row);
+    mutate(bad);
+    assert.throws(() => validateSemanticBudgets(bad));
+  }
+});
+test('AFTER pins original acceptedbaseline/native even validself-rehash or forgedchronology', () => {
+  const native = { sha256: PINNED_BEFORE.nativeSha256, bytes: PINNED_BEFORE.nativeBytes },
+    before = { sourceHash: PINNED_BEFORE.sourceHash, native },
+    complete = {
+      sourceHash: PINNED_BEFORE.sourceHash,
+      status: 'PASS',
+      worlds: 24,
+      completedAt: '2026-10-07T00:58:42.188Z',
+    },
+    after = { native, startedAt: '2026-10-07T03:00:00.000Z' };
+  validateBeforeBinding(before, complete, PINNED_BEFORE.manifestSha256, after);
+  assert.throws(() => validateBeforeBinding(null, complete, PINNED_BEFORE.manifestSha256, after));
+  assert.throws(() =>
+    validateBeforeBinding(
+      { ...before, sourceHash: 'b'.repeat(64) },
+      complete,
+      'c'.repeat(64),
+      after,
+    ),
+  );
+  assert.throws(() =>
+    validateBeforeBinding(before, complete, PINNED_BEFORE.manifestSha256, {
+      ...after,
+      native: { ...native, sha256: 'd'.repeat(64) },
+    }),
+  );
+  assert.throws(() =>
+    validateBeforeBinding(before, complete, PINNED_BEFORE.manifestSha256, {
+      ...after,
+      startedAt: '2026-10-07T00:58:42.187Z',
+    }),
+  );
+});
+
+// Source-only changed metric/adapted digest cannot retain the original declared source as proof.
+import { readFile } from 'node:fs/promises';
+import { validateOriginalInventory, sha256 } from '../../scripts/manual-segments-after-records.mjs';
+test('strict original preflight rejects validly rehashed metric replacement with unchanged declared source', async () => {
+  const accepted = JSON.parse(
+    await readFile(
+      new URL(
+        '../../Docs/Evidence/069-manual-segments/native-before-02-inventory.json',
+        import.meta.url,
+      ),
+    ),
+  ).beforeFiles;
+  validateOriginalInventory(accepted);
+  const forged = structuredClone(accepted),
+    row = forged.find((r) => r.path === 'worlds/world-0.complete.json');
+  assert(row);
+  const altered = Buffer.from(
+    JSON.stringify({
+      sourceHash: PINNED_BEFORE.sourceHash,
+      distributions: { tickMs: { p95: 0.001 } },
+    }),
+  );
+  row.bytes = altered.length;
+  row.sha256 = sha256(altered);
+  assert.throws(() => validateOriginalInventory(forged));
+});

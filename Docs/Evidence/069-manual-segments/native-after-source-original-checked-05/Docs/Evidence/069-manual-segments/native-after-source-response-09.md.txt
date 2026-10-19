@@ -1,0 +1,7 @@
+# Native AFTER SOURCE09 typed declaration response
+
+Narrow declaration-only correction for the actual TS7016 errors in after.ts, cleanup.test.ts and calibration.test.ts. scripts/manual-segments-calibration-proof.d.mts declares every public runtime helper export: exact pinned constant, readonly closure paths, checked rows, recursive bounded diagnostics, validated intake proof and validator/serializer/export-failure signatures. Runtime validation inputs are unknown, not any; successful output types describe actual returned values. Owner observation uses the public telemetry lifecycle type, and record uses the public005 InterventionSegment contract. No suppression or test expectation change.
+
+No runtime .mjs, product18, archive collector or validator code changed. The declaration is compile-time-only and therefore does not claim a changed native/runtime source closure. Future evidence should include the checked declaration explicitly in its source/check receipt; no measured capture has yet occurred. Any collector inventory addition requires parent review before capture.
+
+SOURCE08's14 raw files are preserved under native-after-source-original-08. native-after-scoped-checks-02 retains actual34/34 pure PASS,9syntaxPASS, mainTypeScriptPASS and testsTypeScriptTS7016FAIL. All new checks remain UNEXECUTED in this SOURCE09 round. No packages, child CLI, native world, build, browser or Git mutations.
