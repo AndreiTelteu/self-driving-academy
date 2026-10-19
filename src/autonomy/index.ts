@@ -10,4 +10,5 @@ export * from './signal-policy';
 export * from './stop-policy';
 export * from './lane-change-policy';
 export * from './blocked-recovery';
+export * from './takeover-continuity';
 export * from './decision-explanation';
