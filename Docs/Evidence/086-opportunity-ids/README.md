@@ -130,6 +130,12 @@ measured, finite answer instead of an estimate. Labels stay `PROVISIONAL_UNCALIB
    total RAM.
 7. The `LANE_CHANGE` kind is covered by the unit suite (real `LANE_CHANGE_STARTED`/`_COMPLETED`
    contract) but has no producer on this fixture and therefore no rows in the probe denominators.
+8. One full `npm run check` invocation failed a **pre-existing, unrelated** wall-clock test —
+   `tests/workers/protocol.test.ts:167` "real worker yields to cancellation…" asserted
+   `cancel 115.2 ms` against the documented 100 ms cancellation target. That file is untouched by 086,
+   086 adds no worker, timer or background work, and five other full-suite runs and three isolated runs
+   of that file were green (`981/981`, `exit=0`). It is recorded here as an observed flake, not
+   attributed to 086 and not hidden.
 
 ## Files
 
