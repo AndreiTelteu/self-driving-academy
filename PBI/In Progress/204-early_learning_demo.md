@@ -47,11 +47,11 @@ Citește și [workflow-ul PBI](../AGENTS.md).
 
 ## Criterii de acceptare
 
-- [ ] Trei taxiuri și două civile adoptă același stil; fiecare din cele trei chei are o demonstrație eligibilă și efect real.
-- [ ] MANUAL nu învață; adaptoarele minime păstrează contractele reutilizabile și nu revendică suportul complet de 24.
+- [x] Trei taxiuri și două civile adoptă același stil; fiecare din cele trei chei are o demonstrație eligibilă și efect real.
+- [x] MANUAL nu învață; adaptoarele minime păstrează contractele reutilizabile și nu revendică suportul complet de 24.
 - [ ] Playtestul și ținta primei schimbări în cinci minute sunt consemnate conform modulului 24; nicio dovadă nu este inventată.
 
-- [ ] Harness-ul 218, schedulerul 219 și admiterea 221 măsoară prima buclă pe fixture mic fără a cere artificial flota completă.
+- [x] Harness-ul 218, schedulerul 219 și admiterea 221 măsoară prima buclă pe fixture mic fără a cere artificial flota completă.
 
 ## Verificare
 
@@ -63,12 +63,14 @@ Păstrează comenzile, scenariile și rezultatele reale; nu declara trecere făr
 
 Rezultat implementare (parțial, integrat, PBI rămâne In Progress): `composeEarlyLoopProfile` în `src/learning/early-loop.ts` compune un profil dintr-un candidat 093/094/095/098 cu un blend limitat la `25% × quality`, păstrează proveniența (segmente, oportunități, valoare candidată, calitate), refuză o cheie fără dovezi lăsând valoarea neschimbată și nu activează `implemented`/`estimable` și nu publică `LEARNED`. Etapa a doua adaugă `compileEarlyLoopControllerProfiles(mode, baseProfile, earlyProfile)`: supraimpune valorile eligibile pe un profil de bază validat și le compilează prin limitele reale 046 cruise, 047 longitudinal și 051 stop-policy; AUTO primește token-urile, MANUAL și LEARNING întorc `null`, iar proveniența și dovezile de bază sunt păstrate. Testele adaptorului (3/3) acoperă blend-ul mărginit, refuzul fără dovezi, păstrarea provenienței și validatoarele reale. `tests/browser/early-learning-playtest.html` și `Docs/early-playtest.md` pregătesc protocolul de playtest cu export JSON anonim, fără răspunsuri precompletate; `Docs/Evidence/204-early-learning-demo/playtest/` este gol și nu conține niciun participant inventat.
 
+Etapa a treia (commit `f9e5ce5d` + `2ca03671`) a executat dovezile lipsă. Driver nativ `scripts/run-204-early-loop-behavior.mjs` pe fixture-ul `tests/harness/early-loop-204-fixture.ts`, cu lanțul real 093 → 094/095/098 → `composeEarlyLoopProfile` → `compileEarlyLoopControllerProfiles` → 046/047/051: prudent vs riscant vs fără dovezi dau țintă 046 **9,75 / 10,5 / 10,0 m/s**, accelerație realizată 047 **1,35 / 2,0 / 1,5 m/s²** și rată de oprire completă 051 **29/40 / 22/40 / 26/40**. Toate cele 3 taxiuri și 2 civile primesc token-uri identice (țintă și accelerație egale în `1e-9`); MANUAL dă `null` pe ambele adaptoare, zero episoade de dovezi și delta maxim 0 pe toate cele 80 de valori; fără dovezi, cele trei chei rămân exact la valoarea de bază. Criteriile 1, 2 și 4 sunt verificate.
+
+Proba pe fixture-ul 204 (`scripts/run-204-loop-probe.mjs`, `loop-probe/`) folosește direct API-urile 218/219/221: 218 median frame/main-thread p95 **0,7236 ms**, p99 **1,1839 ms**; 219 step p95 **0,7243 ms**, scheduler-own p95 **0,0064 ms**, zero overloads; 221 queue/service/end-to-end p95 **7,618 / 1,4989 / 8,5771 ms**, 8/8 rezultate identice cu main-thread în `1e-9`. Etichetă `PROVISIONAL_UNCALIBRATED`, fără browser/GPU/FPS.
+
 Verificări executate și rezultat: `npm run typecheck`, `lint`, `format:check`, `check:architecture`, `check:parameter-catalog` exit 0; `npm test` 1049/1049 PASS; `git diff --check` curat. Bucla nu a fost încă măsurată cu 218/219/221 și nu există probe comportamentale.
 
 Ce lipsește pentru închidere:
-- fixture-ul comportamental cu 3 taxiuri + 2 civile care adoptă același stil, seturile prudent/riscant/fără dovezi și dovada că fiecare cheie are efect real, iar MANUAL nu învață;
-- măsurătoarea primei bucle pe harness-ul 218, schedulerul 219 și admiterea 221, pe fixture-ul mic al lui 204 (probele generice 218/221 rulate nu sunt măsurători pe acest fixture, iar 219 nu a rulat);
-- playtest real cu minimum cinci participanți (zero înregistrări până acum) și consemnarea țintei „prima schimbare în cinci minute".
+- playtest real cu minimum cinci participanți (zero înregistrări până acum) și consemnarea țintei „prima schimbare în cinci minute"; pagina și protocolul sunt gata, dar nu se inventează participanți.
 
 Fișiere și documente actualizate: `src/learning/early-loop.ts`, `tests/learning/early-loop.test.ts`, `tests/browser/early-learning-playtest.html`, [Docs/early-learning-loop.md](../../Docs/early-learning-loop.md), [Docs/early-playtest.md](../../Docs/early-playtest.md), [Docs/10-invatarea-stilului.md](../../Docs/10-invatarea-stilului.md), `Docs/Evidence/204-early-learning-demo/`.
 
@@ -91,6 +93,8 @@ Verificare finală: Validate-Board.ps1 -RequireDone '204'.
 - 2026-10-19: Prima etapă în worktree izolat (commit `30782be0`): blend îngust pentru cele trei chei cu proveniență și refuz fără dovezi, plus pagina și protocolul de playtest. Integrat prin fast-forward. Bucla nu este încă legată de 046/047/051, fixture-ul comportamental și măsurătoarea 218/219/221 lipsesc, iar playtest-ul are zero participanți; PBI rămâne In Progress.
 
 - 2026-10-19: Etapa a doua (commit `219b7e61`): `compileEarlyLoopControllerProfiles` leagă profilul compus de validatoarele reale 046/047/051, AUTO primește token-urile iar MANUAL/LEARNING întorc null. `npm test` 1050/1050, toate verificările statice trec. Probele generice 218/221 au rulat, dar nu pe fixture-ul 204, iar 219 nu a rulat; fixture-ul comportamental cu 3 taxiuri + 2 civile și playtest-ul real lipsesc în continuare.
+
+- 2026-10-19: Etapa a treia (commit `f9e5ce5d` + `2ca03671`): driver comportamental executat pe fixture-ul mic (prudent/riscant/fără dovezi, 3 taxiuri + 2 civili, MANUAL zero învățare) și probă 218/219/221 pe fixture-ul 204 prin API-urile reale. `npm test` 1055/1055. Rămâne doar playtestul cu cinci participanți reali.
 
 - 2026-10-04: Revizia 0.4 adaugă contracte/verificări de performanță; implementarea rămâne neîncepută.
 
