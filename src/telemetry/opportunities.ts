@@ -96,6 +96,18 @@ export const OPPORTUNITY_CAPACITY = Object.freeze({
 export const OPPORTUNITY_DENSE_SLOTS = 24;
 export const OPPORTUNITY_BYTES_PER_RECORD = OPPORTUNITY_DENSE_SLOTS * 8;
 
+/**
+ * Derived ceilings that make `estimatedBytesMaximum` finite and honest. One record carries at most
+ * eight UTF-16 strings of at most 256 code units each plus its 486-code-unit-ceiling stable id, so the
+ * 8192-code-unit identity ceiling can never be exceeded by construction; the byte ceiling adds the
+ * dense slots.
+ */
+export const OPPORTUNITY_IDENTITY_CODE_UNITS_CEILING = 8192;
+export const OPPORTUNITY_RECORD_BYTES_CEILING =
+  OPPORTUNITY_BYTES_PER_RECORD + OPPORTUNITY_IDENTITY_CODE_UNITS_CEILING * 2;
+/** Segments recorded per opportunity; a rollover continues the same opportunity without re-identifying it. */
+export const OPPORTUNITY_SEGMENTS_PER_RECORD = 8;
+
 type SignalState = 'RED' | 'YELLOW' | 'GREEN';
 const signalStates = ['RED', 'YELLOW', 'GREEN'] as const;
 
@@ -227,6 +239,7 @@ export interface OpportunityRegistryStats {
   readonly skippedTicks: number;
   readonly suspensions: number;
   readonly resumptions: number;
+  readonly segmentOverflow: number;
   /** Live owned resources; every one returns to zero after `dispose()`. */
   readonly retained: number;
   readonly entered: number;
@@ -504,6 +517,7 @@ export function createOpportunityRegistry(
   let skippedTicks = 0;
   let suspensions = 0;
   let resumptions = 0;
+  let segmentOverflow = 0;
   let lastObservedTick: number | null = null;
   let sessionId: string | null = null;
   let worldEpoch: number | null = null;
@@ -561,6 +575,16 @@ export function createOpportunityRegistry(
     enteredByGroup.delete(groupKey(record.group, record.vehicleId, record.incarnation));
     enteredBySource.delete(record.sourceKey);
     counters.get(record.kind)!.entered -= 1;
+  };
+
+  /** A rollover continues the same opportunity; the observation segment is recorded, never re-identified. */
+  const noteSegment = (record: InternalRecord, segmentId: string) => {
+    if (record.segmentIds.includes(segmentId)) return;
+    if (record.segmentIds.length >= OPPORTUNITY_SEGMENTS_PER_RECORD) {
+      segmentOverflow += 1;
+      return;
+    }
+    record.segmentIds.push(segmentId);
   };
 
   const recordTruncation = (
@@ -632,6 +656,7 @@ export function createOpportunityRegistry(
       ...identityParts(stimulusView),
       String(occurrence),
     ]);
+    requireContract(id.length <= 2048, 'Opportunity id exceeds its declared capacity');
     const opened: InternalRecord = {
       id,
       kind,
@@ -669,13 +694,20 @@ export function createOpportunityRegistry(
     input: { vehicleId: string; incarnation: string; segmentId: string; learningEligible: boolean },
     touched: Map<string, InternalRecord>,
   ) {
+    // The authoritative vehicle comes from the event payload; the caller supplies the incarnation.
+    const forEvent = (vehicleId: string) => ({
+      vehicleId,
+      incarnation: input.incarnation,
+      segmentId: input.segmentId,
+      learningEligible: input.learningEligible,
+    });
     if (event.type === 'STOP_APPROACH') {
       const opened = open(
         'STOP',
         'STOP',
         event.payload.opportunityId,
         Object.freeze({ ...emptyStimulus, stopLineId: event.payload.stopLineId }),
-        input,
+        forEvent(event.payload.vehicleId),
         event.tick,
       );
       if (opened) touched.set(opened.id, opened);
@@ -700,7 +732,7 @@ export function createOpportunityRegistry(
           fromLaneId: event.payload.fromLaneId,
           toLaneId: event.payload.toLaneId,
         }),
-        input,
+        forEvent(event.payload.vehicleId),
         event.tick,
       );
       if (opened) touched.set(opened.id, opened);
@@ -814,6 +846,7 @@ export function createOpportunityRegistry(
         resolve(found, entry.tick, choice(entry.outcome, opportunityOutcomeTable[found.kind]));
         touched.set(found.id, found);
       }
+      for (const record of touched.values()) noteSegment(record, segmentId);
       return Object.freeze([...touched.values()].map(describe));
     },
     conclude(value: OpportunityConclusion): OpportunityRecord {
@@ -866,7 +899,7 @@ export function createOpportunityRegistry(
       const tick = readTick(fields(value, tickOnlyFields).tick);
       resumptions += 1;
       if (lastObservedTick !== null)
-        requireContract(tick > lastObservedTick, 'Opportunity resume tick must advance');
+        requireContract(tick >= lastObservedTick, 'Opportunity resume tick must not regress');
       lastObservedTick = tick;
     },
     getOpportunities: () => Object.freeze(order.map(describe)),
@@ -951,13 +984,14 @@ export function createOpportunityRegistry(
         skippedTicks,
         suspensions,
         resumptions,
+        segmentOverflow,
         retained: order.length,
         entered: enteredCount,
         resolved: resolvedCount,
         truncated: truncatedCount,
         identityCodeUnits,
         estimatedBytes: order.length * OPPORTUNITY_BYTES_PER_RECORD + identityCodeUnits * 2,
-        estimatedBytesMaximum: maxOpportunities * OPPORTUNITY_BYTES_PER_RECORD,
+        estimatedBytesMaximum: maxOpportunities * OPPORTUNITY_RECORD_BYTES_CEILING,
       });
     },
     dispose() {
