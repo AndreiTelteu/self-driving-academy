@@ -1,0 +1,36 @@
+volta run --node 24.21.0 -- node --import ./scripts/register-typescript.mjs --test tests/learning/candidate-validation.test.ts
+
+102 a valid delta is accepted and fully frozen
+102 every one of the 24 M keys is supported at the current learning stage
+102 NaN is rejected with a closed reason, never silently dropped
+102 Infinity and non-numeric values are rejected as not finite
+102 values outside the 092 range are rejected while the boundaries stay valid
+102 unknown keys are rejected instead of being ignored
+102 an R extension key is refused with an explicit stage reason
+102 a unit that does not match 092 is rejected
+102 a mixed delta is rejected atomically instead of partially accepted
+102 risky but numerically valid values are accepted without hidden clamping
+102 profile version, base contract and engine compatibility are explicit
+102 duplicate keys and empty deltas are rejected closed
+102 malformed structure throws while value problems return closed reasons
+102 validation is deterministic, reads the registry read-only and never publishes
+
+tests 14
+pass 14
+fail 0
+
+Why each test catches a plausible wrong implementation:
+1. Dropping the delta, byKey or freezing would expose a mutable/partial result; the test requires exact min/max/unit echoes and deep freeze.
+2. Filtering only implemented keys or hardcoding a subset rejects one of the 24 M targets; the test compares CANDIDATE_LEARNING_KEYS with the catalog stage list and accepts all 24 in one delta.
+3. Coercing NaN to a default, skipping it, or clamping it would accept the delta; the test requires REJECTED, delta null and the NaN preserved in the rejection.
+4. Using a truthiness or >0 check lets ±Infinity or numeric strings through; the test requires three VALUE_NOT_FINITE rejections.
+5. Using exclusive bounds rejects the exact 092 limits, while ignoring bounds accepts 15.1/-8.1/0.2; the test requires both behaviours.
+6. Treating an unknown key as a no-op or a warning would leave the delta accepted; the test requires KEY_UNKNOWN with the offending key and path.
+7. Silently accepting every known catalog key would let an R/extension key into the M learning stage; the test requires KEY_EXTENSION_STAGE and a null delta.
+8. Defaulting a missing unit or accepting a converted unit would pass; the test requires UNIT_MISMATCH for both a wrong and a missing unit.
+9. Accepting valid entries before hitting a bad one (or returning a partial delta) fails the null delta, acceptedKeyCount 0 and three collected reasons.
+10. A behavioural guard, a clamp or a "safe" normalization would change 15/8/0.2/0.2/0.5 or reject the delta; the test requires exact values and behaviour NOT_EVALUATED.
+11. Ignoring version/base/engine metadata accepts a delta built on another profile; the test requires explicit reasons and paths for each case.
+12. De-duplicating silently or accepting an empty delta hides a caller bug; the test requires DUPLICATE_KEY and DELTA_EMPTY.
+13. Returning a rejection for a non-object delta or throwing on a NaN would blur structure vs value; the test requires throws for structure and closed reasons for values.
+14. Mutating the input, the registry or emitting published/learned flags fails the repeatability, immutable-input and unchanged-capability assertions.

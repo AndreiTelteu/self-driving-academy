@@ -7,3 +7,4 @@ export * from './stop-yield-estimator';
 export * from './lane-estimator';
 export * from './evidence-confidence';
 export * from './profile-blend';
+export * from './candidate-validation';
