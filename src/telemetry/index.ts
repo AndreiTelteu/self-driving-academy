@@ -10,4 +10,5 @@ export * from './tick-samples';
 export * from './opportunities';
 export * from './eligibility-windows';
 export * from './artifact-filter';
+export * from './vehicle-normalization';
 export * from './validation-protocol';
