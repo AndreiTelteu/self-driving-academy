@@ -1,0 +1,6191 @@
+{
+  "schema": "204-playtest-v2",
+  "label": "developer self-test, not a participant",
+  "participantSlot": null,
+  "developerSelfTest": true,
+  "mode": "LEARNING",
+  "startedAt": "2026-10-19T19:59:51.415Z",
+  "finishedAt": "2026-10-19T20:00:57.119Z",
+  "finishedBy": "developer",
+  "durationS": 66,
+  "firstVisibleChangeSeconds": 66,
+  "answers": {
+    "noticedChange": "yes",
+    "distinguishesModes": "yes",
+    "supportingObservation": "stop",
+    "freeText": "developer self-test, not a participant; answers describe the developer run only."
+  },
+  "observed": {
+    "ticks": 3943,
+    "elapsedS": 65.71666666666667,
+    "distanceM": 559.9925944072756,
+    "maximumSpeedMps": 10.770341174114916,
+    "freeWindows": 3,
+    "accelerationEpisodes": 4,
+    "stopApproaches": 3,
+    "fullStops": 3,
+    "rollingStops": 0,
+    "abandonedStopApproaches": 0,
+    "evidenceSamples": 3943
+  },
+  "keys": [
+    {
+      "key": "speed_delta_urban",
+      "label": "Viteză urbană",
+      "unit": "m/s",
+      "before": 0,
+      "candidate": 0.7490218837501601,
+      "after": 0.18725547093754003,
+      "delta": 0.18725547093754003,
+      "blend": 0.25,
+      "quality": 1,
+      "sourceEpisodeCount": 3,
+      "evidenceStatus": "READY",
+      "evidenceEpisodes": 3,
+      "unchangedReason": null,
+      "changed": true
+    },
+    {
+      "key": "desired_acceleration",
+      "label": "Accelerație dorită",
+      "unit": "m/s²",
+      "before": 1.5,
+      "candidate": 4.519165265481834,
+      "after": 2.2547913163704587,
+      "delta": 0.7547913163704587,
+      "blend": 0.25,
+      "quality": 1,
+      "sourceEpisodeCount": 4,
+      "evidenceStatus": "READY",
+      "evidenceEpisodes": 4,
+      "unchangedReason": null,
+      "changed": true
+    },
+    {
+      "key": "stop_full_probability",
+      "label": "Opritori complete la STOP",
+      "unit": "probabilitate",
+      "before": 0.6,
+      "candidate": 1,
+      "after": 0.7,
+      "delta": 0.09999999999999998,
+      "blend": 0.25,
+      "quality": 1,
+      "sourceEpisodeCount": 3,
+      "evidenceStatus": "READY",
+      "evidenceEpisodes": 3,
+      "unchangedReason": null,
+      "changed": true
+    }
+  ],
+  "unchangedSurfaceKeys": 77,
+  "manual": null,
+  "evidence": [
+    {
+      "key": "speed_delta_urban",
+      "status": "READY",
+      "distinctEpisodes": 3,
+      "quality": 1,
+      "noEstimate": "ESTIMATOR_NOT_IMPLEMENTED"
+    },
+    {
+      "key": "desired_acceleration",
+      "status": "READY",
+      "distinctEpisodes": 4,
+      "quality": 1,
+      "noEstimate": "ESTIMATOR_NOT_IMPLEMENTED"
+    },
+    {
+      "key": "stop_full_probability",
+      "status": "READY",
+      "distinctEpisodes": 3,
+      "quality": 1,
+      "noEstimate": "ESTIMATOR_NOT_IMPLEMENTED"
+    }
+  ],
+  "candidates": [
+    {
+      "key": "speed_delta_urban",
+      "status": "CANDIDATE",
+      "value": 0.7490218837501601,
+      "quality": 1,
+      "sourceEpisodeCount": 3
+    },
+    {
+      "key": "desired_acceleration",
+      "status": "CANDIDATE",
+      "value": 4.519165265481834,
+      "quality": 1,
+      "sourceEpisodeCount": 4
+    },
+    {
+      "key": "stop_full_probability",
+      "status": "CANDIDATE",
+      "value": 1,
+      "quality": 1,
+      "sourceEpisodeCount": 3
+    }
+  ],
+  "profile": {
+    "baseVersionId": "204-playtest-base-v1",
+    "learnedVersionId": "204-playtest-base-v1-204-early",
+    "parametersBefore": {
+      "speed_delta_urban": 0,
+      "speed_delta_residential": 0,
+      "speed_delta_arterial": 0,
+      "curve_lateral_accel": 2.5,
+      "intersection_approach_speed": 6,
+      "cruise_speed_variability": 0.3,
+      "overtake_speed_bonus": 2,
+      "cruise_accel_deadband": 0.3,
+      "desired_acceleration": 1.5,
+      "comfort_deceleration": 2,
+      "acceleration_jerk": 2,
+      "braking_jerk": 3,
+      "throttle_release_delay": 0.2,
+      "brake_reaction_delay": 0.5,
+      "launch_intensity": 0.6,
+      "coasting_bias": 0.4,
+      "following_time_headway": 1.8,
+      "following_min_gap": 3,
+      "queue_standstill_gap": 2,
+      "cutin_brake_response": 0.7,
+      "following_speed_gain": 0.7,
+      "closing_ttc_threshold": 3,
+      "leader_change_delay": 0.2,
+      "following_hysteresis": 1,
+      "red_stop_probability": 1,
+      "yellow_stop_probability": 0.8,
+      "green_start_delay": 0.7,
+      "red_stop_line_offset": 1,
+      "red_run_gap_acceptance": 2.5,
+      "yellow_commit_time": 2,
+      "green_launch_acceleration": 1.5,
+      "late_red_brake_threshold": 2,
+      "stop_full_probability": 0.6,
+      "stop_dwell_time": 1,
+      "stop_line_offset": 1,
+      "yield_time_gap": 3,
+      "rolling_stop_speed": 1,
+      "priority_assertiveness": 0.3,
+      "allway_stop_patience": 2,
+      "blocked_intersection_entry_probability": 0,
+      "lane_change_front_gap": 12,
+      "lane_change_back_gap": 10,
+      "lane_change_speed_gain": 2,
+      "lane_change_cooldown": 6,
+      "lane_change_duration": 2,
+      "signal_lead_time": 1,
+      "signal_use_probability": 1,
+      "pass_on_right_probability": 0,
+      "lane_center_offset": 0,
+      "steering_response_time": 0.3,
+      "steering_rate_limit": 1,
+      "turn_entry_speed": 5,
+      "turn_exit_acceleration": 1.5,
+      "corner_cutting_bias": 0,
+      "lateral_clearance": 0.8,
+      "lateral_correction_deadband": 0.1,
+      "route_time_weight": 0.6,
+      "route_distance_weight": 0.3,
+      "route_turn_penalty": 2,
+      "route_signal_penalty": 5,
+      "route_congestion_penalty": 0.5,
+      "reroute_patience": 20,
+      "u_turn_willingness": 0,
+      "reverse_recovery_duration": 2,
+      "pedestrian_yield_probability": 1,
+      "pedestrian_clearance": 2,
+      "hazard_reaction_delay": 0.5,
+      "obstacle_clearance": 1,
+      "emergency_brake_intensity": 1,
+      "evasive_steer_willingness": 0.3,
+      "crosswalk_approach_speed": 5,
+      "horn_use_probability": 0.1,
+      "pickup_approach_speed": 3,
+      "pickup_curb_distance": 0.5,
+      "pickup_stop_precision": 1,
+      "pickup_dwell_time": 3,
+      "dropoff_approach_speed": 3,
+      "dropoff_curb_distance": 0.5,
+      "occupied_acceleration_scale": 0.85,
+      "occupied_lateral_accel_scale": 0.85
+    },
+    "parametersAfter": {
+      "speed_delta_urban": 0.18725547093754003,
+      "speed_delta_residential": 0,
+      "speed_delta_arterial": 0,
+      "curve_lateral_accel": 2.5,
+      "intersection_approach_speed": 6,
+      "cruise_speed_variability": 0.3,
+      "overtake_speed_bonus": 2,
+      "cruise_accel_deadband": 0.3,
+      "desired_acceleration": 2.2547913163704587,
+      "comfort_deceleration": 2,
+      "acceleration_jerk": 2,
+      "braking_jerk": 3,
+      "throttle_release_delay": 0.2,
+      "brake_reaction_delay": 0.5,
+      "launch_intensity": 0.6,
+      "coasting_bias": 0.4,
+      "following_time_headway": 1.8,
+      "following_min_gap": 3,
+      "queue_standstill_gap": 2,
+      "cutin_brake_response": 0.7,
+      "following_speed_gain": 0.7,
+      "closing_ttc_threshold": 3,
+      "leader_change_delay": 0.2,
+      "following_hysteresis": 1,
+      "red_stop_probability": 1,
+      "yellow_stop_probability": 0.8,
+      "green_start_delay": 0.7,
+      "red_stop_line_offset": 1,
+      "red_run_gap_acceptance": 2.5,
+      "yellow_commit_time": 2,
+      "green_launch_acceleration": 1.5,
+      "late_red_brake_threshold": 2,
+      "stop_full_probability": 0.7,
+      "stop_dwell_time": 1,
+      "stop_line_offset": 1,
+      "yield_time_gap": 3,
+      "rolling_stop_speed": 1,
+      "priority_assertiveness": 0.3,
+      "allway_stop_patience": 2,
+      "blocked_intersection_entry_probability": 0,
+      "lane_change_front_gap": 12,
+      "lane_change_back_gap": 10,
+      "lane_change_speed_gain": 2,
+      "lane_change_cooldown": 6,
+      "lane_change_duration": 2,
+      "signal_lead_time": 1,
+      "signal_use_probability": 1,
+      "pass_on_right_probability": 0,
+      "lane_center_offset": 0,
+      "steering_response_time": 0.3,
+      "steering_rate_limit": 1,
+      "turn_entry_speed": 5,
+      "turn_exit_acceleration": 1.5,
+      "corner_cutting_bias": 0,
+      "lateral_clearance": 0.8,
+      "lateral_correction_deadband": 0.1,
+      "route_time_weight": 0.6,
+      "route_distance_weight": 0.3,
+      "route_turn_penalty": 2,
+      "route_signal_penalty": 5,
+      "route_congestion_penalty": 0.5,
+      "reroute_patience": 20,
+      "u_turn_willingness": 0,
+      "reverse_recovery_duration": 2,
+      "pedestrian_yield_probability": 1,
+      "pedestrian_clearance": 2,
+      "hazard_reaction_delay": 0.5,
+      "obstacle_clearance": 1,
+      "emergency_brake_intensity": 1,
+      "evasive_steer_willingness": 0.3,
+      "crosswalk_approach_speed": 5,
+      "horn_use_probability": 0.1,
+      "pickup_approach_speed": 3,
+      "pickup_curb_distance": 0.5,
+      "pickup_stop_precision": 1,
+      "pickup_dwell_time": 3,
+      "dropoff_approach_speed": 3,
+      "dropoff_curb_distance": 0.5,
+      "occupied_acceleration_scale": 0.85,
+      "occupied_lateral_accel_scale": 0.85
+    }
+  },
+  "trace": [
+    {
+      "tick": 1,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 200
+    },
+    {
+      "tick": 7,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 200
+    },
+    {
+      "tick": 13,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 200
+    },
+    {
+      "tick": 19,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 200
+    },
+    {
+      "tick": 25,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 200
+    },
+    {
+      "tick": 31,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 200
+    },
+    {
+      "tick": 37,
+      "speedMps": 0.0580099270824736,
+      "throttle": 0.25,
+      "brake": 0,
+      "distanceToStopLineM": 199.99774380771993
+    },
+    {
+      "tick": 43,
+      "speedMps": 0.2550736253825838,
+      "throttle": 0.5499999999999999,
+      "brake": 0,
+      "distanceToStopLineM": 199.98157289918234
+    },
+    {
+      "tick": 49,
+      "speedMps": 0.5909132190112037,
+      "throttle": 0.8500000000000002,
+      "brake": 0,
+      "distanceToStopLineM": 199.9375981111957
+    },
+    {
+      "tick": 55,
+      "speedMps": 1.0420422599540426,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 199.85260276956004
+    },
+    {
+      "tick": 61,
+      "speedMps": 1.503858892838042,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 199.7214517555929
+    },
+    {
+      "tick": 67,
+      "speedMps": 1.9647526618086608,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 199.54417292702195
+    },
+    {
+      "tick": 73,
+      "speedMps": 2.424725411056303,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 199.32085846263084
+    },
+    {
+      "tick": 79,
+      "speedMps": 2.883778981086062,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 199.05160035699927
+    },
+    {
+      "tick": 85,
+      "speedMps": 3.3419152087250907,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 198.73649042087104
+    },
+    {
+      "tick": 91,
+      "speedMps": 3.799135927129946,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 198.37562028152132
+    },
+    {
+      "tick": 97,
+      "speedMps": 4.255442965793924,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 197.96908138312347
+    },
+    {
+      "tick": 103,
+      "speedMps": 4.710838150554385,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 197.5169649871148
+    },
+    {
+      "tick": 109,
+      "speedMps": 5.165323303600054,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 197.01936217256176
+    },
+    {
+      "tick": 115,
+      "speedMps": 5.618900243478316,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 196.47636383652448
+    },
+    {
+      "tick": 121,
+      "speedMps": 6.071570785102488,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 195.88806069442032
+    },
+    {
+      "tick": 127,
+      "speedMps": 6.5233367397590865,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 195.25454328038694
+    },
+    {
+      "tick": 133,
+      "speedMps": 6.974199915115072,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 194.57590194764458
+    },
+    {
+      "tick": 139,
+      "speedMps": 7.424162115225082,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 193.85222686885754
+    },
+    {
+      "tick": 145,
+      "speedMps": 7.873225140538649,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 193.083608036495
+    },
+    {
+      "tick": 151,
+      "speedMps": 8.321390787907411,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 192.27013526319118
+    },
+    {
+      "tick": 157,
+      "speedMps": 8.76866085059229,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 191.41189818210458
+    },
+    {
+      "tick": 163,
+      "speedMps": 9.215037118270676,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 190.50898624727674
+    },
+    {
+      "tick": 169,
+      "speedMps": 9.66052137704358,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 189.56148873399013
+    },
+    {
+      "tick": 175,
+      "speedMps": 10.1051154094428,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 188.5694947391254
+    },
+    {
+      "tick": 181,
+      "speedMps": 10.548820994438026,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 187.53309318151784
+    },
+    {
+      "tick": 187,
+      "speedMps": 10.759574422655625,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 186.4601091781179
+    },
+    {
+      "tick": 193,
+      "speedMps": 10.749675183023166,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 185.38495504096508
+    },
+    {
+      "tick": 199,
+      "speedMps": 10.751389980435514,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 184.30995204591142
+    },
+    {
+      "tick": 205,
+      "speedMps": 10.75310521586016,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 183.2349709441724
+    },
+    {
+      "tick": 211,
+      "speedMps": 10.747080218115858,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 182.16001194977687
+    },
+    {
+      "tick": 217,
+      "speedMps": 10.748796333376639,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 181.0850748251805
+    },
+    {
+      "tick": 223,
+      "speedMps": 10.746639971646772,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 180.01003077328727
+    },
+    {
+      "tick": 229,
+      "speedMps": 10.748356965807712,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 178.93513757905063
+    },
+    {
+      "tick": 235,
+      "speedMps": 10.750070528840714,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 177.86007288560262
+    },
+    {
+      "tick": 241,
+      "speedMps": 10.751788400970444,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 176.7852235751726
+    },
+    {
+      "tick": 247,
+      "speedMps": 10.753502840217761,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 175.7102026778367
+    },
+    {
+      "tick": 253,
+      "speedMps": 10.747479625103052,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 174.6353327852103
+    },
+    {
+      "tick": 259,
+      "speedMps": 10.749194941355881,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 173.56035572353318
+    },
+    {
+      "tick": 265,
+      "speedMps": 10.75091069845152,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 172.48540069664918
+    },
+    {
+      "tick": 271,
+      "speedMps": 10.75262689164169,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 171.4104674672234
+    },
+    {
+      "tick": 277,
+      "speedMps": 10.74660156006643,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 170.33549178684393
+    },
+    {
+      "tick": 283,
+      "speedMps": 10.748318630986537,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 169.26060242928645
+    },
+    {
+      "tick": 289,
+      "speedMps": 10.75003227062532,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 168.18554156485067
+    },
+    {
+      "tick": 295,
+      "speedMps": 10.751750219207745,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 167.1106960757812
+    },
+    {
+      "tick": 301,
+      "speedMps": 10.75346473475498,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 166.0356789921695
+    },
+    {
+      "tick": 307,
+      "speedMps": 10.747441595787716,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 164.9608129056462
+    },
+    {
+      "tick": 313,
+      "speedMps": 10.74915698803582,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 163.88583964246635
+    },
+    {
+      "tick": 319,
+      "speedMps": 10.750872820974871,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 162.8108884064889
+    },
+    {
+      "tick": 325,
+      "speedMps": 10.75258908985689,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 161.73595896039424
+    },
+    {
+      "tick": 331,
+      "speedMps": 10.74656383382223,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 160.66098705578548
+    },
+    {
+      "tick": 337,
+      "speedMps": 10.748280980131977,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 159.58610146645347
+    },
+    {
+      "tick": 343,
+      "speedMps": 10.749994695009745,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 158.511044362713
+    },
+    {
+      "tick": 349,
+      "speedMps": 10.74784238266818,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 157.43620271274523
+    },
+    {
+      "tick": 355,
+      "speedMps": 10.749556974869563,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 156.36118946056342
+    },
+    {
+      "tick": 361,
+      "speedMps": 10.747402960452066,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 155.28626273516696
+    },
+    {
+      "tick": 367,
+      "speedMps": 10.74911842990648,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 154.21129333101572
+    },
+    {
+      "tick": 373,
+      "speedMps": 10.74696400302586,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 153.13634598933754
+    },
+    {
+      "tick": 379,
+      "speedMps": 10.748680350523214,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 152.06142047269927
+    },
+    {
+      "tick": 385,
+      "speedMps": 10.746524220565833,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 150.98638800556756
+    },
+    {
+      "tick": 391,
+      "speedMps": 10.748241446036104,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 149.91150637294223
+    },
+    {
+      "tick": 397,
+      "speedMps": 10.749955239916204,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 148.83645321800157
+    },
+    {
+      "tick": 403,
+      "speedMps": 10.747803006419097,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 147.7616155089426
+    },
+    {
+      "tick": 409,
+      "speedMps": 10.74951767730738,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 146.68660618979436
+    },
+    {
+      "tick": 415,
+      "speedMps": 10.74736374141954,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 145.61168338957194
+    },
+    {
+      "tick": 421,
+      "speedMps": 10.749079289246684,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 144.53671790275095
+    },
+    {
+      "tick": 427,
+      "speedMps": 10.746924940582177,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 143.46177447057482
+    },
+    {
+      "tick": 433,
+      "speedMps": 10.748641366139342,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 142.3868528556262
+    },
+    {
+      "tick": 439,
+      "speedMps": 10.746485314085783,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 141.31182428238722
+    },
+    {
+      "tick": 445,
+      "speedMps": 10.748202617304198,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 140.23694653587333
+    },
+    {
+      "tick": 451,
+      "speedMps": 10.749916488777076,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 139.16189725927836
+    },
+    {
+      "tick": 457,
+      "speedMps": 10.747764332717692,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 138.08706342081484
+    },
+    {
+      "tick": 463,
+      "speedMps": 10.749479080888952,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 137.01205796452734
+    },
+    {
+      "tick": 469,
+      "speedMps": 10.74732522212965,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 135.93713901944636
+    },
+    {
+      "tick": 475,
+      "speedMps": 10.749040846931202,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 134.86217738006292
+    },
+    {
+      "tick": 481,
+      "speedMps": 10.746886575087286,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 133.78723778763595
+    },
+    {
+      "tick": 487,
+      "speedMps": 10.748603077311527,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 132.71232000476328
+    },
+    {
+      "tick": 493,
+      "speedMps": 10.746447101771837,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 131.63729525594258
+    },
+    {
+      "tick": 499,
+      "speedMps": 10.74816448135122,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 130.56242132620443
+    },
+    {
+      "tick": 505,
+      "speedMps": 10.74987842903247,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 129.48737585875804
+    },
+    {
+      "tick": 511,
+      "speedMps": 10.747726349029172,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 128.41254582183115
+    },
+    {
+      "tick": 517,
+      "speedMps": 10.749441173104533,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 127.33754415948354
+    },
+    {
+      "tick": 523,
+      "speedMps": 10.747287390097648,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 126.26262900076087
+    },
+    {
+      "tick": 529,
+      "speedMps": 10.749003090500238,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 125.18767114016934
+    },
+    {
+      "tick": 535,
+      "speedMps": 10.746848894106288,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 124.11273531898297
+    },
+    {
+      "tick": 541,
+      "speedMps": 10.748565471629714,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 123.03782129981474
+    },
+    {
+      "tick": 547,
+      "speedMps": 10.750278618857788,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 121.9627358230503
+    },
+    {
+      "tick": 553,
+      "speedMps": 10.751996075154143,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 120.88786572788224
+    },
+    {
+      "tick": 559,
+      "speedMps": 10.753710099399063,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 119.81282408734317
+    },
+    {
+      "tick": 565,
+      "speedMps": 10.747687758934447,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 118.73799791264412
+    },
+    {
+      "tick": 571,
+      "speedMps": 10.749402660125705,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 117.66300010480629
+    },
+    {
+      "tick": 577,
+      "speedMps": 10.751118002559311,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 116.58802435173175
+    },
+    {
+      "tick": 583,
+      "speedMps": 10.752833781486617,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 115.51307041606727
+    },
+    {
+      "tick": 589,
+      "speedMps": 10.746809326158871,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 114.43813853345931
+    },
+    {
+      "tick": 595,
+      "speedMps": 10.748525982752275,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 113.36322846647211
+    },
+    {
+      "tick": 601,
+      "speedMps": 10.750239208892317,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 112.28814693399096
+    },
+    {
+      "tick": 607,
+      "speedMps": 10.751956743942952,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 111.21328077522418
+    },
+    {
+      "tick": 613,
+      "speedMps": 10.753670846784768,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 110.13824306322013
+    },
+    {
+      "tick": 619,
+      "speedMps": 10.747648584759995,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 109.06342080920558
+    },
+    {
+      "tick": 625,
+      "speedMps": 10.749363564234342,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 107.98842691421738
+    },
+    {
+      "tick": 631,
+      "speedMps": 10.7510789847946,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 106.91345506617334
+    },
+    {
+      "tick": 637,
+      "speedMps": 10.752794841692431,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 105.83850502773578
+    },
+    {
+      "tick": 643,
+      "speedMps": 10.746770464179404,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 104.76357703456681
+    },
+    {
+      "tick": 649,
+      "speedMps": 10.748487198432025,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 103.6886708492462
+    },
+    {
+      "tick": 655,
+      "speedMps": 10.750200502076096,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 102.61359319067475
+    },
+    {
+      "tick": 661,
+      "speedMps": 10.75191811447588,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 101.5387308980763
+    },
+    {
+      "tick": 667,
+      "speedMps": 10.753632294512277,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 100.46369704451469
+    },
+    {
+      "tick": 673,
+      "speedMps": 10.74761010952782,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 99.38887864123211
+    },
+    {
+      "tick": 679,
+      "speedMps": 10.749325165888534,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 98.31388858928086
+    },
+    {
+      "tick": 685,
+      "speedMps": 10.751040663181515,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 97.23892057659408
+    },
+    {
+      "tick": 691,
+      "speedMps": 10.752756596658733,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 96.16397436584944
+    },
+    {
+      "tick": 697,
+      "speedMps": 10.74673229557206,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 95.08905019272439
+    },
+    {
+      "tick": 703,
+      "speedMps": 10.748449106098315,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 94.01414781981396
+    },
+    {
+      "tick": 709,
+      "speedMps": 10.750162485863594,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 92.93907396603421
+    },
+    {
+      "tick": 715,
+      "speedMps": 10.751880174232472,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 91.86421547062425
+    },
+    {
+      "tick": 721,
+      "speedMps": 10.753594430086151,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 90.78918540666308
+    },
+    {
+      "tick": 727,
+      "speedMps": 10.747572320767468,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 89.71437078540808
+    },
+    {
+      "tick": 733,
+      "speedMps": 10.74928745264275,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 88.63938450792664
+    },
+    {
+      "tick": 739,
+      "speedMps": 10.751003025299395,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 87.56442026216699
+    },
+    {
+      "tick": 745,
+      "speedMps": 10.752719033989676,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 86.48947781082191
+    },
+    {
+      "tick": 751,
+      "speedMps": 10.746693518283225,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 85.41449292695161
+    },
+    {
+      "tick": 757,
+      "speedMps": 10.748410405440094,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 84.33959438429498
+    },
+    {
+      "tick": 763,
+      "speedMps": 10.750123861682859,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 83.26452435311492
+    },
+    {
+      "tick": 769,
+      "speedMps": 10.751841627235752,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 82.18966971561939
+    },
+    {
+      "tick": 775,
+      "speedMps": 10.753555960119211,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 81.11464350186324
+    },
+    {
+      "tick": 781,
+      "speedMps": 10.747532638853194,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 80.03976830344058
+    },
+    {
+      "tick": 787,
+      "speedMps": 10.74924784916684,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 78.96478594656998
+    },
+    {
+      "tick": 793,
+      "speedMps": 10.750963500534995,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 77.88982563507402
+    },
+    {
+      "tick": 799,
+      "speedMps": 10.75267958820896,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 76.8148871315967
+    },
+    {
+      "tick": 805,
+      "speedMps": 10.746654151328356,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 75.73990618770502
+    },
+    {
+      "tick": 811,
+      "speedMps": 10.748371117153557,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 74.66501157715359
+    },
+    {
+      "tick": 817,
+      "speedMps": 10.750084651907445,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 73.58994547022108
+    },
+    {
+      "tick": 823,
+      "speedMps": 10.751802495814568,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 72.51509474913115
+    },
+    {
+      "tick": 829,
+      "speedMps": 10.753516906895676,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 71.44007244395434
+    },
+    {
+      "tick": 835,
+      "speedMps": 10.747493663671044,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 70.36520114630034
+    },
+    {
+      "tick": 841,
+      "speedMps": 10.749208951870123,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 69.29022268240334
+    },
+    {
+      "tick": 847,
+      "speedMps": 10.750924680968073,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 68.21526625610153
+    },
+    {
+      "tick": 853,
+      "speedMps": 10.752640846216503,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 67.1403316300545
+    },
+    {
+      "tick": 859,
+      "speedMps": 10.74661548675534,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 66.06535455584466
+    },
+    {
+      "tick": 865,
+      "speedMps": 10.748332529845273,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 64.99046380724218
+    },
+    {
+      "tick": 871,
+      "speedMps": 10.75004614170949,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 63.91540155454118
+    },
+    {
+      "tick": 877,
+      "speedMps": 10.751764062572853,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 62.8405546799807
+    },
+    {
+      "tick": 883,
+      "speedMps": 10.75347855045642,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 61.76553621364664
+    },
+    {
+      "tick": 889,
+      "speedMps": 10.74745538388077,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 60.69066874716415
+    },
+    {
+      "tick": 895,
+      "speedMps": 10.749170748575658,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 59.61569410678274
+    },
+    {
+      "tick": 901,
+      "speedMps": 10.750886554016551,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 58.54074149635579
+    },
+    {
+      "tick": 907,
+      "speedMps": 10.752602795455367,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 57.46581067855823
+    },
+    {
+      "tick": 913,
+      "speedMps": 10.746577512032339,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 56.390837404987735
+    },
+    {
+      "tick": 919,
+      "speedMps": 10.748294631008454,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 55.315950449429664
+    },
+    {
+      "tick": 925,
+      "speedMps": 10.75000831860721,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 54.24089198219323
+    },
+    {
+      "tick": 931,
+      "speedMps": 10.751726315053766,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 53.16604888553269
+    },
+    {
+      "tick": 937,
+      "speedMps": 10.753440878369485,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 52.091034189549134
+    },
+    {
+      "tick": 943,
+      "speedMps": 10.747417787075246,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 51.01617048588267
+    },
+    {
+      "tick": 949,
+      "speedMps": 10.749133226901114,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 49.941199600797916
+    },
+    {
+      "tick": 955,
+      "speedMps": 10.746978770451156,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 48.866250781145624
+    },
+    {
+      "tick": 961,
+      "speedMps": 10.748695088438259,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 47.79132378948671
+    },
+    {
+      "tick": 967,
+      "speedMps": 10.7465389290296,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 46.71628985028198
+    },
+    {
+      "tick": 973,
+      "speedMps": 10.748256125107444,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 45.64140674852533
+    },
+    {
+      "tick": 979,
+      "speedMps": 10.749969889653853,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 44.566352127389166
+    },
+    {
+      "tick": 985,
+      "speedMps": 10.747817626881677,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 43.49151295506465
+    },
+    {
+      "tick": 991,
+      "speedMps": 10.749532268553391,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 42.41650217557492
+    },
+    {
+      "tick": 997,
+      "speedMps": 10.747378303507366,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 41.34157791792927
+    },
+    {
+      "tick": 1003,
+      "speedMps": 10.749093822234592,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 40.266610976597434
+    },
+    {
+      "tick": 1009,
+      "speedMps": 10.746939444528321,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 39.191666092817115
+    },
+    {
+      "tick": 1015,
+      "speedMps": 10.748655841101757,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 38.11674302916501
+    },
+    {
+      "tick": 1021,
+      "speedMps": 10.746499760122388,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 37.041713010117604
+    },
+    {
+      "tick": 1027,
+      "speedMps": 10.748217034472797,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 35.966833820684485
+    },
+    {
+      "tick": 1033,
+      "speedMps": 10.749930877135355,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 34.89178310405373
+    },
+    {
+      "tick": 1039,
+      "speedMps": 10.747778692323223,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 33.81694782843209
+    },
+    {
+      "tick": 1045,
+      "speedMps": 10.749493411799191,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 32.7419409378584
+    },
+    {
+      "tick": 1051,
+      "speedMps": 10.74733952440194,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 31.66702056135742
+    },
+    {
+      "tick": 1057,
+      "speedMps": 10.749055120622774,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 30.592057493414416
+    },
+    {
+      "tick": 1063,
+      "speedMps": 10.746900820255254,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 29.51711647528259
+    },
+    {
+      "tick": 1069,
+      "speedMps": 10.748617294012888,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 28.442197269554157
+    },
+    {
+      "tick": 1075,
+      "speedMps": 10.746461290063479,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 27.36717110072101
+    },
+    {
+      "tick": 1081,
+      "speedMps": 10.748178641289913,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 26.292295753808077
+    },
+    {
+      "tick": 1087,
+      "speedMps": 10.749892560674878,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 25.2172488720189
+    },
+    {
+      "tick": 1093,
+      "speedMps": 10.747740452431833,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 24.14241742357561
+    },
+    {
+      "tick": 1099,
+      "speedMps": 10.749455248323876,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 23.067414352532154
+    },
+    {
+      "tick": 1105,
+      "speedMps": 10.74730143719,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 21.992497787928755
+    },
+    {
+      "tick": 1111,
+      "speedMps": 10.749017109521807,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 20.917538524265893
+    },
+    {
+      "tick": 1117,
+      "speedMps": 10.746862885113165,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 19.842601302812028
+    },
+    {
+      "tick": 1123,
+      "speedMps": 10.74857943467789,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 18.767685886174462
+    },
+    {
+      "tick": 1129,
+      "speedMps": 10.74642350638408,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 17.6926634988603
+    },
+    {
+      "tick": 1135,
+      "speedMps": 10.748140933114929,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 16.61779192590967
+    },
+    {
+      "tick": 1141,
+      "speedMps": 10.749854927853425,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 15.542748810541127
+    },
+    {
+      "tick": 1147,
+      "speedMps": 10.747702894813333,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 14.467921120991889
+    },
+    {
+      "tick": 1153,
+      "speedMps": 10.749417765758052,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 13.392921801331
+    },
+    {
+      "tick": 1159,
+      "speedMps": 10.751133078005559,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 12.317944539454544
+    },
+    {
+      "tick": 1165,
+      "speedMps": 10.701247418076926,
+      "throttle": 0,
+      "brake": 0.2,
+      "distanceToStopLineM": 11.244135827831286
+    },
+    {
+      "tick": 1171,
+      "speedMps": 10.240151528531227,
+      "throttle": 0,
+      "brake": 0.7999999999999999,
+      "distanceToStopLineM": 10.197026282038792
+    },
+    {
+      "tick": 1177,
+      "speedMps": 9.4336657811754,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 9.219513676703372
+    },
+    {
+      "tick": 1183,
+      "speedMps": 8.61548053584763,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 8.323887831070408
+    },
+    {
+      "tick": 1189,
+      "speedMps": 7.798930297974353,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 7.509985108037796
+    },
+    {
+      "tick": 1195,
+      "speedMps": 6.9840118002644616,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 6.777642197505031
+    },
+    {
+      "tick": 1201,
+      "speedMps": 6.170721781955985,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 6.12669611571971
+    },
+    {
+      "tick": 1207,
+      "speedMps": 5.359056988803046,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 5.556984204625451
+    },
+    {
+      "tick": 1213,
+      "speedMps": 4.549014173062844,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 5.068344131210949
+    },
+    {
+      "tick": 1219,
+      "speedMps": 3.740590093482644,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 4.660613886860574
+    },
+    {
+      "tick": 1225,
+      "speedMps": 2.933781515286821,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 4.333631786706036
+    },
+    {
+      "tick": 1231,
+      "speedMps": 2.128585210163913,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 4.0872364689793415
+    },
+    {
+      "tick": 1237,
+      "speedMps": 1.324997956253701,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.9212668943672497
+    },
+    {
+      "tick": 1243,
+      "speedMps": 0.5230165381343208,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.8355623453668954
+    },
+    {
+      "tick": 1249,
+      "speedMps": 0.08250887273532012,
+      "throttle": 0,
+      "brake": 0.2,
+      "distanceToStopLineM": 3.817520869840166
+    },
+    {
+      "tick": 1255,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 0.7999999999999999,
+      "distanceToStopLineM": 3.8168128470105387
+    },
+    {
+      "tick": 1261,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.8168128470105387
+    },
+    {
+      "tick": 1267,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.8168128470105387
+    },
+    {
+      "tick": 1273,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.8168128470105387
+    },
+    {
+      "tick": 1279,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.8168128470105387
+    },
+    {
+      "tick": 1285,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.8168128470105387
+    },
+    {
+      "tick": 1291,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.8168128470105387
+    },
+    {
+      "tick": 1297,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.8168128470105387
+    },
+    {
+      "tick": 1303,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.8168128470105387
+    },
+    {
+      "tick": 1309,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.8168128470105387
+    },
+    {
+      "tick": 1315,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.8168128470105387
+    },
+    {
+      "tick": 1321,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.8168128470105387
+    },
+    {
+      "tick": 1327,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.8168128470105387
+    },
+    {
+      "tick": 1333,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.8168128470105387
+    },
+    {
+      "tick": 1339,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.8168128470105387
+    },
+    {
+      "tick": 1345,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.8168128470105387
+    },
+    {
+      "tick": 1351,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.8168128470105387
+    },
+    {
+      "tick": 1357,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.8168128470105387
+    },
+    {
+      "tick": 1363,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.8168128470105387
+    },
+    {
+      "tick": 1369,
+      "speedMps": 0.011605853174603177,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 3.8165549319973024
+    },
+    {
+      "tick": 1375,
+      "speedMps": 0.1391774351009961,
+      "throttle": 0.39999999999999997,
+      "brake": 0,
+      "distanceToStopLineM": 3.809079263856262
+    },
+    {
+      "tick": 1381,
+      "speedMps": 0.4056637808199149,
+      "throttle": 0.7000000000000001,
+      "brake": 0,
+      "distanceToStopLineM": 3.7807408249926198
+    },
+    {
+      "tick": 1387,
+      "speedMps": 0.8107872922255069,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 3.7176643367487543
+    },
+    {
+      "tick": 1393,
+      "speedMps": 1.2730660497912742,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 3.6096118547919787
+    },
+    {
+      "tick": 1399,
+      "speedMps": 1.734421019964163,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 3.4553853996478097
+    },
+    {
+      "tick": 1405,
+      "speedMps": 2.1948540487799972,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 3.2550772423402066
+    },
+    {
+      "tick": 1411,
+      "speedMps": 2.654366978585605,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 3.008779469504759
+    },
+    {
+      "tick": 1417,
+      "speedMps": 3.1129616480461895,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 2.7165839837572605
+    },
+    {
+      "tick": 1423,
+      "speedMps": 3.570639892152687,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 2.3785825040613133
+    },
+    {
+      "tick": 1429,
+      "speedMps": 4.027403542229109,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 1.9948665660954248
+    },
+    {
+      "tick": 1435,
+      "speedMps": 4.48325442593987,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 1.5655275226192202
+    },
+    {
+      "tick": 1441,
+      "speedMps": 4.938194367297099,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 1.0906565438390032
+    },
+    {
+      "tick": 1447,
+      "speedMps": 5.3922251866679405,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 0.5703446177724913
+    },
+    {
+      "tick": 1453,
+      "speedMps": 5.845348700781837,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 0.004682550613040348
+    },
+    {
+      "tick": 1459,
+      "speedMps": 6.297566722737801,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 179.39376096709287
+    },
+    {
+      "tick": 1465,
+      "speedMps": 6.748881062011662,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 178.73767031084571
+    },
+    {
+      "tick": 1471,
+      "speedMps": 7.199293524463318,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 178.03650084476863
+    },
+    {
+      "tick": 1477,
+      "speedMps": 7.648805912343952,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 177.29034265138333
+    },
+    {
+      "tick": 1483,
+      "speedMps": 8.09742002430325,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 176.4992856331965
+    },
+    {
+      "tick": 1489,
+      "speedMps": 8.545137655396594,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 175.6634195130597
+    },
+    {
+      "tick": 1495,
+      "speedMps": 8.991960597092243,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 174.7828338345281
+    },
+    {
+      "tick": 1501,
+      "speedMps": 9.437890637278505,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 173.85761796221905
+    },
+    {
+      "tick": 1507,
+      "speedMps": 9.88292956027089,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 172.88786108216948
+    },
+    {
+      "tick": 1513,
+      "speedMps": 10.327079146819255,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 171.87365220219286
+    },
+    {
+      "tick": 1519,
+      "speedMps": 10.770341174114916,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 170.81508015223528
+    },
+    {
+      "tick": 1525,
+      "speedMps": 10.748818434359274,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 169.73930187678238
+    },
+    {
+      "tick": 1531,
+      "speedMps": 10.750531075223945,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 168.6641910902873
+    },
+    {
+      "tick": 1537,
+      "speedMps": 10.752248027028141,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 167.5892957789195
+    },
+    {
+      "tick": 1543,
+      "speedMps": 10.753961547789045,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 166.5142289725711
+    },
+    {
+      "tick": 1549,
+      "speedMps": 10.747938704846549,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 165.43937768235236
+    },
+    {
+      "tick": 1555,
+      "speedMps": 10.749653104564043,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 164.36435480918408
+    },
+    {
+      "tick": 1561,
+      "speedMps": 10.747498898047304,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 163.28941848202703
+    },
+    {
+      "tick": 1567,
+      "speedMps": 10.749214175786351,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 162.21443949530277
+    },
+    {
+      "tick": 1573,
+      "speedMps": 10.75092989444517,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 161.13948254721848
+    },
+    {
+      "tick": 1579,
+      "speedMps": 10.752646049275329,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 160.06454740043165
+    },
+    {
+      "tick": 1585,
+      "speedMps": 10.746620679416719,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 158.9895698065226
+    },
+    {
+      "tick": 1591,
+      "speedMps": 10.748337712129981,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 157.91467853925948
+    },
+    {
+      "tick": 1597,
+      "speedMps": 10.750051313638266,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 156.83961576893427
+    },
+    {
+      "tick": 1603,
+      "speedMps": 10.75176922416639,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 155.76476837778392
+    },
+    {
+      "tick": 1609,
+      "speedMps": 10.75348370173537,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 154.6897493958924
+    },
+    {
+      "tick": 1615,
+      "speedMps": 10.747460524865739,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 153.61488141488266
+    },
+    {
+      "tick": 1621,
+      "speedMps": 10.74917587928722,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 152.53990626100222
+    },
+    {
+      "tick": 1627,
+      "speedMps": 10.75089167447524,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 151.46495313810237
+    },
+    {
+      "tick": 1633,
+      "speedMps": 10.752607905681668,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 150.390021808856
+    },
+    {
+      "tick": 1639,
+      "speedMps": 10.746582612046701,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 149.3150480248587
+    },
+    {
+      "tick": 1645,
+      "speedMps": 10.748299720831286,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 148.24016055989378
+    },
+    {
+      "tick": 1651,
+      "speedMps": 10.750013398258876,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 147.1651015842686
+    },
+    {
+      "tick": 1657,
+      "speedMps": 10.751731384554594,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 146.0902579802352
+    },
+    {
+      "tick": 1663,
+      "speedMps": 10.753445937739757,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 145.0152427778927
+    },
+    {
+      "tick": 1669,
+      "speedMps": 10.74742283633521,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 143.94037856887914
+    },
+    {
+      "tick": 1675,
+      "speedMps": 10.749138266070965,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 142.86540717945715
+    },
+    {
+      "tick": 1681,
+      "speedMps": 10.746983799551062,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 141.7904578564754
+    },
+    {
+      "tick": 1687,
+      "speedMps": 10.748700107488343,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 140.7155303624929
+    },
+    {
+      "tick": 1693,
+      "speedMps": 10.746543938049944,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 139.64049592196835
+    },
+    {
+      "tick": 1699,
+      "speedMps": 10.748261124118095,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 138.5656123198937
+    },
+    {
+      "tick": 1705,
+      "speedMps": 10.749974878674813,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 137.4905571994393
+    },
+    {
+      "tick": 1711,
+      "speedMps": 10.747822605932907,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 136.4157175287944
+    },
+    {
+      "tick": 1717,
+      "speedMps": 10.749537237654815,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 135.3407062519801
+    },
+    {
+      "tick": 1723,
+      "speedMps": 10.747383262678868,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 134.26578149800366
+    },
+    {
+      "tick": 1729,
+      "speedMps": 10.749098771496014,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 133.19081406133293
+    },
+    {
+      "tick": 1735,
+      "speedMps": 10.746944383899466,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 132.11586868320356
+    },
+    {
+      "tick": 1741,
+      "speedMps": 10.748660770602386,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 131.0409451261903
+    },
+    {
+      "tick": 1747,
+      "speedMps": 10.746504679772228,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 129.96591461476766
+    },
+    {
+      "tick": 1753,
+      "speedMps": 10.74822194429153,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 128.8910349339432
+    },
+    {
+      "tick": 1759,
+      "speedMps": 10.74993577714263,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 127.81598372690306
+    },
+    {
+      "tick": 1765,
+      "speedMps": 10.747783582538647,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 126.74114796185208
+    },
+    {
+      "tick": 1771,
+      "speedMps": 10.749498292242333,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 125.66614058282707
+    },
+    {
+      "tick": 1777,
+      "speedMps": 10.74734439509233,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 124.59121971885082
+    },
+    {
+      "tick": 1783,
+      "speedMps": 10.749059981579897,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 123.51625616440674
+    },
+    {
+      "tick": 1789,
+      "speedMps": 10.74690567149856,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 122.44131466074595
+    },
+    {
+      "tick": 1795,
+      "speedMps": 10.748622135561792,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 121.36639497045888
+    },
+    {
+      "tick": 1801,
+      "speedMps": 10.746466121937353,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 120.29136831803538
+    },
+    {
+      "tick": 1807,
+      "speedMps": 10.748183463508092,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 119.21649248849849
+    },
+    {
+      "tick": 1813,
+      "speedMps": 10.749897373256653,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 118.14144512504981
+    },
+    {
+      "tick": 1819,
+      "speedMps": 10.747745255396463,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 117.06661319590944
+    },
+    {
+      "tick": 1825,
+      "speedMps": 10.749460041690583,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 115.99160964512964
+    },
+    {
+      "tick": 1831,
+      "speedMps": 10.747306220977961,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 114.91669260174842
+    },
+    {
+      "tick": 1837,
+      "speedMps": 10.74902188375016,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 113.84173286026459
+    },
+    {
+      "tick": 1843,
+      "speedMps": 10.746867649801015,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 112.76679516194451
+    },
+    {
+      "tick": 1849,
+      "speedMps": 10.748584189844303,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 111.69187926939384
+    },
+    {
+      "tick": 1855,
+      "speedMps": 10.746428252048084,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 110.61685640711755
+    },
+    {
+      "tick": 1861,
+      "speedMps": 10.74814566929551,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 109.54198436015389
+    },
+    {
+      "tick": 1867,
+      "speedMps": 10.749859654569537,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 108.46694077171963
+    },
+    {
+      "tick": 1873,
+      "speedMps": 10.747707612083886,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 107.39211261004988
+    },
+    {
+      "tick": 1879,
+      "speedMps": 10.74942247360192,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 106.31711281921201
+    },
+    {
+      "tick": 1885,
+      "speedMps": 10.751137776441581,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 105.24213508710011
+    },
+    {
+      "tick": 1891,
+      "speedMps": 10.752853515854062,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 104.1671791763531
+    },
+    {
+      "tick": 1897,
+      "speedMps": 10.746829021090457,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 103.09224532260953
+    },
+    {
+      "tick": 1903,
+      "speedMps": 10.748545638326807,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 102.01733328842562
+    },
+    {
+      "tick": 1909,
+      "speedMps": 10.750258825188446,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 100.94224979267887
+    },
+    {
+      "tick": 1915,
+      "speedMps": 10.751976321039166,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 99.86738167456974
+    },
+    {
+      "tick": 1921,
+      "speedMps": 10.753690384759407,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 98.79234200713881
+    },
+    {
+      "tick": 1927,
+      "speedMps": 10.747668083691229,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 97.71751780160497
+    },
+    {
+      "tick": 1933,
+      "speedMps": 10.749383024200196,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 96.64252195899729
+    },
+    {
+      "tick": 1939,
+      "speedMps": 10.751098405872941,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 95.56754816722565
+    },
+    {
+      "tick": 1945,
+      "speedMps": 10.752814223960971,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 94.49259618894484
+    },
+    {
+      "tick": 1951,
+      "speedMps": 10.746789807715697,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 93.41766625980904
+    },
+    {
+      "tick": 1957,
+      "speedMps": 10.748506503313475,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 92.34275814239027
+    },
+    {
+      "tick": 1963,
+      "speedMps": 10.750219768379944,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 91.26767855558165
+    },
+    {
+      "tick": 1969,
+      "speedMps": 10.751937342279215,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 90.1928143385993
+    },
+    {
+      "tick": 1975,
+      "speedMps": 10.753651483892037,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 89.11777856449936
+    },
+    {
+      "tick": 1981,
+      "speedMps": 10.747629260560789,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 88.04295824451634
+    },
+    {
+      "tick": 1987,
+      "speedMps": 10.74934427865134,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 86.96796627969496
+    },
+    {
+      "tick": 1993,
+      "speedMps": 10.751059737750634,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 85.8929963579605
+    },
+    {
+      "tick": 1999,
+      "speedMps": 10.75277563311049,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 84.81804824198309
+    },
+    {
+      "tick": 2005,
+      "speedMps": 10.746751293982626,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 83.7431221674326
+    },
+    {
+      "tick": 2011,
+      "speedMps": 10.748468066543706,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 82.66821789689635
+    },
+    {
+      "tick": 2017,
+      "speedMps": 10.750181408419683,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 81.59314214928287
+    },
+    {
+      "tick": 2023,
+      "speedMps": 10.75189905897497,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 80.51828176382367
+    },
+    {
+      "tick": 2029,
+      "speedMps": 10.753613277090626,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 79.44324981359023
+    },
+    {
+      "tick": 2035,
+      "speedMps": 10.747591130109333,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 78.36843330983231
+    },
+    {
+      "tick": 2041,
+      "speedMps": 10.749306224397268,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 77.29344515360987
+    },
+    {
+      "tick": 2047,
+      "speedMps": 10.751021759541675,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 76.21847903286357
+    },
+    {
+      "tick": 2053,
+      "speedMps": 10.752737730794681,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 75.14353471027869
+    },
+    {
+      "tick": 2059,
+      "speedMps": 10.746713467408307,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 74.06861242154025
+    },
+    {
+      "tick": 2065,
+      "speedMps": 10.748430315559522,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 72.99371192925076
+    },
+    {
+      "tick": 2071,
+      "speedMps": 10.750143732874577,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 71.91863995233393
+    },
+    {
+      "tick": 2077,
+      "speedMps": 10.751861458718189,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 70.84378333003627
+    },
+    {
+      "tick": 2083,
+      "speedMps": 10.753575751971718,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 69.76875513544428
+    },
+    {
+      "tick": 2089,
+      "speedMps": 10.747552391154965,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 68.69387796014416
+    },
+    {
+      "tick": 2095,
+      "speedMps": 10.749267561996911,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 67.61889363034658
+    },
+    {
+      "tick": 2101,
+      "speedMps": 10.750983173972248,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 66.54393134986623
+    },
+    {
+      "tick": 2107,
+      "speedMps": 10.752699222332113,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 65.46899088133921
+    },
+    {
+      "tick": 2113,
+      "speedMps": 10.746673746215974,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 64.39400797632453
+    },
+    {
+      "tick": 2119,
+      "speedMps": 10.748390672884044,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 63.3191114085692
+    },
+    {
+      "tick": 2125,
+      "speedMps": 10.750104168559048,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 62.244043348343894
+    },
+    {
+      "tick": 2131,
+      "speedMps": 10.75182197346538,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 61.16919067786455
+    },
+    {
+      "tick": 2137,
+      "speedMps": 10.753536345623635,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 60.094166427193784
+    },
+    {
+      "tick": 2143,
+      "speedMps": 10.747513063553933,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 59.019293187933556
+    },
+    {
+      "tick": 2149,
+      "speedMps": 10.749228312985567,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 57.94431278631032
+    },
+    {
+      "tick": 2155,
+      "speedMps": 10.75094400339354,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 56.86935442615447
+    },
+    {
+      "tick": 2161,
+      "speedMps": 10.752660130029307,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 55.794417870117854
+    },
+    {
+      "tick": 2167,
+      "speedMps": 10.746634732032646,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 54.719438869775274
+    },
+    {
+      "tick": 2173,
+      "speedMps": 10.748351736664084,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 53.64454619888909
+    },
+    {
+      "tick": 2179,
+      "speedMps": 10.750065310146663,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 52.569482027745835
+    },
+    {
+      "tick": 2185,
+      "speedMps": 10.751783192705087,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 51.49463323857674
+    },
+    {
+      "tick": 2191,
+      "speedMps": 10.753497642360257,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 50.41961286146011
+    },
+    {
+      "tick": 2197,
+      "speedMps": 10.747474437632603,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 49.344743488013364
+    },
+    {
+      "tick": 2203,
+      "speedMps": 10.749189764251728,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 48.26976694447842
+    },
+    {
+      "tick": 2209,
+      "speedMps": 10.750905531692947,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 47.19481243470119
+    },
+    {
+      "tick": 2215,
+      "speedMps": 10.752621735208026,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 46.119879721348866
+    },
+    {
+      "tick": 2221,
+      "speedMps": 10.746596413937045,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 45.04490455601149
+    },
+    {
+      "tick": 2227,
+      "speedMps": 10.748313495140842,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 43.97001571246693
+    },
+    {
+      "tick": 2233,
+      "speedMps": 10.75002714504276,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 42.894955361016855
+    },
+    {
+      "tick": 2239,
+      "speedMps": 10.75174510386781,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 41.82011038390806
+    },
+    {
+      "tick": 2245,
+      "speedMps": 10.753459629637202,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 40.74509381123386
+    },
+    {
+      "tick": 2251,
+      "speedMps": 10.747436500871666,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 39.67022823462702
+    },
+    {
+      "tick": 2257,
+      "speedMps": 10.749151903301115,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 38.59525548034469
+    },
+    {
+      "tick": 2263,
+      "speedMps": 10.750867746401163,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 37.52030475224785
+    },
+    {
+      "tick": 2269,
+      "speedMps": 10.752584025423875,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 36.44537581301887
+    },
+    {
+      "tick": 2275,
+      "speedMps": 10.74655877950964,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 35.37040441426285
+    },
+    {
+      "tick": 2281,
+      "speedMps": 10.748275935919592,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 34.29551932977273
+    },
+    {
+      "tick": 2287,
+      "speedMps": 10.749989660877384,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 33.22046272986529
+    },
+    {
+      "tick": 2293,
+      "speedMps": 10.747837358595698,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 32.14562158272378
+    },
+    {
+      "tick": 2299,
+      "speedMps": 10.749551960836857,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 31.070608832363348
+    },
+    {
+      "tick": 2305,
+      "speedMps": 10.747397956439071,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 29.995682607785454
+    },
+    {
+      "tick": 2311,
+      "speedMps": 10.749113435893172,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 28.92071370345201
+    },
+    {
+      "tick": 2317,
+      "speedMps": 10.746959018992259,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 27.845766860592846
+    },
+    {
+      "tick": 2323,
+      "speedMps": 10.748675376449375,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 26.7708418417767
+    },
+    {
+      "tick": 2329,
+      "speedMps": 10.746519256431855,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 25.69580987147242
+    },
+    {
+      "tick": 2335,
+      "speedMps": 10.748236491822121,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 24.620928734681627
+    },
+    {
+      "tick": 2341,
+      "speedMps": 10.749950295602394,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 23.545876074584726
+    },
+    {
+      "tick": 2347,
+      "speedMps": 10.74779807198568,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 22.471038859380656
+    },
+    {
+      "tick": 2353,
+      "speedMps": 10.74951275273461,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 21.396030033100374
+    },
+    {
+      "tick": 2359,
+      "speedMps": 10.747358826687712,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 20.321107724760964
+    },
+    {
+      "tick": 2365,
+      "speedMps": 10.749074384336131,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 19.246142728840084
+    },
+    {
+      "tick": 2371,
+      "speedMps": 10.746920045473278,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 18.171199786583088
+    },
+    {
+      "tick": 2377,
+      "speedMps": 10.748636480812502,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 17.09627866057457
+    },
+    {
+      "tick": 2383,
+      "speedMps": 10.746480438521457,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 16.021250575298666
+    },
+    {
+      "tick": 2389,
+      "speedMps": 10.748197751482875,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 14.946373315772746
+    },
+    {
+      "tick": 2395,
+      "speedMps": 10.74991163267929,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 13.871324525192563
+    },
+    {
+      "tick": 2401,
+      "speedMps": 10.74775948632401,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 12.796491171772573
+    },
+    {
+      "tick": 2407,
+      "speedMps": 10.749474244179982,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 11.721486199559365
+    },
+    {
+      "tick": 2413,
+      "speedMps": 10.535807277198792,
+      "throttle": 0,
+      "brake": 0.5,
+      "distanceToStopLineM": 10.654794204711436
+    },
+    {
+      "tick": 2419,
+      "speedMps": 9.848575236790463,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 9.637979384968446
+    },
+    {
+      "tick": 2425,
+      "speedMps": 9.02956086375996,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 8.700910972993768
+    },
+    {
+      "tick": 2431,
+      "speedMps": 8.212183155058087,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 7.845648499711956
+    },
+    {
+      "tick": 2437,
+      "speedMps": 7.396438840082752,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 7.072028489528236
+    },
+    {
+      "tick": 2443,
+      "speedMps": 6.582324654767614,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 6.379887793526564
+    },
+    {
+      "tick": 2449,
+      "speedMps": 5.769837341569028,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 5.769063588817232
+    },
+    {
+      "tick": 2455,
+      "speedMps": 4.958973649453009,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 5.2393933778848805
+    },
+    {
+      "tick": 2461,
+      "speedMps": 4.149730333882224,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 4.790714987938486
+    },
+    {
+      "tick": 2467,
+      "speedMps": 3.342104156803012,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 4.422866570262443
+    },
+    {
+      "tick": 2473,
+      "speedMps": 2.536091886632421,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 4.135686599569112
+    },
+    {
+      "tick": 2479,
+      "speedMps": 1.7316902982452846,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.929013873352062
+    },
+    {
+      "tick": 2485,
+      "speedMps": 0.9288961729613128,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.8026875112415155
+    },
+    {
+      "tick": 2491,
+      "speedMps": 0.12770629853221374,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.756546954360374
+    },
+    {
+      "tick": 2497,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 0.5,
+      "distanceToStopLineM": 3.750262145431293
+    },
+    {
+      "tick": 2503,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.750262145431293
+    },
+    {
+      "tick": 2509,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.750262145431293
+    },
+    {
+      "tick": 2515,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.750262145431293
+    },
+    {
+      "tick": 2521,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.750262145431293
+    },
+    {
+      "tick": 2527,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.750262145431293
+    },
+    {
+      "tick": 2533,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.750262145431293
+    },
+    {
+      "tick": 2539,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.750262145431293
+    },
+    {
+      "tick": 2545,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.750262145431293
+    },
+    {
+      "tick": 2551,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.750262145431293
+    },
+    {
+      "tick": 2557,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.750262145431293
+    },
+    {
+      "tick": 2563,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.750262145431293
+    },
+    {
+      "tick": 2569,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.750262145431293
+    },
+    {
+      "tick": 2575,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.750262145431293
+    },
+    {
+      "tick": 2581,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.750262145431293
+    },
+    {
+      "tick": 2587,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.750262145431293
+    },
+    {
+      "tick": 2593,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.750262145431293
+    },
+    {
+      "tick": 2599,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.750262145431293
+    },
+    {
+      "tick": 2605,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.750262145431293
+    },
+    {
+      "tick": 2611,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.750262145431293
+    },
+    {
+      "tick": 2617,
+      "speedMps": 0.0580099270824736,
+      "throttle": 0.25,
+      "brake": 0,
+      "distanceToStopLineM": 3.748005953151221
+    },
+    {
+      "tick": 2623,
+      "speedMps": 0.2550736253825838,
+      "throttle": 0.5499999999999999,
+      "brake": 0,
+      "distanceToStopLineM": 3.7318350446136037
+    },
+    {
+      "tick": 2629,
+      "speedMps": 0.5909132190112037,
+      "throttle": 0.8500000000000002,
+      "brake": 0,
+      "distanceToStopLineM": 3.6878602566270047
+    },
+    {
+      "tick": 2635,
+      "speedMps": 1.0420422599540426,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 3.6028649149913576
+    },
+    {
+      "tick": 2641,
+      "speedMps": 1.503858892838042,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 3.4717139010241453
+    },
+    {
+      "tick": 2647,
+      "speedMps": 1.9647526618086608,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 3.2944350724532114
+    },
+    {
+      "tick": 2653,
+      "speedMps": 2.424725411056303,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 3.071120608062131
+    },
+    {
+      "tick": 2659,
+      "speedMps": 2.883778981086062,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 2.801862502430538
+    },
+    {
+      "tick": 2665,
+      "speedMps": 3.3419152087250907,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 2.4867525663023002
+    },
+    {
+      "tick": 2671,
+      "speedMps": 3.799135927129946,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 2.1258824269526713
+    },
+    {
+      "tick": 2677,
+      "speedMps": 4.255442965793924,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 1.7193435285548162
+    },
+    {
+      "tick": 2683,
+      "speedMps": 4.710838150554385,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 1.2672271325462248
+    },
+    {
+      "tick": 2689,
+      "speedMps": 5.165323303600054,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 0.7696243179931912
+    },
+    {
+      "tick": 2695,
+      "speedMps": 5.618900243478316,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 0.22662598195591954
+    },
+    {
+      "tick": 2701,
+      "speedMps": 6.071570785102488,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 179.6383228398518
+    },
+    {
+      "tick": 2707,
+      "speedMps": 6.5233367397590865,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 179.00480542581846
+    },
+    {
+      "tick": 2713,
+      "speedMps": 6.974199915115072,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 178.32616409307616
+    },
+    {
+      "tick": 2719,
+      "speedMps": 7.424162115225082,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 177.60248901428918
+    },
+    {
+      "tick": 2725,
+      "speedMps": 7.873225140538649,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 176.83387018192656
+    },
+    {
+      "tick": 2731,
+      "speedMps": 8.321390787907411,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 176.02039740862267
+    },
+    {
+      "tick": 2737,
+      "speedMps": 8.76866085059229,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 175.16216032753601
+    },
+    {
+      "tick": 2743,
+      "speedMps": 9.215037118270676,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 174.25924839270812
+    },
+    {
+      "tick": 2749,
+      "speedMps": 9.66052137704358,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 173.31175087942148
+    },
+    {
+      "tick": 2755,
+      "speedMps": 10.1051154094428,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 172.31975688455674
+    },
+    {
+      "tick": 2761,
+      "speedMps": 10.548820994438026,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 171.28335532694916
+    },
+    {
+      "tick": 2767,
+      "speedMps": 10.759574422655625,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 170.21037132354928
+    },
+    {
+      "tick": 2773,
+      "speedMps": 10.749675183023166,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 169.13521718639646
+    },
+    {
+      "tick": 2779,
+      "speedMps": 10.751389980435514,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 168.06021419134277
+    },
+    {
+      "tick": 2785,
+      "speedMps": 10.75310521586016,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 166.9852330896038
+    },
+    {
+      "tick": 2791,
+      "speedMps": 10.747080218115858,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 165.91027409520825
+    },
+    {
+      "tick": 2797,
+      "speedMps": 10.748796333376639,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 164.83533697061188
+    },
+    {
+      "tick": 2803,
+      "speedMps": 10.746639971646772,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 163.76029291871868
+    },
+    {
+      "tick": 2809,
+      "speedMps": 10.748356965807712,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 162.685399724482
+    },
+    {
+      "tick": 2815,
+      "speedMps": 10.750070528840714,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 161.61033503103403
+    },
+    {
+      "tick": 2821,
+      "speedMps": 10.751788400970444,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 160.5354857206039
+    },
+    {
+      "tick": 2827,
+      "speedMps": 10.753502840217761,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 159.460464823268
+    },
+    {
+      "tick": 2833,
+      "speedMps": 10.747479625103052,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 158.38559493064162
+    },
+    {
+      "tick": 2839,
+      "speedMps": 10.749194941355881,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 157.31061786896453
+    },
+    {
+      "tick": 2845,
+      "speedMps": 10.75091069845152,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 156.2356628420805
+    },
+    {
+      "tick": 2851,
+      "speedMps": 10.75262689164169,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 155.16072961265473
+    },
+    {
+      "tick": 2857,
+      "speedMps": 10.74660156006643,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 154.08575393227522
+    },
+    {
+      "tick": 2863,
+      "speedMps": 10.748318630986537,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 153.01086457471774
+    },
+    {
+      "tick": 2869,
+      "speedMps": 10.75003227062532,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 151.93580371028196
+    },
+    {
+      "tick": 2875,
+      "speedMps": 10.751750219207745,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 150.8609582212125
+    },
+    {
+      "tick": 2881,
+      "speedMps": 10.75346473475498,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 149.78594113760084
+    },
+    {
+      "tick": 2887,
+      "speedMps": 10.747441595787716,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 148.71107505107756
+    },
+    {
+      "tick": 2893,
+      "speedMps": 10.74915698803582,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 147.63610178789776
+    },
+    {
+      "tick": 2899,
+      "speedMps": 10.750872820974871,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 146.56115055192032
+    },
+    {
+      "tick": 2905,
+      "speedMps": 10.75258908985689,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 145.48622110582562
+    },
+    {
+      "tick": 2911,
+      "speedMps": 10.74656383382223,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 144.4112492012169
+    },
+    {
+      "tick": 2917,
+      "speedMps": 10.748280980131977,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 143.3363636118849
+    },
+    {
+      "tick": 2923,
+      "speedMps": 10.749994695009745,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 142.2613065081444
+    },
+    {
+      "tick": 2929,
+      "speedMps": 10.74784238266818,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 141.18646485817663
+    },
+    {
+      "tick": 2935,
+      "speedMps": 10.749556974869563,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 140.11145160599483
+    },
+    {
+      "tick": 2941,
+      "speedMps": 10.747402960452066,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 139.03652488059834
+    },
+    {
+      "tick": 2947,
+      "speedMps": 10.74911842990648,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 137.96155547644713
+    },
+    {
+      "tick": 2953,
+      "speedMps": 10.74696400302586,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 136.886608134769
+    },
+    {
+      "tick": 2959,
+      "speedMps": 10.748680350523214,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 135.81168261813076
+    },
+    {
+      "tick": 2965,
+      "speedMps": 10.746524220565833,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 134.73665015099908
+    },
+    {
+      "tick": 2971,
+      "speedMps": 10.748241446036104,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 133.66176851837378
+    },
+    {
+      "tick": 2977,
+      "speedMps": 10.749955239916204,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 132.5867153634331
+    },
+    {
+      "tick": 2983,
+      "speedMps": 10.747803006419097,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 131.51187765437408
+    },
+    {
+      "tick": 2989,
+      "speedMps": 10.74951767730738,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 130.43686833522577
+    },
+    {
+      "tick": 2995,
+      "speedMps": 10.74736374141954,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 129.36194553500331
+    },
+    {
+      "tick": 3001,
+      "speedMps": 10.749079289246684,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 128.28698004818227
+    },
+    {
+      "tick": 3007,
+      "speedMps": 10.746924940582177,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 127.21203661600617
+    },
+    {
+      "tick": 3013,
+      "speedMps": 10.748641366139342,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 126.13711500105751
+    },
+    {
+      "tick": 3019,
+      "speedMps": 10.746485314085783,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 125.06208642781854
+    },
+    {
+      "tick": 3025,
+      "speedMps": 10.748202617304198,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 123.9872086813046
+    },
+    {
+      "tick": 3031,
+      "speedMps": 10.749916488777076,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 122.9121594047096
+    },
+    {
+      "tick": 3037,
+      "speedMps": 10.747764332717692,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 121.83732556624608
+    },
+    {
+      "tick": 3043,
+      "speedMps": 10.749479080888952,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 120.76232010995858
+    },
+    {
+      "tick": 3049,
+      "speedMps": 10.74732522212965,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 119.6874011648776
+    },
+    {
+      "tick": 3055,
+      "speedMps": 10.749040846931202,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 118.61243952549421
+    },
+    {
+      "tick": 3061,
+      "speedMps": 10.746886575087286,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 117.53749993306718
+    },
+    {
+      "tick": 3067,
+      "speedMps": 10.748603077311527,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 116.46258215019458
+    },
+    {
+      "tick": 3073,
+      "speedMps": 10.746447101771837,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 115.38755740137384
+    },
+    {
+      "tick": 3079,
+      "speedMps": 10.74816448135122,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 114.3126834716357
+    },
+    {
+      "tick": 3085,
+      "speedMps": 10.74987842903247,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 113.23763800418925
+    },
+    {
+      "tick": 3091,
+      "speedMps": 10.747726349029172,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 112.16280796726244
+    },
+    {
+      "tick": 3097,
+      "speedMps": 10.749441173104533,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 111.0878063049148
+    },
+    {
+      "tick": 3103,
+      "speedMps": 10.747287390097648,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 110.0128911461922
+    },
+    {
+      "tick": 3109,
+      "speedMps": 10.749003090500238,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 108.9379332856007
+    },
+    {
+      "tick": 3115,
+      "speedMps": 10.746848894106288,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 107.86299746441438
+    },
+    {
+      "tick": 3121,
+      "speedMps": 10.748565471629714,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 106.78808344524612
+    },
+    {
+      "tick": 3127,
+      "speedMps": 10.750278618857788,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 105.71299796848166
+    },
+    {
+      "tick": 3133,
+      "speedMps": 10.751996075154143,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 104.63812787331364
+    },
+    {
+      "tick": 3139,
+      "speedMps": 10.753710099399063,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 103.5630862327746
+    },
+    {
+      "tick": 3145,
+      "speedMps": 10.747687758934447,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 102.48826005807558
+    },
+    {
+      "tick": 3151,
+      "speedMps": 10.749402660125705,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 101.41326225023766
+    },
+    {
+      "tick": 3157,
+      "speedMps": 10.751118002559311,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 100.33828649716315
+    },
+    {
+      "tick": 3163,
+      "speedMps": 10.752833781486617,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 99.2633325614986
+    },
+    {
+      "tick": 3169,
+      "speedMps": 10.746809326158871,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 98.18840067889067
+    },
+    {
+      "tick": 3175,
+      "speedMps": 10.748525982752275,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 97.11349061190356
+    },
+    {
+      "tick": 3181,
+      "speedMps": 10.750239208892317,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 96.03840907942237
+    },
+    {
+      "tick": 3187,
+      "speedMps": 10.751956743942952,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 94.96354292065558
+    },
+    {
+      "tick": 3193,
+      "speedMps": 10.753670846784768,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 93.88850520865151
+    },
+    {
+      "tick": 3199,
+      "speedMps": 10.747648584759995,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 92.81368295463699
+    },
+    {
+      "tick": 3205,
+      "speedMps": 10.749363564234342,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 91.73868905964878
+    },
+    {
+      "tick": 3211,
+      "speedMps": 10.7510789847946,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 90.66371721160476
+    },
+    {
+      "tick": 3217,
+      "speedMps": 10.752794841692431,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 89.58876717316718
+    },
+    {
+      "tick": 3223,
+      "speedMps": 10.746770464179404,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 88.51383917999817
+    },
+    {
+      "tick": 3229,
+      "speedMps": 10.748487198432025,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 87.43893299467766
+    },
+    {
+      "tick": 3235,
+      "speedMps": 10.750200502076096,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 86.36385533610627
+    },
+    {
+      "tick": 3241,
+      "speedMps": 10.75191811447588,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 85.28899304350784
+    },
+    {
+      "tick": 3247,
+      "speedMps": 10.753632294512277,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 84.21395918994625
+    },
+    {
+      "tick": 3253,
+      "speedMps": 10.74761010952782,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 83.13914078666369
+    },
+    {
+      "tick": 3259,
+      "speedMps": 10.749325165888534,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 82.06415073471243
+    },
+    {
+      "tick": 3265,
+      "speedMps": 10.751040663181515,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 80.98918272202559
+    },
+    {
+      "tick": 3271,
+      "speedMps": 10.752756596658733,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 79.91423651128093
+    },
+    {
+      "tick": 3277,
+      "speedMps": 10.74673229557206,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 78.83931233815588
+    },
+    {
+      "tick": 3283,
+      "speedMps": 10.748449106098315,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 77.76440996524542
+    },
+    {
+      "tick": 3289,
+      "speedMps": 10.750162485863594,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 76.68933611146565
+    },
+    {
+      "tick": 3295,
+      "speedMps": 10.751880174232472,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 75.6144776160557
+    },
+    {
+      "tick": 3301,
+      "speedMps": 10.753594430086151,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 74.53944755209449
+    },
+    {
+      "tick": 3307,
+      "speedMps": 10.747572320767468,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 73.46463293083946
+    },
+    {
+      "tick": 3313,
+      "speedMps": 10.74928745264275,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 72.389646653358
+    },
+    {
+      "tick": 3319,
+      "speedMps": 10.751003025299395,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 71.31468240759835
+    },
+    {
+      "tick": 3325,
+      "speedMps": 10.752719033989676,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 70.23973995625329
+    },
+    {
+      "tick": 3331,
+      "speedMps": 10.746693518283225,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 69.16475507238306
+    },
+    {
+      "tick": 3337,
+      "speedMps": 10.748410405440094,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 68.08985652972643
+    },
+    {
+      "tick": 3343,
+      "speedMps": 10.750123861682859,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 67.01478649854641
+    },
+    {
+      "tick": 3349,
+      "speedMps": 10.751841627235752,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 65.93993186105092
+    },
+    {
+      "tick": 3355,
+      "speedMps": 10.753555960119211,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 64.86490564729479
+    },
+    {
+      "tick": 3361,
+      "speedMps": 10.747532638853194,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 63.79003044887207
+    },
+    {
+      "tick": 3367,
+      "speedMps": 10.74924784916684,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 62.71504809200155
+    },
+    {
+      "tick": 3373,
+      "speedMps": 10.750963500534995,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 61.64008778050561
+    },
+    {
+      "tick": 3379,
+      "speedMps": 10.75267958820896,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 60.565149277028354
+    },
+    {
+      "tick": 3385,
+      "speedMps": 10.746654151328356,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 59.490168333136694
+    },
+    {
+      "tick": 3391,
+      "speedMps": 10.748371117153557,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 58.4152737225852
+    },
+    {
+      "tick": 3397,
+      "speedMps": 10.750084651907445,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 57.34020761565267
+    },
+    {
+      "tick": 3403,
+      "speedMps": 10.751802495814568,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 56.26535689456267
+    },
+    {
+      "tick": 3409,
+      "speedMps": 10.753516906895676,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 55.19033458938583
+    },
+    {
+      "tick": 3415,
+      "speedMps": 10.747493663671044,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 54.11546329173177
+    },
+    {
+      "tick": 3421,
+      "speedMps": 10.749208951870123,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 53.04048482783486
+    },
+    {
+      "tick": 3427,
+      "speedMps": 10.750924680968073,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 51.96552840153316
+    },
+    {
+      "tick": 3433,
+      "speedMps": 10.752640846216503,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 50.89059377548614
+    },
+    {
+      "tick": 3439,
+      "speedMps": 10.74661548675534,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 49.81561670127638
+    },
+    {
+      "tick": 3445,
+      "speedMps": 10.748332529845273,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 48.74072595267387
+    },
+    {
+      "tick": 3451,
+      "speedMps": 10.75004614170949,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 47.66566369997281
+    },
+    {
+      "tick": 3457,
+      "speedMps": 10.751764062572853,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 46.590816825412276
+    },
+    {
+      "tick": 3463,
+      "speedMps": 10.75347855045642,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 45.51579835907819
+    },
+    {
+      "tick": 3469,
+      "speedMps": 10.74745538388077,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 44.4409308925957
+    },
+    {
+      "tick": 3475,
+      "speedMps": 10.749170748575658,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 43.36595625221423
+    },
+    {
+      "tick": 3481,
+      "speedMps": 10.750886554016551,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 42.29100364178737
+    },
+    {
+      "tick": 3487,
+      "speedMps": 10.752602795455367,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 41.21607282398975
+    },
+    {
+      "tick": 3493,
+      "speedMps": 10.746577512032339,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 40.1410995504192
+    },
+    {
+      "tick": 3499,
+      "speedMps": 10.748294631008454,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 39.0662125948611
+    },
+    {
+      "tick": 3505,
+      "speedMps": 10.75000831860721,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 37.99115412762467
+    },
+    {
+      "tick": 3511,
+      "speedMps": 10.751726315053766,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 36.91631103096415
+    },
+    {
+      "tick": 3517,
+      "speedMps": 10.753440878369485,
+      "throttle": 0.1,
+      "brake": 0,
+      "distanceToStopLineM": 35.841296334980484
+    },
+    {
+      "tick": 3523,
+      "speedMps": 10.747417787075246,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 34.766432631314046
+    },
+    {
+      "tick": 3529,
+      "speedMps": 10.749133226901114,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 33.69146174622915
+    },
+    {
+      "tick": 3535,
+      "speedMps": 10.746978770451156,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 32.616512926576775
+    },
+    {
+      "tick": 3541,
+      "speedMps": 10.748695088438259,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 31.541585934917862
+    },
+    {
+      "tick": 3547,
+      "speedMps": 10.7465389290296,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 30.466551995713075
+    },
+    {
+      "tick": 3553,
+      "speedMps": 10.748256125107444,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 29.391668893956307
+    },
+    {
+      "tick": 3559,
+      "speedMps": 10.749969889653853,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 28.316614272819947
+    },
+    {
+      "tick": 3565,
+      "speedMps": 10.747817626881677,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 27.241775100495488
+    },
+    {
+      "tick": 3571,
+      "speedMps": 10.749532268553391,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 26.166764321005758
+    },
+    {
+      "tick": 3577,
+      "speedMps": 10.747378303507366,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 25.091840063359996
+    },
+    {
+      "tick": 3583,
+      "speedMps": 10.749093822234592,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 24.016873122028073
+    },
+    {
+      "tick": 3589,
+      "speedMps": 10.746939444528321,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 22.941928238247897
+    },
+    {
+      "tick": 3595,
+      "speedMps": 10.748655841101757,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 21.867005174595874
+    },
+    {
+      "tick": 3601,
+      "speedMps": 10.746499760122388,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 20.7919751555487
+    },
+    {
+      "tick": 3607,
+      "speedMps": 10.748217034472797,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 19.717095966115494
+    },
+    {
+      "tick": 3613,
+      "speedMps": 10.749930877135355,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 18.64204524948468
+    },
+    {
+      "tick": 3619,
+      "speedMps": 10.747778692323223,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 17.5672099738631
+    },
+    {
+      "tick": 3625,
+      "speedMps": 10.749493411799191,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 16.492203083289382
+    },
+    {
+      "tick": 3631,
+      "speedMps": 10.74733952440194,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 15.417282706788342
+    },
+    {
+      "tick": 3637,
+      "speedMps": 10.749055120622774,
+      "throttle": 0,
+      "brake": 0,
+      "distanceToStopLineM": 14.342319638845424
+    },
+    {
+      "tick": 3643,
+      "speedMps": 10.746900820255254,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 13.267378620713657
+    },
+    {
+      "tick": 3649,
+      "speedMps": 10.748617294012888,
+      "throttle": 0.05,
+      "brake": 0,
+      "distanceToStopLineM": 12.192459414985251
+    },
+    {
+      "tick": 3655,
+      "speedMps": 10.658746128992052,
+      "throttle": 0,
+      "brake": 0.30000000000000004,
+      "distanceToStopLineM": 11.120041873836612
+    },
+    {
+      "tick": 3661,
+      "speedMps": 10.117801808264959,
+      "throttle": 0,
+      "brake": 0.8999999999999999,
+      "distanceToStopLineM": 10.081841576160855
+    },
+    {
+      "tick": 3667,
+      "speedMps": 9.298249430603084,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 9.11788189936135
+    },
+    {
+      "tick": 3673,
+      "speedMps": 8.480334792382825,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 8.235781898985465
+    },
+    {
+      "tick": 3679,
+      "speedMps": 7.664054620853656,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 7.4353779920525085
+    },
+    {
+      "tick": 3685,
+      "speedMps": 6.849405649805093,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 6.716506922475105
+    },
+    {
+      "tick": 3691,
+      "speedMps": 6.036384619553636,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 6.079005760406517
+    },
+    {
+      "tick": 3697,
+      "speedMps": 5.224988276929718,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 5.522711901587513
+    },
+    {
+      "tick": 3703,
+      "speedMps": 4.415213375264694,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 5.047463066697333
+    },
+    {
+      "tick": 3709,
+      "speedMps": 3.607056674377847,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 4.6530973007030525
+    },
+    {
+      "tick": 3715,
+      "speedMps": 2.8005149405634238,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 4.339452972212143
+    },
+    {
+      "tick": 3721,
+      "speedMps": 1.995584946577696,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 4.106368772825476
+    },
+    {
+      "tick": 3727,
+      "speedMps": 1.1922634716260445,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.953683716492037
+    },
+    {
+      "tick": 3733,
+      "speedMps": 0.39054730135007576,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.88123713886489
+    },
+    {
+      "tick": 3739,
+      "speedMps": 0.04351773003204108,
+      "throttle": 0,
+      "brake": 0.30000000000000004,
+      "distanceToStopLineM": 3.8688757324852077
+    },
+    {
+      "tick": 3745,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 0.8999999999999999,
+      "distanceToStopLineM": 3.8688757324852077
+    },
+    {
+      "tick": 3751,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.8688757324852077
+    },
+    {
+      "tick": 3757,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.8688757324852077
+    },
+    {
+      "tick": 3763,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.8688757324852077
+    },
+    {
+      "tick": 3769,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.8688757324852077
+    },
+    {
+      "tick": 3775,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.8688757324852077
+    },
+    {
+      "tick": 3781,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.8688757324852077
+    },
+    {
+      "tick": 3787,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.8688757324852077
+    },
+    {
+      "tick": 3793,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.8688757324852077
+    },
+    {
+      "tick": 3799,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.8688757324852077
+    },
+    {
+      "tick": 3805,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.8688757324852077
+    },
+    {
+      "tick": 3811,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.8688757324852077
+    },
+    {
+      "tick": 3817,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.8688757324852077
+    },
+    {
+      "tick": 3823,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.8688757324852077
+    },
+    {
+      "tick": 3829,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.8688757324852077
+    },
+    {
+      "tick": 3835,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.8688757324852077
+    },
+    {
+      "tick": 3841,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.8688757324852077
+    },
+    {
+      "tick": 3847,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.8688757324852077
+    },
+    {
+      "tick": 3853,
+      "speedMps": 0,
+      "throttle": 0,
+      "brake": 1,
+      "distanceToStopLineM": 3.8688757324852077
+    },
+    {
+      "tick": 3859,
+      "speedMps": 0.023209127414021168,
+      "throttle": 0.15000000000000002,
+      "brake": 0,
+      "distanceToStopLineM": 3.8682309986817245
+    },
+    {
+      "tick": 3865,
+      "speedMps": 0.17395247119405766,
+      "throttle": 0.44999999999999996,
+      "brake": 0,
+      "distanceToStopLineM": 3.8582429414776698
+    },
+    {
+      "tick": 3871,
+      "speedMps": 0.46356427384535587,
+      "throttle": 0.7500000000000001,
+      "brake": 0,
+      "distanceToStopLineM": 3.825077639236383
+    },
+    {
+      "tick": 3877,
+      "speedMps": 0.8878979821757175,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 3.7549289225204348
+    },
+    {
+      "tick": 3883,
+      "speedMps": 1.3500226468222962,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 3.639174362819631
+    },
+    {
+      "tick": 3889,
+      "speedMps": 1.8112238320051273,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 3.4772612212557306
+    },
+    {
+      "tick": 3895,
+      "speedMps": 2.27150338314469,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 3.269281738095856
+    },
+    {
+      "tick": 3901,
+      "speedMps": 2.7308631419736957,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 3.0153279692799515
+    },
+    {
+      "tick": 3907,
+      "speedMps": 3.1893049465444596,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 2.7154917867895847
+    },
+    {
+      "tick": 3913,
+      "speedMps": 3.6468306312362553,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 2.369864879015381
+    },
+    {
+      "tick": 3919,
+      "speedMps": 4.103442026762652,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 1.9785387511241197
+    },
+    {
+      "tick": 3925,
+      "speedMps": 4.559140960178842,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 1.5416047254243495
+    },
+    {
+      "tick": 3931,
+      "speedMps": 5.013929254888952,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 1.0591539417322338
+    },
+    {
+      "tick": 3937,
+      "speedMps": 5.467808730653337,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 0.5312773577364851
+    },
+    {
+      "tick": 3943,
+      "speedMps": 5.920781203595863,
+      "throttle": 1,
+      "brake": 0,
+      "distanceToStopLineM": 179.95806574936137
+    }
+  ],
+  "autoDemo": [
+    {
+      "tick": 3948,
+      "speedMps": 6.098693863304867,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 3960,
+      "speedMps": 6.524476186339011,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 3972,
+      "speedMps": 6.948558499017983,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 3984,
+      "speedMps": 7.370947588930305,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 3996,
+      "speedMps": 7.791650216563859,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 4008,
+      "speedMps": 8.210673115414103,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 4020,
+      "speedMps": 8.582739641993193,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 4032,
+      "speedMps": 8.877856369928828,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 4044,
+      "speedMps": 9.111937849679798,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 4056,
+      "speedMps": 9.297607227168807,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 4068,
+      "speedMps": 9.444876963218972,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 4080,
+      "speedMps": 9.561688768426688,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 4092,
+      "speedMps": 9.654341870155875,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 4104,
+      "speedMps": 9.727832706503905,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 4116,
+      "speedMps": 9.7861243656749,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 4128,
+      "speedMps": 9.832360300626243,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 4140,
+      "speedMps": 9.869033843826552,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 4152,
+      "speedMps": 9.898122663427152,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 4164,
+      "speedMps": 9.92119541156972,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 4176,
+      "speedMps": 9.939496315977658,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 4188,
+      "speedMps": 9.954012276541997,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 4200,
+      "speedMps": 9.965526085171811,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 4212,
+      "speedMps": 9.974658638858244,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 4224,
+      "speedMps": 9.981902422346149,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 4236,
+      "speedMps": 9.987648066009609,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 4248,
+      "speedMps": 9.99278387761704,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 4260,
+      "speedMps": 9.997899183598841,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 4272,
+      "speedMps": 10.00299406582731,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 4284,
+      "speedMps": 10.008068605847855,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 4296,
+      "speedMps": 10.013122884880293,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 4308,
+      "speedMps": 10.018156983820164,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 4320,
+      "speedMps": 10.023170983240012,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 4332,
+      "speedMps": 10.028164963390687,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 4344,
+      "speedMps": 10.033139004202617,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 4356,
+      "speedMps": 10.03433645242166,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 4368,
+      "speedMps": 10.035531623690522,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 4380,
+      "speedMps": 10.036725776006694,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 4392,
+      "speedMps": 10.034160924159504,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 4404,
+      "speedMps": 10.035356796255641,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 4416,
+      "speedMps": 10.036551646600905,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 4428,
+      "speedMps": 10.033987489995807,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 4440,
+      "speedMps": 10.035184054558158,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 4452,
+      "speedMps": 10.036378344029382,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 4464,
+      "speedMps": 10.037571615567078,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 4476,
+      "speedMps": 10.035008388865142,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 4488,
+      "speedMps": 10.036203379712356,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 4500,
+      "speedMps": 10.037397349825673,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 4512,
+      "speedMps": 10.03483481891017,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 4524,
+      "speedMps": 10.036030502765767,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 4536,
+      "speedMps": 10.037225163120512,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 4548,
+      "speedMps": 10.034660818953684,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 4560,
+      "speedMps": 10.035855946542064,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 4572,
+      "speedMps": 10.037050054101165,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 4584,
+      "speedMps": 10.034486409087705,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 4596,
+      "speedMps": 10.035682233037967,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 4608,
+      "speedMps": 10.036877034178595,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 4620,
+      "speedMps": 10.03431282731558,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 4632,
+      "speedMps": 10.035508092911812,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 4644,
+      "speedMps": 10.03670233917873,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 4656,
+      "speedMps": 10.034137580907174,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 4668,
+      "speedMps": 10.035333546205322,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 4680,
+      "speedMps": 10.036528489380478,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 4692,
+      "speedMps": 10.033964425234636,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 4704,
+      "speedMps": 10.035161081887077,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 4716,
+      "speedMps": 10.036355463080708,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 4728,
+      "speedMps": 10.030034107581864,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 4740,
+      "speedMps": 9.989987443070053,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 4752,
+      "speedMps": 9.940104004829772,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 4764,
+      "speedMps": 9.851962137247451,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 4776,
+      "speedMps": 9.743564872034874,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 4788,
+      "speedMps": 9.618108835626046,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 4800,
+      "speedMps": 9.478422311668902,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 4812,
+      "speedMps": 9.326841075040601,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 4824,
+      "speedMps": 9.165293335500087,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 4836,
+      "speedMps": 8.995369846803193,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 4848,
+      "speedMps": 8.818381761133166,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 4860,
+      "speedMps": 8.635408356820225,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 4872,
+      "speedMps": 8.447336393779654,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 4884,
+      "speedMps": 8.254892542225102,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 4896,
+      "speedMps": 8.058670074647713,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 4908,
+      "speedMps": 7.859150799330305,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 4920,
+      "speedMps": 7.656723037893459,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 4932,
+      "speedMps": 7.451696302922465,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 4944,
+      "speedMps": 7.244313208991276,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 4956,
+      "speedMps": 7.034759046550752,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 4968,
+      "speedMps": 6.823169358903356,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 4980,
+      "speedMps": 6.609635783874419,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 4992,
+      "speedMps": 6.394210349865895,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 5004,
+      "speedMps": 6.176908346444956,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 5016,
+      "speedMps": 5.957709817272681,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 5028,
+      "speedMps": 5.736559641019122,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 5040,
+      "speedMps": 5.5133660636365915,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 5052,
+      "speedMps": 5.287997406658073,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 5064,
+      "speedMps": 5.060276473647824,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 5076,
+      "speedMps": 4.829971862099207,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 5088,
+      "speedMps": 4.596784870898366,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 5100,
+      "speedMps": 4.360329797571511,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 5112,
+      "speedMps": 4.120103778329583,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 5124,
+      "speedMps": 3.87543912035684,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 5136,
+      "speedMps": 3.625424326390498,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 5148,
+      "speedMps": 3.368764352140135,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 5160,
+      "speedMps": 3.1035093314215834,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 5172,
+      "speedMps": 2.8264501504529846,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 5184,
+      "speedMps": 2.531422370222013,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 5196,
+      "speedMps": 2.2011721955272736,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 5208,
+      "speedMps": 1.8062436521262237,
+      "decision": "HOLD/STOP_HOLD",
+      "stopRequested": true
+    },
+    {
+      "tick": 5220,
+      "speedMps": 1.4703426258756935,
+      "decision": "HOLD/STOP_HOLD",
+      "stopRequested": true
+    },
+    {
+      "tick": 5232,
+      "speedMps": 1.1969079780140048,
+      "decision": "HOLD/STOP_HOLD",
+      "stopRequested": true
+    },
+    {
+      "tick": 5244,
+      "speedMps": 1.3588068602785224,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5256,
+      "speedMps": 1.8035140107457672,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5268,
+      "speedMps": 2.24644559017609,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5280,
+      "speedMps": 2.68760868784724,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5292,
+      "speedMps": 3.1270103647317877,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5304,
+      "speedMps": 3.5646576536101353,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5316,
+      "speedMps": 4.000557559183078,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5328,
+      "speedMps": 4.434717058183924,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5340,
+      "speedMps": 4.867143099490147,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5352,
+      "speedMps": 5.297842604234617,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5364,
+      "speedMps": 5.7268224659163725,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5376,
+      "speedMps": 6.154089550510948,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5388,
+      "speedMps": 6.579650696580274,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5400,
+      "speedMps": 7.003512715382126,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5412,
+      "speedMps": 7.425682390979138,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5424,
+      "speedMps": 7.846166480347394,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5436,
+      "speedMps": 8.264017977217975,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5448,
+      "speedMps": 8.625051862908313,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5460,
+      "speedMps": 8.911417691080102,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5472,
+      "speedMps": 9.138558108627647,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5484,
+      "speedMps": 9.318721955735551,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5496,
+      "speedMps": 9.461624800395187,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5508,
+      "speedMps": 9.574972862948407,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5520,
+      "speedMps": 9.664878583965855,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5532,
+      "speedMps": 9.736190245494004,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5544,
+      "speedMps": 9.792753420922175,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5556,
+      "speedMps": 9.83761835249097,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5568,
+      "speedMps": 9.873204439542054,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5580,
+      "speedMps": 9.901430707750345,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5592,
+      "speedMps": 9.9238192950604,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5604,
+      "speedMps": 9.94157753493969,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5616,
+      "speedMps": 9.955663063394121,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5628,
+      "speedMps": 9.966835460725687,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5640,
+      "speedMps": 9.975697212880617,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5652,
+      "speedMps": 9.982726201281649,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5664,
+      "speedMps": 9.98831712899216,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5676,
+      "speedMps": 9.993450269248672,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5688,
+      "speedMps": 9.998562914545394,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5700,
+      "speedMps": 10.003655146712033,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5712,
+      "speedMps": 10.00872704725158,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5724,
+      "speedMps": 10.013778697341614,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5736,
+      "speedMps": 10.01881017783559,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5748,
+      "speedMps": 10.023821569264147,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5760,
+      "speedMps": 10.028812951836391,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5772,
+      "speedMps": 10.033784405441176,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5784,
+      "speedMps": 10.034980529027242,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5796,
+      "speedMps": 10.036175631109726,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5808,
+      "speedMps": 10.037369712014192,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5820,
+      "speedMps": 10.034807291447486,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5832,
+      "speedMps": 10.03600308521129,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5844,
+      "speedMps": 10.037196605293529,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5856,
+      "speedMps": 10.034632375148815,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5868,
+      "speedMps": 10.03582761630406,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5880,
+      "speedMps": 10.037021836976583,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5892,
+      "speedMps": 10.034458304624927,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5904,
+      "speedMps": 10.035654240787167,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5916,
+      "speedMps": 10.036849153691751,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5928,
+      "speedMps": 10.034285058146454,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5940,
+      "speedMps": 10.035480434615945,
+      "decision": "AUTO · croazieră",
+      "stopRequested": false
+    },
+    {
+      "tick": 5952,
+      "speedMps": 10.036674791313445,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 5964,
+      "speedMps": 10.034110143031558,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 5976,
+      "speedMps": 10.035306217880224,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 5988,
+      "speedMps": 10.036501270168491,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 6000,
+      "speedMps": 10.033937314700106,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 6012,
+      "speedMps": 10.035132827769223,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 6024,
+      "speedMps": 10.036327321772355,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 6036,
+      "speedMps": 10.037520797025328,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 6048,
+      "speedMps": 10.034957773225305,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 6060,
+      "speedMps": 10.03615296616431,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 6072,
+      "speedMps": 10.037347137562529,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 6084,
+      "speedMps": 10.034784807128267,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 6096,
+      "speedMps": 10.035980690664648,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 6108,
+      "speedMps": 10.029659581768303,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 6120,
+      "speedMps": 9.989614412616271,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 6132,
+      "speedMps": 9.939732463765285,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 6144,
+      "speedMps": 9.851356896041812,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 6156,
+      "speedMps": 9.7427223779547,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 6168,
+      "speedMps": 9.617068746668524,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 6180,
+      "speedMps": 9.477217414912733,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 6192,
+      "speedMps": 9.325498472091988,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 6204,
+      "speedMps": 9.163835421443256,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 6216,
+      "speedMps": 8.993815118557658,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 6228,
+      "speedMps": 8.8167454848502,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 6240,
+      "speedMps": 8.633703118767649,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 6252,
+      "speedMps": 8.445572554878764,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 6264,
+      "speedMps": 8.253078612860016,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 6276,
+      "speedMps": 8.056813023435009,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 6288,
+      "speedMps": 7.857256307107503,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 6300,
+      "speedMps": 7.654795706167929,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 6312,
+      "speedMps": 7.449739824341984,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 6324,
+      "speedMps": 7.2423305059894805,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 6336,
+      "speedMps": 7.032752383129595,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 6348,
+      "speedMps": 6.821140429491327,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 6360,
+      "speedMps": 6.60758578229799,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 6372,
+      "speedMps": 6.39214002064668,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 6384,
+      "speedMps": 6.174818019836173,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 6396,
+      "speedMps": 5.955599428614073,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 6408,
+      "speedMps": 5.734428734035457,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 6420,
+      "speedMps": 5.5112137761054125,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 6432,
+      "speedMps": 5.2858224352249605,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 6444,
+      "speedMps": 5.058077012125497,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 6456,
+      "speedMps": 4.8277455037261925,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 6468,
+      "speedMps": 4.594528458568306,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 6480,
+      "speedMps": 4.358039194596294,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    },
+    {
+      "tick": 6492,
+      "speedMps": 4.1177735107808475,
+      "decision": "APPROACH/STOP_APPROACH",
+      "stopRequested": true
+    }
+  ],
+  "limitations": [
+    "Scena este o linie dreaptă simplificată; celelalte trei taxiuri și două civile sunt decor, fără coliziuni sau trafic emergent.",
+    "Faptele 085 sunt un subset adaptat construit din eșantioanele paginii, nu ieșirea recorderului producție 069/085.",
+    "Profilul rămâne în memorie, doar pentru AUTO; nu se publică LEARNED și nu se persistă.",
+    "Sesiunea dovedește bucla pe o singură mașină condusă de om; nu dovedește flota, performanța sau experiența completă a jocului."
+  ]
+}
