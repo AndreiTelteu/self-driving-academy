@@ -11,4 +11,5 @@ export * from './opportunities';
 export * from './eligibility-windows';
 export * from './artifact-filter';
 export * from './vehicle-normalization';
+export * from './segment-compaction';
 export * from './validation-protocol';
