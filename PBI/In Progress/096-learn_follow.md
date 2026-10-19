@@ -1,14 +1,14 @@
 ---
 id: "096"
 title: "Estimator headway gap și răspuns la lider"
-status: "To Do"
+status: "In Progress"
 release: "V1"
 module: "Învățare"
 depends_on: ["093","048"]
 parameter_role: "estimator"
 parameter_keys: ["following_time_headway","following_min_gap","queue_standstill_gap","following_speed_gain"]
-owner: null
-started_at: null
+owner: "Codex gpt-6-luna medium follow-signal-estimators-01"
+started_at: "2026-10-19T17:35:30+03:00"
 completed_at: null
 ---
 

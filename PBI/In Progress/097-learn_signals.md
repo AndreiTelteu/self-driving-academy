@@ -1,14 +1,14 @@
 ---
 id: "097"
 title: "Estimator conformare roșu și reacție verde"
-status: "To Do"
+status: "In Progress"
 release: "V1"
 module: "Învățare"
 depends_on: ["093","050"]
 parameter_role: "estimator"
 parameter_keys: ["red_stop_probability","green_start_delay","red_stop_line_offset","late_red_brake_threshold"]
-owner: null
-started_at: null
+owner: "Codex gpt-6-luna medium follow-signal-estimators-01"
+started_at: "2026-10-19T17:35:30+03:00"
 completed_at: null
 ---
 
