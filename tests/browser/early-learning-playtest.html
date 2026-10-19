@@ -3,144 +3,414 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Playtest timpuriu 204</title>
+    <title>Playtest 204 · bucla timpurie de învățare</title>
     <style>
-      body {
-        max-width: 48rem;
-        margin: 3rem auto;
-        padding: 0 1rem;
-        font: 1rem/1.5 system-ui;
-        color: #17202a;
+      :root {
+        color-scheme: dark;
+        --bg: #0f1720;
+        --panel: #17212c;
+        --line: #2a3948;
+        --text: #e8eef4;
+        --muted: #9fb0c0;
+        --accent: #f2c14e;
+        --good: #6dd3a8;
+        --bad: #ef7d7d;
       }
-      fieldset {
-        margin: 1rem 0;
-        padding: 1rem;
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font:
+          15px/1.5 system-ui,
+          sans-serif;
+      }
+      header,
+      main {
+        max-width: 1240px;
+        margin: 0 auto;
+        padding: 0 18px;
+      }
+      header {
+        padding-top: 18px;
+      }
+      h1 {
+        margin: 0 0 4px;
+        font-size: 24px;
+      }
+      h2 {
+        margin: 0 0 8px;
+        font-size: 18px;
+      }
+      p {
+        margin: 6px 0;
+      }
+      small,
+      .muted {
+        color: var(--muted);
+      }
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 16px;
+        margin: 14px 0;
       }
       label {
         display: block;
-        margin: 0.6rem 0;
+        margin: 10px 0 4px;
+        font-weight: 600;
       }
-      button,
+      select,
+      textarea,
+      button {
+        font: inherit;
+      }
       select,
       textarea {
-        font: inherit;
-        padding: 0.5rem;
+        width: 100%;
+        padding: 8px;
+        background: #0f1720;
+        color: var(--text);
+        border: 1px solid var(--line);
+        border-radius: 6px;
       }
       textarea {
-        width: 100%;
-        min-height: 5rem;
+        min-height: 84px;
+        resize: vertical;
       }
-      #status {
+      button {
+        padding: 9px 14px;
+        border-radius: 7px;
+        border: 1px solid #3b5063;
+        background: #203040;
+        color: var(--text);
+        cursor: pointer;
+      }
+      button.primary {
+        background: var(--accent);
+        color: #151b22;
+        border-color: var(--accent);
         font-weight: 700;
+      }
+      button:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+      }
+      .row {
+        display: flex;
+        gap: 16px;
+        align-items: flex-start;
+        flex-wrap: wrap;
+      }
+      .row > * {
+        min-width: 0;
+      }
+      .drive-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 300px;
+        gap: 14px;
+        align-items: start;
+      }
+      @media (max-width: 900px) {
+        .drive-layout {
+          grid-template-columns: 1fr;
+        }
+      }
+      canvas {
+        display: block;
+        width: 100%;
+        aspect-ratio: 2 / 1;
+        background: #0b1016;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        touch-action: none;
+      }
+      #hud {
+        position: relative;
+        margin-top: -46px;
+        margin-left: 10px;
+        display: inline-flex;
+        gap: 14px;
+        padding: 6px 10px;
+        border-radius: 7px;
+        background: rgba(9, 14, 20, 0.78);
+        border: 1px solid var(--line);
+        font-variant-numeric: tabular-nums;
+        pointer-events: none;
+      }
+      #hud strong {
+        color: var(--accent);
+      }
+      .meter {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        padding: 4px 0;
+        border-bottom: 1px dashed var(--line);
+      }
+      .meter:last-child {
+        border-bottom: 0;
+      }
+      .meter.ok b {
+        color: var(--good);
+      }
+      .meter.wait b {
+        color: var(--muted);
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-variant-numeric: tabular-nums;
+      }
+      th,
+      td {
+        text-align: left;
+        padding: 7px 8px;
+        border-bottom: 1px solid var(--line);
+        vertical-align: top;
+      }
+      th {
+        color: var(--muted);
+        font-weight: 600;
+        font-size: 13px;
+      }
+      td.num,
+      th.num {
+        text-align: right;
+      }
+      code {
+        background: #0d141b;
+        padding: 1px 4px;
+        border-radius: 4px;
+        font-size: 13px;
+      }
+      .badge {
+        display: inline-block;
+        padding: 1px 8px;
+        border-radius: 999px;
+        font-size: 12px;
+        border: 1px solid var(--line);
+      }
+      .badge.ok {
+        color: var(--good);
+        border-color: #2f6f57;
+      }
+      .badge.bad {
+        color: var(--bad);
+        border-color: #7a3b3b;
+      }
+      .callout {
+        border-left: 3px solid var(--accent);
+        padding: 6px 12px;
+        margin: 10px 0;
+        background: #101a23;
+      }
+      .callout.bad {
+        border-color: var(--bad);
+      }
+      .callout.ok {
+        border-color: var(--good);
+      }
+      .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+      }
+      @media (max-width: 800px) {
+        .grid-2 {
+          grid-template-columns: 1fr;
+        }
+      }
+      [hidden] {
+        display: none !important;
+      }
+      #start-status,
+      #drive-status,
+      #export-status {
+        min-height: 1.5em;
+        font-weight: 600;
+      }
+      .keys {
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .keys kbd {
+        background: #0d141b;
+        border: 1px solid var(--line);
+        border-radius: 4px;
+        padding: 0 4px;
+        color: var(--text);
       }
     </style>
   </head>
   <body>
-    <h1>Playtest timpuriu 204</h1>
-    <p>Protocol de cercetare local. Nu colectează nume și nu salvează răspunsuri automat.</p>
-    <label
-      >Slot anonim
-      <select id="slot">
-        <option value="">Alegeți slotul atribuit</option>
-        <option>1</option>
-        <option>2</option>
-        <option>3</option>
-        <option>4</option>
-        <option>5</option>
-      </select>
-    </label>
-    <button id="start">Începe sesiunea de maximum 5 minute</button>
-    <p id="status" aria-live="polite">Sesiunea nu a început.</p>
-    <section aria-label="Observații">
-      <h2>Jurnalul observatorului</h2>
-      <p>
-        Notați numai ce a arătat demo-ul: observația, valoarea schimbată sau ce a rămas neobservat.
-        Timpul primei schimbări este calculat de pagină.
+    <header>
+      <h1>Playtest 204 · bucla timpurie de învățare</h1>
+      <p class="muted">
+        Protocol local de cercetare. Nu colectează nume, nu folosește <code>localStorage</code> și
+        nu salvează nimic automat. Fiecare participant primește un slot anonim 1–5.
       </p>
-      <label>Ce s-a observat?<textarea id="observed"></textarea></label>
-      <label>Ce s-a schimbat?<textarea id="changed"></textarea></label>
-      <label>Ce a rămas neobservat?<textarea id="unobserved"></textarea></label>
-    </section>
-    <fieldset>
-      <legend>Răspunsurile participantului</legend>
-      <label
-        >A observat schimbarea?
-        <select id="noticed">
-          <option value="">Alegeți</option>
-          <option value="yes">Da</option>
-          <option value="no">Nu</option>
-          <option value="uncertain">Nu este sigur</option>
-        </select></label
-      >
-      <label
-        >Poate distinge MANUAL de LEARNING?
-        <select id="distinguish">
-          <option value="">Alegeți</option>
-          <option value="yes">Da</option>
-          <option value="no">Nu</option>
-          <option value="uncertain">Nu este sigur</option>
-        </select></label
-      >
-      <label>Ce observație susține delta? <textarea id="support"></textarea></label>
-    </fieldset>
-    <button id="export" disabled>Exportă JSON</button>
-    <script>
-      let startedAt = null;
-      let firstChangeAt = null;
-      let timer = null;
-      const $ = (id) => document.getElementById(id);
-      $('changed').addEventListener('input', () => {
-        if (startedAt !== null && firstChangeAt === null && $('changed').value.trim()) {
-          firstChangeAt = new Date().toISOString();
-          $('status').textContent =
-            `Prima schimbare consemnată după ${Math.round((Date.now() - startedAt) / 1000)} secunde.`;
-        }
-      });
-      $('start').addEventListener('click', () => {
-        if (!$('slot').value || startedAt !== null) return;
-        startedAt = Date.now();
-        $('status').textContent = 'Sesiune în desfășurare · maximum 5:00.';
-        timer = setTimeout(() => {
-          $('status').textContent = 'Sesiunea de 5 minute s-a încheiat.';
-          $('export').disabled = false;
-        }, 300000);
-        $('export').disabled = false;
-      });
-      $('export').addEventListener('click', () => {
-        if (
-          startedAt === null ||
-          !$('noticed').value ||
-          !$('distinguish').value ||
-          !$('support').value.trim()
-        )
-          return;
-        const record = {
-          schema: '204-playtest-v1',
-          participantSlot: Number($('slot').value),
-          startedAt: new Date(startedAt).toISOString(),
-          endedAt: new Date().toISOString(),
-          firstChangeAt,
-          firstChangeSeconds: firstChangeAt
-            ? Math.round((Date.parse(firstChangeAt) - startedAt) / 1000)
-            : null,
-          observed: $('observed').value,
-          changed: $('changed').value,
-          unobserved: $('unobserved').value,
-          answers: {
-            noticedChange: $('noticed').value,
-            distinguishesManualLearning: $('distinguish').value,
-            supportingObservation: $('support').value,
-          },
-        };
-        const blob = new Blob([JSON.stringify(record, null, 2)], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = `participant-${record.participantSlot}.json`;
-        link.click();
-        URL.revokeObjectURL(url);
-      });
-      window.addEventListener('pagehide', () => clearTimeout(timer));
-    </script>
+    </header>
+    <main>
+      <section id="start-panel" class="panel" aria-labelledby="start-title">
+        <h2 id="start-title">Înainte de sesiune</h2>
+        <p>
+          Veți conduce un taxi timp de maximum cinci minute. În modul LEARNING, pagina învață trei
+          preferințe din felul în care conduceți, apoi comută aceeași mașină pe AUTO cu stilul
+          învățat. În modul MANUAL nu se învață nimic.
+        </p>
+        <div class="row">
+          <div style="flex: 1 1 220px">
+            <label for="slot">Slot anonim atribuit</label>
+            <select id="slot">
+              <option value="">Alegeți slotul</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="dev" id="slot-dev" hidden>
+                Self-test developer (nu este participant)
+              </option>
+            </select>
+          </div>
+          <div style="flex: 1 1 280px">
+            <label for="mode">Modul sesiunii</label>
+            <select id="mode">
+              <option value="LEARNING">LEARNING · învață și comută pe AUTO</option>
+              <option value="MANUAL">MANUAL · demonstrează zero învățare</option>
+            </select>
+          </div>
+        </div>
+        <p class="keys">
+          Comenzi: <kbd>W</kbd> accelerație, <kbd>S</kbd> frână, <kbd>A</kbd>/<kbd>D</kbd> direcție,
+          <kbd>Space</kbd> frână de mână. Țineți focusul pe scenă.
+        </p>
+        <button id="start" class="primary">Începe sesiunea</button>
+        <p id="start-status" role="status" aria-live="polite">Sesiunea nu a început.</p>
+      </section>
+
+      <section id="drive-panel" hidden>
+        <div class="drive-layout">
+          <div class="panel" style="margin-top: 0">
+            <canvas
+              id="stage"
+              width="1280"
+              height="640"
+              tabindex="0"
+              aria-label="Scena de condus"
+            ></canvas>
+            <div id="hud">
+              <span id="hud-mode">LEARNING</span>
+              <span>timp <strong id="hud-timer">05:00</strong></span>
+              <span><strong id="hud-speed">0</strong> km/h</span>
+              <span id="hud-stop">0 STOP</span>
+            </div>
+          </div>
+          <aside class="panel" style="margin-top: 0">
+            <h2>Sesiune</h2>
+            <p id="session-mode" class="muted"></p>
+            <div id="progress">
+              <div class="meter wait" id="meter-speed">
+                <span>Ferestre de viteză</span><b>0 / 1</b>
+              </div>
+              <div class="meter wait" id="meter-accel">
+                <span>Episoade accelerație</span><b>0 / 3</b>
+              </div>
+              <div class="meter wait" id="meter-stop"><span>Apropieri STOP</span><b>0 / 3</b></div>
+            </div>
+            <p class="keys" style="margin-top: 10px">
+              Conduceți natural: mențineți o viteză stabilă, accelerați de câteva ori și opriți
+              complet la liniile albe STOP.
+            </p>
+            <button id="finish" class="primary">Termină și arată rezultatul</button>
+            <p id="drive-status" role="status" aria-live="polite">Scena se încarcă…</p>
+          </aside>
+        </div>
+      </section>
+
+      <section id="result-panel" hidden>
+        <div class="panel">
+          <h2>Rezultatul buclei</h2>
+          <p id="auto-status" class="callout"></p>
+          <div class="grid-2">
+            <div>
+              <h3>Ce s-a observat</h3>
+              <ul id="observed-list"></ul>
+            </div>
+            <div>
+              <h3>Ce s-a schimbat</h3>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Cheie</th>
+                    <th class="num">Înainte</th>
+                    <th class="num">Candidat</th>
+                    <th class="num">După</th>
+                    <th class="num">Delta</th>
+                    <th class="num">Calitate</th>
+                  </tr>
+                </thead>
+                <tbody id="change-body"></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="callout" id="unchanged-callout"></div>
+          <h3>Ce a rămas neschimbat și de ce</h3>
+          <ul id="unchanged-list"></ul>
+          <div id="manual-proof" class="callout bad" hidden></div>
+        </div>
+
+        <div class="panel" id="questionnaire" hidden>
+          <h2>Întrebări după condus</h2>
+          <p class="muted">
+            Răspundeți numai după ce ați văzut panoul de mai sus. Nu există răspuns corect
+            preselectat.
+          </p>
+          <label for="noticed">Ați observat o schimbare de stil după comutarea pe AUTO?</label>
+          <select id="noticed">
+            <option value="">Alegeți</option>
+            <option value="yes">Da</option>
+            <option value="no">Nu</option>
+            <option value="uncertain">Nu sunt sigur</option>
+          </select>
+          <label for="distinguish"
+            >Ați putea distinge MANUAL de LEARNING după această sesiune?</label
+          >
+          <select id="distinguish">
+            <option value="">Alegeți</option>
+            <option value="yes">Da</option>
+            <option value="no">Nu</option>
+            <option value="uncertain">Nu sunt sigur</option>
+          </select>
+          <label for="support">Ce observație susține delta?</label>
+          <select id="support">
+            <option value="">Alegeți</option>
+            <option value="speed">Viteza de croazieră</option>
+            <option value="acceleration">Accelerația la plecare</option>
+            <option value="stop">Opritorile la STOP</option>
+            <option value="none">Nicio observație</option>
+            <option value="other">Altceva</option>
+          </select>
+          <label for="free-text">Text liber (opțional)</label>
+          <textarea
+            id="free-text"
+            placeholder="Observații proprii, fără date personale."
+          ></textarea>
+          <p style="margin-top: 12px">
+            <button id="export" class="primary" disabled>Exportă JSON</button>
+          </p>
+          <p id="export-status" role="status" aria-live="polite"></p>
+          <p class="muted">
+            Exportul conține răspunsurile, numerele buclei și o urmă de 10 Hz a condusului. Nu
+            conține nume, adresă sau istoric de browser.
+          </p>
+        </div>
+      </section>
+    </main>
+    <script type="module" src="./early-learning-playtest.ts"></script>
   </body>
 </html>

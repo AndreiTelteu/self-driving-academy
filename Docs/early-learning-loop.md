@@ -8,6 +8,14 @@ Blend-ul este `base + clamp(quality, 0, 1) × 0.25 × (candidate - base)`. Acest
 
 Acest adaptor nu oferă suportul complet de 24 chei. `tests/learning/early-loop.test.ts` demonstrează validarea profilului și valorile token-urilor; fixture-ul de mai jos măsoară efectul în 046/047/051 pe drumul 044, nu în jocul complet. Nicio valoare din acest document nu reprezintă rezultat de participant.
 
+## Pagina interactivă de playtest (19 octombrie 2026)
+
+`tests/browser/early-learning-playtest.html` este servită direct de Vite, fără build, la `/tests/browser/early-learning-playtest.html`. Participantul conduce un taxi cu tastatura (input 025 real) pe o scenă simplificată documentată; fiecare tick devine un eșantion 085-style, iar la 05:00 sau la „Termină” pagina rulează 093 → 094/095/098 → `composeEarlyLoopProfile` → `compileEarlyLoopControllerProfiles` și comută aceeași mașină pe AUTO cu valorile compilate 046/047/051. Panoul arată observațiile, valoarea candidată, valoarea aplicată, calitatea, motivul fiecărei chei neschimbate și cele 77 de chei din afara suprafeței. MANUAL înregistrează condusul, dar nu creează dovezi, delta sau tokenuri.
+
+Self-testul de developer (nu participant) a rulat în Chrome 155.0.8059.84 cu evenimente de tastatură sintetice prin binding-ul real, zero fallback-uri: 3943 tick-uri / 65,7 s, 3 ferestre de viteză, 4 episoade de accelerație și 3 opriri complete la STOP. Rezultatul a fost `speed_delta_urban 0 → 0,187255`, `desired_acceleration 1,5 → 2,254791` și `stop_full_probability 0,6 → 0,7`, cu calitate 1,00; AUTO a preluat aceeași mașină și 051 a returnat `APPROACH/STOP_APPROACH` și `HOLD/STOP_HOLD` la următorul STOP. Rularea MANUAL a condus aceleași trei opriri, dar a raportat 0 episoade de dovezi, delta maxim 0, profil neschimbat și tokenuri LEARNING `null`. Numerele și eticheta sunt în `Docs/Evidence/204-early-learning-demo/playtest-dev/`.
+
+Protocolul complet, inclusiv cele cinci sloturi anonime și ce rămâne nedovedit, este în [early-playtest.md](early-playtest.md). Cei cinci participanți reali lipsesc în continuare; self-testul nu înlocuiește niciun participant.
+
 ## Fixture comportamental executat (19 octombrie 2026)
 
 `scripts/run-204-early-loop-behavior.mjs` rulează lanțul real pe harta 044: 093 ledger → 094/095/098 → `composeEarlyLoopProfile` → `compileEarlyLoopControllerProfiles` → 046/047/051, cu trei taxiuri și două civile. Profilele de bază sunt `speed_delta_urban=0`, `desired_acceleration=1.5`, `stop_full_probability=0.6`; candidații prudente/riscante sunt produși de estimatori din episoade, nu introduși manual. Rezultate executate:
@@ -22,4 +30,4 @@ Cele cinci vehicule primesc aceleași valori compilate; ținta 046 și accelera�
 
 Probe-ul `scripts/run-204-loop-probe.mjs` hrănește direct API-urile 218/219/221 cu acest fixture, fără scripturile generice. Rezultatele sunt marcate `PROVISIONAL_UNCALIBRATED`: 218 (5 perechi, 120 cadre warmup + 600 măsurate) raportează frame/main-thread p95 median 0.7236 ms și p99 1.1839 ms; 219 raportează cost propriu p95 0.0064 ms, datorie p95 ≈1.2e-12 ms și 0 suprasarcini; 221 raportează coadă p95 7.618 ms, serviciu p95 1.4989 ms și end-to-end p95 8.5771 ms pentru opt joburi reale. Sunt valori Node CPU pe ceas sintetic 60 Hz, fără Rapier, browser, GPU sau FPS.
 
-Playtest-ul rămâne neexecutat: zero participanți reali. Niciun număr din acest document nu este rezultat de participant și PBI-ul nu se închide pe baza fixture-ului.
+Playtest-ul cu participanți reali rămâne neexecutat: zero participanți. Niciun număr din acest document nu este rezultat de participant și PBI-ul nu se închide pe baza fixture-ului sau a self-testului de developer.
