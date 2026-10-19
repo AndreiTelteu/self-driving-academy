@@ -11,7 +11,7 @@ made); the registry is a native CPU/owned-memory feature.
 | --- | --- |
 | Runtime | Node **v24.21.0** (via `volta run --node 24.21.0 --npm 11.19.0`), npm 11.19.0 |
 | Hardware | AMD Ryzen 7 7735U with Radeon Graphics, 16 logical CPUs, win32 10.0.26300 |
-| Measured source commit | `73061869e9b7cdfd4d5d1cace8f0179936588531` |
+| Measured source commit | `03c8eb7bc04c32ae0a9732b61571ea836954e8ad` |
 | Fixture | `086-opportunity-ids-native-v1`, reused from 044/085 (`tests/autonomy/road-context-reference.ts` → `roadContextFixture(false)`): real lane graph, real 036 signal controller, real 044 road context, real 025 keyboard filter, 64 authoritative vehicles |
 | Harness | one new probe `scripts/benchmark-opportunity-ids.mjs`; no second harness forked |
 | Protocol | 5 repetitions, paired OFF/ON sequential in one process, 200 warmup + 600 measured ticks per arm |
@@ -32,14 +32,14 @@ identity are injected with `parseSimulationEvent` (one approach every 180 ticks)
 
 | Repetition | Δ p50 | Δ p95 | Δ p99 | world/context p95 (both arms) |
 | --- | --- | --- | --- | --- |
-| 1 | 8.3 µs | 15.2 µs | 61.7 µs | 1.290 ms |
-| 2 | 7.5 µs | 16.2 µs | 51.1 µs | 1.326 ms |
-| 3 | 6.1 µs | 10.9 µs | 33.6 µs | 1.091 ms |
-| 4 | 6.1 µs | 11.3 µs | 34.9 µs | 1.124 ms |
-| 5 | 6.4 µs | 12.9 µs | 35.5 µs | 1.124 ms |
+| 1 | 8.1 µs | 14.7 µs | 62.1 µs | 1.294 ms |
+| 2 | 7.6 µs | 15.6 µs | 48.6 µs | 1.311 ms |
+| 3 | 6.1 µs | 12.5 µs | 34.9 µs | 1.124 ms |
+| 4 | 6.0 µs | 11.5 µs | 36.6 µs | 1.199 ms |
+| 5 | 6.5 µs | 12.9 µs | 39.4 µs | 1.246 ms |
 
 - The OFF timed region is 0.1–0.2 µs p95 (timer overhead only), so the delta is the registry's cost.
-- Added cost is **≈16 µs p95 worst case**, about **0.29%** of the 5.5 ms provisional full-tick p95
+- Added cost is **≈15.6 µs p95 worst case**, about **0.28%** of the 5.5 ms provisional full-tick p95
   ceiling and 0.20% of the 8 ms laptop ceiling. No isolated tick budget is claimed by this probe.
 - The registry is roughly twice the 085 recorder's per-tick cost (≈8 µs p95): it builds the stable id
   and materializes one frozen snapshot per touched record per call. Both are far below the ceiling.
@@ -49,8 +49,8 @@ identity are injected with `parseSimulationEvent` (one approach every 180 ticks)
 
 ## Results — JSON region (separate, not in the hot-path delta)
 
-`JSON.stringify(observation)` p95 **1.6 µs** versus the registry `observe` p95 **5.7 µs**
-(ratio ≈ 0.28, 500 iterations each, `label: JSON_REGION_NOT_PART_OF_HOT_PATH_DELTA`). The registry's
+`JSON.stringify(observation)` p95 **1.4 µs** versus the registry `observe` p95 **5.6 µs**
+(ratio ≈ 0.25, 500 iterations each, `label: JSON_REGION_NOT_PART_OF_HOT_PATH_DELTA`). The registry's
 hot path never serializes; the unit suite does not need to assert this because the registry is a
 contract-validating consumer, not a per-tick store.
 
