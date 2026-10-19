@@ -11,7 +11,7 @@ stall on this laptop, so no such claim is made); the normalizer is a native CPU/
 | --- | --- |
 | Runtime | Node **v24.21.0** (via `volta run --node 24.21.0 --npm 11.19.0`), npm 11.19.0 |
 | Hardware | AMD Ryzen 7 7735U with Radeon Graphics, 16 logical CPUs, 14,702,026,752 B RAM, win32 10.0.26300, power scheme High performance |
-| Measured source commit | `986cbe172121f3c6e00fd2cf851bf721b8780722` |
+| Measured source commit | `5bab550cb30126ffca0a5efb9deb4e390554d016` |
 | Fixture | `089-vehicle-normalization-native-v1`, map `044-context-cross-v1`, reused from 044/085/086/087/088 (`tests/autonomy/road-context-reference.ts` → `roadContextFixture(false)`): real lane graph, real 036 signal controller, real 044 road context, real 045/046 target producer, real 047 longitudinal controller and a real 049 lateral projection, 64 authoritative vehicles |
 | Harness | one new probe `scripts/benchmark-telemetry-normalization.mjs`; no second harness forked |
 | Protocol | 5 repetitions, paired arms `chain` / `normalize` sequential in one process, 120 warmup + 360 measured ticks, 60 measured 219-decisions per arm, ride of 480 ticks |
@@ -35,28 +35,29 @@ growing window of up to 480 usable samples:
 
 | Repetition | observe p50 | observe p95 | observe p99 | Amortized per-tick p95 (÷6) |
 | --- | --- | --- | --- | --- |
-| 1 | 100.8 | 150.4 | 440.9 | 25.1 |
-| 2 | 71.5 | 198.2 | 254.6 | 33.0 |
-| 3 | 74.2 | 144.8 | 205.4 | 24.1 |
-| 4 | 69.0 | 115.0 | 156.7 | 19.2 |
-| 5 | 62.7 | 109.7 | 128.4 | 18.3 |
+| 1 | 103.5 | 137.5 | 206.2 | 22.9 |
+| 2 | 71.6 | 133.7 | 259.8 | 22.3 |
+| 3 | 77.5 | 164.1 | 205.9 | 27.4 |
+| 4 | 64.4 | 113.6 | 123.9 | 18.9 |
+| 5 | 62.4 | 136.9 | 165.6 | 22.8 |
 
-- The 089 added cost is **≈198.2 µs p95 worst case per decision**, about **3.60%** of the 5.5 ms
+- The 089 added cost is **≈164.1 µs p95 worst case per decision**, about **2.98%** of the 5.5 ms
   provisional full-tick p95 ceiling; amortized over the 60 Hz ticks of one decision it is
-  **18.3–33.0 µs p95**, about **0.60%** of the 5.5 ms ceiling worst case and 0.41% of the 8 ms laptop
+  **18.9–27.4 µs p95**, about **0.50%** of the 5.5 ms ceiling worst case and 0.34% of the 8 ms laptop
   ceiling. No isolated tick budget is claimed.
-- The `p99` of 440.9 µs in repetition 1 is a single first-touch/GC sample of the very first measured
-  decision of the arm; repetitions 2–5 stay at 128.4–254.6 µs.
+- The `p99` of 259.8 µs in repetition 2 is a single first-touch/GC sample of the first measured
+  decisions of the arm; repetitions 3–5 stay at 123.9–205.9 µs.
 
 | Repetition | `normalize − chain` p50 | p95 | p99 | `chain` p95 (decision) |
 | --- | --- | --- | --- | --- |
-| 1 | 2.90 | 6.90 | −0.40 | 18.7 |
-| 2 | 3.00 | −7.40 | −44.2 | 48.9 |
-| 3 | 2.10 | −1.40 | 6.60 | 26.2 |
-| 4 | 1.40 | −0.40 | 8.20 | 29.1 |
-| 5 | 2.20 | 10.50 | 9.80 | 13.8 |
+| 1 | 2.90 | 3.60 | 6.20 | 27.8 |
+| 2 | 2.80 | 14.70 | 16.30 | 16.3 |
+| 3 | 2.00 | 4.70 | −4.10 | 21.9 |
+| 4 | 1.40 | 7.20 | −9.40 | 23.3 |
+| 5 | 1.80 | 4.90 | 11.20 | 13.9 |
 
-All figures in µs. The `chain` p95 (086+087+088 together, on a clean window) is 13.8–48.9 µs. The
+All figures in µs. The `chain` p95 (086+087+088 together, on a clean window) is 13.9–27.8 µs; the
+BEFORE arm's chain p95 is 16.3–26.2 µs, i.e. the same chain with 089 disabled. The
 `normalize − chain` delta of the whole decision is dominated by timer noise because the isolated
 `observe` timing is a sub-window of it; the isolated figure above is the authoritative added cost.
 
@@ -68,10 +69,10 @@ window, 120 iterations (µs):
 
 | Metric | p50 | p95 | p99 | min | max | mean |
 | --- | --- | --- | --- | --- | --- | --- |
-| `observe` on a closed 480-sample window | 105.0 | 137.4 | 172.1 | 101.3 | 865.1 | 115.8 |
+| `observe` on a closed 480-sample window | 108.2 | 161.4 | 261.6 | 105.1 | 1,028.7 | 130.2 |
 
-A closed 8-second (480-tick) window therefore costs ≈137 µs p95 (≈2.5% of the 5.5 ms ceiling),
-≈0.29 µs amortized per recorded tick (0.005%). The cost is linear in the usable samples; the dominant term is
+A closed 8-second (480-tick) window therefore costs ≈161 µs p95 (≈2.93% of the 5.5 ms ceiling),
+≈0.34 µs amortized per recorded tick (0.006%). The cost is linear in the usable samples; the dominant term is
 the project's strict per-sample boundary validation, which is why the layer reads samples with the
 documented 085 hot-path reader (plain prototype, exactly the declared fields, every value in range)
 instead of copying a descriptor map per sample.
@@ -95,8 +96,8 @@ instead of copying a descriptor map per sample.
 | Memory region labels | `LONGITUDINAL_ACCELERATION` 854 / `LONGITUDINAL_DECELERATION` 0 / `LATERAL` 0 |
 | After `dispose()` | `retained = identityCodeUnits = estimatedBytes = 0`, `disposedCountersZero = true` |
 
-`process.memoryUsage().arrayBuffers` moved from 482,633 B to 209,151 B and `heapUsed` from 18.6 MB to
-25.4 MB of unrelated JIT/GC state, so the exact ownership figure is taken from the layer counters, as
+`process.memoryUsage().arrayBuffers` moved from 482,633 B to 209,151 B and `heapUsed` from 18.2 MB to
+32.6 MB of unrelated JIT/GC state, so the exact ownership figure is taken from the layer counters, as
 the performance contract permits ("exact unavailable memory APIs may remain null with ownership
 counters"). Forced GC is deliberately not used inside the timed region.
 
