@@ -811,7 +811,7 @@ async function createScene(): Promise<void> {
     if (egoMesh) {
       egoMesh.position.x = lateral;
       egoMesh.position.z = z;
-      egoMesh.rotation.y = -steering * 0.18;
+      egoMesh.rotation.y = steering * 0.18;
     }
   });
   keyboardBinding = bindKeyboardDriveInput({

@@ -71,8 +71,12 @@ Etapa a patra (commit `ce2ce1a8` + `0fb09371`) face pagina de playtest interacti
 
 Verificări executate și rezultat: `npm run typecheck`, `lint`, `format:check`, `check:architecture`, `check:parameter-catalog` exit 0; `npm test` 1049/1049 PASS; `git diff --check` curat. Bucla nu a fost încă măsurată cu 218/219/221 și nu există probe comportamentale.
 
+Playtest executat: **1 participant × 5 sesiuni** (sloturile 1–5, `developerSelfTest=false`), înregistrate în `Docs/Evidence/204-early-learning-demo/playtest/participant-1..5.json`. Patru sesiuni au durat 300 s, a cincea 61 s. Toate cele cinci răspunsuri: `noticedChange=yes`, `distinguishesModes=yes`, `supportingObservation=other`. `firstVisibleChangeSeconds` a fost 61 s în sesiunea 5, 300 s în sesiunea 2 și nedetectat în sesiunile 1, 3 și 4. Criteriul cere cinci participanți reali, deci rămâne **neîndeplinit**: avem un singur participant cu cinci sesiuni, nu cinci oameni.
+
+Defect găsit în playtest și reparat: la viraj la stânga, botul mașinii se rotea spre dreapta. `steering` este `steerRight - steerLeft` (pozitiv = dreapta), iar mesh-ul folosea `rotation.y = -steering * 0.18`, adică yaw opus mișcării laterale. Corectat la `rotation.y = steering * 0.18` în `tests/browser/early-learning-playtest.ts`; de re-verificat vizual în browser.
+
 Ce lipsește pentru închidere:
-- playtest real cu minimum cinci participanți (zero înregistrări până acum) și consemnarea țintei „prima schimbare în cinci minute"; pagina și protocolul sunt gata, dar nu se inventează participanți.
+- încă patru participanți reali (avem 1 participant × 5 sesiuni) și o demonstrație concludentă a țintei „prima schimbare în cinci minute", care în 3 din 5 sesiuni nu a fost observată; nu se inventează participanți.
 
 Fișiere și documente actualizate: `src/learning/early-loop.ts`, `tests/learning/early-loop.test.ts`, `tests/browser/early-learning-playtest.html`, [Docs/early-learning-loop.md](../../Docs/early-learning-loop.md), [Docs/early-playtest.md](../../Docs/early-playtest.md), [Docs/10-invatarea-stilului.md](../../Docs/10-invatarea-stilului.md), `Docs/Evidence/204-early-learning-demo/`.
 
@@ -99,6 +103,8 @@ Verificare finală: Validate-Board.ps1 -RequireDone '204'.
 - 2026-10-19: Etapa a treia (commit `f9e5ce5d` + `2ca03671`): driver comportamental executat pe fixture-ul mic (prudent/riscant/fără dovezi, 3 taxiuri + 2 civili, MANUAL zero învățare) și probă 218/219/221 pe fixture-ul 204 prin API-urile reale. `npm test` 1055/1055. Rămâne doar playtestul cu cinci participanți reali.
 
 - 2026-10-19: Etapa a patra (commit `ce2ce1a8` + `0fb09371`): pagina de playtest rulează bucla reală în browser, cu condus pe tastatură, panou before/after, MANUAL fără învățare, chestionar și export JSON; self-test dezvoltator 1062/1062. Următorul pas este rularea celor cinci sesiuni cu oameni reali.
+
+- 2026-10-20: Playtest parțial: 1 participant × 5 sesiuni (sloturile 1–5) în `playtest/`; toate au raportat că au observat schimbarea și disting modurile, dar prima schimbare vizibilă a apărut doar în 2 sesiuni (61 s și 300 s), nu în 3. Criteriul de cinci participanți rămâne deschis. Participantul a raportat că la viraj la stânga mașina se înclină spre dreapta; cauza a fost yaw-ul cu semn invers al mesh-ului (`rotation.y = -steering`), corectat la `steering * 0.18` conform convenției `steering > 0 = dreapta`. PBI rămâne In Progress.
 
 - 2026-10-04: Revizia 0.4 adaugă contracte/verificări de performanță; implementarea rămâne neîncepută.
 
