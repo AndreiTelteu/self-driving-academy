@@ -672,7 +672,6 @@ export function createOpportunityRegistry(
       ...identityParts(stimulusView),
       String(occurrence),
     ]);
-    requireContract(id.length <= 1024, 'Opportunity id exceeds its declared capacity');
     const opened: InternalRecord = {
       id,
       kind,
