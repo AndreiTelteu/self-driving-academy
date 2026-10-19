@@ -61,14 +61,13 @@ Păstrează comenzile, scenariile și rezultatele reale; nu declara trecere făr
 
 ## Dovezi de finalizare
 
-Rezultat implementare (parțial, integrat, PBI rămâne In Progress): `composeEarlyLoopProfile` în `src/learning/early-loop.ts` compune un profil dintr-un candidat 093/094/095/098 cu un blend limitat la `25% × quality`, păstrează proveniența (segmente, oportunități, valoare candidată, calitate), refuză o cheie fără dovezi lăsând valoarea neschimbată și nu activează `implemented`/`estimable` și nu publică `LEARNED`. Testele adaptorului (2/2) acoperă blend-ul mărginit, refuzul fără dovezi și păstrarea provenienței. `tests/browser/early-learning-playtest.html` și `Docs/early-playtest.md` pregătesc protocolul de playtest cu export JSON anonim, fără răspunsuri precompletate; `Docs/Evidence/204-early-learning-demo/playtest/` este gol și nu conține niciun participant inventat.
+Rezultat implementare (parțial, integrat, PBI rămâne In Progress): `composeEarlyLoopProfile` în `src/learning/early-loop.ts` compune un profil dintr-un candidat 093/094/095/098 cu un blend limitat la `25% × quality`, păstrează proveniența (segmente, oportunități, valoare candidată, calitate), refuză o cheie fără dovezi lăsând valoarea neschimbată și nu activează `implemented`/`estimable` și nu publică `LEARNED`. Etapa a doua adaugă `compileEarlyLoopControllerProfiles(mode, baseProfile, earlyProfile)`: supraimpune valorile eligibile pe un profil de bază validat și le compilează prin limitele reale 046 cruise, 047 longitudinal și 051 stop-policy; AUTO primește token-urile, MANUAL și LEARNING întorc `null`, iar proveniența și dovezile de bază sunt păstrate. Testele adaptorului (3/3) acoperă blend-ul mărginit, refuzul fără dovezi, păstrarea provenienței și validatoarele reale. `tests/browser/early-learning-playtest.html` și `Docs/early-playtest.md` pregătesc protocolul de playtest cu export JSON anonim, fără răspunsuri precompletate; `Docs/Evidence/204-early-learning-demo/playtest/` este gol și nu conține niciun participant inventat.
 
 Verificări executate și rezultat: `npm run typecheck`, `lint`, `format:check`, `check:architecture`, `check:parameter-catalog` exit 0; `npm test` 1049/1049 PASS; `git diff --check` curat. Bucla nu a fost încă măsurată cu 218/219/221 și nu există probe comportamentale.
 
 Ce lipsește pentru închidere:
-- integrarea adaptorului cu token-urile de profil folosite de controllerele 046/047/051, ca AUTO să consume efectiv cele trei chei;
 - fixture-ul comportamental cu 3 taxiuri + 2 civile care adoptă același stil, seturile prudent/riscant/fără dovezi și dovada că fiecare cheie are efect real, iar MANUAL nu învață;
-- măsurătoarea primei bucle pe harness-ul 218, schedulerul 219 și admiterea 221, pe fixture mic;
+- măsurătoarea primei bucle pe harness-ul 218, schedulerul 219 și admiterea 221, pe fixture-ul mic al lui 204 (probele generice 218/221 rulate nu sunt măsurători pe acest fixture, iar 219 nu a rulat);
 - playtest real cu minimum cinci participanți (zero înregistrări până acum) și consemnarea țintei „prima schimbare în cinci minute".
 
 Fișiere și documente actualizate: `src/learning/early-loop.ts`, `tests/learning/early-loop.test.ts`, `tests/browser/early-learning-playtest.html`, [Docs/early-learning-loop.md](../../Docs/early-learning-loop.md), [Docs/early-playtest.md](../../Docs/early-playtest.md), [Docs/10-invatarea-stilului.md](../../Docs/10-invatarea-stilului.md), `Docs/Evidence/204-early-learning-demo/`.
@@ -90,6 +89,8 @@ Verificare finală: Validate-Board.ps1 -RequireDone '204'.
 - 2026-10-04: PBI creat în To Do în revizia 0.3; implementarea nu a început.
 
 - 2026-10-19: Prima etapă în worktree izolat (commit `30782be0`): blend îngust pentru cele trei chei cu proveniență și refuz fără dovezi, plus pagina și protocolul de playtest. Integrat prin fast-forward. Bucla nu este încă legată de 046/047/051, fixture-ul comportamental și măsurătoarea 218/219/221 lipsesc, iar playtest-ul are zero participanți; PBI rămâne In Progress.
+
+- 2026-10-19: Etapa a doua (commit `219b7e61`): `compileEarlyLoopControllerProfiles` leagă profilul compus de validatoarele reale 046/047/051, AUTO primește token-urile iar MANUAL/LEARNING întorc null. `npm test` 1050/1050, toate verificările statice trec. Probele generice 218/221 au rulat, dar nu pe fixture-ul 204, iar 219 nu a rulat; fixture-ul comportamental cu 3 taxiuri + 2 civile și playtest-ul real lipsesc în continuare.
 
 - 2026-10-04: Revizia 0.4 adaugă contracte/verificări de performanță; implementarea rămâne neîncepută.
 
