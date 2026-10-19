@@ -84,9 +84,10 @@ while suspended).
 `getState()` returns a frozen projection: `version`, `mode`, `surfaces`, `focusLost`,
 `heldCommands`, `heldPanelAction`, `suspended`, `cause` and `revision` (which increments only on a
 real suspension change). `getStats()` adds `suspensions`, `resumes`, `refusedResumes`, `heldResets`,
-`noopReconciles`, `surfacesOpen`, `heldResetPort` and `disposed`, and `dispose()` is idempotent.
-A reader can tell *why* the simulation is suspended from this contract alone; it is never inferable
-only from render state.
+`noopReconciles`, `surfacesOpen`, `heldResetPort` and `disposed`. `dispose()` is idempotent, clears
+the held state and never calls the ports: the caller owns clock teardown, so disposal does not resume
+a suspended world. A reader can tell *why* the simulation is suspended from this contract alone; it
+is never inferable only from render state.
 
 ## What it is NOT
 

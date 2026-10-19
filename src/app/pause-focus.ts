@@ -172,6 +172,8 @@ export function createPauseFocusOwner(ports: PauseFocusPorts): PauseFocusOwner {
       ports.suspend(next);
       return;
     }
+    // `cause` is non-null whenever `suspended` is true; the fallback keeps the port signature total
+    // without inventing a suspension state that was never decided.
     const previous = cause ?? 'panel';
     suspended = false;
     cause = null;

@@ -439,35 +439,41 @@ test('documented precedence keeps one suspension edge while the cause changes', 
 });
 
 test('menu open/close, repeated blur and rapid blur/focus do not flap or double-transition', () => {
-  const calls: string[] = [];
-  const owner = createPauseFocusOwner({
-    suspend: (cause) => calls.push(`suspend:${cause}`),
-    resume: (cause) => calls.push(`resume:${cause}`),
-  });
+  const owner = createPauseFocusOwner({ suspend: () => {}, resume: () => {} });
+  // The PBI verification line asks for the menu in both modes: AUTO is suspended too.
+  owner.setMode('AUTO');
+  owner.setSurface('menu', true);
+  assert.equal(owner.getState().suspended, true);
+  assert.equal(owner.getState().cause, 'menu');
+  owner.setSurface('menu', false);
+  assert.equal(owner.getState().suspended, false);
+  const base = owner.getStats();
+  assert.deepEqual([base.suspensions, base.resumes, owner.getState().revision], [1, 1, 2]);
+
   for (const _cycle of [0, 1, 2]) {
     owner.setSurface('menu', true);
     owner.setSurface('menu', true);
     owner.setSurface('menu', false);
     owner.setSurface('menu', false);
   }
-  assert.equal(owner.getStats().suspensions, 3);
-  assert.equal(owner.getStats().resumes, 3);
-  assert.equal(owner.getState().revision, 6);
+  assert.equal(owner.getStats().suspensions, base.suspensions + 3);
+  assert.equal(owner.getStats().resumes, base.resumes + 3);
+  assert.equal(owner.getState().revision, 2 + 6);
   assert.equal(owner.getState().suspended, false);
 
   for (const lost of [true, true, false, false]) owner.setFocusLost(lost);
-  assert.equal(owner.getStats().suspensions, 4);
-  assert.equal(owner.getStats().resumes, 4);
+  assert.equal(owner.getStats().suspensions, base.suspensions + 4);
+  assert.equal(owner.getStats().resumes, base.resumes + 4);
   assert.ok(owner.getStats().noopReconciles > 0);
 
   owner.setFocusLost(true);
   owner.setFocusLost(false);
   owner.setFocusLost(true);
-  assert.equal(owner.getStats().suspensions, 6);
-  assert.equal(owner.getStats().resumes, 5);
+  assert.equal(owner.getStats().suspensions, base.suspensions + 6);
+  assert.equal(owner.getStats().resumes, base.resumes + 5);
   assert.equal(owner.getState().cause, 'focus');
   owner.setFocusLost(false);
-  assert.equal(owner.getStats().resumes, 6);
+  assert.equal(owner.getStats().resumes, base.resumes + 6);
   owner.dispose();
 });
 
