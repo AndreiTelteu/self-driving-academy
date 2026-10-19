@@ -1,0 +1,11 @@
+--- before/scripts/wheel-capture-source.mjs
++++ after/scripts/wheel-capture-source.mjs
+@@ -79,7 +79,7 @@
+ export async function recordEvidence(path, payload, pending = [], writer = immutable) {
+   try { await writer(path, payload); }
+   catch (recording) {
+-    throw new AggregateError([...pending, recording], 'Evidence recording failed', { cause: pending.length ? pending[0] : recording });
++    throw new AggregateError([...pending, recording], 'Evidence recording failed', { cause: recording });
+   }
+ }
+ /** Shared factory seam; successful recording still rethrows the exact thrown value. */

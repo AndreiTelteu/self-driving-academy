@@ -1,0 +1,2094 @@
+diff --git a/Docs/wheel-dynamics.md b/Docs/wheel-dynamics.md
+index 8d88750..46c9ca5 100644
+--- a/Docs/wheel-dynamics.md
++++ b/Docs/wheel-dynamics.md
+@@ -28,6 +28,12 @@ On future export failure, the failure envelope preserves the completed numeric r
+ 
+ A subsequent server-only repair reads static files before sending200headers, returns404forENOENT, and avoids a second header write after a response has started. Real loopbackHTTPrequested a missing`favicon.ico` (404), then the known index (200), invalid-identity export (400), manifest (200) and index again (200), proving the server remained alive. The current frozen sourceHash is`146f8ada7333f7bd66ca15263d97a4a91e6865866de3709b1ad65cb60ed9b8ee`, artifactHash`a72db1040fb41e19d34c6e79befd50ab11b2c36b14e3efb49b6f8e67e384220a`; actual62source inputs and142artifacts plus metadata are verified in`static-fixed-build-146f8ada-a72db104.zip`, ZIP SHA256`fb8e353b210a125c42bb873ae45237a8f9f8891d6b786cc13e3106624eecdee8`. The previous transport-repaired archive remains immutable. This change affects server error handling only.
+ 
+-**Both accepted full hardware reports remain required under the current146f8ada/a72db104build identity.** No hardware budget gate or PBI completion is claimed. Full browser protocol is five alternating archived-BEFORE/current pairs,30s warmup/120s measured per arm. Rendering uses70physical cars/64debris and280wheel meshes in both arms. The current arm adds native wheel projection/presentation; incremental costs remain separate from simulation. Native before/current modules use sequential disposed worlds, never simultaneous physical worlds. Reports preserve actual backend/browser/CIM/power/resolution, bounded frame/tick/projection buffers, unsupported GPU/exact memory asnull, focus and overload failures. Failures are archived separately.
++The146f8ada/a72db104build above is now historical. Before hardware acceptance, isolated snapshot commit7ff0ba7 preserved026 implementation/evidence with explicit hardware-pending limitations; exact published mainf1c6428034c1d52ae0eb3e88857fb6f61ffd43ce was merged as e52e10b.025keyboard,027drivetrain and045FSM exports are included in the current closure. The merge was automatic and changed no026wheel physics, Rapier implementation or readonly projection mechanics.
++
++On the combined state, global type/lint/format/architecture and450tests passed. The new immutable [AFTER-main-027](Evidence/026-wheel-dynamics/after-main-027/node.json), sourceHash`b696b02d00956797b91e1cad5bc53263f9e765047b506f7ff73030cb26f7901f`, preserved exact original BEFORE input/physical hashes across all10native worlds, source/native byte integrity and cleanup. The label-aware verifier passed without recapturing BEFORE. Extra projectionp95 is0.2461–0.3617ms and tickp95 delta−0.0468–+0.1009ms, with no confirmed relative/absolute regression. The original CPU and browser loops call world.step directly; they include025/027in executable import provenance but do not time the opt-in027controller parser. Global tests cover actual027controller behavior separately. No parser-cost claim is inferred from this fixture.
++
++Current sourceHash is`212c919b391053f652942f40120b38258305adeb49b964ae7956d39665c2785e`, artifactHash`f766556a432f1830ca7b5ab71e3cae1fe9872e8452fac0cf4a7fdba13f8628fe`. The [manifest](Evidence/026-wheel-dynamics/build-manifest-after-main-027.json) identifies69actual source inputs and142generated artifacts. Actual source/build/current native archive bytes are preserved in`combined-main-027-212c919b-f766556a.zip`, ZIP SHA256`305e90f5496894cfcdf23273cbf7014723fc20930581858dc45711ba152922af`; all three earlier ZIP hashes remain unchanged. The restarted5197server passed [real HTTP checks](Evidence/026-wheel-dynamics/http-after-main-027.json): missing favicon404, index200, actual native-sized invalid-identity export400,4MiB+1body413, invalid failure400, manifest200, index200. No synthetic accepted hardware report was written. The meaningful isolated transport boundary test passed again.
++
++**Both accepted full hardware reports remain required under current212c919b/f766556abuild identity.** No hardware budget gate or PBI completion is claimed. Full browser protocol is five alternating archived-BEFORE/current pairs,30s warmup/120s measured per arm. Rendering uses70physical cars/64debris and280wheel meshes in both arms. The current arm adds native wheel projection/presentation; incremental costs remain separate from simulation. Native before/current modules use sequential disposed worlds, never simultaneous physical worlds. Reports preserve actual backend/browser/CIM/power/resolution, bounded frame/tick/projection buffers, unsupported GPU/exact memory asnull, focus and overload failures. Failures are archived separately.
+ 
+ Parent owns canonical board movement, sharedDocs integration, finalValidate-Board and publishing. This isolated worktree cannot declare026Done before those steps and actual tests/calibration/browser verification.
+diff --git a/scripts/benchmark-wheel-dynamics.mjs b/scripts/benchmark-wheel-dynamics.mjs
+index a66bd14..5865c9c 100644
+--- a/scripts/benchmark-wheel-dynamics.mjs
++++ b/scripts/benchmark-wheel-dynamics.mjs
+@@ -1,73 +1,43 @@
+-import { access, copyFile, mkdir, readFile, writeFile } from 'node:fs/promises';
+-import { dirname } from 'node:path';
+-import { fileURLToPath } from 'node:url';
+-import { createHash } from 'node:crypto';
+-import { execFileSync } from 'node:child_process';
+ import { cpus, platform, release } from 'node:os';
+ import { performance } from 'node:perf_hooks';
+-import { manyContacts } from '../tests/vehicles/physics-fixture.ts';
++import { archiveCapture, assertFrozen, immutable, digest as sha, requireCaptureGrant, recordFactoryFailure, recordRun, failTerminal } from './wheel-capture-source.mjs';
++import { CURRENT_NATIVE_REFERENCE } from '../tests/browser/wheel-dynamics-v2/current-native-reference.mjs';
+ 
+ const phase = process.argv[2];
+ if (!['before', 'after'].includes(phase)) throw new Error('Choose before or after');
+-const capture = process.argv[3] ?? phase;
+-if (!/^[a-z0-9-]+$/.test(capture)) throw new Error('Invalid immutable capture label');
++const capture = process.argv[3];
++if (phase !== 'after' || capture !== CURRENT_NATIVE_REFERENCE.afterCapture)
++  throw new Error('Fresh current AFTER label required; historical BEFORE/AFTER remain immutable');
+ const folder = `Docs/Evidence/026-wheel-dynamics/${capture}`;
++requireCaptureGrant();
++// Directory already existing means no retry. Never overwrite or select by performance.
++const binding = await archiveCapture(folder, 'current-after');
+ try {
+-  await access(folder);
+-  throw new Error(`Immutable capture already exists: ${folder}`);
+-} catch (error) {
+-  if (error.code !== 'ENOENT') throw error;
+-}
+-const sha = (bytes) => createHash('sha256').update(bytes).digest('hex');
+-const paths = execFileSync('rg', ['--files', 'src/vehicles', 'src/sessions', 'src/rendering'], {
+-  encoding: 'utf8',
+-})
+-  .trim()
+-  .split(/\r?\n/)
+-  .map((path) => path.replaceAll('\\', '/'));
+-paths.push(
+-  'tests/vehicles/physics-fixture.ts',
+-  'scripts/benchmark-wheel-dynamics.mjs',
+-  'scripts/register-typescript.mjs',
+-  'package.json',
+-  'package-lock.json',
+-  'Docs/performance-budgets.json',
+-);
+-paths.sort();
+-await mkdir(`${folder}/source`, { recursive: true });
+-await writeFile(`${folder}/source/.gitattributes`, '* -text\n');
+-const source = createHash('sha256'),
+-  inputs = [];
+-for (const path of paths) {
+-  const bytes = await readFile(path);
+-  source.update(path).update(bytes);
+-  inputs.push({ path, bytes: bytes.length, sha256: sha(bytes) });
+-  await mkdir(dirname(`${folder}/source/${path}`), { recursive: true });
+-  await copyFile(path, `${folder}/source/${path}`);
+-}
+-const nativePath = fileURLToPath(import.meta.resolve('@dimforge/rapier3d-compat'));
+-const nativeBytes = await readFile(nativePath);
+-await writeFile(`${folder}/rapier-native-artifact.mjs`, nativeBytes);
+-const native = {
+-  resolvedPath: nativePath,
+-  bytes: nativeBytes.length,
+-  sha256: sha(nativeBytes),
+-  archive: `${folder}/rapier-native-artifact.mjs`,
+-};
++const { manyContacts } = await import('../tests/vehicles/physics-fixture.ts');
+ const warmupTicks = 180,
+   measuredTicks = 600,
+   runs = [];
+ const channels = ['tick', 'controllerMs', 'stepMs', 'queryMs', 'bridgeMs', 'totalMs', 'projection'];
+ for (let pair = 0; pair < 5; pair++) {
+   for (const observe of pair % 2 ? [true, false] : [false, true]) {
+-    const { world, inputs: commands } = await manyContacts(70);
+-    const identity = world.bodyIdentity('car-0');
++    const runIndex = runs.length;
+     const samples = Object.fromEntries(
+       channels.map((name) => [name, new Float64Array(observe ? measuredTicks : 0)]),
+     );
++    await immutable(`${folder}/run-${runIndex}-started.json`, { pair, observe, worldAttemptAt: new Date().toISOString(), archiveCompletedAt: binding.completedAt });
++    let fixture;
++    try { fixture = await manyContacts(70); }
++    catch (error) {
++      await recordFactoryFailure(`${folder}/run-${runIndex}-failure.json`, error);
++    }
++    const { world, inputs: commands } = fixture;
++    let identity;
+     let report, cleanupFailed;
++    const failures = [];
++    let warmupCompleted = 0, measuredCompleted = 0;
+     try {
+-      for (let i = 0; i < warmupTicks; i++) world.step(commands, false);
++      identity = world.bodyIdentity('car-0');
++      for (let i = 0; i < warmupTicks; i++) { world.step(commands, false); warmupCompleted++; }
+       const start = performance.now();
+       for (let i = 0; i < measuredTicks; i++) {
+         const tickStart = observe ? performance.now() : 0;
+@@ -79,18 +49,19 @@ for (let pair = 0; pair < 5; pair++) {
+           samples.tick[i] = projectionStart - tickStart;
+           for (const name of channels.slice(1, -1)) samples[name][i] = costs[name];
+         }
++        measuredCompleted++;
+       }
+       const elapsedWallMs = performance.now() - start;
+       const metrics = Object.fromEntries(
+         channels.map((name) => {
+           const data = samples[name];
+-          data.sort();
++          const dataSorted = data.slice().sort();
+           return [
+             name,
+             Object.fromEntries(
+               [0.5, 0.95, 0.99].map((p) => [
+                 `p${p * 100}`,
+-                observe ? data[Math.ceil(data.length * p) - 1] : null,
++                observe ? dataSorted[Math.ceil(dataSorted.length * p) - 1] : null,
+               ]),
+             ),
+           ];
+@@ -119,42 +90,42 @@ for (let pair = 0; pair < 5; pair++) {
+           ),
+         ),
+       };
+-    } finally {
+-      world.dispose();
++    } catch (error) { failures.push({ stage: 'measurement', cause: error }); }
++    finally {
++      try { world.dispose(); } catch (error) { failures.push({ stage: 'dispose', cause: error }); }
+       let disposedReadRejected = false;
+       try {
+         world.readBody(identity);
+       } catch {
+         disposedReadRejected = true;
+       }
+-      const bodies = world.bodyResources(),
+-        collisions = world.collisionResources();
++      let bodies, collisions;
++      try { bodies = world.bodyResources(); } catch (error) { failures.push({ stage: 'body-readback', cause: error }); }
++      try { collisions = world.collisionResources(); } catch (error) { failures.push({ stage: 'collision-readback', cause: error }); }
+       cleanupFailed = Boolean(
+-        bodies.entities ||
+-        bodies.subscriptions ||
+-        collisions.colliders ||
+-        !collisions.disposed ||
++        !bodies || !collisions || bodies?.entities ||
++        bodies?.subscriptions ||
++        collisions?.colliders ||
++        !collisions?.disposed ||
+         !disposedReadRejected,
+       );
+-      if (report) report.cleanup = { bodies, collisions, disposedReadRejected };
++      const cleanup = { bodies, collisions, disposedReadRejected };
++      if (report) report.cleanup = cleanup;
++      if (cleanupFailed) failures.push({ stage: 'cleanup', cause: new Error('Cleanup failed/UNKNOWN') });
++      await recordRun(`${folder}/run-${runIndex}-raw.json`, `${folder}/run-${runIndex}-failure.json`, { pair, observe, warmupCompleted, measuredCompleted, channels: Object.fromEntries(channels.map((name) => [name, Array.from(samples[name])])), report: report ?? null, cleanup }, failures);
+     }
+-    if (cleanupFailed) throw new Error('Native fixture cleanup failed');
+     runs.push(report);
+   }
+ }
+-for (const input of inputs)
+-  if (sha(await readFile(input.path)) !== input.sha256)
+-    throw new Error(`Source changed during capture: ${input.path}`);
+-if (sha(await readFile(nativePath)) !== native.sha256)
+-  throw new Error('Native artifact changed during capture');
++await assertFrozen(binding);
+ const report = {
+   capturedAt: new Date().toISOString(),
+   phase,
+   fixture: '026-many-contact-projection-v1',
+-  commit: execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(),
+-  sourceHash: source.digest('hex'),
+-  inputs,
+-  native,
++  sourceHash: binding.sourceHash,
++  inputs: binding.inputs,
++  native: binding.native,
++  archiveCompletedAt: binding.completedAt,
+   runtime: process.version,
+   cpu: cpus()[0]?.model,
+   os: `${platform()} ${release()}`,
+@@ -163,7 +134,17 @@ const report = {
+     'Unpaced real Rapier CPU; no browser/frame/FPS measurement. Four wheel poses per vehicle; no retained production history.',
+   runs,
+ };
+-await writeFile(`${folder}/node.json`, JSON.stringify(report, null, 2));
++await immutable(`${folder}/node.json`, report);
++// Numerical validation is deliberately before the immutable PASS terminal.
++const { readNative, verifyNativeParity, BEFORE_SOURCE } = await import('../tests/browser/wheel-dynamics-v2/numeric-reader.mjs');
++const { readFile } = await import('node:fs/promises');
++const before = await readNative('Docs/Evidence/026-wheel-dynamics/before', 'before', BEFORE_SOURCE);
++await readNative(folder, 'after', binding.sourceHash, { freshCapture: true });
++const budgets = JSON.parse(await readFile('Docs/performance-budgets.json', 'utf8'));
++if (budgets.budgetVersion !== '203-initial-1' || budgets.regressionProposal.p95RelativeIncrease !== 0.1 || budgets.regressionProposal.p95AbsoluteIncreaseMs !== 1 || budgets.regressionProposal.confirmationsOutOfFive !== 3 || budgets.proposedBudgets.desktop.authoritativeTickP95Ms !== 5.5)
++  throw new Error('Original native thresholds changed');
++verifyNativeParity(before, report, budgets);
++await immutable(`${folder}/terminal.json`, { state: 'NATIVE_NUMERIC_PASS', reportHash: sha(await readFile(`${folder}/node.json`)), sourceHash: binding.sourceHash, finishedAt: new Date().toISOString(), hardwareAcceptance: false });
+ console.log(
+   JSON.stringify({
+     saved: `${folder}/node.json`,
+@@ -171,3 +152,6 @@ console.log(
+     runs: runs.length,
+   }),
+ );
++} catch (error) {
++  await failTerminal(`${folder}/terminal.json`, error, { hardwareAcceptance: false });
++}
+diff --git a/scripts/calibrate-wheel-dynamics.mjs b/scripts/calibrate-wheel-dynamics.mjs
+index e477f3e..ca7dcbd 100644
+--- a/scripts/calibrate-wheel-dynamics.mjs
++++ b/scripts/calibrate-wheel-dynamics.mjs
+@@ -1,57 +1,47 @@
+-import { access, mkdir, writeFile } from 'node:fs/promises';
+-import { calibrateWheels } from '../tests/vehicles/wheel-dynamics-fixture.ts';
+-const destination = `Docs/Evidence/026-wheel-dynamics/${process.argv[2] ?? 'calibration-v2.json'}`;
++import { readFile } from 'node:fs/promises';
++import { archiveCapture, assertFrozen, immutable, digest, requireCaptureGrant, recordRun, failTerminal } from './wheel-capture-source.mjs';
++import { CURRENT_NATIVE_REFERENCE } from '../tests/browser/wheel-dynamics-v2/current-native-reference.mjs';
++const capture = process.argv[2];
++if (capture !== CURRENT_NATIVE_REFERENCE.calibrationCapture) throw new Error('Explicit fresh calibration label required');
++const folder = `Docs/Evidence/026-wheel-dynamics/${capture}`;
++requireCaptureGrant();
++const binding = await archiveCapture(folder, 'current-calibration');
+ try {
+-  await access(destination);
+-  throw new Error('Immutable wheel calibration already exists');
++  const { calibrateWheels } = await import('../tests/vehicles/wheel-dynamics-fixture.ts');
++  const runs = [];
++  for (const classId of ['sedan', 'compact']) for (const surface of ['dry-asphalt', 'reduced-adhesion']) {
++    const scenarios = [[10, 'braking'], [20, 'braking'], [30, 'braking'], [8, 'turning'], [20, 'turning'], [10, 'curb'], [10, 'airborne']];
++    for (const [speed, scenario] of scenarios) {
++      const index = runs.length;
++      const worldAttemptAt = new Date().toISOString();
++      await immutable(`${folder}/run-${index}-started.json`, { classId, surface, speed, scenario, worldAttemptAt, archiveCompletedAt: binding.completedAt });
++      let world, identity, partial = null, report = null;
++      const failures = [];
++      try {
++        report = await calibrateWheels(classId, surface, speed, scenario, {
++          world: (value) => { world = value; },
++          progress: (value) => { partial = value; identity ??= world.bodyIdentity('car'); },
++        });
++      } catch (error) { failures.push({ stage: 'calibration-or-factory-or-dispose', cause: error }); }
++      const cleanup = {};
++      if (world) {
++        for (const [key, read] of [['bodies', () => world.bodyResources()], ['collisions', () => world.collisionResources()]])
++          try { cleanup[key] = read(); } catch (error) { failures.push({ stage: `${key}-readback`, cause: error }); }
++        cleanup.disposedReadRejected = false;
++        if (identity) try { world.readBody(identity); } catch { cleanup.disposedReadRejected = true; }
++      } else cleanup.unknown = 'Factory did not return a world; independent causes retained';
++      if (cleanup.bodies?.entities !== 0 || cleanup.bodies?.subscriptions !== 0 || cleanup.collisions?.colliders !== 0 || cleanup.collisions?.disposed !== true || !cleanup.disposedReadRejected)
++        failures.push({ stage: 'cleanup', cause: new Error('Cleanup failed/UNKNOWN') });
++      await recordRun(`${folder}/run-${index}-raw.json`, `${folder}/run-${index}-failure.json`, { classId, surface, speed, scenario, worldAttemptAt, report, partial, cleanup }, failures);
++      runs.push(report);
++    }
++  }
++  await assertFrozen(binding);
++  const report = { fixture: '026-flat-surfaces-calibration-v1', capturedAt: new Date().toISOString(), sourceHash: binding.sourceHash, inputs: binding.inputs, native: binding.native, archiveCompletedAt: binding.completedAt, runs };
++  await immutable(`${folder}/calibration.json`, report);
++  const { validateNativeCalibration, readPinnedCalibration } = await import('../tests/browser/wheel-dynamics-v2/numeric-reader.mjs');
++  validateNativeCalibration(report, await readPinnedCalibration());
++  await immutable(`${folder}/terminal.json`, { state: 'NATIVE_CALIBRATION_NUMERIC_PASS', sourceHash: binding.sourceHash, reportHash: digest(await readFile(`${folder}/calibration.json`)), finishedAt: new Date().toISOString(), hardwareAcceptance: false });
+ } catch (error) {
+-  if (error.code !== 'ENOENT') throw error;
++  await failTerminal(`${folder}/terminal.json`, error, { hardwareAcceptance: false });
+ }
+-const runs = [];
+-for (const classId of ['sedan', 'compact'])
+-  for (const surface of ['dry-asphalt', 'reduced-adhesion']) {
+-    for (const speed of [10, 20, 30])
+-      runs.push(await calibrateWheels(classId, surface, speed, 'braking'));
+-    for (const speed of [8, 20])
+-      runs.push(await calibrateWheels(classId, surface, speed, 'turning'));
+-    for (const scenario of ['curb', 'airborne'])
+-      runs.push(await calibrateWheels(classId, surface, 10, scenario));
+-  }
+-await mkdir('Docs/Evidence/026-wheel-dynamics', { recursive: true });
+-await writeFile(
+-  destination,
+-  JSON.stringify(
+-    { capturedAt: new Date().toISOString(), fixture: '026-flat-surfaces-calibration-v1', runs },
+-    null,
+-    2,
+-  ),
+-);
+-console.log(
+-  JSON.stringify(
+-    runs.map(
+-      ({
+-        classId,
+-        surface,
+-        speedMps,
+-        scenario,
+-        brakingDistanceM,
+-        maxLateralMps,
+-        maxHeightM,
+-        minContacts,
+-        maxContacts,
+-      }) => ({
+-        classId,
+-        surface,
+-        speedMps,
+-        scenario,
+-        brakingDistanceM,
+-        maxLateralMps,
+-        maxHeightM,
+-        minContacts,
+-        maxContacts,
+-      }),
+-    ),
+-    null,
+-    2,
+-  ),
+-);
+diff --git a/scripts/verify-wheel-dynamics.mjs b/scripts/verify-wheel-dynamics.mjs
+index 84b50ef..7e9c3ba 100644
+--- a/scripts/verify-wheel-dynamics.mjs
++++ b/scripts/verify-wheel-dynamics.mjs
+@@ -1,10 +1,20 @@
+ import assert from 'node:assert/strict';
+ import { readFile } from 'node:fs/promises';
+ import { createHash } from 'node:crypto';
++import { readNative, readCurrentNative, BEFORE_SOURCE, AFTER_SOURCE } from '../tests/browser/wheel-dynamics-v2/numeric-reader.mjs';
+ const folder = 'Docs/Evidence/026-wheel-dynamics';
+-const before = JSON.parse(await readFile(`${folder}/before/node.json`, 'utf8'));
+-const after = JSON.parse(await readFile(`${folder}/after-v2/node.json`, 'utf8'));
+-const calibration = JSON.parse(await readFile(`${folder}/calibration-v2.json`, 'utf8'));
++const reference = process.argv.find((argument) => argument.startsWith('--reference='))?.slice('--reference='.length) ?? 'historical';
++assert(['current', 'historical'].includes(reference), 'Choose explicit current/historical reference');
++const current = reference === 'current' ? await readCurrentNative() : null;
++const before = await readNative(`${folder}/before`, 'before', BEFORE_SOURCE);
++const captureArgument = process.argv.find((argument) => argument.startsWith('--after-capture='));
++const afterCapture = captureArgument?.slice('--after-capture='.length) ?? (current?.pins.afterCapture ?? 'after-main-027');
++assert(/^[a-z0-9-]+$/.test(afterCapture), 'Invalid immutable AFTER capture');
++assert.equal(afterCapture, current?.pins.afterCapture ?? 'after-main-027', 'Pinned reference namespace only');
++const after = current?.after ?? await readNative(`${folder}/${afterCapture}`, 'after', AFTER_SOURCE);
++const originalCalibrationBytes = await readFile(`${folder}/calibration-v2.json`);
++assert.equal(createHash('sha256').update(originalCalibrationBytes).digest('hex'), 'd8f7d9022f00d26399baba91ee9591132ac89d818c1c4711108c243e06b47e6c');
++const calibration = current?.calibration ?? JSON.parse(originalCalibrationBytes);
+ const budgets = JSON.parse(await readFile('Docs/performance-budgets.json', 'utf8'));
+ const hash = (bytes) => createHash('sha256').update(bytes).digest('hex');
+ for (const [name, report] of [
+@@ -18,7 +28,7 @@ for (const [name, report] of [
+   for (const input of report.inputs)
+     assert.equal(
+       hash(
+-        await readFile(`${folder}/${name === 'after' ? 'after-v2' : name}/source/${input.path}`),
++        await readFile(`${folder}/${name === 'after' ? afterCapture : name}/source/${input.path}`),
+       ),
+       input.sha256,
+     );
+@@ -85,6 +95,7 @@ for (const classId of ['sedan', 'compact']) {
+   );
+ }
+ if (process.argv.includes('--browser')) {
++  assert.equal(reference, 'historical', 'Legacy browser verifier cannot accept a current v2 build; use verifySuite current binding');
+   for (const backend of ['webgpu', 'webgl2']) {
+     const report = JSON.parse(await readFile(`${folder}/drive-${backend}.json`, 'utf8'));
+     assert.equal(report.full, true);
+@@ -137,6 +148,9 @@ console.log(
+   JSON.stringify(
+     {
+       verified: true,
++      afterCapture,
++      reference,
++      acceptance: reference === 'current' ? 'NATIVE_ONLY_NOT_BROWSER_OR_HARDWARE' : 'HISTORICAL_ONLY',
+       comparisons,
+       browserVerified: process.argv.includes('--browser'),
+       scope: 'Early native wheel fixture, not game/laptop gates',
+diff --git a/src/rendering/babylon/backend.ts b/src/rendering/babylon/backend.ts
+index 2aff392..9ad29bb 100644
+--- a/src/rendering/babylon/backend.ts
++++ b/src/rendering/babylon/backend.ts
+@@ -11,6 +11,7 @@ import glslangWasm from '@babylonjs/core/assets/glslang/glslang.wasm?url';
+ import twgslJs from '@babylonjs/core/assets/twgsl/twgsl.js?url';
+ import twgslWasm from '@babylonjs/core/assets/twgsl/twgsl.wasm?url';
+ import { initializeBackend, type BackendPreference, type RendererKind } from '../backend-policy';
++import { ownPartialWebGPUCleanup, releaseOwnedCanvas } from './partial-cleanup';
+ 
+ export interface RenderingBackend {
+   readonly rendererKind: RendererKind;
+@@ -50,40 +51,25 @@ export async function createRenderingBackend(
+             glslangOptions: { jsPath: glslangJs, wasmPath: glslangWasm },
+             twgslOptions: { jsPath: twgslJs, wasmPath: twgslWasm },
+           });
++          const releasePartial = ownPartialWebGPUCleanup(
++            engine as unknown as Parameters<typeof ownPartialWebGPUCleanup>[0],
++            () => _CommonDispose(engine, target),
++            () => AbstractEngine.prototype.dispose.call(engine),
++          );
++          let released = false;
+           const owned: OwnedEngine = {
+             engine,
+             initialized: false,
+             dispose: () => {
++              if (released) return;
++              released = true;
+               if (owned.initialized) {
+                 engine.dispose();
+                 return;
+               }
+               // 9.29 dispose dereferences helpers absent after requestAdapter/requestDevice failure.
+               // Partial initialization uses the common/base cleanup, plus every acquired GPU owner.
+-              const partial = engine as unknown as {
+-                _isDisposed: boolean;
+-                _timestampQuery?: { dispose(): void };
+-                _textureHelper?: { destroyDeferredTextures(): void };
+-                _bufferManager?: { destroyDeferredBuffers(): void };
+-                _mainTexture?: { destroy(): void };
+-                _depthTexture?: { destroy(): void };
+-                _device?: { destroy(): void };
+-              };
+-              partial._isDisposed = true;
+-              try {
+-                partial._timestampQuery?.dispose();
+-                partial._mainTexture?.destroy();
+-                partial._depthTexture?.destroy();
+-                partial._textureHelper?.destroyDeferredTextures();
+-                partial._bufferManager?.destroyDeferredBuffers();
+-              } finally {
+-                try {
+-                  partial._device?.destroy();
+-                } finally {
+-                  _CommonDispose(engine, target);
+-                  AbstractEngine.prototype.dispose.call(engine);
+-                }
+-              }
++              releasePartial();
+             },
+           };
+           return owned;
+@@ -124,9 +110,8 @@ export async function createRenderingBackend(
+       releaseCanvas: (target) => {
+         // Engine.dispose does not explicitly lose a WebGL context. Release this owned context.
+         const gl = contexts.get(target);
+-        gl?.getExtension('WEBGL_lose_context')?.loseContext();
+-        target.width = 0;
+-        target.height = 0;
++        contexts.delete(target);
++        releaseOwnedCanvas(target, gl);
+       },
+     },
+   );
+diff --git a/src/rendering/backend-policy.ts b/src/rendering/backend-policy.ts
+index c7a1f5a..e7d7efe 100644
+--- a/src/rendering/backend-policy.ts
++++ b/src/rendering/backend-policy.ts
+@@ -30,6 +30,34 @@ export class RenderingInitializationError extends AggregateError {
+   }
+ }
+ 
++/** Internal cleanup aggregate: only our owner lists are flattened, never foreign errors. */
++export class OwnedCleanupError extends AggregateError {
++  constructor(errors: unknown[]) {
++    super(errors, 'Owned rendering resources could not all be released');
++    this.name = 'OwnedCleanupError';
++  }
++}
++
++/** The fixed owner list bounds retained causes; fence before any reentrant release. */
++export function releaseOwnersOnce(owners: readonly (() => void)[]): () => void {
++  let released = false;
++  return () => {
++    if (released) return;
++    released = true;
++    const errors: unknown[] = [];
++    for (const release of owners) {
++      try {
++        release();
++      } catch (error: unknown) {
++        if (error instanceof OwnedCleanupError) errors.push(...error.errors);
++        else errors.push(error);
++      }
++    }
++    if (errors.length === 1) throw errors[0];
++    if (errors.length > 1) throw new OwnedCleanupError(errors);
++  };
++}
++
+ /** Pure policy: ownership is acquired before each asynchronous initialization. */
+ export async function initializeBackend<
+   Canvas,
+@@ -56,22 +84,14 @@ export async function initializeBackend<
+     let engine: Engine | undefined;
+     let scene: Scene | undefined;
+     let ownsCanvas = false;
+-    let released = false;
+-    const dispose = (): void => {
+-      if (released) return;
+-      released = true;
+-      // A cleanup exception must not prevent cleanup of the remaining owners.
+-      try {
+-        scene?.dispose();
+-      } finally {
+-        try {
+-          engine?.dispose();
+-        } finally {
+-          if (ownsCanvas) driver.releaseCanvas(canvasForAttempt);
+-        }
+-      }
+-    };
+     let canvasForAttempt = canvas;
++    const dispose = releaseOwnersOnce([
++      () => scene?.dispose(),
++      () => engine?.dispose(),
++      () => {
++        if (ownsCanvas) driver.releaseCanvas(canvasForAttempt);
++      },
++    ]);
+     try {
+       canvas = driver.freshCanvas(canvas);
+       ownsCanvas = true;
+@@ -86,7 +106,8 @@ export async function initializeBackend<
+       try {
+         dispose();
+       } catch (cleanupError: unknown) {
+-        errors.push(cleanupError);
++        if (cleanupError instanceof OwnedCleanupError) errors.push(...cleanupError.errors);
++        else errors.push(cleanupError);
+       }
+     }
+   }
+diff --git a/src/vehicles/rapier/index.ts b/src/vehicles/rapier/index.ts
+index e39d579..91ac062 100644
+--- a/src/vehicles/rapier/index.ts
++++ b/src/vehicles/rapier/index.ts
+@@ -10,6 +10,8 @@ import { roadSurface } from '../road-surfaces';
+ import type { RoadSurfaceId } from '../road-surfaces';
+ import { COLLISION_LIMITS, CollisionRegistry } from '../collision-port';
+ import type { CollisionContact, CollisionIdentity, CollisionBoxOptions } from '../collision-port';
++import { initializeOwnedWorld } from './world-ownership';
++import { createProbeDisposer } from './probe-cleanup';
+ import { boolean, fields, number, record, requireContract } from '../../sessions';
+ 
+ let initialized: Promise<void> | undefined;
+@@ -34,661 +36,682 @@ export async function createRapierProbe(
+     throw new RangeError('Physics world admission capacity');
+   const world = new RAPIER.World({ x: 0, y: -9.81, z: 0 });
+   activeWorlds++;
+-  world.timestep = 1 / PHYSICS_CONFIG.hz;
+-  world.numSolverIterations = PHYSICS_CONFIG.solverIterations;
+-  world.maxCcdSubsteps = PHYSICS_CONFIG.ccdSubsteps;
+-  const ground = world.createCollider(
+-    RAPIER.ColliderDesc.cuboid(500, 0.5, 500)
+-      .setTranslation(0, -0.5, 0)
+-      .setFriction(surface.groundFriction),
+-  );
+-  const cars = new Map<
+-    string,
+-    {
+-      body: RAPIER.RigidBody;
+-      controller: RAPIER.DynamicRayCastVehicleController;
+-      tuning: CarTuning;
+-      classId: VehicleClassId | null;
+-      mechanicsVersion: string;
+-      collider: RAPIER.Collider;
+-    }
+-  >();
+-  const dynamicColliders: RAPIER.Collider[] = [];
+-  const registry = new PhysicsBodyRegistry();
+-  const collisionRegistry = new CollisionRegistry();
+-  const namedBoxes = new Map<CollisionIdentity, RAPIER.Collider>();
+-  let collisionBusy = false;
+-  let physicsStepSerial = 0;
+-  let publication: object | undefined;
+-  let lastPublicationTick = -1;
+-  let obstacles = 0,
+-    disposed = false;
+-  const ray = new RAPIER.Ray({ x: 0, y: 0, z: 0 }, { x: 0, y: -1, z: 0 });
+-  const assertAlive = () => {
+-    if (disposed) throw new Error('Physics world disposed');
+-  };
+-  const assertMutable = () => {
+-    assertAlive();
+-    if (collisionBusy) throw new Error('Native collision readback/validation is busy');
+-  };
+-  const car = (id: string) => {
+-    assertAlive();
+-    const item = cars.get(id);
+-    if (!item) throw new Error('Unknown vehicle');
+-    return item;
+-  };
+-  const admit = (body: boolean) => {
+-    assertMutable();
+-    if (
+-      world.colliders.len() >= PHYSICS_CONFIG.colliders ||
+-      (body && world.bodies.len() >= PHYSICS_CONFIG.bodies)
+-    )
+-      throw new RangeError('Physics admission capacity');
+-  };
+-  const snapshot = (id: string) => {
+-    const { body, controller } = car(id);
+-    const v = body.linvel();
+-    const wheels = Object.freeze(
+-      Array.from({ length: 4 }, (_, i) => {
+-        const connection = controller.wheelChassisConnectionPointCs(i)!;
+-        const length = controller.wheelSuspensionLength(i)!;
+-        const inContact = controller.wheelIsInContact(i);
+-        return Object.freeze({
+-          wheelId: ['front-left', 'front-right', 'rear-left', 'rear-right'][i]!,
+-          localPositionM: Object.freeze({
+-            x: connection.x,
+-            y: connection.y - length,
+-            z: connection.z,
+-          }),
+-          radiusM: controller.wheelRadius(i)!,
+-          spinRad: controller.wheelRotation(i)!,
+-          steeringRad: controller.wheelSteering(i)!,
+-          suspensionLengthM: length,
+-          suspensionForceN: controller.wheelSuspensionForce(i)!,
+-          inContact,
+-          contactPointM: inContact ? Object.freeze(controller.wheelContactPoint(i)!) : null,
+-          contactNormal: inContact ? Object.freeze(controller.wheelContactNormal(i)!) : null,
+-        });
+-      }),
+-    );
+-    return Object.freeze({
+-      id,
+-      position: Object.freeze(body.translation()),
+-      rotation: Object.freeze(body.rotation()),
+-      velocity: Object.freeze(v),
+-      angularVelocityRadps: Object.freeze(body.angvel()),
+-      speed: Math.hypot(v.x, v.z),
+-      suspension: Object.freeze(wheels.map((wheel) => wheel.suspensionLengthM)),
+-      wheelContacts: wheels.filter((wheel) => wheel.inContact).length,
+-      wheels,
+-    });
+-  };
+-  const readBody = (identity: BodyIdentity): BodyState => {
+-    assertAlive();
+-    registry.assertCurrent(identity);
+-    const { body } = car(identity.entityId);
+-    return Object.freeze({
+-      identity,
+-      transform: copyBodyTransform({
+-        positionM: body.translation(),
+-        rotationQuaternion: body.rotation(),
+-      }),
+-      velocityMps: copyBodyVector(body.linvel()),
+-    });
+-  };
+-  const allocateBox = (
+-    position: PhysicsVector,
+-    halfSize: PhysicsVector,
+-    dynamic: boolean,
+-    sensor = false,
+-  ) => {
+-    const desc = RAPIER.ColliderDesc.cuboid(halfSize.x, halfSize.y, halfSize.z)
+-      .setFriction(0.8)
+-      .setRestitution(0)
+-      .setSensor(sensor);
+-    if (!dynamic)
+-      return world.createCollider(desc.setTranslation(position.x, position.y, position.z));
+-    const body = world.createRigidBody(
+-      RAPIER.RigidBodyDesc.dynamic()
+-        .setTranslation(position.x, position.y, position.z)
+-        .setCcdEnabled(true),
+-    );
+-    try {
+-      const collider = world.createCollider(desc.setMass(40), body);
+-      dynamicColliders.push(collider);
+-      return collider;
+-    } catch (error) {
+-      world.removeRigidBody(body);
+-      throw error;
+-    }
+-  };
+-  const ownedVector = (value: PhysicsVector) => {
+-    const data = fields(value, ['x', 'y', 'z']);
+-    return Object.freeze({
+-      x: number(data.x, -10000, 10000),
+-      y: number(data.y, -10000, 10000),
+-      z: number(data.z, -10000, 10000),
+-    });
+-  };
+-  const tuningNumber = (value: unknown, minimum: number, maximum: number) => {
+-    if (typeof value !== 'number') throw new RangeError('Invalid physics value');
+-    finite(value, minimum, maximum);
+-    return value;
+-  };
+-  const probe: PhysicsProbe = {
+-    collisionSource: Object.freeze({
+-      isCurrent: (identity: CollisionIdentity) => collisionRegistry.isCurrent(identity),
+-    }),
+-    collisionIdentity: (id) => collisionRegistry.identity(id),
+-    collisionForColliderHandle: (handle) => collisionRegistry.forHandle(handle),
+-    collisionStepSerial: () => {
+-      assertAlive();
+-      return physicsStepSerial;
++  return initializeOwnedWorld(
++    world,
++    () => {
++      activeWorlds--;
+     },
+-    collisionResources: () => collisionRegistry.getStats(),
+-    addCar(id, position, tuning = SEDAN) {
+-      admit(true);
+-      registry.admit(id);
+-      collisionRegistry.admit(id, 'VEHICLE');
+-      if (!id || cars.has(id) || cars.size >= PHYSICS_CONFIG.vehicles)
+-        throw new RangeError('Vehicle identity/capacity');
+-      let p: PhysicsVector, config: CarTuning, customMechanics: boolean;
+-      collisionBusy = true;
+-      try {
+-        p = ownedVector(position);
+-        const data = record(tuning);
+-        const geometry = fields(data.wheels ?? { radiusM: 0.32, wheelbaseM: 2.7, trackM: 1.8 }, [
+-          'radiusM',
+-          'wheelbaseM',
+-          'trackM',
+-        ]);
+-        const wheels = Object.freeze({
+-          radiusM: tuningNumber(geometry.radiusM, 0.2, 0.6),
+-          wheelbaseM: tuningNumber(geometry.wheelbaseM, 1.5, 3.8),
+-          trackM: tuningNumber(geometry.trackM, 1.2, 2.4),
+-        });
+-        const powerW =
+-          data.powerW === undefined ? undefined : tuningNumber(data.powerW, 1000, 500000);
+-        config = Object.freeze({
+-          massKg: tuningNumber(data.massKg, 600, 4000),
+-          grip: tuningNumber(data.grip, 0.1, 4),
+-          brakeAcceleration: tuningNumber(data.brakeAcceleration, 1, 12),
+-          engineForceN: tuningNumber(data.engineForceN, 0, 20000),
+-          steeringRadians: tuningNumber(data.steeringRadians, 0.05, 0.7),
+-          suspensionStiffness: tuningNumber(data.suspensionStiffness, 10, 100),
+-          ...(powerW === undefined ? {} : { powerW }),
+-          wheels,
+-        });
+-        customMechanics = data.powerW !== undefined || data.wheels !== undefined;
+-      } finally {
+-        collisionBusy = false;
+-      }
+-      // Boundary reflection cannot interleave lifecycle changes; re-admit immediately before WASM allocation.
+-      admit(true);
+-      registry.admit(id);
+-      collisionRegistry.admit(id, 'VEHICLE');
+-      const wheels = config.wheels!;
+-      const body = world.createRigidBody(
+-        RAPIER.RigidBodyDesc.dynamic()
+-          .setTranslation(p.x, p.y, p.z)
+-          .setCcdEnabled(true)
+-          .setLinearDamping(0.015)
+-          .setAngularDamping(0.3),
++    (freeWorld) => {
++      world.timestep = 1 / PHYSICS_CONFIG.hz;
++      world.numSolverIterations = PHYSICS_CONFIG.solverIterations;
++      world.maxCcdSubsteps = PHYSICS_CONFIG.ccdSubsteps;
++      const ground = world.createCollider(
++        RAPIER.ColliderDesc.cuboid(500, 0.5, 500)
++          .setTranslation(0, -0.5, 0)
++          .setFriction(surface.groundFriction),
+       );
+-      let controller: RAPIER.DynamicRayCastVehicleController | undefined;
+-      let collider: RAPIER.Collider | undefined;
+-      try {
+-        collider = world.createCollider(
+-          RAPIER.ColliderDesc.cuboid(0.85, 0.3, 2)
+-            .setMass(config.massKg)
+-            .setFriction(0.5)
+-            .setRestitution(0),
+-          body,
++      const cars = new Map<
++        string,
++        {
++          body: RAPIER.RigidBody;
++          controller: RAPIER.DynamicRayCastVehicleController;
++          tuning: CarTuning;
++          classId: VehicleClassId | null;
++          mechanicsVersion: string;
++          collider: RAPIER.Collider;
++        }
++      >();
++      const dynamicColliders: RAPIER.Collider[] = [];
++      const registry = new PhysicsBodyRegistry();
++      const collisionRegistry = new CollisionRegistry();
++      const namedBoxes = new Map<CollisionIdentity, RAPIER.Collider>();
++      let collisionBusy = false;
++      let physicsStepSerial = 0;
++      let publication: object | undefined;
++      let lastPublicationTick = -1;
++      let obstacles = 0,
++        disposed = false;
++      const ray = new RAPIER.Ray({ x: 0, y: 0, z: 0 }, { x: 0, y: -1, z: 0 });
++      const assertAlive = () => {
++        if (disposed) throw new Error('Physics world disposed');
++      };
++      const assertMutable = () => {
++        assertAlive();
++        if (collisionBusy) throw new Error('Native collision readback/validation is busy');
++      };
++      const car = (id: string) => {
++        assertAlive();
++        const item = cars.get(id);
++        if (!item) throw new Error('Unknown vehicle');
++        return item;
++      };
++      const admit = (body: boolean) => {
++        assertMutable();
++        if (
++          world.colliders.len() >= PHYSICS_CONFIG.colliders ||
++          (body && world.bodies.len() >= PHYSICS_CONFIG.bodies)
++        )
++          throw new RangeError('Physics admission capacity');
++      };
++      const snapshot = (id: string) => {
++        const { body, controller } = car(id);
++        const v = body.linvel();
++        const wheels = Object.freeze(
++          Array.from({ length: 4 }, (_, i) => {
++            const connection = controller.wheelChassisConnectionPointCs(i)!;
++            const length = controller.wheelSuspensionLength(i)!;
++            const inContact = controller.wheelIsInContact(i);
++            return Object.freeze({
++              wheelId: ['front-left', 'front-right', 'rear-left', 'rear-right'][i]!,
++              localPositionM: Object.freeze({
++                x: connection.x,
++                y: connection.y - length,
++                z: connection.z,
++              }),
++              radiusM: controller.wheelRadius(i)!,
++              spinRad: controller.wheelRotation(i)!,
++              steeringRad: controller.wheelSteering(i)!,
++              suspensionLengthM: length,
++              suspensionForceN: controller.wheelSuspensionForce(i)!,
++              inContact,
++              contactPointM: inContact ? Object.freeze(controller.wheelContactPoint(i)!) : null,
++              contactNormal: inContact ? Object.freeze(controller.wheelContactNormal(i)!) : null,
++            });
++          }),
+         );
+-        dynamicColliders.push(collider);
+-        controller = world.createVehicleController(body);
+-        controller.indexUpAxis = 1;
+-        controller.setIndexForwardAxis = 2;
+-        for (const z of [wheels.wheelbaseM / 2, -wheels.wheelbaseM / 2])
+-          for (const x of [-wheels.trackM / 2, wheels.trackM / 2]) {
+-            const i = controller.numWheels();
+-            controller.addWheel(
+-              { x, y: -0.15, z },
+-              { x: 0, y: -1, z: 0 },
+-              { x: -1, y: 0, z: 0 },
+-              0.35,
+-              wheels.radiusM,
+-            );
+-            controller.setWheelSuspensionStiffness(i, config.suspensionStiffness);
+-            controller.setWheelSuspensionCompression(i, 4.4);
+-            controller.setWheelSuspensionRelaxation(i, 5.2);
+-            controller.setWheelMaxSuspensionTravel(i, 0.2);
+-            controller.setWheelMaxSuspensionForce(i, config.massKg * 9.81);
+-            controller.setWheelFrictionSlip(i, config.grip * surface.tireGripScale);
+-            controller.setWheelSideFrictionStiffness(i, 1);
+-          }
+-        cars.set(id, {
+-          body,
+-          controller,
+-          tuning: config,
+-          classId: null,
+-          mechanicsVersion: customMechanics ? '023-custom-mechanics-v1' : PHYSICS_CONFIG.version,
+-          collider,
++        return Object.freeze({
++          id,
++          position: Object.freeze(body.translation()),
++          rotation: Object.freeze(body.rotation()),
++          velocity: Object.freeze(v),
++          angularVelocityRadps: Object.freeze(body.angvel()),
++          speed: Math.hypot(v.x, v.z),
++          suspension: Object.freeze(wheels.map((wheel) => wheel.suspensionLengthM)),
++          wheelContacts: wheels.filter((wheel) => wheel.inContact).length,
++          wheels,
+         });
+-        registry.register(id, body.handle);
+-        collisionRegistry.register(id, 'VEHICLE', collider.handle);
+-      } catch (error) {
+-        const registeredBody = registry.identity(id);
+-        if (registeredBody) registry.remove(registeredBody);
+-        const registeredCollider = collisionRegistry.identity(id);
+-        if (registeredCollider) collisionRegistry.remove(registeredCollider);
+-        cars.delete(id);
+-        for (let i = dynamicColliders.length - 1; i >= 0; i--)
+-          if (dynamicColliders[i]!.parent()?.handle === body.handle) dynamicColliders.splice(i, 1);
+-        if (controller) world.removeVehicleController(controller);
+-        world.removeRigidBody(body);
+-        throw error;
+-      }
+-    },
+-    addClassCar(id, position, classId, version) {
+-      const config = vehicleClass(classId, version);
+-      probe.addCar(id, position, config);
+-      car(id).classId = classId;
+-    },
+-    readVehicleMechanics(id) {
+-      const { body, controller, tuning, classId, mechanicsVersion } = car(id);
+-      const wheels = Object.freeze({
+-        radiusM: controller.wheelRadius(0)!,
+-        wheelbaseM:
+-          controller.wheelChassisConnectionPointCs(0)!.z -
+-          controller.wheelChassisConnectionPointCs(2)!.z,
+-        trackM:
+-          controller.wheelChassisConnectionPointCs(1)!.x -
+-          controller.wheelChassisConnectionPointCs(0)!.x,
+-      });
+-      return Object.freeze({
+-        classId,
+-        version: classId ? vehicleClass(classId).version : mechanicsVersion,
+-        massKg: body.mass(),
+-        powerW: tuning.powerW ?? null,
+-        grip: controller.wheelFrictionSlip(0)!,
+-        surface,
+-        nativeGroundFriction: ground.friction(),
+-        brakeAccelerationMps2: tuning.brakeAcceleration,
+-        wheels,
+-        turningRadiusM: wheels.wheelbaseM / Math.tan(tuning.steeringRadians),
+-        appliedEngineForceN: Object.freeze(
+-          Array.from({ length: 4 }, (_, i) => controller.wheelEngineForce(i)!),
+-        ),
+-        appliedSteeringRadians: Object.freeze(
+-          Array.from({ length: 4 }, (_, i) => controller.wheelSteering(i)!),
+-        ),
+-        wheelBrakeImpulseLimitNs: Object.freeze(
+-          Array.from({ length: 4 }, (_, i) => controller.wheelBrake(i)!),
+-        ),
+-      });
+-    },
+-    addBox(position, halfSize, dynamic = false) {
+-      admit(dynamic);
+-      vector(position);
+-      vector(halfSize);
+-      for (const k of ['x', 'y', 'z'] as const) finite(halfSize[k], 0.01, 500);
+-      if (obstacles >= PHYSICS_CONFIG.obstacles) throw new RangeError('Obstacle capacity');
+-      allocateBox(position, halfSize, dynamic);
+-      obstacles++;
+-    },
+-    addNamedBox(id, position, halfSize, options: CollisionBoxOptions = {}) {
+-      assertMutable();
+-      let p: PhysicsVector, half: PhysicsVector, dynamic: boolean, sensor: boolean;
+-      collisionBusy = true;
+-      try {
+-        p = ownedVector(position);
+-        half = ownedVector(halfSize);
+-        for (const k of ['x', 'y', 'z'] as const) finite(half[k], 0.01, 500);
+-        const data = record(options);
+-        requireContract(
+-          Object.keys(data).every((key) => key === 'dynamic' || key === 'sensor'),
+-          'Named box options',
++      };
++      const readBody = (identity: BodyIdentity): BodyState => {
++        assertAlive();
++        registry.assertCurrent(identity);
++        const { body } = car(identity.entityId);
++        return Object.freeze({
++          identity,
++          transform: copyBodyTransform({
++            positionM: body.translation(),
++            rotationQuaternion: body.rotation(),
++          }),
++          velocityMps: copyBodyVector(body.linvel()),
++        });
++      };
++      const allocateBox = (
++        position: PhysicsVector,
++        halfSize: PhysicsVector,
++        dynamic: boolean,
++        sensor = false,
++      ) => {
++        const desc = RAPIER.ColliderDesc.cuboid(halfSize.x, halfSize.y, halfSize.z)
++          .setFriction(0.8)
++          .setRestitution(0)
++          .setSensor(sensor);
++        if (!dynamic)
++          return world.createCollider(desc.setTranslation(position.x, position.y, position.z));
++        const body = world.createRigidBody(
++          RAPIER.RigidBodyDesc.dynamic()
++            .setTranslation(position.x, position.y, position.z)
++            .setCcdEnabled(true),
+         );
+-        dynamic = Object.hasOwn(data, 'dynamic') ? boolean(data.dynamic) : false;
+-        sensor = Object.hasOwn(data, 'sensor') ? boolean(data.sensor) : false;
+-      } finally {
+-        collisionBusy = false;
+-      }
+-      admit(dynamic);
+-      if (obstacles >= PHYSICS_CONFIG.obstacles) throw new RangeError('Obstacle capacity');
+-      collisionRegistry.admit(id, 'OBSTACLE');
+-      const collider = allocateBox(p, half, dynamic, sensor);
+-      try {
+-        const identity = collisionRegistry.register(id, 'OBSTACLE', collider.handle);
+-        namedBoxes.set(identity, collider);
+-        obstacles++;
+-        return identity;
+-      } catch (error) {
+-        const body = collider.parent();
+-        const index = dynamicColliders.indexOf(collider);
+-        if (index >= 0) dynamicColliders.splice(index, 1);
+-        if (body) world.removeRigidBody(body);
+-        else world.removeCollider(collider, true);
+-        throw error;
+-      }
+-    },
+-    removeCollisionEntity(identity) {
+-      assertMutable();
+-      if (!collisionRegistry.isCurrent(identity)) return false;
+-      if (identity.kind === 'VEHICLE')
+-        return probe.removeBody(registry.identity(identity.entityId)!);
+-      const collider = namedBoxes.get(identity)!;
+-      collisionRegistry.remove(identity);
+-      namedBoxes.delete(identity);
+-      obstacles--;
+-      const body = collider.parent();
+-      const index = dynamicColliders.indexOf(collider);
+-      if (index >= 0) dynamicColliders.splice(index, 1);
+-      if (body) world.removeRigidBody(body);
+-      else world.removeCollider(collider, true);
+-      return true;
+-    },
+-    readCollisionContacts() {
+-      assertMutable();
+-      collisionBusy = true;
+-      const contacts: CollisionContact[] = [];
+-      let candidatePairs = 0,
+-        manifoldContacts = 0,
+-        ignoredGroundPairs = 0,
+-        ignoredSensorPairs = 0,
+-        ignoredUnmappedPairs = 0;
+-      let failed = false;
+-      let failure: unknown;
+-      let contactToleranceM = 0;
+-      const fail = (error: unknown) => {
+-        if (!failed) {
+-          failed = true;
+-          failure = error;
++        try {
++          const collider = world.createCollider(desc.setMass(40), body);
++          dynamicColliders.push(collider);
++          return collider;
++        } catch (error) {
++          world.removeRigidBody(body);
++          throw error;
+         }
+       };
+-      try {
+-        contactToleranceM = number(
+-          world.integrationParameters.normalizedAllowedLinearError *
+-            world.integrationParameters.lengthUnit,
+-          0,
+-        );
+-        for (const [id, { collider }] of cars) {
+-          const first = collisionRegistry.identity(id)!;
+-          world.contactPairsWith(collider, (other) => {
+-            // No user callback runs here. Always return normally so Rapier frees borrowed manifolds.
+-            try {
+-              if (failed) return;
+-              const second = collisionRegistry.forHandle(other.handle);
+-              if (second?.kind === 'VEHICLE' && second.serial < first.serial) return;
+-              if (
+-                ++candidatePairs >
+-                (PHYSICS_CONFIG.colliders * (PHYSICS_CONFIG.colliders - 1)) / 2
+-              ) {
+-                fail(new RangeError('Collision candidate capacity'));
+-                return;
+-              }
+-              if (other.isSensor() || collider.isSensor()) {
+-                ignoredSensorPairs++;
+-                return;
+-              }
+-              if (other.handle === ground.handle) {
+-                ignoredGroundPairs++;
+-                return;
+-              }
+-              if (!second) {
+-                ignoredUnmappedPairs++;
+-                return;
++      const ownedVector = (value: PhysicsVector) => {
++        const data = fields(value, ['x', 'y', 'z']);
++        return Object.freeze({
++          x: number(data.x, -10000, 10000),
++          y: number(data.y, -10000, 10000),
++          z: number(data.z, -10000, 10000),
++        });
++      };
++      const tuningNumber = (value: unknown, minimum: number, maximum: number) => {
++        if (typeof value !== 'number') throw new RangeError('Invalid physics value');
++        finite(value, minimum, maximum);
++        return value;
++      };
++      const probe: PhysicsProbe = {
++        collisionSource: Object.freeze({
++          isCurrent: (identity: CollisionIdentity) => collisionRegistry.isCurrent(identity),
++        }),
++        collisionIdentity: (id) => collisionRegistry.identity(id),
++        collisionForColliderHandle: (handle) => collisionRegistry.forHandle(handle),
++        collisionStepSerial: () => {
++          assertAlive();
++          return physicsStepSerial;
++        },
++        collisionResources: () => collisionRegistry.getStats(),
++        addCar(id, position, tuning = SEDAN) {
++          admit(true);
++          registry.admit(id);
++          collisionRegistry.admit(id, 'VEHICLE');
++          if (!id || cars.has(id) || cars.size >= PHYSICS_CONFIG.vehicles)
++            throw new RangeError('Vehicle identity/capacity');
++          let p: PhysicsVector, config: CarTuning, customMechanics: boolean;
++          collisionBusy = true;
++          try {
++            p = ownedVector(position);
++            const data = record(tuning);
++            const geometry = fields(
++              data.wheels ?? { radiusM: 0.32, wheelbaseM: 2.7, trackM: 1.8 },
++              ['radiusM', 'wheelbaseM', 'trackM'],
++            );
++            const wheels = Object.freeze({
++              radiusM: tuningNumber(geometry.radiusM, 0.2, 0.6),
++              wheelbaseM: tuningNumber(geometry.wheelbaseM, 1.5, 3.8),
++              trackM: tuningNumber(geometry.trackM, 1.2, 2.4),
++            });
++            const powerW =
++              data.powerW === undefined ? undefined : tuningNumber(data.powerW, 1000, 500000);
++            config = Object.freeze({
++              massKg: tuningNumber(data.massKg, 600, 4000),
++              grip: tuningNumber(data.grip, 0.1, 4),
++              brakeAcceleration: tuningNumber(data.brakeAcceleration, 1, 12),
++              engineForceN: tuningNumber(data.engineForceN, 0, 20000),
++              steeringRadians: tuningNumber(data.steeringRadians, 0.05, 0.7),
++              suspensionStiffness: tuningNumber(data.suspensionStiffness, 10, 100),
++              ...(powerW === undefined ? {} : { powerW }),
++              wheels,
++            });
++            customMechanics = data.powerW !== undefined || data.wheels !== undefined;
++          } finally {
++            collisionBusy = false;
++          }
++          // Boundary reflection cannot interleave lifecycle changes; re-admit immediately before WASM allocation.
++          admit(true);
++          registry.admit(id);
++          collisionRegistry.admit(id, 'VEHICLE');
++          const wheels = config.wheels!;
++          const body = world.createRigidBody(
++            RAPIER.RigidBodyDesc.dynamic()
++              .setTranslation(p.x, p.y, p.z)
++              .setCcdEnabled(true)
++              .setLinearDamping(0.015)
++              .setAngularDamping(0.3),
++          );
++          let controller: RAPIER.DynamicRayCastVehicleController | undefined;
++          let collider: RAPIER.Collider | undefined;
++          try {
++            collider = world.createCollider(
++              RAPIER.ColliderDesc.cuboid(0.85, 0.3, 2)
++                .setMass(config.massKg)
++                .setFriction(0.5)
++                .setRestitution(0),
++              body,
++            );
++            dynamicColliders.push(collider);
++            controller = world.createVehicleController(body);
++            controller.indexUpAxis = 1;
++            controller.setIndexForwardAxis = 2;
++            for (const z of [wheels.wheelbaseM / 2, -wheels.wheelbaseM / 2])
++              for (const x of [-wheels.trackM / 2, wheels.trackM / 2]) {
++                const i = controller.numWheels();
++                controller.addWheel(
++                  { x, y: -0.15, z },
++                  { x: 0, y: -1, z: 0 },
++                  { x: -1, y: 0, z: 0 },
++                  0.35,
++                  wheels.radiusM,
++                );
++                controller.setWheelSuspensionStiffness(i, config.suspensionStiffness);
++                controller.setWheelSuspensionCompression(i, 4.4);
++                controller.setWheelSuspensionRelaxation(i, 5.2);
++                controller.setWheelMaxSuspensionTravel(i, 0.2);
++                controller.setWheelMaxSuspensionForce(i, config.massKg * 9.81);
++                controller.setWheelFrictionSlip(i, config.grip * surface.tireGripScale);
++                controller.setWheelSideFrictionStiffness(i, 1);
+               }
+-              let touching = false,
+-                impulseNs = 0;
+-              world.contactPair(collider, other, (manifold) => {
++            cars.set(id, {
++              body,
++              controller,
++              tuning: config,
++              classId: null,
++              mechanicsVersion: customMechanics
++                ? '023-custom-mechanics-v1'
++                : PHYSICS_CONFIG.version,
++              collider,
++            });
++            registry.register(id, body.handle);
++            collisionRegistry.register(id, 'VEHICLE', collider.handle);
++          } catch (error) {
++            const registeredBody = registry.identity(id);
++            if (registeredBody) registry.remove(registeredBody);
++            const registeredCollider = collisionRegistry.identity(id);
++            if (registeredCollider) collisionRegistry.remove(registeredCollider);
++            cars.delete(id);
++            for (let i = dynamicColliders.length - 1; i >= 0; i--)
++              if (dynamicColliders[i]!.parent()?.handle === body.handle)
++                dynamicColliders.splice(i, 1);
++            if (controller) world.removeVehicleController(controller);
++            world.removeRigidBody(body);
++            throw error;
++          }
++        },
++        addClassCar(id, position, classId, version) {
++          const config = vehicleClass(classId, version);
++          probe.addCar(id, position, config);
++          car(id).classId = classId;
++        },
++        readVehicleMechanics(id) {
++          const { body, controller, tuning, classId, mechanicsVersion } = car(id);
++          const wheels = Object.freeze({
++            radiusM: controller.wheelRadius(0)!,
++            wheelbaseM:
++              controller.wheelChassisConnectionPointCs(0)!.z -
++              controller.wheelChassisConnectionPointCs(2)!.z,
++            trackM:
++              controller.wheelChassisConnectionPointCs(1)!.x -
++              controller.wheelChassisConnectionPointCs(0)!.x,
++          });
++          return Object.freeze({
++            classId,
++            version: classId ? vehicleClass(classId).version : mechanicsVersion,
++            massKg: body.mass(),
++            powerW: tuning.powerW ?? null,
++            grip: controller.wheelFrictionSlip(0)!,
++            surface,
++            nativeGroundFriction: ground.friction(),
++            brakeAccelerationMps2: tuning.brakeAcceleration,
++            wheels,
++            turningRadiusM: wheels.wheelbaseM / Math.tan(tuning.steeringRadians),
++            appliedEngineForceN: Object.freeze(
++              Array.from({ length: 4 }, (_, i) => controller.wheelEngineForce(i)!),
++            ),
++            appliedSteeringRadians: Object.freeze(
++              Array.from({ length: 4 }, (_, i) => controller.wheelSteering(i)!),
++            ),
++            wheelBrakeImpulseLimitNs: Object.freeze(
++              Array.from({ length: 4 }, (_, i) => controller.wheelBrake(i)!),
++            ),
++          });
++        },
++        addBox(position, halfSize, dynamic = false) {
++          admit(dynamic);
++          vector(position);
++          vector(halfSize);
++          for (const k of ['x', 'y', 'z'] as const) finite(halfSize[k], 0.01, 500);
++          if (obstacles >= PHYSICS_CONFIG.obstacles) throw new RangeError('Obstacle capacity');
++          allocateBox(position, halfSize, dynamic);
++          obstacles++;
++        },
++        addNamedBox(id, position, halfSize, options: CollisionBoxOptions = {}) {
++          assertMutable();
++          let p: PhysicsVector, half: PhysicsVector, dynamic: boolean, sensor: boolean;
++          collisionBusy = true;
++          try {
++            p = ownedVector(position);
++            half = ownedVector(halfSize);
++            for (const k of ['x', 'y', 'z'] as const) finite(half[k], 0.01, 500);
++            const data = record(options);
++            requireContract(
++              Object.keys(data).every((key) => key === 'dynamic' || key === 'sensor'),
++              'Named box options',
++            );
++            dynamic = Object.hasOwn(data, 'dynamic') ? boolean(data.dynamic) : false;
++            sensor = Object.hasOwn(data, 'sensor') ? boolean(data.sensor) : false;
++          } finally {
++            collisionBusy = false;
++          }
++          admit(dynamic);
++          if (obstacles >= PHYSICS_CONFIG.obstacles) throw new RangeError('Obstacle capacity');
++          collisionRegistry.admit(id, 'OBSTACLE');
++          const collider = allocateBox(p, half, dynamic, sensor);
++          try {
++            const identity = collisionRegistry.register(id, 'OBSTACLE', collider.handle);
++            namedBoxes.set(identity, collider);
++            obstacles++;
++            return identity;
++          } catch (error) {
++            const body = collider.parent();
++            const index = dynamicColliders.indexOf(collider);
++            if (index >= 0) dynamicColliders.splice(index, 1);
++            if (body) world.removeRigidBody(body);
++            else world.removeCollider(collider, true);
++            throw error;
++          }
++        },
++        removeCollisionEntity(identity) {
++          assertMutable();
++          if (!collisionRegistry.isCurrent(identity)) return false;
++          if (identity.kind === 'VEHICLE')
++            return probe.removeBody(registry.identity(identity.entityId)!);
++          const collider = namedBoxes.get(identity)!;
++          collisionRegistry.remove(identity);
++          namedBoxes.delete(identity);
++          obstacles--;
++          const body = collider.parent();
++          const index = dynamicColliders.indexOf(collider);
++          if (index >= 0) dynamicColliders.splice(index, 1);
++          if (body) world.removeRigidBody(body);
++          else world.removeCollider(collider, true);
++          return true;
++        },
++        readCollisionContacts() {
++          assertMutable();
++          collisionBusy = true;
++          const contacts: CollisionContact[] = [];
++          let candidatePairs = 0,
++            manifoldContacts = 0,
++            ignoredGroundPairs = 0,
++            ignoredSensorPairs = 0,
++            ignoredUnmappedPairs = 0;
++          let failed = false;
++          let failure: unknown;
++          let contactToleranceM = 0;
++          const fail = (error: unknown) => {
++            if (!failed) {
++              failed = true;
++              failure = error;
++            }
++          };
++          try {
++            contactToleranceM = number(
++              world.integrationParameters.normalizedAllowedLinearError *
++                world.integrationParameters.lengthUnit,
++              0,
++            );
++            for (const [id, { collider }] of cars) {
++              const first = collisionRegistry.identity(id)!;
++              world.contactPairsWith(collider, (other) => {
++                // No user callback runs here. Always return normally so Rapier frees borrowed manifolds.
+                 try {
+                   if (failed) return;
+-                  const count = manifold.numContacts();
++                  const second = collisionRegistry.forHandle(other.handle);
++                  if (second?.kind === 'VEHICLE' && second.serial < first.serial) return;
+                   if (
+-                    !Number.isSafeInteger(count) ||
+-                    count < 0 ||
+-                    manifoldContacts + count > COLLISION_LIMITS.contacts
++                    ++candidatePairs >
++                    (PHYSICS_CONFIG.colliders * (PHYSICS_CONFIG.colliders - 1)) / 2
+                   ) {
+-                    fail(new RangeError('Collision manifold contact capacity'));
++                    fail(new RangeError('Collision candidate capacity'));
+                     return;
+                   }
+-                  manifoldContacts += count;
+-                  for (let index = 0; index < count; index++) {
+-                    const distance = manifold.contactDist(index),
+-                      impulse = manifold.contactImpulse(index);
+-                    if (!Number.isFinite(distance) || !Number.isFinite(impulse) || impulse < 0) {
+-                      fail(new RangeError('Invalid native collision contact'));
+-                      return;
+-                    }
+-                    // Rapier can apply a real normal impulse at a positive predictive gap;
+-                    // resting contacts also retain the solver's allowed separation error.
+-                    if (distance <= contactToleranceM || impulse > 0) {
+-                      touching = true;
+-                      impulseNs += impulse;
+-                    }
+-                    if (!Number.isFinite(impulseNs)) {
+-                      fail(new RangeError('Collision impulse overflow'));
+-                      return;
++                  if (other.isSensor() || collider.isSensor()) {
++                    ignoredSensorPairs++;
++                    return;
++                  }
++                  if (other.handle === ground.handle) {
++                    ignoredGroundPairs++;
++                    return;
++                  }
++                  if (!second) {
++                    ignoredUnmappedPairs++;
++                    return;
++                  }
++                  let touching = false,
++                    impulseNs = 0;
++                  world.contactPair(collider, other, (manifold) => {
++                    try {
++                      if (failed) return;
++                      const count = manifold.numContacts();
++                      if (
++                        !Number.isSafeInteger(count) ||
++                        count < 0 ||
++                        manifoldContacts + count > COLLISION_LIMITS.contacts
++                      ) {
++                        fail(new RangeError('Collision manifold contact capacity'));
++                        return;
++                      }
++                      manifoldContacts += count;
++                      for (let index = 0; index < count; index++) {
++                        const distance = manifold.contactDist(index),
++                          impulse = manifold.contactImpulse(index);
++                        if (
++                          !Number.isFinite(distance) ||
++                          !Number.isFinite(impulse) ||
++                          impulse < 0
++                        ) {
++                          fail(new RangeError('Invalid native collision contact'));
++                          return;
++                        }
++                        // Rapier can apply a real normal impulse at a positive predictive gap;
++                        // resting contacts also retain the solver's allowed separation error.
++                        if (distance <= contactToleranceM || impulse > 0) {
++                          touching = true;
++                          impulseNs += impulse;
++                        }
++                        if (!Number.isFinite(impulseNs)) {
++                          fail(new RangeError('Collision impulse overflow'));
++                          return;
++                        }
++                      }
++                    } catch (error) {
++                      fail(error);
+                     }
++                  });
++                  if (failed || !touching) return;
++                  if (contacts.length >= COLLISION_LIMITS.pairs) {
++                    fail(new RangeError('Collision mapped pair capacity'));
++                    return;
+                   }
++                  contacts.push(Object.freeze({ first, second, impulseNs }));
+                 } catch (error) {
+                   fail(error);
+                 }
+               });
+-              if (failed || !touching) return;
+-              if (contacts.length >= COLLISION_LIMITS.pairs) {
+-                fail(new RangeError('Collision mapped pair capacity'));
+-                return;
+-              }
+-              contacts.push(Object.freeze({ first, second, impulseNs }));
+-            } catch (error) {
+-              fail(error);
+             }
+-          });
+-        }
+-        if (failed) throw failure;
+-        return Object.freeze({
+-          physicsStepSerial,
+-          contactToleranceM,
+-          contacts: Object.freeze(contacts),
+-          candidatePairs,
+-          manifoldContacts,
+-          ignoredGroundPairs,
+-          ignoredSensorPairs,
+-          ignoredUnmappedPairs,
+-          ignoredObstaclePairs: 0,
+-        });
+-      } finally {
+-        collisionBusy = false;
+-      }
+-    },
+-    setVelocity(id, velocity) {
+-      assertMutable();
+-      vector(velocity);
+-      car(id).body.setLinvel(velocity, true);
+-    },
+-    bodyIdentity: (id) => registry.identity(id),
+-    entityForBodyHandle: (handle) => registry.forHandle(handle),
+-    readBody,
+-    setPose(identity, transform) {
+-      assertMutable();
+-      registry.assertCurrent(identity);
+-      const pose = copyBodyTransform(transform);
+-      vector(pose.positionM);
+-      const { body } = car(identity.entityId);
+-      body.setTranslation(pose.positionM, true);
+-      body.setRotation(pose.rotationQuaternion, true);
+-    },
+-    setBodyVelocity(identity, velocity) {
+-      assertMutable();
+-      registry.assertCurrent(identity);
+-      vector(velocity);
+-      car(identity.entityId).body.setLinvel(velocity, true);
+-    },
+-    removeBody(identity) {
+-      assertMutable();
+-      if (!registry.isCurrent(identity)) return false;
+-      const { body, controller } = car(identity.entityId);
+-      // Invalidate callbacks before releasing native handles, which Rapier may reuse.
+-      registry.remove(identity);
+-      const collisionIdentity = collisionRegistry.identity(identity.entityId);
+-      if (collisionIdentity) collisionRegistry.remove(collisionIdentity);
+-      cars.delete(identity.entityId);
+-      for (let i = dynamicColliders.length - 1; i >= 0; i--)
+-        if (dynamicColliders[i]!.parent()?.handle === body.handle) dynamicColliders.splice(i, 1);
+-      world.removeVehicleController(controller);
+-      world.removeRigidBody(body); // Rapier also removes every attached collider.
+-      return true;
+-    },
+-    subscribeBody: (identity, listener) => registry.subscribe(identity, listener),
+-    publishBodies(tick, measure = true) {
+-      assertAlive();
+-      if (!Number.isSafeInteger(tick) || tick < 0) throw new RangeError('Invalid body tick');
+-      if (tick < lastPublicationTick) return { readbackMs: 0, dispatchMs: 0, bodies: 0 };
+-      lastPublicationTick = tick;
+-      const batchPublication = {};
+-      publication = batchPublication;
+-      const now = measure ? clock : () => 0;
+-      const start = now();
+-      const states = [...cars.keys()].map((id) => readBody(registry.identity(id)!));
+-      const readbackEnd = now();
+-      for (const state of states) {
+-        if (disposed || publication !== batchPublication) break;
+-        registry.publish(state, tick);
+-      }
+-      return {
+-        readbackMs: readbackEnd - start,
+-        dispatchMs: now() - readbackEnd,
+-        bodies: states.length,
+-      };
+-    },
+-    bodyResources: () => registry.counts(),
+-    step(inputs, measure = true) {
+-      assertMutable();
+-      if (physicsStepSerial >= Number.MAX_SAFE_INTEGER)
+-        throw new RangeError('Physics step serial capacity');
+-      assertAlive();
+-      const now = measure ? clock : () => 0;
+-      const start = now();
+-      // Validate the entire command batch before mutating any body.
+-      for (const [id, input] of inputs) {
+-        car(id);
+-        finite(input.throttle, -1, 1);
+-        finite(input.brake, 0, 1);
+-        finite(input.steering, -1, 1);
+-        if (input.handbrake !== undefined && typeof input.handbrake !== 'boolean')
+-          throw new TypeError('Physics handbrake must be boolean');
+-      }
+-      let bridgeCalls = 0;
+-      for (const [id, { body, controller, tuning }] of cars) {
+-        const input: PhysicsInput = inputs.get(id) ?? zero;
+-        if (input.throttle || input.brake || input.steering || input.handbrake) body.wakeUp();
+-        let force = tuning.engineForceN;
+-        if (tuning.powerW !== undefined) {
+-          // Current velocity in the chassis forward axis; controller's cached speed may
+-          // still describe the previous tick after setPose/setVelocity or a collision.
+-          const v = body.linvel(),
+-            q = body.rotation();
+-          const speed =
+-            v.x * 2 * (q.x * q.z + q.w * q.y) +
+-            v.y * 2 * (q.y * q.z - q.w * q.x) +
+-            v.z * (1 - 2 * (q.x * q.x + q.y * q.y));
+-          force = tractiveForceN(
+-            { powerW: tuning.powerW, engineForceN: tuning.engineForceN },
+-            speed,
+-          );
+-          bridgeCalls += 2;
+-        }
+-        for (let i = 0; i < 4; i++) {
+-          controller.setWheelEngineForce(i, i >= 2 ? (input.throttle * force) / 2 : 0);
+-          controller.setWheelBrake(
+-            i,
+-            (Math.max(input.brake, i >= 2 && input.handbrake ? 1 : 0) *
+-              tuning.massKg *
+-              tuning.brakeAcceleration) /
+-              PHYSICS_CONFIG.hz /
+-              4,
+-          );
+-          controller.setWheelSteering(i, i < 2 ? input.steering * tuning.steeringRadians : 0);
+-          bridgeCalls += 3;
+-        }
+-        // No dynamic-body exclusion: wheels may contact another car or debris.
+-        controller.updateVehicle(world.timestep, RAPIER.QueryFilterFlags.EXCLUDE_SENSORS);
+-      }
+-      const controllerEnd = now();
+-      world.step();
+-      physicsStepSerial++;
+-      const stepEnd = now();
+-      for (const { body } of cars.values()) {
+-        const p = body.translation();
+-        ray.origin.x = p.x;
+-        ray.origin.y = p.y;
+-        ray.origin.z = p.z;
+-        world.castRay(
+-          ray,
+-          5,
+-          true,
+-          RAPIER.QueryFilterFlags.EXCLUDE_SENSORS,
+-          undefined,
+-          undefined,
+-          body,
+-        );
+-      }
+-      const queryEnd = now();
+-      // Separate representative read-back crossings, excluding controllers/queries and solver.
+-      for (const { body, controller } of cars.values()) {
+-        body.translation();
+-        body.rotation();
+-        body.linvel();
+-        for (let i = 0; i < 4; i++) {
+-          controller.wheelSuspensionLength(i);
+-          controller.wheelIsInContact(i);
+-        }
+-        bridgeCalls += 11;
+-      }
+-      const end = now();
+-      return {
+-        controllerMs: controllerEnd - start,
+-        stepMs: stepEnd - controllerEnd,
+-        queryMs: queryEnd - stepEnd,
+-        bridgeMs: end - queryEnd,
+-        totalMs: end - start,
+-        queryCount: cars.size,
+-        bridgeCalls,
++            if (failed) throw failure;
++            return Object.freeze({
++              physicsStepSerial,
++              contactToleranceM,
++              contacts: Object.freeze(contacts),
++              candidatePairs,
++              manifoldContacts,
++              ignoredGroundPairs,
++              ignoredSensorPairs,
++              ignoredUnmappedPairs,
++              ignoredObstaclePairs: 0,
++            });
++          } finally {
++            collisionBusy = false;
++          }
++        },
++        setVelocity(id, velocity) {
++          assertMutable();
++          vector(velocity);
++          car(id).body.setLinvel(velocity, true);
++        },
++        bodyIdentity: (id) => registry.identity(id),
++        entityForBodyHandle: (handle) => registry.forHandle(handle),
++        readBody,
++        setPose(identity, transform) {
++          assertMutable();
++          registry.assertCurrent(identity);
++          const pose = copyBodyTransform(transform);
++          vector(pose.positionM);
++          const { body } = car(identity.entityId);
++          body.setTranslation(pose.positionM, true);
++          body.setRotation(pose.rotationQuaternion, true);
++        },
++        setBodyVelocity(identity, velocity) {
++          assertMutable();
++          registry.assertCurrent(identity);
++          vector(velocity);
++          car(identity.entityId).body.setLinvel(velocity, true);
++        },
++        removeBody(identity) {
++          assertMutable();
++          if (!registry.isCurrent(identity)) return false;
++          const { body, controller } = car(identity.entityId);
++          // Invalidate callbacks before releasing native handles, which Rapier may reuse.
++          registry.remove(identity);
++          const collisionIdentity = collisionRegistry.identity(identity.entityId);
++          if (collisionIdentity) collisionRegistry.remove(collisionIdentity);
++          cars.delete(identity.entityId);
++          for (let i = dynamicColliders.length - 1; i >= 0; i--)
++            if (dynamicColliders[i]!.parent()?.handle === body.handle)
++              dynamicColliders.splice(i, 1);
++          world.removeVehicleController(controller);
++          world.removeRigidBody(body); // Rapier also removes every attached collider.
++          return true;
++        },
++        subscribeBody: (identity, listener) => registry.subscribe(identity, listener),
++        publishBodies(tick, measure = true) {
++          assertAlive();
++          if (!Number.isSafeInteger(tick) || tick < 0) throw new RangeError('Invalid body tick');
++          if (tick < lastPublicationTick) return { readbackMs: 0, dispatchMs: 0, bodies: 0 };
++          lastPublicationTick = tick;
++          const batchPublication = {};
++          publication = batchPublication;
++          const now = measure ? clock : () => 0;
++          const start = now();
++          const states = [...cars.keys()].map((id) => readBody(registry.identity(id)!));
++          const readbackEnd = now();
++          for (const state of states) {
++            if (disposed || publication !== batchPublication) break;
++            registry.publish(state, tick);
++          }
++          return {
++            readbackMs: readbackEnd - start,
++            dispatchMs: now() - readbackEnd,
++            bodies: states.length,
++          };
++        },
++        bodyResources: () => registry.counts(),
++        step(inputs, measure = true) {
++          assertMutable();
++          if (physicsStepSerial >= Number.MAX_SAFE_INTEGER)
++            throw new RangeError('Physics step serial capacity');
++          assertAlive();
++          const now = measure ? clock : () => 0;
++          const start = now();
++          // Validate the entire command batch before mutating any body.
++          for (const [id, input] of inputs) {
++            car(id);
++            finite(input.throttle, -1, 1);
++            finite(input.brake, 0, 1);
++            finite(input.steering, -1, 1);
++            if (input.handbrake !== undefined && typeof input.handbrake !== 'boolean')
++              throw new TypeError('Physics handbrake must be boolean');
++          }
++          let bridgeCalls = 0;
++          for (const [id, { body, controller, tuning }] of cars) {
++            const input: PhysicsInput = inputs.get(id) ?? zero;
++            if (input.throttle || input.brake || input.steering || input.handbrake) body.wakeUp();
++            let force = tuning.engineForceN;
++            if (tuning.powerW !== undefined) {
++              // Current velocity in the chassis forward axis; controller's cached speed may
++              // still describe the previous tick after setPose/setVelocity or a collision.
++              const v = body.linvel(),
++                q = body.rotation();
++              const speed =
++                v.x * 2 * (q.x * q.z + q.w * q.y) +
++                v.y * 2 * (q.y * q.z - q.w * q.x) +
++                v.z * (1 - 2 * (q.x * q.x + q.y * q.y));
++              force = tractiveForceN(
++                { powerW: tuning.powerW, engineForceN: tuning.engineForceN },
++                speed,
++              );
++              bridgeCalls += 2;
++            }
++            for (let i = 0; i < 4; i++) {
++              controller.setWheelEngineForce(i, i >= 2 ? (input.throttle * force) / 2 : 0);
++              controller.setWheelBrake(
++                i,
++                (Math.max(input.brake, i >= 2 && input.handbrake ? 1 : 0) *
++                  tuning.massKg *
++                  tuning.brakeAcceleration) /
++                  PHYSICS_CONFIG.hz /
++                  4,
++              );
++              controller.setWheelSteering(i, i < 2 ? input.steering * tuning.steeringRadians : 0);
++              bridgeCalls += 3;
++            }
++            // No dynamic-body exclusion: wheels may contact another car or debris.
++            controller.updateVehicle(world.timestep, RAPIER.QueryFilterFlags.EXCLUDE_SENSORS);
++          }
++          const controllerEnd = now();
++          world.step();
++          physicsStepSerial++;
++          const stepEnd = now();
++          for (const { body } of cars.values()) {
++            const p = body.translation();
++            ray.origin.x = p.x;
++            ray.origin.y = p.y;
++            ray.origin.z = p.z;
++            world.castRay(
++              ray,
++              5,
++              true,
++              RAPIER.QueryFilterFlags.EXCLUDE_SENSORS,
++              undefined,
++              undefined,
++              body,
++            );
++          }
++          const queryEnd = now();
++          // Separate representative read-back crossings, excluding controllers/queries and solver.
++          for (const { body, controller } of cars.values()) {
++            body.translation();
++            body.rotation();
++            body.linvel();
++            for (let i = 0; i < 4; i++) {
++              controller.wheelSuspensionLength(i);
++              controller.wheelIsInContact(i);
++            }
++            bridgeCalls += 11;
++          }
++          const end = now();
++          return {
++            controllerMs: controllerEnd - start,
++            stepMs: stepEnd - controllerEnd,
++            queryMs: queryEnd - stepEnd,
++            bridgeMs: end - queryEnd,
++            totalMs: end - start,
++            queryCount: cars.size,
++            bridgeCalls,
++          };
++        },
++        project: snapshot,
++        contacts() {
++          assertAlive();
++          let count = 0;
++          for (const collider of dynamicColliders)
++            world.contactPairsWith(collider, (other) => {
++              if (other.handle < collider.handle && other.parent() !== null) return;
++              world.contactPair(collider, other, (manifold) => {
++                count += manifold.numSolverContacts();
++              });
++            });
++          return count;
++        },
++        counts() {
++          assertAlive();
++          return {
++            vehicles: cars.size,
++            bodies: world.bodies.len(),
++            colliders: world.colliders.len(),
++          };
++        },
++        dispose: createProbeDisposer(
++          assertMutable,
++          () => {
++            disposed = true;
++          },
++          {
++            collisionRegistry,
++            namedBoxes,
++            registry,
++            cars,
++            dynamicColliders,
++            removeController: (controller) => world.removeVehicleController(controller),
++            freeWorld,
++          },
++        ),
+       };
++      return probe;
+     },
+-    project: snapshot,
+-    contacts() {
+-      assertAlive();
+-      let count = 0;
+-      for (const collider of dynamicColliders)
+-        world.contactPairsWith(collider, (other) => {
+-          if (other.handle < collider.handle && other.parent() !== null) return;
+-          world.contactPair(collider, other, (manifold) => {
+-            count += manifold.numSolverContacts();
+-          });
+-        });
+-      return count;
+-    },
+-    counts() {
+-      assertAlive();
+-      return { vehicles: cars.size, bodies: world.bodies.len(), colliders: world.colliders.len() };
+-    },
+-    dispose() {
+-      if (disposed) return;
+-      assertMutable();
+-      disposed = true;
+-      collisionRegistry.dispose();
+-      namedBoxes.clear();
+-      registry.dispose();
+-      for (const { controller } of cars.values()) world.removeVehicleController(controller);
+-      cars.clear();
+-      dynamicColliders.length = 0;
+-      world.free();
+-      activeWorlds--;
+-    },
+-  };
+-  return probe;
++  );
+ }
+diff --git a/tests/browser/wheel-dynamics/main.ts b/tests/browser/wheel-dynamics/main.ts
+index a5971f0..4051997 100644
+--- a/tests/browser/wheel-dynamics/main.ts
++++ b/tests/browser/wheel-dynamics/main.ts
+@@ -10,7 +10,12 @@ import { projectPhysicalWheels } from '../../../src/rendering';
+ import { createRapierProbe } from '../../../src/vehicles/rapier';
+ import type { CarProjection } from '../../../src/vehicles';
+ import { createRapierProbe as createBefore } from '../../../Docs/Evidence/026-wheel-dynamics/before/source/src/vehicles/rapier';
+-import { createFixedTickLoop } from '../../../src/simulation/fixed-tick';
++import {
++  FIXED_DT_SECONDS,
++  MAX_STEPS_PER_FRAME,
++  OVERLOAD_DEBT_MS,
++  createFixedTickLoop,
++} from '../../../src/simulation/fixed-tick';
+ import { calibrateWheels } from '../../vehicles/wheel-dynamics-fixture';
+ 
+ declare const __WHEEL_BUILD__: { sourceHash: string; commit: string; inputs: string[] };
+@@ -26,6 +31,9 @@ async function arm(
+   current: boolean,
+   warmupSeconds: number,
+   measuredSeconds: number,
++  failureContext: { diagnostic: unknown },
++  armIndex: number,
++  pair: number,
+ ) {
+   const world = await (current ? createRapierProbe() : createBefore());
+   const inputs = new Map<string, { throttle: number; brake: number; steering: number }>();
+@@ -115,16 +123,20 @@ async function arm(
+   const spin = Quaternion.Identity(),
+     steer = Quaternion.Identity(),
+     combined = Quaternion.Identity();
++  let lastFrame: ReturnType<typeof loop.frame> | undefined;
++  let lastRafMs = 0;
+   try {
+     firstFrame = previousFrame = await raf();
+-    loop.frame(firstFrame);
++    lastFrame = loop.frame(firstFrame);
++    lastRafMs = firstFrame;
+     while (activeSeconds < warmupSeconds + measuredSeconds) {
+       const now = await raf();
++      lastRafMs = now;
+       check(document.hasFocus() && !document.hidden, 'Foreground lost');
+       activeSeconds = (now - firstFrame) / 1000;
+       measuring = activeSeconds >= warmupSeconds;
+       const start = performance.now();
+-      loop.frame(now);
++      lastFrame = loop.frame(now);
+       check(loop.getState().overloadCount === 0, 'Fixed-tick overload');
+       const projectionStart = performance.now();
+       for (const visual of visuals) {
+@@ -204,6 +216,33 @@ async function arm(
+       longTasks,
+       gpuP95Ms: null,
+     };
++  } catch (error) {
++    const state = loop.getState();
++    failureContext.diagnostic = {
++      acceptance: 'INCOMPLETE',
++      armIndex,
++      pair,
++      current,
++      phase: measuring ? 'measurement' : 'warmup',
++      warmupSeconds,
++      measuredSeconds,
++      tick: state.tick,
++      elapsedSeconds: (lastRafMs - firstFrame) / 1000,
++      rafDeltaMs: lastRafMs - previousFrame,
++      debtSeconds: state.debtSeconds,
++      status: state.status,
++      overloadCount: state.overloadCount,
++      stepsInLastFrame: lastFrame?.steps ?? null,
++      fixedDtSeconds: FIXED_DT_SECONDS,
++      maxCatchupSteps: MAX_STEPS_PER_FRAME,
++      overloadDebtMs: OVERLOAD_DEBT_MS,
++      measuredFrames: frameCount,
++      measuredTicks: tickCount,
++      longTasks: { ...longTasks },
++      scope:
++        'Actual bounded failed-arm counters; no successful metrics or performance acceptance reconstructed.',
++    };
++    throw error;
+   } finally {
+     observer?.disconnect();
+     loop.dispose();
+@@ -220,6 +259,9 @@ document.getElementById('run')!.addEventListener('click', async () => {
+   const button = document.getElementById('run') as HTMLButtonElement;
+   button.disabled = true;
+   let completedReport: unknown;
++  const runs: unknown[] = [];
++  const failureContext: { diagnostic: unknown } = { diagnostic: null };
++  let phase = 'setup';
+   try {
+     const full = (document.getElementById('duration') as HTMLSelectElement).value === 'full';
+     owned?.dispose();
+@@ -249,10 +291,22 @@ document.getElementById('run')!.addEventListener('click', async () => {
+         actualCanvas.clientHeight === 1080,
+       'CSS resolution/DPR mismatch',
+     );
+-    const runs = [];
++    phase = 'arms';
+     for (let pair = 0; pair < 5; pair++)
+       for (const current of pair % 2 ? [true, false] : [false, true])
+-        runs.push({ pair, ...(await arm(owned, current, full ? 30 : 1, full ? 120 : 3)) });
++        runs.push({
++          pair,
++          ...(await arm(
++            owned,
++            current,
++            full ? 30 : 1,
++            full ? 120 : 3,
++            failureContext,
++            runs.length,
++            pair,
++          )),
++        });
++    phase = 'calibration';
+     const calibration = [];
+     for (const classId of ['sedan', 'compact'] as const)
+       for (const surface of ['dry-asphalt', 'reduced-adhesion'] as const)
+@@ -288,6 +342,7 @@ document.getElementById('run')!.addEventListener('click', async () => {
+         256 * 1024,
+       'Evidence metadata envelope exceeds bounded 256KiB allowance',
+     );
++    phase = 'export';
+     if (full) {
+       const response = await fetch('/export', {
+         method: 'POST',
+@@ -315,6 +370,12 @@ document.getElementById('run')!.addEventListener('click', async () => {
+         foreground: document.hasFocus() && !document.hidden,
+         error: String(error),
+         completedReport,
++        failureDiagnostics: {
++          acceptance: 'INCOMPLETE',
++          phase,
++          failedArm: failureContext.diagnostic,
++          completedArms: runs,
++        },
+       }),
+     });
+   } finally {
+diff --git a/tests/vehicles/physics-fixture.ts b/tests/vehicles/physics-fixture.ts
+index a2446d3..9ea72f2 100644
+--- a/tests/vehicles/physics-fixture.ts
++++ b/tests/vehicles/physics-fixture.ts
+@@ -1,5 +1,6 @@
+ import { createRapierProbe } from '../../src/vehicles/rapier';
+ import { SEDAN } from '../../src/vehicles';
++import { setupManyContacts } from './fixture-setup';
+ import type { CarTuning, PhysicsInput, PhysicsProbe } from '../../src/vehicles';
+ 
+ export const BRAKE: PhysicsInput = Object.freeze({ throttle: 0, brake: 1, steering: 0 });
+@@ -107,20 +108,6 @@ export async function manyContacts(
+   count = 70,
+ ): Promise<{ world: PhysicsProbe; inputs: Map<string, PhysicsInput> }> {
+   const world = await createRapierProbe();
+-  const inputs = new Map<string, PhysicsInput>();
+-  for (let i = 0; i < count; i++) {
+-    const id = `car-${i}`;
+-    world.addCar(id, { x: (i % 10) * 2.2 - 10, y: 0.8, z: Math.floor(i / 10) * 4.15 });
+-    inputs.set(id, { throttle: i % 2 ? 0.65 : 1, brake: 0, steering: i % 2 ? 0.03 : -0.03 });
+-  }
+-  world.addBox({ x: 0, y: 1, z: 32 }, { x: 20, y: 1, z: 0.5 });
+-  world.addBox({ x: -12, y: 1, z: 16 }, { x: 0.5, y: 1, z: 20 });
+-  world.addBox({ x: 12, y: 1, z: 16 }, { x: 0.5, y: 1, z: 20 });
+-  for (let i = 0; i < 64; i++)
+-    world.addBox(
+-      { x: (i % 8) * 0.65 - 2.5, y: 0.35 + Math.floor(i / 8) * 0.62, z: 30 },
+-      { x: 0.3, y: 0.3, z: 0.3 },
+-      true,
+-    );
+-  return { world, inputs };
++  const fixture = setupManyContacts(world, count);
++  return { world, inputs: fixture.inputs };
+ }
+diff --git a/tests/vehicles/wheel-dynamics-fixture.ts b/tests/vehicles/wheel-dynamics-fixture.ts
+index a83f604..190e5b8 100644
+--- a/tests/vehicles/wheel-dynamics-fixture.ts
++++ b/tests/vehicles/wheel-dynamics-fixture.ts
+@@ -1,15 +1,20 @@
+ import { createRapierProbe } from '../../src/vehicles/rapier';
+-import type { VehicleClassId, RoadSurfaceId } from '../../src/vehicles';
++import type { VehicleClassId, RoadSurfaceId, PhysicsProbe } from '../../src/vehicles';
+ import { VEHICLE_CLASSES, wheelLateralSpeedsMps } from '../../src/vehicles';
++import { disposeAfterFailure } from './fixture-setup';
+ 
+ export async function calibrateWheels(
+   classId: VehicleClassId,
+   surface: RoadSurfaceId,
+   speed: number,
+   scenario: 'braking' | 'turning' | 'curb' | 'airborne',
++  evidence?: { world: (world: PhysicsProbe) => void; progress: (value: unknown) => void },
+ ) {
+   const world = await createRapierProbe(undefined, surface);
++  let primaryFailure: unknown;
++  let primaryFailed = false;
+   try {
++    evidence?.world(world);
+     world.addClassCar('car', { x: 0, y: 0.8, z: 0 }, classId);
+     if (scenario === 'curb') world.addBox({ x: 0, y: 0.09, z: 10 }, { x: 4, y: 0.09, z: 0.15 });
+     for (let tick = 0; tick < 180; tick++) world.step(new Map(), false);
+@@ -63,6 +68,7 @@ export async function calibrateWheels(
+           wheels: state.wheels,
+           wheelLateralMps,
+         });
++      evidence?.progress({ tick: tick + 1, curve });
+       if (scenario === 'braking' && state.speed < 0.1) break;
+     }
+     const final = world.project('car');
+@@ -86,7 +92,11 @@ export async function calibrateWheels(
+       final,
+       curve,
+     };
++  } catch (error) {
++    primaryFailed = true;
++    primaryFailure = error;
++    throw error;
+   } finally {
+-    world.dispose();
++    disposeAfterFailure(world, primaryFailed, primaryFailure);
+   }
+ }

@@ -1,0 +1,11 @@
+--- before/tests/browser/wheel-dynamics-v2/source09.test.mjs
++++ after/tests/browser/wheel-dynamics-v2/source09.test.mjs
+@@ -23,7 +23,7 @@
+   assert.deepEqual(writes[1].dto.failures.map((x) => x.stage), ['measurement', 'dispose', 'raw-write']);
+   await assert.rejects(failTerminal('terminal', pending, {}, writer), (error) => {
+     assert.deepEqual(error.errors, [pending, terminal]);
+-    assert.equal(error.cause, pending);
++    assert.equal(error.cause, terminal);
+     assert.equal(error.errors[0].errors[0], measurement);
+     assert.equal(error.errors[0].errors[1], disposal);
+     return true;

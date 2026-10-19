@@ -1,0 +1,321 @@
+--- before-format/tests/browser/wheel-dynamics-v2/numeric-reader.test.mjs
++++ final/tests/browser/wheel-dynamics-v2/numeric-reader.test.mjs
+@@ -31,20 +31,36 @@
+     metrics: { tick: { p95: value }, projection: { p95: value } },
+   })),
+ });
+-test('current native proposal fails closed before archive reads until exact reviewed pins exist', { skip: CURRENT_NATIVE_REFERENCE.afterSourceHash !== null }, async () => {
+-  assert.throws(() => requireCurrentPins(), /INCOMPLETE/);
+-  await assert.rejects(readCurrentNative(), /INCOMPLETE/);
+-});
++test(
++  'current native proposal fails closed before archive reads until exact reviewed pins exist',
++  { skip: CURRENT_NATIVE_REFERENCE.afterSourceHash !== null },
++  async () => {
++    assert.throws(() => requireCurrentPins(), /INCOMPLETE/);
++    await assert.rejects(readCurrentNative(), /INCOMPLETE/);
++  },
++);
+ test('historical original BEFORE cannot adopt an arbitrary current source claim', async () => {
+-  await assert.rejects(readNative('Docs/Evidence/026-wheel-dynamics/before', 'before', 'a'.repeat(64)), /Historical reference source pin/);
+-  const before = await readNative('Docs/Evidence/026-wheel-dynamics/before', 'before', BEFORE_SOURCE);
++  await assert.rejects(
++    readNative('Docs/Evidence/026-wheel-dynamics/before', 'before', 'a'.repeat(64)),
++    /Historical reference source pin/,
++  );
++  const before = await readNative(
++    'Docs/Evidence/026-wheel-dynamics/before',
++    'before',
++    BEFORE_SOURCE,
++  );
+   assert.equal(before.sourceHash, BEFORE_SOURCE);
+ });
+ test('complete production manifest requires native/calibration bytes, including private cleanup imports', () => {
+-  const browser = [{ path: 'src/vehicles/rapier/private-cleanup.ts', sha256: 'actual-reviewed-by-reader' }];
++  const browser = [
++    { path: 'src/vehicles/rapier/private-cleanup.ts', sha256: 'actual-reviewed-by-reader' },
++  ];
+   verifyProductionManifests(browser, browser, browser);
+   assert.throws(() => verifyProductionManifests(browser, [], browser), /Complete production/);
+-  assert.throws(() => verifyProductionManifests(browser, browser, [{ ...browser[0], sha256: 'historical' }]), /bytes differ/);
++  assert.throws(
++    () => verifyProductionManifests(browser, browser, [{ ...browser[0], sha256: 'historical' }]),
++    /bytes differ/,
++  );
+   assert.throws(() => verifyProductionManifests([], browser, browser), /Empty production/);
+ });
+ test('fresh calibration preserves all28 unique scenarios and original material/slip/recontact gates', async () => {
+@@ -52,23 +68,56 @@
+   validateNativeCalibration(calibration, calibration);
+   for (const change of [
+     (value) => value.runs.pop(),
+-    (value) => { value.runs[1] = value.runs[0]; },
+-    (value) => { value.runs.find((r) => r.scenario === 'braking' && r.surface === 'reduced-adhesion').brakingDistanceM = 0; },
+-    (value) => { value.runs.find((r) => r.scenario === 'airborne').maxContacts = 3; },
+-    (value) => { value.runs[0].geometricRadiusM = 18; },
+-    (value) => { value.runs[0].steeringRadians += 0.01; },
+-    (value) => { delete value.runs[0].curve; },
+-    (value) => { delete value.runs.find((r) => r.scenario === 'turning').curve; },
+-    (value) => { value.runs[0].curve[0].wheels.pop(); },
+-    (value) => { value.runs.find((r) => r.scenario === 'curb').curve[0].wheels = []; },
+-    (value) => { value.runs.find((r) => r.scenario === 'airborne').curve[0].wheels = []; },
+-    (value) => { value.runs[0].curve[0].speedMps = Infinity; },
+-    (value) => { value.runs[0].maxWheelLateralMps = NaN; },
+-    (value) => { value.runs[0].ticks = 0; },
+-    (value) => { value.runs[0].curve[0].tick = 0; },
+-    (value) => { value.runs[0].final.position.x += 0.00001; },
++    (value) => {
++      value.runs[1] = value.runs[0];
++    },
++    (value) => {
++      value.runs.find(
++        (r) => r.scenario === 'braking' && r.surface === 'reduced-adhesion',
++      ).brakingDistanceM = 0;
++    },
++    (value) => {
++      value.runs.find((r) => r.scenario === 'airborne').maxContacts = 3;
++    },
++    (value) => {
++      value.runs[0].geometricRadiusM = 18;
++    },
++    (value) => {
++      value.runs[0].steeringRadians += 0.01;
++    },
++    (value) => {
++      delete value.runs[0].curve;
++    },
++    (value) => {
++      delete value.runs.find((r) => r.scenario === 'turning').curve;
++    },
++    (value) => {
++      value.runs[0].curve[0].wheels.pop();
++    },
++    (value) => {
++      value.runs.find((r) => r.scenario === 'curb').curve[0].wheels = [];
++    },
++    (value) => {
++      value.runs.find((r) => r.scenario === 'airborne').curve[0].wheels = [];
++    },
++    (value) => {
++      value.runs[0].curve[0].speedMps = Infinity;
++    },
++    (value) => {
++      value.runs[0].maxWheelLateralMps = NaN;
++    },
++    (value) => {
++      value.runs[0].ticks = 0;
++    },
++    (value) => {
++      value.runs[0].curve[0].tick = 0;
++    },
++    (value) => {
++      value.runs[0].final.position.x += 0.00001;
++    },
+   ]) {
+-    const changed = structuredClone(calibration); change(changed);
++    const changed = structuredClone(calibration);
++    change(changed);
+     assert.throws(() => validateNativeCalibration(changed, calibration));
+   }
+ });
+@@ -296,55 +345,167 @@
+ test('browser eight deterministic results reject each hostile field and full wrong shape', async () => {
+   const fixture = await numericFixture();
+   const mutations = [
+-    ['null steering', (r) => { r.steeringRadians = null; }],
+-    ['zero lateral', (r) => { r.maxWheelLateralMps = 0; }],
+-    ['null curve speed', (r) => { r.curve[0].speedMps = null; }],
+-    ['empty final wheels', (r) => { r.final.wheels = []; }],
+-    ['three settled wheels', (r) => { r.settled.wheels.pop(); }],
+-    ['empty sampled wheels', (r) => { r.curve[0].wheels = []; }],
+-    ['missing wheel lateral', (r) => { r.curve[0].wheelLateralMps.pop(); }],
+-    ['nonfinite suspension', (r) => { r.final.wheels[0].suspensionLengthM = Infinity; }],
+-    ['NaN lateral', (r) => { r.maxWheelLateralMps = NaN; }],
+-    ['missing curve', (r) => { delete r.curve; }],
+-    ['wrong class', (r) => { r.classId = 'compact'; }],
+-    ['wrong scenario', (r) => { r.scenario = 'airborne'; }],
+-    ['wrong speed', (r) => { r.speedMps = 8; }],
+-    ['wrong material', (r) => { r.mechanics.surface.id = 'unknown'; }],
+-    ['wrong sampled tick', (r) => { r.curve[0].tick = 0; }],
+-    ['wrong ticks', (r) => { r.ticks += 1; }],
+-    ['tiny finite pose change', (r) => { r.final.position.x += 0.00001; }],
+-    ['extra deterministic field', (r) => { r.unapproved = true; }],
+-    ['missing deterministic boolean', (r) => { delete r.stopped; }],
++    [
++      'null steering',
++      (r) => {
++        r.steeringRadians = null;
++      },
++    ],
++    [
++      'zero lateral',
++      (r) => {
++        r.maxWheelLateralMps = 0;
++      },
++    ],
++    [
++      'null curve speed',
++      (r) => {
++        r.curve[0].speedMps = null;
++      },
++    ],
++    [
++      'empty final wheels',
++      (r) => {
++        r.final.wheels = [];
++      },
++    ],
++    [
++      'three settled wheels',
++      (r) => {
++        r.settled.wheels.pop();
++      },
++    ],
++    [
++      'empty sampled wheels',
++      (r) => {
++        r.curve[0].wheels = [];
++      },
++    ],
++    [
++      'missing wheel lateral',
++      (r) => {
++        r.curve[0].wheelLateralMps.pop();
++      },
++    ],
++    [
++      'nonfinite suspension',
++      (r) => {
++        r.final.wheels[0].suspensionLengthM = Infinity;
++      },
++    ],
++    [
++      'NaN lateral',
++      (r) => {
++        r.maxWheelLateralMps = NaN;
++      },
++    ],
++    [
++      'missing curve',
++      (r) => {
++        delete r.curve;
++      },
++    ],
++    [
++      'wrong class',
++      (r) => {
++        r.classId = 'compact';
++      },
++    ],
++    [
++      'wrong scenario',
++      (r) => {
++        r.scenario = 'airborne';
++      },
++    ],
++    [
++      'wrong speed',
++      (r) => {
++        r.speedMps = 8;
++      },
++    ],
++    [
++      'wrong material',
++      (r) => {
++        r.mechanics.surface.id = 'unknown';
++      },
++    ],
++    [
++      'wrong sampled tick',
++      (r) => {
++        r.curve[0].tick = 0;
++      },
++    ],
++    [
++      'wrong ticks',
++      (r) => {
++        r.ticks += 1;
++      },
++    ],
++    [
++      'tiny finite pose change',
++      (r) => {
++        r.final.position.x += 0.00001;
++      },
++    ],
++    [
++      'extra deterministic field',
++      (r) => {
++        r.unapproved = true;
++      },
++    ],
++    [
++      'missing deterministic boolean',
++      (r) => {
++        delete r.stopped;
++      },
++    ],
+   ];
+   for (const [label, mutate] of mutations) {
+     const changed = structuredClone(fixture.capture);
+-    const rowIndex = label === 'zero lateral'
+-      ? fixture.capture.terminal.dto.report.calibration.findIndex(
+-        (row) => row.scenario === 'turning' && row.speedMps === 20 && row.maxWheelLateralMps !== 0,
+-      )
+-      : 0;
++    const rowIndex =
++      label === 'zero lateral'
++        ? fixture.capture.terminal.dto.report.calibration.findIndex(
++            (row) =>
++              row.scenario === 'turning' && row.speedMps === 20 && row.maxWheelLateralMps !== 0,
++          )
++        : 0;
+     assert.ok(rowIndex >= 0);
+     const original = fixture.capture.terminal.dto.report.calibration[rowIndex];
+     const row = changed.terminal.dto.report.calibration[rowIndex];
+     if (label === 'zero lateral') assert.notEqual(original.maxWheelLateralMps, 0);
+     mutate(row);
+-    if (label === 'zero lateral') assert.notEqual(row.maxWheelLateralMps, original.maxWheelLateralMps);
++    if (label === 'zero lateral')
++      assert.notEqual(row.maxWheelLateralMps, original.maxWheelLateralMps);
+     assert.throws(() => verifyCaptureNumbers(changed, fixture.budgets), undefined, label);
+   }
+   const wrong = structuredClone(fixture.capture);
+   // Shape satisfied the former superficial checks; no original output is used for its numbers.
+   wrong.terminal.dto.report.calibration = ['sedan', 'compact'].flatMap((classId) =>
+     ['dry-asphalt', 'reduced-adhesion'].flatMap((surface) =>
+-      ['braking', 'turning'].map((scenario) => ({ classId, surface, scenario, speedMps: 20,
+-        geometricRadiusM: 17, steeringRadians: null, mechanics: { surface: { id: surface },
+-          grip: surface === 'dry-asphalt' ? 1 : 0.1 }, maxWheelLateralMps: 0,
+-        brakingDistanceM: surface === 'dry-asphalt' ? 1 : 2, stopped: true,
+-        final: { wheels: [] }, curve: [{ speedMps: null,
+-          wheels: Array.from({ length: 4 }, () => ({ suspensionLengthM: 0 })) }],
++      ['braking', 'turning'].map((scenario) => ({
++        classId,
++        surface,
++        scenario,
++        speedMps: 20,
++        geometricRadiusM: 17,
++        steeringRadians: null,
++        mechanics: { surface: { id: surface }, grip: surface === 'dry-asphalt' ? 1 : 0.1 },
++        maxWheelLateralMps: 0,
++        brakingDistanceM: surface === 'dry-asphalt' ? 1 : 2,
++        stopped: true,
++        final: { wheels: [] },
++        curve: [
++          { speedMps: null, wheels: Array.from({ length: 4 }, () => ({ suspensionLengthM: 0 })) },
++        ],
+         lifetime: structuredClone(fixture.capture.terminal.dto.report.calibration[0].lifetime),
+-        readbacks: structuredClone(fixture.capture.terminal.dto.report.calibration[0].readbacks) }))));
++        readbacks: structuredClone(fixture.capture.terminal.dto.report.calibration[0].readbacks),
++      })),
++    ),
++  );
+   assert.throws(() => verifyCaptureNumbers(wrong, fixture.budgets));
+   const duplicate = structuredClone(fixture.capture);
+-  duplicate.terminal.dto.report.calibration[1] = structuredClone(duplicate.terminal.dto.report.calibration[0]);
++  duplicate.terminal.dto.report.calibration[1] = structuredClone(
++    duplicate.terminal.dto.report.calibration[0],
++  );
+   assert.throws(() => verifyCaptureNumbers(duplicate, fixture.budgets));
+ });

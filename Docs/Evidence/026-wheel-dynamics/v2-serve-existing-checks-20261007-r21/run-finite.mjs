@@ -1,0 +1,10 @@
+import { paths, wx, run, inventory } from './runner-v3.mjs';
+wx('runner-native-locator-failure.json',{command:'node .../runner-v2.mjs initial',exit:1,stdout:'',stderr:'TypeError [ERR_INVALID_ARG_TYPE]: path Received undefined at inventory runner-v2.mjs:32:2',cause:'Harness assumed archive binding contained native.resolvedPath. Original binding intentionally contains only bytes/hash; locator read from pinned current native report instead.',checksStarted:false});
+wx('preservation-before.json',inventory());
+for(let i=0;i<paths.length;i++) if(!run('syntax-first-'+i,['--check',paths[i]])) process.exit(1);
+if(!run('tests-first',['--test','--test-concurrency=1',paths[2]])) process.exit(1);
+const lint = `import { ESLint } from 'eslint'; import config from './eslint.config.js'; const eslint=new ESLint({overrideConfig:[{...config[1],files:${JSON.stringify(paths)}}]}); const results=await eslint.lintFiles(${JSON.stringify(paths)}); console.log((await eslint.loadFormatter('stylish')).format(results)); const totals=results.reduce((t,r)=>({errors:t.errors+r.errorCount,warnings:t.warnings+r.warningCount}),{errors:0,warnings:0}); console.log(JSON.stringify({files:results.map(r=>r.filePath),...totals,rules:'Existing JS recommended + Node globals; only scoped file selector added'})); process.exitCode=totals.errors||totals.warnings?1:0;`;
+wx('lint-expression.txt',lint);
+if(!run('lint-first',['--input-type=module','-e',lint])) process.exit(1);
+if(!run('format-first',['node_modules/prettier/bin/prettier.cjs','--check',...paths])) process.exit(2);
+if(!run('architecture',['scripts/verify-architecture.mjs'])) process.exit(1);

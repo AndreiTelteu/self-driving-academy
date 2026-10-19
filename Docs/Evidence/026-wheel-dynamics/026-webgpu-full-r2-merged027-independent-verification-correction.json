@@ -1,0 +1,50 @@
+{
+  "status": "CORRECTED_FAILED_NO_HARDWARE_ACCEPTANCE",
+  "capturedAtUtc": "2026-10-06T00:14:45.9684580Z",
+  "supersedesConclusion": "TIMEOUT_NO_TERMINAL_EXPORT in the original r2 independent verification",
+  "reason": "Original file filter compared LastWriteTimeUtc to a DateTime literal parsed into local time, omitting actual failure exports. This correction uses the exports themselves and their explicit UTC createdAt strings.",
+  "hardwareAccepted": false,
+  "driveWebgpuPresent": false,
+  "failures": [
+    {
+      "path": "Docs\\Evidence\\026-wheel-dynamics\\failed-1791244660268-WEBGPU.json",
+      "createdAt": "2026-10-05T23:57:40.185Z",
+      "renderer": "WEBGPU",
+      "foreground": true,
+      "error": "Error: Fixed-tick overload",
+      "sourceHash": "212c919b391053f652942f40120b38258305adeb49b964ae7956d39665c2785e",
+      "artifactHash": "f766556a432f1830ca7b5ab71e3cae1fe9872e8452fac0cf4a7fdba13f8628fe",
+      "sha256": "7974539a5a729e7dceb9351ed24696c2df25f29fc71dc3392e66dac3534be919",
+      "numericReportPresent": false
+    },
+    {
+      "path": "Docs\\Evidence\\026-wheel-dynamics\\failed-1791244728221-WEBGPU.json",
+      "createdAt": "2026-10-05T23:58:48.216Z",
+      "renderer": "WEBGPU",
+      "foreground": false,
+      "error": "Error: Foreground lost",
+      "sourceHash": "212c919b391053f652942f40120b38258305adeb49b964ae7956d39665c2785e",
+      "artifactHash": "f766556a432f1830ca7b5ab71e3cae1fe9872e8452fac0cf4a7fdba13f8628fe",
+      "sha256": "41f2c76ac02c136d42c290901fba6108861fac3680382d7136901e5083caff3c",
+      "numericReportPresent": false
+    },
+    {
+      "path": "Docs\\Evidence\\026-wheel-dynamics\\failed-1791245586571-WEBGL2.json",
+      "createdAt": "2026-10-06T00:13:06.568Z",
+      "renderer": "WEBGL2",
+      "foreground": false,
+      "error": "Error: Foreground lost",
+      "sourceHash": "212c919b391053f652942f40120b38258305adeb49b964ae7956d39665c2785e",
+      "artifactHash": "f766556a432f1830ca7b5ab71e3cae1fe9872e8452fac0cf4a7fdba13f8628fe",
+      "sha256": "74414c114c464011b32e7e7c6d924634874b851a69a2ad6c35067961c1f46f97",
+      "numericReportPresent": false
+    }
+  ],
+  "conclusion": "The parent-started WebGPU round exported Fixed-tick overload at 23:57:40 UTC. A subsequent WebGPU attempt exported Foreground lost at 23:58:48 UTC. WebGL2 exported Foreground lost at 00:13:06 UTC. No accepted numeric backend report exists.",
+  "originalReportPreserved": true,
+  "limitations": [
+    "Failure envelopes do not include successful full-arm metrics; no budget acceptance or calibration acceptance can be concluded.",
+    "Child did not launch any UI attempt, including WebGL2.",
+    "Current user-reported new start needs current UI/backend confirmation; historical failures are not automatically attributed to that new attempt."
+  ]
+}

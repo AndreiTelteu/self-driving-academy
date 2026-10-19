@@ -30,6 +30,34 @@ export class RenderingInitializationError extends AggregateError {
   }
 }
 
+/** Internal cleanup aggregate: only our owner lists are flattened, never foreign errors. */
+export class OwnedCleanupError extends AggregateError {
+  constructor(errors: unknown[]) {
+    super(errors, 'Owned rendering resources could not all be released');
+    this.name = 'OwnedCleanupError';
+  }
+}
+
+/** The fixed owner list bounds retained causes; fence before any reentrant release. */
+export function releaseOwnersOnce(owners: readonly (() => void)[]): () => void {
+  let released = false;
+  return () => {
+    if (released) return;
+    released = true;
+    const errors: unknown[] = [];
+    for (const release of owners) {
+      try {
+        release();
+      } catch (error: unknown) {
+        if (error instanceof OwnedCleanupError) errors.push(...error.errors);
+        else errors.push(error);
+      }
+    }
+    if (errors.length === 1) throw errors[0];
+    if (errors.length > 1) throw new OwnedCleanupError(errors);
+  };
+}
+
 /** Pure policy: ownership is acquired before each asynchronous initialization. */
 export async function initializeBackend<
   Canvas,
@@ -56,22 +84,14 @@ export async function initializeBackend<
     let engine: Engine | undefined;
     let scene: Scene | undefined;
     let ownsCanvas = false;
-    let released = false;
-    const dispose = (): void => {
-      if (released) return;
-      released = true;
-      // A cleanup exception must not prevent cleanup of the remaining owners.
-      try {
-        scene?.dispose();
-      } finally {
-        try {
-          engine?.dispose();
-        } finally {
-          if (ownsCanvas) driver.releaseCanvas(canvasForAttempt);
-        }
-      }
-    };
     let canvasForAttempt = canvas;
+    const dispose = releaseOwnersOnce([
+      () => scene?.dispose(),
+      () => engine?.dispose(),
+      () => {
+        if (ownsCanvas) driver.releaseCanvas(canvasForAttempt);
+      },
+    ]);
     try {
       canvas = driver.freshCanvas(canvas);
       ownsCanvas = true;
@@ -86,7 +106,8 @@ export async function initializeBackend<
       try {
         dispose();
       } catch (cleanupError: unknown) {
-        errors.push(cleanupError);
+        if (cleanupError instanceof OwnedCleanupError) errors.push(...cleanupError.errors);
+        else errors.push(cleanupError);
       }
     }
   }

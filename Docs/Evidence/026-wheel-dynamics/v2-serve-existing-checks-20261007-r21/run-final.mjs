@@ -1,0 +1,30 @@
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+import { spawnSync } from 'node:child_process';
+import { paths,wx,run,inventory,digest } from './runner-v3.mjs';
+const out='Docs/Evidence/026-wheel-dynamics/v2-serve-existing-checks-20261007-r21';
+for(let i=0;i<paths.length;i++) {
+ const args=['diff','--no-index','--',`${out}/before-${i}.mjs`,paths[i]];
+ const start=new Date().toISOString(); const diff=spawnSync('git',args,{encoding:'utf8'});
+ wx(`format-diff-${i}.txt`,diff.stdout??''); wx(`format-diff-${i}.stderr.txt`,diff.stderr??''); wx(`format-diff-${i}.json`,{command:['git',...args],start,end:new Date().toISOString(),exit:diff.status,meaning:'Exit 1 expected for diff; read-only git operation'});
+ if(diff.status!==1 && diff.status!==0) throw Error('Unable to record format diff');
+}
+for(let i=0;i<paths.length;i++) if(!run('syntax-final-'+i,['--check',paths[i]])) process.exit(1);
+if(!run('tests-final',['--test','--test-concurrency=1',paths[2]])) process.exit(1);
+if(!run('lint-final',['--input-type=module','-e',readFileSync(`${out}/lint-expression.txt`,'utf8')])) process.exit(1);
+if(!run('format-final',['F:/Sites/self-driving-academy/node_modules/prettier/bin/prettier.cjs','--check',...paths])) process.exit(1);
+if(!run('architecture',['scripts/verify-architecture.mjs'])) process.exit(1);
+const pins=JSON.parse(readFileSync(`${out}/source21-pins.json`));
+const proofPath=resolve(pins.proofRoot,'service-proof.json');
+if(digest(readFileSync(proofPath))!==pins.serviceProofSha256) throw Error('Caller proof drift');
+const args=[paths[1],'--check-only',pins.exactManifestPath,pins.serviceProofSha256];
+if(!run('check-only',args)) process.exit(1);
+const ready=JSON.parse(readFileSync(`${out}/check-only.stdout.txt`,'utf8'));
+if(ready.state!=='EXISTING_BUILD_READ_ONLY_READY'||ready.buildUUID!=='66872ce5-696c-4c3f-9e6d-b849d38f0ee4'||ready.serviceProofHash!==pins.serviceProofSha256||ready.ledgerCreated!==false||ready.listenerCreated!==false) throw Error('Wrong readiness');
+const before=JSON.parse(readFileSync(`${out}/preservation-before.json`));
+const after=inventory();
+wx('preservation-after.json',after);
+if(JSON.stringify(before)!==JSON.stringify(after)) throw Error('Preserved source/archive/captures/history bytes changed');
+const result={state:'FINITE_CHECKS_AND_CHECK_ONLY_PASS',completedAt:new Date().toISOString(),workdir:resolve('.').replaceAll('\\','/'),buildUUID:ready.buildUUID,proofPath:proofPath.replaceAll('\\','/'),serviceProofSha256:pins.serviceProofSha256,exactCheckOnlyCommand:['node',...args],ready,checks:{syntax:3,pureFaultTests:7,lint:'PASS zero errors/warnings using existing JS rules',prettier:'PASS after authorized format-only correction; first failures retained',architecture:'PASS',typescript:'Not rerun: plain mjs changes only'},preservation:{state:'BYTE_EXACT_PASS',files:before.length,bytes:before.reduce((n,x)=>n+x.bytes,0),inventorySha256:digest(Buffer.from(JSON.stringify(before))),includes:'Original105 live sources, live build, entire original capture namespace/R19 archive, R11–20 history/SOURCE10/SOURCE20, historical/current native and current calibration, installed native'},sourceRevision:'Only existing Prettier format plus PROOF_ROOT directory source20 to source21; verified byte-for-byte against format(original)',reservedPort:{port:5220,touchedByThisTask:false,listenerProbePerformed:false},prohibitedActionsPerformed:[],acceptance:'UNVERIFIED; no live Chrome/hardware/Done claim; stopped after check-only'};
+wx('verification.json',result);
+console.log(JSON.stringify(result,null,2));

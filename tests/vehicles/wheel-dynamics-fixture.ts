@@ -1,15 +1,20 @@
 import { createRapierProbe } from '../../src/vehicles/rapier';
-import type { VehicleClassId, RoadSurfaceId } from '../../src/vehicles';
+import type { VehicleClassId, RoadSurfaceId, PhysicsProbe } from '../../src/vehicles';
 import { VEHICLE_CLASSES, wheelLateralSpeedsMps } from '../../src/vehicles';
+import { disposeAfterFailure } from './fixture-setup';
 
 export async function calibrateWheels(
   classId: VehicleClassId,
   surface: RoadSurfaceId,
   speed: number,
   scenario: 'braking' | 'turning' | 'curb' | 'airborne',
+  evidence?: { world: (world: PhysicsProbe) => void; progress: (value: unknown) => void },
 ) {
   const world = await createRapierProbe(undefined, surface);
+  let primaryFailure: unknown;
+  let primaryFailed = false;
   try {
+    evidence?.world(world);
     world.addClassCar('car', { x: 0, y: 0.8, z: 0 }, classId);
     if (scenario === 'curb') world.addBox({ x: 0, y: 0.09, z: 10 }, { x: 4, y: 0.09, z: 0.15 });
     for (let tick = 0; tick < 180; tick++) world.step(new Map(), false);
@@ -63,6 +68,7 @@ export async function calibrateWheels(
           wheels: state.wheels,
           wheelLateralMps,
         });
+      evidence?.progress({ tick: tick + 1, curve });
       if (scenario === 'braking' && state.speed < 0.1) break;
     }
     const final = world.project('car');
@@ -86,7 +92,11 @@ export async function calibrateWheels(
       final,
       curve,
     };
+  } catch (error) {
+    primaryFailed = true;
+    primaryFailure = error;
+    throw error;
   } finally {
-    world.dispose();
+    disposeAfterFailure(world, primaryFailed, primaryFailure);
   }
 }

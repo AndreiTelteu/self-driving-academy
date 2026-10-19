@@ -1,0 +1,97 @@
+{
+  "at": "2026-10-07T02:20:54.785Z",
+  "workdir": "F:/Sites/self-driving-academy/.worktrees/wheel-dynamics-01",
+  "executable": {
+    "path": "C:/Program Files/nodejs/node.exe",
+    "bytes": 93580104,
+    "sha256": "ba4e6d110e8c1592a1ecd390f6b05f3da124b13871a5be62b341a07a853c6c32"
+  },
+  "tools": [
+    {
+      "path": "F:/Sites/self-driving-academy/node_modules/typescript/bin/tsc",
+      "bytes": 44,
+      "sha256": "2219f428a7e55aaf1f7ad85b9b0f0cf5078aeb76ccc9a7c6036c92d48f492ffd"
+    },
+    {
+      "path": "F:/Sites/self-driving-academy/node_modules/eslint/bin/eslint.js",
+      "bytes": 6028,
+      "sha256": "bb07a179294caee1175397035fef38347782cb8fbf00356ca8c6fd2c87a989fa"
+    },
+    {
+      "path": "F:/Sites/self-driving-academy/node_modules/prettier/bin/prettier.cjs",
+      "bytes": 2628,
+      "sha256": "6e922134a3c76fd4de202959bb6aef50bde0c994148075003a15569b7197906e"
+    }
+  ],
+  "commands": {
+    "pure": [
+      "--import",
+      "./scripts/register-typescript.mjs",
+      "--test",
+      "--test-concurrency=1",
+      "tests/rendering/backend.test.ts",
+      "tests/rendering/backend-ownership.test.ts",
+      "tests/vehicles/world-ownership.test.ts",
+      "tests/vehicles/probe-cleanup.test.ts"
+    ],
+    "types-main": [
+      "F:/Sites/self-driving-academy/node_modules/typescript/bin/tsc",
+      "--noEmit",
+      "-p",
+      "tsconfig.json"
+    ],
+    "types-tests": [
+      "F:/Sites/self-driving-academy/node_modules/typescript/bin/tsc",
+      "--noEmit",
+      "-p",
+      "tsconfig.tests.json"
+    ],
+    "architecture": [
+      "scripts/verify-architecture.mjs"
+    ],
+    "lint": [
+      "F:/Sites/self-driving-academy/node_modules/eslint/bin/eslint.js",
+      "src/rendering/babylon/backend.ts",
+      "src/rendering/babylon/partial-cleanup.ts",
+      "src/rendering/backend-policy.ts",
+      "src/vehicles/rapier/index.ts",
+      "src/vehicles/rapier/probe-cleanup.ts",
+      "src/vehicles/rapier/world-ownership.ts",
+      "tests/rendering/backend-ownership.test.ts",
+      "tests/vehicles/probe-cleanup.test.ts",
+      "tests/vehicles/rapier-factory-ownership.test.ts",
+      "tests/vehicles/world-ownership.test.ts",
+      "--max-warnings",
+      "0"
+    ],
+    "format": [
+      "F:/Sites/self-driving-academy/node_modules/prettier/bin/prettier.cjs",
+      "--check",
+      "src/rendering/babylon/backend.ts",
+      "src/rendering/babylon/partial-cleanup.ts",
+      "src/rendering/backend-policy.ts",
+      "src/vehicles/rapier/index.ts",
+      "src/vehicles/rapier/probe-cleanup.ts",
+      "src/vehicles/rapier/world-ownership.ts",
+      "tests/rendering/backend-ownership.test.ts",
+      "tests/vehicles/probe-cleanup.test.ts",
+      "tests/vehicles/rapier-factory-ownership.test.ts",
+      "tests/vehicles/world-ownership.test.ts"
+    ],
+    "format-write": [
+      "F:/Sites/self-driving-academy/node_modules/prettier/bin/prettier.cjs",
+      "--write",
+      "src/rendering/babylon/backend.ts",
+      "src/rendering/babylon/partial-cleanup.ts",
+      "src/rendering/backend-policy.ts",
+      "src/vehicles/rapier/index.ts",
+      "src/vehicles/rapier/probe-cleanup.ts",
+      "src/vehicles/rapier/world-ownership.ts",
+      "tests/rendering/backend-ownership.test.ts",
+      "tests/vehicles/probe-cleanup.test.ts",
+      "tests/vehicles/rapier-factory-ownership.test.ts",
+      "tests/vehicles/world-ownership.test.ts"
+    ]
+  },
+  "execution": "spawnSync, explicit cwd, shell false, 60s timeout, raw stdout/stderr buffers; sequential CPU static/pure grant only"
+}

@@ -11,6 +11,7 @@ import glslangWasm from '@babylonjs/core/assets/glslang/glslang.wasm?url';
 import twgslJs from '@babylonjs/core/assets/twgsl/twgsl.js?url';
 import twgslWasm from '@babylonjs/core/assets/twgsl/twgsl.wasm?url';
 import { initializeBackend, type BackendPreference, type RendererKind } from '../backend-policy';
+import { ownPartialWebGPUCleanup, releaseOwnedCanvas } from './partial-cleanup';
 
 export interface RenderingBackend {
   readonly rendererKind: RendererKind;
@@ -50,40 +51,25 @@ export async function createRenderingBackend(
             glslangOptions: { jsPath: glslangJs, wasmPath: glslangWasm },
             twgslOptions: { jsPath: twgslJs, wasmPath: twgslWasm },
           });
+          const releasePartial = ownPartialWebGPUCleanup(
+            engine as unknown as Parameters<typeof ownPartialWebGPUCleanup>[0],
+            () => _CommonDispose(engine, target),
+            () => AbstractEngine.prototype.dispose.call(engine),
+          );
+          let released = false;
           const owned: OwnedEngine = {
             engine,
             initialized: false,
             dispose: () => {
+              if (released) return;
+              released = true;
               if (owned.initialized) {
                 engine.dispose();
                 return;
               }
               // 9.29 dispose dereferences helpers absent after requestAdapter/requestDevice failure.
               // Partial initialization uses the common/base cleanup, plus every acquired GPU owner.
-              const partial = engine as unknown as {
-                _isDisposed: boolean;
-                _timestampQuery?: { dispose(): void };
-                _textureHelper?: { destroyDeferredTextures(): void };
-                _bufferManager?: { destroyDeferredBuffers(): void };
-                _mainTexture?: { destroy(): void };
-                _depthTexture?: { destroy(): void };
-                _device?: { destroy(): void };
-              };
-              partial._isDisposed = true;
-              try {
-                partial._timestampQuery?.dispose();
-                partial._mainTexture?.destroy();
-                partial._depthTexture?.destroy();
-                partial._textureHelper?.destroyDeferredTextures();
-                partial._bufferManager?.destroyDeferredBuffers();
-              } finally {
-                try {
-                  partial._device?.destroy();
-                } finally {
-                  _CommonDispose(engine, target);
-                  AbstractEngine.prototype.dispose.call(engine);
-                }
-              }
+              releasePartial();
             },
           };
           return owned;
@@ -124,9 +110,8 @@ export async function createRenderingBackend(
       releaseCanvas: (target) => {
         // Engine.dispose does not explicitly lose a WebGL context. Release this owned context.
         const gl = contexts.get(target);
-        gl?.getExtension('WEBGL_lose_context')?.loseContext();
-        target.width = 0;
-        target.height = 0;
+        contexts.delete(target);
+        releaseOwnedCanvas(target, gl);
       },
     },
   );

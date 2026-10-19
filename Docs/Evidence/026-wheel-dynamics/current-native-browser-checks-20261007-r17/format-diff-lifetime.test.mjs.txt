@@ -1,0 +1,173 @@
+diff --git "a/F:\\Sites\\self-driving-academy\\.worktrees\\wheel-dynamics-01\\Docs\\Evidence\\026-wheel-dynamics\\current-native-browser-checks-20261007-r17\\format-before-lifetime.test.mjs" "b/F:\\Sites\\self-driving-academy\\.worktrees\\wheel-dynamics-01\\Docs\\Evidence\\026-wheel-dynamics\\current-native-browser-checks-20261007-r17\\format-after-lifetime.test.mjs"
+index 5905c5b..36c9a7a 100644
+--- "a/F:\\Sites\\self-driving-academy\\.worktrees\\wheel-dynamics-01\\Docs\\Evidence\\026-wheel-dynamics\\current-native-browser-checks-20261007-r17\\format-before-lifetime.test.mjs"
++++ "b/F:\\Sites\\self-driving-academy\\.worktrees\\wheel-dynamics-01\\Docs\\Evidence\\026-wheel-dynamics\\current-native-browser-checks-20261007-r17\\format-after-lifetime.test.mjs"
+@@ -6,29 +6,57 @@ import { CaptureLifetime, runOwned } from './lifetime.mjs';
+ function adverseValues() {
+   const hostile = {};
+   for (const key of ['message', 'toString', 'valueOf', 'toJSON', Symbol.toPrimitive])
+-    Object.defineProperty(hostile, key, { get() { throw new Error('must not read getter'); } });
+-  const proxy = new Proxy({}, {
+-    get() { throw new Error('must not read proxy'); },
+-    getOwnPropertyDescriptor() { throw new Error('descriptor trap'); },
+-  });
++    Object.defineProperty(hostile, key, {
++      get() {
++        throw new Error('must not read getter');
++      },
++    });
++  const proxy = new Proxy(
++    {},
++    {
++      get() {
++        throw new Error('must not read proxy');
++      },
++      getOwnPropertyDescriptor() {
++        throw new Error('descriptor trap');
++      },
++    },
++  );
+   return [Object.create(null), undefined, false, null, hostile, proxy];
+ }
+ 
+ test('adverse thrown values cannot interrupt remaining owners/readbacks; diagnostic clock is nullable', async () => {
+   for (const value of adverseValues()) {
+-    const f = fixture(), calls = [];
+-    f.life.own('later', () => { calls.push('later'); });
+-    f.life.own('bad', () => { calls.push('bad'); throw value; });
+-    f.life.readback('bad', () => { calls.push('bad-read'); throw value; });
+-    f.life.readback('later', () => { calls.push('later-read'); return 0; });
+-    f.life.ports.now = () => { throw value; };
++    const f = fixture(),
++      calls = [];
++    f.life.own('later', () => {
++      calls.push('later');
++    });
++    f.life.own('bad', () => {
++      calls.push('bad');
++      throw value;
++    });
++    f.life.readback('bad', () => {
++      calls.push('bad-read');
++      throw value;
++    });
++    f.life.readback('later', () => {
++      calls.push('later-read');
++      return 0;
++    });
++    f.life.ports.now = () => {
++      throw value;
++    };
+     const teardown = f.life.teardown();
+     assert.equal(f.life.teardown(), teardown);
+     assert.deepEqual(await teardown, { later: 0 });
+     await f.life.teardown();
+     assert.deepEqual(calls, ['bad', 'later', 'bad-read', 'later-read']);
+     assert.equal(f.life.failed, true);
+-    assert.deepEqual(f.life.causes.map(({ stage }) => stage), ['dispose:bad', 'readback:bad']);
++    assert.deepEqual(
++      f.life.causes.map(({ stage }) => stage),
++      ['dispose:bad', 'readback:bad'],
++    );
+     assert(f.life.causes.every(({ at }) => at === null));
+     const snapshot = f.life.snapshot();
+     assert.deepEqual(JSON.parse(JSON.stringify(snapshot.causes)), snapshot.causes);
+@@ -38,15 +66,21 @@ test('adverse thrown values cannot interrupt remaining owners/readbacks; diagnos
+ test('callback failures reject the exact original value including undefined, false and null', async () => {
+   for (const value of adverseValues()) {
+     const f = fixture();
+-    let reads = 0, rejected = false;
++    let reads = 0,
++      rejected = false;
+     const frame = f.life.nextFrame(() => {
+       if (++reads === 2) throw value;
+       return f.counters();
+     });
+     // Do not return hostile values from the rejection callback: Promise assimilation reads then.
+     const observed = frame.then(
+-      () => { assert.fail('failed callback resolved'); },
+-      (error) => { rejected = true; assert.equal(error, value); },
++      () => {
++        assert.fail('failed callback resolved');
++      },
++      (error) => {
++        rejected = true;
++        assert.equal(error, value);
++      },
+     );
+     f.callback()(16);
+     await observed;
+@@ -63,15 +97,29 @@ test('external fail retains original falsy rejection while both cancellation dia
+     const f = fixture();
+     const frame = f.life.nextFrame(f.counters);
+     const observed = frame.then(
+-      () => { assert.fail('external failure resolved'); },
+-      (error) => { assert.equal(error, value); },
++      () => {
++        assert.fail('external failure resolved');
++      },
++      (error) => {
++        assert.equal(error, value);
++      },
+     );
+-    const cancelRaf = f.life.ports.cancelRaf, clearTimer = f.life.ports.clearTimer;
+-    f.life.ports.cancelRaf = (id) => { cancelRaf(id); throw value; };
+-    f.life.ports.clearTimer = (id) => { clearTimer(id); throw value; };
++    const cancelRaf = f.life.ports.cancelRaf,
++      clearTimer = f.life.ports.clearTimer;
++    f.life.ports.cancelRaf = (id) => {
++      cancelRaf(id);
++      throw value;
++    };
++    f.life.ports.clearTimer = (id) => {
++      clearTimer(id);
++      throw value;
++    };
+     f.life.fail('original', value);
+     await observed;
+-    assert.deepEqual(f.life.causes.map(({ stage }) => stage), ['original', 'cancel-raf', 'cancel-watchdog']);
++    assert.deepEqual(
++      f.life.causes.map(({ stage }) => stage),
++      ['original', 'cancel-raf', 'cancel-watchdog'],
++    );
+     assert.equal(f.rafs.size + f.timers.size, 0);
+     await f.life.teardown();
+   }
+@@ -80,15 +128,30 @@ test('external fail retains original falsy rejection while both cancellation dia
+ test('run/export adverse failures remain FAILED_UNKNOWN after all once-only cleanup', async () => {
+   for (const value of adverseValues()) {
+     const f = fixture();
+-    let disposed = 0, read = 0;
+-    const terminal = await runOwned(f.life, () => {
+-      f.life.own('owner', () => { disposed++; });
+-      f.life.readback('owner', () => { read++; return disposed; });
+-      throw value;
+-    }, () => { throw value; });
++    let disposed = 0,
++      read = 0;
++    const terminal = await runOwned(
++      f.life,
++      () => {
++        f.life.own('owner', () => {
++          disposed++;
++        });
++        f.life.readback('owner', () => {
++          read++;
++          return disposed;
++        });
++        throw value;
++      },
++      () => {
++        throw value;
++      },
++    );
+     assert.equal(terminal.exportState, 'FAILED_UNKNOWN');
+     assert.equal(terminal.acceptance, 'UNVERIFIED');
+-    assert.deepEqual(f.life.causes.map(({ stage }) => stage), ['run', 'export']);
++    assert.deepEqual(
++      f.life.causes.map(({ stage }) => stage),
++      ['run', 'export'],
++    );
+     await f.life.teardown();
+     assert.equal(disposed, 1);
+     assert.equal(read, 1);

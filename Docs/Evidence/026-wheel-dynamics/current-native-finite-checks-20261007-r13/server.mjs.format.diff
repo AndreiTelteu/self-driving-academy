@@ -1,0 +1,52 @@
+--- before-format/tests/browser/wheel-dynamics-v2/server.mjs
++++ final/tests/browser/wheel-dynamics-v2/server.mjs
+@@ -14,7 +14,8 @@
+ 
+ const port = Number(process.argv[2] ?? 5220);
+ const buildOnly = process.argv[3] === '--build-only';
+-if (port !== 5220 || process.argv.length > (buildOnly ? 4 : 3)) throw new Error('Only reserved port5220 and optional --build-only');
++if (port !== 5220 || process.argv.length > (buildOnly ? 4 : 3))
++  throw new Error('Only reserved port5220 and optional --build-only');
+ const expectedRoot = 'F:/Sites/self-driving-academy/.worktrees/wheel-dynamics-01';
+ if (
+   resolve('.').replaceAll(String.fromCharCode(92), '/') !== expectedRoot ||
+@@ -209,9 +210,7 @@
+   resolve(archive, 'hardware.json'),
+   await readFile(resolve(root, 'hardware.json')),
+ );
+-const native = JSON.parse(
+-  await readFile(freshAfterPath, 'utf8'),
+-).native;
++const native = JSON.parse(await readFile(freshAfterPath, 'utf8')).native;
+ const beforeNative = JSON.parse(
+   await readFile('Docs/Evidence/026-wheel-dynamics/before/node.json', 'utf8'),
+ ).native;
+@@ -239,13 +238,25 @@
+ await verifyFrozen();
+ await immutableBytes(resolve(archive, 'archive-complete.json'), JSON.stringify(bindingIdentity));
+ if (buildOnly) {
+-  console.log(JSON.stringify({ state: 'BUILD_ARCHIVED_SERVER_NOT_STARTED', archive, bindingIdentity }));
++  console.log(
++    JSON.stringify({ state: 'BUILD_ARCHIVED_SERVER_NOT_STARTED', archive, bindingIdentity }),
++  );
+   process.exit(0);
+ }
+ async function verifyFrozen() {
+   await readCurrentNative();
+-  try { await verifyFrozenArchive({ inputs, sourceHash: identity.sourceHash, artifacts, root, archive, native }); }
+-  catch (error) { throw new EvidenceTransportError(409, `Frozen build verification failed: ${error.message}`); }
++  try {
++    await verifyFrozenArchive({
++      inputs,
++      sourceHash: identity.sourceHash,
++      artifacts,
++      root,
++      archive,
++      native,
++    });
++  } catch (error) {
++    throw new EvidenceTransportError(409, `Frozen build verification failed: ${error.message}`);
++  }
+ }
+ const ledger = createLedger(destination, bindingIdentity, verifyFrozen);
+ const partLedger = createPartLedger(destination, ledger, verifyFrozen);

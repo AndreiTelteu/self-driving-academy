@@ -1,0 +1,70 @@
+diff --git "a/F:\\Sites\\self-driving-academy\\.worktrees\\wheel-dynamics-01\\Docs\\Evidence\\026-wheel-dynamics\\current-native-browser-checks-20261007-r17\\format-before-ledger-diagnostic.test.mjs" "b/F:\\Sites\\self-driving-academy\\.worktrees\\wheel-dynamics-01\\Docs\\Evidence\\026-wheel-dynamics\\current-native-browser-checks-20261007-r17\\format-after-ledger-diagnostic.test.mjs"
+index d984e3f..fd1750c 100644
+--- "a/F:\\Sites\\self-driving-academy\\.worktrees\\wheel-dynamics-01\\Docs\\Evidence\\026-wheel-dynamics\\current-native-browser-checks-20261007-r17\\format-before-ledger-diagnostic.test.mjs"
++++ "b/F:\\Sites\\self-driving-academy\\.worktrees\\wheel-dynamics-01\\Docs\\Evidence\\026-wheel-dynamics\\current-native-browser-checks-20261007-r17\\format-after-ledger-diagnostic.test.mjs"
+@@ -4,10 +4,23 @@ import assert from 'node:assert/strict';
+ import { createLedger } from './ledger.mjs';
+ 
+ test('frozen verification hostile failure persists FAILED_UNKNOWN supplement and original rejection', async () => {
+-  for (const value of [undefined, false, null, Object.create(null), new Proxy({}, {
+-    get() { throw new Error('get trap'); },
+-    getOwnPropertyDescriptor() { throw new Error('descriptor trap'); },
+-  })]) {
++  for (const value of [
++    undefined,
++    false,
++    null,
++    Object.create(null),
++    new Proxy(
++      {},
++      {
++        get() {
++          throw new Error('get trap');
++        },
++        getOwnPropertyDescriptor() {
++          throw new Error('descriptor trap');
++        },
++      },
++    ),
++  ]) {
+     const files = new Map();
+     const filesystem = {
+       mkdir: async () => {},
+@@ -21,11 +34,18 @@ test('frozen verification hostile failure persists FAILED_UNKNOWN supplement and
+       },
+     };
+     let fail = false;
+-    const ledger = createLedger('source16-memory-only', { sourceHash: 'a'.repeat(64) }, () => {
+-      if (fail) throw value;
+-    }, filesystem);
++    const ledger = createLedger(
++      'source16-memory-only',
++      { sourceHash: 'a'.repeat(64) },
++      () => {
++        if (fail) throw value;
++      },
++      filesystem,
++    );
+     const { binding } = await ledger.start({
+-      launchKey: '12345678-1234-1234-1234-123456789012', requestedBackend: 'AUTO', mode: 'full',
++      launchKey: '12345678-1234-1234-1234-123456789012',
++      requestedBackend: 'AUTO',
++      mode: 'full',
+     });
+     fail = true;
+     await ledger.append({ binding, renderer: null, state: 'FAILED_UNKNOWN' }, 'terminal-error');
+@@ -34,8 +54,12 @@ test('frozen verification hostile failure persists FAILED_UNKNOWN supplement and
+     assert.match(saved.frozenStatus, /^FAILED_UNKNOWN: /);
+     assert(saved.frozenStatus.length <= 1040);
+     await ledger.append({ binding, renderer: null }, 'backend').then(
+-      () => { assert.fail('normal append accepted frozen drift'); },
+-      (error) => { assert.equal(error, value); },
++      () => {
++        assert.fail('normal append accepted frozen drift');
++      },
++      (error) => {
++        assert.equal(error, value);
++      },
+     );
+   }
+ });

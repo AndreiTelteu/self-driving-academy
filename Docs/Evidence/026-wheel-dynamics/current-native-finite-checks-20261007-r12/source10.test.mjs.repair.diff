@@ -1,0 +1,60 @@
+diff --git a/Docs/Evidence/026-wheel-dynamics/current-native-finite-checks-20261007-r12/test-before/source10.test.mjs b/Docs/Evidence/026-wheel-dynamics/current-native-finite-checks-20261007-r12/test-repair-source/source10.test.mjs
+index 0689ad9..63615e8 100644
+--- a/Docs/Evidence/026-wheel-dynamics/current-native-finite-checks-20261007-r12/test-before/source10.test.mjs
++++ b/Docs/Evidence/026-wheel-dynamics/current-native-finite-checks-20261007-r12/test-repair-source/source10.test.mjs
+@@ -26,11 +26,11 @@ function adverseValues() {
+ }
+ 
+ // Manual settlement observation explicitly distinguishes throw undefined from no throw.
+-async function rejected(operation) {
++async function rejected(operation, ...expected) {
+   let failed = false, value;
+-  try { await operation(); } catch (error) { failed = true; value = error; }
++  try { await operation(); } catch (error) { failed = true; value = error; if (expected.length) assert.equal(error, expected[0]); }
+   assert.equal(failed, true);
+-  return value;
++  return { failed, value };
+ }
+ 
+ test('bounded serialization survives arbitrary thrown values and refuses unsafe getters/conversions', () => {
+@@ -63,13 +63,13 @@ test('hostile measurement/dispose/raw/failure/terminal write values retain exact
+       writes.push({ path, text: JSON.stringify(dto) });
+       throw path === 'raw' ? raw : path === 'failure' ? failure : terminal;
+     };
+-    const pending = await rejected(() => recordRun('raw', 'failure', { partial: 17 },
+-      [{ stage: 'measurement', cause: measurement }, { stage: 'dispose', cause: disposal }], writer));
++    const pending = (await rejected(() => recordRun('raw', 'failure', { partial: 17 },
++      [{ stage: 'measurement', cause: measurement }, { stage: 'dispose', cause: disposal }], writer))).value;
+     assert.ok(pending instanceof AggregateError);
+     for (const [position, expected] of [measurement, disposal, raw, failure].entries())
+       assert.equal(pending.errors[position], expected);
+     assert.equal(pending.cause, measurement);
+-    const final = await rejected(() => failTerminal('terminal', pending, {}, writer));
++    const final = (await rejected(() => failTerminal('terminal', pending, {}, writer))).value;
+     assert.equal(final.errors[0], pending);
+     assert.equal(final.errors[1], terminal);
+     assert.equal(final.cause, pending);
+@@ -83,18 +83,18 @@ test('factory and ordinary evidence failures preserve original hostile/undefined
+   for (const [index, primary] of values.entries()) {
+     const recording = values[(index + 1) % values.length];
+     const writer = async (_path, dto) => { JSON.stringify(dto); throw recording; };
+-    const factory = await rejected(() => recordFactoryFailure('factory', primary, writer));
++    const factory = (await rejected(() => recordFactoryFailure('factory', primary, writer))).value;
+     assert.equal(factory.errors[0], primary);
+     assert.equal(factory.errors[1], recording);
+     assert.equal(factory.cause, primary);
+-    const exportFailure = await rejected(() => recordEvidence('report', { causes: causes(primary) }, [primary], writer));
++    const exportFailure = (await rejected(() => recordEvidence('report', { causes: causes(primary) }, [primary], writer))).value;
+     assert.equal(exportFailure.errors[0], primary);
+     assert.equal(exportFailure.errors[1], recording);
+     assert.equal(exportFailure.cause, primary);
+     const passWriter = async (_path, dto) => { JSON.stringify(dto); };
+-    assert.equal(await rejected(() => recordFactoryFailure('factory', primary, passWriter)), primary);
+-    assert.equal(await rejected(() => failTerminal('terminal', primary, {}, passWriter)), primary);
+-    const run = await rejected(() => recordRun('raw', 'failure', {}, [{ stage: 'calibration', cause: primary }], passWriter));
++    assert.equal((await rejected(() => recordFactoryFailure('factory', primary, passWriter), primary)).value, primary);
++    assert.equal((await rejected(() => failTerminal('terminal', primary, {}, passWriter), primary)).value, primary);
++    const run = (await rejected(() => recordRun('raw', 'failure', {}, [{ stage: 'calibration', cause: primary }], passWriter))).value;
+     assert.equal(run.errors[0], primary);
+     assert.equal(run.cause, primary);
+   }

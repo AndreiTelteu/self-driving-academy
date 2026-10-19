@@ -1,0 +1,17 @@
+#026merged027 WebGPU round2 — actual failure diagnosis
+
+Parent started full WebGPU in tab1242655774 at2026-10-05T23:37:23Z. The read-only monitor reported TIMEOUT after35minutes and missed existing failure envelopes. Parent subsequently observed the original tab gone and remaining tab1242655803 atNotrun/Runenabled. No full performance report exists; TIMEOUT is not a hardware result.
+
+The additive [raw provenance record](026-webgpu-full-r2-merged027-parent-diagnostic.json) contains exact SHA256, bytes, embedded createdAt, filesystem UTC time, error and foreground flags for three immutable source212c919b/artifactf766556afailures:
+
+- WebGPU23:57:40.185Z: Fixed-tick overload, foregroundtrue; failure file6012bytes, SHA256`7974539a5a729e7dceb9351ed24696c2df25f29fc71dc3392e66dac3534be919`. This is the parent-started round failing after approximately20minutes.
+- WebGPU23:58:48.216Z: Foreground lost, foregroundfalse;6009bytes, SHA256`41f2c76ac02c136d42c290901fba6108861fac3680382d7136901e5083caff3c`. Raw data does not establish the origin of this further attempt.
+- WebGL2at2026-10-06T00:13:06.568Z: Foreground lost, foregroundfalse;6009bytes, SHA256`74414c114c464011b32e7e7c6d924634874b851a69a2ad6c35067961c1f46f97`. Parent did not start WebGL2in round2. Its origin is UNKNOWN; no user/agent attribution is made.
+
+Read-only socket inspection found PID32260 listening at127.0.0.1:5197. The frozen server wrote all three failure reports to the correct026evidence directory. The log shows safe missingfavicon404errors and the single previously exercised4MiB+1transport413; no filesystem export error, second-header exception or server crash is present. Failure persistence works, and neither drive-webgpu.json nor drive-webgl2.json exists. None of these failures retains a completed numeric report, current arm phase/tick/debt or partial measured distributions. The old timeout and failure files remain unchanged.
+
+The overload path calls loop.frame(now), then fails when loop.getState().overloadCount is nonzero. Fixed-tick core admits RAF elapsed time into accumulated debt before stepping; debt strictly above250ms pauses with zero steps in that frame. Normal catchup permits at most4fixed1/60steps/frame. Thus a single long RAF stall or accumulated debt can explain the observed error. The raw round2envelope cannot distinguish sustained simulation cost, external scheduling stall, render/GCpause or another cause; foregroundtrueatfailure does not prove every preceding frame had normal scheduling.
+
+Before another full round, the minimal proposed harness-only patch captures failure-arm index/current/reference, warmup/measuring phase, physical tick and frame/tick sample counts, active elapsed seconds, failing RAFdelta, current loop status/debt/overload count/last steps and fixed250ms/4step limits. Retain actual partial completed-arm summaries and failed-arm sample summaries as explicitly incomplete evidence, computed only on failure after timing stops. Avoid per-frame logging, unbounded traces, threshold/physics/warmup changes or reconstruction of missing round2measurements. This patch is only proposed here; frozen026source/build is unmodified.
+
+The next monitor must match `identity.sourceHash` inside failure envelopes and `createdAt`, inspect failed-*.json as well as drive-*.json, and end promptly on a matching actual failure. A top-levelsourceHashassumption must not hide persisted errors.

@@ -10,7 +10,12 @@ import { projectPhysicalWheels } from '../../../src/rendering';
 import { createRapierProbe } from '../../../src/vehicles/rapier';
 import type { CarProjection } from '../../../src/vehicles';
 import { createRapierProbe as createBefore } from '../../../Docs/Evidence/026-wheel-dynamics/before/source/src/vehicles/rapier';
-import { createFixedTickLoop } from '../../../src/simulation/fixed-tick';
+import {
+  FIXED_DT_SECONDS,
+  MAX_STEPS_PER_FRAME,
+  OVERLOAD_DEBT_MS,
+  createFixedTickLoop,
+} from '../../../src/simulation/fixed-tick';
 import { calibrateWheels } from '../../vehicles/wheel-dynamics-fixture';
 
 declare const __WHEEL_BUILD__: { sourceHash: string; commit: string; inputs: string[] };
@@ -26,6 +31,9 @@ async function arm(
   current: boolean,
   warmupSeconds: number,
   measuredSeconds: number,
+  failureContext: { diagnostic: unknown },
+  armIndex: number,
+  pair: number,
 ) {
   const world = await (current ? createRapierProbe() : createBefore());
   const inputs = new Map<string, { throttle: number; brake: number; steering: number }>();
@@ -115,16 +123,20 @@ async function arm(
   const spin = Quaternion.Identity(),
     steer = Quaternion.Identity(),
     combined = Quaternion.Identity();
+  let lastFrame: ReturnType<typeof loop.frame> | undefined;
+  let lastRafMs = 0;
   try {
     firstFrame = previousFrame = await raf();
-    loop.frame(firstFrame);
+    lastFrame = loop.frame(firstFrame);
+    lastRafMs = firstFrame;
     while (activeSeconds < warmupSeconds + measuredSeconds) {
       const now = await raf();
+      lastRafMs = now;
       check(document.hasFocus() && !document.hidden, 'Foreground lost');
       activeSeconds = (now - firstFrame) / 1000;
       measuring = activeSeconds >= warmupSeconds;
       const start = performance.now();
-      loop.frame(now);
+      lastFrame = loop.frame(now);
       check(loop.getState().overloadCount === 0, 'Fixed-tick overload');
       const projectionStart = performance.now();
       for (const visual of visuals) {
@@ -204,6 +216,33 @@ async function arm(
       longTasks,
       gpuP95Ms: null,
     };
+  } catch (error) {
+    const state = loop.getState();
+    failureContext.diagnostic = {
+      acceptance: 'INCOMPLETE',
+      armIndex,
+      pair,
+      current,
+      phase: measuring ? 'measurement' : 'warmup',
+      warmupSeconds,
+      measuredSeconds,
+      tick: state.tick,
+      elapsedSeconds: (lastRafMs - firstFrame) / 1000,
+      rafDeltaMs: lastRafMs - previousFrame,
+      debtSeconds: state.debtSeconds,
+      status: state.status,
+      overloadCount: state.overloadCount,
+      stepsInLastFrame: lastFrame?.steps ?? null,
+      fixedDtSeconds: FIXED_DT_SECONDS,
+      maxCatchupSteps: MAX_STEPS_PER_FRAME,
+      overloadDebtMs: OVERLOAD_DEBT_MS,
+      measuredFrames: frameCount,
+      measuredTicks: tickCount,
+      longTasks: { ...longTasks },
+      scope:
+        'Actual bounded failed-arm counters; no successful metrics or performance acceptance reconstructed.',
+    };
+    throw error;
   } finally {
     observer?.disconnect();
     loop.dispose();
@@ -220,6 +259,9 @@ document.getElementById('run')!.addEventListener('click', async () => {
   const button = document.getElementById('run') as HTMLButtonElement;
   button.disabled = true;
   let completedReport: unknown;
+  const runs: unknown[] = [];
+  const failureContext: { diagnostic: unknown } = { diagnostic: null };
+  let phase = 'setup';
   try {
     const full = (document.getElementById('duration') as HTMLSelectElement).value === 'full';
     owned?.dispose();
@@ -249,10 +291,22 @@ document.getElementById('run')!.addEventListener('click', async () => {
         actualCanvas.clientHeight === 1080,
       'CSS resolution/DPR mismatch',
     );
-    const runs = [];
+    phase = 'arms';
     for (let pair = 0; pair < 5; pair++)
       for (const current of pair % 2 ? [true, false] : [false, true])
-        runs.push({ pair, ...(await arm(owned, current, full ? 30 : 1, full ? 120 : 3)) });
+        runs.push({
+          pair,
+          ...(await arm(
+            owned,
+            current,
+            full ? 30 : 1,
+            full ? 120 : 3,
+            failureContext,
+            runs.length,
+            pair,
+          )),
+        });
+    phase = 'calibration';
     const calibration = [];
     for (const classId of ['sedan', 'compact'] as const)
       for (const surface of ['dry-asphalt', 'reduced-adhesion'] as const)
@@ -288,6 +342,7 @@ document.getElementById('run')!.addEventListener('click', async () => {
         256 * 1024,
       'Evidence metadata envelope exceeds bounded 256KiB allowance',
     );
+    phase = 'export';
     if (full) {
       const response = await fetch('/export', {
         method: 'POST',
@@ -315,6 +370,12 @@ document.getElementById('run')!.addEventListener('click', async () => {
         foreground: document.hasFocus() && !document.hidden,
         error: String(error),
         completedReport,
+        failureDiagnostics: {
+          acceptance: 'INCOMPLETE',
+          phase,
+          failedArm: failureContext.diagnostic,
+          completedArms: runs,
+        },
       }),
     });
   } finally {

@@ -1,0 +1,23 @@
+diff --git a/Docs/Evidence/026-wheel-dynamics/current-native-finite-checks-20261007-r12/test-before/numeric-reader.test.mjs b/Docs/Evidence/026-wheel-dynamics/current-native-finite-checks-20261007-r12/test-repair-source/numeric-reader.test.mjs
+index 3de817f..5446a47 100644
+--- a/Docs/Evidence/026-wheel-dynamics/current-native-finite-checks-20261007-r12/test-before/numeric-reader.test.mjs
++++ b/Docs/Evidence/026-wheel-dynamics/current-native-finite-checks-20261007-r12/test-repair-source/numeric-reader.test.mjs
+@@ -318,7 +318,17 @@ test('browser eight deterministic results reject each hostile field and full wro
+   ];
+   for (const [label, mutate] of mutations) {
+     const changed = structuredClone(fixture.capture);
+-    mutate(changed.terminal.dto.report.calibration[0]);
++    const rowIndex = label === 'zero lateral'
++      ? fixture.capture.terminal.dto.report.calibration.findIndex(
++        (row) => row.scenario === 'turning' && row.speedMps === 20 && row.maxWheelLateralMps !== 0,
++      )
++      : 0;
++    assert.ok(rowIndex >= 0);
++    const original = fixture.capture.terminal.dto.report.calibration[rowIndex];
++    const row = changed.terminal.dto.report.calibration[rowIndex];
++    if (label === 'zero lateral') assert.notEqual(original.maxWheelLateralMps, 0);
++    mutate(row);
++    if (label === 'zero lateral') assert.notEqual(row.maxWheelLateralMps, original.maxWheelLateralMps);
+     assert.throws(() => verifyCaptureNumbers(changed, fixture.budgets), undefined, label);
+   }
+   const wrong = structuredClone(fixture.capture);

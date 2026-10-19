@@ -1,0 +1,21 @@
+✔ callback-first cancels watchdog and records entry before continuation, exactly one advance (1.9975ms)
+✔ timer-first plus late callback cannot advance physics; failed trigger survives (0.5098ms)
+✔ cancel between callback and continuation prevents native work (0.1602ms)
+✔ foreground loss never advances, even when callback arrives on time (0.1558ms)
+✔ callback counter read throws: pending ownership is still cancelled (0.149ms)
+✔ dispose cancels pending frame and continues independent resource disposal/readbacks (0.3428ms)
+✔ setup throw retains original, cleanup, readback and export causes; ownership acquired first (0.3449ms)
+✔ overflow is failure with explicit lost count, never silently accepted (0.1653ms)
+✔ synchronous RAF port cannot leave a newly registered watchdog after callback settlement (0.1611ms)
+✔ synchronous watchdog cancels RAF and clears timer handle returned after cancellation (0.262ms)
+✔ reentrant disposer sees the assigned teardown promise; snapshot and bounded causes are immutable copies (0.1761ms)
+✔ post-terminal late callback has bounded separate sink, no terminal snapshot mutation or native advance (0.2579ms)
+✔ late durable sink failure is retained as failedunknown without hiding original watchdog failure (0.2065ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 99.7872

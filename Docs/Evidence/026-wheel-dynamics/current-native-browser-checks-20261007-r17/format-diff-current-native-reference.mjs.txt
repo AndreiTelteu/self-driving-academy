@@ -1,0 +1,25 @@
+diff --git "a/F:\\Sites\\self-driving-academy\\.worktrees\\wheel-dynamics-01\\Docs\\Evidence\\026-wheel-dynamics\\current-native-browser-checks-20261007-r17\\format-before-current-native-reference.mjs" "b/F:\\Sites\\self-driving-academy\\.worktrees\\wheel-dynamics-01\\Docs\\Evidence\\026-wheel-dynamics\\current-native-browser-checks-20261007-r17\\format-after-current-native-reference.mjs"
+index 540111e..ae48456 100644
+--- "a/F:\\Sites\\self-driving-academy\\.worktrees\\wheel-dynamics-01\\Docs\\Evidence\\026-wheel-dynamics\\current-native-browser-checks-20261007-r17\\format-before-current-native-reference.mjs"
++++ "b/F:\\Sites\\self-driving-academy\\.worktrees\\wheel-dynamics-01\\Docs\\Evidence\\026-wheel-dynamics\\current-native-browser-checks-20261007-r17\\format-after-current-native-reference.mjs"
+@@ -14,10 +14,18 @@ export const CURRENT_NATIVE_REFERENCE = Object.freeze({
+   nativeBytes: 4340292,
+ });
+ export function requireCurrentPins() {
+-  for (const key of ['afterSourceHash', 'afterReportHash', 'calibrationSourceHash', 'calibrationReportHash'])
++  for (const key of [
++    'afterSourceHash',
++    'afterReportHash',
++    'calibrationSourceHash',
++    'calibrationReportHash',
++  ])
+     if (!/^[a-f0-9]{64}$/.test(CURRENT_NATIVE_REFERENCE[key] ?? ''))
+       throw new Error(`INCOMPLETE: root-reviewed current native pin missing: ${key}`);
+-  if (CURRENT_NATIVE_REFERENCE.afterSourceHash === 'b696b02d00956797b91e1cad5bc53263f9e765047b506f7ff73030cb26f7901f')
++  if (
++    CURRENT_NATIVE_REFERENCE.afterSourceHash ===
++    'b696b02d00956797b91e1cad5bc53263f9e765047b506f7ff73030cb26f7901f'
++  )
+     throw new Error('Historical AFTER cannot be relabelled current');
+   return CURRENT_NATIVE_REFERENCE;
+ }

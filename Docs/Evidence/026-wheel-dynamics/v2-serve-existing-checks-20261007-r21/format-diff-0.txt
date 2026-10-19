@@ -1,0 +1,67 @@
+diff --git a/Docs/Evidence/026-wheel-dynamics/v2-serve-existing-checks-20261007-r21/before-0.mjs b/tests/browser/wheel-dynamics-v2/serve-existing-contract.mjs
+index bc3b29e..554a272 100644
+--- a/Docs/Evidence/026-wheel-dynamics/v2-serve-existing-checks-20261007-r21/before-0.mjs
++++ b/tests/browser/wheel-dynamics-v2/serve-existing-contract.mjs
+@@ -11,7 +11,7 @@ export const DESTINATION = `${WORKDIR}/Docs/Evidence/026-wheel-dynamics/v2-captu
+ export const ARCHIVE = `${DESTINATION}/${ARCHIVE_NAME}`;
+ export const MANIFEST = `${ARCHIVE}/build-manifest.json`;
+ export const BUILD = `${WORKDIR}/.pbi-validation-026-v2/build-${UUID}`;
+-export const PROOF_ROOT = `${WORKDIR}/Docs/Evidence/026-wheel-dynamics/v2-serve-existing-source20`;
++export const PROOF_ROOT = `${WORKDIR}/Docs/Evidence/026-wheel-dynamics/v2-serve-existing-source21`;
+ export const SERVICE_PATHS = Object.freeze([
+   'tests/browser/wheel-dynamics-v2/serve-existing-contract.mjs',
+   'tests/browser/wheel-dynamics-v2/serve-existing.mjs',
+@@ -24,10 +24,16 @@ export function exactBytes(bytes, count, sha256, label) {
+   need(bytes.length === count && hash(bytes) === sha256, `${label}: byte/count/hash mismatch`);
+ }
+ export function inside(root, locator) {
+-  need(typeof locator === 'string' && locator.length > 0 &&
+-    !locator.includes('\\') && !locator.includes(':') &&
+-    !locator.includes('\0') && !locator.split('/').some((p) => !p || p === '.' || p === '..') &&
+-    !isAbsolute(locator), 'Unsafe relative locator');
++  need(
++    typeof locator === 'string' &&
++      locator.length > 0 &&
++      !locator.includes('\\') &&
++      !locator.includes(':') &&
++      !locator.includes('\0') &&
++      !locator.split('/').some((p) => !p || p === '.' || p === '..') &&
++      !isAbsolute(locator),
++    'Unsafe relative locator',
++  );
+   const path = resolve(root, locator);
+   const delta = relative(resolve(root), path);
+   need(delta && !delta.startsWith('..') && !isAbsolute(delta), 'Path escape');
+@@ -36,14 +42,26 @@ export function inside(root, locator) {
+ export function identity(manifest, binding) {
+   need(binding.archive === ARCHIVE_NAME, 'Wrong build UUID/archive');
+   need(manifest.sourceHash === SOURCE && binding.sourceHash === SOURCE, 'Wrong source pin');
+-  need(manifest.artifactHash === ARTIFACT && binding.artifactHash === ARTIFACT, 'Wrong artifact pin');
+-  need(manifest.commit === 'e52e10b1170db7b8882d6581bdbd4027d2149fb6' &&
+-    binding.commit === manifest.commit, 'Wrong original owner commit');
++  need(
++    manifest.artifactHash === ARTIFACT && binding.artifactHash === ARTIFACT,
++    'Wrong artifact pin',
++  );
++  need(
++    manifest.commit === 'e52e10b1170db7b8882d6581bdbd4027d2149fb6' &&
++      binding.commit === manifest.commit,
++    'Wrong original owner commit',
++  );
+   for (const key of ['inputs', 'budgetVersion', 'physicsVersion', 'engineVersion'])
+     need(JSON.stringify(binding[key]) === JSON.stringify(manifest[key]), `Original binding ${key}`);
+-  need(manifest.inputs.length === 105 && new Set(manifest.inputs).size === 105, '105 unique inputs');
+-  need(manifest.artifacts.length === 142 &&
+-    new Set(manifest.artifacts.map((x) => x.path)).size === 142, '142 unique artifacts');
++  need(
++    manifest.inputs.length === 105 && new Set(manifest.inputs).size === 105,
++    '105 unique inputs',
++  );
++  need(
++    manifest.artifacts.length === 142 &&
++      new Set(manifest.artifacts.map((x) => x.path)).size === 142,
++    '142 unique artifacts',
++  );
+   need(hash(JSON.stringify(manifest.artifacts)) === ARTIFACT, 'Artifact index hash');
+   need(manifest.artifacts.reduce((n, x) => n + x.bytes, 0) === 10424629, 'Artifact byte total');
+   for (const path of manifest.inputs) inside(WORKDIR, path);

@@ -1,10 +1,20 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
+import { readNative, readCurrentNative, BEFORE_SOURCE, AFTER_SOURCE } from '../tests/browser/wheel-dynamics-v2/numeric-reader.mjs';
 const folder = 'Docs/Evidence/026-wheel-dynamics';
-const before = JSON.parse(await readFile(`${folder}/before/node.json`, 'utf8'));
-const after = JSON.parse(await readFile(`${folder}/after-v2/node.json`, 'utf8'));
-const calibration = JSON.parse(await readFile(`${folder}/calibration-v2.json`, 'utf8'));
+const reference = process.argv.find((argument) => argument.startsWith('--reference='))?.slice('--reference='.length) ?? 'historical';
+assert(['current', 'historical'].includes(reference), 'Choose explicit current/historical reference');
+const current = reference === 'current' ? await readCurrentNative() : null;
+const before = await readNative(`${folder}/before`, 'before', BEFORE_SOURCE);
+const captureArgument = process.argv.find((argument) => argument.startsWith('--after-capture='));
+const afterCapture = captureArgument?.slice('--after-capture='.length) ?? (current?.pins.afterCapture ?? 'after-main-027');
+assert(/^[a-z0-9-]+$/.test(afterCapture), 'Invalid immutable AFTER capture');
+assert.equal(afterCapture, current?.pins.afterCapture ?? 'after-main-027', 'Pinned reference namespace only');
+const after = current?.after ?? await readNative(`${folder}/${afterCapture}`, 'after', AFTER_SOURCE);
+const originalCalibrationBytes = await readFile(`${folder}/calibration-v2.json`);
+assert.equal(createHash('sha256').update(originalCalibrationBytes).digest('hex'), 'd8f7d9022f00d26399baba91ee9591132ac89d818c1c4711108c243e06b47e6c');
+const calibration = current?.calibration ?? JSON.parse(originalCalibrationBytes);
 const budgets = JSON.parse(await readFile('Docs/performance-budgets.json', 'utf8'));
 const hash = (bytes) => createHash('sha256').update(bytes).digest('hex');
 for (const [name, report] of [
@@ -18,7 +28,7 @@ for (const [name, report] of [
   for (const input of report.inputs)
     assert.equal(
       hash(
-        await readFile(`${folder}/${name === 'after' ? 'after-v2' : name}/source/${input.path}`),
+        await readFile(`${folder}/${name === 'after' ? afterCapture : name}/source/${input.path}`),
       ),
       input.sha256,
     );
@@ -85,6 +95,7 @@ for (const classId of ['sedan', 'compact']) {
   );
 }
 if (process.argv.includes('--browser')) {
+  assert.equal(reference, 'historical', 'Legacy browser verifier cannot accept a current v2 build; use verifySuite current binding');
   for (const backend of ['webgpu', 'webgl2']) {
     const report = JSON.parse(await readFile(`${folder}/drive-${backend}.json`, 'utf8'));
     assert.equal(report.full, true);
@@ -137,6 +148,9 @@ console.log(
   JSON.stringify(
     {
       verified: true,
+      afterCapture,
+      reference,
+      acceptance: reference === 'current' ? 'NATIVE_ONLY_NOT_BROWSER_OR_HARDWARE' : 'HISTORICAL_ONLY',
       comparisons,
       browserVerified: process.argv.includes('--browser'),
       scope: 'Early native wheel fixture, not game/laptop gates',

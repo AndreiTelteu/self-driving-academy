@@ -1,0 +1,28 @@
+Evidence verifier first invocation (not a product gate):
+command: node Docs/Evidence/026-wheel-dynamics/production-static-pure-20261007-r6/finalize.mjs
+workdir: F:/Sites/self-driving-academy/.worktrees/wheel-dynamics-01
+actual exec_command exit: 1
+actual exec_command wall_time_seconds: 0.2298975
+stdout: empty
+stderr as returned by exec_command:
+node:internal/modules/esm/load:193
+    throw new ERR_UNSUPPORTED_ESM_URL_SCHEME(parsed, schemes);
+          ^
+
+Error [ERR_UNSUPPORTED_ESM_URL_SCHEME]: Only URLs with a scheme in: file, data, and node are supported by the default ESM loader. On Windows, absolute paths must be valid file:// URLs. Received protocol 'f:'
+    at throwIfUnsupportedURLScheme (node:internal/modules/esm/load:193:11)
+    at defaultLoadSync (node:internal/modules/esm/load:146:3)
+    at #loadAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:806:12)
+    at #loadSync (node:internal/modules/esm/loader:838:53)
+    at ModuleLoader.load (node:internal/modules/esm/loader:787:26)
+    at ModuleLoader.loadAndTranslate (node:internal/modules/esm/loader:498:31)
+    at #getOrCreateModuleJobAfterResolve (node:internal/modules/esm/loader:564:36)
+    at afterResolve (node:internal/modules/esm/loader:611:52)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:617:12)
+    at ModuleJob.syncLink (node:internal/modules/esm/module_job:276:33) {
+  code: 'ERR_UNSUPPORTED_ESM_URL_SCHEME'
+}
+
+Node.js v24.21.0
+
+The original finalize.mjs is retained byte-exact. finalize-r2.mjs changes only the absolute module import to a file:/// URL. This transcript preserves the tool-returned text, not a raw-byte stdout/stderr claim; all product check streams were captured as raw buffers by runner.mjs.

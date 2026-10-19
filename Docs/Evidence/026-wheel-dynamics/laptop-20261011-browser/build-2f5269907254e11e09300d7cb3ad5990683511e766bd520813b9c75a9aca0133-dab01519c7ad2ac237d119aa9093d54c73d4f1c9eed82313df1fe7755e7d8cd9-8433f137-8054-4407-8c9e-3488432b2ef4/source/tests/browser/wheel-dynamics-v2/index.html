@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>026 v2 SOURCE draft — UNEXECUTED</title>
+    <link rel="icon" href="data:," />
+    <style>
+      body {
+        margin: 0;
+        background: #14202d;
+        color: #f3f7fb;
+        font: 16px system-ui;
+      }
+      .controls {
+        position: fixed;
+        top: 12px;
+        left: 12px;
+        z-index: 1;
+        background: #14202ded;
+        padding: 12px;
+        max-width: 700px;
+      }
+      pre {
+        max-height: 240px;
+        overflow: auto;
+        white-space: pre-wrap;
+      }
+      canvas {
+        display: block;
+        width: 1920px;
+        height: 1080px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="controls">
+      <strong>026 — physical wheels, suspension and road adhesion</strong>
+      <p>
+        Keep the page focused. Full runs compare archived native BEFORE against current physics. No
+        simulation is omitted outside the camera.
+      </p>
+      <select id="backend">
+        <option>AUTO</option>
+        <option>WEBGL2</option></select
+      ><select id="duration">
+        <option value="full">Full 5 pairs, 30s warmup/120s measured per arm</option>
+        <option value="diagnostic">
+          Stage trace DEV, 3 pairs, 15s/30s, no acceptance
+        </option>
+        <option value="smoke">Smoke, 1s/3s (does not validate performance)</option></select
+      ><button id="run">Run</button>
+      <pre id="status">Not run. Exclusive CPU/browser slot required.</pre>
+    </div>
+    <canvas id="canvas" width="1920" height="1080"></canvas>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

@@ -1,0 +1,45 @@
+# Vehicule și fizică
+
+Versiune 0.5 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
+
+## Fizica și senzația de condus
+
+Realismul primei versiuni înseamnă distanțe de frânare dependente de viteză și aderență, transfer credibil al sarcinii, pierderea aderenței în viraje, suspensie, inerție și diferențe între clasele vehiculelor. Modelul final se alege prin prototip. Un controller cu ray casting este o bază de evaluare, nu o garanție că întreaga dinamică a anvelopelor este simulată fidel.
+
+Inputul digital al tastaturii este filtrat prin curbe de accelerație, frână și direcție, cu revenire și sensibilitate dependentă de viteză. Asistențele sunt configurabile prin ControlPreferences versionat și sliderele din [modulul 27](27-reglaje-hud-si-camera.md), în limite calibrate care păstrează mecanica vehiculului. Estimatorul observă inputul brut, comenzile efective și versiunea setărilor; nu învață oscilațiile produse de limita tastaturii drept preferință personală.
+
+[Implementarea025](keyboard-input.md) publică raw/held/comanda efectivă la tick-ul autoritar. Maparea `025-keyboard-v1` are capete calibrate sedan/compact; valorile vechi `provisional-v1` cer upgrade explicit. Pierderea focusului și editarea într-un câmp eliberează comenzile. Comenzile legacy păstrează S drept frână; [adaptorul027](braking-reverse.md) activează explicit oprire→marșarier și sensul fizic al propulsiei.
+
+Pragurile mecanice aparțin configurației vehiculului. Profilul șoferului exprimă accelerații dorite și spații acceptate, apoi controllerul le realizează în limita aderenței și puterii. Condusul agresiv poate produce derapaje, frânare insuficientă și coliziuni. Sistemul nu adaugă imunitate fizică taxiurilor autonome.
+
+Scenele de calibrare includ frânare de la viteze repetabile, viraje cu rază fixă, schimbare de bandă, impact cu bordură și contact între două mașini. Se verifică stabilitatea numerelor și coerența manual versus autonom înainte de construirea campaniei.
+
+## Contractul dintre manual și autonomie
+
+Controllerul auto aplică aceeași comandă din oricare sursă. Arbitrajul este realizat înainte de fizică; comenzile AI nu sunt aplicate după preluare. Raw input, commanded input și achieved acceleration sunt valori distincte pentru învățare. Nu antrenăm profilul să reproduce zgomotul de suspensie sau impulsurile de coliziune.
+
+Daunele V1 pot avea un model simplu, documentat: efect asupra disponibilității și mobilității, cu incident păstrat. Recuperarea este o operație de joc etichetată, exclusă din preferințele șoferului. Scenele cu frânare, viraj și două clase sunt gate înainte de extinderea hărții.
+
+## Costul fizicii și frecvențele
+
+Controllerul și fizica rămân la 60 Hz; doar deciziile de nivel înalt au 10 Hz distribuiți prin scheduler. Colliderele/query-urile sunt simplificate și filtrate cu regresii de contact/vecini; camera nu dezactivează fizica civililor sau a taxiurilor. Solver/CCD nu se reduc automat cu FPS. 021 măsoară pasul fizic, query-urile și bridge-ul WASM pe trafic/contacte, pe hardware-ul fixat în 203. Acumularea de timp este plafonată și suprasarcina explicită, conform [modulului 25](25-performanta-contracte-si-benchmark.md).
+
+## Recuperare și impacturi distractive
+
+[Modulul 26](26-joaca-libera-haos-si-distrugere.md) diferențiază R/deblocarea mașinii de resetul lumii cu stil păstrat și definește contactele cu decor destructibil. Fizica este aceeași în Academie/Haos și MANUAL/LEARNING/AUTO. Reglajele de input schimbă realizarea comenzilor jucătorului; sliderele de stil schimbă țintele politicii, fără modificarea ascunsă a masei, aderenței sau puterii.
+
+## Prototip implementat021
+
+[Prototipul Rapier](physics-prototype.md) documentează portul, calibrarea, decizia, limitele observate și probele desktop reale. Babylon rămâne engine-ul. Fizica finală și integrarea gameplay continuă în PBI-urile dedicate.
+
+[Adaptorul022](physics-adapter.md) extinde portul cu mapare reală pentru vehicule, pose/velocity SI, remove și subscriptions cu fencing de generație. Implementarea și probele Rapier/Babylon sunt verificate; cinci perechi complete direct/bridge pe WebGPU/WebGL2 reale și20cycles/backend trec bugetele adaptorului timpuriu și cleanupul. Jocul complet și laptopul nu sunt validate de această probă.
+
+[Clasele mecanice023](vehicle-classes.md) definesc două configurații versionate independente de preferințele jucătorului. Masa, puterea, frâna și geometria roților sunt aplicate controllerului Rapier; probele pe aceeași suprafață verifică diferențele de accelerație, frânare și viraj. Portul implicit păstrează mecanica021, iar clasele noi sunt selectate explicit. Calibrarea finală a dinamicii și integrarea controllerului comun continuă în PBI-urile dedicate.
+
+[Contactele și incidentele028](collision-events.md) traduc contactele Rapier reale în episoade cu identități canonice, tick și impuls normal în N*s. Persistența, separarea/recontactul și publicarea cu retry sunt verificate pe ambele backenduri; obstacolele anonime și senzorii nu primesc incidente inventate.
+
+[Controllerul comun024](vehicle-controller.md) realizează comenzile PLAYER/AUTONOMY la 60 Hz, cu validare și arbitraj înaintea unui singur pas fizic. Frâna de mână folosește plafonul nativ al roților spate, iar semnalizarea este derivată din tick. Paritatea, preluarea, suspendarea și cleanup-ul sunt verificate prin teste și driving vizibil; calibrarea suspensiei și aderenței continuă în026, iar marșarierul este documentat separat în027.
+
+[Frânarea și marșarierul027](braking-reverse.md) folosesc opt-in `027-braking-reverse-v1`: inversarea sensului cere viteza totală≤0,2m/s timp de șase tick-uri fizice consecutive cu frâna eliberată. Comanda brută, sensul cerut, sensul angajat și propulsia fizică semnată rămân distincte. Frâna/frâna de mână domină propulsia, iar pauza și schimbarea autorității invalidează tranziția. Calibrarea sedan/compact și driving-ul Chrome pe WebGPU/WebGL2 sunt verificate; mecanica Rapier rămâne comună. Modelul nu pretinde ABS sau o transmisie completă; disponibilitatea029 plafonează magnitudinea după realizarea sensului.
+
+[Avaria029](vehicle-damage.md) publică stările AVAILABLE/DAMAGED/IMMOBILIZED pe identitatea nativă a vehiculului. Pragurile calibrate de impuls echivalent sunt 2 și 8m/s; avaria plafonează propulsia la 0,5, iar imobilizarea aplică propulsie zero și frână de serviciu 1. Recuperarea păstrează prefixul incidentelor și adaugă o operație etichetată. Probele funcționale și complete pe WebGPU/WebGL2 trec criteriile obligatorii de CPU, cadre și memorie JS agregată; perechile individuale eșuate și istoricul regresiilor rămân în [dovezi](Evidence/029-vehicle-damage/current-delivery-summary.md). GPU, latența inputului, memoria nativă și jocul complet rămân nemăsurate de această probă.

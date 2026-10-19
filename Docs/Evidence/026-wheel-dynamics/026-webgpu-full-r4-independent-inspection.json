@@ -1,0 +1,98 @@
+{
+  "version": "026-r4-independent-forensics-v1",
+  "inspectedAt": "2026-10-06T09:30:18.096Z",
+  "launchNotBefore": "2026-10-06T08:53:16Z",
+  "absoluteEvidenceDirectory": "F:/Sites/self-driving-academy/.worktrees/wheel-dynamics-01/Docs/Evidence/026-wheel-dynamics",
+  "captures": [
+    {
+      "file": "failed-1791278505852-WEBGPU.json",
+      "bytes": 23504,
+      "sha256": "6435f6b7f6511b0d7edd8fb6332fb201e2a7083a300e55b81079d4a72e5e9dce",
+      "createdAt": "2026-10-06T09:21:45.822Z",
+      "modifiedAt": "2026-10-06T09:21:45.854Z",
+      "sourceHash": "52671c780d666e6b563ae7e12256a26e3e1b1dfa434175617c5471531df4ad45",
+      "artifactHash": "d4eb36a7f2c215812f71d6f23be8ec27ec3cf9476b65186ec8a83b9a237b69df",
+      "error": "Error: Fixed-tick overload",
+      "foreground": true,
+      "failedArm": {
+        "acceptance": "INCOMPLETE",
+        "armIndex": 9,
+        "pair": 4,
+        "current": true,
+        "phase": "measurement",
+        "warmupSeconds": 30,
+        "measuredSeconds": 120,
+        "tick": 4418,
+        "elapsedSeconds": 355.59169999999995,
+        "rafDeltaMs": 281951.19999999995,
+        "debtSeconds": 281.9583666666666,
+        "status": "overload",
+        "overloadCount": 1,
+        "stepsInLastFrame": 0,
+        "fixedDtSeconds": 0.016666666666666666,
+        "maxCatchupSteps": 4,
+        "overloadDebtMs": 250,
+        "measuredFrames": 6210,
+        "measuredTicks": 2619,
+        "longTasks": {
+          "supported": true,
+          "count": 0,
+          "maxMs": 0
+        },
+        "scope": "Actual bounded failed-arm counters; no successful metrics or performance acceptance reconstructed."
+      },
+      "completedArmCount": 9,
+      "origin": "First aligns with parent R4 launch; second run origin not established by file alone",
+      "acceptance": "FAIL/INCOMPLETE"
+    },
+    {
+      "file": "failed-1791278932179-WEBGPU.json",
+      "bytes": 10554,
+      "sha256": "a019d89665bb3c6cd2a5eef681a0764791a7ef3e940fc86aecf464c64decd81a",
+      "createdAt": "2026-10-06T09:28:52.170Z",
+      "modifiedAt": "2026-10-06T09:28:52.182Z",
+      "sourceHash": "52671c780d666e6b563ae7e12256a26e3e1b1dfa434175617c5471531df4ad45",
+      "artifactHash": "d4eb36a7f2c215812f71d6f23be8ec27ec3cf9476b65186ec8a83b9a237b69df",
+      "error": "Error: Foreground lost",
+      "foreground": false,
+      "failedArm": {
+        "acceptance": "INCOMPLETE",
+        "armIndex": 2,
+        "pair": 1,
+        "current": true,
+        "phase": "measurement",
+        "warmupSeconds": 30,
+        "measuredSeconds": 120,
+        "tick": 6441,
+        "elapsedSeconds": 107.37040000000037,
+        "rafDeltaMs": 7,
+        "debtSeconds": 0.013400000000369915,
+        "status": "running",
+        "overloadCount": 0,
+        "stepsInLastFrame": 0,
+        "fixedDtSeconds": 0.016666666666666666,
+        "maxCatchupSteps": 4,
+        "overloadDebtMs": 250,
+        "measuredFrames": 11128,
+        "measuredTicks": 4642,
+        "longTasks": {
+          "supported": true,
+          "count": 0,
+          "maxMs": 0
+        },
+        "scope": "Actual bounded failed-arm counters; no successful metrics or performance acceptance reconstructed."
+      },
+      "completedArmCount": 2,
+      "origin": "First aligns with parent R4 launch; second run origin not established by file alone",
+      "acceptance": "FAIL/INCOMPLETE"
+    }
+  ],
+  "monitorDisposition": "A matching raw failure was persisted09:21:45 before09:28:26 TIMEOUT. Monitor missed this terminal raw file; its watched path/configuration was not provided for independent inspection.",
+  "serverSession": {
+    "id": 95990,
+    "poll": "alive, no new output"
+  },
+  "cleanupLimit": "Failure exported after runArm finally cleanup; no independent cleanup counters in failure envelope. Do not infer complete cleanup acceptance.",
+  "cause": "R4 raw overload followed a281951.2ms RAF interval. Foreground true at export does not establish uninterrupted prior focus or identify external stall cause. Later separate raw failure reports actual foreground false.",
+  "parentTerminal": "Parent confirmed Run enabled/Foreground lost; hardware released. No rerun/native/UI/source changes performed."
+}

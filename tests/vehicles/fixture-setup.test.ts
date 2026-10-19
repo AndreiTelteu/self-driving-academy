@@ -1,0 +1,104 @@
+// SOURCE09 draft: no Rapier import, init, world or native allocation.
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { setupManyContacts, disposeAfterFailure } from './fixture-setup';
+
+test('many-contact synchronous setup releases earlier allocations on car and box faults', () => {
+  for (const faultAt of [5, 73, 78])
+    for (const disposalFails of [false, true]) {
+      const primary = new Error('setup fault');
+      const disposal = new Error('dispose fault');
+      let calls = 0,
+        owned = 0,
+        disposed = 0;
+      const allocate = () => {
+        if (++calls === faultAt) throw primary;
+        owned++;
+      };
+      const world = {
+        addCar: allocate,
+        addBox: allocate,
+        dispose: () => {
+          disposed++;
+          if (disposalFails) throw disposal;
+          owned = 0;
+        },
+      };
+      assert.throws(
+        () => setupManyContacts(world, 70),
+        (error: unknown) => {
+          if (disposalFails) {
+            assert.ok(error instanceof AggregateError);
+            assert.deepEqual(error.errors, [primary, disposal]);
+            assert.equal(error.cause, primary);
+          } else assert.equal(error, primary);
+          return true;
+        },
+      );
+      assert.equal(disposed, 1);
+      assert.equal(calls, faultAt);
+      assert.equal(owned, disposalFails ? faultAt - 1 : 0);
+      // A failed dispose does not claim zero resources or native-internal cleanup.
+    }
+});
+
+test('successful setup hands ownership to caller with original geometry, ordering and inputs', () => {
+  const calls: unknown[][] = [];
+  let disposed = 0;
+  const world = {
+    addCar: (...args: unknown[]) => {
+      calls.push(['car', ...args]);
+    },
+    addBox: (...args: unknown[]) => {
+      calls.push(['box', ...args]);
+    },
+    dispose: () => {
+      disposed++;
+    },
+  };
+  const result = setupManyContacts(world, 70);
+  assert.equal(result.world, world);
+  assert.equal(disposed, 0);
+  assert.equal(calls.length, 137);
+  assert.deepEqual(calls[0], ['car', 'car-0', { x: -10, y: 0.8, z: 0 }]);
+  assert.deepEqual(calls[70], ['box', { x: 0, y: 1, z: 32 }, { x: 20, y: 1, z: 0.5 }]);
+  assert.deepEqual(calls[73], [
+    'box',
+    { x: -2.5, y: 0.35, z: 30 },
+    { x: 0.3, y: 0.3, z: 0.3 },
+    true,
+  ]);
+  assert.equal(result.inputs.size, 70);
+  assert.deepEqual(result.inputs.get('car-1'), { throttle: 0.65, brake: 0, steering: 0.03 });
+});
+
+test('legitimate throw undefined remains an independent cause when disposal throws', () => {
+  const disposal = new Error('dispose');
+  let failed = false,
+    primary: unknown;
+  try {
+    throw undefined;
+  } catch (error) {
+    failed = true;
+    primary = error;
+  }
+  assert.throws(
+    () =>
+      disposeAfterFailure(
+        {
+          dispose() {
+            throw disposal;
+          },
+        },
+        failed,
+        primary,
+      ),
+    (error: unknown) => {
+      assert.ok(error instanceof AggregateError);
+      assert.deepEqual(error.errors, [undefined, disposal]);
+      assert.ok(Object.hasOwn(error, 'cause'));
+      assert.equal(error.cause, undefined);
+      return true;
+    },
+  );
+});
