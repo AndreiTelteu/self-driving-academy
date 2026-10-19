@@ -43,6 +43,8 @@ export interface PauseFocusStats {
   /** Re-evaluations that did not change the suspension state (no port call). */
   readonly noopReconciles: number;
   readonly surfacesOpen: number;
+  /** Whether the host supplied the held-command reset port for this session. */
+  readonly heldResetPort: boolean;
 }
 
 /**
@@ -54,8 +56,12 @@ export interface PauseFocusPorts {
   readonly suspend: (cause: PauseFocusCause) => void;
   /** 012 owns the clock: this must resume it, excluding all wall time spent suspended. */
   readonly resume: (cause: PauseFocusCause) => void;
-  /** 025 owns held key state: this must clear every held command and its filter ramps. */
-  readonly resetHeldCommands: () => void;
+  /**
+   * 025 owns held key state: this must clear every held driving command and its filter ramps.
+   * Supply it whenever the session composes a held-command source; a session that composes none
+   * may omit it, and `getStats().heldResetPort` then reports `false` so a reader can tell.
+   */
+  readonly resetHeldCommands?: () => void;
 }
 
 const modes: readonly PauseFocusMode[] = ['AUTO', 'MANUAL', 'LEARNING'];
@@ -105,7 +111,7 @@ export function createPauseFocusOwner(ports: PauseFocusPorts): PauseFocusOwner {
   requireContract(
     typeof ports?.suspend === 'function' &&
       typeof ports.resume === 'function' &&
-      typeof ports.resetHeldCommands === 'function',
+      (ports.resetHeldCommands === undefined || typeof ports.resetHeldCommands === 'function'),
     'Pause-focus ports must be synchronous functions',
   );
   let mode: PauseFocusMode = 'AUTO';
@@ -173,7 +179,7 @@ export function createPauseFocusOwner(ports: PauseFocusPorts): PauseFocusOwner {
     resumes += 1;
     clearHeld();
     heldResets += 1;
-    ports.resetHeldCommands();
+    ports.resetHeldCommands?.();
     ports.resume(previous);
   };
   const mutate = (change: () => void): void => {
@@ -199,6 +205,7 @@ export function createPauseFocusOwner(ports: PauseFocusPorts): PauseFocusOwner {
         heldResets,
         noopReconciles,
         surfacesOpen: surfaceNames.filter((name) => open[name]).length,
+        heldResetPort: typeof ports.resetHeldCommands === 'function',
       }),
     setMode(next: PauseFocusMode) {
       mutate(() => {

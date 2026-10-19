@@ -1,5 +1,11 @@
-import { createApplicationLifecycle, createRendererRecovery, type RecoveryRenderer } from './app';
+import {
+  createApplicationLifecycle,
+  createPauseFocusOwner,
+  createRendererRecovery,
+  type RecoveryRenderer,
+} from './app';
 import { createDefaultSettings } from './settings';
+import { bindPauseFocusInput } from './input';
 import {
   createBabylonRecoverySession,
   diagnoseBackend,
@@ -26,6 +32,24 @@ interface BootstrapCheckpoint {
   readonly scene: RecoverySceneSnapshot;
 }
 let activeRecovery: ReturnType<typeof createRendererRecovery<BootstrapCheckpoint>> | undefined;
+/**
+ * 070 owns the suspension decision; 012 only executes it. The bootstrap composes no held driving
+ * filter (025/027 belong to the manual session), so `resetHeldCommands` is intentionally absent
+ * and `getStats().heldResetPort` reports it; the manual session supplies the real hook.
+ */
+const pauseFocus = createPauseFocusOwner({
+  suspend: (cause) => application.pause(cause),
+  resume: (cause) => {
+    const state = application.getState();
+    if (state.kind === 'PAUSED' && state.reason === cause) application.play();
+  },
+});
+/** Browser alt-tab/blur only *reports*; the authoritative suspension stays a 070 decision. */
+const focusBinding = bindPauseFocusInput({
+  surface: app,
+  onFocusLost: () => pauseFocus.setFocusLost(true),
+  onFocusGained: () => pauseFocus.setFocusLost(false),
+});
 const application = createApplicationLifecycle({
   createBackend: async (selected): Promise<RecoveryRenderer> => {
     const recovery = createRendererRecovery<BootstrapCheckpoint>({
@@ -151,12 +175,15 @@ view.onRetry(() => {
   else void activeRecovery.recover('User requested renderer reload');
 });
 view.onPlay(() => {
+  // The owner refuses an explicit resume while a panel/menu/focus loss still demands suspension.
+  if (!pauseFocus.requestResume()) return;
   if (activeRecovery?.getState().kind === 'READY') application.play();
 });
 view.onPause(() => application.pause());
 void application.load(preference);
 const dispose = (): void => {
   try {
+    focusBinding.dispose();
     application.dispose();
   } finally {
     diagnosticsPanel.dispose();
