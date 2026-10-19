@@ -1,12 +1,12 @@
 ---
 id: "100"
 title: "Incertitudine praguri și număr efectiv"
-status: "To Do"
+status: "In Progress"
 release: "V1"
 module: "Învățare"
 depends_on: ["094","095","096","097","098","099"]
-owner: null
-started_at: null
+owner: "Codex gpt-6-luna medium evidence-confidence-01"
+started_at: "2026-10-20T00:36:00+03:00"
 completed_at: null
 ---
 
