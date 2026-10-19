@@ -1,7 +1,7 @@
 // PBI 090 native probe. BEFORE reads the same real 044 fixture through 085 only; AFTER adds
 // 090 compaction, chunk rollover, incremental finalization and safe copy-transfer. Run arms alone.
-// Usage: volta run --node 24.21.0 --npm 11.19.0 -- node scripts/benchmark-telemetry-storage.mjs --baseline
-//        volta run --node 24.21.0 --npm 11.19.0 -- node scripts/benchmark-telemetry-storage.mjs
+// Usage: volta run --node 24.21.0 -- node --import ./scripts/register-typescript.mjs scripts/benchmark-telemetry-storage.mjs --baseline
+//        volta run --node 24.21.0 -- node --import ./scripts/register-typescript.mjs scripts/benchmark-telemetry-storage.mjs
 import { cpus, platform, release, totalmem } from 'node:os';
 import { performance } from 'node:perf_hooks';
 import { execFileSync } from 'node:child_process';
