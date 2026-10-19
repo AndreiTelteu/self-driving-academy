@@ -376,7 +376,11 @@ function selfCheck() {
       // The 052 owner concludes on the authoritative occurrence tick, never on the consumer tick.
       for (const record of records)
         if (record.kind === 'YIELD' && record.state === 'ENTERED')
-          registry.conclude({ tick: record.openedTick, opportunityId: record.id, outcome: 'YIELDED' });
+          registry.conclude({
+            tick: record.openedTick,
+            opportunityId: record.id,
+            outcome: 'YIELDED',
+          });
     }
     const all = registry.getOpportunities();
     const denominators = registry.getDenominators();
@@ -394,7 +398,9 @@ function selfCheck() {
     openedTick: record.openedTick,
     resolvedTick: record.resolvedTick,
   });
-  if (JSON.stringify(everyTick.all.map(project)) !== JSON.stringify(decisionCadence.all.map(project)))
+  if (
+    JSON.stringify(everyTick.all.map(project)) !== JSON.stringify(decisionCadence.all.map(project))
+  )
     failures.push('60 Hz and 10 Hz consumers disagree on the opportunity set');
   if (new Set(everyTick.all.map((record) => record.id)).size !== everyTick.all.length)
     failures.push('a duplicate opportunity id was produced');
