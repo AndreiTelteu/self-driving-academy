@@ -1,12 +1,13 @@
 ---
 id: "055"
 title: "Motive de decizie și observabilitate"
-status: "To Do"
+status: "In Progress"
 release: "V1"
 module: "Autonomie"
 depends_on: ["050","051","052","053","054"]
-owner: null
-started_at: null
+performance_checks: ["simulation", "memory"]
+owner: "opencode deepseek-v4.1-flash medium decision-explanation-01"
+started_at: "2026-10-19T02:59:15+03:00"
 completed_at: null
 ---
 
@@ -62,3 +63,5 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '055' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+
+- 2026-10-19: Ordonatorul `loop-pbi` a actualizat scope-ul de verificare înainte de implementare (conform AGENTS.md): adăugat `performance_checks: ["simulation", "memory"]`, aliniat cu familia de autonomie 044–054. Owner `opencode deepseek-v4.1-flash medium decision-explanation-01`; mutat fizic To Do → In Progress.
