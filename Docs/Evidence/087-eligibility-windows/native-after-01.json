@@ -1,0 +1,1410 @@
+{
+  "capturedAt": "2026-10-19T10:11:45.463Z",
+  "pbi": "087",
+  "mode": "AFTER_ELIGIBILITY_WINDOWS",
+  "commit": "b6b38aa22727668826fe28145c819aef66431649",
+  "sourceHashes": {
+    "scripts/benchmark-eligibility-windows.mjs": "f3faf1488b7a6e993f7f8d8c385e803a929a005ebdb4f4dbb48dd9c325d8dfa9",
+    "src/telemetry/eligibility-windows.ts": "bd40336572b44ec432d52f612754be26a11a4c348235011d6187b1cb29e3cf62",
+    "src/telemetry/opportunities.ts": "c2ecb5c67a7da7f510a42f36202d9748062edef5417e4e2a319381acac526626",
+    "src/telemetry/tick-samples.ts": "71d55715f2a9a1a0ea87b427f2da7c3e13b319e1c68812b27393e49e60740905",
+    "src/sessions/identity.ts": "f4b78b20857fc65704857a7bb78ef5a604083f173153ec7f5582bc450c6d76a6",
+    "src/autonomy/following.ts": "c14c21d6bb8b38017eb7b29da3805502f3e514b5fcf89568ca3bb2d53715cb07",
+    "src/world/signals.ts": "772142b68ba6aa90e9df5d19ee19f35aed6d6ea74e51155e53d4b20b12a2452b",
+    "src/autonomy/road-context.ts": "f9782583c51f9b1b6ab678ba27162f31b95f19b41d180145638fd672c5548dce",
+    "src/vehicles/keyboard-filter.ts": "454b4a750cd0f227910e183e3244930f31a10f95eac33d3934827cc6e97acfca",
+    "tests/autonomy/road-context-reference.ts": "c5fe61c330db951f2bb1f97b3ea6d75bb92228e7f38864197e21378602ddd6f7",
+    "tests/world/intersection-conflicts-fixture.ts": "f159c5b3852b57e456e28b797c1cfa20182d4a58c13e426095ca622cd4a6fbd7"
+  },
+  "sourceHashScope": "Probe, eligibility layer, opportunity registry, 006 identity, 048 following, 036 signals, 044 context, 025 filter and the reused 044 fixture; not a verified transitive dependency closure",
+  "hardware": {
+    "cpu": "AMD Ryzen 7 7735U with Radeon Graphics         ",
+    "logicalCpus": 16,
+    "ramBytes": 14702026752,
+    "os": "win32 10.0.26300",
+    "powerScheme": "Power Scheme GUID: 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c  (High performance)"
+  },
+  "runtime": "v24.21.0",
+  "budgetVersion": "203-initial-1",
+  "fixtureVersion": "087-eligibility-windows-native-v1",
+  "validationLevel": "targeted",
+  "protocol": {
+    "repetitions": 5,
+    "warmupIterations": 200,
+    "measuredIterations": 600,
+    "arms": "world / registry / eligibility per repetition, sequential, one process, no concurrent load",
+    "workload": "1 subject (vehicle-0) observed, real 036 signal controller advancing consecutive ticks over the 044 fixture, real 044 context/leader and 025 keyboard filter; one real-contract 037 STOP approach every 180 ticks and one real 038 yield occurrence per approach",
+    "seed": "none; deterministic tick-modulo input pattern and a fixed fixture",
+    "capacity": "default (4096)",
+    "clock": "performance.now only; fixed synthetic tick index (no wall clock in the fixture)",
+    "budget": "Added cost must stay far below the 5.5 ms provisional full-tick p95 ceiling; no isolated budget claimed",
+    "calibration": "PROVISIONAL_UNCALIBRATED",
+    "injected": [
+      "The 044 fixture declares no STOP stop line, so the real 037 event contract and 037 identity are injected with parseSimulationEvent.",
+      "The real 038 priority-yield identity is injected through the stimulus port (no 038 producer runs on this fixture).",
+      "The stimulus observability is declared by a controlled fixture; the 017 camera pose/occlusion path is covered by the unit suite.",
+      "The 10 Hz consumer drains a queue; the world always steps every fixed tick."
+    ]
+  },
+  "scope": "Native Node CPU and owned-memory cost of the 087 eligibility layer on top of the 086 registry on the reused 044/085 fixture. No renderer, browser, GPU, FPS or realtime-throughput claim.",
+  "runs": [
+    {
+      "repetition": 1,
+      "mode": "world",
+      "observeLoopMs": {
+        "count": 600,
+        "p50": 0.00009999999997489795,
+        "p95": 0.00020000000006348273,
+        "p99": 0.0003000000000383807,
+        "min": 0,
+        "max": 0.0005999999999630745,
+        "mean": 0.00011466666666734682
+      },
+      "worldBuildMs": {
+        "count": 600,
+        "p50": 0.9791000000000167,
+        "p95": 1.4099999999999682,
+        "p99": 1.7379999999999995,
+        "min": 0.8791000000001077,
+        "max": 2.034999999999968,
+        "mean": 1.0492563333333338
+      },
+      "wallMs": 874.0134,
+      "observations": 0,
+      "labels": 0,
+      "heapAfterBytes": 39103008,
+      "registryOwnership": null,
+      "eligibilityDenominators": null,
+      "eligibilityOwnership": null
+    },
+    {
+      "repetition": 1,
+      "mode": "registry",
+      "observeLoopMs": {
+        "count": 600,
+        "p50": 0.007800000000088403,
+        "p95": 0.01880000000005566,
+        "p99": 0.0624000000000251,
+        "min": 0.006300000000010186,
+        "max": 0.1172999999998865,
+        "mean": 0.010041166666665807
+      },
+      "worldBuildMs": {
+        "count": 600,
+        "p50": 0.9546000000000276,
+        "p95": 1.2580000000000382,
+        "p99": 1.4489000000000942,
+        "min": 0.8871999999998934,
+        "max": 1.7467999999998938,
+        "mean": 0.9850768333333406
+      },
+      "wallMs": 804.7883999999999,
+      "observations": 800,
+      "labels": 0,
+      "heapAfterBytes": 52719344,
+      "registryOwnership": {
+        "version": "086-opportunity-ids-v1",
+        "disposed": false,
+        "maxOpportunities": 4096,
+        "openedTotal": 23,
+        "resolvedTotal": 8,
+        "truncatedTotal": 13,
+        "retiredTotal": 0,
+        "rejectedTotal": 0,
+        "contradictionTotal": 0,
+        "observationCalls": 800,
+        "skippedTicks": 0,
+        "suspensions": 0,
+        "resumptions": 0,
+        "segmentOverflow": 0,
+        "retained": 23,
+        "entered": 2,
+        "resolved": 8,
+        "truncated": 13,
+        "identityCodeUnits": 3366,
+        "estimatedBytes": 11148,
+        "estimatedBytesMaximum": 17563648
+      },
+      "eligibilityDenominators": null,
+      "eligibilityOwnership": null
+    },
+    {
+      "repetition": 1,
+      "mode": "eligibility",
+      "observeLoopMs": {
+        "count": 600,
+        "p50": 0.017400000000179716,
+        "p95": 0.03830000000016298,
+        "p99": 0.09040000000004511,
+        "min": 0.013099999999667489,
+        "max": 0.33140000000003056,
+        "mean": 0.020785833333324413
+      },
+      "worldBuildMs": {
+        "count": 600,
+        "p50": 0.9773000000000138,
+        "p95": 1.3557000000000698,
+        "p99": 1.6577000000002045,
+        "min": 0.8908000000001266,
+        "max": 1.9380000000001019,
+        "mean": 1.0331426666666546
+      },
+      "wallMs": 842.8379,
+      "observations": 800,
+      "labels": 826,
+      "heapAfterBytes": 48108536,
+      "registryOwnership": {
+        "version": "086-opportunity-ids-v1",
+        "disposed": false,
+        "maxOpportunities": 4096,
+        "openedTotal": 23,
+        "resolvedTotal": 8,
+        "truncatedTotal": 13,
+        "retiredTotal": 0,
+        "rejectedTotal": 0,
+        "contradictionTotal": 0,
+        "observationCalls": 800,
+        "skippedTicks": 0,
+        "suspensions": 0,
+        "resumptions": 0,
+        "segmentOverflow": 0,
+        "retained": 23,
+        "entered": 2,
+        "resolved": 8,
+        "truncated": 13,
+        "identityCodeUnits": 3366,
+        "estimatedBytes": 11148,
+        "estimatedBytesMaximum": 17563648
+      },
+      "eligibilityDenominators": {
+        "version": "087-eligibility-windows-v1",
+        "total": 23,
+        "eligible": 0,
+        "externalConstraint": 23,
+        "excluded": 0,
+        "byLabel": [
+          {
+            "label": "FREE_TRAFFIC",
+            "windowClass": "ELIGIBLE",
+            "count": 0
+          },
+          {
+            "label": "LEADER",
+            "windowClass": "EXTERNAL_CONSTRAINT",
+            "count": 23
+          },
+          {
+            "label": "BLOCKED_GREEN",
+            "windowClass": "EXTERNAL_CONSTRAINT",
+            "count": 0
+          },
+          {
+            "label": "MECHANICAL_LIMIT",
+            "windowClass": "EXTERNAL_CONSTRAINT",
+            "count": 0
+          },
+          {
+            "label": "IMPACT",
+            "windowClass": "EXTERNAL_CONSTRAINT",
+            "count": 0
+          },
+          {
+            "label": "PAUSE",
+            "windowClass": "EXCLUDED",
+            "count": 0
+          },
+          {
+            "label": "FOCUS_LOST",
+            "windowClass": "EXCLUDED",
+            "count": 0
+          },
+          {
+            "label": "MANUAL_SEGMENT",
+            "windowClass": "EXCLUDED",
+            "count": 0
+          },
+          {
+            "label": "AUTO_SEGMENT",
+            "windowClass": "EXCLUDED",
+            "count": 0
+          },
+          {
+            "label": "NOT_OBSERVABLE",
+            "windowClass": "EXCLUDED",
+            "count": 0
+          }
+        ],
+        "externalConstraints": [
+          {
+            "label": "LEADER",
+            "windowClass": "EXTERNAL_CONSTRAINT",
+            "count": 23
+          },
+          {
+            "label": "BLOCKED_GREEN",
+            "windowClass": "EXTERNAL_CONSTRAINT",
+            "count": 0
+          },
+          {
+            "label": "MECHANICAL_LIMIT",
+            "windowClass": "EXTERNAL_CONSTRAINT",
+            "count": 0
+          },
+          {
+            "label": "IMPACT",
+            "windowClass": "EXTERNAL_CONSTRAINT",
+            "count": 0
+          }
+        ],
+        "notObservable": 0,
+        "reactionWindowsOpened": 0,
+        "reactionSamples": 0,
+        "responsesRefused": 0,
+        "preferenceEvidenceEmitted": 0,
+        "preferenceEvidenceRefused": 0
+      },
+      "eligibilityOwnership": {
+        "version": "087-eligibility-windows-v1",
+        "disposed": false,
+        "maxWindows": 4096,
+        "windowsOpened": 23,
+        "reclassifiedTotal": 0,
+        "retiredTotal": 0,
+        "rejectedTotal": 0,
+        "observationCalls": 826,
+        "skippedTicks": -26,
+        "responsesAccepted": 0,
+        "responsesRefused": 0,
+        "retained": 23,
+        "eligibleRetained": 0,
+        "identityCodeUnits": 5888,
+        "estimatedBytes": 14720,
+        "estimatedBytesMaximum": 8912896
+      }
+    },
+    {
+      "repetition": 2,
+      "mode": "world",
+      "observeLoopMs": {
+        "count": 600,
+        "p50": 0.00009999999974752427,
+        "p95": 0.00010000000020227162,
+        "p99": 0.0001999999999497959,
+        "min": 0,
+        "max": 0.0003999999998995918,
+        "mean": 0.00006849999999076318
+      },
+      "worldBuildMs": {
+        "count": 600,
+        "p50": 0.9463000000000648,
+        "p95": 1.2718999999997322,
+        "p99": 1.4924000000000888,
+        "min": 0.8668999999999869,
+        "max": 2.7669999999998254,
+        "mean": 0.9952571666666639
+      },
+      "wallMs": 796.0731000000001,
+      "observations": 0,
+      "labels": 0,
+      "heapAfterBytes": 86128176,
+      "registryOwnership": null,
+      "eligibilityDenominators": null,
+      "eligibilityOwnership": null
+    },
+    {
+      "repetition": 2,
+      "mode": "registry",
+      "observeLoopMs": {
+        "count": 600,
+        "p50": 0.006200000000262662,
+        "p95": 0.015900000000328873,
+        "p99": 0.03470000000015716,
+        "min": 0.0053999999990992364,
+        "max": 0.11589999999978318,
+        "mean": 0.00800133333334088
+      },
+      "worldBuildMs": {
+        "count": 600,
+        "p50": 0.9515000000001237,
+        "p95": 1.2166999999999462,
+        "p99": 1.8192000000003645,
+        "min": 0.8773000000001048,
+        "max": 2.746099999999842,
+        "mean": 0.9971081666666752
+      },
+      "wallMs": 800.3714999999997,
+      "observations": 800,
+      "labels": 0,
+      "heapAfterBytes": 57085528,
+      "registryOwnership": {
+        "version": "086-opportunity-ids-v1",
+        "disposed": false,
+        "maxOpportunities": 4096,
+        "openedTotal": 23,
+        "resolvedTotal": 8,
+        "truncatedTotal": 13,
+        "retiredTotal": 0,
+        "rejectedTotal": 0,
+        "contradictionTotal": 0,
+        "observationCalls": 800,
+        "skippedTicks": 0,
+        "suspensions": 0,
+        "resumptions": 0,
+        "segmentOverflow": 0,
+        "retained": 23,
+        "entered": 2,
+        "resolved": 8,
+        "truncated": 13,
+        "identityCodeUnits": 3366,
+        "estimatedBytes": 11148,
+        "estimatedBytesMaximum": 17563648
+      },
+      "eligibilityDenominators": null,
+      "eligibilityOwnership": null
+    },
+    {
+      "repetition": 2,
+      "mode": "eligibility",
+      "observeLoopMs": {
+        "count": 600,
+        "p50": 0.013200000000324508,
+        "p95": 0.033500000000458385,
+        "p99": 0.057999999999992724,
+        "min": 0.011199999999917054,
+        "max": 0.07150000000001455,
+        "mean": 0.015353833333330538
+      },
+      "worldBuildMs": {
+        "count": 600,
+        "p50": 0.9506000000001222,
+        "p95": 1.1104999999997744,
+        "p99": 1.5280000000002474,
+        "min": 0.8733999999994921,
+        "max": 1.9441999999999098,
+        "mean": 0.9773509999999987
+      },
+      "wallMs": 796.8812999999991,
+      "observations": 800,
+      "labels": 826,
+      "heapAfterBytes": 37313400,
+      "registryOwnership": {
+        "version": "086-opportunity-ids-v1",
+        "disposed": false,
+        "maxOpportunities": 4096,
+        "openedTotal": 23,
+        "resolvedTotal": 8,
+        "truncatedTotal": 13,
+        "retiredTotal": 0,
+        "rejectedTotal": 0,
+        "contradictionTotal": 0,
+        "observationCalls": 800,
+        "skippedTicks": 0,
+        "suspensions": 0,
+        "resumptions": 0,
+        "segmentOverflow": 0,
+        "retained": 23,
+        "entered": 2,
+        "resolved": 8,
+        "truncated": 13,
+        "identityCodeUnits": 3366,
+        "estimatedBytes": 11148,
+        "estimatedBytesMaximum": 17563648
+      },
+      "eligibilityDenominators": {
+        "version": "087-eligibility-windows-v1",
+        "total": 23,
+        "eligible": 0,
+        "externalConstraint": 23,
+        "excluded": 0,
+        "byLabel": [
+          {
+            "label": "FREE_TRAFFIC",
+            "windowClass": "ELIGIBLE",
+            "count": 0
+          },
+          {
+            "label": "LEADER",
+            "windowClass": "EXTERNAL_CONSTRAINT",
+            "count": 23
+          },
+          {
+            "label": "BLOCKED_GREEN",
+            "windowClass": "EXTERNAL_CONSTRAINT",
+            "count": 0
+          },
+          {
+            "label": "MECHANICAL_LIMIT",
+            "windowClass": "EXTERNAL_CONSTRAINT",
+            "count": 0
+          },
+          {
+            "label": "IMPACT",
+            "windowClass": "EXTERNAL_CONSTRAINT",
+            "count": 0
+          },
+          {
+            "label": "PAUSE",
+            "windowClass": "EXCLUDED",
+            "count": 0
+          },
+          {
+            "label": "FOCUS_LOST",
+            "windowClass": "EXCLUDED",
+            "count": 0
+          },
+          {
+            "label": "MANUAL_SEGMENT",
+            "windowClass": "EXCLUDED",
+            "count": 0
+          },
+          {
+            "label": "AUTO_SEGMENT",
+            "windowClass": "EXCLUDED",
+            "count": 0
+          },
+          {
+            "label": "NOT_OBSERVABLE",
+            "windowClass": "EXCLUDED",
+            "count": 0
+          }
+        ],
+        "externalConstraints": [
+          {
+            "label": "LEADER",
+            "windowClass": "EXTERNAL_CONSTRAINT",
+            "count": 23
+          },
+          {
+            "label": "BLOCKED_GREEN",
+            "windowClass": "EXTERNAL_CONSTRAINT",
+            "count": 0
+          },
+          {
+            "label": "MECHANICAL_LIMIT",
+            "windowClass": "EXTERNAL_CONSTRAINT",
+            "count": 0
+          },
+          {
+            "label": "IMPACT",
+            "windowClass": "EXTERNAL_CONSTRAINT",
+            "count": 0
+          }
+        ],
+        "notObservable": 0,
+        "reactionWindowsOpened": 0,
+        "reactionSamples": 0,
+        "responsesRefused": 0,
+        "preferenceEvidenceEmitted": 0,
+        "preferenceEvidenceRefused": 0
+      },
+      "eligibilityOwnership": {
+        "version": "087-eligibility-windows-v1",
+        "disposed": false,
+        "maxWindows": 4096,
+        "windowsOpened": 23,
+        "reclassifiedTotal": 0,
+        "retiredTotal": 0,
+        "rejectedTotal": 0,
+        "observationCalls": 826,
+        "skippedTicks": -26,
+        "responsesAccepted": 0,
+        "responsesRefused": 0,
+        "retained": 23,
+        "eligibleRetained": 0,
+        "identityCodeUnits": 5888,
+        "estimatedBytes": 14720,
+        "estimatedBytesMaximum": 8912896
+      }
+    },
+    {
+      "repetition": 3,
+      "mode": "world",
+      "observeLoopMs": {
+        "count": 600,
+        "p50": 0.00009999999929277692,
+        "p95": 0.00010000000020227162,
+        "p99": 0.00010000000020227162,
+        "min": 0,
+        "max": 0.0009000000000014552,
+        "mean": 0.000062666666660031
+      },
+      "worldBuildMs": {
+        "count": 600,
+        "p50": 0.9393000000000029,
+        "p95": 1.0591999999996915,
+        "p99": 1.4843000000000757,
+        "min": 0.8733000000001994,
+        "max": 1.8130000000001019,
+        "mean": 0.9611841666666578
+      },
+      "wallMs": 764.4880000000003,
+      "observations": 0,
+      "labels": 0,
+      "heapAfterBytes": 69295168,
+      "registryOwnership": null,
+      "eligibilityDenominators": null,
+      "eligibilityOwnership": null
+    },
+    {
+      "repetition": 3,
+      "mode": "registry",
+      "observeLoopMs": {
+        "count": 600,
+        "p50": 0.005799999999908323,
+        "p95": 0.014400000000023283,
+        "p99": 0.03180000000065775,
+        "min": 0.005199999999604188,
+        "max": 0.058699999999589636,
+        "mean": 0.007107833333354089
+      },
+      "worldBuildMs": {
+        "count": 600,
+        "p50": 0.9438000000000102,
+        "p95": 1.1358000000000175,
+        "p99": 1.4898000000002867,
+        "min": 0.8795000000000073,
+        "max": 1.9333999999998923,
+        "mean": 0.9662638333333113
+      },
+      "wallMs": 778.9763000000003,
+      "observations": 800,
+      "labels": 0,
+      "heapAfterBytes": 41129976,
+      "registryOwnership": {
+        "version": "086-opportunity-ids-v1",
+        "disposed": false,
+        "maxOpportunities": 4096,
+        "openedTotal": 23,
+        "resolvedTotal": 8,
+        "truncatedTotal": 13,
+        "retiredTotal": 0,
+        "rejectedTotal": 0,
+        "contradictionTotal": 0,
+        "observationCalls": 800,
+        "skippedTicks": 0,
+        "suspensions": 0,
+        "resumptions": 0,
+        "segmentOverflow": 0,
+        "retained": 23,
+        "entered": 2,
+        "resolved": 8,
+        "truncated": 13,
+        "identityCodeUnits": 3366,
+        "estimatedBytes": 11148,
+        "estimatedBytesMaximum": 17563648
+      },
+      "eligibilityDenominators": null,
+      "eligibilityOwnership": null
+    },
+    {
+      "repetition": 3,
+      "mode": "eligibility",
+      "observeLoopMs": {
+        "count": 600,
+        "p50": 0.014400000000023283,
+        "p95": 0.03449999999975262,
+        "p99": 0.05569999999988795,
+        "min": 0.012200000000120781,
+        "max": 0.11090000000058353,
+        "mean": 0.016856333333306186
+      },
+      "worldBuildMs": {
+        "count": 600,
+        "p50": 0.9477999999999156,
+        "p95": 1.2273999999997613,
+        "p99": 1.5603000000000975,
+        "min": 0.8801000000003114,
+        "max": 1.7404999999998836,
+        "mean": 0.9779019999999885
+      },
+      "wallMs": 798.8395,
+      "observations": 800,
+      "labels": 826,
+      "heapAfterBytes": 88570792,
+      "registryOwnership": {
+        "version": "086-opportunity-ids-v1",
+        "disposed": false,
+        "maxOpportunities": 4096,
+        "openedTotal": 23,
+        "resolvedTotal": 8,
+        "truncatedTotal": 13,
+        "retiredTotal": 0,
+        "rejectedTotal": 0,
+        "contradictionTotal": 0,
+        "observationCalls": 800,
+        "skippedTicks": 0,
+        "suspensions": 0,
+        "resumptions": 0,
+        "segmentOverflow": 0,
+        "retained": 23,
+        "entered": 2,
+        "resolved": 8,
+        "truncated": 13,
+        "identityCodeUnits": 3366,
+        "estimatedBytes": 11148,
+        "estimatedBytesMaximum": 17563648
+      },
+      "eligibilityDenominators": {
+        "version": "087-eligibility-windows-v1",
+        "total": 23,
+        "eligible": 0,
+        "externalConstraint": 23,
+        "excluded": 0,
+        "byLabel": [
+          {
+            "label": "FREE_TRAFFIC",
+            "windowClass": "ELIGIBLE",
+            "count": 0
+          },
+          {
+            "label": "LEADER",
+            "windowClass": "EXTERNAL_CONSTRAINT",
+            "count": 23
+          },
+          {
+            "label": "BLOCKED_GREEN",
+            "windowClass": "EXTERNAL_CONSTRAINT",
+            "count": 0
+          },
+          {
+            "label": "MECHANICAL_LIMIT",
+            "windowClass": "EXTERNAL_CONSTRAINT",
+            "count": 0
+          },
+          {
+            "label": "IMPACT",
+            "windowClass": "EXTERNAL_CONSTRAINT",
+            "count": 0
+          },
+          {
+            "label": "PAUSE",
+            "windowClass": "EXCLUDED",
+            "count": 0
+          },
+          {
+            "label": "FOCUS_LOST",
+            "windowClass": "EXCLUDED",
+            "count": 0
+          },
+          {
+            "label": "MANUAL_SEGMENT",
+            "windowClass": "EXCLUDED",
+            "count": 0
+          },
+          {
+            "label": "AUTO_SEGMENT",
+            "windowClass": "EXCLUDED",
+            "count": 0
+          },
+          {
+            "label": "NOT_OBSERVABLE",
+            "windowClass": "EXCLUDED",
+            "count": 0
+          }
+        ],
+        "externalConstraints": [
+          {
+            "label": "LEADER",
+            "windowClass": "EXTERNAL_CONSTRAINT",
+            "count": 23
+          },
+          {
+            "label": "BLOCKED_GREEN",
+            "windowClass": "EXTERNAL_CONSTRAINT",
+            "count": 0
+          },
+          {
+            "label": "MECHANICAL_LIMIT",
+            "windowClass": "EXTERNAL_CONSTRAINT",
+            "count": 0
+          },
+          {
+            "label": "IMPACT",
+            "windowClass": "EXTERNAL_CONSTRAINT",
+            "count": 0
+          }
+        ],
+        "notObservable": 0,
+        "reactionWindowsOpened": 0,
+        "reactionSamples": 0,
+        "responsesRefused": 0,
+        "preferenceEvidenceEmitted": 0,
+        "preferenceEvidenceRefused": 0
+      },
+      "eligibilityOwnership": {
+        "version": "087-eligibility-windows-v1",
+        "disposed": false,
+        "maxWindows": 4096,
+        "windowsOpened": 23,
+        "reclassifiedTotal": 0,
+        "retiredTotal": 0,
+        "rejectedTotal": 0,
+        "observationCalls": 826,
+        "skippedTicks": -26,
+        "responsesAccepted": 0,
+        "responsesRefused": 0,
+        "retained": 23,
+        "eligibleRetained": 0,
+        "identityCodeUnits": 5888,
+        "estimatedBytes": 14720,
+        "estimatedBytesMaximum": 8912896
+      }
+    },
+    {
+      "repetition": 4,
+      "mode": "world",
+      "observeLoopMs": {
+        "count": 600,
+        "p50": 0.00009999999929277692,
+        "p95": 0.00010000000111176632,
+        "p99": 0.00020000000040454324,
+        "min": 0,
+        "max": 0.000600000000304135,
+        "mean": 0.00006549999999151623
+      },
+      "worldBuildMs": {
+        "count": 600,
+        "p50": 0.9537000000000262,
+        "p95": 1.078599999999824,
+        "p99": 1.4244999999991705,
+        "min": 0.8840000000000146,
+        "max": 1.7114000000001397,
+        "mean": 0.9777555000000242
+      },
+      "wallMs": 780.3932000000004,
+      "observations": 0,
+      "labels": 0,
+      "heapAfterBytes": 52902848,
+      "registryOwnership": null,
+      "eligibilityDenominators": null,
+      "eligibilityOwnership": null
+    },
+    {
+      "repetition": 4,
+      "mode": "registry",
+      "observeLoopMs": {
+        "count": 600,
+        "p50": 0.006999999999607098,
+        "p95": 0.014100000000325963,
+        "p99": 0.04250000000138243,
+        "min": 0.005499999999301508,
+        "max": 0.06810000000041327,
+        "mean": 0.008559499999986049
+      },
+      "worldBuildMs": {
+        "count": 600,
+        "p50": 1.0520999999989726,
+        "p95": 1.264100000000326,
+        "p99": 1.668999999999869,
+        "min": 0.9302000000006956,
+        "max": 1.9455999999991036,
+        "mean": 1.0710773333333419
+      },
+      "wallMs": 852.9771000000001,
+      "observations": 800,
+      "labels": 0,
+      "heapAfterBytes": 31853272,
+      "registryOwnership": {
+        "version": "086-opportunity-ids-v1",
+        "disposed": false,
+        "maxOpportunities": 4096,
+        "openedTotal": 23,
+        "resolvedTotal": 8,
+        "truncatedTotal": 13,
+        "retiredTotal": 0,
+        "rejectedTotal": 0,
+        "contradictionTotal": 0,
+        "observationCalls": 800,
+        "skippedTicks": 0,
+        "suspensions": 0,
+        "resumptions": 0,
+        "segmentOverflow": 0,
+        "retained": 23,
+        "entered": 2,
+        "resolved": 8,
+        "truncated": 13,
+        "identityCodeUnits": 3366,
+        "estimatedBytes": 11148,
+        "estimatedBytesMaximum": 17563648
+      },
+      "eligibilityDenominators": null,
+      "eligibilityOwnership": null
+    },
+    {
+      "repetition": 4,
+      "mode": "eligibility",
+      "observeLoopMs": {
+        "count": 600,
+        "p50": 0.014900000000125146,
+        "p95": 0.028599999999642023,
+        "p99": 0.05819999999948777,
+        "min": 0.011500000000523869,
+        "max": 0.08100000000013097,
+        "mean": 0.017045666666648078
+      },
+      "worldBuildMs": {
+        "count": 600,
+        "p50": 0.9655999999995402,
+        "p95": 1.1458999999995285,
+        "p99": 1.5446000000010827,
+        "min": 0.8811999999998079,
+        "max": 1.7792000000008557,
+        "mean": 0.9915508333333127
+      },
+      "wallMs": 810.6615999999995,
+      "observations": 800,
+      "labels": 826,
+      "heapAfterBytes": 79626016,
+      "registryOwnership": {
+        "version": "086-opportunity-ids-v1",
+        "disposed": false,
+        "maxOpportunities": 4096,
+        "openedTotal": 23,
+        "resolvedTotal": 8,
+        "truncatedTotal": 13,
+        "retiredTotal": 0,
+        "rejectedTotal": 0,
+        "contradictionTotal": 0,
+        "observationCalls": 800,
+        "skippedTicks": 0,
+        "suspensions": 0,
+        "resumptions": 0,
+        "segmentOverflow": 0,
+        "retained": 23,
+        "entered": 2,
+        "resolved": 8,
+        "truncated": 13,
+        "identityCodeUnits": 3366,
+        "estimatedBytes": 11148,
+        "estimatedBytesMaximum": 17563648
+      },
+      "eligibilityDenominators": {
+        "version": "087-eligibility-windows-v1",
+        "total": 23,
+        "eligible": 0,
+        "externalConstraint": 23,
+        "excluded": 0,
+        "byLabel": [
+          {
+            "label": "FREE_TRAFFIC",
+            "windowClass": "ELIGIBLE",
+            "count": 0
+          },
+          {
+            "label": "LEADER",
+            "windowClass": "EXTERNAL_CONSTRAINT",
+            "count": 23
+          },
+          {
+            "label": "BLOCKED_GREEN",
+            "windowClass": "EXTERNAL_CONSTRAINT",
+            "count": 0
+          },
+          {
+            "label": "MECHANICAL_LIMIT",
+            "windowClass": "EXTERNAL_CONSTRAINT",
+            "count": 0
+          },
+          {
+            "label": "IMPACT",
+            "windowClass": "EXTERNAL_CONSTRAINT",
+            "count": 0
+          },
+          {
+            "label": "PAUSE",
+            "windowClass": "EXCLUDED",
+            "count": 0
+          },
+          {
+            "label": "FOCUS_LOST",
+            "windowClass": "EXCLUDED",
+            "count": 0
+          },
+          {
+            "label": "MANUAL_SEGMENT",
+            "windowClass": "EXCLUDED",
+            "count": 0
+          },
+          {
+            "label": "AUTO_SEGMENT",
+            "windowClass": "EXCLUDED",
+            "count": 0
+          },
+          {
+            "label": "NOT_OBSERVABLE",
+            "windowClass": "EXCLUDED",
+            "count": 0
+          }
+        ],
+        "externalConstraints": [
+          {
+            "label": "LEADER",
+            "windowClass": "EXTERNAL_CONSTRAINT",
+            "count": 23
+          },
+          {
+            "label": "BLOCKED_GREEN",
+            "windowClass": "EXTERNAL_CONSTRAINT",
+            "count": 0
+          },
+          {
+            "label": "MECHANICAL_LIMIT",
+            "windowClass": "EXTERNAL_CONSTRAINT",
+            "count": 0
+          },
+          {
+            "label": "IMPACT",
+            "windowClass": "EXTERNAL_CONSTRAINT",
+            "count": 0
+          }
+        ],
+        "notObservable": 0,
+        "reactionWindowsOpened": 0,
+        "reactionSamples": 0,
+        "responsesRefused": 0,
+        "preferenceEvidenceEmitted": 0,
+        "preferenceEvidenceRefused": 0
+      },
+      "eligibilityOwnership": {
+        "version": "087-eligibility-windows-v1",
+        "disposed": false,
+        "maxWindows": 4096,
+        "windowsOpened": 23,
+        "reclassifiedTotal": 0,
+        "retiredTotal": 0,
+        "rejectedTotal": 0,
+        "observationCalls": 826,
+        "skippedTicks": -26,
+        "responsesAccepted": 0,
+        "responsesRefused": 0,
+        "retained": 23,
+        "eligibleRetained": 0,
+        "identityCodeUnits": 5888,
+        "estimatedBytes": 14720,
+        "estimatedBytesMaximum": 8912896
+      }
+    },
+    {
+      "repetition": 5,
+      "mode": "world",
+      "observeLoopMs": {
+        "count": 600,
+        "p50": 0,
+        "p95": 0.00010000000111176632,
+        "p99": 0.00020000000040454324,
+        "min": 0,
+        "max": 0.00029999999969732016,
+        "mean": 0.00005016666671205409
+      },
+      "worldBuildMs": {
+        "count": 600,
+        "p50": 0.9086000000006607,
+        "p95": 1.0706999999983964,
+        "p99": 1.476700000001074,
+        "min": 0.8690000000005966,
+        "max": 1.9751999999989494,
+        "mean": 0.944130499999986
+      },
+      "wallMs": 755.4575999999997,
+      "observations": 0,
+      "labels": 0,
+      "heapAfterBytes": 43968216,
+      "registryOwnership": null,
+      "eligibilityDenominators": null,
+      "eligibilityOwnership": null
+    },
+    {
+      "repetition": 5,
+      "mode": "registry",
+      "observeLoopMs": {
+        "count": 600,
+        "p50": 0.0059000000001105946,
+        "p95": 0.012299999998504063,
+        "p99": 0.03900000000066939,
+        "min": 0.005100000000311411,
+        "max": 0.053900000000794535,
+        "mean": 0.007305333333312471
+      },
+      "worldBuildMs": {
+        "count": 600,
+        "p50": 0.912399999999252,
+        "p95": 1.053299999999581,
+        "p99": 1.4619999999995343,
+        "min": 0.8647000000000844,
+        "max": 1.8513999999995576,
+        "mean": 0.945630333333332
+      },
+      "wallMs": 761.5159000000003,
+      "observations": 800,
+      "labels": 0,
+      "heapAfterBytes": 82333336,
+      "registryOwnership": {
+        "version": "086-opportunity-ids-v1",
+        "disposed": false,
+        "maxOpportunities": 4096,
+        "openedTotal": 23,
+        "resolvedTotal": 8,
+        "truncatedTotal": 13,
+        "retiredTotal": 0,
+        "rejectedTotal": 0,
+        "contradictionTotal": 0,
+        "observationCalls": 800,
+        "skippedTicks": 0,
+        "suspensions": 0,
+        "resumptions": 0,
+        "segmentOverflow": 0,
+        "retained": 23,
+        "entered": 2,
+        "resolved": 8,
+        "truncated": 13,
+        "identityCodeUnits": 3366,
+        "estimatedBytes": 11148,
+        "estimatedBytesMaximum": 17563648
+      },
+      "eligibilityDenominators": null,
+      "eligibilityOwnership": null
+    },
+    {
+      "repetition": 5,
+      "mode": "eligibility",
+      "observeLoopMs": {
+        "count": 600,
+        "p50": 0.0136000000002241,
+        "p95": 0.02540000000044529,
+        "p99": 0.06309999999939464,
+        "min": 0.011399999999412103,
+        "max": 0.11739999999917927,
+        "mean": 0.01601550000000316
+      },
+      "worldBuildMs": {
+        "count": 600,
+        "p50": 0.9190999999991618,
+        "p95": 1.0707000000002154,
+        "p99": 1.4074000000000524,
+        "min": 0.8832999999995081,
+        "max": 1.628500000000713,
+        "mean": 0.9533664999999807
+      },
+      "wallMs": 775.6490000000013,
+      "observations": 800,
+      "labels": 826,
+      "heapAfterBytes": 60939384,
+      "registryOwnership": {
+        "version": "086-opportunity-ids-v1",
+        "disposed": false,
+        "maxOpportunities": 4096,
+        "openedTotal": 23,
+        "resolvedTotal": 8,
+        "truncatedTotal": 13,
+        "retiredTotal": 0,
+        "rejectedTotal": 0,
+        "contradictionTotal": 0,
+        "observationCalls": 800,
+        "skippedTicks": 0,
+        "suspensions": 0,
+        "resumptions": 0,
+        "segmentOverflow": 0,
+        "retained": 23,
+        "entered": 2,
+        "resolved": 8,
+        "truncated": 13,
+        "identityCodeUnits": 3366,
+        "estimatedBytes": 11148,
+        "estimatedBytesMaximum": 17563648
+      },
+      "eligibilityDenominators": {
+        "version": "087-eligibility-windows-v1",
+        "total": 23,
+        "eligible": 0,
+        "externalConstraint": 23,
+        "excluded": 0,
+        "byLabel": [
+          {
+            "label": "FREE_TRAFFIC",
+            "windowClass": "ELIGIBLE",
+            "count": 0
+          },
+          {
+            "label": "LEADER",
+            "windowClass": "EXTERNAL_CONSTRAINT",
+            "count": 23
+          },
+          {
+            "label": "BLOCKED_GREEN",
+            "windowClass": "EXTERNAL_CONSTRAINT",
+            "count": 0
+          },
+          {
+            "label": "MECHANICAL_LIMIT",
+            "windowClass": "EXTERNAL_CONSTRAINT",
+            "count": 0
+          },
+          {
+            "label": "IMPACT",
+            "windowClass": "EXTERNAL_CONSTRAINT",
+            "count": 0
+          },
+          {
+            "label": "PAUSE",
+            "windowClass": "EXCLUDED",
+            "count": 0
+          },
+          {
+            "label": "FOCUS_LOST",
+            "windowClass": "EXCLUDED",
+            "count": 0
+          },
+          {
+            "label": "MANUAL_SEGMENT",
+            "windowClass": "EXCLUDED",
+            "count": 0
+          },
+          {
+            "label": "AUTO_SEGMENT",
+            "windowClass": "EXCLUDED",
+            "count": 0
+          },
+          {
+            "label": "NOT_OBSERVABLE",
+            "windowClass": "EXCLUDED",
+            "count": 0
+          }
+        ],
+        "externalConstraints": [
+          {
+            "label": "LEADER",
+            "windowClass": "EXTERNAL_CONSTRAINT",
+            "count": 23
+          },
+          {
+            "label": "BLOCKED_GREEN",
+            "windowClass": "EXTERNAL_CONSTRAINT",
+            "count": 0
+          },
+          {
+            "label": "MECHANICAL_LIMIT",
+            "windowClass": "EXTERNAL_CONSTRAINT",
+            "count": 0
+          },
+          {
+            "label": "IMPACT",
+            "windowClass": "EXTERNAL_CONSTRAINT",
+            "count": 0
+          }
+        ],
+        "notObservable": 0,
+        "reactionWindowsOpened": 0,
+        "reactionSamples": 0,
+        "responsesRefused": 0,
+        "preferenceEvidenceEmitted": 0,
+        "preferenceEvidenceRefused": 0
+      },
+      "eligibilityOwnership": {
+        "version": "087-eligibility-windows-v1",
+        "disposed": false,
+        "maxWindows": 4096,
+        "windowsOpened": 23,
+        "reclassifiedTotal": 0,
+        "retiredTotal": 0,
+        "rejectedTotal": 0,
+        "observationCalls": 826,
+        "skippedTicks": -26,
+        "responsesAccepted": 0,
+        "responsesRefused": 0,
+        "retained": 23,
+        "eligibleRetained": 0,
+        "identityCodeUnits": 5888,
+        "estimatedBytes": 14720,
+        "estimatedBytesMaximum": 8912896
+      }
+    }
+  ],
+  "paired": [
+    {
+      "repetition": 1,
+      "registryOverWorldP95Ms": 0.01859999999999218,
+      "eligibilityOverRegistryP50Ms": 0.009600000000091313,
+      "eligibilityOverRegistryP95Ms": 0.01950000000010732,
+      "eligibilityOverRegistryP99Ms": 0.02800000000002001,
+      "eligibilityOverWorldP95Ms": 0.0381000000000995,
+      "worldBuildP95Ms": 1.4099999999999682,
+      "labels": 826,
+      "wallDeltaMs": 38.04950000000008
+    },
+    {
+      "repetition": 2,
+      "registryOverWorldP95Ms": 0.0158000000001266,
+      "eligibilityOverRegistryP50Ms": 0.007000000000061846,
+      "eligibilityOverRegistryP95Ms": 0.017600000000129512,
+      "eligibilityOverRegistryP99Ms": 0.023299999999835563,
+      "eligibilityOverWorldP95Ms": 0.033400000000256114,
+      "worldBuildP95Ms": 1.2718999999997322,
+      "labels": 826,
+      "wallDeltaMs": -3.490200000000641
+    },
+    {
+      "repetition": 3,
+      "registryOverWorldP95Ms": 0.014299999999821011,
+      "eligibilityOverRegistryP50Ms": 0.00860000000011496,
+      "eligibilityOverRegistryP95Ms": 0.020099999999729334,
+      "eligibilityOverRegistryP99Ms": 0.023899999999230204,
+      "eligibilityOverWorldP95Ms": 0.034399999999550346,
+      "worldBuildP95Ms": 1.0591999999996915,
+      "labels": 826,
+      "wallDeltaMs": 19.86319999999978
+    },
+    {
+      "repetition": 4,
+      "registryOverWorldP95Ms": 0.013999999999214197,
+      "eligibilityOverRegistryP50Ms": 0.007900000000518048,
+      "eligibilityOverRegistryP95Ms": 0.01449999999931606,
+      "eligibilityOverRegistryP99Ms": 0.01569999999810534,
+      "eligibilityOverWorldP95Ms": 0.028499999998530257,
+      "worldBuildP95Ms": 1.078599999999824,
+      "labels": 826,
+      "wallDeltaMs": -42.31550000000061
+    },
+    {
+      "repetition": 5,
+      "registryOverWorldP95Ms": 0.012199999997392297,
+      "eligibilityOverRegistryP50Ms": 0.007700000000113505,
+      "eligibilityOverRegistryP95Ms": 0.013100000001941225,
+      "eligibilityOverRegistryP99Ms": 0.024099999998725252,
+      "eligibilityOverWorldP95Ms": 0.025299999999333522,
+      "worldBuildP95Ms": 1.0706999999983964,
+      "labels": 826,
+      "wallDeltaMs": 14.133100000000923
+    }
+  ],
+  "memoryRegion": {
+    "label": "MEMORY_REGION_EXACT_OWNERSHIP_COUNTERS",
+    "iterations": 5120,
+    "retained": 4096,
+    "maxWindows": 4096,
+    "windowsOpened": 5120,
+    "retiredTotal": 1024,
+    "bytesPerRecord": 128,
+    "recordBytesCeiling": 2176,
+    "estimatedBytes": 1359872,
+    "estimatedBytesMaximum": 8912896,
+    "withinCeiling": true,
+    "identityCodeUnits": 417792,
+    "eligible": 3413,
+    "externalConstraint": 1707,
+    "arrayBuffersBeforeBytes": 387979,
+    "arrayBuffersAfterCreateBytes": 387979,
+    "arrayBuffersAfterFillBytes": 209151,
+    "arrayBuffersAfterDisposeBytes": 209151,
+    "heapUsedBeforeBytes": 61208552,
+    "heapUsedAfterFillBytes": 50241752,
+    "disposedCountersZero": true
+  },
+  "selfCheck": {
+    "passed": true,
+    "failures": [],
+    "denominators": {
+      "version": "087-eligibility-windows-v1",
+      "total": 18,
+      "eligible": 0,
+      "externalConstraint": 18,
+      "excluded": 0,
+      "byLabel": [
+        {
+          "label": "FREE_TRAFFIC",
+          "windowClass": "ELIGIBLE",
+          "count": 0
+        },
+        {
+          "label": "LEADER",
+          "windowClass": "EXTERNAL_CONSTRAINT",
+          "count": 18
+        },
+        {
+          "label": "BLOCKED_GREEN",
+          "windowClass": "EXTERNAL_CONSTRAINT",
+          "count": 0
+        },
+        {
+          "label": "MECHANICAL_LIMIT",
+          "windowClass": "EXTERNAL_CONSTRAINT",
+          "count": 0
+        },
+        {
+          "label": "IMPACT",
+          "windowClass": "EXTERNAL_CONSTRAINT",
+          "count": 0
+        },
+        {
+          "label": "PAUSE",
+          "windowClass": "EXCLUDED",
+          "count": 0
+        },
+        {
+          "label": "FOCUS_LOST",
+          "windowClass": "EXCLUDED",
+          "count": 0
+        },
+        {
+          "label": "MANUAL_SEGMENT",
+          "windowClass": "EXCLUDED",
+          "count": 0
+        },
+        {
+          "label": "AUTO_SEGMENT",
+          "windowClass": "EXCLUDED",
+          "count": 0
+        },
+        {
+          "label": "NOT_OBSERVABLE",
+          "windowClass": "EXCLUDED",
+          "count": 0
+        }
+      ],
+      "externalConstraints": [
+        {
+          "label": "LEADER",
+          "windowClass": "EXTERNAL_CONSTRAINT",
+          "count": 18
+        },
+        {
+          "label": "BLOCKED_GREEN",
+          "windowClass": "EXTERNAL_CONSTRAINT",
+          "count": 0
+        },
+        {
+          "label": "MECHANICAL_LIMIT",
+          "windowClass": "EXTERNAL_CONSTRAINT",
+          "count": 0
+        },
+        {
+          "label": "IMPACT",
+          "windowClass": "EXTERNAL_CONSTRAINT",
+          "count": 0
+        }
+      ],
+      "notObservable": 0,
+      "reactionWindowsOpened": 0,
+      "reactionSamples": 0,
+      "responsesRefused": 0,
+      "preferenceEvidenceEmitted": 0,
+      "preferenceEvidenceRefused": 0
+    }
+  },
+  "budgets": {
+    "manifest": "Docs/performance-budgets.json",
+    "budgetVersion": "203-initial-1",
+    "capacityCalibration": "PROVISIONAL_UNCALIBRATED",
+    "diagnosticSamplesProposal": 4096,
+    "measuredCapacity": 4096,
+    "recorderRamBytesCap": 33554432,
+    "authoritativeTickP95MsDesktopProvisional": 5.5,
+    "authoritativeTickP95MsLaptopProvisional": 8
+  },
+  "exclusions": [
+    "No browser, renderer, GPU or FPS measurement; the 052 record documents an unresolved WebGPU presentation stall on this laptop.",
+    "Heap counters are diagnostic only; exact ownership is reported from the eligibility counters.",
+    "Forced GC between repetitions is not used inside the timed region.",
+    "BEFORE is the same fixture with the registry and eligibility disabled, not a historical commit: 087 is purely additive."
+  ],
+  "guard": 18
+}

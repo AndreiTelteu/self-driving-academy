@@ -1,0 +1,217 @@
+{
+  "capturedAt": "2026-10-19T10:11:24.022Z",
+  "pbi": "087",
+  "mode": "BEFORE_ELIGIBILITY_DISABLED",
+  "commit": "b6b38aa22727668826fe28145c819aef66431649",
+  "sourceHashes": {
+    "scripts/benchmark-eligibility-windows.mjs": "f3faf1488b7a6e993f7f8d8c385e803a929a005ebdb4f4dbb48dd9c325d8dfa9",
+    "src/telemetry/eligibility-windows.ts": "bd40336572b44ec432d52f612754be26a11a4c348235011d6187b1cb29e3cf62",
+    "src/telemetry/opportunities.ts": "c2ecb5c67a7da7f510a42f36202d9748062edef5417e4e2a319381acac526626",
+    "src/telemetry/tick-samples.ts": "71d55715f2a9a1a0ea87b427f2da7c3e13b319e1c68812b27393e49e60740905",
+    "src/sessions/identity.ts": "f4b78b20857fc65704857a7bb78ef5a604083f173153ec7f5582bc450c6d76a6",
+    "src/autonomy/following.ts": "c14c21d6bb8b38017eb7b29da3805502f3e514b5fcf89568ca3bb2d53715cb07",
+    "src/world/signals.ts": "772142b68ba6aa90e9df5d19ee19f35aed6d6ea74e51155e53d4b20b12a2452b",
+    "src/autonomy/road-context.ts": "f9782583c51f9b1b6ab678ba27162f31b95f19b41d180145638fd672c5548dce",
+    "src/vehicles/keyboard-filter.ts": "454b4a750cd0f227910e183e3244930f31a10f95eac33d3934827cc6e97acfca",
+    "tests/autonomy/road-context-reference.ts": "c5fe61c330db951f2bb1f97b3ea6d75bb92228e7f38864197e21378602ddd6f7",
+    "tests/world/intersection-conflicts-fixture.ts": "f159c5b3852b57e456e28b797c1cfa20182d4a58c13e426095ca622cd4a6fbd7"
+  },
+  "sourceHashScope": "Probe, eligibility layer, opportunity registry, 006 identity, 048 following, 036 signals, 044 context, 025 filter and the reused 044 fixture; not a verified transitive dependency closure",
+  "hardware": {
+    "cpu": "AMD Ryzen 7 7735U with Radeon Graphics         ",
+    "logicalCpus": 16,
+    "ramBytes": 14702026752,
+    "os": "win32 10.0.26300",
+    "powerScheme": "Power Scheme GUID: 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c  (High performance)"
+  },
+  "runtime": "v24.21.0",
+  "budgetVersion": "203-initial-1",
+  "fixtureVersion": "087-eligibility-windows-native-v1",
+  "validationLevel": "targeted",
+  "protocol": {
+    "repetitions": 5,
+    "warmupIterations": 200,
+    "measuredIterations": 600,
+    "arms": "world / registry / eligibility per repetition, sequential, one process, no concurrent load",
+    "workload": "1 subject (vehicle-0) observed, real 036 signal controller advancing consecutive ticks over the 044 fixture, real 044 context/leader and 025 keyboard filter; one real-contract 037 STOP approach every 180 ticks and one real 038 yield occurrence per approach",
+    "seed": "none; deterministic tick-modulo input pattern and a fixed fixture",
+    "capacity": "default (4096)",
+    "clock": "performance.now only; fixed synthetic tick index (no wall clock in the fixture)",
+    "budget": "Added cost must stay far below the 5.5 ms provisional full-tick p95 ceiling; no isolated budget claimed",
+    "calibration": "PROVISIONAL_UNCALIBRATED",
+    "injected": [
+      "The 044 fixture declares no STOP stop line, so the real 037 event contract and 037 identity are injected with parseSimulationEvent.",
+      "The real 038 priority-yield identity is injected through the stimulus port (no 038 producer runs on this fixture).",
+      "The stimulus observability is declared by a controlled fixture; the 017 camera pose/occlusion path is covered by the unit suite.",
+      "The 10 Hz consumer drains a queue; the world always steps every fixed tick."
+    ]
+  },
+  "scope": "Native Node CPU and owned-memory cost of the 087 eligibility layer on top of the 086 registry on the reused 044/085 fixture. No renderer, browser, GPU, FPS or realtime-throughput claim.",
+  "runs": [
+    {
+      "repetition": 1,
+      "mode": "world",
+      "observeLoopMs": {
+        "count": 600,
+        "p50": 0.00009999999997489795,
+        "p95": 0.00020000000006348273,
+        "p99": 0.0004000000000132786,
+        "min": 0,
+        "max": 0.0009000000000014552,
+        "mean": 0.00011266666666775412
+      },
+      "worldBuildMs": {
+        "count": 600,
+        "p50": 0.9864999999999782,
+        "p95": 1.5144999999999982,
+        "p99": 1.9296999999999684,
+        "min": 0.8740000000000236,
+        "max": 3.4793999999999983,
+        "mean": 1.0743568333333342
+      },
+      "wallMs": 891.4537999999999,
+      "observations": 0,
+      "labels": 0,
+      "heapAfterBytes": 43103768,
+      "registryOwnership": null,
+      "eligibilityDenominators": null,
+      "eligibilityOwnership": null
+    },
+    {
+      "repetition": 2,
+      "mode": "world",
+      "observeLoopMs": {
+        "count": 600,
+        "p50": 0.00009999999997489795,
+        "p95": 0.0001999999999497959,
+        "p99": 0.00029999999992469384,
+        "min": 0,
+        "max": 0.0005000000001018634,
+        "mean": 0.00010583333333443079
+      },
+      "worldBuildMs": {
+        "count": 600,
+        "p50": 0.9498000000000957,
+        "p95": 1.3122000000000753,
+        "p99": 1.4909000000000106,
+        "min": 0.8832999999999629,
+        "max": 1.7375999999999294,
+        "mean": 0.9847988333333323
+      },
+      "wallMs": 795.0918999999999,
+      "observations": 0,
+      "labels": 0,
+      "heapAfterBytes": 47065184,
+      "registryOwnership": null,
+      "eligibilityDenominators": null,
+      "eligibilityOwnership": null
+    },
+    {
+      "repetition": 3,
+      "mode": "world",
+      "observeLoopMs": {
+        "count": 600,
+        "p50": 0.00010000000020227162,
+        "p95": 0.0001999999999497959,
+        "p99": 0.00020000000040454324,
+        "min": 0,
+        "max": 0.0005000000001018634,
+        "mean": 0.00010283333335716331
+      },
+      "worldBuildMs": {
+        "count": 600,
+        "p50": 0.9484999999999673,
+        "p95": 1.322400000000016,
+        "p99": 1.5385999999998603,
+        "min": 0.8763000000003558,
+        "max": 1.8813000000000102,
+        "mean": 0.9915966666666698
+      },
+      "wallMs": 793.8436000000002,
+      "observations": 0,
+      "labels": 0,
+      "heapAfterBytes": 29038880,
+      "registryOwnership": null,
+      "eligibilityDenominators": null,
+      "eligibilityOwnership": null
+    },
+    {
+      "repetition": 4,
+      "mode": "world",
+      "observeLoopMs": {
+        "count": 600,
+        "p50": 0.00009999999974752427,
+        "p95": 0.00010000000020227162,
+        "p99": 0.00020000000040454324,
+        "min": 0,
+        "max": 0.0003999999998995918,
+        "mean": 0.00006416666666154924
+      },
+      "worldBuildMs": {
+        "count": 600,
+        "p50": 0.939600000000155,
+        "p95": 1.342899999999645,
+        "p99": 1.6696000000001732,
+        "min": 0.8686000000002423,
+        "max": 2.7794999999996435,
+        "mean": 0.9953693333333331
+      },
+      "wallMs": 807.5101,
+      "observations": 0,
+      "labels": 0,
+      "heapAfterBytes": 65815832,
+      "registryOwnership": null,
+      "eligibilityDenominators": null,
+      "eligibilityOwnership": null
+    },
+    {
+      "repetition": 5,
+      "mode": "world",
+      "observeLoopMs": {
+        "count": 600,
+        "p50": 0.00009999999974752427,
+        "p95": 0.00010000000020227162,
+        "p99": 0.00020000000040454324,
+        "min": 0,
+        "max": 0.0003999999998995918,
+        "mean": 0.00006299999998570153
+      },
+      "worldBuildMs": {
+        "count": 600,
+        "p50": 0.9436999999998079,
+        "p95": 1.0808000000001812,
+        "p99": 1.4913000000001375,
+        "min": 0.8743999999996959,
+        "max": 1.7219999999997526,
+        "mean": 0.9718201666666778
+      },
+      "wallMs": 779.8915999999999,
+      "observations": 0,
+      "labels": 0,
+      "heapAfterBytes": 30296840,
+      "registryOwnership": null,
+      "eligibilityDenominators": null,
+      "eligibilityOwnership": null
+    }
+  ],
+  "paired": [],
+  "memoryRegion": null,
+  "selfCheck": null,
+  "budgets": {
+    "manifest": "Docs/performance-budgets.json",
+    "budgetVersion": "203-initial-1",
+    "capacityCalibration": "PROVISIONAL_UNCALIBRATED",
+    "diagnosticSamplesProposal": 4096,
+    "measuredCapacity": 4096,
+    "recorderRamBytesCap": 33554432,
+    "authoritativeTickP95MsDesktopProvisional": 5.5,
+    "authoritativeTickP95MsLaptopProvisional": 8
+  },
+  "exclusions": [
+    "No browser, renderer, GPU or FPS measurement; the 052 record documents an unresolved WebGPU presentation stall on this laptop.",
+    "Heap counters are diagnostic only; exact ownership is reported from the eligibility counters.",
+    "Forced GC between repetitions is not used inside the timed region.",
+    "BEFORE is the same fixture with the registry and eligibility disabled, not a historical commit: 087 is purely additive."
+  ],
+  "guard": 0
+}
