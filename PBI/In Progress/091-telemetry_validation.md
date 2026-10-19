@@ -1,12 +1,12 @@
 ---
 id: "091"
 title: "Validator și fixtures pentru demonstrații"
-status: "To Do"
+status: "In Progress"
 release: "V1"
 module: "Telemetrie"
 depends_on: ["090","004"]
-owner: null
-started_at: null
+owner: "Codex gpt-6-luna medium telemetry-fixtures-01"
+started_at: "2026-10-19T16:05:46+03:00"
 completed_at: null
 ---
 
