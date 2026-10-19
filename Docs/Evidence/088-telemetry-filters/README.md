@@ -12,7 +12,7 @@ feature.
 | --- | --- |
 | Runtime | Node **v24.21.0** (via `volta run --node 24.21.0 --npm 11.19.0`), npm 11.19.0 |
 | Hardware | AMD Ryzen 7 7735U with Radeon Graphics, 16 logical CPUs, 14,702,026,752 B RAM, win32 10.0.26300, power scheme High performance |
-| Measured source commit | `12e30fd194cec1aecd2be6a586eef29d255133ec` |
+| Measured source commit | `e3df66065a0615d64b3e45b1d31efda0df978056` |
 | Fixture | `088-telemetry-artifacts-native-v1`, reused from 044/085/086/087 (`tests/autonomy/road-context-reference.ts` → `roadContextFixture(false)`): real lane graph, real 036 signal controller, real 044 road context/leader, real 025 keyboard filter, 64 authoritative vehicles |
 | Harness | one new probe `scripts/benchmark-telemetry-artifacts.mjs`; no second harness forked |
 | Protocol | 5 repetitions, three paired arms `world` / `chain` / `filter` sequential in one process, 200 warmup + 600 measured ticks per arm, 133 filter evaluations per measured window |
@@ -37,20 +37,20 @@ arm is covered by the unit suite and by the probe self-check.
 
 | Repetition | p50 | p95 | p99 | Amortized per-tick p95 (÷6) |
 | --- | --- | --- | --- | --- |
-| 1 | 42.3 | 91.7 | 335.9 | 15.3 |
-| 2 | 33.8 | 54.6 | 68.7 | 9.1 |
-| 3 | 39.9 | 74.4 | 84.3 | 12.4 |
-| 4 | 31.3 | 68.4 | 78.3 | 11.4 |
-| 5 | 32.2 | 57.2 | 69.7 | 9.5 |
+| 1 | 61.0 | 93.3 | 324.1 | 15.5 |
+| 2 | 39.1 | 60.0 | 93.6 | 10.0 |
+| 3 | 39.1 | 73.9 | 112.6 | 12.3 |
+| 4 | 42.1 | 82.3 | 109.7 | 13.7 |
+| 5 | 35.2 | 68.5 | 82.2 | 11.4 |
 
-- The 088 added cost is **≈91.7 µs p95 worst case per decision**, about **1.67%** of the 5.5 ms
+- The 088 added cost is **≈93.3 µs p95 worst case per decision**, about **1.70%** of the 5.5 ms
   provisional full-tick p95 ceiling; amortized over the 60 Hz ticks of one decision it is
-  **9.1–15.3 µs p95**, about **0.28%** of the ceiling worst case and 0.19% of the 8 ms laptop
+  **10.0–15.5 µs p95**, about **0.28%** of the ceiling worst case and 0.19% of the 8 ms laptop
   ceiling. No isolated tick budget is claimed.
-- The `p99` of 335.9 µs in repetition 1 is a single first-touch/GC sample of the artifact-sorting path
-  in the very first measured decision of the arm; repetitions 2–5 stay at 68.7–84.3 µs.
-- For context, `chain − world` p95 is 25.7–39.0 µs, consistent with the 086 (~16 µs) plus 087
-  (~20 µs) records; `filter − world` p95 (all layers together) is 60.0–77.8 µs.
+- The `p99` of 324.1 µs in repetition 1 is a single first-touch/GC sample of the artifact-sorting path
+  in the very first measured decision of the arm; repetitions 2–5 stay at 82.2–112.6 µs.
+- For context, `chain − world` p95 is 23.3–44.4 µs, consistent with the 086 (~16 µs) plus 087
+  (~20 µs) records; `filter − world` p95 (all layers together) is 63.3–96.8 µs.
 - The 1.09–1.58 ms world/context p95 is the 044 road-context and filter work present identically in
   every arm; it is **not** attributable to the layer and is reported only for transparency.
 - `wallDeltaMs` between arms is tens of ms of noise in a ~1 s wall and is not a metric.
