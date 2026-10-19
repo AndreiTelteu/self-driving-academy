@@ -30,6 +30,9 @@ PBI 097 folosește denominatorul oportunităților certe 086, exclude oportunit�
 
 PBI 098 folosește STOP-uri certe și fapte de oprire la linie; opririle produse de lider/coadă sunt constrângeri, iar rolling stop-ul este un eșec distinct de oprirea completă. Dwell-ul se convertește din tick-urile măsurate. Acceptarea yield raportează limita inferioară a spațiilor acceptate, ori intervalul dintre cel mai mare refuz și cea mai mică acceptare; detalii în [stop-yield-estimator](stop-yield-estimator.md).
 
+PBI 099 estimează schimbările opționale separat de cele impuse de rută. Manevrele reușite singure dau doar o limită observată; oportunitățile refuzate și acceptate pot delimita intervalul pragului pentru gap și avantaj. Cooldown-ul cere durate măsurate la schimbări opționale; detalii în [lane-estimator](lane-estimator.md).
+
+
 
 Actualizarea propusă este newValue = oldValue + learningWeight × (estimate − oldValue). Ponderea depinde de calitate, numărul efectiv de episoade și incertitudine. Are o limită de calibrare pentru a evita salturi provocate de zgomot; demonstrațiile repetate pot modifica puternic profilul. Această regularizare păstrează și stilurile riscante dacă dovezile sunt consistente.
 
