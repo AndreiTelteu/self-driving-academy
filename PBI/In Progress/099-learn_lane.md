@@ -1,14 +1,14 @@
 ---
 id: "099"
 title: "Estimator schimbare de bandă V1"
-status: "To Do"
+status: "In Progress"
 release: "V1"
 module: "Învățare"
 depends_on: ["093","053"]
 parameter_role: "estimator"
 parameter_keys: ["lane_change_front_gap","lane_change_back_gap","lane_change_speed_gain","lane_change_cooldown"]
-owner: null
-started_at: null
+owner: "Codex gpt-6-luna medium stop-lane-estimators-01"
+started_at: "2026-10-19T18:17:14+03:00"
 completed_at: null
 ---
 

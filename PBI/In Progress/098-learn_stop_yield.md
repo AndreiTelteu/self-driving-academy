@@ -1,14 +1,14 @@
 ---
 id: "098"
 title: "Estimator STOP și acceptare de prioritate"
-status: "To Do"
+status: "In Progress"
 release: "V1"
 module: "Învățare"
 depends_on: ["093","051","052"]
 parameter_role: "estimator"
 parameter_keys: ["stop_full_probability","stop_dwell_time","stop_line_offset","yield_time_gap"]
-owner: null
-started_at: null
+owner: "Codex gpt-6-luna medium stop-lane-estimators-01"
+started_at: "2026-10-19T18:17:14+03:00"
 completed_at: null
 ---
 
