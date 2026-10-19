@@ -1,0 +1,1963 @@
+{
+  "pbi": "071",
+  "mode": "after",
+  "level": "targeted",
+  "fixtureVersion": "071-targeted-takeover-v1",
+  "commit": "f5536108f402247d395bafa0b0d142d87d64275b",
+  "runtime": "v24.21.0",
+  "hardware": {
+    "cpu": "AMD Ryzen 7 7735U with Radeon Graphics         ",
+    "os": "win32 10.0.26300"
+  },
+  "backend": "Node CPU only; browser/GPU/FPS are separate and not measured here",
+  "budget": {
+    "manifest": "Docs/performance-budgets.json",
+    "budgetVersion": "203-initial-1",
+    "calibration": "PROVISIONAL_UNCALIBRATED",
+    "comparison": "The manifest budgets the whole integrated tick; this probe isolates the local policy cost on the real fixture and does not certify the integrated budget.",
+    "absoluteBudgetsStillApply": true
+  },
+  "method": "one warmup +5repetitions of the real serial fixture; per-cadence-tick cost after a180-tick warmup; BEFORE is the same fixture and cadence without evaluating the new policy",
+  "protocol": {
+    "warmupTicks": 180,
+    "measuredTicks": 1200,
+    "repetitions": 5,
+    "cadenceHz": 10,
+    "tickHz": 60
+  },
+  "source": {
+    "inputs": [
+      "tests/autonomy/policy-probe-fixture.ts",
+      "src/autonomy/blocked-recovery.ts",
+      "src/autonomy/takeover-continuity.ts"
+    ]
+  },
+  "base": {
+    "fixtureVersion": "071-targeted-takeover-v1",
+    "actors": 1,
+    "repetitions": [
+      {
+        "fixtureVersion": "071-targeted-takeover-v1",
+        "count": 170,
+        "p50Ms": 0.04050000000000864,
+        "p95Ms": 0.11639999999999873,
+        "p99Ms": 0.1957999999999629,
+        "minMs": 0.030100000000004457,
+        "maxMs": 0.36480000000000246,
+        "checksum": 103147,
+        "decisions": 200,
+        "owned": {
+          "behavior": {
+            "sessionId": "054-probe",
+            "worldEpoch": 0,
+            "actors": 1,
+            "identities": 1,
+            "retiredIdentities": 0,
+            "decisions": 1,
+            "retainedHistory": 0,
+            "disposed": false
+          },
+          "roadContext": {
+            "tick": 1200,
+            "sessionId": "054-probe",
+            "worldEpoch": 0,
+            "vehicles": 2,
+            "cachedContexts": 1,
+            "laneProjections": 2,
+            "invalidatedContexts": 0,
+            "fingerprintCodeUnits": 602,
+            "identities": 2,
+            "retiredIdentities": 0,
+            "disposed": false,
+            "index": {
+              "entities": 2,
+              "vehicles": 2,
+              "obstacles": 0,
+              "zones": 0,
+              "zoneVertices": 0,
+              "cells": 4,
+              "spatialReferences": 6,
+              "fallbackEntities": 0,
+              "generation": 0,
+              "disposed": false,
+              "lastQuery": {
+                "cellsVisited": 72,
+                "candidates": 2,
+                "exactTests": 1,
+                "matches": 1,
+                "exhaustive": false
+              }
+            }
+          },
+          "takeoverContinuity": null
+        },
+        "blocked": 51,
+        "drives": 100,
+        "escalations": 51
+      },
+      {
+        "fixtureVersion": "071-targeted-takeover-v1",
+        "count": 170,
+        "p50Ms": 0.03140000000001919,
+        "p95Ms": 0.052700000000015734,
+        "p99Ms": 0.10910000000001219,
+        "minMs": 0.02780000000001337,
+        "maxMs": 0.3254000000000019,
+        "checksum": 103147,
+        "decisions": 200,
+        "owned": {
+          "behavior": {
+            "sessionId": "054-probe",
+            "worldEpoch": 0,
+            "actors": 1,
+            "identities": 1,
+            "retiredIdentities": 0,
+            "decisions": 1,
+            "retainedHistory": 0,
+            "disposed": false
+          },
+          "roadContext": {
+            "tick": 1200,
+            "sessionId": "054-probe",
+            "worldEpoch": 0,
+            "vehicles": 2,
+            "cachedContexts": 1,
+            "laneProjections": 2,
+            "invalidatedContexts": 0,
+            "fingerprintCodeUnits": 602,
+            "identities": 2,
+            "retiredIdentities": 0,
+            "disposed": false,
+            "index": {
+              "entities": 2,
+              "vehicles": 2,
+              "obstacles": 0,
+              "zones": 0,
+              "zoneVertices": 0,
+              "cells": 4,
+              "spatialReferences": 6,
+              "fallbackEntities": 0,
+              "generation": 0,
+              "disposed": false,
+              "lastQuery": {
+                "cellsVisited": 72,
+                "candidates": 2,
+                "exactTests": 1,
+                "matches": 1,
+                "exhaustive": false
+              }
+            }
+          },
+          "takeoverContinuity": null
+        },
+        "blocked": 51,
+        "drives": 100,
+        "escalations": 51
+      },
+      {
+        "fixtureVersion": "071-targeted-takeover-v1",
+        "count": 170,
+        "p50Ms": 0.028499999999951342,
+        "p95Ms": 0.05500000000000682,
+        "p99Ms": 0.16149999999998954,
+        "minMs": 0.02400000000000091,
+        "maxMs": 0.8156000000000176,
+        "checksum": 103147,
+        "decisions": 200,
+        "owned": {
+          "behavior": {
+            "sessionId": "054-probe",
+            "worldEpoch": 0,
+            "actors": 1,
+            "identities": 1,
+            "retiredIdentities": 0,
+            "decisions": 1,
+            "retainedHistory": 0,
+            "disposed": false
+          },
+          "roadContext": {
+            "tick": 1200,
+            "sessionId": "054-probe",
+            "worldEpoch": 0,
+            "vehicles": 2,
+            "cachedContexts": 1,
+            "laneProjections": 2,
+            "invalidatedContexts": 0,
+            "fingerprintCodeUnits": 602,
+            "identities": 2,
+            "retiredIdentities": 0,
+            "disposed": false,
+            "index": {
+              "entities": 2,
+              "vehicles": 2,
+              "obstacles": 0,
+              "zones": 0,
+              "zoneVertices": 0,
+              "cells": 4,
+              "spatialReferences": 6,
+              "fallbackEntities": 0,
+              "generation": 0,
+              "disposed": false,
+              "lastQuery": {
+                "cellsVisited": 72,
+                "candidates": 2,
+                "exactTests": 1,
+                "matches": 1,
+                "exhaustive": false
+              }
+            }
+          },
+          "takeoverContinuity": null
+        },
+        "blocked": 51,
+        "drives": 100,
+        "escalations": 51
+      },
+      {
+        "fixtureVersion": "071-targeted-takeover-v1",
+        "count": 170,
+        "p50Ms": 0.025700000000028922,
+        "p95Ms": 0.04919999999998481,
+        "p99Ms": 0.09440000000000737,
+        "minMs": 0.022800000000017917,
+        "maxMs": 0.13929999999999154,
+        "checksum": 103147,
+        "decisions": 200,
+        "owned": {
+          "behavior": {
+            "sessionId": "054-probe",
+            "worldEpoch": 0,
+            "actors": 1,
+            "identities": 1,
+            "retiredIdentities": 0,
+            "decisions": 1,
+            "retainedHistory": 0,
+            "disposed": false
+          },
+          "roadContext": {
+            "tick": 1200,
+            "sessionId": "054-probe",
+            "worldEpoch": 0,
+            "vehicles": 2,
+            "cachedContexts": 1,
+            "laneProjections": 2,
+            "invalidatedContexts": 0,
+            "fingerprintCodeUnits": 602,
+            "identities": 2,
+            "retiredIdentities": 0,
+            "disposed": false,
+            "index": {
+              "entities": 2,
+              "vehicles": 2,
+              "obstacles": 0,
+              "zones": 0,
+              "zoneVertices": 0,
+              "cells": 4,
+              "spatialReferences": 6,
+              "fallbackEntities": 0,
+              "generation": 0,
+              "disposed": false,
+              "lastQuery": {
+                "cellsVisited": 72,
+                "candidates": 2,
+                "exactTests": 1,
+                "matches": 1,
+                "exhaustive": false
+              }
+            }
+          },
+          "takeoverContinuity": null
+        },
+        "blocked": 51,
+        "drives": 100,
+        "escalations": 51
+      },
+      {
+        "fixtureVersion": "071-targeted-takeover-v1",
+        "count": 170,
+        "p50Ms": 0.025199999999983902,
+        "p95Ms": 0.06450000000000955,
+        "p99Ms": 0.12590000000000146,
+        "minMs": 0.022899999999992815,
+        "maxMs": 0.18370000000004438,
+        "checksum": 103147,
+        "decisions": 200,
+        "owned": {
+          "behavior": {
+            "sessionId": "054-probe",
+            "worldEpoch": 0,
+            "actors": 1,
+            "identities": 1,
+            "retiredIdentities": 0,
+            "decisions": 1,
+            "retainedHistory": 0,
+            "disposed": false
+          },
+          "roadContext": {
+            "tick": 1200,
+            "sessionId": "054-probe",
+            "worldEpoch": 0,
+            "vehicles": 2,
+            "cachedContexts": 1,
+            "laneProjections": 2,
+            "invalidatedContexts": 0,
+            "fingerprintCodeUnits": 602,
+            "identities": 2,
+            "retiredIdentities": 0,
+            "disposed": false,
+            "index": {
+              "entities": 2,
+              "vehicles": 2,
+              "obstacles": 0,
+              "zones": 0,
+              "zoneVertices": 0,
+              "cells": 4,
+              "spatialReferences": 6,
+              "fallbackEntities": 0,
+              "generation": 0,
+              "disposed": false,
+              "lastQuery": {
+                "cellsVisited": 72,
+                "candidates": 2,
+                "exactTests": 1,
+                "matches": 1,
+                "exhaustive": false
+              }
+            }
+          },
+          "takeoverContinuity": null
+        },
+        "blocked": 51,
+        "drives": 100,
+        "escalations": 51
+      }
+    ],
+    "medians": {
+      "p50Ms": 0.028499999999951342,
+      "p95Ms": 0.05500000000000682,
+      "p99Ms": 0.12590000000000146
+    },
+    "checksums": [
+      103147,
+      103147,
+      103147,
+      103147,
+      103147
+    ]
+  },
+  "after": {
+    "fixtureVersion": "071-targeted-takeover-v1",
+    "actors": 1,
+    "repetitions": [
+      {
+        "fixtureVersion": "071-targeted-takeover-v1",
+        "count": 170,
+        "p50Ms": 0.04479999999995243,
+        "p95Ms": 0.07240000000001601,
+        "p99Ms": 0.144299999999987,
+        "minMs": 0.041600000000016735,
+        "maxMs": 0.3412999999999897,
+        "checksum": 103147,
+        "decisions": 200,
+        "owned": {
+          "behavior": {
+            "sessionId": "054-probe",
+            "worldEpoch": 0,
+            "actors": 1,
+            "identities": 1,
+            "retiredIdentities": 0,
+            "decisions": 1,
+            "retainedHistory": 0,
+            "disposed": false
+          },
+          "roadContext": {
+            "tick": 1200,
+            "sessionId": "054-probe",
+            "worldEpoch": 0,
+            "vehicles": 2,
+            "cachedContexts": 1,
+            "laneProjections": 2,
+            "invalidatedContexts": 0,
+            "fingerprintCodeUnits": 602,
+            "identities": 2,
+            "retiredIdentities": 0,
+            "disposed": false,
+            "index": {
+              "entities": 2,
+              "vehicles": 2,
+              "obstacles": 0,
+              "zones": 0,
+              "zoneVertices": 0,
+              "cells": 4,
+              "spatialReferences": 6,
+              "fallbackEntities": 0,
+              "generation": 0,
+              "disposed": false,
+              "lastQuery": {
+                "cellsVisited": 72,
+                "candidates": 2,
+                "exactTests": 1,
+                "matches": 1,
+                "exhaustive": false
+              }
+            }
+          },
+          "takeoverContinuity": {
+            "evaluating": false,
+            "retainedActors": 0,
+            "retainedHandovers": 0,
+            "retainedHistory": 0
+          }
+        },
+        "blocked": 51,
+        "drives": 100,
+        "statePreserved": 200,
+        "escalations": 51
+      },
+      {
+        "fixtureVersion": "071-targeted-takeover-v1",
+        "count": 170,
+        "p50Ms": 0.04529999999999745,
+        "p95Ms": 0.09339999999997417,
+        "p99Ms": 0.13290000000000646,
+        "minMs": 0.04019999999997026,
+        "maxMs": 0.2189999999999941,
+        "checksum": 103147,
+        "decisions": 200,
+        "owned": {
+          "behavior": {
+            "sessionId": "054-probe",
+            "worldEpoch": 0,
+            "actors": 1,
+            "identities": 1,
+            "retiredIdentities": 0,
+            "decisions": 1,
+            "retainedHistory": 0,
+            "disposed": false
+          },
+          "roadContext": {
+            "tick": 1200,
+            "sessionId": "054-probe",
+            "worldEpoch": 0,
+            "vehicles": 2,
+            "cachedContexts": 1,
+            "laneProjections": 2,
+            "invalidatedContexts": 0,
+            "fingerprintCodeUnits": 602,
+            "identities": 2,
+            "retiredIdentities": 0,
+            "disposed": false,
+            "index": {
+              "entities": 2,
+              "vehicles": 2,
+              "obstacles": 0,
+              "zones": 0,
+              "zoneVertices": 0,
+              "cells": 4,
+              "spatialReferences": 6,
+              "fallbackEntities": 0,
+              "generation": 0,
+              "disposed": false,
+              "lastQuery": {
+                "cellsVisited": 72,
+                "candidates": 2,
+                "exactTests": 1,
+                "matches": 1,
+                "exhaustive": false
+              }
+            }
+          },
+          "takeoverContinuity": {
+            "evaluating": false,
+            "retainedActors": 0,
+            "retainedHandovers": 0,
+            "retainedHistory": 0
+          }
+        },
+        "blocked": 51,
+        "drives": 100,
+        "statePreserved": 200,
+        "escalations": 51
+      },
+      {
+        "fixtureVersion": "071-targeted-takeover-v1",
+        "count": 170,
+        "p50Ms": 0.042399999999929605,
+        "p95Ms": 0.11739999999997508,
+        "p99Ms": 0.3024000000000342,
+        "minMs": 0.038000000000010914,
+        "maxMs": 0.5086000000000013,
+        "checksum": 103147,
+        "decisions": 200,
+        "owned": {
+          "behavior": {
+            "sessionId": "054-probe",
+            "worldEpoch": 0,
+            "actors": 1,
+            "identities": 1,
+            "retiredIdentities": 0,
+            "decisions": 1,
+            "retainedHistory": 0,
+            "disposed": false
+          },
+          "roadContext": {
+            "tick": 1200,
+            "sessionId": "054-probe",
+            "worldEpoch": 0,
+            "vehicles": 2,
+            "cachedContexts": 1,
+            "laneProjections": 2,
+            "invalidatedContexts": 0,
+            "fingerprintCodeUnits": 602,
+            "identities": 2,
+            "retiredIdentities": 0,
+            "disposed": false,
+            "index": {
+              "entities": 2,
+              "vehicles": 2,
+              "obstacles": 0,
+              "zones": 0,
+              "zoneVertices": 0,
+              "cells": 4,
+              "spatialReferences": 6,
+              "fallbackEntities": 0,
+              "generation": 0,
+              "disposed": false,
+              "lastQuery": {
+                "cellsVisited": 72,
+                "candidates": 2,
+                "exactTests": 1,
+                "matches": 1,
+                "exhaustive": false
+              }
+            }
+          },
+          "takeoverContinuity": {
+            "evaluating": false,
+            "retainedActors": 0,
+            "retainedHandovers": 0,
+            "retainedHistory": 0
+          }
+        },
+        "blocked": 51,
+        "drives": 100,
+        "statePreserved": 200,
+        "escalations": 51
+      },
+      {
+        "fixtureVersion": "071-targeted-takeover-v1",
+        "count": 170,
+        "p50Ms": 0.03990000000010241,
+        "p95Ms": 0.07820000000003802,
+        "p99Ms": 0.10919999999998709,
+        "minMs": 0.03550000000007003,
+        "maxMs": 0.3491000000000213,
+        "checksum": 103147,
+        "decisions": 200,
+        "owned": {
+          "behavior": {
+            "sessionId": "054-probe",
+            "worldEpoch": 0,
+            "actors": 1,
+            "identities": 1,
+            "retiredIdentities": 0,
+            "decisions": 1,
+            "retainedHistory": 0,
+            "disposed": false
+          },
+          "roadContext": {
+            "tick": 1200,
+            "sessionId": "054-probe",
+            "worldEpoch": 0,
+            "vehicles": 2,
+            "cachedContexts": 1,
+            "laneProjections": 2,
+            "invalidatedContexts": 0,
+            "fingerprintCodeUnits": 602,
+            "identities": 2,
+            "retiredIdentities": 0,
+            "disposed": false,
+            "index": {
+              "entities": 2,
+              "vehicles": 2,
+              "obstacles": 0,
+              "zones": 0,
+              "zoneVertices": 0,
+              "cells": 4,
+              "spatialReferences": 6,
+              "fallbackEntities": 0,
+              "generation": 0,
+              "disposed": false,
+              "lastQuery": {
+                "cellsVisited": 72,
+                "candidates": 2,
+                "exactTests": 1,
+                "matches": 1,
+                "exhaustive": false
+              }
+            }
+          },
+          "takeoverContinuity": {
+            "evaluating": false,
+            "retainedActors": 0,
+            "retainedHandovers": 0,
+            "retainedHistory": 0
+          }
+        },
+        "blocked": 51,
+        "drives": 100,
+        "statePreserved": 200,
+        "escalations": 51
+      },
+      {
+        "fixtureVersion": "071-targeted-takeover-v1",
+        "count": 170,
+        "p50Ms": 0.03890000000001237,
+        "p95Ms": 0.06690000000003238,
+        "p99Ms": 0.1289000000000442,
+        "minMs": 0.034700000000043474,
+        "maxMs": 0.13850000000002183,
+        "checksum": 103147,
+        "decisions": 200,
+        "owned": {
+          "behavior": {
+            "sessionId": "054-probe",
+            "worldEpoch": 0,
+            "actors": 1,
+            "identities": 1,
+            "retiredIdentities": 0,
+            "decisions": 1,
+            "retainedHistory": 0,
+            "disposed": false
+          },
+          "roadContext": {
+            "tick": 1200,
+            "sessionId": "054-probe",
+            "worldEpoch": 0,
+            "vehicles": 2,
+            "cachedContexts": 1,
+            "laneProjections": 2,
+            "invalidatedContexts": 0,
+            "fingerprintCodeUnits": 602,
+            "identities": 2,
+            "retiredIdentities": 0,
+            "disposed": false,
+            "index": {
+              "entities": 2,
+              "vehicles": 2,
+              "obstacles": 0,
+              "zones": 0,
+              "zoneVertices": 0,
+              "cells": 4,
+              "spatialReferences": 6,
+              "fallbackEntities": 0,
+              "generation": 0,
+              "disposed": false,
+              "lastQuery": {
+                "cellsVisited": 72,
+                "candidates": 2,
+                "exactTests": 1,
+                "matches": 1,
+                "exhaustive": false
+              }
+            }
+          },
+          "takeoverContinuity": {
+            "evaluating": false,
+            "retainedActors": 0,
+            "retainedHandovers": 0,
+            "retainedHistory": 0
+          }
+        },
+        "blocked": 51,
+        "drives": 100,
+        "statePreserved": 200,
+        "escalations": 51
+      }
+    ],
+    "medians": {
+      "p50Ms": 0.042399999999929605,
+      "p95Ms": 0.07820000000003802,
+      "p99Ms": 0.13290000000000646
+    },
+    "checksums": [
+      103147,
+      103147,
+      103147,
+      103147,
+      103147
+    ]
+  },
+  "delta": {
+    "p50Ms": 0.013899999999978263,
+    "p95Ms": 0.023200000000031196,
+    "p99Ms": 0.007000000000005002,
+    "scope": "ADDED cost of the new policy path measured on the same fixture against the same BEFORE arm"
+  },
+  "memory": {
+    "gcAvailable": true,
+    "cycles": [
+      {
+        "before": {
+          "owner-0": {
+            "behavior": {
+              "sessionId": "054-probe",
+              "worldEpoch": 0,
+              "actors": 1,
+              "identities": 1,
+              "retiredIdentities": 0,
+              "decisions": 0,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "roadContext": {
+              "tick": 1,
+              "sessionId": "054-probe",
+              "worldEpoch": 0,
+              "vehicles": 2,
+              "cachedContexts": 0,
+              "laneProjections": 0,
+              "invalidatedContexts": 0,
+              "fingerprintCodeUnits": 599,
+              "identities": 2,
+              "retiredIdentities": 0,
+              "disposed": false,
+              "index": {
+                "entities": 2,
+                "vehicles": 2,
+                "obstacles": 0,
+                "zones": 0,
+                "zoneVertices": 0,
+                "cells": 4,
+                "spatialReferences": 6,
+                "fallbackEntities": 0,
+                "generation": 0,
+                "disposed": false,
+                "lastQuery": {
+                  "cellsVisited": 0,
+                  "candidates": 0,
+                  "exactTests": 0,
+                  "matches": 0,
+                  "exhaustive": false
+                }
+              }
+            },
+            "takeoverContinuity": {
+              "evaluating": false,
+              "retainedActors": 0,
+              "retainedHandovers": 0,
+              "retainedHistory": 0
+            }
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 12954800,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "behavior": {
+              "sessionId": "054-probe",
+              "worldEpoch": 0,
+              "actors": 1,
+              "identities": 1,
+              "retiredIdentities": 0,
+              "decisions": 0,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "roadContext": {
+              "tick": 1,
+              "sessionId": "054-probe",
+              "worldEpoch": 0,
+              "vehicles": 2,
+              "cachedContexts": 0,
+              "laneProjections": 0,
+              "invalidatedContexts": 0,
+              "fingerprintCodeUnits": 599,
+              "identities": 2,
+              "retiredIdentities": 0,
+              "disposed": false,
+              "index": {
+                "entities": 2,
+                "vehicles": 2,
+                "obstacles": 0,
+                "zones": 0,
+                "zoneVertices": 0,
+                "cells": 4,
+                "spatialReferences": 6,
+                "fallbackEntities": 0,
+                "generation": 0,
+                "disposed": false,
+                "lastQuery": {
+                  "cellsVisited": 0,
+                  "candidates": 0,
+                  "exactTests": 0,
+                  "matches": 0,
+                  "exhaustive": false
+                }
+              }
+            },
+            "takeoverContinuity": {
+              "evaluating": false,
+              "retainedActors": 0,
+              "retainedHandovers": 0,
+              "retainedHistory": 0
+            }
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 12953488,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "behavior": {
+              "sessionId": "054-probe",
+              "worldEpoch": 0,
+              "actors": 1,
+              "identities": 1,
+              "retiredIdentities": 0,
+              "decisions": 0,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "roadContext": {
+              "tick": 1,
+              "sessionId": "054-probe",
+              "worldEpoch": 0,
+              "vehicles": 2,
+              "cachedContexts": 0,
+              "laneProjections": 0,
+              "invalidatedContexts": 0,
+              "fingerprintCodeUnits": 599,
+              "identities": 2,
+              "retiredIdentities": 0,
+              "disposed": false,
+              "index": {
+                "entities": 2,
+                "vehicles": 2,
+                "obstacles": 0,
+                "zones": 0,
+                "zoneVertices": 0,
+                "cells": 4,
+                "spatialReferences": 6,
+                "fallbackEntities": 0,
+                "generation": 0,
+                "disposed": false,
+                "lastQuery": {
+                  "cellsVisited": 0,
+                  "candidates": 0,
+                  "exactTests": 0,
+                  "matches": 0,
+                  "exhaustive": false
+                }
+              }
+            },
+            "takeoverContinuity": {
+              "evaluating": false,
+              "retainedActors": 0,
+              "retainedHandovers": 0,
+              "retainedHistory": 0
+            }
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 12939992,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "behavior": {
+              "sessionId": "054-probe",
+              "worldEpoch": 0,
+              "actors": 1,
+              "identities": 1,
+              "retiredIdentities": 0,
+              "decisions": 0,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "roadContext": {
+              "tick": 1,
+              "sessionId": "054-probe",
+              "worldEpoch": 0,
+              "vehicles": 2,
+              "cachedContexts": 0,
+              "laneProjections": 0,
+              "invalidatedContexts": 0,
+              "fingerprintCodeUnits": 599,
+              "identities": 2,
+              "retiredIdentities": 0,
+              "disposed": false,
+              "index": {
+                "entities": 2,
+                "vehicles": 2,
+                "obstacles": 0,
+                "zones": 0,
+                "zoneVertices": 0,
+                "cells": 4,
+                "spatialReferences": 6,
+                "fallbackEntities": 0,
+                "generation": 0,
+                "disposed": false,
+                "lastQuery": {
+                  "cellsVisited": 0,
+                  "candidates": 0,
+                  "exactTests": 0,
+                  "matches": 0,
+                  "exhaustive": false
+                }
+              }
+            },
+            "takeoverContinuity": {
+              "evaluating": false,
+              "retainedActors": 0,
+              "retainedHandovers": 0,
+              "retainedHistory": 0
+            }
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 12551040,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "behavior": {
+              "sessionId": "054-probe",
+              "worldEpoch": 0,
+              "actors": 1,
+              "identities": 1,
+              "retiredIdentities": 0,
+              "decisions": 0,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "roadContext": {
+              "tick": 1,
+              "sessionId": "054-probe",
+              "worldEpoch": 0,
+              "vehicles": 2,
+              "cachedContexts": 0,
+              "laneProjections": 0,
+              "invalidatedContexts": 0,
+              "fingerprintCodeUnits": 599,
+              "identities": 2,
+              "retiredIdentities": 0,
+              "disposed": false,
+              "index": {
+                "entities": 2,
+                "vehicles": 2,
+                "obstacles": 0,
+                "zones": 0,
+                "zoneVertices": 0,
+                "cells": 4,
+                "spatialReferences": 6,
+                "fallbackEntities": 0,
+                "generation": 0,
+                "disposed": false,
+                "lastQuery": {
+                  "cellsVisited": 0,
+                  "candidates": 0,
+                  "exactTests": 0,
+                  "matches": 0,
+                  "exhaustive": false
+                }
+              }
+            },
+            "takeoverContinuity": {
+              "evaluating": false,
+              "retainedActors": 0,
+              "retainedHandovers": 0,
+              "retainedHistory": 0
+            }
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 12551640,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "behavior": {
+              "sessionId": "054-probe",
+              "worldEpoch": 0,
+              "actors": 1,
+              "identities": 1,
+              "retiredIdentities": 0,
+              "decisions": 0,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "roadContext": {
+              "tick": 1,
+              "sessionId": "054-probe",
+              "worldEpoch": 0,
+              "vehicles": 2,
+              "cachedContexts": 0,
+              "laneProjections": 0,
+              "invalidatedContexts": 0,
+              "fingerprintCodeUnits": 599,
+              "identities": 2,
+              "retiredIdentities": 0,
+              "disposed": false,
+              "index": {
+                "entities": 2,
+                "vehicles": 2,
+                "obstacles": 0,
+                "zones": 0,
+                "zoneVertices": 0,
+                "cells": 4,
+                "spatialReferences": 6,
+                "fallbackEntities": 0,
+                "generation": 0,
+                "disposed": false,
+                "lastQuery": {
+                  "cellsVisited": 0,
+                  "candidates": 0,
+                  "exactTests": 0,
+                  "matches": 0,
+                  "exhaustive": false
+                }
+              }
+            },
+            "takeoverContinuity": {
+              "evaluating": false,
+              "retainedActors": 0,
+              "retainedHandovers": 0,
+              "retainedHistory": 0
+            }
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 12597336,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "behavior": {
+              "sessionId": "054-probe",
+              "worldEpoch": 0,
+              "actors": 1,
+              "identities": 1,
+              "retiredIdentities": 0,
+              "decisions": 0,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "roadContext": {
+              "tick": 1,
+              "sessionId": "054-probe",
+              "worldEpoch": 0,
+              "vehicles": 2,
+              "cachedContexts": 0,
+              "laneProjections": 0,
+              "invalidatedContexts": 0,
+              "fingerprintCodeUnits": 599,
+              "identities": 2,
+              "retiredIdentities": 0,
+              "disposed": false,
+              "index": {
+                "entities": 2,
+                "vehicles": 2,
+                "obstacles": 0,
+                "zones": 0,
+                "zoneVertices": 0,
+                "cells": 4,
+                "spatialReferences": 6,
+                "fallbackEntities": 0,
+                "generation": 0,
+                "disposed": false,
+                "lastQuery": {
+                  "cellsVisited": 0,
+                  "candidates": 0,
+                  "exactTests": 0,
+                  "matches": 0,
+                  "exhaustive": false
+                }
+              }
+            },
+            "takeoverContinuity": {
+              "evaluating": false,
+              "retainedActors": 0,
+              "retainedHandovers": 0,
+              "retainedHistory": 0
+            }
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 12572856,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "behavior": {
+              "sessionId": "054-probe",
+              "worldEpoch": 0,
+              "actors": 1,
+              "identities": 1,
+              "retiredIdentities": 0,
+              "decisions": 0,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "roadContext": {
+              "tick": 1,
+              "sessionId": "054-probe",
+              "worldEpoch": 0,
+              "vehicles": 2,
+              "cachedContexts": 0,
+              "laneProjections": 0,
+              "invalidatedContexts": 0,
+              "fingerprintCodeUnits": 599,
+              "identities": 2,
+              "retiredIdentities": 0,
+              "disposed": false,
+              "index": {
+                "entities": 2,
+                "vehicles": 2,
+                "obstacles": 0,
+                "zones": 0,
+                "zoneVertices": 0,
+                "cells": 4,
+                "spatialReferences": 6,
+                "fallbackEntities": 0,
+                "generation": 0,
+                "disposed": false,
+                "lastQuery": {
+                  "cellsVisited": 0,
+                  "candidates": 0,
+                  "exactTests": 0,
+                  "matches": 0,
+                  "exhaustive": false
+                }
+              }
+            },
+            "takeoverContinuity": {
+              "evaluating": false,
+              "retainedActors": 0,
+              "retainedHandovers": 0,
+              "retainedHistory": 0
+            }
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 12573624,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "behavior": {
+              "sessionId": "054-probe",
+              "worldEpoch": 0,
+              "actors": 1,
+              "identities": 1,
+              "retiredIdentities": 0,
+              "decisions": 0,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "roadContext": {
+              "tick": 1,
+              "sessionId": "054-probe",
+              "worldEpoch": 0,
+              "vehicles": 2,
+              "cachedContexts": 0,
+              "laneProjections": 0,
+              "invalidatedContexts": 0,
+              "fingerprintCodeUnits": 599,
+              "identities": 2,
+              "retiredIdentities": 0,
+              "disposed": false,
+              "index": {
+                "entities": 2,
+                "vehicles": 2,
+                "obstacles": 0,
+                "zones": 0,
+                "zoneVertices": 0,
+                "cells": 4,
+                "spatialReferences": 6,
+                "fallbackEntities": 0,
+                "generation": 0,
+                "disposed": false,
+                "lastQuery": {
+                  "cellsVisited": 0,
+                  "candidates": 0,
+                  "exactTests": 0,
+                  "matches": 0,
+                  "exhaustive": false
+                }
+              }
+            },
+            "takeoverContinuity": {
+              "evaluating": false,
+              "retainedActors": 0,
+              "retainedHandovers": 0,
+              "retainedHistory": 0
+            }
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 12575224,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "behavior": {
+              "sessionId": "054-probe",
+              "worldEpoch": 0,
+              "actors": 1,
+              "identities": 1,
+              "retiredIdentities": 0,
+              "decisions": 0,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "roadContext": {
+              "tick": 1,
+              "sessionId": "054-probe",
+              "worldEpoch": 0,
+              "vehicles": 2,
+              "cachedContexts": 0,
+              "laneProjections": 0,
+              "invalidatedContexts": 0,
+              "fingerprintCodeUnits": 599,
+              "identities": 2,
+              "retiredIdentities": 0,
+              "disposed": false,
+              "index": {
+                "entities": 2,
+                "vehicles": 2,
+                "obstacles": 0,
+                "zones": 0,
+                "zoneVertices": 0,
+                "cells": 4,
+                "spatialReferences": 6,
+                "fallbackEntities": 0,
+                "generation": 0,
+                "disposed": false,
+                "lastQuery": {
+                  "cellsVisited": 0,
+                  "candidates": 0,
+                  "exactTests": 0,
+                  "matches": 0,
+                  "exhaustive": false
+                }
+              }
+            },
+            "takeoverContinuity": {
+              "evaluating": false,
+              "retainedActors": 0,
+              "retainedHandovers": 0,
+              "retainedHistory": 0
+            }
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 12576312,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "behavior": {
+              "sessionId": "054-probe",
+              "worldEpoch": 0,
+              "actors": 1,
+              "identities": 1,
+              "retiredIdentities": 0,
+              "decisions": 0,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "roadContext": {
+              "tick": 1,
+              "sessionId": "054-probe",
+              "worldEpoch": 0,
+              "vehicles": 2,
+              "cachedContexts": 0,
+              "laneProjections": 0,
+              "invalidatedContexts": 0,
+              "fingerprintCodeUnits": 599,
+              "identities": 2,
+              "retiredIdentities": 0,
+              "disposed": false,
+              "index": {
+                "entities": 2,
+                "vehicles": 2,
+                "obstacles": 0,
+                "zones": 0,
+                "zoneVertices": 0,
+                "cells": 4,
+                "spatialReferences": 6,
+                "fallbackEntities": 0,
+                "generation": 0,
+                "disposed": false,
+                "lastQuery": {
+                  "cellsVisited": 0,
+                  "candidates": 0,
+                  "exactTests": 0,
+                  "matches": 0,
+                  "exhaustive": false
+                }
+              }
+            },
+            "takeoverContinuity": {
+              "evaluating": false,
+              "retainedActors": 0,
+              "retainedHandovers": 0,
+              "retainedHistory": 0
+            }
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 12577120,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "behavior": {
+              "sessionId": "054-probe",
+              "worldEpoch": 0,
+              "actors": 1,
+              "identities": 1,
+              "retiredIdentities": 0,
+              "decisions": 0,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "roadContext": {
+              "tick": 1,
+              "sessionId": "054-probe",
+              "worldEpoch": 0,
+              "vehicles": 2,
+              "cachedContexts": 0,
+              "laneProjections": 0,
+              "invalidatedContexts": 0,
+              "fingerprintCodeUnits": 599,
+              "identities": 2,
+              "retiredIdentities": 0,
+              "disposed": false,
+              "index": {
+                "entities": 2,
+                "vehicles": 2,
+                "obstacles": 0,
+                "zones": 0,
+                "zoneVertices": 0,
+                "cells": 4,
+                "spatialReferences": 6,
+                "fallbackEntities": 0,
+                "generation": 0,
+                "disposed": false,
+                "lastQuery": {
+                  "cellsVisited": 0,
+                  "candidates": 0,
+                  "exactTests": 0,
+                  "matches": 0,
+                  "exhaustive": false
+                }
+              }
+            },
+            "takeoverContinuity": {
+              "evaluating": false,
+              "retainedActors": 0,
+              "retainedHandovers": 0,
+              "retainedHistory": 0
+            }
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 12591368,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "behavior": {
+              "sessionId": "054-probe",
+              "worldEpoch": 0,
+              "actors": 1,
+              "identities": 1,
+              "retiredIdentities": 0,
+              "decisions": 0,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "roadContext": {
+              "tick": 1,
+              "sessionId": "054-probe",
+              "worldEpoch": 0,
+              "vehicles": 2,
+              "cachedContexts": 0,
+              "laneProjections": 0,
+              "invalidatedContexts": 0,
+              "fingerprintCodeUnits": 599,
+              "identities": 2,
+              "retiredIdentities": 0,
+              "disposed": false,
+              "index": {
+                "entities": 2,
+                "vehicles": 2,
+                "obstacles": 0,
+                "zones": 0,
+                "zoneVertices": 0,
+                "cells": 4,
+                "spatialReferences": 6,
+                "fallbackEntities": 0,
+                "generation": 0,
+                "disposed": false,
+                "lastQuery": {
+                  "cellsVisited": 0,
+                  "candidates": 0,
+                  "exactTests": 0,
+                  "matches": 0,
+                  "exhaustive": false
+                }
+              }
+            },
+            "takeoverContinuity": {
+              "evaluating": false,
+              "retainedActors": 0,
+              "retainedHandovers": 0,
+              "retainedHistory": 0
+            }
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 12592080,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "behavior": {
+              "sessionId": "054-probe",
+              "worldEpoch": 0,
+              "actors": 1,
+              "identities": 1,
+              "retiredIdentities": 0,
+              "decisions": 0,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "roadContext": {
+              "tick": 1,
+              "sessionId": "054-probe",
+              "worldEpoch": 0,
+              "vehicles": 2,
+              "cachedContexts": 0,
+              "laneProjections": 0,
+              "invalidatedContexts": 0,
+              "fingerprintCodeUnits": 599,
+              "identities": 2,
+              "retiredIdentities": 0,
+              "disposed": false,
+              "index": {
+                "entities": 2,
+                "vehicles": 2,
+                "obstacles": 0,
+                "zones": 0,
+                "zoneVertices": 0,
+                "cells": 4,
+                "spatialReferences": 6,
+                "fallbackEntities": 0,
+                "generation": 0,
+                "disposed": false,
+                "lastQuery": {
+                  "cellsVisited": 0,
+                  "candidates": 0,
+                  "exactTests": 0,
+                  "matches": 0,
+                  "exhaustive": false
+                }
+              }
+            },
+            "takeoverContinuity": {
+              "evaluating": false,
+              "retainedActors": 0,
+              "retainedHandovers": 0,
+              "retainedHistory": 0
+            }
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 12593680,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "behavior": {
+              "sessionId": "054-probe",
+              "worldEpoch": 0,
+              "actors": 1,
+              "identities": 1,
+              "retiredIdentities": 0,
+              "decisions": 0,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "roadContext": {
+              "tick": 1,
+              "sessionId": "054-probe",
+              "worldEpoch": 0,
+              "vehicles": 2,
+              "cachedContexts": 0,
+              "laneProjections": 0,
+              "invalidatedContexts": 0,
+              "fingerprintCodeUnits": 599,
+              "identities": 2,
+              "retiredIdentities": 0,
+              "disposed": false,
+              "index": {
+                "entities": 2,
+                "vehicles": 2,
+                "obstacles": 0,
+                "zones": 0,
+                "zoneVertices": 0,
+                "cells": 4,
+                "spatialReferences": 6,
+                "fallbackEntities": 0,
+                "generation": 0,
+                "disposed": false,
+                "lastQuery": {
+                  "cellsVisited": 0,
+                  "candidates": 0,
+                  "exactTests": 0,
+                  "matches": 0,
+                  "exhaustive": false
+                }
+              }
+            },
+            "takeoverContinuity": {
+              "evaluating": false,
+              "retainedActors": 0,
+              "retainedHandovers": 0,
+              "retainedHistory": 0
+            }
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 12594392,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "behavior": {
+              "sessionId": "054-probe",
+              "worldEpoch": 0,
+              "actors": 1,
+              "identities": 1,
+              "retiredIdentities": 0,
+              "decisions": 0,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "roadContext": {
+              "tick": 1,
+              "sessionId": "054-probe",
+              "worldEpoch": 0,
+              "vehicles": 2,
+              "cachedContexts": 0,
+              "laneProjections": 0,
+              "invalidatedContexts": 0,
+              "fingerprintCodeUnits": 599,
+              "identities": 2,
+              "retiredIdentities": 0,
+              "disposed": false,
+              "index": {
+                "entities": 2,
+                "vehicles": 2,
+                "obstacles": 0,
+                "zones": 0,
+                "zoneVertices": 0,
+                "cells": 4,
+                "spatialReferences": 6,
+                "fallbackEntities": 0,
+                "generation": 0,
+                "disposed": false,
+                "lastQuery": {
+                  "cellsVisited": 0,
+                  "candidates": 0,
+                  "exactTests": 0,
+                  "matches": 0,
+                  "exhaustive": false
+                }
+              }
+            },
+            "takeoverContinuity": {
+              "evaluating": false,
+              "retainedActors": 0,
+              "retainedHandovers": 0,
+              "retainedHistory": 0
+            }
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 12595272,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "behavior": {
+              "sessionId": "054-probe",
+              "worldEpoch": 0,
+              "actors": 1,
+              "identities": 1,
+              "retiredIdentities": 0,
+              "decisions": 0,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "roadContext": {
+              "tick": 1,
+              "sessionId": "054-probe",
+              "worldEpoch": 0,
+              "vehicles": 2,
+              "cachedContexts": 0,
+              "laneProjections": 0,
+              "invalidatedContexts": 0,
+              "fingerprintCodeUnits": 599,
+              "identities": 2,
+              "retiredIdentities": 0,
+              "disposed": false,
+              "index": {
+                "entities": 2,
+                "vehicles": 2,
+                "obstacles": 0,
+                "zones": 0,
+                "zoneVertices": 0,
+                "cells": 4,
+                "spatialReferences": 6,
+                "fallbackEntities": 0,
+                "generation": 0,
+                "disposed": false,
+                "lastQuery": {
+                  "cellsVisited": 0,
+                  "candidates": 0,
+                  "exactTests": 0,
+                  "matches": 0,
+                  "exhaustive": false
+                }
+              }
+            },
+            "takeoverContinuity": {
+              "evaluating": false,
+              "retainedActors": 0,
+              "retainedHandovers": 0,
+              "retainedHistory": 0
+            }
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 12598688,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "behavior": {
+              "sessionId": "054-probe",
+              "worldEpoch": 0,
+              "actors": 1,
+              "identities": 1,
+              "retiredIdentities": 0,
+              "decisions": 0,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "roadContext": {
+              "tick": 1,
+              "sessionId": "054-probe",
+              "worldEpoch": 0,
+              "vehicles": 2,
+              "cachedContexts": 0,
+              "laneProjections": 0,
+              "invalidatedContexts": 0,
+              "fingerprintCodeUnits": 599,
+              "identities": 2,
+              "retiredIdentities": 0,
+              "disposed": false,
+              "index": {
+                "entities": 2,
+                "vehicles": 2,
+                "obstacles": 0,
+                "zones": 0,
+                "zoneVertices": 0,
+                "cells": 4,
+                "spatialReferences": 6,
+                "fallbackEntities": 0,
+                "generation": 0,
+                "disposed": false,
+                "lastQuery": {
+                  "cellsVisited": 0,
+                  "candidates": 0,
+                  "exactTests": 0,
+                  "matches": 0,
+                  "exhaustive": false
+                }
+              }
+            },
+            "takeoverContinuity": {
+              "evaluating": false,
+              "retainedActors": 0,
+              "retainedHandovers": 0,
+              "retainedHistory": 0
+            }
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 12597184,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "behavior": {
+              "sessionId": "054-probe",
+              "worldEpoch": 0,
+              "actors": 1,
+              "identities": 1,
+              "retiredIdentities": 0,
+              "decisions": 0,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "roadContext": {
+              "tick": 1,
+              "sessionId": "054-probe",
+              "worldEpoch": 0,
+              "vehicles": 2,
+              "cachedContexts": 0,
+              "laneProjections": 0,
+              "invalidatedContexts": 0,
+              "fingerprintCodeUnits": 599,
+              "identities": 2,
+              "retiredIdentities": 0,
+              "disposed": false,
+              "index": {
+                "entities": 2,
+                "vehicles": 2,
+                "obstacles": 0,
+                "zones": 0,
+                "zoneVertices": 0,
+                "cells": 4,
+                "spatialReferences": 6,
+                "fallbackEntities": 0,
+                "generation": 0,
+                "disposed": false,
+                "lastQuery": {
+                  "cellsVisited": 0,
+                  "candidates": 0,
+                  "exactTests": 0,
+                  "matches": 0,
+                  "exhaustive": false
+                }
+              }
+            },
+            "takeoverContinuity": {
+              "evaluating": false,
+              "retainedActors": 0,
+              "retainedHandovers": 0,
+              "retainedHistory": 0
+            }
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 12598104,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      },
+      {
+        "before": {
+          "owner-0": {
+            "behavior": {
+              "sessionId": "054-probe",
+              "worldEpoch": 0,
+              "actors": 1,
+              "identities": 1,
+              "retiredIdentities": 0,
+              "decisions": 0,
+              "retainedHistory": 0,
+              "disposed": false
+            },
+            "roadContext": {
+              "tick": 1,
+              "sessionId": "054-probe",
+              "worldEpoch": 0,
+              "vehicles": 2,
+              "cachedContexts": 0,
+              "laneProjections": 0,
+              "invalidatedContexts": 0,
+              "fingerprintCodeUnits": 599,
+              "identities": 2,
+              "retiredIdentities": 0,
+              "disposed": false,
+              "index": {
+                "entities": 2,
+                "vehicles": 2,
+                "obstacles": 0,
+                "zones": 0,
+                "zoneVertices": 0,
+                "cells": 4,
+                "spatialReferences": 6,
+                "fallbackEntities": 0,
+                "generation": 0,
+                "disposed": false,
+                "lastQuery": {
+                  "cellsVisited": 0,
+                  "candidates": 0,
+                  "exactTests": 0,
+                  "matches": 0,
+                  "exhaustive": false
+                }
+              }
+            },
+            "takeoverContinuity": {
+              "evaluating": false,
+              "retainedActors": 0,
+              "retainedHandovers": 0,
+              "retainedHistory": 0
+            }
+          }
+        },
+        "after": {
+          "disposed": true
+        },
+        "heapUsedBytes": 12598472,
+        "counters": {
+          "retainedHistory": 0,
+          "retainedActors": 0,
+          "retainedManoeuvres": 0
+        }
+      }
+    ],
+    "countersScope": "Ownership counters only: the four policies are pure, the053/054 latches are caller-held and the055 collector keeps at most one explanation per admitted actor with retainedHistory0, so no actor, opportunity, manoeuvre, episode or decision-history map is retained by a module."
+  }
+}

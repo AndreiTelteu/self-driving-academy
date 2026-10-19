@@ -46,7 +46,7 @@ La AUTO → MANUAL/LEARNING, sistemul deschide un segment cu controlMode, learni
 
 Sistemul acceptă și segmente scurte. Un segment LEARNING fără suficiente situații informative produce „Nicio modificare justificată” și nu creează artificial o versiune nouă. Aplicația arată clar momentul în care analiza este în curs și momentul în care flota a adoptat rezultatul.
 
-La revenirea la autonomie în afara unei benzi, politica caută o reintrare fezabilă în graful rutier. Dacă nu există, taxiul este marcat BLOCKED și oferă recuperarea explicită. Preluarea controlului nu teleportează mașina și nu șterge accidentele.
+La revenirea la autonomie în afara unei benzi, politica caută o reintrare fezabilă în graful rutier. Dacă nu există, taxiul este marcat BLOCKED și oferă recuperarea explicită. Preluarea controlului nu teleportează mașina și nu șterge accidentele. [Continuitatea la preluare și revenire071](takeover-continuity.md) măsoară și mărginește starea fizică (poză, viteză, stare unghiulară, direcția drivetrain-ului, daune) și diferența de comandă dintre ultima comandă MANUAL și prima comandă AUTONOMY peste un singur pas autoritar, raportând explicit orice depășire fără a o limita sau repara; decizia de reintrare rămâne a 054, iar 045 rămâne singurul proprietar al stării BLOCKED prin `routeBlocked`.
 
 ## Afișarea modurilor și a progresului
 
