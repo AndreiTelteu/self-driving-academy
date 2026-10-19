@@ -1,0 +1,1925 @@
+{
+  "schemaVersion": 1,
+  "label": "EXECUTED_NATIVE_FIXTURE",
+  "fixture": "204-early-loop-fixture-v1",
+  "generatedAt": "2026-10-19T17:46:24.134Z",
+  "commit": "0b785f78afc132add7bd0e45425d6b9955600d58",
+  "sourceHash": "10da05819be87d87d4ac95cdbc39e56895bf05621d84b3f12a9079fac09d95e5",
+  "inputs": [
+    "scripts/run-204-early-loop-behavior.mjs",
+    "tests/harness/early-loop-204-fixture.ts",
+    "tests/learning/early-loop-behavior.test.ts",
+    "src/learning/early-loop.ts",
+    "src/learning/parameter-evidence.ts",
+    "src/learning/speed-estimator.ts",
+    "src/learning/acceleration-estimator.ts",
+    "src/learning/stop-yield-estimator.ts",
+    "src/autonomy/cruise-targets.ts",
+    "src/autonomy/longitudinal-control.ts",
+    "src/autonomy/stop-policy.ts"
+  ],
+  "runtime": {
+    "node": "v24.21.0",
+    "platform": "win32 10.0.26300",
+    "cpu": "AMD Ryzen 7 7735U with Radeon Graphics         ",
+    "logicalCpus": 16,
+    "ramBytes": 14702026752
+  },
+  "scope": "3 taxis + 2 civilians on the authored 044 road context; 093 ledger -> 094/095/098 estimators -> composeEarlyLoopProfile -> compileEarlyLoopControllerProfiles -> 046 cruise target / 047 longitudinal / 051 stop policy; deterministic native fixture, no renderer, no Rapier, no participant data",
+  "tolerances": {
+    "numericStyle": 1e-9,
+    "stopRole": "exact equality for the same seed and opportunity",
+    "profileParameterDelta": 0
+  },
+  "baseProfile": {
+    "profileId": "204-early-loop-fixture",
+    "versionId": "204-base-v1",
+    "parameters": {
+      "speed_delta_urban": 0,
+      "speed_delta_residential": 0,
+      "speed_delta_arterial": 0,
+      "curve_lateral_accel": 2.5,
+      "intersection_approach_speed": 6,
+      "cruise_speed_variability": 0.3,
+      "overtake_speed_bonus": 2,
+      "cruise_accel_deadband": 0.3,
+      "desired_acceleration": 1.5,
+      "comfort_deceleration": 2,
+      "acceleration_jerk": 2,
+      "braking_jerk": 3,
+      "throttle_release_delay": 0.2,
+      "brake_reaction_delay": 0.5,
+      "launch_intensity": 0.6,
+      "coasting_bias": 0.4,
+      "following_time_headway": 1.8,
+      "following_min_gap": 3,
+      "queue_standstill_gap": 2,
+      "cutin_brake_response": 0.7,
+      "following_speed_gain": 0.7,
+      "closing_ttc_threshold": 3,
+      "leader_change_delay": 0.2,
+      "following_hysteresis": 1,
+      "red_stop_probability": 1,
+      "yellow_stop_probability": 0.8,
+      "green_start_delay": 0.7,
+      "red_stop_line_offset": 1,
+      "red_run_gap_acceptance": 2.5,
+      "yellow_commit_time": 2,
+      "green_launch_acceleration": 1.5,
+      "late_red_brake_threshold": 2,
+      "stop_full_probability": 0.6,
+      "stop_dwell_time": 1,
+      "stop_line_offset": 1,
+      "yield_time_gap": 3,
+      "rolling_stop_speed": 1,
+      "priority_assertiveness": 0.3,
+      "allway_stop_patience": 2,
+      "blocked_intersection_entry_probability": 0,
+      "lane_change_front_gap": 12,
+      "lane_change_back_gap": 10,
+      "lane_change_speed_gain": 2,
+      "lane_change_cooldown": 6,
+      "lane_change_duration": 2,
+      "signal_lead_time": 1,
+      "signal_use_probability": 1,
+      "pass_on_right_probability": 0,
+      "lane_center_offset": 0,
+      "steering_response_time": 0.3,
+      "steering_rate_limit": 1,
+      "turn_entry_speed": 5,
+      "turn_exit_acceleration": 1.5,
+      "corner_cutting_bias": 0,
+      "lateral_clearance": 0.8,
+      "lateral_correction_deadband": 0.1,
+      "route_time_weight": 0.6,
+      "route_distance_weight": 0.3,
+      "route_turn_penalty": 2,
+      "route_signal_penalty": 5,
+      "route_congestion_penalty": 0.5,
+      "reroute_patience": 20,
+      "u_turn_willingness": 0,
+      "reverse_recovery_duration": 2,
+      "pedestrian_yield_probability": 1,
+      "pedestrian_clearance": 2,
+      "hazard_reaction_delay": 0.5,
+      "obstacle_clearance": 1,
+      "emergency_brake_intensity": 1,
+      "evasive_steer_willingness": 0.3,
+      "crosswalk_approach_speed": 5,
+      "horn_use_probability": 0.1,
+      "pickup_approach_speed": 3,
+      "pickup_curb_distance": 0.5,
+      "pickup_stop_precision": 1,
+      "pickup_dwell_time": 3,
+      "dropoff_approach_speed": 3,
+      "dropoff_curb_distance": 0.5,
+      "occupied_acceleration_scale": 0.85,
+      "occupied_lateral_accel_scale": 0.85
+    },
+    "earlyKeys": {
+      "speed_delta_urban": 0,
+      "desired_acceleration": 1.5,
+      "stop_full_probability": 0.6
+    }
+  },
+  "stopSample": {
+    "seed": 1,
+    "unit": 0.550262212054804
+  },
+  "baseBehavior": {
+    "actors": [
+      {
+        "actorId": "taxi-01",
+        "kind": "TAXI",
+        "classId": "sedan",
+        "targetMps": 10,
+        "targetReason": "FREE_ROAD",
+        "accelerationMps2": 1.5,
+        "phase": "TRACKING",
+        "throttle": 0.3230769230769231,
+        "brake": 0,
+        "speedMps": 1.699999999999998,
+        "reactionTicks": 30
+      },
+      {
+        "actorId": "taxi-02",
+        "kind": "TAXI",
+        "classId": "sedan",
+        "targetMps": 10,
+        "targetReason": "FREE_ROAD",
+        "accelerationMps2": 1.5,
+        "phase": "TRACKING",
+        "throttle": 0.3230769230769231,
+        "brake": 0,
+        "speedMps": 1.699999999999998,
+        "reactionTicks": 30
+      },
+      {
+        "actorId": "taxi-03",
+        "kind": "TAXI",
+        "classId": "compact",
+        "targetMps": 10,
+        "targetReason": "FREE_ROAD",
+        "accelerationMps2": 1.5,
+        "phase": "TRACKING",
+        "throttle": 0.2357142857142857,
+        "brake": 0,
+        "speedMps": 1.699999999999998,
+        "reactionTicks": 30
+      },
+      {
+        "actorId": "civil-01",
+        "kind": "CIVIL",
+        "classId": "compact",
+        "targetMps": 10,
+        "targetReason": "FREE_ROAD",
+        "accelerationMps2": 1.5,
+        "phase": "TRACKING",
+        "throttle": 0.2357142857142857,
+        "brake": 0,
+        "speedMps": 1.699999999999998,
+        "reactionTicks": 30
+      },
+      {
+        "actorId": "civil-02",
+        "kind": "CIVIL",
+        "classId": "compact",
+        "targetMps": 10,
+        "targetReason": "FREE_ROAD",
+        "accelerationMps2": 1.5,
+        "phase": "TRACKING",
+        "throttle": 0.2357142857142857,
+        "brake": 0,
+        "speedMps": 1.699999999999998,
+        "reactionTicks": 30
+      }
+    ],
+    "stop": {
+      "actors": [
+        {
+          "actorId": "taxi-01",
+          "action": "APPROACH",
+          "reason": "STOP_APPROACH",
+          "role": "FULL",
+          "stopRequested": true,
+          "sampledUnit": 0.550262212054804,
+          "probability": 0.6
+        },
+        {
+          "actorId": "taxi-02",
+          "action": "APPROACH",
+          "reason": "STOP_APPROACH",
+          "role": "FULL",
+          "stopRequested": true,
+          "sampledUnit": 0.550262212054804,
+          "probability": 0.6
+        },
+        {
+          "actorId": "taxi-03",
+          "action": "APPROACH",
+          "reason": "STOP_APPROACH",
+          "role": "FULL",
+          "stopRequested": true,
+          "sampledUnit": 0.550262212054804,
+          "probability": 0.6
+        },
+        {
+          "actorId": "civil-01",
+          "action": "APPROACH",
+          "reason": "STOP_APPROACH",
+          "role": "FULL",
+          "stopRequested": true,
+          "sampledUnit": 0.550262212054804,
+          "probability": 0.6
+        },
+        {
+          "actorId": "civil-02",
+          "action": "APPROACH",
+          "reason": "STOP_APPROACH",
+          "role": "FULL",
+          "stopRequested": true,
+          "sampledUnit": 0.550262212054804,
+          "probability": 0.6
+        }
+      ],
+      "canonical": {
+        "actorId": "taxi-01",
+        "action": "APPROACH",
+        "reason": "STOP_APPROACH",
+        "role": "FULL",
+        "stopRequested": true,
+        "sampledUnit": 0.550262212054804,
+        "probability": 0.6
+      },
+      "rate": {
+        "total": 40,
+        "full": 26,
+        "rolling": 14,
+        "fullRate": 0.65
+      }
+    }
+  },
+  "scenarios": {
+    "prudent": {
+      "id": "prudent",
+      "selectedKeys": [
+        "speed_delta_urban",
+        "desired_acceleration",
+        "stop_full_probability"
+      ],
+      "evidence": [
+        {
+          "key": "speed_delta_urban",
+          "status": "READY",
+          "distinctEpisodes": 3,
+          "quality": 1,
+          "noEstimate": "ESTIMATOR_NOT_IMPLEMENTED"
+        },
+        {
+          "key": "desired_acceleration",
+          "status": "READY",
+          "distinctEpisodes": 3,
+          "quality": 1,
+          "noEstimate": "ESTIMATOR_NOT_IMPLEMENTED"
+        },
+        {
+          "key": "stop_full_probability",
+          "status": "READY",
+          "distinctEpisodes": 4,
+          "quality": 1,
+          "noEstimate": "ESTIMATOR_NOT_IMPLEMENTED"
+        }
+      ],
+      "candidates": [
+        {
+          "key": "speed_delta_urban",
+          "status": "CANDIDATE",
+          "value": -1,
+          "quality": 1,
+          "sourceEpisodeCount": 3
+        },
+        {
+          "key": "desired_acceleration",
+          "status": "CANDIDATE",
+          "value": 0.9,
+          "quality": 1,
+          "sourceEpisodeCount": 3
+        },
+        {
+          "key": "stop_full_probability",
+          "status": "CANDIDATE",
+          "value": 1,
+          "quality": 1,
+          "sourceEpisodeCount": 4
+        }
+      ],
+      "values": {
+        "speed_delta_urban": {
+          "base": 0,
+          "candidate": -1,
+          "blended": -0.25,
+          "blend": 0.25,
+          "quality": 1,
+          "sourceEpisodeCount": 3,
+          "unchangedReason": null,
+          "segmentIds": [
+            "segment-prudent-speed-01",
+            "segment-prudent-speed-02",
+            "segment-prudent-speed-03"
+          ],
+          "opportunityIds": [
+            "prudent-speed-01",
+            "prudent-speed-02",
+            "prudent-speed-03"
+          ]
+        },
+        "desired_acceleration": {
+          "base": 1.5,
+          "candidate": 0.9,
+          "blended": 1.35,
+          "blend": 0.25,
+          "quality": 1,
+          "sourceEpisodeCount": 3,
+          "unchangedReason": null,
+          "segmentIds": [
+            "segment-prudent-acceleration-01",
+            "segment-prudent-acceleration-02",
+            "segment-prudent-acceleration-03"
+          ],
+          "opportunityIds": [
+            "prudent-acceleration-01",
+            "prudent-acceleration-02",
+            "prudent-acceleration-03"
+          ]
+        },
+        "stop_full_probability": {
+          "base": 0.6,
+          "candidate": 1,
+          "blended": 0.7,
+          "blend": 0.25,
+          "quality": 1,
+          "sourceEpisodeCount": 4,
+          "unchangedReason": null,
+          "segmentIds": [
+            "segment-prudent-stop-01",
+            "segment-prudent-stop-02",
+            "segment-prudent-stop-03",
+            "segment-prudent-stop-04"
+          ],
+          "opportunityIds": [
+            "prudent-stop-01",
+            "prudent-stop-02",
+            "prudent-stop-03",
+            "prudent-stop-04"
+          ]
+        }
+      },
+      "tokens": {
+        "autoAvailable": true,
+        "profileId": "204-early-loop-fixture",
+        "versionId": "204-base-v1-204-early",
+        "parametersEqualBase": false,
+        "cruiseSpeedDeltaUrban": -0.25,
+        "longitudinalDesiredAcceleration": 1.35,
+        "stopFullProbability": 0.7,
+        "stopDwellTimeS": 1,
+        "stopLineOffsetM": 1,
+        "provenance": {
+          "speed_delta_urban": "BASE",
+          "desired_acceleration": "BASE",
+          "stop_full_probability": "BASE"
+        }
+      },
+      "actors": [
+        {
+          "actorId": "taxi-01",
+          "kind": "TAXI",
+          "classId": "sedan",
+          "targetMps": 9.75,
+          "targetReason": "FREE_ROAD",
+          "accelerationMps2": 1.35,
+          "phase": "TRACKING",
+          "throttle": 0.2907692307692308,
+          "brake": 0,
+          "speedMps": 1.580555555555554,
+          "reactionTicks": 30
+        },
+        {
+          "actorId": "taxi-02",
+          "kind": "TAXI",
+          "classId": "sedan",
+          "targetMps": 9.75,
+          "targetReason": "FREE_ROAD",
+          "accelerationMps2": 1.35,
+          "phase": "TRACKING",
+          "throttle": 0.2907692307692308,
+          "brake": 0,
+          "speedMps": 1.580555555555554,
+          "reactionTicks": 30
+        },
+        {
+          "actorId": "taxi-03",
+          "kind": "TAXI",
+          "classId": "compact",
+          "targetMps": 9.75,
+          "targetReason": "FREE_ROAD",
+          "accelerationMps2": 1.35,
+          "phase": "TRACKING",
+          "throttle": 0.21214285714285713,
+          "brake": 0,
+          "speedMps": 1.580555555555554,
+          "reactionTicks": 30
+        },
+        {
+          "actorId": "civil-01",
+          "kind": "CIVIL",
+          "classId": "compact",
+          "targetMps": 9.75,
+          "targetReason": "FREE_ROAD",
+          "accelerationMps2": 1.35,
+          "phase": "TRACKING",
+          "throttle": 0.21214285714285713,
+          "brake": 0,
+          "speedMps": 1.580555555555554,
+          "reactionTicks": 30
+        },
+        {
+          "actorId": "civil-02",
+          "kind": "CIVIL",
+          "classId": "compact",
+          "targetMps": 9.75,
+          "targetReason": "FREE_ROAD",
+          "accelerationMps2": 1.35,
+          "phase": "TRACKING",
+          "throttle": 0.21214285714285713,
+          "brake": 0,
+          "speedMps": 1.580555555555554,
+          "reactionTicks": 30
+        }
+      ],
+      "stop": {
+        "canonical": {
+          "actorId": "taxi-01",
+          "action": "APPROACH",
+          "reason": "STOP_APPROACH",
+          "role": "FULL",
+          "stopRequested": true,
+          "sampledUnit": 0.550262212054804,
+          "probability": 0.7
+        },
+        "rate": {
+          "total": 40,
+          "full": 29,
+          "rolling": 11,
+          "fullRate": 0.725
+        },
+        "actors": [
+          {
+            "actorId": "taxi-01",
+            "action": "APPROACH",
+            "reason": "STOP_APPROACH",
+            "role": "FULL",
+            "stopRequested": true,
+            "sampledUnit": 0.550262212054804,
+            "probability": 0.7
+          },
+          {
+            "actorId": "taxi-02",
+            "action": "APPROACH",
+            "reason": "STOP_APPROACH",
+            "role": "FULL",
+            "stopRequested": true,
+            "sampledUnit": 0.550262212054804,
+            "probability": 0.7
+          },
+          {
+            "actorId": "taxi-03",
+            "action": "APPROACH",
+            "reason": "STOP_APPROACH",
+            "role": "FULL",
+            "stopRequested": true,
+            "sampledUnit": 0.550262212054804,
+            "probability": 0.7
+          },
+          {
+            "actorId": "civil-01",
+            "action": "APPROACH",
+            "reason": "STOP_APPROACH",
+            "role": "FULL",
+            "stopRequested": true,
+            "sampledUnit": 0.550262212054804,
+            "probability": 0.7
+          },
+          {
+            "actorId": "civil-02",
+            "action": "APPROACH",
+            "reason": "STOP_APPROACH",
+            "role": "FULL",
+            "stopRequested": true,
+            "sampledUnit": 0.550262212054804,
+            "probability": 0.7
+          }
+        ]
+      }
+    },
+    "risky": {
+      "id": "risky",
+      "selectedKeys": [
+        "speed_delta_urban",
+        "desired_acceleration",
+        "stop_full_probability"
+      ],
+      "evidence": [
+        {
+          "key": "speed_delta_urban",
+          "status": "READY",
+          "distinctEpisodes": 3,
+          "quality": 1,
+          "noEstimate": "ESTIMATOR_NOT_IMPLEMENTED"
+        },
+        {
+          "key": "desired_acceleration",
+          "status": "READY",
+          "distinctEpisodes": 3,
+          "quality": 1,
+          "noEstimate": "ESTIMATOR_NOT_IMPLEMENTED"
+        },
+        {
+          "key": "stop_full_probability",
+          "status": "READY",
+          "distinctEpisodes": 4,
+          "quality": 1,
+          "noEstimate": "ESTIMATOR_NOT_IMPLEMENTED"
+        }
+      ],
+      "candidates": [
+        {
+          "key": "speed_delta_urban",
+          "status": "CANDIDATE",
+          "value": 2,
+          "quality": 1,
+          "sourceEpisodeCount": 3
+        },
+        {
+          "key": "desired_acceleration",
+          "status": "CANDIDATE",
+          "value": 3.5,
+          "quality": 1,
+          "sourceEpisodeCount": 3
+        },
+        {
+          "key": "stop_full_probability",
+          "status": "CANDIDATE",
+          "value": 0.25,
+          "quality": 1,
+          "sourceEpisodeCount": 4
+        }
+      ],
+      "values": {
+        "speed_delta_urban": {
+          "base": 0,
+          "candidate": 2,
+          "blended": 0.5,
+          "blend": 0.25,
+          "quality": 1,
+          "sourceEpisodeCount": 3,
+          "unchangedReason": null,
+          "segmentIds": [
+            "segment-risky-speed-01",
+            "segment-risky-speed-02",
+            "segment-risky-speed-03"
+          ],
+          "opportunityIds": [
+            "risky-speed-01",
+            "risky-speed-02",
+            "risky-speed-03"
+          ]
+        },
+        "desired_acceleration": {
+          "base": 1.5,
+          "candidate": 3.5,
+          "blended": 2,
+          "blend": 0.25,
+          "quality": 1,
+          "sourceEpisodeCount": 3,
+          "unchangedReason": null,
+          "segmentIds": [
+            "segment-risky-acceleration-01",
+            "segment-risky-acceleration-02",
+            "segment-risky-acceleration-03"
+          ],
+          "opportunityIds": [
+            "risky-acceleration-01",
+            "risky-acceleration-02",
+            "risky-acceleration-03"
+          ]
+        },
+        "stop_full_probability": {
+          "base": 0.6,
+          "candidate": 0.25,
+          "blended": 0.5125,
+          "blend": 0.25,
+          "quality": 1,
+          "sourceEpisodeCount": 4,
+          "unchangedReason": null,
+          "segmentIds": [
+            "segment-risky-stop-01",
+            "segment-risky-stop-02",
+            "segment-risky-stop-03",
+            "segment-risky-stop-04"
+          ],
+          "opportunityIds": [
+            "risky-stop-01",
+            "risky-stop-02",
+            "risky-stop-03",
+            "risky-stop-04"
+          ]
+        }
+      },
+      "tokens": {
+        "autoAvailable": true,
+        "profileId": "204-early-loop-fixture",
+        "versionId": "204-base-v1-204-early",
+        "parametersEqualBase": false,
+        "cruiseSpeedDeltaUrban": 0.5,
+        "longitudinalDesiredAcceleration": 2,
+        "stopFullProbability": 0.5125,
+        "stopDwellTimeS": 1,
+        "stopLineOffsetM": 1,
+        "provenance": {
+          "speed_delta_urban": "BASE",
+          "desired_acceleration": "BASE",
+          "stop_full_probability": "BASE"
+        }
+      },
+      "actors": [
+        {
+          "actorId": "taxi-01",
+          "kind": "TAXI",
+          "classId": "sedan",
+          "targetMps": 10.5,
+          "targetReason": "FREE_ROAD",
+          "accelerationMps2": 2,
+          "phase": "TRACKING",
+          "throttle": 0.4307692307692308,
+          "brake": 0,
+          "speedMps": 2.01666666666667,
+          "reactionTicks": 30
+        },
+        {
+          "actorId": "taxi-02",
+          "kind": "TAXI",
+          "classId": "sedan",
+          "targetMps": 10.5,
+          "targetReason": "FREE_ROAD",
+          "accelerationMps2": 2,
+          "phase": "TRACKING",
+          "throttle": 0.4307692307692308,
+          "brake": 0,
+          "speedMps": 2.01666666666667,
+          "reactionTicks": 30
+        },
+        {
+          "actorId": "taxi-03",
+          "kind": "TAXI",
+          "classId": "compact",
+          "targetMps": 10.5,
+          "targetReason": "FREE_ROAD",
+          "accelerationMps2": 2,
+          "phase": "TRACKING",
+          "throttle": 0.3142857142857143,
+          "brake": 0,
+          "speedMps": 2.01666666666667,
+          "reactionTicks": 30
+        },
+        {
+          "actorId": "civil-01",
+          "kind": "CIVIL",
+          "classId": "compact",
+          "targetMps": 10.5,
+          "targetReason": "FREE_ROAD",
+          "accelerationMps2": 2,
+          "phase": "TRACKING",
+          "throttle": 0.3142857142857143,
+          "brake": 0,
+          "speedMps": 2.01666666666667,
+          "reactionTicks": 30
+        },
+        {
+          "actorId": "civil-02",
+          "kind": "CIVIL",
+          "classId": "compact",
+          "targetMps": 10.5,
+          "targetReason": "FREE_ROAD",
+          "accelerationMps2": 2,
+          "phase": "TRACKING",
+          "throttle": 0.3142857142857143,
+          "brake": 0,
+          "speedMps": 2.01666666666667,
+          "reactionTicks": 30
+        }
+      ],
+      "stop": {
+        "canonical": {
+          "actorId": "taxi-01",
+          "action": "ROLL_THROUGH",
+          "reason": "ROLLING_STOP_BY_PROFILE",
+          "role": "ROLLING",
+          "stopRequested": false,
+          "sampledUnit": 0.550262212054804,
+          "probability": 0.5125
+        },
+        "rate": {
+          "total": 40,
+          "full": 22,
+          "rolling": 18,
+          "fullRate": 0.55
+        },
+        "actors": [
+          {
+            "actorId": "taxi-01",
+            "action": "ROLL_THROUGH",
+            "reason": "ROLLING_STOP_BY_PROFILE",
+            "role": "ROLLING",
+            "stopRequested": false,
+            "sampledUnit": 0.550262212054804,
+            "probability": 0.5125
+          },
+          {
+            "actorId": "taxi-02",
+            "action": "ROLL_THROUGH",
+            "reason": "ROLLING_STOP_BY_PROFILE",
+            "role": "ROLLING",
+            "stopRequested": false,
+            "sampledUnit": 0.550262212054804,
+            "probability": 0.5125
+          },
+          {
+            "actorId": "taxi-03",
+            "action": "ROLL_THROUGH",
+            "reason": "ROLLING_STOP_BY_PROFILE",
+            "role": "ROLLING",
+            "stopRequested": false,
+            "sampledUnit": 0.550262212054804,
+            "probability": 0.5125
+          },
+          {
+            "actorId": "civil-01",
+            "action": "ROLL_THROUGH",
+            "reason": "ROLLING_STOP_BY_PROFILE",
+            "role": "ROLLING",
+            "stopRequested": false,
+            "sampledUnit": 0.550262212054804,
+            "probability": 0.5125
+          },
+          {
+            "actorId": "civil-02",
+            "action": "ROLL_THROUGH",
+            "reason": "ROLLING_STOP_BY_PROFILE",
+            "role": "ROLLING",
+            "stopRequested": false,
+            "sampledUnit": 0.550262212054804,
+            "probability": 0.5125
+          }
+        ]
+      }
+    },
+    "no-evidence": {
+      "id": "no-evidence",
+      "selectedKeys": [
+        "speed_delta_urban",
+        "desired_acceleration",
+        "stop_full_probability"
+      ],
+      "evidence": [
+        {
+          "key": "speed_delta_urban",
+          "status": "NO_EVIDENCE",
+          "distinctEpisodes": 0,
+          "quality": 0,
+          "noEstimate": "NO_QUALIFYING_EVIDENCE"
+        },
+        {
+          "key": "desired_acceleration",
+          "status": "NO_EVIDENCE",
+          "distinctEpisodes": 0,
+          "quality": 0,
+          "noEstimate": "NO_QUALIFYING_EVIDENCE"
+        },
+        {
+          "key": "stop_full_probability",
+          "status": "NO_EVIDENCE",
+          "distinctEpisodes": 0,
+          "quality": 0,
+          "noEstimate": "NO_QUALIFYING_EVIDENCE"
+        }
+      ],
+      "candidates": [
+        {
+          "key": "speed_delta_urban",
+          "status": "UNOBSERVED",
+          "value": null,
+          "quality": 0,
+          "sourceEpisodeCount": 0
+        },
+        {
+          "key": "desired_acceleration",
+          "status": "UNOBSERVED",
+          "value": null,
+          "quality": 0,
+          "sourceEpisodeCount": 0
+        },
+        {
+          "key": "stop_full_probability",
+          "status": "REFUSED",
+          "value": null,
+          "quality": 0,
+          "sourceEpisodeCount": 0
+        }
+      ],
+      "values": {
+        "speed_delta_urban": {
+          "base": 0,
+          "candidate": null,
+          "blended": 0,
+          "blend": 0,
+          "quality": 0,
+          "sourceEpisodeCount": 0,
+          "unchangedReason": "NO_QUALIFYING_EVIDENCE",
+          "segmentIds": [],
+          "opportunityIds": []
+        },
+        "desired_acceleration": {
+          "base": 1.5,
+          "candidate": null,
+          "blended": 1.5,
+          "blend": 0,
+          "quality": 0,
+          "sourceEpisodeCount": 0,
+          "unchangedReason": "NO_QUALIFYING_EVIDENCE",
+          "segmentIds": [],
+          "opportunityIds": []
+        },
+        "stop_full_probability": {
+          "base": 0.6,
+          "candidate": null,
+          "blended": 0.6,
+          "blend": 0,
+          "quality": 0,
+          "sourceEpisodeCount": 0,
+          "unchangedReason": "NO_QUALIFYING_EVIDENCE",
+          "segmentIds": [],
+          "opportunityIds": []
+        }
+      },
+      "tokens": {
+        "autoAvailable": true,
+        "profileId": "204-early-loop-fixture",
+        "versionId": "204-base-v1-204-early",
+        "parametersEqualBase": true,
+        "cruiseSpeedDeltaUrban": 0,
+        "longitudinalDesiredAcceleration": 1.5,
+        "stopFullProbability": 0.6,
+        "stopDwellTimeS": 1,
+        "stopLineOffsetM": 1,
+        "provenance": {
+          "speed_delta_urban": "BASE",
+          "desired_acceleration": "BASE",
+          "stop_full_probability": "BASE"
+        }
+      },
+      "actors": [
+        {
+          "actorId": "taxi-01",
+          "kind": "TAXI",
+          "classId": "sedan",
+          "targetMps": 10,
+          "targetReason": "FREE_ROAD",
+          "accelerationMps2": 1.5,
+          "phase": "TRACKING",
+          "throttle": 0.3230769230769231,
+          "brake": 0,
+          "speedMps": 1.699999999999998,
+          "reactionTicks": 30
+        },
+        {
+          "actorId": "taxi-02",
+          "kind": "TAXI",
+          "classId": "sedan",
+          "targetMps": 10,
+          "targetReason": "FREE_ROAD",
+          "accelerationMps2": 1.5,
+          "phase": "TRACKING",
+          "throttle": 0.3230769230769231,
+          "brake": 0,
+          "speedMps": 1.699999999999998,
+          "reactionTicks": 30
+        },
+        {
+          "actorId": "taxi-03",
+          "kind": "TAXI",
+          "classId": "compact",
+          "targetMps": 10,
+          "targetReason": "FREE_ROAD",
+          "accelerationMps2": 1.5,
+          "phase": "TRACKING",
+          "throttle": 0.2357142857142857,
+          "brake": 0,
+          "speedMps": 1.699999999999998,
+          "reactionTicks": 30
+        },
+        {
+          "actorId": "civil-01",
+          "kind": "CIVIL",
+          "classId": "compact",
+          "targetMps": 10,
+          "targetReason": "FREE_ROAD",
+          "accelerationMps2": 1.5,
+          "phase": "TRACKING",
+          "throttle": 0.2357142857142857,
+          "brake": 0,
+          "speedMps": 1.699999999999998,
+          "reactionTicks": 30
+        },
+        {
+          "actorId": "civil-02",
+          "kind": "CIVIL",
+          "classId": "compact",
+          "targetMps": 10,
+          "targetReason": "FREE_ROAD",
+          "accelerationMps2": 1.5,
+          "phase": "TRACKING",
+          "throttle": 0.2357142857142857,
+          "brake": 0,
+          "speedMps": 1.699999999999998,
+          "reactionTicks": 30
+        }
+      ],
+      "stop": {
+        "canonical": {
+          "actorId": "taxi-01",
+          "action": "APPROACH",
+          "reason": "STOP_APPROACH",
+          "role": "FULL",
+          "stopRequested": true,
+          "sampledUnit": 0.550262212054804,
+          "probability": 0.6
+        },
+        "rate": {
+          "total": 40,
+          "full": 26,
+          "rolling": 14,
+          "fullRate": 0.65
+        },
+        "actors": [
+          {
+            "actorId": "taxi-01",
+            "action": "APPROACH",
+            "reason": "STOP_APPROACH",
+            "role": "FULL",
+            "stopRequested": true,
+            "sampledUnit": 0.550262212054804,
+            "probability": 0.6
+          },
+          {
+            "actorId": "taxi-02",
+            "action": "APPROACH",
+            "reason": "STOP_APPROACH",
+            "role": "FULL",
+            "stopRequested": true,
+            "sampledUnit": 0.550262212054804,
+            "probability": 0.6
+          },
+          {
+            "actorId": "taxi-03",
+            "action": "APPROACH",
+            "reason": "STOP_APPROACH",
+            "role": "FULL",
+            "stopRequested": true,
+            "sampledUnit": 0.550262212054804,
+            "probability": 0.6
+          },
+          {
+            "actorId": "civil-01",
+            "action": "APPROACH",
+            "reason": "STOP_APPROACH",
+            "role": "FULL",
+            "stopRequested": true,
+            "sampledUnit": 0.550262212054804,
+            "probability": 0.6
+          },
+          {
+            "actorId": "civil-02",
+            "action": "APPROACH",
+            "reason": "STOP_APPROACH",
+            "role": "FULL",
+            "stopRequested": true,
+            "sampledUnit": 0.550262212054804,
+            "probability": 0.6
+          }
+        ]
+      }
+    }
+  },
+  "mixed": {
+    "speed_delta_urban": {
+      "id": "prudent",
+      "selectedKeys": [
+        "speed_delta_urban"
+      ],
+      "evidence": [
+        {
+          "key": "speed_delta_urban",
+          "status": "READY",
+          "distinctEpisodes": 3,
+          "quality": 1,
+          "noEstimate": "ESTIMATOR_NOT_IMPLEMENTED"
+        },
+        {
+          "key": "desired_acceleration",
+          "status": "NO_EVIDENCE",
+          "distinctEpisodes": 0,
+          "quality": 0,
+          "noEstimate": "NO_QUALIFYING_EVIDENCE"
+        },
+        {
+          "key": "stop_full_probability",
+          "status": "NO_EVIDENCE",
+          "distinctEpisodes": 0,
+          "quality": 0,
+          "noEstimate": "NO_QUALIFYING_EVIDENCE"
+        }
+      ],
+      "candidates": [
+        {
+          "key": "speed_delta_urban",
+          "status": "CANDIDATE",
+          "value": -1,
+          "quality": 1,
+          "sourceEpisodeCount": 3
+        },
+        {
+          "key": "desired_acceleration",
+          "status": "UNOBSERVED",
+          "value": null,
+          "quality": 0,
+          "sourceEpisodeCount": 0
+        },
+        {
+          "key": "stop_full_probability",
+          "status": "REFUSED",
+          "value": null,
+          "quality": 0,
+          "sourceEpisodeCount": 0
+        }
+      ],
+      "values": {
+        "speed_delta_urban": {
+          "base": 0,
+          "candidate": -1,
+          "blended": -0.25,
+          "blend": 0.25,
+          "quality": 1,
+          "sourceEpisodeCount": 3,
+          "unchangedReason": null,
+          "segmentIds": [
+            "segment-prudent-speed-01",
+            "segment-prudent-speed-02",
+            "segment-prudent-speed-03"
+          ],
+          "opportunityIds": [
+            "prudent-speed-01",
+            "prudent-speed-02",
+            "prudent-speed-03"
+          ]
+        },
+        "desired_acceleration": {
+          "base": 1.5,
+          "candidate": null,
+          "blended": 1.5,
+          "blend": 0,
+          "quality": 0,
+          "sourceEpisodeCount": 0,
+          "unchangedReason": "NO_QUALIFYING_EVIDENCE",
+          "segmentIds": [],
+          "opportunityIds": []
+        },
+        "stop_full_probability": {
+          "base": 0.6,
+          "candidate": null,
+          "blended": 0.6,
+          "blend": 0,
+          "quality": 0,
+          "sourceEpisodeCount": 0,
+          "unchangedReason": "NO_QUALIFYING_EVIDENCE",
+          "segmentIds": [],
+          "opportunityIds": []
+        }
+      },
+      "tokens": {
+        "autoAvailable": true,
+        "profileId": "204-early-loop-fixture",
+        "versionId": "204-base-v1-204-early",
+        "parametersEqualBase": false,
+        "cruiseSpeedDeltaUrban": -0.25,
+        "longitudinalDesiredAcceleration": 1.5,
+        "stopFullProbability": 0.6,
+        "stopDwellTimeS": 1,
+        "stopLineOffsetM": 1,
+        "provenance": {
+          "speed_delta_urban": "BASE",
+          "desired_acceleration": "BASE",
+          "stop_full_probability": "BASE"
+        }
+      },
+      "actors": [
+        {
+          "actorId": "taxi-01",
+          "kind": "TAXI",
+          "classId": "sedan",
+          "targetMps": 9.75,
+          "targetReason": "FREE_ROAD",
+          "accelerationMps2": 1.5,
+          "phase": "TRACKING",
+          "throttle": 0.3230769230769231,
+          "brake": 0,
+          "speedMps": 1.699999999999998,
+          "reactionTicks": 30
+        },
+        {
+          "actorId": "taxi-02",
+          "kind": "TAXI",
+          "classId": "sedan",
+          "targetMps": 9.75,
+          "targetReason": "FREE_ROAD",
+          "accelerationMps2": 1.5,
+          "phase": "TRACKING",
+          "throttle": 0.3230769230769231,
+          "brake": 0,
+          "speedMps": 1.699999999999998,
+          "reactionTicks": 30
+        },
+        {
+          "actorId": "taxi-03",
+          "kind": "TAXI",
+          "classId": "compact",
+          "targetMps": 9.75,
+          "targetReason": "FREE_ROAD",
+          "accelerationMps2": 1.5,
+          "phase": "TRACKING",
+          "throttle": 0.2357142857142857,
+          "brake": 0,
+          "speedMps": 1.699999999999998,
+          "reactionTicks": 30
+        },
+        {
+          "actorId": "civil-01",
+          "kind": "CIVIL",
+          "classId": "compact",
+          "targetMps": 9.75,
+          "targetReason": "FREE_ROAD",
+          "accelerationMps2": 1.5,
+          "phase": "TRACKING",
+          "throttle": 0.2357142857142857,
+          "brake": 0,
+          "speedMps": 1.699999999999998,
+          "reactionTicks": 30
+        },
+        {
+          "actorId": "civil-02",
+          "kind": "CIVIL",
+          "classId": "compact",
+          "targetMps": 9.75,
+          "targetReason": "FREE_ROAD",
+          "accelerationMps2": 1.5,
+          "phase": "TRACKING",
+          "throttle": 0.2357142857142857,
+          "brake": 0,
+          "speedMps": 1.699999999999998,
+          "reactionTicks": 30
+        }
+      ],
+      "stop": {
+        "canonical": {
+          "actorId": "taxi-01",
+          "action": "APPROACH",
+          "reason": "STOP_APPROACH",
+          "role": "FULL",
+          "stopRequested": true,
+          "sampledUnit": 0.550262212054804,
+          "probability": 0.6
+        },
+        "rate": {
+          "total": 40,
+          "full": 26,
+          "rolling": 14,
+          "fullRate": 0.65
+        },
+        "actors": [
+          {
+            "actorId": "taxi-01",
+            "action": "APPROACH",
+            "reason": "STOP_APPROACH",
+            "role": "FULL",
+            "stopRequested": true,
+            "sampledUnit": 0.550262212054804,
+            "probability": 0.6
+          },
+          {
+            "actorId": "taxi-02",
+            "action": "APPROACH",
+            "reason": "STOP_APPROACH",
+            "role": "FULL",
+            "stopRequested": true,
+            "sampledUnit": 0.550262212054804,
+            "probability": 0.6
+          },
+          {
+            "actorId": "taxi-03",
+            "action": "APPROACH",
+            "reason": "STOP_APPROACH",
+            "role": "FULL",
+            "stopRequested": true,
+            "sampledUnit": 0.550262212054804,
+            "probability": 0.6
+          },
+          {
+            "actorId": "civil-01",
+            "action": "APPROACH",
+            "reason": "STOP_APPROACH",
+            "role": "FULL",
+            "stopRequested": true,
+            "sampledUnit": 0.550262212054804,
+            "probability": 0.6
+          },
+          {
+            "actorId": "civil-02",
+            "action": "APPROACH",
+            "reason": "STOP_APPROACH",
+            "role": "FULL",
+            "stopRequested": true,
+            "sampledUnit": 0.550262212054804,
+            "probability": 0.6
+          }
+        ]
+      }
+    },
+    "desired_acceleration": {
+      "id": "prudent",
+      "selectedKeys": [
+        "desired_acceleration"
+      ],
+      "evidence": [
+        {
+          "key": "speed_delta_urban",
+          "status": "NO_EVIDENCE",
+          "distinctEpisodes": 0,
+          "quality": 0,
+          "noEstimate": "NO_QUALIFYING_EVIDENCE"
+        },
+        {
+          "key": "desired_acceleration",
+          "status": "READY",
+          "distinctEpisodes": 3,
+          "quality": 1,
+          "noEstimate": "ESTIMATOR_NOT_IMPLEMENTED"
+        },
+        {
+          "key": "stop_full_probability",
+          "status": "NO_EVIDENCE",
+          "distinctEpisodes": 0,
+          "quality": 0,
+          "noEstimate": "NO_QUALIFYING_EVIDENCE"
+        }
+      ],
+      "candidates": [
+        {
+          "key": "speed_delta_urban",
+          "status": "UNOBSERVED",
+          "value": null,
+          "quality": 0,
+          "sourceEpisodeCount": 0
+        },
+        {
+          "key": "desired_acceleration",
+          "status": "CANDIDATE",
+          "value": 0.9,
+          "quality": 1,
+          "sourceEpisodeCount": 3
+        },
+        {
+          "key": "stop_full_probability",
+          "status": "REFUSED",
+          "value": null,
+          "quality": 0,
+          "sourceEpisodeCount": 0
+        }
+      ],
+      "values": {
+        "speed_delta_urban": {
+          "base": 0,
+          "candidate": null,
+          "blended": 0,
+          "blend": 0,
+          "quality": 0,
+          "sourceEpisodeCount": 0,
+          "unchangedReason": "NO_QUALIFYING_EVIDENCE",
+          "segmentIds": [],
+          "opportunityIds": []
+        },
+        "desired_acceleration": {
+          "base": 1.5,
+          "candidate": 0.9,
+          "blended": 1.35,
+          "blend": 0.25,
+          "quality": 1,
+          "sourceEpisodeCount": 3,
+          "unchangedReason": null,
+          "segmentIds": [
+            "segment-prudent-acceleration-01",
+            "segment-prudent-acceleration-02",
+            "segment-prudent-acceleration-03"
+          ],
+          "opportunityIds": [
+            "prudent-acceleration-01",
+            "prudent-acceleration-02",
+            "prudent-acceleration-03"
+          ]
+        },
+        "stop_full_probability": {
+          "base": 0.6,
+          "candidate": null,
+          "blended": 0.6,
+          "blend": 0,
+          "quality": 0,
+          "sourceEpisodeCount": 0,
+          "unchangedReason": "NO_QUALIFYING_EVIDENCE",
+          "segmentIds": [],
+          "opportunityIds": []
+        }
+      },
+      "tokens": {
+        "autoAvailable": true,
+        "profileId": "204-early-loop-fixture",
+        "versionId": "204-base-v1-204-early",
+        "parametersEqualBase": false,
+        "cruiseSpeedDeltaUrban": 0,
+        "longitudinalDesiredAcceleration": 1.35,
+        "stopFullProbability": 0.6,
+        "stopDwellTimeS": 1,
+        "stopLineOffsetM": 1,
+        "provenance": {
+          "speed_delta_urban": "BASE",
+          "desired_acceleration": "BASE",
+          "stop_full_probability": "BASE"
+        }
+      },
+      "actors": [
+        {
+          "actorId": "taxi-01",
+          "kind": "TAXI",
+          "classId": "sedan",
+          "targetMps": 10,
+          "targetReason": "FREE_ROAD",
+          "accelerationMps2": 1.35,
+          "phase": "TRACKING",
+          "throttle": 0.2907692307692308,
+          "brake": 0,
+          "speedMps": 1.580555555555554,
+          "reactionTicks": 30
+        },
+        {
+          "actorId": "taxi-02",
+          "kind": "TAXI",
+          "classId": "sedan",
+          "targetMps": 10,
+          "targetReason": "FREE_ROAD",
+          "accelerationMps2": 1.35,
+          "phase": "TRACKING",
+          "throttle": 0.2907692307692308,
+          "brake": 0,
+          "speedMps": 1.580555555555554,
+          "reactionTicks": 30
+        },
+        {
+          "actorId": "taxi-03",
+          "kind": "TAXI",
+          "classId": "compact",
+          "targetMps": 10,
+          "targetReason": "FREE_ROAD",
+          "accelerationMps2": 1.35,
+          "phase": "TRACKING",
+          "throttle": 0.21214285714285713,
+          "brake": 0,
+          "speedMps": 1.580555555555554,
+          "reactionTicks": 30
+        },
+        {
+          "actorId": "civil-01",
+          "kind": "CIVIL",
+          "classId": "compact",
+          "targetMps": 10,
+          "targetReason": "FREE_ROAD",
+          "accelerationMps2": 1.35,
+          "phase": "TRACKING",
+          "throttle": 0.21214285714285713,
+          "brake": 0,
+          "speedMps": 1.580555555555554,
+          "reactionTicks": 30
+        },
+        {
+          "actorId": "civil-02",
+          "kind": "CIVIL",
+          "classId": "compact",
+          "targetMps": 10,
+          "targetReason": "FREE_ROAD",
+          "accelerationMps2": 1.35,
+          "phase": "TRACKING",
+          "throttle": 0.21214285714285713,
+          "brake": 0,
+          "speedMps": 1.580555555555554,
+          "reactionTicks": 30
+        }
+      ],
+      "stop": {
+        "canonical": {
+          "actorId": "taxi-01",
+          "action": "APPROACH",
+          "reason": "STOP_APPROACH",
+          "role": "FULL",
+          "stopRequested": true,
+          "sampledUnit": 0.550262212054804,
+          "probability": 0.6
+        },
+        "rate": {
+          "total": 40,
+          "full": 26,
+          "rolling": 14,
+          "fullRate": 0.65
+        },
+        "actors": [
+          {
+            "actorId": "taxi-01",
+            "action": "APPROACH",
+            "reason": "STOP_APPROACH",
+            "role": "FULL",
+            "stopRequested": true,
+            "sampledUnit": 0.550262212054804,
+            "probability": 0.6
+          },
+          {
+            "actorId": "taxi-02",
+            "action": "APPROACH",
+            "reason": "STOP_APPROACH",
+            "role": "FULL",
+            "stopRequested": true,
+            "sampledUnit": 0.550262212054804,
+            "probability": 0.6
+          },
+          {
+            "actorId": "taxi-03",
+            "action": "APPROACH",
+            "reason": "STOP_APPROACH",
+            "role": "FULL",
+            "stopRequested": true,
+            "sampledUnit": 0.550262212054804,
+            "probability": 0.6
+          },
+          {
+            "actorId": "civil-01",
+            "action": "APPROACH",
+            "reason": "STOP_APPROACH",
+            "role": "FULL",
+            "stopRequested": true,
+            "sampledUnit": 0.550262212054804,
+            "probability": 0.6
+          },
+          {
+            "actorId": "civil-02",
+            "action": "APPROACH",
+            "reason": "STOP_APPROACH",
+            "role": "FULL",
+            "stopRequested": true,
+            "sampledUnit": 0.550262212054804,
+            "probability": 0.6
+          }
+        ]
+      }
+    },
+    "stop_full_probability": {
+      "id": "prudent",
+      "selectedKeys": [
+        "stop_full_probability"
+      ],
+      "evidence": [
+        {
+          "key": "speed_delta_urban",
+          "status": "NO_EVIDENCE",
+          "distinctEpisodes": 0,
+          "quality": 0,
+          "noEstimate": "NO_QUALIFYING_EVIDENCE"
+        },
+        {
+          "key": "desired_acceleration",
+          "status": "NO_EVIDENCE",
+          "distinctEpisodes": 0,
+          "quality": 0,
+          "noEstimate": "NO_QUALIFYING_EVIDENCE"
+        },
+        {
+          "key": "stop_full_probability",
+          "status": "READY",
+          "distinctEpisodes": 4,
+          "quality": 1,
+          "noEstimate": "ESTIMATOR_NOT_IMPLEMENTED"
+        }
+      ],
+      "candidates": [
+        {
+          "key": "speed_delta_urban",
+          "status": "UNOBSERVED",
+          "value": null,
+          "quality": 0,
+          "sourceEpisodeCount": 0
+        },
+        {
+          "key": "desired_acceleration",
+          "status": "UNOBSERVED",
+          "value": null,
+          "quality": 0,
+          "sourceEpisodeCount": 0
+        },
+        {
+          "key": "stop_full_probability",
+          "status": "CANDIDATE",
+          "value": 1,
+          "quality": 1,
+          "sourceEpisodeCount": 4
+        }
+      ],
+      "values": {
+        "speed_delta_urban": {
+          "base": 0,
+          "candidate": null,
+          "blended": 0,
+          "blend": 0,
+          "quality": 0,
+          "sourceEpisodeCount": 0,
+          "unchangedReason": "NO_QUALIFYING_EVIDENCE",
+          "segmentIds": [],
+          "opportunityIds": []
+        },
+        "desired_acceleration": {
+          "base": 1.5,
+          "candidate": null,
+          "blended": 1.5,
+          "blend": 0,
+          "quality": 0,
+          "sourceEpisodeCount": 0,
+          "unchangedReason": "NO_QUALIFYING_EVIDENCE",
+          "segmentIds": [],
+          "opportunityIds": []
+        },
+        "stop_full_probability": {
+          "base": 0.6,
+          "candidate": 1,
+          "blended": 0.7,
+          "blend": 0.25,
+          "quality": 1,
+          "sourceEpisodeCount": 4,
+          "unchangedReason": null,
+          "segmentIds": [
+            "segment-prudent-stop-01",
+            "segment-prudent-stop-02",
+            "segment-prudent-stop-03",
+            "segment-prudent-stop-04"
+          ],
+          "opportunityIds": [
+            "prudent-stop-01",
+            "prudent-stop-02",
+            "prudent-stop-03",
+            "prudent-stop-04"
+          ]
+        }
+      },
+      "tokens": {
+        "autoAvailable": true,
+        "profileId": "204-early-loop-fixture",
+        "versionId": "204-base-v1-204-early",
+        "parametersEqualBase": false,
+        "cruiseSpeedDeltaUrban": 0,
+        "longitudinalDesiredAcceleration": 1.5,
+        "stopFullProbability": 0.7,
+        "stopDwellTimeS": 1,
+        "stopLineOffsetM": 1,
+        "provenance": {
+          "speed_delta_urban": "BASE",
+          "desired_acceleration": "BASE",
+          "stop_full_probability": "BASE"
+        }
+      },
+      "actors": [
+        {
+          "actorId": "taxi-01",
+          "kind": "TAXI",
+          "classId": "sedan",
+          "targetMps": 10,
+          "targetReason": "FREE_ROAD",
+          "accelerationMps2": 1.5,
+          "phase": "TRACKING",
+          "throttle": 0.3230769230769231,
+          "brake": 0,
+          "speedMps": 1.699999999999998,
+          "reactionTicks": 30
+        },
+        {
+          "actorId": "taxi-02",
+          "kind": "TAXI",
+          "classId": "sedan",
+          "targetMps": 10,
+          "targetReason": "FREE_ROAD",
+          "accelerationMps2": 1.5,
+          "phase": "TRACKING",
+          "throttle": 0.3230769230769231,
+          "brake": 0,
+          "speedMps": 1.699999999999998,
+          "reactionTicks": 30
+        },
+        {
+          "actorId": "taxi-03",
+          "kind": "TAXI",
+          "classId": "compact",
+          "targetMps": 10,
+          "targetReason": "FREE_ROAD",
+          "accelerationMps2": 1.5,
+          "phase": "TRACKING",
+          "throttle": 0.2357142857142857,
+          "brake": 0,
+          "speedMps": 1.699999999999998,
+          "reactionTicks": 30
+        },
+        {
+          "actorId": "civil-01",
+          "kind": "CIVIL",
+          "classId": "compact",
+          "targetMps": 10,
+          "targetReason": "FREE_ROAD",
+          "accelerationMps2": 1.5,
+          "phase": "TRACKING",
+          "throttle": 0.2357142857142857,
+          "brake": 0,
+          "speedMps": 1.699999999999998,
+          "reactionTicks": 30
+        },
+        {
+          "actorId": "civil-02",
+          "kind": "CIVIL",
+          "classId": "compact",
+          "targetMps": 10,
+          "targetReason": "FREE_ROAD",
+          "accelerationMps2": 1.5,
+          "phase": "TRACKING",
+          "throttle": 0.2357142857142857,
+          "brake": 0,
+          "speedMps": 1.699999999999998,
+          "reactionTicks": 30
+        }
+      ],
+      "stop": {
+        "canonical": {
+          "actorId": "taxi-01",
+          "action": "APPROACH",
+          "reason": "STOP_APPROACH",
+          "role": "FULL",
+          "stopRequested": true,
+          "sampledUnit": 0.550262212054804,
+          "probability": 0.7
+        },
+        "rate": {
+          "total": 40,
+          "full": 29,
+          "rolling": 11,
+          "fullRate": 0.725
+        },
+        "actors": [
+          {
+            "actorId": "taxi-01",
+            "action": "APPROACH",
+            "reason": "STOP_APPROACH",
+            "role": "FULL",
+            "stopRequested": true,
+            "sampledUnit": 0.550262212054804,
+            "probability": 0.7
+          },
+          {
+            "actorId": "taxi-02",
+            "action": "APPROACH",
+            "reason": "STOP_APPROACH",
+            "role": "FULL",
+            "stopRequested": true,
+            "sampledUnit": 0.550262212054804,
+            "probability": 0.7
+          },
+          {
+            "actorId": "taxi-03",
+            "action": "APPROACH",
+            "reason": "STOP_APPROACH",
+            "role": "FULL",
+            "stopRequested": true,
+            "sampledUnit": 0.550262212054804,
+            "probability": 0.7
+          },
+          {
+            "actorId": "civil-01",
+            "action": "APPROACH",
+            "reason": "STOP_APPROACH",
+            "role": "FULL",
+            "stopRequested": true,
+            "sampledUnit": 0.550262212054804,
+            "probability": 0.7
+          },
+          {
+            "actorId": "civil-02",
+            "action": "APPROACH",
+            "reason": "STOP_APPROACH",
+            "role": "FULL",
+            "stopRequested": true,
+            "sampledUnit": 0.550262212054804,
+            "probability": 0.7
+          }
+        ]
+      }
+    }
+  },
+  "manual": {
+    "earlyLoop": null,
+    "controllerTokens": null,
+    "evidenceEpisodes": 0,
+    "profileUnchanged": true,
+    "maximumParameterDelta": 0,
+    "before": {
+      "speed_delta_urban": 0,
+      "speed_delta_residential": 0,
+      "speed_delta_arterial": 0,
+      "curve_lateral_accel": 2.5,
+      "intersection_approach_speed": 6,
+      "cruise_speed_variability": 0.3,
+      "overtake_speed_bonus": 2,
+      "cruise_accel_deadband": 0.3,
+      "desired_acceleration": 1.5,
+      "comfort_deceleration": 2,
+      "acceleration_jerk": 2,
+      "braking_jerk": 3,
+      "throttle_release_delay": 0.2,
+      "brake_reaction_delay": 0.5,
+      "launch_intensity": 0.6,
+      "coasting_bias": 0.4,
+      "following_time_headway": 1.8,
+      "following_min_gap": 3,
+      "queue_standstill_gap": 2,
+      "cutin_brake_response": 0.7,
+      "following_speed_gain": 0.7,
+      "closing_ttc_threshold": 3,
+      "leader_change_delay": 0.2,
+      "following_hysteresis": 1,
+      "red_stop_probability": 1,
+      "yellow_stop_probability": 0.8,
+      "green_start_delay": 0.7,
+      "red_stop_line_offset": 1,
+      "red_run_gap_acceptance": 2.5,
+      "yellow_commit_time": 2,
+      "green_launch_acceleration": 1.5,
+      "late_red_brake_threshold": 2,
+      "stop_full_probability": 0.6,
+      "stop_dwell_time": 1,
+      "stop_line_offset": 1,
+      "yield_time_gap": 3,
+      "rolling_stop_speed": 1,
+      "priority_assertiveness": 0.3,
+      "allway_stop_patience": 2,
+      "blocked_intersection_entry_probability": 0,
+      "lane_change_front_gap": 12,
+      "lane_change_back_gap": 10,
+      "lane_change_speed_gain": 2,
+      "lane_change_cooldown": 6,
+      "lane_change_duration": 2,
+      "signal_lead_time": 1,
+      "signal_use_probability": 1,
+      "pass_on_right_probability": 0,
+      "lane_center_offset": 0,
+      "steering_response_time": 0.3,
+      "steering_rate_limit": 1,
+      "turn_entry_speed": 5,
+      "turn_exit_acceleration": 1.5,
+      "corner_cutting_bias": 0,
+      "lateral_clearance": 0.8,
+      "lateral_correction_deadband": 0.1,
+      "route_time_weight": 0.6,
+      "route_distance_weight": 0.3,
+      "route_turn_penalty": 2,
+      "route_signal_penalty": 5,
+      "route_congestion_penalty": 0.5,
+      "reroute_patience": 20,
+      "u_turn_willingness": 0,
+      "reverse_recovery_duration": 2,
+      "pedestrian_yield_probability": 1,
+      "pedestrian_clearance": 2,
+      "hazard_reaction_delay": 0.5,
+      "obstacle_clearance": 1,
+      "emergency_brake_intensity": 1,
+      "evasive_steer_willingness": 0.3,
+      "crosswalk_approach_speed": 5,
+      "horn_use_probability": 0.1,
+      "pickup_approach_speed": 3,
+      "pickup_curb_distance": 0.5,
+      "pickup_stop_precision": 1,
+      "pickup_dwell_time": 3,
+      "dropoff_approach_speed": 3,
+      "dropoff_curb_distance": 0.5,
+      "occupied_acceleration_scale": 0.85,
+      "occupied_lateral_accel_scale": 0.85
+    },
+    "after": {
+      "speed_delta_urban": 0,
+      "speed_delta_residential": 0,
+      "speed_delta_arterial": 0,
+      "curve_lateral_accel": 2.5,
+      "intersection_approach_speed": 6,
+      "cruise_speed_variability": 0.3,
+      "overtake_speed_bonus": 2,
+      "cruise_accel_deadband": 0.3,
+      "desired_acceleration": 1.5,
+      "comfort_deceleration": 2,
+      "acceleration_jerk": 2,
+      "braking_jerk": 3,
+      "throttle_release_delay": 0.2,
+      "brake_reaction_delay": 0.5,
+      "launch_intensity": 0.6,
+      "coasting_bias": 0.4,
+      "following_time_headway": 1.8,
+      "following_min_gap": 3,
+      "queue_standstill_gap": 2,
+      "cutin_brake_response": 0.7,
+      "following_speed_gain": 0.7,
+      "closing_ttc_threshold": 3,
+      "leader_change_delay": 0.2,
+      "following_hysteresis": 1,
+      "red_stop_probability": 1,
+      "yellow_stop_probability": 0.8,
+      "green_start_delay": 0.7,
+      "red_stop_line_offset": 1,
+      "red_run_gap_acceptance": 2.5,
+      "yellow_commit_time": 2,
+      "green_launch_acceleration": 1.5,
+      "late_red_brake_threshold": 2,
+      "stop_full_probability": 0.6,
+      "stop_dwell_time": 1,
+      "stop_line_offset": 1,
+      "yield_time_gap": 3,
+      "rolling_stop_speed": 1,
+      "priority_assertiveness": 0.3,
+      "allway_stop_patience": 2,
+      "blocked_intersection_entry_probability": 0,
+      "lane_change_front_gap": 12,
+      "lane_change_back_gap": 10,
+      "lane_change_speed_gain": 2,
+      "lane_change_cooldown": 6,
+      "lane_change_duration": 2,
+      "signal_lead_time": 1,
+      "signal_use_probability": 1,
+      "pass_on_right_probability": 0,
+      "lane_center_offset": 0,
+      "steering_response_time": 0.3,
+      "steering_rate_limit": 1,
+      "turn_entry_speed": 5,
+      "turn_exit_acceleration": 1.5,
+      "corner_cutting_bias": 0,
+      "lateral_clearance": 0.8,
+      "lateral_correction_deadband": 0.1,
+      "route_time_weight": 0.6,
+      "route_distance_weight": 0.3,
+      "route_turn_penalty": 2,
+      "route_signal_penalty": 5,
+      "route_congestion_penalty": 0.5,
+      "reroute_patience": 20,
+      "u_turn_willingness": 0,
+      "reverse_recovery_duration": 2,
+      "pedestrian_yield_probability": 1,
+      "pedestrian_clearance": 2,
+      "hazard_reaction_delay": 0.5,
+      "obstacle_clearance": 1,
+      "emergency_brake_intensity": 1,
+      "evasive_steer_willingness": 0.3,
+      "crosswalk_approach_speed": 5,
+      "horn_use_probability": 0.1,
+      "pickup_approach_speed": 3,
+      "pickup_curb_distance": 0.5,
+      "pickup_stop_precision": 1,
+      "pickup_dwell_time": 3,
+      "dropoff_approach_speed": 3,
+      "dropoff_curb_distance": 0.5,
+      "occupied_acceleration_scale": 0.85,
+      "occupied_lateral_accel_scale": 0.85
+    }
+  }
+}
