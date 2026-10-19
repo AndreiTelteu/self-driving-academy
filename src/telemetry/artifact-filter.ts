@@ -1063,6 +1063,15 @@ export function createArtifactFilter(options: ArtifactFilterOptions = {}): Artif
           'Artifact window identity changed mid-segment',
         );
         const before = materialize(existing);
+        // A closed segment cannot reopen, and its end tick can only move forward.
+        requireContract(
+          !(existing.endTick !== null && endTick === null),
+          'A closed artifact segment cannot reopen',
+        );
+        requireContract(
+          endTick === null || existing.endTick === null || endTick >= existing.endTick,
+          'Artifact segment end tick regressed',
+        );
         existing.endTick =
           endTick === null ? existing.endTick : Math.max(existing.endTick ?? endTick, endTick);
         // The input completeness only ever tightens: OPEN -> CLOSED -> INCOMPLETE.
