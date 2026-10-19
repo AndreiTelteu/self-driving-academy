@@ -1,0 +1,24 @@
+volta run --node 24.21.0 -- node --import ./scripts/register-typescript.mjs --test tests/learning/parameter-evidence.test.ts
+✔ specifications cover exactly the 24 registry M keys with identical units and ranges
+✔ empty evidence, including a demonstration with no STOP outcome, never becomes zero
+✔ read models and context breakdowns are immutable
+✔ foreign context is rejected instead of guessed
+✔ 20 correlated STOP observations deduplicate by opportunity identity and occurrence
+✔ speed requires ten seconds of free traffic and excludes constrained contexts
+✔ following evidence remains insufficient at one speed and needs varied speeds
+✔ TRUNCATED 088 evidence uses its prefix; FULLY_SUPPRESSED and excluded windows add nothing
+ℹ tests 8
+ℹ pass 8
+ℹ fail 0
+
+Why each test catches a plausible wrong implementation:
+1. A missing M key, extension key, duplicate, or registry unit/range drift fails the exact set and equality checks.
+2. A missing STOP defaulted to probability zero would expose value/delta or fail NO_EVIDENCE/unchanged assertions.
+3. Returning live mutable arrays/objects would fail Object.isFrozen checks.
+4. Guessing at absent/foreign facts instead of rejecting them would fail the thrown-contract assertion.
+5. Counting frames, calls, or cadence observations as episodes would produce 20 instead of 1; failure to include occurrence would keep the new occurrence at 1.
+6. Accepting a short window or leader context as preferred speed would create evidence before the free-traffic threshold.
+7. One-speed following data or counting frames instead of episodes would report READY too early.
+8. Discarding usable truncated prefix or admitting suppressed/excluded context would produce the wrong speed episode count.
+
+The full suite result is captured in checks.txt: 1032/1032 passing (baseline 1024 plus eight new tests).

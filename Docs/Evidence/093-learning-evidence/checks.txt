@@ -1,0 +1,44 @@
+volta run --node 24.21.0 --npm 11.19.0 -- npm ci
+RESULT: remained active without output for >30 seconds; stopped after confirming this was the only Volta npm process. `node_modules/.bin` remained empty.
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm run typecheck
+RESULT: exit 1
+> self-driving-academy@0.1.0 typecheck
+> tsc --noEmit && tsc -p tsconfig.tests.json --noEmit
+'tsc' is not recognized as an internal or external command,
+operable program or batch file.
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm run lint
+RESULT: exit 1; 'eslint' is not recognized as an internal or external command, operable program or batch file.
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm run format:check
+RESULT: exit 1; 'prettier' is not recognized as an internal or external command, operable program or batch file.
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm run check:architecture
+RESULT: PASS after fixing initial barrel import and `window` identifier violations.
+Architecture imports: PASS (162 TypeScript files)
+Architecture negative probes: PASS (6 forbidden dependencies rejected)
+Inspector exception negative probes: PASS (4 forbidden imports rejected)
+Rapier adapter negative probes: PASS (3 forbidden imports rejected)
+Renderer injection, readonly snapshots, defensive persistence and lifecycle: PASS
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm run check:parameter-catalog
+RESULT: PASS
+Parameter catalog is synchronized.
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm test
+RESULT: PASS
+ℹ tests 1032
+ℹ suites 0
+ℹ pass 1032
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 16588.0058
+
+volta run --node 24.21.0 -- node --import ./scripts/register-typescript.mjs --test tests/learning/parameter-evidence.test.ts
+RESULT: PASS — 8 tests, 8 passed, 0 failed.
+
+git diff --check
+RESULT: PASS (no whitespace errors).

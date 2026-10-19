@@ -18,6 +18,8 @@ Fiecare cheie stochează valoare, număr efectiv de observații, contexte, calit
 
 Propunere de praguri inițiale: trei oportunități distincte pentru o primă estimare de conformare, aproximativ zece secunde de trafic liber pentru viteză, trei episoade și viteze variate pentru urmărire, două plecări neblocate pentru reacția la verde. Sunt praguri de pornire pentru calibrare, nu garanții de învățare. Un eveniment singular poate fi arătat imediat fără să determine singur un obicei stabil.
 
+PBI 093 mapează aceste praguri la dovezi descriptive pe fiecare dintre cele 24 de chei M și deduplică după identitatea oportunității 086 plus occurrence, niciodată după cadre. Read model-ul păstrează parametrii fără context eligibil neschimbați și nu produce valori sau delta; specificația și tabelul complet sunt în [learning-evidence](learning-evidence.md). `READY` indică doar suficiența dovezii pentru un estimator ulterior, nu activare sau învățare.
+
 Actualizarea propusă este newValue = oldValue + learningWeight × (estimate − oldValue). Ponderea depinde de calitate, numărul efectiv de episoade și incertitudine. Are o limită de calibrare pentru a evita salturi provocate de zgomot; demonstrațiile repetate pot modifica puternic profilul. Această regularizare păstrează și stilurile riscante dacă dovezile sunt consistente.
 
 Istoricul recent primește o pondere mai mare decât demonstrațiile foarte vechi, astfel încât jucătorul să își poată schimba stilul. Jucătorul poate crea un profil nou de la bază și poate restaura versiuni. MANUAL nu produce învățare; în LEARNING analiza și publicarea rămân automate, fără confirmare după fiecare segment. Restaurarea sau schimbarea profilului creează o barieră learningEpoch, conform contractului profilurilor.
