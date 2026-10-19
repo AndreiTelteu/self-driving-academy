@@ -1,0 +1,30 @@
+Worktree: C:/Users/aandr/Sites/self-driving-academy/.worktrees/100-evidence
+Branch: loop-pbi/100-evidence
+Runtime: Volta Node 24.21.0 / npm 11.19.0
+Baseline before PBI 100: 1062/1062 tests.
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm run typecheck
+PASS (exit 0): tsc --noEmit && tsc -p tsconfig.tests.json --noEmit
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm run lint
+PASS (exit 0): eslint . --max-warnings 0
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm run format:check
+PASS (exit 0): All matched files use Prettier code style!
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm run check:architecture
+PASS (exit 0): Architecture imports PASS (170 TypeScript files); architecture negative probes PASS (6); inspector exception probes PASS (4); Rapier adapter probes PASS (3); renderer injection/lifecycle PASS.
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm run check:parameter-catalog
+PASS (exit 0): Parameter catalog is synchronized.
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm test
+PASS (exit 0): 1072 tests, 1072 pass, 0 fail. Baseline 1062 plus ten PBI 100 tests.
+
+volta run --node 24.21.0 -- node --import ./scripts/register-typescript.mjs --test tests/learning/evidence-confidence.test.ts
+PASS (exit 0): 10 tests, 10 pass, 0 fail.
+
+volta run --node 24.21.0 -- node --import ./scripts/register-typescript.mjs --test tests/learning/parameter-evidence.test.ts tests/learning/speed-estimator.test.ts tests/learning/acceleration-estimator.test.ts tests/learning/following-estimator.test.ts tests/learning/signal-estimator.test.ts tests/learning/stop-yield-estimator.test.ts tests/learning/lane-estimator.test.ts tests/learning/evidence-confidence.test.ts
+PASS (exit 0): 33 tests, 33 pass, 0 fail. Existing 093-099 contracts remain unchanged.
+
+No board validator, browser run, profile publication or performance probe was executed.

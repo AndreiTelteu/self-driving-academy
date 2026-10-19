@@ -32,6 +32,8 @@ PBI 098 folosește STOP-uri certe și fapte de oprire la linie; opririle produse
 
 PBI 099 estimează schimbările opționale separat de cele impuse de rută. Manevrele reușite singure dau doar o limită observată; oportunitățile refuzate și acceptate pot delimita intervalul pragului pentru gap și avantaj. Cooldown-ul cere durate măsurate la schimbări opționale; detalii în [lane-estimator](lane-estimator.md).
 
+PBI 100 adaugă stratul de încredere și praguri peste candidații 094–099. `assessEvidenceConfidence`, `summarizeEvidenceQuality` și `assessEstimatorConfidence` transformă read model-ul 093 plus expunerea reală a episoadelor în număr efectiv, stare și incertitudine. Numărul efectiv pliază cadrele aceleiași apariții și episoadele corelate, apoi ponderează expunerea; nu este numărul eșantioanelor la 20 Hz. `UNOBSERVED`, `WEAK`, `ZERO` și `OBSERVED` rămân distincte: un zero observat din dovezi suficiente nu este „fără dovezi”. Contradicțiile dintre episoade produc un interval explicit, iar o contradicție severă păstrează cheia `WEAK` în loc să fie mediată. Rezultatele rămân candidate-only, fără publicare de profil și fără activarea `estimable`; contractul complet este în [evidence-confidence](evidence-confidence.md).
+
 
 
 Actualizarea propusă este newValue = oldValue + learningWeight × (estimate − oldValue). Ponderea depinde de calitate, numărul efectiv de episoade și incertitudine. Are o limită de calibrare pentru a evita salturi provocate de zgomot; demonstrațiile repetate pot modifica puternic profilul. Această regularizare păstrează și stilurile riscante dacă dovezile sunt consistente.

@@ -5,3 +5,4 @@ export * from './following-estimator';
 export * from './signal-estimator';
 export * from './stop-yield-estimator';
 export * from './lane-estimator';
+export * from './evidence-confidence';

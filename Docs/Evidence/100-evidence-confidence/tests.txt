@@ -1,0 +1,28 @@
+volta run --node 24.21.0 -- node --import ./scripts/register-typescript.mjs --test tests/learning/evidence-confidence.test.ts
+
+100 effective count uses deduplicated exposures, not 20 Hz samples or frames
+100 correlated episodes collapse to one encounter instead of inflating confidence
+100 short intervals are not sufficient even with many samples
+100 observed zero is distinct from unobserved and from weak evidence
+100 contradictory fast and slow episodes stay weak with an explicit interval
+100 moderate dispersion is reported as an interval instead of being averaged away
+100 accepted and refused gaps delimit a threshold or contradict when they overlap
+100 following evidence needs varied speeds and full episode detail
+100 thresholds cover all 24 keys and preserve the 093 gates
+100 real 099 candidates integrate without publishing or enabling estimation
+
+tests 10
+pass 10
+fail 0
+
+Why each test catches a plausible wrong implementation:
+1. Counting frames, 20 Hz samples or observationCount as episodes yields 20 or 1200 instead of 1.
+2. Ignoring correlated encounter groups counts three correlated occurrences and passes the gate.
+3. Accepting any non-empty interval as sufficient ignores the 10 s / 600-tick exposure floor.
+4. Treating zero as missing or weak collapses ZERO into UNOBSERVED instead of a real value.
+5. Averaging contradictory fast/slow episodes returns 2.9 s instead of WEAK + interval [0.8, 5].
+6. Hiding moderate dispersion behind a point value loses the [1.5, 2.5] interval and uncertainty.
+7. Pooling accepted and refused gaps or ignoring overlap fails the threshold/contradiction split.
+8. Ignoring varied-speed identification or episode-detail completeness reports a false OBSERVED.
+9. Omitting a key, changing the 093 gate or mutating thresholds fails the exact per-key checks.
+10. Bypassing the real 099 candidate shape or publishing capability fails integration assertions.
