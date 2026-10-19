@@ -1,0 +1,2429 @@
+{
+  "schemaVersion": 1,
+  "label": "PROVISIONAL_UNCALIBRATED",
+  "capturedAt": "2026-10-19T17:46:26.626Z",
+  "fixture": "204-early-loop-fixture-v1",
+  "commit": "0b785f78afc132add7bd0e45425d6b9955600d58",
+  "sourceHash": "57cd6380f58ffd2b657274455f225df63ce26b7bc1ba12f235d1b7dae71beedf",
+  "inputs": [
+    "scripts/run-204-loop-probe.mjs",
+    "tests/harness/early-loop-204-fixture.ts",
+    "tests/harness/early-loop-governor-task.ts",
+    "tests/workers/early-loop-governor-thread.mjs",
+    "src/learning/early-loop.ts",
+    "src/learning/parameter-evidence.ts",
+    "src/learning/speed-estimator.ts",
+    "src/learning/acceleration-estimator.ts",
+    "src/learning/stop-yield-estimator.ts",
+    "src/autonomy/cruise-targets.ts",
+    "src/autonomy/longitudinal-control.ts",
+    "src/autonomy/stop-policy.ts",
+    "src/simulation/fixed-tick.ts",
+    "src/simulation/scheduling.ts",
+    "src/telemetry/performance.ts",
+    "src/workers/client.ts",
+    "src/workers/governor.ts",
+    "src/workers/protocol.ts",
+    "src/workers/runtime.ts"
+  ],
+  "scope": "204 early loop fixture: 3 taxis + 2 civilians, authored 044 road context, 046/047/051 callbacks under the 219 scheduler and 008 fixed-tick loop after one 093/094/095/098 compose/compile; synthetic 60Hz clock, no Rapier, renderer, GPU or hardware FPS",
+  "protocol": {
+    "warmupFrames": 120,
+    "measuredFrames": 600,
+    "repeats": 5,
+    "pairedArms": "collector enabled/disabled, alternating order",
+    "seed": 204,
+    "actors": [
+      {
+        "id": "taxi-01",
+        "kind": "TAXI",
+        "classId": "sedan"
+      },
+      {
+        "id": "taxi-02",
+        "kind": "TAXI",
+        "classId": "sedan"
+      },
+      {
+        "id": "taxi-03",
+        "kind": "TAXI",
+        "classId": "compact"
+      },
+      {
+        "id": "civil-01",
+        "kind": "CIVIL",
+        "classId": "compact"
+      },
+      {
+        "id": "civil-02",
+        "kind": "CIVIL",
+        "classId": "compact"
+      }
+    ],
+    "schedulerDecisionPhase": "219 entity-ID 10Hz distribution",
+    "workerJobs": 8
+  },
+  "frame218": {
+    "aggregate": {
+      "frameP50MedianMs": 0.35930000000007567,
+      "frameP95MedianMs": 0.7236000000000331,
+      "frameP99MedianMs": 1.1838999999999942,
+      "mainThreadP50MedianMs": 0.35930000000007567,
+      "mainThreadP95MedianMs": 0.7236000000000331,
+      "mainThreadP99MedianMs": 1.1838999999999942,
+      "schedulerTotalP95MedianMs": 0.7182999999999993
+    },
+    "enabledRuns": [
+      {
+        "warmupMs": 50.095300000000066,
+        "activeDurationMs": 209.30010000000004,
+        "frame": {
+          "count": 600,
+          "p50": 0.3647999999999456,
+          "p95": 0.7829000000000406,
+          "p99": 1.2041000000000395,
+          "min": 0.019400000000018736,
+          "max": 1.687599999999975,
+          "mean": 0.3479791666666658,
+          "overBudget": null,
+          "histogram": [
+            585,
+            15,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "mainThread": {
+          "count": 600,
+          "p50": 0.3647999999999456,
+          "p95": 0.7829000000000406,
+          "p99": 1.2041000000000395,
+          "min": 0.019400000000018736,
+          "max": 1.687599999999975,
+          "mean": 0.3479791666666658,
+          "overBudget": null,
+          "histogram": [
+            585,
+            15,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "simulationCpu": {
+          "count": 600,
+          "p50": 0.35829999999998563,
+          "p95": 0.7733999999999241,
+          "p99": 1.1946000000000367,
+          "min": 0.01630000000000109,
+          "max": 1.677000000000021,
+          "mean": 0.34126683333333463,
+          "overBudget": null,
+          "histogram": [
+            585,
+            15,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "debt": {
+          "count": 600,
+          "p50": 3.019806626980426e-13,
+          "p95": 1.2114753644709708e-12,
+          "p99": 1.2114753644709708e-12,
+          "min": 0,
+          "max": 1.2114753644709708e-12,
+          "mean": 4.3690680702942096e-13,
+          "overBudget": null,
+          "histogram": [
+            600,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "overloads": 0
+      },
+      {
+        "warmupMs": 44.83310000000006,
+        "activeDurationMs": 197.8682,
+        "frame": {
+          "count": 600,
+          "p50": 0.36770000000001346,
+          "p95": 0.7236000000000331,
+          "p99": 0.9074000000000524,
+          "min": 0.01999999999998181,
+          "max": 1.289700000000039,
+          "mean": 0.3289896666666696,
+          "overBudget": null,
+          "histogram": [
+            597,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "mainThread": {
+          "count": 600,
+          "p50": 0.36770000000001346,
+          "p95": 0.7236000000000331,
+          "p99": 0.9074000000000524,
+          "min": 0.01999999999998181,
+          "max": 1.289700000000039,
+          "mean": 0.3289896666666696,
+          "overBudget": null,
+          "histogram": [
+            597,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "simulationCpu": {
+          "count": 600,
+          "p50": 0.3628999999998541,
+          "p95": 0.7182999999999993,
+          "p99": 0.9009999999999536,
+          "min": 0.017200000000002547,
+          "max": 1.2786000000000968,
+          "mean": 0.32424166666666526,
+          "overBudget": null,
+          "histogram": [
+            597,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "debt": {
+          "count": 600,
+          "p50": 3.019806626980426e-13,
+          "p95": 1.2114753644709708e-12,
+          "p99": 1.2114753644709708e-12,
+          "min": 0,
+          "max": 1.2114753644709708e-12,
+          "mean": 4.3690680702942096e-13,
+          "overBudget": null,
+          "histogram": [
+            600,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "overloads": 0
+      },
+      {
+        "warmupMs": 39.71499999999992,
+        "activeDurationMs": 188.82560000000012,
+        "frame": {
+          "count": 600,
+          "p50": 0.35599999999999454,
+          "p95": 0.7105999999998858,
+          "p99": 1.1896999999999025,
+          "min": 0.014300000000048385,
+          "max": 1.4239000000000033,
+          "mean": 0.3138928333333297,
+          "overBudget": null,
+          "histogram": [
+            590,
+            10,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "mainThread": {
+          "count": 600,
+          "p50": 0.35599999999999454,
+          "p95": 0.7105999999998858,
+          "p99": 1.1896999999999025,
+          "min": 0.014300000000048385,
+          "max": 1.4239000000000033,
+          "mean": 0.3138928333333297,
+          "overBudget": null,
+          "histogram": [
+            590,
+            10,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "simulationCpu": {
+          "count": 600,
+          "p50": 0.35140000000001237,
+          "p95": 0.7056999999999789,
+          "p99": 1.1829000000000178,
+          "min": 0.011899999999968713,
+          "max": 1.413000000000011,
+          "mean": 0.30954216666667284,
+          "overBudget": null,
+          "histogram": [
+            590,
+            10,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "debt": {
+          "count": 600,
+          "p50": 3.019806626980426e-13,
+          "p95": 1.2114753644709708e-12,
+          "p99": 1.2114753644709708e-12,
+          "min": 0,
+          "max": 1.2114753644709708e-12,
+          "mean": 4.3690680702942096e-13,
+          "overBudget": null,
+          "histogram": [
+            600,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "overloads": 0
+      },
+      {
+        "warmupMs": 42.13210000000004,
+        "activeDurationMs": 197.61159999999995,
+        "frame": {
+          "count": 600,
+          "p50": 0.35930000000007567,
+          "p95": 0.7332000000001244,
+          "p99": 1.1838999999999942,
+          "min": 0.01389999999992142,
+          "max": 1.9962000000000444,
+          "mean": 0.3287041666666634,
+          "overBudget": null,
+          "histogram": [
+            590,
+            10,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "mainThread": {
+          "count": 600,
+          "p50": 0.35930000000007567,
+          "p95": 0.7332000000001244,
+          "p99": 1.1838999999999942,
+          "min": 0.01389999999992142,
+          "max": 1.9962000000000444,
+          "mean": 0.3287041666666634,
+          "overBudget": null,
+          "histogram": [
+            590,
+            10,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "simulationCpu": {
+          "count": 600,
+          "p50": 0.3545000000003711,
+          "p95": 0.7262000000000626,
+          "p99": 1.1730999999999767,
+          "min": 0.011800000000221189,
+          "max": 1.98929999999973,
+          "mean": 0.32428599999999164,
+          "overBudget": null,
+          "histogram": [
+            590,
+            10,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "debt": {
+          "count": 600,
+          "p50": 3.019806626980426e-13,
+          "p95": 1.2114753644709708e-12,
+          "p99": 1.2114753644709708e-12,
+          "min": 0,
+          "max": 1.2114753644709708e-12,
+          "mean": 4.3690680702942096e-13,
+          "overBudget": null,
+          "histogram": [
+            600,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "overloads": 0
+      },
+      {
+        "warmupMs": 38.20179999999982,
+        "activeDurationMs": 187.58179999999993,
+        "frame": {
+          "count": 600,
+          "p50": 0.35730000000012296,
+          "p95": 0.7103000000001884,
+          "p99": 0.8333999999999833,
+          "min": 0.013399999999819556,
+          "max": 1.7208000000000538,
+          "mean": 0.3119948333333347,
+          "overBudget": null,
+          "histogram": [
+            595,
+            5,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "mainThread": {
+          "count": 600,
+          "p50": 0.35730000000012296,
+          "p95": 0.7103000000001884,
+          "p99": 0.8333999999999833,
+          "min": 0.013399999999819556,
+          "max": 1.7208000000000538,
+          "mean": 0.3119948333333347,
+          "overBudget": null,
+          "histogram": [
+            595,
+            5,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "simulationCpu": {
+          "count": 600,
+          "p50": 0.35279999999966094,
+          "p95": 0.7050999999996748,
+          "p99": 0.8268000000002758,
+          "min": 0.011199999999917054,
+          "max": 1.7139999999999418,
+          "mean": 0.30787316666666736,
+          "overBudget": null,
+          "histogram": [
+            595,
+            5,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "debt": {
+          "count": 600,
+          "p50": 3.019806626980426e-13,
+          "p95": 1.2114753644709708e-12,
+          "p99": 1.2114753644709708e-12,
+          "min": 0,
+          "max": 1.2114753644709708e-12,
+          "mean": 4.3690680702942096e-13,
+          "overBudget": null,
+          "histogram": [
+            600,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "overloads": 0
+      }
+    ],
+    "collector": {
+      "enabledArms": 5,
+      "capacityPerMetric": 600,
+      "complete": true
+    }
+  },
+  "scheduler219": {
+    "stepTotalMs": {
+      "count": 3000,
+      "p50": 0.3554999999998927,
+      "p95": 0.7243000000000848,
+      "p99": 1.112500000000182,
+      "min": 0.011199999999917054,
+      "max": 1.98929999999973,
+      "mean": 0.32144196666666636,
+      "overBudget": null,
+      "histogram": [
+        2957,
+        43,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "schedulerOwnMs": {
+      "count": 3000,
+      "p50": 0.0037999999999556167,
+      "p95": 0.006399999999757711,
+      "p99": 0.00910000000033051,
+      "min": 0.0018000000000029104,
+      "max": 0.06650000000036016,
+      "mean": 0.004075966666672646,
+      "overBudget": null,
+      "histogram": [
+        3000,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "decisionCallbackMs": {
+      "count": 3000,
+      "p50": 0.3343999999999596,
+      "p95": 0.6932000000001608,
+      "p99": 1.080600000000004,
+      "min": 0,
+      "max": 1.9596999999998843,
+      "mean": 0.2990662666666642,
+      "overBudget": null,
+      "histogram": [
+        2968,
+        32,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "controllerCallbackMs": {
+      "count": 3000,
+      "p50": 0.016100000000164982,
+      "p95": 0.026399999999966894,
+      "p99": 0.03989999999976135,
+      "min": 0.009100000000216824,
+      "max": 1.1010000000001128,
+      "mean": 0.018027366666665975,
+      "overBudget": null,
+      "histogram": [
+        2999,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "physicsCallbackMs": {
+      "count": 3000,
+      "p50": 0.00029999999992469384,
+      "p95": 0.0004999999999881766,
+      "p99": 0.0007999999999128704,
+      "min": 0,
+      "max": 0.004599999999982174,
+      "mean": 0.00027236666666355326,
+      "overBudget": null,
+      "histogram": [
+        3000,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "debtMs": {
+      "count": 3000,
+      "p50": 3.019806626980426e-13,
+      "p95": 1.2114753644709708e-12,
+      "p99": 1.2114753644709708e-12,
+      "min": 0,
+      "max": 1.2114753644709708e-12,
+      "mean": 4.3690680702942096e-13,
+      "overBudget": null,
+      "histogram": [
+        3000,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "debtP95MedianMs": 1.2114753644709708e-12,
+    "debtP99MedianMs": 1.2114753644709708e-12,
+    "overloads": 0,
+    "stats": {
+      "actors": 5,
+      "routeJobs": 0,
+      "routeCache": 0,
+      "stopPolicyCalls": 600,
+      "retainedSnapshotsBeforeDispose": 2,
+      "retainedSnapshotsAfterDispose": 0,
+      "exactPageMemoryBytes": null
+    }
+  },
+  "worker221": {
+    "jobs": 8,
+    "warmupJobs": 2,
+    "startupMs": 179.9715000000001,
+    "admissions": [
+      "PENDING",
+      "PENDING",
+      "PENDING",
+      "PENDING",
+      "PENDING",
+      "PENDING",
+      "PENDING",
+      "PENDING"
+    ],
+    "statuses": [
+      "result",
+      "result",
+      "result",
+      "result",
+      "result",
+      "result",
+      "result",
+      "result"
+    ],
+    "transferCount": 10,
+    "completedCount": 8,
+    "results": [
+      [
+        -0.25,
+        1.35,
+        0.7,
+        1
+      ],
+      [
+        -0.25,
+        1.35,
+        0.7,
+        1
+      ],
+      [
+        -0.25,
+        1.35,
+        0.7,
+        1
+      ],
+      [
+        -0.25,
+        1.35,
+        0.7,
+        1
+      ],
+      [
+        -0.25,
+        1.35,
+        0.7,
+        1
+      ],
+      [
+        -0.25,
+        1.35,
+        0.7,
+        1
+      ],
+      [
+        -0.25,
+        1.35,
+        0.7,
+        1
+      ],
+      [
+        -0.25,
+        1.35,
+        0.7,
+        1
+      ]
+    ],
+    "queueMs": {
+      "count": 8,
+      "p50": 3.7846000000004096,
+      "p95": 7.617999999999938,
+      "p99": 7.617999999999938,
+      "min": 0.018000000000029104,
+      "max": 7.617999999999938,
+      "mean": 4.158300000000054,
+      "overBudget": null,
+      "histogram": [
+        1,
+        3,
+        4,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "serviceMs": {
+      "count": 8,
+      "p50": 0.9868000000001302,
+      "p95": 1.4989000000000487,
+      "p99": 1.4989000000000487,
+      "min": 0.7343000000000757,
+      "max": 1.4989000000000487,
+      "mean": 1.0654625000000806,
+      "overBudget": null,
+      "histogram": [
+        4,
+        4,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "endToEndMs": {
+      "count": 8,
+      "p50": 4.9377000000004045,
+      "p95": 8.577099999999973,
+      "p99": 8.577099999999973,
+      "min": 1.5169000000000779,
+      "max": 8.577099999999973,
+      "mean": 5.223762500000134,
+      "overBudget": null,
+      "histogram": [
+        0,
+        3,
+        4,
+        1,
+        0,
+        0,
+        0
+      ]
+    },
+    "usageAfterAcknowledgement": {
+      "version": "221-synthetic-1",
+      "jobs": 0,
+      "bytes": 0,
+      "persistenceIngressJobs": 0,
+      "persistenceIngressBytes": 0,
+      "activeHeavyJobs": 0,
+      "history": 10,
+      "transport": {
+        "jobs": 0,
+        "bytes": 0,
+        "history": 10
+      },
+      "pressure": false,
+      "context": "active",
+      "suspendedReason": null
+    },
+    "storeAfterAcknowledgement": {
+      "records": 0,
+      "bytes": 0
+    },
+    "measurements": [
+      {
+        "key": "[\"learning\",\"204-loop-probe\",1,1,\"204-early-loop-fixture\",\"204-base-v1-204-early\",\"204-early-segment-01\"]",
+        "attempt": 1,
+        "status": "result",
+        "queueMs": 0.018000000000029104,
+        "serviceMs": 1.4989000000000487,
+        "endToEndMs": 1.5169000000000779,
+        "cancellationMs": null,
+        "preempted": false
+      },
+      {
+        "key": "[\"learning\",\"204-loop-probe\",1,1,\"204-early-loop-fixture\",\"204-base-v1-204-early\",\"204-early-segment-02\"]",
+        "attempt": 1,
+        "status": "result",
+        "queueMs": 1.4931000000001404,
+        "serviceMs": 0.9868000000001302,
+        "endToEndMs": 2.4799000000002707,
+        "cancellationMs": null,
+        "preempted": false
+      },
+      {
+        "key": "[\"learning\",\"204-loop-probe\",1,1,\"204-early-loop-fixture\",\"204-base-v1-204-early\",\"204-early-segment-03\"]",
+        "attempt": 1,
+        "status": "result",
+        "queueMs": 2.500300000000152,
+        "serviceMs": 1.2613000000001193,
+        "endToEndMs": 3.7616000000002714,
+        "cancellationMs": null,
+        "preempted": false
+      },
+      {
+        "key": "[\"learning\",\"204-loop-probe\",1,1,\"204-early-loop-fixture\",\"204-base-v1-204-early\",\"204-early-segment-04\"]",
+        "attempt": 1,
+        "status": "result",
+        "queueMs": 3.7846000000004096,
+        "serviceMs": 1.153099999999995,
+        "endToEndMs": 4.9377000000004045,
+        "cancellationMs": null,
+        "preempted": false
+      },
+      {
+        "key": "[\"learning\",\"204-loop-probe\",1,1,\"204-early-loop-fixture\",\"204-base-v1-204-early\",\"204-early-segment-05\"]",
+        "attempt": 1,
+        "status": "result",
+        "queueMs": 4.933399999999892,
+        "serviceMs": 1.1368000000002212,
+        "endToEndMs": 6.0702000000001135,
+        "cancellationMs": null,
+        "preempted": false
+      },
+      {
+        "key": "[\"learning\",\"204-loop-probe\",1,1,\"204-early-loop-fixture\",\"204-base-v1-204-early\",\"204-early-segment-06\"]",
+        "attempt": 1,
+        "status": "result",
+        "queueMs": 6.083799999999883,
+        "serviceMs": 0.7343000000000757,
+        "endToEndMs": 6.8180999999999585,
+        "cancellationMs": null,
+        "preempted": false
+      },
+      {
+        "key": "[\"learning\",\"204-loop-probe\",1,1,\"204-early-loop-fixture\",\"204-base-v1-204-early\",\"204-early-segment-07\"]",
+        "attempt": 1,
+        "status": "result",
+        "queueMs": 6.835199999999986,
+        "serviceMs": 0.7934000000000196,
+        "endToEndMs": 7.628600000000006,
+        "cancellationMs": null,
+        "preempted": false
+      },
+      {
+        "key": "[\"learning\",\"204-loop-probe\",1,1,\"204-early-loop-fixture\",\"204-base-v1-204-early\",\"204-early-segment-08\"]",
+        "attempt": 1,
+        "status": "result",
+        "queueMs": 7.617999999999938,
+        "serviceMs": 0.9591000000000349,
+        "endToEndMs": 8.577099999999973,
+        "cancellationMs": null,
+        "preempted": false
+      }
+    ]
+  },
+  "performanceReport": {
+    "schemaVersion": 1,
+    "capturedAt": "2026-10-19T17:46:26.427Z",
+    "role": "portable-cpu",
+    "identity": {
+      "commit": "0b785f78afc132add7bd0e45425d6b9955600d58",
+      "sourceHash": "57cd6380f58ffd2b657274455f225df63ce26b7bc1ba12f235d1b7dae71beedf",
+      "budgetVersion": "203-initial-1",
+      "fixtureVersion": "204-early-loop-fixture-v1",
+      "engineVersion": "204-fixture-engine",
+      "physicsVersion": null,
+      "mapVersion": "044-context-cross-v1",
+      "seeds": [
+        204
+      ],
+      "hardware": {
+        "cpu": "AMD Ryzen 7 7735U with Radeon Graphics         ",
+        "logicalCpus": 16,
+        "ramBytes": 14702026752,
+        "os": "win32 10.0.26300",
+        "runtime": "v24.21.0",
+        "inputs": [
+          "scripts/run-204-loop-probe.mjs",
+          "tests/harness/early-loop-204-fixture.ts",
+          "tests/harness/early-loop-governor-task.ts",
+          "tests/workers/early-loop-governor-thread.mjs",
+          "src/learning/early-loop.ts",
+          "src/learning/parameter-evidence.ts",
+          "src/learning/speed-estimator.ts",
+          "src/learning/acceleration-estimator.ts",
+          "src/learning/stop-yield-estimator.ts",
+          "src/autonomy/cruise-targets.ts",
+          "src/autonomy/longitudinal-control.ts",
+          "src/autonomy/stop-policy.ts",
+          "src/simulation/fixed-tick.ts",
+          "src/simulation/scheduling.ts",
+          "src/telemetry/performance.ts",
+          "src/workers/client.ts",
+          "src/workers/governor.ts",
+          "src/workers/protocol.ts",
+          "src/workers/runtime.ts"
+        ]
+      },
+      "browser": null,
+      "backend": "Node CPU; synthetic 60Hz clock",
+      "preset": "not applicable",
+      "cssResolution": null,
+      "internalResolution": null,
+      "devicePixelRatio": null,
+      "cache": "warm JS after one identical pass per arm",
+      "network": "not applicable",
+      "powerState": "not captured; portable CPU probe"
+    },
+    "scope": "204 early loop fixture: 3 taxis + 2 civilians, authored 044 road context, 046/047/051 callbacks under the 219 scheduler and 008 fixed-tick loop after one 093/094/095/098 compose/compile; synthetic 60Hz clock, no Rapier, renderer, GPU or hardware FPS",
+    "coldLoad": [],
+    "warmLoad": [],
+    "runs": [
+      {
+        "repeat": 1,
+        "seed": 204,
+        "enabled": false,
+        "warmupMs": 62.46029999999996,
+        "activeDurationMs": 251.9309,
+        "wallDurationMs": 314.39119999999997,
+        "collector": {
+          "enabled": false,
+          "capacityPerMetric": 600,
+          "bufferBytes": 44,
+          "dropped": 0,
+          "complete": true,
+          "metrics": {
+            "frameMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            },
+            "mainThreadMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            },
+            "tickCpuMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            },
+            "simulationCpuMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            },
+            "debtMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            },
+            "gpuMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            },
+            "inputToCommandMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            },
+            "learningQueueMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            },
+            "learningServiceMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            },
+            "learningEndToEndMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            },
+            "checkpointAgeMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            }
+          }
+        },
+        "referenceCpuMs": {
+          "count": 600,
+          "p50": 0.4373000000000502,
+          "p95": 0.9710000000000036,
+          "p99": 1.4913000000000238,
+          "min": 0.01959999999996853,
+          "max": 2.2717999999999847,
+          "mean": 0.418719,
+          "overBudget": null,
+          "histogram": [
+            573,
+            27,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "referenceFrameMs": null,
+        "simulation": {
+          "clock": "synthetic",
+          "measuredWallSeconds": 0.2519309,
+          "simulatedSeconds": 12,
+          "admittedClockSeconds": 12,
+          "ratio": 1,
+          "tick": 720,
+          "overloads": 0
+        },
+        "resources": {
+          "actors": 5,
+          "routeJobs": 0,
+          "routeCache": 0,
+          "stopPolicyCalls": 600,
+          "retainedSnapshotsBeforeDispose": 2,
+          "retainedSnapshotsAfterDispose": 0,
+          "exactPageMemoryBytes": null
+        }
+      },
+      {
+        "repeat": 1,
+        "seed": 204,
+        "enabled": true,
+        "warmupMs": 50.095300000000066,
+        "activeDurationMs": 209.30010000000004,
+        "wallDurationMs": 259.3954000000001,
+        "collector": {
+          "enabled": true,
+          "capacityPerMetric": 600,
+          "bufferBytes": 52844,
+          "dropped": 0,
+          "complete": true,
+          "metrics": {
+            "frameMs": {
+              "status": "available",
+              "reason": null,
+              "distribution": {
+                "count": 600,
+                "p50": 0.3647999999999456,
+                "p95": 0.7829000000000406,
+                "p99": 1.2041000000000395,
+                "min": 0.019400000000018736,
+                "max": 1.687599999999975,
+                "mean": 0.3479791666666658,
+                "overBudget": null,
+                "histogram": [
+                  585,
+                  15,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              }
+            },
+            "mainThreadMs": {
+              "status": "available",
+              "reason": null,
+              "distribution": {
+                "count": 600,
+                "p50": 0.3647999999999456,
+                "p95": 0.7829000000000406,
+                "p99": 1.2041000000000395,
+                "min": 0.019400000000018736,
+                "max": 1.687599999999975,
+                "mean": 0.3479791666666658,
+                "overBudget": null,
+                "histogram": [
+                  585,
+                  15,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              }
+            },
+            "tickCpuMs": {
+              "status": "unavailable",
+              "reason": "No samples supplied for this scope",
+              "distribution": null
+            },
+            "simulationCpuMs": {
+              "status": "available",
+              "reason": null,
+              "distribution": {
+                "count": 600,
+                "p50": 0.35829999999998563,
+                "p95": 0.7733999999999241,
+                "p99": 1.1946000000000367,
+                "min": 0.01630000000000109,
+                "max": 1.677000000000021,
+                "mean": 0.34126683333333463,
+                "overBudget": null,
+                "histogram": [
+                  585,
+                  15,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              }
+            },
+            "debtMs": {
+              "status": "available",
+              "reason": null,
+              "distribution": {
+                "count": 600,
+                "p50": 3.019806626980426e-13,
+                "p95": 1.2114753644709708e-12,
+                "p99": 1.2114753644709708e-12,
+                "min": 0,
+                "max": 1.2114753644709708e-12,
+                "mean": 4.3690680702942096e-13,
+                "overBudget": null,
+                "histogram": [
+                  600,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              }
+            },
+            "gpuMs": {
+              "status": "unavailable",
+              "reason": "No samples supplied for this scope",
+              "distribution": null
+            },
+            "inputToCommandMs": {
+              "status": "unavailable",
+              "reason": "No samples supplied for this scope",
+              "distribution": null
+            },
+            "learningQueueMs": {
+              "status": "unavailable",
+              "reason": "No samples supplied for this scope",
+              "distribution": null
+            },
+            "learningServiceMs": {
+              "status": "unavailable",
+              "reason": "No samples supplied for this scope",
+              "distribution": null
+            },
+            "learningEndToEndMs": {
+              "status": "unavailable",
+              "reason": "No samples supplied for this scope",
+              "distribution": null
+            },
+            "checkpointAgeMs": {
+              "status": "unavailable",
+              "reason": "No samples supplied for this scope",
+              "distribution": null
+            }
+          }
+        },
+        "referenceCpuMs": {
+          "count": 600,
+          "p50": 0.3647999999999456,
+          "p95": 0.7829000000000406,
+          "p99": 1.2041000000000395,
+          "min": 0.019400000000018736,
+          "max": 1.687599999999975,
+          "mean": 0.3479791666666658,
+          "overBudget": null,
+          "histogram": [
+            585,
+            15,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "referenceFrameMs": null,
+        "simulation": {
+          "clock": "synthetic",
+          "measuredWallSeconds": 0.20930010000000004,
+          "simulatedSeconds": 12,
+          "admittedClockSeconds": 12,
+          "ratio": 1,
+          "tick": 720,
+          "overloads": 0
+        },
+        "resources": {
+          "actors": 5,
+          "routeJobs": 0,
+          "routeCache": 0,
+          "stopPolicyCalls": 600,
+          "retainedSnapshotsBeforeDispose": 2,
+          "retainedSnapshotsAfterDispose": 0,
+          "exactPageMemoryBytes": null
+        }
+      },
+      {
+        "repeat": 2,
+        "seed": 204,
+        "enabled": true,
+        "warmupMs": 44.83310000000006,
+        "activeDurationMs": 197.8682,
+        "wallDurationMs": 242.70130000000006,
+        "collector": {
+          "enabled": true,
+          "capacityPerMetric": 600,
+          "bufferBytes": 52844,
+          "dropped": 0,
+          "complete": true,
+          "metrics": {
+            "frameMs": {
+              "status": "available",
+              "reason": null,
+              "distribution": {
+                "count": 600,
+                "p50": 0.36770000000001346,
+                "p95": 0.7236000000000331,
+                "p99": 0.9074000000000524,
+                "min": 0.01999999999998181,
+                "max": 1.289700000000039,
+                "mean": 0.3289896666666696,
+                "overBudget": null,
+                "histogram": [
+                  597,
+                  3,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              }
+            },
+            "mainThreadMs": {
+              "status": "available",
+              "reason": null,
+              "distribution": {
+                "count": 600,
+                "p50": 0.36770000000001346,
+                "p95": 0.7236000000000331,
+                "p99": 0.9074000000000524,
+                "min": 0.01999999999998181,
+                "max": 1.289700000000039,
+                "mean": 0.3289896666666696,
+                "overBudget": null,
+                "histogram": [
+                  597,
+                  3,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              }
+            },
+            "tickCpuMs": {
+              "status": "unavailable",
+              "reason": "No samples supplied for this scope",
+              "distribution": null
+            },
+            "simulationCpuMs": {
+              "status": "available",
+              "reason": null,
+              "distribution": {
+                "count": 600,
+                "p50": 0.3628999999998541,
+                "p95": 0.7182999999999993,
+                "p99": 0.9009999999999536,
+                "min": 0.017200000000002547,
+                "max": 1.2786000000000968,
+                "mean": 0.32424166666666526,
+                "overBudget": null,
+                "histogram": [
+                  597,
+                  3,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              }
+            },
+            "debtMs": {
+              "status": "available",
+              "reason": null,
+              "distribution": {
+                "count": 600,
+                "p50": 3.019806626980426e-13,
+                "p95": 1.2114753644709708e-12,
+                "p99": 1.2114753644709708e-12,
+                "min": 0,
+                "max": 1.2114753644709708e-12,
+                "mean": 4.3690680702942096e-13,
+                "overBudget": null,
+                "histogram": [
+                  600,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              }
+            },
+            "gpuMs": {
+              "status": "unavailable",
+              "reason": "No samples supplied for this scope",
+              "distribution": null
+            },
+            "inputToCommandMs": {
+              "status": "unavailable",
+              "reason": "No samples supplied for this scope",
+              "distribution": null
+            },
+            "learningQueueMs": {
+              "status": "unavailable",
+              "reason": "No samples supplied for this scope",
+              "distribution": null
+            },
+            "learningServiceMs": {
+              "status": "unavailable",
+              "reason": "No samples supplied for this scope",
+              "distribution": null
+            },
+            "learningEndToEndMs": {
+              "status": "unavailable",
+              "reason": "No samples supplied for this scope",
+              "distribution": null
+            },
+            "checkpointAgeMs": {
+              "status": "unavailable",
+              "reason": "No samples supplied for this scope",
+              "distribution": null
+            }
+          }
+        },
+        "referenceCpuMs": {
+          "count": 600,
+          "p50": 0.36770000000001346,
+          "p95": 0.7236000000000331,
+          "p99": 0.9074000000000524,
+          "min": 0.01999999999998181,
+          "max": 1.289700000000039,
+          "mean": 0.3289896666666696,
+          "overBudget": null,
+          "histogram": [
+            597,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "referenceFrameMs": null,
+        "simulation": {
+          "clock": "synthetic",
+          "measuredWallSeconds": 0.1978682,
+          "simulatedSeconds": 12,
+          "admittedClockSeconds": 12,
+          "ratio": 1,
+          "tick": 720,
+          "overloads": 0
+        },
+        "resources": {
+          "actors": 5,
+          "routeJobs": 0,
+          "routeCache": 0,
+          "stopPolicyCalls": 600,
+          "retainedSnapshotsBeforeDispose": 2,
+          "retainedSnapshotsAfterDispose": 0,
+          "exactPageMemoryBytes": null
+        }
+      },
+      {
+        "repeat": 2,
+        "seed": 204,
+        "enabled": false,
+        "warmupMs": 40.003799999999956,
+        "activeDurationMs": 195.9448,
+        "wallDurationMs": 235.94859999999994,
+        "collector": {
+          "enabled": false,
+          "capacityPerMetric": 600,
+          "bufferBytes": 44,
+          "dropped": 0,
+          "complete": true,
+          "metrics": {
+            "frameMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            },
+            "mainThreadMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            },
+            "tickCpuMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            },
+            "simulationCpuMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            },
+            "debtMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            },
+            "gpuMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            },
+            "inputToCommandMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            },
+            "learningQueueMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            },
+            "learningServiceMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            },
+            "learningEndToEndMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            },
+            "checkpointAgeMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            }
+          }
+        },
+        "referenceCpuMs": {
+          "count": 600,
+          "p50": 0.3668999999999869,
+          "p95": 0.7291999999999916,
+          "p99": 0.9434999999998581,
+          "min": 0.015099999999847569,
+          "max": 1.3351000000000113,
+          "mean": 0.32586916666666865,
+          "overBudget": null,
+          "histogram": [
+            595,
+            5,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "referenceFrameMs": null,
+        "simulation": {
+          "clock": "synthetic",
+          "measuredWallSeconds": 0.19594479999999997,
+          "simulatedSeconds": 12,
+          "admittedClockSeconds": 12,
+          "ratio": 1,
+          "tick": 720,
+          "overloads": 0
+        },
+        "resources": {
+          "actors": 5,
+          "routeJobs": 0,
+          "routeCache": 0,
+          "stopPolicyCalls": 600,
+          "retainedSnapshotsBeforeDispose": 2,
+          "retainedSnapshotsAfterDispose": 0,
+          "exactPageMemoryBytes": null
+        }
+      },
+      {
+        "repeat": 3,
+        "seed": 204,
+        "enabled": false,
+        "warmupMs": 39.71600000000012,
+        "activeDurationMs": 195.13429999999994,
+        "wallDurationMs": 234.85030000000006,
+        "collector": {
+          "enabled": false,
+          "capacityPerMetric": 600,
+          "bufferBytes": 44,
+          "dropped": 0,
+          "complete": true,
+          "metrics": {
+            "frameMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            },
+            "mainThreadMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            },
+            "tickCpuMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            },
+            "simulationCpuMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            },
+            "debtMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            },
+            "gpuMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            },
+            "inputToCommandMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            },
+            "learningQueueMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            },
+            "learningServiceMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            },
+            "learningEndToEndMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            },
+            "checkpointAgeMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            }
+          }
+        },
+        "referenceCpuMs": {
+          "count": 600,
+          "p50": 0.3581000000001495,
+          "p95": 0.7248999999999342,
+          "p99": 1.1341999999999643,
+          "min": 0.014300000000048385,
+          "max": 1.2648000000001502,
+          "mean": 0.32453433333334,
+          "overBudget": null,
+          "histogram": [
+            591,
+            9,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "referenceFrameMs": null,
+        "simulation": {
+          "clock": "synthetic",
+          "measuredWallSeconds": 0.19513429999999993,
+          "simulatedSeconds": 12,
+          "admittedClockSeconds": 12,
+          "ratio": 1,
+          "tick": 720,
+          "overloads": 0
+        },
+        "resources": {
+          "actors": 5,
+          "routeJobs": 0,
+          "routeCache": 0,
+          "stopPolicyCalls": 600,
+          "retainedSnapshotsBeforeDispose": 2,
+          "retainedSnapshotsAfterDispose": 0,
+          "exactPageMemoryBytes": null
+        }
+      },
+      {
+        "repeat": 3,
+        "seed": 204,
+        "enabled": true,
+        "warmupMs": 39.71499999999992,
+        "activeDurationMs": 188.82560000000012,
+        "wallDurationMs": 228.54060000000004,
+        "collector": {
+          "enabled": true,
+          "capacityPerMetric": 600,
+          "bufferBytes": 52844,
+          "dropped": 0,
+          "complete": true,
+          "metrics": {
+            "frameMs": {
+              "status": "available",
+              "reason": null,
+              "distribution": {
+                "count": 600,
+                "p50": 0.35599999999999454,
+                "p95": 0.7105999999998858,
+                "p99": 1.1896999999999025,
+                "min": 0.014300000000048385,
+                "max": 1.4239000000000033,
+                "mean": 0.3138928333333297,
+                "overBudget": null,
+                "histogram": [
+                  590,
+                  10,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              }
+            },
+            "mainThreadMs": {
+              "status": "available",
+              "reason": null,
+              "distribution": {
+                "count": 600,
+                "p50": 0.35599999999999454,
+                "p95": 0.7105999999998858,
+                "p99": 1.1896999999999025,
+                "min": 0.014300000000048385,
+                "max": 1.4239000000000033,
+                "mean": 0.3138928333333297,
+                "overBudget": null,
+                "histogram": [
+                  590,
+                  10,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              }
+            },
+            "tickCpuMs": {
+              "status": "unavailable",
+              "reason": "No samples supplied for this scope",
+              "distribution": null
+            },
+            "simulationCpuMs": {
+              "status": "available",
+              "reason": null,
+              "distribution": {
+                "count": 600,
+                "p50": 0.35140000000001237,
+                "p95": 0.7056999999999789,
+                "p99": 1.1829000000000178,
+                "min": 0.011899999999968713,
+                "max": 1.413000000000011,
+                "mean": 0.30954216666667284,
+                "overBudget": null,
+                "histogram": [
+                  590,
+                  10,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              }
+            },
+            "debtMs": {
+              "status": "available",
+              "reason": null,
+              "distribution": {
+                "count": 600,
+                "p50": 3.019806626980426e-13,
+                "p95": 1.2114753644709708e-12,
+                "p99": 1.2114753644709708e-12,
+                "min": 0,
+                "max": 1.2114753644709708e-12,
+                "mean": 4.3690680702942096e-13,
+                "overBudget": null,
+                "histogram": [
+                  600,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              }
+            },
+            "gpuMs": {
+              "status": "unavailable",
+              "reason": "No samples supplied for this scope",
+              "distribution": null
+            },
+            "inputToCommandMs": {
+              "status": "unavailable",
+              "reason": "No samples supplied for this scope",
+              "distribution": null
+            },
+            "learningQueueMs": {
+              "status": "unavailable",
+              "reason": "No samples supplied for this scope",
+              "distribution": null
+            },
+            "learningServiceMs": {
+              "status": "unavailable",
+              "reason": "No samples supplied for this scope",
+              "distribution": null
+            },
+            "learningEndToEndMs": {
+              "status": "unavailable",
+              "reason": "No samples supplied for this scope",
+              "distribution": null
+            },
+            "checkpointAgeMs": {
+              "status": "unavailable",
+              "reason": "No samples supplied for this scope",
+              "distribution": null
+            }
+          }
+        },
+        "referenceCpuMs": {
+          "count": 600,
+          "p50": 0.35599999999999454,
+          "p95": 0.7105999999998858,
+          "p99": 1.1896999999999025,
+          "min": 0.014300000000048385,
+          "max": 1.4239000000000033,
+          "mean": 0.3138928333333297,
+          "overBudget": null,
+          "histogram": [
+            590,
+            10,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "referenceFrameMs": null,
+        "simulation": {
+          "clock": "synthetic",
+          "measuredWallSeconds": 0.18882560000000012,
+          "simulatedSeconds": 12,
+          "admittedClockSeconds": 12,
+          "ratio": 1,
+          "tick": 720,
+          "overloads": 0
+        },
+        "resources": {
+          "actors": 5,
+          "routeJobs": 0,
+          "routeCache": 0,
+          "stopPolicyCalls": 600,
+          "retainedSnapshotsBeforeDispose": 2,
+          "retainedSnapshotsAfterDispose": 0,
+          "exactPageMemoryBytes": null
+        }
+      },
+      {
+        "repeat": 4,
+        "seed": 204,
+        "enabled": true,
+        "warmupMs": 42.13210000000004,
+        "activeDurationMs": 197.61159999999995,
+        "wallDurationMs": 239.7437,
+        "collector": {
+          "enabled": true,
+          "capacityPerMetric": 600,
+          "bufferBytes": 52844,
+          "dropped": 0,
+          "complete": true,
+          "metrics": {
+            "frameMs": {
+              "status": "available",
+              "reason": null,
+              "distribution": {
+                "count": 600,
+                "p50": 0.35930000000007567,
+                "p95": 0.7332000000001244,
+                "p99": 1.1838999999999942,
+                "min": 0.01389999999992142,
+                "max": 1.9962000000000444,
+                "mean": 0.3287041666666634,
+                "overBudget": null,
+                "histogram": [
+                  590,
+                  10,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              }
+            },
+            "mainThreadMs": {
+              "status": "available",
+              "reason": null,
+              "distribution": {
+                "count": 600,
+                "p50": 0.35930000000007567,
+                "p95": 0.7332000000001244,
+                "p99": 1.1838999999999942,
+                "min": 0.01389999999992142,
+                "max": 1.9962000000000444,
+                "mean": 0.3287041666666634,
+                "overBudget": null,
+                "histogram": [
+                  590,
+                  10,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              }
+            },
+            "tickCpuMs": {
+              "status": "unavailable",
+              "reason": "No samples supplied for this scope",
+              "distribution": null
+            },
+            "simulationCpuMs": {
+              "status": "available",
+              "reason": null,
+              "distribution": {
+                "count": 600,
+                "p50": 0.3545000000003711,
+                "p95": 0.7262000000000626,
+                "p99": 1.1730999999999767,
+                "min": 0.011800000000221189,
+                "max": 1.98929999999973,
+                "mean": 0.32428599999999164,
+                "overBudget": null,
+                "histogram": [
+                  590,
+                  10,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              }
+            },
+            "debtMs": {
+              "status": "available",
+              "reason": null,
+              "distribution": {
+                "count": 600,
+                "p50": 3.019806626980426e-13,
+                "p95": 1.2114753644709708e-12,
+                "p99": 1.2114753644709708e-12,
+                "min": 0,
+                "max": 1.2114753644709708e-12,
+                "mean": 4.3690680702942096e-13,
+                "overBudget": null,
+                "histogram": [
+                  600,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              }
+            },
+            "gpuMs": {
+              "status": "unavailable",
+              "reason": "No samples supplied for this scope",
+              "distribution": null
+            },
+            "inputToCommandMs": {
+              "status": "unavailable",
+              "reason": "No samples supplied for this scope",
+              "distribution": null
+            },
+            "learningQueueMs": {
+              "status": "unavailable",
+              "reason": "No samples supplied for this scope",
+              "distribution": null
+            },
+            "learningServiceMs": {
+              "status": "unavailable",
+              "reason": "No samples supplied for this scope",
+              "distribution": null
+            },
+            "learningEndToEndMs": {
+              "status": "unavailable",
+              "reason": "No samples supplied for this scope",
+              "distribution": null
+            },
+            "checkpointAgeMs": {
+              "status": "unavailable",
+              "reason": "No samples supplied for this scope",
+              "distribution": null
+            }
+          }
+        },
+        "referenceCpuMs": {
+          "count": 600,
+          "p50": 0.35930000000007567,
+          "p95": 0.7332000000001244,
+          "p99": 1.1838999999999942,
+          "min": 0.01389999999992142,
+          "max": 1.9962000000000444,
+          "mean": 0.3287041666666634,
+          "overBudget": null,
+          "histogram": [
+            590,
+            10,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "referenceFrameMs": null,
+        "simulation": {
+          "clock": "synthetic",
+          "measuredWallSeconds": 0.19761159999999994,
+          "simulatedSeconds": 12,
+          "admittedClockSeconds": 12,
+          "ratio": 1,
+          "tick": 720,
+          "overloads": 0
+        },
+        "resources": {
+          "actors": 5,
+          "routeJobs": 0,
+          "routeCache": 0,
+          "stopPolicyCalls": 600,
+          "retainedSnapshotsBeforeDispose": 2,
+          "retainedSnapshotsAfterDispose": 0,
+          "exactPageMemoryBytes": null
+        }
+      },
+      {
+        "repeat": 4,
+        "seed": 204,
+        "enabled": false,
+        "warmupMs": 39.440500000000156,
+        "activeDurationMs": 195.30330000000004,
+        "wallDurationMs": 234.7438000000002,
+        "collector": {
+          "enabled": false,
+          "capacityPerMetric": 600,
+          "bufferBytes": 44,
+          "dropped": 0,
+          "complete": true,
+          "metrics": {
+            "frameMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            },
+            "mainThreadMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            },
+            "tickCpuMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            },
+            "simulationCpuMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            },
+            "debtMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            },
+            "gpuMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            },
+            "inputToCommandMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            },
+            "learningQueueMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            },
+            "learningServiceMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            },
+            "learningEndToEndMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            },
+            "checkpointAgeMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            }
+          }
+        },
+        "referenceCpuMs": {
+          "count": 600,
+          "p50": 0.36029999999982465,
+          "p95": 0.7195999999999003,
+          "p99": 1.1133999999997286,
+          "min": 0.013800000000173895,
+          "max": 1.6331999999997606,
+          "mean": 0.32483366666667884,
+          "overBudget": null,
+          "histogram": [
+            591,
+            9,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "referenceFrameMs": null,
+        "simulation": {
+          "clock": "synthetic",
+          "measuredWallSeconds": 0.19530330000000004,
+          "simulatedSeconds": 12,
+          "admittedClockSeconds": 12,
+          "ratio": 1,
+          "tick": 720,
+          "overloads": 0
+        },
+        "resources": {
+          "actors": 5,
+          "routeJobs": 0,
+          "routeCache": 0,
+          "stopPolicyCalls": 600,
+          "retainedSnapshotsBeforeDispose": 2,
+          "retainedSnapshotsAfterDispose": 0,
+          "exactPageMemoryBytes": null
+        }
+      },
+      {
+        "repeat": 5,
+        "seed": 204,
+        "enabled": false,
+        "warmupMs": 39.850200000000314,
+        "activeDurationMs": 196.77970000000005,
+        "wallDurationMs": 236.62990000000036,
+        "collector": {
+          "enabled": false,
+          "capacityPerMetric": 600,
+          "bufferBytes": 44,
+          "dropped": 0,
+          "complete": true,
+          "metrics": {
+            "frameMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            },
+            "mainThreadMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            },
+            "tickCpuMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            },
+            "simulationCpuMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            },
+            "debtMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            },
+            "gpuMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            },
+            "inputToCommandMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            },
+            "learningQueueMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            },
+            "learningServiceMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            },
+            "learningEndToEndMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            },
+            "checkpointAgeMs": {
+              "status": "unavailable",
+              "reason": "Collector disabled for overhead comparison",
+              "distribution": null
+            }
+          }
+        },
+        "referenceCpuMs": {
+          "count": 600,
+          "p50": 0.35410000000001673,
+          "p95": 0.7487999999998465,
+          "p99": 0.951799999999821,
+          "min": 0.013399999999819556,
+          "max": 1.6832000000003973,
+          "mean": 0.3273781666666802,
+          "overBudget": null,
+          "histogram": [
+            595,
+            5,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "referenceFrameMs": null,
+        "simulation": {
+          "clock": "synthetic",
+          "measuredWallSeconds": 0.19677970000000006,
+          "simulatedSeconds": 12,
+          "admittedClockSeconds": 12,
+          "ratio": 1,
+          "tick": 720,
+          "overloads": 0
+        },
+        "resources": {
+          "actors": 5,
+          "routeJobs": 0,
+          "routeCache": 0,
+          "stopPolicyCalls": 600,
+          "retainedSnapshotsBeforeDispose": 2,
+          "retainedSnapshotsAfterDispose": 0,
+          "exactPageMemoryBytes": null
+        }
+      },
+      {
+        "repeat": 5,
+        "seed": 204,
+        "enabled": true,
+        "warmupMs": 38.20179999999982,
+        "activeDurationMs": 187.58179999999993,
+        "wallDurationMs": 225.78359999999975,
+        "collector": {
+          "enabled": true,
+          "capacityPerMetric": 600,
+          "bufferBytes": 52844,
+          "dropped": 0,
+          "complete": true,
+          "metrics": {
+            "frameMs": {
+              "status": "available",
+              "reason": null,
+              "distribution": {
+                "count": 600,
+                "p50": 0.35730000000012296,
+                "p95": 0.7103000000001884,
+                "p99": 0.8333999999999833,
+                "min": 0.013399999999819556,
+                "max": 1.7208000000000538,
+                "mean": 0.3119948333333347,
+                "overBudget": null,
+                "histogram": [
+                  595,
+                  5,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              }
+            },
+            "mainThreadMs": {
+              "status": "available",
+              "reason": null,
+              "distribution": {
+                "count": 600,
+                "p50": 0.35730000000012296,
+                "p95": 0.7103000000001884,
+                "p99": 0.8333999999999833,
+                "min": 0.013399999999819556,
+                "max": 1.7208000000000538,
+                "mean": 0.3119948333333347,
+                "overBudget": null,
+                "histogram": [
+                  595,
+                  5,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              }
+            },
+            "tickCpuMs": {
+              "status": "unavailable",
+              "reason": "No samples supplied for this scope",
+              "distribution": null
+            },
+            "simulationCpuMs": {
+              "status": "available",
+              "reason": null,
+              "distribution": {
+                "count": 600,
+                "p50": 0.35279999999966094,
+                "p95": 0.7050999999996748,
+                "p99": 0.8268000000002758,
+                "min": 0.011199999999917054,
+                "max": 1.7139999999999418,
+                "mean": 0.30787316666666736,
+                "overBudget": null,
+                "histogram": [
+                  595,
+                  5,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              }
+            },
+            "debtMs": {
+              "status": "available",
+              "reason": null,
+              "distribution": {
+                "count": 600,
+                "p50": 3.019806626980426e-13,
+                "p95": 1.2114753644709708e-12,
+                "p99": 1.2114753644709708e-12,
+                "min": 0,
+                "max": 1.2114753644709708e-12,
+                "mean": 4.3690680702942096e-13,
+                "overBudget": null,
+                "histogram": [
+                  600,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              }
+            },
+            "gpuMs": {
+              "status": "unavailable",
+              "reason": "No samples supplied for this scope",
+              "distribution": null
+            },
+            "inputToCommandMs": {
+              "status": "unavailable",
+              "reason": "No samples supplied for this scope",
+              "distribution": null
+            },
+            "learningQueueMs": {
+              "status": "unavailable",
+              "reason": "No samples supplied for this scope",
+              "distribution": null
+            },
+            "learningServiceMs": {
+              "status": "unavailable",
+              "reason": "No samples supplied for this scope",
+              "distribution": null
+            },
+            "learningEndToEndMs": {
+              "status": "unavailable",
+              "reason": "No samples supplied for this scope",
+              "distribution": null
+            },
+            "checkpointAgeMs": {
+              "status": "unavailable",
+              "reason": "No samples supplied for this scope",
+              "distribution": null
+            }
+          }
+        },
+        "referenceCpuMs": {
+          "count": 600,
+          "p50": 0.35730000000012296,
+          "p95": 0.7103000000001884,
+          "p99": 0.8333999999999833,
+          "min": 0.013399999999819556,
+          "max": 1.7208000000000538,
+          "mean": 0.3119948333333347,
+          "overBudget": null,
+          "histogram": [
+            595,
+            5,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "referenceFrameMs": null,
+        "simulation": {
+          "clock": "synthetic",
+          "measuredWallSeconds": 0.18758179999999994,
+          "simulatedSeconds": 12,
+          "admittedClockSeconds": 12,
+          "ratio": 1,
+          "tick": 720,
+          "overloads": 0
+        },
+        "resources": {
+          "actors": 5,
+          "routeJobs": 0,
+          "routeCache": 0,
+          "stopPolicyCalls": 600,
+          "retainedSnapshotsBeforeDispose": 2,
+          "retainedSnapshotsAfterDispose": 0,
+          "exactPageMemoryBytes": null
+        }
+      }
+    ],
+    "unavailable": {
+      "gpu": "No renderer/API",
+      "frame": "Synthetic clock is not hardware display cadence",
+      "input": "No player input stream in the 204 fixture",
+      "learningEstimators": "Estimators are measured by the native behaviour driver; the frame arm calls 046/047/051",
+      "memory": "Exact page memory unavailable; owned collector/snapshots reported",
+      "physics": "The 204 fixture publishes a kinematic speed state, not a Rapier world"
+    },
+    "exclusions": [
+      "Frame/main-thread values are Node CPU execution cost, not FPS or display latency",
+      "No browser, GPU, laptop, soak or gameplay budget is validated by this probe",
+      "Scheduler-own cost excludes the injected 044/045/046/047/051 callback work"
+    ],
+    "gameplayGate": "NOT_VALIDATED",
+    "overhead": [
+      {
+        "repeat": 1,
+        "cpuP95DeltaMs": -0.18809999999996307,
+        "totalWallDeltaMs": -54.99579999999986
+      },
+      {
+        "repeat": 2,
+        "cpuP95DeltaMs": -0.005599999999958527,
+        "totalWallDeltaMs": 6.752700000000118
+      },
+      {
+        "repeat": 3,
+        "cpuP95DeltaMs": -0.014300000000048385,
+        "totalWallDeltaMs": -6.309700000000021
+      },
+      {
+        "repeat": 4,
+        "cpuP95DeltaMs": 0.0136000000002241,
+        "totalWallDeltaMs": 4.999899999999798
+      },
+      {
+        "repeat": 5,
+        "cpuP95DeltaMs": -0.03849999999965803,
+        "totalWallDeltaMs": -10.84630000000061
+      }
+    ]
+  },
+  "exportConstraints": [
+    {
+      "export": "createPerformanceReport",
+      "attempted": "single-arm 204 run",
+      "error": "Complete bounded paired repetitions required",
+      "resolution": "The export accepts the 204 workload only as complete paired repetitions; five real pairs were delivered above."
+    }
+  ],
+  "limitations": [
+    "Node CPU only; no browser, GPU, FPS, laptop, soak or gameplay gate is measured",
+    "The fixed tick is synthetic 60Hz; debt/overload are reported from that clock",
+    "The fixture publishes a kinematic speed state instead of a Rapier world",
+    "The 221 worker task runs the real 204 compose/compile on estimator candidates; ledger/estimator work stays on the main thread",
+    "Zero playtest participants exist; this probe is not participant evidence"
+  ]
+}
