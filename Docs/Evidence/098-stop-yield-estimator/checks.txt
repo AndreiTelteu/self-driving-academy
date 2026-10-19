@@ -1,0 +1,31 @@
+Worktree: C:/Users/aandr/Sites/self-driving-academy/.worktrees/098-099-stop-lane
+Runtime: Volta Node 24.21.0 / npm 11.19.0
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm run typecheck
+PASS (exit 0): tsc --noEmit && tsc -p tsconfig.tests.json --noEmit
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm run lint
+PASS (exit 0): eslint . --max-warnings 0
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm run format:check
+PASS (exit 0): All matched files use Prettier code style!
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm run check:architecture
+PASS (exit 0): Architecture imports PASS (168 TypeScript files); architecture negative probes PASS (6); inspector exception probes PASS (4); Rapier adapter probes PASS (3); renderer injection/lifecycle PASS.
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm run check:parameter-catalog
+PASS (exit 0): Parameter catalog is synchronized.
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm test
+PASS (exit 0): 1047 tests, 1047 pass, 0 fail.
+
+volta run --node 24.21.0 -- node --import ./scripts/register-typescript.mjs --test tests/parameters/registry.test.ts
+PASS (exit 0): 8 tests, 8 pass, 0 fail. Existing 092 capability/publication checks remain unchanged.
+
+volta run --node 24.21.0 -- node --import ./scripts/register-typescript.mjs --test tests/learning/stop-yield-estimator.test.ts tests/learning/lane-estimator.test.ts
+PASS (exit 0): 4 tests, 4 pass, 0 fail (the lane suite was present in the shared worktree during this run).
+
+volta run --node 24.21.0 -- node --import ./scripts/register-typescript.mjs --test tests/learning/stop-yield-estimator.test.ts
+PASS (exit 0): 2 tests, 2 pass, 0 fail after the final 086 coverage / 087 FREE_TRAFFIC denominator refinement.
+
+The first full test run caught an undersized STOP fixture: two eligible opportunities cannot meet 093's three-episode minimum. The fixture was corrected to include three eligible line opportunities and re-run; the final full suite above passed. No performance probe was run. No board validator was run.

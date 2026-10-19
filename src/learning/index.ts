@@ -3,3 +3,4 @@ export * from './speed-estimator';
 export * from './acceleration-estimator';
 export * from './following-estimator';
 export * from './signal-estimator';
+export * from './stop-yield-estimator';
