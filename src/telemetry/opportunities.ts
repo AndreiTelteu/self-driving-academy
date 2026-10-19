@@ -82,8 +82,14 @@ export type OpportunityResult = 'SUCCESS' | 'FAILURE';
 
 export const OPPORTUNITY_CAPACITY = Object.freeze({
   minimum: 32,
+  /**
+   * `4096` is the 203 manifest's `diagnosticSamples` figure. With the per-record byte ceiling below,
+   * the default store's derived worst case is `4096 × 4288 B ≈ 17.6 MB`, inside the manifest's
+   * `recorderRamBytes` 33,554,432 B alongside the 085 sample buffers (≈3.6 MiB).
+   */
   default: 4096,
-  maximum: 65536,
+  /** `7168 × 4288 B ≈ 30.7 MB < 33,554,432 B`; a larger store cannot fit the recorder budget. */
+  maximum: 7168,
   /** Maximum semantic ids carried by one YIELD/LANE_CHANGE stimulus. */
   relatedIdsPerStimulus: 4,
 });
@@ -97,16 +103,18 @@ export const OPPORTUNITY_DENSE_SLOTS = 24;
 export const OPPORTUNITY_BYTES_PER_RECORD = OPPORTUNITY_DENSE_SLOTS * 8;
 
 /**
- * Derived ceilings that make `estimatedBytesMaximum` finite and honest. One record carries at most
- * eight UTF-16 strings of at most 256 code units each plus its 486-code-unit-ceiling stable id, so the
- * 8192-code-unit identity ceiling can never be exceeded by construction; the byte ceiling adds the
- * dense slots.
+ * Enforced identity ceiling for one record (its id, vehicle, incarnation, segments, stimulus ids and
+ * relation ids). A prospective record above it is refused explicitly instead of being retained, which
+ * is what makes `estimatedBytesMaximum` a real bound and not an estimate. 2048 code units comfortably
+ * covers a realistic id (~100–300 units) while keeping the worst case finite.
  */
-export const OPPORTUNITY_IDENTITY_CODE_UNITS_CEILING = 8192;
+export const OPPORTUNITY_IDENTITY_CODE_UNITS_CEILING = 2048;
 export const OPPORTUNITY_RECORD_BYTES_CEILING =
   OPPORTUNITY_BYTES_PER_RECORD + OPPORTUNITY_IDENTITY_CODE_UNITS_CEILING * 2;
 /** Segments recorded per opportunity; a rollover continues the same opportunity without re-identifying it. */
 export const OPPORTUNITY_SEGMENTS_PER_RECORD = 8;
+/** `Docs/performance-budgets.json` `proposedCapacities.recorderRamBytes`. */
+export const OPPORTUNITY_RECORDER_RAM_BYTES = 33_554_432;
 
 type SignalState = 'RED' | 'YELLOW' | 'GREEN';
 const signalStates = ['RED', 'YELLOW', 'GREEN'] as const;
@@ -504,6 +512,10 @@ export function createOpportunityRegistry(
       maxOpportunities <= OPPORTUNITY_CAPACITY.maximum,
     'Opportunity store capacity out of range',
   );
+  requireContract(
+    maxOpportunities * OPPORTUNITY_RECORD_BYTES_CEILING <= OPPORTUNITY_RECORDER_RAM_BYTES,
+    'Opportunity store cannot fit the recorder RAM budget',
+  );
 
   let disposed = false;
   let nextOccurrence = 0;
@@ -585,6 +597,10 @@ export function createOpportunityRegistry(
       return;
     }
     record.segmentIds.push(segmentId);
+    if (recordCodeUnits(record) > OPPORTUNITY_IDENTITY_CODE_UNITS_CEILING) {
+      record.segmentIds.pop();
+      segmentOverflow += 1;
+    }
   };
 
   const recordTruncation = (
@@ -656,7 +672,7 @@ export function createOpportunityRegistry(
       ...identityParts(stimulusView),
       String(occurrence),
     ]);
-    requireContract(id.length <= 2048, 'Opportunity id exceeds its declared capacity');
+    requireContract(id.length <= 1024, 'Opportunity id exceeds its declared capacity');
     const opened: InternalRecord = {
       id,
       kind,
@@ -677,6 +693,10 @@ export function createOpportunityRegistry(
       resolvedTick: null,
       observationCount: 1,
     };
+    if (recordCodeUnits(opened) > OPPORTUNITY_IDENTITY_CODE_UNITS_CEILING) {
+      rejectedTotal += 1;
+      return null;
+    }
     retained.set(id, opened);
     order.push(opened);
     enteredByGroup.set(key, opened);

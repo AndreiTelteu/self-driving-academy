@@ -5,6 +5,7 @@ import {
   opportunitySignalContext,
   opportunitySuccessOutcomes,
   OPPORTUNITY_CAPACITY,
+  OPPORTUNITY_RECORDER_RAM_BYTES,
   OPPORTUNITY_RECORD_BYTES_CEILING,
   type OpportunityObservation,
   type OpportunityRecord,
@@ -554,6 +555,21 @@ test('086 only a learning-eligible segment can produce a certain learning denomi
 test('086 rejects malformed observations, unknown ids, out-of-range options and foreign worlds', () => {
   const registry = createOpportunityRegistry();
   assert.throws(() => createOpportunityRegistry({ maxOpportunities: 1 }), /capacity out of range/);
+  assert.throws(
+    () => createOpportunityRegistry({ maxOpportunities: OPPORTUNITY_CAPACITY.maximum + 1 }),
+    /capacity out of range/,
+  );
+  // The declared capacities are a real bound: the default store fits the manifest recorder budget.
+  assert.equal(
+    OPPORTUNITY_CAPACITY.default * OPPORTUNITY_RECORD_BYTES_CEILING <=
+      OPPORTUNITY_RECORDER_RAM_BYTES,
+    true,
+  );
+  assert.equal(
+    OPPORTUNITY_CAPACITY.maximum * OPPORTUNITY_RECORD_BYTES_CEILING <=
+      OPPORTUNITY_RECORDER_RAM_BYTES,
+    true,
+  );
   assert.throws(
     () => createOpportunityRegistry({ unknown: 1 } as never),
     /Unknown opportunity registry option/,
