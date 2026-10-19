@@ -9,6 +9,7 @@ import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { entityDecisionPhase } from '../src/simulation/scheduling.ts';
 import { createBehaviorFSM } from '../src/autonomy/behavior-fsm.ts';
+import { evaluateAuthorityReentry } from '../src/autonomy/blocked-recovery.ts';
 import * as signalPolicy from '../src/autonomy/signal-policy.ts';
 import {
   getParameterDefinition,
@@ -32,8 +33,8 @@ const args = process.argv.slice(2);
 const pbi = args.includes('--pbi') ? args[args.indexOf('--pbi') + 1] : null;
 const phase = args.includes('--before') ? 'before' : 'after';
 assert(
-  ['050', '051', '053', '054', '055', 'group'].includes(pbi),
-  'expected --pbi 050|051|053|054|055|group',
+  ['050', '051', '053', '054', '055', '071', 'group'].includes(pbi),
+  'expected --pbi 050|051|053|054|055|071|group',
 );
 const FOLDER = new Map([
   ['050', 'Docs/Evidence/050-signal-policy'],
@@ -41,6 +42,7 @@ const FOLDER = new Map([
   ['053', 'Docs/Evidence/053-lane-change'],
   ['054', 'Docs/Evidence/054-blocked-recovery'],
   ['055', 'Docs/Evidence/055-decision-explanation'],
+  ['071', 'Docs/Evidence/071-takeover-continuity'],
   ['group', 'Docs/Evidence/autonomy-policies-group'],
 ]).get(pbi);
 mkdirSync(FOLDER, { recursive: true });
@@ -580,6 +582,172 @@ function blockedArm(production) {
   };
 }
 
+// ------------------------------------------------- 071 takeover/return continuity
+/**
+ * 071 arm on the real 054 corridor: real033 lane graph, real044 context, real045 FSM and 054's real
+ * `evaluateAuthorityReentry` as the re-entry decision. BOTH arms evaluate that real 054 decision so
+ * the delta isolates the 071 continuity layer alone: BEFORE is the pre-071 caller (054 directly, no
+ * continuity measurement); AFTER is `evaluateTakeoverContinuity` (measuring/bounding the physical and
+ * command continuity and raising the 045 fact). The authored physical truth is a rolling vehicle on
+ * lane-in that goes off-centre from tick300, so the AFTER arm exercises ON_LANE and DRIVE_TO_LANE.
+ */
+function takeoverArm(production) {
+  const fixture = blockedProbeFixture(),
+    sessionId = fixture.scope.sessionId,
+    scope = { sessionId, worldEpoch: 0 },
+    subject = fixture.subject,
+    behavior = createBehaviorFSM(scope),
+    costs = [];
+  behavior.setActors([subject], scope);
+  let decisions = 0,
+    blocked = 0,
+    drives = 0,
+    escalations = 0,
+    preserved = 0,
+    checksum = 0;
+  for (let tick = 1; tick <= PROTOCOL.measuredTicks; tick++) {
+    // Authored physical truth: rolling forward at 8 m/s, drifting 1.4 m off the lane centre after 5 s,
+    // then driven off the 033 graph after 15 s. The 044 frame stays on lane-in so the 045 context
+    // remains complete; only the authored 071 observation changes, exactly as the 054 arm authors it.
+    const offGraph = tick >= 900;
+    fixture.physical.subjectSpeedMps = offGraph ? 0 : 8;
+    fixture.physical.leaderSpeedMps = 6;
+    fixture.physical.subjectLateralOffsetM = tick >= 300 && !offGraph ? 1.4 : 0;
+    fixture.prepare(tick);
+    if (tick % 6 !== 0) continue;
+    const began = performance.now();
+    const context = fixture.context.getContext(subject.id);
+    if (context === null) continue;
+    const lateral = fixture.physical.subjectLateralOffsetM,
+      positionM = offGraph ? { x: 60, y: 0, z: 12 } : { x: 10, y: 0, z: lateral },
+      step = offGraph ? 0 : 8 * (1 / 60),
+      reentryObservation = {
+        version: '054-progress-observation-v1',
+        units: 'SI',
+        tick,
+        access: 'TAXI',
+        positionM,
+        headingRad: 0,
+        routeStatus: 'READY',
+        destination: 'lane-out',
+        recoveryLaneId: 'lane-in',
+        allowRecoveryEscalation: true,
+      };
+    let policyFacts = baseFacts('autonomy-probe-v1');
+    if (production) {
+      const decision = production.evaluateTakeoverContinuity({
+        sessionId,
+        worldEpoch: 0,
+        actor: subject,
+        decisionTick: tick,
+        authority: 'AUTO',
+        closedMode: 'MANUAL',
+        collisionObserved: false,
+        graph: fixture.graph,
+        before: {
+          tick: tick - 1,
+          positionM: { x: positionM.x - step, y: 0, z: positionM.z },
+          headingRad: 0,
+          velocityMps: { x: 8, y: 0, z: 0 },
+          yawRateRadps: 0,
+          drivetrainDirection: 'FORWARD',
+          damage: 0.2,
+        },
+        after: {
+          tick,
+          positionM,
+          headingRad: 0,
+          velocityMps: { x: 8, y: 0, z: 0 },
+          yawRateRadps: 0,
+          drivetrainDirection: 'FORWARD',
+          damage: 0.2,
+        },
+        lastManualCommand: {
+          source: 'PLAYER',
+          throttle: 0.4,
+          brake: 0,
+          steering: 0.05,
+          handbrake: false,
+        },
+        firstAutonomyCommand: {
+          source: 'AUTONOMY',
+          throttle: 0.45,
+          brake: 0,
+          steering: 0.08,
+          handbrake: false,
+        },
+        observation: reentryObservation,
+      });
+      policyFacts =
+        production.takeoverContinuityBehaviorFacts(policyFacts, decision) ?? policyFacts;
+      if (decision.blocked) blocked++;
+      if (decision.reentry === 'DRIVE_TO_LANE') drives++;
+      if (decision.recovery !== null) escalations++;
+      if (decision.statePreserved) preserved++;
+      // Same formula as BEFORE: an identical checksum proves 071 re-exposes the 054 decision verbatim.
+      checksum =
+        (checksum + decision.reentryReason.length * 31 + decision.reentry.length * 7) >>> 0;
+    } else {
+      // BEFORE: the pre-071 caller asks the pre-existing054 for the re-entry decision and raises the
+      // 045 fact itself; there is no continuity measurement and no command bound.
+      const reentry = evaluateAuthorityReentry({
+        sessionId,
+        worldEpoch: 0,
+        actor: subject,
+        decisionTick: tick,
+        authority: 'AUTO',
+        graph: fixture.graph,
+        observation: reentryObservation,
+      });
+      const isBlocked =
+        reentry.action === 'REQUEST_RECOVERY' || reentry.action === 'REENTRY_IMPOSSIBLE';
+      policyFacts = isBlocked ? { ...policyFacts, routeBlocked: true } : policyFacts;
+      if (isBlocked) blocked++;
+      if (reentry.action === 'DRIVE_TO_LANE') drives++;
+      if (reentry.action === 'REQUEST_RECOVERY') escalations++;
+      checksum = (checksum + reentry.reason.length * 31 + reentry.action.length * 7) >>> 0;
+    }
+    behavior.decide({
+      sessionId,
+      worldEpoch: 0,
+      actor: subject,
+      decisionTick: tick,
+      context: {
+        sessionId,
+        worldEpoch: 0,
+        sourceTick: tick,
+        subject,
+        laneId: context.laneId,
+        leaderId: context.leader?.id ?? null,
+        vehiclesComplete: context.completeness.vehicles,
+        discontinuity: context.discontinuity,
+      },
+      facts: policyFacts,
+    });
+    decisions++;
+    if (tick > PROTOCOL.warmupTicks) costs.push(performance.now() - began);
+  }
+  const owned = {
+    behavior: behavior.getStats(),
+    roadContext: fixture.context.getStats(),
+    takeoverContinuity: production ? production.getTakeoverContinuityStats() : null,
+  };
+  behavior.dispose();
+  fixture.dispose();
+  return {
+    fixtureVersion: '071-targeted-takeover-v1',
+    actors: 1,
+    decisions,
+    blocked,
+    drives,
+    escalations,
+    preserved: production ? preserved : undefined,
+    checksum,
+    owned,
+    costs,
+  };
+}
+
 // ------------------------------------------------------ 055 decision explanation
 /**
  * 055 arm on the real219/044/036/050/045 chain. BOTH arms evaluate the same real chain and the same
@@ -723,6 +891,7 @@ const ARMS = new Map([
   ['053', laneArm],
   ['054', blockedArm],
   ['055', explainArm],
+  ['071', takeoverArm],
 ]);
 function runArm(name, production) {
   const repetitions = [];
@@ -757,7 +926,9 @@ function runArm(name, production) {
             ? production?.stop
             : name === '054'
               ? production?.blocked
-              : production?.lane,
+              : name === '071'
+                ? production?.takeover
+                : production?.lane,
       );
     fixtureVersion = result.fixtureVersion;
     actors = result.actors;
@@ -774,6 +945,8 @@ function runArm(name, production) {
         ? {}
         : { stopExplanations: result.stopExplanations }),
       ...(result.blocked === undefined ? {} : { blocked: result.blocked }),
+      ...(result.drives === undefined ? {} : { drives: result.drives }),
+      ...(result.preserved === undefined ? {} : { statePreserved: result.preserved }),
       ...(result.reroutes === undefined ? {} : { reroutes: result.reroutes }),
       ...(result.escalations === undefined ? {} : { escalations: result.escalations }),
       ...(result.rerouteAlternativeTaken === undefined
@@ -790,7 +963,7 @@ function memoryArm(name) {
     if (name === '050' || name === 'group' || name === '055') resources.push(signalProbeFixture());
     if (name === '051' || name === 'group') resources.push(stopProbeFixture());
     if (name === '053' || name === 'group') resources.push(laneProbeFixture());
-    if (name === '054') resources.push(blockedProbeFixture());
+    if (name === '054' || name === '071') resources.push(blockedProbeFixture());
     const signal = resources.find((resource) => 'prepare' in resource);
     signal?.prepare(1);
     // 055: exercise the bounded collector for two decision ticks over every actor, then dispose it.
@@ -842,21 +1015,27 @@ function memoryArm(name) {
     const before = Object.fromEntries(
       resources.map((resource, index) => [
         `owner-${index}`,
-        typeof resource.rules?.getStats === 'function'
-          ? resource.rules.getStats()
-          : typeof resource.context?.getStats === 'function'
-            ? typeof resource.planner === 'function'
-              ? {
-                  behavior: resource.behavior.getStats(),
-                  roadContext: resource.context.getStats(),
-                  blockedRecovery: production?.blocked?.getBlockedRecoveryStats() ?? null,
-                }
-              : {
-                  behavior: resource.behavior.getStats(),
-                  roadContext: resource.context.getStats(),
-                  ...(explanation ? { explanation } : {}),
-                }
-            : { lanes: resource.graph.getStats().lanes },
+        name === '071'
+          ? {
+              behavior: resource.behavior.getStats(),
+              roadContext: resource.context.getStats(),
+              takeoverContinuity: production?.takeover?.getTakeoverContinuityStats() ?? null,
+            }
+          : typeof resource.rules?.getStats === 'function'
+            ? resource.rules.getStats()
+            : typeof resource.context?.getStats === 'function'
+              ? typeof resource.planner === 'function'
+                ? {
+                    behavior: resource.behavior.getStats(),
+                    roadContext: resource.context.getStats(),
+                    blockedRecovery: production?.blocked?.getBlockedRecoveryStats() ?? null,
+                  }
+                : {
+                    behavior: resource.behavior.getStats(),
+                    roadContext: resource.context.getStats(),
+                    ...(explanation ? { explanation } : {}),
+                  }
+              : { lanes: resource.graph.getStats().lanes },
       ]),
     );
     for (const resource of resources) {
@@ -887,27 +1066,34 @@ const production =
         stop: await import('../src/autonomy/stop-policy.ts'),
         lane: await import('../src/autonomy/lane-change-policy.ts'),
         blocked: await import('../src/autonomy/blocked-recovery.ts'),
+        takeover: await import('../src/autonomy/takeover-continuity.ts'),
         explain: await import('../src/autonomy/decision-explanation.ts'),
       }
     : null;
 const sourceInputs =
-  pbi === '055'
+  pbi === '071'
     ? [
         'tests/autonomy/policy-probe-fixture.ts',
-        'src/autonomy/signal-policy.ts',
-        ...(production ? ['src/autonomy/decision-explanation.ts'] : []),
+        'src/autonomy/blocked-recovery.ts',
+        ...(production ? ['src/autonomy/takeover-continuity.ts'] : []),
       ]
-    : [
-        'tests/autonomy/policy-probe-fixture.ts',
-        ...(production
-          ? [
-              'src/autonomy/signal-policy.ts',
-              'src/autonomy/stop-policy.ts',
-              'src/autonomy/lane-change-policy.ts',
-              'src/autonomy/blocked-recovery.ts',
-            ]
-          : []),
-      ];
+    : pbi === '055'
+      ? [
+          'tests/autonomy/policy-probe-fixture.ts',
+          'src/autonomy/signal-policy.ts',
+          ...(production ? ['src/autonomy/decision-explanation.ts'] : []),
+        ]
+      : [
+          'tests/autonomy/policy-probe-fixture.ts',
+          ...(production
+            ? [
+                'src/autonomy/signal-policy.ts',
+                'src/autonomy/stop-policy.ts',
+                'src/autonomy/lane-change-policy.ts',
+                'src/autonomy/blocked-recovery.ts',
+              ]
+            : []),
+        ];
 const report = {
   pbi: pbi === 'group' ? '050+051+053' : pbi,
   mode: phase,
@@ -918,6 +1104,7 @@ const report = {
     ['053', '053-targeted-lane-v1'],
     ['054', '054-targeted-blocked-v1'],
     ['055', '055-targeted-explanation-v1'],
+    ['071', '071-targeted-takeover-v1'],
     ['group', 'group-targeted-autonomy-v1'],
   ]).get(pbi),
   commit: execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(),
