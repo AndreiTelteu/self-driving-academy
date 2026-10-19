@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="ro">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Playtest timpuriu 204</title>
+    <style>
+      body {
+        max-width: 48rem;
+        margin: 3rem auto;
+        padding: 0 1rem;
+        font: 1rem/1.5 system-ui;
+        color: #17202a;
+      }
+      fieldset {
+        margin: 1rem 0;
+        padding: 1rem;
+      }
+      label {
+        display: block;
+        margin: 0.6rem 0;
+      }
+      button,
+      select,
+      textarea {
+        font: inherit;
+        padding: 0.5rem;
+      }
+      textarea {
+        width: 100%;
+        min-height: 5rem;
+      }
+      #status {
+        font-weight: 700;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Playtest timpuriu 204</h1>
+    <p>Protocol de cercetare local. Nu colectează nume și nu salvează răspunsuri automat.</p>
+    <label
+      >Slot anonim
+      <select id="slot">
+        <option value="">Alegeți slotul atribuit</option>
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5</option>
+      </select>
+    </label>
+    <button id="start">Începe sesiunea de maximum 5 minute</button>
+    <p id="status" aria-live="polite">Sesiunea nu a început.</p>
+    <section aria-label="Observații">
+      <h2>Jurnalul observatorului</h2>
+      <p>
+        Notați numai ce a arătat demo-ul: observația, valoarea schimbată sau ce a rămas neobservat.
+        Timpul primei schimbări este calculat de pagină.
+      </p>
+      <label>Ce s-a observat?<textarea id="observed"></textarea></label>
+      <label>Ce s-a schimbat?<textarea id="changed"></textarea></label>
+      <label>Ce a rămas neobservat?<textarea id="unobserved"></textarea></label>
+    </section>
+    <fieldset>
+      <legend>Răspunsurile participantului</legend>
+      <label
+        >A observat schimbarea?
+        <select id="noticed">
+          <option value="">Alegeți</option>
+          <option value="yes">Da</option>
+          <option value="no">Nu</option>
+          <option value="uncertain">Nu este sigur</option>
+        </select></label
+      >
+      <label
+        >Poate distinge MANUAL de LEARNING?
+        <select id="distinguish">
+          <option value="">Alegeți</option>
+          <option value="yes">Da</option>
+          <option value="no">Nu</option>
+          <option value="uncertain">Nu este sigur</option>
+        </select></label
+      >
+      <label>Ce observație susține delta? <textarea id="support"></textarea></label>
+    </fieldset>
+    <button id="export" disabled>Exportă JSON</button>
+    <script>
+      let startedAt = null;
+      let firstChangeAt = null;
+      let timer = null;
+      const $ = (id) => document.getElementById(id);
+      $('changed').addEventListener('input', () => {
+        if (startedAt !== null && firstChangeAt === null && $('changed').value.trim()) {
+          firstChangeAt = new Date().toISOString();
+          $('status').textContent =
+            `Prima schimbare consemnată după ${Math.round((Date.now() - startedAt) / 1000)} secunde.`;
+        }
+      });
+      $('start').addEventListener('click', () => {
+        if (!$('slot').value || startedAt !== null) return;
+        startedAt = Date.now();
+        $('status').textContent = 'Sesiune în desfășurare · maximum 5:00.';
+        timer = setTimeout(() => {
+          $('status').textContent = 'Sesiunea de 5 minute s-a încheiat.';
+          $('export').disabled = false;
+        }, 300000);
+        $('export').disabled = false;
+      });
+      $('export').addEventListener('click', () => {
+        if (
+          startedAt === null ||
+          !$('noticed').value ||
+          !$('distinguish').value ||
+          !$('support').value.trim()
+        )
+          return;
+        const record = {
+          schema: '204-playtest-v1',
+          participantSlot: Number($('slot').value),
+          startedAt: new Date(startedAt).toISOString(),
+          endedAt: new Date().toISOString(),
+          firstChangeAt,
+          firstChangeSeconds: firstChangeAt
+            ? Math.round((Date.parse(firstChangeAt) - startedAt) / 1000)
+            : null,
+          observed: $('observed').value,
+          changed: $('changed').value,
+          unobserved: $('unobserved').value,
+          answers: {
+            noticedChange: $('noticed').value,
+            distinguishesManualLearning: $('distinguish').value,
+            supportingObservation: $('support').value,
+          },
+        };
+        const blob = new Blob([JSON.stringify(record, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `participant-${record.participantSlot}.json`;
+        link.click();
+        URL.revokeObjectURL(url);
+      });
+      window.addEventListener('pagehide', () => clearTimeout(timer));
+    </script>
+  </body>
+</html>

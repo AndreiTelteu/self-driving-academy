@@ -58,6 +58,8 @@ Revenue-ul și ratings evaluează consecințele fără să corecteze automat sti
 
 Prototipul timpuriu validează trei chei înaintea gate-ului complet de 24. Testele sintetice sunt completate prin playtest: jucătorul recunoaște schimbarea, distinge MANUAL de LEARNING și poate indica observația care a susținut delta. Pragurile și criteriile sunt în [milestone](24-milestone-timpuriu-si-contracte.md).
 
+PBI 204 adaugă adaptorul experimental cu trei chei documentat în [early-learning-loop](early-learning-loop.md) și protocolul uman din [early-playtest](early-playtest.md). Blend-ul local nu activează estimabilitatea 092 și nu publică `LEARNED`; MANUAL rămâne fără învățare. Închiderea PBI cere cinci sesiuni reale exportate, fără substituirea lor cu fixture-uri.
+
 ## Reglaje și schimbări de lume
 
 Aplicarea unui reglaj de stil invalidează joburile vechi prin learningEpoch și nu inventează dovezi; demonstrațiile eligibile ulterioare pot modifica din nou valorile. ControlPreferences este înregistrat în segment, distinct de profil. Joburile păstrează sessionId/worldEpoch pentru a nu publica peste o lume resetată sau peste sesiunea Academie când au fost lansate în Haos. UI arată observațiile lipsă și exemple reale, fără să promită învățarea driftului sau a distrugerii.
