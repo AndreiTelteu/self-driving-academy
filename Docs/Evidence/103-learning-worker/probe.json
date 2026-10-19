@@ -1,0 +1,4476 @@
+{
+  "schemaVersion": 1,
+  "calibration": "PROVISIONAL_UNCALIBRATED",
+  "capturedAt": "2026-10-19T22:58:19.231Z",
+  "fixtureVersion": "103-learning-estimator-v1",
+  "commit": "f73809ac5e4a1f6d4152f9da4b95e112d712e8ea",
+  "sourceHash": "0da1f818818319f731fc0b8a8771a70e012c2c8321981fc5182b295cee183d62",
+  "inputs": [
+    "src/learning/estimator-worker.ts",
+    "src/learning/estimator-task.ts",
+    "src/learning/profile-blend.ts",
+    "src/learning/evidence-confidence.ts",
+    "src/learning/candidate-validation.ts",
+    "src/workers/governor.ts",
+    "src/workers/client.ts",
+    "src/workers/runtime.ts",
+    "src/workers/protocol.ts",
+    "tests/harness/learning-estimator-probe.ts",
+    "tests/harness/learning-estimator-fixture.ts",
+    "tests/harness/governor-store.ts",
+    "tests/harness/governor-task.ts",
+    "tests/workers/learning-estimator-probe-thread.mjs",
+    "scripts/benchmark-learning-estimator.mjs"
+  ],
+  "budgetVersion": "203-initial-1",
+  "workerBudgetVersion": "221-synthetic-1",
+  "hardware": {
+    "cpu": "AMD Ryzen 7 7735U with Radeon Graphics         ",
+    "ramBytes": 14702026752,
+    "os": "win32 10.0.26300",
+    "node": "v24.21.0"
+  },
+  "backend": "Node worker_threads CPU; no browser/FPS/GPU claims",
+  "powerState": "not observed",
+  "scope": "Serial learning queue through the real 221 governor, one secondary optional comparison, 25 jobs (23 composed, 1 task error, 1 pending cancel), two waves with lower orders for recomposition; five repetitions",
+  "frameFamily": {
+    "status": "UNAVAILABLE",
+    "reason": "Node worker_threads has no rAF/browser frame clock; mainThreadMs measures only synchronous submit/coalescing cost"
+  },
+  "gpu": {
+    "status": "UNAVAILABLE",
+    "reason": "No GPU timer in a Node probe"
+  },
+  "browser": {
+    "status": "NOT_MEASURED",
+    "reason": "No browser run was executed for this PBI"
+  },
+  "queueLimits": {
+    "maxPending": 32,
+    "maxBytes": 8388608,
+    "maxProposals": 256,
+    "history": 64
+  },
+  "limits": {
+    "version": "221-synthetic-1",
+    "jobs": 8,
+    "payloadBytes": 16777216,
+    "persistenceIngressJobs": 8,
+    "persistenceIngressBytes": 16777216,
+    "heavyJobs": 1,
+    "residentExperimentWorlds": 1,
+    "optionalAgeMs": 30000,
+    "history": 64
+  },
+  "memoryCategories": {
+    "queueOwned": "Encoded estimator payloads held by the serial queue (pending+active)",
+    "governorOwned": "Private 221 pending/active snapshots, cap 8 jobs/16 MiB",
+    "store": "Fixture 64 records/32 MiB including proposals; not browser durable storage",
+    "process": "RSS/heap/external/arrayBuffers are separate, overlapping categories"
+  },
+  "repeats": [
+    {
+      "repeat": 1,
+      "learningJobs": 25,
+      "composed": 23,
+      "errors": 1,
+      "cancelled": 1,
+      "invalidated": 0,
+      "recomposed": 22,
+      "generationRecompositions": 23,
+      "secondaryAttempts": 1,
+      "secondaryStatus": "cancelled",
+      "startupMs": 192.77999999999997,
+      "submitBatch1Ms": 2.2443999999999846,
+      "submitBatch2Ms": 0.5842999999999847,
+      "pendingAfterSubmit1": 12,
+      "pendingAfterSubmit2": 12,
+      "maxOwnedBytes": 61341,
+      "totalPayloadBytes": 125061,
+      "maxPayloadBytes": 5173,
+      "durationMs": 222.26619999999997,
+      "measurements": [
+        {
+          "segmentId": "probe-cancel",
+          "order": 25,
+          "learningEpoch": 1,
+          "status": "CANCELLED",
+          "queueMs": 0.1852999999999838,
+          "serviceMs": 0,
+          "endToEndMs": 0.1852999999999838,
+          "governorQueueMs": null,
+          "governorServiceMs": null,
+          "recomposed": false,
+          "payloadBytes": 5075
+        },
+        {
+          "segmentId": "probe-wave1-13",
+          "order": 13,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 1.656500000000051,
+          "serviceMs": 14.6755,
+          "endToEndMs": 16.33200000000005,
+          "governorQueueMs": 12.319500000000005,
+          "governorServiceMs": 1.9658000000000015,
+          "recomposed": false,
+          "payloadBytes": 5173
+        },
+        {
+          "segmentId": "probe-wave1-14",
+          "order": 14,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 16.888300000000015,
+          "serviceMs": 0.5344000000000051,
+          "endToEndMs": 17.42270000000002,
+          "governorQueueMs": 0.013599999999996726,
+          "governorServiceMs": 0.40969999999998663,
+          "recomposed": true,
+          "payloadBytes": 5124
+        },
+        {
+          "segmentId": "probe-wave1-15",
+          "order": 15,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 17.43900000000002,
+          "serviceMs": 0.5021999999999593,
+          "endToEndMs": 17.94119999999998,
+          "governorQueueMs": 0.01310000000000855,
+          "governorServiceMs": 0.3487999999999829,
+          "recomposed": true,
+          "payloadBytes": 5173
+        },
+        {
+          "segmentId": "probe-wave1-16",
+          "order": 16,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 17.9298,
+          "serviceMs": 0.4736000000000331,
+          "endToEndMs": 18.403400000000033,
+          "governorQueueMs": 0.012200000000007094,
+          "governorServiceMs": 0.3502000000000294,
+          "recomposed": true,
+          "payloadBytes": 5124
+        },
+        {
+          "segmentId": "probe-wave1-17",
+          "order": 17,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 18.407600000000002,
+          "serviceMs": 0.42099999999999227,
+          "endToEndMs": 18.828599999999994,
+          "governorQueueMs": 0.009500000000002728,
+          "governorServiceMs": 0.31459999999998445,
+          "recomposed": true,
+          "payloadBytes": 5173
+        },
+        {
+          "segmentId": "probe-wave1-18",
+          "order": 18,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 18.829700000000003,
+          "serviceMs": 0.45659999999998035,
+          "endToEndMs": 19.286299999999983,
+          "governorQueueMs": 0.008800000000007913,
+          "governorServiceMs": 0.36709999999999354,
+          "recomposed": true,
+          "payloadBytes": 5124
+        },
+        {
+          "segmentId": "probe-wave1-19",
+          "order": 19,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 19.319200000000023,
+          "serviceMs": 0.5151000000000181,
+          "endToEndMs": 19.83430000000004,
+          "governorQueueMs": 0.009899999999959164,
+          "governorServiceMs": 0.40960000000001173,
+          "recomposed": true,
+          "payloadBytes": 5173
+        },
+        {
+          "segmentId": "probe-error-20",
+          "order": 20,
+          "learningEpoch": 1,
+          "status": "ERROR",
+          "queueMs": 19.821199999999976,
+          "serviceMs": 0.39179999999998927,
+          "endToEndMs": 20.212999999999965,
+          "governorQueueMs": 0.011799999999993815,
+          "governorServiceMs": 0.2925000000000182,
+          "recomposed": false,
+          "payloadBytes": 1987
+        },
+        {
+          "segmentId": "probe-wave1-21",
+          "order": 21,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 20.182399999999973,
+          "serviceMs": 0.4230000000000018,
+          "endToEndMs": 20.605399999999975,
+          "governorQueueMs": 0.008299999999962893,
+          "governorServiceMs": 0.3211000000000013,
+          "recomposed": true,
+          "payloadBytes": 5173
+        },
+        {
+          "segmentId": "probe-wave1-22",
+          "order": 22,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 20.554700000000025,
+          "serviceMs": 0.5416000000000167,
+          "endToEndMs": 21.096300000000042,
+          "governorQueueMs": 0.005200000000002092,
+          "governorServiceMs": 0.4560999999999922,
+          "recomposed": true,
+          "payloadBytes": 5124
+        },
+        {
+          "segmentId": "probe-wave1-23",
+          "order": 23,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 21.093199999999968,
+          "serviceMs": 0.3953000000000202,
+          "endToEndMs": 21.488499999999988,
+          "governorQueueMs": 0.003899999999987358,
+          "governorServiceMs": 0.32269999999999754,
+          "recomposed": true,
+          "payloadBytes": 5173
+        },
+        {
+          "segmentId": "probe-wave1-24",
+          "order": 24,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 21.49509999999998,
+          "serviceMs": 0.6007999999999925,
+          "endToEndMs": 22.095899999999972,
+          "governorQueueMs": 0.003899999999987358,
+          "governorServiceMs": 0.5061000000000035,
+          "recomposed": true,
+          "payloadBytes": 5124
+        },
+        {
+          "segmentId": "probe-wave2-1",
+          "order": 1,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 0.5521999999999707,
+          "serviceMs": 0.3539000000000101,
+          "endToEndMs": 0.9060999999999808,
+          "governorQueueMs": 0.004599999999982174,
+          "governorServiceMs": 0.2746000000000208,
+          "recomposed": true,
+          "payloadBytes": 5075
+        },
+        {
+          "segmentId": "probe-wave2-2",
+          "order": 2,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 0.8692000000000348,
+          "serviceMs": 0.27420000000000755,
+          "endToEndMs": 1.1434000000000424,
+          "governorQueueMs": 0.003899999999987358,
+          "governorServiceMs": 0.20619999999996708,
+          "recomposed": true,
+          "payloadBytes": 5124
+        },
+        {
+          "segmentId": "probe-wave2-3",
+          "order": 3,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 1.121500000000026,
+          "serviceMs": 0.3202999999999747,
+          "endToEndMs": 1.4418000000000006,
+          "governorQueueMs": 0.005200000000002092,
+          "governorServiceMs": 0.24139999999999873,
+          "recomposed": true,
+          "payloadBytes": 5075
+        },
+        {
+          "segmentId": "probe-wave2-4",
+          "order": 4,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 1.424699999999973,
+          "serviceMs": 0.2909000000000219,
+          "endToEndMs": 1.715599999999995,
+          "governorQueueMs": 0.004500000000007276,
+          "governorServiceMs": 0.22579999999999245,
+          "recomposed": true,
+          "payloadBytes": 5124
+        },
+        {
+          "segmentId": "probe-wave2-5",
+          "order": 5,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 1.693300000000022,
+          "serviceMs": 0.2674999999999841,
+          "endToEndMs": 1.960800000000006,
+          "governorQueueMs": 0.0036999999999807187,
+          "governorServiceMs": 0.20690000000001874,
+          "recomposed": true,
+          "payloadBytes": 5075
+        },
+        {
+          "segmentId": "probe-wave2-6",
+          "order": 6,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 1.941500000000019,
+          "serviceMs": 0.2907999999999902,
+          "endToEndMs": 2.2323000000000093,
+          "governorQueueMs": 0.0033999999999991815,
+          "governorServiceMs": 0.2188000000000443,
+          "recomposed": true,
+          "payloadBytes": 5124
+        },
+        {
+          "segmentId": "probe-wave2-7",
+          "order": 7,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 2.2094999999999914,
+          "serviceMs": 0.2607999999999606,
+          "endToEndMs": 2.470299999999952,
+          "governorQueueMs": 0.004000000000019099,
+          "governorServiceMs": 0.20199999999999818,
+          "recomposed": true,
+          "payloadBytes": 5075
+        },
+        {
+          "segmentId": "probe-wave2-8",
+          "order": 8,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 2.4649,
+          "serviceMs": 0.2492000000000303,
+          "endToEndMs": 2.7141000000000304,
+          "governorQueueMs": 0.0033999999999991815,
+          "governorServiceMs": 0.19429999999999836,
+          "recomposed": true,
+          "payloadBytes": 5124
+        },
+        {
+          "segmentId": "probe-wave2-9",
+          "order": 9,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 2.7099000000000046,
+          "serviceMs": 0.2828999999999837,
+          "endToEndMs": 2.9927999999999884,
+          "governorQueueMs": 0.0033999999999991815,
+          "governorServiceMs": 0.21820000000002437,
+          "recomposed": true,
+          "payloadBytes": 5075
+        },
+        {
+          "segmentId": "probe-wave2-10",
+          "order": 10,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 2.994000000000028,
+          "serviceMs": 0.3503999999999792,
+          "endToEndMs": 3.3444000000000074,
+          "governorQueueMs": 0.00380000000001246,
+          "governorServiceMs": 0.2693999999999619,
+          "recomposed": true,
+          "payloadBytes": 5173
+        },
+        {
+          "segmentId": "probe-wave2-11",
+          "order": 11,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 3.375,
+          "serviceMs": 0.40299999999996317,
+          "endToEndMs": 3.777999999999963,
+          "governorQueueMs": 0.006599999999991724,
+          "governorServiceMs": 0.26679999999998927,
+          "recomposed": true,
+          "payloadBytes": 5124
+        },
+        {
+          "segmentId": "probe-wave2-12",
+          "order": 12,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 3.8034999999999854,
+          "serviceMs": 0.3971000000000231,
+          "endToEndMs": 4.2006000000000085,
+          "governorQueueMs": 0.006500000000016826,
+          "governorServiceMs": 0.276299999999992,
+          "recomposed": true,
+          "payloadBytes": 5173
+        }
+      ],
+      "outcomeSummary": [
+        {
+          "segmentId": "probe-wave1-13",
+          "status": "composed",
+          "appliedOrders": [
+            13
+          ]
+        },
+        {
+          "segmentId": "probe-wave1-14",
+          "status": "composed",
+          "appliedOrders": [
+            13,
+            14
+          ]
+        },
+        {
+          "segmentId": "probe-wave1-15",
+          "status": "composed",
+          "appliedOrders": [
+            13,
+            14,
+            15
+          ]
+        },
+        {
+          "segmentId": "probe-wave1-16",
+          "status": "composed",
+          "appliedOrders": [
+            13,
+            14,
+            15,
+            16
+          ]
+        },
+        {
+          "segmentId": "probe-wave1-17",
+          "status": "composed",
+          "appliedOrders": [
+            13,
+            14,
+            15,
+            16,
+            17
+          ]
+        },
+        {
+          "segmentId": "probe-wave1-18",
+          "status": "composed",
+          "appliedOrders": [
+            13,
+            14,
+            15,
+            16,
+            17,
+            18
+          ]
+        },
+        {
+          "segmentId": "probe-wave1-19",
+          "status": "composed",
+          "appliedOrders": [
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ]
+        },
+        {
+          "segmentId": "probe-error-20",
+          "status": "error",
+          "appliedOrders": []
+        },
+        {
+          "segmentId": "probe-wave1-21",
+          "status": "composed",
+          "appliedOrders": [
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21
+          ]
+        },
+        {
+          "segmentId": "probe-wave1-22",
+          "status": "composed",
+          "appliedOrders": [
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22
+          ]
+        },
+        {
+          "segmentId": "probe-wave1-23",
+          "status": "composed",
+          "appliedOrders": [
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23
+          ]
+        },
+        {
+          "segmentId": "probe-wave1-24",
+          "status": "composed",
+          "appliedOrders": [
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-cancel",
+          "status": "cancelled",
+          "appliedOrders": []
+        },
+        {
+          "segmentId": "probe-wave2-1",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-2",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-3",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            3,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-4",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            3,
+            4,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-5",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-6",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-7",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-8",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-9",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-10",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-11",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-12",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        }
+      ],
+      "usage": {
+        "version": "103-learning-estimator-queue-v1",
+        "pending": 0,
+        "active": 0,
+        "bytes": 0,
+        "maxPending": 32,
+        "maxBytes": 8388608,
+        "history": 25,
+        "generation": {
+          "playerId": "player-1",
+          "profileId": "profile-1",
+          "learningEpoch": 1,
+          "baseVersionId": "profile-v1",
+          "headVersionId": "profile-v1~103.1.2.3.4.5.6.7.8.9.10.11.12.13.14.15.16.17.18.19.21.22.23.24",
+          "proposals": 23,
+          "recompositions": 23
+        },
+        "governor": {
+          "version": "221-synthetic-1",
+          "jobs": 0,
+          "bytes": 0,
+          "persistenceIngressJobs": 0,
+          "persistenceIngressBytes": 0,
+          "activeHeavyJobs": 0,
+          "history": 26,
+          "transport": {
+            "jobs": 0,
+            "bytes": 0,
+            "history": 26
+          },
+          "pressure": true,
+          "context": "active",
+          "suspendedReason": null
+        }
+      },
+      "governorUsage": {
+        "version": "221-synthetic-1",
+        "jobs": 0,
+        "bytes": 0,
+        "persistenceIngressJobs": 0,
+        "persistenceIngressBytes": 0,
+        "activeHeavyJobs": 0,
+        "history": 26,
+        "transport": {
+          "jobs": 0,
+          "bytes": 0,
+          "history": 26
+        },
+        "pressure": true,
+        "context": "active",
+        "suspendedReason": null
+      },
+      "storeUsage": {
+        "records": 24,
+        "bytes": 125279
+      },
+      "governorMeasurementCount": 26,
+      "processMemory": {
+        "rss": 34770944,
+        "heapUsed": 234312,
+        "external": 627266,
+        "arrayBuffers": 573013
+      },
+      "derived": {
+        "endToEndP50Ms": 4.2006000000000085,
+        "endToEndP95Ms": 21.488499999999988,
+        "endToEndP99Ms": 22.095899999999972,
+        "queueP50Ms": 3.375,
+        "queueP95Ms": 21.093199999999968,
+        "queueP99Ms": 21.49509999999998,
+        "queueOverheadP95Ms": 21.161900000000003
+      },
+      "processMemoryAfter": {
+        "rss": 104566784,
+        "heapTotal": 22695936,
+        "heapUsed": 15087744,
+        "external": 10861628,
+        "arrayBuffers": 906847
+      }
+    },
+    {
+      "repeat": 2,
+      "learningJobs": 25,
+      "composed": 23,
+      "errors": 1,
+      "cancelled": 1,
+      "invalidated": 0,
+      "recomposed": 22,
+      "generationRecompositions": 23,
+      "secondaryAttempts": 1,
+      "secondaryStatus": "cancelled",
+      "startupMs": 174.99130000000002,
+      "submitBatch1Ms": 0.9283000000000357,
+      "submitBatch2Ms": 0.42430000000001655,
+      "pendingAfterSubmit1": 12,
+      "pendingAfterSubmit2": 12,
+      "maxOwnedBytes": 61341,
+      "totalPayloadBytes": 125061,
+      "maxPayloadBytes": 5173,
+      "durationMs": 200.1979,
+      "measurements": [
+        {
+          "segmentId": "probe-cancel",
+          "order": 25,
+          "learningEpoch": 1,
+          "status": "CANCELLED",
+          "queueMs": 0.014800000000036562,
+          "serviceMs": 0,
+          "endToEndMs": 0.014800000000036562,
+          "governorQueueMs": null,
+          "governorServiceMs": null,
+          "recomposed": false,
+          "payloadBytes": 5075
+        },
+        {
+          "segmentId": "probe-wave1-13",
+          "order": 13,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 0.9174000000000433,
+          "serviceMs": 13.440500000000043,
+          "endToEndMs": 14.357900000000086,
+          "governorQueueMs": 10.979399999999941,
+          "governorServiceMs": 2.2760000000000673,
+          "recomposed": false,
+          "payloadBytes": 5173
+        },
+        {
+          "segmentId": "probe-wave1-14",
+          "order": 14,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 14.38919999999996,
+          "serviceMs": 0.45899999999994634,
+          "endToEndMs": 14.848199999999906,
+          "governorQueueMs": 0.006200000000035288,
+          "governorServiceMs": 0.369199999999978,
+          "recomposed": true,
+          "payloadBytes": 5124
+        },
+        {
+          "segmentId": "probe-wave1-15",
+          "order": 15,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 14.824600000000032,
+          "serviceMs": 0.3955999999999449,
+          "endToEndMs": 15.220199999999977,
+          "governorQueueMs": 0.010800000000017462,
+          "governorServiceMs": 0.3102000000000089,
+          "recomposed": true,
+          "payloadBytes": 5173
+        },
+        {
+          "segmentId": "probe-wave1-16",
+          "order": 16,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 15.197599999999966,
+          "serviceMs": 0.37210000000004584,
+          "endToEndMs": 15.569700000000012,
+          "governorQueueMs": 0.004199999999968895,
+          "governorServiceMs": 0.2980000000000018,
+          "recomposed": true,
+          "payloadBytes": 5124
+        },
+        {
+          "segmentId": "probe-wave1-17",
+          "order": 17,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 15.540300000000002,
+          "serviceMs": 0.38659999999993033,
+          "endToEndMs": 15.926899999999932,
+          "governorQueueMs": 0.004099999999993997,
+          "governorServiceMs": 0.3121000000001004,
+          "recomposed": true,
+          "payloadBytes": 5173
+        },
+        {
+          "segmentId": "probe-wave1-18",
+          "order": 18,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 15.909800000000018,
+          "serviceMs": 0.42829999999992197,
+          "endToEndMs": 16.33809999999994,
+          "governorQueueMs": 0.007499999999936335,
+          "governorServiceMs": 0.3244000000000824,
+          "recomposed": true,
+          "payloadBytes": 5124
+        },
+        {
+          "segmentId": "probe-wave1-19",
+          "order": 19,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 16.364000000000033,
+          "serviceMs": 0.4516999999999598,
+          "endToEndMs": 16.815699999999993,
+          "governorQueueMs": 0.004399999999918691,
+          "governorServiceMs": 0.37630000000001473,
+          "recomposed": true,
+          "payloadBytes": 5173
+        },
+        {
+          "segmentId": "probe-error-20",
+          "order": 20,
+          "learningEpoch": 1,
+          "status": "ERROR",
+          "queueMs": 16.80129999999997,
+          "serviceMs": 0.32920000000001437,
+          "endToEndMs": 17.130499999999984,
+          "governorQueueMs": 0.0037999999999556167,
+          "governorServiceMs": 0.26300000000003365,
+          "recomposed": false,
+          "payloadBytes": 1987
+        },
+        {
+          "segmentId": "probe-wave1-21",
+          "order": 21,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 17.024799999999914,
+          "serviceMs": 0.43889999999998963,
+          "endToEndMs": 17.463699999999903,
+          "governorQueueMs": 0.004599999999982174,
+          "governorServiceMs": 0.3482999999999947,
+          "recomposed": true,
+          "payloadBytes": 5173
+        },
+        {
+          "segmentId": "probe-wave1-22",
+          "order": 22,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 17.41770000000008,
+          "serviceMs": 0.6263000000000147,
+          "endToEndMs": 18.044000000000096,
+          "governorQueueMs": 0.009200000000078035,
+          "governorServiceMs": 0.515299999999911,
+          "recomposed": true,
+          "payloadBytes": 5124
+        },
+        {
+          "segmentId": "probe-wave1-23",
+          "order": 23,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 18.029899999999998,
+          "serviceMs": 0.4295999999999367,
+          "endToEndMs": 18.459499999999935,
+          "governorQueueMs": 0.004299999999943793,
+          "governorServiceMs": 0.3512000000000626,
+          "recomposed": true,
+          "payloadBytes": 5173
+        },
+        {
+          "segmentId": "probe-wave1-24",
+          "order": 24,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 18.43760000000009,
+          "serviceMs": 0.580600000000004,
+          "endToEndMs": 19.018200000000093,
+          "governorQueueMs": 0.004400000000032378,
+          "governorServiceMs": 0.5072999999999865,
+          "recomposed": true,
+          "payloadBytes": 5124
+        },
+        {
+          "segmentId": "probe-wave2-1",
+          "order": 1,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 0.42259999999998854,
+          "serviceMs": 0.6818000000000666,
+          "endToEndMs": 1.1044000000000551,
+          "governorQueueMs": 0.004400000000032378,
+          "governorServiceMs": 0.5992999999999711,
+          "recomposed": true,
+          "payloadBytes": 5075
+        },
+        {
+          "segmentId": "probe-wave2-2",
+          "order": 2,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 1.097599999999943,
+          "serviceMs": 0.2979000000000269,
+          "endToEndMs": 1.39549999999997,
+          "governorQueueMs": 0.004299999999943793,
+          "governorServiceMs": 0.23109999999996944,
+          "recomposed": true,
+          "payloadBytes": 5124
+        },
+        {
+          "segmentId": "probe-wave2-3",
+          "order": 3,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 1.380200000000059,
+          "serviceMs": 0.300899999999956,
+          "endToEndMs": 1.681100000000015,
+          "governorQueueMs": 0.0036000000000058208,
+          "governorServiceMs": 0.23550000000000182,
+          "recomposed": true,
+          "payloadBytes": 5075
+        },
+        {
+          "segmentId": "probe-wave2-4",
+          "order": 4,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 1.6784000000000106,
+          "serviceMs": 0.2880999999999858,
+          "endToEndMs": 1.9664999999999964,
+          "governorQueueMs": 0.004299999999943793,
+          "governorServiceMs": 0.22220000000004347,
+          "recomposed": true,
+          "payloadBytes": 5124
+        },
+        {
+          "segmentId": "probe-wave2-5",
+          "order": 5,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 1.965400000000045,
+          "serviceMs": 0.2783999999999196,
+          "endToEndMs": 2.2437999999999647,
+          "governorQueueMs": 0.0037999999999556167,
+          "governorServiceMs": 0.21420000000000528,
+          "recomposed": true,
+          "payloadBytes": 5075
+        },
+        {
+          "segmentId": "probe-wave2-6",
+          "order": 6,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 2.2439999999999145,
+          "serviceMs": 0.32950000000005275,
+          "endToEndMs": 2.5734999999999673,
+          "governorQueueMs": 0.003500000000030923,
+          "governorServiceMs": 0.2615000000000691,
+          "recomposed": true,
+          "payloadBytes": 5124
+        },
+        {
+          "segmentId": "probe-wave2-7",
+          "order": 7,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 2.577099999999973,
+          "serviceMs": 0.3384999999999536,
+          "endToEndMs": 2.9155999999999267,
+          "governorQueueMs": 0.004500000000007276,
+          "governorServiceMs": 0.2761000000000422,
+          "recomposed": true,
+          "payloadBytes": 5075
+        },
+        {
+          "segmentId": "probe-wave2-8",
+          "order": 8,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 2.9162000000000035,
+          "serviceMs": 0.3448999999999387,
+          "endToEndMs": 3.261099999999942,
+          "governorQueueMs": 0.003300000000081127,
+          "governorServiceMs": 0.27139999999997144,
+          "recomposed": true,
+          "payloadBytes": 5124
+        },
+        {
+          "segmentId": "probe-wave2-9",
+          "order": 9,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 3.286200000000008,
+          "serviceMs": 0.3523000000000138,
+          "endToEndMs": 3.638500000000022,
+          "governorQueueMs": 0.006499999999959982,
+          "governorServiceMs": 0.2639000000000351,
+          "recomposed": true,
+          "payloadBytes": 5075
+        },
+        {
+          "segmentId": "probe-wave2-10",
+          "order": 10,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 3.6405999999999494,
+          "serviceMs": 0.3492999999999711,
+          "endToEndMs": 3.9898999999999205,
+          "governorQueueMs": 0.004000000000019099,
+          "governorServiceMs": 0.25479999999993197,
+          "recomposed": true,
+          "payloadBytes": 5173
+        },
+        {
+          "segmentId": "probe-wave2-11",
+          "order": 11,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 3.9972999999999956,
+          "serviceMs": 0.3062999999999647,
+          "endToEndMs": 4.30359999999996,
+          "governorQueueMs": 0.005599999999958527,
+          "governorServiceMs": 0.23469999999997526,
+          "recomposed": true,
+          "payloadBytes": 5124
+        },
+        {
+          "segmentId": "probe-wave2-12",
+          "order": 12,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 4.3478999999999814,
+          "serviceMs": 0.35380000000009204,
+          "endToEndMs": 4.7017000000000735,
+          "governorQueueMs": 0.004599999999982174,
+          "governorServiceMs": 0.26909999999998035,
+          "recomposed": true,
+          "payloadBytes": 5173
+        }
+      ],
+      "outcomeSummary": [
+        {
+          "segmentId": "probe-wave1-13",
+          "status": "composed",
+          "appliedOrders": [
+            13
+          ]
+        },
+        {
+          "segmentId": "probe-wave1-14",
+          "status": "composed",
+          "appliedOrders": [
+            13,
+            14
+          ]
+        },
+        {
+          "segmentId": "probe-wave1-15",
+          "status": "composed",
+          "appliedOrders": [
+            13,
+            14,
+            15
+          ]
+        },
+        {
+          "segmentId": "probe-wave1-16",
+          "status": "composed",
+          "appliedOrders": [
+            13,
+            14,
+            15,
+            16
+          ]
+        },
+        {
+          "segmentId": "probe-wave1-17",
+          "status": "composed",
+          "appliedOrders": [
+            13,
+            14,
+            15,
+            16,
+            17
+          ]
+        },
+        {
+          "segmentId": "probe-wave1-18",
+          "status": "composed",
+          "appliedOrders": [
+            13,
+            14,
+            15,
+            16,
+            17,
+            18
+          ]
+        },
+        {
+          "segmentId": "probe-wave1-19",
+          "status": "composed",
+          "appliedOrders": [
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ]
+        },
+        {
+          "segmentId": "probe-error-20",
+          "status": "error",
+          "appliedOrders": []
+        },
+        {
+          "segmentId": "probe-wave1-21",
+          "status": "composed",
+          "appliedOrders": [
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21
+          ]
+        },
+        {
+          "segmentId": "probe-wave1-22",
+          "status": "composed",
+          "appliedOrders": [
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22
+          ]
+        },
+        {
+          "segmentId": "probe-wave1-23",
+          "status": "composed",
+          "appliedOrders": [
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23
+          ]
+        },
+        {
+          "segmentId": "probe-wave1-24",
+          "status": "composed",
+          "appliedOrders": [
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-cancel",
+          "status": "cancelled",
+          "appliedOrders": []
+        },
+        {
+          "segmentId": "probe-wave2-1",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-2",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-3",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            3,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-4",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            3,
+            4,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-5",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-6",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-7",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-8",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-9",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-10",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-11",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-12",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        }
+      ],
+      "usage": {
+        "version": "103-learning-estimator-queue-v1",
+        "pending": 0,
+        "active": 0,
+        "bytes": 0,
+        "maxPending": 32,
+        "maxBytes": 8388608,
+        "history": 25,
+        "generation": {
+          "playerId": "player-1",
+          "profileId": "profile-1",
+          "learningEpoch": 1,
+          "baseVersionId": "profile-v1",
+          "headVersionId": "profile-v1~103.1.2.3.4.5.6.7.8.9.10.11.12.13.14.15.16.17.18.19.21.22.23.24",
+          "proposals": 23,
+          "recompositions": 23
+        },
+        "governor": {
+          "version": "221-synthetic-1",
+          "jobs": 0,
+          "bytes": 0,
+          "persistenceIngressJobs": 0,
+          "persistenceIngressBytes": 0,
+          "activeHeavyJobs": 0,
+          "history": 26,
+          "transport": {
+            "jobs": 0,
+            "bytes": 0,
+            "history": 26
+          },
+          "pressure": true,
+          "context": "active",
+          "suspendedReason": null
+        }
+      },
+      "governorUsage": {
+        "version": "221-synthetic-1",
+        "jobs": 0,
+        "bytes": 0,
+        "persistenceIngressJobs": 0,
+        "persistenceIngressBytes": 0,
+        "activeHeavyJobs": 0,
+        "history": 26,
+        "transport": {
+          "jobs": 0,
+          "bytes": 0,
+          "history": 26
+        },
+        "pressure": true,
+        "context": "active",
+        "suspendedReason": null
+      },
+      "storeUsage": {
+        "records": 24,
+        "bytes": 125279
+      },
+      "governorMeasurementCount": 26,
+      "processMemory": {
+        "rss": 15286272,
+        "heapUsed": -768792,
+        "external": -50414,
+        "arrayBuffers": -50414
+      },
+      "derived": {
+        "endToEndP50Ms": 4.7017000000000735,
+        "endToEndP95Ms": 18.459499999999935,
+        "endToEndP99Ms": 19.018200000000093,
+        "queueP50Ms": 3.9972999999999956,
+        "queueP95Ms": 18.029899999999998,
+        "queueP99Ms": 18.43760000000009,
+        "queueOverheadP95Ms": 18.103999999999928
+      },
+      "processMemoryAfter": {
+        "rss": 107319296,
+        "heapTotal": 22695936,
+        "heapUsed": 14457120,
+        "external": 10811214,
+        "arrayBuffers": 856433
+      }
+    },
+    {
+      "repeat": 3,
+      "learningJobs": 25,
+      "composed": 23,
+      "errors": 1,
+      "cancelled": 1,
+      "invalidated": 0,
+      "recomposed": 22,
+      "generationRecompositions": 23,
+      "secondaryAttempts": 1,
+      "secondaryStatus": "cancelled",
+      "startupMs": 165.41149999999993,
+      "submitBatch1Ms": 0.5288000000000466,
+      "submitBatch2Ms": 0.42009999999993397,
+      "pendingAfterSubmit1": 12,
+      "pendingAfterSubmit2": 12,
+      "maxOwnedBytes": 61341,
+      "totalPayloadBytes": 125061,
+      "maxPayloadBytes": 5173,
+      "durationMs": 186.46939999999995,
+      "measurements": [
+        {
+          "segmentId": "probe-cancel",
+          "order": 25,
+          "learningEpoch": 1,
+          "status": "CANCELLED",
+          "queueMs": 0.0062999999998964995,
+          "serviceMs": 0,
+          "endToEndMs": 0.0062999999998964995,
+          "governorQueueMs": null,
+          "governorServiceMs": null,
+          "recomposed": false,
+          "payloadBytes": 5075
+        },
+        {
+          "segmentId": "probe-wave1-13",
+          "order": 13,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 0.4615999999999758,
+          "serviceMs": 10.962499999999977,
+          "endToEndMs": 11.424099999999953,
+          "governorQueueMs": 8.902899999999931,
+          "governorServiceMs": 1.9803000000000566,
+          "recomposed": false,
+          "payloadBytes": 5173
+        },
+        {
+          "segmentId": "probe-wave1-14",
+          "order": 14,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 11.42730000000006,
+          "serviceMs": 0.4800999999999931,
+          "endToEndMs": 11.907400000000052,
+          "governorQueueMs": 0.004900000000020555,
+          "governorServiceMs": 0.31599999999991724,
+          "recomposed": true,
+          "payloadBytes": 5124
+        },
+        {
+          "segmentId": "probe-wave1-15",
+          "order": 15,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 11.90039999999999,
+          "serviceMs": 0.3306999999999789,
+          "endToEndMs": 12.23109999999997,
+          "governorQueueMs": 0.004900000000020555,
+          "governorServiceMs": 0.2760999999999285,
+          "recomposed": true,
+          "payloadBytes": 5173
+        },
+        {
+          "segmentId": "probe-wave1-16",
+          "order": 16,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 12.227600000000052,
+          "serviceMs": 0.29799999999988813,
+          "endToEndMs": 12.52559999999994,
+          "governorQueueMs": 0.003500000000030923,
+          "governorServiceMs": 0.25260000000002947,
+          "recomposed": true,
+          "payloadBytes": 5124
+        },
+        {
+          "segmentId": "probe-wave1-17",
+          "order": 17,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 12.52559999999994,
+          "serviceMs": 0.2964000000000624,
+          "endToEndMs": 12.822000000000003,
+          "governorQueueMs": 0.00329999999996744,
+          "governorServiceMs": 0.2504999999999882,
+          "recomposed": true,
+          "payloadBytes": 5173
+        },
+        {
+          "segmentId": "probe-wave1-18",
+          "order": 18,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 12.780099999999948,
+          "serviceMs": 0.3305000000000291,
+          "endToEndMs": 13.110599999999977,
+          "governorQueueMs": 0.0029000000000678483,
+          "governorServiceMs": 0.28089999999997417,
+          "recomposed": true,
+          "payloadBytes": 5124
+        },
+        {
+          "segmentId": "probe-wave1-19",
+          "order": 19,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 13.109100000000012,
+          "serviceMs": 0.33750000000009095,
+          "endToEndMs": 13.446600000000103,
+          "governorQueueMs": 0.004000000000019099,
+          "governorServiceMs": 0.2844000000000051,
+          "recomposed": true,
+          "payloadBytes": 5173
+        },
+        {
+          "segmentId": "probe-error-20",
+          "order": 20,
+          "learningEpoch": 1,
+          "status": "ERROR",
+          "queueMs": 13.446700000000078,
+          "serviceMs": 0.23119999999994434,
+          "endToEndMs": 13.677900000000022,
+          "governorQueueMs": 0.0036000000000058208,
+          "governorServiceMs": 0.1916999999999689,
+          "recomposed": false,
+          "payloadBytes": 1987
+        },
+        {
+          "segmentId": "probe-wave1-21",
+          "order": 21,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 13.655899999999974,
+          "serviceMs": 0.34560000000010405,
+          "endToEndMs": 14.001500000000078,
+          "governorQueueMs": 0.0039000000000442014,
+          "governorServiceMs": 0.2826000000000022,
+          "recomposed": true,
+          "payloadBytes": 5173
+        },
+        {
+          "segmentId": "probe-wave1-22",
+          "order": 22,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 13.995199999999954,
+          "serviceMs": 0.4597999999999729,
+          "endToEndMs": 14.454999999999927,
+          "governorQueueMs": 0.0049999999999954525,
+          "governorServiceMs": 0.39790000000004966,
+          "recomposed": true,
+          "payloadBytes": 5124
+        },
+        {
+          "segmentId": "probe-wave1-23",
+          "order": 23,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 14.44679999999994,
+          "serviceMs": 0.4093000000000302,
+          "endToEndMs": 14.85609999999997,
+          "governorQueueMs": 0.0037999999999556167,
+          "governorServiceMs": 0.34810000000004493,
+          "recomposed": true,
+          "payloadBytes": 5173
+        },
+        {
+          "segmentId": "probe-wave1-24",
+          "order": 24,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 14.853099999999927,
+          "serviceMs": 0.6067000000000462,
+          "endToEndMs": 15.459799999999973,
+          "governorQueueMs": 0.004000000000019099,
+          "governorServiceMs": 0.524599999999964,
+          "recomposed": true,
+          "payloadBytes": 5124
+        },
+        {
+          "segmentId": "probe-wave2-1",
+          "order": 1,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 0.3502000000000862,
+          "serviceMs": 0.3366999999999507,
+          "endToEndMs": 0.6869000000000369,
+          "governorQueueMs": 0.0038000000000693035,
+          "governorServiceMs": 0.2778999999999314,
+          "recomposed": true,
+          "payloadBytes": 5075
+        },
+        {
+          "segmentId": "probe-wave2-2",
+          "order": 2,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 0.6880999999999631,
+          "serviceMs": 0.28329999999994016,
+          "endToEndMs": 0.9713999999999032,
+          "governorQueueMs": 0.004099999999993997,
+          "governorServiceMs": 0.22019999999997708,
+          "recomposed": true,
+          "payloadBytes": 5124
+        },
+        {
+          "segmentId": "probe-wave2-3",
+          "order": 3,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 0.9542000000000144,
+          "serviceMs": 0.2985999999999649,
+          "endToEndMs": 1.2527999999999793,
+          "governorQueueMs": 0.005899999999996908,
+          "governorServiceMs": 0.22730000000001382,
+          "recomposed": true,
+          "payloadBytes": 5075
+        },
+        {
+          "segmentId": "probe-wave2-4",
+          "order": 4,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 1.2522000000000162,
+          "serviceMs": 0.2542000000000826,
+          "endToEndMs": 1.5064000000000988,
+          "governorQueueMs": 0.004100000000107684,
+          "governorServiceMs": 0.19529999999997472,
+          "recomposed": true,
+          "payloadBytes": 5124
+        },
+        {
+          "segmentId": "probe-wave2-5",
+          "order": 5,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 1.5120999999999185,
+          "serviceMs": 0.23869999999999436,
+          "endToEndMs": 1.7507999999999129,
+          "governorQueueMs": 0.00329999999996744,
+          "governorServiceMs": 0.1893000000000029,
+          "recomposed": true,
+          "payloadBytes": 5075
+        },
+        {
+          "segmentId": "probe-wave2-6",
+          "order": 6,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 1.765800000000013,
+          "serviceMs": 0.26549999999997453,
+          "endToEndMs": 2.0312999999999874,
+          "governorQueueMs": 0.003100000000017644,
+          "governorServiceMs": 0.21670000000005984,
+          "recomposed": true,
+          "payloadBytes": 5124
+        },
+        {
+          "segmentId": "probe-wave2-7",
+          "order": 7,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 2.0334000000000287,
+          "serviceMs": 0.2418999999999869,
+          "endToEndMs": 2.2753000000000156,
+          "governorQueueMs": 0.00329999999996744,
+          "governorServiceMs": 0.19110000000000582,
+          "recomposed": true,
+          "payloadBytes": 5075
+        },
+        {
+          "segmentId": "probe-wave2-8",
+          "order": 8,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 2.2789000000000215,
+          "serviceMs": 0.28350000000000364,
+          "endToEndMs": 2.562400000000025,
+          "governorQueueMs": 0.005300000000033833,
+          "governorServiceMs": 0.19249999999999545,
+          "recomposed": true,
+          "payloadBytes": 5124
+        },
+        {
+          "segmentId": "probe-wave2-9",
+          "order": 9,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 2.564300000000003,
+          "serviceMs": 0.25250000000005457,
+          "endToEndMs": 2.8168000000000575,
+          "governorQueueMs": 0.003399999999942338,
+          "governorServiceMs": 0.20030000000008386,
+          "recomposed": true,
+          "payloadBytes": 5075
+        },
+        {
+          "segmentId": "probe-wave2-10",
+          "order": 10,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 2.81880000000001,
+          "serviceMs": 0.32590000000004693,
+          "endToEndMs": 3.144700000000057,
+          "governorQueueMs": 0.00329999999996744,
+          "governorServiceMs": 0.2521000000000413,
+          "recomposed": true,
+          "payloadBytes": 5173
+        },
+        {
+          "segmentId": "probe-wave2-11",
+          "order": 11,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 3.179399999999987,
+          "serviceMs": 0.9510000000000218,
+          "endToEndMs": 4.130400000000009,
+          "governorQueueMs": 0.006499999999959982,
+          "governorServiceMs": 0.8561000000000831,
+          "recomposed": true,
+          "payloadBytes": 5124
+        },
+        {
+          "segmentId": "probe-wave2-12",
+          "order": 12,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 4.1440000000000055,
+          "serviceMs": 0.32359999999994216,
+          "endToEndMs": 4.467599999999948,
+          "governorQueueMs": 0.004500000000007276,
+          "governorServiceMs": 0.2617000000000189,
+          "recomposed": true,
+          "payloadBytes": 5173
+        }
+      ],
+      "outcomeSummary": [
+        {
+          "segmentId": "probe-wave1-13",
+          "status": "composed",
+          "appliedOrders": [
+            13
+          ]
+        },
+        {
+          "segmentId": "probe-wave1-14",
+          "status": "composed",
+          "appliedOrders": [
+            13,
+            14
+          ]
+        },
+        {
+          "segmentId": "probe-wave1-15",
+          "status": "composed",
+          "appliedOrders": [
+            13,
+            14,
+            15
+          ]
+        },
+        {
+          "segmentId": "probe-wave1-16",
+          "status": "composed",
+          "appliedOrders": [
+            13,
+            14,
+            15,
+            16
+          ]
+        },
+        {
+          "segmentId": "probe-wave1-17",
+          "status": "composed",
+          "appliedOrders": [
+            13,
+            14,
+            15,
+            16,
+            17
+          ]
+        },
+        {
+          "segmentId": "probe-wave1-18",
+          "status": "composed",
+          "appliedOrders": [
+            13,
+            14,
+            15,
+            16,
+            17,
+            18
+          ]
+        },
+        {
+          "segmentId": "probe-wave1-19",
+          "status": "composed",
+          "appliedOrders": [
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ]
+        },
+        {
+          "segmentId": "probe-error-20",
+          "status": "error",
+          "appliedOrders": []
+        },
+        {
+          "segmentId": "probe-wave1-21",
+          "status": "composed",
+          "appliedOrders": [
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21
+          ]
+        },
+        {
+          "segmentId": "probe-wave1-22",
+          "status": "composed",
+          "appliedOrders": [
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22
+          ]
+        },
+        {
+          "segmentId": "probe-wave1-23",
+          "status": "composed",
+          "appliedOrders": [
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23
+          ]
+        },
+        {
+          "segmentId": "probe-wave1-24",
+          "status": "composed",
+          "appliedOrders": [
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-cancel",
+          "status": "cancelled",
+          "appliedOrders": []
+        },
+        {
+          "segmentId": "probe-wave2-1",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-2",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-3",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            3,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-4",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            3,
+            4,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-5",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-6",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-7",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-8",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-9",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-10",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-11",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-12",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        }
+      ],
+      "usage": {
+        "version": "103-learning-estimator-queue-v1",
+        "pending": 0,
+        "active": 0,
+        "bytes": 0,
+        "maxPending": 32,
+        "maxBytes": 8388608,
+        "history": 25,
+        "generation": {
+          "playerId": "player-1",
+          "profileId": "profile-1",
+          "learningEpoch": 1,
+          "baseVersionId": "profile-v1",
+          "headVersionId": "profile-v1~103.1.2.3.4.5.6.7.8.9.10.11.12.13.14.15.16.17.18.19.21.22.23.24",
+          "proposals": 23,
+          "recompositions": 23
+        },
+        "governor": {
+          "version": "221-synthetic-1",
+          "jobs": 0,
+          "bytes": 0,
+          "persistenceIngressJobs": 0,
+          "persistenceIngressBytes": 0,
+          "activeHeavyJobs": 0,
+          "history": 26,
+          "transport": {
+            "jobs": 0,
+            "bytes": 0,
+            "history": 26
+          },
+          "pressure": true,
+          "context": "active",
+          "suspendedReason": null
+        }
+      },
+      "governorUsage": {
+        "version": "221-synthetic-1",
+        "jobs": 0,
+        "bytes": 0,
+        "persistenceIngressJobs": 0,
+        "persistenceIngressBytes": 0,
+        "activeHeavyJobs": 0,
+        "history": 26,
+        "transport": {
+          "jobs": 0,
+          "bytes": 0,
+          "history": 26
+        },
+        "pressure": true,
+        "context": "active",
+        "suspendedReason": null
+      },
+      "storeUsage": {
+        "records": 24,
+        "bytes": 125279
+      },
+      "governorMeasurementCount": 26,
+      "processMemory": {
+        "rss": 13803520,
+        "heapUsed": -389056,
+        "external": -22803,
+        "arrayBuffers": -22803
+      },
+      "derived": {
+        "endToEndP50Ms": 4.467599999999948,
+        "endToEndP95Ms": 14.85609999999997,
+        "endToEndP99Ms": 15.459799999999973,
+        "queueP50Ms": 3.179399999999987,
+        "queueP95Ms": 14.44679999999994,
+        "queueP99Ms": 14.853099999999927,
+        "queueOverheadP95Ms": 14.504199999999969
+      },
+      "processMemoryAfter": {
+        "rss": 108228608,
+        "heapTotal": 22695936,
+        "heapUsed": 14163560,
+        "external": 10788411,
+        "arrayBuffers": 833630
+      }
+    },
+    {
+      "repeat": 4,
+      "learningJobs": 25,
+      "composed": 23,
+      "errors": 1,
+      "cancelled": 1,
+      "invalidated": 0,
+      "recomposed": 22,
+      "generationRecompositions": 23,
+      "secondaryAttempts": 1,
+      "secondaryStatus": "cancelled",
+      "startupMs": 169.24,
+      "submitBatch1Ms": 0.4798000000000684,
+      "submitBatch2Ms": 0.4130999999999858,
+      "pendingAfterSubmit1": 12,
+      "pendingAfterSubmit2": 12,
+      "maxOwnedBytes": 61341,
+      "totalPayloadBytes": 125061,
+      "maxPayloadBytes": 5173,
+      "durationMs": 198.96810000000005,
+      "measurements": [
+        {
+          "segmentId": "probe-cancel",
+          "order": 25,
+          "learningEpoch": 1,
+          "status": "CANCELLED",
+          "queueMs": 0.012799999999970169,
+          "serviceMs": 0,
+          "endToEndMs": 0.012799999999970169,
+          "governorQueueMs": null,
+          "governorServiceMs": null,
+          "recomposed": false,
+          "payloadBytes": 5075
+        },
+        {
+          "segmentId": "probe-wave1-13",
+          "order": 13,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 0.4210000000000491,
+          "serviceMs": 20.523099999999886,
+          "endToEndMs": 20.944099999999935,
+          "governorQueueMs": 18.12779999999998,
+          "governorServiceMs": 2.2951000000000477,
+          "recomposed": false,
+          "payloadBytes": 5173
+        },
+        {
+          "segmentId": "probe-wave1-14",
+          "order": 14,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 20.962800000000016,
+          "serviceMs": 0.3766000000000531,
+          "endToEndMs": 21.33940000000007,
+          "governorQueueMs": 0.005699999999933425,
+          "governorServiceMs": 0.3108999999999469,
+          "recomposed": true,
+          "payloadBytes": 5124
+        },
+        {
+          "segmentId": "probe-wave1-15",
+          "order": 15,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 21.35239999999999,
+          "serviceMs": 0.33619999999996253,
+          "endToEndMs": 21.68859999999995,
+          "governorQueueMs": 0.0039999999999054126,
+          "governorServiceMs": 0.28280000000017935,
+          "recomposed": true,
+          "payloadBytes": 5173
+        },
+        {
+          "segmentId": "probe-wave1-16",
+          "order": 16,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 21.688300000000027,
+          "serviceMs": 0.3449000000000524,
+          "endToEndMs": 22.03320000000008,
+          "governorQueueMs": 0.0039999999999054126,
+          "governorServiceMs": 0.2798000000000229,
+          "recomposed": true,
+          "payloadBytes": 5124
+        },
+        {
+          "segmentId": "probe-wave1-17",
+          "order": 17,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 22.026799999999866,
+          "serviceMs": 0.2985000000001037,
+          "endToEndMs": 22.32529999999997,
+          "governorQueueMs": 0.003400000000056025,
+          "governorServiceMs": 0.25050000000010186,
+          "recomposed": true,
+          "payloadBytes": 5173
+        },
+        {
+          "segmentId": "probe-wave1-18",
+          "order": 18,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 22.32249999999999,
+          "serviceMs": 0.2861000000000331,
+          "endToEndMs": 22.608600000000024,
+          "governorQueueMs": 0.0029999999999290594,
+          "governorServiceMs": 0.241800000000012,
+          "recomposed": true,
+          "payloadBytes": 5124
+        },
+        {
+          "segmentId": "probe-wave1-19",
+          "order": 19,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 22.61329999999998,
+          "serviceMs": 0.37400000000002365,
+          "endToEndMs": 22.987300000000005,
+          "governorQueueMs": 0.0036000000000058208,
+          "governorServiceMs": 0.2776000000001204,
+          "recomposed": true,
+          "payloadBytes": 5173
+        },
+        {
+          "segmentId": "probe-error-20",
+          "order": 20,
+          "learningEpoch": 1,
+          "status": "ERROR",
+          "queueMs": 22.984300000000076,
+          "serviceMs": 0.22659999999996217,
+          "endToEndMs": 23.210900000000038,
+          "governorQueueMs": 0.0029999999999290594,
+          "governorServiceMs": 0.19069999999987886,
+          "recomposed": false,
+          "payloadBytes": 1987
+        },
+        {
+          "segmentId": "probe-wave1-21",
+          "order": 21,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 23.192800000000034,
+          "serviceMs": 0.31179999999994834,
+          "endToEndMs": 23.504599999999982,
+          "governorQueueMs": 0.002900000000181535,
+          "governorServiceMs": 0.26289999999994507,
+          "recomposed": true,
+          "payloadBytes": 5173
+        },
+        {
+          "segmentId": "probe-wave1-22",
+          "order": 22,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 23.52929999999992,
+          "serviceMs": 0.5558000000000902,
+          "endToEndMs": 24.08510000000001,
+          "governorQueueMs": 0.003500000000030923,
+          "governorServiceMs": 0.4679999999998472,
+          "recomposed": true,
+          "payloadBytes": 5124
+        },
+        {
+          "segmentId": "probe-wave1-23",
+          "order": 23,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 24.101400000000012,
+          "serviceMs": 0.4277999999999338,
+          "endToEndMs": 24.529199999999946,
+          "governorQueueMs": 0.00709999999980937,
+          "governorServiceMs": 0.3408000000001721,
+          "recomposed": true,
+          "payloadBytes": 5173
+        },
+        {
+          "segmentId": "probe-wave1-24",
+          "order": 24,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 24.520500000000084,
+          "serviceMs": 0.48649999999997817,
+          "endToEndMs": 25.007000000000062,
+          "governorQueueMs": 0.0038999999999305146,
+          "governorServiceMs": 0.4157000000000153,
+          "recomposed": true,
+          "payloadBytes": 5124
+        },
+        {
+          "segmentId": "probe-wave2-1",
+          "order": 1,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 0.3686000000000149,
+          "serviceMs": 0.3183999999998832,
+          "endToEndMs": 0.6869999999998981,
+          "governorQueueMs": 0.003400000000056025,
+          "governorServiceMs": 0.2615000000000691,
+          "recomposed": true,
+          "payloadBytes": 5075
+        },
+        {
+          "segmentId": "probe-wave2-2",
+          "order": 2,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 0.6605999999999312,
+          "serviceMs": 0.258199999999988,
+          "endToEndMs": 0.9187999999999192,
+          "governorQueueMs": 0.003400000000056025,
+          "governorServiceMs": 0.20730000000003201,
+          "recomposed": true,
+          "payloadBytes": 5124
+        },
+        {
+          "segmentId": "probe-wave2-3",
+          "order": 3,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 0.9138000000000375,
+          "serviceMs": 0.2438999999999396,
+          "endToEndMs": 1.157699999999977,
+          "governorQueueMs": 0.0030999999999039574,
+          "governorServiceMs": 0.1956000000000131,
+          "recomposed": true,
+          "payloadBytes": 5075
+        },
+        {
+          "segmentId": "probe-wave2-4",
+          "order": 4,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 1.1458999999999833,
+          "serviceMs": 0.2395000000001346,
+          "endToEndMs": 1.3854000000001179,
+          "governorQueueMs": 0.0036999999999807187,
+          "governorServiceMs": 0.18980000000010477,
+          "recomposed": true,
+          "payloadBytes": 5124
+        },
+        {
+          "segmentId": "probe-wave2-5",
+          "order": 5,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 1.3820999999998094,
+          "serviceMs": 0.25680000000011205,
+          "endToEndMs": 1.6388999999999214,
+          "governorQueueMs": 0.0029999999999290594,
+          "governorServiceMs": 0.20790000000010878,
+          "recomposed": true,
+          "payloadBytes": 5075
+        },
+        {
+          "segmentId": "probe-wave2-6",
+          "order": 6,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 1.6504999999999654,
+          "serviceMs": 0.26959999999985484,
+          "endToEndMs": 1.9200999999998203,
+          "governorQueueMs": 0.003400000000056025,
+          "governorServiceMs": 0.21669999999994616,
+          "recomposed": true,
+          "payloadBytes": 5124
+        },
+        {
+          "segmentId": "probe-wave2-7",
+          "order": 7,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 1.9219000000000506,
+          "serviceMs": 0.2502999999999247,
+          "endToEndMs": 2.1721999999999753,
+          "governorQueueMs": 0.0036000000000058208,
+          "governorServiceMs": 0.20090000000004693,
+          "recomposed": true,
+          "payloadBytes": 5075
+        },
+        {
+          "segmentId": "probe-wave2-8",
+          "order": 8,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 2.161299999999983,
+          "serviceMs": 0.22910000000001673,
+          "endToEndMs": 2.3903999999999996,
+          "governorQueueMs": 0.004000000000132786,
+          "governorServiceMs": 0.18299999999999272,
+          "recomposed": true,
+          "payloadBytes": 5124
+        },
+        {
+          "segmentId": "probe-wave2-9",
+          "order": 9,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 2.3869999999999436,
+          "serviceMs": 0.22460000000000946,
+          "endToEndMs": 2.611599999999953,
+          "governorQueueMs": 0.0029999999999290594,
+          "governorServiceMs": 0.17849999999998545,
+          "recomposed": true,
+          "payloadBytes": 5075
+        },
+        {
+          "segmentId": "probe-wave2-10",
+          "order": 10,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 2.60570000000007,
+          "serviceMs": 0.30729999999994106,
+          "endToEndMs": 2.913000000000011,
+          "governorQueueMs": 0.003200000000106229,
+          "governorServiceMs": 0.24789999999984502,
+          "recomposed": true,
+          "payloadBytes": 5173
+        },
+        {
+          "segmentId": "probe-wave2-11",
+          "order": 11,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 2.917599999999993,
+          "serviceMs": 0.3387000000000171,
+          "endToEndMs": 3.25630000000001,
+          "governorQueueMs": 0.0038999999999305146,
+          "governorServiceMs": 0.248299999999972,
+          "recomposed": true,
+          "payloadBytes": 5124
+        },
+        {
+          "segmentId": "probe-wave2-12",
+          "order": 12,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 3.259999999999991,
+          "serviceMs": 0.39840000000003783,
+          "endToEndMs": 3.6584000000000287,
+          "governorQueueMs": 0.0036000000000058208,
+          "governorServiceMs": 0.286200000000008,
+          "recomposed": true,
+          "payloadBytes": 5173
+        }
+      ],
+      "outcomeSummary": [
+        {
+          "segmentId": "probe-wave1-13",
+          "status": "composed",
+          "appliedOrders": [
+            13
+          ]
+        },
+        {
+          "segmentId": "probe-wave1-14",
+          "status": "composed",
+          "appliedOrders": [
+            13,
+            14
+          ]
+        },
+        {
+          "segmentId": "probe-wave1-15",
+          "status": "composed",
+          "appliedOrders": [
+            13,
+            14,
+            15
+          ]
+        },
+        {
+          "segmentId": "probe-wave1-16",
+          "status": "composed",
+          "appliedOrders": [
+            13,
+            14,
+            15,
+            16
+          ]
+        },
+        {
+          "segmentId": "probe-wave1-17",
+          "status": "composed",
+          "appliedOrders": [
+            13,
+            14,
+            15,
+            16,
+            17
+          ]
+        },
+        {
+          "segmentId": "probe-wave1-18",
+          "status": "composed",
+          "appliedOrders": [
+            13,
+            14,
+            15,
+            16,
+            17,
+            18
+          ]
+        },
+        {
+          "segmentId": "probe-wave1-19",
+          "status": "composed",
+          "appliedOrders": [
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ]
+        },
+        {
+          "segmentId": "probe-error-20",
+          "status": "error",
+          "appliedOrders": []
+        },
+        {
+          "segmentId": "probe-wave1-21",
+          "status": "composed",
+          "appliedOrders": [
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21
+          ]
+        },
+        {
+          "segmentId": "probe-wave1-22",
+          "status": "composed",
+          "appliedOrders": [
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22
+          ]
+        },
+        {
+          "segmentId": "probe-wave1-23",
+          "status": "composed",
+          "appliedOrders": [
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23
+          ]
+        },
+        {
+          "segmentId": "probe-wave1-24",
+          "status": "composed",
+          "appliedOrders": [
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-cancel",
+          "status": "cancelled",
+          "appliedOrders": []
+        },
+        {
+          "segmentId": "probe-wave2-1",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-2",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-3",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            3,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-4",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            3,
+            4,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-5",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-6",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-7",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-8",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-9",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-10",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-11",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-12",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        }
+      ],
+      "usage": {
+        "version": "103-learning-estimator-queue-v1",
+        "pending": 0,
+        "active": 0,
+        "bytes": 0,
+        "maxPending": 32,
+        "maxBytes": 8388608,
+        "history": 25,
+        "generation": {
+          "playerId": "player-1",
+          "profileId": "profile-1",
+          "learningEpoch": 1,
+          "baseVersionId": "profile-v1",
+          "headVersionId": "profile-v1~103.1.2.3.4.5.6.7.8.9.10.11.12.13.14.15.16.17.18.19.21.22.23.24",
+          "proposals": 23,
+          "recompositions": 23
+        },
+        "governor": {
+          "version": "221-synthetic-1",
+          "jobs": 0,
+          "bytes": 0,
+          "persistenceIngressJobs": 0,
+          "persistenceIngressBytes": 0,
+          "activeHeavyJobs": 0,
+          "history": 26,
+          "transport": {
+            "jobs": 0,
+            "bytes": 0,
+            "history": 26
+          },
+          "pressure": true,
+          "context": "active",
+          "suspendedReason": null
+        }
+      },
+      "governorUsage": {
+        "version": "221-synthetic-1",
+        "jobs": 0,
+        "bytes": 0,
+        "persistenceIngressJobs": 0,
+        "persistenceIngressBytes": 0,
+        "activeHeavyJobs": 0,
+        "history": 26,
+        "transport": {
+          "jobs": 0,
+          "bytes": 0,
+          "history": 26
+        },
+        "pressure": true,
+        "context": "active",
+        "suspendedReason": null
+      },
+      "storeUsage": {
+        "records": 24,
+        "bytes": 125279
+      },
+      "governorMeasurementCount": 26,
+      "processMemory": {
+        "rss": 12845056,
+        "heapUsed": 2087120,
+        "external": 740700,
+        "arrayBuffers": 740700
+      },
+      "derived": {
+        "endToEndP50Ms": 3.6584000000000287,
+        "endToEndP95Ms": 24.529199999999946,
+        "endToEndP99Ms": 25.007000000000062,
+        "queueP50Ms": 2.917599999999993,
+        "queueP95Ms": 24.101400000000012,
+        "queueP99Ms": 24.520500000000084,
+        "queueOverheadP95Ms": 24.181299999999965
+      },
+      "processMemoryAfter": {
+        "rss": 108703744,
+        "heapTotal": 22695936,
+        "heapUsed": 16338224,
+        "external": 11529111,
+        "arrayBuffers": 1574330
+      }
+    },
+    {
+      "repeat": 5,
+      "learningJobs": 25,
+      "composed": 23,
+      "errors": 1,
+      "cancelled": 1,
+      "invalidated": 0,
+      "recomposed": 22,
+      "generationRecompositions": 23,
+      "secondaryAttempts": 1,
+      "secondaryStatus": "cancelled",
+      "startupMs": 167.49659999999994,
+      "submitBatch1Ms": 0.4294999999999618,
+      "submitBatch2Ms": 0.5993000000000848,
+      "pendingAfterSubmit1": 12,
+      "pendingAfterSubmit2": 12,
+      "maxOwnedBytes": 61341,
+      "totalPayloadBytes": 125061,
+      "maxPayloadBytes": 5173,
+      "durationMs": 184.8347000000001,
+      "measurements": [
+        {
+          "segmentId": "probe-cancel",
+          "order": 25,
+          "learningEpoch": 1,
+          "status": "CANCELLED",
+          "queueMs": 0.00680000000011205,
+          "serviceMs": 0,
+          "endToEndMs": 0.00680000000011205,
+          "governorQueueMs": null,
+          "governorServiceMs": null,
+          "recomposed": false,
+          "payloadBytes": 5075
+        },
+        {
+          "segmentId": "probe-wave1-13",
+          "order": 13,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 0.3730000000000473,
+          "serviceMs": 7.419499999999971,
+          "endToEndMs": 7.792500000000018,
+          "governorQueueMs": 5.359200000000101,
+          "governorServiceMs": 1.9746999999999844,
+          "recomposed": false,
+          "payloadBytes": 5173
+        },
+        {
+          "segmentId": "probe-wave1-14",
+          "order": 14,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 7.801099999999906,
+          "serviceMs": 0.39200000000005275,
+          "endToEndMs": 8.193099999999959,
+          "governorQueueMs": 0.005100000000084037,
+          "governorServiceMs": 0.3291999999999007,
+          "recomposed": true,
+          "payloadBytes": 5124
+        },
+        {
+          "segmentId": "probe-wave1-15",
+          "order": 15,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 8.19769999999994,
+          "serviceMs": 0.3894000000000233,
+          "endToEndMs": 8.587099999999964,
+          "governorQueueMs": 0.004100000000107684,
+          "governorServiceMs": 0.3186000000000604,
+          "recomposed": true,
+          "payloadBytes": 5173
+        },
+        {
+          "segmentId": "probe-wave1-16",
+          "order": 16,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 8.611599999999953,
+          "serviceMs": 0.5452000000000226,
+          "endToEndMs": 9.156799999999976,
+          "governorQueueMs": 0.004200000000082582,
+          "governorServiceMs": 0.4840999999998985,
+          "recomposed": true,
+          "payloadBytes": 5124
+        },
+        {
+          "segmentId": "probe-wave1-17",
+          "order": 17,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 9.159600000000182,
+          "serviceMs": 0.6231999999999971,
+          "endToEndMs": 9.78280000000018,
+          "governorQueueMs": 0.0039999999999054126,
+          "governorServiceMs": 0.5582000000001699,
+          "recomposed": true,
+          "payloadBytes": 5173
+        },
+        {
+          "segmentId": "probe-wave1-18",
+          "order": 18,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 9.789800000000014,
+          "serviceMs": 0.3246999999998934,
+          "endToEndMs": 10.114499999999907,
+          "governorQueueMs": 0.0037999999999556167,
+          "governorServiceMs": 0.2737000000001899,
+          "recomposed": true,
+          "payloadBytes": 5124
+        },
+        {
+          "segmentId": "probe-wave1-19",
+          "order": 19,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 10.122600000000148,
+          "serviceMs": 0.3627999999998792,
+          "endToEndMs": 10.485400000000027,
+          "governorQueueMs": 0.0038999999999305146,
+          "governorServiceMs": 0.3085000000000946,
+          "recomposed": true,
+          "payloadBytes": 5173
+        },
+        {
+          "segmentId": "probe-error-20",
+          "order": 20,
+          "learningEpoch": 1,
+          "status": "ERROR",
+          "queueMs": 10.491899999999987,
+          "serviceMs": 0.2556999999999334,
+          "endToEndMs": 10.74759999999992,
+          "governorQueueMs": 0.003300000000081127,
+          "governorServiceMs": 0.21739999999999782,
+          "recomposed": false,
+          "payloadBytes": 1987
+        },
+        {
+          "segmentId": "probe-wave1-21",
+          "order": 21,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 10.731199999999944,
+          "serviceMs": 0.36000000000012733,
+          "endToEndMs": 11.091200000000072,
+          "governorQueueMs": 0.0029999999999290594,
+          "governorServiceMs": 0.31009999999992033,
+          "recomposed": true,
+          "payloadBytes": 5173
+        },
+        {
+          "segmentId": "probe-wave1-22",
+          "order": 22,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 11.090400000000045,
+          "serviceMs": 0.43489999999997053,
+          "endToEndMs": 11.525300000000016,
+          "governorQueueMs": 0.003500000000030923,
+          "governorServiceMs": 0.3830000000000382,
+          "recomposed": true,
+          "payloadBytes": 5124
+        },
+        {
+          "segmentId": "probe-wave1-23",
+          "order": 23,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 11.526200000000017,
+          "serviceMs": 0.375,
+          "endToEndMs": 11.901200000000017,
+          "governorQueueMs": 0.0038999999999305146,
+          "governorServiceMs": 0.32110000000011496,
+          "recomposed": true,
+          "payloadBytes": 5173
+        },
+        {
+          "segmentId": "probe-wave1-24",
+          "order": 24,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 11.899800000000141,
+          "serviceMs": 0.5909999999998945,
+          "endToEndMs": 12.490800000000036,
+          "governorQueueMs": 0.003500000000030923,
+          "governorServiceMs": 0.47849999999994,
+          "recomposed": true,
+          "payloadBytes": 5124
+        },
+        {
+          "segmentId": "probe-wave2-1",
+          "order": 1,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 0.5296000000000731,
+          "serviceMs": 0.34799999999995634,
+          "endToEndMs": 0.8776000000000295,
+          "governorQueueMs": 0.0037000000002080924,
+          "governorServiceMs": 0.2849999999998545,
+          "recomposed": true,
+          "payloadBytes": 5075
+        },
+        {
+          "segmentId": "probe-wave2-2",
+          "order": 2,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 0.8497999999999593,
+          "serviceMs": 0.25289999999995416,
+          "endToEndMs": 1.1026999999999134,
+          "governorQueueMs": 0.0039999999999054126,
+          "governorServiceMs": 0.20029999999997017,
+          "recomposed": true,
+          "payloadBytes": 5124
+        },
+        {
+          "segmentId": "probe-wave2-3",
+          "order": 3,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 1.0822000000000571,
+          "serviceMs": 0.25279999999997926,
+          "endToEndMs": 1.3350000000000364,
+          "governorQueueMs": 0.0037999999999556167,
+          "governorServiceMs": 0.1935000000000855,
+          "recomposed": true,
+          "payloadBytes": 5075
+        },
+        {
+          "segmentId": "probe-wave2-4",
+          "order": 4,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 1.2952000000000226,
+          "serviceMs": 0.25349999999980355,
+          "endToEndMs": 1.548699999999826,
+          "governorQueueMs": 0.003400000000056025,
+          "governorServiceMs": 0.1993999999999687,
+          "recomposed": true,
+          "payloadBytes": 5124
+        },
+        {
+          "segmentId": "probe-wave2-5",
+          "order": 5,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 1.5301999999999225,
+          "serviceMs": 0.25319999999987886,
+          "endToEndMs": 1.7833999999998014,
+          "governorQueueMs": 0.0039999999999054126,
+          "governorServiceMs": 0.19800000000009277,
+          "recomposed": true,
+          "payloadBytes": 5075
+        },
+        {
+          "segmentId": "probe-wave2-6",
+          "order": 6,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 1.7679000000000542,
+          "serviceMs": 0.2336999999999989,
+          "endToEndMs": 2.001600000000053,
+          "governorQueueMs": 0.0038000000001829903,
+          "governorServiceMs": 0.18509999999992033,
+          "recomposed": true,
+          "payloadBytes": 5124
+        },
+        {
+          "segmentId": "probe-wave2-7",
+          "order": 7,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 1.9855000000000018,
+          "serviceMs": 0.23069999999984248,
+          "endToEndMs": 2.2161999999998443,
+          "governorQueueMs": 0.003399999999828651,
+          "governorServiceMs": 0.18100000000004002,
+          "recomposed": true,
+          "payloadBytes": 5075
+        },
+        {
+          "segmentId": "probe-wave2-8",
+          "order": 8,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 2.20049999999992,
+          "serviceMs": 0.23730000000000473,
+          "endToEndMs": 2.4377999999999247,
+          "governorQueueMs": 0.003200000000106229,
+          "governorServiceMs": 0.1894999999999527,
+          "recomposed": true,
+          "payloadBytes": 5124
+        },
+        {
+          "segmentId": "probe-wave2-9",
+          "order": 9,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 2.4220000000000255,
+          "serviceMs": 0.22890000000006694,
+          "endToEndMs": 2.6509000000000924,
+          "governorQueueMs": 0.003000000000156433,
+          "governorServiceMs": 0.1814999999999145,
+          "recomposed": true,
+          "payloadBytes": 5075
+        },
+        {
+          "segmentId": "probe-wave2-10",
+          "order": 10,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 2.6263000000001284,
+          "serviceMs": 0.31209999999987303,
+          "endToEndMs": 2.9384000000000015,
+          "governorQueueMs": 0.003300000000081127,
+          "governorServiceMs": 0.2438999999999396,
+          "recomposed": true,
+          "payloadBytes": 5173
+        },
+        {
+          "segmentId": "probe-wave2-11",
+          "order": 11,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 2.943200000000161,
+          "serviceMs": 0.35009999999988395,
+          "endToEndMs": 3.2933000000000447,
+          "governorQueueMs": 0.00659999999993488,
+          "governorServiceMs": 0.25909999999998945,
+          "recomposed": true,
+          "payloadBytes": 5124
+        },
+        {
+          "segmentId": "probe-wave2-12",
+          "order": 12,
+          "learningEpoch": 1,
+          "status": "COMPOSED",
+          "queueMs": 3.2956000000001495,
+          "serviceMs": 0.3632000000000062,
+          "endToEndMs": 3.6588000000001557,
+          "governorQueueMs": 0.005999999999858119,
+          "governorServiceMs": 0.288300000000163,
+          "recomposed": true,
+          "payloadBytes": 5173
+        }
+      ],
+      "outcomeSummary": [
+        {
+          "segmentId": "probe-wave1-13",
+          "status": "composed",
+          "appliedOrders": [
+            13
+          ]
+        },
+        {
+          "segmentId": "probe-wave1-14",
+          "status": "composed",
+          "appliedOrders": [
+            13,
+            14
+          ]
+        },
+        {
+          "segmentId": "probe-wave1-15",
+          "status": "composed",
+          "appliedOrders": [
+            13,
+            14,
+            15
+          ]
+        },
+        {
+          "segmentId": "probe-wave1-16",
+          "status": "composed",
+          "appliedOrders": [
+            13,
+            14,
+            15,
+            16
+          ]
+        },
+        {
+          "segmentId": "probe-wave1-17",
+          "status": "composed",
+          "appliedOrders": [
+            13,
+            14,
+            15,
+            16,
+            17
+          ]
+        },
+        {
+          "segmentId": "probe-wave1-18",
+          "status": "composed",
+          "appliedOrders": [
+            13,
+            14,
+            15,
+            16,
+            17,
+            18
+          ]
+        },
+        {
+          "segmentId": "probe-wave1-19",
+          "status": "composed",
+          "appliedOrders": [
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ]
+        },
+        {
+          "segmentId": "probe-error-20",
+          "status": "error",
+          "appliedOrders": []
+        },
+        {
+          "segmentId": "probe-wave1-21",
+          "status": "composed",
+          "appliedOrders": [
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21
+          ]
+        },
+        {
+          "segmentId": "probe-wave1-22",
+          "status": "composed",
+          "appliedOrders": [
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22
+          ]
+        },
+        {
+          "segmentId": "probe-wave1-23",
+          "status": "composed",
+          "appliedOrders": [
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23
+          ]
+        },
+        {
+          "segmentId": "probe-wave1-24",
+          "status": "composed",
+          "appliedOrders": [
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-cancel",
+          "status": "cancelled",
+          "appliedOrders": []
+        },
+        {
+          "segmentId": "probe-wave2-1",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-2",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-3",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            3,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-4",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            3,
+            4,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-5",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-6",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-7",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-8",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-9",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-10",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-11",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "segmentId": "probe-wave2-12",
+          "status": "composed",
+          "appliedOrders": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24
+          ]
+        }
+      ],
+      "usage": {
+        "version": "103-learning-estimator-queue-v1",
+        "pending": 0,
+        "active": 0,
+        "bytes": 0,
+        "maxPending": 32,
+        "maxBytes": 8388608,
+        "history": 25,
+        "generation": {
+          "playerId": "player-1",
+          "profileId": "profile-1",
+          "learningEpoch": 1,
+          "baseVersionId": "profile-v1",
+          "headVersionId": "profile-v1~103.1.2.3.4.5.6.7.8.9.10.11.12.13.14.15.16.17.18.19.21.22.23.24",
+          "proposals": 23,
+          "recompositions": 23
+        },
+        "governor": {
+          "version": "221-synthetic-1",
+          "jobs": 0,
+          "bytes": 0,
+          "persistenceIngressJobs": 0,
+          "persistenceIngressBytes": 0,
+          "activeHeavyJobs": 0,
+          "history": 26,
+          "transport": {
+            "jobs": 0,
+            "bytes": 0,
+            "history": 26
+          },
+          "pressure": true,
+          "context": "active",
+          "suspendedReason": null
+        }
+      },
+      "governorUsage": {
+        "version": "221-synthetic-1",
+        "jobs": 0,
+        "bytes": 0,
+        "persistenceIngressJobs": 0,
+        "persistenceIngressBytes": 0,
+        "activeHeavyJobs": 0,
+        "history": 26,
+        "transport": {
+          "jobs": 0,
+          "bytes": 0,
+          "history": 26
+        },
+        "pressure": true,
+        "context": "active",
+        "suspendedReason": null
+      },
+      "storeUsage": {
+        "records": 24,
+        "bytes": 125279
+      },
+      "governorMeasurementCount": 26,
+      "processMemory": {
+        "rss": 14086144,
+        "heapUsed": -594776,
+        "external": -151367,
+        "arrayBuffers": -151367
+      },
+      "derived": {
+        "endToEndP50Ms": 3.6588000000001557,
+        "endToEndP95Ms": 11.901200000000017,
+        "endToEndP99Ms": 12.490800000000036,
+        "queueP50Ms": 2.943200000000161,
+        "queueP95Ms": 11.526200000000017,
+        "queueP99Ms": 11.899800000000141,
+        "queueOverheadP95Ms": 11.576199999999972
+      },
+      "processMemoryAfter": {
+        "rss": 109654016,
+        "heapTotal": 23482368,
+        "heapUsed": 15842456,
+        "external": 11377744,
+        "arrayBuffers": 1422963
+      }
+    }
+  ],
+  "collector": {
+    "enabled": true,
+    "capacityPerMetric": 256,
+    "bufferBytes": 22572,
+    "dropped": 0,
+    "complete": true,
+    "metrics": {
+      "frameMs": {
+        "status": "unavailable",
+        "reason": "No browser rAF/frame clock in this Node worker_threads probe",
+        "distribution": null
+      },
+      "mainThreadMs": {
+        "status": "available",
+        "reason": null,
+        "distribution": {
+          "count": 10,
+          "p50": 0.03690769230769757,
+          "p95": 0.17264615384615267,
+          "p99": 0.17264615384615267,
+          "min": 0.0330384615384586,
+          "max": 0.17264615384615267,
+          "mean": 0.05581019230769311,
+          "overBudget": 0,
+          "histogram": [
+            10,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "tickCpuMs": {
+        "status": "unavailable",
+        "reason": "No gameplay tick in this probe",
+        "distribution": null
+      },
+      "simulationCpuMs": {
+        "status": "unavailable",
+        "reason": "No gameplay simulation in this probe",
+        "distribution": null
+      },
+      "debtMs": {
+        "status": "unavailable",
+        "reason": "No simulation loop in this probe",
+        "distribution": null
+      },
+      "gpuMs": {
+        "status": "unavailable",
+        "reason": "No GPU timer in this Node worker_threads probe",
+        "distribution": null
+      },
+      "inputToCommandMs": {
+        "status": "unavailable",
+        "reason": "No driving input in this probe",
+        "distribution": null
+      },
+      "learningQueueMs": {
+        "status": "available",
+        "reason": null,
+        "distribution": {
+          "count": 125,
+          "p50": 3.286200000000008,
+          "p95": 22.32249999999999,
+          "p99": 24.101400000000012,
+          "min": 0.0062999999998964995,
+          "max": 24.520500000000084,
+          "mean": 8.169549600000003,
+          "overBudget": 0,
+          "histogram": [
+            20,
+            48,
+            3,
+            27,
+            27,
+            0,
+            0
+          ]
+        }
+      },
+      "learningServiceMs": {
+        "status": "available",
+        "reason": null,
+        "distribution": {
+          "count": 125,
+          "p50": 0.33750000000009095,
+          "p95": 0.6818000000000666,
+          "p99": 14.6755,
+          "min": 0,
+          "max": 20.523099999999886,
+          "mean": 0.8691855999999889,
+          "overBudget": null,
+          "histogram": [
+            120,
+            0,
+            1,
+            3,
+            1,
+            0,
+            0
+          ]
+        }
+      },
+      "learningEndToEndMs": {
+        "status": "available",
+        "reason": null,
+        "distribution": {
+          "count": 125,
+          "p50": 4.30359999999996,
+          "p95": 22.608600000000024,
+          "p99": 24.529199999999946,
+          "min": 0.0062999999998964995,
+          "max": 25.007000000000062,
+          "mean": 9.038735199999996,
+          "overBudget": 0,
+          "histogram": [
+            11,
+            49,
+            6,
+            30,
+            28,
+            1,
+            0
+          ]
+        }
+      },
+      "checkpointAgeMs": {
+        "status": "unavailable",
+        "reason": "No checkpoint in this probe",
+        "distribution": null
+      }
+    }
+  },
+  "gameplayGate": "NOT_VALIDATED",
+  "laptop": "NOT_MEASURED; 203 waiver only"
+}

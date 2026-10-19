@@ -1,0 +1,33 @@
+Worktree: C:/Users/aandr/Sites/self-driving-academy/.worktrees/103-worker
+Branch: loop-pbi/103-worker
+Runtime: Volta Node 24.21.0 / npm 11.19.0
+Baseline before PBI 103: 1098/1098 tests.
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm run typecheck
+PASS (exit 0): tsc --noEmit && tsc -p tsconfig.tests.json --noEmit
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm run lint
+PASS (exit 0): eslint . --max-warnings 0
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm run format:check
+PASS (exit 0): All matched files use Prettier code style!
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm run check:architecture
+PASS (exit 0): Architecture imports PASS (174 TypeScript files); negative probes PASS (6);
+inspector exception PASS (4); Rapier adapter PASS (3); renderer injection/lifecycle PASS.
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm run check:parameter-catalog
+PASS (exit 0): Parameter catalog is synchronized.
+
+volta run --node 24.21.0 -- node --import ./scripts/register-typescript.mjs --test tests/learning/estimator-worker.test.ts
+PASS (exit 0): 12 tests, 12 pass, 0 fail.
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm test
+PASS (exit 0): 1110 tests, 1110 pass, 0 fail (baseline 1098 plus 12 PBI 103 tests).
+
+volta run --node 24.21.0 -- node --import ./scripts/register-typescript.mjs scripts/benchmark-learning-estimator.mjs Docs/Evidence/103-learning-worker/probe.json
+PASS (exit 0): 5 repetitions; 25 learning jobs per repetition; 23 composed, 1 task error,
+1 pending cancel, 22 recomposed, 0 invalidated; secondary cancelled; no failures.
+Calibration: PROVISIONAL_UNCALIBRATED. Node worker_threads only; frame/GPU unavailable.
+
+No board validator, browser run, GPU measurement, profile publication or PBI Done move was executed.

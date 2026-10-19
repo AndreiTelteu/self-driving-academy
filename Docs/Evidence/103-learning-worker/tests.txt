@@ -1,0 +1,59 @@
+volta run --node 24.21.0 -- node --import ./scripts/register-typescript.mjs --test tests/learning/estimator-worker.test.ts
+
+103 only eligible LEARNING jobs reach the queue; MANUAL/AUTO use closed reasons
+103 the serial queue dispatches by intervention order, not arrival
+103 a stale same-generation result is recomposed in order, never dropped
+103 a new learningEpoch invalidates the old job and its result
+103 a new baseVersion in the same epoch also invalidates the old attempt
+103 cancellation, task errors and a rejected composition leave the queue runnable
+103 bounded queue returns explicit backpressure instead of growing silently
+103 end-to-end latency includes queue time while a secondary job is running
+103 duplicate segments and orders are closed rejections
+103 the worker task runs the real 101 estimate over the wire contract
+103 a real worker thread composes a learning proposal through the queue
+103 admission rejects a duplicate profile owner and accepts multiple keys in one epoch
+
+tests 12
+pass 12
+fail 0
+
+Why each test catches a plausible wrong implementation:
+
+1. Accepting every mode, coercing `eligible`, or treating MANUAL/AUTO as a no-op would let a
+   non-learning segment through; the test requires the three distinct closed reasons and asserts
+   that the governor never receives a start. An extension key is refused with its own reason.
+2. Dispatching in arrival order would start "second" first; the test submits order 2 before order 1
+   in the same turn and requires "first" to be the only attempt sent. It also requires the composed
+   orders to be [1,2].
+3. Dropping a result whose `order` is lower than the latest applied one would leave the value at the
+   first fold (-1.5); a parallel last-write-wins overwrite would leave 3.0. The test requires 0.0,
+   `appliedOrders [1,2]`, `recomposed: true` and two successful recompositions.
+4. Treating a new `learningEpoch` as a fresh independent job would leave the old attempt running;
+   the test requires a 221 cancel, an `invalidated` old outcome and a new composition containing
+   only the new segment. Awaiting the old result before the next dispatch also catches a parallel
+   overwrite.
+5. Using only `learningEpoch` in the generation key would not invalidate an old base version; the
+   test changes `baseVersionId` in the same epoch and requires the same invalidation.
+6. Poisoning the queue on cancel/error or keeping the failed proposal in the ledger would block the
+   next jobs; the test runs cancel, task error, an out-of-range composition (VALUE_OUT_OF_RANGE) and
+   two later successful compositions, then asserts pending/active/bytes are zero.
+7. An unbounded queue would accept both jobs with `maxPending: 1`; the test requires `BACKPRESSURE`
+   with `QUEUE_FULL`, and a separate byte-capped queue requires `QUEUE_BYTES`.
+8. Reporting only `serviceMs` would make end-to-end equal service; the test advances an injected
+   clock while a secondary comparison and a first learning job run, and requires the second learning
+   `queueMs === 100`, `endToEndMs === 130`, `governorQueueMs === 40` and end-to-end strictly above
+   service.
+9. Reusing a composed segment or an order would duplicate or reorder the ledger; the test requires
+   `SEGMENT_DUPLICATE` and `ORDER_CONFLICT` before admission.
+10. Faking the task result instead of running the 101 blend would fail the exact `estimate`,
+    `learningWeight`, `resolution`, `changed`, `min` and `max` comparison with `blendProfileValue`,
+    plus the malformed-request throw.
+11. Stubbing the worker with an in-process port would miss module loading, transfer ownership and
+    the runtime's serial lifecycle; the test uses a real `worker_threads` Worker and requires the
+    composed value and drained usage.
+12. Allowing a profile to switch players silently would mix identities; the test requires
+    `PROFILE_OWNER_MISMATCH` while two keys in the same epoch still compose independently.
+
+The probe additionally exercises the same queue end-to-end with 25 jobs per repetition, a real
+secondary `comparison` job, an intentional task error and a pending cancellation. Its console
+summary and probe.json are the execution evidence; it is not a browser/GPU/FPS measurement.

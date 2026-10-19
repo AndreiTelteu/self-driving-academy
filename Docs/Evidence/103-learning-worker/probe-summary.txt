@@ -1,0 +1,45 @@
+Command:
+  node --import ./scripts/register-typescript.mjs scripts/benchmark-learning-estimator.mjs Docs/Evidence/103-learning-worker/probe.json
+
+Calibration: PROVISIONAL_UNCALIBRATED
+Backend: Node worker_threads CPU; no browser rAF/FPS/GPU claims
+Fixture: 103-learning-estimator-v1
+Budget version: 203-initial-1; worker budget 221-synthetic-1
+Hardware: AMD Ryzen 7 7735U with Radeon Graphics; 14,702,026,752 bytes RAM;
+          win32 10.0.26300; Node v24.21.0
+Scenario: 25 learning jobs per repetition (23 composed, 1 task error, 1 pending cancel),
+          1 secondary optional comparison, two waves (orders 13-25 then 1-12), 5 repetitions.
+
+Per repetition:
+  repeat  startupMs  e2eP50  e2eP95  e2eP99  qP50   qP95   submitBatch1  submitBatch2
+  1       192.78     4.201   21.488  22.096  3.375  21.093  2.244         0.584
+  2       174.99     4.702   18.459  19.018  3.997  18.030  0.928         0.424
+  3       165.41     4.468   14.856  15.460  3.179  14.447  0.529         0.420
+  4       169.24     3.658   24.529  25.007  2.918  24.101  0.480         0.413
+  5       167.50     3.659   11.901  12.491  2.943  11.526  0.429         0.599
+
+Collector (125 samples, 5 repetitions):
+  learningQueueMs      p50 3.2862   p95 22.3225   p99 24.1014   mean 8.1695
+  learningServiceMs    p50 0.3375   p95 0.6818    p99 14.6755   mean 0.8692
+  learningEndToEndMs   p50 4.3036   p95 22.6086   p99 24.5292   mean 9.0387
+  mainThreadMs/submit  p50 0.0369   p95 0.1726    p99 0.1726    mean 0.0558
+  dropped 0; complete true; capacity 256/metric; bufferBytes 22,572
+
+Bytes/ownership:
+  queue maxOwnedBytes 61,341; total payload 125,061; max payload 5,173
+  fixture store 24 records / 125,279 bytes
+  governor usage after drain: jobs 0, bytes 0, persistence ingress 0, transport 0
+
+Outcomes per repetition: composed 23, errors 1, cancelled 1, invalidated 0,
+recomposed 22, generation recompositions 23, secondary attempts 1, secondary cancelled.
+Failures: none.
+
+Unavailable metrics (explicit reason, never zero):
+  frameMs, gpuMs: no browser rAF/GPU timer in a Node probe
+  tickCpuMs, simulationCpuMs, debtMs: no gameplay loop
+  inputToCommandMs: no driving input
+  checkpointAgeMs: no checkpoint
+
+Limitations: not gameplay, not laptop, not 120 s/soak, not FPS/GPU, not a hardware gate.
+The queue composes in-memory candidates only; profile publication and 221 acknowledge remain
+outside PBI 103.
