@@ -1,12 +1,12 @@
 ---
 id: "101"
 title: "Regularizare adaptare și memorii recente"
-status: "To Do"
+status: "In Progress"
 release: "V1"
 module: "Învățare"
 depends_on: ["100"]
-owner: null
-started_at: null
+owner: "Codex gpt-6-luna medium profile-blend-01"
+started_at: "2026-10-20T00:55:00+03:00"
 completed_at: null
 ---
 
