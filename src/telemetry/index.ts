@@ -8,4 +8,5 @@ export * from './intervention-intake';
 export * from './intervention-lifecycle';
 export * from './tick-samples';
 export * from './opportunities';
+export * from './eligibility-windows';
 export * from './validation-protocol';
