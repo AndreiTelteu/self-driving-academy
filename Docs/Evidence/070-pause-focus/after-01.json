@@ -1,0 +1,714 @@
+{
+  "pbi": "070",
+  "mode": "after",
+  "featurePath": "COMPOSED (070 owner + 012 lifecycle + 008 loop)",
+  "validationProfile": "targeted-validation-v1",
+  "commit": "14f6a4692e441c7b3801a178670643310febb60a",
+  "runtime": {
+    "node": "v24.21.0",
+    "platform": "win32",
+    "arch": "x64"
+  },
+  "hardware": {
+    "cpu": "AMD Ryzen 7 7735U with Radeon Graphics         ",
+    "logicalCpus": 16,
+    "os": "win32 10.0.26300",
+    "totalMemBytes": 14702026752
+  },
+  "engine": "Babylon.js is the project engine; this probe is a CPU Node fixture and exercises no renderer",
+  "backend": "CPU Node mock renderer; no GPU, browser, FPS, frame-time or input-latency measurement",
+  "preset": "unavailable (no renderer composed)",
+  "budgetVersion": "203-initial-1 PROVISIONAL_UNCALIBRATED",
+  "budgetComparison": {
+    "status": "FIXED_INITIAL_CONTRACT_WITH_PROVISIONAL_GAMEPLAY_BUDGETS",
+    "approvedGate": false,
+    "desktopAuthoritativeTickP95Ms": 5.5,
+    "desktopFrameP95Ms": 18.5,
+    "laptopAuthoritativeTickP95Ms": 8,
+    "simulationToActiveWallTimeMinimum": 0.98,
+    "note": "isolated local cost only; the owner adds no per-tick work, so there is no authoritative-tick row to close"
+  },
+  "fixtureVersion": "070-pause-focus-native-v1",
+  "protocol": {
+    "repetitions": 5,
+    "warmup": "one identical unmeasured pass per probe before the measured repetitions",
+    "framesPerLiveSuspensionArm": 10000,
+    "transitionEdgesPerRepetition": 2000,
+    "readsPerRepetition": 10000,
+    "observerCapacity": 10000,
+    "order": "sequential, one arm at a time, alone in the process"
+  },
+  "arms": {
+    "live": {
+      "medianMs": 20.330399999999997,
+      "medianTicks": 10000
+    },
+    "liveObserved": {
+      "p50Micros": 1.8999999999778083,
+      "p95Micros": 2.0000000000095497,
+      "p99Micros": 2.3000000000479304
+    },
+    "suspended": {
+      "medianMs": 0.1862000000000421,
+      "ticksWhileSuspended": 0,
+      "suspensionEdges": 1
+    },
+    "suspendedObserved": {
+      "p50Micros": 0.09999999997489795,
+      "p95Micros": 0.10000000003174137,
+      "p99Micros": 0.10000000003174137
+    },
+    "transitions": {
+      "p50Micros": 2.7999999999792635,
+      "p95Micros": 3.100000000017644,
+      "p99Micros": 4.400000000032378,
+      "suspensions": 1000,
+      "resumes": 1000,
+      "heldResets": 1000,
+      "ticksWhileSuspended": 0,
+      "contiguous": true,
+      "distinctTicks": true
+    },
+    "reads": {
+      "p50Micros": 0.2000000000066393,
+      "p95Micros": 0.2000000000066393,
+      "suspended": true,
+      "cause": "panel"
+    }
+  },
+  "repetitions": [
+    {
+      "repetition": 1,
+      "live": {
+        "milliseconds": 23.757900000000006,
+        "ticks": 10000,
+        "renders": 10001,
+        "suspensions": 0,
+        "observedMs": null
+      },
+      "liveObserved": {
+        "milliseconds": 21.796600000000012,
+        "ticks": 10000,
+        "renders": 10001,
+        "suspensions": 0,
+        "observedMs": {
+          "count": 10000,
+          "p50": 0.0018000000000029104,
+          "p95": 0.0024999999999977263,
+          "p99": 0.004400000000003956
+        }
+      },
+      "suspended": {
+        "milliseconds": 0.32140000000001123,
+        "ticksBeforePause": 0,
+        "ticksWhileSuspended": 0,
+        "renders": 10001,
+        "suspensions": 1,
+        "observedMs": null
+      },
+      "suspendedObserved": {
+        "milliseconds": 2.6554999999999893,
+        "ticksBeforePause": 0,
+        "ticksWhileSuspended": 0,
+        "renders": 10001,
+        "suspensions": 1,
+        "observedMs": {
+          "count": 10000,
+          "p50": 0.00010000000000331966,
+          "p95": 0.00029999999998153726,
+          "p99": 0.00030000000000995897
+        }
+      },
+      "transitions": {
+        "edges": 2000,
+        "suspensions": 1000,
+        "resumes": 1000,
+        "heldResets": 1000,
+        "ticksWhileSuspended": 0,
+        "ticksTotal": 2001,
+        "contiguous": true,
+        "distinctTicks": true,
+        "observedMs": {
+          "count": 2000,
+          "p50": 0.002899999999982583,
+          "p95": 0.003200000000020964,
+          "p99": 0.0046999999999854936
+        }
+      },
+      "reads": {
+        "observedMs": {
+          "count": 10000,
+          "p50": 0.0002000000000066393,
+          "p95": 0.0002000000000066393,
+          "p99": 0.00030000000000995897
+        },
+        "suspended": true,
+        "cause": "panel"
+      }
+    },
+    {
+      "repetition": 2,
+      "live": {
+        "milliseconds": 19.669299999999993,
+        "ticks": 10000,
+        "renders": 10001,
+        "suspensions": 0,
+        "observedMs": null
+      },
+      "liveObserved": {
+        "milliseconds": 19.853099999999984,
+        "ticks": 10000,
+        "renders": 10001,
+        "suspensions": 0,
+        "observedMs": {
+          "count": 10000,
+          "p50": 0.0018999999999778083,
+          "p95": 0.0019999999999527063,
+          "p99": 0.002200000000016189
+        }
+      },
+      "suspended": {
+        "milliseconds": 0.1862000000000421,
+        "ticksBeforePause": 0,
+        "ticksWhileSuspended": 0,
+        "renders": 10001,
+        "suspensions": 1,
+        "observedMs": null
+      },
+      "suspendedObserved": {
+        "milliseconds": 1.7364000000000033,
+        "ticksBeforePause": 0,
+        "ticksWhileSuspended": 0,
+        "renders": 10001,
+        "suspensions": 1,
+        "observedMs": {
+          "count": 10000,
+          "p50": 0.00009999999997489795,
+          "p95": 0.00010000000003174137,
+          "p99": 0.00010000000003174137
+        }
+      },
+      "transitions": {
+        "edges": 2000,
+        "suspensions": 1000,
+        "resumes": 1000,
+        "heldResets": 1000,
+        "ticksWhileSuspended": 0,
+        "ticksTotal": 2001,
+        "contiguous": true,
+        "distinctTicks": true,
+        "observedMs": {
+          "count": 2000,
+          "p50": 0.0027000000000043656,
+          "p95": 0.003199999999992542,
+          "p99": 0.004799999999988813
+        }
+      },
+      "reads": {
+        "observedMs": {
+          "count": 10000,
+          "p50": 0.0002000000000066393,
+          "p95": 0.0002000000000066393,
+          "p99": 0.0004000000000132786
+        },
+        "suspended": true,
+        "cause": "panel"
+      }
+    },
+    {
+      "repetition": 3,
+      "live": {
+        "milliseconds": 20.41420000000005,
+        "ticks": 10000,
+        "renders": 10001,
+        "suspensions": 0,
+        "observedMs": null
+      },
+      "liveObserved": {
+        "milliseconds": 20.17610000000002,
+        "ticks": 10000,
+        "renders": 10001,
+        "suspensions": 0,
+        "observedMs": {
+          "count": 10000,
+          "p50": 0.0018999999999778083,
+          "p95": 0.0020000000000095497,
+          "p99": 0.002299999999991087
+        }
+      },
+      "suspended": {
+        "milliseconds": 0.1974999999999909,
+        "ticksBeforePause": 0,
+        "ticksWhileSuspended": 0,
+        "renders": 10001,
+        "suspensions": 1,
+        "observedMs": null
+      },
+      "suspendedObserved": {
+        "milliseconds": 1.7893000000000256,
+        "ticksBeforePause": 0,
+        "ticksWhileSuspended": 0,
+        "renders": 10001,
+        "suspensions": 1,
+        "observedMs": {
+          "count": 10000,
+          "p50": 0.00009999999997489795,
+          "p95": 0.00010000000003174137,
+          "p99": 0.00010000000003174137
+        }
+      },
+      "transitions": {
+        "edges": 2000,
+        "suspensions": 1000,
+        "resumes": 1000,
+        "heldResets": 1000,
+        "ticksWhileSuspended": 0,
+        "ticksTotal": 2001,
+        "contiguous": true,
+        "distinctTicks": true,
+        "observedMs": {
+          "count": 2000,
+          "p50": 0.0028999999999541615,
+          "p95": 0.003100000000017644,
+          "p99": 0.004400000000032378
+        }
+      },
+      "reads": {
+        "observedMs": {
+          "count": 10000,
+          "p50": 0.00010000000003174137,
+          "p95": 0.0002000000000066393,
+          "p99": 0.0002000000000066393
+        },
+        "suspended": true,
+        "cause": "panel"
+      }
+    },
+    {
+      "repetition": 4,
+      "live": {
+        "milliseconds": 19.170900000000017,
+        "ticks": 10000,
+        "renders": 10001,
+        "suspensions": 0,
+        "observedMs": null
+      },
+      "liveObserved": {
+        "milliseconds": 19.996100000000013,
+        "ticks": 10000,
+        "renders": 10001,
+        "suspensions": 0,
+        "observedMs": {
+          "count": 10000,
+          "p50": 0.0018999999999778083,
+          "p95": 0.0019000000000346517,
+          "p99": 0.0023000000000479304
+        }
+      },
+      "suspended": {
+        "milliseconds": 0.17259999999998854,
+        "ticksBeforePause": 0,
+        "ticksWhileSuspended": 0,
+        "renders": 10001,
+        "suspensions": 1,
+        "observedMs": null
+      },
+      "suspendedObserved": {
+        "milliseconds": 0.9834999999999923,
+        "ticksBeforePause": 0,
+        "ticksWhileSuspended": 0,
+        "renders": 10001,
+        "suspensions": 1,
+        "observedMs": {
+          "count": 10000,
+          "p50": 0.00009999999997489795,
+          "p95": 0.00010000000003174137,
+          "p99": 0.00010000000003174137
+        }
+      },
+      "transitions": {
+        "edges": 2000,
+        "suspensions": 1000,
+        "resumes": 1000,
+        "heldResets": 1000,
+        "ticksWhileSuspended": 0,
+        "ticksTotal": 2001,
+        "contiguous": true,
+        "distinctTicks": true,
+        "observedMs": {
+          "count": 2000,
+          "p50": 0.0027999999999792635,
+          "p95": 0.003100000000017644,
+          "p99": 0.003899999999987358
+        }
+      },
+      "reads": {
+        "observedMs": {
+          "count": 10000,
+          "p50": 0.0002000000000066393,
+          "p95": 0.0002000000000066393,
+          "p99": 0.0002000000000066393
+        },
+        "suspended": true,
+        "cause": "panel"
+      }
+    },
+    {
+      "repetition": 5,
+      "live": {
+        "milliseconds": 20.330399999999997,
+        "ticks": 10000,
+        "renders": 10001,
+        "suspensions": 0,
+        "observedMs": null
+      },
+      "liveObserved": {
+        "milliseconds": 19.646599999999978,
+        "ticks": 10000,
+        "renders": 10001,
+        "suspensions": 0,
+        "observedMs": {
+          "count": 10000,
+          "p50": 0.0018000000000029104,
+          "p95": 0.0020000000000095497,
+          "p99": 0.0024000000000228283
+        }
+      },
+      "suspended": {
+        "milliseconds": 0.170599999999979,
+        "ticksBeforePause": 0,
+        "ticksWhileSuspended": 0,
+        "renders": 10001,
+        "suspensions": 1,
+        "observedMs": null
+      },
+      "suspendedObserved": {
+        "milliseconds": 0.9714999999999918,
+        "ticksBeforePause": 0,
+        "ticksWhileSuspended": 0,
+        "renders": 10001,
+        "suspensions": 1,
+        "observedMs": {
+          "count": 10000,
+          "p50": 0.00009999999997489795,
+          "p95": 0.00010000000003174137,
+          "p99": 0.00010000000003174137
+        }
+      },
+      "transitions": {
+        "edges": 2000,
+        "suspensions": 1000,
+        "resumes": 1000,
+        "heldResets": 1000,
+        "ticksWhileSuspended": 0,
+        "ticksTotal": 2001,
+        "contiguous": true,
+        "distinctTicks": true,
+        "observedMs": {
+          "count": 2000,
+          "p50": 0.0013999999999896318,
+          "p95": 0.003100000000017644,
+          "p99": 0.003500000000030923
+        }
+      },
+      "reads": {
+        "observedMs": {
+          "count": 10000,
+          "p50": 0.0002000000000066393,
+          "p95": 0.0002000000000066393,
+          "p99": 0.0002000000000066393
+        },
+        "suspended": true,
+        "cause": "panel"
+      }
+    }
+  ],
+  "selfCheck": {
+    "liveArmAdvancesTicks": true,
+    "suspendedArmAdvancesNoTicks": true,
+    "suspendedArmStillRenders": true,
+    "transitionArmSuspendsNothingWhilePaused": true,
+    "transitionArmTickSequenceContiguous": true,
+    "memoryReleasesEveryCycle": true,
+    "memoryOwnsNoTypedArrays": true,
+    "transitionArmEdgesMatch": true,
+    "passed": true
+  },
+  "memory": {
+    "cycles": [
+      {
+        "cycle": 0,
+        "liveHeld": 16,
+        "liveHeldAction": "resume",
+        "liveSuspended": false,
+        "suspensions": 2,
+        "resumes": 2,
+        "heldResets": 2,
+        "afterDisposeHeld": 0,
+        "afterDisposeHeldAction": null,
+        "disposed": true,
+        "disposedRejects": true
+      },
+      {
+        "cycle": 1,
+        "liveHeld": 16,
+        "liveHeldAction": "resume",
+        "liveSuspended": false,
+        "suspensions": 2,
+        "resumes": 2,
+        "heldResets": 2,
+        "afterDisposeHeld": 0,
+        "afterDisposeHeldAction": null,
+        "disposed": true,
+        "disposedRejects": true
+      },
+      {
+        "cycle": 2,
+        "liveHeld": 16,
+        "liveHeldAction": "resume",
+        "liveSuspended": false,
+        "suspensions": 2,
+        "resumes": 2,
+        "heldResets": 2,
+        "afterDisposeHeld": 0,
+        "afterDisposeHeldAction": null,
+        "disposed": true,
+        "disposedRejects": true
+      },
+      {
+        "cycle": 3,
+        "liveHeld": 16,
+        "liveHeldAction": "resume",
+        "liveSuspended": false,
+        "suspensions": 2,
+        "resumes": 2,
+        "heldResets": 2,
+        "afterDisposeHeld": 0,
+        "afterDisposeHeldAction": null,
+        "disposed": true,
+        "disposedRejects": true
+      },
+      {
+        "cycle": 4,
+        "liveHeld": 16,
+        "liveHeldAction": "resume",
+        "liveSuspended": false,
+        "suspensions": 2,
+        "resumes": 2,
+        "heldResets": 2,
+        "afterDisposeHeld": 0,
+        "afterDisposeHeldAction": null,
+        "disposed": true,
+        "disposedRejects": true
+      },
+      {
+        "cycle": 5,
+        "liveHeld": 16,
+        "liveHeldAction": "resume",
+        "liveSuspended": false,
+        "suspensions": 2,
+        "resumes": 2,
+        "heldResets": 2,
+        "afterDisposeHeld": 0,
+        "afterDisposeHeldAction": null,
+        "disposed": true,
+        "disposedRejects": true
+      },
+      {
+        "cycle": 6,
+        "liveHeld": 16,
+        "liveHeldAction": "resume",
+        "liveSuspended": false,
+        "suspensions": 2,
+        "resumes": 2,
+        "heldResets": 2,
+        "afterDisposeHeld": 0,
+        "afterDisposeHeldAction": null,
+        "disposed": true,
+        "disposedRejects": true
+      },
+      {
+        "cycle": 7,
+        "liveHeld": 16,
+        "liveHeldAction": "resume",
+        "liveSuspended": false,
+        "suspensions": 2,
+        "resumes": 2,
+        "heldResets": 2,
+        "afterDisposeHeld": 0,
+        "afterDisposeHeldAction": null,
+        "disposed": true,
+        "disposedRejects": true
+      },
+      {
+        "cycle": 8,
+        "liveHeld": 16,
+        "liveHeldAction": "resume",
+        "liveSuspended": false,
+        "suspensions": 2,
+        "resumes": 2,
+        "heldResets": 2,
+        "afterDisposeHeld": 0,
+        "afterDisposeHeldAction": null,
+        "disposed": true,
+        "disposedRejects": true
+      },
+      {
+        "cycle": 9,
+        "liveHeld": 16,
+        "liveHeldAction": "resume",
+        "liveSuspended": false,
+        "suspensions": 2,
+        "resumes": 2,
+        "heldResets": 2,
+        "afterDisposeHeld": 0,
+        "afterDisposeHeldAction": null,
+        "disposed": true,
+        "disposedRejects": true
+      },
+      {
+        "cycle": 10,
+        "liveHeld": 16,
+        "liveHeldAction": "resume",
+        "liveSuspended": false,
+        "suspensions": 2,
+        "resumes": 2,
+        "heldResets": 2,
+        "afterDisposeHeld": 0,
+        "afterDisposeHeldAction": null,
+        "disposed": true,
+        "disposedRejects": true
+      },
+      {
+        "cycle": 11,
+        "liveHeld": 16,
+        "liveHeldAction": "resume",
+        "liveSuspended": false,
+        "suspensions": 2,
+        "resumes": 2,
+        "heldResets": 2,
+        "afterDisposeHeld": 0,
+        "afterDisposeHeldAction": null,
+        "disposed": true,
+        "disposedRejects": true
+      },
+      {
+        "cycle": 12,
+        "liveHeld": 16,
+        "liveHeldAction": "resume",
+        "liveSuspended": false,
+        "suspensions": 2,
+        "resumes": 2,
+        "heldResets": 2,
+        "afterDisposeHeld": 0,
+        "afterDisposeHeldAction": null,
+        "disposed": true,
+        "disposedRejects": true
+      },
+      {
+        "cycle": 13,
+        "liveHeld": 16,
+        "liveHeldAction": "resume",
+        "liveSuspended": false,
+        "suspensions": 2,
+        "resumes": 2,
+        "heldResets": 2,
+        "afterDisposeHeld": 0,
+        "afterDisposeHeldAction": null,
+        "disposed": true,
+        "disposedRejects": true
+      },
+      {
+        "cycle": 14,
+        "liveHeld": 16,
+        "liveHeldAction": "resume",
+        "liveSuspended": false,
+        "suspensions": 2,
+        "resumes": 2,
+        "heldResets": 2,
+        "afterDisposeHeld": 0,
+        "afterDisposeHeldAction": null,
+        "disposed": true,
+        "disposedRejects": true
+      },
+      {
+        "cycle": 15,
+        "liveHeld": 16,
+        "liveHeldAction": "resume",
+        "liveSuspended": false,
+        "suspensions": 2,
+        "resumes": 2,
+        "heldResets": 2,
+        "afterDisposeHeld": 0,
+        "afterDisposeHeldAction": null,
+        "disposed": true,
+        "disposedRejects": true
+      },
+      {
+        "cycle": 16,
+        "liveHeld": 16,
+        "liveHeldAction": "resume",
+        "liveSuspended": false,
+        "suspensions": 2,
+        "resumes": 2,
+        "heldResets": 2,
+        "afterDisposeHeld": 0,
+        "afterDisposeHeldAction": null,
+        "disposed": true,
+        "disposedRejects": true
+      },
+      {
+        "cycle": 17,
+        "liveHeld": 16,
+        "liveHeldAction": "resume",
+        "liveSuspended": false,
+        "suspensions": 2,
+        "resumes": 2,
+        "heldResets": 2,
+        "afterDisposeHeld": 0,
+        "afterDisposeHeldAction": null,
+        "disposed": true,
+        "disposedRejects": true
+      },
+      {
+        "cycle": 18,
+        "liveHeld": 16,
+        "liveHeldAction": "resume",
+        "liveSuspended": false,
+        "suspensions": 2,
+        "resumes": 2,
+        "heldResets": 2,
+        "afterDisposeHeld": 0,
+        "afterDisposeHeldAction": null,
+        "disposed": true,
+        "disposedRejects": true
+      },
+      {
+        "cycle": 19,
+        "liveHeld": 16,
+        "liveHeldAction": "resume",
+        "liveSuspended": false,
+        "suspensions": 2,
+        "resumes": 2,
+        "heldResets": 2,
+        "afterDisposeHeld": 0,
+        "afterDisposeHeldAction": null,
+        "disposed": true,
+        "disposedRejects": true
+      }
+    ],
+    "allCyclesReleased": true,
+    "ownership": {
+      "heldCommandCapacity": 16,
+      "surfaceFlags": 3,
+      "retainedTypedArrays": 0,
+      "preallocatedBufferBytes": 0,
+      "retainedHistoryEntries": 0
+    },
+    "process": {
+      "label": "DIAGNOSTIC_NOT_COMPARABLE_ACROSS_JIT_GC",
+      "heapUsedDeltaBytes": 151224,
+      "arrayBuffersDeltaBytes": 0
+    }
+  }
+}

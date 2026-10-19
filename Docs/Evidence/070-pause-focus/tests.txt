@@ -1,0 +1,46 @@
+# PBI 070 tests (verbatim, Node v24.21.0 via volta, npm 11.19.0, commit 14f6a4692e441c7b3801a178670643310febb60a)
+# chcp 65001 before capture, so the runner's Unicode status glyphs are preserved.
+
+$ volta run --node 24.21.0 --npm 11.19.0 node --import ./scripts/register-typescript.mjs --test tests/app/pause-focus.test.ts
+
+(node:21144) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ MANUAL panel suspends the authoritative loop; closing resumes without lost time (3.3863ms)
+✔ AUTO observation stays live with a panel and an open diagnostics surface, without PLAYER authority (4625.1671ms)
+✔ focus loss suspends in AUTO and MANUAL and refocusing never fabricates a tick burst (0.7015ms)
+✔ a background pause keeps its own reason and is not double-suspended by focus (0.3127ms)
+✔ resume clears the really held keyboard key and the first command is neutral (1.7319ms)
+✔ documented precedence keeps one suspension edge while the cause changes (0.2769ms)
+✔ menu open/close, repeated blur and rapid blur/focus do not flap or double-transition (0.2548ms)
+✔ an explicit resume is refused while a surface or focus loss still demands suspension (0.2191ms)
+✔ focus adapter reports edges only and disposal leaves no listeners (0.4414ms)
+✔ state is frozen and observable, and bounds/disposal fail closed (0.7832ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4876.9545
+exit=0 
+
+$ volta run --node 24.21.0 --npm 11.19.0 npm test
+# The complete stdout is stored verbatim in tests-full-raw.txt; the runner totals below are the tail of it.
+✔ speed threshold, far upstream and wrong heading cannot create complete-stop evidence (17.2994ms)
+✔ missing ticks, teleport, reverse crossing, height and finite line ends do not invent traversal (14.2604ms)
+✔ stale/conflicting ticks, context and nonfinite data reject without advancing history (3.165ms)
+✔ ID reuse cannot inherit stop evidence or admit a retired incarnation; real epoch resets history (4.6569ms)
+✔ bounded history fails closed; frozen map geometry and transverse direction stay stable (4.4328ms)
+✔ directed reverse geometry and consecutive STOP lines preserve distinct opportunities (7.8187ms)
+✔ calibration/accessor boundaries and long valid identities remain safe (3.073ms)
+ℹ tests 961
+ℹ suites 0
+ℹ pass 961
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13844.9841
+exit=0 
+
