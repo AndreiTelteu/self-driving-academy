@@ -61,26 +61,35 @@ Păstrează comenzile, scenariile și rezultatele reale; nu declara trecere făr
 
 ## Dovezi de finalizare
 
-Rezultat implementare: De completat.
+Rezultat implementare (parțial, integrat, PBI rămâne In Progress): `composeEarlyLoopProfile` în `src/learning/early-loop.ts` compune un profil dintr-un candidat 093/094/095/098 cu un blend limitat la `25% × quality`, păstrează proveniența (segmente, oportunități, valoare candidată, calitate), refuză o cheie fără dovezi lăsând valoarea neschimbată și nu activează `implemented`/`estimable` și nu publică `LEARNED`. Testele adaptorului (2/2) acoperă blend-ul mărginit, refuzul fără dovezi și păstrarea provenienței. `tests/browser/early-learning-playtest.html` și `Docs/early-playtest.md` pregătesc protocolul de playtest cu export JSON anonim, fără răspunsuri precompletate; `Docs/Evidence/204-early-learning-demo/playtest/` este gol și nu conține niciun participant inventat.
 
-Verificări executate și rezultat: De completat.
+Verificări executate și rezultat: `npm run typecheck`, `lint`, `format:check`, `check:architecture`, `check:parameter-catalog` exit 0; `npm test` 1049/1049 PASS; `git diff --check` curat. Bucla nu a fost încă măsurată cu 218/219/221 și nu există probe comportamentale.
 
-Fișiere și documente actualizate: De completat.
+Ce lipsește pentru închidere:
+- integrarea adaptorului cu token-urile de profil folosite de controllerele 046/047/051, ca AUTO să consume efectiv cele trei chei;
+- fixture-ul comportamental cu 3 taxiuri + 2 civile care adoptă același stil, seturile prudent/riscant/fără dovezi și dovada că fiecare cheie are efect real, iar MANUAL nu învață;
+- măsurătoarea primei bucle pe harness-ul 218, schedulerul 219 și admiterea 221, pe fixture mic;
+- playtest real cu minimum cinci participanți (zero înregistrări până acum) și consemnarea țintei „prima schimbare în cinci minute".
 
-Limitări sau follow-up: De completat.
+Fișiere și documente actualizate: `src/learning/early-loop.ts`, `tests/learning/early-loop.test.ts`, `tests/browser/early-learning-playtest.html`, [Docs/early-learning-loop.md](../../Docs/early-learning-loop.md), [Docs/early-playtest.md](../../Docs/early-playtest.md), [Docs/10-invatarea-stilului.md](../../Docs/10-invatarea-stilului.md), `Docs/Evidence/204-early-learning-demo/`.
+
+Limitări sau follow-up: Adaptorul este intenționat îngust (doar cele trei chei) și nu pretinde suportul complet de 24. Nu este cablat în bucla live, nu are probe de comportament sau performanță și nu are participanți reali. Criteriul de playtest și cele trei criterii de buclă rămân deschise; PBI-ul rămâne In Progress până sunt îndeplinite cu dovezi executate.
 
 ## Definition of Done
 
-- [ ] Criterii îndeplinite și verificate.
-- [ ] Dovezi completate și documentație actualizată.
-- [ ] Status Done și completed_at completat.
-- [ ] Fișier mutat fizic în Done și absent din celelalte coloane.
+- [ ] Criteriile de acceptare sunt îndeplinite și bifate.
+- [ ] Verificările relevante sunt executate, iar dovezile sunt completate.
+- [ ] Contractele și documentația afectate sunt actualizate.
+- [ ] Statusul este Done și completed_at este completat.
+- [ ] Fișierul este mutat fizic în PBI/Done și lipsește din celelalte coloane.
 
 Verificare finală: Validate-Board.ps1 -RequireDone '204'.
 
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do în revizia 0.3; implementarea nu a început.
+
+- 2026-10-19: Prima etapă în worktree izolat (commit `30782be0`): blend îngust pentru cele trei chei cu proveniență și refuz fără dovezi, plus pagina și protocolul de playtest. Integrat prin fast-forward. Bucla nu este încă legată de 046/047/051, fixture-ul comportamental și măsurătoarea 218/219/221 lipsesc, iar playtest-ul are zero participanți; PBI rămâne In Progress.
 
 - 2026-10-04: Revizia 0.4 adaugă contracte/verificări de performanță; implementarea rămâne neîncepută.
 
