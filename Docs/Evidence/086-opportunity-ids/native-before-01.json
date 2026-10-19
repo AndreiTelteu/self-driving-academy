@@ -1,0 +1,209 @@
+{
+  "capturedAt": "2026-10-19T09:34:26.976Z",
+  "pbi": "086",
+  "mode": "BEFORE_REGISTRY_DISABLED",
+  "commit": "73061869e9b7cdfd4d5d1cace8f0179936588531",
+  "sourceHashes": {
+    "scripts/benchmark-opportunity-ids.mjs": "d75ee6f3444f2f79751e12d5aea77d9ca6741c6f1485f5e56689c6c9e8de44fa",
+    "src/telemetry/opportunities.ts": "1b4e7c05f2fa875bf17e283ddd6b0b06ab0c4d901e7e3c5f8288e9035a1d5f77",
+    "src/sessions/identity.ts": "f4b78b20857fc65704857a7bb78ef5a604083f173153ec7f5582bc450c6d76a6",
+    "src/world/signals.ts": "772142b68ba6aa90e9df5d19ee19f35aed6d6ea74e51155e53d4b20b12a2452b",
+    "src/autonomy/road-context.ts": "f9782583c51f9b1b6ab678ba27162f31b95f19b41d180145638fd672c5548dce",
+    "src/vehicles/keyboard-filter.ts": "454b4a750cd0f227910e183e3244930f31a10f95eac33d3934827cc6e97acfca",
+    "tests/autonomy/road-context-reference.ts": "c5fe61c330db951f2bb1f97b3ea6d75bb92228e7f38864197e21378602ddd6f7",
+    "tests/world/intersection-conflicts-fixture.ts": "f159c5b3852b57e456e28b797c1cfa20182d4a58c13e426095ca622cd4a6fbd7"
+  },
+  "sourceHashScope": "Probe, opportunity registry, 006 identity, 036 signals, 044 context, 025 filter and the reused 044 fixture; not a verified transitive dependency closure",
+  "hardware": {
+    "cpu": "AMD Ryzen 7 7735U with Radeon Graphics         ",
+    "logicalCpus": 16,
+    "ramBytes": 14702026752,
+    "os": "win32 10.0.26300",
+    "powerScheme": "Power Scheme GUID: 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c  (High performance)"
+  },
+  "runtime": "v24.21.0",
+  "budgetVersion": "203-initial-1",
+  "fixtureVersion": "086-opportunity-ids-native-v1",
+  "validationLevel": "targeted",
+  "protocol": {
+    "repetitions": 5,
+    "warmupIterations": 200,
+    "measuredIterations": 600,
+    "arms": "paired OFF/ON per repetition, sequential, one process, no concurrent load",
+    "workload": "1 subject (vehicle-0) observed, real 036 signal controller advancing consecutive ticks over the 044 fixture, real 044 context and 025 keyboard filter; one real-contract 037 STOP approach every 180 ticks and one real 038 yield occurrence per approach",
+    "seed": "none; deterministic tick-modulo input pattern and a fixed fixture",
+    "capacity": "default (4096)",
+    "clock": "performance.now only; fixed synthetic tick index (no wall clock in the fixture)",
+    "budget": "Added cost must stay far below the 5.5 ms provisional full-tick p95 ceiling; no isolated budget claimed",
+    "calibration": "PROVISIONAL_UNCALIBRATED",
+    "injected": [
+      "The 044 fixture declares no STOP stop line, so the real 037 event contract and 037 identity are injected with parseSimulationEvent.",
+      "The real 038 priority-yield identity is injected through the stimulus port (no 038 producer runs on this fixture).",
+      "The 10 Hz consumer drains a queue; the world always steps every fixed tick."
+    ]
+  },
+  "scope": "Native Node CPU and owned-memory cost of the 086 opportunity registry on the reused 044/085 fixture. No renderer, browser, GPU, FPS or realtime-throughput claim.",
+  "runs": [
+    {
+      "repetition": 1,
+      "enabled": false,
+      "observeLoopMs": {
+        "count": 600,
+        "p50": 0.00009999999997489795,
+        "p95": 0.00020000000006348273,
+        "p99": 0.0004999999999881766,
+        "min": 0,
+        "max": 0.0019000000000914952,
+        "mean": 0.00011516666666352648
+      },
+      "worldBuildMs": {
+        "count": 600,
+        "p50": 1.0070000000000618,
+        "p95": 1.46449999999993,
+        "p99": 1.830699999999979,
+        "min": 0.9156999999999584,
+        "max": 2.289799999999957,
+        "mean": 1.0790301666666675
+      },
+      "wallMs": 903.9043,
+      "resolves": 0,
+      "observations": 0,
+      "heapAfterBytes": 51439336,
+      "registryOwnership": null,
+      "denominators": null
+    },
+    {
+      "repetition": 2,
+      "enabled": false,
+      "observeLoopMs": {
+        "count": 600,
+        "p50": 0.00009999999997489795,
+        "p95": 0.0001999999999497959,
+        "p99": 0.00040000000012696546,
+        "min": 0,
+        "max": 0.0005000000001018634,
+        "mean": 0.00010950000000017704
+      },
+      "worldBuildMs": {
+        "count": 600,
+        "p50": 0.9803000000001703,
+        "p95": 1.291300000000092,
+        "p99": 1.554200000000037,
+        "min": 0.8874999999998181,
+        "max": 1.7183999999999742,
+        "mean": 1.0131158333333303
+      },
+      "wallMs": 817.8783000000001,
+      "resolves": 0,
+      "observations": 0,
+      "heapAfterBytes": 21257072,
+      "registryOwnership": null,
+      "denominators": null
+    },
+    {
+      "repetition": 3,
+      "enabled": false,
+      "observeLoopMs": {
+        "count": 600,
+        "p50": 0.00010000000020227162,
+        "p95": 0.0001999999999497959,
+        "p99": 0.0003999999998995918,
+        "min": 0,
+        "max": 0.0005000000001018634,
+        "mean": 0.00010649999999335098
+      },
+      "worldBuildMs": {
+        "count": 600,
+        "p50": 0.9803999999999178,
+        "p95": 1.3188999999997577,
+        "p99": 1.5585000000000946,
+        "min": 0.8835000000003674,
+        "max": 1.860700000000179,
+        "mean": 1.0125030000000084
+      },
+      "wallMs": 811.5962999999997,
+      "resolves": 0,
+      "observations": 0,
+      "heapAfterBytes": 37165392,
+      "registryOwnership": null,
+      "denominators": null
+    },
+    {
+      "repetition": 4,
+      "enabled": false,
+      "observeLoopMs": {
+        "count": 600,
+        "p50": 0.00009999999974752427,
+        "p95": 0.00010000000020227162,
+        "p99": 0.0003000000001520675,
+        "min": 0,
+        "max": 0.0005000000001018634,
+        "mean": 0.0000746666666668716
+      },
+      "worldBuildMs": {
+        "count": 600,
+        "p50": 0.9713999999999032,
+        "p95": 1.3454999999999018,
+        "p99": 1.7597000000000662,
+        "min": 0.8753999999998996,
+        "max": 2.978900000000067,
+        "mean": 1.027091999999991
+      },
+      "wallMs": 829.7203999999997,
+      "resolves": 0,
+      "observations": 0,
+      "heapAfterBytes": 74774592,
+      "registryOwnership": null,
+      "denominators": null
+    },
+    {
+      "repetition": 5,
+      "enabled": false,
+      "observeLoopMs": {
+        "count": 600,
+        "p50": 0.00009999999929277692,
+        "p95": 0.00010000000020227162,
+        "p99": 0.00010000000020227162,
+        "min": 0,
+        "max": 0.00020000000040454324,
+        "mean": 0.00005100000000614576
+      },
+      "worldBuildMs": {
+        "count": 600,
+        "p50": 0.9558000000001812,
+        "p95": 1.0882000000001426,
+        "p99": 1.4711999999999534,
+        "min": 0.8783999999996013,
+        "max": 1.6174999999998363,
+        "mean": 0.9729943333333343
+      },
+      "wallMs": 782.1174000000005,
+      "resolves": 0,
+      "observations": 0,
+      "heapAfterBytes": 39208952,
+      "registryOwnership": null,
+      "denominators": null
+    }
+  ],
+  "paired": [],
+  "jsonRegion": null,
+  "memoryRegion": null,
+  "selfCheck": null,
+  "budgets": {
+    "manifest": "Docs/performance-budgets.json",
+    "budgetVersion": "203-initial-1",
+    "capacityCalibration": "PROVISIONAL_UNCALIBRATED",
+    "diagnosticSamplesProposal": 4096,
+    "measuredCapacity": 4096,
+    "recorderRamBytesCap": 33554432,
+    "authoritativeTickP95MsDesktopProvisional": 5.5,
+    "authoritativeTickP95MsLaptopProvisional": 8
+  },
+  "exclusions": [
+    "No browser, renderer, GPU or FPS measurement; the 052 record documents an unresolved WebGPU presentation stall on this laptop.",
+    "Heap counters are diagnostic only; exact ownership is reported from the registry counters.",
+    "Forced GC between repetitions is not used inside the timed region.",
+    "BEFORE is the same fixture with the registry disabled, not a historical commit: 086 is purely additive."
+  ],
+  "guard": 0
+}

@@ -1,0 +1,1079 @@
+{
+  "capturedAt": "2026-10-19T09:34:35.436Z",
+  "pbi": "086",
+  "mode": "AFTER_OPPORTUNITY_REGISTRY",
+  "commit": "73061869e9b7cdfd4d5d1cace8f0179936588531",
+  "sourceHashes": {
+    "scripts/benchmark-opportunity-ids.mjs": "d75ee6f3444f2f79751e12d5aea77d9ca6741c6f1485f5e56689c6c9e8de44fa",
+    "src/telemetry/opportunities.ts": "1b4e7c05f2fa875bf17e283ddd6b0b06ab0c4d901e7e3c5f8288e9035a1d5f77",
+    "src/sessions/identity.ts": "f4b78b20857fc65704857a7bb78ef5a604083f173153ec7f5582bc450c6d76a6",
+    "src/world/signals.ts": "772142b68ba6aa90e9df5d19ee19f35aed6d6ea74e51155e53d4b20b12a2452b",
+    "src/autonomy/road-context.ts": "f9782583c51f9b1b6ab678ba27162f31b95f19b41d180145638fd672c5548dce",
+    "src/vehicles/keyboard-filter.ts": "454b4a750cd0f227910e183e3244930f31a10f95eac33d3934827cc6e97acfca",
+    "tests/autonomy/road-context-reference.ts": "c5fe61c330db951f2bb1f97b3ea6d75bb92228e7f38864197e21378602ddd6f7",
+    "tests/world/intersection-conflicts-fixture.ts": "f159c5b3852b57e456e28b797c1cfa20182d4a58c13e426095ca622cd4a6fbd7"
+  },
+  "sourceHashScope": "Probe, opportunity registry, 006 identity, 036 signals, 044 context, 025 filter and the reused 044 fixture; not a verified transitive dependency closure",
+  "hardware": {
+    "cpu": "AMD Ryzen 7 7735U with Radeon Graphics         ",
+    "logicalCpus": 16,
+    "ramBytes": 14702026752,
+    "os": "win32 10.0.26300",
+    "powerScheme": "Power Scheme GUID: 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c  (High performance)"
+  },
+  "runtime": "v24.21.0",
+  "budgetVersion": "203-initial-1",
+  "fixtureVersion": "086-opportunity-ids-native-v1",
+  "validationLevel": "targeted",
+  "protocol": {
+    "repetitions": 5,
+    "warmupIterations": 200,
+    "measuredIterations": 600,
+    "arms": "paired OFF/ON per repetition, sequential, one process, no concurrent load",
+    "workload": "1 subject (vehicle-0) observed, real 036 signal controller advancing consecutive ticks over the 044 fixture, real 044 context and 025 keyboard filter; one real-contract 037 STOP approach every 180 ticks and one real 038 yield occurrence per approach",
+    "seed": "none; deterministic tick-modulo input pattern and a fixed fixture",
+    "capacity": "default (4096)",
+    "clock": "performance.now only; fixed synthetic tick index (no wall clock in the fixture)",
+    "budget": "Added cost must stay far below the 5.5 ms provisional full-tick p95 ceiling; no isolated budget claimed",
+    "calibration": "PROVISIONAL_UNCALIBRATED",
+    "injected": [
+      "The 044 fixture declares no STOP stop line, so the real 037 event contract and 037 identity are injected with parseSimulationEvent.",
+      "The real 038 priority-yield identity is injected through the stimulus port (no 038 producer runs on this fixture).",
+      "The 10 Hz consumer drains a queue; the world always steps every fixed tick."
+    ]
+  },
+  "scope": "Native Node CPU and owned-memory cost of the 086 opportunity registry on the reused 044/085 fixture. No renderer, browser, GPU, FPS or realtime-throughput claim.",
+  "runs": [
+    {
+      "repetition": 1,
+      "enabled": false,
+      "observeLoopMs": {
+        "count": 600,
+        "p50": 0.00009999999997489795,
+        "p95": 0.00029999999992469384,
+        "p99": 0.0004000000000132786,
+        "min": 0,
+        "max": 0.0006000000000767614,
+        "mean": 0.00012649999999562547
+      },
+      "worldBuildMs": {
+        "count": 600,
+        "p50": 1.0026000000000295,
+        "p95": 1.437599999999975,
+        "p99": 1.8144999999999527,
+        "min": 0.8880000000000337,
+        "max": 2.167100000000005,
+        "mean": 1.0703789999999995
+      },
+      "wallMs": 894.1740000000001,
+      "resolves": 0,
+      "observations": 0,
+      "heapAfterBytes": 47025680,
+      "registryOwnership": null,
+      "denominators": null
+    },
+    {
+      "repetition": 1,
+      "enabled": true,
+      "observeLoopMs": {
+        "count": 600,
+        "p50": 0.008400000000165164,
+        "p95": 0.015499999999974534,
+        "p99": 0.062099999999873035,
+        "min": 0.00659999999993488,
+        "max": 0.09149999999999636,
+        "mean": 0.010526166666667223
+      },
+      "worldBuildMs": {
+        "count": 600,
+        "p50": 0.9793999999999414,
+        "p95": 1.2899999999999636,
+        "p99": 1.4824999999998454,
+        "min": 0.8839999999997872,
+        "max": 1.689600000000155,
+        "mean": 1.0124474999999966
+      },
+      "wallMs": 825.2212999999999,
+      "resolves": 4,
+      "observations": 800,
+      "heapAfterBytes": 24946416,
+      "registryOwnership": {
+        "version": "086-opportunity-ids-v1",
+        "disposed": false,
+        "maxOpportunities": 4096,
+        "openedTotal": 23,
+        "resolvedTotal": 8,
+        "truncatedTotal": 13,
+        "retiredTotal": 0,
+        "rejectedTotal": 0,
+        "contradictionTotal": 0,
+        "observationCalls": 800,
+        "skippedTicks": 0,
+        "suspensions": 0,
+        "resumptions": 0,
+        "segmentOverflow": 0,
+        "retained": 23,
+        "entered": 2,
+        "resolved": 8,
+        "truncated": 13,
+        "identityCodeUnits": 3366,
+        "estimatedBytes": 11148,
+        "estimatedBytesMaximum": 17563648
+      },
+      "denominators": {
+        "version": "086-opportunity-ids-v1",
+        "total": 23,
+        "certain": 8,
+        "success": 8,
+        "failure": 0,
+        "incomplete": 13,
+        "entered": 2,
+        "learningEligibleCertain": 0,
+        "byKind": [
+          {
+            "kind": "STOP",
+            "total": 5,
+            "certain": 4,
+            "success": 4,
+            "failure": 0,
+            "incomplete": 0,
+            "entered": 1,
+            "learningEligibleCertain": 0
+          },
+          {
+            "kind": "RED",
+            "total": 7,
+            "certain": 0,
+            "success": 0,
+            "failure": 0,
+            "incomplete": 7,
+            "entered": 0,
+            "learningEligibleCertain": 0
+          },
+          {
+            "kind": "GREEN",
+            "total": 7,
+            "certain": 0,
+            "success": 0,
+            "failure": 0,
+            "incomplete": 6,
+            "entered": 1,
+            "learningEligibleCertain": 0
+          },
+          {
+            "kind": "YIELD",
+            "total": 4,
+            "certain": 4,
+            "success": 4,
+            "failure": 0,
+            "incomplete": 0,
+            "entered": 0,
+            "learningEligibleCertain": 0
+          },
+          {
+            "kind": "LANE_CHANGE",
+            "total": 0,
+            "certain": 0,
+            "success": 0,
+            "failure": 0,
+            "incomplete": 0,
+            "entered": 0,
+            "learningEligibleCertain": 0
+          }
+        ],
+        "truncatedByReason": [
+          {
+            "reason": "SUPERSEDED",
+            "count": 13
+          },
+          {
+            "reason": "SEGMENT_CLOSED",
+            "count": 0
+          },
+          {
+            "reason": "OBSERVATION_LOST",
+            "count": 0
+          },
+          {
+            "reason": "SUSPENDED",
+            "count": 0
+          },
+          {
+            "reason": "DISPOSED",
+            "count": 0
+          }
+        ]
+      }
+    },
+    {
+      "repetition": 2,
+      "enabled": false,
+      "observeLoopMs": {
+        "count": 600,
+        "p50": 0.00010000000020227162,
+        "p95": 0.0001999999999497959,
+        "p99": 0.0003999999998995918,
+        "min": 0,
+        "max": 0.0009000000000014552,
+        "mean": 0.00011916666666214345
+      },
+      "worldBuildMs": {
+        "count": 600,
+        "p50": 0.9915000000000873,
+        "p95": 1.340900000000147,
+        "p99": 1.5952000000002045,
+        "min": 0.900000000000091,
+        "max": 1.6979999999998654,
+        "mean": 1.0288654999999942
+      },
+      "wallMs": 818.9647000000002,
+      "resolves": 0,
+      "observations": 0,
+      "heapAfterBytes": 40548560,
+      "registryOwnership": null,
+      "denominators": null
+    },
+    {
+      "repetition": 2,
+      "enabled": true,
+      "observeLoopMs": {
+        "count": 600,
+        "p50": 0.007599999999911233,
+        "p95": 0.01639999999997599,
+        "p99": 0.05150000000003274,
+        "min": 0.006199999999807915,
+        "max": 0.36229999999977736,
+        "mean": 0.009897999999992257
+      },
+      "worldBuildMs": {
+        "count": 600,
+        "p50": 0.9655999999999949,
+        "p95": 1.3263999999999214,
+        "p99": 1.5610000000001492,
+        "min": 0.871900000000096,
+        "max": 2.8818999999998596,
+        "mean": 1.0088680000000128
+      },
+      "wallMs": 817.6172999999999,
+      "resolves": 4,
+      "observations": 800,
+      "heapAfterBytes": 83568736,
+      "registryOwnership": {
+        "version": "086-opportunity-ids-v1",
+        "disposed": false,
+        "maxOpportunities": 4096,
+        "openedTotal": 23,
+        "resolvedTotal": 8,
+        "truncatedTotal": 13,
+        "retiredTotal": 0,
+        "rejectedTotal": 0,
+        "contradictionTotal": 0,
+        "observationCalls": 800,
+        "skippedTicks": 0,
+        "suspensions": 0,
+        "resumptions": 0,
+        "segmentOverflow": 0,
+        "retained": 23,
+        "entered": 2,
+        "resolved": 8,
+        "truncated": 13,
+        "identityCodeUnits": 3366,
+        "estimatedBytes": 11148,
+        "estimatedBytesMaximum": 17563648
+      },
+      "denominators": {
+        "version": "086-opportunity-ids-v1",
+        "total": 23,
+        "certain": 8,
+        "success": 8,
+        "failure": 0,
+        "incomplete": 13,
+        "entered": 2,
+        "learningEligibleCertain": 0,
+        "byKind": [
+          {
+            "kind": "STOP",
+            "total": 5,
+            "certain": 4,
+            "success": 4,
+            "failure": 0,
+            "incomplete": 0,
+            "entered": 1,
+            "learningEligibleCertain": 0
+          },
+          {
+            "kind": "RED",
+            "total": 7,
+            "certain": 0,
+            "success": 0,
+            "failure": 0,
+            "incomplete": 7,
+            "entered": 0,
+            "learningEligibleCertain": 0
+          },
+          {
+            "kind": "GREEN",
+            "total": 7,
+            "certain": 0,
+            "success": 0,
+            "failure": 0,
+            "incomplete": 6,
+            "entered": 1,
+            "learningEligibleCertain": 0
+          },
+          {
+            "kind": "YIELD",
+            "total": 4,
+            "certain": 4,
+            "success": 4,
+            "failure": 0,
+            "incomplete": 0,
+            "entered": 0,
+            "learningEligibleCertain": 0
+          },
+          {
+            "kind": "LANE_CHANGE",
+            "total": 0,
+            "certain": 0,
+            "success": 0,
+            "failure": 0,
+            "incomplete": 0,
+            "entered": 0,
+            "learningEligibleCertain": 0
+          }
+        ],
+        "truncatedByReason": [
+          {
+            "reason": "SUPERSEDED",
+            "count": 13
+          },
+          {
+            "reason": "SEGMENT_CLOSED",
+            "count": 0
+          },
+          {
+            "reason": "OBSERVATION_LOST",
+            "count": 0
+          },
+          {
+            "reason": "SUSPENDED",
+            "count": 0
+          },
+          {
+            "reason": "DISPOSED",
+            "count": 0
+          }
+        ]
+      }
+    },
+    {
+      "repetition": 3,
+      "enabled": false,
+      "observeLoopMs": {
+        "count": 600,
+        "p50": 0.00009999999974752427,
+        "p95": 0.00010000000020227162,
+        "p99": 0.00029999999969732016,
+        "min": 0,
+        "max": 0.0008000000007086783,
+        "mean": 0.00007183333333462846
+      },
+      "worldBuildMs": {
+        "count": 600,
+        "p50": 0.9522999999999229,
+        "p95": 1.125199999999495,
+        "p99": 1.4904999999998836,
+        "min": 0.8694000000000415,
+        "max": 1.9742000000005646,
+        "mean": 0.9717955000000067
+      },
+      "wallMs": 783.4270999999999,
+      "resolves": 0,
+      "observations": 0,
+      "heapAfterBytes": 48993872,
+      "registryOwnership": null,
+      "denominators": null
+    },
+    {
+      "repetition": 3,
+      "enabled": true,
+      "observeLoopMs": {
+        "count": 600,
+        "p50": 0.006200000000717409,
+        "p95": 0.01099999999951251,
+        "p99": 0.03390000000035798,
+        "min": 0.005099999999401916,
+        "max": 0.09929999999985739,
+        "mean": 0.007596333333320521
+      },
+      "worldBuildMs": {
+        "count": 600,
+        "p50": 0.9624999999996362,
+        "p95": 1.0907999999999447,
+        "p99": 1.4979000000002998,
+        "min": 0.8707000000003973,
+        "max": 1.8712000000004991,
+        "mean": 0.9798856666666477
+      },
+      "wallMs": 795.0575999999992,
+      "resolves": 4,
+      "observations": 800,
+      "heapAfterBytes": 90741344,
+      "registryOwnership": {
+        "version": "086-opportunity-ids-v1",
+        "disposed": false,
+        "maxOpportunities": 4096,
+        "openedTotal": 23,
+        "resolvedTotal": 8,
+        "truncatedTotal": 13,
+        "retiredTotal": 0,
+        "rejectedTotal": 0,
+        "contradictionTotal": 0,
+        "observationCalls": 800,
+        "skippedTicks": 0,
+        "suspensions": 0,
+        "resumptions": 0,
+        "segmentOverflow": 0,
+        "retained": 23,
+        "entered": 2,
+        "resolved": 8,
+        "truncated": 13,
+        "identityCodeUnits": 3366,
+        "estimatedBytes": 11148,
+        "estimatedBytesMaximum": 17563648
+      },
+      "denominators": {
+        "version": "086-opportunity-ids-v1",
+        "total": 23,
+        "certain": 8,
+        "success": 8,
+        "failure": 0,
+        "incomplete": 13,
+        "entered": 2,
+        "learningEligibleCertain": 0,
+        "byKind": [
+          {
+            "kind": "STOP",
+            "total": 5,
+            "certain": 4,
+            "success": 4,
+            "failure": 0,
+            "incomplete": 0,
+            "entered": 1,
+            "learningEligibleCertain": 0
+          },
+          {
+            "kind": "RED",
+            "total": 7,
+            "certain": 0,
+            "success": 0,
+            "failure": 0,
+            "incomplete": 7,
+            "entered": 0,
+            "learningEligibleCertain": 0
+          },
+          {
+            "kind": "GREEN",
+            "total": 7,
+            "certain": 0,
+            "success": 0,
+            "failure": 0,
+            "incomplete": 6,
+            "entered": 1,
+            "learningEligibleCertain": 0
+          },
+          {
+            "kind": "YIELD",
+            "total": 4,
+            "certain": 4,
+            "success": 4,
+            "failure": 0,
+            "incomplete": 0,
+            "entered": 0,
+            "learningEligibleCertain": 0
+          },
+          {
+            "kind": "LANE_CHANGE",
+            "total": 0,
+            "certain": 0,
+            "success": 0,
+            "failure": 0,
+            "incomplete": 0,
+            "entered": 0,
+            "learningEligibleCertain": 0
+          }
+        ],
+        "truncatedByReason": [
+          {
+            "reason": "SUPERSEDED",
+            "count": 13
+          },
+          {
+            "reason": "SEGMENT_CLOSED",
+            "count": 0
+          },
+          {
+            "reason": "OBSERVATION_LOST",
+            "count": 0
+          },
+          {
+            "reason": "SUSPENDED",
+            "count": 0
+          },
+          {
+            "reason": "DISPOSED",
+            "count": 0
+          }
+        ]
+      }
+    },
+    {
+      "repetition": 4,
+      "enabled": false,
+      "observeLoopMs": {
+        "count": 600,
+        "p50": 0.00009999999929277692,
+        "p95": 0.00010000000020227162,
+        "p99": 0.00020000000040454324,
+        "min": 0,
+        "max": 0.0009000000000014552,
+        "mean": 0.00006466666668529797
+      },
+      "worldBuildMs": {
+        "count": 600,
+        "p50": 0.9540999999999258,
+        "p95": 1.0560999999997875,
+        "p99": 1.4624000000003434,
+        "min": 0.8660999999992782,
+        "max": 1.68329999999969,
+        "mean": 0.9664233333333307
+      },
+      "wallMs": 779.7434000000003,
+      "resolves": 0,
+      "observations": 0,
+      "heapAfterBytes": 55106352,
+      "registryOwnership": null,
+      "denominators": null
+    },
+    {
+      "repetition": 4,
+      "enabled": true,
+      "observeLoopMs": {
+        "count": 600,
+        "p50": 0.006199999999807915,
+        "p95": 0.011399999999412103,
+        "p99": 0.03510000000005675,
+        "min": 0.005199999999604188,
+        "max": 0.06629999999950087,
+        "mean": 0.007436333333319756
+      },
+      "worldBuildMs": {
+        "count": 600,
+        "p50": 0.9711999999999534,
+        "p95": 1.1242999999994936,
+        "p99": 1.521099999999933,
+        "min": 0.871900000000096,
+        "max": 1.712800000000243,
+        "mean": 0.9949983333333269
+      },
+      "wallMs": 802.3111000000008,
+      "resolves": 4,
+      "observations": 800,
+      "heapAfterBytes": 26838784,
+      "registryOwnership": {
+        "version": "086-opportunity-ids-v1",
+        "disposed": false,
+        "maxOpportunities": 4096,
+        "openedTotal": 23,
+        "resolvedTotal": 8,
+        "truncatedTotal": 13,
+        "retiredTotal": 0,
+        "rejectedTotal": 0,
+        "contradictionTotal": 0,
+        "observationCalls": 800,
+        "skippedTicks": 0,
+        "suspensions": 0,
+        "resumptions": 0,
+        "segmentOverflow": 0,
+        "retained": 23,
+        "entered": 2,
+        "resolved": 8,
+        "truncated": 13,
+        "identityCodeUnits": 3366,
+        "estimatedBytes": 11148,
+        "estimatedBytesMaximum": 17563648
+      },
+      "denominators": {
+        "version": "086-opportunity-ids-v1",
+        "total": 23,
+        "certain": 8,
+        "success": 8,
+        "failure": 0,
+        "incomplete": 13,
+        "entered": 2,
+        "learningEligibleCertain": 0,
+        "byKind": [
+          {
+            "kind": "STOP",
+            "total": 5,
+            "certain": 4,
+            "success": 4,
+            "failure": 0,
+            "incomplete": 0,
+            "entered": 1,
+            "learningEligibleCertain": 0
+          },
+          {
+            "kind": "RED",
+            "total": 7,
+            "certain": 0,
+            "success": 0,
+            "failure": 0,
+            "incomplete": 7,
+            "entered": 0,
+            "learningEligibleCertain": 0
+          },
+          {
+            "kind": "GREEN",
+            "total": 7,
+            "certain": 0,
+            "success": 0,
+            "failure": 0,
+            "incomplete": 6,
+            "entered": 1,
+            "learningEligibleCertain": 0
+          },
+          {
+            "kind": "YIELD",
+            "total": 4,
+            "certain": 4,
+            "success": 4,
+            "failure": 0,
+            "incomplete": 0,
+            "entered": 0,
+            "learningEligibleCertain": 0
+          },
+          {
+            "kind": "LANE_CHANGE",
+            "total": 0,
+            "certain": 0,
+            "success": 0,
+            "failure": 0,
+            "incomplete": 0,
+            "entered": 0,
+            "learningEligibleCertain": 0
+          }
+        ],
+        "truncatedByReason": [
+          {
+            "reason": "SUPERSEDED",
+            "count": 13
+          },
+          {
+            "reason": "SEGMENT_CLOSED",
+            "count": 0
+          },
+          {
+            "reason": "OBSERVATION_LOST",
+            "count": 0
+          },
+          {
+            "reason": "SUSPENDED",
+            "count": 0
+          },
+          {
+            "reason": "DISPOSED",
+            "count": 0
+          }
+        ]
+      }
+    },
+    {
+      "repetition": 5,
+      "enabled": false,
+      "observeLoopMs": {
+        "count": 600,
+        "p50": 0,
+        "p95": 0.00010000000020227162,
+        "p99": 0.00010000000020227162,
+        "min": 0,
+        "max": 0.00029999999969732016,
+        "mean": 0.00004433333333357344
+      },
+      "worldBuildMs": {
+        "count": 600,
+        "p50": 0.9218999999993684,
+        "p95": 1.1060999999999694,
+        "p99": 1.4561000000003332,
+        "min": 0.8704999999999927,
+        "max": 1.9407000000001062,
+        "mean": 0.9594594999999678
+      },
+      "wallMs": 773.5951999999997,
+      "resolves": 0,
+      "observations": 0,
+      "heapAfterBytes": 64815752,
+      "registryOwnership": null,
+      "denominators": null
+    },
+    {
+      "repetition": 5,
+      "enabled": true,
+      "observeLoopMs": {
+        "count": 600,
+        "p50": 0.006400000000212458,
+        "p95": 0.012999999999919964,
+        "p99": 0.035600000000158616,
+        "min": 0.005099999999401916,
+        "max": 0.048299999999471765,
+        "mean": 0.007709166666713827
+      },
+      "worldBuildMs": {
+        "count": 600,
+        "p50": 0.9808000000011816,
+        "p95": 1.1238000000012107,
+        "p99": 1.5691999999999098,
+        "min": 0.868399999999383,
+        "max": 1.7614999999996144,
+        "mean": 0.9942703333333657
+      },
+      "wallMs": 796.9105,
+      "resolves": 4,
+      "observations": 800,
+      "heapAfterBytes": 35632344,
+      "registryOwnership": {
+        "version": "086-opportunity-ids-v1",
+        "disposed": false,
+        "maxOpportunities": 4096,
+        "openedTotal": 23,
+        "resolvedTotal": 8,
+        "truncatedTotal": 13,
+        "retiredTotal": 0,
+        "rejectedTotal": 0,
+        "contradictionTotal": 0,
+        "observationCalls": 800,
+        "skippedTicks": 0,
+        "suspensions": 0,
+        "resumptions": 0,
+        "segmentOverflow": 0,
+        "retained": 23,
+        "entered": 2,
+        "resolved": 8,
+        "truncated": 13,
+        "identityCodeUnits": 3366,
+        "estimatedBytes": 11148,
+        "estimatedBytesMaximum": 17563648
+      },
+      "denominators": {
+        "version": "086-opportunity-ids-v1",
+        "total": 23,
+        "certain": 8,
+        "success": 8,
+        "failure": 0,
+        "incomplete": 13,
+        "entered": 2,
+        "learningEligibleCertain": 0,
+        "byKind": [
+          {
+            "kind": "STOP",
+            "total": 5,
+            "certain": 4,
+            "success": 4,
+            "failure": 0,
+            "incomplete": 0,
+            "entered": 1,
+            "learningEligibleCertain": 0
+          },
+          {
+            "kind": "RED",
+            "total": 7,
+            "certain": 0,
+            "success": 0,
+            "failure": 0,
+            "incomplete": 7,
+            "entered": 0,
+            "learningEligibleCertain": 0
+          },
+          {
+            "kind": "GREEN",
+            "total": 7,
+            "certain": 0,
+            "success": 0,
+            "failure": 0,
+            "incomplete": 6,
+            "entered": 1,
+            "learningEligibleCertain": 0
+          },
+          {
+            "kind": "YIELD",
+            "total": 4,
+            "certain": 4,
+            "success": 4,
+            "failure": 0,
+            "incomplete": 0,
+            "entered": 0,
+            "learningEligibleCertain": 0
+          },
+          {
+            "kind": "LANE_CHANGE",
+            "total": 0,
+            "certain": 0,
+            "success": 0,
+            "failure": 0,
+            "incomplete": 0,
+            "entered": 0,
+            "learningEligibleCertain": 0
+          }
+        ],
+        "truncatedByReason": [
+          {
+            "reason": "SUPERSEDED",
+            "count": 13
+          },
+          {
+            "reason": "SEGMENT_CLOSED",
+            "count": 0
+          },
+          {
+            "reason": "OBSERVATION_LOST",
+            "count": 0
+          },
+          {
+            "reason": "SUSPENDED",
+            "count": 0
+          },
+          {
+            "reason": "DISPOSED",
+            "count": 0
+          }
+        ]
+      }
+    }
+  ],
+  "paired": [
+    {
+      "repetition": 1,
+      "observeOnlyP50DeltaMs": 0.008300000000190266,
+      "observeOnlyP95DeltaMs": 0.01520000000004984,
+      "observeOnlyP99DeltaMs": 0.061699999999859756,
+      "worldBuildP95Ms": 1.2899999999999636,
+      "offObserveLoopP95Ms": 0.00029999999992469384,
+      "onObserveLoopP95Ms": 0.015499999999974534,
+      "wallDeltaMs": -68.95270000000016
+    },
+    {
+      "repetition": 2,
+      "observeOnlyP50DeltaMs": 0.007499999999708962,
+      "observeOnlyP95DeltaMs": 0.016200000000026193,
+      "observeOnlyP99DeltaMs": 0.05110000000013315,
+      "worldBuildP95Ms": 1.3263999999999214,
+      "offObserveLoopP95Ms": 0.0001999999999497959,
+      "onObserveLoopP95Ms": 0.01639999999997599,
+      "wallDeltaMs": -1.3474000000003343
+    },
+    {
+      "repetition": 3,
+      "observeOnlyP50DeltaMs": 0.006100000000969885,
+      "observeOnlyP95DeltaMs": 0.01089999999931024,
+      "observeOnlyP99DeltaMs": 0.03360000000066066,
+      "worldBuildP95Ms": 1.0907999999999447,
+      "offObserveLoopP95Ms": 0.00010000000020227162,
+      "onObserveLoopP95Ms": 0.01099999999951251,
+      "wallDeltaMs": 11.630499999999302
+    },
+    {
+      "repetition": 4,
+      "observeOnlyP50DeltaMs": 0.006100000000515138,
+      "observeOnlyP95DeltaMs": 0.011299999999209831,
+      "observeOnlyP99DeltaMs": 0.03489999999965221,
+      "worldBuildP95Ms": 1.1242999999994936,
+      "offObserveLoopP95Ms": 0.00010000000020227162,
+      "onObserveLoopP95Ms": 0.011399999999412103,
+      "wallDeltaMs": 22.567700000000514
+    },
+    {
+      "repetition": 5,
+      "observeOnlyP50DeltaMs": 0.006400000000212458,
+      "observeOnlyP95DeltaMs": 0.012899999999717693,
+      "observeOnlyP99DeltaMs": 0.035499999999956344,
+      "worldBuildP95Ms": 1.1238000000012107,
+      "offObserveLoopP95Ms": 0.00010000000020227162,
+      "onObserveLoopP95Ms": 0.012999999999919964,
+      "wallDeltaMs": 23.315300000000207
+    }
+  ],
+  "jsonRegion": {
+    "label": "JSON_REGION_NOT_PART_OF_HOT_PATH_DELTA",
+    "iterations": 500,
+    "jsonStringifyMs": {
+      "count": 500,
+      "p50": 0.0010000000002037268,
+      "p95": 0.0015999999995983671,
+      "p99": 0.004500000000916771,
+      "min": 0.0006999999986874172,
+      "max": 0.008200000000215368,
+      "mean": 0.001156200000019453
+    },
+    "registryObserveMs": {
+      "count": 500,
+      "p50": 0.003700000001117587,
+      "p95": 0.005699999999706051,
+      "p99": 0.014700000001539593,
+      "min": 0.0035999999981868314,
+      "max": 0.05019999999967695,
+      "mean": 0.004367599999928643
+    },
+    "ratioJsonOverRegistry": 0.2807017543299788,
+    "registryOwnership": {
+      "version": "086-opportunity-ids-v1",
+      "disposed": false,
+      "maxOpportunities": 4096,
+      "openedTotal": 15,
+      "resolvedTotal": 3,
+      "truncatedTotal": 10,
+      "retiredTotal": 0,
+      "rejectedTotal": 0,
+      "contradictionTotal": 0,
+      "observationCalls": 500,
+      "skippedTicks": 0,
+      "suspensions": 0,
+      "resumptions": 0,
+      "segmentOverflow": 0,
+      "retained": 15,
+      "entered": 2,
+      "resolved": 3,
+      "truncated": 10,
+      "identityCodeUnits": 2188,
+      "estimatedBytes": 7256,
+      "estimatedBytesMaximum": 17563648
+    }
+  },
+  "memoryRegion": {
+    "label": "MEMORY_REGION_EXACT_OWNERSHIP_COUNTERS",
+    "iterations": 5120,
+    "retained": 4096,
+    "maxOpportunities": 4096,
+    "openedTotal": 5120,
+    "retiredTotal": 1024,
+    "bytesPerRecord": 192,
+    "recordBytesCeiling": 4288,
+    "estimatedBytes": 1769472,
+    "estimatedBytesMaximum": 17563648,
+    "withinCeiling": true,
+    "identityCodeUnits": 491520,
+    "arrayBuffersBeforeBytes": 209151,
+    "arrayBuffersAfterCreateBytes": 209151,
+    "arrayBuffersAfterFillBytes": 209151,
+    "arrayBuffersAfterDisposeBytes": 209151,
+    "heapUsedBeforeBytes": 83315528,
+    "heapUsedAfterFillBytes": 33049832,
+    "disposedCountersZero": true
+  },
+  "selfCheck": {
+    "passed": true,
+    "failures": [],
+    "everyTickCount": 18,
+    "decisionCadenceCount": 18,
+    "denominators": {
+      "version": "086-opportunity-ids-v1",
+      "total": 18,
+      "certain": 6,
+      "success": 6,
+      "failure": 0,
+      "incomplete": 10,
+      "entered": 2,
+      "learningEligibleCertain": 0,
+      "byKind": [
+        {
+          "kind": "STOP",
+          "total": 4,
+          "certain": 3,
+          "success": 3,
+          "failure": 0,
+          "incomplete": 0,
+          "entered": 1,
+          "learningEligibleCertain": 0
+        },
+        {
+          "kind": "RED",
+          "total": 6,
+          "certain": 0,
+          "success": 0,
+          "failure": 0,
+          "incomplete": 5,
+          "entered": 1,
+          "learningEligibleCertain": 0
+        },
+        {
+          "kind": "GREEN",
+          "total": 5,
+          "certain": 0,
+          "success": 0,
+          "failure": 0,
+          "incomplete": 5,
+          "entered": 0,
+          "learningEligibleCertain": 0
+        },
+        {
+          "kind": "YIELD",
+          "total": 3,
+          "certain": 3,
+          "success": 3,
+          "failure": 0,
+          "incomplete": 0,
+          "entered": 0,
+          "learningEligibleCertain": 0
+        },
+        {
+          "kind": "LANE_CHANGE",
+          "total": 0,
+          "certain": 0,
+          "success": 0,
+          "failure": 0,
+          "incomplete": 0,
+          "entered": 0,
+          "learningEligibleCertain": 0
+        }
+      ],
+      "truncatedByReason": [
+        {
+          "reason": "SUPERSEDED",
+          "count": 10
+        },
+        {
+          "reason": "SEGMENT_CLOSED",
+          "count": 0
+        },
+        {
+          "reason": "OBSERVATION_LOST",
+          "count": 0
+        },
+        {
+          "reason": "SUSPENDED",
+          "count": 0
+        },
+        {
+          "reason": "DISPOSED",
+          "count": 0
+        }
+      ]
+    }
+  },
+  "budgets": {
+    "manifest": "Docs/performance-budgets.json",
+    "budgetVersion": "203-initial-1",
+    "capacityCalibration": "PROVISIONAL_UNCALIBRATED",
+    "diagnosticSamplesProposal": 4096,
+    "measuredCapacity": 4096,
+    "recorderRamBytesCap": 33554432,
+    "authoritativeTickP95MsDesktopProvisional": 5.5,
+    "authoritativeTickP95MsLaptopProvisional": 8
+  },
+  "exclusions": [
+    "No browser, renderer, GPU or FPS measurement; the 052 record documents an unresolved WebGPU presentation stall on this laptop.",
+    "Heap counters are diagnostic only; exact ownership is reported from the registry counters.",
+    "Forced GC between repetitions is not used inside the timed region.",
+    "BEFORE is the same fixture with the registry disabled, not a historical commit: 086 is purely additive."
+  ],
+  "guard": 177004
+}
