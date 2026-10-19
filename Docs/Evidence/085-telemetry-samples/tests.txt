@@ -1,41 +1,41 @@
 # PBI 085 tests (verbatim, Node v24.21.0 via volta, npm 11.19.0)
 
 $ volta run --node 24.21.0 --npm 11.19.0 node --import ./scripts/register-typescript.mjs --test tests/telemetry/tick-samples.test.ts
-(node:30800) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(node:26496) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
 (Use `node --trace-warnings ...` to show where the warning was created)
-Γ£ö 085 toggle opens a new segment and freezes mode/profile/epoch/eligibility at open (5.6024ms)
-Γ£ö 085 a LEARNING segment is eligible while MANUAL/AUTO stay ineligible by construction (0.4006ms)
-Γ£ö 085 vehicle switch opens a new segment with the new class/profile and no wrong attribution (1.0675ms)
-Γ£ö 085 pause produces no samples and never fabricates ticks (1.1153ms)
-Γ£ö 085 ring capacity is exact and overflow is explicit for both policies (6.2492ms)
-Γ£ö 085 retention is bounded by segment count and bytes, and dispose zeroes live counters (1.1164ms)
-Γ£ö 085 hot path is finite SI and never serializes JSON per tick (4.1585ms)
-Γ£ö 085 a lane-less tick has no lane identity and no signal is fabricated (0.3171ms)
-Γ£ö 085 identical input produces identical samples (1.5529ms)
-Γ£ö 085 derived physics is finite SI and rejects an invalid step (0.401ms)
-Γ£ö 085 rejects malformed segments, frames and statistics inputs (0.7291ms)
-Γä╣ tests 11
-Γä╣ suites 0
-Γä╣ pass 11
-Γä╣ fail 0
-Γä╣ cancelled 0
-Γä╣ skipped 0
-Γä╣ todo 0
-Γä╣ duration_ms 217.2924
+✔ 085 toggle opens a new segment and freezes mode/profile/epoch/eligibility at open (5.5631ms)
+✔ 085 a LEARNING segment is eligible while MANUAL/AUTO stay ineligible by construction (0.6611ms)
+✔ 085 vehicle switch opens a new segment with the new class/profile and no wrong attribution (1.3325ms)
+✔ 085 pause produces no samples and never fabricates ticks (1.1225ms)
+✔ 085 ring capacity is exact and overflow is explicit for both policies (5.2042ms)
+✔ 085 retention is bounded by segment count and bytes, and dispose zeroes live counters (0.9882ms)
+✔ 085 hot path is finite SI and never serializes JSON per tick (6.805ms)
+✔ 085 a lane-less tick has no lane identity and no signal is fabricated (0.4156ms)
+✔ 085 identical input produces identical samples (1.5511ms)
+✔ 085 derived physics is finite SI and rejects an invalid step (0.3573ms)
+✔ 085 rejects malformed segments, frames and statistics inputs (0.7998ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 219.9604
 exit=0
 
 $ volta run --node 24.21.0 --npm 11.19.0 npm test
-[... full suite output truncated to the final summary; the complete run is reproducible with the command above]
-Γ£ö ID reuse cannot inherit stop evidence or admit a retired incarnation; real epoch resets history (5.1894ms)
-Γ£ö bounded history fails closed; frozen map geometry and transverse direction stay stable (5.1423ms)
-Γ£ö directed reverse geometry and consecutive STOP lines preserve distinct opportunities (8.0769ms)
-Γ£ö calibration/accessor boundaries and long valid identities remain safe (3.3703ms)
-Γä╣ tests 859
-Γä╣ suites 0
-Γä╣ pass 859
-Γä╣ fail 0
-Γä╣ cancelled 0
-Γä╣ skipped 0
-Γä╣ todo 0
-Γä╣ duration_ms 15144.1744
+# The complete run is reproducible with the command above; the runner totals below are the verbatim tail of the full log.
+✔ ID reuse cannot inherit stop evidence or admit a retired incarnation; real epoch resets history (5.0988ms)
+✔ bounded history fails closed; frozen map geometry and transverse direction stay stable (6.696ms)
+✔ directed reverse geometry and consecutive STOP lines preserve distinct opportunities (6.713ms)
+✔ calibration/accessor boundaries and long valid identities remain safe (2.4777ms)
+ℹ tests 859
+ℹ suites 0
+ℹ pass 859
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 15114.7098
 exit=0
