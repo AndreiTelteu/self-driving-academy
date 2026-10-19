@@ -13,3 +13,4 @@ export * from './artifact-filter';
 export * from './vehicle-normalization';
 export * from './segment-compaction';
 export * from './validation-protocol';
+export * from './demonstration-fixtures';

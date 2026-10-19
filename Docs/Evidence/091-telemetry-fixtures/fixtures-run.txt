@@ -1,0 +1,56 @@
+> volta run --node 24.21.0 -- node --import ./scripts/register-typescript.mjs scripts/validate-telemetry-fixtures.mjs
+eligibility-free_traffic VALID
+eligibility-leader VALID
+(node:25420) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+eligibility-blocked_green VALID
+eligibility-mechanical_limit VALID
+eligibility-impact VALID
+eligibility-pause VALID
+(Use `node --trace-warnings ...` to show where the warning was created)
+eligibility-focus_lost VALID
+eligibility-manual_segment VALID
+eligibility-auto_segment VALID
+eligibility-not_observable VALID
+opportunity-stop-resolved VALID
+opportunity-stop-truncated VALID
+opportunity-red-resolved VALID
+opportunity-red-truncated VALID
+opportunity-green-resolved VALID
+opportunity-green-truncated VALID
+opportunity-yield-resolved VALID
+opportunity-yield-truncated VALID
+opportunity-lane_change-resolved VALID
+opportunity-lane_change-truncated VALID
+stop-not-observed VALID
+artefact-collision VALID
+artefact-recovery VALID
+artefact-incomplete VALID
+bad-non-monotonic-tick REJECTED reason=NON_MONOTONIC_TICK path=ticks[2]
+bad-foreign-entity REJECTED reason=FOREIGN_ENTITY path=entityIds[1]
+bad-duplicate-entity REJECTED reason=DUPLICATE_ENTITY path=entityIds[1]
+bad-non-finite REJECTED reason=NON_FINITE_VALUE path=longitudinalAccelerationMps2
+bad-command-range REJECTED reason=COMMAND_OUT_OF_RANGE path=commandThrottle
+bad-opportunity-kind REJECTED reason=UNKNOWN_OPPORTUNITY_KIND path=opportunityKind
+bad-opportunity-state REJECTED reason=UNKNOWN_OPPORTUNITY_STATE path=opportunityState
+bad-duplicate-opportunity-id REJECTED reason=DUPLICATE_OPPORTUNITY_ID path=opportunities[1].id
+bad-eligibility-impact REJECTED reason=ELIGIBILITY_FACT_CONTRADICTION path=eligibilityLabel
+bad-truncated-complete REJECTED reason=TRUNCATED_CLAIMS_COMPLETE path=claimedCompleteness
+bad-missing-stop-marker REJECTED reason=NOT_OBSERVED path=stopOpportunity
+summary valid=24 corrupted=11 failures=0
+exit=0
+> volta run --node 24.21.0 -- node --import ./scripts/register-typescript.mjs scripts/validate-telemetry-fixtures.mjs --corrupted-only
+bad-non-monotonic-tick REJECTED reason=NON_MONOTONIC_TICK path=ticks[2]
+bad-foreign-entity REJECTED reason=FOREIGN_ENTITY path=entityIds[1]
+bad-duplicate-entity REJECTED reason=DUPLICATE_ENTITY path=entityIds[1]
+bad-non-finite REJECTED reason=NON_FINITE_VALUE path=longitudinalAccelerationMps2
+bad-command-range REJECTED reason=COMMAND_OUT_OF_RANGE path=commandThrottle
+bad-opportunity-kind REJECTED reason=UNKNOWN_OPPORTUNITY_KIND path=opportunityKind
+bad-opportunity-state REJECTED reason=UNKNOWN_OPPORTUNITY_STATE path=opportunityState
+bad-duplicate-opportunity-id REJECTED reason=DUPLICATE_OPPORTUNITY_ID path=opportunities[1].id
+bad-eligibility-impact REJECTED reason=ELIGIBILITY_FACT_CONTRADICTION path=eligibilityLabel
+bad-truncated-complete REJECTED reason=TRUNCATED_CLAIMS_COMPLETE path=claimedCompleteness
+bad-missing-stop-marker REJECTED reason=NOT_OBSERVED path=stopOpportunity
+summary valid=0 corrupted=11 failures=0
+(node:35436) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+exit=0

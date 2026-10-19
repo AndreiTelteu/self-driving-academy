@@ -28,6 +28,8 @@ Normalizarea după clasa vehiculului din 089 (`createVehicleNormalizer` din `src
 
 Compactarea segmentului din 090 (`createSegmentCompaction` în `src/telemetry/segment-compaction.ts`) citește incremental recorderul 085 la cadența explicită de analiză și păstrează tick-urile originale, iar faptele registrului 086 rămân unice și poartă tick-urile lor proprii. Chunkurile au plafoane și legături de continuitate declarate; finalizarea se împarte în pași limitați și transferă copii deținute separat, fără detașarea datelor live. Contractul, capacitățile și măsurătorile native sunt în [telemetry-storage](telemetry-storage.md) și [Evidence/090-telemetry-storage](Evidence/090-telemetry-storage/README.md).
 
+Corpusul și validatorul de demonstrații din 091 (`tests/telemetry/fixtures/corpus.ts` și `src/telemetry/demonstration-fixtures.ts`) compun contractele reale 085–090 într-o verificare nativă, fără browser, pentru toate etichetele 087, tipurile și ciclurile 086 și artefactele 088. Fiecare refuz are un cod închis, o cale de câmp și valoarea respinsă; o demonstrație fără stimul STOP păstrează `{ kind: 'STOP', observation: 'NOT_OBSERVED' }` și raportul de conformare refuză calculul, în loc să transforme lipsa dovezii în zero. Corpusul, matricea de acoperire și comenzile sunt în [telemetry-fixtures](telemetry-fixtures.md) și [Evidence/091-telemetry-fixtures](Evidence/091-telemetry-fixtures/README.md).
+
 Validatorul verifică monotonia tick-urilor, entityId, contexte, input source și completitudinea. Bufferul are limite măsurate; retenția nu elimină automat dovezile agregate. Datele brute și agregările au versiuni distincte de transformare.
 
 ## Fluxuri separate de înregistrare
