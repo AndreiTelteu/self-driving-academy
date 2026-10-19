@@ -1,15 +1,17 @@
-# Checks executate
+# Executed verification commands
 
-Worktree `loop-pbi/204-early-demo`; Node 24.21.0 / npm 11.19.0.
+Worktree: `C:\Users\aandr\Sites\self-driving-academy\.worktrees\204-stage2`
+Branch: `loop-pbi/204-stage2`
+Runtime: Node 24.21.0 / npm 11.19.0
 
-| Comandă | Rezultat |
+| Command | Result |
 | --- | --- |
 | `volta run --node 24.21.0 --npm 11.19.0 -- npm run typecheck` | PASS |
 | `volta run --node 24.21.0 --npm 11.19.0 -- npm run lint` | PASS |
-| `volta run --node 24.21.0 --npm 11.19.0 -- npm run format:check` | PASS (după prettier --write pe fișiere noi) |
-| `volta run --node 24.21.0 --npm 11.19.0 -- npm run check:architecture` | PASS: import checks și probe negative |
-| `volta run --node 24.21.0 --npm 11.19.0 -- npm run check:parameter-catalog` | PASS: catalog sincronizat |
-| `volta run --node 24.21.0 --npm 11.19.0 -- npm test` | PASS: 1049/1049, 0 eșecuri |
-| `volta run --node 24.21.0 -- node --import ./scripts/register-typescript.mjs --test tests/learning/early-loop.test.ts` | PASS: 2/2 |
+| `volta run --node 24.21.0 --npm 11.19.0 -- npm run format:check` | PASS |
+| `volta run --node 24.21.0 --npm 11.19.0 -- npm run check:architecture` | PASS; architecture imports and negative probes pass |
+| `volta run --node 24.21.0 --npm 11.19.0 -- npm run check:parameter-catalog` | PASS; catalog synchronized |
+| `volta run --node 24.21.0 --npm 11.19.0 -- npm test` | PASS; 1050/1050 |
+| `volta run --node 24.21.0 --npm 11.19.0 -- node --import ./scripts/register-typescript.mjs --test tests/learning/early-loop.test.ts` | PASS; 3/3 |
 
-Suitea inițială de referință menționată în cerere era 1047 teste; această revizie adaugă două teste și a executat 1049. Acestea sunt verificări software locale, nu validare de browser sau performanță hardware.
+The first direct benchmark attempts omitted `--import ./scripts/register-typescript.mjs` and failed with `ERR_UNSUPPORTED_DIR_IMPORT`; no benchmark result was taken from those attempts. See `probe.md` for the correctly registered runs and their limited scope.

@@ -1,5 +1,15 @@
-# Rezultate de scenarii
+# Behavioral and adapter evidence for PBI 204
 
-Doar contractul adaptorului a fost executat: blend limitat la 25% × quality, proveniență, refuz la evidence/proveniență absentă și no-op MANUAL (2 teste). Acesta folosește în test obiecte candidate controlate; nu este independent-data behavior evidence.
+Status: PARTIAL. No three-vehicle/civilian behavioral fixture has been executed yet.
 
-Fixture-ul cerut cu 3 taxiuri + 2 civile, seturi prudent/riscant/fără evidence și măsurători de target speed/accelerație/full-stop rate NU a fost implementat sau executat. Nu există rezultate pentru adopția stilului ori controller-ele 046/047/051. Nicio valoare comportamentală nu este pretinsă.
+Executed command:
+
+```text
+volta run --node 24.21.0 --npm 11.19.0 -- node --import ./scripts/register-typescript.mjs --test tests/learning/early-loop.test.ts
+```
+
+Result: 3/3 PASS. The checks cover the 25% × quality blend, unchanged values when evidence/provenance is missing, MANUAL helper no-op, and successful parsing by the real 046/047/051 profile validators. The controller boundary check confirms the values are exposed as `speed_delta_urban`, `desired_acceleration`, and `stopFullProbability`; it does not measure driving outcomes.
+
+The requested 3 taxis + 2 civilians fixture, prudent/risky/no-evidence independent datasets, measured target-speed/acceleration/full-stop outcomes, common style adoption, and MANUAL zero-learning end-to-end comparison remain unrun. No behavioral number is claimed.
+
+`npm test` completed with 1050/1050 passing (the 1049 stage-1 baseline plus this added adapter test).

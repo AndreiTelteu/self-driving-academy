@@ -2,6 +2,9 @@ import type { ParameterEvidenceReadModel } from './parameter-evidence';
 import type { SpeedCandidate } from './speed-estimator';
 import type { AccelerationCandidate } from './acceleration-estimator';
 import type { StopYieldCandidate } from './stop-yield-estimator';
+import { compileCruiseProfile, compileLongitudinalProfile, projectStopProfile } from '../autonomy';
+import { parsePublishableDrivingProfile } from '../profiles';
+import type { DrivingProfile } from '../profiles';
 
 /** Deliberately narrow prototype surface. It is not a 24-key publisher or a LEARNED profile. */
 export const EARLY_LOOP_KEYS = Object.freeze([
@@ -33,6 +36,43 @@ export interface EarlyLoopProfile {
   readonly version: '204-early-loop-v1';
   readonly publication: 'IN_MEMORY_AUTO_ONLY';
   readonly values: Readonly<Record<EarlyLoopKey, EarlyLoopValue>>;
+}
+
+/** Controller-owned capabilities compiled from a validated profile with only the three early values overlaid. */
+export interface EarlyLoopControllerProfiles {
+  readonly profile: DrivingProfile;
+  readonly cruise: ReturnType<typeof compileCruiseProfile>;
+  readonly longitudinal: ReturnType<typeof compileLongitudinalProfile>;
+  readonly stop: ReturnType<typeof projectStopProfile>;
+}
+
+/**
+ * Bridges the in-memory early-loop values into the existing 046/047/051 validation boundaries.
+ * Source/provenance and evidence metadata are copied verbatim; this never labels a value LEARNED.
+ */
+export function compileEarlyLoopControllerProfiles(
+  mode: 'AUTO' | 'MANUAL' | 'LEARNING',
+  base: DrivingProfile,
+  early: EarlyLoopProfile,
+): EarlyLoopControllerProfiles | null {
+  if (earlyLoopForMode(mode, early) === null) return null;
+  const parameters = { ...base.parameters };
+  for (const key of EARLY_LOOP_KEYS) {
+    const value = early.values[key];
+    if (value.candidate !== null) parameters[key] = value.value;
+  }
+  const profile = parsePublishableDrivingProfile({
+    ...base,
+    versionId: `${base.versionId}-204-early`,
+    parameters,
+    checksum: `${base.checksum}:204-early-loop-v1`,
+  });
+  return Object.freeze({
+    profile,
+    cruise: compileCruiseProfile(profile),
+    longitudinal: compileLongitudinalProfile(profile),
+    stop: projectStopProfile(profile),
+  });
 }
 
 const BLEND_CAP = 0.25;

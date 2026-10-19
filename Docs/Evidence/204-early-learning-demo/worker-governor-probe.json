@@ -1,0 +1,832 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-10-19T16:55:02.757Z",
+  "fixtureVersion": "221-synthetic-cpu-v1",
+  "commit": "5a1c8e576fc69eeeccd06abd9b4bf24aebf809ae",
+  "sourceHash": "f277666ce0ef2cc9d178f8e8d38e1ddcea2b1517819408a70e4822397627b764",
+  "inputs": [
+    "src/workers/governor.ts",
+    "src/workers/client.ts",
+    "src/workers/runtime.ts",
+    "src/workers/protocol.ts",
+    "tests/harness/governor-probe.ts",
+    "tests/harness/governor-task.ts",
+    "tests/harness/governor-store.ts",
+    "tests/workers/governor-thread.mjs",
+    "scripts/benchmark-worker-governor.mjs"
+  ],
+  "budgetVersion": "203-initial-1",
+  "workerBudgetVersion": "221-synthetic-1",
+  "hardware": {
+    "cpu": "AMD Ryzen 7 7735U with Radeon Graphics         ",
+    "ramBytes": 14702026752,
+    "os": "win32",
+    "node": "v24.21.0"
+  },
+  "backend": "Node worker_threads CPU; no browser/FPS/GPU claims",
+  "powerState": "not observed",
+  "scope": "Synthetic protocol, slices2ms/120, preemption/cancel/restart/protected result persistence, five repetitions; not gameplay calibration",
+  "baseline": {
+    "fixture": "clone-4096x1000-v1",
+    "samplesMs": [
+      6.043999999999983,
+      4.2287000000000035,
+      4.116299999999995,
+      3.9824999999999875,
+      4.7952999999999975
+    ]
+  },
+  "limits": {
+    "version": "221-synthetic-1",
+    "jobs": 8,
+    "payloadBytes": 16777216,
+    "persistenceIngressJobs": 8,
+    "persistenceIngressBytes": 16777216,
+    "heavyJobs": 1,
+    "residentExperimentWorlds": 1,
+    "optionalAgeMs": 30000,
+    "history": 64
+  },
+  "categories": {
+    "pendingOwned": "16MiB/8jobs cap",
+    "persistenceIngress": "16MiB/8jobs independent cap",
+    "activeTransport": "8MiB/1heavy cap; client metadata buffer detached on transfer",
+    "protectedStore": "fixture16MiB/8records including evidence and proposals; injected production store must declare finite bounds",
+    "memory": "RSS/heap/external observed independently; do not sum overlapping categories or call the16MiB queue cap total RAM"
+  },
+  "repeats": [
+    {
+      "repeat": 1,
+      "startupMs": 63.22909999999999,
+      "interactiveEndToEndMs": 5.6311000000000035,
+      "progressCount": 12,
+      "progressEvents": [
+        {
+          "jobId": "1",
+          "atMs": 303.0784
+        },
+        {
+          "jobId": "3",
+          "atMs": 310.9259
+        },
+        {
+          "jobId": "3",
+          "atMs": 527.1585
+        },
+        {
+          "jobId": "3",
+          "atMs": 731.9036
+        },
+        {
+          "jobId": "3",
+          "atMs": 935.9926
+        },
+        {
+          "jobId": "3",
+          "atMs": 1140.7105
+        },
+        {
+          "jobId": "3",
+          "atMs": 1343.7562
+        },
+        {
+          "jobId": "3",
+          "atMs": 1549.0559
+        },
+        {
+          "jobId": "3",
+          "atMs": 1751.4119
+        },
+        {
+          "jobId": "3",
+          "atMs": 1953.9844
+        },
+        {
+          "jobId": "3",
+          "atMs": 2156.3373
+        },
+        {
+          "jobId": "4",
+          "atMs": 2174.0412
+        }
+      ],
+      "maxSliceMs": 2.0020000000000095,
+      "worldTokensMaximum": 1,
+      "logicalComparisonResults": 1,
+      "attemptedComparisonStarts": 2,
+      "liveBufferAttached": true,
+      "measurements": [
+        {
+          "key": "[\"comparison\",\"probe1\",1,1,\"p1\",\"v1\",\"comparison-long\"]",
+          "attempt": 1,
+          "status": "cancelled",
+          "queueMs": 0.21109999999998763,
+          "serviceMs": 67.41150000000002,
+          "endToEndMs": 67.6226,
+          "cancellationMs": 4.66070000000002,
+          "preempted": true
+        },
+        {
+          "key": "[\"learning\",\"probe1\",1,1,\"p1\",\"v1\",\"learning-short\"]",
+          "attempt": 1,
+          "status": "result",
+          "queueMs": 4.784400000000005,
+          "serviceMs": 0.38330000000001974,
+          "endToEndMs": 5.167700000000025,
+          "cancellationMs": null,
+          "preempted": false
+        },
+        {
+          "key": "[\"comparison\",\"probe1\",1,1,\"p1\",\"v1\",\"comparison-long\"]",
+          "attempt": 2,
+          "status": "result",
+          "queueMs": 0.6059999999999945,
+          "serviceMs": 1862.6864999999998,
+          "endToEndMs": 1930.9150999999997,
+          "cancellationMs": null,
+          "preempted": false
+        },
+        {
+          "key": "[\"comparison\",\"probe1\",1,1,\"p1\",\"v1\",\"cancel-long\"]",
+          "attempt": 1,
+          "status": "cancelled",
+          "queueMs": 0.018500000000130967,
+          "serviceMs": 45.88830000000007,
+          "endToEndMs": 45.9068000000002,
+          "cancellationMs": 16.327299999999923,
+          "preempted": false
+        }
+      ],
+      "usage": {
+        "version": "221-synthetic-1",
+        "jobs": 0,
+        "bytes": 0,
+        "persistenceIngressJobs": 0,
+        "persistenceIngressBytes": 0,
+        "activeHeavyJobs": 0,
+        "history": 4,
+        "transport": {
+          "jobs": 0,
+          "bytes": 0,
+          "history": 4
+        },
+        "pressure": false,
+        "context": "active",
+        "suspendedReason": null
+      },
+      "storeAfterAcknowledgement": {
+        "records": 0,
+        "bytes": 0
+      },
+      "durationMs": 1977.9415,
+      "transferCount": 4,
+      "processMemory": {
+        "rss": 103542784,
+        "heapTotal": 21909504,
+        "heapUsed": 12757536,
+        "external": 14658896,
+        "arrayBuffers": 4704123
+      }
+    },
+    {
+      "repeat": 2,
+      "startupMs": 50.48259999999982,
+      "interactiveEndToEndMs": 2.092999999999847,
+      "progressCount": 11,
+      "progressEvents": [
+        {
+          "jobId": "1",
+          "atMs": 2271.5208
+        },
+        {
+          "jobId": "3",
+          "atMs": 2275.8201
+        },
+        {
+          "jobId": "3",
+          "atMs": 2480.7717
+        },
+        {
+          "jobId": "3",
+          "atMs": 2681.4926
+        },
+        {
+          "jobId": "3",
+          "atMs": 2896.2012
+        },
+        {
+          "jobId": "3",
+          "atMs": 3097.749
+        },
+        {
+          "jobId": "3",
+          "atMs": 3303.809
+        },
+        {
+          "jobId": "3",
+          "atMs": 3509.7456
+        },
+        {
+          "jobId": "3",
+          "atMs": 3713.1363
+        },
+        {
+          "jobId": "3",
+          "atMs": 3918.0628
+        },
+        {
+          "jobId": "4",
+          "atMs": 4093.9183
+        }
+      ],
+      "maxSliceMs": 2.041399999999612,
+      "worldTokensMaximum": 1,
+      "logicalComparisonResults": 1,
+      "attemptedComparisonStarts": 2,
+      "liveBufferAttached": true,
+      "measurements": [
+        {
+          "key": "[\"comparison\",\"probe1\",1,1,\"p1\",\"v1\",\"comparison-long\"]",
+          "attempt": 1,
+          "status": "cancelled",
+          "queueMs": 0.014599999999973079,
+          "serviceMs": 51.985299999999825,
+          "endToEndMs": 51.9998999999998,
+          "cancellationMs": 1.4135999999998603,
+          "preempted": true
+        },
+        {
+          "key": "[\"learning\",\"probe1\",1,1,\"p1\",\"v1\",\"learning-short\"]",
+          "attempt": 1,
+          "status": "result",
+          "queueMs": 1.4542999999998756,
+          "serviceMs": 0.3726000000001477,
+          "endToEndMs": 1.8269000000000233,
+          "cancellationMs": null,
+          "preempted": false
+        },
+        {
+          "key": "[\"comparison\",\"probe1\",1,1,\"p1\",\"v1\",\"comparison-long\"]",
+          "attempt": 2,
+          "status": "result",
+          "queueMs": 0.4519000000000233,
+          "serviceMs": 1817.7935000000002,
+          "endToEndMs": 1870.2453,
+          "cancellationMs": null,
+          "preempted": false
+        },
+        {
+          "key": "[\"comparison\",\"probe1\",1,1,\"p1\",\"v1\",\"cancel-long\"]",
+          "attempt": 1,
+          "status": "cancelled",
+          "queueMs": 0.027800000000297587,
+          "serviceMs": 45.07369999999992,
+          "endToEndMs": 45.101500000000215,
+          "cancellationMs": 16.48070000000007,
+          "preempted": false
+        }
+      ],
+      "usage": {
+        "version": "221-synthetic-1",
+        "jobs": 0,
+        "bytes": 0,
+        "persistenceIngressJobs": 0,
+        "persistenceIngressBytes": 0,
+        "activeHeavyJobs": 0,
+        "history": 4,
+        "transport": {
+          "jobs": 0,
+          "bytes": 0,
+          "history": 4
+        },
+        "pressure": false,
+        "context": "active",
+        "suspendedReason": null
+      },
+      "storeAfterAcknowledgement": {
+        "records": 0,
+        "bytes": 0
+      },
+      "durationMs": 1915.6352000000002,
+      "transferCount": 4,
+      "processMemory": {
+        "rss": 104148992,
+        "heapTotal": 21909504,
+        "heapUsed": 13189592,
+        "external": 14659088,
+        "arrayBuffers": 4704223
+      }
+    },
+    {
+      "repeat": 3,
+      "startupMs": 52.060599999999795,
+      "interactiveEndToEndMs": 1.8226000000004206,
+      "progressCount": 12,
+      "progressEvents": [
+        {
+          "jobId": "1",
+          "atMs": 4191.4915
+        },
+        {
+          "jobId": "3",
+          "atMs": 4195.4869
+        },
+        {
+          "jobId": "3",
+          "atMs": 4406.6794
+        },
+        {
+          "jobId": "3",
+          "atMs": 4614.063
+        },
+        {
+          "jobId": "3",
+          "atMs": 4820.7379
+        },
+        {
+          "jobId": "3",
+          "atMs": 5023.594
+        },
+        {
+          "jobId": "3",
+          "atMs": 5227.9288
+        },
+        {
+          "jobId": "3",
+          "atMs": 5431.4663
+        },
+        {
+          "jobId": "3",
+          "atMs": 5636.7623
+        },
+        {
+          "jobId": "3",
+          "atMs": 5842.6193
+        },
+        {
+          "jobId": "3",
+          "atMs": 6050.6719
+        },
+        {
+          "jobId": "4",
+          "atMs": 6068.6726
+        }
+      ],
+      "maxSliceMs": 2.0002999999996973,
+      "worldTokensMaximum": 1,
+      "logicalComparisonResults": 1,
+      "attemptedComparisonStarts": 2,
+      "liveBufferAttached": true,
+      "measurements": [
+        {
+          "key": "[\"comparison\",\"probe1\",1,1,\"p1\",\"v1\",\"comparison-long\"]",
+          "attempt": 1,
+          "status": "cancelled",
+          "queueMs": 0.014200000000528235,
+          "serviceMs": 53.392799999999625,
+          "endToEndMs": 53.40700000000015,
+          "cancellationMs": 1.250199999999495,
+          "preempted": true
+        },
+        {
+          "key": "[\"learning\",\"probe1\",1,1,\"p1\",\"v1\",\"learning-short\"]",
+          "attempt": 1,
+          "status": "result",
+          "queueMs": 1.2942999999995664,
+          "serviceMs": 0.3103000000000975,
+          "endToEndMs": 1.6045999999996639,
+          "cancellationMs": null,
+          "preempted": false
+        },
+        {
+          "key": "[\"comparison\",\"probe1\",1,1,\"p1\",\"v1\",\"comparison-long\"]",
+          "attempt": 2,
+          "status": "result",
+          "queueMs": 0.3878999999997177,
+          "serviceMs": 1872.8802000000005,
+          "endToEndMs": 1926.6751000000004,
+          "cancellationMs": null,
+          "preempted": false
+        },
+        {
+          "key": "[\"comparison\",\"probe1\",1,1,\"p1\",\"v1\",\"cancel-long\"]",
+          "attempt": 1,
+          "status": "cancelled",
+          "queueMs": 0.021600000000034925,
+          "serviceMs": 45.84109999999964,
+          "endToEndMs": 45.86269999999968,
+          "cancellationMs": 16.31999999999971,
+          "preempted": false
+        }
+      ],
+      "usage": {
+        "version": "221-synthetic-1",
+        "jobs": 0,
+        "bytes": 0,
+        "persistenceIngressJobs": 0,
+        "persistenceIngressBytes": 0,
+        "activeHeavyJobs": 0,
+        "history": 4,
+        "transport": {
+          "jobs": 0,
+          "bytes": 0,
+          "history": 4
+        },
+        "pressure": false,
+        "context": "active",
+        "suspendedReason": null
+      },
+      "storeAfterAcknowledgement": {
+        "records": 0,
+        "bytes": 0
+      },
+      "durationMs": 1972.8845000000001,
+      "transferCount": 4,
+      "processMemory": {
+        "rss": 104005632,
+        "heapTotal": 21909504,
+        "heapUsed": 13597048,
+        "external": 14659240,
+        "arrayBuffers": 4704327
+      }
+    },
+    {
+      "repeat": 4,
+      "startupMs": 52.69170000000031,
+      "interactiveEndToEndMs": 1.4326000000000931,
+      "progressCount": 11,
+      "progressEvents": [
+        {
+          "jobId": "1",
+          "atMs": 6168.5804
+        },
+        {
+          "jobId": "3",
+          "atMs": 6173.0856
+        },
+        {
+          "jobId": "3",
+          "atMs": 6382.6647
+        },
+        {
+          "jobId": "3",
+          "atMs": 6584.2036
+        },
+        {
+          "jobId": "3",
+          "atMs": 6785.8443
+        },
+        {
+          "jobId": "3",
+          "atMs": 6989.4199
+        },
+        {
+          "jobId": "3",
+          "atMs": 7189.5892
+        },
+        {
+          "jobId": "3",
+          "atMs": 7393.8896
+        },
+        {
+          "jobId": "3",
+          "atMs": 7594.1488
+        },
+        {
+          "jobId": "3",
+          "atMs": 7795.3598
+        },
+        {
+          "jobId": "4",
+          "atMs": 7999.4373
+        }
+      ],
+      "maxSliceMs": 2.027100000000246,
+      "worldTokensMaximum": 1,
+      "logicalComparisonResults": 1,
+      "attemptedComparisonStarts": 2,
+      "liveBufferAttached": true,
+      "measurements": [
+        {
+          "key": "[\"comparison\",\"probe1\",1,1,\"p1\",\"v1\",\"comparison-long\"]",
+          "attempt": 1,
+          "status": "cancelled",
+          "queueMs": 0.02099999999973079,
+          "serviceMs": 53.67240000000038,
+          "endToEndMs": 53.69340000000011,
+          "cancellationMs": 0.9501000000000204,
+          "preempted": true
+        },
+        {
+          "key": "[\"learning\",\"probe1\",1,1,\"p1\",\"v1\",\"learning-short\"]",
+          "attempt": 1,
+          "status": "result",
+          "queueMs": 0.9799000000002707,
+          "serviceMs": 0.2588999999998123,
+          "endToEndMs": 1.238800000000083,
+          "cancellationMs": null,
+          "preempted": false
+        },
+        {
+          "key": "[\"comparison\",\"probe1\",1,1,\"p1\",\"v1\",\"comparison-long\"]",
+          "attempt": 2,
+          "status": "result",
+          "queueMs": 0.31520000000000437,
+          "serviceMs": 1826.9552999999996,
+          "endToEndMs": 1880.9638999999997,
+          "cancellationMs": null,
+          "preempted": false
+        },
+        {
+          "key": "[\"comparison\",\"probe1\",1,1,\"p1\",\"v1\",\"cancel-long\"]",
+          "attempt": 1,
+          "status": "cancelled",
+          "queueMs": 0.01239999999961583,
+          "serviceMs": 44.430600000000595,
+          "endToEndMs": 44.44300000000021,
+          "cancellationMs": 16.13040000000001,
+          "preempted": false
+        }
+      ],
+      "usage": {
+        "version": "221-synthetic-1",
+        "jobs": 0,
+        "bytes": 0,
+        "persistenceIngressJobs": 0,
+        "persistenceIngressBytes": 0,
+        "activeHeavyJobs": 0,
+        "history": 4,
+        "transport": {
+          "jobs": 0,
+          "bytes": 0,
+          "history": 4
+        },
+        "pressure": false,
+        "context": "active",
+        "suspendedReason": null
+      },
+      "storeAfterAcknowledgement": {
+        "records": 0,
+        "bytes": 0
+      },
+      "durationMs": 1925.75,
+      "transferCount": 4,
+      "processMemory": {
+        "rss": 103088128,
+        "heapTotal": 21909504,
+        "heapUsed": 13949008,
+        "external": 14659392,
+        "arrayBuffers": 4704435
+      }
+    },
+    {
+      "repeat": 5,
+      "startupMs": 51.0622000000003,
+      "interactiveEndToEndMs": 4.408700000000863,
+      "progressCount": 11,
+      "progressEvents": [
+        {
+          "jobId": "1",
+          "atMs": 8095.1476
+        },
+        {
+          "jobId": "3",
+          "atMs": 8101.7056
+        },
+        {
+          "jobId": "3",
+          "atMs": 8305.4528
+        },
+        {
+          "jobId": "3",
+          "atMs": 8520.9708
+        },
+        {
+          "jobId": "3",
+          "atMs": 8721.5897
+        },
+        {
+          "jobId": "3",
+          "atMs": 8938.0061
+        },
+        {
+          "jobId": "3",
+          "atMs": 9140.9458
+        },
+        {
+          "jobId": "3",
+          "atMs": 9346.8668
+        },
+        {
+          "jobId": "3",
+          "atMs": 9550.8951
+        },
+        {
+          "jobId": "3",
+          "atMs": 9755.8725
+        },
+        {
+          "jobId": "4",
+          "atMs": 9934.2201
+        }
+      ],
+      "maxSliceMs": 2.000400000000809,
+      "worldTokensMaximum": 1,
+      "logicalComparisonResults": 1,
+      "attemptedComparisonStarts": 2,
+      "liveBufferAttached": true,
+      "measurements": [
+        {
+          "key": "[\"comparison\",\"probe1\",1,1,\"p1\",\"v1\",\"comparison-long\"]",
+          "attempt": 1,
+          "status": "cancelled",
+          "queueMs": 0.008100000000013097,
+          "serviceMs": 55.008200000000215,
+          "endToEndMs": 55.01630000000023,
+          "cancellationMs": 3.8759000000000015,
+          "preempted": true
+        },
+        {
+          "key": "[\"learning\",\"probe1\",1,1,\"p1\",\"v1\",\"learning-short\"]",
+          "attempt": 1,
+          "status": "result",
+          "queueMs": 3.9069999999992433,
+          "serviceMs": 0.3121000000001004,
+          "endToEndMs": 4.219099999999344,
+          "cancellationMs": null,
+          "preempted": false
+        },
+        {
+          "key": "[\"comparison\",\"probe1\",1,1,\"p1\",\"v1\",\"comparison-long\"]",
+          "attempt": 2,
+          "status": "result",
+          "queueMs": 0.37110000000029686,
+          "serviceMs": 1832.112399999999,
+          "endToEndMs": 1887.4997999999996,
+          "cancellationMs": null,
+          "preempted": false
+        },
+        {
+          "key": "[\"comparison\",\"probe1\",1,1,\"p1\",\"v1\",\"cancel-long\"]",
+          "attempt": 1,
+          "status": "cancelled",
+          "queueMs": 0.010099999999511056,
+          "serviceMs": 45.806700000001,
+          "endToEndMs": 45.81680000000051,
+          "cancellationMs": 16.225099999999657,
+          "preempted": false
+        }
+      ],
+      "usage": {
+        "version": "221-synthetic-1",
+        "jobs": 0,
+        "bytes": 0,
+        "persistenceIngressJobs": 0,
+        "persistenceIngressBytes": 0,
+        "activeHeavyJobs": 0,
+        "history": 4,
+        "transport": {
+          "jobs": 0,
+          "bytes": 0,
+          "history": 4
+        },
+        "pressure": false,
+        "context": "active",
+        "suspendedReason": null
+      },
+      "storeAfterAcknowledgement": {
+        "records": 0,
+        "bytes": 0
+      },
+      "durationMs": 1933.7055999999993,
+      "transferCount": 4,
+      "processMemory": {
+        "rss": 93138944,
+        "heapTotal": 14831616,
+        "heapUsed": 12563992,
+        "external": 10104172,
+        "arrayBuffers": 149359
+      }
+    }
+  ],
+  "collector": {
+    "enabled": true,
+    "capacityPerMetric": 64,
+    "bufferBytes": 5676,
+    "dropped": 0,
+    "complete": true,
+    "metrics": {
+      "frameMs": {
+        "status": "unavailable",
+        "reason": "No samples supplied for this scope",
+        "distribution": null
+      },
+      "mainThreadMs": {
+        "status": "unavailable",
+        "reason": "No samples supplied for this scope",
+        "distribution": null
+      },
+      "tickCpuMs": {
+        "status": "unavailable",
+        "reason": "No samples supplied for this scope",
+        "distribution": null
+      },
+      "simulationCpuMs": {
+        "status": "unavailable",
+        "reason": "No samples supplied for this scope",
+        "distribution": null
+      },
+      "debtMs": {
+        "status": "unavailable",
+        "reason": "No samples supplied for this scope",
+        "distribution": null
+      },
+      "gpuMs": {
+        "status": "unavailable",
+        "reason": "No samples supplied for this scope",
+        "distribution": null
+      },
+      "inputToCommandMs": {
+        "status": "unavailable",
+        "reason": "No samples supplied for this scope",
+        "distribution": null
+      },
+      "learningQueueMs": {
+        "status": "available",
+        "reason": null,
+        "distribution": {
+          "count": 5,
+          "p50": 1.4542999999998756,
+          "p95": 4.784400000000005,
+          "p99": 4.784400000000005,
+          "min": 0.9799000000002707,
+          "max": 4.784400000000005,
+          "mean": 2.483979999999792,
+          "overBudget": null,
+          "histogram": [
+            1,
+            3,
+            1,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "learningServiceMs": {
+        "status": "available",
+        "reason": null,
+        "distribution": {
+          "count": 5,
+          "p50": 0.3121000000001004,
+          "p95": 0.38330000000001974,
+          "p99": 0.38330000000001974,
+          "min": 0.2588999999998123,
+          "max": 0.38330000000001974,
+          "mean": 0.32744000000003554,
+          "overBudget": null,
+          "histogram": [
+            5,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "learningEndToEndMs": {
+        "status": "available",
+        "reason": null,
+        "distribution": {
+          "count": 5,
+          "p50": 1.8269000000000233,
+          "p95": 5.167700000000025,
+          "p99": 5.167700000000025,
+          "min": 1.238800000000083,
+          "max": 5.167700000000025,
+          "mean": 2.8114199999998277,
+          "overBudget": 0,
+          "histogram": [
+            0,
+            3,
+            2,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "checkpointAgeMs": {
+        "status": "unavailable",
+        "reason": "No samples supplied for this scope",
+        "distribution": null
+      }
+    }
+  },
+  "gameplayGate": "NOT_VALIDATED",
+  "laptop": "NOT_MEASURED;203 waiver only"
+}
