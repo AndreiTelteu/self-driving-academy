@@ -1,0 +1,177 @@
+{
+  "capturedAt": "2026-10-19T11:35:08.486Z",
+  "pbi": "089",
+  "mode": "BEFORE_NORMALIZER_DISABLED",
+  "commit": "986cbe172121f3c6e00fd2cf851bf721b8780722",
+  "sourceHashes": {
+    "scripts/benchmark-telemetry-normalization.mjs": "eca67504434e712793a07c80775bd584e92ef8841f91bdec639b3cdfbb895aaf",
+    "src/telemetry/vehicle-normalization.ts": "b8ad78fb0e75453f12faade75966c30aa608ab486b866111a39bf5d40803de57",
+    "src/telemetry/artifact-filter.ts": "f7b0f887cbc968685e1403cccd7e50c6f2ad75206260e7712fbf6849698c90e3",
+    "src/telemetry/eligibility-windows.ts": "bd40336572b44ec432d52f612754be26a11a4c348235011d6187b1cb29e3cf62",
+    "src/telemetry/opportunities.ts": "c2ecb5c67a7da7f510a42f36202d9748062edef5417e4e2a319381acac526626",
+    "src/telemetry/tick-samples.ts": "71d55715f2a9a1a0ea87b427f2da7c3e13b319e1c68812b27393e49e60740905",
+    "src/vehicles/vehicle-classes.ts": "43eed5576928ac07616200837f58bfbfd10bb41bd111b4bc7369f7ac0bc40fb2",
+    "src/autonomy/longitudinal-control.ts": "36638749d6c9e968a9a4ad138783a9605fd712ae53d245b3ccf6066a78ff5e43",
+    "src/autonomy/lateral-controller.ts": "4709fb854733a5df83ac198e62b9cf30753dbaa9bd55b115d061831a937513dd",
+    "src/autonomy/cruise-targets.ts": "cdb05518de0540d197dd02e9b8ea8467576bfd5942d4e1c82c4a1b82b44bcebd",
+    "tests/autonomy/road-context-reference.ts": "c5fe61c330db951f2bb1f97b3ea6d75bb92228e7f38864197e21378602ddd6f7",
+    "tests/autonomy/longitudinal-reference.ts": "c978e333c16ba26f098974fe76173d240b9b004f30739797a44ed7ff6e84304e",
+    "tests/autonomy/lateral-controller-reference.ts": "5fe7c2dbb69cc6e9cfb9c3b0a3db1d944bbf0af8e2810e9b25649103413ca898"
+  },
+  "sourceHashScope": "Probe, normalization layer, artefact filter, eligibility layer, opportunity registry, tick samples, vehicle classes, longitudinal/lateral controllers, cruise targets and the reused fixtures; not a verified transitive dependency closure",
+  "hardware": {
+    "cpu": "AMD Ryzen 7 7735U with Radeon Graphics         ",
+    "logicalCpus": 16,
+    "ramBytes": 14702026752,
+    "os": "win32 10.0.26300",
+    "powerScheme": "Power Scheme GUID: 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c  (High performance)"
+  },
+  "runtime": "v24.21.0",
+  "budgetVersion": "203-initial-1",
+  "fixtureVersion": "089-vehicle-normalization-native-v1",
+  "fixtureMapId": "044-context-cross-v1",
+  "validationLevel": "targeted",
+  "protocol": {
+    "repetitions": 5,
+    "totalRideTicks": 480,
+    "warmupTicks": 120,
+    "measuredTicks": 360,
+    "decisionPeriodTicks": 6,
+    "measuredDecisions": 60,
+    "arms": "chain / normalize per repetition, sequential, one process, no concurrent load",
+    "workload": "one subject observed over the real 044/085 fixture; the real 046 target producer and the real 047 longitudinal controller at 60 Hz produce the command sequence, replayed verbatim in the compact so both classes execute the same command; the realized demand is the real 023 drivetrain and the real 049 projected curvature; the real 086 registry, the real 087 eligibility layer, the real 088 filter and (in the normalize arm) the real 089 normalizer run at the 219 decision cadence (every 6 ticks)",
+    "seed": "none; deterministic fixture and a fixed tick cadence",
+    "capacity": "default (4096)",
+    "clock": "performance.now only; fixed synthetic tick index (no wall clock in the fixture)",
+    "budget": "Added cost must stay far below the 5.5 ms provisional full-tick p95 ceiling; no isolated budget claimed",
+    "calibration": "PROVISIONAL_UNCALIBRATED",
+    "injected": [
+      "The 044 fixture carries no traffic opportunity, so the real 038 priority-yield identity is injected through the 086 registry stimulus port at one decision.",
+      "The ride carries no collision, recovery or suspension: the 088 window is COMPLETE. The refused cases are covered by the unit suite and the self-check."
+    ]
+  },
+  "scope": "Native Node CPU and owned-memory cost of the 089 vehicle-class normalization on top of the real 086/087/088 chain. No renderer, browser, GPU, FPS or realtime-throughput claim.",
+  "runs": [
+    {
+      "repetition": 1,
+      "mode": "chain",
+      "classId": "sedan",
+      "chainCallMs": {
+        "count": 60,
+        "p50": 0.015900000000044656,
+        "p95": 0.025400000000047385,
+        "p99": 0.03469999999998663,
+        "min": 0.014999999999986358,
+        "max": 0.036500000000046384,
+        "mean": 0.017271666666669225
+      },
+      "observeCallMs": null,
+      "wallMs": 3.935800000000029,
+      "decisions": 60,
+      "normalizationOwnership": null,
+      "normalizationDenominators": null,
+      "heapAfterBytes": 18175288
+    },
+    {
+      "repetition": 2,
+      "mode": "chain",
+      "classId": "sedan",
+      "chainCallMs": {
+        "count": 60,
+        "p50": 0.01520000000004984,
+        "p95": 0.02800000000002001,
+        "p99": 0.03280000000000882,
+        "min": 0.014800000000036562,
+        "max": 0.058500000000037744,
+        "mean": 0.017836666666669505
+      },
+      "observeCallMs": null,
+      "wallMs": 1.5294999999999845,
+      "decisions": 60,
+      "normalizationOwnership": null,
+      "normalizationDenominators": null,
+      "heapAfterBytes": 20296672
+    },
+    {
+      "repetition": 3,
+      "mode": "chain",
+      "classId": "sedan",
+      "chainCallMs": {
+        "count": 60,
+        "p50": 0.014999999999986358,
+        "p95": 0.02390000000002601,
+        "p99": 0.02719999999999345,
+        "min": 0.014600000000029922,
+        "max": 0.03449999999997999,
+        "mean": 0.016251666666671365
+      },
+      "observeCallMs": null,
+      "wallMs": 1.377900000000011,
+      "decisions": 60,
+      "normalizationOwnership": null,
+      "normalizationDenominators": null,
+      "heapAfterBytes": 22415560
+    },
+    {
+      "repetition": 4,
+      "mode": "chain",
+      "classId": "sedan",
+      "chainCallMs": {
+        "count": 60,
+        "p50": 0.014800000000036562,
+        "p95": 0.018100000000004002,
+        "p99": 0.02990000000005466,
+        "min": 0.01439999999996644,
+        "max": 0.248299999999972,
+        "mean": 0.01937000000000637
+      },
+      "observeCallMs": null,
+      "wallMs": 1.5745999999999754,
+      "decisions": 60,
+      "normalizationOwnership": null,
+      "normalizationDenominators": null,
+      "heapAfterBytes": 16316176
+    },
+    {
+      "repetition": 5,
+      "mode": "chain",
+      "classId": "sedan",
+      "chainCallMs": {
+        "count": 60,
+        "p50": 0.014600000000029922,
+        "p95": 0.015800000000012915,
+        "p99": 0.022899999999992815,
+        "min": 0.014299999999991542,
+        "max": 0.037599999999997635,
+        "mean": 0.015253333333333785
+      },
+      "observeCallMs": null,
+      "wallMs": 1.365199999999959,
+      "decisions": 60,
+      "normalizationOwnership": null,
+      "normalizationDenominators": null,
+      "heapAfterBytes": 18437848
+    }
+  ],
+  "paired": [],
+  "memoryRegion": null,
+  "perWindowCostMs": null,
+  "selfCheck": null,
+  "budgets": {
+    "manifest": "Docs/performance-budgets.json",
+    "budgetVersion": "203-initial-1",
+    "capacityCalibration": "PROVISIONAL_UNCALIBRATED",
+    "diagnosticSamplesProposal": 4096,
+    "measuredCapacity": 4096,
+    "recorderRamBytesCap": 33554432,
+    "authoritativeTickP95MsDesktopProvisional": 5.5,
+    "authoritativeTickP95MsLaptopProvisional": 8
+  },
+  "exclusions": [
+    "No browser, renderer, GPU or FPS measurement; the 052 record documents an unresolved WebGPU presentation stall on this laptop.",
+    "Heap counters are diagnostic only; exact ownership is reported from the normalization counters.",
+    "Forced GC between repetitions is not used inside the timed region.",
+    "BEFORE is the same fixture with the 089 layer disabled, not a historical commit: 089 is purely additive."
+  ],
+  "guard": 0
+}

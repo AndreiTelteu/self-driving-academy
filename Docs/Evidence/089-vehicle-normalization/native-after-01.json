@@ -1,0 +1,775 @@
+{
+  "capturedAt": "2026-10-19T11:35:20.734Z",
+  "pbi": "089",
+  "mode": "AFTER_VEHICLE_NORMALIZATION",
+  "commit": "986cbe172121f3c6e00fd2cf851bf721b8780722",
+  "sourceHashes": {
+    "scripts/benchmark-telemetry-normalization.mjs": "eca67504434e712793a07c80775bd584e92ef8841f91bdec639b3cdfbb895aaf",
+    "src/telemetry/vehicle-normalization.ts": "b8ad78fb0e75453f12faade75966c30aa608ab486b866111a39bf5d40803de57",
+    "src/telemetry/artifact-filter.ts": "f7b0f887cbc968685e1403cccd7e50c6f2ad75206260e7712fbf6849698c90e3",
+    "src/telemetry/eligibility-windows.ts": "bd40336572b44ec432d52f612754be26a11a4c348235011d6187b1cb29e3cf62",
+    "src/telemetry/opportunities.ts": "c2ecb5c67a7da7f510a42f36202d9748062edef5417e4e2a319381acac526626",
+    "src/telemetry/tick-samples.ts": "71d55715f2a9a1a0ea87b427f2da7c3e13b319e1c68812b27393e49e60740905",
+    "src/vehicles/vehicle-classes.ts": "43eed5576928ac07616200837f58bfbfd10bb41bd111b4bc7369f7ac0bc40fb2",
+    "src/autonomy/longitudinal-control.ts": "36638749d6c9e968a9a4ad138783a9605fd712ae53d245b3ccf6066a78ff5e43",
+    "src/autonomy/lateral-controller.ts": "4709fb854733a5df83ac198e62b9cf30753dbaa9bd55b115d061831a937513dd",
+    "src/autonomy/cruise-targets.ts": "cdb05518de0540d197dd02e9b8ea8467576bfd5942d4e1c82c4a1b82b44bcebd",
+    "tests/autonomy/road-context-reference.ts": "c5fe61c330db951f2bb1f97b3ea6d75bb92228e7f38864197e21378602ddd6f7",
+    "tests/autonomy/longitudinal-reference.ts": "c978e333c16ba26f098974fe76173d240b9b004f30739797a44ed7ff6e84304e",
+    "tests/autonomy/lateral-controller-reference.ts": "5fe7c2dbb69cc6e9cfb9c3b0a3db1d944bbf0af8e2810e9b25649103413ca898"
+  },
+  "sourceHashScope": "Probe, normalization layer, artefact filter, eligibility layer, opportunity registry, tick samples, vehicle classes, longitudinal/lateral controllers, cruise targets and the reused fixtures; not a verified transitive dependency closure",
+  "hardware": {
+    "cpu": "AMD Ryzen 7 7735U with Radeon Graphics         ",
+    "logicalCpus": 16,
+    "ramBytes": 14702026752,
+    "os": "win32 10.0.26300",
+    "powerScheme": "Power Scheme GUID: 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c  (High performance)"
+  },
+  "runtime": "v24.21.0",
+  "budgetVersion": "203-initial-1",
+  "fixtureVersion": "089-vehicle-normalization-native-v1",
+  "fixtureMapId": "044-context-cross-v1",
+  "validationLevel": "targeted",
+  "protocol": {
+    "repetitions": 5,
+    "totalRideTicks": 480,
+    "warmupTicks": 120,
+    "measuredTicks": 360,
+    "decisionPeriodTicks": 6,
+    "measuredDecisions": 60,
+    "arms": "chain / normalize per repetition, sequential, one process, no concurrent load",
+    "workload": "one subject observed over the real 044/085 fixture; the real 046 target producer and the real 047 longitudinal controller at 60 Hz produce the command sequence, replayed verbatim in the compact so both classes execute the same command; the realized demand is the real 023 drivetrain and the real 049 projected curvature; the real 086 registry, the real 087 eligibility layer, the real 088 filter and (in the normalize arm) the real 089 normalizer run at the 219 decision cadence (every 6 ticks)",
+    "seed": "none; deterministic fixture and a fixed tick cadence",
+    "capacity": "default (4096)",
+    "clock": "performance.now only; fixed synthetic tick index (no wall clock in the fixture)",
+    "budget": "Added cost must stay far below the 5.5 ms provisional full-tick p95 ceiling; no isolated budget claimed",
+    "calibration": "PROVISIONAL_UNCALIBRATED",
+    "injected": [
+      "The 044 fixture carries no traffic opportunity, so the real 038 priority-yield identity is injected through the 086 registry stimulus port at one decision.",
+      "The ride carries no collision, recovery or suspension: the 088 window is COMPLETE. The refused cases are covered by the unit suite and the self-check."
+    ]
+  },
+  "scope": "Native Node CPU and owned-memory cost of the 089 vehicle-class normalization on top of the real 086/087/088 chain. No renderer, browser, GPU, FPS or realtime-throughput claim.",
+  "runs": [
+    {
+      "repetition": 1,
+      "mode": "chain",
+      "classId": "sedan",
+      "chainCallMs": {
+        "count": 60,
+        "p50": 0.015499999999974534,
+        "p95": 0.01870000000002392,
+        "p99": 0.03190000000000737,
+        "min": 0.01470000000000482,
+        "max": 0.13959999999997308,
+        "mean": 0.018189999999996567
+      },
+      "observeCallMs": null,
+      "wallMs": 3.9198000000000093,
+      "decisions": 60,
+      "normalizationOwnership": null,
+      "normalizationDenominators": null,
+      "heapAfterBytes": 18348064
+    },
+    {
+      "repetition": 1,
+      "mode": "normalize",
+      "classId": "sedan",
+      "chainCallMs": {
+        "count": 60,
+        "p50": 0.018400000000042382,
+        "p95": 0.02559999999999718,
+        "p99": 0.03150000000005093,
+        "min": 0.017499999999984084,
+        "max": 0.03779999999994743,
+        "mean": 0.019956666666665037
+      },
+      "observeCallMs": {
+        "count": 80,
+        "p50": 0.10079999999999245,
+        "p95": 0.15039999999999054,
+        "p99": 0.4408999999999992,
+        "min": 0.05889999999999418,
+        "max": 0.8375000000000341,
+        "mean": 0.11585500000000053
+      },
+      "wallMs": 11.120799999999974,
+      "decisions": 60,
+      "normalizationOwnership": {
+        "version": "089-vehicle-normalization-v1",
+        "disposed": false,
+        "maxWindows": 4096,
+        "windowsEvaluated": 1,
+        "observationCalls": 80,
+        "normalizedTotal": 79,
+        "intentionalTotal": 79,
+        "capabilityLimitedTotal": 0,
+        "refusedTotal": 1,
+        "downgradedTotal": 0,
+        "upgradedTotal": 1,
+        "rejectedTotal": 0,
+        "retiredTotal": 0,
+        "skippedTicks": 395,
+        "intentEmitted": 0,
+        "intentRefused": 0,
+        "retained": 1,
+        "capabilityLimitedRetained": 0,
+        "identityCodeUnits": 402,
+        "estimatedBytes": 1060,
+        "estimatedBytesMaximum": 9437184
+      },
+      "normalizationDenominators": {
+        "version": "089-vehicle-normalization-v1",
+        "total": 1,
+        "normalized": 79,
+        "intentional": 79,
+        "capabilityLimited": 0,
+        "refused": 1,
+        "byRefusal": [
+          {
+            "refusal": "NOT_ELIGIBLE_WINDOW",
+            "count": 0
+          },
+          {
+            "refusal": "WINDOW_FULLY_SUPPRESSED",
+            "count": 0
+          },
+          {
+            "refusal": "WINDOW_TRUNCATED",
+            "count": 0
+          },
+          {
+            "refusal": "NO_USABLE_SAMPLES",
+            "count": 0
+          },
+          {
+            "refusal": "INSUFFICIENT_SAMPLES",
+            "count": 1
+          }
+        ],
+        "byChannel": [
+          {
+            "channel": "LONGITUDINAL_ACCELERATION",
+            "count": 0
+          },
+          {
+            "channel": "LONGITUDINAL_DECELERATION",
+            "count": 0
+          },
+          {
+            "channel": "LATERAL",
+            "count": 0
+          }
+        ],
+        "usableTicks": 19039,
+        "sampledTicks": 19039,
+        "intentEmitted": 0,
+        "intentRefused": 0
+      },
+      "heapAfterBytes": 22604256
+    },
+    {
+      "repetition": 2,
+      "mode": "chain",
+      "classId": "sedan",
+      "chainCallMs": {
+        "count": 60,
+        "p50": 0.015100000000018099,
+        "p95": 0.048900000000003274,
+        "p99": 0.08650000000000091,
+        "min": 0.014499999999998181,
+        "max": 0.325300000000027,
+        "mean": 0.025139999999998962
+      },
+      "observeCallMs": null,
+      "wallMs": 2.0160999999999945,
+      "decisions": 60,
+      "normalizationOwnership": null,
+      "normalizationDenominators": null,
+      "heapAfterBytes": 16541296
+    },
+    {
+      "repetition": 2,
+      "mode": "normalize",
+      "classId": "sedan",
+      "chainCallMs": {
+        "count": 60,
+        "p50": 0.018100000000004002,
+        "p95": 0.04149999999998499,
+        "p99": 0.04230000000001155,
+        "min": 0.01639999999997599,
+        "max": 0.06059999999996535,
+        "mean": 0.022091666666668175
+      },
+      "observeCallMs": {
+        "count": 80,
+        "p50": 0.07150000000001455,
+        "p95": 0.19819999999998572,
+        "p99": 0.2545999999999822,
+        "min": 0.020699999999976626,
+        "max": 0.35969999999997526,
+        "mean": 0.08668249999999418
+      },
+      "wallMs": 8.750200000000007,
+      "decisions": 60,
+      "normalizationOwnership": {
+        "version": "089-vehicle-normalization-v1",
+        "disposed": false,
+        "maxWindows": 4096,
+        "windowsEvaluated": 1,
+        "observationCalls": 80,
+        "normalizedTotal": 79,
+        "intentionalTotal": 79,
+        "capabilityLimitedTotal": 0,
+        "refusedTotal": 1,
+        "downgradedTotal": 0,
+        "upgradedTotal": 1,
+        "rejectedTotal": 0,
+        "retiredTotal": 0,
+        "skippedTicks": 395,
+        "intentEmitted": 0,
+        "intentRefused": 0,
+        "retained": 1,
+        "capabilityLimitedRetained": 0,
+        "identityCodeUnits": 402,
+        "estimatedBytes": 1060,
+        "estimatedBytesMaximum": 9437184
+      },
+      "normalizationDenominators": {
+        "version": "089-vehicle-normalization-v1",
+        "total": 1,
+        "normalized": 79,
+        "intentional": 79,
+        "capabilityLimited": 0,
+        "refused": 1,
+        "byRefusal": [
+          {
+            "refusal": "NOT_ELIGIBLE_WINDOW",
+            "count": 0
+          },
+          {
+            "refusal": "WINDOW_FULLY_SUPPRESSED",
+            "count": 0
+          },
+          {
+            "refusal": "WINDOW_TRUNCATED",
+            "count": 0
+          },
+          {
+            "refusal": "NO_USABLE_SAMPLES",
+            "count": 0
+          },
+          {
+            "refusal": "INSUFFICIENT_SAMPLES",
+            "count": 1
+          }
+        ],
+        "byChannel": [
+          {
+            "channel": "LONGITUDINAL_ACCELERATION",
+            "count": 0
+          },
+          {
+            "channel": "LONGITUDINAL_DECELERATION",
+            "count": 0
+          },
+          {
+            "channel": "LATERAL",
+            "count": 0
+          }
+        ],
+        "usableTicks": 19039,
+        "sampledTicks": 19039,
+        "intentEmitted": 0,
+        "intentRefused": 0
+      },
+      "heapAfterBytes": 20529400
+    },
+    {
+      "repetition": 3,
+      "mode": "chain",
+      "classId": "sedan",
+      "chainCallMs": {
+        "count": 60,
+        "p50": 0.014499999999998181,
+        "p95": 0.0262000000000171,
+        "p99": 0.0362999999999829,
+        "min": 0.014099999999984902,
+        "max": 0.04779999999999518,
+        "mean": 0.016428333333334422
+      },
+      "observeCallMs": null,
+      "wallMs": 1.5203000000000202,
+      "decisions": 60,
+      "normalizationOwnership": null,
+      "normalizationDenominators": null,
+      "heapAfterBytes": 22654088
+    },
+    {
+      "repetition": 3,
+      "mode": "normalize",
+      "classId": "sedan",
+      "chainCallMs": {
+        "count": 60,
+        "p50": 0.016600000000039472,
+        "p95": 0.024799999999970623,
+        "p99": 0.04290000000003147,
+        "min": 0.01520000000004984,
+        "max": 0.04779999999999518,
+        "mean": 0.018386666666664078
+      },
+      "observeCallMs": {
+        "count": 80,
+        "p50": 0.07420000000001892,
+        "p95": 0.14479999999991833,
+        "p99": 0.20539999999999736,
+        "min": 0.01779999999996562,
+        "max": 0.294399999999996,
+        "mean": 0.08319000000000258
+      },
+      "wallMs": 8.355200000000025,
+      "decisions": 60,
+      "normalizationOwnership": {
+        "version": "089-vehicle-normalization-v1",
+        "disposed": false,
+        "maxWindows": 4096,
+        "windowsEvaluated": 1,
+        "observationCalls": 80,
+        "normalizedTotal": 79,
+        "intentionalTotal": 79,
+        "capabilityLimitedTotal": 0,
+        "refusedTotal": 1,
+        "downgradedTotal": 0,
+        "upgradedTotal": 1,
+        "rejectedTotal": 0,
+        "retiredTotal": 0,
+        "skippedTicks": 395,
+        "intentEmitted": 0,
+        "intentRefused": 0,
+        "retained": 1,
+        "capabilityLimitedRetained": 0,
+        "identityCodeUnits": 402,
+        "estimatedBytes": 1060,
+        "estimatedBytesMaximum": 9437184
+      },
+      "normalizationDenominators": {
+        "version": "089-vehicle-normalization-v1",
+        "total": 1,
+        "normalized": 79,
+        "intentional": 79,
+        "capabilityLimited": 0,
+        "refused": 1,
+        "byRefusal": [
+          {
+            "refusal": "NOT_ELIGIBLE_WINDOW",
+            "count": 0
+          },
+          {
+            "refusal": "WINDOW_FULLY_SUPPRESSED",
+            "count": 0
+          },
+          {
+            "refusal": "WINDOW_TRUNCATED",
+            "count": 0
+          },
+          {
+            "refusal": "NO_USABLE_SAMPLES",
+            "count": 0
+          },
+          {
+            "refusal": "INSUFFICIENT_SAMPLES",
+            "count": 1
+          }
+        ],
+        "byChannel": [
+          {
+            "channel": "LONGITUDINAL_ACCELERATION",
+            "count": 0
+          },
+          {
+            "channel": "LONGITUDINAL_DECELERATION",
+            "count": 0
+          },
+          {
+            "channel": "LATERAL",
+            "count": 0
+          }
+        ],
+        "usableTicks": 19039,
+        "sampledTicks": 19039,
+        "intentEmitted": 0,
+        "intentRefused": 0
+      },
+      "heapAfterBytes": 18343312
+    },
+    {
+      "repetition": 4,
+      "mode": "chain",
+      "classId": "sedan",
+      "chainCallMs": {
+        "count": 60,
+        "p50": 0.014399999999909596,
+        "p95": 0.02909999999997126,
+        "p99": 0.03170000000000073,
+        "min": 0.013499999999908141,
+        "max": 0.12829999999996744,
+        "mean": 0.018636666666659116
+      },
+      "observeCallMs": null,
+      "wallMs": 1.5828000000000202,
+      "decisions": 60,
+      "normalizationOwnership": null,
+      "normalizationDenominators": null,
+      "heapAfterBytes": 21224952
+    },
+    {
+      "repetition": 4,
+      "mode": "normalize",
+      "classId": "sedan",
+      "chainCallMs": {
+        "count": 60,
+        "p50": 0.015800000000012915,
+        "p95": 0.028700000000071668,
+        "p99": 0.03989999999998872,
+        "min": 0.014800000000036562,
+        "max": 0.041900000000055115,
+        "mean": 0.01763833333334143
+      },
+      "observeCallMs": {
+        "count": 80,
+        "p50": 0.06899999999995998,
+        "p95": 0.1150000000000091,
+        "p99": 0.15670000000000073,
+        "min": 0.020100000000070395,
+        "max": 0.3484999999999445,
+        "mean": 0.07447249999998604
+      },
+      "wallMs": 7.518500000000017,
+      "decisions": 60,
+      "normalizationOwnership": {
+        "version": "089-vehicle-normalization-v1",
+        "disposed": false,
+        "maxWindows": 4096,
+        "windowsEvaluated": 1,
+        "observationCalls": 80,
+        "normalizedTotal": 79,
+        "intentionalTotal": 79,
+        "capabilityLimitedTotal": 0,
+        "refusedTotal": 1,
+        "downgradedTotal": 0,
+        "upgradedTotal": 1,
+        "rejectedTotal": 0,
+        "retiredTotal": 0,
+        "skippedTicks": 395,
+        "intentEmitted": 0,
+        "intentRefused": 0,
+        "retained": 1,
+        "capabilityLimitedRetained": 0,
+        "identityCodeUnits": 402,
+        "estimatedBytes": 1060,
+        "estimatedBytesMaximum": 9437184
+      },
+      "normalizationDenominators": {
+        "version": "089-vehicle-normalization-v1",
+        "total": 1,
+        "normalized": 79,
+        "intentional": 79,
+        "capabilityLimited": 0,
+        "refused": 1,
+        "byRefusal": [
+          {
+            "refusal": "NOT_ELIGIBLE_WINDOW",
+            "count": 0
+          },
+          {
+            "refusal": "WINDOW_FULLY_SUPPRESSED",
+            "count": 0
+          },
+          {
+            "refusal": "WINDOW_TRUNCATED",
+            "count": 0
+          },
+          {
+            "refusal": "NO_USABLE_SAMPLES",
+            "count": 0
+          },
+          {
+            "refusal": "INSUFFICIENT_SAMPLES",
+            "count": 1
+          }
+        ],
+        "byChannel": [
+          {
+            "channel": "LONGITUDINAL_ACCELERATION",
+            "count": 0
+          },
+          {
+            "channel": "LONGITUDINAL_DECELERATION",
+            "count": 0
+          },
+          {
+            "channel": "LATERAL",
+            "count": 0
+          }
+        ],
+        "usableTicks": 19039,
+        "sampledTicks": 19039,
+        "intentEmitted": 0,
+        "intentRefused": 0
+      },
+      "heapAfterBytes": 22510584
+    },
+    {
+      "repetition": 5,
+      "mode": "chain",
+      "classId": "sedan",
+      "chainCallMs": {
+        "count": 60,
+        "p50": 0.012800000000083855,
+        "p95": 0.013800000000060209,
+        "p99": 0.021600000000034925,
+        "min": 0.012600000000020373,
+        "max": 0.20659999999998035,
+        "mean": 0.016358333333333044
+      },
+      "observeCallMs": null,
+      "wallMs": 1.3823999999999614,
+      "decisions": 60,
+      "normalizationOwnership": null,
+      "normalizationDenominators": null,
+      "heapAfterBytes": 16285632
+    },
+    {
+      "repetition": 5,
+      "mode": "normalize",
+      "classId": "sedan",
+      "chainCallMs": {
+        "count": 60,
+        "p50": 0.014999999999986358,
+        "p95": 0.02430000000003929,
+        "p99": 0.03139999999996235,
+        "min": 0.013900000000035106,
+        "max": 0.03829999999993561,
+        "mean": 0.016474999999989373
+      },
+      "observeCallMs": {
+        "count": 80,
+        "p50": 0.06270000000006348,
+        "p95": 0.10970000000008895,
+        "p99": 0.12840000000005602,
+        "min": 0.018699999999967076,
+        "max": 0.2983000000000402,
+        "mean": 0.06740875000000983
+      },
+      "wallMs": 6.780799999999999,
+      "decisions": 60,
+      "normalizationOwnership": {
+        "version": "089-vehicle-normalization-v1",
+        "disposed": false,
+        "maxWindows": 4096,
+        "windowsEvaluated": 1,
+        "observationCalls": 80,
+        "normalizedTotal": 79,
+        "intentionalTotal": 79,
+        "capabilityLimitedTotal": 0,
+        "refusedTotal": 1,
+        "downgradedTotal": 0,
+        "upgradedTotal": 1,
+        "rejectedTotal": 0,
+        "retiredTotal": 0,
+        "skippedTicks": 395,
+        "intentEmitted": 0,
+        "intentRefused": 0,
+        "retained": 1,
+        "capabilityLimitedRetained": 0,
+        "identityCodeUnits": 402,
+        "estimatedBytes": 1060,
+        "estimatedBytesMaximum": 9437184
+      },
+      "normalizationDenominators": {
+        "version": "089-vehicle-normalization-v1",
+        "total": 1,
+        "normalized": 79,
+        "intentional": 79,
+        "capabilityLimited": 0,
+        "refused": 1,
+        "byRefusal": [
+          {
+            "refusal": "NOT_ELIGIBLE_WINDOW",
+            "count": 0
+          },
+          {
+            "refusal": "WINDOW_FULLY_SUPPRESSED",
+            "count": 0
+          },
+          {
+            "refusal": "WINDOW_TRUNCATED",
+            "count": 0
+          },
+          {
+            "refusal": "NO_USABLE_SAMPLES",
+            "count": 0
+          },
+          {
+            "refusal": "INSUFFICIENT_SAMPLES",
+            "count": 1
+          }
+        ],
+        "byChannel": [
+          {
+            "channel": "LONGITUDINAL_ACCELERATION",
+            "count": 0
+          },
+          {
+            "channel": "LONGITUDINAL_DECELERATION",
+            "count": 0
+          },
+          {
+            "channel": "LATERAL",
+            "count": 0
+          }
+        ],
+        "usableTicks": 19039,
+        "sampledTicks": 19039,
+        "intentEmitted": 0,
+        "intentRefused": 0
+      },
+      "heapAfterBytes": 18241624
+    }
+  ],
+  "paired": [
+    {
+      "repetition": 1,
+      "normalizeOverChainP50Ms": 0.0029000000000678483,
+      "normalizeOverChainP95Ms": 0.006899999999973261,
+      "normalizeOverChainP99Ms": -0.0003999999999564352,
+      "observeP50Ms": 0.10079999999999245,
+      "observeP95Ms": 0.15039999999999054,
+      "observeP99Ms": 0.4408999999999992,
+      "chainP95Ms": 0.01870000000002392,
+      "decisions": 60,
+      "wallDeltaMs": 7.200999999999965
+    },
+    {
+      "repetition": 2,
+      "normalizeOverChainP50Ms": 0.002999999999985903,
+      "normalizeOverChainP95Ms": -0.007400000000018281,
+      "normalizeOverChainP99Ms": -0.04419999999998936,
+      "observeP50Ms": 0.07150000000001455,
+      "observeP95Ms": 0.19819999999998572,
+      "observeP99Ms": 0.2545999999999822,
+      "chainP95Ms": 0.048900000000003274,
+      "decisions": 60,
+      "wallDeltaMs": 6.734100000000012
+    },
+    {
+      "repetition": 3,
+      "normalizeOverChainP50Ms": 0.002100000000041291,
+      "normalizeOverChainP95Ms": -0.0014000000000464752,
+      "normalizeOverChainP99Ms": 0.006600000000048567,
+      "observeP50Ms": 0.07420000000001892,
+      "observeP95Ms": 0.14479999999991833,
+      "observeP99Ms": 0.20539999999999736,
+      "chainP95Ms": 0.0262000000000171,
+      "decisions": 60,
+      "wallDeltaMs": 6.834900000000005
+    },
+    {
+      "repetition": 4,
+      "normalizeOverChainP50Ms": 0.0014000000001033186,
+      "normalizeOverChainP95Ms": -0.0003999999998995918,
+      "normalizeOverChainP99Ms": 0.008199999999987995,
+      "observeP50Ms": 0.06899999999995998,
+      "observeP95Ms": 0.1150000000000091,
+      "observeP99Ms": 0.15670000000000073,
+      "chainP95Ms": 0.02909999999997126,
+      "decisions": 60,
+      "wallDeltaMs": 5.935699999999997
+    },
+    {
+      "repetition": 5,
+      "normalizeOverChainP50Ms": 0.002199999999902502,
+      "normalizeOverChainP95Ms": 0.010499999999979082,
+      "normalizeOverChainP99Ms": 0.009799999999927422,
+      "observeP50Ms": 0.06270000000006348,
+      "observeP95Ms": 0.10970000000008895,
+      "observeP99Ms": 0.12840000000005602,
+      "chainP95Ms": 0.013800000000060209,
+      "decisions": 60,
+      "wallDeltaMs": 5.398400000000038
+    }
+  ],
+  "memoryRegion": {
+    "label": "MEMORY_REGION_EXACT_OWNERSHIP_COUNTERS",
+    "iterations": 5120,
+    "retained": 4096,
+    "maxWindows": 4096,
+    "windowsEvaluated": 5120,
+    "retiredTotal": 1024,
+    "bytesPerRecord": 256,
+    "recordBytesCeiling": 2304,
+    "estimatedBytes": 2359296,
+    "estimatedBytesMaximum": 9437184,
+    "withinCeiling": true,
+    "identityCodeUnits": 655360,
+    "capabilityLimitedRetained": 683,
+    "byChannel": [
+      {
+        "channel": "LONGITUDINAL_ACCELERATION",
+        "count": 854
+      },
+      {
+        "channel": "LONGITUDINAL_DECELERATION",
+        "count": 0
+      },
+      {
+        "channel": "LATERAL",
+        "count": 0
+      }
+    ],
+    "arrayBuffersBeforeBytes": 482633,
+    "arrayBuffersAfterCreateBytes": 482633,
+    "arrayBuffersAfterFillBytes": 209151,
+    "arrayBuffersAfterDisposeBytes": 209151,
+    "heapUsedBeforeBytes": 18568464,
+    "heapUsedAfterFillBytes": 25391320,
+    "disposedCountersZero": true
+  },
+  "perWindowCostMs": {
+    "label": "ONE_OBSERVE_PER_CLOSED_WINDOW",
+    "usableSamples": 480,
+    "iterations": 120,
+    "observeMs": {
+      "count": 120,
+      "p50": 0.1049999999999045,
+      "p95": 0.1373999999999569,
+      "p99": 0.17210000000000036,
+      "min": 0.10129999999992378,
+      "max": 0.865099999999984,
+      "mean": 0.11575833333333208
+    },
+    "retained": 1
+  },
+  "selfCheck": {
+    "passed": true,
+    "failures": []
+  },
+  "budgets": {
+    "manifest": "Docs/performance-budgets.json",
+    "budgetVersion": "203-initial-1",
+    "capacityCalibration": "PROVISIONAL_UNCALIBRATED",
+    "diagnosticSamplesProposal": 4096,
+    "measuredCapacity": 4096,
+    "recorderRamBytesCap": 33554432,
+    "authoritativeTickP95MsDesktopProvisional": 5.5,
+    "authoritativeTickP95MsLaptopProvisional": 8
+  },
+  "exclusions": [
+    "No browser, renderer, GPU or FPS measurement; the 052 record documents an unresolved WebGPU presentation stall on this laptop.",
+    "Heap counters are diagnostic only; exact ownership is reported from the normalization counters.",
+    "Forced GC between repetitions is not used inside the timed region.",
+    "BEFORE is the same fixture with the 089 layer disabled, not a historical commit: 089 is purely additive."
+  ],
+  "guard": 325
+}
