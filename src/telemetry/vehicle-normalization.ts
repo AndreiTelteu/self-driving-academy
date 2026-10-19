@@ -552,6 +552,10 @@ const ascending = (values: number[]): number[] => values.sort((left, right) => l
  *   latFraction   = |a_lat| / maxLateralAccelerationMps2
  * Each channel demand is the p90 of its fraction; a channel is marked `CAPABILITY_LIMITED` when at
  * least `minSaturatedTicks` samples reach `saturationFraction` of the class ceiling.
+ *
+ * Because `ceil`-nearest-rank order statistics are homogeneous for a positive scale
+ * (`p90(x/k) = p90(x)/k`), the raw magnitudes are sorted once and the fractions are derived by
+ * dividing by the class ceiling; the result is identical and no value is rescaled twice.
  */
 function demandEvidence(
   samples: readonly VehicleNormalizationSample[],
@@ -559,36 +563,34 @@ function demandEvidence(
   saturationFraction: number,
   minSaturatedTicks: number,
 ): DemandEvidence {
-  const acceleration: number[] = [];
-  const deceleration: number[] = [];
-  const lateral: number[] = [];
-  const rawAcceleration: number[] = [];
-  const rawDeceleration: number[] = [];
-  const rawLateral: number[] = [];
-  const throttle: number[] = [];
-  const brake: number[] = [];
-  const steering: number[] = [];
+  const size = samples.length;
+  const rawAcceleration = new Array<number>(size);
+  const rawDeceleration = new Array<number>(size);
+  const rawLateral = new Array<number>(size);
+  const throttle = new Array<number>(size);
+  const brake = new Array<number>(size);
+  const steering = new Array<number>(size);
   let saturatedAcceleration = 0;
   let saturatedDeceleration = 0;
   let saturatedLateral = 0;
   let peakAcceleration = 0;
   let peakDeceleration = 0;
   let peakLateral = 0;
-  for (const sample of samples) {
+  for (let index = 0; index < size; index += 1) {
+    const sample = samples[index]!;
     const value = sample.longitudinalAccelerationMps2;
-    const accelerationFraction = Math.max(0, value) / capability.maxAccelerationMps2;
-    const decelerationFraction = Math.max(0, -value) / capability.maxDecelerationMps2;
-    const lateralFraction =
-      Math.abs(sample.lateralAccelerationMps2) / capability.maxLateralAccelerationMps2;
-    acceleration.push(accelerationFraction);
-    deceleration.push(decelerationFraction);
-    lateral.push(lateralFraction);
-    rawAcceleration.push(Math.max(0, value));
-    rawDeceleration.push(Math.max(0, -value));
-    rawLateral.push(Math.abs(sample.lateralAccelerationMps2));
-    throttle.push(sample.throttle);
-    brake.push(sample.brake);
-    steering.push(Math.abs(sample.steering));
+    const accelerationMagnitude = value > 0 ? value : 0;
+    const decelerationMagnitude = value < 0 ? -value : 0;
+    const lateralMagnitude = Math.abs(sample.lateralAccelerationMps2);
+    rawAcceleration[index] = accelerationMagnitude;
+    rawDeceleration[index] = decelerationMagnitude;
+    rawLateral[index] = lateralMagnitude;
+    throttle[index] = sample.throttle;
+    brake[index] = sample.brake;
+    steering[index] = Math.abs(sample.steering);
+    const accelerationFraction = accelerationMagnitude / capability.maxAccelerationMps2;
+    const decelerationFraction = decelerationMagnitude / capability.maxDecelerationMps2;
+    const lateralFraction = lateralMagnitude / capability.maxLateralAccelerationMps2;
     if (accelerationFraction >= saturationFraction) saturatedAcceleration += 1;
     if (decelerationFraction >= saturationFraction) saturatedDeceleration += 1;
     if (lateralFraction >= saturationFraction) saturatedLateral += 1;
@@ -596,6 +598,16 @@ function demandEvidence(
     if (decelerationFraction > peakDeceleration) peakDeceleration = decelerationFraction;
     if (lateralFraction > peakLateral) peakLateral = lateralFraction;
   }
+  ascending(rawAcceleration);
+  ascending(rawDeceleration);
+  ascending(rawLateral);
+  ascending(throttle);
+  ascending(brake);
+  ascending(steering);
+  const fraction = NORMALIZATION_DEMAND_PERCENTILE;
+  const rawAccelerationP90 = normalizationPercentile(rawAcceleration, fraction);
+  const rawDecelerationP90 = normalizationPercentile(rawDeceleration, fraction);
+  const rawLateralP90 = normalizationPercentile(rawLateral, fraction);
   const candidates: readonly ChannelEvidence[] = [
     {
       channel: 'LONGITUDINAL_ACCELERATION',
@@ -616,20 +628,19 @@ function demandEvidence(
       saturatedTicks: saturatedLateral,
     },
   ];
-  const fraction = NORMALIZATION_DEMAND_PERCENTILE;
   return {
-    accelerationDemand: normalizationPercentile(ascending(acceleration), fraction),
-    decelerationDemand: normalizationPercentile(ascending(deceleration), fraction),
-    lateralDemand: normalizationPercentile(ascending(lateral), fraction),
+    accelerationDemand: rawAccelerationP90 / capability.maxAccelerationMps2,
+    decelerationDemand: rawDecelerationP90 / capability.maxDecelerationMps2,
+    lateralDemand: rawLateralP90 / capability.maxLateralAccelerationMps2,
     raw: Object.freeze({
-      longitudinalAccelerationMps2: normalizationPercentile(ascending(rawAcceleration), fraction),
-      longitudinalDecelerationMps2: normalizationPercentile(ascending(rawDeceleration), fraction),
-      lateralAccelerationMps2: normalizationPercentile(ascending(rawLateral), fraction),
+      longitudinalAccelerationMps2: rawAccelerationP90,
+      longitudinalDecelerationMps2: rawDecelerationP90,
+      lateralAccelerationMps2: rawLateralP90,
     }),
     intent: Object.freeze({
-      throttle: normalizationPercentile(ascending(throttle), fraction),
-      brake: normalizationPercentile(ascending(brake), fraction),
-      steering: normalizationPercentile(ascending(steering), fraction),
+      throttle: normalizationPercentile(throttle, fraction),
+      brake: normalizationPercentile(brake, fraction),
+      steering: normalizationPercentile(steering, fraction),
     }),
     channels: Object.freeze(
       candidates.filter((candidate) => candidate.saturatedTicks >= minSaturatedTicks),
