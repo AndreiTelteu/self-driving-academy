@@ -67,6 +67,8 @@ Etapa a treia (commit `f9e5ce5d` + `2ca03671`) a executat dovezile lipsă. Drive
 
 Proba pe fixture-ul 204 (`scripts/run-204-loop-probe.mjs`, `loop-probe/`) folosește direct API-urile 218/219/221: 218 median frame/main-thread p95 **0,7236 ms**, p99 **1,1839 ms**; 219 step p95 **0,7243 ms**, scheduler-own p95 **0,0064 ms**, zero overloads; 221 queue/service/end-to-end p95 **7,618 / 1,4989 / 8,5771 ms**, 8/8 rezultate identice cu main-thread în `1e-9`. Etichetă `PROVISIONAL_UNCALIBRATED`, fără browser/GPU/FPS.
 
+Etapa a patra (commit `ce2ce1a8` + `0fb09371`) face pagina de playtest interactivă: Vite la `/tests/browser/early-learning-playtest.html`, condus real cu tastatura, sesiune LEARNING cu fapte 085 adaptate, estimatori reali, profil compus, comutare pe AUTO și panou „observat / schimbat / necunoscut", plus toggle MANUAL cu zero învățare și chestionar cu export JSON anonim pe slotul 1–5. Self-testul dezvoltatorului (marcat explicit „not a participant", `playtest-dev/`) a rulat 3943 tick-uri / 65,7 s: `speed_delta_urban` 0 → +0,187, `desired_acceleration` 1,5 → +0,755, `stop_full_probability` 0,6 → 0,7, iar AUTO a produs decizii reale `APPROACH/STOP_APPROACH` și `HOLD/STOP_HOLD`; MANUAL a dat 0 episoade și delta 0. `npm test` 1062/1062. Criteriul de playtest rămâne deschis: zero participanți reali, iar cronometrul de 5:00 nu a fost exercitat (self-testul s-a încheiat după trei opriri).
+
 Verificări executate și rezultat: `npm run typecheck`, `lint`, `format:check`, `check:architecture`, `check:parameter-catalog` exit 0; `npm test` 1049/1049 PASS; `git diff --check` curat. Bucla nu a fost încă măsurată cu 218/219/221 și nu există probe comportamentale.
 
 Ce lipsește pentru închidere:
@@ -95,6 +97,8 @@ Verificare finală: Validate-Board.ps1 -RequireDone '204'.
 - 2026-10-19: Etapa a doua (commit `219b7e61`): `compileEarlyLoopControllerProfiles` leagă profilul compus de validatoarele reale 046/047/051, AUTO primește token-urile iar MANUAL/LEARNING întorc null. `npm test` 1050/1050, toate verificările statice trec. Probele generice 218/221 au rulat, dar nu pe fixture-ul 204, iar 219 nu a rulat; fixture-ul comportamental cu 3 taxiuri + 2 civile și playtest-ul real lipsesc în continuare.
 
 - 2026-10-19: Etapa a treia (commit `f9e5ce5d` + `2ca03671`): driver comportamental executat pe fixture-ul mic (prudent/riscant/fără dovezi, 3 taxiuri + 2 civili, MANUAL zero învățare) și probă 218/219/221 pe fixture-ul 204 prin API-urile reale. `npm test` 1055/1055. Rămâne doar playtestul cu cinci participanți reali.
+
+- 2026-10-19: Etapa a patra (commit `ce2ce1a8` + `0fb09371`): pagina de playtest rulează bucla reală în browser, cu condus pe tastatură, panou before/after, MANUAL fără învățare, chestionar și export JSON; self-test dezvoltator 1062/1062. Următorul pas este rularea celor cinci sesiuni cu oameni reali.
 
 - 2026-10-04: Revizia 0.4 adaugă contracte/verificări de performanță; implementarea rămâne neîncepută.
 
