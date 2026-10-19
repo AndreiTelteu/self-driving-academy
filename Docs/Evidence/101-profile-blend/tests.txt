@@ -1,0 +1,32 @@
+volta run --node 24.21.0 -- node --import ./scripts/register-typescript.mjs --test tests/learning/profile-blend.test.ts
+
+101 one noisy episode is bounded instead of rewriting the profile
+101 repeated consistent episodes move the profile strongly
+101 observed zero is applied as a real value, not skipped
+101 unobserved and weak evidence leave the exact old value
+101 severe contradiction holds the value and keeps the observed interval
+101 moderate dispersion is applied at reduced weight with the interval retained
+101 consistent risky evidence is not dragged toward a safe base
+101 bounded regularization does not erase a consistently extreme style
+101 recency gives recent episodes more weight without erasing old ones
+101 a style change accumulates from recent episodes after an old habit
+101 provenance history records each update and never publishes
+101 updates are bounded and invalid inputs are rejected
+
+tests 12
+pass 12
+fail 0
+
+Why each test catches a plausible wrong implementation:
+1. Weight equal to quality would move 1.5 straight to 4.0; the 0.15 novel-evidence cap keeps it at 1.875.
+2. Ignoring the effective count would give the same small step for one and sixteen episodes; the 0.6 cap and chained convergence require count saturation.
+3. Treating a falsy estimate as missing skips ZERO; the test requires estimate 0, a positive weight and a real value change.
+4. Applying evidence without a sufficiency gate changes the value for UNOBSERVED or WEAK input.
+5. Averaging contradictory values would return 4 instead of holding 2.5 plus interval [1, 7].
+6. Ignoring the moderate penalty applies ~0.26 instead of ~0.13; hiding dispersion loses the interval.
+7. A hidden shrink toward the 2.5 default would reduce 6.5; the test requires movement toward the risky estimate.
+8. A regularizer that erases extreme styles would drop 12 m/s after one low episode or fail to restore it.
+9. Ignoring age gives identical weights for fresh and 30-day-old evidence and cannot demonstrate a style change.
+10. Treating old evidence as current rewrites the old habit in one step; the three recent updates must provide the change.
+11. Dropping provenance, mutating the registry or publishing/LEARNED flags fails the frozen history and capability checks.
+12. An unbounded step reaches 15 instead of 9.6 and skips the 092 clamp; invalid inputs must throw.

@@ -6,3 +6,4 @@ export * from './signal-estimator';
 export * from './stop-yield-estimator';
 export * from './lane-estimator';
 export * from './evidence-confidence';
+export * from './profile-blend';
