@@ -44,3 +44,49 @@ $ volta run --node 24.21.0 --npm 11.19.0 npm test
 ℹ duration_ms 13844.9841
 exit=0 
 
+
+# Final re-verification at the documentation revision b4a8a8a1b48094d803aa158625423ad089a34d35.
+
+$ volta run --node 24.21.0 --npm 11.19.0 node --import ./scripts/register-typescript.mjs --test tests/app/pause-focus.test.ts
+
+(node:21884) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ MANUAL panel suspends the authoritative loop; closing resumes without lost time (2.7736ms)
+✔ AUTO observation stays live with a panel and an open diagnostics surface, without PLAYER authority (4511.6312ms)
+✔ focus loss suspends in AUTO and MANUAL and refocusing never fabricates a tick burst (0.7132ms)
+✔ a background pause keeps its own reason and is not double-suspended by focus (0.2887ms)
+✔ resume clears the really held keyboard key and the first command is neutral (1.67ms)
+✔ documented precedence keeps one suspension edge while the cause changes (0.2798ms)
+✔ menu open/close, repeated blur and rapid blur/focus do not flap or double-transition (0.246ms)
+✔ an explicit resume is refused while a surface or focus loss still demands suspension (0.2084ms)
+✔ focus adapter reports edges only and disposal leaves no listeners (0.433ms)
+✔ state is frozen and observable, and bounds/disposal fail closed (0.7275ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4735.6904
+exit=0 
+
+$ volta run --node 24.21.0 --npm 11.19.0 npm test
+
+✔ speed threshold, far upstream and wrong heading cannot create complete-stop evidence (10.9904ms)
+✔ missing ticks, teleport, reverse crossing, height and finite line ends do not invent traversal (8.8482ms)
+✔ stale/conflicting ticks, context and nonfinite data reject without advancing history (2.1156ms)
+✔ ID reuse cannot inherit stop evidence or admit a retired incarnation; real epoch resets history (2.7551ms)
+✔ bounded history fails closed; frozen map geometry and transverse direction stay stable (3.1453ms)
+✔ directed reverse geometry and consecutive STOP lines preserve distinct opportunities (4.979ms)
+✔ calibration/accessor boundaries and long valid identities remain safe (2.0602ms)
+ℹ tests 961
+ℹ suites 0
+ℹ pass 961
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 14232.0044
+exit=0 
+
