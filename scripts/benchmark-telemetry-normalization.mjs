@@ -424,6 +424,56 @@ function measureMemoryRegion() {
   };
 }
 
+/** The natural cadence: one `observe` per **closed** window rather than one per decision. */
+function measurePerWindowCost() {
+  const layer = telemetry.createVehicleNormalizer();
+  const eligible = {
+    windowClass: 'ELIGIBLE',
+    windowId: 'per-window',
+    opportunityId: 'per-window-opportunity',
+    kind: 'GREEN',
+    segmentId: SEGMENT,
+    vehicleId: VEHICLE,
+    incarnation: INCARNATION,
+    openedTick: 1,
+    lastTick: RIDE_TICKS,
+  };
+  const artifacts = {
+    windowClass: 'PREFIX_ELIGIBLE',
+    completeness: 'COMPLETE',
+    completenessReason: 'SEGMENT_CLOSED',
+    segmentId: SEGMENT,
+    vehicleId: VEHICLE,
+    prefix: { fromTick: 1, toTick: RIDE_TICKS, ticks: RIDE_TICKS },
+  };
+  const durations = [];
+  for (let iteration = 0; iteration < 120; iteration += 1) {
+    const started = performance.now();
+    layer.observe({
+      tick: RIDE_TICKS + 1000 + iteration,
+      sessionId: SESSION,
+      worldEpoch: EPOCH,
+      segmentId: SEGMENT,
+      vehicleId: VEHICLE,
+      incarnation: INCARNATION,
+      classId: 'sedan',
+      eligibility: eligible,
+      artifacts,
+      samples: fixtureData.sedan,
+    });
+    durations.push(performance.now() - started);
+  }
+  const stats = layer.getStats();
+  layer.dispose();
+  return {
+    label: 'ONE_OBSERVE_PER_CLOSED_WINDOW',
+    usableSamples: fixtureData.sedan.length,
+    iterations: durations.length,
+    observeMs: summary(durations),
+    retained: stats.retained,
+  };
+}
+
 /** Criterion 1 and criterion 2, checked on the real chain rather than on a synthetic scale. */
 function selfCheck() {
   const failures = [];
@@ -628,6 +678,7 @@ const report = {
   runs,
   paired,
   memoryRegion: baseline ? null : measureMemoryRegion(),
+  perWindowCostMs: baseline ? null : measurePerWindowCost(),
   selfCheck: baseline ? null : selfCheck(),
   budgets: {
     manifest: 'Docs/performance-budgets.json',
@@ -658,6 +709,7 @@ console.log(
       commit: report.commit,
       paired,
       memoryRegion: report.memoryRegion,
+      perWindowCostMs: report.perWindowCostMs,
       selfCheck: report.selfCheck,
     },
     null,
