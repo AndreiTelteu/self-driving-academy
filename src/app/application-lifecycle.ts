@@ -3,13 +3,21 @@ import type { FixedTickFrame, FixedTickLoop, FixedTickOptions } from '../simulat
 import type { BackendPreference } from '../rendering';
 import type { RenderSession } from './rendering-lifecycle';
 
+/**
+ * Why the authoritative loop is paused. `background` is a browser lifecycle fact mapped onto
+ * 008's `background` pause; every other value is the host's own suspension and maps onto 008's
+ * authoritative `manual` pause, which admits wall time only up to the boundary.
+ */
+export type ApplicationPauseReason =
+  'manual' | 'background' | 'overload' | 'focus' | 'menu' | 'panel';
+
 export type ApplicationState =
   | { readonly kind: 'LOADING' | 'DISPOSED' }
   | { readonly kind: 'READY' | 'PLAYING'; readonly rendererKind: string }
   | {
       readonly kind: 'PAUSED';
       readonly rendererKind: string;
-      readonly reason: 'manual' | 'background' | 'overload';
+      readonly reason: ApplicationPauseReason;
     }
   | { readonly kind: 'ERROR'; readonly message: string };
 
@@ -75,10 +83,12 @@ export function createApplicationLifecycle<T, View>(services: LifecycleServices<
     if (!disposed)
       show({ kind: 'ERROR', message: error instanceof Error ? error.message : String(error) });
   };
-  const pause = (reason: 'manual' | 'background' = 'manual'): void => {
+  const pause = (reason: ApplicationPauseReason = 'manual'): void => {
     if (state.kind !== 'PLAYING' || !loop || !backend) return;
     try {
-      loop.pause(services.now(), reason);
+      // 008 keeps its own `manual`/`background` vocabulary; the richer host cause stays in 012's
+      // observable state so a reader can tell why the world is suspended.
+      loop.pause(services.now(), reason === 'background' ? 'background' : 'manual');
       show({ kind: 'PAUSED', rendererKind: backend.rendererKind, reason });
     } catch (error: unknown) {
       fail(error);

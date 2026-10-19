@@ -48,5 +48,21 @@ export function createApplication(services: ApplicationServices): Application {
     },
   };
 }
-export { createApplicationLifecycle, type ApplicationState } from './application-lifecycle';
+export {
+  createApplicationLifecycle,
+  type ApplicationPauseReason,
+  type ApplicationState,
+} from './application-lifecycle';
+export {
+  createPauseFocusOwner,
+  PAUSE_FOCUS_MAX_HELD_COMMANDS,
+  PAUSE_FOCUS_VERSION,
+  type PauseFocusCause,
+  type PauseFocusMode,
+  type PauseFocusOwner,
+  type PauseFocusPorts,
+  type PauseFocusState,
+  type PauseFocusStats,
+  type PauseFocusSurface,
+} from './pause-focus';
 export { createManualSegmentBridge, type ManualSegmentStepCause } from './manual-segment-bridge';
