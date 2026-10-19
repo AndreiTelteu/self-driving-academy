@@ -9,4 +9,5 @@ export * from './intervention-lifecycle';
 export * from './tick-samples';
 export * from './opportunities';
 export * from './eligibility-windows';
+export * from './artifact-filter';
 export * from './validation-protocol';
