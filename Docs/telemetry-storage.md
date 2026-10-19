@@ -22,7 +22,9 @@ The default analysis cadence is 20 Hz derived from 60 Hz (`analysisHz` must divi
 
 ## State and capacities
 
-Terminal path: `OPEN → FINALIZING → FINALIZED`; source loss, capacity breach or disposal ends in `INCOMPLETE` with `SOURCE_INCOMPLETE`, `CAPACITY_EXCEEDED`, `INVALID_SOURCE` or `DISPOSED`. Finalization step work is bounded to 32 operations by default (maximum configurable 256), and every source read call is capped at 256 rows. A caller must continue stepping until a terminal state.
+Terminal path: `OPEN → FINALIZING → FINALIZED`; source loss, capacity breach, disposal or a fact that cannot be placed ends in `INCOMPLETE` with `SOURCE_INCOMPLETE`, `CAPACITY_EXCEEDED`, `INVALID_SOURCE`, `DISPOSED` or `LATE_FACT`. Each finalization step seals at most one remaining chunk as one actual work item; the default item budget is 32 (maximum configurable 256), and every source read call is capped at 256 rows. A caller must continue stepping until a terminal state.
+
+Admission order is explicit: after a chunk seals, its `lastTick` is the committed watermark. A new event or opportunity with a tick at or below that watermark is refused, increments the corresponding rejected counter and closes the segment as `INCOMPLETE/LATE_FACT`. Updates resolving an already-admitted opportunity remain accepted and update its original chunk, including the exact `resolvedTick`. Finalization never reports `FINALIZED` while pending facts remain; if a pending fact cannot be emitted, the segment ends `INCOMPLETE/LATE_FACT`.
 
 | Resource | Default | Maximum | Ceiling / policy |
 | --- | ---: | ---: | --- |
@@ -47,4 +49,4 @@ See [090 evidence](Evidence/090-telemetry-storage/README.md) for paired native C
 
 ## What this is NOT
 
-This is not the 069 lifecycle owner, 222 checkpoint/autosave, persistence, a worker scheduler or live-loop wiring. It does not replace 085 validation or 086 identity, does not delete evidence on overflow, and makes no browser, renderer, GPU or FPS claim.
+This is not the 069 lifecycle owner, 222 checkpoint/autosave, persistence, a worker scheduler or live-loop wiring. It does not replace 085 validation or 086 identity, refuses and reports rather than silently deleting on overflow, and makes no browser, renderer, GPU or FPS claim.

@@ -1,0 +1,14 @@
+Orchestrator reproduction rerun on the repaired implementation
+Command context: Node v24.21.0 with the repository TypeScript registration hook.
+Fixture: closed 1200-tick 085 segment; compactAvailable(32) repeated until complete.
+
+recordEvent({ id: 'early', kind: 'STOP_LINE_CROSSED', tick: 5 }) => true
+compactAvailable(32) => 6 chunks sealed; 5 rollovers; last sealed tick watermark 1152
+recordEvent({ id: 'late', kind: 'FULL_STOP', tick: 4 }) => false
+getStats() => eventsAccepted=1, eventsRejected=1, reason=LATE_FACT, state=INCOMPLETE
+beginFinalize() => false
+emitted events => [{"id":"early","kind":"STOP_LINE_CROSSED","tick":5}]
+
+The late fact was refused and counted. The segment did not claim FINALIZED with an accepted fact
+missing. The parallel late-opportunity regression test verifies rejectedOpportunities=1,
+reason=LATE_FACT, and immediate INCOMPLETE rather than a FINALIZING hang.

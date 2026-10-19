@@ -241,7 +241,7 @@ test('finalize work is bounded by the requested item count and completes through
     assert.ok(result.processedItems <= 3);
     calls++;
   }
-  assert.ok(calls >= 3);
+  assert.equal(calls, 1);
   assert.equal(compactor.state, 'FINALIZED');
   recorder.dispose();
   registry.dispose();
@@ -299,5 +299,52 @@ test('event id conflicts fail closed instead of silently replacing an earlier ti
   assert.equal(compactor.recordEvent({ id: 'stop-1', kind: 'FULL_STOP', tick: 5 }), false);
   assert.equal(compactor.state, 'INCOMPLETE');
   assert.equal(compactor.getStats().reason, 'INVALID_SOURCE');
+  recorder.dispose();
+});
+
+test('late events after rollover are refused with a counter and LATE_FACT', () => {
+  const recorder = closedRecorder(1200);
+  const compactor = createSegmentCompaction({ recorder, segmentId: 'ride' });
+  assert.equal(compactor.recordEvent({ id: 'early', kind: 'STOP_LINE_CROSSED', tick: 5 }), true);
+  compactAll(compactor);
+  assert.equal(compactor.getChunks().length, 6);
+  assert.equal(compactor.recordEvent({ id: 'late', kind: 'FULL_STOP', tick: 4 }), false);
+  assert.equal(compactor.getStats().eventsRejected, 1);
+  assert.equal(compactor.getStats().reason, 'LATE_FACT');
+  assert.equal(compactor.beginFinalize(), false);
+  assert.equal(compactor.state, 'INCOMPLETE');
+  assert.deepEqual(
+    compactor.getChunks().flatMap((chunk) => chunk.events),
+    [{ id: 'early', kind: 'STOP_LINE_CROSSED', tick: 5 }],
+  );
+  recorder.dispose();
+});
+
+test('new opportunity behind a sealed range is rejected without hanging finalization', () => {
+  const recorder = closedRecorder(1200);
+  const compactor = createSegmentCompaction({ recorder, segmentId: 'ride' });
+  compactAll(compactor);
+  const registry = createOpportunityRegistry();
+  const late = opportunity(registry, 4);
+  assert.equal(compactor.recordOpportunity(late), false);
+  assert.equal(compactor.getStats().rejectedOpportunities, 1);
+  assert.equal(compactor.getStats().reason, 'LATE_FACT');
+  assert.equal(compactor.state, 'INCOMPLETE');
+  assert.equal(compactor.beginFinalize(), false);
+  recorder.dispose();
+  registry.dispose();
+});
+
+test('finalize step seals the last chunk as one real bounded work item', () => {
+  const recorder = closedRecorder(12);
+  const compactor = createSegmentCompaction({ recorder, segmentId: 'ride' });
+  compactAll(compactor);
+  assert.equal(compactor.getChunks().length, 0);
+  assert.equal(compactor.beginFinalize(), true);
+  const step = compactor.finalizeStep(1);
+  assert.equal(step.processedItems, 1);
+  assert.equal(step.state, 'FINALIZED');
+  assert.equal(step.done, true);
+  assert.equal(compactor.getChunks().length, 1);
   recorder.dispose();
 });

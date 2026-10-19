@@ -11,9 +11,9 @@ sequentially, one arm per process. Cost labels are native CPU-only and
 
 | Measurement | Result |
 | --- | --- |
-| BEFORE direct 085 read p50/p95/p99 | median per-repetition percentiles: **0.7 / 1.0 / 1.2 µs** |
-| AFTER `compactAvailable(32)` p50/p95/p99 | median per-repetition percentiles: **24.3 / 87.8 / 90.4 µs**; p95 range **44.7–134.9 µs** |
-| AFTER `finalizeStep(4)` p50/p95/p99 | median per-repetition percentiles: **2.6 / 8.6 / 8.6 µs**; p95 range **3.9–36.5 µs** |
+| BEFORE direct 085 read p50/p95/p99 | median per-repetition percentiles: **0.8 / 1.4 / 2.0 µs** |
+| AFTER `compactAvailable(32)` p50/p95/p99 | median per-repetition percentiles: **26.8 / 51.7 / 62.0 µs**; p95 range **43.0–291.0 µs** |
+| AFTER `finalizeStep(4)` p50/p95/p99 | median per-repetition percentiles: **22.5 / 25.1 / 25.1 µs**; p95 range **14.3–131.6 µs** |
 | Retained analysis samples | 400 from 1200 source ticks at 20 Hz; source tick sequence preserved exactly |
 | Chunking | 7 chunks, 6 rollovers; payloads **544–2740 B**, each below the **4096 B** cap |
 | Retained 090 payload counter | **15,446 B** (0.046% of `recorderRamBytes` = 33,554,432 B); typed-array backing bytes plus UTF-8 event metadata, excluding JS object/Map overhead |
@@ -21,14 +21,14 @@ sequentially, one arm per process. Cost labels are native CPU-only and
 | Ownership self-check | copied transfer handle detached (`copyDetached=true`); live 085 segment remained readable and accepted a subsequent segment/tick (`liveAfterTransfer=true`) |
 | Worker transport | Native `structuredClone` transfer exercised; no real Worker/MessagePort round-trip |
 
-The first AFTER repetition includes first-touch overhead and is retained in the report. Finalization
-uses four operations per step in the probe and reached FINALIZED over four calls; no call scans or
-copies the entire live 085 recorder buffer synchronously. The 090 byte counter is separate from 085
-ownership and does not claim a whole-process RAM bound.
+The first AFTER repetition includes first-touch overhead and is retained in the report. Each finalization
+step seals the one remaining chunk as one real work item; the probe reached FINALIZED in one call with
+`maxStepItems=1`. The 090 byte counter is separate from 085 ownership and does not claim a whole-process
+RAM bound.
 
 ## Tests and why they matter
 
-`tests/telemetry/segment-compaction.test.ts` has eight passing tests. Each catches a plausible faulty
+`tests/telemetry/segment-compaction.test.ts` has eleven passing tests. Each catches a plausible faulty
 implementation:
 
 1. **Long rollover** would fail if a cadence counter replaced source ticks, chunk links skipped or
@@ -41,19 +41,26 @@ implementation:
    an invalid zero-length chunk for a short segment.
 4. **Open recorder** would fail if the compactor only consumed the sample count present at creation
    or treated an open source as final; it verifies rows can arrive in later bounded reads.
-5. **Incremental finalization** would fail if one call consumed more than its item budget or the
-   terminal transition depended on a single unbounded call.
+5. **Incremental finalization** would fail if one call consumed more than its item budget; the final
+   chunk is asserted to be sealed by a step that reports one processed item.
 6. **Transfer ownership** would fail if the handle referenced live 085 buffers, if one chunk could be
    acquired twice, or if transfer detached the recorder's readout.
 7. **Dispose/misuse** would fail if live bytes/counters remained after disposal or new event admission
    and transfer continued after disposal.
 8. **Conflicting event id** would fail if a repeated id with a different tick silently replaced the
    original fact instead of closing the segment as `INCOMPLETE/INVALID_SOURCE`.
+9. **Late event after rollover** reproduces the 1200-tick/32-row compaction case: the late tick-4 event
+   is refused, `eventsRejected` increments, and the segment reports `INCOMPLETE/LATE_FACT`.
+10. **Late opportunity after rollover** verifies rejection with a counter and terminal `LATE_FACT`, so
+    it cannot remain pending forever in `FINALIZING`.
+11. **Final chunk work** verifies `finalizeStep(1)` creates the last chunk and reports one processed item.
+The long-rollover test also preserves the exact tick-900 resolution of an opportunity admitted before
+rollover in its original chunk.
 
 Exact command output is preserved in `checks.txt`, `tests.txt`, `native-before-01.txt` and
-`native-after-01.txt`; machine-readable reports are in the matching JSON files.
-The full suite passed **1016/1016**; the known unrelated worker cancellation-latency flake did not
-appear.
+`native-after-01.txt`; the orchestrator-style late fact reproduction is in
+`late-fact-reproduction.txt`; machine-readable reports are in the matching JSON files.
+The full suite passed **1019/1019**.
 
 ## Limitations
 

@@ -26,7 +26,7 @@ const SAMPLE_ARRAYS = [
 type ArrayName = (typeof SAMPLE_ARRAYS)[number];
 type SampleArrays = Record<ArrayName, Float64Array | Float32Array>;
 export type SegmentTerminalReason =
-  'SOURCE_INCOMPLETE' | 'CAPACITY_EXCEEDED' | 'DISPOSED' | 'INVALID_SOURCE';
+  'SOURCE_INCOMPLETE' | 'CAPACITY_EXCEEDED' | 'DISPOSED' | 'INVALID_SOURCE' | 'LATE_FACT';
 export type SegmentState = 'OPEN' | 'FINALIZING' | 'FINALIZED' | 'INCOMPLETE';
 export interface SegmentCompactionOptions {
   readonly tickHz?: number;
@@ -178,9 +178,8 @@ export function createSegmentCompaction(input: SegmentCompactionInput): SegmentC
   let firstObservedTick: number | null = null;
   let lastObservedTick: number | null = null;
   let gapCount = 0;
-  let finalizeIterator: Iterator<[string, CompactOpportunity]> | null = null;
-  let finalizeVisited = 0;
   const opportunityChunk = new Map<string, number>();
+  const sealedWatermark = () => chunks.at(-1)?.lastTick ?? null;
 
   const closeChunk = (allowEventsOnly = false) => {
     if (workCount === 0 && (!allowEventsOnly || (current.length === 0 && eventFacts.size === 0)))
@@ -327,6 +326,11 @@ export function createSegmentCompaction(input: SegmentCompactionInput): SegmentC
           counters.truncatedOpportunities++;
         return true;
       }
+      if (sealedWatermark() !== null && record.openedTick <= sealedWatermark()!) {
+        counters.rejectedOpportunities++;
+        fail('LATE_FACT');
+        return false;
+      }
       if (opportunities.size >= config.maxOpportunities) {
         counters.rejectedOpportunities++;
         fail('CAPACITY_EXCEEDED');
@@ -367,6 +371,11 @@ export function createSegmentCompaction(input: SegmentCompactionInput): SegmentC
           return false;
         }
         return true;
+      }
+      if (sealedWatermark() !== null && event.tick <= sealedWatermark()!) {
+        counters.eventsRejected++;
+        fail('LATE_FACT');
+        return false;
       }
       if (eventFacts.size >= config.maxEvents) {
         counters.eventsRejected++;
@@ -457,30 +466,14 @@ export function createSegmentCompaction(input: SegmentCompactionInput): SegmentC
         return { processedItems: 0, state: counters.state, done: true };
       const amount = requestedItems(maxItems);
       let processed = 0;
-      if (!finalizeIterator) finalizeIterator = opportunities.entries();
-      while (processed < amount && finalizeVisited < opportunities.size) {
-        const next = finalizeIterator.next();
-        if (next.done) break;
-        finalizeVisited++;
-        processed++;
-      }
-      if (
-        finalizeVisited === opportunities.size &&
-        processed < amount &&
-        (workCount || current.length)
-      ) {
+      if (amount > 0 && (workCount || current.length || eventFacts.size)) {
         closeChunk(true);
         processed++;
       }
+      if (isFinalizing() && (workCount || current.length || eventFacts.size)) fail('LATE_FACT');
       counters.finalizeCalls++;
       counters.maxFinalizeItems = Math.max(counters.maxFinalizeItems, processed);
-      if (
-        isFinalizing() &&
-        finalizeVisited === opportunities.size &&
-        workCount === 0 &&
-        current.length === 0
-      )
-        counters.state = 'FINALIZED';
+      if (isFinalizing() && workCount === 0 && current.length === 0) counters.state = 'FINALIZED';
       return {
         processedItems: processed,
         state: counters.state,

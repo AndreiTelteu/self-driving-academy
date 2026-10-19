@@ -1,104 +1,35 @@
-Node/npm and install:
-> volta run --node 24.21.0 --npm 11.19.0 -- node --version
-v24.21.0
-> volta run --node 24.21.0 --npm 11.19.0 -- npm --version
-11.19.0
-> volta run --node 24.21.0 --npm 11.19.0 -- npm ci
-added 249 packages, and audited 250 packages in 3m
-34 packages are looking for funding
-found 0 vulnerabilities
+PBI 090 repair round 2 verification
+Worktree base: 50f39b46 (worktree: C:/Users/aandr/.t3/worktrees/self-driving-academy/t3-56c65fe7)
+Toolchain: Volta Node v24.21.0, npm 11.19.0
 
-COMMAND: volta run --node 24.21.0 --npm 11.19.0 -- npm run lint
-
-> self-driving-academy@0.1.0 lint
-> eslint . --max-warnings 0
-
-
-C:\Users\aandr\.t3\worktrees\self-driving-academy\t3-bd07cb0e\scripts\benchmark-telemetry-storage.mjs
-  288:10  error  'handlePayload' is defined but never used  no-unused-vars
-
-✖ 1 problem (1 error, 0 warnings)
-
-EXIT: 126
-RETRY AFTER FIX: removed unused probe helper
-COMMAND: volta run --node 24.21.0 --npm 11.19.0 -- npm run lint
-
-> self-driving-academy@0.1.0 lint
-> eslint . --max-warnings 0
-
-EXIT: 0
 COMMAND: volta run --node 24.21.0 --npm 11.19.0 -- npm run typecheck
+RESULT: PASS (exit 0)
 
-> self-driving-academy@0.1.0 typecheck
-> tsc --noEmit && tsc -p tsconfig.tests.json --noEmit
-
-EXIT: 0
-COMMAND: volta run --node 24.21.0 --npm 11.19.0 -- npm run format:check
-
-> self-driving-academy@0.1.0 format:check
-> prettier --check "src/**/*.{ts,css}" "tests/**/*.ts" "tests/**/*.html" "scripts/**/*.mjs" "*.{json,js,html}"
-
-Checking formatting...
-All matched files use Prettier code style!
-EXIT: 0
-COMMAND: volta run --node 24.21.0 --npm 11.19.0 -- npm run check:architecture
-
-> self-driving-academy@0.1.0 check:architecture
-> node scripts/verify-architecture.mjs
-
-Architecture imports: PASS (160 TypeScript files)
-Architecture negative probes: PASS (6 forbidden dependencies rejected)
-Inspector exception negative probes: PASS (4 forbidden imports rejected)
-Rapier adapter negative probes: PASS (3 forbidden imports rejected)
-Renderer injection, readonly snapshots, defensive persistence and lifecycle: PASS
-(node:23564) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
-(Use `node --trace-warnings ...` to show where the warning was created)
-EXIT: 0
-COMMAND: volta run --node 24.21.0 --npm 11.19.0 -- npm run check:parameter-catalog
-
-> self-driving-academy@0.1.0 check:parameter-catalog
-> node scripts/generate-parameter-catalog.mjs --check
-
-Parameter catalog is synchronized.
-EXIT: 0
-FINAL VERIFICATION (after incremental source support)
-COMMAND: volta run --node 24.21.0 --npm 11.19.0 -- npm run typecheck
-
-> self-driving-academy@0.1.0 typecheck
-> tsc --noEmit && tsc -p tsconfig.tests.json --noEmit
-
-EXIT: 0
 COMMAND: volta run --node 24.21.0 --npm 11.19.0 -- npm run lint
+RESULT: PASS (exit 0)
 
-> self-driving-academy@0.1.0 lint
-> eslint . --max-warnings 0
-
-EXIT: 0
 COMMAND: volta run --node 24.21.0 --npm 11.19.0 -- npm run format:check
+RESULT: PASS (exit 0)
 
-> self-driving-academy@0.1.0 format:check
-> prettier --check "src/**/*.{ts,css}" "tests/**/*.ts" "tests/**/*.html" "scripts/**/*.mjs" "*.{json,js,html}"
-
-Checking formatting...
-All matched files use Prettier code style!
-EXIT: 0
 COMMAND: volta run --node 24.21.0 --npm 11.19.0 -- npm run check:architecture
+RESULT: PASS (160 TypeScript files; architecture negative probes 6/6, inspector probes 4/4, Rapier probes 3/3)
 
-> self-driving-academy@0.1.0 check:architecture
-> node scripts/verify-architecture.mjs
-
-Architecture imports: PASS (160 TypeScript files)
-Architecture negative probes: PASS (6 forbidden dependencies rejected)
-Inspector exception negative probes: PASS (4 forbidden imports rejected)
-Rapier adapter negative probes: PASS (3 forbidden imports rejected)
-Renderer injection, readonly snapshots, defensive persistence and lifecycle: PASS
-(node:26940) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
-(Use `node --trace-warnings ...` to show where the warning was created)
-EXIT: 0
 COMMAND: volta run --node 24.21.0 --npm 11.19.0 -- npm run check:parameter-catalog
+RESULT: PASS (catalog synchronized)
 
-> self-driving-academy@0.1.0 check:parameter-catalog
-> node scripts/generate-parameter-catalog.mjs --check
+COMMAND: volta run --node 24.21.0 --npm 11.19.0 -- npm test
+RESULT: PASS (1019/1019, 0 failed; duration 23.855 s)
 
-Parameter catalog is synchronized.
-EXIT: 0
+COMMAND: volta run --node 24.21.0 --npm 11.19.0 -- node --import ./scripts/register-typescript.mjs --test tests/telemetry/segment-compaction.test.ts
+RESULT: PASS (11/11; see tests.txt for full test names/output)
+
+Probe arms, run sequentially and alone:
+COMMAND: volta run --node 24.21.0 --npm 11.19.0 -- node --import ./scripts/register-typescript.mjs scripts/benchmark-telemetry-storage.mjs --baseline
+RESULT: PASS; wrote native-before-01.json/.txt. Direct-read p50/p95/p99 medians: 0.8/1.4/2.0 us.
+COMMAND: volta run --node 24.21.0 --npm 11.19.0 -- node --import ./scripts/register-typescript.mjs scripts/benchmark-telemetry-storage.mjs
+RESULT: PASS; wrote native-after-01.json/.txt. finalizeStep p50/p95/p99 medians: 22.5/25.1/25.1 us; each repetition seals one final chunk, maxStepItems=1.
+Both arms: five repetitions, Node v24.21.0, PROVISIONAL_UNCALIBRATED. The loader hook is required for the fixture's TypeScript directory imports.
+
+Late-fact reproduction: PASS; see late-fact-reproduction.txt. The tick-4 late event is refused, eventsRejected=1, reason=LATE_FACT, state=INCOMPLETE; beginFinalize=false. No accepted fact is silently missing from a FINALIZED result.
+
+Initial direct invocation without the TypeScript registration hook failed with ERR_UNSUPPORTED_DIR_IMPORT and produced no measurement. The successful reruns above used the documented repository hook; the failed attempt was not treated as evidence.
