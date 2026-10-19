@@ -10,6 +10,8 @@ Evenimentele includ MANUAL_START, MANUAL_END, LEADER_ACQUIRED, SIGNAL_CHANGED, S
 
 Segmentul păstrează motivul închiderii, versiunea motorului, versiunea hărții și tipul inputului, playerId, profileId, learningEpoch și learningEligible fixat la deschidere. Datele din AUTO și MANUAL nu sunt folosite ca demonstrații; numai LEARNING este eligibil. O cursă poate conține mai multe segmente manuale și autonome.
 
+Recorderul de eșantioane la tick este implementat în 085: `createTickSampleRecorder` din `src/telemetry/tick-samples.ts` scrie pentru fiecare pas fix inputul brut, comanda filtrată, mărimile fizice SI, banda și semnalul autoritativ plus clasa vehiculului în buffere coloană cu capacitate finită (4096 eșantioane × 114 B, retenție maximum 8 segmente / 8 MiB, politică explicită DROP_OLDEST ori DROP_NEWEST). Identitatea segmentului, inclusiv profileId, learningEpoch și learningEligible, este fixată la deschidere și nu se schimbă la mijloc de segment; un toggle de mod ori o schimbare de mașină deschide un segment nou. Eșantioanele MANUAL și AUTO rămân disponibile pentru metrici și istoric, dar nu devin demonstrații prin construcție. Contractul public, capacitățile și probele native sunt în [telemetry-samples](telemetry-samples.md) și [Evidence/085-telemetry-samples](Evidence/085-telemetry-samples/README.md).
+
 Coliziunile sunt păstrate ca dovezi despre consecințe și decizii anterioare impactului. Impulsul fizic al coliziunii nu este interpretat ca frânare sau direcție intenționată. Recuperările, teleportările, pauzele și intervalele cu pierdere de focus sunt marcate și excluse din estimarea comenzilor. Segmentele parțiale pot contribui doar la evenimentele finalizate și observațiile valide.
 
 ## Stări de date și integritate

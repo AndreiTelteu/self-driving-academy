@@ -1,0 +1,218 @@
+{
+  "capturedAt": "2026-10-19T00:46:01.351Z",
+  "pbi": "085",
+  "mode": "BEFORE_TELEMETRY_DISABLED",
+  "commit": "53330edfc9f54c5cd1bb6cbf7fb710ff53b952ab",
+  "sourceHashes": {
+    "scripts/benchmark-telemetry-tick-samples.mjs": "b010704a3ff73a41e109aae48b9a01b6ab82e14e8cf526d05bebb7063d34abf2",
+    "src/telemetry/tick-samples.ts": "71d55715f2a9a1a0ea87b427f2da7c3e13b319e1c68812b27393e49e60740905",
+    "src/vehicles/keyboard-filter.ts": "454b4a750cd0f227910e183e3244930f31a10f95eac33d3934827cc6e97acfca",
+    "src/vehicles/vehicle-classes.ts": "43eed5576928ac07616200837f58bfbfd10bb41bd111b4bc7369f7ac0bc40fb2",
+    "src/vehicles/contracts.ts": "0c349520676b7300f2f9b652964ef5ad1be3145c8cda2f852e5dff2b8466265e",
+    "src/autonomy/road-context.ts": "f9782583c51f9b1b6ab678ba27162f31b95f19b41d180145638fd672c5548dce",
+    "src/world/lane-graph.ts": "8094ffbc7d85ed8fc4fc9400e02f5ca071d83408c04b66be12aef3c7bb8685aa",
+    "src/world/signals.ts": "772142b68ba6aa90e9df5d19ee19f35aed6d6ea74e51155e53d4b20b12a2452b",
+    "src/settings/contracts.ts": "94f0a6d6c2753b021bcc90e09fde4667d3a19e256a089fcaee3c538b404b93ba",
+    "tests/autonomy/road-context-reference.ts": "c5fe61c330db951f2bb1f97b3ea6d75bb92228e7f38864197e21378602ddd6f7",
+    "tests/world/intersection-conflicts-fixture.ts": "f159c5b3852b57e456e28b797c1cfa20182d4a58c13e426095ca622cd4a6fbd7"
+  },
+  "sourceHashScope": "Probe, recorder module, authoritative input/class/context sources and the reused 044 fixture; not a verified transitive dependency closure",
+  "hardware": {
+    "cpu": "AMD Ryzen 7 7735U with Radeon Graphics         ",
+    "logicalCpus": 16,
+    "ramBytes": 14702026752,
+    "os": "win32 10.0.26300",
+    "powerScheme": "Power Scheme GUID: 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c  (High performance)"
+  },
+  "runtime": "v24.21.0",
+  "budgetVersion": "203-initial-1",
+  "fixtureVersion": "085-tick-samples-native-v1",
+  "validationLevel": "targeted",
+  "protocol": {
+    "repetitions": 5,
+    "warmupIterations": 200,
+    "measuredIterations": 600,
+    "arms": "paired OFF/ON per repetition, sequential, one process, no concurrent load",
+    "workload": "1 subject (vehicle-0) recorded,64 authoritative vehicles in the 044 frame, real 036 signal controller advancing consecutive ticks, real 025 keyboard filter input",
+    "seed": "none; deterministic tick modulo input pattern and fixed grid fixture",
+    "capacity": 4096,
+    "jsonIterations": 500,
+    "clock": "performance.now only; fixed synthetic tick index (no wall clock in the fixture)",
+    "budget": "Added cost must stay far below the 5.5 ms provisional full-tick p95 ceiling; no isolated budget claimed",
+    "calibration": "PROVISIONAL_UNCALIBRATED"
+  },
+  "scope": "Native Node CPU and owned-memory cost of the 085 recorder on the reused 044 fixture. No renderer/browser/GPU/FPS/realtime-throughput claim.",
+  "runs": [
+    {
+      "repetition": 1,
+      "enabled": false,
+      "recordLoopMs": {
+        "count": 600,
+        "p50": 0.00009999999997489795,
+        "p95": 0.00020000000006348273,
+        "p99": 0.0004000000000132786,
+        "min": 0,
+        "max": 0.001299999999901047,
+        "mean": 0.0001175000000023374
+      },
+      "frameBuildMs": {
+        "count": 600,
+        "p50": 1.0565000000001419,
+        "p95": 1.7268000000000256,
+        "p99": 2.1948000000001002,
+        "min": 0.9255000000000564,
+        "max": 3.4909000000000106,
+        "mean": 1.1723178333333357
+      },
+      "wallMs": 989.0618,
+      "checksum": 800,
+      "written": 800,
+      "heapBeforeBytes": 15935640,
+      "heapAfterBytes": 36317248,
+      "forcedGc": false,
+      "exactCadenceBytes": null,
+      "recorderOwnership": null
+    },
+    {
+      "repetition": 2,
+      "enabled": false,
+      "recordLoopMs": {
+        "count": 600,
+        "p50": 0.00009999999997489795,
+        "p95": 0.0001999999999497959,
+        "p99": 0.0003000000001520675,
+        "min": 0,
+        "max": 0.0008000000000265572,
+        "mean": 0.00011366666665746077
+      },
+      "frameBuildMs": {
+        "count": 600,
+        "p50": 1.0234000000000378,
+        "p95": 1.3661999999999352,
+        "p99": 1.71550000000002,
+        "min": 0.8980999999998858,
+        "max": 2.2502999999999247,
+        "mean": 1.0554549999999943
+      },
+      "wallMs": 857.0648999999999,
+      "checksum": 800,
+      "written": 800,
+      "heapBeforeBytes": 42138992,
+      "heapAfterBytes": 51094648,
+      "forcedGc": false,
+      "exactCadenceBytes": null,
+      "recorderOwnership": null
+    },
+    {
+      "repetition": 3,
+      "enabled": false,
+      "recordLoopMs": {
+        "count": 600,
+        "p50": 0.00010000000020227162,
+        "p95": 0.00020000000040454324,
+        "p99": 0.0003999999998995918,
+        "min": 0,
+        "max": 0.000600000000304135,
+        "mean": 0.0001201666666725032
+      },
+      "frameBuildMs": {
+        "count": 600,
+        "p50": 1.0421000000001186,
+        "p95": 1.4986000000003514,
+        "p99": 2.0634000000000015,
+        "min": 0.8989000000001397,
+        "max": 2.5895000000000437,
+        "mean": 1.0931023333333345
+      },
+      "wallMs": 870.7609000000002,
+      "checksum": 800,
+      "written": 800,
+      "heapBeforeBytes": 22934640,
+      "heapAfterBytes": 38039352,
+      "forcedGc": false,
+      "exactCadenceBytes": null,
+      "recorderOwnership": null
+    },
+    {
+      "repetition": 4,
+      "enabled": false,
+      "recordLoopMs": {
+        "count": 600,
+        "p50": 0.00009999999974752427,
+        "p95": 0.00010000000020227162,
+        "p99": 0.0001999999999497959,
+        "min": 0,
+        "max": 0.0003000000001520675,
+        "mean": 0.00007883333331543933
+      },
+      "frameBuildMs": {
+        "count": 600,
+        "p50": 1.0324000000000524,
+        "p95": 1.8224999999997635,
+        "p99": 2.105199999999968,
+        "min": 0.8877999999999702,
+        "max": 3.5187999999998283,
+        "mean": 1.1266996666666742
+      },
+      "wallMs": 906.7814000000003,
+      "checksum": 800,
+      "written": 800,
+      "heapBeforeBytes": 43665008,
+      "heapAfterBytes": 46545000,
+      "forcedGc": false,
+      "exactCadenceBytes": null,
+      "recorderOwnership": null
+    },
+    {
+      "repetition": 5,
+      "enabled": false,
+      "recordLoopMs": {
+        "count": 600,
+        "p50": 0.00009999999929277692,
+        "p95": 0.00010000000020227162,
+        "p99": 0.00020000000040454324,
+        "min": 0,
+        "max": 0.0005000000001018634,
+        "mean": 0.00006266666668276836
+      },
+      "frameBuildMs": {
+        "count": 600,
+        "p50": 1.0291999999999462,
+        "p95": 1.7366999999994732,
+        "p99": 2.0744999999997162,
+        "min": 0.9099000000005617,
+        "max": 2.529099999999744,
+        "mean": 1.1213856666666577
+      },
+      "wallMs": 902.3313000000003,
+      "checksum": 800,
+      "written": 800,
+      "heapBeforeBytes": 52097560,
+      "heapAfterBytes": 84899328,
+      "forcedGc": false,
+      "exactCadenceBytes": null,
+      "recorderOwnership": null
+    }
+  ],
+  "paired": [],
+  "jsonRegion": null,
+  "memoryRegion": null,
+  "selfCheck": null,
+  "budgets": {
+    "manifest": "Docs/performance-budgets.json",
+    "budgetVersion": "203-initial-1",
+    "capacityCalibration": "PROVISIONAL_UNCALIBRATED",
+    "diagnosticsSamplesProposal": 4096,
+    "measuredCapacity": 4096,
+    "recorderRamBytesCap": 33554432,
+    "authoritativeTickP95MsDesktopProvisional": 5.5,
+    "authoritativeTickP95MsLaptopProvisional": 8
+  },
+  "exclusions": [
+    "No browser, renderer, GPU or FPS measurement; the 052 record documents an unresolved WebGPU presentation stall on this laptop.",
+    "Heap counters are diagnostic only; exact ownership is reported from the recorder typed-array counters.",
+    "Forced GC between repetitions is not used inside the timed region.",
+    "BEFORE is the same fixture with telemetry disabled, not a historical commit: 085 is purely additive."
+  ],
+  "guard": 0
+}
