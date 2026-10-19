@@ -7,4 +7,5 @@ export * from './intervention-events';
 export * from './intervention-intake';
 export * from './intervention-lifecycle';
 export * from './tick-samples';
+export * from './opportunities';
 export * from './validation-protocol';
