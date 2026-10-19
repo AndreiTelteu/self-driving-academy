@@ -12,7 +12,7 @@ as accepted. The UI/frame arm therefore stays **owed** to 153/224/235 and is lis
 | --- | --- |
 | Runtime | Node **v24.21.0** / npm 11.19.0 (via `volta run --node 24.21.0 --npm 11.19.0`); ambient Node is v24.19.0 and was not used |
 | Hardware | AMD Ryzen 7 7735U with Radeon Graphics, 16 logical CPUs, 14,702,026,752 B RAM, win32 10.0.26300 |
-| Measured commit | `14f6a4692e441c7b3801a178670643310febb60a` (probe committed, then both arms captured) |
+| Measured commit | `c2ee8c168ffdaa72dbc680fa34c3e4a10c7f00a9` (probe committed, then both arms captured sequentially) |
 | Fixture | `070-pause-focus-native-v1`: real 012 application lifecycle + real 008 fixed-tick loop + optional real 070 owner; CPU Node mock renderer, tick-only snapshot |
 | Harness | one new probe `scripts/benchmark-pause-focus.mjs`; no second harness forked |
 | Protocol | 5 repetitions, sequential, one arm at a time, warmup = one identical unmeasured pass per probe; 10,000 frames per live/suspended arm, 2,000 suspension edges and 10,000 `getState()` reads per repetition, bounded 10,000-sample CPU observer |
@@ -26,31 +26,35 @@ paired deltas below.
 
 | Arm | BEFORE | AFTER | Added |
 | --- | --- | --- | --- |
-| Live, 10,000 frames (median wall) | 18.8333 ms | 20.3304 ms | +1.497 ms (**+7.95 %**) |
-| Live, per-frame observer p50 / p95 / p99 | 1.9 / 2.8 / 4.0 µs | 1.9 / 2.0 / 2.3 µs | no p95/p99 regression; −0.8 µs p95 |
-| Transition (suspend+frame+resume) p50 / p95 / p99 | 2.6 / 2.9 / 3.9 µs | 2.8 / 3.1 / 4.4 µs | +0.2 / +0.2 / +0.5 µs per edge |
+| Live, 10,000 frames (median wall) | 20.0943 ms | 21.3885 ms | +1.2942 ms (**+6.44 %**) |
+| Live, per-frame observer p50 / p95 / p99 | 1.9 / 2.3 / 4.2 µs | 2.0 / 2.1 / 2.4 µs | no p95/p99 regression; −0.2 µs p95, −1.8 µs p99 |
+| Transition (suspend+frame+resume) p50 / p95 / p99 | 2.8 / 3.1 / 4.4 µs | 3.1 / 3.5 / 5.5 µs | +0.3 / +0.4 / +1.1 µs per edge |
 | `getState()` p50 / p95 | n/a (no owner) | 0.2 / 0.2 µs | 0.2 µs per read |
 
-The per-frame observer p95 is **not** worse in the AFTER arm; the +1.5 ms live wall difference is
-run-to-run noise on a 1.9 µs/frame fixture and is reported only for transparency, because the owner
+The per-frame observer p95 is **not** worse in the AFTER arm; the +1.29 ms live wall difference is
+run-to-run noise on a ~2 µs/frame fixture and is reported only for transparency, because the owner
 does **no per-frame work** in the live path (nothing polls it inside the loop). The only measurable
-added cost is **per suspension edge** (p95 ≈ 0.2 µs) and **per state read** (p95 0.2 µs).
+added cost is **per suspension edge** (p95 ≈ 0.4 µs) and **per state read** (p95 0.2 µs).
 
-Paired relative gate (Docs/25: >10 % **and** >1 ms p95 increase in ≥3/5 pairs):
+Paired relative gate (Docs/25: a regression needs **>10 % and >1 ms** p95 increase in ≥3/5 pairs):
 
-- per-frame p95 pairs µs B→A: 2.9→2.5, 2.8→2.0, 1.9→2.0, 3.0→1.9, 2.0→2.0 → **0/5 violating pairs**.
-- transition p95 pairs µs B→A: 3.6→3.2, 2.9→3.2, 3.0→3.1, 2.9→3.1, 2.9→3.1 → **0/5 violating pairs**
-  (the largest is +0.3 µs, i.e. ≈ +10 % but three orders of magnitude below the 1 ms absolute half of the gate).
+- per-frame p95 pairs µs B→A: 4.1→4.6, 2.3→2.1, 2.1→2.1, 3.1→2.1, 2.1→2.0 → **0/5 violating pairs**
+  (the single increase is +0.5 µs, the instrument's own resolution).
+- transition p95 pairs µs B→A: 3.2→3.9, 3.2→3.5, 3.1→3.4, 3.0→3.2, 3.0→4.1 → **0/5 violating pairs**.
+  Reported honestly: the relative increase exceeds 10 % in two of the five pairs (+22 % and +37 %;
+  the other three rise 7–10 %), but the absolute increase is 0.2–1.1 µs, three orders of magnitude
+  below the 1 ms half of the gate, and the fixture's whole transition stage is ~3 µs. This is the real
+  added cost of the feature.
 
 ## Results — the suspended arm (the point of a pause)
 
 | Arm | Frames | Ticks advanced | Wall |
 | --- | --- | --- | --- |
-| AFTER live (AUTO, panel + diagnostic open) | 10,000 | 10,000 | 20.3304 ms |
-| AFTER suspended (MANUAL, panel open) | 10,000 | **0** | 0.1862 ms |
-| BEFORE suspended (012 `pause('manual')`) | 10,000 | **0** | 0.1729 ms |
+| AFTER live (AUTO, panel + diagnostic open) | 10,000 | 10,000 | 21.3885 ms |
+| AFTER suspended (MANUAL, panel open) | 10,000 | **0** | 0.1967 ms |
+| BEFORE suspended (012 `pause('manual')`) | 10,000 | **0** | 0.1760 ms |
 
-Suspension removes **20.144 ms of 20.330 ms (99.1 %)** of this CPU fixture's frame work while
+Suspension removes **21.19 ms of 21.39 ms (99.1 %)** of this CPU fixture's frame work while
 rendering keeps running (`renders = 10,000` in both arms). This is honest for a fixture whose frame
 is dominated by the authoritative tick and its snapshot capture; the Babylon/GPU render cost that a
 real suspended frame still pays is **not** measured here.

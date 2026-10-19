@@ -1,5 +1,5 @@
-# PBI 070 static checks (verbatim, Node v24.21.0 via volta, npm 11.19.0, commit 14f6a4692e441c7b3801a178670643310febb60a)
-# Windows console codepage set to UTF-8 (chcp 65001) before capture.
+# PBI 070 static checks (verbatim, Node v24.21.0 via volta, npm 11.19.0, delivered revision c2ee8c168ffdaa72dbc680fa34c3e4a10c7f00a9)
+# Windows console codepage set to UTF-8 (chcp 65001) before capture, so Unicode output is preserved.
 
 $ volta run --node 24.21.0 --npm 11.19.0 npm run typecheck
 
@@ -7,7 +7,7 @@ $ volta run --node 24.21.0 --npm 11.19.0 npm run typecheck
 > self-driving-academy@0.1.0 typecheck
 > tsc --noEmit && tsc -p tsconfig.tests.json --noEmit
 
-exit=0 
+exit=0
 
 $ volta run --node 24.21.0 --npm 11.19.0 npm run lint
 
@@ -15,7 +15,7 @@ $ volta run --node 24.21.0 --npm 11.19.0 npm run lint
 > self-driving-academy@0.1.0 lint
 > eslint . --max-warnings 0
 
-exit=0 
+exit=0
 
 $ volta run --node 24.21.0 --npm 11.19.0 npm run format:check
 
@@ -25,7 +25,7 @@ $ volta run --node 24.21.0 --npm 11.19.0 npm run format:check
 
 Checking formatting...
 All matched files use Prettier code style!
-exit=0 
+exit=0
 
 $ volta run --node 24.21.0 --npm 11.19.0 npm run check:architecture
 
@@ -38,9 +38,9 @@ Architecture negative probes: PASS (6 forbidden dependencies rejected)
 Inspector exception negative probes: PASS (4 forbidden imports rejected)
 Rapier adapter negative probes: PASS (3 forbidden imports rejected)
 Renderer injection, readonly snapshots, defensive persistence and lifecycle: PASS
-(node:32484) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(node:19196) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
 (Use `node --trace-warnings ...` to show where the warning was created)
-exit=0 
+exit=0
 
 $ volta run --node 24.21.0 --npm 11.19.0 npm run check:parameter-catalog
 
@@ -49,59 +49,5 @@ $ volta run --node 24.21.0 --npm 11.19.0 npm run check:parameter-catalog
 > node scripts/generate-parameter-catalog.mjs --check
 
 Parameter catalog is synchronized.
-exit=0 
-
-
-# Final re-verification at the documentation revision b4a8a8a1b48094d803aa158625423ad089a34d35 (only Docs changed since the measured
-# source revision; the src/ bytes under measurement are identical).
-
-$ volta run --node 24.21.0 --npm 11.19.0 npm run typecheck
-
-
-> self-driving-academy@0.1.0 typecheck
-> tsc --noEmit && tsc -p tsconfig.tests.json --noEmit
-
-exit=0 
-
-$ volta run --node 24.21.0 --npm 11.19.0 npm run lint
-
-
-> self-driving-academy@0.1.0 lint
-> eslint . --max-warnings 0
-
-exit=0 
-
-$ volta run --node 24.21.0 --npm 11.19.0 npm run format:check
-
-
-> self-driving-academy@0.1.0 format:check
-> prettier --check "src/**/*.{ts,css}" "tests/**/*.ts" "tests/**/*.html" "scripts/**/*.mjs" "*.{json,js,html}"
-
-Checking formatting...
-All matched files use Prettier code style!
-exit=0 
-
-$ volta run --node 24.21.0 --npm 11.19.0 npm run check:architecture
-
-
-> self-driving-academy@0.1.0 check:architecture
-> node scripts/verify-architecture.mjs
-
-Architecture imports: PASS (154 TypeScript files)
-Architecture negative probes: PASS (6 forbidden dependencies rejected)
-Inspector exception negative probes: PASS (4 forbidden imports rejected)
-Rapier adapter negative probes: PASS (3 forbidden imports rejected)
-Renderer injection, readonly snapshots, defensive persistence and lifecycle: PASS
-(node:12088) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
-(Use `node --trace-warnings ...` to show where the warning was created)
-exit=0 
-
-$ volta run --node 24.21.0 --npm 11.19.0 npm run check:parameter-catalog
-
-
-> self-driving-academy@0.1.0 check:parameter-catalog
-> node scripts/generate-parameter-catalog.mjs --check
-
-Parameter catalog is synchronized.
-exit=0 
+exit=0
 
