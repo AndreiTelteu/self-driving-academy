@@ -1,0 +1,669 @@
+{
+  "version": "059-ride-demand-v1",
+  "generatedBy": "npm run ride:demand",
+  "oracleRule": "Schedule window + 006 seed derivation chooses real TAXI service zones; 041 findRoute must return READY before a request can enter the bounded FIFO queue.",
+  "limits": {
+    "version": "059-ride-demand-v1",
+    "windows": 256,
+    "requests": 1024,
+    "requestsPerWindow": 256,
+    "pendingRequests": 64,
+    "idCodeUnits": 256,
+    "windowIdCodeUnits": 64,
+    "scenarioIdCodeUnits": 256,
+    "namespaceCodeUnits": 64
+  },
+  "plan": {
+    "scenarioId": "city-059",
+    "mapId": "neighbourhood-compact-v1",
+    "seed": 59059,
+    "windows": 3,
+    "requests": 32,
+    "levels": {
+      "LOW": 8,
+      "NORMAL": 12,
+      "HIGH": 12
+    },
+    "firstSpawnTick": 0,
+    "lastSpawnTick": 1425
+  },
+  "generated": {
+    "requests": 32,
+    "uniqueIds": 32,
+    "valid": 32,
+    "invalid": 0,
+    "routeSearches": 32,
+    "pendingAfterHorizon": 32,
+    "admittedAfterHorizon": 32
+  },
+  "determinism": {
+    "sameSeed": true,
+    "differentSeed": true,
+    "windowOrderIndependent": true,
+    "advanceGranularityIndependent": true,
+    "staleTickRejected": true
+  },
+  "invalid": {
+    "accessMismatch": "ACCESS_MISMATCH",
+    "unknownDestination": "UNKNOWN_DESTINATION",
+    "sameZone": "SAME_ZONE",
+    "blockedRoute": "NO_ROUTE",
+    "blockedRouteStatus": "BLOCKED"
+  },
+  "queue": {
+    "policy": "REJECT_NEWEST",
+    "limit": 4,
+    "requests": 100,
+    "admitted": 4,
+    "pending": 4,
+    "overflow": 96,
+    "bounded": true
+  },
+  "disposal": {
+    "disposed": true,
+    "requests": 0,
+    "pending": 0,
+    "routeSearches": 0,
+    "plannerOwned": true,
+    "plannerDisposed": true,
+    "externalPlannerAlive": true
+  },
+  "schedule": [
+    {
+      "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:morning5:r0000",
+      "windowId": "w:morning",
+      "spawnTick": 0,
+      "demandLevel": "NORMAL",
+      "originZoneId": "sz:2-0",
+      "destinationZoneId": "sz:1-3",
+      "validation": "READY"
+    },
+    {
+      "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:morning5:r0001",
+      "windowId": "w:morning",
+      "spawnTick": 50,
+      "demandLevel": "NORMAL",
+      "originZoneId": "sz:1-1",
+      "destinationZoneId": "sz:0-1",
+      "validation": "READY"
+    },
+    {
+      "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:morning5:r0002",
+      "windowId": "w:morning",
+      "spawnTick": 100,
+      "demandLevel": "NORMAL",
+      "originZoneId": "sz:3-3",
+      "destinationZoneId": "sz:1-1",
+      "validation": "READY"
+    },
+    {
+      "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:morning5:r0003",
+      "windowId": "w:morning",
+      "spawnTick": 150,
+      "demandLevel": "NORMAL",
+      "originZoneId": "sz:2-0",
+      "destinationZoneId": "sz:0-1",
+      "validation": "READY"
+    },
+    {
+      "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:morning5:r0004",
+      "windowId": "w:morning",
+      "spawnTick": 200,
+      "demandLevel": "NORMAL",
+      "originZoneId": "sz:3-2",
+      "destinationZoneId": "sz:0-1",
+      "validation": "READY"
+    },
+    {
+      "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:morning5:r0005",
+      "windowId": "w:morning",
+      "spawnTick": 250,
+      "demandLevel": "NORMAL",
+      "originZoneId": "sz:2-0",
+      "destinationZoneId": "sz:0-1",
+      "validation": "READY"
+    },
+    {
+      "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:morning5:r0006",
+      "windowId": "w:morning",
+      "spawnTick": 300,
+      "demandLevel": "NORMAL",
+      "originZoneId": "sz:1-2",
+      "destinationZoneId": "sz:1-0",
+      "validation": "READY"
+    },
+    {
+      "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:morning5:r0007",
+      "windowId": "w:morning",
+      "spawnTick": 350,
+      "demandLevel": "NORMAL",
+      "originZoneId": "sz:1-1",
+      "destinationZoneId": "sz:3-2",
+      "validation": "READY"
+    },
+    {
+      "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:morning5:r0008",
+      "windowId": "w:morning",
+      "spawnTick": 400,
+      "demandLevel": "NORMAL",
+      "originZoneId": "sz:2-1",
+      "destinationZoneId": "sz:0-1",
+      "validation": "READY"
+    },
+    {
+      "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:morning5:r0009",
+      "windowId": "w:morning",
+      "spawnTick": 450,
+      "demandLevel": "NORMAL",
+      "originZoneId": "sz:3-2",
+      "destinationZoneId": "sz:0-1",
+      "validation": "READY"
+    },
+    {
+      "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:morning5:r0010",
+      "windowId": "w:morning",
+      "spawnTick": 500,
+      "demandLevel": "NORMAL",
+      "originZoneId": "sz:1-1",
+      "destinationZoneId": "sz:2-0",
+      "validation": "READY"
+    },
+    {
+      "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:morning5:r0011",
+      "windowId": "w:morning",
+      "spawnTick": 550,
+      "demandLevel": "NORMAL",
+      "originZoneId": "sz:1-2",
+      "destinationZoneId": "sz:2-0",
+      "validation": "READY"
+    },
+    {
+      "requestId": "id-v1:12:ride-request18:city:fixture:rides6:w:peak5:r0000",
+      "windowId": "w:peak",
+      "spawnTick": 600,
+      "demandLevel": "HIGH",
+      "originZoneId": "sz:3-2",
+      "destinationZoneId": "sz:1-1",
+      "validation": "READY"
+    },
+    {
+      "requestId": "id-v1:12:ride-request18:city:fixture:rides6:w:peak5:r0001",
+      "windowId": "w:peak",
+      "spawnTick": 625,
+      "demandLevel": "HIGH",
+      "originZoneId": "sz:2-0",
+      "destinationZoneId": "sz:2-3",
+      "validation": "READY"
+    },
+    {
+      "requestId": "id-v1:12:ride-request18:city:fixture:rides6:w:peak5:r0002",
+      "windowId": "w:peak",
+      "spawnTick": 650,
+      "demandLevel": "HIGH",
+      "originZoneId": "sz:0-0",
+      "destinationZoneId": "sz:2-3",
+      "validation": "READY"
+    },
+    {
+      "requestId": "id-v1:12:ride-request18:city:fixture:rides6:w:peak5:r0003",
+      "windowId": "w:peak",
+      "spawnTick": 675,
+      "demandLevel": "HIGH",
+      "originZoneId": "sz:3-2",
+      "destinationZoneId": "sz:1-3",
+      "validation": "READY"
+    },
+    {
+      "requestId": "id-v1:12:ride-request18:city:fixture:rides6:w:peak5:r0004",
+      "windowId": "w:peak",
+      "spawnTick": 700,
+      "demandLevel": "HIGH",
+      "originZoneId": "sz:1-2",
+      "destinationZoneId": "sz:3-2",
+      "validation": "READY"
+    },
+    {
+      "requestId": "id-v1:12:ride-request18:city:fixture:rides6:w:peak5:r0005",
+      "windowId": "w:peak",
+      "spawnTick": 725,
+      "demandLevel": "HIGH",
+      "originZoneId": "sz:2-1",
+      "destinationZoneId": "sz:2-3",
+      "validation": "READY"
+    },
+    {
+      "requestId": "id-v1:12:ride-request18:city:fixture:rides6:w:peak5:r0006",
+      "windowId": "w:peak",
+      "spawnTick": 750,
+      "demandLevel": "HIGH",
+      "originZoneId": "sz:3-0",
+      "destinationZoneId": "sz:1-1",
+      "validation": "READY"
+    },
+    {
+      "requestId": "id-v1:12:ride-request18:city:fixture:rides6:w:peak5:r0007",
+      "windowId": "w:peak",
+      "spawnTick": 775,
+      "demandLevel": "HIGH",
+      "originZoneId": "sz:0-3",
+      "destinationZoneId": "sz:0-1",
+      "validation": "READY"
+    },
+    {
+      "requestId": "id-v1:12:ride-request18:city:fixture:rides6:w:peak5:r0008",
+      "windowId": "w:peak",
+      "spawnTick": 800,
+      "demandLevel": "HIGH",
+      "originZoneId": "sz:0-2",
+      "destinationZoneId": "sz:2-0",
+      "validation": "READY"
+    },
+    {
+      "requestId": "id-v1:12:ride-request18:city:fixture:rides6:w:peak5:r0009",
+      "windowId": "w:peak",
+      "spawnTick": 825,
+      "demandLevel": "HIGH",
+      "originZoneId": "sz:2-3",
+      "destinationZoneId": "sz:1-1",
+      "validation": "READY"
+    },
+    {
+      "requestId": "id-v1:12:ride-request18:city:fixture:rides6:w:peak5:r0010",
+      "windowId": "w:peak",
+      "spawnTick": 850,
+      "demandLevel": "HIGH",
+      "originZoneId": "sz:3-2",
+      "destinationZoneId": "sz:0-1",
+      "validation": "READY"
+    },
+    {
+      "requestId": "id-v1:12:ride-request18:city:fixture:rides6:w:peak5:r0011",
+      "windowId": "w:peak",
+      "spawnTick": 875,
+      "demandLevel": "HIGH",
+      "originZoneId": "sz:0-0",
+      "destinationZoneId": "sz:2-0",
+      "validation": "READY"
+    },
+    {
+      "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:evening5:r0000",
+      "windowId": "w:evening",
+      "spawnTick": 900,
+      "demandLevel": "LOW",
+      "originZoneId": "sz:1-2",
+      "destinationZoneId": "sz:2-3",
+      "validation": "READY"
+    },
+    {
+      "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:evening5:r0001",
+      "windowId": "w:evening",
+      "spawnTick": 975,
+      "demandLevel": "LOW",
+      "originZoneId": "sz:0-0",
+      "destinationZoneId": "sz:2-3",
+      "validation": "READY"
+    },
+    {
+      "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:evening5:r0002",
+      "windowId": "w:evening",
+      "spawnTick": 1050,
+      "demandLevel": "LOW",
+      "originZoneId": "sz:1-1",
+      "destinationZoneId": "sz:0-2",
+      "validation": "READY"
+    },
+    {
+      "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:evening5:r0003",
+      "windowId": "w:evening",
+      "spawnTick": 1125,
+      "demandLevel": "LOW",
+      "originZoneId": "sz:1-1",
+      "destinationZoneId": "sz:2-3",
+      "validation": "READY"
+    },
+    {
+      "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:evening5:r0004",
+      "windowId": "w:evening",
+      "spawnTick": 1200,
+      "demandLevel": "LOW",
+      "originZoneId": "sz:3-2",
+      "destinationZoneId": "sz:1-0",
+      "validation": "READY"
+    },
+    {
+      "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:evening5:r0005",
+      "windowId": "w:evening",
+      "spawnTick": 1275,
+      "demandLevel": "LOW",
+      "originZoneId": "sz:0-0",
+      "destinationZoneId": "sz:0-1",
+      "validation": "READY"
+    },
+    {
+      "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:evening5:r0006",
+      "windowId": "w:evening",
+      "spawnTick": 1350,
+      "demandLevel": "LOW",
+      "originZoneId": "sz:0-0",
+      "destinationZoneId": "sz:1-3",
+      "validation": "READY"
+    },
+    {
+      "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:evening5:r0007",
+      "windowId": "w:evening",
+      "spawnTick": 1425,
+      "demandLevel": "LOW",
+      "originZoneId": "sz:3-3",
+      "destinationZoneId": "sz:1-3",
+      "validation": "READY"
+    }
+  ],
+  "checks": [
+    {
+      "name": "plan-map-id",
+      "expected": {
+        "plan": "neighbourhood-compact-v1",
+        "map": "neighbourhood-compact-v1"
+      },
+      "actual": {
+        "plan": "neighbourhood-compact-v1",
+        "map": "neighbourhood-compact-v1"
+      },
+      "pass": true,
+      "detail": "The schedule is bound to the real 032 neighbourhood map."
+    },
+    {
+      "name": "plan-frozen",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Plan, windows and entries are immutable."
+    },
+    {
+      "name": "windows",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "Three authored demand windows."
+    },
+    {
+      "name": "requests",
+      "expected": 32,
+      "actual": 32,
+      "pass": true,
+      "detail": "12 morning + 12 peak + 8 evening requests."
+    },
+    {
+      "name": "unique-request-ids",
+      "expected": 32,
+      "actual": 32,
+      "pass": true,
+      "detail": "006 request identities are unique."
+    },
+    {
+      "name": "canonical-order",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Order is spawn tick then request id, never insertion or Map order."
+    },
+    {
+      "name": "demand-levels",
+      "expected": {
+        "LOW": 8,
+        "NORMAL": 12,
+        "HIGH": 12
+      },
+      "actual": {
+        "LOW": 8,
+        "NORMAL": 12,
+        "HIGH": 12
+      },
+      "pass": true,
+      "detail": "Every request carries its window demand level."
+    },
+    {
+      "name": "spawn-inside-window",
+      "expected": 32,
+      "actual": 32,
+      "pass": true,
+      "detail": "No request spawns before or after its schedule window."
+    },
+    {
+      "name": "real-service-zones",
+      "expected": 32,
+      "actual": 32,
+      "pass": true,
+      "detail": "Origin and destination are real map service-zone ids."
+    },
+    {
+      "name": "taxi-zone-access",
+      "expected": 32,
+      "actual": 32,
+      "pass": true,
+      "detail": "Both zones admit the TAXI access class."
+    },
+    {
+      "name": "pickup-dropoff-kinds",
+      "expected": 32,
+      "actual": 32,
+      "pass": true,
+      "detail": "Origin is pickup-capable and destination is dropoff-capable."
+    },
+    {
+      "name": "distinct-zones",
+      "expected": 32,
+      "actual": 32,
+      "pass": true,
+      "detail": "A generated trip never starts and ends in the same service zone."
+    },
+    {
+      "name": "ready-validations",
+      "expected": 32,
+      "actual": 32,
+      "pass": true,
+      "detail": "Every impossible request is excluded before admission."
+    },
+    {
+      "name": "planner-ready-routes",
+      "expected": 32,
+      "actual": 32,
+      "pass": true,
+      "detail": "Every admitted request was checked by the real 041 planner."
+    },
+    {
+      "name": "route-searches",
+      "expected": 32,
+      "actual": 32,
+      "pass": true,
+      "detail": "One real planner query per generated request."
+    },
+    {
+      "name": "pending-after-horizon",
+      "expected": 32,
+      "actual": 32,
+      "pass": true,
+      "detail": "All 32 valid requests fit the default bounded queue."
+    },
+    {
+      "name": "admitted-after-horizon",
+      "expected": 32,
+      "actual": 32,
+      "pass": true,
+      "detail": "The horizon admits every valid request exactly once."
+    },
+    {
+      "name": "no-future-admission",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "advance never admits a request before its scheduled tick."
+    },
+    {
+      "name": "same-seed",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Two identical plans produce identical schedules."
+    },
+    {
+      "name": "different-seed",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "A different seed changes the derived zone pairs."
+    },
+    {
+      "name": "window-order-independent",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Reversing the authored window array does not change the schedule."
+    },
+    {
+      "name": "advance-granularity-independent",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "One advance and 215 stepped advances admit the same stable queue."
+    },
+    {
+      "name": "stale-tick-rejected",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "A decreasing authoritative tick is refused."
+    },
+    {
+      "name": "invalid-destination",
+      "expected": {
+        "status": "ACCESS_MISMATCH",
+        "pending": 0,
+        "rejectionReason": "INVALID_REQUEST",
+        "rejectionStatus": "ACCESS_MISMATCH"
+      },
+      "actual": {
+        "status": "ACCESS_MISMATCH",
+        "pending": 0,
+        "rejectionReason": "INVALID_REQUEST",
+        "rejectionStatus": "ACCESS_MISMATCH"
+      },
+      "pass": true,
+      "detail": "A CIVIL-only dropoff zone is refused for a TAXI request."
+    },
+    {
+      "name": "unknown-destination",
+      "expected": {
+        "status": "UNKNOWN_DESTINATION",
+        "pending": 0,
+        "rejectionReason": "INVALID_REQUEST",
+        "rejectionStatus": "UNKNOWN_DESTINATION"
+      },
+      "actual": {
+        "status": "UNKNOWN_DESTINATION",
+        "pending": 0,
+        "rejectionReason": "INVALID_REQUEST",
+        "rejectionStatus": "UNKNOWN_DESTINATION"
+      },
+      "pass": true,
+      "detail": "An id outside the map service zones is refused."
+    },
+    {
+      "name": "same-zone",
+      "expected": {
+        "status": "SAME_ZONE",
+        "pending": 0,
+        "rejectionReason": "INVALID_REQUEST",
+        "rejectionStatus": "SAME_ZONE"
+      },
+      "actual": {
+        "status": "SAME_ZONE",
+        "pending": 0,
+        "rejectionReason": "INVALID_REQUEST",
+        "rejectionStatus": "SAME_ZONE"
+      },
+      "pass": true,
+      "detail": "A trip with one zone is refused."
+    },
+    {
+      "name": "blocked-route",
+      "expected": {
+        "status": "NO_ROUTE",
+        "routeStatus": "BLOCKED",
+        "pending": 0
+      },
+      "actual": {
+        "status": "NO_ROUTE",
+        "routeStatus": "BLOCKED",
+        "pending": 0
+      },
+      "pass": true,
+      "detail": "A blocked origin lane is refused before allocation."
+    },
+    {
+      "name": "overflow-policy",
+      "expected": {
+        "policy": "REJECT_NEWEST",
+        "limit": 4,
+        "requests": 100,
+        "admitted": 4,
+        "pending": 4,
+        "overflow": 96,
+        "bounded": true
+      },
+      "actual": {
+        "policy": "REJECT_NEWEST",
+        "limit": 4,
+        "requests": 100,
+        "admitted": 4,
+        "pending": 4,
+        "overflow": 96,
+        "bounded": true
+      },
+      "pass": true,
+      "detail": "The queue is bounded and the newest overflow is explicitly rejected."
+    },
+    {
+      "name": "clean-disposal",
+      "expected": {
+        "disposed": true,
+        "requests": 0,
+        "pending": 0,
+        "routeSearches": 0,
+        "plannerOwned": true,
+        "plannerDisposed": true,
+        "externalPlannerAlive": true
+      },
+      "actual": {
+        "disposed": true,
+        "requests": 0,
+        "pending": 0,
+        "routeSearches": 0,
+        "plannerOwned": true,
+        "plannerDisposed": true,
+        "externalPlannerAlive": true
+      },
+      "pass": true,
+      "detail": "Owned planner and request state go to zero; an injected planner stays caller-owned."
+    },
+    {
+      "name": "no-wall-clock",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The source has no Date, timer or ambient randomness."
+    },
+    {
+      "name": "no-dom-or-renderer",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The source has no DOM, Babylon or Rapier dependency."
+    }
+  ],
+  "summary": {
+    "checks": 31,
+    "passed": 31,
+    "pass": true
+  }
+}

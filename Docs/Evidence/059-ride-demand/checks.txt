@@ -1,0 +1,96 @@
+# PBI 059 execution log (2026-10-20)
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm run typecheck
+
+> self-driving-academy@0.1.0 typecheck
+> tsc --noEmit && tsc -p tsconfig.tests.json --noEmit
+
+exit=0
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm run lint
+
+> self-driving-academy@0.1.0 lint
+> eslint . --max-warnings 0
+
+exit=0
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm run format:check
+
+> self-driving-academy@0.1.0 format:check
+> prettier --check "src/**/*.{ts,css}" "tests/**/*.ts" "tests/**/*.html" "scripts/**/*.mjs" "*.{json,js,html}"
+
+Checking formatting...
+All matched files use Prettier code style!
+exit=0
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm run check:architecture
+
+> self-driving-academy@0.1.0 check:architecture
+> node scripts/verify-architecture.mjs
+
+Architecture imports: PASS (183 TypeScript files)
+Architecture negative probes: PASS (6 forbidden dependencies rejected)
+Inspector exception negative probes: PASS (4 forbidden imports rejected)
+Rapier adapter negative probes: PASS (3 forbidden imports rejected)
+Renderer injection, readonly snapshots, defensive persistence and lifecycle: PASS
+exit=0
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm run check:parameter-catalog
+
+> self-driving-academy@0.1.0 check:parameter-catalog
+> node scripts/generate-parameter-catalog.mjs --check
+
+Parameter catalog is synchronized.
+exit=0
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm test (filtered summary)
+
+tests 1190
+suites 1
+pass 1190
+fail 0
+cancelled 0
+skipped 0
+todo 0
+duration_ms 25282.4256
+exit=0
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm run ride:demand -- --check
+
+> self-driving-academy@0.1.0 ride:demand
+> node --import ./scripts/register-typescript.mjs scripts/run-ride-demand-report.mjs --check
+
+PASS CHECK plan-map-id
+PASS CHECK plan-frozen
+PASS CHECK windows
+PASS CHECK requests
+PASS CHECK unique-request-ids
+PASS CHECK canonical-order
+PASS CHECK demand-levels
+PASS CHECK spawn-inside-window
+PASS CHECK real-service-zones
+PASS CHECK taxi-zone-access
+PASS CHECK pickup-dropoff-kinds
+PASS CHECK distinct-zones
+PASS CHECK ready-validations
+PASS CHECK planner-ready-routes
+PASS CHECK route-searches
+PASS CHECK pending-after-horizon
+PASS CHECK admitted-after-horizon
+PASS CHECK no-future-admission
+PASS CHECK same-seed
+PASS CHECK different-seed
+PASS CHECK window-order-independent
+PASS CHECK advance-granularity-independent
+PASS CHECK stale-tick-rejected
+PASS CHECK invalid-destination
+PASS CHECK unknown-destination
+PASS CHECK same-zone
+PASS CHECK blocked-route
+PASS CHECK overflow-policy
+PASS CHECK clean-disposal
+PASS CHECK no-wall-clock
+PASS CHECK no-dom-or-renderer
+SUMMARY checks 31/31, requests 32, overflow 96, overall PASS
+Ride demand report is current: C:\Users\aandr\Sites\self-driving-academy\.worktrees\pbi-059\Docs\Evidence\059-ride-demand\report.json
+exit=0

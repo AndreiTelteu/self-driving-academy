@@ -16,6 +16,8 @@ Lista flotei afișează ID, mod de control, etapa cursei, pickup, destinație, E
 
 [Traficul civil 058](civil-traffic.md) pornește fiecare civil din registry cu o rută proprie calculată de [plannerul 041](route-planner.md) peste graful real 033 și o urmărește prin lanțul 044/046/047/048. Toți civilii consumă același profil comun al orașului; eliberarea unui vehicul păstrează ruta și recitește stilul activ la `resume`, fără profil fix ascuns. Poziția și viteza rămân pe banda direcționată, un taxi din față devine lider semantic cu gap fizic minim, iar `dispose()` readuce ownership-ul la zero. Corpurile Rapier, semafoarele live și dispecerizarea rămân contracte separate.
 
+[Cererile de curse 059](ride-demand.md) transformă un program de scenariu și un seed într-o listă deterministă de cereri cu ID stabil 006, pickup și dropoff din zonele reale de serviciu 032, tick de apariție și nivel `LOW`/`NORMAL`/`HIGH`. Fiecare cerere este validată cu plannerul 041 înainte de alocare: origine pickup și destinație dropoff accesibile `TAXI`, zone distincte și traseu `READY`. Cererile imposibile sunt raportate cu motiv închis, iar coada validă este plafonată la 64 cu politica explicită `REJECT_NEWEST`. Modulul nu alege taxiuri și nu creează curse; dispecerizarea 060 replanifică la asignare, deoarece blocajele și versiunile se pot schimba. `dispose()` readuce cererile, coada și plannerul deținut la zero.
+
 
 ## Rezultate comerciale și experiența pasagerului
 
