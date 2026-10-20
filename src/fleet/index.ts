@@ -5,3 +5,4 @@ export * from './ride-demand';
 export * from './dispatcher';
 export * from './ride-fsm';
 export * from './pickup';
+export * from './dropoff';

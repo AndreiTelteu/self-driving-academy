@@ -1,0 +1,1319 @@
+{
+  "version": "063-dropoff-v1",
+  "generatedBy": "npm run ride:dropoff",
+  "oracleRule": "A delivery completes only when the assigned taxi is inside the ride’s real authored destination-zone polygon, at or below the speed threshold, and has remained contiguous and stationary for the exact simulated dwell; completion writes DROPOFF_COMPLETE through 061 exactly once, keeps the trip metrics and releases the 060 claim with COMPLETED.",
+  "defaults": {
+    "tickRateHz": 60,
+    "speedThresholdMps": 0.3,
+    "dwellTicks": 180,
+    "displacementToleranceM": 0.05
+  },
+  "limits": {
+    "version": "063-dropoff-v1",
+    "attempts": 64,
+    "completions": 128,
+    "vertices": 256,
+    "idCodeUnits": 512
+  },
+  "fleet": {
+    "taxis": 24,
+    "civilians": 20,
+    "requests": 32
+  },
+  "exactDwell": {
+    "requiredDwellTicks": 180,
+    "startTick": 20,
+    "completeTick": 200,
+    "pendingBeforeComplete": 179,
+    "dwellAtComplete": 180,
+    "dwellSeconds": 3,
+    "stateAfterComplete": "COMPLETED",
+    "events": [
+      "ASSIGNED",
+      "ARRIVED_PICKUP",
+      "PICKUP_COMPLETE",
+      "ARRIVED_DROPOFF",
+      "DROPOFF_COMPLETE"
+    ],
+    "transitionTicks": [
+      10,
+      12,
+      13,
+      200,
+      200
+    ],
+    "replayDuplicate": true,
+    "transitionsAfterReplay": 5,
+    "releaseReason": "COMPLETED",
+    "taxiStatus": "AVAILABLE",
+    "metricsPreserved": true
+  },
+  "fastPass": {
+    "samples": 13,
+    "insideSamples": 7,
+    "reasons": [
+      "NOT_AT_DROPOFF",
+      "TOO_FAST"
+    ],
+    "maxDwell": 0,
+    "state": "TO_DROPOFF",
+    "transitions": 3,
+    "completions": 0
+  },
+  "zoneRejections": {
+    "outside": {
+      "samples": 200,
+      "reason": "NOT_AT_DROPOFF"
+    },
+    "otherDropoffZone": {
+      "zoneId": "sz:0-1",
+      "samples": 180,
+      "reason": "WRONG_ZONE"
+    },
+    "pickupZone": {
+      "zoneId": "sz:0-0",
+      "samples": 100,
+      "reason": "WRONG_ZONE"
+    },
+    "state": "TO_DROPOFF",
+    "transitions": 3,
+    "completions": 0
+  },
+  "incompatibleZone": {
+    "reason": "WRONG_ZONE",
+    "inDropoffZone": false,
+    "state": "TO_DROPOFF",
+    "completions": 0
+  },
+  "boundary": {
+    "exactBoundaryInZone": true,
+    "exactBoundaryReason": "NOT_STATIONARY",
+    "outsideReason": "NOT_AT_DROPOFF",
+    "reentryReason": "NOT_STATIONARY",
+    "completeTick": 282,
+    "dwellTicks": 180,
+    "state": "COMPLETED"
+  },
+  "idempotency": {
+    "sameTickDuplicate": true,
+    "laterDuplicate": true,
+    "transitions": 5,
+    "completions": 1,
+    "completeEvents": 1,
+    "lifecycleDuplicates": 0,
+    "releases": 1
+  },
+  "wrongRide": {
+    "unknown": "WRONG_RIDE",
+    "foreign": "FOREIGN_VEHICLE",
+    "notOnTrip": "RIDE_NOT_ON_TRIP",
+    "cancelled": "WRONG_RIDE",
+    "failed": "WRONG_RIDE",
+    "notOnTripState": "TO_PICKUP",
+    "cancelledState": "CANCELLED",
+    "failedState": "FAILED",
+    "completions": 0
+  },
+  "stale": {
+    "staleBefore": true,
+    "staleAfterAdvance": true,
+    "tickAfterStale": 100,
+    "restartDwell": 0,
+    "state": "TO_DROPOFF",
+    "staleCount": 2
+  },
+  "release": {
+    "attemptedCompletionRejected": true,
+    "stateAfterAttempt": "DROPOFF",
+    "completions": 0,
+    "lifecycleReleases": 0,
+    "dispatcherReleaseReason": "TAXI_BLOCKED",
+    "taxiStatus": "BLOCKED"
+  },
+  "equivalence": {
+    "identical": true,
+    "manualState": "COMPLETED",
+    "autonomousState": "COMPLETED",
+    "manualDwellTicks": 180,
+    "autonomousDwellTicks": 180,
+    "completeTick": 400
+  },
+  "simulation": {
+    "assignments": 32,
+    "boarded": 32,
+    "completed": 32,
+    "failed": 0,
+    "cancelled": 0,
+    "active": 0,
+    "releases": 32,
+    "requests": 32,
+    "duplicateTaxis": false,
+    "uniqueDropoffZones": 8,
+    "uniqueCompleteEvents": 32,
+    "minCompleteDwellTicks": 180,
+    "maxCompleteDwellTicks": 180,
+    "exactDwellRides": 32,
+    "pickupRejections": 0,
+    "pickupDuplicates": 0,
+    "dropoffRejections": 0,
+    "dropoffDuplicates": 0,
+    "minTransitions": 5,
+    "maxTransitions": 5,
+    "rides": [
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:morning5:r0000",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0021",
+        "pickupZoneId": "sz:2-0",
+        "dropoffZoneId": "sz:1-3",
+        "boardTick": 180,
+        "dropoffStartTick": 181,
+        "completeTick": 361,
+        "boardDwellTicks": 180,
+        "completeDwellTicks": 180,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:morning5:r0001",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0009",
+        "pickupZoneId": "sz:1-1",
+        "dropoffZoneId": "sz:0-1",
+        "boardTick": 230,
+        "dropoffStartTick": 231,
+        "completeTick": 411,
+        "boardDwellTicks": 180,
+        "completeDwellTicks": 180,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:morning5:r0002",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0010",
+        "pickupZoneId": "sz:3-3",
+        "dropoffZoneId": "sz:1-1",
+        "boardTick": 280,
+        "dropoffStartTick": 281,
+        "completeTick": 461,
+        "boardDwellTicks": 180,
+        "completeDwellTicks": 180,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:morning5:r0003",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0005",
+        "pickupZoneId": "sz:2-0",
+        "dropoffZoneId": "sz:0-1",
+        "boardTick": 330,
+        "dropoffStartTick": 331,
+        "completeTick": 511,
+        "boardDwellTicks": 180,
+        "completeDwellTicks": 180,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:morning5:r0004",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0015",
+        "pickupZoneId": "sz:3-2",
+        "dropoffZoneId": "sz:0-1",
+        "boardTick": 380,
+        "dropoffStartTick": 381,
+        "completeTick": 561,
+        "boardDwellTicks": 180,
+        "completeDwellTicks": 180,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:morning5:r0005",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0022",
+        "pickupZoneId": "sz:2-0",
+        "dropoffZoneId": "sz:0-1",
+        "boardTick": 430,
+        "dropoffStartTick": 431,
+        "completeTick": 611,
+        "boardDwellTicks": 180,
+        "completeDwellTicks": 180,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:morning5:r0006",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0001",
+        "pickupZoneId": "sz:1-2",
+        "dropoffZoneId": "sz:1-0",
+        "boardTick": 480,
+        "dropoffStartTick": 481,
+        "completeTick": 661,
+        "boardDwellTicks": 180,
+        "completeDwellTicks": 180,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:morning5:r0007",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0023",
+        "pickupZoneId": "sz:1-1",
+        "dropoffZoneId": "sz:3-2",
+        "boardTick": 530,
+        "dropoffStartTick": 531,
+        "completeTick": 711,
+        "boardDwellTicks": 180,
+        "completeDwellTicks": 180,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:morning5:r0008",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0021",
+        "pickupZoneId": "sz:2-1",
+        "dropoffZoneId": "sz:0-1",
+        "boardTick": 580,
+        "dropoffStartTick": 581,
+        "completeTick": 761,
+        "boardDwellTicks": 180,
+        "completeDwellTicks": 180,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:morning5:r0009",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0009",
+        "pickupZoneId": "sz:3-2",
+        "dropoffZoneId": "sz:0-1",
+        "boardTick": 630,
+        "dropoffStartTick": 631,
+        "completeTick": 811,
+        "boardDwellTicks": 180,
+        "completeDwellTicks": 180,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:morning5:r0010",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0010",
+        "pickupZoneId": "sz:1-1",
+        "dropoffZoneId": "sz:2-0",
+        "boardTick": 680,
+        "dropoffStartTick": 681,
+        "completeTick": 861,
+        "boardDwellTicks": 180,
+        "completeDwellTicks": 180,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:morning5:r0011",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0005",
+        "pickupZoneId": "sz:1-2",
+        "dropoffZoneId": "sz:2-0",
+        "boardTick": 730,
+        "dropoffStartTick": 731,
+        "completeTick": 911,
+        "boardDwellTicks": 180,
+        "completeDwellTicks": 180,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides6:w:peak5:r0000",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0015",
+        "pickupZoneId": "sz:3-2",
+        "dropoffZoneId": "sz:1-1",
+        "boardTick": 780,
+        "dropoffStartTick": 781,
+        "completeTick": 961,
+        "boardDwellTicks": 180,
+        "completeDwellTicks": 180,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides6:w:peak5:r0001",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0022",
+        "pickupZoneId": "sz:2-0",
+        "dropoffZoneId": "sz:2-3",
+        "boardTick": 805,
+        "dropoffStartTick": 806,
+        "completeTick": 986,
+        "boardDwellTicks": 180,
+        "completeDwellTicks": 180,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides6:w:peak5:r0002",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0004",
+        "pickupZoneId": "sz:0-0",
+        "dropoffZoneId": "sz:2-3",
+        "boardTick": 830,
+        "dropoffStartTick": 831,
+        "completeTick": 1011,
+        "boardDwellTicks": 180,
+        "completeDwellTicks": 180,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides6:w:peak5:r0003",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0001",
+        "pickupZoneId": "sz:3-2",
+        "dropoffZoneId": "sz:1-3",
+        "boardTick": 855,
+        "dropoffStartTick": 856,
+        "completeTick": 1036,
+        "boardDwellTicks": 180,
+        "completeDwellTicks": 180,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides6:w:peak5:r0004",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0019",
+        "pickupZoneId": "sz:1-2",
+        "dropoffZoneId": "sz:3-2",
+        "boardTick": 880,
+        "dropoffStartTick": 881,
+        "completeTick": 1061,
+        "boardDwellTicks": 180,
+        "completeDwellTicks": 180,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides6:w:peak5:r0005",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0023",
+        "pickupZoneId": "sz:2-1",
+        "dropoffZoneId": "sz:2-3",
+        "boardTick": 905,
+        "dropoffStartTick": 906,
+        "completeTick": 1086,
+        "boardDwellTicks": 180,
+        "completeDwellTicks": 180,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides6:w:peak5:r0006",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0002",
+        "pickupZoneId": "sz:3-0",
+        "dropoffZoneId": "sz:1-1",
+        "boardTick": 930,
+        "dropoffStartTick": 931,
+        "completeTick": 1111,
+        "boardDwellTicks": 180,
+        "completeDwellTicks": 180,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides6:w:peak5:r0007",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0018",
+        "pickupZoneId": "sz:0-3",
+        "dropoffZoneId": "sz:0-1",
+        "boardTick": 955,
+        "dropoffStartTick": 956,
+        "completeTick": 1136,
+        "boardDwellTicks": 180,
+        "completeDwellTicks": 180,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides6:w:peak5:r0008",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0013",
+        "pickupZoneId": "sz:0-2",
+        "dropoffZoneId": "sz:2-0",
+        "boardTick": 980,
+        "dropoffStartTick": 981,
+        "completeTick": 1161,
+        "boardDwellTicks": 180,
+        "completeDwellTicks": 180,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides6:w:peak5:r0009",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0009",
+        "pickupZoneId": "sz:2-3",
+        "dropoffZoneId": "sz:1-1",
+        "boardTick": 1005,
+        "dropoffStartTick": 1006,
+        "completeTick": 1186,
+        "boardDwellTicks": 180,
+        "completeDwellTicks": 180,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides6:w:peak5:r0010",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0021",
+        "pickupZoneId": "sz:3-2",
+        "dropoffZoneId": "sz:0-1",
+        "boardTick": 1030,
+        "dropoffStartTick": 1031,
+        "completeTick": 1211,
+        "boardDwellTicks": 180,
+        "completeDwellTicks": 180,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides6:w:peak5:r0011",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0024",
+        "pickupZoneId": "sz:0-0",
+        "dropoffZoneId": "sz:2-0",
+        "boardTick": 1055,
+        "dropoffStartTick": 1056,
+        "completeTick": 1236,
+        "boardDwellTicks": 180,
+        "completeDwellTicks": 180,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:evening5:r0000",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0010",
+        "pickupZoneId": "sz:1-2",
+        "dropoffZoneId": "sz:2-3",
+        "boardTick": 1080,
+        "dropoffStartTick": 1081,
+        "completeTick": 1261,
+        "boardDwellTicks": 180,
+        "completeDwellTicks": 180,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:evening5:r0001",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0005",
+        "pickupZoneId": "sz:0-0",
+        "dropoffZoneId": "sz:2-3",
+        "boardTick": 1155,
+        "dropoffStartTick": 1156,
+        "completeTick": 1336,
+        "boardDwellTicks": 180,
+        "completeDwellTicks": 180,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:evening5:r0002",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0001",
+        "pickupZoneId": "sz:1-1",
+        "dropoffZoneId": "sz:0-2",
+        "boardTick": 1230,
+        "dropoffStartTick": 1231,
+        "completeTick": 1411,
+        "boardDwellTicks": 180,
+        "completeDwellTicks": 180,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:evening5:r0003",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0023",
+        "pickupZoneId": "sz:1-1",
+        "dropoffZoneId": "sz:2-3",
+        "boardTick": 1305,
+        "dropoffStartTick": 1306,
+        "completeTick": 1486,
+        "boardDwellTicks": 180,
+        "completeDwellTicks": 180,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:evening5:r0004",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0015",
+        "pickupZoneId": "sz:3-2",
+        "dropoffZoneId": "sz:1-0",
+        "boardTick": 1380,
+        "dropoffStartTick": 1381,
+        "completeTick": 1561,
+        "boardDwellTicks": 180,
+        "completeDwellTicks": 180,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:evening5:r0005",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0004",
+        "pickupZoneId": "sz:0-0",
+        "dropoffZoneId": "sz:0-1",
+        "boardTick": 1455,
+        "dropoffStartTick": 1456,
+        "completeTick": 1636,
+        "boardDwellTicks": 180,
+        "completeDwellTicks": 180,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:evening5:r0006",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0024",
+        "pickupZoneId": "sz:0-0",
+        "dropoffZoneId": "sz:1-3",
+        "boardTick": 1530,
+        "dropoffStartTick": 1531,
+        "completeTick": 1711,
+        "boardDwellTicks": 180,
+        "completeDwellTicks": 180,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:evening5:r0007",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0009",
+        "pickupZoneId": "sz:3-3",
+        "dropoffZoneId": "sz:1-3",
+        "boardTick": 1605,
+        "dropoffStartTick": 1606,
+        "completeTick": 1786,
+        "boardDwellTicks": 180,
+        "completeDwellTicks": 180,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "releaseReason": "COMPLETED"
+      }
+    ]
+  },
+  "disposal": {
+    "disposed": true,
+    "attempts": 0,
+    "completions": 0,
+    "observations": 0,
+    "completed": 0,
+    "tick": 0,
+    "rideState": "TO_DROPOFF",
+    "taxiStatus": "ASSIGNED",
+    "releases": 0
+  },
+  "determinism": {
+    "identical": true,
+    "rides": 32
+  },
+  "checks": [
+    {
+      "name": "version",
+      "expected": "063-dropoff-v1",
+      "actual": "063-dropoff-v1",
+      "pass": true,
+      "detail": "One versioned dropoff identity."
+    },
+    {
+      "name": "rejection-reasons",
+      "expected": [
+        "WRONG_ZONE",
+        "TOO_FAST",
+        "NOT_STATIONARY",
+        "WRONG_RIDE",
+        "NOT_AT_DROPOFF",
+        "STALE_TICK",
+        "FOREIGN_VEHICLE",
+        "RIDE_NOT_ON_TRIP"
+      ],
+      "actual": [
+        "WRONG_ZONE",
+        "TOO_FAST",
+        "NOT_STATIONARY",
+        "WRONG_RIDE",
+        "NOT_AT_DROPOFF",
+        "STALE_TICK",
+        "FOREIGN_VEHICLE",
+        "RIDE_NOT_ON_TRIP"
+      ],
+      "pass": true,
+      "detail": "Every non-completed observation carries one closed reason."
+    },
+    {
+      "name": "defaults",
+      "expected": {
+        "tickRateHz": 60,
+        "speedThresholdMps": 0.3,
+        "dwellTicks": 180,
+        "displacementToleranceM": 0.05
+      },
+      "actual": {
+        "tickRateHz": 60,
+        "speedThresholdMps": 0.3,
+        "dwellTicks": 180,
+        "displacementToleranceM": 0.05
+      },
+      "pass": true,
+      "detail": "Delivery uses the same provisional zone, speed and dwell rules as pickup 062."
+    },
+    {
+      "name": "fleet-and-demand",
+      "expected": {
+        "taxis": 24,
+        "civilians": 20,
+        "requests": 32
+      },
+      "actual": {
+        "taxis": 24,
+        "civilians": 20,
+        "requests": 32
+      },
+      "pass": true,
+      "detail": "The report uses the real 057 fleet and the real 059 schedule."
+    },
+    {
+      "name": "exact-dwell",
+      "expected": {
+        "requiredDwellTicks": 180,
+        "startTick": 20,
+        "completeTick": 200,
+        "pendingBeforeComplete": 179,
+        "dwellAtComplete": 180,
+        "dwellSeconds": 3,
+        "stateAfterComplete": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "transitionTicks": [
+          10,
+          12,
+          13,
+          200,
+          200
+        ],
+        "replayDuplicate": true,
+        "transitionsAfterReplay": 5,
+        "releaseReason": "COMPLETED",
+        "taxiStatus": "AVAILABLE",
+        "metricsPreserved": true
+      },
+      "actual": {
+        "requiredDwellTicks": 180,
+        "startTick": 20,
+        "completeTick": 200,
+        "pendingBeforeComplete": 179,
+        "dwellAtComplete": 180,
+        "dwellSeconds": 3,
+        "stateAfterComplete": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "transitionTicks": [
+          10,
+          12,
+          13,
+          200,
+          200
+        ],
+        "replayDuplicate": true,
+        "transitionsAfterReplay": 5,
+        "releaseReason": "COMPLETED",
+        "taxiStatus": "AVAILABLE",
+        "metricsPreserved": true
+      },
+      "pass": true,
+      "detail": "Completion happens exactly at 180 simulated tick intervals inside the real destination zone."
+    },
+    {
+      "name": "fast-pass",
+      "expected": {
+        "samples": 13,
+        "insideSamples": 7,
+        "reasons": [
+          "NOT_AT_DROPOFF",
+          "TOO_FAST"
+        ],
+        "maxDwell": 0,
+        "state": "TO_DROPOFF",
+        "transitions": 3,
+        "completions": 0
+      },
+      "actual": {
+        "samples": 13,
+        "insideSamples": 7,
+        "reasons": [
+          "NOT_AT_DROPOFF",
+          "TOO_FAST"
+        ],
+        "maxDwell": 0,
+        "state": "TO_DROPOFF",
+        "transitions": 3,
+        "completions": 0
+      },
+      "pass": true,
+      "detail": "A fast pass through the destination never completes or starts a dwell proof."
+    },
+    {
+      "name": "zone-rejections",
+      "expected": {
+        "outside": {
+          "samples": 200,
+          "reason": "NOT_AT_DROPOFF"
+        },
+        "otherDropoffZone": {
+          "zoneId": "sz:0-1",
+          "samples": 180,
+          "reason": "WRONG_ZONE"
+        },
+        "pickupZone": {
+          "zoneId": "sz:0-0",
+          "samples": 100,
+          "reason": "WRONG_ZONE"
+        },
+        "state": "TO_DROPOFF",
+        "transitions": 3,
+        "completions": 0
+      },
+      "actual": {
+        "outside": {
+          "samples": 200,
+          "reason": "NOT_AT_DROPOFF"
+        },
+        "otherDropoffZone": {
+          "zoneId": "sz:0-1",
+          "samples": 180,
+          "reason": "WRONG_ZONE"
+        },
+        "pickupZone": {
+          "zoneId": "sz:0-0",
+          "samples": 100,
+          "reason": "WRONG_ZONE"
+        },
+        "state": "TO_DROPOFF",
+        "transitions": 3,
+        "completions": 0
+      },
+      "pass": true,
+      "detail": "A nearby authored zone or the pickup-only zone never yields a completion."
+    },
+    {
+      "name": "incompatible-zone",
+      "expected": {
+        "reason": "WRONG_ZONE",
+        "inDropoffZone": false,
+        "state": "TO_DROPOFF",
+        "completions": 0
+      },
+      "actual": {
+        "reason": "WRONG_ZONE",
+        "inDropoffZone": false,
+        "state": "TO_DROPOFF",
+        "completions": 0
+      },
+      "pass": true,
+      "detail": "A dropoff zone id that exists but cannot serve a taxi is refused before dwell."
+    },
+    {
+      "name": "boundary",
+      "expected": {
+        "exactBoundaryInZone": true,
+        "exactBoundaryReason": "NOT_STATIONARY",
+        "outsideReason": "NOT_AT_DROPOFF",
+        "reentryReason": "NOT_STATIONARY",
+        "completeTick": 282,
+        "dwellTicks": 180,
+        "state": "COMPLETED"
+      },
+      "actual": {
+        "exactBoundaryInZone": true,
+        "exactBoundaryReason": "NOT_STATIONARY",
+        "outsideReason": "NOT_AT_DROPOFF",
+        "reentryReason": "NOT_STATIONARY",
+        "completeTick": 282,
+        "dwellTicks": 180,
+        "state": "COMPLETED"
+      },
+      "pass": true,
+      "detail": "The authored boundary is inclusive and leaving it resets the dwell proof."
+    },
+    {
+      "name": "idempotency",
+      "expected": {
+        "sameTickDuplicate": true,
+        "laterDuplicate": true,
+        "transitions": 5,
+        "completions": 1,
+        "completeEvents": 1,
+        "lifecycleDuplicates": 0,
+        "releases": 1
+      },
+      "actual": {
+        "sameTickDuplicate": true,
+        "laterDuplicate": true,
+        "transitions": 5,
+        "completions": 1,
+        "completeEvents": 1,
+        "lifecycleDuplicates": 0,
+        "releases": 1
+      },
+      "pass": true,
+      "detail": "One ride has exactly one completion transition and one stable completion event id."
+    },
+    {
+      "name": "wrong-ride",
+      "expected": {
+        "unknown": "WRONG_RIDE",
+        "foreign": "FOREIGN_VEHICLE",
+        "notOnTrip": "RIDE_NOT_ON_TRIP",
+        "cancelled": "WRONG_RIDE",
+        "failed": "WRONG_RIDE",
+        "notOnTripState": "TO_PICKUP",
+        "cancelledState": "CANCELLED",
+        "failedState": "FAILED",
+        "completions": 0
+      },
+      "actual": {
+        "unknown": "WRONG_RIDE",
+        "foreign": "FOREIGN_VEHICLE",
+        "notOnTrip": "RIDE_NOT_ON_TRIP",
+        "cancelled": "WRONG_RIDE",
+        "failed": "WRONG_RIDE",
+        "notOnTripState": "TO_PICKUP",
+        "cancelledState": "CANCELLED",
+        "failedState": "FAILED",
+        "completions": 0
+      },
+      "pass": true,
+      "detail": "Unknown rides, foreign taxis, early rides and terminal rides never complete."
+    },
+    {
+      "name": "stale-tick",
+      "expected": {
+        "staleBefore": true,
+        "staleAfterAdvance": true,
+        "tickAfterStale": 100,
+        "restartDwell": 0,
+        "state": "TO_DROPOFF",
+        "staleCount": 2
+      },
+      "actual": {
+        "staleBefore": true,
+        "staleAfterAdvance": true,
+        "tickAfterStale": 100,
+        "restartDwell": 0,
+        "state": "TO_DROPOFF",
+        "staleCount": 2
+      },
+      "pass": true,
+      "detail": "Stale ticks are refused and never contribute dwell."
+    },
+    {
+      "name": "release",
+      "expected": {
+        "attemptedCompletionRejected": true,
+        "stateAfterAttempt": "DROPOFF",
+        "completions": 0,
+        "lifecycleReleases": 0,
+        "dispatcherReleaseReason": "TAXI_BLOCKED",
+        "taxiStatus": "BLOCKED"
+      },
+      "actual": {
+        "attemptedCompletionRejected": true,
+        "stateAfterAttempt": "DROPOFF",
+        "completions": 0,
+        "lifecycleReleases": 0,
+        "dispatcherReleaseReason": "TAXI_BLOCKED",
+        "taxiStatus": "BLOCKED"
+      },
+      "pass": true,
+      "detail": "Without the real 060 claim the 061 terminal edge is refused and no completion is recorded."
+    },
+    {
+      "name": "equivalence",
+      "expected": {
+        "identical": true,
+        "manualState": "COMPLETED",
+        "autonomousState": "COMPLETED",
+        "manualDwellTicks": 180,
+        "autonomousDwellTicks": 180,
+        "completeTick": 400
+      },
+      "actual": {
+        "identical": true,
+        "manualState": "COMPLETED",
+        "autonomousState": "COMPLETED",
+        "manualDwellTicks": 180,
+        "autonomousDwellTicks": 180,
+        "completeTick": 400
+      },
+      "pass": true,
+      "detail": "A manually composed ride and a ride boarded through the real 062 module share one predicate."
+    },
+    {
+      "name": "simulation",
+      "expected": {
+        "assignments": 32,
+        "boarded": 32,
+        "completed": 32,
+        "failed": 0,
+        "cancelled": 0,
+        "active": 0,
+        "releases": 32,
+        "uniqueDropoffZones": 8,
+        "uniqueCompleteEvents": 32,
+        "minCompleteDwellTicks": 180,
+        "maxCompleteDwellTicks": 180,
+        "exactDwellRides": 32,
+        "pickupRejections": 0,
+        "pickupDuplicates": 0,
+        "dropoffRejections": 0,
+        "dropoffDuplicates": 0,
+        "duplicateTaxis": false
+      },
+      "actual": {
+        "assignments": 32,
+        "boarded": 32,
+        "completed": 32,
+        "failed": 0,
+        "cancelled": 0,
+        "active": 0,
+        "releases": 32,
+        "uniqueDropoffZones": 8,
+        "uniqueCompleteEvents": 32,
+        "minCompleteDwellTicks": 180,
+        "maxCompleteDwellTicks": 180,
+        "exactDwellRides": 32,
+        "pickupRejections": 0,
+        "pickupDuplicates": 0,
+        "dropoffRejections": 0,
+        "dropoffDuplicates": 0,
+        "duplicateTaxis": false
+      },
+      "pass": true,
+      "detail": "All 32 real requests are picked up and delivered in their real zones at the exact dwell and released once."
+    },
+    {
+      "name": "simulation-bounds",
+      "expected": {
+        "requests": 32,
+        "uniqueDropoffZones": true,
+        "transitions": true,
+        "completedNotMoreThanRides": true
+      },
+      "actual": {
+        "requests": 32,
+        "uniqueDropoffZones": true,
+        "transitions": true,
+        "completedNotMoreThanRides": true
+      },
+      "pass": true,
+      "detail": "The simulation stays inside the documented fleet, zone and transition bounds."
+    },
+    {
+      "name": "disposal",
+      "expected": {
+        "disposed": true,
+        "attempts": 0,
+        "completions": 0,
+        "observations": 0,
+        "completed": 0,
+        "tick": 0,
+        "rideState": "TO_DROPOFF",
+        "taxiStatus": "ASSIGNED",
+        "releases": 0
+      },
+      "actual": {
+        "disposed": true,
+        "attempts": 0,
+        "completions": 0,
+        "observations": 0,
+        "completed": 0,
+        "tick": 0,
+        "rideState": "TO_DROPOFF",
+        "taxiStatus": "ASSIGNED",
+        "releases": 0
+      },
+      "pass": true,
+      "detail": "Disposal returns owned dropoff state to zero without releasing the taxi claim."
+    },
+    {
+      "name": "limits",
+      "expected": {
+        "attempts": 64,
+        "completions": 128,
+        "vertices": 256,
+        "minimumFleet": true
+      },
+      "actual": {
+        "attempts": 64,
+        "completions": 128,
+        "vertices": 256,
+        "minimumFleet": true
+      },
+      "pass": true,
+      "detail": "Dropoff state is bounded by the same active- and terminal-ride ceilings."
+    },
+    {
+      "name": "determinism",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Two identical simulations produce identical rides."
+    },
+    {
+      "name": "no-wall-clock",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The source has no Date, timer or ambient randomness."
+    },
+    {
+      "name": "no-dom-or-renderer",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The source has no DOM, Babylon or Rapier dependency."
+    },
+    {
+      "name": "validation-errors",
+      "expected": {
+        "missingMap": true,
+        "unknownOption": true,
+        "badDwell": true,
+        "noLifecycle": true
+      },
+      "actual": {
+        "missingMap": true,
+        "unknownOption": true,
+        "badDwell": true,
+        "noLifecycle": true
+      },
+      "pass": true,
+      "detail": "Options are validated before any observed tick changes dropoff state."
+    }
+  ],
+  "summary": {
+    "checks": 22,
+    "passed": 22,
+    "pass": true
+  }
+}

@@ -1,0 +1,44 @@
+﻿# PBI 063 targeted test transcript
+
+volta run --node 24.21.0 -- node --import ./scripts/register-typescript.mjs --test tests/fleet/dropoff.test.ts
+
+(node:44488) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+Γ£ö 063 completes only at the exact stationary dwell tick inside the real dropoff zone (337.9818ms)
+Γ£ö 063 refuses a fast pass through the destination and never credits dwell at speed (233.1798ms)
+Γ£ö 063 never completes a taxi that only passes through the destination zone (227.8224ms)
+Γ£ö 063 rejects outside, nearby and pickup-only zones without starting dwell (426.6019ms)
+Γ£ö 063 treats the zone boundary inclusively and resets dwell when the taxi leaves (190.1212ms)
+Γ£ö 063 rejects a wrong ride, a foreign taxi, a ride not on trip and terminal rides (549.3752ms)
+Γ£ö 063 refuses stale ticks and repeats the same tick without double-counting dwell (175.8896ms)
+Γ£ö 063 makes completion idempotent across repeats and later observations (176.4267ms)
+Γ£ö 063 never completes without the real dispatcher release (190.3712ms)
+Γ£ö 063 evaluates a manual and an autonomous ride through the same predicate (654.7708ms)
+Γ£ö 063 uses no wall clock, validates options and disposes to zero without releasing the taxi (368.7131ms)
+Γ£ö 063 exposes the documented dropoff vocabulary, defaults and event identities (0.2827ms)
+Γ£ö 063 committed evidence report is the current dropoff transcript (10003.8677ms)
+Γä╣ tests 13
+Γä╣ suites 0
+Γä╣ pass 13
+Γä╣ fail 0
+Γä╣ cancelled 0
+Γä╣ skipped 0
+Γä╣ todo 0
+Γä╣ duration_ms 13865.5577
+exit=0
+
+# Full project suite (same commit)
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm test
+
+Γä╣ tests 1239
+Γä╣ suites 1
+Γä╣ pass 1239
+Γä╣ fail 0
+Γä╣ cancelled 0
+Γä╣ skipped 0
+Γä╣ todo 0
+Γä╣ duration_ms 40430.0419
+
+exit=0
+
