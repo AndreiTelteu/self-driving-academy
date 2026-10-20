@@ -1,12 +1,12 @@
 ---
 id: "042"
 title: "Construirea cartierului în Babylon"
-status: "To Do"
+status: "In Progress"
 release: "V1"
 module: "Oraș"
 depends_on: ["015","016","032","040","204"]
-owner: null
-started_at: null
+owner: "Codex gpt-6-luna medium city-visual-01"
+started_at: "2026-10-20T02:00:00+03:00"
 completed_at: null
 ---
 
