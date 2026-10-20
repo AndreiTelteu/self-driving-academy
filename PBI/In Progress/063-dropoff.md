@@ -1,12 +1,12 @@
 ---
 id: "063"
 title: "Dropoff și finalizarea cursei"
-status: "To Do"
+status: "In Progress"
 release: "V1"
 module: "Flotă și curse"
 depends_on: ["062"]
-owner: null
-started_at: null
+owner: "Codex gpt-6-luna medium loop-063"
+started_at: "2026-10-20T19:22:44+03:00"
 completed_at: null
 ---
 
