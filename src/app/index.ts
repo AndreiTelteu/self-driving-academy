@@ -66,6 +66,7 @@ export {
   type PauseFocusSurface,
 } from './pause-focus';
 export { createManualSegmentBridge, type ManualSegmentStepCause } from './manual-segment-bridge';
+export { readTaxiHudSnapshot, type TaxiHudFrame, type TaxiHudSources } from './taxi-hud';
 export {
   createManualTrip,
   manualTripContractFacts,

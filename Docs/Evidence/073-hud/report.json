@@ -1,0 +1,412 @@
+{
+  "version": "073-taxi-hud-v1",
+  "contract": {
+    "defaultRows": [
+      "Viteză",
+      "Mod",
+      "Taxi",
+      "Etapă",
+      "Obiectiv",
+      "Rută",
+      "ETA",
+      "Progres",
+      "Serviciu"
+    ],
+    "detailRows": [
+      "Taxi",
+      "Clasă",
+      "Profil",
+      "Versiune profil",
+      "Cursă",
+      "Etapă tehnică",
+      "Interval ETA",
+      "Distanță rămasă",
+      "Motiv ETA"
+    ],
+    "modes": [
+      "AUTO",
+      "MANUAL",
+      "LEARNING"
+    ]
+  },
+  "scenarios": [
+    {
+      "name": "AUTO · TO_PICKUP",
+      "mode": "AUTO",
+      "tick": 10,
+      "speedMps": 8,
+      "rows": {
+        "speed": "29 km/h",
+        "modeSymbol": "A",
+        "modeLabel": "Conduce AI-ul",
+        "taxi": "#1",
+        "stage": "Spre pasager",
+        "objective": "Du-te la pasagerul din sz:0-0",
+        "route": "sz:0-0 → sz:1-0",
+        "eta": "~1 min 24 s",
+        "progress": "0% · 1.1 km",
+        "service": "Flux liber"
+      },
+      "dom": "<section aria-label=\"HUD de condus · Conduce AI-ul · #1 · Spre pasager\" class=\"taxi-hud\" data-mode=\"AUTO\" data-ride=\"id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000\" data-service=\"FREE_FLOW\" data-stance=\"ACTIVE\">\n  <div class=\"taxi-hud__speed\">\n    <span>Viteză</span>\n    <output aria-label=\"Viteză: 29 kilometri pe oră\" aria-live=\"off\">29</output>\n    <span class=\"taxi-hud__unit\">km/h</span>\n  </div>\n  <div aria-label=\"Mod de control: AUTO. Conduce AI-ul\" aria-live=\"polite\" class=\"taxi-hud__mode\" role=\"status\">\n    <span aria-hidden=\"true\" class=\"taxi-hud__symbol\">A</span>\n    <span>Conduce AI-ul</span>\n  </div>\n  <div class=\"taxi-hud__taxi\">\n    <span>Taxi</span>\n    <span aria-label=\"Taxi #1: id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0001\">#1</span>\n  </div>\n  <dl class=\"taxi-hud__ride\">\n    <dt>Etapă</dt>\n    <dd>Spre pasager</dd>\n    <dt>Obiectiv</dt>\n    <dd>Du-te la pasagerul din sz:0-0</dd>\n    <dt>Rută</dt>\n    <dd>sz:0-0 → sz:1-0</dd>\n    <dt>ETA</dt>\n    <dd aria-label=\"ETA aproximativ 1 min 24 s\">~1 min 24 s</dd>\n    <dt>Progres</dt>\n    <dd>0% · 1.1 km</dd>\n    <dt>Serviciu</dt>\n    <dd>Flux liber</dd>\n  </dl>\n  <details class=\"taxi-hud__details\">\n    <summary>Detalii</summary>\n    <dl>\n      <dt>Taxi</dt>\n      <dd>id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0001</dd>\n      <dt>Clasă</dt>\n      <dd>sedan</dd>\n      <dt>Profil</dt>\n      <dd>city:common</dd>\n      <dt>Versiune profil</dt>\n      <dd>profile-v1</dd>\n      <dt>Cursă</dt>\n      <dd>id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000</dd>\n      <dt>Etapă tehnică</dt>\n      <dd>TO_PICKUP</dd>\n      <dt>Interval ETA</dt>\n      <dd>1 min 16 s – 1 min 33 s</dd>\n      <dt>Distanță rămasă</dt>\n      <dd>1.1 km</dd>\n      <dt>Motiv ETA</dt>\n      <dd>—</dd>\n    </dl>\n  </details>\n</section>",
+      "stats": {
+        "version": "073-taxi-hud-v1",
+        "elements": 45,
+        "textNodes": 38,
+        "listeners": 0,
+        "updates": 1,
+        "writes": 27,
+        "skipped": 0,
+        "disposed": false,
+        "retainedProjections": 1
+      }
+    },
+    {
+      "name": "MANUAL · TO_PICKUP",
+      "mode": "MANUAL",
+      "tick": 10,
+      "speedMps": 8,
+      "rows": {
+        "speed": "29 km/h",
+        "modeSymbol": "M",
+        "modeLabel": "Conduci · învățare oprită",
+        "taxi": "#1",
+        "stage": "Spre pasager",
+        "objective": "Du-te la pasagerul din sz:0-0",
+        "route": "sz:0-0 → sz:1-0",
+        "eta": "~1 min 24 s",
+        "progress": "0% · 1.1 km",
+        "service": "Flux liber"
+      },
+      "dom": "<section aria-label=\"HUD de condus · Conduci · învățare oprită · #1 · Spre pasager\" class=\"taxi-hud\" data-mode=\"MANUAL\" data-ride=\"id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000\" data-service=\"FREE_FLOW\" data-stance=\"ACTIVE\">\n  <div class=\"taxi-hud__speed\">\n    <span>Viteză</span>\n    <output aria-label=\"Viteză: 29 kilometri pe oră\" aria-live=\"off\">29</output>\n    <span class=\"taxi-hud__unit\">km/h</span>\n  </div>\n  <div aria-label=\"Mod de control: MANUAL. Conduci · învățare oprită\" aria-live=\"polite\" class=\"taxi-hud__mode\" role=\"status\">\n    <span aria-hidden=\"true\" class=\"taxi-hud__symbol\">M</span>\n    <span>Conduci · învățare oprită</span>\n  </div>\n  <div class=\"taxi-hud__taxi\">\n    <span>Taxi</span>\n    <span aria-label=\"Taxi #1: id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0001\">#1</span>\n  </div>\n  <dl class=\"taxi-hud__ride\">\n    <dt>Etapă</dt>\n    <dd>Spre pasager</dd>\n    <dt>Obiectiv</dt>\n    <dd>Du-te la pasagerul din sz:0-0</dd>\n    <dt>Rută</dt>\n    <dd>sz:0-0 → sz:1-0</dd>\n    <dt>ETA</dt>\n    <dd aria-label=\"ETA aproximativ 1 min 24 s\">~1 min 24 s</dd>\n    <dt>Progres</dt>\n    <dd>0% · 1.1 km</dd>\n    <dt>Serviciu</dt>\n    <dd>Flux liber</dd>\n  </dl>\n  <details class=\"taxi-hud__details\">\n    <summary>Detalii</summary>\n    <dl>\n      <dt>Taxi</dt>\n      <dd>id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0001</dd>\n      <dt>Clasă</dt>\n      <dd>sedan</dd>\n      <dt>Profil</dt>\n      <dd>city:common</dd>\n      <dt>Versiune profil</dt>\n      <dd>profile-v1</dd>\n      <dt>Cursă</dt>\n      <dd>id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000</dd>\n      <dt>Etapă tehnică</dt>\n      <dd>TO_PICKUP</dd>\n      <dt>Interval ETA</dt>\n      <dd>1 min 16 s – 1 min 33 s</dd>\n      <dt>Distanță rămasă</dt>\n      <dd>1.1 km</dd>\n      <dt>Motiv ETA</dt>\n      <dd>—</dd>\n    </dl>\n  </details>\n</section>",
+      "stats": {
+        "version": "073-taxi-hud-v1",
+        "elements": 45,
+        "textNodes": 38,
+        "listeners": 0,
+        "updates": 1,
+        "writes": 27,
+        "skipped": 0,
+        "disposed": false,
+        "retainedProjections": 1
+      }
+    },
+    {
+      "name": "LEARNING · TO_PICKUP",
+      "mode": "LEARNING",
+      "tick": 10,
+      "speedMps": 8,
+      "rows": {
+        "speed": "29 km/h",
+        "modeSymbol": "L",
+        "modeLabel": "Conduci · orașul învață",
+        "taxi": "#1",
+        "stage": "Spre pasager",
+        "objective": "Du-te la pasagerul din sz:0-0",
+        "route": "sz:0-0 → sz:1-0",
+        "eta": "~1 min 24 s",
+        "progress": "0% · 1.1 km",
+        "service": "Flux liber"
+      },
+      "dom": "<section aria-label=\"HUD de condus · Conduci · orașul învață · #1 · Spre pasager\" class=\"taxi-hud\" data-mode=\"LEARNING\" data-ride=\"id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000\" data-service=\"FREE_FLOW\" data-stance=\"ACTIVE\">\n  <div class=\"taxi-hud__speed\">\n    <span>Viteză</span>\n    <output aria-label=\"Viteză: 29 kilometri pe oră\" aria-live=\"off\">29</output>\n    <span class=\"taxi-hud__unit\">km/h</span>\n  </div>\n  <div aria-label=\"Mod de control: LEARNING. Conduci · orașul învață\" aria-live=\"polite\" class=\"taxi-hud__mode\" role=\"status\">\n    <span aria-hidden=\"true\" class=\"taxi-hud__symbol\">L</span>\n    <span>Conduci · orașul învață</span>\n  </div>\n  <div class=\"taxi-hud__taxi\">\n    <span>Taxi</span>\n    <span aria-label=\"Taxi #1: id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0001\">#1</span>\n  </div>\n  <dl class=\"taxi-hud__ride\">\n    <dt>Etapă</dt>\n    <dd>Spre pasager</dd>\n    <dt>Obiectiv</dt>\n    <dd>Du-te la pasagerul din sz:0-0</dd>\n    <dt>Rută</dt>\n    <dd>sz:0-0 → sz:1-0</dd>\n    <dt>ETA</dt>\n    <dd aria-label=\"ETA aproximativ 1 min 24 s\">~1 min 24 s</dd>\n    <dt>Progres</dt>\n    <dd>0% · 1.1 km</dd>\n    <dt>Serviciu</dt>\n    <dd>Flux liber</dd>\n  </dl>\n  <details class=\"taxi-hud__details\">\n    <summary>Detalii</summary>\n    <dl>\n      <dt>Taxi</dt>\n      <dd>id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0001</dd>\n      <dt>Clasă</dt>\n      <dd>sedan</dd>\n      <dt>Profil</dt>\n      <dd>city:common</dd>\n      <dt>Versiune profil</dt>\n      <dd>profile-v1</dd>\n      <dt>Cursă</dt>\n      <dd>id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000</dd>\n      <dt>Etapă tehnică</dt>\n      <dd>TO_PICKUP</dd>\n      <dt>Interval ETA</dt>\n      <dd>1 min 16 s – 1 min 33 s</dd>\n      <dt>Distanță rămasă</dt>\n      <dd>1.1 km</dd>\n      <dt>Motiv ETA</dt>\n      <dd>—</dd>\n    </dl>\n  </details>\n</section>",
+      "stats": {
+        "version": "073-taxi-hud-v1",
+        "elements": 45,
+        "textNodes": 38,
+        "listeners": 0,
+        "updates": 1,
+        "writes": 27,
+        "skipped": 0,
+        "disposed": false,
+        "retainedProjections": 1
+      }
+    },
+    {
+      "name": "AUTO · SERVICE_BLOCKED",
+      "mode": "AUTO",
+      "tick": 11,
+      "speedMps": 8,
+      "rows": {
+        "speed": "29 km/h",
+        "modeSymbol": "A",
+        "modeLabel": "Conduce AI-ul",
+        "taxi": "#1",
+        "stage": "Spre pasager",
+        "objective": "Du-te la pasagerul din sz:0-0",
+        "route": "sz:0-0 → sz:1-0",
+        "eta": "Indisponibil",
+        "progress": "0% · 1.1 km",
+        "service": "Serviciu blocat"
+      },
+      "dom": "<section aria-label=\"HUD de condus · Conduce AI-ul · #1 · Spre pasager\" class=\"taxi-hud\" data-mode=\"AUTO\" data-ride=\"id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000\" data-service=\"BLOCKED\" data-stance=\"ACTIVE\">\n  <div class=\"taxi-hud__speed\">\n    <span>Viteză</span>\n    <output aria-label=\"Viteză: 29 kilometri pe oră\" aria-live=\"off\">29</output>\n    <span class=\"taxi-hud__unit\">km/h</span>\n  </div>\n  <div aria-label=\"Mod de control: AUTO. Conduce AI-ul\" aria-live=\"polite\" class=\"taxi-hud__mode\" role=\"status\">\n    <span aria-hidden=\"true\" class=\"taxi-hud__symbol\">A</span>\n    <span>Conduce AI-ul</span>\n  </div>\n  <div class=\"taxi-hud__taxi\">\n    <span>Taxi</span>\n    <span aria-label=\"Taxi #1: id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0001\">#1</span>\n  </div>\n  <dl class=\"taxi-hud__ride\">\n    <dt>Etapă</dt>\n    <dd>Spre pasager</dd>\n    <dt>Obiectiv</dt>\n    <dd>Du-te la pasagerul din sz:0-0</dd>\n    <dt>Rută</dt>\n    <dd>sz:0-0 → sz:1-0</dd>\n    <dt>ETA</dt>\n    <dd aria-label=\"ETA indisponibil: SERVICE_BLOCKED\">Indisponibil</dd>\n    <dt>Progres</dt>\n    <dd>0% · 1.1 km</dd>\n    <dt>Serviciu</dt>\n    <dd>Serviciu blocat</dd>\n  </dl>\n  <details class=\"taxi-hud__details\">\n    <summary>Detalii</summary>\n    <dl>\n      <dt>Taxi</dt>\n      <dd>id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0001</dd>\n      <dt>Clasă</dt>\n      <dd>sedan</dd>\n      <dt>Profil</dt>\n      <dd>city:common</dd>\n      <dt>Versiune profil</dt>\n      <dd>profile-v1</dd>\n      <dt>Cursă</dt>\n      <dd>id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000</dd>\n      <dt>Etapă tehnică</dt>\n      <dd>TO_PICKUP</dd>\n      <dt>Interval ETA</dt>\n      <dd>—</dd>\n      <dt>Distanță rămasă</dt>\n      <dd>1.1 km</dd>\n      <dt>Motiv ETA</dt>\n      <dd>SERVICE_BLOCKED</dd>\n    </dl>\n  </details>\n</section>",
+      "stats": {
+        "version": "073-taxi-hud-v1",
+        "elements": 45,
+        "textNodes": 38,
+        "listeners": 0,
+        "updates": 1,
+        "writes": 27,
+        "skipped": 0,
+        "disposed": false,
+        "retainedProjections": 1
+      }
+    },
+    {
+      "name": "AUTO · COMPLETED",
+      "mode": "AUTO",
+      "tick": 15,
+      "speedMps": 0,
+      "rows": {
+        "speed": "0 km/h",
+        "modeSymbol": "A",
+        "modeLabel": "Conduce AI-ul",
+        "taxi": "#1",
+        "stage": "Cursă încheiată",
+        "objective": "Fără obiectiv",
+        "route": "sz:0-0 → sz:1-0",
+        "eta": "—",
+        "progress": "100% · 0 m",
+        "service": "—"
+      },
+      "dom": "<section aria-label=\"HUD de condus · Conduce AI-ul · #1 · Cursă încheiată\" class=\"taxi-hud\" data-mode=\"AUTO\" data-ride=\"id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000\" data-service=\"BLOCKED\" data-stance=\"TERMINAL\">\n  <div class=\"taxi-hud__speed\">\n    <span>Viteză</span>\n    <output aria-label=\"Viteză: 0 kilometri pe oră\" aria-live=\"off\">0</output>\n    <span class=\"taxi-hud__unit\">km/h</span>\n  </div>\n  <div aria-label=\"Mod de control: AUTO. Conduce AI-ul\" aria-live=\"polite\" class=\"taxi-hud__mode\" role=\"status\">\n    <span aria-hidden=\"true\" class=\"taxi-hud__symbol\">A</span>\n    <span>Conduce AI-ul</span>\n  </div>\n  <div class=\"taxi-hud__taxi\">\n    <span>Taxi</span>\n    <span aria-label=\"Taxi #1: id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0001\">#1</span>\n  </div>\n  <dl class=\"taxi-hud__ride\">\n    <dt>Etapă</dt>\n    <dd>Cursă încheiată</dd>\n    <dt>Obiectiv</dt>\n    <dd>Fără obiectiv</dd>\n    <dt>Rută</dt>\n    <dd>sz:0-0 → sz:1-0</dd>\n    <dt>ETA</dt>\n    <dd aria-label=\"ETA indisponibil: cursa este închisă\">—</dd>\n    <dt>Progres</dt>\n    <dd>100% · 0 m</dd>\n    <dt>Serviciu</dt>\n    <dd>—</dd>\n  </dl>\n  <details class=\"taxi-hud__details\">\n    <summary>Detalii</summary>\n    <dl>\n      <dt>Taxi</dt>\n      <dd>id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0001</dd>\n      <dt>Clasă</dt>\n      <dd>sedan</dd>\n      <dt>Profil</dt>\n      <dd>city:common</dd>\n      <dt>Versiune profil</dt>\n      <dd>profile-v1</dd>\n      <dt>Cursă</dt>\n      <dd>id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000</dd>\n      <dt>Etapă tehnică</dt>\n      <dd>COMPLETED</dd>\n      <dt>Interval ETA</dt>\n      <dd>—</dd>\n      <dt>Distanță rămasă</dt>\n      <dd>—</dd>\n      <dt>Motiv ETA</dt>\n      <dd>—</dd>\n    </dl>\n  </details>\n</section>",
+      "stats": {
+        "version": "073-taxi-hud-v1",
+        "elements": 45,
+        "textNodes": 38,
+        "listeners": 0,
+        "updates": 1,
+        "writes": 25,
+        "skipped": 0,
+        "disposed": false,
+        "retainedProjections": 1
+      }
+    },
+    {
+      "name": "AUTO · no ride",
+      "mode": "AUTO",
+      "tick": 15,
+      "speedMps": 0,
+      "rows": {
+        "speed": "0 km/h",
+        "modeSymbol": "A",
+        "modeLabel": "Conduce AI-ul",
+        "taxi": "#2",
+        "stage": "Nicio cursă activă",
+        "objective": "Fără obiectiv",
+        "route": "Fără rută",
+        "eta": "Fără estimare",
+        "progress": "—",
+        "service": "—"
+      },
+      "dom": "<section aria-label=\"HUD de condus · Conduce AI-ul · #2 · Nicio cursă activă\" class=\"taxi-hud\" data-mode=\"AUTO\" data-ride=\"NONE\" data-service=\"NONE\" data-stance=\"ACTIVE\">\n  <div class=\"taxi-hud__speed\">\n    <span>Viteză</span>\n    <output aria-label=\"Viteză: 0 kilometri pe oră\" aria-live=\"off\">0</output>\n    <span class=\"taxi-hud__unit\">km/h</span>\n  </div>\n  <div aria-label=\"Mod de control: AUTO. Conduce AI-ul\" aria-live=\"polite\" class=\"taxi-hud__mode\" role=\"status\">\n    <span aria-hidden=\"true\" class=\"taxi-hud__symbol\">A</span>\n    <span>Conduce AI-ul</span>\n  </div>\n  <div class=\"taxi-hud__taxi\">\n    <span>Taxi</span>\n    <span aria-label=\"Taxi #2: id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0002\">#2</span>\n  </div>\n  <dl class=\"taxi-hud__ride\">\n    <dt>Etapă</dt>\n    <dd>Nicio cursă activă</dd>\n    <dt>Obiectiv</dt>\n    <dd>Fără obiectiv</dd>\n    <dt>Rută</dt>\n    <dd>Fără rută</dd>\n    <dt>ETA</dt>\n    <dd aria-label=\"ETA indisponibil: nicio cursă activă\">Fără estimare</dd>\n    <dt>Progres</dt>\n    <dd>—</dd>\n    <dt>Serviciu</dt>\n    <dd>—</dd>\n  </dl>\n  <details class=\"taxi-hud__details\">\n    <summary>Detalii</summary>\n    <dl>\n      <dt>Taxi</dt>\n      <dd>id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0002</dd>\n      <dt>Clasă</dt>\n      <dd>compact</dd>\n      <dt>Profil</dt>\n      <dd>city:common</dd>\n      <dt>Versiune profil</dt>\n      <dd>profile-v1</dd>\n      <dt>Cursă</dt>\n      <dd>—</dd>\n      <dt>Etapă tehnică</dt>\n      <dd>—</dd>\n      <dt>Interval ETA</dt>\n      <dd>—</dd>\n      <dt>Distanță rămasă</dt>\n      <dd>—</dd>\n      <dt>Motiv ETA</dt>\n      <dd>—</dd>\n    </dl>\n  </details>\n</section>",
+      "stats": {
+        "version": "073-taxi-hud-v1",
+        "elements": 45,
+        "textNodes": 38,
+        "listeners": 0,
+        "updates": 1,
+        "writes": 23,
+        "skipped": 0,
+        "disposed": false,
+        "retainedProjections": 1
+      }
+    },
+    {
+      "name": "AUTO · foreign ride",
+      "mode": "AUTO",
+      "tick": 15,
+      "speedMps": 0,
+      "rows": {
+        "speed": "0 km/h",
+        "modeSymbol": "A",
+        "modeLabel": "Conduce AI-ul",
+        "taxi": "#2",
+        "stage": "Cursă a altui taxi",
+        "objective": "Fără obiectiv",
+        "route": "Fără rută",
+        "eta": "Fără estimare",
+        "progress": "—",
+        "service": "—"
+      },
+      "dom": "<section aria-label=\"HUD de condus · Conduce AI-ul · #2 · Cursă a altui taxi\" class=\"taxi-hud\" data-mode=\"AUTO\" data-ride=\"id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000\" data-service=\"BLOCKED\" data-stance=\"FOREIGN\">\n  <div class=\"taxi-hud__speed\">\n    <span>Viteză</span>\n    <output aria-label=\"Viteză: 0 kilometri pe oră\" aria-live=\"off\">0</output>\n    <span class=\"taxi-hud__unit\">km/h</span>\n  </div>\n  <div aria-label=\"Mod de control: AUTO. Conduce AI-ul\" aria-live=\"polite\" class=\"taxi-hud__mode\" role=\"status\">\n    <span aria-hidden=\"true\" class=\"taxi-hud__symbol\">A</span>\n    <span>Conduce AI-ul</span>\n  </div>\n  <div class=\"taxi-hud__taxi\">\n    <span>Taxi</span>\n    <span aria-label=\"Taxi #2: id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0002\">#2</span>\n  </div>\n  <dl class=\"taxi-hud__ride\">\n    <dt>Etapă</dt>\n    <dd>Cursă a altui taxi</dd>\n    <dt>Obiectiv</dt>\n    <dd>Fără obiectiv</dd>\n    <dt>Rută</dt>\n    <dd>Fără rută</dd>\n    <dt>ETA</dt>\n    <dd aria-label=\"ETA indisponibil: cursa aparține altui taxi\">Fără estimare</dd>\n    <dt>Progres</dt>\n    <dd>—</dd>\n    <dt>Serviciu</dt>\n    <dd>—</dd>\n  </dl>\n  <details class=\"taxi-hud__details\">\n    <summary>Detalii</summary>\n    <dl>\n      <dt>Taxi</dt>\n      <dd>id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0002</dd>\n      <dt>Clasă</dt>\n      <dd>compact</dd>\n      <dt>Profil</dt>\n      <dd>city:common</dd>\n      <dt>Versiune profil</dt>\n      <dd>profile-v1</dd>\n      <dt>Cursă</dt>\n      <dd>id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000</dd>\n      <dt>Etapă tehnică</dt>\n      <dd>COMPLETED</dd>\n      <dt>Interval ETA</dt>\n      <dd>—</dd>\n      <dt>Distanță rămasă</dt>\n      <dd>—</dd>\n      <dt>Motiv ETA</dt>\n      <dd>—</dd>\n    </dl>\n  </details>\n</section>",
+      "stats": {
+        "version": "073-taxi-hud-v1",
+        "elements": 45,
+        "textNodes": 38,
+        "listeners": 0,
+        "updates": 1,
+        "writes": 25,
+        "skipped": 0,
+        "disposed": false,
+        "retainedProjections": 1
+      }
+    }
+  ],
+  "checks": [
+    {
+      "name": "contract-version",
+      "expected": "073-taxi-hud-v1",
+      "actual": "073-taxi-hud-v1",
+      "pass": true,
+      "detail": "073 snapshot version"
+    },
+    {
+      "name": "speed-from-physical-readback",
+      "expected": "29 km/h",
+      "actual": "29 km/h",
+      "pass": true,
+      "detail": "8 m/s becomes 29 km/h with an explicit unit"
+    },
+    {
+      "name": "route-from-real-zones",
+      "expected": "sz:0-0 → sz:1-0",
+      "actual": "sz:0-0 → sz:1-0",
+      "pass": true,
+      "detail": "route text is the real 060 assignment zones"
+    },
+    {
+      "name": "stage-from-real-ride",
+      "expected": "Spre pasager",
+      "actual": "Spre pasager",
+      "pass": true,
+      "detail": "061 TO_PICKUP"
+    },
+    {
+      "name": "objective-names-real-pickup",
+      "expected": "Du-te la pasagerul din sz:0-0",
+      "actual": "Du-te la pasagerul din sz:0-0",
+      "pass": true,
+      "detail": "objective uses the real pickup zone id"
+    },
+    {
+      "name": "eta-from-real-064",
+      "expected": "~1 min 24 s",
+      "actual": "~1 min 24 s",
+      "pass": true,
+      "detail": "064 estimate, rounded once"
+    },
+    {
+      "name": "progress-from-real-064",
+      "expected": "0% · 1.1 km",
+      "actual": "0% · 1.1 km",
+      "pass": true,
+      "detail": "certified progress"
+    },
+    {
+      "name": "mode-auto",
+      "expected": "Conduce AI-ul",
+      "actual": "Conduce AI-ul",
+      "pass": true,
+      "detail": "mandated 08/067 AUTO label"
+    },
+    {
+      "name": "mode-manual",
+      "expected": "Conduci · învățare oprită",
+      "actual": "Conduci · învățare oprită",
+      "pass": true,
+      "detail": "mandated 08/067 MANUAL label"
+    },
+    {
+      "name": "mode-learning",
+      "expected": "Conduci · orașul învață",
+      "actual": "Conduci · orașul învață",
+      "pass": true,
+      "detail": "mandated 08/067 LEARNING label"
+    },
+    {
+      "name": "mode-symbols-distinct",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "text and symbol, not colour alone"
+    },
+    {
+      "name": "blocked-explicit-unavailable",
+      "expected": "Indisponibil",
+      "actual": "Indisponibil",
+      "pass": true,
+      "detail": "064 SERVICE_BLOCKED is displayed, never 0 s"
+    },
+    {
+      "name": "blocked-service-label",
+      "expected": "Serviciu blocat",
+      "actual": "Serviciu blocat",
+      "pass": true,
+      "detail": "service state comes from the same 064 snapshot"
+    },
+    {
+      "name": "completed-not-active",
+      "expected": "Cursă încheiată",
+      "actual": "Cursă încheiată",
+      "pass": true,
+      "detail": "a real terminal ride is not rendered as an active ride"
+    },
+    {
+      "name": "completed-without-eta-promise",
+      "expected": "—",
+      "actual": "—",
+      "pass": true,
+      "detail": "a closed ride carries no active ETA"
+    },
+    {
+      "name": "no-ride-explicit",
+      "expected": "Nicio cursă activă",
+      "actual": "Nicio cursă activă",
+      "pass": true,
+      "detail": "a taxi without a ride is not shown as completed"
+    },
+    {
+      "name": "no-ride-no-estimate",
+      "expected": "Fără estimare",
+      "actual": "Fără estimare",
+      "pass": true,
+      "detail": "missing ETA is never rendered as 0 s"
+    },
+    {
+      "name": "foreign-ride-explicit",
+      "expected": "Cursă a altui taxi",
+      "actual": "Cursă a altui taxi",
+      "pass": true,
+      "detail": "a ride claimed by another taxi is never carried over"
+    },
+    {
+      "name": "profile-at-request",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "details are collapsed while profile id/version stay available"
+    },
+    {
+      "name": "deterministic-dom",
+      "expected": "<section aria-label=\"HUD de condus · Conduce AI-ul · #1 · Spre pasager\" class=\"taxi-hud\" data-mode=\"AUTO\" data-ride=\"id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000\" data-service=\"FREE_FLOW\" data-stance=\"ACTIVE\">\n  <div class=\"taxi-hud__speed\">\n    <span>Viteză</span>\n    <output aria-label=\"Viteză: 29 kilometri pe oră\" aria-live=\"off\">29</output>\n    <span class=\"taxi-hud__unit\">km/h</span>\n  </div>\n  <div aria-label=\"Mod de control: AUTO. Conduce AI-ul\" aria-live=\"polite\" class=\"taxi-hud__mode\" role=\"status\">\n    <span aria-hidden=\"true\" class=\"taxi-hud__symbol\">A</span>\n    <span>Conduce AI-ul</span>\n  </div>\n  <div class=\"taxi-hud__taxi\">\n    <span>Taxi</span>\n    <span aria-label=\"Taxi #1: id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0001\">#1</span>\n  </div>\n  <dl class=\"taxi-hud__ride\">\n    <dt>Etapă</dt>\n    <dd>Spre pasager</dd>\n    <dt>Obiectiv</dt>\n    <dd>Du-te la pasagerul din sz:0-0</dd>\n    <dt>Rută</dt>\n    <dd>sz:0-0 → sz:1-0</dd>\n    <dt>ETA</dt>\n    <dd aria-label=\"ETA aproximativ 1 min 24 s\">~1 min 24 s</dd>\n    <dt>Progres</dt>\n    <dd>0% · 1.1 km</dd>\n    <dt>Serviciu</dt>\n    <dd>Flux liber</dd>\n  </dl>\n  <details class=\"taxi-hud__details\">\n    <summary>Detalii</summary>\n    <dl>\n      <dt>Taxi</dt>\n      <dd>id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0001</dd>\n      <dt>Clasă</dt>\n      <dd>sedan</dd>\n      <dt>Profil</dt>\n      <dd>city:common</dd>\n      <dt>Versiune profil</dt>\n      <dd>profile-v1</dd>\n      <dt>Cursă</dt>\n      <dd>id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000</dd>\n      <dt>Etapă tehnică</dt>\n      <dd>TO_PICKUP</dd>\n      <dt>Interval ETA</dt>\n      <dd>1 min 16 s – 1 min 33 s</dd>\n      <dt>Distanță rămasă</dt>\n      <dd>1.1 km</dd>\n      <dt>Motiv ETA</dt>\n      <dd>—</dd>\n    </dl>\n  </details>\n</section>",
+      "actual": "<section aria-label=\"HUD de condus · Conduce AI-ul · #1 · Spre pasager\" class=\"taxi-hud\" data-mode=\"AUTO\" data-ride=\"id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000\" data-service=\"FREE_FLOW\" data-stance=\"ACTIVE\">\n  <div class=\"taxi-hud__speed\">\n    <span>Viteză</span>\n    <output aria-label=\"Viteză: 29 kilometri pe oră\" aria-live=\"off\">29</output>\n    <span class=\"taxi-hud__unit\">km/h</span>\n  </div>\n  <div aria-label=\"Mod de control: AUTO. Conduce AI-ul\" aria-live=\"polite\" class=\"taxi-hud__mode\" role=\"status\">\n    <span aria-hidden=\"true\" class=\"taxi-hud__symbol\">A</span>\n    <span>Conduce AI-ul</span>\n  </div>\n  <div class=\"taxi-hud__taxi\">\n    <span>Taxi</span>\n    <span aria-label=\"Taxi #1: id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0001\">#1</span>\n  </div>\n  <dl class=\"taxi-hud__ride\">\n    <dt>Etapă</dt>\n    <dd>Spre pasager</dd>\n    <dt>Obiectiv</dt>\n    <dd>Du-te la pasagerul din sz:0-0</dd>\n    <dt>Rută</dt>\n    <dd>sz:0-0 → sz:1-0</dd>\n    <dt>ETA</dt>\n    <dd aria-label=\"ETA aproximativ 1 min 24 s\">~1 min 24 s</dd>\n    <dt>Progres</dt>\n    <dd>0% · 1.1 km</dd>\n    <dt>Serviciu</dt>\n    <dd>Flux liber</dd>\n  </dl>\n  <details class=\"taxi-hud__details\">\n    <summary>Detalii</summary>\n    <dl>\n      <dt>Taxi</dt>\n      <dd>id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0001</dd>\n      <dt>Clasă</dt>\n      <dd>sedan</dd>\n      <dt>Profil</dt>\n      <dd>city:common</dd>\n      <dt>Versiune profil</dt>\n      <dd>profile-v1</dd>\n      <dt>Cursă</dt>\n      <dd>id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000</dd>\n      <dt>Etapă tehnică</dt>\n      <dd>TO_PICKUP</dd>\n      <dt>Interval ETA</dt>\n      <dd>1 min 16 s – 1 min 33 s</dd>\n      <dt>Distanță rămasă</dt>\n      <dd>1.1 km</dd>\n      <dt>Motiv ETA</dt>\n      <dd>—</dd>\n    </dl>\n  </details>\n</section>",
+      "pass": true,
+      "detail": "the same snapshot renders byte-identical HTML"
+    },
+    {
+      "name": "bounded-writes",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "a repeated 10 Hz frame writes no text"
+    },
+    {
+      "name": "immediate-mode-change",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "a mode change inside the throttle window is not stale"
+    },
+    {
+      "name": "bounded-lifecycle",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "dispose removes every owned node and listener"
+    }
+  ],
+  "summary": {
+    "checks": 23,
+    "passed": 23,
+    "pass": true
+  }
+}

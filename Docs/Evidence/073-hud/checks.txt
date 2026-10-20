@@ -1,0 +1,126 @@
+# PBI 073 execution log (2026-10-21)
+
+Worktree: C:\Users\aandr\Sites\self-driving-academy\.worktrees\pbi-073
+Branch: loop-pbi/pbi-073
+Runtime: Node v24.21.0 via `volta run --node 24.21.0`
+
+# typecheck
+
+> self-driving-academy@0.1.0 typecheck
+> tsc --noEmit && tsc -p tsconfig.tests.json --noEmit
+
+exit=0
+
+# lint
+
+> self-driving-academy@0.1.0 lint
+> eslint . --max-warnings 0
+
+exit=0
+
+# format:check
+
+> self-driving-academy@0.1.0 format:check
+> prettier --check "src/**/*.{ts,css}" "tests/**/*.ts" "tests/**/*.html" "scripts/**/*.mjs" "*.{json,js,html}"
+
+Checking formatting...
+All matched files use Prettier code style!
+
+exit=0
+
+# check:architecture
+
+> self-driving-academy@0.1.0 check:architecture
+> node scripts/verify-architecture.mjs
+
+Architecture imports: PASS (194 TypeScript files)
+Architecture negative probes: PASS (6 forbidden dependencies rejected)
+Inspector exception negative probes: PASS (4 forbidden imports rejected)
+Rapier adapter negative probes: PASS (3 forbidden imports rejected)
+Renderer injection, readonly snapshots, defensive persistence and lifecycle: PASS
+
+exit=0
+
+# check:parameter-catalog
+
+> self-driving-academy@0.1.0 check:parameter-catalog
+> node scripts/generate-parameter-catalog.mjs --check
+
+Parameter catalog is synchronized.
+
+exit=0
+
+# targeted tests
+
+> volta run --node 24.21.0 -- node --import ./scripts/register-typescript.mjs --test tests/ui/taxi-hud.test.ts
+
+12/12 pass, 0 fail; full transcript in tests.txt
+
+exit=0
+
+# npm test (summary; full stdout in tests-full-raw.txt)
+
+tests 1291
+suites 1
+pass 1291
+fail 0
+cancelled 0
+skipped 0
+todo 0
+duration_ms 48982.9709
+
+exit=0
+
+# hud:taxi -- --check
+
+> self-driving-academy@0.1.0 hud:taxi
+> node --import ./scripts/register-typescript.mjs scripts/run-taxi-hud-report.mjs --check
+
+PASS CHECK contract-version
+PASS CHECK speed-from-physical-readback
+PASS CHECK route-from-real-zones
+PASS CHECK stage-from-real-ride
+PASS CHECK objective-names-real-pickup
+PASS CHECK eta-from-real-064
+PASS CHECK progress-from-real-064
+PASS CHECK mode-auto
+PASS CHECK mode-manual
+PASS CHECK mode-learning
+PASS CHECK mode-symbols-distinct
+PASS CHECK blocked-explicit-unavailable
+PASS CHECK blocked-service-label
+PASS CHECK completed-not-active
+PASS CHECK completed-without-eta-promise
+PASS CHECK no-ride-explicit
+PASS CHECK no-ride-no-estimate
+PASS CHECK foreign-ride-explicit
+PASS CHECK profile-at-request
+PASS CHECK deterministic-dom
+PASS CHECK bounded-writes
+PASS CHECK immediate-mode-change
+PASS CHECK bounded-lifecycle
+SUMMARY checks 23/23, scenarios 7, overall PASS
+Taxi HUD report is current: C:\Users\aandr\Sites\self-driving-academy\.worktrees\pbi-073\Docs\Evidence\073-hud\report.json
+
+exit=0
+
+# visual capture (optional, cached Playwright 1.62.1)
+
+> $env:PLAYWRIGHT_MODULE="$env:LOCALAPPDATA\npm-cache\_npx\e41f203b7505f1fb\node_modules\playwright\index.mjs"
+> volta run --node 24.21.0 -- node --import ./scripts/register-typescript.mjs scripts/capture-taxi-hud.mjs
+
+PASS CAPTURE AUTO · TO_PICKUP capture-auto-to-pickup.png
+PASS CAPTURE MANUAL · TO_PICKUP capture-manual-to-pickup.png
+PASS CAPTURE AUTO · SERVICE_BLOCKED capture-auto-service-blocked.png
+PASS CAPTURE AUTO · no ride capture-auto-no-ride.png
+SUMMARY captures 4, checks 28/28, overall PASS
+Wrote C:\Users\aandr\Sites\self-driving-academy\.worktrees\pbi-073\Docs\Evidence\073-hud\capture.json
+
+exit=0
+
+# mutation probes (temporary edits, restored byte-for-byte)
+
+- speed conversion 3.6 -> 3: actual '38', expected '45' (real binding test)
+- no-ride stage -> completed: actual 'Cursă încheiată', expected 'Nicio cursă activă'
+- mode removed from identity change: actual 'Conduce AI-ul', expected 'Conduci · învățare oprită'
+- no-ride ETA -> '0 s': actual '0 s', expected 'Fără estimare'

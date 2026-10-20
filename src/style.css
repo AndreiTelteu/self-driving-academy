@@ -46,3 +46,111 @@ button:focus-visible {
   outline: 3px solid #9edbb5;
   outline-offset: 4px;
 }
+
+/* 073 HUD: readable while driving. Text and symbols carry the mode; colour only reinforces. */
+.taxi-hud {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 2;
+  width: min(22rem, calc(100vw - 2rem));
+  padding: 0.85rem 1rem;
+  border: 1px solid #ffffff2b;
+  border-radius: 0.75rem;
+  background: #0d1714d9;
+  color: #f3f7fb;
+  font-size: 0.95rem;
+  line-height: 1.35;
+  text-shadow: 0 1px 2px #000000b3;
+  pointer-events: none;
+}
+
+.taxi-hud__speed {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+}
+
+.taxi-hud__speed output {
+  font-size: 2.4rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.taxi-hud__unit {
+  color: #b9cfc5;
+}
+
+.taxi-hud__mode {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-top: 0.5rem;
+  font-weight: 600;
+}
+
+.taxi-hud__symbol {
+  display: inline-grid;
+  place-items: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  border: 1px solid currentColor;
+  border-radius: 0.35rem;
+  font-size: 0.85rem;
+}
+
+.taxi-hud__taxi {
+  margin-top: 0.35rem;
+  color: #c6dbd1;
+  overflow-wrap: anywhere;
+}
+
+.taxi-hud__ride,
+.taxi-hud__details dl {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.2rem 0.75rem;
+  margin: 0.6rem 0 0;
+}
+
+.taxi-hud__ride dt,
+.taxi-hud__details dt {
+  color: #b9cfc5;
+}
+
+.taxi-hud__ride dd,
+.taxi-hud__details dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.taxi-hud__details {
+  margin-top: 0.5rem;
+  pointer-events: auto;
+}
+
+.taxi-hud__details summary {
+  cursor: pointer;
+  color: #9edbb5;
+}
+
+.taxi-hud[data-mode='AUTO'] .taxi-hud__symbol {
+  border-color: #7fd7ff;
+  color: #b8ecff;
+}
+
+.taxi-hud[data-mode='MANUAL'] .taxi-hud__symbol {
+  border-color: #ffd27f;
+  color: #ffe6b8;
+}
+
+.taxi-hud[data-mode='LEARNING'] .taxi-hud__symbol {
+  border-color: #b9a6ff;
+  color: #ded5ff;
+}
+
+.taxi-hud[data-service='BLOCKED'] .taxi-hud__ride dd:last-child {
+  color: #ffb3a7;
+  font-weight: 600;
+}

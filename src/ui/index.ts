@@ -25,3 +25,29 @@ export function createBootstrapView(root: HTMLDivElement): BootstrapView {
 export { createControlModeHud, CONTROL_MODE_HUD_LIMITS } from './control-mode-hud';
 export type { ControlModeHudView } from './control-mode-hud';
 export * from './recovery-hud';
+export { createTaxiHud } from './taxi-hud';
+export {
+  formatDuration,
+  formatDistanceM,
+  formatEtaRange,
+  formatSpeedKmh,
+  modeView,
+  parseTaxiHudSnapshot,
+  projectTaxiHud,
+  rideStageView,
+  TAXI_HUD_LIMITS,
+  TAXI_HUD_VERSION,
+} from './taxi-hud-format';
+export type {
+  TaxiHudDetail,
+  TaxiHudEta,
+  TaxiHudEtaStatus,
+  TaxiHudModeView,
+  TaxiHudProjection,
+  TaxiHudRide,
+  TaxiHudServiceState,
+  TaxiHudSnapshot,
+  TaxiHudSpeedView,
+  TaxiHudStageView,
+  TaxiHudTaxi,
+} from './taxi-hud-format';
