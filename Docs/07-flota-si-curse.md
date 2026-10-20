@@ -14,6 +14,8 @@ Lista flotei afișează ID, mod de control, etapa cursei, pickup, destinație, E
 
 [Registry-ul flotei](fleet-registry.md) creează populația V1: 24 de taxiuri configurabile între 20 și 30 plus 20–40 de mașini civile, fiecare cu ID stabil 006, clasă mecanică reală 023, `driverKind` explicit și stare proprie. Configurația validează limitele, duplicatele și compatibilitatea clasă/tip; clasele sunt atribuite determinist din seed, iar `list()` și raportul au ordine stabilă. Starea per vehicul (`tick`, `controlMode`, `appliedProfileVersion`) nu depinde de cameră, selecție sau renderer. Vehiculele noi citesc versiunea activă a profilului comun al orașului, iar cele existente păstrează referința până la actualizarea explicită sau activarea 110. Registry-ul nu deține corpuri fizice sau mesh-uri și se eliberează complet la `dispose()`; dispecerizarea, cursele, ETA și sănătatea flotei rămân în PBI-urile 059–065.
 
+[Traficul civil 058](civil-traffic.md) pornește fiecare civil din registry cu o rută proprie calculată de [plannerul 041](route-planner.md) peste graful real 033 și o urmărește prin lanțul 044/046/047/048. Toți civilii consumă același profil comun al orașului; eliberarea unui vehicul păstrează ruta și recitește stilul activ la `resume`, fără profil fix ascuns. Poziția și viteza rămân pe banda direcționată, un taxi din față devine lider semantic cu gap fizic minim, iar `dispose()` readuce ownership-ul la zero. Corpurile Rapier, semafoarele live și dispecerizarea rămân contracte separate.
+
 
 ## Rezultate comerciale și experiența pasagerului
 

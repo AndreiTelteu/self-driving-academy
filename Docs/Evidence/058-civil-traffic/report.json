@@ -1,0 +1,275 @@
+{
+  "version": "058-civil-traffic-v1",
+  "generatedBy": "npm run civil:traffic",
+  "oracleRule": "Expected values are computed from the actual 033/041/044/046/047/048/057 contracts and the authored neighbourhood, not from a captured transcript.",
+  "style": {
+    "profileId": "city-profile",
+    "versionId": "city-style-v1"
+  },
+  "limits": {
+    "version": "058-civil-traffic-v1",
+    "actors": 40,
+    "frameVehicles": 110,
+    "maximumStepSeconds": 0.016666666666666666,
+    "routeLanes": 256,
+    "routeAttempts": 64,
+    "replansPerTick": 1,
+    "tickHz": 60,
+    "vehicleRadiusM": 2.5,
+    "minimumGapM": 0.25,
+    "entryClearanceM": 6,
+    "retainedHistory": 0
+  },
+  "spawn": {
+    "civilians": 40,
+    "uniqueIds": 40,
+    "readyRoutes": 40,
+    "routesFromPlanner": 40,
+    "onLane": 40,
+    "commonStyle": 40,
+    "shortestRouteLanes": 1,
+    "longestRouteLanes": 9,
+    "turnRoutes": 39
+  },
+  "mixed": {
+    "ticks": 180,
+    "taxiLeaderObserved": true,
+    "minimumLeaderGapM": 0.25,
+    "followedSpeedMps": 0,
+    "controlSpeedMps": 10.824100061728378,
+    "onLaneFrames": 7200,
+    "sameLaneOverlap": 0
+  },
+  "resume": {
+    "styleBefore": "city-style-v1",
+    "styleAfter": "city-style-v2",
+    "routePreserved": true,
+    "registryMode": "AUTO",
+    "registryProfile": "city-style-v2",
+    "movedAfterResume": true
+  },
+  "clean": {
+    "disposed": true,
+    "actors": 0,
+    "longitudinalActors": 0,
+    "roadContextVehicles": 0,
+    "routeSearches": 0
+  },
+  "checks": [
+    {
+      "name": "population",
+      "expected": 40,
+      "actual": 40,
+      "pass": true,
+      "detail": "One actor per 057 civilian."
+    },
+    {
+      "name": "unique-ids",
+      "expected": 40,
+      "actual": 40,
+      "pass": true,
+      "detail": "Vehicle identities are stable and unique."
+    },
+    {
+      "name": "ready-routes",
+      "expected": 40,
+      "actual": 40,
+      "pass": true,
+      "detail": "Every spawn route is READY."
+    },
+    {
+      "name": "routes-from-041",
+      "expected": 40,
+      "actual": 40,
+      "pass": true,
+      "detail": "Every route was returned by the real planner."
+    },
+    {
+      "name": "on-lane-spawn",
+      "expected": 40,
+      "actual": 40,
+      "pass": true,
+      "detail": "Every pose projects onto its route lane."
+    },
+    {
+      "name": "common-city-style",
+      "expected": 40,
+      "actual": 40,
+      "pass": true,
+      "detail": "Every civilian uses the common city profile and version."
+    },
+    {
+      "name": "mixed-intersection-routes",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "39 spawn routes include an authored TURN movement."
+    },
+    {
+      "name": "taxi-leader",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "044 reports the taxi as leader."
+    },
+    {
+      "name": "following-slows",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Followed 0.000000 m/s versus 10.824100 m/s."
+    },
+    {
+      "name": "minimum-gap",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Minimum observed leader gap 0.25 m."
+    },
+    {
+      "name": "no-same-lane-overlap",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Pairwise same-lane overlap frames."
+    },
+    {
+      "name": "mix-on-lane-frames",
+      "expected": 7200,
+      "actual": 7200,
+      "pass": true,
+      "detail": "Every actor remains on its lane during the mixed run."
+    },
+    {
+      "name": "resume-style-before",
+      "expected": "city-style-v1",
+      "actual": "city-style-v1",
+      "pass": true,
+      "detail": "Starting common style."
+    },
+    {
+      "name": "resume-style-after",
+      "expected": "city-style-v2",
+      "actual": "city-style-v2",
+      "pass": true,
+      "detail": "Resume re-reads the common style."
+    },
+    {
+      "name": "resume-route-preserved",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Release/resume keeps the route path."
+    },
+    {
+      "name": "resume-registry-mode",
+      "expected": "AUTO",
+      "actual": "AUTO",
+      "pass": true,
+      "detail": "Registry authority returns to AUTO."
+    },
+    {
+      "name": "resume-registry-profile",
+      "expected": "city-style-v2",
+      "actual": "city-style-v2",
+      "pass": true,
+      "detail": "Registry applied profile matches the common style."
+    },
+    {
+      "name": "resume-moves",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The civilian advances after resume."
+    },
+    {
+      "name": "clean-disposal",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Dispose is idempotent."
+    },
+    {
+      "name": "clean-actors",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "No actor retained."
+    },
+    {
+      "name": "clean-longitudinal",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "No controller actor retained."
+    },
+    {
+      "name": "clean-road-context",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "No road-context vehicle retained."
+    },
+    {
+      "name": "clean-planner-searches",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "Owned planner state is released."
+    },
+    {
+      "name": "route-starts-at-origin",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "A path that does not bind origin/destination is rejected."
+    },
+    {
+      "name": "no-zero-length-origin-only-route",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "A missing route or an origin-only placeholder is rejected."
+    },
+    {
+      "name": "no-per-player-style",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The fixture player profile v9 must never appear on a civilian."
+    },
+    {
+      "name": "no-shared-mutable-state",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "180 ticks produced 40 distinct poses, so actors do not share one progress object."
+    },
+    {
+      "name": "no-camera-render-dependency",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The source scan rejects Babylon/DOM/renderer/camera tokens."
+    },
+    {
+      "name": "deterministic-spawn-and-step",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Two same-seed runs must match at spawn and after 20 ticks."
+    },
+    {
+      "name": "dispose-to-zero",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Disposal releases actors, road context and planner ownership."
+    }
+  ],
+  "summary": {
+    "checks": 30,
+    "passed": 30,
+    "pass": true
+  }
+}
