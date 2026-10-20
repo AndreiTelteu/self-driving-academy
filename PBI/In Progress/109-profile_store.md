@@ -1,12 +1,12 @@
 ---
 id: "109"
 title: "Profile imuabile și istoric versionat"
-status: "To Do"
+status: "In Progress"
 release: "V1"
 module: "Profiluri"
 depends_on: ["092","102"]
-owner: null
-started_at: null
+owner: "Codex gpt-6-luna medium profile-store-01"
+started_at: "2026-10-20T02:35:00+03:00"
 completed_at: null
 ---
 
