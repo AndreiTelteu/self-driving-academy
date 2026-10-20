@@ -1,12 +1,12 @@
 ---
 id: "059"
 title: "Cereri de curse și program de scenariu"
-status: "To Do"
+status: "In Progress"
 release: "V1"
 module: "Flotă și curse"
 depends_on: ["057","040","006"]
-owner: null
-started_at: null
+owner: "Codex gpt-6-luna medium loop-059"
+started_at: "2026-10-20T15:59:21+03:00"
 completed_at: null
 ---
 
