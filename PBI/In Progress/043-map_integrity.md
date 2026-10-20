@@ -1,12 +1,12 @@
 ---
 id: "043"
 title: "Validarea integrității întregii hărți"
-status: "To Do"
+status: "In Progress"
 release: "V1"
 module: "Oraș"
 depends_on: ["042","041","036"]
-owner: null
-started_at: null
+owner: "Codex gpt-6-luna medium map-integrity-01"
+started_at: "2026-10-20T03:05:00+03:00"
 completed_at: null
 ---
 
