@@ -163,6 +163,11 @@ export interface RideDemand {
   /** Stable FIFO removal of the oldest pending request. */
   dequeue(): RideRequest | undefined;
   stats(): RideDemandStats;
+  /**
+   * Scenario boundary (065): rewinds the schedule cursor and the pending queue, drops overflow
+   * rejections and optionally keeps cumulative counters. The plan, validations and planner stay.
+   */
+  reset(options?: unknown): void;
   dispose(): void;
 }
 
@@ -640,6 +645,7 @@ export function createRideDemand(options: unknown): RideDemand {
   }
   const pending: RideRequest[] = [];
   const limit = read.queueLimit;
+  const initialRejectionCount = rejections.length;
   let cursor = 0;
   let cursorTick = -1;
   let admitted = 0;
@@ -710,6 +716,30 @@ export function createRideDemand(options: unknown): RideDemand {
       const request = pending.shift();
       if (request !== undefined) dequeued += 1;
       return request;
+    },
+    reset(options?: unknown): void {
+      assertLive();
+      let preserveStats = false;
+      if (options !== undefined) {
+        const data = record(options);
+        for (const key of Object.keys(data))
+          requireContract(key === 'preserveStats', 'Unknown ride demand reset option');
+        requireContract(
+          data.preserveStats === undefined || typeof data.preserveStats === 'boolean',
+          'Ride demand preserveStats must be a boolean',
+        );
+        preserveStats = data.preserveStats === true;
+      }
+      pending.length = 0;
+      cursor = 0;
+      cursorTick = -1;
+      // Only the invalid-request rejections belong to the plan; overflow belongs to the run.
+      rejections.length = initialRejectionCount;
+      if (!preserveStats) {
+        admitted = 0;
+        dequeued = 0;
+        overflow = 0;
+      }
     },
     stats(): RideDemandStats {
       const plannerDisposed = planner === null || planner.getStats().disposed;

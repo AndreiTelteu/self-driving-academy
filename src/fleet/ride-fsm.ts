@@ -175,6 +175,14 @@ export interface RideLifecycleStats {
   readonly disposed: boolean;
 }
 
+/** Scenario boundary (065): active rides are discarded by the caller only after release attempts. */
+export interface RideLifecycleReset {
+  readonly tick: number;
+  readonly clearedRides: number;
+  /** Active rides that were still open when the reset cleared the lifecycle. */
+  readonly discardedActive: number;
+}
+
 export interface RideLifecycleOptions {
   readonly dispatcher: unknown;
 }
@@ -197,6 +205,8 @@ export interface RideLifecycle {
   /** Snapshot entry for one retained ride, including a closed one, for evidence and tests. */
   snapshotRide(rideId: string): RideSnapshotEntry | undefined;
   restore(snapshot: unknown): readonly RideRecord[];
+  /** Scenario boundary (065): clears retained rides; the tick stays monotonic. */
+  reset(input: unknown): RideLifecycleReset;
   stats(): RideLifecycleStats;
   dispose(): void;
 }
@@ -206,6 +216,8 @@ const beginFields = ['requestId', 'eventId', 'tick'] as const;
 const eventFields = ['rideId', 'eventId', 'event', 'tick', 'reason'] as const;
 
 const snapshotFields = ['version', 'tick', 'rides'] as const;
+
+const resetFields = ['tick', 'preserveStats'] as const;
 
 const snapshotEntryFields = [
   'requestId',
@@ -794,6 +806,36 @@ export function createRideLifecycle(options: unknown): RideLifecycle {
     });
   }
 
+  function reset(value: unknown): RideLifecycleReset {
+    assertLive();
+    const data = plainFields(value, resetFields, 'ride reset');
+    requireRequired(data, 'tick', 'ride reset');
+    requireContract(
+      data.preserveStats === undefined || typeof data.preserveStats === 'boolean',
+      'Ride reset preserveStats must be a boolean',
+    );
+    const atTick = tick(data.tick);
+    if (atTick < lastTick) throw new RangeError('Stale ride tick');
+    let discardedActive = 0;
+    for (const ride of rides.values()) if (!ride.terminal) discardedActive += 1;
+    const clearedRides = rides.size;
+    rides.clear();
+    byRequest.clear();
+    applied.clear();
+    lastTick = atTick;
+    if (data.preserveStats !== true) {
+      transitionsTotal = 0;
+      releasesTotal = 0;
+      duplicates = 0;
+      restored = 0;
+      droppedTerminal = 0;
+      terminals.COMPLETED = 0;
+      terminals.FAILED = 0;
+      terminals.CANCELLED = 0;
+    }
+    return Object.freeze({ tick: atTick, clearedRides, discardedActive });
+  }
+
   function stats(): RideLifecycleStats {
     if (disposed) return zeroStats(namespace, true, restored);
     let active = 0,
@@ -863,6 +905,7 @@ export function createRideLifecycle(options: unknown): RideLifecycle {
     snapshot,
     snapshotRide,
     restore,
+    reset,
     stats,
     dispose(): void {
       if (disposed) return;

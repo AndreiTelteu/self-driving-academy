@@ -25,6 +25,7 @@ demand.pending();             // cereri valide, încă nepreluate, în ordine st
 demand.advance(tick);         // admite cererile cu spawnTick <= tick
 demand.dequeue();             // FIFO; undefined când coada este goală
 demand.stats();               // contoare și ownership
+demand.reset({ preserveStats }); // graniță de scenariu 065: cursor și coadă rewindate
 demand.dispose();             // idempotent, readuce starea la zero
 ```
 
@@ -101,6 +102,8 @@ Harta trebuie să aibă cel puțin o zonă `TAXI` de pickup și una de dropoff. 
 ## Ownership și disposal
 
 Generatorul deține lista de cereri, validările, respingerile, coada și, când nu primește un planner, plannerul 041 construit intern. Nu deține taxiuri, curse, corpuri Rapier, mesh-uri, listeners sau timere. `dispose()` este idempotent: golește toate cele patru structuri, readuce contoarele la zero, eliberează plannerul deținut și marchează `stats().disposed`. Un planner injectat rămâne al apelantului și nu este eliberat. După disposal, `advance` și `dequeue` aruncă, iar citirile returnează liste goale/zero.
+
+`reset({ preserveStats })` este granița de scenariu 065: rewindează cursorul programului și golește coada, păstrând planul, validările și plannerul. Respingerile de overflow și contoarele `admitted`/`dequeued`/`overflow` sunt resetate, iar respingerile permanente de validare rămân; `preserveStats` păstrează numai contoarele cumulative. Resetul nu creează cereri noi și nu schimbă identitățile 006.
 
 ## Verificare
 

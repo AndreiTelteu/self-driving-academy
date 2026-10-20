@@ -22,6 +22,7 @@ eta.setServiceState('FREE_FLOW' | 'CONGESTED' | 'BLOCKED');
 eta.currentTick();
 eta.estimate(rideId);   // ultima estimare reținută, inclusiv terminală
 eta.estimates();        // ordine stabilă după rideId
+eta.reset({ preserveStats }); // graniță de scenariu 065: rute, progres și estimări golite
 eta.stats();
 eta.dispose();
 ```
@@ -106,6 +107,8 @@ Dacă planul curent nu este `READY`, nu este exact aceeași secvență de benzi 
 | Toleranță laterală | 4 m |
 
 `dispose()` este idempotent, golește traseele, progresul, estimările și contoarele și nu eliberează lifecycle-ul, graful sau plannerul injectate. Când o cursă devine terminală, traseul și progresul ei sunt eliberate imediat; rămâne numai estimarea plafonată, pentru panoul flotei. După disposal, `observe`/`setServiceState` aruncă, iar citirile întorc liste goale sau zero.
+
+`reset({ preserveStats })` este granița de scenariu 065: golește rutele, progresul, estimările și tick-ul, rebazează semnătura intrărilor plannerului (o replanificare dinaintea resetului nu mai face noile rute stale) și readuce starea serviciului la valoarea configurată inițial. `preserveStats` păstrează numai contoarele cumulative. După reset, `estimate(rideId)` este `undefined` până la o observație nouă, deci un ETA vechi nu este servit ca prospețime.
 
 ## Verificare
 

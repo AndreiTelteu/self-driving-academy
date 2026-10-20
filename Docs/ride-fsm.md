@@ -22,6 +22,7 @@ lifecycle.terminal(); // curse închise, ordine stabilă
 lifecycle.snapshot(); // numai curse active, pentru restart
 lifecycle.snapshotRide(rideId); // intrarea oricărei curse reținute, inclusiv închise
 lifecycle.restore(snapshot); // refuză cursele terminale sau fără revendicare
+lifecycle.reset({ tick, preserveStats }); // graniță de scenariu 065; raportează cursele încă deschise
 lifecycle.stats();
 lifecycle.dispose();
 ```
@@ -119,6 +120,8 @@ O cursă terminală din snapshot este refuzată explicit (`Cannot restore a term
 | Code units per `eventId` | 256 |
 
 Înregistrările terminale peste plafon sunt eliminate în ordine stabilă și raportate prin `stats().droppedTerminal`; eliminarea nu inventează o eliberare și nu readuce cursa în `active()`. `dispose()` este idempotent, golește cursele, tranzițiile, snapshot-urile și contoarele și nu eliberează revendicările dispecerului injectat, pentru că aceea ar fi o eliberare fără motiv de business. După disposal, mutațiile aruncă, iar citirile întorc liste goale sau zero.
+
+`reset({ tick, preserveStats })` este granița de scenariu 065: golește cursele reținute (inclusiv terminale) și memoria de evenimente, păstrează tick-ul monoton și resetează contoarele numai când `preserveStats` este absent. El raportează `discardedActive` pentru orice cursă încă deschisă, astfel încât compoziția 065 să poată demonstra că a închis întâi fiecare cursă cu `SCENARIO_RESET`; resetul nu eliberează singur nicio revendicare.
 
 ## Verificare
 

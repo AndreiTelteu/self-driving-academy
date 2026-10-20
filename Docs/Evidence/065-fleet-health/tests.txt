@@ -1,0 +1,42 @@
+# PBI 065 targeted test transcript
+
+volta run --node 24.21.0 -- node --import ./scripts/register-typescript.mjs --test tests/fleet/fleet-health.test.ts
+
+(node:25608) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ 065 health states are driven by the closed block, damage and recovery facts (747.1976ms)
+✔ 065 closes the claimed ride with the fact terminal reason when the taxi is damaged (409.7218ms)
+✔ 065 releases a claim without an active ride with the matching closed reason (358.3202ms)
+✔ 065 never assigns a damaged, blocked or offline taxi (549.8106ms)
+✔ 065 reset closes a ride whose taxi disappeared instead of leaving it allocated (289.8055ms)
+✔ 065 reset is coherent, idempotent and leaves no ride, claim, queue or estimate (517.1876ms)
+✔ 065 reset rewinds demand and ETA, then the next scenario runs without stale ids (384.7358ms)
+✔ 065 reset keeps statistics and profiles only when explicitly asked (675.1189ms)
+✔ 065 scenario fixture is reproducible for the 20/24/30 taxi presets (1547.6788ms)
+✔ 065 is pure, deterministic and disposes only its own state (435.3543ms)
+✔ 065 keeps the versioned contract, closed vocabularies and bounded validation (145.4762ms)
+✔ 065 fact application is idempotent by fact id and rejects conflicts (142.5233ms)
+✔ 065 committed evidence report is the current fleet health transcript (2083.7085ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8669.9779
+exit=0
+
+# Full project suite (same source)
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm test
+
+ℹ tests 1265
+ℹ suites 1
+ℹ pass 1265
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 47431.849
+exit=0

@@ -28,6 +28,7 @@ dispatcher.release(taxiId, reason, tick);
 dispatcher.rejections();      // respingeri permanente, în ordine stabilă
 dispatcher.releases();        // jurnal plafonat de eliberări
 dispatcher.stats();
+dispatcher.reset({ tick, preserveStats }); // graniță de scenariu 065, fără revendicări active
 dispatcher.dispose();
 ```
 
@@ -79,7 +80,9 @@ O revendicare activă este ținută simultan după taxi și după cerere, deci o
 | `TAXI_DAMAGED` | `DAMAGED` |
 | `TAXI_REMOVED` | `OFFLINE` |
 
-`release` întoarce asignarea eliberată sau `null` pentru un taxi neassignat, cere un tick mai mare sau egal cu asignarea și păstrează un jurnal plafonat. Tick-ul pasului este monoton; un tick descrescător este refuzat.
+`release` întoarce asignarea eliberată sau `null` pentru un taxi neassignat, cere un tick mai mare sau egal cu asignarea și păstrează un jurnal plafonat. Tick-ul pasului este monoton; un tick descrescător este refuzat. Un ID fără revendicare rămâne refuzat cu `Unknown taxi`; o revendicare activă al cărei taxi a fost scos din registry poate fi eliberată explicit (de regulă `TAXI_REMOVED` sau `FAILED`), astfel încât un reset 065 să nu lase o cursă alocată unui vehicul dispărut. `step` nu eliberează nimic silent: revendicarea fără vehicul rămâne o eroare explicită până la eliberare sau reset.
+
+`reset({ tick, preserveStats })` este granița de scenariu 065. Cere zero revendicări active, golește statusurile apelantului, setul cererilor deja dispecerizate și jurnalele, păstrează tick-ul monoton și resetează contoarele cumulative numai când `preserveStats` este absent sau `false`. Fără golirea setului de cereri deja dispecerizate, o coadă 059 rewindată nu ar putea fi dispecerizată din nou.
 
 ## Limite
 

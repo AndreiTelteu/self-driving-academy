@@ -173,6 +173,11 @@ export interface RideDispatcher {
   rejections(): readonly DispatchRejection[];
   releases(): readonly DispatchRelease[];
   stats(): RideDispatcherStats;
+  /**
+   * Scenario boundary (065): the caller has already released every claim, so this only clears
+   * caller statuses, the dispatched-request memory and the bounded logs. The tick stays monotonic.
+   */
+  reset(input: unknown): void;
   dispose(): void;
 }
 
@@ -604,11 +609,18 @@ export function createRideDispatcher(options: unknown): RideDispatcher {
 
   function release(taxiId: string, reason: unknown, atTick: unknown): DispatchRelease | null {
     assertLive();
-    const id = requireTaxi(taxiId),
+    const id = text(taxiId),
       releaseReason = choice(reason, RIDE_DISPATCH_RELEASE_REASONS),
       releaseTick = tick(atTick),
       assignment = active.get(id);
-    if (assignment === undefined) return null;
+    if (assignment === undefined) {
+      // An unclaimed identity must still be a real taxi; an unknown id is never silently accepted.
+      requireTaxi(id);
+      return null;
+    }
+    // A claim can outlive its registry entry when the composition removes a vehicle. Releasing it is
+    // an explicit caller decision (TAXI_REMOVED or the lifecycle terminal reason), never a step side
+    // effect: `step` still fails loudly on a claim whose taxi disappeared.
     requireContract(releaseTick >= assignment.tick, 'Stale dispatch release tick');
     const nextStatus = releaseStatus[releaseReason];
     active.delete(id);
@@ -619,6 +631,35 @@ export function createRideDispatcher(options: unknown): RideDispatcher {
       droppedReleaseHistory += 1;
     releasesTotal += 1;
     return entry;
+  }
+
+  function reset(input: unknown): void {
+    assertLive();
+    const data = record(input);
+    for (const key of Object.keys(data))
+      requireContract(key === 'tick' || key === 'preserveStats', 'Unknown dispatcher reset field');
+    requireContract(data.tick !== undefined, 'Ride dispatcher reset requires a tick');
+    const atTick = tick(data.tick);
+    requireContract(
+      data.preserveStats === undefined || typeof data.preserveStats === 'boolean',
+      'Ride dispatcher preserveStats must be a boolean',
+    );
+    requireContract(active.size === 0, 'Cannot reset a dispatcher with active assignments');
+    if (atTick < lastTick) throw new RangeError('Stale dispatcher tick');
+    const preserveStats = data.preserveStats === true;
+    statuses.clear();
+    dispatched.clear();
+    releaseLog.length = 0;
+    rejectionLog.length = 0;
+    lastTick = atTick;
+    if (!preserveStats) {
+      assignmentsTotal = 0;
+      releasesTotal = 0;
+      rejectionsTotal = 0;
+      routeSearchesTotal = 0;
+      lastStepSearches = 0;
+      droppedReleaseHistory = 0;
+    }
   }
 
   function stats(): RideDispatcherStats {
@@ -712,6 +753,7 @@ export function createRideDispatcher(options: unknown): RideDispatcher {
       return disposed ? Object.freeze([]) : Object.freeze(releaseLog.slice());
     },
     stats,
+    reset,
     dispose(): void {
       if (disposed) return;
       disposed = true;

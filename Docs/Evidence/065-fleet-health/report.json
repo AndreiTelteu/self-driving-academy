@@ -1,0 +1,1017 @@
+{
+  "version": "065-fleet-health-v1",
+  "generatedBy": "npm run fleet:health",
+  "oracleRule": "A health fact is the only source of availability; an unavailable claimed taxi is released through the real 060 contract with a closed reason, and a scenario reset closes rides with SCENARIO_RESET, rewinds demand and ETA and publishes every taxi as AVAILABLE.",
+  "states": [
+    "AVAILABLE",
+    "BLOCKED",
+    "DAMAGED",
+    "OFFLINE"
+  ],
+  "facts": [
+    "TRAFFIC_BLOCK",
+    "IMMOBILIZATION",
+    "COLLISION_DAMAGE",
+    "RECOVERY",
+    "SERVICE_WITHDRAWN",
+    "SERVICE_RETURNED"
+  ],
+  "policies": [
+    "RESET",
+    "PRESERVE"
+  ],
+  "limits": {
+    "taxis": 30,
+    "historyEntries": 256,
+    "factIds": 1024,
+    "idCodeUnits": 256,
+    "factIdCodeUnits": 200
+  },
+  "fixture": {
+    "version": "065-fleet-scenario-v1",
+    "presets": [
+      20,
+      24,
+      30
+    ],
+    "populations": [
+      {
+        "taxis": 20,
+        "civilians": 40,
+        "total": 60,
+        "requests": 32,
+        "uniqueTaxis": 20,
+        "lanesAssigned": 20,
+        "reproducible": true
+      },
+      {
+        "taxis": 24,
+        "civilians": 40,
+        "total": 64,
+        "requests": 32,
+        "uniqueTaxis": 24,
+        "lanesAssigned": 24,
+        "reproducible": true
+      },
+      {
+        "taxis": 30,
+        "civilians": 40,
+        "total": 70,
+        "requests": 32,
+        "uniqueTaxis": 30,
+        "lanesAssigned": 30,
+        "reproducible": true
+      }
+    ]
+  },
+  "damage": {
+    "taxiId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0004",
+    "reason": "TAXI_DAMAGED",
+    "dispatcherStatus": "DAMAGED",
+    "healthState": "DAMAGED",
+    "claimReleased": true,
+    "lifecycleReleaseReason": "FAILED",
+    "directReleaseReason": null
+  },
+  "block": {
+    "taxiId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0023",
+    "reason": "TAXI_BLOCKED",
+    "dispatcherStatus": "BLOCKED",
+    "healthState": "BLOCKED",
+    "claimReleased": true,
+    "lifecycleReleaseReason": "FAILED",
+    "directReleaseReason": null
+  },
+  "offline": {
+    "taxiId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0024",
+    "reason": "TAXI_REMOVED",
+    "dispatcherStatus": "OFFLINE",
+    "healthState": "OFFLINE",
+    "claimReleased": true,
+    "lifecycleReleaseReason": "FAILED",
+    "directReleaseReason": null
+  },
+  "claimOnly": {
+    "blockRelease": "TAXI_BLOCKED",
+    "offlineRelease": "TAXI_REMOVED",
+    "assignments": 0,
+    "statuses": [
+      "BLOCKED",
+      "OFFLINE"
+    ]
+  },
+  "availability": {
+    "damagedTaxiId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0001",
+    "assignedTaxiId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0002",
+    "assignedIsDamaged": false,
+    "availableExcludesDamaged": true,
+    "allDamagedBlocker": "NO_TAXI",
+    "allDamagedAssignments": 0
+  },
+  "reset": {
+    "tick": 300,
+    "closedRides": 2,
+    "closedReasons": [
+      "SCENARIO_RESET",
+      "SCENARIO_RESET"
+    ],
+    "releasedAssignments": 0,
+    "clearedHealth": 3,
+    "discardedRides": 0,
+    "activeRides": 0,
+    "assignments": 0,
+    "pending": 0,
+    "estimates": 0,
+    "healthAvailable": 24,
+    "assigned": 0,
+    "consistent": true,
+    "staleRideIds": true,
+    "staleEstimates": true,
+    "secondReset": {
+      "closedRides": 0,
+      "releasedAssignments": 0,
+      "clearedHealth": 0,
+      "lifecycleRides": 0,
+      "assignments": 0
+    }
+  },
+  "policy": {
+    "preservedProfile": "profile-v2",
+    "preservedFacts": 1,
+    "preservedResetProfiles": 0,
+    "preservedResetStats": "PRESERVE",
+    "healthAfterPreserve": 20,
+    "resetProfile": "profile-v1",
+    "resetFacts": 0,
+    "resetResetProfiles": 40,
+    "resetStats": "RESET"
+  },
+  "vanished": {
+    "closedRides": 1,
+    "discardedRides": 0,
+    "closedReason": "SCENARIO_RESET",
+    "assignments": 0,
+    "activeRides": 0,
+    "taxis": 19,
+    "consistent": true
+  },
+  "nextScenario": {
+    "requestId": "id-v1:12:ride-request20:city:fleet-065:rides4:w0005:r0000",
+    "assignmentId": "id-v1:19:dispatch-assignment20:city:fleet-065:rides57:id-v1:12:ride-request20:city:fleet-065:rides4:w0005:r000050:id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0004",
+    "rideId": "id-v1:4:ride20:city:fleet-065:rides57:id-v1:12:ride-request20:city:fleet-065:rides4:w0005:r0000",
+    "state": "TO_PICKUP",
+    "etaStatus": "ESTIMATED",
+    "reusedFactAccepted": true,
+    "reusedRideReason": "TAXI_DAMAGED",
+    "sameRequestId": true
+  },
+  "simulation": {
+    "requests": 32,
+    "assigned": 8,
+    "begun": 8,
+    "completed": 1,
+    "failedHealth": 3,
+    "failedTimeout": 1,
+    "cancelled": 1,
+    "activeBeforeReset": 2,
+    "closedByReset": 2,
+    "etaSamples": 9
+  },
+  "determinism": {
+    "first": {
+      "probe": {
+        "taxiId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0004",
+        "reason": "TAXI_DAMAGED",
+        "dispatcherStatus": "DAMAGED",
+        "healthState": "DAMAGED",
+        "claimReleased": true,
+        "lifecycleReleaseReason": "FAILED",
+        "directReleaseReason": null
+      },
+      "health": [
+        {
+          "taxiId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0001",
+          "state": "AVAILABLE",
+          "cause": null,
+          "tick": 0,
+          "factId": null
+        },
+        {
+          "taxiId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0002",
+          "state": "AVAILABLE",
+          "cause": null,
+          "tick": 0,
+          "factId": null
+        },
+        {
+          "taxiId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0003",
+          "state": "AVAILABLE",
+          "cause": null,
+          "tick": 0,
+          "factId": null
+        },
+        {
+          "taxiId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0004",
+          "state": "DAMAGED",
+          "cause": "COLLISION_DAMAGE",
+          "tick": 60,
+          "factId": "determinism:damage"
+        },
+        {
+          "taxiId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0005",
+          "state": "AVAILABLE",
+          "cause": null,
+          "tick": 0,
+          "factId": null
+        },
+        {
+          "taxiId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0006",
+          "state": "AVAILABLE",
+          "cause": null,
+          "tick": 0,
+          "factId": null
+        },
+        {
+          "taxiId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0007",
+          "state": "AVAILABLE",
+          "cause": null,
+          "tick": 0,
+          "factId": null
+        },
+        {
+          "taxiId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0008",
+          "state": "AVAILABLE",
+          "cause": null,
+          "tick": 0,
+          "factId": null
+        },
+        {
+          "taxiId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0009",
+          "state": "AVAILABLE",
+          "cause": null,
+          "tick": 0,
+          "factId": null
+        },
+        {
+          "taxiId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0010",
+          "state": "AVAILABLE",
+          "cause": null,
+          "tick": 0,
+          "factId": null
+        },
+        {
+          "taxiId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0011",
+          "state": "AVAILABLE",
+          "cause": null,
+          "tick": 0,
+          "factId": null
+        },
+        {
+          "taxiId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0012",
+          "state": "AVAILABLE",
+          "cause": null,
+          "tick": 0,
+          "factId": null
+        },
+        {
+          "taxiId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0013",
+          "state": "AVAILABLE",
+          "cause": null,
+          "tick": 0,
+          "factId": null
+        },
+        {
+          "taxiId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0014",
+          "state": "AVAILABLE",
+          "cause": null,
+          "tick": 0,
+          "factId": null
+        },
+        {
+          "taxiId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0015",
+          "state": "AVAILABLE",
+          "cause": null,
+          "tick": 0,
+          "factId": null
+        },
+        {
+          "taxiId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0016",
+          "state": "AVAILABLE",
+          "cause": null,
+          "tick": 0,
+          "factId": null
+        },
+        {
+          "taxiId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0017",
+          "state": "AVAILABLE",
+          "cause": null,
+          "tick": 0,
+          "factId": null
+        },
+        {
+          "taxiId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0018",
+          "state": "AVAILABLE",
+          "cause": null,
+          "tick": 0,
+          "factId": null
+        },
+        {
+          "taxiId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0019",
+          "state": "AVAILABLE",
+          "cause": null,
+          "tick": 0,
+          "factId": null
+        },
+        {
+          "taxiId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0020",
+          "state": "AVAILABLE",
+          "cause": null,
+          "tick": 0,
+          "factId": null
+        }
+      ],
+      "history": [
+        {
+          "taxiId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0004",
+          "fact": "COLLISION_DAMAGE",
+          "from": "AVAILABLE",
+          "to": "DAMAGED",
+          "tick": 60,
+          "factId": "determinism:damage",
+          "releasedRideId": "id-v1:4:ride20:city:fleet-065:rides57:id-v1:12:ride-request20:city:fleet-065:rides4:w0005:r0000"
+        }
+      ],
+      "terminal": [
+        {
+          "rideId": "id-v1:4:ride20:city:fleet-065:rides57:id-v1:12:ride-request20:city:fleet-065:rides4:w0005:r0000",
+          "state": "FAILED",
+          "reason": "TAXI_DAMAGED"
+        }
+      ],
+      "eta": null
+    },
+    "second": {
+      "probe": {
+        "taxiId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0004",
+        "reason": "TAXI_DAMAGED",
+        "dispatcherStatus": "DAMAGED",
+        "healthState": "DAMAGED",
+        "claimReleased": true,
+        "lifecycleReleaseReason": "FAILED",
+        "directReleaseReason": null
+      },
+      "health": [
+        {
+          "taxiId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0001",
+          "state": "AVAILABLE",
+          "cause": null,
+          "tick": 0,
+          "factId": null
+        },
+        {
+          "taxiId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0002",
+          "state": "AVAILABLE",
+          "cause": null,
+          "tick": 0,
+          "factId": null
+        },
+        {
+          "taxiId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0003",
+          "state": "AVAILABLE",
+          "cause": null,
+          "tick": 0,
+          "factId": null
+        },
+        {
+          "taxiId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0004",
+          "state": "DAMAGED",
+          "cause": "COLLISION_DAMAGE",
+          "tick": 60,
+          "factId": "determinism:damage"
+        },
+        {
+          "taxiId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0005",
+          "state": "AVAILABLE",
+          "cause": null,
+          "tick": 0,
+          "factId": null
+        },
+        {
+          "taxiId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0006",
+          "state": "AVAILABLE",
+          "cause": null,
+          "tick": 0,
+          "factId": null
+        },
+        {
+          "taxiId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0007",
+          "state": "AVAILABLE",
+          "cause": null,
+          "tick": 0,
+          "factId": null
+        },
+        {
+          "taxiId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0008",
+          "state": "AVAILABLE",
+          "cause": null,
+          "tick": 0,
+          "factId": null
+        },
+        {
+          "taxiId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0009",
+          "state": "AVAILABLE",
+          "cause": null,
+          "tick": 0,
+          "factId": null
+        },
+        {
+          "taxiId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0010",
+          "state": "AVAILABLE",
+          "cause": null,
+          "tick": 0,
+          "factId": null
+        },
+        {
+          "taxiId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0011",
+          "state": "AVAILABLE",
+          "cause": null,
+          "tick": 0,
+          "factId": null
+        },
+        {
+          "taxiId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0012",
+          "state": "AVAILABLE",
+          "cause": null,
+          "tick": 0,
+          "factId": null
+        },
+        {
+          "taxiId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0013",
+          "state": "AVAILABLE",
+          "cause": null,
+          "tick": 0,
+          "factId": null
+        },
+        {
+          "taxiId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0014",
+          "state": "AVAILABLE",
+          "cause": null,
+          "tick": 0,
+          "factId": null
+        },
+        {
+          "taxiId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0015",
+          "state": "AVAILABLE",
+          "cause": null,
+          "tick": 0,
+          "factId": null
+        },
+        {
+          "taxiId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0016",
+          "state": "AVAILABLE",
+          "cause": null,
+          "tick": 0,
+          "factId": null
+        },
+        {
+          "taxiId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0017",
+          "state": "AVAILABLE",
+          "cause": null,
+          "tick": 0,
+          "factId": null
+        },
+        {
+          "taxiId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0018",
+          "state": "AVAILABLE",
+          "cause": null,
+          "tick": 0,
+          "factId": null
+        },
+        {
+          "taxiId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0019",
+          "state": "AVAILABLE",
+          "cause": null,
+          "tick": 0,
+          "factId": null
+        },
+        {
+          "taxiId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0020",
+          "state": "AVAILABLE",
+          "cause": null,
+          "tick": 0,
+          "factId": null
+        }
+      ],
+      "history": [
+        {
+          "taxiId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0004",
+          "fact": "COLLISION_DAMAGE",
+          "from": "AVAILABLE",
+          "to": "DAMAGED",
+          "tick": 60,
+          "factId": "determinism:damage",
+          "releasedRideId": "id-v1:4:ride20:city:fleet-065:rides57:id-v1:12:ride-request20:city:fleet-065:rides4:w0005:r0000"
+        }
+      ],
+      "terminal": [
+        {
+          "rideId": "id-v1:4:ride20:city:fleet-065:rides57:id-v1:12:ride-request20:city:fleet-065:rides4:w0005:r0000",
+          "state": "FAILED",
+          "reason": "TAXI_DAMAGED"
+        }
+      ],
+      "eta": null
+    },
+    "equal": true
+  },
+  "disposal": {
+    "disposed": true,
+    "healthTaxis": 0,
+    "healthFacts": 0,
+    "estimates": 0,
+    "assignments": 0,
+    "pending": 0,
+    "activeRides": 0,
+    "vehicles": 0
+  },
+  "checks": [
+    {
+      "name": "version",
+      "expected": "065-fleet-health-v1",
+      "actual": "065-fleet-health-v1",
+      "pass": true,
+      "detail": "Versioned 065 contract"
+    },
+    {
+      "name": "states",
+      "expected": [
+        "AVAILABLE",
+        "BLOCKED",
+        "DAMAGED",
+        "OFFLINE"
+      ],
+      "actual": [
+        "AVAILABLE",
+        "BLOCKED",
+        "DAMAGED",
+        "OFFLINE"
+      ],
+      "pass": true,
+      "detail": "Closed health states"
+    },
+    {
+      "name": "facts",
+      "expected": [
+        "TRAFFIC_BLOCK",
+        "IMMOBILIZATION",
+        "COLLISION_DAMAGE",
+        "RECOVERY",
+        "SERVICE_WITHDRAWN",
+        "SERVICE_RETURNED"
+      ],
+      "actual": [
+        "TRAFFIC_BLOCK",
+        "IMMOBILIZATION",
+        "COLLISION_DAMAGE",
+        "RECOVERY",
+        "SERVICE_WITHDRAWN",
+        "SERVICE_RETURNED"
+      ],
+      "pass": true,
+      "detail": "Closed fact vocabulary"
+    },
+    {
+      "name": "policies",
+      "expected": [
+        "RESET",
+        "PRESERVE"
+      ],
+      "actual": [
+        "RESET",
+        "PRESERVE"
+      ],
+      "pass": true,
+      "detail": "Explicit reset policy"
+    },
+    {
+      "name": "limits",
+      "expected": {
+        "taxis": 30,
+        "historyEntries": 256,
+        "factIds": 1024,
+        "idCodeUnits": 256,
+        "factIdCodeUnits": 200
+      },
+      "actual": {
+        "taxis": 30,
+        "historyEntries": 256,
+        "factIds": 1024,
+        "idCodeUnits": 256,
+        "factIdCodeUnits": 200
+      },
+      "pass": true,
+      "detail": "Bounded health state"
+    },
+    {
+      "name": "fixture-presets",
+      "expected": [
+        20,
+        24,
+        30
+      ],
+      "actual": [
+        20,
+        24,
+        30
+      ],
+      "pass": true,
+      "detail": "Gate 220 taxi presets"
+    },
+    {
+      "name": "fixture-reproducible",
+      "expected": [
+        true,
+        true,
+        true
+      ],
+      "actual": [
+        true,
+        true,
+        true
+      ],
+      "pass": true,
+      "detail": "Identical structural fixture reports"
+    },
+    {
+      "name": "fixture-capacity",
+      "expected": [
+        true,
+        true,
+        true
+      ],
+      "actual": [
+        true,
+        true,
+        true
+      ],
+      "pass": true,
+      "detail": "Population and position capacity"
+    },
+    {
+      "name": "damage-release",
+      "expected": {
+        "reason": "TAXI_DAMAGED",
+        "dispatcherStatus": "DAMAGED",
+        "healthState": "DAMAGED",
+        "claimReleased": true,
+        "lifecycleReleaseReason": "FAILED"
+      },
+      "actual": {
+        "reason": "TAXI_DAMAGED",
+        "dispatcherStatus": "DAMAGED",
+        "healthState": "DAMAGED",
+        "claimReleased": true,
+        "lifecycleReleaseReason": "FAILED"
+      },
+      "pass": true,
+      "detail": "Damage closes the ride with TAXI_DAMAGED and releases the claim"
+    },
+    {
+      "name": "block-release",
+      "expected": {
+        "reason": "TAXI_BLOCKED",
+        "dispatcherStatus": "BLOCKED",
+        "healthState": "BLOCKED",
+        "claimReleased": true
+      },
+      "actual": {
+        "reason": "TAXI_BLOCKED",
+        "dispatcherStatus": "BLOCKED",
+        "healthState": "BLOCKED",
+        "claimReleased": true
+      },
+      "pass": true,
+      "detail": "A block closes the ride with TAXI_BLOCKED"
+    },
+    {
+      "name": "offline-release",
+      "expected": {
+        "reason": "TAXI_REMOVED",
+        "dispatcherStatus": "OFFLINE",
+        "healthState": "OFFLINE",
+        "claimReleased": true
+      },
+      "actual": {
+        "reason": "TAXI_REMOVED",
+        "dispatcherStatus": "OFFLINE",
+        "healthState": "OFFLINE",
+        "claimReleased": true
+      },
+      "pass": true,
+      "detail": "Withdrawal closes the ride with TAXI_REMOVED"
+    },
+    {
+      "name": "claim-only-release",
+      "expected": {
+        "blockRelease": "TAXI_BLOCKED",
+        "offlineRelease": "TAXI_REMOVED",
+        "assignments": 0,
+        "statuses": [
+          "BLOCKED",
+          "OFFLINE"
+        ]
+      },
+      "actual": {
+        "blockRelease": "TAXI_BLOCKED",
+        "offlineRelease": "TAXI_REMOVED",
+        "assignments": 0,
+        "statuses": [
+          "BLOCKED",
+          "OFFLINE"
+        ]
+      },
+      "pass": true,
+      "detail": "A claim without a ride is released with the matching closed reason"
+    },
+    {
+      "name": "availability",
+      "expected": {
+        "assignedIsDamaged": false,
+        "availableExcludesDamaged": true,
+        "allDamagedBlocker": "NO_TAXI",
+        "allDamagedAssignments": 0
+      },
+      "actual": {
+        "assignedIsDamaged": false,
+        "availableExcludesDamaged": true,
+        "allDamagedBlocker": "NO_TAXI",
+        "allDamagedAssignments": 0
+      },
+      "pass": true,
+      "detail": "Damaged taxis are never candidates"
+    },
+    {
+      "name": "reset-coherence",
+      "expected": {
+        "closedRides": 2,
+        "closedReasons": [
+          "SCENARIO_RESET",
+          "SCENARIO_RESET"
+        ],
+        "activeRides": 0,
+        "assignments": 0,
+        "pending": 0,
+        "estimates": 0,
+        "consistent": true
+      },
+      "actual": {
+        "closedRides": 2,
+        "closedReasons": [
+          "SCENARIO_RESET",
+          "SCENARIO_RESET"
+        ],
+        "activeRides": 0,
+        "assignments": 0,
+        "pending": 0,
+        "estimates": 0,
+        "consistent": true
+      },
+      "pass": true,
+      "detail": "Reset closes live rides and leaves no claim, queue or estimate"
+    },
+    {
+      "name": "reset-health",
+      "expected": {
+        "available": 24,
+        "assigned": 0,
+        "cleared": 3
+      },
+      "actual": {
+        "available": 24,
+        "assigned": 0,
+        "cleared": 3
+      },
+      "pass": true,
+      "detail": "Health returns to explicit AVAILABLE for every taxi"
+    },
+    {
+      "name": "reset-stale-ids",
+      "expected": {
+        "staleRideIds": true,
+        "staleEstimates": true
+      },
+      "actual": {
+        "staleRideIds": true,
+        "staleEstimates": true
+      },
+      "pass": true,
+      "detail": "Old ride ids and estimates do not survive the reset"
+    },
+    {
+      "name": "reset-idempotent",
+      "expected": {
+        "closedRides": 0,
+        "releasedAssignments": 0,
+        "clearedHealth": 0,
+        "lifecycleRides": 0,
+        "assignments": 0
+      },
+      "actual": {
+        "closedRides": 0,
+        "releasedAssignments": 0,
+        "clearedHealth": 0,
+        "lifecycleRides": 0,
+        "assignments": 0
+      },
+      "pass": true,
+      "detail": "A second reset creates no ride, release or health mark"
+    },
+    {
+      "name": "reset-demand",
+      "expected": {
+        "pending": 0,
+        "admitted": 0,
+        "dequeued": 0
+      },
+      "actual": {
+        "pending": 0,
+        "admitted": 0,
+        "dequeued": 0
+      },
+      "pass": true,
+      "detail": "The demand cursor and queue are rewound"
+    },
+    {
+      "name": "reset-eta",
+      "expected": {
+        "estimates": 0,
+        "tick": 0,
+        "freshStatus": "ESTIMATED"
+      },
+      "actual": {
+        "estimates": 0,
+        "tick": 0,
+        "freshStatus": "ESTIMATED"
+      },
+      "pass": true,
+      "detail": "ETA drops stale routes and estimates the next scenario"
+    },
+    {
+      "name": "next-scenario",
+      "expected": {
+        "state": "TO_PICKUP",
+        "etaStatus": "ESTIMATED",
+        "reusedFactAccepted": true,
+        "sameRequestId": true,
+        "reusedRideReason": "TAXI_DAMAGED"
+      },
+      "actual": {
+        "state": "TO_PICKUP",
+        "etaStatus": "ESTIMATED",
+        "reusedFactAccepted": true,
+        "sameRequestId": true,
+        "reusedRideReason": "TAXI_DAMAGED"
+      },
+      "pass": true,
+      "detail": "The same request identity runs again without stale state"
+    },
+    {
+      "name": "reset-profiles",
+      "expected": {
+        "preservedProfile": "profile-v2",
+        "preservedResetProfiles": 0,
+        "resetProfile": "profile-v1",
+        "resetResetProfiles": 40
+      },
+      "actual": {
+        "preservedProfile": "profile-v2",
+        "preservedResetProfiles": 0,
+        "resetProfile": "profile-v1",
+        "resetResetProfiles": 40
+      },
+      "pass": true,
+      "detail": "Profiles are preserved or reset only by explicit policy"
+    },
+    {
+      "name": "reset-stats",
+      "expected": {
+        "preservedFacts": 1,
+        "preservedPolicy": "PRESERVE",
+        "resetFacts": 0,
+        "resetPolicy": "RESET",
+        "healthAfterPreserve": 20
+      },
+      "actual": {
+        "preservedFacts": 1,
+        "preservedPolicy": "PRESERVE",
+        "resetFacts": 0,
+        "resetPolicy": "RESET",
+        "healthAfterPreserve": 20
+      },
+      "pass": true,
+      "detail": "Cumulative statistics follow the explicit policy; health always resets"
+    },
+    {
+      "name": "vanished-taxi",
+      "expected": {
+        "closedRides": 1,
+        "discardedRides": 0,
+        "closedReason": "SCENARIO_RESET",
+        "assignments": 0,
+        "activeRides": 0,
+        "taxis": 19,
+        "consistent": true
+      },
+      "actual": {
+        "closedRides": 1,
+        "discardedRides": 0,
+        "closedReason": "SCENARIO_RESET",
+        "assignments": 0,
+        "activeRides": 0,
+        "taxis": 19,
+        "consistent": true
+      },
+      "pass": true,
+      "detail": "A vanished taxi cannot keep an allocated ride through reset"
+    },
+    {
+      "name": "simulation",
+      "expected": {
+        "requests": 32,
+        "assigned": 8,
+        "begun": 8,
+        "completed": 1,
+        "failedHealth": 3,
+        "failedTimeout": 1,
+        "cancelled": 1,
+        "activeBeforeReset": 2,
+        "closedByReset": 2
+      },
+      "actual": {
+        "requests": 32,
+        "assigned": 8,
+        "begun": 8,
+        "completed": 1,
+        "failedHealth": 3,
+        "failedTimeout": 1,
+        "cancelled": 1,
+        "activeBeforeReset": 2,
+        "closedByReset": 2
+      },
+      "pass": true,
+      "detail": "Real 059 schedule and real 060 assignments over the 24-taxi fixture"
+    },
+    {
+      "name": "determinism",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Identical facts and ids produce identical output"
+    },
+    {
+      "name": "disposal",
+      "expected": {
+        "disposed": true,
+        "healthTaxis": 0,
+        "healthFacts": 0,
+        "estimates": 0,
+        "assignments": 0,
+        "pending": 0,
+        "activeRides": 0,
+        "vehicles": 0
+      },
+      "actual": {
+        "disposed": true,
+        "healthTaxis": 0,
+        "healthFacts": 0,
+        "estimates": 0,
+        "assignments": 0,
+        "pending": 0,
+        "activeRides": 0,
+        "vehicles": 0
+      },
+      "pass": true,
+      "detail": "dispose() returns every owned structure to zero"
+    },
+    {
+      "name": "no-wall-clock",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "No Date, timer or Math.random"
+    },
+    {
+      "name": "no-dom-or-renderer",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "No DOM, Babylon or Rapier"
+    }
+  ],
+  "summary": {
+    "version": 1,
+    "checks": 28,
+    "passed": 28,
+    "pass": true
+  }
+}

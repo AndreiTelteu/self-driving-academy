@@ -124,6 +124,8 @@ export interface RideEta {
   /** Last estimate retained for one ride, including a terminal ride. */
   estimate(rideId: string): EtaSnapshot | undefined;
   estimates(): readonly EtaSnapshot[];
+  /** Scenario boundary (065): drops routes, progress and estimates; the tick restarts at zero. */
+  reset(options?: unknown): void;
   stats(): RideEtaStats;
   dispose(): void;
 }
@@ -484,8 +486,9 @@ export function createRideEta(options: unknown): RideEta {
     data.serviceState === undefined
       ? ETA_DEFAULTS.serviceState
       : (data.serviceState as EtaServiceState);
-  const initialInputs = routeInputs(planner),
-    routes = new Map<string, RouteState>(),
+  const initialServiceState = serviceState;
+  let initialInputs = routeInputs(planner);
+  const routes = new Map<string, RouteState>(),
     progress = new Map<string, RouteProgress>(),
     snapshots = new Map<string, EtaSnapshot>();
   let lastTick = 0,
@@ -1114,6 +1117,37 @@ export function createRideEta(options: unknown): RideEta {
       return Object.freeze(
         [...snapshots.values()].sort((left, right) => compareText(left.rideId, right.rideId)),
       );
+    },
+    reset(options?: unknown): void {
+      assertLive();
+      let preserveStats = false;
+      if (options !== undefined) {
+        const data = record(options);
+        for (const key of Object.keys(data))
+          requireContract(key === 'preserveStats', 'Unknown ride eta reset option');
+        requireContract(
+          data.preserveStats === undefined || typeof data.preserveStats === 'boolean',
+          'Ride eta preserveStats must be a boolean',
+        );
+        preserveStats = data.preserveStats === true;
+      }
+      routes.clear();
+      progress.clear();
+      snapshots.clear();
+      lastTick = 0;
+      // The next scenario re-baselines route inputs, so a replan before the reset cannot make every
+      // new route stale, and the service state returns to its configured initial value.
+      initialInputs = routeInputs(planner);
+      serviceState = initialServiceState;
+      if (!preserveStats) {
+        observations = 0;
+        estimated = 0;
+        arrived = 0;
+        unavailable = 0;
+        reprojectedTotal = 0;
+        routeLoads = 0;
+        for (const reason of ETA_UNAVAILABLE_REASONS) byReason[reason] = 0;
+      }
     },
     stats(): RideEtaStats {
       if (disposed) return zeroStats();
