@@ -1,0 +1,1590 @@
+{
+  "version": "056-auto-scenarios-v1",
+  "oracleRule": "Each expected value is computed at run time by an independent reference implementation of the published contract formulas and priority tables from the scenario inputs (profile values, authored facts, addressed sample, tick). No expected value is a precomputed transcript of a controller output.",
+  "scenarios": [
+    {
+      "id": "cruise-urban-free-road",
+      "behavior": "cruise",
+      "title": "Urban taxi follows the posted limit and its style delta",
+      "oracle": "referenceCruise (046 formula: min(posted+delta, sqrt(a*radius), approach, 30))",
+      "ticks": 12,
+      "checks": [
+        {
+          "name": "behavior state",
+          "expected": "FOLLOW",
+          "actual": "FOLLOW",
+          "pass": true,
+          "detail": "real045 state over the authored044 lane"
+        },
+        {
+          "name": "behavior reason",
+          "expected": "FOLLOW_LANE",
+          "actual": "FOLLOW_LANE",
+          "pass": true,
+          "detail": "no leader is authored on this lane"
+        },
+        {
+          "name": "cruise target",
+          "expected": 8,
+          "actual": 8,
+          "pass": true,
+          "detail": "independent046 formula"
+        },
+        {
+          "name": "cruise reason",
+          "expected": "FREE_ROAD",
+          "actual": "FREE_ROAD",
+          "pass": true,
+          "detail": "documented046 reason priority"
+        },
+        {
+          "name": "preferred road speed",
+          "expected": 8,
+          "actual": 8,
+          "pass": true,
+          "detail": "posted plus style delta"
+        },
+        {
+          "name": "preferred curve speed",
+          "expected": null,
+          "actual": null,
+          "pass": true,
+          "detail": "sqrt(lateral accel * radius)"
+        },
+        {
+          "name": "preferred approach speed",
+          "expected": null,
+          "actual": null,
+          "pass": true,
+          "detail": "explicit approach fact"
+        },
+        {
+          "name": "target is positive",
+          "expected": true,
+          "actual": 8,
+          "pass": true,
+          "detail": "the authored road is traversable"
+        },
+        {
+          "name": "source tick",
+          "expected": 12,
+          "actual": 12,
+          "pass": true,
+          "detail": "target retains the real044 source tick"
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "cruise-residential-curve",
+      "behavior": "cruise",
+      "title": "Residential taxi slows for the authored curve radius",
+      "oracle": "referenceCruise (046 formula: min(posted+delta, sqrt(a*radius), approach, 30))",
+      "ticks": 12,
+      "checks": [
+        {
+          "name": "behavior state",
+          "expected": "FOLLOW",
+          "actual": "FOLLOW",
+          "pass": true,
+          "detail": "real045 state over the authored044 lane"
+        },
+        {
+          "name": "behavior reason",
+          "expected": "FOLLOW_LANE",
+          "actual": "FOLLOW_LANE",
+          "pass": true,
+          "detail": "no leader is authored on this lane"
+        },
+        {
+          "name": "cruise target",
+          "expected": 5.196152422706632,
+          "actual": 5.196152422706632,
+          "pass": true,
+          "detail": "independent046 formula"
+        },
+        {
+          "name": "cruise reason",
+          "expected": "CURVE_PREFERENCE",
+          "actual": "CURVE_PREFERENCE",
+          "pass": true,
+          "detail": "documented046 reason priority"
+        },
+        {
+          "name": "preferred road speed",
+          "expected": 7,
+          "actual": 7,
+          "pass": true,
+          "detail": "posted plus style delta"
+        },
+        {
+          "name": "preferred curve speed",
+          "expected": 5.196152422706632,
+          "actual": 5.196152422706632,
+          "pass": true,
+          "detail": "sqrt(lateral accel * radius)"
+        },
+        {
+          "name": "preferred approach speed",
+          "expected": null,
+          "actual": null,
+          "pass": true,
+          "detail": "explicit approach fact"
+        },
+        {
+          "name": "target is positive",
+          "expected": true,
+          "actual": 5.196152422706632,
+          "pass": true,
+          "detail": "the authored road is traversable"
+        },
+        {
+          "name": "source tick",
+          "expected": 12,
+          "actual": 12,
+          "pass": true,
+          "detail": "target retains the real044 source tick"
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "cruise-intersection-approach",
+      "behavior": "cruise",
+      "title": "Taxi applies the authored intersection approach speed",
+      "oracle": "referenceCruise (046 formula: min(posted+delta, sqrt(a*radius), approach, 30))",
+      "ticks": 12,
+      "checks": [
+        {
+          "name": "behavior state",
+          "expected": "FOLLOW",
+          "actual": "FOLLOW",
+          "pass": true,
+          "detail": "real045 state over the authored044 lane"
+        },
+        {
+          "name": "behavior reason",
+          "expected": "FOLLOW_LANE",
+          "actual": "FOLLOW_LANE",
+          "pass": true,
+          "detail": "no leader is authored on this lane"
+        },
+        {
+          "name": "cruise target",
+          "expected": 4.5,
+          "actual": 4.5,
+          "pass": true,
+          "detail": "independent046 formula"
+        },
+        {
+          "name": "cruise reason",
+          "expected": "INTERSECTION_APPROACH",
+          "actual": "INTERSECTION_APPROACH",
+          "pass": true,
+          "detail": "documented046 reason priority"
+        },
+        {
+          "name": "preferred road speed",
+          "expected": 10,
+          "actual": 10,
+          "pass": true,
+          "detail": "posted plus style delta"
+        },
+        {
+          "name": "preferred curve speed",
+          "expected": null,
+          "actual": null,
+          "pass": true,
+          "detail": "sqrt(lateral accel * radius)"
+        },
+        {
+          "name": "preferred approach speed",
+          "expected": 4.5,
+          "actual": 4.5,
+          "pass": true,
+          "detail": "explicit approach fact"
+        },
+        {
+          "name": "target is positive",
+          "expected": true,
+          "actual": 4.5,
+          "pass": true,
+          "detail": "the authored road is traversable"
+        },
+        {
+          "name": "source tick",
+          "expected": 12,
+          "actual": 12,
+          "pass": true,
+          "detail": "target retains the real044 source tick"
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "signal-red-green",
+      "behavior": "signals",
+      "title": "Cautious taxi stops on red and leaves on green",
+      "oracle": "referenceSignal (050 green release, red stop line, late-red and crossing table)",
+      "ticks": 120,
+      "checks": [
+        {
+          "name": "addressed sample 4",
+          "expected": "STOP",
+          "actual": "STOP",
+          "pass": true,
+          "detail": "one addressed sample per identified opportunity"
+        },
+        {
+          "name": "subject4 behavior state",
+          "expected": "STOP",
+          "actual": "STOP",
+          "pass": true,
+          "detail": "045 composes the real050 intent"
+        },
+        {
+          "name": "addressed sample 10",
+          "expected": "STOP",
+          "actual": "STOP",
+          "pass": true,
+          "detail": "one addressed sample per identified opportunity"
+        },
+        {
+          "name": "subject10 behavior state",
+          "expected": "STOP",
+          "actual": "STOP",
+          "pass": true,
+          "detail": "045 composes the real050 intent"
+        },
+        {
+          "name": "addressed sample 16",
+          "expected": "STOP",
+          "actual": "STOP",
+          "pass": true,
+          "detail": "one addressed sample per identified opportunity"
+        },
+        {
+          "name": "subject16 behavior state",
+          "expected": "STOP",
+          "actual": "STOP",
+          "pass": true,
+          "detail": "045 composes the real050 intent"
+        },
+        {
+          "name": "subject22 behavior state",
+          "expected": "STOP",
+          "actual": "STOP",
+          "pass": true,
+          "detail": "045 composes the real050 intent"
+        },
+        {
+          "name": "subject28 behavior state",
+          "expected": "STOP",
+          "actual": "STOP",
+          "pass": true,
+          "detail": "045 composes the real050 intent"
+        },
+        {
+          "name": "subject34 behavior state",
+          "expected": "STOP",
+          "actual": "STOP",
+          "pass": true,
+          "detail": "045 composes the real050 intent"
+        },
+        {
+          "name": "subject40 behavior state",
+          "expected": "STOP",
+          "actual": "STOP",
+          "pass": true,
+          "detail": "045 composes the real050 intent"
+        },
+        {
+          "name": "subject46 behavior state",
+          "expected": "STOP",
+          "actual": "STOP",
+          "pass": true,
+          "detail": "045 composes the real050 intent"
+        },
+        {
+          "name": "subject52 behavior state",
+          "expected": "STOP",
+          "actual": "STOP",
+          "pass": true,
+          "detail": "045 composes the real050 intent"
+        },
+        {
+          "name": "subject58 behavior state",
+          "expected": "STOP",
+          "actual": "STOP",
+          "pass": true,
+          "detail": "045 composes the real050 intent"
+        },
+        {
+          "name": "subject64 behavior state",
+          "expected": "FOLLOW",
+          "actual": "FOLLOW",
+          "pass": true,
+          "detail": "045 composes the real050 intent"
+        },
+        {
+          "name": "subject70 behavior state",
+          "expected": "FOLLOW",
+          "actual": "FOLLOW",
+          "pass": true,
+          "detail": "045 composes the real050 intent"
+        },
+        {
+          "name": "subject76 behavior state",
+          "expected": "FOLLOW",
+          "actual": "FOLLOW",
+          "pass": true,
+          "detail": "045 composes the real050 intent"
+        },
+        {
+          "name": "subject82 behavior state",
+          "expected": "FOLLOW",
+          "actual": "FOLLOW",
+          "pass": true,
+          "detail": "045 composes the real050 intent"
+        },
+        {
+          "name": "subject88 behavior state",
+          "expected": "FOLLOW",
+          "actual": "FOLLOW",
+          "pass": true,
+          "detail": "045 composes the real050 intent"
+        },
+        {
+          "name": "subject94 behavior state",
+          "expected": "FOLLOW",
+          "actual": "FOLLOW",
+          "pass": true,
+          "detail": "045 composes the real050 intent"
+        },
+        {
+          "name": "subject100 behavior state",
+          "expected": "FOLLOW",
+          "actual": "FOLLOW",
+          "pass": true,
+          "detail": "045 composes the real050 intent"
+        },
+        {
+          "name": "subject106 behavior state",
+          "expected": "FOLLOW",
+          "actual": "FOLLOW",
+          "pass": true,
+          "detail": "045 composes the real050 intent"
+        },
+        {
+          "name": "subject112 behavior state",
+          "expected": "FOLLOW",
+          "actual": "FOLLOW",
+          "pass": true,
+          "detail": "045 composes the real050 intent"
+        },
+        {
+          "name": "subject118 behavior state",
+          "expected": "FOLLOW",
+          "actual": "FOLLOW",
+          "pass": true,
+          "detail": "045 composes the real050 intent"
+        },
+        {
+          "name": "decision count",
+          "expected": 1280,
+          "actual": 1280,
+          "pass": true,
+          "detail": "real219 six-phase10Hz addressing"
+        },
+        {
+          "name": "red window states",
+          "expected": "STOP",
+          "actual": "STOP",
+          "pass": true,
+          "detail": "the cautious profile stops on red"
+        },
+        {
+          "name": "green window states",
+          "expected": "FOLLOW",
+          "actual": "FOLLOW",
+          "pass": true,
+          "detail": "green releases the stop"
+        },
+        {
+          "name": "red stop requests observed",
+          "expected": true,
+          "actual": 10,
+          "pass": true,
+          "detail": "stopRequested only on red"
+        },
+        {
+          "name": "red stop-line reasons",
+          "expected": true,
+          "actual": "STOP_LINE_APPROACH,STOP_LINE_APPROACH,STOP_LINE_APPROACH,STOP_LINE_APPROACH,STOP_LINE_APPROACH,STOP_LINE_APPROACH,STOP_LINE_APPROACH,STOP_LINE_APPROACH,STOP_LINE_APPROACH,STOP_LINE_APPROACH",
+          "pass": true,
+          "detail": "the cautious profile reports the authored stop line"
+        },
+        {
+          "name": "green releases observed",
+          "expected": true,
+          "actual": 10,
+          "pass": true,
+          "detail": "GREEN_RELEASE observed"
+        },
+        {
+          "name": "green release reasons",
+          "expected": true,
+          "actual": "GREEN_RELEASE,GREEN_RELEASE,GREEN_RELEASE,GREEN_RELEASE,GREEN_RELEASE,GREEN_RELEASE,GREEN_RELEASE,GREEN_RELEASE,GREEN_RELEASE,GREEN_RELEASE",
+          "pass": true,
+          "detail": "the green phase releases the stop"
+        },
+        {
+          "name": "oracle mismatches",
+          "expected": 0,
+          "actual": 0,
+          "pass": true,
+          "detail": "every decision matches the independent050 oracle"
+        },
+        {
+          "name": "input calls",
+          "expected": 120,
+          "actual": 120,
+          "pass": true,
+          "detail": "input remains60Hz"
+        },
+        {
+          "name": "physics calls",
+          "expected": 120,
+          "actual": 120,
+          "pass": true,
+          "detail": "physics remains60Hz"
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "stop-rule-profiles",
+      "behavior": "stop",
+      "title": "Full stop profile dwells while rolling profile does not invent a stop",
+      "oracle": "referenceStop (051 full/rolling sample, offset, dwell, crossing)",
+      "ticks": 360,
+      "checks": [
+        {
+          "name": "cautious stop state",
+          "expected": true,
+          "actual": "STOP,STOP,STOP,STOP,STOP,STOP,STOP,STOP,STOP,STOP,STOP,STOP,STOP,FOLLOW,FOLLOW,FOLLOW,STOP,FOLLOW,FOLLOW,FOLLOW,FOLLOW,FOLLOW,FOLLOW,FOLLOW,FOLLOW,FOLLOW,FOLLOW,FOLLOW,FOLLOW,FOLLOW",
+          "pass": true,
+          "detail": "full-stop profile stops"
+        },
+        {
+          "name": "cautious dwell release",
+          "expected": true,
+          "actual": "STOP_APPROACH,STOP_APPROACH,STOP_APPROACH,STOP_APPROACH,STOP_APPROACH,STOP_APPROACH,STOP_APPROACH,STOP_APPROACH,DWELL_IN_PROGRESS,DWELL_IN_PROGRESS,DWELL_IN_PROGRESS,DWELL_IN_PROGRESS,DWELL_IN_PROGRESS,DWELL_SATISFIED,DWELL_SATISFIED,DWELL_SATISFIED,STOP_HOLD,STOP_LINE_CROSSED,STOP_LINE_CROSSED,STOP_LINE_CROSSED,STOP_LINE_CROSSED,STOP_LINE_CROSSED,STOP_LINE_CROSSED,STOP_LINE_CROSSED,STOP_LINE_CROSSED,STOP_LINE_CROSSED,STOP_LINE_CROSSED,STOP_LINE_CROSSED,STOP_LINE_CROSSED,STOP_LINE_CROSSED",
+          "pass": true,
+          "detail": "release only after the configured stationary proof"
+        },
+        {
+          "name": "cautious final state",
+          "expected": "FOLLOW",
+          "actual": "FOLLOW",
+          "pass": true,
+          "detail": "the release returns the ordinary chain"
+        },
+        {
+          "name": "cautious oracle mismatches",
+          "expected": 0,
+          "actual": 0,
+          "pass": true,
+          "detail": "every cautious decision matches the independent051 oracle"
+        },
+        {
+          "name": "rolling never requests a stop",
+          "expected": true,
+          "actual": "FOLLOW,FOLLOW,FOLLOW,FOLLOW,FOLLOW,FOLLOW,FOLLOW,FOLLOW,FOLLOW,FOLLOW,FOLLOW,FOLLOW,FOLLOW,FOLLOW,FOLLOW,FOLLOW,FOLLOW,FOLLOW,FOLLOW,FOLLOW,FOLLOW,FOLLOW,FOLLOW,FOLLOW,FOLLOW,FOLLOW,FOLLOW,FOLLOW,FOLLOW,FOLLOW",
+          "pass": true,
+          "detail": "the rolling profile is distinguished without a hidden clamp"
+        },
+        {
+          "name": "rolling oracle mismatches",
+          "expected": 0,
+          "actual": 0,
+          "pass": true,
+          "detail": "every rolling decision matches the independent051 oracle"
+        },
+        {
+          "name": "bridge availability",
+          "expected": 0,
+          "actual": 0,
+          "pass": true,
+          "detail": "real observations produce facts"
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "route-junction-cautious",
+      "behavior": "cruise/signals/accelerate",
+      "title": "Cautious taxi stops at the red line and crosses on green",
+      "oracle": "referenceSignal + referenceCruise + referenceBehavior over the real044/045/046/047 chain",
+      "ticks": 600,
+      "checks": [
+        {
+          "name": "route authored length",
+          "expected": true,
+          "actual": 100,
+          "pass": true,
+          "detail": "the route has an approach before the line"
+        },
+        {
+          "name": "route crossed the stop line",
+          "expected": true,
+          "actual": 418,
+          "pass": true,
+          "detail": "the authored route reaches the intersection line"
+        },
+        {
+          "name": "route oracle mismatches",
+          "expected": true,
+          "actual": 0,
+          "pass": true,
+          "detail": "050 and046 decisions match the independent formulas on the real chain"
+        },
+        {
+          "name": "route consequence profile",
+          "expected": "STOP",
+          "actual": "STOP",
+          "pass": true,
+          "detail": "cautious profile stops; risky profile keeps the cruise target"
+        },
+        {
+          "name": "crossed signal state",
+          "expected": "GREEN",
+          "actual": "GREEN",
+          "pass": true,
+          "detail": "the cautious profile waits for green"
+        },
+        {
+          "name": "crossing happened on the expected side of the phase",
+          "expected": true,
+          "actual": 418,
+          "pass": true,
+          "detail": "red phase is the first240 authored ticks"
+        },
+        {
+          "name": "cautious stop line reason",
+          "expected": true,
+          "actual": true,
+          "pass": true,
+          "detail": "050 reports a stop-line decision at the authored line"
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "route-junction-risky",
+      "behavior": "cruise/signals/accelerate",
+      "title": "Risky taxi commits and crosses on red with a documented reason",
+      "oracle": "referenceSignal + referenceCruise + referenceBehavior over the real044/045/046/047 chain",
+      "ticks": 600,
+      "checks": [
+        {
+          "name": "route authored length",
+          "expected": true,
+          "actual": 100,
+          "pass": true,
+          "detail": "the route has an approach before the line"
+        },
+        {
+          "name": "route crossed the stop line",
+          "expected": true,
+          "actual": 146,
+          "pass": true,
+          "detail": "the authored route reaches the intersection line"
+        },
+        {
+          "name": "route oracle mismatches",
+          "expected": true,
+          "actual": 0,
+          "pass": true,
+          "detail": "050 and046 decisions match the independent formulas on the real chain"
+        },
+        {
+          "name": "route consequence profile",
+          "expected": "FOLLOW",
+          "actual": "FOLLOW",
+          "pass": true,
+          "detail": "cautious profile stops; risky profile keeps the cruise target"
+        },
+        {
+          "name": "crossed signal state",
+          "expected": "RED",
+          "actual": "RED",
+          "pass": true,
+          "detail": "the risky profile crosses during its committed red"
+        },
+        {
+          "name": "crossing happened on the expected side of the phase",
+          "expected": true,
+          "actual": 146,
+          "pass": true,
+          "detail": "red phase is the first240 authored ticks"
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "follow-leader",
+      "behavior": "follow",
+      "title": "Following a stopped and a moving leader over the real044/045/046 chain",
+      "oracle": "referenceFollowing (048 queue/headway gaps and speed formula)",
+      "ticks": 12,
+      "checks": [
+        {
+          "name": "stationary reason",
+          "expected": "QUEUE_GAP",
+          "actual": "QUEUE_GAP",
+          "pass": true,
+          "detail": "a stopped leader uses the queue gap"
+        },
+        {
+          "name": "stationary desired gap",
+          "expected": 2,
+          "actual": 2,
+          "pass": true,
+          "detail": "052/048 queue formula"
+        },
+        {
+          "name": "stationary following speed",
+          "expected": 6.6,
+          "actual": 6.600000000000005,
+          "pass": true,
+          "detail": "048 speed/gap formula"
+        },
+        {
+          "name": "stationary leader id",
+          "expected": "leader",
+          "actual": "leader",
+          "pass": true,
+          "detail": "real044 leader identity"
+        },
+        {
+          "name": "moving reason",
+          "expected": "FOLLOWING_GAP",
+          "actual": "FOLLOWING_GAP",
+          "pass": true,
+          "detail": "a moving leader uses headway"
+        },
+        {
+          "name": "moving desired gap",
+          "expected": 17.4,
+          "actual": 17.4,
+          "pass": true,
+          "detail": "048 headway formula"
+        },
+        {
+          "name": "moving following speed",
+          "expected": 8.42,
+          "actual": 8.42000000000001,
+          "pass": true,
+          "detail": "048 speed/gap formula"
+        },
+        {
+          "name": "moving cruise bound",
+          "expected": true,
+          "actual": true,
+          "pass": true,
+          "detail": "following can only reduce the046 target"
+        },
+        {
+          "name": "command identity",
+          "expected": "taxi-follow",
+          "actual": "taxi-follow",
+          "pass": true,
+          "detail": "real047 returns a common024 command for the actor"
+        },
+        {
+          "name": "command finite",
+          "expected": true,
+          "actual": 0,
+          "pass": true,
+          "detail": "no nonfinite actuator command"
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "yield-conflict",
+      "behavior": "yield",
+      "title": "Yield refuses a short priority interval and accepts a clear one",
+      "oracle": "referenceYield (052 signed interval gap against the published yield_time_gap)",
+      "ticks": 60,
+      "checks": [
+        {
+          "name": "yield action",
+          "expected": "REFUSE",
+          "actual": "REFUSE",
+          "pass": true,
+          "detail": "052 interval separation and complete-horizon rule"
+        },
+        {
+          "name": "yield reason",
+          "expected": "GAP_REFUSED",
+          "actual": "GAP_REFUSED",
+          "pass": true,
+          "detail": "052 documented reason"
+        },
+        {
+          "name": "yield minimum gap",
+          "expected": 2,
+          "actual": 2,
+          "pass": true,
+          "detail": "signed interval separation"
+        },
+        {
+          "name": "yield behavior state",
+          "expected": "YIELD",
+          "actual": "YIELD",
+          "pass": true,
+          "detail": "045 composition of the real052 decision"
+        },
+        {
+          "name": "yield action",
+          "expected": "ACCEPT",
+          "actual": "ACCEPT",
+          "pass": true,
+          "detail": "052 interval separation and complete-horizon rule"
+        },
+        {
+          "name": "yield reason",
+          "expected": "GAP_ACCEPTED",
+          "actual": "GAP_ACCEPTED",
+          "pass": true,
+          "detail": "052 documented reason"
+        },
+        {
+          "name": "yield minimum gap",
+          "expected": 3.5,
+          "actual": 3.5,
+          "pass": true,
+          "detail": "signed interval separation"
+        },
+        {
+          "name": "yield behavior state",
+          "expected": "FOLLOW",
+          "actual": "FOLLOW",
+          "pass": true,
+          "detail": "045 composition of the real052 decision"
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "lane-change",
+      "behavior": "lane-change",
+      "title": "Optional overtake validates, keeps continuity and preserves the cruise reference",
+      "oracle": "referenceLaneChange (053 gaps/cooldown/continuity/access-filtered adjacency)",
+      "ticks": 60,
+      "checks": [
+        {
+          "name": "lane1 action",
+          "expected": "CHANGE",
+          "actual": "CHANGE",
+          "pass": true,
+          "detail": "053 start gates and continuity"
+        },
+        {
+          "name": "lane1 reason",
+          "expected": "OPTIONAL_CHANGE_VALIDATED",
+          "actual": "OPTIONAL_CHANGE_VALIDATED",
+          "pass": true,
+          "detail": "053 documented reason"
+        },
+        {
+          "name": "lane1 behavior",
+          "expected": "CHANGE_LANE",
+          "actual": "CHANGE_LANE",
+          "pass": true,
+          "detail": "045 composition of the real053 decision"
+        },
+        {
+          "name": "lane2 action",
+          "expected": "CHANGE",
+          "actual": "CHANGE",
+          "pass": true,
+          "detail": "053 start gates and continuity"
+        },
+        {
+          "name": "lane2 reason",
+          "expected": "COMMITTED_CONTINUITY",
+          "actual": "COMMITTED_CONTINUITY",
+          "pass": true,
+          "detail": "053 documented reason"
+        },
+        {
+          "name": "lane2 behavior",
+          "expected": "CHANGE_LANE",
+          "actual": "CHANGE_LANE",
+          "pass": true,
+          "detail": "045 composition of the real053 decision"
+        },
+        {
+          "name": "lane3 action",
+          "expected": "CHANGE",
+          "actual": "CHANGE",
+          "pass": true,
+          "detail": "053 start gates and continuity"
+        },
+        {
+          "name": "lane3 reason",
+          "expected": "COMMITTED_CONTINUITY",
+          "actual": "COMMITTED_CONTINUITY",
+          "pass": true,
+          "detail": "053 documented reason"
+        },
+        {
+          "name": "lane3 behavior",
+          "expected": "CHANGE_LANE",
+          "actual": "CHANGE_LANE",
+          "pass": true,
+          "detail": "045 composition of the real053 decision"
+        },
+        {
+          "name": "CHANGE_LANE preserves cruise",
+          "expected": true,
+          "actual": true,
+          "pass": true,
+          "detail": "046 keeps the style reference"
+        },
+        {
+          "name": "CHANGE_LANE reason not zeroed",
+          "expected": true,
+          "actual": "FREE_ROAD",
+          "pass": true,
+          "detail": "validated lane change is not a hold"
+        },
+        {
+          "name": "lane4 action",
+          "expected": "CHANGE",
+          "actual": "CHANGE",
+          "pass": true,
+          "detail": "053 start gates and continuity"
+        },
+        {
+          "name": "lane4 reason",
+          "expected": "COMMITTED_CONTINUITY",
+          "actual": "COMMITTED_CONTINUITY",
+          "pass": true,
+          "detail": "053 documented reason"
+        },
+        {
+          "name": "lane4 behavior",
+          "expected": "CHANGE_LANE",
+          "actual": "CHANGE_LANE",
+          "pass": true,
+          "detail": "045 composition of the real053 decision"
+        },
+        {
+          "name": "lane5 action",
+          "expected": "CHANGE",
+          "actual": "CHANGE",
+          "pass": true,
+          "detail": "053 start gates and continuity"
+        },
+        {
+          "name": "lane5 reason",
+          "expected": "COMMITTED_CONTINUITY",
+          "actual": "COMMITTED_CONTINUITY",
+          "pass": true,
+          "detail": "053 documented reason"
+        },
+        {
+          "name": "lane5 behavior",
+          "expected": "CHANGE_LANE",
+          "actual": "CHANGE_LANE",
+          "pass": true,
+          "detail": "045 composition of the real053 decision"
+        },
+        {
+          "name": "lane6 action",
+          "expected": "CHANGE",
+          "actual": "CHANGE",
+          "pass": true,
+          "detail": "053 start gates and continuity"
+        },
+        {
+          "name": "lane6 reason",
+          "expected": "COMMITTED_CONTINUITY",
+          "actual": "COMMITTED_CONTINUITY",
+          "pass": true,
+          "detail": "053 documented reason"
+        },
+        {
+          "name": "lane6 behavior",
+          "expected": "CHANGE_LANE",
+          "actual": "CHANGE_LANE",
+          "pass": true,
+          "detail": "045 composition of the real053 decision"
+        },
+        {
+          "name": "lane7 action",
+          "expected": "NO_CHANGE",
+          "actual": "NO_CHANGE",
+          "pass": true,
+          "detail": "053 start gates and continuity"
+        },
+        {
+          "name": "lane7 reason",
+          "expected": "COMMITMENT_RELEASED",
+          "actual": "COMMITMENT_RELEASED",
+          "pass": true,
+          "detail": "053 documented reason"
+        },
+        {
+          "name": "lane7 behavior",
+          "expected": "FOLLOW",
+          "actual": "FOLLOW",
+          "pass": true,
+          "detail": "045 composition of the real053 decision"
+        },
+        {
+          "name": "lane8 action",
+          "expected": "NO_CHANGE",
+          "actual": "NO_CHANGE",
+          "pass": true,
+          "detail": "053 start gates and continuity"
+        },
+        {
+          "name": "lane8 reason",
+          "expected": "COOLDOWN_ACTIVE",
+          "actual": "COOLDOWN_ACTIVE",
+          "pass": true,
+          "detail": "053 documented reason"
+        },
+        {
+          "name": "lane8 behavior",
+          "expected": "FOLLOW",
+          "actual": "FOLLOW",
+          "pass": true,
+          "detail": "045 composition of the real053 decision"
+        },
+        {
+          "name": "lane decision count",
+          "expected": 10,
+          "actual": 10,
+          "pass": true,
+          "detail": "six-phase cadence"
+        },
+        {
+          "name": "lane committed released",
+          "expected": null,
+          "actual": null,
+          "pass": true,
+          "detail": "explicit release when the target is no longer adjacent"
+        },
+        {
+          "name": "lane cooldown preserved",
+          "expected": true,
+          "actual": true,
+          "pass": true,
+          "detail": "the release preserves the cooldown latch"
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "blocked-recovery",
+      "behavior": "blocked",
+      "title": "A structural block reroutes through the real041 planner and releases to FOLLOW",
+      "oracle": "referenceBlockedCause/referenceBlockedFirstAction (054 cause and action tables)",
+      "ticks": 120,
+      "checks": [
+        {
+          "name": "blocked cause",
+          "expected": "NO_PROGRESS_BLOCKED_LANE_AHEAD",
+          "actual": "NO_PROGRESS_BLOCKED_LANE_AHEAD",
+          "pass": true,
+          "detail": "054 structural cause priority"
+        },
+        {
+          "name": "blocked first action",
+          "expected": "REQUEST_REROUTE",
+          "actual": "REQUEST_REROUTE",
+          "pass": true,
+          "detail": "054 ordered recovery table"
+        },
+        {
+          "name": "blocked fact",
+          "expected": true,
+          "actual": true,
+          "pass": true,
+          "detail": "BLOCKED is raised for the structural cause"
+        },
+        {
+          "name": "blocked path changed",
+          "expected": true,
+          "actual": [
+            "lane-in",
+            "lane-b",
+            "lane-out"
+          ],
+          "pass": true,
+          "detail": "real041 reroute leaves the blocked lane"
+        },
+        {
+          "name": "blocked alternative path",
+          "expected": "[\"lane-in\",\"lane-b\",\"lane-out\"]",
+          "actual": "[\"lane-in\",\"lane-b\",\"lane-out\"]",
+          "pass": true,
+          "detail": "the legal alternative is the reroute consequence"
+        },
+        {
+          "name": "blocked initial FSM",
+          "expected": "BLOCKED",
+          "actual": "BLOCKED",
+          "pass": true,
+          "detail": "045 consumes routeBlocked"
+        },
+        {
+          "name": "blocked released to FOLLOW",
+          "expected": true,
+          "actual": "BLOCKED,FOLLOW,FOLLOW,FOLLOW,FOLLOW,FOLLOW,FOLLOW,FOLLOW,FOLLOW,FOLLOW,FOLLOW,FOLLOW,FOLLOW,FOLLOW,FOLLOW,FOLLOW,FOLLOW,FOLLOW,FOLLOW,FOLLOW",
+          "pass": true,
+          "detail": "progress releases the episode"
+        },
+        {
+          "name": "blocked release hold",
+          "expected": 12,
+          "actual": 12,
+          "pass": true,
+          "detail": "documented hysteresis"
+        },
+        {
+          "name": "manual authority plan",
+          "expected": "MANUAL_AUTHORITY",
+          "actual": "MANUAL_AUTHORITY",
+          "pass": true,
+          "detail": "054 does not plan over MANUAL"
+        },
+        {
+          "name": "reentry action",
+          "expected": "DRIVE_TO_LANE",
+          "actual": "DRIVE_TO_LANE",
+          "pass": true,
+          "detail": "off-centre re-entry is a driving request"
+        },
+        {
+          "name": "reentry no teleport",
+          "expected": false,
+          "actual": false,
+          "pass": true,
+          "detail": "the module has no pose writer"
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "accelerate-native",
+      "behavior": "accelerate",
+      "title": "Real024/Rapier sedan launch from the real046/047 target chain",
+      "oracle": "contract invariants: positive target -> positive throttle, speed/path grow, no contact",
+      "ticks": 180,
+      "checks": [
+        {
+          "name": "native rows",
+          "expected": 180,
+          "actual": 180,
+          "pass": true,
+          "detail": "the authored180-tick launch"
+        },
+        {
+          "name": "native launch moved",
+          "expected": true,
+          "actual": 5.927877902984619,
+          "pass": true,
+          "detail": "positive command produces real motion"
+        },
+        {
+          "name": "native launch accelerated",
+          "expected": true,
+          "actual": 4.14284730880828,
+          "pass": true,
+          "detail": "speed grew from standstill"
+        },
+        {
+          "name": "native throttle observed",
+          "expected": true,
+          "actual": 0,
+          "pass": true,
+          "detail": "positive acceleration maps to throttle"
+        },
+        {
+          "name": "native no obstacle impact",
+          "expected": 0,
+          "actual": 0,
+          "pass": true,
+          "detail": "the launch fixture has no contact"
+        },
+        {
+          "name": "native tick cadence",
+          "expected": true,
+          "actual": 180,
+          "pass": true,
+          "detail": "consecutive60Hz realization"
+        },
+        {
+          "name": "native target refresh",
+          "expected": true,
+          "actual": 180,
+          "pass": true,
+          "detail": "real046 targets reached047"
+        },
+        {
+          "name": "native no braking launch",
+          "expected": true,
+          "actual": -1,
+          "pass": true,
+          "detail": "a clear launch never brakes"
+        }
+      ],
+      "pass": true
+    }
+  ],
+  "negativeCases": [
+    {
+      "id": "wrong-context-actor",
+      "behavior": "context",
+      "title": "Foreign context actor is rejected",
+      "stimulus": "context subject taxi-negative evaluated for taxi-other",
+      "expected": "fail closed",
+      "actual": "FOREIGN_CONTEXT/FOREIGN_CONTEXT",
+      "checks": [
+        {
+          "name": "045 reason",
+          "expected": "FOREIGN_CONTEXT",
+          "actual": "FOREIGN_CONTEXT",
+          "pass": true,
+          "detail": "identity fence"
+        },
+        {
+          "name": "045 state",
+          "expected": "BLOCKED",
+          "actual": "BLOCKED",
+          "pass": true,
+          "detail": "context failure precedes behavior"
+        },
+        {
+          "name": "046 reason",
+          "expected": "FOREIGN_CONTEXT",
+          "actual": "FOREIGN_CONTEXT",
+          "pass": true,
+          "detail": "046 fences the same identity"
+        },
+        {
+          "name": "046 target",
+          "expected": 0,
+          "actual": 0,
+          "pass": true,
+          "detail": "no target is fabricated"
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "stale-context",
+      "behavior": "context",
+      "title": "Stale and future context ticks are rejected",
+      "stimulus": "sourceTick 1 and future sourceTick 11 at decision tick 10",
+      "expected": "fail closed",
+      "actual": "STALE_CONTEXT/STALE_CONTEXT",
+      "checks": [
+        {
+          "name": "045 stale reason",
+          "expected": "STALE_CONTEXT",
+          "actual": "STALE_CONTEXT",
+          "pass": true,
+          "detail": "six-tick age fence"
+        },
+        {
+          "name": "045 stale state",
+          "expected": "BLOCKED",
+          "actual": "BLOCKED",
+          "pass": true,
+          "detail": "no driving on stale data"
+        },
+        {
+          "name": "046 stale target",
+          "expected": 0,
+          "actual": 0,
+          "pass": true,
+          "detail": "no target from stale data"
+        },
+        {
+          "name": "045 future reason",
+          "expected": "STALE_CONTEXT",
+          "actual": "STALE_CONTEXT",
+          "pass": true,
+          "detail": "future observations are stale"
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "foreign-behavior-tick",
+      "behavior": "context",
+      "title": "A behavior decision from another tick is rejected",
+      "stimulus": "045 decision tick10 used at046 tick16",
+      "expected": "fail closed",
+      "actual": "FOREIGN_OR_STALE_BEHAVIOR",
+      "checks": [
+        {
+          "name": "046 reason",
+          "expected": "FOREIGN_OR_STALE_BEHAVIOR",
+          "actual": "FOREIGN_OR_STALE_BEHAVIOR",
+          "pass": true,
+          "detail": "exact decision tick fence"
+        },
+        {
+          "name": "046 target",
+          "expected": 0,
+          "actual": 0,
+          "pass": true,
+          "detail": "no target is borrowed across ticks"
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "missing-leader",
+      "behavior": "follow",
+      "title": "A missing leader cannot fabricate a gap target",
+      "stimulus": "no leader in the real044 snapshot",
+      "expected": "fail closed",
+      "actual": "NO_LEADER",
+      "checks": [
+        {
+          "name": "following reason",
+          "expected": "NO_LEADER",
+          "actual": "NO_LEADER",
+          "pass": true,
+          "detail": "absence is explicit"
+        },
+        {
+          "name": "following target",
+          "expected": 10,
+          "actual": 10,
+          "pass": true,
+          "detail": "the cruise target is preserved"
+        },
+        {
+          "name": "leader",
+          "expected": null,
+          "actual": null,
+          "pass": true,
+          "detail": "no leader identity is invented"
+        },
+        {
+          "name": "gap",
+          "expected": null,
+          "actual": null,
+          "pass": true,
+          "detail": "no gap is invented"
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "signal-unobservable",
+      "behavior": "signals",
+      "title": "An unobservable signal requests no stop",
+      "stimulus": "RED observation older than six ticks",
+      "expected": "fail closed",
+      "actual": "UNAVAILABLE/MISSING_POLICY_FACTS",
+      "checks": [
+        {
+          "name": "signal action",
+          "expected": "UNKNOWN",
+          "actual": "UNKNOWN",
+          "pass": true,
+          "detail": "unknown is explicit"
+        },
+        {
+          "name": "signal reason",
+          "expected": "UNAVAILABLE",
+          "actual": "UNAVAILABLE",
+          "pass": true,
+          "detail": "no signal is invented"
+        },
+        {
+          "name": "stop requested",
+          "expected": false,
+          "actual": false,
+          "pass": true,
+          "detail": "no fabricated stop"
+        },
+        {
+          "name": "sample",
+          "expected": null,
+          "actual": null,
+          "pass": true,
+          "detail": "no sample is drawn"
+        },
+        {
+          "name": "behavior facts",
+          "expected": null,
+          "actual": null,
+          "pass": true,
+          "detail": "no policy fact is fabricated"
+        },
+        {
+          "name": "045 state",
+          "expected": "BLOCKED",
+          "actual": "BLOCKED",
+          "pass": true,
+          "detail": "missing policy facts fail closed"
+        },
+        {
+          "name": "045 reason",
+          "expected": "MISSING_POLICY_FACTS",
+          "actual": "MISSING_POLICY_FACTS",
+          "pass": true,
+          "detail": "the caller cannot drive on absent facts"
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "stop-leader-induced",
+      "behavior": "stop",
+      "title": "A leader hold never becomes the driver STOP intent",
+      "stimulus": "leaderStop LEADER_OR_QUEUE with no037 opportunity",
+      "expected": "fail closed",
+      "actual": "LEADER_STOP_NOT_STOP_INTENT",
+      "checks": [
+        {
+          "name": "stop action",
+          "expected": "NO_STOP",
+          "actual": "NO_STOP",
+          "pass": true,
+          "detail": "the leader path is separate"
+        },
+        {
+          "name": "stop reason",
+          "expected": "LEADER_STOP_NOT_STOP_INTENT",
+          "actual": "LEADER_STOP_NOT_STOP_INTENT",
+          "pass": true,
+          "detail": "documented separation"
+        },
+        {
+          "name": "stop requested",
+          "expected": false,
+          "actual": false,
+          "pass": true,
+          "detail": "no false driver intent"
+        },
+        {
+          "name": "leader induced",
+          "expected": true,
+          "actual": true,
+          "pass": true,
+          "detail": "the cause stays visible"
+        },
+        {
+          "name": "045 state",
+          "expected": "FOLLOW",
+          "actual": "FOLLOW",
+          "pass": true,
+          "detail": "the queue hold is a normal follow"
+        },
+        {
+          "name": "045 reason",
+          "expected": "FOLLOW_LEADER",
+          "actual": "FOLLOW_LEADER",
+          "pass": true,
+          "detail": "the leader is still reported"
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "lane-local-only",
+      "behavior": "lane-change",
+      "title": "Local-only coverage cannot approve a lane change",
+      "stimulus": "coverage LOCAL_ONLY",
+      "expected": "fail closed",
+      "actual": "INCOMPLETE_LANE_COVERAGE",
+      "checks": [
+        {
+          "name": "lane action",
+          "expected": "NO_CHANGE",
+          "actual": "NO_CHANGE",
+          "pass": true,
+          "detail": "local coverage is not horizon-wide"
+        },
+        {
+          "name": "lane reason",
+          "expected": "INCOMPLETE_LANE_COVERAGE",
+          "actual": "INCOMPLETE_LANE_COVERAGE",
+          "pass": true,
+          "detail": "documented refusal"
+        },
+        {
+          "name": "behavior fact",
+          "expected": "NONE",
+          "actual": "NONE",
+          "pass": true,
+          "detail": "no CHANGE_LANE fact is fabricated"
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "yield-local-only",
+      "behavior": "yield",
+      "title": "Local-only traffic cannot certify a priority gap",
+      "stimulus": "coverage LOCAL_ONLY with a large local gap",
+      "expected": "fail closed",
+      "actual": "UNAVAILABLE",
+      "checks": [
+        {
+          "name": "yield action",
+          "expected": "UNKNOWN",
+          "actual": "UNKNOWN",
+          "pass": true,
+          "detail": "UNKNOWN dominates"
+        },
+        {
+          "name": "yield reason",
+          "expected": "UNAVAILABLE",
+          "actual": "UNAVAILABLE",
+          "pass": true,
+          "detail": "documented unavailability"
+        },
+        {
+          "name": "yield facts",
+          "expected": null,
+          "actual": null,
+          "pass": true,
+          "detail": "no yield fact is fabricated"
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "blocked-missing-graph",
+      "behavior": "blocked",
+      "title": "A missing graph abstains without a blocked claim",
+      "stimulus": "graph null, speed0",
+      "expected": "fail closed",
+      "actual": "MISSING_LANE_GRAPH",
+      "checks": [
+        {
+          "name": "blocked reason",
+          "expected": "MISSING_LANE_GRAPH",
+          "actual": "MISSING_LANE_GRAPH",
+          "pass": true,
+          "detail": "explicit abstention"
+        },
+        {
+          "name": "blocked boolean",
+          "expected": false,
+          "actual": false,
+          "pass": true,
+          "detail": "no fabricated BLOCKED"
+        },
+        {
+          "name": "reroute",
+          "expected": null,
+          "actual": null,
+          "pass": true,
+          "detail": "no invented route"
+        },
+        {
+          "name": "recovery",
+          "expected": null,
+          "actual": null,
+          "pass": true,
+          "detail": "no invented recovery"
+        },
+        {
+          "name": "behavior facts",
+          "expected": null,
+          "actual": null,
+          "pass": true,
+          "detail": "no routeBlocked fact"
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "profile-version-mismatch",
+      "behavior": "cruise",
+      "title": "A foreign profile version does not drive the target",
+      "stimulus": "045 facts from056-negative-v1, 046 profile056-negative-other-v1",
+      "expected": "fail closed",
+      "actual": "PROFILE_VERSION_MISMATCH",
+      "checks": [
+        {
+          "name": "046 reason",
+          "expected": "PROFILE_VERSION_MISMATCH",
+          "actual": "PROFILE_VERSION_MISMATCH",
+          "pass": true,
+          "detail": "exact version fence"
+        },
+        {
+          "name": "046 target",
+          "expected": 0,
+          "actual": 0,
+          "pass": true,
+          "detail": "no target from a foreign policy version"
+        }
+      ],
+      "pass": true
+    }
+  ],
+  "mutationProbes": [
+    {
+      "name": "mutation cruise ignores style delta",
+      "expected": true,
+      "actual": "{\"expected\":11.5,\"wrong\":10}",
+      "pass": true,
+      "detail": "a posted-limit-only implementation would fail"
+    },
+    {
+      "name": "mutation following ignores leader",
+      "expected": true,
+      "actual": "{\"expected\":6.6,\"wrong\":8}",
+      "pass": true,
+      "detail": "a cruise-only implementation would fail"
+    },
+    {
+      "name": "mutation signal always stops",
+      "expected": true,
+      "actual": "{\"expected\":\"PROCEED\",\"wrong\":\"STOP\"}",
+      "pass": true,
+      "detail": "a red-only implementation would fail"
+    },
+    {
+      "name": "mutation lane accepts local coverage",
+      "expected": true,
+      "actual": "{\"expected\":\"NO_CHANGE\",\"wrong\":\"CHANGE\"}",
+      "pass": true,
+      "detail": "a local-only implementation would fail"
+    },
+    {
+      "name": "mutation yield ignores the gap",
+      "expected": true,
+      "actual": "ACCEPT",
+      "pass": true,
+      "detail": "an always-accept implementation would fail"
+    }
+  ],
+  "summary": {
+    "scenarios": 12,
+    "scenariosPassed": 12,
+    "negativeCases": 10,
+    "negativeCasesPassed": 10,
+    "mutationProbes": 5,
+    "mutationProbesPassed": 5,
+    "pass": true
+  }
+}
