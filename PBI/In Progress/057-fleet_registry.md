@@ -1,12 +1,12 @@
 ---
 id: "057"
 title: "Registry flotă și mașini civile"
-status: "To Do"
+status: "In Progress"
 release: "V1"
 module: "Flotă și curse"
 depends_on: ["056","023"]
-owner: null
-started_at: null
+owner: "Codex gpt-6-luna medium loop-057"
+started_at: "2026-10-20T14:03:52+03:00"
 completed_at: null
 ---
 
