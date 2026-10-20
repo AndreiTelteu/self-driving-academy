@@ -1,0 +1,40 @@
+# PBI 060 targeted test transcript
+
+volta run --node 24.21.0 -- node --import ./scripts/register-typescript.mjs --test tests/fleet/dispatcher.test.ts
+
+(node:36600) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ 060 assigns the real planner cheapest taxi and replans both legs at assignment time (206.2201ms)
+✔ 060 never treats blocked, damaged, civilian or busy vehicles as available (151.2574ms)
+✔ 060 never assigns one request or one taxi twice (143.0283ms)
+✔ 060 replans the trip instead of reusing the 059 creation snapshot (323.0118ms)
+✔ 060 breaks equal cost by stable taxi id regardless of registry list order (172.5151ms)
+✔ 060 bounds per-step assignments, candidates and real planner searches (475.2951ms)
+✔ 060 claims and releases explicitly, with closed release reasons and no stale ticks (968.7861ms)
+✔ 060 disposal returns owned state to zero and never disposes injected contracts (131.7737ms)
+✔ 060 never reads a wall clock, ambient randomness or a renderer (261.3512ms)
+✔ 060 exposes only the closed vocabularies (0.3567ms)
+✔ 060 committed evidence report is the current dispatcher transcript (2975.734ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6077.65
+exit=0
+
+# Full project suite (same commit)
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm test
+
+ℹ tests 1201
+ℹ suites 1
+ℹ pass 1201
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 28045.5234
+exit=0

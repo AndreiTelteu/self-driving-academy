@@ -1,0 +1,514 @@
+{
+  "version": "060-ride-dispatcher-v1",
+  "generatedBy": "npm run fleet:dispatch",
+  "oracleRule": "A pending 059 request is claimed by the available 057 taxi whose fresh 041 taxi->pickup cost is lowest; the pickup->dropoff leg is replanned at assignment, ties fall back to the stable taxi id and every claim is bounded and explicitly released.",
+  "limits": {
+    "version": "060-ride-dispatcher-v1",
+    "assignmentsPerStep": 4,
+    "maximumAssignmentsPerStep": 16,
+    "taxiCandidates": 30,
+    "routeSearchesPerStep": 128,
+    "maximumRouteSearchesPerStep": 256,
+    "releaseHistory": 128,
+    "rejectionHistory": 128
+  },
+  "fleet": {
+    "taxis": 24,
+    "civilians": 20,
+    "serviceable": 21,
+    "blocked": 1,
+    "damaged": 1,
+    "offline": 1
+  },
+  "demand": {
+    "windows": 3,
+    "requests": 32,
+    "firstSpawnTick": 0,
+    "lastSpawnTick": 1425
+  },
+  "simulation": {
+    "ticks": 1501,
+    "assignments": 32,
+    "uniqueRequests": 32,
+    "uniqueTaxis": 6,
+    "releases": 32,
+    "plannerSearches": 692,
+    "maxConcurrent": 2,
+    "duplicateTaxis": false,
+    "firstAssignmentTick": 0,
+    "lastAssignmentTick": 1425,
+    "blockedTaxiAssigned": false,
+    "damagedTaxiAssigned": false,
+    "offlineTaxiAssigned": false,
+    "fifoMatchesDemandOrder": true
+  },
+  "costs": {
+    "recomputedMatches": 32,
+    "recomputedChecked": 32,
+    "minPickupSeconds": 0,
+    "maxPickupSeconds": 86.303571,
+    "totalPickupSeconds": 1502.886591,
+    "totalTripSeconds": 2239.91431
+  },
+  "tieBreak": {
+    "equalCost": true,
+    "chosenTaxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0001",
+    "expectedTaxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0001",
+    "sameResultWithReversedPositions": true
+  },
+  "staleRoute": {
+    "validationBefore": "READY",
+    "validationAfter": "READY",
+    "assigned": 0,
+    "reason": "TRIP_UNREACHABLE",
+    "routeStatus": "BLOCKED",
+    "pendingAfter": 0
+  },
+  "pickupUnreachable": {
+    "assigned": 0,
+    "reason": "PICKUP_UNREACHABLE",
+    "pendingAfter": 1,
+    "plannerSearches": 25
+  },
+  "noTaxi": {
+    "assigned": 0,
+    "reason": "NO_TAXI",
+    "pendingAfter": 1,
+    "plannerSearches": 0
+  },
+  "noPosition": {
+    "assigned": 0,
+    "reason": "NO_POSITION",
+    "pendingAfter": 1
+  },
+  "bounds": {
+    "configuredSearches": 30,
+    "assignmentsInStep": 1,
+    "plannerSearches": 25,
+    "budgetExhausted": true,
+    "blockedReason": "ROUTE_BUDGET_EXHAUSTED",
+    "pendingAfter": 11,
+    "candidateLimit": 24,
+    "assignmentLimit": 16
+  },
+  "releaseReasons": [
+    {
+      "reason": "COMPLETED",
+      "statusAfter": "AVAILABLE",
+      "availableAfter": true
+    },
+    {
+      "reason": "CANCELLED",
+      "statusAfter": "AVAILABLE",
+      "availableAfter": true
+    },
+    {
+      "reason": "FAILED",
+      "statusAfter": "AVAILABLE",
+      "availableAfter": true
+    },
+    {
+      "reason": "TAXI_BLOCKED",
+      "statusAfter": "BLOCKED",
+      "availableAfter": false
+    },
+    {
+      "reason": "TAXI_DAMAGED",
+      "statusAfter": "DAMAGED",
+      "availableAfter": false
+    },
+    {
+      "reason": "TAXI_REMOVED",
+      "statusAfter": "OFFLINE",
+      "availableAfter": false
+    }
+  ],
+  "disposal": {
+    "disposed": true,
+    "assignments": 0,
+    "assigned": 0,
+    "routeSearches": 0,
+    "registryTaxis": 24,
+    "demandRequests": 32,
+    "plannerAlive": true
+  },
+  "determinism": {
+    "identical": true,
+    "checkCount": 32
+  },
+  "checks": [
+    {
+      "name": "version",
+      "expected": "060-ride-dispatcher-v1",
+      "actual": "060-ride-dispatcher-v1",
+      "pass": true,
+      "detail": "The dispatch contract has one versioned identity."
+    },
+    {
+      "name": "fleet",
+      "expected": {
+        "taxis": 24,
+        "civilians": 20
+      },
+      "actual": {
+        "taxis": 24,
+        "civilians": 20
+      },
+      "pass": true,
+      "detail": "Taxi candidates come from the real 057 registry, not a parallel population."
+    },
+    {
+      "name": "demand",
+      "expected": {
+        "windows": 3,
+        "requests": 32
+      },
+      "actual": {
+        "windows": 3,
+        "requests": 32
+      },
+      "pass": true,
+      "detail": "The queue is the real 059 schedule over the real 032 map."
+    },
+    {
+      "name": "assignments",
+      "expected": 32,
+      "actual": 32,
+      "pass": true,
+      "detail": "Every pending request is assigned exactly once over the simulated horizon."
+    },
+    {
+      "name": "unique-requests",
+      "expected": 32,
+      "actual": 32,
+      "pass": true,
+      "detail": "No request is assigned to two taxis."
+    },
+    {
+      "name": "request-identity",
+      "expected": 32,
+      "actual": 32,
+      "pass": true,
+      "detail": "The assignment sequence contains every 059 request identity once."
+    },
+    {
+      "name": "unique-taxis",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Assignments rotate over real taxis."
+    },
+    {
+      "name": "no-double-taxi",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "No taxi holds two active assignments at the same tick."
+    },
+    {
+      "name": "max-concurrent",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Concurrent claims never exceed the serviceable taxi population."
+    },
+    {
+      "name": "unavailable-never-assigned",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "BLOCKED, DAMAGED and OFFLINE taxis are never treated as available."
+    },
+    {
+      "name": "fifo",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Requests are claimed in the 059 spawnTick/requestId order."
+    },
+    {
+      "name": "releases",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Every assignment is released explicitly before the horizon ends."
+    },
+    {
+      "name": "planner-searches",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Every assignment performs a trip replan plus at least one pickup search."
+    },
+    {
+      "name": "cost-recomputed",
+      "expected": {
+        "checked": 32,
+        "matches": 32
+      },
+      "actual": {
+        "checked": 32,
+        "matches": 32
+      },
+      "pass": true,
+      "detail": "Recorded pickup and trip costs equal fresh 041 queries, not the 059 snapshot."
+    },
+    {
+      "name": "cost-range",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Pickup ETA is the real planner cost and varies by taxi position."
+    },
+    {
+      "name": "tie-break",
+      "expected": {
+        "equalCost": true,
+        "chosen": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0001",
+        "reversed": true
+      },
+      "actual": {
+        "equalCost": true,
+        "chosen": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0001",
+        "reversed": true
+      },
+      "pass": true,
+      "detail": "Equal cost is broken by the stable taxi id, independent of insertion order."
+    },
+    {
+      "name": "stale-snapshot",
+      "expected": {
+        "validationBefore": "READY",
+        "validationAfter": "READY",
+        "assigned": 0,
+        "reason": "TRIP_UNREACHABLE",
+        "routeStatus": "BLOCKED",
+        "pendingAfter": 0
+      },
+      "actual": {
+        "validationBefore": "READY",
+        "validationAfter": "READY",
+        "assigned": 0,
+        "reason": "TRIP_UNREACHABLE",
+        "routeStatus": "BLOCKED",
+        "pendingAfter": 0
+      },
+      "pass": true,
+      "detail": "A READY 059 snapshot is ignored; the assignment replans and rejects the impossible trip."
+    },
+    {
+      "name": "pickup-unreachable",
+      "expected": {
+        "assigned": 0,
+        "reason": "PICKUP_UNREACHABLE",
+        "pendingAfter": 1,
+        "plannerSearches": 25
+      },
+      "actual": {
+        "assigned": 0,
+        "reason": "PICKUP_UNREACHABLE",
+        "pendingAfter": 1,
+        "plannerSearches": 25
+      },
+      "pass": true,
+      "detail": "A blocked taxi position keeps the request pending instead of inventing a route."
+    },
+    {
+      "name": "no-taxi",
+      "expected": {
+        "assigned": 0,
+        "reason": "NO_TAXI",
+        "pendingAfter": 1,
+        "plannerSearches": 0
+      },
+      "actual": {
+        "assigned": 0,
+        "reason": "NO_TAXI",
+        "pendingAfter": 1,
+        "plannerSearches": 0
+      },
+      "pass": true,
+      "detail": "With no available taxi the dispatcher performs zero searches and preserves the queue."
+    },
+    {
+      "name": "no-position",
+      "expected": {
+        "assigned": 0,
+        "reason": "NO_POSITION",
+        "pendingAfter": 1
+      },
+      "actual": {
+        "assigned": 0,
+        "reason": "NO_POSITION",
+        "pendingAfter": 1
+      },
+      "pass": true,
+      "detail": "A taxi without a real lane position cannot be assigned."
+    },
+    {
+      "name": "bounds",
+      "expected": {
+        "configuredSearches": 30,
+        "assignmentsInStep": 1,
+        "plannerSearches": 25,
+        "budgetExhausted": true,
+        "blockedReason": "ROUTE_BUDGET_EXHAUSTED",
+        "pendingAfter": 11,
+        "candidateLimit": 24,
+        "assignmentLimit": 16
+      },
+      "actual": {
+        "configuredSearches": 30,
+        "assignmentsInStep": 1,
+        "plannerSearches": 25,
+        "budgetExhausted": true,
+        "blockedReason": "ROUTE_BUDGET_EXHAUSTED",
+        "pendingAfter": 11,
+        "candidateLimit": 24,
+        "assignmentLimit": 16
+      },
+      "pass": true,
+      "detail": "One step assigns at most its budget; the all-or-nothing scan never half-ranks candidates."
+    },
+    {
+      "name": "release-reasons",
+      "expected": [
+        {
+          "reason": "COMPLETED",
+          "statusAfter": "AVAILABLE",
+          "availableAfter": true
+        },
+        {
+          "reason": "CANCELLED",
+          "statusAfter": "AVAILABLE",
+          "availableAfter": true
+        },
+        {
+          "reason": "FAILED",
+          "statusAfter": "AVAILABLE",
+          "availableAfter": true
+        },
+        {
+          "reason": "TAXI_BLOCKED",
+          "statusAfter": "BLOCKED",
+          "availableAfter": false
+        },
+        {
+          "reason": "TAXI_DAMAGED",
+          "statusAfter": "DAMAGED",
+          "availableAfter": false
+        },
+        {
+          "reason": "TAXI_REMOVED",
+          "statusAfter": "OFFLINE",
+          "availableAfter": false
+        }
+      ],
+      "actual": [
+        {
+          "reason": "COMPLETED",
+          "statusAfter": "AVAILABLE",
+          "availableAfter": true
+        },
+        {
+          "reason": "CANCELLED",
+          "statusAfter": "AVAILABLE",
+          "availableAfter": true
+        },
+        {
+          "reason": "FAILED",
+          "statusAfter": "AVAILABLE",
+          "availableAfter": true
+        },
+        {
+          "reason": "TAXI_BLOCKED",
+          "statusAfter": "BLOCKED",
+          "availableAfter": false
+        },
+        {
+          "reason": "TAXI_DAMAGED",
+          "statusAfter": "DAMAGED",
+          "availableAfter": false
+        },
+        {
+          "reason": "TAXI_REMOVED",
+          "statusAfter": "OFFLINE",
+          "availableAfter": false
+        }
+      ],
+      "pass": true,
+      "detail": "Release reasons are closed and map to explicit next taxi statuses."
+    },
+    {
+      "name": "disposal",
+      "expected": {
+        "disposed": true,
+        "assignments": 0,
+        "assigned": 0,
+        "routeSearches": 0,
+        "registryTaxis": 24,
+        "demandRequests": 32,
+        "plannerAlive": true
+      },
+      "actual": {
+        "disposed": true,
+        "assignments": 0,
+        "assigned": 0,
+        "routeSearches": 0,
+        "registryTaxis": 24,
+        "demandRequests": 32,
+        "plannerAlive": true
+      },
+      "pass": true,
+      "detail": "Dispatcher state returns to zero; the injected registry, queue and planner stay alive."
+    },
+    {
+      "name": "determinism",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Two identical runs produce identical assignments."
+    },
+    {
+      "name": "no-wall-clock",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The source has no Date, timer or ambient randomness."
+    },
+    {
+      "name": "no-dom-or-renderer",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The source has no DOM, Babylon or Rapier dependency."
+    },
+    {
+      "name": "closed-vocabularies",
+      "expected": {
+        "rejections": 5,
+        "releases": 6,
+        "statuses": 5
+      },
+      "actual": {
+        "rejections": 5,
+        "releases": 6,
+        "statuses": 5
+      },
+      "pass": true,
+      "detail": "Rejection, release and taxi status vocabularies are closed enums."
+    },
+    {
+      "name": "validation-errors",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Options are validated instead of silently defaulting."
+    }
+  ],
+  "summary": {
+    "checks": 28,
+    "passed": 28,
+    "pass": true
+  }
+}

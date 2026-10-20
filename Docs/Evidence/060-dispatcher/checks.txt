@@ -1,0 +1,93 @@
+# PBI 060 execution log (2026-10-20)
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm run typecheck
+
+> self-driving-academy@0.1.0 typecheck
+> tsc --noEmit && tsc -p tsconfig.tests.json --noEmit
+
+exit=0
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm run lint
+
+> self-driving-academy@0.1.0 lint
+> eslint . --max-warnings 0
+
+exit=0
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm run format:check
+
+> self-driving-academy@0.1.0 format:check
+> prettier --check "src/**/*.{ts,css}" "tests/**/*.ts" "tests/**/*.html" "scripts/**/*.mjs" "*.{json,js,html}"
+
+Checking formatting...
+All matched files use Prettier code style!
+exit=0
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm run check:architecture
+
+> self-driving-academy@0.1.0 check:architecture
+> node scripts/verify-architecture.mjs
+
+Architecture imports: PASS (184 TypeScript files)
+Architecture negative probes: PASS (6 forbidden dependencies rejected)
+Inspector exception negative probes: PASS (4 forbidden imports rejected)
+Rapier adapter negative probes: PASS (3 forbidden imports rejected)
+Renderer injection, readonly snapshots, defensive persistence and lifecycle: PASS
+exit=0
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm run check:parameter-catalog
+
+> self-driving-academy@0.1.0 check:parameter-catalog
+> node scripts/generate-parameter-catalog.mjs --check
+
+Parameter catalog is synchronized.
+exit=0
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm test (filtered summary)
+
+tests 1201
+suites 1
+pass 1201
+fail 0
+cancelled 0
+skipped 0
+todo 0
+duration_ms 28045.5234
+exit=0
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm run fleet:dispatch -- --check
+
+> self-driving-academy@0.1.0 fleet:dispatch
+> node --import ./scripts/register-typescript.mjs scripts/run-dispatcher-report.mjs --check
+
+PASS CHECK version
+PASS CHECK fleet
+PASS CHECK demand
+PASS CHECK assignments
+PASS CHECK unique-requests
+PASS CHECK request-identity
+PASS CHECK unique-taxis
+PASS CHECK no-double-taxi
+PASS CHECK max-concurrent
+PASS CHECK unavailable-never-assigned
+PASS CHECK fifo
+PASS CHECK releases
+PASS CHECK planner-searches
+PASS CHECK cost-recomputed
+PASS CHECK cost-range
+PASS CHECK tie-break
+PASS CHECK stale-snapshot
+PASS CHECK pickup-unreachable
+PASS CHECK no-taxi
+PASS CHECK no-position
+PASS CHECK bounds
+PASS CHECK release-reasons
+PASS CHECK disposal
+PASS CHECK determinism
+PASS CHECK no-wall-clock
+PASS CHECK no-dom-or-renderer
+PASS CHECK closed-vocabularies
+PASS CHECK validation-errors
+SUMMARY checks 28/28, assignments 32, searches 692, overall PASS
+Dispatcher report is current: Docs/Evidence/060-dispatcher/report.json
+exit=0

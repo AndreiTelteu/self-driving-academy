@@ -18,6 +18,8 @@ Lista flotei afișează ID, mod de control, etapa cursei, pickup, destinație, E
 
 [Cererile de curse 059](ride-demand.md) transformă un program de scenariu și un seed într-o listă deterministă de cereri cu ID stabil 006, pickup și dropoff din zonele reale de serviciu 032, tick de apariție și nivel `LOW`/`NORMAL`/`HIGH`. Fiecare cerere este validată cu plannerul 041 înainte de alocare: origine pickup și destinație dropoff accesibile `TAXI`, zone distincte și traseu `READY`. Cererile imposibile sunt raportate cu motiv închis, iar coada validă este plafonată la 64 cu politica explicită `REJECT_NEWEST`. Modulul nu alege taxiuri și nu creează curse; dispecerizarea 060 replanifică la asignare, deoarece blocajele și versiunile se pot schimba. `dispose()` readuce cererile, coada și plannerul deținut la zero.
 
+[Dispecerizarea 060](dispatcher.md) leagă coada 059 de taxiurile reale 057 și de plannerul 041. La asignare replanifică taxi→pickup și pickup→dropoff, alege taxiul disponibil cu cel mai mic cost real până la pickup și departajează egalitatea după ID-ul stabil al taxiului. `BLOCKED`, `DAMAGED` și `OFFLINE` nu sunt disponibile, o cerere nu poate primi două taxiuri, iar revendicarea și eliberarea sunt explicite (`COMPLETED`, `CANCELLED`, `FAILED`, `TAXI_BLOCKED`, `TAXI_DAMAGED`, `TAXI_REMOVED`). Motivele de blocare sunt închise, munca per pas este plafonată, iar `dispose()` readuce starea dispecerului la zero fără a elibera registry-ul, coada sau plannerul injectate. [Dovezile 060](Evidence/060-dispatcher/report.json) păstrează cele 28 de verificări și simularea pe programul real.
+
 
 ## Rezultate comerciale și experiența pasagerului
 
