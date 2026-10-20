@@ -19,6 +19,41 @@ export type {
   ParameterStage,
   ParameterDefinition,
 } from './parameter-registry';
+export {
+  PROFILE_STORE_VERSION,
+  PROFILE_STORE_CHECKSUM_ALGORITHM,
+  PROFILE_STORE_LIMITS,
+  PROFILE_STORE_POLICY,
+  profileStoreRejectionCodes,
+  computeProfileVersionChecksum,
+  verifyProfileVersionChecksum,
+  createProfileStore,
+  isProfileStoreAccepted,
+} from './profile-store';
+export type {
+  ProfileDeltaChange,
+  ProfileDeltaRequest,
+  ProfileDeltaValidationAccepted,
+  ProfileDeltaValidationExpectations,
+  ProfileDeltaValidationInput,
+  ProfileDeltaValidationRejected,
+  ProfileDeltaValidationResult,
+  ProfileDeltaValidationValue,
+  ProfileDeltaValidator,
+  ProfileStore,
+  ProfileStoreAccepted,
+  ProfileStoreOptions,
+  ProfileStoreRejected,
+  ProfileStoreRejection,
+  ProfileStoreRejectionCode,
+  ProfileStoreResult,
+  ProfileStoreStats,
+  ProfileVersion,
+  ProfileVersionContent,
+  ProfileVersionDelta,
+  ProfileVersionProvenance,
+  CreateProfileBaseInput,
+} from './profile-store';
 
 /** Minimal bootstrap read model, separate from the versioned DrivingProfile import contract. */
 export interface ProfileSnapshot {

@@ -1,0 +1,27 @@
+Worktree: C:/Users/aandr/Sites/self-driving-academy/.worktrees/109-store
+Branch: loop-pbi/109-store
+Runtime: Volta Node 24.21.0 / npm 11.19.0
+Baseline before PBI 109: 1127/1127 tests.
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm run typecheck
+PASS (exit 0): tsc --noEmit && tsc -p tsconfig.tests.json --noEmit
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm run lint
+PASS (exit 0): eslint . --max-warnings 0
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm run format:check
+PASS (exit 0): All matched files use Prettier code style!
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm run check:architecture
+PASS (exit 0): Architecture imports PASS (179 TypeScript files); negative probes PASS (6); inspector exception probes PASS (4); Rapier adapter probes PASS (3); renderer injection/lifecycle PASS.
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm run check:parameter-catalog
+PASS (exit 0): Parameter catalog is synchronized.
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm test
+PASS (exit 0): 1143 tests, 1143 pass, 0 fail. Baseline 1127 plus sixteen PBI 109 tests.
+
+volta run --node 24.21.0 -- node --import ./scripts/register-typescript.mjs --test tests/profiles/profile-store.test.ts
+PASS (exit 0): 16 tests, 16 pass, 0 fail.
+
+No board validator, browser run, profile publication, performance probe or PBI Done move was executed.

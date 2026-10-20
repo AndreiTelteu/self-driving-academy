@@ -8,5 +8,6 @@ export * from './lane-estimator';
 export * from './evidence-confidence';
 export * from './profile-blend';
 export * from './candidate-validation';
+export * from './profile-store';
 export * from './estimator-task';
 export * from './estimator-worker';

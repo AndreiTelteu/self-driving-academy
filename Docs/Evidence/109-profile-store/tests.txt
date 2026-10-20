@@ -1,0 +1,40 @@
+volta run --node 24.21.0 -- node --import ./scripts/register-typescript.mjs --test tests/profiles/profile-store.test.ts
+
+109 base versions are deep-frozen, copied on read and independent of caller data
+109 derived versions record parent, engine, full values and delta provenance
+109 the parent version is never edited in place
+109 a delta preserves its base and cannot perform a hidden absolute replacement
+109 the same intervention is idempotent across retries and conflicts stay closed
+109 invalid deltas are rejected closed with the 102 reasons
+109 engine version mismatch is rejected with a closed reason
+109 missing, foreign and self parents are rejected closed
+109 delta metadata that does not match the request is rejected closed
+109 history is bounded by explicit limits instead of growing without bound
+109 clear and dispose have explicit lifecycle semantics and counters
+109 checksum is deterministic and detects tampering
+109 history and listings are scoped to one profile
+109 the store never publishes, marks LEARNED or activates 092 capabilities
+109 the injected validator is the only numeric gate and is not blindly trusted
+109 structural request errors throw while domain failures stay closed
+
+tests 16
+pass 16
+fail 0
+
+Why each test catches a plausible wrong implementation:
+1. Storing the caller's parameter object, returning the internal record, skipping deep freeze or skips the checksum would fail the mutation, identity, freeze and checksum assertions.
+2. Dropping parentVersionId/engineVersion/depth or the delta record would fail the provenance assertions; losing untouched values would fail the full-value checks.
+3. Applying a delta by replacing the whole parameter map or mutating the parent in place would change the reread parent values/checksum; the test requires the parent untouched and a separate frozen child map.
+4. Trusting the delta values without recording previousValue, or accepting a delta built on another base, would fail the base/parent equality and the DELTA_BASE_MISMATCH expectation; adding a key absent from the base must fail DELTA_KEY_NOT_IN_BASE.
+5. Creating a version on every submission would double the history; the test requires the same versionId, created=false, deduplicated=true, one intervention and unchanged stats, including a retry with a new child id/timestamp. A changed payload must be INTERVENTION_CONFLICT, not a second version.
+6. Returning a partial version or accepting out-of-range/NaN/extension/empty deltas would fail DELTA_INVALID with the 102 codes and the null-version assertions.
+7. Comparing engine versions with truthiness or ignoring a missing engine would accept the wrong or missing engine; both cases require ENGINE_VERSION_MISMATCH.
+8. Looking up parents by id alone would accept a parent from another profile; missing and self parents must be closed reasons and the version count must stay unchanged.
+9. Ignoring delta.profileVersionId/parentVersionId or trusting a non-existent base would accept an orphan delta; both mismatches require closed reasons.
+10. Keeping an unbounded map would create the third version; the test requires HISTORY_LIMIT at maxVersions, per-profile caps and INTERVENTION_LIMIT, with counters and no stored overflow version.
+11. Clear/dispose that leave stale data, lose usage or allow mutations after dispose would fail the version/intervention zeroing, reuse-after-clear and STORE_DISPOSED assertions; dispose must be idempotent in its counter.
+12. A checksum ignoring content, a random checksum or an unchecked checksum would fail stability across reads, the createdAt difference and tamper detection.
+13. Mixing histories across profiles would leak the other chain; the test requires per-profile history, tip-to-base ordering and filtered listings.
+14. Writing 092 flags, emitting published/learned fields or activating a profile would fail the before/after registry snapshot and the policy assertions.
+15. Blindly trusting an injected validator that returns an out-of-range value would create the version; the test requires the store's registry re-check to reject DELTA_INVALID. The spy also proves the validator receives the explicit base/engine expectations.
+16. Throwing for every domain failure or returning a closed result for structural garbage would blur the contract; the test requires throws for malformed requests and closed PARENT_NOT_FOUND for a valid request with a missing parent.
