@@ -14,6 +14,14 @@ export {
 } from './vehicle-picking-registry';
 export { BabylonVehiclePicker, type SelectVehicleIntent } from './vehicle-picking';
 export { BabylonCellBatches, type BatchInstance, type CellBatchDefinition } from './cell-batches';
+export {
+  createCityScene,
+  type CityMaterialKey,
+  type CityScene,
+  type CitySceneOptions,
+  type CitySceneResourceCounts,
+  type CitySceneStats,
+} from './city-scene';
 export { analyzeRegistryGlb } from './asset-contract';
 export { bindVehiclePickingInput, type VehiclePickingInputOptions } from './vehicle-picking-input';
 export {
