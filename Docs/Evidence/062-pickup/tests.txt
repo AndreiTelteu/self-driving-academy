@@ -1,0 +1,41 @@
+# PBI 062 targeted test transcript
+
+volta run --node 24.21.0 -- node --import ./scripts/register-typescript.mjs --test tests/fleet/pickup.test.ts
+
+(node:40648) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ 062 boards only at the exact stationary dwell tick inside the real pickup zone (277.5773ms)
+✔ 062 refuses a fast pass through the zone and never credits dwell at speed (188.5477ms)
+✔ 062 never boards a taxi that only passes through the pickup zone (190.4213ms)
+✔ 062 rejects outside, nearby and wrong-kind zones without starting dwell (187.4878ms)
+✔ 062 treats the zone boundary inclusively and resets dwell when the taxi leaves (191.252ms)
+✔ 062 rejects a wrong ride, a foreign taxi and a cancelled ride (164.4435ms)
+✔ 062 rejects stale ticks and repeats the same tick without double-counting dwell (156.2985ms)
+✔ 062 makes boarding idempotent across repeats and later ride progress (155.294ms)
+✔ 062 completes an externally arrived ride only after the same valid dwell (153.5407ms)
+✔ 062 uses no wall clock, validates options and disposes to zero without releasing the taxi (219.9114ms)
+✔ 062 exposes the documented pickup vocabulary and defaults (0.27ms)
+✔ 062 committed evidence report is the current pickup transcript (4011.6397ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6182.1264
+exit=0
+
+# Full project suite (same commit)
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm test
+
+ℹ tests 1226
+ℹ suites 1
+ℹ pass 1226
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 36763.4079
+exit=0

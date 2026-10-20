@@ -4,3 +4,4 @@ export * from './civil-traffic';
 export * from './ride-demand';
 export * from './dispatcher';
 export * from './ride-fsm';
+export * from './pickup';
