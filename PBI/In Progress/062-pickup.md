@@ -1,12 +1,12 @@
 ---
 id: "062"
 title: "Pickup cu zonă viteză și staționare"
-status: "To Do"
+status: "In Progress"
 release: "V1"
 module: "Flotă și curse"
 depends_on: ["061","040","054"]
-owner: null
-started_at: null
+owner: "Codex gpt-6-luna medium loop-062"
+started_at: "2026-10-20T18:28:58+03:00"
 completed_at: null
 ---
 
