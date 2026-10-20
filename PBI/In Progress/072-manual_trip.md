@@ -1,12 +1,12 @@
 ---
 id: "072"
 title: "Cursă completă și intervenție scurtă manuală"
-status: "To Do"
+status: "In Progress"
 release: "V1"
 module: "Control manual"
 depends_on: ["071","063"]
-owner: null
-started_at: null
+owner: "Codex gpt-6-luna medium loop-072"
+started_at: "2026-10-20T23:01:15+03:00"
 completed_at: null
 ---
 
