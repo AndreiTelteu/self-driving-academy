@@ -1,0 +1,1044 @@
+{
+  "version": "072-manual-trip-v1",
+  "generatedBy": "npm run trip:manual",
+  "oracleRule": "One real 061 ride is driven through the real 062/063 service gate while the real 066 seat, 067 mode intents, 068 selection and 069 segments are applied by the real bridge. A MANUAL/LEARNING segment never creates, retargets or releases the ride; a closed eligible LEARNING segment publishes only the parameter keys observed inside it; MANUAL publishes nothing and leaves the profile values and proofs untouched.",
+  "contract": {
+    "version": "072-manual-trip-v1",
+    "refusalReasons": [
+      "NO_ACTIVE_RIDE",
+      "DUPLICATE_RIDE",
+      "RIDE_TERMINAL",
+      "RIDE_MISMATCH",
+      "TAXI_MISMATCH",
+      "TICK_NOT_CURRENT",
+      "TICK_NOT_NEXT",
+      "UNKNOWN_MODE",
+      "ALREADY_IN_MODE",
+      "INTENT_ALREADY_QUEUED",
+      "LEARNING_UNAVAILABLE",
+      "TARGET_UNAVAILABLE",
+      "AUTHORITY_SUSPENDED",
+      "AUTHORITY_FAULT",
+      "MODE_QUEUE_CONFLICT"
+    ],
+    "segments": 64,
+    "publications": 64,
+    "handovers": 64,
+    "samplesPerSegment": 32,
+    "tickHz": 60,
+    "dtSeconds": 0.016666666666666666,
+    "parameterKeys": [
+      "acceleration_jerk",
+      "allway_stop_patience",
+      "blocked_intersection_entry_probability",
+      "brake_reaction_delay",
+      "braking_jerk",
+      "closing_ttc_threshold",
+      "coasting_bias",
+      "comfort_deceleration",
+      "corner_cutting_bias",
+      "crosswalk_approach_speed",
+      "cruise_accel_deadband",
+      "cruise_speed_variability",
+      "curve_lateral_accel",
+      "cutin_brake_response",
+      "desired_acceleration",
+      "dropoff_approach_speed",
+      "dropoff_curb_distance",
+      "emergency_brake_intensity",
+      "evasive_steer_willingness",
+      "following_hysteresis",
+      "following_min_gap",
+      "following_speed_gain",
+      "following_time_headway",
+      "green_launch_acceleration",
+      "green_start_delay",
+      "hazard_reaction_delay",
+      "horn_use_probability",
+      "intersection_approach_speed",
+      "lane_center_offset",
+      "lane_change_back_gap",
+      "lane_change_cooldown",
+      "lane_change_duration",
+      "lane_change_front_gap",
+      "lane_change_speed_gain",
+      "late_red_brake_threshold",
+      "lateral_clearance",
+      "lateral_correction_deadband",
+      "launch_intensity",
+      "leader_change_delay",
+      "obstacle_clearance",
+      "occupied_acceleration_scale",
+      "occupied_lateral_accel_scale",
+      "overtake_speed_bonus",
+      "pass_on_right_probability",
+      "pedestrian_clearance",
+      "pedestrian_yield_probability",
+      "pickup_approach_speed",
+      "pickup_curb_distance",
+      "pickup_dwell_time",
+      "pickup_stop_precision",
+      "priority_assertiveness",
+      "queue_standstill_gap",
+      "red_run_gap_acceptance",
+      "red_stop_line_offset",
+      "red_stop_probability",
+      "reroute_patience",
+      "reverse_recovery_duration",
+      "rolling_stop_speed",
+      "route_congestion_penalty",
+      "route_distance_weight",
+      "route_signal_penalty",
+      "route_time_weight",
+      "route_turn_penalty",
+      "signal_lead_time",
+      "signal_use_probability",
+      "speed_delta_arterial",
+      "speed_delta_residential",
+      "speed_delta_urban",
+      "steering_rate_limit",
+      "steering_response_time",
+      "stop_dwell_time",
+      "stop_full_probability",
+      "stop_line_offset",
+      "throttle_release_delay",
+      "turn_entry_speed",
+      "turn_exit_acceleration",
+      "u_turn_willingness",
+      "yellow_commit_time",
+      "yellow_stop_probability",
+      "yield_time_gap"
+    ],
+    "learningParameterKeys": [
+      "acceleration_jerk",
+      "brake_reaction_delay",
+      "comfort_deceleration",
+      "curve_lateral_accel",
+      "desired_acceleration",
+      "following_min_gap",
+      "following_speed_gain",
+      "following_time_headway",
+      "green_start_delay",
+      "intersection_approach_speed",
+      "lane_change_back_gap",
+      "lane_change_cooldown",
+      "lane_change_front_gap",
+      "lane_change_speed_gain",
+      "late_red_brake_threshold",
+      "queue_standstill_gap",
+      "red_stop_line_offset",
+      "red_stop_probability",
+      "speed_delta_residential",
+      "speed_delta_urban",
+      "stop_dwell_time",
+      "stop_full_probability",
+      "stop_line_offset",
+      "yield_time_gap"
+    ],
+    "closeReasons": [
+      "RETURN_TO_AUTO",
+      "MODE_CHANGE",
+      "RIDE_COMPLETED",
+      "VEHICLE_SWITCH",
+      "SHUTDOWN"
+    ]
+  },
+  "timeline": {
+    "beginTick": 10,
+    "boardingTick": 191,
+    "driveStartTick": 192,
+    "driveTicks": 535,
+    "driveSpeedMps": 19.979439252336448,
+    "dropoffStartTick": 727,
+    "completionTick": 907,
+    "pickupDwellTicks": 180,
+    "dropoffDwellTicks": 180
+  },
+  "mixed": {
+    "beginRideId": "id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000",
+    "sameRide": true,
+    "sameRequest": true,
+    "sameTaxi": true,
+    "assignmentPickupZoneId": "sz:0-0",
+    "assignmentDropoffZoneId": "sz:1-0",
+    "ride": {
+      "rideId": "id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000",
+      "requestId": "id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000",
+      "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0001",
+      "pickupZoneId": "sz:0-0",
+      "dropoffZoneId": "sz:1-0",
+      "state": "COMPLETED",
+      "completedTick": 907,
+      "boardingTick": 191,
+      "completionTick": 907,
+      "completionDwellTicks": 180,
+      "releaseReason": "COMPLETED",
+      "transitions": [
+        [
+          "ASSIGNED",
+          10
+        ],
+        [
+          "ARRIVED_PICKUP",
+          191
+        ],
+        [
+          "PICKUP_COMPLETE",
+          191
+        ],
+        [
+          "ARRIVED_DROPOFF",
+          907
+        ],
+        [
+          "DROPOFF_COMPLETE",
+          907
+        ]
+      ],
+      "dropoffTransitions": 1
+    },
+    "segments": [
+      {
+        "segmentId": "trip:072:segment:1",
+        "mode": "MANUAL",
+        "learningEligible": false,
+        "startTick": 31,
+        "endTick": 35,
+        "completeness": "CLOSED",
+        "closeReason": "RETURN_TO_AUTO",
+        "samples": 4,
+        "observedParameters": [
+          "following_time_headway",
+          "speed_delta_urban"
+        ],
+        "publishedParameters": [],
+        "publicationOperationId": null
+      }
+    ],
+    "intakeEntries": 0,
+    "publications": 0,
+    "publishedParameters": [],
+    "manualSegments": 1,
+    "learningSegments": 0,
+    "profileUnchanged": true,
+    "ticks": {
+      "AUTO": 903,
+      "MANUAL": 4,
+      "LEARNING": 0
+    },
+    "samplesAppended": 4,
+    "samplesSkipped": 0,
+    "handovers": [
+      {
+        "decisionTick": 35,
+        "closedMode": "MANUAL",
+        "authority": "AUTO",
+        "segmentCloseReason": "RETURN_TO_AUTO",
+        "reason": "REENTRY_ABSTAINED",
+        "reentryReason": "NO_OBSERVATION",
+        "statePreserved": true,
+        "violations": [],
+        "commandStep": 0.25,
+        "commandContinuity": "WITHIN_BOUND",
+        "teleportsVehicle": false
+      }
+    ],
+    "lifecycleRides": 1,
+    "lifecycleActive": 0,
+    "lifecycleTerminal": 1,
+    "lifecycleReleases": 1,
+    "lifecycleTransitions": 5,
+    "dispatcherReleases": 1,
+    "finalMode": "AUTO",
+    "refused": {
+      "NO_ACTIVE_RIDE": 0,
+      "DUPLICATE_RIDE": 0,
+      "RIDE_TERMINAL": 0,
+      "RIDE_MISMATCH": 0,
+      "TAXI_MISMATCH": 0,
+      "TICK_NOT_CURRENT": 0,
+      "TICK_NOT_NEXT": 0,
+      "UNKNOWN_MODE": 0,
+      "ALREADY_IN_MODE": 0,
+      "INTENT_ALREADY_QUEUED": 0,
+      "LEARNING_UNAVAILABLE": 0,
+      "TARGET_UNAVAILABLE": 0,
+      "AUTHORITY_SUSPENDED": 0,
+      "AUTHORITY_FAULT": 0,
+      "MODE_QUEUE_CONFLICT": 0
+    }
+  },
+  "manual": {
+    "beginRideId": "id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000",
+    "sameRide": true,
+    "sameRequest": true,
+    "sameTaxi": true,
+    "assignmentPickupZoneId": "sz:0-0",
+    "assignmentDropoffZoneId": "sz:1-0",
+    "ride": {
+      "rideId": "id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000",
+      "requestId": "id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000",
+      "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0001",
+      "pickupZoneId": "sz:0-0",
+      "dropoffZoneId": "sz:1-0",
+      "state": "COMPLETED",
+      "completedTick": 907,
+      "boardingTick": 191,
+      "completionTick": 907,
+      "completionDwellTicks": 180,
+      "releaseReason": "COMPLETED",
+      "transitions": [
+        [
+          "ASSIGNED",
+          10
+        ],
+        [
+          "ARRIVED_PICKUP",
+          191
+        ],
+        [
+          "PICKUP_COMPLETE",
+          191
+        ],
+        [
+          "ARRIVED_DROPOFF",
+          907
+        ],
+        [
+          "DROPOFF_COMPLETE",
+          907
+        ]
+      ],
+      "dropoffTransitions": 1
+    },
+    "segments": [
+      {
+        "segmentId": "trip:072:segment:1",
+        "mode": "MANUAL",
+        "learningEligible": false,
+        "startTick": 11,
+        "endTick": 908,
+        "completeness": "CLOSED",
+        "closeReason": "RETURN_TO_AUTO",
+        "samples": 32,
+        "observedParameters": [
+          "following_time_headway",
+          "speed_delta_urban"
+        ],
+        "publishedParameters": [],
+        "publicationOperationId": null
+      }
+    ],
+    "intakeEntries": 0,
+    "publications": 0,
+    "publishedParameters": [],
+    "manualSegments": 1,
+    "learningSegments": 0,
+    "profileUnchanged": true,
+    "ticks": {
+      "AUTO": 11,
+      "MANUAL": 897,
+      "LEARNING": 0
+    },
+    "samplesAppended": 32,
+    "samplesSkipped": 865,
+    "handovers": [
+      {
+        "decisionTick": 908,
+        "closedMode": "MANUAL",
+        "authority": "AUTO",
+        "segmentCloseReason": "RETURN_TO_AUTO",
+        "reason": "REENTRY_ABSTAINED",
+        "reentryReason": "NO_OBSERVATION",
+        "statePreserved": true,
+        "violations": [],
+        "commandStep": 0.25,
+        "commandContinuity": "WITHIN_BOUND",
+        "teleportsVehicle": false
+      }
+    ],
+    "lifecycleRides": 1,
+    "lifecycleActive": 0,
+    "lifecycleTerminal": 1,
+    "lifecycleReleases": 1,
+    "lifecycleTransitions": 5,
+    "dispatcherReleases": 1,
+    "finalMode": "AUTO",
+    "refused": {
+      "NO_ACTIVE_RIDE": 0,
+      "DUPLICATE_RIDE": 0,
+      "RIDE_TERMINAL": 0,
+      "RIDE_MISMATCH": 0,
+      "TAXI_MISMATCH": 0,
+      "TICK_NOT_CURRENT": 0,
+      "TICK_NOT_NEXT": 0,
+      "UNKNOWN_MODE": 0,
+      "ALREADY_IN_MODE": 0,
+      "INTENT_ALREADY_QUEUED": 0,
+      "LEARNING_UNAVAILABLE": 0,
+      "TARGET_UNAVAILABLE": 0,
+      "AUTHORITY_SUSPENDED": 0,
+      "AUTHORITY_FAULT": 0,
+      "MODE_QUEUE_CONFLICT": 0
+    }
+  },
+  "learning": {
+    "beginRideId": "id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000",
+    "sameRide": true,
+    "sameRequest": true,
+    "sameTaxi": true,
+    "assignmentPickupZoneId": "sz:0-0",
+    "assignmentDropoffZoneId": "sz:1-0",
+    "ride": {
+      "rideId": "id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000",
+      "requestId": "id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000",
+      "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0001",
+      "pickupZoneId": "sz:0-0",
+      "dropoffZoneId": "sz:1-0",
+      "state": "TO_PICKUP",
+      "completedTick": null,
+      "boardingTick": null,
+      "completionTick": null,
+      "completionDwellTicks": null,
+      "releaseReason": null,
+      "transitions": [
+        [
+          "ASSIGNED",
+          10
+        ]
+      ],
+      "dropoffTransitions": 0
+    },
+    "segments": [
+      {
+        "segmentId": "trip:072:segment:1",
+        "mode": "LEARNING",
+        "learningEligible": true,
+        "startTick": 31,
+        "endTick": 35,
+        "completeness": "CLOSED",
+        "closeReason": "RETURN_TO_AUTO",
+        "samples": 4,
+        "observedParameters": [
+          "desired_acceleration",
+          "speed_delta_urban"
+        ],
+        "publishedParameters": [
+          "desired_acceleration",
+          "speed_delta_urban"
+        ],
+        "publicationOperationId": "trip:072:close:35"
+      }
+    ],
+    "intakeEntries": 1,
+    "publications": 1,
+    "publishedParameters": [
+      "desired_acceleration",
+      "speed_delta_urban"
+    ],
+    "manualSegments": 0,
+    "learningSegments": 1,
+    "profileUnchanged": true,
+    "ticks": {
+      "AUTO": 31,
+      "MANUAL": 0,
+      "LEARNING": 4
+    },
+    "samplesAppended": 4,
+    "samplesSkipped": 0,
+    "handovers": [
+      {
+        "decisionTick": 35,
+        "closedMode": "LEARNING",
+        "authority": "AUTO",
+        "segmentCloseReason": "RETURN_TO_AUTO",
+        "reason": "REENTRY_ABSTAINED",
+        "reentryReason": "NO_OBSERVATION",
+        "statePreserved": true,
+        "violations": [],
+        "commandStep": 0.25,
+        "commandContinuity": "WITHIN_BOUND",
+        "teleportsVehicle": false
+      }
+    ],
+    "lifecycleRides": 1,
+    "lifecycleActive": 1,
+    "lifecycleTerminal": 0,
+    "lifecycleReleases": 0,
+    "lifecycleTransitions": 1,
+    "dispatcherReleases": 0,
+    "finalMode": "AUTO",
+    "refused": {
+      "NO_ACTIVE_RIDE": 0,
+      "DUPLICATE_RIDE": 0,
+      "RIDE_TERMINAL": 0,
+      "RIDE_MISMATCH": 0,
+      "TAXI_MISMATCH": 0,
+      "TICK_NOT_CURRENT": 0,
+      "TICK_NOT_NEXT": 0,
+      "UNKNOWN_MODE": 0,
+      "ALREADY_IN_MODE": 0,
+      "INTENT_ALREADY_QUEUED": 0,
+      "LEARNING_UNAVAILABLE": 0,
+      "TARGET_UNAVAILABLE": 0,
+      "AUTHORITY_SUSPENDED": 0,
+      "AUTHORITY_FAULT": 0,
+      "MODE_QUEUE_CONFLICT": 0
+    }
+  },
+  "completionBoundary": {
+    "beginRideId": "id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000",
+    "sameRide": true,
+    "sameRequest": true,
+    "sameTaxi": true,
+    "assignmentPickupZoneId": "sz:0-0",
+    "assignmentDropoffZoneId": "sz:1-0",
+    "ride": {
+      "rideId": "id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000",
+      "requestId": "id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000",
+      "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0001",
+      "pickupZoneId": "sz:0-0",
+      "dropoffZoneId": "sz:1-0",
+      "state": "COMPLETED",
+      "completedTick": 907,
+      "boardingTick": 191,
+      "completionTick": 907,
+      "completionDwellTicks": 180,
+      "releaseReason": "COMPLETED",
+      "transitions": [
+        [
+          "ASSIGNED",
+          10
+        ],
+        [
+          "ARRIVED_PICKUP",
+          191
+        ],
+        [
+          "PICKUP_COMPLETE",
+          191
+        ],
+        [
+          "ARRIVED_DROPOFF",
+          907
+        ],
+        [
+          "DROPOFF_COMPLETE",
+          907
+        ]
+      ],
+      "dropoffTransitions": 1
+    },
+    "segments": [
+      {
+        "segmentId": "trip:072:segment:1",
+        "mode": "MANUAL",
+        "learningEligible": false,
+        "startTick": 11,
+        "endTick": 908,
+        "completeness": "CLOSED",
+        "closeReason": "RIDE_COMPLETED",
+        "samples": 32,
+        "observedParameters": [
+          "following_time_headway",
+          "speed_delta_urban"
+        ],
+        "publishedParameters": [],
+        "publicationOperationId": null
+      },
+      {
+        "segmentId": "trip:072:segment:2",
+        "mode": "MANUAL",
+        "learningEligible": false,
+        "startTick": 908,
+        "endTick": null,
+        "completeness": "OPEN",
+        "closeReason": null,
+        "samples": 0,
+        "observedParameters": [
+          "following_time_headway",
+          "speed_delta_urban"
+        ],
+        "publishedParameters": [],
+        "publicationOperationId": null
+      }
+    ],
+    "intakeEntries": 0,
+    "publications": 0,
+    "publishedParameters": [],
+    "manualSegments": 2,
+    "learningSegments": 0,
+    "profileUnchanged": true,
+    "ticks": {
+      "AUTO": 10,
+      "MANUAL": 898,
+      "LEARNING": 0
+    },
+    "samplesAppended": 33,
+    "samplesSkipped": 865,
+    "handovers": [],
+    "lifecycleRides": 1,
+    "lifecycleActive": 0,
+    "lifecycleTerminal": 1,
+    "lifecycleReleases": 1,
+    "lifecycleTransitions": 5,
+    "dispatcherReleases": 1,
+    "finalMode": "MANUAL",
+    "refused": {
+      "NO_ACTIVE_RIDE": 0,
+      "DUPLICATE_RIDE": 0,
+      "RIDE_TERMINAL": 0,
+      "RIDE_MISMATCH": 0,
+      "TAXI_MISMATCH": 0,
+      "TICK_NOT_CURRENT": 0,
+      "TICK_NOT_NEXT": 0,
+      "UNKNOWN_MODE": 0,
+      "ALREADY_IN_MODE": 0,
+      "INTENT_ALREADY_QUEUED": 0,
+      "LEARNING_UNAVAILABLE": 0,
+      "TARGET_UNAVAILABLE": 0,
+      "AUTHORITY_SUSPENDED": 0,
+      "AUTHORITY_FAULT": 0,
+      "MODE_QUEUE_CONFLICT": 0
+    }
+  },
+  "refusals": {
+    "reasons": {
+      "NO_ACTIVE_RIDE": "NO_ACTIVE_RIDE",
+      "TAXI_MISMATCH": "TAXI_MISMATCH",
+      "DUPLICATE_RIDE": "DUPLICATE_RIDE",
+      "TICK_NOT_CURRENT": "TICK_NOT_CURRENT",
+      "RIDE_MISMATCH": "RIDE_MISMATCH",
+      "ALREADY_IN_MODE": "ALREADY_IN_MODE",
+      "UNKNOWN_MODE": "UNKNOWN_MODE",
+      "TICK_NOT_NEXT": "TICK_NOT_NEXT",
+      "TARGET_UNAVAILABLE": "TARGET_UNAVAILABLE",
+      "INTENT_ALREADY_QUEUED": "INTENT_ALREADY_QUEUED",
+      "AUTHORITY_SUSPENDED": "AUTHORITY_SUSPENDED",
+      "RIDE_TERMINAL": "RIDE_TERMINAL",
+      "LEARNING_UNAVAILABLE": "LEARNING_UNAVAILABLE"
+    },
+    "rideState": "COMPLETED",
+    "segments": 1,
+    "lifecycleRides": 1,
+    "catalogue": [
+      "NO_ACTIVE_RIDE",
+      "DUPLICATE_RIDE",
+      "RIDE_TERMINAL",
+      "RIDE_MISMATCH",
+      "TAXI_MISMATCH",
+      "TICK_NOT_CURRENT",
+      "TICK_NOT_NEXT",
+      "UNKNOWN_MODE",
+      "ALREADY_IN_MODE",
+      "INTENT_ALREADY_QUEUED",
+      "LEARNING_UNAVAILABLE",
+      "TARGET_UNAVAILABLE",
+      "AUTHORITY_SUSPENDED",
+      "AUTHORITY_FAULT",
+      "MODE_QUEUE_CONFLICT"
+    ]
+  },
+  "disposal": {
+    "disposed": true,
+    "openSegments": 0,
+    "rideState": "TO_PICKUP",
+    "taxiStatus": "ASSIGNED"
+  },
+  "determinism": {
+    "identical": true,
+    "scenarios": 2
+  },
+  "checks": [
+    {
+      "name": "version",
+      "expected": "072-manual-trip-v1",
+      "actual": "072-manual-trip-v1",
+      "pass": true,
+      "detail": "One versioned trip identity."
+    },
+    {
+      "name": "contract",
+      "expected": {
+        "refusalReasons": [
+          "NO_ACTIVE_RIDE",
+          "DUPLICATE_RIDE",
+          "RIDE_TERMINAL",
+          "RIDE_MISMATCH",
+          "TAXI_MISMATCH",
+          "TICK_NOT_CURRENT",
+          "TICK_NOT_NEXT",
+          "UNKNOWN_MODE",
+          "ALREADY_IN_MODE",
+          "INTENT_ALREADY_QUEUED",
+          "LEARNING_UNAVAILABLE",
+          "TARGET_UNAVAILABLE",
+          "AUTHORITY_SUSPENDED",
+          "AUTHORITY_FAULT",
+          "MODE_QUEUE_CONFLICT"
+        ],
+        "segments": 64,
+        "publications": 64,
+        "samplesPerSegment": 32,
+        "tickHz": 60,
+        "learningParameterKeys": 24,
+        "parameterKeys": 80
+      },
+      "actual": {
+        "refusalReasons": [
+          "NO_ACTIVE_RIDE",
+          "DUPLICATE_RIDE",
+          "RIDE_TERMINAL",
+          "RIDE_MISMATCH",
+          "TAXI_MISMATCH",
+          "TICK_NOT_CURRENT",
+          "TICK_NOT_NEXT",
+          "UNKNOWN_MODE",
+          "ALREADY_IN_MODE",
+          "INTENT_ALREADY_QUEUED",
+          "LEARNING_UNAVAILABLE",
+          "TARGET_UNAVAILABLE",
+          "AUTHORITY_SUSPENDED",
+          "AUTHORITY_FAULT",
+          "MODE_QUEUE_CONFLICT"
+        ],
+        "segments": 64,
+        "publications": 64,
+        "samplesPerSegment": 32,
+        "tickHz": 60,
+        "learningParameterKeys": 24,
+        "parameterKeys": 80
+      },
+      "pass": true,
+      "detail": "The closed refusal/limit vocabulary and the 24 published learning targets."
+    },
+    {
+      "name": "mixed",
+      "expected": {
+        "state": "COMPLETED",
+        "segments": 1,
+        "mode": "MANUAL",
+        "closeReason": "RETURN_TO_AUTO",
+        "rides": 1,
+        "dropoffTransitions": 1,
+        "releases": 1,
+        "dispatcherReleases": 1,
+        "transit": 5,
+        "intake": 0
+      },
+      "actual": {
+        "state": "COMPLETED",
+        "segments": 1,
+        "mode": "MANUAL",
+        "closeReason": "RETURN_TO_AUTO",
+        "rides": 1,
+        "dropoffTransitions": 1,
+        "releases": 1,
+        "dispatcherReleases": 1,
+        "transit": 5,
+        "intake": 0
+      },
+      "pass": true,
+      "detail": "A short MANUAL intervention on an AUTO ride never duplicates the ride or its completion."
+    },
+    {
+      "name": "mixed-same-ride",
+      "expected": {
+        "sameRide": true,
+        "sameRequest": true,
+        "sameTaxi": true
+      },
+      "actual": {
+        "sameRide": true,
+        "sameRequest": true,
+        "sameTaxi": true
+      },
+      "pass": true,
+      "detail": "AUTO resumes exactly the ride the intervention paused, with the same real claim."
+    },
+    {
+      "name": "mixed-proofs",
+      "expected": {
+        "boardingTick": 191,
+        "completionTick": 907,
+        "pickupZone": "sz:0-0",
+        "dropoffZone": "sz:1-0",
+        "dropoffTransitions": 1
+      },
+      "actual": {
+        "boardingTick": 191,
+        "completionTick": 907,
+        "pickupZone": "sz:0-0",
+        "dropoffZone": "sz:1-0",
+        "dropoffTransitions": 1
+      },
+      "pass": true,
+      "detail": "The pickup and dropoff proofs survive the intervention unchanged: same assignment zones, same boarding and completion ticks."
+    },
+    {
+      "name": "mixed-handover",
+      "expected": {
+        "closedMode": "MANUAL",
+        "authority": "AUTO",
+        "closeReason": "RETURN_TO_AUTO",
+        "statePreserved": true,
+        "violations": [],
+        "teleports": false,
+        "commandContinuity": "WITHIN_BOUND"
+      },
+      "actual": {
+        "closedMode": "MANUAL",
+        "authority": "AUTO",
+        "closeReason": "RETURN_TO_AUTO",
+        "statePreserved": true,
+        "violations": [],
+        "teleports": false,
+        "commandContinuity": "WITHIN_BOUND"
+      },
+      "pass": true,
+      "detail": "The real 071 continuity measured one authoritative handover step without repairing it."
+    },
+    {
+      "name": "mixed-manual-evidence",
+      "expected": {
+        "learningEligible": false,
+        "publications": 0,
+        "intake": 0,
+        "samplesPositive": true
+      },
+      "actual": {
+        "learningEligible": false,
+        "publications": 0,
+        "intake": 0,
+        "samplesPositive": true
+      },
+      "pass": true,
+      "detail": "A MANUAL segment records telemetry with learningEligible=false and never a publication."
+    },
+    {
+      "name": "manual-complete",
+      "expected": {
+        "state": "COMPLETED",
+        "boardingTick": 191,
+        "completionTick": 907,
+        "dwell": 180,
+        "manualTicksOver800": true,
+        "cappedSamples": 32,
+        "skippedPositive": true,
+        "intake": 0,
+        "publications": 0
+      },
+      "actual": {
+        "state": "COMPLETED",
+        "boardingTick": 191,
+        "completionTick": 907,
+        "dwell": 180,
+        "manualTicksOver800": true,
+        "cappedSamples": 32,
+        "skippedPositive": true,
+        "intake": 0,
+        "publications": 0
+      },
+      "pass": true,
+      "detail": "A complete MANUAL trip produces the real ride result and telemetry with no learning."
+    },
+    {
+      "name": "manual-return",
+      "expected": {
+        "closeReason": "RETURN_TO_AUTO",
+        "statePreserved": true,
+        "mode": "AUTO"
+      },
+      "actual": {
+        "closeReason": "RETURN_TO_AUTO",
+        "statePreserved": true,
+        "mode": "AUTO"
+      },
+      "pass": true,
+      "detail": "The player returns to AUTO after delivery and the MANUAL segment closes once."
+    },
+    {
+      "name": "learning-publication",
+      "expected": {
+        "segments": 1,
+        "eligible": true,
+        "intake": 1,
+        "publications": 1,
+        "published": [
+          "desired_acceleration",
+          "speed_delta_urban"
+        ],
+        "unobserved": 22,
+        "closeReason": "RETURN_TO_AUTO"
+      },
+      "actual": {
+        "segments": 1,
+        "eligible": true,
+        "intake": 1,
+        "publications": 1,
+        "published": [
+          "desired_acceleration",
+          "speed_delta_urban"
+        ],
+        "unobserved": 22,
+        "closeReason": "RETURN_TO_AUTO"
+      },
+      "pass": true,
+      "detail": "LEARNING queues one real 069 intake and publishes only the observed parameter keys."
+    },
+    {
+      "name": "learning-not-manual",
+      "expected": {
+        "manualSegments": 0,
+        "learningSegments": 1
+      },
+      "actual": {
+        "manualSegments": 0,
+        "learningSegments": 1
+      },
+      "pass": true,
+      "detail": "The demonstration is a real LEARNING segment, not a MANUAL segment counted as learning."
+    },
+    {
+      "name": "profile-unchanged",
+      "expected": {
+        "mixed": true,
+        "manual": true,
+        "learning": true
+      },
+      "actual": {
+        "mixed": true,
+        "manual": true,
+        "learning": true
+      },
+      "pass": true,
+      "detail": "No trip changes the profile values or the proof counts."
+    },
+    {
+      "name": "completion-boundary",
+      "expected": {
+        "mode": "MANUAL",
+        "segments": 2,
+        "firstClose": "RIDE_COMPLETED",
+        "secondMode": "MANUAL",
+        "secondCompleteness": "OPEN"
+      },
+      "actual": {
+        "mode": "MANUAL",
+        "segments": 2,
+        "firstClose": "RIDE_COMPLETED",
+        "secondMode": "MANUAL",
+        "secondCompleteness": "OPEN"
+      },
+      "pass": true,
+      "detail": "A ride completed while MANUAL opens a new segment without changing the control mode."
+    },
+    {
+      "name": "refusals",
+      "expected": {
+        "reasons": {
+          "ALREADY_IN_MODE": "ALREADY_IN_MODE",
+          "AUTHORITY_SUSPENDED": "AUTHORITY_SUSPENDED",
+          "DUPLICATE_RIDE": "DUPLICATE_RIDE",
+          "INTENT_ALREADY_QUEUED": "INTENT_ALREADY_QUEUED",
+          "LEARNING_UNAVAILABLE": "LEARNING_UNAVAILABLE",
+          "NO_ACTIVE_RIDE": "NO_ACTIVE_RIDE",
+          "RIDE_MISMATCH": "RIDE_MISMATCH",
+          "RIDE_TERMINAL": "RIDE_TERMINAL",
+          "TARGET_UNAVAILABLE": "TARGET_UNAVAILABLE",
+          "TAXI_MISMATCH": "TAXI_MISMATCH",
+          "TICK_NOT_CURRENT": "TICK_NOT_CURRENT",
+          "TICK_NOT_NEXT": "TICK_NOT_NEXT",
+          "UNKNOWN_MODE": "UNKNOWN_MODE"
+        },
+        "rideState": "COMPLETED",
+        "segments": 1,
+        "rides": 1
+      },
+      "actual": {
+        "reasons": {
+          "ALREADY_IN_MODE": "ALREADY_IN_MODE",
+          "AUTHORITY_SUSPENDED": "AUTHORITY_SUSPENDED",
+          "DUPLICATE_RIDE": "DUPLICATE_RIDE",
+          "INTENT_ALREADY_QUEUED": "INTENT_ALREADY_QUEUED",
+          "LEARNING_UNAVAILABLE": "LEARNING_UNAVAILABLE",
+          "NO_ACTIVE_RIDE": "NO_ACTIVE_RIDE",
+          "RIDE_MISMATCH": "RIDE_MISMATCH",
+          "RIDE_TERMINAL": "RIDE_TERMINAL",
+          "TARGET_UNAVAILABLE": "TARGET_UNAVAILABLE",
+          "TAXI_MISMATCH": "TAXI_MISMATCH",
+          "TICK_NOT_CURRENT": "TICK_NOT_CURRENT",
+          "TICK_NOT_NEXT": "TICK_NOT_NEXT",
+          "UNKNOWN_MODE": "UNKNOWN_MODE"
+        },
+        "rideState": "COMPLETED",
+        "segments": 1,
+        "rides": 1
+      },
+      "pass": true,
+      "detail": "Every illegal intervention carries one closed reason and leaves the ride untouched."
+    },
+    {
+      "name": "disposal",
+      "expected": {
+        "disposed": true,
+        "openSegments": 0,
+        "rideState": "TO_PICKUP",
+        "taxiStatus": "ASSIGNED"
+      },
+      "actual": {
+        "disposed": true,
+        "openSegments": 0,
+        "rideState": "TO_PICKUP",
+        "taxiStatus": "ASSIGNED"
+      },
+      "pass": true,
+      "detail": "Disposal retires the open segment and never releases the host-owned ride."
+    },
+    {
+      "name": "determinism",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Two identical scenarios produce identical JSON."
+    },
+    {
+      "name": "no-wall-clock",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The source has no Date, timer or ambient randomness."
+    },
+    {
+      "name": "no-dom-or-renderer",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The source has no DOM, Babylon or Rapier dependency."
+    },
+    {
+      "name": "validation-errors",
+      "expected": {
+        "missingContext": true,
+        "missingLifecycle": true,
+        "missingReadState": true,
+        "unknownOption": true,
+        "badTaxi": true
+      },
+      "actual": {
+        "missingContext": true,
+        "missingLifecycle": true,
+        "missingReadState": true,
+        "unknownOption": true,
+        "badTaxi": true
+      },
+      "pass": true,
+      "detail": "Malformed option objects are rejected before a single accepted tick."
+    }
+  ],
+  "summary": {
+    "checks": 19,
+    "passed": 19,
+    "pass": true
+  }
+}

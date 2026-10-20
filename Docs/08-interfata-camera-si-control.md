@@ -48,6 +48,9 @@ Sistemul acceptă și segmente scurte. Un segment LEARNING fără suficiente sit
 
 La revenirea la autonomie în afara unei benzi, politica caută o reintrare fezabilă în graful rutier. Dacă nu există, taxiul este marcat BLOCKED și oferă recuperarea explicită. Preluarea controlului nu teleportează mașina și nu șterge accidentele. [Continuitatea la preluare și revenire071](takeover-continuity.md) măsoară și mărginește starea fizică (poză, viteză, stare unghiulară, direcția drivetrain-ului, daune) și diferența de comandă dintre ultima comandă MANUAL și prima comandă AUTONOMY peste un singur pas autoritar, raportând explicit orice depășire fără a o limita sau repara; decizia de reintrare rămâne a 054, iar 045 rămâne singurul proprietar al stării BLOCKED prin `routeBlocked`.
 
+[Compoziția cursei complete 072](manual-trip.md) închide lanțul: aceeași cursă 061 este condusă prin pickup-ul 062 și dropoff-ul 063 în timp ce 066/067/068/069 aplică schimbarea de mod, iar 071 măsoară revenirea. O intervenție scurtă AUTO → MANUAL → AUTO nu creează o a doua cursă și nu pierde pasagerul, destinația sau dovezile; MANUAL rămâne telemetrie fără learning, LEARNING publică numai parametrii observați, iar un salt fizic raportat este afișat ca violare de continuitate, nu reparat.
+
+
 ## Afișarea modurilor și a progresului
 
 AUTO arată „Conduce AI-ul”; MANUAL arată „Conduci · învățare oprită”; LEARNING arată „Conduci · orașul învață”. Textul și simbolurile însoțesc culoarea. Tutorialul explică MANUAL înainte de prima demonstrație LEARNING. ANALYZING este starea unui job, nu un al patrulea mod de conducere. La reload se pornește în pauză, cu selecția păstrată și vehiculele în AUTO; reluarea MANUAL/LEARNING cere o acțiune explicită și deschide un segment nou.

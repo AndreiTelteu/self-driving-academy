@@ -66,3 +66,27 @@ export {
   type PauseFocusSurface,
 } from './pause-focus';
 export { createManualSegmentBridge, type ManualSegmentStepCause } from './manual-segment-bridge';
+export {
+  createManualTrip,
+  manualTripContractFacts,
+  MANUAL_TRIP_LIMITS,
+  MANUAL_TRIP_REFUSAL_REASONS,
+  MANUAL_TRIP_VERSION,
+  type ManualTrip,
+  type ManualTripBegin,
+  type ManualTripContinuityPorts,
+  type ManualTripMode,
+  type ManualTripModeRequest,
+  type ManualTripObservation,
+  type ManualTripOptions,
+  type ManualTripProfile,
+  type ManualTripPublication,
+  type ManualTripRefusal,
+  type ManualTripRefusalReason,
+  type ManualTripResult,
+  type ManualTripRideResult,
+  type ManualTripSegmentResult,
+  type ManualTripStats,
+  type ManualTripStep,
+  type ManualTripTelemetry,
+} from './manual-trip';
