@@ -12,6 +12,9 @@ Dispecerizarea folosește inițial un cost simplu bazat pe timp estimat până l
 
 Lista flotei afișează ID, mod de control, etapa cursei, pickup, destinație, ETA estimat, viteză, profil aplicat și eventualul motiv al blocajului. Sortarea după ID este stabilă; filtrele permit taxiuri disponibile, în cursă, blocate și selectate.
 
+[Registry-ul flotei](fleet-registry.md) creează populația V1: 24 de taxiuri configurabile între 20 și 30 plus 20–40 de mașini civile, fiecare cu ID stabil 006, clasă mecanică reală 023, `driverKind` explicit și stare proprie. Configurația validează limitele, duplicatele și compatibilitatea clasă/tip; clasele sunt atribuite determinist din seed, iar `list()` și raportul au ordine stabilă. Starea per vehicul (`tick`, `controlMode`, `appliedProfileVersion`) nu depinde de cameră, selecție sau renderer. Vehiculele noi citesc versiunea activă a profilului comun al orașului, iar cele existente păstrează referința până la actualizarea explicită sau activarea 110. Registry-ul nu deține corpuri fizice sau mesh-uri și se eliberează complet la `dispose()`; dispecerizarea, cursele, ETA și sănătatea flotei rămân în PBI-urile 059–065.
+
+
 ## Rezultate comerciale și experiența pasagerului
 
 Fiecare cursă terminală produce un rezultat comercial idempotent și, când există experiență evaluabilă, un review simulat 0–5. MANUAL, LEARNING și AUTO folosesc aceleași reguli de tarif și evaluare. O cursă mixtă păstrează intervalele de autoritate și versiunile aplicate pentru atribuirea consecințelor. Civilii nu generează încasări sau review-uri ale flotei.
