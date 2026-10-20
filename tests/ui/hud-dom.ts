@@ -12,7 +12,10 @@ export class HudElement {
   readonly attrs = new Map<string, string>();
   text = '';
   open = false;
+  /** Mirrors the DOM `value` property used by `select`/`option` elements. */
+  value = '';
   private textNode: TextNode | null = null;
+  private readonly eventListeners = new Map<string, HudListener[]>();
   constructor(tagName: string) {
     this.tagName = tagName;
   }
@@ -56,6 +59,45 @@ export class HudElement {
       node.parent = this;
     }
   }
+  /** Same ordering contract as the DOM `insertBefore`; a null reference appends. */
+  insertBefore(node: HudElement, reference: HudElement | null): void {
+    if (reference !== null && reference.parent !== this)
+      throw new Error('insertBefore reference is not a child of this element');
+    node.remove();
+    if (this.textNode) {
+      this.textNode = null;
+      this.text = '';
+      this.childNodes = [];
+    }
+    const index = reference === null ? this.children.length : this.children.indexOf(reference);
+    if (index === -1) throw new Error('insertBefore reference is not a child of this element');
+    this.children.splice(index, 0, node);
+    this.childNodes = [...this.children];
+    node.parent = this;
+  }
+  addEventListener(type: string, listener: HudListener): void {
+    const listeners = this.eventListeners.get(type);
+    if (listeners === undefined) this.eventListeners.set(type, [listener]);
+    else if (!listeners.includes(listener)) listeners.push(listener);
+  }
+  removeEventListener(type: string, listener: HudListener): void {
+    const listeners = this.eventListeners.get(type);
+    if (listeners === undefined) return;
+    const index = listeners.indexOf(listener);
+    if (index !== -1) listeners.splice(index, 1);
+  }
+  /** Deterministic event delivery for the tests; returns how many listeners ran. */
+  dispatch(type: string): number {
+    const listeners = [...(this.eventListeners.get(type) ?? [])],
+      event: HudEvent = { type, target: this, preventDefault: () => undefined };
+    for (const listener of listeners) listener(event);
+    return listeners.length;
+  }
+  get listenerCount(): number {
+    let total = 0;
+    for (const listeners of this.eventListeners.values()) total += listeners.length;
+    return total;
+  }
   remove(): void {
     if (!this.parent) return;
     this.parent.children = this.parent.children.filter((node) => node !== this);
@@ -67,6 +109,14 @@ export class HudElement {
 export interface HudDocument {
   createElement(tagName: string): HudElement;
 }
+
+export interface HudEvent {
+  readonly type: string;
+  readonly target: HudElement;
+  preventDefault(): void;
+}
+
+export type HudListener = (event: HudEvent) => void;
 
 export function createHudDocument(): HudDocument {
   const doc: HudDocument = {

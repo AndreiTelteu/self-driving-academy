@@ -221,3 +221,182 @@ button:focus-visible {
   white-space: nowrap;
   border: 0;
 }
+
+/* 075 fleet panel: one reusable row per taxi; text and symbol carry the state, colour reinforces. */
+.fleet-panel {
+  position: fixed;
+  left: 1rem;
+  bottom: 1rem;
+  z-index: 3;
+  display: grid;
+  gap: 0.5rem;
+  width: min(24rem, calc(100vw - 2rem));
+  max-height: min(28rem, calc(100vh - 2rem));
+  padding: 0.75rem 0.85rem;
+  border: 1px solid #ffffff2b;
+  border-radius: 0.75rem;
+  background: #0d1714f2;
+  color: #f3f7fb;
+  font-size: 0.85rem;
+  line-height: 1.35;
+  text-shadow: 0 1px 2px #000000b3;
+}
+
+.fleet-panel[hidden] {
+  display: none;
+}
+
+.fleet-panel__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.fleet-panel__title {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.fleet-panel__count {
+  color: #b9cfc5;
+  font-variant-numeric: tabular-nums;
+}
+
+.fleet-panel__controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.9rem;
+}
+
+.fleet-panel__control {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: #b9cfc5;
+}
+
+.fleet-panel__caption {
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.fleet-panel__filter,
+.fleet-panel__sort {
+  padding: 0.15rem 0.35rem;
+  border: 1px solid #ffffff2b;
+  border-radius: 0.35rem;
+  background: #13251f;
+  color: inherit;
+  font: inherit;
+}
+
+.fleet-panel__rows {
+  display: grid;
+  gap: 0.28rem;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.fleet-panel__row {
+  display: grid;
+  grid-template-areas:
+    'slot state eta'
+    'mode ride profile';
+  grid-template-columns: auto 1fr auto;
+  gap: 0.1rem 0.5rem;
+  width: 100%;
+  padding: 0.35rem 0.45rem;
+  border: 1px solid #ffffff1f;
+  border-radius: 0.4rem;
+  background: #13251f;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.fleet-panel__slot {
+  grid-area: slot;
+  font-weight: 600;
+}
+
+.fleet-panel__state {
+  grid-area: state;
+  justify-self: end;
+  font-weight: 600;
+}
+
+.fleet-panel__mode {
+  grid-area: mode;
+  color: #c6dbd1;
+}
+
+.fleet-panel__ride {
+  grid-area: ride;
+  color: #c6dbd1;
+  overflow-wrap: anywhere;
+}
+
+.fleet-panel__eta {
+  grid-area: eta;
+  justify-self: end;
+  font-variant-numeric: tabular-nums;
+}
+
+.fleet-panel__profile {
+  grid-area: profile;
+  justify-self: end;
+  max-width: 11rem;
+  overflow-wrap: anywhere;
+  color: #b9cfc5;
+  font-size: 0.75rem;
+}
+
+.fleet-panel__item[data-state='BLOCKED'] .fleet-panel__state {
+  color: #ffb3a7;
+}
+
+.fleet-panel__item[data-state='BUSY'] .fleet-panel__state {
+  color: #ffd27f;
+}
+
+.fleet-panel__item[data-state='FREE'] .fleet-panel__state {
+  color: #9edbb5;
+}
+
+.fleet-panel__item[data-pinned='true'] .fleet-panel__row {
+  border-style: dashed;
+  border-color: #ffd27f;
+}
+
+.fleet-panel__row[aria-selected='true'] {
+  border-color: #7fd7ff;
+  box-shadow: inset 0 0 0 1px #7fd7ff;
+}
+
+.fleet-panel__row:focus-visible {
+  outline: 3px solid #9edbb5;
+  outline-offset: 2px;
+}
+
+.fleet-panel__status {
+  margin: 0;
+  color: #b9cfc5;
+  font-size: 0.75rem;
+}
+
+.fleet-panel__description {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}

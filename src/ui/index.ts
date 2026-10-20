@@ -28,6 +28,34 @@ export * from './recovery-hud';
 export { createTaxiHud } from './taxi-hud';
 export { createMinimap } from './minimap';
 export type { MinimapOptions } from './minimap';
+export { createFleetPanel } from './fleet-panel';
+export type { FleetPanel, FleetPanelOptions } from './fleet-panel';
+export {
+  fleetPanelBlockedSignature,
+  FLEET_PANEL_FILTERS,
+  FLEET_PANEL_FILTER_LABELS,
+  FLEET_PANEL_LIMITS,
+  FLEET_PANEL_SORTS,
+  FLEET_PANEL_SORT_LABELS,
+  FLEET_PANEL_VERSION,
+  parseFleetPanelSnapshot,
+  projectFleetPanel,
+} from './fleet-panel-format';
+export type {
+  FleetPanelCounts,
+  FleetPanelEta,
+  FleetPanelEtaStatus,
+  FleetPanelFilter,
+  FleetPanelProjectionOptions,
+  FleetPanelRide,
+  FleetPanelRow,
+  FleetPanelRowState,
+  FleetPanelServiceState,
+  FleetPanelSnapshot,
+  FleetPanelSort,
+  FleetPanelTaxi,
+  FleetPanelView,
+} from './fleet-panel-format';
 export {
   createMinimapScene,
   createMinimapTransform,
