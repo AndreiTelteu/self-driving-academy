@@ -68,6 +68,13 @@ export {
 export { createManualSegmentBridge, type ManualSegmentStepCause } from './manual-segment-bridge';
 export { readTaxiHudSnapshot, type TaxiHudFrame, type TaxiHudSources } from './taxi-hud';
 export {
+  readMinimapFrame,
+  readMinimapGeometry,
+  type MinimapFrameInput,
+  type MinimapGeometrySources,
+  type MinimapSources,
+} from './minimap';
+export {
   createManualTrip,
   manualTripContractFacts,
   MANUAL_TRIP_LIMITS,

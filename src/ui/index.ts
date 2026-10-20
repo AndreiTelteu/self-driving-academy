@@ -26,6 +26,51 @@ export { createControlModeHud, CONTROL_MODE_HUD_LIMITS } from './control-mode-hu
 export type { ControlModeHudView } from './control-mode-hud';
 export * from './recovery-hud';
 export { createTaxiHud } from './taxi-hud';
+export { createMinimap } from './minimap';
+export type { MinimapOptions } from './minimap';
+export {
+  createMinimapScene,
+  createMinimapTransform,
+  MINIMAP_LIMITS,
+  MINIMAP_ROUTE_REASONS,
+  MINIMAP_VERSION,
+  paintMinimapLayer,
+  parseMinimapFrame,
+  projectMinimap,
+  projectMinimapPoint,
+} from './minimap-format';
+export type {
+  MinimapAreaCommand,
+  MinimapBounds,
+  MinimapContext,
+  MinimapDynamicCommand,
+  MinimapFrame,
+  MinimapFrameRide,
+  MinimapFrameRoute,
+  MinimapFrameTaxi,
+  MinimapGeometry,
+  MinimapIntersectionGeometry,
+  MinimapLaneGeometry,
+  MinimapLayer,
+  MinimapLeg,
+  MinimapMarker,
+  MinimapMarkerRole,
+  MinimapMovementGeometry,
+  MinimapPointM,
+  MinimapPointPx,
+  MinimapPositionM,
+  MinimapProjection,
+  MinimapRoadCommand,
+  MinimapRouteCommand,
+  MinimapRouteReason,
+  MinimapRouteStatus,
+  MinimapScene,
+  MinimapSceneStats,
+  MinimapServiceState,
+  MinimapStaticCommand,
+  MinimapTransform,
+  MinimapZoneGeometry,
+} from './minimap-format';
 export {
   formatDuration,
   formatDistanceM,
