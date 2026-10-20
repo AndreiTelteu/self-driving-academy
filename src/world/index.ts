@@ -75,6 +75,27 @@ export {
   type RouteDestinationKind,
   type RouteStatus,
 } from './route-planner';
+export {
+  checkMapIntegrity,
+  MAP_INTEGRITY_CHECKS,
+  MAP_INTEGRITY_LIMITS,
+  MAP_INTEGRITY_REASONS,
+  MAP_INTEGRITY_VERSION,
+  type MapIntegrityAccessCoverage,
+  type MapIntegrityCheckCoverage,
+  type MapIntegrityCheckId,
+  type MapIntegrityCheckStatus,
+  type MapIntegrityCoverage,
+  type MapIntegrityEntityKind,
+  type MapIntegrityIssue,
+  type MapIntegrityOptions,
+  type MapIntegrityReason,
+  type MapIntegrityReferenceCoverage,
+  type MapIntegrityReferenceKind,
+  type MapIntegrityReport,
+  type MapIntegrityRoutingCoverage,
+  type MapIntegrityScenarioCoverage,
+} from './map-integrity';
 export { createNeighbourhoodMap, NEIGHBOURHOOD_MAP_ID } from './neighbourhood';
 export {
   createCityLayout,
