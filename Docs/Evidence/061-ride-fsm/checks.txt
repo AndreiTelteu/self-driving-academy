@@ -1,0 +1,91 @@
+# PBI 061 execution log (2026-10-20)
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm run typecheck
+
+> self-driving-academy@0.1.0 typecheck
+> tsc --noEmit && tsc -p tsconfig.tests.json --noEmit
+
+exit=0
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm run lint
+
+> self-driving-academy@0.1.0 lint
+> eslint . --max-warnings 0
+
+exit=0
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm run format:check
+
+> self-driving-academy@0.1.0 format:check
+> prettier --check "src/**/*.{ts,css}" "tests/**/*.ts" "tests/**/*.html" "scripts/**/*.mjs" "*.{json,js,html}"
+
+Checking formatting...
+All matched files use Prettier code style!
+exit=0
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm run check:architecture
+
+> self-driving-academy@0.1.0 check:architecture
+> node scripts/verify-architecture.mjs
+
+Architecture imports: PASS (185 TypeScript files)
+Architecture negative probes: PASS (6 forbidden dependencies rejected)
+Inspector exception negative probes: PASS (4 forbidden imports rejected)
+Rapier adapter negative probes: PASS (3 forbidden imports rejected)
+Renderer injection, readonly snapshots, defensive persistence and lifecycle: PASS
+exit=0
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm run check:parameter-catalog
+
+> self-driving-academy@0.1.0 check:parameter-catalog
+> node scripts/generate-parameter-catalog.mjs --check
+
+Parameter catalog is synchronized.
+exit=0
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm test (filtered summary)
+
+tests 1214
+suites 1
+pass 1214
+fail 0
+cancelled 0
+skipped 0
+todo 0
+duration_ms 34704.3585
+exit=0
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm run ride:lifecycle -- --check
+
+> self-driving-academy@0.1.0 ride:lifecycle
+> node --import ./scripts/register-typescript.mjs scripts/run-ride-fsm-report.mjs --check
+
+PASS CHECK version
+PASS CHECK states
+PASS CHECK terminal-states
+PASS CHECK transitions
+PASS CHECK fleet-and-demand
+PASS CHECK full-path
+PASS CHECK cancel
+PASS CHECK failure
+PASS CHECK duplicates
+PASS CHECK illegal-transition
+PASS CHECK double-terminal
+PASS CHECK stale-tick
+PASS CHECK terminal-reasons
+PASS CHECK claim-leak
+PASS CHECK selection
+PASS CHECK restore
+PASS CHECK identity
+PASS CHECK simulation
+PASS CHECK simulation-bounds
+PASS CHECK disposal
+PASS CHECK closed-vocabularies
+PASS CHECK limits
+PASS CHECK determinism
+PASS CHECK no-wall-clock
+PASS CHECK no-dom-or-renderer
+PASS CHECK validation-errors
+SUMMARY checks 26/26, rides 32, releases 32, overall PASS
+Ride lifecycle report is current: Docs/Evidence/061-ride-fsm/report.json
+exit=0

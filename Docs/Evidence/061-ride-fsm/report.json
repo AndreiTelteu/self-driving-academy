@@ -1,0 +1,1084 @@
+{
+  "version": "061-ride-fsm-v1",
+  "generatedBy": "npm run ride:lifecycle",
+  "oracleRule": "One real 060 assignment creates one ride in TO_PICKUP; only the documented edges advance it, every event is idempotent by its stable event id, ticks never decrease, terminal states carry an explicit reason and release the exact dispatcher claim once, and a restart can restore only a claimed, non-terminal ride.",
+  "limits": {
+    "version": "061-ride-fsm-v1",
+    "activeRides": 64,
+    "terminalRides": 128,
+    "eventsPerRide": 16,
+    "idCodeUnits": 256,
+    "rideIdCodeUnits": 512,
+    "eventIdCodeUnits": 256
+  },
+  "fleet": {
+    "taxis": 24,
+    "civilians": 20,
+    "requests": 32
+  },
+  "path": {
+    "states": [
+      "TO_PICKUP",
+      "PICKUP",
+      "TO_DROPOFF",
+      "DROPOFF",
+      "COMPLETED"
+    ],
+    "events": [
+      "ASSIGNED",
+      "ARRIVED_PICKUP",
+      "PICKUP_COMPLETE",
+      "ARRIVED_DROPOFF",
+      "DROPOFF_COMPLETE"
+    ],
+    "transitions": 5,
+    "releaseReason": "COMPLETED",
+    "assignmentReleased": true,
+    "taxiStatus": "AVAILABLE",
+    "available": true
+  },
+  "cancel": {
+    "state": "CANCELLED",
+    "reason": "PASSENGER_CANCELLED",
+    "releaseReason": "CANCELLED",
+    "assignmentReleased": true,
+    "taxiStatus": "AVAILABLE"
+  },
+  "failure": {
+    "state": "FAILED",
+    "reason": "TAXI_DAMAGED",
+    "releaseReason": "FAILED",
+    "assignmentReleased": true,
+    "taxiStatus": "AVAILABLE"
+  },
+  "duplicates": {
+    "beginDuplicate": true,
+    "replayDuplicate": true,
+    "transitionsAfterReplay": 2,
+    "releasesAfterReplay": 0,
+    "conflictRejected": true,
+    "stateAfterReplay": "PICKUP"
+  },
+  "illegal": {
+    "rejected": true,
+    "stateAfter": "TO_PICKUP",
+    "transitionsAfter": 1,
+    "releasesAfter": 0,
+    "claimIntact": true
+  },
+  "doubleTerminal": {
+    "rejected": true,
+    "state": "COMPLETED",
+    "releases": 1,
+    "transitions": 5
+  },
+  "stale": {
+    "eventRejected": true,
+    "advanceRejected": true,
+    "tick": 20,
+    "stateAfter": "TO_PICKUP"
+  },
+  "reasons": {
+    "missingFailureRejected": true,
+    "missingCancelRejected": true,
+    "wrongVocabularyRejected": true,
+    "reasonOnProgressRejected": true,
+    "releaseOnProgress": false
+  },
+  "claimLeak": {
+    "externalReleaseReason": "TAXI_REMOVED",
+    "terminalRejected": true,
+    "stateAfter": "DROPOFF",
+    "terminal": false,
+    "lifecycleReleases": 0
+  },
+  "selection": {
+    "retargetRejected": true,
+    "firstTaxi": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0002",
+    "firstTaxiAfter": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0002",
+    "firstState": "PICKUP",
+    "secondState": "TO_PICKUP",
+    "secondTaxi": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0001",
+    "claimIntact": true,
+    "releases": 0
+  },
+  "restore": {
+    "restoredState": "TO_DROPOFF",
+    "restoredTaxiMatches": true,
+    "appliedEventIds": 3,
+    "duplicateAfterRestore": true,
+    "terminalRejected": true,
+    "unclaimedRejected": true,
+    "continuedState": "DROPOFF"
+  },
+  "identity": {
+    "rideIdDerived": true,
+    "taxiDistinctFromRide": true,
+    "transitionIdsStable": true,
+    "transitionIdsUnique": true
+  },
+  "simulation": {
+    "assignments": 32,
+    "completed": 24,
+    "failed": 3,
+    "cancelled": 5,
+    "active": 0,
+    "releases": 32,
+    "dispatcherAssignments": 0,
+    "maxConcurrentRides": 1,
+    "duplicateTaxis": false,
+    "uniqueRides": 32,
+    "uniqueTaxis": 5,
+    "firstBeginTick": 0,
+    "lastBeginTick": 1425,
+    "requests": 32,
+    "rides": [
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:morning5:r0000",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0021",
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "reason": null,
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:morning5:r0001",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0021",
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "reason": null,
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:morning5:r0002",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0009",
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "reason": null,
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:morning5:r0003",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0021",
+        "state": "CANCELLED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "CANCELLED"
+        ],
+        "reason": "PLAYER_CANCELLED",
+        "releaseReason": "CANCELLED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:morning5:r0004",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0021",
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "reason": null,
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:morning5:r0005",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0021",
+        "state": "FAILED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "FAILED"
+        ],
+        "reason": "SERVICE_TIMEOUT",
+        "releaseReason": "FAILED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:morning5:r0006",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0021",
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "reason": null,
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:morning5:r0007",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0021",
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "reason": null,
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:morning5:r0008",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0021",
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "reason": null,
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:morning5:r0009",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0021",
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "reason": null,
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:morning5:r0010",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0021",
+        "state": "CANCELLED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "CANCELLED"
+        ],
+        "reason": "PLAYER_CANCELLED",
+        "releaseReason": "CANCELLED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:morning5:r0011",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0021",
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "reason": null,
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides6:w:peak5:r0000",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0021",
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "reason": null,
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides6:w:peak5:r0001",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0021",
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "reason": null,
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides6:w:peak5:r0002",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0004",
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "reason": null,
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides6:w:peak5:r0003",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0021",
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "reason": null,
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides6:w:peak5:r0004",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0021",
+        "state": "FAILED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "FAILED"
+        ],
+        "reason": "SERVICE_TIMEOUT",
+        "releaseReason": "FAILED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides6:w:peak5:r0005",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0021",
+        "state": "CANCELLED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "CANCELLED"
+        ],
+        "reason": "PLAYER_CANCELLED",
+        "releaseReason": "CANCELLED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides6:w:peak5:r0006",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0021",
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "reason": null,
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides6:w:peak5:r0007",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0018",
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "reason": null,
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides6:w:peak5:r0008",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0013",
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "reason": null,
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides6:w:peak5:r0009",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0009",
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "reason": null,
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides6:w:peak5:r0010",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0021",
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "reason": null,
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides6:w:peak5:r0011",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0004",
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "reason": null,
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:evening5:r0000",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0021",
+        "state": "CANCELLED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "CANCELLED"
+        ],
+        "reason": "PLAYER_CANCELLED",
+        "releaseReason": "CANCELLED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:evening5:r0001",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0004",
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "reason": null,
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:evening5:r0002",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0021",
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "reason": null,
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:evening5:r0003",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0021",
+        "state": "FAILED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "FAILED"
+        ],
+        "reason": "SERVICE_TIMEOUT",
+        "releaseReason": "FAILED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:evening5:r0004",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0021",
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "reason": null,
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:evening5:r0005",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0004",
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "reason": null,
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:evening5:r0006",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0004",
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "reason": null,
+        "releaseReason": "COMPLETED"
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:evening5:r0007",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0009",
+        "state": "CANCELLED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "CANCELLED"
+        ],
+        "reason": "PLAYER_CANCELLED",
+        "releaseReason": "CANCELLED"
+      }
+    ]
+  },
+  "disposal": {
+    "disposed": true,
+    "rides": 0,
+    "active": 0,
+    "releases": 0,
+    "claimKept": true
+  },
+  "determinism": {
+    "identical": true,
+    "rides": 32
+  },
+  "checks": [
+    {
+      "name": "version",
+      "expected": "061-ride-fsm-v1",
+      "actual": "061-ride-fsm-v1",
+      "pass": true,
+      "detail": "One versioned lifecycle identity."
+    },
+    {
+      "name": "states",
+      "expected": [
+        "TO_PICKUP",
+        "PICKUP",
+        "TO_DROPOFF",
+        "DROPOFF",
+        "COMPLETED",
+        "FAILED",
+        "CANCELLED"
+      ],
+      "actual": [
+        "TO_PICKUP",
+        "PICKUP",
+        "TO_DROPOFF",
+        "DROPOFF",
+        "COMPLETED",
+        "FAILED",
+        "CANCELLED"
+      ],
+      "pass": true,
+      "detail": "The ride state vocabulary is explicit and closed."
+    },
+    {
+      "name": "terminal-states",
+      "expected": [
+        "COMPLETED",
+        "FAILED",
+        "CANCELLED"
+      ],
+      "actual": [
+        "COMPLETED",
+        "FAILED",
+        "CANCELLED"
+      ],
+      "pass": true,
+      "detail": "Terminal rides are explicit outcomes."
+    },
+    {
+      "name": "transitions",
+      "expected": {
+        "TO_PICKUP": [
+          "PICKUP",
+          "FAILED",
+          "CANCELLED"
+        ],
+        "PICKUP": [
+          "TO_DROPOFF",
+          "FAILED",
+          "CANCELLED"
+        ],
+        "TO_DROPOFF": [
+          "DROPOFF",
+          "FAILED",
+          "CANCELLED"
+        ],
+        "DROPOFF": [
+          "COMPLETED",
+          "FAILED"
+        ],
+        "COMPLETED": [],
+        "FAILED": [],
+        "CANCELLED": []
+      },
+      "actual": {
+        "TO_PICKUP": [
+          "PICKUP",
+          "FAILED",
+          "CANCELLED"
+        ],
+        "PICKUP": [
+          "TO_DROPOFF",
+          "FAILED",
+          "CANCELLED"
+        ],
+        "TO_DROPOFF": [
+          "DROPOFF",
+          "FAILED",
+          "CANCELLED"
+        ],
+        "DROPOFF": [
+          "COMPLETED",
+          "FAILED"
+        ],
+        "COMPLETED": [],
+        "FAILED": [],
+        "CANCELLED": []
+      },
+      "pass": true,
+      "detail": "Every allowed edge is listed; terminal states have no outgoing edge."
+    },
+    {
+      "name": "fleet-and-demand",
+      "expected": {
+        "taxis": 24,
+        "civilians": 20,
+        "requests": 32
+      },
+      "actual": {
+        "taxis": 24,
+        "civilians": 20,
+        "requests": 32
+      },
+      "pass": true,
+      "detail": "The lifecycle uses the real 057 fleet and the real 059 schedule."
+    },
+    {
+      "name": "full-path",
+      "expected": {
+        "states": [
+          "TO_PICKUP",
+          "PICKUP",
+          "TO_DROPOFF",
+          "DROPOFF",
+          "COMPLETED"
+        ],
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "transitions": 5,
+        "releaseReason": "COMPLETED",
+        "assignmentReleased": true,
+        "taxiStatus": "AVAILABLE",
+        "available": true
+      },
+      "actual": {
+        "states": [
+          "TO_PICKUP",
+          "PICKUP",
+          "TO_DROPOFF",
+          "DROPOFF",
+          "COMPLETED"
+        ],
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "transitions": 5,
+        "releaseReason": "COMPLETED",
+        "assignmentReleased": true,
+        "taxiStatus": "AVAILABLE",
+        "available": true
+      },
+      "pass": true,
+      "detail": "A complete ride ends in COMPLETED and releases the real taxi claim."
+    },
+    {
+      "name": "cancel",
+      "expected": {
+        "state": "CANCELLED",
+        "reason": "PASSENGER_CANCELLED",
+        "releaseReason": "CANCELLED",
+        "assignmentReleased": true,
+        "taxiStatus": "AVAILABLE"
+      },
+      "actual": {
+        "state": "CANCELLED",
+        "reason": "PASSENGER_CANCELLED",
+        "releaseReason": "CANCELLED",
+        "assignmentReleased": true,
+        "taxiStatus": "AVAILABLE"
+      },
+      "pass": true,
+      "detail": "A cancellation carries its reason and releases the claim."
+    },
+    {
+      "name": "failure",
+      "expected": {
+        "state": "FAILED",
+        "reason": "TAXI_DAMAGED",
+        "releaseReason": "FAILED",
+        "assignmentReleased": true,
+        "taxiStatus": "AVAILABLE"
+      },
+      "actual": {
+        "state": "FAILED",
+        "reason": "TAXI_DAMAGED",
+        "releaseReason": "FAILED",
+        "assignmentReleased": true,
+        "taxiStatus": "AVAILABLE"
+      },
+      "pass": true,
+      "detail": "A failure carries its reason and releases the claim."
+    },
+    {
+      "name": "duplicates",
+      "expected": {
+        "beginDuplicate": true,
+        "replayDuplicate": true,
+        "transitionsAfterReplay": 2,
+        "releasesAfterReplay": 0,
+        "conflictRejected": true,
+        "stateAfterReplay": "PICKUP"
+      },
+      "actual": {
+        "beginDuplicate": true,
+        "replayDuplicate": true,
+        "transitionsAfterReplay": 2,
+        "releasesAfterReplay": 0,
+        "conflictRejected": true,
+        "stateAfterReplay": "PICKUP"
+      },
+      "pass": true,
+      "detail": "Replays are idempotent; the same event id cannot change the event."
+    },
+    {
+      "name": "illegal-transition",
+      "expected": {
+        "rejected": true,
+        "stateAfter": "TO_PICKUP",
+        "transitionsAfter": 1,
+        "releasesAfter": 0,
+        "claimIntact": true
+      },
+      "actual": {
+        "rejected": true,
+        "stateAfter": "TO_PICKUP",
+        "transitionsAfter": 1,
+        "releasesAfter": 0,
+        "claimIntact": true
+      },
+      "pass": true,
+      "detail": "An illegal edge is rejected without moving state or releasing the taxi."
+    },
+    {
+      "name": "double-terminal",
+      "expected": {
+        "rejected": true,
+        "state": "COMPLETED",
+        "releases": 1,
+        "transitions": 5
+      },
+      "actual": {
+        "rejected": true,
+        "state": "COMPLETED",
+        "releases": 1,
+        "transitions": 5
+      },
+      "pass": true,
+      "detail": "A second terminal event cannot overwrite or duplicate the first result."
+    },
+    {
+      "name": "stale-tick",
+      "expected": {
+        "eventRejected": true,
+        "advanceRejected": true,
+        "tick": 20,
+        "stateAfter": "TO_PICKUP"
+      },
+      "actual": {
+        "eventRejected": true,
+        "advanceRejected": true,
+        "tick": 20,
+        "stateAfter": "TO_PICKUP"
+      },
+      "pass": true,
+      "detail": "Ticks are monotonic; a stale event or a backwards advance is rejected."
+    },
+    {
+      "name": "terminal-reasons",
+      "expected": {
+        "missingFailureRejected": true,
+        "missingCancelRejected": true,
+        "wrongVocabularyRejected": true,
+        "reasonOnProgressRejected": true,
+        "releaseOnProgress": false
+      },
+      "actual": {
+        "missingFailureRejected": true,
+        "missingCancelRejected": true,
+        "wrongVocabularyRejected": true,
+        "reasonOnProgressRejected": true,
+        "releaseOnProgress": false
+      },
+      "pass": true,
+      "detail": "Terminal outcomes require a reason from the matching closed vocabulary."
+    },
+    {
+      "name": "claim-leak",
+      "expected": {
+        "externalReleaseReason": "TAXI_REMOVED",
+        "terminalRejected": true,
+        "stateAfter": "DROPOFF",
+        "terminal": false,
+        "lifecycleReleases": 0
+      },
+      "actual": {
+        "externalReleaseReason": "TAXI_REMOVED",
+        "terminalRejected": true,
+        "stateAfter": "DROPOFF",
+        "terminal": false,
+        "lifecycleReleases": 0
+      },
+      "pass": true,
+      "detail": "A terminal state is never recorded without releasing a real dispatcher claim."
+    },
+    {
+      "name": "selection",
+      "expected": {
+        "retargetRejected": true,
+        "firstTaxiAfter": "SAME",
+        "firstState": "PICKUP",
+        "secondState": "TO_PICKUP",
+        "claimIntact": true,
+        "releases": 0
+      },
+      "actual": {
+        "retargetRejected": true,
+        "firstTaxiAfter": "SAME",
+        "firstState": "PICKUP",
+        "secondState": "TO_PICKUP",
+        "claimIntact": true,
+        "releases": 0
+      },
+      "pass": true,
+      "detail": "Changing the selected taxi never retargets or cancels an active ride."
+    },
+    {
+      "name": "restore",
+      "expected": {
+        "restoredState": "TO_DROPOFF",
+        "restoredTaxiMatches": true,
+        "appliedEventIds": 3,
+        "duplicateAfterRestore": true,
+        "terminalRejected": true,
+        "unclaimedRejected": true,
+        "continuedState": "DROPOFF"
+      },
+      "actual": {
+        "restoredState": "TO_DROPOFF",
+        "restoredTaxiMatches": true,
+        "appliedEventIds": 3,
+        "duplicateAfterRestore": true,
+        "terminalRejected": true,
+        "unclaimedRejected": true,
+        "continuedState": "DROPOFF"
+      },
+      "pass": true,
+      "detail": "Only claimed, non-terminal rides are restorable; replay stays idempotent."
+    },
+    {
+      "name": "identity",
+      "expected": {
+        "rideIdDerived": true,
+        "taxiDistinctFromRide": true,
+        "transitionIdsStable": true,
+        "transitionIdsUnique": true
+      },
+      "actual": {
+        "rideIdDerived": true,
+        "taxiDistinctFromRide": true,
+        "transitionIdsStable": true,
+        "transitionIdsUnique": true
+      },
+      "pass": true,
+      "detail": "Ride and transition ids derive from the real request namespace, not from taxis or clocks."
+    },
+    {
+      "name": "simulation",
+      "expected": {
+        "assignments": 32,
+        "terminals": 32,
+        "releases": 32,
+        "active": 0,
+        "dispatcherAssignments": 0,
+        "uniqueRides": 32,
+        "duplicateTaxis": false,
+        "failedAtLeastOne": true,
+        "cancelledAtLeastOne": true
+      },
+      "actual": {
+        "assignments": 32,
+        "terminals": 32,
+        "releases": 32,
+        "active": 0,
+        "dispatcherAssignments": 0,
+        "uniqueRides": 32,
+        "duplicateTaxis": false,
+        "failedAtLeastOne": true,
+        "cancelledAtLeastOne": true
+      },
+      "pass": true,
+      "detail": "All 32 real requests reach a terminal state exactly once and release their taxi."
+    },
+    {
+      "name": "simulation-bounds",
+      "expected": {
+        "maxConcurrentRides": true,
+        "uniqueTaxis": true,
+        "firstBeginTick": true,
+        "lastBeginTick": true
+      },
+      "actual": {
+        "maxConcurrentRides": true,
+        "uniqueTaxis": true,
+        "firstBeginTick": true,
+        "lastBeginTick": true
+      },
+      "pass": true,
+      "detail": "The simulation stays inside the documented fleet and tick bounds."
+    },
+    {
+      "name": "disposal",
+      "expected": {
+        "disposed": true,
+        "rides": 0,
+        "active": 0,
+        "releases": 0,
+        "claimKept": true
+      },
+      "actual": {
+        "disposed": true,
+        "rides": 0,
+        "active": 0,
+        "releases": 0,
+        "claimKept": true
+      },
+      "pass": true,
+      "detail": "Disposal returns owned state to zero without fabricating a release."
+    },
+    {
+      "name": "closed-vocabularies",
+      "expected": {
+        "failureReasons": 7,
+        "cancelReasons": 3,
+        "events": 7,
+        "releaseReasons": 6
+      },
+      "actual": {
+        "failureReasons": 7,
+        "cancelReasons": 3,
+        "events": 7,
+        "releaseReasons": 6
+      },
+      "pass": true,
+      "detail": "Failure, cancellation and event vocabularies are closed enums."
+    },
+    {
+      "name": "limits",
+      "expected": {
+        "activeRides": 64,
+        "terminalRides": 128,
+        "eventsPerRide": 16,
+        "minimumFleet": true
+      },
+      "actual": {
+        "activeRides": 64,
+        "terminalRides": 128,
+        "eventsPerRide": 16,
+        "minimumFleet": true
+      },
+      "pass": true,
+      "detail": "The lifecycle keeps bounded active and terminal records."
+    },
+    {
+      "name": "determinism",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Two identical simulations produce identical rides."
+    },
+    {
+      "name": "no-wall-clock",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The source has no Date, timer or ambient randomness."
+    },
+    {
+      "name": "no-dom-or-renderer",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The source has no DOM, Babylon or Rapier dependency."
+    },
+    {
+      "name": "validation-errors",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Options are validated instead of silently defaulting."
+    }
+  ],
+  "summary": {
+    "checks": 26,
+    "passed": 26,
+    "pass": true
+  }
+}

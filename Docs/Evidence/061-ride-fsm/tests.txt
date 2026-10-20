@@ -1,0 +1,42 @@
+# PBI 061 targeted test transcript
+
+volta run --node 24.21.0 -- node --import ./scripts/register-typescript.mjs --test tests/fleet/ride-fsm.test.ts
+
+(node:43776) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ 061 completes a full ride and releases the real 060 claim exactly once (249.5834ms)
+✔ 061 rejects every illegal transition without moving state or releasing the claim (169.8121ms)
+✔ 061 rejects a second terminal transition and keeps the first result (178.3494ms)
+✔ 061 refuses a terminal state when the dispatcher claim is already gone (170.3712ms)
+✔ 061 requires an explicit terminal reason and reuses the 060 release for it (2340.605ms)
+✔ 061 makes events idempotent by event id and rejects conflicting replays (134.1876ms)
+✔ 061 rejects stale ticks and stale lifecycle advances (137.5597ms)
+✔ 061 keeps the ride on its assigned taxi when the selected taxi changes (141.2069ms)
+✔ 061 restores an active ride without id forks and refuses terminal or unclaimed rides (300.1885ms)
+✔ 061 restores atomically and never keeps a partially restored lifecycle (148.4612ms)
+✔ 061 never reads a wall clock or a renderer and disposes to zero (451.5103ms)
+✔ 061 exposes only the documented states, events, reasons and transitions (0.4042ms)
+✔ 061 committed evidence report is the current ride lifecycle transcript (2820.4567ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7540.6787
+exit=0
+
+# Full project suite (same commit)
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm test
+
+ℹ tests 1214
+ℹ suites 1
+ℹ pass 1214
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 34704.3585
+exit=0

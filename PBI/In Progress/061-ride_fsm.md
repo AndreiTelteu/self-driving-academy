@@ -27,8 +27,8 @@ Implementează TO_PICKUP până la COMPLETED plus FAILED și CANCELLED.
 
 ## Criterii de acceptare
 
-- [ ] Tranzițiile au evenimente unice și motive pentru rezultate terminale.
-- [ ] Schimbarea taxiului selectat nu anulează cursa.
+- [x] Tranzițiile au evenimente unice și motive pentru rezultate terminale.
+- [x] Schimbarea taxiului selectat nu anulează cursa.
 
 ## Verificare
 
@@ -38,13 +38,13 @@ Rulează verificările relevante ale proiectului și păstrează rezultatul exac
 
 ## Dovezi de finalizare
 
-Rezultat implementare: De completat.
+Rezultat implementare: `src/fleet/ride-fsm.ts` implementează lifecycle-ul pur peste asignările reale 060: stări `TO_PICKUP` → `PICKUP` → `TO_DROPOFF` → `DROPOFF` → `COMPLETED` plus `FAILED`/`CANCELLED`, tranziții închise, evenimente idempotente după `eventId` cu `transitionId` stabil 006, tick monoton fără ceas de perete, ownership-ul taxiului asignat și eliberare explicită `dispatcher.release(...)` cu `COMPLETED`/`CANCELLED`/`FAILED` la fiecare stare terminală. Motivele sunt vocabulare închise, un al doilea terminal este imposibil, iar restaurările acceptă numai curse active cu revendicare reală. Export public în `src/fleet/index.ts`; documentație în `Docs/ride-fsm.md` și paragraf în `Docs/07-flota-si-curse.md`; raport în `Docs/Evidence/061-ride-fsm/`.
 
-Verificări executate și rezultat: De completat.
+Verificări executate și rezultat: `npm run typecheck` exit 0; `npm run lint` exit 0; `npm run format:check` exit 0; `npm run check:architecture` PASS (185 fișiere TS, probe negative 6+4+3); `npm run check:parameter-catalog` sincronizat; `npm test` 1214/1214 pass (baseline 1201/1201); `npm run ride:lifecycle -- --check` 26/26 verificări PASS, 32 curse, 32 eliberări, raport curent. Testele țintite: 13/13 pass.
 
-Fișiere și documente actualizate: De completat.
+Fișiere și documente actualizate: `src/fleet/ride-fsm.ts`, `src/fleet/index.ts`, `tests/fleet/ride-fsm.test.ts`, `tests/fleet/ride-fsm-fixture.ts`, `tests/fleet/ride-fsm-report.ts`, `scripts/run-ride-fsm-report.mjs`, `package.json` (script `ride:lifecycle`), `Docs/ride-fsm.md`, `Docs/07-flota-si-curse.md`, `Docs/Evidence/061-ride-fsm/{README.md,checks.txt,tests.txt,report.json,report.md}`.
 
-Limitări sau follow-up: De completat.
+Limitări sau follow-up: pickup/dropoff fizic rămâne 062–063; ETA/HUD 064/075; tarif/review/KPI 209; sănătatea flotei 065 (remarkarea `DAMAGED` după un `FAILED`). Persistarea snapshot-ului în savefile aparține 127–136. Înregistrările terminale peste 128 sunt eliminate cu `stats().droppedTerminal`. Boardul, mutarea în Done și Validatorul rămân orchestratorului.
 
 ## Definition of Done
 
@@ -59,3 +59,4 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '061' d
 ## Istoric
 
 - 2026-10-04: PBI creat în To Do; implementarea nu a început.
+- 2026-10-20: implementare lifecycle, teste, raport și documentație complete; verificările au trecut, PBI rămâne In Progress pentru mutarea în Done a orchestratorului.
