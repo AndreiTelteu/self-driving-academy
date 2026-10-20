@@ -1,0 +1,102 @@
+# PBI 064 execution log (2026-10-20T17:32:58.810Z)
+
+# typecheck
+
+
+> self-driving-academy@0.1.0 typecheck
+> tsc --noEmit && tsc -p tsconfig.tests.json --noEmit
+
+exit=0
+# lint
+
+
+> self-driving-academy@0.1.0 lint
+> eslint . --max-warnings 0
+
+exit=0
+# format:check
+
+
+> self-driving-academy@0.1.0 format:check
+> prettier --check "src/**/*.{ts,css}" "tests/**/*.ts" "tests/**/*.html" "scripts/**/*.mjs" "*.{json,js,html}"
+
+Checking formatting...
+All matched files use Prettier code style!
+
+exit=0
+# check:architecture
+
+
+> self-driving-academy@0.1.0 check:architecture
+> node scripts/verify-architecture.mjs
+
+Architecture imports: PASS (188 TypeScript files)
+Architecture negative probes: PASS (6 forbidden dependencies rejected)
+Inspector exception negative probes: PASS (4 forbidden imports rejected)
+Rapier adapter negative probes: PASS (3 forbidden imports rejected)
+Renderer injection, readonly snapshots, defensive persistence and lifecycle: PASS
+
+exit=0
+# check:parameter-catalog
+
+
+> self-driving-academy@0.1.0 check:parameter-catalog
+> node scripts/generate-parameter-catalog.mjs --check
+
+Parameter catalog is synchronized.
+
+exit=0
+# npm test (summary; full output omitted)
+
+✔ line contact permits stationary stop; actual forward passage then emits crossing exactly once (10.7029ms)
+✔ speed threshold, far upstream and wrong heading cannot create complete-stop evidence (21.6029ms)
+✔ missing ticks, teleport, reverse crossing, height and finite line ends do not invent traversal (23.3592ms)
+✔ stale/conflicting ticks, context and nonfinite data reject without advancing history (6.0649ms)
+✔ ID reuse cannot inherit stop evidence or admit a retired incarnation; real epoch resets history (7.0413ms)
+✔ bounded history fails closed; frozen map geometry and transverse direction stay stable (7.0648ms)
+✔ directed reverse geometry and consecutive STOP lines preserve distinct opportunities (9.8655ms)
+✔ calibration/accessor boundaries and long valid identities remain safe (4.3494ms)
+ℹ tests 1252
+ℹ suites 1
+ℹ pass 1252
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 44334.3719
+
+exit=0
+# ride:eta -- --check
+
+
+> self-driving-academy@0.1.0 ride:eta
+> node --import ./scripts/register-typescript.mjs scripts/run-eta-report.mjs --check
+
+PASS CHECK version
+PASS CHECK unavailable-reasons
+PASS CHECK defaults
+PASS CHECK uncertainty
+PASS CHECK fleet-and-demand
+PASS CHECK route-basis
+PASS CHECK remaining-route
+PASS CHECK monotonic
+PASS CHECK reprojection
+PASS CHECK anti-snap
+PASS CHECK missing-route
+PASS CHECK invalid-routes
+PASS CHECK stale-route
+PASS CHECK service-states
+PASS CHECK reroute
+PASS CHECK arrivals
+PASS CHECK validation
+PASS CHECK simulation
+PASS CHECK simulation-bounds
+PASS CHECK disposal
+PASS CHECK limits
+PASS CHECK determinism
+PASS CHECK no-wall-clock
+PASS CHECK no-dom-or-renderer
+SUMMARY checks 24/24, completed 32, samples 311, overall PASS
+Eta report is current: C:\Users\aandr\Sites\self-driving-academy\.worktrees\pbi-064\Docs\Evidence\064-eta\report.json
+
+exit=0

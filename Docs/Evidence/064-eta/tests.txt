@@ -1,0 +1,50 @@
+# PBI 064 targeted test transcript
+
+volta run --node 24.21.0 -- node --import ./scripts/register-typescript.mjs --test tests/fleet/eta.test.ts
+
+(node:31376) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ 064 estimates the remaining real 041 route and publishes documented bounds (240.5581ms)
+✔ 064 ETA follows the remaining route instead of the whole leg cost (165.5253ms)
+✔ 064 certified progress never moves backwards, even for a backward observation (151.4646ms)
+✔ 064 reprojects an adjacent lane or intersection gap onto the current route segment (328.5049ms)
+✔ 064 refuses an off-route position instead of snapping it to the wrong segment (154.711ms)
+✔ 064 never reports a missing route as a certain zero-second ETA (555.3418ms)
+✔ 064 refuses a stale route after a replan instead of reusing the old path (324.5083ms)
+✔ 064 reflects free flow, congestion and a blocked service in the estimate (160.4916ms)
+✔ 064 handles arrival and terminal rides without inventing a trip estimate (589.183ms)
+✔ 064 validates speed, position and tick instead of estimating from bad input (134.9361ms)
+✔ 064 is pure, deterministic and disposes every owned structure (428.1833ms)
+✔ 064 keeps the versioned contract and bounded defaults (134.5026ms)
+✔ 064 committed evidence report is the current eta transcript (7155.4471ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 10830.3498
+exit=0
+
+# Full project suite (same commit)
+
+volta run --node 24.21.0 --npm 11.19.0 -- npm test
+
+✔ line contact permits stationary stop; actual forward passage then emits crossing exactly once (10.7029ms)
+✔ speed threshold, far upstream and wrong heading cannot create complete-stop evidence (21.6029ms)
+✔ missing ticks, teleport, reverse crossing, height and finite line ends do not invent traversal (23.3592ms)
+✔ stale/conflicting ticks, context and nonfinite data reject without advancing history (6.0649ms)
+✔ ID reuse cannot inherit stop evidence or admit a retired incarnation; real epoch resets history (7.0413ms)
+✔ bounded history fails closed; frozen map geometry and transverse direction stay stable (7.0648ms)
+✔ directed reverse geometry and consecutive STOP lines preserve distinct opportunities (9.8655ms)
+✔ calibration/accessor boundaries and long valid identities remain safe (4.3494ms)
+ℹ tests 1252
+ℹ suites 1
+ℹ pass 1252
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 44334.3719
+exit=0

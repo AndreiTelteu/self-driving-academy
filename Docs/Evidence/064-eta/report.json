@@ -1,0 +1,1251 @@
+{
+  "version": "064-eta-v1",
+  "generatedBy": "npm run ride:eta",
+  "oracleRule": "ETA is the remaining real 041 lane-time profile at the certified route progress, scaled by the caller service state; progress is forward-only over the stored route with a documented reprojection tolerance, and a missing, stale or uncertifiable route is unavailable instead of zero.",
+  "defaults": {
+    "tickRateHz": 60,
+    "offRouteToleranceM": 4,
+    "reprojectionLanes": 8,
+    "serviceState": "FREE_FLOW"
+  },
+  "limits": {
+    "version": "064-eta-v1",
+    "rides": 64,
+    "routeLanes": 256,
+    "idCodeUnits": 512,
+    "reprojectionLanes": 8,
+    "maximumReprojectionLanes": 64
+  },
+  "uncertainty": {
+    "FREE_FLOW": {
+      "nominalSpeedFactor": 1,
+      "minSpeedFactor": 0.9,
+      "maxSpeedFactor": 1.1
+    },
+    "CONGESTED": {
+      "nominalSpeedFactor": 0.5,
+      "minSpeedFactor": 0.35,
+      "maxSpeedFactor": 0.65
+    },
+    "BLOCKED": null
+  },
+  "fleet": {
+    "taxis": 24,
+    "civilians": 20,
+    "requests": 32
+  },
+  "routeBasis": {
+    "routeLaneIds": [
+      "lane:00E0",
+      "lane:10E0",
+      "lane:20N0",
+      "lane:11W0",
+      "lane:10S0",
+      "lane:00W0"
+    ],
+    "totalDistanceM": 1067.884216,
+    "plannedSpeedMps": 12.258824,
+    "pickupCostSeconds": 83.776386,
+    "plannedRemainingSeconds": 83.776386,
+    "etaSeconds": 83.776386,
+    "etaMinSeconds": 76.160351,
+    "etaMaxSeconds": 93.084873,
+    "boundsOrdered": true,
+    "initialProgress": 0
+  },
+  "remainingRoute": {
+    "fullEtaSeconds": 83.776386,
+    "nearEndEtaSeconds": 7.230957,
+    "nearEndProgress": 0.91928,
+    "nearEndRatio": 0.086313,
+    "samples": 6
+  },
+  "monotonic": {
+    "progressBefore": 0.417806,
+    "progressAfterBackward": 0.417806,
+    "backwardReason": "OFF_ROUTE",
+    "backwardEta": null,
+    "forwardProgress": 0.588066,
+    "noRewind": true,
+    "etaAfterBackward": null
+  },
+  "reprojection": {
+    "adjacentLaneId": "lane:20N1",
+    "adjacentDistanceM": 3.7,
+    "adjacentStatus": "ESTIMATED",
+    "adjacentSegmentIndex": 2,
+    "adjacentSegmentLaneId": "lane:20N0",
+    "adjacentReprojected": true,
+    "gapStatus": "ESTIMATED",
+    "gapKind": "CONNECTION",
+    "gapSegmentIndex": 1,
+    "gapSegmentLaneId": "lane:10E0",
+    "gapOffRouteDistanceM": 0,
+    "gapReprojected": true,
+    "gapProgress": 0.164999,
+    "gapEta": 69.314472
+  },
+  "antiSnap": {
+    "reason": "OFF_ROUTE",
+    "progressBefore": 0.91928,
+    "progressAfter": 0.91928,
+    "progressPreserved": true,
+    "etaSeconds": null,
+    "offRouteDistanceM": null
+  },
+  "missingRoute": {
+    "status": "UNAVAILABLE",
+    "reason": "ROUTE_MISSING",
+    "etaSeconds": null,
+    "remainingDistanceM": null,
+    "progressFraction": null,
+    "routeLaneIds": null
+  },
+  "invalidRoutes": {
+    "negativeCostReason": "ROUTE_INVALID",
+    "negativeCostEta": null,
+    "disconnectedReason": "ROUTE_STALE",
+    "disconnectedStale": true,
+    "disconnectedEta": null
+  },
+  "staleRoute": {
+    "beforeStatus": "ESTIMATED",
+    "afterReason": "ROUTE_STALE",
+    "afterEta": null,
+    "afterRemaining": null,
+    "staleFlag": true,
+    "recoveredStatus": "ESTIMATED",
+    "recoveredProgress": 0.417806,
+    "beforeProgress": 0.247546,
+    "lateCreatedReason": "ROUTE_STALE",
+    "lateCreatedEta": null
+  },
+  "service": {
+    "freeEtaSeconds": 62.238703,
+    "congestedEtaSeconds": 124.477407,
+    "congestedRatio": 2,
+    "congestedMinSeconds": 95.751851,
+    "congestedMaxSeconds": 177.824867,
+    "blockedReason": "SERVICE_BLOCKED",
+    "blockedEta": null,
+    "blockedProgress": 0.417806,
+    "congestedProgress": 0.247546,
+    "restoredEtaSeconds": 35.999597
+  },
+  "reroute": {
+    "freeRouteLaneIds": [
+      "lane:00W0",
+      "lane:00N0",
+      "lane:01E0",
+      "lane:11E0",
+      "lane:20S1",
+      "lane:10W0"
+    ],
+    "replannedRouteLaneIds": [
+      "lane:00W0",
+      "lane:00N0",
+      "lane:01N0",
+      "lane:02E1",
+      "lane:12E1",
+      "lane:21S1",
+      "lane:20S1",
+      "lane:10W0"
+    ],
+    "routeDiffers": true,
+    "freeTripCostSeconds": 83.776386,
+    "replannedTripCostSeconds": 110.428305,
+    "freeEtaSeconds": 83.776386,
+    "replannedEtaSeconds": 110.428305,
+    "oldRouteAfterReplanReason": "ROUTE_STALE",
+    "oldRouteAfterReplanEta": null
+  },
+  "arrivals": {
+    "pickupStatus": "ARRIVED",
+    "pickupEta": 0,
+    "dropoffStatus": "ARRIVED",
+    "dropoffEta": 0,
+    "terminalReason": "RIDE_TERMINAL",
+    "terminalEta": null,
+    "terminalState": "COMPLETED"
+  },
+  "validation": {
+    "nanSpeed": true,
+    "negativeSpeed": true,
+    "infiniteSpeed": true,
+    "nanPosition": true,
+    "staleTick": true,
+    "staleTickReason": "STALE_TICK",
+    "unknownField": true,
+    "wrongRide": "WRONG_RIDE",
+    "foreignVehicle": "FOREIGN_VEHICLE"
+  },
+  "simulation": {
+    "requests": 32,
+    "assignments": 32,
+    "completed": 32,
+    "failed": 0,
+    "cancelled": 0,
+    "active": 0,
+    "samples": 311,
+    "pickupSamples": 141,
+    "tripSamples": 170,
+    "monotonicViolations": 0,
+    "etaViolations": 0,
+    "offRoute": 0,
+    "unavailable": 0,
+    "arrived": 0,
+    "zeroCostSamples": 4,
+    "byReason": {
+      "ARRIVED": 0
+    },
+    "routeLoads": 64,
+    "minEta": 0,
+    "maxEta": 105.164269,
+    "rides": [
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:morning5:r0000",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0021",
+        "pickupSamples": 5,
+        "tripSamples": 5,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ]
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:morning5:r0001",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0009",
+        "pickupSamples": 4,
+        "tripSamples": 2,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ]
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:morning5:r0002",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0010",
+        "pickupSamples": 6,
+        "tripSamples": 5,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ]
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:morning5:r0003",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0005",
+        "pickupSamples": 5,
+        "tripSamples": 4,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ]
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:morning5:r0004",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0015",
+        "pickupSamples": 6,
+        "tripSamples": 5,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ]
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:morning5:r0005",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0022",
+        "pickupSamples": 5,
+        "tripSamples": 4,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ]
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:morning5:r0006",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0001",
+        "pickupSamples": 5,
+        "tripSamples": 5,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ]
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:morning5:r0007",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0023",
+        "pickupSamples": 4,
+        "tripSamples": 8,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ]
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:morning5:r0008",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0021",
+        "pickupSamples": 4,
+        "tripSamples": 3,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ]
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:morning5:r0009",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0009",
+        "pickupSamples": 7,
+        "tripSamples": 5,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ]
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:morning5:r0010",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0010",
+        "pickupSamples": 4,
+        "tripSamples": 7,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ]
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:morning5:r0011",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0005",
+        "pickupSamples": 4,
+        "tripSamples": 6,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ]
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides6:w:peak5:r0000",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0015",
+        "pickupSamples": 6,
+        "tripSamples": 4,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ]
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides6:w:peak5:r0001",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0022",
+        "pickupSamples": 5,
+        "tripSamples": 6,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ]
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides6:w:peak5:r0002",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0004",
+        "pickupSamples": 1,
+        "tripSamples": 8,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ]
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides6:w:peak5:r0003",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0001",
+        "pickupSamples": 7,
+        "tripSamples": 4,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ]
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides6:w:peak5:r0004",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0019",
+        "pickupSamples": 5,
+        "tripSamples": 7,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ]
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides6:w:peak5:r0005",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0023",
+        "pickupSamples": 5,
+        "tripSamples": 5,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ]
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides6:w:peak5:r0006",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0002",
+        "pickupSamples": 7,
+        "tripSamples": 4,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ]
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides6:w:peak5:r0007",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0018",
+        "pickupSamples": 1,
+        "tripSamples": 5,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ]
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides6:w:peak5:r0008",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0013",
+        "pickupSamples": 1,
+        "tripSamples": 7,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ]
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides6:w:peak5:r0009",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0009",
+        "pickupSamples": 5,
+        "tripSamples": 4,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ]
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides6:w:peak5:r0010",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0021",
+        "pickupSamples": 6,
+        "tripSamples": 5,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ]
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides6:w:peak5:r0011",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0024",
+        "pickupSamples": 2,
+        "tripSamples": 7,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ]
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:evening5:r0000",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0010",
+        "pickupSamples": 5,
+        "tripSamples": 7,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ]
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:evening5:r0001",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0005",
+        "pickupSamples": 3,
+        "tripSamples": 8,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ]
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:evening5:r0002",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0001",
+        "pickupSamples": 4,
+        "tripSamples": 3,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ]
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:evening5:r0003",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0023",
+        "pickupSamples": 4,
+        "tripSamples": 6,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ]
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:evening5:r0004",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0015",
+        "pickupSamples": 6,
+        "tripSamples": 5,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ]
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:evening5:r0005",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0004",
+        "pickupSamples": 1,
+        "tripSamples": 6,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ]
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:evening5:r0006",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0024",
+        "pickupSamples": 2,
+        "tripSamples": 7,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ]
+      },
+      {
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides9:w:evening5:r0007",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0009",
+        "pickupSamples": 6,
+        "tripSamples": 3,
+        "state": "COMPLETED",
+        "events": [
+          "ASSIGNED",
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ]
+      }
+    ]
+  },
+  "disposal": {
+    "disposed": true,
+    "observations": 0,
+    "estimated": 0,
+    "arrived": 0,
+    "unavailable": 0,
+    "tick": 0,
+    "routeLoads": 0,
+    "releaseReason": null,
+    "state": "TO_PICKUP"
+  },
+  "determinism": {
+    "identical": true,
+    "rides": 32
+  },
+  "checks": [
+    {
+      "name": "version",
+      "expected": "064-eta-v1",
+      "actual": "064-eta-v1",
+      "pass": true,
+      "detail": "One versioned ETA identity."
+    },
+    {
+      "name": "unavailable-reasons",
+      "expected": [
+        "ROUTE_MISSING",
+        "ROUTE_STALE",
+        "ROUTE_INVALID",
+        "POSITION_INVALID",
+        "OFF_ROUTE",
+        "SERVICE_BLOCKED",
+        "STALE_TICK",
+        "WRONG_RIDE",
+        "FOREIGN_VEHICLE",
+        "RIDE_TERMINAL"
+      ],
+      "actual": [
+        "ROUTE_MISSING",
+        "ROUTE_STALE",
+        "ROUTE_INVALID",
+        "POSITION_INVALID",
+        "OFF_ROUTE",
+        "SERVICE_BLOCKED",
+        "STALE_TICK",
+        "WRONG_RIDE",
+        "FOREIGN_VEHICLE",
+        "RIDE_TERMINAL"
+      ],
+      "pass": true,
+      "detail": "Every unavailable estimate carries one closed reason."
+    },
+    {
+      "name": "defaults",
+      "expected": {
+        "tickRateHz": 60,
+        "offRouteToleranceM": 4,
+        "reprojectionLanes": 8,
+        "serviceState": "FREE_FLOW"
+      },
+      "actual": {
+        "tickRateHz": 60,
+        "offRouteToleranceM": 4,
+        "reprojectionLanes": 8,
+        "serviceState": "FREE_FLOW"
+      },
+      "pass": true,
+      "detail": "Documented provisional defaults; no wall clock and no hidden traffic prediction."
+    },
+    {
+      "name": "uncertainty",
+      "expected": {
+        "FREE_FLOW": {
+          "nominalSpeedFactor": 1,
+          "minSpeedFactor": 0.9,
+          "maxSpeedFactor": 1.1
+        },
+        "CONGESTED": {
+          "nominalSpeedFactor": 0.5,
+          "minSpeedFactor": 0.35,
+          "maxSpeedFactor": 0.65
+        },
+        "BLOCKED": null
+      },
+      "actual": {
+        "FREE_FLOW": {
+          "nominalSpeedFactor": 1,
+          "minSpeedFactor": 0.9,
+          "maxSpeedFactor": 1.1
+        },
+        "CONGESTED": {
+          "nominalSpeedFactor": 0.5,
+          "minSpeedFactor": 0.35,
+          "maxSpeedFactor": 0.65
+        },
+        "BLOCKED": null
+      },
+      "pass": true,
+      "detail": "The published interval is a declared speed uncertainty around the real route basis."
+    },
+    {
+      "name": "fleet-and-demand",
+      "expected": {
+        "taxis": 24,
+        "civilians": 20,
+        "requests": 32
+      },
+      "actual": {
+        "taxis": 24,
+        "civilians": 20,
+        "requests": 32
+      },
+      "pass": true,
+      "detail": "The report uses the real 057 fleet and the real 059 schedule."
+    },
+    {
+      "name": "route-basis",
+      "expected": {
+        "routeLaneIds": [
+          "lane:00E0",
+          "lane:10E0",
+          "lane:20N0",
+          "lane:11W0",
+          "lane:10S0",
+          "lane:00W0"
+        ],
+        "totalDistanceM": 1067.884216,
+        "plannedSpeedMps": 12.258824,
+        "pickupCostSeconds": 83.776386,
+        "plannedRemainingSeconds": 83.776386,
+        "etaSeconds": 83.776386,
+        "etaMinSeconds": 76.160351,
+        "etaMaxSeconds": 93.084873,
+        "boundsOrdered": true,
+        "initialProgress": 0
+      },
+      "actual": {
+        "routeLaneIds": [
+          "lane:00E0",
+          "lane:10E0",
+          "lane:20N0",
+          "lane:11W0",
+          "lane:10S0",
+          "lane:00W0"
+        ],
+        "totalDistanceM": 1067.884216,
+        "plannedSpeedMps": 12.258824,
+        "pickupCostSeconds": 83.776386,
+        "plannedRemainingSeconds": 83.776386,
+        "etaSeconds": 83.776386,
+        "etaMinSeconds": 76.160351,
+        "etaMaxSeconds": 93.084873,
+        "boundsOrdered": true,
+        "initialProgress": 0
+      },
+      "pass": true,
+      "detail": "The ETA is the real 041 route cost at progress 0 with an ordered interval."
+    },
+    {
+      "name": "remaining-route",
+      "expected": {
+        "fullEtaSeconds": 83.776386,
+        "nearEndEtaSeconds": 7.230957,
+        "nearEndProgress": 0.91928,
+        "nearEndRatio": 0.086313,
+        "samples": 6
+      },
+      "actual": {
+        "fullEtaSeconds": 83.776386,
+        "nearEndEtaSeconds": 7.230957,
+        "nearEndProgress": 0.91928,
+        "nearEndRatio": 0.086313,
+        "samples": 6
+      },
+      "pass": true,
+      "detail": "A near-end observation returns a small fraction of the full leg, not the leg cost."
+    },
+    {
+      "name": "monotonic",
+      "expected": {
+        "progressBefore": 0.417806,
+        "progressAfterBackward": 0.417806,
+        "backwardReason": "OFF_ROUTE",
+        "backwardEta": null,
+        "forwardProgress": 0.588066,
+        "noRewind": true,
+        "etaAfterBackward": null
+      },
+      "actual": {
+        "progressBefore": 0.417806,
+        "progressAfterBackward": 0.417806,
+        "backwardReason": "OFF_ROUTE",
+        "backwardEta": null,
+        "forwardProgress": 0.588066,
+        "noRewind": true,
+        "etaAfterBackward": null
+      },
+      "pass": true,
+      "detail": "A backward observation is refused and certified progress is not rewound."
+    },
+    {
+      "name": "reprojection",
+      "expected": {
+        "adjacentLaneId": "lane:20N1",
+        "adjacentDistanceM": 3.7,
+        "adjacentStatus": "ESTIMATED",
+        "adjacentSegmentIndex": 2,
+        "adjacentSegmentLaneId": "lane:20N0",
+        "adjacentReprojected": true,
+        "gapStatus": "ESTIMATED",
+        "gapKind": "CONNECTION",
+        "gapSegmentIndex": 1,
+        "gapSegmentLaneId": "lane:10E0",
+        "gapOffRouteDistanceM": 0,
+        "gapReprojected": true,
+        "gapProgress": 0.164999,
+        "gapEta": 69.314472
+      },
+      "actual": {
+        "adjacentLaneId": "lane:20N1",
+        "adjacentDistanceM": 3.7,
+        "adjacentStatus": "ESTIMATED",
+        "adjacentSegmentIndex": 2,
+        "adjacentSegmentLaneId": "lane:20N0",
+        "adjacentReprojected": true,
+        "gapStatus": "ESTIMATED",
+        "gapKind": "CONNECTION",
+        "gapSegmentIndex": 1,
+        "gapSegmentLaneId": "lane:10E0",
+        "gapOffRouteDistanceM": 0,
+        "gapReprojected": true,
+        "gapProgress": 0.164999,
+        "gapEta": 69.314472
+      },
+      "pass": true,
+      "detail": "An adjacent same-direction lane and an intersection gap reproject to the current segment."
+    },
+    {
+      "name": "anti-snap",
+      "expected": {
+        "reason": "OFF_ROUTE",
+        "progressBefore": 0.91928,
+        "progressAfter": 0.91928,
+        "progressPreserved": true,
+        "etaSeconds": null,
+        "offRouteDistanceM": null
+      },
+      "actual": {
+        "reason": "OFF_ROUTE",
+        "progressBefore": 0.91928,
+        "progressAfter": 0.91928,
+        "progressPreserved": true,
+        "etaSeconds": null,
+        "offRouteDistanceM": null
+      },
+      "pass": true,
+      "detail": "A position behind the committed progress is not snapped to an earlier segment."
+    },
+    {
+      "name": "missing-route",
+      "expected": {
+        "status": "UNAVAILABLE",
+        "reason": "ROUTE_MISSING",
+        "etaSeconds": null,
+        "remainingDistanceM": null,
+        "progressFraction": null,
+        "routeLaneIds": null
+      },
+      "actual": {
+        "status": "UNAVAILABLE",
+        "reason": "ROUTE_MISSING",
+        "etaSeconds": null,
+        "remainingDistanceM": null,
+        "progressFraction": null,
+        "routeLaneIds": null
+      },
+      "pass": true,
+      "detail": "A ride without a 041 route never shows zero seconds as a certain time."
+    },
+    {
+      "name": "invalid-routes",
+      "expected": {
+        "negativeCostReason": "ROUTE_INVALID",
+        "negativeCostEta": null,
+        "disconnectedReason": "ROUTE_STALE",
+        "disconnectedStale": true,
+        "disconnectedEta": null
+      },
+      "actual": {
+        "negativeCostReason": "ROUTE_INVALID",
+        "negativeCostEta": null,
+        "disconnectedReason": "ROUTE_STALE",
+        "disconnectedStale": true,
+        "disconnectedEta": null
+      },
+      "pass": true,
+      "detail": "An invalid-cost leg and a disconnected lane sequence are refused with closed reasons."
+    },
+    {
+      "name": "stale-route",
+      "expected": {
+        "beforeStatus": "ESTIMATED",
+        "afterReason": "ROUTE_STALE",
+        "afterEta": null,
+        "afterRemaining": null,
+        "staleFlag": true,
+        "recoveredStatus": "ESTIMATED",
+        "recoveredProgress": 0.417806,
+        "beforeProgress": 0.247546,
+        "lateCreatedReason": "ROUTE_STALE",
+        "lateCreatedEta": null
+      },
+      "actual": {
+        "beforeStatus": "ESTIMATED",
+        "afterReason": "ROUTE_STALE",
+        "afterEta": null,
+        "afterRemaining": null,
+        "staleFlag": true,
+        "recoveredStatus": "ESTIMATED",
+        "recoveredProgress": 0.417806,
+        "beforeProgress": 0.247546,
+        "lateCreatedReason": "ROUTE_STALE",
+        "lateCreatedEta": null
+      },
+      "pass": true,
+      "detail": "A replan invalidates the stored route; an estimate created later refuses the old path too."
+    },
+    {
+      "name": "service-states",
+      "expected": {
+        "freeEtaSeconds": 62.238703,
+        "congestedEtaSeconds": 124.477407,
+        "congestedRatio": 2,
+        "congestedMinSeconds": 95.751851,
+        "congestedMaxSeconds": 177.824867,
+        "blockedReason": "SERVICE_BLOCKED",
+        "blockedEta": null,
+        "blockedProgress": 0.417806,
+        "congestedProgress": 0.247546,
+        "restoredEtaSeconds": 35.999597
+      },
+      "actual": {
+        "freeEtaSeconds": 62.238703,
+        "congestedEtaSeconds": 124.477407,
+        "congestedRatio": 2,
+        "congestedMinSeconds": 95.751851,
+        "congestedMaxSeconds": 177.824867,
+        "blockedReason": "SERVICE_BLOCKED",
+        "blockedEta": null,
+        "blockedProgress": 0.417806,
+        "congestedProgress": 0.247546,
+        "restoredEtaSeconds": 35.999597
+      },
+      "pass": true,
+      "detail": "Free flow, congestion and a blocked service produce different, documented outcomes."
+    },
+    {
+      "name": "reroute",
+      "expected": {
+        "freeRouteLaneIds": [
+          "lane:00W0",
+          "lane:00N0",
+          "lane:01E0",
+          "lane:11E0",
+          "lane:20S1",
+          "lane:10W0"
+        ],
+        "replannedRouteLaneIds": [
+          "lane:00W0",
+          "lane:00N0",
+          "lane:01N0",
+          "lane:02E1",
+          "lane:12E1",
+          "lane:21S1",
+          "lane:20S1",
+          "lane:10W0"
+        ],
+        "routeDiffers": true,
+        "freeTripCostSeconds": 83.776386,
+        "replannedTripCostSeconds": 110.428305,
+        "freeEtaSeconds": 83.776386,
+        "replannedEtaSeconds": 110.428305,
+        "oldRouteAfterReplanReason": "ROUTE_STALE",
+        "oldRouteAfterReplanEta": null
+      },
+      "actual": {
+        "freeRouteLaneIds": [
+          "lane:00W0",
+          "lane:00N0",
+          "lane:01E0",
+          "lane:11E0",
+          "lane:20S1",
+          "lane:10W0"
+        ],
+        "replannedRouteLaneIds": [
+          "lane:00W0",
+          "lane:00N0",
+          "lane:01N0",
+          "lane:02E1",
+          "lane:12E1",
+          "lane:21S1",
+          "lane:20S1",
+          "lane:10W0"
+        ],
+        "routeDiffers": true,
+        "freeTripCostSeconds": 83.776386,
+        "replannedTripCostSeconds": 110.428305,
+        "freeEtaSeconds": 83.776386,
+        "replannedEtaSeconds": 110.428305,
+        "oldRouteAfterReplanReason": "ROUTE_STALE",
+        "oldRouteAfterReplanEta": null
+      },
+      "pass": true,
+      "detail": "A real 060 replan yields a different route and a larger ETA; the old route is stale."
+    },
+    {
+      "name": "arrivals",
+      "expected": {
+        "pickupStatus": "ARRIVED",
+        "pickupEta": 0,
+        "dropoffStatus": "ARRIVED",
+        "dropoffEta": 0,
+        "terminalReason": "RIDE_TERMINAL",
+        "terminalEta": null,
+        "terminalState": "COMPLETED"
+      },
+      "actual": {
+        "pickupStatus": "ARRIVED",
+        "pickupEta": 0,
+        "dropoffStatus": "ARRIVED",
+        "dropoffEta": 0,
+        "terminalReason": "RIDE_TERMINAL",
+        "terminalEta": null,
+        "terminalState": "COMPLETED"
+      },
+      "pass": true,
+      "detail": "Arrival is authoritative and reports zero; a terminal ride has no estimate."
+    },
+    {
+      "name": "validation",
+      "expected": {
+        "nanSpeed": true,
+        "negativeSpeed": true,
+        "infiniteSpeed": true,
+        "nanPosition": true,
+        "staleTick": true,
+        "staleTickReason": "STALE_TICK",
+        "unknownField": true,
+        "wrongRide": "WRONG_RIDE",
+        "foreignVehicle": "FOREIGN_VEHICLE"
+      },
+      "actual": {
+        "nanSpeed": true,
+        "negativeSpeed": true,
+        "infiniteSpeed": true,
+        "nanPosition": true,
+        "staleTick": true,
+        "staleTickReason": "STALE_TICK",
+        "unknownField": true,
+        "wrongRide": "WRONG_RIDE",
+        "foreignVehicle": "FOREIGN_VEHICLE"
+      },
+      "pass": true,
+      "detail": "NaN, negative or infinite speed and invalid positions are contract errors, never estimates."
+    },
+    {
+      "name": "simulation",
+      "expected": {
+        "requests": 32,
+        "assignments": 32,
+        "completed": 32,
+        "failed": 0,
+        "cancelled": 0,
+        "active": 0,
+        "samples": 311,
+        "pickupSamples": 141,
+        "tripSamples": 170,
+        "monotonicViolations": 0,
+        "etaViolations": 0,
+        "offRoute": 0,
+        "unavailable": 0,
+        "arrived": 0,
+        "zeroCostSamples": 4,
+        "routeLoads": 64,
+        "minEtaNonNegative": true,
+        "maxEtaGreaterThanMin": true
+      },
+      "actual": {
+        "requests": 32,
+        "assignments": 32,
+        "completed": 32,
+        "failed": 0,
+        "cancelled": 0,
+        "active": 0,
+        "samples": 311,
+        "pickupSamples": 141,
+        "tripSamples": 170,
+        "monotonicViolations": 0,
+        "etaViolations": 0,
+        "offRoute": 0,
+        "unavailable": 0,
+        "arrived": 0,
+        "zeroCostSamples": 4,
+        "routeLoads": 64,
+        "minEtaNonNegative": true,
+        "maxEtaGreaterThanMin": true
+      },
+      "pass": true,
+      "detail": "All 32 real requests are estimated along their real route without rewinds or ETA inversions."
+    },
+    {
+      "name": "simulation-bounds",
+      "expected": {
+        "requests": 32,
+        "everyRideSampledBothLegs": true,
+        "transitions": true
+      },
+      "actual": {
+        "requests": 32,
+        "everyRideSampledBothLegs": true,
+        "transitions": true
+      },
+      "pass": true,
+      "detail": "Each completed ride contributed ETA samples on both legs and kept the real 061 chain."
+    },
+    {
+      "name": "disposal",
+      "expected": {
+        "disposed": true,
+        "observations": 0,
+        "estimated": 0,
+        "arrived": 0,
+        "unavailable": 0,
+        "tick": 0,
+        "routeLoads": 0,
+        "releaseReason": null,
+        "state": "TO_PICKUP"
+      },
+      "actual": {
+        "disposed": true,
+        "observations": 0,
+        "estimated": 0,
+        "arrived": 0,
+        "unavailable": 0,
+        "tick": 0,
+        "routeLoads": 0,
+        "releaseReason": null,
+        "state": "TO_PICKUP"
+      },
+      "pass": true,
+      "detail": "Disposal returns owned ETA state to zero without releasing the 060 claim."
+    },
+    {
+      "name": "limits",
+      "expected": {
+        "rides": 64,
+        "routeLanes": 256,
+        "reprojectionLanes": 8,
+        "minimumFleet": true
+      },
+      "actual": {
+        "rides": 64,
+        "routeLanes": 256,
+        "reprojectionLanes": 8,
+        "minimumFleet": true
+      },
+      "pass": true,
+      "detail": "ETA state is bounded by the same active-ride and 041 path ceilings."
+    },
+    {
+      "name": "determinism",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Two identical simulations produce identical estimates."
+    },
+    {
+      "name": "no-wall-clock",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The source has no Date, timer or ambient randomness."
+    },
+    {
+      "name": "no-dom-or-renderer",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The source has no DOM, Babylon or Rapier dependency."
+    }
+  ],
+  "summary": {
+    "checks": 24,
+    "passed": 24,
+    "pass": true
+  }
+}

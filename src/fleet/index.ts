@@ -6,3 +6,4 @@ export * from './dispatcher';
 export * from './ride-fsm';
 export * from './pickup';
 export * from './dropoff';
+export * from './eta';
