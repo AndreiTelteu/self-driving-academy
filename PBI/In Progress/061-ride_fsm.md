@@ -1,12 +1,12 @@
 ---
 id: "061"
 title: "Lifecycle cursă și eșecuri"
-status: "To Do"
+status: "In Progress"
 release: "V1"
 module: "Flotă și curse"
 depends_on: ["060","007"]
-owner: null
-started_at: null
+owner: "Codex gpt-6-luna medium loop-061"
+started_at: "2026-10-20T17:40:41+03:00"
 completed_at: null
 ---
 
