@@ -1,12 +1,12 @@
 ---
 id: "058"
 title: "Trafic civil cu rute proprii și stilul comun al orașului"
-status: "To Do"
+status: "In Progress"
 release: "V1"
 module: "Flotă și curse"
 depends_on: ["057","041"]
-owner: null
-started_at: null
+owner: "Codex gpt-6-luna medium loop-058"
+started_at: "2026-10-20T14:17:39+03:00"
 completed_at: null
 ---
 
