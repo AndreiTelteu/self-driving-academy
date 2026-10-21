@@ -20,6 +20,8 @@ Panoul profilului afișează valorile curente, diferența față de versiunea pr
 
 Tabloul orașului arată curse finalizate, timpi, distanță parcursă, încălcări, coliziuni, blocaje și confort. Jucătorul poate inspecta fiecare eveniment pe hartă și poate compara două profiluri în același scenariu.
 
+[Tabloul orașului 082](city-dashboard.md) materializează această regulă: cei șapte indicatori au identitate închisă, unul indisponibil este afișat „Indisponibil” cu motiv închis și niciodată ca `0`, iar un zero real rămâne `AVAILABLE` și se afișează „0”. Expunerea (ferestre, observații, durată) urmează aceeași regulă. Incidentele reale 028 și blocajele 065 păstrează id-ul, tick-ul, vehiculul și poziția sursei; un incident fără poziție nu poate fi localizat. Selectarea unui incident emite o singură intenție de focalizare a hărții prin portul injectat și nu schimbă profilul, modul camerei, autoritatea sau fizica.
+
 ## Comenzi propuse
 
 | Comandă | Acțiune |

@@ -75,6 +75,21 @@ export {
   type FleetPanelSources,
 } from './fleet-panel';
 export {
+  CITY_COLLISION_SEVERITY_BANDS,
+  createCityCollisionLog,
+  createCityDashboardFocusPort,
+  readCityDashboardSnapshot,
+  type CityCollisionLog,
+  type CityCollisionLogStats,
+  type CityCollisionSource,
+  type CityDashboardExposureProvider,
+  type CityDashboardFrame,
+  type CityDashboardMetricsProvider,
+  type CityDashboardSources,
+  type CityExposureObservation,
+  type CityFocusMapPort,
+} from './city-dashboard';
+export {
   PROFILE_PANEL_LOCAL_CONTEXT,
   PROFILE_PANEL_READ_ERRORS,
   readProfilePanelSnapshot,

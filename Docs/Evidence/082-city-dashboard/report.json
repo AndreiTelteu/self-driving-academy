@@ -1,0 +1,1202 @@
+{
+  "version": "082-city-dashboard-v1",
+  "contract": {
+    "metricIds": [
+      "completedRides",
+      "averageRideSeconds",
+      "totalDistanceM",
+      "violations",
+      "collisions",
+      "blockages",
+      "comfortScore"
+    ],
+    "incidentKinds": [
+      "COLLISION",
+      "BLOCKAGE",
+      "VIOLATION",
+      "COMFORT"
+    ],
+    "reasons": [
+      "NO_EXPOSURE",
+      "SOURCE_MISSING",
+      "NOT_CERTIFIED"
+    ],
+    "rules": [
+      "unavailable data is value:null with a closed reason, never 0",
+      "a real zero is AVAILABLE with value 0 and the text \"0\"",
+      "an incident without a real point cannot be located and emits no focus",
+      "selecting an incident only emits a map-focus intention; no profile, camera mode, authority or physics change"
+    ],
+    "limits": {
+      "maximumHz": 10,
+      "metrics": 7,
+      "incidents": 500,
+      "idCodeUnits": 512
+    }
+  },
+  "scenarios": [
+    {
+      "name": "fără expunere",
+      "tick": 70,
+      "metrics": [
+        {
+          "id": "completedRides",
+          "state": "AVAILABLE",
+          "value": 0,
+          "reason": null,
+          "valueLabel": "0",
+          "sampleLabel": "eșantion 0"
+        },
+        {
+          "id": "averageRideSeconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "reason": "NO_EXPOSURE",
+          "valueLabel": "Indisponibil",
+          "sampleLabel": "eșantion indisponibil"
+        },
+        {
+          "id": "totalDistanceM",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "reason": "SOURCE_MISSING",
+          "valueLabel": "Indisponibil",
+          "sampleLabel": "eșantion indisponibil"
+        },
+        {
+          "id": "violations",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "reason": "SOURCE_MISSING",
+          "valueLabel": "Indisponibil",
+          "sampleLabel": "eșantion indisponibil"
+        },
+        {
+          "id": "collisions",
+          "state": "AVAILABLE",
+          "value": 0,
+          "reason": null,
+          "valueLabel": "0",
+          "sampleLabel": "eșantion 0"
+        },
+        {
+          "id": "blockages",
+          "state": "AVAILABLE",
+          "value": 0,
+          "reason": null,
+          "valueLabel": "0",
+          "sampleLabel": "eșantion 0"
+        },
+        {
+          "id": "comfortScore",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "reason": "SOURCE_MISSING",
+          "valueLabel": "Indisponibil",
+          "sampleLabel": "eșantion indisponibil"
+        }
+      ],
+      "availableMetrics": 3,
+      "unavailableMetrics": 4,
+      "exposure": {
+        "state": "AVAILABLE",
+        "windows": "0",
+        "observations": "0",
+        "duration": "0 s",
+        "reason": null
+      },
+      "incidents": [],
+      "drilldown": {
+        "status": "UNAVAILABLE",
+        "reason": "NO_SELECTION",
+        "title": "Niciun incident selectat",
+        "position": "Poziție indisponibilă",
+        "metrics": "Curse finalizate: 0 · Durată medie cursă: Indisponibil (Fără expunere) · Distanță parcursă: Indisponibil (Sursă lipsă) · Încălcări: Indisponibil (Sursă lipsă) · Coliziuni: 0 · Blocaje: 0 · Confort: Indisponibil (Sursă lipsă)"
+      },
+      "focusCount": 0,
+      "focusSkipped": 0,
+      "summary": "Tabloul orașului: 3 din 7 indicatori disponibili, Expunere: 0 ferestre, 0 observații, 0 s. 0 evenimente, 0 localizabile; Niciun incident selectat.",
+      "dom": "<section aria-describedby=\"city-dashboard-description\" aria-label=\"Tabloul orașului · 0 evenimente · 0 localizabile\" class=\"city-dashboard\" data-incidents=\"0\" data-located=\"0\" data-metrics=\"7\" data-selected=\"\" data-tick=\"70\">\n  <header class=\"city-dashboard__header\">\n    <h2 class=\"city-dashboard__title\">Tabloul orașului</h2>\n    <span class=\"city-dashboard__count\">3/7 indicatori · 0 evenimente · 0 localizabile</span>\n  </header>\n  <ul aria-label=\"Indicatori\" class=\"city-dashboard__metrics\" role=\"list\">\n    <li aria-label=\"Curse finalizate: 0 curse, Disponibil, eșantion 0.\" class=\"city-dashboard__metric\" data-metric-id=\"completedRides\" data-reason=\"\" data-state=\"AVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Curse finalizate</span>\n      <span class=\"city-dashboard__metric-value\">0</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion 0</span>\n      <span class=\"city-dashboard__metric-reason\"></span>\n    </li>\n    <li aria-label=\"Durată medie cursă: Indisponibil, motiv Fără expunere.\" class=\"city-dashboard__metric\" data-metric-id=\"averageRideSeconds\" data-reason=\"NO_EXPOSURE\" data-state=\"UNAVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Durată medie cursă</span>\n      <span class=\"city-dashboard__metric-value\">Indisponibil</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion indisponibil</span>\n      <span class=\"city-dashboard__metric-reason\">Fără expunere</span>\n    </li>\n    <li aria-label=\"Distanță parcursă: Indisponibil, motiv Sursă lipsă.\" class=\"city-dashboard__metric\" data-metric-id=\"totalDistanceM\" data-reason=\"SOURCE_MISSING\" data-state=\"UNAVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Distanță parcursă</span>\n      <span class=\"city-dashboard__metric-value\">Indisponibil</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion indisponibil</span>\n      <span class=\"city-dashboard__metric-reason\">Sursă lipsă</span>\n    </li>\n    <li aria-label=\"Încălcări: Indisponibil, motiv Sursă lipsă.\" class=\"city-dashboard__metric\" data-metric-id=\"violations\" data-reason=\"SOURCE_MISSING\" data-state=\"UNAVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Încălcări</span>\n      <span class=\"city-dashboard__metric-value\">Indisponibil</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion indisponibil</span>\n      <span class=\"city-dashboard__metric-reason\">Sursă lipsă</span>\n    </li>\n    <li aria-label=\"Coliziuni: 0 evenimente, Disponibil, eșantion 0.\" class=\"city-dashboard__metric\" data-metric-id=\"collisions\" data-reason=\"\" data-state=\"AVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Coliziuni</span>\n      <span class=\"city-dashboard__metric-value\">0</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion 0</span>\n      <span class=\"city-dashboard__metric-reason\"></span>\n    </li>\n    <li aria-label=\"Blocaje: 0 evenimente, Disponibil, eșantion 0.\" class=\"city-dashboard__metric\" data-metric-id=\"blockages\" data-reason=\"\" data-state=\"AVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Blocaje</span>\n      <span class=\"city-dashboard__metric-value\">0</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion 0</span>\n      <span class=\"city-dashboard__metric-reason\"></span>\n    </li>\n    <li aria-label=\"Confort: Indisponibil, motiv Sursă lipsă.\" class=\"city-dashboard__metric\" data-metric-id=\"comfortScore\" data-reason=\"SOURCE_MISSING\" data-state=\"UNAVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Confort</span>\n      <span class=\"city-dashboard__metric-value\">Indisponibil</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion indisponibil</span>\n      <span class=\"city-dashboard__metric-reason\">Sursă lipsă</span>\n    </li>\n  </ul>\n  <div aria-label=\"Expunere observată: 0 ferestre, 0 observații, 0 s.\" class=\"city-dashboard__exposure\" data-reason=\"\" data-state=\"AVAILABLE\">\n    <h3 class=\"city-dashboard__section-title\">Expunere</h3>\n    <p class=\"city-dashboard__exposure-summary\">Expunere: 0 ferestre, 0 observații, 0 s.</p>\n    <dl class=\"city-dashboard__exposure-grid\">\n      <dt>Ferestre</dt>\n      <dd class=\"city-dashboard__exposure-value\">0</dd>\n      <dt>Observații</dt>\n      <dd class=\"city-dashboard__exposure-value\">0</dd>\n      <dt>Durată</dt>\n      <dd class=\"city-dashboard__exposure-value\">0 s</dd>\n    </dl>\n  </div>\n  <ul aria-label=\"Evenimente\" class=\"city-dashboard__incidents\" role=\"listbox\"></ul>\n  <section aria-label=\"Detalii incident\" class=\"city-dashboard__drilldown\" data-reason=\"NO_SELECTION\" data-status=\"UNAVAILABLE\">\n    <h3 class=\"city-dashboard__section-title\">Detaliu incident</h3>\n    <p class=\"city-dashboard__drilldown-title\">Niciun incident selectat</p>\n    <p class=\"city-dashboard__drilldown-position\">Poziție indisponibilă</p>\n    <p class=\"city-dashboard__drilldown-detail\">Selectează un incident din listă pentru a-l localiza pe hartă.</p>\n    <p class=\"city-dashboard__drilldown-metrics\">Curse finalizate: 0 · Durată medie cursă: Indisponibil (Fără expunere) · Distanță parcursă: Indisponibil (Sursă lipsă) · Încălcări: Indisponibil (Sursă lipsă) · Coliziuni: 0 · Blocaje: 0 · Confort: Indisponibil (Sursă lipsă)</p>\n  </section>\n  <p aria-atomic=\"true\" aria-live=\"polite\" class=\"city-dashboard__status\" role=\"status\">Tabloul orașului: 3 din 7 indicatori disponibili, Expunere: 0 ferestre, 0 observații, 0 s. 0 evenimente, 0 localizabile; Niciun incident selectat.</p>\n  <p class=\"city-dashboard__description\">Tabloul orașului citește cursele 061, incidentele 028 și istoricul de sănătate 065. O valoare indisponibilă este afișată „Indisponibil” și nu este niciodată zero; un zero real rămâne „0”. Selectarea unui incident trimite doar o intenție de focalizare a hărții și nu schimbă profilul, modul camerei, autoritatea sau fizica.</p>\n</section>",
+      "stats": {
+        "version": "082-city-dashboard-v1",
+        "elements": 59,
+        "textNodes": 39,
+        "metrics": 7,
+        "cards": 7,
+        "rows": 0,
+        "retainedRows": 0,
+        "createdRows": 0,
+        "removedRows": 0,
+        "moves": 0,
+        "writes": 63,
+        "skipped": 0,
+        "updates": 1,
+        "renders": 1,
+        "listeners": 0,
+        "focusEmits": 0,
+        "focusAccepted": 0,
+        "focusSkipped": 0,
+        "selectedIncidentId": null,
+        "retainedViews": 1,
+        "disposed": false
+      }
+    },
+    {
+      "name": "zero real",
+      "tick": 70,
+      "metrics": [
+        {
+          "id": "completedRides",
+          "state": "AVAILABLE",
+          "value": 1,
+          "reason": null,
+          "valueLabel": "1",
+          "sampleLabel": "eșantion 1"
+        },
+        {
+          "id": "averageRideSeconds",
+          "state": "AVAILABLE",
+          "value": 135.95495735607676,
+          "reason": null,
+          "valueLabel": "2 min 16 s",
+          "sampleLabel": "eșantion 1"
+        },
+        {
+          "id": "totalDistanceM",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "reason": "SOURCE_MISSING",
+          "valueLabel": "Indisponibil",
+          "sampleLabel": "eșantion indisponibil"
+        },
+        {
+          "id": "violations",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "reason": "SOURCE_MISSING",
+          "valueLabel": "Indisponibil",
+          "sampleLabel": "eșantion indisponibil"
+        },
+        {
+          "id": "collisions",
+          "state": "AVAILABLE",
+          "value": 0,
+          "reason": null,
+          "valueLabel": "0",
+          "sampleLabel": "eșantion 0"
+        },
+        {
+          "id": "blockages",
+          "state": "AVAILABLE",
+          "value": 1,
+          "reason": null,
+          "valueLabel": "1",
+          "sampleLabel": "eșantion 1"
+        },
+        {
+          "id": "comfortScore",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "reason": "SOURCE_MISSING",
+          "valueLabel": "Indisponibil",
+          "sampleLabel": "eșantion indisponibil"
+        }
+      ],
+      "availableMetrics": 4,
+      "unavailableMetrics": 3,
+      "exposure": {
+        "state": "AVAILABLE",
+        "windows": "2",
+        "observations": "1",
+        "duration": "2 min 16 s",
+        "reason": null
+      },
+      "incidents": [
+        {
+          "incidentId": "blockage:city:082:traffic-block",
+          "kind": "BLOCKAGE",
+          "severity": "MODERATE",
+          "tick": 64,
+          "vehicleId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0001",
+          "located": false,
+          "selected": false,
+          "positionLabel": "Poziție indisponibilă"
+        }
+      ],
+      "drilldown": {
+        "status": "UNAVAILABLE",
+        "reason": "NO_SELECTION",
+        "title": "Niciun incident selectat",
+        "position": "Poziție indisponibilă",
+        "metrics": "Curse finalizate: 1 · Durată medie cursă: 2 min 16 s · Distanță parcursă: Indisponibil (Sursă lipsă) · Încălcări: Indisponibil (Sursă lipsă) · Coliziuni: 0 · Blocaje: 1 · Confort: Indisponibil (Sursă lipsă)"
+      },
+      "focusCount": 0,
+      "focusSkipped": 0,
+      "summary": "Tabloul orașului: 4 din 7 indicatori disponibili, Expunere: 2 ferestre, 1 observații, 2 min 16 s. 1 evenimente, 0 localizabile; Niciun incident selectat.",
+      "dom": "<section aria-describedby=\"city-dashboard-description\" aria-label=\"Tabloul orașului · 1 evenimente · 0 localizabile\" class=\"city-dashboard\" data-incidents=\"1\" data-located=\"0\" data-metrics=\"7\" data-selected=\"\" data-tick=\"70\">\n  <header class=\"city-dashboard__header\">\n    <h2 class=\"city-dashboard__title\">Tabloul orașului</h2>\n    <span class=\"city-dashboard__count\">4/7 indicatori · 1 evenimente · 0 localizabile</span>\n  </header>\n  <ul aria-label=\"Indicatori\" class=\"city-dashboard__metrics\" role=\"list\">\n    <li aria-label=\"Curse finalizate: 1 curse, Disponibil, eșantion 1.\" class=\"city-dashboard__metric\" data-metric-id=\"completedRides\" data-reason=\"\" data-state=\"AVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Curse finalizate</span>\n      <span class=\"city-dashboard__metric-value\">1</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion 1</span>\n      <span class=\"city-dashboard__metric-reason\"></span>\n    </li>\n    <li aria-label=\"Durată medie cursă: 2 min 16 s secunde, Disponibil, eșantion 1.\" class=\"city-dashboard__metric\" data-metric-id=\"averageRideSeconds\" data-reason=\"\" data-state=\"AVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Durată medie cursă</span>\n      <span class=\"city-dashboard__metric-value\">2 min 16 s</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion 1</span>\n      <span class=\"city-dashboard__metric-reason\"></span>\n    </li>\n    <li aria-label=\"Distanță parcursă: Indisponibil, motiv Sursă lipsă.\" class=\"city-dashboard__metric\" data-metric-id=\"totalDistanceM\" data-reason=\"SOURCE_MISSING\" data-state=\"UNAVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Distanță parcursă</span>\n      <span class=\"city-dashboard__metric-value\">Indisponibil</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion indisponibil</span>\n      <span class=\"city-dashboard__metric-reason\">Sursă lipsă</span>\n    </li>\n    <li aria-label=\"Încălcări: Indisponibil, motiv Sursă lipsă.\" class=\"city-dashboard__metric\" data-metric-id=\"violations\" data-reason=\"SOURCE_MISSING\" data-state=\"UNAVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Încălcări</span>\n      <span class=\"city-dashboard__metric-value\">Indisponibil</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion indisponibil</span>\n      <span class=\"city-dashboard__metric-reason\">Sursă lipsă</span>\n    </li>\n    <li aria-label=\"Coliziuni: 0 evenimente, Disponibil, eșantion 0.\" class=\"city-dashboard__metric\" data-metric-id=\"collisions\" data-reason=\"\" data-state=\"AVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Coliziuni</span>\n      <span class=\"city-dashboard__metric-value\">0</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion 0</span>\n      <span class=\"city-dashboard__metric-reason\"></span>\n    </li>\n    <li aria-label=\"Blocaje: 1 evenimente, Disponibil, eșantion 1.\" class=\"city-dashboard__metric\" data-metric-id=\"blockages\" data-reason=\"\" data-state=\"AVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Blocaje</span>\n      <span class=\"city-dashboard__metric-value\">1</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion 1</span>\n      <span class=\"city-dashboard__metric-reason\"></span>\n    </li>\n    <li aria-label=\"Confort: Indisponibil, motiv Sursă lipsă.\" class=\"city-dashboard__metric\" data-metric-id=\"comfortScore\" data-reason=\"SOURCE_MISSING\" data-state=\"UNAVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Confort</span>\n      <span class=\"city-dashboard__metric-value\">Indisponibil</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion indisponibil</span>\n      <span class=\"city-dashboard__metric-reason\">Sursă lipsă</span>\n    </li>\n  </ul>\n  <div aria-label=\"Expunere observată: 2 ferestre, 1 observații, 2 min 16 s.\" class=\"city-dashboard__exposure\" data-reason=\"\" data-state=\"AVAILABLE\">\n    <h3 class=\"city-dashboard__section-title\">Expunere</h3>\n    <p class=\"city-dashboard__exposure-summary\">Expunere: 2 ferestre, 1 observații, 2 min 16 s.</p>\n    <dl class=\"city-dashboard__exposure-grid\">\n      <dt>Ferestre</dt>\n      <dd class=\"city-dashboard__exposure-value\">2</dd>\n      <dt>Observații</dt>\n      <dd class=\"city-dashboard__exposure-value\">1</dd>\n      <dt>Durată</dt>\n      <dd class=\"city-dashboard__exposure-value\">2 min 16 s</dd>\n    </dl>\n  </div>\n  <ul aria-label=\"Evenimente\" class=\"city-dashboard__incidents\" role=\"listbox\">\n    <li class=\"city-dashboard__incident\" data-incident-id=\"blockage:city:082:traffic-block\" data-kind=\"BLOCKAGE\" data-located=\"false\" data-selected=\"false\" role=\"presentation\">\n      <button aria-label=\"Blocaj blockage:city:082:traffic-block; Moderat; tick 64; vehicul id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0001; cursă id-v1:4:ride20:city:fleet-065:rides57:id-v1:12:ride-request20:city:fleet-065:rides4:w0005:r0001; Poziție indisponibilă; nu poate fi localizat; neselectat\" aria-selected=\"false\" class=\"city-dashboard__incident-row\" data-incident-id=\"blockage:city:082:traffic-block\" role=\"option\" type=\"button\">\n        <span class=\"city-dashboard__incident-kind\">Blocaj</span>\n        <span class=\"city-dashboard__incident-label\">Moderat · tick 64 · id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0001</span>\n        <span class=\"city-dashboard__incident-place\">Poziție indisponibilă</span>\n      </button>\n    </li>\n  </ul>\n  <section aria-label=\"Detalii incident\" class=\"city-dashboard__drilldown\" data-reason=\"NO_SELECTION\" data-status=\"UNAVAILABLE\">\n    <h3 class=\"city-dashboard__section-title\">Detaliu incident</h3>\n    <p class=\"city-dashboard__drilldown-title\">Niciun incident selectat</p>\n    <p class=\"city-dashboard__drilldown-position\">Poziție indisponibilă</p>\n    <p class=\"city-dashboard__drilldown-detail\">Selectează un incident din listă pentru a-l localiza pe hartă.</p>\n    <p class=\"city-dashboard__drilldown-metrics\">Curse finalizate: 1 · Durată medie cursă: 2 min 16 s · Distanță parcursă: Indisponibil (Sursă lipsă) · Încălcări: Indisponibil (Sursă lipsă) · Coliziuni: 0 · Blocaje: 1 · Confort: Indisponibil (Sursă lipsă)</p>\n  </section>\n  <p aria-atomic=\"true\" aria-live=\"polite\" class=\"city-dashboard__status\" role=\"status\">Tabloul orașului: 4 din 7 indicatori disponibili, Expunere: 2 ferestre, 1 observații, 2 min 16 s. 1 evenimente, 0 localizabile; Niciun incident selectat.</p>\n  <p class=\"city-dashboard__description\">Tabloul orașului citește cursele 061, incidentele 028 și istoricul de sănătate 065. O valoare indisponibilă este afișată „Indisponibil” și nu este niciodată zero; un zero real rămâne „0”. Selectarea unui incident trimite doar o intenție de focalizare a hărții și nu schimbă profilul, modul camerei, autoritatea sau fizica.</p>\n</section>",
+      "stats": {
+        "version": "082-city-dashboard-v1",
+        "elements": 64,
+        "textNodes": 42,
+        "metrics": 7,
+        "cards": 7,
+        "rows": 1,
+        "retainedRows": 1,
+        "createdRows": 1,
+        "removedRows": 0,
+        "moves": 0,
+        "writes": 70,
+        "skipped": 0,
+        "updates": 1,
+        "renders": 1,
+        "listeners": 1,
+        "focusEmits": 0,
+        "focusAccepted": 0,
+        "focusSkipped": 0,
+        "selectedIncidentId": null,
+        "retainedViews": 1,
+        "disposed": false
+      }
+    },
+    {
+      "name": "incidente reale 028/065",
+      "tick": 70,
+      "metrics": [
+        {
+          "id": "completedRides",
+          "state": "AVAILABLE",
+          "value": 1,
+          "reason": null,
+          "valueLabel": "1",
+          "sampleLabel": "eșantion 1"
+        },
+        {
+          "id": "averageRideSeconds",
+          "state": "AVAILABLE",
+          "value": 135.95495735607676,
+          "reason": null,
+          "valueLabel": "2 min 16 s",
+          "sampleLabel": "eșantion 1"
+        },
+        {
+          "id": "totalDistanceM",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "reason": "SOURCE_MISSING",
+          "valueLabel": "Indisponibil",
+          "sampleLabel": "eșantion indisponibil"
+        },
+        {
+          "id": "violations",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "reason": "SOURCE_MISSING",
+          "valueLabel": "Indisponibil",
+          "sampleLabel": "eșantion indisponibil"
+        },
+        {
+          "id": "collisions",
+          "state": "AVAILABLE",
+          "value": 1,
+          "reason": null,
+          "valueLabel": "1",
+          "sampleLabel": "eșantion 1"
+        },
+        {
+          "id": "blockages",
+          "state": "AVAILABLE",
+          "value": 1,
+          "reason": null,
+          "valueLabel": "1",
+          "sampleLabel": "eșantion 1"
+        },
+        {
+          "id": "comfortScore",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "reason": "SOURCE_MISSING",
+          "valueLabel": "Indisponibil",
+          "sampleLabel": "eșantion indisponibil"
+        }
+      ],
+      "availableMetrics": 4,
+      "unavailableMetrics": 3,
+      "exposure": {
+        "state": "AVAILABLE",
+        "windows": "2",
+        "observations": "1",
+        "duration": "2 min 16 s",
+        "reason": null
+      },
+      "incidents": [
+        {
+          "incidentId": "id-v1:9:collision11:session:0653:0281:03:1:22:65",
+          "kind": "COLLISION",
+          "severity": "MODERATE",
+          "tick": 65,
+          "vehicleId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0002",
+          "located": true,
+          "selected": false,
+          "positionLabel": "x 12.0 m, z -4.0 m"
+        },
+        {
+          "incidentId": "blockage:city:082:traffic-block",
+          "kind": "BLOCKAGE",
+          "severity": "MODERATE",
+          "tick": 64,
+          "vehicleId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0001",
+          "located": false,
+          "selected": false,
+          "positionLabel": "Poziție indisponibilă"
+        }
+      ],
+      "drilldown": {
+        "status": "UNAVAILABLE",
+        "reason": "NO_SELECTION",
+        "title": "Niciun incident selectat",
+        "position": "Poziție indisponibilă",
+        "metrics": "Curse finalizate: 1 · Durată medie cursă: 2 min 16 s · Distanță parcursă: Indisponibil (Sursă lipsă) · Încălcări: Indisponibil (Sursă lipsă) · Coliziuni: 1 · Blocaje: 1 · Confort: Indisponibil (Sursă lipsă)"
+      },
+      "focusCount": 0,
+      "focusSkipped": 0,
+      "summary": "Tabloul orașului: 4 din 7 indicatori disponibili, Expunere: 2 ferestre, 1 observații, 2 min 16 s. 2 evenimente, 1 localizabile; Niciun incident selectat.",
+      "dom": "<section aria-describedby=\"city-dashboard-description\" aria-label=\"Tabloul orașului · 2 evenimente · 1 localizabile\" class=\"city-dashboard\" data-incidents=\"2\" data-located=\"1\" data-metrics=\"7\" data-selected=\"\" data-tick=\"70\">\n  <header class=\"city-dashboard__header\">\n    <h2 class=\"city-dashboard__title\">Tabloul orașului</h2>\n    <span class=\"city-dashboard__count\">4/7 indicatori · 2 evenimente · 1 localizabile</span>\n  </header>\n  <ul aria-label=\"Indicatori\" class=\"city-dashboard__metrics\" role=\"list\">\n    <li aria-label=\"Curse finalizate: 1 curse, Disponibil, eșantion 1.\" class=\"city-dashboard__metric\" data-metric-id=\"completedRides\" data-reason=\"\" data-state=\"AVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Curse finalizate</span>\n      <span class=\"city-dashboard__metric-value\">1</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion 1</span>\n      <span class=\"city-dashboard__metric-reason\"></span>\n    </li>\n    <li aria-label=\"Durată medie cursă: 2 min 16 s secunde, Disponibil, eșantion 1.\" class=\"city-dashboard__metric\" data-metric-id=\"averageRideSeconds\" data-reason=\"\" data-state=\"AVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Durată medie cursă</span>\n      <span class=\"city-dashboard__metric-value\">2 min 16 s</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion 1</span>\n      <span class=\"city-dashboard__metric-reason\"></span>\n    </li>\n    <li aria-label=\"Distanță parcursă: Indisponibil, motiv Sursă lipsă.\" class=\"city-dashboard__metric\" data-metric-id=\"totalDistanceM\" data-reason=\"SOURCE_MISSING\" data-state=\"UNAVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Distanță parcursă</span>\n      <span class=\"city-dashboard__metric-value\">Indisponibil</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion indisponibil</span>\n      <span class=\"city-dashboard__metric-reason\">Sursă lipsă</span>\n    </li>\n    <li aria-label=\"Încălcări: Indisponibil, motiv Sursă lipsă.\" class=\"city-dashboard__metric\" data-metric-id=\"violations\" data-reason=\"SOURCE_MISSING\" data-state=\"UNAVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Încălcări</span>\n      <span class=\"city-dashboard__metric-value\">Indisponibil</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion indisponibil</span>\n      <span class=\"city-dashboard__metric-reason\">Sursă lipsă</span>\n    </li>\n    <li aria-label=\"Coliziuni: 1 evenimente, Disponibil, eșantion 1.\" class=\"city-dashboard__metric\" data-metric-id=\"collisions\" data-reason=\"\" data-state=\"AVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Coliziuni</span>\n      <span class=\"city-dashboard__metric-value\">1</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion 1</span>\n      <span class=\"city-dashboard__metric-reason\"></span>\n    </li>\n    <li aria-label=\"Blocaje: 1 evenimente, Disponibil, eșantion 1.\" class=\"city-dashboard__metric\" data-metric-id=\"blockages\" data-reason=\"\" data-state=\"AVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Blocaje</span>\n      <span class=\"city-dashboard__metric-value\">1</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion 1</span>\n      <span class=\"city-dashboard__metric-reason\"></span>\n    </li>\n    <li aria-label=\"Confort: Indisponibil, motiv Sursă lipsă.\" class=\"city-dashboard__metric\" data-metric-id=\"comfortScore\" data-reason=\"SOURCE_MISSING\" data-state=\"UNAVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Confort</span>\n      <span class=\"city-dashboard__metric-value\">Indisponibil</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion indisponibil</span>\n      <span class=\"city-dashboard__metric-reason\">Sursă lipsă</span>\n    </li>\n  </ul>\n  <div aria-label=\"Expunere observată: 2 ferestre, 1 observații, 2 min 16 s.\" class=\"city-dashboard__exposure\" data-reason=\"\" data-state=\"AVAILABLE\">\n    <h3 class=\"city-dashboard__section-title\">Expunere</h3>\n    <p class=\"city-dashboard__exposure-summary\">Expunere: 2 ferestre, 1 observații, 2 min 16 s.</p>\n    <dl class=\"city-dashboard__exposure-grid\">\n      <dt>Ferestre</dt>\n      <dd class=\"city-dashboard__exposure-value\">2</dd>\n      <dt>Observații</dt>\n      <dd class=\"city-dashboard__exposure-value\">1</dd>\n      <dt>Durată</dt>\n      <dd class=\"city-dashboard__exposure-value\">2 min 16 s</dd>\n    </dl>\n  </div>\n  <ul aria-label=\"Evenimente\" class=\"city-dashboard__incidents\" role=\"listbox\">\n    <li class=\"city-dashboard__incident\" data-incident-id=\"id-v1:9:collision11:session:0653:0281:03:1:22:65\" data-kind=\"COLLISION\" data-located=\"true\" data-selected=\"false\" role=\"presentation\">\n      <button aria-label=\"Coliziune id-v1:9:collision11:session:0653:0281:03:1:22:65; Moderat; tick 65; vehicul id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0002; cursă fără cursă; x 12.0 m, z -4.0 m; localizabil pe hartă; neselectat\" aria-selected=\"false\" class=\"city-dashboard__incident-row\" data-incident-id=\"id-v1:9:collision11:session:0653:0281:03:1:22:65\" role=\"option\" type=\"button\">\n        <span class=\"city-dashboard__incident-kind\">Coliziune</span>\n        <span class=\"city-dashboard__incident-label\">Moderat · tick 65 · id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0002</span>\n        <span class=\"city-dashboard__incident-place\">x 12.0 m, z -4.0 m</span>\n      </button>\n    </li>\n    <li class=\"city-dashboard__incident\" data-incident-id=\"blockage:city:082:traffic-block\" data-kind=\"BLOCKAGE\" data-located=\"false\" data-selected=\"false\" role=\"presentation\">\n      <button aria-label=\"Blocaj blockage:city:082:traffic-block; Moderat; tick 64; vehicul id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0001; cursă id-v1:4:ride20:city:fleet-065:rides57:id-v1:12:ride-request20:city:fleet-065:rides4:w0005:r0001; Poziție indisponibilă; nu poate fi localizat; neselectat\" aria-selected=\"false\" class=\"city-dashboard__incident-row\" data-incident-id=\"blockage:city:082:traffic-block\" role=\"option\" type=\"button\">\n        <span class=\"city-dashboard__incident-kind\">Blocaj</span>\n        <span class=\"city-dashboard__incident-label\">Moderat · tick 64 · id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0001</span>\n        <span class=\"city-dashboard__incident-place\">Poziție indisponibilă</span>\n      </button>\n    </li>\n  </ul>\n  <section aria-label=\"Detalii incident\" class=\"city-dashboard__drilldown\" data-reason=\"NO_SELECTION\" data-status=\"UNAVAILABLE\">\n    <h3 class=\"city-dashboard__section-title\">Detaliu incident</h3>\n    <p class=\"city-dashboard__drilldown-title\">Niciun incident selectat</p>\n    <p class=\"city-dashboard__drilldown-position\">Poziție indisponibilă</p>\n    <p class=\"city-dashboard__drilldown-detail\">Selectează un incident din listă pentru a-l localiza pe hartă.</p>\n    <p class=\"city-dashboard__drilldown-metrics\">Curse finalizate: 1 · Durată medie cursă: 2 min 16 s · Distanță parcursă: Indisponibil (Sursă lipsă) · Încălcări: Indisponibil (Sursă lipsă) · Coliziuni: 1 · Blocaje: 1 · Confort: Indisponibil (Sursă lipsă)</p>\n  </section>\n  <p aria-atomic=\"true\" aria-live=\"polite\" class=\"city-dashboard__status\" role=\"status\">Tabloul orașului: 4 din 7 indicatori disponibili, Expunere: 2 ferestre, 1 observații, 2 min 16 s. 2 evenimente, 1 localizabile; Niciun incident selectat.</p>\n  <p class=\"city-dashboard__description\">Tabloul orașului citește cursele 061, incidentele 028 și istoricul de sănătate 065. O valoare indisponibilă este afișată „Indisponibil” și nu este niciodată zero; un zero real rămâne „0”. Selectarea unui incident trimite doar o intenție de focalizare a hărții și nu schimbă profilul, modul camerei, autoritatea sau fizica.</p>\n</section>",
+      "stats": {
+        "version": "082-city-dashboard-v1",
+        "elements": 69,
+        "textNodes": 45,
+        "metrics": 7,
+        "cards": 7,
+        "rows": 2,
+        "retainedRows": 2,
+        "createdRows": 2,
+        "removedRows": 0,
+        "moves": 0,
+        "writes": 77,
+        "skipped": 0,
+        "updates": 1,
+        "renders": 1,
+        "listeners": 2,
+        "focusEmits": 0,
+        "focusAccepted": 0,
+        "focusSkipped": 0,
+        "selectedIncidentId": null,
+        "retainedViews": 1,
+        "disposed": false
+      }
+    },
+    {
+      "name": "poziție lipsă",
+      "tick": 70,
+      "metrics": [
+        {
+          "id": "completedRides",
+          "state": "AVAILABLE",
+          "value": 1,
+          "reason": null,
+          "valueLabel": "1",
+          "sampleLabel": "eșantion 1"
+        },
+        {
+          "id": "averageRideSeconds",
+          "state": "AVAILABLE",
+          "value": 135.95495735607676,
+          "reason": null,
+          "valueLabel": "2 min 16 s",
+          "sampleLabel": "eșantion 1"
+        },
+        {
+          "id": "totalDistanceM",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "reason": "SOURCE_MISSING",
+          "valueLabel": "Indisponibil",
+          "sampleLabel": "eșantion indisponibil"
+        },
+        {
+          "id": "violations",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "reason": "SOURCE_MISSING",
+          "valueLabel": "Indisponibil",
+          "sampleLabel": "eșantion indisponibil"
+        },
+        {
+          "id": "collisions",
+          "state": "AVAILABLE",
+          "value": 1,
+          "reason": null,
+          "valueLabel": "1",
+          "sampleLabel": "eșantion 1"
+        },
+        {
+          "id": "blockages",
+          "state": "AVAILABLE",
+          "value": 1,
+          "reason": null,
+          "valueLabel": "1",
+          "sampleLabel": "eșantion 1"
+        },
+        {
+          "id": "comfortScore",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "reason": "SOURCE_MISSING",
+          "valueLabel": "Indisponibil",
+          "sampleLabel": "eșantion indisponibil"
+        }
+      ],
+      "availableMetrics": 4,
+      "unavailableMetrics": 3,
+      "exposure": {
+        "state": "AVAILABLE",
+        "windows": "2",
+        "observations": "1",
+        "duration": "2 min 16 s",
+        "reason": null
+      },
+      "incidents": [
+        {
+          "incidentId": "id-v1:9:collision11:session:0653:0281:03:1:22:65",
+          "kind": "COLLISION",
+          "severity": "MODERATE",
+          "tick": 65,
+          "vehicleId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0002",
+          "located": true,
+          "selected": false,
+          "positionLabel": "x 12.0 m, z -4.0 m"
+        },
+        {
+          "incidentId": "blockage:city:082:traffic-block",
+          "kind": "BLOCKAGE",
+          "severity": "MODERATE",
+          "tick": 64,
+          "vehicleId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0001",
+          "located": false,
+          "selected": true,
+          "positionLabel": "Poziție indisponibilă"
+        }
+      ],
+      "drilldown": {
+        "status": "UNAVAILABLE",
+        "reason": "MISSING_POSITION",
+        "title": "Blocaj · Moderat",
+        "position": "Poziție indisponibilă",
+        "metrics": "Curse finalizate: 1 · Durată medie cursă: 2 min 16 s · Distanță parcursă: Indisponibil (Sursă lipsă) · Încălcări: Indisponibil (Sursă lipsă) · Coliziuni: 1 · Blocaje: 1 · Confort: Indisponibil (Sursă lipsă)"
+      },
+      "focusCount": 0,
+      "focusSkipped": 1,
+      "summary": "Tabloul orașului: 4 din 7 indicatori disponibili, Expunere: 2 ferestre, 1 observații, 2 min 16 s. 2 evenimente, 1 localizabile; selectat blockage:city:082:traffic-block.",
+      "dom": "<section aria-describedby=\"city-dashboard-description\" aria-label=\"Tabloul orașului · 2 evenimente · 1 localizabile\" class=\"city-dashboard\" data-incidents=\"2\" data-located=\"1\" data-metrics=\"7\" data-selected=\"blockage:city:082:traffic-block\" data-tick=\"70\">\n  <header class=\"city-dashboard__header\">\n    <h2 class=\"city-dashboard__title\">Tabloul orașului</h2>\n    <span class=\"city-dashboard__count\">4/7 indicatori · 2 evenimente · 1 localizabile</span>\n  </header>\n  <ul aria-label=\"Indicatori\" class=\"city-dashboard__metrics\" role=\"list\">\n    <li aria-label=\"Curse finalizate: 1 curse, Disponibil, eșantion 1.\" class=\"city-dashboard__metric\" data-metric-id=\"completedRides\" data-reason=\"\" data-state=\"AVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Curse finalizate</span>\n      <span class=\"city-dashboard__metric-value\">1</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion 1</span>\n      <span class=\"city-dashboard__metric-reason\"></span>\n    </li>\n    <li aria-label=\"Durată medie cursă: 2 min 16 s secunde, Disponibil, eșantion 1.\" class=\"city-dashboard__metric\" data-metric-id=\"averageRideSeconds\" data-reason=\"\" data-state=\"AVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Durată medie cursă</span>\n      <span class=\"city-dashboard__metric-value\">2 min 16 s</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion 1</span>\n      <span class=\"city-dashboard__metric-reason\"></span>\n    </li>\n    <li aria-label=\"Distanță parcursă: Indisponibil, motiv Sursă lipsă.\" class=\"city-dashboard__metric\" data-metric-id=\"totalDistanceM\" data-reason=\"SOURCE_MISSING\" data-state=\"UNAVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Distanță parcursă</span>\n      <span class=\"city-dashboard__metric-value\">Indisponibil</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion indisponibil</span>\n      <span class=\"city-dashboard__metric-reason\">Sursă lipsă</span>\n    </li>\n    <li aria-label=\"Încălcări: Indisponibil, motiv Sursă lipsă.\" class=\"city-dashboard__metric\" data-metric-id=\"violations\" data-reason=\"SOURCE_MISSING\" data-state=\"UNAVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Încălcări</span>\n      <span class=\"city-dashboard__metric-value\">Indisponibil</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion indisponibil</span>\n      <span class=\"city-dashboard__metric-reason\">Sursă lipsă</span>\n    </li>\n    <li aria-label=\"Coliziuni: 1 evenimente, Disponibil, eșantion 1.\" class=\"city-dashboard__metric\" data-metric-id=\"collisions\" data-reason=\"\" data-state=\"AVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Coliziuni</span>\n      <span class=\"city-dashboard__metric-value\">1</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion 1</span>\n      <span class=\"city-dashboard__metric-reason\"></span>\n    </li>\n    <li aria-label=\"Blocaje: 1 evenimente, Disponibil, eșantion 1.\" class=\"city-dashboard__metric\" data-metric-id=\"blockages\" data-reason=\"\" data-state=\"AVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Blocaje</span>\n      <span class=\"city-dashboard__metric-value\">1</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion 1</span>\n      <span class=\"city-dashboard__metric-reason\"></span>\n    </li>\n    <li aria-label=\"Confort: Indisponibil, motiv Sursă lipsă.\" class=\"city-dashboard__metric\" data-metric-id=\"comfortScore\" data-reason=\"SOURCE_MISSING\" data-state=\"UNAVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Confort</span>\n      <span class=\"city-dashboard__metric-value\">Indisponibil</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion indisponibil</span>\n      <span class=\"city-dashboard__metric-reason\">Sursă lipsă</span>\n    </li>\n  </ul>\n  <div aria-label=\"Expunere observată: 2 ferestre, 1 observații, 2 min 16 s.\" class=\"city-dashboard__exposure\" data-reason=\"\" data-state=\"AVAILABLE\">\n    <h3 class=\"city-dashboard__section-title\">Expunere</h3>\n    <p class=\"city-dashboard__exposure-summary\">Expunere: 2 ferestre, 1 observații, 2 min 16 s.</p>\n    <dl class=\"city-dashboard__exposure-grid\">\n      <dt>Ferestre</dt>\n      <dd class=\"city-dashboard__exposure-value\">2</dd>\n      <dt>Observații</dt>\n      <dd class=\"city-dashboard__exposure-value\">1</dd>\n      <dt>Durată</dt>\n      <dd class=\"city-dashboard__exposure-value\">2 min 16 s</dd>\n    </dl>\n  </div>\n  <ul aria-label=\"Evenimente\" class=\"city-dashboard__incidents\" role=\"listbox\">\n    <li class=\"city-dashboard__incident\" data-incident-id=\"id-v1:9:collision11:session:0653:0281:03:1:22:65\" data-kind=\"COLLISION\" data-located=\"true\" data-selected=\"false\" role=\"presentation\">\n      <button aria-label=\"Coliziune id-v1:9:collision11:session:0653:0281:03:1:22:65; Moderat; tick 65; vehicul id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0002; cursă fără cursă; x 12.0 m, z -4.0 m; localizabil pe hartă; neselectat\" aria-selected=\"false\" class=\"city-dashboard__incident-row\" data-incident-id=\"id-v1:9:collision11:session:0653:0281:03:1:22:65\" role=\"option\" type=\"button\">\n        <span class=\"city-dashboard__incident-kind\">Coliziune</span>\n        <span class=\"city-dashboard__incident-label\">Moderat · tick 65 · id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0002</span>\n        <span class=\"city-dashboard__incident-place\">x 12.0 m, z -4.0 m</span>\n      </button>\n    </li>\n    <li class=\"city-dashboard__incident\" data-incident-id=\"blockage:city:082:traffic-block\" data-kind=\"BLOCKAGE\" data-located=\"false\" data-selected=\"true\" role=\"presentation\">\n      <button aria-label=\"Blocaj blockage:city:082:traffic-block; Moderat; tick 64; vehicul id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0001; cursă id-v1:4:ride20:city:fleet-065:rides57:id-v1:12:ride-request20:city:fleet-065:rides4:w0005:r0001; Poziție indisponibilă; nu poate fi localizat; incident selectat\" aria-selected=\"true\" class=\"city-dashboard__incident-row\" data-incident-id=\"blockage:city:082:traffic-block\" role=\"option\" type=\"button\">\n        <span class=\"city-dashboard__incident-kind\">Blocaj</span>\n        <span class=\"city-dashboard__incident-label\">Moderat · tick 64 · id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0001</span>\n        <span class=\"city-dashboard__incident-place\">Poziție indisponibilă</span>\n      </button>\n    </li>\n  </ul>\n  <section aria-label=\"Detalii incident\" class=\"city-dashboard__drilldown\" data-reason=\"MISSING_POSITION\" data-status=\"UNAVAILABLE\">\n    <h3 class=\"city-dashboard__section-title\">Detaliu incident</h3>\n    <p class=\"city-dashboard__drilldown-title\">Blocaj · Moderat</p>\n    <p class=\"city-dashboard__drilldown-position\">Poziție indisponibilă</p>\n    <p class=\"city-dashboard__drilldown-detail\">tick 64 · vehicul id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0001 · cursă id-v1:4:ride20:city:fleet-065:rides57:id-v1:12:ride-request20:city:fleet-065:rides4:w0005:r0001 · TRAFFIC_BLOCK · AVAILABLE → BLOCKED</p>\n    <p class=\"city-dashboard__drilldown-metrics\">Curse finalizate: 1 · Durată medie cursă: 2 min 16 s · Distanță parcursă: Indisponibil (Sursă lipsă) · Încălcări: Indisponibil (Sursă lipsă) · Coliziuni: 1 · Blocaje: 1 · Confort: Indisponibil (Sursă lipsă)</p>\n  </section>\n  <p aria-atomic=\"true\" aria-live=\"polite\" class=\"city-dashboard__status\" role=\"status\">Blocaj Moderat, tick 64, vehicul id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0001, Poziție indisponibilă. Nu este trimisă nicio intenție de hartă.</p>\n  <p class=\"city-dashboard__description\">Tabloul orașului citește cursele 061, incidentele 028 și istoricul de sănătate 065. O valoare indisponibilă este afișată „Indisponibil” și nu este niciodată zero; un zero real rămâne „0”. Selectarea unui incident trimite doar o intenție de focalizare a hărții și nu schimbă profilul, modul camerei, autoritatea sau fizica.</p>\n</section>",
+      "stats": {
+        "version": "082-city-dashboard-v1",
+        "elements": 69,
+        "textNodes": 45,
+        "metrics": 7,
+        "cards": 7,
+        "rows": 2,
+        "retainedRows": 2,
+        "createdRows": 2,
+        "removedRows": 0,
+        "moves": 0,
+        "writes": 86,
+        "skipped": 0,
+        "updates": 2,
+        "renders": 2,
+        "listeners": 2,
+        "focusEmits": 0,
+        "focusAccepted": 0,
+        "focusSkipped": 1,
+        "selectedIncidentId": "blockage:city:082:traffic-block",
+        "retainedViews": 1,
+        "disposed": false
+      }
+    },
+    {
+      "name": "incident selectat",
+      "tick": 70,
+      "metrics": [
+        {
+          "id": "completedRides",
+          "state": "AVAILABLE",
+          "value": 1,
+          "reason": null,
+          "valueLabel": "1",
+          "sampleLabel": "eșantion 1"
+        },
+        {
+          "id": "averageRideSeconds",
+          "state": "AVAILABLE",
+          "value": 135.95495735607676,
+          "reason": null,
+          "valueLabel": "2 min 16 s",
+          "sampleLabel": "eșantion 1"
+        },
+        {
+          "id": "totalDistanceM",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "reason": "SOURCE_MISSING",
+          "valueLabel": "Indisponibil",
+          "sampleLabel": "eșantion indisponibil"
+        },
+        {
+          "id": "violations",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "reason": "SOURCE_MISSING",
+          "valueLabel": "Indisponibil",
+          "sampleLabel": "eșantion indisponibil"
+        },
+        {
+          "id": "collisions",
+          "state": "AVAILABLE",
+          "value": 1,
+          "reason": null,
+          "valueLabel": "1",
+          "sampleLabel": "eșantion 1"
+        },
+        {
+          "id": "blockages",
+          "state": "AVAILABLE",
+          "value": 1,
+          "reason": null,
+          "valueLabel": "1",
+          "sampleLabel": "eșantion 1"
+        },
+        {
+          "id": "comfortScore",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "reason": "SOURCE_MISSING",
+          "valueLabel": "Indisponibil",
+          "sampleLabel": "eșantion indisponibil"
+        }
+      ],
+      "availableMetrics": 4,
+      "unavailableMetrics": 3,
+      "exposure": {
+        "state": "AVAILABLE",
+        "windows": "2",
+        "observations": "1",
+        "duration": "2 min 16 s",
+        "reason": null
+      },
+      "incidents": [
+        {
+          "incidentId": "id-v1:9:collision11:session:0653:0281:03:1:22:65",
+          "kind": "COLLISION",
+          "severity": "MODERATE",
+          "tick": 65,
+          "vehicleId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0002",
+          "located": true,
+          "selected": true,
+          "positionLabel": "x 12.0 m, z -4.0 m"
+        },
+        {
+          "incidentId": "blockage:city:082:traffic-block",
+          "kind": "BLOCKAGE",
+          "severity": "MODERATE",
+          "tick": 64,
+          "vehicleId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0001",
+          "located": false,
+          "selected": false,
+          "positionLabel": "Poziție indisponibilă"
+        }
+      ],
+      "drilldown": {
+        "status": "AVAILABLE",
+        "reason": null,
+        "title": "Coliziune · Moderat",
+        "position": "x 12.0 m, z -4.0 m",
+        "metrics": "Curse finalizate: 1 · Durată medie cursă: 2 min 16 s · Distanță parcursă: Indisponibil (Sursă lipsă) · Încălcări: Indisponibil (Sursă lipsă) · Coliziuni: 1 · Blocaje: 1 · Confort: Indisponibil (Sursă lipsă)"
+      },
+      "focusCount": 1,
+      "focusSkipped": 0,
+      "summary": "Tabloul orașului: 4 din 7 indicatori disponibili, Expunere: 2 ferestre, 1 observații, 2 min 16 s. 2 evenimente, 1 localizabile; selectat id-v1:9:collision11:session:0653:0281:03:1:22:65.",
+      "dom": "<section aria-describedby=\"city-dashboard-description\" aria-label=\"Tabloul orașului · 2 evenimente · 1 localizabile\" class=\"city-dashboard\" data-incidents=\"2\" data-located=\"1\" data-metrics=\"7\" data-selected=\"id-v1:9:collision11:session:0653:0281:03:1:22:65\" data-tick=\"70\">\n  <header class=\"city-dashboard__header\">\n    <h2 class=\"city-dashboard__title\">Tabloul orașului</h2>\n    <span class=\"city-dashboard__count\">4/7 indicatori · 2 evenimente · 1 localizabile</span>\n  </header>\n  <ul aria-label=\"Indicatori\" class=\"city-dashboard__metrics\" role=\"list\">\n    <li aria-label=\"Curse finalizate: 1 curse, Disponibil, eșantion 1.\" class=\"city-dashboard__metric\" data-metric-id=\"completedRides\" data-reason=\"\" data-state=\"AVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Curse finalizate</span>\n      <span class=\"city-dashboard__metric-value\">1</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion 1</span>\n      <span class=\"city-dashboard__metric-reason\"></span>\n    </li>\n    <li aria-label=\"Durată medie cursă: 2 min 16 s secunde, Disponibil, eșantion 1.\" class=\"city-dashboard__metric\" data-metric-id=\"averageRideSeconds\" data-reason=\"\" data-state=\"AVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Durată medie cursă</span>\n      <span class=\"city-dashboard__metric-value\">2 min 16 s</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion 1</span>\n      <span class=\"city-dashboard__metric-reason\"></span>\n    </li>\n    <li aria-label=\"Distanță parcursă: Indisponibil, motiv Sursă lipsă.\" class=\"city-dashboard__metric\" data-metric-id=\"totalDistanceM\" data-reason=\"SOURCE_MISSING\" data-state=\"UNAVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Distanță parcursă</span>\n      <span class=\"city-dashboard__metric-value\">Indisponibil</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion indisponibil</span>\n      <span class=\"city-dashboard__metric-reason\">Sursă lipsă</span>\n    </li>\n    <li aria-label=\"Încălcări: Indisponibil, motiv Sursă lipsă.\" class=\"city-dashboard__metric\" data-metric-id=\"violations\" data-reason=\"SOURCE_MISSING\" data-state=\"UNAVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Încălcări</span>\n      <span class=\"city-dashboard__metric-value\">Indisponibil</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion indisponibil</span>\n      <span class=\"city-dashboard__metric-reason\">Sursă lipsă</span>\n    </li>\n    <li aria-label=\"Coliziuni: 1 evenimente, Disponibil, eșantion 1.\" class=\"city-dashboard__metric\" data-metric-id=\"collisions\" data-reason=\"\" data-state=\"AVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Coliziuni</span>\n      <span class=\"city-dashboard__metric-value\">1</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion 1</span>\n      <span class=\"city-dashboard__metric-reason\"></span>\n    </li>\n    <li aria-label=\"Blocaje: 1 evenimente, Disponibil, eșantion 1.\" class=\"city-dashboard__metric\" data-metric-id=\"blockages\" data-reason=\"\" data-state=\"AVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Blocaje</span>\n      <span class=\"city-dashboard__metric-value\">1</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion 1</span>\n      <span class=\"city-dashboard__metric-reason\"></span>\n    </li>\n    <li aria-label=\"Confort: Indisponibil, motiv Sursă lipsă.\" class=\"city-dashboard__metric\" data-metric-id=\"comfortScore\" data-reason=\"SOURCE_MISSING\" data-state=\"UNAVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Confort</span>\n      <span class=\"city-dashboard__metric-value\">Indisponibil</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion indisponibil</span>\n      <span class=\"city-dashboard__metric-reason\">Sursă lipsă</span>\n    </li>\n  </ul>\n  <div aria-label=\"Expunere observată: 2 ferestre, 1 observații, 2 min 16 s.\" class=\"city-dashboard__exposure\" data-reason=\"\" data-state=\"AVAILABLE\">\n    <h3 class=\"city-dashboard__section-title\">Expunere</h3>\n    <p class=\"city-dashboard__exposure-summary\">Expunere: 2 ferestre, 1 observații, 2 min 16 s.</p>\n    <dl class=\"city-dashboard__exposure-grid\">\n      <dt>Ferestre</dt>\n      <dd class=\"city-dashboard__exposure-value\">2</dd>\n      <dt>Observații</dt>\n      <dd class=\"city-dashboard__exposure-value\">1</dd>\n      <dt>Durată</dt>\n      <dd class=\"city-dashboard__exposure-value\">2 min 16 s</dd>\n    </dl>\n  </div>\n  <ul aria-label=\"Evenimente\" class=\"city-dashboard__incidents\" role=\"listbox\">\n    <li class=\"city-dashboard__incident\" data-incident-id=\"id-v1:9:collision11:session:0653:0281:03:1:22:65\" data-kind=\"COLLISION\" data-located=\"true\" data-selected=\"true\" role=\"presentation\">\n      <button aria-label=\"Coliziune id-v1:9:collision11:session:0653:0281:03:1:22:65; Moderat; tick 65; vehicul id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0002; cursă fără cursă; x 12.0 m, z -4.0 m; localizabil pe hartă; incident selectat\" aria-selected=\"true\" class=\"city-dashboard__incident-row\" data-incident-id=\"id-v1:9:collision11:session:0653:0281:03:1:22:65\" role=\"option\" type=\"button\">\n        <span class=\"city-dashboard__incident-kind\">Coliziune</span>\n        <span class=\"city-dashboard__incident-label\">Moderat · tick 65 · id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0002</span>\n        <span class=\"city-dashboard__incident-place\">x 12.0 m, z -4.0 m</span>\n      </button>\n    </li>\n    <li class=\"city-dashboard__incident\" data-incident-id=\"blockage:city:082:traffic-block\" data-kind=\"BLOCKAGE\" data-located=\"false\" data-selected=\"false\" role=\"presentation\">\n      <button aria-label=\"Blocaj blockage:city:082:traffic-block; Moderat; tick 64; vehicul id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0001; cursă id-v1:4:ride20:city:fleet-065:rides57:id-v1:12:ride-request20:city:fleet-065:rides4:w0005:r0001; Poziție indisponibilă; nu poate fi localizat; neselectat\" aria-selected=\"false\" class=\"city-dashboard__incident-row\" data-incident-id=\"blockage:city:082:traffic-block\" role=\"option\" type=\"button\">\n        <span class=\"city-dashboard__incident-kind\">Blocaj</span>\n        <span class=\"city-dashboard__incident-label\">Moderat · tick 64 · id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0001</span>\n        <span class=\"city-dashboard__incident-place\">Poziție indisponibilă</span>\n      </button>\n    </li>\n  </ul>\n  <section aria-label=\"Detalii incident\" class=\"city-dashboard__drilldown\" data-reason=\"\" data-status=\"AVAILABLE\">\n    <h3 class=\"city-dashboard__section-title\">Detaliu incident</h3>\n    <p class=\"city-dashboard__drilldown-title\">Coliziune · Moderat</p>\n    <p class=\"city-dashboard__drilldown-position\">x 12.0 m, z -4.0 m</p>\n    <p class=\"city-dashboard__drilldown-detail\">tick 65 · vehicul id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0002 · cursă fără cursă · impuls 1200 N·s cu obstacle:082:wall</p>\n    <p class=\"city-dashboard__drilldown-metrics\">Curse finalizate: 1 · Durată medie cursă: 2 min 16 s · Distanță parcursă: Indisponibil (Sursă lipsă) · Încălcări: Indisponibil (Sursă lipsă) · Coliziuni: 1 · Blocaje: 1 · Confort: Indisponibil (Sursă lipsă)</p>\n  </section>\n  <p aria-atomic=\"true\" aria-live=\"polite\" class=\"city-dashboard__status\" role=\"status\">Coliziune Moderat, tick 65, vehicul id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0002, poziție x 12.0 m, z -4.0 m. Selectarea nu schimbă profilul.</p>\n  <p class=\"city-dashboard__description\">Tabloul orașului citește cursele 061, incidentele 028 și istoricul de sănătate 065. O valoare indisponibilă este afișată „Indisponibil” și nu este niciodată zero; un zero real rămâne „0”. Selectarea unui incident trimite doar o intenție de focalizare a hărții și nu schimbă profilul, modul camerei, autoritatea sau fizica.</p>\n</section>",
+      "stats": {
+        "version": "082-city-dashboard-v1",
+        "elements": 69,
+        "textNodes": 45,
+        "metrics": 7,
+        "cards": 7,
+        "rows": 2,
+        "retainedRows": 2,
+        "createdRows": 2,
+        "removedRows": 0,
+        "moves": 0,
+        "writes": 88,
+        "skipped": 0,
+        "updates": 2,
+        "renders": 2,
+        "listeners": 2,
+        "focusEmits": 1,
+        "focusAccepted": 1,
+        "focusSkipped": 0,
+        "selectedIncidentId": "id-v1:9:collision11:session:0653:0281:03:1:22:65",
+        "retainedViews": 1,
+        "disposed": false
+      }
+    },
+    {
+      "name": "indicator indisponibil",
+      "tick": 70,
+      "metrics": [
+        {
+          "id": "completedRides",
+          "state": "AVAILABLE",
+          "value": 1,
+          "reason": null,
+          "valueLabel": "1",
+          "sampleLabel": "eșantion 1"
+        },
+        {
+          "id": "averageRideSeconds",
+          "state": "AVAILABLE",
+          "value": 135.95495735607676,
+          "reason": null,
+          "valueLabel": "2 min 16 s",
+          "sampleLabel": "eșantion 1"
+        },
+        {
+          "id": "totalDistanceM",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "reason": "SOURCE_MISSING",
+          "valueLabel": "Indisponibil",
+          "sampleLabel": "eșantion indisponibil"
+        },
+        {
+          "id": "violations",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "reason": "SOURCE_MISSING",
+          "valueLabel": "Indisponibil",
+          "sampleLabel": "eșantion indisponibil"
+        },
+        {
+          "id": "collisions",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "reason": "SOURCE_MISSING",
+          "valueLabel": "Indisponibil",
+          "sampleLabel": "eșantion indisponibil"
+        },
+        {
+          "id": "blockages",
+          "state": "AVAILABLE",
+          "value": 1,
+          "reason": null,
+          "valueLabel": "1",
+          "sampleLabel": "eșantion 1"
+        },
+        {
+          "id": "comfortScore",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "reason": "SOURCE_MISSING",
+          "valueLabel": "Indisponibil",
+          "sampleLabel": "eșantion indisponibil"
+        }
+      ],
+      "availableMetrics": 3,
+      "unavailableMetrics": 4,
+      "exposure": {
+        "state": "AVAILABLE",
+        "windows": "2",
+        "observations": "1",
+        "duration": "2 min 16 s",
+        "reason": null
+      },
+      "incidents": [
+        {
+          "incidentId": "blockage:city:082:traffic-block",
+          "kind": "BLOCKAGE",
+          "severity": "MODERATE",
+          "tick": 64,
+          "vehicleId": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0001",
+          "located": false,
+          "selected": false,
+          "positionLabel": "Poziție indisponibilă"
+        }
+      ],
+      "drilldown": {
+        "status": "UNAVAILABLE",
+        "reason": "NO_SELECTION",
+        "title": "Niciun incident selectat",
+        "position": "Poziție indisponibilă",
+        "metrics": "Curse finalizate: 1 · Durată medie cursă: 2 min 16 s · Distanță parcursă: Indisponibil (Sursă lipsă) · Încălcări: Indisponibil (Sursă lipsă) · Coliziuni: Indisponibil (Sursă lipsă) · Blocaje: 1 · Confort: Indisponibil (Sursă lipsă)"
+      },
+      "focusCount": 0,
+      "focusSkipped": 0,
+      "summary": "Tabloul orașului: 3 din 7 indicatori disponibili, Expunere: 2 ferestre, 1 observații, 2 min 16 s. 1 evenimente, 0 localizabile; Niciun incident selectat.",
+      "dom": "<section aria-describedby=\"city-dashboard-description\" aria-label=\"Tabloul orașului · 1 evenimente · 0 localizabile\" class=\"city-dashboard\" data-incidents=\"1\" data-located=\"0\" data-metrics=\"7\" data-selected=\"\" data-tick=\"70\">\n  <header class=\"city-dashboard__header\">\n    <h2 class=\"city-dashboard__title\">Tabloul orașului</h2>\n    <span class=\"city-dashboard__count\">3/7 indicatori · 1 evenimente · 0 localizabile</span>\n  </header>\n  <ul aria-label=\"Indicatori\" class=\"city-dashboard__metrics\" role=\"list\">\n    <li aria-label=\"Curse finalizate: 1 curse, Disponibil, eșantion 1.\" class=\"city-dashboard__metric\" data-metric-id=\"completedRides\" data-reason=\"\" data-state=\"AVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Curse finalizate</span>\n      <span class=\"city-dashboard__metric-value\">1</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion 1</span>\n      <span class=\"city-dashboard__metric-reason\"></span>\n    </li>\n    <li aria-label=\"Durată medie cursă: 2 min 16 s secunde, Disponibil, eșantion 1.\" class=\"city-dashboard__metric\" data-metric-id=\"averageRideSeconds\" data-reason=\"\" data-state=\"AVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Durată medie cursă</span>\n      <span class=\"city-dashboard__metric-value\">2 min 16 s</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion 1</span>\n      <span class=\"city-dashboard__metric-reason\"></span>\n    </li>\n    <li aria-label=\"Distanță parcursă: Indisponibil, motiv Sursă lipsă.\" class=\"city-dashboard__metric\" data-metric-id=\"totalDistanceM\" data-reason=\"SOURCE_MISSING\" data-state=\"UNAVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Distanță parcursă</span>\n      <span class=\"city-dashboard__metric-value\">Indisponibil</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion indisponibil</span>\n      <span class=\"city-dashboard__metric-reason\">Sursă lipsă</span>\n    </li>\n    <li aria-label=\"Încălcări: Indisponibil, motiv Sursă lipsă.\" class=\"city-dashboard__metric\" data-metric-id=\"violations\" data-reason=\"SOURCE_MISSING\" data-state=\"UNAVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Încălcări</span>\n      <span class=\"city-dashboard__metric-value\">Indisponibil</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion indisponibil</span>\n      <span class=\"city-dashboard__metric-reason\">Sursă lipsă</span>\n    </li>\n    <li aria-label=\"Coliziuni: Indisponibil, motiv Sursă lipsă.\" class=\"city-dashboard__metric\" data-metric-id=\"collisions\" data-reason=\"SOURCE_MISSING\" data-state=\"UNAVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Coliziuni</span>\n      <span class=\"city-dashboard__metric-value\">Indisponibil</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion indisponibil</span>\n      <span class=\"city-dashboard__metric-reason\">Sursă lipsă</span>\n    </li>\n    <li aria-label=\"Blocaje: 1 evenimente, Disponibil, eșantion 1.\" class=\"city-dashboard__metric\" data-metric-id=\"blockages\" data-reason=\"\" data-state=\"AVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Blocaje</span>\n      <span class=\"city-dashboard__metric-value\">1</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion 1</span>\n      <span class=\"city-dashboard__metric-reason\"></span>\n    </li>\n    <li aria-label=\"Confort: Indisponibil, motiv Sursă lipsă.\" class=\"city-dashboard__metric\" data-metric-id=\"comfortScore\" data-reason=\"SOURCE_MISSING\" data-state=\"UNAVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Confort</span>\n      <span class=\"city-dashboard__metric-value\">Indisponibil</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion indisponibil</span>\n      <span class=\"city-dashboard__metric-reason\">Sursă lipsă</span>\n    </li>\n  </ul>\n  <div aria-label=\"Expunere observată: 2 ferestre, 1 observații, 2 min 16 s.\" class=\"city-dashboard__exposure\" data-reason=\"\" data-state=\"AVAILABLE\">\n    <h3 class=\"city-dashboard__section-title\">Expunere</h3>\n    <p class=\"city-dashboard__exposure-summary\">Expunere: 2 ferestre, 1 observații, 2 min 16 s.</p>\n    <dl class=\"city-dashboard__exposure-grid\">\n      <dt>Ferestre</dt>\n      <dd class=\"city-dashboard__exposure-value\">2</dd>\n      <dt>Observații</dt>\n      <dd class=\"city-dashboard__exposure-value\">1</dd>\n      <dt>Durată</dt>\n      <dd class=\"city-dashboard__exposure-value\">2 min 16 s</dd>\n    </dl>\n  </div>\n  <ul aria-label=\"Evenimente\" class=\"city-dashboard__incidents\" role=\"listbox\">\n    <li class=\"city-dashboard__incident\" data-incident-id=\"blockage:city:082:traffic-block\" data-kind=\"BLOCKAGE\" data-located=\"false\" data-selected=\"false\" role=\"presentation\">\n      <button aria-label=\"Blocaj blockage:city:082:traffic-block; Moderat; tick 64; vehicul id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0001; cursă id-v1:4:ride20:city:fleet-065:rides57:id-v1:12:ride-request20:city:fleet-065:rides4:w0005:r0001; Poziție indisponibilă; nu poate fi localizat; neselectat\" aria-selected=\"false\" class=\"city-dashboard__incident-row\" data-incident-id=\"blockage:city:082:traffic-block\" role=\"option\" type=\"button\">\n        <span class=\"city-dashboard__incident-kind\">Blocaj</span>\n        <span class=\"city-dashboard__incident-label\">Moderat · tick 64 · id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0001</span>\n        <span class=\"city-dashboard__incident-place\">Poziție indisponibilă</span>\n      </button>\n    </li>\n  </ul>\n  <section aria-label=\"Detalii incident\" class=\"city-dashboard__drilldown\" data-reason=\"NO_SELECTION\" data-status=\"UNAVAILABLE\">\n    <h3 class=\"city-dashboard__section-title\">Detaliu incident</h3>\n    <p class=\"city-dashboard__drilldown-title\">Niciun incident selectat</p>\n    <p class=\"city-dashboard__drilldown-position\">Poziție indisponibilă</p>\n    <p class=\"city-dashboard__drilldown-detail\">Selectează un incident din listă pentru a-l localiza pe hartă.</p>\n    <p class=\"city-dashboard__drilldown-metrics\">Curse finalizate: 1 · Durată medie cursă: 2 min 16 s · Distanță parcursă: Indisponibil (Sursă lipsă) · Încălcări: Indisponibil (Sursă lipsă) · Coliziuni: Indisponibil (Sursă lipsă) · Blocaje: 1 · Confort: Indisponibil (Sursă lipsă)</p>\n  </section>\n  <p aria-atomic=\"true\" aria-live=\"polite\" class=\"city-dashboard__status\" role=\"status\">Tabloul orașului: 3 din 7 indicatori disponibili, Expunere: 2 ferestre, 1 observații, 2 min 16 s. 1 evenimente, 0 localizabile; Niciun incident selectat.</p>\n  <p class=\"city-dashboard__description\">Tabloul orașului citește cursele 061, incidentele 028 și istoricul de sănătate 065. O valoare indisponibilă este afișată „Indisponibil” și nu este niciodată zero; un zero real rămâne „0”. Selectarea unui incident trimite doar o intenție de focalizare a hărții și nu schimbă profilul, modul camerei, autoritatea sau fizica.</p>\n</section>",
+      "stats": {
+        "version": "082-city-dashboard-v1",
+        "elements": 64,
+        "textNodes": 42,
+        "metrics": 7,
+        "cards": 7,
+        "rows": 1,
+        "retainedRows": 1,
+        "createdRows": 1,
+        "removedRows": 0,
+        "moves": 0,
+        "writes": 70,
+        "skipped": 0,
+        "updates": 1,
+        "renders": 1,
+        "listeners": 1,
+        "focusEmits": 0,
+        "focusAccepted": 0,
+        "focusSkipped": 0,
+        "selectedIncidentId": null,
+        "retainedViews": 1,
+        "disposed": false
+      }
+    },
+    {
+      "name": "60 cadre · plafon 10 Hz",
+      "tick": 480,
+      "metrics": [
+        {
+          "id": "completedRides",
+          "state": "AVAILABLE",
+          "value": 7,
+          "reason": null,
+          "valueLabel": "7",
+          "sampleLabel": "eșantion 7"
+        },
+        {
+          "id": "averageRideSeconds",
+          "state": "AVAILABLE",
+          "value": 91,
+          "reason": null,
+          "valueLabel": "1 min 31 s",
+          "sampleLabel": "eșantion 7"
+        },
+        {
+          "id": "totalDistanceM",
+          "state": "AVAILABLE",
+          "value": 1240,
+          "reason": null,
+          "valueLabel": "1240 m",
+          "sampleLabel": "eșantion 7"
+        },
+        {
+          "id": "violations",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "reason": "SOURCE_MISSING",
+          "valueLabel": "Indisponibil",
+          "sampleLabel": "eșantion indisponibil"
+        },
+        {
+          "id": "collisions",
+          "state": "AVAILABLE",
+          "value": 0,
+          "reason": null,
+          "valueLabel": "0",
+          "sampleLabel": "eșantion 0"
+        },
+        {
+          "id": "blockages",
+          "state": "AVAILABLE",
+          "value": 2,
+          "reason": null,
+          "valueLabel": "2",
+          "sampleLabel": "eșantion 2"
+        },
+        {
+          "id": "comfortScore",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "reason": "NOT_CERTIFIED",
+          "valueLabel": "Indisponibil",
+          "sampleLabel": "eșantion indisponibil"
+        }
+      ],
+      "availableMetrics": 5,
+      "unavailableMetrics": 2,
+      "exposure": {
+        "state": "AVAILABLE",
+        "windows": "9",
+        "observations": "7",
+        "duration": "10 min 37 s",
+        "reason": null
+      },
+      "incidents": [],
+      "drilldown": {
+        "status": "UNAVAILABLE",
+        "reason": "NO_SELECTION",
+        "title": "Niciun incident selectat",
+        "position": "Poziție indisponibilă",
+        "metrics": "Curse finalizate: 7 · Durată medie cursă: 1 min 31 s · Distanță parcursă: 1240 m · Încălcări: Indisponibil (Sursă lipsă) · Coliziuni: 0 · Blocaje: 2 · Confort: Indisponibil (Necertificat)"
+      },
+      "focusCount": 0,
+      "focusSkipped": 0,
+      "summary": "Tabloul orașului: 5 din 7 indicatori disponibili, Expunere: 9 ferestre, 7 observații, 10 min 37 s. 0 evenimente, 0 localizabile; Niciun incident selectat.",
+      "dom": "<section aria-describedby=\"city-dashboard-description\" aria-label=\"Tabloul orașului · 0 evenimente · 0 localizabile\" class=\"city-dashboard\" data-incidents=\"0\" data-located=\"0\" data-metrics=\"7\" data-selected=\"\" data-tick=\"536\">\n  <header class=\"city-dashboard__header\">\n    <h2 class=\"city-dashboard__title\">Tabloul orașului</h2>\n    <span class=\"city-dashboard__count\">5/7 indicatori · 0 evenimente · 0 localizabile</span>\n  </header>\n  <ul aria-label=\"Indicatori\" class=\"city-dashboard__metrics\" role=\"list\">\n    <li aria-label=\"Curse finalizate: 7 curse, Disponibil, eșantion 7.\" class=\"city-dashboard__metric\" data-metric-id=\"completedRides\" data-reason=\"\" data-state=\"AVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Curse finalizate</span>\n      <span class=\"city-dashboard__metric-value\">7</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion 7</span>\n      <span class=\"city-dashboard__metric-reason\"></span>\n    </li>\n    <li aria-label=\"Durată medie cursă: 2 min 35 s secunde, Disponibil, eșantion 7.\" class=\"city-dashboard__metric\" data-metric-id=\"averageRideSeconds\" data-reason=\"\" data-state=\"AVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Durată medie cursă</span>\n      <span class=\"city-dashboard__metric-value\">2 min 35 s</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion 7</span>\n      <span class=\"city-dashboard__metric-reason\"></span>\n    </li>\n    <li aria-label=\"Distanță parcursă: 1240 m metri, Disponibil, eșantion 7.\" class=\"city-dashboard__metric\" data-metric-id=\"totalDistanceM\" data-reason=\"\" data-state=\"AVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Distanță parcursă</span>\n      <span class=\"city-dashboard__metric-value\">1240 m</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion 7</span>\n      <span class=\"city-dashboard__metric-reason\"></span>\n    </li>\n    <li aria-label=\"Încălcări: Indisponibil, motiv Sursă lipsă.\" class=\"city-dashboard__metric\" data-metric-id=\"violations\" data-reason=\"SOURCE_MISSING\" data-state=\"UNAVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Încălcări</span>\n      <span class=\"city-dashboard__metric-value\">Indisponibil</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion indisponibil</span>\n      <span class=\"city-dashboard__metric-reason\">Sursă lipsă</span>\n    </li>\n    <li aria-label=\"Coliziuni: 0 evenimente, Disponibil, eșantion 0.\" class=\"city-dashboard__metric\" data-metric-id=\"collisions\" data-reason=\"\" data-state=\"AVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Coliziuni</span>\n      <span class=\"city-dashboard__metric-value\">0</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion 0</span>\n      <span class=\"city-dashboard__metric-reason\"></span>\n    </li>\n    <li aria-label=\"Blocaje: 2 evenimente, Disponibil, eșantion 2.\" class=\"city-dashboard__metric\" data-metric-id=\"blockages\" data-reason=\"\" data-state=\"AVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Blocaje</span>\n      <span class=\"city-dashboard__metric-value\">2</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion 2</span>\n      <span class=\"city-dashboard__metric-reason\"></span>\n    </li>\n    <li aria-label=\"Confort: Indisponibil, motiv Necertificat.\" class=\"city-dashboard__metric\" data-metric-id=\"comfortScore\" data-reason=\"NOT_CERTIFIED\" data-state=\"UNAVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Confort</span>\n      <span class=\"city-dashboard__metric-value\">Indisponibil</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion indisponibil</span>\n      <span class=\"city-dashboard__metric-reason\">Necertificat</span>\n    </li>\n  </ul>\n  <div aria-label=\"Expunere observată: 9 ferestre, 7 observații, 10 min 37 s.\" class=\"city-dashboard__exposure\" data-reason=\"\" data-state=\"AVAILABLE\">\n    <h3 class=\"city-dashboard__section-title\">Expunere</h3>\n    <p class=\"city-dashboard__exposure-summary\">Expunere: 9 ferestre, 7 observații, 10 min 37 s.</p>\n    <dl class=\"city-dashboard__exposure-grid\">\n      <dt>Ferestre</dt>\n      <dd class=\"city-dashboard__exposure-value\">9</dd>\n      <dt>Observații</dt>\n      <dd class=\"city-dashboard__exposure-value\">7</dd>\n      <dt>Durată</dt>\n      <dd class=\"city-dashboard__exposure-value\">10 min 37 s</dd>\n    </dl>\n  </div>\n  <ul aria-label=\"Evenimente\" class=\"city-dashboard__incidents\" role=\"listbox\"></ul>\n  <section aria-label=\"Detalii incident\" class=\"city-dashboard__drilldown\" data-reason=\"NO_SELECTION\" data-status=\"UNAVAILABLE\">\n    <h3 class=\"city-dashboard__section-title\">Detaliu incident</h3>\n    <p class=\"city-dashboard__drilldown-title\">Niciun incident selectat</p>\n    <p class=\"city-dashboard__drilldown-position\">Poziție indisponibilă</p>\n    <p class=\"city-dashboard__drilldown-detail\">Selectează un incident din listă pentru a-l localiza pe hartă.</p>\n    <p class=\"city-dashboard__drilldown-metrics\">Curse finalizate: 7 · Durată medie cursă: 2 min 35 s · Distanță parcursă: 1240 m · Încălcări: Indisponibil (Sursă lipsă) · Coliziuni: 0 · Blocaje: 2 · Confort: Indisponibil (Necertificat)</p>\n  </section>\n  <p aria-atomic=\"true\" aria-live=\"polite\" class=\"city-dashboard__status\" role=\"status\">Tabloul orașului: 5 din 7 indicatori disponibili, Expunere: 9 ferestre, 7 observații, 10 min 37 s. 0 evenimente, 0 localizabile; Niciun incident selectat.</p>\n  <p class=\"city-dashboard__description\">Tabloul orașului citește cursele 061, incidentele 028 și istoricul de sănătate 065. O valoare indisponibilă este afișată „Indisponibil” și nu este niciodată zero; un zero real rămâne „0”. Selectarea unui incident trimite doar o intenție de focalizare a hărții și nu schimbă profilul, modul camerei, autoritatea sau fizica.</p>\n</section>",
+      "stats": {
+        "version": "082-city-dashboard-v1",
+        "elements": 59,
+        "textNodes": 39,
+        "metrics": 7,
+        "cards": 7,
+        "rows": 0,
+        "retainedRows": 0,
+        "createdRows": 0,
+        "removedRows": 0,
+        "moves": 0,
+        "writes": 95,
+        "skipped": 52,
+        "updates": 9,
+        "renders": 9,
+        "listeners": 0,
+        "focusEmits": 0,
+        "focusAccepted": 0,
+        "focusSkipped": 0,
+        "selectedIncidentId": null,
+        "retainedViews": 1,
+        "disposed": false
+      }
+    }
+  ],
+  "checks": [
+    {
+      "name": "contract-version",
+      "expected": "082-city-dashboard-v1",
+      "actual": "082-city-dashboard-v1",
+      "pass": true,
+      "detail": "082 dashboard contract version"
+    },
+    {
+      "name": "closed-metric-set",
+      "expected": "completedRides,averageRideSeconds,totalDistanceM,violations,collisions,blockages,comfortScore",
+      "actual": "completedRides,averageRideSeconds,totalDistanceM,violations,collisions,blockages,comfortScore",
+      "pass": true,
+      "detail": "the dashboard exposes exactly the seven closed indicators in canonical order"
+    },
+    {
+      "name": "incident-ceiling",
+      "expected": 500,
+      "actual": 500,
+      "pass": true,
+      "detail": "the retained incident window is bounded"
+    },
+    {
+      "name": "no-exposure-average-state",
+      "expected": "UNAVAILABLE",
+      "actual": "UNAVAILABLE",
+      "pass": true,
+      "detail": "a scenario without completed rides has no average"
+    },
+    {
+      "name": "no-exposure-average-value",
+      "expected": null,
+      "actual": null,
+      "pass": true,
+      "detail": "the unavailable average carries no number"
+    },
+    {
+      "name": "no-exposure-average-text",
+      "expected": "Indisponibil",
+      "actual": "Indisponibil",
+      "pass": true,
+      "detail": "the card shows the unavailable text instead of 0"
+    },
+    {
+      "name": "no-exposure-average-reason",
+      "expected": "NO_EXPOSURE",
+      "actual": "NO_EXPOSURE",
+      "pass": true,
+      "detail": "the reason is the closed NO_EXPOSURE token"
+    },
+    {
+      "name": "no-exposure-completed-zero",
+      "expected": "0",
+      "actual": "0",
+      "pass": true,
+      "detail": "completed rides is a real zero, not an unavailable value"
+    },
+    {
+      "name": "no-exposure-completed-state",
+      "expected": "AVAILABLE",
+      "actual": "AVAILABLE",
+      "pass": true,
+      "detail": "the real zero stays available"
+    },
+    {
+      "name": "exposure-zero-state",
+      "expected": "AVAILABLE",
+      "actual": "AVAILABLE",
+      "pass": true,
+      "detail": "a known window with no rides is an available zero"
+    },
+    {
+      "name": "exposure-zero-windows",
+      "expected": "0",
+      "actual": "0",
+      "pass": true,
+      "detail": "zero windows are shown"
+    },
+    {
+      "name": "exposure-zero-duration",
+      "expected": "0 s",
+      "actual": "0 s",
+      "pass": true,
+      "detail": "a zero duration is shown as a number"
+    },
+    {
+      "name": "exposure-unavailable-state",
+      "expected": "UNAVAILABLE",
+      "actual": "UNAVAILABLE",
+      "pass": true,
+      "detail": "a missing exposure provider is unavailable"
+    },
+    {
+      "name": "exposure-unavailable-text",
+      "expected": "Indisponibil",
+      "actual": "Indisponibil",
+      "pass": true,
+      "detail": "an unreadable window is not zero"
+    },
+    {
+      "name": "exposure-unavailable-reason",
+      "expected": "SOURCE_MISSING",
+      "actual": "SOURCE_MISSING",
+      "pass": true,
+      "detail": "the closed reason names the missing source"
+    },
+    {
+      "name": "real-zero-text",
+      "expected": "0",
+      "actual": "0",
+      "pass": true,
+      "detail": "a real zero collision count is displayed as 0"
+    },
+    {
+      "name": "real-zero-state",
+      "expected": "AVAILABLE",
+      "actual": "AVAILABLE",
+      "pass": true,
+      "detail": "a real zero is available"
+    },
+    {
+      "name": "incident-count",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "one real 028 collision and one real 065 blockage are listed"
+    },
+    {
+      "name": "incident-order",
+      "expected": "COLLISION,BLOCKAGE",
+      "actual": "COLLISION,BLOCKAGE",
+      "pass": true,
+      "detail": "incidents are ordered by tick descending"
+    },
+    {
+      "name": "collision-located",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the collision has the real host position"
+    },
+    {
+      "name": "blockage-unlocated",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "a source without coordinates stays unlocated"
+    },
+    {
+      "name": "collision-real-id",
+      "expected": "id-v1:9:collision11:session:0653:0281:03:1:22:65",
+      "actual": "id-v1:9:collision11:session:0653:0281:03:1:22:65",
+      "pass": true,
+      "detail": "the incident id is the real 028 stable id"
+    },
+    {
+      "name": "collision-tick",
+      "expected": 65,
+      "actual": 65,
+      "pass": true,
+      "detail": "the real 028 onset tick is kept"
+    },
+    {
+      "name": "collision-vehicle",
+      "expected": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0002",
+      "actual": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0002",
+      "pass": true,
+      "detail": "the colliding taxi identity is the real fleet id"
+    },
+    {
+      "name": "missing-position-text",
+      "expected": "Poziție indisponibilă",
+      "actual": "Poziție indisponibilă",
+      "pass": true,
+      "detail": "an incident without a point says so"
+    },
+    {
+      "name": "missing-position-no-focus",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "a selection without a position emits nothing"
+    },
+    {
+      "name": "missing-position-skipped",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the refused focus is counted explicitly"
+    },
+    {
+      "name": "missing-position-drilldown",
+      "expected": "MISSING_POSITION",
+      "actual": "MISSING_POSITION",
+      "pass": true,
+      "detail": "the drilldown keeps the unavailable reason"
+    },
+    {
+      "name": "missing-position-status",
+      "expected": "UNAVAILABLE",
+      "actual": "UNAVAILABLE",
+      "pass": true,
+      "detail": "the drilldown is unavailable, never a fake point"
+    },
+    {
+      "name": "selected-focus-count",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "a located selection emits exactly one focus intention"
+    },
+    {
+      "name": "selected-focus-position",
+      "expected": "12,0,-4",
+      "actual": "12,0,-4",
+      "pass": true,
+      "detail": "the intention carries the incident position, not a camera or profile change"
+    },
+    {
+      "name": "selected-focus-id",
+      "expected": "id-v1:9:collision11:session:0653:0281:03:1:22:65",
+      "actual": "id-v1:9:collision11:session:0653:0281:03:1:22:65",
+      "pass": true,
+      "detail": "the intention is addressed to the selected incident"
+    },
+    {
+      "name": "selected-drilldown-status",
+      "expected": "AVAILABLE",
+      "actual": "AVAILABLE",
+      "pass": true,
+      "detail": "a located incident has an available drilldown"
+    },
+    {
+      "name": "selected-aria",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the selected row is marked for assistive technology"
+    },
+    {
+      "name": "unavailable-never-zero",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "every missing source is unavailable with no number"
+    },
+    {
+      "name": "unavailable-metric-count",
+      "expected": 4,
+      "actual": 4,
+      "pass": true,
+      "detail": "distance, violations, collisions and comfort are unavailable without their sources"
+    },
+    {
+      "name": "violations-reason",
+      "expected": "SOURCE_MISSING",
+      "actual": "SOURCE_MISSING",
+      "pass": true,
+      "detail": "137 is not Done, so violations name the missing source"
+    },
+    {
+      "name": "metrics-never-fabricated",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "every unavailable metric carries a closed reason"
+    },
+    {
+      "name": "throttled-updates",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "60 frames at 16 ms produce 9 writes"
+    },
+    {
+      "name": "throttled-skipped",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the ceiling skips the frames it cannot write"
+    },
+    {
+      "name": "identical-frame-no-write",
+      "expected": 63,
+      "actual": 63,
+      "pass": true,
+      "detail": "a repeated frame writes nothing"
+    },
+    {
+      "name": "identical-frame-same-dom",
+      "expected": "<section aria-describedby=\"city-dashboard-description\" aria-label=\"Tabloul orașului · 0 evenimente · 0 localizabile\" class=\"city-dashboard\" data-incidents=\"0\" data-located=\"0\" data-metrics=\"7\" data-selected=\"\" data-tick=\"480\">\n  <header class=\"city-dashboard__header\">\n    <h2 class=\"city-dashboard__title\">Tabloul orașului</h2>\n    <span class=\"city-dashboard__count\">5/7 indicatori · 0 evenimente · 0 localizabile</span>\n  </header>\n  <ul aria-label=\"Indicatori\" class=\"city-dashboard__metrics\" role=\"list\">\n    <li aria-label=\"Curse finalizate: 7 curse, Disponibil, eșantion 7.\" class=\"city-dashboard__metric\" data-metric-id=\"completedRides\" data-reason=\"\" data-state=\"AVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Curse finalizate</span>\n      <span class=\"city-dashboard__metric-value\">7</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion 7</span>\n      <span class=\"city-dashboard__metric-reason\"></span>\n    </li>\n    <li aria-label=\"Durată medie cursă: 1 min 31 s secunde, Disponibil, eșantion 7.\" class=\"city-dashboard__metric\" data-metric-id=\"averageRideSeconds\" data-reason=\"\" data-state=\"AVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Durată medie cursă</span>\n      <span class=\"city-dashboard__metric-value\">1 min 31 s</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion 7</span>\n      <span class=\"city-dashboard__metric-reason\"></span>\n    </li>\n    <li aria-label=\"Distanță parcursă: 1240 m metri, Disponibil, eșantion 7.\" class=\"city-dashboard__metric\" data-metric-id=\"totalDistanceM\" data-reason=\"\" data-state=\"AVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Distanță parcursă</span>\n      <span class=\"city-dashboard__metric-value\">1240 m</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion 7</span>\n      <span class=\"city-dashboard__metric-reason\"></span>\n    </li>\n    <li aria-label=\"Încălcări: Indisponibil, motiv Sursă lipsă.\" class=\"city-dashboard__metric\" data-metric-id=\"violations\" data-reason=\"SOURCE_MISSING\" data-state=\"UNAVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Încălcări</span>\n      <span class=\"city-dashboard__metric-value\">Indisponibil</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion indisponibil</span>\n      <span class=\"city-dashboard__metric-reason\">Sursă lipsă</span>\n    </li>\n    <li aria-label=\"Coliziuni: 0 evenimente, Disponibil, eșantion 0.\" class=\"city-dashboard__metric\" data-metric-id=\"collisions\" data-reason=\"\" data-state=\"AVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Coliziuni</span>\n      <span class=\"city-dashboard__metric-value\">0</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion 0</span>\n      <span class=\"city-dashboard__metric-reason\"></span>\n    </li>\n    <li aria-label=\"Blocaje: 2 evenimente, Disponibil, eșantion 2.\" class=\"city-dashboard__metric\" data-metric-id=\"blockages\" data-reason=\"\" data-state=\"AVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Blocaje</span>\n      <span class=\"city-dashboard__metric-value\">2</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion 2</span>\n      <span class=\"city-dashboard__metric-reason\"></span>\n    </li>\n    <li aria-label=\"Confort: Indisponibil, motiv Necertificat.\" class=\"city-dashboard__metric\" data-metric-id=\"comfortScore\" data-reason=\"NOT_CERTIFIED\" data-state=\"UNAVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Confort</span>\n      <span class=\"city-dashboard__metric-value\">Indisponibil</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion indisponibil</span>\n      <span class=\"city-dashboard__metric-reason\">Necertificat</span>\n    </li>\n  </ul>\n  <div aria-label=\"Expunere observată: 9 ferestre, 7 observații, 10 min 37 s.\" class=\"city-dashboard__exposure\" data-reason=\"\" data-state=\"AVAILABLE\">\n    <h3 class=\"city-dashboard__section-title\">Expunere</h3>\n    <p class=\"city-dashboard__exposure-summary\">Expunere: 9 ferestre, 7 observații, 10 min 37 s.</p>\n    <dl class=\"city-dashboard__exposure-grid\">\n      <dt>Ferestre</dt>\n      <dd class=\"city-dashboard__exposure-value\">9</dd>\n      <dt>Observații</dt>\n      <dd class=\"city-dashboard__exposure-value\">7</dd>\n      <dt>Durată</dt>\n      <dd class=\"city-dashboard__exposure-value\">10 min 37 s</dd>\n    </dl>\n  </div>\n  <ul aria-label=\"Evenimente\" class=\"city-dashboard__incidents\" role=\"listbox\"></ul>\n  <section aria-label=\"Detalii incident\" class=\"city-dashboard__drilldown\" data-reason=\"NO_SELECTION\" data-status=\"UNAVAILABLE\">\n    <h3 class=\"city-dashboard__section-title\">Detaliu incident</h3>\n    <p class=\"city-dashboard__drilldown-title\">Niciun incident selectat</p>\n    <p class=\"city-dashboard__drilldown-position\">Poziție indisponibilă</p>\n    <p class=\"city-dashboard__drilldown-detail\">Selectează un incident din listă pentru a-l localiza pe hartă.</p>\n    <p class=\"city-dashboard__drilldown-metrics\">Curse finalizate: 7 · Durată medie cursă: 1 min 31 s · Distanță parcursă: 1240 m · Încălcări: Indisponibil (Sursă lipsă) · Coliziuni: 0 · Blocaje: 2 · Confort: Indisponibil (Necertificat)</p>\n  </section>\n  <p aria-atomic=\"true\" aria-live=\"polite\" class=\"city-dashboard__status\" role=\"status\">Tabloul orașului: 5 din 7 indicatori disponibili, Expunere: 9 ferestre, 7 observații, 10 min 37 s. 0 evenimente, 0 localizabile; Niciun incident selectat.</p>\n  <p class=\"city-dashboard__description\">Tabloul orașului citește cursele 061, incidentele 028 și istoricul de sănătate 065. O valoare indisponibilă este afișată „Indisponibil” și nu este niciodată zero; un zero real rămâne „0”. Selectarea unui incident trimite doar o intenție de focalizare a hărții și nu schimbă profilul, modul camerei, autoritatea sau fizica.</p>\n</section>",
+      "actual": "<section aria-describedby=\"city-dashboard-description\" aria-label=\"Tabloul orașului · 0 evenimente · 0 localizabile\" class=\"city-dashboard\" data-incidents=\"0\" data-located=\"0\" data-metrics=\"7\" data-selected=\"\" data-tick=\"480\">\n  <header class=\"city-dashboard__header\">\n    <h2 class=\"city-dashboard__title\">Tabloul orașului</h2>\n    <span class=\"city-dashboard__count\">5/7 indicatori · 0 evenimente · 0 localizabile</span>\n  </header>\n  <ul aria-label=\"Indicatori\" class=\"city-dashboard__metrics\" role=\"list\">\n    <li aria-label=\"Curse finalizate: 7 curse, Disponibil, eșantion 7.\" class=\"city-dashboard__metric\" data-metric-id=\"completedRides\" data-reason=\"\" data-state=\"AVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Curse finalizate</span>\n      <span class=\"city-dashboard__metric-value\">7</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion 7</span>\n      <span class=\"city-dashboard__metric-reason\"></span>\n    </li>\n    <li aria-label=\"Durată medie cursă: 1 min 31 s secunde, Disponibil, eșantion 7.\" class=\"city-dashboard__metric\" data-metric-id=\"averageRideSeconds\" data-reason=\"\" data-state=\"AVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Durată medie cursă</span>\n      <span class=\"city-dashboard__metric-value\">1 min 31 s</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion 7</span>\n      <span class=\"city-dashboard__metric-reason\"></span>\n    </li>\n    <li aria-label=\"Distanță parcursă: 1240 m metri, Disponibil, eșantion 7.\" class=\"city-dashboard__metric\" data-metric-id=\"totalDistanceM\" data-reason=\"\" data-state=\"AVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Distanță parcursă</span>\n      <span class=\"city-dashboard__metric-value\">1240 m</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion 7</span>\n      <span class=\"city-dashboard__metric-reason\"></span>\n    </li>\n    <li aria-label=\"Încălcări: Indisponibil, motiv Sursă lipsă.\" class=\"city-dashboard__metric\" data-metric-id=\"violations\" data-reason=\"SOURCE_MISSING\" data-state=\"UNAVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Încălcări</span>\n      <span class=\"city-dashboard__metric-value\">Indisponibil</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion indisponibil</span>\n      <span class=\"city-dashboard__metric-reason\">Sursă lipsă</span>\n    </li>\n    <li aria-label=\"Coliziuni: 0 evenimente, Disponibil, eșantion 0.\" class=\"city-dashboard__metric\" data-metric-id=\"collisions\" data-reason=\"\" data-state=\"AVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Coliziuni</span>\n      <span class=\"city-dashboard__metric-value\">0</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion 0</span>\n      <span class=\"city-dashboard__metric-reason\"></span>\n    </li>\n    <li aria-label=\"Blocaje: 2 evenimente, Disponibil, eșantion 2.\" class=\"city-dashboard__metric\" data-metric-id=\"blockages\" data-reason=\"\" data-state=\"AVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Blocaje</span>\n      <span class=\"city-dashboard__metric-value\">2</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion 2</span>\n      <span class=\"city-dashboard__metric-reason\"></span>\n    </li>\n    <li aria-label=\"Confort: Indisponibil, motiv Necertificat.\" class=\"city-dashboard__metric\" data-metric-id=\"comfortScore\" data-reason=\"NOT_CERTIFIED\" data-state=\"UNAVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Confort</span>\n      <span class=\"city-dashboard__metric-value\">Indisponibil</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion indisponibil</span>\n      <span class=\"city-dashboard__metric-reason\">Necertificat</span>\n    </li>\n  </ul>\n  <div aria-label=\"Expunere observată: 9 ferestre, 7 observații, 10 min 37 s.\" class=\"city-dashboard__exposure\" data-reason=\"\" data-state=\"AVAILABLE\">\n    <h3 class=\"city-dashboard__section-title\">Expunere</h3>\n    <p class=\"city-dashboard__exposure-summary\">Expunere: 9 ferestre, 7 observații, 10 min 37 s.</p>\n    <dl class=\"city-dashboard__exposure-grid\">\n      <dt>Ferestre</dt>\n      <dd class=\"city-dashboard__exposure-value\">9</dd>\n      <dt>Observații</dt>\n      <dd class=\"city-dashboard__exposure-value\">7</dd>\n      <dt>Durată</dt>\n      <dd class=\"city-dashboard__exposure-value\">10 min 37 s</dd>\n    </dl>\n  </div>\n  <ul aria-label=\"Evenimente\" class=\"city-dashboard__incidents\" role=\"listbox\"></ul>\n  <section aria-label=\"Detalii incident\" class=\"city-dashboard__drilldown\" data-reason=\"NO_SELECTION\" data-status=\"UNAVAILABLE\">\n    <h3 class=\"city-dashboard__section-title\">Detaliu incident</h3>\n    <p class=\"city-dashboard__drilldown-title\">Niciun incident selectat</p>\n    <p class=\"city-dashboard__drilldown-position\">Poziție indisponibilă</p>\n    <p class=\"city-dashboard__drilldown-detail\">Selectează un incident din listă pentru a-l localiza pe hartă.</p>\n    <p class=\"city-dashboard__drilldown-metrics\">Curse finalizate: 7 · Durată medie cursă: 1 min 31 s · Distanță parcursă: 1240 m · Încălcări: Indisponibil (Sursă lipsă) · Coliziuni: 0 · Blocaje: 2 · Confort: Indisponibil (Necertificat)</p>\n  </section>\n  <p aria-atomic=\"true\" aria-live=\"polite\" class=\"city-dashboard__status\" role=\"status\">Tabloul orașului: 5 din 7 indicatori disponibili, Expunere: 9 ferestre, 7 observații, 10 min 37 s. 0 evenimente, 0 localizabile; Niciun incident selectat.</p>\n  <p class=\"city-dashboard__description\">Tabloul orașului citește cursele 061, incidentele 028 și istoricul de sănătate 065. O valoare indisponibilă este afișată „Indisponibil” și nu este niciodată zero; un zero real rămâne „0”. Selectarea unui incident trimite doar o intenție de focalizare a hărții și nu schimbă profilul, modul camerei, autoritatea sau fizica.</p>\n</section>",
+      "pass": true,
+      "detail": "a repeated frame leaves the DOM byte-identical"
+    },
+    {
+      "name": "incident-bypass",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "a new incident is rendered immediately, without waiting for the ceiling"
+    },
+    {
+      "name": "focus-port-accepts",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the port maps a finite point to the host map"
+    },
+    {
+      "name": "focus-port-rejects",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "a non-finite point never reaches the host map"
+    },
+    {
+      "name": "no-global-key-listener",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the dashboard installs no host/global listener"
+    },
+    {
+      "name": "deterministic-dom",
+      "expected": "<section aria-describedby=\"city-dashboard-description\" aria-label=\"Tabloul orașului · 2 evenimente · 1 localizabile\" class=\"city-dashboard\" data-incidents=\"2\" data-located=\"1\" data-metrics=\"7\" data-selected=\"\" data-tick=\"70\">\n  <header class=\"city-dashboard__header\">\n    <h2 class=\"city-dashboard__title\">Tabloul orașului</h2>\n    <span class=\"city-dashboard__count\">4/7 indicatori · 2 evenimente · 1 localizabile</span>\n  </header>\n  <ul aria-label=\"Indicatori\" class=\"city-dashboard__metrics\" role=\"list\">\n    <li aria-label=\"Curse finalizate: 1 curse, Disponibil, eșantion 1.\" class=\"city-dashboard__metric\" data-metric-id=\"completedRides\" data-reason=\"\" data-state=\"AVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Curse finalizate</span>\n      <span class=\"city-dashboard__metric-value\">1</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion 1</span>\n      <span class=\"city-dashboard__metric-reason\"></span>\n    </li>\n    <li aria-label=\"Durată medie cursă: 2 min 16 s secunde, Disponibil, eșantion 1.\" class=\"city-dashboard__metric\" data-metric-id=\"averageRideSeconds\" data-reason=\"\" data-state=\"AVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Durată medie cursă</span>\n      <span class=\"city-dashboard__metric-value\">2 min 16 s</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion 1</span>\n      <span class=\"city-dashboard__metric-reason\"></span>\n    </li>\n    <li aria-label=\"Distanță parcursă: Indisponibil, motiv Sursă lipsă.\" class=\"city-dashboard__metric\" data-metric-id=\"totalDistanceM\" data-reason=\"SOURCE_MISSING\" data-state=\"UNAVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Distanță parcursă</span>\n      <span class=\"city-dashboard__metric-value\">Indisponibil</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion indisponibil</span>\n      <span class=\"city-dashboard__metric-reason\">Sursă lipsă</span>\n    </li>\n    <li aria-label=\"Încălcări: Indisponibil, motiv Sursă lipsă.\" class=\"city-dashboard__metric\" data-metric-id=\"violations\" data-reason=\"SOURCE_MISSING\" data-state=\"UNAVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Încălcări</span>\n      <span class=\"city-dashboard__metric-value\">Indisponibil</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion indisponibil</span>\n      <span class=\"city-dashboard__metric-reason\">Sursă lipsă</span>\n    </li>\n    <li aria-label=\"Coliziuni: 1 evenimente, Disponibil, eșantion 1.\" class=\"city-dashboard__metric\" data-metric-id=\"collisions\" data-reason=\"\" data-state=\"AVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Coliziuni</span>\n      <span class=\"city-dashboard__metric-value\">1</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion 1</span>\n      <span class=\"city-dashboard__metric-reason\"></span>\n    </li>\n    <li aria-label=\"Blocaje: 1 evenimente, Disponibil, eșantion 1.\" class=\"city-dashboard__metric\" data-metric-id=\"blockages\" data-reason=\"\" data-state=\"AVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Blocaje</span>\n      <span class=\"city-dashboard__metric-value\">1</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion 1</span>\n      <span class=\"city-dashboard__metric-reason\"></span>\n    </li>\n    <li aria-label=\"Confort: Indisponibil, motiv Sursă lipsă.\" class=\"city-dashboard__metric\" data-metric-id=\"comfortScore\" data-reason=\"SOURCE_MISSING\" data-state=\"UNAVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Confort</span>\n      <span class=\"city-dashboard__metric-value\">Indisponibil</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion indisponibil</span>\n      <span class=\"city-dashboard__metric-reason\">Sursă lipsă</span>\n    </li>\n  </ul>\n  <div aria-label=\"Expunere observată: 2 ferestre, 1 observații, 2 min 16 s.\" class=\"city-dashboard__exposure\" data-reason=\"\" data-state=\"AVAILABLE\">\n    <h3 class=\"city-dashboard__section-title\">Expunere</h3>\n    <p class=\"city-dashboard__exposure-summary\">Expunere: 2 ferestre, 1 observații, 2 min 16 s.</p>\n    <dl class=\"city-dashboard__exposure-grid\">\n      <dt>Ferestre</dt>\n      <dd class=\"city-dashboard__exposure-value\">2</dd>\n      <dt>Observații</dt>\n      <dd class=\"city-dashboard__exposure-value\">1</dd>\n      <dt>Durată</dt>\n      <dd class=\"city-dashboard__exposure-value\">2 min 16 s</dd>\n    </dl>\n  </div>\n  <ul aria-label=\"Evenimente\" class=\"city-dashboard__incidents\" role=\"listbox\">\n    <li class=\"city-dashboard__incident\" data-incident-id=\"id-v1:9:collision11:session:0653:0281:03:1:22:65\" data-kind=\"COLLISION\" data-located=\"true\" data-selected=\"false\" role=\"presentation\">\n      <button aria-label=\"Coliziune id-v1:9:collision11:session:0653:0281:03:1:22:65; Moderat; tick 65; vehicul id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0002; cursă fără cursă; x 12.0 m, z -4.0 m; localizabil pe hartă; neselectat\" aria-selected=\"false\" class=\"city-dashboard__incident-row\" data-incident-id=\"id-v1:9:collision11:session:0653:0281:03:1:22:65\" role=\"option\" type=\"button\">\n        <span class=\"city-dashboard__incident-kind\">Coliziune</span>\n        <span class=\"city-dashboard__incident-label\">Moderat · tick 65 · id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0002</span>\n        <span class=\"city-dashboard__incident-place\">x 12.0 m, z -4.0 m</span>\n      </button>\n    </li>\n    <li class=\"city-dashboard__incident\" data-incident-id=\"blockage:city:082:traffic-block\" data-kind=\"BLOCKAGE\" data-located=\"false\" data-selected=\"false\" role=\"presentation\">\n      <button aria-label=\"Blocaj blockage:city:082:traffic-block; Moderat; tick 64; vehicul id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0001; cursă id-v1:4:ride20:city:fleet-065:rides57:id-v1:12:ride-request20:city:fleet-065:rides4:w0005:r0001; Poziție indisponibilă; nu poate fi localizat; neselectat\" aria-selected=\"false\" class=\"city-dashboard__incident-row\" data-incident-id=\"blockage:city:082:traffic-block\" role=\"option\" type=\"button\">\n        <span class=\"city-dashboard__incident-kind\">Blocaj</span>\n        <span class=\"city-dashboard__incident-label\">Moderat · tick 64 · id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0001</span>\n        <span class=\"city-dashboard__incident-place\">Poziție indisponibilă</span>\n      </button>\n    </li>\n  </ul>\n  <section aria-label=\"Detalii incident\" class=\"city-dashboard__drilldown\" data-reason=\"NO_SELECTION\" data-status=\"UNAVAILABLE\">\n    <h3 class=\"city-dashboard__section-title\">Detaliu incident</h3>\n    <p class=\"city-dashboard__drilldown-title\">Niciun incident selectat</p>\n    <p class=\"city-dashboard__drilldown-position\">Poziție indisponibilă</p>\n    <p class=\"city-dashboard__drilldown-detail\">Selectează un incident din listă pentru a-l localiza pe hartă.</p>\n    <p class=\"city-dashboard__drilldown-metrics\">Curse finalizate: 1 · Durată medie cursă: 2 min 16 s · Distanță parcursă: Indisponibil (Sursă lipsă) · Încălcări: Indisponibil (Sursă lipsă) · Coliziuni: 1 · Blocaje: 1 · Confort: Indisponibil (Sursă lipsă)</p>\n  </section>\n  <p aria-atomic=\"true\" aria-live=\"polite\" class=\"city-dashboard__status\" role=\"status\">Tabloul orașului: 4 din 7 indicatori disponibili, Expunere: 2 ferestre, 1 observații, 2 min 16 s. 2 evenimente, 1 localizabile; Niciun incident selectat.</p>\n  <p class=\"city-dashboard__description\">Tabloul orașului citește cursele 061, incidentele 028 și istoricul de sănătate 065. O valoare indisponibilă este afișată „Indisponibil” și nu este niciodată zero; un zero real rămâne „0”. Selectarea unui incident trimite doar o intenție de focalizare a hărții și nu schimbă profilul, modul camerei, autoritatea sau fizica.</p>\n</section>",
+      "actual": "<section aria-describedby=\"city-dashboard-description\" aria-label=\"Tabloul orașului · 2 evenimente · 1 localizabile\" class=\"city-dashboard\" data-incidents=\"2\" data-located=\"1\" data-metrics=\"7\" data-selected=\"\" data-tick=\"70\">\n  <header class=\"city-dashboard__header\">\n    <h2 class=\"city-dashboard__title\">Tabloul orașului</h2>\n    <span class=\"city-dashboard__count\">4/7 indicatori · 2 evenimente · 1 localizabile</span>\n  </header>\n  <ul aria-label=\"Indicatori\" class=\"city-dashboard__metrics\" role=\"list\">\n    <li aria-label=\"Curse finalizate: 1 curse, Disponibil, eșantion 1.\" class=\"city-dashboard__metric\" data-metric-id=\"completedRides\" data-reason=\"\" data-state=\"AVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Curse finalizate</span>\n      <span class=\"city-dashboard__metric-value\">1</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion 1</span>\n      <span class=\"city-dashboard__metric-reason\"></span>\n    </li>\n    <li aria-label=\"Durată medie cursă: 2 min 16 s secunde, Disponibil, eșantion 1.\" class=\"city-dashboard__metric\" data-metric-id=\"averageRideSeconds\" data-reason=\"\" data-state=\"AVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Durată medie cursă</span>\n      <span class=\"city-dashboard__metric-value\">2 min 16 s</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion 1</span>\n      <span class=\"city-dashboard__metric-reason\"></span>\n    </li>\n    <li aria-label=\"Distanță parcursă: Indisponibil, motiv Sursă lipsă.\" class=\"city-dashboard__metric\" data-metric-id=\"totalDistanceM\" data-reason=\"SOURCE_MISSING\" data-state=\"UNAVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Distanță parcursă</span>\n      <span class=\"city-dashboard__metric-value\">Indisponibil</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion indisponibil</span>\n      <span class=\"city-dashboard__metric-reason\">Sursă lipsă</span>\n    </li>\n    <li aria-label=\"Încălcări: Indisponibil, motiv Sursă lipsă.\" class=\"city-dashboard__metric\" data-metric-id=\"violations\" data-reason=\"SOURCE_MISSING\" data-state=\"UNAVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Încălcări</span>\n      <span class=\"city-dashboard__metric-value\">Indisponibil</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion indisponibil</span>\n      <span class=\"city-dashboard__metric-reason\">Sursă lipsă</span>\n    </li>\n    <li aria-label=\"Coliziuni: 1 evenimente, Disponibil, eșantion 1.\" class=\"city-dashboard__metric\" data-metric-id=\"collisions\" data-reason=\"\" data-state=\"AVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Coliziuni</span>\n      <span class=\"city-dashboard__metric-value\">1</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion 1</span>\n      <span class=\"city-dashboard__metric-reason\"></span>\n    </li>\n    <li aria-label=\"Blocaje: 1 evenimente, Disponibil, eșantion 1.\" class=\"city-dashboard__metric\" data-metric-id=\"blockages\" data-reason=\"\" data-state=\"AVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Blocaje</span>\n      <span class=\"city-dashboard__metric-value\">1</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion 1</span>\n      <span class=\"city-dashboard__metric-reason\"></span>\n    </li>\n    <li aria-label=\"Confort: Indisponibil, motiv Sursă lipsă.\" class=\"city-dashboard__metric\" data-metric-id=\"comfortScore\" data-reason=\"SOURCE_MISSING\" data-state=\"UNAVAILABLE\">\n      <span class=\"city-dashboard__metric-label\">Confort</span>\n      <span class=\"city-dashboard__metric-value\">Indisponibil</span>\n      <span class=\"city-dashboard__metric-sample\">eșantion indisponibil</span>\n      <span class=\"city-dashboard__metric-reason\">Sursă lipsă</span>\n    </li>\n  </ul>\n  <div aria-label=\"Expunere observată: 2 ferestre, 1 observații, 2 min 16 s.\" class=\"city-dashboard__exposure\" data-reason=\"\" data-state=\"AVAILABLE\">\n    <h3 class=\"city-dashboard__section-title\">Expunere</h3>\n    <p class=\"city-dashboard__exposure-summary\">Expunere: 2 ferestre, 1 observații, 2 min 16 s.</p>\n    <dl class=\"city-dashboard__exposure-grid\">\n      <dt>Ferestre</dt>\n      <dd class=\"city-dashboard__exposure-value\">2</dd>\n      <dt>Observații</dt>\n      <dd class=\"city-dashboard__exposure-value\">1</dd>\n      <dt>Durată</dt>\n      <dd class=\"city-dashboard__exposure-value\">2 min 16 s</dd>\n    </dl>\n  </div>\n  <ul aria-label=\"Evenimente\" class=\"city-dashboard__incidents\" role=\"listbox\">\n    <li class=\"city-dashboard__incident\" data-incident-id=\"id-v1:9:collision11:session:0653:0281:03:1:22:65\" data-kind=\"COLLISION\" data-located=\"true\" data-selected=\"false\" role=\"presentation\">\n      <button aria-label=\"Coliziune id-v1:9:collision11:session:0653:0281:03:1:22:65; Moderat; tick 65; vehicul id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0002; cursă fără cursă; x 12.0 m, z -4.0 m; localizabil pe hartă; neselectat\" aria-selected=\"false\" class=\"city-dashboard__incident-row\" data-incident-id=\"id-v1:9:collision11:session:0653:0281:03:1:22:65\" role=\"option\" type=\"button\">\n        <span class=\"city-dashboard__incident-kind\">Coliziune</span>\n        <span class=\"city-dashboard__incident-label\">Moderat · tick 65 · id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0002</span>\n        <span class=\"city-dashboard__incident-place\">x 12.0 m, z -4.0 m</span>\n      </button>\n    </li>\n    <li class=\"city-dashboard__incident\" data-incident-id=\"blockage:city:082:traffic-block\" data-kind=\"BLOCKAGE\" data-located=\"false\" data-selected=\"false\" role=\"presentation\">\n      <button aria-label=\"Blocaj blockage:city:082:traffic-block; Moderat; tick 64; vehicul id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0001; cursă id-v1:4:ride20:city:fleet-065:rides57:id-v1:12:ride-request20:city:fleet-065:rides4:w0005:r0001; Poziție indisponibilă; nu poate fi localizat; neselectat\" aria-selected=\"false\" class=\"city-dashboard__incident-row\" data-incident-id=\"blockage:city:082:traffic-block\" role=\"option\" type=\"button\">\n        <span class=\"city-dashboard__incident-kind\">Blocaj</span>\n        <span class=\"city-dashboard__incident-label\">Moderat · tick 64 · id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0001</span>\n        <span class=\"city-dashboard__incident-place\">Poziție indisponibilă</span>\n      </button>\n    </li>\n  </ul>\n  <section aria-label=\"Detalii incident\" class=\"city-dashboard__drilldown\" data-reason=\"NO_SELECTION\" data-status=\"UNAVAILABLE\">\n    <h3 class=\"city-dashboard__section-title\">Detaliu incident</h3>\n    <p class=\"city-dashboard__drilldown-title\">Niciun incident selectat</p>\n    <p class=\"city-dashboard__drilldown-position\">Poziție indisponibilă</p>\n    <p class=\"city-dashboard__drilldown-detail\">Selectează un incident din listă pentru a-l localiza pe hartă.</p>\n    <p class=\"city-dashboard__drilldown-metrics\">Curse finalizate: 1 · Durată medie cursă: 2 min 16 s · Distanță parcursă: Indisponibil (Sursă lipsă) · Încălcări: Indisponibil (Sursă lipsă) · Coliziuni: 1 · Blocaje: 1 · Confort: Indisponibil (Sursă lipsă)</p>\n  </section>\n  <p aria-atomic=\"true\" aria-live=\"polite\" class=\"city-dashboard__status\" role=\"status\">Tabloul orașului: 4 din 7 indicatori disponibili, Expunere: 2 ferestre, 1 observații, 2 min 16 s. 2 evenimente, 1 localizabile; Niciun incident selectat.</p>\n  <p class=\"city-dashboard__description\">Tabloul orașului citește cursele 061, incidentele 028 și istoricul de sănătate 065. O valoare indisponibilă este afișată „Indisponibil” și nu este niciodată zero; un zero real rămâne „0”. Selectarea unui incident trimite doar o intenție de focalizare a hărții și nu schimbă profilul, modul camerei, autoritatea sau fizica.</p>\n</section>",
+      "pass": true,
+      "detail": "the same frame renders byte-identical DOM"
+    }
+  ],
+  "summary": {
+    "checks": 47,
+    "passed": 47,
+    "pass": true
+  }
+}
