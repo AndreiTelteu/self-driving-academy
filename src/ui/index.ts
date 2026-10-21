@@ -28,6 +28,39 @@ export * from './recovery-hud';
 export { createTaxiHud } from './taxi-hud';
 export { createMinimap } from './minimap';
 export type { MinimapOptions } from './minimap';
+export {
+  createPassengerVisualPresenter,
+  PASSENGER_VISUAL_ADAPTER_LIMITS,
+} from './passenger-visual';
+export type {
+  PassengerMarkerCommand,
+  PassengerVisualAdapter,
+  PassengerVisualPort,
+  PassengerVisualStats,
+} from './passenger-visual';
+export {
+  PASSENGER_MARKER_OMISSION_REASONS,
+  PASSENGER_PHASE_MARKERS,
+  PASSENGER_STATE_PHASES,
+  PASSENGER_VISUAL_FRAME_FIELDS,
+  PASSENGER_VISUAL_LIMITS,
+  PASSENGER_VISUAL_VERSION,
+  parsePassengerVisualFrame,
+  passengerMarkerId,
+  passengerMarkerRoles,
+  passengerVisualPhases,
+  passengerVisualSignature,
+} from './passenger-visual-format';
+export type {
+  PassengerMarker,
+  PassengerMarkerLabel,
+  PassengerMarkerOmission,
+  PassengerMarkerOmissionReason,
+  PassengerMarkerRole,
+  PassengerVisualFrame,
+  PassengerVisualLabels,
+  PassengerVisualPhase,
+} from './passenger-visual-format';
 export { createFleetPanel } from './fleet-panel';
 export type { FleetPanel, FleetPanelOptions } from './fleet-panel';
 export { createProfilePanel } from './profile-panel';

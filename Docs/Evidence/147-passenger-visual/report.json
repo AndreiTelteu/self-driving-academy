@@ -1,0 +1,928 @@
+{
+  "version": "147-passenger-visual-v1",
+  "contract": {
+    "limits": {
+      "markers": 2,
+      "omissions": 2,
+      "commandsPerFrame": 5,
+      "pedestrianActors": 0
+    },
+    "phases": [
+      {
+        "state": "TO_PICKUP",
+        "phase": "WAITING_PICKUP",
+        "occupancy": 0
+      },
+      {
+        "state": "PICKUP",
+        "phase": "BOARDING",
+        "occupancy": 0
+      },
+      {
+        "state": "TO_DROPOFF",
+        "phase": "ONBOARD",
+        "occupancy": 1
+      },
+      {
+        "state": "DROPOFF",
+        "phase": "DROPPING_OFF",
+        "occupancy": 1
+      },
+      {
+        "state": "COMPLETED",
+        "phase": "NONE",
+        "occupancy": 0
+      }
+    ],
+    "passenger": "V1 passenger representation is a marker/occupancy read model only; pedestrians belong to V2."
+  },
+  "scenarios": [
+    {
+      "name": "waiting",
+      "frames": [
+        {
+          "tick": 10,
+          "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0002",
+          "rideId": "id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000",
+          "phase": "WAITING_PICKUP",
+          "occupancy": 0,
+          "passengerVisible": false,
+          "reset": false,
+          "markers": [
+            {
+              "markerId": "passenger:id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000:PICKUP",
+              "role": "PICKUP",
+              "zoneId": "sz:0-0",
+              "x": 90,
+              "z": 2.1,
+              "label": "P"
+            }
+          ],
+          "omissions": [],
+          "labels": {
+            "phase": "Așteptare ridicare",
+            "occupancy": "0 pasageri",
+            "passenger": "Pasager în așteptare"
+          },
+          "accessibleText": "Ridicare la zona sz:0-0: pasagerul așteaptă, taxiul nu a ajuns încă."
+        }
+      ],
+      "commands": [
+        {
+          "op": "setMarker",
+          "markerId": "passenger:id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000:PICKUP",
+          "role": "PICKUP",
+          "zoneId": "sz:0-0",
+          "x": 90,
+          "z": 2.1,
+          "label": "P"
+        }
+      ],
+      "stats": {
+        "markers": 1,
+        "commands": 1,
+        "cleared": 0,
+        "updates": 1,
+        "rejected": 0,
+        "visible": false
+      }
+    },
+    {
+      "name": "boarding",
+      "frames": [
+        {
+          "tick": 10,
+          "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0002",
+          "rideId": "id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000",
+          "phase": "WAITING_PICKUP",
+          "occupancy": 0,
+          "passengerVisible": false,
+          "reset": false,
+          "markers": [
+            {
+              "markerId": "passenger:id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000:PICKUP",
+              "role": "PICKUP",
+              "zoneId": "sz:0-0",
+              "x": 90,
+              "z": 2.1,
+              "label": "P"
+            }
+          ],
+          "omissions": [],
+          "labels": {
+            "phase": "Așteptare ridicare",
+            "occupancy": "0 pasageri",
+            "passenger": "Pasager în așteptare"
+          },
+          "accessibleText": "Ridicare la zona sz:0-0: pasagerul așteaptă, taxiul nu a ajuns încă."
+        },
+        {
+          "tick": 11,
+          "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0002",
+          "rideId": "id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000",
+          "phase": "BOARDING",
+          "occupancy": 0,
+          "passengerVisible": true,
+          "reset": false,
+          "markers": [
+            {
+              "markerId": "passenger:id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000:PICKUP",
+              "role": "PICKUP",
+              "zoneId": "sz:0-0",
+              "x": 90,
+              "z": 2.1,
+              "label": "P"
+            },
+            {
+              "markerId": "passenger:id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000:PASSENGER",
+              "role": "PASSENGER",
+              "zoneId": "sz:0-0",
+              "x": 90,
+              "z": 2.1,
+              "label": "S"
+            }
+          ],
+          "omissions": [],
+          "labels": {
+            "phase": "Îmbarcare",
+            "occupancy": "0 pasageri",
+            "passenger": "Pasager în stație"
+          },
+          "accessibleText": "Pasager la ridicare în zona sz:0-0; nu este încă la bord."
+        }
+      ],
+      "commands": [
+        {
+          "op": "setMarker",
+          "markerId": "passenger:id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000:PICKUP",
+          "role": "PICKUP",
+          "zoneId": "sz:0-0",
+          "x": 90,
+          "z": 2.1,
+          "label": "P"
+        },
+        {
+          "op": "setMarker",
+          "markerId": "passenger:id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000:PASSENGER",
+          "role": "PASSENGER",
+          "zoneId": "sz:0-0",
+          "x": 90,
+          "z": 2.1,
+          "label": "S"
+        },
+        {
+          "op": "setPassengerVisible",
+          "visible": true
+        }
+      ],
+      "stats": {
+        "markers": 2,
+        "commands": 3,
+        "cleared": 0,
+        "updates": 2,
+        "rejected": 0,
+        "visible": true
+      }
+    },
+    {
+      "name": "onboard",
+      "frames": [
+        {
+          "tick": 11,
+          "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0002",
+          "rideId": "id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000",
+          "phase": "BOARDING",
+          "occupancy": 0,
+          "passengerVisible": true,
+          "reset": false,
+          "markers": [
+            {
+              "markerId": "passenger:id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000:PICKUP",
+              "role": "PICKUP",
+              "zoneId": "sz:0-0",
+              "x": 90,
+              "z": 2.1,
+              "label": "P"
+            },
+            {
+              "markerId": "passenger:id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000:PASSENGER",
+              "role": "PASSENGER",
+              "zoneId": "sz:0-0",
+              "x": 90,
+              "z": 2.1,
+              "label": "S"
+            }
+          ],
+          "omissions": [],
+          "labels": {
+            "phase": "Îmbarcare",
+            "occupancy": "0 pasageri",
+            "passenger": "Pasager în stație"
+          },
+          "accessibleText": "Pasager la ridicare în zona sz:0-0; nu este încă la bord."
+        },
+        {
+          "tick": 12,
+          "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0002",
+          "rideId": "id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000",
+          "phase": "ONBOARD",
+          "occupancy": 1,
+          "passengerVisible": true,
+          "reset": false,
+          "markers": [
+            {
+              "markerId": "passenger:id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000:DROPOFF",
+              "role": "DROPOFF",
+              "zoneId": "sz:1-0",
+              "x": 268.15,
+              "z": 2.1,
+              "label": "D"
+            }
+          ],
+          "omissions": [],
+          "labels": {
+            "phase": "La bord",
+            "occupancy": "1 pasager",
+            "passenger": "Pasager la bord"
+          },
+          "accessibleText": "1 pasager la bord; predare la zona sz:1-0."
+        }
+      ],
+      "commands": [
+        {
+          "op": "setMarker",
+          "markerId": "passenger:id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000:PICKUP",
+          "role": "PICKUP",
+          "zoneId": "sz:0-0",
+          "x": 90,
+          "z": 2.1,
+          "label": "P"
+        },
+        {
+          "op": "setMarker",
+          "markerId": "passenger:id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000:PASSENGER",
+          "role": "PASSENGER",
+          "zoneId": "sz:0-0",
+          "x": 90,
+          "z": 2.1,
+          "label": "S"
+        },
+        {
+          "op": "setPassengerVisible",
+          "visible": true
+        },
+        {
+          "op": "removeMarker",
+          "markerId": "passenger:id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000:PASSENGER"
+        },
+        {
+          "op": "removeMarker",
+          "markerId": "passenger:id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000:PICKUP"
+        },
+        {
+          "op": "setMarker",
+          "markerId": "passenger:id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000:DROPOFF",
+          "role": "DROPOFF",
+          "zoneId": "sz:1-0",
+          "x": 268.15,
+          "z": 2.1,
+          "label": "D"
+        }
+      ],
+      "stats": {
+        "markers": 1,
+        "commands": 6,
+        "cleared": 0,
+        "updates": 2,
+        "rejected": 0,
+        "visible": true
+      }
+    },
+    {
+      "name": "dropping off",
+      "frames": [
+        {
+          "tick": 12,
+          "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0002",
+          "rideId": "id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000",
+          "phase": "ONBOARD",
+          "occupancy": 1,
+          "passengerVisible": true,
+          "reset": false,
+          "markers": [
+            {
+              "markerId": "passenger:id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000:DROPOFF",
+              "role": "DROPOFF",
+              "zoneId": "sz:1-0",
+              "x": 268.15,
+              "z": 2.1,
+              "label": "D"
+            }
+          ],
+          "omissions": [],
+          "labels": {
+            "phase": "La bord",
+            "occupancy": "1 pasager",
+            "passenger": "Pasager la bord"
+          },
+          "accessibleText": "1 pasager la bord; predare la zona sz:1-0."
+        },
+        {
+          "tick": 13,
+          "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0002",
+          "rideId": "id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000",
+          "phase": "DROPPING_OFF",
+          "occupancy": 1,
+          "passengerVisible": true,
+          "reset": false,
+          "markers": [
+            {
+              "markerId": "passenger:id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000:DROPOFF",
+              "role": "DROPOFF",
+              "zoneId": "sz:1-0",
+              "x": 268.15,
+              "z": 2.1,
+              "label": "D"
+            }
+          ],
+          "omissions": [],
+          "labels": {
+            "phase": "Coborâre",
+            "occupancy": "1 pasager",
+            "passenger": "Pasager la bord"
+          },
+          "accessibleText": "1 pasager la bord; coborâre la zona sz:1-0."
+        }
+      ],
+      "commands": [
+        {
+          "op": "setMarker",
+          "markerId": "passenger:id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000:DROPOFF",
+          "role": "DROPOFF",
+          "zoneId": "sz:1-0",
+          "x": 268.15,
+          "z": 2.1,
+          "label": "D"
+        },
+        {
+          "op": "setPassengerVisible",
+          "visible": true
+        }
+      ],
+      "stats": {
+        "markers": 1,
+        "commands": 2,
+        "cleared": 0,
+        "updates": 2,
+        "rejected": 0,
+        "visible": true
+      }
+    },
+    {
+      "name": "completed reset",
+      "frames": [
+        {
+          "tick": 13,
+          "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0002",
+          "rideId": "id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000",
+          "phase": "DROPPING_OFF",
+          "occupancy": 1,
+          "passengerVisible": true,
+          "reset": false,
+          "markers": [
+            {
+              "markerId": "passenger:id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000:DROPOFF",
+              "role": "DROPOFF",
+              "zoneId": "sz:1-0",
+              "x": 268.15,
+              "z": 2.1,
+              "label": "D"
+            }
+          ],
+          "omissions": [],
+          "labels": {
+            "phase": "Coborâre",
+            "occupancy": "1 pasager",
+            "passenger": "Pasager la bord"
+          },
+          "accessibleText": "1 pasager la bord; coborâre la zona sz:1-0."
+        },
+        {
+          "tick": 14,
+          "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0002",
+          "rideId": null,
+          "phase": "NONE",
+          "occupancy": 0,
+          "passengerVisible": false,
+          "reset": true,
+          "markers": [],
+          "omissions": [],
+          "labels": {
+            "phase": "Fără cursă",
+            "occupancy": "0 pasageri",
+            "passenger": "Niciun pasager"
+          },
+          "accessibleText": "Cursa id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000 este închisă (COMPLETED): niciun pasager afișat și niciun marker păstrat."
+        },
+        {
+          "tick": 20,
+          "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0002",
+          "rideId": null,
+          "phase": "NONE",
+          "occupancy": 0,
+          "passengerVisible": false,
+          "reset": true,
+          "markers": [],
+          "omissions": [],
+          "labels": {
+            "phase": "Fără cursă",
+            "occupancy": "0 pasageri",
+            "passenger": "Niciun pasager"
+          },
+          "accessibleText": "Nicio cursă activă pentru taxiul selectat: niciun pasager afișat și niciun marker păstrat."
+        }
+      ],
+      "commands": [
+        {
+          "op": "setMarker",
+          "markerId": "passenger:id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000:DROPOFF",
+          "role": "DROPOFF",
+          "zoneId": "sz:1-0",
+          "x": 268.15,
+          "z": 2.1,
+          "label": "D"
+        },
+        {
+          "op": "setPassengerVisible",
+          "visible": true
+        },
+        {
+          "op": "clear"
+        }
+      ],
+      "stats": {
+        "markers": 0,
+        "commands": 3,
+        "cleared": 1,
+        "updates": 3,
+        "rejected": 0,
+        "visible": false
+      }
+    },
+    {
+      "name": "mixed taxi",
+      "frames": [
+        {
+          "tick": 10,
+          "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0002",
+          "rideId": "id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000",
+          "phase": "WAITING_PICKUP",
+          "occupancy": 0,
+          "passengerVisible": false,
+          "reset": false,
+          "markers": [
+            {
+              "markerId": "passenger:id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000:PICKUP",
+              "role": "PICKUP",
+              "zoneId": "sz:0-0",
+              "x": 90,
+              "z": 2.1,
+              "label": "P"
+            }
+          ],
+          "omissions": [],
+          "labels": {
+            "phase": "Așteptare ridicare",
+            "occupancy": "0 pasageri",
+            "passenger": "Pasager în așteptare"
+          },
+          "accessibleText": "Ridicare la zona sz:0-0: pasagerul așteaptă, taxiul nu a ajuns încă."
+        },
+        {
+          "tick": 10,
+          "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0001",
+          "rideId": "id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0001",
+          "phase": "WAITING_PICKUP",
+          "occupancy": 0,
+          "passengerVisible": false,
+          "reset": false,
+          "markers": [
+            {
+              "markerId": "passenger:id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0001:PICKUP",
+              "role": "PICKUP",
+              "zoneId": "sz:0-0",
+              "x": 90,
+              "z": 2.1,
+              "label": "P"
+            }
+          ],
+          "omissions": [],
+          "labels": {
+            "phase": "Așteptare ridicare",
+            "occupancy": "0 pasageri",
+            "passenger": "Pasager în așteptare"
+          },
+          "accessibleText": "Ridicare la zona sz:0-0: pasagerul așteaptă, taxiul nu a ajuns încă."
+        },
+        {
+          "tick": 14,
+          "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0001",
+          "rideId": null,
+          "phase": "NONE",
+          "occupancy": 0,
+          "passengerVisible": false,
+          "reset": true,
+          "markers": [],
+          "omissions": [],
+          "labels": {
+            "phase": "Fără cursă",
+            "occupancy": "0 pasageri",
+            "passenger": "Niciun pasager"
+          },
+          "accessibleText": "Cursa id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000 aparține altui taxi: niciun pasager afișat și niciun marker păstrat."
+        },
+        {
+          "tick": 14,
+          "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0003",
+          "rideId": null,
+          "phase": "NONE",
+          "occupancy": 0,
+          "passengerVisible": false,
+          "reset": true,
+          "markers": [],
+          "omissions": [],
+          "labels": {
+            "phase": "Fără cursă",
+            "occupancy": "0 pasageri",
+            "passenger": "Niciun pasager"
+          },
+          "accessibleText": "Nicio cursă activă pentru taxiul selectat: niciun pasager afișat și niciun marker păstrat."
+        }
+      ],
+      "commands": [
+        {
+          "op": "setMarker",
+          "markerId": "passenger:id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000:PICKUP",
+          "role": "PICKUP",
+          "zoneId": "sz:0-0",
+          "x": 90,
+          "z": 2.1,
+          "label": "P"
+        },
+        {
+          "op": "removeMarker",
+          "markerId": "passenger:id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000:PICKUP"
+        },
+        {
+          "op": "setMarker",
+          "markerId": "passenger:id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0001:PICKUP",
+          "role": "PICKUP",
+          "zoneId": "sz:0-0",
+          "x": 90,
+          "z": 2.1,
+          "label": "P"
+        },
+        {
+          "op": "clear"
+        }
+      ],
+      "stats": {
+        "markers": 0,
+        "commands": 4,
+        "cleared": 1,
+        "updates": 4,
+        "rejected": 0,
+        "visible": false
+      }
+    },
+    {
+      "name": "missing anchor",
+      "frames": [
+        {
+          "tick": 13,
+          "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0002",
+          "rideId": "id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000",
+          "phase": "DROPPING_OFF",
+          "occupancy": 1,
+          "passengerVisible": true,
+          "reset": false,
+          "markers": [],
+          "omissions": [
+            {
+              "role": "DROPOFF",
+              "zoneId": "sz:1-0",
+              "reason": "ANCHOR_MISSING"
+            }
+          ],
+          "labels": {
+            "phase": "Coborâre",
+            "occupancy": "1 pasager",
+            "passenger": "Pasager la bord"
+          },
+          "accessibleText": "1 pasager la bord; coborâre la zona sz:1-0. Fără marker predare la zona sz:1-0: ancora zonei lipsește din harta validată, poziția nu este inventată."
+        }
+      ],
+      "commands": [
+        {
+          "op": "setPassengerVisible",
+          "visible": true
+        }
+      ],
+      "stats": {
+        "markers": 0,
+        "commands": 1,
+        "cleared": 0,
+        "updates": 1,
+        "rejected": 0,
+        "visible": true
+      }
+    }
+  ],
+  "checks": [
+    {
+      "name": "contract-version",
+      "expected": "147-passenger-visual-v1",
+      "actual": "147-passenger-visual-v1",
+      "pass": true,
+      "detail": "the frame uses the 147 contract version"
+    },
+    {
+      "name": "waiting-phase",
+      "expected": "WAITING_PICKUP",
+      "actual": "WAITING_PICKUP",
+      "pass": true,
+      "detail": "TO_PICKUP maps to waiting"
+    },
+    {
+      "name": "waiting-occupancy",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the taxi is still empty"
+    },
+    {
+      "name": "waiting-passenger-hidden",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "no passenger is represented before boarding"
+    },
+    {
+      "name": "waiting-marker-roles",
+      "expected": "PICKUP",
+      "actual": "PICKUP",
+      "pass": true,
+      "detail": "only the real pickup marker"
+    },
+    {
+      "name": "waiting-real-pickup-anchor",
+      "expected": "90,2.1",
+      "actual": "90,2.1",
+      "pass": true,
+      "detail": "the pickup marker is exactly the real 032 zone anchor"
+    },
+    {
+      "name": "waiting-marker-zone",
+      "expected": "sz:0-0",
+      "actual": "sz:0-0",
+      "pass": true,
+      "detail": "the marker keeps the real service-zone id"
+    },
+    {
+      "name": "boarding-phase",
+      "expected": "BOARDING",
+      "actual": "BOARDING",
+      "pass": true,
+      "detail": "PICKUP maps to boarding"
+    },
+    {
+      "name": "boarding-occupancy",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the passenger is not onboard yet"
+    },
+    {
+      "name": "boarding-passenger-visible",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the passenger is visible at the pickup anchor"
+    },
+    {
+      "name": "boarding-marker-roles",
+      "expected": "PICKUP,PASSENGER",
+      "actual": "PICKUP,PASSENGER",
+      "pass": true,
+      "detail": "pickup and passenger markers are both present"
+    },
+    {
+      "name": "boarding-passenger-at-pickup-anchor",
+      "expected": "90,2.1",
+      "actual": "90,2.1",
+      "pass": true,
+      "detail": "the V1 passenger stands at the real pickup anchor, not at an invented position"
+    },
+    {
+      "name": "onboard-phase",
+      "expected": "ONBOARD",
+      "actual": "ONBOARD",
+      "pass": true,
+      "detail": "TO_DROPOFF maps to onboard"
+    },
+    {
+      "name": "onboard-occupancy",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "exactly one passenger is in the taxi"
+    },
+    {
+      "name": "onboard-marker-roles",
+      "expected": "DROPOFF",
+      "actual": "DROPOFF",
+      "pass": true,
+      "detail": "only the real dropoff marker"
+    },
+    {
+      "name": "onboard-real-dropoff-anchor",
+      "expected": "268.15,2.1",
+      "actual": "268.15,2.1",
+      "pass": true,
+      "detail": "the dropoff marker is exactly the real 032 zone anchor"
+    },
+    {
+      "name": "dropping-phase",
+      "expected": "DROPPING_OFF",
+      "actual": "DROPPING_OFF",
+      "pass": true,
+      "detail": "DROPOFF maps to dropping off"
+    },
+    {
+      "name": "dropping-occupancy",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the passenger is still onboard"
+    },
+    {
+      "name": "completed-phase",
+      "expected": "NONE",
+      "actual": "NONE",
+      "pass": true,
+      "detail": "COMPLETED is terminal, not a phase"
+    },
+    {
+      "name": "completed-reset",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "a terminal ride requests a visual reset"
+    },
+    {
+      "name": "completed-occupancy",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "occupancy drops to zero"
+    },
+    {
+      "name": "completed-clear-command",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the presenter clears the previous dropoff marker"
+    },
+    {
+      "name": "completed-accessible-explicit",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the terminal state is named in the accessible text"
+    },
+    {
+      "name": "reset-after-lifecycle-reset",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "a real 061 scenario reset leaves no ride and no marker"
+    },
+    {
+      "name": "mixed-taxi-own-ride",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "each taxi reads its own claimed 061 ride"
+    },
+    {
+      "name": "mixed-taxi-isolated-markers",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "marker identity is rideId + role, so two waiting taxis never share a marker"
+    },
+    {
+      "name": "mixed-foreign-not-drawn",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "an explicitly bound foreign ride is not drawn for the selected taxi"
+    },
+    {
+      "name": "mixed-free-taxi-none",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "a taxi without a ride has no passenger and no marker"
+    },
+    {
+      "name": "missing-anchor-omitted",
+      "expected": "DROPOFF:ANCHOR_MISSING",
+      "actual": "DROPOFF:ANCHOR_MISSING",
+      "pass": true,
+      "detail": "a missing 032 anchor omits the marker with an explicit reason"
+    },
+    {
+      "name": "missing-anchor-no-fake-point",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the omitted marker does not receive a synthetic coordinate"
+    },
+    {
+      "name": "missing-anchor-accessible",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the omission reason is explicit in the accessible text"
+    },
+    {
+      "name": "missing-zone-reason",
+      "expected": "DROPOFF:ZONE_MISSING",
+      "actual": "DROPOFF:ZONE_MISSING",
+      "pass": true,
+      "detail": "a removed service zone is reported as a missing zone, not as an anchor"
+    },
+    {
+      "name": "no-side-effects-unchanged",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "4 presentations leave the ride record, stats, claim and taxi status identical"
+    },
+    {
+      "name": "no-side-effects-phases",
+      "expected": "WAITING_PICKUP,BOARDING,ONBOARD,DROPPING_OFF",
+      "actual": "WAITING_PICKUP,BOARDING,ONBOARD,DROPPING_OFF",
+      "pass": true,
+      "detail": "the presentation follows the real ride instead of driving it"
+    },
+    {
+      "name": "no-terminal-side-effect",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "presenting the dropping-off frame does not complete or release the ride"
+    },
+    {
+      "name": "no-pedestrian-evidence",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "V1 creates no pedestrian, opportunity or telemetry evidence"
+    },
+    {
+      "name": "stable-marker-identity",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "every marker id is exactly passengerMarkerId(rideId, role)"
+    },
+    {
+      "name": "deterministic-commands",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the same frame sequence produces byte-identical commands"
+    },
+    {
+      "name": "marker-ceiling",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "no frame exceeds 2 markers"
+    },
+    {
+      "name": "lifecycle-reset-reports",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the scenario reset discarded the remaining open ride exactly once"
+    }
+  ],
+  "summary": {
+    "checks": 40,
+    "passed": 40,
+    "pass": true
+  }
+}

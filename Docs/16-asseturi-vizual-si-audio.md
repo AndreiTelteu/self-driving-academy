@@ -18,6 +18,8 @@ Fiecare asset are ID, tip, versiune/hash, rol critic/opțional, sursă și licen
 
 Scenele de gameplay folosesc asseturi simple în prototip, apoi se înlocuiesc prin registry fără a modifica semantica rutieră. V1 reprezintă pasagerii simplificat; pietonii autonomi V2 și personajul V3 au asseturi și animații distincte.
 
+[Pasagerii simplificați 147](passenger-visual.md) fixează reprezentarea V1 ca read model vizual peste starea reală 061 și ancorele reale 032: fazele `WAITING_PICKUP`/`BOARDING`/`ONBOARD`/`DROPPING_OFF`, ocuparea 0/1 și markerii `PICKUP`/`PASSENGER`/`DROPOFF` identificați stabil prin `rideId + rol`. Prezentarea nu schimbă cursa și nu creează pietoni, telemetrie sau oportunități; un asset 3D final și sistemul de pietoni V2 rămân separate.
+
 ## Admiterea asseturilor finale
 
 145/146 depind de gate-ul de flotă 220 și bugetele 223. Manifestul include costuri transferate/decodate, texturi estimate, LOD/materiale, decodere/WASM și startup critic separat de decorul opțional. Batchurile statice sunt locale; calitatea nu schimbă colliderele sau simularea. Audio are plafon de voci și reutilizare/disposal. 150 verifică automat manifestul și capacitățile conform [modulului 25](25-performanta-contracte-si-benchmark.md).

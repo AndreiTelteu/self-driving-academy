@@ -1,7 +1,7 @@
 <!-- loop-pbi:progress:start -->
 | Module | Remaining phases | To Do | In Progress | Done / Total | Progress |
 |---|---|---:|---:|---:|---|
-| Asseturi și audio | V1 | 7 | 0 | 0 / 7 | `░░░░░░░░░░` 0% |
+| Asseturi și audio | V1 | 6 | 0 | 1 / 7 | `█░░░░░░░░░` 14% |
 | Autonomie | V1 | 1 | 0 | 13 / 14 | `█████████░` 93% |
 | Babylon | Completed | 0 | 0 | 11 / 11 | `██████████` 100% |
 | Control manual | V1 | 1 | 0 | 7 / 8 | `████████░░` 88% |
@@ -34,7 +34,7 @@
 | Validare și release | V1 | 12 | 0 | 0 / 12 | `░░░░░░░░░░` 0% |
 | Validare V2 | V2 | 2 | 0 | 0 / 2 | `░░░░░░░░░░` 0% |
 | Vehicule și fizică | Completed | 0 | 0 | 11 / 11 | `██████████` 100% |
-| Total | - | 114 | 0 | 121 / 235 | `█████░░░░░` 51% |
+| Total | - | 113 | 0 | 122 / 235 | `█████░░░░░` 52% |
 <!-- loop-pbi:progress:end -->
 
 # Backlog Kanban Self Driving Academy

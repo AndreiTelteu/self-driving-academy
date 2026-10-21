@@ -237,6 +237,15 @@ export {
   type MinimapSources,
 } from './minimap';
 export {
+  createPassengerRideBridge,
+  readPassengerVisualFrame,
+  type PassengerRideBridge,
+  type PassengerRideBridgeSources,
+  type PassengerRideBridgeStats,
+  type PassengerVisualFrameInput,
+  type PassengerVisualSources,
+} from './passenger-visual';
+export {
   createMapSelectionPort,
   readMapSelectionSnapshot,
   type MapSelectionCamera,
