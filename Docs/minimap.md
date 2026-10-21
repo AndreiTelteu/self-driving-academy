@@ -106,6 +106,11 @@ Markerii de ridicare/predare apar numai când cursa aparține taxiului selectat.
 produce `FOREIGN_VEHICLE`, fără markeri P/D și fără rută. Forma și litera poartă sensul; culoarea doar
 îl întărește.
 
+[Selectarea prin hartă 076](map-selection.md) adaugă un strat DOM separat peste aceeași hartă: un
+marker per taxi 057 și per mașină civilă 058, proiectat cu transformarea de mai sus și identificat
+stabil prin `vehicleId`. Un click pe marker emite doar intenția 068 `WORLD`; nu desenează o a doua
+hartă, nu deschide o cameră Babylon și nu teleportează vehicule.
+
 ## Stări explicite
 
 | Situație | Rută | Taxi | Text |

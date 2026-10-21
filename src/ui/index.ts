@@ -30,6 +30,27 @@ export { createMinimap } from './minimap';
 export type { MinimapOptions } from './minimap';
 export { createFleetPanel } from './fleet-panel';
 export type { FleetPanel, FleetPanelOptions } from './fleet-panel';
+export { createMapSelectionOverlay } from './map-selection';
+export type { MapSelectionOptions, MapSelectionOverlay } from './map-selection';
+export {
+  hitTestMapMarker,
+  MAP_SELECTION_LIMITS,
+  MAP_SELECTION_VERSION,
+  parseMapSelectionSnapshot,
+  projectMapSelection,
+} from './map-selection-format';
+export type {
+  MapMarkerHit,
+  MapMarkerHitOptions,
+  MapMarkerProjection,
+  MapSelectionCounts,
+  MapSelectionKind,
+  MapSelectionPositionM,
+  MapSelectionProjection,
+  MapSelectionProjectionOptions,
+  MapSelectionSnapshot,
+  MapSelectionVehicle,
+} from './map-selection-format';
 export {
   fleetPanelBlockedSignature,
   FLEET_PANEL_FILTERS,

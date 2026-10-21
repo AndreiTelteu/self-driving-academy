@@ -222,6 +222,108 @@ button:focus-visible {
   border: 0;
 }
 
+/* 076 map selection: one native button per real vehicle, reused by stable vehicleId. */
+.map-selection {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  margin: 0;
+  pointer-events: none;
+}
+
+.map-selection__marker {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 1.35rem;
+  height: 1.35rem;
+  padding: 0;
+  transform: translate(-50%, -50%);
+  border: 1px solid #07110d;
+  border-radius: 50%;
+  background: #7fd7ff;
+  color: #07110d;
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+/* Civilian markers are square and carry C; taxi markers are round and carry T. */
+.map-selection__marker[data-kind='CIVIL'] {
+  border-radius: 0.25rem;
+  background: #ffd27f;
+}
+
+.map-selection__marker[data-kind='TAXI'] {
+  background: #7fd7ff;
+}
+
+.map-selection__marker[data-selectable='false'] {
+  border-style: dashed;
+  background: #6d7f78;
+  cursor: not-allowed;
+}
+
+/* The followed marker is marked by a check and a double ring, not by colour alone. */
+.map-selection__marker[aria-pressed='true'] {
+  box-shadow:
+    0 0 0 2px #07110d,
+    0 0 0 4px #f3f7fb;
+}
+
+.map-selection__marker[aria-pressed='true']::after {
+  content: '✓';
+  position: absolute;
+  top: -0.75rem;
+  right: -0.75rem;
+  display: grid;
+  place-items: center;
+  width: 0.85rem;
+  height: 0.85rem;
+  border: 1px solid #07110d;
+  border-radius: 50%;
+  background: #f3f7fb;
+  color: #07110d;
+  font-size: 0.6rem;
+  line-height: 1;
+}
+
+.map-selection__marker:hover::before,
+.map-selection__marker:focus-visible::before {
+  content: attr(data-label);
+  position: absolute;
+  bottom: 115%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.1rem 0.3rem;
+  border-radius: 0.25rem;
+  background: #07110def;
+  color: #f3f7fb;
+  font-size: 0.7rem;
+  font-weight: 500;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.map-selection__marker:focus-visible {
+  outline: 3px solid #9edbb5;
+  outline-offset: 3px;
+}
+
+.map-selection__description {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* 075 fleet panel: one reusable row per taxi; text and symbol carry the state, colour reinforces. */
 .fleet-panel {
   position: fixed;

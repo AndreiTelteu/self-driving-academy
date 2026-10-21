@@ -82,6 +82,14 @@ export {
   type MinimapSources,
 } from './minimap';
 export {
+  createMapSelectionPort,
+  readMapSelectionSnapshot,
+  type MapSelectionCamera,
+  type MapSelectionFrame,
+  type MapSelectionPortSources,
+  type MapSelectionSources,
+} from './map-selection';
+export {
   createManualTrip,
   manualTripContractFacts,
   MANUAL_TRIP_LIMITS,

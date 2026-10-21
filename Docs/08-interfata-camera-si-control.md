@@ -8,6 +8,8 @@ HUD implicit: minimap/rută, viteză, mod de control cu text și simbol, tipul s
 
 Panoul flotei permite selectarea oricărui taxi fără a muta fizic vehiculele. Mașinile civile se selectează prin click pe vehiculul vizibil sau pe markerul lui de pe hartă, apoi prin aceeași acțiune de preluare a controlului. Traficul civil are destinații sau rute proprii pe care le reia la eliberare. Camera trece către taxiul ales. În modul autonom jucătorul îl observă; după alegerea MANUAL sau LEARNING îl conduce. Dacă părăsește un vehicul în MANUAL sau LEARNING, segmentul se închide și vehiculul revine în AUTO cu ruta/cursa păstrată. Noua selecție schimbă doar ținta camerei; noul vehicul rămâne în AUTO până la preluarea explicită. În V3 selecția distantă păstrează personajul și nu îi transferă implicit autoritatea.
 
+[Selectarea prin hartă 076](map-selection.md) materializează această regulă pentru toate taxiurile 057 și mașinile civile 058: markerii folosesc transformarea minimap-ului 074, identitatea stabilă este `vehicleId`-ul flotei, iar un click emite o singură intenție 068 `WORLD`. Modulul nu mișcă absolut camera, nu teleportează vehicule și nu revendică autoritatea PLAYER.
+
 Panoul profilului afișează valorile curente, diferența față de versiunea precedentă, situațiile care au susținut schimbarea, cantitatea de dovezi și parametrii încă neobservați. Notificarea poate spune: „Profil nou: distanță mai mică în mers și reacție mai rapidă la verde”. Valorile concrete provin exclusiv din datele sesiunii.
 
 Tabloul orașului arată curse finalizate, timpi, distanță parcursă, încălcări, coliziuni, blocaje și confort. Jucătorul poate inspecta fiecare eveniment pe hartă și poate compara două profiluri în același scenariu.
