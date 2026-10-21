@@ -161,6 +161,17 @@ export {
   type KeyRemappingSettingsServices,
 } from './key-remapping';
 export {
+  applyGameSettings,
+  gameSettingsDefaults,
+  gameSettingsValuesFrom,
+  readGameSettingsDraft,
+  resetGameSettings,
+  sameGameSettings,
+  type GameSettingsApplyRejection,
+  type GameSettingsApplyResult,
+  type GameSettingsSettingsServices,
+} from './game-settings';
+export {
   isStaleNotification,
   learningNotificationEventId,
   learningNotificationGenerationKey,

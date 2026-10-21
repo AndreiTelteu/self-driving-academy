@@ -1697,3 +1697,178 @@ button:focus-visible {
   white-space: nowrap;
   border: 0;
 }
+
+/* 081 game settings: device preferences (units/camera/comfort/graphics), no learned-style editor. */
+.game-settings {
+  position: fixed;
+  top: 1rem;
+  left: 50%;
+  z-index: 5;
+  display: grid;
+  gap: 0.55rem;
+  width: min(32rem, calc(100vw - 2rem));
+  max-height: min(42rem, calc(100vh - 2rem));
+  padding: 0.85rem 1rem;
+  overflow-y: auto;
+  border: 1px solid #ffffff2b;
+  border-radius: 0.75rem;
+  background: #0d1714f5;
+  color: #f3f7fb;
+  font-size: 0.85rem;
+  line-height: 1.35;
+  text-shadow: 0 1px 2px #000000b3;
+  transform: translateX(-50%);
+}
+
+.game-settings__header {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.game-settings__title {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.game-settings__live {
+  margin: 0;
+  color: #b9cfc5;
+  font-size: 0.75rem;
+}
+
+.game-settings__description {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.game-settings__section {
+  display: grid;
+  gap: 0.3rem;
+  padding: 0.5rem 0.55rem;
+  border: 1px solid #ffffff1f;
+  border-radius: 0.5rem;
+  background: #13251f;
+}
+
+.game-settings__heading {
+  margin: 0;
+  color: #c6dbd1;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.game-settings__row {
+  display: grid;
+  grid-template-columns: minmax(10rem, 1fr) minmax(8rem, 1.2fr) auto;
+  align-items: center;
+  gap: 0.4rem 0.6rem;
+}
+
+.game-settings__label {
+  color: #dbe8e2;
+}
+
+.game-settings__select,
+.game-settings__range,
+.game-settings__checkbox {
+  font: inherit;
+  accent-color: #9edbb5;
+}
+
+.game-settings__select {
+  min-width: 0;
+  padding: 0.25rem 0.4rem;
+  border: 1px solid #ffffff3d;
+  border-radius: 0.35rem;
+  background: #1c332b;
+  color: inherit;
+}
+
+.game-settings__range {
+  width: 100%;
+}
+
+.game-settings__value {
+  justify-self: end;
+  min-width: 3.5rem;
+  color: #9edbb5;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.game-settings__section--unavailable {
+  border-style: dashed;
+  border-color: #8fa8a0;
+  background: #101f1a;
+}
+
+.game-settings__audio {
+  margin: 0;
+  color: #ffd27f;
+}
+
+.game-settings__preview {
+  margin: 0;
+  color: #c6dbd1;
+  font-variant-numeric: tabular-nums;
+}
+
+.game-settings__issues {
+  margin: 0;
+  color: #ffb3a7;
+  font-weight: 600;
+}
+
+.game-settings__issues[hidden] {
+  display: none;
+}
+
+.game-settings__footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.game-settings__footer button {
+  padding: 0.35rem 0.7rem;
+  border: 1px solid #ffffff3d;
+  border-radius: 0.4rem;
+  background: #1c332b;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.game-settings__save {
+  border-color: #9edbb5 !important;
+}
+
+.game-settings__save[disabled] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.game-settings__policy {
+  flex-basis: 100%;
+  margin: 0;
+  color: #ffd27f;
+  font-size: 0.75rem;
+}
+
+.game-settings__select:focus-visible,
+.game-settings__range:focus-visible,
+.game-settings__checkbox:focus-visible,
+.game-settings__footer button:focus-visible {
+  outline: 3px solid #9edbb5;
+  outline-offset: 2px;
+}

@@ -44,6 +44,8 @@ Hotkey-urile sunt remapabile. Butoanele din HUD oferă echivalente pentru acțiu
 
 [Remaparea comenzilor 080](key-remapping.md) materializează regula „hotkey-urile sunt remapabile”: toate cele 15 bindinguri 009 sunt listate, conflictele și tastele invalide sunt afișate inline și blochează salvarea, captura consumă numai următorul `keydown` de pe butonul focalizat, iar `Escape` anulează captura fără a închide panoul. Resetarea propune valorile reale din `createDefaultSettings` și cere o confirmare explicită; salvarea rămâne explicită și schimbă numai `input.bindings`, fără revizie de control. Bindingurile sunt stare de dispozitiv, separate de profilul învățat și de persistența profilurilor.
 
+[Setările 081](game-settings.md) adaugă panoul de preferințe de dispozitiv peste aceleași setări 009: unități de afișare km/h↔mph și m↔ft convertite doar pentru prezentare, camera CHASE/FIRST_PERSON, cele șapte slidere de confort și grafica LOW/MEDIUM/HIGH cu backend preferat, scală de rezoluție și adaptare. Salvarea păstrează bindingurile, jucătorul și scenariul, iar revizia `input.control.version` crește exact o dată numai când se schimbă confortul. Resetarea propune valorile reale după confirmare, audio este explicit `Indisponibil · 148`, iar editorul de stil rămâne o suprafață separată care nu schimbă AI-ul prin acest panou.
+
 ## Moduri de control și închiderea intervențiilor
 
 Există cel mult un vehicul sub controlul jucătorului, în MANUAL sau LEARNING. Modul de control, etapa cursei și versiunea profilului sunt stări independente. Un taxi poate fi autonom și în drum spre pickup sau manual și în drum spre dropoff.

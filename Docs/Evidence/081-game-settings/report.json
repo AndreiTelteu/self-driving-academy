@@ -1,0 +1,592 @@
+{
+  "version": "081-game-settings-v1",
+  "contract": {
+    "policy": "Setări dispozitiv · nu modifică profilul învățat, AI-ul sau stilul flotei",
+    "styleEditorSeparate": true,
+    "audio": {
+      "state": "UNAVAILABLE",
+      "reason": "PBI_148_PENDING"
+    },
+    "audioLabel": "Indisponibil · 148",
+    "audioReason": "PBI_148_PENDING",
+    "ranges": {
+      "steeringSensitivity": "0–100",
+      "returnRate": "0–100",
+      "speedAttenuation": "0–100",
+      "throttleRamp": "0–100",
+      "brakeRamp": "0–100",
+      "cameraMotion": "0–100",
+      "fov": "60–100°",
+      "resolutionScale": "0.5–1"
+    },
+    "comfortFields": [
+      "steeringSensitivity",
+      "returnRate",
+      "speedAttenuation",
+      "throttleRamp",
+      "brakeRamp",
+      "cameraMotion",
+      "fov"
+    ],
+    "rules": [
+      "display units convert SI m/s and m for presentation only; physics, telemetry and profiles stay SI",
+      "camera, units and graphics changes preserve input.bindings, playerId, scenario and the control revision",
+      "a comfort change increments input.control.version exactly once per save",
+      "reset restores display/camera/comfort/graphics defaults and preserves input.bindings",
+      "audio is explicitly unavailable until 148; no volume or mute control is created",
+      "the learned-style editor is a separate surface and is absent from this panel"
+    ]
+  },
+  "preview": {
+    "speedMps": 12.5,
+    "distanceM": 120,
+    "siSpeed": "12.5 m/s",
+    "siDistance": "120 m",
+    "kmh": "45 km/h",
+    "mph": "28 mph",
+    "meters": "120 m",
+    "feet": "394 ft",
+    "speedText": "12.5 m/s = 45 km/h = 28 mph",
+    "distanceText": "120 m = 394 ft",
+    "text": "12.5 m/s = 45 km/h = 28 mph · 120 m = 394 ft"
+  },
+  "scenarios": [
+    {
+      "name": "km/h",
+      "saveState": "DIRTY",
+      "changedSections": [
+        "units"
+      ],
+      "summary": "1 secțiune modificată: Unități. Salvează pentru a păstra; simularea rămâne în SI.",
+      "preview": "Afișat: 45 km/h · 120 m. Simularea rămâne 12.5 m/s (SI). Referință: 12.5 m/s = 45 km/h = 28 mph.",
+      "saved": {
+        "playerId": "player:081",
+        "units": "km/h/m",
+        "cameraMode": "FIRST_PERSON",
+        "controlVersion": 4,
+        "fov": 90,
+        "quality": "HIGH/WEBGL2/0.75/true",
+        "bindings": "ArrowUp/KeyZ",
+        "scenario": "7/10/12"
+      },
+      "stats": {
+        "elements": 85,
+        "textNodes": 49,
+        "controls": 14,
+        "listeners": 17,
+        "writes": 27,
+        "skipped": 0,
+        "saves": 0,
+        "resets": 0,
+        "saveState": "DIRTY",
+        "disposed": false
+      },
+      "dom": "<section aria-describedby=\"game-settings-1-description\" aria-label=\"Setări joc\" class=\"game-settings\" data-changed=\"1\" data-save-state=\"DIRTY\">\n  <header class=\"game-settings__header\">\n    <h2 class=\"game-settings__title\">Setări</h2>\n    <p aria-atomic=\"true\" aria-live=\"polite\" class=\"game-settings__live\" role=\"status\">1 secțiune modificată: Unități. Salvează pentru a păstra; simularea rămâne în SI. Afișat: 45 km/h · 120 m; simularea rămâne 12.5 m/s (SI).</p>\n  </header>\n  <p class=\"game-settings__description\" id=\"game-settings-1-description\">Preferințe de dispozitiv pentru unități, cameră, confort și grafică. Valorile sunt propuse local și se păstrează numai cu Salvează; simularea, profilul învățat, AI-ul și stilul flotei nu sunt modificate.</p>\n  <section class=\"game-settings__section\" data-section=\"units\">\n    <h3 class=\"game-settings__heading\">Unități</h3>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-1-speed\">Viteză</label>\n      <select class=\"game-settings__select\" id=\"game-settings-1-speed\">\n        <option value=\"km/h\">km/h</option>\n        <option value=\"mph\">mph</option>\n      </select>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-1-distance\">Distanță</label>\n      <select class=\"game-settings__select\" id=\"game-settings-1-distance\">\n        <option value=\"m\">metri (m)</option>\n        <option value=\"ft\">picioare (ft)</option>\n      </select>\n    </div>\n  </section>\n  <section class=\"game-settings__section\" data-section=\"camera\">\n    <h3 class=\"game-settings__heading\">Cameră</h3>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-1-camera\">Cameră</label>\n      <select class=\"game-settings__select\" id=\"game-settings-1-camera\">\n        <option value=\"CHASE\">Din spate</option>\n        <option value=\"FIRST_PERSON\">First-person din poziția șoferului</option>\n      </select>\n    </div>\n  </section>\n  <section class=\"game-settings__section\" data-section=\"comfort\">\n    <h3 class=\"game-settings__heading\">Confort</h3>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-1-steeringSensitivity\">Sensibilitatea direcției</label>\n      <input class=\"game-settings__range\" id=\"game-settings-1-steeringSensitivity\" max=\"100\" min=\"0\" step=\"1\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-1-steeringSensitivity\">65</output>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-1-returnRate\">Revenirea volanului</label>\n      <input class=\"game-settings__range\" id=\"game-settings-1-returnRate\" max=\"100\" min=\"0\" step=\"1\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-1-returnRate\">50</output>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-1-speedAttenuation\">Direcție mai calmă la viteză</label>\n      <input class=\"game-settings__range\" id=\"game-settings-1-speedAttenuation\" max=\"100\" min=\"0\" step=\"1\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-1-speedAttenuation\">50</output>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-1-throttleRamp\">Accelerație progresivă</label>\n      <input class=\"game-settings__range\" id=\"game-settings-1-throttleRamp\" max=\"100\" min=\"0\" step=\"1\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-1-throttleRamp\">50</output>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-1-brakeRamp\">Frânare progresivă</label>\n      <input class=\"game-settings__range\" id=\"game-settings-1-brakeRamp\" max=\"100\" min=\"0\" step=\"1\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-1-brakeRamp\">50</output>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-1-cameraMotion\">Mișcarea camerei</label>\n      <input class=\"game-settings__range\" id=\"game-settings-1-cameraMotion\" max=\"100\" min=\"0\" step=\"1\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-1-cameraMotion\">0</output>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-1-fov\">Câmp vizual</label>\n      <input class=\"game-settings__range\" id=\"game-settings-1-fov\" max=\"100\" min=\"60\" step=\"1\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-1-fov\">90°</output>\n    </div>\n  </section>\n  <section class=\"game-settings__section\" data-section=\"graphics\">\n    <h3 class=\"game-settings__heading\">Grafică</h3>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-1-preset\">Presetare</label>\n      <select class=\"game-settings__select\" id=\"game-settings-1-preset\">\n        <option value=\"LOW\">Scăzută</option>\n        <option value=\"MEDIUM\">Medie</option>\n        <option value=\"HIGH\">Ridicată</option>\n      </select>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-1-backend\">Backend preferat</label>\n      <select class=\"game-settings__select\" id=\"game-settings-1-backend\">\n        <option value=\"AUTO\">Automat</option>\n        <option value=\"WEBGPU\">WebGPU</option>\n        <option value=\"WEBGL2\">WebGL2</option>\n      </select>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-1-resolution\">Scala rezoluției</label>\n      <input class=\"game-settings__range\" id=\"game-settings-1-resolution\" max=\"1\" min=\"0.5\" step=\"0.05\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-1-resolution\">75%</output>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-1-adaptive\">Adaptare automată</label>\n      <input class=\"game-settings__checkbox\" id=\"game-settings-1-adaptive\" role=\"switch\" type=\"checkbox\"></input>\n    </div>\n  </section>\n  <section aria-disabled=\"true\" class=\"game-settings__section game-settings__section--unavailable\" data-section=\"audio\" data-state=\"UNAVAILABLE\">\n    <h3 class=\"game-settings__heading\">Audio</h3>\n    <p class=\"game-settings__audio\">Audio: Indisponibil · 148 · PBI_148_PENDING</p>\n  </section>\n  <p class=\"game-settings__preview\">Afișat: 45 km/h · 120 m. Simularea rămâne 12.5 m/s (SI). Referință: 12.5 m/s = 45 km/h = 28 mph.</p>\n  <p class=\"game-settings__issues\" hidden=\"\"></p>\n  <div class=\"game-settings__footer\">\n    <button class=\"game-settings__reset\" type=\"button\">Resetează</button>\n    <button class=\"game-settings__save\" type=\"button\">Salvează</button>\n    <button class=\"game-settings__cancel\" type=\"button\">Renunță</button>\n    <p class=\"game-settings__policy\">Setări dispozitiv · nu modifică profilul învățat, AI-ul sau stilul flotei</p>\n  </div>\n</section>"
+    },
+    {
+      "name": "mph",
+      "saveState": "DIRTY",
+      "changedSections": [
+        "units"
+      ],
+      "summary": "1 secțiune modificată: Unități. Salvează pentru a păstra; simularea rămâne în SI.",
+      "preview": "Afișat: 28 mph · 394 ft. Simularea rămâne 12.5 m/s (SI). Referință: 12.5 m/s = 45 km/h = 28 mph.",
+      "saved": {
+        "playerId": "player:081",
+        "units": "mph/ft",
+        "cameraMode": "CHASE",
+        "controlVersion": 0,
+        "fov": 80,
+        "quality": "MEDIUM/AUTO/1/false",
+        "bindings": "KeyW/KeyS",
+        "scenario": "1/24/40"
+      },
+      "stats": {
+        "elements": 85,
+        "textNodes": 49,
+        "controls": 14,
+        "listeners": 17,
+        "writes": 35,
+        "skipped": 0,
+        "saves": 0,
+        "resets": 0,
+        "saveState": "DIRTY",
+        "disposed": false
+      },
+      "dom": "<section aria-describedby=\"game-settings-2-description\" aria-label=\"Setări joc\" class=\"game-settings\" data-changed=\"1\" data-save-state=\"DIRTY\">\n  <header class=\"game-settings__header\">\n    <h2 class=\"game-settings__title\">Setări</h2>\n    <p aria-atomic=\"true\" aria-live=\"polite\" class=\"game-settings__live\" role=\"status\">1 secțiune modificată: Unități. Salvează pentru a păstra; simularea rămâne în SI. Afișat: 28 mph · 394 ft; simularea rămâne 12.5 m/s (SI).</p>\n  </header>\n  <p class=\"game-settings__description\" id=\"game-settings-2-description\">Preferințe de dispozitiv pentru unități, cameră, confort și grafică. Valorile sunt propuse local și se păstrează numai cu Salvează; simularea, profilul învățat, AI-ul și stilul flotei nu sunt modificate.</p>\n  <section class=\"game-settings__section\" data-section=\"units\">\n    <h3 class=\"game-settings__heading\">Unități</h3>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-2-speed\">Viteză</label>\n      <select class=\"game-settings__select\" id=\"game-settings-2-speed\">\n        <option value=\"km/h\">km/h</option>\n        <option value=\"mph\">mph</option>\n      </select>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-2-distance\">Distanță</label>\n      <select class=\"game-settings__select\" id=\"game-settings-2-distance\">\n        <option value=\"m\">metri (m)</option>\n        <option value=\"ft\">picioare (ft)</option>\n      </select>\n    </div>\n  </section>\n  <section class=\"game-settings__section\" data-section=\"camera\">\n    <h3 class=\"game-settings__heading\">Cameră</h3>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-2-camera\">Cameră</label>\n      <select class=\"game-settings__select\" id=\"game-settings-2-camera\">\n        <option value=\"CHASE\">Din spate</option>\n        <option value=\"FIRST_PERSON\">First-person din poziția șoferului</option>\n      </select>\n    </div>\n  </section>\n  <section class=\"game-settings__section\" data-section=\"comfort\">\n    <h3 class=\"game-settings__heading\">Confort</h3>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-2-steeringSensitivity\">Sensibilitatea direcției</label>\n      <input class=\"game-settings__range\" id=\"game-settings-2-steeringSensitivity\" max=\"100\" min=\"0\" step=\"1\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-2-steeringSensitivity\">50</output>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-2-returnRate\">Revenirea volanului</label>\n      <input class=\"game-settings__range\" id=\"game-settings-2-returnRate\" max=\"100\" min=\"0\" step=\"1\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-2-returnRate\">50</output>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-2-speedAttenuation\">Direcție mai calmă la viteză</label>\n      <input class=\"game-settings__range\" id=\"game-settings-2-speedAttenuation\" max=\"100\" min=\"0\" step=\"1\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-2-speedAttenuation\">50</output>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-2-throttleRamp\">Accelerație progresivă</label>\n      <input class=\"game-settings__range\" id=\"game-settings-2-throttleRamp\" max=\"100\" min=\"0\" step=\"1\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-2-throttleRamp\">50</output>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-2-brakeRamp\">Frânare progresivă</label>\n      <input class=\"game-settings__range\" id=\"game-settings-2-brakeRamp\" max=\"100\" min=\"0\" step=\"1\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-2-brakeRamp\">50</output>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-2-cameraMotion\">Mișcarea camerei</label>\n      <input class=\"game-settings__range\" id=\"game-settings-2-cameraMotion\" max=\"100\" min=\"0\" step=\"1\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-2-cameraMotion\">50</output>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-2-fov\">Câmp vizual</label>\n      <input class=\"game-settings__range\" id=\"game-settings-2-fov\" max=\"100\" min=\"60\" step=\"1\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-2-fov\">80°</output>\n    </div>\n  </section>\n  <section class=\"game-settings__section\" data-section=\"graphics\">\n    <h3 class=\"game-settings__heading\">Grafică</h3>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-2-preset\">Presetare</label>\n      <select class=\"game-settings__select\" id=\"game-settings-2-preset\">\n        <option value=\"LOW\">Scăzută</option>\n        <option value=\"MEDIUM\">Medie</option>\n        <option value=\"HIGH\">Ridicată</option>\n      </select>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-2-backend\">Backend preferat</label>\n      <select class=\"game-settings__select\" id=\"game-settings-2-backend\">\n        <option value=\"AUTO\">Automat</option>\n        <option value=\"WEBGPU\">WebGPU</option>\n        <option value=\"WEBGL2\">WebGL2</option>\n      </select>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-2-resolution\">Scala rezoluției</label>\n      <input class=\"game-settings__range\" id=\"game-settings-2-resolution\" max=\"1\" min=\"0.5\" step=\"0.05\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-2-resolution\">100%</output>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-2-adaptive\">Adaptare automată</label>\n      <input class=\"game-settings__checkbox\" id=\"game-settings-2-adaptive\" role=\"switch\" type=\"checkbox\"></input>\n    </div>\n  </section>\n  <section aria-disabled=\"true\" class=\"game-settings__section game-settings__section--unavailable\" data-section=\"audio\" data-state=\"UNAVAILABLE\">\n    <h3 class=\"game-settings__heading\">Audio</h3>\n    <p class=\"game-settings__audio\">Audio: Indisponibil · 148 · PBI_148_PENDING</p>\n  </section>\n  <p class=\"game-settings__preview\">Afișat: 28 mph · 394 ft. Simularea rămâne 12.5 m/s (SI). Referință: 12.5 m/s = 45 km/h = 28 mph.</p>\n  <p class=\"game-settings__issues\" hidden=\"\"></p>\n  <div class=\"game-settings__footer\">\n    <button class=\"game-settings__reset\" type=\"button\">Resetează</button>\n    <button class=\"game-settings__save\" type=\"button\">Salvează</button>\n    <button class=\"game-settings__cancel\" type=\"button\">Renunță</button>\n    <p class=\"game-settings__policy\">Setări dispozitiv · nu modifică profilul învățat, AI-ul sau stilul flotei</p>\n  </div>\n</section>"
+    },
+    {
+      "name": "mid-session change",
+      "saveState": "UNCHANGED",
+      "changedSections": [],
+      "summary": "Nicio modificare față de setările salvate.",
+      "preview": "Afișat: 45 km/h · 120 m. Simularea rămâne 12.5 m/s (SI). Referință: 12.5 m/s = 45 km/h = 28 mph.",
+      "saved": {
+        "playerId": "player:081",
+        "units": "km/h/m",
+        "cameraMode": "CHASE",
+        "controlVersion": 4,
+        "fov": 90,
+        "quality": "HIGH/WEBGL2/0.75/true",
+        "bindings": "ArrowUp/KeyZ",
+        "scenario": "7/10/12"
+      },
+      "stats": {
+        "elements": 85,
+        "textNodes": 49,
+        "controls": 14,
+        "listeners": 17,
+        "writes": 28,
+        "skipped": 0,
+        "saves": 0,
+        "resets": 0,
+        "saveState": "UNCHANGED",
+        "disposed": false
+      },
+      "dom": "<section aria-describedby=\"game-settings-3-description\" aria-label=\"Setări joc\" class=\"game-settings\" data-changed=\"0\" data-save-state=\"UNCHANGED\">\n  <header class=\"game-settings__header\">\n    <h2 class=\"game-settings__title\">Setări</h2>\n    <p aria-atomic=\"true\" aria-live=\"polite\" class=\"game-settings__live\" role=\"status\">Nicio modificare față de setările salvate. Afișat: 45 km/h · 120 m; simularea rămâne 12.5 m/s (SI).</p>\n  </header>\n  <p class=\"game-settings__description\" id=\"game-settings-3-description\">Preferințe de dispozitiv pentru unități, cameră, confort și grafică. Valorile sunt propuse local și se păstrează numai cu Salvează; simularea, profilul învățat, AI-ul și stilul flotei nu sunt modificate.</p>\n  <section class=\"game-settings__section\" data-section=\"units\">\n    <h3 class=\"game-settings__heading\">Unități</h3>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-3-speed\">Viteză</label>\n      <select class=\"game-settings__select\" id=\"game-settings-3-speed\">\n        <option value=\"km/h\">km/h</option>\n        <option value=\"mph\">mph</option>\n      </select>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-3-distance\">Distanță</label>\n      <select class=\"game-settings__select\" id=\"game-settings-3-distance\">\n        <option value=\"m\">metri (m)</option>\n        <option value=\"ft\">picioare (ft)</option>\n      </select>\n    </div>\n  </section>\n  <section class=\"game-settings__section\" data-section=\"camera\">\n    <h3 class=\"game-settings__heading\">Cameră</h3>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-3-camera\">Cameră</label>\n      <select class=\"game-settings__select\" id=\"game-settings-3-camera\">\n        <option value=\"CHASE\">Din spate</option>\n        <option value=\"FIRST_PERSON\">First-person din poziția șoferului</option>\n      </select>\n    </div>\n  </section>\n  <section class=\"game-settings__section\" data-section=\"comfort\">\n    <h3 class=\"game-settings__heading\">Confort</h3>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-3-steeringSensitivity\">Sensibilitatea direcției</label>\n      <input class=\"game-settings__range\" id=\"game-settings-3-steeringSensitivity\" max=\"100\" min=\"0\" step=\"1\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-3-steeringSensitivity\">65</output>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-3-returnRate\">Revenirea volanului</label>\n      <input class=\"game-settings__range\" id=\"game-settings-3-returnRate\" max=\"100\" min=\"0\" step=\"1\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-3-returnRate\">50</output>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-3-speedAttenuation\">Direcție mai calmă la viteză</label>\n      <input class=\"game-settings__range\" id=\"game-settings-3-speedAttenuation\" max=\"100\" min=\"0\" step=\"1\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-3-speedAttenuation\">50</output>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-3-throttleRamp\">Accelerație progresivă</label>\n      <input class=\"game-settings__range\" id=\"game-settings-3-throttleRamp\" max=\"100\" min=\"0\" step=\"1\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-3-throttleRamp\">50</output>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-3-brakeRamp\">Frânare progresivă</label>\n      <input class=\"game-settings__range\" id=\"game-settings-3-brakeRamp\" max=\"100\" min=\"0\" step=\"1\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-3-brakeRamp\">50</output>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-3-cameraMotion\">Mișcarea camerei</label>\n      <input class=\"game-settings__range\" id=\"game-settings-3-cameraMotion\" max=\"100\" min=\"0\" step=\"1\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-3-cameraMotion\">0</output>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-3-fov\">Câmp vizual</label>\n      <input class=\"game-settings__range\" id=\"game-settings-3-fov\" max=\"100\" min=\"60\" step=\"1\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-3-fov\">90°</output>\n    </div>\n  </section>\n  <section class=\"game-settings__section\" data-section=\"graphics\">\n    <h3 class=\"game-settings__heading\">Grafică</h3>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-3-preset\">Presetare</label>\n      <select class=\"game-settings__select\" id=\"game-settings-3-preset\">\n        <option value=\"LOW\">Scăzută</option>\n        <option value=\"MEDIUM\">Medie</option>\n        <option value=\"HIGH\">Ridicată</option>\n      </select>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-3-backend\">Backend preferat</label>\n      <select class=\"game-settings__select\" id=\"game-settings-3-backend\">\n        <option value=\"AUTO\">Automat</option>\n        <option value=\"WEBGPU\">WebGPU</option>\n        <option value=\"WEBGL2\">WebGL2</option>\n      </select>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-3-resolution\">Scala rezoluției</label>\n      <input class=\"game-settings__range\" id=\"game-settings-3-resolution\" max=\"1\" min=\"0.5\" step=\"0.05\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-3-resolution\">75%</output>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-3-adaptive\">Adaptare automată</label>\n      <input class=\"game-settings__checkbox\" id=\"game-settings-3-adaptive\" role=\"switch\" type=\"checkbox\"></input>\n    </div>\n  </section>\n  <section aria-disabled=\"true\" class=\"game-settings__section game-settings__section--unavailable\" data-section=\"audio\" data-state=\"UNAVAILABLE\">\n    <h3 class=\"game-settings__heading\">Audio</h3>\n    <p class=\"game-settings__audio\">Audio: Indisponibil · 148 · PBI_148_PENDING</p>\n  </section>\n  <p class=\"game-settings__preview\">Afișat: 45 km/h · 120 m. Simularea rămâne 12.5 m/s (SI). Referință: 12.5 m/s = 45 km/h = 28 mph.</p>\n  <p class=\"game-settings__issues\" hidden=\"\"></p>\n  <div class=\"game-settings__footer\">\n    <button class=\"game-settings__reset\" type=\"button\">Resetează</button>\n    <button class=\"game-settings__save\" disabled=\"\" type=\"button\">Salvează</button>\n    <button class=\"game-settings__cancel\" type=\"button\">Renunță</button>\n    <p class=\"game-settings__policy\">Setări dispozitiv · nu modifică profilul învățat, AI-ul sau stilul flotei</p>\n  </div>\n</section>"
+    },
+    {
+      "name": "control change",
+      "saveState": "DIRTY",
+      "changedSections": [
+        "comfort"
+      ],
+      "summary": "1 secțiune modificată: Confort. Salvează pentru a păstra; simularea rămâne în SI.",
+      "preview": "Afișat: 28 mph · 394 ft. Simularea rămâne 12.5 m/s (SI). Referință: 12.5 m/s = 45 km/h = 28 mph.",
+      "saved": {
+        "playerId": "player:081",
+        "units": "mph/ft",
+        "cameraMode": "FIRST_PERSON",
+        "controlVersion": 5,
+        "fov": 95,
+        "quality": "HIGH/WEBGL2/0.75/true",
+        "bindings": "ArrowUp/KeyZ",
+        "scenario": "7/10/12"
+      },
+      "stats": {
+        "elements": 85,
+        "textNodes": 49,
+        "controls": 14,
+        "listeners": 17,
+        "writes": 27,
+        "skipped": 0,
+        "saves": 0,
+        "resets": 0,
+        "saveState": "DIRTY",
+        "disposed": false
+      },
+      "dom": "<section aria-describedby=\"game-settings-4-description\" aria-label=\"Setări joc\" class=\"game-settings\" data-changed=\"1\" data-save-state=\"DIRTY\">\n  <header class=\"game-settings__header\">\n    <h2 class=\"game-settings__title\">Setări</h2>\n    <p aria-atomic=\"true\" aria-live=\"polite\" class=\"game-settings__live\" role=\"status\">1 secțiune modificată: Confort. Salvează pentru a păstra; simularea rămâne în SI. Afișat: 28 mph · 394 ft; simularea rămâne 12.5 m/s (SI).</p>\n  </header>\n  <p class=\"game-settings__description\" id=\"game-settings-4-description\">Preferințe de dispozitiv pentru unități, cameră, confort și grafică. Valorile sunt propuse local și se păstrează numai cu Salvează; simularea, profilul învățat, AI-ul și stilul flotei nu sunt modificate.</p>\n  <section class=\"game-settings__section\" data-section=\"units\">\n    <h3 class=\"game-settings__heading\">Unități</h3>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-4-speed\">Viteză</label>\n      <select class=\"game-settings__select\" id=\"game-settings-4-speed\">\n        <option value=\"km/h\">km/h</option>\n        <option value=\"mph\">mph</option>\n      </select>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-4-distance\">Distanță</label>\n      <select class=\"game-settings__select\" id=\"game-settings-4-distance\">\n        <option value=\"m\">metri (m)</option>\n        <option value=\"ft\">picioare (ft)</option>\n      </select>\n    </div>\n  </section>\n  <section class=\"game-settings__section\" data-section=\"camera\">\n    <h3 class=\"game-settings__heading\">Cameră</h3>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-4-camera\">Cameră</label>\n      <select class=\"game-settings__select\" id=\"game-settings-4-camera\">\n        <option value=\"CHASE\">Din spate</option>\n        <option value=\"FIRST_PERSON\">First-person din poziția șoferului</option>\n      </select>\n    </div>\n  </section>\n  <section class=\"game-settings__section\" data-section=\"comfort\">\n    <h3 class=\"game-settings__heading\">Confort</h3>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-4-steeringSensitivity\">Sensibilitatea direcției</label>\n      <input class=\"game-settings__range\" id=\"game-settings-4-steeringSensitivity\" max=\"100\" min=\"0\" step=\"1\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-4-steeringSensitivity\">65</output>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-4-returnRate\">Revenirea volanului</label>\n      <input class=\"game-settings__range\" id=\"game-settings-4-returnRate\" max=\"100\" min=\"0\" step=\"1\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-4-returnRate\">50</output>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-4-speedAttenuation\">Direcție mai calmă la viteză</label>\n      <input class=\"game-settings__range\" id=\"game-settings-4-speedAttenuation\" max=\"100\" min=\"0\" step=\"1\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-4-speedAttenuation\">50</output>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-4-throttleRamp\">Accelerație progresivă</label>\n      <input class=\"game-settings__range\" id=\"game-settings-4-throttleRamp\" max=\"100\" min=\"0\" step=\"1\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-4-throttleRamp\">50</output>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-4-brakeRamp\">Frânare progresivă</label>\n      <input class=\"game-settings__range\" id=\"game-settings-4-brakeRamp\" max=\"100\" min=\"0\" step=\"1\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-4-brakeRamp\">30</output>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-4-cameraMotion\">Mișcarea camerei</label>\n      <input class=\"game-settings__range\" id=\"game-settings-4-cameraMotion\" max=\"100\" min=\"0\" step=\"1\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-4-cameraMotion\">0</output>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-4-fov\">Câmp vizual</label>\n      <input class=\"game-settings__range\" id=\"game-settings-4-fov\" max=\"100\" min=\"60\" step=\"1\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-4-fov\">95°</output>\n    </div>\n  </section>\n  <section class=\"game-settings__section\" data-section=\"graphics\">\n    <h3 class=\"game-settings__heading\">Grafică</h3>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-4-preset\">Presetare</label>\n      <select class=\"game-settings__select\" id=\"game-settings-4-preset\">\n        <option value=\"LOW\">Scăzută</option>\n        <option value=\"MEDIUM\">Medie</option>\n        <option value=\"HIGH\">Ridicată</option>\n      </select>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-4-backend\">Backend preferat</label>\n      <select class=\"game-settings__select\" id=\"game-settings-4-backend\">\n        <option value=\"AUTO\">Automat</option>\n        <option value=\"WEBGPU\">WebGPU</option>\n        <option value=\"WEBGL2\">WebGL2</option>\n      </select>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-4-resolution\">Scala rezoluției</label>\n      <input class=\"game-settings__range\" id=\"game-settings-4-resolution\" max=\"1\" min=\"0.5\" step=\"0.05\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-4-resolution\">75%</output>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-4-adaptive\">Adaptare automată</label>\n      <input class=\"game-settings__checkbox\" id=\"game-settings-4-adaptive\" role=\"switch\" type=\"checkbox\"></input>\n    </div>\n  </section>\n  <section aria-disabled=\"true\" class=\"game-settings__section game-settings__section--unavailable\" data-section=\"audio\" data-state=\"UNAVAILABLE\">\n    <h3 class=\"game-settings__heading\">Audio</h3>\n    <p class=\"game-settings__audio\">Audio: Indisponibil · 148 · PBI_148_PENDING</p>\n  </section>\n  <p class=\"game-settings__preview\">Afișat: 28 mph · 394 ft. Simularea rămâne 12.5 m/s (SI). Referință: 12.5 m/s = 45 km/h = 28 mph.</p>\n  <p class=\"game-settings__issues\" hidden=\"\"></p>\n  <div class=\"game-settings__footer\">\n    <button class=\"game-settings__reset\" type=\"button\">Resetează</button>\n    <button class=\"game-settings__save\" type=\"button\">Salvează</button>\n    <button class=\"game-settings__cancel\" type=\"button\">Renunță</button>\n    <p class=\"game-settings__policy\">Setări dispozitiv · nu modifică profilul învățat, AI-ul sau stilul flotei</p>\n  </div>\n</section>"
+    },
+    {
+      "name": "graphics/camera change",
+      "saveState": "DIRTY",
+      "changedSections": [
+        "camera",
+        "graphics"
+      ],
+      "summary": "2 secțiuni modificate: Cameră, Grafică. Salvează pentru a păstra; simularea rămâne în SI.",
+      "preview": "Afișat: 28 mph · 394 ft. Simularea rămâne 12.5 m/s (SI). Referință: 12.5 m/s = 45 km/h = 28 mph.",
+      "saved": {
+        "playerId": "player:081",
+        "units": "mph/ft",
+        "cameraMode": "CHASE",
+        "controlVersion": 4,
+        "fov": 90,
+        "quality": "LOW/WEBGPU/0.5/false",
+        "bindings": "ArrowUp/KeyZ",
+        "scenario": "7/10/12"
+      },
+      "stats": {
+        "elements": 85,
+        "textNodes": 49,
+        "controls": 14,
+        "listeners": 17,
+        "writes": 27,
+        "skipped": 0,
+        "saves": 0,
+        "resets": 0,
+        "saveState": "DIRTY",
+        "disposed": false
+      },
+      "dom": "<section aria-describedby=\"game-settings-5-description\" aria-label=\"Setări joc\" class=\"game-settings\" data-changed=\"2\" data-save-state=\"DIRTY\">\n  <header class=\"game-settings__header\">\n    <h2 class=\"game-settings__title\">Setări</h2>\n    <p aria-atomic=\"true\" aria-live=\"polite\" class=\"game-settings__live\" role=\"status\">2 secțiuni modificate: Cameră, Grafică. Salvează pentru a păstra; simularea rămâne în SI. Afișat: 28 mph · 394 ft; simularea rămâne 12.5 m/s (SI).</p>\n  </header>\n  <p class=\"game-settings__description\" id=\"game-settings-5-description\">Preferințe de dispozitiv pentru unități, cameră, confort și grafică. Valorile sunt propuse local și se păstrează numai cu Salvează; simularea, profilul învățat, AI-ul și stilul flotei nu sunt modificate.</p>\n  <section class=\"game-settings__section\" data-section=\"units\">\n    <h3 class=\"game-settings__heading\">Unități</h3>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-5-speed\">Viteză</label>\n      <select class=\"game-settings__select\" id=\"game-settings-5-speed\">\n        <option value=\"km/h\">km/h</option>\n        <option value=\"mph\">mph</option>\n      </select>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-5-distance\">Distanță</label>\n      <select class=\"game-settings__select\" id=\"game-settings-5-distance\">\n        <option value=\"m\">metri (m)</option>\n        <option value=\"ft\">picioare (ft)</option>\n      </select>\n    </div>\n  </section>\n  <section class=\"game-settings__section\" data-section=\"camera\">\n    <h3 class=\"game-settings__heading\">Cameră</h3>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-5-camera\">Cameră</label>\n      <select class=\"game-settings__select\" id=\"game-settings-5-camera\">\n        <option value=\"CHASE\">Din spate</option>\n        <option value=\"FIRST_PERSON\">First-person din poziția șoferului</option>\n      </select>\n    </div>\n  </section>\n  <section class=\"game-settings__section\" data-section=\"comfort\">\n    <h3 class=\"game-settings__heading\">Confort</h3>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-5-steeringSensitivity\">Sensibilitatea direcției</label>\n      <input class=\"game-settings__range\" id=\"game-settings-5-steeringSensitivity\" max=\"100\" min=\"0\" step=\"1\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-5-steeringSensitivity\">65</output>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-5-returnRate\">Revenirea volanului</label>\n      <input class=\"game-settings__range\" id=\"game-settings-5-returnRate\" max=\"100\" min=\"0\" step=\"1\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-5-returnRate\">50</output>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-5-speedAttenuation\">Direcție mai calmă la viteză</label>\n      <input class=\"game-settings__range\" id=\"game-settings-5-speedAttenuation\" max=\"100\" min=\"0\" step=\"1\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-5-speedAttenuation\">50</output>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-5-throttleRamp\">Accelerație progresivă</label>\n      <input class=\"game-settings__range\" id=\"game-settings-5-throttleRamp\" max=\"100\" min=\"0\" step=\"1\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-5-throttleRamp\">50</output>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-5-brakeRamp\">Frânare progresivă</label>\n      <input class=\"game-settings__range\" id=\"game-settings-5-brakeRamp\" max=\"100\" min=\"0\" step=\"1\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-5-brakeRamp\">50</output>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-5-cameraMotion\">Mișcarea camerei</label>\n      <input class=\"game-settings__range\" id=\"game-settings-5-cameraMotion\" max=\"100\" min=\"0\" step=\"1\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-5-cameraMotion\">0</output>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-5-fov\">Câmp vizual</label>\n      <input class=\"game-settings__range\" id=\"game-settings-5-fov\" max=\"100\" min=\"60\" step=\"1\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-5-fov\">90°</output>\n    </div>\n  </section>\n  <section class=\"game-settings__section\" data-section=\"graphics\">\n    <h3 class=\"game-settings__heading\">Grafică</h3>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-5-preset\">Presetare</label>\n      <select class=\"game-settings__select\" id=\"game-settings-5-preset\">\n        <option value=\"LOW\">Scăzută</option>\n        <option value=\"MEDIUM\">Medie</option>\n        <option value=\"HIGH\">Ridicată</option>\n      </select>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-5-backend\">Backend preferat</label>\n      <select class=\"game-settings__select\" id=\"game-settings-5-backend\">\n        <option value=\"AUTO\">Automat</option>\n        <option value=\"WEBGPU\">WebGPU</option>\n        <option value=\"WEBGL2\">WebGL2</option>\n      </select>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-5-resolution\">Scala rezoluției</label>\n      <input class=\"game-settings__range\" id=\"game-settings-5-resolution\" max=\"1\" min=\"0.5\" step=\"0.05\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-5-resolution\">50%</output>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-5-adaptive\">Adaptare automată</label>\n      <input class=\"game-settings__checkbox\" id=\"game-settings-5-adaptive\" role=\"switch\" type=\"checkbox\"></input>\n    </div>\n  </section>\n  <section aria-disabled=\"true\" class=\"game-settings__section game-settings__section--unavailable\" data-section=\"audio\" data-state=\"UNAVAILABLE\">\n    <h3 class=\"game-settings__heading\">Audio</h3>\n    <p class=\"game-settings__audio\">Audio: Indisponibil · 148 · PBI_148_PENDING</p>\n  </section>\n  <p class=\"game-settings__preview\">Afișat: 28 mph · 394 ft. Simularea rămâne 12.5 m/s (SI). Referință: 12.5 m/s = 45 km/h = 28 mph.</p>\n  <p class=\"game-settings__issues\" hidden=\"\"></p>\n  <div class=\"game-settings__footer\">\n    <button class=\"game-settings__reset\" type=\"button\">Resetează</button>\n    <button class=\"game-settings__save\" type=\"button\">Salvează</button>\n    <button class=\"game-settings__cancel\" type=\"button\">Renunță</button>\n    <p class=\"game-settings__policy\">Setări dispozitiv · nu modifică profilul învățat, AI-ul sau stilul flotei</p>\n  </div>\n</section>"
+    },
+    {
+      "name": "reset with preserved bindings",
+      "saveState": "DIRTY",
+      "changedSections": [
+        "units",
+        "camera",
+        "comfort",
+        "graphics"
+      ],
+      "summary": "4 secțiuni modificate: Unități, Cameră, Confort, Grafică. Salvează pentru a păstra; simularea rămâne în SI.",
+      "preview": "Afișat: 45 km/h · 120 m. Simularea rămâne 12.5 m/s (SI). Referință: 12.5 m/s = 45 km/h = 28 mph.",
+      "saved": {
+        "playerId": "player:081",
+        "units": "km/h/m",
+        "cameraMode": "CHASE",
+        "controlVersion": 5,
+        "fov": 80,
+        "quality": "MEDIUM/AUTO/1/false",
+        "bindings": "ArrowUp/KeyZ",
+        "scenario": "7/10/12"
+      },
+      "stats": {
+        "elements": 85,
+        "textNodes": 49,
+        "controls": 14,
+        "listeners": 17,
+        "writes": 27,
+        "skipped": 0,
+        "saves": 0,
+        "resets": 0,
+        "saveState": "DIRTY",
+        "disposed": false
+      },
+      "dom": "<section aria-describedby=\"game-settings-6-description\" aria-label=\"Setări joc\" class=\"game-settings\" data-changed=\"4\" data-save-state=\"DIRTY\">\n  <header class=\"game-settings__header\">\n    <h2 class=\"game-settings__title\">Setări</h2>\n    <p aria-atomic=\"true\" aria-live=\"polite\" class=\"game-settings__live\" role=\"status\">4 secțiuni modificate: Unități, Cameră, Confort, Grafică. Salvează pentru a păstra; simularea rămâne în SI. Afișat: 45 km/h · 120 m; simularea rămâne 12.5 m/s (SI).</p>\n  </header>\n  <p class=\"game-settings__description\" id=\"game-settings-6-description\">Preferințe de dispozitiv pentru unități, cameră, confort și grafică. Valorile sunt propuse local și se păstrează numai cu Salvează; simularea, profilul învățat, AI-ul și stilul flotei nu sunt modificate.</p>\n  <section class=\"game-settings__section\" data-section=\"units\">\n    <h3 class=\"game-settings__heading\">Unități</h3>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-6-speed\">Viteză</label>\n      <select class=\"game-settings__select\" id=\"game-settings-6-speed\">\n        <option value=\"km/h\">km/h</option>\n        <option value=\"mph\">mph</option>\n      </select>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-6-distance\">Distanță</label>\n      <select class=\"game-settings__select\" id=\"game-settings-6-distance\">\n        <option value=\"m\">metri (m)</option>\n        <option value=\"ft\">picioare (ft)</option>\n      </select>\n    </div>\n  </section>\n  <section class=\"game-settings__section\" data-section=\"camera\">\n    <h3 class=\"game-settings__heading\">Cameră</h3>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-6-camera\">Cameră</label>\n      <select class=\"game-settings__select\" id=\"game-settings-6-camera\">\n        <option value=\"CHASE\">Din spate</option>\n        <option value=\"FIRST_PERSON\">First-person din poziția șoferului</option>\n      </select>\n    </div>\n  </section>\n  <section class=\"game-settings__section\" data-section=\"comfort\">\n    <h3 class=\"game-settings__heading\">Confort</h3>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-6-steeringSensitivity\">Sensibilitatea direcției</label>\n      <input class=\"game-settings__range\" id=\"game-settings-6-steeringSensitivity\" max=\"100\" min=\"0\" step=\"1\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-6-steeringSensitivity\">50</output>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-6-returnRate\">Revenirea volanului</label>\n      <input class=\"game-settings__range\" id=\"game-settings-6-returnRate\" max=\"100\" min=\"0\" step=\"1\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-6-returnRate\">50</output>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-6-speedAttenuation\">Direcție mai calmă la viteză</label>\n      <input class=\"game-settings__range\" id=\"game-settings-6-speedAttenuation\" max=\"100\" min=\"0\" step=\"1\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-6-speedAttenuation\">50</output>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-6-throttleRamp\">Accelerație progresivă</label>\n      <input class=\"game-settings__range\" id=\"game-settings-6-throttleRamp\" max=\"100\" min=\"0\" step=\"1\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-6-throttleRamp\">50</output>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-6-brakeRamp\">Frânare progresivă</label>\n      <input class=\"game-settings__range\" id=\"game-settings-6-brakeRamp\" max=\"100\" min=\"0\" step=\"1\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-6-brakeRamp\">50</output>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-6-cameraMotion\">Mișcarea camerei</label>\n      <input class=\"game-settings__range\" id=\"game-settings-6-cameraMotion\" max=\"100\" min=\"0\" step=\"1\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-6-cameraMotion\">50</output>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-6-fov\">Câmp vizual</label>\n      <input class=\"game-settings__range\" id=\"game-settings-6-fov\" max=\"100\" min=\"60\" step=\"1\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-6-fov\">80°</output>\n    </div>\n  </section>\n  <section class=\"game-settings__section\" data-section=\"graphics\">\n    <h3 class=\"game-settings__heading\">Grafică</h3>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-6-preset\">Presetare</label>\n      <select class=\"game-settings__select\" id=\"game-settings-6-preset\">\n        <option value=\"LOW\">Scăzută</option>\n        <option value=\"MEDIUM\">Medie</option>\n        <option value=\"HIGH\">Ridicată</option>\n      </select>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-6-backend\">Backend preferat</label>\n      <select class=\"game-settings__select\" id=\"game-settings-6-backend\">\n        <option value=\"AUTO\">Automat</option>\n        <option value=\"WEBGPU\">WebGPU</option>\n        <option value=\"WEBGL2\">WebGL2</option>\n      </select>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-6-resolution\">Scala rezoluției</label>\n      <input class=\"game-settings__range\" id=\"game-settings-6-resolution\" max=\"1\" min=\"0.5\" step=\"0.05\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-6-resolution\">100%</output>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-6-adaptive\">Adaptare automată</label>\n      <input class=\"game-settings__checkbox\" id=\"game-settings-6-adaptive\" role=\"switch\" type=\"checkbox\"></input>\n    </div>\n  </section>\n  <section aria-disabled=\"true\" class=\"game-settings__section game-settings__section--unavailable\" data-section=\"audio\" data-state=\"UNAVAILABLE\">\n    <h3 class=\"game-settings__heading\">Audio</h3>\n    <p class=\"game-settings__audio\">Audio: Indisponibil · 148 · PBI_148_PENDING</p>\n  </section>\n  <p class=\"game-settings__preview\">Afișat: 45 km/h · 120 m. Simularea rămâne 12.5 m/s (SI). Referință: 12.5 m/s = 45 km/h = 28 mph.</p>\n  <p class=\"game-settings__issues\" hidden=\"\"></p>\n  <div class=\"game-settings__footer\">\n    <button class=\"game-settings__reset\" type=\"button\">Resetează</button>\n    <button class=\"game-settings__save\" type=\"button\">Salvează</button>\n    <button class=\"game-settings__cancel\" type=\"button\">Renunță</button>\n    <p class=\"game-settings__policy\">Setări dispozitiv · nu modifică profilul învățat, AI-ul sau stilul flotei</p>\n  </div>\n</section>"
+    },
+    {
+      "name": "audio unavailable",
+      "saveState": "UNCHANGED",
+      "changedSections": [],
+      "summary": "Nicio modificare față de setările salvate.",
+      "preview": "Afișat: 45 km/h · 120 m. Simularea rămâne 12.5 m/s (SI). Referință: 12.5 m/s = 45 km/h = 28 mph.",
+      "saved": null,
+      "stats": {
+        "elements": 85,
+        "textNodes": 49,
+        "controls": 14,
+        "listeners": 17,
+        "writes": 28,
+        "skipped": 0,
+        "saves": 0,
+        "resets": 0,
+        "saveState": "UNCHANGED",
+        "disposed": false
+      },
+      "dom": "<section aria-describedby=\"game-settings-7-description\" aria-label=\"Setări joc\" class=\"game-settings\" data-changed=\"0\" data-save-state=\"UNCHANGED\">\n  <header class=\"game-settings__header\">\n    <h2 class=\"game-settings__title\">Setări</h2>\n    <p aria-atomic=\"true\" aria-live=\"polite\" class=\"game-settings__live\" role=\"status\">Nicio modificare față de setările salvate. Afișat: 45 km/h · 120 m; simularea rămâne 12.5 m/s (SI).</p>\n  </header>\n  <p class=\"game-settings__description\" id=\"game-settings-7-description\">Preferințe de dispozitiv pentru unități, cameră, confort și grafică. Valorile sunt propuse local și se păstrează numai cu Salvează; simularea, profilul învățat, AI-ul și stilul flotei nu sunt modificate.</p>\n  <section class=\"game-settings__section\" data-section=\"units\">\n    <h3 class=\"game-settings__heading\">Unități</h3>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-7-speed\">Viteză</label>\n      <select class=\"game-settings__select\" id=\"game-settings-7-speed\">\n        <option value=\"km/h\">km/h</option>\n        <option value=\"mph\">mph</option>\n      </select>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-7-distance\">Distanță</label>\n      <select class=\"game-settings__select\" id=\"game-settings-7-distance\">\n        <option value=\"m\">metri (m)</option>\n        <option value=\"ft\">picioare (ft)</option>\n      </select>\n    </div>\n  </section>\n  <section class=\"game-settings__section\" data-section=\"camera\">\n    <h3 class=\"game-settings__heading\">Cameră</h3>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-7-camera\">Cameră</label>\n      <select class=\"game-settings__select\" id=\"game-settings-7-camera\">\n        <option value=\"CHASE\">Din spate</option>\n        <option value=\"FIRST_PERSON\">First-person din poziția șoferului</option>\n      </select>\n    </div>\n  </section>\n  <section class=\"game-settings__section\" data-section=\"comfort\">\n    <h3 class=\"game-settings__heading\">Confort</h3>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-7-steeringSensitivity\">Sensibilitatea direcției</label>\n      <input class=\"game-settings__range\" id=\"game-settings-7-steeringSensitivity\" max=\"100\" min=\"0\" step=\"1\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-7-steeringSensitivity\">50</output>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-7-returnRate\">Revenirea volanului</label>\n      <input class=\"game-settings__range\" id=\"game-settings-7-returnRate\" max=\"100\" min=\"0\" step=\"1\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-7-returnRate\">50</output>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-7-speedAttenuation\">Direcție mai calmă la viteză</label>\n      <input class=\"game-settings__range\" id=\"game-settings-7-speedAttenuation\" max=\"100\" min=\"0\" step=\"1\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-7-speedAttenuation\">50</output>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-7-throttleRamp\">Accelerație progresivă</label>\n      <input class=\"game-settings__range\" id=\"game-settings-7-throttleRamp\" max=\"100\" min=\"0\" step=\"1\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-7-throttleRamp\">50</output>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-7-brakeRamp\">Frânare progresivă</label>\n      <input class=\"game-settings__range\" id=\"game-settings-7-brakeRamp\" max=\"100\" min=\"0\" step=\"1\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-7-brakeRamp\">50</output>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-7-cameraMotion\">Mișcarea camerei</label>\n      <input class=\"game-settings__range\" id=\"game-settings-7-cameraMotion\" max=\"100\" min=\"0\" step=\"1\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-7-cameraMotion\">50</output>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-7-fov\">Câmp vizual</label>\n      <input class=\"game-settings__range\" id=\"game-settings-7-fov\" max=\"100\" min=\"60\" step=\"1\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-7-fov\">80°</output>\n    </div>\n  </section>\n  <section class=\"game-settings__section\" data-section=\"graphics\">\n    <h3 class=\"game-settings__heading\">Grafică</h3>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-7-preset\">Presetare</label>\n      <select class=\"game-settings__select\" id=\"game-settings-7-preset\">\n        <option value=\"LOW\">Scăzută</option>\n        <option value=\"MEDIUM\">Medie</option>\n        <option value=\"HIGH\">Ridicată</option>\n      </select>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-7-backend\">Backend preferat</label>\n      <select class=\"game-settings__select\" id=\"game-settings-7-backend\">\n        <option value=\"AUTO\">Automat</option>\n        <option value=\"WEBGPU\">WebGPU</option>\n        <option value=\"WEBGL2\">WebGL2</option>\n      </select>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-7-resolution\">Scala rezoluției</label>\n      <input class=\"game-settings__range\" id=\"game-settings-7-resolution\" max=\"1\" min=\"0.5\" step=\"0.05\" type=\"range\"></input>\n      <output class=\"game-settings__value\" for=\"game-settings-7-resolution\">100%</output>\n    </div>\n    <div class=\"game-settings__row\">\n      <label class=\"game-settings__label\" for=\"game-settings-7-adaptive\">Adaptare automată</label>\n      <input class=\"game-settings__checkbox\" id=\"game-settings-7-adaptive\" role=\"switch\" type=\"checkbox\"></input>\n    </div>\n  </section>\n  <section aria-disabled=\"true\" class=\"game-settings__section game-settings__section--unavailable\" data-section=\"audio\" data-state=\"UNAVAILABLE\">\n    <h3 class=\"game-settings__heading\">Audio</h3>\n    <p class=\"game-settings__audio\">Audio: Indisponibil · 148 · PBI_148_PENDING</p>\n  </section>\n  <p class=\"game-settings__preview\">Afișat: 45 km/h · 120 m. Simularea rămâne 12.5 m/s (SI). Referință: 12.5 m/s = 45 km/h = 28 mph.</p>\n  <p class=\"game-settings__issues\" hidden=\"\"></p>\n  <div class=\"game-settings__footer\">\n    <button class=\"game-settings__reset\" type=\"button\">Resetează</button>\n    <button class=\"game-settings__save\" disabled=\"\" type=\"button\">Salvează</button>\n    <button class=\"game-settings__cancel\" type=\"button\">Renunță</button>\n    <p class=\"game-settings__policy\">Setări dispozitiv · nu modifică profilul învățat, AI-ul sau stilul flotei</p>\n  </div>\n</section>"
+    }
+  ],
+  "checks": [
+    {
+      "name": "contract-version",
+      "expected": "081-game-settings-v1",
+      "actual": "081-game-settings-v1",
+      "pass": true,
+      "detail": "081 draft version"
+    },
+    {
+      "name": "policy-text",
+      "expected": "Setări dispozitiv · nu modifică profilul învățat, AI-ul sau stilul flotei",
+      "actual": "Setări dispozitiv · nu modifică profilul învățat, AI-ul sau stilul flotei",
+      "pass": true,
+      "detail": "the separation policy is explicit"
+    },
+    {
+      "name": "policy-style-editor-separate",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "no learned-style editor in this panel"
+    },
+    {
+      "name": "audio-state",
+      "expected": "UNAVAILABLE",
+      "actual": "UNAVAILABLE",
+      "pass": true,
+      "detail": "audio is explicitly unavailable"
+    },
+    {
+      "name": "audio-reason",
+      "expected": "PBI_148_PENDING",
+      "actual": "PBI_148_PENDING",
+      "pass": true,
+      "detail": "audio is deferred to 148"
+    },
+    {
+      "name": "audio-label",
+      "expected": "Indisponibil · 148",
+      "actual": "Indisponibil · 148",
+      "pass": true,
+      "detail": "visible audio label"
+    },
+    {
+      "name": "audio-no-volume-control",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "no fabricated volume/mute control"
+    },
+    {
+      "name": "audio-dom-text",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the unavailable text is visible"
+    },
+    {
+      "name": "range-fov",
+      "expected": "60/100",
+      "actual": "60/100",
+      "pass": true,
+      "detail": "FOV uses the 009 domain"
+    },
+    {
+      "name": "range-resolution",
+      "expected": "0.5/1",
+      "actual": "0.5/1",
+      "pass": true,
+      "detail": "resolution uses the 009 domain"
+    },
+    {
+      "name": "comfort-fields",
+      "expected": 7,
+      "actual": 7,
+      "pass": true,
+      "detail": "all control preferences are represented"
+    },
+    {
+      "name": "preview-speed-text",
+      "expected": "12.5 m/s = 45 km/h = 28 mph",
+      "actual": "12.5 m/s = 45 km/h = 28 mph",
+      "pass": true,
+      "detail": "SI and both speed units are shown"
+    },
+    {
+      "name": "preview-distance-text",
+      "expected": "120 m = 394 ft",
+      "actual": "120 m = 394 ft",
+      "pass": true,
+      "detail": "SI and feet are shown"
+    },
+    {
+      "name": "kmh-format",
+      "expected": "45 km/h",
+      "actual": "45 km/h",
+      "pass": true,
+      "detail": "km/h conversion"
+    },
+    {
+      "name": "mph-format",
+      "expected": "28 mph",
+      "actual": "28 mph",
+      "pass": true,
+      "detail": "mph conversion"
+    },
+    {
+      "name": "si-value-preserved",
+      "expected": 12.5,
+      "actual": 12.5,
+      "pass": true,
+      "detail": "conversion returns the untouched m/s value"
+    },
+    {
+      "name": "distance-ft",
+      "expected": "394 ft",
+      "actual": "394 ft",
+      "pass": true,
+      "detail": "m to ft conversion"
+    },
+    {
+      "name": "kmh-units-saved",
+      "expected": "km/h/m",
+      "actual": "km/h/m",
+      "pass": true,
+      "detail": "display units are persisted"
+    },
+    {
+      "name": "kmh-version",
+      "expected": 4,
+      "actual": 4,
+      "pass": true,
+      "detail": "units do not bump the control revision"
+    },
+    {
+      "name": "kmh-bindings",
+      "expected": "ArrowUp/KeyZ",
+      "actual": "ArrowUp/KeyZ",
+      "pass": true,
+      "detail": "bindings survive a unit change"
+    },
+    {
+      "name": "mph-units-saved",
+      "expected": "mph/ft",
+      "actual": "mph/ft",
+      "pass": true,
+      "detail": "mph/ft are persisted"
+    },
+    {
+      "name": "mph-version",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "mph does not bump the control revision"
+    },
+    {
+      "name": "mph-live-preview",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the panel preview follows the change"
+    },
+    {
+      "name": "mid-session-units",
+      "expected": "km/h/m",
+      "actual": "km/h/m",
+      "pass": true,
+      "detail": "units changed during the session"
+    },
+    {
+      "name": "mid-session-version",
+      "expected": 4,
+      "actual": 4,
+      "pass": true,
+      "detail": "camera change keeps the revision"
+    },
+    {
+      "name": "mid-session-camera",
+      "expected": "CHASE",
+      "actual": "CHASE",
+      "pass": true,
+      "detail": "camera mode changed"
+    },
+    {
+      "name": "mid-session-bindings",
+      "expected": "ArrowUp/KeyZ",
+      "actual": "ArrowUp/KeyZ",
+      "pass": true,
+      "detail": "bindings survive both applies"
+    },
+    {
+      "name": "control-version",
+      "expected": 5,
+      "actual": 5,
+      "pass": true,
+      "detail": "comfort bumps exactly once"
+    },
+    {
+      "name": "control-delta",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "only one revision is consumed"
+    },
+    {
+      "name": "control-fov",
+      "expected": 95,
+      "actual": 95,
+      "pass": true,
+      "detail": "the comfort value is applied"
+    },
+    {
+      "name": "control-bindings",
+      "expected": "ArrowUp/KeyZ",
+      "actual": "ArrowUp/KeyZ",
+      "pass": true,
+      "detail": "bindings survive a comfort change"
+    },
+    {
+      "name": "graphics-preset",
+      "expected": "LOW/WEBGPU/0.5/false",
+      "actual": "LOW/WEBGPU/0.5/false",
+      "pass": true,
+      "detail": "graphics preferences are applied"
+    },
+    {
+      "name": "graphics-camera",
+      "expected": "CHASE",
+      "actual": "CHASE",
+      "pass": true,
+      "detail": "camera mode is applied"
+    },
+    {
+      "name": "graphics-version",
+      "expected": 4,
+      "actual": 4,
+      "pass": true,
+      "detail": "graphics/camera never bump control"
+    },
+    {
+      "name": "graphics-bindings",
+      "expected": "ArrowUp/KeyZ",
+      "actual": "ArrowUp/KeyZ",
+      "pass": true,
+      "detail": "bindings survive graphics"
+    },
+    {
+      "name": "graphics-scenario",
+      "expected": "7/10/12",
+      "actual": "7/10/12",
+      "pass": true,
+      "detail": "scenario survives graphics"
+    },
+    {
+      "name": "reset-units",
+      "expected": "km/h/m",
+      "actual": "km/h/m",
+      "pass": true,
+      "detail": "reset restores display defaults"
+    },
+    {
+      "name": "reset-fov",
+      "expected": 80,
+      "actual": 80,
+      "pass": true,
+      "detail": "reset restores comfort defaults"
+    },
+    {
+      "name": "reset-bindings",
+      "expected": "ArrowUp/KeyZ",
+      "actual": "ArrowUp/KeyZ",
+      "pass": true,
+      "detail": "reset preserves the persisted bindings"
+    },
+    {
+      "name": "reset-version",
+      "expected": 5,
+      "actual": 5,
+      "pass": true,
+      "detail": "a comfort reset bumps once"
+    },
+    {
+      "name": "reset-player",
+      "expected": "player:081",
+      "actual": "player:081",
+      "pass": true,
+      "detail": "reset never changes the player"
+    },
+    {
+      "name": "panel-sections",
+      "expected": 5,
+      "actual": 5,
+      "pass": true,
+      "detail": "five visible sections"
+    },
+    {
+      "name": "panel-controls",
+      "expected": 14,
+      "actual": 14,
+      "pass": true,
+      "detail": "native controls are bounded"
+    },
+    {
+      "name": "panel-listeners",
+      "expected": 17,
+      "actual": 17,
+      "pass": true,
+      "detail": "one change listener per control plus three buttons"
+    },
+    {
+      "name": "scenario-count",
+      "expected": 7,
+      "actual": 7,
+      "pass": true,
+      "detail": "seven deterministic scenarios are recorded"
+    }
+  ],
+  "summary": {
+    "checks": 45,
+    "passed": 45,
+    "pass": true
+  }
+}
