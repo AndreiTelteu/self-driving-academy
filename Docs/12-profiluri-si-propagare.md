@@ -20,6 +20,8 @@ Toate taxiurile și civilele au același profil de stil; rutele și clasele lor 
 
 Integrarea dintre segment, estimator și publicare este explicită în [profile-pipeline](profile-pipeline.md): segmentul `LEARNING` eligibil intră în coada 103, compoziția acceptată de 102 devine o singură versiune 109 cu părintele head-ului, iar versiunea este publicată în 110 la tick-ul următor. `MANUAL`/`AUTO` și `LEARNING` neeligibil nu produc job sau versiune, o compoziție fără schimbare reală este `NO_CHANGE`, un rezultat depășit în aceeași generație este `RECOMPOSED` explicit, iar o bază sau o epocă străină rămâne `STALE_JOB`. Re-submisia aceluiași segment întoarce versiunea existentă, nu creează una nouă.
 
+Legarea UI la aceste proiecții este explicită în [profile-ui-binding](profile-ui-binding.md): panoul 077, istoricul 078 și ținta activă 110 pornesc din aceeași versiune imuabilă 109, iar un verificator compară versiunea, valorile, delta și codurile de motiv. Fără o versiune reală, binding-ul este gol cu `MISSING_VERSION`, nu ilustrativ; cheile rezervate rămân `RESERVED`/`null`, cele neobservate rămân `UNOBSERVED`/`null`, iar dovezile absente dintr-o versiune 109 sunt raportate `NO_EVIDENCE_RECORD`, niciodată inventate.
+
 Restaurarea unei versiuni anterioare publică o activare nouă cu proveniență explicită. Versiunile existente nu sunt editate. Un profil importat este validat și devine activ prin același mecanism. Scorul XP aparține PlayerProgress și nu este importat sau resetat printr-un simplu export/import de DrivingProfile.
 
 ## Barieră la restaurare, import și profil nou
