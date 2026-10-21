@@ -1,0 +1,425 @@
+{
+  "version": "111-profile-continuity-v1",
+  "appVersion": "111-profile-continuity-app-v1",
+  "contract": {
+    "violations": [
+      "POSITION_CHANGED",
+      "SPEED_CHANGED",
+      "HEADING_CHANGED",
+      "CONTROL_MODE_CHANGED",
+      "LANE_CHANGE_CANCELLED",
+      "MANUAL_COMMAND_OVERRIDDEN",
+      "OPPORTUNITY_RESAMPLED",
+      "VERSION_NOT_APPLIED"
+    ],
+    "appErrors": [
+      "VEHICLE_MISSING",
+      "FOREIGN_ACTIVATION",
+      "STALE_TICK"
+    ],
+    "memoCapacity": 256
+  },
+  "scenarios": [
+    {
+      "name": "turn",
+      "status": "APPLIED",
+      "detail": {
+        "headingRad": 0.42,
+        "speedMps": 11.25,
+        "positionX": 3.25,
+        "version": "profile-v2",
+        "violations": "none"
+      }
+    },
+    {
+      "name": "lane change",
+      "status": "APPLIED",
+      "detail": {
+        "phase": "COMMITTED",
+        "targetLaneId": "lane-par",
+        "progress": 0.4,
+        "startedTick": 0,
+        "violations": "none"
+      }
+    },
+    {
+      "name": "red opportunity cached",
+      "status": "APPLIED",
+      "detail": {
+        "opportunityId": "id-v1:18:signal-opportunity11:session-1111:153:id-v1:7:vehicle23:city:fixture:continuity4:TAXI4:00011:18:junction13:west-straight1:0",
+        "decision": "STOP:STOP_LINE_APPROACH",
+        "sampledTick": 0,
+        "sampledVersion": "profile-v1",
+        "samplerCalls": 1,
+        "cached": 1
+      }
+    },
+    {
+      "name": "new opportunity resampled",
+      "status": "profile-v2",
+      "detail": {
+        "newOpportunityId": "id-v1:18:signal-opportunity11:session-1111:153:id-v1:7:vehicle23:city:fixture:continuity4:TAXI4:00011:18:junction13:west-straight3:600",
+        "oldOpportunityId": "id-v1:18:signal-opportunity11:session-1111:153:id-v1:7:vehicle23:city:fixture:continuity4:TAXI4:00011:18:junction13:west-straight1:0",
+        "decision": "STOP:STOP_LINE_APPROACH",
+        "sampledVersion": "profile-v2",
+        "samplerCalls": 1
+      }
+    },
+    {
+      "name": "manual priority",
+      "status": "APPLIED",
+      "detail": {
+        "controlMode": "MANUAL",
+        "seat": "PLAYER",
+        "commandId": "command-7",
+        "throttle": 0.4,
+        "manualPreserved": true
+      }
+    },
+    {
+      "name": "injected speed reset",
+      "status": "BLOCKED",
+      "detail": {
+        "reportStatus": "APPLIED",
+        "violations": "SPEED_CHANGED",
+        "readbackSpeedMps": 0,
+        "version": "profile-v2"
+      }
+    },
+    {
+      "name": "sixty frames",
+      "status": "APPLIED",
+      "detail": {
+        "idleFrames": 59,
+        "driftFrames": 0,
+        "samplerCalls": 1,
+        "cached": 60,
+        "applied": 1,
+        "vehiclesUpdated": 64
+      }
+    }
+  ],
+  "checks": [
+    {
+      "name": "turn-status",
+      "expected": "APPLIED",
+      "actual": "APPLIED",
+      "pass": true,
+      "detail": "activation is applied during the turn"
+    },
+    {
+      "name": "turn-position",
+      "expected": "{\"x\":3.25,\"y\":0.35,\"z\":120.5}",
+      "actual": "{\"x\":3.25,\"y\":0.35,\"z\":120.5}",
+      "pass": true,
+      "detail": "no teleport at the common tick"
+    },
+    {
+      "name": "turn-speed",
+      "expected": 11.25,
+      "actual": 11.25,
+      "pass": true,
+      "detail": "speed is not reset"
+    },
+    {
+      "name": "turn-heading",
+      "expected": 0.42,
+      "actual": 0.42,
+      "pass": true,
+      "detail": "heading is not rewritten"
+    },
+    {
+      "name": "turn-version",
+      "expected": "profile-v2",
+      "actual": "profile-v2",
+      "pass": true,
+      "detail": "the new version is applied"
+    },
+    {
+      "name": "turn-violations",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no continuity violation"
+    },
+    {
+      "name": "lane-status",
+      "expected": "APPLIED",
+      "actual": "APPLIED",
+      "pass": true,
+      "detail": "the lane change is not blocked"
+    },
+    {
+      "name": "lane-phase",
+      "expected": "COMMITTED",
+      "actual": "COMMITTED",
+      "pass": true,
+      "detail": "the committed phase survives"
+    },
+    {
+      "name": "lane-target",
+      "expected": "lane-par",
+      "actual": "lane-par",
+      "pass": true,
+      "detail": "the target lane is not reset"
+    },
+    {
+      "name": "lane-progress",
+      "expected": 0.4,
+      "actual": 0.4,
+      "pass": true,
+      "detail": "progress is not restarted"
+    },
+    {
+      "name": "lane-start",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the manoeuvre start tick is unchanged"
+    },
+    {
+      "name": "lane-not-cancelled",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "no cancellation is reported"
+    },
+    {
+      "name": "red-status",
+      "expected": "APPLIED",
+      "actual": "APPLIED",
+      "pass": true,
+      "detail": "the activation is applied at the red light"
+    },
+    {
+      "name": "red-before-decision",
+      "expected": "STOP:STOP_LINE_APPROACH",
+      "actual": "STOP:STOP_LINE_APPROACH",
+      "pass": true,
+      "detail": "the accepted snapshot already carries the evaluated decision"
+    },
+    {
+      "name": "red-decision",
+      "expected": "STOP:STOP_LINE_APPROACH",
+      "actual": "STOP:STOP_LINE_APPROACH",
+      "pass": true,
+      "detail": "the evaluated decision is unchanged"
+    },
+    {
+      "name": "red-sampled-tick",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the original sample tick is kept"
+    },
+    {
+      "name": "red-sampled-version",
+      "expected": "profile-v1",
+      "actual": "profile-v1",
+      "pass": true,
+      "detail": "the sample keeps the version that produced it"
+    },
+    {
+      "name": "red-sampler-calls",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the policy is sampled exactly once"
+    },
+    {
+      "name": "red-cached",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the activation probe is a cache hit"
+    },
+    {
+      "name": "red-no-resample",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "no resampling violation"
+    },
+    {
+      "name": "new-distinct-opportunity",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "a new phase occurrence is a new identity"
+    },
+    {
+      "name": "new-sampler-calls",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the new opportunity is sampled once"
+    },
+    {
+      "name": "new-profile-version",
+      "expected": "profile-v2",
+      "actual": "profile-v2",
+      "pass": true,
+      "detail": "the new opportunity uses the new version"
+    },
+    {
+      "name": "new-decision-version",
+      "expected": "profile-v2",
+      "actual": "profile-v2",
+      "pass": true,
+      "detail": "the real policy reports the new version"
+    },
+    {
+      "name": "new-decision",
+      "expected": "STOP:STOP_LINE_APPROACH",
+      "actual": "STOP:STOP_LINE_APPROACH",
+      "pass": true,
+      "detail": "the new opportunity is really evaluated by the 050 policy"
+    },
+    {
+      "name": "old-profile-version",
+      "expected": "profile-v1",
+      "actual": "profile-v1",
+      "pass": true,
+      "detail": "the old opportunity keeps its version"
+    },
+    {
+      "name": "manual-control-mode",
+      "expected": "MANUAL",
+      "actual": "MANUAL",
+      "pass": true,
+      "detail": "the control mode is not changed"
+    },
+    {
+      "name": "manual-seat",
+      "expected": "PLAYER",
+      "actual": "PLAYER",
+      "pass": true,
+      "detail": "the PLAYER seat is preserved"
+    },
+    {
+      "name": "manual-mode",
+      "expected": "MANUAL",
+      "actual": "MANUAL",
+      "pass": true,
+      "detail": "the MANUAL authority mode is preserved"
+    },
+    {
+      "name": "manual-command",
+      "expected": "command-7",
+      "actual": "command-7",
+      "pass": true,
+      "detail": "the held command still exists"
+    },
+    {
+      "name": "manual-throttle",
+      "expected": 0.4,
+      "actual": 0.4,
+      "pass": true,
+      "detail": "the held input is not reset"
+    },
+    {
+      "name": "manual-preserved",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "activation is not a takeover"
+    },
+    {
+      "name": "manual-no-override",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "no manual override is reported"
+    },
+    {
+      "name": "reset-blocked",
+      "expected": "BLOCKED",
+      "actual": "BLOCKED",
+      "pass": true,
+      "detail": "a violated continuity is not certified"
+    },
+    {
+      "name": "reset-violation",
+      "expected": "SPEED_CHANGED",
+      "actual": "SPEED_CHANGED",
+      "pass": true,
+      "detail": "the injected reset is the reported violation"
+    },
+    {
+      "name": "reset-report",
+      "expected": "APPLIED",
+      "actual": "APPLIED",
+      "pass": true,
+      "detail": "the real 110 result is kept, not repaired"
+    },
+    {
+      "name": "reset-speed",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the real reset is visible"
+    },
+    {
+      "name": "reset-version",
+      "expected": "profile-v2",
+      "actual": "profile-v2",
+      "pass": true,
+      "detail": "the activation still reached the vehicle"
+    },
+    {
+      "name": "frames-idle",
+      "expected": 59,
+      "actual": 59,
+      "pass": true,
+      "detail": "every frame after the common tick is idle"
+    },
+    {
+      "name": "frames-drift",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no state drifts after activation"
+    },
+    {
+      "name": "frames-sampler-calls",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "no frame re-samples the evaluated opportunity"
+    },
+    {
+      "name": "frames-decisions",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the cached decision never changes"
+    },
+    {
+      "name": "frames-applied",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the command applies exactly once"
+    },
+    {
+      "name": "frames-writes",
+      "expected": 64,
+      "actual": 64,
+      "pass": true,
+      "detail": "later frames write no vehicle"
+    },
+    {
+      "name": "frames-version",
+      "expected": "profile-v2",
+      "actual": "profile-v2",
+      "pass": true,
+      "detail": "the last frame still reads the applied version"
+    }
+  ],
+  "summary": {
+    "scenarios": 7,
+    "checks": 45,
+    "passed": 45,
+    "pass": true
+  }
+}

@@ -146,6 +146,28 @@ export {
   type ProfileActivationReadSources,
 } from './profile-activation';
 export {
+  applyActivationDuringManeuver,
+  createSignalDecisionSampler,
+  profileContinuityAppErrors,
+  PROFILE_CONTINUITY_APP_VERSION,
+  readManeuverSnapshot,
+  type ApplyActivationDuringManeuverInput,
+  type ApplyActivationDuringManeuverResult,
+  type LaneChangeRead,
+  type LaneChangeReadSource,
+  type ManeuverSnapshotSources,
+  type ManualAuthorityRead,
+  type ManualAuthorityReadSource,
+  type ProfileContinuityAppError,
+  type ProfileContinuityAppRejection,
+  type SignalDecisionSampler,
+  type SignalDecisionSamplerConfig,
+  type SignalOpportunityRead,
+  type SignalOpportunityReadSource,
+  type VehicleMotionRead,
+  type VehicleMotionReadSource,
+} from './profile-continuity';
+export {
   readMinimapFrame,
   readMinimapGeometry,
   type MinimapFrameInput,

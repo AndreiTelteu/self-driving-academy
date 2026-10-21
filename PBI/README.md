@@ -24,7 +24,7 @@
 | Parametri V2 | V2 | 10 | 0 | 0 / 10 | `░░░░░░░░░░` 0% |
 | Persistență | V1 | 14 | 0 | 0 / 14 | `░░░░░░░░░░` 0% |
 | Produs | Completed | 0 | 0 | 1 / 1 | `██████████` 100% |
-| Profiluri | V1 | 6 | 0 | 2 / 8 | `██░░░░░░░░` 25% |
+| Profiluri | V1 | 5 | 0 | 3 / 8 | `███░░░░░░░` 38% |
 | Profiluri și interfață | V1 | 1 | 0 | 0 / 1 | `░░░░░░░░░░` 0% |
 | Progres | V1 | 2 | 0 | 0 / 2 | `░░░░░░░░░░` 0% |
 | Release V2 | V2 | 1 | 0 | 0 / 1 | `░░░░░░░░░░` 0% |
@@ -34,7 +34,7 @@
 | Validare și release | V1 | 12 | 0 | 0 / 12 | `░░░░░░░░░░` 0% |
 | Validare V2 | V2 | 2 | 0 | 0 / 2 | `░░░░░░░░░░` 0% |
 | Vehicule și fizică | Completed | 0 | 0 | 11 / 11 | `██████████` 100% |
-| Total | - | 118 | 0 | 117 / 235 | `████░░░░░░` 50% |
+| Total | - | 117 | 0 | 118 / 235 | `█████░░░░░` 50% |
 <!-- loop-pbi:progress:end -->
 
 # Backlog Kanban Self Driving Academy

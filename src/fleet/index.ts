@@ -9,4 +9,5 @@ export * from './dropoff';
 export * from './eta';
 export * from './fleet-health';
 export * from './profile-activation';
+export * from './profile-continuity';
 export * from './scenario-fixture';

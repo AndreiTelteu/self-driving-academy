@@ -103,6 +103,14 @@ reason })` citește versiunea, validează profilul și motorul, apoi publică la
 propagată cu `activationCode`. Store-ul nu este niciodată scris: nu se creează versiuni și nu se
 modifică checksum-ul.
 
+## Continuitatea manevrelor (111)
+
+Aplicarea 110 nu certifică singură continuitatea fizică. [profile-continuity](profile-continuity.md)
+adaugă `111-profile-continuity-v1`: un snapshot al manevrei (poziție, viteză, heading, mod, latch
+053, oportunitate 050, scaun 066) este comparat înainte/după tick-ul comun cu egalitate exactă, iar
+un memo mărginit garantează că oportunitatea deja evaluată nu este reeșantionată. `BLOCKED` păstrează
+raportul real 110 și nu repară nimic. Acest contract nu schimbă regulile 110 de mai sus.
+
 ## Ce nu este
 
 Nu este estimator, worker, barrieră `learningEpoch`, persistare sau UI. Nu decide dacă un delta este
