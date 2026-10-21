@@ -1,0 +1,2917 @@
+{
+  "version": "115-vertical-slice-v1",
+  "reportVersion": "115-vertical-slice-report-v1",
+  "rows": [
+    {
+      "row": "PRUDENT",
+      "status": "PASS",
+      "detail": "the prudent profile learns a higher stop probability and commits no violation",
+      "values": {
+        "version": "segment-115-prudent~112",
+        "evidence": 16,
+        "opportunities": 14,
+        "violations": 0
+      }
+    },
+    {
+      "row": "RECKLESS",
+      "status": "PASS",
+      "detail": "the reckless profile learns a lower stop probability and commits visible violations",
+      "values": {
+        "version": "segment-115-reckless~112",
+        "evidence": 16,
+        "opportunities": 14,
+        "violations": 6
+      }
+    },
+    {
+      "row": "BOTH_CATEGORIES",
+      "status": "PASS",
+      "detail": "taxis and civilians read the same learned version and values in both scenarios",
+      "values": {
+        "prudentTaxi": "segment-115-prudent~112",
+        "prudentCivilian": "segment-115-prudent~112",
+        "recklessTaxi": "segment-115-reckless~112",
+        "recklessCivilian": "segment-115-reckless~112"
+      }
+    },
+    {
+      "row": "MISTAKES_VISIBLE",
+      "status": "PASS",
+      "detail": "the reckless mistakes are visible on both a taxi and a civilian, while the prudent run is clean",
+      "values": {
+        "prudentTaxiViolations": 0,
+        "prudentCivilianViolations": 0,
+        "recklessTaxiViolations": 3,
+        "recklessCivilianViolations": 3
+      }
+    },
+    {
+      "row": "MANUAL_NO_CHANGE",
+      "status": "PASS",
+      "detail": "MANUAL records telemetry but creates no job, version, activation or style change",
+      "values": {
+        "prudentStatus": "SKIPPED_MANUAL",
+        "prudentTelemetry": 14,
+        "prudentExplanation": "NO_CHANGE",
+        "recklessStatus": "SKIPPED_MANUAL",
+        "recklessTelemetry": 14,
+        "recklessExplanation": "NO_CHANGE"
+      }
+    },
+    {
+      "row": "UNOBSERVED_CONTEXTS",
+      "status": "PASS",
+      "detail": "the explanation names the observed context and every unobserved context explicitly",
+      "values": {
+        "reported": "GREEN,YIELD,LANE_CHANGE",
+        "declared": "FREE_TRAFFIC",
+        "observed": "FREE_TRAFFIC"
+      }
+    },
+    {
+      "row": "DETERMINISM",
+      "status": "PASS",
+      "detail": "two independent runs produce the same frozen report",
+      "values": {
+        "fingerprint": "115-506f6d9b-40582",
+        "secondFingerprint": "115-506f6d9b-40582"
+      }
+    }
+  ],
+  "checks": [
+    {
+      "name": "prudent.learning-composed",
+      "expected": "COMPOSED",
+      "actual": "COMPOSED",
+      "pass": true,
+      "detail": "one eligible LEARNING segment produced a composed version"
+    },
+    {
+      "name": "prudent.one-new-version",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the segment created exactly one version"
+    },
+    {
+      "name": "prudent.pending-before-tick",
+      "expected": "PENDING",
+      "actual": "PENDING",
+      "pass": true,
+      "detail": "the 110 command is pending before the common tick"
+    },
+    {
+      "name": "prudent.pending-writes",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "nothing is written before the common tick"
+    },
+    {
+      "name": "prudent.before-histogram",
+      "expected": "city-style-base-115=40",
+      "actual": "city-style-base-115=40",
+      "pass": true,
+      "detail": "the whole fleet keeps the base version before the tick"
+    },
+    {
+      "name": "prudent.activation-tick",
+      "expected": 7,
+      "actual": 7,
+      "pass": true,
+      "detail": "the published command is applied at its scheduled tick"
+    },
+    {
+      "name": "prudent.single-after-version",
+      "expected": "segment-115-prudent~112",
+      "actual": "segment-115-prudent~112",
+      "pass": true,
+      "detail": "exactly one applied version remains"
+    },
+    {
+      "name": "prudent.one-activation",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "one learning version publishes exactly one 110 command"
+    },
+    {
+      "name": "prudent.fleet-population",
+      "expected": 40,
+      "actual": 40,
+      "pass": true,
+      "detail": "every vehicle reports the common version"
+    },
+    {
+      "name": "prudent.updated-vehicles",
+      "expected": 40,
+      "actual": 40,
+      "pass": true,
+      "detail": "the activation plan covers every vehicle"
+    },
+    {
+      "name": "prudent.write-surface",
+      "expected": "appliedProfileVersion,tick",
+      "actual": "appliedProfileVersion,tick",
+      "pass": true,
+      "detail": "activation writes only version and tick"
+    },
+    {
+      "name": "prudent.taxi-version",
+      "expected": "segment-115-prudent~112",
+      "actual": "segment-115-prudent~112",
+      "pass": true,
+      "detail": "taxis adopt the learned style"
+    },
+    {
+      "name": "prudent.civilian-version",
+      "expected": "segment-115-prudent~112",
+      "actual": "segment-115-prudent~112",
+      "pass": true,
+      "detail": "civilians adopt the same learned style"
+    },
+    {
+      "name": "prudent.both-categories",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "both categories share the single learned version"
+    },
+    {
+      "name": "prudent.route-preserved",
+      "expected": "115-aed8ea7d-285",
+      "actual": "115-aed8ea7d-285",
+      "pass": true,
+      "detail": "the learning civilian keeps its real route"
+    },
+    {
+      "name": "prudent.style-changed",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the learned style value differs from the base"
+    },
+    {
+      "name": "prudent.style-trend",
+      "expected": "HIGHER",
+      "actual": "HIGHER",
+      "pass": true,
+      "detail": "the prudent style learns a higher stop probability and the reckless one a lower value"
+    },
+    {
+      "name": "prudent.explanation-status",
+      "expected": "CHANGED",
+      "actual": "CHANGED",
+      "pass": true,
+      "detail": "104 explains the real accepted change"
+    },
+    {
+      "name": "prudent.explanation-version",
+      "expected": "city-style-base-115~103.1",
+      "actual": "city-style-base-115~103.1",
+      "pass": true,
+      "detail": "the explanation carries the real 103 composition version"
+    },
+    {
+      "name": "prudent.explanation-evidence",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "every change is supported by effective episodes"
+    },
+    {
+      "name": "prudent.explanation-contexts",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the explanation names the real observed context"
+    },
+    {
+      "name": "prudent.unobserved-contexts",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "unobserved contexts are explicit"
+    },
+    {
+      "name": "prudent.behaviour-opportunities",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the playtest exposes real STOP and RED opportunities"
+    },
+    {
+      "name": "prudent.behaviour-stop",
+      "expected": "STOP",
+      "actual": "STOP",
+      "pass": true,
+      "detail": "the STOP denominator is reported separately"
+    },
+    {
+      "name": "prudent.behaviour-clean",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the prudent style commits no violation"
+    },
+    {
+      "name": "prudent.taxi-behaviour",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the learned style is visible on a taxi"
+    },
+    {
+      "name": "prudent.civilian-behaviour",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the learned style is visible on a civilian"
+    },
+    {
+      "name": "prudent.binding-taxi",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the taxi UI binding is internally consistent"
+    },
+    {
+      "name": "prudent.binding-civilian",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the civilian UI binding is internally consistent"
+    },
+    {
+      "name": "prudent.binding-same-version",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "both categories read the same active version"
+    },
+    {
+      "name": "prudent.binding-same-values",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "both categories read the same style values"
+    },
+    {
+      "name": "prudent.no-hidden-override",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no class-specific or per-kind profile override exists"
+    },
+    {
+      "name": "prudent.explanation-binding",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "the 104 composition id is reported separately from the 109/110 id it cannot match here"
+    },
+    {
+      "name": "prudent.manual-no-job",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "MANUAL never reaches the 103 queue"
+    },
+    {
+      "name": "prudent.manual-status",
+      "expected": "SKIPPED_MANUAL",
+      "actual": "SKIPPED_MANUAL",
+      "pass": true,
+      "detail": "the real 112 pipeline reports the closed MANUAL skip"
+    },
+    {
+      "name": "prudent.manual-no-version",
+      "expected": "MANUAL_SEGMENT_NOT_LEARNABLE",
+      "actual": "MANUAL_SEGMENT_NOT_LEARNABLE",
+      "pass": true,
+      "detail": "MANUAL creates no version and reports the real reason"
+    },
+    {
+      "name": "prudent.manual-no-activation",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "MANUAL publishes no 110 command"
+    },
+    {
+      "name": "prudent.manual-store-untouched",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "the 109 store keeps exactly the same versions"
+    },
+    {
+      "name": "prudent.manual-job-counter",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the 103 job counter is unchanged"
+    },
+    {
+      "name": "prudent.manual-telemetry",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "MANUAL still records driving telemetry"
+    },
+    {
+      "name": "prudent.manual-telemetry-matches-learning",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the same route and the still-active style produce the same outcomes"
+    },
+    {
+      "name": "prudent.manual-active-version",
+      "expected": "segment-115-prudent~112",
+      "actual": "segment-115-prudent~112",
+      "pass": true,
+      "detail": "the active version is unchanged"
+    },
+    {
+      "name": "prudent.manual-values",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "all applied style values are unchanged"
+    },
+    {
+      "name": "prudent.manual-explanation-no-change",
+      "expected": "NO_CHANGE",
+      "actual": "NO_CHANGE",
+      "pass": true,
+      "detail": "the MANUAL explanation reports no change and no version"
+    },
+    {
+      "name": "prudent.manual-explanation-version",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the MANUAL explanation never claims a version"
+    },
+    {
+      "name": "prudent.manual-no-change",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "no job, version, activation or style change from MANUAL"
+    },
+    {
+      "name": "prudent.manual-binding",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the UI binding stays consistent across MANUAL"
+    },
+    {
+      "name": "reckless.learning-composed",
+      "expected": "COMPOSED",
+      "actual": "COMPOSED",
+      "pass": true,
+      "detail": "one eligible LEARNING segment produced a composed version"
+    },
+    {
+      "name": "reckless.one-new-version",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the segment created exactly one version"
+    },
+    {
+      "name": "reckless.pending-before-tick",
+      "expected": "PENDING",
+      "actual": "PENDING",
+      "pass": true,
+      "detail": "the 110 command is pending before the common tick"
+    },
+    {
+      "name": "reckless.pending-writes",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "nothing is written before the common tick"
+    },
+    {
+      "name": "reckless.before-histogram",
+      "expected": "city-style-base-115=40",
+      "actual": "city-style-base-115=40",
+      "pass": true,
+      "detail": "the whole fleet keeps the base version before the tick"
+    },
+    {
+      "name": "reckless.activation-tick",
+      "expected": 7,
+      "actual": 7,
+      "pass": true,
+      "detail": "the published command is applied at its scheduled tick"
+    },
+    {
+      "name": "reckless.single-after-version",
+      "expected": "segment-115-reckless~112",
+      "actual": "segment-115-reckless~112",
+      "pass": true,
+      "detail": "exactly one applied version remains"
+    },
+    {
+      "name": "reckless.one-activation",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "one learning version publishes exactly one 110 command"
+    },
+    {
+      "name": "reckless.fleet-population",
+      "expected": 40,
+      "actual": 40,
+      "pass": true,
+      "detail": "every vehicle reports the common version"
+    },
+    {
+      "name": "reckless.updated-vehicles",
+      "expected": 40,
+      "actual": 40,
+      "pass": true,
+      "detail": "the activation plan covers every vehicle"
+    },
+    {
+      "name": "reckless.write-surface",
+      "expected": "appliedProfileVersion,tick",
+      "actual": "appliedProfileVersion,tick",
+      "pass": true,
+      "detail": "activation writes only version and tick"
+    },
+    {
+      "name": "reckless.taxi-version",
+      "expected": "segment-115-reckless~112",
+      "actual": "segment-115-reckless~112",
+      "pass": true,
+      "detail": "taxis adopt the learned style"
+    },
+    {
+      "name": "reckless.civilian-version",
+      "expected": "segment-115-reckless~112",
+      "actual": "segment-115-reckless~112",
+      "pass": true,
+      "detail": "civilians adopt the same learned style"
+    },
+    {
+      "name": "reckless.both-categories",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "both categories share the single learned version"
+    },
+    {
+      "name": "reckless.route-preserved",
+      "expected": "115-aed8ea7d-285",
+      "actual": "115-aed8ea7d-285",
+      "pass": true,
+      "detail": "the learning civilian keeps its real route"
+    },
+    {
+      "name": "reckless.style-changed",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the learned style value differs from the base"
+    },
+    {
+      "name": "reckless.style-trend",
+      "expected": "LOWER",
+      "actual": "LOWER",
+      "pass": true,
+      "detail": "the prudent style learns a higher stop probability and the reckless one a lower value"
+    },
+    {
+      "name": "reckless.explanation-status",
+      "expected": "CHANGED",
+      "actual": "CHANGED",
+      "pass": true,
+      "detail": "104 explains the real accepted change"
+    },
+    {
+      "name": "reckless.explanation-version",
+      "expected": "city-style-base-115~103.1",
+      "actual": "city-style-base-115~103.1",
+      "pass": true,
+      "detail": "the explanation carries the real 103 composition version"
+    },
+    {
+      "name": "reckless.explanation-evidence",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "every change is supported by effective episodes"
+    },
+    {
+      "name": "reckless.explanation-contexts",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the explanation names the real observed context"
+    },
+    {
+      "name": "reckless.unobserved-contexts",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "unobserved contexts are explicit"
+    },
+    {
+      "name": "reckless.behaviour-opportunities",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the playtest exposes real STOP and RED opportunities"
+    },
+    {
+      "name": "reckless.behaviour-stop",
+      "expected": "STOP",
+      "actual": "STOP",
+      "pass": true,
+      "detail": "the STOP denominator is reported separately"
+    },
+    {
+      "name": "reckless.behaviour-clean",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the reckless style commits visible violations"
+    },
+    {
+      "name": "reckless.taxi-behaviour",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the learned style is visible on a taxi"
+    },
+    {
+      "name": "reckless.civilian-behaviour",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the learned style is visible on a civilian"
+    },
+    {
+      "name": "reckless.binding-taxi",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the taxi UI binding is internally consistent"
+    },
+    {
+      "name": "reckless.binding-civilian",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the civilian UI binding is internally consistent"
+    },
+    {
+      "name": "reckless.binding-same-version",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "both categories read the same active version"
+    },
+    {
+      "name": "reckless.binding-same-values",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "both categories read the same style values"
+    },
+    {
+      "name": "reckless.no-hidden-override",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no class-specific or per-kind profile override exists"
+    },
+    {
+      "name": "reckless.explanation-binding",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "the 104 composition id is reported separately from the 109/110 id it cannot match here"
+    },
+    {
+      "name": "reckless.manual-no-job",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "MANUAL never reaches the 103 queue"
+    },
+    {
+      "name": "reckless.manual-status",
+      "expected": "SKIPPED_MANUAL",
+      "actual": "SKIPPED_MANUAL",
+      "pass": true,
+      "detail": "the real 112 pipeline reports the closed MANUAL skip"
+    },
+    {
+      "name": "reckless.manual-no-version",
+      "expected": "MANUAL_SEGMENT_NOT_LEARNABLE",
+      "actual": "MANUAL_SEGMENT_NOT_LEARNABLE",
+      "pass": true,
+      "detail": "MANUAL creates no version and reports the real reason"
+    },
+    {
+      "name": "reckless.manual-no-activation",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "MANUAL publishes no 110 command"
+    },
+    {
+      "name": "reckless.manual-store-untouched",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "the 109 store keeps exactly the same versions"
+    },
+    {
+      "name": "reckless.manual-job-counter",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the 103 job counter is unchanged"
+    },
+    {
+      "name": "reckless.manual-telemetry",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "MANUAL still records driving telemetry"
+    },
+    {
+      "name": "reckless.manual-telemetry-matches-learning",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the same route and the still-active style produce the same outcomes"
+    },
+    {
+      "name": "reckless.manual-active-version",
+      "expected": "segment-115-reckless~112",
+      "actual": "segment-115-reckless~112",
+      "pass": true,
+      "detail": "the active version is unchanged"
+    },
+    {
+      "name": "reckless.manual-values",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "all applied style values are unchanged"
+    },
+    {
+      "name": "reckless.manual-explanation-no-change",
+      "expected": "NO_CHANGE",
+      "actual": "NO_CHANGE",
+      "pass": true,
+      "detail": "the MANUAL explanation reports no change and no version"
+    },
+    {
+      "name": "reckless.manual-explanation-version",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the MANUAL explanation never claims a version"
+    },
+    {
+      "name": "reckless.manual-no-change",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "no job, version, activation or style change from MANUAL"
+    },
+    {
+      "name": "reckless.manual-binding",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the UI binding stays consistent across MANUAL"
+    },
+    {
+      "name": "report.two-scenarios",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "the report contains the prudent and the reckless deterministic playtest"
+    },
+    {
+      "name": "report.prudent-clean",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the prudent profile commits no violation with real opportunities"
+    },
+    {
+      "name": "report.reckless-mistakes",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the reckless profile commits visible STOP violations"
+    },
+    {
+      "name": "report.both-categories",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "taxis and civilians adopt the same learned version in both scenarios"
+    },
+    {
+      "name": "report.manual-no-change",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "MANUAL produces no job, version, activation or style change in both scenarios"
+    },
+    {
+      "name": "report.unobserved-contexts",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "unobserved contexts are explicit at report level"
+    },
+    {
+      "name": "report.scenario-isolation",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the two scenarios use independent worlds, versions and segments"
+    },
+    {
+      "name": "row.PRUDENT",
+      "expected": "PASS",
+      "actual": "PASS",
+      "pass": true,
+      "detail": "the prudent profile learns a higher stop probability and commits no violation"
+    },
+    {
+      "name": "row.RECKLESS",
+      "expected": "PASS",
+      "actual": "PASS",
+      "pass": true,
+      "detail": "the reckless profile learns a lower stop probability and commits visible violations"
+    },
+    {
+      "name": "row.BOTH_CATEGORIES",
+      "expected": "PASS",
+      "actual": "PASS",
+      "pass": true,
+      "detail": "taxis and civilians read the same learned version and values in both scenarios"
+    },
+    {
+      "name": "row.MISTAKES_VISIBLE",
+      "expected": "PASS",
+      "actual": "PASS",
+      "pass": true,
+      "detail": "the reckless mistakes are visible on both a taxi and a civilian, while the prudent run is clean"
+    },
+    {
+      "name": "row.MANUAL_NO_CHANGE",
+      "expected": "PASS",
+      "actual": "PASS",
+      "pass": true,
+      "detail": "MANUAL records telemetry but creates no job, version, activation or style change"
+    },
+    {
+      "name": "row.UNOBSERVED_CONTEXTS",
+      "expected": "PASS",
+      "actual": "PASS",
+      "pass": true,
+      "detail": "the explanation names the observed context and every unobserved context explicitly"
+    },
+    {
+      "name": "row.DETERMINISM",
+      "expected": "PASS",
+      "actual": "PASS",
+      "pass": true,
+      "detail": "two independent runs produce the same frozen report"
+    },
+    {
+      "name": "report.version",
+      "expected": "115-vertical-slice-v1",
+      "actual": "115-vertical-slice-v1",
+      "pass": true,
+      "detail": "the report version is closed"
+    },
+    {
+      "name": "report.playtest",
+      "expected": "DETERMINISTIC_SIMULATED",
+      "actual": "DETERMINISTIC_SIMULATED",
+      "pass": true,
+      "detail": "the playtest is a deterministic simulation, not a human or browser run"
+    },
+    {
+      "name": "report.determinism",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "two independent runs are byte-identical"
+    }
+  ],
+  "summary": {
+    "rows": 7,
+    "checks": 111,
+    "passed": 111,
+    "pass": true
+  },
+  "determinism": {
+    "runs": 2,
+    "equal": true,
+    "fingerprint": "115-506f6d9b-40582"
+  },
+  "playtest": {
+    "kind": "DETERMINISTIC_SIMULATED",
+    "humanPlaytest": false,
+    "browserCapture": false,
+    "profiles": [
+      "PRUDENT",
+      "RECKLESS"
+    ],
+    "note": "Deterministic simulated playtest, not a human or browser playtest; no screenshot was produced."
+  },
+  "report": {
+    "version": "115-vertical-slice-v1",
+    "contract": {
+      "profileId": "city-profile-115",
+      "engineVersion": "engine-115",
+      "baseVersionId": "city-style-base-115",
+      "learningKey": "stop_full_probability",
+      "baseStopProbability": 0.6,
+      "scenarios": [
+        "PRUDENT",
+        "RECKLESS"
+      ],
+      "observedContext": "FREE_TRAFFIC",
+      "unexercisedKinds": [
+        "GREEN",
+        "YIELD",
+        "LANE_CHANGE"
+      ],
+      "stateFields": [
+        "appliedProfileVersion",
+        "controlMode",
+        "tick"
+      ],
+      "vehicleFields": [
+        "classId",
+        "classVersion",
+        "createdAtTick",
+        "driverKind",
+        "profileId",
+        "slot",
+        "vehicleId"
+      ],
+      "tickHz": 60,
+      "seed": 115000,
+      "limits": {
+        "vehicles": 110,
+        "taxis": 20,
+        "civilians": 20,
+        "stopOpportunities": 10,
+        "redOpportunities": 4,
+        "speedSamples": 8,
+        "episodesPerSegment": 16,
+        "retainedHistory": 0
+      }
+    },
+    "playtest": {
+      "kind": "DETERMINISTIC_SIMULATED",
+      "humanPlaytest": false,
+      "browserCapture": false,
+      "profiles": [
+        "PRUDENT",
+        "RECKLESS"
+      ],
+      "note": "Deterministic simulated playtest, not a human or browser playtest; no screenshot was produced."
+    },
+    "scenarios": [
+      {
+        "scenario": "PRUDENT",
+        "status": "PASS",
+        "learner": {
+          "vehicleId": "id-v1:7:vehicle14:city:115:slice8:CIVILIAN4:0001",
+          "driverKind": "CIVILIAN",
+          "mode": "LEARNING",
+          "routeDigest": "115-aed8ea7d-285",
+          "routePreserved": true
+        },
+        "base": {
+          "versionId": "city-style-base-115",
+          "stopFullProbability": 0.6,
+          "parametersDigest": "115-f22f3385-2116"
+        },
+        "versionChain": [
+          {
+            "versionId": "city-style-base-115",
+            "parentVersionId": null,
+            "sourceSegmentIds": [],
+            "value": 0.6,
+            "appliedTick": null
+          },
+          {
+            "versionId": "segment-115-prudent~112",
+            "parentVersionId": "city-style-base-115",
+            "sourceSegmentIds": [
+              "segment-115-prudent"
+            ],
+            "value": 0.84,
+            "appliedTick": 7
+          }
+        ],
+        "fleet": {
+          "fleetSize": 40,
+          "before": {
+            "city-style-base-115": 40
+          },
+          "after": {
+            "segment-115-prudent~112": 40
+          },
+          "taxiBefore": {
+            "city-style-base-115": 20
+          },
+          "taxiAfter": {
+            "segment-115-prudent~112": 20
+          },
+          "civilianBefore": {
+            "city-style-base-115": 20
+          },
+          "civilianAfter": {
+            "segment-115-prudent~112": 20
+          },
+          "taxiVersions": [
+            "segment-115-prudent~112"
+          ],
+          "civilianVersions": [
+            "segment-115-prudent~112"
+          ],
+          "updatedVehicles": 40,
+          "bothCategoriesUpdated": true
+        },
+        "style": {
+          "key": "stop_full_probability",
+          "baseValue": 0.6,
+          "candidateValue": 1,
+          "appliedValue": 0.84,
+          "delta": 0.24,
+          "direction": "HIGHER",
+          "parameters": {
+            "speed_delta_urban": 0,
+            "red_stop_probability": 1,
+            "stop_full_probability": 0.84
+          },
+          "changedKeys": [
+            "stop_full_probability"
+          ],
+          "appliedParameterCount": 80
+        },
+        "behaviour": {
+          "eligibleOpportunities": 14,
+          "successes": 14,
+          "violations": 0,
+          "complianceRate": 100,
+          "byKind": [
+            {
+              "kind": "STOP",
+              "opportunities": 10,
+              "successes": 10,
+              "violations": 0,
+              "complianceRate": 100
+            },
+            {
+              "kind": "RED",
+              "opportunities": 4,
+              "successes": 4,
+              "violations": 0,
+              "complianceRate": 100
+            }
+          ],
+          "taxi": {
+            "opportunities": 7,
+            "successes": 7,
+            "violations": 0
+          },
+          "civilian": {
+            "opportunities": 7,
+            "successes": 7,
+            "violations": 0
+          },
+          "speedSamples": 8,
+          "meanSpeedMps": 11.200000000000001,
+          "overLimitSamples": 0,
+          "overLimitFraction": 0,
+          "limitMps": 11.2,
+          "mistakesVisible": false
+        },
+        "explanation": {
+          "status": "CHANGED",
+          "versionId": "city-style-base-115~103.1",
+          "composedVersionId": "city-style-base-115~103.1",
+          "segmentId": "segment-115-prudent",
+          "mode": "LEARNING",
+          "changes": [
+            {
+              "key": "stop_full_probability",
+              "previous": 0.6,
+              "next": 0.84,
+              "delta": 0.24,
+              "evidenceCount": 16,
+              "contexts": [
+                "FREE_TRAFFIC"
+              ],
+              "quality": 1,
+              "uncertainty": "LOW",
+              "confidence": "OBSERVED",
+              "reason": "EVIDENCE_APPLIED"
+            }
+          ],
+          "evidenceCounts": {
+            "stop_full_probability": 16
+          },
+          "evidenceTotal": 16,
+          "declaredContexts": [
+            "FREE_TRAFFIC"
+          ],
+          "observedContexts": [
+            "FREE_TRAFFIC"
+          ],
+          "unobservedContexts": [
+            {
+              "context": "GREEN",
+              "source": "086_KIND",
+              "reason": "NOT_EXERCISED_BY_PLAN"
+            },
+            {
+              "context": "YIELD",
+              "source": "086_KIND",
+              "reason": "NOT_EXERCISED_BY_PLAN"
+            },
+            {
+              "context": "LANE_CHANGE",
+              "source": "086_KIND",
+              "reason": "NOT_EXERCISED_BY_PLAN"
+            }
+          ],
+          "missingContexts": [],
+          "summary": "Modificare explicată: 1 modificare din segmentul segment-115-prudent · jobul job:104:segment-115-prudent:1 · versiune city-style-base-115~103.1 · Probabilitate de oprire completă la STOP 0.6 → 0.84 probabilitate (+0.24 probabilitate)."
+        },
+        "binding": {
+          "taxi": {
+            "vehicleId": "id-v1:7:vehicle14:city:115:slice4:TAXI4:0001",
+            "driverKind": "TAXI",
+            "appliedVersion": "segment-115-prudent~112",
+            "panelVersion": "segment-115-prudent~112",
+            "historyVersion": "segment-115-prudent~112",
+            "activeVersion": "segment-115-prudent~112",
+            "pass": true,
+            "mismatches": [],
+            "values": {
+              "speed_delta_urban": 0,
+              "red_stop_probability": 1,
+              "stop_full_probability": 0.84
+            },
+            "changedKeys": [
+              "stop_full_probability"
+            ]
+          },
+          "civilian": {
+            "vehicleId": "id-v1:7:vehicle14:city:115:slice8:CIVILIAN4:0002",
+            "driverKind": "CIVILIAN",
+            "appliedVersion": "segment-115-prudent~112",
+            "panelVersion": "segment-115-prudent~112",
+            "historyVersion": "segment-115-prudent~112",
+            "activeVersion": "segment-115-prudent~112",
+            "pass": true,
+            "mismatches": [],
+            "values": {
+              "speed_delta_urban": 0,
+              "red_stop_probability": 1,
+              "stop_full_probability": 0.84
+            },
+            "changedKeys": [
+              "stop_full_probability"
+            ]
+          },
+          "sameVersion": true,
+          "sameValues": true,
+          "hiddenOverrides": [],
+          "explanationBinding": {
+            "attempted": true,
+            "attached": false,
+            "mismatches": [
+              "REASON_CODE_MISMATCH"
+            ],
+            "reason": "COMPOSITION_AND_STORE_VERSION_IDS_DIFFER"
+          }
+        },
+        "manual": {
+          "segmentId": "segment-115-manual",
+          "mode": "MANUAL",
+          "pipelineStatus": "SKIPPED_MANUAL",
+          "reason": "MANUAL_SEGMENT_NOT_LEARNABLE",
+          "jobSubmitted": false,
+          "versionId": null,
+          "activationPublished": false,
+          "jobsBefore": 1,
+          "jobsAfter": 1,
+          "versionsBefore": 2,
+          "versionsAfter": 2,
+          "commandsBefore": 1,
+          "commandsAfter": 1,
+          "telemetry": {
+            "opportunities": 14,
+            "successes": 14,
+            "violations": 0,
+            "speedSamples": 8
+          },
+          "telemetryMatchesLearning": true,
+          "activeVersionBefore": "segment-115-prudent~112",
+          "activeVersionAfter": "segment-115-prudent~112",
+          "valuesDigestBefore": "115-28c39905-2117",
+          "valuesDigestAfter": "115-28c39905-2117",
+          "valuesEqual": true,
+          "styleKeysBefore": {
+            "speed_delta_urban": 0,
+            "red_stop_probability": 1,
+            "stop_full_probability": 0.84
+          },
+          "styleKeysAfter": {
+            "speed_delta_urban": 0,
+            "red_stop_probability": 1,
+            "stop_full_probability": 0.84
+          },
+          "explanation": {
+            "status": "NO_CHANGE",
+            "versionId": null,
+            "reason": "MANUAL_SEGMENT_NOT_LEARNABLE",
+            "source": "112_SKIPPED_MANUAL",
+            "jobSubmitted": false,
+            "changes": [],
+            "evidenceCounts": {},
+            "unobservedContexts": [
+              {
+                "context": "GREEN",
+                "source": "086_KIND",
+                "reason": "NOT_EXERCISED_BY_PLAN"
+              },
+              {
+                "context": "YIELD",
+                "source": "086_KIND",
+                "reason": "NOT_EXERCISED_BY_PLAN"
+              },
+              {
+                "context": "LANE_CHANGE",
+                "source": "086_KIND",
+                "reason": "NOT_EXERCISED_BY_PLAN"
+              }
+            ]
+          },
+          "binding": {
+            "pass": true,
+            "panelVersion": "segment-115-prudent~112",
+            "activeVersion": "segment-115-prudent~112",
+            "valuesEqualBeforeAfter": true
+          },
+          "noChange": true
+        },
+        "checks": [
+          {
+            "name": "prudent.learning-composed",
+            "expected": "COMPOSED",
+            "actual": "COMPOSED",
+            "pass": true,
+            "detail": "one eligible LEARNING segment produced a composed version"
+          },
+          {
+            "name": "prudent.one-new-version",
+            "expected": 1,
+            "actual": 1,
+            "pass": true,
+            "detail": "the segment created exactly one version"
+          },
+          {
+            "name": "prudent.pending-before-tick",
+            "expected": "PENDING",
+            "actual": "PENDING",
+            "pass": true,
+            "detail": "the 110 command is pending before the common tick"
+          },
+          {
+            "name": "prudent.pending-writes",
+            "expected": 0,
+            "actual": 0,
+            "pass": true,
+            "detail": "nothing is written before the common tick"
+          },
+          {
+            "name": "prudent.before-histogram",
+            "expected": "city-style-base-115=40",
+            "actual": "city-style-base-115=40",
+            "pass": true,
+            "detail": "the whole fleet keeps the base version before the tick"
+          },
+          {
+            "name": "prudent.activation-tick",
+            "expected": 7,
+            "actual": 7,
+            "pass": true,
+            "detail": "the published command is applied at its scheduled tick"
+          },
+          {
+            "name": "prudent.single-after-version",
+            "expected": "segment-115-prudent~112",
+            "actual": "segment-115-prudent~112",
+            "pass": true,
+            "detail": "exactly one applied version remains"
+          },
+          {
+            "name": "prudent.one-activation",
+            "expected": 1,
+            "actual": 1,
+            "pass": true,
+            "detail": "one learning version publishes exactly one 110 command"
+          },
+          {
+            "name": "prudent.fleet-population",
+            "expected": 40,
+            "actual": 40,
+            "pass": true,
+            "detail": "every vehicle reports the common version"
+          },
+          {
+            "name": "prudent.updated-vehicles",
+            "expected": 40,
+            "actual": 40,
+            "pass": true,
+            "detail": "the activation plan covers every vehicle"
+          },
+          {
+            "name": "prudent.write-surface",
+            "expected": "appliedProfileVersion,tick",
+            "actual": "appliedProfileVersion,tick",
+            "pass": true,
+            "detail": "activation writes only version and tick"
+          },
+          {
+            "name": "prudent.taxi-version",
+            "expected": "segment-115-prudent~112",
+            "actual": "segment-115-prudent~112",
+            "pass": true,
+            "detail": "taxis adopt the learned style"
+          },
+          {
+            "name": "prudent.civilian-version",
+            "expected": "segment-115-prudent~112",
+            "actual": "segment-115-prudent~112",
+            "pass": true,
+            "detail": "civilians adopt the same learned style"
+          },
+          {
+            "name": "prudent.both-categories",
+            "expected": true,
+            "actual": true,
+            "pass": true,
+            "detail": "both categories share the single learned version"
+          },
+          {
+            "name": "prudent.route-preserved",
+            "expected": "115-aed8ea7d-285",
+            "actual": "115-aed8ea7d-285",
+            "pass": true,
+            "detail": "the learning civilian keeps its real route"
+          },
+          {
+            "name": "prudent.style-changed",
+            "expected": true,
+            "actual": true,
+            "pass": true,
+            "detail": "the learned style value differs from the base"
+          },
+          {
+            "name": "prudent.style-trend",
+            "expected": "HIGHER",
+            "actual": "HIGHER",
+            "pass": true,
+            "detail": "the prudent style learns a higher stop probability and the reckless one a lower value"
+          },
+          {
+            "name": "prudent.explanation-status",
+            "expected": "CHANGED",
+            "actual": "CHANGED",
+            "pass": true,
+            "detail": "104 explains the real accepted change"
+          },
+          {
+            "name": "prudent.explanation-version",
+            "expected": "city-style-base-115~103.1",
+            "actual": "city-style-base-115~103.1",
+            "pass": true,
+            "detail": "the explanation carries the real 103 composition version"
+          },
+          {
+            "name": "prudent.explanation-evidence",
+            "expected": true,
+            "actual": true,
+            "pass": true,
+            "detail": "every change is supported by effective episodes"
+          },
+          {
+            "name": "prudent.explanation-contexts",
+            "expected": true,
+            "actual": true,
+            "pass": true,
+            "detail": "the explanation names the real observed context"
+          },
+          {
+            "name": "prudent.unobserved-contexts",
+            "expected": true,
+            "actual": true,
+            "pass": true,
+            "detail": "unobserved contexts are explicit"
+          },
+          {
+            "name": "prudent.behaviour-opportunities",
+            "expected": true,
+            "actual": true,
+            "pass": true,
+            "detail": "the playtest exposes real STOP and RED opportunities"
+          },
+          {
+            "name": "prudent.behaviour-stop",
+            "expected": "STOP",
+            "actual": "STOP",
+            "pass": true,
+            "detail": "the STOP denominator is reported separately"
+          },
+          {
+            "name": "prudent.behaviour-clean",
+            "expected": 0,
+            "actual": 0,
+            "pass": true,
+            "detail": "the prudent style commits no violation"
+          },
+          {
+            "name": "prudent.taxi-behaviour",
+            "expected": 0,
+            "actual": 0,
+            "pass": true,
+            "detail": "the learned style is visible on a taxi"
+          },
+          {
+            "name": "prudent.civilian-behaviour",
+            "expected": 0,
+            "actual": 0,
+            "pass": true,
+            "detail": "the learned style is visible on a civilian"
+          },
+          {
+            "name": "prudent.binding-taxi",
+            "expected": true,
+            "actual": true,
+            "pass": true,
+            "detail": "the taxi UI binding is internally consistent"
+          },
+          {
+            "name": "prudent.binding-civilian",
+            "expected": true,
+            "actual": true,
+            "pass": true,
+            "detail": "the civilian UI binding is internally consistent"
+          },
+          {
+            "name": "prudent.binding-same-version",
+            "expected": true,
+            "actual": true,
+            "pass": true,
+            "detail": "both categories read the same active version"
+          },
+          {
+            "name": "prudent.binding-same-values",
+            "expected": true,
+            "actual": true,
+            "pass": true,
+            "detail": "both categories read the same style values"
+          },
+          {
+            "name": "prudent.no-hidden-override",
+            "expected": 0,
+            "actual": 0,
+            "pass": true,
+            "detail": "no class-specific or per-kind profile override exists"
+          },
+          {
+            "name": "prudent.explanation-binding",
+            "expected": false,
+            "actual": false,
+            "pass": true,
+            "detail": "the 104 composition id is reported separately from the 109/110 id it cannot match here"
+          },
+          {
+            "name": "prudent.manual-no-job",
+            "expected": false,
+            "actual": false,
+            "pass": true,
+            "detail": "MANUAL never reaches the 103 queue"
+          },
+          {
+            "name": "prudent.manual-status",
+            "expected": "SKIPPED_MANUAL",
+            "actual": "SKIPPED_MANUAL",
+            "pass": true,
+            "detail": "the real 112 pipeline reports the closed MANUAL skip"
+          },
+          {
+            "name": "prudent.manual-no-version",
+            "expected": "MANUAL_SEGMENT_NOT_LEARNABLE",
+            "actual": "MANUAL_SEGMENT_NOT_LEARNABLE",
+            "pass": true,
+            "detail": "MANUAL creates no version and reports the real reason"
+          },
+          {
+            "name": "prudent.manual-no-activation",
+            "expected": 0,
+            "actual": 0,
+            "pass": true,
+            "detail": "MANUAL publishes no 110 command"
+          },
+          {
+            "name": "prudent.manual-store-untouched",
+            "expected": 2,
+            "actual": 2,
+            "pass": true,
+            "detail": "the 109 store keeps exactly the same versions"
+          },
+          {
+            "name": "prudent.manual-job-counter",
+            "expected": 1,
+            "actual": 1,
+            "pass": true,
+            "detail": "the 103 job counter is unchanged"
+          },
+          {
+            "name": "prudent.manual-telemetry",
+            "expected": true,
+            "actual": true,
+            "pass": true,
+            "detail": "MANUAL still records driving telemetry"
+          },
+          {
+            "name": "prudent.manual-telemetry-matches-learning",
+            "expected": true,
+            "actual": true,
+            "pass": true,
+            "detail": "the same route and the still-active style produce the same outcomes"
+          },
+          {
+            "name": "prudent.manual-active-version",
+            "expected": "segment-115-prudent~112",
+            "actual": "segment-115-prudent~112",
+            "pass": true,
+            "detail": "the active version is unchanged"
+          },
+          {
+            "name": "prudent.manual-values",
+            "expected": true,
+            "actual": true,
+            "pass": true,
+            "detail": "all applied style values are unchanged"
+          },
+          {
+            "name": "prudent.manual-explanation-no-change",
+            "expected": "NO_CHANGE",
+            "actual": "NO_CHANGE",
+            "pass": true,
+            "detail": "the MANUAL explanation reports no change and no version"
+          },
+          {
+            "name": "prudent.manual-explanation-version",
+            "expected": true,
+            "actual": true,
+            "pass": true,
+            "detail": "the MANUAL explanation never claims a version"
+          },
+          {
+            "name": "prudent.manual-no-change",
+            "expected": true,
+            "actual": true,
+            "pass": true,
+            "detail": "no job, version, activation or style change from MANUAL"
+          },
+          {
+            "name": "prudent.manual-binding",
+            "expected": true,
+            "actual": true,
+            "pass": true,
+            "detail": "the UI binding stays consistent across MANUAL"
+          }
+        ]
+      },
+      {
+        "scenario": "RECKLESS",
+        "status": "PASS",
+        "learner": {
+          "vehicleId": "id-v1:7:vehicle14:city:115:slice8:CIVILIAN4:0001",
+          "driverKind": "CIVILIAN",
+          "mode": "LEARNING",
+          "routeDigest": "115-aed8ea7d-285",
+          "routePreserved": true
+        },
+        "base": {
+          "versionId": "city-style-base-115",
+          "stopFullProbability": 0.6,
+          "parametersDigest": "115-f22f3385-2116"
+        },
+        "versionChain": [
+          {
+            "versionId": "city-style-base-115",
+            "parentVersionId": null,
+            "sourceSegmentIds": [],
+            "value": 0.6,
+            "appliedTick": null
+          },
+          {
+            "versionId": "segment-115-reckless~112",
+            "parentVersionId": "city-style-base-115",
+            "sourceSegmentIds": [
+              "segment-115-reckless"
+            ],
+            "value": 0.36,
+            "appliedTick": 7
+          }
+        ],
+        "fleet": {
+          "fleetSize": 40,
+          "before": {
+            "city-style-base-115": 40
+          },
+          "after": {
+            "segment-115-reckless~112": 40
+          },
+          "taxiBefore": {
+            "city-style-base-115": 20
+          },
+          "taxiAfter": {
+            "segment-115-reckless~112": 20
+          },
+          "civilianBefore": {
+            "city-style-base-115": 20
+          },
+          "civilianAfter": {
+            "segment-115-reckless~112": 20
+          },
+          "taxiVersions": [
+            "segment-115-reckless~112"
+          ],
+          "civilianVersions": [
+            "segment-115-reckless~112"
+          ],
+          "updatedVehicles": 40,
+          "bothCategoriesUpdated": true
+        },
+        "style": {
+          "key": "stop_full_probability",
+          "baseValue": 0.6,
+          "candidateValue": 0.2,
+          "appliedValue": 0.36,
+          "delta": -0.24,
+          "direction": "LOWER",
+          "parameters": {
+            "speed_delta_urban": 0,
+            "red_stop_probability": 1,
+            "stop_full_probability": 0.36
+          },
+          "changedKeys": [
+            "stop_full_probability"
+          ],
+          "appliedParameterCount": 80
+        },
+        "behaviour": {
+          "eligibleOpportunities": 14,
+          "successes": 8,
+          "violations": 6,
+          "complianceRate": 57.14285714285714,
+          "byKind": [
+            {
+              "kind": "STOP",
+              "opportunities": 10,
+              "successes": 4,
+              "violations": 6,
+              "complianceRate": 40
+            },
+            {
+              "kind": "RED",
+              "opportunities": 4,
+              "successes": 4,
+              "violations": 0,
+              "complianceRate": 100
+            }
+          ],
+          "taxi": {
+            "opportunities": 7,
+            "successes": 4,
+            "violations": 3
+          },
+          "civilian": {
+            "opportunities": 7,
+            "successes": 4,
+            "violations": 3
+          },
+          "speedSamples": 8,
+          "meanSpeedMps": 11.200000000000001,
+          "overLimitSamples": 0,
+          "overLimitFraction": 0,
+          "limitMps": 11.2,
+          "mistakesVisible": true
+        },
+        "explanation": {
+          "status": "CHANGED",
+          "versionId": "city-style-base-115~103.1",
+          "composedVersionId": "city-style-base-115~103.1",
+          "segmentId": "segment-115-reckless",
+          "mode": "LEARNING",
+          "changes": [
+            {
+              "key": "stop_full_probability",
+              "previous": 0.6,
+              "next": 0.36,
+              "delta": -0.24,
+              "evidenceCount": 16,
+              "contexts": [
+                "FREE_TRAFFIC"
+              ],
+              "quality": 1,
+              "uncertainty": "LOW",
+              "confidence": "OBSERVED",
+              "reason": "EVIDENCE_APPLIED"
+            }
+          ],
+          "evidenceCounts": {
+            "stop_full_probability": 16
+          },
+          "evidenceTotal": 16,
+          "declaredContexts": [
+            "FREE_TRAFFIC"
+          ],
+          "observedContexts": [
+            "FREE_TRAFFIC"
+          ],
+          "unobservedContexts": [
+            {
+              "context": "GREEN",
+              "source": "086_KIND",
+              "reason": "NOT_EXERCISED_BY_PLAN"
+            },
+            {
+              "context": "YIELD",
+              "source": "086_KIND",
+              "reason": "NOT_EXERCISED_BY_PLAN"
+            },
+            {
+              "context": "LANE_CHANGE",
+              "source": "086_KIND",
+              "reason": "NOT_EXERCISED_BY_PLAN"
+            }
+          ],
+          "missingContexts": [],
+          "summary": "Modificare explicată: 1 modificare din segmentul segment-115-reckless · jobul job:104:segment-115-reckless:1 · versiune city-style-base-115~103.1 · Probabilitate de oprire completă la STOP 0.6 → 0.36 probabilitate (-0.24 probabilitate)."
+        },
+        "binding": {
+          "taxi": {
+            "vehicleId": "id-v1:7:vehicle14:city:115:slice4:TAXI4:0001",
+            "driverKind": "TAXI",
+            "appliedVersion": "segment-115-reckless~112",
+            "panelVersion": "segment-115-reckless~112",
+            "historyVersion": "segment-115-reckless~112",
+            "activeVersion": "segment-115-reckless~112",
+            "pass": true,
+            "mismatches": [],
+            "values": {
+              "speed_delta_urban": 0,
+              "red_stop_probability": 1,
+              "stop_full_probability": 0.36
+            },
+            "changedKeys": [
+              "stop_full_probability"
+            ]
+          },
+          "civilian": {
+            "vehicleId": "id-v1:7:vehicle14:city:115:slice8:CIVILIAN4:0002",
+            "driverKind": "CIVILIAN",
+            "appliedVersion": "segment-115-reckless~112",
+            "panelVersion": "segment-115-reckless~112",
+            "historyVersion": "segment-115-reckless~112",
+            "activeVersion": "segment-115-reckless~112",
+            "pass": true,
+            "mismatches": [],
+            "values": {
+              "speed_delta_urban": 0,
+              "red_stop_probability": 1,
+              "stop_full_probability": 0.36
+            },
+            "changedKeys": [
+              "stop_full_probability"
+            ]
+          },
+          "sameVersion": true,
+          "sameValues": true,
+          "hiddenOverrides": [],
+          "explanationBinding": {
+            "attempted": true,
+            "attached": false,
+            "mismatches": [
+              "REASON_CODE_MISMATCH"
+            ],
+            "reason": "COMPOSITION_AND_STORE_VERSION_IDS_DIFFER"
+          }
+        },
+        "manual": {
+          "segmentId": "segment-115-manual",
+          "mode": "MANUAL",
+          "pipelineStatus": "SKIPPED_MANUAL",
+          "reason": "MANUAL_SEGMENT_NOT_LEARNABLE",
+          "jobSubmitted": false,
+          "versionId": null,
+          "activationPublished": false,
+          "jobsBefore": 1,
+          "jobsAfter": 1,
+          "versionsBefore": 2,
+          "versionsAfter": 2,
+          "commandsBefore": 1,
+          "commandsAfter": 1,
+          "telemetry": {
+            "opportunities": 14,
+            "successes": 8,
+            "violations": 6,
+            "speedSamples": 8
+          },
+          "telemetryMatchesLearning": true,
+          "activeVersionBefore": "segment-115-reckless~112",
+          "activeVersionAfter": "segment-115-reckless~112",
+          "valuesDigestBefore": "115-87e81eba-2117",
+          "valuesDigestAfter": "115-87e81eba-2117",
+          "valuesEqual": true,
+          "styleKeysBefore": {
+            "speed_delta_urban": 0,
+            "red_stop_probability": 1,
+            "stop_full_probability": 0.36
+          },
+          "styleKeysAfter": {
+            "speed_delta_urban": 0,
+            "red_stop_probability": 1,
+            "stop_full_probability": 0.36
+          },
+          "explanation": {
+            "status": "NO_CHANGE",
+            "versionId": null,
+            "reason": "MANUAL_SEGMENT_NOT_LEARNABLE",
+            "source": "112_SKIPPED_MANUAL",
+            "jobSubmitted": false,
+            "changes": [],
+            "evidenceCounts": {},
+            "unobservedContexts": [
+              {
+                "context": "GREEN",
+                "source": "086_KIND",
+                "reason": "NOT_EXERCISED_BY_PLAN"
+              },
+              {
+                "context": "YIELD",
+                "source": "086_KIND",
+                "reason": "NOT_EXERCISED_BY_PLAN"
+              },
+              {
+                "context": "LANE_CHANGE",
+                "source": "086_KIND",
+                "reason": "NOT_EXERCISED_BY_PLAN"
+              }
+            ]
+          },
+          "binding": {
+            "pass": true,
+            "panelVersion": "segment-115-reckless~112",
+            "activeVersion": "segment-115-reckless~112",
+            "valuesEqualBeforeAfter": true
+          },
+          "noChange": true
+        },
+        "checks": [
+          {
+            "name": "reckless.learning-composed",
+            "expected": "COMPOSED",
+            "actual": "COMPOSED",
+            "pass": true,
+            "detail": "one eligible LEARNING segment produced a composed version"
+          },
+          {
+            "name": "reckless.one-new-version",
+            "expected": 1,
+            "actual": 1,
+            "pass": true,
+            "detail": "the segment created exactly one version"
+          },
+          {
+            "name": "reckless.pending-before-tick",
+            "expected": "PENDING",
+            "actual": "PENDING",
+            "pass": true,
+            "detail": "the 110 command is pending before the common tick"
+          },
+          {
+            "name": "reckless.pending-writes",
+            "expected": 0,
+            "actual": 0,
+            "pass": true,
+            "detail": "nothing is written before the common tick"
+          },
+          {
+            "name": "reckless.before-histogram",
+            "expected": "city-style-base-115=40",
+            "actual": "city-style-base-115=40",
+            "pass": true,
+            "detail": "the whole fleet keeps the base version before the tick"
+          },
+          {
+            "name": "reckless.activation-tick",
+            "expected": 7,
+            "actual": 7,
+            "pass": true,
+            "detail": "the published command is applied at its scheduled tick"
+          },
+          {
+            "name": "reckless.single-after-version",
+            "expected": "segment-115-reckless~112",
+            "actual": "segment-115-reckless~112",
+            "pass": true,
+            "detail": "exactly one applied version remains"
+          },
+          {
+            "name": "reckless.one-activation",
+            "expected": 1,
+            "actual": 1,
+            "pass": true,
+            "detail": "one learning version publishes exactly one 110 command"
+          },
+          {
+            "name": "reckless.fleet-population",
+            "expected": 40,
+            "actual": 40,
+            "pass": true,
+            "detail": "every vehicle reports the common version"
+          },
+          {
+            "name": "reckless.updated-vehicles",
+            "expected": 40,
+            "actual": 40,
+            "pass": true,
+            "detail": "the activation plan covers every vehicle"
+          },
+          {
+            "name": "reckless.write-surface",
+            "expected": "appliedProfileVersion,tick",
+            "actual": "appliedProfileVersion,tick",
+            "pass": true,
+            "detail": "activation writes only version and tick"
+          },
+          {
+            "name": "reckless.taxi-version",
+            "expected": "segment-115-reckless~112",
+            "actual": "segment-115-reckless~112",
+            "pass": true,
+            "detail": "taxis adopt the learned style"
+          },
+          {
+            "name": "reckless.civilian-version",
+            "expected": "segment-115-reckless~112",
+            "actual": "segment-115-reckless~112",
+            "pass": true,
+            "detail": "civilians adopt the same learned style"
+          },
+          {
+            "name": "reckless.both-categories",
+            "expected": true,
+            "actual": true,
+            "pass": true,
+            "detail": "both categories share the single learned version"
+          },
+          {
+            "name": "reckless.route-preserved",
+            "expected": "115-aed8ea7d-285",
+            "actual": "115-aed8ea7d-285",
+            "pass": true,
+            "detail": "the learning civilian keeps its real route"
+          },
+          {
+            "name": "reckless.style-changed",
+            "expected": true,
+            "actual": true,
+            "pass": true,
+            "detail": "the learned style value differs from the base"
+          },
+          {
+            "name": "reckless.style-trend",
+            "expected": "LOWER",
+            "actual": "LOWER",
+            "pass": true,
+            "detail": "the prudent style learns a higher stop probability and the reckless one a lower value"
+          },
+          {
+            "name": "reckless.explanation-status",
+            "expected": "CHANGED",
+            "actual": "CHANGED",
+            "pass": true,
+            "detail": "104 explains the real accepted change"
+          },
+          {
+            "name": "reckless.explanation-version",
+            "expected": "city-style-base-115~103.1",
+            "actual": "city-style-base-115~103.1",
+            "pass": true,
+            "detail": "the explanation carries the real 103 composition version"
+          },
+          {
+            "name": "reckless.explanation-evidence",
+            "expected": true,
+            "actual": true,
+            "pass": true,
+            "detail": "every change is supported by effective episodes"
+          },
+          {
+            "name": "reckless.explanation-contexts",
+            "expected": true,
+            "actual": true,
+            "pass": true,
+            "detail": "the explanation names the real observed context"
+          },
+          {
+            "name": "reckless.unobserved-contexts",
+            "expected": true,
+            "actual": true,
+            "pass": true,
+            "detail": "unobserved contexts are explicit"
+          },
+          {
+            "name": "reckless.behaviour-opportunities",
+            "expected": true,
+            "actual": true,
+            "pass": true,
+            "detail": "the playtest exposes real STOP and RED opportunities"
+          },
+          {
+            "name": "reckless.behaviour-stop",
+            "expected": "STOP",
+            "actual": "STOP",
+            "pass": true,
+            "detail": "the STOP denominator is reported separately"
+          },
+          {
+            "name": "reckless.behaviour-clean",
+            "expected": true,
+            "actual": true,
+            "pass": true,
+            "detail": "the reckless style commits visible violations"
+          },
+          {
+            "name": "reckless.taxi-behaviour",
+            "expected": true,
+            "actual": true,
+            "pass": true,
+            "detail": "the learned style is visible on a taxi"
+          },
+          {
+            "name": "reckless.civilian-behaviour",
+            "expected": true,
+            "actual": true,
+            "pass": true,
+            "detail": "the learned style is visible on a civilian"
+          },
+          {
+            "name": "reckless.binding-taxi",
+            "expected": true,
+            "actual": true,
+            "pass": true,
+            "detail": "the taxi UI binding is internally consistent"
+          },
+          {
+            "name": "reckless.binding-civilian",
+            "expected": true,
+            "actual": true,
+            "pass": true,
+            "detail": "the civilian UI binding is internally consistent"
+          },
+          {
+            "name": "reckless.binding-same-version",
+            "expected": true,
+            "actual": true,
+            "pass": true,
+            "detail": "both categories read the same active version"
+          },
+          {
+            "name": "reckless.binding-same-values",
+            "expected": true,
+            "actual": true,
+            "pass": true,
+            "detail": "both categories read the same style values"
+          },
+          {
+            "name": "reckless.no-hidden-override",
+            "expected": 0,
+            "actual": 0,
+            "pass": true,
+            "detail": "no class-specific or per-kind profile override exists"
+          },
+          {
+            "name": "reckless.explanation-binding",
+            "expected": false,
+            "actual": false,
+            "pass": true,
+            "detail": "the 104 composition id is reported separately from the 109/110 id it cannot match here"
+          },
+          {
+            "name": "reckless.manual-no-job",
+            "expected": false,
+            "actual": false,
+            "pass": true,
+            "detail": "MANUAL never reaches the 103 queue"
+          },
+          {
+            "name": "reckless.manual-status",
+            "expected": "SKIPPED_MANUAL",
+            "actual": "SKIPPED_MANUAL",
+            "pass": true,
+            "detail": "the real 112 pipeline reports the closed MANUAL skip"
+          },
+          {
+            "name": "reckless.manual-no-version",
+            "expected": "MANUAL_SEGMENT_NOT_LEARNABLE",
+            "actual": "MANUAL_SEGMENT_NOT_LEARNABLE",
+            "pass": true,
+            "detail": "MANUAL creates no version and reports the real reason"
+          },
+          {
+            "name": "reckless.manual-no-activation",
+            "expected": 0,
+            "actual": 0,
+            "pass": true,
+            "detail": "MANUAL publishes no 110 command"
+          },
+          {
+            "name": "reckless.manual-store-untouched",
+            "expected": 2,
+            "actual": 2,
+            "pass": true,
+            "detail": "the 109 store keeps exactly the same versions"
+          },
+          {
+            "name": "reckless.manual-job-counter",
+            "expected": 1,
+            "actual": 1,
+            "pass": true,
+            "detail": "the 103 job counter is unchanged"
+          },
+          {
+            "name": "reckless.manual-telemetry",
+            "expected": true,
+            "actual": true,
+            "pass": true,
+            "detail": "MANUAL still records driving telemetry"
+          },
+          {
+            "name": "reckless.manual-telemetry-matches-learning",
+            "expected": true,
+            "actual": true,
+            "pass": true,
+            "detail": "the same route and the still-active style produce the same outcomes"
+          },
+          {
+            "name": "reckless.manual-active-version",
+            "expected": "segment-115-reckless~112",
+            "actual": "segment-115-reckless~112",
+            "pass": true,
+            "detail": "the active version is unchanged"
+          },
+          {
+            "name": "reckless.manual-values",
+            "expected": true,
+            "actual": true,
+            "pass": true,
+            "detail": "all applied style values are unchanged"
+          },
+          {
+            "name": "reckless.manual-explanation-no-change",
+            "expected": "NO_CHANGE",
+            "actual": "NO_CHANGE",
+            "pass": true,
+            "detail": "the MANUAL explanation reports no change and no version"
+          },
+          {
+            "name": "reckless.manual-explanation-version",
+            "expected": true,
+            "actual": true,
+            "pass": true,
+            "detail": "the MANUAL explanation never claims a version"
+          },
+          {
+            "name": "reckless.manual-no-change",
+            "expected": true,
+            "actual": true,
+            "pass": true,
+            "detail": "no job, version, activation or style change from MANUAL"
+          },
+          {
+            "name": "reckless.manual-binding",
+            "expected": true,
+            "actual": true,
+            "pass": true,
+            "detail": "the UI binding stays consistent across MANUAL"
+          }
+        ]
+      }
+    ],
+    "checks": [
+      {
+        "name": "prudent.learning-composed",
+        "expected": "COMPOSED",
+        "actual": "COMPOSED",
+        "pass": true,
+        "detail": "one eligible LEARNING segment produced a composed version"
+      },
+      {
+        "name": "prudent.one-new-version",
+        "expected": 1,
+        "actual": 1,
+        "pass": true,
+        "detail": "the segment created exactly one version"
+      },
+      {
+        "name": "prudent.pending-before-tick",
+        "expected": "PENDING",
+        "actual": "PENDING",
+        "pass": true,
+        "detail": "the 110 command is pending before the common tick"
+      },
+      {
+        "name": "prudent.pending-writes",
+        "expected": 0,
+        "actual": 0,
+        "pass": true,
+        "detail": "nothing is written before the common tick"
+      },
+      {
+        "name": "prudent.before-histogram",
+        "expected": "city-style-base-115=40",
+        "actual": "city-style-base-115=40",
+        "pass": true,
+        "detail": "the whole fleet keeps the base version before the tick"
+      },
+      {
+        "name": "prudent.activation-tick",
+        "expected": 7,
+        "actual": 7,
+        "pass": true,
+        "detail": "the published command is applied at its scheduled tick"
+      },
+      {
+        "name": "prudent.single-after-version",
+        "expected": "segment-115-prudent~112",
+        "actual": "segment-115-prudent~112",
+        "pass": true,
+        "detail": "exactly one applied version remains"
+      },
+      {
+        "name": "prudent.one-activation",
+        "expected": 1,
+        "actual": 1,
+        "pass": true,
+        "detail": "one learning version publishes exactly one 110 command"
+      },
+      {
+        "name": "prudent.fleet-population",
+        "expected": 40,
+        "actual": 40,
+        "pass": true,
+        "detail": "every vehicle reports the common version"
+      },
+      {
+        "name": "prudent.updated-vehicles",
+        "expected": 40,
+        "actual": 40,
+        "pass": true,
+        "detail": "the activation plan covers every vehicle"
+      },
+      {
+        "name": "prudent.write-surface",
+        "expected": "appliedProfileVersion,tick",
+        "actual": "appliedProfileVersion,tick",
+        "pass": true,
+        "detail": "activation writes only version and tick"
+      },
+      {
+        "name": "prudent.taxi-version",
+        "expected": "segment-115-prudent~112",
+        "actual": "segment-115-prudent~112",
+        "pass": true,
+        "detail": "taxis adopt the learned style"
+      },
+      {
+        "name": "prudent.civilian-version",
+        "expected": "segment-115-prudent~112",
+        "actual": "segment-115-prudent~112",
+        "pass": true,
+        "detail": "civilians adopt the same learned style"
+      },
+      {
+        "name": "prudent.both-categories",
+        "expected": true,
+        "actual": true,
+        "pass": true,
+        "detail": "both categories share the single learned version"
+      },
+      {
+        "name": "prudent.route-preserved",
+        "expected": "115-aed8ea7d-285",
+        "actual": "115-aed8ea7d-285",
+        "pass": true,
+        "detail": "the learning civilian keeps its real route"
+      },
+      {
+        "name": "prudent.style-changed",
+        "expected": true,
+        "actual": true,
+        "pass": true,
+        "detail": "the learned style value differs from the base"
+      },
+      {
+        "name": "prudent.style-trend",
+        "expected": "HIGHER",
+        "actual": "HIGHER",
+        "pass": true,
+        "detail": "the prudent style learns a higher stop probability and the reckless one a lower value"
+      },
+      {
+        "name": "prudent.explanation-status",
+        "expected": "CHANGED",
+        "actual": "CHANGED",
+        "pass": true,
+        "detail": "104 explains the real accepted change"
+      },
+      {
+        "name": "prudent.explanation-version",
+        "expected": "city-style-base-115~103.1",
+        "actual": "city-style-base-115~103.1",
+        "pass": true,
+        "detail": "the explanation carries the real 103 composition version"
+      },
+      {
+        "name": "prudent.explanation-evidence",
+        "expected": true,
+        "actual": true,
+        "pass": true,
+        "detail": "every change is supported by effective episodes"
+      },
+      {
+        "name": "prudent.explanation-contexts",
+        "expected": true,
+        "actual": true,
+        "pass": true,
+        "detail": "the explanation names the real observed context"
+      },
+      {
+        "name": "prudent.unobserved-contexts",
+        "expected": true,
+        "actual": true,
+        "pass": true,
+        "detail": "unobserved contexts are explicit"
+      },
+      {
+        "name": "prudent.behaviour-opportunities",
+        "expected": true,
+        "actual": true,
+        "pass": true,
+        "detail": "the playtest exposes real STOP and RED opportunities"
+      },
+      {
+        "name": "prudent.behaviour-stop",
+        "expected": "STOP",
+        "actual": "STOP",
+        "pass": true,
+        "detail": "the STOP denominator is reported separately"
+      },
+      {
+        "name": "prudent.behaviour-clean",
+        "expected": 0,
+        "actual": 0,
+        "pass": true,
+        "detail": "the prudent style commits no violation"
+      },
+      {
+        "name": "prudent.taxi-behaviour",
+        "expected": 0,
+        "actual": 0,
+        "pass": true,
+        "detail": "the learned style is visible on a taxi"
+      },
+      {
+        "name": "prudent.civilian-behaviour",
+        "expected": 0,
+        "actual": 0,
+        "pass": true,
+        "detail": "the learned style is visible on a civilian"
+      },
+      {
+        "name": "prudent.binding-taxi",
+        "expected": true,
+        "actual": true,
+        "pass": true,
+        "detail": "the taxi UI binding is internally consistent"
+      },
+      {
+        "name": "prudent.binding-civilian",
+        "expected": true,
+        "actual": true,
+        "pass": true,
+        "detail": "the civilian UI binding is internally consistent"
+      },
+      {
+        "name": "prudent.binding-same-version",
+        "expected": true,
+        "actual": true,
+        "pass": true,
+        "detail": "both categories read the same active version"
+      },
+      {
+        "name": "prudent.binding-same-values",
+        "expected": true,
+        "actual": true,
+        "pass": true,
+        "detail": "both categories read the same style values"
+      },
+      {
+        "name": "prudent.no-hidden-override",
+        "expected": 0,
+        "actual": 0,
+        "pass": true,
+        "detail": "no class-specific or per-kind profile override exists"
+      },
+      {
+        "name": "prudent.explanation-binding",
+        "expected": false,
+        "actual": false,
+        "pass": true,
+        "detail": "the 104 composition id is reported separately from the 109/110 id it cannot match here"
+      },
+      {
+        "name": "prudent.manual-no-job",
+        "expected": false,
+        "actual": false,
+        "pass": true,
+        "detail": "MANUAL never reaches the 103 queue"
+      },
+      {
+        "name": "prudent.manual-status",
+        "expected": "SKIPPED_MANUAL",
+        "actual": "SKIPPED_MANUAL",
+        "pass": true,
+        "detail": "the real 112 pipeline reports the closed MANUAL skip"
+      },
+      {
+        "name": "prudent.manual-no-version",
+        "expected": "MANUAL_SEGMENT_NOT_LEARNABLE",
+        "actual": "MANUAL_SEGMENT_NOT_LEARNABLE",
+        "pass": true,
+        "detail": "MANUAL creates no version and reports the real reason"
+      },
+      {
+        "name": "prudent.manual-no-activation",
+        "expected": 0,
+        "actual": 0,
+        "pass": true,
+        "detail": "MANUAL publishes no 110 command"
+      },
+      {
+        "name": "prudent.manual-store-untouched",
+        "expected": 2,
+        "actual": 2,
+        "pass": true,
+        "detail": "the 109 store keeps exactly the same versions"
+      },
+      {
+        "name": "prudent.manual-job-counter",
+        "expected": 1,
+        "actual": 1,
+        "pass": true,
+        "detail": "the 103 job counter is unchanged"
+      },
+      {
+        "name": "prudent.manual-telemetry",
+        "expected": true,
+        "actual": true,
+        "pass": true,
+        "detail": "MANUAL still records driving telemetry"
+      },
+      {
+        "name": "prudent.manual-telemetry-matches-learning",
+        "expected": true,
+        "actual": true,
+        "pass": true,
+        "detail": "the same route and the still-active style produce the same outcomes"
+      },
+      {
+        "name": "prudent.manual-active-version",
+        "expected": "segment-115-prudent~112",
+        "actual": "segment-115-prudent~112",
+        "pass": true,
+        "detail": "the active version is unchanged"
+      },
+      {
+        "name": "prudent.manual-values",
+        "expected": true,
+        "actual": true,
+        "pass": true,
+        "detail": "all applied style values are unchanged"
+      },
+      {
+        "name": "prudent.manual-explanation-no-change",
+        "expected": "NO_CHANGE",
+        "actual": "NO_CHANGE",
+        "pass": true,
+        "detail": "the MANUAL explanation reports no change and no version"
+      },
+      {
+        "name": "prudent.manual-explanation-version",
+        "expected": true,
+        "actual": true,
+        "pass": true,
+        "detail": "the MANUAL explanation never claims a version"
+      },
+      {
+        "name": "prudent.manual-no-change",
+        "expected": true,
+        "actual": true,
+        "pass": true,
+        "detail": "no job, version, activation or style change from MANUAL"
+      },
+      {
+        "name": "prudent.manual-binding",
+        "expected": true,
+        "actual": true,
+        "pass": true,
+        "detail": "the UI binding stays consistent across MANUAL"
+      },
+      {
+        "name": "reckless.learning-composed",
+        "expected": "COMPOSED",
+        "actual": "COMPOSED",
+        "pass": true,
+        "detail": "one eligible LEARNING segment produced a composed version"
+      },
+      {
+        "name": "reckless.one-new-version",
+        "expected": 1,
+        "actual": 1,
+        "pass": true,
+        "detail": "the segment created exactly one version"
+      },
+      {
+        "name": "reckless.pending-before-tick",
+        "expected": "PENDING",
+        "actual": "PENDING",
+        "pass": true,
+        "detail": "the 110 command is pending before the common tick"
+      },
+      {
+        "name": "reckless.pending-writes",
+        "expected": 0,
+        "actual": 0,
+        "pass": true,
+        "detail": "nothing is written before the common tick"
+      },
+      {
+        "name": "reckless.before-histogram",
+        "expected": "city-style-base-115=40",
+        "actual": "city-style-base-115=40",
+        "pass": true,
+        "detail": "the whole fleet keeps the base version before the tick"
+      },
+      {
+        "name": "reckless.activation-tick",
+        "expected": 7,
+        "actual": 7,
+        "pass": true,
+        "detail": "the published command is applied at its scheduled tick"
+      },
+      {
+        "name": "reckless.single-after-version",
+        "expected": "segment-115-reckless~112",
+        "actual": "segment-115-reckless~112",
+        "pass": true,
+        "detail": "exactly one applied version remains"
+      },
+      {
+        "name": "reckless.one-activation",
+        "expected": 1,
+        "actual": 1,
+        "pass": true,
+        "detail": "one learning version publishes exactly one 110 command"
+      },
+      {
+        "name": "reckless.fleet-population",
+        "expected": 40,
+        "actual": 40,
+        "pass": true,
+        "detail": "every vehicle reports the common version"
+      },
+      {
+        "name": "reckless.updated-vehicles",
+        "expected": 40,
+        "actual": 40,
+        "pass": true,
+        "detail": "the activation plan covers every vehicle"
+      },
+      {
+        "name": "reckless.write-surface",
+        "expected": "appliedProfileVersion,tick",
+        "actual": "appliedProfileVersion,tick",
+        "pass": true,
+        "detail": "activation writes only version and tick"
+      },
+      {
+        "name": "reckless.taxi-version",
+        "expected": "segment-115-reckless~112",
+        "actual": "segment-115-reckless~112",
+        "pass": true,
+        "detail": "taxis adopt the learned style"
+      },
+      {
+        "name": "reckless.civilian-version",
+        "expected": "segment-115-reckless~112",
+        "actual": "segment-115-reckless~112",
+        "pass": true,
+        "detail": "civilians adopt the same learned style"
+      },
+      {
+        "name": "reckless.both-categories",
+        "expected": true,
+        "actual": true,
+        "pass": true,
+        "detail": "both categories share the single learned version"
+      },
+      {
+        "name": "reckless.route-preserved",
+        "expected": "115-aed8ea7d-285",
+        "actual": "115-aed8ea7d-285",
+        "pass": true,
+        "detail": "the learning civilian keeps its real route"
+      },
+      {
+        "name": "reckless.style-changed",
+        "expected": true,
+        "actual": true,
+        "pass": true,
+        "detail": "the learned style value differs from the base"
+      },
+      {
+        "name": "reckless.style-trend",
+        "expected": "LOWER",
+        "actual": "LOWER",
+        "pass": true,
+        "detail": "the prudent style learns a higher stop probability and the reckless one a lower value"
+      },
+      {
+        "name": "reckless.explanation-status",
+        "expected": "CHANGED",
+        "actual": "CHANGED",
+        "pass": true,
+        "detail": "104 explains the real accepted change"
+      },
+      {
+        "name": "reckless.explanation-version",
+        "expected": "city-style-base-115~103.1",
+        "actual": "city-style-base-115~103.1",
+        "pass": true,
+        "detail": "the explanation carries the real 103 composition version"
+      },
+      {
+        "name": "reckless.explanation-evidence",
+        "expected": true,
+        "actual": true,
+        "pass": true,
+        "detail": "every change is supported by effective episodes"
+      },
+      {
+        "name": "reckless.explanation-contexts",
+        "expected": true,
+        "actual": true,
+        "pass": true,
+        "detail": "the explanation names the real observed context"
+      },
+      {
+        "name": "reckless.unobserved-contexts",
+        "expected": true,
+        "actual": true,
+        "pass": true,
+        "detail": "unobserved contexts are explicit"
+      },
+      {
+        "name": "reckless.behaviour-opportunities",
+        "expected": true,
+        "actual": true,
+        "pass": true,
+        "detail": "the playtest exposes real STOP and RED opportunities"
+      },
+      {
+        "name": "reckless.behaviour-stop",
+        "expected": "STOP",
+        "actual": "STOP",
+        "pass": true,
+        "detail": "the STOP denominator is reported separately"
+      },
+      {
+        "name": "reckless.behaviour-clean",
+        "expected": true,
+        "actual": true,
+        "pass": true,
+        "detail": "the reckless style commits visible violations"
+      },
+      {
+        "name": "reckless.taxi-behaviour",
+        "expected": true,
+        "actual": true,
+        "pass": true,
+        "detail": "the learned style is visible on a taxi"
+      },
+      {
+        "name": "reckless.civilian-behaviour",
+        "expected": true,
+        "actual": true,
+        "pass": true,
+        "detail": "the learned style is visible on a civilian"
+      },
+      {
+        "name": "reckless.binding-taxi",
+        "expected": true,
+        "actual": true,
+        "pass": true,
+        "detail": "the taxi UI binding is internally consistent"
+      },
+      {
+        "name": "reckless.binding-civilian",
+        "expected": true,
+        "actual": true,
+        "pass": true,
+        "detail": "the civilian UI binding is internally consistent"
+      },
+      {
+        "name": "reckless.binding-same-version",
+        "expected": true,
+        "actual": true,
+        "pass": true,
+        "detail": "both categories read the same active version"
+      },
+      {
+        "name": "reckless.binding-same-values",
+        "expected": true,
+        "actual": true,
+        "pass": true,
+        "detail": "both categories read the same style values"
+      },
+      {
+        "name": "reckless.no-hidden-override",
+        "expected": 0,
+        "actual": 0,
+        "pass": true,
+        "detail": "no class-specific or per-kind profile override exists"
+      },
+      {
+        "name": "reckless.explanation-binding",
+        "expected": false,
+        "actual": false,
+        "pass": true,
+        "detail": "the 104 composition id is reported separately from the 109/110 id it cannot match here"
+      },
+      {
+        "name": "reckless.manual-no-job",
+        "expected": false,
+        "actual": false,
+        "pass": true,
+        "detail": "MANUAL never reaches the 103 queue"
+      },
+      {
+        "name": "reckless.manual-status",
+        "expected": "SKIPPED_MANUAL",
+        "actual": "SKIPPED_MANUAL",
+        "pass": true,
+        "detail": "the real 112 pipeline reports the closed MANUAL skip"
+      },
+      {
+        "name": "reckless.manual-no-version",
+        "expected": "MANUAL_SEGMENT_NOT_LEARNABLE",
+        "actual": "MANUAL_SEGMENT_NOT_LEARNABLE",
+        "pass": true,
+        "detail": "MANUAL creates no version and reports the real reason"
+      },
+      {
+        "name": "reckless.manual-no-activation",
+        "expected": 0,
+        "actual": 0,
+        "pass": true,
+        "detail": "MANUAL publishes no 110 command"
+      },
+      {
+        "name": "reckless.manual-store-untouched",
+        "expected": 2,
+        "actual": 2,
+        "pass": true,
+        "detail": "the 109 store keeps exactly the same versions"
+      },
+      {
+        "name": "reckless.manual-job-counter",
+        "expected": 1,
+        "actual": 1,
+        "pass": true,
+        "detail": "the 103 job counter is unchanged"
+      },
+      {
+        "name": "reckless.manual-telemetry",
+        "expected": true,
+        "actual": true,
+        "pass": true,
+        "detail": "MANUAL still records driving telemetry"
+      },
+      {
+        "name": "reckless.manual-telemetry-matches-learning",
+        "expected": true,
+        "actual": true,
+        "pass": true,
+        "detail": "the same route and the still-active style produce the same outcomes"
+      },
+      {
+        "name": "reckless.manual-active-version",
+        "expected": "segment-115-reckless~112",
+        "actual": "segment-115-reckless~112",
+        "pass": true,
+        "detail": "the active version is unchanged"
+      },
+      {
+        "name": "reckless.manual-values",
+        "expected": true,
+        "actual": true,
+        "pass": true,
+        "detail": "all applied style values are unchanged"
+      },
+      {
+        "name": "reckless.manual-explanation-no-change",
+        "expected": "NO_CHANGE",
+        "actual": "NO_CHANGE",
+        "pass": true,
+        "detail": "the MANUAL explanation reports no change and no version"
+      },
+      {
+        "name": "reckless.manual-explanation-version",
+        "expected": true,
+        "actual": true,
+        "pass": true,
+        "detail": "the MANUAL explanation never claims a version"
+      },
+      {
+        "name": "reckless.manual-no-change",
+        "expected": true,
+        "actual": true,
+        "pass": true,
+        "detail": "no job, version, activation or style change from MANUAL"
+      },
+      {
+        "name": "reckless.manual-binding",
+        "expected": true,
+        "actual": true,
+        "pass": true,
+        "detail": "the UI binding stays consistent across MANUAL"
+      },
+      {
+        "name": "report.two-scenarios",
+        "expected": 2,
+        "actual": 2,
+        "pass": true,
+        "detail": "the report contains the prudent and the reckless deterministic playtest"
+      },
+      {
+        "name": "report.prudent-clean",
+        "expected": 0,
+        "actual": 0,
+        "pass": true,
+        "detail": "the prudent profile commits no violation with real opportunities"
+      },
+      {
+        "name": "report.reckless-mistakes",
+        "expected": true,
+        "actual": true,
+        "pass": true,
+        "detail": "the reckless profile commits visible STOP violations"
+      },
+      {
+        "name": "report.both-categories",
+        "expected": true,
+        "actual": true,
+        "pass": true,
+        "detail": "taxis and civilians adopt the same learned version in both scenarios"
+      },
+      {
+        "name": "report.manual-no-change",
+        "expected": true,
+        "actual": true,
+        "pass": true,
+        "detail": "MANUAL produces no job, version, activation or style change in both scenarios"
+      },
+      {
+        "name": "report.unobserved-contexts",
+        "expected": true,
+        "actual": true,
+        "pass": true,
+        "detail": "unobserved contexts are explicit at report level"
+      },
+      {
+        "name": "report.scenario-isolation",
+        "expected": true,
+        "actual": true,
+        "pass": true,
+        "detail": "the two scenarios use independent worlds, versions and segments"
+      }
+    ],
+    "summary": {
+      "scenarios": 2,
+      "checks": 101,
+      "passed": 101,
+      "pass": true
+    },
+    "manualNoChange": true,
+    "bothCategoriesUpdated": true,
+    "mistakesVisible": true,
+    "unobservedContexts": [
+      "GREEN",
+      "YIELD",
+      "LANE_CHANGE"
+    ],
+    "evidenceCounts": {
+      "PRUDENT:stop_full_probability": 16,
+      "RECKLESS:stop_full_probability": 16
+    },
+    "versionChain": {
+      "PRUDENT": [
+        "city-style-base-115",
+        "segment-115-prudent~112"
+      ],
+      "RECKLESS": [
+        "city-style-base-115",
+        "segment-115-reckless~112"
+      ]
+    }
+  }
+}

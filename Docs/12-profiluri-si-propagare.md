@@ -24,6 +24,8 @@ Integrarea dintre segment, estimator și publicare este explicită în [profile-
 
 Legarea UI la aceste proiecții este explicită în [profile-ui-binding](profile-ui-binding.md): panoul 077, istoricul 078 și ținta activă 110 pornesc din aceeași versiune imuabilă 109, iar un verificator compară versiunea, valorile, delta și codurile de motiv. Fără o versiune reală, binding-ul este gol cu `MISSING_VERSION`, nu ilustrativ; cheile rezervate rămân `RESERVED`/`null`, cele neobservate rămân `UNOBSERVED`/`null`, iar dovezile absente dintr-o versiune 109 sunt raportate `NO_EVIDENCE_RECORD`, niciodată inventate.
 
+[Vertical slice 115](vertical-slice.md) leagă aceste contracte într-o singură demonstrație deterministă: profilurile 105 `PRUDENT` și `RECKLESS` intră prin pipeline-ul 112, versiunea 110 ajunge la toate taxiurile și civilii prin 208, faptele simulate intră în 138, explicația 104 păstrează dovezile și contextele neobservate, iar binding-ul 113 este citit identic pentru un taxi și un civil. `MANUAL` rulează aceeași rută fără job, versiune, activare sau schimbare de stil. Playtestul este o simulare deterministă, nu un playtest uman sau de browser.
+
 Restaurarea unei versiuni anterioare publică o activare nouă cu proveniență explicită. Versiunile existente nu sunt editate. Un profil importat este validat și devine activ prin același mecanism. Scorul XP aparține PlayerProgress și nu este importat sau resetat printr-un simplu export/import de DrivingProfile. Orhestrarea concretă a restore-ului, importului, profilului nou și resetului de stil, cu bariera 205 și o singură activare 110, este în [profile-restore](profile-restore.md).
 
 ## Barieră la restaurare, import și profil nou
