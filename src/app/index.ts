@@ -265,3 +265,10 @@ export {
   LEARNING_EDGECASES_APP_VERSION,
   runLearningEdgeCaseRegressions,
 } from './learning-edgecases';
+
+export {
+  LEARNING_GATE24_APP_VERSION,
+  learningGate24Markdown,
+  readLearningGate24,
+  type LearningGate24ReadOptions,
+} from './learning-gate24';

@@ -1,0 +1,2617 @@
+{
+  "version": "108-learning-gate24-v1",
+  "appVersion": "108-learning-gate24-app-v1",
+  "gate": {
+    "version": "108-learning-gate24-v1",
+    "gateStatus": "CLOSED",
+    "sources": {
+      "registryKeys": 24,
+      "evidence": "093-parameter-evidence-v1",
+      "opportunities": "086-opportunity-ids-v1",
+      "inverse": "105-inverse-learning-v1",
+      "edgecases": "107-learning-edgecases-v1",
+      "estimators": [
+        "094-speed-estimator-v1",
+        "095-acceleration-estimator-v1",
+        "096-following-estimator-v1",
+        "097-signal-estimator-v1",
+        "098-stop-yield-estimator-v1",
+        "099-lane-estimator-v1"
+      ]
+    },
+    "mKeySetMatches092": true,
+    "matrix": [
+      {
+        "key": "speed_delta_urban",
+        "implementationStage": "initial_learning_target",
+        "implemented": true,
+        "estimable": false,
+        "unit": "m/s",
+        "estimatorOwner": "094",
+        "estimatorOwners": [
+          "094"
+        ],
+        "channel": "SPEED_SAMPLE",
+        "contexts": [
+          "FREE_TRAFFIC"
+        ],
+        "opportunities": [
+          {
+            "kind": "GREEN",
+            "role": "CARRIER"
+          }
+        ],
+        "opportunityRole": "CARRIER",
+        "scenarios": [
+          {
+            "scenarioId": "PROFILE_PRUDENT",
+            "profileId": "PRUDENT",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": -1.9963861535675829,
+            "interval": null,
+            "tolerance": 0.3,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_IMPULSIVE",
+            "profileId": "IMPULSIVE",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 3.502700974661856,
+            "interval": null,
+            "tolerance": 0.375,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_RECKLESS",
+            "profileId": "RECKLESS",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 9.002879277374596,
+            "interval": null,
+            "tolerance": 0.65,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_MIXED",
+            "profileId": "MIXED",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 1.4970382653735577,
+            "interval": null,
+            "tolerance": 0.275,
+            "withinTolerance": true
+          }
+        ],
+        "scenariosWithinTolerance": 4,
+        "edgeCaseIds": [
+          "MANY_STREETS",
+          "SHORT_INTERVENTION",
+          "CLEAN_FREE_TRAFFIC"
+        ],
+        "edgeCaseContexts": [
+          "FREE_TRAFFIC"
+        ],
+        "validated": true,
+        "reasons": []
+      },
+      {
+        "key": "speed_delta_residential",
+        "implementationStage": "initial_learning_target",
+        "implemented": true,
+        "estimable": false,
+        "unit": "m/s",
+        "estimatorOwner": "094",
+        "estimatorOwners": [
+          "094"
+        ],
+        "channel": "SPEED_SAMPLE",
+        "contexts": [
+          "FREE_TRAFFIC"
+        ],
+        "opportunities": [
+          {
+            "kind": "GREEN",
+            "role": "CARRIER"
+          }
+        ],
+        "opportunityRole": "CARRIER",
+        "scenarios": [
+          {
+            "scenarioId": "PROFILE_PRUDENT",
+            "profileId": "PRUDENT",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": -1.5057893053814766,
+            "interval": null,
+            "tolerance": 0.275,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_IMPULSIVE",
+            "profileId": "IMPULSIVE",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 2.504098869618028,
+            "interval": null,
+            "tolerance": 0.325,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_RECKLESS",
+            "profileId": "RECKLESS",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 6.004018910769373,
+            "interval": null,
+            "tolerance": 0.5,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_MIXED",
+            "profileId": "MIXED",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": -0.4953349782340233,
+            "interval": null,
+            "tolerance": 0.225,
+            "withinTolerance": true
+          }
+        ],
+        "scenariosWithinTolerance": 4,
+        "edgeCaseIds": [
+          "MANY_STREETS",
+          "SHORT_INTERVENTION",
+          "CLEAN_FREE_TRAFFIC"
+        ],
+        "edgeCaseContexts": [
+          "FREE_TRAFFIC"
+        ],
+        "validated": true,
+        "reasons": []
+      },
+      {
+        "key": "curve_lateral_accel",
+        "implementationStage": "initial_learning_target",
+        "implemented": true,
+        "estimable": false,
+        "unit": "m/s²",
+        "estimatorOwner": "094",
+        "estimatorOwners": [
+          "094"
+        ],
+        "channel": "ACCELERATION",
+        "contexts": [
+          "FREE_TRAFFIC"
+        ],
+        "opportunities": [
+          {
+            "kind": "GREEN",
+            "role": "CARRIER"
+          }
+        ],
+        "opportunityRole": "CARRIER",
+        "scenarios": [
+          {
+            "scenarioId": "PROFILE_PRUDENT",
+            "profileId": "PRUDENT",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 1.8,
+            "interval": null,
+            "tolerance": 0.394,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_IMPULSIVE",
+            "profileId": "IMPULSIVE",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 3.6,
+            "interval": null,
+            "tolerance": 0.538,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_RECKLESS",
+            "profileId": "RECKLESS",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 6.500000000000001,
+            "interval": null,
+            "tolerance": 0.77,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_MIXED",
+            "profileId": "MIXED",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 3,
+            "interval": null,
+            "tolerance": 0.49,
+            "withinTolerance": true
+          }
+        ],
+        "scenariosWithinTolerance": 4,
+        "edgeCaseIds": [
+          "MANY_STREETS",
+          "SHORT_INTERVENTION",
+          "CLEAN_FREE_TRAFFIC"
+        ],
+        "edgeCaseContexts": [
+          "FREE_TRAFFIC"
+        ],
+        "validated": true,
+        "reasons": []
+      },
+      {
+        "key": "intersection_approach_speed",
+        "implementationStage": "initial_learning_target",
+        "implemented": true,
+        "estimable": false,
+        "unit": "m/s",
+        "estimatorOwner": "094",
+        "estimatorOwners": [
+          "094"
+        ],
+        "channel": "SPEED_SAMPLE",
+        "contexts": [
+          "FREE_TRAFFIC"
+        ],
+        "opportunities": [
+          {
+            "kind": "GREEN",
+            "role": "CARRIER"
+          }
+        ],
+        "opportunityRole": "CARRIER",
+        "scenarios": [
+          {
+            "scenarioId": "PROFILE_PRUDENT",
+            "profileId": "PRUDENT",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 7.511002492904663,
+            "interval": null,
+            "tolerance": 0.625,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_IMPULSIVE",
+            "profileId": "IMPULSIVE",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 11.011834996170364,
+            "interval": null,
+            "tolerance": 0.73,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_RECKLESS",
+            "profileId": "RECKLESS",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 16.03040466804523,
+            "interval": null,
+            "tolerance": 0.88,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_MIXED",
+            "profileId": "MIXED",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 9.013398761744611,
+            "interval": null,
+            "tolerance": 0.67,
+            "withinTolerance": true
+          }
+        ],
+        "scenariosWithinTolerance": 4,
+        "edgeCaseIds": [
+          "MANY_STREETS",
+          "SHORT_INTERVENTION",
+          "CLEAN_FREE_TRAFFIC"
+        ],
+        "edgeCaseContexts": [
+          "FREE_TRAFFIC"
+        ],
+        "validated": true,
+        "reasons": []
+      },
+      {
+        "key": "desired_acceleration",
+        "implementationStage": "initial_learning_target",
+        "implemented": true,
+        "estimable": false,
+        "unit": "m/s²",
+        "estimatorOwner": "095",
+        "estimatorOwners": [
+          "095"
+        ],
+        "channel": "ACCELERATION",
+        "contexts": [
+          "FREE_TRAFFIC"
+        ],
+        "opportunities": [
+          {
+            "kind": "GREEN",
+            "role": "CARRIER"
+          }
+        ],
+        "opportunityRole": "CARRIER",
+        "scenarios": [
+          {
+            "scenarioId": "PROFILE_PRUDENT",
+            "profileId": "PRUDENT",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 1.1999999999999997,
+            "interval": null,
+            "tolerance": 0.21,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_IMPULSIVE",
+            "profileId": "IMPULSIVE",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 2.7999999999999994,
+            "interval": null,
+            "tolerance": 0.29,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_RECKLESS",
+            "profileId": "RECKLESS",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 4.499999999999999,
+            "interval": null,
+            "tolerance": 0.375,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_MIXED",
+            "profileId": "MIXED",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 2,
+            "interval": null,
+            "tolerance": 0.25,
+            "withinTolerance": true
+          }
+        ],
+        "scenariosWithinTolerance": 4,
+        "edgeCaseIds": [
+          "MANY_STREETS",
+          "SHORT_INTERVENTION",
+          "CLEAN_FREE_TRAFFIC"
+        ],
+        "edgeCaseContexts": [
+          "FREE_TRAFFIC"
+        ],
+        "validated": true,
+        "reasons": []
+      },
+      {
+        "key": "comfort_deceleration",
+        "implementationStage": "initial_learning_target",
+        "implemented": true,
+        "estimable": false,
+        "unit": "m/s²",
+        "estimatorOwner": "095",
+        "estimatorOwners": [
+          "095"
+        ],
+        "channel": "DECELERATION",
+        "contexts": [
+          "FREE_TRAFFIC"
+        ],
+        "opportunities": [
+          {
+            "kind": "GREEN",
+            "role": "CARRIER"
+          }
+        ],
+        "opportunityRole": "CARRIER",
+        "scenarios": [
+          {
+            "scenarioId": "PROFILE_PRUDENT",
+            "profileId": "PRUDENT",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 2.2,
+            "interval": null,
+            "tolerance": 0.31,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_IMPULSIVE",
+            "profileId": "IMPULSIVE",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 3.4,
+            "interval": null,
+            "tolerance": 0.37,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_RECKLESS",
+            "profileId": "RECKLESS",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 5.5,
+            "interval": null,
+            "tolerance": 0.475,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_MIXED",
+            "profileId": "MIXED",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 2.9,
+            "interval": null,
+            "tolerance": 0.345,
+            "withinTolerance": true
+          }
+        ],
+        "scenariosWithinTolerance": 4,
+        "edgeCaseIds": [
+          "MANY_STREETS",
+          "SHORT_INTERVENTION",
+          "CLEAN_FREE_TRAFFIC"
+        ],
+        "edgeCaseContexts": [
+          "FREE_TRAFFIC"
+        ],
+        "validated": true,
+        "reasons": []
+      },
+      {
+        "key": "acceleration_jerk",
+        "implementationStage": "initial_learning_target",
+        "implemented": true,
+        "estimable": false,
+        "unit": "m/s³",
+        "estimatorOwner": "095",
+        "estimatorOwners": [
+          "095"
+        ],
+        "channel": "ACCELERATION",
+        "contexts": [
+          "FREE_TRAFFIC"
+        ],
+        "opportunities": [
+          {
+            "kind": "GREEN",
+            "role": "CARRIER"
+          }
+        ],
+        "opportunityRole": "CARRIER",
+        "scenarios": [
+          {
+            "scenarioId": "PROFILE_PRUDENT",
+            "profileId": "PRUDENT",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 1.5,
+            "interval": null,
+            "tolerance": 0.45,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_IMPULSIVE",
+            "profileId": "IMPULSIVE",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 3.8,
+            "interval": null,
+            "tolerance": 0.68,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_RECKLESS",
+            "profileId": "RECKLESS",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 7,
+            "interval": null,
+            "tolerance": 1,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_MIXED",
+            "profileId": "MIXED",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 2.6,
+            "interval": null,
+            "tolerance": 0.56,
+            "withinTolerance": true
+          }
+        ],
+        "scenariosWithinTolerance": 4,
+        "edgeCaseIds": [
+          "MANY_STREETS",
+          "SHORT_INTERVENTION",
+          "CLEAN_FREE_TRAFFIC"
+        ],
+        "edgeCaseContexts": [
+          "FREE_TRAFFIC"
+        ],
+        "validated": true,
+        "reasons": []
+      },
+      {
+        "key": "brake_reaction_delay",
+        "implementationStage": "initial_learning_target",
+        "implemented": true,
+        "estimable": false,
+        "unit": "s",
+        "estimatorOwner": "095",
+        "estimatorOwners": [
+          "095"
+        ],
+        "channel": "DECELERATION",
+        "contexts": [
+          "FREE_TRAFFIC"
+        ],
+        "opportunities": [
+          {
+            "kind": "GREEN",
+            "role": "CARRIER"
+          }
+        ],
+        "opportunityRole": "CARRIER",
+        "scenarios": [
+          {
+            "scenarioId": "PROFILE_PRUDENT",
+            "profileId": "PRUDENT",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 0.45,
+            "interval": null,
+            "tolerance": 0.029,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_IMPULSIVE",
+            "profileId": "IMPULSIVE",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 0.25,
+            "interval": null,
+            "tolerance": 0.025,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_RECKLESS",
+            "profileId": "RECKLESS",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 0.15,
+            "interval": null,
+            "tolerance": 0.023,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_MIXED",
+            "profileId": "MIXED",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 0.35,
+            "interval": null,
+            "tolerance": 0.027,
+            "withinTolerance": true
+          }
+        ],
+        "scenariosWithinTolerance": 4,
+        "edgeCaseIds": [
+          "MANY_STREETS",
+          "SHORT_INTERVENTION",
+          "CLEAN_FREE_TRAFFIC"
+        ],
+        "edgeCaseContexts": [
+          "FREE_TRAFFIC"
+        ],
+        "validated": true,
+        "reasons": []
+      },
+      {
+        "key": "following_time_headway",
+        "implementationStage": "initial_learning_target",
+        "implemented": true,
+        "estimable": false,
+        "unit": "s",
+        "estimatorOwner": "096",
+        "estimatorOwners": [
+          "096"
+        ],
+        "channel": "HEADWAY_PAIR",
+        "contexts": [
+          "LEADER"
+        ],
+        "opportunities": [
+          {
+            "kind": "GREEN",
+            "role": "CARRIER"
+          },
+          {
+            "kind": "STOP",
+            "role": "CARRIER"
+          }
+        ],
+        "opportunityRole": "CARRIER",
+        "scenarios": [
+          {
+            "scenarioId": "PROFILE_PRUDENT",
+            "profileId": "PRUDENT",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 2.4002374399999997,
+            "interval": null,
+            "tolerance": 0.152,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_IMPULSIVE",
+            "profileId": "IMPULSIVE",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 1.10064958,
+            "interval": null,
+            "tolerance": 0.113,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_RECKLESS",
+            "profileId": "RECKLESS",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 0.6004627800000001,
+            "interval": null,
+            "tolerance": 0.098,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_MIXED",
+            "profileId": "MIXED",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 1.59994214,
+            "interval": null,
+            "tolerance": 0.128,
+            "withinTolerance": true
+          }
+        ],
+        "scenariosWithinTolerance": 4,
+        "edgeCaseIds": [
+          "MANY_STREETS",
+          "CLEAN_LEADER"
+        ],
+        "edgeCaseContexts": [
+          "LEADER"
+        ],
+        "validated": true,
+        "reasons": []
+      },
+      {
+        "key": "following_min_gap",
+        "implementationStage": "initial_learning_target",
+        "implemented": true,
+        "estimable": false,
+        "unit": "m",
+        "estimatorOwner": "096",
+        "estimatorOwners": [
+          "096"
+        ],
+        "channel": "HEADWAY_PAIR",
+        "contexts": [
+          "LEADER"
+        ],
+        "opportunities": [
+          {
+            "kind": "GREEN",
+            "role": "CARRIER"
+          },
+          {
+            "kind": "STOP",
+            "role": "CARRIER"
+          }
+        ],
+        "opportunityRole": "CARRIER",
+        "scenarios": [
+          {
+            "scenarioId": "PROFILE_PRUDENT",
+            "profileId": "PRUDENT",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 4.012228220000004,
+            "interval": null,
+            "tolerance": 0.27,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_IMPULSIVE",
+            "profileId": "IMPULSIVE",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 2.00038829,
+            "interval": null,
+            "tolerance": 0.21,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_RECKLESS",
+            "profileId": "RECKLESS",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 0.9806053899999991,
+            "interval": null,
+            "tolerance": 0.18,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_MIXED",
+            "profileId": "MIXED",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 2.800471569999999,
+            "interval": null,
+            "tolerance": 0.234,
+            "withinTolerance": true
+          }
+        ],
+        "scenariosWithinTolerance": 4,
+        "edgeCaseIds": [
+          "MANY_STREETS",
+          "CLEAN_LEADER"
+        ],
+        "edgeCaseContexts": [
+          "LEADER"
+        ],
+        "validated": true,
+        "reasons": []
+      },
+      {
+        "key": "queue_standstill_gap",
+        "implementationStage": "initial_learning_target",
+        "implemented": true,
+        "estimable": false,
+        "unit": "m",
+        "estimatorOwner": "096",
+        "estimatorOwners": [
+          "096"
+        ],
+        "channel": "HEADWAY_PAIR",
+        "contexts": [
+          "LEADER"
+        ],
+        "opportunities": [
+          {
+            "kind": "GREEN",
+            "role": "CARRIER"
+          },
+          {
+            "kind": "STOP",
+            "role": "CARRIER"
+          }
+        ],
+        "opportunityRole": "CARRIER",
+        "scenarios": [
+          {
+            "scenarioId": "PROFILE_PRUDENT",
+            "profileId": "PRUDENT",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 2.487148,
+            "interval": null,
+            "tolerance": 0.225,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_IMPULSIVE",
+            "profileId": "IMPULSIVE",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 1.4060743333333334,
+            "interval": null,
+            "tolerance": 0.192,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_RECKLESS",
+            "profileId": "RECKLESS",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 0.7025966666666666,
+            "interval": null,
+            "tolerance": 0.171,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_MIXED",
+            "profileId": "MIXED",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 1.8073476666666668,
+            "interval": null,
+            "tolerance": 0.204,
+            "withinTolerance": true
+          }
+        ],
+        "scenariosWithinTolerance": 4,
+        "edgeCaseIds": [
+          "MANY_STREETS",
+          "CLEAN_LEADER"
+        ],
+        "edgeCaseContexts": [
+          "LEADER"
+        ],
+        "validated": true,
+        "reasons": []
+      },
+      {
+        "key": "following_speed_gain",
+        "implementationStage": "initial_learning_target",
+        "implemented": true,
+        "estimable": false,
+        "unit": "1/s",
+        "estimatorOwner": "096",
+        "estimatorOwners": [
+          "096"
+        ],
+        "channel": "HEADWAY_PAIR",
+        "contexts": [
+          "LEADER"
+        ],
+        "opportunities": [
+          {
+            "kind": "GREEN",
+            "role": "CARRIER"
+          },
+          {
+            "kind": "STOP",
+            "role": "CARRIER"
+          }
+        ],
+        "opportunityRole": "CARRIER",
+        "scenarios": [
+          {
+            "scenarioId": "PROFILE_PRUDENT",
+            "profileId": "PRUDENT",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 0.501048,
+            "interval": null,
+            "tolerance": 0.065,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_IMPULSIVE",
+            "profileId": "IMPULSIVE",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 1.1046625,
+            "interval": null,
+            "tolerance": 0.083,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_RECKLESS",
+            "profileId": "RECKLESS",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 1.698387,
+            "interval": null,
+            "tolerance": 0.101,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_MIXED",
+            "profileId": "MIXED",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 0.79662875,
+            "interval": null,
+            "tolerance": 0.074,
+            "withinTolerance": true
+          }
+        ],
+        "scenariosWithinTolerance": 4,
+        "edgeCaseIds": [
+          "MANY_STREETS",
+          "CLEAN_LEADER"
+        ],
+        "edgeCaseContexts": [
+          "LEADER"
+        ],
+        "validated": true,
+        "reasons": []
+      },
+      {
+        "key": "red_stop_probability",
+        "implementationStage": "initial_learning_target",
+        "implemented": true,
+        "estimable": false,
+        "unit": "probability",
+        "estimatorOwner": "097",
+        "estimatorOwners": [
+          "097"
+        ],
+        "channel": "STOP_OUTCOME",
+        "contexts": [
+          "FREE_TRAFFIC"
+        ],
+        "opportunities": [
+          {
+            "kind": "RED",
+            "role": "DEDICATED"
+          }
+        ],
+        "opportunityRole": "DEDICATED",
+        "scenarios": [
+          {
+            "scenarioId": "PROFILE_PRUDENT",
+            "profileId": "PRUDENT",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 1,
+            "interval": null,
+            "tolerance": 0.05,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_IMPULSIVE",
+            "profileId": "IMPULSIVE",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 0.75,
+            "interval": null,
+            "tolerance": 0.045,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_RECKLESS",
+            "profileId": "RECKLESS",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 0.35,
+            "interval": null,
+            "tolerance": 0.037,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_MIXED",
+            "profileId": "MIXED",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 0.85,
+            "interval": null,
+            "tolerance": 0.047,
+            "withinTolerance": true
+          }
+        ],
+        "scenariosWithinTolerance": 4,
+        "edgeCaseIds": [
+          "MANY_STREETS",
+          "SHORT_INTERVENTION",
+          "CLEAN_FREE_TRAFFIC"
+        ],
+        "edgeCaseContexts": [
+          "FREE_TRAFFIC"
+        ],
+        "validated": true,
+        "reasons": []
+      },
+      {
+        "key": "green_start_delay",
+        "implementationStage": "initial_learning_target",
+        "implemented": true,
+        "estimable": false,
+        "unit": "s",
+        "estimatorOwner": "097",
+        "estimatorOwners": [
+          "097"
+        ],
+        "channel": "GREEN_START_DELAY",
+        "contexts": [
+          "FREE_TRAFFIC"
+        ],
+        "opportunities": [
+          {
+            "kind": "GREEN",
+            "role": "DEDICATED"
+          }
+        ],
+        "opportunityRole": "DEDICATED",
+        "scenarios": [
+          {
+            "scenarioId": "PROFILE_PRUDENT",
+            "profileId": "PRUDENT",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 0.9,
+            "interval": null,
+            "tolerance": 0.047,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_IMPULSIVE",
+            "profileId": "IMPULSIVE",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 0.3499999999999999,
+            "interval": null,
+            "tolerance": 0.0305,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_RECKLESS",
+            "profileId": "RECKLESS",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 0.15,
+            "interval": null,
+            "tolerance": 0.0245,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_MIXED",
+            "profileId": "MIXED",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 0.5,
+            "interval": null,
+            "tolerance": 0.035,
+            "withinTolerance": true
+          }
+        ],
+        "scenariosWithinTolerance": 4,
+        "edgeCaseIds": [
+          "MANY_STREETS",
+          "SHORT_INTERVENTION",
+          "CLEAN_FREE_TRAFFIC"
+        ],
+        "edgeCaseContexts": [
+          "FREE_TRAFFIC"
+        ],
+        "validated": true,
+        "reasons": []
+      },
+      {
+        "key": "red_stop_line_offset",
+        "implementationStage": "initial_learning_target",
+        "implemented": true,
+        "estimable": false,
+        "unit": "m",
+        "estimatorOwner": "097",
+        "estimatorOwners": [
+          "097"
+        ],
+        "channel": "STOP_OUTCOME",
+        "contexts": [
+          "FREE_TRAFFIC"
+        ],
+        "opportunities": [
+          {
+            "kind": "RED",
+            "role": "DEDICATED"
+          }
+        ],
+        "opportunityRole": "DEDICATED",
+        "scenarios": [
+          {
+            "scenarioId": "PROFILE_PRUDENT",
+            "profileId": "PRUDENT",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 1.2,
+            "interval": null,
+            "tolerance": 0.136,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_IMPULSIVE",
+            "profileId": "IMPULSIVE",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 0.6,
+            "interval": null,
+            "tolerance": 0.118,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_RECKLESS",
+            "profileId": "RECKLESS",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 0.29999999999999993,
+            "interval": null,
+            "tolerance": 0.109,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_MIXED",
+            "profileId": "MIXED",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 0.9,
+            "interval": null,
+            "tolerance": 0.127,
+            "withinTolerance": true
+          }
+        ],
+        "scenariosWithinTolerance": 4,
+        "edgeCaseIds": [
+          "MANY_STREETS",
+          "SHORT_INTERVENTION",
+          "CLEAN_FREE_TRAFFIC"
+        ],
+        "edgeCaseContexts": [
+          "FREE_TRAFFIC"
+        ],
+        "validated": true,
+        "reasons": []
+      },
+      {
+        "key": "late_red_brake_threshold",
+        "implementationStage": "initial_learning_target",
+        "implemented": true,
+        "estimable": false,
+        "unit": "s",
+        "estimatorOwner": "097",
+        "estimatorOwners": [
+          "097"
+        ],
+        "channel": "DECELERATION",
+        "contexts": [
+          "FREE_TRAFFIC"
+        ],
+        "opportunities": [
+          {
+            "kind": "RED",
+            "role": "DEDICATED"
+          }
+        ],
+        "opportunityRole": "DEDICATED",
+        "scenarios": [
+          {
+            "scenarioId": "PROFILE_PRUDENT",
+            "profileId": "PRUDENT",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 2.6,
+            "interval": null,
+            "tolerance": 0.154,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_IMPULSIVE",
+            "profileId": "IMPULSIVE",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 1.4,
+            "interval": null,
+            "tolerance": 0.106,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_RECKLESS",
+            "profileId": "RECKLESS",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 0.8000000000000002,
+            "interval": null,
+            "tolerance": 0.082,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_MIXED",
+            "profileId": "MIXED",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 2,
+            "interval": null,
+            "tolerance": 0.13,
+            "withinTolerance": true
+          }
+        ],
+        "scenariosWithinTolerance": 4,
+        "edgeCaseIds": [
+          "MANY_STREETS",
+          "SHORT_INTERVENTION",
+          "CLEAN_FREE_TRAFFIC"
+        ],
+        "edgeCaseContexts": [
+          "FREE_TRAFFIC"
+        ],
+        "validated": true,
+        "reasons": []
+      },
+      {
+        "key": "stop_full_probability",
+        "implementationStage": "initial_learning_target",
+        "implemented": true,
+        "estimable": false,
+        "unit": "probability",
+        "estimatorOwner": "098",
+        "estimatorOwners": [
+          "098"
+        ],
+        "channel": "STOP_OUTCOME",
+        "contexts": [
+          "FREE_TRAFFIC"
+        ],
+        "opportunities": [
+          {
+            "kind": "STOP",
+            "role": "DEDICATED"
+          }
+        ],
+        "opportunityRole": "DEDICATED",
+        "scenarios": [
+          {
+            "scenarioId": "PROFILE_PRUDENT",
+            "profileId": "PRUDENT",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 1,
+            "interval": null,
+            "tolerance": 0.05,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_IMPULSIVE",
+            "profileId": "IMPULSIVE",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 0.6,
+            "interval": null,
+            "tolerance": 0.042,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_RECKLESS",
+            "profileId": "RECKLESS",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 0.2,
+            "interval": null,
+            "tolerance": 0.034,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_MIXED",
+            "profileId": "MIXED",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 0.85,
+            "interval": null,
+            "tolerance": 0.047,
+            "withinTolerance": true
+          }
+        ],
+        "scenariosWithinTolerance": 4,
+        "edgeCaseIds": [
+          "MANY_STREETS",
+          "SHORT_INTERVENTION",
+          "CLEAN_FREE_TRAFFIC"
+        ],
+        "edgeCaseContexts": [
+          "FREE_TRAFFIC"
+        ],
+        "validated": true,
+        "reasons": []
+      },
+      {
+        "key": "stop_dwell_time",
+        "implementationStage": "initial_learning_target",
+        "implemented": true,
+        "estimable": false,
+        "unit": "s",
+        "estimatorOwner": "098",
+        "estimatorOwners": [
+          "098"
+        ],
+        "channel": "STOP_OUTCOME",
+        "contexts": [
+          "FREE_TRAFFIC"
+        ],
+        "opportunities": [
+          {
+            "kind": "STOP",
+            "role": "DEDICATED"
+          }
+        ],
+        "opportunityRole": "DEDICATED",
+        "scenarios": [
+          {
+            "scenarioId": "PROFILE_PRUDENT",
+            "profileId": "PRUDENT",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 1.4,
+            "interval": null,
+            "tolerance": 0.062,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_IMPULSIVE",
+            "profileId": "IMPULSIVE",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 0.5,
+            "interval": null,
+            "tolerance": 0.035,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_RECKLESS",
+            "profileId": "RECKLESS",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 0.20000000000000004,
+            "interval": null,
+            "tolerance": 0.026,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_MIXED",
+            "profileId": "MIXED",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 0.9000000000000002,
+            "interval": null,
+            "tolerance": 0.047,
+            "withinTolerance": true
+          }
+        ],
+        "scenariosWithinTolerance": 4,
+        "edgeCaseIds": [
+          "MANY_STREETS",
+          "SHORT_INTERVENTION",
+          "CLEAN_FREE_TRAFFIC"
+        ],
+        "edgeCaseContexts": [
+          "FREE_TRAFFIC"
+        ],
+        "validated": true,
+        "reasons": []
+      },
+      {
+        "key": "stop_line_offset",
+        "implementationStage": "initial_learning_target",
+        "implemented": true,
+        "estimable": false,
+        "unit": "m",
+        "estimatorOwner": "098",
+        "estimatorOwners": [
+          "098"
+        ],
+        "channel": "STOP_OUTCOME",
+        "contexts": [
+          "FREE_TRAFFIC"
+        ],
+        "opportunities": [
+          {
+            "kind": "STOP",
+            "role": "DEDICATED"
+          }
+        ],
+        "opportunityRole": "DEDICATED",
+        "scenarios": [
+          {
+            "scenarioId": "PROFILE_PRUDENT",
+            "profileId": "PRUDENT",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 1.1,
+            "interval": null,
+            "tolerance": 0.133,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_IMPULSIVE",
+            "profileId": "IMPULSIVE",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 0.8,
+            "interval": null,
+            "tolerance": 0.124,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_RECKLESS",
+            "profileId": "RECKLESS",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 0.4000000000000001,
+            "interval": null,
+            "tolerance": 0.112,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_MIXED",
+            "profileId": "MIXED",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 0.9,
+            "interval": null,
+            "tolerance": 0.127,
+            "withinTolerance": true
+          }
+        ],
+        "scenariosWithinTolerance": 4,
+        "edgeCaseIds": [
+          "MANY_STREETS",
+          "SHORT_INTERVENTION",
+          "CLEAN_FREE_TRAFFIC"
+        ],
+        "edgeCaseContexts": [
+          "FREE_TRAFFIC"
+        ],
+        "validated": true,
+        "reasons": []
+      },
+      {
+        "key": "yield_time_gap",
+        "implementationStage": "initial_learning_target",
+        "implemented": false,
+        "estimable": false,
+        "unit": "s",
+        "estimatorOwner": "098",
+        "estimatorOwners": [
+          "098"
+        ],
+        "channel": "HEADWAY_PAIR",
+        "contexts": [
+          "LEADER"
+        ],
+        "opportunities": [
+          {
+            "kind": "YIELD",
+            "role": "DEDICATED"
+          }
+        ],
+        "opportunityRole": "DEDICATED",
+        "scenarios": [
+          {
+            "scenarioId": "PROFILE_PRUDENT",
+            "profileId": "PRUDENT",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": null,
+            "interval": [
+              4.1,
+              4.9
+            ],
+            "tolerance": 0.375,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_IMPULSIVE",
+            "profileId": "IMPULSIVE",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": null,
+            "interval": [
+              2.2,
+              3
+            ],
+            "tolerance": 0.28,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_RECKLESS",
+            "profileId": "RECKLESS",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": null,
+            "interval": [
+              0.9,
+              1.7000000000000002
+            ],
+            "tolerance": 0.215,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_MIXED",
+            "profileId": "MIXED",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": null,
+            "interval": [
+              3,
+              3.8
+            ],
+            "tolerance": 0.32,
+            "withinTolerance": true
+          }
+        ],
+        "scenariosWithinTolerance": 4,
+        "edgeCaseIds": [
+          "MANY_STREETS",
+          "CLEAN_LEADER"
+        ],
+        "edgeCaseContexts": [
+          "LEADER"
+        ],
+        "validated": true,
+        "reasons": []
+      },
+      {
+        "key": "lane_change_front_gap",
+        "implementationStage": "initial_learning_target",
+        "implemented": true,
+        "estimable": false,
+        "unit": "m",
+        "estimatorOwner": "099",
+        "estimatorOwners": [
+          "099"
+        ],
+        "channel": "LANE_CHANGE_OUTCOME",
+        "contexts": [
+          "FREE_TRAFFIC"
+        ],
+        "opportunities": [
+          {
+            "kind": "LANE_CHANGE",
+            "role": "DEDICATED"
+          }
+        ],
+        "opportunityRole": "DEDICATED",
+        "scenarios": [
+          {
+            "scenarioId": "PROFILE_PRUDENT",
+            "profileId": "PRUDENT",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": null,
+            "interval": [
+              17,
+              19.5
+            ],
+            "tolerance": 1.02,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_IMPULSIVE",
+            "profileId": "IMPULSIVE",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": null,
+            "interval": [
+              8,
+              10.5
+            ],
+            "tolerance": 0.66,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_RECKLESS",
+            "profileId": "RECKLESS",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": null,
+            "interval": [
+              3,
+              5.5
+            ],
+            "tolerance": 0.46,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_MIXED",
+            "profileId": "MIXED",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": null,
+            "interval": [
+              11,
+              13.5
+            ],
+            "tolerance": 0.78,
+            "withinTolerance": true
+          }
+        ],
+        "scenariosWithinTolerance": 4,
+        "edgeCaseIds": [
+          "MANY_STREETS",
+          "SHORT_INTERVENTION",
+          "CLEAN_FREE_TRAFFIC"
+        ],
+        "edgeCaseContexts": [
+          "FREE_TRAFFIC"
+        ],
+        "validated": true,
+        "reasons": []
+      },
+      {
+        "key": "lane_change_back_gap",
+        "implementationStage": "initial_learning_target",
+        "implemented": true,
+        "estimable": false,
+        "unit": "m",
+        "estimatorOwner": "099",
+        "estimatorOwners": [
+          "099"
+        ],
+        "channel": "LANE_CHANGE_OUTCOME",
+        "contexts": [
+          "FREE_TRAFFIC"
+        ],
+        "opportunities": [
+          {
+            "kind": "LANE_CHANGE",
+            "role": "DEDICATED"
+          }
+        ],
+        "opportunityRole": "DEDICATED",
+        "scenarios": [
+          {
+            "scenarioId": "PROFILE_PRUDENT",
+            "profileId": "PRUDENT",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": null,
+            "interval": [
+              15,
+              17.5
+            ],
+            "tolerance": 0.94,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_IMPULSIVE",
+            "profileId": "IMPULSIVE",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": null,
+            "interval": [
+              6,
+              8.5
+            ],
+            "tolerance": 0.58,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_RECKLESS",
+            "profileId": "RECKLESS",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": null,
+            "interval": [
+              2,
+              4.5
+            ],
+            "tolerance": 0.42,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_MIXED",
+            "profileId": "MIXED",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": null,
+            "interval": [
+              8.5,
+              11
+            ],
+            "tolerance": 0.68,
+            "withinTolerance": true
+          }
+        ],
+        "scenariosWithinTolerance": 4,
+        "edgeCaseIds": [
+          "MANY_STREETS",
+          "SHORT_INTERVENTION",
+          "CLEAN_FREE_TRAFFIC"
+        ],
+        "edgeCaseContexts": [
+          "FREE_TRAFFIC"
+        ],
+        "validated": true,
+        "reasons": []
+      },
+      {
+        "key": "lane_change_speed_gain",
+        "implementationStage": "initial_learning_target",
+        "implemented": true,
+        "estimable": false,
+        "unit": "m/s",
+        "estimatorOwner": "099",
+        "estimatorOwners": [
+          "099"
+        ],
+        "channel": "LANE_CHANGE_OUTCOME",
+        "contexts": [
+          "FREE_TRAFFIC"
+        ],
+        "opportunities": [
+          {
+            "kind": "LANE_CHANGE",
+            "role": "DEDICATED"
+          }
+        ],
+        "opportunityRole": "DEDICATED",
+        "scenarios": [
+          {
+            "scenarioId": "PROFILE_PRUDENT",
+            "profileId": "PRUDENT",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": null,
+            "interval": [
+              2.25,
+              2.875
+            ],
+            "tolerance": 0.275,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_IMPULSIVE",
+            "profileId": "IMPULSIVE",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": null,
+            "interval": [
+              4.25,
+              4.875
+            ],
+            "tolerance": 0.375,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_RECKLESS",
+            "profileId": "RECKLESS",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": null,
+            "interval": [
+              7.25,
+              7.875
+            ],
+            "tolerance": 0.525,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_MIXED",
+            "profileId": "MIXED",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": null,
+            "interval": [
+              2.95,
+              3.575
+            ],
+            "tolerance": 0.31,
+            "withinTolerance": true
+          }
+        ],
+        "scenariosWithinTolerance": 4,
+        "edgeCaseIds": [
+          "MANY_STREETS",
+          "SHORT_INTERVENTION",
+          "CLEAN_FREE_TRAFFIC"
+        ],
+        "edgeCaseContexts": [
+          "FREE_TRAFFIC"
+        ],
+        "validated": true,
+        "reasons": []
+      },
+      {
+        "key": "lane_change_cooldown",
+        "implementationStage": "initial_learning_target",
+        "implemented": true,
+        "estimable": false,
+        "unit": "s",
+        "estimatorOwner": "099",
+        "estimatorOwners": [
+          "099"
+        ],
+        "channel": "LANE_CHANGE_OUTCOME",
+        "contexts": [
+          "FREE_TRAFFIC"
+        ],
+        "opportunities": [
+          {
+            "kind": "LANE_CHANGE",
+            "role": "DEDICATED"
+          }
+        ],
+        "opportunityRole": "DEDICATED",
+        "scenarios": [
+          {
+            "scenarioId": "PROFILE_PRUDENT",
+            "profileId": "PRUDENT",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 8,
+            "interval": null,
+            "tolerance": 0.29,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_IMPULSIVE",
+            "profileId": "IMPULSIVE",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 3.5,
+            "interval": null,
+            "tolerance": 0.155,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_RECKLESS",
+            "profileId": "RECKLESS",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 1.5,
+            "interval": null,
+            "tolerance": 0.095,
+            "withinTolerance": true
+          },
+          {
+            "scenarioId": "PROFILE_MIXED",
+            "profileId": "MIXED",
+            "status": "WITHIN_TOLERANCE",
+            "estimate": 5,
+            "interval": null,
+            "tolerance": 0.2,
+            "withinTolerance": true
+          }
+        ],
+        "scenariosWithinTolerance": 4,
+        "edgeCaseIds": [
+          "MANY_STREETS",
+          "SHORT_INTERVENTION",
+          "CLEAN_FREE_TRAFFIC"
+        ],
+        "edgeCaseContexts": [
+          "FREE_TRAFFIC"
+        ],
+        "validated": true,
+        "reasons": []
+      }
+    ],
+    "counts": {
+      "registryMKeys": 24,
+      "matrixRows": 24,
+      "validated": 24,
+      "unvalidated": 0,
+      "estimatorOwners": 6,
+      "dedicatedKeys": 12,
+      "carrierKeys": 12,
+      "dedicatedOpportunities": 12,
+      "carrierOpportunities": 16,
+      "channels": 7,
+      "contexts": 2,
+      "scenarioResults": 96,
+      "edgeCases": 13
+    },
+    "dedicatedKeys": [
+      "red_stop_probability",
+      "green_start_delay",
+      "red_stop_line_offset",
+      "late_red_brake_threshold",
+      "stop_full_probability",
+      "stop_dwell_time",
+      "stop_line_offset",
+      "yield_time_gap",
+      "lane_change_front_gap",
+      "lane_change_back_gap",
+      "lane_change_speed_gain",
+      "lane_change_cooldown"
+    ],
+    "carrierKeys": [
+      "speed_delta_urban",
+      "speed_delta_residential",
+      "curve_lateral_accel",
+      "intersection_approach_speed",
+      "desired_acceleration",
+      "comfort_deceleration",
+      "acceleration_jerk",
+      "brake_reaction_delay",
+      "following_time_headway",
+      "following_min_gap",
+      "queue_standstill_gap",
+      "following_speed_gain"
+    ],
+    "unvalidated": [],
+    "duplicateMKeys": [],
+    "foreignKeys": [],
+    "matrixErrors": [],
+    "effects": {
+      "profilePublications": 0,
+      "storeWrites": 0,
+      "fleetMutations": 0
+    },
+    "signature": "fnv1a64:a7dc00cd4e0dbc08"
+  },
+  "scenarios": [
+    {
+      "scenarioId": "FULL_MATRIX",
+      "detail": "real 092/093/086/094–099/105/107 exports",
+      "gateStatus": "CLOSED",
+      "validated": 24,
+      "unvalidated": [],
+      "checks": [
+        {
+          "name": "gate-status",
+          "expected": "CLOSED",
+          "actual": "CLOSED",
+          "pass": true,
+          "detail": "all 24 M keys validated"
+        },
+        {
+          "name": "registry-m-keys",
+          "expected": 24,
+          "actual": 24,
+          "pass": true,
+          "detail": "092 initial_learning_target count"
+        },
+        {
+          "name": "matrix-rows",
+          "expected": 24,
+          "actual": 24,
+          "pass": true,
+          "detail": "one row per M key"
+        },
+        {
+          "name": "validated-rows",
+          "expected": 24,
+          "actual": 24,
+          "pass": true,
+          "detail": "every key passed all five sources"
+        },
+        {
+          "name": "unvalidated-rows",
+          "expected": 0,
+          "actual": 0,
+          "pass": true,
+          "detail": "no unvalidated key remains"
+        },
+        {
+          "name": "estimator-owners",
+          "expected": 6,
+          "actual": 6,
+          "pass": true,
+          "detail": "094–099 all own at least one key"
+        },
+        {
+          "name": "channels",
+          "expected": 7,
+          "actual": 7,
+          "pass": true,
+          "detail": "all 093 channels are represented"
+        },
+        {
+          "name": "contexts",
+          "expected": 2,
+          "actual": 2,
+          "pass": true,
+          "detail": "FREE_TRAFFIC and LEADER contexts"
+        },
+        {
+          "name": "scenario-results",
+          "expected": 96,
+          "actual": 96,
+          "pass": true,
+          "detail": "24 keys × 4 profiles"
+        },
+        {
+          "name": "edge-cases",
+          "expected": 13,
+          "actual": 13,
+          "pass": true,
+          "detail": "closed 107 case set"
+        },
+        {
+          "name": "units-from-093",
+          "expected": true,
+          "actual": true,
+          "pass": true,
+          "detail": "every row carries the 092 unit through its 093 spec"
+        },
+        {
+          "name": "reasons-empty",
+          "expected": true,
+          "actual": true,
+          "pass": true,
+          "detail": "validated rows carry no residual reason"
+        }
+      ]
+    },
+    {
+      "scenarioId": "MISSING_ESTIMATOR",
+      "detail": "lane_change_cooldown removed from the 099 key set",
+      "gateStatus": "OPEN",
+      "validated": 23,
+      "unvalidated": [
+        "lane_change_cooldown:NO_ESTIMATOR"
+      ],
+      "checks": [
+        {
+          "name": "gate-status",
+          "expected": "OPEN",
+          "actual": "OPEN",
+          "pass": true,
+          "detail": "a missing owner cannot close the gate"
+        },
+        {
+          "name": "unvalidated-rows",
+          "expected": 1,
+          "actual": 1,
+          "pass": true,
+          "detail": "only the affected key remains"
+        },
+        {
+          "name": "unvalidated-key",
+          "expected": "lane_change_cooldown",
+          "actual": "lane_change_cooldown",
+          "pass": true,
+          "detail": "the key removed from the 099 set"
+        },
+        {
+          "name": "reason",
+          "expected": "NO_ESTIMATOR",
+          "actual": "NO_ESTIMATOR",
+          "pass": true,
+          "detail": "the reason is closed and exact"
+        },
+        {
+          "name": "validated-rows",
+          "expected": 23,
+          "actual": 23,
+          "pass": true,
+          "detail": "the other keys are unaffected"
+        }
+      ]
+    },
+    {
+      "scenarioId": "MISSING_OPPORTUNITY",
+      "detail": "RED and LANE_CHANGE removed from the 086 vocabulary",
+      "gateStatus": "OPEN",
+      "validated": 17,
+      "unvalidated": [
+        "red_stop_probability:NO_OPPORTUNITY",
+        "red_stop_line_offset:NO_OPPORTUNITY",
+        "late_red_brake_threshold:NO_OPPORTUNITY",
+        "lane_change_front_gap:NO_OPPORTUNITY",
+        "lane_change_back_gap:NO_OPPORTUNITY",
+        "lane_change_speed_gain:NO_OPPORTUNITY",
+        "lane_change_cooldown:NO_OPPORTUNITY"
+      ],
+      "checks": [
+        {
+          "name": "gate-status",
+          "expected": "OPEN",
+          "actual": "OPEN",
+          "pass": true,
+          "detail": "a missing 086 kind opens the gate"
+        },
+        {
+          "name": "red-reason",
+          "expected": "NO_OPPORTUNITY",
+          "actual": "NO_OPPORTUNITY",
+          "pass": true,
+          "detail": "RED is no longer available"
+        },
+        {
+          "name": "lane-reason",
+          "expected": "NO_OPPORTUNITY",
+          "actual": "NO_OPPORTUNITY",
+          "pass": true,
+          "detail": "LANE_CHANGE is no longer available"
+        },
+        {
+          "name": "green-start-still-valid",
+          "expected": true,
+          "actual": true,
+          "pass": true,
+          "detail": "GREEN remains a dedicated opportunity for green_start_delay"
+        },
+        {
+          "name": "dedicated-keys",
+          "expected": 5,
+          "actual": 5,
+          "pass": true,
+          "detail": "only green start plus the four STOP/YIELD keys stay dedicated"
+        }
+      ]
+    },
+    {
+      "scenarioId": "FAILED_SCENARIO",
+      "detail": "PROFILE_PRUDENT/speed_delta_urban forced OUTSIDE_TOLERANCE",
+      "gateStatus": "OPEN",
+      "validated": 23,
+      "unvalidated": [
+        "speed_delta_urban:SCENARIO_FAILED"
+      ],
+      "checks": [
+        {
+          "name": "gate-status",
+          "expected": "OPEN",
+          "actual": "OPEN",
+          "pass": true,
+          "detail": "a retained failure cannot close the gate"
+        },
+        {
+          "name": "reason",
+          "expected": "SCENARIO_FAILED",
+          "actual": "SCENARIO_FAILED",
+          "pass": true,
+          "detail": "outside tolerance is a closed failure reason"
+        },
+        {
+          "name": "within-tolerance",
+          "expected": 3,
+          "actual": 3,
+          "pass": true,
+          "detail": "three profiles remain inside tolerance"
+        },
+        {
+          "name": "retained-failure",
+          "expected": "OUTSIDE_TOLERANCE",
+          "actual": "OUTSIDE_TOLERANCE",
+          "pass": true,
+          "detail": "the real 105 status is preserved, not rewritten"
+        },
+        {
+          "name": "signature-changes",
+          "expected": true,
+          "actual": true,
+          "pass": true,
+          "detail": "the deterministic signature covers the failure"
+        }
+      ]
+    },
+    {
+      "scenarioId": "CARRIER_TRANSPARENCY",
+      "detail": "dedicated versus carrier opportunity roles",
+      "gateStatus": "CLOSED",
+      "validated": 24,
+      "unvalidated": [],
+      "checks": [
+        {
+          "name": "carrier-keys",
+          "expected": 12,
+          "actual": 12,
+          "pass": true,
+          "detail": "094–096 keys have no dedicated 086 kind"
+        },
+        {
+          "name": "dedicated-keys",
+          "expected": 12,
+          "actual": 12,
+          "pass": true,
+          "detail": "097–099 keys have dedicated kinds"
+        },
+        {
+          "name": "carrier-list",
+          "expected": "speed_delta_urban,speed_delta_residential,curve_lateral_accel,intersection_approach_speed,desired_acceleration,comfort_deceleration,acceleration_jerk,brake_reaction_delay,following_time_headway,following_min_gap,queue_standstill_gap,following_speed_gain",
+          "actual": "speed_delta_urban,speed_delta_residential,curve_lateral_accel,intersection_approach_speed,desired_acceleration,comfort_deceleration,acceleration_jerk,brake_reaction_delay,following_time_headway,following_min_gap,queue_standstill_gap,following_speed_gain",
+          "pass": true,
+          "detail": "carrier keys are listed explicitly"
+        },
+        {
+          "name": "roles-uniform",
+          "expected": true,
+          "actual": true,
+          "pass": true,
+          "detail": "a row never mixes dedicated and carrier roles"
+        },
+        {
+          "name": "carrier-kinds",
+          "expected": "GREEN,STOP",
+          "actual": "GREEN,STOP",
+          "pass": true,
+          "detail": "086 has no dedicated free-flow/following kind"
+        },
+        {
+          "name": "carrier-no-dedicated-kind",
+          "expected": true,
+          "actual": true,
+          "pass": true,
+          "detail": "RED/YIELD/LANE_CHANGE are never presented as carriers"
+        },
+        {
+          "name": "carrier-opportunities",
+          "expected": 16,
+          "actual": 16,
+          "pass": true,
+          "detail": "12 single-kind carriers plus four following keys with GREEN+STOP"
+        }
+      ]
+    },
+    {
+      "scenarioId": "DUPLICATE_INJECTED",
+      "detail": "duplicate owner, foreign key and injected 25th key",
+      "gateStatus": "OPEN",
+      "validated": 23,
+      "unvalidated": [
+        "speed_delta_urban:DUPLICATE_OWNER"
+      ],
+      "checks": [
+        {
+          "name": "duplicate-open",
+          "expected": "OPEN",
+          "actual": "OPEN",
+          "pass": true,
+          "detail": "duplicate ownership opens the gate"
+        },
+        {
+          "name": "duplicate-reason",
+          "expected": "DUPLICATE_OWNER",
+          "actual": "DUPLICATE_OWNER",
+          "pass": true,
+          "detail": "the key has two estimator owners"
+        },
+        {
+          "name": "duplicate-owners",
+          "expected": "094,095",
+          "actual": "094,095",
+          "pass": true,
+          "detail": "both real owners are reported"
+        },
+        {
+          "name": "foreign-open",
+          "expected": "OPEN",
+          "actual": "OPEN",
+          "pass": true,
+          "detail": "a foreign key opens the gate"
+        },
+        {
+          "name": "foreign-keys",
+          "expected": "speed_delta_arterial",
+          "actual": "speed_delta_arterial",
+          "pass": true,
+          "detail": "an R key is never accepted as an M key"
+        },
+        {
+          "name": "foreign-matrix-error",
+          "expected": "FOREIGN_KEY",
+          "actual": "FOREIGN_KEY",
+          "pass": true,
+          "detail": "the defect is reported at report level"
+        },
+        {
+          "name": "extra-key-open",
+          "expected": "OPEN",
+          "actual": "OPEN",
+          "pass": true,
+          "detail": "an injected 25th key opens the gate"
+        },
+        {
+          "name": "extra-key-mismatch",
+          "expected": true,
+          "actual": true,
+          "pass": true,
+          "detail": "the M-key set must be exactly the 092 24"
+        }
+      ]
+    },
+    {
+      "scenarioId": "OPEN_VS_CLOSED",
+      "detail": "gate derived from rows and matrix defects",
+      "gateStatus": "CLOSED",
+      "validated": 24,
+      "unvalidated": [],
+      "checks": [
+        {
+          "name": "closed-only-at-24",
+          "expected": true,
+          "actual": true,
+          "pass": true,
+          "detail": "the real data closes the gate at 24/24"
+        },
+        {
+          "name": "missing-edge-open",
+          "expected": "OPEN",
+          "actual": "OPEN",
+          "pass": true,
+          "detail": "a missing 107 context opens it"
+        },
+        {
+          "name": "missing-edge-reason",
+          "expected": "NO_EDGE_CASE",
+          "actual": "NO_EDGE_CASE",
+          "pass": true,
+          "detail": "the LEADER context lost its positive 107 coverage"
+        },
+        {
+          "name": "status-invariant",
+          "expected": true,
+          "actual": true,
+          "pass": true,
+          "detail": "the gate is derived from rows and matrix defects"
+        },
+        {
+          "name": "counts-invariant",
+          "expected": true,
+          "actual": true,
+          "pass": true,
+          "detail": "validated plus unvalidated always equals the matrix rows"
+        },
+        {
+          "name": "reasons-invariant",
+          "expected": true,
+          "actual": true,
+          "pass": true,
+          "detail": "validated rows have no reasons and unvalidated rows always do"
+        }
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "name": "gate-status",
+      "expected": "CLOSED",
+      "actual": "CLOSED",
+      "pass": true,
+      "detail": "all 24 M keys validated"
+    },
+    {
+      "name": "registry-m-keys",
+      "expected": 24,
+      "actual": 24,
+      "pass": true,
+      "detail": "092 initial_learning_target count"
+    },
+    {
+      "name": "matrix-rows",
+      "expected": 24,
+      "actual": 24,
+      "pass": true,
+      "detail": "one row per M key"
+    },
+    {
+      "name": "validated-rows",
+      "expected": 24,
+      "actual": 24,
+      "pass": true,
+      "detail": "every key passed all five sources"
+    },
+    {
+      "name": "unvalidated-rows",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no unvalidated key remains"
+    },
+    {
+      "name": "estimator-owners",
+      "expected": 6,
+      "actual": 6,
+      "pass": true,
+      "detail": "094–099 all own at least one key"
+    },
+    {
+      "name": "channels",
+      "expected": 7,
+      "actual": 7,
+      "pass": true,
+      "detail": "all 093 channels are represented"
+    },
+    {
+      "name": "contexts",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "FREE_TRAFFIC and LEADER contexts"
+    },
+    {
+      "name": "scenario-results",
+      "expected": 96,
+      "actual": 96,
+      "pass": true,
+      "detail": "24 keys × 4 profiles"
+    },
+    {
+      "name": "edge-cases",
+      "expected": 13,
+      "actual": 13,
+      "pass": true,
+      "detail": "closed 107 case set"
+    },
+    {
+      "name": "units-from-093",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "every row carries the 092 unit through its 093 spec"
+    },
+    {
+      "name": "reasons-empty",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "validated rows carry no residual reason"
+    },
+    {
+      "name": "gate-status",
+      "expected": "OPEN",
+      "actual": "OPEN",
+      "pass": true,
+      "detail": "a missing owner cannot close the gate"
+    },
+    {
+      "name": "unvalidated-rows",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "only the affected key remains"
+    },
+    {
+      "name": "unvalidated-key",
+      "expected": "lane_change_cooldown",
+      "actual": "lane_change_cooldown",
+      "pass": true,
+      "detail": "the key removed from the 099 set"
+    },
+    {
+      "name": "reason",
+      "expected": "NO_ESTIMATOR",
+      "actual": "NO_ESTIMATOR",
+      "pass": true,
+      "detail": "the reason is closed and exact"
+    },
+    {
+      "name": "validated-rows",
+      "expected": 23,
+      "actual": 23,
+      "pass": true,
+      "detail": "the other keys are unaffected"
+    },
+    {
+      "name": "gate-status",
+      "expected": "OPEN",
+      "actual": "OPEN",
+      "pass": true,
+      "detail": "a missing 086 kind opens the gate"
+    },
+    {
+      "name": "red-reason",
+      "expected": "NO_OPPORTUNITY",
+      "actual": "NO_OPPORTUNITY",
+      "pass": true,
+      "detail": "RED is no longer available"
+    },
+    {
+      "name": "lane-reason",
+      "expected": "NO_OPPORTUNITY",
+      "actual": "NO_OPPORTUNITY",
+      "pass": true,
+      "detail": "LANE_CHANGE is no longer available"
+    },
+    {
+      "name": "green-start-still-valid",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "GREEN remains a dedicated opportunity for green_start_delay"
+    },
+    {
+      "name": "dedicated-keys",
+      "expected": 5,
+      "actual": 5,
+      "pass": true,
+      "detail": "only green start plus the four STOP/YIELD keys stay dedicated"
+    },
+    {
+      "name": "gate-status",
+      "expected": "OPEN",
+      "actual": "OPEN",
+      "pass": true,
+      "detail": "a retained failure cannot close the gate"
+    },
+    {
+      "name": "reason",
+      "expected": "SCENARIO_FAILED",
+      "actual": "SCENARIO_FAILED",
+      "pass": true,
+      "detail": "outside tolerance is a closed failure reason"
+    },
+    {
+      "name": "within-tolerance",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "three profiles remain inside tolerance"
+    },
+    {
+      "name": "retained-failure",
+      "expected": "OUTSIDE_TOLERANCE",
+      "actual": "OUTSIDE_TOLERANCE",
+      "pass": true,
+      "detail": "the real 105 status is preserved, not rewritten"
+    },
+    {
+      "name": "signature-changes",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the deterministic signature covers the failure"
+    },
+    {
+      "name": "carrier-keys",
+      "expected": 12,
+      "actual": 12,
+      "pass": true,
+      "detail": "094–096 keys have no dedicated 086 kind"
+    },
+    {
+      "name": "dedicated-keys",
+      "expected": 12,
+      "actual": 12,
+      "pass": true,
+      "detail": "097–099 keys have dedicated kinds"
+    },
+    {
+      "name": "carrier-list",
+      "expected": "speed_delta_urban,speed_delta_residential,curve_lateral_accel,intersection_approach_speed,desired_acceleration,comfort_deceleration,acceleration_jerk,brake_reaction_delay,following_time_headway,following_min_gap,queue_standstill_gap,following_speed_gain",
+      "actual": "speed_delta_urban,speed_delta_residential,curve_lateral_accel,intersection_approach_speed,desired_acceleration,comfort_deceleration,acceleration_jerk,brake_reaction_delay,following_time_headway,following_min_gap,queue_standstill_gap,following_speed_gain",
+      "pass": true,
+      "detail": "carrier keys are listed explicitly"
+    },
+    {
+      "name": "roles-uniform",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "a row never mixes dedicated and carrier roles"
+    },
+    {
+      "name": "carrier-kinds",
+      "expected": "GREEN,STOP",
+      "actual": "GREEN,STOP",
+      "pass": true,
+      "detail": "086 has no dedicated free-flow/following kind"
+    },
+    {
+      "name": "carrier-no-dedicated-kind",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "RED/YIELD/LANE_CHANGE are never presented as carriers"
+    },
+    {
+      "name": "carrier-opportunities",
+      "expected": 16,
+      "actual": 16,
+      "pass": true,
+      "detail": "12 single-kind carriers plus four following keys with GREEN+STOP"
+    },
+    {
+      "name": "duplicate-open",
+      "expected": "OPEN",
+      "actual": "OPEN",
+      "pass": true,
+      "detail": "duplicate ownership opens the gate"
+    },
+    {
+      "name": "duplicate-reason",
+      "expected": "DUPLICATE_OWNER",
+      "actual": "DUPLICATE_OWNER",
+      "pass": true,
+      "detail": "the key has two estimator owners"
+    },
+    {
+      "name": "duplicate-owners",
+      "expected": "094,095",
+      "actual": "094,095",
+      "pass": true,
+      "detail": "both real owners are reported"
+    },
+    {
+      "name": "foreign-open",
+      "expected": "OPEN",
+      "actual": "OPEN",
+      "pass": true,
+      "detail": "a foreign key opens the gate"
+    },
+    {
+      "name": "foreign-keys",
+      "expected": "speed_delta_arterial",
+      "actual": "speed_delta_arterial",
+      "pass": true,
+      "detail": "an R key is never accepted as an M key"
+    },
+    {
+      "name": "foreign-matrix-error",
+      "expected": "FOREIGN_KEY",
+      "actual": "FOREIGN_KEY",
+      "pass": true,
+      "detail": "the defect is reported at report level"
+    },
+    {
+      "name": "extra-key-open",
+      "expected": "OPEN",
+      "actual": "OPEN",
+      "pass": true,
+      "detail": "an injected 25th key opens the gate"
+    },
+    {
+      "name": "extra-key-mismatch",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the M-key set must be exactly the 092 24"
+    },
+    {
+      "name": "closed-only-at-24",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the real data closes the gate at 24/24"
+    },
+    {
+      "name": "missing-edge-open",
+      "expected": "OPEN",
+      "actual": "OPEN",
+      "pass": true,
+      "detail": "a missing 107 context opens it"
+    },
+    {
+      "name": "missing-edge-reason",
+      "expected": "NO_EDGE_CASE",
+      "actual": "NO_EDGE_CASE",
+      "pass": true,
+      "detail": "the LEADER context lost its positive 107 coverage"
+    },
+    {
+      "name": "status-invariant",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the gate is derived from rows and matrix defects"
+    },
+    {
+      "name": "counts-invariant",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "validated plus unvalidated always equals the matrix rows"
+    },
+    {
+      "name": "reasons-invariant",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "validated rows have no reasons and unvalidated rows always do"
+    }
+  ],
+  "summary": {
+    "scenarios": 7,
+    "checks": 48,
+    "passed": 48,
+    "pass": true,
+    "gateStatus": "CLOSED",
+    "carrierKeys": [
+      "speed_delta_urban",
+      "speed_delta_residential",
+      "curve_lateral_accel",
+      "intersection_approach_speed",
+      "desired_acceleration",
+      "comfort_deceleration",
+      "acceleration_jerk",
+      "brake_reaction_delay",
+      "following_time_headway",
+      "following_min_gap",
+      "queue_standstill_gap",
+      "following_speed_gain"
+    ],
+    "unvalidated": []
+  }
+}
