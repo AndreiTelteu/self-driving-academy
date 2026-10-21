@@ -1,0 +1,669 @@
+{
+  "version": "205-learning-epoch-v1",
+  "contract": {
+    "changeReasons": [
+      "RESTORE",
+      "IMPORT",
+      "NEW_PROFILE"
+    ],
+    "generationStatuses": [
+      "OPEN",
+      "CLOSED",
+      "CANCELLED_BY_PROFILE_CHANGE"
+    ],
+    "barrierStatuses": [
+      "PENDING",
+      "COMMITTED",
+      "ROLLED_BACK"
+    ],
+    "rejectionCodes": [
+      "IMPORT_INVALID",
+      "CHANGE_PENDING",
+      "SAME_TARGET",
+      "TARGET_INVALID",
+      "TARGET_PROFILE_MISMATCH",
+      "TARGET_VERSION_NOT_FOUND",
+      "TARGET_ENGINE_MISMATCH",
+      "SEGMENT_STATE_UNREADABLE",
+      "SEGMENT_CLOSE_FAILED",
+      "SEGMENT_OPEN_FAILED",
+      "PHYSICAL_STATE_CHANGED",
+      "ACTIVATION_PENDING",
+      "ACTIVATION_REJECTED",
+      "ACTIVATION_FAILED",
+      "TICK_NOT_ADVANCING",
+      "BARRIER_DISPOSED"
+    ],
+    "decisionStatuses": [
+      "CURRENT",
+      "STALE_GENERATION",
+      "DUPLICATE",
+      "LATE_RESULT",
+      "INVALID"
+    ],
+    "history": 16,
+    "trackedJobs": 64,
+    "seenResults": 128
+  },
+  "scenarios": [
+    {
+      "name": "restore with an in-progress job",
+      "status": "APPLIED",
+      "detail": {
+        "request": "PENDING",
+        "epoch": 2,
+        "baseVersionId": "profile-v2",
+        "segmentId": "city-profile:g2",
+        "cancelledJobs": "restore-job",
+        "jobOutcome": "cancelled",
+        "lateResult": "LATE_RESULT",
+        "versions": 3,
+        "activation": "activation-0001"
+      }
+    },
+    {
+      "name": "valid import",
+      "status": "APPLIED",
+      "detail": {
+        "reason": "IMPORT",
+        "epoch": 2,
+        "activationCommand": "activation-0001",
+        "activationTick": 2,
+        "origin": "IMPORT",
+        "fleetBefore": "profile-v1",
+        "fleetAfter": "profile-v2",
+        "appliedAt": 2
+      }
+    },
+    {
+      "name": "invalid import",
+      "status": "REJECTED",
+      "detail": {
+        "code": "IMPORT_INVALID",
+        "barriers": 0,
+        "pending": false,
+        "epoch": 1,
+        "segment": "segment-g1",
+        "queuePending": 1,
+        "closeCalls": 0,
+        "openCalls": 0,
+        "activationCommands": 0
+      }
+    },
+    {
+      "name": "new profile",
+      "status": "APPLIED",
+      "detail": {
+        "firstEpoch": 2,
+        "secondEpoch": 3,
+        "firstSegment": "city-profile:g2",
+        "secondSegment": "city-profile:g3",
+        "baseVersionId": "profile-v3",
+        "statuses": "CANCELLED_BY_PROFILE_CHANGE,CANCELLED_BY_PROFILE_CHANGE,OPEN",
+        "closeReason": "PROFILE_CHANGE",
+        "physicalPreserved": true,
+        "invalidatedActivations": 1
+      }
+    },
+    {
+      "name": "late result",
+      "status": "LATE_RESULT",
+      "detail": {
+        "reason": "CANCELLED_BY_PROFILE_CHANGE",
+        "ignored": true,
+        "accepted": false,
+        "versionId": null,
+        "versions": 3,
+        "lateResults": 1
+      }
+    },
+    {
+      "name": "duplicate result",
+      "status": "DUPLICATE",
+      "detail": {
+        "first": "CURRENT",
+        "second": "DUPLICATE",
+        "reason": "DUPLICATE_RESULT",
+        "duplicates": 1,
+        "versions": 3
+      }
+    },
+    {
+      "name": "rollback",
+      "status": "ROLLED_BACK",
+      "detail": {
+        "code": "ACTIVATION_REJECTED",
+        "barrierStatus": "ROLLED_BACK",
+        "exact": true,
+        "segmentRestored": true,
+        "activationPublished": false,
+        "epoch": 1,
+        "segment": "segment-g1",
+        "status": "OPEN",
+        "versions": 3,
+        "fleet": "profile-v1",
+        "changes": 0,
+        "rollbacks": 1
+      }
+    }
+  ],
+  "checks": [
+    {
+      "name": "contract-version",
+      "expected": "205-learning-epoch-v1",
+      "actual": "205-learning-epoch-v1",
+      "pass": true,
+      "detail": "barrier contract"
+    },
+    {
+      "name": "change-reasons",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "RESTORE, IMPORT, NEW_PROFILE"
+    },
+    {
+      "name": "generation-statuses",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "OPEN, CLOSED, CANCELLED"
+    },
+    {
+      "name": "barrier-statuses",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "PENDING, COMMITTED, ROLLED_BACK"
+    },
+    {
+      "name": "decision-statuses",
+      "expected": 5,
+      "actual": 5,
+      "pass": true,
+      "detail": "closed generation gate"
+    },
+    {
+      "name": "rejection-codes",
+      "expected": 16,
+      "actual": 16,
+      "pass": true,
+      "detail": "closed rejection vocabulary"
+    },
+    {
+      "name": "history-limit",
+      "expected": 16,
+      "actual": 16,
+      "pass": true,
+      "detail": "bounded barrier history"
+    },
+    {
+      "name": "tracked-jobs-limit",
+      "expected": 64,
+      "actual": 64,
+      "pass": true,
+      "detail": "bounded job capture"
+    },
+    {
+      "name": "restore-request",
+      "expected": "PENDING",
+      "actual": "PENDING",
+      "pass": true,
+      "detail": "the request waits for the tick"
+    },
+    {
+      "name": "restore-applied",
+      "expected": "APPLIED",
+      "actual": "APPLIED",
+      "pass": true,
+      "detail": "the barrier committed at the boundary"
+    },
+    {
+      "name": "restore-pending-at-request",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "one pending barrier"
+    },
+    {
+      "name": "restore-epoch",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "epoch advanced by one"
+    },
+    {
+      "name": "restore-base",
+      "expected": "profile-v2",
+      "actual": "profile-v2",
+      "pass": true,
+      "detail": "the target is the new base"
+    },
+    {
+      "name": "restore-cancelled-job",
+      "expected": "restore-job",
+      "actual": "restore-job",
+      "pass": true,
+      "detail": "the 103 job was cancelled"
+    },
+    {
+      "name": "restore-job-outcome",
+      "expected": "cancelled",
+      "actual": "cancelled",
+      "pass": true,
+      "detail": "real 103 cancellation"
+    },
+    {
+      "name": "restore-late-result",
+      "expected": "LATE_RESULT",
+      "actual": "LATE_RESULT",
+      "pass": true,
+      "detail": "explicit late result"
+    },
+    {
+      "name": "restore-invalidated-jobs",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "one invalidated job"
+    },
+    {
+      "name": "restore-no-version",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "the barrier created no version"
+    },
+    {
+      "name": "restore-changes",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "one committed change"
+    },
+    {
+      "name": "import-applied",
+      "expected": "APPLIED",
+      "actual": "APPLIED",
+      "pass": true,
+      "detail": "the import committed"
+    },
+    {
+      "name": "import-reason",
+      "expected": "IMPORT",
+      "actual": "IMPORT",
+      "pass": true,
+      "detail": "explicit import reason"
+    },
+    {
+      "name": "import-command",
+      "expected": "activation-0001",
+      "actual": "activation-0001",
+      "pass": true,
+      "detail": "one real 110 command"
+    },
+    {
+      "name": "import-activate-tick",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "next common tick"
+    },
+    {
+      "name": "import-origin",
+      "expected": "IMPORT",
+      "actual": "IMPORT",
+      "pass": true,
+      "detail": "110 origin"
+    },
+    {
+      "name": "import-fleet-before",
+      "expected": "profile-v1",
+      "actual": "profile-v1",
+      "pass": true,
+      "detail": "not applied before the tick"
+    },
+    {
+      "name": "import-fleet-after",
+      "expected": "profile-v2",
+      "actual": "profile-v2",
+      "pass": true,
+      "detail": "fleet adopted it"
+    },
+    {
+      "name": "import-applied-tick",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "common tick of the activation"
+    },
+    {
+      "name": "invalid-status",
+      "expected": "REJECTED",
+      "actual": "REJECTED",
+      "pass": true,
+      "detail": "the import was refused"
+    },
+    {
+      "name": "invalid-code",
+      "expected": "IMPORT_INVALID",
+      "actual": "IMPORT_INVALID",
+      "pass": true,
+      "detail": "closed import reason"
+    },
+    {
+      "name": "invalid-no-barrier",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no barrier record"
+    },
+    {
+      "name": "invalid-no-pending",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "nothing scheduled"
+    },
+    {
+      "name": "invalid-epoch",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "epoch unchanged"
+    },
+    {
+      "name": "invalid-segment",
+      "expected": "segment-g1",
+      "actual": "segment-g1",
+      "pass": true,
+      "detail": "segment kept"
+    },
+    {
+      "name": "invalid-queue",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the job stays queued"
+    },
+    {
+      "name": "invalid-closes",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no segment close"
+    },
+    {
+      "name": "invalid-opens",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no segment open"
+    },
+    {
+      "name": "invalid-activations",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no publication"
+    },
+    {
+      "name": "newprofile-first-epoch",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "first increment"
+    },
+    {
+      "name": "newprofile-second-epoch",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "second increment"
+    },
+    {
+      "name": "newprofile-monotonic",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the epoch strictly grows"
+    },
+    {
+      "name": "newprofile-first-segment",
+      "expected": "city-profile:g2",
+      "actual": "city-profile:g2",
+      "pass": true,
+      "detail": "stable new identity"
+    },
+    {
+      "name": "newprofile-second-segment",
+      "expected": "city-profile:g3",
+      "actual": "city-profile:g3",
+      "pass": true,
+      "detail": "a second identity"
+    },
+    {
+      "name": "newprofile-base",
+      "expected": "profile-v3",
+      "actual": "profile-v3",
+      "pass": true,
+      "detail": "the target is the base"
+    },
+    {
+      "name": "newprofile-statuses",
+      "expected": "CANCELLED_BY_PROFILE_CHANGE,CANCELLED_BY_PROFILE_CHANGE,OPEN",
+      "actual": "CANCELLED_BY_PROFILE_CHANGE,CANCELLED_BY_PROFILE_CHANGE,OPEN",
+      "pass": true,
+      "detail": "old evidence is cancelled explicitly"
+    },
+    {
+      "name": "newprofile-close-reason",
+      "expected": "PROFILE_CHANGE",
+      "actual": "PROFILE_CHANGE",
+      "pass": true,
+      "detail": "069 close reason"
+    },
+    {
+      "name": "newprofile-physical",
+      "expected": "[12,9.5,0.25]",
+      "actual": "[12,9.5,0.25]",
+      "pass": true,
+      "detail": "physical state preserved"
+    },
+    {
+      "name": "newprofile-settled-activation",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the superseded activation was settled at the boundary"
+    },
+    {
+      "name": "late-status",
+      "expected": "LATE_RESULT",
+      "actual": "LATE_RESULT",
+      "pass": true,
+      "detail": "late result is explicit"
+    },
+    {
+      "name": "late-reason",
+      "expected": "CANCELLED_BY_PROFILE_CHANGE",
+      "actual": "CANCELLED_BY_PROFILE_CHANGE",
+      "pass": true,
+      "detail": "old evidence status"
+    },
+    {
+      "name": "late-ignored",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "never composed"
+    },
+    {
+      "name": "late-version",
+      "expected": null,
+      "actual": null,
+      "pass": true,
+      "detail": "no version identity"
+    },
+    {
+      "name": "late-no-version",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "store unchanged"
+    },
+    {
+      "name": "late-counter",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "counted once"
+    },
+    {
+      "name": "duplicate-first",
+      "expected": "CURRENT",
+      "actual": "CURRENT",
+      "pass": true,
+      "detail": "the first delivery is current"
+    },
+    {
+      "name": "duplicate-second",
+      "expected": "DUPLICATE",
+      "actual": "DUPLICATE",
+      "pass": true,
+      "detail": "the second is deduplicated"
+    },
+    {
+      "name": "duplicate-reason",
+      "expected": "DUPLICATE_RESULT",
+      "actual": "DUPLICATE_RESULT",
+      "pass": true,
+      "detail": "closed duplicate reason"
+    },
+    {
+      "name": "duplicate-version",
+      "expected": null,
+      "actual": null,
+      "pass": true,
+      "detail": "no version identity"
+    },
+    {
+      "name": "duplicate-ignored",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "ignored"
+    },
+    {
+      "name": "duplicate-no-version",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "base plus two fixture targets"
+    },
+    {
+      "name": "duplicate-counter",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "counted once"
+    },
+    {
+      "name": "rollback-status",
+      "expected": "ROLLED_BACK",
+      "actual": "ROLLED_BACK",
+      "pass": true,
+      "detail": "explicit rollback"
+    },
+    {
+      "name": "rollback-code",
+      "expected": "ACTIVATION_REJECTED",
+      "actual": "ACTIVATION_REJECTED",
+      "pass": true,
+      "detail": "110 refusal kept"
+    },
+    {
+      "name": "rollback-barrier",
+      "expected": "ROLLED_BACK",
+      "actual": "ROLLED_BACK",
+      "pass": true,
+      "detail": "no committed barrier"
+    },
+    {
+      "name": "rollback-exact",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "no side effect"
+    },
+    {
+      "name": "rollback-segment",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "reopened"
+    },
+    {
+      "name": "rollback-activation",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "nothing published"
+    },
+    {
+      "name": "rollback-epoch",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "epoch unchanged"
+    },
+    {
+      "name": "rollback-generation",
+      "expected": "segment-g1",
+      "actual": "segment-g1",
+      "pass": true,
+      "detail": "same segment"
+    },
+    {
+      "name": "rollback-segment-status",
+      "expected": "OPEN",
+      "actual": "OPEN",
+      "pass": true,
+      "detail": "reopened"
+    },
+    {
+      "name": "rollback-no-version",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "store untouched"
+    },
+    {
+      "name": "rollback-fleet",
+      "expected": "profile-v1",
+      "actual": "profile-v1",
+      "pass": true,
+      "detail": "fleet untouched"
+    },
+    {
+      "name": "rollback-changes",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no committed change"
+    },
+    {
+      "name": "rollback-count",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "one rollback"
+    }
+  ],
+  "summary": {
+    "scenarios": 7,
+    "checks": 73,
+    "passed": 73,
+    "pass": true
+  }
+}

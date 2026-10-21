@@ -67,6 +67,11 @@ Anularea și erorile sunt terminale pentru jobul respectiv, eliberează `order`-
 funcțională; următorul job este dispatch-uit normal. `cancel(segmentId)` anulează un job pending sau
 cere anularea tentativei active prin governor. `dispose()` nu dispune governorul partajat.
 
+Bariera de generație 205 compune exact aceste reguli la o schimbare explicită de țintă: capturează
+joburile generației curente și le anulează prin `cancel(segmentId)` înainte de a deschide segmentul
+noii epoci, iar rezultatele vechi sunt respinse de poarta de generație. Contractul, inclusiv
+importul invalid și rezultatele târzii/duplicate, este în [learning-epoch](learning-epoch.md).
+
 Limitele sunt explicite: `maxPending` (implicit 8, ca `governorLimits.jobs`), `maxBytes` (implicit
 16 MiB) și `maxProposals` pe epocă (implicit 256). La depășire se întoarce `BACKPRESSURE`, nu se
 crește coada tacit.

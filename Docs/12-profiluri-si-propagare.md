@@ -32,6 +32,8 @@ Restore, import validat și profil nou se rezolvă la limita unui tick: se înch
 
 Se testează restore cu worker în curs, import invalid/valid, profil nou, rezultat sosit după anulare, aceeași intervenție livrată de două ori și un crash în jurul commitului. Bariera și activarea sunt persistate împreună; reluarea nu aplică din nou segmente deja acceptate.
 
+Contractul concret al barierei — identitatea generației, tranzacția unică, importul invalid, rezultatele târzii/duplicate, închiderea și redeschiderea segmentului și statusul dovezilor vechi — este în [learning-epoch](learning-epoch.md).
+
 ## MANUAL_TUNING și izolarea lumilor
 
 DrivingProfile/ProfileDelta includ proveniența valorii (LEARNED/MANUAL_TUNING/BASE/IMPORTED), iar dovezile anterioare rămân istorice. Aplicarea sliderelor validează draft/baseVersionId, închide segmentul, invalidează learningEpoch și publică o versiune nouă la tick comun; anularea sau lipsa diferențelor nu creează versiuni. Contractul este în [modulul 27](27-reglaje-hud-si-camera.md). Academie și Haos au profile țintă distincte; joburile și activările verifică sessionId/worldEpoch. Copierea explicită a stilului între sesiuni folosește validarea/importul comun, fără transfer XP, conform [modulului 26](26-joaca-libera-haos-si-distrugere.md).
