@@ -138,6 +138,14 @@ export {
   type ManualTripTelemetry,
 } from './manual-trip';
 export {
+  applyKeyRemapping,
+  readKeyRemappingDraft,
+  resetKeyRemapping,
+  type KeyRemappingApplyRejection,
+  type KeyRemappingApplyResult,
+  type KeyRemappingSettingsServices,
+} from './key-remapping';
+export {
   isStaleNotification,
   learningNotificationEventId,
   learningNotificationGenerationKey,

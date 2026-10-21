@@ -87,11 +87,34 @@ export class HudElement {
     if (index !== -1) listeners.splice(index, 1);
   }
   /** Deterministic event delivery for the tests; returns how many listeners ran. */
-  dispatch(type: string): number {
-    const listeners = [...(this.eventListeners.get(type) ?? [])],
-      event: HudEvent = { type, target: this, preventDefault: () => undefined };
+  dispatch(type: string, init: HudEventInit = {}): number {
+    this.dispatchEvent(type, init);
+    return (this.eventListeners.get(type) ?? []).length;
+  }
+  /** Full deterministic event object, used by the keyboard-capture tests. */
+  dispatchEvent(type: string, init: HudEventInit = {}): HudEvent {
+    const listeners = [...(this.eventListeners.get(type) ?? [])];
+    let defaultPrevented = false,
+      propagationStopped = false;
+    const event: HudEvent = {
+      type,
+      target: this,
+      ...init,
+      preventDefault: () => {
+        defaultPrevented = true;
+      },
+      stopPropagation: () => {
+        propagationStopped = true;
+      },
+      get defaultPrevented() {
+        return defaultPrevented;
+      },
+      get propagationStopped() {
+        return propagationStopped;
+      },
+    };
     for (const listener of listeners) listener(event);
-    return listeners.length;
+    return event;
   }
   get listenerCount(): number {
     let total = 0;
@@ -110,10 +133,23 @@ export interface HudDocument {
   createElement(tagName: string): HudElement;
 }
 
-export interface HudEvent {
+export interface HudEventInit {
+  readonly code?: string;
+  readonly key?: string;
+  readonly repeat?: boolean;
+  readonly shiftKey?: boolean;
+  readonly ctrlKey?: boolean;
+  readonly altKey?: boolean;
+  readonly metaKey?: boolean;
+}
+
+export interface HudEvent extends HudEventInit {
   readonly type: string;
   readonly target: HudElement;
   preventDefault(): void;
+  stopPropagation(): void;
+  readonly defaultPrevented: boolean;
+  readonly propagationStopped: boolean;
 }
 
 export type HudListener = (event: HudEvent) => void;

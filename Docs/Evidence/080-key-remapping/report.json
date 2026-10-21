@@ -1,0 +1,1780 @@
+{
+  "version": "080-key-remapping-v1",
+  "contract": {
+    "actions": [
+      "throttle",
+      "brake",
+      "steerLeft",
+      "steerRight",
+      "handbrake",
+      "manualMode",
+      "learningMode",
+      "kpis",
+      "fleet",
+      "signalLeft",
+      "signalRight",
+      "camera",
+      "profile",
+      "pause",
+      "recover"
+    ],
+    "criticalActions": [
+      "throttle",
+      "brake",
+      "steerLeft",
+      "steerRight",
+      "handbrake",
+      "manualMode",
+      "learningMode",
+      "pause",
+      "recover"
+    ],
+    "states": [
+      "VALID",
+      "CONFLICT",
+      "UNSUPPORTED",
+      "UNCHANGED"
+    ],
+    "rejections": [
+      "UNSUPPORTED_CODE",
+      "MODIFIER_ONLY",
+      "RESERVED_BROWSER_CODE",
+      "EMPTY"
+    ],
+    "reservedCodes": [
+      "F1",
+      "F3",
+      "F5",
+      "F6",
+      "F7",
+      "F10",
+      "F11",
+      "F12"
+    ],
+    "modifierOnly": [
+      "Shift",
+      "Control",
+      "Ctrl",
+      "Alt",
+      "AltGraph",
+      "Meta",
+      "OS",
+      "Super",
+      "Hyper",
+      "Fn",
+      "FnLock",
+      "CapsLock",
+      "NumLock",
+      "ScrollLock",
+      "Symbol",
+      "SymbolLock",
+      "MetaLeft",
+      "MetaRight",
+      "OSLeft",
+      "OSRight"
+    ],
+    "defaults": {
+      "throttle": "KeyW",
+      "brake": "KeyS",
+      "steerLeft": "KeyA",
+      "steerRight": "KeyD",
+      "handbrake": "Space",
+      "manualMode": "KeyM",
+      "learningMode": "KeyL",
+      "kpis": "KeyK",
+      "fleet": "Tab",
+      "signalLeft": "KeyQ",
+      "signalRight": "KeyE",
+      "camera": "KeyC",
+      "profile": "KeyP",
+      "pause": "Escape",
+      "recover": "KeyR"
+    },
+    "rules": [
+      "all 15 actions are always listed; an action without a valid code stays visible and invalid",
+      "a code bound to more than one action is a conflict and blocks save",
+      "reset proposes the real createDefaultSettings bindings locally; save stays explicit",
+      "capture consumes only the next keydown on the focused key button; Escape cancels it",
+      "bindings are device/settings state, never profile parameters or learned values"
+    ]
+  },
+  "scenarios": [
+    {
+      "name": "defaults",
+      "saveState": "UNCHANGED",
+      "summary": "Nicio modificare față de setările salvate.",
+      "changed": 0,
+      "rows": [
+        {
+          "action": "throttle",
+          "label": "Accelerație",
+          "current": "KeyW",
+          "proposed": "KeyW",
+          "defaultCode": "KeyW",
+          "critical": true,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "brake",
+          "label": "Frână",
+          "current": "KeyS",
+          "proposed": "KeyS",
+          "defaultCode": "KeyS",
+          "critical": true,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "steerLeft",
+          "label": "Direcție stânga",
+          "current": "KeyA",
+          "proposed": "KeyA",
+          "defaultCode": "KeyA",
+          "critical": true,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "steerRight",
+          "label": "Direcție dreapta",
+          "current": "KeyD",
+          "proposed": "KeyD",
+          "defaultCode": "KeyD",
+          "critical": true,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "handbrake",
+          "label": "Frână de mână",
+          "current": "Space",
+          "proposed": "Space",
+          "defaultCode": "Space",
+          "critical": true,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "manualMode",
+          "label": "Mod AUTO/MANUAL",
+          "current": "KeyM",
+          "proposed": "KeyM",
+          "defaultCode": "KeyM",
+          "critical": true,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "learningMode",
+          "label": "Mod LEARNING",
+          "current": "KeyL",
+          "proposed": "KeyL",
+          "defaultCode": "KeyL",
+          "critical": true,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "kpis",
+          "label": "Panou KPI",
+          "current": "KeyK",
+          "proposed": "KeyK",
+          "defaultCode": "KeyK",
+          "critical": false,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "fleet",
+          "label": "Lista flotei",
+          "current": "Tab",
+          "proposed": "Tab",
+          "defaultCode": "Tab",
+          "critical": false,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "signalLeft",
+          "label": "Semnalizare stânga",
+          "current": "KeyQ",
+          "proposed": "KeyQ",
+          "defaultCode": "KeyQ",
+          "critical": false,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "signalRight",
+          "label": "Semnalizare dreapta",
+          "current": "KeyE",
+          "proposed": "KeyE",
+          "defaultCode": "KeyE",
+          "critical": false,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "camera",
+          "label": "Cameră",
+          "current": "KeyC",
+          "proposed": "KeyC",
+          "defaultCode": "KeyC",
+          "critical": false,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "profile",
+          "label": "Panou profil",
+          "current": "KeyP",
+          "proposed": "KeyP",
+          "defaultCode": "KeyP",
+          "critical": false,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "pause",
+          "label": "Pauză",
+          "current": "Escape",
+          "proposed": "Escape",
+          "defaultCode": "Escape",
+          "critical": true,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "recover",
+          "label": "Recuperare",
+          "current": "KeyR",
+          "proposed": "KeyR",
+          "defaultCode": "KeyR",
+          "critical": true,
+          "state": "UNCHANGED",
+          "message": null
+        }
+      ],
+      "conflicts": [],
+      "saved": null,
+      "stats": {
+        "elements": 116,
+        "textNodes": 97,
+        "rows": 15,
+        "listeners": 18,
+        "captureListeners": 0,
+        "writes": 199,
+        "skipped": 0,
+        "captures": 0,
+        "cancelledCaptures": 0,
+        "saves": 0,
+        "resets": 0,
+        "saveState": "UNCHANGED",
+        "disposed": false
+      },
+      "dom": "<section aria-describedby=\"key-remapping-description\" aria-label=\"Remapare comenzi\" class=\"key-remapping\" data-changed=\"0\" data-save-state=\"UNCHANGED\">\n  <header class=\"key-remapping__header\">\n    <h2 class=\"key-remapping__title\">Remapare comenzi</h2>\n    <p class=\"key-remapping__note\">Setări dispozitiv · separat de profilul învățat</p>\n  </header>\n  <p class=\"key-remapping__description\">Toate cele 15 comenzi sunt listate mereu. O tastă folosită de două comenzi este conflict și blochează salvarea; o comandă fără tastă validă rămâne vizibilă și invalidă. Valorile propuse se păstrează numai prin butonul Salvează, în setările dispozitivului, separat de profilul învățat.</p>\n  <ul aria-label=\"Comenzi și taste\" class=\"key-remapping__rows\">\n    <li aria-label=\"Accelerație: tasta curentă W, propusă W, implicit W, Neschimbat\" class=\"key-remapping__item\" data-action=\"throttle\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Accelerație</span>\n      <kbd class=\"key-remapping__current\">Acum: W</kbd>\n      <button aria-label=\"Accelerație: schimbă tasta; acum W, propusă W\" class=\"key-remapping__key\" data-action=\"throttle\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">W</button>\n      <span class=\"key-remapping__default\">Implicit: W</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Frână: tasta curentă S, propusă S, implicit S, Neschimbat\" class=\"key-remapping__item\" data-action=\"brake\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Frână</span>\n      <kbd class=\"key-remapping__current\">Acum: S</kbd>\n      <button aria-label=\"Frână: schimbă tasta; acum S, propusă S\" class=\"key-remapping__key\" data-action=\"brake\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">S</button>\n      <span class=\"key-remapping__default\">Implicit: S</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Direcție stânga: tasta curentă A, propusă A, implicit A, Neschimbat\" class=\"key-remapping__item\" data-action=\"steerLeft\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Direcție stânga</span>\n      <kbd class=\"key-remapping__current\">Acum: A</kbd>\n      <button aria-label=\"Direcție stânga: schimbă tasta; acum A, propusă A\" class=\"key-remapping__key\" data-action=\"steerLeft\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">A</button>\n      <span class=\"key-remapping__default\">Implicit: A</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Direcție dreapta: tasta curentă D, propusă D, implicit D, Neschimbat\" class=\"key-remapping__item\" data-action=\"steerRight\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Direcție dreapta</span>\n      <kbd class=\"key-remapping__current\">Acum: D</kbd>\n      <button aria-label=\"Direcție dreapta: schimbă tasta; acum D, propusă D\" class=\"key-remapping__key\" data-action=\"steerRight\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">D</button>\n      <span class=\"key-remapping__default\">Implicit: D</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Frână de mână: tasta curentă Space, propusă Space, implicit Space, Neschimbat\" class=\"key-remapping__item\" data-action=\"handbrake\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Frână de mână</span>\n      <kbd class=\"key-remapping__current\">Acum: Space</kbd>\n      <button aria-label=\"Frână de mână: schimbă tasta; acum Space, propusă Space\" class=\"key-remapping__key\" data-action=\"handbrake\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">Space</button>\n      <span class=\"key-remapping__default\">Implicit: Space</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Mod AUTO/MANUAL: tasta curentă M, propusă M, implicit M, Neschimbat\" class=\"key-remapping__item\" data-action=\"manualMode\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Mod AUTO/MANUAL</span>\n      <kbd class=\"key-remapping__current\">Acum: M</kbd>\n      <button aria-label=\"Mod AUTO/MANUAL: schimbă tasta; acum M, propusă M\" class=\"key-remapping__key\" data-action=\"manualMode\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">M</button>\n      <span class=\"key-remapping__default\">Implicit: M</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Mod LEARNING: tasta curentă L, propusă L, implicit L, Neschimbat\" class=\"key-remapping__item\" data-action=\"learningMode\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Mod LEARNING</span>\n      <kbd class=\"key-remapping__current\">Acum: L</kbd>\n      <button aria-label=\"Mod LEARNING: schimbă tasta; acum L, propusă L\" class=\"key-remapping__key\" data-action=\"learningMode\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">L</button>\n      <span class=\"key-remapping__default\">Implicit: L</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Panou KPI: tasta curentă K, propusă K, implicit K, Neschimbat\" class=\"key-remapping__item\" data-action=\"kpis\" data-capturing=\"false\" data-critical=\"false\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Panou KPI</span>\n      <kbd class=\"key-remapping__current\">Acum: K</kbd>\n      <button aria-label=\"Panou KPI: schimbă tasta; acum K, propusă K\" class=\"key-remapping__key\" data-action=\"kpis\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">K</button>\n      <span class=\"key-remapping__default\">Implicit: K</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Lista flotei: tasta curentă Tab, propusă Tab, implicit Tab, Neschimbat\" class=\"key-remapping__item\" data-action=\"fleet\" data-capturing=\"false\" data-critical=\"false\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Lista flotei</span>\n      <kbd class=\"key-remapping__current\">Acum: Tab</kbd>\n      <button aria-label=\"Lista flotei: schimbă tasta; acum Tab, propusă Tab\" class=\"key-remapping__key\" data-action=\"fleet\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">Tab</button>\n      <span class=\"key-remapping__default\">Implicit: Tab</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Semnalizare stânga: tasta curentă Q, propusă Q, implicit Q, Neschimbat\" class=\"key-remapping__item\" data-action=\"signalLeft\" data-capturing=\"false\" data-critical=\"false\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Semnalizare stânga</span>\n      <kbd class=\"key-remapping__current\">Acum: Q</kbd>\n      <button aria-label=\"Semnalizare stânga: schimbă tasta; acum Q, propusă Q\" class=\"key-remapping__key\" data-action=\"signalLeft\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">Q</button>\n      <span class=\"key-remapping__default\">Implicit: Q</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Semnalizare dreapta: tasta curentă E, propusă E, implicit E, Neschimbat\" class=\"key-remapping__item\" data-action=\"signalRight\" data-capturing=\"false\" data-critical=\"false\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Semnalizare dreapta</span>\n      <kbd class=\"key-remapping__current\">Acum: E</kbd>\n      <button aria-label=\"Semnalizare dreapta: schimbă tasta; acum E, propusă E\" class=\"key-remapping__key\" data-action=\"signalRight\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">E</button>\n      <span class=\"key-remapping__default\">Implicit: E</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Cameră: tasta curentă C, propusă C, implicit C, Neschimbat\" class=\"key-remapping__item\" data-action=\"camera\" data-capturing=\"false\" data-critical=\"false\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Cameră</span>\n      <kbd class=\"key-remapping__current\">Acum: C</kbd>\n      <button aria-label=\"Cameră: schimbă tasta; acum C, propusă C\" class=\"key-remapping__key\" data-action=\"camera\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">C</button>\n      <span class=\"key-remapping__default\">Implicit: C</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Panou profil: tasta curentă P, propusă P, implicit P, Neschimbat\" class=\"key-remapping__item\" data-action=\"profile\" data-capturing=\"false\" data-critical=\"false\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Panou profil</span>\n      <kbd class=\"key-remapping__current\">Acum: P</kbd>\n      <button aria-label=\"Panou profil: schimbă tasta; acum P, propusă P\" class=\"key-remapping__key\" data-action=\"profile\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">P</button>\n      <span class=\"key-remapping__default\">Implicit: P</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Pauză: tasta curentă Escape, propusă Escape, implicit Escape, Neschimbat\" class=\"key-remapping__item\" data-action=\"pause\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Pauză</span>\n      <kbd class=\"key-remapping__current\">Acum: Escape</kbd>\n      <button aria-label=\"Pauză: schimbă tasta; acum Escape, propusă Escape\" class=\"key-remapping__key\" data-action=\"pause\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">Escape</button>\n      <span class=\"key-remapping__default\">Implicit: Escape</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Recuperare: tasta curentă R, propusă R, implicit R, Neschimbat\" class=\"key-remapping__item\" data-action=\"recover\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Recuperare</span>\n      <kbd class=\"key-remapping__current\">Acum: R</kbd>\n      <button aria-label=\"Recuperare: schimbă tasta; acum R, propusă R\" class=\"key-remapping__key\" data-action=\"recover\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">R</button>\n      <span class=\"key-remapping__default\">Implicit: R</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n  </ul>\n  <p aria-atomic=\"true\" aria-live=\"polite\" class=\"key-remapping__live\" role=\"status\">Nicio modificare față de setările salvate.</p>\n  <div class=\"key-remapping__actions\">\n    <button class=\"key-remapping__reset\" type=\"button\">Resetează la implicite</button>\n    <button class=\"key-remapping__save\" disabled=\"\" type=\"button\">Salvează</button>\n    <button class=\"key-remapping__cancel\" type=\"button\">Renunță</button>\n  </div>\n</section>"
+    },
+    {
+      "name": "conflict",
+      "saveState": "CONFLICT",
+      "summary": "1 conflict de taste: S → Accelerație, Frână. Salvează este blocat până la corectare.",
+      "changed": 1,
+      "rows": [
+        {
+          "action": "throttle",
+          "label": "Accelerație",
+          "current": "KeyW",
+          "proposed": "KeyS",
+          "defaultCode": "KeyW",
+          "critical": true,
+          "state": "CONFLICT",
+          "message": "Tasta S este folosită și de Frână."
+        },
+        {
+          "action": "brake",
+          "label": "Frână",
+          "current": "KeyS",
+          "proposed": "KeyS",
+          "defaultCode": "KeyS",
+          "critical": true,
+          "state": "CONFLICT",
+          "message": "Tasta S este folosită și de Accelerație."
+        },
+        {
+          "action": "steerLeft",
+          "label": "Direcție stânga",
+          "current": "KeyA",
+          "proposed": "KeyA",
+          "defaultCode": "KeyA",
+          "critical": true,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "steerRight",
+          "label": "Direcție dreapta",
+          "current": "KeyD",
+          "proposed": "KeyD",
+          "defaultCode": "KeyD",
+          "critical": true,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "handbrake",
+          "label": "Frână de mână",
+          "current": "Space",
+          "proposed": "Space",
+          "defaultCode": "Space",
+          "critical": true,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "manualMode",
+          "label": "Mod AUTO/MANUAL",
+          "current": "KeyM",
+          "proposed": "KeyM",
+          "defaultCode": "KeyM",
+          "critical": true,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "learningMode",
+          "label": "Mod LEARNING",
+          "current": "KeyL",
+          "proposed": "KeyL",
+          "defaultCode": "KeyL",
+          "critical": true,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "kpis",
+          "label": "Panou KPI",
+          "current": "KeyK",
+          "proposed": "KeyK",
+          "defaultCode": "KeyK",
+          "critical": false,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "fleet",
+          "label": "Lista flotei",
+          "current": "Tab",
+          "proposed": "Tab",
+          "defaultCode": "Tab",
+          "critical": false,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "signalLeft",
+          "label": "Semnalizare stânga",
+          "current": "KeyQ",
+          "proposed": "KeyQ",
+          "defaultCode": "KeyQ",
+          "critical": false,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "signalRight",
+          "label": "Semnalizare dreapta",
+          "current": "KeyE",
+          "proposed": "KeyE",
+          "defaultCode": "KeyE",
+          "critical": false,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "camera",
+          "label": "Cameră",
+          "current": "KeyC",
+          "proposed": "KeyC",
+          "defaultCode": "KeyC",
+          "critical": false,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "profile",
+          "label": "Panou profil",
+          "current": "KeyP",
+          "proposed": "KeyP",
+          "defaultCode": "KeyP",
+          "critical": false,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "pause",
+          "label": "Pauză",
+          "current": "Escape",
+          "proposed": "Escape",
+          "defaultCode": "Escape",
+          "critical": true,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "recover",
+          "label": "Recuperare",
+          "current": "KeyR",
+          "proposed": "KeyR",
+          "defaultCode": "KeyR",
+          "critical": true,
+          "state": "UNCHANGED",
+          "message": null
+        }
+      ],
+      "conflicts": [
+        {
+          "code": "KeyS",
+          "actions": [
+            "throttle",
+            "brake"
+          ],
+          "message": "Tasta S este atribuită comenzilor Accelerație, Frână."
+        }
+      ],
+      "saved": null,
+      "stats": {
+        "elements": 116,
+        "textNodes": 97,
+        "rows": 15,
+        "listeners": 18,
+        "captureListeners": 0,
+        "writes": 200,
+        "skipped": 0,
+        "captures": 0,
+        "cancelledCaptures": 0,
+        "saves": 0,
+        "resets": 0,
+        "saveState": "CONFLICT",
+        "disposed": false
+      },
+      "dom": "<section aria-describedby=\"key-remapping-description\" aria-label=\"Remapare comenzi\" class=\"key-remapping\" data-changed=\"1\" data-save-state=\"CONFLICT\">\n  <header class=\"key-remapping__header\">\n    <h2 class=\"key-remapping__title\">Remapare comenzi</h2>\n    <p class=\"key-remapping__note\">Setări dispozitiv · separat de profilul învățat</p>\n  </header>\n  <p class=\"key-remapping__description\">Toate cele 15 comenzi sunt listate mereu. O tastă folosită de două comenzi este conflict și blochează salvarea; o comandă fără tastă validă rămâne vizibilă și invalidă. Valorile propuse se păstrează numai prin butonul Salvează, în setările dispozitivului, separat de profilul învățat.</p>\n  <ul aria-label=\"Comenzi și taste\" class=\"key-remapping__rows\">\n    <li aria-label=\"Accelerație: tasta curentă W, propusă S, implicit W, Conflict, Tasta S este folosită și de Frână.\" class=\"key-remapping__item\" data-action=\"throttle\" data-capturing=\"false\" data-critical=\"true\" data-state=\"CONFLICT\">\n      <span class=\"key-remapping__label\">Accelerație</span>\n      <kbd class=\"key-remapping__current\">Acum: W</kbd>\n      <button aria-label=\"Accelerație: schimbă tasta; acum W, propusă S\" class=\"key-remapping__key\" data-action=\"throttle\" data-capturing=\"false\" data-state=\"CONFLICT\" type=\"button\">S</button>\n      <span class=\"key-remapping__default\">Implicit: W</span>\n      <span class=\"key-remapping__state\">⚠ Conflict</span>\n      <span class=\"key-remapping__message\">Tasta S este folosită și de Frână.</span>\n    </li>\n    <li aria-label=\"Frână: tasta curentă S, propusă S, implicit S, Conflict, Tasta S este folosită și de Accelerație.\" class=\"key-remapping__item\" data-action=\"brake\" data-capturing=\"false\" data-critical=\"true\" data-state=\"CONFLICT\">\n      <span class=\"key-remapping__label\">Frână</span>\n      <kbd class=\"key-remapping__current\">Acum: S</kbd>\n      <button aria-label=\"Frână: schimbă tasta; acum S, propusă S\" class=\"key-remapping__key\" data-action=\"brake\" data-capturing=\"false\" data-state=\"CONFLICT\" type=\"button\">S</button>\n      <span class=\"key-remapping__default\">Implicit: S</span>\n      <span class=\"key-remapping__state\">⚠ Conflict</span>\n      <span class=\"key-remapping__message\">Tasta S este folosită și de Accelerație.</span>\n    </li>\n    <li aria-label=\"Direcție stânga: tasta curentă A, propusă A, implicit A, Neschimbat\" class=\"key-remapping__item\" data-action=\"steerLeft\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Direcție stânga</span>\n      <kbd class=\"key-remapping__current\">Acum: A</kbd>\n      <button aria-label=\"Direcție stânga: schimbă tasta; acum A, propusă A\" class=\"key-remapping__key\" data-action=\"steerLeft\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">A</button>\n      <span class=\"key-remapping__default\">Implicit: A</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Direcție dreapta: tasta curentă D, propusă D, implicit D, Neschimbat\" class=\"key-remapping__item\" data-action=\"steerRight\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Direcție dreapta</span>\n      <kbd class=\"key-remapping__current\">Acum: D</kbd>\n      <button aria-label=\"Direcție dreapta: schimbă tasta; acum D, propusă D\" class=\"key-remapping__key\" data-action=\"steerRight\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">D</button>\n      <span class=\"key-remapping__default\">Implicit: D</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Frână de mână: tasta curentă Space, propusă Space, implicit Space, Neschimbat\" class=\"key-remapping__item\" data-action=\"handbrake\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Frână de mână</span>\n      <kbd class=\"key-remapping__current\">Acum: Space</kbd>\n      <button aria-label=\"Frână de mână: schimbă tasta; acum Space, propusă Space\" class=\"key-remapping__key\" data-action=\"handbrake\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">Space</button>\n      <span class=\"key-remapping__default\">Implicit: Space</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Mod AUTO/MANUAL: tasta curentă M, propusă M, implicit M, Neschimbat\" class=\"key-remapping__item\" data-action=\"manualMode\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Mod AUTO/MANUAL</span>\n      <kbd class=\"key-remapping__current\">Acum: M</kbd>\n      <button aria-label=\"Mod AUTO/MANUAL: schimbă tasta; acum M, propusă M\" class=\"key-remapping__key\" data-action=\"manualMode\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">M</button>\n      <span class=\"key-remapping__default\">Implicit: M</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Mod LEARNING: tasta curentă L, propusă L, implicit L, Neschimbat\" class=\"key-remapping__item\" data-action=\"learningMode\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Mod LEARNING</span>\n      <kbd class=\"key-remapping__current\">Acum: L</kbd>\n      <button aria-label=\"Mod LEARNING: schimbă tasta; acum L, propusă L\" class=\"key-remapping__key\" data-action=\"learningMode\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">L</button>\n      <span class=\"key-remapping__default\">Implicit: L</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Panou KPI: tasta curentă K, propusă K, implicit K, Neschimbat\" class=\"key-remapping__item\" data-action=\"kpis\" data-capturing=\"false\" data-critical=\"false\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Panou KPI</span>\n      <kbd class=\"key-remapping__current\">Acum: K</kbd>\n      <button aria-label=\"Panou KPI: schimbă tasta; acum K, propusă K\" class=\"key-remapping__key\" data-action=\"kpis\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">K</button>\n      <span class=\"key-remapping__default\">Implicit: K</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Lista flotei: tasta curentă Tab, propusă Tab, implicit Tab, Neschimbat\" class=\"key-remapping__item\" data-action=\"fleet\" data-capturing=\"false\" data-critical=\"false\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Lista flotei</span>\n      <kbd class=\"key-remapping__current\">Acum: Tab</kbd>\n      <button aria-label=\"Lista flotei: schimbă tasta; acum Tab, propusă Tab\" class=\"key-remapping__key\" data-action=\"fleet\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">Tab</button>\n      <span class=\"key-remapping__default\">Implicit: Tab</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Semnalizare stânga: tasta curentă Q, propusă Q, implicit Q, Neschimbat\" class=\"key-remapping__item\" data-action=\"signalLeft\" data-capturing=\"false\" data-critical=\"false\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Semnalizare stânga</span>\n      <kbd class=\"key-remapping__current\">Acum: Q</kbd>\n      <button aria-label=\"Semnalizare stânga: schimbă tasta; acum Q, propusă Q\" class=\"key-remapping__key\" data-action=\"signalLeft\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">Q</button>\n      <span class=\"key-remapping__default\">Implicit: Q</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Semnalizare dreapta: tasta curentă E, propusă E, implicit E, Neschimbat\" class=\"key-remapping__item\" data-action=\"signalRight\" data-capturing=\"false\" data-critical=\"false\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Semnalizare dreapta</span>\n      <kbd class=\"key-remapping__current\">Acum: E</kbd>\n      <button aria-label=\"Semnalizare dreapta: schimbă tasta; acum E, propusă E\" class=\"key-remapping__key\" data-action=\"signalRight\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">E</button>\n      <span class=\"key-remapping__default\">Implicit: E</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Cameră: tasta curentă C, propusă C, implicit C, Neschimbat\" class=\"key-remapping__item\" data-action=\"camera\" data-capturing=\"false\" data-critical=\"false\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Cameră</span>\n      <kbd class=\"key-remapping__current\">Acum: C</kbd>\n      <button aria-label=\"Cameră: schimbă tasta; acum C, propusă C\" class=\"key-remapping__key\" data-action=\"camera\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">C</button>\n      <span class=\"key-remapping__default\">Implicit: C</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Panou profil: tasta curentă P, propusă P, implicit P, Neschimbat\" class=\"key-remapping__item\" data-action=\"profile\" data-capturing=\"false\" data-critical=\"false\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Panou profil</span>\n      <kbd class=\"key-remapping__current\">Acum: P</kbd>\n      <button aria-label=\"Panou profil: schimbă tasta; acum P, propusă P\" class=\"key-remapping__key\" data-action=\"profile\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">P</button>\n      <span class=\"key-remapping__default\">Implicit: P</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Pauză: tasta curentă Escape, propusă Escape, implicit Escape, Neschimbat\" class=\"key-remapping__item\" data-action=\"pause\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Pauză</span>\n      <kbd class=\"key-remapping__current\">Acum: Escape</kbd>\n      <button aria-label=\"Pauză: schimbă tasta; acum Escape, propusă Escape\" class=\"key-remapping__key\" data-action=\"pause\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">Escape</button>\n      <span class=\"key-remapping__default\">Implicit: Escape</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Recuperare: tasta curentă R, propusă R, implicit R, Neschimbat\" class=\"key-remapping__item\" data-action=\"recover\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Recuperare</span>\n      <kbd class=\"key-remapping__current\">Acum: R</kbd>\n      <button aria-label=\"Recuperare: schimbă tasta; acum R, propusă R\" class=\"key-remapping__key\" data-action=\"recover\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">R</button>\n      <span class=\"key-remapping__default\">Implicit: R</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n  </ul>\n  <p aria-atomic=\"true\" aria-live=\"polite\" class=\"key-remapping__live\" role=\"status\">Corectează conflictele sau tastele invalide înainte de salvare.</p>\n  <div class=\"key-remapping__actions\">\n    <button class=\"key-remapping__reset\" type=\"button\">Resetează la implicite</button>\n    <button class=\"key-remapping__save\" disabled=\"\" type=\"button\">Salvează</button>\n    <button class=\"key-remapping__cancel\" type=\"button\">Renunță</button>\n  </div>\n</section>"
+    },
+    {
+      "name": "resolved conflict",
+      "saveState": "DIRTY",
+      "summary": "2 comenzi modificate, niciun conflict. Salvează pentru a păstra.",
+      "changed": 2,
+      "rows": [
+        {
+          "action": "throttle",
+          "label": "Accelerație",
+          "current": "KeyW",
+          "proposed": "KeyS",
+          "defaultCode": "KeyW",
+          "critical": true,
+          "state": "VALID",
+          "message": null
+        },
+        {
+          "action": "brake",
+          "label": "Frână",
+          "current": "KeyS",
+          "proposed": "KeyX",
+          "defaultCode": "KeyS",
+          "critical": true,
+          "state": "VALID",
+          "message": null
+        },
+        {
+          "action": "steerLeft",
+          "label": "Direcție stânga",
+          "current": "KeyA",
+          "proposed": "KeyA",
+          "defaultCode": "KeyA",
+          "critical": true,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "steerRight",
+          "label": "Direcție dreapta",
+          "current": "KeyD",
+          "proposed": "KeyD",
+          "defaultCode": "KeyD",
+          "critical": true,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "handbrake",
+          "label": "Frână de mână",
+          "current": "Space",
+          "proposed": "Space",
+          "defaultCode": "Space",
+          "critical": true,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "manualMode",
+          "label": "Mod AUTO/MANUAL",
+          "current": "KeyM",
+          "proposed": "KeyM",
+          "defaultCode": "KeyM",
+          "critical": true,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "learningMode",
+          "label": "Mod LEARNING",
+          "current": "KeyL",
+          "proposed": "KeyL",
+          "defaultCode": "KeyL",
+          "critical": true,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "kpis",
+          "label": "Panou KPI",
+          "current": "KeyK",
+          "proposed": "KeyK",
+          "defaultCode": "KeyK",
+          "critical": false,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "fleet",
+          "label": "Lista flotei",
+          "current": "Tab",
+          "proposed": "Tab",
+          "defaultCode": "Tab",
+          "critical": false,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "signalLeft",
+          "label": "Semnalizare stânga",
+          "current": "KeyQ",
+          "proposed": "KeyQ",
+          "defaultCode": "KeyQ",
+          "critical": false,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "signalRight",
+          "label": "Semnalizare dreapta",
+          "current": "KeyE",
+          "proposed": "KeyE",
+          "defaultCode": "KeyE",
+          "critical": false,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "camera",
+          "label": "Cameră",
+          "current": "KeyC",
+          "proposed": "KeyC",
+          "defaultCode": "KeyC",
+          "critical": false,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "profile",
+          "label": "Panou profil",
+          "current": "KeyP",
+          "proposed": "KeyP",
+          "defaultCode": "KeyP",
+          "critical": false,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "pause",
+          "label": "Pauză",
+          "current": "Escape",
+          "proposed": "Escape",
+          "defaultCode": "Escape",
+          "critical": true,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "recover",
+          "label": "Recuperare",
+          "current": "KeyR",
+          "proposed": "KeyR",
+          "defaultCode": "KeyR",
+          "critical": true,
+          "state": "UNCHANGED",
+          "message": null
+        }
+      ],
+      "conflicts": [],
+      "saved": {
+        "bindings": {
+          "throttle": "KeyS",
+          "brake": "KeyX",
+          "steerLeft": "KeyA",
+          "steerRight": "KeyD",
+          "handbrake": "Space",
+          "manualMode": "KeyM",
+          "learningMode": "KeyL",
+          "kpis": "KeyK",
+          "fleet": "Tab",
+          "signalLeft": "KeyQ",
+          "signalRight": "KeyE",
+          "camera": "KeyC",
+          "profile": "KeyP",
+          "pause": "Escape",
+          "recover": "KeyR"
+        },
+        "controlVersion": 0,
+        "fov": 80,
+        "cameraMode": "CHASE",
+        "units": "km/h/m",
+        "quality": "MEDIUM/AUTO/1/false",
+        "scenario": "provisional-city-v1/provisional-v1/1/24/40"
+      },
+      "stats": {
+        "elements": 116,
+        "textNodes": 97,
+        "rows": 15,
+        "listeners": 18,
+        "captureListeners": 0,
+        "writes": 198,
+        "skipped": 0,
+        "captures": 0,
+        "cancelledCaptures": 0,
+        "saves": 1,
+        "resets": 0,
+        "saveState": "DIRTY",
+        "disposed": false
+      },
+      "dom": "<section aria-describedby=\"key-remapping-description\" aria-label=\"Remapare comenzi\" class=\"key-remapping\" data-changed=\"2\" data-save-state=\"DIRTY\">\n  <header class=\"key-remapping__header\">\n    <h2 class=\"key-remapping__title\">Remapare comenzi</h2>\n    <p class=\"key-remapping__note\">Setări dispozitiv · separat de profilul învățat</p>\n  </header>\n  <p class=\"key-remapping__description\">Toate cele 15 comenzi sunt listate mereu. O tastă folosită de două comenzi este conflict și blochează salvarea; o comandă fără tastă validă rămâne vizibilă și invalidă. Valorile propuse se păstrează numai prin butonul Salvează, în setările dispozitivului, separat de profilul învățat.</p>\n  <ul aria-label=\"Comenzi și taste\" class=\"key-remapping__rows\">\n    <li aria-label=\"Accelerație: tasta curentă W, propusă S, implicit W, Modificat\" class=\"key-remapping__item\" data-action=\"throttle\" data-capturing=\"false\" data-critical=\"true\" data-state=\"VALID\">\n      <span class=\"key-remapping__label\">Accelerație</span>\n      <kbd class=\"key-remapping__current\">Acum: W</kbd>\n      <button aria-label=\"Accelerație: schimbă tasta; acum W, propusă S\" class=\"key-remapping__key\" data-action=\"throttle\" data-capturing=\"false\" data-state=\"VALID\" type=\"button\">S</button>\n      <span class=\"key-remapping__default\">Implicit: W</span>\n      <span class=\"key-remapping__state\">✎ Modificat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Frână: tasta curentă S, propusă X, implicit S, Modificat\" class=\"key-remapping__item\" data-action=\"brake\" data-capturing=\"false\" data-critical=\"true\" data-state=\"VALID\">\n      <span class=\"key-remapping__label\">Frână</span>\n      <kbd class=\"key-remapping__current\">Acum: S</kbd>\n      <button aria-label=\"Frână: schimbă tasta; acum S, propusă X\" class=\"key-remapping__key\" data-action=\"brake\" data-capturing=\"false\" data-state=\"VALID\" type=\"button\">X</button>\n      <span class=\"key-remapping__default\">Implicit: S</span>\n      <span class=\"key-remapping__state\">✎ Modificat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Direcție stânga: tasta curentă A, propusă A, implicit A, Neschimbat\" class=\"key-remapping__item\" data-action=\"steerLeft\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Direcție stânga</span>\n      <kbd class=\"key-remapping__current\">Acum: A</kbd>\n      <button aria-label=\"Direcție stânga: schimbă tasta; acum A, propusă A\" class=\"key-remapping__key\" data-action=\"steerLeft\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">A</button>\n      <span class=\"key-remapping__default\">Implicit: A</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Direcție dreapta: tasta curentă D, propusă D, implicit D, Neschimbat\" class=\"key-remapping__item\" data-action=\"steerRight\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Direcție dreapta</span>\n      <kbd class=\"key-remapping__current\">Acum: D</kbd>\n      <button aria-label=\"Direcție dreapta: schimbă tasta; acum D, propusă D\" class=\"key-remapping__key\" data-action=\"steerRight\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">D</button>\n      <span class=\"key-remapping__default\">Implicit: D</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Frână de mână: tasta curentă Space, propusă Space, implicit Space, Neschimbat\" class=\"key-remapping__item\" data-action=\"handbrake\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Frână de mână</span>\n      <kbd class=\"key-remapping__current\">Acum: Space</kbd>\n      <button aria-label=\"Frână de mână: schimbă tasta; acum Space, propusă Space\" class=\"key-remapping__key\" data-action=\"handbrake\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">Space</button>\n      <span class=\"key-remapping__default\">Implicit: Space</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Mod AUTO/MANUAL: tasta curentă M, propusă M, implicit M, Neschimbat\" class=\"key-remapping__item\" data-action=\"manualMode\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Mod AUTO/MANUAL</span>\n      <kbd class=\"key-remapping__current\">Acum: M</kbd>\n      <button aria-label=\"Mod AUTO/MANUAL: schimbă tasta; acum M, propusă M\" class=\"key-remapping__key\" data-action=\"manualMode\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">M</button>\n      <span class=\"key-remapping__default\">Implicit: M</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Mod LEARNING: tasta curentă L, propusă L, implicit L, Neschimbat\" class=\"key-remapping__item\" data-action=\"learningMode\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Mod LEARNING</span>\n      <kbd class=\"key-remapping__current\">Acum: L</kbd>\n      <button aria-label=\"Mod LEARNING: schimbă tasta; acum L, propusă L\" class=\"key-remapping__key\" data-action=\"learningMode\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">L</button>\n      <span class=\"key-remapping__default\">Implicit: L</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Panou KPI: tasta curentă K, propusă K, implicit K, Neschimbat\" class=\"key-remapping__item\" data-action=\"kpis\" data-capturing=\"false\" data-critical=\"false\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Panou KPI</span>\n      <kbd class=\"key-remapping__current\">Acum: K</kbd>\n      <button aria-label=\"Panou KPI: schimbă tasta; acum K, propusă K\" class=\"key-remapping__key\" data-action=\"kpis\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">K</button>\n      <span class=\"key-remapping__default\">Implicit: K</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Lista flotei: tasta curentă Tab, propusă Tab, implicit Tab, Neschimbat\" class=\"key-remapping__item\" data-action=\"fleet\" data-capturing=\"false\" data-critical=\"false\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Lista flotei</span>\n      <kbd class=\"key-remapping__current\">Acum: Tab</kbd>\n      <button aria-label=\"Lista flotei: schimbă tasta; acum Tab, propusă Tab\" class=\"key-remapping__key\" data-action=\"fleet\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">Tab</button>\n      <span class=\"key-remapping__default\">Implicit: Tab</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Semnalizare stânga: tasta curentă Q, propusă Q, implicit Q, Neschimbat\" class=\"key-remapping__item\" data-action=\"signalLeft\" data-capturing=\"false\" data-critical=\"false\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Semnalizare stânga</span>\n      <kbd class=\"key-remapping__current\">Acum: Q</kbd>\n      <button aria-label=\"Semnalizare stânga: schimbă tasta; acum Q, propusă Q\" class=\"key-remapping__key\" data-action=\"signalLeft\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">Q</button>\n      <span class=\"key-remapping__default\">Implicit: Q</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Semnalizare dreapta: tasta curentă E, propusă E, implicit E, Neschimbat\" class=\"key-remapping__item\" data-action=\"signalRight\" data-capturing=\"false\" data-critical=\"false\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Semnalizare dreapta</span>\n      <kbd class=\"key-remapping__current\">Acum: E</kbd>\n      <button aria-label=\"Semnalizare dreapta: schimbă tasta; acum E, propusă E\" class=\"key-remapping__key\" data-action=\"signalRight\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">E</button>\n      <span class=\"key-remapping__default\">Implicit: E</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Cameră: tasta curentă C, propusă C, implicit C, Neschimbat\" class=\"key-remapping__item\" data-action=\"camera\" data-capturing=\"false\" data-critical=\"false\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Cameră</span>\n      <kbd class=\"key-remapping__current\">Acum: C</kbd>\n      <button aria-label=\"Cameră: schimbă tasta; acum C, propusă C\" class=\"key-remapping__key\" data-action=\"camera\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">C</button>\n      <span class=\"key-remapping__default\">Implicit: C</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Panou profil: tasta curentă P, propusă P, implicit P, Neschimbat\" class=\"key-remapping__item\" data-action=\"profile\" data-capturing=\"false\" data-critical=\"false\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Panou profil</span>\n      <kbd class=\"key-remapping__current\">Acum: P</kbd>\n      <button aria-label=\"Panou profil: schimbă tasta; acum P, propusă P\" class=\"key-remapping__key\" data-action=\"profile\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">P</button>\n      <span class=\"key-remapping__default\">Implicit: P</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Pauză: tasta curentă Escape, propusă Escape, implicit Escape, Neschimbat\" class=\"key-remapping__item\" data-action=\"pause\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Pauză</span>\n      <kbd class=\"key-remapping__current\">Acum: Escape</kbd>\n      <button aria-label=\"Pauză: schimbă tasta; acum Escape, propusă Escape\" class=\"key-remapping__key\" data-action=\"pause\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">Escape</button>\n      <span class=\"key-remapping__default\">Implicit: Escape</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Recuperare: tasta curentă R, propusă R, implicit R, Neschimbat\" class=\"key-remapping__item\" data-action=\"recover\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Recuperare</span>\n      <kbd class=\"key-remapping__current\">Acum: R</kbd>\n      <button aria-label=\"Recuperare: schimbă tasta; acum R, propusă R\" class=\"key-remapping__key\" data-action=\"recover\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">R</button>\n      <span class=\"key-remapping__default\">Implicit: R</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n  </ul>\n  <p aria-atomic=\"true\" aria-live=\"polite\" class=\"key-remapping__live\" role=\"status\">2 comenzi modificate, niciun conflict. Salvează pentru a păstra.</p>\n  <div class=\"key-remapping__actions\">\n    <button class=\"key-remapping__reset\" type=\"button\">Resetează la implicite</button>\n    <button class=\"key-remapping__save\" type=\"button\">Salvează</button>\n    <button class=\"key-remapping__cancel\" type=\"button\">Renunță</button>\n  </div>\n</section>"
+    },
+    {
+      "name": "unsupported codes",
+      "saveState": "UNSUPPORTED",
+      "summary": "4 comenzi nu au o tastă validă. Salvează este blocat până la corectare.",
+      "changed": 4,
+      "rows": [
+        {
+          "action": "throttle",
+          "label": "Accelerație",
+          "current": "KeyW",
+          "proposed": "KeyW",
+          "defaultCode": "KeyW",
+          "critical": true,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "brake",
+          "label": "Frână",
+          "current": "KeyS",
+          "proposed": "",
+          "defaultCode": "KeyS",
+          "critical": true,
+          "state": "UNSUPPORTED",
+          "message": "Tastele modificator singure nu pot fi atribuite unei comenzi."
+        },
+        {
+          "action": "steerLeft",
+          "label": "Direcție stânga",
+          "current": "KeyA",
+          "proposed": "",
+          "defaultCode": "KeyA",
+          "critical": true,
+          "state": "UNSUPPORTED",
+          "message": "Tasta nu este acceptată; folosește litere, cifre, săgeți, Space/Tab/Escape/Enter/Backspace, Shift/Ctrl/Alt sau F1–F12."
+        },
+        {
+          "action": "steerRight",
+          "label": "Direcție dreapta",
+          "current": "KeyD",
+          "proposed": "KeyD",
+          "defaultCode": "KeyD",
+          "critical": true,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "handbrake",
+          "label": "Frână de mână",
+          "current": "Space",
+          "proposed": "",
+          "defaultCode": "Space",
+          "critical": true,
+          "state": "UNSUPPORTED",
+          "message": "Tasta este rezervată de browser și nu poate fi capturată stabil."
+        },
+        {
+          "action": "manualMode",
+          "label": "Mod AUTO/MANUAL",
+          "current": "KeyM",
+          "proposed": "KeyM",
+          "defaultCode": "KeyM",
+          "critical": true,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "learningMode",
+          "label": "Mod LEARNING",
+          "current": "KeyL",
+          "proposed": "KeyL",
+          "defaultCode": "KeyL",
+          "critical": true,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "kpis",
+          "label": "Panou KPI",
+          "current": "KeyK",
+          "proposed": "KeyK",
+          "defaultCode": "KeyK",
+          "critical": false,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "fleet",
+          "label": "Lista flotei",
+          "current": "Tab",
+          "proposed": "Tab",
+          "defaultCode": "Tab",
+          "critical": false,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "signalLeft",
+          "label": "Semnalizare stânga",
+          "current": "KeyQ",
+          "proposed": "KeyQ",
+          "defaultCode": "KeyQ",
+          "critical": false,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "signalRight",
+          "label": "Semnalizare dreapta",
+          "current": "KeyE",
+          "proposed": "KeyE",
+          "defaultCode": "KeyE",
+          "critical": false,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "camera",
+          "label": "Cameră",
+          "current": "KeyC",
+          "proposed": "",
+          "defaultCode": "KeyC",
+          "critical": false,
+          "state": "UNSUPPORTED",
+          "message": "Nicio tastă atribuită."
+        },
+        {
+          "action": "profile",
+          "label": "Panou profil",
+          "current": "KeyP",
+          "proposed": "KeyP",
+          "defaultCode": "KeyP",
+          "critical": false,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "pause",
+          "label": "Pauză",
+          "current": "Escape",
+          "proposed": "Escape",
+          "defaultCode": "Escape",
+          "critical": true,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "recover",
+          "label": "Recuperare",
+          "current": "KeyR",
+          "proposed": "KeyR",
+          "defaultCode": "KeyR",
+          "critical": true,
+          "state": "UNCHANGED",
+          "message": null
+        }
+      ],
+      "conflicts": [],
+      "saved": null,
+      "stats": {
+        "elements": 116,
+        "textNodes": 97,
+        "rows": 15,
+        "listeners": 18,
+        "captureListeners": 0,
+        "writes": 200,
+        "skipped": 0,
+        "captures": 0,
+        "cancelledCaptures": 0,
+        "saves": 0,
+        "resets": 0,
+        "saveState": "UNSUPPORTED",
+        "disposed": false
+      },
+      "dom": "<section aria-describedby=\"key-remapping-description\" aria-label=\"Remapare comenzi\" class=\"key-remapping\" data-changed=\"4\" data-save-state=\"UNSUPPORTED\">\n  <header class=\"key-remapping__header\">\n    <h2 class=\"key-remapping__title\">Remapare comenzi</h2>\n    <p class=\"key-remapping__note\">Setări dispozitiv · separat de profilul învățat</p>\n  </header>\n  <p class=\"key-remapping__description\">Toate cele 15 comenzi sunt listate mereu. O tastă folosită de două comenzi este conflict și blochează salvarea; o comandă fără tastă validă rămâne vizibilă și invalidă. Valorile propuse se păstrează numai prin butonul Salvează, în setările dispozitivului, separat de profilul învățat.</p>\n  <ul aria-label=\"Comenzi și taste\" class=\"key-remapping__rows\">\n    <li aria-label=\"Accelerație: tasta curentă W, propusă W, implicit W, Neschimbat\" class=\"key-remapping__item\" data-action=\"throttle\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Accelerație</span>\n      <kbd class=\"key-remapping__current\">Acum: W</kbd>\n      <button aria-label=\"Accelerație: schimbă tasta; acum W, propusă W\" class=\"key-remapping__key\" data-action=\"throttle\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">W</button>\n      <span class=\"key-remapping__default\">Implicit: W</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Frână: tasta curentă S, propusă Nicio tastă, implicit S, Tastă invalidă, Tastele modificator singure nu pot fi atribuite unei comenzi.\" class=\"key-remapping__item\" data-action=\"brake\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNSUPPORTED\">\n      <span class=\"key-remapping__label\">Frână</span>\n      <kbd class=\"key-remapping__current\">Acum: S</kbd>\n      <button aria-label=\"Frână: schimbă tasta; acum S, propusă Nicio tastă\" class=\"key-remapping__key\" data-action=\"brake\" data-capturing=\"false\" data-state=\"UNSUPPORTED\" type=\"button\">Nicio tastă</button>\n      <span class=\"key-remapping__default\">Implicit: S</span>\n      <span class=\"key-remapping__state\">✕ Tastă invalidă</span>\n      <span class=\"key-remapping__message\">Tastele modificator singure nu pot fi atribuite unei comenzi.</span>\n    </li>\n    <li aria-label=\"Direcție stânga: tasta curentă A, propusă Nicio tastă, implicit A, Tastă invalidă, Tasta nu este acceptată; folosește litere, cifre, săgeți, Space/Tab/Escape/Enter/Backspace, Shift/Ctrl/Alt sau F1–F12.\" class=\"key-remapping__item\" data-action=\"steerLeft\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNSUPPORTED\">\n      <span class=\"key-remapping__label\">Direcție stânga</span>\n      <kbd class=\"key-remapping__current\">Acum: A</kbd>\n      <button aria-label=\"Direcție stânga: schimbă tasta; acum A, propusă Nicio tastă\" class=\"key-remapping__key\" data-action=\"steerLeft\" data-capturing=\"false\" data-state=\"UNSUPPORTED\" type=\"button\">Nicio tastă</button>\n      <span class=\"key-remapping__default\">Implicit: A</span>\n      <span class=\"key-remapping__state\">✕ Tastă invalidă</span>\n      <span class=\"key-remapping__message\">Tasta nu este acceptată; folosește litere, cifre, săgeți, Space/Tab/Escape/Enter/Backspace, Shift/Ctrl/Alt sau F1–F12.</span>\n    </li>\n    <li aria-label=\"Direcție dreapta: tasta curentă D, propusă D, implicit D, Neschimbat\" class=\"key-remapping__item\" data-action=\"steerRight\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Direcție dreapta</span>\n      <kbd class=\"key-remapping__current\">Acum: D</kbd>\n      <button aria-label=\"Direcție dreapta: schimbă tasta; acum D, propusă D\" class=\"key-remapping__key\" data-action=\"steerRight\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">D</button>\n      <span class=\"key-remapping__default\">Implicit: D</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Frână de mână: tasta curentă Space, propusă Nicio tastă, implicit Space, Tastă invalidă, Tasta este rezervată de browser și nu poate fi capturată stabil.\" class=\"key-remapping__item\" data-action=\"handbrake\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNSUPPORTED\">\n      <span class=\"key-remapping__label\">Frână de mână</span>\n      <kbd class=\"key-remapping__current\">Acum: Space</kbd>\n      <button aria-label=\"Frână de mână: schimbă tasta; acum Space, propusă Nicio tastă\" class=\"key-remapping__key\" data-action=\"handbrake\" data-capturing=\"false\" data-state=\"UNSUPPORTED\" type=\"button\">Nicio tastă</button>\n      <span class=\"key-remapping__default\">Implicit: Space</span>\n      <span class=\"key-remapping__state\">✕ Tastă invalidă</span>\n      <span class=\"key-remapping__message\">Tasta este rezervată de browser și nu poate fi capturată stabil.</span>\n    </li>\n    <li aria-label=\"Mod AUTO/MANUAL: tasta curentă M, propusă M, implicit M, Neschimbat\" class=\"key-remapping__item\" data-action=\"manualMode\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Mod AUTO/MANUAL</span>\n      <kbd class=\"key-remapping__current\">Acum: M</kbd>\n      <button aria-label=\"Mod AUTO/MANUAL: schimbă tasta; acum M, propusă M\" class=\"key-remapping__key\" data-action=\"manualMode\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">M</button>\n      <span class=\"key-remapping__default\">Implicit: M</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Mod LEARNING: tasta curentă L, propusă L, implicit L, Neschimbat\" class=\"key-remapping__item\" data-action=\"learningMode\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Mod LEARNING</span>\n      <kbd class=\"key-remapping__current\">Acum: L</kbd>\n      <button aria-label=\"Mod LEARNING: schimbă tasta; acum L, propusă L\" class=\"key-remapping__key\" data-action=\"learningMode\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">L</button>\n      <span class=\"key-remapping__default\">Implicit: L</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Panou KPI: tasta curentă K, propusă K, implicit K, Neschimbat\" class=\"key-remapping__item\" data-action=\"kpis\" data-capturing=\"false\" data-critical=\"false\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Panou KPI</span>\n      <kbd class=\"key-remapping__current\">Acum: K</kbd>\n      <button aria-label=\"Panou KPI: schimbă tasta; acum K, propusă K\" class=\"key-remapping__key\" data-action=\"kpis\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">K</button>\n      <span class=\"key-remapping__default\">Implicit: K</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Lista flotei: tasta curentă Tab, propusă Tab, implicit Tab, Neschimbat\" class=\"key-remapping__item\" data-action=\"fleet\" data-capturing=\"false\" data-critical=\"false\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Lista flotei</span>\n      <kbd class=\"key-remapping__current\">Acum: Tab</kbd>\n      <button aria-label=\"Lista flotei: schimbă tasta; acum Tab, propusă Tab\" class=\"key-remapping__key\" data-action=\"fleet\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">Tab</button>\n      <span class=\"key-remapping__default\">Implicit: Tab</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Semnalizare stânga: tasta curentă Q, propusă Q, implicit Q, Neschimbat\" class=\"key-remapping__item\" data-action=\"signalLeft\" data-capturing=\"false\" data-critical=\"false\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Semnalizare stânga</span>\n      <kbd class=\"key-remapping__current\">Acum: Q</kbd>\n      <button aria-label=\"Semnalizare stânga: schimbă tasta; acum Q, propusă Q\" class=\"key-remapping__key\" data-action=\"signalLeft\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">Q</button>\n      <span class=\"key-remapping__default\">Implicit: Q</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Semnalizare dreapta: tasta curentă E, propusă E, implicit E, Neschimbat\" class=\"key-remapping__item\" data-action=\"signalRight\" data-capturing=\"false\" data-critical=\"false\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Semnalizare dreapta</span>\n      <kbd class=\"key-remapping__current\">Acum: E</kbd>\n      <button aria-label=\"Semnalizare dreapta: schimbă tasta; acum E, propusă E\" class=\"key-remapping__key\" data-action=\"signalRight\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">E</button>\n      <span class=\"key-remapping__default\">Implicit: E</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Cameră: tasta curentă C, propusă Nicio tastă, implicit C, Tastă invalidă, Nicio tastă atribuită.\" class=\"key-remapping__item\" data-action=\"camera\" data-capturing=\"false\" data-critical=\"false\" data-state=\"UNSUPPORTED\">\n      <span class=\"key-remapping__label\">Cameră</span>\n      <kbd class=\"key-remapping__current\">Acum: C</kbd>\n      <button aria-label=\"Cameră: schimbă tasta; acum C, propusă Nicio tastă\" class=\"key-remapping__key\" data-action=\"camera\" data-capturing=\"false\" data-state=\"UNSUPPORTED\" type=\"button\">Nicio tastă</button>\n      <span class=\"key-remapping__default\">Implicit: C</span>\n      <span class=\"key-remapping__state\">✕ Tastă invalidă</span>\n      <span class=\"key-remapping__message\">Nicio tastă atribuită.</span>\n    </li>\n    <li aria-label=\"Panou profil: tasta curentă P, propusă P, implicit P, Neschimbat\" class=\"key-remapping__item\" data-action=\"profile\" data-capturing=\"false\" data-critical=\"false\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Panou profil</span>\n      <kbd class=\"key-remapping__current\">Acum: P</kbd>\n      <button aria-label=\"Panou profil: schimbă tasta; acum P, propusă P\" class=\"key-remapping__key\" data-action=\"profile\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">P</button>\n      <span class=\"key-remapping__default\">Implicit: P</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Pauză: tasta curentă Escape, propusă Escape, implicit Escape, Neschimbat\" class=\"key-remapping__item\" data-action=\"pause\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Pauză</span>\n      <kbd class=\"key-remapping__current\">Acum: Escape</kbd>\n      <button aria-label=\"Pauză: schimbă tasta; acum Escape, propusă Escape\" class=\"key-remapping__key\" data-action=\"pause\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">Escape</button>\n      <span class=\"key-remapping__default\">Implicit: Escape</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Recuperare: tasta curentă R, propusă R, implicit R, Neschimbat\" class=\"key-remapping__item\" data-action=\"recover\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Recuperare</span>\n      <kbd class=\"key-remapping__current\">Acum: R</kbd>\n      <button aria-label=\"Recuperare: schimbă tasta; acum R, propusă R\" class=\"key-remapping__key\" data-action=\"recover\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">R</button>\n      <span class=\"key-remapping__default\">Implicit: R</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n  </ul>\n  <p aria-atomic=\"true\" aria-live=\"polite\" class=\"key-remapping__live\" role=\"status\">Corectează conflictele sau tastele invalide înainte de salvare.</p>\n  <div class=\"key-remapping__actions\">\n    <button class=\"key-remapping__reset\" type=\"button\">Resetează la implicite</button>\n    <button class=\"key-remapping__save\" disabled=\"\" type=\"button\">Salvează</button>\n    <button class=\"key-remapping__cancel\" type=\"button\">Renunță</button>\n  </div>\n</section>"
+    },
+    {
+      "name": "reset to defaults",
+      "saveState": "DIRTY",
+      "summary": "2 comenzi modificate, niciun conflict. Salvează pentru a păstra.",
+      "changed": 2,
+      "rows": [
+        {
+          "action": "throttle",
+          "label": "Accelerație",
+          "current": "ArrowUp",
+          "proposed": "KeyW",
+          "defaultCode": "KeyW",
+          "critical": true,
+          "state": "VALID",
+          "message": null
+        },
+        {
+          "action": "brake",
+          "label": "Frână",
+          "current": "KeyZ",
+          "proposed": "KeyS",
+          "defaultCode": "KeyS",
+          "critical": true,
+          "state": "VALID",
+          "message": null
+        },
+        {
+          "action": "steerLeft",
+          "label": "Direcție stânga",
+          "current": "KeyA",
+          "proposed": "KeyA",
+          "defaultCode": "KeyA",
+          "critical": true,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "steerRight",
+          "label": "Direcție dreapta",
+          "current": "KeyD",
+          "proposed": "KeyD",
+          "defaultCode": "KeyD",
+          "critical": true,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "handbrake",
+          "label": "Frână de mână",
+          "current": "Space",
+          "proposed": "Space",
+          "defaultCode": "Space",
+          "critical": true,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "manualMode",
+          "label": "Mod AUTO/MANUAL",
+          "current": "KeyM",
+          "proposed": "KeyM",
+          "defaultCode": "KeyM",
+          "critical": true,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "learningMode",
+          "label": "Mod LEARNING",
+          "current": "KeyL",
+          "proposed": "KeyL",
+          "defaultCode": "KeyL",
+          "critical": true,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "kpis",
+          "label": "Panou KPI",
+          "current": "KeyK",
+          "proposed": "KeyK",
+          "defaultCode": "KeyK",
+          "critical": false,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "fleet",
+          "label": "Lista flotei",
+          "current": "Tab",
+          "proposed": "Tab",
+          "defaultCode": "Tab",
+          "critical": false,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "signalLeft",
+          "label": "Semnalizare stânga",
+          "current": "KeyQ",
+          "proposed": "KeyQ",
+          "defaultCode": "KeyQ",
+          "critical": false,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "signalRight",
+          "label": "Semnalizare dreapta",
+          "current": "KeyE",
+          "proposed": "KeyE",
+          "defaultCode": "KeyE",
+          "critical": false,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "camera",
+          "label": "Cameră",
+          "current": "KeyC",
+          "proposed": "KeyC",
+          "defaultCode": "KeyC",
+          "critical": false,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "profile",
+          "label": "Panou profil",
+          "current": "KeyP",
+          "proposed": "KeyP",
+          "defaultCode": "KeyP",
+          "critical": false,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "pause",
+          "label": "Pauză",
+          "current": "Escape",
+          "proposed": "Escape",
+          "defaultCode": "Escape",
+          "critical": true,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "recover",
+          "label": "Recuperare",
+          "current": "KeyR",
+          "proposed": "KeyR",
+          "defaultCode": "KeyR",
+          "critical": true,
+          "state": "UNCHANGED",
+          "message": null
+        }
+      ],
+      "conflicts": [],
+      "saved": {
+        "bindings": {
+          "throttle": "KeyW",
+          "brake": "KeyS",
+          "steerLeft": "KeyA",
+          "steerRight": "KeyD",
+          "handbrake": "Space",
+          "manualMode": "KeyM",
+          "learningMode": "KeyL",
+          "kpis": "KeyK",
+          "fleet": "Tab",
+          "signalLeft": "KeyQ",
+          "signalRight": "KeyE",
+          "camera": "KeyC",
+          "profile": "KeyP",
+          "pause": "Escape",
+          "recover": "KeyR"
+        },
+        "controlVersion": 4,
+        "fov": 90,
+        "cameraMode": "FIRST_PERSON",
+        "units": "mph/ft",
+        "quality": "HIGH/WEBGL2/0.75/true",
+        "scenario": "provisional-city-v1/provisional-v1/7/10/12"
+      },
+      "stats": {
+        "elements": 116,
+        "textNodes": 97,
+        "rows": 15,
+        "listeners": 18,
+        "captureListeners": 0,
+        "writes": 203,
+        "skipped": 0,
+        "captures": 0,
+        "cancelledCaptures": 0,
+        "saves": 0,
+        "resets": 1,
+        "saveState": "DIRTY",
+        "disposed": false
+      },
+      "dom": "<section aria-describedby=\"key-remapping-description\" aria-label=\"Remapare comenzi\" class=\"key-remapping\" data-changed=\"2\" data-save-state=\"DIRTY\">\n  <header class=\"key-remapping__header\">\n    <h2 class=\"key-remapping__title\">Remapare comenzi</h2>\n    <p class=\"key-remapping__note\">Setări dispozitiv · separat de profilul învățat</p>\n  </header>\n  <p class=\"key-remapping__description\">Toate cele 15 comenzi sunt listate mereu. O tastă folosită de două comenzi este conflict și blochează salvarea; o comandă fără tastă validă rămâne vizibilă și invalidă. Valorile propuse se păstrează numai prin butonul Salvează, în setările dispozitivului, separat de profilul învățat.</p>\n  <ul aria-label=\"Comenzi și taste\" class=\"key-remapping__rows\">\n    <li aria-label=\"Accelerație: tasta curentă ↑, propusă W, implicit W, Modificat\" class=\"key-remapping__item\" data-action=\"throttle\" data-capturing=\"false\" data-critical=\"true\" data-state=\"VALID\">\n      <span class=\"key-remapping__label\">Accelerație</span>\n      <kbd class=\"key-remapping__current\">Acum: ↑</kbd>\n      <button aria-label=\"Accelerație: schimbă tasta; acum ↑, propusă W\" class=\"key-remapping__key\" data-action=\"throttle\" data-capturing=\"false\" data-state=\"VALID\" type=\"button\">W</button>\n      <span class=\"key-remapping__default\">Implicit: W</span>\n      <span class=\"key-remapping__state\">✎ Modificat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Frână: tasta curentă Z, propusă S, implicit S, Modificat\" class=\"key-remapping__item\" data-action=\"brake\" data-capturing=\"false\" data-critical=\"true\" data-state=\"VALID\">\n      <span class=\"key-remapping__label\">Frână</span>\n      <kbd class=\"key-remapping__current\">Acum: Z</kbd>\n      <button aria-label=\"Frână: schimbă tasta; acum Z, propusă S\" class=\"key-remapping__key\" data-action=\"brake\" data-capturing=\"false\" data-state=\"VALID\" type=\"button\">S</button>\n      <span class=\"key-remapping__default\">Implicit: S</span>\n      <span class=\"key-remapping__state\">✎ Modificat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Direcție stânga: tasta curentă A, propusă A, implicit A, Neschimbat\" class=\"key-remapping__item\" data-action=\"steerLeft\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Direcție stânga</span>\n      <kbd class=\"key-remapping__current\">Acum: A</kbd>\n      <button aria-label=\"Direcție stânga: schimbă tasta; acum A, propusă A\" class=\"key-remapping__key\" data-action=\"steerLeft\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">A</button>\n      <span class=\"key-remapping__default\">Implicit: A</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Direcție dreapta: tasta curentă D, propusă D, implicit D, Neschimbat\" class=\"key-remapping__item\" data-action=\"steerRight\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Direcție dreapta</span>\n      <kbd class=\"key-remapping__current\">Acum: D</kbd>\n      <button aria-label=\"Direcție dreapta: schimbă tasta; acum D, propusă D\" class=\"key-remapping__key\" data-action=\"steerRight\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">D</button>\n      <span class=\"key-remapping__default\">Implicit: D</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Frână de mână: tasta curentă Space, propusă Space, implicit Space, Neschimbat\" class=\"key-remapping__item\" data-action=\"handbrake\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Frână de mână</span>\n      <kbd class=\"key-remapping__current\">Acum: Space</kbd>\n      <button aria-label=\"Frână de mână: schimbă tasta; acum Space, propusă Space\" class=\"key-remapping__key\" data-action=\"handbrake\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">Space</button>\n      <span class=\"key-remapping__default\">Implicit: Space</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Mod AUTO/MANUAL: tasta curentă M, propusă M, implicit M, Neschimbat\" class=\"key-remapping__item\" data-action=\"manualMode\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Mod AUTO/MANUAL</span>\n      <kbd class=\"key-remapping__current\">Acum: M</kbd>\n      <button aria-label=\"Mod AUTO/MANUAL: schimbă tasta; acum M, propusă M\" class=\"key-remapping__key\" data-action=\"manualMode\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">M</button>\n      <span class=\"key-remapping__default\">Implicit: M</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Mod LEARNING: tasta curentă L, propusă L, implicit L, Neschimbat\" class=\"key-remapping__item\" data-action=\"learningMode\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Mod LEARNING</span>\n      <kbd class=\"key-remapping__current\">Acum: L</kbd>\n      <button aria-label=\"Mod LEARNING: schimbă tasta; acum L, propusă L\" class=\"key-remapping__key\" data-action=\"learningMode\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">L</button>\n      <span class=\"key-remapping__default\">Implicit: L</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Panou KPI: tasta curentă K, propusă K, implicit K, Neschimbat\" class=\"key-remapping__item\" data-action=\"kpis\" data-capturing=\"false\" data-critical=\"false\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Panou KPI</span>\n      <kbd class=\"key-remapping__current\">Acum: K</kbd>\n      <button aria-label=\"Panou KPI: schimbă tasta; acum K, propusă K\" class=\"key-remapping__key\" data-action=\"kpis\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">K</button>\n      <span class=\"key-remapping__default\">Implicit: K</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Lista flotei: tasta curentă Tab, propusă Tab, implicit Tab, Neschimbat\" class=\"key-remapping__item\" data-action=\"fleet\" data-capturing=\"false\" data-critical=\"false\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Lista flotei</span>\n      <kbd class=\"key-remapping__current\">Acum: Tab</kbd>\n      <button aria-label=\"Lista flotei: schimbă tasta; acum Tab, propusă Tab\" class=\"key-remapping__key\" data-action=\"fleet\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">Tab</button>\n      <span class=\"key-remapping__default\">Implicit: Tab</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Semnalizare stânga: tasta curentă Q, propusă Q, implicit Q, Neschimbat\" class=\"key-remapping__item\" data-action=\"signalLeft\" data-capturing=\"false\" data-critical=\"false\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Semnalizare stânga</span>\n      <kbd class=\"key-remapping__current\">Acum: Q</kbd>\n      <button aria-label=\"Semnalizare stânga: schimbă tasta; acum Q, propusă Q\" class=\"key-remapping__key\" data-action=\"signalLeft\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">Q</button>\n      <span class=\"key-remapping__default\">Implicit: Q</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Semnalizare dreapta: tasta curentă E, propusă E, implicit E, Neschimbat\" class=\"key-remapping__item\" data-action=\"signalRight\" data-capturing=\"false\" data-critical=\"false\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Semnalizare dreapta</span>\n      <kbd class=\"key-remapping__current\">Acum: E</kbd>\n      <button aria-label=\"Semnalizare dreapta: schimbă tasta; acum E, propusă E\" class=\"key-remapping__key\" data-action=\"signalRight\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">E</button>\n      <span class=\"key-remapping__default\">Implicit: E</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Cameră: tasta curentă C, propusă C, implicit C, Neschimbat\" class=\"key-remapping__item\" data-action=\"camera\" data-capturing=\"false\" data-critical=\"false\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Cameră</span>\n      <kbd class=\"key-remapping__current\">Acum: C</kbd>\n      <button aria-label=\"Cameră: schimbă tasta; acum C, propusă C\" class=\"key-remapping__key\" data-action=\"camera\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">C</button>\n      <span class=\"key-remapping__default\">Implicit: C</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Panou profil: tasta curentă P, propusă P, implicit P, Neschimbat\" class=\"key-remapping__item\" data-action=\"profile\" data-capturing=\"false\" data-critical=\"false\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Panou profil</span>\n      <kbd class=\"key-remapping__current\">Acum: P</kbd>\n      <button aria-label=\"Panou profil: schimbă tasta; acum P, propusă P\" class=\"key-remapping__key\" data-action=\"profile\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">P</button>\n      <span class=\"key-remapping__default\">Implicit: P</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Pauză: tasta curentă Escape, propusă Escape, implicit Escape, Neschimbat\" class=\"key-remapping__item\" data-action=\"pause\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Pauză</span>\n      <kbd class=\"key-remapping__current\">Acum: Escape</kbd>\n      <button aria-label=\"Pauză: schimbă tasta; acum Escape, propusă Escape\" class=\"key-remapping__key\" data-action=\"pause\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">Escape</button>\n      <span class=\"key-remapping__default\">Implicit: Escape</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Recuperare: tasta curentă R, propusă R, implicit R, Neschimbat\" class=\"key-remapping__item\" data-action=\"recover\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Recuperare</span>\n      <kbd class=\"key-remapping__current\">Acum: R</kbd>\n      <button aria-label=\"Recuperare: schimbă tasta; acum R, propusă R\" class=\"key-remapping__key\" data-action=\"recover\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">R</button>\n      <span class=\"key-remapping__default\">Implicit: R</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n  </ul>\n  <p aria-atomic=\"true\" aria-live=\"polite\" class=\"key-remapping__live\" role=\"status\">Valorile implicite sunt propuse local. Salvează pentru a le păstra; nimic nu a fost scris încă.</p>\n  <div class=\"key-remapping__actions\">\n    <button class=\"key-remapping__reset\" type=\"button\">Resetează la implicite</button>\n    <button class=\"key-remapping__save\" type=\"button\">Salvează</button>\n    <button class=\"key-remapping__cancel\" type=\"button\">Renunță</button>\n  </div>\n</section>"
+    },
+    {
+      "name": "save preserves other settings",
+      "saveState": "DIRTY",
+      "summary": "1 comandă modificată, niciun conflict. Salvează pentru a păstra.",
+      "changed": 1,
+      "rows": [
+        {
+          "action": "throttle",
+          "label": "Accelerație",
+          "current": "ArrowUp",
+          "proposed": "ArrowUp",
+          "defaultCode": "KeyW",
+          "critical": true,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "brake",
+          "label": "Frână",
+          "current": "KeyZ",
+          "proposed": "KeyZ",
+          "defaultCode": "KeyS",
+          "critical": true,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "steerLeft",
+          "label": "Direcție stânga",
+          "current": "KeyA",
+          "proposed": "KeyA",
+          "defaultCode": "KeyA",
+          "critical": true,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "steerRight",
+          "label": "Direcție dreapta",
+          "current": "KeyD",
+          "proposed": "KeyD",
+          "defaultCode": "KeyD",
+          "critical": true,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "handbrake",
+          "label": "Frână de mână",
+          "current": "Space",
+          "proposed": "Space",
+          "defaultCode": "Space",
+          "critical": true,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "manualMode",
+          "label": "Mod AUTO/MANUAL",
+          "current": "KeyM",
+          "proposed": "KeyM",
+          "defaultCode": "KeyM",
+          "critical": true,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "learningMode",
+          "label": "Mod LEARNING",
+          "current": "KeyL",
+          "proposed": "KeyL",
+          "defaultCode": "KeyL",
+          "critical": true,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "kpis",
+          "label": "Panou KPI",
+          "current": "KeyK",
+          "proposed": "KeyK",
+          "defaultCode": "KeyK",
+          "critical": false,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "fleet",
+          "label": "Lista flotei",
+          "current": "Tab",
+          "proposed": "Tab",
+          "defaultCode": "Tab",
+          "critical": false,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "signalLeft",
+          "label": "Semnalizare stânga",
+          "current": "KeyQ",
+          "proposed": "KeyQ",
+          "defaultCode": "KeyQ",
+          "critical": false,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "signalRight",
+          "label": "Semnalizare dreapta",
+          "current": "KeyE",
+          "proposed": "KeyE",
+          "defaultCode": "KeyE",
+          "critical": false,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "camera",
+          "label": "Cameră",
+          "current": "KeyC",
+          "proposed": "KeyC",
+          "defaultCode": "KeyC",
+          "critical": false,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "profile",
+          "label": "Panou profil",
+          "current": "KeyP",
+          "proposed": "KeyP",
+          "defaultCode": "KeyP",
+          "critical": false,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "pause",
+          "label": "Pauză",
+          "current": "Escape",
+          "proposed": "Escape",
+          "defaultCode": "Escape",
+          "critical": true,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "recover",
+          "label": "Recuperare",
+          "current": "KeyR",
+          "proposed": "KeyY",
+          "defaultCode": "KeyR",
+          "critical": true,
+          "state": "VALID",
+          "message": null
+        }
+      ],
+      "conflicts": [],
+      "saved": {
+        "bindings": {
+          "throttle": "ArrowUp",
+          "brake": "KeyZ",
+          "steerLeft": "KeyA",
+          "steerRight": "KeyD",
+          "handbrake": "Space",
+          "manualMode": "KeyM",
+          "learningMode": "KeyL",
+          "kpis": "KeyK",
+          "fleet": "Tab",
+          "signalLeft": "KeyQ",
+          "signalRight": "KeyE",
+          "camera": "KeyC",
+          "profile": "KeyP",
+          "pause": "Escape",
+          "recover": "KeyY"
+        },
+        "controlVersion": 4,
+        "fov": 90,
+        "cameraMode": "FIRST_PERSON",
+        "units": "mph/ft",
+        "quality": "HIGH/WEBGL2/0.75/true",
+        "scenario": "provisional-city-v1/provisional-v1/7/10/12"
+      },
+      "stats": {
+        "elements": 116,
+        "textNodes": 97,
+        "rows": 15,
+        "listeners": 18,
+        "captureListeners": 0,
+        "writes": 198,
+        "skipped": 0,
+        "captures": 0,
+        "cancelledCaptures": 0,
+        "saves": 1,
+        "resets": 0,
+        "saveState": "DIRTY",
+        "disposed": false
+      },
+      "dom": "<section aria-describedby=\"key-remapping-description\" aria-label=\"Remapare comenzi\" class=\"key-remapping\" data-changed=\"1\" data-save-state=\"DIRTY\">\n  <header class=\"key-remapping__header\">\n    <h2 class=\"key-remapping__title\">Remapare comenzi</h2>\n    <p class=\"key-remapping__note\">Setări dispozitiv · separat de profilul învățat</p>\n  </header>\n  <p class=\"key-remapping__description\">Toate cele 15 comenzi sunt listate mereu. O tastă folosită de două comenzi este conflict și blochează salvarea; o comandă fără tastă validă rămâne vizibilă și invalidă. Valorile propuse se păstrează numai prin butonul Salvează, în setările dispozitivului, separat de profilul învățat.</p>\n  <ul aria-label=\"Comenzi și taste\" class=\"key-remapping__rows\">\n    <li aria-label=\"Accelerație: tasta curentă ↑, propusă ↑, implicit W, Neschimbat\" class=\"key-remapping__item\" data-action=\"throttle\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Accelerație</span>\n      <kbd class=\"key-remapping__current\">Acum: ↑</kbd>\n      <button aria-label=\"Accelerație: schimbă tasta; acum ↑, propusă ↑\" class=\"key-remapping__key\" data-action=\"throttle\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">↑</button>\n      <span class=\"key-remapping__default\">Implicit: W</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Frână: tasta curentă Z, propusă Z, implicit S, Neschimbat\" class=\"key-remapping__item\" data-action=\"brake\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Frână</span>\n      <kbd class=\"key-remapping__current\">Acum: Z</kbd>\n      <button aria-label=\"Frână: schimbă tasta; acum Z, propusă Z\" class=\"key-remapping__key\" data-action=\"brake\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">Z</button>\n      <span class=\"key-remapping__default\">Implicit: S</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Direcție stânga: tasta curentă A, propusă A, implicit A, Neschimbat\" class=\"key-remapping__item\" data-action=\"steerLeft\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Direcție stânga</span>\n      <kbd class=\"key-remapping__current\">Acum: A</kbd>\n      <button aria-label=\"Direcție stânga: schimbă tasta; acum A, propusă A\" class=\"key-remapping__key\" data-action=\"steerLeft\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">A</button>\n      <span class=\"key-remapping__default\">Implicit: A</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Direcție dreapta: tasta curentă D, propusă D, implicit D, Neschimbat\" class=\"key-remapping__item\" data-action=\"steerRight\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Direcție dreapta</span>\n      <kbd class=\"key-remapping__current\">Acum: D</kbd>\n      <button aria-label=\"Direcție dreapta: schimbă tasta; acum D, propusă D\" class=\"key-remapping__key\" data-action=\"steerRight\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">D</button>\n      <span class=\"key-remapping__default\">Implicit: D</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Frână de mână: tasta curentă Space, propusă Space, implicit Space, Neschimbat\" class=\"key-remapping__item\" data-action=\"handbrake\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Frână de mână</span>\n      <kbd class=\"key-remapping__current\">Acum: Space</kbd>\n      <button aria-label=\"Frână de mână: schimbă tasta; acum Space, propusă Space\" class=\"key-remapping__key\" data-action=\"handbrake\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">Space</button>\n      <span class=\"key-remapping__default\">Implicit: Space</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Mod AUTO/MANUAL: tasta curentă M, propusă M, implicit M, Neschimbat\" class=\"key-remapping__item\" data-action=\"manualMode\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Mod AUTO/MANUAL</span>\n      <kbd class=\"key-remapping__current\">Acum: M</kbd>\n      <button aria-label=\"Mod AUTO/MANUAL: schimbă tasta; acum M, propusă M\" class=\"key-remapping__key\" data-action=\"manualMode\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">M</button>\n      <span class=\"key-remapping__default\">Implicit: M</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Mod LEARNING: tasta curentă L, propusă L, implicit L, Neschimbat\" class=\"key-remapping__item\" data-action=\"learningMode\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Mod LEARNING</span>\n      <kbd class=\"key-remapping__current\">Acum: L</kbd>\n      <button aria-label=\"Mod LEARNING: schimbă tasta; acum L, propusă L\" class=\"key-remapping__key\" data-action=\"learningMode\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">L</button>\n      <span class=\"key-remapping__default\">Implicit: L</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Panou KPI: tasta curentă K, propusă K, implicit K, Neschimbat\" class=\"key-remapping__item\" data-action=\"kpis\" data-capturing=\"false\" data-critical=\"false\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Panou KPI</span>\n      <kbd class=\"key-remapping__current\">Acum: K</kbd>\n      <button aria-label=\"Panou KPI: schimbă tasta; acum K, propusă K\" class=\"key-remapping__key\" data-action=\"kpis\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">K</button>\n      <span class=\"key-remapping__default\">Implicit: K</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Lista flotei: tasta curentă Tab, propusă Tab, implicit Tab, Neschimbat\" class=\"key-remapping__item\" data-action=\"fleet\" data-capturing=\"false\" data-critical=\"false\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Lista flotei</span>\n      <kbd class=\"key-remapping__current\">Acum: Tab</kbd>\n      <button aria-label=\"Lista flotei: schimbă tasta; acum Tab, propusă Tab\" class=\"key-remapping__key\" data-action=\"fleet\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">Tab</button>\n      <span class=\"key-remapping__default\">Implicit: Tab</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Semnalizare stânga: tasta curentă Q, propusă Q, implicit Q, Neschimbat\" class=\"key-remapping__item\" data-action=\"signalLeft\" data-capturing=\"false\" data-critical=\"false\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Semnalizare stânga</span>\n      <kbd class=\"key-remapping__current\">Acum: Q</kbd>\n      <button aria-label=\"Semnalizare stânga: schimbă tasta; acum Q, propusă Q\" class=\"key-remapping__key\" data-action=\"signalLeft\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">Q</button>\n      <span class=\"key-remapping__default\">Implicit: Q</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Semnalizare dreapta: tasta curentă E, propusă E, implicit E, Neschimbat\" class=\"key-remapping__item\" data-action=\"signalRight\" data-capturing=\"false\" data-critical=\"false\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Semnalizare dreapta</span>\n      <kbd class=\"key-remapping__current\">Acum: E</kbd>\n      <button aria-label=\"Semnalizare dreapta: schimbă tasta; acum E, propusă E\" class=\"key-remapping__key\" data-action=\"signalRight\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">E</button>\n      <span class=\"key-remapping__default\">Implicit: E</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Cameră: tasta curentă C, propusă C, implicit C, Neschimbat\" class=\"key-remapping__item\" data-action=\"camera\" data-capturing=\"false\" data-critical=\"false\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Cameră</span>\n      <kbd class=\"key-remapping__current\">Acum: C</kbd>\n      <button aria-label=\"Cameră: schimbă tasta; acum C, propusă C\" class=\"key-remapping__key\" data-action=\"camera\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">C</button>\n      <span class=\"key-remapping__default\">Implicit: C</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Panou profil: tasta curentă P, propusă P, implicit P, Neschimbat\" class=\"key-remapping__item\" data-action=\"profile\" data-capturing=\"false\" data-critical=\"false\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Panou profil</span>\n      <kbd class=\"key-remapping__current\">Acum: P</kbd>\n      <button aria-label=\"Panou profil: schimbă tasta; acum P, propusă P\" class=\"key-remapping__key\" data-action=\"profile\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">P</button>\n      <span class=\"key-remapping__default\">Implicit: P</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Pauză: tasta curentă Escape, propusă Escape, implicit Escape, Neschimbat\" class=\"key-remapping__item\" data-action=\"pause\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Pauză</span>\n      <kbd class=\"key-remapping__current\">Acum: Escape</kbd>\n      <button aria-label=\"Pauză: schimbă tasta; acum Escape, propusă Escape\" class=\"key-remapping__key\" data-action=\"pause\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">Escape</button>\n      <span class=\"key-remapping__default\">Implicit: Escape</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Recuperare: tasta curentă R, propusă Y, implicit R, Modificat\" class=\"key-remapping__item\" data-action=\"recover\" data-capturing=\"false\" data-critical=\"true\" data-state=\"VALID\">\n      <span class=\"key-remapping__label\">Recuperare</span>\n      <kbd class=\"key-remapping__current\">Acum: R</kbd>\n      <button aria-label=\"Recuperare: schimbă tasta; acum R, propusă Y\" class=\"key-remapping__key\" data-action=\"recover\" data-capturing=\"false\" data-state=\"VALID\" type=\"button\">Y</button>\n      <span class=\"key-remapping__default\">Implicit: R</span>\n      <span class=\"key-remapping__state\">✎ Modificat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n  </ul>\n  <p aria-atomic=\"true\" aria-live=\"polite\" class=\"key-remapping__live\" role=\"status\">1 comandă modificată, niciun conflict. Salvează pentru a păstra.</p>\n  <div class=\"key-remapping__actions\">\n    <button class=\"key-remapping__reset\" type=\"button\">Resetează la implicite</button>\n    <button class=\"key-remapping__save\" type=\"button\">Salvează</button>\n    <button class=\"key-remapping__cancel\" type=\"button\">Renunță</button>\n  </div>\n</section>"
+    },
+    {
+      "name": "focus capture",
+      "saveState": "DIRTY",
+      "summary": "2 comenzi modificate, niciun conflict. Salvează pentru a păstra.",
+      "changed": 2,
+      "rows": [
+        {
+          "action": "throttle",
+          "label": "Accelerație",
+          "current": "KeyW",
+          "proposed": "KeyW",
+          "defaultCode": "KeyW",
+          "critical": true,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "brake",
+          "label": "Frână",
+          "current": "KeyS",
+          "proposed": "KeyZ",
+          "defaultCode": "KeyS",
+          "critical": true,
+          "state": "VALID",
+          "message": null
+        },
+        {
+          "action": "steerLeft",
+          "label": "Direcție stânga",
+          "current": "KeyA",
+          "proposed": "KeyA",
+          "defaultCode": "KeyA",
+          "critical": true,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "steerRight",
+          "label": "Direcție dreapta",
+          "current": "KeyD",
+          "proposed": "KeyD",
+          "defaultCode": "KeyD",
+          "critical": true,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "handbrake",
+          "label": "Frână de mână",
+          "current": "Space",
+          "proposed": "Space",
+          "defaultCode": "Space",
+          "critical": true,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "manualMode",
+          "label": "Mod AUTO/MANUAL",
+          "current": "KeyM",
+          "proposed": "KeyM",
+          "defaultCode": "KeyM",
+          "critical": true,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "learningMode",
+          "label": "Mod LEARNING",
+          "current": "KeyL",
+          "proposed": "KeyL",
+          "defaultCode": "KeyL",
+          "critical": true,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "kpis",
+          "label": "Panou KPI",
+          "current": "KeyK",
+          "proposed": "Enter",
+          "defaultCode": "KeyK",
+          "critical": false,
+          "state": "VALID",
+          "message": null
+        },
+        {
+          "action": "fleet",
+          "label": "Lista flotei",
+          "current": "Tab",
+          "proposed": "Tab",
+          "defaultCode": "Tab",
+          "critical": false,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "signalLeft",
+          "label": "Semnalizare stânga",
+          "current": "KeyQ",
+          "proposed": "KeyQ",
+          "defaultCode": "KeyQ",
+          "critical": false,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "signalRight",
+          "label": "Semnalizare dreapta",
+          "current": "KeyE",
+          "proposed": "KeyE",
+          "defaultCode": "KeyE",
+          "critical": false,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "camera",
+          "label": "Cameră",
+          "current": "KeyC",
+          "proposed": "KeyC",
+          "defaultCode": "KeyC",
+          "critical": false,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "profile",
+          "label": "Panou profil",
+          "current": "KeyP",
+          "proposed": "KeyP",
+          "defaultCode": "KeyP",
+          "critical": false,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "pause",
+          "label": "Pauză",
+          "current": "Escape",
+          "proposed": "Escape",
+          "defaultCode": "Escape",
+          "critical": true,
+          "state": "UNCHANGED",
+          "message": null
+        },
+        {
+          "action": "recover",
+          "label": "Recuperare",
+          "current": "KeyR",
+          "proposed": "KeyR",
+          "defaultCode": "KeyR",
+          "critical": true,
+          "state": "UNCHANGED",
+          "message": null
+        }
+      ],
+      "conflicts": [],
+      "saved": null,
+      "stats": {
+        "elements": 116,
+        "textNodes": 97,
+        "rows": 15,
+        "listeners": 18,
+        "captureListeners": 0,
+        "writes": 252,
+        "skipped": 2,
+        "captures": 4,
+        "cancelledCaptures": 0,
+        "saves": 1,
+        "resets": 0,
+        "saveState": "DIRTY",
+        "disposed": false
+      },
+      "dom": "<section aria-describedby=\"key-remapping-description\" aria-label=\"Remapare comenzi\" class=\"key-remapping\" data-changed=\"2\" data-save-state=\"DIRTY\">\n  <header class=\"key-remapping__header\">\n    <h2 class=\"key-remapping__title\">Remapare comenzi</h2>\n    <p class=\"key-remapping__note\">Setări dispozitiv · separat de profilul învățat</p>\n  </header>\n  <p class=\"key-remapping__description\">Toate cele 15 comenzi sunt listate mereu. O tastă folosită de două comenzi este conflict și blochează salvarea; o comandă fără tastă validă rămâne vizibilă și invalidă. Valorile propuse se păstrează numai prin butonul Salvează, în setările dispozitivului, separat de profilul învățat.</p>\n  <ul aria-label=\"Comenzi și taste\" class=\"key-remapping__rows\">\n    <li aria-label=\"Accelerație: tasta curentă W, propusă W, implicit W, Neschimbat\" class=\"key-remapping__item\" data-action=\"throttle\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Accelerație</span>\n      <kbd class=\"key-remapping__current\">Acum: W</kbd>\n      <button aria-label=\"Accelerație: schimbă tasta; acum W, propusă W\" class=\"key-remapping__key\" data-action=\"throttle\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">W</button>\n      <span class=\"key-remapping__default\">Implicit: W</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Frână: tasta curentă S, propusă Z, implicit S, Modificat\" class=\"key-remapping__item\" data-action=\"brake\" data-capturing=\"false\" data-critical=\"true\" data-state=\"VALID\">\n      <span class=\"key-remapping__label\">Frână</span>\n      <kbd class=\"key-remapping__current\">Acum: S</kbd>\n      <button aria-label=\"Frână: schimbă tasta; acum S, propusă Z\" class=\"key-remapping__key\" data-action=\"brake\" data-capturing=\"false\" data-state=\"VALID\" type=\"button\">Z</button>\n      <span class=\"key-remapping__default\">Implicit: S</span>\n      <span class=\"key-remapping__state\">✎ Modificat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Direcție stânga: tasta curentă A, propusă A, implicit A, Neschimbat\" class=\"key-remapping__item\" data-action=\"steerLeft\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Direcție stânga</span>\n      <kbd class=\"key-remapping__current\">Acum: A</kbd>\n      <button aria-label=\"Direcție stânga: schimbă tasta; acum A, propusă A\" class=\"key-remapping__key\" data-action=\"steerLeft\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">A</button>\n      <span class=\"key-remapping__default\">Implicit: A</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Direcție dreapta: tasta curentă D, propusă D, implicit D, Neschimbat\" class=\"key-remapping__item\" data-action=\"steerRight\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Direcție dreapta</span>\n      <kbd class=\"key-remapping__current\">Acum: D</kbd>\n      <button aria-label=\"Direcție dreapta: schimbă tasta; acum D, propusă D\" class=\"key-remapping__key\" data-action=\"steerRight\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">D</button>\n      <span class=\"key-remapping__default\">Implicit: D</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Frână de mână: tasta curentă Space, propusă Space, implicit Space, Neschimbat\" class=\"key-remapping__item\" data-action=\"handbrake\" data-critical=\"true\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Frână de mână</span>\n      <kbd class=\"key-remapping__current\">Acum: Space</kbd>\n      <button aria-label=\"Frână de mână: schimbă tasta; acum Space, propusă Space\" class=\"key-remapping__key\" data-action=\"handbrake\" data-state=\"UNCHANGED\" type=\"button\">Apasă o tastă…</button>\n      <span class=\"key-remapping__default\">Implicit: Space</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Mod AUTO/MANUAL: tasta curentă M, propusă M, implicit M, Neschimbat\" class=\"key-remapping__item\" data-action=\"manualMode\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Mod AUTO/MANUAL</span>\n      <kbd class=\"key-remapping__current\">Acum: M</kbd>\n      <button aria-label=\"Mod AUTO/MANUAL: schimbă tasta; acum M, propusă M\" class=\"key-remapping__key\" data-action=\"manualMode\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">M</button>\n      <span class=\"key-remapping__default\">Implicit: M</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Mod LEARNING: tasta curentă L, propusă L, implicit L, Neschimbat\" class=\"key-remapping__item\" data-action=\"learningMode\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Mod LEARNING</span>\n      <kbd class=\"key-remapping__current\">Acum: L</kbd>\n      <button aria-label=\"Mod LEARNING: schimbă tasta; acum L, propusă L\" class=\"key-remapping__key\" data-action=\"learningMode\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">L</button>\n      <span class=\"key-remapping__default\">Implicit: L</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Panou KPI: tasta curentă K, propusă Enter, implicit K, Modificat\" class=\"key-remapping__item\" data-action=\"kpis\" data-capturing=\"false\" data-critical=\"false\" data-state=\"VALID\">\n      <span class=\"key-remapping__label\">Panou KPI</span>\n      <kbd class=\"key-remapping__current\">Acum: K</kbd>\n      <button aria-label=\"Panou KPI: schimbă tasta; acum K, propusă Enter\" class=\"key-remapping__key\" data-action=\"kpis\" data-capturing=\"false\" data-state=\"VALID\" type=\"button\">Enter</button>\n      <span class=\"key-remapping__default\">Implicit: K</span>\n      <span class=\"key-remapping__state\">✎ Modificat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Lista flotei: tasta curentă Tab, propusă Tab, implicit Tab, Neschimbat\" class=\"key-remapping__item\" data-action=\"fleet\" data-capturing=\"false\" data-critical=\"false\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Lista flotei</span>\n      <kbd class=\"key-remapping__current\">Acum: Tab</kbd>\n      <button aria-label=\"Lista flotei: schimbă tasta; acum Tab, propusă Tab\" class=\"key-remapping__key\" data-action=\"fleet\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">Tab</button>\n      <span class=\"key-remapping__default\">Implicit: Tab</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Semnalizare stânga: tasta curentă Q, propusă Q, implicit Q, Neschimbat\" class=\"key-remapping__item\" data-action=\"signalLeft\" data-capturing=\"false\" data-critical=\"false\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Semnalizare stânga</span>\n      <kbd class=\"key-remapping__current\">Acum: Q</kbd>\n      <button aria-label=\"Semnalizare stânga: schimbă tasta; acum Q, propusă Q\" class=\"key-remapping__key\" data-action=\"signalLeft\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">Q</button>\n      <span class=\"key-remapping__default\">Implicit: Q</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Semnalizare dreapta: tasta curentă E, propusă E, implicit E, Neschimbat\" class=\"key-remapping__item\" data-action=\"signalRight\" data-capturing=\"false\" data-critical=\"false\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Semnalizare dreapta</span>\n      <kbd class=\"key-remapping__current\">Acum: E</kbd>\n      <button aria-label=\"Semnalizare dreapta: schimbă tasta; acum E, propusă E\" class=\"key-remapping__key\" data-action=\"signalRight\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">E</button>\n      <span class=\"key-remapping__default\">Implicit: E</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Cameră: tasta curentă C, propusă C, implicit C, Neschimbat\" class=\"key-remapping__item\" data-action=\"camera\" data-capturing=\"false\" data-critical=\"false\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Cameră</span>\n      <kbd class=\"key-remapping__current\">Acum: C</kbd>\n      <button aria-label=\"Cameră: schimbă tasta; acum C, propusă C\" class=\"key-remapping__key\" data-action=\"camera\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">C</button>\n      <span class=\"key-remapping__default\">Implicit: C</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Panou profil: tasta curentă P, propusă P, implicit P, Neschimbat\" class=\"key-remapping__item\" data-action=\"profile\" data-capturing=\"false\" data-critical=\"false\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Panou profil</span>\n      <kbd class=\"key-remapping__current\">Acum: P</kbd>\n      <button aria-label=\"Panou profil: schimbă tasta; acum P, propusă P\" class=\"key-remapping__key\" data-action=\"profile\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">P</button>\n      <span class=\"key-remapping__default\">Implicit: P</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Pauză: tasta curentă Escape, propusă Escape, implicit Escape, Neschimbat\" class=\"key-remapping__item\" data-action=\"pause\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Pauză</span>\n      <kbd class=\"key-remapping__current\">Acum: Escape</kbd>\n      <button aria-label=\"Pauză: schimbă tasta; acum Escape, propusă Escape\" class=\"key-remapping__key\" data-action=\"pause\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">Escape</button>\n      <span class=\"key-remapping__default\">Implicit: Escape</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n    <li aria-label=\"Recuperare: tasta curentă R, propusă R, implicit R, Neschimbat\" class=\"key-remapping__item\" data-action=\"recover\" data-capturing=\"false\" data-critical=\"true\" data-state=\"UNCHANGED\">\n      <span class=\"key-remapping__label\">Recuperare</span>\n      <kbd class=\"key-remapping__current\">Acum: R</kbd>\n      <button aria-label=\"Recuperare: schimbă tasta; acum R, propusă R\" class=\"key-remapping__key\" data-action=\"recover\" data-capturing=\"false\" data-state=\"UNCHANGED\" type=\"button\">R</button>\n      <span class=\"key-remapping__default\">Implicit: R</span>\n      <span class=\"key-remapping__state\">= Neschimbat</span>\n      <span class=\"key-remapping__message\" hidden=\"\"></span>\n    </li>\n  </ul>\n  <p aria-atomic=\"true\" aria-live=\"polite\" class=\"key-remapping__live\" role=\"status\">Frână de mână: tasta Space propusă.</p>\n  <div class=\"key-remapping__actions\">\n    <button class=\"key-remapping__reset\" type=\"button\">Resetează la implicite</button>\n    <button class=\"key-remapping__save\" type=\"button\">Salvează</button>\n    <button class=\"key-remapping__cancel\" type=\"button\">Renunță</button>\n  </div>\n</section>"
+    }
+  ],
+  "checks": [
+    {
+      "name": "contract-version",
+      "expected": "080-key-remapping-v1",
+      "actual": "080-key-remapping-v1",
+      "pass": true,
+      "detail": "080 draft version"
+    },
+    {
+      "name": "action-count",
+      "expected": 15,
+      "actual": 15,
+      "pass": true,
+      "detail": "all public 009 actions are listed"
+    },
+    {
+      "name": "action-set",
+      "expected": "throttle,brake,steerLeft,steerRight,handbrake,manualMode,learningMode,kpis,fleet,signalLeft,signalRight,camera,profile,pause,recover",
+      "actual": "throttle,brake,steerLeft,steerRight,handbrake,manualMode,learningMode,kpis,fleet,signalLeft,signalRight,camera,profile,pause,recover",
+      "pass": true,
+      "detail": "action order and identities match the settings contract"
+    },
+    {
+      "name": "default-bound",
+      "expected": 15,
+      "actual": 15,
+      "pass": true,
+      "detail": "every default action has a code"
+    },
+    {
+      "name": "defaults-distinct",
+      "expected": 15,
+      "actual": 15,
+      "pass": true,
+      "detail": "default codes are distinct"
+    },
+    {
+      "name": "defaults-unchanged",
+      "expected": "UNCHANGED",
+      "actual": "UNCHANGED",
+      "pass": true,
+      "detail": "the default draft is not dirty"
+    },
+    {
+      "name": "defaults-cannot-save",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "save is disabled without a change"
+    },
+    {
+      "name": "critical-actions",
+      "expected": 9,
+      "actual": 9,
+      "pass": true,
+      "detail": "nine driving/safety actions are flagged"
+    },
+    {
+      "name": "critical-set",
+      "expected": "throttle,brake,steerLeft,steerRight,handbrake,manualMode,learningMode,pause,recover",
+      "actual": "throttle,brake,steerLeft,steerRight,handbrake,manualMode,learningMode,pause,recover",
+      "pass": true,
+      "detail": "critical flags are stable"
+    },
+    {
+      "name": "conflict-both-rows",
+      "expected": "CONFLICT,CONFLICT",
+      "actual": "CONFLICT,CONFLICT",
+      "pass": true,
+      "detail": "both actions bound to KeyS are marked"
+    },
+    {
+      "name": "conflict-code",
+      "expected": "KeyS",
+      "actual": "KeyS",
+      "pass": true,
+      "detail": "the duplicate code is listed"
+    },
+    {
+      "name": "conflict-blocks-save",
+      "expected": "CONFLICT",
+      "actual": "CONFLICT",
+      "pass": true,
+      "detail": "a conflict blocks save"
+    },
+    {
+      "name": "conflict-save-disabled",
+      "expected": "true",
+      "actual": "true",
+      "pass": true,
+      "detail": "the save button is disabled"
+    },
+    {
+      "name": "conflict-no-intent",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "clicking a disabled save emits nothing"
+    },
+    {
+      "name": "resolved-no-conflict",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "rebinding the duplicate resolves it"
+    },
+    {
+      "name": "resolved-dirty",
+      "expected": "DIRTY",
+      "actual": "DIRTY",
+      "pass": true,
+      "detail": "the resolved draft is dirty"
+    },
+    {
+      "name": "resolved-save",
+      "expected": "SAVED",
+      "actual": "SAVED",
+      "pass": true,
+      "detail": "the resolved draft is applied"
+    },
+    {
+      "name": "resolved-bindings",
+      "expected": "KeyS/KeyX",
+      "actual": "KeyS/KeyX",
+      "pass": true,
+      "detail": "the applied bindings are the proposal"
+    },
+    {
+      "name": "unsupported-reserved",
+      "expected": "RESERVED_BROWSER_CODE",
+      "actual": "RESERVED_BROWSER_CODE",
+      "pass": true,
+      "detail": "F5 is browser-reserved"
+    },
+    {
+      "name": "unsupported-modifier",
+      "expected": "MODIFIER_ONLY",
+      "actual": "MODIFIER_ONLY",
+      "pass": true,
+      "detail": "a bare modifier is refused"
+    },
+    {
+      "name": "unsupported-printable",
+      "expected": "UNSUPPORTED_CODE",
+      "actual": "UNSUPPORTED_CODE",
+      "pass": true,
+      "detail": "event.key letters are refused"
+    },
+    {
+      "name": "unsupported-empty",
+      "expected": "UNSUPPORTED",
+      "actual": "UNSUPPORTED",
+      "pass": true,
+      "detail": "clearing an action leaves an explicit invalid row"
+    },
+    {
+      "name": "unsupported-save-state",
+      "expected": "UNSUPPORTED",
+      "actual": "UNSUPPORTED",
+      "pass": true,
+      "detail": "invalid rows block save"
+    },
+    {
+      "name": "unsupported-rejected-by-app",
+      "expected": "REJECTED:UNSUPPORTED",
+      "actual": "REJECTED:UNSUPPORTED",
+      "pass": true,
+      "detail": "the composition root refuses the invalid draft"
+    },
+    {
+      "name": "reset-proposes-defaults",
+      "expected": "KeyS",
+      "actual": "KeyS",
+      "pass": true,
+      "detail": "reset proposes the real 009 default"
+    },
+    {
+      "name": "reset-saves-defaults",
+      "expected": "KeyS",
+      "actual": "KeyS",
+      "pass": true,
+      "detail": "reset saves the real default binding"
+    },
+    {
+      "name": "reset-preserves-units",
+      "expected": "mph/ft",
+      "actual": "mph/ft",
+      "pass": true,
+      "detail": "units survive"
+    },
+    {
+      "name": "reset-preserves-quality",
+      "expected": "HIGH/WEBGL2/0.75/true",
+      "actual": "HIGH/WEBGL2/0.75/true",
+      "pass": true,
+      "detail": "quality survives"
+    },
+    {
+      "name": "reset-preserves-scenario",
+      "expected": "7/10/12",
+      "actual": "7/10/12",
+      "pass": true,
+      "detail": "scenario survives"
+    },
+    {
+      "name": "reset-preserves-control",
+      "expected": "4/90/FIRST_PERSON",
+      "actual": "4/90/FIRST_PERSON",
+      "pass": true,
+      "detail": "control preferences survive"
+    },
+    {
+      "name": "save-applies-binding",
+      "expected": "KeyY",
+      "actual": "KeyY",
+      "pass": true,
+      "detail": "the new binding is persisted"
+    },
+    {
+      "name": "save-control-version",
+      "expected": 4,
+      "actual": 4,
+      "pass": true,
+      "detail": "bindings do not bump the control revision"
+    },
+    {
+      "name": "save-preserves-units",
+      "expected": "mph/ft",
+      "actual": "mph/ft",
+      "pass": true,
+      "detail": "units are untouched"
+    },
+    {
+      "name": "save-preserves-quality",
+      "expected": "HIGH/WEBGL2/0.75/true",
+      "actual": "HIGH/WEBGL2/0.75/true",
+      "pass": true,
+      "detail": "quality is untouched"
+    },
+    {
+      "name": "save-preserves-scenario",
+      "expected": "7/10/12",
+      "actual": "7/10/12",
+      "pass": true,
+      "detail": "scenario is untouched"
+    },
+    {
+      "name": "foreign-player-rejected",
+      "expected": "REJECTED:PLAYER_MISMATCH",
+      "actual": "REJECTED:PLAYER_MISMATCH",
+      "pass": true,
+      "detail": "a draft of another player is refused"
+    },
+    {
+      "name": "stale-draft-rejected",
+      "expected": "REJECTED:STALE_DRAFT",
+      "actual": "REJECTED:STALE_DRAFT",
+      "pass": true,
+      "detail": "a draft read before a store change is refused"
+    },
+    {
+      "name": "capture-binding",
+      "expected": "KeyZ",
+      "actual": "KeyZ",
+      "pass": true,
+      "detail": "the captured code becomes the proposal"
+    },
+    {
+      "name": "capture-events-prevented",
+      "expected": "true,true,true,true",
+      "actual": "true,true,true,true",
+      "pass": true,
+      "detail": "Tab/Enter/Space/code keydowns are prevented and stopped"
+    },
+    {
+      "name": "capture-listener-removed",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no capture listener survives"
+    },
+    {
+      "name": "capture-button-listener",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "only the click listener remains on the key button"
+    },
+    {
+      "name": "capture-save-intent",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "save emits one binding intention"
+    },
+    {
+      "name": "escape-cancels",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Escape cancels capture and keeps the panel"
+    },
+    {
+      "name": "escape-no-mutation",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Escape changes no binding"
+    },
+    {
+      "name": "panel-note",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the separation note is visible"
+    },
+    {
+      "name": "panel-rows",
+      "expected": 15,
+      "actual": 15,
+      "pass": true,
+      "detail": "the DOM lists all 15 actions"
+    },
+    {
+      "name": "panel-elements",
+      "expected": 116,
+      "actual": 116,
+      "pass": true,
+      "detail": "bounded element count"
+    },
+    {
+      "name": "panel-listeners",
+      "expected": 18,
+      "actual": 18,
+      "pass": true,
+      "detail": "no global or document listener is installed"
+    },
+    {
+      "name": "panel-note-no-global",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the host owns no listener"
+    },
+    {
+      "name": "settings-vs-profile",
+      "expected": "bindings,cameraMode,controlVersion,fov,quality,scenario,units",
+      "actual": "bindings,cameraMode,controlVersion,fov,quality,scenario,units",
+      "pass": true,
+      "detail": "the saved settings expose no profile or learned field"
+    },
+    {
+      "name": "scenario-count",
+      "expected": 7,
+      "actual": 7,
+      "pass": true,
+      "detail": "seven deterministic scenarios are recorded"
+    }
+  ],
+  "summary": {
+    "checks": 51,
+    "passed": 51,
+    "pass": true
+  }
+}
