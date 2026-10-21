@@ -2,3 +2,4 @@
 
 export * from './metric-service';
 export * from './inverse-learning';
+export * from './cross-class-fidelity';

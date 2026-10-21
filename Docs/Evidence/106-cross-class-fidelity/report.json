@@ -1,0 +1,2133 @@
+{
+  "version": "106-cross-class-fidelity-v1",
+  "rootSeed": 106000,
+  "tickHz": 60,
+  "contract": {
+    "classes": [
+      "sedan",
+      "compact"
+    ],
+    "styles": [
+      "CAUTIOUS",
+      "ASSERTIVE"
+    ],
+    "styleSources": {
+      "CAUTIOUS": "PRUDENT",
+      "ASSERTIVE": "IMPULSIVE"
+    },
+    "scenarios": [
+      "FREE_FLOW",
+      "LONGITUDINAL"
+    ],
+    "keys": [
+      "speed_delta_urban",
+      "speed_delta_residential",
+      "curve_lateral_accel",
+      "intersection_approach_speed",
+      "desired_acceleration",
+      "comfort_deceleration",
+      "acceleration_jerk",
+      "brake_reaction_delay"
+    ],
+    "trendKeys": [
+      {
+        "key": "speed_delta_urban",
+        "direction": "ASCENDING"
+      },
+      {
+        "key": "speed_delta_residential",
+        "direction": "ASCENDING"
+      },
+      {
+        "key": "curve_lateral_accel",
+        "direction": "ASCENDING"
+      },
+      {
+        "key": "intersection_approach_speed",
+        "direction": "ASCENDING"
+      },
+      {
+        "key": "desired_acceleration",
+        "direction": "ASCENDING"
+      },
+      {
+        "key": "comfort_deceleration",
+        "direction": "ASCENDING"
+      },
+      {
+        "key": "acceleration_jerk",
+        "direction": "ASCENDING"
+      },
+      {
+        "key": "brake_reaction_delay",
+        "direction": "DESCENDING"
+      }
+    ],
+    "tolerances": [
+      {
+        "key": "speed_delta_urban",
+        "absoluteTolerance": 0.2,
+        "relativeTolerance": 0.05,
+        "effective": 0.375,
+        "source": "105-INVERSE-TOLERANCE",
+        "justifiedBy": "Reuses the 105 per-key bound (absolute + relative × |target|). Speed samples are quantized per 20 Hz frame and the median absorbs free-flow spread; 0.2 m/s covers the posting-limit rounding (0.1 m/s) plus the ±0.04 m/s seeded sample noise, and 5% covers higher urban limits."
+      },
+      {
+        "key": "speed_delta_residential",
+        "absoluteTolerance": 0.2,
+        "relativeTolerance": 0.05,
+        "effective": 0.325,
+        "source": "105-INVERSE-TOLERANCE",
+        "justifiedBy": "Reuses the 105 per-key bound (absolute + relative × |target|). Residential limits are lower, so the same 0.2 m/s posting/quantization floor dominates; the relative part stays at 5% because the estimator uses the same median over a 10 s window."
+      },
+      {
+        "key": "curve_lateral_accel",
+        "absoluteTolerance": 0.25,
+        "relativeTolerance": 0.2,
+        "effective": 0.97,
+        "source": "106-CLASS-RECONSTRUCTION",
+        "justifiedBy": "094 reconstructs the lateral SI candidate with the observed 023 class ceiling, so equal normalized demand on sedan and compact yields candidates with the lateral ceiling ratio (compact/sedan = 1.1538). The 0.25 m/s² floor covers the demand spread and the 20% term covers that documented class reconstruction; it is not a statistical confidence interval."
+      },
+      {
+        "key": "intersection_approach_speed",
+        "absoluteTolerance": 0.4,
+        "relativeTolerance": 0.03,
+        "effective": 0.73,
+        "source": "105-INVERSE-TOLERANCE",
+        "justifiedBy": "Reuses the 105 per-key bound (absolute + relative × |target|). An approach window contains deceleration, so the median is a spread statistic rather than a single cruise value; 0.4 m/s covers the approach profile spread and 3% covers faster arterials."
+      },
+      {
+        "key": "desired_acceleration",
+        "absoluteTolerance": 0.15,
+        "relativeTolerance": 0.05,
+        "effective": 0.29,
+        "source": "105-INVERSE-TOLERANCE",
+        "justifiedBy": "Reuses the 105 per-key bound (absolute + relative × |target|). Demand is a dimensionless p90 fraction mapped to the sedan reference ceiling (6500 N / 1400 kg ≈ 4.643 m/s²); 0.15 m/s² covers the trimmed p50 and the class-capability rounding, 5% covers the demand spread."
+      },
+      {
+        "key": "comfort_deceleration",
+        "absoluteTolerance": 0.2,
+        "relativeTolerance": 0.05,
+        "effective": 0.37,
+        "source": "105-INVERSE-TOLERANCE",
+        "justifiedBy": "Reuses the 105 per-key bound (absolute + relative × |target|). The deceleration ceiling is 8 m/s², so one demand percentage point is 0.08 m/s²; 0.2 m/s² covers the trimmed p50 plus the p90-to-p50 difference and 5% covers stronger braking."
+      },
+      {
+        "key": "acceleration_jerk",
+        "absoluteTolerance": 0.3,
+        "relativeTolerance": 0.1,
+        "effective": 0.68,
+        "source": "105-INVERSE-TOLERANCE",
+        "justifiedBy": "Reuses the 105 per-key bound (absolute + relative × |target|). Jerk is differenced at the fixed 60 Hz tick, so a single-frame acceleration change is amplified; 0.3 m/s³ covers the 1/60 s differencing noise and 10% covers the outer-tail trimming of the p50."
+      },
+      {
+        "key": "brake_reaction_delay",
+        "absoluteTolerance": 0.02,
+        "relativeTolerance": 0.02,
+        "effective": 0.029,
+        "source": "105-INVERSE-TOLERANCE",
+        "justifiedBy": "Reuses the 105 per-key bound (absolute + relative × |target|). The reaction is an integer tick count divided by 60, so one tick is 0.0167 s; the 0.02 s absolute floor is exactly that quantization and 2% keeps the bound proportional for longer reactions."
+      }
+    ],
+    "unrepresentableBehaviours": [
+      "PASSENGER_MODIFIER",
+      "HAZARD_AVOIDANCE",
+      "OFF_ROAD",
+      "EXTERNAL_COMMAND"
+    ],
+    "referenceClass": "sedan",
+    "toleranceSource": "105-inverse-learning-v1"
+  },
+  "classes": [
+    {
+      "classId": "sedan",
+      "capability": {
+        "classId": "sedan",
+        "classVersion": "023-mechanics-v1",
+        "maxAccelerationMps2": 4.642857142857143,
+        "maxDecelerationMps2": 8,
+        "maxLateralAccelerationMps2": 12.753000000000002
+      }
+    },
+    {
+      "classId": "compact",
+      "capability": {
+        "classId": "compact",
+        "classVersion": "023-mechanics-v1",
+        "maxAccelerationMps2": 6.363636363636363,
+        "maxDecelerationMps2": 9,
+        "maxLateralAccelerationMps2": 14.715
+      }
+    }
+  ],
+  "runs": [
+    {
+      "classId": "sedan",
+      "style": "CAUTIOUS",
+      "capability": {
+        "classId": "sedan",
+        "classVersion": "023-mechanics-v1",
+        "maxAccelerationMps2": 4.642857142857143,
+        "maxDecelerationMps2": 8,
+        "maxLateralAccelerationMps2": 12.753000000000002
+      },
+      "demonstrationSeeds": {
+        "freeFlow": 3445141222,
+        "longitudinal": 2292407521
+      },
+      "mechanical": {
+        "classId": "sedan",
+        "capability": {
+          "classId": "sedan",
+          "classVersion": "023-mechanics-v1",
+          "maxAccelerationMps2": 4.642857142857143,
+          "maxDecelerationMps2": 8,
+          "maxLateralAccelerationMps2": 12.753000000000002
+        },
+        "rawP50": {
+          "accelerationMps2": 1.213162,
+          "decelerationMps2": 2.224297,
+          "lateralMps2": 1.829643
+        },
+        "normalizedP50": {
+          "acceleration": 0.26129643076923076,
+          "deceleration": 0.278037125,
+          "lateral": 0.1434676546694895
+        },
+        "episodeCount": 4
+      },
+      "keys": [
+        {
+          "key": "speed_delta_urban",
+          "target": -2,
+          "estimate": -1.9976901490800074,
+          "status": "CANDIDATE",
+          "reason": null,
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 3,
+            "sampleCount": 93,
+            "quality": 1
+          },
+          "tolerance": {
+            "absolute": 0.2,
+            "relative": 0.05,
+            "effective": 0.3
+          }
+        },
+        {
+          "key": "speed_delta_residential",
+          "target": -1.5,
+          "estimate": -1.4947215388715271,
+          "status": "CANDIDATE",
+          "reason": null,
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 3,
+            "sampleCount": 93,
+            "quality": 1
+          },
+          "tolerance": {
+            "absolute": 0.2,
+            "relative": 0.05,
+            "effective": 0.275
+          }
+        },
+        {
+          "key": "curve_lateral_accel",
+          "target": 1.8,
+          "estimate": 1.8306059999999997,
+          "status": "CANDIDATE",
+          "reason": null,
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 3,
+            "sampleCount": 720,
+            "quality": 1
+          },
+          "tolerance": {
+            "absolute": 0.25,
+            "relative": 0.2,
+            "effective": 0.61
+          }
+        },
+        {
+          "key": "intersection_approach_speed",
+          "target": 7.5,
+          "estimate": 7.500476248841733,
+          "status": "CANDIDATE",
+          "reason": null,
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 9,
+            "sampleCount": 279,
+            "quality": 1
+          },
+          "tolerance": {
+            "absolute": 0.4,
+            "relative": 0.03,
+            "effective": 0.625
+          }
+        },
+        {
+          "key": "desired_acceleration",
+          "target": 1.2,
+          "estimate": 1.213162,
+          "status": "CANDIDATE",
+          "reason": null,
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 4,
+            "sampleCount": 960,
+            "quality": 1
+          },
+          "tolerance": {
+            "absolute": 0.15,
+            "relative": 0.05,
+            "effective": 0.21
+          }
+        },
+        {
+          "key": "comfort_deceleration",
+          "target": 2.2,
+          "estimate": 2.224297,
+          "status": "CANDIDATE",
+          "reason": null,
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 4,
+            "sampleCount": 960,
+            "quality": 1
+          },
+          "tolerance": {
+            "absolute": 0.2,
+            "relative": 0.05,
+            "effective": 0.31
+          }
+        },
+        {
+          "key": "acceleration_jerk",
+          "target": 1.5,
+          "estimate": 1.5,
+          "status": "CANDIDATE",
+          "reason": null,
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 4,
+            "sampleCount": 960,
+            "quality": 1
+          },
+          "tolerance": {
+            "absolute": 0.3,
+            "relative": 0.1,
+            "effective": 0.45
+          }
+        },
+        {
+          "key": "brake_reaction_delay",
+          "target": 0.45,
+          "estimate": 0.45,
+          "status": "CANDIDATE",
+          "reason": null,
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 4,
+            "sampleCount": 960,
+            "quality": 1
+          },
+          "tolerance": {
+            "absolute": 0.02,
+            "relative": 0.02,
+            "effective": 0.029
+          }
+        }
+      ],
+      "route": {
+        "routeId": "route-106",
+        "routeDigest": "29504975",
+        "observationDigest": "88a35ce1",
+        "classId": "sedan",
+        "style": "CAUTIOUS",
+        "scenarioId": "LONGITUDINAL",
+        "startTick": 120,
+        "endTick": 360,
+        "sampleCount": 241,
+        "postedLimitMps": 12,
+        "cruiseSpeedMps": 10.1239,
+        "distanceM": 2365.289
+      }
+    },
+    {
+      "classId": "compact",
+      "style": "CAUTIOUS",
+      "capability": {
+        "classId": "compact",
+        "classVersion": "023-mechanics-v1",
+        "maxAccelerationMps2": 6.363636363636363,
+        "maxDecelerationMps2": 9,
+        "maxLateralAccelerationMps2": 14.715
+      },
+      "demonstrationSeeds": {
+        "freeFlow": 3020663727,
+        "longitudinal": 2940367498
+      },
+      "mechanical": {
+        "classId": "compact",
+        "capability": {
+          "classId": "compact",
+          "classVersion": "023-mechanics-v1",
+          "maxAccelerationMps2": 6.363636363636363,
+          "maxDecelerationMps2": 9,
+          "maxLateralAccelerationMps2": 14.715
+        },
+        "rawP50": {
+          "accelerationMps2": 1.662102,
+          "decelerationMps2": 2.501994,
+          "lateralMps2": 2.111168
+        },
+        "normalizedP50": {
+          "acceleration": 0.2611874571428571,
+          "deceleration": 0.2779993333333333,
+          "lateral": 0.14347047230716956
+        },
+        "episodeCount": 4
+      },
+      "keys": [
+        {
+          "key": "speed_delta_urban",
+          "target": -2,
+          "estimate": -2.009313542768359,
+          "status": "CANDIDATE",
+          "reason": null,
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 3,
+            "sampleCount": 93,
+            "quality": 1
+          },
+          "tolerance": {
+            "absolute": 0.2,
+            "relative": 0.05,
+            "effective": 0.3
+          }
+        },
+        {
+          "key": "speed_delta_residential",
+          "target": -1.5,
+          "estimate": -1.5021442694962026,
+          "status": "CANDIDATE",
+          "reason": null,
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 3,
+            "sampleCount": 93,
+            "quality": 1
+          },
+          "tolerance": {
+            "absolute": 0.2,
+            "relative": 0.05,
+            "effective": 0.275
+          }
+        },
+        {
+          "key": "curve_lateral_accel",
+          "target": 1.8,
+          "estimate": 2.109227,
+          "status": "CANDIDATE",
+          "reason": null,
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 3,
+            "sampleCount": 720,
+            "quality": 1
+          },
+          "tolerance": {
+            "absolute": 0.25,
+            "relative": 0.2,
+            "effective": 0.61
+          }
+        },
+        {
+          "key": "intersection_approach_speed",
+          "target": 7.5,
+          "estimate": 7.490367072005756,
+          "status": "CANDIDATE",
+          "reason": null,
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 9,
+            "sampleCount": 279,
+            "quality": 1
+          },
+          "tolerance": {
+            "absolute": 0.4,
+            "relative": 0.03,
+            "effective": 0.625
+          }
+        },
+        {
+          "key": "desired_acceleration",
+          "target": 1.2,
+          "estimate": 1.212656051020408,
+          "status": "CANDIDATE",
+          "reason": null,
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 4,
+            "sampleCount": 960,
+            "quality": 1
+          },
+          "tolerance": {
+            "absolute": 0.15,
+            "relative": 0.05,
+            "effective": 0.21
+          }
+        },
+        {
+          "key": "comfort_deceleration",
+          "target": 2.2,
+          "estimate": 2.2239946666666666,
+          "status": "CANDIDATE",
+          "reason": null,
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 4,
+            "sampleCount": 960,
+            "quality": 1
+          },
+          "tolerance": {
+            "absolute": 0.2,
+            "relative": 0.05,
+            "effective": 0.31
+          }
+        },
+        {
+          "key": "acceleration_jerk",
+          "target": 1.5,
+          "estimate": 1.5,
+          "status": "CANDIDATE",
+          "reason": null,
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 4,
+            "sampleCount": 960,
+            "quality": 1
+          },
+          "tolerance": {
+            "absolute": 0.3,
+            "relative": 0.1,
+            "effective": 0.45
+          }
+        },
+        {
+          "key": "brake_reaction_delay",
+          "target": 0.45,
+          "estimate": 0.45,
+          "status": "CANDIDATE",
+          "reason": null,
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 4,
+            "sampleCount": 960,
+            "quality": 1
+          },
+          "tolerance": {
+            "absolute": 0.02,
+            "relative": 0.02,
+            "effective": 0.029
+          }
+        }
+      ],
+      "route": {
+        "routeId": "route-106",
+        "routeDigest": "7372cd2b",
+        "observationDigest": "af42728a",
+        "classId": "compact",
+        "style": "CAUTIOUS",
+        "scenarioId": "LONGITUDINAL",
+        "startTick": 120,
+        "endTick": 360,
+        "sampleCount": 241,
+        "postedLimitMps": 12,
+        "cruiseSpeedMps": 12.2064,
+        "distanceM": 1807.121
+      }
+    },
+    {
+      "classId": "sedan",
+      "style": "ASSERTIVE",
+      "capability": {
+        "classId": "sedan",
+        "classVersion": "023-mechanics-v1",
+        "maxAccelerationMps2": 4.642857142857143,
+        "maxDecelerationMps2": 8,
+        "maxLateralAccelerationMps2": 12.753000000000002
+      },
+      "demonstrationSeeds": {
+        "freeFlow": 3524814619,
+        "longitudinal": 2537638349
+      },
+      "mechanical": {
+        "classId": "sedan",
+        "capability": {
+          "classId": "sedan",
+          "classVersion": "023-mechanics-v1",
+          "maxAccelerationMps2": 4.642857142857143,
+          "maxDecelerationMps2": 8,
+          "maxLateralAccelerationMps2": 12.753000000000002
+        },
+        "rawP50": {
+          "accelerationMps2": 2.828355,
+          "decelerationMps2": 3.444491,
+          "lateralMps2": 3.660471
+        },
+        "normalizedP50": {
+          "acceleration": 0.6091841538461539,
+          "deceleration": 0.430561375,
+          "lateral": 0.28702822865208183
+        },
+        "episodeCount": 4
+      },
+      "keys": [
+        {
+          "key": "speed_delta_urban",
+          "target": 3.5,
+          "estimate": 3.4948015817068523,
+          "status": "CANDIDATE",
+          "reason": null,
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 3,
+            "sampleCount": 93,
+            "quality": 1
+          },
+          "tolerance": {
+            "absolute": 0.2,
+            "relative": 0.05,
+            "effective": 0.375
+          }
+        },
+        {
+          "key": "speed_delta_residential",
+          "target": 2.5,
+          "estimate": 2.4965486995317043,
+          "status": "CANDIDATE",
+          "reason": null,
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 3,
+            "sampleCount": 93,
+            "quality": 1
+          },
+          "tolerance": {
+            "absolute": 0.2,
+            "relative": 0.05,
+            "effective": 0.325
+          }
+        },
+        {
+          "key": "curve_lateral_accel",
+          "target": 3.6,
+          "estimate": 3.6547959999999997,
+          "status": "CANDIDATE",
+          "reason": null,
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 3,
+            "sampleCount": 720,
+            "quality": 1
+          },
+          "tolerance": {
+            "absolute": 0.25,
+            "relative": 0.2,
+            "effective": 0.97
+          }
+        },
+        {
+          "key": "intersection_approach_speed",
+          "target": 11,
+          "estimate": 10.98483076049015,
+          "status": "CANDIDATE",
+          "reason": null,
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 9,
+            "sampleCount": 279,
+            "quality": 1
+          },
+          "tolerance": {
+            "absolute": 0.4,
+            "relative": 0.03,
+            "effective": 0.73
+          }
+        },
+        {
+          "key": "desired_acceleration",
+          "target": 2.8,
+          "estimate": 2.828355,
+          "status": "CANDIDATE",
+          "reason": null,
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 4,
+            "sampleCount": 960,
+            "quality": 1
+          },
+          "tolerance": {
+            "absolute": 0.15,
+            "relative": 0.05,
+            "effective": 0.29
+          }
+        },
+        {
+          "key": "comfort_deceleration",
+          "target": 3.4,
+          "estimate": 3.444491,
+          "status": "CANDIDATE",
+          "reason": null,
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 4,
+            "sampleCount": 960,
+            "quality": 1
+          },
+          "tolerance": {
+            "absolute": 0.2,
+            "relative": 0.05,
+            "effective": 0.37
+          }
+        },
+        {
+          "key": "acceleration_jerk",
+          "target": 3.8,
+          "estimate": 3.8,
+          "status": "CANDIDATE",
+          "reason": null,
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 4,
+            "sampleCount": 960,
+            "quality": 1
+          },
+          "tolerance": {
+            "absolute": 0.3,
+            "relative": 0.1,
+            "effective": 0.68
+          }
+        },
+        {
+          "key": "brake_reaction_delay",
+          "target": 0.25,
+          "estimate": 0.25,
+          "status": "CANDIDATE",
+          "reason": null,
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 4,
+            "sampleCount": 960,
+            "quality": 1
+          },
+          "tolerance": {
+            "absolute": 0.02,
+            "relative": 0.02,
+            "effective": 0.025
+          }
+        }
+      ],
+      "route": {
+        "routeId": "route-106",
+        "routeDigest": "1b2b2818",
+        "observationDigest": "974149cd",
+        "classId": "sedan",
+        "style": "ASSERTIVE",
+        "scenarioId": "LONGITUDINAL",
+        "startTick": 120,
+        "endTick": 360,
+        "sampleCount": 241,
+        "postedLimitMps": 12,
+        "cruiseSpeedMps": 9.2961,
+        "distanceM": 2094.932
+      }
+    },
+    {
+      "classId": "compact",
+      "style": "ASSERTIVE",
+      "capability": {
+        "classId": "compact",
+        "classVersion": "023-mechanics-v1",
+        "maxAccelerationMps2": 6.363636363636363,
+        "maxDecelerationMps2": 9,
+        "maxLateralAccelerationMps2": 14.715
+      },
+      "demonstrationSeeds": {
+        "freeFlow": 1446016653,
+        "longitudinal": 1131681830
+      },
+      "mechanical": {
+        "classId": "compact",
+        "capability": {
+          "classId": "compact",
+          "classVersion": "023-mechanics-v1",
+          "maxAccelerationMps2": 6.363636363636363,
+          "maxDecelerationMps2": 9,
+          "maxLateralAccelerationMps2": 14.715
+        },
+        "rawP50": {
+          "accelerationMps2": 3.886437,
+          "decelerationMps2": 3.867514,
+          "lateralMps2": 4.216203
+        },
+        "normalizedP50": {
+          "acceleration": 0.6107258142857143,
+          "deceleration": 0.42972377777777776,
+          "lateral": 0.28652415902140677
+        },
+        "episodeCount": 4
+      },
+      "keys": [
+        {
+          "key": "speed_delta_urban",
+          "target": 3.5,
+          "estimate": 3.5033911006711413,
+          "status": "CANDIDATE",
+          "reason": null,
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 3,
+            "sampleCount": 93,
+            "quality": 1
+          },
+          "tolerance": {
+            "absolute": 0.2,
+            "relative": 0.05,
+            "effective": 0.375
+          }
+        },
+        {
+          "key": "speed_delta_residential",
+          "target": 2.5,
+          "estimate": 2.4983256396651274,
+          "status": "CANDIDATE",
+          "reason": null,
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 3,
+            "sampleCount": 93,
+            "quality": 1
+          },
+          "tolerance": {
+            "absolute": 0.2,
+            "relative": 0.05,
+            "effective": 0.325
+          }
+        },
+        {
+          "key": "curve_lateral_accel",
+          "target": 3.6,
+          "estimate": 4.218173,
+          "status": "CANDIDATE",
+          "reason": null,
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 3,
+            "sampleCount": 720,
+            "quality": 1
+          },
+          "tolerance": {
+            "absolute": 0.25,
+            "relative": 0.2,
+            "effective": 0.97
+          }
+        },
+        {
+          "key": "intersection_approach_speed",
+          "target": 11,
+          "estimate": 11.005018818681128,
+          "status": "CANDIDATE",
+          "reason": null,
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 9,
+            "sampleCount": 279,
+            "quality": 1
+          },
+          "tolerance": {
+            "absolute": 0.4,
+            "relative": 0.03,
+            "effective": 0.73
+          }
+        },
+        {
+          "key": "desired_acceleration",
+          "target": 2.8,
+          "estimate": 2.8355127091836736,
+          "status": "CANDIDATE",
+          "reason": null,
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 4,
+            "sampleCount": 960,
+            "quality": 1
+          },
+          "tolerance": {
+            "absolute": 0.15,
+            "relative": 0.05,
+            "effective": 0.29
+          }
+        },
+        {
+          "key": "comfort_deceleration",
+          "target": 3.4,
+          "estimate": 3.437790222222222,
+          "status": "CANDIDATE",
+          "reason": null,
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 4,
+            "sampleCount": 960,
+            "quality": 1
+          },
+          "tolerance": {
+            "absolute": 0.2,
+            "relative": 0.05,
+            "effective": 0.37
+          }
+        },
+        {
+          "key": "acceleration_jerk",
+          "target": 3.8,
+          "estimate": 3.8,
+          "status": "CANDIDATE",
+          "reason": null,
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 4,
+            "sampleCount": 960,
+            "quality": 1
+          },
+          "tolerance": {
+            "absolute": 0.3,
+            "relative": 0.1,
+            "effective": 0.68
+          }
+        },
+        {
+          "key": "brake_reaction_delay",
+          "target": 0.25,
+          "estimate": 0.25,
+          "status": "CANDIDATE",
+          "reason": null,
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 4,
+            "sampleCount": 960,
+            "quality": 1
+          },
+          "tolerance": {
+            "absolute": 0.02,
+            "relative": 0.02,
+            "effective": 0.025
+          }
+        }
+      ],
+      "route": {
+        "routeId": "route-106",
+        "routeDigest": "7debaf9e",
+        "observationDigest": "43741826",
+        "classId": "compact",
+        "style": "ASSERTIVE",
+        "scenarioId": "LONGITUDINAL",
+        "startTick": 120,
+        "endTick": 360,
+        "sampleCount": 241,
+        "postedLimitMps": 12,
+        "cruiseSpeedMps": 11.8449,
+        "distanceM": 2613.806
+      }
+    }
+  ],
+  "trend": [
+    {
+      "key": "speed_delta_urban",
+      "direction": "ASCENDING",
+      "targets": {
+        "cautious": -2,
+        "assertive": 3.5
+      },
+      "estimates": {
+        "sedan": {
+          "cautious": -1.9976901490800074,
+          "assertive": 3.4948015817068523
+        },
+        "compact": {
+          "cautious": -2.009313542768359,
+          "assertive": 3.5033911006711413
+        }
+      },
+      "classOrderPreserved": {
+        "sedan": true,
+        "compact": true
+      },
+      "orderPreserved": true,
+      "tolerance": {
+        "key": "speed_delta_urban",
+        "absoluteTolerance": 0.2,
+        "relativeTolerance": 0.05,
+        "effective": 0.375,
+        "source": "105-INVERSE-TOLERANCE",
+        "justifiedBy": "Reuses the 105 per-key bound (absolute + relative × |target|). Speed samples are quantized per 20 Hz frame and the median absorbs free-flow spread; 0.2 m/s covers the posting-limit rounding (0.1 m/s) plus the ±0.04 m/s seeded sample noise, and 5% covers higher urban limits."
+      },
+      "agreement": 0.011623393688351413,
+      "normalizedAgreement": true,
+      "mechanical": null
+    },
+    {
+      "key": "speed_delta_residential",
+      "direction": "ASCENDING",
+      "targets": {
+        "cautious": -1.5,
+        "assertive": 2.5
+      },
+      "estimates": {
+        "sedan": {
+          "cautious": -1.4947215388715271,
+          "assertive": 2.4965486995317043
+        },
+        "compact": {
+          "cautious": -1.5021442694962026,
+          "assertive": 2.4983256396651274
+        }
+      },
+      "classOrderPreserved": {
+        "sedan": true,
+        "compact": true
+      },
+      "orderPreserved": true,
+      "tolerance": {
+        "key": "speed_delta_residential",
+        "absoluteTolerance": 0.2,
+        "relativeTolerance": 0.05,
+        "effective": 0.325,
+        "source": "105-INVERSE-TOLERANCE",
+        "justifiedBy": "Reuses the 105 per-key bound (absolute + relative × |target|). Residential limits are lower, so the same 0.2 m/s posting/quantization floor dominates; the relative part stays at 5% because the estimator uses the same median over a 10 s window."
+      },
+      "agreement": 0.0074227306246754665,
+      "normalizedAgreement": true,
+      "mechanical": null
+    },
+    {
+      "key": "curve_lateral_accel",
+      "direction": "ASCENDING",
+      "targets": {
+        "cautious": 1.8,
+        "assertive": 3.6
+      },
+      "estimates": {
+        "sedan": {
+          "cautious": 1.8306059999999997,
+          "assertive": 3.6547959999999997
+        },
+        "compact": {
+          "cautious": 2.109227,
+          "assertive": 4.218173
+        }
+      },
+      "classOrderPreserved": {
+        "sedan": true,
+        "compact": true
+      },
+      "orderPreserved": true,
+      "tolerance": {
+        "key": "curve_lateral_accel",
+        "absoluteTolerance": 0.25,
+        "relativeTolerance": 0.2,
+        "effective": 0.97,
+        "source": "106-CLASS-RECONSTRUCTION",
+        "justifiedBy": "094 reconstructs the lateral SI candidate with the observed 023 class ceiling, so equal normalized demand on sedan and compact yields candidates with the lateral ceiling ratio (compact/sedan = 1.1538). The 0.25 m/s² floor covers the demand spread and the 20% term covers that documented class reconstruction; it is not a statistical confidence interval."
+      },
+      "agreement": 0.5633770000000005,
+      "normalizedAgreement": true,
+      "mechanical": {
+        "sedan": {
+          "cautious": 1.829643,
+          "assertive": 3.660471
+        },
+        "compact": {
+          "cautious": 2.111168,
+          "assertive": 4.216203
+        },
+        "differs": true
+      }
+    },
+    {
+      "key": "intersection_approach_speed",
+      "direction": "ASCENDING",
+      "targets": {
+        "cautious": 7.5,
+        "assertive": 11
+      },
+      "estimates": {
+        "sedan": {
+          "cautious": 7.500476248841733,
+          "assertive": 10.98483076049015
+        },
+        "compact": {
+          "cautious": 7.490367072005756,
+          "assertive": 11.005018818681128
+        }
+      },
+      "classOrderPreserved": {
+        "sedan": true,
+        "compact": true
+      },
+      "orderPreserved": true,
+      "tolerance": {
+        "key": "intersection_approach_speed",
+        "absoluteTolerance": 0.4,
+        "relativeTolerance": 0.03,
+        "effective": 0.73,
+        "source": "105-INVERSE-TOLERANCE",
+        "justifiedBy": "Reuses the 105 per-key bound (absolute + relative × |target|). An approach window contains deceleration, so the median is a spread statistic rather than a single cruise value; 0.4 m/s covers the approach profile spread and 3% covers faster arterials."
+      },
+      "agreement": 0.020188058190978353,
+      "normalizedAgreement": true,
+      "mechanical": null
+    },
+    {
+      "key": "desired_acceleration",
+      "direction": "ASCENDING",
+      "targets": {
+        "cautious": 1.2,
+        "assertive": 2.8
+      },
+      "estimates": {
+        "sedan": {
+          "cautious": 1.213162,
+          "assertive": 2.828355
+        },
+        "compact": {
+          "cautious": 1.212656051020408,
+          "assertive": 2.8355127091836736
+        }
+      },
+      "classOrderPreserved": {
+        "sedan": true,
+        "compact": true
+      },
+      "orderPreserved": true,
+      "tolerance": {
+        "key": "desired_acceleration",
+        "absoluteTolerance": 0.15,
+        "relativeTolerance": 0.05,
+        "effective": 0.29,
+        "source": "105-INVERSE-TOLERANCE",
+        "justifiedBy": "Reuses the 105 per-key bound (absolute + relative × |target|). Demand is a dimensionless p90 fraction mapped to the sedan reference ceiling (6500 N / 1400 kg ≈ 4.643 m/s²); 0.15 m/s² covers the trimmed p50 and the class-capability rounding, 5% covers the demand spread."
+      },
+      "agreement": 0.007157709183673422,
+      "normalizedAgreement": true,
+      "mechanical": {
+        "sedan": {
+          "cautious": 1.213162,
+          "assertive": 2.828355
+        },
+        "compact": {
+          "cautious": 1.662102,
+          "assertive": 3.886437
+        },
+        "differs": true
+      }
+    },
+    {
+      "key": "comfort_deceleration",
+      "direction": "ASCENDING",
+      "targets": {
+        "cautious": 2.2,
+        "assertive": 3.4
+      },
+      "estimates": {
+        "sedan": {
+          "cautious": 2.224297,
+          "assertive": 3.444491
+        },
+        "compact": {
+          "cautious": 2.2239946666666666,
+          "assertive": 3.437790222222222
+        }
+      },
+      "classOrderPreserved": {
+        "sedan": true,
+        "compact": true
+      },
+      "orderPreserved": true,
+      "tolerance": {
+        "key": "comfort_deceleration",
+        "absoluteTolerance": 0.2,
+        "relativeTolerance": 0.05,
+        "effective": 0.37,
+        "source": "105-INVERSE-TOLERANCE",
+        "justifiedBy": "Reuses the 105 per-key bound (absolute + relative × |target|). The deceleration ceiling is 8 m/s², so one demand percentage point is 0.08 m/s²; 0.2 m/s² covers the trimmed p50 plus the p90-to-p50 difference and 5% covers stronger braking."
+      },
+      "agreement": 0.006700777777778111,
+      "normalizedAgreement": true,
+      "mechanical": {
+        "sedan": {
+          "cautious": 2.224297,
+          "assertive": 3.444491
+        },
+        "compact": {
+          "cautious": 2.501994,
+          "assertive": 3.867514
+        },
+        "differs": true
+      }
+    },
+    {
+      "key": "acceleration_jerk",
+      "direction": "ASCENDING",
+      "targets": {
+        "cautious": 1.5,
+        "assertive": 3.8
+      },
+      "estimates": {
+        "sedan": {
+          "cautious": 1.5,
+          "assertive": 3.8
+        },
+        "compact": {
+          "cautious": 1.5,
+          "assertive": 3.8
+        }
+      },
+      "classOrderPreserved": {
+        "sedan": true,
+        "compact": true
+      },
+      "orderPreserved": true,
+      "tolerance": {
+        "key": "acceleration_jerk",
+        "absoluteTolerance": 0.3,
+        "relativeTolerance": 0.1,
+        "effective": 0.68,
+        "source": "105-INVERSE-TOLERANCE",
+        "justifiedBy": "Reuses the 105 per-key bound (absolute + relative × |target|). Jerk is differenced at the fixed 60 Hz tick, so a single-frame acceleration change is amplified; 0.3 m/s³ covers the 1/60 s differencing noise and 10% covers the outer-tail trimming of the p50."
+      },
+      "agreement": 0,
+      "normalizedAgreement": true,
+      "mechanical": null
+    },
+    {
+      "key": "brake_reaction_delay",
+      "direction": "DESCENDING",
+      "targets": {
+        "cautious": 0.45,
+        "assertive": 0.25
+      },
+      "estimates": {
+        "sedan": {
+          "cautious": 0.45,
+          "assertive": 0.25
+        },
+        "compact": {
+          "cautious": 0.45,
+          "assertive": 0.25
+        }
+      },
+      "classOrderPreserved": {
+        "sedan": true,
+        "compact": true
+      },
+      "orderPreserved": true,
+      "tolerance": {
+        "key": "brake_reaction_delay",
+        "absoluteTolerance": 0.02,
+        "relativeTolerance": 0.02,
+        "effective": 0.029,
+        "source": "105-INVERSE-TOLERANCE",
+        "justifiedBy": "Reuses the 105 per-key bound (absolute + relative × |target|). The reaction is an integer tick count divided by 60, so one tick is 0.0167 s; the 0.02 s absolute floor is exactly that quantization and 2% keeps the bound proportional for longer reactions."
+      },
+      "agreement": 0,
+      "normalizedAgreement": true,
+      "mechanical": null
+    }
+  ],
+  "trendPreserved": true,
+  "normalizedAgreement": true,
+  "commonProfiles": [
+    {
+      "style": "CAUTIOUS",
+      "derivedFrom": "sedan",
+      "values": [
+        {
+          "key": "speed_delta_urban",
+          "value": -1.9976901490800074,
+          "unit": "m/s",
+          "min": -8,
+          "max": 15,
+          "source": "NORMALIZED_STYLE"
+        },
+        {
+          "key": "speed_delta_residential",
+          "value": -1.4947215388715271,
+          "unit": "m/s",
+          "min": -8,
+          "max": 12,
+          "source": "NORMALIZED_STYLE"
+        },
+        {
+          "key": "curve_lateral_accel",
+          "value": 1.8306059999999997,
+          "unit": "m/s²",
+          "min": 0.5,
+          "max": 8,
+          "source": "NORMALIZED_STYLE"
+        },
+        {
+          "key": "intersection_approach_speed",
+          "value": 7.500476248841733,
+          "unit": "m/s",
+          "min": 1,
+          "max": 20,
+          "source": "NORMALIZED_STYLE"
+        },
+        {
+          "key": "desired_acceleration",
+          "value": 1.213162,
+          "unit": "m/s²",
+          "min": 0.2,
+          "max": 6,
+          "source": "NORMALIZED_STYLE"
+        },
+        {
+          "key": "comfort_deceleration",
+          "value": 2.224297,
+          "unit": "m/s²",
+          "min": 0.3,
+          "max": 8,
+          "source": "NORMALIZED_STYLE"
+        },
+        {
+          "key": "acceleration_jerk",
+          "value": 1.5,
+          "unit": "m/s³",
+          "min": 0.2,
+          "max": 15,
+          "source": "NORMALIZED_STYLE"
+        },
+        {
+          "key": "brake_reaction_delay",
+          "value": 0.45,
+          "unit": "s",
+          "min": 0,
+          "max": 3,
+          "source": "NORMALIZED_STYLE"
+        }
+      ],
+      "parameters": {
+        "speed_delta_urban": -1.9976901490800074,
+        "speed_delta_residential": -1.4947215388715271,
+        "curve_lateral_accel": 1.8306059999999997,
+        "intersection_approach_speed": 7.500476248841733,
+        "desired_acceleration": 1.213162,
+        "comfort_deceleration": 2.224297,
+        "acceleration_jerk": 1.5,
+        "brake_reaction_delay": 0.45
+      },
+      "fleetApplication": [
+        {
+          "driverKind": "TAXI",
+          "profileId": "106-common-cautious",
+          "classes": [
+            "sedan",
+            "compact"
+          ],
+          "parameters": {
+            "speed_delta_urban": -1.9976901490800074,
+            "speed_delta_residential": -1.4947215388715271,
+            "curve_lateral_accel": 1.8306059999999997,
+            "intersection_approach_speed": 7.500476248841733,
+            "desired_acceleration": 1.213162,
+            "comfort_deceleration": 2.224297,
+            "acceleration_jerk": 1.5,
+            "brake_reaction_delay": 0.45
+          },
+          "classSpecificOverrides": []
+        },
+        {
+          "driverKind": "CIVILIAN",
+          "profileId": "106-common-cautious",
+          "classes": [
+            "sedan",
+            "compact"
+          ],
+          "parameters": {
+            "speed_delta_urban": -1.9976901490800074,
+            "speed_delta_residential": -1.4947215388715271,
+            "curve_lateral_accel": 1.8306059999999997,
+            "intersection_approach_speed": 7.500476248841733,
+            "desired_acceleration": 1.213162,
+            "comfort_deceleration": 2.224297,
+            "acceleration_jerk": 1.5,
+            "brake_reaction_delay": 0.45
+          },
+          "classSpecificOverrides": []
+        }
+      ],
+      "sameAcrossDriverKinds": true,
+      "appliedToBothClasses": true,
+      "mechanicalCopied": false,
+      "mechanicalCopyCode": null,
+      "copiedKeys": [],
+      "copyFindings": []
+    },
+    {
+      "style": "ASSERTIVE",
+      "derivedFrom": "sedan",
+      "values": [
+        {
+          "key": "speed_delta_urban",
+          "value": 3.4948015817068523,
+          "unit": "m/s",
+          "min": -8,
+          "max": 15,
+          "source": "NORMALIZED_STYLE"
+        },
+        {
+          "key": "speed_delta_residential",
+          "value": 2.4965486995317043,
+          "unit": "m/s",
+          "min": -8,
+          "max": 12,
+          "source": "NORMALIZED_STYLE"
+        },
+        {
+          "key": "curve_lateral_accel",
+          "value": 3.6547959999999997,
+          "unit": "m/s²",
+          "min": 0.5,
+          "max": 8,
+          "source": "NORMALIZED_STYLE"
+        },
+        {
+          "key": "intersection_approach_speed",
+          "value": 10.98483076049015,
+          "unit": "m/s",
+          "min": 1,
+          "max": 20,
+          "source": "NORMALIZED_STYLE"
+        },
+        {
+          "key": "desired_acceleration",
+          "value": 2.828355,
+          "unit": "m/s²",
+          "min": 0.2,
+          "max": 6,
+          "source": "NORMALIZED_STYLE"
+        },
+        {
+          "key": "comfort_deceleration",
+          "value": 3.444491,
+          "unit": "m/s²",
+          "min": 0.3,
+          "max": 8,
+          "source": "NORMALIZED_STYLE"
+        },
+        {
+          "key": "acceleration_jerk",
+          "value": 3.8,
+          "unit": "m/s³",
+          "min": 0.2,
+          "max": 15,
+          "source": "NORMALIZED_STYLE"
+        },
+        {
+          "key": "brake_reaction_delay",
+          "value": 0.25,
+          "unit": "s",
+          "min": 0,
+          "max": 3,
+          "source": "NORMALIZED_STYLE"
+        }
+      ],
+      "parameters": {
+        "speed_delta_urban": 3.4948015817068523,
+        "speed_delta_residential": 2.4965486995317043,
+        "curve_lateral_accel": 3.6547959999999997,
+        "intersection_approach_speed": 10.98483076049015,
+        "desired_acceleration": 2.828355,
+        "comfort_deceleration": 3.444491,
+        "acceleration_jerk": 3.8,
+        "brake_reaction_delay": 0.25
+      },
+      "fleetApplication": [
+        {
+          "driverKind": "TAXI",
+          "profileId": "106-common-assertive",
+          "classes": [
+            "sedan",
+            "compact"
+          ],
+          "parameters": {
+            "speed_delta_urban": 3.4948015817068523,
+            "speed_delta_residential": 2.4965486995317043,
+            "curve_lateral_accel": 3.6547959999999997,
+            "intersection_approach_speed": 10.98483076049015,
+            "desired_acceleration": 2.828355,
+            "comfort_deceleration": 3.444491,
+            "acceleration_jerk": 3.8,
+            "brake_reaction_delay": 0.25
+          },
+          "classSpecificOverrides": []
+        },
+        {
+          "driverKind": "CIVILIAN",
+          "profileId": "106-common-assertive",
+          "classes": [
+            "sedan",
+            "compact"
+          ],
+          "parameters": {
+            "speed_delta_urban": 3.4948015817068523,
+            "speed_delta_residential": 2.4965486995317043,
+            "curve_lateral_accel": 3.6547959999999997,
+            "intersection_approach_speed": 10.98483076049015,
+            "desired_acceleration": 2.828355,
+            "comfort_deceleration": 3.444491,
+            "acceleration_jerk": 3.8,
+            "brake_reaction_delay": 0.25
+          },
+          "classSpecificOverrides": []
+        }
+      ],
+      "sameAcrossDriverKinds": true,
+      "appliedToBothClasses": true,
+      "mechanicalCopied": false,
+      "mechanicalCopyCode": null,
+      "copiedKeys": [],
+      "copyFindings": []
+    }
+  ],
+  "mechanicalCopied": false,
+  "mechanicalCopyCode": null,
+  "modeFidelity": {
+    "manual": {
+      "mode": "MANUAL",
+      "eligible": false,
+      "sameRoute": true,
+      "reason": "MANUAL_NO_LEARNING",
+      "profileChanged": false,
+      "candidate": null,
+      "versionId": null,
+      "delta": null,
+      "evidence": {
+        "status": "READY",
+        "distinctEpisodes": 4,
+        "quality": 1
+      },
+      "gate": {
+        "status": "REJECTED",
+        "reason": "MANUAL_SEGMENT_NOT_LEARNABLE",
+        "detail": "MANUAL observations never update the profile"
+      },
+      "route": {
+        "routeId": "route-106",
+        "routeDigest": "1b2b2818",
+        "observationDigest": "974149cd",
+        "classId": "sedan",
+        "style": "ASSERTIVE",
+        "scenarioId": "LONGITUDINAL",
+        "startTick": 120,
+        "endTick": 360,
+        "sampleCount": 241,
+        "postedLimitMps": 12,
+        "cruiseSpeedMps": 9.2961,
+        "distanceM": 2094.932
+      },
+      "publication": {
+        "published": false,
+        "storeWrites": 0,
+        "fleetMutations": 0
+      }
+    },
+    "learningEligible": {
+      "mode": "LEARNING",
+      "eligible": true,
+      "sameRoute": true,
+      "reason": "LEARNING_ACCEPTED",
+      "profileChanged": true,
+      "candidate": {
+        "key": "desired_acceleration",
+        "status": "CANDIDATE",
+        "value": 2.828355,
+        "reason": null
+      },
+      "versionId": "candidate-106-desired_acceleration-route-106",
+      "delta": {
+        "key": "desired_acceleration",
+        "previousValue": 1.5,
+        "estimate": 2.828355,
+        "newValue": 2.1642,
+        "learningWeight": 0.5,
+        "resolution": "APPLIED",
+        "evidenceState": "SUFFICIENT",
+        "effectiveEpisodeCount": 4,
+        "published": false,
+        "learned": false
+      },
+      "evidence": {
+        "status": "READY",
+        "distinctEpisodes": 4,
+        "quality": 1
+      },
+      "gate": {
+        "status": "VALID",
+        "reason": null,
+        "detail": null
+      },
+      "route": {
+        "routeId": "route-106",
+        "routeDigest": "1b2b2818",
+        "observationDigest": "974149cd",
+        "classId": "sedan",
+        "style": "ASSERTIVE",
+        "scenarioId": "LONGITUDINAL",
+        "startTick": 120,
+        "endTick": 360,
+        "sampleCount": 241,
+        "postedLimitMps": 12,
+        "cruiseSpeedMps": 9.2961,
+        "distanceM": 2094.932
+      },
+      "publication": {
+        "published": false,
+        "storeWrites": 0,
+        "fleetMutations": 0
+      }
+    },
+    "learningIneligible": {
+      "mode": "LEARNING",
+      "eligible": false,
+      "sameRoute": true,
+      "reason": "INELIGIBLE",
+      "profileChanged": false,
+      "candidate": null,
+      "versionId": null,
+      "delta": null,
+      "evidence": {
+        "status": "READY",
+        "distinctEpisodes": 4,
+        "quality": 1
+      },
+      "gate": {
+        "status": "REJECTED",
+        "reason": "SEGMENT_INELIGIBLE",
+        "detail": "The segment windows are not eligible for learning"
+      },
+      "route": {
+        "routeId": "route-106",
+        "routeDigest": "1b2b2818",
+        "observationDigest": "974149cd",
+        "classId": "sedan",
+        "style": "ASSERTIVE",
+        "scenarioId": "LONGITUDINAL",
+        "startTick": 120,
+        "endTick": 360,
+        "sampleCount": 241,
+        "postedLimitMps": 12,
+        "cruiseSpeedMps": 9.2961,
+        "distanceM": 2094.932
+      },
+      "publication": {
+        "published": false,
+        "storeWrites": 0,
+        "fleetMutations": 0
+      }
+    },
+    "routeIdentical": true,
+    "manualMatchesActualGate": true,
+    "learningEligibleMatchesActualGate": true,
+    "learningIneligibleMatchesActualGate": true
+  },
+  "unrepresentable": [
+    {
+      "behaviour": "PASSENGER_MODIFIER",
+      "result": "UNREPRESENTABLE",
+      "estimate": null,
+      "key": null,
+      "value": null,
+      "reason": "PASSENGER_CONTEXT_NOT_COMPARABLE",
+      "detail": "A passenger modifier needs comparable episodes with and without a passenger; this harness has no passenger context."
+    },
+    {
+      "behaviour": "HAZARD_AVOIDANCE",
+      "result": "UNREPRESENTABLE",
+      "estimate": null,
+      "key": null,
+      "value": null,
+      "reason": "EVASIVE_MANOEUVRE_OUTSIDE_LEARNING_TARGETS",
+      "detail": "An evasive swerve around a hazard is a reactive manoeuvre, not a free-traffic or leader preference; the 24 M targets do not describe it."
+    },
+    {
+      "behaviour": "OFF_ROAD",
+      "result": "UNREPRESENTABLE",
+      "estimate": null,
+      "key": null,
+      "value": null,
+      "reason": "SURFACE_EXCLUDED_BY_ELIGIBILITY",
+      "detail": "Off-road demand is excluded by the eligibility/artefact layers, so it cannot become a style observation."
+    },
+    {
+      "behaviour": "EXTERNAL_COMMAND",
+      "result": "UNREPRESENTABLE",
+      "estimate": null,
+      "key": null,
+      "value": null,
+      "reason": "SOURCE_NOT_A_DRIVER_CHOICE",
+      "detail": "An external command is not a driver choice, so it is not a learning source even when the raw demand is measurable."
+    }
+  ],
+  "outOfScopeManoeuvre": {
+    "behaviour": "HAZARD_AVOIDANCE",
+    "result": "UNREPRESENTABLE",
+    "estimate": null,
+    "key": null,
+    "value": null,
+    "reason": "EVASIVE_MANOEUVRE_OUTSIDE_LEARNING_TARGETS",
+    "detail": "An evasive swerve around a hazard is a reactive manoeuvre, not a free-traffic or leader preference; the 24 M targets do not describe it.",
+    "manoeuvre": "EVASIVE_SWERVE_AROUND_HAZARD",
+    "description": "An out-of-scope evasive swerve around a stopped hazard: the route state is measurable, but no learning key or preference estimate is fabricated for it."
+  },
+  "overall": {
+    "styles": 2,
+    "classes": 2,
+    "keys": 8,
+    "runs": 4,
+    "keyRows": 32,
+    "trendPreserved": true,
+    "normalizedAgreement": true,
+    "mechanicalCopied": false,
+    "commonProfileSameAcrossKinds": true,
+    "commonProfileNoClassOverrides": true,
+    "manualNoLearning": true,
+    "learningEligibleChanged": true,
+    "learningIneligibleUnchanged": true,
+    "sameRoute": true,
+    "unrepresentableReported": true,
+    "storeWrites": 0,
+    "fleetMutations": 0,
+    "profilePublications": 0,
+    "pass": true
+  },
+  "appVersion": "106-cross-class-fidelity-app-v1",
+  "scenarios": [
+    "SEDAN_CAUTIOUS",
+    "SEDAN_ASSERTIVE",
+    "COMPACT_CAUTIOUS",
+    "COMPACT_ASSERTIVE",
+    "COMMON_PROFILE_BOTH_FLEETS",
+    "SAME_ROUTE_MANUAL_VS_LEARNING",
+    "UNREPRESENTABLE_MANOEUVRE"
+  ],
+  "tolerances": [
+    {
+      "key": "speed_delta_urban",
+      "absoluteTolerance": 0.2,
+      "relativeTolerance": 0.05,
+      "effective": 0.375,
+      "source": "105-INVERSE-TOLERANCE",
+      "justifiedBy": "Reuses the 105 per-key bound (absolute + relative × |target|). Speed samples are quantized per 20 Hz frame and the median absorbs free-flow spread; 0.2 m/s covers the posting-limit rounding (0.1 m/s) plus the ±0.04 m/s seeded sample noise, and 5% covers higher urban limits."
+    },
+    {
+      "key": "speed_delta_residential",
+      "absoluteTolerance": 0.2,
+      "relativeTolerance": 0.05,
+      "effective": 0.325,
+      "source": "105-INVERSE-TOLERANCE",
+      "justifiedBy": "Reuses the 105 per-key bound (absolute + relative × |target|). Residential limits are lower, so the same 0.2 m/s posting/quantization floor dominates; the relative part stays at 5% because the estimator uses the same median over a 10 s window."
+    },
+    {
+      "key": "curve_lateral_accel",
+      "absoluteTolerance": 0.25,
+      "relativeTolerance": 0.2,
+      "effective": 0.97,
+      "source": "106-CLASS-RECONSTRUCTION",
+      "justifiedBy": "094 reconstructs the lateral SI candidate with the observed 023 class ceiling, so equal normalized demand on sedan and compact yields candidates with the lateral ceiling ratio (compact/sedan = 1.1538). The 0.25 m/s² floor covers the demand spread and the 20% term covers that documented class reconstruction; it is not a statistical confidence interval."
+    },
+    {
+      "key": "intersection_approach_speed",
+      "absoluteTolerance": 0.4,
+      "relativeTolerance": 0.03,
+      "effective": 0.73,
+      "source": "105-INVERSE-TOLERANCE",
+      "justifiedBy": "Reuses the 105 per-key bound (absolute + relative × |target|). An approach window contains deceleration, so the median is a spread statistic rather than a single cruise value; 0.4 m/s covers the approach profile spread and 3% covers faster arterials."
+    },
+    {
+      "key": "desired_acceleration",
+      "absoluteTolerance": 0.15,
+      "relativeTolerance": 0.05,
+      "effective": 0.29,
+      "source": "105-INVERSE-TOLERANCE",
+      "justifiedBy": "Reuses the 105 per-key bound (absolute + relative × |target|). Demand is a dimensionless p90 fraction mapped to the sedan reference ceiling (6500 N / 1400 kg ≈ 4.643 m/s²); 0.15 m/s² covers the trimmed p50 and the class-capability rounding, 5% covers the demand spread."
+    },
+    {
+      "key": "comfort_deceleration",
+      "absoluteTolerance": 0.2,
+      "relativeTolerance": 0.05,
+      "effective": 0.37,
+      "source": "105-INVERSE-TOLERANCE",
+      "justifiedBy": "Reuses the 105 per-key bound (absolute + relative × |target|). The deceleration ceiling is 8 m/s², so one demand percentage point is 0.08 m/s²; 0.2 m/s² covers the trimmed p50 plus the p90-to-p50 difference and 5% covers stronger braking."
+    },
+    {
+      "key": "acceleration_jerk",
+      "absoluteTolerance": 0.3,
+      "relativeTolerance": 0.1,
+      "effective": 0.68,
+      "source": "105-INVERSE-TOLERANCE",
+      "justifiedBy": "Reuses the 105 per-key bound (absolute + relative × |target|). Jerk is differenced at the fixed 60 Hz tick, so a single-frame acceleration change is amplified; 0.3 m/s³ covers the 1/60 s differencing noise and 10% covers the outer-tail trimming of the p50."
+    },
+    {
+      "key": "brake_reaction_delay",
+      "absoluteTolerance": 0.02,
+      "relativeTolerance": 0.02,
+      "effective": 0.029,
+      "source": "105-INVERSE-TOLERANCE",
+      "justifiedBy": "Reuses the 105 per-key bound (absolute + relative × |target|). The reaction is an integer tick count divided by 60, so one tick is 0.0167 s; the 0.02 s absolute floor is exactly that quantization and 2% keeps the bound proportional for longer reactions."
+    }
+  ],
+  "checks": [
+    {
+      "name": "contract-version",
+      "expected": "106-cross-class-fidelity-v1",
+      "actual": "106-cross-class-fidelity-v1",
+      "pass": true,
+      "detail": "106 harness version"
+    },
+    {
+      "name": "app-adapter-version",
+      "expected": "106-cross-class-fidelity-app-v1",
+      "actual": "106-cross-class-fidelity-app-v1",
+      "pass": true,
+      "detail": "frozen report adapter version"
+    },
+    {
+      "name": "classes",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "sedan and compact real 023 classes"
+    },
+    {
+      "name": "styles",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "cautious and assertive"
+    },
+    {
+      "name": "keys",
+      "expected": 8,
+      "actual": 8,
+      "pass": true,
+      "detail": "eight class-normalizable M keys"
+    },
+    {
+      "name": "trend-keys",
+      "expected": 8,
+      "actual": 8,
+      "pass": true,
+      "detail": "one ordering rule per key"
+    },
+    {
+      "name": "tolerances",
+      "expected": 8,
+      "actual": 8,
+      "pass": true,
+      "detail": "one documented tolerance per key"
+    },
+    {
+      "name": "style-targets-from-105",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "styles reuse the 105 PRUDENT/IMPULSIVE targets"
+    },
+    {
+      "name": "style-runs",
+      "expected": 4,
+      "actual": 4,
+      "pass": true,
+      "detail": "two styles × two classes"
+    },
+    {
+      "name": "scenario-count",
+      "expected": 7,
+      "actual": 7,
+      "pass": true,
+      "detail": "four class/style + common + mode + out-of-scope"
+    },
+    {
+      "name": "trend-preserved",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "cautious < assertive in both classes"
+    },
+    {
+      "name": "normalized-agreement",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "cross-class estimates stay within the per-key tolerance"
+    },
+    {
+      "name": "sedan-order",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "sedan preserves every documented ordering"
+    },
+    {
+      "name": "compact-order",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "compact preserves every documented ordering"
+    },
+    {
+      "name": "per-key-agreement",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "every agreement is inside its declared effective bound"
+    },
+    {
+      "name": "curve-class-reconstruction",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "094 curve SI is reconstructed with the observed class ceiling and documented"
+    },
+    {
+      "name": "mechanical-raw-differs",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "compact raw acceleration differs by 1.0581 m/s²"
+    },
+    {
+      "name": "normalized-demand-stable",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "normalized acceleration demand differs by 0.001542"
+    },
+    {
+      "name": "mechanical-not-copied",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "the common profile carries style, not a class ceiling"
+    },
+    {
+      "name": "copy-code-absent",
+      "expected": "none",
+      "actual": "none",
+      "pass": true,
+      "detail": "no mechanical copy in the default run"
+    },
+    {
+      "name": "injected-copy-detected",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "injecting the sedan acceleration ceiling as a profile value fails"
+    },
+    {
+      "name": "injected-copy-code",
+      "expected": "MECHANICAL_CAPABILITY_COPIED",
+      "actual": "MECHANICAL_CAPABILITY_COPIED",
+      "pass": true,
+      "detail": "the failure carries MECHANICAL_CAPABILITY_COPIED"
+    },
+    {
+      "name": "injected-copy-fails-report",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "the injected copy is not hidden by the aggregate"
+    },
+    {
+      "name": "common-profiles",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "one common profile per demonstrated style"
+    },
+    {
+      "name": "common-taxi-civilian-same",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "TAXI and CIVILIAN receive the same parameter set"
+    },
+    {
+      "name": "common-no-class-overrides",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "no class-specific mechanical override exists"
+    },
+    {
+      "name": "common-both-classes",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "both real classes accept the common profile"
+    },
+    {
+      "name": "manual-no-change",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "MANUAL on the same route changes nothing"
+    },
+    {
+      "name": "manual-no-candidate-version",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "MANUAL has no candidate or version"
+    },
+    {
+      "name": "manual-reason",
+      "expected": "MANUAL_NO_LEARNING",
+      "actual": "MANUAL_NO_LEARNING",
+      "pass": true,
+      "detail": "MANUAL reason is explicit"
+    },
+    {
+      "name": "manual-real-gate",
+      "expected": "MANUAL_SEGMENT_NOT_LEARNABLE",
+      "actual": "MANUAL_SEGMENT_NOT_LEARNABLE",
+      "pass": true,
+      "detail": "the real 103 admission gate rejects MANUAL"
+    },
+    {
+      "name": "learning-eligible-changed",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "eligible LEARNING produces a candidate delta"
+    },
+    {
+      "name": "learning-eligible-candidate",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the candidate and version are present"
+    },
+    {
+      "name": "learning-eligible-evidence",
+      "expected": "READY",
+      "actual": "READY",
+      "pass": true,
+      "detail": "the change is tied to the real 093 evidence"
+    },
+    {
+      "name": "learning-ineligible-unchanged",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "ineligible LEARNING changes nothing"
+    },
+    {
+      "name": "learning-ineligible-reason",
+      "expected": "INELIGIBLE",
+      "actual": "INELIGIBLE",
+      "pass": true,
+      "detail": "the ineligible reason is explicit"
+    },
+    {
+      "name": "same-route-identical",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "MANUAL and LEARNING share the same physical route and observation digest"
+    },
+    {
+      "name": "unrepresentable-count",
+      "expected": 4,
+      "actual": 4,
+      "pass": true,
+      "detail": "the closed unrepresentable set is complete"
+    },
+    {
+      "name": "unrepresentable-null-estimate",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "no unrepresentable behaviour receives an estimate"
+    },
+    {
+      "name": "unrepresentable-no-key-value",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "no fabricated parameter key or value"
+    },
+    {
+      "name": "out-of-scope-manoeuvre",
+      "expected": "UNREPRESENTABLE",
+      "actual": "UNREPRESENTABLE",
+      "pass": true,
+      "detail": "the evasive hazard swerve is retained as UNREPRESENTABLE"
+    },
+    {
+      "name": "no-store-writes",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no profile store was written"
+    },
+    {
+      "name": "no-fleet-mutations",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no fleet vehicle was mutated"
+    },
+    {
+      "name": "no-profile-publication",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no profile version was published"
+    },
+    {
+      "name": "deterministic",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "two runs produce byte-identical reports"
+    },
+    {
+      "name": "key-row-count",
+      "expected": 32,
+      "actual": 32,
+      "pass": true,
+      "detail": "four runs × eight keys"
+    },
+    {
+      "name": "overall-pass",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "all trend, profile, mode and unrepresentable expectations hold"
+    }
+  ],
+  "summary": {
+    "scenarios": 7,
+    "checks": 47,
+    "passed": 47,
+    "pass": true
+  }
+}

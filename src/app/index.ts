@@ -253,3 +253,9 @@ export {
   runInverseLearningValidation,
   type InverseLearningValidationOptions,
 } from './inverse-learning';
+
+export {
+  CROSS_CLASS_FIDELITY_APP_VERSION,
+  crossClassFidelityReportMarkdown,
+  runCrossClassFidelityValidation,
+} from './cross-class-fidelity';

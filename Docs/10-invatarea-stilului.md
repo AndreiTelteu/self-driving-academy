@@ -44,6 +44,8 @@ PBI 104 adaugă contractul de explicație `104-learning-explanation-v1` din [lea
 
 PBI 105 adaugă validarea inversă din [inverse-learning](inverse-learning.md): patru profile cunoscute, fiecare cu 24 de ținte explicite, sunt demonstrate pe șase scenarii independente și trecute prin estimatoarele reale 094–099. Fiecare cheie M are o toleranță documentată, iar o cheie neidentificabilă rămâne `NOT_IDENTIFIABLE` cu estimare `null` — niciodată o valoare precisă inventată. Raportul păstrează `OUTSIDE_TOLERANCE` real și nu publică profiluri, nu scrie în store și nu învață din `MANUAL`/`AUTO`.
 
+PBI 106 adaugă fidelitatea între clase din [cross-class-fidelity](cross-class-fidelity.md): aceleași două stiluri 105 (`PRUDENT`/`IMPULSIVE`, reduse la opt chei normalizabile) sunt demonstrate pe `sedan` și `compact` cu plafoane 023 diferite, iar 089 transformă cererea brută în fracțiuni adimensionale înainte ca 094/095 să estimeze stilul. Ordinea `CAUTIOUS < ASSERTIVE` se păstrează în ambele clase, estimările normalizate se potrivesc în toleranțe per cheie, iar un profil comun se aplică identic taxiurilor și civililor fără override mecanic. Copierea unui plafon de clasă în profil este `MECHANICAL_CAPABILITY_COPIED`; `MANUAL` și `LEARNING` neeligibil nu schimbă profilul, `LEARNING` eligibil produce doar un candidat, iar o manevră de evitare este `UNREPRESENTABLE` cu estimare `null`.
+
 
 Actualizarea propusă este newValue = oldValue + learningWeight × (estimate − oldValue). Ponderea depinde de calitate, numărul efectiv de episoade și incertitudine. Are o limită de calibrare pentru a evita salturi provocate de zgomot; demonstrațiile repetate pot modifica puternic profilul. Această regularizare păstrează și stilurile riscante dacă dovezile sunt consistente.
 
