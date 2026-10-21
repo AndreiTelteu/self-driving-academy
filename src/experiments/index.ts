@@ -1,2 +1,3 @@
-/** Public entry point reserved for the experiments module; no gameplay implementation yet. */
-export {};
+/** Public entry point of the experiments module. */
+
+export * from './metric-service';

@@ -90,6 +90,19 @@ export {
   type CityFocusMapPort,
 } from './city-dashboard';
 export {
+  CITY_METRIC_SOURCE_IDS,
+  METRIC_APP_VERSION,
+  METRIC_TO_CITY_REASON,
+  ingestBlockedInterval,
+  ingestCollision,
+  ingestRideTerminal,
+  readMetricSnapshot,
+  toCityDashboardMetrics,
+  type BlockedIntervalInput,
+  type MetricSnapshotFrame,
+  type MetricSnapshotSources,
+} from './metric-service';
+export {
   PROFILE_PANEL_LOCAL_CONTEXT,
   PROFILE_PANEL_READ_ERRORS,
   readProfilePanelSnapshot,

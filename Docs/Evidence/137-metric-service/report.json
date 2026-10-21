@@ -1,0 +1,1734 @@
+{
+  "version": "137-metric-service-v1",
+  "contract": {
+    "eventKinds": [
+      "RIDE_TERMINAL",
+      "VEHICLE_DISTANCE",
+      "BLOCKED_INTERVAL",
+      "COLLISION",
+      "VIOLATION"
+    ],
+    "metricIds": [
+      "completedRides",
+      "failedRides",
+      "cancelledRides",
+      "terminalRides",
+      "completionRate",
+      "averagePickupSeconds",
+      "averageTripSeconds",
+      "totalDistanceM",
+      "vehicleKilometres",
+      "rideDistanceM",
+      "blockedIntervals",
+      "blockedSeconds",
+      "blockedFraction",
+      "collisions",
+      "collisionsPer100VehicleKm",
+      "violations",
+      "violationsPerOpportunity"
+    ],
+    "reasons": [
+      "NO_EXPOSURE",
+      "NO_RIDES",
+      "NO_DISTANCE",
+      "NO_FLEET",
+      "NO_OPPORTUNITIES"
+    ],
+    "rules": [
+      "denominators use the whole fleet from counts(), hidden and unselected vehicles included",
+      "zero exposure or a missing distance/opportunity denominator is UNAVAILABLE with value:null",
+      "a real zero with a real denominator stays AVAILABLE with value:0",
+      "events are idempotent by eventId and every aggregate is incremental; historyScans is 0",
+      "out-of-order ticks are accepted and counted deterministically by sum/count/min/max",
+      "a metric value carries exactly one unit and a closed unavailable reason"
+    ],
+    "retainedKeys": 8192,
+    "idCodeUnits": 1024
+  },
+  "scenarios": [
+    {
+      "name": "flotă nevizibilă 24+40",
+      "fleet": {
+        "vehicles": 64,
+        "taxis": 24,
+        "civilians": 40
+      },
+      "simulatedSeconds": 3600,
+      "distanceAvailable": true,
+      "fleetVehicleSeconds": 230400,
+      "events": {
+        "events": 1,
+        "accepted": 1,
+        "duplicates": 0,
+        "rejected": 0
+      },
+      "metrics": [
+        {
+          "id": "completedRides",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "id": "failedRides",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "id": "cancelledRides",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "id": "terminalRides",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "id": "completionRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_RIDES"
+        },
+        {
+          "id": "averagePickupSeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_RIDES"
+        },
+        {
+          "id": "averageTripSeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_RIDES"
+        },
+        {
+          "id": "totalDistanceM",
+          "unit": "metres",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "id": "vehicleKilometres",
+          "unit": "km",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "id": "rideDistanceM",
+          "unit": "metres",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_DISTANCE"
+        },
+        {
+          "id": "blockedIntervals",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 1,
+          "sampleSize": 1,
+          "reason": null
+        },
+        {
+          "id": "blockedSeconds",
+          "unit": "seconds",
+          "state": "AVAILABLE",
+          "value": 3600,
+          "sampleSize": 1,
+          "reason": null
+        },
+        {
+          "id": "blockedFraction",
+          "unit": "ratio",
+          "state": "AVAILABLE",
+          "value": 0.015625,
+          "sampleSize": 1,
+          "reason": null
+        },
+        {
+          "id": "collisions",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "id": "collisionsPer100VehicleKm",
+          "unit": "per100km",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_DISTANCE"
+        },
+        {
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "id": "violationsPerOpportunity",
+          "unit": "ratio",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        }
+      ],
+      "adapter": [
+        {
+          "id": "completedRides",
+          "unit": "rides",
+          "state": "AVAILABLE",
+          "value": 0,
+          "reason": null
+        },
+        {
+          "id": "averageRideSeconds",
+          "unit": "s",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "reason": "NO_EXPOSURE"
+        },
+        {
+          "id": "totalDistanceM",
+          "unit": "m",
+          "state": "AVAILABLE",
+          "value": 0,
+          "reason": null
+        },
+        {
+          "id": "collisions",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "reason": null
+        },
+        {
+          "id": "blockages",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 1,
+          "reason": null
+        }
+      ],
+      "historyScans": 0,
+      "snapshotCalls": 1
+    },
+    {
+      "name": "fără curse",
+      "fleet": {
+        "vehicles": 64,
+        "taxis": 24,
+        "civilians": 40
+      },
+      "simulatedSeconds": 3600,
+      "distanceAvailable": true,
+      "fleetVehicleSeconds": 230400,
+      "events": {
+        "events": 0,
+        "accepted": 0,
+        "duplicates": 0,
+        "rejected": 0
+      },
+      "metrics": [
+        {
+          "id": "completedRides",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "id": "failedRides",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "id": "cancelledRides",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "id": "terminalRides",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "id": "completionRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_RIDES"
+        },
+        {
+          "id": "averagePickupSeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_RIDES"
+        },
+        {
+          "id": "averageTripSeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_RIDES"
+        },
+        {
+          "id": "totalDistanceM",
+          "unit": "metres",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "id": "vehicleKilometres",
+          "unit": "km",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "id": "rideDistanceM",
+          "unit": "metres",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_DISTANCE"
+        },
+        {
+          "id": "blockedIntervals",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "id": "blockedSeconds",
+          "unit": "seconds",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "id": "blockedFraction",
+          "unit": "ratio",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "id": "collisions",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "id": "collisionsPer100VehicleKm",
+          "unit": "per100km",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_DISTANCE"
+        },
+        {
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "id": "violationsPerOpportunity",
+          "unit": "ratio",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        }
+      ],
+      "adapter": [
+        {
+          "id": "completedRides",
+          "unit": "rides",
+          "state": "AVAILABLE",
+          "value": 0,
+          "reason": null
+        },
+        {
+          "id": "averageRideSeconds",
+          "unit": "s",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "reason": "NO_EXPOSURE"
+        },
+        {
+          "id": "totalDistanceM",
+          "unit": "m",
+          "state": "AVAILABLE",
+          "value": 0,
+          "reason": null
+        },
+        {
+          "id": "collisions",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "reason": null
+        },
+        {
+          "id": "blockages",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "reason": null
+        }
+      ],
+      "historyScans": 0,
+      "snapshotCalls": 1
+    },
+    {
+      "name": "fără distanță",
+      "fleet": {
+        "vehicles": 64,
+        "taxis": 24,
+        "civilians": 40
+      },
+      "simulatedSeconds": 3600,
+      "distanceAvailable": false,
+      "fleetVehicleSeconds": 230400,
+      "events": {
+        "events": 2,
+        "accepted": 2,
+        "duplicates": 0,
+        "rejected": 0
+      },
+      "metrics": [
+        {
+          "id": "completedRides",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 1,
+          "sampleSize": 1,
+          "reason": null
+        },
+        {
+          "id": "failedRides",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "id": "cancelledRides",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "id": "terminalRides",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 1,
+          "sampleSize": 1,
+          "reason": null
+        },
+        {
+          "id": "completionRate",
+          "unit": "percentage",
+          "state": "AVAILABLE",
+          "value": 100,
+          "sampleSize": 1,
+          "reason": null
+        },
+        {
+          "id": "averagePickupSeconds",
+          "unit": "seconds",
+          "state": "AVAILABLE",
+          "value": 13,
+          "sampleSize": 1,
+          "reason": null
+        },
+        {
+          "id": "averageTripSeconds",
+          "unit": "seconds",
+          "state": "AVAILABLE",
+          "value": 61,
+          "sampleSize": 1,
+          "reason": null
+        },
+        {
+          "id": "totalDistanceM",
+          "unit": "metres",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_DISTANCE"
+        },
+        {
+          "id": "vehicleKilometres",
+          "unit": "km",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_DISTANCE"
+        },
+        {
+          "id": "rideDistanceM",
+          "unit": "metres",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_DISTANCE"
+        },
+        {
+          "id": "blockedIntervals",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "id": "blockedSeconds",
+          "unit": "seconds",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "id": "blockedFraction",
+          "unit": "ratio",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "id": "collisions",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "id": "collisionsPer100VehicleKm",
+          "unit": "per100km",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_DISTANCE"
+        },
+        {
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "id": "violationsPerOpportunity",
+          "unit": "ratio",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        }
+      ],
+      "adapter": [
+        {
+          "id": "completedRides",
+          "unit": "rides",
+          "state": "AVAILABLE",
+          "value": 1,
+          "reason": null
+        },
+        {
+          "id": "averageRideSeconds",
+          "unit": "s",
+          "state": "AVAILABLE",
+          "value": 61,
+          "reason": null
+        },
+        {
+          "id": "totalDistanceM",
+          "unit": "m",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "reason": "SOURCE_MISSING"
+        },
+        {
+          "id": "collisions",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "reason": null
+        },
+        {
+          "id": "blockages",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "reason": null
+        }
+      ],
+      "historyScans": 0,
+      "snapshotCalls": 1
+    },
+    {
+      "name": "zero real",
+      "fleet": {
+        "vehicles": 64,
+        "taxis": 24,
+        "civilians": 40
+      },
+      "simulatedSeconds": 3600,
+      "distanceAvailable": true,
+      "fleetVehicleSeconds": 230400,
+      "events": {
+        "events": 2,
+        "accepted": 2,
+        "duplicates": 0,
+        "rejected": 0
+      },
+      "metrics": [
+        {
+          "id": "completedRides",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "id": "failedRides",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "id": "cancelledRides",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "id": "terminalRides",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "id": "completionRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_RIDES"
+        },
+        {
+          "id": "averagePickupSeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_RIDES"
+        },
+        {
+          "id": "averageTripSeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_RIDES"
+        },
+        {
+          "id": "totalDistanceM",
+          "unit": "metres",
+          "state": "AVAILABLE",
+          "value": 2000,
+          "sampleSize": 2,
+          "reason": null
+        },
+        {
+          "id": "vehicleKilometres",
+          "unit": "km",
+          "state": "AVAILABLE",
+          "value": 2,
+          "sampleSize": 2,
+          "reason": null
+        },
+        {
+          "id": "rideDistanceM",
+          "unit": "metres",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_DISTANCE"
+        },
+        {
+          "id": "blockedIntervals",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "id": "blockedSeconds",
+          "unit": "seconds",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "id": "blockedFraction",
+          "unit": "ratio",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "id": "collisions",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "id": "collisionsPer100VehicleKm",
+          "unit": "per100km",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 2,
+          "reason": null
+        },
+        {
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "id": "violationsPerOpportunity",
+          "unit": "ratio",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        }
+      ],
+      "adapter": [
+        {
+          "id": "completedRides",
+          "unit": "rides",
+          "state": "AVAILABLE",
+          "value": 0,
+          "reason": null
+        },
+        {
+          "id": "averageRideSeconds",
+          "unit": "s",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "reason": "NO_EXPOSURE"
+        },
+        {
+          "id": "totalDistanceM",
+          "unit": "m",
+          "state": "AVAILABLE",
+          "value": 2000,
+          "reason": null
+        },
+        {
+          "id": "collisions",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "reason": null
+        },
+        {
+          "id": "blockages",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "reason": null
+        }
+      ],
+      "historyScans": 0,
+      "snapshotCalls": 1
+    },
+    {
+      "name": "coliziuni per 100 km",
+      "fleet": {
+        "vehicles": 64,
+        "taxis": 24,
+        "civilians": 40
+      },
+      "simulatedSeconds": 3600,
+      "distanceAvailable": true,
+      "fleetVehicleSeconds": 230400,
+      "events": {
+        "events": 4,
+        "accepted": 4,
+        "duplicates": 0,
+        "rejected": 0
+      },
+      "metrics": [
+        {
+          "id": "completedRides",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "id": "failedRides",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "id": "cancelledRides",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "id": "terminalRides",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "id": "completionRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_RIDES"
+        },
+        {
+          "id": "averagePickupSeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_RIDES"
+        },
+        {
+          "id": "averageTripSeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_RIDES"
+        },
+        {
+          "id": "totalDistanceM",
+          "unit": "metres",
+          "state": "AVAILABLE",
+          "value": 5000,
+          "sampleSize": 2,
+          "reason": null
+        },
+        {
+          "id": "vehicleKilometres",
+          "unit": "km",
+          "state": "AVAILABLE",
+          "value": 5,
+          "sampleSize": 2,
+          "reason": null
+        },
+        {
+          "id": "rideDistanceM",
+          "unit": "metres",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_DISTANCE"
+        },
+        {
+          "id": "blockedIntervals",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "id": "blockedSeconds",
+          "unit": "seconds",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "id": "blockedFraction",
+          "unit": "ratio",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "id": "collisions",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 2,
+          "sampleSize": 2,
+          "reason": null
+        },
+        {
+          "id": "collisionsPer100VehicleKm",
+          "unit": "per100km",
+          "state": "AVAILABLE",
+          "value": 40,
+          "sampleSize": 2,
+          "reason": null
+        },
+        {
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "id": "violationsPerOpportunity",
+          "unit": "ratio",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        }
+      ],
+      "adapter": [
+        {
+          "id": "completedRides",
+          "unit": "rides",
+          "state": "AVAILABLE",
+          "value": 0,
+          "reason": null
+        },
+        {
+          "id": "averageRideSeconds",
+          "unit": "s",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "reason": "NO_EXPOSURE"
+        },
+        {
+          "id": "totalDistanceM",
+          "unit": "m",
+          "state": "AVAILABLE",
+          "value": 5000,
+          "reason": null
+        },
+        {
+          "id": "collisions",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 2,
+          "reason": null
+        },
+        {
+          "id": "blockages",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "reason": null
+        }
+      ],
+      "historyScans": 0,
+      "snapshotCalls": 1
+    },
+    {
+      "name": "timp blocat",
+      "fleet": {
+        "vehicles": 64,
+        "taxis": 24,
+        "civilians": 40
+      },
+      "simulatedSeconds": 3600,
+      "distanceAvailable": true,
+      "fleetVehicleSeconds": 230400,
+      "events": {
+        "events": 1,
+        "accepted": 1,
+        "duplicates": 0,
+        "rejected": 0
+      },
+      "metrics": [
+        {
+          "id": "completedRides",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "id": "failedRides",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "id": "cancelledRides",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "id": "terminalRides",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "id": "completionRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_RIDES"
+        },
+        {
+          "id": "averagePickupSeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_RIDES"
+        },
+        {
+          "id": "averageTripSeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_RIDES"
+        },
+        {
+          "id": "totalDistanceM",
+          "unit": "metres",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "id": "vehicleKilometres",
+          "unit": "km",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "id": "rideDistanceM",
+          "unit": "metres",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_DISTANCE"
+        },
+        {
+          "id": "blockedIntervals",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 1,
+          "sampleSize": 1,
+          "reason": null
+        },
+        {
+          "id": "blockedSeconds",
+          "unit": "seconds",
+          "state": "AVAILABLE",
+          "value": 1152,
+          "sampleSize": 1,
+          "reason": null
+        },
+        {
+          "id": "blockedFraction",
+          "unit": "ratio",
+          "state": "AVAILABLE",
+          "value": 0.005,
+          "sampleSize": 1,
+          "reason": null
+        },
+        {
+          "id": "collisions",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "id": "collisionsPer100VehicleKm",
+          "unit": "per100km",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_DISTANCE"
+        },
+        {
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "id": "violationsPerOpportunity",
+          "unit": "ratio",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        }
+      ],
+      "adapter": [
+        {
+          "id": "completedRides",
+          "unit": "rides",
+          "state": "AVAILABLE",
+          "value": 0,
+          "reason": null
+        },
+        {
+          "id": "averageRideSeconds",
+          "unit": "s",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "reason": "NO_EXPOSURE"
+        },
+        {
+          "id": "totalDistanceM",
+          "unit": "m",
+          "state": "AVAILABLE",
+          "value": 0,
+          "reason": null
+        },
+        {
+          "id": "collisions",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "reason": null
+        },
+        {
+          "id": "blockages",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 1,
+          "reason": null
+        }
+      ],
+      "historyScans": 0,
+      "snapshotCalls": 1
+    },
+    {
+      "name": "20 000 evenimente · 2 000 snapshoturi",
+      "fleet": {
+        "vehicles": 64,
+        "taxis": 24,
+        "civilians": 40
+      },
+      "simulatedSeconds": 3600,
+      "distanceAvailable": true,
+      "fleetVehicleSeconds": 230400,
+      "events": {
+        "events": 20000,
+        "accepted": 20000,
+        "duplicates": 0,
+        "rejected": 0
+      },
+      "metrics": [
+        {
+          "id": "completedRides",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 2000,
+          "sampleSize": 2000,
+          "reason": null
+        },
+        {
+          "id": "failedRides",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 2000,
+          "sampleSize": 2000,
+          "reason": null
+        },
+        {
+          "id": "cancelledRides",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "id": "terminalRides",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 4000,
+          "sampleSize": 4000,
+          "reason": null
+        },
+        {
+          "id": "completionRate",
+          "unit": "percentage",
+          "state": "AVAILABLE",
+          "value": 50,
+          "sampleSize": 4000,
+          "reason": null
+        },
+        {
+          "id": "averagePickupSeconds",
+          "unit": "seconds",
+          "state": "AVAILABLE",
+          "value": 10009.5,
+          "sampleSize": 4000,
+          "reason": null
+        },
+        {
+          "id": "averageTripSeconds",
+          "unit": "seconds",
+          "state": "AVAILABLE",
+          "value": 10057.5,
+          "sampleSize": 4000,
+          "reason": null
+        },
+        {
+          "id": "totalDistanceM",
+          "unit": "metres",
+          "state": "AVAILABLE",
+          "value": 1074000,
+          "sampleSize": 4000,
+          "reason": null
+        },
+        {
+          "id": "vehicleKilometres",
+          "unit": "km",
+          "state": "AVAILABLE",
+          "value": 1074,
+          "sampleSize": 4000,
+          "reason": null
+        },
+        {
+          "id": "rideDistanceM",
+          "unit": "metres",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_DISTANCE"
+        },
+        {
+          "id": "blockedIntervals",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 4000,
+          "sampleSize": 4000,
+          "reason": null
+        },
+        {
+          "id": "blockedSeconds",
+          "unit": "seconds",
+          "state": "AVAILABLE",
+          "value": 61980,
+          "sampleSize": 4000,
+          "reason": null
+        },
+        {
+          "id": "blockedFraction",
+          "unit": "ratio",
+          "state": "AVAILABLE",
+          "value": 0.26901041666666664,
+          "sampleSize": 4000,
+          "reason": null
+        },
+        {
+          "id": "collisions",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 4000,
+          "sampleSize": 4000,
+          "reason": null
+        },
+        {
+          "id": "collisionsPer100VehicleKm",
+          "unit": "per100km",
+          "state": "AVAILABLE",
+          "value": 372.43947858473,
+          "sampleSize": 4000,
+          "reason": null
+        },
+        {
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 4000,
+          "sampleSize": 4000,
+          "reason": null
+        },
+        {
+          "id": "violationsPerOpportunity",
+          "unit": "ratio",
+          "state": "AVAILABLE",
+          "value": 1,
+          "sampleSize": 4000,
+          "reason": null
+        }
+      ],
+      "adapter": [
+        {
+          "id": "completedRides",
+          "unit": "rides",
+          "state": "AVAILABLE",
+          "value": 2000,
+          "reason": null
+        },
+        {
+          "id": "averageRideSeconds",
+          "unit": "s",
+          "state": "AVAILABLE",
+          "value": 10057.5,
+          "reason": null
+        },
+        {
+          "id": "totalDistanceM",
+          "unit": "m",
+          "state": "AVAILABLE",
+          "value": 1074000,
+          "reason": null
+        },
+        {
+          "id": "collisions",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 4000,
+          "reason": null
+        },
+        {
+          "id": "blockages",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 4000,
+          "reason": null
+        }
+      ],
+      "historyScans": 0,
+      "snapshotCalls": 2000
+    }
+  ],
+  "performance": {
+    "label": "machine-local provisional",
+    "events": 20000,
+    "snapshots": 2000,
+    "ingestMs": 47.1481,
+    "snapshotMs": 6.284100000000024,
+    "perEventMs": 0.002357405,
+    "perSnapshotMs": 0.0031420500000000117,
+    "eventsPerSecond": 424195.2485890206,
+    "note": "Local correctness/cost probe on this machine only; it is not an FPS, hardware or game-loop claim."
+  },
+  "checks": [
+    {
+      "name": "contract-version",
+      "expected": "137-metric-service-v1",
+      "actual": "137-metric-service-v1",
+      "pass": true,
+      "detail": "137 metric service contract version"
+    },
+    {
+      "name": "closed-event-kinds",
+      "expected": 5,
+      "actual": 5,
+      "pass": true,
+      "detail": "the service ingests exactly 5 closed event kinds"
+    },
+    {
+      "name": "metric-count",
+      "expected": 17,
+      "actual": 17,
+      "pass": true,
+      "detail": "every closed metric is present in canonical order"
+    },
+    {
+      "name": "invisible-fleet-vehicles",
+      "expected": 64,
+      "actual": 64,
+      "pass": true,
+      "detail": "the denominator counts all 24 taxis and 40 civilians, hidden included"
+    },
+    {
+      "name": "invisible-fleet-taxis",
+      "expected": 24,
+      "actual": 24,
+      "pass": true,
+      "detail": "the taxi count is the whole registered fleet"
+    },
+    {
+      "name": "invisible-fleet-civilians",
+      "expected": 40,
+      "actual": 40,
+      "pass": true,
+      "detail": "the civilian count is the whole registered fleet"
+    },
+    {
+      "name": "invisible-fleet-no-list",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the snapshot called neither list nor get on the fleet port"
+    },
+    {
+      "name": "invisible-fleet-vehicle-seconds",
+      "expected": 230400,
+      "actual": 230400,
+      "pass": true,
+      "detail": "fleet vehicle-seconds are vehicles × simulated exposure"
+    },
+    {
+      "name": "invisible-fleet-blocked-fraction",
+      "expected": 0.015625,
+      "actual": 0.015625,
+      "pass": true,
+      "detail": "blocked vehicle-seconds / whole-fleet vehicle-seconds"
+    },
+    {
+      "name": "invisible-fleet-blocked-sample",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the blocked fraction reports its blocked interval sample"
+    },
+    {
+      "name": "no-rides-completion-state",
+      "expected": "UNAVAILABLE",
+      "actual": "UNAVAILABLE",
+      "pass": true,
+      "detail": "no terminal ride means no completion rate"
+    },
+    {
+      "name": "no-rides-completion-value",
+      "expected": null,
+      "actual": null,
+      "pass": true,
+      "detail": "the unavailable rate carries no number"
+    },
+    {
+      "name": "no-rides-completion-reason",
+      "expected": "NO_RIDES",
+      "actual": "NO_RIDES",
+      "pass": true,
+      "detail": "the closed reason names the missing ride denominator"
+    },
+    {
+      "name": "no-rides-completed-zero",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "a real zero completed count stays a real zero"
+    },
+    {
+      "name": "no-rides-completed-state",
+      "expected": "AVAILABLE",
+      "actual": "AVAILABLE",
+      "pass": true,
+      "detail": "a count needs no denominator, so zero is available"
+    },
+    {
+      "name": "no-rides-average-state",
+      "expected": "UNAVAILABLE",
+      "actual": "UNAVAILABLE",
+      "pass": true,
+      "detail": "no ride duration sample means no average"
+    },
+    {
+      "name": "no-distance-total-state",
+      "expected": "UNAVAILABLE",
+      "actual": "UNAVAILABLE",
+      "pass": true,
+      "detail": "a missing distance source cannot certify travel"
+    },
+    {
+      "name": "no-distance-total-value",
+      "expected": null,
+      "actual": null,
+      "pass": true,
+      "detail": "the unavailable distance carries no number"
+    },
+    {
+      "name": "no-distance-total-reason",
+      "expected": "NO_DISTANCE",
+      "actual": "NO_DISTANCE",
+      "pass": true,
+      "detail": "the closed reason names the missing distance"
+    },
+    {
+      "name": "no-distance-adapter-reason",
+      "expected": "SOURCE_MISSING",
+      "actual": "SOURCE_MISSING",
+      "pass": true,
+      "detail": "the 082 adapter maps the 137 NO_DISTANCE reason into its own closed vocabulary"
+    },
+    {
+      "name": "no-distance-km-state",
+      "expected": "UNAVAILABLE",
+      "actual": "UNAVAILABLE",
+      "pass": true,
+      "detail": "vehicle-kilometres are unavailable without a distance source"
+    },
+    {
+      "name": "no-distance-collision-reason",
+      "expected": "NO_DISTANCE",
+      "actual": "NO_DISTANCE",
+      "pass": true,
+      "detail": "a per-distance rate is unavailable instead of infinite"
+    },
+    {
+      "name": "real-zero-collision-rate",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "zero collisions with real distance is an available zero"
+    },
+    {
+      "name": "real-zero-collision-state",
+      "expected": "AVAILABLE",
+      "actual": "AVAILABLE",
+      "pass": true,
+      "detail": "the real zero is a certified value, not a missing one"
+    },
+    {
+      "name": "real-zero-completion-reason",
+      "expected": "NO_RIDES",
+      "actual": "NO_RIDES",
+      "pass": true,
+      "detail": "a real zero collision rate does not hide the missing ride denominator"
+    },
+    {
+      "name": "collisions-per-100km",
+      "expected": 40,
+      "actual": 40,
+      "pass": true,
+      "detail": "2 collisions over 5 km are 40 per 100 vehicle-km"
+    },
+    {
+      "name": "collisions-per-100km-unit",
+      "expected": "per100km",
+      "actual": "per100km",
+      "pass": true,
+      "detail": "the rate carries its per-100-km unit"
+    },
+    {
+      "name": "collisions-per-100km-sample",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "the rate reports the two distance samples"
+    },
+    {
+      "name": "blocked-seconds",
+      "expected": 1152,
+      "actual": 1152,
+      "pass": true,
+      "detail": "blocked vehicle-seconds accumulate from the real intervals"
+    },
+    {
+      "name": "blocked-fraction",
+      "expected": 0.005,
+      "actual": 0.005,
+      "pass": true,
+      "detail": "blocked fraction is blocked vehicle-seconds over fleet vehicle-seconds"
+    },
+    {
+      "name": "blocked-fraction-unit",
+      "expected": "ratio",
+      "actual": "ratio",
+      "pass": true,
+      "detail": "the fraction carries the ratio unit"
+    },
+    {
+      "name": "blocked-fraction-sample",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the fraction reports its blocked interval sample"
+    },
+    {
+      "name": "out-of-order-equivalence",
+      "expected": "[{\"id\":\"completedRides\",\"unit\":\"count\",\"state\":\"AVAILABLE\",\"value\":1,\"sampleSize\":1,\"reason\":null},{\"id\":\"failedRides\",\"unit\":\"count\",\"state\":\"AVAILABLE\",\"value\":0,\"sampleSize\":0,\"reason\":null},{\"id\":\"cancelledRides\",\"unit\":\"count\",\"state\":\"AVAILABLE\",\"value\":0,\"sampleSize\":0,\"reason\":null},{\"id\":\"terminalRides\",\"unit\":\"count\",\"state\":\"AVAILABLE\",\"value\":1,\"sampleSize\":1,\"reason\":null},{\"id\":\"completionRate\",\"unit\":\"percentage\",\"state\":\"AVAILABLE\",\"value\":100,\"sampleSize\":1,\"reason\":null},{\"id\":\"averagePickupSeconds\",\"unit\":\"seconds\",\"state\":\"AVAILABLE\",\"value\":13,\"sampleSize\":1,\"reason\":null},{\"id\":\"averageTripSeconds\",\"unit\":\"seconds\",\"state\":\"AVAILABLE\",\"value\":61,\"sampleSize\":1,\"reason\":null},{\"id\":\"totalDistanceM\",\"unit\":\"metres\",\"state\":\"AVAILABLE\",\"value\":1000,\"sampleSize\":1,\"reason\":null},{\"id\":\"vehicleKilometres\",\"unit\":\"km\",\"state\":\"AVAILABLE\",\"value\":1,\"sampleSize\":1,\"reason\":null},{\"id\":\"rideDistanceM\",\"unit\":\"metres\",\"state\":\"UNAVAILABLE\",\"value\":null,\"sampleSize\":null,\"reason\":\"NO_DISTANCE\"},{\"id\":\"blockedIntervals\",\"unit\":\"count\",\"state\":\"AVAILABLE\",\"value\":0,\"sampleSize\":0,\"reason\":null},{\"id\":\"blockedSeconds\",\"unit\":\"seconds\",\"state\":\"AVAILABLE\",\"value\":0,\"sampleSize\":0,\"reason\":null},{\"id\":\"blockedFraction\",\"unit\":\"ratio\",\"state\":\"AVAILABLE\",\"value\":0,\"sampleSize\":0,\"reason\":null},{\"id\":\"collisions\",\"unit\":\"count\",\"state\":\"AVAILABLE\",\"value\":1,\"sampleSize\":1,\"reason\":null},{\"id\":\"collisionsPer100VehicleKm\",\"unit\":\"per100km\",\"state\":\"AVAILABLE\",\"value\":100,\"sampleSize\":1,\"reason\":null},{\"id\":\"violations\",\"unit\":\"count\",\"state\":\"AVAILABLE\",\"value\":0,\"sampleSize\":0,\"reason\":null},{\"id\":\"violationsPerOpportunity\",\"unit\":\"ratio\",\"state\":\"UNAVAILABLE\",\"value\":null,\"sampleSize\":null,\"reason\":\"NO_OPPORTUNITIES\"}]",
+      "actual": "[{\"id\":\"completedRides\",\"unit\":\"count\",\"state\":\"AVAILABLE\",\"value\":1,\"sampleSize\":1,\"reason\":null},{\"id\":\"failedRides\",\"unit\":\"count\",\"state\":\"AVAILABLE\",\"value\":0,\"sampleSize\":0,\"reason\":null},{\"id\":\"cancelledRides\",\"unit\":\"count\",\"state\":\"AVAILABLE\",\"value\":0,\"sampleSize\":0,\"reason\":null},{\"id\":\"terminalRides\",\"unit\":\"count\",\"state\":\"AVAILABLE\",\"value\":1,\"sampleSize\":1,\"reason\":null},{\"id\":\"completionRate\",\"unit\":\"percentage\",\"state\":\"AVAILABLE\",\"value\":100,\"sampleSize\":1,\"reason\":null},{\"id\":\"averagePickupSeconds\",\"unit\":\"seconds\",\"state\":\"AVAILABLE\",\"value\":13,\"sampleSize\":1,\"reason\":null},{\"id\":\"averageTripSeconds\",\"unit\":\"seconds\",\"state\":\"AVAILABLE\",\"value\":61,\"sampleSize\":1,\"reason\":null},{\"id\":\"totalDistanceM\",\"unit\":\"metres\",\"state\":\"AVAILABLE\",\"value\":1000,\"sampleSize\":1,\"reason\":null},{\"id\":\"vehicleKilometres\",\"unit\":\"km\",\"state\":\"AVAILABLE\",\"value\":1,\"sampleSize\":1,\"reason\":null},{\"id\":\"rideDistanceM\",\"unit\":\"metres\",\"state\":\"UNAVAILABLE\",\"value\":null,\"sampleSize\":null,\"reason\":\"NO_DISTANCE\"},{\"id\":\"blockedIntervals\",\"unit\":\"count\",\"state\":\"AVAILABLE\",\"value\":0,\"sampleSize\":0,\"reason\":null},{\"id\":\"blockedSeconds\",\"unit\":\"seconds\",\"state\":\"AVAILABLE\",\"value\":0,\"sampleSize\":0,\"reason\":null},{\"id\":\"blockedFraction\",\"unit\":\"ratio\",\"state\":\"AVAILABLE\",\"value\":0,\"sampleSize\":0,\"reason\":null},{\"id\":\"collisions\",\"unit\":\"count\",\"state\":\"AVAILABLE\",\"value\":1,\"sampleSize\":1,\"reason\":null},{\"id\":\"collisionsPer100VehicleKm\",\"unit\":\"per100km\",\"state\":\"AVAILABLE\",\"value\":100,\"sampleSize\":1,\"reason\":null},{\"id\":\"violations\",\"unit\":\"count\",\"state\":\"AVAILABLE\",\"value\":0,\"sampleSize\":0,\"reason\":null},{\"id\":\"violationsPerOpportunity\",\"unit\":\"ratio\",\"state\":\"UNAVAILABLE\",\"value\":null,\"sampleSize\":null,\"reason\":\"NO_OPPORTUNITIES\"}]",
+      "pass": true,
+      "detail": "the same events in another order produce identical aggregates"
+    },
+    {
+      "name": "duplicate-no-double-count",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "a replayed event id is counted once"
+    },
+    {
+      "name": "duplicate-counter",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the duplicate is reported instead of folded into the total"
+    },
+    {
+      "name": "history-scans-zero",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the snapshot never rescans a history"
+    },
+    {
+      "name": "adapter-ids",
+      "expected": "completedRides,averageRideSeconds,totalDistanceM,collisions,blockages",
+      "actual": "completedRides,averageRideSeconds,totalDistanceM,collisions,blockages",
+      "pass": true,
+      "detail": "only the 082 metrics owned by 137 are adapted"
+    },
+    {
+      "name": "adapter-unavailable-null",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "an adapted unavailable value never becomes zero"
+    },
+    {
+      "name": "adapter-no-violations",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "138/139 own violations and comfort, so 137 does not adapt them"
+    },
+    {
+      "name": "throughput-events",
+      "expected": 20000,
+      "actual": 20000,
+      "pass": true,
+      "detail": "the probe ingests 20 000 mixed events"
+    },
+    {
+      "name": "throughput-accepted",
+      "expected": 20000,
+      "actual": 20000,
+      "pass": true,
+      "detail": "every distinct probe event is accepted exactly once"
+    },
+    {
+      "name": "throughput-rejected",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the probe contains no invalid event"
+    },
+    {
+      "name": "throughput-per-event-under-0.05ms",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the measured per-event cost stays under the local 0.05 ms probe ceiling"
+    },
+    {
+      "name": "throughput-per-snapshot-under-1ms",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the measured per-snapshot cost stays under the local 1 ms probe ceiling"
+    }
+  ],
+  "summary": {
+    "checks": 44,
+    "passed": 44,
+    "pass": true
+  }
+}

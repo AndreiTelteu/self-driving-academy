@@ -34,6 +34,10 @@ Snapshotul pentru rerulare folosește checkpointul complet al lumii din [persist
 
 Revenue-ul, review-urile și istoricul lor sunt în [economia flotei](22-kpi-economie-si-review-uri.md). Comparațiile sunt experimente opționale, fără acordare sau retragere XP. Dashboardul distinge corelația temporală de rezultatul comparabil, fără să atribuie un accident jucătorului dacă dovezile nu permit. Confortul comenzilor exclude impulsurile de impact; ratingul include incidentul real.
 
+## Serviciul de indicatori 137
+
+[Contractul indicatorilor de serviciu](metric-service.md) implementează agregările incrementale pentru curse terminale, durate, kilometri-vehicul, timp blocat, coliziuni și încălcări. Numitorii folosesc întreaga flotă din `counts()` (inclusiv vehiculele ascunse), expunerea zero produce indisponibil, iar un zero real rămâne disponibil. Evenimentele sunt idempotente după `eventId`, snapshotul nu rescanează istoricul, iar adaptorul 082 expune doar indicatorii deținuți de 137; încălcările și confortul rămân pentru 138/139. [Dovezile 137](Evidence/137-metric-service/README.md) păstrează cele 20 de teste și raportul determinist 44/44, cu proba de debit locală marcată provizorie.
+
 ## Resurse pentru comparații și evaluări
 
 Experimentele folosesc admiterea comună 221: lumi și seed-uri rulate secvențial, felii măsurate, anulare și progres plafonat. Learning-ul interactiv poate întrerupe un lot secundar. Recorderul/capturile au limite în bytes prin 222. Nu există A/B automat pentru penalizare XP. [Protocolul de performanță](25-performanta-contracte-si-benchmark.md).
