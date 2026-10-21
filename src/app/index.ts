@@ -259,3 +259,9 @@ export {
   crossClassFidelityReportMarkdown,
   runCrossClassFidelityValidation,
 } from './cross-class-fidelity';
+
+export {
+  admitLearningWindowForRegression,
+  LEARNING_EDGECASES_APP_VERSION,
+  runLearningEdgeCaseRegressions,
+} from './learning-edgecases';
