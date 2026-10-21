@@ -53,6 +53,8 @@ HUD implicit: viteză, rută/minimap, mod de control cu text/simbol și următor
 
 075 implementează lista flotei ca adaptor DOM peste read-model-urile reale: toate taxiurile 057 cu slot semantic, starea serviciului, etapa 061, ETA 064 și clasa/profilul aplicat. Filtrele `ALL`/`BUSY`/`FREE`/`BLOCKED` nu ascund niciodată taxiul urmărit și păstrează mereu primul taxi blocat; sortarea `SLOT`/`STATE`/`ETA` rulează după apartenență, deci nu duplică și nu elimină rânduri. Fiecare `vehicleId` are un singur element de rând, refolosit la filtrare, sortare și redeschidere; scrierile sunt plafonate la 10 Hz, iar schimbarea taxiului urmărit, a filtrului, a sortării sau a blocajului ocolește plafonul. Un click emite doar intenția de selecție `FLEET` către 068, fără să mute vehiculul sau să preia controlul. Contractul, accesibilitatea și dovezile sunt în [fleet-panel.md](fleet-panel.md).
 
+[Notificările 079](learning-notifications.md) afișează analiza în curs, rezultatul, dovezile lipsă și eroarea ca rânduri scurte, legate de segment și job prin text și `data-*`, cu simbol pentru fiecare stare și maximum trei rânduri deduplicate. Un rezultat `composed` rămâne „Candidat validat, nepublicat”, erorile nu devin publicare, iar un rezultat târziu este `STALE`; sunetul are mereu alternativă vizuală și este opțional.
+
 Instrucțiunile LEARNING arată progres concret, de exemplu „2 din 3 opriri observate”, fără a garanta estimarea din număr dacă dovezile sunt ambigue. „Vezi un exemplu” păstrează contractul milestone-ului 204. Reviews pot include replici scurte amuzante determinate de evenimente reale, fără pop-up care oprește mașina și fără repetarea aceleiași replici la fiecare cursă.
 
 ## Cameră first-person confirmată

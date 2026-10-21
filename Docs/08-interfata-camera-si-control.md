@@ -16,6 +16,8 @@ Panoul profilului afișează valorile curente, diferența față de versiunea pr
 
 [Istoricul profilului 078](profile-history.md) listează versiunile imuabile 109 în ordinea bază→vârf și compară versiunea curentă cu cea selectată fără să editeze niciun instantaneu. Selectarea nu restaurează: restaurarea cere butonul „Restaurează” și o confirmare vizibilă, iar un motor sau un profil incompatibil este raportat explicit cu un motiv închis. Cheile R nu apar ca modificări învățabile; 109/110/114 rămân proprietarii stocării, publicării și activării.
 
+[Notificările de analiză 079](learning-notifications.md) leagă fiecare mesaj de segmentul și jobul real prin text și atribute `data-*`: analiza în curs, rezultatul, lipsa dovezilor, eroarea, respingerea, anularea, invalidarea și rezultatul târziu au simbol și text propriu. O compunere a workerului apare ca „Candidat validat, nepublicat”, niciodată ca publicare; numai un payload explicit 110/112 poate spune „Profil publicat”. Sunt cel mult trei notificări vizibile, deduplicate pe segment+job+tip, cu expirare pe ceas injectat și scrieri plafonate la 10 Hz; sunetul este opțional, iar alternativa vizuală este obligatorie.
+
 Tabloul orașului arată curse finalizate, timpi, distanță parcursă, încălcări, coliziuni, blocaje și confort. Jucătorul poate inspecta fiecare eveniment pe hartă și poate compara două profiluri în același scenariu.
 
 ## Comenzi propuse

@@ -1,0 +1,770 @@
+{
+  "version": "079-learning-notifications-v1",
+  "adapter": "079-learning-notifications-app-v1",
+  "contract": {
+    "kinds": [
+      "ANALYZING",
+      "RESULT",
+      "NO_CHANGE",
+      "INSUFFICIENT_EVIDENCE",
+      "ERROR",
+      "REJECTED",
+      "CANCELLED",
+      "INVALIDATED",
+      "STALE",
+      "PUBLISHED"
+    ],
+    "rules": [
+      "every notification is bound to one segmentId and one jobKey, in the text and data-* attributes",
+      "a worker composed candidate is RESULT (Candidat validat, nepublicat), never PUBLISHED",
+      "ERROR/REJECTED/CANCELLED/INVALIDATED are non-success and never claim a publication",
+      "only an explicit 110 publication payload may say Profil publicat",
+      "a late event for another segment/job/epoch/session/world becomes STALE and is never the current result",
+      "the same segment/job/kind is deduplicated for a bounded window; at most three rows stay visible",
+      "every kind has a visual symbol and text; the sound cue is optional and never the only signal"
+    ],
+    "limits": {
+      "maxActive": 3,
+      "maximumHz": 10,
+      "dedupeWindowMs": 30000,
+      "ttlMs": 15000,
+      "staleTtlMs": 4000,
+      "missing": 4
+    }
+  },
+  "scenarios": [
+    {
+      "name": "valid",
+      "push": "ACCEPTED",
+      "counts": {
+        "active": 1,
+        "stale": 0,
+        "errors": 0,
+        "results": 1,
+        "analyzing": 0,
+        "published": 0,
+        "deduped": 0,
+        "evicted": 0,
+        "expired": 0,
+        "identical": 0
+      },
+      "summary": "1 din 3 notificări active: 0 în analiză, 1 rezultat, 0 erori.",
+      "notifications": [
+        {
+          "kind": "RESULT",
+          "text": "Candidat validat, nepublicat: Interval temporal țintă față de lider 1.8 s → 1.5 s · segmentul segment:079:headway · jobul job:103:segment:079:headway:7",
+          "detail": null,
+          "missing": [],
+          "soundCue": "SUCCESS",
+          "published": false,
+          "segment": "segment:079:headway",
+          "job": "job:103:segment:079:headway:7"
+        }
+      ],
+      "dom": "<section aria-atomic=\"false\" aria-label=\"Notificări de învățare\" aria-live=\"polite\" class=\"learning-notifications\" data-active=\"1\" data-count=\"1\" data-errors=\"0\" data-published=\"0\" data-stale=\"0\" data-version=\"079-learning-notifications-v1\" role=\"status\">\n  <ol class=\"learning-notifications__list\">\n    <li class=\"learning-notifications__item\" data-event=\"079:valid\" data-generation=\"gen:103:style:079:4:style:079:v2\" data-job=\"job:103:segment:079:headway:7\" data-key=\"following_time_headway\" data-kind=\"RESULT\" data-learning-epoch=\"4\" data-mode=\"LEARNING\" data-order=\"7\" data-profile=\"style:079\" data-published=\"false\" data-segment=\"segment:079:headway\" data-session=\"session:079\" data-sound=\"SUCCESS\" data-stale=\"false\" data-success=\"false\" data-tick=\"10\" data-world-epoch=\"3\">\n      <span aria-hidden=\"true\" class=\"learning-notifications__symbol\">✓</span>\n      <span class=\"learning-notifications__text\">Candidat validat, nepublicat: Interval temporal țintă față de lider 1.8 s → 1.5 s · segmentul segment:079:headway · jobul job:103:segment:079:headway:7</span>\n      <p class=\"learning-notifications__detail\" hidden=\"\"></p>\n      <ul class=\"learning-notifications__missing\" hidden=\"\"></ul>\n    </li>\n  </ol>\n  <p class=\"learning-notifications__summary\">1 din 3 notificări active: 0 în analiză, 1 rezultat, 0 erori.</p>\n</section>",
+      "stats": {
+        "version": "079-learning-notifications-v1",
+        "maximumHz": 10,
+        "elements": 8,
+        "rows": 1,
+        "active": 1,
+        "writes": 26,
+        "updates": 1,
+        "renders": 1,
+        "skipped": 0,
+        "dismissed": 0,
+        "rejected": 0,
+        "deduped": 0,
+        "expired": 0,
+        "evicted": 0,
+        "announced": 0,
+        "announceFailures": 0,
+        "listeners": 0,
+        "clickListeners": 0,
+        "keyListeners": 0,
+        "retainedViews": 1,
+        "pending": false,
+        "disposed": false
+      }
+    },
+    {
+      "name": "no-change",
+      "push": "ACCEPTED",
+      "counts": {
+        "active": 1,
+        "stale": 0,
+        "errors": 0,
+        "results": 1,
+        "analyzing": 0,
+        "published": 0,
+        "deduped": 0,
+        "evicted": 0,
+        "expired": 0,
+        "identical": 0
+      },
+      "summary": "1 din 3 notificări active: 0 în analiză, 1 rezultat, 0 erori.",
+      "notifications": [
+        {
+          "kind": "NO_CHANGE",
+          "text": "Nicio modificare justificată pentru Interval temporal țintă față de lider · segmentul segment:079:nochange · jobul job:103:segment:079:nochange:8",
+          "detail": null,
+          "missing": [],
+          "soundCue": "NONE",
+          "published": false,
+          "segment": "segment:079:nochange",
+          "job": "job:103:segment:079:nochange:8"
+        }
+      ],
+      "dom": null,
+      "stats": {
+        "version": "079-learning-notifications-v1",
+        "maximumHz": 10,
+        "elements": 8,
+        "rows": 1,
+        "active": 1,
+        "writes": 26,
+        "updates": 1,
+        "renders": 1,
+        "skipped": 0,
+        "dismissed": 0,
+        "rejected": 0,
+        "deduped": 0,
+        "expired": 0,
+        "evicted": 0,
+        "announced": 0,
+        "announceFailures": 0,
+        "listeners": 0,
+        "clickListeners": 0,
+        "keyListeners": 0,
+        "retainedViews": 1,
+        "pending": false,
+        "disposed": false
+      }
+    },
+    {
+      "name": "error",
+      "push": "ACCEPTED",
+      "counts": {
+        "active": 1,
+        "stale": 0,
+        "errors": 1,
+        "results": 0,
+        "analyzing": 0,
+        "published": 0,
+        "deduped": 0,
+        "evicted": 0,
+        "expired": 0,
+        "identical": 0
+      },
+      "summary": "1 din 3 notificări active: 0 în analiză, 0 rezultate, 1 eroare.",
+      "notifications": [
+        {
+          "kind": "ERROR",
+          "text": "Eroare de analiză (RESULT_INVALID): Malformed estimator result · segmentul segment:079:error · jobul job:103:segment:079:error:9",
+          "detail": "Malformed estimator result",
+          "missing": [],
+          "soundCue": "ERROR",
+          "published": false,
+          "segment": "segment:079:error",
+          "job": "job:103:segment:079:error:9"
+        }
+      ],
+      "dom": "<section aria-atomic=\"false\" aria-label=\"Notificări de învățare\" aria-live=\"polite\" class=\"learning-notifications\" data-active=\"1\" data-count=\"1\" data-errors=\"1\" data-published=\"0\" data-stale=\"0\" data-version=\"079-learning-notifications-v1\" role=\"status\">\n  <ol class=\"learning-notifications__list\">\n    <li class=\"learning-notifications__item\" data-event=\"079:error\" data-generation=\"gen:103:style:079:4:style:079:v2\" data-job=\"job:103:segment:079:error:9\" data-key=\"following_time_headway\" data-kind=\"ERROR\" data-learning-epoch=\"4\" data-mode=\"LEARNING\" data-order=\"9\" data-profile=\"style:079\" data-published=\"false\" data-segment=\"segment:079:error\" data-session=\"session:079\" data-sound=\"ERROR\" data-stale=\"false\" data-success=\"false\" data-tick=\"12\" data-world-epoch=\"3\">\n      <span aria-hidden=\"true\" class=\"learning-notifications__symbol\">✕</span>\n      <span class=\"learning-notifications__text\">Eroare de analiză (RESULT_INVALID): Malformed estimator result · segmentul segment:079:error · jobul job:103:segment:079:error:9</span>\n      <p class=\"learning-notifications__detail\">Malformed estimator result</p>\n      <ul class=\"learning-notifications__missing\" hidden=\"\"></ul>\n    </li>\n  </ol>\n  <p class=\"learning-notifications__summary\">1 din 3 notificări active: 0 în analiză, 0 rezultate, 1 eroare.</p>\n</section>",
+      "stats": {
+        "version": "079-learning-notifications-v1",
+        "maximumHz": 10,
+        "elements": 8,
+        "rows": 1,
+        "active": 1,
+        "writes": 26,
+        "updates": 1,
+        "renders": 1,
+        "skipped": 0,
+        "dismissed": 0,
+        "rejected": 0,
+        "deduped": 0,
+        "expired": 0,
+        "evicted": 0,
+        "announced": 0,
+        "announceFailures": 0,
+        "listeners": 0,
+        "clickListeners": 0,
+        "keyListeners": 0,
+        "retainedViews": 1,
+        "pending": false,
+        "disposed": false
+      }
+    },
+    {
+      "name": "late",
+      "push": "STALE",
+      "counts": {
+        "active": 1,
+        "stale": 1,
+        "errors": 0,
+        "results": 0,
+        "analyzing": 0,
+        "published": 0,
+        "deduped": 0,
+        "evicted": 0,
+        "expired": 0,
+        "identical": 0
+      },
+      "summary": "1 din 3 notificări active: 0 în analiză, 0 rezultate, 0 erori, 1 întârziat.",
+      "notifications": [
+        {
+          "kind": "STALE",
+          "text": "Rezultat întârziat ignorat · following_time_headway · segmentul segment:079:late · jobul job:103:segment:079:late:11",
+          "detail": null,
+          "missing": [],
+          "soundCue": "NONE",
+          "published": false,
+          "segment": "segment:079:late",
+          "job": "job:103:segment:079:late:11"
+        }
+      ],
+      "dom": null,
+      "stats": {
+        "version": "079-learning-notifications-v1",
+        "maximumHz": 10,
+        "elements": 8,
+        "rows": 1,
+        "active": 1,
+        "writes": 26,
+        "updates": 1,
+        "renders": 1,
+        "skipped": 0,
+        "dismissed": 0,
+        "rejected": 0,
+        "deduped": 0,
+        "expired": 0,
+        "evicted": 0,
+        "announced": 0,
+        "announceFailures": 0,
+        "listeners": 0,
+        "clickListeners": 0,
+        "keyListeners": 0,
+        "retainedViews": 1,
+        "pending": false,
+        "disposed": false
+      }
+    },
+    {
+      "name": "insufficient evidence",
+      "push": "ACCEPTED",
+      "counts": {
+        "active": 1,
+        "stale": 0,
+        "errors": 0,
+        "results": 1,
+        "analyzing": 0,
+        "published": 0,
+        "deduped": 0,
+        "evicted": 0,
+        "expired": 0,
+        "identical": 0
+      },
+      "summary": "1 din 3 notificări active: 0 în analiză, 1 rezultat, 0 erori.",
+      "notifications": [
+        {
+          "kind": "INSUFFICIENT_EVIDENCE",
+          "text": "Dovezi insuficiente · Lipsesc dovezi: following_time_headway (2 episoade, WEAK); green_start_delay (1 episoade, WEAK); lane_change_front_gap (0 episoade, UNOBSERVED); stop_full_probability (0 episoade, UNOBSERVED) · segmentul segment:079:missing · jobul job:103:segment:079:missing:12",
+          "detail": null,
+          "missing": [
+            "following_time_headway (2 episoade, WEAK)",
+            "green_start_delay (1 episoade, WEAK)",
+            "lane_change_front_gap (0 episoade, UNOBSERVED)",
+            "stop_full_probability (0 episoade, UNOBSERVED)"
+          ],
+          "soundCue": "WARNING",
+          "published": false,
+          "segment": "segment:079:missing",
+          "job": "job:103:segment:079:missing:12"
+        }
+      ],
+      "dom": "<section aria-atomic=\"false\" aria-label=\"Notificări de învățare\" aria-live=\"polite\" class=\"learning-notifications\" data-active=\"1\" data-count=\"1\" data-errors=\"0\" data-published=\"0\" data-stale=\"0\" data-version=\"079-learning-notifications-v1\" role=\"status\">\n  <ol class=\"learning-notifications__list\">\n    <li class=\"learning-notifications__item\" data-event=\"079:missing\" data-generation=\"gen:103:style:079:4:style:079:v2\" data-job=\"job:103:segment:079:missing:12\" data-key=\"following_time_headway\" data-kind=\"INSUFFICIENT_EVIDENCE\" data-learning-epoch=\"4\" data-mode=\"LEARNING\" data-order=\"12\" data-profile=\"style:079\" data-published=\"false\" data-segment=\"segment:079:missing\" data-session=\"session:079\" data-sound=\"WARNING\" data-stale=\"false\" data-success=\"false\" data-tick=\"14\" data-world-epoch=\"3\">\n      <span aria-hidden=\"true\" class=\"learning-notifications__symbol\">?</span>\n      <span class=\"learning-notifications__text\">Dovezi insuficiente · Lipsesc dovezi: following_time_headway (2 episoade, WEAK); green_start_delay (1 episoade, WEAK); lane_change_front_gap (0 episoade, UNOBSERVED); stop_full_probability (0 episoade, UNOBSERVED) · segmentul segment:079:missing · jobul job:103:segment:079:missing:12</span>\n      <p class=\"learning-notifications__detail\" hidden=\"\"></p>\n      <ul class=\"learning-notifications__missing\">\n        <li class=\"learning-notifications__missing-item\" data-key=\"following_time_headway\" data-state=\"WEAK\">following_time_headway (2 episoade, WEAK)</li>\n        <li class=\"learning-notifications__missing-item\" data-key=\"green_start_delay\" data-state=\"WEAK\">green_start_delay (1 episoade, WEAK)</li>\n        <li class=\"learning-notifications__missing-item\" data-key=\"lane_change_front_gap\" data-state=\"UNOBSERVED\">lane_change_front_gap (0 episoade, UNOBSERVED)</li>\n        <li class=\"learning-notifications__missing-item\" data-key=\"stop_full_probability\" data-state=\"UNOBSERVED\">stop_full_probability (0 episoade, UNOBSERVED)</li>\n      </ul>\n    </li>\n  </ol>\n  <p class=\"learning-notifications__summary\">1 din 3 notificări active: 0 în analiză, 1 rezultat, 0 erori.</p>\n</section>",
+      "stats": {
+        "version": "079-learning-notifications-v1",
+        "maximumHz": 10,
+        "elements": 12,
+        "rows": 1,
+        "active": 1,
+        "writes": 25,
+        "updates": 1,
+        "renders": 1,
+        "skipped": 0,
+        "dismissed": 0,
+        "rejected": 0,
+        "deduped": 0,
+        "expired": 0,
+        "evicted": 0,
+        "announced": 0,
+        "announceFailures": 0,
+        "listeners": 0,
+        "clickListeners": 0,
+        "keyListeners": 0,
+        "retainedViews": 1,
+        "pending": false,
+        "disposed": false
+      }
+    },
+    {
+      "name": "dedupe/no-spam",
+      "push": "DEDUPED",
+      "counts": {
+        "active": 1,
+        "stale": 0,
+        "errors": 0,
+        "results": 1,
+        "analyzing": 0,
+        "published": 0,
+        "deduped": 5,
+        "evicted": 0,
+        "expired": 0,
+        "identical": 0
+      },
+      "summary": "1 din 3 notificări active: 0 în analiză, 1 rezultat, 0 erori.",
+      "notifications": [
+        {
+          "kind": "RESULT",
+          "text": "Candidat validat, nepublicat: Interval temporal țintă față de lider 1.8 s → 1.5 s · segmentul segment:079:dedupe · jobul job:103:segment:079:dedupe:13",
+          "detail": null,
+          "missing": [],
+          "soundCue": "SUCCESS",
+          "published": false,
+          "segment": "segment:079:dedupe",
+          "job": "job:103:segment:079:dedupe:13"
+        }
+      ],
+      "dom": "<section aria-atomic=\"false\" aria-label=\"Notificări de învățare\" aria-live=\"polite\" class=\"learning-notifications\" data-active=\"1\" data-count=\"1\" data-errors=\"0\" data-published=\"0\" data-stale=\"0\" data-version=\"079-learning-notifications-v1\" role=\"status\">\n  <ol class=\"learning-notifications__list\">\n    <li class=\"learning-notifications__item\" data-event=\"079:dedupe:0\" data-generation=\"gen:103:style:079:4:style:079:v2\" data-job=\"job:103:segment:079:dedupe:13\" data-key=\"following_time_headway\" data-kind=\"RESULT\" data-learning-epoch=\"4\" data-mode=\"LEARNING\" data-order=\"13\" data-profile=\"style:079\" data-published=\"false\" data-segment=\"segment:079:dedupe\" data-session=\"session:079\" data-sound=\"SUCCESS\" data-stale=\"false\" data-success=\"false\" data-tick=\"20\" data-world-epoch=\"3\">\n      <span aria-hidden=\"true\" class=\"learning-notifications__symbol\">✓</span>\n      <span class=\"learning-notifications__text\">Candidat validat, nepublicat: Interval temporal țintă față de lider 1.8 s → 1.5 s · segmentul segment:079:dedupe · jobul job:103:segment:079:dedupe:13</span>\n      <p class=\"learning-notifications__detail\" hidden=\"\"></p>\n      <ul class=\"learning-notifications__missing\" hidden=\"\"></ul>\n    </li>\n  </ol>\n  <p class=\"learning-notifications__summary\">1 din 3 notificări active: 0 în analiză, 1 rezultat, 0 erori.</p>\n</section>",
+      "stats": {
+        "version": "079-learning-notifications-v1",
+        "maximumHz": 10,
+        "elements": 8,
+        "rows": 1,
+        "active": 1,
+        "writes": 26,
+        "updates": 1,
+        "renders": 1,
+        "skipped": 5,
+        "dismissed": 0,
+        "rejected": 0,
+        "deduped": 5,
+        "expired": 0,
+        "evicted": 0,
+        "announced": 0,
+        "announceFailures": 0,
+        "listeners": 0,
+        "clickListeners": 0,
+        "keyListeners": 0,
+        "retainedViews": 1,
+        "pending": false,
+        "disposed": false
+      }
+    },
+    {
+      "name": "explicit publication",
+      "push": "ACCEPTED",
+      "counts": {
+        "active": 1,
+        "stale": 0,
+        "errors": 0,
+        "results": 0,
+        "analyzing": 0,
+        "published": 1,
+        "deduped": 0,
+        "evicted": 0,
+        "expired": 0,
+        "identical": 0
+      },
+      "summary": "1 din 3 notificări active: 0 în analiză, 0 rezultate, 0 erori, 1 publicat.",
+      "notifications": [
+        {
+          "kind": "PUBLISHED",
+          "text": "Profil publicat: Interval temporal țintă față de lider 1.8 s → 1.5 s · versiune style:079:v3 · segmentul segment:079:published · jobul job:103:segment:079:published:15",
+          "detail": null,
+          "missing": [],
+          "soundCue": "SUCCESS",
+          "published": true,
+          "segment": "segment:079:published",
+          "job": "job:103:segment:079:published:15"
+        }
+      ],
+      "dom": "<section aria-atomic=\"false\" aria-label=\"Notificări de învățare\" aria-live=\"polite\" class=\"learning-notifications\" data-active=\"2\" data-count=\"2\" data-errors=\"1\" data-published=\"1\" data-stale=\"0\" data-version=\"079-learning-notifications-v1\" role=\"status\">\n  <ol class=\"learning-notifications__list\">\n    <li class=\"learning-notifications__item\" data-event=\"079:published\" data-generation=\"gen:103:style:079:4:style:079:v2\" data-job=\"job:103:segment:079:published:15\" data-key=\"following_time_headway\" data-kind=\"PUBLISHED\" data-learning-epoch=\"4\" data-mode=\"LEARNING\" data-order=\"15\" data-profile=\"style:079\" data-published=\"true\" data-segment=\"segment:079:published\" data-session=\"session:079\" data-sound=\"SUCCESS\" data-stale=\"false\" data-success=\"true\" data-tick=\"50\" data-world-epoch=\"3\">\n      <span aria-hidden=\"true\" class=\"learning-notifications__symbol\">★</span>\n      <span class=\"learning-notifications__text\">Profil publicat: Interval temporal țintă față de lider 1.8 s → 1.5 s · versiune style:079:v3 · segmentul segment:079:published · jobul job:103:segment:079:published:15</span>\n      <p class=\"learning-notifications__detail\" hidden=\"\"></p>\n      <ul class=\"learning-notifications__missing\" hidden=\"\"></ul>\n    </li>\n    <li class=\"learning-notifications__item\" data-event=\"079:published:error\" data-generation=\"gen:103:style:079:4:style:079:v2\" data-job=\"job:103:segment:079:published:15\" data-key=\"following_time_headway\" data-kind=\"ERROR\" data-learning-epoch=\"4\" data-mode=\"LEARNING\" data-order=\"15\" data-profile=\"style:079\" data-published=\"false\" data-segment=\"segment:079:published\" data-session=\"session:079\" data-sound=\"ERROR\" data-stale=\"false\" data-success=\"false\" data-tick=\"51\" data-world-epoch=\"3\">\n      <span aria-hidden=\"true\" class=\"learning-notifications__symbol\">✕</span>\n      <span class=\"learning-notifications__text\">Eroare de analiză (RESULT_INVALID) · segmentul segment:079:published · jobul job:103:segment:079:published:15</span>\n      <p class=\"learning-notifications__detail\" hidden=\"\"></p>\n      <ul class=\"learning-notifications__missing\" hidden=\"\"></ul>\n    </li>\n  </ol>\n  <p class=\"learning-notifications__summary\">2 din 3 notificări active: 0 în analiză, 0 rezultate, 1 eroare, 1 publicat.</p>\n</section>",
+      "stats": {
+        "version": "079-learning-notifications-v1",
+        "maximumHz": 10,
+        "elements": 13,
+        "rows": 2,
+        "active": 2,
+        "writes": 50,
+        "updates": 2,
+        "renders": 2,
+        "skipped": 0,
+        "dismissed": 0,
+        "rejected": 0,
+        "deduped": 0,
+        "expired": 0,
+        "evicted": 0,
+        "announced": 0,
+        "announceFailures": 0,
+        "listeners": 0,
+        "clickListeners": 0,
+        "keyListeners": 0,
+        "retainedViews": 1,
+        "pending": false,
+        "disposed": false
+      }
+    }
+  ],
+  "checks": [
+    {
+      "name": "contract-version",
+      "expected": "079-learning-notifications-v1",
+      "actual": "079-learning-notifications-v1",
+      "pass": true,
+      "detail": "079 contract"
+    },
+    {
+      "name": "adapter-version",
+      "expected": "079-learning-notifications-app-v1",
+      "actual": "079-learning-notifications-app-v1",
+      "pass": true,
+      "detail": "composition root contract"
+    },
+    {
+      "name": "valid-kind",
+      "expected": "RESULT",
+      "actual": "RESULT",
+      "pass": true,
+      "detail": "a composed candidate is RESULT"
+    },
+    {
+      "name": "valid-title",
+      "expected": "Candidat validat, nepublicat",
+      "actual": "Candidat validat, nepublicat",
+      "pass": true,
+      "detail": "a worker composition is never a publication"
+    },
+    {
+      "name": "valid-published",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "RESULT is not published"
+    },
+    {
+      "name": "valid-success",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "RESULT is not a success"
+    },
+    {
+      "name": "valid-sound",
+      "expected": "SUCCESS",
+      "actual": "SUCCESS",
+      "pass": true,
+      "detail": "the result has a sound cue"
+    },
+    {
+      "name": "valid-change",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the short result names the old and new value"
+    },
+    {
+      "name": "valid-segment-attribute",
+      "expected": "segment:079:headway",
+      "actual": "segment:079:headway",
+      "pass": true,
+      "detail": "the row is bound to its segment"
+    },
+    {
+      "name": "valid-job-attribute",
+      "expected": "job:103:segment:079:headway:7",
+      "actual": "job:103:segment:079:headway:7",
+      "pass": true,
+      "detail": "the row is bound to its job"
+    },
+    {
+      "name": "valid-text-binding",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the segment and job also appear in the text"
+    },
+    {
+      "name": "valid-epoch-attributes",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "learning epoch, session and world epoch are explicit"
+    },
+    {
+      "name": "valid-counts-published",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no publication is counted"
+    },
+    {
+      "name": "nochange-kind",
+      "expected": "NO_CHANGE",
+      "actual": "NO_CHANGE",
+      "pass": true,
+      "detail": "equal values are NO_CHANGE"
+    },
+    {
+      "name": "nochange-text",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the no-change text is explicit"
+    },
+    {
+      "name": "nochange-published",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "no-change is not published"
+    },
+    {
+      "name": "error-kind",
+      "expected": "ERROR",
+      "actual": "ERROR",
+      "pass": true,
+      "detail": "a worker failure is ERROR"
+    },
+    {
+      "name": "error-reason",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the real 103 reason is shown"
+    },
+    {
+      "name": "error-detail",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the real detail is shown"
+    },
+    {
+      "name": "error-not-published",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "a worker error is never displayed as a published profile"
+    },
+    {
+      "name": "error-sound",
+      "expected": "ERROR",
+      "actual": "ERROR",
+      "pass": true,
+      "detail": "the error has an error cue"
+    },
+    {
+      "name": "late-kind",
+      "expected": "STALE",
+      "actual": "STALE",
+      "pass": true,
+      "detail": "a late result is STALE"
+    },
+    {
+      "name": "late-text",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the late result is quiet text"
+    },
+    {
+      "name": "late-not-current",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "a late result never replaces the current result"
+    },
+    {
+      "name": "late-counts",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the stale count is explicit"
+    },
+    {
+      "name": "missing-limit",
+      "expected": 4,
+      "actual": 4,
+      "pass": true,
+      "detail": "the missing list is bounded to four keys"
+    },
+    {
+      "name": "missing-first",
+      "expected": "following_time_headway (2 episoade, WEAK)",
+      "actual": "following_time_headway (2 episoade, WEAK)",
+      "pass": true,
+      "detail": "the concrete key and real episode count are named"
+    },
+    {
+      "name": "missing-unobserved",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "an unobserved key is distinct from a weak one"
+    },
+    {
+      "name": "missing-text",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the message names the missing evidence"
+    },
+    {
+      "name": "missing-bounded-text",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the message stays bounded"
+    },
+    {
+      "name": "missing-no-invented",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "every episode count comes from the read model"
+    },
+    {
+      "name": "dedupe-rows",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "six duplicates show one row"
+    },
+    {
+      "name": "dedupe-count",
+      "expected": 5,
+      "actual": 5,
+      "pass": true,
+      "detail": "five duplicates were suppressed"
+    },
+    {
+      "name": "dedupe-writes",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "duplicate pushes do not rewrite the row"
+    },
+    {
+      "name": "dedupe-dom-stable",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the duplicate does not add a second row"
+    },
+    {
+      "name": "cap-rows",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "at most three notifications stay visible"
+    },
+    {
+      "name": "cap-evicted",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "the oldest rows are evicted"
+    },
+    {
+      "name": "expiry-before",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the notification is visible before the deadline"
+    },
+    {
+      "name": "expiry-during",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the notification is visible before the deadline"
+    },
+    {
+      "name": "expiry-after",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the notification expires with the injected clock"
+    },
+    {
+      "name": "publish-kind",
+      "expected": "PUBLISHED",
+      "actual": "PUBLISHED",
+      "pass": true,
+      "detail": "an explicit publication is PUBLISHED"
+    },
+    {
+      "name": "publish-title",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "only the explicit publication says Profil publicat"
+    },
+    {
+      "name": "publish-flag",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the publication flag is true"
+    },
+    {
+      "name": "publish-version",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the publication version is named"
+    },
+    {
+      "name": "publish-count",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "one publication is counted"
+    },
+    {
+      "name": "publish-after-error",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "a later worker error cannot remove or fake the real publication"
+    },
+    {
+      "name": "publish-after-error-kind",
+      "expected": "ERROR",
+      "actual": "ERROR",
+      "pass": true,
+      "detail": "the worker error stays an ERROR next to the publication"
+    },
+    {
+      "name": "kind-symbols",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "every kind has a symbol and text, never colour only"
+    },
+    {
+      "name": "limits",
+      "expected": "3/10",
+      "actual": "3/10",
+      "pass": true,
+      "detail": "three rows at a 10 Hz write ceiling"
+    }
+  ],
+  "summary": {
+    "checks": 49,
+    "passed": 49,
+    "pass": true
+  }
+}

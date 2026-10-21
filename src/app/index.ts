@@ -137,3 +137,20 @@ export {
   type ManualTripStep,
   type ManualTripTelemetry,
 } from './manual-trip';
+export {
+  isStaleNotification,
+  learningNotificationEventId,
+  learningNotificationGenerationKey,
+  learningNotificationJobKey,
+  missingObservationsFromEvidence,
+  notificationCurrentJob,
+  notificationFromAdmission,
+  notificationFromMissingEvidence,
+  notificationFromOutcome,
+  notificationFromPublication,
+  LEARNING_NOTIFICATION_ADAPTER_VERSION,
+  type LearningNotificationContext,
+  type LearningNotificationEvidenceInput,
+  type LearningNotificationEvidenceSource,
+  type LearningNotificationPublicationPayload,
+} from './learning-notification';

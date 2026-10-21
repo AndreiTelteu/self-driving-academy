@@ -32,6 +32,64 @@ export { createFleetPanel } from './fleet-panel';
 export type { FleetPanel, FleetPanelOptions } from './fleet-panel';
 export { createProfilePanel } from './profile-panel';
 export type { ProfilePanel, ProfilePanelOptions } from './profile-panel';
+export { createLearningNotifications } from './learning-notifications';
+export type {
+  LearningNotificationAnnouncer,
+  LearningNotifications,
+  LearningNotificationsOptions,
+  LearningNotificationPushResult,
+  LearningNotificationPushStatus,
+} from './learning-notifications';
+export {
+  LEARNING_NOTIFICATION_LIMITS,
+  LEARNING_NOTIFICATION_POLICY,
+  LEARNING_NOTIFICATION_VERSION,
+  createLearningNotificationState,
+  dismissLearningNotification,
+  expireLearningNotifications,
+  formatLearningNotificationNumber,
+  isLearningNotificationStale,
+  learningNotificationDedupeKey,
+  learningNotificationFailureKinds,
+  learningNotificationKindView,
+  learningNotificationKinds,
+  learningNotificationMissingStates,
+  learningNotificationModes,
+  learningNotificationSoundCues,
+  parseLearningNotificationEvent,
+  projectLearningNotifications,
+  reduceLearningNotifications,
+} from './learning-notification-format';
+export type {
+  LearningNotificationAnalyzing,
+  LearningNotificationCancelled,
+  LearningNotificationCounters,
+  LearningNotificationCounts,
+  LearningNotificationCurrentJob,
+  LearningNotificationDedupeRow,
+  LearningNotificationEntry,
+  LearningNotificationError,
+  LearningNotificationEvent,
+  LearningNotificationIdentity,
+  LearningNotificationInsufficientEvidence,
+  LearningNotificationInvalidated,
+  LearningNotificationItem,
+  LearningNotificationKind,
+  LearningNotificationKindView,
+  LearningNotificationMissingObservation,
+  LearningNotificationMissingState,
+  LearningNotificationMissingView,
+  LearningNotificationMode,
+  LearningNotificationNoChange,
+  LearningNotificationPolicy,
+  LearningNotificationPublished,
+  LearningNotificationRejected,
+  LearningNotificationResult,
+  LearningNotificationSoundCue,
+  LearningNotificationStale,
+  LearningNotificationState,
+  LearningNotificationView,
+} from './learning-notification-format';
 export { createProfileHistoryPanel } from './profile-history';
 export type {
   ProfileHistoryOptions,
