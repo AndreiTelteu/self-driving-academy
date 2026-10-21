@@ -35,12 +35,7 @@ export const RESPONSIVE_MINIMUM_FLEET_HEIGHT_PX = 96;
 
 export type ResponsiveRegion = 'COMPACT' | 'STANDARD' | 'LARGE';
 export type ResponsiveSurfaceId = 'hud' | 'minimap' | 'fleet' | 'center' | 'notifications';
-export type ResponsiveAnchor =
-  | 'top-left'
-  | 'top-right'
-  | 'left-column'
-  | 'center'
-  | 'right-column';
+export type ResponsiveAnchor = 'top-left' | 'top-right' | 'left-column' | 'center' | 'right-column';
 export type EssentialControlId =
   'speed-output' | 'mode-buttons' | 'minimap-status' | 'pause-control' | 'recovery-control';
 
@@ -350,7 +345,11 @@ export function computeResponsiveLayout(input: ResponsiveViewport): ResponsiveLa
       }),
       Object.freeze({
         id: 'notifications',
-        x: round(effectiveWidthPx - insetPx - Math.min(notificationsWidthPx, effectiveWidthPx - insetPx * 2)),
+        x: round(
+          effectiveWidthPx -
+            insetPx -
+            Math.min(notificationsWidthPx, effectiveWidthPx - insetPx * 2),
+        ),
         y: round(insetPx + minimapHeightPx + gapPx),
         width: Math.min(notificationsWidthPx, Math.max(1, effectiveWidthPx - insetPx * 2)),
         height: notificationsHeightPx,
