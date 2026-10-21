@@ -3,6 +3,23 @@
   color: #e8f1ed;
   background: #13251f;
   color-scheme: dark;
+  /* 083 audited tokens; the values mirror the literals used by the panels below (no redesign). */
+  --ui-text: #f3f7fb;
+  --ui-text-muted: #b9cfc5;
+  --ui-text-secondary: #c6dbd1;
+  --ui-text-strong: #dbe8e2;
+  --ui-text-small: #9bb3a8;
+  --ui-surface: #0d1714;
+  --ui-surface-raised: #13251f;
+  --ui-surface-sunken: #101f1a;
+  --ui-control: #1c332b;
+  --ui-border: #ffffff2b;
+  --ui-focus: #9edbb5;
+  --ui-success: #9edbb5;
+  --ui-warning: #ffd27f;
+  --ui-error: #ffb3a7;
+  --ui-selected: #7fd7ff;
+  --ui-marker-ink: #07110d;
 }
 
 body {
@@ -45,6 +62,21 @@ button {
 button:focus-visible {
   outline: 3px solid #9edbb5;
   outline-offset: 4px;
+}
+
+/* 083 shared focus ring for panels that opt in explicitly, plus the visible fail-closed reason. */
+.ui-focus-ring:focus-visible {
+  outline: 3px solid var(--ui-focus);
+  outline-offset: 2px;
+}
+
+.ui-focus-error {
+  margin: 0;
+  padding: 0.4rem 0.5rem;
+  border: 1px dashed var(--ui-error);
+  border-radius: 0.4rem;
+  color: var(--ui-error);
+  font-size: 0.78rem;
 }
 
 /* 073 HUD: readable while driving. Text and symbols carry the mode; colour only reinforces. */
@@ -133,6 +165,11 @@ button:focus-visible {
 .taxi-hud__details summary {
   cursor: pointer;
   color: #9edbb5;
+}
+
+.taxi-hud__details summary:focus-visible {
+  outline: 3px solid var(--ui-focus);
+  outline-offset: 2px;
 }
 
 .taxi-hud[data-mode='AUTO'] .taxi-hud__symbol {
@@ -392,6 +429,12 @@ button:focus-visible {
   background: #13251f;
   color: inherit;
   font: inherit;
+}
+
+.fleet-panel__filter:focus-visible,
+.fleet-panel__sort:focus-visible {
+  outline: 3px solid var(--ui-focus);
+  outline-offset: 2px;
 }
 
 .fleet-panel__rows {

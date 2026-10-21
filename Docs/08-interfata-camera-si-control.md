@@ -46,6 +46,8 @@ Hotkey-urile sunt remapabile. Butoanele din HUD oferă echivalente pentru acțiu
 
 [Setările 081](game-settings.md) adaugă panoul de preferințe de dispozitiv peste aceleași setări 009: unități de afișare km/h↔mph și m↔ft convertite doar pentru prezentare, camera CHASE/FIRST_PERSON, cele șapte slidere de confort și grafica LOW/MEDIUM/HIGH cu backend preferat, scală de rezoluție și adaptare. Salvarea păstrează bindingurile, jucătorul și scenariul, iar revizia `input.control.version` crește exact o dată numai când se schimbă confortul. Resetarea propune valorile reale după confirmare, audio este explicit `Indisponibil · 148`, iar editorul de stil rămâne o suprafață separată care nu schimbă AI-ul prin acest panou.
 
+[Accesibilitatea panourilor 083](ui-accessibility.md) verifică exact această regulă pentru suprafețele reale: fiecare panou are nume accesibil, control focalizabil, contur vizibil de 3 px, stare purtată de text/simbol și perechi de contrast măsurate WCAG AA, iar niciun panou nu instalează listener de `window`/`document`. Focusul este mutat pe primul control, Tab/Shift+Tab rămân în panou, Escape închide prin portul injectat și restaurează focusul, iar un panou fără control focalizabil eșuează vizibil în loc să pretindă operare din tastatură. Tastele de condus rămân blocate numai cât timp un panou/meniu cere suspendarea 070; diagnosticul read-only nu blochează niciodată și bridge-ul nu revendică PLAYER.
+
 ## Moduri de control și închiderea intervențiilor
 
 Există cel mult un vehicul sub controlul jucătorului, în MANUAL sau LEARNING. Modul de control, etapa cursei și versiunea profilului sunt stări independente. Un taxi poate fi autonom și în drum spre pickup sau manual și în drum spre dropoff.

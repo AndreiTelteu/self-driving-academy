@@ -459,3 +459,47 @@ export type {
   CityMetricUnit,
   CityMetricView,
 } from './city-dashboard-format';
+export {
+  ACCESSIBILITY_CONTRAST_REQUIREMENTS,
+  ACCESSIBILITY_ISSUE_CODES,
+  ACCESSIBILITY_TOKENS,
+  ACCESSIBILITY_VERSION,
+  PANEL_IDS,
+  PANEL_SURFACES,
+  auditPanelAccessibility,
+  contrastRatio,
+  drivingBlockReason,
+  drivingKeysBlocked,
+  panelDescriptor,
+  planPanelTraversal,
+  relativeLuminance,
+  requiredContrast,
+} from './accessibility-format';
+export type {
+  AccessibilityAudit,
+  AccessibilityContrastMeasurement,
+  AccessibilityIssue,
+  AccessibilityIssueCode,
+  AccessibilityMode,
+  AccessibilityPanelAudit,
+  AccessibilityTokens,
+  ContrastTarget,
+  DrivingBlockReason,
+  PanelContrastPair,
+  PanelControlDescriptor,
+  PanelControlRole,
+  PanelFocusVisible,
+  PanelId,
+  PanelRole,
+  PanelSurfaceDescriptor,
+  PanelSurfaceKind,
+  PanelTraversalPlan,
+  PanelTraversalStep,
+} from './accessibility-format';
+export {
+  PANEL_FOCUSABLE_SELECTOR,
+  PANEL_FOCUS_VERSION,
+  createPanelFocusController,
+  focusableControls,
+} from './panel-focus';
+export type { PanelFocusController, PanelFocusOptions, PanelFocusStats } from './panel-focus';

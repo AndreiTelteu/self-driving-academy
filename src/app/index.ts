@@ -188,3 +188,18 @@ export {
   type LearningNotificationEvidenceSource,
   type LearningNotificationPublicationPayload,
 } from './learning-notification';
+export {
+  PANEL_ACCESSIBILITY_BRIDGE_CLAIMS_PLAYER,
+  UI_ACCESSIBILITY_BLOCKING_CODES,
+  UI_ACCESSIBILITY_REPORT_VERSION,
+  createPanelAccessibilityBridge,
+  readAccessibilityReport,
+  requireAccessibleUi,
+  type AccessibilityContrastRow,
+  type PanelAccessibilityBridge,
+  type PanelAccessibilityBridgeOptions,
+  type PanelAccessibilityBridgeState,
+  type PanelAccessibilityBridgeStats,
+  type UiAccessibilityPanelReport,
+  type UiAccessibilityReport,
+} from './ui-accessibility';

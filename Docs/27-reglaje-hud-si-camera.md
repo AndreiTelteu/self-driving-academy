@@ -57,6 +57,8 @@ HUD implicit: viteză, rută/minimap, mod de control cu text/simbol și următor
 
 Instrucțiunile LEARNING arată progres concret, de exemplu „2 din 3 opriri observate”, fără a garanta estimarea din număr dacă dovezile sunt ambigue. „Vezi un exemplu” păstrează contractul milestone-ului 204. Reviews pot include replici scurte amuzante determinate de evenimente reale, fără pop-up care oprește mașina și fără repetarea aceleiași replici la fiecare cursă.
 
+[Accesibilitatea HUD și a panourilor 083](ui-accessibility.md) completează regula de focus: HUD-ul, minimapa, markerii și notificările rămân suprafețe read-only care nu blochează tastele de condus, iar panourile flotei/profilului/istoricului/tabloului se suspendă în MANUAL/LEARNING și rămân live în observare AUTO. Setările și remaparea sunt meniuri modale, cu Escape prin portul injectat. Fiecare buton are `type="button"`, fiecare control interactiv are contur `:focus-visible` de 3 px, iar contrastul textului, avertismentului, erorii, selecției și focusului este măsurat WCAG AA în `Docs/Evidence/083-ui-accessibility`.
+
 ## Cameră first-person confirmată
 
 V1 oferă camera din spate și first-person din poziția șoferului; C comută și preferința se salvează. First-person nu este echivalentă doar cu o cameră pe capotă. Poziția/FOV evită caroseria în câmpul vizual și clippingul la viraje/impact; dacă nu există interior complet, reprezentarea rămâne simplă. Nu presupune personaj controlabil sau mers pe jos. Mouse-ul poate privi în jur cu limită și recenter; inputul este capturat doar după acțiune explicită, iar Escape eliberează capturarea. Sliderele de mișcare și FOV permit confort fără head-bob impus. Camera nu schimbă autoritatea sau regulile și nu limitează preluarea altor mașini.
