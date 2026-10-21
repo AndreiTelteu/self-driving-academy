@@ -1,0 +1,683 @@
+{
+  "version": "104-learning-explanation-v1",
+  "adapter": "104-learning-explanation-app-v1",
+  "contract": {
+    "statuses": [
+      "CHANGED",
+      "NO_CHANGE",
+      "INSUFFICIENT_EVIDENCE",
+      "REJECTED",
+      "ERROR"
+    ],
+    "rules": [
+      "CHANGED requires at least one change and the real 103 composition versionId",
+      "NO_CHANGE and INSUFFICIENT_EVIDENCE require versionId null, zero changes and a closed reason",
+      "ERROR and REJECTED require zero changes, no version and the real closed reason/detail",
+      "every change carries a positive effective episode count, real contexts, quality, uncertainty and confidence",
+      "a real zero is a valid value and never an unobserved one",
+      "a late or foreign job becomes a closed STALE_JOB error, never the current result",
+      "an R key can never appear as a learned change",
+      "the panel writes only changed text at 10 Hz and never invents a version, value or publication"
+    ],
+    "limits": {
+      "changes": 24,
+      "contextsPerChange": 8,
+      "missingContexts": 8,
+      "maximumHz": 10
+    }
+  },
+  "scenarios": [
+    {
+      "name": "single change",
+      "status": "CHANGED",
+      "versionId": "style:104:v2~103.7",
+      "reason": null,
+      "detail": null,
+      "missing": [],
+      "rows": [
+        {
+          "key": "following_time_headway",
+          "previous": 1.8,
+          "next": 1.5,
+          "delta": "-0.3 s",
+          "evidence": 3,
+          "contexts": [
+            "LEADER"
+          ],
+          "quality": 1,
+          "uncertainty": "MODERATE",
+          "confidence": "OBSERVED",
+          "reason": "EVIDENCE_APPLIED"
+        }
+      ],
+      "summary": "Modificare explicată: 1 modificare din segmentul segment:104:headway · jobul job:104:segment:104:headway:7 · versiune style:104:v2~103.7 · Interval temporal țintă față de lider 1.8 → 1.5 s (-0.3 s).",
+      "noChange": null,
+      "failure": null,
+      "dom": "<section aria-describedby=\"learning-explanation-description\" aria-label=\"Explicarea modificărilor · Modificare explicată · segment:104:headway · style:104:v2~103.7\" class=\"learning-explanation\" data-changes=\"1\" data-job=\"job:104:segment:104:headway:7\" data-no-version=\"false\" data-published=\"false\" data-segment=\"segment:104:headway\" data-status=\"CHANGED\" data-success=\"true\" data-tick=\"10\" data-version=\"style:104:v2~103.7\" tabindex=\"-1\">\n  <header class=\"learning-explanation__header\">\n    <h2 class=\"learning-explanation__title\">Explicarea modificărilor</h2>\n    <span class=\"learning-explanation__badge\" data-status=\"CHANGED\">Δ Modificare explicată</span>\n    <span class=\"learning-explanation__count\">1 modificare</span>\n  </header>\n  <dl class=\"learning-explanation__identity\">\n    <dt>Job</dt>\n    <dd>job:104:segment:104:headway:7</dd>\n    <dt>Segment</dt>\n    <dd>segment:104:headway</dd>\n    <dt>Profil</dt>\n    <dd>style:104</dd>\n    <dt>Epocă învățare</dt>\n    <dd>4</dd>\n    <dt>Mod</dt>\n    <dd>LEARNING</dd>\n    <dt>Ordine</dt>\n    <dd>7</dd>\n    <dt>Sesiune</dt>\n    <dd>session:104</dd>\n    <dt>Lume</dt>\n    <dd>2</dd>\n    <dt>Tick</dt>\n    <dd>10</dd>\n  </dl>\n  <p class=\"learning-explanation__version\">Versiune: style:104:v2~103.7</p>\n  <p aria-atomic=\"true\" aria-live=\"polite\" class=\"learning-explanation__summary\" role=\"status\">Modificare explicată: 1 modificare din segmentul segment:104:headway · jobul job:104:segment:104:headway:7 · versiune style:104:v2~103.7 · Interval temporal țintă față de lider 1.8 → 1.5 s (-0.3 s).</p>\n  <p class=\"learning-explanation__no-change\" hidden=\"\"></p>\n  <section class=\"learning-explanation__changes\">\n    <h3 class=\"learning-explanation__changes-title\">Modificări față de baza epocii</h3>\n    <p class=\"learning-explanation__changes-empty\" hidden=\"\">Nicio modificare învățată în acest rezultat.</p>\n    <ul class=\"learning-explanation__rows\">\n      <li aria-label=\"Interval temporal țintă față de lider (following_time_headway); 1.8 s → 1.5 s; delta -0.3 s; 3 episoade efective; contexte LEADER; calitate 100%; incertitudine MODERATE; încredere Dovezi suficiente; segmente segment:104:headway; motiv EVIDENCE_APPLIED\" class=\"learning-explanation__row\" data-confidence=\"OBSERVED\" data-key=\"following_time_headway\">\n        <dl class=\"learning-explanation__row-fields\">\n          <dt>Valoare</dt>\n          <dd>1.8 s → 1.5 s</dd>\n          <dt>Delta</dt>\n          <dd>-0.3 s</dd>\n          <dt>Dovezi</dt>\n          <dd>3 episoade efective</dd>\n          <dt>Contexte</dt>\n          <dd>LEADER</dd>\n          <dt>Calitate</dt>\n          <dd>100% · incertitudine MODERATE</dd>\n          <dt>Încredere</dt>\n          <dd>Dovezi suficiente</dd>\n          <dt>Segmente</dt>\n          <dd>segment:104:headway</dd>\n          <dt>Motiv</dt>\n          <dd>EVIDENCE_APPLIED</dd>\n        </dl>\n      </li>\n    </ul>\n  </section>\n  <section class=\"learning-explanation__missing-section\" hidden=\"\">\n    <h3 class=\"learning-explanation__missing-title\">Dovezi și contexte lipsă</h3>\n    <ul class=\"learning-explanation__missing\" data-key=\"\"></ul>\n  </section>\n  <p class=\"learning-explanation__failure\" hidden=\"\"></p>\n  <p class=\"learning-explanation__description\">Fiecare modificare este legată de numărul efectiv de episoade, contexte, calitate și încrederea din dovezi. „Nicio versiune nouă” înseamnă că dovezile nu justifică o schimbare; o eroare sau o respingere nu este niciodată o publicare.</p>\n</section>",
+      "stats": {
+        "version": "104-learning-explanation-v1",
+        "maximumHz": 10,
+        "elements": 54,
+        "rows": 1,
+        "writes": 41,
+        "updates": 1,
+        "renders": 1,
+        "skipped": 0,
+        "rejected": 0,
+        "stale": 0,
+        "pending": false,
+        "status": "CHANGED",
+        "listeners": 0,
+        "clickListeners": 0,
+        "keyListeners": 0,
+        "retainedViews": 1,
+        "history": 0,
+        "disposed": false
+      }
+    },
+    {
+      "name": "multi-key",
+      "status": "CHANGED",
+      "versionId": "style:104:v2~103.8",
+      "reason": null,
+      "detail": null,
+      "missing": [],
+      "rows": [
+        {
+          "key": "following_time_headway",
+          "previous": 1.8,
+          "next": 1.5,
+          "delta": "-0.3 s",
+          "evidence": 3,
+          "contexts": [
+            "LEADER"
+          ],
+          "quality": 1,
+          "uncertainty": "MODERATE",
+          "confidence": "OBSERVED",
+          "reason": "EVIDENCE_APPLIED"
+        },
+        {
+          "key": "stop_full_probability",
+          "previous": 1,
+          "next": 0,
+          "delta": "-1 probabilitate",
+          "evidence": 3,
+          "contexts": [
+            "FREE_TRAFFIC"
+          ],
+          "quality": 1,
+          "uncertainty": "MODERATE",
+          "confidence": "ZERO",
+          "reason": "ZERO_OBSERVED"
+        }
+      ],
+      "summary": "Modificare explicată: 2 modificări din segmentul segment:104:stop · jobul job:104:segment:104:stop:8 · versiune style:104:v2~103.8 · Interval temporal țintă față de lider 1.8 → 1.5 s (-0.3 s); Probabilitate de oprire completă la STOP 1 → 0 probabilitate (-1 probabilitate).",
+      "noChange": null,
+      "failure": null,
+      "dom": null,
+      "stats": {
+        "version": "104-learning-explanation-v1",
+        "maximumHz": 10,
+        "elements": 72,
+        "rows": 2,
+        "writes": 52,
+        "updates": 1,
+        "renders": 1,
+        "skipped": 0,
+        "rejected": 0,
+        "stale": 0,
+        "pending": false,
+        "status": "CHANGED",
+        "listeners": 0,
+        "clickListeners": 0,
+        "keyListeners": 0,
+        "retainedViews": 1,
+        "history": 0,
+        "disposed": false
+      }
+    },
+    {
+      "name": "no-change",
+      "status": "NO_CHANGE",
+      "versionId": null,
+      "reason": "NO_NEW_EVIDENCE",
+      "detail": null,
+      "missing": [
+        "following_time_headway: NO_NEW_EVIDENCE (0 episoade efective, 0 distincte)"
+      ],
+      "rows": [],
+      "summary": "Nicio modificare justificată din segmentul segment:104:headway · jobul job:104:segment:104:headway:7 · Nicio versiune nouă — dovezile nu justifică o schimbare · motiv: nu există episoade noi eligibile pentru cheile analizate · lipsesc: following_time_headway: NO_NEW_EVIDENCE (0 episoade efective, 0 distincte).",
+      "noChange": "Nicio versiune nouă — dovezile nu justifică o schimbare. Motiv: nu există episoade noi eligibile pentru cheile analizate. Lipsesc dovezi sau contexte: following_time_headway: NO_NEW_EVIDENCE (0 episoade efective, 0 distincte).",
+      "failure": null,
+      "dom": "<section aria-describedby=\"learning-explanation-description\" aria-label=\"Explicarea modificărilor · Nicio modificare justificată · segment:104:headway · Nicio versiune nouă\" class=\"learning-explanation\" data-changes=\"0\" data-job=\"job:104:segment:104:headway:7\" data-no-version=\"true\" data-published=\"false\" data-segment=\"segment:104:headway\" data-status=\"NO_CHANGE\" data-success=\"false\" data-tick=\"12\" data-version=\"\" tabindex=\"-1\">\n  <header class=\"learning-explanation__header\">\n    <h2 class=\"learning-explanation__title\">Explicarea modificărilor</h2>\n    <span class=\"learning-explanation__badge\" data-status=\"NO_CHANGE\">= Nicio modificare justificată</span>\n    <span class=\"learning-explanation__count\">0 modificări</span>\n  </header>\n  <dl class=\"learning-explanation__identity\">\n    <dt>Job</dt>\n    <dd>job:104:segment:104:headway:7</dd>\n    <dt>Segment</dt>\n    <dd>segment:104:headway</dd>\n    <dt>Profil</dt>\n    <dd>style:104</dd>\n    <dt>Epocă învățare</dt>\n    <dd>4</dd>\n    <dt>Mod</dt>\n    <dd>LEARNING</dd>\n    <dt>Ordine</dt>\n    <dd>7</dd>\n    <dt>Sesiune</dt>\n    <dd>session:104</dd>\n    <dt>Lume</dt>\n    <dd>2</dd>\n    <dt>Tick</dt>\n    <dd>12</dd>\n  </dl>\n  <p class=\"learning-explanation__version\">Versiune: Nicio versiune nouă</p>\n  <p aria-atomic=\"true\" aria-live=\"polite\" class=\"learning-explanation__summary\" role=\"status\">Nicio modificare justificată din segmentul segment:104:headway · jobul job:104:segment:104:headway:7 · Nicio versiune nouă — dovezile nu justifică o schimbare · motiv: nu există episoade noi eligibile pentru cheile analizate · lipsesc: following_time_headway: NO_NEW_EVIDENCE (0 episoade efective, 0 distincte).</p>\n  <p class=\"learning-explanation__no-change\">Nicio versiune nouă — dovezile nu justifică o schimbare. Motiv: nu există episoade noi eligibile pentru cheile analizate. Lipsesc dovezi sau contexte: following_time_headway: NO_NEW_EVIDENCE (0 episoade efective, 0 distincte).</p>\n  <section class=\"learning-explanation__changes\">\n    <h3 class=\"learning-explanation__changes-title\">Modificări față de baza epocii</h3>\n    <p class=\"learning-explanation__changes-empty\">Nicio modificare învățată în acest rezultat.</p>\n    <ul class=\"learning-explanation__rows\" hidden=\"\"></ul>\n  </section>\n  <section class=\"learning-explanation__missing-section\">\n    <h3 class=\"learning-explanation__missing-title\">Dovezi și contexte lipsă</h3>\n    <ul class=\"learning-explanation__missing\" data-key=\"following_time_headway: NO_NEW_EVIDENCE (0 episoade efective, 0 distincte)\">\n      <li class=\"learning-explanation__missing-item\" data-index=\"0\">following_time_headway: NO_NEW_EVIDENCE (0 episoade efective, 0 distincte)</li>\n    </ul>\n  </section>\n  <p class=\"learning-explanation__failure\" hidden=\"\"></p>\n  <p class=\"learning-explanation__description\">Fiecare modificare este legată de numărul efectiv de episoade, contexte, calitate și încrederea din dovezi. „Nicio versiune nouă” înseamnă că dovezile nu justifică o schimbare; o eroare sau o respingere nu este niciodată o publicare.</p>\n</section>",
+      "stats": {
+        "version": "104-learning-explanation-v1",
+        "maximumHz": 10,
+        "elements": 37,
+        "rows": 0,
+        "writes": 29,
+        "updates": 1,
+        "renders": 1,
+        "skipped": 0,
+        "rejected": 0,
+        "stale": 0,
+        "pending": false,
+        "status": "NO_CHANGE",
+        "listeners": 0,
+        "clickListeners": 0,
+        "keyListeners": 0,
+        "retainedViews": 1,
+        "history": 0,
+        "disposed": false
+      }
+    },
+    {
+      "name": "insufficient evidence / missing context",
+      "status": "INSUFFICIENT_EVIDENCE",
+      "versionId": null,
+      "reason": "WEAK_EVIDENCE",
+      "detail": null,
+      "missing": [
+        "following_time_headway: CONTEXT_MISSING (3 episoade efective, 3 distincte)"
+      ],
+      "rows": [],
+      "summary": "Dovezi insuficiente din segmentul segment:104:headway · jobul job:104:segment:104:headway:7 · Nicio versiune nouă — dovezile nu justifică o schimbare · motiv: dovezile existente sunt sub prag (număr efectiv, expunere sau contradicție) · lipsesc: following_time_headway: CONTEXT_MISSING (3 episoade efective, 3 distincte).",
+      "noChange": "Nicio versiune nouă — dovezile nu justifică o schimbare. Motiv: dovezile existente sunt sub prag (număr efectiv, expunere sau contradicție). Lipsesc dovezi sau contexte: following_time_headway: CONTEXT_MISSING (3 episoade efective, 3 distincte).",
+      "failure": null,
+      "dom": "<section aria-describedby=\"learning-explanation-description\" aria-label=\"Explicarea modificărilor · Dovezi insuficiente · segment:104:headway · Nicio versiune nouă\" class=\"learning-explanation\" data-changes=\"0\" data-job=\"job:104:segment:104:headway:7\" data-no-version=\"true\" data-published=\"false\" data-segment=\"segment:104:headway\" data-status=\"INSUFFICIENT_EVIDENCE\" data-success=\"false\" data-tick=\"13\" data-version=\"\" tabindex=\"-1\">\n  <header class=\"learning-explanation__header\">\n    <h2 class=\"learning-explanation__title\">Explicarea modificărilor</h2>\n    <span class=\"learning-explanation__badge\" data-status=\"INSUFFICIENT_EVIDENCE\">? Dovezi insuficiente</span>\n    <span class=\"learning-explanation__count\">0 modificări</span>\n  </header>\n  <dl class=\"learning-explanation__identity\">\n    <dt>Job</dt>\n    <dd>job:104:segment:104:headway:7</dd>\n    <dt>Segment</dt>\n    <dd>segment:104:headway</dd>\n    <dt>Profil</dt>\n    <dd>style:104</dd>\n    <dt>Epocă învățare</dt>\n    <dd>4</dd>\n    <dt>Mod</dt>\n    <dd>LEARNING</dd>\n    <dt>Ordine</dt>\n    <dd>7</dd>\n    <dt>Sesiune</dt>\n    <dd>session:104</dd>\n    <dt>Lume</dt>\n    <dd>2</dd>\n    <dt>Tick</dt>\n    <dd>13</dd>\n  </dl>\n  <p class=\"learning-explanation__version\">Versiune: Nicio versiune nouă</p>\n  <p aria-atomic=\"true\" aria-live=\"polite\" class=\"learning-explanation__summary\" role=\"status\">Dovezi insuficiente din segmentul segment:104:headway · jobul job:104:segment:104:headway:7 · Nicio versiune nouă — dovezile nu justifică o schimbare · motiv: dovezile existente sunt sub prag (număr efectiv, expunere sau contradicție) · lipsesc: following_time_headway: CONTEXT_MISSING (3 episoade efective, 3 distincte).</p>\n  <p class=\"learning-explanation__no-change\">Nicio versiune nouă — dovezile nu justifică o schimbare. Motiv: dovezile existente sunt sub prag (număr efectiv, expunere sau contradicție). Lipsesc dovezi sau contexte: following_time_headway: CONTEXT_MISSING (3 episoade efective, 3 distincte).</p>\n  <section class=\"learning-explanation__changes\">\n    <h3 class=\"learning-explanation__changes-title\">Modificări față de baza epocii</h3>\n    <p class=\"learning-explanation__changes-empty\">Nicio modificare învățată în acest rezultat.</p>\n    <ul class=\"learning-explanation__rows\" hidden=\"\"></ul>\n  </section>\n  <section class=\"learning-explanation__missing-section\">\n    <h3 class=\"learning-explanation__missing-title\">Dovezi și contexte lipsă</h3>\n    <ul class=\"learning-explanation__missing\" data-key=\"following_time_headway: CONTEXT_MISSING (3 episoade efective, 3 distincte)\">\n      <li class=\"learning-explanation__missing-item\" data-index=\"0\">following_time_headway: CONTEXT_MISSING (3 episoade efective, 3 distincte)</li>\n    </ul>\n  </section>\n  <p class=\"learning-explanation__failure\" hidden=\"\"></p>\n  <p class=\"learning-explanation__description\">Fiecare modificare este legată de numărul efectiv de episoade, contexte, calitate și încrederea din dovezi. „Nicio versiune nouă” înseamnă că dovezile nu justifică o schimbare; o eroare sau o respingere nu este niciodată o publicare.</p>\n</section>",
+      "stats": {
+        "version": "104-learning-explanation-v1",
+        "maximumHz": 10,
+        "elements": 37,
+        "rows": 0,
+        "writes": 29,
+        "updates": 1,
+        "renders": 1,
+        "skipped": 0,
+        "rejected": 0,
+        "stale": 0,
+        "pending": false,
+        "status": "INSUFFICIENT_EVIDENCE",
+        "listeners": 0,
+        "clickListeners": 0,
+        "keyListeners": 0,
+        "retainedViews": 1,
+        "history": 0,
+        "disposed": false
+      }
+    },
+    {
+      "name": "real zero",
+      "status": "CHANGED",
+      "versionId": "style:104:v2~103.2",
+      "reason": null,
+      "detail": null,
+      "missing": [],
+      "rows": [
+        {
+          "key": "stop_full_probability",
+          "previous": 1,
+          "next": 0,
+          "delta": "-1 probabilitate",
+          "evidence": 3,
+          "contexts": [
+            "FREE_TRAFFIC"
+          ],
+          "quality": 1,
+          "uncertainty": "MODERATE",
+          "confidence": "ZERO",
+          "reason": "ZERO_OBSERVED"
+        }
+      ],
+      "summary": "Modificare explicată: 1 modificare din segmentul segment:104:stop · jobul job:104:segment:104:stop:2 · versiune style:104:v2~103.2 · Probabilitate de oprire completă la STOP 1 → 0 probabilitate (-1 probabilitate).",
+      "noChange": null,
+      "failure": null,
+      "dom": "<section aria-describedby=\"learning-explanation-description\" aria-label=\"Explicarea modificărilor · Modificare explicată · segment:104:stop · style:104:v2~103.2\" class=\"learning-explanation\" data-changes=\"1\" data-job=\"job:104:segment:104:stop:2\" data-no-version=\"false\" data-published=\"false\" data-segment=\"segment:104:stop\" data-status=\"CHANGED\" data-success=\"true\" data-tick=\"14\" data-version=\"style:104:v2~103.2\" tabindex=\"-1\">\n  <header class=\"learning-explanation__header\">\n    <h2 class=\"learning-explanation__title\">Explicarea modificărilor</h2>\n    <span class=\"learning-explanation__badge\" data-status=\"CHANGED\">Δ Modificare explicată</span>\n    <span class=\"learning-explanation__count\">1 modificare</span>\n  </header>\n  <dl class=\"learning-explanation__identity\">\n    <dt>Job</dt>\n    <dd>job:104:segment:104:stop:2</dd>\n    <dt>Segment</dt>\n    <dd>segment:104:stop</dd>\n    <dt>Profil</dt>\n    <dd>style:104</dd>\n    <dt>Epocă învățare</dt>\n    <dd>4</dd>\n    <dt>Mod</dt>\n    <dd>LEARNING</dd>\n    <dt>Ordine</dt>\n    <dd>2</dd>\n    <dt>Sesiune</dt>\n    <dd>session:104</dd>\n    <dt>Lume</dt>\n    <dd>2</dd>\n    <dt>Tick</dt>\n    <dd>14</dd>\n  </dl>\n  <p class=\"learning-explanation__version\">Versiune: style:104:v2~103.2</p>\n  <p aria-atomic=\"true\" aria-live=\"polite\" class=\"learning-explanation__summary\" role=\"status\">Modificare explicată: 1 modificare din segmentul segment:104:stop · jobul job:104:segment:104:stop:2 · versiune style:104:v2~103.2 · Probabilitate de oprire completă la STOP 1 → 0 probabilitate (-1 probabilitate).</p>\n  <p class=\"learning-explanation__no-change\" hidden=\"\"></p>\n  <section class=\"learning-explanation__changes\">\n    <h3 class=\"learning-explanation__changes-title\">Modificări față de baza epocii</h3>\n    <p class=\"learning-explanation__changes-empty\" hidden=\"\">Nicio modificare învățată în acest rezultat.</p>\n    <ul class=\"learning-explanation__rows\">\n      <li aria-label=\"Probabilitate de oprire completă la STOP (stop_full_probability); 1 probabilitate → 0 probabilitate; delta -1 probabilitate; 3 episoade efective; contexte FREE_TRAFFIC; calitate 100%; incertitudine MODERATE; încredere Zero observat; segmente segment:104:stop; motiv ZERO_OBSERVED\" class=\"learning-explanation__row\" data-confidence=\"ZERO\" data-key=\"stop_full_probability\">\n        <dl class=\"learning-explanation__row-fields\">\n          <dt>Valoare</dt>\n          <dd>1 probabilitate → 0 probabilitate</dd>\n          <dt>Delta</dt>\n          <dd>-1 probabilitate</dd>\n          <dt>Dovezi</dt>\n          <dd>3 episoade efective</dd>\n          <dt>Contexte</dt>\n          <dd>FREE_TRAFFIC</dd>\n          <dt>Calitate</dt>\n          <dd>100% · incertitudine MODERATE</dd>\n          <dt>Încredere</dt>\n          <dd>Zero observat</dd>\n          <dt>Segmente</dt>\n          <dd>segment:104:stop</dd>\n          <dt>Motiv</dt>\n          <dd>ZERO_OBSERVED</dd>\n        </dl>\n      </li>\n    </ul>\n  </section>\n  <section class=\"learning-explanation__missing-section\" hidden=\"\">\n    <h3 class=\"learning-explanation__missing-title\">Dovezi și contexte lipsă</h3>\n    <ul class=\"learning-explanation__missing\" data-key=\"\"></ul>\n  </section>\n  <p class=\"learning-explanation__failure\" hidden=\"\"></p>\n  <p class=\"learning-explanation__description\">Fiecare modificare este legată de numărul efectiv de episoade, contexte, calitate și încrederea din dovezi. „Nicio versiune nouă” înseamnă că dovezile nu justifică o schimbare; o eroare sau o respingere nu este niciodată o publicare.</p>\n</section>",
+      "stats": {
+        "version": "104-learning-explanation-v1",
+        "maximumHz": 10,
+        "elements": 54,
+        "rows": 1,
+        "writes": 41,
+        "updates": 1,
+        "renders": 1,
+        "skipped": 0,
+        "rejected": 0,
+        "stale": 0,
+        "pending": false,
+        "status": "CHANGED",
+        "listeners": 0,
+        "clickListeners": 0,
+        "keyListeners": 0,
+        "retainedViews": 1,
+        "history": 0,
+        "disposed": false
+      }
+    },
+    {
+      "name": "error",
+      "status": "ERROR",
+      "versionId": null,
+      "reason": "RESULT_INVALID",
+      "detail": "Malformed result",
+      "missing": [],
+      "rows": [],
+      "summary": "Eroare de analiză din segmentul segment:104:error · jobul job:104:segment:104:error:3 (RESULT_INVALID) · Nicio versiune nouă.",
+      "noChange": null,
+      "failure": "Eroare de analiză (RESULT_INVALID): Malformed result. Nicio versiune nouă.",
+      "dom": "<section aria-describedby=\"learning-explanation-description\" aria-label=\"Explicarea modificărilor · Eroare de analiză · segment:104:error · Nicio versiune nouă\" class=\"learning-explanation\" data-changes=\"0\" data-job=\"job:104:segment:104:error:3\" data-no-version=\"true\" data-published=\"false\" data-segment=\"segment:104:error\" data-status=\"ERROR\" data-success=\"false\" data-tick=\"15\" data-version=\"\" tabindex=\"-1\">\n  <header class=\"learning-explanation__header\">\n    <h2 class=\"learning-explanation__title\">Explicarea modificărilor</h2>\n    <span class=\"learning-explanation__badge\" data-status=\"ERROR\">✕ Eroare de analiză</span>\n    <span class=\"learning-explanation__count\">0 modificări</span>\n  </header>\n  <dl class=\"learning-explanation__identity\">\n    <dt>Job</dt>\n    <dd>job:104:segment:104:error:3</dd>\n    <dt>Segment</dt>\n    <dd>segment:104:error</dd>\n    <dt>Profil</dt>\n    <dd>style:104</dd>\n    <dt>Epocă învățare</dt>\n    <dd>4</dd>\n    <dt>Mod</dt>\n    <dd>LEARNING</dd>\n    <dt>Ordine</dt>\n    <dd>3</dd>\n    <dt>Sesiune</dt>\n    <dd>session:104</dd>\n    <dt>Lume</dt>\n    <dd>2</dd>\n    <dt>Tick</dt>\n    <dd>15</dd>\n  </dl>\n  <p class=\"learning-explanation__version\">Versiune: Nicio versiune nouă</p>\n  <p aria-atomic=\"true\" aria-live=\"polite\" class=\"learning-explanation__summary\" role=\"status\">Eroare de analiză din segmentul segment:104:error · jobul job:104:segment:104:error:3 (RESULT_INVALID) · Nicio versiune nouă.</p>\n  <p class=\"learning-explanation__no-change\" hidden=\"\"></p>\n  <section class=\"learning-explanation__changes\">\n    <h3 class=\"learning-explanation__changes-title\">Modificări față de baza epocii</h3>\n    <p class=\"learning-explanation__changes-empty\">Nicio modificare învățată în acest rezultat.</p>\n    <ul class=\"learning-explanation__rows\" hidden=\"\"></ul>\n  </section>\n  <section class=\"learning-explanation__missing-section\" hidden=\"\">\n    <h3 class=\"learning-explanation__missing-title\">Dovezi și contexte lipsă</h3>\n    <ul class=\"learning-explanation__missing\" data-key=\"\"></ul>\n  </section>\n  <p class=\"learning-explanation__failure\">Eroare de analiză (RESULT_INVALID): Malformed result. Nicio versiune nouă.</p>\n  <p class=\"learning-explanation__description\">Fiecare modificare este legată de numărul efectiv de episoade, contexte, calitate și încrederea din dovezi. „Nicio versiune nouă” înseamnă că dovezile nu justifică o schimbare; o eroare sau o respingere nu este niciodată o publicare.</p>\n</section>",
+      "stats": {
+        "version": "104-learning-explanation-v1",
+        "maximumHz": 10,
+        "elements": 36,
+        "rows": 0,
+        "writes": 30,
+        "updates": 1,
+        "renders": 1,
+        "skipped": 0,
+        "rejected": 0,
+        "stale": 0,
+        "pending": false,
+        "status": "ERROR",
+        "listeners": 0,
+        "clickListeners": 0,
+        "keyListeners": 0,
+        "retainedViews": 1,
+        "history": 0,
+        "disposed": false
+      }
+    },
+    {
+      "name": "60-frame ceiling",
+      "status": "CHANGED",
+      "versionId": "style:104:v2~103.7",
+      "reason": null,
+      "detail": null,
+      "missing": [],
+      "rows": [
+        {
+          "key": "following_time_headway",
+          "previous": 1.8,
+          "next": 1.5,
+          "delta": "-0.3 s",
+          "evidence": 3,
+          "contexts": [
+            "LEADER"
+          ],
+          "quality": 1,
+          "uncertainty": "MODERATE",
+          "confidence": "OBSERVED",
+          "reason": "EVIDENCE_APPLIED"
+        }
+      ],
+      "summary": "Modificare explicată: 1 modificare din segmentul segment:104:headway · jobul job:104:segment:104:headway:7 · versiune style:104:v2~103.7 · Interval temporal țintă față de lider 1.8 → 1.5 s (-0.3 s).",
+      "noChange": null,
+      "failure": null,
+      "dom": "<section aria-describedby=\"learning-explanation-description\" aria-label=\"Explicarea modificărilor · Modificare explicată · segment:104:headway · style:104:v2~103.7\" class=\"learning-explanation\" data-changes=\"1\" data-job=\"job:104:segment:104:headway:7\" data-no-version=\"false\" data-published=\"false\" data-segment=\"segment:104:headway\" data-status=\"CHANGED\" data-success=\"true\" data-tick=\"76\" data-version=\"style:104:v2~103.7\" tabindex=\"-1\">\n  <header class=\"learning-explanation__header\">\n    <h2 class=\"learning-explanation__title\">Explicarea modificărilor</h2>\n    <span class=\"learning-explanation__badge\" data-status=\"CHANGED\">Δ Modificare explicată</span>\n    <span class=\"learning-explanation__count\">1 modificare</span>\n  </header>\n  <dl class=\"learning-explanation__identity\">\n    <dt>Job</dt>\n    <dd>job:104:segment:104:headway:7</dd>\n    <dt>Segment</dt>\n    <dd>segment:104:headway</dd>\n    <dt>Profil</dt>\n    <dd>style:104</dd>\n    <dt>Epocă învățare</dt>\n    <dd>4</dd>\n    <dt>Mod</dt>\n    <dd>LEARNING</dd>\n    <dt>Ordine</dt>\n    <dd>7</dd>\n    <dt>Sesiune</dt>\n    <dd>session:104</dd>\n    <dt>Lume</dt>\n    <dd>2</dd>\n    <dt>Tick</dt>\n    <dd>76</dd>\n  </dl>\n  <p class=\"learning-explanation__version\">Versiune: style:104:v2~103.7</p>\n  <p aria-atomic=\"true\" aria-live=\"polite\" class=\"learning-explanation__summary\" role=\"status\">Modificare explicată: 1 modificare din segmentul segment:104:headway · jobul job:104:segment:104:headway:7 · versiune style:104:v2~103.7 · Interval temporal țintă față de lider 1.8 → 1.556 s (-0.244 s).</p>\n  <p class=\"learning-explanation__no-change\" hidden=\"\"></p>\n  <section class=\"learning-explanation__changes\">\n    <h3 class=\"learning-explanation__changes-title\">Modificări față de baza epocii</h3>\n    <p class=\"learning-explanation__changes-empty\" hidden=\"\">Nicio modificare învățată în acest rezultat.</p>\n    <ul class=\"learning-explanation__rows\">\n      <li aria-label=\"Interval temporal țintă față de lider (following_time_headway); 1.8 s → 1.556 s; delta -0.244 s; 3 episoade efective; contexte LEADER; calitate 100%; incertitudine MODERATE; încredere Dovezi suficiente; segmente segment:104:headway; motiv EVIDENCE_APPLIED\" class=\"learning-explanation__row\" data-confidence=\"OBSERVED\" data-key=\"following_time_headway\">\n        <dl class=\"learning-explanation__row-fields\">\n          <dt>Valoare</dt>\n          <dd>1.8 s → 1.556 s</dd>\n          <dt>Delta</dt>\n          <dd>-0.244 s</dd>\n          <dt>Dovezi</dt>\n          <dd>3 episoade efective</dd>\n          <dt>Contexte</dt>\n          <dd>LEADER</dd>\n          <dt>Calitate</dt>\n          <dd>100% · incertitudine MODERATE</dd>\n          <dt>Încredere</dt>\n          <dd>Dovezi suficiente</dd>\n          <dt>Segmente</dt>\n          <dd>segment:104:headway</dd>\n          <dt>Motiv</dt>\n          <dd>EVIDENCE_APPLIED</dd>\n        </dl>\n      </li>\n    </ul>\n  </section>\n  <section class=\"learning-explanation__missing-section\" hidden=\"\">\n    <h3 class=\"learning-explanation__missing-title\">Dovezi și contexte lipsă</h3>\n    <ul class=\"learning-explanation__missing\" data-key=\"\"></ul>\n  </section>\n  <p class=\"learning-explanation__failure\" hidden=\"\"></p>\n  <p class=\"learning-explanation__description\">Fiecare modificare este legată de numărul efectiv de episoade, contexte, calitate și încrederea din dovezi. „Nicio versiune nouă” înseamnă că dovezile nu justifică o schimbare; o eroare sau o respingere nu este niciodată o publicare.</p>\n</section>",
+      "stats": {
+        "version": "104-learning-explanation-v1",
+        "maximumHz": 10,
+        "elements": 54,
+        "rows": 1,
+        "writes": 89,
+        "updates": 9,
+        "renders": 9,
+        "skipped": 51,
+        "rejected": 0,
+        "stale": 0,
+        "pending": true,
+        "status": "CHANGED",
+        "listeners": 0,
+        "clickListeners": 0,
+        "keyListeners": 0,
+        "retainedViews": 1,
+        "history": 0,
+        "disposed": false
+      }
+    }
+  ],
+  "checks": [
+    {
+      "name": "contract-version",
+      "expected": "104-learning-explanation-v1",
+      "actual": "104-learning-explanation-v1",
+      "pass": true,
+      "detail": "104 contract"
+    },
+    {
+      "name": "adapter-version",
+      "expected": "104-learning-explanation-app-v1",
+      "actual": "104-learning-explanation-app-v1",
+      "pass": true,
+      "detail": "composition root contract"
+    },
+    {
+      "name": "changed-status",
+      "expected": "CHANGED",
+      "actual": "CHANGED",
+      "pass": true,
+      "detail": "a real delta is CHANGED"
+    },
+    {
+      "name": "changed-version",
+      "expected": "style:104:v2~103.7",
+      "actual": "style:104:v2~103.7",
+      "pass": true,
+      "detail": "the real 103 composition version is shown"
+    },
+    {
+      "name": "changed-rows",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "one change for one key"
+    },
+    {
+      "name": "changed-previous",
+      "expected": 1.8,
+      "actual": 1.8,
+      "pass": true,
+      "detail": "the real base value"
+    },
+    {
+      "name": "changed-next",
+      "expected": 1.5,
+      "actual": 1.5,
+      "pass": true,
+      "detail": "the real composed value"
+    },
+    {
+      "name": "changed-delta",
+      "expected": "-0.3 s",
+      "actual": "-0.3 s",
+      "pass": true,
+      "detail": "delta with its unit"
+    },
+    {
+      "name": "changed-evidence",
+      "expected": "3 episoade efective",
+      "actual": "3 episoade efective",
+      "pass": true,
+      "detail": "the effective episode count is shown"
+    },
+    {
+      "name": "changed-context",
+      "expected": "LEADER",
+      "actual": "LEADER",
+      "pass": true,
+      "detail": "the real context"
+    },
+    {
+      "name": "changed-quality",
+      "expected": "100%",
+      "actual": "100%",
+      "pass": true,
+      "detail": "the 100 quality"
+    },
+    {
+      "name": "changed-confidence",
+      "expected": "OBSERVED",
+      "actual": "OBSERVED",
+      "pass": true,
+      "detail": "the confidence state is explicit"
+    },
+    {
+      "name": "changed-published",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "a change is never a publication"
+    },
+    {
+      "name": "changed-success",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "CHANGED is the only successful job result"
+    },
+    {
+      "name": "changed-text-binding",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the segment and job are in the text"
+    },
+    {
+      "name": "nochange-status",
+      "expected": "NO_CHANGE",
+      "actual": "NO_CHANGE",
+      "pass": true,
+      "detail": "equal values are NO_CHANGE"
+    },
+    {
+      "name": "nochange-version",
+      "expected": "null",
+      "actual": "null",
+      "pass": true,
+      "detail": "a no-change has no version"
+    },
+    {
+      "name": "nochange-changes",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "a no-change has no row"
+    },
+    {
+      "name": "nochange-reason",
+      "expected": "NO_NEW_EVIDENCE",
+      "actual": "NO_NEW_EVIDENCE",
+      "pass": true,
+      "detail": "the reason is closed and derived from the evidence"
+    },
+    {
+      "name": "nochange-missing",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the missing evidence is concrete"
+    },
+    {
+      "name": "nochange-sentence",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the exact sentence is present"
+    },
+    {
+      "name": "nochange-dom-version",
+      "expected": "Versiune: Nicio versiune nouă",
+      "actual": "Versiune: Nicio versiune nouă",
+      "pass": true,
+      "detail": "the panel never invents a version"
+    },
+    {
+      "name": "nochange-dom-flags",
+      "expected": "true/false",
+      "actual": "true/false",
+      "pass": true,
+      "detail": "no version and no publication"
+    },
+    {
+      "name": "multi-keys",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "two keys aggregate"
+    },
+    {
+      "name": "multi-unique",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the aggregated keys are unique"
+    },
+    {
+      "name": "multi-order",
+      "expected": "following_time_headway,stop_full_probability",
+      "actual": "following_time_headway,stop_full_probability",
+      "pass": true,
+      "detail": "the rows are ordered by key"
+    },
+    {
+      "name": "multi-head-version",
+      "expected": "style:104:v2~103.8",
+      "actual": "style:104:v2~103.8",
+      "pass": true,
+      "detail": "the head composition version is used"
+    },
+    {
+      "name": "multi-deterministic",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "input order does not change the frame"
+    },
+    {
+      "name": "multi-dom-rows",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "the panel renders one row per key"
+    },
+    {
+      "name": "insufficient-status",
+      "expected": "INSUFFICIENT_EVIDENCE",
+      "actual": "INSUFFICIENT_EVIDENCE",
+      "pass": true,
+      "detail": "a change without context is not shown as a change"
+    },
+    {
+      "name": "insufficient-version",
+      "expected": "null",
+      "actual": "null",
+      "pass": true,
+      "detail": "no version without an explanation"
+    },
+    {
+      "name": "insufficient-missing",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the missing context is named"
+    },
+    {
+      "name": "insufficient-rows",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no invented evidence row"
+    },
+    {
+      "name": "zero-next",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "a real zero is preserved"
+    },
+    {
+      "name": "zero-delta",
+      "expected": "-1 probabilitate",
+      "actual": "-1 probabilitate",
+      "pass": true,
+      "detail": "the real delta"
+    },
+    {
+      "name": "zero-confidence",
+      "expected": "ZERO",
+      "actual": "ZERO",
+      "pass": true,
+      "detail": "zero is distinct from unobserved"
+    },
+    {
+      "name": "error-status",
+      "expected": "ERROR",
+      "actual": "ERROR",
+      "pass": true,
+      "detail": "a worker failure is ERROR"
+    },
+    {
+      "name": "error-reason",
+      "expected": "RESULT_INVALID",
+      "actual": "RESULT_INVALID",
+      "pass": true,
+      "detail": "the real 103 reason is kept"
+    },
+    {
+      "name": "error-detail",
+      "expected": "Malformed result",
+      "actual": "Malformed result",
+      "pass": true,
+      "detail": "the real detail"
+    },
+    {
+      "name": "error-version",
+      "expected": "null",
+      "actual": "null",
+      "pass": true,
+      "detail": "an error never claims a version"
+    },
+    {
+      "name": "error-not-published",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "an error is never a published profile"
+    },
+    {
+      "name": "frames-rows",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "sixty frames keep one stable row"
+    },
+    {
+      "name": "frames-renders",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "60 frames at 16 ms produced 9 renders"
+    },
+    {
+      "name": "frames-status",
+      "expected": "CHANGED",
+      "actual": "CHANGED",
+      "pass": true,
+      "detail": "the panel still shows the last accepted result"
+    },
+    {
+      "name": "frames-dom",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the stable row is present in the DOM"
+    },
+    {
+      "name": "limits",
+      "expected": "24/10",
+      "actual": "24/10",
+      "pass": true,
+      "detail": "24 learnable keys at a 10 Hz write ceiling"
+    },
+    {
+      "name": "status-symbols",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "every status has a symbol and text and none is a publication"
+    },
+    {
+      "name": "nochange-rows-visible",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the panel shows no change row for a no-change"
+    }
+  ],
+  "summary": {
+    "checks": 48,
+    "passed": 48,
+    "pass": true
+  }
+}

@@ -189,6 +189,17 @@ export {
   type LearningNotificationPublicationPayload,
 } from './learning-notification';
 export {
+  LEARNING_EXPLANATION_ADAPTER_VERSION,
+  LEARNING_EXPLANATION_READ_ERRORS,
+  learningExplanationCurrentJob,
+  learningExplanationGenerationKey,
+  learningExplanationJobKey,
+  readLearningExplanation,
+  type LearningExplanationCurrent,
+  type LearningExplanationInput,
+  type LearningExplanationSource,
+} from './learning-explanation';
+export {
   PANEL_ACCESSIBILITY_BRIDGE_CLAIMS_PLAYER,
   UI_ACCESSIBILITY_BLOCKING_CODES,
   UI_ACCESSIBILITY_REPORT_VERSION,

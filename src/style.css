@@ -1360,6 +1360,206 @@ button:focus-visible {
   opacity: 0.85;
 }
 
+/* 104 learning explanation: one stable row per key; the status symbol, badge text and data-* carry
+   every state. A no-change, rejection or error is visible in text, never colour-only. */
+.learning-explanation {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  right: auto;
+  bottom: auto;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  display: grid;
+  gap: 0.45rem;
+  width: min(var(--layout-panel-width), calc(100vw - 2rem));
+  max-height: var(--layout-panel-max-height);
+  min-width: 0;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid #ffffff2b;
+  border-radius: 0.75rem;
+  background: #0d1714f2;
+  color: #f3f7fb;
+  font-size: 0.82rem;
+  line-height: 1.4;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overflow-wrap: anywhere;
+  scroll-padding-block: 0.5rem;
+  scrollbar-width: thin;
+  text-shadow: 0 1px 2px #000000b3;
+}
+
+.learning-explanation:focus-visible {
+  outline: 3px solid #9edbb5;
+  outline-offset: 3px;
+}
+
+.learning-explanation[hidden] {
+  display: none;
+}
+
+.learning-explanation__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.5rem;
+}
+
+.learning-explanation__title {
+  flex: 1 1 auto;
+  margin: 0;
+  font-size: 1rem;
+}
+
+.learning-explanation__badge {
+  padding: 0.1rem 0.4rem;
+  border: 1px solid #ffffff2b;
+  border-radius: 999px;
+  color: #c6dbd1;
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+
+.learning-explanation__count {
+  color: #b9cfc5;
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.learning-explanation__identity,
+.learning-explanation__row-fields {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.1rem 0.5rem;
+  margin: 0;
+}
+
+.learning-explanation__identity dt,
+.learning-explanation__row-fields dt {
+  color: #b9cfc5;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.learning-explanation__identity dd,
+.learning-explanation__row-fields dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-variant-numeric: tabular-nums;
+}
+
+.learning-explanation__version,
+.learning-explanation__summary,
+.learning-explanation__changes-title,
+.learning-explanation__missing-title {
+  margin: 0;
+}
+
+.learning-explanation__version {
+  color: #9edbb5;
+  font-variant-numeric: tabular-nums;
+}
+
+.learning-explanation__summary {
+  color: #b9cfc5;
+  font-size: 0.75rem;
+}
+
+.learning-explanation__no-change,
+.learning-explanation__changes-empty,
+.learning-explanation__failure {
+  margin: 0;
+  padding: 0.4rem 0.5rem;
+  border: 1px dashed #b9cfc5;
+  border-radius: 0.4rem;
+  color: #ffe4a8;
+  overflow-wrap: anywhere;
+}
+
+.learning-explanation__failure {
+  border-color: #ffb3a7;
+  color: #ffcabf;
+}
+
+.learning-explanation__no-change[hidden],
+.learning-explanation__changes-empty[hidden],
+.learning-explanation__failure[hidden],
+.learning-explanation__missing-section[hidden],
+.learning-explanation__rows[hidden] {
+  display: none;
+}
+
+.learning-explanation__changes,
+.learning-explanation__missing-section {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.learning-explanation__changes-title,
+.learning-explanation__missing-title {
+  color: #c6dbd1;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.learning-explanation__rows,
+.learning-explanation__missing {
+  display: grid;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.learning-explanation__row {
+  padding: 0.3rem 0.4rem;
+  border: 1px solid #7fd7ff55;
+  border-radius: 0.35rem;
+  background: #13251f;
+}
+
+.learning-explanation__missing-item {
+  color: #ffd27f;
+  font-size: 0.75rem;
+  overflow-wrap: anywhere;
+}
+
+.learning-explanation[data-status='NO_CHANGE'] .learning-explanation__badge,
+.learning-explanation[data-status='REJECTED'] .learning-explanation__badge {
+  border-color: #ffd27f;
+  color: #ffd27f;
+}
+
+.learning-explanation[data-status='INSUFFICIENT_EVIDENCE'] .learning-explanation__badge {
+  border-color: #ffd27f;
+  color: #ffe4a8;
+}
+
+.learning-explanation[data-status='ERROR'] .learning-explanation__badge {
+  border-color: #ffb3a7;
+  color: #ffcabf;
+}
+
+.learning-explanation[data-status='CHANGED'] .learning-explanation__badge {
+  border-color: #9edbb5;
+  color: #9edbb5;
+}
+
+.learning-explanation__description {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* 080 key remapping: device/settings state, explicitly separate from the learned profile. */
 .key-remapping {
   position: fixed;
@@ -2030,14 +2230,16 @@ button:focus-visible {
 .profile-history,
 .city-dashboard,
 .game-settings,
-.learning-notifications {
+.learning-notifications,
+.learning-explanation {
   box-sizing: border-box;
 }
 
 /* 084: a panel hidden by the host stays hidden even where its class sets `display: grid`. */
 .city-dashboard[hidden],
 .game-settings[hidden],
-.learning-notifications[hidden] {
+.learning-notifications[hidden],
+.learning-explanation[hidden] {
   display: none;
 }
 
@@ -2065,7 +2267,8 @@ button:focus-visible {
 
   .profile-panel,
   .city-dashboard,
-  .game-settings {
+  .game-settings,
+  .learning-explanation {
     top: var(--layout-inset);
     right: calc(var(--layout-minimap-width) + var(--layout-gap) * 2);
     bottom: auto;

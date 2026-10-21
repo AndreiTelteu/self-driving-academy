@@ -110,6 +110,13 @@ notificationFromPublication(publication, { eventId });
 - Nu este sistem audio: `soundCue` este un descriptor, iar alternativa vizuală este obligatorie.
 - Nu certifică FPS, GPU sau captură de browser.
 
+## Legătura cu explicația 104
+
+[Explicația 104](learning-explanation.md) rămâne panoul persistent al rezultatului: leagă fiecare delta
+de dovezi, contexte și încredere și explică o non-schimbare fără versiune. 079 rămâne proprietarul
+mesajelor tranzitorii; cele două module citesc aceleași rezultate 103, dar 104 nu preia deduplicarea,
+expirarea, sunetul sau publicarea explicită.
+
 ## Verificare
 
 `tests/ui/learning-notifications.test.ts` acoperă parserul strict, rezultatul valid nepublicat,

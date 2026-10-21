@@ -90,6 +90,45 @@ export type {
   LearningNotificationState,
   LearningNotificationView,
 } from './learning-notification-format';
+export { createLearningExplanationPanel } from './learning-explanation';
+export type {
+  LearningExplanationPanel,
+  LearningExplanationPanelOptions,
+  LearningExplanationUpdateStatus,
+} from './learning-explanation';
+export {
+  LEARNING_EXPLANATION_LIMITS,
+  LEARNING_EXPLANATION_NO_CHANGE_TEXT,
+  LEARNING_EXPLANATION_NO_VERSION_TEXT,
+  LEARNING_EXPLANATION_VERSION,
+  createLearningExplanationSnapshot,
+  formatLearningExplanationDelta,
+  formatLearningExplanationNumber,
+  learningExplanationConfidenceStates,
+  learningExplanationModes,
+  learningExplanationNoChangeReasons,
+  learningExplanationStatusView,
+  learningExplanationStatuses,
+  learningExplanationUnitLabel,
+  learningExplanationUncertainties,
+  parseLearningExplanationSnapshot,
+  projectLearningExplanation,
+} from './learning-explanation-format';
+export type {
+  LearningExplanationChange,
+  LearningExplanationChangeRow,
+  LearningExplanationConfidenceState,
+  LearningExplanationCounts,
+  LearningExplanationFrame,
+  LearningExplanationMissingView,
+  LearningExplanationMode,
+  LearningExplanationNoChangeReason,
+  LearningExplanationSnapshot,
+  LearningExplanationStatus,
+  LearningExplanationStatusView,
+  LearningExplanationUncertainty,
+  LearningExplanationView,
+} from './learning-explanation-format';
 export { createProfileHistoryPanel } from './profile-history';
 export type {
   ProfileHistoryOptions,
