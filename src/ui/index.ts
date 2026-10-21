@@ -32,6 +32,55 @@ export { createFleetPanel } from './fleet-panel';
 export type { FleetPanel, FleetPanelOptions } from './fleet-panel';
 export { createProfilePanel } from './profile-panel';
 export type { ProfilePanel, ProfilePanelOptions } from './profile-panel';
+export { createProfileHistoryPanel } from './profile-history';
+export type {
+  ProfileHistoryOptions,
+  ProfileHistoryPanel,
+  ProfileHistoryRestoreResult,
+} from './profile-history';
+export {
+  PROFILE_HISTORY_AVAILABLE_TEXT,
+  PROFILE_HISTORY_CHANGE_WITHOUT_REASON,
+  PROFILE_HISTORY_CONFIRM_LABEL,
+  PROFILE_HISTORY_CONFIRM_RULE,
+  PROFILE_HISTORY_EMPTY_DETAIL,
+  PROFILE_HISTORY_EMPTY_TEXT,
+  PROFILE_HISTORY_INCOMPATIBILITY_LABELS,
+  PROFILE_HISTORY_LIMITS,
+  PROFILE_HISTORY_NO_CHANGES,
+  PROFILE_HISTORY_NOT_CONNECTED,
+  PROFILE_HISTORY_PREVIEW_EMPTY,
+  PROFILE_HISTORY_PREVIEW_MISSING,
+  PROFILE_HISTORY_PREVIEW_SAME,
+  PROFILE_HISTORY_RESTORE_LABEL,
+  PROFILE_HISTORY_RESTORE_REASON_LABELS,
+  PROFILE_HISTORY_VERSION,
+  deriveProfileHistoryChanges,
+  parseProfileHistorySnapshot,
+  projectProfileHistory,
+  profileHistoryIncompatibilities,
+  profileHistoryRestoreReasons,
+} from './profile-history-format';
+export type {
+  ProfileHistoryAction,
+  ProfileHistoryChange,
+  ProfileHistoryChangeDerivation,
+  ProfileHistoryChangeRow,
+  ProfileHistoryChangeSource,
+  ProfileHistoryCounts,
+  ProfileHistoryEntry,
+  ProfileHistoryIncompatibility,
+  ProfileHistoryOrigin,
+  ProfileHistoryPreview,
+  ProfileHistoryPreviewView,
+  ProfileHistoryRestoreReason,
+  ProfileHistoryRestoreState,
+  ProfileHistoryRestoreView,
+  ProfileHistoryRow,
+  ProfileHistorySnapshot,
+  ProfileHistoryVersionValues,
+  ProfileHistoryView,
+} from './profile-history-format';
 export { createMapSelectionOverlay } from './map-selection';
 export type { MapSelectionOptions, MapSelectionOverlay } from './map-selection';
 export {

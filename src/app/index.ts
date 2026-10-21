@@ -82,6 +82,23 @@ export {
   type ProfilePanelSources,
 } from './profile-panel';
 export {
+  createProfileHistoryPorts,
+  planProfileRestore,
+  PROFILE_HISTORY_LOCAL_CONTEXT,
+  PROFILE_HISTORY_READ_ERRORS,
+  PROFILE_HISTORY_RESERVED_KEYS,
+  readProfileHistorySnapshot,
+  type ProfileHistoryFrame,
+  type ProfileHistoryPortOptions,
+  type ProfileHistoryPorts,
+  type ProfileHistoryRestoreHandler,
+  type ProfileHistoryRestoreOutcome,
+  type ProfileHistoryRestoreRequest,
+  type ProfileHistorySources,
+  type ProfileRestorePlan,
+  type ProfileRestorePlanInput,
+} from './profile-history';
+export {
   readMinimapFrame,
   readMinimapGeometry,
   type MinimapFrameInput,
