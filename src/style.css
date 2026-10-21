@@ -20,6 +20,24 @@
   --ui-error: #ffb3a7;
   --ui-selected: #7fd7ff;
   --ui-marker-ink: #07110d;
+  /* 084 responsive contract: the STANDARD (1280Ã—720â€“1919Ã—1079) values; the two media queries below
+     override exactly these names for COMPACT and LARGE. No visual redesign, only caps and anchors. */
+  --layout-inset: 1rem;
+  --layout-gap: 0.75rem;
+  --layout-hud-width: 22rem;
+  --layout-hud-reserve: 22rem;
+  --layout-hud-font: 0.95rem;
+  --layout-minimap-width: 15rem;
+  --layout-minimap-font: 0.8rem;
+  --layout-fleet-width: 24rem;
+  --layout-fleet-row: 2.75rem;
+  --layout-fleet-chrome: 5.5rem;
+  --layout-fleet-min-height: 0rem;
+  --layout-fleet-max-rows: 10;
+  --layout-panel-width: 26rem;
+  --layout-panel-max-height: min(90vh, 42rem);
+  --layout-notifications-width: 24rem;
+  --layout-font-scale: 1;
 }
 
 body {
@@ -82,17 +100,18 @@ button:focus-visible {
 /* 073 HUD: readable while driving. Text and symbols carry the mode; colour only reinforces. */
 .taxi-hud {
   position: fixed;
-  top: 1rem;
-  left: 1rem;
+  top: var(--layout-inset);
+  left: var(--layout-inset);
   z-index: 2;
-  width: min(22rem, calc(100vw - 2rem));
+  width: min(var(--layout-hud-width), calc(100vw - 2rem));
   padding: 0.85rem 1rem;
   border: 1px solid #ffffff2b;
   border-radius: 0.75rem;
   background: #0d1714d9;
   color: #f3f7fb;
-  font-size: 0.95rem;
-  line-height: 1.35;
+  /* 084: clamped, but never below 0.75rem (12 CSS px). */
+  font-size: max(0.75rem, var(--layout-hud-font));
+  line-height: 1.4;
   text-shadow: 0 1px 2px #000000b3;
   pointer-events: none;
 }
@@ -116,10 +135,23 @@ button:focus-visible {
 
 .taxi-hud__mode {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 0.45rem;
   margin-top: 0.5rem;
   font-weight: 600;
+}
+
+/* 084: HUD action buttons stay compact so the mode row does not inflate the HUD height. */
+.taxi-hud__mode button {
+  padding: 0.2rem 0.45rem;
+  border: 1px solid #ffffff3d;
+  border-radius: 0.35rem;
+  background: #1c332b;
+  color: inherit;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
 }
 
 .taxi-hud__symbol {
@@ -195,21 +227,22 @@ button:focus-visible {
 /* 074 minimap: static roads on a background canvas, route/markers on a capped overlay canvas. */
 .minimap {
   position: fixed;
-  top: 1rem;
-  right: 1rem;
+  top: var(--layout-inset);
+  right: var(--layout-inset);
   z-index: 2;
   display: grid;
   grid-template-areas:
     'map'
     'status';
-  width: min(15rem, calc(100vw - 2rem));
+  width: min(var(--layout-minimap-width), calc(100vw - 2rem));
   padding: 0.5rem;
   border: 1px solid #ffffff2b;
   border-radius: 0.75rem;
   background: #0d1714d9;
   color: #f3f7fb;
-  font-size: 0.8rem;
-  line-height: 1.35;
+  /* 084: clamped, but never below 0.75rem (12 CSS px). */
+  font-size: max(0.75rem, var(--layout-minimap-font));
+  line-height: 1.4;
   text-shadow: 0 1px 2px #000000b3;
   pointer-events: none;
 }
@@ -280,7 +313,7 @@ button:focus-visible {
   border-radius: 50%;
   background: #7fd7ff;
   color: #07110d;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   font-weight: 700;
   line-height: 1;
   cursor: pointer;
@@ -311,7 +344,7 @@ button:focus-visible {
 }
 
 .map-selection__marker[aria-pressed='true']::after {
-  content: '✓';
+  content: 'âœ“';
   position: absolute;
   top: -0.75rem;
   right: -0.75rem;
@@ -338,7 +371,7 @@ button:focus-visible {
   border-radius: 0.25rem;
   background: #07110def;
   color: #f3f7fb;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   font-weight: 500;
   white-space: nowrap;
   pointer-events: none;
@@ -364,20 +397,32 @@ button:focus-visible {
 /* 075 fleet panel: one reusable row per taxi; text and symbol carry the state, colour reinforces. */
 .fleet-panel {
   position: fixed;
-  left: 1rem;
-  bottom: 1rem;
+  top: calc(var(--layout-inset) + var(--layout-hud-reserve) + var(--layout-gap));
+  left: var(--layout-inset);
+  bottom: auto;
   z-index: 3;
   display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
   gap: 0.5rem;
-  width: min(24rem, calc(100vw - 2rem));
-  max-height: min(28rem, calc(100vh - 2rem));
+  width: min(var(--layout-fleet-width), calc(100vw - 2rem));
+  /* 084: the row cap is the ceiling; the viewport clamp keeps the list scrollable instead of
+     covering the bottom edge. The 30-row list always scrolls inside this box. */
+  max-height: max(
+    var(--layout-fleet-min-height),
+    min(
+      calc(var(--layout-fleet-max-rows) * var(--layout-fleet-row) + var(--layout-fleet-chrome)),
+      calc(100vh - var(--layout-hud-reserve) - var(--layout-gap) - var(--layout-inset) * 2)
+    )
+  );
+  min-width: 0;
   padding: 0.75rem 0.85rem;
   border: 1px solid #ffffff2b;
   border-radius: 0.75rem;
   background: #0d1714f2;
   color: #f3f7fb;
   font-size: 0.85rem;
-  line-height: 1.35;
+  line-height: 1.4;
+  overflow: hidden;
   text-shadow: 0 1px 2px #000000b3;
 }
 
@@ -416,7 +461,7 @@ button:focus-visible {
 }
 
 .fleet-panel__caption {
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
@@ -442,7 +487,12 @@ button:focus-visible {
   gap: 0.28rem;
   margin: 0;
   padding: 0;
+  min-height: 0;
   overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  overscroll-behavior: contain;
+  scroll-padding-block: 0.25rem;
   list-style: none;
 }
 
@@ -549,21 +599,29 @@ button:focus-visible {
 /* 077 profile panel: read-only values; reserved, illustrative and delta states are carried by text. */
 .profile-panel {
   position: fixed;
-  top: 1rem;
-  right: 1rem;
+  top: 50%;
+  left: 50%;
+  right: auto;
+  bottom: auto;
+  transform: translate(-50%, -50%);
   z-index: 3;
   display: grid;
   gap: 0.5rem;
-  width: min(26rem, calc(100vw - 2rem));
-  max-height: min(34rem, calc(100vh - 2rem));
+  width: min(var(--layout-panel-width), calc(100vw - 2rem));
+  max-height: var(--layout-panel-max-height);
+  min-width: 0;
   padding: 0.75rem 0.85rem;
   border: 1px solid #ffffff2b;
   border-radius: 0.75rem;
   background: #0d1714f2;
   color: #f3f7fb;
   font-size: 0.82rem;
-  line-height: 1.35;
+  line-height: 1.4;
   overflow-y: auto;
+  overflow-x: hidden;
+  overflow-wrap: anywhere;
+  scroll-padding-block: 0.5rem;
+  scrollbar-width: thin;
   text-shadow: 0 1px 2px #000000b3;
 }
 
@@ -572,10 +630,15 @@ button:focus-visible {
 }
 
 .profile-panel__header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
   gap: 0.35rem 0.5rem;
+  padding-block: 0.15rem;
+  background: #0d1714f2;
 }
 
 .profile-panel__title {
@@ -588,7 +651,7 @@ button:focus-visible {
   padding: 0.1rem 0.4rem;
   border: 1px solid #ffffff2b;
   border-radius: 999px;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
@@ -619,7 +682,7 @@ button:focus-visible {
 .profile-panel__identity dt,
 .profile-panel__details-body dt {
   color: #b9cfc5;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
@@ -693,8 +756,8 @@ button:focus-visible {
 .profile-panel__row {
   display: grid;
   grid-template-areas:
-    'label value'
-    'reason reason'
+    'label value .'
+    'reason reason .'
     'uncertainty evidence source';
   grid-template-columns: auto auto 1fr;
   gap: 0.05rem 0.5rem;
@@ -720,21 +783,21 @@ button:focus-visible {
 .profile-panel__reason {
   grid-area: reason;
   color: #b9cfc5;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   overflow-wrap: anywhere;
 }
 
 .profile-panel__uncertainty {
   grid-area: uncertainty;
   color: #c6dbd1;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   font-variant-numeric: tabular-nums;
 }
 
 .profile-panel__evidence {
   grid-area: evidence;
   color: #c6dbd1;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   font-variant-numeric: tabular-nums;
 }
 
@@ -742,7 +805,7 @@ button:focus-visible {
   grid-area: source;
   justify-self: end;
   color: #9edbb5;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
 }
 
 .profile-panel__row[data-status='UNOBSERVED'] .profile-panel__value {
@@ -818,14 +881,14 @@ button:focus-visible {
 
 .profile-panel__delta-reason {
   color: #c6dbd1;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   overflow-wrap: anywhere;
 }
 
 .profile-panel__delta-evidence {
   justify-self: end;
   color: #b9cfc5;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
 }
 
 .profile-panel__description {
@@ -849,15 +912,20 @@ button:focus-visible {
   display: grid;
   gap: 0.55rem;
   width: min(24rem, calc(100vw - 2rem));
-  max-height: min(34rem, calc(100vh - 2rem));
+  max-height: var(--layout-panel-max-height);
+  min-width: 0;
   padding: 0.75rem 0.85rem;
   border: 1px solid #ffffff2b;
   border-radius: 0.75rem;
   background: #0d1714f2;
   color: #f3f7fb;
   font-size: 0.82rem;
-  line-height: 1.35;
+  line-height: 1.4;
   overflow-y: auto;
+  overflow-x: hidden;
+  overflow-wrap: anywhere;
+  scroll-padding-block: 0.5rem;
+  scrollbar-width: thin;
   text-shadow: 0 1px 2px #000000b3;
 }
 
@@ -866,10 +934,15 @@ button:focus-visible {
 }
 
 .profile-history__header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: 0.5rem;
+  padding-block: 0.15rem;
+  background: #0d1714f2;
 }
 
 .profile-history__title {
@@ -891,7 +964,7 @@ button:focus-visible {
 
 .profile-history__identity dt {
   color: #b9cfc5;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
@@ -977,7 +1050,7 @@ button:focus-visible {
 .profile-history__engine {
   grid-area: engine;
   color: #b9cfc5;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   overflow-wrap: anywhere;
 }
 
@@ -985,7 +1058,7 @@ button:focus-visible {
   grid-area: source;
   justify-self: end;
   color: #b9cfc5;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
 }
 
 .profile-history__item[data-current='true'] .profile-history__version {
@@ -1073,7 +1146,7 @@ button:focus-visible {
 .profile-history__change-reason {
   grid-column: 1 / -1;
   color: #c6dbd1;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   overflow-wrap: anywhere;
 }
 
@@ -1140,18 +1213,25 @@ button:focus-visible {
   border: 0;
 }
 
-/* 079 learning notifications: at most three short rows; the symbol and text carry every state. */
+/* 079 learning notifications: at most three short rows; the symbol and text carry every state.
+   084: anchored in the right column below the minimap, so a transient notification never covers the
+   driving HUD, the fleet rows or the centre profile/dashboard panel. */
 .learning-notifications {
   position: fixed;
-  bottom: 1rem;
-  left: 1rem;
+  top: calc(var(--layout-inset) + var(--layout-minimap-width) + 4rem);
+  right: var(--layout-inset);
+  bottom: auto;
+  left: auto;
   z-index: 4;
   display: grid;
   gap: 0.35rem;
-  width: min(24rem, calc(100vw - 2rem));
+  width: min(var(--layout-notifications-width), calc(100vw - 2rem));
+  max-height: calc(100vh - var(--layout-inset) - var(--layout-minimap-width) - 5rem);
+  overflow-y: auto;
+  scrollbar-width: thin;
   color: #f3f7fb;
   font-size: 0.8rem;
-  line-height: 1.35;
+  line-height: 1.4;
   text-shadow: 0 1px 2px #000000b3;
   pointer-events: none;
 }
@@ -1191,7 +1271,7 @@ button:focus-visible {
   grid-column: 2 / -1;
   margin: 0;
   color: #c6dbd1;
-  font-size: 0.74rem;
+  font-size: 0.75rem;
   overflow-wrap: anywhere;
 }
 
@@ -1200,7 +1280,7 @@ button:focus-visible {
   margin: 0;
   padding-left: 1rem;
   color: #ffd27f;
-  font-size: 0.74rem;
+  font-size: 0.75rem;
 }
 
 .learning-notifications__missing-item {
@@ -1234,7 +1314,7 @@ button:focus-visible {
 .learning-notifications__summary {
   margin: 0;
   color: #b9cfc5;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
 }
 
 .learning-notifications__item[data-kind='RESULT'] {
@@ -1296,7 +1376,7 @@ button:focus-visible {
   background: #0d1714f2;
   color: #f3f7fb;
   font-size: 0.85rem;
-  line-height: 1.35;
+  line-height: 1.4;
   text-shadow: 0 1px 2px #000000b3;
 }
 
@@ -1394,7 +1474,7 @@ button:focus-visible {
 .key-remapping__message {
   grid-area: message;
   color: #ffd27f;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   overflow-wrap: anywhere;
 }
 
@@ -1480,29 +1560,42 @@ button:focus-visible {
 /* 082 city dashboard: metrics, exposure and incident drilldown; text carries unavailable vs zero. */
 .city-dashboard {
   position: fixed;
-  top: 1rem;
-  left: 1rem;
+  top: 50%;
+  left: 50%;
+  right: auto;
+  bottom: auto;
+  transform: translate(-50%, -50%);
   z-index: 3;
   display: grid;
   gap: 0.6rem;
-  width: min(27rem, calc(100vw - 2rem));
-  max-height: min(36rem, calc(100vh - 2rem));
+  width: min(var(--layout-panel-width), calc(100vw - 2rem));
+  max-height: var(--layout-panel-max-height);
+  min-width: 0;
   padding: 0.75rem 0.85rem;
   border: 1px solid #ffffff2b;
   border-radius: 0.75rem;
   background: #0d1714f2;
   color: #f3f7fb;
   font-size: 0.82rem;
-  line-height: 1.35;
+  line-height: 1.4;
   overflow-y: auto;
+  overflow-x: hidden;
+  overflow-wrap: anywhere;
+  scroll-padding-block: 0.5rem;
+  scrollbar-width: thin;
   text-shadow: 0 1px 2px #000000b3;
 }
 
 .city-dashboard__header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: 0.5rem;
+  padding-block: 0.15rem;
+  background: #0d1714f2;
 }
 
 .city-dashboard__title {
@@ -1550,7 +1643,7 @@ button:focus-visible {
 .city-dashboard__metric-label {
   grid-area: label;
   color: #b9cfc5;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
@@ -1565,7 +1658,7 @@ button:focus-visible {
   grid-area: sample;
   justify-self: end;
   color: #9bb3a8;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
 }
 
 .city-dashboard__metric-reason {
@@ -1614,7 +1707,7 @@ button:focus-visible {
 
 .city-dashboard__exposure-grid dt {
   color: #b9cfc5;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
@@ -1744,28 +1837,40 @@ button:focus-visible {
 /* 081 game settings: device preferences (units/camera/comfort/graphics), no learned-style editor. */
 .game-settings {
   position: fixed;
-  top: 1rem;
+  top: 50%;
   left: 50%;
+  right: auto;
+  bottom: auto;
   z-index: 5;
   display: grid;
   gap: 0.55rem;
-  width: min(32rem, calc(100vw - 2rem));
-  max-height: min(42rem, calc(100vh - 2rem));
+  width: min(var(--layout-panel-width), calc(100vw - 2rem));
+  max-height: var(--layout-panel-max-height);
+  min-width: 0;
   padding: 0.85rem 1rem;
   overflow-y: auto;
+  overflow-x: hidden;
+  overflow-wrap: anywhere;
+  scroll-padding-block: 0.5rem;
+  scrollbar-width: thin;
   border: 1px solid #ffffff2b;
   border-radius: 0.75rem;
   background: #0d1714f5;
   color: #f3f7fb;
   font-size: 0.85rem;
-  line-height: 1.35;
+  line-height: 1.4;
   text-shadow: 0 1px 2px #000000b3;
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%);
 }
 
 .game-settings__header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
   display: grid;
   gap: 0.25rem;
+  padding-block: 0.15rem;
+  background: #0d1714f5;
 }
 
 .game-settings__title {
@@ -1914,4 +2019,118 @@ button:focus-visible {
 .game-settings__footer button:focus-visible {
   outline: 3px solid #9edbb5;
   outline-offset: 2px;
+}
+
+/* 084: every layout cap is a border-box cap, so the declared px in `responsive-layout.ts` match
+   the rectangles the browser reports (padding and border included). */
+.taxi-hud,
+.minimap,
+.fleet-panel,
+.profile-panel,
+.profile-history,
+.city-dashboard,
+.game-settings,
+.learning-notifications {
+  box-sizing: border-box;
+}
+
+/* 084: a panel hidden by the host stays hidden even where its class sets `display: grid`. */
+.city-dashboard[hidden],
+.game-settings[hidden],
+.learning-notifications[hidden] {
+  display: none;
+}
+
+/* 084 compact: viewport width <= 1279 px or height <= 719 px, or a browser zoom that reduces the
+   CSS viewport below those values. The HUD and minimap stay legible (>= 0.75rem), the fleet column
+   keeps its own scroll, and the centre panel is placed strictly between the HUD and minimap columns
+   so it never covers the speed output, mode buttons, minimap status or the pause/recovery controls. */
+@media (max-width: 1279px), (max-height: 719px) {
+  :root {
+    --layout-hud-width: 15rem;
+    --layout-hud-reserve: 22rem;
+    --layout-hud-font: 0.85rem;
+    --layout-minimap-width: 10rem;
+    --layout-minimap-font: 0.75rem;
+    --layout-fleet-width: 14rem;
+    --layout-fleet-row: 2.5rem;
+    --layout-fleet-chrome: 5rem;
+    --layout-fleet-min-height: 6rem;
+    --layout-fleet-max-rows: 8;
+    --layout-panel-width: 24rem;
+    --layout-panel-max-height: min(90vh, calc(100vh - 2rem));
+    --layout-notifications-width: 10rem;
+    --layout-font-scale: 0.9;
+  }
+
+  .profile-panel,
+  .city-dashboard,
+  .game-settings {
+    top: var(--layout-inset);
+    right: calc(var(--layout-minimap-width) + var(--layout-gap) * 2);
+    bottom: auto;
+    left: calc(var(--layout-hud-width) + var(--layout-gap) * 2);
+    width: auto;
+    max-width: var(--layout-panel-width);
+    max-height: var(--layout-panel-max-height);
+    margin-inline: auto;
+    transform: none;
+  }
+
+  .game-settings__row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .game-settings__value {
+    justify-self: start;
+    text-align: left;
+  }
+
+  .city-dashboard__exposure-grid {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .city-dashboard__metrics {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* 084 short viewport: the fleet column is the outer scroll container and the 30-row list keeps a
+     usable minimum, so the panel stays operable instead of collapsing to its header. */
+  .fleet-panel {
+    overflow-y: auto;
+  }
+
+  .fleet-panel__rows {
+    min-height: 5rem;
+  }
+
+  /* 084 short viewport: the transient notifications keep the right column under the minimap, narrowed
+     so they never reach the centre panel. They scroll inside a capped box; the speed output, mode
+     buttons, pause/recovery controls, fleet rows and minimap status stay unobstructed. */
+  .learning-notifications {
+    width: min(var(--layout-notifications-width), calc(100vw - 2rem));
+    max-height: 9rem;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    pointer-events: auto;
+  }
+}
+
+/* 084 large: 1920ï¿½1080 and above. Wider centre panel and fleet column, more visible fleet rows,
+   same anchors and the same scroll contract. */
+@media (min-width: 1920px) and (min-height: 1080px) {
+  :root {
+    --layout-hud-reserve: 22rem;
+    --layout-hud-font: 1rem;
+    --layout-minimap-font: 0.85rem;
+    --layout-fleet-width: 26rem;
+    --layout-fleet-row: 2.875rem;
+    --layout-fleet-chrome: 6rem;
+    --layout-fleet-min-height: 0rem;
+    --layout-fleet-max-rows: 14;
+    --layout-panel-width: 32rem;
+    --layout-panel-max-height: min(90vh, 54rem);
+    --layout-notifications-width: 26rem;
+    --layout-font-scale: 1.05;
+  }
 }

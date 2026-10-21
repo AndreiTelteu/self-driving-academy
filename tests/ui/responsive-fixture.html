@@ -1,0 +1,706 @@
+<!doctype html>
+<html lang="ro">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>084 responsive fixture</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="../../src/style.css" />
+  </head>
+  <body>
+    <main id="fixture">
+      <section class="taxi-hud" data-testid="panel-hud" aria-label="HUD de condus" data-mode="AUTO">
+        <div class="taxi-hud__speed">
+          <span>Viteză</span>
+          <output data-testid="essential-speed" aria-label="Viteză: 45 kilometri pe oră">45</output>
+          <span class="taxi-hud__unit">km/h</span>
+        </div>
+        <div class="taxi-hud__mode" role="status" data-testid="essential-mode-buttons">
+          <span class="taxi-hud__symbol" aria-hidden="true">A</span>
+          <span>Conduce AI-ul</span>
+          <button type="button" data-testid="essential-pause">Pauză</button>
+          <button type="button" data-testid="essential-recovery">Recuperare</button>
+        </div>
+        <div class="taxi-hud__taxi"><span>Taxi</span> <span>Taxi #12</span></div>
+        <dl class="taxi-hud__ride">
+          <dt>Etapă</dt>
+          <dd>Spre pasager</dd>
+          <dt>Obiectiv</dt>
+          <dd>Ridică pasagerul din zona Piața Centrală</dd>
+          <dt>Rută</dt>
+          <dd>12 benzi · 42%</dd>
+          <dt>ETA</dt>
+          <dd>~2 min 05 s</dd>
+          <dt>Progres</dt>
+          <dd>42% · 320 m</dd>
+          <dt>Serviciu</dt>
+          <dd>Liber</dd>
+        </dl>
+        <details class="taxi-hud__details">
+          <summary>Detalii</summary>
+          <dl>
+            <dt>Taxi</dt>
+            <dd>taxi:057:12</dd>
+            <dt>Clasă</dt>
+            <dd>sedan</dd>
+            <dt>Profil</dt>
+            <dd>style:city</dd>
+            <dt>Versiune profil</dt>
+            <dd>v3</dd>
+          </dl>
+        </details>
+      </section>
+
+      <section class="minimap" data-testid="panel-minimap" aria-label="Minimapă nord-sus">
+        <canvas class="minimap__static" width="240" height="240" aria-hidden="true"></canvas>
+        <canvas class="minimap__dynamic" width="240" height="240" aria-hidden="true"></canvas>
+        <p class="minimap__status" data-testid="essential-minimap-status">
+          <span class="minimap__route">Rută: 12 benzi · 42%</span>
+          <span class="minimap__eta">ETA ~2 min 05 s</span>
+          <span class="minimap__progress">320 m</span>
+        </p>
+        <p class="minimap__description">
+          Minimapă nord-sus (X est, Z nord) cu harta, taxiul, poziția, progresul, ETA, motivul și
+          zonele de ridicare și predare.
+        </p>
+      </section>
+
+      <section class="fleet-panel" data-testid="panel-fleet" aria-label="Lista taxiurilor">
+        <header class="fleet-panel__header">
+          <h2 class="fleet-panel__title">Lista taxiurilor</h2>
+          <span class="fleet-panel__count">30 / 30</span>
+        </header>
+        <div class="fleet-panel__controls">
+          <label class="fleet-panel__control">
+            <span class="fleet-panel__caption">Filtru</span>
+            <select class="fleet-panel__filter">
+              <option>Toate</option>
+              <option>În cursă</option>
+              <option>Libere</option>
+              <option>Blocate</option>
+            </select>
+          </label>
+          <label class="fleet-panel__control">
+            <span class="fleet-panel__caption">Sortare</span>
+            <select class="fleet-panel__sort">
+              <option>Slot</option>
+              <option>Stare</option>
+              <option>ETA</option>
+            </select>
+          </label>
+        </div>
+        <ul class="fleet-panel__rows" role="listbox" aria-label="Taxiuri" id="fleet-rows"></ul>
+        <p class="fleet-panel__status" role="status">30 taxiuri vizibile · lista derulează</p>
+        <p class="fleet-panel__description">
+          Selectarea schimbă doar ținta camerei. Taxiul urmărit și primul taxi blocat rămân mereu
+          vizibile.
+        </p>
+      </section>
+
+      <section class="profile-panel" data-testid="panel-profile" aria-label="Panoul profilului">
+        <header class="profile-panel__header">
+          <h2 class="profile-panel__title">Profilul flotei</h2>
+          <span class="profile-panel__badge" data-illustrative="false">Publicat</span>
+          <span class="profile-panel__count">24 parametri</span>
+        </header>
+        <dl class="profile-panel__identity">
+          <dt>Profil</dt>
+          <dd>style:city</dd>
+          <dt>Versiune</dt>
+          <dd>v3</dd>
+          <dt>Motor</dt>
+          <dd>engine:2026.10</dd>
+        </dl>
+        <p class="profile-panel__banner" hidden>Date ilustrative</p>
+        <p class="profile-panel__summary" role="status">
+          18 observați · 4 neobservați · 2 rezervați
+        </p>
+        <details class="profile-panel__details">
+          <summary>Checksum și dovezi</summary>
+          <dl class="profile-panel__details-body">
+            <dt>Checksum</dt>
+            <dd>sha256:0840fixture</dd>
+            <dt>Dovezi</dt>
+            <dd>128 de dovezi</dd>
+          </dl>
+        </details>
+        <div class="profile-panel__sections" id="profile-sections"></div>
+        <section class="profile-panel__delta">
+          <h3>Modificări față de v2</h3>
+          <ul class="profile-panel__delta-rows">
+            <li class="profile-panel__delta-row">
+              <span class="profile-panel__delta-label">Distanță în mers</span>
+              <span class="profile-panel__delta-change">0.5 s → 0 s</span>
+              <span class="profile-panel__delta-reason">Opriri mai dese la verde</span>
+              <span class="profile-panel__delta-evidence">12 dovezi</span>
+            </li>
+          </ul>
+        </section>
+        <p class="profile-panel__description">
+          Panoul afișează valorile curente, incertitudinea, dovezile și sursa fiecărui parametru.
+        </p>
+      </section>
+
+      <section class="city-dashboard" data-testid="panel-city" aria-label="Tabloul orașului" hidden>
+        <header class="city-dashboard__header">
+          <h2 class="city-dashboard__title">Tabloul orașului</h2>
+          <span class="city-dashboard__count">7 indicatori</span>
+        </header>
+        <h3 class="city-dashboard__section-title">Indicatori</h3>
+        <ul class="city-dashboard__metrics" id="city-metrics"></ul>
+        <div class="city-dashboard__exposure" data-state="AVAILABLE">
+          <p class="city-dashboard__exposure-summary">Expunere: 3 ferestre</p>
+          <dl class="city-dashboard__exposure-grid">
+            <dt>Ferestre</dt>
+            <dd class="city-dashboard__exposure-value">3</dd>
+            <dt>Observații</dt>
+            <dd class="city-dashboard__exposure-value">180</dd>
+            <dt>Durată</dt>
+            <dd class="city-dashboard__exposure-value">6 min</dd>
+          </dl>
+        </div>
+        <h3 class="city-dashboard__section-title">Incidente</h3>
+        <ul class="city-dashboard__incidents" id="city-incidents"></ul>
+        <div class="city-dashboard__drilldown" data-status="AVAILABLE">
+          <p class="city-dashboard__drilldown-title">Coliziune · moderată</p>
+          <p class="city-dashboard__drilldown-position">Poziție: 12.5 m est, 40.1 m nord</p>
+          <p class="city-dashboard__drilldown-detail">Taxi #4 · cursa ride:084:4 · tick 512</p>
+        </div>
+        <p class="city-dashboard__status" role="status">7 indicatori · 4 incidente</p>
+      </section>
+
+      <section
+        class="game-settings"
+        data-testid="panel-settings"
+        aria-label="Setările jocului"
+        hidden
+      >
+        <header class="game-settings__header">
+          <h2 class="game-settings__title">Setările jocului</h2>
+          <p class="game-settings__live">Setări dispozitiv · nu modifică profilul învățat</p>
+        </header>
+        <section class="game-settings__section">
+          <h3 class="game-settings__heading">Unități</h3>
+          <div class="game-settings__row">
+            <span class="game-settings__label">Viteză</span>
+            <select class="game-settings__select">
+              <option>km/h</option>
+              <option>mph</option>
+            </select>
+            <span class="game-settings__value">km/h</span>
+          </div>
+          <div class="game-settings__row">
+            <span class="game-settings__label">Distanță</span>
+            <select class="game-settings__select">
+              <option>m</option>
+              <option>ft</option>
+            </select>
+            <span class="game-settings__value">m</span>
+          </div>
+        </section>
+        <section class="game-settings__section">
+          <h3 class="game-settings__heading">Cameră</h3>
+          <div class="game-settings__row">
+            <span class="game-settings__label">Mod cameră</span>
+            <select class="game-settings__select">
+              <option>CHASE</option>
+              <option>FIRST_PERSON</option>
+            </select>
+            <span class="game-settings__value">CHASE</span>
+          </div>
+        </section>
+        <section class="game-settings__section">
+          <h3 class="game-settings__heading">Confort</h3>
+          <div class="game-settings__row">
+            <label class="game-settings__label" for="comfort-steering"
+              >Sensibilitatea direcției</label
+            >
+            <input
+              class="game-settings__range"
+              id="comfort-steering"
+              type="range"
+              min="0"
+              max="100"
+              value="50"
+            />
+            <output class="game-settings__value">50</output>
+          </div>
+          <div class="game-settings__row">
+            <label class="game-settings__label" for="comfort-fov">Câmp vizual</label>
+            <input
+              class="game-settings__range"
+              id="comfort-fov"
+              type="range"
+              min="60"
+              max="100"
+              value="80"
+            />
+            <output class="game-settings__value">80°</output>
+          </div>
+        </section>
+        <section class="game-settings__section">
+          <h3 class="game-settings__heading">Grafică</h3>
+          <div class="game-settings__row">
+            <span class="game-settings__label">Preset</span>
+            <select class="game-settings__select">
+              <option>LOW</option>
+              <option selected>MEDIUM</option>
+              <option>HIGH</option>
+            </select>
+            <span class="game-settings__value">MEDIUM</span>
+          </div>
+        </section>
+        <section class="game-settings__section game-settings__section--unavailable">
+          <h3 class="game-settings__heading">Audio</h3>
+          <p class="game-settings__audio">Indisponibil · 148 · PBI_148_PENDING</p>
+        </section>
+        <p class="game-settings__preview">12.5 m/s = 45 km/h = 28 mph · 120 m = 394 ft</p>
+        <div class="game-settings__footer">
+          <button type="button" class="game-settings__save">Salvează</button>
+          <button type="button">Renunță</button>
+          <button type="button">Resetează</button>
+          <p class="game-settings__policy">
+            Setări dispozitiv · nu modifică profilul învățat, AI-ul sau stilul flotei.
+          </p>
+        </div>
+      </section>
+
+      <section
+        class="learning-notifications"
+        data-testid="panel-notifications"
+        aria-label="Notificări de analiză"
+      >
+        <ul class="learning-notifications__list">
+          <li class="learning-notifications__item" data-kind="RESULT">
+            <span class="learning-notifications__symbol" aria-hidden="true">✓</span>
+            <p class="learning-notifications__text">Candidat validat, nepublicat</p>
+            <p class="learning-notifications__detail">Segmentul 4 · jobul 12 · 18 dovezi</p>
+          </li>
+          <li class="learning-notifications__item" data-kind="INSUFFICIENT_EVIDENCE">
+            <span class="learning-notifications__symbol" aria-hidden="true">?</span>
+            <p class="learning-notifications__text">Dovezi insuficiente</p>
+            <p class="learning-notifications__detail">2 din 3 opriri observate</p>
+          </li>
+          <li class="learning-notifications__item" data-kind="ERROR">
+            <span class="learning-notifications__symbol" aria-hidden="true">!</span>
+            <p class="learning-notifications__text">Analiza a eșuat</p>
+            <p class="learning-notifications__detail">Reîncercare la următorul segment</p>
+          </li>
+        </ul>
+        <p class="learning-notifications__summary">3 notificări · plafon 10 Hz</p>
+      </section>
+    </main>
+
+    <script>
+      (() => {
+        const options = Object.assign(
+          { center: 'profile', zoom: 1 },
+          window.__fixtureOptions || {},
+        );
+        const params = new URLSearchParams(globalThis.location.search);
+        const center = params.get('center') || options.center;
+        const zoom = Number(params.get('zoom') || options.zoom) || 1;
+
+        const states = ['BUSY', 'FREE', 'BLOCKED'];
+        const labels = { BUSY: 'În cursă', FREE: 'Liber', BLOCKED: 'Blocat' };
+        const stages = ['Spre pasager', 'La pasager', 'Spre destinație', 'La destinație'];
+        const fleet = document.querySelector('#fleet-rows');
+        for (let slot = 1; slot <= 30; slot += 1) {
+          const state = slot <= 10 ? 'BUSY' : slot <= 20 ? 'FREE' : 'BLOCKED';
+          const item = document.createElement('li');
+          item.className = 'fleet-panel__item';
+          item.dataset.state = state;
+          item.dataset.pinned = slot === 21 ? 'true' : 'false';
+          const row = document.createElement('button');
+          row.type = 'button';
+          row.className = 'fleet-panel__row';
+          row.setAttribute('role', 'option');
+          row.setAttribute('aria-selected', slot === 12 ? 'true' : 'false');
+          row.setAttribute(
+            'aria-label',
+            `Taxi #${slot}, ${labels[state]}, ${stageOf(slot)}, ETA ${etaOf(slot)}, sedan, profil style:city v3`,
+          );
+          row.innerHTML = `<span class="fleet-panel__slot">Taxi #${slot}</span><span class="fleet-panel__state">${labels[state]}</span><span class="fleet-panel__mode">A · Conduce AI-ul</span><span class="fleet-panel__ride">${stageOf(slot)}</span><span class="fleet-panel__eta">${etaOf(slot)}</span><span class="fleet-panel__profile">sedan · style:city · v3</span>`;
+          item.append(row);
+          fleet.append(item);
+        }
+        function stageOf(slot) {
+          return slot <= 10 ? stages[slot % stages.length] : 'Nicio cursă activă';
+        }
+        function etaOf(slot) {
+          return slot <= 10 ? `~${slot % 4 === 0 ? '2 min 05 s' : `${slot} min`}` : 'Fără estimare';
+        }
+
+        const parameters = [
+          [
+            'speed_delta_urban',
+            'Ritm pe străzile orașului',
+            '12.5 km/h',
+            '±0.4',
+            '24 dovezi',
+            'Învățat',
+            'OBSERVED',
+          ],
+          [
+            'desired_acceleration',
+            'Plecare de pe loc',
+            '1.8 m/s²',
+            '±0.2',
+            '18 dovezi',
+            'Învățat',
+            'OBSERVED',
+          ],
+          [
+            'comfort_deceleration',
+            'Frânare obișnuită',
+            '2.4 m/s²',
+            '±0.3',
+            '16 dovezi',
+            'Reglat manual',
+            'OBSERVED',
+          ],
+          [
+            'following_time_headway',
+            'Distanță în mers',
+            '1.6 s',
+            '±0.1',
+            '21 dovezi',
+            'Învățat',
+            'OBSERVED',
+          ],
+          [
+            'following_min_gap',
+            'Spațiu minim în mers',
+            '2.5 m',
+            '±0.2',
+            '9 dovezi',
+            'Bază',
+            'OBSERVED',
+          ],
+          [
+            'red_stop_probability',
+            'Oprire la roșu',
+            '94 %',
+            '±2',
+            '30 dovezi',
+            'Învățat',
+            'OBSERVED',
+          ],
+          [
+            'stop_full_probability',
+            'Oprire completă la STOP',
+            '88 %',
+            '±3',
+            '11 dovezi',
+            'Învățat',
+            'OBSERVED',
+          ],
+          [
+            'green_start_delay',
+            'Reacție la verde',
+            '0.8 s',
+            '±0.1',
+            '14 dovezi',
+            'Învățat',
+            'OBSERVED',
+          ],
+          [
+            'lane_change_threshold',
+            'Schimbare de bandă',
+            '0.35',
+            '±0.05',
+            '6 dovezi',
+            'Învățat',
+            'OBSERVED',
+          ],
+          [
+            'yield_gap',
+            'Cedare la intersecție',
+            '3.2 s',
+            '±0.4',
+            '5 dovezi',
+            'Importat',
+            'OBSERVED',
+          ],
+          [
+            'corner_speed_factor',
+            'Viteză în viraj',
+            '0.82',
+            '±0.03',
+            '8 dovezi',
+            'Învățat',
+            'OBSERVED',
+          ],
+          ['camera_motion', 'Mișcarea camerei', '40', '—', '0 dovezi', '—', 'UNOBSERVED'],
+          ['fov', 'Câmp vizual', '80°', '—', '0 dovezi', '—', 'UNOBSERVED'],
+          ['aggressiveness', 'Agresivitate', 'Neobservat', '—', '0 dovezi', '—', 'UNOBSERVED'],
+          ['brake_ramp', 'Frânare progresivă', 'Neobservat', '—', '0 dovezi', '—', 'UNOBSERVED'],
+          [
+            'extension_signal',
+            'Extensie semnalizare',
+            'Rezervat · neînvățabil V1',
+            '—',
+            '0 dovezi',
+            '—',
+            'RESERVED',
+          ],
+          [
+            'extension_route',
+            'Extensie rută',
+            'Rezervat · neînvățabil V1',
+            '—',
+            '0 dovezi',
+            '—',
+            'RESERVED',
+          ],
+        ];
+        const sections = document.querySelector('#profile-sections');
+        for (const title of ['Conducere', 'Confort', 'Extensii']) {
+          const section = document.createElement('section');
+          section.className = 'profile-panel__section';
+          section.innerHTML = `<h3 class="profile-panel__section-title">${title}</h3><ul class="profile-panel__rows"></ul>`;
+          sections.append(section);
+        }
+        const lists = sections.querySelectorAll('.profile-panel__rows');
+        parameters.forEach((parameter, index) => {
+          const [key, label, value, uncertainty, evidence, source, status] = parameter;
+          const row = document.createElement('li');
+          row.className = 'profile-panel__row';
+          row.dataset.status = status;
+          row.setAttribute('aria-label', `${label}: ${value}, ${evidence}, ${source}`);
+          row.innerHTML = `<span class="profile-panel__label" title="${key}">${label}</span><span class="profile-panel__value">${value}</span><span class="profile-panel__uncertainty">${uncertainty}</span><span class="profile-panel__evidence">${evidence}</span><span class="profile-panel__source">${source}</span><span class="profile-panel__reason">${status === 'OBSERVED' ? 'Valoare publicată în versiunea curentă' : status === 'RESERVED' ? 'Cheie rezervată extensiilor' : 'Valoarea lipsește din profil'}</span>`;
+          lists[index % lists.length].append(row);
+        });
+
+        const metrics = [
+          ['Curse finalizate', '42', '42 curse'],
+          ['Durată medie', '6 min 12 s', '42 curse'],
+          ['Distanță parcursă', '128.4 km', '42 curse'],
+          ['Încălcări', 'Indisponibil', 'Sursă lipsă'],
+          ['Coliziuni', '0', '3 ferestre'],
+          ['Blocaje', '2', '3 ferestre'],
+          ['Confort', 'Indisponibil', 'Sursă lipsă'],
+        ];
+        const metricList = document.querySelector('#city-metrics');
+        for (const [label, value, sample] of metrics) {
+          const item = document.createElement('li');
+          item.className = 'city-dashboard__metric';
+          item.dataset.state = value === 'Indisponibil' ? 'UNAVAILABLE' : 'AVAILABLE';
+          item.innerHTML = `<span class="city-dashboard__metric-label">${label}</span><span class="city-dashboard__metric-value">${value}</span><span class="city-dashboard__metric-sample">${sample}</span><span class="city-dashboard__metric-reason">${value === 'Indisponibil' ? 'Sursă lipsă' : ''}</span>`;
+          metricList.append(item);
+        }
+        const incidents = [
+          ['COLLISION', 'Coliziune · moderată', 'tick 512'],
+          ['BLOCKAGE', 'Blocaj · minor', 'tick 480'],
+          ['VIOLATION', 'Încălcare · severă', 'tick 402'],
+          ['COMFORT', 'Confort · minor', 'tick 366'],
+        ];
+        const incidentList = document.querySelector('#city-incidents');
+        for (const [kind, label, detail] of incidents) {
+          const item = document.createElement('li');
+          item.className = 'city-dashboard__incident';
+          item.dataset.kind = kind;
+          item.dataset.located = 'true';
+          item.dataset.selected = 'false';
+          item.innerHTML = `<button type="button" class="city-dashboard__incident-row" role="option" aria-selected="false" aria-label="${label}, ${detail}"><span class="city-dashboard__incident-kind">${kind}</span><span class="city-dashboard__incident-label">${label} · ${detail}</span><span class="city-dashboard__incident-place">12.5 m / 40.1 m</span></button>`;
+          incidentList.append(item);
+        }
+
+        for (const id of ['profile', 'city', 'settings']) {
+          const panel = document.querySelector(`[data-testid="panel-${id}"]`);
+          if (panel) panel.hidden = id !== center;
+        }
+        window.__fixtureState = { center, zoom };
+
+        const panelTestIds = [
+          'panel-hud',
+          'panel-minimap',
+          'panel-fleet',
+          'panel-profile',
+          'panel-city',
+          'panel-settings',
+          'panel-notifications',
+        ];
+        const essentialTestIds = [
+          'essential-speed',
+          'essential-mode-buttons',
+          'essential-minimap-status',
+          'essential-pause',
+          'essential-recovery',
+        ];
+        const isVisible = (element) =>
+          element !== null && Boolean(element.getClientRects().length) && !element.hidden;
+        const rectOf = (element) => {
+          const rect = element.getBoundingClientRect();
+          return {
+            x: Math.round(rect.x * 100) / 100,
+            y: Math.round(rect.y * 100) / 100,
+            width: Math.round(rect.width * 100) / 100,
+            height: Math.round(rect.height * 100) / 100,
+            right: Math.round(rect.right * 100) / 100,
+            bottom: Math.round(rect.bottom * 100) / 100,
+          };
+        };
+        const intersection = (a, b) => {
+          const width = Math.min(a.right, b.right) - Math.max(a.x, b.x);
+          const height = Math.min(a.bottom, b.bottom) - Math.max(a.y, b.y);
+          return width > 0 && height > 0
+            ? { widthPx: Math.round(width * 100) / 100, heightPx: Math.round(height * 100) / 100 }
+            : null;
+        };
+        const scrollOf = (element) => {
+          if (!isVisible(element)) return null;
+          const style = getComputedStyle(element);
+          return {
+            scrollHeight: element.scrollHeight,
+            clientHeight: element.clientHeight,
+            scrollable: element.scrollHeight > element.clientHeight + 1,
+            overflowY: style.overflowY,
+            maxHeight: style.maxHeight,
+          };
+        };
+
+        window.__measureResponsive = () => {
+          const rects = {};
+          for (const testId of [...panelTestIds, ...essentialTestIds]) {
+            const element = document.querySelector(`[data-testid="${testId}"]`);
+            rects[testId] = {
+              visible: isVisible(element),
+              rect: isVisible(element) ? rectOf(element) : null,
+            };
+          }
+          const overlaps = [];
+          for (const testId of essentialTestIds) {
+            const element = document.querySelector(`[data-testid="${testId}"]`);
+            if (!isVisible(element)) continue;
+            for (const panelId of panelTestIds) {
+              const panel = document.querySelector(`[data-testid="${panelId}"]`);
+              if (!isVisible(panel) || panel.contains(element)) continue;
+              const hit = intersection(rectOf(panel), rectOf(element));
+              if (hit)
+                overlaps.push({
+                  a: panelId,
+                  b: testId,
+                  severity: 'critical',
+                  ...hit,
+                });
+            }
+          }
+          for (let left = 0; left < panelTestIds.length; left += 1)
+            for (let right = left + 1; right < panelTestIds.length; right += 1) {
+              const aId = panelTestIds[left];
+              const bId = panelTestIds[right];
+              if (aId === 'panel-notifications' || bId === 'panel-notifications') continue;
+              const a = document.querySelector(`[data-testid="${aId}"]`);
+              const b = document.querySelector(`[data-testid="${bId}"]`);
+              if (!isVisible(a) || !isVisible(b)) continue;
+              const hit = intersection(rectOf(a), rectOf(b));
+              if (hit) overlaps.push({ a: aId, b: bId, severity: 'critical', ...hit });
+            }
+          for (const panelId of panelTestIds.filter((id) => id !== 'panel-notifications')) {
+            const panel = document.querySelector(`[data-testid="${panelId}"]`);
+            const notifications = document.querySelector('[data-testid="panel-notifications"]');
+            if (!isVisible(panel) || !isVisible(notifications)) continue;
+            const hit = intersection(rectOf(panel), rectOf(notifications));
+            if (hit)
+              overlaps.push({
+                a: panelId,
+                b: 'panel-notifications',
+                severity: 'transient',
+                ...hit,
+              });
+          }
+
+          let minFontPx = Number.POSITIVE_INFINITY;
+          let minFontSelector = '';
+          for (const panelId of panelTestIds) {
+            const panel = document.querySelector(`[data-testid="${panelId}"]`);
+            if (!isVisible(panel)) continue;
+            for (const element of [panel, ...panel.querySelectorAll('*')]) {
+              if (!isVisible(element)) continue;
+              const style = getComputedStyle(element);
+              const fontSize = Number.parseFloat(style.fontSize);
+              const hasText = [...element.childNodes].some(
+                (node) => node.nodeType === Node.TEXT_NODE && node.textContent.trim() !== '',
+              );
+              if (hasText && Number.isFinite(fontSize) && fontSize < minFontPx) {
+                minFontPx = fontSize;
+                minFontSelector =
+                  element.className && typeof element.className === 'string'
+                    ? `${element.tagName.toLowerCase()}.${element.className.split(' ')[0]}`
+                    : element.tagName.toLowerCase();
+              }
+            }
+          }
+          const lineHeightSource =
+            document.querySelector('.profile-panel__row') ||
+            document.querySelector(`[data-testid="panel-${center}"]`) ||
+            document.querySelector('.fleet-panel__row');
+          const lineHeightStyle = lineHeightSource ? getComputedStyle(lineHeightSource) : null;
+          const lineHeightFontPx = lineHeightStyle
+            ? Number.parseFloat(lineHeightStyle.fontSize)
+            : 0;
+          const lineHeightPx =
+            lineHeightStyle && Number.isFinite(Number.parseFloat(lineHeightStyle.lineHeight))
+              ? Number.parseFloat(lineHeightStyle.lineHeight)
+              : 0;
+          const lineHeightRatio =
+            lineHeightFontPx > 0 && lineHeightPx > 0
+              ? Math.round((lineHeightPx / lineHeightFontPx) * 100) / 100
+              : 0;
+
+          const scrollable = {
+            fleetRows: scrollOf(document.querySelector('.fleet-panel__rows')),
+            fleetPanel: scrollOf(document.querySelector('.fleet-panel')),
+            profile: scrollOf(document.querySelector('[data-testid="panel-profile"]')),
+            city: scrollOf(document.querySelector('[data-testid="panel-city"]')),
+            settings: scrollOf(document.querySelector('[data-testid="panel-settings"]')),
+            centerVisible: scrollOf(document.querySelector(`[data-testid="panel-${center}"]`)),
+          };
+          const root = getComputedStyle(document.documentElement);
+          const layoutVariables = {};
+          for (const name of [
+            '--layout-hud-width',
+            '--layout-hud-reserve',
+            '--layout-minimap-width',
+            '--layout-fleet-width',
+            '--layout-fleet-max-rows',
+            '--layout-panel-width',
+            '--layout-panel-max-height',
+            '--layout-notifications-width',
+            '--layout-font-scale',
+          ])
+            layoutVariables[name] = root.getPropertyValue(name).trim();
+
+          return {
+            version: '084-responsive-layout-v1',
+            viewport: { widthPx: innerWidth, heightPx: innerHeight, devicePixelRatio },
+            zoom,
+            effectiveWidthPx: Math.round((innerWidth / zoom) * 100) / 100,
+            effectiveHeightPx: Math.round((innerHeight / zoom) * 100) / 100,
+            center,
+            compact: matchMedia('(max-width: 1279px), (max-height: 719px)').matches,
+            large: matchMedia('(min-width: 1920px) and (min-height: 1080px)').matches,
+            rects,
+            overlaps,
+            scrollable,
+            rows: document.querySelectorAll('.fleet-panel__item').length,
+            minFontPx: Number.isFinite(minFontPx) ? Math.round(minFontPx * 100) / 100 : null,
+            minFontSelector,
+            lineHeight: {
+              ratio: lineHeightRatio,
+              px: Math.round(lineHeightPx * 100) / 100,
+              selector: lineHeightSource
+                ? `${lineHeightSource.tagName.toLowerCase()}.${String(lineHeightSource.className).split(' ')[0]}`
+                : '',
+            },
+            layoutVariables,
+            documentScrollHeight: document.documentElement.scrollHeight,
+          };
+        };
+
+        window.__fixtureReady = true;
+      })();
+    </script>
+  </body>
+</html>

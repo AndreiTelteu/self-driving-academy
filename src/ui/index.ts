@@ -503,3 +503,34 @@ export {
   focusableControls,
 } from './panel-focus';
 export type { PanelFocusController, PanelFocusOptions, PanelFocusStats } from './panel-focus';
+export {
+  RESPONSIVE_BREAKPOINTS,
+  RESPONSIVE_LAYOUTS,
+  RESPONSIVE_LAYOUT_VERSION,
+  RESPONSIVE_MINIMUM_FLEET_HEIGHT_PX,
+  RESPONSIVE_MINIMUM_FONT_PX,
+  RESPONSIVE_MINIMUM_LINE_HEIGHT,
+  RESPONSIVE_ROOT_FONT_PX,
+  RESPONSIVE_SURFACE_IDS,
+  assertNoOverlap,
+  computeResponsiveLayout,
+  essentialControls,
+  findOverlaps,
+  responsiveRegion,
+  scrollableRegion,
+  textLegibility,
+} from './responsive-layout';
+export type {
+  EssentialControl,
+  EssentialControlId,
+  ResponsiveAnchor,
+  ResponsiveLayout,
+  ResponsiveOverlap,
+  ResponsiveRect,
+  ResponsiveRegion,
+  ResponsiveScrollRules,
+  ResponsiveSurface,
+  ResponsiveSurfaceId,
+  ResponsiveViewport,
+  TextLegibility,
+} from './responsive-layout';

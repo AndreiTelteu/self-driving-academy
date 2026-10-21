@@ -1,0 +1,580 @@
+{
+  "version": "084-responsive-layout-v1",
+  "contract": {
+    "breakpoints": {
+      "compactMaxWidthPx": 1279,
+      "compactMaxHeightPx": 719,
+      "standardMinWidthPx": 1280,
+      "standardMinHeightPx": 720,
+      "largeMinWidthPx": 1920,
+      "largeMinHeightPx": 1080,
+      "reducedViewportFromZoom": 1.5
+    },
+    "minimumFontPx": 12,
+    "minimumLineHeight": 1.4,
+    "essentialControls": [
+      "speed-output",
+      "mode-buttons",
+      "minimap-status",
+      "pause-control",
+      "recovery-control"
+    ],
+    "regions": {
+      "COMPACT": {
+        "condition": "width <= 1279 px or height <= 719 px",
+        "hudWidth": "15rem",
+        "minimapWidth": "10rem",
+        "fleetWidth": "14rem",
+        "panelWidth": "24rem",
+        "fleetMaxRows": 8
+      },
+      "STANDARD": {
+        "condition": "1280×720 up to 1919×1079",
+        "hudWidth": "22rem",
+        "minimapWidth": "15rem",
+        "fleetWidth": "24rem",
+        "panelWidth": "26rem",
+        "fleetMaxRows": 10
+      },
+      "LARGE": {
+        "condition": "width >= 1920 px and height >= 1080 px",
+        "hudWidth": "22rem",
+        "minimapWidth": "15rem",
+        "fleetWidth": "26rem",
+        "panelWidth": "32rem",
+        "fleetMaxRows": 14
+      }
+    }
+  },
+  "scenarios": [
+    {
+      "name": "1280×720 profile",
+      "viewport": {
+        "widthPx": 1280,
+        "heightPx": 720,
+        "zoom": 1
+      },
+      "region": "STANDARD",
+      "effectiveWidthPx": 1280,
+      "effectiveHeightPx": 720,
+      "hudWidthPx": 352,
+      "minimapWidthPx": 240,
+      "fleetWidthPx": 384,
+      "panelWidthPx": 416,
+      "panelMaxHeightPx": 648,
+      "panelMaxHeightRule": "min(90vh, 42rem)",
+      "gapPx": 12,
+      "fleetVisibleRows": 5,
+      "fleetMaxRows": 10,
+      "fleetHeightPx": 324,
+      "rectHeights": [
+        352,
+        288,
+        324,
+        648,
+        152
+      ],
+      "overlaps": [],
+      "notes": [
+        "STANDARD band: HUD 22rem top-left, minimap 15rem top-right, fleet 24rem below the HUD.",
+        "The contract reserves room for 5 rows; text wrapping may show fewer. The 30-row list scrolls inside the column."
+      ]
+    },
+    {
+      "name": "1920×1080 profile",
+      "viewport": {
+        "widthPx": 1920,
+        "heightPx": 1080,
+        "zoom": 1
+      },
+      "region": "LARGE",
+      "effectiveWidthPx": 1920,
+      "effectiveHeightPx": 1080,
+      "hudWidthPx": 352,
+      "minimapWidthPx": 240,
+      "fleetWidthPx": 416,
+      "panelWidthPx": 512,
+      "panelMaxHeightPx": 864,
+      "panelMaxHeightRule": "min(90vh, 54rem)",
+      "gapPx": 12,
+      "fleetVisibleRows": 12,
+      "fleetMaxRows": 14,
+      "fleetHeightPx": 684,
+      "rectHeights": [
+        352,
+        288,
+        684,
+        864,
+        152
+      ],
+      "overlaps": [],
+      "notes": [
+        "LARGE band: wider centre panel and fleet column, same anchors.",
+        "Visible rows rise to 12 (cap 14)."
+      ]
+    },
+    {
+      "name": "150% zoom (853×480 effective)",
+      "viewport": {
+        "widthPx": 1280,
+        "heightPx": 720,
+        "zoom": 1.5
+      },
+      "region": "COMPACT",
+      "effectiveWidthPx": 853.33,
+      "effectiveHeightPx": 480,
+      "hudWidthPx": 240,
+      "minimapWidthPx": 160,
+      "fleetWidthPx": 224,
+      "panelWidthPx": 384,
+      "panelMaxHeightPx": 432,
+      "panelMaxHeightRule": "min(90vh, calc(100vh - 2rem))",
+      "gapPx": 12,
+      "fleetVisibleRows": 0,
+      "fleetMaxRows": 8,
+      "fleetHeightPx": 96,
+      "rectHeights": [
+        352,
+        208,
+        96,
+        432,
+        152
+      ],
+      "overlaps": [],
+      "notes": [
+        "Zoom is modelled as innerWidth/zoom, exactly what CSS media queries see.",
+        "The centre panel is placed between the compact HUD and minimap columns."
+      ]
+    },
+    {
+      "name": "1920×700 compact height",
+      "viewport": {
+        "widthPx": 1920,
+        "heightPx": 700,
+        "zoom": 1
+      },
+      "region": "COMPACT",
+      "effectiveWidthPx": 1920,
+      "effectiveHeightPx": 700,
+      "hudWidthPx": 240,
+      "minimapWidthPx": 160,
+      "fleetWidthPx": 224,
+      "panelWidthPx": 384,
+      "panelMaxHeightPx": 480,
+      "panelMaxHeightRule": "min(90vh, calc(100vh - 2rem))",
+      "gapPx": 12,
+      "fleetVisibleRows": 5,
+      "fleetMaxRows": 8,
+      "fleetHeightPx": 304,
+      "rectHeights": [
+        352,
+        208,
+        304,
+        480,
+        152
+      ],
+      "overlaps": [],
+      "notes": [
+        "A short viewport is COMPACT even when the width is large.",
+        "Panels cap at calc(100vh - 2rem) and keep their internal scroll."
+      ]
+    },
+    {
+      "name": "fleet 30 rows",
+      "viewport": {
+        "widthPx": 1280,
+        "heightPx": 720,
+        "zoom": 1
+      },
+      "region": "STANDARD",
+      "effectiveWidthPx": 1280,
+      "effectiveHeightPx": 720,
+      "hudWidthPx": 352,
+      "minimapWidthPx": 240,
+      "fleetWidthPx": 384,
+      "panelWidthPx": 416,
+      "panelMaxHeightPx": 648,
+      "panelMaxHeightRule": "min(90vh, 42rem)",
+      "gapPx": 12,
+      "fleetVisibleRows": 5,
+      "fleetMaxRows": 10,
+      "fleetHeightPx": 324,
+      "rectHeights": [
+        352,
+        288,
+        324,
+        648,
+        152
+      ],
+      "overlaps": [],
+      "notes": [
+        "The fleet list keeps one scroll container; the row cap is a ceiling, not a promise of 30 visible rows."
+      ]
+    },
+    {
+      "name": "profile scroll",
+      "viewport": {
+        "widthPx": 1280,
+        "heightPx": 720,
+        "zoom": 1
+      },
+      "region": "STANDARD",
+      "effectiveWidthPx": 1280,
+      "effectiveHeightPx": 720,
+      "hudWidthPx": 352,
+      "minimapWidthPx": 240,
+      "fleetWidthPx": 384,
+      "panelWidthPx": 416,
+      "panelMaxHeightPx": 648,
+      "panelMaxHeightRule": "min(90vh, 42rem)",
+      "gapPx": 12,
+      "fleetVisibleRows": 5,
+      "fleetMaxRows": 10,
+      "fleetHeightPx": 324,
+      "rectHeights": [
+        352,
+        288,
+        324,
+        648,
+        152
+      ],
+      "overlaps": [],
+      "notes": [
+        "Profile/city/settings cap at min(90vh, 42rem) with overflow-y auto and a sticky header."
+      ]
+    },
+    {
+      "name": "overlap-free essentials",
+      "viewport": {
+        "widthPx": 1280,
+        "heightPx": 720,
+        "zoom": 1.5
+      },
+      "region": "COMPACT",
+      "effectiveWidthPx": 853.33,
+      "effectiveHeightPx": 480,
+      "hudWidthPx": 240,
+      "minimapWidthPx": 160,
+      "fleetWidthPx": 224,
+      "panelWidthPx": 384,
+      "panelMaxHeightPx": 432,
+      "panelMaxHeightRule": "min(90vh, calc(100vh - 2rem))",
+      "gapPx": 12,
+      "fleetVisibleRows": 0,
+      "fleetMaxRows": 8,
+      "fleetHeightPx": 96,
+      "rectHeights": [
+        352,
+        208,
+        96,
+        432,
+        152
+      ],
+      "overlaps": [],
+      "notes": [
+        "Speed output, mode buttons, minimap status, pause and recovery stay unobstructed at the tightest supported viewport."
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "name": "contract-version",
+      "expected": "084-responsive-layout-v1",
+      "actual": "084-responsive-layout-v1",
+      "pass": true,
+      "detail": "084 layout contract version"
+    },
+    {
+      "name": "1280-region",
+      "expected": "STANDARD",
+      "actual": "STANDARD",
+      "pass": true,
+      "detail": "1280×720 is the standard PC band"
+    },
+    {
+      "name": "1280-hud-width",
+      "expected": 352,
+      "actual": 352,
+      "pass": true,
+      "detail": "22rem HUD cap"
+    },
+    {
+      "name": "1280-minimap-width",
+      "expected": 240,
+      "actual": 240,
+      "pass": true,
+      "detail": "15rem minimap cap"
+    },
+    {
+      "name": "1280-fleet-width",
+      "expected": 384,
+      "actual": 384,
+      "pass": true,
+      "detail": "24rem fleet column"
+    },
+    {
+      "name": "1280-panel-width",
+      "expected": 416,
+      "actual": 416,
+      "pass": true,
+      "detail": "26rem centre panel"
+    },
+    {
+      "name": "1280-gap",
+      "expected": 12,
+      "actual": 12,
+      "pass": true,
+      "detail": "0.75rem region gap"
+    },
+    {
+      "name": "1280-fleet-below-hud",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the fleet column starts under the HUD with the shared gap"
+    },
+    {
+      "name": "1280-overlap-free",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "declared HUD/minimap/fleet/centre regions do not overlap"
+    },
+    {
+      "name": "1920-region",
+      "expected": "LARGE",
+      "actual": "LARGE",
+      "pass": true,
+      "detail": "1920×1080 is the large band"
+    },
+    {
+      "name": "1920-panel-width",
+      "expected": 512,
+      "actual": 512,
+      "pass": true,
+      "detail": "32rem centre panel"
+    },
+    {
+      "name": "1920-fleet-width",
+      "expected": 416,
+      "actual": 416,
+      "pass": true,
+      "detail": "26rem fleet column"
+    },
+    {
+      "name": "1920-more-rows",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "12 visible rows at 1080p vs 5 at 720p"
+    },
+    {
+      "name": "1920-overlap-free",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "large layout keeps the same anchors"
+    },
+    {
+      "name": "zoom-region",
+      "expected": "COMPACT",
+      "actual": "COMPACT",
+      "pass": true,
+      "detail": "150% zoom reduces the CSS viewport"
+    },
+    {
+      "name": "zoom-effective-width",
+      "expected": 853.33,
+      "actual": 853.33,
+      "pass": true,
+      "detail": "1280 / 1.5"
+    },
+    {
+      "name": "zoom-effective-height",
+      "expected": 480,
+      "actual": 480,
+      "pass": true,
+      "detail": "720 / 1.5"
+    },
+    {
+      "name": "zoom-overlap-free",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no panel covers an essential control when zoomed"
+    },
+    {
+      "name": "zoom-panel-between-columns",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the centre panel sits strictly between the HUD and minimap columns"
+    },
+    {
+      "name": "compact-height-region",
+      "expected": "COMPACT",
+      "actual": "COMPACT",
+      "pass": true,
+      "detail": "1920×700 is COMPACT because the height is 700"
+    },
+    {
+      "name": "compact-height-fleet-scrolls",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the fleet keeps its own scroll above the 6rem floor"
+    },
+    {
+      "name": "fleet-thirty-rows-scroll",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "30 rows always exceed the visible box"
+    },
+    {
+      "name": "fleet-standard-max-rows",
+      "expected": 10,
+      "actual": 10,
+      "pass": true,
+      "detail": "STANDARD row cap"
+    },
+    {
+      "name": "fleet-large-max-rows",
+      "expected": 14,
+      "actual": 14,
+      "pass": true,
+      "detail": "LARGE row cap"
+    },
+    {
+      "name": "panel-max-height-90vh",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "min(90vh, 42rem)"
+    },
+    {
+      "name": "panel-scroll-policy",
+      "expected": "auto",
+      "actual": "auto",
+      "pass": true,
+      "detail": "centre panels scroll vertically"
+    },
+    {
+      "name": "panel-css-overflow",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the profile panel CSS scrolls"
+    },
+    {
+      "name": "panel-css-sticky",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "profile header stays visible while scrolling"
+    },
+    {
+      "name": "panel-css-min-width",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "grid/flex panels may shrink"
+    },
+    {
+      "name": "panel-css-wrap",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "text wraps instead of overflowing"
+    },
+    {
+      "name": "settings-css-centre",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "settings is the centre modal"
+    },
+    {
+      "name": "city-css-centre",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "city dashboard is the centre modal"
+    },
+    {
+      "name": "media-compact",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "1279px/719px media query present"
+    },
+    {
+      "name": "media-large",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "1920×1080 media query present"
+    },
+    {
+      "name": "css-variables",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "all 16 layout variables exist in style.css"
+    },
+    {
+      "name": "text-legible-12",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "12 CSS px at 150% zoom is legible"
+    },
+    {
+      "name": "text-legible-device",
+      "expected": 18,
+      "actual": 18,
+      "pass": true,
+      "detail": "12 CSS px renders as 18 device px at 150% zoom"
+    },
+    {
+      "name": "text-not-legible-11-5",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "sizes below 12 CSS px are rejected"
+    },
+    {
+      "name": "essential-controls",
+      "expected": 5,
+      "actual": 5,
+      "pass": true,
+      "detail": "speed, mode, minimap status, pause and recovery"
+    },
+    {
+      "name": "essential-controls-free",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "no declared panel overlaps the HUD/minimap surfaces"
+    },
+    {
+      "name": "hud-font-floor",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the HUD font never falls below 0.75rem"
+    },
+    {
+      "name": "zoom-font-floor",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the compact minimap font stays at 0.75rem and panels keep scrolling"
+    }
+  ],
+  "summary": {
+    "checks": 42,
+    "passed": 42,
+    "pass": true
+  }
+}
