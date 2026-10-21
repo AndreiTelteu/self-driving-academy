@@ -120,7 +120,7 @@ sunt cumulative.
 Store-ul nu publică profiluri sau delta, nu emite `PROFILE_ACTIVATE`, nu scrie `implemented` și nu
 marchează valori `LEARNED`; `PROFILE_STORE_POLICY` documentează aceste absențe. Nu calculează
 estimări, nu decide dacă un delta trebuie aplicat și nu are worker, persistență, `learningEpoch`
-sau propagare la tick — acestea rămân în 102/103/110/127/205. Din cauza direcției de dependențe
+sau propagare la tick — acestea rămân în 102/103/110/127/205. Restaurarea, importul și profilul nou care consumă acest store sunt orchestrate în [profile-restore](profile-restore.md). Din cauza direcției de dependențe
 (`learning → profiles`), `src/profiles` nu poate importa validatorul 102 fără un ciclu de module;
 de aceea validatorul este un port obligatoriu, iar `createCandidateProfileStore` este legarea
 canonică. Un consumator care injectează alt validator este responsabil de contractul numeric;

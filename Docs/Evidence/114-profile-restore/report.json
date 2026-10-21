@@ -1,0 +1,647 @@
+{
+  "version": "114-profile-restore-v1",
+  "contract": {
+    "statuses": [
+      "COMMITTED",
+      "PENDING",
+      "ALREADY_ACTIVE",
+      "REJECTED"
+    ],
+    "provenances": [
+      "RESTORE",
+      "IMPORT",
+      "NEW_PROFILE",
+      "RESET_STYLE"
+    ],
+    "rejectionCodes": [
+      "VERSION_NOT_FOUND",
+      "VERSION_PROFILE_MISMATCH",
+      "VERSION_ENGINE_MISMATCH",
+      "VERSION_CORRUPT",
+      "VERSION_MUTATED",
+      "PROFILE_NOT_FOUND",
+      "PROFILE_MISMATCH",
+      "PLAYER_MISMATCH",
+      "BASE_NOT_FOUND",
+      "BASE_INVALID",
+      "TARGET_PROFILE_MISMATCH",
+      "IMPORT_INVALID",
+      "STORE_REJECTED",
+      "BARRIER_REJECTED",
+      "BARRIER_ROLLED_BACK",
+      "ACTIVATION_MISSING",
+      "TICK_NOT_ADVANCING"
+    ],
+    "barrierReasons": {
+      "RESTORE": "RESTORE",
+      "IMPORT": "IMPORT",
+      "NEW_PROFILE": "NEW_PROFILE",
+      "RESET_STYLE": "RESTORE"
+    },
+    "activationOrigins": {
+      "RESTORE": "RESTORE",
+      "IMPORT": "IMPORT",
+      "NEW_PROFILE": "MANUAL_TUNING",
+      "RESET_STYLE": "RESTORE"
+    },
+    "limits": {
+      "historyRows": 16,
+      "reportRows": 8,
+      "idCodeUnits": 256,
+      "reasonCodeUnits": 240
+    }
+  },
+  "scenarios": [
+    {
+      "name": "restore",
+      "status": "COMMITTED",
+      "reason": "RESTORE",
+      "provenance": "RESTORE",
+      "versionId": "profile-v2",
+      "versionCreated": false,
+      "versionsAdded": 0,
+      "barrierReason": "RESTORE",
+      "activationOrigin": "RESTORE",
+      "activationTick": 2,
+      "versions": [
+        "profile-v1",
+        "profile-v2",
+        "profile-v3"
+      ],
+      "progressionCalls": 0,
+      "cancelledJobs": [],
+      "physicalPreserved": true,
+      "pass": true
+    },
+    {
+      "name": "already_active",
+      "status": "ALREADY_ACTIVE",
+      "reason": "RESTORE",
+      "provenance": "RESTORE",
+      "versionId": "profile-v1",
+      "versionCreated": false,
+      "versionsAdded": 0,
+      "barrierReason": null,
+      "activationOrigin": null,
+      "activationTick": null,
+      "versions": [
+        "profile-v1",
+        "profile-v2",
+        "profile-v3"
+      ],
+      "progressionCalls": 0,
+      "cancelledJobs": [],
+      "physicalPreserved": null,
+      "pass": true
+    },
+    {
+      "name": "valid_import",
+      "status": "COMMITTED",
+      "reason": "IMPORT",
+      "provenance": "IMPORT",
+      "versionId": "import-v4",
+      "versionCreated": false,
+      "versionsAdded": 0,
+      "barrierReason": "IMPORT",
+      "activationOrigin": "IMPORT",
+      "activationTick": 2,
+      "versions": [
+        "profile-v1",
+        "profile-v2",
+        "profile-v3",
+        "import-v4"
+      ],
+      "progressionCalls": 0,
+      "cancelledJobs": [],
+      "physicalPreserved": true,
+      "pass": true
+    },
+    {
+      "name": "invalid_import",
+      "status": "REJECTED",
+      "reason": "IMPORT_INVALID",
+      "provenance": "IMPORT",
+      "versionId": null,
+      "versionCreated": false,
+      "versionsAdded": 0,
+      "barrierReason": null,
+      "activationOrigin": null,
+      "activationTick": null,
+      "versions": [
+        "profile-v1",
+        "profile-v2",
+        "profile-v3"
+      ],
+      "progressionCalls": 0,
+      "cancelledJobs": [],
+      "physicalPreserved": null,
+      "pass": true
+    },
+    {
+      "name": "new_profile",
+      "status": "COMMITTED",
+      "reason": "NEW_PROFILE",
+      "provenance": "NEW_PROFILE",
+      "versionId": "base-profile-b-2",
+      "versionCreated": false,
+      "versionsAdded": 0,
+      "barrierReason": "NEW_PROFILE",
+      "activationOrigin": "MANUAL_TUNING",
+      "activationTick": 2,
+      "versions": [
+        "base-profile-b",
+        "base-profile-b-2"
+      ],
+      "progressionCalls": 0,
+      "cancelledJobs": [],
+      "physicalPreserved": true,
+      "pass": true
+    },
+    {
+      "name": "style_reset",
+      "status": "COMMITTED",
+      "reason": "RESET_STYLE",
+      "provenance": "RESET_STYLE",
+      "versionId": "profile-v1",
+      "versionCreated": false,
+      "versionsAdded": 0,
+      "barrierReason": "RESTORE",
+      "activationOrigin": "RESTORE",
+      "activationTick": 3,
+      "versions": [
+        "profile-v1",
+        "profile-v2",
+        "profile-v3"
+      ],
+      "progressionCalls": 0,
+      "cancelledJobs": [],
+      "physicalPreserved": true,
+      "pass": true
+    },
+    {
+      "name": "active_session",
+      "status": "COMMITTED",
+      "reason": "RESTORE",
+      "provenance": "RESTORE",
+      "versionId": "profile-v2",
+      "versionCreated": false,
+      "versionsAdded": 0,
+      "barrierReason": "RESTORE",
+      "activationOrigin": "RESTORE",
+      "activationTick": 2,
+      "versions": [
+        "profile-v1",
+        "profile-v2",
+        "profile-v3"
+      ],
+      "progressionCalls": 0,
+      "cancelledJobs": [
+        "report-active-job"
+      ],
+      "physicalPreserved": true,
+      "pass": true
+    }
+  ],
+  "checks": [
+    {
+      "name": "restore.pending.status",
+      "expected": "PENDING",
+      "actual": "PENDING",
+      "pass": true,
+      "detail": "barrier scheduled"
+    },
+    {
+      "name": "restore.pending.barrier",
+      "expected": "barrier-0001",
+      "actual": "barrier-0001",
+      "pass": true,
+      "detail": "first barrier"
+    },
+    {
+      "name": "restore.pending.activation",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "not applied yet"
+    },
+    {
+      "name": "restore.pending.versionsAdded",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no version"
+    },
+    {
+      "name": "restore.status",
+      "expected": "COMMITTED",
+      "actual": "COMMITTED",
+      "pass": true,
+      "detail": "barrier committed"
+    },
+    {
+      "name": "restore.origin",
+      "expected": "RESTORE",
+      "actual": "RESTORE",
+      "pass": true,
+      "detail": "110 origin"
+    },
+    {
+      "name": "restore.barrierReason",
+      "expected": "RESTORE",
+      "actual": "RESTORE",
+      "pass": true,
+      "detail": "205 reason"
+    },
+    {
+      "name": "restore.versionsAdded",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "version reused"
+    },
+    {
+      "name": "restore.historyUnchanged",
+      "expected": "[\"profile-v1\",\"profile-v2\",\"profile-v3\"]",
+      "actual": "[\"profile-v1\",\"profile-v2\",\"profile-v3\"]",
+      "pass": true,
+      "detail": "no clone"
+    },
+    {
+      "name": "restore.versionId",
+      "expected": "profile-v2",
+      "actual": "profile-v2",
+      "pass": true,
+      "detail": "restored target"
+    },
+    {
+      "name": "alreadyActive.status",
+      "expected": "ALREADY_ACTIVE",
+      "actual": "ALREADY_ACTIVE",
+      "pass": true,
+      "detail": "no-op"
+    },
+    {
+      "name": "alreadyActive.barrier",
+      "expected": null,
+      "actual": null,
+      "pass": true,
+      "detail": "no barrier opened"
+    },
+    {
+      "name": "alreadyActive.barriers",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "empty history"
+    },
+    {
+      "name": "alreadyActive.changes",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no epoch change"
+    },
+    {
+      "name": "import.pending.status",
+      "expected": "PENDING",
+      "actual": "PENDING",
+      "pass": true,
+      "detail": "barrier scheduled"
+    },
+    {
+      "name": "import.pending.created",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "new 109 record"
+    },
+    {
+      "name": "import.pending.added",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "exactly one version"
+    },
+    {
+      "name": "import.stored",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "imported version exists"
+    },
+    {
+      "name": "import.parent",
+      "expected": "profile-v1",
+      "actual": "profile-v1",
+      "pass": true,
+      "detail": "explicit parent"
+    },
+    {
+      "name": "import.marker",
+      "expected": "IMPORTED",
+      "actual": "IMPORTED",
+      "pass": true,
+      "detail": "import provenance"
+    },
+    {
+      "name": "import.previousHistory",
+      "expected": "[\"profile-v1\",\"profile-v2\",\"profile-v3\"]",
+      "actual": "[\"profile-v1\",\"profile-v2\",\"profile-v3\"]",
+      "pass": true,
+      "detail": "old versions untouched"
+    },
+    {
+      "name": "import.status",
+      "expected": "COMMITTED",
+      "actual": "COMMITTED",
+      "pass": true,
+      "detail": "barrier committed"
+    },
+    {
+      "name": "import.origin",
+      "expected": "IMPORT",
+      "actual": "IMPORT",
+      "pass": true,
+      "detail": "110 origin"
+    },
+    {
+      "name": "import.barrierReason",
+      "expected": "IMPORT",
+      "actual": "IMPORT",
+      "pass": true,
+      "detail": "205 reason"
+    },
+    {
+      "name": "import.duplicate",
+      "expected": "ALREADY_ACTIVE",
+      "actual": "ALREADY_ACTIVE",
+      "pass": true,
+      "detail": "idempotent"
+    },
+    {
+      "name": "import.singleVersion",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "no second record"
+    },
+    {
+      "name": "invalidImport.status",
+      "expected": "REJECTED",
+      "actual": "REJECTED",
+      "pass": true,
+      "detail": "closed rejection"
+    },
+    {
+      "name": "invalidImport.reason",
+      "expected": "IMPORT_INVALID",
+      "actual": "IMPORT_INVALID",
+      "pass": true,
+      "detail": "closed reason"
+    },
+    {
+      "name": "invalidImport.barrier",
+      "expected": null,
+      "actual": null,
+      "pass": true,
+      "detail": "no barrier"
+    },
+    {
+      "name": "invalidImport.store",
+      "expected": "[\"fnv1a64:8821a6910d8845e2\",\"fnv1a64:2fc224f2e6b4ef94\",\"fnv1a64:408d9f1dc54879a3\"]",
+      "actual": "[\"fnv1a64:8821a6910d8845e2\",\"fnv1a64:2fc224f2e6b4ef94\",\"fnv1a64:408d9f1dc54879a3\"]",
+      "pass": true,
+      "detail": "store unchanged"
+    },
+    {
+      "name": "invalidImport.queue",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "queue unchanged"
+    },
+    {
+      "name": "invalidImport.activation",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no activation"
+    },
+    {
+      "name": "invalidImport.segments",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no segment rotation"
+    },
+    {
+      "name": "newProfile.pending.status",
+      "expected": "PENDING",
+      "actual": "PENDING",
+      "pass": true,
+      "detail": "barrier scheduled"
+    },
+    {
+      "name": "newProfile.pending.created",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "base created"
+    },
+    {
+      "name": "newProfile.versionId",
+      "expected": "base-profile-b-2",
+      "actual": "base-profile-b-2",
+      "pass": true,
+      "detail": "new base id"
+    },
+    {
+      "name": "newProfile.otherProfile",
+      "expected": "[\"profile-v1\",\"profile-v2\",\"profile-v3\"]",
+      "actual": "[\"profile-v1\",\"profile-v2\",\"profile-v3\"]",
+      "pass": true,
+      "detail": "profile A untouched"
+    },
+    {
+      "name": "newProfile.status",
+      "expected": "COMMITTED",
+      "actual": "COMMITTED",
+      "pass": true,
+      "detail": "barrier committed"
+    },
+    {
+      "name": "newProfile.origin",
+      "expected": "MANUAL_TUNING",
+      "actual": "MANUAL_TUNING",
+      "pass": true,
+      "detail": "110 origin"
+    },
+    {
+      "name": "newProfile.barrierReason",
+      "expected": "NEW_PROFILE",
+      "actual": "NEW_PROFILE",
+      "pass": true,
+      "detail": "205 reason"
+    },
+    {
+      "name": "newProfile.baseOrigin",
+      "expected": "BASE",
+      "actual": "BASE",
+      "pass": true,
+      "detail": "109 base provenance"
+    },
+    {
+      "name": "newProfile.parameterCount",
+      "expected": 80,
+      "actual": 80,
+      "pass": true,
+      "detail": "catalog defaults"
+    },
+    {
+      "name": "newProfile.history",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "history appended"
+    },
+    {
+      "name": "reset.setupRestore",
+      "expected": "COMMITTED",
+      "actual": "COMMITTED",
+      "pass": true,
+      "detail": "active version changed first"
+    },
+    {
+      "name": "reset.pending.status",
+      "expected": "PENDING",
+      "actual": "PENDING",
+      "pass": true,
+      "detail": "barrier scheduled"
+    },
+    {
+      "name": "reset.status",
+      "expected": "COMMITTED",
+      "actual": "COMMITTED",
+      "pass": true,
+      "detail": "barrier committed"
+    },
+    {
+      "name": "reset.versionId",
+      "expected": "profile-v1",
+      "actual": "profile-v1",
+      "pass": true,
+      "detail": "base target"
+    },
+    {
+      "name": "reset.origin",
+      "expected": "RESTORE",
+      "actual": "RESTORE",
+      "pass": true,
+      "detail": "110 origin"
+    },
+    {
+      "name": "reset.versionsAdded",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no learned version"
+    },
+    {
+      "name": "reset.history",
+      "expected": "[\"profile-v1\",\"profile-v2\",\"profile-v3\"]",
+      "actual": "[\"profile-v1\",\"profile-v2\",\"profile-v3\"]",
+      "pass": true,
+      "detail": "history unchanged"
+    },
+    {
+      "name": "reset.checksums",
+      "expected": "[\"fnv1a64:8821a6910d8845e2\",\"fnv1a64:2fc224f2e6b4ef94\",\"fnv1a64:408d9f1dc54879a3\"]",
+      "actual": "[\"fnv1a64:8821a6910d8845e2\",\"fnv1a64:2fc224f2e6b4ef94\",\"fnv1a64:408d9f1dc54879a3\"]",
+      "pass": true,
+      "detail": "records unchanged"
+    },
+    {
+      "name": "reset.progressionCalls",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "zero XP/mission calls"
+    },
+    {
+      "name": "reset.progressSnapshot",
+      "expected": "{\"xp\":420,\"level\":3,\"missions\":[\"m1\",\"m2\"]}",
+      "actual": "{\"xp\":420,\"level\":3,\"missions\":[\"m1\",\"m2\"]}",
+      "pass": true,
+      "detail": "XP/missions identical"
+    },
+    {
+      "name": "active.pending",
+      "expected": "PENDING",
+      "actual": "PENDING",
+      "pass": true,
+      "detail": "barrier scheduled"
+    },
+    {
+      "name": "active.status",
+      "expected": "COMMITTED",
+      "actual": "COMMITTED",
+      "pass": true,
+      "detail": "barrier committed"
+    },
+    {
+      "name": "active.jobTracked",
+      "expected": "TRACKED",
+      "actual": "TRACKED",
+      "pass": true,
+      "detail": "old generation job"
+    },
+    {
+      "name": "active.cancelled",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "job invalidated"
+    },
+    {
+      "name": "active.physical",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "physical state preserved"
+    },
+    {
+      "name": "active.readback",
+      "expected": "[12,9.5,0.25]",
+      "actual": "[12,9.5,0.25]",
+      "pass": true,
+      "detail": "byte-identical readback"
+    },
+    {
+      "name": "active.lateResult",
+      "expected": "LATE_RESULT",
+      "actual": "LATE_RESULT",
+      "pass": true,
+      "detail": "late result ignored"
+    },
+    {
+      "name": "active.versionsAdded",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no version created"
+    },
+    {
+      "name": "active.history",
+      "expected": "[\"profile-v1\",\"profile-v2\",\"profile-v3\"]",
+      "actual": "[\"profile-v1\",\"profile-v2\",\"profile-v3\"]",
+      "pass": true,
+      "detail": "history unchanged"
+    }
+  ],
+  "summary": {
+    "checks": 62,
+    "passed": 62,
+    "scenarios": 7,
+    "overall": true
+  }
+}
