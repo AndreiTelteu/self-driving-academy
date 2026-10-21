@@ -75,6 +75,13 @@ export {
   type FleetPanelSources,
 } from './fleet-panel';
 export {
+  PROFILE_PANEL_LOCAL_CONTEXT,
+  PROFILE_PANEL_READ_ERRORS,
+  readProfilePanelSnapshot,
+  type ProfilePanelFrame,
+  type ProfilePanelSources,
+} from './profile-panel';
+export {
   readMinimapFrame,
   readMinimapGeometry,
   type MinimapFrameInput,

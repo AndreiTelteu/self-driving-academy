@@ -12,6 +12,8 @@ Panoul flotei permite selectarea oricărui taxi fără a muta fizic vehiculele. 
 
 Panoul profilului afișează valorile curente, diferența față de versiunea precedentă, situațiile care au susținut schimbarea, cantitatea de dovezi și parametrii încă neobservați. Notificarea poate spune: „Profil nou: distanță mai mică în mers și reacție mai rapidă la verde”. Valorile concrete provin exclusiv din datele sesiunii.
 
+[Panoul profilului 077](profile-panel.md) materializează regula pe schema catalogului: cele 80 de chei au câte un rând stabil, o valoare lipsă este „Neobservat” (niciodată 0), un zero real rămâne observat, iar cheile R sunt rezervate, `null` și neînvățabile în V1 chiar dacă recordul conține un număr. Fără o versiune publicată, panoul afișează explicit valorile ilustrative din catalog, cu bannerul „Date ilustrative”; publicarea și propagarea rămân la 110/112.
+
 Tabloul orașului arată curse finalizate, timpi, distanță parcursă, încălcări, coliziuni, blocaje și confort. Jucătorul poate inspecta fiecare eveniment pe hartă și poate compara două profiluri în același scenariu.
 
 ## Comenzi propuse

@@ -30,6 +30,8 @@ export { createMinimap } from './minimap';
 export type { MinimapOptions } from './minimap';
 export { createFleetPanel } from './fleet-panel';
 export type { FleetPanel, FleetPanelOptions } from './fleet-panel';
+export { createProfilePanel } from './profile-panel';
+export type { ProfilePanel, ProfilePanelOptions } from './profile-panel';
 export { createMapSelectionOverlay } from './map-selection';
 export type { MapSelectionOptions, MapSelectionOverlay } from './map-selection';
 export {
@@ -77,6 +79,34 @@ export type {
   FleetPanelTaxi,
   FleetPanelView,
 } from './fleet-panel-format';
+export {
+  PROFILE_PANEL_ILLUSTRATIVE_BANNER,
+  PROFILE_PANEL_LIMITS,
+  PROFILE_PANEL_VERSION,
+  createIllustrativeProfilePanel,
+  formatProfilePanelNumber,
+  isProfilePanelReserved,
+  parseProfilePanelSnapshot,
+  profilePanelUnitLabel,
+  projectProfilePanel,
+} from './profile-panel-format';
+export type {
+  ProfilePanelCounts,
+  ProfilePanelDelta,
+  ProfilePanelDeltaChange,
+  ProfilePanelDeltaRow,
+  ProfilePanelDeltaView,
+  ProfilePanelIllustrativeInput,
+  ProfilePanelParameter,
+  ProfilePanelProfileIdentity,
+  ProfilePanelReason,
+  ProfilePanelRow,
+  ProfilePanelSection,
+  ProfilePanelSnapshot,
+  ProfilePanelSource,
+  ProfilePanelStatus,
+  ProfilePanelView,
+} from './profile-panel-format';
 export {
   createMinimapScene,
   createMinimapTransform,
