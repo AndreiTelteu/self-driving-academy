@@ -1,0 +1,489 @@
+{
+  "version": "110-profile-activation-v1",
+  "appVersion": "110-profile-activation-app-v1",
+  "contract": {
+    "origins": [
+      "LEARNED",
+      "MANUAL_TUNING",
+      "RESTORE",
+      "IMPORT"
+    ],
+    "rejectionCodes": [
+      "INVALID_VERSION",
+      "PROFILE_MISMATCH",
+      "ENGINE_MISMATCH",
+      "STALE_VERSION",
+      "TICK_NOT_ADVANCING",
+      "ACTIVATION_PENDING",
+      "DISPOSED"
+    ],
+    "reportStatuses": [
+      "IDLE",
+      "PENDING",
+      "APPLIED",
+      "REJECTED"
+    ],
+    "limits": {
+      "commands": 16,
+      "idCodeUnits": 256,
+      "reasonCodeUnits": 240
+    }
+  },
+  "scenarios": [
+    {
+      "name": "full fleet before/after",
+      "status": "APPLIED",
+      "detail": {
+        "taxis": 24,
+        "civilians": 40,
+        "total": 64,
+        "before": "profile-v1=64 -> profile-v1=64",
+        "after": "profile-v1=64 -> profile-v2=64",
+        "updated": 64,
+        "activationTick": 1,
+        "appliedTick": 1,
+        "beforeVersions": "profile-v1",
+        "afterVersions": "profile-v2"
+      }
+    },
+    {
+      "name": "manual and player preserved",
+      "status": "APPLIED",
+      "detail": {
+        "updated": 64,
+        "manualBefore": 8,
+        "manualAfter": 8,
+        "learningBefore": 8,
+        "learningAfter": 8,
+        "versions": "profile-v2"
+      }
+    },
+    {
+      "name": "later vehicle",
+      "status": "APPLIED",
+      "detail": {
+        "pendingVersion": "profile-v2",
+        "appliedVersion": "profile-v2",
+        "updated": 65,
+        "total": 66
+      }
+    },
+    {
+      "name": "duplicate publish",
+      "status": "ACCEPTED",
+      "detail": {
+        "duplicate": true,
+        "firstCommand": "activation-0001",
+        "secondCommand": "activation-0001",
+        "commands": 1,
+        "pending": 1
+      }
+    },
+    {
+      "name": "rejected engine",
+      "status": "REJECTED",
+      "detail": {
+        "code": "ENGINE_MISMATCH",
+        "readCode": "ENGINE_MISMATCH",
+        "foreignProfileCode": "PROFILE_MISMATCH",
+        "missingCode": "VERSION_NOT_FOUND",
+        "appPublish": "PUBLISHED",
+        "appPublishedAt": 7,
+        "appActivateAt": 8,
+        "checksumValid": true,
+        "storeVersions": 3
+      }
+    },
+    {
+      "name": "rollback",
+      "status": "REJECTED",
+      "detail": {
+        "rolledBack": true,
+        "restored": 10,
+        "exact": false,
+        "versions": "profile-v1",
+        "auto": 64,
+        "injected": 1,
+        "after": "profile-v1=64 -> profile-v1=64",
+        "commandStatus": "REJECTED"
+      }
+    },
+    {
+      "name": "sixty frames",
+      "status": "APPLIED",
+      "detail": {
+        "frames": 59,
+        "idleFrames": 59,
+        "applied": 1,
+        "vehiclesUpdated": 64,
+        "lastAppliedTick": 1,
+        "pending": 0
+      }
+    }
+  ],
+  "checks": [
+    {
+      "name": "contract-version",
+      "expected": "110-profile-activation-v1",
+      "actual": "110-profile-activation-v1",
+      "pass": true,
+      "detail": "110 activation contract"
+    },
+    {
+      "name": "app-version",
+      "expected": "110-profile-activation-app-v1",
+      "actual": "110-profile-activation-app-v1",
+      "pass": true,
+      "detail": "110 composition contract"
+    },
+    {
+      "name": "fleet-total",
+      "expected": 64,
+      "actual": 64,
+      "pass": true,
+      "detail": "24 taxis plus 40 civilians"
+    },
+    {
+      "name": "before-tick-status",
+      "expected": "PENDING",
+      "actual": "PENDING",
+      "pass": true,
+      "detail": "nothing is written before the common tick"
+    },
+    {
+      "name": "before-tick-version",
+      "expected": "profile-v1",
+      "actual": "profile-v1",
+      "pass": true,
+      "detail": "the whole fleet keeps the base version"
+    },
+    {
+      "name": "before-tick-updated",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the early apply writes no vehicle"
+    },
+    {
+      "name": "after-tick-status",
+      "expected": "APPLIED",
+      "actual": "APPLIED",
+      "pass": true,
+      "detail": "the common tick applies the command"
+    },
+    {
+      "name": "after-tick-updated",
+      "expected": 64,
+      "actual": 64,
+      "pass": true,
+      "detail": "every existing vehicle is written"
+    },
+    {
+      "name": "after-single-version",
+      "expected": "profile-v2",
+      "actual": "profile-v2",
+      "pass": true,
+      "detail": "no mixed fleet after activation"
+    },
+    {
+      "name": "common-tick",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "all vehicles receive the same tick"
+    },
+    {
+      "name": "before-histogram",
+      "expected": 64,
+      "actual": 64,
+      "pass": true,
+      "detail": "before counts are the full fleet"
+    },
+    {
+      "name": "after-histogram",
+      "expected": 64,
+      "actual": 64,
+      "pass": true,
+      "detail": "after counts are the full fleet"
+    },
+    {
+      "name": "publication-origin",
+      "expected": "LEARNED",
+      "actual": "LEARNED",
+      "pass": true,
+      "detail": "provenance is preserved"
+    },
+    {
+      "name": "fleet-auto-count",
+      "expected": 64,
+      "actual": 64,
+      "pass": true,
+      "detail": "control modes stay AUTO"
+    },
+    {
+      "name": "manual-updated",
+      "expected": 64,
+      "actual": 64,
+      "pass": true,
+      "detail": "MANUAL vehicles are not skipped"
+    },
+    {
+      "name": "manual-count",
+      "expected": 8,
+      "actual": 8,
+      "pass": true,
+      "detail": "MANUAL control modes are preserved"
+    },
+    {
+      "name": "learning-count",
+      "expected": 8,
+      "actual": 8,
+      "pass": true,
+      "detail": "LEARNING modes are preserved"
+    },
+    {
+      "name": "manual-version",
+      "expected": "profile-v2",
+      "actual": "profile-v2",
+      "pass": true,
+      "detail": "player-driven vehicles adopt the version"
+    },
+    {
+      "name": "later-pending-version",
+      "expected": "profile-v2",
+      "actual": "profile-v2",
+      "pass": true,
+      "detail": "a vehicle created before the tick reads the pending target"
+    },
+    {
+      "name": "later-applied-version",
+      "expected": "profile-v2",
+      "actual": "profile-v2",
+      "pass": true,
+      "detail": "a vehicle created later reads the applied target"
+    },
+    {
+      "name": "later-included",
+      "expected": 65,
+      "actual": 65,
+      "pass": true,
+      "detail": "the vehicle created before the tick is part of the plan"
+    },
+    {
+      "name": "later-total",
+      "expected": 66,
+      "actual": 66,
+      "pass": true,
+      "detail": "the fleet grew by two taxis"
+    },
+    {
+      "name": "duplicate-flag",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the same idempotency key is a no-op"
+    },
+    {
+      "name": "duplicate-command",
+      "expected": "activation-0001",
+      "actual": "activation-0001",
+      "pass": true,
+      "detail": "the existing command is returned"
+    },
+    {
+      "name": "duplicate-commands",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "no second command is stored"
+    },
+    {
+      "name": "duplicate-pending",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "exactly one pending command"
+    },
+    {
+      "name": "engine-rejection",
+      "expected": "ENGINE_MISMATCH",
+      "actual": "ENGINE_MISMATCH",
+      "pass": true,
+      "detail": "the controller rejects another engine"
+    },
+    {
+      "name": "app-engine-rejection",
+      "expected": "ENGINE_MISMATCH",
+      "actual": "ENGINE_MISMATCH",
+      "pass": true,
+      "detail": "the composition rejects an engine-incompatible version"
+    },
+    {
+      "name": "app-profile-rejection",
+      "expected": "PROFILE_MISMATCH",
+      "actual": "PROFILE_MISMATCH",
+      "pass": true,
+      "detail": "a foreign profile version is rejected"
+    },
+    {
+      "name": "app-missing-rejection",
+      "expected": "VERSION_NOT_FOUND",
+      "actual": "VERSION_NOT_FOUND",
+      "pass": true,
+      "detail": "a missing version is rejected"
+    },
+    {
+      "name": "version-untouched",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the 109 version stays valid"
+    },
+    {
+      "name": "app-publish-status",
+      "expected": "PUBLISHED",
+      "actual": "PUBLISHED",
+      "pass": true,
+      "detail": "the composition publishes the stored version"
+    },
+    {
+      "name": "app-publish-tick",
+      "expected": 7,
+      "actual": 7,
+      "pass": true,
+      "detail": "the publication uses the injected fixed tick"
+    },
+    {
+      "name": "app-publish-activate",
+      "expected": 8,
+      "actual": 8,
+      "pass": true,
+      "detail": "the activation targets the next common tick"
+    },
+    {
+      "name": "app-publish-origin",
+      "expected": "IMPORT",
+      "actual": "IMPORT",
+      "pass": true,
+      "detail": "provenance is preserved"
+    },
+    {
+      "name": "store-untouched",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "no version is published by activation"
+    },
+    {
+      "name": "store-content",
+      "expected": "{\"schemaVersion\":1,\"units\":\"SI\",\"profileId\":\"city-profile\",\"versionId\":\"city-v1\",\"parentVersionId\":null,\"engineVersion\":\"engine-1\",\"parameters\":{\"speed_delta_urban\":0,\"following_time_headway\":1.8},\"provenance\":{\"origin\":\"BASE\",\"sourceSegmentIds\":[],\"sourceInterventionIds\":[],\"delta\":null},\"sourceSegmentIds\":[],\"depth\":0,\"createdAt\":\"2026-10-21T00:00:00Z\",\"checksum\":\"fnv1a64:92c73c3aa43d9d50\"}",
+      "actual": "{\"schemaVersion\":1,\"units\":\"SI\",\"profileId\":\"city-profile\",\"versionId\":\"city-v1\",\"parentVersionId\":null,\"engineVersion\":\"engine-1\",\"parameters\":{\"speed_delta_urban\":0,\"following_time_headway\":1.8},\"provenance\":{\"origin\":\"BASE\",\"sourceSegmentIds\":[],\"sourceInterventionIds\":[],\"delta\":null},\"sourceSegmentIds\":[],\"depth\":0,\"createdAt\":\"2026-10-21T00:00:00Z\",\"checksum\":\"fnv1a64:92c73c3aa43d9d50\"}",
+      "pass": true,
+      "detail": "the stored version is byte-identical"
+    },
+    {
+      "name": "rollback-status",
+      "expected": "REJECTED",
+      "actual": "REJECTED",
+      "pass": true,
+      "detail": "an injected write failure rejects the command"
+    },
+    {
+      "name": "rollback-applied",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the rollback ran"
+    },
+    {
+      "name": "rollback-restored",
+      "expected": 10,
+      "actual": 10,
+      "pass": true,
+      "detail": "every already-written vehicle is restored"
+    },
+    {
+      "name": "rollback-exact",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "the monotonic tick cannot be rewound by 057"
+    },
+    {
+      "name": "rollback-versions",
+      "expected": "profile-v1",
+      "actual": "profile-v1",
+      "pass": true,
+      "detail": "the fleet never keeps two versions"
+    },
+    {
+      "name": "rollback-modes",
+      "expected": 64,
+      "actual": 64,
+      "pass": true,
+      "detail": "control modes survive the rollback"
+    },
+    {
+      "name": "rollback-injections",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the failure is injected exactly once"
+    },
+    {
+      "name": "rollback-command",
+      "expected": "REJECTED",
+      "actual": "REJECTED",
+      "pass": true,
+      "detail": "the pending command is closed as rejected"
+    },
+    {
+      "name": "frames-idle",
+      "expected": 59,
+      "actual": 59,
+      "pass": true,
+      "detail": "every frame after the common tick is idle"
+    },
+    {
+      "name": "frames-applied",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the command applies exactly once"
+    },
+    {
+      "name": "frames-writes",
+      "expected": 64,
+      "actual": 64,
+      "pass": true,
+      "detail": "later frames never write another vehicle"
+    },
+    {
+      "name": "frames-last-tick",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the applied tick does not move"
+    },
+    {
+      "name": "frames-pending",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no command stays pending"
+    },
+    {
+      "name": "source-adapter",
+      "expected": "profile-v2",
+      "actual": "profile-v2",
+      "pass": true,
+      "detail": "the composition source reads the applied target"
+    }
+  ],
+  "summary": {
+    "scenarios": 7,
+    "checks": 51,
+    "passed": 51,
+    "pass": true
+  }
+}

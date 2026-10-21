@@ -114,6 +114,25 @@ export {
   type ProfileRestorePlanInput,
 } from './profile-history';
 export {
+  createCityProfileSource,
+  profileActivationAppErrors,
+  PROFILE_ACTIVATION_APP_VERSION,
+  publishProfileVersion,
+  readProfileActivation,
+  type ProfileActivationAppError,
+  type ProfileActivationAppRejection,
+  type ProfileActivationPublishAccepted,
+  type ProfileActivationPublishRejected,
+  type ProfileActivationPublishRequest,
+  type ProfileActivationPublishResult,
+  type ProfileActivationPublishSources,
+  type ProfileActivationReadAccepted,
+  type ProfileActivationReadRejected,
+  type ProfileActivationReadRequest,
+  type ProfileActivationReadResult,
+  type ProfileActivationReadSources,
+} from './profile-activation';
+export {
   readMinimapFrame,
   readMinimapGeometry,
   type MinimapFrameInput,
