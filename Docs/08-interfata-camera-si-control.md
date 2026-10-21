@@ -68,6 +68,8 @@ La revenirea la autonomie în afara unei benzi, politica caută o reintrare feza
 
 [Compoziția cursei complete 072](manual-trip.md) închide lanțul: aceeași cursă 061 este condusă prin pickup-ul 062 și dropoff-ul 063 în timp ce 066/067/068/069 aplică schimbarea de mod, iar 071 măsoară revenirea. O intervenție scurtă AUTO → MANUAL → AUTO nu creează o a doua cursă și nu pierde pasagerul, destinația sau dovezile; MANUAL rămâne telemetrie fără learning, LEARNING publică numai parametrii observați, iar un salt fizic raportat este afișat ca violare de continuitate, nu reparat.
 
+[Integrarea celor trei moduri 217](three-modes.md) verifică aceleași module de la hotkey și HUD până la estimator și profil: matricea AUTO/MANUAL/LEARNING × taxi/civil, toate cele șase tranziții (segment închis/deschis, fizică păstrată, maximum un scaun `PLAYER`), MANUAL fără job/versiune/parametru, LEARNING eligibil publicat automat și LEARNING neeligibil sărit, selecția care mută doar camera, remaparea M/L din 080 și pauza 070 fără gol de tick. Sonda de latență este locală și provizorie: nu raportează FPS, GPU sau hardware. [Dovezile 217](Evidence/217-three-modes/README.md) păstrează cele 20 de teste, raportul determinist 28/28 și cele 7 scenarii.
+
 
 ## Afișarea modurilor și a progresului
 

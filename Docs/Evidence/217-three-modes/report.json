@@ -1,0 +1,1603 @@
+{
+  "version": "217-three-modes-v1",
+  "generatedBy": "npm run modes:three",
+  "level": "full",
+  "scope": "LOCAL_NODE_SINGLE_PROCESS",
+  "oracleRule": "The harness drives the real 066 seat, real 067 M/L intents from the real 080 bindings, real 068 selection, real 069 segments, real 070 pause/focus, real 103 queue and real 112 pipeline one accepted tick at a time. Every transition must close the previous segment and open the next one with the right mode/eligibility without changing speed, heading or the per-tick position step, and must leave at most one PLAYER seat. MANUAL records telemetry but never a learning job, parameter change or evidence; an eligible closed LEARNING segment publishes through the real 112 pipeline and an ineligible one is skipped. The latency probe is a local single-process measurement over bounded samples, not an FPS, GPU or hardware result.",
+  "preflight": {
+    "suite": "npm test",
+    "required": true,
+    "runBy": "scripts/run-three-modes-report.mjs",
+    "rule": "The full suite runs once before the latency probe (targeted-validation-v1 preflight). Only the artifact-freshness assertion of this PBI is skipped during that preflight."
+  },
+  "matrix": {
+    "rows": [
+      {
+        "transition": "AUTO->MANUAL",
+        "action": "M",
+        "kind": "TAXI",
+        "scenarioId": "matrix:taxi:AUTO->MANUAL",
+        "from": "AUTO",
+        "to": "MANUAL",
+        "previousTick": 3,
+        "atTick": 4,
+        "eligible": true,
+        "seat": {
+          "identity": "taxi:217",
+          "mode": "MANUAL",
+          "count": 1
+        },
+        "physics": {
+          "preserved": true,
+          "expectedStepM": 0.1333,
+          "actualStepM": 0.1333,
+          "positionStepErrorM": 0,
+          "speedDeltaMps": 0,
+          "headingDeltaRad": 0
+        },
+        "closed": {
+          "segmentId": null,
+          "mode": null,
+          "endTick": null,
+          "closeReason": null,
+          "samples": 0
+        },
+        "opened": {
+          "segmentId": "three-modes:matrix:taxi:AUTO->MANUAL:segment:1",
+          "mode": "MANUAL",
+          "startTick": 4,
+          "learningEligible": false
+        },
+        "learning": {
+          "status": null,
+          "reason": null,
+          "jobSubmitted": false,
+          "versionId": null,
+          "compositionKey": null,
+          "compositionValue": null,
+          "parametersChanged": false,
+          "evidenceRecorded": false
+        },
+        "hud": {
+          "symbol": "M",
+          "label": "Conduci · învățare oprită",
+          "eligibility": "Învățare neeligibilă"
+        },
+        "failures": [],
+        "ok": true
+      },
+      {
+        "transition": "AUTO->LEARNING",
+        "action": "L",
+        "kind": "TAXI",
+        "scenarioId": "matrix:taxi:AUTO->LEARNING",
+        "from": "AUTO",
+        "to": "LEARNING",
+        "previousTick": 3,
+        "atTick": 4,
+        "eligible": true,
+        "seat": {
+          "identity": "taxi:217",
+          "mode": "LEARNING",
+          "count": 1
+        },
+        "physics": {
+          "preserved": true,
+          "expectedStepM": 0.1333,
+          "actualStepM": 0.1333,
+          "positionStepErrorM": 0,
+          "speedDeltaMps": 0,
+          "headingDeltaRad": 0
+        },
+        "closed": {
+          "segmentId": null,
+          "mode": null,
+          "endTick": null,
+          "closeReason": null,
+          "samples": 0
+        },
+        "opened": {
+          "segmentId": "three-modes:matrix:taxi:AUTO->LEARNING:segment:1",
+          "mode": "LEARNING",
+          "startTick": 4,
+          "learningEligible": true
+        },
+        "learning": {
+          "status": null,
+          "reason": null,
+          "jobSubmitted": false,
+          "versionId": null,
+          "compositionKey": null,
+          "compositionValue": null,
+          "parametersChanged": false,
+          "evidenceRecorded": false
+        },
+        "hud": {
+          "symbol": "L",
+          "label": "Conduci · orașul învață",
+          "eligibility": "Eligibil pentru învățare"
+        },
+        "failures": [],
+        "ok": true
+      },
+      {
+        "transition": "MANUAL->AUTO",
+        "action": "M",
+        "kind": "TAXI",
+        "scenarioId": "matrix:taxi:MANUAL->AUTO",
+        "from": "MANUAL",
+        "to": "AUTO",
+        "previousTick": 4,
+        "atTick": 5,
+        "eligible": true,
+        "seat": {
+          "identity": null,
+          "mode": null,
+          "count": 0
+        },
+        "physics": {
+          "preserved": true,
+          "expectedStepM": 0.1333,
+          "actualStepM": 0.1333,
+          "positionStepErrorM": 0,
+          "speedDeltaMps": 0,
+          "headingDeltaRad": 0
+        },
+        "closed": {
+          "segmentId": "three-modes:matrix:taxi:MANUAL->AUTO:segment:1",
+          "mode": "MANUAL",
+          "endTick": 5,
+          "closeReason": "RETURN_TO_AUTO",
+          "samples": 1
+        },
+        "opened": {
+          "segmentId": null,
+          "mode": null,
+          "startTick": null,
+          "learningEligible": null
+        },
+        "learning": {
+          "status": "SKIPPED_MANUAL",
+          "reason": "MANUAL_SEGMENT_NOT_LEARNABLE",
+          "jobSubmitted": false,
+          "versionId": null,
+          "compositionKey": null,
+          "compositionValue": null,
+          "parametersChanged": false,
+          "evidenceRecorded": true
+        },
+        "hud": {
+          "symbol": "A",
+          "label": "Conduce AI-ul",
+          "eligibility": "Învățare neeligibilă"
+        },
+        "failures": [],
+        "ok": true
+      },
+      {
+        "transition": "MANUAL->LEARNING",
+        "action": "L",
+        "kind": "TAXI",
+        "scenarioId": "matrix:taxi:MANUAL->LEARNING",
+        "from": "MANUAL",
+        "to": "LEARNING",
+        "previousTick": 4,
+        "atTick": 5,
+        "eligible": true,
+        "seat": {
+          "identity": "taxi:217",
+          "mode": "LEARNING",
+          "count": 1
+        },
+        "physics": {
+          "preserved": true,
+          "expectedStepM": 0.1333,
+          "actualStepM": 0.1333,
+          "positionStepErrorM": 0,
+          "speedDeltaMps": 0,
+          "headingDeltaRad": 0
+        },
+        "closed": {
+          "segmentId": "three-modes:matrix:taxi:MANUAL->LEARNING:segment:1",
+          "mode": "MANUAL",
+          "endTick": 5,
+          "closeReason": "MODE_CHANGE",
+          "samples": 1
+        },
+        "opened": {
+          "segmentId": "three-modes:matrix:taxi:MANUAL->LEARNING:segment:2",
+          "mode": "LEARNING",
+          "startTick": 5,
+          "learningEligible": true
+        },
+        "learning": {
+          "status": "SKIPPED_MANUAL",
+          "reason": "MANUAL_SEGMENT_NOT_LEARNABLE",
+          "jobSubmitted": false,
+          "versionId": null,
+          "compositionKey": null,
+          "compositionValue": null,
+          "parametersChanged": false,
+          "evidenceRecorded": true
+        },
+        "hud": {
+          "symbol": "L",
+          "label": "Conduci · orașul învață",
+          "eligibility": "Eligibil pentru învățare"
+        },
+        "failures": [],
+        "ok": true
+      },
+      {
+        "transition": "LEARNING->AUTO",
+        "action": "M",
+        "kind": "TAXI",
+        "scenarioId": "matrix:taxi:LEARNING->AUTO",
+        "from": "LEARNING",
+        "to": "AUTO",
+        "previousTick": 4,
+        "atTick": 5,
+        "eligible": true,
+        "seat": {
+          "identity": null,
+          "mode": null,
+          "count": 0
+        },
+        "physics": {
+          "preserved": true,
+          "expectedStepM": 0.1333,
+          "actualStepM": 0.1333,
+          "positionStepErrorM": 0,
+          "speedDeltaMps": 0,
+          "headingDeltaRad": 0
+        },
+        "closed": {
+          "segmentId": "three-modes:matrix:taxi:LEARNING->AUTO:segment:1",
+          "mode": "LEARNING",
+          "endTick": 5,
+          "closeReason": "RETURN_TO_AUTO",
+          "samples": 1
+        },
+        "opened": {
+          "segmentId": null,
+          "mode": null,
+          "startTick": null,
+          "learningEligible": null
+        },
+        "learning": {
+          "status": "COMPOSED",
+          "reason": null,
+          "jobSubmitted": true,
+          "versionId": "three-modes:matrix:taxi:LEARNING->AUTO:segment:1~112",
+          "compositionKey": "speed_delta_urban",
+          "compositionValue": 3,
+          "parametersChanged": true,
+          "evidenceRecorded": true
+        },
+        "hud": {
+          "symbol": "A",
+          "label": "Conduce AI-ul",
+          "eligibility": "Învățare neeligibilă"
+        },
+        "failures": [],
+        "ok": true
+      },
+      {
+        "transition": "LEARNING->MANUAL",
+        "action": "L",
+        "kind": "TAXI",
+        "scenarioId": "matrix:taxi:LEARNING->MANUAL",
+        "from": "LEARNING",
+        "to": "MANUAL",
+        "previousTick": 4,
+        "atTick": 5,
+        "eligible": true,
+        "seat": {
+          "identity": "taxi:217",
+          "mode": "MANUAL",
+          "count": 1
+        },
+        "physics": {
+          "preserved": true,
+          "expectedStepM": 0.1333,
+          "actualStepM": 0.1333,
+          "positionStepErrorM": 0,
+          "speedDeltaMps": 0,
+          "headingDeltaRad": 0
+        },
+        "closed": {
+          "segmentId": "three-modes:matrix:taxi:LEARNING->MANUAL:segment:1",
+          "mode": "LEARNING",
+          "endTick": 5,
+          "closeReason": "MODE_CHANGE",
+          "samples": 1
+        },
+        "opened": {
+          "segmentId": "three-modes:matrix:taxi:LEARNING->MANUAL:segment:2",
+          "mode": "MANUAL",
+          "startTick": 5,
+          "learningEligible": false
+        },
+        "learning": {
+          "status": "COMPOSED",
+          "reason": null,
+          "jobSubmitted": true,
+          "versionId": "three-modes:matrix:taxi:LEARNING->MANUAL:segment:1~112",
+          "compositionKey": "speed_delta_urban",
+          "compositionValue": 3,
+          "parametersChanged": true,
+          "evidenceRecorded": true
+        },
+        "hud": {
+          "symbol": "M",
+          "label": "Conduci · învățare oprită",
+          "eligibility": "Învățare neeligibilă"
+        },
+        "failures": [],
+        "ok": true
+      },
+      {
+        "transition": "AUTO->MANUAL",
+        "action": "M",
+        "kind": "CIVIL",
+        "scenarioId": "matrix:civil:AUTO->MANUAL",
+        "from": "AUTO",
+        "to": "MANUAL",
+        "previousTick": 3,
+        "atTick": 4,
+        "eligible": true,
+        "seat": {
+          "identity": "civil:217",
+          "mode": "MANUAL",
+          "count": 1
+        },
+        "physics": {
+          "preserved": true,
+          "expectedStepM": 0.1333,
+          "actualStepM": 0.1333,
+          "positionStepErrorM": 0,
+          "speedDeltaMps": 0,
+          "headingDeltaRad": 0
+        },
+        "closed": {
+          "segmentId": null,
+          "mode": null,
+          "endTick": null,
+          "closeReason": null,
+          "samples": 0
+        },
+        "opened": {
+          "segmentId": "three-modes:matrix:civil:AUTO->MANUAL:segment:1",
+          "mode": "MANUAL",
+          "startTick": 4,
+          "learningEligible": false
+        },
+        "learning": {
+          "status": null,
+          "reason": null,
+          "jobSubmitted": false,
+          "versionId": null,
+          "compositionKey": null,
+          "compositionValue": null,
+          "parametersChanged": false,
+          "evidenceRecorded": false
+        },
+        "hud": {
+          "symbol": "M",
+          "label": "Conduci · învățare oprită",
+          "eligibility": "Învățare neeligibilă"
+        },
+        "failures": [],
+        "ok": true
+      },
+      {
+        "transition": "AUTO->LEARNING",
+        "action": "L",
+        "kind": "CIVIL",
+        "scenarioId": "matrix:civil:AUTO->LEARNING",
+        "from": "AUTO",
+        "to": "LEARNING",
+        "previousTick": 3,
+        "atTick": 4,
+        "eligible": true,
+        "seat": {
+          "identity": "civil:217",
+          "mode": "LEARNING",
+          "count": 1
+        },
+        "physics": {
+          "preserved": true,
+          "expectedStepM": 0.1333,
+          "actualStepM": 0.1333,
+          "positionStepErrorM": 0,
+          "speedDeltaMps": 0,
+          "headingDeltaRad": 0
+        },
+        "closed": {
+          "segmentId": null,
+          "mode": null,
+          "endTick": null,
+          "closeReason": null,
+          "samples": 0
+        },
+        "opened": {
+          "segmentId": "three-modes:matrix:civil:AUTO->LEARNING:segment:1",
+          "mode": "LEARNING",
+          "startTick": 4,
+          "learningEligible": true
+        },
+        "learning": {
+          "status": null,
+          "reason": null,
+          "jobSubmitted": false,
+          "versionId": null,
+          "compositionKey": null,
+          "compositionValue": null,
+          "parametersChanged": false,
+          "evidenceRecorded": false
+        },
+        "hud": {
+          "symbol": "L",
+          "label": "Conduci · orașul învață",
+          "eligibility": "Eligibil pentru învățare"
+        },
+        "failures": [],
+        "ok": true
+      },
+      {
+        "transition": "MANUAL->AUTO",
+        "action": "M",
+        "kind": "CIVIL",
+        "scenarioId": "matrix:civil:MANUAL->AUTO",
+        "from": "MANUAL",
+        "to": "AUTO",
+        "previousTick": 4,
+        "atTick": 5,
+        "eligible": true,
+        "seat": {
+          "identity": null,
+          "mode": null,
+          "count": 0
+        },
+        "physics": {
+          "preserved": true,
+          "expectedStepM": 0.1333,
+          "actualStepM": 0.1333,
+          "positionStepErrorM": 0,
+          "speedDeltaMps": 0,
+          "headingDeltaRad": 0
+        },
+        "closed": {
+          "segmentId": "three-modes:matrix:civil:MANUAL->AUTO:segment:1",
+          "mode": "MANUAL",
+          "endTick": 5,
+          "closeReason": "RETURN_TO_AUTO",
+          "samples": 1
+        },
+        "opened": {
+          "segmentId": null,
+          "mode": null,
+          "startTick": null,
+          "learningEligible": null
+        },
+        "learning": {
+          "status": "SKIPPED_MANUAL",
+          "reason": "MANUAL_SEGMENT_NOT_LEARNABLE",
+          "jobSubmitted": false,
+          "versionId": null,
+          "compositionKey": null,
+          "compositionValue": null,
+          "parametersChanged": false,
+          "evidenceRecorded": true
+        },
+        "hud": {
+          "symbol": "A",
+          "label": "Conduce AI-ul",
+          "eligibility": "Învățare neeligibilă"
+        },
+        "failures": [],
+        "ok": true
+      },
+      {
+        "transition": "MANUAL->LEARNING",
+        "action": "L",
+        "kind": "CIVIL",
+        "scenarioId": "matrix:civil:MANUAL->LEARNING",
+        "from": "MANUAL",
+        "to": "LEARNING",
+        "previousTick": 4,
+        "atTick": 5,
+        "eligible": true,
+        "seat": {
+          "identity": "civil:217",
+          "mode": "LEARNING",
+          "count": 1
+        },
+        "physics": {
+          "preserved": true,
+          "expectedStepM": 0.1333,
+          "actualStepM": 0.1333,
+          "positionStepErrorM": 0,
+          "speedDeltaMps": 0,
+          "headingDeltaRad": 0
+        },
+        "closed": {
+          "segmentId": "three-modes:matrix:civil:MANUAL->LEARNING:segment:1",
+          "mode": "MANUAL",
+          "endTick": 5,
+          "closeReason": "MODE_CHANGE",
+          "samples": 1
+        },
+        "opened": {
+          "segmentId": "three-modes:matrix:civil:MANUAL->LEARNING:segment:2",
+          "mode": "LEARNING",
+          "startTick": 5,
+          "learningEligible": true
+        },
+        "learning": {
+          "status": "SKIPPED_MANUAL",
+          "reason": "MANUAL_SEGMENT_NOT_LEARNABLE",
+          "jobSubmitted": false,
+          "versionId": null,
+          "compositionKey": null,
+          "compositionValue": null,
+          "parametersChanged": false,
+          "evidenceRecorded": true
+        },
+        "hud": {
+          "symbol": "L",
+          "label": "Conduci · orașul învață",
+          "eligibility": "Eligibil pentru învățare"
+        },
+        "failures": [],
+        "ok": true
+      },
+      {
+        "transition": "LEARNING->AUTO",
+        "action": "M",
+        "kind": "CIVIL",
+        "scenarioId": "matrix:civil:LEARNING->AUTO",
+        "from": "LEARNING",
+        "to": "AUTO",
+        "previousTick": 4,
+        "atTick": 5,
+        "eligible": true,
+        "seat": {
+          "identity": null,
+          "mode": null,
+          "count": 0
+        },
+        "physics": {
+          "preserved": true,
+          "expectedStepM": 0.1333,
+          "actualStepM": 0.1333,
+          "positionStepErrorM": 0,
+          "speedDeltaMps": 0,
+          "headingDeltaRad": 0
+        },
+        "closed": {
+          "segmentId": "three-modes:matrix:civil:LEARNING->AUTO:segment:1",
+          "mode": "LEARNING",
+          "endTick": 5,
+          "closeReason": "RETURN_TO_AUTO",
+          "samples": 1
+        },
+        "opened": {
+          "segmentId": null,
+          "mode": null,
+          "startTick": null,
+          "learningEligible": null
+        },
+        "learning": {
+          "status": "COMPOSED",
+          "reason": null,
+          "jobSubmitted": true,
+          "versionId": "three-modes:matrix:civil:LEARNING->AUTO:segment:1~112",
+          "compositionKey": "speed_delta_urban",
+          "compositionValue": 3,
+          "parametersChanged": true,
+          "evidenceRecorded": true
+        },
+        "hud": {
+          "symbol": "A",
+          "label": "Conduce AI-ul",
+          "eligibility": "Învățare neeligibilă"
+        },
+        "failures": [],
+        "ok": true
+      },
+      {
+        "transition": "LEARNING->MANUAL",
+        "action": "L",
+        "kind": "CIVIL",
+        "scenarioId": "matrix:civil:LEARNING->MANUAL",
+        "from": "LEARNING",
+        "to": "MANUAL",
+        "previousTick": 4,
+        "atTick": 5,
+        "eligible": true,
+        "seat": {
+          "identity": "civil:217",
+          "mode": "MANUAL",
+          "count": 1
+        },
+        "physics": {
+          "preserved": true,
+          "expectedStepM": 0.1333,
+          "actualStepM": 0.1333,
+          "positionStepErrorM": 0,
+          "speedDeltaMps": 0,
+          "headingDeltaRad": 0
+        },
+        "closed": {
+          "segmentId": "three-modes:matrix:civil:LEARNING->MANUAL:segment:1",
+          "mode": "LEARNING",
+          "endTick": 5,
+          "closeReason": "MODE_CHANGE",
+          "samples": 1
+        },
+        "opened": {
+          "segmentId": "three-modes:matrix:civil:LEARNING->MANUAL:segment:2",
+          "mode": "MANUAL",
+          "startTick": 5,
+          "learningEligible": false
+        },
+        "learning": {
+          "status": "COMPOSED",
+          "reason": null,
+          "jobSubmitted": true,
+          "versionId": "three-modes:matrix:civil:LEARNING->MANUAL:segment:1~112",
+          "compositionKey": "speed_delta_urban",
+          "compositionValue": 3,
+          "parametersChanged": true,
+          "evidenceRecorded": true
+        },
+        "hud": {
+          "symbol": "M",
+          "label": "Conduci · învățare oprită",
+          "eligibility": "Învățare neeligibilă"
+        },
+        "failures": [],
+        "ok": true
+      }
+    ],
+    "counts": {
+      "transitions": 6,
+      "transitionRows": 12,
+      "scenarios": 7,
+      "segments": 12,
+      "closedSegments": 8,
+      "manualClosed": 4,
+      "learningClosed": 4,
+      "maxPlayerSeats": 1,
+      "learningJobs": 2,
+      "profileVersions": 2,
+      "manualPublications": 0
+    },
+    "failures": [],
+    "pass": true
+  },
+  "scenarios": [
+    {
+      "id": "taxi-auto-manual",
+      "description": "Taxi AUTO <-> MANUAL with the real hotkey, HUD, seat and segments.",
+      "checks": [
+        {
+          "name": "taxi-auto-manual-rows",
+          "expected": 6,
+          "actual": 6,
+          "pass": true,
+          "detail": "All six transitions ran for the TAXI class."
+        },
+        {
+          "name": "taxi-auto-manual-pass",
+          "expected": true,
+          "actual": true,
+          "pass": true,
+          "detail": "Every TAXI transition row passed."
+        },
+        {
+          "name": "taxi-auto-manual-physics",
+          "expected": true,
+          "actual": true,
+          "pass": true,
+          "detail": "No transition changed speed, heading or the per-tick position step."
+        },
+        {
+          "name": "taxi-auto-manual-segments",
+          "expected": true,
+          "actual": true,
+          "pass": true,
+          "detail": "Every closed segment ends and every opened segment starts on the accepted tick."
+        },
+        {
+          "name": "taxi-auto-manual-seats",
+          "expected": 1,
+          "actual": 1,
+          "pass": true,
+          "detail": "At most one PLAYER seat exists across the whole transition set."
+        },
+        {
+          "name": "taxi-auto-manual-hud",
+          "expected": true,
+          "actual": true,
+          "pass": true,
+          "detail": "The HUD label follows the accepted mode after every transition."
+        }
+      ],
+      "ok": true
+    },
+    {
+      "id": "civil-auto-learning",
+      "description": "Civil AUTO <-> LEARNING with the real hotkey, HUD, seat and segments.",
+      "checks": [
+        {
+          "name": "civil-auto-learning-rows",
+          "expected": 6,
+          "actual": 6,
+          "pass": true,
+          "detail": "All six transitions ran for the CIVIL class."
+        },
+        {
+          "name": "civil-auto-learning-pass",
+          "expected": true,
+          "actual": true,
+          "pass": true,
+          "detail": "Every CIVIL transition row passed."
+        },
+        {
+          "name": "civil-auto-learning-physics",
+          "expected": true,
+          "actual": true,
+          "pass": true,
+          "detail": "No transition changed speed, heading or the per-tick position step."
+        },
+        {
+          "name": "civil-auto-learning-segments",
+          "expected": true,
+          "actual": true,
+          "pass": true,
+          "detail": "Every closed segment ends and every opened segment starts on the accepted tick."
+        },
+        {
+          "name": "civil-auto-learning-seats",
+          "expected": 1,
+          "actual": 1,
+          "pass": true,
+          "detail": "At most one PLAYER seat exists across the whole transition set."
+        },
+        {
+          "name": "civil-auto-learning-hud",
+          "expected": true,
+          "actual": true,
+          "pass": true,
+          "detail": "The HUD label follows the accepted mode after every transition."
+        }
+      ],
+      "ok": true
+    },
+    {
+      "id": "mixed-ride",
+      "description": "One session rides a taxi in MANUAL, explicitly selects a civil, drives it in LEARNING and returns to AUTO.",
+      "checks": [
+        {
+          "name": "mixed-taxi-segment",
+          "expected": {
+            "mode": "MANUAL",
+            "opened": true
+          },
+          "actual": {
+            "mode": "MANUAL",
+            "opened": true
+          },
+          "pass": true,
+          "detail": "The taxi segment is a real 069 MANUAL record."
+        },
+        {
+          "name": "mixed-selection-closes-taxi",
+          "expected": {
+            "count": 1,
+            "mode": "MANUAL",
+            "reason": "VEHICLE_SWITCH"
+          },
+          "actual": {
+            "count": 1,
+            "mode": "MANUAL",
+            "reason": "VEHICLE_SWITCH"
+          },
+          "pass": true,
+          "detail": "The 068 camera switch closes the departing MANUAL segment with VEHICLE_SWITCH."
+        },
+        {
+          "name": "mixed-selection-no-takeover",
+          "expected": {
+            "camera": "civil:217",
+            "seat": null,
+            "civilSegments": 0
+          },
+          "actual": {
+            "camera": "civil:217",
+            "seat": null,
+            "civilSegments": 0
+          },
+          "pass": true,
+          "detail": "A new selection moves only the camera; the civil stays in AUTO, unseated."
+        },
+        {
+          "name": "mixed-learning-segment",
+          "expected": {
+            "mode": "LEARNING",
+            "eligible": true
+          },
+          "actual": {
+            "mode": "LEARNING",
+            "eligible": true
+          },
+          "pass": true,
+          "detail": "The explicit L intent opens a real eligible LEARNING segment on the civil."
+        },
+        {
+          "name": "mixed-manual-not-learned",
+          "expected": {
+            "status": "SKIPPED_MANUAL",
+            "jobs": false,
+            "version": null
+          },
+          "actual": {
+            "status": "SKIPPED_MANUAL",
+            "jobs": false,
+            "version": null
+          },
+          "pass": true,
+          "detail": "The MANUAL segment never becomes a learning job or a version."
+        },
+        {
+          "name": "mixed-learning-version",
+          "expected": {
+            "job": true,
+            "version": true
+          },
+          "actual": {
+            "job": true,
+            "version": true
+          },
+          "pass": true,
+          "detail": "The closed eligible LEARNING segment produced a real 112 version."
+        },
+        {
+          "name": "mixed-physics",
+          "expected": {
+            "taxi": true,
+            "civil": true
+          },
+          "actual": {
+            "taxi": true,
+            "civil": true
+          },
+          "pass": true,
+          "detail": "Both vehicles keep their speed, heading and per-tick position step."
+        },
+        {
+          "name": "mixed-seats",
+          "expected": {
+            "after": 0,
+            "max": 1
+          },
+          "actual": {
+            "after": 0,
+            "max": 1
+          },
+          "pass": true,
+          "detail": "At most one seat."
+        },
+        {
+          "name": "mixed-profile-manual",
+          "expected": {
+            "manualSkipped": 1,
+            "jobs": 1
+          },
+          "actual": {
+            "manualSkipped": 1,
+            "jobs": 1
+          },
+          "pass": true,
+          "detail": "Only the eligible LEARNING close reached the 103 queue."
+        }
+      ],
+      "ok": true
+    },
+    {
+      "id": "pause-focus",
+      "description": "A paused MANUAL world drops the held M/L key and pending intent and resumes with contiguous ticks.",
+      "checks": [
+        {
+          "name": "pause-holds-key",
+          "expected": {
+            "held": 1
+          },
+          "actual": {
+            "held": 1
+          },
+          "pass": true,
+          "detail": "The real 067 keyboard keeps exactly one held code before the pause."
+        },
+        {
+          "name": "pause-resets-held",
+          "expected": {
+            "held": 0,
+            "suspended": true
+          },
+          "actual": {
+            "held": 0,
+            "suspended": true
+          },
+          "pass": true,
+          "detail": "070 suspension clears the held code through the injected reset port."
+        },
+        {
+          "name": "pause-stops-ticks",
+          "expected": {
+            "tick": 5,
+            "stepped": false
+          },
+          "actual": {
+            "tick": 5,
+            "stepped": false
+          },
+          "pass": true,
+          "detail": "A suspended world executes zero physical ticks."
+        },
+        {
+          "name": "pause-resume",
+          "expected": {
+            "paused": false,
+            "gap": 1
+          },
+          "actual": {
+            "paused": false,
+            "gap": 1
+          },
+          "pass": true,
+          "detail": "The resumed tick is exactly the next accepted tick: no gap, no duplicate."
+        },
+        {
+          "name": "pause-clears-intent",
+          "expected": {
+            "mode": "MANUAL",
+            "autoSegments": 0,
+            "closed": 0
+          },
+          "actual": {
+            "mode": "MANUAL",
+            "autoSegments": 0,
+            "closed": 0
+          },
+          "pass": true,
+          "detail": "The intent queued before the pause is cleared, so no AUTO transition is applied."
+        },
+        {
+          "name": "pause-keeps-segment",
+          "expected": {
+            "segmentId": "three-modes:case:pause-focus:segment:1",
+            "startTick": 4
+          },
+          "actual": {
+            "segmentId": "three-modes:case:pause-focus:segment:1",
+            "startTick": 4
+          },
+          "pass": true,
+          "detail": "The suspended MANUAL segment stays open and is not re-opened."
+        },
+        {
+          "name": "focus-suspends",
+          "expected": {
+            "suspended": true,
+            "held": 0,
+            "resumed": false,
+            "tickGap": 0
+          },
+          "actual": {
+            "suspended": true,
+            "held": 0,
+            "resumed": false,
+            "tickGap": 0
+          },
+          "pass": true,
+          "detail": "Browser focus loss suspends through 070 in every mode and resuming restores the same tick."
+        }
+      ],
+      "ok": true
+    },
+    {
+      "id": "remap",
+      "description": "M/L come from the persisted 080 bindings; the previous physical codes are ignored.",
+      "checks": [
+        {
+          "name": "remap-saved",
+          "expected": {
+            "manual": "Digit1",
+            "learning": "Digit2",
+            "changed": true
+          },
+          "actual": {
+            "manual": "Digit1",
+            "learning": "Digit2",
+            "changed": true
+          },
+          "pass": true,
+          "detail": "The 080 draft was saved through the real settings store and applied to the keyboard and HUD."
+        },
+        {
+          "name": "remap-old-code-ignored",
+          "expected": {
+            "accepted": false,
+            "mode": "AUTO",
+            "segments": 0
+          },
+          "actual": {
+            "accepted": false,
+            "mode": "AUTO",
+            "segments": 0
+          },
+          "pass": true,
+          "detail": "KeyM is no longer bound, so it queues nothing."
+        },
+        {
+          "name": "remap-new-code-accepted",
+          "expected": {
+            "manual": true,
+            "learning": true
+          },
+          "actual": {
+            "manual": true,
+            "learning": true
+          },
+          "pass": true,
+          "detail": "The remapped physical codes are accepted by the real 067 adapter."
+        },
+        {
+          "name": "remap-modes",
+          "expected": {
+            "manual": "MANUAL",
+            "learning": "LEARNING"
+          },
+          "actual": {
+            "manual": "MANUAL",
+            "learning": "LEARNING"
+          },
+          "pass": true,
+          "detail": "The remapped keys drive the documented transitions."
+        }
+      ],
+      "ok": true
+    },
+    {
+      "id": "busy-worker",
+      "description": "A LEARNING close is admitted while the serial 103 worker is busy with a secondary job.",
+      "checks": [
+        {
+          "name": "busy-worker-active",
+          "expected": {
+            "active": 1
+          },
+          "actual": {
+            "active": 1
+          },
+          "pass": true,
+          "detail": "A real secondary 103 job occupies the serial queue at admission time."
+        },
+        {
+          "name": "busy-admission",
+          "expected": {
+            "job": true,
+            "version": true
+          },
+          "actual": {
+            "job": true,
+            "version": true
+          },
+          "pass": true,
+          "detail": "The closed segment is admitted by the real 112 pipeline while the serial worker is busy."
+        },
+        {
+          "name": "busy-no-duplicate",
+          "expected": {
+            "starts": 2,
+            "deduplicated": "DEDUPLICATED"
+          },
+          "actual": {
+            "starts": 2,
+            "deduplicated": "DEDUPLICATED"
+          },
+          "pass": true,
+          "detail": "A replayed segment is deduplicated by the real pipeline ledger; no second job starts."
+        },
+        {
+          "name": "busy-one-job",
+          "expected": {
+            "jobs": 1
+          },
+          "actual": {
+            "jobs": 1
+          },
+          "pass": true,
+          "detail": "Only the real closed LEARNING segment reached the queue."
+        }
+      ],
+      "ok": true
+    },
+    {
+      "id": "selection-no-takeover",
+      "description": "Changing the camera target never takes control; an explicit M intent does, and switching releases the old seat.",
+      "checks": [
+        {
+          "name": "selection-camera-only",
+          "expected": {
+            "camera": "civil:217",
+            "seat": null,
+            "segments": 0
+          },
+          "actual": {
+            "camera": "civil:217",
+            "seat": null,
+            "segments": 0
+          },
+          "pass": true,
+          "detail": "068 moves the camera target only; no PLAYER seat and no segment exist."
+        },
+        {
+          "name": "selection-explicit-takeover",
+          "expected": {
+            "identity": "civil:217",
+            "mode": "MANUAL"
+          },
+          "actual": {
+            "identity": "civil:217",
+            "mode": "MANUAL"
+          },
+          "pass": true,
+          "detail": "The explicit M intent claims the selected civil in MANUAL."
+        },
+        {
+          "name": "selection-leaves-old-car",
+          "expected": {
+            "closed": 1,
+            "reason": "VEHICLE_SWITCH",
+            "seat": null,
+            "oldSegments": 1
+          },
+          "actual": {
+            "closed": 1,
+            "reason": "VEHICLE_SWITCH",
+            "seat": null,
+            "oldSegments": 1
+          },
+          "pass": true,
+          "detail": "Switching to the taxi releases the civil seat and closes its segment, without taking the taxi."
+        },
+        {
+          "name": "selection-camera-target",
+          "expected": {
+            "target": "taxi:217",
+            "civilOpen": true
+          },
+          "actual": {
+            "target": "taxi:217",
+            "civilOpen": true
+          },
+          "pass": true,
+          "detail": "The camera follows the new target while the old vehicle keeps its closed record."
+        }
+      ],
+      "ok": true
+    }
+  ],
+  "latency": {
+    "version": "217-three-modes-v1",
+    "level": "full",
+    "scope": "LOCAL_NODE_SINGLE_PROCESS",
+    "provisional": true,
+    "hardwareClaim": "NOT_MEASURED",
+    "fpsClaim": "NOT_MEASURED",
+    "gpuClaim": "NOT_MEASURED",
+    "rule": "Local deterministic probe: mode intent -> accepted transition tick, selection change -> accepted camera target and LEARNING close -> 103 queue admission with a busy serial worker. Bounded samples, single process, no parallel hardware probe, no FPS/GPU/hardware claim.",
+    "modeIntentToAcceptedTransition": {
+      "samples": 48,
+      "minMs": 0.8227,
+      "p50Ms": 1.1779,
+      "p95Ms": 1.5128,
+      "maxMs": 1.7673,
+      "meanMs": 1.1231
+    },
+    "selectionChangeToCameraTarget": {
+      "samples": 200,
+      "minMs": 0.3466,
+      "p50Ms": 0.3704,
+      "p95Ms": 0.5539,
+      "maxMs": 0.9057,
+      "meanMs": 0.3974
+    },
+    "learningSegmentCloseToQueueAdmission": {
+      "samples": 200,
+      "minMs": 0.1731,
+      "p50Ms": 0.7098,
+      "p95Ms": 0.9677,
+      "maxMs": 2.6495,
+      "meanMs": 0.7081,
+      "busyWorker": true,
+      "busySamples": 200,
+      "admissions": 200,
+      "duplicateJobs": 0
+    },
+    "budget": {
+      "tickMs": 16.6667,
+      "modeIntentWithinTick": true,
+      "selectionChangeWithinTick": true,
+      "note": "Informational local observation only: p95 below one 60 Hz tick on this machine is not an FPS, GPU or hardware result and is never a pass/fail gate."
+    },
+    "failures": []
+  },
+  "checks": [
+    {
+      "name": "version",
+      "expected": "217-three-modes-v1",
+      "actual": "217-three-modes-v1",
+      "pass": true,
+      "detail": "One versioned 217 identity."
+    },
+    {
+      "name": "limits",
+      "expected": {
+        "tickHz": 60,
+        "dtSeconds": 0.016666666666666666,
+        "modeSamples": 48,
+        "selectionSamples": 200,
+        "admissionSamples": 200
+      },
+      "actual": {
+        "tickHz": 60,
+        "dtSeconds": 0.016666666666666666,
+        "modeSamples": 48,
+        "selectionSamples": 200,
+        "admissionSamples": 200
+      },
+      "pass": true,
+      "detail": "The frozen tick and bounded-sample limits."
+    },
+    {
+      "name": "matrix-rows",
+      "expected": 12,
+      "actual": 12,
+      "pass": true,
+      "detail": "Six transitions times the TAXI and CIVIL classes."
+    },
+    {
+      "name": "matrix-transitions",
+      "expected": [
+        "AUTO->MANUAL",
+        "AUTO->LEARNING",
+        "MANUAL->AUTO",
+        "MANUAL->LEARNING",
+        "LEARNING->AUTO",
+        "LEARNING->MANUAL"
+      ],
+      "actual": [
+        "AUTO->MANUAL",
+        "AUTO->LEARNING",
+        "MANUAL->AUTO",
+        "MANUAL->LEARNING",
+        "LEARNING->AUTO",
+        "LEARNING->MANUAL"
+      ],
+      "pass": true,
+      "detail": "Every documented M/L fold is covered exactly once per class."
+    },
+    {
+      "name": "matrix-pass",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "No matrix row or scenario reported a failure."
+    },
+    {
+      "name": "matrix-physics",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Physics is preserved on every transition of both classes."
+    },
+    {
+      "name": "matrix-max-seats",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "The real 066 coordinator never exposed more than one PLAYER seat."
+    },
+    {
+      "name": "matrix-manual-not-learned",
+      "expected": [
+        {
+          "status": "SKIPPED_MANUAL",
+          "job": false,
+          "version": null
+        },
+        {
+          "status": "SKIPPED_MANUAL",
+          "job": false,
+          "version": null
+        },
+        {
+          "status": "SKIPPED_MANUAL",
+          "job": false,
+          "version": null
+        },
+        {
+          "status": "SKIPPED_MANUAL",
+          "job": false,
+          "version": null
+        }
+      ],
+      "actual": [
+        {
+          "status": "SKIPPED_MANUAL",
+          "job": false,
+          "version": null
+        },
+        {
+          "status": "SKIPPED_MANUAL",
+          "job": false,
+          "version": null
+        },
+        {
+          "status": "SKIPPED_MANUAL",
+          "job": false,
+          "version": null
+        },
+        {
+          "status": "SKIPPED_MANUAL",
+          "job": false,
+          "version": null
+        }
+      ],
+      "pass": true,
+      "detail": "Every closed MANUAL segment is skipped by the 112 pipeline without a job or a version."
+    },
+    {
+      "name": "matrix-manual-samples",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "MANUAL keeps telemetry/history; the skip is not a missing record."
+    },
+    {
+      "name": "matrix-learning-versions",
+      "expected": [
+        {
+          "job": true,
+          "version": true
+        },
+        {
+          "job": true,
+          "version": true
+        },
+        {
+          "job": true,
+          "version": true
+        },
+        {
+          "job": true,
+          "version": true
+        }
+      ],
+      "actual": [
+        {
+          "job": true,
+          "version": true
+        },
+        {
+          "job": true,
+          "version": true
+        },
+        {
+          "job": true,
+          "version": true
+        },
+        {
+          "job": true,
+          "version": true
+        }
+      ],
+      "pass": true,
+      "detail": "Every closed eligible LEARNING segment produced a real 112 job and version."
+    },
+    {
+      "name": "matrix-close-reasons",
+      "expected": [
+        "MODE_CHANGE",
+        "RETURN_TO_AUTO"
+      ],
+      "actual": [
+        "MODE_CHANGE",
+        "RETURN_TO_AUTO"
+      ],
+      "pass": true,
+      "detail": "RETURN_TO_AUTO and MODE_CHANGE are the only segment close reasons of a mode change."
+    },
+    {
+      "name": "scenarios",
+      "expected": [
+        "taxi-auto-manual",
+        "civil-auto-learning",
+        "mixed-ride",
+        "pause-focus",
+        "remap",
+        "busy-worker",
+        "selection-no-takeover"
+      ],
+      "actual": [
+        "taxi-auto-manual",
+        "civil-auto-learning",
+        "mixed-ride",
+        "pause-focus",
+        "remap",
+        "busy-worker",
+        "selection-no-takeover"
+      ],
+      "pass": true,
+      "detail": "The seven required acceptance scenarios are present in order."
+    },
+    {
+      "name": "scenario-pass",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Every acceptance scenario passed."
+    },
+    {
+      "name": "hud-labels-case",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The three HUD labels are exact."
+    },
+    {
+      "name": "evidence-manual",
+      "expected": {
+        "manualSegmentsClosed": 4,
+        "publications": 0
+      },
+      "actual": {
+        "manualSegmentsClosed": 4,
+        "publications": 0
+      },
+      "pass": true,
+      "detail": "MANUAL closes are real segments and never publications."
+    },
+    {
+      "name": "evidence-case",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The dedicated MANUAL/ineligible/eligible profile-evidence case passed."
+    },
+    {
+      "name": "latency-scope",
+      "expected": {
+        "level": "full",
+        "scope": "LOCAL_NODE_SINGLE_PROCESS",
+        "provisional": true,
+        "hardware": "NOT_MEASURED",
+        "fps": "NOT_MEASURED",
+        "gpu": "NOT_MEASURED"
+      },
+      "actual": {
+        "level": "full",
+        "scope": "LOCAL_NODE_SINGLE_PROCESS",
+        "provisional": true,
+        "hardware": "NOT_MEASURED",
+        "fps": "NOT_MEASURED",
+        "gpu": "NOT_MEASURED"
+      },
+      "pass": true,
+      "detail": "The probe is local and provisional and claims no hardware, FPS or GPU number."
+    },
+    {
+      "name": "latency-mode-samples",
+      "expected": 48,
+      "actual": 48,
+      "pass": true,
+      "detail": "The mode-intent channel has its full bounded sample."
+    },
+    {
+      "name": "latency-selection-samples",
+      "expected": 200,
+      "actual": 200,
+      "pass": true,
+      "detail": "The selection channel has its full bounded sample."
+    },
+    {
+      "name": "latency-admission-samples",
+      "expected": 200,
+      "actual": 200,
+      "pass": true,
+      "detail": "The queue-admission channel has its full bounded sample."
+    },
+    {
+      "name": "latency-percentiles",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "p50 <= p95 <= max on every measured channel."
+    },
+    {
+      "name": "latency-busy-worker",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Every admission sample was taken while a secondary 103 job occupied the serial worker."
+    },
+    {
+      "name": "latency-busy-samples",
+      "expected": 200,
+      "actual": 200,
+      "pass": true,
+      "detail": "The busy worker was confirmed for every admission sample."
+    },
+    {
+      "name": "latency-admissions",
+      "expected": 200,
+      "actual": 200,
+      "pass": true,
+      "detail": "Every measured close was really admitted as a 103 job."
+    },
+    {
+      "name": "latency-duplicates",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "Replaying a closed segment never started a second job."
+    },
+    {
+      "name": "latency-no-failures",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The probe retained zero failures."
+    },
+    {
+      "name": "latency-budget-observation",
+      "expected": {
+        "tickMs": 16.6667,
+        "informationalOnly": true
+      },
+      "actual": {
+        "tickMs": 16.6667,
+        "informationalOnly": true
+      },
+      "pass": true,
+      "detail": "The one-tick comparison is reported as a local observation, never a gate or a hardware claim."
+    },
+    {
+      "name": "determinism",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Two identical matrix runs produce identical JSON."
+    }
+  ],
+  "summary": {
+    "checks": 28,
+    "passed": 28,
+    "pass": true
+  },
+  "determinism": {
+    "identical": true,
+    "runs": 2
+  },
+  "limitations": [
+    "The latency probe is a local single-process Node measurement over bounded samples. It is provisional and machine-local and does not claim FPS, GPU, renderer or hardware performance.",
+    "The 094-101 estimators run inside the worker; this harness answers with the real 101 blend through the real 103 queue and 112 pipeline, exactly like the shared 103 harness. It does not re-estimate the style.",
+    "The scene physics is a deterministic constant-velocity readback used to prove that a mode/selection transition introduces no position, speed or heading discontinuity; it is not a Rapier vehicle simulation.",
+    "The mode/selection latency sample is 48/200 iterations because 069 protects 64 segment records per lifecycle; the admission sample is 200 across fresh scenes to stay below that bound."
+  ]
+}

@@ -77,6 +77,8 @@ Prototipul timpuriu validează trei chei înaintea gate-ului complet de 24. Test
 
 PBI 204 adaugă adaptorul experimental cu trei chei documentat în [early-learning-loop](early-learning-loop.md) și protocolul uman din [early-playtest](early-playtest.md). Blend-ul local nu activează estimabilitatea 092 și nu publică `LEARNED`; MANUAL rămâne fără învățare. Închiderea PBI cere cinci sesiuni reale exportate, fără substituirea lor cu fixture-uri.
 
+PBI 217 verifică lanțul complet al celor trei moduri în [three-modes](three-modes.md): MANUAL produce telemetrie și istoric fără job, versiune sau parametru schimbat, LEARNING eligibil publică automat prin pipeline-ul 112, iar LEARNING neeligibil este sărit. Matricea AUTO/MANUAL/LEARNING × taxi/civil acoperă toate cele șase tranziții, cu segment închis/deschis corect, fizică păstrată și maximum un scaun `PLAYER`; sonda de latență este locală și provizorie, fără pretenție de FPS/GPU/hardware. [Dovezile 217](Evidence/217-three-modes/README.md) păstrează cele 20 de teste și raportul determinist 28/28.
+
 ## Reglaje și schimbări de lume
 
 Aplicarea unui reglaj de stil invalidează joburile vechi prin learningEpoch și nu inventează dovezi; demonstrațiile eligibile ulterioare pot modifica din nou valorile. ControlPreferences este înregistrat în segment, distinct de profil. Joburile păstrează sessionId/worldEpoch pentru a nu publica peste o lume resetată sau peste sesiunea Academie când au fost lansate în Haos. UI arată observațiile lipsă și exemple reale, fără să promită învățarea driftului sau a distrugerii.
