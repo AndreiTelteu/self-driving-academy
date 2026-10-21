@@ -1,0 +1,3416 @@
+{
+  "version": "208-city-style-v1",
+  "contract": {
+    "profileId": "city-profile-208",
+    "engineVersion": "engine-208",
+    "baseVersionId": "city-style-base-208",
+    "learningKey": "speed_delta_urban",
+    "styleSources": {
+      "CAUTIOUS": "PRUDENT",
+      "ASSERTIVE": "IMPULSIVE"
+    },
+    "scenarios": [
+      "MIXED_ACTIVATION",
+      "HIDDEN_VEHICLES",
+      "LATER_SPAWN",
+      "CIVIL_MANUAL",
+      "CIVIL_RELEASE",
+      "CIVIL_LEARNING",
+      "ROUTE_PRESERVATION"
+    ],
+    "stateFields": [
+      "appliedProfileVersion",
+      "controlMode",
+      "tick"
+    ],
+    "vehicleFields": [
+      "classId",
+      "classVersion",
+      "createdAtTick",
+      "driverKind",
+      "profileId",
+      "slot",
+      "vehicleId"
+    ],
+    "presentationFields": [
+      "camera",
+      "hidden",
+      "isPlayer",
+      "mesh",
+      "renderer",
+      "screen",
+      "selected",
+      "visible"
+    ],
+    "limits": {
+      "vehicles": 110,
+      "civilActors": 40,
+      "routeLanes": 256,
+      "routeAttempts": 64,
+      "minimumGapM": 0.25,
+      "retainedHistory": 0
+    },
+    "tickHz": 60,
+    "seed": 208000
+  },
+  "phases": [
+    {
+      "phase": "MIXED_ACTIVATION",
+      "status": "PASS",
+      "scenarioStatus": "APPLIED",
+      "tick": 8,
+      "activationStatus": "APPLIED",
+      "activationTick": 7,
+      "appliedTick": 7,
+      "before": {
+        "city-style-base-208": 40
+      },
+      "after": {
+        "segment-208-fleet~112": 40
+      },
+      "changedIds": [
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0001",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0002",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0003",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0004",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0005",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0006",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0007",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0008",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0009",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0010",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0011",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0012",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0013",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0014",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0015",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0016",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0017",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0018",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0019",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0020",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0001",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0002",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0003",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0004",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0005",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0006",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0007",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0008",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0009",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0010",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0011",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0012",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0013",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0014",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0015",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0016",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0017",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0018",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0019",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0020"
+      ],
+      "commonVersionAfter": "segment-208-fleet~112",
+      "controlModesBefore": {
+        "AUTO": 40,
+        "LEARNING": 0,
+        "MANUAL": 0
+      },
+      "controlModesAfter": {
+        "AUTO": 40,
+        "LEARNING": 0,
+        "MANUAL": 0
+      },
+      "preservedRoutes": 0,
+      "routeFingerprintsPreserved": true,
+      "hiddenOverrides": [],
+      "laterSpawnVersion": null,
+      "manualVersionChanges": 0,
+      "learningVersion": null,
+      "crossCategoryUpdated": false,
+      "writes": [
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0001",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0002",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0003",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0004",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0005",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0006",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0007",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0008",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0009",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0010",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0011",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0012",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0013",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0014",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0015",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0016",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0017",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0018",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0019",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0020",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0001",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0002",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0003",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0004",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0005",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0006",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0007",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0008",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0009",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0010",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0011",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0012",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0013",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0014",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0015",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0016",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0017",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0018",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0019",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0020",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        }
+      ],
+      "details": {
+        "fleet": 40,
+        "tick": 7,
+        "nextStepTick": 8,
+        "updated": 40,
+        "closure": "COMPOSED",
+        "beforeHistogram": "city-style-base-208=40"
+      }
+    },
+    {
+      "phase": "HIDDEN_VEHICLES",
+      "status": "PASS",
+      "scenarioStatus": "APPLIED",
+      "tick": 5,
+      "activationStatus": "APPLIED",
+      "activationTick": 5,
+      "appliedTick": 5,
+      "before": {
+        "city-style-base-208": 40
+      },
+      "after": {
+        "segment-208-fleet~112": 40
+      },
+      "changedIds": [
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0001",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0002",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0003",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0004",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0005",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0006",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0007",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0008",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0009",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0010",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0011",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0012",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0013",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0014",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0015",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0016",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0017",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0018",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0019",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0020",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0001",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0002",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0003",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0004",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0005",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0006",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0007",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0008",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0009",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0010",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0011",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0012",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0013",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0014",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0015",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0016",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0017",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0018",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0019",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0020"
+      ],
+      "commonVersionAfter": "segment-208-fleet~112",
+      "controlModesBefore": {
+        "AUTO": 34,
+        "LEARNING": 3,
+        "MANUAL": 3
+      },
+      "controlModesAfter": {
+        "AUTO": 34,
+        "LEARNING": 3,
+        "MANUAL": 3
+      },
+      "preservedRoutes": 0,
+      "routeFingerprintsPreserved": true,
+      "hiddenOverrides": [],
+      "laterSpawnVersion": null,
+      "manualVersionChanges": 0,
+      "learningVersion": null,
+      "crossCategoryUpdated": false,
+      "writes": [
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0001",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0002",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0003",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0004",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0005",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0006",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0007",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0008",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0009",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0010",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0011",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0012",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0013",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0014",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0015",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0016",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0017",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0018",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0019",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0020",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0001",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0002",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0003",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0004",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0005",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0006",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0007",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0008",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0009",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0010",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0011",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0012",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0013",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0014",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0015",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0016",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0017",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0018",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0019",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0020",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        }
+      ],
+      "details": {
+        "hiddenIds": 3,
+        "selectedIds": 3,
+        "manual": 3,
+        "learning": 3,
+        "updated": 40
+      }
+    },
+    {
+      "phase": "LATER_SPAWN",
+      "status": "PASS",
+      "scenarioStatus": "APPLIED",
+      "tick": 5,
+      "activationStatus": "APPLIED",
+      "activationTick": 5,
+      "appliedTick": 5,
+      "before": {
+        "city-style-base-208": 40
+      },
+      "after": {
+        "segment-208-fleet~112": 44
+      },
+      "changedIds": [
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0001",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0002",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0003",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0004",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0005",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0006",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0007",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0008",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0009",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0010",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0011",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0012",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0013",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0014",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0015",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0016",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0017",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0018",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0019",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0020",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0021",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0001",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0002",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0003",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0004",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0005",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0006",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0007",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0008",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0009",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0010",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0011",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0012",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0013",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0014",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0015",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0016",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0017",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0018",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0019",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0020",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0021"
+      ],
+      "commonVersionAfter": "segment-208-fleet~112",
+      "controlModesBefore": {
+        "AUTO": 44,
+        "LEARNING": 0,
+        "MANUAL": 0
+      },
+      "controlModesAfter": {
+        "AUTO": 44,
+        "LEARNING": 0,
+        "MANUAL": 0
+      },
+      "preservedRoutes": 0,
+      "routeFingerprintsPreserved": true,
+      "hiddenOverrides": [],
+      "laterSpawnVersion": "segment-208-fleet~112",
+      "manualVersionChanges": 0,
+      "learningVersion": null,
+      "crossCategoryUpdated": false,
+      "writes": [
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0001",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0002",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0003",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0004",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0005",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0006",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0007",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0008",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0009",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0010",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0011",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0012",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0013",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0014",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0015",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0016",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0017",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0018",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0019",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0020",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0021",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0001",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0002",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0003",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0004",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0005",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0006",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0007",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0008",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0009",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0010",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0011",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0012",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0013",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0014",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0015",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0016",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0017",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0018",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0019",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0020",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0021",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        }
+      ],
+      "details": {
+        "pendingVersion": "segment-208-fleet~112",
+        "appliedVersion": "segment-208-fleet~112",
+        "pendingCivilVersion": "segment-208-fleet~112",
+        "appliedCivilVersion": "segment-208-fleet~112",
+        "grownPopulation": 44
+      }
+    },
+    {
+      "phase": "CIVIL_MANUAL",
+      "status": "PASS",
+      "scenarioStatus": "SKIPPED_MANUAL",
+      "tick": 7,
+      "activationStatus": "APPLIED",
+      "activationTick": 7,
+      "appliedTick": 7,
+      "before": {
+        "city-style-base-208": 40
+      },
+      "after": {
+        "segment-208-fleet~112": 40
+      },
+      "changedIds": [
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0001",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0002",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0003",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0004",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0005",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0006",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0007",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0008",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0009",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0010",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0011",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0012",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0013",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0014",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0015",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0016",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0017",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0018",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0019",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0020",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0001",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0002",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0003",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0004",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0005",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0006",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0007",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0008",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0009",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0010",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0011",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0012",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0013",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0014",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0015",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0016",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0017",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0018",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0019",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0020"
+      ],
+      "commonVersionAfter": "segment-208-fleet~112",
+      "controlModesBefore": {
+        "AUTO": 39,
+        "LEARNING": 0,
+        "MANUAL": 1
+      },
+      "controlModesAfter": {
+        "AUTO": 39,
+        "LEARNING": 0,
+        "MANUAL": 1
+      },
+      "preservedRoutes": 1,
+      "routeFingerprintsPreserved": true,
+      "hiddenOverrides": [],
+      "laterSpawnVersion": null,
+      "manualVersionChanges": 0,
+      "learningVersion": null,
+      "crossCategoryUpdated": false,
+      "writes": [
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0001",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0002",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0003",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0004",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0005",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0006",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0007",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0008",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0009",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0010",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0011",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0012",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0013",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0014",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0015",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0016",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0017",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0018",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0019",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0020",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0001",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0002",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0003",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0004",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0005",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0006",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0007",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0008",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0009",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0010",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0011",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0012",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0013",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0014",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0015",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0016",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0017",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0018",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0019",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0020",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        }
+      ],
+      "details": {
+        "civilianId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0001",
+        "manualStatus": "SKIPPED_MANUAL",
+        "manualActivations": 0,
+        "learningVersion": "segment-208-fleet~112",
+        "speedMps": 0
+      }
+    },
+    {
+      "phase": "CIVIL_RELEASE",
+      "status": "PASS",
+      "scenarioStatus": "APPLIED",
+      "tick": 8,
+      "activationStatus": "APPLIED",
+      "activationTick": 7,
+      "appliedTick": 7,
+      "before": {
+        "city-style-base-208": 40
+      },
+      "after": {
+        "segment-208-fleet~112": 40
+      },
+      "changedIds": [
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0001",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0002",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0003",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0004",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0005",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0006",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0007",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0008",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0009",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0010",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0011",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0012",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0013",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0014",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0015",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0016",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0017",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0018",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0019",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0020",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0001",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0002",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0003",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0004",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0005",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0006",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0007",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0008",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0009",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0010",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0011",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0012",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0013",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0014",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0015",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0016",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0017",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0018",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0019",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0020"
+      ],
+      "commonVersionAfter": "segment-208-fleet~112",
+      "controlModesBefore": {
+        "AUTO": 40,
+        "LEARNING": 0,
+        "MANUAL": 0
+      },
+      "controlModesAfter": {
+        "AUTO": 40,
+        "LEARNING": 0,
+        "MANUAL": 0
+      },
+      "preservedRoutes": 1,
+      "routeFingerprintsPreserved": true,
+      "hiddenOverrides": [],
+      "laterSpawnVersion": null,
+      "manualVersionChanges": 0,
+      "learningVersion": null,
+      "crossCategoryUpdated": false,
+      "writes": [
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0001",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0002",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0003",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0004",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0005",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0006",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0007",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0008",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0009",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0010",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0011",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0012",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0013",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0014",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0015",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0016",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0017",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0018",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0019",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0020",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0001",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0002",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0003",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0004",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0005",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0006",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0007",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0008",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0009",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0010",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0011",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0012",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0013",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0014",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0015",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0016",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0017",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0018",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0019",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0020",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        }
+      ],
+      "details": {
+        "civilianId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0002",
+        "releasedTick": 7,
+        "distanceBeforeM": 0.0003888888888888889,
+        "distanceAfterM": 0.0003958333333333334,
+        "speedMps": 0.0004166666666666667
+      }
+    },
+    {
+      "phase": "CIVIL_LEARNING",
+      "status": "PASS",
+      "scenarioStatus": "APPLIED",
+      "tick": 7,
+      "activationStatus": "APPLIED",
+      "activationTick": 7,
+      "appliedTick": 7,
+      "before": {
+        "city-style-base-208": 40
+      },
+      "after": {
+        "segment-208-civilian~112": 40
+      },
+      "changedIds": [
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0001",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0002",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0003",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0004",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0005",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0006",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0007",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0008",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0009",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0010",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0011",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0012",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0013",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0014",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0015",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0016",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0017",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0018",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0019",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0020",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0001",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0002",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0003",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0004",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0005",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0006",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0007",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0008",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0009",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0010",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0011",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0012",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0013",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0014",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0015",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0016",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0017",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0018",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0019",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0020"
+      ],
+      "commonVersionAfter": "segment-208-civilian~112",
+      "controlModesBefore": {
+        "AUTO": 39,
+        "LEARNING": 1,
+        "MANUAL": 0
+      },
+      "controlModesAfter": {
+        "AUTO": 39,
+        "LEARNING": 1,
+        "MANUAL": 0
+      },
+      "preservedRoutes": 1,
+      "routeFingerprintsPreserved": true,
+      "hiddenOverrides": [],
+      "laterSpawnVersion": null,
+      "manualVersionChanges": 0,
+      "learningVersion": "segment-208-civilian~112",
+      "crossCategoryUpdated": true,
+      "writes": [
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0001",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0002",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0003",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0004",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0005",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0006",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0007",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0008",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0009",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0010",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0011",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0012",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0013",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0014",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0015",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0016",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0017",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0018",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0019",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0020",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0001",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0002",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0003",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0004",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0005",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0006",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0007",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0008",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0009",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0010",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0011",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0012",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0013",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0014",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0015",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0016",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0017",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0018",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0019",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0020",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        }
+      ],
+      "details": {
+        "civilianId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0003",
+        "learnedValue": 1.3,
+        "baseValue": -2,
+        "taxiVersions": "segment-208-civilian~112",
+        "civilianVersions": "segment-208-civilian~112",
+        "versionsCreated": 1
+      }
+    },
+    {
+      "phase": "ROUTE_PRESERVATION",
+      "status": "PASS",
+      "scenarioStatus": "APPLIED",
+      "tick": 13,
+      "activationStatus": "APPLIED",
+      "activationTick": 13,
+      "appliedTick": 13,
+      "before": {
+        "city-style-base-208": 40
+      },
+      "after": {
+        "segment-208-fleet~112": 40
+      },
+      "changedIds": [
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0001",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0002",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0003",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0004",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0005",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0006",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0007",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0008",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0009",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0010",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0011",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0012",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0013",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0014",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0015",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0016",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0017",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0018",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0019",
+        "id-v1:7:vehicle14:city:208:style4:TAXI4:0020",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0001",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0002",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0003",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0004",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0005",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0006",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0007",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0008",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0009",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0010",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0011",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0012",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0013",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0014",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0015",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0016",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0017",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0018",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0019",
+        "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0020"
+      ],
+      "commonVersionAfter": "segment-208-fleet~112",
+      "controlModesBefore": {
+        "AUTO": 40,
+        "LEARNING": 0,
+        "MANUAL": 0
+      },
+      "controlModesAfter": {
+        "AUTO": 40,
+        "LEARNING": 0,
+        "MANUAL": 0
+      },
+      "preservedRoutes": 20,
+      "routeFingerprintsPreserved": true,
+      "hiddenOverrides": [],
+      "laterSpawnVersion": null,
+      "manualVersionChanges": 0,
+      "learningVersion": null,
+      "crossCategoryUpdated": false,
+      "writes": [
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0001",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0002",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0003",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0004",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0005",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0006",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0007",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0008",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0009",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0010",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0011",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0012",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0013",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0014",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0015",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0016",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0017",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0018",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0019",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style4:TAXI4:0020",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0001",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0002",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0003",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0004",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0005",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0006",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0007",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0008",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0009",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0010",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0011",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0012",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0013",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0014",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0015",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0016",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0017",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0018",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0019",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        },
+        {
+          "method": "updateState",
+          "vehicleId": "id-v1:7:vehicle14:city:208:style8:CIVILIAN4:0020",
+          "fields": [
+            "appliedProfileVersion",
+            "tick"
+          ]
+        }
+      ],
+      "details": {
+        "civilians": 20,
+        "preservedRoutes": 20,
+        "classes": 2,
+        "ticks": "13"
+      }
+    }
+  ],
+  "checks": [
+    {
+      "name": "mixed-before-tick-status",
+      "expected": "PENDING",
+      "actual": "PENDING",
+      "pass": true,
+      "detail": "the command is pending before the common tick"
+    },
+    {
+      "name": "mixed-before-tick-writes",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no vehicle is written before the common tick"
+    },
+    {
+      "name": "mixed-before-tick-versions",
+      "expected": "city-style-base-208=40",
+      "actual": "city-style-base-208=40",
+      "pass": true,
+      "detail": "the whole fleet keeps the base version before the tick"
+    },
+    {
+      "name": "mixed-applied-tick",
+      "expected": 7,
+      "actual": 7,
+      "pass": true,
+      "detail": "every vehicle shares the scheduled common tick"
+    },
+    {
+      "name": "mixed-common-tick",
+      "expected": "7=40",
+      "actual": "7=40",
+      "pass": true,
+      "detail": "no vehicle keeps a different tick after the common activation"
+    },
+    {
+      "name": "mixed-common-version",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "exactly one applied version remains after the tick"
+    },
+    {
+      "name": "mixed-common-version-id",
+      "expected": "segment-208-fleet~112",
+      "actual": "segment-208-fleet~112",
+      "pass": true,
+      "detail": "the applied version is the published one"
+    },
+    {
+      "name": "mixed-fleet-count",
+      "expected": 40,
+      "actual": 40,
+      "pass": true,
+      "detail": "both categories report the same version"
+    },
+    {
+      "name": "mixed-taxis-version",
+      "expected": "segment-208-fleet~112",
+      "actual": "segment-208-fleet~112",
+      "pass": true,
+      "detail": "taxis adopt the common version"
+    },
+    {
+      "name": "mixed-civilians-version",
+      "expected": "segment-208-fleet~112",
+      "actual": "segment-208-fleet~112",
+      "pass": true,
+      "detail": "civilians adopt the common version"
+    },
+    {
+      "name": "mixed-control-modes",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "control modes are untouched by activation"
+    },
+    {
+      "name": "mixed-fleet-report",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the fleet report is unchanged"
+    },
+    {
+      "name": "mixed-vehicle-list",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the vehicle list is unchanged"
+    },
+    {
+      "name": "mixed-write-surface",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "activation writes only version and tick"
+    },
+    {
+      "name": "mixed-civil-after-step",
+      "expected": "segment-208-fleet~112",
+      "actual": "segment-208-fleet~112",
+      "pass": true,
+      "detail": "the next 60 Hz step keeps the common version"
+    },
+    {
+      "name": "hidden-marked-count",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "hidden/selected ids are presentation-only"
+    },
+    {
+      "name": "hidden-plan-includes-marked",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "a presentation-hidden vehicle is part of the activation plan"
+    },
+    {
+      "name": "hidden-plan-includes-selected",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "a selected vehicle is part of the activation plan"
+    },
+    {
+      "name": "hidden-manual-count",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "MANUAL control modes survive the activation"
+    },
+    {
+      "name": "hidden-learning-count",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "LEARNING control modes survive the activation"
+    },
+    {
+      "name": "hidden-common-version",
+      "expected": "segment-208-fleet~112",
+      "actual": "segment-208-fleet~112",
+      "pass": true,
+      "detail": "every hidden/selected/player vehicle reports the common version"
+    },
+    {
+      "name": "hidden-command",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "one 110 command served the whole fleet"
+    },
+    {
+      "name": "hidden-no-presentation-state",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "selection and visibility are not fleet state"
+    },
+    {
+      "name": "later-pending-target",
+      "expected": "segment-208-fleet~112",
+      "actual": "segment-208-fleet~112",
+      "pass": true,
+      "detail": "a taxi created before the tick reads the pending common target"
+    },
+    {
+      "name": "later-pending-civilian",
+      "expected": "segment-208-fleet~112",
+      "actual": "segment-208-fleet~112",
+      "pass": true,
+      "detail": "a civilian created before the tick reads the pending common target"
+    },
+    {
+      "name": "later-active-target",
+      "expected": "segment-208-fleet~112",
+      "actual": "segment-208-fleet~112",
+      "pass": true,
+      "detail": "a taxi created after the tick reads the active version"
+    },
+    {
+      "name": "later-active-civilian",
+      "expected": "segment-208-fleet~112",
+      "actual": "segment-208-fleet~112",
+      "pass": true,
+      "detail": "a civilian created after the tick reads the active version"
+    },
+    {
+      "name": "later-single-version",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "no per-kind or per-spawn version appears"
+    },
+    {
+      "name": "later-population",
+      "expected": 44,
+      "actual": 44,
+      "pass": true,
+      "detail": "the whole grown fleet shares the version"
+    },
+    {
+      "name": "later-profile-identity",
+      "expected": "city-profile-208",
+      "actual": "city-profile-208",
+      "pass": true,
+      "detail": "the later civilian has no private profile id"
+    },
+    {
+      "name": "later-no-extra-command",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "later vehicles need no second activation"
+    },
+    {
+      "name": "manual-segment-status",
+      "expected": "SKIPPED_MANUAL",
+      "actual": "SKIPPED_MANUAL",
+      "pass": true,
+      "detail": "a civil MANUAL segment is not learnable"
+    },
+    {
+      "name": "manual-segment-reason",
+      "expected": "MANUAL_SEGMENT_NOT_LEARNABLE",
+      "actual": "MANUAL_SEGMENT_NOT_LEARNABLE",
+      "pass": true,
+      "detail": "the closed manual reason is reported"
+    },
+    {
+      "name": "manual-segment-job",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "MANUAL never reaches the 103 queue"
+    },
+    {
+      "name": "manual-segment-version",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "MANUAL creates no version"
+    },
+    {
+      "name": "manual-segment-activation",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "MANUAL creates no 110 command"
+    },
+    {
+      "name": "manual-store-versions",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the 109 store is untouched by MANUAL"
+    },
+    {
+      "name": "manual-activations",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no activation command is published by MANUAL"
+    },
+    {
+      "name": "manual-mode-kept",
+      "expected": "MANUAL",
+      "actual": "MANUAL",
+      "pass": true,
+      "detail": "the civilian stays MANUAL after the common activation"
+    },
+    {
+      "name": "manual-route-kept",
+      "expected": "{\"source\":\"041-route-planner\",\"status\":\"READY\",\"path\":[\"lane:11N0\",\"lane:12E1\",\"lane:21S1\",\"lane:20S1\"],\"originLaneId\":\"lane:11N0\",\"destinationLaneId\":\"lane:20S1\",\"destinationKind\":\"LANE\",\"costSeconds\":44.04477611940298,\"costVersion\":\"route-cost-v1\",\"graphVersion\":\"033-lane-graph-v1\"}",
+      "actual": "{\"source\":\"041-route-planner\",\"status\":\"READY\",\"path\":[\"lane:11N0\",\"lane:12E1\",\"lane:21S1\",\"lane:20S1\"],\"originLaneId\":\"lane:11N0\",\"destinationLaneId\":\"lane:20S1\",\"destinationKind\":\"LANE\",\"costSeconds\":44.04477611940298,\"costVersion\":\"route-cost-v1\",\"graphVersion\":\"033-lane-graph-v1\"}",
+      "pass": true,
+      "detail": "the MANUAL civilian keeps its route"
+    },
+    {
+      "name": "manual-active-version",
+      "expected": "segment-208-fleet~112",
+      "actual": "segment-208-fleet~112",
+      "pass": true,
+      "detail": "the MANUAL civilian records the common version"
+    },
+    {
+      "name": "manual-manual-version-changes",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "MANUAL changes no version"
+    },
+    {
+      "name": "release-held-version",
+      "expected": "segment-208-fleet~112",
+      "actual": "segment-208-fleet~112",
+      "pass": true,
+      "detail": "the MANUAL civilian records the common version"
+    },
+    {
+      "name": "release-held-route",
+      "expected": "{\"source\":\"041-route-planner\",\"status\":\"READY\",\"path\":[\"lane:01S0\",\"lane:01E0\",\"lane:11N0\",\"lane:12N0\",\"lane:13N0\",\"lane:04W0\",\"lane:03S0\"],\"originLaneId\":\"lane:01S0\",\"destinationLaneId\":\"lane:03S0\",\"destinationKind\":\"LANE\",\"costSeconds\":103.69642857142858,\"costVersion\":\"route-cost-v1\",\"graphVersion\":\"033-lane-graph-v1\"}",
+      "actual": "{\"source\":\"041-route-planner\",\"status\":\"READY\",\"path\":[\"lane:01S0\",\"lane:01E0\",\"lane:11N0\",\"lane:12N0\",\"lane:13N0\",\"lane:04W0\",\"lane:03S0\"],\"originLaneId\":\"lane:01S0\",\"destinationLaneId\":\"lane:03S0\",\"destinationKind\":\"LANE\",\"costSeconds\":103.69642857142858,\"costVersion\":\"route-cost-v1\",\"graphVersion\":\"033-lane-graph-v1\"}",
+      "pass": true,
+      "detail": "the MANUAL civilian keeps its route before release"
+    },
+    {
+      "name": "release-mode",
+      "expected": "AUTO",
+      "actual": "AUTO",
+      "pass": true,
+      "detail": "resume returns the civilian to AUTO"
+    },
+    {
+      "name": "release-registry-mode",
+      "expected": "AUTO",
+      "actual": "AUTO",
+      "pass": true,
+      "detail": "the registry records the release"
+    },
+    {
+      "name": "release-version",
+      "expected": "segment-208-fleet~112",
+      "actual": "segment-208-fleet~112",
+      "pass": true,
+      "detail": "release keeps the active common version"
+    },
+    {
+      "name": "release-style-version",
+      "expected": "segment-208-fleet~112",
+      "actual": "segment-208-fleet~112",
+      "pass": true,
+      "detail": "the civilian re-reads the active style on release"
+    },
+    {
+      "name": "release-route",
+      "expected": "{\"source\":\"041-route-planner\",\"status\":\"READY\",\"path\":[\"lane:01S0\",\"lane:01E0\",\"lane:11N0\",\"lane:12N0\",\"lane:13N0\",\"lane:04W0\",\"lane:03S0\"],\"originLaneId\":\"lane:01S0\",\"destinationLaneId\":\"lane:03S0\",\"destinationKind\":\"LANE\",\"costSeconds\":103.69642857142858,\"costVersion\":\"route-cost-v1\",\"graphVersion\":\"033-lane-graph-v1\"}",
+      "actual": "{\"source\":\"041-route-planner\",\"status\":\"READY\",\"path\":[\"lane:01S0\",\"lane:01E0\",\"lane:11N0\",\"lane:12N0\",\"lane:13N0\",\"lane:04W0\",\"lane:03S0\"],\"originLaneId\":\"lane:01S0\",\"destinationLaneId\":\"lane:03S0\",\"destinationKind\":\"LANE\",\"costSeconds\":103.69642857142858,\"costVersion\":\"route-cost-v1\",\"graphVersion\":\"033-lane-graph-v1\"}",
+      "pass": true,
+      "detail": "release keeps the route fingerprint"
+    },
+    {
+      "name": "release-after-step-route",
+      "expected": "{\"source\":\"041-route-planner\",\"status\":\"READY\",\"path\":[\"lane:01S0\",\"lane:01E0\",\"lane:11N0\",\"lane:12N0\",\"lane:13N0\",\"lane:04W0\",\"lane:03S0\"],\"originLaneId\":\"lane:01S0\",\"destinationLaneId\":\"lane:03S0\",\"destinationKind\":\"LANE\",\"costSeconds\":103.69642857142858,\"costVersion\":\"route-cost-v1\",\"graphVersion\":\"033-lane-graph-v1\"}",
+      "actual": "{\"source\":\"041-route-planner\",\"status\":\"READY\",\"path\":[\"lane:01S0\",\"lane:01E0\",\"lane:11N0\",\"lane:12N0\",\"lane:13N0\",\"lane:04W0\",\"lane:03S0\"],\"originLaneId\":\"lane:01S0\",\"destinationLaneId\":\"lane:03S0\",\"destinationKind\":\"LANE\",\"costSeconds\":103.69642857142858,\"costVersion\":\"route-cost-v1\",\"graphVersion\":\"033-lane-graph-v1\"}",
+      "pass": true,
+      "detail": "the next step keeps the same route"
+    },
+    {
+      "name": "release-moves-again",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the released civilian drives again"
+    },
+    {
+      "name": "learning-version-created",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "one eligible civil segment creates exactly one version"
+    },
+    {
+      "name": "learning-version-id",
+      "expected": "segment-208-civilian~112",
+      "actual": "segment-208-civilian~112",
+      "pass": true,
+      "detail": "the pipeline reports the stored version"
+    },
+    {
+      "name": "learning-parameter-changed",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the learned style value differs from the base"
+    },
+    {
+      "name": "learning-taxi-version",
+      "expected": "segment-208-civilian~112",
+      "actual": "segment-208-civilian~112",
+      "pass": true,
+      "detail": "taxis adopt the version learned from a civilian"
+    },
+    {
+      "name": "learning-civilian-version",
+      "expected": "segment-208-civilian~112",
+      "actual": "segment-208-civilian~112",
+      "pass": true,
+      "detail": "civilians adopt the same version"
+    },
+    {
+      "name": "learning-cross-category",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "both categories share the learned style"
+    },
+    {
+      "name": "learning-one-activation",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "one learning version publishes one activation"
+    },
+    {
+      "name": "learning-mode-kept",
+      "expected": "LEARNING",
+      "actual": "LEARNING",
+      "pass": true,
+      "detail": "the LEARNING control mode is preserved"
+    },
+    {
+      "name": "learning-route-kept",
+      "expected": "{\"source\":\"041-route-planner\",\"status\":\"READY\",\"path\":[\"lane:21N0\",\"lane:12W1\",\"lane:12N0\",\"lane:13E0\",\"lane:22S1\"],\"originLaneId\":\"lane:21N0\",\"destinationLaneId\":\"lane:22S1\",\"destinationKind\":\"LANE\",\"costSeconds\":63.30410447761194,\"costVersion\":\"route-cost-v1\",\"graphVersion\":\"033-lane-graph-v1\"}",
+      "actual": "{\"source\":\"041-route-planner\",\"status\":\"READY\",\"path\":[\"lane:21N0\",\"lane:12W1\",\"lane:12N0\",\"lane:13E0\",\"lane:22S1\"],\"originLaneId\":\"lane:21N0\",\"destinationLaneId\":\"lane:22S1\",\"destinationKind\":\"LANE\",\"costSeconds\":63.30410447761194,\"costVersion\":\"route-cost-v1\",\"graphVersion\":\"033-lane-graph-v1\"}",
+      "pass": true,
+      "detail": "learning does not change the civilian route"
+    },
+    {
+      "name": "preserve-civilian-count",
+      "expected": 20,
+      "actual": 20,
+      "pass": true,
+      "detail": "no civilian is created or removed"
+    },
+    {
+      "name": "preserve-routes",
+      "expected": 20,
+      "actual": 20,
+      "pass": true,
+      "detail": "every civilian keeps its exact 041 route fingerprint"
+    },
+    {
+      "name": "preserve-classes",
+      "expected": "sedan,compact,compact,compact,sedan,compact,compact,sedan,compact,compact,sedan,compact,compact,compact,sedan,sedan,compact,compact,sedan,compact",
+      "actual": "sedan,compact,compact,compact,sedan,compact,compact,sedan,compact,compact,sedan,compact,compact,compact,sedan,sedan,compact,compact,sedan,compact",
+      "pass": true,
+      "detail": "the 023 mechanical class is unchanged"
+    },
+    {
+      "name": "preserve-limits",
+      "expected": "{\"classId\":\"sedan\",\"classVersion\":\"023-mechanics-v1\",\"massKg\":1400,\"powerW\":90000,\"engineForceN\":6500,\"brakeAcceleration\":8,\"grip\":1.3,\"steeringRadians\":0.45,\"turningRadiusM\":5.589424875513274,\"maxAccelerationMps2\":4.642857142857143,\"maxDecelerationMps2\":8,\"maxLateralAccelerationMps2\":12.753000000000002}|{\"classId\":\"compact\",\"classVersion\":\"023-mechanics-v1\",\"massKg\":1100,\"powerW\":70000,\"engineForceN\":7000,\"brakeAcceleration\":9,\"grip\":1.5,\"steeringRadians\":0.55,\"turningRadiusM\":3.914499417039034,\"maxAccelerationMps2\":6.363636363636363,\"maxDecelerationMps2\":9,\"maxLateralAccelerationMps2\":14.715}|{\"classId\":\"compact\",\"classVersion\":\"023-mechanics-v1\",\"massKg\":1100,\"powerW\":70000,\"engineForceN\":7000,\"brakeAcceleration\":9,\"grip\":1.5,\"steeringRadians\":0.55,\"turningRadiusM\":3.914499417039034,\"maxAccelerationMps2\":6.363636363636363,\"maxDecelerationMps2\":9,\"maxLateralAccelerationMps2\":14.715}|{\"classId\":\"compact\",\"classVersion\":\"023-mechanics-v1\",\"massKg\":1100,\"powerW\":70000,\"engineForceN\":7000,\"brakeAcceleration\":9,\"grip\":1.5,\"steeringRadians\":0.55,\"turningRadiusM\":3.914499417039034,\"maxAccelerationMps2\":6.363636363636363,\"maxDecelerationMps2\":9,\"maxLateralAccelerationMps2\":14.715}|{\"classId\":\"sedan\",\"classVersion\":\"023-mechanics-v1\",\"massKg\":1400,\"powerW\":90000,\"engineForceN\":6500,\"brakeAcceleration\":8,\"grip\":1.3,\"steeringRadians\":0.45,\"turningRadiusM\":5.589424875513274,\"maxAccelerationMps2\":4.642857142857143,\"maxDecelerationMps2\":8,\"maxLateralAccelerationMps2\":12.753000000000002}|{\"classId\":\"compact\",\"classVersion\":\"023-mechanics-v1\",\"massKg\":1100,\"powerW\":70000,\"engineForceN\":7000,\"brakeAcceleration\":9,\"grip\":1.5,\"steeringRadians\":0.55,\"turningRadiusM\":3.914499417039034,\"maxAccelerationMps2\":6.363636363636363,\"maxDecelerationMps2\":9,\"maxLateralAccelerationMps2\":14.715}|{\"classId\":\"compact\",\"classVersion\":\"023-mechanics-v1\",\"massKg\":1100,\"powerW\":70000,\"engineForceN\":7000,\"brakeAcceleration\":9,\"grip\":1.5,\"steeringRadians\":0.55,\"turningRadiusM\":3.914499417039034,\"maxAccelerationMps2\":6.363636363636363,\"maxDecelerationMps2\":9,\"maxLateralAccelerationMps2\":14.715}|{\"classId\":\"sedan\",\"classVersion\":\"023-mechanics-v1\",\"massKg\":1400,\"powerW\":90000,\"engineForceN\":6500,\"brakeAcceleration\":8,\"grip\":1.3,\"steeringRadians\":0.45,\"turningRadiusM\":5.589424875513274,\"maxAccelerationMps2\":4.642857142857143,\"maxDecelerationMps2\":8,\"maxLateralAccelerationMps2\":12.753000000000002}|{\"classId\":\"compact\",\"classVersion\":\"023-mechanics-v1\",\"massKg\":1100,\"powerW\":70000,\"engineForceN\":7000,\"brakeAcceleration\":9,\"grip\":1.5,\"steeringRadians\":0.55,\"turningRadiusM\":3.914499417039034,\"maxAccelerationMps2\":6.363636363636363,\"maxDecelerationMps2\":9,\"maxLateralAccelerationMps2\":14.715}|{\"classId\":\"compact\",\"classVersion\":\"023-mechanics-v1\",\"massKg\":1100,\"powerW\":70000,\"engineForceN\":7000,\"brakeAcceleration\":9,\"grip\":1.5,\"steeringRadians\":0.55,\"turningRadiusM\":3.914499417039034,\"maxAccelerationMps2\":6.363636363636363,\"maxDecelerationMps2\":9,\"maxLateralAccelerationMps2\":14.715}|{\"classId\":\"sedan\",\"classVersion\":\"023-mechanics-v1\",\"massKg\":1400,\"powerW\":90000,\"engineForceN\":6500,\"brakeAcceleration\":8,\"grip\":1.3,\"steeringRadians\":0.45,\"turningRadiusM\":5.589424875513274,\"maxAccelerationMps2\":4.642857142857143,\"maxDecelerationMps2\":8,\"maxLateralAccelerationMps2\":12.753000000000002}|{\"classId\":\"compact\",\"classVersion\":\"023-mechanics-v1\",\"massKg\":1100,\"powerW\":70000,\"engineForceN\":7000,\"brakeAcceleration\":9,\"grip\":1.5,\"steeringRadians\":0.55,\"turningRadiusM\":3.914499417039034,\"maxAccelerationMps2\":6.363636363636363,\"maxDecelerationMps2\":9,\"maxLateralAccelerationMps2\":14.715}|{\"classId\":\"compact\",\"classVersion\":\"023-mechanics-v1\",\"massKg\":1100,\"powerW\":70000,\"engineForceN\":7000,\"brakeAcceleration\":9,\"grip\":1.5,\"steeringRadians\":0.55,\"turningRadiusM\":3.914499417039034,\"maxAccelerationMps2\":6.363636363636363,\"maxDecelerationMps2\":9,\"maxLateralAccelerationMps2\":14.715}|{\"classId\":\"compact\",\"classVersion\":\"023-mechanics-v1\",\"massKg\":1100,\"powerW\":70000,\"engineForceN\":7000,\"brakeAcceleration\":9,\"grip\":1.5,\"steeringRadians\":0.55,\"turningRadiusM\":3.914499417039034,\"maxAccelerationMps2\":6.363636363636363,\"maxDecelerationMps2\":9,\"maxLateralAccelerationMps2\":14.715}|{\"classId\":\"sedan\",\"classVersion\":\"023-mechanics-v1\",\"massKg\":1400,\"powerW\":90000,\"engineForceN\":6500,\"brakeAcceleration\":8,\"grip\":1.3,\"steeringRadians\":0.45,\"turningRadiusM\":5.589424875513274,\"maxAccelerationMps2\":4.642857142857143,\"maxDecelerationMps2\":8,\"maxLateralAccelerationMps2\":12.753000000000002}|{\"classId\":\"sedan\",\"classVersion\":\"023-mechanics-v1\",\"massKg\":1400,\"powerW\":90000,\"engineForceN\":6500,\"brakeAcceleration\":8,\"grip\":1.3,\"steeringRadians\":0.45,\"turningRadiusM\":5.589424875513274,\"maxAccelerationMps2\":4.642857142857143,\"maxDecelerationMps2\":8,\"maxLateralAccelerationMps2\":12.753000000000002}|{\"classId\":\"compact\",\"classVersion\":\"023-mechanics-v1\",\"massKg\":1100,\"powerW\":70000,\"engineForceN\":7000,\"brakeAcceleration\":9,\"grip\":1.5,\"steeringRadians\":0.55,\"turningRadiusM\":3.914499417039034,\"maxAccelerationMps2\":6.363636363636363,\"maxDecelerationMps2\":9,\"maxLateralAccelerationMps2\":14.715}|{\"classId\":\"compact\",\"classVersion\":\"023-mechanics-v1\",\"massKg\":1100,\"powerW\":70000,\"engineForceN\":7000,\"brakeAcceleration\":9,\"grip\":1.5,\"steeringRadians\":0.55,\"turningRadiusM\":3.914499417039034,\"maxAccelerationMps2\":6.363636363636363,\"maxDecelerationMps2\":9,\"maxLateralAccelerationMps2\":14.715}|{\"classId\":\"sedan\",\"classVersion\":\"023-mechanics-v1\",\"massKg\":1400,\"powerW\":90000,\"engineForceN\":6500,\"brakeAcceleration\":8,\"grip\":1.3,\"steeringRadians\":0.45,\"turningRadiusM\":5.589424875513274,\"maxAccelerationMps2\":4.642857142857143,\"maxDecelerationMps2\":8,\"maxLateralAccelerationMps2\":12.753000000000002}|{\"classId\":\"compact\",\"classVersion\":\"023-mechanics-v1\",\"massKg\":1100,\"powerW\":70000,\"engineForceN\":7000,\"brakeAcceleration\":9,\"grip\":1.5,\"steeringRadians\":0.55,\"turningRadiusM\":3.914499417039034,\"maxAccelerationMps2\":6.363636363636363,\"maxDecelerationMps2\":9,\"maxLateralAccelerationMps2\":14.715}",
+      "actual": "{\"classId\":\"sedan\",\"classVersion\":\"023-mechanics-v1\",\"massKg\":1400,\"powerW\":90000,\"engineForceN\":6500,\"brakeAcceleration\":8,\"grip\":1.3,\"steeringRadians\":0.45,\"turningRadiusM\":5.589424875513274,\"maxAccelerationMps2\":4.642857142857143,\"maxDecelerationMps2\":8,\"maxLateralAccelerationMps2\":12.753000000000002}|{\"classId\":\"compact\",\"classVersion\":\"023-mechanics-v1\",\"massKg\":1100,\"powerW\":70000,\"engineForceN\":7000,\"brakeAcceleration\":9,\"grip\":1.5,\"steeringRadians\":0.55,\"turningRadiusM\":3.914499417039034,\"maxAccelerationMps2\":6.363636363636363,\"maxDecelerationMps2\":9,\"maxLateralAccelerationMps2\":14.715}|{\"classId\":\"compact\",\"classVersion\":\"023-mechanics-v1\",\"massKg\":1100,\"powerW\":70000,\"engineForceN\":7000,\"brakeAcceleration\":9,\"grip\":1.5,\"steeringRadians\":0.55,\"turningRadiusM\":3.914499417039034,\"maxAccelerationMps2\":6.363636363636363,\"maxDecelerationMps2\":9,\"maxLateralAccelerationMps2\":14.715}|{\"classId\":\"compact\",\"classVersion\":\"023-mechanics-v1\",\"massKg\":1100,\"powerW\":70000,\"engineForceN\":7000,\"brakeAcceleration\":9,\"grip\":1.5,\"steeringRadians\":0.55,\"turningRadiusM\":3.914499417039034,\"maxAccelerationMps2\":6.363636363636363,\"maxDecelerationMps2\":9,\"maxLateralAccelerationMps2\":14.715}|{\"classId\":\"sedan\",\"classVersion\":\"023-mechanics-v1\",\"massKg\":1400,\"powerW\":90000,\"engineForceN\":6500,\"brakeAcceleration\":8,\"grip\":1.3,\"steeringRadians\":0.45,\"turningRadiusM\":5.589424875513274,\"maxAccelerationMps2\":4.642857142857143,\"maxDecelerationMps2\":8,\"maxLateralAccelerationMps2\":12.753000000000002}|{\"classId\":\"compact\",\"classVersion\":\"023-mechanics-v1\",\"massKg\":1100,\"powerW\":70000,\"engineForceN\":7000,\"brakeAcceleration\":9,\"grip\":1.5,\"steeringRadians\":0.55,\"turningRadiusM\":3.914499417039034,\"maxAccelerationMps2\":6.363636363636363,\"maxDecelerationMps2\":9,\"maxLateralAccelerationMps2\":14.715}|{\"classId\":\"compact\",\"classVersion\":\"023-mechanics-v1\",\"massKg\":1100,\"powerW\":70000,\"engineForceN\":7000,\"brakeAcceleration\":9,\"grip\":1.5,\"steeringRadians\":0.55,\"turningRadiusM\":3.914499417039034,\"maxAccelerationMps2\":6.363636363636363,\"maxDecelerationMps2\":9,\"maxLateralAccelerationMps2\":14.715}|{\"classId\":\"sedan\",\"classVersion\":\"023-mechanics-v1\",\"massKg\":1400,\"powerW\":90000,\"engineForceN\":6500,\"brakeAcceleration\":8,\"grip\":1.3,\"steeringRadians\":0.45,\"turningRadiusM\":5.589424875513274,\"maxAccelerationMps2\":4.642857142857143,\"maxDecelerationMps2\":8,\"maxLateralAccelerationMps2\":12.753000000000002}|{\"classId\":\"compact\",\"classVersion\":\"023-mechanics-v1\",\"massKg\":1100,\"powerW\":70000,\"engineForceN\":7000,\"brakeAcceleration\":9,\"grip\":1.5,\"steeringRadians\":0.55,\"turningRadiusM\":3.914499417039034,\"maxAccelerationMps2\":6.363636363636363,\"maxDecelerationMps2\":9,\"maxLateralAccelerationMps2\":14.715}|{\"classId\":\"compact\",\"classVersion\":\"023-mechanics-v1\",\"massKg\":1100,\"powerW\":70000,\"engineForceN\":7000,\"brakeAcceleration\":9,\"grip\":1.5,\"steeringRadians\":0.55,\"turningRadiusM\":3.914499417039034,\"maxAccelerationMps2\":6.363636363636363,\"maxDecelerationMps2\":9,\"maxLateralAccelerationMps2\":14.715}|{\"classId\":\"sedan\",\"classVersion\":\"023-mechanics-v1\",\"massKg\":1400,\"powerW\":90000,\"engineForceN\":6500,\"brakeAcceleration\":8,\"grip\":1.3,\"steeringRadians\":0.45,\"turningRadiusM\":5.589424875513274,\"maxAccelerationMps2\":4.642857142857143,\"maxDecelerationMps2\":8,\"maxLateralAccelerationMps2\":12.753000000000002}|{\"classId\":\"compact\",\"classVersion\":\"023-mechanics-v1\",\"massKg\":1100,\"powerW\":70000,\"engineForceN\":7000,\"brakeAcceleration\":9,\"grip\":1.5,\"steeringRadians\":0.55,\"turningRadiusM\":3.914499417039034,\"maxAccelerationMps2\":6.363636363636363,\"maxDecelerationMps2\":9,\"maxLateralAccelerationMps2\":14.715}|{\"classId\":\"compact\",\"classVersion\":\"023-mechanics-v1\",\"massKg\":1100,\"powerW\":70000,\"engineForceN\":7000,\"brakeAcceleration\":9,\"grip\":1.5,\"steeringRadians\":0.55,\"turningRadiusM\":3.914499417039034,\"maxAccelerationMps2\":6.363636363636363,\"maxDecelerationMps2\":9,\"maxLateralAccelerationMps2\":14.715}|{\"classId\":\"compact\",\"classVersion\":\"023-mechanics-v1\",\"massKg\":1100,\"powerW\":70000,\"engineForceN\":7000,\"brakeAcceleration\":9,\"grip\":1.5,\"steeringRadians\":0.55,\"turningRadiusM\":3.914499417039034,\"maxAccelerationMps2\":6.363636363636363,\"maxDecelerationMps2\":9,\"maxLateralAccelerationMps2\":14.715}|{\"classId\":\"sedan\",\"classVersion\":\"023-mechanics-v1\",\"massKg\":1400,\"powerW\":90000,\"engineForceN\":6500,\"brakeAcceleration\":8,\"grip\":1.3,\"steeringRadians\":0.45,\"turningRadiusM\":5.589424875513274,\"maxAccelerationMps2\":4.642857142857143,\"maxDecelerationMps2\":8,\"maxLateralAccelerationMps2\":12.753000000000002}|{\"classId\":\"sedan\",\"classVersion\":\"023-mechanics-v1\",\"massKg\":1400,\"powerW\":90000,\"engineForceN\":6500,\"brakeAcceleration\":8,\"grip\":1.3,\"steeringRadians\":0.45,\"turningRadiusM\":5.589424875513274,\"maxAccelerationMps2\":4.642857142857143,\"maxDecelerationMps2\":8,\"maxLateralAccelerationMps2\":12.753000000000002}|{\"classId\":\"compact\",\"classVersion\":\"023-mechanics-v1\",\"massKg\":1100,\"powerW\":70000,\"engineForceN\":7000,\"brakeAcceleration\":9,\"grip\":1.5,\"steeringRadians\":0.55,\"turningRadiusM\":3.914499417039034,\"maxAccelerationMps2\":6.363636363636363,\"maxDecelerationMps2\":9,\"maxLateralAccelerationMps2\":14.715}|{\"classId\":\"compact\",\"classVersion\":\"023-mechanics-v1\",\"massKg\":1100,\"powerW\":70000,\"engineForceN\":7000,\"brakeAcceleration\":9,\"grip\":1.5,\"steeringRadians\":0.55,\"turningRadiusM\":3.914499417039034,\"maxAccelerationMps2\":6.363636363636363,\"maxDecelerationMps2\":9,\"maxLateralAccelerationMps2\":14.715}|{\"classId\":\"sedan\",\"classVersion\":\"023-mechanics-v1\",\"massKg\":1400,\"powerW\":90000,\"engineForceN\":6500,\"brakeAcceleration\":8,\"grip\":1.3,\"steeringRadians\":0.45,\"turningRadiusM\":5.589424875513274,\"maxAccelerationMps2\":4.642857142857143,\"maxDecelerationMps2\":8,\"maxLateralAccelerationMps2\":12.753000000000002}|{\"classId\":\"compact\",\"classVersion\":\"023-mechanics-v1\",\"massKg\":1100,\"powerW\":70000,\"engineForceN\":7000,\"brakeAcceleration\":9,\"grip\":1.5,\"steeringRadians\":0.55,\"turningRadiusM\":3.914499417039034,\"maxAccelerationMps2\":6.363636363636363,\"maxDecelerationMps2\":9,\"maxLateralAccelerationMps2\":14.715}",
+      "pass": true,
+      "detail": "the mechanical limits are unchanged"
+    },
+    {
+      "name": "preserve-vehicles",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the vehicle list (profileId, class, slot) is unchanged"
+    },
+    {
+      "name": "preserve-fleet-report",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the fleet population report is unchanged"
+    },
+    {
+      "name": "preserve-control-modes",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "control modes are unchanged by activation"
+    },
+    {
+      "name": "preserve-only-version-and-tick",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "only version and tick were written"
+    },
+    {
+      "name": "preserve-common-version",
+      "expected": "segment-208-fleet~112",
+      "actual": "segment-208-fleet~112",
+      "pass": true,
+      "detail": "only the applied version evolves"
+    },
+    {
+      "name": "preserve-no-hidden-override",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no class-specific or per-kind profile override exists"
+    },
+    {
+      "name": "preserve-civil-style-source",
+      "expected": "city-profile-208",
+      "actual": "city-profile-208",
+      "pass": true,
+      "detail": "every civilian reads the one common city profile"
+    }
+  ],
+  "summary": {
+    "phases": 7,
+    "checks": 71,
+    "passed": 71,
+    "pass": true
+  },
+  "commonVersionAfter": "segment-208-fleet~112",
+  "hiddenOverrides": [],
+  "laterSpawnVersion": "segment-208-fleet~112",
+  "manualVersionChanges": 0,
+  "learningVersion": "segment-208-civilian~112",
+  "crossCategoryUpdated": true
+}

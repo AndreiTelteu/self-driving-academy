@@ -417,6 +417,35 @@ export {
 } from './cross-class-fidelity';
 
 export {
+  CITY_STYLE_BASE_VERSION,
+  CITY_STYLE_ENGINE_VERSION,
+  CITY_STYLE_LEARNING_KEY,
+  CITY_STYLE_LIMITS,
+  CITY_STYLE_NOW,
+  CITY_STYLE_PROFILE_ID,
+  CITY_STYLE_SEED,
+  CITY_STYLE_SESSION_ID,
+  CITY_STYLE_TICK_HZ,
+  CITY_STYLE_VERSION,
+  CITY_STYLE_WORLD_EPOCH,
+  cityStyleParameters,
+  cityStyleReportMarkdown,
+  cityStyleScenarioIds,
+  createCityStyleWorld,
+  runCityStyleScenario,
+  type CityStyleActivationOutcome,
+  type CityStyleCheck,
+  type CityStylePhaseReport,
+  type CityStyleQueueHandle,
+  type CityStyleScenarioId,
+  type CityStyleScenarioReport,
+  type CityStyleScenarioServices,
+  type CityStyleWorld,
+  type CityStyleWorldOptions,
+  type RegistryWrite,
+} from './city-style-propagation';
+
+export {
   admitLearningWindowForRegression,
   LEARNING_EDGECASES_APP_VERSION,
   runLearningEdgeCaseRegressions,
