@@ -1,0 +1,3871 @@
+{
+  "version": "138-behavior-metrics-v1",
+  "contract": {
+    "eventKinds": [
+      "OPPORTUNITY_RESOLVED",
+      "SPEED_SAMPLE"
+    ],
+    "metricIds": [
+      "eligibleOpportunities",
+      "successes",
+      "violations",
+      "complianceRate",
+      "violationRate",
+      "completeStops",
+      "stopDwellSeconds",
+      "meanStopDwellSeconds",
+      "reactionSamples",
+      "meanReactionSeconds",
+      "medianReactionSeconds",
+      "speedSamples",
+      "meanSpeedMps",
+      "medianSpeedMps",
+      "p90SpeedMps",
+      "limitedSpeedSamples",
+      "limitedSeconds",
+      "meanLimitMps",
+      "overLimitSamples",
+      "overLimitSeconds",
+      "overLimitFraction",
+      "headwaySamples",
+      "ineligibleHeadwaySamples",
+      "meanHeadwaySeconds",
+      "medianHeadwaySeconds",
+      "p90HeadwaySeconds"
+    ],
+    "unavailableReasons": [
+      "NO_OPPORTUNITIES",
+      "NO_REACTION_SAMPLES",
+      "NO_STOP_DWELL",
+      "NO_SPEED_SAMPLES",
+      "NO_LIMIT",
+      "NO_ELIGIBLE_SPEED",
+      "NO_HEADWAY_SAMPLES"
+    ],
+    "rules": [
+      "the opportunity denominator is the set of distinct (opportunityId, occurrence) identities",
+      "a repeated frame of the same occurrence is DUPLICATE and changes no numerator or denominator",
+      "10 Hz and 60 Hz duplicate streams produce identical denominators and numerators",
+      "an empty denominator is UNAVAILABLE with value:null; a real zero with a denominator is AVAILABLE 0",
+      "success comes from the 086 opportunitySuccessOutcomes; a violation comes from the real failure table",
+      "speed and headway distributions keep bounded histograms and never retain a full history",
+      "over-limit duration uses only samples with a certifiable limit and a declared sample interval",
+      "historyScans is structurally 0 and the snapshot is frozen"
+    ],
+    "retainedKeys": 8192,
+    "idCodeUnits": 1024,
+    "reactionTickHz": 60,
+    "sampleSeconds": 0.1
+  },
+  "scenarios": [
+    {
+      "name": "STOP per oportunitate eligibilă",
+      "events": {
+        "events": 3,
+        "accepted": 3,
+        "duplicates": 0,
+        "rejected": 0
+      },
+      "metrics": [
+        {
+          "scope": "ALL",
+          "id": "eligibleOpportunities",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 3,
+          "sampleSize": 3,
+          "reason": null
+        },
+        {
+          "scope": "ALL",
+          "id": "successes",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 2,
+          "sampleSize": 2,
+          "reason": null
+        },
+        {
+          "scope": "ALL",
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 1,
+          "sampleSize": 1,
+          "reason": null
+        },
+        {
+          "scope": "ALL",
+          "id": "complianceRate",
+          "unit": "percentage",
+          "state": "AVAILABLE",
+          "value": 66.66666666666666,
+          "sampleSize": 3,
+          "reason": null
+        },
+        {
+          "scope": "ALL",
+          "id": "violationRate",
+          "unit": "percentage",
+          "state": "AVAILABLE",
+          "value": 33.33333333333333,
+          "sampleSize": 3,
+          "reason": null
+        },
+        {
+          "scope": "STOP",
+          "id": "eligibleOpportunities",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 3,
+          "sampleSize": 3,
+          "reason": null
+        },
+        {
+          "scope": "STOP",
+          "id": "successes",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 2,
+          "sampleSize": 2,
+          "reason": null
+        },
+        {
+          "scope": "STOP",
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 1,
+          "sampleSize": 1,
+          "reason": null
+        },
+        {
+          "scope": "STOP",
+          "id": "complianceRate",
+          "unit": "percentage",
+          "state": "AVAILABLE",
+          "value": 66.66666666666666,
+          "sampleSize": 3,
+          "reason": null
+        },
+        {
+          "scope": "STOP",
+          "id": "violationRate",
+          "unit": "percentage",
+          "state": "AVAILABLE",
+          "value": 33.33333333333333,
+          "sampleSize": 3,
+          "reason": null
+        },
+        {
+          "scope": "RED",
+          "id": "eligibleOpportunities",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "RED",
+          "id": "successes",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "RED",
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "RED",
+          "id": "complianceRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "RED",
+          "id": "violationRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "GREEN",
+          "id": "eligibleOpportunities",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "GREEN",
+          "id": "successes",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "GREEN",
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "GREEN",
+          "id": "complianceRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "GREEN",
+          "id": "violationRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "YIELD",
+          "id": "eligibleOpportunities",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "YIELD",
+          "id": "successes",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "YIELD",
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "YIELD",
+          "id": "complianceRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "YIELD",
+          "id": "violationRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "LANE_CHANGE",
+          "id": "eligibleOpportunities",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "LANE_CHANGE",
+          "id": "successes",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "LANE_CHANGE",
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "LANE_CHANGE",
+          "id": "complianceRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "LANE_CHANGE",
+          "id": "violationRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "stops",
+          "id": "completeStops",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 2,
+          "sampleSize": 2,
+          "reason": null
+        },
+        {
+          "scope": "stops",
+          "id": "stopDwellSeconds",
+          "unit": "seconds",
+          "state": "AVAILABLE",
+          "value": 4,
+          "sampleSize": 2,
+          "reason": null
+        },
+        {
+          "scope": "stops",
+          "id": "meanStopDwellSeconds",
+          "unit": "seconds",
+          "state": "AVAILABLE",
+          "value": 2,
+          "sampleSize": 2,
+          "reason": null
+        },
+        {
+          "scope": "reactions",
+          "id": "reactionSamples",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "reactions",
+          "id": "meanReactionSeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_REACTION_SAMPLES"
+        },
+        {
+          "scope": "reactions",
+          "id": "medianReactionSeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_REACTION_SAMPLES"
+        },
+        {
+          "scope": "speed",
+          "id": "speedSamples",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "speed",
+          "id": "meanSpeedMps",
+          "unit": "mps",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_SPEED_SAMPLES"
+        },
+        {
+          "scope": "speed",
+          "id": "medianSpeedMps",
+          "unit": "mps",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_SPEED_SAMPLES"
+        },
+        {
+          "scope": "speed",
+          "id": "p90SpeedMps",
+          "unit": "mps",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_SPEED_SAMPLES"
+        },
+        {
+          "scope": "speed",
+          "id": "limitedSpeedSamples",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "speed",
+          "id": "limitedSeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_LIMIT"
+        },
+        {
+          "scope": "speed",
+          "id": "meanLimitMps",
+          "unit": "mps",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_LIMIT"
+        },
+        {
+          "scope": "speed",
+          "id": "overLimitSamples",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "speed",
+          "id": "overLimitSeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_LIMIT"
+        },
+        {
+          "scope": "speed",
+          "id": "overLimitFraction",
+          "unit": "ratio",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_LIMIT"
+        },
+        {
+          "scope": "headway",
+          "id": "headwaySamples",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "headway",
+          "id": "ineligibleHeadwaySamples",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "headway",
+          "id": "meanHeadwaySeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_HEADWAY_SAMPLES"
+        },
+        {
+          "scope": "headway",
+          "id": "medianHeadwaySeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_HEADWAY_SAMPLES"
+        },
+        {
+          "scope": "headway",
+          "id": "p90HeadwaySeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_HEADWAY_SAMPLES"
+        }
+      ],
+      "adapter": [
+        {
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 1,
+          "sampleSize": 3,
+          "reason": null
+        }
+      ],
+      "historyScans": 0,
+      "snapshotCalls": 1
+    },
+    {
+      "name": "RED per oportunitate eligibilă",
+      "events": {
+        "events": 2,
+        "accepted": 2,
+        "duplicates": 0,
+        "rejected": 0
+      },
+      "metrics": [
+        {
+          "scope": "ALL",
+          "id": "eligibleOpportunities",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 2,
+          "sampleSize": 2,
+          "reason": null
+        },
+        {
+          "scope": "ALL",
+          "id": "successes",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 1,
+          "sampleSize": 1,
+          "reason": null
+        },
+        {
+          "scope": "ALL",
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 1,
+          "sampleSize": 1,
+          "reason": null
+        },
+        {
+          "scope": "ALL",
+          "id": "complianceRate",
+          "unit": "percentage",
+          "state": "AVAILABLE",
+          "value": 50,
+          "sampleSize": 2,
+          "reason": null
+        },
+        {
+          "scope": "ALL",
+          "id": "violationRate",
+          "unit": "percentage",
+          "state": "AVAILABLE",
+          "value": 50,
+          "sampleSize": 2,
+          "reason": null
+        },
+        {
+          "scope": "STOP",
+          "id": "eligibleOpportunities",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "STOP",
+          "id": "successes",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "STOP",
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "STOP",
+          "id": "complianceRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "STOP",
+          "id": "violationRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "RED",
+          "id": "eligibleOpportunities",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 2,
+          "sampleSize": 2,
+          "reason": null
+        },
+        {
+          "scope": "RED",
+          "id": "successes",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 1,
+          "sampleSize": 1,
+          "reason": null
+        },
+        {
+          "scope": "RED",
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 1,
+          "sampleSize": 1,
+          "reason": null
+        },
+        {
+          "scope": "RED",
+          "id": "complianceRate",
+          "unit": "percentage",
+          "state": "AVAILABLE",
+          "value": 50,
+          "sampleSize": 2,
+          "reason": null
+        },
+        {
+          "scope": "RED",
+          "id": "violationRate",
+          "unit": "percentage",
+          "state": "AVAILABLE",
+          "value": 50,
+          "sampleSize": 2,
+          "reason": null
+        },
+        {
+          "scope": "GREEN",
+          "id": "eligibleOpportunities",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "GREEN",
+          "id": "successes",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "GREEN",
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "GREEN",
+          "id": "complianceRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "GREEN",
+          "id": "violationRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "YIELD",
+          "id": "eligibleOpportunities",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "YIELD",
+          "id": "successes",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "YIELD",
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "YIELD",
+          "id": "complianceRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "YIELD",
+          "id": "violationRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "LANE_CHANGE",
+          "id": "eligibleOpportunities",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "LANE_CHANGE",
+          "id": "successes",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "LANE_CHANGE",
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "LANE_CHANGE",
+          "id": "complianceRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "LANE_CHANGE",
+          "id": "violationRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "stops",
+          "id": "completeStops",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "stops",
+          "id": "stopDwellSeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_STOP_DWELL"
+        },
+        {
+          "scope": "stops",
+          "id": "meanStopDwellSeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_STOP_DWELL"
+        },
+        {
+          "scope": "reactions",
+          "id": "reactionSamples",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "reactions",
+          "id": "meanReactionSeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_REACTION_SAMPLES"
+        },
+        {
+          "scope": "reactions",
+          "id": "medianReactionSeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_REACTION_SAMPLES"
+        },
+        {
+          "scope": "speed",
+          "id": "speedSamples",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "speed",
+          "id": "meanSpeedMps",
+          "unit": "mps",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_SPEED_SAMPLES"
+        },
+        {
+          "scope": "speed",
+          "id": "medianSpeedMps",
+          "unit": "mps",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_SPEED_SAMPLES"
+        },
+        {
+          "scope": "speed",
+          "id": "p90SpeedMps",
+          "unit": "mps",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_SPEED_SAMPLES"
+        },
+        {
+          "scope": "speed",
+          "id": "limitedSpeedSamples",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "speed",
+          "id": "limitedSeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_LIMIT"
+        },
+        {
+          "scope": "speed",
+          "id": "meanLimitMps",
+          "unit": "mps",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_LIMIT"
+        },
+        {
+          "scope": "speed",
+          "id": "overLimitSamples",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "speed",
+          "id": "overLimitSeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_LIMIT"
+        },
+        {
+          "scope": "speed",
+          "id": "overLimitFraction",
+          "unit": "ratio",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_LIMIT"
+        },
+        {
+          "scope": "headway",
+          "id": "headwaySamples",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "headway",
+          "id": "ineligibleHeadwaySamples",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "headway",
+          "id": "meanHeadwaySeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_HEADWAY_SAMPLES"
+        },
+        {
+          "scope": "headway",
+          "id": "medianHeadwaySeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_HEADWAY_SAMPLES"
+        },
+        {
+          "scope": "headway",
+          "id": "p90HeadwaySeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_HEADWAY_SAMPLES"
+        }
+      ],
+      "adapter": [
+        {
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 1,
+          "sampleSize": 2,
+          "reason": null
+        }
+      ],
+      "historyScans": 0,
+      "snapshotCalls": 1
+    },
+    {
+      "name": "cadre duplicate 10 Hz vs 60 Hz",
+      "events": {
+        "events": 40,
+        "accepted": 4,
+        "duplicates": 36,
+        "rejected": 0
+      },
+      "metrics": [
+        {
+          "scope": "ALL",
+          "id": "eligibleOpportunities",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 4,
+          "sampleSize": 4,
+          "reason": null
+        },
+        {
+          "scope": "ALL",
+          "id": "successes",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 2,
+          "sampleSize": 2,
+          "reason": null
+        },
+        {
+          "scope": "ALL",
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 2,
+          "sampleSize": 2,
+          "reason": null
+        },
+        {
+          "scope": "ALL",
+          "id": "complianceRate",
+          "unit": "percentage",
+          "state": "AVAILABLE",
+          "value": 50,
+          "sampleSize": 4,
+          "reason": null
+        },
+        {
+          "scope": "ALL",
+          "id": "violationRate",
+          "unit": "percentage",
+          "state": "AVAILABLE",
+          "value": 50,
+          "sampleSize": 4,
+          "reason": null
+        },
+        {
+          "scope": "STOP",
+          "id": "eligibleOpportunities",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 2,
+          "sampleSize": 2,
+          "reason": null
+        },
+        {
+          "scope": "STOP",
+          "id": "successes",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 1,
+          "sampleSize": 1,
+          "reason": null
+        },
+        {
+          "scope": "STOP",
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 1,
+          "sampleSize": 1,
+          "reason": null
+        },
+        {
+          "scope": "STOP",
+          "id": "complianceRate",
+          "unit": "percentage",
+          "state": "AVAILABLE",
+          "value": 50,
+          "sampleSize": 2,
+          "reason": null
+        },
+        {
+          "scope": "STOP",
+          "id": "violationRate",
+          "unit": "percentage",
+          "state": "AVAILABLE",
+          "value": 50,
+          "sampleSize": 2,
+          "reason": null
+        },
+        {
+          "scope": "RED",
+          "id": "eligibleOpportunities",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 2,
+          "sampleSize": 2,
+          "reason": null
+        },
+        {
+          "scope": "RED",
+          "id": "successes",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 1,
+          "sampleSize": 1,
+          "reason": null
+        },
+        {
+          "scope": "RED",
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 1,
+          "sampleSize": 1,
+          "reason": null
+        },
+        {
+          "scope": "RED",
+          "id": "complianceRate",
+          "unit": "percentage",
+          "state": "AVAILABLE",
+          "value": 50,
+          "sampleSize": 2,
+          "reason": null
+        },
+        {
+          "scope": "RED",
+          "id": "violationRate",
+          "unit": "percentage",
+          "state": "AVAILABLE",
+          "value": 50,
+          "sampleSize": 2,
+          "reason": null
+        },
+        {
+          "scope": "GREEN",
+          "id": "eligibleOpportunities",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "GREEN",
+          "id": "successes",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "GREEN",
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "GREEN",
+          "id": "complianceRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "GREEN",
+          "id": "violationRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "YIELD",
+          "id": "eligibleOpportunities",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "YIELD",
+          "id": "successes",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "YIELD",
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "YIELD",
+          "id": "complianceRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "YIELD",
+          "id": "violationRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "LANE_CHANGE",
+          "id": "eligibleOpportunities",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "LANE_CHANGE",
+          "id": "successes",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "LANE_CHANGE",
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "LANE_CHANGE",
+          "id": "complianceRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "LANE_CHANGE",
+          "id": "violationRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "stops",
+          "id": "completeStops",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 1,
+          "sampleSize": 1,
+          "reason": null
+        },
+        {
+          "scope": "stops",
+          "id": "stopDwellSeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_STOP_DWELL"
+        },
+        {
+          "scope": "stops",
+          "id": "meanStopDwellSeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_STOP_DWELL"
+        },
+        {
+          "scope": "reactions",
+          "id": "reactionSamples",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "reactions",
+          "id": "meanReactionSeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_REACTION_SAMPLES"
+        },
+        {
+          "scope": "reactions",
+          "id": "medianReactionSeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_REACTION_SAMPLES"
+        },
+        {
+          "scope": "speed",
+          "id": "speedSamples",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "speed",
+          "id": "meanSpeedMps",
+          "unit": "mps",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_SPEED_SAMPLES"
+        },
+        {
+          "scope": "speed",
+          "id": "medianSpeedMps",
+          "unit": "mps",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_SPEED_SAMPLES"
+        },
+        {
+          "scope": "speed",
+          "id": "p90SpeedMps",
+          "unit": "mps",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_SPEED_SAMPLES"
+        },
+        {
+          "scope": "speed",
+          "id": "limitedSpeedSamples",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "speed",
+          "id": "limitedSeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_LIMIT"
+        },
+        {
+          "scope": "speed",
+          "id": "meanLimitMps",
+          "unit": "mps",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_LIMIT"
+        },
+        {
+          "scope": "speed",
+          "id": "overLimitSamples",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "speed",
+          "id": "overLimitSeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_LIMIT"
+        },
+        {
+          "scope": "speed",
+          "id": "overLimitFraction",
+          "unit": "ratio",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_LIMIT"
+        },
+        {
+          "scope": "headway",
+          "id": "headwaySamples",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "headway",
+          "id": "ineligibleHeadwaySamples",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "headway",
+          "id": "meanHeadwaySeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_HEADWAY_SAMPLES"
+        },
+        {
+          "scope": "headway",
+          "id": "medianHeadwaySeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_HEADWAY_SAMPLES"
+        },
+        {
+          "scope": "headway",
+          "id": "p90HeadwaySeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_HEADWAY_SAMPLES"
+        }
+      ],
+      "adapter": [
+        {
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 2,
+          "sampleSize": 4,
+          "reason": null
+        }
+      ],
+      "historyScans": 0,
+      "snapshotCalls": 1
+    },
+    {
+      "name": "numitor zero",
+      "events": {
+        "events": 0,
+        "accepted": 0,
+        "duplicates": 0,
+        "rejected": 0
+      },
+      "metrics": [
+        {
+          "scope": "ALL",
+          "id": "eligibleOpportunities",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "ALL",
+          "id": "successes",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "ALL",
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "ALL",
+          "id": "complianceRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "ALL",
+          "id": "violationRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "STOP",
+          "id": "eligibleOpportunities",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "STOP",
+          "id": "successes",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "STOP",
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "STOP",
+          "id": "complianceRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "STOP",
+          "id": "violationRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "RED",
+          "id": "eligibleOpportunities",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "RED",
+          "id": "successes",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "RED",
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "RED",
+          "id": "complianceRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "RED",
+          "id": "violationRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "GREEN",
+          "id": "eligibleOpportunities",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "GREEN",
+          "id": "successes",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "GREEN",
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "GREEN",
+          "id": "complianceRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "GREEN",
+          "id": "violationRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "YIELD",
+          "id": "eligibleOpportunities",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "YIELD",
+          "id": "successes",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "YIELD",
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "YIELD",
+          "id": "complianceRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "YIELD",
+          "id": "violationRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "LANE_CHANGE",
+          "id": "eligibleOpportunities",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "LANE_CHANGE",
+          "id": "successes",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "LANE_CHANGE",
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "LANE_CHANGE",
+          "id": "complianceRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "LANE_CHANGE",
+          "id": "violationRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "stops",
+          "id": "completeStops",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "stops",
+          "id": "stopDwellSeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_STOP_DWELL"
+        },
+        {
+          "scope": "stops",
+          "id": "meanStopDwellSeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_STOP_DWELL"
+        },
+        {
+          "scope": "reactions",
+          "id": "reactionSamples",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "reactions",
+          "id": "meanReactionSeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_REACTION_SAMPLES"
+        },
+        {
+          "scope": "reactions",
+          "id": "medianReactionSeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_REACTION_SAMPLES"
+        },
+        {
+          "scope": "speed",
+          "id": "speedSamples",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "speed",
+          "id": "meanSpeedMps",
+          "unit": "mps",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_SPEED_SAMPLES"
+        },
+        {
+          "scope": "speed",
+          "id": "medianSpeedMps",
+          "unit": "mps",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_SPEED_SAMPLES"
+        },
+        {
+          "scope": "speed",
+          "id": "p90SpeedMps",
+          "unit": "mps",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_SPEED_SAMPLES"
+        },
+        {
+          "scope": "speed",
+          "id": "limitedSpeedSamples",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "speed",
+          "id": "limitedSeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_LIMIT"
+        },
+        {
+          "scope": "speed",
+          "id": "meanLimitMps",
+          "unit": "mps",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_LIMIT"
+        },
+        {
+          "scope": "speed",
+          "id": "overLimitSamples",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "speed",
+          "id": "overLimitSeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_LIMIT"
+        },
+        {
+          "scope": "speed",
+          "id": "overLimitFraction",
+          "unit": "ratio",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_LIMIT"
+        },
+        {
+          "scope": "headway",
+          "id": "headwaySamples",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "headway",
+          "id": "ineligibleHeadwaySamples",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "headway",
+          "id": "meanHeadwaySeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_HEADWAY_SAMPLES"
+        },
+        {
+          "scope": "headway",
+          "id": "medianHeadwaySeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_HEADWAY_SAMPLES"
+        },
+        {
+          "scope": "headway",
+          "id": "p90HeadwaySeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_HEADWAY_SAMPLES"
+        }
+      ],
+      "adapter": [
+        {
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        }
+      ],
+      "historyScans": 0,
+      "snapshotCalls": 1
+    },
+    {
+      "name": "zero real",
+      "events": {
+        "events": 3,
+        "accepted": 3,
+        "duplicates": 0,
+        "rejected": 0
+      },
+      "metrics": [
+        {
+          "scope": "ALL",
+          "id": "eligibleOpportunities",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 3,
+          "sampleSize": 3,
+          "reason": null
+        },
+        {
+          "scope": "ALL",
+          "id": "successes",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 3,
+          "sampleSize": 3,
+          "reason": null
+        },
+        {
+          "scope": "ALL",
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "ALL",
+          "id": "complianceRate",
+          "unit": "percentage",
+          "state": "AVAILABLE",
+          "value": 100,
+          "sampleSize": 3,
+          "reason": null
+        },
+        {
+          "scope": "ALL",
+          "id": "violationRate",
+          "unit": "percentage",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 3,
+          "reason": null
+        },
+        {
+          "scope": "STOP",
+          "id": "eligibleOpportunities",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 3,
+          "sampleSize": 3,
+          "reason": null
+        },
+        {
+          "scope": "STOP",
+          "id": "successes",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 3,
+          "sampleSize": 3,
+          "reason": null
+        },
+        {
+          "scope": "STOP",
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "STOP",
+          "id": "complianceRate",
+          "unit": "percentage",
+          "state": "AVAILABLE",
+          "value": 100,
+          "sampleSize": 3,
+          "reason": null
+        },
+        {
+          "scope": "STOP",
+          "id": "violationRate",
+          "unit": "percentage",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 3,
+          "reason": null
+        },
+        {
+          "scope": "RED",
+          "id": "eligibleOpportunities",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "RED",
+          "id": "successes",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "RED",
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "RED",
+          "id": "complianceRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "RED",
+          "id": "violationRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "GREEN",
+          "id": "eligibleOpportunities",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "GREEN",
+          "id": "successes",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "GREEN",
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "GREEN",
+          "id": "complianceRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "GREEN",
+          "id": "violationRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "YIELD",
+          "id": "eligibleOpportunities",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "YIELD",
+          "id": "successes",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "YIELD",
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "YIELD",
+          "id": "complianceRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "YIELD",
+          "id": "violationRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "LANE_CHANGE",
+          "id": "eligibleOpportunities",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "LANE_CHANGE",
+          "id": "successes",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "LANE_CHANGE",
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "LANE_CHANGE",
+          "id": "complianceRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "LANE_CHANGE",
+          "id": "violationRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "stops",
+          "id": "completeStops",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 3,
+          "sampleSize": 3,
+          "reason": null
+        },
+        {
+          "scope": "stops",
+          "id": "stopDwellSeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_STOP_DWELL"
+        },
+        {
+          "scope": "stops",
+          "id": "meanStopDwellSeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_STOP_DWELL"
+        },
+        {
+          "scope": "reactions",
+          "id": "reactionSamples",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "reactions",
+          "id": "meanReactionSeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_REACTION_SAMPLES"
+        },
+        {
+          "scope": "reactions",
+          "id": "medianReactionSeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_REACTION_SAMPLES"
+        },
+        {
+          "scope": "speed",
+          "id": "speedSamples",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "speed",
+          "id": "meanSpeedMps",
+          "unit": "mps",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_SPEED_SAMPLES"
+        },
+        {
+          "scope": "speed",
+          "id": "medianSpeedMps",
+          "unit": "mps",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_SPEED_SAMPLES"
+        },
+        {
+          "scope": "speed",
+          "id": "p90SpeedMps",
+          "unit": "mps",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_SPEED_SAMPLES"
+        },
+        {
+          "scope": "speed",
+          "id": "limitedSpeedSamples",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "speed",
+          "id": "limitedSeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_LIMIT"
+        },
+        {
+          "scope": "speed",
+          "id": "meanLimitMps",
+          "unit": "mps",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_LIMIT"
+        },
+        {
+          "scope": "speed",
+          "id": "overLimitSamples",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "speed",
+          "id": "overLimitSeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_LIMIT"
+        },
+        {
+          "scope": "speed",
+          "id": "overLimitFraction",
+          "unit": "ratio",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_LIMIT"
+        },
+        {
+          "scope": "headway",
+          "id": "headwaySamples",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "headway",
+          "id": "ineligibleHeadwaySamples",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "headway",
+          "id": "meanHeadwaySeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_HEADWAY_SAMPLES"
+        },
+        {
+          "scope": "headway",
+          "id": "medianHeadwaySeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_HEADWAY_SAMPLES"
+        },
+        {
+          "scope": "headway",
+          "id": "p90HeadwaySeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_HEADWAY_SAMPLES"
+        }
+      ],
+      "adapter": [
+        {
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 3,
+          "reason": null
+        }
+      ],
+      "historyScans": 0,
+      "snapshotCalls": 1
+    },
+    {
+      "name": "viteză și headway eligibil",
+      "events": {
+        "events": 7,
+        "accepted": 7,
+        "duplicates": 0,
+        "rejected": 0
+      },
+      "metrics": [
+        {
+          "scope": "ALL",
+          "id": "eligibleOpportunities",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 3,
+          "sampleSize": 3,
+          "reason": null
+        },
+        {
+          "scope": "ALL",
+          "id": "successes",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 3,
+          "sampleSize": 3,
+          "reason": null
+        },
+        {
+          "scope": "ALL",
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "ALL",
+          "id": "complianceRate",
+          "unit": "percentage",
+          "state": "AVAILABLE",
+          "value": 100,
+          "sampleSize": 3,
+          "reason": null
+        },
+        {
+          "scope": "ALL",
+          "id": "violationRate",
+          "unit": "percentage",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 3,
+          "reason": null
+        },
+        {
+          "scope": "STOP",
+          "id": "eligibleOpportunities",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 3,
+          "sampleSize": 3,
+          "reason": null
+        },
+        {
+          "scope": "STOP",
+          "id": "successes",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 3,
+          "sampleSize": 3,
+          "reason": null
+        },
+        {
+          "scope": "STOP",
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "STOP",
+          "id": "complianceRate",
+          "unit": "percentage",
+          "state": "AVAILABLE",
+          "value": 100,
+          "sampleSize": 3,
+          "reason": null
+        },
+        {
+          "scope": "STOP",
+          "id": "violationRate",
+          "unit": "percentage",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 3,
+          "reason": null
+        },
+        {
+          "scope": "RED",
+          "id": "eligibleOpportunities",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "RED",
+          "id": "successes",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "RED",
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "RED",
+          "id": "complianceRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "RED",
+          "id": "violationRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "GREEN",
+          "id": "eligibleOpportunities",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "GREEN",
+          "id": "successes",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "GREEN",
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "GREEN",
+          "id": "complianceRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "GREEN",
+          "id": "violationRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "YIELD",
+          "id": "eligibleOpportunities",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "YIELD",
+          "id": "successes",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "YIELD",
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "YIELD",
+          "id": "complianceRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "YIELD",
+          "id": "violationRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "LANE_CHANGE",
+          "id": "eligibleOpportunities",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "LANE_CHANGE",
+          "id": "successes",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "LANE_CHANGE",
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "LANE_CHANGE",
+          "id": "complianceRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "LANE_CHANGE",
+          "id": "violationRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "stops",
+          "id": "completeStops",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 3,
+          "sampleSize": 3,
+          "reason": null
+        },
+        {
+          "scope": "stops",
+          "id": "stopDwellSeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_STOP_DWELL"
+        },
+        {
+          "scope": "stops",
+          "id": "meanStopDwellSeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_STOP_DWELL"
+        },
+        {
+          "scope": "reactions",
+          "id": "reactionSamples",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "reactions",
+          "id": "meanReactionSeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_REACTION_SAMPLES"
+        },
+        {
+          "scope": "reactions",
+          "id": "medianReactionSeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_REACTION_SAMPLES"
+        },
+        {
+          "scope": "speed",
+          "id": "speedSamples",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 4,
+          "sampleSize": 4,
+          "reason": null
+        },
+        {
+          "scope": "speed",
+          "id": "meanSpeedMps",
+          "unit": "mps",
+          "state": "AVAILABLE",
+          "value": 13.75,
+          "sampleSize": 4,
+          "reason": null
+        },
+        {
+          "scope": "speed",
+          "id": "medianSpeedMps",
+          "unit": "mps",
+          "state": "AVAILABLE",
+          "value": 10.25,
+          "sampleSize": 4,
+          "reason": null
+        },
+        {
+          "scope": "speed",
+          "id": "p90SpeedMps",
+          "unit": "mps",
+          "state": "AVAILABLE",
+          "value": 25.25,
+          "sampleSize": 4,
+          "reason": null
+        },
+        {
+          "scope": "speed",
+          "id": "limitedSpeedSamples",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 3,
+          "sampleSize": 3,
+          "reason": null
+        },
+        {
+          "scope": "speed",
+          "id": "limitedSeconds",
+          "unit": "seconds",
+          "state": "AVAILABLE",
+          "value": 0.3,
+          "sampleSize": 3,
+          "reason": null
+        },
+        {
+          "scope": "speed",
+          "id": "meanLimitMps",
+          "unit": "mps",
+          "state": "AVAILABLE",
+          "value": 10,
+          "sampleSize": 3,
+          "reason": null
+        },
+        {
+          "scope": "speed",
+          "id": "overLimitSamples",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 2,
+          "sampleSize": 2,
+          "reason": null
+        },
+        {
+          "scope": "speed",
+          "id": "overLimitSeconds",
+          "unit": "seconds",
+          "state": "AVAILABLE",
+          "value": 0.2,
+          "sampleSize": 3,
+          "reason": null
+        },
+        {
+          "scope": "speed",
+          "id": "overLimitFraction",
+          "unit": "ratio",
+          "state": "AVAILABLE",
+          "value": 0.6666666666666666,
+          "sampleSize": 3,
+          "reason": null
+        },
+        {
+          "scope": "headway",
+          "id": "headwaySamples",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 1,
+          "sampleSize": 1,
+          "reason": null
+        },
+        {
+          "scope": "headway",
+          "id": "ineligibleHeadwaySamples",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 1,
+          "sampleSize": 1,
+          "reason": null
+        },
+        {
+          "scope": "headway",
+          "id": "meanHeadwaySeconds",
+          "unit": "seconds",
+          "state": "AVAILABLE",
+          "value": 1.2,
+          "sampleSize": 1,
+          "reason": null
+        },
+        {
+          "scope": "headway",
+          "id": "medianHeadwaySeconds",
+          "unit": "seconds",
+          "state": "AVAILABLE",
+          "value": 1.125,
+          "sampleSize": 1,
+          "reason": null
+        },
+        {
+          "scope": "headway",
+          "id": "p90HeadwaySeconds",
+          "unit": "seconds",
+          "state": "AVAILABLE",
+          "value": 1.125,
+          "sampleSize": 1,
+          "reason": null
+        }
+      ],
+      "adapter": [
+        {
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 3,
+          "reason": null
+        }
+      ],
+      "historyScans": 0,
+      "snapshotCalls": 1
+    },
+    {
+      "name": "reacție GREEN",
+      "events": {
+        "events": 4,
+        "accepted": 4,
+        "duplicates": 0,
+        "rejected": 0
+      },
+      "metrics": [
+        {
+          "scope": "ALL",
+          "id": "eligibleOpportunities",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 4,
+          "sampleSize": 4,
+          "reason": null
+        },
+        {
+          "scope": "ALL",
+          "id": "successes",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 3,
+          "sampleSize": 3,
+          "reason": null
+        },
+        {
+          "scope": "ALL",
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "ALL",
+          "id": "complianceRate",
+          "unit": "percentage",
+          "state": "AVAILABLE",
+          "value": 75,
+          "sampleSize": 4,
+          "reason": null
+        },
+        {
+          "scope": "ALL",
+          "id": "violationRate",
+          "unit": "percentage",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 4,
+          "reason": null
+        },
+        {
+          "scope": "STOP",
+          "id": "eligibleOpportunities",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "STOP",
+          "id": "successes",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "STOP",
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "STOP",
+          "id": "complianceRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "STOP",
+          "id": "violationRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "RED",
+          "id": "eligibleOpportunities",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 1,
+          "sampleSize": 1,
+          "reason": null
+        },
+        {
+          "scope": "RED",
+          "id": "successes",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 1,
+          "sampleSize": 1,
+          "reason": null
+        },
+        {
+          "scope": "RED",
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "RED",
+          "id": "complianceRate",
+          "unit": "percentage",
+          "state": "AVAILABLE",
+          "value": 100,
+          "sampleSize": 1,
+          "reason": null
+        },
+        {
+          "scope": "RED",
+          "id": "violationRate",
+          "unit": "percentage",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 1,
+          "reason": null
+        },
+        {
+          "scope": "GREEN",
+          "id": "eligibleOpportunities",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 3,
+          "sampleSize": 3,
+          "reason": null
+        },
+        {
+          "scope": "GREEN",
+          "id": "successes",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 2,
+          "sampleSize": 2,
+          "reason": null
+        },
+        {
+          "scope": "GREEN",
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "GREEN",
+          "id": "complianceRate",
+          "unit": "percentage",
+          "state": "AVAILABLE",
+          "value": 66.66666666666666,
+          "sampleSize": 3,
+          "reason": null
+        },
+        {
+          "scope": "GREEN",
+          "id": "violationRate",
+          "unit": "percentage",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 3,
+          "reason": null
+        },
+        {
+          "scope": "YIELD",
+          "id": "eligibleOpportunities",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "YIELD",
+          "id": "successes",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "YIELD",
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "YIELD",
+          "id": "complianceRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "YIELD",
+          "id": "violationRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "LANE_CHANGE",
+          "id": "eligibleOpportunities",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "LANE_CHANGE",
+          "id": "successes",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "LANE_CHANGE",
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "LANE_CHANGE",
+          "id": "complianceRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "LANE_CHANGE",
+          "id": "violationRate",
+          "unit": "percentage",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_OPPORTUNITIES"
+        },
+        {
+          "scope": "stops",
+          "id": "completeStops",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "stops",
+          "id": "stopDwellSeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_STOP_DWELL"
+        },
+        {
+          "scope": "stops",
+          "id": "meanStopDwellSeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_STOP_DWELL"
+        },
+        {
+          "scope": "reactions",
+          "id": "reactionSamples",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 2,
+          "sampleSize": 2,
+          "reason": null
+        },
+        {
+          "scope": "reactions",
+          "id": "meanReactionSeconds",
+          "unit": "seconds",
+          "state": "AVAILABLE",
+          "value": 2,
+          "sampleSize": 2,
+          "reason": null
+        },
+        {
+          "scope": "reactions",
+          "id": "medianReactionSeconds",
+          "unit": "seconds",
+          "state": "AVAILABLE",
+          "value": 1.625,
+          "sampleSize": 2,
+          "reason": null
+        },
+        {
+          "scope": "speed",
+          "id": "speedSamples",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "speed",
+          "id": "meanSpeedMps",
+          "unit": "mps",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_SPEED_SAMPLES"
+        },
+        {
+          "scope": "speed",
+          "id": "medianSpeedMps",
+          "unit": "mps",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_SPEED_SAMPLES"
+        },
+        {
+          "scope": "speed",
+          "id": "p90SpeedMps",
+          "unit": "mps",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_SPEED_SAMPLES"
+        },
+        {
+          "scope": "speed",
+          "id": "limitedSpeedSamples",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "speed",
+          "id": "limitedSeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_LIMIT"
+        },
+        {
+          "scope": "speed",
+          "id": "meanLimitMps",
+          "unit": "mps",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_LIMIT"
+        },
+        {
+          "scope": "speed",
+          "id": "overLimitSamples",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "speed",
+          "id": "overLimitSeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_LIMIT"
+        },
+        {
+          "scope": "speed",
+          "id": "overLimitFraction",
+          "unit": "ratio",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_LIMIT"
+        },
+        {
+          "scope": "headway",
+          "id": "headwaySamples",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "headway",
+          "id": "ineligibleHeadwaySamples",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 0,
+          "reason": null
+        },
+        {
+          "scope": "headway",
+          "id": "meanHeadwaySeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_HEADWAY_SAMPLES"
+        },
+        {
+          "scope": "headway",
+          "id": "medianHeadwaySeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_HEADWAY_SAMPLES"
+        },
+        {
+          "scope": "headway",
+          "id": "p90HeadwaySeconds",
+          "unit": "seconds",
+          "state": "UNAVAILABLE",
+          "value": null,
+          "sampleSize": null,
+          "reason": "NO_HEADWAY_SAMPLES"
+        }
+      ],
+      "adapter": [
+        {
+          "id": "violations",
+          "unit": "count",
+          "state": "AVAILABLE",
+          "value": 0,
+          "sampleSize": 4,
+          "reason": null
+        }
+      ],
+      "historyScans": 0,
+      "snapshotCalls": 1
+    }
+  ],
+  "framerate": {
+    "tenHz": {
+      "events": 40,
+      "accepted": 4,
+      "duplicates": 36,
+      "eligible": 4,
+      "successes": 2,
+      "violations": 2,
+      "complianceRate": 50,
+      "violationRate": 50
+    },
+    "sixtyHz": {
+      "events": 240,
+      "accepted": 4,
+      "duplicates": 236,
+      "eligible": 4,
+      "successes": 2,
+      "violations": 2,
+      "complianceRate": 50,
+      "violationRate": 50
+    }
+  },
+  "checks": [
+    {
+      "name": "contract-version",
+      "expected": "138-behavior-metrics-v1",
+      "actual": "138-behavior-metrics-v1",
+      "pass": true,
+      "detail": "138 behavior metrics contract version"
+    },
+    {
+      "name": "closed-event-kinds",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "the service ingests exactly 2 closed event kinds"
+    },
+    {
+      "name": "metric-count",
+      "expected": 26,
+      "actual": 26,
+      "pass": true,
+      "detail": "the closed metric identity set"
+    },
+    {
+      "name": "unavailable-reason-count",
+      "expected": 7,
+      "actual": 7,
+      "pass": true,
+      "detail": "the closed unavailable vocabulary"
+    },
+    {
+      "name": "compliance-unit",
+      "expected": "percentage",
+      "actual": "percentage",
+      "pass": true,
+      "detail": "a compliance rate is a percentage of eligible opportunities"
+    },
+    {
+      "name": "violation-rate-unit",
+      "expected": "percentage",
+      "actual": "percentage",
+      "pass": true,
+      "detail": "a violation rate is a percentage of eligible opportunities"
+    },
+    {
+      "name": "over-limit-fraction-unit",
+      "expected": "ratio",
+      "actual": "ratio",
+      "pass": true,
+      "detail": "the over-limit fraction carries a ratio unit"
+    },
+    {
+      "name": "success-never-violation",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the 086 success half is never a violation"
+    },
+    {
+      "name": "stop-eligible",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "three STOP occurrences are three opportunities"
+    },
+    {
+      "name": "stop-successes",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "two STOP occurrences resolved STOPPED"
+    },
+    {
+      "name": "stop-violations",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the rolling crossing is exactly one STOP violation"
+    },
+    {
+      "name": "stop-compliance-percentage",
+      "expected": 66.66666666666666,
+      "actual": 66.66666666666666,
+      "pass": true,
+      "detail": "compliance is successes / eligible × 100"
+    },
+    {
+      "name": "stop-violation-percentage",
+      "expected": 33.33333333333333,
+      "actual": 33.33333333333333,
+      "pass": true,
+      "detail": "violation is violations / eligible × 100"
+    },
+    {
+      "name": "stop-violation-sample",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "the rate reports the eligible STOP denominator"
+    },
+    {
+      "name": "stop-complete-count",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "complete stops are counted separately"
+    },
+    {
+      "name": "stop-dwell-seconds",
+      "expected": 4,
+      "actual": 4,
+      "pass": true,
+      "detail": "240 dwell ticks at 60 Hz are four observed seconds"
+    },
+    {
+      "name": "stop-mean-dwell-seconds",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "four dwell seconds over two samples"
+    },
+    {
+      "name": "red-eligible",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "two RED occurrences are two opportunities"
+    },
+    {
+      "name": "red-successes",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "one RED occurrence was held"
+    },
+    {
+      "name": "red-violations",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "one RED occurrence was crossed"
+    },
+    {
+      "name": "red-compliance",
+      "expected": 50,
+      "actual": 50,
+      "pass": true,
+      "detail": "one of two RED opportunities complied"
+    },
+    {
+      "name": "red-violation",
+      "expected": 50,
+      "actual": 50,
+      "pass": true,
+      "detail": "one of two RED opportunities was a violation"
+    },
+    {
+      "name": "overall-eligible",
+      "expected": 5,
+      "actual": 5,
+      "pass": true,
+      "detail": "overall aggregates the STOP and RED denominators without double counting"
+    },
+    {
+      "name": "overall-successes",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "two stops and one held red are three successes"
+    },
+    {
+      "name": "overall-violations",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "one rolling stop and one red crossing are two violations"
+    },
+    {
+      "name": "overall-violation-rate",
+      "expected": 40,
+      "actual": 40,
+      "pass": true,
+      "detail": "two violations of five opportunities are 40 %"
+    },
+    {
+      "name": "cadence-denominator-identical",
+      "expected": 4,
+      "actual": 4,
+      "pass": true,
+      "detail": "10 Hz and 60 Hz duplicate frames produce the same opportunity denominator"
+    },
+    {
+      "name": "cadence-numerators-identical",
+      "expected": "[2,2]",
+      "actual": "[2,2]",
+      "pass": true,
+      "detail": "10 Hz and 60 Hz duplicate frames produce the same numerators"
+    },
+    {
+      "name": "cadence-accepted-10hz",
+      "expected": 4,
+      "actual": 4,
+      "pass": true,
+      "detail": "four distinct occurrences at 10 Hz"
+    },
+    {
+      "name": "cadence-accepted-60hz",
+      "expected": 4,
+      "actual": 4,
+      "pass": true,
+      "detail": "four distinct occurrences at 60 Hz"
+    },
+    {
+      "name": "cadence-duplicates-10hz",
+      "expected": 36,
+      "actual": 36,
+      "pass": true,
+      "detail": "nine duplicate frames per occurrence"
+    },
+    {
+      "name": "cadence-duplicates-60hz",
+      "expected": 236,
+      "actual": 236,
+      "pass": true,
+      "detail": "fifty-nine duplicate frames per occurrence"
+    },
+    {
+      "name": "zero-denominator-state",
+      "expected": "UNAVAILABLE",
+      "actual": "UNAVAILABLE",
+      "pass": true,
+      "detail": "an empty denominator is unavailable"
+    },
+    {
+      "name": "zero-denominator-value",
+      "expected": null,
+      "actual": null,
+      "pass": true,
+      "detail": "the unavailable rate carries no number"
+    },
+    {
+      "name": "zero-denominator-reason",
+      "expected": "NO_OPPORTUNITIES",
+      "actual": "NO_OPPORTUNITIES",
+      "pass": true,
+      "detail": "the closed reason names the empty opportunity denominator"
+    },
+    {
+      "name": "zero-denominator-not-perfect",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "an empty denominator is never reported as a perfect 0 % or 100 %"
+    },
+    {
+      "name": "real-zero-state",
+      "expected": "AVAILABLE",
+      "actual": "AVAILABLE",
+      "pass": true,
+      "detail": "a real zero with a real denominator stays available"
+    },
+    {
+      "name": "real-zero-value",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "three compliant stops mean zero violations"
+    },
+    {
+      "name": "real-zero-sample",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "the real zero reports its denominator"
+    },
+    {
+      "name": "real-zero-count",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the violation count is a real zero"
+    },
+    {
+      "name": "speed-samples",
+      "expected": 4,
+      "actual": 4,
+      "pass": true,
+      "detail": "four speed samples were accepted"
+    },
+    {
+      "name": "speed-mean",
+      "expected": 13.75,
+      "actual": 13.75,
+      "pass": true,
+      "detail": "mean of 10, 15, 25 and 5 m/s"
+    },
+    {
+      "name": "speed-limited-samples",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "only three samples carried a certifiable limit"
+    },
+    {
+      "name": "over-limit-samples",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "two samples exceeded their limit"
+    },
+    {
+      "name": "over-limit-seconds",
+      "expected": 0.2,
+      "actual": 0.2,
+      "pass": true,
+      "detail": "two accepted samples × 0.1 s"
+    },
+    {
+      "name": "over-limit-fraction",
+      "expected": 0.6666666666666666,
+      "actual": 0.6666666666666666,
+      "pass": true,
+      "detail": "over-limit fraction over time with a valid limit only"
+    },
+    {
+      "name": "headway-eligible-samples",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "only the moving-ego headway enters the distribution"
+    },
+    {
+      "name": "headway-ineligible-samples",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the standing-ego headway is reported as ineligible"
+    },
+    {
+      "name": "headway-mean",
+      "expected": 1.2,
+      "actual": 1.2,
+      "pass": true,
+      "detail": "the eligible headway sample is 1.2 s"
+    },
+    {
+      "name": "reaction-samples",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "two GREEN opportunities carried a reaction"
+    },
+    {
+      "name": "reaction-mean",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "1.5 s and 2.5 s reaction samples"
+    },
+    {
+      "name": "reaction-excludes-red",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the RED reaction sample is not part of the GREEN reaction indicator"
+    },
+    {
+      "name": "history-scans",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the snapshot never rescans a history"
+    },
+    {
+      "name": "adapter-ids",
+      "expected": "violations",
+      "actual": "violations",
+      "pass": true,
+      "detail": "138 adapts violations only"
+    },
+    {
+      "name": "adapter-unit",
+      "expected": "count",
+      "actual": "count",
+      "pass": true,
+      "detail": "violations use the 082 count unit"
+    },
+    {
+      "name": "adapter-value",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the STOP scenario has one violation"
+    },
+    {
+      "name": "adapter-sample",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "the adapter reports the eligible denominator"
+    },
+    {
+      "name": "retained-keys-limit",
+      "expected": 8192,
+      "actual": 8192,
+      "pass": true,
+      "detail": "bounded idempotency memory"
+    }
+  ],
+  "summary": {
+    "checks": 58,
+    "passed": 58,
+    "pass": true
+  }
+}

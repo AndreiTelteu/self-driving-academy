@@ -103,6 +103,17 @@ export {
   type MetricSnapshotSources,
 } from './metric-service';
 export {
+  BEHAVIOR_CITY_METRIC_IDS,
+  BEHAVIOR_METRICS_APP_VERSION,
+  ingestOpportunityRecord,
+  ingestSpeedSample,
+  readBehaviorMetricSnapshot,
+  toCityDashboardBehaviorMetrics,
+  type BehaviorOpportunityTiming,
+  type BehaviorSnapshotContext,
+  type BehaviorSpeedSampleInput,
+} from './behavior-metrics';
+export {
   PROFILE_PANEL_LOCAL_CONTEXT,
   PROFILE_PANEL_READ_ERRORS,
   readProfilePanelSnapshot,

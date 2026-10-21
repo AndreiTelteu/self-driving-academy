@@ -160,6 +160,15 @@ blocajului, deci hostul o măsoară; modulul nu inventează secunde.
 `NO_EXPOSURE`/`NO_RIDES`/`NO_OPPORTUNITIES` → `NO_EXPOSURE`, `NO_DISTANCE` → `SOURCE_MISSING`,
 `NO_FLEET` → `NOT_CERTIFIED`. Un `UNAVAILABLE` rămâne `value: null`, niciodată `0`.
 
+## Relația cu indicatorii de comportament 138
+
+137 rămâne proprietarul indicatorilor de serviciu și al numărătorului brut `violations` din evenimente
+`VIOLATION`. [Contractul 138](behavior-metrics.md) consumă separat oportunitățile 086 rezolvate și
+calculează conformarea per oportunitate eligibilă, viteza, dwell-ul, reacția și headway-ul. Cele două
+module nu împart acumulatori: 137 nu clasifică oportunități, iar 138 nu calculează curse, distanțe sau
+coliziuni. Adaptorul 082 al 138 expune doar `violations`, ca valoare `CityMetric` compatibilă, fără să
+modifice contractul 082 sau adaptorul 137.
+
 ## Limite
 
 | Limită | Valoare |
