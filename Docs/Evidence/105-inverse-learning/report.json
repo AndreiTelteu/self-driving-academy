@@ -1,0 +1,5943 @@
+{
+  "version": "105-inverse-learning-v1",
+  "rootSeed": 105000,
+  "tickHz": 60,
+  "contract": {
+    "profiles": [
+      "PRUDENT",
+      "IMPULSIVE",
+      "RECKLESS",
+      "MIXED"
+    ],
+    "demonstrationScenarios": [
+      "FREE_FLOW",
+      "FOLLOWING",
+      "LONGITUDINAL",
+      "SIGNALIZED",
+      "STOP_YIELD",
+      "LANE_CHANGE"
+    ],
+    "evaluationStatuses": [
+      "WITHIN_TOLERANCE",
+      "OUTSIDE_TOLERANCE",
+      "NOT_IDENTIFIABLE",
+      "NO_ESTIMATE"
+    ],
+    "keys": [
+      "speed_delta_urban",
+      "speed_delta_residential",
+      "curve_lateral_accel",
+      "intersection_approach_speed",
+      "desired_acceleration",
+      "comfort_deceleration",
+      "acceleration_jerk",
+      "brake_reaction_delay",
+      "following_time_headway",
+      "following_min_gap",
+      "queue_standstill_gap",
+      "following_speed_gain",
+      "red_stop_probability",
+      "green_start_delay",
+      "red_stop_line_offset",
+      "late_red_brake_threshold",
+      "stop_full_probability",
+      "stop_dwell_time",
+      "stop_line_offset",
+      "yield_time_gap",
+      "lane_change_front_gap",
+      "lane_change_back_gap",
+      "lane_change_speed_gain",
+      "lane_change_cooldown"
+    ],
+    "identifiableKeys": 24,
+    "unidentifiableRuleCount": 24
+  },
+  "scenarios": [
+    {
+      "scenarioId": "PROFILE_PRUDENT",
+      "kind": "PROFILE",
+      "probe": null,
+      "profileId": "PRUDENT",
+      "expectedFailure": false,
+      "keys": 24,
+      "withinTolerance": 24,
+      "outsideTolerance": 0,
+      "notIdentifiable": 0,
+      "noEstimate": 0,
+      "passed": true,
+      "retainedFailures": [],
+      "demonstrationSeeds": [
+        1207002829,
+        8485895,
+        232881746,
+        1785885450,
+        2111335887,
+        2985583521
+      ],
+      "results": [
+        {
+          "key": "speed_delta_urban",
+          "scenarioId": "PROFILE_PRUDENT",
+          "scenarioIds": [
+            "FREE_FLOW"
+          ],
+          "target": -2,
+          "estimate": -1.9963861535675829,
+          "interval": null,
+          "error": 0.003613846,
+          "absoluteError": 0.003613846,
+          "tolerance": {
+            "absolute": 0.2,
+            "relative": 0.05,
+            "effective": 0.3
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 3,
+            "sampleCount": 93,
+            "contexts": [
+              "FREE_TRAFFIC/urban/MID×3"
+            ]
+          },
+          "context": "FREE_TRAFFIC urban median of (speed − posted limit) over ≥10 s"
+        },
+        {
+          "key": "speed_delta_residential",
+          "scenarioId": "PROFILE_PRUDENT",
+          "scenarioIds": [
+            "FREE_FLOW"
+          ],
+          "target": -1.5,
+          "estimate": -1.5057893053814766,
+          "interval": null,
+          "error": -0.005789305,
+          "absoluteError": 0.005789305,
+          "tolerance": {
+            "absolute": 0.2,
+            "relative": 0.05,
+            "effective": 0.275
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 3,
+            "sampleCount": 93,
+            "contexts": [
+              "FREE_TRAFFIC/residential/MID×3"
+            ]
+          },
+          "context": "FREE_TRAFFIC residential median of (speed − posted limit) over ≥10 s"
+        },
+        {
+          "key": "curve_lateral_accel",
+          "scenarioId": "PROFILE_PRUDENT",
+          "scenarioIds": [
+            "FREE_FLOW"
+          ],
+          "target": 1.8,
+          "estimate": 1.8,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.25,
+            "relative": 0.08,
+            "effective": 0.394
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 3,
+            "sampleCount": 2700,
+            "contexts": [
+              "FREE_TRAFFIC/other/UNKNOWN×3"
+            ]
+          },
+          "context": "FREE_TRAFFIC curve: intentional 089 lateral demand × class lateral ceiling"
+        },
+        {
+          "key": "intersection_approach_speed",
+          "scenarioId": "PROFILE_PRUDENT",
+          "scenarioIds": [
+            "FREE_FLOW"
+          ],
+          "target": 7.5,
+          "estimate": 7.511002492904663,
+          "interval": null,
+          "error": 0.011002493,
+          "absoluteError": 0.011002493,
+          "tolerance": {
+            "absolute": 0.4,
+            "relative": 0.03,
+            "effective": 0.625
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 9,
+            "sampleCount": 279,
+            "contexts": [
+              "FREE_TRAFFIC/urban/MID×3",
+              "FREE_TRAFFIC/residential/MID×3",
+              "FREE_TRAFFIC/other/MID×3"
+            ]
+          },
+          "context": "FREE_TRAFFIC explicitly marked approach median speed"
+        },
+        {
+          "key": "desired_acceleration",
+          "scenarioId": "PROFILE_PRUDENT",
+          "scenarioIds": [
+            "LONGITUDINAL"
+          ],
+          "target": 1.2,
+          "estimate": 1.1999999999999997,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.15,
+            "relative": 0.05,
+            "effective": 0.21
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 4,
+            "sampleCount": 3600,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×4"
+            ]
+          },
+          "context": "FREE_TRAFFIC complete intentional 089 acceleration demand × sedan force/mass"
+        },
+        {
+          "key": "comfort_deceleration",
+          "scenarioId": "PROFILE_PRUDENT",
+          "scenarioIds": [
+            "LONGITUDINAL"
+          ],
+          "target": 2.2,
+          "estimate": 2.2,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.2,
+            "relative": 0.05,
+            "effective": 0.31
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 4,
+            "sampleCount": 3600,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×4"
+            ]
+          },
+          "context": "FREE_TRAFFIC complete intentional 089 deceleration demand × sedan brake ceiling"
+        },
+        {
+          "key": "acceleration_jerk",
+          "scenarioId": "PROFILE_PRUDENT",
+          "scenarioIds": [
+            "LONGITUDINAL"
+          ],
+          "target": 1.5,
+          "estimate": 1.5,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.3,
+            "relative": 0.1,
+            "effective": 0.45
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 4,
+            "sampleCount": 3600,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×4"
+            ]
+          },
+          "context": "FREE_TRAFFIC tick-to-tick |SI jerk| samples, trimmed p50"
+        },
+        {
+          "key": "brake_reaction_delay",
+          "scenarioId": "PROFILE_PRUDENT",
+          "scenarioIds": [
+            "LONGITUDINAL"
+          ],
+          "target": 0.45,
+          "estimate": 0.45,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.02,
+            "relative": 0.02,
+            "effective": 0.029
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 4,
+            "sampleCount": 3600,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×4"
+            ]
+          },
+          "context": "observable stimulus, reactionDurationTicks / 60"
+        },
+        {
+          "key": "following_time_headway",
+          "scenarioId": "PROFILE_PRUDENT",
+          "scenarioIds": [
+            "FOLLOWING"
+          ],
+          "target": 2.4,
+          "estimate": 2.4002374399999997,
+          "interval": null,
+          "error": 0.00023744,
+          "absoluteError": 0.00023744,
+          "tolerance": {
+            "absolute": 0.08,
+            "relative": 0.03,
+            "effective": 0.152
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 7,
+            "sampleCount": 7,
+            "contexts": [
+              "LEADER/urban/LOW×4",
+              "LEADER/urban/MID×2",
+              "LEADER/urban/HIGH×1"
+            ]
+          },
+          "context": "LEADER moving episodes fitted as gap = minGap + headway × speed"
+        },
+        {
+          "key": "following_min_gap",
+          "scenarioId": "PROFILE_PRUDENT",
+          "scenarioIds": [
+            "FOLLOWING"
+          ],
+          "target": 4,
+          "estimate": 4.012228220000004,
+          "interval": null,
+          "error": 0.01222822,
+          "absoluteError": 0.01222822,
+          "tolerance": {
+            "absolute": 0.15,
+            "relative": 0.03,
+            "effective": 0.27
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 7,
+            "sampleCount": 7,
+            "contexts": [
+              "LEADER/urban/LOW×4",
+              "LEADER/urban/MID×2",
+              "LEADER/urban/HIGH×1"
+            ]
+          },
+          "context": "LEADER moving episodes, OLS intercept at zero speed"
+        },
+        {
+          "key": "queue_standstill_gap",
+          "scenarioId": "PROFILE_PRUDENT",
+          "scenarioIds": [
+            "FOLLOWING"
+          ],
+          "target": 2.5,
+          "estimate": 2.487148,
+          "interval": null,
+          "error": -0.012852,
+          "absoluteError": 0.012852,
+          "tolerance": {
+            "absolute": 0.15,
+            "relative": 0.03,
+            "effective": 0.225
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 7,
+            "sampleCount": 7,
+            "contexts": [
+              "LEADER/urban/LOW×4",
+              "LEADER/urban/MID×2",
+              "LEADER/urban/HIGH×1"
+            ]
+          },
+          "context": "LEADER QUEUE_STANDSTILL episodes with both speeds ≤ 0.1 m/s"
+        },
+        {
+          "key": "following_speed_gain",
+          "scenarioId": "PROFILE_PRUDENT",
+          "scenarioIds": [
+            "FOLLOWING"
+          ],
+          "target": 0.5,
+          "estimate": 0.501048,
+          "interval": null,
+          "error": 0.001048,
+          "absoluteError": 0.001048,
+          "tolerance": {
+            "absolute": 0.05,
+            "relative": 0.03,
+            "effective": 0.065
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 7,
+            "sampleCount": 7,
+            "contexts": [
+              "LEADER/urban/LOW×4",
+              "LEADER/urban/MID×2",
+              "LEADER/urban/HIGH×1"
+            ]
+          },
+          "context": "LEADER moving episodes with a separately observed speedGain"
+        },
+        {
+          "key": "red_stop_probability",
+          "scenarioId": "PROFILE_PRUDENT",
+          "scenarioIds": [
+            "SIGNALIZED"
+          ],
+          "target": 1,
+          "estimate": 1,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.03,
+            "relative": 0.02,
+            "effective": 0.05
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 4,
+            "sampleCount": 3600,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×4"
+            ]
+          },
+          "context": "certain RED opportunities, compliant HELD / certain denominator"
+        },
+        {
+          "key": "green_start_delay",
+          "scenarioId": "PROFILE_PRUDENT",
+          "scenarioIds": [
+            "SIGNALIZED"
+          ],
+          "target": 0.9,
+          "estimate": 0.9,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.02,
+            "relative": 0.03,
+            "effective": 0.047
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 3,
+            "sampleCount": 3,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×3"
+            ]
+          },
+          "context": "unblocked GREEN departures, (departureTick − onsetTick) / 60"
+        },
+        {
+          "key": "red_stop_line_offset",
+          "scenarioId": "PROFILE_PRUDENT",
+          "scenarioIds": [
+            "SIGNALIZED"
+          ],
+          "target": 1.2,
+          "estimate": 1.2,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.1,
+            "relative": 0.03,
+            "effective": 0.136
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 4,
+            "sampleCount": 3600,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×4"
+            ]
+          },
+          "context": "certain RED opportunities, mean measured stopLineOffsetM"
+        },
+        {
+          "key": "late_red_brake_threshold",
+          "scenarioId": "PROFILE_PRUDENT",
+          "scenarioIds": [
+            "SIGNALIZED"
+          ],
+          "target": 2.6,
+          "estimate": 2.6,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.05,
+            "relative": 0.04,
+            "effective": 0.154
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 4,
+            "sampleCount": 3600,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×4"
+            ]
+          },
+          "context": "certain RED opportunities, mean brakeThresholdMps2"
+        },
+        {
+          "key": "stop_full_probability",
+          "scenarioId": "PROFILE_PRUDENT",
+          "scenarioIds": [
+            "STOP_YIELD"
+          ],
+          "target": 1,
+          "estimate": 1,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.03,
+            "relative": 0.02,
+            "effective": 0.05
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 5,
+            "sampleCount": 5,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×5"
+            ]
+          },
+          "context": "certain FREE_TRAFFIC STOP_LINE facts, full stops / certain denominator"
+        },
+        {
+          "key": "stop_dwell_time",
+          "scenarioId": "PROFILE_PRUDENT",
+          "scenarioIds": [
+            "STOP_YIELD"
+          ],
+          "target": 1.4,
+          "estimate": 1.4,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.02,
+            "relative": 0.03,
+            "effective": 0.062
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 5,
+            "sampleCount": 5,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×5"
+            ]
+          },
+          "context": "measured dwellTicks of full STOP_LINE stops / 60"
+        },
+        {
+          "key": "stop_line_offset",
+          "scenarioId": "PROFILE_PRUDENT",
+          "scenarioIds": [
+            "STOP_YIELD"
+          ],
+          "target": 1.1,
+          "estimate": 1.1,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.1,
+            "relative": 0.03,
+            "effective": 0.133
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 5,
+            "sampleCount": 5,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×5"
+            ]
+          },
+          "context": "certain FREE_TRAFFIC STOP_LINE facts, mean measured offset"
+        },
+        {
+          "key": "yield_time_gap",
+          "scenarioId": "PROFILE_PRUDENT",
+          "scenarioIds": [
+            "STOP_YIELD"
+          ],
+          "target": 4.5,
+          "estimate": null,
+          "interval": [
+            4.1,
+            4.9
+          ],
+          "error": null,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.15,
+            "relative": 0.05,
+            "effective": 0.375
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 4,
+            "sampleCount": 4,
+            "contexts": [
+              "LEADER/urban/MID×4"
+            ]
+          },
+          "context": "YIELD interval [max refused, min accepted] of signed 052 separations"
+        },
+        {
+          "key": "lane_change_front_gap",
+          "scenarioId": "PROFILE_PRUDENT",
+          "scenarioIds": [
+            "LANE_CHANGE"
+          ],
+          "target": 18,
+          "estimate": null,
+          "interval": [
+            17,
+            19.5
+          ],
+          "error": null,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.3,
+            "relative": 0.04,
+            "effective": 1.02
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 5,
+            "sampleCount": 5,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×5"
+            ]
+          },
+          "context": "optional LANE_CHANGE interval [max rejected, min completed] front gap"
+        },
+        {
+          "key": "lane_change_back_gap",
+          "scenarioId": "PROFILE_PRUDENT",
+          "scenarioIds": [
+            "LANE_CHANGE"
+          ],
+          "target": 16,
+          "estimate": null,
+          "interval": [
+            15,
+            17.5
+          ],
+          "error": null,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.3,
+            "relative": 0.04,
+            "effective": 0.94
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 5,
+            "sampleCount": 5,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×5"
+            ]
+          },
+          "context": "optional LANE_CHANGE interval [max rejected, min completed] back gap"
+        },
+        {
+          "key": "lane_change_speed_gain",
+          "scenarioId": "PROFILE_PRUDENT",
+          "scenarioIds": [
+            "LANE_CHANGE"
+          ],
+          "target": 2.5,
+          "estimate": null,
+          "interval": [
+            2.25,
+            2.875
+          ],
+          "error": null,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.15,
+            "relative": 0.05,
+            "effective": 0.275
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 5,
+            "sampleCount": 5,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×5"
+            ]
+          },
+          "context": "optional LANE_CHANGE interval of observed speedAdvantageMps"
+        },
+        {
+          "key": "lane_change_cooldown",
+          "scenarioId": "PROFILE_PRUDENT",
+          "scenarioIds": [
+            "LANE_CHANGE"
+          ],
+          "target": 8,
+          "estimate": 8,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.05,
+            "relative": 0.03,
+            "effective": 0.29
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 5,
+            "sampleCount": 5,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×5"
+            ]
+          },
+          "context": "optional completed manoeuvres, mean cooldownTicks / 60"
+        }
+      ]
+    },
+    {
+      "scenarioId": "PROFILE_IMPULSIVE",
+      "kind": "PROFILE",
+      "probe": null,
+      "profileId": "IMPULSIVE",
+      "expectedFailure": false,
+      "keys": 24,
+      "withinTolerance": 24,
+      "outsideTolerance": 0,
+      "notIdentifiable": 0,
+      "noEstimate": 0,
+      "passed": true,
+      "retainedFailures": [],
+      "demonstrationSeeds": [
+        755343596,
+        4154586188,
+        2453023935,
+        3501239704,
+        1652295727,
+        3140893140
+      ],
+      "results": [
+        {
+          "key": "speed_delta_urban",
+          "scenarioId": "PROFILE_IMPULSIVE",
+          "scenarioIds": [
+            "FREE_FLOW"
+          ],
+          "target": 3.5,
+          "estimate": 3.502700974661856,
+          "interval": null,
+          "error": 0.002700975,
+          "absoluteError": 0.002700975,
+          "tolerance": {
+            "absolute": 0.2,
+            "relative": 0.05,
+            "effective": 0.375
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 3,
+            "sampleCount": 93,
+            "contexts": [
+              "FREE_TRAFFIC/urban/HIGH×3"
+            ]
+          },
+          "context": "FREE_TRAFFIC urban median of (speed − posted limit) over ≥10 s"
+        },
+        {
+          "key": "speed_delta_residential",
+          "scenarioId": "PROFILE_IMPULSIVE",
+          "scenarioIds": [
+            "FREE_FLOW"
+          ],
+          "target": 2.5,
+          "estimate": 2.504098869618028,
+          "interval": null,
+          "error": 0.00409887,
+          "absoluteError": 0.00409887,
+          "tolerance": {
+            "absolute": 0.2,
+            "relative": 0.05,
+            "effective": 0.325
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 3,
+            "sampleCount": 93,
+            "contexts": [
+              "FREE_TRAFFIC/residential/MID×3"
+            ]
+          },
+          "context": "FREE_TRAFFIC residential median of (speed − posted limit) over ≥10 s"
+        },
+        {
+          "key": "curve_lateral_accel",
+          "scenarioId": "PROFILE_IMPULSIVE",
+          "scenarioIds": [
+            "FREE_FLOW"
+          ],
+          "target": 3.6,
+          "estimate": 3.6,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.25,
+            "relative": 0.08,
+            "effective": 0.538
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 3,
+            "sampleCount": 2700,
+            "contexts": [
+              "FREE_TRAFFIC/other/UNKNOWN×3"
+            ]
+          },
+          "context": "FREE_TRAFFIC curve: intentional 089 lateral demand × class lateral ceiling"
+        },
+        {
+          "key": "intersection_approach_speed",
+          "scenarioId": "PROFILE_IMPULSIVE",
+          "scenarioIds": [
+            "FREE_FLOW"
+          ],
+          "target": 11,
+          "estimate": 11.011834996170364,
+          "interval": null,
+          "error": 0.011834996,
+          "absoluteError": 0.011834996,
+          "tolerance": {
+            "absolute": 0.4,
+            "relative": 0.03,
+            "effective": 0.73
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 9,
+            "sampleCount": 279,
+            "contexts": [
+              "FREE_TRAFFIC/urban/HIGH×3",
+              "FREE_TRAFFIC/residential/MID×3",
+              "FREE_TRAFFIC/other/MID×3"
+            ]
+          },
+          "context": "FREE_TRAFFIC explicitly marked approach median speed"
+        },
+        {
+          "key": "desired_acceleration",
+          "scenarioId": "PROFILE_IMPULSIVE",
+          "scenarioIds": [
+            "LONGITUDINAL"
+          ],
+          "target": 2.8,
+          "estimate": 2.7999999999999994,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.15,
+            "relative": 0.05,
+            "effective": 0.29
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 4,
+            "sampleCount": 3600,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×4"
+            ]
+          },
+          "context": "FREE_TRAFFIC complete intentional 089 acceleration demand × sedan force/mass"
+        },
+        {
+          "key": "comfort_deceleration",
+          "scenarioId": "PROFILE_IMPULSIVE",
+          "scenarioIds": [
+            "LONGITUDINAL"
+          ],
+          "target": 3.4,
+          "estimate": 3.4,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.2,
+            "relative": 0.05,
+            "effective": 0.37
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 4,
+            "sampleCount": 3600,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×4"
+            ]
+          },
+          "context": "FREE_TRAFFIC complete intentional 089 deceleration demand × sedan brake ceiling"
+        },
+        {
+          "key": "acceleration_jerk",
+          "scenarioId": "PROFILE_IMPULSIVE",
+          "scenarioIds": [
+            "LONGITUDINAL"
+          ],
+          "target": 3.8,
+          "estimate": 3.8,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.3,
+            "relative": 0.1,
+            "effective": 0.68
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 4,
+            "sampleCount": 3600,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×4"
+            ]
+          },
+          "context": "FREE_TRAFFIC tick-to-tick |SI jerk| samples, trimmed p50"
+        },
+        {
+          "key": "brake_reaction_delay",
+          "scenarioId": "PROFILE_IMPULSIVE",
+          "scenarioIds": [
+            "LONGITUDINAL"
+          ],
+          "target": 0.25,
+          "estimate": 0.25,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.02,
+            "relative": 0.02,
+            "effective": 0.025
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 4,
+            "sampleCount": 3600,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×4"
+            ]
+          },
+          "context": "observable stimulus, reactionDurationTicks / 60"
+        },
+        {
+          "key": "following_time_headway",
+          "scenarioId": "PROFILE_IMPULSIVE",
+          "scenarioIds": [
+            "FOLLOWING"
+          ],
+          "target": 1.1,
+          "estimate": 1.10064958,
+          "interval": null,
+          "error": 0.00064958,
+          "absoluteError": 0.00064958,
+          "tolerance": {
+            "absolute": 0.08,
+            "relative": 0.03,
+            "effective": 0.113
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 7,
+            "sampleCount": 7,
+            "contexts": [
+              "LEADER/urban/LOW×4",
+              "LEADER/urban/MID×2",
+              "LEADER/urban/HIGH×1"
+            ]
+          },
+          "context": "LEADER moving episodes fitted as gap = minGap + headway × speed"
+        },
+        {
+          "key": "following_min_gap",
+          "scenarioId": "PROFILE_IMPULSIVE",
+          "scenarioIds": [
+            "FOLLOWING"
+          ],
+          "target": 2,
+          "estimate": 2.00038829,
+          "interval": null,
+          "error": 0.00038829,
+          "absoluteError": 0.00038829,
+          "tolerance": {
+            "absolute": 0.15,
+            "relative": 0.03,
+            "effective": 0.21
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 7,
+            "sampleCount": 7,
+            "contexts": [
+              "LEADER/urban/LOW×4",
+              "LEADER/urban/MID×2",
+              "LEADER/urban/HIGH×1"
+            ]
+          },
+          "context": "LEADER moving episodes, OLS intercept at zero speed"
+        },
+        {
+          "key": "queue_standstill_gap",
+          "scenarioId": "PROFILE_IMPULSIVE",
+          "scenarioIds": [
+            "FOLLOWING"
+          ],
+          "target": 1.4,
+          "estimate": 1.4060743333333334,
+          "interval": null,
+          "error": 0.006074333,
+          "absoluteError": 0.006074333,
+          "tolerance": {
+            "absolute": 0.15,
+            "relative": 0.03,
+            "effective": 0.192
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 7,
+            "sampleCount": 7,
+            "contexts": [
+              "LEADER/urban/LOW×4",
+              "LEADER/urban/MID×2",
+              "LEADER/urban/HIGH×1"
+            ]
+          },
+          "context": "LEADER QUEUE_STANDSTILL episodes with both speeds ≤ 0.1 m/s"
+        },
+        {
+          "key": "following_speed_gain",
+          "scenarioId": "PROFILE_IMPULSIVE",
+          "scenarioIds": [
+            "FOLLOWING"
+          ],
+          "target": 1.1,
+          "estimate": 1.1046625,
+          "interval": null,
+          "error": 0.0046625,
+          "absoluteError": 0.0046625,
+          "tolerance": {
+            "absolute": 0.05,
+            "relative": 0.03,
+            "effective": 0.083
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 7,
+            "sampleCount": 7,
+            "contexts": [
+              "LEADER/urban/LOW×4",
+              "LEADER/urban/MID×2",
+              "LEADER/urban/HIGH×1"
+            ]
+          },
+          "context": "LEADER moving episodes with a separately observed speedGain"
+        },
+        {
+          "key": "red_stop_probability",
+          "scenarioId": "PROFILE_IMPULSIVE",
+          "scenarioIds": [
+            "SIGNALIZED"
+          ],
+          "target": 0.75,
+          "estimate": 0.75,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.03,
+            "relative": 0.02,
+            "effective": 0.045
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 4,
+            "sampleCount": 3600,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×4"
+            ]
+          },
+          "context": "certain RED opportunities, compliant HELD / certain denominator"
+        },
+        {
+          "key": "green_start_delay",
+          "scenarioId": "PROFILE_IMPULSIVE",
+          "scenarioIds": [
+            "SIGNALIZED"
+          ],
+          "target": 0.35,
+          "estimate": 0.3499999999999999,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.02,
+            "relative": 0.03,
+            "effective": 0.0305
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 3,
+            "sampleCount": 3,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×3"
+            ]
+          },
+          "context": "unblocked GREEN departures, (departureTick − onsetTick) / 60"
+        },
+        {
+          "key": "red_stop_line_offset",
+          "scenarioId": "PROFILE_IMPULSIVE",
+          "scenarioIds": [
+            "SIGNALIZED"
+          ],
+          "target": 0.6,
+          "estimate": 0.6,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.1,
+            "relative": 0.03,
+            "effective": 0.118
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 4,
+            "sampleCount": 3600,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×4"
+            ]
+          },
+          "context": "certain RED opportunities, mean measured stopLineOffsetM"
+        },
+        {
+          "key": "late_red_brake_threshold",
+          "scenarioId": "PROFILE_IMPULSIVE",
+          "scenarioIds": [
+            "SIGNALIZED"
+          ],
+          "target": 1.4,
+          "estimate": 1.4,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.05,
+            "relative": 0.04,
+            "effective": 0.106
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 4,
+            "sampleCount": 3600,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×4"
+            ]
+          },
+          "context": "certain RED opportunities, mean brakeThresholdMps2"
+        },
+        {
+          "key": "stop_full_probability",
+          "scenarioId": "PROFILE_IMPULSIVE",
+          "scenarioIds": [
+            "STOP_YIELD"
+          ],
+          "target": 0.6,
+          "estimate": 0.6,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.03,
+            "relative": 0.02,
+            "effective": 0.042
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 5,
+            "sampleCount": 5,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×5"
+            ]
+          },
+          "context": "certain FREE_TRAFFIC STOP_LINE facts, full stops / certain denominator"
+        },
+        {
+          "key": "stop_dwell_time",
+          "scenarioId": "PROFILE_IMPULSIVE",
+          "scenarioIds": [
+            "STOP_YIELD"
+          ],
+          "target": 0.5,
+          "estimate": 0.5,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.02,
+            "relative": 0.03,
+            "effective": 0.035
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 5,
+            "sampleCount": 5,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×5"
+            ]
+          },
+          "context": "measured dwellTicks of full STOP_LINE stops / 60"
+        },
+        {
+          "key": "stop_line_offset",
+          "scenarioId": "PROFILE_IMPULSIVE",
+          "scenarioIds": [
+            "STOP_YIELD"
+          ],
+          "target": 0.8,
+          "estimate": 0.8,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.1,
+            "relative": 0.03,
+            "effective": 0.124
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 5,
+            "sampleCount": 5,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×5"
+            ]
+          },
+          "context": "certain FREE_TRAFFIC STOP_LINE facts, mean measured offset"
+        },
+        {
+          "key": "yield_time_gap",
+          "scenarioId": "PROFILE_IMPULSIVE",
+          "scenarioIds": [
+            "STOP_YIELD"
+          ],
+          "target": 2.6,
+          "estimate": null,
+          "interval": [
+            2.2,
+            3
+          ],
+          "error": null,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.15,
+            "relative": 0.05,
+            "effective": 0.28
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 4,
+            "sampleCount": 4,
+            "contexts": [
+              "LEADER/urban/MID×4"
+            ]
+          },
+          "context": "YIELD interval [max refused, min accepted] of signed 052 separations"
+        },
+        {
+          "key": "lane_change_front_gap",
+          "scenarioId": "PROFILE_IMPULSIVE",
+          "scenarioIds": [
+            "LANE_CHANGE"
+          ],
+          "target": 9,
+          "estimate": null,
+          "interval": [
+            8,
+            10.5
+          ],
+          "error": null,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.3,
+            "relative": 0.04,
+            "effective": 0.66
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 5,
+            "sampleCount": 5,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×5"
+            ]
+          },
+          "context": "optional LANE_CHANGE interval [max rejected, min completed] front gap"
+        },
+        {
+          "key": "lane_change_back_gap",
+          "scenarioId": "PROFILE_IMPULSIVE",
+          "scenarioIds": [
+            "LANE_CHANGE"
+          ],
+          "target": 7,
+          "estimate": null,
+          "interval": [
+            6,
+            8.5
+          ],
+          "error": null,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.3,
+            "relative": 0.04,
+            "effective": 0.58
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 5,
+            "sampleCount": 5,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×5"
+            ]
+          },
+          "context": "optional LANE_CHANGE interval [max rejected, min completed] back gap"
+        },
+        {
+          "key": "lane_change_speed_gain",
+          "scenarioId": "PROFILE_IMPULSIVE",
+          "scenarioIds": [
+            "LANE_CHANGE"
+          ],
+          "target": 4.5,
+          "estimate": null,
+          "interval": [
+            4.25,
+            4.875
+          ],
+          "error": null,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.15,
+            "relative": 0.05,
+            "effective": 0.375
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 5,
+            "sampleCount": 5,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×5"
+            ]
+          },
+          "context": "optional LANE_CHANGE interval of observed speedAdvantageMps"
+        },
+        {
+          "key": "lane_change_cooldown",
+          "scenarioId": "PROFILE_IMPULSIVE",
+          "scenarioIds": [
+            "LANE_CHANGE"
+          ],
+          "target": 3.5,
+          "estimate": 3.5,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.05,
+            "relative": 0.03,
+            "effective": 0.155
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 5,
+            "sampleCount": 5,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×5"
+            ]
+          },
+          "context": "optional completed manoeuvres, mean cooldownTicks / 60"
+        }
+      ]
+    },
+    {
+      "scenarioId": "PROFILE_RECKLESS",
+      "kind": "PROFILE",
+      "probe": null,
+      "profileId": "RECKLESS",
+      "expectedFailure": false,
+      "keys": 24,
+      "withinTolerance": 24,
+      "outsideTolerance": 0,
+      "notIdentifiable": 0,
+      "noEstimate": 0,
+      "passed": true,
+      "retainedFailures": [],
+      "demonstrationSeeds": [
+        2608569953,
+        345601360,
+        3911443076,
+        1933523559,
+        2001683451,
+        4197064002
+      ],
+      "results": [
+        {
+          "key": "speed_delta_urban",
+          "scenarioId": "PROFILE_RECKLESS",
+          "scenarioIds": [
+            "FREE_FLOW"
+          ],
+          "target": 9,
+          "estimate": 9.002879277374596,
+          "interval": null,
+          "error": 0.002879277,
+          "absoluteError": 0.002879277,
+          "tolerance": {
+            "absolute": 0.2,
+            "relative": 0.05,
+            "effective": 0.65
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 3,
+            "sampleCount": 93,
+            "contexts": [
+              "FREE_TRAFFIC/urban/HIGH×3"
+            ]
+          },
+          "context": "FREE_TRAFFIC urban median of (speed − posted limit) over ≥10 s"
+        },
+        {
+          "key": "speed_delta_residential",
+          "scenarioId": "PROFILE_RECKLESS",
+          "scenarioIds": [
+            "FREE_FLOW"
+          ],
+          "target": 6,
+          "estimate": 6.004018910769373,
+          "interval": null,
+          "error": 0.004018911,
+          "absoluteError": 0.004018911,
+          "tolerance": {
+            "absolute": 0.2,
+            "relative": 0.05,
+            "effective": 0.5
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 3,
+            "sampleCount": 93,
+            "contexts": [
+              "FREE_TRAFFIC/residential/MID×3"
+            ]
+          },
+          "context": "FREE_TRAFFIC residential median of (speed − posted limit) over ≥10 s"
+        },
+        {
+          "key": "curve_lateral_accel",
+          "scenarioId": "PROFILE_RECKLESS",
+          "scenarioIds": [
+            "FREE_FLOW"
+          ],
+          "target": 6.5,
+          "estimate": 6.500000000000001,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.25,
+            "relative": 0.08,
+            "effective": 0.77
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 3,
+            "sampleCount": 2700,
+            "contexts": [
+              "FREE_TRAFFIC/other/UNKNOWN×3"
+            ]
+          },
+          "context": "FREE_TRAFFIC curve: intentional 089 lateral demand × class lateral ceiling"
+        },
+        {
+          "key": "intersection_approach_speed",
+          "scenarioId": "PROFILE_RECKLESS",
+          "scenarioIds": [
+            "FREE_FLOW"
+          ],
+          "target": 16,
+          "estimate": 16.03040466804523,
+          "interval": null,
+          "error": 0.030404668,
+          "absoluteError": 0.030404668,
+          "tolerance": {
+            "absolute": 0.4,
+            "relative": 0.03,
+            "effective": 0.88
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 9,
+            "sampleCount": 279,
+            "contexts": [
+              "FREE_TRAFFIC/urban/HIGH×3",
+              "FREE_TRAFFIC/residential/MID×3",
+              "FREE_TRAFFIC/other/HIGH×3"
+            ]
+          },
+          "context": "FREE_TRAFFIC explicitly marked approach median speed"
+        },
+        {
+          "key": "desired_acceleration",
+          "scenarioId": "PROFILE_RECKLESS",
+          "scenarioIds": [
+            "LONGITUDINAL"
+          ],
+          "target": 4.5,
+          "estimate": 4.499999999999999,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.15,
+            "relative": 0.05,
+            "effective": 0.375
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 4,
+            "sampleCount": 3600,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×4"
+            ]
+          },
+          "context": "FREE_TRAFFIC complete intentional 089 acceleration demand × sedan force/mass"
+        },
+        {
+          "key": "comfort_deceleration",
+          "scenarioId": "PROFILE_RECKLESS",
+          "scenarioIds": [
+            "LONGITUDINAL"
+          ],
+          "target": 5.5,
+          "estimate": 5.5,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.2,
+            "relative": 0.05,
+            "effective": 0.475
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 4,
+            "sampleCount": 3600,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×4"
+            ]
+          },
+          "context": "FREE_TRAFFIC complete intentional 089 deceleration demand × sedan brake ceiling"
+        },
+        {
+          "key": "acceleration_jerk",
+          "scenarioId": "PROFILE_RECKLESS",
+          "scenarioIds": [
+            "LONGITUDINAL"
+          ],
+          "target": 7,
+          "estimate": 7,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.3,
+            "relative": 0.1,
+            "effective": 1
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 4,
+            "sampleCount": 3600,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×4"
+            ]
+          },
+          "context": "FREE_TRAFFIC tick-to-tick |SI jerk| samples, trimmed p50"
+        },
+        {
+          "key": "brake_reaction_delay",
+          "scenarioId": "PROFILE_RECKLESS",
+          "scenarioIds": [
+            "LONGITUDINAL"
+          ],
+          "target": 0.15,
+          "estimate": 0.15,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.02,
+            "relative": 0.02,
+            "effective": 0.023
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 4,
+            "sampleCount": 3600,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×4"
+            ]
+          },
+          "context": "observable stimulus, reactionDurationTicks / 60"
+        },
+        {
+          "key": "following_time_headway",
+          "scenarioId": "PROFILE_RECKLESS",
+          "scenarioIds": [
+            "FOLLOWING"
+          ],
+          "target": 0.6,
+          "estimate": 0.6004627800000001,
+          "interval": null,
+          "error": 0.00046278,
+          "absoluteError": 0.00046278,
+          "tolerance": {
+            "absolute": 0.08,
+            "relative": 0.03,
+            "effective": 0.098
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 7,
+            "sampleCount": 7,
+            "contexts": [
+              "LEADER/urban/LOW×4",
+              "LEADER/urban/MID×2",
+              "LEADER/urban/HIGH×1"
+            ]
+          },
+          "context": "LEADER moving episodes fitted as gap = minGap + headway × speed"
+        },
+        {
+          "key": "following_min_gap",
+          "scenarioId": "PROFILE_RECKLESS",
+          "scenarioIds": [
+            "FOLLOWING"
+          ],
+          "target": 1,
+          "estimate": 0.9806053899999991,
+          "interval": null,
+          "error": -0.01939461,
+          "absoluteError": 0.01939461,
+          "tolerance": {
+            "absolute": 0.15,
+            "relative": 0.03,
+            "effective": 0.18
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 7,
+            "sampleCount": 7,
+            "contexts": [
+              "LEADER/urban/LOW×4",
+              "LEADER/urban/MID×2",
+              "LEADER/urban/HIGH×1"
+            ]
+          },
+          "context": "LEADER moving episodes, OLS intercept at zero speed"
+        },
+        {
+          "key": "queue_standstill_gap",
+          "scenarioId": "PROFILE_RECKLESS",
+          "scenarioIds": [
+            "FOLLOWING"
+          ],
+          "target": 0.7,
+          "estimate": 0.7025966666666666,
+          "interval": null,
+          "error": 0.002596667,
+          "absoluteError": 0.002596667,
+          "tolerance": {
+            "absolute": 0.15,
+            "relative": 0.03,
+            "effective": 0.171
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 7,
+            "sampleCount": 7,
+            "contexts": [
+              "LEADER/urban/LOW×4",
+              "LEADER/urban/MID×2",
+              "LEADER/urban/HIGH×1"
+            ]
+          },
+          "context": "LEADER QUEUE_STANDSTILL episodes with both speeds ≤ 0.1 m/s"
+        },
+        {
+          "key": "following_speed_gain",
+          "scenarioId": "PROFILE_RECKLESS",
+          "scenarioIds": [
+            "FOLLOWING"
+          ],
+          "target": 1.7,
+          "estimate": 1.698387,
+          "interval": null,
+          "error": -0.001613,
+          "absoluteError": 0.001613,
+          "tolerance": {
+            "absolute": 0.05,
+            "relative": 0.03,
+            "effective": 0.101
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 7,
+            "sampleCount": 7,
+            "contexts": [
+              "LEADER/urban/LOW×4",
+              "LEADER/urban/MID×2",
+              "LEADER/urban/HIGH×1"
+            ]
+          },
+          "context": "LEADER moving episodes with a separately observed speedGain"
+        },
+        {
+          "key": "red_stop_probability",
+          "scenarioId": "PROFILE_RECKLESS",
+          "scenarioIds": [
+            "SIGNALIZED"
+          ],
+          "target": 0.35,
+          "estimate": 0.35,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.03,
+            "relative": 0.02,
+            "effective": 0.037
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 20,
+            "sampleCount": 18000,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×20"
+            ]
+          },
+          "context": "certain RED opportunities, compliant HELD / certain denominator"
+        },
+        {
+          "key": "green_start_delay",
+          "scenarioId": "PROFILE_RECKLESS",
+          "scenarioIds": [
+            "SIGNALIZED"
+          ],
+          "target": 0.15,
+          "estimate": 0.15,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.02,
+            "relative": 0.03,
+            "effective": 0.0245
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 3,
+            "sampleCount": 3,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×3"
+            ]
+          },
+          "context": "unblocked GREEN departures, (departureTick − onsetTick) / 60"
+        },
+        {
+          "key": "red_stop_line_offset",
+          "scenarioId": "PROFILE_RECKLESS",
+          "scenarioIds": [
+            "SIGNALIZED"
+          ],
+          "target": 0.3,
+          "estimate": 0.29999999999999993,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.1,
+            "relative": 0.03,
+            "effective": 0.109
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 20,
+            "sampleCount": 18000,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×20"
+            ]
+          },
+          "context": "certain RED opportunities, mean measured stopLineOffsetM"
+        },
+        {
+          "key": "late_red_brake_threshold",
+          "scenarioId": "PROFILE_RECKLESS",
+          "scenarioIds": [
+            "SIGNALIZED"
+          ],
+          "target": 0.8,
+          "estimate": 0.8000000000000002,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.05,
+            "relative": 0.04,
+            "effective": 0.082
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 20,
+            "sampleCount": 18000,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×20"
+            ]
+          },
+          "context": "certain RED opportunities, mean brakeThresholdMps2"
+        },
+        {
+          "key": "stop_full_probability",
+          "scenarioId": "PROFILE_RECKLESS",
+          "scenarioIds": [
+            "STOP_YIELD"
+          ],
+          "target": 0.2,
+          "estimate": 0.2,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.03,
+            "relative": 0.02,
+            "effective": 0.034
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 15,
+            "sampleCount": 15,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×15"
+            ]
+          },
+          "context": "certain FREE_TRAFFIC STOP_LINE facts, full stops / certain denominator"
+        },
+        {
+          "key": "stop_dwell_time",
+          "scenarioId": "PROFILE_RECKLESS",
+          "scenarioIds": [
+            "STOP_YIELD"
+          ],
+          "target": 0.2,
+          "estimate": 0.20000000000000004,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.02,
+            "relative": 0.03,
+            "effective": 0.026
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 15,
+            "sampleCount": 15,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×15"
+            ]
+          },
+          "context": "measured dwellTicks of full STOP_LINE stops / 60"
+        },
+        {
+          "key": "stop_line_offset",
+          "scenarioId": "PROFILE_RECKLESS",
+          "scenarioIds": [
+            "STOP_YIELD"
+          ],
+          "target": 0.4,
+          "estimate": 0.4000000000000001,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.1,
+            "relative": 0.03,
+            "effective": 0.112
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 15,
+            "sampleCount": 15,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×15"
+            ]
+          },
+          "context": "certain FREE_TRAFFIC STOP_LINE facts, mean measured offset"
+        },
+        {
+          "key": "yield_time_gap",
+          "scenarioId": "PROFILE_RECKLESS",
+          "scenarioIds": [
+            "STOP_YIELD"
+          ],
+          "target": 1.3,
+          "estimate": null,
+          "interval": [
+            0.9,
+            1.7000000000000002
+          ],
+          "error": null,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.15,
+            "relative": 0.05,
+            "effective": 0.215
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 4,
+            "sampleCount": 4,
+            "contexts": [
+              "LEADER/urban/MID×4"
+            ]
+          },
+          "context": "YIELD interval [max refused, min accepted] of signed 052 separations"
+        },
+        {
+          "key": "lane_change_front_gap",
+          "scenarioId": "PROFILE_RECKLESS",
+          "scenarioIds": [
+            "LANE_CHANGE"
+          ],
+          "target": 4,
+          "estimate": null,
+          "interval": [
+            3,
+            5.5
+          ],
+          "error": null,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.3,
+            "relative": 0.04,
+            "effective": 0.46
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 5,
+            "sampleCount": 5,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×5"
+            ]
+          },
+          "context": "optional LANE_CHANGE interval [max rejected, min completed] front gap"
+        },
+        {
+          "key": "lane_change_back_gap",
+          "scenarioId": "PROFILE_RECKLESS",
+          "scenarioIds": [
+            "LANE_CHANGE"
+          ],
+          "target": 3,
+          "estimate": null,
+          "interval": [
+            2,
+            4.5
+          ],
+          "error": null,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.3,
+            "relative": 0.04,
+            "effective": 0.42
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 5,
+            "sampleCount": 5,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×5"
+            ]
+          },
+          "context": "optional LANE_CHANGE interval [max rejected, min completed] back gap"
+        },
+        {
+          "key": "lane_change_speed_gain",
+          "scenarioId": "PROFILE_RECKLESS",
+          "scenarioIds": [
+            "LANE_CHANGE"
+          ],
+          "target": 7.5,
+          "estimate": null,
+          "interval": [
+            7.25,
+            7.875
+          ],
+          "error": null,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.15,
+            "relative": 0.05,
+            "effective": 0.525
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 5,
+            "sampleCount": 5,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×5"
+            ]
+          },
+          "context": "optional LANE_CHANGE interval of observed speedAdvantageMps"
+        },
+        {
+          "key": "lane_change_cooldown",
+          "scenarioId": "PROFILE_RECKLESS",
+          "scenarioIds": [
+            "LANE_CHANGE"
+          ],
+          "target": 1.5,
+          "estimate": 1.5,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.05,
+            "relative": 0.03,
+            "effective": 0.095
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 5,
+            "sampleCount": 5,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×5"
+            ]
+          },
+          "context": "optional completed manoeuvres, mean cooldownTicks / 60"
+        }
+      ]
+    },
+    {
+      "scenarioId": "PROFILE_MIXED",
+      "kind": "PROFILE",
+      "probe": null,
+      "profileId": "MIXED",
+      "expectedFailure": false,
+      "keys": 24,
+      "withinTolerance": 24,
+      "outsideTolerance": 0,
+      "notIdentifiable": 0,
+      "noEstimate": 0,
+      "passed": true,
+      "retainedFailures": [],
+      "demonstrationSeeds": [
+        4247428989,
+        4105407456,
+        2760677115,
+        1725093332,
+        950282674,
+        873291958
+      ],
+      "results": [
+        {
+          "key": "speed_delta_urban",
+          "scenarioId": "PROFILE_MIXED",
+          "scenarioIds": [
+            "FREE_FLOW"
+          ],
+          "target": 1.5,
+          "estimate": 1.4970382653735577,
+          "interval": null,
+          "error": -0.002961735,
+          "absoluteError": 0.002961735,
+          "tolerance": {
+            "absolute": 0.2,
+            "relative": 0.05,
+            "effective": 0.275
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 3,
+            "sampleCount": 93,
+            "contexts": [
+              "FREE_TRAFFIC/urban/HIGH×3"
+            ]
+          },
+          "context": "FREE_TRAFFIC urban median of (speed − posted limit) over ≥10 s"
+        },
+        {
+          "key": "speed_delta_residential",
+          "scenarioId": "PROFILE_MIXED",
+          "scenarioIds": [
+            "FREE_FLOW"
+          ],
+          "target": -0.5,
+          "estimate": -0.4953349782340233,
+          "interval": null,
+          "error": 0.004665022,
+          "absoluteError": 0.004665022,
+          "tolerance": {
+            "absolute": 0.2,
+            "relative": 0.05,
+            "effective": 0.225
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 3,
+            "sampleCount": 93,
+            "contexts": [
+              "FREE_TRAFFIC/residential/MID×3"
+            ]
+          },
+          "context": "FREE_TRAFFIC residential median of (speed − posted limit) over ≥10 s"
+        },
+        {
+          "key": "curve_lateral_accel",
+          "scenarioId": "PROFILE_MIXED",
+          "scenarioIds": [
+            "FREE_FLOW"
+          ],
+          "target": 3,
+          "estimate": 3,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.25,
+            "relative": 0.08,
+            "effective": 0.49
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 3,
+            "sampleCount": 2700,
+            "contexts": [
+              "FREE_TRAFFIC/other/UNKNOWN×3"
+            ]
+          },
+          "context": "FREE_TRAFFIC curve: intentional 089 lateral demand × class lateral ceiling"
+        },
+        {
+          "key": "intersection_approach_speed",
+          "scenarioId": "PROFILE_MIXED",
+          "scenarioIds": [
+            "FREE_FLOW"
+          ],
+          "target": 9,
+          "estimate": 9.013398761744611,
+          "interval": null,
+          "error": 0.013398762,
+          "absoluteError": 0.013398762,
+          "tolerance": {
+            "absolute": 0.4,
+            "relative": 0.03,
+            "effective": 0.67
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 9,
+            "sampleCount": 279,
+            "contexts": [
+              "FREE_TRAFFIC/urban/HIGH×3",
+              "FREE_TRAFFIC/residential/MID×3",
+              "FREE_TRAFFIC/other/MID×3"
+            ]
+          },
+          "context": "FREE_TRAFFIC explicitly marked approach median speed"
+        },
+        {
+          "key": "desired_acceleration",
+          "scenarioId": "PROFILE_MIXED",
+          "scenarioIds": [
+            "LONGITUDINAL"
+          ],
+          "target": 2,
+          "estimate": 2,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.15,
+            "relative": 0.05,
+            "effective": 0.25
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 4,
+            "sampleCount": 3600,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×4"
+            ]
+          },
+          "context": "FREE_TRAFFIC complete intentional 089 acceleration demand × sedan force/mass"
+        },
+        {
+          "key": "comfort_deceleration",
+          "scenarioId": "PROFILE_MIXED",
+          "scenarioIds": [
+            "LONGITUDINAL"
+          ],
+          "target": 2.9,
+          "estimate": 2.9,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.2,
+            "relative": 0.05,
+            "effective": 0.345
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 4,
+            "sampleCount": 3600,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×4"
+            ]
+          },
+          "context": "FREE_TRAFFIC complete intentional 089 deceleration demand × sedan brake ceiling"
+        },
+        {
+          "key": "acceleration_jerk",
+          "scenarioId": "PROFILE_MIXED",
+          "scenarioIds": [
+            "LONGITUDINAL"
+          ],
+          "target": 2.6,
+          "estimate": 2.6,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.3,
+            "relative": 0.1,
+            "effective": 0.56
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 4,
+            "sampleCount": 3600,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×4"
+            ]
+          },
+          "context": "FREE_TRAFFIC tick-to-tick |SI jerk| samples, trimmed p50"
+        },
+        {
+          "key": "brake_reaction_delay",
+          "scenarioId": "PROFILE_MIXED",
+          "scenarioIds": [
+            "LONGITUDINAL"
+          ],
+          "target": 0.35,
+          "estimate": 0.35,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.02,
+            "relative": 0.02,
+            "effective": 0.027
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 4,
+            "sampleCount": 3600,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×4"
+            ]
+          },
+          "context": "observable stimulus, reactionDurationTicks / 60"
+        },
+        {
+          "key": "following_time_headway",
+          "scenarioId": "PROFILE_MIXED",
+          "scenarioIds": [
+            "FOLLOWING"
+          ],
+          "target": 1.6,
+          "estimate": 1.59994214,
+          "interval": null,
+          "error": -0.00005786,
+          "absoluteError": 0.00005786,
+          "tolerance": {
+            "absolute": 0.08,
+            "relative": 0.03,
+            "effective": 0.128
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 7,
+            "sampleCount": 7,
+            "contexts": [
+              "LEADER/urban/LOW×4",
+              "LEADER/urban/MID×2",
+              "LEADER/urban/HIGH×1"
+            ]
+          },
+          "context": "LEADER moving episodes fitted as gap = minGap + headway × speed"
+        },
+        {
+          "key": "following_min_gap",
+          "scenarioId": "PROFILE_MIXED",
+          "scenarioIds": [
+            "FOLLOWING"
+          ],
+          "target": 2.8,
+          "estimate": 2.800471569999999,
+          "interval": null,
+          "error": 0.00047157,
+          "absoluteError": 0.00047157,
+          "tolerance": {
+            "absolute": 0.15,
+            "relative": 0.03,
+            "effective": 0.234
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 7,
+            "sampleCount": 7,
+            "contexts": [
+              "LEADER/urban/LOW×4",
+              "LEADER/urban/MID×2",
+              "LEADER/urban/HIGH×1"
+            ]
+          },
+          "context": "LEADER moving episodes, OLS intercept at zero speed"
+        },
+        {
+          "key": "queue_standstill_gap",
+          "scenarioId": "PROFILE_MIXED",
+          "scenarioIds": [
+            "FOLLOWING"
+          ],
+          "target": 1.8,
+          "estimate": 1.8073476666666668,
+          "interval": null,
+          "error": 0.007347667,
+          "absoluteError": 0.007347667,
+          "tolerance": {
+            "absolute": 0.15,
+            "relative": 0.03,
+            "effective": 0.204
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 7,
+            "sampleCount": 7,
+            "contexts": [
+              "LEADER/urban/LOW×4",
+              "LEADER/urban/MID×2",
+              "LEADER/urban/HIGH×1"
+            ]
+          },
+          "context": "LEADER QUEUE_STANDSTILL episodes with both speeds ≤ 0.1 m/s"
+        },
+        {
+          "key": "following_speed_gain",
+          "scenarioId": "PROFILE_MIXED",
+          "scenarioIds": [
+            "FOLLOWING"
+          ],
+          "target": 0.8,
+          "estimate": 0.79662875,
+          "interval": null,
+          "error": -0.00337125,
+          "absoluteError": 0.00337125,
+          "tolerance": {
+            "absolute": 0.05,
+            "relative": 0.03,
+            "effective": 0.074
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 7,
+            "sampleCount": 7,
+            "contexts": [
+              "LEADER/urban/LOW×4",
+              "LEADER/urban/MID×2",
+              "LEADER/urban/HIGH×1"
+            ]
+          },
+          "context": "LEADER moving episodes with a separately observed speedGain"
+        },
+        {
+          "key": "red_stop_probability",
+          "scenarioId": "PROFILE_MIXED",
+          "scenarioIds": [
+            "SIGNALIZED"
+          ],
+          "target": 0.85,
+          "estimate": 0.85,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.03,
+            "relative": 0.02,
+            "effective": 0.047
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 20,
+            "sampleCount": 18000,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×20"
+            ]
+          },
+          "context": "certain RED opportunities, compliant HELD / certain denominator"
+        },
+        {
+          "key": "green_start_delay",
+          "scenarioId": "PROFILE_MIXED",
+          "scenarioIds": [
+            "SIGNALIZED"
+          ],
+          "target": 0.5,
+          "estimate": 0.5,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.02,
+            "relative": 0.03,
+            "effective": 0.035
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 3,
+            "sampleCount": 3,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×3"
+            ]
+          },
+          "context": "unblocked GREEN departures, (departureTick − onsetTick) / 60"
+        },
+        {
+          "key": "red_stop_line_offset",
+          "scenarioId": "PROFILE_MIXED",
+          "scenarioIds": [
+            "SIGNALIZED"
+          ],
+          "target": 0.9,
+          "estimate": 0.9,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.1,
+            "relative": 0.03,
+            "effective": 0.127
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 20,
+            "sampleCount": 18000,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×20"
+            ]
+          },
+          "context": "certain RED opportunities, mean measured stopLineOffsetM"
+        },
+        {
+          "key": "late_red_brake_threshold",
+          "scenarioId": "PROFILE_MIXED",
+          "scenarioIds": [
+            "SIGNALIZED"
+          ],
+          "target": 2,
+          "estimate": 2,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.05,
+            "relative": 0.04,
+            "effective": 0.13
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 20,
+            "sampleCount": 18000,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×20"
+            ]
+          },
+          "context": "certain RED opportunities, mean brakeThresholdMps2"
+        },
+        {
+          "key": "stop_full_probability",
+          "scenarioId": "PROFILE_MIXED",
+          "scenarioIds": [
+            "STOP_YIELD"
+          ],
+          "target": 0.85,
+          "estimate": 0.85,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.03,
+            "relative": 0.02,
+            "effective": 0.047
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 20,
+            "sampleCount": 20,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×20"
+            ]
+          },
+          "context": "certain FREE_TRAFFIC STOP_LINE facts, full stops / certain denominator"
+        },
+        {
+          "key": "stop_dwell_time",
+          "scenarioId": "PROFILE_MIXED",
+          "scenarioIds": [
+            "STOP_YIELD"
+          ],
+          "target": 0.9,
+          "estimate": 0.9000000000000002,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.02,
+            "relative": 0.03,
+            "effective": 0.047
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 20,
+            "sampleCount": 20,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×20"
+            ]
+          },
+          "context": "measured dwellTicks of full STOP_LINE stops / 60"
+        },
+        {
+          "key": "stop_line_offset",
+          "scenarioId": "PROFILE_MIXED",
+          "scenarioIds": [
+            "STOP_YIELD"
+          ],
+          "target": 0.9,
+          "estimate": 0.9,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.1,
+            "relative": 0.03,
+            "effective": 0.127
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 20,
+            "sampleCount": 20,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×20"
+            ]
+          },
+          "context": "certain FREE_TRAFFIC STOP_LINE facts, mean measured offset"
+        },
+        {
+          "key": "yield_time_gap",
+          "scenarioId": "PROFILE_MIXED",
+          "scenarioIds": [
+            "STOP_YIELD"
+          ],
+          "target": 3.4,
+          "estimate": null,
+          "interval": [
+            3,
+            3.8
+          ],
+          "error": null,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.15,
+            "relative": 0.05,
+            "effective": 0.32
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 4,
+            "sampleCount": 4,
+            "contexts": [
+              "LEADER/urban/MID×4"
+            ]
+          },
+          "context": "YIELD interval [max refused, min accepted] of signed 052 separations"
+        },
+        {
+          "key": "lane_change_front_gap",
+          "scenarioId": "PROFILE_MIXED",
+          "scenarioIds": [
+            "LANE_CHANGE"
+          ],
+          "target": 12,
+          "estimate": null,
+          "interval": [
+            11,
+            13.5
+          ],
+          "error": null,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.3,
+            "relative": 0.04,
+            "effective": 0.78
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 5,
+            "sampleCount": 5,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×5"
+            ]
+          },
+          "context": "optional LANE_CHANGE interval [max rejected, min completed] front gap"
+        },
+        {
+          "key": "lane_change_back_gap",
+          "scenarioId": "PROFILE_MIXED",
+          "scenarioIds": [
+            "LANE_CHANGE"
+          ],
+          "target": 9.5,
+          "estimate": null,
+          "interval": [
+            8.5,
+            11
+          ],
+          "error": null,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.3,
+            "relative": 0.04,
+            "effective": 0.68
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 5,
+            "sampleCount": 5,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×5"
+            ]
+          },
+          "context": "optional LANE_CHANGE interval [max rejected, min completed] back gap"
+        },
+        {
+          "key": "lane_change_speed_gain",
+          "scenarioId": "PROFILE_MIXED",
+          "scenarioIds": [
+            "LANE_CHANGE"
+          ],
+          "target": 3.2,
+          "estimate": null,
+          "interval": [
+            2.95,
+            3.575
+          ],
+          "error": null,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.15,
+            "relative": 0.05,
+            "effective": 0.31
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 5,
+            "sampleCount": 5,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×5"
+            ]
+          },
+          "context": "optional LANE_CHANGE interval of observed speedAdvantageMps"
+        },
+        {
+          "key": "lane_change_cooldown",
+          "scenarioId": "PROFILE_MIXED",
+          "scenarioIds": [
+            "LANE_CHANGE"
+          ],
+          "target": 5,
+          "estimate": 5,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.05,
+            "relative": 0.03,
+            "effective": 0.2
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 5,
+            "sampleCount": 5,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×5"
+            ]
+          },
+          "context": "optional completed manoeuvres, mean cooldownTicks / 60"
+        }
+      ]
+    },
+    {
+      "scenarioId": "SPARSE_EVIDENCE",
+      "kind": "PROBE",
+      "probe": "SPARSE_EVIDENCE",
+      "profileId": "MIXED",
+      "expectedFailure": false,
+      "keys": 24,
+      "withinTolerance": 0,
+      "outsideTolerance": 0,
+      "notIdentifiable": 24,
+      "noEstimate": 0,
+      "passed": true,
+      "retainedFailures": [],
+      "demonstrationSeeds": [
+        1898489974,
+        1385123733
+      ],
+      "results": [
+        {
+          "key": "speed_delta_urban",
+          "scenarioId": "SPARSE_EVIDENCE",
+          "scenarioIds": [],
+          "target": 1.5,
+          "estimate": null,
+          "interval": null,
+          "error": null,
+          "absoluteError": null,
+          "tolerance": {
+            "absolute": 0.2,
+            "relative": 0.05,
+            "effective": 0.275
+          },
+          "status": "NOT_IDENTIFIABLE",
+          "identifiable": false,
+          "estimatorStatus": "UNOBSERVED",
+          "estimatorReason": "NO_QUALIFYING_EVIDENCE",
+          "reason": "NO_QUALIFYING_EVIDENCE",
+          "evidence": {
+            "status": "NO_EVIDENCE",
+            "distinctEpisodes": 0,
+            "sampleCount": 0,
+            "contexts": []
+          },
+          "context": "FREE_TRAFFIC urban median of (speed − posted limit) over ≥10 s"
+        },
+        {
+          "key": "speed_delta_residential",
+          "scenarioId": "SPARSE_EVIDENCE",
+          "scenarioIds": [],
+          "target": -0.5,
+          "estimate": null,
+          "interval": null,
+          "error": null,
+          "absoluteError": null,
+          "tolerance": {
+            "absolute": 0.2,
+            "relative": 0.05,
+            "effective": 0.225
+          },
+          "status": "NOT_IDENTIFIABLE",
+          "identifiable": false,
+          "estimatorStatus": "UNOBSERVED",
+          "estimatorReason": "NO_QUALIFYING_EVIDENCE",
+          "reason": "NO_QUALIFYING_EVIDENCE",
+          "evidence": {
+            "status": "NO_EVIDENCE",
+            "distinctEpisodes": 0,
+            "sampleCount": 0,
+            "contexts": []
+          },
+          "context": "FREE_TRAFFIC residential median of (speed − posted limit) over ≥10 s"
+        },
+        {
+          "key": "curve_lateral_accel",
+          "scenarioId": "SPARSE_EVIDENCE",
+          "scenarioIds": [],
+          "target": 3,
+          "estimate": null,
+          "interval": null,
+          "error": null,
+          "absoluteError": null,
+          "tolerance": {
+            "absolute": 0.25,
+            "relative": 0.08,
+            "effective": 0.49
+          },
+          "status": "NOT_IDENTIFIABLE",
+          "identifiable": false,
+          "estimatorStatus": "UNOBSERVED",
+          "estimatorReason": "NO_QUALIFYING_EVIDENCE",
+          "reason": "NO_QUALIFYING_EVIDENCE",
+          "evidence": {
+            "status": "NO_EVIDENCE",
+            "distinctEpisodes": 0,
+            "sampleCount": 0,
+            "contexts": []
+          },
+          "context": "FREE_TRAFFIC curve: intentional 089 lateral demand × class lateral ceiling"
+        },
+        {
+          "key": "intersection_approach_speed",
+          "scenarioId": "SPARSE_EVIDENCE",
+          "scenarioIds": [],
+          "target": 9,
+          "estimate": null,
+          "interval": null,
+          "error": null,
+          "absoluteError": null,
+          "tolerance": {
+            "absolute": 0.4,
+            "relative": 0.03,
+            "effective": 0.67
+          },
+          "status": "NOT_IDENTIFIABLE",
+          "identifiable": false,
+          "estimatorStatus": "UNOBSERVED",
+          "estimatorReason": "NO_QUALIFYING_EVIDENCE",
+          "reason": "NO_QUALIFYING_EVIDENCE",
+          "evidence": {
+            "status": "NO_EVIDENCE",
+            "distinctEpisodes": 0,
+            "sampleCount": 0,
+            "contexts": []
+          },
+          "context": "FREE_TRAFFIC explicitly marked approach median speed"
+        },
+        {
+          "key": "desired_acceleration",
+          "scenarioId": "SPARSE_EVIDENCE",
+          "scenarioIds": [],
+          "target": 2,
+          "estimate": null,
+          "interval": null,
+          "error": null,
+          "absoluteError": null,
+          "tolerance": {
+            "absolute": 0.15,
+            "relative": 0.05,
+            "effective": 0.25
+          },
+          "status": "NOT_IDENTIFIABLE",
+          "identifiable": false,
+          "estimatorStatus": "UNOBSERVED",
+          "estimatorReason": "NO_QUALIFYING_EVIDENCE",
+          "reason": "NO_QUALIFYING_EVIDENCE",
+          "evidence": {
+            "status": "NO_EVIDENCE",
+            "distinctEpisodes": 0,
+            "sampleCount": 0,
+            "contexts": []
+          },
+          "context": "FREE_TRAFFIC complete intentional 089 acceleration demand × sedan force/mass"
+        },
+        {
+          "key": "comfort_deceleration",
+          "scenarioId": "SPARSE_EVIDENCE",
+          "scenarioIds": [],
+          "target": 2.9,
+          "estimate": null,
+          "interval": null,
+          "error": null,
+          "absoluteError": null,
+          "tolerance": {
+            "absolute": 0.2,
+            "relative": 0.05,
+            "effective": 0.345
+          },
+          "status": "NOT_IDENTIFIABLE",
+          "identifiable": false,
+          "estimatorStatus": "UNOBSERVED",
+          "estimatorReason": "NO_QUALIFYING_EVIDENCE",
+          "reason": "NO_QUALIFYING_EVIDENCE",
+          "evidence": {
+            "status": "NO_EVIDENCE",
+            "distinctEpisodes": 0,
+            "sampleCount": 0,
+            "contexts": []
+          },
+          "context": "FREE_TRAFFIC complete intentional 089 deceleration demand × sedan brake ceiling"
+        },
+        {
+          "key": "acceleration_jerk",
+          "scenarioId": "SPARSE_EVIDENCE",
+          "scenarioIds": [],
+          "target": 2.6,
+          "estimate": null,
+          "interval": null,
+          "error": null,
+          "absoluteError": null,
+          "tolerance": {
+            "absolute": 0.3,
+            "relative": 0.1,
+            "effective": 0.56
+          },
+          "status": "NOT_IDENTIFIABLE",
+          "identifiable": false,
+          "estimatorStatus": "UNOBSERVED",
+          "estimatorReason": "NO_QUALIFYING_EVIDENCE",
+          "reason": "NO_QUALIFYING_EVIDENCE",
+          "evidence": {
+            "status": "NO_EVIDENCE",
+            "distinctEpisodes": 0,
+            "sampleCount": 0,
+            "contexts": []
+          },
+          "context": "FREE_TRAFFIC tick-to-tick |SI jerk| samples, trimmed p50"
+        },
+        {
+          "key": "brake_reaction_delay",
+          "scenarioId": "SPARSE_EVIDENCE",
+          "scenarioIds": [],
+          "target": 0.35,
+          "estimate": null,
+          "interval": null,
+          "error": null,
+          "absoluteError": null,
+          "tolerance": {
+            "absolute": 0.02,
+            "relative": 0.02,
+            "effective": 0.027
+          },
+          "status": "NOT_IDENTIFIABLE",
+          "identifiable": false,
+          "estimatorStatus": "UNOBSERVED",
+          "estimatorReason": "NO_QUALIFYING_EVIDENCE",
+          "reason": "NO_QUALIFYING_EVIDENCE",
+          "evidence": {
+            "status": "NO_EVIDENCE",
+            "distinctEpisodes": 0,
+            "sampleCount": 0,
+            "contexts": []
+          },
+          "context": "observable stimulus, reactionDurationTicks / 60"
+        },
+        {
+          "key": "following_time_headway",
+          "scenarioId": "SPARSE_EVIDENCE",
+          "scenarioIds": [
+            "FOLLOWING"
+          ],
+          "target": 1.6,
+          "estimate": null,
+          "interval": null,
+          "error": null,
+          "absoluteError": null,
+          "tolerance": {
+            "absolute": 0.08,
+            "relative": 0.03,
+            "effective": 0.128
+          },
+          "status": "NOT_IDENTIFIABLE",
+          "identifiable": false,
+          "estimatorStatus": "UNIDENTIFIED",
+          "estimatorReason": "INSUFFICIENT_DISTINCT_EPISODES_OR_VARIATION",
+          "reason": "INSUFFICIENT_EVIDENCE",
+          "evidence": {
+            "status": "INSUFFICIENT",
+            "distinctEpisodes": 3,
+            "sampleCount": 3,
+            "contexts": [
+              "LEADER/urban/MID×3"
+            ]
+          },
+          "context": "LEADER moving episodes fitted as gap = minGap + headway × speed"
+        },
+        {
+          "key": "following_min_gap",
+          "scenarioId": "SPARSE_EVIDENCE",
+          "scenarioIds": [
+            "FOLLOWING"
+          ],
+          "target": 2.8,
+          "estimate": null,
+          "interval": null,
+          "error": null,
+          "absoluteError": null,
+          "tolerance": {
+            "absolute": 0.15,
+            "relative": 0.03,
+            "effective": 0.234
+          },
+          "status": "NOT_IDENTIFIABLE",
+          "identifiable": false,
+          "estimatorStatus": "UNIDENTIFIED",
+          "estimatorReason": "INSUFFICIENT_DISTINCT_EPISODES_OR_VARIATION",
+          "reason": "INSUFFICIENT_EVIDENCE",
+          "evidence": {
+            "status": "INSUFFICIENT",
+            "distinctEpisodes": 3,
+            "sampleCount": 3,
+            "contexts": [
+              "LEADER/urban/MID×3"
+            ]
+          },
+          "context": "LEADER moving episodes, OLS intercept at zero speed"
+        },
+        {
+          "key": "queue_standstill_gap",
+          "scenarioId": "SPARSE_EVIDENCE",
+          "scenarioIds": [
+            "FOLLOWING"
+          ],
+          "target": 1.8,
+          "estimate": null,
+          "interval": null,
+          "error": null,
+          "absoluteError": null,
+          "tolerance": {
+            "absolute": 0.15,
+            "relative": 0.03,
+            "effective": 0.204
+          },
+          "status": "NOT_IDENTIFIABLE",
+          "identifiable": false,
+          "estimatorStatus": "UNOBSERVED",
+          "estimatorReason": "INSUFFICIENT_MATCHING_OBSERVATION_EPISODES",
+          "reason": "ESTIMATOR_NOT_IDENTIFIED",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 3,
+            "sampleCount": 3,
+            "contexts": [
+              "LEADER/urban/MID×3"
+            ]
+          },
+          "context": "LEADER QUEUE_STANDSTILL episodes with both speeds ≤ 0.1 m/s"
+        },
+        {
+          "key": "following_speed_gain",
+          "scenarioId": "SPARSE_EVIDENCE",
+          "scenarioIds": [
+            "FOLLOWING"
+          ],
+          "target": 0.8,
+          "estimate": null,
+          "interval": null,
+          "error": null,
+          "absoluteError": null,
+          "tolerance": {
+            "absolute": 0.05,
+            "relative": 0.03,
+            "effective": 0.074
+          },
+          "status": "NOT_IDENTIFIABLE",
+          "identifiable": false,
+          "estimatorStatus": "UNOBSERVED",
+          "estimatorReason": "INSUFFICIENT_DISTINCT_EPISODES_OR_VARIATION",
+          "reason": "INSUFFICIENT_EVIDENCE",
+          "evidence": {
+            "status": "INSUFFICIENT",
+            "distinctEpisodes": 3,
+            "sampleCount": 3,
+            "contexts": [
+              "LEADER/urban/MID×3"
+            ]
+          },
+          "context": "LEADER moving episodes with a separately observed speedGain"
+        },
+        {
+          "key": "red_stop_probability",
+          "scenarioId": "SPARSE_EVIDENCE",
+          "scenarioIds": [
+            "SIGNALIZED"
+          ],
+          "target": 0.85,
+          "estimate": null,
+          "interval": null,
+          "error": null,
+          "absoluteError": null,
+          "tolerance": {
+            "absolute": 0.03,
+            "relative": 0.02,
+            "effective": 0.047
+          },
+          "status": "NOT_IDENTIFIABLE",
+          "identifiable": false,
+          "estimatorStatus": "UNOBSERVED",
+          "estimatorReason": "INSUFFICIENT_DISTINCT_EPISODES_OR_VARIATION",
+          "reason": "INSUFFICIENT_EVIDENCE",
+          "evidence": {
+            "status": "INSUFFICIENT",
+            "distinctEpisodes": 1,
+            "sampleCount": 900,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×1"
+            ]
+          },
+          "context": "certain RED opportunities, compliant HELD / certain denominator"
+        },
+        {
+          "key": "green_start_delay",
+          "scenarioId": "SPARSE_EVIDENCE",
+          "scenarioIds": [
+            "SIGNALIZED"
+          ],
+          "target": 0.5,
+          "estimate": null,
+          "interval": null,
+          "error": null,
+          "absoluteError": null,
+          "tolerance": {
+            "absolute": 0.02,
+            "relative": 0.03,
+            "effective": 0.035
+          },
+          "status": "NOT_IDENTIFIABLE",
+          "identifiable": false,
+          "estimatorStatus": "UNOBSERVED",
+          "estimatorReason": "NO_QUALIFYING_EVIDENCE",
+          "reason": "NO_QUALIFYING_EVIDENCE",
+          "evidence": {
+            "status": "NO_EVIDENCE",
+            "distinctEpisodes": 0,
+            "sampleCount": 0,
+            "contexts": []
+          },
+          "context": "unblocked GREEN departures, (departureTick − onsetTick) / 60"
+        },
+        {
+          "key": "red_stop_line_offset",
+          "scenarioId": "SPARSE_EVIDENCE",
+          "scenarioIds": [
+            "SIGNALIZED"
+          ],
+          "target": 0.9,
+          "estimate": null,
+          "interval": null,
+          "error": null,
+          "absoluteError": null,
+          "tolerance": {
+            "absolute": 0.1,
+            "relative": 0.03,
+            "effective": 0.127
+          },
+          "status": "NOT_IDENTIFIABLE",
+          "identifiable": false,
+          "estimatorStatus": "UNOBSERVED",
+          "estimatorReason": "INSUFFICIENT_DISTINCT_EPISODES_OR_VARIATION",
+          "reason": "INSUFFICIENT_EVIDENCE",
+          "evidence": {
+            "status": "INSUFFICIENT",
+            "distinctEpisodes": 1,
+            "sampleCount": 900,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×1"
+            ]
+          },
+          "context": "certain RED opportunities, mean measured stopLineOffsetM"
+        },
+        {
+          "key": "late_red_brake_threshold",
+          "scenarioId": "SPARSE_EVIDENCE",
+          "scenarioIds": [
+            "SIGNALIZED"
+          ],
+          "target": 2,
+          "estimate": null,
+          "interval": null,
+          "error": null,
+          "absoluteError": null,
+          "tolerance": {
+            "absolute": 0.05,
+            "relative": 0.04,
+            "effective": 0.13
+          },
+          "status": "NOT_IDENTIFIABLE",
+          "identifiable": false,
+          "estimatorStatus": "UNOBSERVED",
+          "estimatorReason": "INSUFFICIENT_DISTINCT_EPISODES_OR_VARIATION",
+          "reason": "INSUFFICIENT_EVIDENCE",
+          "evidence": {
+            "status": "INSUFFICIENT",
+            "distinctEpisodes": 1,
+            "sampleCount": 900,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×1"
+            ]
+          },
+          "context": "certain RED opportunities, mean brakeThresholdMps2"
+        },
+        {
+          "key": "stop_full_probability",
+          "scenarioId": "SPARSE_EVIDENCE",
+          "scenarioIds": [],
+          "target": 0.85,
+          "estimate": null,
+          "interval": null,
+          "error": null,
+          "absoluteError": null,
+          "tolerance": {
+            "absolute": 0.03,
+            "relative": 0.02,
+            "effective": 0.047
+          },
+          "status": "NOT_IDENTIFIABLE",
+          "identifiable": false,
+          "estimatorStatus": "UNOBSERVED",
+          "estimatorReason": "NO_QUALIFYING_EVIDENCE",
+          "reason": "NO_QUALIFYING_EVIDENCE",
+          "evidence": {
+            "status": "NO_EVIDENCE",
+            "distinctEpisodes": 0,
+            "sampleCount": 0,
+            "contexts": []
+          },
+          "context": "certain FREE_TRAFFIC STOP_LINE facts, full stops / certain denominator"
+        },
+        {
+          "key": "stop_dwell_time",
+          "scenarioId": "SPARSE_EVIDENCE",
+          "scenarioIds": [],
+          "target": 0.9,
+          "estimate": null,
+          "interval": null,
+          "error": null,
+          "absoluteError": null,
+          "tolerance": {
+            "absolute": 0.02,
+            "relative": 0.03,
+            "effective": 0.047
+          },
+          "status": "NOT_IDENTIFIABLE",
+          "identifiable": false,
+          "estimatorStatus": "UNOBSERVED",
+          "estimatorReason": "NO_QUALIFYING_EVIDENCE",
+          "reason": "NO_QUALIFYING_EVIDENCE",
+          "evidence": {
+            "status": "NO_EVIDENCE",
+            "distinctEpisodes": 0,
+            "sampleCount": 0,
+            "contexts": []
+          },
+          "context": "measured dwellTicks of full STOP_LINE stops / 60"
+        },
+        {
+          "key": "stop_line_offset",
+          "scenarioId": "SPARSE_EVIDENCE",
+          "scenarioIds": [],
+          "target": 0.9,
+          "estimate": null,
+          "interval": null,
+          "error": null,
+          "absoluteError": null,
+          "tolerance": {
+            "absolute": 0.1,
+            "relative": 0.03,
+            "effective": 0.127
+          },
+          "status": "NOT_IDENTIFIABLE",
+          "identifiable": false,
+          "estimatorStatus": "UNOBSERVED",
+          "estimatorReason": "NO_QUALIFYING_EVIDENCE",
+          "reason": "NO_QUALIFYING_EVIDENCE",
+          "evidence": {
+            "status": "NO_EVIDENCE",
+            "distinctEpisodes": 0,
+            "sampleCount": 0,
+            "contexts": []
+          },
+          "context": "certain FREE_TRAFFIC STOP_LINE facts, mean measured offset"
+        },
+        {
+          "key": "yield_time_gap",
+          "scenarioId": "SPARSE_EVIDENCE",
+          "scenarioIds": [],
+          "target": 3.4,
+          "estimate": null,
+          "interval": null,
+          "error": null,
+          "absoluteError": null,
+          "tolerance": {
+            "absolute": 0.15,
+            "relative": 0.05,
+            "effective": 0.32
+          },
+          "status": "NOT_IDENTIFIABLE",
+          "identifiable": false,
+          "estimatorStatus": "UNOBSERVED",
+          "estimatorReason": "NO_QUALIFYING_EVIDENCE",
+          "reason": "NO_QUALIFYING_EVIDENCE",
+          "evidence": {
+            "status": "NO_EVIDENCE",
+            "distinctEpisodes": 0,
+            "sampleCount": 0,
+            "contexts": []
+          },
+          "context": "YIELD interval [max refused, min accepted] of signed 052 separations"
+        },
+        {
+          "key": "lane_change_front_gap",
+          "scenarioId": "SPARSE_EVIDENCE",
+          "scenarioIds": [],
+          "target": 12,
+          "estimate": null,
+          "interval": null,
+          "error": null,
+          "absoluteError": null,
+          "tolerance": {
+            "absolute": 0.3,
+            "relative": 0.04,
+            "effective": 0.78
+          },
+          "status": "NOT_IDENTIFIABLE",
+          "identifiable": false,
+          "estimatorStatus": "UNOBSERVED",
+          "estimatorReason": "NO_QUALIFYING_EVIDENCE",
+          "reason": "NO_QUALIFYING_EVIDENCE",
+          "evidence": {
+            "status": "NO_EVIDENCE",
+            "distinctEpisodes": 0,
+            "sampleCount": 0,
+            "contexts": []
+          },
+          "context": "optional LANE_CHANGE interval [max rejected, min completed] front gap"
+        },
+        {
+          "key": "lane_change_back_gap",
+          "scenarioId": "SPARSE_EVIDENCE",
+          "scenarioIds": [],
+          "target": 9.5,
+          "estimate": null,
+          "interval": null,
+          "error": null,
+          "absoluteError": null,
+          "tolerance": {
+            "absolute": 0.3,
+            "relative": 0.04,
+            "effective": 0.68
+          },
+          "status": "NOT_IDENTIFIABLE",
+          "identifiable": false,
+          "estimatorStatus": "UNOBSERVED",
+          "estimatorReason": "NO_QUALIFYING_EVIDENCE",
+          "reason": "NO_QUALIFYING_EVIDENCE",
+          "evidence": {
+            "status": "NO_EVIDENCE",
+            "distinctEpisodes": 0,
+            "sampleCount": 0,
+            "contexts": []
+          },
+          "context": "optional LANE_CHANGE interval [max rejected, min completed] back gap"
+        },
+        {
+          "key": "lane_change_speed_gain",
+          "scenarioId": "SPARSE_EVIDENCE",
+          "scenarioIds": [],
+          "target": 3.2,
+          "estimate": null,
+          "interval": null,
+          "error": null,
+          "absoluteError": null,
+          "tolerance": {
+            "absolute": 0.15,
+            "relative": 0.05,
+            "effective": 0.31
+          },
+          "status": "NOT_IDENTIFIABLE",
+          "identifiable": false,
+          "estimatorStatus": "UNOBSERVED",
+          "estimatorReason": "NO_QUALIFYING_EVIDENCE",
+          "reason": "NO_QUALIFYING_EVIDENCE",
+          "evidence": {
+            "status": "NO_EVIDENCE",
+            "distinctEpisodes": 0,
+            "sampleCount": 0,
+            "contexts": []
+          },
+          "context": "optional LANE_CHANGE interval of observed speedAdvantageMps"
+        },
+        {
+          "key": "lane_change_cooldown",
+          "scenarioId": "SPARSE_EVIDENCE",
+          "scenarioIds": [],
+          "target": 5,
+          "estimate": null,
+          "interval": null,
+          "error": null,
+          "absoluteError": null,
+          "tolerance": {
+            "absolute": 0.05,
+            "relative": 0.03,
+            "effective": 0.2
+          },
+          "status": "NOT_IDENTIFIABLE",
+          "identifiable": false,
+          "estimatorStatus": "UNOBSERVED",
+          "estimatorReason": "NO_QUALIFYING_EVIDENCE",
+          "reason": "NO_QUALIFYING_EVIDENCE",
+          "evidence": {
+            "status": "NO_EVIDENCE",
+            "distinctEpisodes": 0,
+            "sampleCount": 0,
+            "contexts": []
+          },
+          "context": "optional completed manoeuvres, mean cooldownTicks / 60"
+        }
+      ]
+    },
+    {
+      "scenarioId": "CONTRADICTORY_EVIDENCE",
+      "kind": "PROBE",
+      "probe": "CONTRADICTORY_EVIDENCE",
+      "profileId": "MIXED",
+      "expectedFailure": false,
+      "keys": 24,
+      "withinTolerance": 6,
+      "outsideTolerance": 0,
+      "notIdentifiable": 18,
+      "noEstimate": 0,
+      "passed": true,
+      "retainedFailures": [],
+      "demonstrationSeeds": [
+        3373687046,
+        57524603,
+        4059233848
+      ],
+      "results": [
+        {
+          "key": "speed_delta_urban",
+          "scenarioId": "CONTRADICTORY_EVIDENCE",
+          "scenarioIds": [],
+          "target": 1.5,
+          "estimate": null,
+          "interval": null,
+          "error": null,
+          "absoluteError": null,
+          "tolerance": {
+            "absolute": 0.2,
+            "relative": 0.05,
+            "effective": 0.275
+          },
+          "status": "NOT_IDENTIFIABLE",
+          "identifiable": false,
+          "estimatorStatus": "UNOBSERVED",
+          "estimatorReason": "NO_QUALIFYING_EVIDENCE",
+          "reason": "CONTRADICTORY_EVIDENCE",
+          "evidence": {
+            "status": "NO_EVIDENCE",
+            "distinctEpisodes": 0,
+            "sampleCount": 0,
+            "contexts": []
+          },
+          "context": "FREE_TRAFFIC urban median of (speed − posted limit) over ≥10 s"
+        },
+        {
+          "key": "speed_delta_residential",
+          "scenarioId": "CONTRADICTORY_EVIDENCE",
+          "scenarioIds": [],
+          "target": -0.5,
+          "estimate": null,
+          "interval": null,
+          "error": null,
+          "absoluteError": null,
+          "tolerance": {
+            "absolute": 0.2,
+            "relative": 0.05,
+            "effective": 0.225
+          },
+          "status": "NOT_IDENTIFIABLE",
+          "identifiable": false,
+          "estimatorStatus": "UNOBSERVED",
+          "estimatorReason": "NO_QUALIFYING_EVIDENCE",
+          "reason": "CONTRADICTORY_EVIDENCE",
+          "evidence": {
+            "status": "NO_EVIDENCE",
+            "distinctEpisodes": 0,
+            "sampleCount": 0,
+            "contexts": []
+          },
+          "context": "FREE_TRAFFIC residential median of (speed − posted limit) over ≥10 s"
+        },
+        {
+          "key": "curve_lateral_accel",
+          "scenarioId": "CONTRADICTORY_EVIDENCE",
+          "scenarioIds": [],
+          "target": 3,
+          "estimate": null,
+          "interval": null,
+          "error": null,
+          "absoluteError": null,
+          "tolerance": {
+            "absolute": 0.25,
+            "relative": 0.08,
+            "effective": 0.49
+          },
+          "status": "NOT_IDENTIFIABLE",
+          "identifiable": false,
+          "estimatorStatus": "UNOBSERVED",
+          "estimatorReason": "NO_QUALIFYING_EVIDENCE",
+          "reason": "CONTRADICTORY_EVIDENCE",
+          "evidence": {
+            "status": "NO_EVIDENCE",
+            "distinctEpisodes": 0,
+            "sampleCount": 0,
+            "contexts": []
+          },
+          "context": "FREE_TRAFFIC curve: intentional 089 lateral demand × class lateral ceiling"
+        },
+        {
+          "key": "intersection_approach_speed",
+          "scenarioId": "CONTRADICTORY_EVIDENCE",
+          "scenarioIds": [],
+          "target": 9,
+          "estimate": null,
+          "interval": null,
+          "error": null,
+          "absoluteError": null,
+          "tolerance": {
+            "absolute": 0.4,
+            "relative": 0.03,
+            "effective": 0.67
+          },
+          "status": "NOT_IDENTIFIABLE",
+          "identifiable": false,
+          "estimatorStatus": "UNOBSERVED",
+          "estimatorReason": "NO_QUALIFYING_EVIDENCE",
+          "reason": "CONTRADICTORY_EVIDENCE",
+          "evidence": {
+            "status": "NO_EVIDENCE",
+            "distinctEpisodes": 0,
+            "sampleCount": 0,
+            "contexts": []
+          },
+          "context": "FREE_TRAFFIC explicitly marked approach median speed"
+        },
+        {
+          "key": "desired_acceleration",
+          "scenarioId": "CONTRADICTORY_EVIDENCE",
+          "scenarioIds": [],
+          "target": 2,
+          "estimate": null,
+          "interval": null,
+          "error": null,
+          "absoluteError": null,
+          "tolerance": {
+            "absolute": 0.15,
+            "relative": 0.05,
+            "effective": 0.25
+          },
+          "status": "NOT_IDENTIFIABLE",
+          "identifiable": false,
+          "estimatorStatus": "UNOBSERVED",
+          "estimatorReason": "NO_QUALIFYING_EVIDENCE",
+          "reason": "CONTRADICTORY_EVIDENCE",
+          "evidence": {
+            "status": "NO_EVIDENCE",
+            "distinctEpisodes": 0,
+            "sampleCount": 0,
+            "contexts": []
+          },
+          "context": "FREE_TRAFFIC complete intentional 089 acceleration demand × sedan force/mass"
+        },
+        {
+          "key": "comfort_deceleration",
+          "scenarioId": "CONTRADICTORY_EVIDENCE",
+          "scenarioIds": [],
+          "target": 2.9,
+          "estimate": null,
+          "interval": null,
+          "error": null,
+          "absoluteError": null,
+          "tolerance": {
+            "absolute": 0.2,
+            "relative": 0.05,
+            "effective": 0.345
+          },
+          "status": "NOT_IDENTIFIABLE",
+          "identifiable": false,
+          "estimatorStatus": "UNOBSERVED",
+          "estimatorReason": "NO_QUALIFYING_EVIDENCE",
+          "reason": "CONTRADICTORY_EVIDENCE",
+          "evidence": {
+            "status": "NO_EVIDENCE",
+            "distinctEpisodes": 0,
+            "sampleCount": 0,
+            "contexts": []
+          },
+          "context": "FREE_TRAFFIC complete intentional 089 deceleration demand × sedan brake ceiling"
+        },
+        {
+          "key": "acceleration_jerk",
+          "scenarioId": "CONTRADICTORY_EVIDENCE",
+          "scenarioIds": [],
+          "target": 2.6,
+          "estimate": null,
+          "interval": null,
+          "error": null,
+          "absoluteError": null,
+          "tolerance": {
+            "absolute": 0.3,
+            "relative": 0.1,
+            "effective": 0.56
+          },
+          "status": "NOT_IDENTIFIABLE",
+          "identifiable": false,
+          "estimatorStatus": "UNOBSERVED",
+          "estimatorReason": "NO_QUALIFYING_EVIDENCE",
+          "reason": "CONTRADICTORY_EVIDENCE",
+          "evidence": {
+            "status": "NO_EVIDENCE",
+            "distinctEpisodes": 0,
+            "sampleCount": 0,
+            "contexts": []
+          },
+          "context": "FREE_TRAFFIC tick-to-tick |SI jerk| samples, trimmed p50"
+        },
+        {
+          "key": "brake_reaction_delay",
+          "scenarioId": "CONTRADICTORY_EVIDENCE",
+          "scenarioIds": [],
+          "target": 0.35,
+          "estimate": null,
+          "interval": null,
+          "error": null,
+          "absoluteError": null,
+          "tolerance": {
+            "absolute": 0.02,
+            "relative": 0.02,
+            "effective": 0.027
+          },
+          "status": "NOT_IDENTIFIABLE",
+          "identifiable": false,
+          "estimatorStatus": "UNOBSERVED",
+          "estimatorReason": "NO_QUALIFYING_EVIDENCE",
+          "reason": "CONTRADICTORY_EVIDENCE",
+          "evidence": {
+            "status": "NO_EVIDENCE",
+            "distinctEpisodes": 0,
+            "sampleCount": 0,
+            "contexts": []
+          },
+          "context": "observable stimulus, reactionDurationTicks / 60"
+        },
+        {
+          "key": "following_time_headway",
+          "scenarioId": "CONTRADICTORY_EVIDENCE",
+          "scenarioIds": [
+            "FOLLOWING"
+          ],
+          "target": 1.6,
+          "estimate": null,
+          "interval": null,
+          "error": null,
+          "absoluteError": null,
+          "tolerance": {
+            "absolute": 0.08,
+            "relative": 0.03,
+            "effective": 0.128
+          },
+          "status": "NOT_IDENTIFIABLE",
+          "identifiable": false,
+          "estimatorStatus": "UNIDENTIFIED",
+          "estimatorReason": "WEAK_IDENTIFICATION_SPEED_VARIATION_REQUIRED",
+          "reason": "CONTRADICTORY_EVIDENCE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 7,
+            "sampleCount": 7,
+            "contexts": [
+              "LEADER/urban/LOW×4",
+              "LEADER/urban/MID×2",
+              "LEADER/urban/HIGH×1"
+            ]
+          },
+          "context": "LEADER moving episodes fitted as gap = minGap + headway × speed"
+        },
+        {
+          "key": "following_min_gap",
+          "scenarioId": "CONTRADICTORY_EVIDENCE",
+          "scenarioIds": [
+            "FOLLOWING"
+          ],
+          "target": 2.8,
+          "estimate": null,
+          "interval": null,
+          "error": null,
+          "absoluteError": null,
+          "tolerance": {
+            "absolute": 0.15,
+            "relative": 0.03,
+            "effective": 0.234
+          },
+          "status": "NOT_IDENTIFIABLE",
+          "identifiable": false,
+          "estimatorStatus": "UNIDENTIFIED",
+          "estimatorReason": "WEAK_IDENTIFICATION_SPEED_VARIATION_REQUIRED",
+          "reason": "CONTRADICTORY_EVIDENCE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 7,
+            "sampleCount": 7,
+            "contexts": [
+              "LEADER/urban/LOW×4",
+              "LEADER/urban/MID×2",
+              "LEADER/urban/HIGH×1"
+            ]
+          },
+          "context": "LEADER moving episodes, OLS intercept at zero speed"
+        },
+        {
+          "key": "queue_standstill_gap",
+          "scenarioId": "CONTRADICTORY_EVIDENCE",
+          "scenarioIds": [
+            "FOLLOWING"
+          ],
+          "target": 1.8,
+          "estimate": 1.8051266666666665,
+          "interval": null,
+          "error": 0.005126667,
+          "absoluteError": 0.005126667,
+          "tolerance": {
+            "absolute": 0.15,
+            "relative": 0.03,
+            "effective": 0.204
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 7,
+            "sampleCount": 7,
+            "contexts": [
+              "LEADER/urban/LOW×4",
+              "LEADER/urban/MID×2",
+              "LEADER/urban/HIGH×1"
+            ]
+          },
+          "context": "LEADER QUEUE_STANDSTILL episodes with both speeds ≤ 0.1 m/s"
+        },
+        {
+          "key": "following_speed_gain",
+          "scenarioId": "CONTRADICTORY_EVIDENCE",
+          "scenarioIds": [
+            "FOLLOWING"
+          ],
+          "target": 0.8,
+          "estimate": 0.797381,
+          "interval": null,
+          "error": -0.002619,
+          "absoluteError": 0.002619,
+          "tolerance": {
+            "absolute": 0.05,
+            "relative": 0.03,
+            "effective": 0.074
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 7,
+            "sampleCount": 7,
+            "contexts": [
+              "LEADER/urban/LOW×4",
+              "LEADER/urban/MID×2",
+              "LEADER/urban/HIGH×1"
+            ]
+          },
+          "context": "LEADER moving episodes with a separately observed speedGain"
+        },
+        {
+          "key": "red_stop_probability",
+          "scenarioId": "CONTRADICTORY_EVIDENCE",
+          "scenarioIds": [],
+          "target": 0.85,
+          "estimate": null,
+          "interval": null,
+          "error": null,
+          "absoluteError": null,
+          "tolerance": {
+            "absolute": 0.03,
+            "relative": 0.02,
+            "effective": 0.047
+          },
+          "status": "NOT_IDENTIFIABLE",
+          "identifiable": false,
+          "estimatorStatus": "UNOBSERVED",
+          "estimatorReason": "NO_QUALIFYING_EVIDENCE",
+          "reason": "CONTRADICTORY_EVIDENCE",
+          "evidence": {
+            "status": "NO_EVIDENCE",
+            "distinctEpisodes": 0,
+            "sampleCount": 0,
+            "contexts": []
+          },
+          "context": "certain RED opportunities, compliant HELD / certain denominator"
+        },
+        {
+          "key": "green_start_delay",
+          "scenarioId": "CONTRADICTORY_EVIDENCE",
+          "scenarioIds": [],
+          "target": 0.5,
+          "estimate": null,
+          "interval": null,
+          "error": null,
+          "absoluteError": null,
+          "tolerance": {
+            "absolute": 0.02,
+            "relative": 0.03,
+            "effective": 0.035
+          },
+          "status": "NOT_IDENTIFIABLE",
+          "identifiable": false,
+          "estimatorStatus": "UNOBSERVED",
+          "estimatorReason": "NO_QUALIFYING_EVIDENCE",
+          "reason": "CONTRADICTORY_EVIDENCE",
+          "evidence": {
+            "status": "NO_EVIDENCE",
+            "distinctEpisodes": 0,
+            "sampleCount": 0,
+            "contexts": []
+          },
+          "context": "unblocked GREEN departures, (departureTick − onsetTick) / 60"
+        },
+        {
+          "key": "red_stop_line_offset",
+          "scenarioId": "CONTRADICTORY_EVIDENCE",
+          "scenarioIds": [],
+          "target": 0.9,
+          "estimate": null,
+          "interval": null,
+          "error": null,
+          "absoluteError": null,
+          "tolerance": {
+            "absolute": 0.1,
+            "relative": 0.03,
+            "effective": 0.127
+          },
+          "status": "NOT_IDENTIFIABLE",
+          "identifiable": false,
+          "estimatorStatus": "UNOBSERVED",
+          "estimatorReason": "NO_QUALIFYING_EVIDENCE",
+          "reason": "CONTRADICTORY_EVIDENCE",
+          "evidence": {
+            "status": "NO_EVIDENCE",
+            "distinctEpisodes": 0,
+            "sampleCount": 0,
+            "contexts": []
+          },
+          "context": "certain RED opportunities, mean measured stopLineOffsetM"
+        },
+        {
+          "key": "late_red_brake_threshold",
+          "scenarioId": "CONTRADICTORY_EVIDENCE",
+          "scenarioIds": [],
+          "target": 2,
+          "estimate": null,
+          "interval": null,
+          "error": null,
+          "absoluteError": null,
+          "tolerance": {
+            "absolute": 0.05,
+            "relative": 0.04,
+            "effective": 0.13
+          },
+          "status": "NOT_IDENTIFIABLE",
+          "identifiable": false,
+          "estimatorStatus": "UNOBSERVED",
+          "estimatorReason": "NO_QUALIFYING_EVIDENCE",
+          "reason": "CONTRADICTORY_EVIDENCE",
+          "evidence": {
+            "status": "NO_EVIDENCE",
+            "distinctEpisodes": 0,
+            "sampleCount": 0,
+            "contexts": []
+          },
+          "context": "certain RED opportunities, mean brakeThresholdMps2"
+        },
+        {
+          "key": "stop_full_probability",
+          "scenarioId": "CONTRADICTORY_EVIDENCE",
+          "scenarioIds": [
+            "STOP_YIELD"
+          ],
+          "target": 0.85,
+          "estimate": 0.85,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.03,
+            "relative": 0.02,
+            "effective": 0.047
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 20,
+            "sampleCount": 20,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×20"
+            ]
+          },
+          "context": "certain FREE_TRAFFIC STOP_LINE facts, full stops / certain denominator"
+        },
+        {
+          "key": "stop_dwell_time",
+          "scenarioId": "CONTRADICTORY_EVIDENCE",
+          "scenarioIds": [
+            "STOP_YIELD"
+          ],
+          "target": 0.9,
+          "estimate": 0.9000000000000002,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.02,
+            "relative": 0.03,
+            "effective": 0.047
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 20,
+            "sampleCount": 20,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×20"
+            ]
+          },
+          "context": "measured dwellTicks of full STOP_LINE stops / 60"
+        },
+        {
+          "key": "stop_line_offset",
+          "scenarioId": "CONTRADICTORY_EVIDENCE",
+          "scenarioIds": [
+            "STOP_YIELD"
+          ],
+          "target": 0.9,
+          "estimate": 0.9,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.1,
+            "relative": 0.03,
+            "effective": 0.127
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 20,
+            "sampleCount": 20,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×20"
+            ]
+          },
+          "context": "certain FREE_TRAFFIC STOP_LINE facts, mean measured offset"
+        },
+        {
+          "key": "yield_time_gap",
+          "scenarioId": "CONTRADICTORY_EVIDENCE",
+          "scenarioIds": [
+            "STOP_YIELD"
+          ],
+          "target": 3.4,
+          "estimate": null,
+          "interval": null,
+          "error": null,
+          "absoluteError": null,
+          "tolerance": {
+            "absolute": 0.15,
+            "relative": 0.05,
+            "effective": 0.32
+          },
+          "status": "NOT_IDENTIFIABLE",
+          "identifiable": false,
+          "estimatorStatus": "REFUSED",
+          "estimatorReason": "NO_ACCEPTED_YIELD_GAP",
+          "reason": "CONTRADICTORY_EVIDENCE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 4,
+            "sampleCount": 4,
+            "contexts": [
+              "LEADER/urban/MID×4"
+            ]
+          },
+          "context": "YIELD interval [max refused, min accepted] of signed 052 separations"
+        },
+        {
+          "key": "lane_change_front_gap",
+          "scenarioId": "CONTRADICTORY_EVIDENCE",
+          "scenarioIds": [
+            "LANE_CHANGE"
+          ],
+          "target": 12,
+          "estimate": null,
+          "interval": null,
+          "error": null,
+          "absoluteError": null,
+          "tolerance": {
+            "absolute": 0.3,
+            "relative": 0.04,
+            "effective": 0.78
+          },
+          "status": "NOT_IDENTIFIABLE",
+          "identifiable": false,
+          "estimatorStatus": "UNIDENTIFIED",
+          "estimatorReason": "OBSERVED_BOUND_ONLY",
+          "reason": "CONTRADICTORY_EVIDENCE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 5,
+            "sampleCount": 5,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×5"
+            ]
+          },
+          "context": "optional LANE_CHANGE interval [max rejected, min completed] front gap"
+        },
+        {
+          "key": "lane_change_back_gap",
+          "scenarioId": "CONTRADICTORY_EVIDENCE",
+          "scenarioIds": [
+            "LANE_CHANGE"
+          ],
+          "target": 9.5,
+          "estimate": null,
+          "interval": null,
+          "error": null,
+          "absoluteError": null,
+          "tolerance": {
+            "absolute": 0.3,
+            "relative": 0.04,
+            "effective": 0.68
+          },
+          "status": "NOT_IDENTIFIABLE",
+          "identifiable": false,
+          "estimatorStatus": "UNIDENTIFIED",
+          "estimatorReason": "OBSERVED_BOUND_ONLY",
+          "reason": "CONTRADICTORY_EVIDENCE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 5,
+            "sampleCount": 5,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×5"
+            ]
+          },
+          "context": "optional LANE_CHANGE interval [max rejected, min completed] back gap"
+        },
+        {
+          "key": "lane_change_speed_gain",
+          "scenarioId": "CONTRADICTORY_EVIDENCE",
+          "scenarioIds": [
+            "LANE_CHANGE"
+          ],
+          "target": 3.2,
+          "estimate": null,
+          "interval": null,
+          "error": null,
+          "absoluteError": null,
+          "tolerance": {
+            "absolute": 0.15,
+            "relative": 0.05,
+            "effective": 0.31
+          },
+          "status": "NOT_IDENTIFIABLE",
+          "identifiable": false,
+          "estimatorStatus": "UNIDENTIFIED",
+          "estimatorReason": "OBSERVED_BOUND_ONLY",
+          "reason": "CONTRADICTORY_EVIDENCE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 5,
+            "sampleCount": 5,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×5"
+            ]
+          },
+          "context": "optional LANE_CHANGE interval of observed speedAdvantageMps"
+        },
+        {
+          "key": "lane_change_cooldown",
+          "scenarioId": "CONTRADICTORY_EVIDENCE",
+          "scenarioIds": [
+            "LANE_CHANGE"
+          ],
+          "target": 5,
+          "estimate": 5,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.05,
+            "relative": 0.03,
+            "effective": 0.2
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 5,
+            "sampleCount": 5,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×5"
+            ]
+          },
+          "context": "optional completed manoeuvres, mean cooldownTicks / 60"
+        }
+      ]
+    },
+    {
+      "scenarioId": "OUT_OF_TOLERANCE_PROBE",
+      "kind": "PROBE",
+      "probe": "OUT_OF_TOLERANCE",
+      "profileId": "PRUDENT",
+      "expectedFailure": true,
+      "keys": 24,
+      "withinTolerance": 23,
+      "outsideTolerance": 1,
+      "notIdentifiable": 0,
+      "noEstimate": 0,
+      "passed": true,
+      "retainedFailures": [
+        "speed_delta_urban:OUTSIDE_TOLERANCE"
+      ],
+      "demonstrationSeeds": [
+        1207002829,
+        8485895,
+        232881746,
+        1785885450,
+        2111335887,
+        2985583521
+      ],
+      "results": [
+        {
+          "key": "speed_delta_urban",
+          "scenarioId": "OUT_OF_TOLERANCE_PROBE",
+          "scenarioIds": [
+            "FREE_FLOW"
+          ],
+          "target": -2,
+          "estimate": 2,
+          "interval": null,
+          "error": 4,
+          "absoluteError": 4,
+          "tolerance": {
+            "absolute": 0.2,
+            "relative": 0.05,
+            "effective": 0.3
+          },
+          "status": "OUTSIDE_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 3,
+            "sampleCount": 93,
+            "contexts": [
+              "FREE_TRAFFIC/urban/MID×3"
+            ]
+          },
+          "context": "FREE_TRAFFIC urban median of (speed − posted limit) over ≥10 s"
+        },
+        {
+          "key": "speed_delta_residential",
+          "scenarioId": "OUT_OF_TOLERANCE_PROBE",
+          "scenarioIds": [
+            "FREE_FLOW"
+          ],
+          "target": -1.5,
+          "estimate": -1.5057893053814766,
+          "interval": null,
+          "error": -0.005789305,
+          "absoluteError": 0.005789305,
+          "tolerance": {
+            "absolute": 0.2,
+            "relative": 0.05,
+            "effective": 0.275
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 3,
+            "sampleCount": 93,
+            "contexts": [
+              "FREE_TRAFFIC/residential/MID×3"
+            ]
+          },
+          "context": "FREE_TRAFFIC residential median of (speed − posted limit) over ≥10 s"
+        },
+        {
+          "key": "curve_lateral_accel",
+          "scenarioId": "OUT_OF_TOLERANCE_PROBE",
+          "scenarioIds": [
+            "FREE_FLOW"
+          ],
+          "target": 1.8,
+          "estimate": 1.8,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.25,
+            "relative": 0.08,
+            "effective": 0.394
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 3,
+            "sampleCount": 2700,
+            "contexts": [
+              "FREE_TRAFFIC/other/UNKNOWN×3"
+            ]
+          },
+          "context": "FREE_TRAFFIC curve: intentional 089 lateral demand × class lateral ceiling"
+        },
+        {
+          "key": "intersection_approach_speed",
+          "scenarioId": "OUT_OF_TOLERANCE_PROBE",
+          "scenarioIds": [
+            "FREE_FLOW"
+          ],
+          "target": 7.5,
+          "estimate": 7.511002492904663,
+          "interval": null,
+          "error": 0.011002493,
+          "absoluteError": 0.011002493,
+          "tolerance": {
+            "absolute": 0.4,
+            "relative": 0.03,
+            "effective": 0.625
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 9,
+            "sampleCount": 279,
+            "contexts": [
+              "FREE_TRAFFIC/urban/MID×3",
+              "FREE_TRAFFIC/residential/MID×3",
+              "FREE_TRAFFIC/other/MID×3"
+            ]
+          },
+          "context": "FREE_TRAFFIC explicitly marked approach median speed"
+        },
+        {
+          "key": "desired_acceleration",
+          "scenarioId": "OUT_OF_TOLERANCE_PROBE",
+          "scenarioIds": [
+            "LONGITUDINAL"
+          ],
+          "target": 1.2,
+          "estimate": 1.1999999999999997,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.15,
+            "relative": 0.05,
+            "effective": 0.21
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 4,
+            "sampleCount": 3600,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×4"
+            ]
+          },
+          "context": "FREE_TRAFFIC complete intentional 089 acceleration demand × sedan force/mass"
+        },
+        {
+          "key": "comfort_deceleration",
+          "scenarioId": "OUT_OF_TOLERANCE_PROBE",
+          "scenarioIds": [
+            "LONGITUDINAL"
+          ],
+          "target": 2.2,
+          "estimate": 2.2,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.2,
+            "relative": 0.05,
+            "effective": 0.31
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 4,
+            "sampleCount": 3600,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×4"
+            ]
+          },
+          "context": "FREE_TRAFFIC complete intentional 089 deceleration demand × sedan brake ceiling"
+        },
+        {
+          "key": "acceleration_jerk",
+          "scenarioId": "OUT_OF_TOLERANCE_PROBE",
+          "scenarioIds": [
+            "LONGITUDINAL"
+          ],
+          "target": 1.5,
+          "estimate": 1.5,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.3,
+            "relative": 0.1,
+            "effective": 0.45
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 4,
+            "sampleCount": 3600,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×4"
+            ]
+          },
+          "context": "FREE_TRAFFIC tick-to-tick |SI jerk| samples, trimmed p50"
+        },
+        {
+          "key": "brake_reaction_delay",
+          "scenarioId": "OUT_OF_TOLERANCE_PROBE",
+          "scenarioIds": [
+            "LONGITUDINAL"
+          ],
+          "target": 0.45,
+          "estimate": 0.45,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.02,
+            "relative": 0.02,
+            "effective": 0.029
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 4,
+            "sampleCount": 3600,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×4"
+            ]
+          },
+          "context": "observable stimulus, reactionDurationTicks / 60"
+        },
+        {
+          "key": "following_time_headway",
+          "scenarioId": "OUT_OF_TOLERANCE_PROBE",
+          "scenarioIds": [
+            "FOLLOWING"
+          ],
+          "target": 2.4,
+          "estimate": 2.4002374399999997,
+          "interval": null,
+          "error": 0.00023744,
+          "absoluteError": 0.00023744,
+          "tolerance": {
+            "absolute": 0.08,
+            "relative": 0.03,
+            "effective": 0.152
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 7,
+            "sampleCount": 7,
+            "contexts": [
+              "LEADER/urban/LOW×4",
+              "LEADER/urban/MID×2",
+              "LEADER/urban/HIGH×1"
+            ]
+          },
+          "context": "LEADER moving episodes fitted as gap = minGap + headway × speed"
+        },
+        {
+          "key": "following_min_gap",
+          "scenarioId": "OUT_OF_TOLERANCE_PROBE",
+          "scenarioIds": [
+            "FOLLOWING"
+          ],
+          "target": 4,
+          "estimate": 4.012228220000004,
+          "interval": null,
+          "error": 0.01222822,
+          "absoluteError": 0.01222822,
+          "tolerance": {
+            "absolute": 0.15,
+            "relative": 0.03,
+            "effective": 0.27
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 7,
+            "sampleCount": 7,
+            "contexts": [
+              "LEADER/urban/LOW×4",
+              "LEADER/urban/MID×2",
+              "LEADER/urban/HIGH×1"
+            ]
+          },
+          "context": "LEADER moving episodes, OLS intercept at zero speed"
+        },
+        {
+          "key": "queue_standstill_gap",
+          "scenarioId": "OUT_OF_TOLERANCE_PROBE",
+          "scenarioIds": [
+            "FOLLOWING"
+          ],
+          "target": 2.5,
+          "estimate": 2.487148,
+          "interval": null,
+          "error": -0.012852,
+          "absoluteError": 0.012852,
+          "tolerance": {
+            "absolute": 0.15,
+            "relative": 0.03,
+            "effective": 0.225
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 7,
+            "sampleCount": 7,
+            "contexts": [
+              "LEADER/urban/LOW×4",
+              "LEADER/urban/MID×2",
+              "LEADER/urban/HIGH×1"
+            ]
+          },
+          "context": "LEADER QUEUE_STANDSTILL episodes with both speeds ≤ 0.1 m/s"
+        },
+        {
+          "key": "following_speed_gain",
+          "scenarioId": "OUT_OF_TOLERANCE_PROBE",
+          "scenarioIds": [
+            "FOLLOWING"
+          ],
+          "target": 0.5,
+          "estimate": 0.501048,
+          "interval": null,
+          "error": 0.001048,
+          "absoluteError": 0.001048,
+          "tolerance": {
+            "absolute": 0.05,
+            "relative": 0.03,
+            "effective": 0.065
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 7,
+            "sampleCount": 7,
+            "contexts": [
+              "LEADER/urban/LOW×4",
+              "LEADER/urban/MID×2",
+              "LEADER/urban/HIGH×1"
+            ]
+          },
+          "context": "LEADER moving episodes with a separately observed speedGain"
+        },
+        {
+          "key": "red_stop_probability",
+          "scenarioId": "OUT_OF_TOLERANCE_PROBE",
+          "scenarioIds": [
+            "SIGNALIZED"
+          ],
+          "target": 1,
+          "estimate": 1,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.03,
+            "relative": 0.02,
+            "effective": 0.05
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 4,
+            "sampleCount": 3600,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×4"
+            ]
+          },
+          "context": "certain RED opportunities, compliant HELD / certain denominator"
+        },
+        {
+          "key": "green_start_delay",
+          "scenarioId": "OUT_OF_TOLERANCE_PROBE",
+          "scenarioIds": [
+            "SIGNALIZED"
+          ],
+          "target": 0.9,
+          "estimate": 0.9,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.02,
+            "relative": 0.03,
+            "effective": 0.047
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 3,
+            "sampleCount": 3,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×3"
+            ]
+          },
+          "context": "unblocked GREEN departures, (departureTick − onsetTick) / 60"
+        },
+        {
+          "key": "red_stop_line_offset",
+          "scenarioId": "OUT_OF_TOLERANCE_PROBE",
+          "scenarioIds": [
+            "SIGNALIZED"
+          ],
+          "target": 1.2,
+          "estimate": 1.2,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.1,
+            "relative": 0.03,
+            "effective": 0.136
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 4,
+            "sampleCount": 3600,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×4"
+            ]
+          },
+          "context": "certain RED opportunities, mean measured stopLineOffsetM"
+        },
+        {
+          "key": "late_red_brake_threshold",
+          "scenarioId": "OUT_OF_TOLERANCE_PROBE",
+          "scenarioIds": [
+            "SIGNALIZED"
+          ],
+          "target": 2.6,
+          "estimate": 2.6,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.05,
+            "relative": 0.04,
+            "effective": 0.154
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 4,
+            "sampleCount": 3600,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×4"
+            ]
+          },
+          "context": "certain RED opportunities, mean brakeThresholdMps2"
+        },
+        {
+          "key": "stop_full_probability",
+          "scenarioId": "OUT_OF_TOLERANCE_PROBE",
+          "scenarioIds": [
+            "STOP_YIELD"
+          ],
+          "target": 1,
+          "estimate": 1,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.03,
+            "relative": 0.02,
+            "effective": 0.05
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 5,
+            "sampleCount": 5,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×5"
+            ]
+          },
+          "context": "certain FREE_TRAFFIC STOP_LINE facts, full stops / certain denominator"
+        },
+        {
+          "key": "stop_dwell_time",
+          "scenarioId": "OUT_OF_TOLERANCE_PROBE",
+          "scenarioIds": [
+            "STOP_YIELD"
+          ],
+          "target": 1.4,
+          "estimate": 1.4,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.02,
+            "relative": 0.03,
+            "effective": 0.062
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 5,
+            "sampleCount": 5,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×5"
+            ]
+          },
+          "context": "measured dwellTicks of full STOP_LINE stops / 60"
+        },
+        {
+          "key": "stop_line_offset",
+          "scenarioId": "OUT_OF_TOLERANCE_PROBE",
+          "scenarioIds": [
+            "STOP_YIELD"
+          ],
+          "target": 1.1,
+          "estimate": 1.1,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.1,
+            "relative": 0.03,
+            "effective": 0.133
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 5,
+            "sampleCount": 5,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×5"
+            ]
+          },
+          "context": "certain FREE_TRAFFIC STOP_LINE facts, mean measured offset"
+        },
+        {
+          "key": "yield_time_gap",
+          "scenarioId": "OUT_OF_TOLERANCE_PROBE",
+          "scenarioIds": [
+            "STOP_YIELD"
+          ],
+          "target": 4.5,
+          "estimate": null,
+          "interval": [
+            4.1,
+            4.9
+          ],
+          "error": null,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.15,
+            "relative": 0.05,
+            "effective": 0.375
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 4,
+            "sampleCount": 4,
+            "contexts": [
+              "LEADER/urban/MID×4"
+            ]
+          },
+          "context": "YIELD interval [max refused, min accepted] of signed 052 separations"
+        },
+        {
+          "key": "lane_change_front_gap",
+          "scenarioId": "OUT_OF_TOLERANCE_PROBE",
+          "scenarioIds": [
+            "LANE_CHANGE"
+          ],
+          "target": 18,
+          "estimate": null,
+          "interval": [
+            17,
+            19.5
+          ],
+          "error": null,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.3,
+            "relative": 0.04,
+            "effective": 1.02
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 5,
+            "sampleCount": 5,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×5"
+            ]
+          },
+          "context": "optional LANE_CHANGE interval [max rejected, min completed] front gap"
+        },
+        {
+          "key": "lane_change_back_gap",
+          "scenarioId": "OUT_OF_TOLERANCE_PROBE",
+          "scenarioIds": [
+            "LANE_CHANGE"
+          ],
+          "target": 16,
+          "estimate": null,
+          "interval": [
+            15,
+            17.5
+          ],
+          "error": null,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.3,
+            "relative": 0.04,
+            "effective": 0.94
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 5,
+            "sampleCount": 5,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×5"
+            ]
+          },
+          "context": "optional LANE_CHANGE interval [max rejected, min completed] back gap"
+        },
+        {
+          "key": "lane_change_speed_gain",
+          "scenarioId": "OUT_OF_TOLERANCE_PROBE",
+          "scenarioIds": [
+            "LANE_CHANGE"
+          ],
+          "target": 2.5,
+          "estimate": null,
+          "interval": [
+            2.25,
+            2.875
+          ],
+          "error": null,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.15,
+            "relative": 0.05,
+            "effective": 0.275
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 5,
+            "sampleCount": 5,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×5"
+            ]
+          },
+          "context": "optional LANE_CHANGE interval of observed speedAdvantageMps"
+        },
+        {
+          "key": "lane_change_cooldown",
+          "scenarioId": "OUT_OF_TOLERANCE_PROBE",
+          "scenarioIds": [
+            "LANE_CHANGE"
+          ],
+          "target": 8,
+          "estimate": 8,
+          "interval": null,
+          "error": 0,
+          "absoluteError": 0,
+          "tolerance": {
+            "absolute": 0.05,
+            "relative": 0.03,
+            "effective": 0.29
+          },
+          "status": "WITHIN_TOLERANCE",
+          "identifiable": true,
+          "estimatorStatus": "CANDIDATE",
+          "estimatorReason": null,
+          "reason": "IDENTIFIABLE",
+          "evidence": {
+            "status": "READY",
+            "distinctEpisodes": 5,
+            "sampleCount": 5,
+            "contexts": [
+              "FREE_TRAFFIC/urban/UNKNOWN×5"
+            ]
+          },
+          "context": "optional completed manoeuvres, mean cooldownTicks / 60"
+        }
+      ]
+    }
+  ],
+  "overall": {
+    "keysEvaluated": 168,
+    "withinTolerance": 125,
+    "outsideTolerance": 1,
+    "notIdentifiable": 42,
+    "noEstimate": 0,
+    "profileFailures": 0,
+    "retainedProbeFailures": 1,
+    "pass": true
+  },
+  "appVersion": "105-inverse-learning-app-v1",
+  "tolerances": [
+    {
+      "key": "speed_delta_urban",
+      "context": "FREE_TRAFFIC urban median of (speed − posted limit) over ≥10 s",
+      "absoluteTolerance": 0.2,
+      "relativeTolerance": 0.05,
+      "justifiedBy": "Speed samples are quantized per 20 Hz frame and the median absorbs free-flow spread; 0.2 m/s covers the posting-limit rounding (0.1 m/s) plus the ±0.04 m/s seeded sample noise, and 5% covers higher urban limits."
+    },
+    {
+      "key": "speed_delta_residential",
+      "context": "FREE_TRAFFIC residential median of (speed − posted limit) over ≥10 s",
+      "absoluteTolerance": 0.2,
+      "relativeTolerance": 0.05,
+      "justifiedBy": "Residential limits are lower, so the same 0.2 m/s posting/quantization floor dominates; the relative part stays at 5% because the estimator uses the same median over a 10 s window."
+    },
+    {
+      "key": "curve_lateral_accel",
+      "context": "FREE_TRAFFIC curve: intentional 089 lateral demand × class lateral ceiling",
+      "absoluteTolerance": 0.25,
+      "relativeTolerance": 0.08,
+      "justifiedBy": "The value is reconstructed from p90 class-normalized lateral demand times the 023 sedan ceiling (grip 1.3 × 9.81 m/s²), so the demand percentile and the ceiling rounding dominate; 8% covers demand variation across curve radii."
+    },
+    {
+      "key": "intersection_approach_speed",
+      "context": "FREE_TRAFFIC explicitly marked approach median speed",
+      "absoluteTolerance": 0.4,
+      "relativeTolerance": 0.03,
+      "justifiedBy": "An approach window contains deceleration, so the median is a spread statistic rather than a single cruise value; 0.4 m/s covers the approach profile spread and 3% covers faster arterials."
+    },
+    {
+      "key": "desired_acceleration",
+      "context": "FREE_TRAFFIC complete intentional 089 acceleration demand × sedan force/mass",
+      "absoluteTolerance": 0.15,
+      "relativeTolerance": 0.05,
+      "justifiedBy": "Demand is a dimensionless p90 fraction mapped to the sedan reference ceiling (6500 N / 1400 kg ≈ 4.643 m/s²); 0.15 m/s² covers the trimmed p50 and the class-capability rounding, 5% covers the demand spread."
+    },
+    {
+      "key": "comfort_deceleration",
+      "context": "FREE_TRAFFIC complete intentional 089 deceleration demand × sedan brake ceiling",
+      "absoluteTolerance": 0.2,
+      "relativeTolerance": 0.05,
+      "justifiedBy": "The deceleration ceiling is 8 m/s², so one demand percentage point is 0.08 m/s²; 0.2 m/s² covers the trimmed p50 plus the p90-to-p50 difference and 5% covers stronger braking."
+    },
+    {
+      "key": "acceleration_jerk",
+      "context": "FREE_TRAFFIC tick-to-tick |SI jerk| samples, trimmed p50",
+      "absoluteTolerance": 0.3,
+      "relativeTolerance": 0.1,
+      "justifiedBy": "Jerk is differenced at the fixed 60 Hz tick, so a single-frame acceleration change is amplified; 0.3 m/s³ covers the 1/60 s differencing noise and 10% covers the outer-tail trimming of the p50."
+    },
+    {
+      "key": "brake_reaction_delay",
+      "context": "observable stimulus, reactionDurationTicks / 60",
+      "absoluteTolerance": 0.02,
+      "relativeTolerance": 0.02,
+      "justifiedBy": "The reaction is an integer tick count divided by 60, so one tick is 0.0167 s; the 0.02 s absolute floor is exactly that quantization and 2% keeps the bound proportional for longer reactions."
+    },
+    {
+      "key": "following_time_headway",
+      "context": "LEADER moving episodes fitted as gap = minGap + headway × speed",
+      "absoluteTolerance": 0.08,
+      "relativeTolerance": 0.03,
+      "justifiedBy": "The OLS slope divides gap quantization (0.01 m seeded noise) by the ego-speed spread (≥15 m/s), giving ~0.001 s; 0.08 s covers gap measurement and lateral offset in the fitted line, 3% covers headway spread."
+    },
+    {
+      "key": "following_min_gap",
+      "context": "LEADER moving episodes, OLS intercept at zero speed",
+      "absoluteTolerance": 0.15,
+      "relativeTolerance": 0.03,
+      "justifiedBy": "The intercept is the fitted gap at 0 m/s, which extrapolates from the lowest observed speed; 0.15 m covers that extrapolation plus the RMS residual rounding and 3% covers larger gaps."
+    },
+    {
+      "key": "queue_standstill_gap",
+      "context": "LEADER QUEUE_STANDSTILL episodes with both speeds ≤ 0.1 m/s",
+      "absoluteTolerance": 0.15,
+      "relativeTolerance": 0.03,
+      "justifiedBy": "The queue value is the arithmetic mean of measured standstill gaps, so the 0.01 m seeded measurement noise and the 0.1 m/s stop qualification define a 0.15 m floor; 3% covers longer vehicles."
+    },
+    {
+      "key": "following_speed_gain",
+      "context": "LEADER moving episodes with a separately observed speedGain",
+      "absoluteTolerance": 0.05,
+      "relativeTolerance": 0.03,
+      "justifiedBy": "Speed gain is a mean of observed per-episode ratios in 1/s, not a fit coefficient; 0.05 covers the per-episode observation rounding and 3% covers gains above 1/s."
+    },
+    {
+      "key": "red_stop_probability",
+      "context": "certain RED opportunities, compliant HELD / certain denominator",
+      "absoluteTolerance": 0.03,
+      "relativeTolerance": 0.02,
+      "justifiedBy": "The value is a ratio over a certain opportunity count, so its granularity is 1/N; 0.03 is smaller than one count at the fixture denominators (N ≥ 15) and 2% covers stricter fixtures, not a statistical confidence interval."
+    },
+    {
+      "key": "green_start_delay",
+      "context": "unblocked GREEN departures, (departureTick − onsetTick) / 60",
+      "absoluteTolerance": 0.02,
+      "relativeTolerance": 0.03,
+      "justifiedBy": "Onset and departure are integer ticks at 60 Hz, so the mean carries a 0.0167 s quantization; 0.02 s is that floor and 3% covers fixtures with few departures."
+    },
+    {
+      "key": "red_stop_line_offset",
+      "context": "certain RED opportunities, mean measured stopLineOffsetM",
+      "absoluteTolerance": 0.1,
+      "relativeTolerance": 0.03,
+      "justifiedBy": "The stop-line offset is the mean of metre measurements rounded to 0.05 m; 0.1 m is two rounding steps and 3% covers larger offsets."
+    },
+    {
+      "key": "late_red_brake_threshold",
+      "context": "certain RED opportunities, mean brakeThresholdMps2",
+      "absoluteTolerance": 0.05,
+      "relativeTolerance": 0.04,
+      "justifiedBy": "The threshold is a mean of deceleration measurements rounded to 0.05 m/s²; 0.05 is exactly one rounding step and 4% covers thresholds near the 6 m/s² upper bound."
+    },
+    {
+      "key": "stop_full_probability",
+      "context": "certain FREE_TRAFFIC STOP_LINE facts, full stops / certain denominator",
+      "absoluteTolerance": 0.03,
+      "relativeTolerance": 0.02,
+      "justifiedBy": "A full-stop ratio shares the 1/N opportunity granularity; 0.03 is below one count at N ≥ 15 and 2% covers the stricter 1/20 fixtures, without inventing a binomial interval."
+    },
+    {
+      "key": "stop_dwell_time",
+      "context": "measured dwellTicks of full STOP_LINE stops / 60",
+      "absoluteTolerance": 0.02,
+      "relativeTolerance": 0.03,
+      "justifiedBy": "Dwell is measured in whole ticks at 60 Hz, so the mean has a 0.0167 s quantization; 0.02 s is that floor and 3% covers dwell times above 1 s."
+    },
+    {
+      "key": "stop_line_offset",
+      "context": "certain FREE_TRAFFIC STOP_LINE facts, mean measured offset",
+      "absoluteTolerance": 0.1,
+      "relativeTolerance": 0.03,
+      "justifiedBy": "Same metre measurement as the RED offset but taken at a STOP line; 0.1 m covers two 0.05 m rounding steps and 3% covers offsets of several metres."
+    },
+    {
+      "key": "yield_time_gap",
+      "context": "YIELD interval [max refused, min accepted] of signed 052 separations",
+      "absoluteTolerance": 0.15,
+      "relativeTolerance": 0.05,
+      "justifiedBy": "Only opposed YIELDED/PROCEEDED facts identify the threshold, and the result is an interval whose endpoints are measured separations; 0.15 s pads the interval-edge rounding and 5% covers wider separations."
+    },
+    {
+      "key": "lane_change_front_gap",
+      "context": "optional LANE_CHANGE interval [max rejected, min completed] front gap",
+      "absoluteTolerance": 0.3,
+      "relativeTolerance": 0.04,
+      "justifiedBy": "The front gap is measured at the manoeuvre and only an accepted/rejected interval identifies the threshold; 0.3 m covers the gap measurement rounding and 4% covers gaps of tens of metres."
+    },
+    {
+      "key": "lane_change_back_gap",
+      "context": "optional LANE_CHANGE interval [max rejected, min completed] back gap",
+      "absoluteTolerance": 0.3,
+      "relativeTolerance": 0.04,
+      "justifiedBy": "The back gap uses the same manoeuvre-time measurement as the front gap but a different reference vehicle; 0.3 m covers its own rounding and 4% covers the larger gaps."
+    },
+    {
+      "key": "lane_change_speed_gain",
+      "context": "optional LANE_CHANGE interval of observed speedAdvantageMps",
+      "absoluteTolerance": 0.15,
+      "relativeTolerance": 0.05,
+      "justifiedBy": "The advantage is a speed difference in m/s recorded per optional manoeuvre; 0.15 m/s covers the difference rounding and 5% covers advantages near 10 m/s."
+    },
+    {
+      "key": "lane_change_cooldown",
+      "context": "optional completed manoeuvres, mean cooldownTicks / 60",
+      "absoluteTolerance": 0.05,
+      "relativeTolerance": 0.03,
+      "justifiedBy": "The cooldown is a measured tick interval divided by 60; 0.05 s allows for manoeuvre-boundary tick assignment and 3% covers long cooldowns up to 30 s."
+    }
+  ],
+  "checks": [
+    {
+      "name": "contract-version",
+      "expected": "105-inverse-learning-v1",
+      "actual": "105-inverse-learning-v1",
+      "pass": true,
+      "detail": "105 harness version"
+    },
+    {
+      "name": "app-adapter-version",
+      "expected": "105-inverse-learning-app-v1",
+      "actual": "105-inverse-learning-app-v1",
+      "pass": true,
+      "detail": "frozen report adapter version"
+    },
+    {
+      "name": "profiles",
+      "expected": 4,
+      "actual": 4,
+      "pass": true,
+      "detail": "prudent/impulsive/reckless/mixed"
+    },
+    {
+      "name": "demonstration-scenarios",
+      "expected": 6,
+      "actual": 6,
+      "pass": true,
+      "detail": "free flow, following, longitudinal, signals, stop/yield, lane change"
+    },
+    {
+      "name": "m-keys",
+      "expected": 24,
+      "actual": 24,
+      "pass": true,
+      "detail": "only initial_learning_target keys"
+    },
+    {
+      "name": "tolerances",
+      "expected": 24,
+      "actual": 24,
+      "pass": true,
+      "detail": "one documented tolerance per M key"
+    },
+    {
+      "name": "identifiability-rules",
+      "expected": 24,
+      "actual": 24,
+      "pass": true,
+      "detail": "one identifiability rule per M key"
+    },
+    {
+      "name": "known-profile-targets",
+      "expected": 96,
+      "actual": 96,
+      "pass": true,
+      "detail": "four profiles × 24 explicit targets"
+    },
+    {
+      "name": "key-specific-justifications",
+      "expected": 24,
+      "actual": 24,
+      "pass": true,
+      "detail": "no shared default justification text"
+    },
+    {
+      "name": "no-uniform-tolerance",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "tolerance pairs are spread across keys"
+    },
+    {
+      "name": "scenario-count",
+      "expected": 7,
+      "actual": 7,
+      "pass": true,
+      "detail": "four profiles plus three probes"
+    },
+    {
+      "name": "profile-scenarios",
+      "expected": 4,
+      "actual": 4,
+      "pass": true,
+      "detail": "four profile runs"
+    },
+    {
+      "name": "profile-keys-within",
+      "expected": 96,
+      "actual": 96,
+      "pass": true,
+      "detail": "24 keys × 4 profiles inside their explicit tolerance"
+    },
+    {
+      "name": "profile-outside",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no profile key is outside tolerance"
+    },
+    {
+      "name": "profile-not-identifiable",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "all four profiles identify all 24 keys"
+    },
+    {
+      "name": "profile-no-estimate",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no profile key lacks an estimate"
+    },
+    {
+      "name": "distinct-speed",
+      "expected": 4,
+      "actual": 4,
+      "pass": true,
+      "detail": "prudent/impulsive/reckless/mixed have four speed estimates"
+    },
+    {
+      "name": "distinct-headway",
+      "expected": 4,
+      "actual": 4,
+      "pass": true,
+      "detail": "four distinct time-headway estimates"
+    },
+    {
+      "name": "distinct-cooldown",
+      "expected": 4,
+      "actual": 4,
+      "pass": true,
+      "detail": "four distinct lane-change cooldown estimates"
+    },
+    {
+      "name": "lane-interval-separation",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "interval keys separate prudent from reckless"
+    },
+    {
+      "name": "sparse-within",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "sparse evidence identifies nothing"
+    },
+    {
+      "name": "sparse-not-identifiable",
+      "expected": 24,
+      "actual": 24,
+      "pass": true,
+      "detail": "all sparse keys are unidentifiable"
+    },
+    {
+      "name": "sparse-no-numeric",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "unidentifiable keys never carry a numeric estimate"
+    },
+    {
+      "name": "sparse-single-speed-following",
+      "expected": "NOT_IDENTIFIABLE",
+      "actual": "NOT_IDENTIFIABLE",
+      "pass": true,
+      "detail": "one observed speed cannot identify headway and minimum gap"
+    },
+    {
+      "name": "sparse-few-signals",
+      "expected": "NOT_IDENTIFIABLE",
+      "actual": "NOT_IDENTIFIABLE",
+      "pass": true,
+      "detail": "one RED opportunity is below the three-opportunity threshold"
+    },
+    {
+      "name": "sparse-no-lane-changes",
+      "expected": "NOT_IDENTIFIABLE",
+      "actual": "NOT_IDENTIFIABLE",
+      "pass": true,
+      "detail": "no lane change fact means no lane threshold"
+    },
+    {
+      "name": "contradictory-outside",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "contradiction is not reported as a numeric tolerance failure"
+    },
+    {
+      "name": "contradictory-following",
+      "expected": "CONTRADICTORY_EVIDENCE",
+      "actual": "CONTRADICTORY_EVIDENCE",
+      "pass": true,
+      "detail": "a negative OLS slope is retained as contradictory evidence"
+    },
+    {
+      "name": "contradictory-yield",
+      "expected": "NOT_IDENTIFIABLE",
+      "actual": "NOT_IDENTIFIABLE",
+      "pass": true,
+      "detail": "an inverted accepted/refused interval is refused"
+    },
+    {
+      "name": "contradictory-lane",
+      "expected": "NOT_IDENTIFIABLE",
+      "actual": "NOT_IDENTIFIABLE",
+      "pass": true,
+      "detail": "an inverted lane interval is unidentified"
+    },
+    {
+      "name": "contradictory-no-numeric",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "no contradictory threshold receives a point estimate or interval"
+    },
+    {
+      "name": "probe-outside",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "one injected wrong estimate is retained"
+    },
+    {
+      "name": "probe-retained-failure",
+      "expected": "speed_delta_urban:OUTSIDE_TOLERANCE",
+      "actual": "speed_delta_urban:OUTSIDE_TOLERANCE",
+      "pass": true,
+      "detail": "the report exposes the deliberate failure"
+    },
+    {
+      "name": "probe-detector",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the detector passes only because it reported the failure"
+    },
+    {
+      "name": "probe-is-not-hidden",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "probe failures are counted in the overall totals"
+    },
+    {
+      "name": "totals-match-results",
+      "expected": 168,
+      "actual": 168,
+      "pass": true,
+      "detail": "aggregate status counts sum to the evaluated keys"
+    },
+    {
+      "name": "evaluated-keys",
+      "expected": 168,
+      "actual": 168,
+      "pass": true,
+      "detail": "7 scenarios × 24 keys"
+    },
+    {
+      "name": "scenario-key-total",
+      "expected": 168,
+      "actual": 168,
+      "pass": true,
+      "detail": "scenario key counts sum to the overall total"
+    },
+    {
+      "name": "within-tolerance-total",
+      "expected": 125,
+      "actual": 125,
+      "pass": true,
+      "detail": "within-tolerance aggregate matches per-key rows"
+    },
+    {
+      "name": "not-identifiable-total",
+      "expected": 42,
+      "actual": 42,
+      "pass": true,
+      "detail": "not-identifiable aggregate matches per-key rows"
+    },
+    {
+      "name": "profile-failures",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the four known profiles have no outside/no-estimate key"
+    },
+    {
+      "name": "overall-pass",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "all profile and probe expectations held"
+    },
+    {
+      "name": "deterministic",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "two runs produce byte-identical reports"
+    },
+    {
+      "name": "every-result-has-context",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "each row carries its context, tolerance and scenario"
+    },
+    {
+      "name": "probe-reuses-profile-stream",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the out-of-tolerance probe reuses the PRUDENT demonstration and only injects the estimate"
+    },
+    {
+      "name": "variant-seeds-are-independent",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "sparse and contradictory evidence derive their own scenario seeds"
+    }
+  ],
+  "summary": {
+    "scenarios": 7,
+    "checks": 46,
+    "passed": 46,
+    "pass": true
+  }
+}

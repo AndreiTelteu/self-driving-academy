@@ -246,3 +246,10 @@ export {
   type UiAccessibilityPanelReport,
   type UiAccessibilityReport,
 } from './ui-accessibility';
+
+export {
+  INVERSE_LEARNING_APP_VERSION,
+  inverseLearningReportMarkdown,
+  runInverseLearningValidation,
+  type InverseLearningValidationOptions,
+} from './inverse-learning';
