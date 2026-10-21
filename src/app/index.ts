@@ -168,6 +168,28 @@ export {
   type VehicleMotionReadSource,
 } from './profile-continuity';
 export {
+  createProfilePipeline,
+  profilePipelineReasons,
+  profilePipelineStatuses,
+  PROFILE_PIPELINE_LIMITS,
+  PROFILE_PIPELINE_VERSION,
+  type ProfileLearningSegment,
+  type ProfilePipeline,
+  type ProfilePipelineActivationRecord,
+  type ProfilePipelineActivationStep,
+  type ProfilePipelineCompositionRecord,
+  type ProfilePipelineContinuity,
+  type ProfilePipelineContinuityInput,
+  type ProfilePipelineContinuityResult,
+  type ProfilePipelineQueue,
+  type ProfilePipelineReason,
+  type ProfilePipelineResult,
+  type ProfilePipelineServices,
+  type ProfilePipelineStats,
+  type ProfilePipelineStatus,
+  type ProfileSegmentSource,
+} from './profile-pipeline';
+export {
   readMinimapFrame,
   readMinimapGeometry,
   type MinimapFrameInput,

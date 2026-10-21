@@ -8,6 +8,12 @@ definește contractul de mesaj și taskul cooperativ care rulează în worker. A
 Modulul compune candidați în memorie. Nu publică profiluri, nu scrie `implemented`/`estimable` în
 registrul 092, nu emite `LEARNED` și nu decide dacă un delta trebuie aplicat.
 
+Consumatorul de producție al cozii este [profile-pipeline](profile-pipeline.md) (112): trimite doar
+segmente `LEARNING` eligibile, așteaptă outcome-ul terminal, derivă cel mult o versiune 109 dintr-o
+compoziție schimbată și o publică în 110 la tick-ul următor. `MANUAL`, `AUTO`, segmentele
+neeligibile, rezultatele fără schimbare și erorile nu produc versiuni; un rezultat depășit în aceeași
+generație este raportat ca recompoziție explicită.
+
 ## Jobul și eligibilitatea
 
 Un job trebuie să conțină `playerId`, `profileId`, `learningEpoch`, `baseVersionId`, `segmentId`,

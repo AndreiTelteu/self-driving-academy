@@ -1,0 +1,507 @@
+{
+  "version": "112-profile-pipeline-v1",
+  "contract": {
+    "statuses": [
+      "COMPOSED",
+      "RECOMPOSED",
+      "NO_CHANGE",
+      "DEDUPLICATED",
+      "SKIPPED_MANUAL",
+      "SKIPPED_INELIGIBLE",
+      "STALE_JOB",
+      "FAILED"
+    ],
+    "reasons": [
+      "MANUAL_SEGMENT_NOT_LEARNABLE",
+      "AUTO_SEGMENT_NOT_LEARNABLE",
+      "SEGMENT_INELIGIBLE",
+      "SEGMENT_NOT_FOUND",
+      "DUPLICATE_SEGMENT",
+      "NO_CHANGE",
+      "EPOCH_MISMATCH",
+      "BASE_MISMATCH",
+      "BASE_SUPERSEDED",
+      "LEARNING_JOB_REJECTED",
+      "LEARNING_JOB_FAILED",
+      "COMPOSITION_REJECTED",
+      "DELTA_REJECTED",
+      "STORE_REJECTED",
+      "PIPELINE_DISPOSED"
+    ],
+    "history": 16,
+    "ledger": 64,
+    "statusCount": 8,
+    "reasonCount": 15
+  },
+  "scenarios": [
+    {
+      "name": "first eligible LEARNING segment",
+      "status": "COMPOSED",
+      "detail": {
+        "versionId": "walk-1~112",
+        "parentVersionId": "profile-v1",
+        "versionBefore": 1.5,
+        "versionAfter": 3,
+        "jobSubmitted": true,
+        "activateAtTick": 1,
+        "storeVersions": 2
+      }
+    },
+    {
+      "name": "second eligible LEARNING segment",
+      "status": "COMPOSED",
+      "detail": {
+        "versionId": "walk-2~112",
+        "parentVersionId": "walk-1~112",
+        "chain": "profile-v1 -> walk-1~112 -> walk-2~112",
+        "depth": "0,1,2",
+        "sourceSegments": "walk-1,walk-2",
+        "appliedTick": 2,
+        "fleetVersions": "walk-2~112"
+      }
+    },
+    {
+      "name": "MANUAL intervention",
+      "status": "SKIPPED_MANUAL",
+      "detail": {
+        "reason": "MANUAL_SEGMENT_NOT_LEARNABLE",
+        "jobSubmitted": false,
+        "queueStarts": 2,
+        "storeVersions": 3,
+        "activationCommands": 2
+      }
+    },
+    {
+      "name": "LEARNING with no change",
+      "status": "NO_CHANGE",
+      "detail": {
+        "reason": "NO_CHANGE",
+        "composedValue": 1.5,
+        "versionId": null,
+        "storeVersions": 1,
+        "activationCommands": 0,
+        "duplicateStatus": "NO_CHANGE",
+        "queueStarts": 1
+      }
+    },
+    {
+      "name": "superseded same-generation result",
+      "status": "RECOMPOSED",
+      "detail": {
+        "firstStatus": "COMPOSED",
+        "appliedOrders": "1,2",
+        "appliedSegments": "stale-early,stale-late",
+        "recomposed": true,
+        "value": 0,
+        "versionId": "stale-early~112",
+        "activationStatus": "PENDING",
+        "newVersions": 1
+      }
+    },
+    {
+      "name": "estimator error",
+      "status": "FAILED",
+      "detail": {
+        "reason": "LEARNING_JOB_FAILED",
+        "code": "RESULT_INVALID",
+        "detail": "Synthetic estimator failure",
+        "versionId": null,
+        "storeVersions": 1,
+        "activationCommands": 0
+      }
+    },
+    {
+      "name": "duplicate segment",
+      "status": "DEDUPLICATED",
+      "detail": {
+        "firstVersionId": "dup-1~112",
+        "duplicateVersionId": "dup-1~112",
+        "deduplicated": true,
+        "jobSubmitted": false,
+        "queueStarts": 1,
+        "storeVersions": 2,
+        "storeDeduplicated": 1,
+        "publicationCommands": 1
+      }
+    }
+  ],
+  "checks": [
+    {
+      "name": "contract-version",
+      "expected": "112-profile-pipeline-v1",
+      "actual": "112-profile-pipeline-v1",
+      "pass": true,
+      "detail": "pipeline contract"
+    },
+    {
+      "name": "status-count",
+      "expected": 8,
+      "actual": 8,
+      "pass": true,
+      "detail": "closed result vocabulary"
+    },
+    {
+      "name": "reason-count",
+      "expected": 15,
+      "actual": 15,
+      "pass": true,
+      "detail": "closed pipeline reason vocabulary"
+    },
+    {
+      "name": "history-limit",
+      "expected": 16,
+      "actual": 16,
+      "pass": true,
+      "detail": "bounded retained results"
+    },
+    {
+      "name": "ledger-limit",
+      "expected": 64,
+      "actual": 64,
+      "pass": true,
+      "detail": "bounded segment ledger"
+    },
+    {
+      "name": "walk1-status",
+      "expected": "COMPOSED",
+      "actual": "COMPOSED",
+      "pass": true,
+      "detail": "one accepted composition published"
+    },
+    {
+      "name": "walk1-version",
+      "expected": "walk-1~112",
+      "actual": "walk-1~112",
+      "pass": true,
+      "detail": "deterministic version id"
+    },
+    {
+      "name": "walk1-parent",
+      "expected": "profile-v1",
+      "actual": "profile-v1",
+      "pass": true,
+      "detail": "explicit base"
+    },
+    {
+      "name": "walk1-value",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "real 101 fold"
+    },
+    {
+      "name": "walk1-activate-tick",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "next common tick"
+    },
+    {
+      "name": "walk1-store-versions",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "base plus one derived version"
+    },
+    {
+      "name": "walk2-status",
+      "expected": "COMPOSED",
+      "actual": "COMPOSED",
+      "pass": true,
+      "detail": "second change published"
+    },
+    {
+      "name": "walk2-version",
+      "expected": "walk-2~112",
+      "actual": "walk-2~112",
+      "pass": true,
+      "detail": "second version id"
+    },
+    {
+      "name": "walk2-parent",
+      "expected": "walk-1~112",
+      "actual": "walk-1~112",
+      "pass": true,
+      "detail": "parent is v1"
+    },
+    {
+      "name": "walk2-chain",
+      "expected": "profile-v1 -> walk-1~112 -> walk-2~112",
+      "actual": "profile-v1 -> walk-1~112 -> walk-2~112",
+      "pass": true,
+      "detail": "base-to-tip history"
+    },
+    {
+      "name": "walk2-depth",
+      "expected": "0,1,2",
+      "actual": "0,1,2",
+      "pass": true,
+      "detail": "one derivation per segment"
+    },
+    {
+      "name": "walk2-provenance",
+      "expected": "walk-1,walk-2",
+      "actual": "walk-1,walk-2",
+      "pass": true,
+      "detail": "cumulative provenance"
+    },
+    {
+      "name": "walk2-applied-tick",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "common tick of v2"
+    },
+    {
+      "name": "walk2-fleet",
+      "expected": "walk-2~112",
+      "actual": "walk-2~112",
+      "pass": true,
+      "detail": "the whole fleet adopted v2"
+    },
+    {
+      "name": "walk2-commands",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "one command per version"
+    },
+    {
+      "name": "walk2-applied",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "both commands applied"
+    },
+    {
+      "name": "manual-status",
+      "expected": "SKIPPED_MANUAL",
+      "actual": "SKIPPED_MANUAL",
+      "pass": true,
+      "detail": "MANUAL is never learned"
+    },
+    {
+      "name": "manual-no-job",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no 103 job"
+    },
+    {
+      "name": "manual-no-version",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "store keeps base plus two versions"
+    },
+    {
+      "name": "manual-no-activation",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no 110 command"
+    },
+    {
+      "name": "nochange-status",
+      "expected": "NO_CHANGE",
+      "actual": "NO_CHANGE",
+      "pass": true,
+      "detail": "composed but unchanged"
+    },
+    {
+      "name": "nochange-no-version",
+      "expected": null,
+      "actual": null,
+      "pass": true,
+      "detail": "no version for a no-op"
+    },
+    {
+      "name": "nochange-store",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "only the base version exists"
+    },
+    {
+      "name": "nochange-commands",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "nothing published"
+    },
+    {
+      "name": "nochange-duplicate",
+      "expected": "NO_CHANGE",
+      "actual": "NO_CHANGE",
+      "pass": true,
+      "detail": "duplicate keeps NO_CHANGE"
+    },
+    {
+      "name": "nochange-duplicate-job",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "duplicate is not queued"
+    },
+    {
+      "name": "recompose-first",
+      "expected": "COMPOSED",
+      "actual": "COMPOSED",
+      "pass": true,
+      "detail": "the later order composed first"
+    },
+    {
+      "name": "recompose-status",
+      "expected": "RECOMPOSED",
+      "actual": "RECOMPOSED",
+      "pass": true,
+      "detail": "explicit recomposition"
+    },
+    {
+      "name": "recompose-flag",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "ledger folded"
+    },
+    {
+      "name": "recompose-orders",
+      "expected": "1,2",
+      "actual": "1,2",
+      "pass": true,
+      "detail": "intervention order restored"
+    },
+    {
+      "name": "recompose-segments",
+      "expected": "stale-early,stale-late",
+      "actual": "stale-early,stale-late",
+      "pass": true,
+      "detail": "both proposals in the latest composition"
+    },
+    {
+      "name": "recompose-value",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "serial fold in intervention order"
+    },
+    {
+      "name": "recompose-one-version",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "exactly one new version"
+    },
+    {
+      "name": "recompose-activation",
+      "expected": "PENDING",
+      "actual": "PENDING",
+      "pass": true,
+      "detail": "the recomposed version targets the next common tick"
+    },
+    {
+      "name": "recompose-counter",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "recomposition counted explicitly"
+    },
+    {
+      "name": "error-status",
+      "expected": "FAILED",
+      "actual": "FAILED",
+      "pass": true,
+      "detail": "a worker error is never a publication"
+    },
+    {
+      "name": "error-reason",
+      "expected": "LEARNING_JOB_FAILED",
+      "actual": "LEARNING_JOB_FAILED",
+      "pass": true,
+      "detail": "closed pipeline reason"
+    },
+    {
+      "name": "error-code",
+      "expected": "RESULT_INVALID",
+      "actual": "RESULT_INVALID",
+      "pass": true,
+      "detail": "real 103 outcome code"
+    },
+    {
+      "name": "error-no-version",
+      "expected": null,
+      "actual": null,
+      "pass": true,
+      "detail": "nothing derived"
+    },
+    {
+      "name": "error-store",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "only the base version exists"
+    },
+    {
+      "name": "error-commands",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "nothing published"
+    },
+    {
+      "name": "duplicate-status",
+      "expected": "DEDUPLICATED",
+      "actual": "DEDUPLICATED",
+      "pass": true,
+      "detail": "the store answered the retry"
+    },
+    {
+      "name": "duplicate-version",
+      "expected": "dup-1~112",
+      "actual": "dup-1~112",
+      "pass": true,
+      "detail": "same version id"
+    },
+    {
+      "name": "duplicate-flag",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "explicit deduplication"
+    },
+    {
+      "name": "duplicate-no-job",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "no second 103 job"
+    },
+    {
+      "name": "duplicate-store",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "no duplicate version"
+    },
+    {
+      "name": "duplicate-store-counter",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "109 retry counter"
+    },
+    {
+      "name": "duplicate-commands",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "no duplicate activation"
+    }
+  ],
+  "summary": {
+    "scenarios": 7,
+    "checks": 53,
+    "passed": 53,
+    "pass": true
+  }
+}
