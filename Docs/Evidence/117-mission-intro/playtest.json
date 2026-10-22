@@ -1,0 +1,170 @@
+{
+  "version": "117-mission-tutorial-playtest-v1",
+  "viewport": {
+    "width": 1280,
+    "height": 720
+  },
+  "browser": "Chromium 156.0.8078.4",
+  "url": "http://127.0.0.1:5117",
+  "note": "The real compiled createMissionTutorialPanel mounted on 127.0.0.1:5117; keyboard and mouse interaction, not a simulation frame.",
+  "styleBytes": 57572,
+  "captures": [
+    {
+      "name": "active",
+      "screenshot": "playtest-active.png",
+      "bytes": 20981,
+      "observed": {
+        "panels": 1,
+        "state": "ACTIVE",
+        "stepIndex": 0,
+        "text": "Tutorial · Primul taxiAlege orice taxi din flotă. Toate taxiurile rămân disponibile.Pasul 1 din 5În desfășurareNiciun taxi selectatLEARNING: eligibilitate oprită în tutorial, fără job sau versiune de profilToate taxiurile rămân disponibile indiferent de progresul tutorialuluiPauzăReiaSari peste pasSari peste tutorial",
+        "ariaLabel": "Tutorial · Primul taxi · Pasul 1 din 5 · În desfășurare",
+        "enabled": [
+          "Pauză",
+          "Sari peste pas",
+          "Sari peste tutorial"
+        ],
+        "focused": "\n    Tutorial · Primul taxiAlege orice taxi din flotă. Toate taxiurile rămân disponibile.Pasul 1 din 5În desfășurareNiciun taxi selectatLEARNING: eligibilitate oprită în tutorial, fără job sau versiune de profilToate taxiurile rămân disponibile indiferent de progresul tutorialuluiPauzăReiaSari peste pasSari peste tutorial\n    \n      import { createMissionTutorialPanel } from './ui/mission-tutorial.js';\n      import { TUTORIAL_PANEL_VERSION } from './ui/mission-tutorial-format.js';\n      const host = document.getElementById('host');\n      let state = 'ACTIVE';\n      let stepIndex = 0;\n      let tick = 1;\n      let clock = 0;\n      const steps = [\n        ['SELECT_TAXI', 'Alege un taxi', 'Alege orice taxi din flotă. Toate taxiurile rămân disponibile.'],\n        ['MODE_MANUAL', 'Preia controlul', 'Apasă M ca să conduci manual.'],\n        ['MODE_LEARNING', 'Vezi LEARNING fără învățare', 'Apasă L; eligibilitatea este oprită.'],\n        ['MODE_AUTO', 'Revino în AUTO', 'Apasă M ca să dai controlul AI-ului.'],\n        ['COMPLETE_RIDE', 'Finalizează o cursă', 'Du pasagerul la destinație.'],\n      ];\n      const render = () => {\n        const complete = state === 'COMPLETED';\n        const current = steps[Math.min(stepIndex, steps.length - 1)];\n        panel.update(\n          {\n            schemaVersion: 1,\n            units: 'SI',\n            sessionId: 'session-117-playtest',\n            worldEpoch: 1,\n            version: TUTORIAL_PANEL_VERSION,\n            tick: tick++,\n            state,\n            stepId: complete ? null : current[0],\n            stepIndex,\n            stepCount: steps.length,\n            title: current[1],\n            instruction: current[2],\n            taxiId: stepIndex > 0 ? 'taxi:117:A' : null,\n          },\n          clock++,\n        );\n      };\n      const panel = createMissionTutorialPanel(host, {\n        pause: () => { state = 'PAUSED'; render(); },\n        resume: () => { state = 'ACTIVE'; render(); },\n        skipStep: () => {\n          stepIndex = Math.min(stepIndex + 1, steps.length);\n          if (stepIndex === steps.length) state = 'COMPLETED';\n          render();\n        },\n        skipAll: () => { stepIndex = steps.length; state = 'COMPLETED'; render(); },\n      });\n      render();\n      globalThis.__tutorialPlaytest = {\n        summary() {\n          const root = host.querySelector('section.mission-tutorial');\n          return {\n            panels: host.querySelectorAll('section.mission-tutorial').length,\n            state,\n            stepIndex,\n            text: root?.textContent ?? '',\n            ariaLabel: root?.getAttribute('aria-label') ?? '',\n            enabled: [...(root?.querySelectorAll('button:not([disabled])') ?? [])].map(\n              (button) => button.textContent,\n            ),\n            focused: document.activeElement?.textContent ?? null,\n            globalListeners: 0,\n          };\n        },\n      };\n    \n  \n\n",
+        "globalListeners": 0
+      }
+    },
+    {
+      "name": "paused",
+      "screenshot": "playtest-paused.png",
+      "bytes": 21108,
+      "observed": {
+        "panels": 1,
+        "state": "PAUSED",
+        "stepIndex": 0,
+        "text": "Tutorial · Primul taxiAlege orice taxi din flotă. Toate taxiurile rămân disponibile.Pasul 1 din 5Pauză · reia când vreiNiciun taxi selectatLEARNING: eligibilitate oprită în tutorial, fără job sau versiune de profilToate taxiurile rămân disponibile indiferent de progresul tutorialuluiPauzăReiaSari peste pasSari peste tutorial",
+        "ariaLabel": "Tutorial · Primul taxi · Pasul 1 din 5 · Pauză · reia când vrei",
+        "enabled": [
+          "Reia"
+        ],
+        "focused": "\n    Tutorial · Primul taxiAlege orice taxi din flotă. Toate taxiurile rămân disponibile.Pasul 1 din 5Pauză · reia când vreiNiciun taxi selectatLEARNING: eligibilitate oprită în tutorial, fără job sau versiune de profilToate taxiurile rămân disponibile indiferent de progresul tutorialuluiPauzăReiaSari peste pasSari peste tutorial\n    \n      import { createMissionTutorialPanel } from './ui/mission-tutorial.js';\n      import { TUTORIAL_PANEL_VERSION } from './ui/mission-tutorial-format.js';\n      const host = document.getElementById('host');\n      let state = 'ACTIVE';\n      let stepIndex = 0;\n      let tick = 1;\n      let clock = 0;\n      const steps = [\n        ['SELECT_TAXI', 'Alege un taxi', 'Alege orice taxi din flotă. Toate taxiurile rămân disponibile.'],\n        ['MODE_MANUAL', 'Preia controlul', 'Apasă M ca să conduci manual.'],\n        ['MODE_LEARNING', 'Vezi LEARNING fără învățare', 'Apasă L; eligibilitatea este oprită.'],\n        ['MODE_AUTO', 'Revino în AUTO', 'Apasă M ca să dai controlul AI-ului.'],\n        ['COMPLETE_RIDE', 'Finalizează o cursă', 'Du pasagerul la destinație.'],\n      ];\n      const render = () => {\n        const complete = state === 'COMPLETED';\n        const current = steps[Math.min(stepIndex, steps.length - 1)];\n        panel.update(\n          {\n            schemaVersion: 1,\n            units: 'SI',\n            sessionId: 'session-117-playtest',\n            worldEpoch: 1,\n            version: TUTORIAL_PANEL_VERSION,\n            tick: tick++,\n            state,\n            stepId: complete ? null : current[0],\n            stepIndex,\n            stepCount: steps.length,\n            title: current[1],\n            instruction: current[2],\n            taxiId: stepIndex > 0 ? 'taxi:117:A' : null,\n          },\n          clock++,\n        );\n      };\n      const panel = createMissionTutorialPanel(host, {\n        pause: () => { state = 'PAUSED'; render(); },\n        resume: () => { state = 'ACTIVE'; render(); },\n        skipStep: () => {\n          stepIndex = Math.min(stepIndex + 1, steps.length);\n          if (stepIndex === steps.length) state = 'COMPLETED';\n          render();\n        },\n        skipAll: () => { stepIndex = steps.length; state = 'COMPLETED'; render(); },\n      });\n      render();\n      globalThis.__tutorialPlaytest = {\n        summary() {\n          const root = host.querySelector('section.mission-tutorial');\n          return {\n            panels: host.querySelectorAll('section.mission-tutorial').length,\n            state,\n            stepIndex,\n            text: root?.textContent ?? '',\n            ariaLabel: root?.getAttribute('aria-label') ?? '',\n            enabled: [...(root?.querySelectorAll('button:not([disabled])') ?? [])].map(\n              (button) => button.textContent,\n            ),\n            focused: document.activeElement?.textContent ?? null,\n            globalListeners: 0,\n          };\n        },\n      };\n    \n  \n\n",
+        "globalListeners": 0
+      }
+    },
+    {
+      "name": "resumed",
+      "screenshot": "playtest-resumed.png",
+      "bytes": 21015,
+      "observed": {
+        "panels": 1,
+        "state": "ACTIVE",
+        "stepIndex": 0,
+        "text": "Tutorial · Primul taxiAlege orice taxi din flotă. Toate taxiurile rămân disponibile.Pasul 1 din 5În desfășurareNiciun taxi selectatLEARNING: eligibilitate oprită în tutorial, fără job sau versiune de profilToate taxiurile rămân disponibile indiferent de progresul tutorialuluiPauzăReiaSari peste pasSari peste tutorial",
+        "ariaLabel": "Tutorial · Primul taxi · Pasul 1 din 5 · În desfășurare",
+        "enabled": [
+          "Pauză",
+          "Sari peste pas",
+          "Sari peste tutorial"
+        ],
+        "focused": "\n    Tutorial · Primul taxiAlege orice taxi din flotă. Toate taxiurile rămân disponibile.Pasul 1 din 5În desfășurareNiciun taxi selectatLEARNING: eligibilitate oprită în tutorial, fără job sau versiune de profilToate taxiurile rămân disponibile indiferent de progresul tutorialuluiPauzăReiaSari peste pasSari peste tutorial\n    \n      import { createMissionTutorialPanel } from './ui/mission-tutorial.js';\n      import { TUTORIAL_PANEL_VERSION } from './ui/mission-tutorial-format.js';\n      const host = document.getElementById('host');\n      let state = 'ACTIVE';\n      let stepIndex = 0;\n      let tick = 1;\n      let clock = 0;\n      const steps = [\n        ['SELECT_TAXI', 'Alege un taxi', 'Alege orice taxi din flotă. Toate taxiurile rămân disponibile.'],\n        ['MODE_MANUAL', 'Preia controlul', 'Apasă M ca să conduci manual.'],\n        ['MODE_LEARNING', 'Vezi LEARNING fără învățare', 'Apasă L; eligibilitatea este oprită.'],\n        ['MODE_AUTO', 'Revino în AUTO', 'Apasă M ca să dai controlul AI-ului.'],\n        ['COMPLETE_RIDE', 'Finalizează o cursă', 'Du pasagerul la destinație.'],\n      ];\n      const render = () => {\n        const complete = state === 'COMPLETED';\n        const current = steps[Math.min(stepIndex, steps.length - 1)];\n        panel.update(\n          {\n            schemaVersion: 1,\n            units: 'SI',\n            sessionId: 'session-117-playtest',\n            worldEpoch: 1,\n            version: TUTORIAL_PANEL_VERSION,\n            tick: tick++,\n            state,\n            stepId: complete ? null : current[0],\n            stepIndex,\n            stepCount: steps.length,\n            title: current[1],\n            instruction: current[2],\n            taxiId: stepIndex > 0 ? 'taxi:117:A' : null,\n          },\n          clock++,\n        );\n      };\n      const panel = createMissionTutorialPanel(host, {\n        pause: () => { state = 'PAUSED'; render(); },\n        resume: () => { state = 'ACTIVE'; render(); },\n        skipStep: () => {\n          stepIndex = Math.min(stepIndex + 1, steps.length);\n          if (stepIndex === steps.length) state = 'COMPLETED';\n          render();\n        },\n        skipAll: () => { stepIndex = steps.length; state = 'COMPLETED'; render(); },\n      });\n      render();\n      globalThis.__tutorialPlaytest = {\n        summary() {\n          const root = host.querySelector('section.mission-tutorial');\n          return {\n            panels: host.querySelectorAll('section.mission-tutorial').length,\n            state,\n            stepIndex,\n            text: root?.textContent ?? '',\n            ariaLabel: root?.getAttribute('aria-label') ?? '',\n            enabled: [...(root?.querySelectorAll('button:not([disabled])') ?? [])].map(\n              (button) => button.textContent,\n            ),\n            focused: document.activeElement?.textContent ?? null,\n            globalListeners: 0,\n          };\n        },\n      };\n    \n  \n\n",
+        "globalListeners": 0
+      }
+    },
+    {
+      "name": "completed",
+      "screenshot": "playtest-completed.png",
+      "bytes": 20074,
+      "observed": {
+        "panels": 1,
+        "state": "COMPLETED",
+        "stepIndex": 5,
+        "text": "Tutorial · Primul taxiPoți continua cu orice taxi; accesul nu a fost restricționat.Tutorial finalizatFinalizatTaxi: taxi:117:ALEARNING: eligibilitate oprită în tutorial, fără job sau versiune de profilToate taxiurile rămân disponibile indiferent de progresul tutorialuluiPauzăReiaSari peste pasSari peste tutorial",
+        "ariaLabel": "Tutorial · Primul taxi · Tutorial finalizat · Finalizat",
+        "enabled": [],
+        "focused": "\n    Tutorial · Primul taxiPoți continua cu orice taxi; accesul nu a fost restricționat.Tutorial finalizatFinalizatTaxi: taxi:117:ALEARNING: eligibilitate oprită în tutorial, fără job sau versiune de profilToate taxiurile rămân disponibile indiferent de progresul tutorialuluiPauzăReiaSari peste pasSari peste tutorial\n    \n      import { createMissionTutorialPanel } from './ui/mission-tutorial.js';\n      import { TUTORIAL_PANEL_VERSION } from './ui/mission-tutorial-format.js';\n      const host = document.getElementById('host');\n      let state = 'ACTIVE';\n      let stepIndex = 0;\n      let tick = 1;\n      let clock = 0;\n      const steps = [\n        ['SELECT_TAXI', 'Alege un taxi', 'Alege orice taxi din flotă. Toate taxiurile rămân disponibile.'],\n        ['MODE_MANUAL', 'Preia controlul', 'Apasă M ca să conduci manual.'],\n        ['MODE_LEARNING', 'Vezi LEARNING fără învățare', 'Apasă L; eligibilitatea este oprită.'],\n        ['MODE_AUTO', 'Revino în AUTO', 'Apasă M ca să dai controlul AI-ului.'],\n        ['COMPLETE_RIDE', 'Finalizează o cursă', 'Du pasagerul la destinație.'],\n      ];\n      const render = () => {\n        const complete = state === 'COMPLETED';\n        const current = steps[Math.min(stepIndex, steps.length - 1)];\n        panel.update(\n          {\n            schemaVersion: 1,\n            units: 'SI',\n            sessionId: 'session-117-playtest',\n            worldEpoch: 1,\n            version: TUTORIAL_PANEL_VERSION,\n            tick: tick++,\n            state,\n            stepId: complete ? null : current[0],\n            stepIndex,\n            stepCount: steps.length,\n            title: current[1],\n            instruction: current[2],\n            taxiId: stepIndex > 0 ? 'taxi:117:A' : null,\n          },\n          clock++,\n        );\n      };\n      const panel = createMissionTutorialPanel(host, {\n        pause: () => { state = 'PAUSED'; render(); },\n        resume: () => { state = 'ACTIVE'; render(); },\n        skipStep: () => {\n          stepIndex = Math.min(stepIndex + 1, steps.length);\n          if (stepIndex === steps.length) state = 'COMPLETED';\n          render();\n        },\n        skipAll: () => { stepIndex = steps.length; state = 'COMPLETED'; render(); },\n      });\n      render();\n      globalThis.__tutorialPlaytest = {\n        summary() {\n          const root = host.querySelector('section.mission-tutorial');\n          return {\n            panels: host.querySelectorAll('section.mission-tutorial').length,\n            state,\n            stepIndex,\n            text: root?.textContent ?? '',\n            ariaLabel: root?.getAttribute('aria-label') ?? '',\n            enabled: [...(root?.querySelectorAll('button:not([disabled])') ?? [])].map(\n              (button) => button.textContent,\n            ),\n            focused: document.activeElement?.textContent ?? null,\n            globalListeners: 0,\n          };\n        },\n      };\n    \n  \n\n",
+        "globalListeners": 0
+      }
+    }
+  ],
+  "checks": [
+    {
+      "name": "single-panel",
+      "pass": true,
+      "actual": 1
+    },
+    {
+      "name": "region-label",
+      "pass": true,
+      "actual": "Tutorial · Primul taxi · Pasul 1 din 5 · În desfășurare"
+    },
+    {
+      "name": "three-actions-active",
+      "pass": true,
+      "actual": [
+        "Pauză",
+        "Sari peste pas",
+        "Sari peste tutorial"
+      ]
+    },
+    {
+      "name": "no-global-listeners",
+      "pass": true,
+      "actual": 0
+    },
+    {
+      "name": "tab-focuses-pause",
+      "pass": true,
+      "actual": "Pauză"
+    },
+    {
+      "name": "enter-pauses",
+      "pass": true,
+      "actual": "PAUSED"
+    },
+    {
+      "name": "paused-only-resume",
+      "pass": true,
+      "actual": [
+        "Reia"
+      ]
+    },
+    {
+      "name": "tab-focuses-resume",
+      "pass": true,
+      "actual": "Reia"
+    },
+    {
+      "name": "space-resumes",
+      "pass": true,
+      "actual": "ACTIVE"
+    },
+    {
+      "name": "driving-key-untouched",
+      "pass": true,
+      "actual": {
+        "state": "ACTIVE",
+        "stepIndex": 0
+      }
+    },
+    {
+      "name": "click-completes",
+      "pass": true,
+      "actual": "COMPLETED"
+    },
+    {
+      "name": "completed-disables-all",
+      "pass": true,
+      "actual": []
+    },
+    {
+      "name": "completed-text",
+      "pass": true,
+      "actual": "Tutorial · Primul taxiPoți continua cu orice taxi; accesul nu a fost restricțion"
+    },
+    {
+      "name": "no-page-errors",
+      "pass": true,
+      "actual": []
+    }
+  ],
+  "summary": {
+    "captures": 4,
+    "checks": 14,
+    "passed": 14,
+    "pass": true
+  }
+}

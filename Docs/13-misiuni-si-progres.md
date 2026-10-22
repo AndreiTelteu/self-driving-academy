@@ -53,3 +53,17 @@ Idempotența are două chei explicite. Progresul este protejat de un registru m�
 
 Nu fac parte din acest contract: obiectivele de confort/rating (necesită agregatele KPI), aplicarea XP în `PlayerProgress`, persistarea în savefile, UI-ul de misiuni și misiunile zilnice/random (modulele 23/28). Trackerul nu are ceas de perete, DOM, renderer sau muncă pe frame; consumă doar evenimente și tick-ul autoritar.
 
+## Contract implementat în V1 (PBI 117): tutorialul de control
+
+Etapa 1 din campanie are un tutorial separat de definiția de misiune: `src/missions/tutorial.ts` cu schema `117-mission-tutorial-v1`, ID stabil `tutorial-first-taxi-controls` și identitate de instanță derivată din `(namespace, tutorialId, încercare)`. Parcursul are cinci pași fixați, în ordine: `SELECT_TAXI`, `MODE_MANUAL`, `MODE_LEARNING`, `MODE_AUTO`, `COMPLETE_RIDE`. Un pas avansează numai din faptul real al familiei lui: selecția 068 (tip `TAXI`), proiecția acceptată 067 (`mode` plus `learningEligible`) sau evenimentele 007 `PICKUP`/`DROPOFF` pentru taxiul selectat.
+
+Tutorialul nu produce învățare. Pasul `MODE_LEARNING` cere `learningEligible === false`, iar o observație `LEARNING` cu eligibilitate `true` sau `null` este refuzată cu eroare de contract pentru orice pas; contorul `refusedLearning` o consemnează. Contractul nu are API de job, versiune sau profil, iar `stats()` raportează structural `learningJobs: 0` și `profileVersions: 0`. Un `PROFILE_ACTIVATE` observat pe bus este doar evidență (`learningActivationsObserved`), niciodată progres.
+
+Accesul la taxiuri nu este condiționat de progres: orice taxi poate fi selectat în orice pas, `canSelectTaxi` răspunde `allowed: true` pentru orice identitate, iar `blockedSelections` este structural zero. O selecție de taxi în alt pas este `IGNORED` cu motiv explicit (`WRONG_STEP`), nu un refuz; schimbarea taxiului păstrează pașii satisfăcuți și doar golește cursa în curs. Selecția unui vehicul civil este `NOT_A_TAXI`. Cursa cere un `PICKUP` real pentru taxiul selectat, iar un `DROPOFF` cu alt taxi, fără îmbarcare sau cu alt `rideId` este respins cu motiv închis.
+
+Stările sunt `ACTIVE`, `PAUSED`, `COMPLETED`; terminarea este fie prin joc (`completedBy: PLAY`), fie prin skip (`SKIP`). `skip` marchează pasul curent sau toate pașii rămași, `pause` îngheață progresul (observațiile devin `TUTORIAL_PAUSED`), iar `resume` continuă exact de la pasul reținut. Tick-ul este monoton: unul vechi aruncă. Limitele sunt fixe: cinci pași, patru ID-uri de dovadă pe pas, o singură instanță. Fără ceas, DOM, renderer sau aleator în modul.
+
+Panoul `src/ui/mission-tutorial.ts` (schema `117-mission-tutorial-ui-v1`) proiectează un singur snapshot acceptat și expune patru intenții (`PAUZA`, `REIA`, `SARI PESTE PAS`, `SARI PESTE TUTORIAL`) ca butoane native `<button type="button">`. Tastatura și mouse-ul folosesc același drum: clic sau activarea nativă Enter/Space a butonului focalizat, fără listener global, deci tastele de condus nu sunt capturate. Scrierile sunt throttled la 10 Hz, schimbările de pas/etapă ocolesc pragul, iar `dispose` returnează bugetul la zero.
+
+Nu fac parte din acest contract: compunerea tutorialului în `main.ts`/vertical slice, persistarea între sesiuni (127–136), XP-ul de misiune și blocarea intenționată a vreunui taxi. Tutorialul nu este un panou de setări și nu modifică `PlayerProgress`.
+

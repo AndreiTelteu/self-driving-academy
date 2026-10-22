@@ -57,3 +57,29 @@ export type {
   MissionTrackerStats,
 } from './lifecycle';
 export { MISSION_LIMITS, MISSION_SCHEMA_VERSION } from './contracts';
+export {
+  TUTORIAL_ID,
+  TUTORIAL_LIMITS,
+  TUTORIAL_NAMESPACE,
+  TUTORIAL_VERSION,
+  createTutorial,
+  tutorialIgnoreReasons,
+  tutorialStates,
+  tutorialStepIds,
+  tutorialStepStates,
+} from './tutorial';
+export type {
+  Tutorial,
+  TutorialIgnoreReason,
+  TutorialInstance,
+  TutorialObservation,
+  TutorialOptions,
+  TutorialStartResult,
+  TutorialState,
+  TutorialStats,
+  TutorialStepDefinition,
+  TutorialStepId,
+  TutorialStepState,
+  TutorialStepView,
+  TutorialTaxiAccess,
+} from './tutorial';
