@@ -10,6 +10,8 @@ import { HemisphericLight } from '@babylonjs/core/Lights/hemisphericLight';
 import { FreeCamera } from '@babylonjs/core/Cameras/freeCamera';
 import { Vector3 } from '@babylonjs/core/Maths/math.vector';
 import { createRenderingBackend } from '../../../src/rendering/babylon';
+import { createCityDecorScene } from '../../../src/rendering/babylon/city-decor-scene';
+import { createCityLayout, createNeighbourhoodMap } from '../../../src/world';
 import { VERTICAL_SLICE_ENGINE_VERSION } from '../../../src/app';
 import { createFleetGateWorkload } from './workload';
 import { runFleetGateWorkload, protocolTiming } from './protocol';
@@ -125,6 +127,44 @@ button.addEventListener('click', async () => {
     camera.setTarget(new Vector3(0, 0, 34));
     owned.scene.activeCamera = camera;
 
+    /* Opt-in PBI 146 assets: the same gate scene and workload plus the real spatial decor batches. */
+    let assetProbe: Record<string, unknown> | null = null;
+    if (params.get('assets') === '146') {
+      const layout = createCityLayout(createNeighbourhoodMap());
+      const startupStart = performance.now();
+      const decor = createCityDecorScene(owned.scene, layout);
+      const startupMs = performance.now() - startupStart;
+      const bounds = layout.boundsM;
+      const center = {
+        x: (bounds.minM.x + bounds.maxM.x) / 2,
+        z: (bounds.minM.z + bounds.maxM.z) / 2,
+      };
+      camera.position.set(center.x + 210, 330, center.z - 260);
+      camera.setTarget(new Vector3(center.x, 0, center.z));
+      const drawCalls = (
+        owned.scene.getEngine() as unknown as {
+          _drawCalls: { fetchNewFrame(): void; current: number };
+        }
+      )._drawCalls;
+      drawCalls.fetchNewFrame();
+      owned.render();
+      assetProbe = {
+        assets: '146',
+        startupMs,
+        items: decor.stats.items,
+        cells: decor.stats.cells,
+        decorMeshes: decor.stats.meshes,
+        drawCalls: drawCalls.current,
+        visibleMeshes: owned.scene.meshes.filter((mesh) => mesh.isEnabled() && mesh.isVisible)
+          .length,
+        textures: owned.scene.textures.length,
+        materials: owned.scene.materials.length,
+        vertices: decor.stats.vertices,
+        gpuBytes: decor.stats.gpuBytes,
+        camera: 'city overview after decor build; fleet bodies still simulated',
+      };
+    }
+
     /* The far camera keeps most of the fleet outside the frustum; physics keeps every body. */
     const hardware = (await (await fetch('/hardware.json')).json()) as Record<string, unknown>;
     const { column, identity } = readHardwareColumn(hardware);
@@ -163,6 +203,8 @@ button.addEventListener('click', async () => {
       decisionPolicy:
         'fixture command policy over real route progress and real 058 leader/blocked interaction; not the 045/050/051/052 gameplay policies',
       camera: 'fixed chase overview; offscreen actors remain simulated',
+      assets: params.get('assets') ?? 'none',
+      assetProbe,
     };
     exportReport = async (report) => {
       const response = await fetch('/export', {

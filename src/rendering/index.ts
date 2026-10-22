@@ -97,3 +97,21 @@ export type {
   VehicleClassGeometrySpec,
   VehicleLod,
 } from './vehicle-geometry';
+export {
+  CITY_DECOR_VERSION,
+  CITY_DECOR_CELL_SIZE_M,
+  CITY_DECOR_KINDS,
+  createCityDecorPlan,
+  verifyCityDecor,
+  buildCityDecorGeometry,
+  cityDecorManifest,
+  cityDecorBudget,
+  cityDecorInventory,
+} from './city-decor';
+export type {
+  CityDecorKind,
+  CityDecorItem,
+  CityDecorPlan,
+  CityDecorCellGeometry,
+  CityDecorInventoryEntry,
+} from './city-decor';

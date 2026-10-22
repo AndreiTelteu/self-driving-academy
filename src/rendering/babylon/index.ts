@@ -22,6 +22,12 @@ export {
   type CitySceneResourceCounts,
   type CitySceneStats,
 } from './city-scene';
+export {
+  createCityDecorScene,
+  type CityDecorScene,
+  type CityDecorSceneOptions,
+  type CityDecorSceneStats,
+} from './city-decor-scene';
 export { analyzeRegistryGlb } from './asset-contract';
 export {
   createVehicleVisualStage,
