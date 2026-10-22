@@ -113,3 +113,21 @@ Refuzul pe o singură viteză este executabil, nu declarativ: setul `FOLLOW_SING
 
 Contractul este structural read-only: `profileWrites: 0`, `learningJobs: 0` și `versionIds: []` apar atât pe comparație, cât și pe fiecare profil, iar modulul nu are ceas, DOM, renderer, store de profil, coadă de learning sau aleator. Limitele sunt fixe: 6 scenarii, 2 profiluri, 8 observații pe scenariu, 32 pe profil și 256 de unități UTF-16 pentru o identitate. Nu fac parte din contract: UI-ul de comparație, XP-ul, persistarea, compoziția cu `main.ts` și afișarea grafică a gap-ului.
 
+## Contract implementat în V1 (PBI 120): misiunea STOP/roșu/verde
+
+`src/missions/signals.ts` cu schema `120-mission-signals-v1` implementează etapa 4 a campaniei (`campaign-4-stops-and-signals`, definiție 116) ca misiune în care încălcarea este **învățată și consecința este observabilă**, nu ca o notă inventată deasupra traficului. Modulul consumă exclusiv fapte reale: oportunitatea **086** cu `outcome`/`result` cert, fereastra **087** cu eticheta și clasa ei, refuzul real al lui `respond` pentru ferestrele constrânse, cauza STOP **050/051**, și candidații reali **097** `red_stop_probability` și **098** `stop_full_probability`.
+
+Obiectivul este cel din definiția 116: două opriri complete de minimum **1,5 s** fiecare, plus zero încălcări imputabile. O oprire completă sub 1,5 s rămâne o oprire reală (`FULL_STOP`), dar nu satisface obiectivul; misiunea raportează `INSUFFICIENT_FULL_STOPS`, nu o transformă în încălcare.
+
+O încălcare are două jumătăți observabile: oportunitatea 086 este un `FAILURE` cert, iar episodul intră în candidatul real pe care estimatorul îl învață. `RED_CROSSED` se leagă de `red_stop_probability`, `STOP_LINE_CROSSED` de `stop_full_probability`, iar `SignalConsequence` raportează aceeași valoare pe care o raportează estimatorul (`1/3` într-un run cu o frânare corectă din trei). Modulul nu recalculează estimatorul și nu publică un profil.
+
+Două situații reale nu sunt niciodată încălcări și nu cer reacție:
+
+- **oprirea din trafic** (`cause` `LEADER`, `QUEUE` sau `BLOCKED`) este un `FAILURE` 086 cert, dar fereastra 087 este `EXTERNAL_CONSTRAINT`; misiunea o raportează `TRAFFIC_STOP` și o exclude din numitorul `stop_full_probability` (raportul rămâne `3/3`, nu `3/4`);
+- **verdele blocat** (`BLOCKED_GREEN`, sursă `FOLLOWING_QUEUE`) este `EXTERNAL_CONSTRAINT`; `respond` îl refuză cu `EXTERNAL_CONSTRAINT`, deci `reaction.applicable` este `false`, iar delay-ul lui nu intră în `green_start_delay`.
+
+Vocabularul este închis: verdictele `VIOLATION`, `COMPLIANT`, `TRAFFIC_STOP`, `BLOCKED_GREEN`, `EXTERNAL_CONSTRAINT`, iar explicațiile acoperă fiecare caz (`RED_HELD`, `RED_CROSSED`, `STOP_LINE_HELD`, `STOP_LINE_CROSSED`, `GREEN_RELEASED`, `GREEN_MISSED`, `TRAFFIC_STOP_NOT_VIOLATION`, `BLOCKED_GREEN_NOT_VIOLATION`, `EXTERNAL_CONSTRAINT_NOT_VIOLATION`). Contractul refuză un input contradictoriu — fereastră străină, oportunitate duplicată, candidat care nu corespunde episoadelor, reacție acceptată pe o fereastră constrânsă — în loc să explique o situație pe care faptele nu o susțin.
+
+Contractul este structural read-only: `profileWrites: 0` și `learningJobs: 0`, fără ceas, DOM, renderer, store de profil, coadă de learning sau aleator. Limitele sunt fixe: 32 de episoade într-un run și 256 de unități UTF-16 pentru o identitate. Nu fac parte din contract: UI-ul de misiune, XP-ul, persistarea și compoziția cu `main.ts`.
+
+

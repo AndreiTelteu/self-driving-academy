@@ -1,0 +1,999 @@
+{
+  "version": "120-mission-signals-report-v1",
+  "contract": {
+    "missionId": "campaign-4-stops-and-signals",
+    "schema": "120-mission-signals-v1",
+    "objectiveFullStops": 2,
+    "minimumFullStopDwellS": 1.5,
+    "episodeLimit": 32,
+    "verdicts": [
+      "VIOLATION",
+      "COMPLIANT",
+      "TRAFFIC_STOP",
+      "BLOCKED_GREEN",
+      "EXTERNAL_CONSTRAINT"
+    ],
+    "violationKinds": [
+      "RED_CROSSED",
+      "STOP_LINE_CROSSED"
+    ],
+    "stopCauses": [
+      "STOP_LINE",
+      "LEADER",
+      "QUEUE",
+      "BLOCKED"
+    ],
+    "outcomes": [
+      "PROGRESS",
+      "NO_PROGRESS"
+    ],
+    "explanations": [
+      "RED_HELD",
+      "RED_CROSSED",
+      "STOP_LINE_HELD",
+      "STOP_LINE_CROSSED",
+      "GREEN_RELEASED",
+      "GREEN_MISSED",
+      "TRAFFIC_STOP_NOT_VIOLATION",
+      "BLOCKED_GREEN_NOT_VIOLATION",
+      "EXTERNAL_CONSTRAINT_NOT_VIOLATION"
+    ]
+  },
+  "runs": [
+    {
+      "name": "compliant",
+      "plan": [
+        "STOP_LINE:FULL",
+        "RED:HELD",
+        "STOP_LINE:FULL",
+        "GREEN:BLOCKED",
+        "RED:HELD",
+        "TRAFFIC_STOP",
+        "STOP_LINE:FULL",
+        "RED:HELD",
+        "GREEN:FREE"
+      ],
+      "outcome": "PROGRESS",
+      "reason": null,
+      "violations": 0,
+      "compliant": 7,
+      "trafficStops": 1,
+      "blockedGreens": 1,
+      "fullStops": 3,
+      "objectiveMet": true,
+      "redDenominator": 3,
+      "stopOpportunityDenominator": 4,
+      "stopLineDenominator": 3,
+      "trafficInducedStopsExcluded": 1,
+      "redCandidate": {
+        "status": "CANDIDATE",
+        "value": 1,
+        "confidence": "HIGH",
+        "sourceEpisodeCount": 6
+      },
+      "stopCandidate": {
+        "status": "CANDIDATE",
+        "value": 1,
+        "confidence": "HIGH",
+        "sourceEpisodeCount": 6
+      },
+      "episodes": [
+        {
+          "opportunityId": "id-v1:16:opportunity-stop19:session-120-signals1:18:taxi:12010:taxi:120:113:stop-line:1201:0",
+          "kind": "STOP",
+          "windowClass": "ELIGIBLE",
+          "label": "FREE_TRAFFIC",
+          "stopCause": "STOP_LINE",
+          "outcome": "STOPPED",
+          "opportunityResult": "SUCCESS",
+          "verdict": "COMPLIANT",
+          "explanation": "STOP_LINE_HELD",
+          "violation": null,
+          "fullStop": true,
+          "dwellS": 2,
+          "reactionApplicable": true,
+          "reactionResponded": true,
+          "reactionReason": "RESPONSE",
+          "consequenceKey": null,
+          "consequenceStatus": null,
+          "consequenceValue": null
+        },
+        {
+          "opportunityId": "id-v1:15:opportunity-red19:session-120-signals1:18:taxi:12010:taxi:120:110:signal:12016:intersection:12012:movement:1203:2001:1",
+          "kind": "RED",
+          "windowClass": "ELIGIBLE",
+          "label": "FREE_TRAFFIC",
+          "stopCause": null,
+          "outcome": "HELD",
+          "opportunityResult": "SUCCESS",
+          "verdict": "COMPLIANT",
+          "explanation": "RED_HELD",
+          "violation": null,
+          "fullStop": false,
+          "dwellS": null,
+          "reactionApplicable": true,
+          "reactionResponded": true,
+          "reactionReason": "RESPONSE",
+          "consequenceKey": null,
+          "consequenceStatus": null,
+          "consequenceValue": null
+        },
+        {
+          "opportunityId": "id-v1:16:opportunity-stop19:session-120-signals1:18:taxi:12010:taxi:120:113:stop-line:1201:2",
+          "kind": "STOP",
+          "windowClass": "ELIGIBLE",
+          "label": "FREE_TRAFFIC",
+          "stopCause": "STOP_LINE",
+          "outcome": "STOPPED",
+          "opportunityResult": "SUCCESS",
+          "verdict": "COMPLIANT",
+          "explanation": "STOP_LINE_HELD",
+          "violation": null,
+          "fullStop": true,
+          "dwellS": 2,
+          "reactionApplicable": true,
+          "reactionResponded": true,
+          "reactionReason": "RESPONSE",
+          "consequenceKey": null,
+          "consequenceStatus": null,
+          "consequenceValue": null
+        },
+        {
+          "opportunityId": "id-v1:17:opportunity-green19:session-120-signals1:18:taxi:12010:taxi:120:110:signal:12016:intersection:12012:movement:1203:4001:3",
+          "kind": "GREEN",
+          "windowClass": "EXTERNAL_CONSTRAINT",
+          "label": "BLOCKED_GREEN",
+          "stopCause": null,
+          "outcome": "MISSED",
+          "opportunityResult": "FAILURE",
+          "verdict": "BLOCKED_GREEN",
+          "explanation": "BLOCKED_GREEN_NOT_VIOLATION",
+          "violation": null,
+          "fullStop": false,
+          "dwellS": null,
+          "reactionApplicable": false,
+          "reactionResponded": false,
+          "reactionReason": "EXTERNAL_CONSTRAINT",
+          "consequenceKey": null,
+          "consequenceStatus": null,
+          "consequenceValue": null
+        },
+        {
+          "opportunityId": "id-v1:15:opportunity-red19:session-120-signals1:18:taxi:12010:taxi:120:110:signal:12016:intersection:12012:movement:1203:5001:4",
+          "kind": "RED",
+          "windowClass": "ELIGIBLE",
+          "label": "FREE_TRAFFIC",
+          "stopCause": null,
+          "outcome": "HELD",
+          "opportunityResult": "SUCCESS",
+          "verdict": "COMPLIANT",
+          "explanation": "RED_HELD",
+          "violation": null,
+          "fullStop": false,
+          "dwellS": null,
+          "reactionApplicable": true,
+          "reactionResponded": true,
+          "reactionReason": "RESPONSE",
+          "consequenceKey": null,
+          "consequenceStatus": null,
+          "consequenceValue": null
+        },
+        {
+          "opportunityId": "id-v1:16:opportunity-stop19:session-120-signals1:18:taxi:12010:taxi:120:113:stop-line:1201:5",
+          "kind": "STOP",
+          "windowClass": "EXTERNAL_CONSTRAINT",
+          "label": "LEADER",
+          "stopCause": "LEADER",
+          "outcome": "CROSSED_WITHOUT_STOP",
+          "opportunityResult": "FAILURE",
+          "verdict": "TRAFFIC_STOP",
+          "explanation": "TRAFFIC_STOP_NOT_VIOLATION",
+          "violation": null,
+          "fullStop": false,
+          "dwellS": null,
+          "reactionApplicable": false,
+          "reactionResponded": false,
+          "reactionReason": "EXTERNAL_CONSTRAINT",
+          "consequenceKey": null,
+          "consequenceStatus": null,
+          "consequenceValue": null
+        },
+        {
+          "opportunityId": "id-v1:16:opportunity-stop19:session-120-signals1:18:taxi:12010:taxi:120:113:stop-line:1201:6",
+          "kind": "STOP",
+          "windowClass": "ELIGIBLE",
+          "label": "FREE_TRAFFIC",
+          "stopCause": "STOP_LINE",
+          "outcome": "STOPPED",
+          "opportunityResult": "SUCCESS",
+          "verdict": "COMPLIANT",
+          "explanation": "STOP_LINE_HELD",
+          "violation": null,
+          "fullStop": true,
+          "dwellS": 2,
+          "reactionApplicable": true,
+          "reactionResponded": true,
+          "reactionReason": "RESPONSE",
+          "consequenceKey": null,
+          "consequenceStatus": null,
+          "consequenceValue": null
+        },
+        {
+          "opportunityId": "id-v1:15:opportunity-red19:session-120-signals1:18:taxi:12010:taxi:120:110:signal:12016:intersection:12012:movement:1203:8001:7",
+          "kind": "RED",
+          "windowClass": "ELIGIBLE",
+          "label": "FREE_TRAFFIC",
+          "stopCause": null,
+          "outcome": "HELD",
+          "opportunityResult": "SUCCESS",
+          "verdict": "COMPLIANT",
+          "explanation": "RED_HELD",
+          "violation": null,
+          "fullStop": false,
+          "dwellS": null,
+          "reactionApplicable": true,
+          "reactionResponded": true,
+          "reactionReason": "RESPONSE",
+          "consequenceKey": null,
+          "consequenceStatus": null,
+          "consequenceValue": null
+        },
+        {
+          "opportunityId": "id-v1:17:opportunity-green19:session-120-signals1:18:taxi:12010:taxi:120:110:signal:12016:intersection:12012:movement:1203:9001:8",
+          "kind": "GREEN",
+          "windowClass": "ELIGIBLE",
+          "label": "FREE_TRAFFIC",
+          "stopCause": null,
+          "outcome": "RELEASED",
+          "opportunityResult": "SUCCESS",
+          "verdict": "COMPLIANT",
+          "explanation": "GREEN_RELEASED",
+          "violation": null,
+          "fullStop": false,
+          "dwellS": null,
+          "reactionApplicable": true,
+          "reactionResponded": true,
+          "reactionReason": "RESPONSE",
+          "consequenceKey": null,
+          "consequenceStatus": null,
+          "consequenceValue": null
+        }
+      ]
+    },
+    {
+      "name": "violation",
+      "plan": [
+        "STOP_LINE:FULL",
+        "RED:HELD",
+        "STOP_LINE:CROSS",
+        "GREEN:BLOCKED",
+        "RED:CROSS",
+        "TRAFFIC_STOP",
+        "STOP_LINE:CROSS",
+        "RED:CROSS",
+        "GREEN:FREE"
+      ],
+      "outcome": "NO_PROGRESS",
+      "reason": "VIOLATIONS_AND_INSUFFICIENT_FULL_STOPS",
+      "violations": 4,
+      "compliant": 3,
+      "trafficStops": 1,
+      "blockedGreens": 1,
+      "fullStops": 1,
+      "objectiveMet": false,
+      "redDenominator": 3,
+      "stopOpportunityDenominator": 4,
+      "stopLineDenominator": 3,
+      "trafficInducedStopsExcluded": 1,
+      "redCandidate": {
+        "status": "CANDIDATE",
+        "value": 0.333333,
+        "confidence": "HIGH",
+        "sourceEpisodeCount": 6
+      },
+      "stopCandidate": {
+        "status": "CANDIDATE",
+        "value": 0.333333,
+        "confidence": "HIGH",
+        "sourceEpisodeCount": 6
+      },
+      "episodes": [
+        {
+          "opportunityId": "id-v1:16:opportunity-stop19:session-120-signals1:18:taxi:12010:taxi:120:113:stop-line:1201:0",
+          "kind": "STOP",
+          "windowClass": "ELIGIBLE",
+          "label": "FREE_TRAFFIC",
+          "stopCause": "STOP_LINE",
+          "outcome": "STOPPED",
+          "opportunityResult": "SUCCESS",
+          "verdict": "COMPLIANT",
+          "explanation": "STOP_LINE_HELD",
+          "violation": null,
+          "fullStop": true,
+          "dwellS": 2,
+          "reactionApplicable": true,
+          "reactionResponded": true,
+          "reactionReason": "RESPONSE",
+          "consequenceKey": null,
+          "consequenceStatus": null,
+          "consequenceValue": null
+        },
+        {
+          "opportunityId": "id-v1:15:opportunity-red19:session-120-signals1:18:taxi:12010:taxi:120:110:signal:12016:intersection:12012:movement:1203:2001:1",
+          "kind": "RED",
+          "windowClass": "ELIGIBLE",
+          "label": "FREE_TRAFFIC",
+          "stopCause": null,
+          "outcome": "HELD",
+          "opportunityResult": "SUCCESS",
+          "verdict": "COMPLIANT",
+          "explanation": "RED_HELD",
+          "violation": null,
+          "fullStop": false,
+          "dwellS": null,
+          "reactionApplicable": true,
+          "reactionResponded": true,
+          "reactionReason": "RESPONSE",
+          "consequenceKey": null,
+          "consequenceStatus": null,
+          "consequenceValue": null
+        },
+        {
+          "opportunityId": "id-v1:16:opportunity-stop19:session-120-signals1:18:taxi:12010:taxi:120:113:stop-line:1201:2",
+          "kind": "STOP",
+          "windowClass": "ELIGIBLE",
+          "label": "FREE_TRAFFIC",
+          "stopCause": "STOP_LINE",
+          "outcome": "CROSSED_WITHOUT_STOP",
+          "opportunityResult": "FAILURE",
+          "verdict": "VIOLATION",
+          "explanation": "STOP_LINE_CROSSED",
+          "violation": "STOP_LINE_CROSSED",
+          "fullStop": false,
+          "dwellS": null,
+          "reactionApplicable": true,
+          "reactionResponded": true,
+          "reactionReason": "RESPONSE",
+          "consequenceKey": "stop_full_probability",
+          "consequenceStatus": "CANDIDATE",
+          "consequenceValue": 0.333333
+        },
+        {
+          "opportunityId": "id-v1:17:opportunity-green19:session-120-signals1:18:taxi:12010:taxi:120:110:signal:12016:intersection:12012:movement:1203:4001:3",
+          "kind": "GREEN",
+          "windowClass": "EXTERNAL_CONSTRAINT",
+          "label": "BLOCKED_GREEN",
+          "stopCause": null,
+          "outcome": "MISSED",
+          "opportunityResult": "FAILURE",
+          "verdict": "BLOCKED_GREEN",
+          "explanation": "BLOCKED_GREEN_NOT_VIOLATION",
+          "violation": null,
+          "fullStop": false,
+          "dwellS": null,
+          "reactionApplicable": false,
+          "reactionResponded": false,
+          "reactionReason": "EXTERNAL_CONSTRAINT",
+          "consequenceKey": null,
+          "consequenceStatus": null,
+          "consequenceValue": null
+        },
+        {
+          "opportunityId": "id-v1:15:opportunity-red19:session-120-signals1:18:taxi:12010:taxi:120:110:signal:12016:intersection:12012:movement:1203:5001:4",
+          "kind": "RED",
+          "windowClass": "ELIGIBLE",
+          "label": "FREE_TRAFFIC",
+          "stopCause": null,
+          "outcome": "CROSSED",
+          "opportunityResult": "FAILURE",
+          "verdict": "VIOLATION",
+          "explanation": "RED_CROSSED",
+          "violation": "RED_CROSSED",
+          "fullStop": false,
+          "dwellS": null,
+          "reactionApplicable": true,
+          "reactionResponded": true,
+          "reactionReason": "RESPONSE",
+          "consequenceKey": "red_stop_probability",
+          "consequenceStatus": "CANDIDATE",
+          "consequenceValue": 0.333333
+        },
+        {
+          "opportunityId": "id-v1:16:opportunity-stop19:session-120-signals1:18:taxi:12010:taxi:120:113:stop-line:1201:5",
+          "kind": "STOP",
+          "windowClass": "EXTERNAL_CONSTRAINT",
+          "label": "LEADER",
+          "stopCause": "LEADER",
+          "outcome": "CROSSED_WITHOUT_STOP",
+          "opportunityResult": "FAILURE",
+          "verdict": "TRAFFIC_STOP",
+          "explanation": "TRAFFIC_STOP_NOT_VIOLATION",
+          "violation": null,
+          "fullStop": false,
+          "dwellS": null,
+          "reactionApplicable": false,
+          "reactionResponded": false,
+          "reactionReason": "EXTERNAL_CONSTRAINT",
+          "consequenceKey": null,
+          "consequenceStatus": null,
+          "consequenceValue": null
+        },
+        {
+          "opportunityId": "id-v1:16:opportunity-stop19:session-120-signals1:18:taxi:12010:taxi:120:113:stop-line:1201:6",
+          "kind": "STOP",
+          "windowClass": "ELIGIBLE",
+          "label": "FREE_TRAFFIC",
+          "stopCause": "STOP_LINE",
+          "outcome": "CROSSED_WITHOUT_STOP",
+          "opportunityResult": "FAILURE",
+          "verdict": "VIOLATION",
+          "explanation": "STOP_LINE_CROSSED",
+          "violation": "STOP_LINE_CROSSED",
+          "fullStop": false,
+          "dwellS": null,
+          "reactionApplicable": true,
+          "reactionResponded": true,
+          "reactionReason": "RESPONSE",
+          "consequenceKey": "stop_full_probability",
+          "consequenceStatus": "CANDIDATE",
+          "consequenceValue": 0.333333
+        },
+        {
+          "opportunityId": "id-v1:15:opportunity-red19:session-120-signals1:18:taxi:12010:taxi:120:110:signal:12016:intersection:12012:movement:1203:8001:7",
+          "kind": "RED",
+          "windowClass": "ELIGIBLE",
+          "label": "FREE_TRAFFIC",
+          "stopCause": null,
+          "outcome": "CROSSED",
+          "opportunityResult": "FAILURE",
+          "verdict": "VIOLATION",
+          "explanation": "RED_CROSSED",
+          "violation": "RED_CROSSED",
+          "fullStop": false,
+          "dwellS": null,
+          "reactionApplicable": true,
+          "reactionResponded": true,
+          "reactionReason": "RESPONSE",
+          "consequenceKey": "red_stop_probability",
+          "consequenceStatus": "CANDIDATE",
+          "consequenceValue": 0.333333
+        },
+        {
+          "opportunityId": "id-v1:17:opportunity-green19:session-120-signals1:18:taxi:12010:taxi:120:110:signal:12016:intersection:12012:movement:1203:9001:8",
+          "kind": "GREEN",
+          "windowClass": "ELIGIBLE",
+          "label": "FREE_TRAFFIC",
+          "stopCause": null,
+          "outcome": "RELEASED",
+          "opportunityResult": "SUCCESS",
+          "verdict": "COMPLIANT",
+          "explanation": "GREEN_RELEASED",
+          "violation": null,
+          "fullStop": false,
+          "dwellS": null,
+          "reactionApplicable": true,
+          "reactionResponded": true,
+          "reactionReason": "RESPONSE",
+          "consequenceKey": null,
+          "consequenceStatus": null,
+          "consequenceValue": null
+        }
+      ]
+    },
+    {
+      "name": "short-dwell",
+      "plan": [
+        "STOP_LINE:FULL",
+        "RED:HELD",
+        "STOP_LINE:FULL:0.5s",
+        "RED:HELD",
+        "RED:HELD"
+      ],
+      "outcome": "NO_PROGRESS",
+      "reason": "INSUFFICIENT_FULL_STOPS",
+      "violations": 0,
+      "compliant": 5,
+      "trafficStops": 0,
+      "blockedGreens": 0,
+      "fullStops": 1,
+      "objectiveMet": false,
+      "redDenominator": 3,
+      "stopOpportunityDenominator": 2,
+      "stopLineDenominator": 2,
+      "trafficInducedStopsExcluded": 0,
+      "redCandidate": {
+        "status": "CANDIDATE",
+        "value": 1,
+        "confidence": "HIGH",
+        "sourceEpisodeCount": 5
+      },
+      "stopCandidate": {
+        "status": "UNOBSERVED",
+        "value": null,
+        "confidence": "NONE",
+        "sourceEpisodeCount": 5
+      },
+      "episodes": [
+        {
+          "opportunityId": "id-v1:16:opportunity-stop19:session-120-signals1:18:taxi:12010:taxi:120:113:stop-line:1201:0",
+          "kind": "STOP",
+          "windowClass": "ELIGIBLE",
+          "label": "FREE_TRAFFIC",
+          "stopCause": "STOP_LINE",
+          "outcome": "STOPPED",
+          "opportunityResult": "SUCCESS",
+          "verdict": "COMPLIANT",
+          "explanation": "STOP_LINE_HELD",
+          "violation": null,
+          "fullStop": true,
+          "dwellS": 2,
+          "reactionApplicable": true,
+          "reactionResponded": true,
+          "reactionReason": "RESPONSE",
+          "consequenceKey": null,
+          "consequenceStatus": null,
+          "consequenceValue": null
+        },
+        {
+          "opportunityId": "id-v1:15:opportunity-red19:session-120-signals1:18:taxi:12010:taxi:120:110:signal:12016:intersection:12012:movement:1203:2001:1",
+          "kind": "RED",
+          "windowClass": "ELIGIBLE",
+          "label": "FREE_TRAFFIC",
+          "stopCause": null,
+          "outcome": "HELD",
+          "opportunityResult": "SUCCESS",
+          "verdict": "COMPLIANT",
+          "explanation": "RED_HELD",
+          "violation": null,
+          "fullStop": false,
+          "dwellS": null,
+          "reactionApplicable": true,
+          "reactionResponded": true,
+          "reactionReason": "RESPONSE",
+          "consequenceKey": null,
+          "consequenceStatus": null,
+          "consequenceValue": null
+        },
+        {
+          "opportunityId": "id-v1:16:opportunity-stop19:session-120-signals1:18:taxi:12010:taxi:120:113:stop-line:1201:2",
+          "kind": "STOP",
+          "windowClass": "ELIGIBLE",
+          "label": "FREE_TRAFFIC",
+          "stopCause": "STOP_LINE",
+          "outcome": "STOPPED",
+          "opportunityResult": "SUCCESS",
+          "verdict": "COMPLIANT",
+          "explanation": "STOP_LINE_HELD",
+          "violation": null,
+          "fullStop": true,
+          "dwellS": 0.5,
+          "reactionApplicable": true,
+          "reactionResponded": true,
+          "reactionReason": "RESPONSE",
+          "consequenceKey": null,
+          "consequenceStatus": null,
+          "consequenceValue": null
+        },
+        {
+          "opportunityId": "id-v1:15:opportunity-red19:session-120-signals1:18:taxi:12010:taxi:120:110:signal:12016:intersection:12012:movement:1203:4001:3",
+          "kind": "RED",
+          "windowClass": "ELIGIBLE",
+          "label": "FREE_TRAFFIC",
+          "stopCause": null,
+          "outcome": "HELD",
+          "opportunityResult": "SUCCESS",
+          "verdict": "COMPLIANT",
+          "explanation": "RED_HELD",
+          "violation": null,
+          "fullStop": false,
+          "dwellS": null,
+          "reactionApplicable": true,
+          "reactionResponded": true,
+          "reactionReason": "RESPONSE",
+          "consequenceKey": null,
+          "consequenceStatus": null,
+          "consequenceValue": null
+        },
+        {
+          "opportunityId": "id-v1:15:opportunity-red19:session-120-signals1:18:taxi:12010:taxi:120:110:signal:12016:intersection:12012:movement:1203:5001:4",
+          "kind": "RED",
+          "windowClass": "ELIGIBLE",
+          "label": "FREE_TRAFFIC",
+          "stopCause": null,
+          "outcome": "HELD",
+          "opportunityResult": "SUCCESS",
+          "verdict": "COMPLIANT",
+          "explanation": "RED_HELD",
+          "violation": null,
+          "fullStop": false,
+          "dwellS": null,
+          "reactionApplicable": true,
+          "reactionResponded": true,
+          "reactionReason": "RESPONSE",
+          "consequenceKey": null,
+          "consequenceStatus": null,
+          "consequenceValue": null
+        }
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "name": "contract-schema",
+      "expected": "120-mission-signals-v1",
+      "actual": "120-mission-signals-v1",
+      "pass": true,
+      "detail": "mission schema"
+    },
+    {
+      "name": "mission-id",
+      "expected": "campaign-4-stops-and-signals",
+      "actual": "campaign-4-stops-and-signals",
+      "pass": true,
+      "detail": "116 campaign stage"
+    },
+    {
+      "name": "objective-full-stops",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "116 FULL_STOPS target"
+    },
+    {
+      "name": "objective-minimum-dwell",
+      "expected": 1.5,
+      "actual": 1.5,
+      "pass": true,
+      "detail": "116 minimum dwell in seconds"
+    },
+    {
+      "name": "episode-limit",
+      "expected": 32,
+      "actual": 32,
+      "pass": true,
+      "detail": "bounded mission run"
+    },
+    {
+      "name": "verdicts",
+      "expected": "VIOLATION,COMPLIANT,TRAFFIC_STOP,BLOCKED_GREEN,EXTERNAL_CONSTRAINT",
+      "actual": "VIOLATION,COMPLIANT,TRAFFIC_STOP,BLOCKED_GREEN,EXTERNAL_CONSTRAINT",
+      "pass": true,
+      "detail": "closed episode verdicts"
+    },
+    {
+      "name": "violation-kinds",
+      "expected": "RED_CROSSED,STOP_LINE_CROSSED",
+      "actual": "RED_CROSSED,STOP_LINE_CROSSED",
+      "pass": true,
+      "detail": "only a free-traffic decision can be a violation"
+    },
+    {
+      "name": "stop-causes",
+      "expected": "STOP_LINE,LEADER,QUEUE,BLOCKED",
+      "actual": "STOP_LINE,LEADER,QUEUE,BLOCKED",
+      "pass": true,
+      "detail": "050/051 causes"
+    },
+    {
+      "name": "outcomes",
+      "expected": "PROGRESS,NO_PROGRESS",
+      "actual": "PROGRESS,NO_PROGRESS",
+      "pass": true,
+      "detail": "closed mission outcome"
+    },
+    {
+      "name": "explanations",
+      "expected": "RED_HELD,RED_CROSSED,STOP_LINE_HELD,STOP_LINE_CROSSED,GREEN_RELEASED,GREEN_MISSED,TRAFFIC_STOP_NOT_VIOLATION,BLOCKED_GREEN_NOT_VIOLATION,EXTERNAL_CONSTRAINT_NOT_VIOLATION",
+      "actual": "RED_HELD,RED_CROSSED,STOP_LINE_HELD,STOP_LINE_CROSSED,GREEN_RELEASED,GREEN_MISSED,TRAFFIC_STOP_NOT_VIOLATION,BLOCKED_GREEN_NOT_VIOLATION,EXTERNAL_CONSTRAINT_NOT_VIOLATION",
+      "pass": true,
+      "detail": "every episode is explained"
+    },
+    {
+      "name": "compliant-outcome",
+      "expected": "PROGRESS",
+      "actual": "PROGRESS",
+      "pass": true,
+      "detail": "116 objective met"
+    },
+    {
+      "name": "compliant-violations",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no attributable violation"
+    },
+    {
+      "name": "compliant-full-stops",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "three real FULL_STOP events"
+    },
+    {
+      "name": "compliant-blocked-greens",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "real BLOCKED_GREEN"
+    },
+    {
+      "name": "compliant-traffic-stops",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "real LEADER stop"
+    },
+    {
+      "name": "compliant-red-denominator",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "086"
+    },
+    {
+      "name": "compliant-stop-opportunity-denominator",
+      "expected": 4,
+      "actual": 4,
+      "pass": true,
+      "detail": "all 086 STOP opportunities"
+    },
+    {
+      "name": "compliant-stop-line-denominator",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "free-traffic STOP_LINE subset"
+    },
+    {
+      "name": "compliant-traffic-excluded",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the LEADER stop never enters the stop-line ratio"
+    },
+    {
+      "name": "compliant-red-candidate",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "097 ratio over 3 HELD reds"
+    },
+    {
+      "name": "compliant-stop-candidate",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "098 ratio over 3 STOP_LINE approaches, not 4"
+    },
+    {
+      "name": "compliant-stop-candidate-not-3-4",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "a traffic stop is not a missing stop-line stop"
+    },
+    {
+      "name": "blocked-green-verdict",
+      "expected": "BLOCKED_GREEN",
+      "actual": "BLOCKED_GREEN",
+      "pass": true,
+      "detail": "not a violation"
+    },
+    {
+      "name": "blocked-green-window",
+      "expected": "EXTERNAL_CONSTRAINT",
+      "actual": "EXTERNAL_CONSTRAINT",
+      "pass": true,
+      "detail": "087"
+    },
+    {
+      "name": "blocked-green-consequence",
+      "expected": null,
+      "actual": null,
+      "pass": true,
+      "detail": "no candidate doubled"
+    },
+    {
+      "name": "blocked-green-reaction",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "no reaction requirement"
+    },
+    {
+      "name": "blocked-green-reaction-reason",
+      "expected": "EXTERNAL_CONSTRAINT",
+      "actual": "EXTERNAL_CONSTRAINT",
+      "pass": true,
+      "detail": "the real 087 refusal"
+    },
+    {
+      "name": "blocked-green-outcome",
+      "expected": "MISSED",
+      "actual": "MISSED",
+      "pass": true,
+      "detail": "the 086 relation is a certain failure"
+    },
+    {
+      "name": "traffic-stop-verdict",
+      "expected": "TRAFFIC_STOP",
+      "actual": "TRAFFIC_STOP",
+      "pass": true,
+      "detail": "a queue stop is not a stop-line violation"
+    },
+    {
+      "name": "traffic-stop-failure",
+      "expected": "FAILURE",
+      "actual": "FAILURE",
+      "pass": true,
+      "detail": "the 086 opportunity is a real failure"
+    },
+    {
+      "name": "traffic-stop-consequence",
+      "expected": null,
+      "actual": null,
+      "pass": true,
+      "detail": "excluded from learning"
+    },
+    {
+      "name": "green-delay-evidence",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "only the unblocked green produces a delay"
+    },
+    {
+      "name": "green-delay-candidate",
+      "expected": null,
+      "actual": null,
+      "pass": true,
+      "detail": "one delay is below the two-episode minimum"
+    },
+    {
+      "name": "violation-outcome",
+      "expected": "NO_PROGRESS",
+      "actual": "NO_PROGRESS",
+      "pass": true,
+      "detail": "violations block progress"
+    },
+    {
+      "name": "violation-reason",
+      "expected": "VIOLATIONS_AND_INSUFFICIENT_FULL_STOPS",
+      "actual": "VIOLATIONS_AND_INSUFFICIENT_FULL_STOPS",
+      "pass": true,
+      "detail": "both halves fail"
+    },
+    {
+      "name": "violation-count",
+      "expected": 4,
+      "actual": 4,
+      "pass": true,
+      "detail": "two reds and two stop lines"
+    },
+    {
+      "name": "violation-red-count",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "real RED CROSSED outcomes"
+    },
+    {
+      "name": "violation-stop-count",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "real CROSSED_WITHOUT_STOP outcomes"
+    },
+    {
+      "name": "violation-full-stops",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "one FULL_STOP event"
+    },
+    {
+      "name": "violation-red-candidate",
+      "expected": 0.333333,
+      "actual": 0.333333,
+      "pass": true,
+      "detail": "1 HELD of 3 certain reds"
+    },
+    {
+      "name": "violation-stop-candidate",
+      "expected": 0.333333,
+      "actual": 0.333333,
+      "pass": true,
+      "detail": "1 full of 3 STOP_LINE approaches"
+    },
+    {
+      "name": "violation-consequence-red",
+      "expected": "red_stop_probability",
+      "actual": "red_stop_probability",
+      "pass": true,
+      "detail": "the violation is the learned red episode"
+    },
+    {
+      "name": "violation-consequence-stop",
+      "expected": "stop_full_probability",
+      "actual": "stop_full_probability",
+      "pass": true,
+      "detail": "the violation is the learned stop-line episode"
+    },
+    {
+      "name": "violation-consequence-failure",
+      "expected": "FAILURE",
+      "actual": "FAILURE",
+      "pass": true,
+      "detail": "consequence tied to the certain 086 result"
+    },
+    {
+      "name": "violation-blocked-green",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "a violation run can still contain an external constraint"
+    },
+    {
+      "name": "short-outcome",
+      "expected": "INSUFFICIENT_FULL_STOPS",
+      "actual": "INSUFFICIENT_FULL_STOPS",
+      "pass": true,
+      "detail": "no violation, but the objective fails"
+    },
+    {
+      "name": "short-full-stops",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "0.5 s is below the 1.5 s minimum"
+    },
+    {
+      "name": "short-first-dwell",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "the 2 s stop counts"
+    },
+    {
+      "name": "short-second-dwell",
+      "expected": 0.5,
+      "actual": 0.5,
+      "pass": true,
+      "detail": "the 0.5 s stop does not count"
+    },
+    {
+      "name": "short-stop-candidate",
+      "expected": "UNOBSERVED",
+      "actual": "UNOBSERVED",
+      "pass": true,
+      "detail": "two stop-line facts are below the three-episode minimum"
+    },
+    {
+      "name": "refuses-forged-candidate",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "a candidate the real episodes do not support is refused"
+    },
+    {
+      "name": "structural-writes",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the mission never writes a profile"
+    },
+    {
+      "name": "structural-learning-jobs",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the mission never queues a learning job"
+    }
+  ],
+  "summary": {
+    "runs": 3,
+    "checks": 53,
+    "passed": 53,
+    "pass": true
+  }
+}

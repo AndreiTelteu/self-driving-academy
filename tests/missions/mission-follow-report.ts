@@ -96,12 +96,6 @@ function round(value: number, digits = 6): number {
   return Math.round(value * factor) / factor;
 }
 
-function gaps(style: Parameters<typeof measureFollowStyle>[0]): readonly number[] {
-  return measureFollowStyle(style).measuredGapsM.map((value) => round(value));
-}
-
-const STYLES = ['PRUDENT', 'HEADWAY_TWIN', 'GAP_TWIN', 'RECKLESS', 'PRUDENT_TWIN'] as const;
-
 export function runMissionFollowReport(): MissionFollowReport {
   const scenarios: MissionFollowReportScenario[] = [];
   const checks: MissionFollowReportCheck[] = [];
