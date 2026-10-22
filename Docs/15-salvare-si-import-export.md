@@ -1,6 +1,6 @@
 # Salvare și import export
 
-Versiune 0.9 · 22 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
+Versiune 0.10 · 22 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
 
 ## Date salvate și export
 
@@ -106,3 +106,23 @@ Dovezi: [Evidence/129-save-segments](Evidence/129-save-segments/README.md).
 **Contractul pentru import (134).** Rezultatul citirii reține valorile efective ale versiunii active (`parameters`), cheile rezervate cu `null` (`reservedParameters`) și parametrii fiecărei versiuni, cu proveniența și checksum-ul ei. PBI 134 verifică mai departe compatibilitatea, activează tranzacțional și nu șterge nimic înainte de validare; 133 livrează formatul, validatorul și cititorul pe care 134 le folosesc.
 
 Dovezi: [Evidence/133-export-profile](Evidence/133-export-profile/README.md).
+
+## Contract implementat V1 (PBI 206) — checkpoint complet și reluare coerentă
+
+`src/persistence/world-snapshot.ts` (contract `206-world-snapshot-v1`) este documentul snapshotului, separat de envelope-ul din store-ul `checkpoints` (127/129) și de salvarea progresului. Snapshotul conține numai date simple, înghețate: `tick`, `worldEpoch`, profilul activ, vehiculele (poziție, rotație, viteze, `entityId`↔`handle`, clasă, mod de control, FSM, rută, segment și pasageri), stările controller/FSM cu memoria numerică, cursele și pasagerii, segmentele, oportunitățile evaluate, semafoarele, dispecerul (joburi pending și rezultate acceptate), learning-ul (joburi, observații finalizate, chei de rezultat deja acceptate), cursorii RNG și deduplicarea evenimentelor. Validarea are un vocabular închis: câmpuri lipsă/necunoscute, identități duplicate, referințe suspendate, numere nefinite, depășirea bugetului de dimensiune și versiune incompatibilă sunt refuzate explicit, iar snapshotul nu este niciodată trunchiat.
+
+**Un singur tick coerent.** Captura primește tickul fizicii și tickul fiecărui subsistem; este refuzată dacă fixed-tick loop este în interiorul unui pas (`TICK_NOT_BOUNDARY`) sau dacă orice subsistem nu este exact la tickul capturat (`SUBSYSTEM_TICK_MISMATCH`). Copierea este sincronă și defensivă: după captură, lumea vie poate continua fără să atingă documentul. Integritatea refolosește `SDA-CJSON-1` și `SHA-256` din [modulul 29](29-savefile-si-integritate.md), peste payload-ul fără câmpul `checksum`; citirea verifică checksumul înainte de a folosi orice valoare.
+
+**RNG reluabil, nu re-generat.** Fiecare stream (`traffic`, `rideDemand`, `opportunities`) este un cursor într-un generator keyed (`randomUnit`), nu `Math.random`. Snapshotul păstrează seed-ul și cursorii, iar `advanceWorldRng` întoarce valoarea și cursorul următor, deci lumea restaurată vede exact șirul pe care lumea originală l-ar fi văzut.
+
+**Reluarea este o decizie explicită.** `restoreWorldState` întoarce starea și un plan `206-world-resume-v1`: sesiunea pornește `PAUSED_AUTO`, inputul este eliberat, toate vehiculele trec în `AUTO`, segmentele `OPEN` devin `INCOMPLETE` cu motivul `RELOAD`, iar joburile pending sunt `RELAUNCH` numai dacă `profileId` și `learningEpoch` corespund profilului activ; altfel sunt `INVALIDATED` cu motivul exact (`PROFILE_MISMATCH`, `LEARNING_EPOCH_MISMATCH` sau ambele). Observațiile LEARNING finalizate sunt reluabile idempotent, cu cheie `segmentId:observationId`, iar rezultatele deja acceptate sunt păstrate fără să reaplice reward-ul (`rewardsReapplied: 0`).
+
+**Un writer, o generație în pregătire, una în commit.** `src/persistence/world-checkpoint.ts` (contract `206-world-checkpoint-v1`) cere repository-ul în starea `READY` și rolul `WRITER` (127); un al doilea tab poate citi, dar captura este refuzată cu `WRITER_REQUIRED`, iar un token de la alt writer este refuzat la commit cu `WRITER_MISMATCH`. O cerere identică (același tick și aceeași generație) este coalesced, o generație mai nouă înlocuiește pregătirea, iar un tick sau o generație mai veche este refuzat (`STALE_TICK`, `STALE_GENERATION`). Un singur commit rulează odată (`COMMIT_IN_PROGRESS`); commitul scrie envelope-ul și snapshotul într-o singură tranzacție, deci un crash înainte de tranzacție nu lasă niciun rând, iar unul după commit este raportat ca `CRASHED_AFTER_COMMIT` cu rândul deja durabil.
+
+**Pierderea GPU nu pierde captura.** Captura pregătită este deja o copie simplă în heap-ul JS. La `deviceLoss`, writer-ul trece în `LOST`, păstrează captura pregătită și o etichetează `RAM`; commitul durabil este refuzat cu `DEVICE_LOST`, iar `commitDeferred` refuză până la `integrateRecovery()` cu `DEVICE_NOT_INTEGRATED`. După integrare, captura din RAM este publicată, iar `lastCommit.device` rămâne `RAM`.
+
+**Costul este atribuit, nu ascuns.** Citirea sincronă a lumii (`captureMs`), validarea/canonicalizarea/checksum-ul (`encodeMs`) și tranzacția (`commitMs`) sunt măsurate separat, cu un ceas monotonic injectabil. Transcriptul determinist folosește un ceas scriptat (`STUB_CLOCK`); costul real al mașinii este scris separat în `cost.json` de `--cost` și nu intră niciodată în `report.json`. Snapshotul de 70 de vehicule are 64 378 bytes din bugetul de 262 144, iar citirea completă a raportului confirmă cele 98 de verificări.
+
+**Încărcarea nu promite ce nu poate continua.** `loadLatestWorldCheckpoint` verifică checksumul, coerența envelope↔snapshot (tick, profil, `learningEpoch`) și versiunile engine/fizică/hartă. O versiune diferită întoarce `INCOMPATIBLE` cu detaliul exact, astfel încât checkpointul poate fi exportat, dar lumea veche nu este reluată tacit. Vârsta checkpointului este raportată în tickuri, nu dedusă din ceas.
+
+Dovezi: [Evidence/206-world-checkpoint](Evidence/206-world-checkpoint/README.md).
