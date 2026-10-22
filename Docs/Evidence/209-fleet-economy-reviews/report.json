@@ -1,0 +1,189 @@
+{
+  "version": "209-fleet-economy-report-v1",
+  "generatedBy": "npm run fleet:economy",
+  "currency": "SDA",
+  "clock": {
+    "version": "209-economy-clock-v1",
+    "secondsPerDay": 1200,
+    "daysPerMonth": 30,
+    "tickHz": 60
+  },
+  "tariff": {
+    "pricingVersion": "209-tariff-v1",
+    "baseFareMinorUnits": 240,
+    "distanceRateMinorUnitsPerKm": 180,
+    "timeRateMinorUnitsPerMinute": 90,
+    "cancellationFeeBasisPoints": 3000
+  },
+  "windowEndTick": 12000,
+  "efficient": {
+    "style": "efficient",
+    "requests": 3,
+    "settledRides": 3,
+    "ridesInWindow": 2,
+    "windowRevenueMinorUnits": 1102,
+    "totalRevenueMinorUnits": 1653,
+    "averageRating": 5,
+    "ratings": [
+      5,
+      5,
+      5
+    ],
+    "quotes": [
+      551,
+      551,
+      551
+    ],
+    "reasonCodes": [
+      [
+        "EFFICIENT_DELIVERY",
+        "ON_TIME",
+        "SMOOTH_DRIVE"
+      ],
+      [
+        "EFFICIENT_DELIVERY",
+        "ON_TIME",
+        "SMOOTH_DRIVE"
+      ],
+      [
+        "EFFICIENT_DELIVERY",
+        "ON_TIME",
+        "SMOOTH_DRIVE"
+      ]
+    ],
+    "windowEndTick": 12000
+  },
+  "aggressive": {
+    "style": "aggressive",
+    "requests": 3,
+    "settledRides": 3,
+    "ridesInWindow": 3,
+    "windowRevenueMinorUnits": 1653,
+    "totalRevenueMinorUnits": 1653,
+    "averageRating": 1.333333,
+    "ratings": [
+      1,
+      1,
+      2
+    ],
+    "quotes": [
+      551,
+      551,
+      551
+    ],
+    "reasonCodes": [
+      [
+        "ON_TIME",
+        "HARD_BRAKING",
+        "COLLISION"
+      ],
+      [
+        "ON_TIME",
+        "HARD_BRAKING",
+        "COLLISION"
+      ],
+      [
+        "ON_TIME",
+        "HARD_BRAKING",
+        "COLLISION"
+      ]
+    ],
+    "windowEndTick": 12000
+  },
+  "outcomes": {
+    "completedNetMinorUnits": 551,
+    "failedNetMinorUnits": 0,
+    "cancelledBeforeNetMinorUnits": 0,
+    "cancelledAfterNetMinorUnits": 165,
+    "civilianRejected": true,
+    "civilianRevenueMinorUnits": 0,
+    "reviewCount": 3,
+    "ratings": [
+      5,
+      3,
+      3
+    ],
+    "reasonCodes": [
+      [
+        "EFFICIENT_DELIVERY",
+        "ON_TIME",
+        "SMOOTH_DRIVE"
+      ],
+      [
+        "SMOOTH_DRIVE",
+        "RIDE_FAILED"
+      ],
+      [
+        "SMOOTH_DRIVE",
+        "RIDE_CANCELLED"
+      ]
+    ]
+  },
+  "detour": {
+    "onTimeQuoteMinorUnits": 551,
+    "detourQuoteMinorUnits": 551,
+    "onTimeNetMinorUnits": 551,
+    "detourNetMinorUnits": 551,
+    "onTimeDelaySeconds": 0.006947,
+    "detourDelaySeconds": 300.006947,
+    "onTimeRating": 5,
+    "detourRating": 3
+  },
+  "kpi": {
+    "dayTerminalRides": 4,
+    "dayCompletedRides": 1,
+    "dayFailedRides": 1,
+    "dayCancelledRides": 2,
+    "dayReviewCount": 3,
+    "dayAverageRating": 3.666667,
+    "monthRevenueMinorUnits": 716,
+    "historyScans": 0
+  },
+  "checks": [
+    {
+      "name": "planned_fare_survives_a_detour",
+      "pass": true
+    },
+    {
+      "name": "detour_lowers_the_rating_without_changing_the_price",
+      "pass": true
+    },
+    {
+      "name": "completed_failure_cancellation_settled_separately",
+      "pass": true
+    },
+    {
+      "name": "civilians_never_enter_revenue",
+      "pass": true
+    },
+    {
+      "name": "one_review_per_eligible_ride",
+      "pass": true
+    },
+    {
+      "name": "ratings_stay_on_the_0_5_scale",
+      "pass": true
+    },
+    {
+      "name": "efficient_style_earns_better_ratings",
+      "pass": true
+    },
+    {
+      "name": "aggressive_style_serves_more_rides_in_the_same_window",
+      "pass": true
+    },
+    {
+      "name": "the_fare_is_independent_of_the_style",
+      "pass": true
+    },
+    {
+      "name": "kpi_reads_never_rescan_the_ledger",
+      "pass": true
+    }
+  ],
+  "summary": {
+    "checks": 10,
+    "passed": 10,
+    "pass": true
+  }
+}
