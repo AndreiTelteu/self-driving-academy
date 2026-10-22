@@ -23,6 +23,16 @@ export {
   type CitySceneStats,
 } from './city-scene';
 export { analyzeRegistryGlb } from './asset-contract';
+export {
+  createVehicleVisualStage,
+  type VehicleMaterialKey,
+  type VehicleRenderWheel,
+  type VehicleRepresentation,
+  type VehicleRepresentationMetrics,
+  type VehicleVisualMetrics,
+  type VehicleVisualOptions,
+  type VehicleVisualStage,
+} from './vehicle-scene';
 export { bindVehiclePickingInput, type VehiclePickingInputOptions } from './vehicle-picking-input';
 export {
   createBabylonRecoverySession,

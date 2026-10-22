@@ -52,3 +52,48 @@ export interface BootstrapView {
   dispose(): void;
 }
 export * from './physical-wheels';
+export {
+  VEHICLE_VISUAL_VERSION,
+  VEHICLE_LOD_LEVELS,
+  VEHICLE_LOD_DISTANCES_M,
+  VEHICLE_WHEEL_IDS,
+  VEHICLE_CONNECTION_Y_M,
+  VEHICLE_REST_SPRING_M,
+  VEHICLE_COLLISION_HALF_EXTENTS_M,
+  VEHICLE_LIGHTS_OFF,
+  vehicleVisualClass,
+  selectVehicleLod,
+  vehicleVisualAlignment,
+  visibleGroupsFor,
+  vehicleDrawCalls,
+  vehicleAssetManifest,
+  vehicleAssetBudget,
+  admitVehicleAssets,
+  vehicleAssetInventory,
+} from './vehicle-visuals';
+export type {
+  VehicleLodLevel,
+  VehicleWheelId,
+  VehicleWheelPivot,
+  VehicleLodSpec,
+  VehicleVisualClass,
+  MechanicalWheelSource,
+  VehicleLightState,
+  VehicleAssetInventoryEntry,
+  VehicleAssetDiagnostic,
+} from './vehicle-visuals';
+export {
+  buildVehicleGeometry,
+  vehicleGeometrySpec,
+  VEHICLE_VERTEX_BYTES,
+  VEHICLE_INDEX_BYTES,
+} from './vehicle-geometry';
+export type {
+  VehicleClassKey,
+  VehicleGeometrySet,
+  VehicleGeometryGroup,
+  VehicleMaterialGroup,
+  VehicleBoxPart,
+  VehicleClassGeometrySpec,
+  VehicleLod,
+} from './vehicle-geometry';
