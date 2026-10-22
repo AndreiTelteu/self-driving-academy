@@ -101,3 +101,33 @@ Acțiunea „Vezi un exemplu" este întotdeauna etichetată. După o publicare, 
 
 Rezultatul are două identități de versiune și ele nu trebuie confundate: `versionId` este versiunea 109 publicată în flotă, iar `composedVersionId` este compoziția 103 pe care cadrul 104 o raportează. Segmentul demonstrează valoarea de bază a profilului curent, deci un segment ulterior trebuie să declare valoarea de bază a capului acceptat, altfel pipeline-ul 112 compară valoarea compusă cu valoarea capului și derivează o versiune; regula 112 nu este schimbată de 118. Limitele sunt fixe: 24 de rânduri într-un exemplu, 16 identități 086 ca proveniență, 240 de unități UTF-16 pentru un motiv și o lume deterministă cu 24 de taxiuri și 40 de civili. Modulul nu are ceas de perete, DOM, renderer, aleator sau memorie de evenimente; el consumă tick-uri autoritare și module reale. Nu fac parte din contract: UI-ul de misiuni, XP-ul, persisterea și compoziția cu `main.ts`.
 
+## Contract implementat în V1 (PBI 119): comparația stilurilor de urmărire
+
+`src/missions/follow.ts` cu schema `119-mission-follow-v1` implementează etapa 3 a campaniei (`campaign-3-following-distance`, definiție 116) ca **comparație măsurată** între două stiluri de urmărire, nu ca estimare a unor coeficienți dintr-o singură viteză. Modulul nu scrie o a doua lege de urmărire: distanța pe care un stil o ține într-un context cunoscut este `desiredGapM` raportat de politica livrată **048** pentru profilul compilat, iar `following_time_headway` (panta) și `following_min_gap` (intersecția) sunt derivate exclusiv de estimatorul real **096** din observațiile reale.
+
+Contexturile sunt autorate și cunoscute: patru scenarii cu viteze distincte (4, 8, 12, 20 m/s) și distanțe autorate 12, 14, 16, 30 m, fiecare cu liderul lui. În același scenariu ambele stiluri întâlnesc exact aceleași fapte — viteză ego, viteză lider și identitate lider — iar contractul verifică asta pentru fiecare observație; un context străin este refuzat ca eroare de contract, nu comparat silențios cu altă situație. Comparația cere exact două profiluri cu ID-uri distincte, aceleași ID-uri de scenariu declarate și același număr de observații pe scenariu.
+
+Stările sunt închise: `SEPARATED`, `IDENTICAL`, `UNIDENTIFIED`. Separarea este `HEADWAY` când diferă doar panta, `MINIMUM_GAP` când diferă doar intersecția, `BOTH` când diferă ambele, `NONE` când valorile coincid și `UNIDENTIFIED` când estimatorul nu poate identifica coeficienții. Toleranțele sunt explicite: 0,1 s pentru time headway și 0,5 m pentru distanța minimă, sub diferența vizibilă pentru jucător. Poarta misiunii este unică: `followingMissionGate` completează etapa doar pentru `SEPARATED` (`PROGRESS`); `IDENTICAL` raportează `PROFILE_VALUES_MATCH`, iar `UNIDENTIFIED` păstrează motivul estimatorului.
+
+Refuzul pe o singură viteză este executabil, nu declarativ: setul `FOLLOW_SINGLE_SPEED_SCENARIOS` (un context la 8 m/s) produce `UNIDENTIFIED` cu motivul real `SINGLE_SPEED_CANNOT_IDENTIFY`, deși distanțele măsurate ale celor două stiluri diferă. Cu alte cuvinte, jucătorul nu este niciodată pus să ghicească coeficienți dintr-o singură observație; i se cere să compare două comportamente în contexte în care diferența este vizibilă.
+
+Contractul este structural read-only: `profileWrites: 0`, `learningJobs: 0` și `versionIds: []` apar atât pe comparație, cât și pe fiecare profil, iar modulul nu are ceas, DOM, renderer, store de profil, coadă de learning sau aleator. Limitele sunt fixe: 6 scenarii, 2 profiluri, 8 observații pe scenariu, 32 pe profil și 256 de unități UTF-16 pentru o identitate. Nu fac parte din contract: UI-ul de comparație, XP-ul, persistarea, compoziția cu `main.ts` și afișarea grafică a gap-ului.
+
+## Contract implementat în V1 (PBI 120): misiunea STOP/roșu/verde
+
+`src/missions/signals.ts` cu schema `120-mission-signals-v1` implementează etapa 4 a campaniei (`campaign-4-stops-and-signals`, definiție 116) ca misiune în care încălcarea este **învățată și consecința este observabilă**, nu ca o notă inventată deasupra traficului. Modulul consumă exclusiv fapte reale: oportunitatea **086** cu `outcome`/`result` cert, fereastra **087** cu eticheta și clasa ei, refuzul real al lui `respond` pentru ferestrele constrânse, cauza STOP **050/051**, și candidații reali **097** `red_stop_probability` și **098** `stop_full_probability`.
+
+Obiectivul este cel din definiția 116: două opriri complete de minimum **1,5 s** fiecare, plus zero încălcări imputabile. O oprire completă sub 1,5 s rămâne o oprire reală (`FULL_STOP`), dar nu satisface obiectivul; misiunea raportează `INSUFFICIENT_FULL_STOPS`, nu o transformă în încălcare.
+
+O încălcare are două jumătăți observabile: oportunitatea 086 este un `FAILURE` cert, iar episodul intră în candidatul real pe care estimatorul îl învață. `RED_CROSSED` se leagă de `red_stop_probability`, `STOP_LINE_CROSSED` de `stop_full_probability`, iar `SignalConsequence` raportează aceeași valoare pe care o raportează estimatorul (`1/3` într-un run cu o frânare corectă din trei). Modulul nu recalculează estimatorul și nu publică un profil.
+
+Două situații reale nu sunt niciodată încălcări și nu cer reacție:
+
+- **oprirea din trafic** (`cause` `LEADER`, `QUEUE` sau `BLOCKED`) este un `FAILURE` 086 cert, dar fereastra 087 este `EXTERNAL_CONSTRAINT`; misiunea o raportează `TRAFFIC_STOP` și o exclude din numitorul `stop_full_probability` (raportul rămâne `3/3`, nu `3/4`);
+- **verdele blocat** (`BLOCKED_GREEN`, sursă `FOLLOWING_QUEUE`) este `EXTERNAL_CONSTRAINT`; `respond` îl refuză cu `EXTERNAL_CONSTRAINT`, deci `reaction.applicable` este `false`, iar delay-ul lui nu intră în `green_start_delay`.
+
+Vocabularul este închis: verdictele `VIOLATION`, `COMPLIANT`, `TRAFFIC_STOP`, `BLOCKED_GREEN`, `EXTERNAL_CONSTRAINT`, iar explicațiile acoperă fiecare caz (`RED_HELD`, `RED_CROSSED`, `STOP_LINE_HELD`, `STOP_LINE_CROSSED`, `GREEN_RELEASED`, `GREEN_MISSED`, `TRAFFIC_STOP_NOT_VIOLATION`, `BLOCKED_GREEN_NOT_VIOLATION`, `EXTERNAL_CONSTRAINT_NOT_VIOLATION`). Contractul refuză un input contradictoriu — fereastră străină, oportunitate duplicată, candidat care nu corespunde episoadelor, reacție acceptată pe o fereastră constrânsă — în loc să explique o situație pe care faptele nu o susțin.
+
+Contractul este structural read-only: `profileWrites: 0` și `learningJobs: 0`, fără ceas, DOM, renderer, store de profil, coadă de learning sau aleator. Limitele sunt fixe: 32 de episoade într-un run și 256 de unități UTF-16 pentru o identitate. Nu fac parte din contract: UI-ul de misiune, XP-ul, persistarea și compoziția cu `main.ts`.
+
+
