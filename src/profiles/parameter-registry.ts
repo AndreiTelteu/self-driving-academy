@@ -163,6 +163,26 @@ export function getParameterDefinition(key: string): ParameterDefinition {
   return byKey[key];
 }
 
+/**
+ * R (`extension`) keys are reserved for V1.
+ *
+ * The rule is the one of the 077 profile panel: a key whose `implementationStage` is `extension` is
+ * reserved, so it is never learned, never manually tuned and never published as a usable value.
+ * The panel keeps its own read-only copy of the rule because a presentation module may not call a
+ * domain service at runtime; the predicate is the same one.
+ */
+export function isReservedParameterKey(key: string): boolean {
+  const definition = byKey[key];
+  return definition !== undefined && definition.implementationStage === 'extension';
+}
+
+/** Every R (`extension`) key of the catalog, in catalog order. */
+export const reservedParameterKeys: readonly string[] = Object.freeze(
+  definitions
+    .filter((definition) => definition.implementationStage === 'extension')
+    .map((definition) => definition.key),
+);
+
 export function validateParameterValue(key: string, value: unknown, unit: unknown): number {
   const definition = getParameterDefinition(key);
   requireContract(unit === definition.unit, `Wrong unit for parameter: ${key}`);

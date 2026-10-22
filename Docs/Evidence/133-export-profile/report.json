@@ -1,0 +1,481 @@
+{
+  "version": "133-export-profile-v1",
+  "generatedBy": "node --import ./scripts/register-typescript.mjs scripts/run-export-profile-report.mjs",
+  "oracleRule": "Every value is a real run of src/persistence/profile-export against the in-memory IndexedDB double; the expected value is the documented contract, never a copy of the actual one.",
+  "contract": "133-profile-export-v1",
+  "format": {
+    "format": "self-driving-academy-profile-export",
+    "formatVersion": 1,
+    "schemaVersion": 1,
+    "units": "SI",
+    "checksumAlgorithm": "SHA-256",
+    "canonicalization": "SDA-CJSON-1",
+    "documentBytes": 4451,
+    "checksum": "d7597165fa372a82cfbed0b693c331cba3b9bd2def54a29088ad3a34d3bb17e3"
+  },
+  "profile": {
+    "profileId": "profile-1",
+    "engineVersion": "engine-127",
+    "versions": 3,
+    "activeVersionId": "profile-1@3",
+    "source": "LEARNING",
+    "parameters": 2,
+    "reservedParameters": 56,
+    "activationSequence": 3
+  },
+  "aggregates": {
+    "counts": {
+      "versions": 3,
+      "baseVersions": 1,
+      "derivedVersions": 2,
+      "manualTuningVersions": 1,
+      "learningVersions": 1,
+      "parameters": 2,
+      "reservedParameters": 56,
+      "sourceSegments": 1,
+      "sourceInterventions": 1
+    },
+    "indicators": 1,
+    "evidence": 1,
+    "referencedSegments": 1
+  },
+  "telemetry": {
+    "includedByDefault": false,
+    "rawEventCountByDefault": 0,
+    "rawEventLimit": 512,
+    "omittedByDefault": 1,
+    "includedOnRequest": true,
+    "rawEventCountOnRequest": 2,
+    "limitExceededCode": "TELEMETRY_LIMIT_EXCEEDED"
+  },
+  "roundtrip": {
+    "readStatus": "ACCEPTED",
+    "checksumVerified": true,
+    "parameters": {
+      "speed_delta_urban": 3.5,
+      "desired_acceleration": 2
+    },
+    "reservedParameters": 56,
+    "versions": 3,
+    "sources": [
+      "BASE",
+      "MANUAL_TUNING",
+      "LEARNING"
+    ]
+  },
+  "refusals": {
+    "modifiedDocument": "CHECKSUM_MISMATCH",
+    "reservedKeyWithValue": "RESERVED_KEY_SET",
+    "missingReservedKey": "RESERVED_KEY_MISSING",
+    "usableKeyInReservedMap": "RESERVED_KEY_INVALID",
+    "duplicateKey": "DUPLICATE_KEY",
+    "trailingContent": "TRAILING_CONTENT",
+    "nonJsonNumber": "INVALID_LITERAL",
+    "unsupportedFormatVersion": "UNSUPPORTED_FORMAT_VERSION"
+  },
+  "repository": {
+    "status": "ACCEPTED",
+    "versions": 2,
+    "activeVersionId": "profile-1@2",
+    "activationSequence": 2,
+    "included": false
+  },
+  "digest": {
+    "sample": "4451",
+    "platform": "b1a11a68f5f9f8bd8659be0b17126c2146284cf4770bc25bbb2a96b11ee4c91b",
+    "own": "b1a11a68f5f9f8bd8659be0b17126c2146284cf4770bc25bbb2a96b11ee4c91b",
+    "equal": true
+  },
+  "checks": [
+    {
+      "name": "contract-version",
+      "expected": "133-profile-export-v1",
+      "actual": "133-profile-export-v1",
+      "pass": true,
+      "detail": "Contract id"
+    },
+    {
+      "name": "format",
+      "expected": "self-driving-academy-profile-export",
+      "actual": "self-driving-academy-profile-export",
+      "pass": true,
+      "detail": "The format marker"
+    },
+    {
+      "name": "format-version",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "Format version"
+    },
+    {
+      "name": "schema-version",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "Schema version"
+    },
+    {
+      "name": "units",
+      "expected": "SI",
+      "actual": "SI",
+      "pass": true,
+      "detail": "The export uses SI units"
+    },
+    {
+      "name": "checksum-algorithm",
+      "expected": "SHA-256",
+      "actual": "SHA-256",
+      "pass": true,
+      "detail": "Checksum algorithm"
+    },
+    {
+      "name": "canonicalization",
+      "expected": "SDA-CJSON-1",
+      "actual": "SDA-CJSON-1",
+      "pass": true,
+      "detail": "Canonicalization version"
+    },
+    {
+      "name": "document-bytes",
+      "expected": 4451,
+      "actual": 4451,
+      "pass": true,
+      "detail": "Canonical size of the document"
+    },
+    {
+      "name": "checksum-length",
+      "expected": 64,
+      "actual": 64,
+      "pass": true,
+      "detail": "The checksum is 64 hexadecimal characters"
+    },
+    {
+      "name": "profile-id",
+      "expected": "profile-1",
+      "actual": "profile-1",
+      "pass": true,
+      "detail": "The exported profile"
+    },
+    {
+      "name": "versions",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "The three stored versions"
+    },
+    {
+      "name": "active-version",
+      "expected": "profile-1@3",
+      "actual": "profile-1@3",
+      "pass": true,
+      "detail": "The active version"
+    },
+    {
+      "name": "source",
+      "expected": "LEARNING",
+      "actual": "LEARNING",
+      "pass": true,
+      "detail": "The provenance classification"
+    },
+    {
+      "name": "parameters",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "The effective parameters"
+    },
+    {
+      "name": "reserved-parameters",
+      "expected": 56,
+      "actual": 56,
+      "pass": true,
+      "detail": "The reserved R keys"
+    },
+    {
+      "name": "reserved-catalog-keys",
+      "expected": 56,
+      "actual": 56,
+      "pass": true,
+      "detail": "The reserved keys of the catalog"
+    },
+    {
+      "name": "activation-sequence",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "The activation sequence"
+    },
+    {
+      "name": "base-versions",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "The base versions"
+    },
+    {
+      "name": "derived-versions",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "The derived versions"
+    },
+    {
+      "name": "manual-tuning-versions",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "Manual versions"
+    },
+    {
+      "name": "learning-versions",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "Learned versions"
+    },
+    {
+      "name": "source-segments",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "The driving segments"
+    },
+    {
+      "name": "source-interventions",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "The manual interventions"
+    },
+    {
+      "name": "indicators",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "The aggregated indicators"
+    },
+    {
+      "name": "evidence",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "The aggregated evidence"
+    },
+    {
+      "name": "referenced-segments",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "The referenced segments"
+    },
+    {
+      "name": "telemetry-included-by-default",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "No raw telemetry"
+    },
+    {
+      "name": "telemetry-count-by-default",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "No raw event is published"
+    },
+    {
+      "name": "telemetry-limit",
+      "expected": 512,
+      "actual": 512,
+      "pass": true,
+      "detail": "The fixed raw event cap"
+    },
+    {
+      "name": "telemetry-omitted",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "The dropped raw event"
+    },
+    {
+      "name": "telemetry-included-on-request",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The explicit request publishes the raw events"
+    },
+    {
+      "name": "telemetry-count-on-request",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "The published raw events"
+    },
+    {
+      "name": "telemetry-limit-exceeded",
+      "expected": "TELEMETRY_LIMIT_EXCEEDED",
+      "actual": "TELEMETRY_LIMIT_EXCEEDED",
+      "pass": true,
+      "detail": "The raw event cap is enforced"
+    },
+    {
+      "name": "roundtrip-status",
+      "expected": "ACCEPTED",
+      "actual": "ACCEPTED",
+      "pass": true,
+      "detail": "The file is readable"
+    },
+    {
+      "name": "roundtrip-checksum",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The checksum verifies"
+    },
+    {
+      "name": "roundtrip-parameters",
+      "expected": {
+        "speed_delta_urban": 3.5,
+        "desired_acceleration": 2
+      },
+      "actual": {
+        "speed_delta_urban": 3.5,
+        "desired_acceleration": 2
+      },
+      "pass": true,
+      "detail": "The parameter values survive the roundtrip"
+    },
+    {
+      "name": "roundtrip-reserved",
+      "expected": 56,
+      "actual": 56,
+      "pass": true,
+      "detail": "The reserved keys survive the roundtrip"
+    },
+    {
+      "name": "roundtrip-versions",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "The versions survive the roundtrip"
+    },
+    {
+      "name": "roundtrip-sources",
+      "expected": [
+        "BASE",
+        "MANUAL_TUNING",
+        "LEARNING"
+      ],
+      "actual": [
+        "BASE",
+        "MANUAL_TUNING",
+        "LEARNING"
+      ],
+      "pass": true,
+      "detail": "The provenance survives the roundtrip"
+    },
+    {
+      "name": "refusal-modified",
+      "expected": "CHECKSUM_MISMATCH",
+      "actual": "CHECKSUM_MISMATCH",
+      "pass": true,
+      "detail": "A modified file"
+    },
+    {
+      "name": "refusal-reserved-value",
+      "expected": "RESERVED_KEY_SET",
+      "actual": "RESERVED_KEY_SET",
+      "pass": true,
+      "detail": "A reserved key with a value"
+    },
+    {
+      "name": "refusal-missing-reserved",
+      "expected": "RESERVED_KEY_MISSING",
+      "actual": "RESERVED_KEY_MISSING",
+      "pass": true,
+      "detail": "A missing reserved key"
+    },
+    {
+      "name": "refusal-foreign-reserved",
+      "expected": "RESERVED_KEY_INVALID",
+      "actual": "RESERVED_KEY_INVALID",
+      "pass": true,
+      "detail": "A usable key inside the reserved map"
+    },
+    {
+      "name": "refusal-duplicate-key",
+      "expected": "DUPLICATE_KEY",
+      "actual": "DUPLICATE_KEY",
+      "pass": true,
+      "detail": "A duplicate key"
+    },
+    {
+      "name": "refusal-trailing-content",
+      "expected": "TRAILING_CONTENT",
+      "actual": "TRAILING_CONTENT",
+      "pass": true,
+      "detail": "Content after the document"
+    },
+    {
+      "name": "refusal-non-json",
+      "expected": "INVALID_LITERAL",
+      "actual": "INVALID_LITERAL",
+      "pass": true,
+      "detail": "NaN is not JSON"
+    },
+    {
+      "name": "refusal-format-version",
+      "expected": "UNSUPPORTED_FORMAT_VERSION",
+      "actual": "UNSUPPORTED_FORMAT_VERSION",
+      "pass": true,
+      "detail": "A newer format version"
+    },
+    {
+      "name": "repository-status",
+      "expected": "ACCEPTED",
+      "actual": "ACCEPTED",
+      "pass": true,
+      "detail": "The repository export"
+    },
+    {
+      "name": "repository-versions",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "The stored versions"
+    },
+    {
+      "name": "repository-active-version",
+      "expected": "profile-1@2",
+      "actual": "profile-1@2",
+      "pass": true,
+      "detail": "The stored active version"
+    },
+    {
+      "name": "repository-activation",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "The stored sequence"
+    },
+    {
+      "name": "repository-telemetry",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "No raw telemetry"
+    },
+    {
+      "name": "digest-equal",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The SHA-256 matches the platform digest"
+    }
+  ],
+  "summary": {
+    "checks": 53,
+    "passed": 53,
+    "pass": true
+  }
+}

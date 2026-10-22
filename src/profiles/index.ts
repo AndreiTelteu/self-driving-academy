@@ -10,6 +10,8 @@ export {
   parameterRegistry,
   parameterDefinitions,
   getParameterDefinition,
+  isReservedParameterKey,
+  reservedParameterKeys,
   validateParameterValue,
   parsePublishableDrivingProfile,
 } from './parameter-registry';

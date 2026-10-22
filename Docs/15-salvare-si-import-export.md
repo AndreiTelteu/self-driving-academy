@@ -1,6 +1,6 @@
 # Salvare și import export
 
-Versiune 0.8 · 22 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
+Versiune 0.9 · 22 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
 
 ## Date salvate și export
 
@@ -88,3 +88,21 @@ Dovezi: [Evidence/128-save-profiles](Evidence/128-save-profiles/README.md).
 **Checkpointul unei intervenții active.** `src/persistence/intervention-checkpoint.ts` (contract `129-intervention-checkpoint-v1`) scrie în store-ul `checkpoints` doar identitatea și generația: segmentul, vehiculul, modul de control, tickul de start, generația și `learningEpoch`. Snapshotul complet al lumii rămâne la PBI 206 și nu este inventat aici; o generație mai veche nu înlocuiește una mai nouă (`STALE_REVISION`).
 
 Dovezi: [Evidence/129-save-segments](Evidence/129-save-segments/README.md).
+
+## Contract implementat V1 (PBI 133) — export JSON de profil
+
+`src/persistence/profile-export.ts` (contract `133-profile-export-v1`) produce documentul de export, îl validează și îl citește înapoi. Formatul este versionat și explică schema: `format="self-driving-academy-profile-export"`, `formatVersion=1`, `schemaVersion=1`, `units="SI"`, `createdAt`, `engineVersion` și un checksum `SHA-256` peste forma canonică `SDA-CJSON-1` a întregului document fără câmpul `checksum` — aceleași reguli ca în [modulul 29](29-savefile-si-integritate.md), nu un format nou paralel. Documentul are patru secțiuni: `profile`, `aggregates`, `telemetry` și `checksum`.
+
+**Profilul, versiunile și proveniența.** `profile` conține `profileId`, `source` (BASE, LEARNING sau MANUAL_TUNING, derivat numai din proveniența stocată), `activeVersionId`, `activation` (player, secvență, moment), lista versiunilor și maparea cheilor rezervate. Fiecare versiune păstrează `versionId`, `parentVersionId`, `depth`, `createdAt`, `engineVersion`, `source`, `checksum` (checksum-ul 109 al versiunii), parametrii cu unitatea lor și proveniența completă (origine, segmente, intervenții, delta cu schimbările). Cititorul recalculează checksum-ul 109 al fiecărei versiuni și refuză documentul dacă diferă (`PROFILE_CHECKSUM_MISMATCH`), deci o versiune modificată nu poate fi importată ca atare. Un istoric cu o gaură (părinte lipsă) este refuzat la construire (`HISTORY_INCOMPLETE`), pentru că un lanț incomplet nu poate fi reimportat fără pierderi.
+
+**Cheile rezervate rămân rezervate.** O cheie R (`extension`) din catalogul 092 este rezervată pentru V1: nu este învățabilă și nu poate primi o valoare. Exportul le publică pe toate în `profile.reservedParameters`, fiecare cu valoarea `null`, iar parametrii efectivi (`parameters`) conțin doar cheile utilizabile, cu valoarea și unitatea din catalog. Constructorul refuză o versiune care valorează o cheie rezervată (`RESERVED_KEY_SET`), iar validatorul refuză o cheie rezervată cu valoare (`RESERVED_KEY_SET`), o cheie rezervată lipsă (`RESERVED_KEY_MISSING`) sau o cheie utilizabilă pusă în maparea rezervată (`RESERVED_KEY_INVALID`). O cheie din afara catalogului 092 este refuzată (`UNKNOWN_PARAMETER`): un export care nu poate fi reimportat fără pierderea parametrilor nu este un export.
+
+**Dovezile agregate, nu telemetria brută.** `aggregates` conține contoarele recalculate de cititor (`versions`, `baseVersions`, `derivedVersions`, `manualTuningVersions`, `learningVersions`, `parameters`, `reservedParameters`, `sourceSegments`, `sourceInterventions`), rândurile de indicatori (forma 138: `id`, `unit`, `state`, `value`, `sampleSize`, `reason`) și rândurile de dovezi ale parametrilor (`key`, `effectiveCount`, `quality`, `uncertainty`, `sourceSegmentIds`). Contoarele sunt recalculate din secțiunea profilului la citire, deci un contor fals este refuzat (`AGGREGATE_MISMATCH`). Dovezile și indicatorii sunt agregări: nu conțin evenimente brute.
+
+**Telemetria brută nu intră automat.** Secțiunea `telemetry` publică doar referințe (`referencedSegmentIds`) și, în mod implicit, niciun eveniment brut: `included=false`, `rawEventCount=0`. Evenimentele brute apar numai când apelantul cere explicit includerea, iar cantitatea este plafonată de `maxRawTelemetryEvents` (512); peste plafon, construcția este refuzată (`TELEMETRY_LIMIT_EXCEEDED`). Calea din repository nu poate publica telemetrie brută: repository-ul nu expune niciun cititor de telemetrie, deci `exportProfileFromRepository` produce întotdeauna `included=false`.
+
+**Citirea și refuzurile închise.** `readProfileExport` acceptă textul fișierului sau un obiect deja parsat și folosește un parser JSON strict, nu `JSON.parse`: cheile duplicate sunt respinse (`DUPLICATE_KEY`), conținutul după document este respins (`TRAILING_CONTENT`), `NaN` și `Infinity` nu sunt JSON (`INVALID_LITERAL`), iar mărimea (1 MiB) și adâncimea (24) sunt plafonate (`FILE_TOO_LARGE`, `DEPTH_EXCEEDED`). Cititorul verifică întâi envelope-ul și checksum-ul (`CHECKSUM_MISMATCH` pentru un fișier modificat), apoi schema, referințele și agregatele. Vocabularul de refuz este închis și publicat în `profileExportRejectionCodes`; niciun refuz nu activează parțial un profil.
+
+**Contractul pentru import (134).** Rezultatul citirii reține valorile efective ale versiunii active (`parameters`), cheile rezervate cu `null` (`reservedParameters`) și parametrii fiecărei versiuni, cu proveniența și checksum-ul ei. PBI 134 verifică mai departe compatibilitatea, activează tranzacțional și nu șterge nimic înainte de validare; 133 livrează formatul, validatorul și cititorul pe care 134 le folosesc.
+
+Dovezi: [Evidence/133-export-profile](Evidence/133-export-profile/README.md).
