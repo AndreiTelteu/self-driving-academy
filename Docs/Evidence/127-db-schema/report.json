@@ -1,0 +1,582 @@
+{
+  "version": "127-db-schema-v1",
+  "generatedBy": "node --import ./scripts/register-typescript.mjs scripts/run-db-schema-report.mjs",
+  "oracleRule": "Every row is a real run of src/persistence against the in-memory IndexedDB double; the expected value is the documented contract, never a copy of the actual one.",
+  "productionDatabase": "self-driving-academy",
+  "sandboxDatabase": "127-report-db",
+  "schema": {
+    "currentVersion": 2,
+    "steps": [
+      {
+        "version": 1,
+        "id": "127-v1-base-layout",
+        "creates": [
+          "meta",
+          "profiles",
+          "profileActivations",
+          "segments",
+          "scenarios",
+          "progress",
+          "settings"
+        ],
+        "indexes": [],
+        "drops": []
+      },
+      {
+        "version": 2,
+        "id": "127-v2-checkpoints-and-lifecycle-indexes",
+        "creates": [
+          "checkpoints"
+        ],
+        "indexes": [
+          "segments.byStatus",
+          "progress.byStatus"
+        ],
+        "drops": []
+      }
+    ],
+    "stores": [
+      {
+        "name": "meta",
+        "keyPath": "key",
+        "indexes": []
+      },
+      {
+        "name": "profiles",
+        "keyPath": "versionId",
+        "indexes": [
+          {
+            "name": "byProfile",
+            "keyPath": "profileId",
+            "unique": false
+          }
+        ]
+      },
+      {
+        "name": "profileActivations",
+        "keyPath": "profileId",
+        "indexes": []
+      },
+      {
+        "name": "segments",
+        "keyPath": "recordId",
+        "indexes": [
+          {
+            "name": "bySession",
+            "keyPath": "sessionId",
+            "unique": false
+          },
+          {
+            "name": "byStatus",
+            "keyPath": "status",
+            "unique": false
+          }
+        ]
+      },
+      {
+        "name": "scenarios",
+        "keyPath": "recordId",
+        "indexes": [
+          {
+            "name": "bySession",
+            "keyPath": "sessionId",
+            "unique": false
+          }
+        ]
+      },
+      {
+        "name": "progress",
+        "keyPath": "recordId",
+        "indexes": [
+          {
+            "name": "bySession",
+            "keyPath": "sessionId",
+            "unique": false
+          },
+          {
+            "name": "byStatus",
+            "keyPath": "status",
+            "unique": false
+          }
+        ]
+      },
+      {
+        "name": "settings",
+        "keyPath": "playerId",
+        "indexes": []
+      },
+      {
+        "name": "checkpoints",
+        "keyPath": "checkpointId",
+        "indexes": [
+          {
+            "name": "bySession",
+            "keyPath": "sessionId",
+            "unique": false
+          },
+          {
+            "name": "byGeneration",
+            "keyPath": "generation",
+            "unique": false
+          }
+        ]
+      }
+    ]
+  },
+  "freshDatabase": {
+    "status": "READY",
+    "version": 2,
+    "previousVersion": 0,
+    "appliedMigrations": [
+      "127-v1-base-layout",
+      "127-v2-checkpoints-and-lifecycle-indexes"
+    ],
+    "role": "WRITER",
+    "stores": [
+      "meta",
+      "profiles",
+      "profileActivations",
+      "segments",
+      "scenarios",
+      "progress",
+      "settings",
+      "checkpoints"
+    ],
+    "marker": {
+      "key": "schema",
+      "value": {
+        "format": "self-driving-academy-local",
+        "schemaVersion": 1,
+        "createdAt": "2026-10-22T09:00:00.000Z"
+      }
+    }
+  },
+  "upgrade": {
+    "fromVersion": 1,
+    "toVersion": 2,
+    "appliedMigrations": [
+      "127-v2-checkpoints-and-lifecycle-indexes"
+    ],
+    "rowsBefore": 1,
+    "rowsAfter": 1,
+    "addedStores": [
+      "checkpoints"
+    ],
+    "addedIndexes": [
+      "segments.byStatus",
+      "progress.byStatus"
+    ],
+    "indexHits": 1
+  },
+  "blockedUpgrade": {
+    "repositoryState": "BLOCKED_UPGRADE",
+    "reason": "UPGRADE_BLOCKED",
+    "requestedVersion": 2,
+    "currentVersion": 1,
+    "openConnectionsWhileBlocked": 1,
+    "afterCloseStatus": "READY",
+    "afterCloseVersion": 2
+  },
+  "versionChange": {
+    "state": "RELEASED_FOR_UPGRADE",
+    "reason": "VERSION_CHANGE",
+    "role": "NONE",
+    "initialStatus": "READY",
+    "openConnectionsAfter": 0,
+    "writeAfterRelease": "REJECTED",
+    "reopenedStatus": "READY"
+  },
+  "writer": {
+    "firstTabRole": "WRITER",
+    "secondTabRole": "READ_ONLY",
+    "secondTabReason": "WRITER_HELD_BY_OTHER_TAB",
+    "waitingRole": "WAITING",
+    "transferRole": "WRITER",
+    "writeDeniedBeforeTransfer": "REJECTED",
+    "writeCommittedAfterTransfer": "COMMITTED",
+    "previousWriterRole": "RELEASED"
+  },
+  "openFailure": {
+    "status": "FAILED",
+    "code": "OPEN_FAILED",
+    "repositoryState": "FAILED"
+  },
+  "unavailableLocks": {
+    "role": "READ_ONLY",
+    "writeResult": "REJECTED"
+  },
+  "transactions": {
+    "committedStores": 6,
+    "rolledBackSegments": 0,
+    "rolledBackProgress": 0,
+    "orphanActivation": "REFERENCE_MISSING",
+    "activationRowsAfterOrphan": 0,
+    "staleRevision": "STALE_REVISION",
+    "immutableProfile": "IMMUTABLE_RECORD",
+    "checksumMismatch": "PROFILE_CHECKSUM_MISMATCH",
+    "idempotentProfile": "COMMITTED",
+    "oversizedBody": "BODY_TOO_LARGE",
+    "listLimit": "LIST_LIMIT"
+  },
+  "bounds": {
+    "bodyBytes": 50,
+    "maxBodyBytes": 262144,
+    "maxRecordBytes": 1048576,
+    "maxListEntries": 512,
+    "maxBodyDepth": 24
+  },
+  "checks": [
+    {
+      "name": "schema-version",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "Current on-disk schema version"
+    },
+    {
+      "name": "step-count",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "One step per declared version"
+    },
+    {
+      "name": "store-count",
+      "expected": 8,
+      "actual": 8,
+      "pass": true,
+      "detail": "Stores at the current version"
+    },
+    {
+      "name": "checkpoints-store",
+      "expected": "checkpointId",
+      "actual": "checkpointId",
+      "pass": true,
+      "detail": "Checkpoint key path"
+    },
+    {
+      "name": "fresh-status",
+      "expected": "READY",
+      "actual": "READY",
+      "pass": true,
+      "detail": "Fresh database open status"
+    },
+    {
+      "name": "fresh-version",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "Fresh database version"
+    },
+    {
+      "name": "fresh-migrations",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "Applied migration steps"
+    },
+    {
+      "name": "fresh-role",
+      "expected": "WRITER",
+      "actual": "WRITER",
+      "pass": true,
+      "detail": "Only tab, so it owns the writer lock"
+    },
+    {
+      "name": "fresh-marker",
+      "expected": "self-driving-academy-local",
+      "actual": "self-driving-academy-local",
+      "pass": true,
+      "detail": "Format marker written inside the upgrade"
+    },
+    {
+      "name": "upgrade-applied",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "Steps for 1 to 2"
+    },
+    {
+      "name": "upgrade-rows",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "Rows preserved across the upgrade"
+    },
+    {
+      "name": "upgrade-added-stores",
+      "expected": [
+        "checkpoints"
+      ],
+      "actual": [
+        "checkpoints"
+      ],
+      "pass": true,
+      "detail": "Stores added by version 2"
+    },
+    {
+      "name": "upgrade-index-hits",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "New byStatus index returns the stored row"
+    },
+    {
+      "name": "blocked-state",
+      "expected": "BLOCKED_UPGRADE",
+      "actual": "BLOCKED_UPGRADE",
+      "pass": true,
+      "detail": "Blocked upgrade is explicit"
+    },
+    {
+      "name": "blocked-connections",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "The blocking tab keeps its connection"
+    },
+    {
+      "name": "blocked-role",
+      "expected": "NONE",
+      "actual": "NONE",
+      "pass": true,
+      "detail": "A blocked page cannot write"
+    },
+    {
+      "name": "blocked-after-close",
+      "expected": "READY",
+      "actual": "READY",
+      "pass": true,
+      "detail": "Retry after the tab closed"
+    },
+    {
+      "name": "version-change-initial",
+      "expected": "READY",
+      "actual": "READY",
+      "pass": true,
+      "detail": "The page was ready before the change"
+    },
+    {
+      "name": "version-change-state",
+      "expected": "RELEASED_FOR_UPGRADE",
+      "actual": "RELEASED_FOR_UPGRADE",
+      "pass": true,
+      "detail": "Version change stops the page"
+    },
+    {
+      "name": "version-change-reason",
+      "expected": "VERSION_CHANGE",
+      "actual": "VERSION_CHANGE",
+      "pass": true,
+      "detail": "Closed reason code"
+    },
+    {
+      "name": "version-change-connections",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "Database closed for the upgrade"
+    },
+    {
+      "name": "version-change-write",
+      "expected": "REJECTED",
+      "actual": "REJECTED",
+      "pass": true,
+      "detail": "Writes stop after release"
+    },
+    {
+      "name": "version-change-reopen",
+      "expected": "READY",
+      "actual": "READY",
+      "pass": true,
+      "detail": "The page can reopen at the same version"
+    },
+    {
+      "name": "writer-first",
+      "expected": "WRITER",
+      "actual": "WRITER",
+      "pass": true,
+      "detail": "First tab owns the writer lock"
+    },
+    {
+      "name": "writer-second",
+      "expected": "READ_ONLY",
+      "actual": "READ_ONLY",
+      "pass": true,
+      "detail": "Second tab is explicitly read-only"
+    },
+    {
+      "name": "writer-second-reason",
+      "expected": "WRITER_HELD_BY_OTHER_TAB",
+      "actual": "WRITER_HELD_BY_OTHER_TAB",
+      "pass": true,
+      "detail": "Reason is closed"
+    },
+    {
+      "name": "writer-waiting",
+      "expected": "WAITING",
+      "actual": "WAITING",
+      "pass": true,
+      "detail": "Queued transfer is explicit"
+    },
+    {
+      "name": "writer-transfer",
+      "expected": "WRITER",
+      "actual": "WRITER",
+      "pass": true,
+      "detail": "Transfer grants the writer role"
+    },
+    {
+      "name": "writer-denied-before",
+      "expected": "REJECTED",
+      "actual": "REJECTED",
+      "pass": true,
+      "detail": "Second tab cannot write yet"
+    },
+    {
+      "name": "writer-committed-after",
+      "expected": "COMMITTED",
+      "actual": "COMMITTED",
+      "pass": true,
+      "detail": "New writer commits"
+    },
+    {
+      "name": "writer-previous-released",
+      "expected": "RELEASED",
+      "actual": "RELEASED",
+      "pass": true,
+      "detail": "Previous writer released"
+    },
+    {
+      "name": "writer-previous-denied",
+      "expected": "REJECTED",
+      "actual": "REJECTED",
+      "pass": true,
+      "detail": "Previous writer cannot write"
+    },
+    {
+      "name": "open-failure-status",
+      "expected": "FAILED",
+      "actual": "FAILED",
+      "pass": true,
+      "detail": "Open failure is a state"
+    },
+    {
+      "name": "open-failure-code",
+      "expected": "OPEN_FAILED",
+      "actual": "OPEN_FAILED",
+      "pass": true,
+      "detail": "Closed failure code"
+    },
+    {
+      "name": "locks-unavailable",
+      "expected": "READ_ONLY",
+      "actual": "READ_ONLY",
+      "pass": true,
+      "detail": "No unsafe fallback without Web Locks"
+    },
+    {
+      "name": "locks-unavailable-write",
+      "expected": "REJECTED",
+      "actual": "REJECTED",
+      "pass": true,
+      "detail": "Writes are refused"
+    },
+    {
+      "name": "tx-committed-stores",
+      "expected": 6,
+      "actual": 6,
+      "pass": true,
+      "detail": "Stores committed by the run, including the schema marker"
+    },
+    {
+      "name": "tx-rollback-segments",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "Segment rolled back"
+    },
+    {
+      "name": "tx-rollback-progress",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "Progress rolled back"
+    },
+    {
+      "name": "tx-orphan",
+      "expected": "REFERENCE_MISSING",
+      "actual": "REFERENCE_MISSING",
+      "pass": true,
+      "detail": "Activation needs its version"
+    },
+    {
+      "name": "tx-orphan-rows",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "No orphan activation row"
+    },
+    {
+      "name": "tx-stale",
+      "expected": "STALE_REVISION",
+      "actual": "STALE_REVISION",
+      "pass": true,
+      "detail": "Older revision rejected"
+    },
+    {
+      "name": "tx-immutable",
+      "expected": "IMMUTABLE_RECORD",
+      "actual": "IMMUTABLE_RECORD",
+      "pass": true,
+      "detail": "A stored version cannot change content"
+    },
+    {
+      "name": "tx-checksum",
+      "expected": "PROFILE_CHECKSUM_MISMATCH",
+      "actual": "PROFILE_CHECKSUM_MISMATCH",
+      "pass": true,
+      "detail": "The 109 checksum is verified before commit"
+    },
+    {
+      "name": "tx-idempotent",
+      "expected": "COMMITTED",
+      "actual": "COMMITTED",
+      "pass": true,
+      "detail": "Re-putting the same version is idempotent"
+    },
+    {
+      "name": "tx-oversized",
+      "expected": "BODY_TOO_LARGE",
+      "actual": "BODY_TOO_LARGE",
+      "pass": true,
+      "detail": "Body budget enforced"
+    },
+    {
+      "name": "tx-list-limit",
+      "expected": "LIST_LIMIT",
+      "actual": "LIST_LIMIT",
+      "pass": true,
+      "detail": "List budget enforced"
+    },
+    {
+      "name": "bounds-body",
+      "expected": 50,
+      "actual": 50,
+      "pass": true,
+      "detail": "Sample body size matches a hand-written canonical oracle"
+    },
+    {
+      "name": "bounds-record",
+      "expected": 1048576,
+      "actual": 1048576,
+      "pass": true,
+      "detail": "Record budget from contracts"
+    }
+  ],
+  "summary": {
+    "checks": 49,
+    "passed": 49,
+    "pass": true
+  }
+}

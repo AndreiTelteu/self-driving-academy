@@ -21,3 +21,88 @@ export function createMemorySnapshotStore(): SnapshotStore {
     load: () => Promise.resolve(saved),
   };
 }
+
+export {
+  PERSISTENCE_DB_NAME,
+  PERSISTENCE_FORMAT,
+  PERSISTENCE_LIMITS,
+  PERSISTENCE_SCHEMA_VERSION,
+  META_SCHEMA_KEY,
+  PersistenceError,
+  boundedText,
+  isPersistenceRecordKind,
+  persistenceReasonCodes,
+  persistenceRecordKinds,
+  persistenceRejection,
+  persistenceIndexNames,
+  persistenceStoreNames,
+} from './contracts';
+export type {
+  ActivationRecord,
+  CheckpointRecord,
+  CheckpointRecordInput,
+  IndexDefinition,
+  MetaRecord,
+  OpenReport,
+  PersistedRecord,
+  PersistedRecordInput,
+  PersistenceRecordKind,
+  PersistenceReasonCode,
+  PersistenceRejection,
+  RepositoryRole,
+  RepositoryState,
+  RepositoryStats,
+  RepositoryStatusSnapshot,
+  SchemaStep,
+  StoreDefinition,
+  WriteCommitted,
+  WriteRejected,
+  WriteResult,
+} from './contracts';
+export {
+  PERSISTENCE_SCHEMA_STEPS,
+  PERSISTENCE_KEY_PATHS,
+  applySchemaStep,
+  indexDefinition,
+  planUpgrade,
+  schemaStores,
+  storeDefinition,
+  verifySchemaDeclaration,
+} from './schema';
+export {
+  measureJsonBytes,
+  parseActivationRecord,
+  parseCheckpointRecord,
+  parseMetaRecord,
+  parsePersistedRecord,
+  parseProfileRecord,
+  parseSettingsRecord,
+  storageKey,
+} from './records';
+export { cloneValue, createMemoryIdbFactory, createMemoryLockManager } from './memory-idb';
+export type {
+  MemoryDatabaseInspection,
+  MemoryIdbFactory,
+  MemoryIdbOptions,
+  MemoryLockManager,
+} from './memory-idb';
+export { browserIndexedDbFactory, createIndexedDbFactory } from './indexeddb';
+export { WRITER_LOCK_NAME, createWriterAuthority } from './writer';
+export type { WriterAuthority, WriterAuthorityOptions, WriterAuthorityState } from './writer';
+export { createLocalRepository } from './repository';
+export type { LocalRepository, LocalRepositoryOptions } from './repository';
+export type {
+  DatabasePort,
+  FactoryPort,
+  LockManagerPort,
+  LockOptions,
+  OpenBlocked,
+  OpenFailed,
+  OpenOpened,
+  OpenOutcome,
+  OpenRequest,
+  SchemaUpgrader,
+  TransactionMode,
+  TransactionPort,
+  VersionChangeEvent,
+} from './ports';

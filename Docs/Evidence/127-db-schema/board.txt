@@ -1,0 +1,21 @@
+﻿=== PBI/Validate-Board.ps1 -RequireDone '127' ===
+> pwsh -NoProfile -ExecutionPolicy Bypass -File ./PBI/Validate-Board.ps1 -RequireDone '127'
+Nota: validatorul trebuie rulat cu PowerShell 7 (pwsh). Sub Windows PowerShell 5.1 el esueaza
+cu 'Dependenta inexistenta 045 041 030 pentru 054' chiar si in checkout-ul canonic, din cauza
+comportamentului ConvertFrom-Json din 5.1 (nu enumera tablourile). Nu este cauzat de PBI 127.
+{
+  "Valid": true,
+  "Total": 235,
+  "Columns": {
+    "To Do": 103,
+    "In Progress": 0,
+    "Done": 132
+  },
+  "FirstId": "001",
+  "LastId": "235",
+  "RequiredDonePaths": [
+    "C:\\Users\\aandr\\Sites\\self-driving-academy\\.worktrees\\persistence-127-01\\PBI\\Done\\127-db_schema.md"
+  ]
+}
+exit=0
+

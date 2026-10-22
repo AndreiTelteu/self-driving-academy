@@ -1,6 +1,6 @@
 # Salvare și import export
 
-Versiune 0.5 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
+Versiune 0.6 · 22 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
 
 ## Date salvate și export
 
@@ -39,3 +39,28 @@ Snapshotul Rapier și copierea coerentă a stării au un cost sincron măsurat. 
 ## Savefile complet și noile stări V1
 
 [Modulul 29](29-savefile-si-integritate.md) definește fișierul .sdasave cu SHA-256 inclus, canonicalizare versionată, verificare înainte de migrare și încărcare atomică fără ignorarea checksumului. Autosave/export de profil/savefile sunt acțiuni distincte. Checkpointul include Academie/Haos, worldEpoch, destructibile, provocări/recorduri și ControlPreferences. Profilurile păstrează proveniența MANUAL_TUNING. XP conține numai credite nenegative; nu persistă evaluări de penalizare. Importul complet înlocuiește progresul după verificare și confirmare, fără adunarea recompenselor.
+
+## Contract implementat V1 (PBI 127) — schema IndexedDB și repository local
+
+Modulul `src/persistence` este implementat ca o familie de porturi (`DatabasePort`, `FactoryPort`, `TransactionPort`, `LockManagerPort`) cu două adaptoare: `indexeddb.ts` pentru IndexedDB-ul real și `memory-idb.ts`, un dublu în memorie folosit de testele deterministe din Node. Driverul real este izolat de port, deci comportamentul nu este simulat în testele de corectitudine.
+
+**Baza de date și store-uri.** Nume stabil al bazei: `self-driving-academy`; formatul de date: `self-driving-academy-local`; versiunea de schemă curentă: `2`. Store-urile declarate și cheile lor primare:
+
+| Store | Cheie primară | Indexuri |
+| --- | --- | --- |
+| `meta` | `key` | — (marcajul de format și de versiune) |
+| `profiles` | `versionId` | `byProfile` → `profileId` |
+| `profileActivations` | `profileId` | — |
+| `segments` | `recordId` | `bySession` → `sessionId`, `byStatus` → `status` |
+| `scenarios` | `recordId` | `bySession` → `sessionId` |
+| `progress` | `recordId` | `bySession` → `sessionId`, `byStatus` → `status` |
+| `settings` | `playerId` | — |
+| `checkpoints` | `checkpointId` | `bySession` → `sessionId`, `byGeneration` → `generation` |
+
+**Migrare explicită.** Istoricul este declarat, nu calculat: pasul `127-v1-base-layout` (versiunea 1) creează `meta`, `profiles`, `profileActivations`, `segments`, `scenarios`, `progress` și `settings`; pasul `127-v2-checkpoints-and-lifecycle-indexes` (versiunea 2) creează `checkpoints` și adaugă indexurile `segments.byStatus` și `progress.byStatus` fără a rescrie rânduri. `planUpgrade` este continuu (fără goluri) și refuză explicit o bază de date mai nouă decât build-ul curent cu `SCHEMA_TOO_NEW`; migrarea se aplică întotdeauna în interiorul tranzacției de upgrade, iar o migrare eșuată lasă versiunea și rândurile anterioare intacte (`MIGRATION_FAILED`).
+
+**Stări explicite, nu excepții mută.** Repository-ul expune stările `CLOSED`, `OPENING`, `READY`, `BLOCKED_UPGRADE`, `RELEASED_FOR_UPGRADE`, `FAILED` și `DISPOSED`, împreună cu rolul `NONE`/`WRITER`/`READ_ONLY`/`WAITING`/`RELEASED` și un cod de cauză închis. Un upgrade blocat de o altă conexiune deschisă produce `BLOCKED_UPGRADE` cu `UPGRADE_BLOCKED` și poate fi reluat cu `retryBlockedUpgrade()` după ce tabul blocant se închide; o eroare de deschidere produce `FAILED` cu `OPEN_FAILED` (sau `OPEN_TIMEOUT`); o bază de date prea nouă produce `SCHEMA_TOO_NEW`. Când alt tab cere o versiune mai nouă, pagina curentă trece în `RELEASED_FOR_UPGRADE` cu `VERSION_CHANGE`, eliberează blocajul de scriere și închide conexiunea.
+
+**Un singur scriitor.** Dreptul de scriere este un lock exclusiv Web Locks (`self-driving-academy-persistence-writer`). `claim()` este non-blocant: dacă lock-ul este ocupat, pagina devine `READ_ONLY` cu `WRITER_HELD_BY_OTHER_TAB` și orice scriere este respinsă cu `WRITER_REQUIRED` — nu există fallback nesigur. `wait()` intră în coadă (`WAITING`) și primește rolul de `WRITER` când deținătorul eliberează lock-ul; acesta este transferul explicit de scriitor. Fără Web Locks pagina rămâne `READ_ONLY` cu `WEB_LOCKS_UNAVAILABLE`. Paginile cititoare citesc datele scriitorului, dar nu scriu.
+
+**Coerență și limite.** Fiecare înregistrare este validată și măsurată înainte să ajungă într-o tranzacție: corpul trebuie să fie JSON simplu, adâncime cel mult 24, cel mult 20 000 de intrări, cel mult 262 144 de octeți pentru corp și cel mult 1 048 576 de octeți pentru înregistrarea completă; o listă returnează cel mult 512 rânduri, altfel `LIST_LIMIT`. Scrierile multi-store (de exemplu activarea unui profil împreună cu versiunea profilului) sunt tranzacționale: o eroare la mijloc lasă baza exact cum era, fără activare orfană. Versiunile de profil 109 sunt imutabile (`IMMUTABLE_RECORD`) și checksum-ul lor este re-verificat la citire (`PROFILE_CHECKSUM_MISMATCH`); o revizie mai veche nu înlocuiește una mai nouă (`STALE_REVISION`).
