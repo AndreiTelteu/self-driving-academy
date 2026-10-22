@@ -90,7 +90,59 @@ export { browserIndexedDbFactory, createIndexedDbFactory } from './indexeddb';
 export { WRITER_LOCK_NAME, createWriterAuthority } from './writer';
 export type { WriterAuthority, WriterAuthorityOptions, WriterAuthorityState } from './writer';
 export { createLocalRepository } from './repository';
-export type { LocalRepository, LocalRepositoryOptions } from './repository';
+export type {
+  LocalRepository,
+  LocalRepositoryOptions,
+  ProfileActivationOutcome,
+} from './repository';
+export {
+  PROFILE_TRANSACTION_VERSION,
+  buildProfileHistory,
+  classifyProfileSource,
+  commitProfileActivationRows,
+} from './profile-transaction';
+export type {
+  ProfileActivationCommit,
+  ProfileHistory,
+  ProfileSourceKind,
+  ProfileTransactionHooks,
+} from './profile-transaction';
+export {
+  SEGMENT_DIGEST_ALGORITHM,
+  SEGMENT_STORE_VERSION,
+  digestEvents,
+  normalizeSegmentInput,
+  readSegment,
+  segmentIncompleteReasons,
+  writeSegment,
+} from './segment-store';
+export type {
+  RecoveredSegment,
+  SegmentCompleteness,
+  SegmentEventFact,
+  SegmentEventInput,
+  SegmentIncompleteReason,
+  SegmentSaveInput,
+  SegmentWriteHooks,
+  SegmentWriteOptions,
+  SegmentWriteResult,
+} from './segment-store';
+export { createSegmentWriteQueue } from './write-queue';
+export type {
+  SegmentQueueResult,
+  SegmentWriteQueue,
+  SegmentWriteQueueOptions,
+  SegmentWriteQueueStats,
+} from './write-queue';
+export {
+  INTERVENTION_CHECKPOINT_VERSION,
+  createInterventionCheckpoint,
+  writeInterventionCheckpoint,
+} from './intervention-checkpoint';
+export type {
+  InterventionCheckpoint,
+  InterventionCheckpointInput,
+} from './intervention-checkpoint';
 export type {
   DatabasePort,
   FactoryPort,

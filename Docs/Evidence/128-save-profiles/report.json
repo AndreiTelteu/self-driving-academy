@@ -1,0 +1,367 @@
+{
+  "version": "128-save-profiles-v1",
+  "generatedBy": "node --import ./scripts/register-typescript.mjs scripts/run-save-profiles-report.mjs",
+  "oracleRule": "Every row is a real run of src/persistence against the in-memory IndexedDB double; the expected value is the documented contract, never a copy of the actual one.",
+  "contract": "128-profile-transaction-v1",
+  "atomicCommit": {
+    "status": "COMMITTED",
+    "versionCreated": true,
+    "activationChanged": true,
+    "source": "BASE",
+    "bytes": 507,
+    "profileRows": 1,
+    "activationRows": 1
+  },
+  "crashBeforeCommit": {
+    "status": "REJECTED",
+    "rejection": "TRANSACTION_ABORTED",
+    "profileRows": 1,
+    "activationRows": 1,
+    "activeVersionId": "profile-1@1",
+    "activeVersionLoadable": true
+  },
+  "crashAfterCommit": {
+    "status": "CRASHED_AFTER_COMMIT",
+    "profileRows": 1,
+    "activationRows": 1,
+    "activeVersionId": "profile-1@1",
+    "activeVersionLoadable": true
+  },
+  "guards": {
+    "orphanActivation": "REFERENCE_MISSING",
+    "orphanRows": 0,
+    "missingParent": "REFERENCE_MISSING",
+    "immutableVersion": "IMMUTABLE_RECORD",
+    "staleSequence": "STALE_REVISION",
+    "storedSequence": 5,
+    "sameSequenceOtherVersion": "STALE_REVISION",
+    "readOnlyPage": "WRITER_REQUIRED"
+  },
+  "history": {
+    "chain": [
+      "profile-1@1",
+      "profile-1@2"
+    ],
+    "versions": [
+      "profile-1@1",
+      "profile-1@2"
+    ],
+    "activeVersionId": "profile-1@2",
+    "activationSequence": 2,
+    "activatedAt": "2026-10-22T09:00:00.000Z",
+    "source": "MANUAL_TUNING",
+    "complete": true,
+    "missingVersionIds": [],
+    "interventionIds": [
+      "intervention-1"
+    ],
+    "segmentIds": [],
+    "parentVersionId": "profile-1@1",
+    "createdAt": "2026-10-22T09:05:00.000Z",
+    "idempotentVersionCreated": false,
+    "idempotentActivationChanged": false
+  },
+  "checks": [
+    {
+      "name": "contract-version",
+      "expected": "128-profile-transaction-v1",
+      "actual": "128-profile-transaction-v1",
+      "pass": true,
+      "detail": "Contract id"
+    },
+    {
+      "name": "atomic-status",
+      "expected": "COMMITTED",
+      "actual": "COMMITTED",
+      "pass": true,
+      "detail": "One transaction, both rows"
+    },
+    {
+      "name": "atomic-version-created",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The version row is new"
+    },
+    {
+      "name": "atomic-activation-changed",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The activation pointer moved"
+    },
+    {
+      "name": "atomic-source",
+      "expected": "BASE",
+      "actual": "BASE",
+      "pass": true,
+      "detail": "Provenance classification"
+    },
+    {
+      "name": "atomic-profile-rows",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "Exactly one version row"
+    },
+    {
+      "name": "atomic-activation-rows",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "Exactly one activation row"
+    },
+    {
+      "name": "crash-before-status",
+      "expected": "REJECTED",
+      "actual": "REJECTED",
+      "pass": true,
+      "detail": "The crash aborted it"
+    },
+    {
+      "name": "crash-before-rejection",
+      "expected": "TRANSACTION_ABORTED",
+      "actual": "TRANSACTION_ABORTED",
+      "pass": true,
+      "detail": "Closed rejection code"
+    },
+    {
+      "name": "crash-before-profile-rows",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "The interrupted version never landed"
+    },
+    {
+      "name": "crash-before-activation-rows",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "The interrupted activation never landed"
+    },
+    {
+      "name": "crash-before-active",
+      "expected": "profile-1@1",
+      "actual": "profile-1@1",
+      "pass": true,
+      "detail": "The previous active version is still active"
+    },
+    {
+      "name": "crash-before-loadable",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The active profile is still loadable"
+    },
+    {
+      "name": "crash-after-status",
+      "expected": "CRASHED_AFTER_COMMIT",
+      "actual": "CRASHED_AFTER_COMMIT",
+      "pass": true,
+      "detail": "The commit survived the crash"
+    },
+    {
+      "name": "crash-after-profile-rows",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "The version is durable"
+    },
+    {
+      "name": "crash-after-activation-rows",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "The activation is durable"
+    },
+    {
+      "name": "crash-after-active",
+      "expected": "profile-1@1",
+      "actual": "profile-1@1",
+      "pass": true,
+      "detail": "The active version is the committed one"
+    },
+    {
+      "name": "crash-after-loadable",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The active profile loads"
+    },
+    {
+      "name": "guard-orphan",
+      "expected": "REFERENCE_MISSING",
+      "actual": "REFERENCE_MISSING",
+      "pass": true,
+      "detail": "An activation needs its version"
+    },
+    {
+      "name": "guard-orphan-rows",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "No orphan row was written"
+    },
+    {
+      "name": "guard-missing-parent",
+      "expected": "REFERENCE_MISSING",
+      "actual": "REFERENCE_MISSING",
+      "pass": true,
+      "detail": "A derived version needs its parent"
+    },
+    {
+      "name": "guard-immutable",
+      "expected": "IMMUTABLE_RECORD",
+      "actual": "IMMUTABLE_RECORD",
+      "pass": true,
+      "detail": "A stored version cannot change"
+    },
+    {
+      "name": "guard-stale",
+      "expected": "STALE_REVISION",
+      "actual": "STALE_REVISION",
+      "pass": true,
+      "detail": "An older sequence cannot replace a newer one"
+    },
+    {
+      "name": "guard-stored-sequence",
+      "expected": 5,
+      "actual": 5,
+      "pass": true,
+      "detail": "The newer activation survived"
+    },
+    {
+      "name": "guard-same-sequence",
+      "expected": "STALE_REVISION",
+      "actual": "STALE_REVISION",
+      "pass": true,
+      "detail": "One sequence points at one version"
+    },
+    {
+      "name": "guard-read-only",
+      "expected": "WRITER_REQUIRED",
+      "actual": "WRITER_REQUIRED",
+      "pass": true,
+      "detail": "Only the writer page commits"
+    },
+    {
+      "name": "history-chain",
+      "expected": [
+        "profile-1@1",
+        "profile-1@2"
+      ],
+      "actual": [
+        "profile-1@1",
+        "profile-1@2"
+      ],
+      "pass": true,
+      "detail": "The chain is rebuilt from the stored parents"
+    },
+    {
+      "name": "history-versions",
+      "expected": [
+        "profile-1@1",
+        "profile-1@2"
+      ],
+      "actual": [
+        "profile-1@1",
+        "profile-1@2"
+      ],
+      "pass": true,
+      "detail": "Both versions are stored"
+    },
+    {
+      "name": "history-active",
+      "expected": "profile-1@2",
+      "actual": "profile-1@2",
+      "pass": true,
+      "detail": "The active version"
+    },
+    {
+      "name": "history-sequence",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "The activation sequence"
+    },
+    {
+      "name": "history-activated-at",
+      "expected": "2026-10-22T09:00:00.000Z",
+      "actual": "2026-10-22T09:00:00.000Z",
+      "pass": true,
+      "detail": "The activation timestamp is kept"
+    },
+    {
+      "name": "history-source",
+      "expected": "MANUAL_TUNING",
+      "actual": "MANUAL_TUNING",
+      "pass": true,
+      "detail": "Provenance classification"
+    },
+    {
+      "name": "history-complete",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "No hole in the history"
+    },
+    {
+      "name": "history-missing",
+      "expected": [],
+      "actual": [],
+      "pass": true,
+      "detail": "No missing parent"
+    },
+    {
+      "name": "history-intervention-ids",
+      "expected": [
+        "intervention-1"
+      ],
+      "actual": [
+        "intervention-1"
+      ],
+      "pass": true,
+      "detail": "The manual intervention source is kept"
+    },
+    {
+      "name": "history-segment-ids",
+      "expected": [],
+      "actual": [],
+      "pass": true,
+      "detail": "No driving segment is invented"
+    },
+    {
+      "name": "history-parent",
+      "expected": "profile-1@1",
+      "actual": "profile-1@1",
+      "pass": true,
+      "detail": "The parent link is kept"
+    },
+    {
+      "name": "history-created-at",
+      "expected": "2026-10-22T09:05:00.000Z",
+      "actual": "2026-10-22T09:05:00.000Z",
+      "pass": true,
+      "detail": "The version timestamp is kept"
+    },
+    {
+      "name": "history-idempotent-version",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "The repeated commit creates no second version"
+    },
+    {
+      "name": "history-idempotent-activation",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "The repeated commit moves no pointer"
+    }
+  ],
+  "summary": {
+    "checks": 40,
+    "passed": 40,
+    "pass": true
+  }
+}

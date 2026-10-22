@@ -32,6 +32,12 @@ import {
   storageKey,
 } from './records';
 import { planUpgrade } from './schema';
+import { buildProfileHistory, commitProfileActivationRows } from './profile-transaction';
+import type {
+  ProfileActivationCommit,
+  ProfileHistory,
+  ProfileTransactionHooks,
+} from './profile-transaction';
 import { createWriterAuthority } from './writer';
 import type { WriterAuthority } from './writer';
 import type {
@@ -83,6 +89,8 @@ export interface LocalRepository {
   getProfile(versionId: string): Promise<ProfileVersion | null>;
   listProfiles(profileId?: string): Promise<readonly ProfileVersion[]>;
   getActivation(profileId: string): Promise<ActivationRecord | null>;
+  /** Stored history of one profile: chain, active version and provenance classification. */
+  getProfileHistory(profileId: string): Promise<ProfileHistory>;
   getSegment(segmentId: string): Promise<PersistedRecord | null>;
   listSegments(sessionId: string): Promise<readonly PersistedRecord[]>;
   listSegmentsByStatus(status: string): Promise<readonly PersistedRecord[]>;
@@ -95,6 +103,16 @@ export interface LocalRepository {
   latestCheckpoint(sessionId: string): Promise<CheckpointRecord | null>;
   putProfile(profile: unknown): Promise<WriteResult<ProfileVersion>>;
   activateProfile(activation: unknown): Promise<WriteResult<ActivationRecord>>;
+  /**
+   * Publishes one version and its activation in a single multi-store transaction (PBI 128).
+   *
+   * `CRASHED_AFTER_COMMIT` means the fault hook fired after the transaction committed: the rows
+   * are durable even though the caller did not receive a plain success.
+   */
+  commitProfileActivation(
+    input: ProfileActivationInput,
+    hooks?: ProfileTransactionHooks,
+  ): Promise<ProfileActivationOutcome>;
   putSegment(record: unknown): Promise<WriteResult<PersistedRecord>>;
   putScenario(record: unknown): Promise<WriteResult<PersistedRecord>>;
   putProgress(record: unknown): Promise<WriteResult<PersistedRecord>>;
@@ -108,6 +126,28 @@ export interface LocalRepository {
     recordId: string,
   ): Promise<WriteResult<{ readonly recordId: string; readonly deleted: boolean }>>;
 }
+
+/** The two rows published by one atomic transaction. */
+export interface ProfileActivationInput {
+  readonly profile: unknown;
+  readonly activation: unknown;
+}
+
+/** Outcome of the atomic version+activation transaction. */
+export type ProfileActivationOutcome =
+  | {
+      readonly status: 'COMMITTED';
+      readonly value: ProfileActivationCommit;
+    }
+  | {
+      readonly status: 'CRASHED_AFTER_COMMIT';
+      readonly value: ProfileActivationCommit;
+    }
+  | {
+      readonly status: 'REJECTED';
+      readonly value: null;
+      readonly rejection: PersistenceRejection;
+    };
 
 const ALL_STORES: readonly PersistenceStoreName[] = [
   'meta',
@@ -200,23 +240,24 @@ export function createLocalRepository(options: LocalRepositoryOptions): LocalRep
     });
   }
 
-  function reject(code: PersistenceReasonCode, text: string, path: string | null = null) {
+  function rejectionFor(error: unknown): PersistenceRejection {
+    if (error instanceof PersistenceError) {
+      return persistenceRejection(error.code, error.message, error.path);
+    }
+    if (error instanceof ContractValidationError) {
+      return persistenceRejection('INVALID_RECORD', error.message);
+    }
+    return persistenceRejection('TRANSACTION_ABORTED', message(error));
+  }
+
+  function rejectionOf(error: unknown): WriteResult<never> {
+    const rejection = rejectionFor(error);
     counters.rejections += 1;
     return Object.freeze({
       status: 'REJECTED' as const,
       value: null,
-      rejection: persistenceRejection(code, text, path),
+      rejection,
     });
-  }
-
-  function rejectionOf(error: unknown): WriteResult<never> {
-    if (error instanceof PersistenceError) {
-      return reject(error.code, error.message, error.path);
-    }
-    if (error instanceof ContractValidationError) {
-      return reject('INVALID_RECORD', error.message);
-    }
-    return reject('TRANSACTION_ABORTED', message(error));
   }
 
   function requireDatabase(): DatabasePort {
@@ -457,6 +498,19 @@ export function createLocalRepository(options: LocalRepositoryOptions): LocalRep
     return stored === undefined ? null : parseActivationRecord(stored);
   }
 
+  async function getProfileHistory(profileId: string): Promise<ProfileHistory> {
+    const key = storageKey(profileId, 'profileId');
+    const [versions, activation] = await Promise.all([
+      read(['profiles'], (transaction) =>
+        transaction.getAllByIndex('profiles', 'byProfile', key),
+      ).then((rows) => bounded(parseAll(rows, parseProfileRecord), 'profiles')),
+      read(['profileActivations'], (transaction) =>
+        transaction.get('profileActivations', key),
+      ).then((stored) => (stored === undefined ? null : parseActivationRecord(stored))),
+    ]);
+    return buildProfileHistory(profileId, versions, activation);
+  }
+
   function persistedReader(
     store: 'segments' | 'scenarios' | 'progress',
     kind: 'SEGMENT' | 'SCENARIO' | 'PROGRESS',
@@ -602,6 +656,52 @@ export function createLocalRepository(options: LocalRepositoryOptions): LocalRep
     }
   }
 
+  async function commitProfileActivation(
+    input: ProfileActivationInput,
+    hooks: ProfileTransactionHooks = {},
+  ): Promise<ProfileActivationOutcome> {
+    try {
+      if (disposed)
+        throw new PersistenceError('REPOSITORY_DISPOSED', 'The repository was disposed');
+      if (state !== 'READY' || database === null) {
+        throw new PersistenceError('REPOSITORY_CLOSED', `The repository is ${state}`);
+      }
+      if (writerRole() !== 'WRITER') {
+        counters.rejections += 1;
+        return Object.freeze({
+          status: 'REJECTED' as const,
+          value: null,
+          rejection: persistenceRejection(
+            'WRITER_REQUIRED',
+            'This page does not own the writer lock',
+            'writer',
+          ),
+        });
+      }
+      counters.transactions += 1;
+      const value = await database.transact(
+        ['profiles', 'profileActivations'],
+        'readwrite',
+        (transaction) => commitProfileActivationRows(transaction, input, hooks),
+      );
+      counters.writes += 1;
+      try {
+        hooks.afterCommit?.();
+      } catch {
+        // The transaction already committed: the rows are durable even though the caller died.
+        return Object.freeze({ status: 'CRASHED_AFTER_COMMIT' as const, value });
+      }
+      return Object.freeze({ status: 'COMMITTED' as const, value });
+    } catch (error) {
+      counters.rejections += 1;
+      return Object.freeze({
+        status: 'REJECTED' as const,
+        value: null,
+        rejection: rejectionFor(error),
+      });
+    }
+  }
+
   function persistedWriter(
     store: 'segments' | 'scenarios' | 'progress',
     kind: 'SEGMENT' | 'SCENARIO' | 'PROGRESS',
@@ -744,6 +844,7 @@ export function createLocalRepository(options: LocalRepositoryOptions): LocalRep
     getProfile,
     listProfiles,
     getActivation,
+    getProfileHistory,
     getSegment: persistedReader('segments', 'SEGMENT'),
     listSegments: persistedLister('segments', 'SEGMENT'),
     listSegmentsByStatus,
@@ -756,6 +857,7 @@ export function createLocalRepository(options: LocalRepositoryOptions): LocalRep
     latestCheckpoint,
     putProfile,
     activateProfile,
+    commitProfileActivation,
     putSegment: persistedWriter('segments', 'SEGMENT'),
     putScenario: persistedWriter('scenarios', 'SCENARIO'),
     putProgress: persistedWriter('progress', 'PROGRESS'),
