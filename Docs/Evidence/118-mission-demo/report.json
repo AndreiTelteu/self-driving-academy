@@ -1,0 +1,597 @@
+{
+  "version": "118-mission-demo-report-v1",
+  "contract": {
+    "missionId": "campaign-2-first-demonstration",
+    "learningKey": "stop_full_probability",
+    "baseValue": 0.6,
+    "statuses": [
+      "DEMONSTRATED",
+      "NO_CHANGE",
+      "REJECTED"
+    ],
+    "chain": [
+      "069-segment",
+      "085-tick-samples",
+      "086-opportunities",
+      "087-eligibility",
+      "088-artifact-filter",
+      "093-evidence",
+      "097-signal-estimator",
+      "098-stop-yield-estimator",
+      "103-queue",
+      "102-candidate-gate",
+      "112-pipeline",
+      "109-profile-store",
+      "110-profile-activation",
+      "104-explanation"
+    ],
+    "limits": {
+      "exampleRows": 24,
+      "opportunityIds": 16,
+      "taxis": 24,
+      "civilians": 40
+    }
+  },
+  "scenarios": [
+    {
+      "name": "LEARNING segment with sufficient evidence",
+      "status": "DEMONSTRATED",
+      "detail": {
+        "pipelineStatus": "COMPOSED",
+        "evidenceStatus": "READY",
+        "distinctEpisodes": 4,
+        "effectiveEpisodes": 4,
+        "confidence": "OBSERVED",
+        "contexts": "FREE_TRAFFIC",
+        "previous": 0.6,
+        "next": 0.8,
+        "versionId": "segment-118-demo~112",
+        "composedVersionId": "city-profile-118-base~103.1",
+        "activationStatus": "APPLIED",
+        "appliedTick": 1,
+        "updatedVehicles": 64,
+        "fleetVersions": "segment-118-demo~112",
+        "chain": "city-profile-118-base -> segment-118-demo~112",
+        "exampleKind": "LIVE",
+        "exampleOrigin": "109-profile-store-v1",
+        "stopCandidate": 1,
+        "signalCandidate": "REFUSED",
+        "samples": 300,
+        "opportunities": 4
+      }
+    },
+    {
+      "name": "LEARNING segment without eligible evidence",
+      "status": "NO_CHANGE",
+      "detail": {
+        "pipelineStatus": "NO_CHANGE",
+        "reason": "NO_NEW_EVIDENCE",
+        "evidenceStatus": "NO_EVIDENCE",
+        "distinctEpisodes": 0,
+        "confidence": "UNOBSERVED",
+        "versionId": null,
+        "activation": null,
+        "explanationStatus": "NO_CHANGE",
+        "explanationVersion": null,
+        "missingContexts": "stop_full_probability: NO_NEW_EVIDENCE (0 episoade efective, 0 distincte)",
+        "storeVersions": 1,
+        "activationCommands": 0,
+        "exampleKind": "EXPERIMENT",
+        "exampleOrigin": "105-inverse-learning-v1",
+        "exampleEffect": false,
+        "stopCandidateStatus": "REFUSED",
+        "stopCandidateReason": "ZERO_ELIGIBLE_STOP_DENOMINATOR",
+        "signalCandidateStatus": "REFUSED"
+      }
+    },
+    {
+      "name": "MANUAL segment",
+      "status": "REJECTED",
+      "detail": {
+        "pipelineStatus": "SKIPPED_MANUAL",
+        "reason": "MANUAL_SEGMENT_NOT_LEARNABLE",
+        "versionId": null,
+        "activation": null,
+        "jobs": 0,
+        "storeVersions": 1,
+        "exampleKind": "EXPERIMENT"
+      }
+    },
+    {
+      "name": "ineligible LEARNING segment",
+      "status": "REJECTED",
+      "detail": {
+        "pipelineStatus": "SKIPPED_INELIGIBLE",
+        "reason": "SEGMENT_INELIGIBLE",
+        "versionId": null,
+        "jobs": 0,
+        "storeVersions": 1
+      }
+    },
+    {
+      "name": "published version without an observed activation",
+      "status": "REJECTED",
+      "detail": {
+        "pipelineStatus": "COMPOSED",
+        "reason": "ACTIVATION_NOT_OBSERVED",
+        "versionId": "segment-118-demo~112",
+        "activation": null,
+        "justifiedDelta": true,
+        "observedActivation": false,
+        "satisfied": false,
+        "exampleKind": "LIVE",
+        "blockingCommands": 1
+      }
+    }
+  ],
+  "checks": [
+    {
+      "name": "contract-version",
+      "expected": "118-mission-demo-v1",
+      "actual": "118-mission-demo-v1",
+      "pass": true,
+      "detail": "demo contract"
+    },
+    {
+      "name": "mission-id",
+      "expected": "campaign-2-first-demonstration",
+      "actual": "campaign-2-first-demonstration",
+      "pass": true,
+      "detail": "116 mission"
+    },
+    {
+      "name": "learning-key",
+      "expected": "stop_full_probability",
+      "actual": "stop_full_probability",
+      "pass": true,
+      "detail": "092/105 key"
+    },
+    {
+      "name": "status-count",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "closed result vocabulary"
+    },
+    {
+      "name": "example-row-limit",
+      "expected": 24,
+      "actual": 24,
+      "pass": true,
+      "detail": "bounded example payload"
+    },
+    {
+      "name": "chain-length",
+      "expected": 14,
+      "actual": 14,
+      "pass": true,
+      "detail": "real modules of the chain"
+    },
+    {
+      "name": "demo-status",
+      "expected": "DEMONSTRATED",
+      "actual": "DEMONSTRATED",
+      "pass": true,
+      "detail": "delta plus observed activation"
+    },
+    {
+      "name": "demo-pipeline",
+      "expected": "COMPOSED",
+      "actual": "COMPOSED",
+      "pass": true,
+      "detail": "112 composition accepted"
+    },
+    {
+      "name": "demo-evidence-status",
+      "expected": "READY",
+      "actual": "READY",
+      "pass": true,
+      "detail": "real 093 read model"
+    },
+    {
+      "name": "demo-episodes",
+      "expected": 4,
+      "actual": 4,
+      "pass": true,
+      "detail": "four distinct 086 occasions"
+    },
+    {
+      "name": "demo-effective",
+      "expected": 4,
+      "actual": 4,
+      "pass": true,
+      "detail": "real 100 effective count"
+    },
+    {
+      "name": "demo-confidence",
+      "expected": "OBSERVED",
+      "actual": "OBSERVED",
+      "pass": true,
+      "detail": "real 100 state"
+    },
+    {
+      "name": "demo-contexts",
+      "expected": "FREE_TRAFFIC",
+      "actual": "FREE_TRAFFIC",
+      "pass": true,
+      "detail": "real 087 label"
+    },
+    {
+      "name": "demo-previous",
+      "expected": 0.6,
+      "actual": 0.6,
+      "pass": true,
+      "detail": "base value of the segment"
+    },
+    {
+      "name": "demo-next",
+      "expected": 0.8,
+      "actual": 0.8,
+      "pass": true,
+      "detail": "real 101 fold of the 098 candidate"
+    },
+    {
+      "name": "demo-delta",
+      "expected": 0.2,
+      "actual": 0.2,
+      "pass": true,
+      "detail": "the published delta"
+    },
+    {
+      "name": "demo-version",
+      "expected": "segment-118-demo~112",
+      "actual": "segment-118-demo~112",
+      "pass": true,
+      "detail": "109 version"
+    },
+    {
+      "name": "demo-parent",
+      "expected": "city-profile-118-base",
+      "actual": "city-profile-118-base",
+      "pass": true,
+      "detail": "109 parent"
+    },
+    {
+      "name": "demo-chain",
+      "expected": "city-profile-118-base -> segment-118-demo~112",
+      "actual": "city-profile-118-base -> segment-118-demo~112",
+      "pass": true,
+      "detail": "base-to-tip history"
+    },
+    {
+      "name": "demo-activation",
+      "expected": "APPLIED",
+      "actual": "APPLIED",
+      "pass": true,
+      "detail": "110 applied"
+    },
+    {
+      "name": "demo-applied-tick",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "next common tick"
+    },
+    {
+      "name": "demo-updated",
+      "expected": 64,
+      "actual": 64,
+      "pass": true,
+      "detail": "whole fleet adopted"
+    },
+    {
+      "name": "demo-fleet",
+      "expected": "segment-118-demo~112",
+      "actual": "segment-118-demo~112",
+      "pass": true,
+      "detail": "fleet version"
+    },
+    {
+      "name": "demo-requirements",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "both mission requirements"
+    },
+    {
+      "name": "demo-example",
+      "expected": "LIVE",
+      "actual": "LIVE",
+      "pass": true,
+      "detail": "live example after a publication"
+    },
+    {
+      "name": "demo-example-origin",
+      "expected": "109-profile-store-v1",
+      "actual": "109-profile-store-v1",
+      "pass": true,
+      "detail": "109 provenance"
+    },
+    {
+      "name": "demo-example-effect",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the player effect"
+    },
+    {
+      "name": "demo-stop-candidate",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "real 098 candidate"
+    },
+    {
+      "name": "demo-explanation",
+      "expected": "CHANGED",
+      "actual": "CHANGED",
+      "pass": true,
+      "detail": "real 104 explanation of the same job"
+    },
+    {
+      "name": "empty-status",
+      "expected": "NO_CHANGE",
+      "actual": "NO_CHANGE",
+      "pass": true,
+      "detail": "no version, no activation"
+    },
+    {
+      "name": "empty-pipeline",
+      "expected": "NO_CHANGE",
+      "actual": "NO_CHANGE",
+      "pass": true,
+      "detail": "112 reports the closed no-change"
+    },
+    {
+      "name": "empty-reason",
+      "expected": "NO_NEW_EVIDENCE",
+      "actual": "NO_NEW_EVIDENCE",
+      "pass": true,
+      "detail": "closed 104 no-change reason"
+    },
+    {
+      "name": "empty-evidence",
+      "expected": "NO_EVIDENCE",
+      "actual": "NO_EVIDENCE",
+      "pass": true,
+      "detail": "real 093 read model"
+    },
+    {
+      "name": "empty-episodes",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no qualifying evidence"
+    },
+    {
+      "name": "empty-confidence",
+      "expected": "UNOBSERVED",
+      "actual": "UNOBSERVED",
+      "pass": true,
+      "detail": "real 100 state"
+    },
+    {
+      "name": "empty-version",
+      "expected": null,
+      "actual": null,
+      "pass": true,
+      "detail": "no 109 version"
+    },
+    {
+      "name": "empty-activation",
+      "expected": null,
+      "actual": null,
+      "pass": true,
+      "detail": "no 110 command"
+    },
+    {
+      "name": "empty-store",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "only the base version"
+    },
+    {
+      "name": "empty-commands",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "nothing published"
+    },
+    {
+      "name": "empty-explanation",
+      "expected": "NO_CHANGE",
+      "actual": "NO_CHANGE",
+      "pass": true,
+      "detail": "104 frame"
+    },
+    {
+      "name": "empty-explanation-version",
+      "expected": null,
+      "actual": null,
+      "pass": true,
+      "detail": "no version in the frame"
+    },
+    {
+      "name": "empty-missing-contexts",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the frame names what is missing"
+    },
+    {
+      "name": "empty-example",
+      "expected": "EXPERIMENT",
+      "actual": "EXPERIMENT",
+      "pass": true,
+      "detail": "reference example"
+    },
+    {
+      "name": "empty-example-origin",
+      "expected": "105-inverse-learning-v1",
+      "actual": "105-inverse-learning-v1",
+      "pass": true,
+      "detail": "105 reference"
+    },
+    {
+      "name": "empty-example-effect",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "not the player effect"
+    },
+    {
+      "name": "empty-stop-candidate",
+      "expected": "REFUSED",
+      "actual": "REFUSED",
+      "pass": true,
+      "detail": "real 098 refusal"
+    },
+    {
+      "name": "empty-stop-reason",
+      "expected": "ZERO_ELIGIBLE_STOP_DENOMINATOR",
+      "actual": "ZERO_ELIGIBLE_STOP_DENOMINATOR",
+      "pass": true,
+      "detail": "closed 098 reason"
+    },
+    {
+      "name": "empty-signal-candidate",
+      "expected": "REFUSED",
+      "actual": "REFUSED",
+      "pass": true,
+      "detail": "real 097 refusal"
+    },
+    {
+      "name": "manual-status",
+      "expected": "REJECTED",
+      "actual": "REJECTED",
+      "pass": true,
+      "detail": "MANUAL is not a demonstration"
+    },
+    {
+      "name": "manual-pipeline",
+      "expected": "SKIPPED_MANUAL",
+      "actual": "SKIPPED_MANUAL",
+      "pass": true,
+      "detail": "112 closed skip"
+    },
+    {
+      "name": "manual-reason",
+      "expected": "MANUAL_SEGMENT_NOT_LEARNABLE",
+      "actual": "MANUAL_SEGMENT_NOT_LEARNABLE",
+      "pass": true,
+      "detail": "closed reason"
+    },
+    {
+      "name": "manual-jobs",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no 103 job"
+    },
+    {
+      "name": "manual-version",
+      "expected": null,
+      "actual": null,
+      "pass": true,
+      "detail": "no 109 version"
+    },
+    {
+      "name": "manual-store",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "only the base version"
+    },
+    {
+      "name": "ineligible-status",
+      "expected": "REJECTED",
+      "actual": "REJECTED",
+      "pass": true,
+      "detail": "ineligible is not a demonstration"
+    },
+    {
+      "name": "ineligible-pipeline",
+      "expected": "SKIPPED_INELIGIBLE",
+      "actual": "SKIPPED_INELIGIBLE",
+      "pass": true,
+      "detail": "112 closed skip"
+    },
+    {
+      "name": "ineligible-reason",
+      "expected": "SEGMENT_INELIGIBLE",
+      "actual": "SEGMENT_INELIGIBLE",
+      "pass": true,
+      "detail": "closed reason"
+    },
+    {
+      "name": "ineligible-jobs",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no 103 job"
+    },
+    {
+      "name": "ineligible-store",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "only the base version"
+    },
+    {
+      "name": "blocked-status",
+      "expected": "REJECTED",
+      "actual": "REJECTED",
+      "pass": true,
+      "detail": "no observed activation, no demonstration"
+    },
+    {
+      "name": "blocked-reason",
+      "expected": "ACTIVATION_NOT_OBSERVED",
+      "actual": "ACTIVATION_NOT_OBSERVED",
+      "pass": true,
+      "detail": "closed 118 reason"
+    },
+    {
+      "name": "blocked-activation",
+      "expected": null,
+      "actual": null,
+      "pass": true,
+      "detail": "no applied activation"
+    },
+    {
+      "name": "blocked-justified",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the delta is justified"
+    },
+    {
+      "name": "blocked-observed",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "the activation was not observed"
+    },
+    {
+      "name": "blocked-satisfied",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "the mission is not satisfied"
+    },
+    {
+      "name": "blocked-publish",
+      "expected": "ACCEPTED",
+      "actual": "ACCEPTED",
+      "pass": true,
+      "detail": "the blocking command is real"
+    }
+  ],
+  "summary": {
+    "scenarios": 5,
+    "checks": 66,
+    "passed": 66,
+    "pass": true
+  }
+}
