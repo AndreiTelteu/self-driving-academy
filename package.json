@@ -64,7 +64,10 @@
     "ui:control-sliders": "node --import ./scripts/register-typescript.mjs scripts/run-control-sliders-report.mjs",
     "ui:style-sliders": "node --import ./scripts/register-typescript.mjs scripts/run-style-sliders-report.mjs",
     "ui:responsive": "node --import ./scripts/register-typescript.mjs scripts/run-responsive-layout-report.mjs",
-    "modes:three": "node --import ./scripts/register-typescript.mjs scripts/run-three-modes-report.mjs"
+    "modes:three": "node --import ./scripts/register-typescript.mjs scripts/run-three-modes-report.mjs",
+    "perf:fleet-gate": "node --import ./scripts/register-typescript.mjs scripts/fleet-gate-server.mjs 5196",
+    "perf:fleet-gate:verify": "node --import ./scripts/register-typescript.mjs scripts/verify-fleet-gate-evidence.mjs",
+    "perf:fleet-gate:run": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/Run-FleetGate.ps1"
   },
   "dependencies": {
     "@babylonjs/core": "9.29.0",

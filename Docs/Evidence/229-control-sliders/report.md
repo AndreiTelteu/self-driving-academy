@@ -59,7 +59,7 @@ true. Change `CONTROL_PREFERENCES_CHANGE` at tick
 | Summary | Nicio modificare față de reglajele salvate; nimic de aplicat. |
 | Values | steeringSensitivity=50,returnRate=50,speedAttenuation=50,throttleRamp=50,brakeRamp=50,cameraMotion=50,fov=80 |
 | Controls / listeners | 16 / 21 |
-| Writes / renders / skipped | 27 / 1 / 0 |
+| Writes / renders / skipped | 28 / 1 / 0 |
 
 ### preset DIRECT
 
@@ -71,7 +71,7 @@ true. Change `CONTROL_PREFERENCES_CHANGE` at tick
 | Summary | 7 reglaje modificate: Sensibilitatea direcției, Revenirea volanului, Direcție mai calmă la viteză, Accelerație progresivă, Frânare progresivă, Mișcarea camerei, Câmp vizual. Nimic nu se aplică până la Aplică. |
 | Values | steeringSensitivity=80,returnRate=40,speedAttenuation=25,throttleRamp=75,brakeRamp=35,cameraMotion=60,fov=88 |
 | Controls / listeners | 16 / 21 |
-| Writes / renders / skipped | 55 / 2 / 0 |
+| Writes / renders / skipped | 56 / 2 / 0 |
 
 ### extreme min
 
@@ -83,7 +83,7 @@ true. Change `CONTROL_PREFERENCES_CHANGE` at tick
 | Summary | 7 reglaje modificate: Sensibilitatea direcției, Revenirea volanului, Direcție mai calmă la viteză, Accelerație progresivă, Frânare progresivă, Mișcarea camerei, Câmp vizual. Nimic nu se aplică până la Aplică. |
 | Values | steeringSensitivity=0,returnRate=0,speedAttenuation=0,throttleRamp=0,brakeRamp=0,cameraMotion=0,fov=60 |
 | Controls / listeners | 16 / 21 |
-| Writes / renders / skipped | 66 / 8 / 0 |
+| Writes / renders / skipped | 67 / 8 / 0 |
 
 ### extreme max
 
@@ -95,7 +95,7 @@ true. Change `CONTROL_PREFERENCES_CHANGE` at tick
 | Summary | 7 reglaje modificate: Sensibilitatea direcției, Revenirea volanului, Direcție mai calmă la viteză, Accelerație progresivă, Frânare progresivă, Mișcarea camerei, Câmp vizual. Nimic nu se aplică până la Aplică. |
 | Values | steeringSensitivity=100,returnRate=100,speedAttenuation=100,throttleRamp=100,brakeRamp=100,cameraMotion=100,fov=100 |
 | Controls / listeners | 16 / 21 |
-| Writes / renders / skipped | 66 / 8 / 0 |
+| Writes / renders / skipped | 67 / 8 / 0 |
 
 ### invalid fov 120
 
@@ -107,7 +107,7 @@ true. Change `CONTROL_PREFERENCES_CHANGE` at tick
 | Summary | 1 valoare este în afara limitelor. Aplică este blocat până la corectare. |
 | Values | steeringSensitivity=50,returnRate=50,speedAttenuation=50,throttleRamp=50,brakeRamp=50,cameraMotion=50,fov=120 |
 | Controls / listeners | 16 / 21 |
-| Writes / renders / skipped | 37 / 2 / 0 |
+| Writes / renders / skipped | 38 / 2 / 0 |
 
 ### cancel
 
@@ -119,7 +119,7 @@ true. Change `CONTROL_PREFERENCES_CHANGE` at tick
 | Summary | Nicio modificare față de reglajele salvate; nimic de aplicat. |
 | Values | steeringSensitivity=50,returnRate=50,speedAttenuation=50,throttleRamp=50,brakeRamp=50,cameraMotion=50,fov=80 |
 | Controls / listeners | 16 / 21 |
-| Writes / renders / skipped | 45 / 3 / 0 |
+| Writes / renders / skipped | 46 / 3 / 0 |
 
 ### reset (confirmed)
 
@@ -131,7 +131,7 @@ true. Change `CONTROL_PREFERENCES_CHANGE` at tick
 | Summary | Nicio modificare față de reglajele salvate; nimic de aplicat. |
 | Values | steeringSensitivity=50,returnRate=50,speedAttenuation=50,throttleRamp=50,brakeRamp=50,cameraMotion=50,fov=80 |
 | Controls / listeners | 16 / 21 |
-| Writes / renders / skipped | 32 / 2 / 0 |
+| Writes / renders / skipped | 33 / 2 / 0 |
 
 ### 60 input events at 16 ms
 
@@ -143,7 +143,7 @@ true. Change `CONTROL_PREFERENCES_CHANGE` at tick
 | Summary | Nicio modificare față de reglajele salvate; nimic de aplicat. |
 | Values | steeringSensitivity=50,returnRate=50,speedAttenuation=50,throttleRamp=50,brakeRamp=50,cameraMotion=50,fov=80 |
 | Controls / listeners | 16 / 21 |
-| Writes / renders / skipped | 45 / 1 / 0 |
+| Writes / renders / skipped | 46 / 1 / 0 |
 
 ## Checks
 
