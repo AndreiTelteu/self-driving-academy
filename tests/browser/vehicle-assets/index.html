@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>PBI 145 vehicle assets probe</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        background: #10161b;
+        color: #dfe7ec;
+        font:
+          13px/1.4 ui-monospace,
+          monospace;
+      }
+      #host {
+        display: block;
+        width: 100vw;
+        height: 100vh;
+      }
+      #status {
+        position: fixed;
+        top: 8px;
+        left: 8px;
+        padding: 6px 10px;
+        border-radius: 6px;
+        background: #0b1116cc;
+      }
+      #status[data-state='ready'] {
+        color: #7ee2a8;
+      }
+      #status[data-state='error'] {
+        color: #ff8a80;
+      }
+      #panel {
+        position: fixed;
+        right: 8px;
+        bottom: 8px;
+        max-width: 46vw;
+        max-height: 42vh;
+        overflow: auto;
+        padding: 8px 10px;
+        border-radius: 6px;
+        background: #0b1116cc;
+        white-space: pre-wrap;
+      }
+      #panel[hidden] {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="host"></canvas>
+    <div id="status" data-state="loading">Loading PBI 145 probe…</div>
+    <pre id="panel" hidden></pre>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

@@ -1,0 +1,993 @@
+{
+  "gateVersion": "220-fleet-gate-v1",
+  "commit": "71a75ad684d34e8c380f68fd59f3a62bf9e6a9b6",
+  "sourceHash": "6b89671f6b79d93baf4c5590df5d230de58c27ad413251cc54222a40a0c5a8eb",
+  "inputs": [
+    "Docs/performance-budgets.json",
+    "package-lock.json",
+    "package.json",
+    "scripts/fleet-gate-server.mjs",
+    "src/app/application-lifecycle.ts",
+    "src/app/behavior-metrics.ts",
+    "src/app/city-dashboard.ts",
+    "src/app/city-style-propagation.ts",
+    "src/app/control-sliders-style.ts",
+    "src/app/control-sliders.ts",
+    "src/app/cross-class-fidelity.ts",
+    "src/app/fleet-panel.ts",
+    "src/app/game-settings.ts",
+    "src/app/index.ts",
+    "src/app/inverse-learning.ts",
+    "src/app/key-remapping.ts",
+    "src/app/learning-edgecases.ts",
+    "src/app/learning-epoch.ts",
+    "src/app/learning-explanation.ts",
+    "src/app/learning-gate24.ts",
+    "src/app/learning-notification.ts",
+    "src/app/manual-segment-bridge.ts",
+    "src/app/manual-trip.ts",
+    "src/app/map-selection.ts",
+    "src/app/metric-service.ts",
+    "src/app/minimap.ts",
+    "src/app/passenger-visual.ts",
+    "src/app/pause-focus.ts",
+    "src/app/profile-activation.ts",
+    "src/app/profile-continuity.ts",
+    "src/app/profile-history.ts",
+    "src/app/profile-panel.ts",
+    "src/app/profile-pipeline.ts",
+    "src/app/profile-restore.ts",
+    "src/app/profile-ui-binding.ts",
+    "src/app/renderer-recovery.ts",
+    "src/app/rendering-lifecycle.ts",
+    "src/app/taxi-hud.ts",
+    "src/app/three-modes.ts",
+    "src/app/ui-accessibility.ts",
+    "src/app/vehicle-recovery-road.ts",
+    "src/app/vehicle-recovery-segment.ts",
+    "src/app/vehicle-recovery.ts",
+    "src/app/vertical-slice.ts",
+    "src/autonomy/behavior-fsm.ts",
+    "src/autonomy/blocked-recovery.ts",
+    "src/autonomy/cruise-targets.ts",
+    "src/autonomy/decision-explanation.ts",
+    "src/autonomy/following.ts",
+    "src/autonomy/index.ts",
+    "src/autonomy/lane-change-policy.ts",
+    "src/autonomy/lateral-controller.ts",
+    "src/autonomy/longitudinal-control.ts",
+    "src/autonomy/road-context.ts",
+    "src/autonomy/signal-policy.ts",
+    "src/autonomy/stop-policy.ts",
+    "src/autonomy/takeover-continuity.ts",
+    "src/autonomy/yield-policy.ts",
+    "src/experiments/behavior-metrics.ts",
+    "src/experiments/cross-class-fidelity.ts",
+    "src/experiments/index.ts",
+    "src/experiments/inverse-learning.ts",
+    "src/experiments/learning-edgecases.ts",
+    "src/experiments/learning-gate24.ts",
+    "src/experiments/metric-service.ts",
+    "src/fleet/civil-traffic.ts",
+    "src/fleet/contracts.ts",
+    "src/fleet/dispatcher.ts",
+    "src/fleet/dropoff.ts",
+    "src/fleet/eta.ts",
+    "src/fleet/fleet-health.ts",
+    "src/fleet/index.ts",
+    "src/fleet/pickup.ts",
+    "src/fleet/profile-activation.ts",
+    "src/fleet/profile-continuity.ts",
+    "src/fleet/registry.ts",
+    "src/fleet/ride-demand.ts",
+    "src/fleet/ride-fsm.ts",
+    "src/fleet/scenario-fixture.ts",
+    "src/input/control-authority.ts",
+    "src/input/index.ts",
+    "src/input/keyboard-drive.ts",
+    "src/input/mode-boundary.ts",
+    "src/input/mode-controls.ts",
+    "src/input/mode-keyboard.ts",
+    "src/input/pause-focus-input.ts",
+    "src/input/recovery-input.ts",
+    "src/input/vehicle-selection.ts",
+    "src/learning/acceleration-estimator.ts",
+    "src/learning/candidate-validation.ts",
+    "src/learning/estimator-task.ts",
+    "src/learning/estimator-worker.ts",
+    "src/learning/evidence-confidence.ts",
+    "src/learning/following-estimator.ts",
+    "src/learning/index.ts",
+    "src/learning/lane-estimator.ts",
+    "src/learning/parameter-evidence.ts",
+    "src/learning/profile-blend.ts",
+    "src/learning/profile-store.ts",
+    "src/learning/signal-estimator.ts",
+    "src/learning/speed-estimator.ts",
+    "src/learning/stop-yield-estimator.ts",
+    "src/profiles/contracts.ts",
+    "src/profiles/index.ts",
+    "src/profiles/parameter-catalog.generated.ts",
+    "src/profiles/parameter-registry.ts",
+    "src/profiles/profile-store.ts",
+    "src/rendering/asset-budgets.ts",
+    "src/rendering/babylon/asset-contract.ts",
+    "src/rendering/babylon/asset-registry.ts",
+    "src/rendering/babylon/backend.ts",
+    "src/rendering/babylon/cell-batches.ts",
+    "src/rendering/babylon/city-decor-scene.ts",
+    "src/rendering/babylon/city-scene.ts",
+    "src/rendering/babylon/daylight.ts",
+    "src/rendering/babylon/dev-inspector.ts",
+    "src/rendering/babylon/diagnostics-adapter.ts",
+    "src/rendering/babylon/index.ts",
+    "src/rendering/babylon/partial-cleanup.ts",
+    "src/rendering/babylon/recovery-session.ts",
+    "src/rendering/babylon/scene-adapter.ts",
+    "src/rendering/babylon/snapshot-presenter.ts",
+    "src/rendering/babylon/vehicle-camera-input.ts",
+    "src/rendering/babylon/vehicle-camera.ts",
+    "src/rendering/babylon/vehicle-picking-input.ts",
+    "src/rendering/babylon/vehicle-picking-registry.ts",
+    "src/rendering/babylon/vehicle-picking.ts",
+    "src/rendering/babylon/vehicle-scene.ts",
+    "src/rendering/backend-policy.ts",
+    "src/rendering/camera-collision.ts",
+    "src/rendering/city-decor.ts",
+    "src/rendering/diagnostics.ts",
+    "src/rendering/quality-policy.ts",
+    "src/rendering/render-sync.ts",
+    "src/rendering/scene-contract.ts",
+    "src/rendering/vehicle-camera.ts",
+    "src/rendering/vehicle-geometry.ts",
+    "src/rendering/vehicle-visuals.ts",
+    "src/sessions/identity.ts",
+    "src/sessions/index.ts",
+    "src/sessions/random.ts",
+    "src/sessions/validation.ts",
+    "src/settings/contracts.ts",
+    "src/settings/control-mapping.ts",
+    "src/settings/index.ts",
+    "src/settings/store.ts",
+    "src/simulation/collision-events.ts",
+    "src/simulation/event-bus.ts",
+    "src/simulation/events.ts",
+    "src/simulation/fixed-tick.ts",
+    "src/simulation/index.ts",
+    "src/simulation/scheduling.ts",
+    "src/telemetry/artifact-filter.ts",
+    "src/telemetry/contracts.ts",
+    "src/telemetry/demonstration-fixtures.ts",
+    "src/telemetry/eligibility-windows.ts",
+    "src/telemetry/index.ts",
+    "src/telemetry/intervention-admission.ts",
+    "src/telemetry/intervention-events.ts",
+    "src/telemetry/intervention-intake.ts",
+    "src/telemetry/intervention-lifecycle.ts",
+    "src/telemetry/intervention-ports.ts",
+    "src/telemetry/intervention-receipts.ts",
+    "src/telemetry/intervention-record-store.ts",
+    "src/telemetry/intervention-validation.ts",
+    "src/telemetry/opportunities.ts",
+    "src/telemetry/performance.ts",
+    "src/telemetry/segment-compaction.ts",
+    "src/telemetry/tick-samples.ts",
+    "src/telemetry/validation-protocol.ts",
+    "src/telemetry/vehicle-normalization.ts",
+    "src/ui/accessibility-format.ts",
+    "src/ui/city-dashboard-format.ts",
+    "src/ui/city-dashboard.ts",
+    "src/ui/control-mode-hud.ts",
+    "src/ui/control-sliders-format.ts",
+    "src/ui/control-sliders.ts",
+    "src/ui/diagnostics-panel.ts",
+    "src/ui/fleet-panel-format.ts",
+    "src/ui/fleet-panel.ts",
+    "src/ui/game-settings-format.ts",
+    "src/ui/game-settings.ts",
+    "src/ui/index.ts",
+    "src/ui/key-remapping-format.ts",
+    "src/ui/key-remapping.ts",
+    "src/ui/learning-explanation-format.ts",
+    "src/ui/learning-explanation.ts",
+    "src/ui/learning-notification-format.ts",
+    "src/ui/learning-notifications.ts",
+    "src/ui/map-selection-format.ts",
+    "src/ui/map-selection.ts",
+    "src/ui/minimap-format.ts",
+    "src/ui/minimap.ts",
+    "src/ui/panel-focus.ts",
+    "src/ui/passenger-visual-format.ts",
+    "src/ui/passenger-visual.ts",
+    "src/ui/profile-history-format.ts",
+    "src/ui/profile-history.ts",
+    "src/ui/profile-panel-format.ts",
+    "src/ui/profile-panel.ts",
+    "src/ui/recovery-hud.ts",
+    "src/ui/rendering-view.ts",
+    "src/ui/responsive-layout.ts",
+    "src/ui/style-sliders-format.ts",
+    "src/ui/style-sliders.ts",
+    "src/ui/taxi-hud-format.ts",
+    "src/ui/taxi-hud.ts",
+    "src/vehicles/body-port.ts",
+    "src/vehicles/body-registry.ts",
+    "src/vehicles/braking-reverse-input.ts",
+    "src/vehicles/collision-episodes.ts",
+    "src/vehicles/collision-port.ts",
+    "src/vehicles/contracts.ts",
+    "src/vehicles/controller-port.ts",
+    "src/vehicles/controller.ts",
+    "src/vehicles/damage-port.ts",
+    "src/vehicles/damage-state.ts",
+    "src/vehicles/drivetrain.ts",
+    "src/vehicles/index.ts",
+    "src/vehicles/keyboard-filter.ts",
+    "src/vehicles/physics.ts",
+    "src/vehicles/rapier/index.ts",
+    "src/vehicles/rapier/probe-cleanup.ts",
+    "src/vehicles/rapier/recovery-shape-query.ts",
+    "src/vehicles/rapier/world-ownership.ts",
+    "src/vehicles/recovery-diagnostic.ts",
+    "src/vehicles/recovery-ledger.ts",
+    "src/vehicles/recovery-port.ts",
+    "src/vehicles/recovery-road.ts",
+    "src/vehicles/recovery-state.ts",
+    "src/vehicles/road-surfaces.ts",
+    "src/vehicles/vehicle-classes.ts",
+    "src/vehicles/wheel-slip.ts",
+    "src/workers/client.ts",
+    "src/workers/governor.ts",
+    "src/workers/index.ts",
+    "src/workers/protocol.ts",
+    "src/workers/runtime.ts",
+    "src/workers/transport.ts",
+    "src/world/city-layout.ts",
+    "src/world/crosswalk-zones.ts",
+    "src/world/errors.ts",
+    "src/world/index.ts",
+    "src/world/intersection-conflict-geometry.ts",
+    "src/world/intersection-conflicts.ts",
+    "src/world/lane-graph.ts",
+    "src/world/map-integrity.ts",
+    "src/world/neighbourhood.ts",
+    "src/world/parser.ts",
+    "src/world/priority-arrival.ts",
+    "src/world/priority-policy.ts",
+    "src/world/priority-rules.ts",
+    "src/world/route-planner.ts",
+    "src/world/semantics.ts",
+    "src/world/signals.ts",
+    "src/world/spatial-index.ts",
+    "src/world/stop-rules.ts",
+    "tests/autonomy/road-context-reference.ts",
+    "tests/browser/fleet-performance-gate/index.html",
+    "tests/browser/fleet-performance-gate/main.ts",
+    "tests/browser/fleet-performance-gate/plan.ts",
+    "tests/browser/fleet-performance-gate/protocol.ts",
+    "tests/browser/fleet-performance-gate/workload.ts",
+    "tests/harness/governor-store.ts",
+    "tests/harness/learning-queue-harness.ts",
+    "tests/simulation/scheduling-reference.ts",
+    "tests/world/intersection-conflicts-fixture.ts",
+    "tests/world/spatial-index-reference.ts"
+  ],
+  "budgetVersion": "203-initial-1",
+  "physicsVersion": "0.21.0",
+  "engineVersion": "9.29.0",
+  "workloads": [
+    "scaling-20",
+    "normal-24",
+    "maximum-30",
+    "overload-30-80"
+  ],
+  "artifactHash": "fad628eb0705007ddeaadf4f54a077383999e405b8aaeda820c699a2715771ed",
+  "artifacts": [
+    {
+      "path": "assets/abstractAudioBus-CX5ZKOYC.js",
+      "bytes": 119,
+      "sha256": "8744923a259de99655a9c11181797a44c7d921527da1941f7ad95445d0703ed5"
+    },
+    {
+      "path": "assets/abstractSoundInstance-CgG1Tn-d.js",
+      "bytes": 3077,
+      "sha256": "b1c5dfe52a5ee1ed4c3235e75123097cb8c02989d58981f619b5f7637f0a2f2a"
+    },
+    {
+      "path": "assets/abstractSoundSource-DY24eWW5.js",
+      "bytes": 1484,
+      "sha256": "404104ebc783907bff800606c6dff3c437be3fe1a7afc15f29166bab9a9a58ff"
+    },
+    {
+      "path": "assets/animation.pure-DgajrSNT.js",
+      "bytes": 26662,
+      "sha256": "b5f5d39cfcf4943c746b217cbc969b87371a452bc39c7c05b0226e34737b5240"
+    },
+    {
+      "path": "assets/animationGroup.pure-Bo-3IYAB.js",
+      "bytes": 42153,
+      "sha256": "a1383110cd81d6c36cfe8062f946bbae4406aac03515163b04c0229ac37fa74d"
+    },
+    {
+      "path": "assets/baseTexture.pure-BTXK3HNZ.js",
+      "bytes": 15117,
+      "sha256": "f107a846df7b8ff03f6208b4a84c6abd7225c1adddb17c449f156141518f396c"
+    },
+    {
+      "path": "assets/basisTextureLoader-IJt6Zmr8.js",
+      "bytes": 8151,
+      "sha256": "dd3e03a66421af356b9552a4cabd110f9f9344285f131d9d889db57e0489da43"
+    },
+    {
+      "path": "assets/brdfTextureTools-BtrWvR89.js",
+      "bytes": 62245,
+      "sha256": "3a1195ac4f53e7d489a0ced80fe2bd18880fabc3da0943b0c084bb4f0322b766"
+    },
+    {
+      "path": "assets/buffer.pure-LXQToWSq.js",
+      "bytes": 7398,
+      "sha256": "4266a5414f6bd3dc1d73a58596e71c0f0b25f47a8b44e6345a92f50ba5bf0ba9"
+    },
+    {
+      "path": "assets/bumpFragment-CuiSf1tw.js",
+      "bytes": 6862,
+      "sha256": "2ca75b61a92b7a6c32d752683405136fbe3d1745adf656ddc19a6a85add23340"
+    },
+    {
+      "path": "assets/bumpFragment-D2NLTOb5.js",
+      "bytes": 8067,
+      "sha256": "5a6c665d9c6bf4b2b6b2bbf3a3f1c2c9e763dee877e76e2107e7388236ada1e9"
+    },
+    {
+      "path": "assets/bumpVertex-CWhdIpqj.js",
+      "bytes": 522,
+      "sha256": "0566f87b964a6c179999bb6cf54b4c82463bf6ad42cb87c5aa24e9e0d51a63f2"
+    },
+    {
+      "path": "assets/bumpVertex-DRq4BZvD.js",
+      "bytes": 699,
+      "sha256": "74176a269e6216de48f6ef20164ced661a06dfa6efd4d48bc0cb648cc02463c6"
+    },
+    {
+      "path": "assets/bumpVertexDeclaration-Cb04kLz9.js",
+      "bytes": 341,
+      "sha256": "d4ed775da7490ad120f0146e0c32df1bf166693679d7b09b3e4aa490ef3d5701"
+    },
+    {
+      "path": "assets/bumpVertexDeclaration-I4Guxw_q.js",
+      "bytes": 394,
+      "sha256": "2ed968a556173636bc88fe322aef8e0057e4d160ff89be53a87336f2936383c5"
+    },
+    {
+      "path": "assets/clipPlaneFragment-Ct2VqHzk.js",
+      "bytes": 1274,
+      "sha256": "455c46fc4b13fe2a93164783c7bfba27f2611f7a8e5c0c160cf0798dd7926275"
+    },
+    {
+      "path": "assets/clipPlaneFragment-DVK0wgyZ.js",
+      "bytes": 1174,
+      "sha256": "74fd12d190430b96092bbaf47daa9916639ccf578b14fc8f90fee322f820b073"
+    },
+    {
+      "path": "assets/clipPlaneVertex-B1wJvZTt.js",
+      "bytes": 5121,
+      "sha256": "79d36c691499cb27eab1942703233c6bf210fe2dbcf257d3ae2f85e4b635d720"
+    },
+    {
+      "path": "assets/clipPlaneVertex-BgCTjwUU.js",
+      "bytes": 9705,
+      "sha256": "ccf24e983b9b3dc27b95733f45f18afcd0dec5942ad4bcfb11ee760a66e92b8c"
+    },
+    {
+      "path": "assets/color.fragment-CbJP31yK.js",
+      "bytes": 1037,
+      "sha256": "e9dae782167d32901e20679ab315477933c7c47d6d776541961a2e4eeabe1693"
+    },
+    {
+      "path": "assets/color.fragment-CxH-oW8C.js",
+      "bytes": 929,
+      "sha256": "6c19811bcafc31d92808a8b0b8099399b797e39c3b50f32d6a43bdb0cc6a6012"
+    },
+    {
+      "path": "assets/color.vertex-DCm2P3oG.js",
+      "bytes": 1455,
+      "sha256": "212664aa271671905c2dd002646a3827fdae61b568bc4f277c5609352bee7ac2"
+    },
+    {
+      "path": "assets/color.vertex-DXLP3w0c.js",
+      "bytes": 1433,
+      "sha256": "97d153072dc3e841f586b00112248014db2991e14827a535496b3e94dc149e1f"
+    },
+    {
+      "path": "assets/cubemapToSphericalPolynomial-B1ogYt_P.js",
+      "bytes": 3704,
+      "sha256": "7861820cf54b1c60d73d267fccf1918caa04f4dcab0e29f464faff3e112e1c35"
+    },
+    {
+      "path": "assets/dds.pure-BJt72CLW.js",
+      "bytes": 6931,
+      "sha256": "49dfec0eaaeb9fb49f0196e35fc1b0540dd9f2c9a5a8762434ea52d445380efe"
+    },
+    {
+      "path": "assets/ddsTextureLoader-Cz_trmR5.js",
+      "bytes": 1257,
+      "sha256": "c5ed7332f002c49a5d4b304393152c257fb8fe6b8bb65069d39b2df918e4af04"
+    },
+    {
+      "path": "assets/decorators-D5uwmq6c.js",
+      "bytes": 3806,
+      "sha256": "ad00ff645fe3572ebe2fd4868087b2316cc4d6544d280f460c472c41d9313f1f"
+    },
+    {
+      "path": "assets/default.fragment-CImgPyQt.js",
+      "bytes": 25335,
+      "sha256": "c3c358f7ea0fa11714760b915edc1d923326dda11496677afe22d0bf89e6c3ff"
+    },
+    {
+      "path": "assets/default.fragment-DQU-0_3U.js",
+      "bytes": 25930,
+      "sha256": "ef7847ece4b087c7a76d0e8373b4e299803a15ceb3d3a74d431cc785226165b0"
+    },
+    {
+      "path": "assets/default.vertex-DLIzVMEF.js",
+      "bytes": 8016,
+      "sha256": "8811c51a1c246041b876173177d3f0fe4d724c348ca05065f4e7e5878d6481b8"
+    },
+    {
+      "path": "assets/default.vertex-Do95UkFi.js",
+      "bytes": 9297,
+      "sha256": "8a1f4ea6e3c45a1a305e839038a92973fff2c264b34415656fcfb2a5ab4ef78a"
+    },
+    {
+      "path": "assets/defaultUboDeclaration-COomfCG5.js",
+      "bytes": 1263,
+      "sha256": "4bb4fdcf8dae6d7e1775c8e5cd0670edf1b0ccb86552d2eccd1e35bd67321d8c"
+    },
+    {
+      "path": "assets/defaultUboDeclaration-CPc9I34S.js",
+      "bytes": 1570,
+      "sha256": "d9676279129c316cd1ccd7628e8ccda96d9f08d4b81603f83c18e56fb2922157"
+    },
+    {
+      "path": "assets/drawWrapper-CrO7u9va.js",
+      "bytes": 2130,
+      "sha256": "71b7202f73b8e102f673ab49b12d0a733a80337f9c64fcd501dbc09f692b6bf9"
+    },
+    {
+      "path": "assets/dumpTools.pure-SSCsCOvG.js",
+      "bytes": 4015,
+      "sha256": "e07eaede72595215681103b324d790d424911517042cc6acf6f0e45d607b2147"
+    },
+    {
+      "path": "assets/effectRenderer.pure-DyxNYoAo.js",
+      "bytes": 8153,
+      "sha256": "35f1c21bb23d133aed2ed9e6900055d40ae56cf9fd38be11d3afe1020cc174b2"
+    },
+    {
+      "path": "assets/engineStore-e38OvQA7.js",
+      "bytes": 364,
+      "sha256": "1149137099e563d52b5aea2b0b1a40716cc6ed18e64ebdca8813a5ea0315e770"
+    },
+    {
+      "path": "assets/envTextureLoader-DD5UCD3G.js",
+      "bytes": 8910,
+      "sha256": "8c19c1e8db9dfd209ea72a19bfc8abc8dfa3be2f599c2074a7571f49f040fb8e"
+    },
+    {
+      "path": "assets/exrTextureLoader-DrL5ODQU.js",
+      "bytes": 13138,
+      "sha256": "aa0eb51fa72dc88c42ec2996d101f85b22dc9959140e93bfef2ae3f1660a9635"
+    },
+    {
+      "path": "assets/fogFragment-CISE_m3s.js",
+      "bytes": 1084,
+      "sha256": "16bc7ec0e6e4d42ecf24c19ad1103704765052f1f19408cc1b9255ce6a121dad"
+    },
+    {
+      "path": "assets/fogFragment-EikOP4pH.js",
+      "bytes": 1214,
+      "sha256": "8b08b73a42fed9785b5ddf87d49fcd43876f1c2c56ba88367b62dc2b7f60add0"
+    },
+    {
+      "path": "assets/geometry.fragment-6lZ9tE3J.js",
+      "bytes": 11721,
+      "sha256": "db6a4dba1676b10549fcfc5efc02cb041e694c327c4196578fc69e6b9ec23216"
+    },
+    {
+      "path": "assets/geometry.fragment-D13zAY9p.js",
+      "bytes": 11275,
+      "sha256": "5c0123b59bc1d7f1d5e8f2f66c6c1cdf9e1abc0a09d93bb066c64559089d2c80"
+    },
+    {
+      "path": "assets/geometry.vertex-C1QIaAMs.js",
+      "bytes": 8993,
+      "sha256": "505c1b93a8c59121834d343c231f4a4d1f31212db6eff90887a37e5d15b5aa7e"
+    },
+    {
+      "path": "assets/geometry.vertex-fDXindyo.js",
+      "bytes": 7797,
+      "sha256": "97927df45ca4d1186b5f9f21b8c6e612278e69bef633da8ed050a78b18b221e0"
+    },
+    {
+      "path": "assets/glTFLoaderAnimation.pure-ChcRzFXU.js",
+      "bytes": 1824,
+      "sha256": "e00308b768a38c4eb610f28824b224b827e299d3cb6e8c3dc5074fef5576e2b4"
+    },
+    {
+      "path": "assets/glslang-DqqdIFnr.js",
+      "bytes": 16030,
+      "sha256": "c3a3c2a47284b16b60293fa08a5842fbe8689ac617edc857ab6cb8134a590db4"
+    },
+    {
+      "path": "assets/glslang-G7Yt_-32.wasm",
+      "bytes": 943680,
+      "sha256": "d79453e0803ebcdf3753c6b1d8d51543b52fed96f7f0d4aec94acd847e225169"
+    },
+    {
+      "path": "assets/halfFloat-Ce77JD5z.js",
+      "bytes": 1290,
+      "sha256": "e364d38c88e676a0e9ced31660c08e156b244af07b1729fb8ea38e1ad6cffbb7"
+    },
+    {
+      "path": "assets/harmonicsFunctions-CMr56qfT.js",
+      "bytes": 1421,
+      "sha256": "27091372e529570da5fbff6e233ee6485c27d5ad0ca206d9582d8d8bd7ff4b32"
+    },
+    {
+      "path": "assets/harmonicsFunctions-QSz_WdsQ.js",
+      "bytes": 1126,
+      "sha256": "157c8e9336e59c7b83bcc254dda83652512d04a97041476979053d0ead47d887"
+    },
+    {
+      "path": "assets/hdrTextureLoader-BQVwkxK1.js",
+      "bytes": 2313,
+      "sha256": "c1dfa7a7928d2c03e86324a093297ad10c35caefff14518691c5fe4d4172447a"
+    },
+    {
+      "path": "assets/helperFunctions-gEnZbjN3.js",
+      "bytes": 6815,
+      "sha256": "25cb5a62b09965a1f9d12f999eb40672c9f80924b8cf2353120e9809d11a03ba"
+    },
+    {
+      "path": "assets/iesTextureLoader-3O5bSkSd.js",
+      "bytes": 2477,
+      "sha256": "ba6cbc6a680efda56c5507ab3ca58c7d7ed0d986242c005828a60fe6cec0892a"
+    },
+    {
+      "path": "assets/imageProcessing-C2v0QmqJ.js",
+      "bytes": 18596,
+      "sha256": "110000e27e684954566e85ffc90197fccf328527f4d31f51df1fa469d8218d91"
+    },
+    {
+      "path": "assets/index-0aWe5_Sf.js",
+      "bytes": 6102784,
+      "sha256": "dfe26f617c4ef7815f2b5ba3ad6086fc049e430e83d23f956ad7aa10aaf317f8"
+    },
+    {
+      "path": "assets/internalTexture--UEgW48C.js",
+      "bytes": 7883,
+      "sha256": "6a8792a204780aa77110b119274d21dfbccb672d75ad57dc3d868bf122cc6e35"
+    },
+    {
+      "path": "assets/ktxTextureLoader-WSOt25si.js",
+      "bytes": 16411,
+      "sha256": "cb8db9dc78a2e7e0c18522e41e86aaa0e10c79e098dc350357b4ab525863c952"
+    },
+    {
+      "path": "assets/lightConstants-DsnPDNj8.js",
+      "bytes": 18247,
+      "sha256": "25c081b66b61a292d75735500328df45ec1839f00dad9f6392f88d75dd1ce9ee"
+    },
+    {
+      "path": "assets/lightFragment-B2GfWPKU.js",
+      "bytes": 22164,
+      "sha256": "359e0a27b127169133eada9c528c358f3ddff32d5f02a6a85b4f0a6c7afda6d8"
+    },
+    {
+      "path": "assets/lightFragment-x7Xpl9uU.js",
+      "bytes": 20567,
+      "sha256": "c89db96c1503ef9dfad4049ca2ca2428e2fff2f4961478b2f9baebb55f825195"
+    },
+    {
+      "path": "assets/logDepthDeclaration-BYs2zDV7.js",
+      "bytes": 462,
+      "sha256": "61254b8bed5eefb3669eae7f2044d23f1a7c2e5b5890f65b9fce7e8312d8637d"
+    },
+    {
+      "path": "assets/logDepthDeclaration-wCvYk_Kr.js",
+      "bytes": 728,
+      "sha256": "2640418366798b2c1b6b298df8945cfb248b3b67df0eba702a40b520a101aa34"
+    },
+    {
+      "path": "assets/logDepthVertex-DbaC19x4.js",
+      "bytes": 7091,
+      "sha256": "ed5f8325590fcc92acfa02da61cef57c1aa0f8d6d62b7851d6f35508906db9b9"
+    },
+    {
+      "path": "assets/logDepthVertex-DgpvUSZJ.js",
+      "bytes": 21930,
+      "sha256": "e832675c3731487f475bbbfdd3f52541555f372e7a9921f948e5c0ba85a7b85e"
+    },
+    {
+      "path": "assets/logger-CuBYPcDK.js",
+      "bytes": 1881,
+      "sha256": "30a999582eace71f2e78a479182e71e943508bbda9574b17e5b29575c49a3b9e"
+    },
+    {
+      "path": "assets/material.pure-Cr9YUb_f.js",
+      "bytes": 78779,
+      "sha256": "a50bcad35dda41b2a757c613647b1b54115397d3de31bc80a127634fe1bb2eeb"
+    },
+    {
+      "path": "assets/math.color.pure-tnjpV39e.js",
+      "bytes": 12514,
+      "sha256": "8fec10dc56dcd0c524122cc049d0d90a715c5ef8d53e144a2b9362f793a7e589"
+    },
+    {
+      "path": "assets/math.plane-B8NUBKuy.js",
+      "bytes": 1811,
+      "sha256": "47f52766c008ce0d7e26703bce8ea7aceb1a48b51c3bf4ba15eeecaf05eee943"
+    },
+    {
+      "path": "assets/math.scalar.functions-lnL7TJ7T.js",
+      "bytes": 764,
+      "sha256": "4a5ef6436ef4c8fd85de14835c3bf62ccf5d1fbe38f71c727cc79760f1a1ff79"
+    },
+    {
+      "path": "assets/math.size-B0wQX-L6.js",
+      "bytes": 5657,
+      "sha256": "4578712e9187d3eba96fcb5acec799e98b5e02dbd31c67b00df4c61693ddadb6"
+    },
+    {
+      "path": "assets/math.vector.pure-BI_ulypP.js",
+      "bytes": 64627,
+      "sha256": "b9b18d61a2f8ae08549615e5b72a5b0395a18e0bf6c41f09de6cf791170231dd"
+    },
+    {
+      "path": "assets/mesh.vertexData.functions-CD4JOR2q.js",
+      "bytes": 930,
+      "sha256": "bdeb852116676b6289101b6ef271fb52200959188fba6863858942ec2e068338"
+    },
+    {
+      "path": "assets/morphTargetsVertex-6N5r7oF1.js",
+      "bytes": 4379,
+      "sha256": "7e231dfccd87db548f33cf4bb21a0e7fcbf9907bdb54cde2776876fc9c52c34e"
+    },
+    {
+      "path": "assets/morphTargetsVertex-OlIh-Lzh.js",
+      "bytes": 6405,
+      "sha256": "55af13b4ebad6636788f652ede1cb6c4919f9d37542ae9846914dd16c0b3a8ea"
+    },
+    {
+      "path": "assets/observable.pure-B5E8yEYx.js",
+      "bytes": 3205,
+      "sha256": "156313d871c0a1956dd917336e2a32478ccc52b9d27c0acca2120cfe0148ba6a"
+    },
+    {
+      "path": "assets/oitFragment-BMjpbSa2.js",
+      "bytes": 53414,
+      "sha256": "40eaa74a6058a286592a92ed23e6aacd1b13cbc50cc9161ebc053c3e74563b8e"
+    },
+    {
+      "path": "assets/oitFragment-ByezL1dB.js",
+      "bytes": 53464,
+      "sha256": "9902b46b514287ca08b94f929145f9374264f77c697eed8f6899200ad31ebd04"
+    },
+    {
+      "path": "assets/openpbr.fragment-DOwyU8wG.js",
+      "bytes": 88643,
+      "sha256": "afd0b478affaf6ecf5d7c91ba7332f60509cf9c1126ec36296c02011d4013acd"
+    },
+    {
+      "path": "assets/openpbr.fragment-YtSohsTu.js",
+      "bytes": 90327,
+      "sha256": "20013c9bb37b43a16ba0c15f2cd312626c14c531c168a420ed567cf0a09e0f80"
+    },
+    {
+      "path": "assets/openpbr.vertex-lwOvGDfy.js",
+      "bytes": 17174,
+      "sha256": "1f61424b43f36e6f430c70eba19a4a6a0597c5a2afb157ad061ad568d429d4b6"
+    },
+    {
+      "path": "assets/openpbr.vertex-niL4iXsc.js",
+      "bytes": 20577,
+      "sha256": "c0710dd8ced25a32ac12bd7440efda81817faddb2c7d5b69fb1002b0e9eff1c0"
+    },
+    {
+      "path": "assets/openpbrMaterial.pure-BppstAt_.js",
+      "bytes": 141355,
+      "sha256": "25e66856a645c4e6a8a3af41c7bdd4db4e39a2f51d5d6b11bbfd2a95730deef4"
+    },
+    {
+      "path": "assets/openpbrMaterialLoadingAdapter-ZhAALj29.js",
+      "bytes": 33647,
+      "sha256": "46d517de26a7e516a6dc0ca8b8affd3490e1dadef1b773a011cb9af9ad1f8bef"
+    },
+    {
+      "path": "assets/openpbrTransmissionLayerData-BRi1vGnu.js",
+      "bytes": 17355,
+      "sha256": "23fb7f071942396abb748dba5529f4dc83abda84d3bc2d0d800e50078681c10d"
+    },
+    {
+      "path": "assets/openpbrTransmissionLayerData-CbssVoWF.js",
+      "bytes": 18461,
+      "sha256": "f92d0aaf10cdb9738525fe3b51b207e5eae236e81c65499195cab6b1f1d664ed"
+    },
+    {
+      "path": "assets/openpbrUboDeclaration-Brwxqcx2.js",
+      "bytes": 5167,
+      "sha256": "8ab92f70f030a94a0f39bb48d9aa2752c59ed55dba619fc7dd5d4d0e866888c3"
+    },
+    {
+      "path": "assets/openpbrUboDeclaration-dcWCwMT2.js",
+      "bytes": 3876,
+      "sha256": "34d5c02d2813c428bfe07365a2c7dcb6a0d92e39512150037733c68cd99bbda5"
+    },
+    {
+      "path": "assets/pass.fragment-Cvd2TCWC.js",
+      "bytes": 318,
+      "sha256": "9360b4269aa9ef2e3f7c40e8671692d8efa20ef17ef57f3207ce34b5cd3751e2"
+    },
+    {
+      "path": "assets/pbr.fragment-ChJf8OJW.js",
+      "bytes": 97349,
+      "sha256": "ede7a74ca8e8ab2c9a6007620859c30c282f625cadcdfaec87bf74922d556e2c"
+    },
+    {
+      "path": "assets/pbr.fragment-Dy4XiT_5.js",
+      "bytes": 93473,
+      "sha256": "e624e0930a6bd294fb0f0bee91fbd0f1339cdeca467519742d039602b432a483"
+    },
+    {
+      "path": "assets/pbr.vertex-55KuCxpP.js",
+      "bytes": 14299,
+      "sha256": "9eca318d94fbe5a7b8b8d383dffd0e494a02a988009b7d6c46c94ebac5b53aa9"
+    },
+    {
+      "path": "assets/pbr.vertex-Cb79SIfK.js",
+      "bytes": 16889,
+      "sha256": "f269c3179b66689a024a1b334c333f6e9230b7ba85b617bac9938568cd7bafa5"
+    },
+    {
+      "path": "assets/pbrBRDFFunctions-BCNINF-p.js",
+      "bytes": 11931,
+      "sha256": "61b464dc57e87e6d27224049b6920679ffb6ca96e3b9b5a1b2896c23f0aeea80"
+    },
+    {
+      "path": "assets/pbrBRDFFunctions-DxfbxN23.js",
+      "bytes": 12761,
+      "sha256": "6498fd73a62404b2bdd281d8ffabe8b59d14e1927a32216b467847763a412ed0"
+    },
+    {
+      "path": "assets/pbrDebug-BE0WC03C.js",
+      "bytes": 38056,
+      "sha256": "8d9ec4e2b72c0c36adaa466a82e9887de95ed8fb076240ddfef351b70e7536ea"
+    },
+    {
+      "path": "assets/pbrDebug-DewMBbAj.js",
+      "bytes": 45347,
+      "sha256": "3c169bcb3af22ec0f6535ef2c386ea1ec7ee0ee2ccac0b187be5224df6260754"
+    },
+    {
+      "path": "assets/pbrIBLFunctions-CSlJv7qb.js",
+      "bytes": 2522,
+      "sha256": "5537af51297ac954c4125dc6ff8490e4fd120f2239ebb2c00331e06d053395a1"
+    },
+    {
+      "path": "assets/pbrIBLFunctions-b8fwQKtH.js",
+      "bytes": 2719,
+      "sha256": "d45fb4d76f370e711f5dc73a6a24dfff983ebf62c5068f8de006ebfe2e2c1874"
+    },
+    {
+      "path": "assets/pbrMaterial.pure-DYt-Ln9B.js",
+      "bytes": 136087,
+      "sha256": "0ec85e022ca4fa99b5e2771ee03e099496f476387d1baeb09a0beefd93d2e942"
+    },
+    {
+      "path": "assets/pbrMaterialLoadingAdapter-BHpqgCkG.js",
+      "bytes": 12503,
+      "sha256": "8560d7b3827fc2a716ff1266d88dbfe150b1638e42c963e2f6a6041736349d5a"
+    },
+    {
+      "path": "assets/pbrUboDeclaration-BMpWyJcJ.js",
+      "bytes": 2344,
+      "sha256": "80f852ccb3e1dfaf7892d840ee61d678c706781ecf1b6b7bea7e547919f4aebc"
+    },
+    {
+      "path": "assets/pbrUboDeclaration-C3goPwfE.js",
+      "bytes": 1802,
+      "sha256": "6884af9f6c7de7ed8a348d96f5d4589b22c5d5f86ceb83dd5af66191463e9911"
+    },
+    {
+      "path": "assets/performanceConfigurator-UtxC_Odd.js",
+      "bytes": 500,
+      "sha256": "18ac183db602e06e8f22bb36ef5a1b0127170dfa0401d3e6aff4f81dc5d76b26"
+    },
+    {
+      "path": "assets/postProcess.pure-QVnFE-_w.js",
+      "bytes": 18401,
+      "sha256": "3fa0ff5b173ec3b30ca15e726447a9e85548641c0dd4fef3c19ff7bfdb487a6e"
+    },
+    {
+      "path": "assets/postprocess.vertex-CmVXXq2T.js",
+      "bytes": 584,
+      "sha256": "7f3cb8f402651e0c1378f484fdd319a6859ce17c20cb877ede973037d487ca79"
+    },
+    {
+      "path": "assets/postprocess.vertex-DJCmMhI8.js",
+      "bytes": 460,
+      "sha256": "520bb6e9e2851654258b110a11a5d138f1e77aaaaa22013e6d723cdd59bdeacd"
+    },
+    {
+      "path": "assets/precisionDate-CfCevjl-.js",
+      "bytes": 390,
+      "sha256": "ca81e6b450810d0472b8ea1d02e169f7c206f21994ba8fd557a0fdde51bb1e67"
+    },
+    {
+      "path": "assets/procedural.vertex-C47TVAon.js",
+      "bytes": 473,
+      "sha256": "0cf20bd5c3a7e80a7ba4d4ffd233a0b5b235a29acf926ebf62af8bf8de7b0f61"
+    },
+    {
+      "path": "assets/procedural.vertex-D3o6xkF2.js",
+      "bytes": 613,
+      "sha256": "4fb7d38a1b7e1c89c5ea8627a340763c85e73e5748663b32c965ff9264f026e9"
+    },
+    {
+      "path": "assets/reflectionFunction-3knPrqsc.js",
+      "bytes": 5629,
+      "sha256": "2565c4cc7abbacd8d737bec705bdd5a8d91730c8058453e6987eee6a70d32d82"
+    },
+    {
+      "path": "assets/reflectionFunction-BTwp8RXV.js",
+      "bytes": 5093,
+      "sha256": "f51734641430c8d433a9f5c198f00298847b282b3a233636e2d030416fb817d8"
+    },
+    {
+      "path": "assets/renderTargetTexture.pure-BTg_z4P6.js",
+      "bytes": 32220,
+      "sha256": "89b83c420c1b845671f4dc6d8fb6e050027f2c21f689be85de62282edf3e78f4"
+    },
+    {
+      "path": "assets/rgbdDecode.fragment-Cdz2Tveq.js",
+      "bytes": 520,
+      "sha256": "bee2fc90a9d5fad759b42d5df5a6f2e1302957a5d4bdd56bc8a4e78891d589da"
+    },
+    {
+      "path": "assets/rgbdDecode.fragment-LJ1ayvjw.js",
+      "bytes": 658,
+      "sha256": "fe6d0b64356a129bc035057330d19dcc744e0eca17960ebee0093c9efca2f712"
+    },
+    {
+      "path": "assets/rgbdEncode.fragment-CVg4Fcse.js",
+      "bytes": 512,
+      "sha256": "dfd45fc4a88d859371441b9e928d3f9adc81a60ec9bdcdad16363e159077defb"
+    },
+    {
+      "path": "assets/rgbdEncode.fragment-DfcTXzLQ.js",
+      "bytes": 649,
+      "sha256": "684556fb599d31ce94083434fa952e0e7564fb96378001b88bfaadd88df803f0"
+    },
+    {
+      "path": "assets/sceneComponent-CZpgacvn.js",
+      "bytes": 17918,
+      "sha256": "433c38db640a6a90437ce2671359db995f94b76b4fd4f4eb722fc79c862285a1"
+    },
+    {
+      "path": "assets/sceneUboDeclaration-B5VhSG0v.js",
+      "bytes": 364,
+      "sha256": "bb44727afcb0fe70461ca9bdb0d212901fa0a18067c8a62d1577506c6d347b95"
+    },
+    {
+      "path": "assets/shaderStore-D-XQlhUT.js",
+      "bytes": 469,
+      "sha256": "db600316439f2fedb7bfd3bcbc61b24d30c2b2646828dcea1c7c778cd07d5e3e"
+    },
+    {
+      "path": "assets/smartArray-BRfcgNbX.js",
+      "bytes": 1186,
+      "sha256": "8dc20e14af937dfe98d73e0190bd449c7724164eee863b08caa8dd5a4cfc019f"
+    },
+    {
+      "path": "assets/spatialWebAudio-C4kDBDkD.js",
+      "bytes": 14134,
+      "sha256": "86fb04727b3538a1512616c4136d9a3d7c69f88ad7c59e711eed8144e7186fa7"
+    },
+    {
+      "path": "assets/textureProcessor.fragment-B-hqHgey.js",
+      "bytes": 4378,
+      "sha256": "5e86123c86314febf84a63b67986711686eacc80d215bae6a719368d8097c9cc"
+    },
+    {
+      "path": "assets/textureProcessor.fragment-D-awtrDP.js",
+      "bytes": 3491,
+      "sha256": "cb04efe695c7b5f2f6cbf62aa035df9a85f3c4b220aa3ef7b08288e6181ee6f3"
+    },
+    {
+      "path": "assets/tgaTextureLoader-CqhhocF6.js",
+      "bytes": 3408,
+      "sha256": "7edd7f23ff0ade28e79de5a87b7c966629d4e26d815fa3321589c50632179ae0"
+    },
+    {
+      "path": "assets/thinEngine.pure-CBu5JNfH.js",
+      "bytes": 127869,
+      "sha256": "54320d1fc2cba528850e5ca85b7aa4fb6935b8ef91fdb39defe171cb4111c9f7"
+    },
+    {
+      "path": "assets/timingTools-BVXVNp4w.js",
+      "bytes": 12879,
+      "sha256": "1abccf73e9ba4e1b62a8941639c664781019676653580420dbf67c7c56a76d20"
+    },
+    {
+      "path": "assets/tools.pure-C2ahnx92.js",
+      "bytes": 27653,
+      "sha256": "ce4e25e6d145dfd88ceb32e2c3ebfd438fcc34d657c2b51ae65769cd858a83e0"
+    },
+    {
+      "path": "assets/twgsl-CB--yrSG.wasm",
+      "bytes": 1702916,
+      "sha256": "a434c2decdbb38caadf5f486d806384a1543554828c983c77922b2d92579914c"
+    },
+    {
+      "path": "assets/twgsl-DqdFeK3J.js",
+      "bytes": 74555,
+      "sha256": "b4f1f66263b801210f955f74aa71f1939be647ce0fd80ea5befd12a78499d5ff"
+    },
+    {
+      "path": "assets/typeStore-Cu_sj2zM.js",
+      "bytes": 80,
+      "sha256": "ac5c1cd88e21454d0753d41e04c62cf8a19b88778746954785b5d32d0f1b66d8"
+    },
+    {
+      "path": "assets/vertexColorMixing-B7dmaeCQ.js",
+      "bytes": 751,
+      "sha256": "68d82a964aabd8eeda1ba7c3cd653451e641d39dcf6a8aeeb8be79b4a93495ac"
+    },
+    {
+      "path": "assets/vertexColorMixing-D2Z31hvR.js",
+      "bytes": 1004,
+      "sha256": "0f6f6437050eefbec655e3a0fe84e3adbbfa20020cc4d2a97c042d5e24aad9b7"
+    },
+    {
+      "path": "assets/webAudioBaseSubGraph-BcsmrreO.js",
+      "bytes": 8497,
+      "sha256": "3fedf440f6cae7eea309f01745736935444c1306efa1ffae85d8ab3e3b636cde"
+    },
+    {
+      "path": "assets/webAudioBus-B3yMSnzZ.js",
+      "bytes": 2276,
+      "sha256": "608cc01dfced763e1cfd2a11a5da08465728e43f78cdfe50bbd7b8c608329b5a"
+    },
+    {
+      "path": "assets/webAudioMainBus-OseNGkvW.js",
+      "bytes": 917,
+      "sha256": "a78f30ce03c8d46d10fa5cf6418f4eb77a8c17866e237d943c5b0b2bbaefc07b"
+    },
+    {
+      "path": "assets/webAudioSoundSource-BDL-QlSv.js",
+      "bytes": 2327,
+      "sha256": "732f88bd9795c7b0de59f50bbc2c1804d88ba2edbd01fc28b38de6a7a6955831"
+    },
+    {
+      "path": "assets/webAudioStaticSound-C2glIWhd.js",
+      "bytes": 9368,
+      "sha256": "d2e8b6055ea184d8d2f2d14fd7e26c509b8bf56a209b7428aea4ccae33f82d36"
+    },
+    {
+      "path": "assets/webAudioStreamingSound-cQNYrBQb.js",
+      "bytes": 8393,
+      "sha256": "5730a7d5d73d2670392a22c5f836c2d906e24fd7b7df3dafb45b1f110a74c07c"
+    },
+    {
+      "path": "assets/webRequest-dqz0dHXK.js",
+      "bytes": 2941,
+      "sha256": "d4a0d83706cc2f7681ca2895f9b827fbadfe11ed77025bc19fbf9ef40dd9d01d"
+    },
+    {
+      "path": "index.html",
+      "bytes": 3505,
+      "sha256": "ce8689066bde0dd094814e4fb30ed9f0a05ed09eb0886a0670fe3f5d65450024"
+    }
+  ],
+  "note": "All Vite-emitted files hashed before adding this manifest and the startup hardware record."
+}
