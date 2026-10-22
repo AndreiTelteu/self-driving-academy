@@ -1,0 +1,236 @@
+{
+  "format": "self-driving-academy-profile-export",
+  "formatVersion": 1,
+  "schemaVersion": 1,
+  "units": "SI",
+  "createdAt": "2026-10-22T10:00:00.000Z",
+  "engineVersion": "engine-127",
+  "profile": {
+    "profileId": "profile-1",
+    "source": "LEARNING",
+    "activeVersionId": "profile-1@3",
+    "activation": {
+      "playerId": "player-1",
+      "sequence": 3,
+      "activatedAt": "2026-10-22T09:10:00.000Z"
+    },
+    "versions": [
+      {
+        "versionId": "profile-1@1",
+        "parentVersionId": null,
+        "depth": 0,
+        "createdAt": "2026-10-22T09:00:00.000Z",
+        "engineVersion": "engine-127",
+        "source": "BASE",
+        "checksum": "fnv1a64:0603ac437850df0b",
+        "parameters": {
+          "speed_delta_urban": {
+            "value": 1.5,
+            "unit": "m/s"
+          },
+          "desired_acceleration": {
+            "value": 2,
+            "unit": "m/s²"
+          }
+        },
+        "provenance": {
+          "origin": "BASE",
+          "sourceSegmentIds": [],
+          "sourceInterventionIds": [],
+          "delta": null
+        }
+      },
+      {
+        "versionId": "profile-1@2",
+        "parentVersionId": "profile-1@1",
+        "depth": 1,
+        "createdAt": "2026-10-22T09:05:00.000Z",
+        "engineVersion": "engine-127",
+        "source": "MANUAL_TUNING",
+        "checksum": "fnv1a64:58d8db466c950724",
+        "parameters": {
+          "speed_delta_urban": {
+            "value": 2.5,
+            "unit": "m/s"
+          },
+          "desired_acceleration": {
+            "value": 2,
+            "unit": "m/s²"
+          }
+        },
+        "provenance": {
+          "origin": "DERIVED",
+          "sourceSegmentIds": [],
+          "sourceInterventionIds": [
+            "intervention-1"
+          ],
+          "delta": {
+            "baseVersionId": "profile-1@1",
+            "validationVersion": "102-candidate-v1",
+            "segmentId": "segment-1",
+            "interventionId": "intervention-1",
+            "reason": "manual tuning",
+            "keyCount": 1,
+            "changes": [
+              {
+                "key": "speed_delta_urban",
+                "unit": "m/s",
+                "previousValue": 1.5,
+                "newValue": 2.5
+              }
+            ]
+          }
+        }
+      },
+      {
+        "versionId": "profile-1@3",
+        "parentVersionId": "profile-1@2",
+        "depth": 2,
+        "createdAt": "2026-10-22T09:10:00.000Z",
+        "engineVersion": "engine-127",
+        "source": "LEARNING",
+        "checksum": "fnv1a64:a1625f1b8cc14fda",
+        "parameters": {
+          "speed_delta_urban": {
+            "value": 3.5,
+            "unit": "m/s"
+          },
+          "desired_acceleration": {
+            "value": 2,
+            "unit": "m/s²"
+          }
+        },
+        "provenance": {
+          "origin": "DERIVED",
+          "sourceSegmentIds": [
+            "segment-9"
+          ],
+          "sourceInterventionIds": [],
+          "delta": {
+            "baseVersionId": "profile-1@2",
+            "validationVersion": "102-candidate-v1",
+            "segmentId": "segment-9",
+            "interventionId": null,
+            "reason": "learned driving",
+            "keyCount": 1,
+            "changes": [
+              {
+                "key": "speed_delta_urban",
+                "unit": "m/s",
+                "previousValue": 2.5,
+                "newValue": 3.5
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "reservedParameters": {
+      "speed_delta_arterial": null,
+      "cruise_speed_variability": null,
+      "overtake_speed_bonus": null,
+      "cruise_accel_deadband": null,
+      "braking_jerk": null,
+      "throttle_release_delay": null,
+      "launch_intensity": null,
+      "coasting_bias": null,
+      "cutin_brake_response": null,
+      "closing_ttc_threshold": null,
+      "leader_change_delay": null,
+      "following_hysteresis": null,
+      "yellow_stop_probability": null,
+      "red_run_gap_acceptance": null,
+      "yellow_commit_time": null,
+      "green_launch_acceleration": null,
+      "rolling_stop_speed": null,
+      "priority_assertiveness": null,
+      "allway_stop_patience": null,
+      "blocked_intersection_entry_probability": null,
+      "lane_change_duration": null,
+      "signal_lead_time": null,
+      "signal_use_probability": null,
+      "pass_on_right_probability": null,
+      "lane_center_offset": null,
+      "steering_response_time": null,
+      "steering_rate_limit": null,
+      "turn_entry_speed": null,
+      "turn_exit_acceleration": null,
+      "corner_cutting_bias": null,
+      "lateral_clearance": null,
+      "lateral_correction_deadband": null,
+      "route_time_weight": null,
+      "route_distance_weight": null,
+      "route_turn_penalty": null,
+      "route_signal_penalty": null,
+      "route_congestion_penalty": null,
+      "reroute_patience": null,
+      "u_turn_willingness": null,
+      "reverse_recovery_duration": null,
+      "pedestrian_yield_probability": null,
+      "pedestrian_clearance": null,
+      "hazard_reaction_delay": null,
+      "obstacle_clearance": null,
+      "emergency_brake_intensity": null,
+      "evasive_steer_willingness": null,
+      "crosswalk_approach_speed": null,
+      "horn_use_probability": null,
+      "pickup_approach_speed": null,
+      "pickup_curb_distance": null,
+      "pickup_stop_precision": null,
+      "pickup_dwell_time": null,
+      "dropoff_approach_speed": null,
+      "dropoff_curb_distance": null,
+      "occupied_acceleration_scale": null,
+      "occupied_lateral_accel_scale": null
+    }
+  },
+  "aggregates": {
+    "schemaVersion": 1,
+    "counts": {
+      "versions": 3,
+      "baseVersions": 1,
+      "derivedVersions": 2,
+      "manualTuningVersions": 1,
+      "learningVersions": 1,
+      "parameters": 2,
+      "reservedParameters": 56,
+      "sourceSegments": 1,
+      "sourceInterventions": 1
+    },
+    "indicators": [
+      {
+        "id": "complianceRate",
+        "unit": "percentage",
+        "state": "AVAILABLE",
+        "value": 92.5,
+        "sampleSize": 12,
+        "reason": null
+      }
+    ],
+    "evidence": [
+      {
+        "key": "speed_delta_urban",
+        "effectiveCount": 12,
+        "quality": 0.8,
+        "uncertainty": 0.2,
+        "sourceSegmentIds": [
+          "segment-9"
+        ]
+      }
+    ]
+  },
+  "telemetry": {
+    "included": false,
+    "rawEventCount": 0,
+    "rawEventLimit": 512,
+    "referencedSegmentIds": [
+      "segment-9"
+    ],
+    "rawEvents": []
+  },
+  "checksum": {
+    "algorithm": "SHA-256",
+    "canonicalization": "SDA-CJSON-1",
+    "value": "d7597165fa372a82cfbed0b693c331cba3b9bd2def54a29088ad3a34d3bb17e3"
+  }
+}
