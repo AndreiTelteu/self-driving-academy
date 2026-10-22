@@ -1,0 +1,49 @@
+PBI 150 — comenzi executate în worktree-ul manifest-150-01
+
+npm run typecheck
+  exit 0
+  tsc --noEmit && tsc -p tsconfig.tests.json --noEmit (fără erori)
+
+npm run lint
+  exit 0
+  eslint . --max-warnings 0 (fără erori, fără warnings)
+
+npm run format:check
+  exit 0
+  All matched files use Prettier code style!
+
+npm run check:architecture
+  exit 0
+  Architecture imports: PASS (303 TypeScript files)
+  Architecture negative probes: PASS (6 forbidden dependencies rejected)
+  Inspector exception negative probes: PASS (4 forbidden imports rejected)
+  Rapier adapter negative probes: PASS (3 forbidden imports rejected)
+  Renderer injection, readonly snapshots, defensive persistence and lifecycle: PASS
+
+npm run check:parameter-catalog
+  exit 0
+  Parameter catalog is synchronized.
+
+npm test
+  exit 0
+  tests 2088, suites 1, pass 2088, fail 0, duration_ms 71453.7567
+
+npm run assets:manifest
+  exit 0
+  SUMMARY entries 27, critical 17, optional 10, wire 6756068 B, decoded 40934632 B,
+  checks 17/17, overall PASS
+
+npm run assets:manifest -- --check
+  exit 0
+  Asset manifest evidence is current: Docs/Evidence/150-asset-manifest/asset-manifest.json
+  Asset manifest evidence is current: Docs/Evidence/150-asset-manifest/report.json
+  Asset manifest evidence is current: Docs/Evidence/150-asset-manifest/report.md
+
+node --import ./scripts/register-typescript.mjs --test tests/build/asset-manifest.test.ts
+  exit 0
+  tests 14, pass 14, fail 0
+
+Observație: avertismentul Node „stripTypeScriptTypes is an experimental feature” apare pe stderr
+la fiecare comandă care încarcă `scripts/register-typescript.mjs`; nu este o eroare și nu schimbă
+codul de ieșire. Dacă este capturat prin pipeline-ul PowerShell 5.1, poate fi raportat ca
+NativeCommandError, de aceea codurile de ieșire au fost verificate cu `$LASTEXITCODE`.
