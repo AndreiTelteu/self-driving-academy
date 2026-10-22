@@ -58,6 +58,33 @@ export type {
 } from './lifecycle';
 export { MISSION_LIMITS, MISSION_SCHEMA_VERSION } from './contracts';
 export {
+  FOLLOW_COMPARISON_SCENARIOS,
+  FOLLOW_LIMITS,
+  FOLLOW_MISSION_ID,
+  FOLLOW_SCHEMA_VERSION,
+  FOLLOW_SINGLE_SPEED_SCENARIOS,
+  compareFollowingProfiles,
+  followComparisonStatuses,
+  followMissionOutcomes,
+  followReasons,
+  followSeparationKinds,
+  followingMissionGate,
+} from './follow';
+export type {
+  FollowComparison,
+  FollowComparisonInput,
+  FollowComparisonStatus,
+  FollowMeasurement,
+  FollowMissionGate,
+  FollowMissionOutcome,
+  FollowProfileComparison,
+  FollowProfileRun,
+  FollowReason,
+  FollowScenario,
+  FollowScenarioRun,
+  FollowSeparationKind,
+} from './follow';
+export {
   COMFORT_LIMITS,
   COMFORT_MISSION_ID,
   COMFORT_OBJECTIVE,

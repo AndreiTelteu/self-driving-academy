@@ -1,0 +1,526 @@
+{
+  "version": "119-mission-follow-report-v1",
+  "contract": {
+    "missionId": "campaign-3-following-distance",
+    "schema": "119-mission-follow-v1",
+    "scenarios": [
+      {
+        "scenarioId": "follow-urban-4",
+        "egoSpeedMps": 4,
+        "leaderSpeedMps": 4,
+        "leaderGapM": 12,
+        "leaderId": "leader-follow-4"
+      },
+      {
+        "scenarioId": "follow-urban-8",
+        "egoSpeedMps": 8,
+        "leaderSpeedMps": 8,
+        "leaderGapM": 14,
+        "leaderId": "leader-follow-8"
+      },
+      {
+        "scenarioId": "follow-urban-12",
+        "egoSpeedMps": 12,
+        "leaderSpeedMps": 12,
+        "leaderGapM": 16,
+        "leaderId": "leader-follow-12"
+      },
+      {
+        "scenarioId": "follow-urban-20",
+        "egoSpeedMps": 20,
+        "leaderSpeedMps": 20,
+        "leaderGapM": 30,
+        "leaderId": "leader-follow-20"
+      }
+    ],
+    "singleSpeedScenarioIds": [
+      "follow-urban-8-single"
+    ],
+    "statuses": [
+      "SEPARATED",
+      "IDENTICAL",
+      "UNIDENTIFIED"
+    ],
+    "separations": [
+      "HEADWAY",
+      "MINIMUM_GAP",
+      "BOTH",
+      "NONE",
+      "UNIDENTIFIED"
+    ],
+    "outcomes": [
+      "PROGRESS",
+      "NO_PROGRESS"
+    ],
+    "tolerances": {
+      "headwayS": 0.1,
+      "minGapM": 0.5
+    },
+    "limits": {
+      "profiles": 2,
+      "observationsPerProfile": 32
+    }
+  },
+  "scenarios": [
+    {
+      "name": "Headway separates the styles at identical leader facts",
+      "status": "SEPARATED",
+      "detail": {
+        "separation": "HEADWAY",
+        "headwayDeltaS": 1.7999999999999998,
+        "minGapDeltaM": 0,
+        "prudentHeadwayS": 2.4,
+        "twinHeadwayS": 0.6,
+        "prudentMinGapM": 4,
+        "twinMinGapM": 4,
+        "prudentGapsM": "13.6,23.2,32.8,52",
+        "twinGapsM": "6.4,8.8,11.2,16",
+        "measuredAt4": "13.6 vs 6.4",
+        "measuredAt20": "52 vs 16",
+        "outcome": "PROGRESS"
+      }
+    },
+    {
+      "name": "Minimum gap separates the styles at every speed",
+      "status": "SEPARATED",
+      "detail": {
+        "separation": "MINIMUM_GAP",
+        "headwayDeltaS": 0,
+        "minGapDeltaM": 6,
+        "prudentHeadwayS": 2.4,
+        "twinHeadwayS": 2.4,
+        "prudentMinGapM": 4,
+        "twinMinGapM": 10,
+        "differenceAt4": 6.000000000000002,
+        "differenceAt20": 6,
+        "outcome": "PROGRESS"
+      }
+    },
+    {
+      "name": "Two identical styles",
+      "status": "IDENTICAL",
+      "detail": {
+        "separation": "NONE",
+        "reason": "PROFILE_VALUES_MATCH",
+        "headwayDeltaS": 0,
+        "minGapDeltaM": 0,
+        "outcome": "NO_PROGRESS",
+        "gateReason": "PROFILE_VALUES_MATCH"
+      }
+    },
+    {
+      "name": "Single speed refuses to identify the coefficients",
+      "status": "UNIDENTIFIED",
+      "detail": {
+        "distinctSpeeds": 1,
+        "singleSpeed": true,
+        "separation": "UNIDENTIFIED",
+        "reason": "SINGLE_SPEED_CANNOT_IDENTIFY",
+        "prudentGapM": 23.2,
+        "twinGapM": 8.8,
+        "prudentHeadwayS": null,
+        "twinHeadwayS": null,
+        "prudentMinGapM": null,
+        "twinMinGapM": null,
+        "outcome": "NO_PROGRESS",
+        "gateReason": "SINGLE_SPEED_CANNOT_IDENTIFY"
+      }
+    },
+    {
+      "name": "Gate matrix",
+      "status": "PROGRESS/NO_PROGRESS",
+      "detail": {
+        "recklessSeparation": "BOTH",
+        "recklessHeadwayDeltaS": 1.7999999999999998,
+        "recklessMinGapDeltaM": 3,
+        "profileWrites": 0,
+        "learningJobs": 0
+      }
+    }
+  ],
+  "profiles": {
+    "PRUDENT": {
+      "profileId": "profile:119:prudent",
+      "headwayS": 2.4,
+      "minGapM": 4,
+      "identified": true,
+      "reason": null,
+      "gapsM": [
+        13.6,
+        23.2,
+        32.8,
+        52
+      ]
+    },
+    "HEADWAY_TWIN": {
+      "profileId": "profile:119:headway_twin",
+      "headwayS": 0.6,
+      "minGapM": 4,
+      "identified": true,
+      "reason": null,
+      "gapsM": [
+        6.4,
+        8.8,
+        11.2,
+        16
+      ]
+    },
+    "GAP_TWIN": {
+      "profileId": "profile:119:gap_twin",
+      "headwayS": 2.4,
+      "minGapM": 10,
+      "identified": true,
+      "reason": null,
+      "gapsM": [
+        19.6,
+        29.2,
+        38.8,
+        58
+      ]
+    }
+  },
+  "checks": [
+    {
+      "name": "contract-schema",
+      "expected": "119-mission-follow-v1",
+      "actual": "119-mission-follow-v1",
+      "pass": true,
+      "detail": "mission schema"
+    },
+    {
+      "name": "mission-id",
+      "expected": "campaign-3-following-distance",
+      "actual": "campaign-3-following-distance",
+      "pass": true,
+      "detail": "116 campaign stage"
+    },
+    {
+      "name": "scenario-count",
+      "expected": 4,
+      "actual": 4,
+      "pass": true,
+      "detail": "authored known contexts"
+    },
+    {
+      "name": "distinct-speeds",
+      "expected": 4,
+      "actual": 4,
+      "pass": true,
+      "detail": "the comparison varies the speed"
+    },
+    {
+      "name": "single-speed-count",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the refusal context"
+    },
+    {
+      "name": "profiles-per-comparison",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "exactly two styles"
+    },
+    {
+      "name": "statuses",
+      "expected": "SEPARATED,IDENTICAL,UNIDENTIFIED",
+      "actual": "SEPARATED,IDENTICAL,UNIDENTIFIED",
+      "pass": true,
+      "detail": "closed comparison vocabulary"
+    },
+    {
+      "name": "separations",
+      "expected": "HEADWAY,MINIMUM_GAP,BOTH,NONE,UNIDENTIFIED",
+      "actual": "HEADWAY,MINIMUM_GAP,BOTH,NONE,UNIDENTIFIED",
+      "pass": true,
+      "detail": "closed separation vocabulary"
+    },
+    {
+      "name": "outcomes",
+      "expected": "PROGRESS,NO_PROGRESS",
+      "actual": "PROGRESS,NO_PROGRESS",
+      "pass": true,
+      "detail": "closed mission outcome"
+    },
+    {
+      "name": "headway-tolerance",
+      "expected": 0.1,
+      "actual": 0.1,
+      "pass": true,
+      "detail": "seconds"
+    },
+    {
+      "name": "gap-tolerance",
+      "expected": 0.5,
+      "actual": 0.5,
+      "pass": true,
+      "detail": "metres"
+    },
+    {
+      "name": "prudent-headway",
+      "expected": 2.4,
+      "actual": 2.4,
+      "pass": true,
+      "detail": "the measured gap law of the real 048 policy at 20 m/s"
+    },
+    {
+      "name": "prudent-min-gap",
+      "expected": 4,
+      "actual": 4,
+      "pass": true,
+      "detail": "the intercept of the same measured gaps"
+    },
+    {
+      "name": "headway-status",
+      "expected": "SEPARATED",
+      "actual": "SEPARATED",
+      "pass": true,
+      "detail": "real 096 coefficients"
+    },
+    {
+      "name": "headway-kind",
+      "expected": "HEADWAY",
+      "actual": "HEADWAY",
+      "pass": true,
+      "detail": "slope differs"
+    },
+    {
+      "name": "headway-min-gap",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "intercept equal"
+    },
+    {
+      "name": "headway-delta",
+      "expected": 1.8,
+      "actual": 1.8,
+      "pass": true,
+      "detail": "seconds"
+    },
+    {
+      "name": "headway-gap-4",
+      "expected": 7.2,
+      "actual": 7.2,
+      "pass": true,
+      "detail": "real 048 gap difference at 4 m/s"
+    },
+    {
+      "name": "headway-gap-20",
+      "expected": 36,
+      "actual": 36,
+      "pass": true,
+      "detail": "same two styles, larger difference at 20 m/s"
+    },
+    {
+      "name": "headway-outcome",
+      "expected": "PROGRESS",
+      "actual": "PROGRESS",
+      "pass": true,
+      "detail": "mission gate"
+    },
+    {
+      "name": "headway-writes",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no profile write"
+    },
+    {
+      "name": "gap-status",
+      "expected": "SEPARATED",
+      "actual": "SEPARATED",
+      "pass": true,
+      "detail": "real 096 coefficients"
+    },
+    {
+      "name": "gap-kind",
+      "expected": "MINIMUM_GAP",
+      "actual": "MINIMUM_GAP",
+      "pass": true,
+      "detail": "intercept differs"
+    },
+    {
+      "name": "gap-headway",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "slope equal"
+    },
+    {
+      "name": "gap-delta",
+      "expected": 6,
+      "actual": 6,
+      "pass": true,
+      "detail": "metres"
+    },
+    {
+      "name": "gap-difference-4",
+      "expected": 6,
+      "actual": 6,
+      "pass": true,
+      "detail": "a constant difference is a minimum-gap difference"
+    },
+    {
+      "name": "gap-difference-8",
+      "expected": 6,
+      "actual": 6,
+      "pass": true,
+      "detail": "a constant difference is a minimum-gap difference"
+    },
+    {
+      "name": "gap-difference-12",
+      "expected": 6,
+      "actual": 6,
+      "pass": true,
+      "detail": "a constant difference is a minimum-gap difference"
+    },
+    {
+      "name": "gap-difference-20",
+      "expected": 6,
+      "actual": 6,
+      "pass": true,
+      "detail": "a constant difference is a minimum-gap difference"
+    },
+    {
+      "name": "gap-outcome",
+      "expected": "PROGRESS",
+      "actual": "PROGRESS",
+      "pass": true,
+      "detail": "mission gate"
+    },
+    {
+      "name": "identical-status",
+      "expected": "IDENTICAL",
+      "actual": "IDENTICAL",
+      "pass": true,
+      "detail": "no visible difference"
+    },
+    {
+      "name": "identical-kind",
+      "expected": "NONE",
+      "actual": "NONE",
+      "pass": true,
+      "detail": "neither coefficient"
+    },
+    {
+      "name": "identical-reason",
+      "expected": "PROFILE_VALUES_MATCH",
+      "actual": "PROFILE_VALUES_MATCH",
+      "pass": true,
+      "detail": "closed reason"
+    },
+    {
+      "name": "identical-outcome",
+      "expected": "NO_PROGRESS",
+      "actual": "NO_PROGRESS",
+      "pass": true,
+      "detail": "mission gate"
+    },
+    {
+      "name": "single-speed-count",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "distinct authored speeds"
+    },
+    {
+      "name": "single-speed-flag",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "one speed"
+    },
+    {
+      "name": "single-status",
+      "expected": "UNIDENTIFIED",
+      "actual": "UNIDENTIFIED",
+      "pass": true,
+      "detail": "not enough identification"
+    },
+    {
+      "name": "single-separation",
+      "expected": "UNIDENTIFIED",
+      "actual": "UNIDENTIFIED",
+      "pass": true,
+      "detail": "no coefficient"
+    },
+    {
+      "name": "single-reason",
+      "expected": "SINGLE_SPEED_CANNOT_IDENTIFY",
+      "actual": "SINGLE_SPEED_CANNOT_IDENTIFY",
+      "pass": true,
+      "detail": "real 096 refusal"
+    },
+    {
+      "name": "single-headway",
+      "expected": null,
+      "actual": null,
+      "pass": true,
+      "detail": "no slope identified"
+    },
+    {
+      "name": "single-min-gap",
+      "expected": null,
+      "actual": null,
+      "pass": true,
+      "detail": "no intercept identified"
+    },
+    {
+      "name": "single-delta",
+      "expected": null,
+      "actual": null,
+      "pass": true,
+      "detail": "no reported difference"
+    },
+    {
+      "name": "single-outcome",
+      "expected": "NO_PROGRESS",
+      "actual": "NO_PROGRESS",
+      "pass": true,
+      "detail": "mission gate"
+    },
+    {
+      "name": "single-gap-differs",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the measured gap still differs; only identification is refused"
+    },
+    {
+      "name": "gate-PRUDENT-HEADWAY_TWIN",
+      "expected": "PROGRESS:SEPARATED",
+      "actual": "PROGRESS:SEPARATED",
+      "pass": true,
+      "detail": "gate follows the measured comparison"
+    },
+    {
+      "name": "gate-PRUDENT-GAP_TWIN",
+      "expected": "PROGRESS:SEPARATED",
+      "actual": "PROGRESS:SEPARATED",
+      "pass": true,
+      "detail": "gate follows the measured comparison"
+    },
+    {
+      "name": "gate-PRUDENT-RECKLESS",
+      "expected": "PROGRESS:SEPARATED",
+      "actual": "PROGRESS:SEPARATED",
+      "pass": true,
+      "detail": "gate follows the measured comparison"
+    },
+    {
+      "name": "gate-PRUDENT-PRUDENT_TWIN",
+      "expected": "NO_PROGRESS:IDENTICAL",
+      "actual": "NO_PROGRESS:IDENTICAL",
+      "pass": true,
+      "detail": "gate follows the measured comparison"
+    }
+  ],
+  "summary": {
+    "scenarios": 5,
+    "checks": 48,
+    "passed": 48,
+    "pass": true
+  }
+}
