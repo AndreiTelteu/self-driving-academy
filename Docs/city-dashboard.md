@@ -127,7 +127,7 @@ Rândurile selectate folosesc `aria-selected`, iar detaliul rămâne disponibil 
 | `completedRides` | 061 `lifecycle.terminal()` cu `state === 'COMPLETED'` | zero real când nu există curse finalizate |
 | `averageRideSeconds` | `totalCostSeconds` al curselor finalizate | medie numai cu eșantion pozitiv; altfel `NO_EXPOSURE` |
 | `totalDistanceM` | portul opțional `rideDistanceM` | fără port sau fără măsurători → `UNAVAILABLE` |
-| `violations`, `comfortScore` | provider opțional (137 nu este Done) | absent → `SOURCE_MISSING`, niciodată `0` |
+| `violations`, `comfortScore` | provider opțional (138 pentru încălcări, 139 pentru confort) | absent → `SOURCE_MISSING`, niciodată `0` |
 | `collisions` | 028 `CollisionIncident` colectate în `createCityCollisionLog` | zero real când fereastra este completă |
 | `blockages` | 065 `health.history()` cu `TRAFFIC_BLOCK`/`IMMOBILIZATION` | `rideId` real din `releasedRideId` |
 | `exposure` | provider de ferestre sau retenția 061 | `droppedTerminal > 0` → `NOT_CERTIFIED` |
@@ -185,7 +185,8 @@ transcriptul comis.
 ## Ce NU este
 
 - Nu este 061/028/065: nu creează, nu avansează și nu repară curse, incidente, blocaje sau sănătatea flotei.
-- Nu este 137: încălcările și confortul rămân `UNAVAILABLE` până când providerul real este livrat.
+- Nu este 137/138/139: indicatorii de serviciu, încălcările și confortul rămân `UNAVAILABLE` până când
+  providerul real este livrat; 082 nu calculează niciunul dintre ele.
 - Nu este 074/076: nu desenează harta, nu mută camera și nu teleportează vehicule; emite doar intenția de
   focalizare către host.
 - Nu este 109/110/112: nu citește, nu compară și nu schimbă profilul; profilul este neatins prin construcție.

@@ -1,0 +1,667 @@
+{
+  "version": "139-comfort-metrics-v1",
+  "contract": {
+    "version": "139-comfort-metrics-v1",
+    "eventKinds": [
+      "PASSENGER_INTERVAL",
+      "PASSENGER_IMPACT"
+    ],
+    "controlModes": [
+      "AUTO",
+      "MANUAL",
+      "LEARNING"
+    ],
+    "thresholds": {
+      "maxAccelerationMps2": 2,
+      "maxJerkMps3": 2
+    },
+    "thresholdSource": {
+      "maxAccelerationMps2": "comfort_deceleration",
+      "maxJerkMps3": "acceleration_jerk",
+      "catalog": "project driving-parameter catalog default"
+    },
+    "reviewModelVersion": "139-comfort-review-v1",
+    "reviewCoefficients": {
+      "ratingBase": 5,
+      "accelerationPenaltyPoints": 2,
+      "jerkPenaltyPoints": 2,
+      "lateralPenaltyPoints": 1,
+      "maximumPenalty": 5
+    },
+    "limits": {
+      "retainedKeys": 8192,
+      "retainedRides": 512,
+      "idCodeUnits": 1024
+    }
+  },
+  "scenarios": [
+    {
+      "name": "cursă linie · AUTO",
+      "rideId": "ride:139:linear",
+      "vehicleId": "taxi:139:A",
+      "controlModes": [
+        "AUTO"
+      ],
+      "intervals": 120,
+      "events": {
+        "events": 120,
+        "accepted": 120,
+        "duplicates": 0,
+        "rejected": 0
+      },
+      "excludedSamples": 0,
+      "excludedIntervals": 0,
+      "comfort": {
+        "peakAccelerationMps2": 0.9375,
+        "peakLateralAccelerationMps2": 0,
+        "peakJerkMps3": 0,
+        "accelerationViolations": 0,
+        "jerkViolations": 0,
+        "lateralViolations": 0
+      },
+      "review": {
+        "comfortPenalty": 0,
+        "comfortScore": 5,
+        "comfortIntervals": 120,
+        "impacts": 0,
+        "affectedRides": 0
+      },
+      "adapter": [
+        {
+          "id": "comfortScore",
+          "unit": "score",
+          "state": "AVAILABLE",
+          "value": 5,
+          "reason": null
+        }
+      ],
+      "historyScans": 0,
+      "snapshotCalls": 1
+    },
+    {
+      "name": "cursă bruscă · MANUAL",
+      "rideId": "ride:139:brisk",
+      "vehicleId": "taxi:139:A",
+      "controlModes": [
+        "MANUAL"
+      ],
+      "intervals": 120,
+      "events": {
+        "events": 120,
+        "accepted": 120,
+        "duplicates": 0,
+        "rejected": 0
+      },
+      "excludedSamples": 0,
+      "excludedIntervals": 0,
+      "comfort": {
+        "peakAccelerationMps2": 5.625,
+        "peakLateralAccelerationMps2": 0,
+        "peakJerkMps3": 0,
+        "accelerationViolations": 120,
+        "jerkViolations": 0,
+        "lateralViolations": 0
+      },
+      "review": {
+        "comfortPenalty": 2,
+        "comfortScore": 3,
+        "comfortIntervals": 120,
+        "impacts": 0,
+        "affectedRides": 0
+      },
+      "adapter": [
+        {
+          "id": "comfortScore",
+          "unit": "score",
+          "state": "AVAILABLE",
+          "value": 3,
+          "reason": null
+        }
+      ],
+      "historyScans": 0,
+      "snapshotCalls": 1
+    },
+    {
+      "name": "cursă jerky · LEARNING",
+      "rideId": "ride:139:jerky",
+      "vehicleId": "taxi:139:A",
+      "controlModes": [
+        "LEARNING"
+      ],
+      "intervals": 120,
+      "events": {
+        "events": 120,
+        "accepted": 120,
+        "duplicates": 0,
+        "rejected": 0
+      },
+      "excludedSamples": 0,
+      "excludedIntervals": 0,
+      "comfort": {
+        "peakAccelerationMps2": 1.875,
+        "peakLateralAccelerationMps2": 0,
+        "peakJerkMps3": 225,
+        "accelerationViolations": 0,
+        "jerkViolations": 119,
+        "lateralViolations": 0
+      },
+      "review": {
+        "comfortPenalty": 2,
+        "comfortScore": 3,
+        "comfortIntervals": 120,
+        "impacts": 0,
+        "affectedRides": 0
+      },
+      "adapter": [
+        {
+          "id": "comfortScore",
+          "unit": "score",
+          "state": "AVAILABLE",
+          "value": 3,
+          "reason": null
+        }
+      ],
+      "historyScans": 0,
+      "snapshotCalls": 1
+    },
+    {
+      "name": "cursă mixtă · AUTO+MANUAL+LEARNING",
+      "rideId": "ride:139:mixed",
+      "vehicleId": "taxi:139:A",
+      "controlModes": [
+        "AUTO",
+        "LEARNING",
+        "MANUAL"
+      ],
+      "intervals": 179,
+      "events": {
+        "events": 179,
+        "accepted": 179,
+        "duplicates": 0,
+        "rejected": 0
+      },
+      "excludedSamples": 0,
+      "excludedIntervals": 0,
+      "comfort": {
+        "peakAccelerationMps2": 0.9375,
+        "peakLateralAccelerationMps2": 0,
+        "peakJerkMps3": 0,
+        "accelerationViolations": 0,
+        "jerkViolations": 0,
+        "lateralViolations": 0
+      },
+      "review": {
+        "comfortPenalty": 0,
+        "comfortScore": 5,
+        "comfortIntervals": 179,
+        "impacts": 0,
+        "affectedRides": 0
+      },
+      "adapter": [
+        {
+          "id": "comfortScore",
+          "unit": "score",
+          "state": "AVAILABLE",
+          "value": 5,
+          "reason": null
+        }
+      ],
+      "historyScans": 0,
+      "snapshotCalls": 1
+    },
+    {
+      "name": "cursă cu incident",
+      "rideId": "ride:139:incident",
+      "vehicleId": "taxi:139:A",
+      "controlModes": [
+        "AUTO"
+      ],
+      "intervals": 59,
+      "events": {
+        "events": 60,
+        "accepted": 60,
+        "duplicates": 0,
+        "rejected": 0
+      },
+      "excludedSamples": 61,
+      "excludedIntervals": 0,
+      "comfort": {
+        "peakAccelerationMps2": 0.9375,
+        "peakLateralAccelerationMps2": 0,
+        "peakJerkMps3": 0,
+        "accelerationViolations": 0,
+        "jerkViolations": 0,
+        "lateralViolations": 0
+      },
+      "review": {
+        "comfortPenalty": 0,
+        "comfortScore": 5,
+        "comfortIntervals": 59,
+        "impacts": 1,
+        "affectedRides": 1
+      },
+      "adapter": [
+        {
+          "id": "comfortScore",
+          "unit": "score",
+          "state": "AVAILABLE",
+          "value": 5,
+          "reason": null
+        }
+      ],
+      "historyScans": 0,
+      "snapshotCalls": 1
+    },
+    {
+      "name": "taxi nevizibil",
+      "rideId": "ride:139:invisible",
+      "vehicleId": "taxi:139:offscreen",
+      "controlModes": [
+        "AUTO"
+      ],
+      "intervals": 120,
+      "events": {
+        "events": 240,
+        "accepted": 240,
+        "duplicates": 0,
+        "rejected": 0
+      },
+      "excludedSamples": 0,
+      "excludedIntervals": 0,
+      "comfort": {
+        "peakAccelerationMps2": 0.9375,
+        "peakLateralAccelerationMps2": 0,
+        "peakJerkMps3": 0,
+        "accelerationViolations": 0,
+        "jerkViolations": 0,
+        "lateralViolations": 0
+      },
+      "review": {
+        "comfortPenalty": 0,
+        "comfortScore": 5,
+        "comfortIntervals": 240,
+        "impacts": 0,
+        "affectedRides": 0
+      },
+      "adapter": [
+        {
+          "id": "comfortScore",
+          "unit": "score",
+          "state": "AVAILABLE",
+          "value": 5,
+          "reason": null
+        }
+      ],
+      "historyScans": 0,
+      "snapshotCalls": 1
+    },
+    {
+      "name": "recuperare 030 · teleport exclus",
+      "rideId": "ride:139:recovery",
+      "vehicleId": "taxi:139:A",
+      "controlModes": [
+        "MANUAL"
+      ],
+      "intervals": 59,
+      "events": {
+        "events": 59,
+        "accepted": 59,
+        "duplicates": 0,
+        "rejected": 0
+      },
+      "excludedSamples": 61,
+      "excludedIntervals": 0,
+      "comfort": {
+        "peakAccelerationMps2": 0.9375,
+        "peakLateralAccelerationMps2": 0,
+        "peakJerkMps3": 0,
+        "accelerationViolations": 0,
+        "jerkViolations": 0,
+        "lateralViolations": 0
+      },
+      "review": {
+        "comfortPenalty": 0,
+        "comfortScore": 5,
+        "comfortIntervals": 59,
+        "impacts": 0,
+        "affectedRides": 0
+      },
+      "adapter": [
+        {
+          "id": "comfortScore",
+          "unit": "score",
+          "state": "AVAILABLE",
+          "value": 5,
+          "reason": null
+        }
+      ],
+      "historyScans": 0,
+      "snapshotCalls": 1
+    },
+    {
+      "name": "curbă · accelerație laterală",
+      "rideId": "ride:139:turn",
+      "vehicleId": "taxi:139:A",
+      "controlModes": [
+        "AUTO"
+      ],
+      "intervals": 120,
+      "events": {
+        "events": 120,
+        "accepted": 120,
+        "duplicates": 0,
+        "rejected": 0
+      },
+      "excludedSamples": 0,
+      "excludedIntervals": 0,
+      "comfort": {
+        "peakAccelerationMps2": 0.000052,
+        "peakLateralAccelerationMps2": 3.333362,
+        "peakJerkMps3": 0.006063,
+        "accelerationViolations": 0,
+        "jerkViolations": 0,
+        "lateralViolations": 0
+      },
+      "review": {
+        "comfortPenalty": 0,
+        "comfortScore": 5,
+        "comfortIntervals": 120,
+        "impacts": 0,
+        "affectedRides": 0
+      },
+      "adapter": [
+        {
+          "id": "comfortScore",
+          "unit": "score",
+          "state": "AVAILABLE",
+          "value": 5,
+          "reason": null
+        }
+      ],
+      "historyScans": 0,
+      "snapshotCalls": 1
+    }
+  ],
+  "performance": {
+    "label": "probe locală 139",
+    "intervals": 12000,
+    "ingestMs": 31.542200000000093,
+    "perIntervalMs": 0.002628516666666674,
+    "snapshots": 2000,
+    "snapshotMs": 14.998299999999972,
+    "perSnapshotMs": 0.007499149999999986,
+    "perModeIngestMs": {
+      "AUTO": 12.891000000000076,
+      "MANUAL": 9.155099999999948,
+      "LEARNING": 9.49610000000007
+    },
+    "perModePerIntervalMs": {
+      "AUTO": 0.003222750000000019,
+      "MANUAL": 0.002288774999999987,
+      "LEARNING": 0.0023740250000000174
+    },
+    "invisibleTaxiIntervals": 4000,
+    "invisibleTaxiIngestMs": 7.468299999999999,
+    "invisibleTaxiPerIntervalMs": 0.0018670749999999997,
+    "note": "măsurătoare locală, provizorie: nu este buget, FPS sau dovadă hardware"
+  },
+  "checks": [
+    {
+      "name": "contract-version",
+      "expected": "139-comfort-metrics-v1",
+      "actual": "139-comfort-metrics-v1",
+      "pass": true,
+      "detail": "139 comfort metrics contract version"
+    },
+    {
+      "name": "closed-event-kinds",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "the service ingests exactly the passenger interval and the passenger impact"
+    },
+    {
+      "name": "control-modes",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "AUTO, MANUAL and LEARNING are all aggregated"
+    },
+    {
+      "name": "threshold-acceleration",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "the comfort acceleration threshold is the catalog default of comfort_deceleration"
+    },
+    {
+      "name": "threshold-jerk",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "the comfort jerk threshold is the catalog default of acceleration_jerk"
+    },
+    {
+      "name": "threshold-source",
+      "expected": "comfort_deceleration",
+      "actual": "comfort_deceleration",
+      "pass": true,
+      "detail": "the threshold provenance is the shipped parameter catalog"
+    },
+    {
+      "name": "review-model-version",
+      "expected": "139-comfort-review-v1",
+      "actual": "139-comfort-review-v1",
+      "pass": true,
+      "detail": "the review model reads the comfort read model"
+    },
+    {
+      "name": "linear-intervals",
+      "expected": 120,
+      "actual": 120,
+      "pass": true,
+      "detail": "the linear ride contributes one interval per tick pair"
+    },
+    {
+      "name": "linear-peak-acceleration",
+      "expected": 0.9375,
+      "actual": 0.9375,
+      "pass": true,
+      "detail": "the linear ride peaks at the recorded 0,9375 m/s²"
+    },
+    {
+      "name": "linear-violations",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the linear ride exceeds no comfort threshold"
+    },
+    {
+      "name": "linear-mode",
+      "expected": "AUTO",
+      "actual": "AUTO",
+      "pass": true,
+      "detail": "the linear ride is aggregated in its own control mode"
+    },
+    {
+      "name": "brisk-peak-acceleration",
+      "expected": 5.625,
+      "actual": 5.625,
+      "pass": true,
+      "detail": "the brisk ride peaks at the recorded 5,625 m/s²"
+    },
+    {
+      "name": "brisk-violations",
+      "expected": 120,
+      "actual": 120,
+      "pass": true,
+      "detail": "every interval of the brisk ride exceeds the acceleration threshold"
+    },
+    {
+      "name": "brisk-jerk-violations",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "a constant acceleration has no jerk violation"
+    },
+    {
+      "name": "jerky-peak-jerk",
+      "expected": 225,
+      "actual": 225,
+      "pass": true,
+      "detail": "the jerky ride peaks at the real 225 m/s³ jerk"
+    },
+    {
+      "name": "jerky-acceleration-violations",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the jerky ride stays inside the acceleration threshold"
+    },
+    {
+      "name": "jerky-jerk-violations",
+      "expected": 119,
+      "actual": 119,
+      "pass": true,
+      "detail": "every jerk pair of the jerky ride exceeds the jerk threshold"
+    },
+    {
+      "name": "mixed-modes",
+      "expected": "AUTO,LEARNING,MANUAL",
+      "actual": "AUTO,LEARNING,MANUAL",
+      "pass": true,
+      "detail": "the mixed ride is aggregated in all three control modes"
+    },
+    {
+      "name": "mixed-intervals",
+      "expected": 179,
+      "actual": 179,
+      "pass": true,
+      "detail": "the mixed ride contributes every usable interval of its three segments"
+    },
+    {
+      "name": "mixed-mode-counts",
+      "expected": 60,
+      "actual": 60,
+      "pass": true,
+      "detail": "the AUTO part of the mixed ride keeps its own intervals"
+    },
+    {
+      "name": "incident-excluded-samples",
+      "expected": 61,
+      "actual": 61,
+      "pass": true,
+      "detail": "the 088 window suppresses every sample from the impact tick on"
+    },
+    {
+      "name": "incident-intervals",
+      "expected": 59,
+      "actual": 59,
+      "pass": true,
+      "detail": "only the prefix before the real impact reaches the comfort metric"
+    },
+    {
+      "name": "incident-impacts",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the real impact is counted as a passenger consequence"
+    },
+    {
+      "name": "incident-no-comfort-violation",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the impact impulse never becomes a comfort violation"
+    },
+    {
+      "name": "invisible-intervals",
+      "expected": 120,
+      "actual": 120,
+      "pass": true,
+      "detail": "the taxi outside the camera is aggregated like a visible one"
+    },
+    {
+      "name": "invisible-total-intervals",
+      "expected": 240,
+      "actual": 240,
+      "pass": true,
+      "detail": "the visible and the off-camera taxi contribute the same intervals"
+    },
+    {
+      "name": "recovery-excluded-samples",
+      "expected": 61,
+      "actual": 61,
+      "pass": true,
+      "detail": "the 088 window suppresses the recovery tick and everything after it"
+    },
+    {
+      "name": "recovery-peak-acceleration",
+      "expected": 0.9375,
+      "actual": 0.9375,
+      "pass": true,
+      "detail": "the teleport never becomes comfort of the command"
+    },
+    {
+      "name": "recovery-violations",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the recovery ride exceeds no comfort threshold"
+    },
+    {
+      "name": "turn-lateral",
+      "expected": 3.333362,
+      "actual": 3.333362,
+      "pass": true,
+      "detail": "the turn measures the real lateral acceleration of the recorded velocity"
+    },
+    {
+      "name": "turn-lateral-violations",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the comfortable turn stays below the real sedan capability"
+    },
+    {
+      "name": "adapter-id",
+      "expected": "comfortScore",
+      "actual": "comfortScore",
+      "pass": true,
+      "detail": "the 082 adapter exposes the comfort metric"
+    },
+    {
+      "name": "adapter-value",
+      "expected": 5,
+      "actual": 5,
+      "pass": true,
+      "detail": "the dashboard reads the comfort score of the shared review model"
+    },
+    {
+      "name": "history-scans",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the snapshot performs no history scan"
+    },
+    {
+      "name": "limits-retained-keys",
+      "expected": 8192,
+      "actual": 8192,
+      "pass": true,
+      "detail": "the idempotency memory is bounded"
+    },
+    {
+      "name": "limits-retained-rides",
+      "expected": 512,
+      "actual": 512,
+      "pass": true,
+      "detail": "the per-ride read model is bounded"
+    }
+  ],
+  "summary": {
+    "checks": 36,
+    "passed": 36,
+    "pass": true
+  }
+}

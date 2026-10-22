@@ -1,7 +1,17 @@
 import { record, requireContract, text, tick } from '../sessions';
 import { rideStates } from '../fleet';
 import type { RideState } from '../fleet';
-import { parameterRegistry } from '../profiles';
+import {
+  COMFORT_LIMIT_EPSILON as SHARED_COMFORT_LIMIT_EPSILON,
+  COMFORT_PASSENGER_RIDE_STATES as SHARED_COMFORT_PASSENGER_RIDE_STATES,
+  COMFORT_THRESHOLD_SOURCE as SHARED_COMFORT_THRESHOLD_SOURCE,
+  COMFORT_THRESHOLDS as SHARED_COMFORT_THRESHOLDS,
+  comfortPassengerAboard as sharedComfortPassengerAboard,
+  comfortVerdict,
+  deriveComfortIntervals,
+  summarizeComfortIntervals,
+} from '../experiments';
+import type { ComfortRideAggregate, ComfortThresholds } from '../experiments';
 import { ARTIFACT_FILTER_TICK_HZ } from '../telemetry';
 import type { FilteredWindowRecord, TickSampleReadout } from '../telemetry';
 import { controlModes } from '../vehicles';
@@ -61,12 +71,11 @@ export const COMFORT_LIMITS = Object.freeze({
  * catalog, so the comfort gate is a real project figure and not a number invented for the mission.
  * A published profile can tune `comfort_deceleration`/`acceleration_jerk` for the longitudinal
  * controller; the comfort objective keeps the catalog default and never follows a profile.
+ *
+ * The values themselves are owned by the 139 comfort metric, so the mission gate, the dashboard and
+ * the review model read one single source of thresholds.
  */
-export const COMFORT_THRESHOLD_SOURCE = Object.freeze({
-  maxAccelerationMps2: 'comfort_deceleration',
-  maxJerkMps3: 'acceleration_jerk',
-  catalog: 'project driving-parameter catalog default',
-});
+export const COMFORT_THRESHOLD_SOURCE = SHARED_COMFORT_THRESHOLD_SOURCE;
 
 /**
  * Calibration thresholds taken from the shipped catalog defaults:
@@ -74,22 +83,16 @@ export const COMFORT_THRESHOLD_SOURCE = Object.freeze({
  * `acceleration_jerk` = 2 m/s³ (the jerk rate the longitudinal controller itself uses). A peak
  * above either limit fails the ride, and the count of exceedances is reported per metric.
  */
-export const COMFORT_THRESHOLDS = Object.freeze({
-  maxAccelerationMps2: parameterRegistry.comfort_deceleration.default,
-  maxJerkMps3: parameterRegistry.acceleration_jerk.default,
-});
+export const COMFORT_THRESHOLDS = SHARED_COMFORT_THRESHOLDS;
 
 /**
  * Numerical tolerance of the threshold comparison. The metrics are integrated from 60 Hz ticks, so
  * a drive that sits exactly on the threshold can land a few ULPs above it; the tolerance keeps the
  * verdict stable without hiding a real exceedance.
  */
-export const COMFORT_LIMIT_EPSILON = 1e-9;
+export const COMFORT_LIMIT_EPSILON = SHARED_COMFORT_LIMIT_EPSILON;
 
-export interface ComfortThresholds {
-  readonly maxAccelerationMps2: number;
-  readonly maxJerkMps3: number;
-}
+export type { ComfortThresholds };
 
 /** Real 069 segment facts for the evaluated window. */
 export interface ComfortSegmentFacts {
@@ -248,12 +251,15 @@ export type ComfortFailureReason = (typeof comfortFailureReasons)[number];
 /**
  * The 061 ride states that carry the passenger. `TO_PICKUP` and `PICKUP` have an empty cabin;
  * `TO_DROPOFF` and `DROPOFF` transport the passenger; the terminal states have ended the ride.
+ *
+ * The rule is owned by the 139 comfort metric, so the mission gate, the dashboard and the review
+ * model agree on when a passenger is aboard.
  */
-export const COMFORT_PASSENGER_RIDE_STATES = Object.freeze(['TO_DROPOFF', 'DROPOFF'] as const);
+export const COMFORT_PASSENGER_RIDE_STATES = SHARED_COMFORT_PASSENGER_RIDE_STATES;
 
 /** Passenger presence derived from the real 061 ride lifecycle, never asserted freely. */
 export function comfortPassengerAboard(rideState: RideState): boolean {
-  return (COMFORT_PASSENGER_RIDE_STATES as readonly string[]).includes(rideState);
+  return sharedComfortPassengerAboard(rideState);
 }
 
 export interface ComfortSpeedSample {
@@ -541,10 +547,6 @@ function artifactCounts(window: FilteredWindowRecord, counts: ExcludedArtifactCo
   }
 }
 
-function round(value: number): number {
-  return Math.round(value * 1e6) / 1e6;
-}
-
 function emptyMetrics(): ComfortMetrics {
   return Object.freeze({
     peakAccelerationMps2: 0,
@@ -581,11 +583,6 @@ export function evaluateComfortRide(
   }
   requireContract(spans.length <= COMFORT_LIMITS.spans, 'Comfort span capacity exceeded');
 
-  const suppressed = (at: number): boolean =>
-    spans.some((span) => at >= span.fromTick && at <= span.toTick);
-  const crosses = (from: number, to: number): boolean =>
-    spans.some((span) => span.fromTick <= to && span.toTick >= from);
-
   const insideWindow = ride.samples.filter(
     (sample) => sample.tick >= ride.startTick && sample.tick <= evaluatedEndTick,
   );
@@ -596,9 +593,14 @@ export function evaluateComfortRide(
       ),
       'Comfort sample does not belong to a declared 069 segment',
     );
-  const used = insideWindow.filter((sample) => !suppressed(sample.tick));
+  // The 139 derivation is the single source of the comfort intervals: the same function feeds the
+  // 139 service, so the mission gate cannot diverge from the dashboard and the review model.
+  const derivation = deriveComfortIntervals({
+    samples: insideWindow,
+    suppressedSpans: spans,
+    tickHz: COMFORT_TICK_HZ,
+  });
   const outsideWindow = ride.samples.length - insideWindow.length;
-  const excludedSamples = insideWindow.length - used.length;
   const suppressedTicks = spans.reduce(
     (total, span) =>
       total +
@@ -627,8 +629,8 @@ export function evaluateComfortRide(
     samples: Object.freeze({
       received: ride.samples.length,
       insideWindow: insideWindow.length,
-      used: used.length,
-      excluded: excludedSamples,
+      used: derivation.usedSamples,
+      excluded: derivation.excludedSamples,
       outsideWindow,
     }),
     exclusions: Object.freeze({
@@ -661,85 +663,35 @@ export function evaluateComfortRide(
       metrics: emptyMetrics(),
     });
 
-  const accelerations: { readonly value: number; readonly durationS: number }[] = [];
-  let excludedIntervals = 0;
-  for (let index = 0; index + 1 < used.length; index += 1) {
-    const from = used[index]!;
-    const to = used[index + 1]!;
-    if (crosses(from.tick, to.tick)) {
-      excludedIntervals += 1;
-      continue;
-    }
-    const durationS = (to.tick - from.tick) / COMFORT_TICK_HZ;
-    accelerations.push(
-      Object.freeze({ value: (to.speedMps - from.speedMps) / durationS, durationS }),
-    );
-  }
-
-  const jerks: number[] = [];
-  for (let index = 0; index + 1 < accelerations.length; index += 1) {
-    const previous = accelerations[index]!;
-    const next = accelerations[index + 1]!;
-    jerks.push((next.value - previous.value) / next.durationS);
-  }
-
-  let peakAcceleration = 0;
-  let sumAbsAcceleration = 0;
-  let accelerationViolations = 0;
-  for (const entry of accelerations) {
-    const magnitude = Math.abs(entry.value);
-    peakAcceleration = Math.max(peakAcceleration, magnitude);
-    sumAbsAcceleration += magnitude;
-    if (magnitude > objective.thresholds.maxAccelerationMps2 + COMFORT_LIMIT_EPSILON)
-      accelerationViolations += 1;
-  }
-  let peakJerk = 0;
-  let jerkViolations = 0;
-  for (const value of jerks) {
-    const magnitude = Math.abs(value);
-    peakJerk = Math.max(peakJerk, magnitude);
-    if (magnitude > objective.thresholds.maxJerkMps3 + COMFORT_LIMIT_EPSILON) jerkViolations += 1;
-  }
+  const summary = summarizeComfortIntervals(derivation.intervals, objective.thresholds);
+  const verdict = comfortVerdict(
+    {
+      intervals: summary.accelerationSamples,
+      jerkSamples: summary.jerkSamples,
+      accelerationViolations: summary.accelerationViolations,
+      jerkViolations: summary.jerkViolations,
+    },
+    objective.evaluation.minimumSamples,
+  );
 
   const metrics: ComfortMetrics = Object.freeze({
-    peakAccelerationMps2: round(peakAcceleration),
-    meanAccelerationAbsMps2: round(
-      accelerations.length === 0 ? 0 : sumAbsAcceleration / accelerations.length,
-    ),
-    peakJerkMps3: round(peakJerk),
-    accelerationSamples: accelerations.length,
-    jerkSamples: jerks.length,
-    accelerationViolations,
-    jerkViolations,
+    peakAccelerationMps2: summary.peakAccelerationMps2,
+    meanAccelerationAbsMps2: summary.meanAccelerationAbsMps2,
+    peakJerkMps3: summary.peakJerkMps3,
+    accelerationSamples: summary.accelerationSamples,
+    jerkSamples: summary.jerkSamples,
+    accelerationViolations: summary.accelerationViolations,
+    jerkViolations: summary.jerkViolations,
   });
-
-  const status: ComfortStatus =
-    accelerations.length < objective.evaluation.minimumSamples
-      ? 'INSUFFICIENT_DATA'
-      : accelerationViolations > 0 && jerkViolations > 0
-        ? 'FAILED'
-        : accelerationViolations > 0
-          ? 'FAILED'
-          : jerkViolations > 0
-            ? 'FAILED'
-            : 'PASSED';
-  const reason: ComfortFailureReason | null =
-    status !== 'FAILED'
-      ? null
-      : accelerationViolations > 0 && jerkViolations > 0
-        ? 'BOTH_LIMITS'
-        : accelerationViolations > 0
-          ? 'ACCELERATION_LIMIT'
-          : 'JERK_LIMIT';
 
   return Object.freeze({
     ...base,
-    status,
-    reason,
+    status: verdict.status as ComfortStatus,
+    reason: verdict.reason as ComfortFailureReason | null,
     intervals: Object.freeze({
-      acceleration: accelerations.length,
-      jerk: jerks.length,
-      excluded: excludedIntervals,
+      acceleration: derivation.intervals.length,
+      jerk: summary.jerkSamples,
+      excluded: derivation.excludedIntervals,
     }),
     metrics,
   });
@@ -847,4 +799,65 @@ export function comfortMissionIds(): readonly string[] {
       .missions.map((mission) => mission.missionId)
       .sort(),
   );
+}
+
+/**
+ * The comfort mission read from the shared 139 read model.
+ *
+ * The aggregate is the one the 139 service published for the ride, so the mission gate, the 082
+ * dashboard and the review model read the same numbers instead of keeping parallel calculations.
+ * The verdict rules are the shared ones, so the outcome cannot diverge from
+ * {@link comfortMissionOutcome}.
+ */
+export interface ComfortMissionAggregateInput {
+  readonly missionId: string;
+  /** The 139 read-model aggregate of the ride. */
+  readonly aggregate: ComfortRideAggregate;
+  /** Minimum usable intervals for a verdict; the objective default is 8. */
+  readonly minimumSamples: number;
+}
+
+export function comfortMissionOutcomeFromAggregates(input: unknown): ComfortMissionOutcome {
+  requireContract(
+    typeof input === 'object' && input !== null && !Array.isArray(input),
+    'Comfort mission aggregate requires an object',
+  );
+  const data = input as Record<string, unknown>;
+  requireContract(
+    typeof data.missionId === 'string' && data.missionId === COMFORT_MISSION_ID,
+    'Unknown comfort mission',
+  );
+  const aggregate = data.aggregate;
+  requireContract(
+    typeof aggregate === 'object' &&
+      aggregate !== null &&
+      typeof (aggregate as { intervals?: unknown }).intervals === 'number',
+    'Comfort mission aggregate requires the 139 ride aggregate',
+  );
+  const minimumSamples = data.minimumSamples;
+  requireContract(
+    typeof minimumSamples === 'number' &&
+      Number.isSafeInteger(minimumSamples) &&
+      minimumSamples >= 2,
+    'Comfort mission aggregate requires a minimum sample count',
+  );
+  const ride = aggregate as ComfortRideAggregate;
+  const verdict = comfortVerdict(
+    {
+      intervals: ride.intervals,
+      jerkSamples: ride.jerkSamples,
+      accelerationViolations: ride.accelerationViolations,
+      jerkViolations: ride.jerkViolations,
+    },
+    minimumSamples,
+  );
+  const passed = verdict.status === 'PASSED';
+  return Object.freeze({
+    missionId: COMFORT_MISSION_ID,
+    objectiveId: COMFORT_OBJECTIVE_ID,
+    status: passed ? ('COMPLETED' as const) : ('FAILED' as const),
+    reason: passed ? null : (verdict.reason ?? 'NOT_PASSED'),
+    comfortStatus: verdict.status as ComfortStatus,
+    styleFidelity: null,
+  });
 }

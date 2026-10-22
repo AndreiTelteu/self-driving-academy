@@ -155,8 +155,9 @@ blocajului, deci hostul o măsoară; modulul nu inventează secunde.
 | `collisions` | `collisions` | `count` |
 | `blockages` | `blockedIntervals` | `count` |
 
-Încălcările și confortul rămân în afara adaptorului (`source: null`), deci 082 continuă să le arate
-`SOURCE_MISSING` până la 138/139. Motivele 137 sunt mapate în vocabularul închis 082:
+Încălcările și confortul rămân în afara adaptorului (`source: null`): încălcarea este adaptată de
+138 (`toCityDashboardBehaviorMetrics`), iar confortul de 139 (`toCityDashboardComfortMetrics`).
+Motivele 137 sunt mapate în vocabularul închis 082:
 `NO_EXPOSURE`/`NO_RIDES`/`NO_OPPORTUNITIES` → `NO_EXPOSURE`, `NO_DISTANCE` → `SOURCE_MISSING`,
 `NO_FLEET` → `NOT_CERTIFIED`. Un `UNAVAILABLE` rămâne `value: null`, niciodată `0`.
 
@@ -168,6 +169,15 @@ calculează conformarea per oportunitate eligibilă, viteza, dwell-ul, reacția 
 module nu împart acumulatori: 137 nu clasifică oportunități, iar 138 nu calculează curse, distanțe sau
 coliziuni. Adaptorul 082 al 138 expune doar `violations`, ca valoare `CityMetric` compatibilă, fără să
 modifice contractul 082 sau adaptorul 137.
+
+## Relația cu indicatorii de confort 139
+
+[Contractul 139](comfort-metrics.md) este singurul proprietar al confortului: intervalele cu pasager,
+agregatele per cursă și per mod, scorul de confort și termenul de review. 137 nu calculează și nu
+copiază confortul; adaptorul său 082 continuă să omită `comfortScore`, iar adaptorul 139 îl
+publică din același read model pe care îl citesc misiunea 121 și modelul de review. Cele două module
+nu împart acumulatori și nici vocabular de evenimente: 137 are evenimentele sale de serviciu, 139 are
+intervalele și impactele cu pasager.
 
 ## Limite
 

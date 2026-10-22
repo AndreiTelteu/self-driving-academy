@@ -114,6 +114,19 @@ export {
   type BehaviorSpeedSampleInput,
 } from './behavior-metrics';
 export {
+  COMFORT_CITY_METRIC_IDS,
+  COMFORT_METRICS_APP_VERSION,
+  ingestComfortImpact,
+  ingestComfortRide,
+  readComfortSnapshot,
+  toCityDashboardComfortMetrics,
+  toComfortCityObservation,
+  type ComfortImpactFacts,
+  type ComfortRideFacts,
+  type ComfortRideIngestResult,
+  type ComfortSnapshotContext,
+} from './comfort-metrics';
+export {
   PROFILE_PANEL_LOCAL_CONTEXT,
   PROFILE_PANEL_READ_ERRORS,
   readProfilePanelSnapshot,
