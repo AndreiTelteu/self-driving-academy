@@ -61,10 +61,10 @@ Histerezisul este de 5 m, ca la batchurile 223. Pivoturile rămân în arbore la
 ## Cost local pe 24 de instanțe
 
 - 4 materiale partajate, 8 variante shader, 61 draw calls de aplicație (75 cu solul și șoseaua),
-  5.232 vârfuri de corp + roți partajate.
+  85 mesh-uri, 14.448 vârfuri de corp + roți partajate.
 - Trimitere CPU/render: p50 0,7 ms, p95 1,2 ms, p99 1,8 ms, max 2,0 ms; 0 cadre peste 25 ms.
-- Memorie: `usedJSHeapSize` 24,6 MB; memoria GPU exactă este indisponibilă (`null`), ca în 223.
-- LOD-uri simultane în vedere: NEAR 6, MID 8, FAR 10.
+- Memorie: `usedJSHeapSize` 23,6 MB; memoria GPU exactă este indisponibilă (`null`), ca în 223.
+- LOD-uri simultane în vedere (overview): NEAR 0, MID 11, FAR 13.
 
 ## Comenzi
 
