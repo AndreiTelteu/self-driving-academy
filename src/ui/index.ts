@@ -24,6 +24,16 @@ export function createBootstrapView(root: HTMLDivElement): BootstrapView {
 
 export { createControlModeHud, CONTROL_MODE_HUD_LIMITS } from './control-mode-hud';
 export type { ControlModeHudView } from './control-mode-hud';
+export {
+  AUDIO_FEEDBACK_INDICATOR_LIMITS,
+  AUDIO_FEEDBACK_INDICATOR_VERSION,
+  createAudioFeedbackIndicator,
+} from './audio-feedback-indicator';
+export type {
+  AudioFeedbackIndicator,
+  AudioFeedbackIndicatorAdapter,
+  AudioFeedbackIndicatorStats,
+} from './audio-feedback-indicator';
 export * from './recovery-hud';
 export { createTaxiHud } from './taxi-hud';
 export { createMissionTutorialPanel } from './mission-tutorial';

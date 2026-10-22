@@ -1,0 +1,367 @@
+{
+  "version": "149-audio-feedback-v1",
+  "contract": {
+    "limits": {
+      "version": "149-audio-feedback-v1",
+      "emittedKeys": 256,
+      "keyCodeUnits": 256,
+      "idCodeUnits": 256,
+      "textCodeUnits": 240,
+      "retainedVisuals": 1
+    },
+    "cues": [
+      {
+        "cueId": "takeover-notice",
+        "category": "ui",
+        "usedBy": "TAKEOVER"
+      },
+      {
+        "cueId": "profile-notice",
+        "category": "ui",
+        "usedBy": "PUBLICATION"
+      },
+      {
+        "cueId": "ui-tick",
+        "category": "ui",
+        "usedBy": "MISSION,LEARNING"
+      }
+    ],
+    "families": [
+      {
+        "kind": "TAKEOVER",
+        "cue": "takeover-notice",
+        "event": "007 MANUAL_START"
+      },
+      {
+        "kind": "PUBLICATION",
+        "cue": "profile-notice",
+        "event": "007 PROFILE_ACTIVATE"
+      },
+      {
+        "kind": "MISSION",
+        "cue": "ui-tick",
+        "event": "116 mission instance"
+      },
+      {
+        "kind": "LEARNING",
+        "cue": "ui-tick",
+        "event": "079 notification"
+      }
+    ],
+    "visual": "Every accepted sound has a visual twin: the 149 indicator (one bounded status line) and, for the learning and the publication, the real 079 notification rows."
+  },
+  "scenarios": [
+    {
+      "name": "gesture-required",
+      "detail": "Without a player gesture the engine refuses the cue; the visual twin of the takeover is still shown.",
+      "data": {
+        "status": "AWAITING_GESTURE",
+        "voices": 0,
+        "visuals": 1,
+        "awaitingGesture": 1
+      }
+    },
+    {
+      "name": "takeover",
+      "detail": "The real 007 MANUAL_START event becomes one takeover cue; the relayed and the direct repetition sound nothing.",
+      "data": {
+        "cues": "takeover-notice",
+        "busStatus": "duplicate",
+        "directStatus": "DUPLICATE",
+        "duplicates": 1,
+        "visual": "Preluare control · taxi-2 · MANUAL"
+      }
+    },
+    {
+      "name": "publication",
+      "detail": "The 007 PROFILE_ACTIVATE event and the 079 publication notification share one key: the profile sounds once.",
+      "data": {
+        "cues": "profile-notice",
+        "notificationStatus": "DUPLICATE",
+        "duplicates": 1,
+        "visual": "Profil publicat · style:149:v3"
+      }
+    },
+    {
+      "name": "late-result",
+      "detail": "A validated candidate is an analysis result, not a publication; the late publication sounds its own real outcome.",
+      "data": {
+        "cues": "takeover-notice,ui-tick,profile-notice",
+        "analysisCue": "ui-tick",
+        "lateFlag": true,
+        "lateCue": "profile-notice"
+      }
+    },
+    {
+      "name": "rapid-toggle",
+      "detail": "Sixty mute and category toggles and a burst of ten takeovers never create a second voice nor an orphan one.",
+      "data": {
+        "voicesBefore": 1,
+        "voicesAfter": 1,
+        "activeVoices": 1,
+        "uiVoices": 1,
+        "totalVoiceCap": 14,
+        "cooldownSkips": 10,
+        "buffers": 1,
+        "maxBuffers": 8
+      }
+    },
+    {
+      "name": "mission-state",
+      "detail": "The mission state is read from the real 116 tracker: one sound per real state, nothing for an unknown instance.",
+      "data": {
+        "instanceId": "id-v1:16:mission-instance12:missions:14911:mission-1495:a0001",
+        "cues": "ui-tick,ui-tick",
+        "repeatedStatus": "DUPLICATE",
+        "completedStatus": "PLAYED",
+        "completedVisual": "Misiune completată · mission-149",
+        "unknownStatus": "UNKNOWN_MISSION",
+        "unknownMissions": 1
+      }
+    },
+    {
+      "name": "visual-equivalent",
+      "detail": "The indicator mirrors the last sound and the 079 infrastructure keeps the detailed publication row.",
+      "data": {
+        "visuals": 2,
+        "indicatorKind": "PUBLICATION",
+        "indicatorText": "Profil publicat · style:149:v5",
+        "notificationStatus": "ACCEPTED",
+        "notificationRows": 1,
+        "notificationKind": "PUBLISHED",
+        "notificationSymbol": "★"
+      }
+    }
+  ],
+  "checks": [
+    {
+      "name": "gesture/status",
+      "expected": "AWAITING_GESTURE",
+      "actual": "AWAITING_GESTURE",
+      "pass": true,
+      "detail": "The 148 engine refuses the cue before the gesture."
+    },
+    {
+      "name": "gesture/no-voice",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "No voice exists before the gesture."
+    },
+    {
+      "name": "gesture/visual-shown",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "The information never depends on the sound: the visual twin is shown anyway."
+    },
+    {
+      "name": "takeover/cue",
+      "expected": "takeover-notice",
+      "actual": "takeover-notice",
+      "pass": true,
+      "detail": "The takeover cue played."
+    },
+    {
+      "name": "takeover/one-voice",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "Exactly one voice was started."
+    },
+    {
+      "name": "takeover/bus-duplicate",
+      "expected": "duplicate",
+      "actual": "duplicate",
+      "pass": true,
+      "detail": "The 007 bus refuses the repeated event."
+    },
+    {
+      "name": "takeover/direct-duplicate",
+      "expected": "DUPLICATE",
+      "actual": "DUPLICATE",
+      "pass": true,
+      "detail": "The idempotency key refuses the repeated event."
+    },
+    {
+      "name": "takeover/visual",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The visual twin names the vehicle of the real event."
+    },
+    {
+      "name": "publication/cue",
+      "expected": "profile-notice",
+      "actual": "profile-notice",
+      "pass": true,
+      "detail": "The publication cue played."
+    },
+    {
+      "name": "publication/one-voice",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "The activation and the notification produced a single sound."
+    },
+    {
+      "name": "publication/notification-duplicate",
+      "expected": "DUPLICATE",
+      "actual": "DUPLICATE",
+      "pass": true,
+      "detail": "The 079 notification shares the publication key."
+    },
+    {
+      "name": "publication/visual",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The visual twin names the published version."
+    },
+    {
+      "name": "late/no-publication-for-candidate",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "A validated candidate never sounds like a published profile."
+    },
+    {
+      "name": "late/analysis-cue",
+      "expected": "ui-tick",
+      "actual": "ui-tick",
+      "pass": true,
+      "detail": "The analysis result has its own cue."
+    },
+    {
+      "name": "late/late-flag",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The late publication is marked as late."
+    },
+    {
+      "name": "late/own-outcome",
+      "expected": "profile-notice",
+      "actual": "profile-notice",
+      "pass": true,
+      "detail": "The late publication sounds the real outcome, not the anticipated state."
+    },
+    {
+      "name": "toggle/no-extra-voice",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "The toggles and the burst create no additional voice."
+    },
+    {
+      "name": "toggle/within-total-cap",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The active voices stay under the total cap."
+    },
+    {
+      "name": "toggle/within-ui-cap",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The ui voices stay under the category cap."
+    },
+    {
+      "name": "toggle/buffer-cap",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The buffers stay under the explicit cap."
+    },
+    {
+      "name": "toggle/cooldown-counted",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The burst is bounded by the 148 cooldown of the family."
+    },
+    {
+      "name": "mission/cues",
+      "expected": "ui-tick,ui-tick",
+      "actual": "ui-tick,ui-tick",
+      "pass": true,
+      "detail": "The mission cues played."
+    },
+    {
+      "name": "mission/repeated",
+      "expected": "DUPLICATE",
+      "actual": "DUPLICATE",
+      "pass": true,
+      "detail": "The repeated state sounds nothing."
+    },
+    {
+      "name": "mission/completed",
+      "expected": "PLAYED",
+      "actual": "PLAYED",
+      "pass": true,
+      "detail": "The completion of the real tracker sounds."
+    },
+    {
+      "name": "mission/visual",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The visual twin names the completed mission."
+    },
+    {
+      "name": "mission/unknown",
+      "expected": "UNKNOWN_MISSION",
+      "actual": "UNKNOWN_MISSION",
+      "pass": true,
+      "detail": "An unknown instance never sounds."
+    },
+    {
+      "name": "visual/one-twin-per-sound",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "Both sounds have a visual twin."
+    },
+    {
+      "name": "visual/indicator-kind",
+      "expected": "PUBLICATION",
+      "actual": "PUBLICATION",
+      "pass": true,
+      "detail": "The indicator shows the kind of the last sound."
+    },
+    {
+      "name": "visual/indicator-text",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The indicator shows the text of the publication."
+    },
+    {
+      "name": "visual/notification-accepted",
+      "expected": "ACCEPTED",
+      "actual": "ACCEPTED",
+      "pass": true,
+      "detail": "The 079 row is accepted."
+    },
+    {
+      "name": "visual/notification-kind",
+      "expected": "PUBLISHED",
+      "actual": "PUBLISHED",
+      "pass": true,
+      "detail": "The 079 row is the publication."
+    },
+    {
+      "name": "visual/notification-symbol",
+      "expected": "★",
+      "actual": "★",
+      "pass": true,
+      "detail": "The 079 row carries the symbol."
+    }
+  ],
+  "summary": {
+    "checks": 32,
+    "passed": 32,
+    "pass": true
+  }
+}
