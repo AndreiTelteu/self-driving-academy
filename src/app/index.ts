@@ -559,3 +559,22 @@ export {
   type ControlSlidersTickResult,
   type ControlSlidersTickStatus,
 } from './control-sliders';
+
+export {
+  STYLE_SLIDERS_EDITABLE_KEYS,
+  STYLE_SLIDERS_SESSION_VERSION,
+  createStyleSlidersSession,
+  type StyleSlidersBarrierSummary,
+  type StyleSlidersChange,
+  type StyleSlidersOpenStatus,
+  type StyleSlidersQueueStatus,
+  type StyleSlidersRestoreStatus,
+  type StyleSlidersSession,
+  type StyleSlidersSessionOptions,
+  type StyleSlidersSessionState,
+  type StyleSlidersSessionStats,
+  type StyleSlidersTarget,
+  type StyleSlidersTickResult,
+  type StyleSlidersTickStatus,
+  type StyleSlidersVersionSummary,
+} from './control-sliders-style';

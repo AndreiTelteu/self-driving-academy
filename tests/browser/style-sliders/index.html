@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ro">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="data:," />
+    <title>230 style sliders playtest</title>
+    <link rel="stylesheet" href="../../../src/style.css" />
+    <style>
+      body {
+        display: block;
+        margin: 0;
+        min-height: 100vh;
+        background: #0b1411;
+        color: #e8f1ed;
+        font-family: system-ui, sans-serif;
+      }
+      #playtest-status {
+        position: fixed;
+        top: 0.5rem;
+        left: 0.5rem;
+        z-index: 1;
+        max-width: 60ch;
+        font-size: 0.78rem;
+        color: #9bb3a8;
+      }
+      #playtest-open {
+        position: fixed;
+        top: 0.5rem;
+        right: 0.5rem;
+        z-index: 1;
+        padding: 0.5rem 0.8rem;
+        border: 1px solid #ffffff3d;
+        border-radius: 0.4rem;
+        background: #1c332b;
+        color: inherit;
+        font: inherit;
+        cursor: pointer;
+      }
+      #playtest-log {
+        position: fixed;
+        bottom: 0.5rem;
+        left: 0.5rem;
+        z-index: 1;
+        max-width: 80ch;
+        max-height: 12rem;
+        overflow: auto;
+        font-size: 0.72rem;
+        color: #c6dbd1;
+        white-space: pre-wrap;
+      }
+    </style>
+  </head>
+  <body>
+    <p id="playtest-status" role="status" aria-live="polite"></p>
+    <button id="playtest-open" type="button">Deschide Reglaje</button>
+    <pre id="playtest-log" aria-live="polite"></pre>
+    <div id="playtest-host"></div>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>
