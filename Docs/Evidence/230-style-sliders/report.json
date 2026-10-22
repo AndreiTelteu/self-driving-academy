@@ -1,0 +1,875 @@
+{
+  "version": "230-style-sliders-v1",
+  "contract": {
+    "tuningMapVersion": "230-style-map-v1",
+    "fields": [
+      "speedDeltaUrban",
+      "desiredAcceleration",
+      "comfortDeceleration",
+      "followingTimeHeadway",
+      "followingMinGap",
+      "redStopProbability",
+      "stopFullProbability",
+      "greenStartDelay"
+    ],
+    "parameterKeys": [
+      "speed_delta_urban",
+      "desired_acceleration",
+      "comfort_deceleration",
+      "following_time_headway",
+      "following_min_gap",
+      "red_stop_probability",
+      "stop_full_probability",
+      "green_start_delay"
+    ],
+    "ranges": [
+      {
+        "key": "speed_delta_urban",
+        "unit": "km/h",
+        "min": -28.8,
+        "max": 54,
+        "step": 0.1
+      },
+      {
+        "key": "desired_acceleration",
+        "unit": "m/s²",
+        "min": 0.2,
+        "max": 6,
+        "step": 0.1
+      },
+      {
+        "key": "comfort_deceleration",
+        "unit": "m/s²",
+        "min": 0.3,
+        "max": 8,
+        "step": 0.1
+      },
+      {
+        "key": "following_time_headway",
+        "unit": "s",
+        "min": 0.2,
+        "max": 5,
+        "step": 0.1
+      },
+      {
+        "key": "following_min_gap",
+        "unit": "m",
+        "min": 0.2,
+        "max": 15,
+        "step": 0.1
+      },
+      {
+        "key": "red_stop_probability",
+        "unit": "%",
+        "min": 0,
+        "max": 100,
+        "step": 1
+      },
+      {
+        "key": "stop_full_probability",
+        "unit": "%",
+        "min": 0,
+        "max": 100,
+        "step": 1
+      },
+      {
+        "key": "green_start_delay",
+        "unit": "s",
+        "min": 0,
+        "max": 4,
+        "step": 0.1
+      }
+    ],
+    "unavailable": [
+      {
+        "key": "speed_delta_residential",
+        "reason": "OUTSIDE_TUNING_MAP",
+        "reserved": true
+      },
+      {
+        "key": "launch_intensity",
+        "reason": "NO_POLICY",
+        "reserved": true
+      },
+      {
+        "key": "signal_use_probability",
+        "reason": "NO_POLICY",
+        "reserved": true
+      }
+    ],
+    "writeHz": 10,
+    "saveStates": [
+      "DIRTY",
+      "UNCHANGED",
+      "INVALID",
+      "STALE",
+      "SESSION_CHANGED"
+    ],
+    "tabLimits": {
+      "fields": 8,
+      "unavailableRows": 3,
+      "historyRows": 8,
+      "retainedDrafts": 1,
+      "globalListeners": 0
+    },
+    "layouts": [
+      {
+        "id": "1280x720",
+        "widthPx": 416,
+        "maxHeightPx": 648,
+        "visibleRows": 6,
+        "fits": true
+      },
+      {
+        "id": "1920x1080",
+        "widthPx": 512,
+        "maxHeightPx": 864,
+        "visibleRows": 8,
+        "fits": true
+      },
+      {
+        "id": "zoom-150",
+        "widthPx": 384,
+        "maxHeightPx": 432,
+        "visibleRows": 3,
+        "fits": true
+      }
+    ]
+  },
+  "conversions": [
+    {
+      "key": "speed_delta_urban",
+      "minUi": -28.8,
+      "minParameter": -8,
+      "maxUi": 54,
+      "maxParameter": 15,
+      "roundTripMin": -28.8,
+      "roundTripMax": 54
+    },
+    {
+      "key": "desired_acceleration",
+      "minUi": 0.2,
+      "minParameter": 0.2,
+      "maxUi": 6,
+      "maxParameter": 6,
+      "roundTripMin": 0.2,
+      "roundTripMax": 6
+    },
+    {
+      "key": "comfort_deceleration",
+      "minUi": 0.3,
+      "minParameter": 0.3,
+      "maxUi": 8,
+      "maxParameter": 8,
+      "roundTripMin": 0.3,
+      "roundTripMax": 8
+    },
+    {
+      "key": "following_time_headway",
+      "minUi": 0.2,
+      "minParameter": 0.2,
+      "maxUi": 5,
+      "maxParameter": 5,
+      "roundTripMin": 0.2,
+      "roundTripMax": 5
+    },
+    {
+      "key": "following_min_gap",
+      "minUi": 0.2,
+      "minParameter": 0.2,
+      "maxUi": 15,
+      "maxParameter": 15,
+      "roundTripMin": 0.2,
+      "roundTripMax": 15
+    },
+    {
+      "key": "red_stop_probability",
+      "minUi": 0,
+      "minParameter": 0,
+      "maxUi": 100,
+      "maxParameter": 1,
+      "roundTripMin": 0,
+      "roundTripMax": 100
+    },
+    {
+      "key": "stop_full_probability",
+      "minUi": 0,
+      "minParameter": 0,
+      "maxUi": 100,
+      "maxParameter": 1,
+      "roundTripMin": 0,
+      "roundTripMax": 100
+    },
+    {
+      "key": "green_start_delay",
+      "minUi": 0,
+      "minParameter": 0,
+      "maxUi": 4,
+      "maxParameter": 4,
+      "roundTripMin": 0,
+      "roundTripMax": 4
+    }
+  ],
+  "publish": {
+    "status": "PUBLISHED",
+    "profileId": "city-profile",
+    "baseVersionId": "profile-v1",
+    "versionId": "manual-session-academia-1",
+    "parentVersionId": "profile-v1",
+    "checksum": "fnv1a64:87ebc224b5155f9e",
+    "tuningMapVersion": "230-style-map-v1",
+    "reason": "MANUAL_TUNING 230-style-map-v1",
+    "manualKeys": 2,
+    "sourceSegments": [
+      "manual:manual-session-academia-1"
+    ],
+    "changes": [
+      {
+        "parameterKey": "speed_delta_urban",
+        "unit": "m/s",
+        "before": 0,
+        "after": 5,
+        "beforeText": "0 km/h",
+        "afterText": "+18 km/h",
+        "valueProvenance": "MANUAL_TUNING",
+        "evidence": "HISTORICAL_ONLY"
+      },
+      {
+        "parameterKey": "green_start_delay",
+        "unit": "s",
+        "before": 0.7,
+        "after": 2.5,
+        "beforeText": "0.7 s",
+        "afterText": "2.5 s",
+        "valueProvenance": "MANUAL_TUNING",
+        "evidence": "HISTORICAL_ONLY"
+      }
+    ],
+    "barrierReason": "NEW_PROFILE",
+    "fromEpoch": 1,
+    "learningEpoch": 2,
+    "activationOrigin": "MANUAL_TUNING",
+    "activationTick": 3,
+    "cancelledJobs": [],
+    "physicalPreserved": true,
+    "fleetVersions": [
+      "manual-session-academia-1"
+    ],
+    "commonFleetTick": 3,
+    "fleetVehicles": 64,
+    "learningJobs": 0,
+    "progressionCalls": 0
+  },
+  "worker": {
+    "inFlightBeforeApply": true,
+    "cancelled": true,
+    "lateResult": "LATE_RESULT",
+    "applyStatus": "PUBLISHED"
+  },
+  "stale": {
+    "queueStatus": "STALE_BASE",
+    "saveState": "STALE",
+    "versionsUnchanged": true,
+    "rebaseBase": "stale-other-session-academia-1",
+    "rebaseMergesProposal": false
+  },
+  "noop": {
+    "queueStatus": "UNCHANGED",
+    "versionsAfterNoop": 1,
+    "barriersAfterNoop": 0,
+    "cancelLeavesVersions": 1
+  },
+  "restore": {
+    "status": "RESTORED",
+    "restoredVersionId": "profile-v1",
+    "versionsUnchanged": true,
+    "learningEpochBefore": 3,
+    "learningEpochAfter": 4,
+    "fleetVersion": "profile-v1",
+    "learningAfterRestore": "CURRENT:ACCEPTED"
+  },
+  "worlds": {
+    "academiaVersion": "manual-session-academia-1",
+    "haosVersion": "manual-session-haos-1",
+    "academiaVersions": 2,
+    "haosVersions": 2,
+    "draftInvalidated": true,
+    "applyAfterSwitch": "SESSION_CHANGED"
+  },
+  "reload": {
+    "baseVersionId": "manual-session-academia-1",
+    "saveState": "UNCHANGED",
+    "redStopProbability": 55,
+    "versions": 2
+  },
+  "ui": {
+    "enabledRows": 8,
+    "unavailableRows": 3,
+    "unavailabilityVisible": true,
+    "saveState": "DIRTY",
+    "writeHz": 10,
+    "frameUpdates": 600,
+    "frameWrites": 0,
+    "frameRenders": 0,
+    "restoreConfirms": 1,
+    "globalListeners": 0,
+    "elements": 84
+  },
+  "storage": {
+    "versions": 2,
+    "maxVersionsPerProfile": 128,
+    "historyRows": 2,
+    "retainedDrafts": 1,
+    "storeWrites": 1,
+    "versionsAdded": 1
+  },
+  "scenarios": [
+    {
+      "name": "contract",
+      "status": "PASS",
+      "detail": "8 conversions verified against 092"
+    },
+    {
+      "name": "publish",
+      "status": "PUBLISHED",
+      "detail": "2 changes, epoch 1→2, fleet manual-session-academia-1"
+    },
+    {
+      "name": "worker-in-progress",
+      "status": "PUBLISHED",
+      "detail": "job cancelled: true"
+    },
+    {
+      "name": "stale-base",
+      "status": "REFUSED",
+      "detail": "queue STALE_BASE, rebase stale-other-session-academia-1"
+    },
+    {
+      "name": "no-op-cancel",
+      "status": "NO_CHANGE",
+      "detail": "UNCHANGED / withdrawn"
+    },
+    {
+      "name": "restore",
+      "status": "RESTORED",
+      "detail": "epoch 3→4"
+    },
+    {
+      "name": "session-worlds",
+      "status": "SEPARATED",
+      "detail": "academia manual-session-academia-1 / haos manual-session-haos-1"
+    },
+    {
+      "name": "reload",
+      "status": "PERSISTED",
+      "detail": "head manual-session-academia-1"
+    },
+    {
+      "name": "ui",
+      "status": "PASS",
+      "detail": "600 frame updates, 0 writes"
+    },
+    {
+      "name": "layout",
+      "status": "PASS",
+      "detail": "1280×720, 1920×1080 and 150% zoom fit the 084 panel"
+    }
+  ],
+  "checks": [
+    {
+      "name": "catalog-domain:speed_delta_urban",
+      "expected": "-8:15:m/s",
+      "actual": "-8:15:m/s",
+      "pass": true,
+      "detail": "UI range converts exactly to the 092 catalog domain"
+    },
+    {
+      "name": "round-trip:speed_delta_urban",
+      "expected": "-28.8:54",
+      "actual": "-28.8:54",
+      "pass": true,
+      "detail": "parameter → UI conversion returns the declared ends"
+    },
+    {
+      "name": "catalog-domain:desired_acceleration",
+      "expected": "0.2:6:m/s²",
+      "actual": "0.2:6:m/s²",
+      "pass": true,
+      "detail": "UI range converts exactly to the 092 catalog domain"
+    },
+    {
+      "name": "round-trip:desired_acceleration",
+      "expected": "0.2:6",
+      "actual": "0.2:6",
+      "pass": true,
+      "detail": "parameter → UI conversion returns the declared ends"
+    },
+    {
+      "name": "catalog-domain:comfort_deceleration",
+      "expected": "0.3:8:m/s²",
+      "actual": "0.3:8:m/s²",
+      "pass": true,
+      "detail": "UI range converts exactly to the 092 catalog domain"
+    },
+    {
+      "name": "round-trip:comfort_deceleration",
+      "expected": "0.3:8",
+      "actual": "0.3:8",
+      "pass": true,
+      "detail": "parameter → UI conversion returns the declared ends"
+    },
+    {
+      "name": "catalog-domain:following_time_headway",
+      "expected": "0.2:5:s",
+      "actual": "0.2:5:s",
+      "pass": true,
+      "detail": "UI range converts exactly to the 092 catalog domain"
+    },
+    {
+      "name": "round-trip:following_time_headway",
+      "expected": "0.2:5",
+      "actual": "0.2:5",
+      "pass": true,
+      "detail": "parameter → UI conversion returns the declared ends"
+    },
+    {
+      "name": "catalog-domain:following_min_gap",
+      "expected": "0.2:15:m",
+      "actual": "0.2:15:m",
+      "pass": true,
+      "detail": "UI range converts exactly to the 092 catalog domain"
+    },
+    {
+      "name": "round-trip:following_min_gap",
+      "expected": "0.2:15",
+      "actual": "0.2:15",
+      "pass": true,
+      "detail": "parameter → UI conversion returns the declared ends"
+    },
+    {
+      "name": "catalog-domain:red_stop_probability",
+      "expected": "0:1:probability",
+      "actual": "0:1:probability",
+      "pass": true,
+      "detail": "UI range converts exactly to the 092 catalog domain"
+    },
+    {
+      "name": "round-trip:red_stop_probability",
+      "expected": "0:100",
+      "actual": "0:100",
+      "pass": true,
+      "detail": "parameter → UI conversion returns the declared ends"
+    },
+    {
+      "name": "catalog-domain:stop_full_probability",
+      "expected": "0:1:probability",
+      "actual": "0:1:probability",
+      "pass": true,
+      "detail": "UI range converts exactly to the 092 catalog domain"
+    },
+    {
+      "name": "round-trip:stop_full_probability",
+      "expected": "0:100",
+      "actual": "0:100",
+      "pass": true,
+      "detail": "parameter → UI conversion returns the declared ends"
+    },
+    {
+      "name": "catalog-domain:green_start_delay",
+      "expected": "0:4:s",
+      "actual": "0:4:s",
+      "pass": true,
+      "detail": "UI range converts exactly to the 092 catalog domain"
+    },
+    {
+      "name": "round-trip:green_start_delay",
+      "expected": "0:4",
+      "actual": "0:4",
+      "pass": true,
+      "detail": "parameter → UI conversion returns the declared ends"
+    },
+    {
+      "name": "keys-implemented",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "all eight keys are implemented policies"
+    },
+    {
+      "name": "unavailable-visible",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "unsupported keys stay visible with the reserved badge"
+    },
+    {
+      "name": "write-hz",
+      "expected": 10,
+      "actual": 10,
+      "pass": true,
+      "detail": "slider read-out ceiling"
+    },
+    {
+      "name": "publish-status",
+      "expected": "PUBLISHED",
+      "actual": "PUBLISHED",
+      "pass": true,
+      "detail": "one publication"
+    },
+    {
+      "name": "publish-keys",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "only the two differences"
+    },
+    {
+      "name": "publish-reason",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "version provenance is MANUAL_TUNING"
+    },
+    {
+      "name": "publish-parent",
+      "expected": "profile-v1",
+      "actual": "profile-v1",
+      "pass": true,
+      "detail": "explicit base"
+    },
+    {
+      "name": "publish-before-after",
+      "expected": "0→5",
+      "actual": "0→5",
+      "pass": true,
+      "detail": "explicit before/after in SI"
+    },
+    {
+      "name": "publish-origin",
+      "expected": "MANUAL_TUNING",
+      "actual": "MANUAL_TUNING",
+      "pass": true,
+      "detail": "110 origin"
+    },
+    {
+      "name": "publish-epoch",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "learningEpoch advanced by the 205 barrier"
+    },
+    {
+      "name": "publish-fleet",
+      "expected": "manual-session-academia-1",
+      "actual": "manual-session-academia-1",
+      "pass": true,
+      "detail": "both categories use the new version"
+    },
+    {
+      "name": "publish-common-tick",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "all vehicles share one activation tick"
+    },
+    {
+      "name": "publish-learning-jobs",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no 103 job created"
+    },
+    {
+      "name": "publish-progression",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no progression call"
+    },
+    {
+      "name": "publish-no-observations",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "no observation is invented"
+    },
+    {
+      "name": "worker-tracked",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "real 103 job queued"
+    },
+    {
+      "name": "worker-cancelled",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "205 cancels the in-flight job"
+    },
+    {
+      "name": "worker-late",
+      "expected": "LATE_RESULT",
+      "actual": "LATE_RESULT",
+      "pass": true,
+      "detail": "late result is ignored"
+    },
+    {
+      "name": "worker-not-blocked",
+      "expected": "PUBLISHED",
+      "actual": "PUBLISHED",
+      "pass": true,
+      "detail": "apply is not blocked"
+    },
+    {
+      "name": "stale-queue",
+      "expected": "STALE_BASE",
+      "actual": "STALE_BASE",
+      "pass": true,
+      "detail": "stale draft is refused"
+    },
+    {
+      "name": "stale-save-state",
+      "expected": "STALE",
+      "actual": "STALE",
+      "pass": true,
+      "detail": "visible stale state"
+    },
+    {
+      "name": "stale-no-write",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "history is untouched"
+    },
+    {
+      "name": "stale-rebase",
+      "expected": "stale-other-session-academia-1",
+      "actual": "stale-other-session-academia-1",
+      "pass": true,
+      "detail": "explicit rebase"
+    },
+    {
+      "name": "stale-no-merge",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "rebase discards the old proposal"
+    },
+    {
+      "name": "noop-status",
+      "expected": "UNCHANGED",
+      "actual": "UNCHANGED",
+      "pass": true,
+      "detail": "no difference, no version"
+    },
+    {
+      "name": "noop-versions",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "only the base version"
+    },
+    {
+      "name": "noop-barriers",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no barrier opened"
+    },
+    {
+      "name": "cancel-versions",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "cancel publishes nothing"
+    },
+    {
+      "name": "restore-status",
+      "expected": "RESTORED",
+      "actual": "RESTORED",
+      "pass": true,
+      "detail": "114 restore committed"
+    },
+    {
+      "name": "restore-no-version",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "restore edits no version"
+    },
+    {
+      "name": "restore-epoch",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "epoch advances"
+    },
+    {
+      "name": "restore-fleet",
+      "expected": "profile-v1",
+      "actual": "profile-v1",
+      "pass": true,
+      "detail": "restored target activates"
+    },
+    {
+      "name": "restore-learning",
+      "expected": "CURRENT:ACCEPTED",
+      "actual": "CURRENT:ACCEPTED",
+      "pass": true,
+      "detail": "LEARNING can change the keys again"
+    },
+    {
+      "name": "worlds-separated",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "Academia keeps its own history"
+    },
+    {
+      "name": "worlds-haos",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "Haos publishes only in Haos"
+    },
+    {
+      "name": "worlds-invalidated",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "session change invalidates"
+    },
+    {
+      "name": "worlds-refused",
+      "expected": "SESSION_CHANGED",
+      "actual": "SESSION_CHANGED",
+      "pass": true,
+      "detail": "no cross-world write"
+    },
+    {
+      "name": "reload-head",
+      "expected": "manual-session-academia-1",
+      "actual": "manual-session-academia-1",
+      "pass": true,
+      "detail": "reload reads the head"
+    },
+    {
+      "name": "reload-state",
+      "expected": "UNCHANGED",
+      "actual": "UNCHANGED",
+      "pass": true,
+      "detail": "no draft survives a reload"
+    },
+    {
+      "name": "reload-value",
+      "expected": 55,
+      "actual": 55,
+      "pass": true,
+      "detail": "persisted value is displayed"
+    },
+    {
+      "name": "storage-history",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "bounded history rows"
+    },
+    {
+      "name": "storage-drafts",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "one retained draft"
+    },
+    {
+      "name": "storage-writes",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "one store write per version"
+    },
+    {
+      "name": "ui-rows",
+      "expected": 8,
+      "actual": 8,
+      "pass": true,
+      "detail": "eight enabled sliders"
+    },
+    {
+      "name": "ui-unavailable",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "three disabled keys"
+    },
+    {
+      "name": "ui-unavailable-visible",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "disabled keys are not hidden"
+    },
+    {
+      "name": "ui-frame-writes",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "identical frames write nothing"
+    },
+    {
+      "name": "ui-frame-renders",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "identical frames render nothing"
+    },
+    {
+      "name": "ui-global-listeners",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no global listener"
+    },
+    {
+      "name": "ui-restore-confirm",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "restore needs confirmation"
+    },
+    {
+      "name": "layout:1280x720",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "416px wide, 6/8 rows visible"
+    },
+    {
+      "name": "layout:1920x1080",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "512px wide, 8/8 rows visible"
+    },
+    {
+      "name": "layout:zoom-150",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "384px wide, 3/8 rows visible"
+    },
+    {
+      "name": "layout-1280",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the 8-row list scrolls at 1280×720"
+    }
+  ],
+  "summary": {
+    "checks": 70,
+    "passed": 70,
+    "pass": true
+  }
+}

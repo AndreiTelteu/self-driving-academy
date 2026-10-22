@@ -2476,6 +2476,304 @@ button:focus-visible {
   outline-offset: 2px;
 }
 
+/* 230 „Cum conduce orașul”: the style tab lives inside the same 229 popup. Only the tab content
+   scrolls (list + history); the tab strip and the shared footer stay fixed, so Aplică/Anulează and
+   the disabled catalog keys are never scrolled out of reach at 1280×720. */
+.control-sliders__panels {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.control-sliders__panel[hidden],
+.style-sliders[hidden] {
+  display: none;
+}
+
+.style-sliders {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  box-sizing: border-box;
+}
+
+.style-sliders__header {
+  display: grid;
+  gap: 0.2rem;
+  flex: 0 0 auto;
+}
+
+.style-sliders__summary {
+  margin: 0;
+  color: #dbe8e2;
+  font-weight: 600;
+}
+
+.style-sliders__policy {
+  margin: 0;
+  color: #ffd27f;
+  font-size: 0.75rem;
+}
+
+.style-sliders__provenance {
+  margin: 0;
+  color: #b9cfc5;
+  font-size: 0.75rem;
+}
+
+.style-sliders__stale {
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.4rem 0.55rem;
+  border: 1px dashed #ffd27f;
+  border-radius: 0.5rem;
+  background: #241f10;
+}
+
+.style-sliders__stale[hidden] {
+  display: none;
+}
+
+.style-sliders__stale-text {
+  flex: 1 1 12rem;
+  margin: 0;
+  color: #ffe6b3;
+  font-size: 0.75rem;
+}
+
+.style-sliders__rebase {
+  padding: 0.25rem 0.6rem;
+  border: 1px solid #ffd27f;
+  border-radius: 0.4rem;
+  background: #1c332b;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.style-sliders__list {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-height: 0;
+  padding-inline-end: 0.15rem;
+}
+
+.style-sliders__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.15rem 0.5rem;
+  padding: 0.45rem 0.55rem;
+  border: 1px solid #ffffff1f;
+  border-radius: 0.5rem;
+  background: #13251f;
+}
+
+.style-sliders__row[data-changed='true'] {
+  border-color: #7fd7ff;
+}
+
+.style-sliders__row[data-provenance='MANUAL_TUNING'] .style-sliders__value {
+  color: #7fd7ff;
+}
+
+.style-sliders__row[data-unavailable] {
+  border-style: dashed;
+  opacity: 0.6;
+}
+
+.style-sliders__label {
+  color: #dbe8e2;
+  font-weight: 600;
+}
+
+.style-sliders__value {
+  justify-self: end;
+  min-width: 5rem;
+  color: #9edbb5;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.style-sliders__hint {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: #b9cfc5;
+  font-size: 0.75rem;
+}
+
+.style-sliders__range {
+  grid-column: 1 / -1;
+  width: 100%;
+  margin: 0.15rem 0;
+  accent-color: #9edbb5;
+  font: inherit;
+}
+
+.style-sliders__ends {
+  display: flex;
+  grid-column: 1 / -1;
+  justify-content: space-between;
+  color: #c6dbd1;
+  font-size: 0.72rem;
+}
+
+.style-sliders__issues {
+  margin: 0;
+  flex: 0 0 auto;
+  color: #ffb3a7;
+  font-weight: 600;
+}
+
+.style-sliders__issues[hidden] {
+  display: none;
+}
+
+.style-sliders__unavailable {
+  flex: 0 0 auto;
+  padding: 0.45rem 0.55rem;
+  border: 1px dashed #8fa8a0;
+  border-radius: 0.5rem;
+  background: #101f1a;
+}
+
+.style-sliders__unavailable-title {
+  margin: 0 0 0.3rem;
+  color: #ffd27f;
+  font-size: 0.78rem;
+}
+
+.style-sliders__unavailable-list {
+  display: grid;
+  gap: 0.3rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.style-sliders__unavailable-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.1rem 0.5rem;
+  align-items: center;
+}
+
+.style-sliders__unavailable-label {
+  color: #c6dbd1;
+  font-size: 0.78rem;
+}
+
+.style-sliders__unavailable-badge {
+  padding: 0 0.35rem;
+  border: 1px solid #8fa8a0;
+  border-radius: 999px;
+  color: #ffd27f;
+  font-size: 0.7rem;
+}
+
+.style-sliders__unavailable-detail {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: #9fb6ad;
+  font-size: 0.7rem;
+}
+
+.style-sliders__restore {
+  display: grid;
+  flex: 0 0 auto;
+  gap: 0.3rem;
+  padding: 0.45rem 0.55rem;
+  border: 1px solid #ffffff1f;
+  border-radius: 0.5rem;
+  background: #0f1d18;
+}
+
+.style-sliders__restore-title {
+  margin: 0;
+  color: #dbe8e2;
+  font-size: 0.82rem;
+}
+
+.style-sliders__restore-reason {
+  margin: 0;
+  color: #b9cfc5;
+  font-size: 0.72rem;
+}
+
+.style-sliders__restore-select {
+  width: 100%;
+  padding: 0.25rem 0.35rem;
+  border: 1px solid #ffffff3d;
+  border-radius: 0.35rem;
+  background: #13251f;
+  color: inherit;
+  font: inherit;
+}
+
+.style-sliders__restore-button,
+.style-sliders__confirm-button {
+  justify-self: start;
+  padding: 0.25rem 0.6rem;
+  border: 1px solid #ffffff3d;
+  border-radius: 0.4rem;
+  background: #1c332b;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.style-sliders__restore-button[data-confirming='true'] {
+  border-color: #ffd27f;
+  color: #ffe6b3;
+}
+
+.style-sliders__confirm-button {
+  border-color: #ffb3a7;
+  color: #ffd9d2;
+}
+
+.style-sliders__confirm-button[hidden] {
+  display: none;
+}
+
+.style-sliders__restore-button[disabled],
+.style-sliders__restore-select[disabled] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.style-sliders__status {
+  flex: 0 0 auto;
+  margin: 0;
+  color: #b9cfc5;
+  font-size: 0.72rem;
+}
+
+.style-sliders__rebase:focus-visible,
+.style-sliders__range:focus-visible,
+.style-sliders__restore-select:focus-visible,
+.style-sliders__restore-button:focus-visible,
+.style-sliders__confirm-button:focus-visible {
+  outline: 3px solid #9edbb5;
+  outline-offset: 2px;
+}
+
+.style-sliders__rebase[disabled] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
 /* 084: every layout cap is a border-box cap, so the declared px in `responsive-layout.ts` match
    the rectangles the browser reports (padding and border included). */
 .taxi-hud,

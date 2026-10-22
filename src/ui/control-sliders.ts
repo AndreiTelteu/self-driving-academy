@@ -31,6 +31,14 @@ import {
   type ControlSlidersDraft,
   type ControlSlidersProjection,
 } from './control-sliders-format';
+import {
+  createStyleSlidersTab,
+  type StyleSlidersTab,
+  type StyleSlidersTabOptions,
+} from './style-sliders';
+import type { StyleSlidersDraft, StyleSlidersProjection } from './style-sliders-format';
+
+export type { StyleSlidersTab, StyleSlidersTabOptions };
 
 export type ControlSlidersCloseReason = 'ESCAPE' | 'CLOSE';
 
@@ -45,9 +53,16 @@ export interface ControlSlidersPanelOptions {
   readonly cancel?: (draft: ControlSlidersDraft) => void;
   /** Called after the confirmed „Revino la valorile inițiale”. */
   readonly reset?: (draft: ControlSlidersDraft) => void;
+  /**
+   * Optional 230 „Cum conduce orașul” tab. When omitted, the city tab keeps the explicit 229
+   * placeholder, so existing 229 hosts and tests are unaffected.
+   */
+  readonly style?: StyleSlidersTabOptions;
   /** Injected clock for the 10 Hz read-out ceiling; defaults to `performance.now`. */
   readonly now?: () => number;
 }
+
+type ControlSlidersActiveTab = 'CONTROL' | 'CITY';
 
 interface SliderRow {
   readonly root: HTMLElement;
@@ -78,6 +93,9 @@ export function createControlSlidersPanel(
       throw new Error(`Control sliders ${port} port`);
   const clock = options.now ?? (() => performance.now());
   if (typeof clock !== 'function') throw new Error('Control sliders clock');
+  const styleOptions = options.style;
+  if (styleOptions !== undefined && typeof styleOptions !== 'object')
+    throw new Error('Control sliders style tab options');
 
   const initial = parseControlSlidersDraft(draft),
     player = initial.playerId,
@@ -102,6 +120,7 @@ export function createControlSlidersPanel(
     tabs = element('div'),
     controlTab = element('button'),
     cityTab = element('button'),
+    panels = element('div'),
     panel = element('section'),
     policy = element('p'),
     presetGroup = element('div'),
@@ -144,25 +163,36 @@ export function createControlSlidersPanel(
   controlTab.setAttribute('aria-selected', 'true');
   controlTab.setAttribute('aria-controls', controlId('panel-control'));
   controlTab.textContent = CONTROL_SLIDERS_CONTROL_TAB;
-  cityTab.className = 'control-sliders__tab control-sliders__tab--unavailable';
+  cityTab.className =
+    styleOptions === undefined
+      ? 'control-sliders__tab control-sliders__tab--unavailable'
+      : 'control-sliders__tab';
   cityTab.setAttribute('type', 'button');
   cityTab.setAttribute('role', 'tab');
   cityTab.setAttribute('id', controlId('tab-city'));
   cityTab.setAttribute('aria-selected', 'false');
-  cityTab.setAttribute('disabled', '');
-  cityTab.setAttribute('data-state', 'UNAVAILABLE');
-  cityTab.setAttribute('data-reason', CONTROL_SLIDERS_CITY_TAB_REASON);
-  cityTab.setAttribute(
-    'aria-label',
-    `${CONTROL_SLIDERS_CITY_TAB}, ${CONTROL_SLIDERS_CITY_TAB_LABEL}`,
-  );
-  cityTab.textContent = `${CONTROL_SLIDERS_CITY_TAB} · ${CONTROL_SLIDERS_CITY_TAB_LABEL}`;
+  if (styleOptions === undefined) {
+    cityTab.setAttribute('disabled', '');
+    cityTab.setAttribute('data-state', 'UNAVAILABLE');
+    cityTab.setAttribute('data-reason', CONTROL_SLIDERS_CITY_TAB_REASON);
+    cityTab.setAttribute(
+      'aria-label',
+      `${CONTROL_SLIDERS_CITY_TAB}, ${CONTROL_SLIDERS_CITY_TAB_LABEL}`,
+    );
+    cityTab.textContent = `${CONTROL_SLIDERS_CITY_TAB} · ${CONTROL_SLIDERS_CITY_TAB_LABEL}`;
+  } else {
+    cityTab.setAttribute('data-state', 'AVAILABLE');
+    cityTab.setAttribute('aria-controls', '');
+    cityTab.textContent = CONTROL_SLIDERS_CITY_TAB;
+  }
   tabs.append(controlTab, cityTab);
 
   panel.className = 'control-sliders__panel';
   panel.setAttribute('role', 'tabpanel');
   panel.setAttribute('id', controlId('panel-control'));
   panel.setAttribute('aria-labelledby', controlId('tab-control'));
+  panels.className = 'control-sliders__panels';
+  panels.append(panel);
   policy.className = 'control-sliders__policy';
   policy.textContent = CONTROL_SLIDERS_POLICY;
   presetGroup.className = 'control-sliders__presets';
@@ -246,8 +276,25 @@ export function createControlSlidersPanel(
   footer.append(resetButton, applyButton, cancelButton, closeButton, footerNote);
 
   panel.append(policy, presetGroup, list, issues);
-  root.append(header, description, tabs, panel, footer);
+  root.append(header, description, tabs, panels, footer);
   host.append(root);
+
+  const styleTab: StyleSlidersTab | null =
+    styleOptions === undefined
+      ? null
+      : createStyleSlidersTab(panels, {
+          ...styleOptions,
+          onChange: (next) => {
+            styleOptions.onChange?.(next);
+            if (activeTab === 'CITY') refreshFooter();
+          },
+        });
+  if (styleTab !== null) {
+    styleTab.root.setAttribute('aria-labelledby', cityTab.id);
+    cityTab.setAttribute('aria-controls', styleTab.root.id);
+    styleTab.setActive(false);
+  }
+  let activeTab: ControlSlidersActiveTab = 'CONTROL';
 
   let disposed = false,
     busy = false,
@@ -273,6 +320,8 @@ export function createControlSlidersPanel(
     closeRequests = 0,
     focusMoves = 0,
     focusRestores = 0,
+    tabSwitches = 0,
+    styleApplies = 0,
     open = false,
     previousFocus: HTMLElement | null = null;
   const pending = new Map<ControlSliderField, number>();
@@ -340,12 +389,61 @@ export function createControlSlidersPanel(
     else removeAttribute(issues, 'hidden');
     attribute(root, 'data-save-state', projected.saveState);
     attribute(root, 'data-changed', String(projected.changedCount));
-    if (projected.canApply) removeAttribute(applyButton, 'disabled');
-    else attribute(applyButton, 'disabled', '');
-    if (projected.changedCount > 0) removeAttribute(cancelButton, 'disabled');
-    else attribute(cancelButton, 'disabled', '');
+    if (activeTab === 'CONTROL') {
+      if (projected.canApply) removeAttribute(applyButton, 'disabled');
+      else attribute(applyButton, 'disabled', '');
+      if (projected.changedCount > 0) removeAttribute(cancelButton, 'disabled');
+      else attribute(cancelButton, 'disabled', '');
+      set(resetButton, 'Revino la valorile inițiale');
+      set(
+        footerNote,
+        'Aplicarea se face la următorul tick, cu o versiune nouă de control; tastaturile rămân neschimbate.',
+      );
+      attribute(root, 'data-tab', 'CONTROL');
+    }
     lastSignature = projected.signature;
     renders += 1;
+  };
+  const refreshFooter = () => {
+    if (activeTab === 'CITY' && styleTab !== null) {
+      const chrome = styleTab.getChrome();
+      if (chrome.applyDisabled) attribute(applyButton, 'disabled', '');
+      else removeAttribute(applyButton, 'disabled');
+      if (chrome.cancelDisabled) attribute(cancelButton, 'disabled', '');
+      else removeAttribute(cancelButton, 'disabled');
+      set(resetButton, chrome.resetLabel);
+      set(footerNote, chrome.note);
+      attribute(root, 'data-tab', 'CITY');
+      attribute(cityTab, 'data-save-state', chrome.saveState);
+      return;
+    }
+    attribute(root, 'data-tab', 'CONTROL');
+    removeAttribute(cityTab, 'data-save-state');
+    render(view);
+  };
+  const selectTab = (tab: ControlSlidersActiveTab) => {
+    if (styleTab === null && tab === 'CITY') return;
+    activeTab = tab;
+    resetPending = false;
+    attribute(controlTab, 'aria-selected', tab === 'CONTROL' ? 'true' : 'false');
+    attribute(controlTab, 'tabindex', tab === 'CONTROL' ? '0' : '-1');
+    attribute(cityTab, 'aria-selected', tab === 'CITY' ? 'true' : 'false');
+    attribute(cityTab, 'tabindex', tab === 'CITY' ? '0' : '-1');
+    attribute(
+      controlTab,
+      'class',
+      `control-sliders__tab${tab === 'CONTROL' ? ' control-sliders__tab--active' : ''}`,
+    );
+    attribute(
+      cityTab,
+      'class',
+      `control-sliders__tab${tab === 'CITY' ? ' control-sliders__tab--active' : ''}`,
+    );
+    if (tab === 'CONTROL') removeAttribute(panel, 'hidden');
+    else attribute(panel, 'hidden', '');
+    styleTab?.setActive(tab === 'CITY');
+    tabSwitches += 1;
+    refreshFooter();
   };
   const applyDraft = (next: ControlSlidersDraft, notify: boolean) => {
     const parsed = parseControlSlidersDraft(next);
@@ -389,11 +487,16 @@ export function createControlSlidersPanel(
 
   const focusOrder = (): HTMLElement[] => {
     const ordered: HTMLElement[] = [controlTab];
-    for (const preset of CONTROL_SLIDER_PRESETS) {
-      const button = presetButtons.get(preset);
-      if (button !== undefined) ordered.push(button);
+    if (styleTab !== null) ordered.push(cityTab);
+    if (activeTab === 'CITY' && styleTab !== null) {
+      for (const node of styleTab.focusables()) ordered.push(node);
+    } else {
+      for (const preset of CONTROL_SLIDER_PRESETS) {
+        const button = presetButtons.get(preset);
+        if (button !== undefined) ordered.push(button);
+      }
+      for (const field of CONTROL_SLIDER_FIELDS) ordered.push(rowOf(field).input);
     }
-    for (const field of CONTROL_SLIDER_FIELDS) ordered.push(rowOf(field).input);
     ordered.push(resetButton, applyButton, cancelButton, closeButton);
     return ordered.filter((node) => !node.hasAttribute('disabled') && !node.hasAttribute('hidden'));
   };
@@ -484,9 +587,28 @@ export function createControlSlidersPanel(
       }),
     );
   }
+  if (styleTab !== null) {
+    listen(controlTab, 'click', () =>
+      mutate(() => {
+        assertLive();
+        selectTab('CONTROL');
+      }),
+    );
+    listen(cityTab, 'click', () =>
+      mutate(() => {
+        assertLive();
+        selectTab('CITY');
+      }),
+    );
+  }
   listen(resetButton, 'click', () =>
     mutate(() => {
       assertLive();
+      if (activeTab === 'CITY' && styleTab !== null) {
+        styleTab.handle('RESET');
+        refreshFooter();
+        return;
+      }
       if (!resetPending) {
         resetPending = true;
         set(resetButton, 'Confirmă revenirea');
@@ -514,6 +636,11 @@ export function createControlSlidersPanel(
   listen(cancelButton, 'click', () =>
     mutate(() => {
       assertLive();
+      if (activeTab === 'CITY' && styleTab !== null) {
+        styleTab.handle('CANCEL');
+        refreshFooter();
+        return;
+      }
       resetPending = false;
       set(resetButton, 'Revino la valorile inițiale');
       applyDraft(revertControlSlidersDraft(current), true);
@@ -533,6 +660,17 @@ export function createControlSlidersPanel(
     mutate(() => {
       assertLive();
       resetPending = false;
+      if (activeTab === 'CITY' && styleTab !== null) {
+        const chrome = styleTab.getChrome();
+        styleTab.handle('APPLY');
+        refreshFooter();
+        if (!chrome.applyDisabled && styleTab.getView().canApply) {
+          styleApplies += 1;
+          // The popup must close so the suspended world reaches the tick that publishes the delta.
+          close('CLOSE');
+        }
+        return;
+      }
       set(resetButton, 'Revino la valorile inițiale');
       if (view.saveState !== 'DIRTY') {
         set(
@@ -604,6 +742,28 @@ export function createControlSlidersPanel(
     getDraft: () => current,
     getView: () => view,
     isOpen: () => open,
+    /** The 230 tab, or `null` when this popup was opened without one. */
+    getStyleTab: () => styleTab,
+    getStyleDraft: (): StyleSlidersDraft | null => styleTab?.getDraft() ?? null,
+    getStyleView: (): StyleSlidersProjection | null => styleTab?.getView() ?? null,
+    getActiveTab: () => activeTab,
+    /** Frame hook of the city tab: same 10 Hz coalescing, no global listener. */
+    updateStyle(candidate: StyleSlidersDraft, nowMs: number) {
+      if (styleTab === null) throw new Error('Control sliders has no style tab');
+      mutate(() => {
+        assertLive();
+        styleTab.update(candidate, nowMs);
+        if (activeTab === 'CITY') refreshFooter();
+      });
+    },
+    setStyleDraft(candidate: StyleSlidersDraft) {
+      if (styleTab === null) throw new Error('Control sliders has no style tab');
+      mutate(() => {
+        assertLive();
+        styleTab.setDraft(candidate);
+        if (activeTab === 'CITY') refreshFooter();
+      });
+    },
     getStats: () =>
       Object.freeze({
         version: CONTROL_SLIDERS_VERSION,
@@ -611,7 +771,7 @@ export function createControlSlidersPanel(
         presets: CONTROL_SLIDER_PRESETS.length,
         elements: disposed ? 0 : CONTROL_SLIDERS_PANEL_LIMITS.elements,
         textNodes: disposed ? 0 : CONTROL_SLIDERS_PANEL_LIMITS.textNodes,
-        listeners: disposed ? 0 : controls.length + (open ? 1 : 0),
+        listeners: disposed ? 0 : controls.length + (open ? 1 : 0) + (styleTab === null ? 0 : 1),
         writeHz: 10 as const,
         writeIntervalMs: CONTROL_SLIDERS_WRITE_INTERVAL_MS,
         writes,
@@ -629,8 +789,17 @@ export function createControlSlidersPanel(
         closeRequests,
         focusMoves,
         focusRestores,
+        tab: activeTab,
+        tabs: styleTab === null ? 1 : 2,
+        tabSwitches,
+        styleTab: styleTab === null ? ('UNAVAILABLE' as const) : ('AVAILABLE' as const),
+        styleApplies,
+        styleApplyDisabled: styleTab === null ? true : styleTab.getChrome().applyDisabled,
+        styleCancelDisabled: styleTab === null ? true : styleTab.getChrome().cancelDisabled,
+        styleSaveState: styleTab === null ? ('UNAVAILABLE' as const) : styleTab.getView().saveState,
         globalListeners: 0 as const,
-        saveState: view.saveState,
+        saveState:
+          activeTab === 'CITY' && styleTab !== null ? styleTab.getView().saveState : view.saveState,
         open,
         disposed,
       }),
@@ -648,6 +817,7 @@ export function createControlSlidersPanel(
         rows.clear();
         presetButtons.clear();
         pending.clear();
+        styleTab?.dispose();
         root.remove();
       });
     },
