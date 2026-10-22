@@ -1,0 +1,947 @@
+{
+  "version": "206-world-checkpoint-v1",
+  "generatedBy": "node --import ./scripts/register-typescript.mjs scripts/run-world-checkpoint-report.mjs",
+  "oracleRule": "Every value is a real run of src/persistence against the in-memory IndexedDB double and the clockless world fixture; the expected value is the documented contract, never a copy of the actual one.",
+  "coherence": {
+    "sourceTick": 60,
+    "boundary": "BOUNDARY",
+    "subsystemTicksCoherent": true,
+    "snapshotVersion": "206-world-snapshot-v1",
+    "units": "SI",
+    "tick": 60,
+    "worldEpoch": 1,
+    "profileId": "profile-1",
+    "learningEpoch": 2,
+    "vehicles": 70,
+    "controllers": 70,
+    "rides": 30,
+    "passengers": 30,
+    "segments": 3,
+    "opportunities": 64,
+    "signals": 8,
+    "dispatchPending": 3,
+    "dispatchAccepted": 1,
+    "learningPending": 3,
+    "learningObservations": 2,
+    "acceptedResultKeys": 1,
+    "rng": {
+      "traffic": 4200,
+      "rideDemand": 0,
+      "opportunities": 60
+    },
+    "checksum": "c5a0738c0be1b8a149726738b9b9cccad5655229c542396b04d8aa9d24d8bcb5",
+    "checksumMatches": true,
+    "deterministicCapture": true,
+    "bodyBytes": 64378,
+    "bodyFields": [
+      "snapshotVersion",
+      "units",
+      "tick",
+      "worldEpoch",
+      "profile",
+      "vehicles",
+      "controllers",
+      "rides",
+      "passengers",
+      "segments",
+      "opportunities",
+      "signals",
+      "dispatch",
+      "learning",
+      "rng",
+      "dedup",
+      "checksum"
+    ],
+    "byteBudget": 262144
+  },
+  "continuation": {
+    "ticks": 60,
+    "finalTick": 120,
+    "oracleDigest": "c1347393390deb7bb6a5b504986720aff53c40348e7777362caa327c643f8a6a",
+    "restoredDigest": "c1347393390deb7bb6a5b504986720aff53c40348e7777362caa327c643f8a6a",
+    "digestMatches": true,
+    "canonicalMatch": true,
+    "trafficCursor": 8400,
+    "ride01": "COMPLETED",
+    "passenger01": "DELIVERED",
+    "taxi08Ride": null,
+    "openSegmentSamples": 120
+  },
+  "resume": {
+    "mode": "PAUSED_AUTO",
+    "paused": true,
+    "auto": true,
+    "inputReleased": true,
+    "vehicles": 70,
+    "allAuto": true,
+    "openSegments": 1,
+    "segmentTransition": "segment-taxi-01:OPEN->INCOMPLETE:RELOAD",
+    "jobs": [
+      {
+        "source": "LEARNING",
+        "jobId": "learning-01",
+        "status": "RELAUNCH",
+        "reason": null
+      },
+      {
+        "source": "LEARNING",
+        "jobId": "learning-02",
+        "status": "INVALIDATED",
+        "reason": "LEARNING_EPOCH_MISMATCH"
+      },
+      {
+        "source": "LEARNING",
+        "jobId": "learning-03",
+        "status": "INVALIDATED",
+        "reason": "PROFILE_MISMATCH"
+      },
+      {
+        "source": "DISPATCH",
+        "jobId": "dispatch-01",
+        "status": "RELAUNCH",
+        "reason": null
+      },
+      {
+        "source": "DISPATCH",
+        "jobId": "dispatch-02",
+        "status": "INVALIDATED",
+        "reason": "PROFILE_MISMATCH"
+      },
+      {
+        "source": "DISPATCH",
+        "jobId": "dispatch-03",
+        "status": "INVALIDATED",
+        "reason": "LEARNING_EPOCH_MISMATCH"
+      }
+    ],
+    "observations": [
+      {
+        "observationId": "observation-01",
+        "idempotencyKey": "segment-taxi-06:observation-01",
+        "status": "REPLAY",
+        "alreadyRewarded": true
+      },
+      {
+        "observationId": "observation-02",
+        "idempotencyKey": "segment-taxi-06:observation-02",
+        "status": "REPLAY",
+        "alreadyRewarded": false
+      }
+    ],
+    "acceptedResultsPreserved": 2,
+    "rewardsReapplied": 0,
+    "idempotent": true,
+    "switchedProfileJobStatuses": [
+      "learning-01:INVALIDATED",
+      "learning-02:INVALIDATED",
+      "learning-03:RELAUNCH",
+      "dispatch-01:INVALIDATED",
+      "dispatch-02:RELAUNCH",
+      "dispatch-03:INVALIDATED"
+    ]
+  },
+  "writer": {
+    "secondTabRole": "READ_ONLY",
+    "secondTabReason": "WRITER_HELD_BY_OTHER_TAB",
+    "secondTabCapture": "WRITER_REQUIRED",
+    "foreignCommit": "WRITER_MISMATCH",
+    "commitStatus": "COMMITTED",
+    "coalesced": true,
+    "capturesAfterCoalescing": 1,
+    "replaced": true,
+    "capturesAfterReplace": 2,
+    "olderGeneration": "STALE_GENERATION",
+    "olderTick": "STALE_TICK",
+    "commitInProgress": "COMMIT_IN_PROGRESS",
+    "discarded": true,
+    "discardedAgain": false,
+    "discardReason": "SUPERSEDED",
+    "rows": 1
+  },
+  "crash": {
+    "beforeStatus": "REJECTED",
+    "beforeCode": "CRASHED_BEFORE_COMMIT",
+    "rowsAfterBefore": 0,
+    "afterStatus": "CRASHED_AFTER_COMMIT",
+    "durable": true,
+    "reloadStatus": "RESUMABLE"
+  },
+  "deviceLoss": {
+    "device": "LOST",
+    "reason": "GPU_DEVICE_LOST",
+    "lostTick": 60,
+    "commitWhileLost": "DEVICE_LOST",
+    "deferredBeforeIntegration": "DEVICE_NOT_INTEGRATED",
+    "preparedBeforeIntegration": 60,
+    "deviceAfterIntegration": "INTEGRATED",
+    "deferredCommit": "COMMITTED",
+    "deferredDevice": "RAM",
+    "deferredMs": 4,
+    "preparedAfter": null,
+    "ramCaptureKept": true
+  },
+  "load": {
+    "empty": "EMPTY",
+    "resumable": "RESUMABLE",
+    "tick": 60,
+    "generation": 1,
+    "ageTicks": 15,
+    "incompatible": "INCOMPATIBLE",
+    "incompatibleDetail": "physicsVersion: stored rapier-0.21.0, current rapier-0.22.0",
+    "olderSnapshot": "INCOMPATIBLE",
+    "tickMismatch": "TICK_MISMATCH",
+    "profileMismatch": "PROFILE_MISMATCH",
+    "epochMismatch": "LEARNING_EPOCH_MISMATCH",
+    "checksumMismatch": "CHECKSUM_MISMATCH"
+  },
+  "cost": {
+    "source": "STUB_CLOCK",
+    "captureMs": 2.5,
+    "encodeMs": 7,
+    "commitMs": 6,
+    "totalMs": 15.5
+  },
+  "checks": [
+    {
+      "name": "coherence-version",
+      "expected": "206-world-snapshot-v1",
+      "actual": "206-world-snapshot-v1",
+      "pass": true,
+      "detail": "One snapshot contract"
+    },
+    {
+      "name": "coherence-units",
+      "expected": "SI",
+      "actual": "SI",
+      "pass": true,
+      "detail": "Only SI units are stored"
+    },
+    {
+      "name": "coherence-tick",
+      "expected": 60,
+      "actual": 60,
+      "pass": true,
+      "detail": "The capture tick is the fixed-tick boundary"
+    },
+    {
+      "name": "coherence-subticks",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Every subsystem is at the same tick"
+    },
+    {
+      "name": "coherence-vehicles",
+      "expected": 70,
+      "actual": 70,
+      "pass": true,
+      "detail": "30 taxis and 40 civilians"
+    },
+    {
+      "name": "coherence-controllers",
+      "expected": 70,
+      "actual": 70,
+      "pass": true,
+      "detail": "Every vehicle has controller state"
+    },
+    {
+      "name": "coherence-rides",
+      "expected": 30,
+      "actual": 30,
+      "pass": true,
+      "detail": "Every passenger has a ride"
+    },
+    {
+      "name": "coherence-passengers",
+      "expected": 30,
+      "actual": 30,
+      "pass": true,
+      "detail": "Passenger states are preserved"
+    },
+    {
+      "name": "coherence-segments",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "Open, closed and incomplete segments"
+    },
+    {
+      "name": "coherence-opportunities",
+      "expected": 64,
+      "actual": 64,
+      "pass": true,
+      "detail": "Opportunity ledger"
+    },
+    {
+      "name": "coherence-signals",
+      "expected": 8,
+      "actual": 8,
+      "pass": true,
+      "detail": "Signal phases and remaining ticks"
+    },
+    {
+      "name": "coherence-dispatch",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "Pending dispatch jobs"
+    },
+    {
+      "name": "coherence-accepted",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "Accepted results are kept"
+    },
+    {
+      "name": "coherence-learning",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "Pending learning jobs"
+    },
+    {
+      "name": "coherence-observations",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "Completed observations"
+    },
+    {
+      "name": "coherence-result-keys",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "Rewards already applied"
+    },
+    {
+      "name": "coherence-rng-traffic",
+      "expected": 4200,
+      "actual": 4200,
+      "pass": true,
+      "detail": "70 draws per tick"
+    },
+    {
+      "name": "coherence-rng-opportunities",
+      "expected": 60,
+      "actual": 60,
+      "pass": true,
+      "detail": "One draw per tick"
+    },
+    {
+      "name": "coherence-checksum",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "SHA-256 over SDA-CJSON-1"
+    },
+    {
+      "name": "coherence-deterministic",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The same world yields the same checksum"
+    },
+    {
+      "name": "coherence-budget",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Under the 262144 byte budget"
+    },
+    {
+      "name": "coherence-body",
+      "expected": [
+        "snapshotVersion",
+        "units",
+        "tick",
+        "worldEpoch",
+        "profile",
+        "vehicles",
+        "controllers",
+        "rides",
+        "passengers",
+        "segments",
+        "opportunities",
+        "signals",
+        "dispatch",
+        "learning",
+        "rng",
+        "dedup",
+        "checksum"
+      ],
+      "actual": [
+        "snapshotVersion",
+        "units",
+        "tick",
+        "worldEpoch",
+        "profile",
+        "vehicles",
+        "controllers",
+        "rides",
+        "passengers",
+        "segments",
+        "opportunities",
+        "signals",
+        "dispatch",
+        "learning",
+        "rng",
+        "dedup",
+        "checksum"
+      ],
+      "pass": true,
+      "detail": "Stable stored body fields"
+    },
+    {
+      "name": "continuation-ticks",
+      "expected": 60,
+      "actual": 60,
+      "pass": true,
+      "detail": "The oracle and the restored world both run 60 ticks"
+    },
+    {
+      "name": "continuation-final-tick",
+      "expected": 120,
+      "actual": 120,
+      "pass": true,
+      "detail": "The resumed tick matches"
+    },
+    {
+      "name": "continuation-digest",
+      "expected": "c1347393390deb7bb6a5b504986720aff53c40348e7777362caa327c643f8a6a",
+      "actual": "c1347393390deb7bb6a5b504986720aff53c40348e7777362caa327c643f8a6a",
+      "pass": true,
+      "detail": "The canonical world is byte-identical"
+    },
+    {
+      "name": "continuation-canonical",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "No subsystem drifted"
+    },
+    {
+      "name": "continuation-rng",
+      "expected": 8400,
+      "actual": 8400,
+      "pass": true,
+      "detail": "The keyed cursor continued exactly"
+    },
+    {
+      "name": "continuation-ride",
+      "expected": "COMPLETED",
+      "actual": "COMPLETED",
+      "pass": true,
+      "detail": "The pickup ride completed"
+    },
+    {
+      "name": "continuation-passenger",
+      "expected": "DELIVERED",
+      "actual": "DELIVERED",
+      "pass": true,
+      "detail": "The passenger was delivered"
+    },
+    {
+      "name": "continuation-ride-link",
+      "expected": null,
+      "actual": null,
+      "pass": true,
+      "detail": "A completed ride releases its vehicle"
+    },
+    {
+      "name": "continuation-segment",
+      "expected": 120,
+      "actual": 120,
+      "pass": true,
+      "detail": "The open segment kept sampling"
+    },
+    {
+      "name": "resume-mode",
+      "expected": "PAUSED_AUTO",
+      "actual": "PAUSED_AUTO",
+      "pass": true,
+      "detail": "The session reopens paused in AUTO"
+    },
+    {
+      "name": "resume-paused",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "No tick runs before the player resumes"
+    },
+    {
+      "name": "resume-auto",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Every vehicle returns to AUTO"
+    },
+    {
+      "name": "resume-input",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "No input is held across the reload"
+    },
+    {
+      "name": "resume-vehicles",
+      "expected": 70,
+      "actual": 70,
+      "pass": true,
+      "detail": "Every vehicle is named"
+    },
+    {
+      "name": "resume-all-auto",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "A manual segment never resumes manually"
+    },
+    {
+      "name": "resume-open-segments",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "Only the open segment changes"
+    },
+    {
+      "name": "resume-segment",
+      "expected": "segment-taxi-01:OPEN->INCOMPLETE:RELOAD",
+      "actual": "segment-taxi-01:OPEN->INCOMPLETE:RELOAD",
+      "pass": true,
+      "detail": "The reason is explicit"
+    },
+    {
+      "name": "resume-jobs",
+      "expected": 6,
+      "actual": 6,
+      "pass": true,
+      "detail": "Every pending job is decided"
+    },
+    {
+      "name": "resume-learning-01",
+      "expected": "RELAUNCH",
+      "actual": "RELAUNCH",
+      "pass": true,
+      "detail": "Matching profile and epoch"
+    },
+    {
+      "name": "resume-learning-02",
+      "expected": "INVALIDATED",
+      "actual": "INVALIDATED",
+      "pass": true,
+      "detail": "Epoch moved on"
+    },
+    {
+      "name": "resume-learning-03",
+      "expected": "INVALIDATED",
+      "actual": "INVALIDATED",
+      "pass": true,
+      "detail": "Profile changed"
+    },
+    {
+      "name": "resume-dispatch-02",
+      "expected": "INVALIDATED",
+      "actual": "INVALIDATED",
+      "pass": true,
+      "detail": "Profile changed"
+    },
+    {
+      "name": "resume-dispatch-03",
+      "expected": "INVALIDATED",
+      "actual": "INVALIDATED",
+      "pass": true,
+      "detail": "Epoch moved on"
+    },
+    {
+      "name": "resume-observations",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "Completed LEARNING observations replay"
+    },
+    {
+      "name": "resume-observation-key",
+      "expected": "segment-taxi-06:observation-01",
+      "actual": "segment-taxi-06:observation-01",
+      "pass": true,
+      "detail": "The replay is keyed"
+    },
+    {
+      "name": "resume-observation-rewarded",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "An applied reward is not applied again"
+    },
+    {
+      "name": "resume-accepted",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "Accepted dispatch and learning results are kept"
+    },
+    {
+      "name": "resume-rewards",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "No reward is applied twice"
+    },
+    {
+      "name": "resume-idempotent",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Restoring twice yields the same plan"
+    },
+    {
+      "name": "resume-switched-profile",
+      "expected": [
+        "learning-01:INVALIDATED",
+        "learning-02:INVALIDATED",
+        "learning-03:RELAUNCH",
+        "dispatch-01:INVALIDATED",
+        "dispatch-02:RELAUNCH",
+        "dispatch-03:INVALIDATED"
+      ],
+      "actual": [
+        "learning-01:INVALIDATED",
+        "learning-02:INVALIDATED",
+        "learning-03:RELAUNCH",
+        "dispatch-01:INVALIDATED",
+        "dispatch-02:RELAUNCH",
+        "dispatch-03:INVALIDATED"
+      ],
+      "pass": true,
+      "detail": "A different active profile invalidates the rest"
+    },
+    {
+      "name": "writer-second-role",
+      "expected": "READ_ONLY",
+      "actual": "READ_ONLY",
+      "pass": true,
+      "detail": "A second tab only reads"
+    },
+    {
+      "name": "writer-second-reason",
+      "expected": "WRITER_HELD_BY_OTHER_TAB",
+      "actual": "WRITER_HELD_BY_OTHER_TAB",
+      "pass": true,
+      "detail": "The reason is explicit"
+    },
+    {
+      "name": "writer-second-capture",
+      "expected": "WRITER_REQUIRED",
+      "actual": "WRITER_REQUIRED",
+      "pass": true,
+      "detail": "The second tab never captures"
+    },
+    {
+      "name": "writer-foreign-commit",
+      "expected": "WRITER_MISMATCH",
+      "actual": "WRITER_MISMATCH",
+      "pass": true,
+      "detail": "A page cannot publish another writer token"
+    },
+    {
+      "name": "writer-commit",
+      "expected": "COMMITTED",
+      "actual": "COMMITTED",
+      "pass": true,
+      "detail": "The writer commits"
+    },
+    {
+      "name": "writer-coalesced",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The same tick and generation are coalesced"
+    },
+    {
+      "name": "writer-replaced",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "A newer generation replaces the prepared one"
+    },
+    {
+      "name": "writer-older-generation",
+      "expected": "STALE_GENERATION",
+      "actual": "STALE_GENERATION",
+      "pass": true,
+      "detail": "An older generation is refused"
+    },
+    {
+      "name": "writer-older-tick",
+      "expected": "STALE_TICK",
+      "actual": "STALE_TICK",
+      "pass": true,
+      "detail": "An older tick is refused"
+    },
+    {
+      "name": "writer-concurrent",
+      "expected": "COMMIT_IN_PROGRESS",
+      "actual": "COMMIT_IN_PROGRESS",
+      "pass": true,
+      "detail": "Only one transaction at a time"
+    },
+    {
+      "name": "writer-discard",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "A prepared generation can be dropped"
+    },
+    {
+      "name": "writer-discard-again",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "There is nothing left to drop"
+    },
+    {
+      "name": "writer-discard-reason",
+      "expected": "SUPERSEDED",
+      "actual": "SUPERSEDED",
+      "pass": true,
+      "detail": "The reason is recorded"
+    },
+    {
+      "name": "writer-rows",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "The checkpoint id owns one durable row"
+    },
+    {
+      "name": "crash-before-status",
+      "expected": "CRASHED_BEFORE_COMMIT",
+      "actual": "CRASHED_BEFORE_COMMIT",
+      "pass": true,
+      "detail": "The failure is named"
+    },
+    {
+      "name": "crash-before-rows",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "No row was invented"
+    },
+    {
+      "name": "crash-after-status",
+      "expected": "CRASHED_AFTER_COMMIT",
+      "actual": "CRASHED_AFTER_COMMIT",
+      "pass": true,
+      "detail": "The death is reported"
+    },
+    {
+      "name": "crash-after-durable",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The committed row survives"
+    },
+    {
+      "name": "crash-after-reload",
+      "expected": "RESUMABLE",
+      "actual": "RESUMABLE",
+      "pass": true,
+      "detail": "The world can continue"
+    },
+    {
+      "name": "device-lost",
+      "expected": "LOST",
+      "actual": "LOST",
+      "pass": true,
+      "detail": "The GPU loss is a state"
+    },
+    {
+      "name": "device-reason",
+      "expected": "GPU_DEVICE_LOST",
+      "actual": "GPU_DEVICE_LOST",
+      "pass": true,
+      "detail": "The reason is explicit"
+    },
+    {
+      "name": "device-tick",
+      "expected": 60,
+      "actual": 60,
+      "pass": true,
+      "detail": "The lost capture keeps its tick"
+    },
+    {
+      "name": "device-commit-lost",
+      "expected": "DEVICE_LOST",
+      "actual": "DEVICE_LOST",
+      "pass": true,
+      "detail": "No durable commit while lost"
+    },
+    {
+      "name": "device-deferred-early",
+      "expected": "DEVICE_NOT_INTEGRATED",
+      "actual": "DEVICE_NOT_INTEGRATED",
+      "pass": true,
+      "detail": "The recovery must be integrated first"
+    },
+    {
+      "name": "device-prepared-kept",
+      "expected": 60,
+      "actual": 60,
+      "pass": true,
+      "detail": "The RAM capture stays prepared while the GPU is lost"
+    },
+    {
+      "name": "device-integrated",
+      "expected": "INTEGRATED",
+      "actual": "INTEGRATED",
+      "pass": true,
+      "detail": "Recovery is integrated"
+    },
+    {
+      "name": "device-deferred",
+      "expected": "COMMITTED",
+      "actual": "COMMITTED",
+      "pass": true,
+      "detail": "The RAM capture is published"
+    },
+    {
+      "name": "device-deferred-source",
+      "expected": "RAM",
+      "actual": "RAM",
+      "pass": true,
+      "detail": "The capture came from RAM"
+    },
+    {
+      "name": "device-deferred-cost",
+      "expected": 4,
+      "actual": 4,
+      "pass": true,
+      "detail": "Only the commit is measured after recovery"
+    },
+    {
+      "name": "device-prepared",
+      "expected": null,
+      "actual": null,
+      "pass": true,
+      "detail": "Nothing stays prepared"
+    },
+    {
+      "name": "load-empty",
+      "expected": "EMPTY",
+      "actual": "EMPTY",
+      "pass": true,
+      "detail": "No checkpoint is not an error"
+    },
+    {
+      "name": "load-resumable",
+      "expected": "RESUMABLE",
+      "actual": "RESUMABLE",
+      "pass": true,
+      "detail": "A coherent checkpoint resumes"
+    },
+    {
+      "name": "load-tick",
+      "expected": 60,
+      "actual": 60,
+      "pass": true,
+      "detail": "The stored tick is returned"
+    },
+    {
+      "name": "load-generation",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "The stored generation is returned"
+    },
+    {
+      "name": "load-age",
+      "expected": 15,
+      "actual": 15,
+      "pass": true,
+      "detail": "The age is measured, not guessed"
+    },
+    {
+      "name": "load-incompatible",
+      "expected": "INCOMPATIBLE",
+      "actual": "INCOMPATIBLE",
+      "pass": true,
+      "detail": "A physics change is explicit"
+    },
+    {
+      "name": "load-incompatible-detail",
+      "expected": "physicsVersion: stored rapier-0.21.0, current rapier-0.22.0",
+      "actual": "physicsVersion: stored rapier-0.21.0, current rapier-0.22.0",
+      "pass": true,
+      "detail": "The reason names both versions"
+    },
+    {
+      "name": "load-older-engine",
+      "expected": "INCOMPATIBLE",
+      "actual": "INCOMPATIBLE",
+      "pass": true,
+      "detail": "An older engine is explicit too"
+    },
+    {
+      "name": "load-tick-mismatch",
+      "expected": "TICK_MISMATCH",
+      "actual": "TICK_MISMATCH",
+      "pass": true,
+      "detail": "The envelope and the snapshot agree"
+    },
+    {
+      "name": "load-profile-mismatch",
+      "expected": "PROFILE_MISMATCH",
+      "actual": "PROFILE_MISMATCH",
+      "pass": true,
+      "detail": "The profile is coherent"
+    },
+    {
+      "name": "load-epoch-mismatch",
+      "expected": "LEARNING_EPOCH_MISMATCH",
+      "actual": "LEARNING_EPOCH_MISMATCH",
+      "pass": true,
+      "detail": "The learning epoch is coherent"
+    },
+    {
+      "name": "load-checksum-mismatch",
+      "expected": "CHECKSUM_MISMATCH",
+      "actual": "CHECKSUM_MISMATCH",
+      "pass": true,
+      "detail": "A changed body is refused"
+    },
+    {
+      "name": "cost-capture",
+      "expected": 2.5,
+      "actual": 2.5,
+      "pass": true,
+      "detail": "The synchronous world copy is measured on its own"
+    },
+    {
+      "name": "cost-encode",
+      "expected": 7,
+      "actual": 7,
+      "pass": true,
+      "detail": "Validation, canonicalization and checksum are separate"
+    },
+    {
+      "name": "cost-commit",
+      "expected": 6,
+      "actual": 6,
+      "pass": true,
+      "detail": "The transaction is measured around the write"
+    },
+    {
+      "name": "cost-total",
+      "expected": 15.5,
+      "actual": 15.5,
+      "pass": true,
+      "detail": "The three phases add up"
+    }
+  ],
+  "summary": {
+    "checks": 98,
+    "passed": 98,
+    "pass": true
+  }
+}
