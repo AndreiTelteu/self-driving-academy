@@ -90,7 +90,23 @@ export { browserIndexedDbFactory, createIndexedDbFactory } from './indexeddb';
 export { WRITER_LOCK_NAME, createWriterAuthority } from './writer';
 export type { WriterAuthority, WriterAuthorityOptions, WriterAuthorityState } from './writer';
 export { createLocalRepository } from './repository';
-export type { LocalRepository, LocalRepositoryOptions } from './repository';
+export type {
+  LocalRepository,
+  LocalRepositoryOptions,
+  ProfileActivationOutcome,
+} from './repository';
+export {
+  PROFILE_TRANSACTION_VERSION,
+  buildProfileHistory,
+  classifyProfileSource,
+  commitProfileActivationRows,
+} from './profile-transaction';
+export type {
+  ProfileActivationCommit,
+  ProfileHistory,
+  ProfileSourceKind,
+  ProfileTransactionHooks,
+} from './profile-transaction';
 export type {
   DatabasePort,
   FactoryPort,

@@ -1,6 +1,6 @@
 # Salvare și import export
 
-Versiune 0.6 · 22 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
+Versiune 0.7 · 22 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
 
 ## Date salvate și export
 
@@ -64,3 +64,15 @@ Modulul `src/persistence` este implementat ca o familie de porturi (`DatabasePor
 **Un singur scriitor.** Dreptul de scriere este un lock exclusiv Web Locks (`self-driving-academy-persistence-writer`). `claim()` este non-blocant: dacă lock-ul este ocupat, pagina devine `READ_ONLY` cu `WRITER_HELD_BY_OTHER_TAB` și orice scriere este respinsă cu `WRITER_REQUIRED` — nu există fallback nesigur. `wait()` intră în coadă (`WAITING`) și primește rolul de `WRITER` când deținătorul eliberează lock-ul; acesta este transferul explicit de scriitor. Fără Web Locks pagina rămâne `READ_ONLY` cu `WEB_LOCKS_UNAVAILABLE`. Paginile cititoare citesc datele scriitorului, dar nu scriu.
 
 **Coerență și limite.** Fiecare înregistrare este validată și măsurată înainte să ajungă într-o tranzacție: corpul trebuie să fie JSON simplu, adâncime cel mult 24, cel mult 20 000 de intrări, cel mult 262 144 de octeți pentru corp și cel mult 1 048 576 de octeți pentru înregistrarea completă; o listă returnează cel mult 512 rânduri, altfel `LIST_LIMIT`. Scrierile multi-store (de exemplu activarea unui profil împreună cu versiunea profilului) sunt tranzacționale: o eroare la mijloc lasă baza exact cum era, fără activare orfană. Versiunile de profil 109 sunt imutabile (`IMMUTABLE_RECORD`) și checksum-ul lor este re-verificat la citire (`PROFILE_CHECKSUM_MISMATCH`); o revizie mai veche nu înlocuiește una mai nouă (`STALE_REVISION`).
+
+## Contract implementat V1 (PBI 128) — tranzacția profil/activare
+
+`src/persistence/profile-transaction.ts` (contract `128-profile-transaction-v1`) scrie versiunea 109 și activarea 110 într-o singură tranzacție multi-store peste `profiles` și `profileActivations`. Repository-ul (`commitProfileActivation`) deține conexiunea, lock-ul de scriere și limita tranzacției; modulul de tranzacție deține regulile și lucrează pe `TransactionPort`, deci aceleași reguli rulează peste adaptorul IndexedDB real și peste dublul în memorie.
+
+**Reguli, toate verificate înainte de commit.** Activarea trebuie să indice exact versiunea scrisă de aceeași tranzacție, altfel `REFERENCE_MISSING`: nu există activare fără versiunea ei și nu există versiune fără activarea corectă. Părintele unei versiuni derivate trebuie să fie deja stocat, altfel `REFERENCE_MISSING`: istoricul nu are găuri. O versiune stocată este imuabilă (`IMMUTABLE_RECORD`), iar secvența activării nu se întoarce niciodată: o secvență mai veche nu poate înlocui o versiune mai nouă activă (`STALE_REVISION`), iar aceeași secvență nu poate indica altă versiune (`STALE_REVISION`). Repetarea exactă a aceleiași tranzacții este idempotentă: nu se creează a doua versiune și pointerul nu se mută.
+
+**Crash înainte și după commit.** Tranzacția expune două puncte de injecție de defecțiune folosite de testele deterministe: `beforeCommit` rulează în interiorul tranzacției, după toate scrierile, deci o excepție acolo anulează tranzacția și baza rămâne exact cum era; `afterCommit` rulează după commit, deci o excepție acolo modelează un proces mort după ce datele au devenit durabile. Rezultatul este explicit, nu o excepție: `COMMITTED`, `CRASHED_AFTER_COMMIT` (rândurile sunt durable) sau `REJECTED` cu codul închis. Testele verifică ambele întreruperi: înainte de commit nu rămâne nici versiune, nici activare, iar profilul activ anterior rămâne încărcabil; după commit ambele rânduri sunt prezente și profilul activ se citește înapoi exact.
+
+**Proveniență și istoric.** Clasificarea sursei este derivată doar din proveniența stocată: `BASE` pentru versiunea rădăcină, `MANUAL_TUNING` pentru o versiune derivată care numează intervenții și `LEARNING` pentru una care numează doar segmente de condus. `getProfileHistory(profileId)` reconstruiește lanțul base→tip din legăturile de părinte stocate, întoarce versiunea activă, secvența și timestamp-ul activării, timestamp-urile versiunilor și listează explicit veriunile lipsă dacă istoricul are o gaură; proveniența, delta și lista surselor sunt citite înapoi exact, fără a fi completate cu date fabricate.
+
+Dovezi: [Evidence/128-save-profiles](Evidence/128-save-profiles/README.md).
