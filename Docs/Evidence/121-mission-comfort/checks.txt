@@ -1,0 +1,225 @@
+﻿PBI 121 evidence - checks captured on branch loop-pbi/mission-chain-117-121-01 (worktree mission-chain-117-121-01)
+node v24.19.0 / npm 11.17.0
+
+=== npm run typecheck ===
+
+> self-driving-academy@0.1.0 typecheck
+> tsc --noEmit && tsc -p tsconfig.tests.json --noEmit
+
+exit=0
+
+=== npm run lint ===
+
+> self-driving-academy@0.1.0 lint
+> eslint . --max-warnings 0
+
+exit=0
+
+=== npm run format:check ===
+
+> self-driving-academy@0.1.0 format:check
+> prettier --check "src/**/*.{ts,css}" "tests/**/*.ts" "tests/**/*.html" "scripts/**/*.mjs" "*.{json,js,html}"
+
+Checking formatting...
+All matched files use Prettier code style!
+exit=0
+
+=== npm run check:architecture ===
+
+> self-driving-academy@0.1.0 check:architecture
+> node scripts/verify-architecture.mjs
+
+Architecture imports: PASS (267 TypeScript files)
+Architecture negative probes: PASS (6 forbidden dependencies rejected)
+Inspector exception negative probes: PASS (4 forbidden imports rejected)
+Rapier adapter negative probes: PASS (3 forbidden imports rejected)
+Renderer injection, readonly snapshots, defensive persistence and lifecycle: PASS
+npm : (node:63796) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+At line:1 char:1378
++ ... coding utf8 "$ev\checks.txt"; npm run check:architecture 2>&1 | Out-F ...
++                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ((node:63796) Ex...nge at any time:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+(Use `node --trace-warnings ...` to show where the warning was created)
+exit=0
+
+=== npm run check:parameter-catalog ===
+
+> self-driving-academy@0.1.0 check:parameter-catalog
+> node scripts/generate-parameter-catalog.mjs --check
+
+Parameter catalog is synchronized.
+exit=0
+=== npm test (suite completă) ===
+exit=0
+=== teste țintă 121 ===
+(node:51924) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+Γ£ö 121 comfort objective is explicit, separate from style and bound to the 088 spans (3.8376ms)
+Γ£ö 121 the thresholds are the shipped catalog defaults, not invented for the mission (0.2583ms)
+Γ£ö 121 the passenger comes from the real 061 ride lifecycle (0.2226ms)
+Γ£ö 121 the comfort mission is a valid 116 mission with its own explicit gate (1.8793ms)
+Γ£ö 121 a smooth ride with a passenger passes with real acceleration and jerk values (8.7516ms)
+Γ£ö 121 the metric is derived from the real 085 telemetry of the segment (2.4509ms)
+Γ£ö 121 a brisk ride fails on the acceleration limit with the real peak (2.6573ms)
+Γ£ö 121 a jerky ride fails on jerk even when acceleration stays at the limit (3.3822ms)
+Γ£ö 121 a real 030 recovery teleport is excluded through the real 088 window (7.002ms)
+Γ£ö 121 an open segment recovery suppresses the boundary tick and everything after it (2.4109ms)
+Γ£ö 121 a clean 088 window suppresses nothing and keeps the whole ride (5.1354ms)
+Γ£ö 121 no passenger or too little data cannot produce a comfort verdict (3.8717ms)
+Γ£ö 121 a window longer than the objective is refused instead of silently truncated (2.5604ms)
+Γ£ö 121 malformed rides and injected style scores are rejected (11.9235ms)
+Γ£ö 121 the comfort mission completes only through a passing comfort result (6.0911ms)
+Γ£ö 121 evaluation is deterministic and reports only comfort statuses (4.8364ms)
+Γ£ö 121 the telemetry projection rejects mixed or unordered 085 readouts (1.7385ms)
+Γ£ö 121 comfort source is deterministic and free of DOM, clocks and randomness (1.1368ms)
+Γ£ö 121 report transcript is deterministic and matches the saved evidence (39.3076ms)
+Γä╣ tests 19
+Γä╣ suites 0
+Γä╣ pass 19
+Γä╣ fail 0
+Γä╣ cancelled 0
+Γä╣ skipped 0
+Γä╣ todo 0
+Γä╣ duration_ms 774.458
+exit=0
+
+=== raport determinist ===
+PASS CHECK objective-thresholds
+PASS CHECK objective-threshold-source
+PASS CHECK objective-thresholds-match-catalog
+PASS CHECK objective-separation
+PASS CHECK objective-passenger
+PASS CHECK objective-artifact-policy
+PASS CHECK objective-mission-valid
+PASS CHECK objective-mission-id
+PASS CHECK objective-mission-objective
+PASS CHECK passenger-ride-states
+PASS CHECK passenger-derivation
+PASS CHECK telemetry-real-085
+PASS CHECK telemetry-derived-matches-recorded
+PASS CHECK smooth-status
+PASS CHECK smooth-peak-acceleration
+PASS CHECK smooth-peak-jerk
+PASS CHECK smooth-samples
+PASS CHECK smooth-segment-facts
+PASS CHECK brisk-status
+PASS CHECK brisk-reason
+PASS CHECK brisk-peak
+PASS CHECK jerky-status
+PASS CHECK jerky-reason
+PASS CHECK jerky-acceleration-not-violated
+PASS CHECK recovery-raw-fails
+PASS CHECK recovery-with-088-passes
+PASS CHECK recovery-teleport-counted
+PASS CHECK recovery-excluded-samples
+PASS CHECK recovery-interval-crossing
+PASS CHECK recovery-peak-accepted
+PASS CHECK recovery-tail-boundary
+PASS CHECK clean-window-suppresses-nothing
+PASS CHECK no-passenger-status
+PASS CHECK no-passenger-metrics
+PASS CHECK insufficient-status
+PASS CHECK window-exceeded-status
+PASS CHECK style-score-rejected
+PASS CHECK result-style-fidelity
+PASS CHECK mission-completes-on-pass
+PASS CHECK mission-fails-on-brisk
+PASS CHECK scenario-statuses
+PASS CHECK no-style-in-any-scenario
+PASS CHECK all-statuses-covered
+SUMMARY checks 43/43, scenarios 10, teleports excluded 1, overall PASS
+Wrote C:\Users\aandr\Sites\self-driving-academy\.worktrees\mission-chain-117-121-01\Docs\Evidence\121-mission-comfort\report.json
+Wrote C:\Users\aandr\Sites\self-driving-academy\.worktrees\mission-chain-117-121-01\Docs\Evidence\121-mission-comfort\report.md
+exit=0
+PASS CHECK objective-thresholds
+PASS CHECK objective-threshold-source
+PASS CHECK objective-thresholds-match-catalog
+PASS CHECK objective-separation
+PASS CHECK objective-passenger
+PASS CHECK objective-artifact-policy
+PASS CHECK objective-mission-valid
+PASS CHECK objective-mission-id
+PASS CHECK objective-mission-objective
+PASS CHECK passenger-ride-states
+PASS CHECK passenger-derivation
+PASS CHECK telemetry-real-085
+PASS CHECK telemetry-derived-matches-recorded
+PASS CHECK smooth-status
+PASS CHECK smooth-peak-acceleration
+PASS CHECK smooth-peak-jerk
+PASS CHECK smooth-samples
+PASS CHECK smooth-segment-facts
+PASS CHECK brisk-status
+PASS CHECK brisk-reason
+PASS CHECK brisk-peak
+PASS CHECK jerky-status
+PASS CHECK jerky-reason
+PASS CHECK jerky-acceleration-not-violated
+PASS CHECK recovery-raw-fails
+PASS CHECK recovery-with-088-passes
+PASS CHECK recovery-teleport-counted
+PASS CHECK recovery-excluded-samples
+PASS CHECK recovery-interval-crossing
+PASS CHECK recovery-peak-accepted
+PASS CHECK recovery-tail-boundary
+PASS CHECK clean-window-suppresses-nothing
+PASS CHECK no-passenger-status
+PASS CHECK no-passenger-metrics
+PASS CHECK insufficient-status
+PASS CHECK window-exceeded-status
+PASS CHECK style-score-rejected
+PASS CHECK result-style-fidelity
+PASS CHECK mission-completes-on-pass
+PASS CHECK mission-fails-on-brisk
+PASS CHECK scenario-statuses
+PASS CHECK no-style-in-any-scenario
+PASS CHECK all-statuses-covered
+SUMMARY checks 43/43, scenarios 10, teleports excluded 1, overall PASS
+Mission comfort report is current: C:\Users\aandr\Sites\self-driving-academy\.worktrees\mission-chain-117-121-01\Docs\Evidence\121-mission-comfort\report.json
+exit=0
+=== Validate-Board.ps1 -RequireDone 121 (pwsh 7.6.7) ===
+{
+  "Valid": true,
+  "Total": 235,
+  "Columns": {
+    "To Do": 102,
+    "In Progress": 0,
+    "Done": 133
+  },
+  "FirstId": "001",
+  "LastId": "235",
+  "RequiredDonePaths": [
+    "C:\\Users\\aandr\\Sites\\self-driving-academy\\.worktrees\\mission-chain-117-121-01\\PBI\\Done\\121-mission_comfort.md"
+  ]
+}
+exit=0
+
+=== Validate-Board.ps1 (Windows PowerShell 5.1, incompatibilitate preexistenta a scriptului) ===
+powershell : C:\Users\aandr\Sites\self-driving-academy\.worktrees\mission-chain-117-121-01\PBI\Validate-Board.ps1 : 
+Cannot bind 
+At line:1 char:665
++ ... hecks.txt"; powershell -NoProfile -ExecutionPolicy Bypass -File ./PBI ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (C:\Users\aandr\... : Cannot bind :String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+argument to parameter 'LiteralPath' because it is an empty string.
+    + CategoryInfo          : InvalidData: (:) [Validate-Board.ps1], ParameterBindingValidationException
+    + FullyQualifiedErrorId : ParameterArgumentValidationErrorEmptyStringNotAllowed,Validate-Board.ps1
+ 
+=== Validate-Board.ps1 pe board-ul canonic (PS 5.1, aceeasi eroare preexistenta pe 054) ===
+powershell : DependenE>Äƒ inexistentÄƒ 045 041 030 pentru 054
+At line:1 char:274
++ ... hecks.txt"; powershell -NoProfile -ExecutionPolicy Bypass -File "C:\U ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (DependenE>Äƒ in... 030 pentru 054:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+At C:\Users\aandr\Sites\self-driving-academy\PBI\Validate-Board.ps1:55 char:64
++ ... taskDep)) { throw "DependenE>Äƒ inexistentÄƒ $taskDep pentru $($taskE ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (DependenE>Äƒ in... 030 pentru 054:String) [], RuntimeException
+    + FullyQualifiedErrorId : DependenE>Äƒ inexistentÄƒ 045 041 030 pentru 054
+ 

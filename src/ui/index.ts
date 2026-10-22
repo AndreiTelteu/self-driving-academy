@@ -26,6 +26,22 @@ export { createControlModeHud, CONTROL_MODE_HUD_LIMITS } from './control-mode-hu
 export type { ControlModeHudView } from './control-mode-hud';
 export * from './recovery-hud';
 export { createTaxiHud } from './taxi-hud';
+export { createMissionTutorialPanel } from './mission-tutorial';
+export type { MissionTutorialPanel, TutorialPanelIntents } from './mission-tutorial';
+export {
+  TUTORIAL_PANEL_LIMITS,
+  TUTORIAL_PANEL_TEXT,
+  TUTORIAL_PANEL_VERSION,
+  parseTutorialPanelSnapshot,
+  projectTutorialPanel,
+  tutorialPanelActions,
+} from './mission-tutorial-format';
+export type {
+  TutorialPanelAction,
+  TutorialPanelButton,
+  TutorialPanelProjection,
+  TutorialPanelSnapshot,
+} from './mission-tutorial-format';
 export { createMinimap } from './minimap';
 export type { MinimapOptions } from './minimap';
 export {

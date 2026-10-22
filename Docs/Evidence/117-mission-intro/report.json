@@ -1,0 +1,494 @@
+{
+  "version": "117-mission-tutorial-v1",
+  "generatedBy": "scripts/run-mission-intro-report.mjs",
+  "oracleRule": "A step advances only from a validated 067/068 observation or a real 007 event; LEARNING must be ineligible, and no taxi access is ever gated.",
+  "steps": [
+    {
+      "stepId": "SELECT_TAXI",
+      "order": 1,
+      "requirement": "SELECTION",
+      "mode": null,
+      "title": "Alege un taxi"
+    },
+    {
+      "stepId": "MODE_MANUAL",
+      "order": 2,
+      "requirement": "CONTROL_MODE",
+      "mode": "MANUAL",
+      "title": "Preia controlul"
+    },
+    {
+      "stepId": "MODE_LEARNING",
+      "order": 3,
+      "requirement": "CONTROL_MODE",
+      "mode": "LEARNING",
+      "title": "Vezi LEARNING fără învățare"
+    },
+    {
+      "stepId": "MODE_AUTO",
+      "order": 4,
+      "requirement": "CONTROL_MODE",
+      "mode": "AUTO",
+      "title": "Revino în AUTO"
+    },
+    {
+      "stepId": "COMPLETE_RIDE",
+      "order": 5,
+      "requirement": "RIDE",
+      "mode": null,
+      "title": "Finalizează o cursă"
+    }
+  ],
+  "playthrough": {
+    "steps": [
+      "ACCEPTED",
+      "ACCEPTED",
+      "ACCEPTED",
+      "ACCEPTED",
+      "ACCEPTED",
+      "COMPLETED"
+    ],
+    "state": "COMPLETED",
+    "completedBy": "PLAY",
+    "completedTick": 6,
+    "skippedSteps": 0,
+    "blockedSelections": 0,
+    "learningJobs": 0,
+    "profileVersions": 0,
+    "learningActivationsObserved": 0
+  },
+  "skipResume": {
+    "afterStepSkip": [
+      "SATISFIED",
+      "SKIPPED",
+      "PENDING",
+      "PENDING",
+      "PENDING"
+    ],
+    "skippedSteps": 4,
+    "stateAfterSkipAll": "COMPLETED",
+    "completedBy": "SKIP",
+    "pausedState": "PAUSED",
+    "ignoredWhilePaused": "TUTORIAL_PAUSED",
+    "resumedStepIndex": 2,
+    "resumedStatus": "ACCEPTED"
+  },
+  "learning": {
+    "refusedEligibleLearning": true,
+    "refusedNullEligibility": true,
+    "refusedLearning": 2,
+    "stepIndexAfterRefusal": 2,
+    "learningJobs": 0,
+    "profileVersions": 0
+  },
+  "taxiAccess": {
+    "alwaysAllowed": true,
+    "blockedSelections": 0,
+    "otherTaxiContinue": "ACCEPTED",
+    "civilSelection": "NOT_A_TAXI"
+  },
+  "ride": {
+    "foreignDropoff": "FOREIGN_VEHICLE",
+    "dropoffWithoutPickup": "RIDE_NOT_BOARDED",
+    "wrongRide": "RIDE_NOT_BOARDED",
+    "completedByDropoff": true
+  },
+  "bus": {
+    "attachedCompletion": true,
+    "activationsObserved": 0,
+    "foreignWorldRefused": true
+  },
+  "ui": {
+    "version": "117-mission-tutorial-ui-v1",
+    "activeProgress": "Pasul 1 din 5",
+    "activeButtons": [
+      "PAUSE",
+      "SKIP_STEP",
+      "SKIP_ALL"
+    ],
+    "completedProgress": "Tutorial finalizat",
+    "completedButtons": [],
+    "keyboardPaths": [
+      "Enter Space",
+      "Enter Space",
+      "Enter Space",
+      "Enter Space"
+    ],
+    "globalListeners": 0
+  },
+  "checks": [
+    {
+      "name": "step-count-and-order",
+      "expected": [
+        "SELECT_TAXI",
+        "MODE_MANUAL",
+        "MODE_LEARNING",
+        "MODE_AUTO",
+        "COMPLETE_RIDE"
+      ],
+      "actual": [
+        "SELECT_TAXI",
+        "MODE_MANUAL",
+        "MODE_LEARNING",
+        "MODE_AUTO",
+        "COMPLETE_RIDE"
+      ],
+      "pass": true,
+      "detail": "Fixed authored path; no dynamic step can be added at runtime."
+    },
+    {
+      "name": "step-orders",
+      "expected": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "actual": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "pass": true,
+      "detail": "The order is authored, not derived from a clock or a frame."
+    },
+    {
+      "name": "playthrough-statuses",
+      "expected": 6,
+      "actual": 6,
+      "pass": true,
+      "detail": "Selection, M, L, M, pickup, dropoff."
+    },
+    {
+      "name": "playthrough-completed",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "A full path completes the tutorial."
+    },
+    {
+      "name": "playthrough-state",
+      "expected": "COMPLETED",
+      "actual": "COMPLETED",
+      "pass": true,
+      "detail": "The terminal state is explicit."
+    },
+    {
+      "name": "playthrough-completed-by",
+      "expected": "PLAY",
+      "actual": "PLAY",
+      "pass": true,
+      "detail": "Completed by playing."
+    },
+    {
+      "name": "playthrough-steps-satisfied",
+      "expected": [
+        "SATISFIED",
+        "SATISFIED",
+        "SATISFIED",
+        "SATISFIED",
+        "SATISFIED"
+      ],
+      "actual": [
+        "SATISFIED",
+        "SATISFIED",
+        "SATISFIED",
+        "SATISFIED",
+        "SATISFIED"
+      ],
+      "pass": true,
+      "detail": "Every step was satisfied by a real observation."
+    },
+    {
+      "name": "learning-jobs",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "The tutorial creates no learning job."
+    },
+    {
+      "name": "profile-versions",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "The tutorial publishes no profile version."
+    },
+    {
+      "name": "activations-observed",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "A clean tutorial observes no PROFILE_ACTIVATE."
+    },
+    {
+      "name": "blocked-selections",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "Selections are never blocked by tutorial progress."
+    },
+    {
+      "name": "eligible-learning-refused",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Eligible LEARNING is a bug."
+    },
+    {
+      "name": "null-eligibility-refused",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Unknown eligibility is refused too."
+    },
+    {
+      "name": "refused-learning-counter",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "Bounded counter."
+    },
+    {
+      "name": "refusal-keeps-step",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "A refusal cannot advance the tutorial."
+    },
+    {
+      "name": "accepted-after-refusal",
+      "expected": "ACCEPTED",
+      "actual": "ACCEPTED",
+      "pass": true,
+      "detail": "The ineligible path still works after the refusals."
+    },
+    {
+      "name": "other-taxi-allowed",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Access is never gated."
+    },
+    {
+      "name": "other-taxi-does-not-reset",
+      "expected": [
+        2,
+        "SATISFIED"
+      ],
+      "actual": [
+        2,
+        "SATISFIED"
+      ],
+      "pass": true,
+      "detail": "Progress survives a taxi change."
+    },
+    {
+      "name": "other-taxi-observation",
+      "expected": "WRONG_STEP",
+      "actual": "WRONG_STEP",
+      "pass": true,
+      "detail": "A selection in a mode step is ignored, not rejected."
+    },
+    {
+      "name": "other-taxi-continues",
+      "expected": "ACCEPTED",
+      "actual": "ACCEPTED",
+      "pass": true,
+      "detail": "New taxi continues."
+    },
+    {
+      "name": "blocked-selections-counter",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "Always zero."
+    },
+    {
+      "name": "civil-ignored",
+      "expected": "NOT_A_TAXI",
+      "actual": "NOT_A_TAXI",
+      "pass": true,
+      "detail": "A civil is not a taxi."
+    },
+    {
+      "name": "civil-does-not-advance",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "No step is satisfied."
+    },
+    {
+      "name": "skip-step-continues",
+      "expected": [
+        2,
+        "SKIPPED",
+        "ACCEPTED"
+      ],
+      "actual": [
+        2,
+        "SKIPPED",
+        "ACCEPTED"
+      ],
+      "pass": true,
+      "detail": "A skipped step advances to the next one."
+    },
+    {
+      "name": "skip-all-completes",
+      "expected": [
+        "COMPLETED",
+        "SKIP",
+        4
+      ],
+      "actual": [
+        "COMPLETED",
+        "SKIP",
+        4
+      ],
+      "pass": true,
+      "detail": "Skip-all is explicit and counted."
+    },
+    {
+      "name": "pause-state",
+      "expected": "PAUSED",
+      "actual": "PAUSED",
+      "pass": true,
+      "detail": "Pause is explicit."
+    },
+    {
+      "name": "paused-ignores-input",
+      "expected": "TUTORIAL_PAUSED",
+      "actual": "TUTORIAL_PAUSED",
+      "pass": true,
+      "detail": "No progress while paused."
+    },
+    {
+      "name": "resume-retains-step",
+      "expected": [
+        2,
+        "ACTIVE",
+        "ACCEPTED"
+      ],
+      "actual": [
+        2,
+        "ACTIVE",
+        "ACCEPTED"
+      ],
+      "pass": true,
+      "detail": "Resume continues at the retained step."
+    },
+    {
+      "name": "foreign-dropoff",
+      "expected": "FOREIGN_VEHICLE",
+      "actual": "FOREIGN_VEHICLE",
+      "pass": true,
+      "detail": "Other taxis are not counted."
+    },
+    {
+      "name": "dropoff-without-pickup",
+      "expected": "RIDE_NOT_BOARDED",
+      "actual": "RIDE_NOT_BOARDED",
+      "pass": true,
+      "detail": "No passenger, no ride."
+    },
+    {
+      "name": "wrong-ride",
+      "expected": "RIDE_NOT_BOARDED",
+      "actual": "RIDE_NOT_BOARDED",
+      "pass": true,
+      "detail": "The ride id must match."
+    },
+    {
+      "name": "dropoff-completes",
+      "expected": "COMPLETED",
+      "actual": "COMPLETED",
+      "pass": true,
+      "detail": "A real pickup plus dropoff completes."
+    },
+    {
+      "name": "bus-completes",
+      "expected": "COMPLETED",
+      "actual": "COMPLETED",
+      "pass": true,
+      "detail": "The real 007 bus drives the ride steps."
+    },
+    {
+      "name": "bus-foreign-world-refused",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "A bus from another session cannot feed the tutorial."
+    },
+    {
+      "name": "ui-active-buttons",
+      "expected": [
+        "PAUSE",
+        "SKIP_STEP",
+        "SKIP_ALL"
+      ],
+      "actual": [
+        "PAUSE",
+        "SKIP_STEP",
+        "SKIP_ALL"
+      ],
+      "pass": true,
+      "detail": "Mouse and keyboard share the native buttons."
+    },
+    {
+      "name": "ui-active-progress",
+      "expected": "Pasul 1 din 5",
+      "actual": "Pasul 1 din 5",
+      "pass": true,
+      "detail": "Progress text."
+    },
+    {
+      "name": "ui-completed-progress",
+      "expected": "Tutorial finalizat",
+      "actual": "Tutorial finalizat",
+      "pass": true,
+      "detail": "Done."
+    },
+    {
+      "name": "ui-completed-buttons",
+      "expected": [],
+      "actual": [],
+      "pass": true,
+      "detail": "A completed tutorial disables every action."
+    },
+    {
+      "name": "ui-paused-buttons",
+      "expected": [
+        "RESUME"
+      ],
+      "actual": [
+        "RESUME"
+      ],
+      "pass": true,
+      "detail": "Paused shows only Resume."
+    },
+    {
+      "name": "ui-keyboard-paths",
+      "expected": [
+        "Enter Space",
+        "Enter Space",
+        "Enter Space",
+        "Enter Space"
+      ],
+      "actual": [
+        "Enter Space",
+        "Enter Space",
+        "Enter Space",
+        "Enter Space"
+      ],
+      "pass": true,
+      "detail": "Native button activation is documented for every action."
+    }
+  ],
+  "summary": {
+    "checks": 40,
+    "passed": 40,
+    "pass": true
+  }
+}
