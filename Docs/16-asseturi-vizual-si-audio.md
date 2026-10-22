@@ -55,3 +55,28 @@ Registry-ul include arhetipuri intacte/deteriorate pentru garduri ușoare, conur
 **Adaptor și driver fals.** Web Audio API este izolat în `src/audio/web-audio-backend.ts`, care folosește doar forma structurală necesară (`WebAudioContextLike`) și creează contextul la `resume()`. `src/audio/fake-backend.ts` este driverul determinist pentru Node: ceas explicit, contoare, jurnal cu capacitate finită și același port. Nu există dependențe noi în `package.json`.
 
 **Placeholder-uri, nu asseturi finale.** Cele șapte cue-uri (`engine-loop`, `tyre-screech`, `brake-squeal`, `impact`, `takeover-notice`, `profile-notice`, `ui-tick`) folosesc buffere procedurale generate determinist de `src/audio/procedural.ts` (22,05 kHz, mono). Ele sunt **placeholder-uri identificate explicit**, nu asseturile finale înregistrate; înlocuirea cu înregistrările reale nu schimbă contractul motorului. Dovezile sunt în [Docs/Evidence/148-audio-engine](Evidence/148-audio-engine/README.md), inclusiv costul local de memorie și per tick.
+
+## Contractul audio 149: preluare, publicare și misiuni
+
+[149](16-asseturi-vizual-si-audio.md) adaugă feedback distinct pentru preluarea controlului, publicarea profilului și stările misiunilor, **fără** un al doilea sistem audio: contractul pur este `src/audio/feedback.ts` (`149-audio-feedback-v1`), composition root-ul este `src/app/audio-feedback.ts` (`149-audio-feedback-app-v1`), iar echivalentul vizual este `src/ui/audio-feedback-indicator.ts` (`149-audio-feedback-indicator-v1`).
+
+**Legarea de evenimentul real.** Fiecare sunet vine dintr-un eveniment real, nu dintr-o stare anticipată:
+
+| Familie | Evenimentul real | Cue 148 | Categoria |
+| --- | --- | --- | --- |
+| `TAKEOVER` | evenimentul 007 `MANUAL_START` (seatul 066/068) | `takeover-notice` | `ui` |
+| `PUBLICATION` | evenimentul 007 `PROFILE_ACTIVATE` și payloadul 110/112 cu `published: true` | `profile-notice` | `ui` |
+| `MISSION` | starea instancei din trackerul real 116 (`ACTIVE`/`COMPLETED`/`FAILED`) | `ui-tick` | `ui` |
+| `LEARNING` | notificarea reală 079 cu descriptor de sunet ≠ `NONE` | `ui-tick` | `ui` |
+
+Cue-urile sunt cele șapte ale motorului 148: 149 nu adaugă cue, buffer sau voce și nu modifică `AUDIO_LIMITS`. Toate sunetele trec prin `playOneShot`, deci plafonul de voci, cooldown-ul pe familie, furtul determinist de voce și comutatorul de mute rămân în vigoare. Un rezultat de învățare validat dar **nepublicat** (`RESULT` 079) sună ca analiză, nu ca publicare; doar payloadul explicit de publicare poate produce `profile-notice`.
+
+**Fără dublare.** Fiecare feedback are o **cheie de idempotență explicită**, derivată din identitatea reală a evenimentului: `takeover:<eventId 007>`, `publication:<versionId 110/112>`, `mission:<instanceId 116>:<state>` și `learning:<eventId 079>`. Cheile sunt păstrate într-un registru FIFO mărginit (256 chei, `AUDIO_FEEDBACK_LIMITS.emittedKeys`). Publicarea și notificarea 079 `PUBLISHED` a **aceleiași** versiuni împart aceeași cheie, deci activarea și notificarea nu sună de două ori; evenimentul reluat de un releu, întâlnit și direct, este refuzat cu `DUPLICATE`.
+
+**Rezultat întârziat.** Un feedback primit după un eveniment mai nou este marcat `late`, dar sună propriul rezultat real: o publicare întârziată sună `profile-notice` (publicarea chiar a avut loc), nu starea anticipată, iar o notificare 079 reclasificată `STALE` are descriptor `NONE` și rămâne mută. Contorul `lastTick` este singurul reper de ordine; starea curentă a motorului nu înlocuiește niciodată payloadul evenimentului.
+
+**Toggle rapid.** Comutarea repetată a mute-ului sau a categoriilor trece prin `setMuted`/`applyPreferences` ale motorului 148: câștigul de ieșire se schimbă, vocile, proprietățile și buferele nu. Un burst de evenimente de aceeași familie este limitat de cooldown-ul motorului (0,4 s pe familie) și de plafonul de 4 voci `ui`; nicio voce orfană nu rămâne, iar buferele rămân sub plafonul de 8.
+
+**Echivalent vizual obligatoriu.** Orice informație transmisă audio are și un echivalent vizual: `src/ui/audio-feedback-indicator.ts` este o **linie de stare** mărginită (un singur rând, fără listă, fără istoric, fără fereastră de deduplicare, fără coadă de expirare) care arată simbolul, textul și atributele `data-*` ale ultimului feedback acceptat. Nu este un sistem paralel de notificări: mesajele detaliate de învățare și publicare rămân pe rândurile reale ale infrastructurii 079 (`★ Profil publicat`), iar preluarea rămâne pe indicatorul de mod 067. Indicatoarea este desenată și când motorul refuză sunetul (de exemplu `AWAITING_GESTURE`), deci informația nu depinde de sunet.
+
+Dovezile sunt în [Docs/Evidence/149-audio-feedback](Evidence/149-audio-feedback/README.md).

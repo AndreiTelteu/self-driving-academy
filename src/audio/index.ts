@@ -8,6 +8,7 @@
 export * from './contracts';
 export * from './ports';
 export * from './engine';
+export * from './feedback';
 export * from './fake-backend';
 export * from './web-audio-backend';
 export * from './collision-bridge';

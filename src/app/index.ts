@@ -49,6 +49,16 @@ export function createApplication(services: ApplicationServices): Application {
   };
 }
 export {
+  AUDIO_FEEDBACK_APP_VERSION,
+  createAudioFeedback,
+  type AudioFeedback,
+  type AudioFeedbackResult,
+  type AudioFeedbackServices,
+  type AudioFeedbackStats,
+  type AudioFeedbackStatus,
+  type AudioFeedbackVisualPort,
+} from './audio-feedback';
+export {
   createApplicationLifecycle,
   type ApplicationPauseReason,
   type ApplicationState,
