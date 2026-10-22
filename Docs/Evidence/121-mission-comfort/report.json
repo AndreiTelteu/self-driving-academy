@@ -1,0 +1,678 @@
+{
+  "version": "121-mission-comfort-v1",
+  "generatedBy": "scripts/run-mission-comfort-report.mjs",
+  "oracleRule": "Comfort is measured only from acceleration and jerk while a passenger is aboard, inside the ride window minus the real 088 suppressed spans; the thresholds are the shipped catalog defaults and no style score is read or reported.",
+  "limits": {
+    "version": "121-mission-comfort-v1",
+    "samples": 20000,
+    "windows": 64,
+    "segments": 16,
+    "spans": 64,
+    "idCodeUnits": 256,
+    "labelCodeUnits": 160
+  },
+  "tickHz": 60,
+  "objective": {
+    "objectiveId": "passenger-comfort",
+    "passengerRequired": true,
+    "artifactPolicy": "EXCLUDE_ARTIFACT_SUPPRESSED_SPANS",
+    "separation": {
+      "styleFidelity": "NOT_USED",
+      "styleScore": "NOT_USED"
+    },
+    "thresholdSource": {
+      "maxAccelerationMps2": "comfort_deceleration",
+      "maxJerkMps3": "acceleration_jerk",
+      "catalog": "project driving-parameter catalog default"
+    },
+    "thresholds": {
+      "maxAccelerationMps2": 2,
+      "maxJerkMps3": 2
+    },
+    "windowTicks": 7200,
+    "minimumSamples": 8
+  },
+  "mission": {
+    "missionId": "campaign-5-comfort-ride",
+    "title": "Cursa cu obiectiv de confort",
+    "namespace": "campaign:121-comfort",
+    "objectives": [
+      "DROPOFFS:1"
+    ],
+    "incidentBudget": 1,
+    "prerequisites": [],
+    "statuses": [
+      "PASSED",
+      "FAILED",
+      "NO_PASSENGER",
+      "INSUFFICIENT_DATA",
+      "WINDOW_EXCEEDED"
+    ]
+  },
+  "provenance": {
+    "thresholdKeys": [
+      "comfort_deceleration",
+      "acceleration_jerk"
+    ],
+    "catalogAcceleration": 2,
+    "catalogJerk": 2,
+    "passengerRideStates": [
+      "TO_DROPOFF",
+      "DROPOFF"
+    ],
+    "telemetrySegments": [
+      "segment:121:smooth"
+    ],
+    "telemetryControlMode": "LEARNING",
+    "telemetryLearningEligible": true,
+    "telemetrySamples": 121,
+    "derivedAgainstRecordedMps2": 0
+  },
+  "scenarios": [
+    {
+      "name": "smooth",
+      "status": "PASSED",
+      "reason": null,
+      "peakAccelerationMps2": 0.9375,
+      "peakJerkMps3": 0,
+      "accelerationSamples": 120,
+      "jerkSamples": 119,
+      "accelerationViolations": 0,
+      "jerkViolations": 0,
+      "windows": 1,
+      "excludedSpans": 0,
+      "excludedSamples": 0,
+      "excludedIntervals": 0,
+      "teleports": 0,
+      "styleFidelity": null
+    },
+    {
+      "name": "brisk",
+      "status": "FAILED",
+      "reason": "ACCELERATION_LIMIT",
+      "peakAccelerationMps2": 5.625,
+      "peakJerkMps3": 0,
+      "accelerationSamples": 120,
+      "jerkSamples": 119,
+      "accelerationViolations": 120,
+      "jerkViolations": 0,
+      "windows": 1,
+      "excludedSpans": 0,
+      "excludedSamples": 0,
+      "excludedIntervals": 0,
+      "teleports": 0,
+      "styleFidelity": null
+    },
+    {
+      "name": "jerky",
+      "status": "FAILED",
+      "reason": "JERK_LIMIT",
+      "peakAccelerationMps2": 1.875,
+      "peakJerkMps3": 225,
+      "accelerationSamples": 120,
+      "jerkSamples": 119,
+      "accelerationViolations": 0,
+      "jerkViolations": 119,
+      "windows": 1,
+      "excludedSpans": 0,
+      "excludedSamples": 0,
+      "excludedIntervals": 0,
+      "teleports": 0,
+      "styleFidelity": null
+    },
+    {
+      "name": "recovery-without-window",
+      "status": "FAILED",
+      "reason": "BOTH_LIMITS",
+      "peakAccelerationMps2": 720.9375,
+      "peakJerkMps3": 43200,
+      "accelerationSamples": 120,
+      "jerkSamples": 119,
+      "accelerationViolations": 1,
+      "jerkViolations": 2,
+      "windows": 0,
+      "excludedSpans": 0,
+      "excludedSamples": 0,
+      "excludedIntervals": 0,
+      "teleports": 0,
+      "styleFidelity": null
+    },
+    {
+      "name": "recovery-segment-closed-088",
+      "status": "PASSED",
+      "reason": null,
+      "peakAccelerationMps2": 0.9375,
+      "peakJerkMps3": 0,
+      "accelerationSamples": 118,
+      "jerkSamples": 117,
+      "accelerationViolations": 0,
+      "jerkViolations": 0,
+      "windows": 2,
+      "excludedSpans": 1,
+      "excludedSamples": 1,
+      "excludedIntervals": 1,
+      "teleports": 1,
+      "styleFidelity": null
+    },
+    {
+      "name": "recovery-open-segment-088",
+      "status": "PASSED",
+      "reason": null,
+      "peakAccelerationMps2": 0.9375,
+      "peakJerkMps3": 0,
+      "accelerationSamples": 59,
+      "jerkSamples": 58,
+      "accelerationViolations": 0,
+      "jerkViolations": 0,
+      "windows": 1,
+      "excludedSpans": 1,
+      "excludedSamples": 61,
+      "excludedIntervals": 0,
+      "teleports": 1,
+      "styleFidelity": null
+    },
+    {
+      "name": "clean-window",
+      "status": "PASSED",
+      "reason": null,
+      "peakAccelerationMps2": 0.9375,
+      "peakJerkMps3": 0,
+      "accelerationSamples": 120,
+      "jerkSamples": 119,
+      "accelerationViolations": 0,
+      "jerkViolations": 0,
+      "windows": 1,
+      "excludedSpans": 0,
+      "excludedSamples": 0,
+      "excludedIntervals": 0,
+      "teleports": 0,
+      "styleFidelity": null
+    },
+    {
+      "name": "no-passenger",
+      "status": "NO_PASSENGER",
+      "reason": null,
+      "peakAccelerationMps2": 0,
+      "peakJerkMps3": 0,
+      "accelerationSamples": 0,
+      "jerkSamples": 0,
+      "accelerationViolations": 0,
+      "jerkViolations": 0,
+      "windows": 1,
+      "excludedSpans": 0,
+      "excludedSamples": 0,
+      "excludedIntervals": 0,
+      "teleports": 0,
+      "styleFidelity": null
+    },
+    {
+      "name": "insufficient-data",
+      "status": "INSUFFICIENT_DATA",
+      "reason": null,
+      "peakAccelerationMps2": 0.9375,
+      "peakJerkMps3": 0,
+      "accelerationSamples": 3,
+      "jerkSamples": 2,
+      "accelerationViolations": 0,
+      "jerkViolations": 0,
+      "windows": 1,
+      "excludedSpans": 0,
+      "excludedSamples": 0,
+      "excludedIntervals": 0,
+      "teleports": 0,
+      "styleFidelity": null
+    },
+    {
+      "name": "window-exceeded",
+      "status": "WINDOW_EXCEEDED",
+      "reason": null,
+      "peakAccelerationMps2": 0,
+      "peakJerkMps3": 0,
+      "accelerationSamples": 0,
+      "jerkSamples": 0,
+      "accelerationViolations": 0,
+      "jerkViolations": 0,
+      "windows": 1,
+      "excludedSpans": 0,
+      "excludedSamples": 0,
+      "excludedIntervals": 0,
+      "teleports": 0,
+      "styleFidelity": null
+    }
+  ],
+  "separation": {
+    "styleFidelityInResult": false,
+    "styleScoreUsed": false,
+    "injectedStyleScoreRejected": true
+  },
+  "checks": [
+    {
+      "name": "objective-thresholds",
+      "expected": {
+        "maxAccelerationMps2": 2,
+        "maxJerkMps3": 2
+      },
+      "actual": {
+        "maxAccelerationMps2": 2,
+        "maxJerkMps3": 2
+      },
+      "pass": true,
+      "detail": "Explicit acceleration and jerk thresholds, no hidden rule."
+    },
+    {
+      "name": "objective-threshold-source",
+      "expected": {
+        "maxAccelerationMps2": "comfort_deceleration",
+        "maxJerkMps3": "acceleration_jerk"
+      },
+      "actual": {
+        "maxAccelerationMps2": "comfort_deceleration",
+        "maxJerkMps3": "acceleration_jerk"
+      },
+      "pass": true,
+      "detail": "The thresholds are catalog parameters, not numbers invented for the mission."
+    },
+    {
+      "name": "objective-thresholds-match-catalog",
+      "expected": {
+        "maxAccelerationMps2": 2,
+        "maxJerkMps3": 2
+      },
+      "actual": {
+        "maxAccelerationMps2": 2,
+        "maxJerkMps3": 2
+      },
+      "pass": true,
+      "detail": "The thresholds are the shipped defaults of the project driving-parameter catalog."
+    },
+    {
+      "name": "objective-separation",
+      "expected": {
+        "styleFidelity": "NOT_USED",
+        "styleScore": "NOT_USED"
+      },
+      "actual": {
+        "styleFidelity": "NOT_USED",
+        "styleScore": "NOT_USED"
+      },
+      "pass": true,
+      "detail": "Comfort is separate from imitation/style fidelity by declaration."
+    },
+    {
+      "name": "objective-passenger",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "A passenger is required."
+    },
+    {
+      "name": "objective-artifact-policy",
+      "expected": "EXCLUDE_ARTIFACT_SUPPRESSED_SPANS",
+      "actual": "EXCLUDE_ARTIFACT_SUPPRESSED_SPANS",
+      "pass": true,
+      "detail": "Only the real 088 suppressed spans exclude data."
+    },
+    {
+      "name": "objective-mission-valid",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "The comfort mission parses through the real 116 catalog contract."
+    },
+    {
+      "name": "objective-mission-id",
+      "expected": "campaign-5-comfort-ride",
+      "actual": "campaign-5-comfort-ride",
+      "pass": true,
+      "detail": "Stable mission id."
+    },
+    {
+      "name": "objective-mission-objective",
+      "expected": [
+        "DROPOFFS:1"
+      ],
+      "actual": [
+        "DROPOFFS:1"
+      ],
+      "pass": true,
+      "detail": "The 116 objective counts the ride; comfort is the completion gate."
+    },
+    {
+      "name": "passenger-ride-states",
+      "expected": [
+        "TO_DROPOFF",
+        "DROPOFF"
+      ],
+      "actual": [
+        "TO_DROPOFF",
+        "DROPOFF"
+      ],
+      "pass": true,
+      "detail": "The passenger comes from the real 061 ride lifecycle."
+    },
+    {
+      "name": "passenger-derivation",
+      "expected": {
+        "TO_DROPOFF": true,
+        "DROPOFF": true,
+        "TO_PICKUP": false,
+        "PICKUP": false,
+        "COMPLETED": false
+      },
+      "actual": {
+        "TO_DROPOFF": true,
+        "DROPOFF": true,
+        "TO_PICKUP": false,
+        "PICKUP": false,
+        "COMPLETED": false
+      },
+      "pass": true,
+      "detail": "Passenger presence is derived, never asserted by the caller."
+    },
+    {
+      "name": "telemetry-real-085",
+      "expected": {
+        "controlMode": "LEARNING",
+        "learningEligible": true,
+        "segments": 1,
+        "samples": 121
+      },
+      "actual": {
+        "controlMode": "LEARNING",
+        "learningEligible": true,
+        "segments": 1,
+        "samples": 121
+      },
+      "pass": true,
+      "detail": "The samples come from a real 085 LEARNING segment."
+    },
+    {
+      "name": "telemetry-derived-matches-recorded",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "The acceleration of the metric equals the acceleration recorded by the real 085 physics."
+    },
+    {
+      "name": "smooth-status",
+      "expected": "PASSED",
+      "actual": "PASSED",
+      "pass": true,
+      "detail": "Lin: sub ambele praguri."
+    },
+    {
+      "name": "smooth-peak-acceleration",
+      "expected": 0.9375,
+      "actual": 0.9375,
+      "pass": true,
+      "detail": "Real peak."
+    },
+    {
+      "name": "smooth-peak-jerk",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "Constant acceleration, no jerk."
+    },
+    {
+      "name": "smooth-samples",
+      "expected": 120,
+      "actual": 120,
+      "pass": true,
+      "detail": "All intervals usable."
+    },
+    {
+      "name": "smooth-segment-facts",
+      "expected": {
+        "controlMode": "LEARNING",
+        "learningEligible": true,
+        "segments": 1
+      },
+      "actual": {
+        "controlMode": "LEARNING",
+        "learningEligible": true,
+        "segments": 1
+      },
+      "pass": true,
+      "detail": "The evaluated window is a real 069 LEARNING segment."
+    },
+    {
+      "name": "brisk-status",
+      "expected": "FAILED",
+      "actual": "FAILED",
+      "pass": true,
+      "detail": "Brusc: limita de accelerație este depășită."
+    },
+    {
+      "name": "brisk-reason",
+      "expected": "ACCELERATION_LIMIT",
+      "actual": "ACCELERATION_LIMIT",
+      "pass": true,
+      "detail": "Explicit failure reason."
+    },
+    {
+      "name": "brisk-peak",
+      "expected": 5.625,
+      "actual": 5.625,
+      "pass": true,
+      "detail": "Real 5,625 m/s² peak."
+    },
+    {
+      "name": "jerky-status",
+      "expected": "FAILED",
+      "actual": "FAILED",
+      "pass": true,
+      "detail": "Jerk peste prag."
+    },
+    {
+      "name": "jerky-reason",
+      "expected": "JERK_LIMIT",
+      "actual": "JERK_LIMIT",
+      "pass": true,
+      "detail": "Acceleration stays at the limit."
+    },
+    {
+      "name": "jerky-acceleration-not-violated",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "Only the derivative fails."
+    },
+    {
+      "name": "recovery-raw-fails",
+      "expected": "FAILED",
+      "actual": "FAILED",
+      "pass": true,
+      "detail": "Without the 088 window the teleport looks like an acceleration violation."
+    },
+    {
+      "name": "recovery-with-088-passes",
+      "expected": "PASSED",
+      "actual": "PASSED",
+      "pass": true,
+      "detail": "The real 088 window suppresses the recovery boundary tick."
+    },
+    {
+      "name": "recovery-teleport-counted",
+      "expected": {
+        "spans": 1,
+        "teleports": 1,
+        "windows": 2
+      },
+      "actual": {
+        "spans": 1,
+        "teleports": 1,
+        "windows": 2
+      },
+      "pass": true,
+      "detail": "030 recovery facts stay visible as excluded evidence, never as comfort data."
+    },
+    {
+      "name": "recovery-excluded-samples",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "Suppression starts at tick 59, the recovery boundary tick of the closed segment."
+    },
+    {
+      "name": "recovery-interval-crossing",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "The interval that crosses the boundary is dropped, so no impulse enters the metric."
+    },
+    {
+      "name": "recovery-peak-accepted",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The excluded impulse cannot fail the ride."
+    },
+    {
+      "name": "recovery-tail-boundary",
+      "expected": {
+        "excludedSamples": 61,
+        "excludedIntervals": 0,
+        "used": 60
+      },
+      "actual": {
+        "excludedSamples": 61,
+        "excludedIntervals": 0,
+        "used": 60
+      },
+      "pass": true,
+      "detail": "When suppression runs to the end of the segment, the boundary sample is dropped."
+    },
+    {
+      "name": "clean-window-suppresses-nothing",
+      "expected": {
+        "spans": 0,
+        "excluded": 0,
+        "used": 121
+      },
+      "actual": {
+        "spans": 0,
+        "excluded": 0,
+        "used": 121
+      },
+      "pass": true,
+      "detail": "A window without artefacts changes nothing."
+    },
+    {
+      "name": "no-passenger-status",
+      "expected": "NO_PASSENGER",
+      "actual": "NO_PASSENGER",
+      "pass": true,
+      "detail": "No verdict without a passenger."
+    },
+    {
+      "name": "no-passenger-metrics",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "No sampled acceleration without a passenger."
+    },
+    {
+      "name": "insufficient-status",
+      "expected": "INSUFFICIENT_DATA",
+      "actual": "INSUFFICIENT_DATA",
+      "pass": true,
+      "detail": "Fewer than 8 usable intervals."
+    },
+    {
+      "name": "window-exceeded-status",
+      "expected": "WINDOW_EXCEEDED",
+      "actual": "WINDOW_EXCEEDED",
+      "pass": true,
+      "detail": "A too long ride is refused, not truncated silently."
+    },
+    {
+      "name": "style-score-rejected",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "A style score cannot even enter the comfort input."
+    },
+    {
+      "name": "result-style-fidelity",
+      "expected": null,
+      "actual": null,
+      "pass": true,
+      "detail": "The result never carries an imitation score."
+    },
+    {
+      "name": "mission-completes-on-pass",
+      "expected": [
+        "COMPLETED",
+        null
+      ],
+      "actual": [
+        "COMPLETED",
+        null
+      ],
+      "pass": true,
+      "detail": "Only a passing comfort result completes the mission."
+    },
+    {
+      "name": "mission-fails-on-brisk",
+      "expected": [
+        "FAILED",
+        "ACCELERATION_LIMIT"
+      ],
+      "actual": [
+        "FAILED",
+        "ACCELERATION_LIMIT"
+      ],
+      "pass": true,
+      "detail": "A brisk ride keeps the explicit failure reason."
+    },
+    {
+      "name": "scenario-statuses",
+      "expected": [
+        "PASSED",
+        "FAILED",
+        "FAILED",
+        "FAILED",
+        "PASSED",
+        "PASSED",
+        "PASSED",
+        "NO_PASSENGER",
+        "INSUFFICIENT_DATA",
+        "WINDOW_EXCEEDED"
+      ],
+      "actual": [
+        "PASSED",
+        "FAILED",
+        "FAILED",
+        "FAILED",
+        "PASSED",
+        "PASSED",
+        "PASSED",
+        "NO_PASSENGER",
+        "INSUFFICIENT_DATA",
+        "WINDOW_EXCEEDED"
+      ],
+      "pass": true,
+      "detail": "Every closed comfort status is exercised."
+    },
+    {
+      "name": "no-style-in-any-scenario",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "No scenario reports a style value."
+    },
+    {
+      "name": "all-statuses-covered",
+      "expected": 5,
+      "actual": 5,
+      "pass": true,
+      "detail": "Closed vocabulary: PASSED, FAILED, NO_PASSENGER, INSUFFICIENT_DATA, WINDOW_EXCEEDED."
+    }
+  ],
+  "summary": {
+    "checks": 43,
+    "passed": 43,
+    "pass": true
+  }
+}

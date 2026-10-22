@@ -67,3 +67,21 @@ Panoul `src/ui/mission-tutorial.ts` (schema `117-mission-tutorial-ui-v1`) proiec
 
 Nu fac parte din acest contract: compunerea tutorialului în `main.ts`/vertical slice, persistarea între sesiuni (127–136), XP-ul de misiune și blocarea intenționată a vreunui taxi. Tutorialul nu este un panou de setări și nu modifică `PlayerProgress`.
 
+## Contract implementat în V1 (PBI 121): obiectivul de confort
+
+`src/missions/comfort.ts` cu schema `121-mission-comfort-v1` definește obiectivul `passenger-comfort`: praguri explicite de **accelerație** (2 m/s²) și **jerk** (2 m/s³), evaluate numai cu pasager la bord, într-o fereastră de maximum 7200 tick-uri (120 s la 60 Hz) și cu minimum 8 intervale utilizabile.
+
+Pragurile nu sunt numere inventate pentru misiune: sunt valorile implicite livrate de catalogul de parametri ai proiectului (`src/profiles/parameter-registry.ts`), citite la import prin `parameterRegistry.comfort_deceleration.default` (2 m/s²) și `parameterRegistry.acceleration_jerk.default` (2 m/s³). Contractul le publică prin `COMFORT_THRESHOLD_SOURCE` (`comfort_deceleration`, `acceleration_jerk`), iar `parseComfortObjective` refuză orice altă sursă de prag. Pragurile sunt constante de misiune: un profil publicat sau ajustat manual nu este citit la runtime, iar confortul nu este o cheie de profil și nu poate fi învățat sau reglat.
+
+Obiectivul este separat explicit de fidelitatea stilului: `separation` declară `styleFidelity: NOT_USED` și `styleScore: NOT_USED`, rezultatul are `styleFidelity: null` și `styleScoreUsed: false`, iar un câmp de scor de stil în intrare este refuzat de parser (câmp necunoscut). Confortul nu este un scor de „șofer bun” și nu se combină cu scorul de imitație.
+
+Toate intrările sunt contracte reale, nu aproximări: pasagerul este derivat din ciclul de cursă **061** (`TO_DROPOFF` și `DROPOFF` au pasager la bord, `TO_PICKUP`/`PICKUP` nu), segmentul este segmentul **069** cu `controlMode` și `learningEligible` fixate la deschidere, eșantioanele sunt citite din înregistrarea reală **085** prin `comfortTelemetryFromTickSamples`, iar excluderile sunt ferestrele reale **088**.
+
+Indicatorii nu includ impulsuri de teleportare. Evaluatorul consumă ferestrele reale **088** (`artifactWindows`) și folosește exclusiv span-ul lor `suppressed` (inclusiv, `fromTick..toTick`): un eșantion din span nu intră în calcul, iar un interval de accelerație care traversează span-ul este eliminat. Recuperările **030** rămân vizibile ca dovezi excluse (`exclusions.teleports`, `collisions`, `pauses`), dar nu pot produce o violare de confort. Fără fereastra 088, același salt de viteză este raportat corect ca violare — deci filtrarea este cea care separă teleportarea de condus. Ambele modele reale de recuperare sunt acoperite: segment închis de recuperare (span de un tick, un interval traversat și eliminat) și segment deschis (span până la capătul segmentului).
+
+Stările sunt `PASSED`, `FAILED`, `NO_PASSENGER`, `INSUFFICIENT_DATA` și `WINDOW_EXCEEDED`; eșecul are motiv închis `ACCELERATION_LIMIT`, `JERK_LIMIT` sau `BOTH_LIMITS`. Accelerația este derivată vitezei reale pe interval (`Δv/Δt` la 60 Hz) din telemetria 085, iar jerk-ul derivata accelerației între intervale consecutive; comparația cu pragul folosește o toleranță de 1e-9 m/s² pentru integrarea la 60 Hz. Rezultatul raportează vârfurile, media |a|, numărul de eșantioane, numărul de depășiri, faptele de segment și contoarele de excludere.
+
+Misiunea `campaign-5-comfort-ride` este un catalog 116 separat (`createComfortMissionCatalog`, namespace `campaign:121-comfort`): obiectivul 116 numără cursa (`DROPOFFS`, prag 1), iar poarta de confort este explicită — `comfortMissionOutcome` completează misiunea numai pentru un rezultat `PASSED` și păstrează motivul eșecului în rest. Un `DROPOFF` singur nu încheie obiectivul de confort.
+
+Limitele sunt fixe: 20.000 eșantioane, 64 ferestre 088, 16 segmente, 64 span-uri, identități de maximum 256 de unități UTF-16. Modulul nu are ceas de perete, DOM, renderer, store de profil sau aleator; consumă doar tick-uri autoritare și valori SI. Nu fac parte din contract: UI-ul de confort, XP-ul, persistarea, calibrarea cu pasageri reali și fidelitatea stilului.
+
