@@ -5,7 +5,7 @@
 | Autonomie | Completed | 0 | 0 | 14 / 14 | `██████████` 100% |
 | Babylon | Completed | 0 | 0 | 11 / 11 | `██████████` 100% |
 | Control manual | Completed | 0 | 0 | 8 / 8 | `██████████` 100% |
-| Economie | V1 | 1 | 0 | 0 / 1 | `░░░░░░░░░░` 0% |
+| Economie | Completed | 0 | 0 | 1 / 1 | `██████████` 100% |
 | Experiență | V1 | 2 | 0 | 0 / 2 | `░░░░░░░░░░` 0% |
 | Experimente | V1 | 1 | 0 | 0 / 1 | `░░░░░░░░░░` 0% |
 | Experimente și indicatori | V1 | 5 | 0 | 3 / 8 | `███░░░░░░░` 38% |
@@ -34,7 +34,7 @@
 | Validare și release | V1 | 12 | 0 | 0 / 12 | `░░░░░░░░░░` 0% |
 | Validare V2 | V2 | 2 | 0 | 0 / 2 | `░░░░░░░░░░` 0% |
 | Vehicule și fizică | Completed | 0 | 0 | 11 / 11 | `██████████` 100% |
-| Total | - | 90 | 0 | 145 / 235 | `██████░░░░` 62% |
+| Total | - | 89 | 0 | 146 / 235 | `██████░░░░` 62% |
 <!-- loop-pbi:progress:end -->
 
 # Backlog Kanban Self Driving Academy
