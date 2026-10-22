@@ -1,0 +1,1390 @@
+{
+  "version": "116-mission-schema-v1",
+  "generatedBy": "node --import ./scripts/register-typescript.mjs scripts/run-mission-schema-report.mjs",
+  "oracleRule": "Eight authored campaign missions declare stable ids, definition versions, real-event objectives, rewards, a replay policy and an evaluation window. An instance starts once, advances only from validated 007 events, completes when every objective target is satisfied, fails through an explicit reason, window or incident budget, and can be replayed as the next stable attempt. Event ids and reward identities are idempotent inside bounded ledgers, so a duplicate event or a replay never awards progress or a reward twice; profile state is never touched by the tracker.",
+  "limits": {
+    "version": "116-mission-schema-v1",
+    "missions": 32,
+    "objectivesPerMission": 8,
+    "rewardsPerMission": 4,
+    "activeInstances": 16,
+    "retainedInstances": 64,
+    "attemptsPerMission": 8,
+    "retainedEvents": 8192,
+    "eventCodeUnits": 1048576,
+    "retainedRewards": 4096,
+    "recentEventsPerInstance": 16,
+    "comparisonProfiles": 4,
+    "vehicleFlags": 1024,
+    "idCodeUnits": 256,
+    "instanceIdCodeUnits": 768,
+    "rewardIdCodeUnits": 768,
+    "eventIdCodeUnits": 768,
+    "titleCodeUnits": 160,
+    "versionCodeUnits": 32
+  },
+  "contract": {
+    "namespace": "campaign:116",
+    "states": [
+      "ACTIVE",
+      "COMPLETED",
+      "FAILED"
+    ],
+    "terminalStates": [
+      "COMPLETED",
+      "FAILED"
+    ],
+    "failureReasons": [
+      "EVALUATION_WINDOW_EXPIRED",
+      "INCIDENT_BUDGET_EXCEEDED",
+      "SCENARIO_RESET",
+      "PLAYER_ABANDONED"
+    ],
+    "objectiveKinds": [
+      "DROPOFFS",
+      "MANUAL_DROPOFFS",
+      "CLEAN_DROPOFFS",
+      "LEARNING_ACTIVATIONS",
+      "DISTINCT_PROFILE_VERSIONS",
+      "FULL_STOPS",
+      "LANE_CHANGES",
+      "LEADER_ACQUIRED"
+    ],
+    "rewardKinds": [
+      "XP",
+      "UNLOCK_CHALLENGE",
+      "UNLOCK_VEHICLE_CLASS",
+      "UNLOCK_ANALYSIS_TOOL"
+    ],
+    "difficulties": [
+      "EASY",
+      "NORMAL",
+      "HARD"
+    ],
+    "replayProfileSources": [
+      "CURRENT",
+      "SNAPSHOT"
+    ],
+    "objectiveEvents": {
+      "DROPOFFS": [
+        "DROPOFF"
+      ],
+      "MANUAL_DROPOFFS": [
+        "DROPOFF",
+        "MANUAL_START"
+      ],
+      "CLEAN_DROPOFFS": [
+        "DROPOFF",
+        "COLLISION"
+      ],
+      "LEARNING_ACTIVATIONS": [
+        "PROFILE_ACTIVATE"
+      ],
+      "DISTINCT_PROFILE_VERSIONS": [
+        "PROFILE_ACTIVATE"
+      ],
+      "FULL_STOPS": [
+        "FULL_STOP"
+      ],
+      "LANE_CHANGES": [
+        "LANE_CHANGE_COMPLETED"
+      ],
+      "LEADER_ACQUIRED": [
+        "LEADER_ACQUIRED"
+      ]
+    }
+  },
+  "catalog": {
+    "missions": 8,
+    "order": [
+      "campaign-1-first-taxi",
+      "campaign-2-first-demonstration",
+      "campaign-3-following-distance",
+      "campaign-4-stops-and-signals",
+      "campaign-5-passenger",
+      "campaign-6-city-copies-you",
+      "campaign-7-changing-a-habit",
+      "campaign-8-fleet-challenge"
+    ],
+    "ids": [
+      "campaign-1-first-taxi",
+      "campaign-2-first-demonstration",
+      "campaign-3-following-distance",
+      "campaign-4-stops-and-signals",
+      "campaign-5-passenger",
+      "campaign-6-city-copies-you",
+      "campaign-7-changing-a-habit",
+      "campaign-8-fleet-challenge"
+    ],
+    "rows": [
+      {
+        "missionId": "campaign-1-first-taxi",
+        "version": "1",
+        "title": "Primul taxi",
+        "objectives": [
+          {
+            "objectiveId": "manual-ride",
+            "kind": "MANUAL_DROPOFFS",
+            "target": 1,
+            "easy": null,
+            "hard": null,
+            "minDurationS": null,
+            "profileId": null,
+            "eventTypes": [
+              "DROPOFF",
+              "MANUAL_START"
+            ]
+          }
+        ],
+        "rewards": [
+          {
+            "rewardId": "xp",
+            "kind": "XP",
+            "amount": 100,
+            "unlockId": null
+          },
+          {
+            "rewardId": "unlock-challenge",
+            "kind": "UNLOCK_CHALLENGE",
+            "amount": 0,
+            "unlockId": "challenge:first-demonstration"
+          }
+        ],
+        "replay": {
+          "profileSource": "CURRENT",
+          "snapshotId": null,
+          "scenarioId": null,
+          "comparisonProfileIds": []
+        },
+        "windowTicks": null,
+        "incidentBudget": null,
+        "prerequisites": []
+      },
+      {
+        "missionId": "campaign-2-first-demonstration",
+        "version": "1",
+        "title": "Prima demonstrație",
+        "objectives": [
+          {
+            "objectiveId": "profile-activation",
+            "kind": "LEARNING_ACTIVATIONS",
+            "target": 1,
+            "easy": null,
+            "hard": null,
+            "minDurationS": null,
+            "profileId": null,
+            "eventTypes": [
+              "PROFILE_ACTIVATE"
+            ]
+          }
+        ],
+        "rewards": [
+          {
+            "rewardId": "xp",
+            "kind": "XP",
+            "amount": 100,
+            "unlockId": null
+          },
+          {
+            "rewardId": "unlock-analysis",
+            "kind": "UNLOCK_ANALYSIS_TOOL",
+            "amount": 0,
+            "unlockId": "analysis:learning-review"
+          }
+        ],
+        "replay": {
+          "profileSource": "CURRENT",
+          "snapshotId": null,
+          "scenarioId": null,
+          "comparisonProfileIds": []
+        },
+        "windowTicks": null,
+        "incidentBudget": null,
+        "prerequisites": [
+          "campaign-1-first-taxi"
+        ]
+      },
+      {
+        "missionId": "campaign-3-following-distance",
+        "version": "1",
+        "title": "Distanța în trafic",
+        "objectives": [
+          {
+            "objectiveId": "leader-acquired",
+            "kind": "LEADER_ACQUIRED",
+            "target": 2,
+            "easy": 1,
+            "hard": null,
+            "minDurationS": null,
+            "profileId": null,
+            "eventTypes": [
+              "LEADER_ACQUIRED"
+            ]
+          }
+        ],
+        "rewards": [
+          {
+            "rewardId": "xp",
+            "kind": "XP",
+            "amount": 100,
+            "unlockId": null
+          },
+          {
+            "rewardId": "unlock-challenge",
+            "kind": "UNLOCK_CHALLENGE",
+            "amount": 0,
+            "unlockId": "challenge:following-comparison"
+          }
+        ],
+        "replay": {
+          "profileSource": "SNAPSHOT",
+          "snapshotId": "snapshot:campaign-comparison",
+          "scenarioId": "scenario:following-comparison",
+          "comparisonProfileIds": [
+            "profile:prudent",
+            "profile:reckless"
+          ]
+        },
+        "windowTicks": 18000,
+        "incidentBudget": 2,
+        "prerequisites": [
+          "campaign-2-first-demonstration"
+        ]
+      },
+      {
+        "missionId": "campaign-4-stops-and-signals",
+        "version": "1",
+        "title": "STOP și semafoare",
+        "objectives": [
+          {
+            "objectiveId": "full-stops",
+            "kind": "FULL_STOPS",
+            "target": 2,
+            "easy": 1,
+            "hard": null,
+            "minDurationS": 1.5,
+            "profileId": null,
+            "eventTypes": [
+              "FULL_STOP"
+            ]
+          }
+        ],
+        "rewards": [
+          {
+            "rewardId": "xp",
+            "kind": "XP",
+            "amount": 100,
+            "unlockId": null
+          },
+          {
+            "rewardId": "unlock-analysis",
+            "kind": "UNLOCK_ANALYSIS_TOOL",
+            "amount": 0,
+            "unlockId": "analysis:opportunity-review"
+          }
+        ],
+        "replay": {
+          "profileSource": "CURRENT",
+          "snapshotId": null,
+          "scenarioId": null,
+          "comparisonProfileIds": []
+        },
+        "windowTicks": 12000,
+        "incidentBudget": 1,
+        "prerequisites": [
+          "campaign-3-following-distance"
+        ]
+      },
+      {
+        "missionId": "campaign-5-passenger",
+        "version": "1",
+        "title": "Pasagerul",
+        "objectives": [
+          {
+            "objectiveId": "clean-dropoff",
+            "kind": "CLEAN_DROPOFFS",
+            "target": 1,
+            "easy": null,
+            "hard": null,
+            "minDurationS": null,
+            "profileId": null,
+            "eventTypes": [
+              "DROPOFF",
+              "COLLISION"
+            ]
+          }
+        ],
+        "rewards": [
+          {
+            "rewardId": "xp",
+            "kind": "XP",
+            "amount": 100,
+            "unlockId": null
+          },
+          {
+            "rewardId": "unlock-vehicle-class",
+            "kind": "UNLOCK_VEHICLE_CLASS",
+            "amount": 0,
+            "unlockId": "vehicle-class:comfort-sedan"
+          }
+        ],
+        "replay": {
+          "profileSource": "CURRENT",
+          "snapshotId": null,
+          "scenarioId": null,
+          "comparisonProfileIds": []
+        },
+        "windowTicks": null,
+        "incidentBudget": 1,
+        "prerequisites": [
+          "campaign-4-stops-and-signals"
+        ]
+      },
+      {
+        "missionId": "campaign-6-city-copies-you",
+        "version": "1",
+        "title": "Orașul te copiază",
+        "objectives": [
+          {
+            "objectiveId": "city-activation",
+            "kind": "LEARNING_ACTIVATIONS",
+            "target": 1,
+            "easy": null,
+            "hard": null,
+            "minDurationS": null,
+            "profileId": null,
+            "eventTypes": [
+              "PROFILE_ACTIVATE"
+            ]
+          }
+        ],
+        "rewards": [
+          {
+            "rewardId": "xp",
+            "kind": "XP",
+            "amount": 100,
+            "unlockId": null
+          },
+          {
+            "rewardId": "unlock-challenge",
+            "kind": "UNLOCK_CHALLENGE",
+            "amount": 0,
+            "unlockId": "challenge:fleet-scenario"
+          }
+        ],
+        "replay": {
+          "profileSource": "CURRENT",
+          "snapshotId": null,
+          "scenarioId": null,
+          "comparisonProfileIds": []
+        },
+        "windowTicks": null,
+        "incidentBudget": null,
+        "prerequisites": [
+          "campaign-5-passenger"
+        ]
+      },
+      {
+        "missionId": "campaign-7-changing-a-habit",
+        "version": "1",
+        "title": "Schimbarea unui obicei",
+        "objectives": [
+          {
+            "objectiveId": "distinct-versions",
+            "kind": "DISTINCT_PROFILE_VERSIONS",
+            "target": 2,
+            "easy": null,
+            "hard": null,
+            "minDurationS": null,
+            "profileId": null,
+            "eventTypes": [
+              "PROFILE_ACTIVATE"
+            ]
+          }
+        ],
+        "rewards": [
+          {
+            "rewardId": "xp",
+            "kind": "XP",
+            "amount": 100,
+            "unlockId": null
+          },
+          {
+            "rewardId": "unlock-analysis",
+            "kind": "UNLOCK_ANALYSIS_TOOL",
+            "amount": 0,
+            "unlockId": "analysis:version-comparison"
+          }
+        ],
+        "replay": {
+          "profileSource": "SNAPSHOT",
+          "snapshotId": "snapshot:campaign-habit",
+          "scenarioId": "scenario:habit-comparison",
+          "comparisonProfileIds": [
+            "profile:prudent",
+            "profile:reckless"
+          ]
+        },
+        "windowTicks": null,
+        "incidentBudget": null,
+        "prerequisites": [
+          "campaign-6-city-copies-you"
+        ]
+      },
+      {
+        "missionId": "campaign-8-fleet-challenge",
+        "version": "1",
+        "title": "Provocarea flotei",
+        "objectives": [
+          {
+            "objectiveId": "fleet-clean-dropoffs",
+            "kind": "CLEAN_DROPOFFS",
+            "target": 3,
+            "easy": 2,
+            "hard": 4,
+            "minDurationS": null,
+            "profileId": null,
+            "eventTypes": [
+              "DROPOFF",
+              "COLLISION"
+            ]
+          }
+        ],
+        "rewards": [
+          {
+            "rewardId": "xp",
+            "kind": "XP",
+            "amount": 100,
+            "unlockId": null
+          },
+          {
+            "rewardId": "unlock-challenge",
+            "kind": "UNLOCK_CHALLENGE",
+            "amount": 0,
+            "unlockId": "challenge:fleet-championship"
+          }
+        ],
+        "replay": {
+          "profileSource": "CURRENT",
+          "snapshotId": null,
+          "scenarioId": null,
+          "comparisonProfileIds": []
+        },
+        "windowTicks": 21600,
+        "incidentBudget": 0,
+        "prerequisites": [
+          "campaign-7-changing-a-habit"
+        ]
+      }
+    ]
+  },
+  "lifecycle": {
+    "startState": "ACTIVE",
+    "duplicateStart": true,
+    "state": "COMPLETED",
+    "progress": 1,
+    "target": 1,
+    "completedTick": 12,
+    "appliedEvents": 2,
+    "rewardsGranted": 2,
+    "rewardLedger": 2,
+    "stats": {
+      "instances": 1,
+      "active": 0,
+      "completed": 1,
+      "acceptedEvents": 2,
+      "duplicates": 0,
+      "rewardsGranted": 2,
+      "tick": 12
+    }
+  },
+  "objectives": {
+    "state": "COMPLETED",
+    "rows": [
+      {
+        "objectiveId": "manual",
+        "kind": "MANUAL_DROPOFFS",
+        "progress": 1,
+        "target": 1,
+        "satisfied": true
+      },
+      {
+        "objectiveId": "clean",
+        "kind": "CLEAN_DROPOFFS",
+        "progress": 1,
+        "target": 1,
+        "satisfied": true
+      },
+      {
+        "objectiveId": "dropoffs",
+        "kind": "DROPOFFS",
+        "progress": 2,
+        "target": 2,
+        "satisfied": true
+      },
+      {
+        "objectiveId": "activation",
+        "kind": "LEARNING_ACTIVATIONS",
+        "progress": 1,
+        "target": 1,
+        "satisfied": true
+      },
+      {
+        "objectiveId": "versions",
+        "kind": "DISTINCT_PROFILE_VERSIONS",
+        "progress": 2,
+        "target": 2,
+        "satisfied": true
+      },
+      {
+        "objectiveId": "stop",
+        "kind": "FULL_STOPS",
+        "progress": 1,
+        "target": 1,
+        "satisfied": true
+      },
+      {
+        "objectiveId": "lane",
+        "kind": "LANE_CHANGES",
+        "progress": 1,
+        "target": 1,
+        "satisfied": true
+      },
+      {
+        "objectiveId": "leader",
+        "kind": "LEADER_ACQUIRED",
+        "progress": 1,
+        "target": 1,
+        "satisfied": true
+      }
+    ]
+  },
+  "duplicates": {
+    "manual": [
+      "IGNORED",
+      "DUPLICATE",
+      "ACCEPTED",
+      "DUPLICATE"
+    ],
+    "progressAfterDuplicates": 1,
+    "stateAfterDuplicates": "COMPLETED",
+    "rewardsAfterFirst": 2,
+    "rewardsAfterDuplicate": 2,
+    "conflictRejected": true,
+    "duplicates": 2
+  },
+  "failure": {
+    "window": {
+      "state": "FAILED",
+      "reason": "EVALUATION_WINDOW_EXPIRED",
+      "failedTick": 101,
+      "lateCompletionState": "FAILED",
+      "rewards": 0
+    },
+    "incident": {
+      "state": "FAILED",
+      "reason": "INCIDENT_BUDGET_EXCEEDED",
+      "incidents": 1,
+      "rewards": 0
+    }
+  },
+  "replay": {
+    "firstState": "FAILED",
+    "attempt": 2,
+    "replayedFromMatches": true,
+    "state": "ACTIVE",
+    "progress": 0,
+    "profileSource": "SNAPSHOT",
+    "snapshotId": "snapshot:report-replay",
+    "comparisonProfiles": [
+      "profile:a",
+      "profile:b"
+    ],
+    "rewardsAfterFirstAttempt": 0,
+    "rewardsAfterReplay": 2,
+    "rewardsAfterThirdAttempt": 2,
+    "rewardsGrantedThirdAttempt": 0,
+    "rewardDuplicates": 2
+  },
+  "identity": {
+    "namespace": "campaign:116",
+    "instanceIdPrefix": "id-v1:",
+    "instanceIdsStable": true,
+    "attemptsDistinct": true,
+    "rewardIdStable": true,
+    "rewardVersionScoped": true,
+    "rewardIdentityMatches": true
+  },
+  "restore": {
+    "restoredState": "ACTIVE",
+    "restoredProgress": 1,
+    "duplicateAfterRestore": "DUPLICATE",
+    "continuedState": "COMPLETED",
+    "rewards": 2,
+    "terminalState": "COMPLETED",
+    "replayAttempt": 2,
+    "forgedInstanceRejected": true,
+    "versionMismatchRejected": true
+  },
+  "reset": {
+    "clearedInstances": 1,
+    "instancesAfter": 0,
+    "rewardsKept": 2,
+    "completedAfterReset": 1,
+    "rewardsAfterSecondCompletion": 2,
+    "rewardsGrantedSecondCompletion": 0,
+    "preservedEvents": 2
+  },
+  "realSimulation": {
+    "rides": 3,
+    "allDecisionsCompleted": true,
+    "progress": 3,
+    "state": "COMPLETED",
+    "rewards": 2,
+    "acceptedEvents": 3,
+    "uniqueTaxis": 3,
+    "uniqueRides": 3,
+    "firstDropoffTick": 210,
+    "lastDropoffTick": 610
+  },
+  "bounds": {
+    "ingested": 8256,
+    "retainedEvents": 4462,
+    "retainedEventCodeUnits": 1048570,
+    "droppedEvents": 3794,
+    "activeInstances": 1,
+    "recentEventsPerInstance": 16,
+    "objectiveProgress": 8256,
+    "ancientDuplicate": "STALE_REJECTED"
+  },
+  "checks": [
+    {
+      "name": "version",
+      "expected": "116-mission-schema-v1",
+      "actual": "116-mission-schema-v1",
+      "pass": true,
+      "detail": "One versioned schema."
+    },
+    {
+      "name": "limits",
+      "expected": {
+        "missions": 32,
+        "objectivesPerMission": 8,
+        "rewardsPerMission": 4,
+        "activeInstances": 16,
+        "retainedInstances": 64,
+        "attemptsPerMission": 8,
+        "retainedEvents": 8192,
+        "eventCodeUnits": 1048576,
+        "retainedRewards": 4096,
+        "recentEventsPerInstance": 16
+      },
+      "actual": {
+        "missions": 32,
+        "objectivesPerMission": 8,
+        "rewardsPerMission": 4,
+        "activeInstances": 16,
+        "retainedInstances": 64,
+        "attemptsPerMission": 8,
+        "retainedEvents": 8192,
+        "eventCodeUnits": 1048576,
+        "retainedRewards": 4096,
+        "recentEventsPerInstance": 16
+      },
+      "pass": true,
+      "detail": "Every capacity is a fixed budget; no wall-clock growth."
+    },
+    {
+      "name": "catalog",
+      "expected": {
+        "missions": 8,
+        "ids": [
+          "campaign-1-first-taxi",
+          "campaign-2-first-demonstration",
+          "campaign-3-following-distance",
+          "campaign-4-stops-and-signals",
+          "campaign-5-passenger",
+          "campaign-6-city-copies-you",
+          "campaign-7-changing-a-habit",
+          "campaign-8-fleet-challenge"
+        ],
+        "versions": [
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1"
+        ],
+        "namespace": "campaign:116"
+      },
+      "actual": {
+        "missions": 8,
+        "ids": [
+          "campaign-1-first-taxi",
+          "campaign-2-first-demonstration",
+          "campaign-3-following-distance",
+          "campaign-4-stops-and-signals",
+          "campaign-5-passenger",
+          "campaign-6-city-copies-you",
+          "campaign-7-changing-a-habit",
+          "campaign-8-fleet-challenge"
+        ],
+        "versions": [
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1"
+        ],
+        "namespace": "campaign:116"
+      },
+      "pass": true,
+      "detail": "Eight authored campaign missions with stable ids and definition versions."
+    },
+    {
+      "name": "campaign-order",
+      "expected": [
+        "campaign-1-first-taxi",
+        "campaign-2-first-demonstration",
+        "campaign-3-following-distance",
+        "campaign-4-stops-and-signals",
+        "campaign-5-passenger",
+        "campaign-6-city-copies-you",
+        "campaign-7-changing-a-habit",
+        "campaign-8-fleet-challenge"
+      ],
+      "actual": [
+        "campaign-1-first-taxi",
+        "campaign-2-first-demonstration",
+        "campaign-3-following-distance",
+        "campaign-4-stops-and-signals",
+        "campaign-5-passenger",
+        "campaign-6-city-copies-you",
+        "campaign-7-changing-a-habit",
+        "campaign-8-fleet-challenge"
+      ],
+      "pass": true,
+      "detail": "The prerequisite graph is a DAG in campaign order."
+    },
+    {
+      "name": "objective-kinds",
+      "expected": [
+        "DROPOFFS",
+        "MANUAL_DROPOFFS",
+        "CLEAN_DROPOFFS",
+        "LEARNING_ACTIVATIONS",
+        "DISTINCT_PROFILE_VERSIONS",
+        "FULL_STOPS",
+        "LANE_CHANGES",
+        "LEADER_ACQUIRED"
+      ],
+      "actual": [
+        "DROPOFFS",
+        "MANUAL_DROPOFFS",
+        "CLEAN_DROPOFFS",
+        "LEARNING_ACTIVATIONS",
+        "DISTINCT_PROFILE_VERSIONS",
+        "FULL_STOPS",
+        "LANE_CHANGES",
+        "LEADER_ACQUIRED"
+      ],
+      "pass": true,
+      "detail": "The objective vocabulary is closed."
+    },
+    {
+      "name": "objective-events",
+      "expected": {
+        "DROPOFFS": [
+          "DROPOFF"
+        ],
+        "MANUAL_DROPOFFS": [
+          "DROPOFF",
+          "MANUAL_START"
+        ],
+        "CLEAN_DROPOFFS": [
+          "DROPOFF",
+          "COLLISION"
+        ],
+        "LEARNING_ACTIVATIONS": [
+          "PROFILE_ACTIVATE"
+        ],
+        "DISTINCT_PROFILE_VERSIONS": [
+          "PROFILE_ACTIVATE"
+        ],
+        "FULL_STOPS": [
+          "FULL_STOP"
+        ],
+        "LANE_CHANGES": [
+          "LANE_CHANGE_COMPLETED"
+        ],
+        "LEADER_ACQUIRED": [
+          "LEADER_ACQUIRED"
+        ]
+      },
+      "actual": {
+        "DROPOFFS": [
+          "DROPOFF"
+        ],
+        "MANUAL_DROPOFFS": [
+          "DROPOFF",
+          "MANUAL_START"
+        ],
+        "CLEAN_DROPOFFS": [
+          "DROPOFF",
+          "COLLISION"
+        ],
+        "LEARNING_ACTIVATIONS": [
+          "PROFILE_ACTIVATE"
+        ],
+        "DISTINCT_PROFILE_VERSIONS": [
+          "PROFILE_ACTIVATE"
+        ],
+        "FULL_STOPS": [
+          "FULL_STOP"
+        ],
+        "LANE_CHANGES": [
+          "LANE_CHANGE_COMPLETED"
+        ],
+        "LEADER_ACQUIRED": [
+          "LEADER_ACQUIRED"
+        ]
+      },
+      "pass": true,
+      "detail": "Each objective consumes only real 007 events."
+    },
+    {
+      "name": "states",
+      "expected": {
+        "states": [
+          "ACTIVE",
+          "COMPLETED",
+          "FAILED"
+        ],
+        "terminal": [
+          "COMPLETED",
+          "FAILED"
+        ],
+        "failureReasons": [
+          "EVALUATION_WINDOW_EXPIRED",
+          "INCIDENT_BUDGET_EXCEEDED",
+          "SCENARIO_RESET",
+          "PLAYER_ABANDONED"
+        ],
+        "rewardKinds": [
+          "XP",
+          "UNLOCK_CHALLENGE",
+          "UNLOCK_VEHICLE_CLASS",
+          "UNLOCK_ANALYSIS_TOOL"
+        ],
+        "difficulties": [
+          "EASY",
+          "NORMAL",
+          "HARD"
+        ],
+        "replayProfileSources": [
+          "CURRENT",
+          "SNAPSHOT"
+        ]
+      },
+      "actual": {
+        "states": [
+          "ACTIVE",
+          "COMPLETED",
+          "FAILED"
+        ],
+        "terminal": [
+          "COMPLETED",
+          "FAILED"
+        ],
+        "failureReasons": [
+          "EVALUATION_WINDOW_EXPIRED",
+          "INCIDENT_BUDGET_EXCEEDED",
+          "SCENARIO_RESET",
+          "PLAYER_ABANDONED"
+        ],
+        "rewardKinds": [
+          "XP",
+          "UNLOCK_CHALLENGE",
+          "UNLOCK_VEHICLE_CLASS",
+          "UNLOCK_ANALYSIS_TOOL"
+        ],
+        "difficulties": [
+          "EASY",
+          "NORMAL",
+          "HARD"
+        ],
+        "replayProfileSources": [
+          "CURRENT",
+          "SNAPSHOT"
+        ]
+      },
+      "pass": true,
+      "detail": "Lifecycle, failure and reward vocabularies are closed."
+    },
+    {
+      "name": "difficulty-targets",
+      "expected": {
+        "easy": 2,
+        "normal": 3,
+        "hard": 4,
+        "incidentBudget": 0
+      },
+      "actual": {
+        "easy": 2,
+        "normal": 3,
+        "hard": 4,
+        "incidentBudget": 0
+      },
+      "pass": true,
+      "detail": "Difficulty changes declared thresholds only, never the learned style."
+    },
+    {
+      "name": "lifecycle",
+      "expected": {
+        "startState": "ACTIVE",
+        "duplicateStart": true,
+        "state": "COMPLETED",
+        "progress": 1,
+        "target": 1,
+        "completedTick": 12,
+        "appliedEvents": 2,
+        "rewardsGranted": 2,
+        "rewardLedger": 2,
+        "stats": {
+          "instances": 1,
+          "active": 0,
+          "completed": 1,
+          "acceptedEvents": 2,
+          "duplicates": 0,
+          "rewardsGranted": 2,
+          "tick": 12
+        }
+      },
+      "actual": {
+        "startState": "ACTIVE",
+        "duplicateStart": true,
+        "state": "COMPLETED",
+        "progress": 1,
+        "target": 1,
+        "completedTick": 12,
+        "appliedEvents": 2,
+        "rewardsGranted": 2,
+        "rewardLedger": 2,
+        "stats": {
+          "instances": 1,
+          "active": 0,
+          "completed": 1,
+          "acceptedEvents": 2,
+          "duplicates": 0,
+          "rewardsGranted": 2,
+          "tick": 12
+        }
+      },
+      "pass": true,
+      "detail": "Start, MANUAL progress and completion run through the real 007 bus."
+    },
+    {
+      "name": "objectives",
+      "expected": {
+        "state": "COMPLETED",
+        "rows": [
+          {
+            "objectiveId": "manual",
+            "kind": "MANUAL_DROPOFFS",
+            "progress": 1,
+            "target": 1,
+            "satisfied": true
+          },
+          {
+            "objectiveId": "clean",
+            "kind": "CLEAN_DROPOFFS",
+            "progress": 1,
+            "target": 1,
+            "satisfied": true
+          },
+          {
+            "objectiveId": "dropoffs",
+            "kind": "DROPOFFS",
+            "progress": 2,
+            "target": 2,
+            "satisfied": true
+          },
+          {
+            "objectiveId": "activation",
+            "kind": "LEARNING_ACTIVATIONS",
+            "progress": 1,
+            "target": 1,
+            "satisfied": true
+          },
+          {
+            "objectiveId": "versions",
+            "kind": "DISTINCT_PROFILE_VERSIONS",
+            "progress": 2,
+            "target": 2,
+            "satisfied": true
+          },
+          {
+            "objectiveId": "stop",
+            "kind": "FULL_STOPS",
+            "progress": 1,
+            "target": 1,
+            "satisfied": true
+          },
+          {
+            "objectiveId": "lane",
+            "kind": "LANE_CHANGES",
+            "progress": 1,
+            "target": 1,
+            "satisfied": true
+          },
+          {
+            "objectiveId": "leader",
+            "kind": "LEADER_ACQUIRED",
+            "progress": 1,
+            "target": 1,
+            "satisfied": true
+          }
+        ]
+      },
+      "actual": {
+        "state": "COMPLETED",
+        "rows": [
+          {
+            "objectiveId": "manual",
+            "kind": "MANUAL_DROPOFFS",
+            "progress": 1,
+            "target": 1,
+            "satisfied": true
+          },
+          {
+            "objectiveId": "clean",
+            "kind": "CLEAN_DROPOFFS",
+            "progress": 1,
+            "target": 1,
+            "satisfied": true
+          },
+          {
+            "objectiveId": "dropoffs",
+            "kind": "DROPOFFS",
+            "progress": 2,
+            "target": 2,
+            "satisfied": true
+          },
+          {
+            "objectiveId": "activation",
+            "kind": "LEARNING_ACTIVATIONS",
+            "progress": 1,
+            "target": 1,
+            "satisfied": true
+          },
+          {
+            "objectiveId": "versions",
+            "kind": "DISTINCT_PROFILE_VERSIONS",
+            "progress": 2,
+            "target": 2,
+            "satisfied": true
+          },
+          {
+            "objectiveId": "stop",
+            "kind": "FULL_STOPS",
+            "progress": 1,
+            "target": 1,
+            "satisfied": true
+          },
+          {
+            "objectiveId": "lane",
+            "kind": "LANE_CHANGES",
+            "progress": 1,
+            "target": 1,
+            "satisfied": true
+          },
+          {
+            "objectiveId": "leader",
+            "kind": "LEADER_ACQUIRED",
+            "progress": 1,
+            "target": 1,
+            "satisfied": true
+          }
+        ]
+      },
+      "pass": true,
+      "detail": "Every objective kind advances from its real event payload, including the FULL_STOP floor."
+    },
+    {
+      "name": "duplicates",
+      "expected": {
+        "manual": [
+          "IGNORED",
+          "DUPLICATE",
+          "ACCEPTED",
+          "DUPLICATE"
+        ],
+        "progressAfterDuplicates": 1,
+        "stateAfterDuplicates": "COMPLETED",
+        "rewardsAfterFirst": 2,
+        "rewardsAfterDuplicate": 2,
+        "conflictRejected": true,
+        "duplicates": 2
+      },
+      "actual": {
+        "manual": [
+          "IGNORED",
+          "DUPLICATE",
+          "ACCEPTED",
+          "DUPLICATE"
+        ],
+        "progressAfterDuplicates": 1,
+        "stateAfterDuplicates": "COMPLETED",
+        "rewardsAfterFirst": 2,
+        "rewardsAfterDuplicate": 2,
+        "conflictRejected": true,
+        "duplicates": 2
+      },
+      "pass": true,
+      "detail": "A repeated event id is DUPLICATE and never re-awards progress or rewards."
+    },
+    {
+      "name": "window-failure",
+      "expected": {
+        "state": "FAILED",
+        "reason": "EVALUATION_WINDOW_EXPIRED",
+        "failedTick": 101,
+        "lateCompletionState": "FAILED",
+        "rewards": 0
+      },
+      "actual": {
+        "state": "FAILED",
+        "reason": "EVALUATION_WINDOW_EXPIRED",
+        "failedTick": 101,
+        "lateCompletionState": "FAILED",
+        "rewards": 0
+      },
+      "pass": true,
+      "detail": "A late terminal event cannot complete a mission after its window."
+    },
+    {
+      "name": "incident-failure",
+      "expected": {
+        "state": "FAILED",
+        "reason": "INCIDENT_BUDGET_EXCEEDED",
+        "incidents": 1,
+        "rewards": 0
+      },
+      "actual": {
+        "state": "FAILED",
+        "reason": "INCIDENT_BUDGET_EXCEEDED",
+        "incidents": 1,
+        "rewards": 0
+      },
+      "pass": true,
+      "detail": "An exceeded incident budget fails the mission without a reward."
+    },
+    {
+      "name": "replay",
+      "expected": {
+        "firstState": "FAILED",
+        "attempt": 2,
+        "replayedFromMatches": true,
+        "state": "ACTIVE",
+        "progress": 0,
+        "profileSource": "SNAPSHOT",
+        "snapshotId": "snapshot:report-replay",
+        "comparisonProfiles": [
+          "profile:a",
+          "profile:b"
+        ],
+        "rewardsAfterFirstAttempt": 0,
+        "rewardsAfterReplay": 2,
+        "rewardsAfterThirdAttempt": 2,
+        "rewardsGrantedThirdAttempt": 0,
+        "rewardDuplicates": 2
+      },
+      "actual": {
+        "firstState": "FAILED",
+        "attempt": 2,
+        "replayedFromMatches": true,
+        "state": "ACTIVE",
+        "progress": 0,
+        "profileSource": "SNAPSHOT",
+        "snapshotId": "snapshot:report-replay",
+        "comparisonProfiles": [
+          "profile:a",
+          "profile:b"
+        ],
+        "rewardsAfterFirstAttempt": 0,
+        "rewardsAfterReplay": 2,
+        "rewardsAfterThirdAttempt": 2,
+        "rewardsGrantedThirdAttempt": 0,
+        "rewardDuplicates": 2
+      },
+      "pass": true,
+      "detail": "Replay creates the next stable attempt, resets progress, keeps earned rewards once."
+    },
+    {
+      "name": "identity",
+      "expected": {
+        "namespace": "campaign:116",
+        "instanceIdPrefix": "id-v1:",
+        "instanceIdsStable": true,
+        "attemptsDistinct": true,
+        "rewardIdStable": true,
+        "rewardVersionScoped": true,
+        "rewardIdentityMatches": true
+      },
+      "actual": {
+        "namespace": "campaign:116",
+        "instanceIdPrefix": "id-v1:",
+        "instanceIdsStable": true,
+        "attemptsDistinct": true,
+        "rewardIdStable": true,
+        "rewardVersionScoped": true,
+        "rewardIdentityMatches": true
+      },
+      "pass": true,
+      "detail": "Instance and reward identities are stable 006 values, version-scoped for rewards."
+    },
+    {
+      "name": "restore",
+      "expected": {
+        "restoredState": "ACTIVE",
+        "restoredProgress": 1,
+        "duplicateAfterRestore": "DUPLICATE",
+        "continuedState": "COMPLETED",
+        "rewards": 2,
+        "terminalState": "COMPLETED",
+        "replayAttempt": 2,
+        "forgedInstanceRejected": true,
+        "versionMismatchRejected": true
+      },
+      "actual": {
+        "restoredState": "ACTIVE",
+        "restoredProgress": 1,
+        "duplicateAfterRestore": "DUPLICATE",
+        "continuedState": "COMPLETED",
+        "rewards": 2,
+        "terminalState": "COMPLETED",
+        "replayAttempt": 2,
+        "forgedInstanceRejected": true,
+        "versionMismatchRejected": true
+      },
+      "pass": true,
+      "detail": "Snapshot/restore keeps progress and idempotency; forged identities are rejected."
+    },
+    {
+      "name": "reset",
+      "expected": {
+        "clearedInstances": 1,
+        "instancesAfter": 0,
+        "rewardsKept": 2,
+        "completedAfterReset": 1,
+        "rewardsAfterSecondCompletion": 2,
+        "rewardsGrantedSecondCompletion": 0,
+        "preservedEvents": 2
+      },
+      "actual": {
+        "clearedInstances": 1,
+        "instancesAfter": 0,
+        "rewardsKept": 2,
+        "completedAfterReset": 1,
+        "rewardsAfterSecondCompletion": 2,
+        "rewardsGrantedSecondCompletion": 0,
+        "preservedEvents": 2
+      },
+      "pass": true,
+      "detail": "A scenario reset clears instances but keeps processed events and rewards."
+    },
+    {
+      "name": "real-simulation",
+      "expected": {
+        "rides": 3,
+        "allDecisionsCompleted": true,
+        "progress": 3,
+        "state": "COMPLETED",
+        "rewards": 2,
+        "acceptedEvents": 3,
+        "uniqueTaxis": 3,
+        "uniqueRides": 3,
+        "firstDropoffTick": 210,
+        "lastDropoffTick": 610
+      },
+      "actual": {
+        "rides": 3,
+        "allDecisionsCompleted": true,
+        "progress": 3,
+        "state": "COMPLETED",
+        "rewards": 2,
+        "acceptedEvents": 3,
+        "uniqueTaxis": 3,
+        "uniqueRides": 3,
+        "firstDropoffTick": 210,
+        "lastDropoffTick": 610
+      },
+      "pass": true,
+      "detail": "Real 057/059/060/061/063 rides advance the mission through real 007 events."
+    },
+    {
+      "name": "bounded-ledger",
+      "expected": {
+        "ingested": 8256,
+        "retainedEvents": 4462,
+        "retainedEventCodeUnits": 1048570,
+        "droppedEvents": 3794,
+        "activeInstances": 1,
+        "recentEventsPerInstance": 16,
+        "objectiveProgress": 8256,
+        "ancientDuplicate": "STALE_REJECTED"
+      },
+      "actual": {
+        "ingested": 8256,
+        "retainedEvents": 4462,
+        "retainedEventCodeUnits": 1048570,
+        "droppedEvents": 3794,
+        "activeInstances": 1,
+        "recentEventsPerInstance": 16,
+        "objectiveProgress": 8256,
+        "ancientDuplicate": "STALE_REJECTED"
+      },
+      "pass": true,
+      "detail": "The event ledger and per-instance evidence stay bounded; an ancient replay is stale."
+    },
+    {
+      "name": "determinism",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Two identical real simulations produce identical results."
+    },
+    {
+      "name": "no-wall-clock",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The source has no Date, timer or ambient randomness."
+    },
+    {
+      "name": "no-dom-or-renderer",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The source has no DOM, Babylon or Rapier dependency."
+    },
+    {
+      "name": "validation-errors",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Malformed definitions, catalogs and options are rejected instead of defaulted."
+    }
+  ],
+  "summary": {
+    "checks": 23,
+    "passed": 23,
+    "pass": true
+  }
+}

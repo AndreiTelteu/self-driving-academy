@@ -1,2 +1,59 @@
-/** Public entry point reserved for the missions module; no gameplay implementation yet. */
-export {};
+export {
+  MISSION_CATALOG_NAMESPACE,
+  MISSION_FAILURE_REASONS,
+  MISSION_OBJECTIVE_EVENT_TYPES,
+  MISSION_TERMINAL_STATES,
+  campaignMissionDefinitions,
+  campaignOrder,
+  createCampaignMissionCatalog,
+  missionDefinitionIds,
+  missionDifficulties,
+  missionObjectiveKinds,
+  missionReplayProfileSources,
+  missionRewardKinds,
+  missionStates,
+  missionTargetFor,
+  missionInstanceId,
+  missionProgressKey,
+  missionRewardId,
+  parseMissionCatalog,
+  parseMissionDefinition,
+} from './definitions';
+export type {
+  MissionCatalog,
+  MissionDefinition,
+  MissionDifficulty,
+  MissionDifficultyTargets,
+  MissionFailureReason,
+  MissionObjective,
+  MissionObjectiveKind,
+  MissionReplay,
+  MissionReplayProfileSource,
+  MissionReward,
+  MissionRewardKind,
+  MissionState,
+  MissionTerminalState,
+} from './definitions';
+export {
+  MISSION_INSTANCE_FIELDS,
+  attemptInstanceId,
+  createMissionTracker,
+  rewardIdentityOf,
+} from './lifecycle';
+export type {
+  MissionAdvanceResult,
+  MissionAdvancedObjective,
+  MissionIngestResult,
+  MissionInstance,
+  MissionObjectiveState,
+  MissionReplayResult,
+  MissionResetResult,
+  MissionRewardGrant,
+  MissionSnapshotEntry,
+  MissionStartResult,
+  MissionTracker,
+  MissionTrackerOptions,
+  MissionTrackerSnapshot,
+  MissionTrackerStats,
+} from './lifecycle';
+export { MISSION_LIMITS, MISSION_SCHEMA_VERSION } from './contracts';
