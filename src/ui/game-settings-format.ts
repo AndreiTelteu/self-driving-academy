@@ -804,5 +804,6 @@ export function gameSettingsRuntimeCandidate(
     units: { ...current.proposed.units },
     quality: { ...current.proposed.graphics },
     scenario: { ...base.scenario },
+    audio: { ...base.audio },
   };
 }

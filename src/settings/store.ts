@@ -1,5 +1,5 @@
 import { requireContract } from '../sessions';
-import { parseRuntimeSettings, type RuntimeSettings } from './contracts';
+import { defaultAudioPreferences, parseRuntimeSettings, type RuntimeSettings } from './contracts';
 
 /** Defaults are declarative;025 input mapping does not alter vehicle mechanics or hardware budgets. */
 export function createDefaultSettings(playerId: string, controlVersion = 0): RuntimeSettings {
@@ -47,6 +47,7 @@ export function createDefaultSettings(playerId: string, controlVersion = 0): Run
       taxiCount: 24,
       civilianCount: 40,
     },
+    audio: defaultAudioPreferences(),
   });
 }
 

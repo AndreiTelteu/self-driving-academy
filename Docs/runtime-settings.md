@@ -4,7 +4,9 @@ PBI 009 implementează modulul pur [src/settings](../src/settings/index.ts). Set
 
 ## Contract public
 
-`RuntimeSettings` are `schemaVersion: 1`, `playerId`, `input`, `units`, `quality` și `scenario`. Parserele primesc `unknown`, resping câmpuri lipsă/suplimentare, obiecte exotice, simboluri, getters, valori nefinite și versiuni necunoscute. Construiesc copii defensive readonly, înghețate recursiv. Nu există migrare implicită din altă schemă.
+`RuntimeSettings` are `schemaVersion: 1`, `playerId`, `input`, `units`, `quality`, `scenario` și `audio`. Parserele primesc `unknown`, resping câmpuri lipsă/suplimentare, obiecte exotice, simboluri, getters, valori nefinite și versiuni necunoscute. Construiesc copii defensive readonly, înghețate recursiv. Nu există migrare implicită din altă schemă.
+
+Grupul `audio` a fost adăugat de PBI 148: un snapshot scris înaintea lui rămâne lizibil și primește nivelurile implicite documentate, fără migrarea implicită a celorlalte câmpuri.
 
 | Contract | Conținut și limite |
 | --- | --- |
@@ -13,6 +15,7 @@ PBI 009 implementează modulul pur [src/settings](../src/settings/index.ts). Set
 | `UnitPreferences` | Viteză km/h sau mph și distanță m sau ft; doar afișare, simularea rămâne SI |
 | `QualityPreferences` | LOW/MEDIUM/HIGH, preferredBackend AUTO/WEBGPU/WEBGL2, resolutionScale 0,5–1 și adaptive boolean |
 | `ScenarioConfiguration` | scenarioId/mapVersion nenule, seed uint32, taxiCount/civilianCount întregi siguri ≥0; configurație de lansare, nu snapshot de lume |
+| `AudioPreferences` | `schemaVersion: 1`; `master`, `engine`, `impact` și `ui` în 0–1; `muted` boolean. Preferințe de afișare: nu schimbă simularea, fizica sau informațiile vizuale |
 
 Codurile tastaturii acceptate sunt KeyA–KeyZ, Digit0–Digit9, săgeți, Space, Tab, Escape, Enter, Backspace, Shift/Control/Alt Left/Right și F1–F12. Conflictul dintre două acțiuni respinge întregul candidat. Bindingurile nu implementează capturarea inputului, focusul sau dialogurile; acestea sunt scope-ul input/UI. Gamepadul și remaparea hardware se extind printr-o schemă explicită.
 
@@ -27,6 +30,8 @@ Codurile tastaturii acceptate sunt KeyA–KeyZ, Digit0–Digit9, săgeți, Space
 Calitatea inițială MEDIUM/AUTO, resolutionScale 1 și adaptive false sunt preferințe declarative. Domeniul resolutionScale 0,5–1 este provizoriu înainte de 203; preseturile nu conțin bugete calibrate sau o promisiune de FPS. preferredBackend este o preferință, nu dovada suportului; inițializarea rendererului și fallbackul WebGL2 rămân independente. Setările grafice nu conțin populația, timestepul, parametrii profilului sau recompense.
 
 Scenariul inițial `provisional-city-v1`, mapVersion `provisional-v1`, seed 1, 24 taxiuri și 40 civili este un fixture propus, nu o hartă implementată sau o populație măsurată. Parserul validează forma și domeniul numeric; existența hărții/scenariului și admiterea unei populații în buget sunt verificări viitoare ale lansării. Nu se inventează un plafon hardware înainte de calibrare.
+
+Nivelurile audio inițiale sunt `master` 0,8, `engine` 0,7, `impact` 0,9, `ui` 0,6 și `muted` fals. Ele sunt preferințe de afișare: `muted` este comutatorul global de ieșire audio și nu oprește tick-ul, fizica, telemetria sau HUD-ul. O modificare de volum nu este o schimbare de preferință de control, deci nu cere o revizie nouă a lui `input.control.version`; resetul setărilor restaurează și nivelurile audio implicite. Contractul de mixaj și plafoanele de voci sunt în [modulul 16](16-asseturi-vizual-si-audio.md).
 
 ## Store atomic și reset independent
 

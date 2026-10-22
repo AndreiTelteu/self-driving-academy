@@ -268,6 +268,7 @@ test('081 settings stay distinct from profiles, fleet style and AI', () => {
   assert.equal(saved.status, 'SAVED');
   if (saved.status !== 'SAVED') return;
   assert.deepEqual(Object.keys(saved.settings).sort(), [
+    'audio',
     'input',
     'playerId',
     'quality',

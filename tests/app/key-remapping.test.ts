@@ -166,6 +166,7 @@ test('080 settings stay distinct from the learned profile and never import profi
   assert.equal(saved.status, 'SAVED');
   if (saved.status !== 'SAVED') return;
   assert.deepEqual(Object.keys(saved.settings).sort(), [
+    'audio',
     'input',
     'playerId',
     'quality',

@@ -1,4 +1,4 @@
-import { boolean, choice, fields, number, requireContract, text, tick } from '../sessions';
+import { boolean, choice, fields, number, record, requireContract, text, tick } from '../sessions';
 
 /** Versioned UI preferences; legacy provisional values require explicit upgrade for live input. */
 export interface ControlPreferences {
@@ -62,6 +62,47 @@ export interface ScenarioConfiguration {
   readonly civilianCount: number;
 }
 
+/**
+ * Audio preferences of the 148 audio engine.
+ *
+ * `master` is the only global output level and `muted` is the only global output switch; the
+ * three category levels are independent mix buses (engine, impact, ui). The values are display
+ * preferences: they never change the simulation, the physics or the visible information.
+ */
+export interface AudioPreferences {
+  readonly schemaVersion: 1;
+  readonly master: number;
+  readonly engine: number;
+  readonly impact: number;
+  readonly ui: number;
+  readonly muted: boolean;
+}
+
+export function defaultAudioPreferences(): AudioPreferences {
+  return Object.freeze({
+    schemaVersion: 1,
+    master: 0.8,
+    engine: 0.7,
+    impact: 0.9,
+    ui: 0.6,
+    muted: false,
+  });
+}
+
+export function parseAudioPreferences(value: unknown): AudioPreferences {
+  const data = fields(value, ['schemaVersion', 'master', 'engine', 'impact', 'ui', 'muted']);
+  requireContract(data.schemaVersion === 1, 'Unsupported audio preferences schema');
+  return Object.freeze({
+    schemaVersion: 1,
+    master: number(data.master, 0, 1),
+    engine: number(data.engine, 0, 1),
+    impact: number(data.impact, 0, 1),
+    ui: number(data.ui, 0, 1),
+    muted: boolean(data.muted),
+  });
+}
+
+/** Runtime settings of the player. */
 export interface RuntimeSettings {
   readonly schemaVersion: 1;
   readonly playerId: string;
@@ -69,6 +110,7 @@ export interface RuntimeSettings {
   readonly units: UnitPreferences;
   readonly quality: QualityPreferences;
   readonly scenario: ScenarioConfiguration;
+  readonly audio: AudioPreferences;
 }
 
 export function parseControlPreferences(value: unknown): ControlPreferences {
@@ -157,14 +199,16 @@ export function parseScenarioConfiguration(value: unknown): ScenarioConfiguratio
 }
 
 export function parseRuntimeSettings(value: unknown): RuntimeSettings {
-  const data = fields(value, [
-    'schemaVersion',
-    'playerId',
-    'input',
-    'units',
-    'quality',
-    'scenario',
-  ]);
+  // The audio group was added by 148; snapshots written before it stay readable and receive the
+  // documented default levels instead of being rejected.
+  const data = record(value);
+  const required = ['schemaVersion', 'playerId', 'input', 'units', 'quality', 'scenario'] as const;
+  const allowed = [...required, 'audio'] as const;
+  requireContract(
+    required.every((key) => Object.hasOwn(data, key)) &&
+      Object.keys(data).every((key) => (allowed as readonly string[]).includes(key)),
+    'Missing or unknown contract fields',
+  );
   requireContract(data.schemaVersion === 1, 'Unsupported runtime settings schema');
   return Object.freeze({
     schemaVersion: 1,
@@ -173,5 +217,8 @@ export function parseRuntimeSettings(value: unknown): RuntimeSettings {
     units: parseUnitPreferences(data.units),
     quality: parseQualityPreferences(data.quality),
     scenario: parseScenarioConfiguration(data.scenario),
+    audio: Object.hasOwn(data, 'audio')
+      ? parseAudioPreferences(data.audio)
+      : defaultAudioPreferences(),
   });
 }

@@ -1,0 +1,41 @@
+{
+  "fixture": {
+    "version": "148-audio-fixture-v1",
+    "vehicles": 70,
+    "ticks": 600,
+    "repetitions": 5,
+    "audibleVehicles": 24
+  },
+  "baseline": {
+    "totalMs": 1.3168,
+    "perTickUs": 2.1947
+  },
+  "withAudio": {
+    "totalMs": 23.9161,
+    "perTickUs": 39.8602,
+    "voicesStarted": 12,
+    "activeVoices": 6
+  },
+  "delta": {
+    "perTickUs": 37.6655,
+    "relativeShare": 0.944941
+  },
+  "memory": {
+    "heapBeforeBytes": 10282704,
+    "heapAfterBytes": 10291464,
+    "heapDeltaBytes": 23888,
+    "ownedBufferBytes": 44100,
+    "gcAvailable": true
+  },
+  "budgets": {
+    "authoritativeTickP95Ms": 5.5,
+    "mainThreadP95Ms": 10,
+    "audioBufferBytesCap": 1048576
+  },
+  "method": "Local cost probe in Node: the same deterministic fixture is iterated with and without the audio engine in the same process, the median of five repetitions is reported, and the additional per-tick work plus the retained heap of a live engine and the owned buffer bytes are the measured values.",
+  "limitations": [
+    "Local cost probe, not a hardware frame gate: it does not certify the frame budget of the game.",
+    "Other processes on the same machine may pollute the timings; the medians of five repetitions reduce but cannot remove that noise.",
+    "The heap delta of Node is not the memory of a browser page; the owned buffer bytes are the auditable figure of the audio subsystem."
+  ]
+}
