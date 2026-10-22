@@ -1,0 +1,727 @@
+{
+  "version": "229-control-sliders-v1",
+  "contract": {
+    "policy": "Ajustează doar inputul și camera. Mașina, frânarea, aderența și stilul AI rămân neschimbate.",
+    "fields": [
+      "steeringSensitivity",
+      "returnRate",
+      "speedAttenuation",
+      "throttleRamp",
+      "brakeRamp",
+      "cameraMotion",
+      "fov"
+    ],
+    "ranges": {
+      "steeringSensitivity": "0–100",
+      "returnRate": "0–100",
+      "speedAttenuation": "0–100",
+      "throttleRamp": "0–100",
+      "brakeRamp": "0–100",
+      "cameraMotion": "0–100",
+      "fov": "60–100"
+    },
+    "presets": {
+      "ACCESSIBLE": {
+        "steeringSensitivity": 30,
+        "returnRate": 80,
+        "speedAttenuation": 80,
+        "throttleRamp": 25,
+        "brakeRamp": 70,
+        "cameraMotion": 0,
+        "fov": 72
+      },
+      "BALANCED": {
+        "steeringSensitivity": 50,
+        "returnRate": 50,
+        "speedAttenuation": 50,
+        "throttleRamp": 50,
+        "brakeRamp": 50,
+        "cameraMotion": 50,
+        "fov": 80
+      },
+      "DIRECT": {
+        "steeringSensitivity": 80,
+        "returnRate": 40,
+        "speedAttenuation": 25,
+        "throttleRamp": 75,
+        "brakeRamp": 35,
+        "cameraMotion": 60,
+        "fov": 88
+      }
+    },
+    "ends": {
+      "steeringSensitivity": "Lină–Directă",
+      "returnRate": "Lentă–Rapidă",
+      "speedAttenuation": "Puțină–Multă",
+      "throttleRamp": "Lentă–Rapidă",
+      "brakeRamp": "Lentă–Rapidă",
+      "cameraMotion": "Stabilă–Mobilă",
+      "fov": "Îngust–Larg"
+    },
+    "hints": [
+      "Cât de repede crește comanda de direcție când apeși pe viraj.",
+      "Cât de repede revine volanul la neutru după ce eliberezi.",
+      "Cât de mult se reduce virajul la viteză mare.",
+      "Cât de lin crește accelerația cât timp ții apăsat.",
+      "Cât de lin crește frânarea cât timp ții apăsat.",
+      "Cât de mult urmărește camera mișcarea; 0 ține camera stabilă.",
+      "Cât de larg vezi în prima persoană, în grade."
+    ],
+    "writeHz": 10,
+    "writeIntervalMs": 100,
+    "keyboard": [
+      "ArrowLeft/ArrowRight step one unit",
+      "ArrowDown/ArrowUp step one unit",
+      "PageDown/PageUp step ten units",
+      "Home/End jump to the domain ends"
+    ],
+    "layout": {
+      "region": "STANDARD",
+      "widthPx": 416,
+      "maxHeightPx": 648,
+      "listMaxHeightPx": 397,
+      "visibleRows": 4,
+      "totalRows": 7,
+      "scrolls": true
+    },
+    "contrast": [
+      {
+        "pair": "text-on-surface",
+        "ratio": 16.97,
+        "required": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "muted-on-surface",
+        "ratio": 11.13,
+        "required": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "strong-on-raised",
+        "ratio": 12.69,
+        "required": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "focus-on-surface",
+        "ratio": 11.53,
+        "required": 3,
+        "pass": true
+      },
+      {
+        "pair": "warning-on-surface",
+        "ratio": 12.85,
+        "required": 4.5,
+        "pass": true
+      }
+    ]
+  },
+  "scenarios": [
+    {
+      "name": "default",
+      "saveState": "UNCHANGED",
+      "activePreset": "BALANCED",
+      "changedFields": [],
+      "summary": "Nicio modificare față de reglajele salvate; nimic de aplicat.",
+      "values": "steeringSensitivity=50,returnRate=50,speedAttenuation=50,throttleRamp=50,brakeRamp=50,cameraMotion=50,fov=80",
+      "stats": {
+        "controls": 16,
+        "writes": 27,
+        "renders": 1,
+        "skipped": 0,
+        "inputEvents": 0,
+        "throttledReads": 0,
+        "changes": 0,
+        "presetsUsed": 0,
+        "applies": 0,
+        "cancels": 0,
+        "resets": 0,
+        "listeners": 21,
+        "globalListeners": 0
+      }
+    },
+    {
+      "name": "preset DIRECT",
+      "saveState": "DIRTY",
+      "activePreset": "DIRECT",
+      "changedFields": [
+        "steeringSensitivity",
+        "returnRate",
+        "speedAttenuation",
+        "throttleRamp",
+        "brakeRamp",
+        "cameraMotion",
+        "fov"
+      ],
+      "summary": "7 reglaje modificate: Sensibilitatea direcției, Revenirea volanului, Direcție mai calmă la viteză, Accelerație progresivă, Frânare progresivă, Mișcarea camerei, Câmp vizual. Nimic nu se aplică până la Aplică.",
+      "values": "steeringSensitivity=80,returnRate=40,speedAttenuation=25,throttleRamp=75,brakeRamp=35,cameraMotion=60,fov=88",
+      "stats": {
+        "controls": 16,
+        "writes": 55,
+        "renders": 2,
+        "skipped": 0,
+        "inputEvents": 0,
+        "throttledReads": 0,
+        "changes": 0,
+        "presetsUsed": 1,
+        "applies": 0,
+        "cancels": 0,
+        "resets": 0,
+        "listeners": 21,
+        "globalListeners": 0
+      }
+    },
+    {
+      "name": "extreme min",
+      "saveState": "DIRTY",
+      "activePreset": null,
+      "changedFields": [
+        "steeringSensitivity",
+        "returnRate",
+        "speedAttenuation",
+        "throttleRamp",
+        "brakeRamp",
+        "cameraMotion",
+        "fov"
+      ],
+      "summary": "7 reglaje modificate: Sensibilitatea direcției, Revenirea volanului, Direcție mai calmă la viteză, Accelerație progresivă, Frânare progresivă, Mișcarea camerei, Câmp vizual. Nimic nu se aplică până la Aplică.",
+      "values": "steeringSensitivity=0,returnRate=0,speedAttenuation=0,throttleRamp=0,brakeRamp=0,cameraMotion=0,fov=60",
+      "stats": {
+        "controls": 16,
+        "writes": 66,
+        "renders": 8,
+        "skipped": 0,
+        "inputEvents": 0,
+        "throttledReads": 0,
+        "changes": 0,
+        "presetsUsed": 0,
+        "applies": 0,
+        "cancels": 0,
+        "resets": 0,
+        "listeners": 21,
+        "globalListeners": 0
+      }
+    },
+    {
+      "name": "extreme max",
+      "saveState": "DIRTY",
+      "activePreset": null,
+      "changedFields": [
+        "steeringSensitivity",
+        "returnRate",
+        "speedAttenuation",
+        "throttleRamp",
+        "brakeRamp",
+        "cameraMotion",
+        "fov"
+      ],
+      "summary": "7 reglaje modificate: Sensibilitatea direcției, Revenirea volanului, Direcție mai calmă la viteză, Accelerație progresivă, Frânare progresivă, Mișcarea camerei, Câmp vizual. Nimic nu se aplică până la Aplică.",
+      "values": "steeringSensitivity=100,returnRate=100,speedAttenuation=100,throttleRamp=100,brakeRamp=100,cameraMotion=100,fov=100",
+      "stats": {
+        "controls": 16,
+        "writes": 66,
+        "renders": 8,
+        "skipped": 0,
+        "inputEvents": 0,
+        "throttledReads": 0,
+        "changes": 0,
+        "presetsUsed": 0,
+        "applies": 0,
+        "cancels": 0,
+        "resets": 0,
+        "listeners": 21,
+        "globalListeners": 0
+      }
+    },
+    {
+      "name": "invalid fov 120",
+      "saveState": "INVALID",
+      "activePreset": null,
+      "changedFields": [
+        "fov"
+      ],
+      "summary": "1 valoare este în afara limitelor. Aplică este blocat până la corectare.",
+      "values": "steeringSensitivity=50,returnRate=50,speedAttenuation=50,throttleRamp=50,brakeRamp=50,cameraMotion=50,fov=120",
+      "stats": {
+        "controls": 16,
+        "writes": 37,
+        "renders": 2,
+        "skipped": 0,
+        "inputEvents": 0,
+        "throttledReads": 0,
+        "changes": 0,
+        "presetsUsed": 0,
+        "applies": 0,
+        "cancels": 0,
+        "resets": 0,
+        "listeners": 21,
+        "globalListeners": 0
+      }
+    },
+    {
+      "name": "cancel",
+      "saveState": "UNCHANGED",
+      "activePreset": "BALANCED",
+      "changedFields": [],
+      "summary": "Nicio modificare față de reglajele salvate; nimic de aplicat.",
+      "values": "steeringSensitivity=50,returnRate=50,speedAttenuation=50,throttleRamp=50,brakeRamp=50,cameraMotion=50,fov=80",
+      "stats": {
+        "controls": 16,
+        "writes": 45,
+        "renders": 3,
+        "skipped": 0,
+        "inputEvents": 1,
+        "throttledReads": 1,
+        "changes": 1,
+        "presetsUsed": 0,
+        "applies": 0,
+        "cancels": 1,
+        "resets": 0,
+        "listeners": 21,
+        "globalListeners": 0
+      }
+    },
+    {
+      "name": "reset (confirmed)",
+      "saveState": "UNCHANGED",
+      "activePreset": "BALANCED",
+      "changedFields": [],
+      "summary": "Nicio modificare față de reglajele salvate; nimic de aplicat.",
+      "values": "steeringSensitivity=50,returnRate=50,speedAttenuation=50,throttleRamp=50,brakeRamp=50,cameraMotion=50,fov=80",
+      "stats": {
+        "controls": 16,
+        "writes": 32,
+        "renders": 2,
+        "skipped": 0,
+        "inputEvents": 0,
+        "throttledReads": 0,
+        "changes": 0,
+        "presetsUsed": 0,
+        "applies": 0,
+        "cancels": 0,
+        "resets": 1,
+        "listeners": 21,
+        "globalListeners": 0
+      }
+    },
+    {
+      "name": "60 input events at 16 ms",
+      "saveState": "UNCHANGED",
+      "activePreset": "BALANCED",
+      "changedFields": [],
+      "summary": "Nicio modificare față de reglajele salvate; nimic de aplicat.",
+      "values": "steeringSensitivity=50,returnRate=50,speedAttenuation=50,throttleRamp=50,brakeRamp=50,cameraMotion=50,fov=80",
+      "stats": {
+        "controls": 16,
+        "writes": 45,
+        "renders": 1,
+        "skipped": 0,
+        "inputEvents": 60,
+        "throttledReads": 9,
+        "changes": 0,
+        "presetsUsed": 0,
+        "applies": 0,
+        "cancels": 0,
+        "resets": 0,
+        "listeners": 21,
+        "globalListeners": 0
+      }
+    }
+  ],
+  "applied": {
+    "playerId": "player:229",
+    "controlVersion": 5,
+    "values": "steeringSensitivity=65,returnRate=35,speedAttenuation=50,throttleRamp=50,brakeRamp=50,cameraMotion=20,fov=96",
+    "cameraMode": "FIRST_PERSON",
+    "bindings": "ArrowUp/KeyD",
+    "scenario": "7/10/12"
+  },
+  "telemetry": {
+    "closedReason": "CONTROL_PREFERENCES_CHANGE",
+    "closedVersion": "keys-1",
+    "openedVersion": "[\"player\",\"025-keyboard-v1\",4]",
+    "learningEpochUnchanged": true,
+    "changeReason": "CONTROL_PREFERENCES_CHANGE",
+    "changeTick": 10,
+    "operationId": "control-preferences-10"
+  },
+  "checks": [
+    {
+      "name": "version",
+      "expected": "229-control-sliders-v1",
+      "actual": "229-control-sliders-v1",
+      "pass": true,
+      "detail": "229 draft version"
+    },
+    {
+      "name": "policy",
+      "expected": "Ajustează doar inputul și camera. Mașina, frânarea, aderența și stilul AI rămân neschimbate.",
+      "actual": "Ajustează doar inputul și camera. Mașina, frânarea, aderența și stilul AI rămân neschimbate.",
+      "pass": true,
+      "detail": "the policy is explicit and declared once"
+    },
+    {
+      "name": "fields",
+      "expected": 7,
+      "actual": 7,
+      "pass": true,
+      "detail": "seven 009 control fields"
+    },
+    {
+      "name": "fov-range",
+      "expected": "60/100",
+      "actual": "60/100",
+      "pass": true,
+      "detail": "FOV uses the 009 domain"
+    },
+    {
+      "name": "slider-range",
+      "expected": "0/100",
+      "actual": "0/100",
+      "pass": true,
+      "detail": "the six 0–100 sliders use the 009 domain"
+    },
+    {
+      "name": "presets",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "Accesibil / Echilibrat / Direct"
+    },
+    {
+      "name": "presets-in-domain",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "no preset leaves the 009 domains"
+    },
+    {
+      "name": "ends",
+      "expected": 14,
+      "actual": 14,
+      "pass": true,
+      "detail": "every slider has two simple ends"
+    },
+    {
+      "name": "hints",
+      "expected": 7,
+      "actual": 7,
+      "pass": true,
+      "detail": "one plain sentence per slider"
+    },
+    {
+      "name": "write-hz",
+      "expected": 10,
+      "actual": 10,
+      "pass": true,
+      "detail": "read-out write ceiling"
+    },
+    {
+      "name": "panel-controls",
+      "expected": 16,
+      "actual": 16,
+      "pass": true,
+      "detail": "two tabs, three presets, seven sliders, four buttons"
+    },
+    {
+      "name": "panel-listeners",
+      "expected": 22,
+      "actual": 22,
+      "pass": true,
+      "detail": "two listeners per slider plus presets, buttons and the panel key handler"
+    },
+    {
+      "name": "global-listeners",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no listener on window/document"
+    },
+    {
+      "name": "layout-1280-region",
+      "expected": "STANDARD",
+      "actual": "STANDARD",
+      "pass": true,
+      "detail": "1280×720 is the standard band"
+    },
+    {
+      "name": "layout-1280-fits",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the popup fits with the declared caps"
+    },
+    {
+      "name": "layout-1280-scrolls",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the slider list scrolls while the footer stays fixed"
+    },
+    {
+      "name": "layout-1280-visible-rows",
+      "expected": 4,
+      "actual": 4,
+      "pass": true,
+      "detail": "four slider rows are visible before scrolling"
+    },
+    {
+      "name": "layout-1920-region",
+      "expected": "LARGE",
+      "actual": "LARGE",
+      "pass": true,
+      "detail": "1920×1080 is the large band"
+    },
+    {
+      "name": "layout-150-zoom",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "150% zoom keeps two rows and a fixed footer"
+    },
+    {
+      "name": "default-unchanged",
+      "expected": "UNCHANGED",
+      "actual": "UNCHANGED",
+      "pass": true,
+      "detail": "the initial draft equals the saved preferences"
+    },
+    {
+      "name": "preset-direct",
+      "expected": "steeringSensitivity=80,returnRate=40,speedAttenuation=25,throttleRamp=75,brakeRamp=35,cameraMotion=60,fov=88",
+      "actual": "steeringSensitivity=80,returnRate=40,speedAttenuation=25,throttleRamp=75,brakeRamp=35,cameraMotion=60,fov=88",
+      "pass": true,
+      "detail": "DIRECT proposes all seven values"
+    },
+    {
+      "name": "extreme-min",
+      "expected": "steeringSensitivity=0,returnRate=0,speedAttenuation=0,throttleRamp=0,brakeRamp=0,cameraMotion=0,fov=60",
+      "actual": "steeringSensitivity=0,returnRate=0,speedAttenuation=0,throttleRamp=0,brakeRamp=0,cameraMotion=0,fov=60",
+      "pass": true,
+      "detail": "all minima"
+    },
+    {
+      "name": "extreme-max",
+      "expected": "steeringSensitivity=100,returnRate=100,speedAttenuation=100,throttleRamp=100,brakeRamp=100,cameraMotion=100,fov=100",
+      "actual": "steeringSensitivity=100,returnRate=100,speedAttenuation=100,throttleRamp=100,brakeRamp=100,cameraMotion=100,fov=100",
+      "pass": true,
+      "detail": "all maxima"
+    },
+    {
+      "name": "invalid-reported",
+      "expected": "INVALID",
+      "actual": "INVALID",
+      "pass": true,
+      "detail": "an out-of-range value is reported, never clamped"
+    },
+    {
+      "name": "cancel-reverts",
+      "expected": "UNCHANGED",
+      "actual": "UNCHANGED",
+      "pass": true,
+      "detail": "Anulează returns to the saved preferences"
+    },
+    {
+      "name": "reset-proposes",
+      "expected": "UNCHANGED",
+      "actual": "UNCHANGED",
+      "pass": true,
+      "detail": "reset needs confirmation and proposes the 009 defaults"
+    },
+    {
+      "name": "write-budget",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "9 read-outs in 0.96s (18 DOM writes)"
+    },
+    {
+      "name": "drag-commits-once",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "one draft revision after the gesture"
+    },
+    {
+      "name": "queue",
+      "expected": "QUEUED",
+      "actual": "QUEUED",
+      "pass": true,
+      "detail": "Aplică queues one application"
+    },
+    {
+      "name": "same-tick",
+      "expected": "NOT_DUE",
+      "actual": "NOT_DUE",
+      "pass": true,
+      "detail": "never applied inside the current tick"
+    },
+    {
+      "name": "applied",
+      "expected": "APPLIED",
+      "actual": "APPLIED",
+      "pass": true,
+      "detail": "applied at the next tick"
+    },
+    {
+      "name": "applied-version",
+      "expected": 5,
+      "actual": 5,
+      "pass": true,
+      "detail": "exactly one new control revision"
+    },
+    {
+      "name": "applied-fov",
+      "expected": 96,
+      "actual": 96,
+      "pass": true,
+      "detail": "the slider value is saved"
+    },
+    {
+      "name": "applied-bindings",
+      "expected": "ArrowUp/KeyD",
+      "actual": "ArrowUp/KeyD",
+      "pass": true,
+      "detail": "key bindings survive the apply"
+    },
+    {
+      "name": "applied-scenario",
+      "expected": "7/10/12",
+      "actual": "7/10/12",
+      "pass": true,
+      "detail": "the scenario survives the apply"
+    },
+    {
+      "name": "telemetry-version",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the segment target carries the new controlPreferencesVersion"
+    },
+    {
+      "name": "telemetry-epoch",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "preferences never bump the learning epoch"
+    },
+    {
+      "name": "segment-close-reason",
+      "expected": "CONTROL_PREFERENCES_CHANGE",
+      "actual": "CONTROL_PREFERENCES_CHANGE",
+      "pass": true,
+      "detail": "the old segment closes with the preferences reason"
+    },
+    {
+      "name": "segment-version-split",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the old segment keeps its version and the new one gets the new version"
+    },
+    {
+      "name": "segment-opens-at-tick",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "the new segment starts at the applying tick"
+    },
+    {
+      "name": "segment-learning-epoch",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "only the control version changes"
+    },
+    {
+      "name": "pause-menu",
+      "expected": "suspend:menu",
+      "actual": "suspend:menu",
+      "pass": true,
+      "detail": "the popup opens the 070 menu surface"
+    },
+    {
+      "name": "held-released",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "held driving commands are released when the popup opens"
+    },
+    {
+      "name": "resume-on-close",
+      "expected": "resume:menu",
+      "actual": "resume:menu",
+      "pass": true,
+      "detail": "closing the popup resumes the clock"
+    },
+    {
+      "name": "sedan-extremes",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "commands stay finite and inside the envelope on the sedan"
+    },
+    {
+      "name": "compact-extremes",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "commands stay finite and inside the envelope on the compact"
+    },
+    {
+      "name": "mechanics-unchanged",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "control preferences never change mass, power, brake or grip"
+    },
+    {
+      "name": "vehicle-class-frozen",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "023 class definitions stay immutable"
+    },
+    {
+      "name": "camera-extremes",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "FOV 60/100 and motion 0/100 stay finite"
+    },
+    {
+      "name": "camera-stable",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "motion 0 keeps the chase camera stable"
+    },
+    {
+      "name": "contrast",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "every measured pair meets WCAG AA"
+    },
+    {
+      "name": "session-ownership",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "the session owns no profile, mechanics or AI"
+    },
+    {
+      "name": "session-version",
+      "expected": "229-control-sliders-session-v1",
+      "actual": "229-control-sliders-session-v1",
+      "pass": true,
+      "detail": "session contract version"
+    }
+  ],
+  "summary": {
+    "checks": 53,
+    "passed": 53,
+    "pass": true
+  }
+}

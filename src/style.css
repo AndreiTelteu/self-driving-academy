@@ -2221,6 +2221,261 @@ button:focus-visible {
   outline-offset: 2px;
 }
 
+/* 229 control & comfort sliders: the „Cum controlez mașina” tab of the Reglaje popup. The header,
+   tabs, presets and footer are fixed; only the slider list scrolls, so Aplică/Anulează are never
+   scrolled away or covered at 1280×720. */
+.control-sliders {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  right: auto;
+  bottom: auto;
+  z-index: 6;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  width: min(var(--layout-panel-width), calc(100vw - 2rem));
+  max-height: var(--layout-panel-max-height);
+  min-width: 0;
+  padding: 0.85rem 1rem;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  border: 1px solid #ffffff2b;
+  border-radius: 0.75rem;
+  background: #0d1714f5;
+  color: #f3f7fb;
+  font-size: max(0.75rem, var(--layout-hud-font));
+  line-height: 1.4;
+  text-shadow: 0 1px 2px #000000b3;
+  transform: translate(-50%, -50%);
+  box-sizing: border-box;
+}
+
+.control-sliders[hidden] {
+  display: none;
+}
+
+.control-sliders__header {
+  display: grid;
+  gap: 0.2rem;
+  flex: 0 0 auto;
+}
+
+.control-sliders__title {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.control-sliders__live {
+  margin: 0;
+  color: #b9cfc5;
+  font-size: 0.78rem;
+}
+
+.control-sliders__description {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.control-sliders__tabs {
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.control-sliders__tab {
+  padding: 0.3rem 0.6rem;
+  border: 1px solid #ffffff3d;
+  border-radius: 0.4rem;
+  background: #1c332b;
+  color: #c6dbd1;
+  font: inherit;
+  cursor: pointer;
+}
+
+.control-sliders__tab--active {
+  border-color: #9edbb5;
+  background: #13251f;
+  color: #f3f7fb;
+  font-weight: 600;
+}
+
+.control-sliders__tab--unavailable,
+.control-sliders__tab[disabled] {
+  border-style: dashed;
+  border-color: #8fa8a0;
+  background: #101f1a;
+  color: #ffd27f;
+  cursor: not-allowed;
+}
+
+.control-sliders__panel {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 0.4rem;
+  min-height: 0;
+}
+
+.control-sliders__policy {
+  margin: 0;
+  flex: 0 0 auto;
+  color: #ffd27f;
+  font-size: 0.75rem;
+}
+
+.control-sliders__presets {
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.control-sliders__preset {
+  padding: 0.25rem 0.6rem;
+  border: 1px solid #ffffff3d;
+  border-radius: 999px;
+  background: #1c332b;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.control-sliders__preset[aria-pressed='true'] {
+  border-color: #7fd7ff;
+  background: #13251f;
+  box-shadow: inset 0 0 0 1px #7fd7ff;
+}
+
+.control-sliders__list {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-height: 0;
+  max-height: var(--sliders-list-max-height, none);
+  padding-inline-end: 0.15rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scroll-padding-block: 0.4rem;
+}
+
+.control-sliders__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.15rem 0.5rem;
+  padding: 0.45rem 0.55rem;
+  border: 1px solid #ffffff1f;
+  border-radius: 0.5rem;
+  background: #13251f;
+}
+
+.control-sliders__label {
+  color: #dbe8e2;
+  font-weight: 600;
+}
+
+.control-sliders__value {
+  justify-self: end;
+  min-width: 4rem;
+  color: #9edbb5;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.control-sliders__hint {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: #b9cfc5;
+  font-size: 0.75rem;
+}
+
+.control-sliders__range {
+  grid-column: 1 / -1;
+  width: 100%;
+  margin: 0.15rem 0;
+  accent-color: #9edbb5;
+  font: inherit;
+}
+
+.control-sliders__ends {
+  display: flex;
+  grid-column: 1 / -1;
+  justify-content: space-between;
+  color: #c6dbd1;
+  font-size: 0.72rem;
+}
+
+.control-sliders__issues {
+  margin: 0;
+  flex: 0 0 auto;
+  color: #ffb3a7;
+  font-weight: 600;
+}
+
+.control-sliders__issues[hidden] {
+  display: none;
+}
+
+.control-sliders__footer {
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+  padding-block-start: 0.35rem;
+  border-block-start: 1px solid #ffffff1f;
+}
+
+.control-sliders__footer button {
+  padding: 0.35rem 0.7rem;
+  border: 1px solid #ffffff3d;
+  border-radius: 0.4rem;
+  background: #1c332b;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.control-sliders__apply {
+  border-color: #9edbb5;
+}
+
+.control-sliders__reset,
+.control-sliders__cancel {
+  color: #c6dbd1;
+}
+
+.control-sliders__footer button[disabled] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.control-sliders__note {
+  flex-basis: 100%;
+  margin: 0;
+  color: #b9cfc5;
+  font-size: 0.72rem;
+}
+
+.control-sliders__tab:focus-visible,
+.control-sliders__preset:focus-visible,
+.control-sliders__range:focus-visible,
+.control-sliders__footer button:focus-visible {
+  outline: 3px solid #9edbb5;
+  outline-offset: 2px;
+}
+
 /* 084: every layout cap is a border-box cap, so the declared px in `responsive-layout.ts` match
    the rectangles the browser reports (padding and border included). */
 .taxi-hud,

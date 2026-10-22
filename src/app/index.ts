@@ -545,3 +545,17 @@ export {
   type ThreeModesTransitionFailure,
   type ThreeModesWorld,
 } from './three-modes';
+
+export {
+  CONTROL_SLIDERS_EDITABLE_FIELDS,
+  CONTROL_SLIDERS_SESSION_VERSION,
+  createControlSlidersSession,
+  type ControlSlidersApplyStatus,
+  type ControlSlidersOpenStatus,
+  type ControlSlidersSession,
+  type ControlSlidersSessionOptions,
+  type ControlSlidersSessionState,
+  type ControlSlidersSessionStats,
+  type ControlSlidersTickResult,
+  type ControlSlidersTickStatus,
+} from './control-sliders';
