@@ -1,0 +1,139 @@
+﻿PBI 127 - verificari executate in worktree persistence-127-01
+Data rulare: 2026-10-22T14:57:23.7858964+03:00
+Node: v24.19.0
+npm: 11.17.0
+Worktree: C:\Users\aandr\Sites\self-driving-academy\.worktrees\persistence-127-01
+Branch: loop-pbi/persistence-127-01
+Base commit: dbed70fd94180b2178f2702f4de6bcd0f96dbc84
+
+=== npm run typecheck ===
+> npm run typecheck
+
+> self-driving-academy@0.1.0 typecheck
+> tsc --noEmit && tsc -p tsconfig.tests.json --noEmit
+
+exit=0
+
+=== npm run lint ===
+> npm run lint
+
+> self-driving-academy@0.1.0 lint
+> eslint . --max-warnings 0
+
+exit=0
+
+=== npm run format:check ===
+> npm run format:check
+
+> self-driving-academy@0.1.0 format:check
+> prettier --check "src/**/*.{ts,css}" "tests/**/*.ts" "tests/**/*.html" "scripts/**/*.mjs" "*.{json,js,html}"
+
+Checking formatting...
+All matched files use Prettier code style!
+exit=0
+
+=== npm run check:architecture ===
+> npm run check:architecture
+
+> self-driving-academy@0.1.0 check:architecture
+> node scripts/verify-architecture.mjs
+
+Architecture imports: PASS (271 TypeScript files)
+Architecture negative probes: PASS (6 forbidden dependencies rejected)
+Inspector exception negative probes: PASS (4 forbidden imports rejected)
+Rapier adapter negative probes: PASS (3 forbidden imports rejected)
+Renderer injection, readonly snapshots, defensive persistence and lifecycle: PASS
+exit=0
+
+=== npm test (suite completa, rezumat) ===
+> npm test
+... (2401 linii anterioare omise) ...
+✔ ID reuse cannot inherit stop evidence or admit a retired incarnation; real epoch resets history (7.3289ms)
+✔ bounded history fails closed; frozen map geometry and transverse direction stay stable (8.3986ms)
+✔ directed reverse geometry and consecutive STOP lines preserve distinct opportunities (26.1633ms)
+✔ calibration/accessor boundaries and long valid identities remain safe (9.6109ms)
+ℹ tests 1920
+ℹ suites 1
+ℹ pass 1920
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 75029.4119
+exit=0
+
+=== testele tinta 127 ===
+> node --import ./scripts/register-typescript.mjs --test 'tests/persistence/*.test.ts'
+(node:45896) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ 127 committed evidence report is the current transcript (43.8652ms)
+✔ 127 the report is deterministic across runs (18.161ms)
+(node:34732) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ 127 a fresh database opens at the current schema with the writer role (14.0934ms)
+✔ 127 every store round-trips and survives a reopen (18.8371ms)
+✔ 127 an activation cannot reference a missing or foreign profile version (1.9299ms)
+✔ 127 a rejected activation keeps the previous activation instead of half-writing (3.3684ms)
+✔ 127 stale revisions, immutable profiles and oversized bodies are rejected (3.9079ms)
+✔ 127 list results are bounded by an explicit row budget (3.3139ms)
+✔ 127 a read-only page reads the writer data but cannot write (2.2822ms)
+✔ 127 the writer role transfers when the holder releases it (2.0549ms)
+✔ 127 a blocked upgrade is a repository state and finishes after retry (2.4077ms)
+✔ 127 a version change releases the database and the writer lock (1.3472ms)
+✔ 127 an open failure and unavailable Web Locks are explicit states (1.1313ms)
+✔ 127 the newest checkpoint of a session is picked by tick then generation (3.0585ms)
+(node:53768) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ 127 schema declaration is contiguous and matches the documented stores and indexes (4.1397ms)
+✔ 127 planUpgrade is explicit, ordered and refuses a newer on-disk schema (1.2917ms)
+✔ 127 a fresh database is created at the current version with every store and the marker (3.3591ms)
+✔ 127 upgrading from version 1 keeps rows and adds checkpoints plus lifecycle indexes (2.2067ms)
+✔ 127 a blocked upgrade is explicit and completes when the blocking tab closes (1.1414ms)
+✔ 127 a cancelled blocked upgrade reports UPGRADE_ABORTED instead of hanging (0.5178ms)
+✔ 127 a failed migration keeps the previous version and its rows (0.8892ms)
+✔ 127 an IndexedDB open error is reported as a state, not an exception (0.4242ms)
+✔ 127 an older build cannot open a newer database (0.3656ms)
+✔ 127 a failing transaction rolls back every store it touched (0.9007ms)
+✔ 127 a read-only transaction cannot write and unknown stores are refused (1.016ms)
+✔ 127 schema steps refuse to re-create a store or index a missing one (0.4386ms)
+✔ 127 record envelopes reject unknown fields, non-JSON data and invalid lifecycles (3.8266ms)
+✔ 127 the stored profile version must still match its 109 checksum (1.3826ms)
+✔ 127 checkpoint and settings records carry the metadata later PBIs rely on (2.0254ms)
+(node:51392) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ 127 the writer lock is exclusive per origin and named explicitly (3.4183ms)
+✔ 127 a second tab queues and becomes the writer in FIFO order (1.2105ms)
+✔ 127 releasing before the grant cancels the queued request (0.6517ms)
+✔ 127 release is idempotent and dispose frees the lock for the next tab (0.6593ms)
+✔ 127 without Web Locks the page never claims a write role (0.4153ms)
+✔ 127 the authority reports each transition with a stable tab identity (2.4682ms)
+ℹ tests 35
+ℹ suites 0
+ℹ pass 35
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 403.8292
+exit=0
+
+=== raport determinist db:schema (rezumat) ===
+> npm run db:schema
+... (50 linii anterioare omise) ...
+PASS CHECK tx-list-limit
+PASS CHECK bounds-body
+PASS CHECK bounds-record
+SUMMARY checks 49/49, schema v2, stores 8, overall PASS
+Wrote C:\Users\aandr\Sites\self-driving-academy\.worktrees\persistence-127-01\Docs\Evidence\127-db-schema\report.json
+Wrote C:\Users\aandr\Sites\self-driving-academy\.worktrees\persistence-127-01\Docs\Evidence\127-db-schema\report.md
+exit=0
+
+=== raport determinist db:schema --check ===
+> node --import ./scripts/register-typescript.mjs scripts/run-db-schema-report.mjs --check
+... (47 linii anterioare omise) ...
+PASS CHECK bounds-body
+PASS CHECK bounds-record
+SUMMARY checks 49/49, schema v2, stores 8, overall PASS
+DB schema report is current: C:\Users\aandr\Sites\self-driving-academy\.worktrees\persistence-127-01\Docs\Evidence\127-db-schema\report.json
+exit=0
+
