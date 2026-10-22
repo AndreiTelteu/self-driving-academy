@@ -1,6 +1,6 @@
 # Salvare și import export
 
-Versiune 0.7 · 22 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
+Versiune 0.8 · 22 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
 
 ## Date salvate și export
 
@@ -76,3 +76,15 @@ Modulul `src/persistence` este implementat ca o familie de porturi (`DatabasePor
 **Proveniență și istoric.** Clasificarea sursei este derivată doar din proveniența stocată: `BASE` pentru versiunea rădăcină, `MANUAL_TUNING` pentru o versiune derivată care numează intervenții și `LEARNING` pentru una care numează doar segmente de condus. `getProfileHistory(profileId)` reconstruiește lanțul base→tip din legăturile de părinte stocate, întoarce versiunea activă, secvența și timestamp-ul activării, timestamp-urile versiunilor și listează explicit veriunile lipsă dacă istoricul are o gaură; proveniența, delta și lista surselor sunt citite înapoi exact, fără a fi completate cu date fabricate.
 
 Dovezi: [Evidence/128-save-profiles](Evidence/128-save-profiles/README.md).
+
+## Contract implementat V1 (PBI 129) — segmente, checkpointuri și coada de scriere
+
+`src/persistence/segment-store.ts` (contract `129-segment-store-v1`) scrie segmentele închise (069/090) în store-ul `segments`, cu starea, motivul închiderii și ordinea evenimentelor. Un segment este scris în trei pași: manifestul (care declară câte bucăți urmează și digestul evenimentelor ordonate), bucățile de evenimente și sigiliul, care rescrie manifestul cu starea finală și confirmă digestul.
+
+**Un crash nu produce niciodată un segment valid.** Citirea (`readSegment`) reconstruiește realitatea din rândurile stocate: un manifest nesigilat, o bucată lipsă, o secvență neordonată sau un digest care nu se potrivește se raportează ca `INCOMPLETE` cu un motiv explicit — `UNSEALED_WRITE`, `MISSING_CHUNKS`, `ORDER_VIOLATION`, `DIGEST_MISMATCH` sau `SOURCE_INCOMPLETE` pentru un segment care era deja incomplet la sursă. Citirea întoarce numai evenimentele aflate efectiv în magazie și numelează bucățile lipsă; nu completează niciodată datele lipsă și nu transformă un segment parțial într-unul complet. Evenimentele primesc o secvență monotonă la scriere, iar digestul FNV-1a 64 al listei ordonate detectează orice modificare a conținutului stocat.
+
+**Scrierile nu blochează inputul.** `src/persistence/write-queue.ts` oferă o coadă FIFO limitată (`maxPending`): `enqueue` acceptă segmentul și întoarce imediat, scrierea are loc mai târziu, în afara hot path-ului de tick. Coada scrie un segment pe rând, deci segmentele ajung în magazin în ordinea în care au fost puse în coadă, iar ordinea evenimentelor din interiorul unui segment nu se schimbă niciodată. Coada nu crește fără limită: când este plină, refuză segmentul nou cu `STORAGE_FULL`, iar apelantul decide (retrimitere, export sau abandon explicit).
+
+**Checkpointul unei intervenții active.** `src/persistence/intervention-checkpoint.ts` (contract `129-intervention-checkpoint-v1`) scrie în store-ul `checkpoints` doar identitatea și generația: segmentul, vehiculul, modul de control, tickul de start, generația și `learningEpoch`. Snapshotul complet al lumii rămâne la PBI 206 și nu este inventat aici; o generație mai veche nu înlocuiește una mai nouă (`STALE_REVISION`).
+
+Dovezi: [Evidence/129-save-segments](Evidence/129-save-segments/README.md).

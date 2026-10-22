@@ -1,0 +1,539 @@
+{
+  "version": "129-save-segments-v1",
+  "generatedBy": "node --import ./scripts/register-typescript.mjs scripts/run-save-segments-report.mjs",
+  "oracleRule": "Every row is a real run of src/persistence against the in-memory IndexedDB double; the expected value is the documented contract, never a copy of the actual one.",
+  "closedSegment": {
+    "status": "COMMITTED",
+    "completeness": "CLOSED",
+    "reason": null,
+    "closeReason": "RETURN_TO_AUTO",
+    "eventCount": 6,
+    "expectedEventCount": 6,
+    "firstEventId": "event-0",
+    "lastEventId": "event-5",
+    "sequences": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "sealed": true,
+    "digestMatches": true
+  },
+  "longIntervention": {
+    "chunkCount": 8,
+    "eventCount": 500,
+    "completeness": "CLOSED",
+    "missingChunks": [],
+    "sequencesMonotonic": true
+  },
+  "crashBeforeChunks": {
+    "writeStatus": "REJECTED",
+    "completeness": "INCOMPLETE",
+    "reason": "UNSEALED_WRITE",
+    "storedEvents": 0,
+    "expectedEvents": 4,
+    "missingChunks": [
+      0
+    ]
+  },
+  "crashInTheMiddle": {
+    "writeStatus": "REJECTED",
+    "completeness": "INCOMPLETE",
+    "reason": "UNSEALED_WRITE",
+    "storedEvents": 100,
+    "expectedEvents": 200,
+    "presentChunks": [
+      0,
+      1
+    ],
+    "missingChunks": [
+      2,
+      3
+    ]
+  },
+  "missingChunk": {
+    "completeness": "INCOMPLETE",
+    "reason": "MISSING_CHUNKS",
+    "storedEvents": 150,
+    "expectedEvents": 200,
+    "missingChunks": [
+      3
+    ]
+  },
+  "tamperedChunk": {
+    "completeness": "INCOMPLETE",
+    "reason": "DIGEST_MISMATCH",
+    "digestMatches": false
+  },
+  "incompleteSource": {
+    "completeness": "INCOMPLETE",
+    "reason": "SOURCE_INCOMPLETE",
+    "sourceReason": "DATA_LOSS"
+  },
+  "writeQueue": {
+    "rowsBeforeTheGate": 0,
+    "rowsAfterDrain": 10,
+    "settledOrder": [
+      "segment-0",
+      "segment-1",
+      "segment-2",
+      "segment-3",
+      "segment-4"
+    ],
+    "written": 5,
+    "refused": 1,
+    "refusalCode": "STORAGE_FULL"
+  },
+  "checkpoint": {
+    "status": "COMMITTED",
+    "generation": 3,
+    "learningEpoch": 2,
+    "bodyKeys": [
+      "scope",
+      "segmentId",
+      "vehicleId",
+      "controlMode",
+      "startTick",
+      "generation",
+      "learningEpoch"
+    ],
+    "olderGeneration": "STALE_REVISION",
+    "hasWorldSnapshot": false
+  },
+  "checks": [
+    {
+      "name": "closed-status",
+      "expected": "COMMITTED",
+      "actual": "COMMITTED",
+      "pass": true,
+      "detail": "The segment was written"
+    },
+    {
+      "name": "closed-completeness",
+      "expected": "CLOSED",
+      "actual": "CLOSED",
+      "pass": true,
+      "detail": "A sealed segment"
+    },
+    {
+      "name": "closed-reason",
+      "expected": null,
+      "actual": null,
+      "pass": true,
+      "detail": "A complete segment has no reason"
+    },
+    {
+      "name": "closed-close-reason",
+      "expected": "RETURN_TO_AUTO",
+      "actual": "RETURN_TO_AUTO",
+      "pass": true,
+      "detail": "The close reason of the source is kept"
+    },
+    {
+      "name": "closed-events",
+      "expected": 6,
+      "actual": 6,
+      "pass": true,
+      "detail": "Every event is stored"
+    },
+    {
+      "name": "closed-expected-events",
+      "expected": 6,
+      "actual": 6,
+      "pass": true,
+      "detail": "The manifest declares the same count"
+    },
+    {
+      "name": "closed-first-event",
+      "expected": "event-0",
+      "actual": "event-0",
+      "pass": true,
+      "detail": "The first event"
+    },
+    {
+      "name": "closed-last-event",
+      "expected": "event-5",
+      "actual": "event-5",
+      "pass": true,
+      "detail": "The last event"
+    },
+    {
+      "name": "closed-sequences",
+      "expected": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "actual": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "pass": true,
+      "detail": "The event order is monotonic and unchanged"
+    },
+    {
+      "name": "closed-sealed",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The segment was sealed"
+    },
+    {
+      "name": "closed-digest",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The digest matches"
+    },
+    {
+      "name": "long-chunks",
+      "expected": 8,
+      "actual": 8,
+      "pass": true,
+      "detail": "500 events in 8 chunks"
+    },
+    {
+      "name": "long-events",
+      "expected": 500,
+      "actual": 500,
+      "pass": true,
+      "detail": "No event was lost"
+    },
+    {
+      "name": "long-completeness",
+      "expected": "CLOSED",
+      "actual": "CLOSED",
+      "pass": true,
+      "detail": "A long intervention is still complete"
+    },
+    {
+      "name": "long-missing",
+      "expected": [],
+      "actual": [],
+      "pass": true,
+      "detail": "No chunk is missing"
+    },
+    {
+      "name": "long-monotonic",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The order survives the chunking"
+    },
+    {
+      "name": "crash-before-status",
+      "expected": "REJECTED",
+      "actual": "REJECTED",
+      "pass": true,
+      "detail": "The interrupted write is reported as failed"
+    },
+    {
+      "name": "crash-before-completeness",
+      "expected": "INCOMPLETE",
+      "actual": "INCOMPLETE",
+      "pass": true,
+      "detail": "The segment is not complete"
+    },
+    {
+      "name": "crash-before-reason",
+      "expected": "UNSEALED_WRITE",
+      "actual": "UNSEALED_WRITE",
+      "pass": true,
+      "detail": "The reason is explicit"
+    },
+    {
+      "name": "crash-before-events",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "No event was invented"
+    },
+    {
+      "name": "crash-before-expected",
+      "expected": 4,
+      "actual": 4,
+      "pass": true,
+      "detail": "The manifest still declares the planned count"
+    },
+    {
+      "name": "crash-before-missing",
+      "expected": [
+        0
+      ],
+      "actual": [
+        0
+      ],
+      "pass": true,
+      "detail": "The missing chunk is named"
+    },
+    {
+      "name": "crash-middle-status",
+      "expected": "REJECTED",
+      "actual": "REJECTED",
+      "pass": true,
+      "detail": "The interrupted write is reported as failed"
+    },
+    {
+      "name": "crash-middle-completeness",
+      "expected": "INCOMPLETE",
+      "actual": "INCOMPLETE",
+      "pass": true,
+      "detail": "The segment is not complete"
+    },
+    {
+      "name": "crash-middle-reason",
+      "expected": "UNSEALED_WRITE",
+      "actual": "UNSEALED_WRITE",
+      "pass": true,
+      "detail": "The reason is explicit"
+    },
+    {
+      "name": "crash-middle-events",
+      "expected": 100,
+      "actual": 100,
+      "pass": true,
+      "detail": "Only stored events"
+    },
+    {
+      "name": "crash-middle-expected",
+      "expected": 200,
+      "actual": 200,
+      "pass": true,
+      "detail": "The planned count is reported"
+    },
+    {
+      "name": "crash-middle-present",
+      "expected": [
+        0,
+        1
+      ],
+      "actual": [
+        0,
+        1
+      ],
+      "pass": true,
+      "detail": "The chunks that really landed"
+    },
+    {
+      "name": "crash-middle-missing",
+      "expected": [
+        2,
+        3
+      ],
+      "actual": [
+        2,
+        3
+      ],
+      "pass": true,
+      "detail": "The missing chunks are named, not invented"
+    },
+    {
+      "name": "missing-completeness",
+      "expected": "INCOMPLETE",
+      "actual": "INCOMPLETE",
+      "pass": true,
+      "detail": "A missing chunk means an incomplete segment"
+    },
+    {
+      "name": "missing-reason",
+      "expected": "MISSING_CHUNKS",
+      "actual": "MISSING_CHUNKS",
+      "pass": true,
+      "detail": "The reason is explicit"
+    },
+    {
+      "name": "missing-events",
+      "expected": 150,
+      "actual": 150,
+      "pass": true,
+      "detail": "Only the stored events"
+    },
+    {
+      "name": "missing-expected",
+      "expected": 200,
+      "actual": 200,
+      "pass": true,
+      "detail": "The planned count is reported"
+    },
+    {
+      "name": "missing-chunks",
+      "expected": [
+        3
+      ],
+      "actual": [
+        3
+      ],
+      "pass": true,
+      "detail": "The missing chunk is named"
+    },
+    {
+      "name": "tampered-completeness",
+      "expected": "INCOMPLETE",
+      "actual": "INCOMPLETE",
+      "pass": true,
+      "detail": "A changed chunk means an incomplete segment"
+    },
+    {
+      "name": "tampered-reason",
+      "expected": "DIGEST_MISMATCH",
+      "actual": "DIGEST_MISMATCH",
+      "pass": true,
+      "detail": "The digest detects the change"
+    },
+    {
+      "name": "tampered-digest",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "The digest does not match"
+    },
+    {
+      "name": "source-completeness",
+      "expected": "INCOMPLETE",
+      "actual": "INCOMPLETE",
+      "pass": true,
+      "detail": "An incomplete source stays incomplete"
+    },
+    {
+      "name": "source-reason",
+      "expected": "SOURCE_INCOMPLETE",
+      "actual": "SOURCE_INCOMPLETE",
+      "pass": true,
+      "detail": "The reason of the source is kept"
+    },
+    {
+      "name": "source-reason-detail",
+      "expected": "DATA_LOSS",
+      "actual": "DATA_LOSS",
+      "pass": true,
+      "detail": "The explicit reason of the source"
+    },
+    {
+      "name": "queue-not-blocking",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "Nothing was written while the input loop continued"
+    },
+    {
+      "name": "queue-rows",
+      "expected": 10,
+      "actual": 10,
+      "pass": true,
+      "detail": "Five manifests and five chunks"
+    },
+    {
+      "name": "queue-order",
+      "expected": [
+        "segment-0",
+        "segment-1",
+        "segment-2",
+        "segment-3",
+        "segment-4"
+      ],
+      "actual": [
+        "segment-0",
+        "segment-1",
+        "segment-2",
+        "segment-3",
+        "segment-4"
+      ],
+      "pass": true,
+      "detail": "The segments reached the store in the queued order"
+    },
+    {
+      "name": "queue-written",
+      "expected": 5,
+      "actual": 5,
+      "pass": true,
+      "detail": "Every queued segment was written"
+    },
+    {
+      "name": "queue-refused",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "The bounded queue refused one"
+    },
+    {
+      "name": "queue-refusal-code",
+      "expected": "STORAGE_FULL",
+      "actual": "STORAGE_FULL",
+      "pass": true,
+      "detail": "Closed code"
+    },
+    {
+      "name": "checkpoint-status",
+      "expected": "COMMITTED",
+      "actual": "COMMITTED",
+      "pass": true,
+      "detail": "The checkpoint was written"
+    },
+    {
+      "name": "checkpoint-generation",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "The generation is stored"
+    },
+    {
+      "name": "checkpoint-epoch",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "The learning epoch is stored"
+    },
+    {
+      "name": "checkpoint-body",
+      "expected": [
+        "scope",
+        "segmentId",
+        "vehicleId",
+        "controlMode",
+        "startTick",
+        "generation",
+        "learningEpoch"
+      ],
+      "actual": [
+        "scope",
+        "segmentId",
+        "vehicleId",
+        "controlMode",
+        "startTick",
+        "generation",
+        "learningEpoch"
+      ],
+      "pass": true,
+      "detail": "The body holds identity and generation only"
+    },
+    {
+      "name": "checkpoint-older",
+      "expected": "STALE_REVISION",
+      "actual": "STALE_REVISION",
+      "pass": true,
+      "detail": "An older generation never replaces a newer one"
+    },
+    {
+      "name": "checkpoint-no-world",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "The world snapshot stays with PBI 206"
+    }
+  ],
+  "summary": {
+    "checks": 52,
+    "passed": 52,
+    "pass": true
+  }
+}
