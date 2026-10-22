@@ -71,6 +71,7 @@ export {
   comfortMissionDefinition,
   comfortMissionIds,
   comfortMissionOutcome,
+  comfortMissionOutcomeFromAggregates,
   comfortPassengerAboard,
   comfortStatuses,
   comfortTelemetryFromTickSamples,
@@ -81,6 +82,7 @@ export {
 export type {
   ComfortFailureReason,
   ComfortMetrics,
+  ComfortMissionAggregateInput,
   ComfortMissionOutcome,
   ComfortObjective,
   ComfortResult,

@@ -83,5 +83,7 @@ Stările sunt `PASSED`, `FAILED`, `NO_PASSENGER`, `INSUFFICIENT_DATA` și `WINDO
 
 Misiunea `campaign-5-comfort-ride` este un catalog 116 separat (`createComfortMissionCatalog`, namespace `campaign:121-comfort`): obiectivul 116 numără cursa (`DROPOFFS`, prag 1), iar poarta de confort este explicită — `comfortMissionOutcome` completează misiunea numai pentru un rezultat `PASSED` și păstrează motivul eșecului în rest. Un `DROPOFF` singur nu încheie obiectivul de confort.
 
+Din PBI **139** evaluarea misiunii folosește unica formulă de derivare și de rezumare a confortului (`deriveComfortIntervals`, `summarizeComfortIntervals`), iar `comfortMissionOutcomeFromAggregates` citește agregatul per cursă al read modelului 139. Misiunea, tabloul 082 și modelul de review citesc astfel aceleași agregate, fără calcule paralele; pragurile și regula pasagerului sunt tot ale modulului 139.
+
 Limitele sunt fixe: 20.000 eșantioane, 64 ferestre 088, 16 segmente, 64 span-uri, identități de maximum 256 de unități UTF-16. Modulul nu are ceas de perete, DOM, renderer, store de profil sau aleator; consumă doar tick-uri autoritare și valori SI. Nu fac parte din contract: UI-ul de confort, XP-ul, persistarea, calibrarea cu pasageri reali și fidelitatea stilului.
 
