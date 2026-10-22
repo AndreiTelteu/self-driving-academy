@@ -649,6 +649,7 @@ export function controlSlidersRuntimeCandidate(
     units: { ...base.units },
     quality: { ...base.quality },
     scenario: { ...base.scenario },
+    audio: { ...base.audio },
   };
 }
 
