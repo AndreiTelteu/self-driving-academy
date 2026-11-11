@@ -16,7 +16,7 @@
 | Învățare | Completed | 0 | 0 | 17 / 17 | `██████████` 100% |
 | Învățare V2 | V2 | 10 | 0 | 0 / 10 | `░░░░░░░░░░` 0% |
 | Mers pe jos V3 | V3 | 12 | 0 | 0 / 12 | `░░░░░░░░░░` 0% |
-| Misiuni | V1 | 6 | 0 | 9 / 15 | `██████░░░░` 60% |
+| Misiuni | V1 | 5 | 0 | 10 / 15 | `██████░░░░` 67% |
 | Misiuni și interfață | V1 | 1 | 0 | 0 / 1 | `░░░░░░░░░░` 0% |
 | Misiuni V2 | V2 | 1 | 0 | 0 / 1 | `░░░░░░░░░░` 0% |
 | Oraș | Completed | 0 | 0 | 12 / 12 | `██████████` 100% |
@@ -34,7 +34,7 @@
 | Validare și release | V1 | 12 | 0 | 0 / 12 | `░░░░░░░░░░` 0% |
 | Validare V2 | V2 | 2 | 0 | 0 / 2 | `░░░░░░░░░░` 0% |
 | Vehicule și fizică | Completed | 0 | 0 | 11 / 11 | `██████████` 100% |
-| Total | - | 81 | 0 | 154 / 235 | `██████░░░░` 66% |
+| Total | - | 80 | 0 | 155 / 235 | `██████░░░░` 66% |
 <!-- loop-pbi:progress:end -->
 
 # Backlog Kanban Self Driving Academy
