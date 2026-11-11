@@ -116,6 +116,12 @@ export const persistenceReasonCodes = [
   'STORAGE_FULL',
   'TRANSACTION_ABORTED',
   'LIST_LIMIT',
+  'CATALOG_MISMATCH',
+  'LEDGER_REPLAY_MISMATCH',
+  'TRACKER_SNAPSHOT_INVALID',
+  'SAVE_DIGEST_MISMATCH',
+  'SAVE_CATEGORY_UNKNOWN',
+  'SAVE_EMPTY',
 ] as const;
 export type PersistenceReasonCode = (typeof persistenceReasonCodes)[number];
 
