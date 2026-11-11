@@ -1,0 +1,1101 @@
+{
+  "version": "124-mission-fleet-report-v1",
+  "contract": {
+    "missionId": "campaign-8-fleet-challenge",
+    "schema": "124-mission-fleet-v1",
+    "objectiveId": "fleet-clean-dropoffs",
+    "windowTicks": 21600,
+    "incidentBudget": 0,
+    "serviceTargets": [
+      "minimumServedRides=3",
+      "minimumServedFraction=1",
+      "maximumLateRides=0"
+    ],
+    "comfortThresholds": [
+      "maxAccelerationMps2=2",
+      "maxJerkMps3=2"
+    ],
+    "comfortMinimumRides": 1,
+    "fidelityTarget": "1/EXACT",
+    "compositeRule": "ALL_DIMENSIONS_WITHIN_BUDGET",
+    "compositeVerdicts": [
+      "SUCCESS",
+      "FAILURE",
+      "INCOMPLETE"
+    ],
+    "dimensions": [
+      "SERVICE",
+      "COMFORT",
+      "FIDELITY",
+      "INCIDENTS",
+      "WINDOW"
+    ],
+    "serviceVerdicts": [
+      "MET",
+      "BELOW_TARGET"
+    ],
+    "comfortVerdicts": [
+      "PASSED",
+      "FAILED",
+      "NOT_EVALUATED"
+    ],
+    "fidelityVerdicts": [
+      "MET",
+      "BELOW_TARGET"
+    ],
+    "requestStatuses": [
+      "SERVED",
+      "FAILED",
+      "CANCELLED",
+      "PENDING"
+    ],
+    "reasons": [
+      "SERVICE_BELOW_TARGET",
+      "COMFORT_FAILED",
+      "COMFORT_NOT_EVALUATED",
+      "FIDELITY_BELOW_TARGET",
+      "INCIDENT_BUDGET_EXCEEDED",
+      "WINDOW_INCOMPLETE"
+    ],
+    "outcomes": [
+      "PROGRESS",
+      "NO_PROGRESS"
+    ]
+  },
+  "briefing": {
+    "conditions": [
+      "Serviciu: cel puțin 3 curse finalizate, 100% din cererile 059 servite și cel mult 0 curse peste promisiune.",
+      "Confort: cel puțin o cursă de pasager evaluată 121, fiecare cu accelerația sub 2 m/s² și jerk sub 2 m/s³, cel mult 0 eșecuri.",
+      "Fidelitate: flota evaluată 122 reproduce profilul publicat în proporție de 100% (verdict EXACT).",
+      "Incidente: cel mult 0 evenimente 007 COLLISION în fereastra de evaluare."
+    ],
+    "evaluated": [
+      0,
+      0
+    ]
+  },
+  "runs": [
+    {
+      "name": "success",
+      "profileId": "city:common",
+      "profileVersionId": "fleet-124-v1",
+      "attempt": 1,
+      "instanceId": "id-v1:16:mission-instance12:campaign:12426:campaign-8-fleet-challenge5:a0001",
+      "window": {
+        "startTick": 0,
+        "endTick": 21600,
+        "durationTicks": 21600,
+        "endedAtTick": 802,
+        "complete": true
+      },
+      "briefing": {
+        "status": "BEFORE_START",
+        "definitionVersion": "1",
+        "incidentBudget": 0,
+        "compositeRuleId": "ALL_DIMENSIONS_WITHIN_BUDGET",
+        "minimumServedRides": 3,
+        "minimumServedFraction": 1,
+        "maximumLateRides": 0,
+        "comfortMinimumRides": 1,
+        "comfortMaxAccelerationMps2": 2,
+        "comfortMaxJerkMps3": 2,
+        "fidelityMatchedFraction": 1,
+        "fidelityVerdict": "EXACT",
+        "conditions": [
+          "Serviciu: cel puțin 3 curse finalizate, 100% din cererile 059 servite și cel mult 0 curse peste promisiune.",
+          "Confort: cel puțin o cursă de pasager evaluată 121, fiecare cu accelerația sub 2 m/s² și jerk sub 2 m/s³, cel mult 0 eșecuri.",
+          "Fidelitate: flota evaluată 122 reproduce profilul publicat în proporție de 100% (verdict EXACT).",
+          "Incidente: cel mult 0 evenimente 007 COLLISION în fereastra de evaluare."
+        ],
+        "evaluatedRides": 0,
+        "evaluatedIncidents": 0
+      },
+      "service": {
+        "verdict": "MET",
+        "requests": 32,
+        "served": 32,
+        "failed": 0,
+        "cancelled": 0,
+        "pending": 0,
+        "late": 0,
+        "servedFraction": 1,
+        "plannedSeconds": 4809.54451,
+        "deliveredSeconds": 4809.54451,
+        "missedSeconds": 0,
+        "allServedRows": true
+      },
+      "comfort": {
+        "verdict": "PASSED",
+        "rides": 3,
+        "passed": 3,
+        "failed": 0,
+        "peakAccelerationMps2": 0,
+        "peakJerkMps3": 0
+      },
+      "fidelity": {
+        "verdict": "MET",
+        "cityVerdict": "EXACT",
+        "evaluatedVehicles": 40,
+        "matchedCells": 3200,
+        "totalCells": 3200,
+        "matchedFraction": 1
+      },
+      "incidents": {
+        "limit": 0,
+        "used": 0,
+        "remaining": 0,
+        "withinBudget": true,
+        "duplicates": 0
+      },
+      "composite": {
+        "verdict": "SUCCESS",
+        "dimensionVerdicts": [
+          "SERVICE:MET",
+          "COMFORT:PASSED",
+          "FIDELITY:MET",
+          "INCIDENTS:WITHIN_BUDGET",
+          "WINDOW:COMPLETE"
+        ],
+        "failingDimensions": []
+      },
+      "outcome": "PROGRESS",
+      "reasons": [],
+      "gate": "PROGRESS",
+      "profileWrites": 0,
+      "learningJobs": 0,
+      "deterministic": true,
+      "briefingMatchesPreStart": true
+    },
+    {
+      "name": "service-failure",
+      "profileId": "city:common",
+      "profileVersionId": "fleet-124-v1",
+      "attempt": 1,
+      "instanceId": "id-v1:16:mission-instance12:campaign:12426:campaign-8-fleet-challenge5:a0001",
+      "window": {
+        "startTick": 0,
+        "endTick": 21600,
+        "durationTicks": 21600,
+        "endedAtTick": 652,
+        "complete": true
+      },
+      "briefing": {
+        "status": "BEFORE_START",
+        "definitionVersion": "1",
+        "incidentBudget": 0,
+        "compositeRuleId": "ALL_DIMENSIONS_WITHIN_BUDGET",
+        "minimumServedRides": 3,
+        "minimumServedFraction": 1,
+        "maximumLateRides": 0,
+        "comfortMinimumRides": 1,
+        "comfortMaxAccelerationMps2": 2,
+        "comfortMaxJerkMps3": 2,
+        "fidelityMatchedFraction": 1,
+        "fidelityVerdict": "EXACT",
+        "conditions": [
+          "Serviciu: cel puțin 3 curse finalizate, 100% din cererile 059 servite și cel mult 0 curse peste promisiune.",
+          "Confort: cel puțin o cursă de pasager evaluată 121, fiecare cu accelerația sub 2 m/s² și jerk sub 2 m/s³, cel mult 0 eșecuri.",
+          "Fidelitate: flota evaluată 122 reproduce profilul publicat în proporție de 100% (verdict EXACT).",
+          "Incidente: cel mult 0 evenimente 007 COLLISION în fereastra de evaluare."
+        ],
+        "evaluatedRides": 0,
+        "evaluatedIncidents": 0
+      },
+      "service": {
+        "verdict": "BELOW_TARGET",
+        "requests": 32,
+        "served": 2,
+        "failed": 30,
+        "cancelled": 0,
+        "pending": 0,
+        "late": 0,
+        "servedFraction": 0.0625,
+        "plannedSeconds": 4809.54451,
+        "deliveredSeconds": 303.507729,
+        "missedSeconds": 4506.03678,
+        "allServedRows": false
+      },
+      "comfort": {
+        "verdict": "FAILED",
+        "rides": 2,
+        "passed": 0,
+        "failed": 2,
+        "peakAccelerationMps2": 300,
+        "peakJerkMps3": 36000
+      },
+      "fidelity": {
+        "verdict": "MET",
+        "cityVerdict": "EXACT",
+        "evaluatedVehicles": 40,
+        "matchedCells": 3200,
+        "totalCells": 3200,
+        "matchedFraction": 1
+      },
+      "incidents": {
+        "limit": 0,
+        "used": 0,
+        "remaining": 0,
+        "withinBudget": true,
+        "duplicates": 0
+      },
+      "composite": {
+        "verdict": "FAILURE",
+        "dimensionVerdicts": [
+          "SERVICE:BELOW_TARGET",
+          "COMFORT:FAILED",
+          "FIDELITY:MET",
+          "INCIDENTS:WITHIN_BUDGET",
+          "WINDOW:COMPLETE"
+        ],
+        "failingDimensions": [
+          "SERVICE",
+          "COMFORT"
+        ]
+      },
+      "outcome": "NO_PROGRESS",
+      "reasons": [
+        "SERVICE_BELOW_TARGET",
+        "COMFORT_FAILED"
+      ],
+      "gate": "NO_PROGRESS",
+      "profileWrites": 0,
+      "learningJobs": 0,
+      "deterministic": true,
+      "briefingMatchesPreStart": true
+    },
+    {
+      "name": "replay-other-profile",
+      "profileId": "city:common",
+      "profileVersionId": "fleet-124-v2",
+      "attempt": 2,
+      "instanceId": "id-v1:16:mission-instance12:campaign:12426:campaign-8-fleet-challenge5:a0002",
+      "window": {
+        "startTick": 0,
+        "endTick": 21600,
+        "durationTicks": 21600,
+        "endedAtTick": 802,
+        "complete": true
+      },
+      "briefing": {
+        "status": "BEFORE_START",
+        "definitionVersion": "1",
+        "incidentBudget": 0,
+        "compositeRuleId": "ALL_DIMENSIONS_WITHIN_BUDGET",
+        "minimumServedRides": 3,
+        "minimumServedFraction": 1,
+        "maximumLateRides": 0,
+        "comfortMinimumRides": 1,
+        "comfortMaxAccelerationMps2": 2,
+        "comfortMaxJerkMps3": 2,
+        "fidelityMatchedFraction": 1,
+        "fidelityVerdict": "EXACT",
+        "conditions": [
+          "Serviciu: cel puțin 3 curse finalizate, 100% din cererile 059 servite și cel mult 0 curse peste promisiune.",
+          "Confort: cel puțin o cursă de pasager evaluată 121, fiecare cu accelerația sub 2 m/s² și jerk sub 2 m/s³, cel mult 0 eșecuri.",
+          "Fidelitate: flota evaluată 122 reproduce profilul publicat în proporție de 100% (verdict EXACT).",
+          "Incidente: cel mult 0 evenimente 007 COLLISION în fereastra de evaluare."
+        ],
+        "evaluatedRides": 0,
+        "evaluatedIncidents": 0
+      },
+      "service": {
+        "verdict": "MET",
+        "requests": 32,
+        "served": 32,
+        "failed": 0,
+        "cancelled": 0,
+        "pending": 0,
+        "late": 0,
+        "servedFraction": 1,
+        "plannedSeconds": 4809.54451,
+        "deliveredSeconds": 4809.54451,
+        "missedSeconds": 0,
+        "allServedRows": true
+      },
+      "comfort": {
+        "verdict": "PASSED",
+        "rides": 3,
+        "passed": 3,
+        "failed": 0,
+        "peakAccelerationMps2": 0,
+        "peakJerkMps3": 0
+      },
+      "fidelity": {
+        "verdict": "BELOW_TARGET",
+        "cityVerdict": "PARTIAL",
+        "evaluatedVehicles": 40,
+        "matchedCells": 3194,
+        "totalCells": 3200,
+        "matchedFraction": 0.998125
+      },
+      "incidents": {
+        "limit": 0,
+        "used": 0,
+        "remaining": 0,
+        "withinBudget": true,
+        "duplicates": 0
+      },
+      "composite": {
+        "verdict": "FAILURE",
+        "dimensionVerdicts": [
+          "SERVICE:MET",
+          "COMFORT:PASSED",
+          "FIDELITY:BELOW_TARGET",
+          "INCIDENTS:WITHIN_BUDGET",
+          "WINDOW:COMPLETE"
+        ],
+        "failingDimensions": [
+          "FIDELITY"
+        ]
+      },
+      "outcome": "NO_PROGRESS",
+      "reasons": [
+        "FIDELITY_BELOW_TARGET"
+      ],
+      "gate": "NO_PROGRESS",
+      "profileWrites": 0,
+      "learningJobs": 0,
+      "deterministic": true,
+      "briefingMatchesPreStart": true
+    },
+    {
+      "name": "incident-budget",
+      "profileId": "city:common",
+      "profileVersionId": "fleet-124-v1",
+      "attempt": 1,
+      "instanceId": "id-v1:16:mission-instance12:campaign:12426:campaign-8-fleet-challenge5:a0001",
+      "window": {
+        "startTick": 0,
+        "endTick": 21600,
+        "durationTicks": 21600,
+        "endedAtTick": 802,
+        "complete": true
+      },
+      "briefing": {
+        "status": "BEFORE_START",
+        "definitionVersion": "1",
+        "incidentBudget": 0,
+        "compositeRuleId": "ALL_DIMENSIONS_WITHIN_BUDGET",
+        "minimumServedRides": 3,
+        "minimumServedFraction": 1,
+        "maximumLateRides": 0,
+        "comfortMinimumRides": 1,
+        "comfortMaxAccelerationMps2": 2,
+        "comfortMaxJerkMps3": 2,
+        "fidelityMatchedFraction": 1,
+        "fidelityVerdict": "EXACT",
+        "conditions": [
+          "Serviciu: cel puțin 3 curse finalizate, 100% din cererile 059 servite și cel mult 0 curse peste promisiune.",
+          "Confort: cel puțin o cursă de pasager evaluată 121, fiecare cu accelerația sub 2 m/s² și jerk sub 2 m/s³, cel mult 0 eșecuri.",
+          "Fidelitate: flota evaluată 122 reproduce profilul publicat în proporție de 100% (verdict EXACT).",
+          "Incidente: cel mult 0 evenimente 007 COLLISION în fereastra de evaluare."
+        ],
+        "evaluatedRides": 0,
+        "evaluatedIncidents": 0
+      },
+      "service": {
+        "verdict": "MET",
+        "requests": 32,
+        "served": 32,
+        "failed": 0,
+        "cancelled": 0,
+        "pending": 0,
+        "late": 0,
+        "servedFraction": 1,
+        "plannedSeconds": 4809.54451,
+        "deliveredSeconds": 4809.54451,
+        "missedSeconds": 0,
+        "allServedRows": true
+      },
+      "comfort": {
+        "verdict": "PASSED",
+        "rides": 3,
+        "passed": 3,
+        "failed": 0,
+        "peakAccelerationMps2": 0,
+        "peakJerkMps3": 0
+      },
+      "fidelity": {
+        "verdict": "MET",
+        "cityVerdict": "EXACT",
+        "evaluatedVehicles": 40,
+        "matchedCells": 3200,
+        "totalCells": 3200,
+        "matchedFraction": 1
+      },
+      "incidents": {
+        "limit": 0,
+        "used": 1,
+        "remaining": -1,
+        "withinBudget": false,
+        "duplicates": 0
+      },
+      "composite": {
+        "verdict": "FAILURE",
+        "dimensionVerdicts": [
+          "SERVICE:MET",
+          "COMFORT:PASSED",
+          "FIDELITY:MET",
+          "INCIDENTS:EXCEEDED",
+          "WINDOW:COMPLETE"
+        ],
+        "failingDimensions": [
+          "INCIDENTS"
+        ]
+      },
+      "outcome": "NO_PROGRESS",
+      "reasons": [
+        "INCIDENT_BUDGET_EXCEEDED"
+      ],
+      "gate": "NO_PROGRESS",
+      "profileWrites": 0,
+      "learningJobs": 0,
+      "deterministic": true,
+      "briefingMatchesPreStart": true
+    },
+    {
+      "name": "incomplete-window",
+      "profileId": "city:common",
+      "profileVersionId": "fleet-124-v1",
+      "attempt": 1,
+      "instanceId": "id-v1:16:mission-instance12:campaign:12426:campaign-8-fleet-challenge5:a0001",
+      "window": {
+        "startTick": 0,
+        "endTick": 21600,
+        "durationTicks": 21600,
+        "endedAtTick": 52,
+        "complete": false
+      },
+      "briefing": {
+        "status": "BEFORE_START",
+        "definitionVersion": "1",
+        "incidentBudget": 0,
+        "compositeRuleId": "ALL_DIMENSIONS_WITHIN_BUDGET",
+        "minimumServedRides": 3,
+        "minimumServedFraction": 1,
+        "maximumLateRides": 0,
+        "comfortMinimumRides": 1,
+        "comfortMaxAccelerationMps2": 2,
+        "comfortMaxJerkMps3": 2,
+        "fidelityMatchedFraction": 1,
+        "fidelityVerdict": "EXACT",
+        "conditions": [
+          "Serviciu: cel puțin 3 curse finalizate, 100% din cererile 059 servite și cel mult 0 curse peste promisiune.",
+          "Confort: cel puțin o cursă de pasager evaluată 121, fiecare cu accelerația sub 2 m/s² și jerk sub 2 m/s³, cel mult 0 eșecuri.",
+          "Fidelitate: flota evaluată 122 reproduce profilul publicat în proporție de 100% (verdict EXACT).",
+          "Incidente: cel mult 0 evenimente 007 COLLISION în fereastra de evaluare."
+        ],
+        "evaluatedRides": 0,
+        "evaluatedIncidents": 0
+      },
+      "service": {
+        "verdict": "BELOW_TARGET",
+        "requests": 32,
+        "served": 2,
+        "failed": 0,
+        "cancelled": 0,
+        "pending": 30,
+        "late": 0,
+        "servedFraction": 0.0625,
+        "plannedSeconds": 303.507729,
+        "deliveredSeconds": 303.507729,
+        "missedSeconds": 0,
+        "allServedRows": false
+      },
+      "comfort": {
+        "verdict": "PASSED",
+        "rides": 2,
+        "passed": 2,
+        "failed": 0,
+        "peakAccelerationMps2": 0,
+        "peakJerkMps3": 0
+      },
+      "fidelity": {
+        "verdict": "MET",
+        "cityVerdict": "EXACT",
+        "evaluatedVehicles": 40,
+        "matchedCells": 3200,
+        "totalCells": 3200,
+        "matchedFraction": 1
+      },
+      "incidents": {
+        "limit": 0,
+        "used": 0,
+        "remaining": 0,
+        "withinBudget": true,
+        "duplicates": 0
+      },
+      "composite": {
+        "verdict": "INCOMPLETE",
+        "dimensionVerdicts": [
+          "SERVICE:BELOW_TARGET",
+          "COMFORT:PASSED",
+          "FIDELITY:MET",
+          "INCIDENTS:WITHIN_BUDGET",
+          "WINDOW:INCOMPLETE"
+        ],
+        "failingDimensions": [
+          "WINDOW",
+          "SERVICE"
+        ]
+      },
+      "outcome": "NO_PROGRESS",
+      "reasons": [
+        "WINDOW_INCOMPLETE",
+        "SERVICE_BELOW_TARGET"
+      ],
+      "gate": "NO_PROGRESS",
+      "profileWrites": 0,
+      "learningJobs": 0,
+      "deterministic": true,
+      "briefingMatchesPreStart": true
+    }
+  ],
+  "checks": [
+    {
+      "name": "contract-schema",
+      "expected": "124-mission-fleet-v1",
+      "actual": "124-mission-fleet-v1",
+      "pass": true,
+      "detail": "mission schema"
+    },
+    {
+      "name": "mission-id",
+      "expected": "campaign-8-fleet-challenge",
+      "actual": "campaign-8-fleet-challenge",
+      "pass": true,
+      "detail": "116 campaign stage"
+    },
+    {
+      "name": "objective-id",
+      "expected": "fleet-clean-dropoffs",
+      "actual": "fleet-clean-dropoffs",
+      "pass": true,
+      "detail": "the authored 116 objective"
+    },
+    {
+      "name": "window-ticks",
+      "expected": 21600,
+      "actual": 21600,
+      "pass": true,
+      "detail": "the 116 evaluation window"
+    },
+    {
+      "name": "incident-budget",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the 116 numeric incident budget"
+    },
+    {
+      "name": "limit-taxis",
+      "expected": 70,
+      "actual": 70,
+      "pass": true,
+      "detail": "the 057 fleet capacity"
+    },
+    {
+      "name": "limit-window",
+      "expected": 5184000,
+      "actual": 5184000,
+      "pass": true,
+      "detail": "the upper bound of one evaluation window (24 h at 60 Hz)"
+    },
+    {
+      "name": "service-targets",
+      "expected": "1/0",
+      "actual": "1/0",
+      "pass": true,
+      "detail": "every request served and no ride after its promise"
+    },
+    {
+      "name": "comfort-thresholds",
+      "expected": "2/2",
+      "actual": "2/2",
+      "pass": true,
+      "detail": "the 121 acceleration and jerk thresholds shown to the player"
+    },
+    {
+      "name": "comfort-targets",
+      "expected": "1/0",
+      "actual": "1/0",
+      "pass": true,
+      "detail": "at least one evaluated passenger ride and no failure"
+    },
+    {
+      "name": "fidelity-target",
+      "expected": "1/EXACT",
+      "actual": "1/EXACT",
+      "pass": true,
+      "detail": "the 122 fleet must reproduce the profile exactly"
+    },
+    {
+      "name": "composite-rule",
+      "expected": "ALL_DIMENSIONS_WITHIN_BUDGET",
+      "actual": "ALL_DIMENSIONS_WITHIN_BUDGET",
+      "pass": true,
+      "detail": "the explicit conjunction, never a weighted score"
+    },
+    {
+      "name": "composite-verdicts",
+      "expected": "SUCCESS,FAILURE,INCOMPLETE",
+      "actual": "SUCCESS,FAILURE,INCOMPLETE",
+      "pass": true,
+      "detail": "closed composite vocabulary"
+    },
+    {
+      "name": "dimensions",
+      "expected": "SERVICE,COMFORT,FIDELITY,INCIDENTS,WINDOW",
+      "actual": "SERVICE,COMFORT,FIDELITY,INCIDENTS,WINDOW",
+      "pass": true,
+      "detail": "each dimension is reported separately"
+    },
+    {
+      "name": "service-verdicts",
+      "expected": "MET,BELOW_TARGET",
+      "actual": "MET,BELOW_TARGET",
+      "pass": true,
+      "detail": "closed service verdicts"
+    },
+    {
+      "name": "comfort-verdicts",
+      "expected": "PASSED,FAILED,NOT_EVALUATED",
+      "actual": "PASSED,FAILED,NOT_EVALUATED",
+      "pass": true,
+      "detail": "closed comfort verdicts"
+    },
+    {
+      "name": "fidelity-verdicts",
+      "expected": "MET,BELOW_TARGET",
+      "actual": "MET,BELOW_TARGET",
+      "pass": true,
+      "detail": "closed fidelity verdicts"
+    },
+    {
+      "name": "request-statuses",
+      "expected": "SERVED,FAILED,CANCELLED,PENDING",
+      "actual": "SERVED,FAILED,CANCELLED,PENDING",
+      "pass": true,
+      "detail": "closed request statuses"
+    },
+    {
+      "name": "reasons",
+      "expected": "SERVICE_BELOW_TARGET,COMFORT_FAILED,COMFORT_NOT_EVALUATED,FIDELITY_BELOW_TARGET,INCIDENT_BUDGET_EXCEEDED,WINDOW_INCOMPLETE",
+      "actual": "SERVICE_BELOW_TARGET,COMFORT_FAILED,COMFORT_NOT_EVALUATED,FIDELITY_BELOW_TARGET,INCIDENT_BUDGET_EXCEEDED,WINDOW_INCOMPLETE",
+      "pass": true,
+      "detail": "every failure has a closed reason"
+    },
+    {
+      "name": "outcomes",
+      "expected": "PROGRESS,NO_PROGRESS",
+      "actual": "PROGRESS,NO_PROGRESS",
+      "pass": true,
+      "detail": "closed gate outcomes"
+    },
+    {
+      "name": "briefing-status",
+      "expected": "BEFORE_START",
+      "actual": "BEFORE_START",
+      "pass": true,
+      "detail": "the briefing exists before start"
+    },
+    {
+      "name": "briefing-evaluated-rides",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no ride is in the briefing"
+    },
+    {
+      "name": "briefing-evaluated-incidents",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no incident is in the briefing"
+    },
+    {
+      "name": "briefing-window",
+      "expected": 21600,
+      "actual": 21600,
+      "pass": true,
+      "detail": "the shown window is the 116 duration"
+    },
+    {
+      "name": "briefing-budget",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the shown budget is the 116 budget"
+    },
+    {
+      "name": "briefing-conditions",
+      "expected": "SERVICE,COMFORT,FIDELITY,INCIDENTS",
+      "actual": "SERVICE,COMFORT,FIDELITY,INCIDENTS",
+      "pass": true,
+      "detail": "every measured dimension is shown before start"
+    },
+    {
+      "name": "briefing-composite-rule",
+      "expected": "ALL_DIMENSIONS_WITHIN_BUDGET",
+      "actual": "ALL_DIMENSIONS_WITHIN_BUDGET",
+      "pass": true,
+      "detail": "the composition rule is shown before start"
+    },
+    {
+      "name": "briefing-embedded-everywhere",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "every result is judged against the pre-start briefing"
+    },
+    {
+      "name": "success-requests",
+      "expected": 32,
+      "actual": 32,
+      "pass": true,
+      "detail": "the whole real 059 schedule is evaluated"
+    },
+    {
+      "name": "success-served",
+      "expected": 32,
+      "actual": 32,
+      "pass": true,
+      "detail": "every request served"
+    },
+    {
+      "name": "success-pending",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "nothing left pending"
+    },
+    {
+      "name": "success-fraction",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "full service"
+    },
+    {
+      "name": "success-late",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no ride after its promise"
+    },
+    {
+      "name": "success-service",
+      "expected": "MET",
+      "actual": "MET",
+      "pass": true,
+      "detail": "the service target is met"
+    },
+    {
+      "name": "success-planned-equals-delivered",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "planned and delivered service seconds agree"
+    },
+    {
+      "name": "success-comfort",
+      "expected": "PASSED",
+      "actual": "PASSED",
+      "pass": true,
+      "detail": "three real 121 rides pass"
+    },
+    {
+      "name": "success-comfort-rides",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "three passenger rides evaluated"
+    },
+    {
+      "name": "success-fidelity",
+      "expected": "EXACT",
+      "actual": "EXACT",
+      "pass": true,
+      "detail": "the fleet copies the profile"
+    },
+    {
+      "name": "success-fidelity-verdict",
+      "expected": "MET",
+      "actual": "MET",
+      "pass": true,
+      "detail": "the fidelity target is met"
+    },
+    {
+      "name": "success-incidents",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no collision inside the window"
+    },
+    {
+      "name": "success-composite",
+      "expected": "SUCCESS",
+      "actual": "SUCCESS",
+      "pass": true,
+      "detail": "the explicit conjunction passes"
+    },
+    {
+      "name": "success-outcome",
+      "expected": "PROGRESS",
+      "actual": "PROGRESS",
+      "pass": true,
+      "detail": "the campaign gate progresses"
+    },
+    {
+      "name": "success-gate",
+      "expected": "PROGRESS",
+      "actual": "PROGRESS",
+      "pass": true,
+      "detail": "the gate mirrors the composite verdict"
+    },
+    {
+      "name": "success-window-complete",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the early end is legitimate because no request stayed pending"
+    },
+    {
+      "name": "success-ended-before-window",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the run ended early, not by window expiry"
+    },
+    {
+      "name": "failure-served",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "only two rides were delivered"
+    },
+    {
+      "name": "failure-failed",
+      "expected": 30,
+      "actual": 30,
+      "pass": true,
+      "detail": "thirty rides failed"
+    },
+    {
+      "name": "failure-fraction",
+      "expected": 0.0625,
+      "actual": 0.0625,
+      "pass": true,
+      "detail": "2 of 32 requests served"
+    },
+    {
+      "name": "failure-service",
+      "expected": "BELOW_TARGET",
+      "actual": "BELOW_TARGET",
+      "pass": true,
+      "detail": "the service target fails"
+    },
+    {
+      "name": "failure-comfort",
+      "expected": "FAILED",
+      "actual": "FAILED",
+      "pass": true,
+      "detail": "the comfort target fails"
+    },
+    {
+      "name": "failure-fidelity-still-met",
+      "expected": "MET",
+      "actual": "MET",
+      "pass": true,
+      "detail": "the passing dimension is reported, not hidden"
+    },
+    {
+      "name": "failure-composite",
+      "expected": "FAILURE",
+      "actual": "FAILURE",
+      "pass": true,
+      "detail": "the composite verdict fails"
+    },
+    {
+      "name": "failure-failing-dimensions",
+      "expected": "SERVICE,COMFORT",
+      "actual": "SERVICE,COMFORT",
+      "pass": true,
+      "detail": "both failing dimensions are named"
+    },
+    {
+      "name": "failure-reasons",
+      "expected": "SERVICE_BELOW_TARGET,COMFORT_FAILED",
+      "actual": "SERVICE_BELOW_TARGET,COMFORT_FAILED",
+      "pass": true,
+      "detail": "the reasons are explicit, not a score"
+    },
+    {
+      "name": "failure-outcome",
+      "expected": "NO_PROGRESS",
+      "actual": "NO_PROGRESS",
+      "pass": true,
+      "detail": "no progress on failure"
+    },
+    {
+      "name": "replay-attempt",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "the replay is the next attempt"
+    },
+    {
+      "name": "replay-profile",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the replay uses another profile version"
+    },
+    {
+      "name": "replay-instance",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the replay has its own stable instance identity"
+    },
+    {
+      "name": "replay-same-window",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the evaluation window is unchanged by the replay"
+    },
+    {
+      "name": "replay-same-conditions",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the shown conditions are unchanged by the replay"
+    },
+    {
+      "name": "replay-fidelity",
+      "expected": "PARTIAL",
+      "actual": "PARTIAL",
+      "pass": true,
+      "detail": "six vehicles kept the old version"
+    },
+    {
+      "name": "replay-fidelity-verdict",
+      "expected": "BELOW_TARGET",
+      "actual": "BELOW_TARGET",
+      "pass": true,
+      "detail": "the fidelity target fails on a partial fleet"
+    },
+    {
+      "name": "replay-failing-dimensions",
+      "expected": "FIDELITY",
+      "actual": "FIDELITY",
+      "pass": true,
+      "detail": "only the fidelity dimension fails"
+    },
+    {
+      "name": "replay-composite",
+      "expected": "FAILURE",
+      "actual": "FAILURE",
+      "pass": true,
+      "detail": "the replay is judged on its own"
+    },
+    {
+      "name": "budget-limit",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the numeric 116 budget"
+    },
+    {
+      "name": "budget-used",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "one real 007 collision counted"
+    },
+    {
+      "name": "budget-remaining",
+      "expected": -1,
+      "actual": -1,
+      "pass": true,
+      "detail": "the budget is exceeded"
+    },
+    {
+      "name": "budget-within",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "the budget target fails"
+    },
+    {
+      "name": "budget-failing-dimensions",
+      "expected": "INCIDENTS",
+      "actual": "INCIDENTS",
+      "pass": true,
+      "detail": "only the incident dimension fails"
+    },
+    {
+      "name": "budget-other-dimensions-pass",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the passing dimensions stay visible"
+    },
+    {
+      "name": "incomplete-window",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "thirty requests stayed pending"
+    },
+    {
+      "name": "incomplete-pending",
+      "expected": 30,
+      "actual": 30,
+      "pass": true,
+      "detail": "the unfinished work is reported"
+    },
+    {
+      "name": "incomplete-verdict",
+      "expected": "INCOMPLETE",
+      "actual": "INCOMPLETE",
+      "pass": true,
+      "detail": "no success is claimed"
+    },
+    {
+      "name": "incomplete-failing-dimensions",
+      "expected": "WINDOW,SERVICE",
+      "actual": "WINDOW,SERVICE",
+      "pass": true,
+      "detail": "both the window and the service fail"
+    },
+    {
+      "name": "incomplete-reasons",
+      "expected": "WINDOW_INCOMPLETE,SERVICE_BELOW_TARGET",
+      "actual": "WINDOW_INCOMPLETE,SERVICE_BELOW_TARGET",
+      "pass": true,
+      "detail": "the reasons name the unfinished window"
+    },
+    {
+      "name": "structural-read-only",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the mission never writes a profile or queues a learning job"
+    },
+    {
+      "name": "deterministic",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "evaluating the same run twice produces the identical bytes"
+    }
+  ],
+  "summary": {
+    "runs": 5,
+    "checks": 77,
+    "passed": 77,
+    "pass": true
+  }
+}

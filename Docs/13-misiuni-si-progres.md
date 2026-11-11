@@ -156,4 +156,25 @@ Stările sunt `REPLACED`, `BUILDING`, `NO_DEMONSTRATIONS`, `REJECTED`. Intrăril
 
 Contractul este structural read-only: `profileWrites: 0` și `learningJobs: 0`, fără ceas, DOM, renderer, store de profil, coadă de learning sau aleator. Limitele sunt fixe: 128 de versiuni (capacitatea 109 pe profil), 256 de unități UTF-16 pentru identități și token-uri, toleranță `1e-9` la compararea valorilor. Nu fac parte din contract: UI-ul de misiune, XP-ul, persistarea, compoziția cu `main.ts` și captura reală de condus.
 
+## Contract implementat în V1 (PBI 124): provocarea finală de serviciu
+
+`src/missions/fleet.ts` cu schema `124-mission-fleet-v1` implementează etapa 8 a campaniei (`campaign-8-fleet-challenge`, definiție 116) ca o **cursă reală de serviciu** măsurată pe trei dimensiuni separate, nu ca un scor final. Contractul are două intrări distincte: `fleetChallengeBriefing` produce **înainte de start** fereastra, condițiile, țintele și bugetul, iar `evaluateFleetMission` judecă o încercare împotriva aceleiași instanțe de briefing, pe care o embeduiește în rezultat.
+
+**Fereastra de evaluare** este un contract explicit: `[startTick, endTick]` cu ambele capete incluse, `durationTicks` luat din `windowTicks` al definiției 116 (21.600 tick-uri, adică 6 minute la 60 Hz) și `endTick = startTick + durationTicks`. Briefingul are `status: BEFORE_START` și `evaluated: { rides: 0, incidents: 0 }` structural; parserul refuză orice câmp de rezultat trimis la briefing (`rides`, `incidents` etc. sunt câmpuri necunoscute). Orice cerere sau incident din afara ferestrei este refuzat ca eroare de contract, deci fereastra afișată este exact cea judecată. O încercare se încheie legitim devreme numai când toate cererile au un rezultat terminal 061; altfel `window.complete` este `false`.
+
+**Cererea de curse** este cererea reală 059: `requestId`, `scenarioId`, `windowId`, `ordinal`, `spawnTick`, `demandLevel`, `access: TAXI`, zonele de origine/destinație, plus promisiunea de serviciu autorată `promiseTick` (`spawnTick < promiseTick <= endTick`). Rezultatul fiecărei cereri este un rând cu stare închisă `SERVED`, `FAILED`, `CANCELLED` sau `PENDING`, cursa 061 și taxiul care a servit-o, `responseTicks` și `late`.
+
+**Țintele de serviciu** sunt publicate în briefing: `minimumServedRides` este pragul obiectivului 116 `fleet-clean-dropoffs` pentru dificultatea aleasă (2/3/4 pentru EASY/NORMAL/HARD, prin `missionTargetFor`), `minimumServedFraction` este `1` (toate cererile 059 ale ferestrei trebuie servite) și `maximumLateRides` este `0`. Valorile măsurate vin exclusiv din 059/061: curse servite, eșuate, anulate, în așteptare, întârziate, secunde planificate versus livrate. Nu există o a doua metrică de serviciu.
+
+**Confortul** refolosește obiectivul 121: fiecare cursă de pasager este evaluată cu `evaluateComfortRide`, iar dimensiunea cere cel puțin o cursă evaluată, zero eșecuri și pragurile 121 de 2 m/s² și 2 m/s³. Rezultatul listează fiecare cursă cu statusul și vârfurile ei; un rezultat `NOT_EVALUATED` nu poate produce succes. Confortul nu citește și nu raportează niciun scor de stil.
+
+**Fidelitatea** proiectează evaluarea reală 122 a aceleiași flote: contractul cere ca rezultatul 122 să aparțină exact profilului și versiunii încercării și să acopere întreaga flotă evaluată, apoi citește verdicul și celulele potrivite. Ținta este `minimumMatchedFraction: 1` cu verdictul 122 `EXACT`; o flotă parțial actualizată rămâne `PARTIAL` și eșuează, fără rotunjire în sus. Nu se recalculează imitația în modul.
+
+**Bugetul de incidente** este numeric și vine din 116 (`incidentBudget`, `0` pentru etapa 8). Incidentele sunt evenimente reale 007 `COLLISION`, validate cu `parseSimulationEvent`, numărate o singură dată pe `eventId` și numai în intervalul evaluat; un eveniment relivrat nu umflă bugetul (`duplicates` este raportat separat), iar un incident al unui vehicul nedeclarat sau din afara ferestrei este refuzat.
+
+**Verdictul compozit este explicit derivat**, nu un scor opac. `FLEET_COMPOSITE_RULE` publică regula `ALL_DIMENSIONS_WITHIN_BUDGET`: `SUCCESS` numai când fereastra este completă și serviciul (`MET`), confortul (`PASSED`), fidelitatea (`MET`) și bugetul de incidente (`WITHIN_BUDGET`) trec toate; `INCOMPLETE` când fereastra nu s-a încheiat și au rămas cereri fără rezultat; `FAILURE` altfel, cu `failingDimensions` și motive închise. Dimensiunile au verdicte proprii în `composite.dimensions`, deci o dimensiune care trece rămâne vizibilă într-o încercare eșuată, iar una care eșuează nu este compensată de celelalte. Poarta campaniei (`fleetMissionGate`) acordă `PROGRESS` numai pentru `SUCCESS`.
+
+Contractul este structural read-only: `profileWrites: 0` și `learningJobs: 0`, fără ceas, DOM, renderer, store de profil, coadă de learning sau aleator. Limitele sunt fixe: 70 de taxiuri (capacitatea 057), 1024 cereri/curse/incidente, 64 curse de confort, o fereastră de maximum 5.184.000 tick-uri (24 h la 60 Hz) și 256 de unități UTF-16 pentru identități. Nu fac parte din contract: UI-ul de provocare, XP-ul, persistarea, compoziția cu `main.ts` și captura reală de condus.
+
+
 
