@@ -1,0 +1,745 @@
+{
+  "version": "142-experiment-rerun-v1",
+  "contract": {
+    "policyKeys": {
+      "SIGNAL": [
+        "red_stop_probability",
+        "green_start_delay",
+        "red_stop_line_offset",
+        "late_red_brake_threshold"
+      ],
+      "STOP": [
+        "stop_full_probability",
+        "stop_dwell_time",
+        "stop_line_offset"
+      ]
+    },
+    "divergenceCauses": [
+      "PROBABILITY_THRESHOLD",
+      "GEOMETRY_PARAMETER",
+      "SEED_DIVERGENCE",
+      "UNCLASSIFIED"
+    ],
+    "refusalCodes": [
+      "SNAPSHOT_REFUSED",
+      "SNAPSHOT_STATE_UNREADABLE",
+      "PROFILE_DUPLICATE",
+      "PROFILE_INCOMPLETE",
+      "PROFILE_PARAMETER_OUT_OF_RANGE",
+      "SCENARIO_INVALID",
+      "OPPORTUNITY_UNKNOWN",
+      "VEHICLE_UNKNOWN",
+      "SIGNAL_UNKNOWN",
+      "TICK_OUT_OF_HORIZON",
+      "LEDGER_CHANGED"
+    ],
+    "reproducibility": {
+      "scope": "SAME_PLATFORM_SAME_SEED",
+      "crossPlatformBitExactness": false,
+      "statement": "Reproductibilitatea este promisă numai pe aceeași platformă, cu același snapshot și același seed de bază. Identitatea bit cu bit între browsere, GPU-uri sau backenduri de fizică diferite nu este promisă."
+    }
+  },
+  "snapshot": {
+    "tick": 60,
+    "expectedTick": 60,
+    "ticksAdvanced": 0,
+    "bytes": 64378,
+    "checksum": "c5a0738c0be1b8a149726738b9b9cccad5655229c542396b04d8aa9d24d8bcb5",
+    "entities": 287,
+    "fields": 3080,
+    "mismatches": 0
+  },
+  "state": {
+    "worldEpoch": 1,
+    "profileId": "profile-1",
+    "learningEpoch": 2,
+    "rngSeed": 6221086,
+    "counts": {
+      "vehicles": 70,
+      "controllers": 70,
+      "rides": 30,
+      "passengers": 30,
+      "segments": 3,
+      "opportunities": 64,
+      "signals": 8,
+      "dispatch": 4,
+      "learningJobs": 3
+    },
+    "requestDigest": "fc0894ac"
+  },
+  "seed": {
+    "baseSeed": 142000,
+    "baseSeedHex": "00022ab0",
+    "scenarioId": "city-v1/exchange-west",
+    "scenarioSeed": 1360032776,
+    "scenarioSeedHex": "51107408",
+    "profileIdentityInSeed": false,
+    "derivation": [
+      "deriveScenarioSeed(baseSeed, scenarioId) -> scenarioSeed",
+      "deriveVehicleSeed(scenarioSeed, vehicleId) -> vehicleSeed",
+      "deriveOpportunitySeed(vehicleSeed, opportunityKey) -> opportunitySeed (the 050/051 sample)"
+    ],
+    "addressing": [
+      {
+        "opportunityKey": "opportunity-00",
+        "vehicleId": "taxi-01",
+        "vehicleSeed": 526436252,
+        "opportunitySeed": 2857081938
+      },
+      {
+        "opportunityKey": "opportunity-01",
+        "vehicleId": "taxi-02",
+        "vehicleSeed": 197709273,
+        "opportunitySeed": 2536558592
+      },
+      {
+        "opportunityKey": "opportunity-02",
+        "vehicleId": "taxi-03",
+        "vehicleSeed": 1313042239,
+        "opportunitySeed": 3975536073
+      },
+      {
+        "opportunityKey": "opportunity-03",
+        "vehicleId": "taxi-04",
+        "vehicleSeed": 2621165900,
+        "opportunitySeed": 733039435
+      },
+      {
+        "opportunityKey": "opportunity-04",
+        "vehicleId": "taxi-05",
+        "vehicleSeed": 1818996493,
+        "opportunitySeed": 1101312382
+      },
+      {
+        "opportunityKey": "opportunity-05",
+        "vehicleId": "taxi-06",
+        "vehicleSeed": 565434487,
+        "opportunitySeed": 2391345349
+      },
+      {
+        "opportunityKey": "opportunity-06",
+        "vehicleId": "taxi-07",
+        "vehicleSeed": 689340886,
+        "opportunitySeed": 1500022124
+      },
+      {
+        "opportunityKey": "opportunity-07",
+        "vehicleId": "taxi-08",
+        "vehicleSeed": 4146793434,
+        "opportunitySeed": 2410551076
+      },
+      {
+        "opportunityKey": "opportunity-08",
+        "vehicleId": "taxi-09",
+        "vehicleSeed": 2529643516,
+        "opportunitySeed": 2112806896
+      },
+      {
+        "opportunityKey": "opportunity-09",
+        "vehicleId": "taxi-10",
+        "vehicleSeed": 1608692667,
+        "opportunitySeed": 1946155034
+      },
+      {
+        "opportunityKey": "opportunity-10",
+        "vehicleId": "taxi-11",
+        "vehicleSeed": 2849873678,
+        "opportunitySeed": 1329382413
+      },
+      {
+        "opportunityKey": "opportunity-11",
+        "vehicleId": "taxi-12",
+        "vehicleSeed": 1784544520,
+        "opportunitySeed": 718957361
+      },
+      {
+        "opportunityKey": "opportunity-12",
+        "vehicleId": "taxi-13",
+        "vehicleSeed": 2793765583,
+        "opportunitySeed": 2960909625
+      },
+      {
+        "opportunityKey": "opportunity-13",
+        "vehicleId": "taxi-14",
+        "vehicleSeed": 2191663272,
+        "opportunitySeed": 184502864
+      },
+      {
+        "opportunityKey": "opportunity-14",
+        "vehicleId": "taxi-15",
+        "vehicleSeed": 651193798,
+        "opportunitySeed": 4182437905
+      },
+      {
+        "opportunityKey": "opportunity-15",
+        "vehicleId": "taxi-16",
+        "vehicleSeed": 2889447142,
+        "opportunitySeed": 1881083966
+      },
+      {
+        "opportunityKey": "opportunity-16",
+        "vehicleId": "taxi-17",
+        "vehicleSeed": 3148682342,
+        "opportunitySeed": 1512323233
+      },
+      {
+        "opportunityKey": "opportunity-17",
+        "vehicleId": "taxi-18",
+        "vehicleSeed": 299991574,
+        "opportunitySeed": 634615028
+      },
+      {
+        "opportunityKey": "opportunity-18",
+        "vehicleId": "taxi-19",
+        "vehicleSeed": 4216167317,
+        "opportunitySeed": 337771392
+      },
+      {
+        "opportunityKey": "opportunity-19",
+        "vehicleId": "taxi-20",
+        "vehicleSeed": 1059437792,
+        "opportunitySeed": 316160458
+      },
+      {
+        "opportunityKey": "opportunity-20",
+        "vehicleId": "taxi-21",
+        "vehicleSeed": 2916515940,
+        "opportunitySeed": 3853736872
+      },
+      {
+        "opportunityKey": "opportunity-21",
+        "vehicleId": "taxi-22",
+        "vehicleSeed": 3491344710,
+        "opportunitySeed": 3248411908
+      },
+      {
+        "opportunityKey": "opportunity-22",
+        "vehicleId": "taxi-23",
+        "vehicleSeed": 405190332,
+        "opportunitySeed": 860490448
+      },
+      {
+        "opportunityKey": "opportunity-23",
+        "vehicleId": "taxi-24",
+        "vehicleSeed": 289957679,
+        "opportunitySeed": 2554355445
+      }
+    ]
+  },
+  "scenario": {
+    "scenarioId": "city-v1/exchange-west",
+    "ticks": 24,
+    "fromTick": 61,
+    "toTick": 84,
+    "opportunities": 24,
+    "kinds": {
+      "STOP": 12,
+      "SIGNAL": 12
+    }
+  },
+  "profiles": [
+    {
+      "profileId": "PRUDENT",
+      "profileVersionId": "prudent-142@1",
+      "parameters": {
+        "red_stop_probability": 1,
+        "green_start_delay": 0.9,
+        "red_stop_line_offset": 1.2,
+        "late_red_brake_threshold": 2.6,
+        "stop_full_probability": 1,
+        "stop_dwell_time": 1.4,
+        "stop_line_offset": 1.1
+      },
+      "decisions": 24,
+      "stopRequested": 20,
+      "proceeded": 4,
+      "byAction": {
+        "APPROACH": 7,
+        "PROCEED": 2,
+        "STOP": 10,
+        "HOLD": 3,
+        "RELEASE": 2
+      },
+      "traceDigest": "daf459fc"
+    },
+    {
+      "profileId": "IMPULSIVE",
+      "profileVersionId": "impulsive-142@1",
+      "parameters": {
+        "red_stop_probability": 0.75,
+        "green_start_delay": 0.35,
+        "red_stop_line_offset": 0.6,
+        "late_red_brake_threshold": 1.4,
+        "stop_full_probability": 0.6,
+        "stop_dwell_time": 0.5,
+        "stop_line_offset": 0.8
+      },
+      "decisions": 24,
+      "stopRequested": 12,
+      "proceeded": 12,
+      "byAction": {
+        "APPROACH": 5,
+        "PROCEED": 5,
+        "STOP": 7,
+        "ROLL_THROUGH": 4,
+        "RELEASE": 3
+      },
+      "traceDigest": "525ff680"
+    }
+  ],
+  "comparison": {
+    "left": "prudent-142@1",
+    "right": "impulsive-142@1",
+    "decisions": 24,
+    "identical": 16,
+    "divergent": 8,
+    "sameRequest": true,
+    "sameSeed": true,
+    "sameState": true,
+    "causeCounts": {
+      "PROBABILITY_THRESHOLD": 7,
+      "GEOMETRY_PARAMETER": 1,
+      "SEED_DIVERGENCE": 0,
+      "UNCLASSIFIED": 0
+    },
+    "parameterCounts": {
+      "stop_full_probability": 4,
+      "red_stop_probability": 3,
+      "stop_dwell_time": 1
+    },
+    "profileDifferences": [
+      {
+        "key": "red_stop_probability",
+        "left": 1,
+        "right": 0.75
+      },
+      {
+        "key": "green_start_delay",
+        "left": 0.9,
+        "right": 0.35
+      },
+      {
+        "key": "red_stop_line_offset",
+        "left": 1.2,
+        "right": 0.6
+      },
+      {
+        "key": "late_red_brake_threshold",
+        "left": 2.6,
+        "right": 1.4
+      },
+      {
+        "key": "stop_full_probability",
+        "left": 1,
+        "right": 0.6
+      },
+      {
+        "key": "stop_dwell_time",
+        "left": 1.4,
+        "right": 0.5
+      },
+      {
+        "key": "stop_line_offset",
+        "left": 1.1,
+        "right": 0.8
+      }
+    ],
+    "unattributed": 0,
+    "crossPlatformBitExactness": false
+  },
+  "decisions": [
+    {
+      "opportunityKey": "opportunity-04",
+      "kind": "STOP",
+      "decisionTick": 65,
+      "vehicleId": "taxi-05",
+      "sampledUnit": 0.9237732081674039,
+      "opportunitySeed": 1101312382,
+      "leftAction": "HOLD",
+      "leftReason": "DWELL_IN_PROGRESS",
+      "rightAction": "ROLL_THROUGH",
+      "rightReason": "ROLLING_STOP_BY_PROFILE",
+      "thresholdLeft": 1,
+      "thresholdRight": 0.6,
+      "divergent": true,
+      "cause": "PROBABILITY_THRESHOLD",
+      "parameter": "stop_full_probability"
+    },
+    {
+      "opportunityKey": "opportunity-06",
+      "kind": "STOP",
+      "decisionTick": 67,
+      "vehicleId": "taxi-07",
+      "sampledUnit": 0.7330009788274765,
+      "opportunitySeed": 1500022124,
+      "leftAction": "APPROACH",
+      "leftReason": "STOP_APPROACH",
+      "rightAction": "ROLL_THROUGH",
+      "rightReason": "ROLLING_STOP_BY_PROFILE",
+      "thresholdLeft": 1,
+      "thresholdRight": 0.6,
+      "divergent": true,
+      "cause": "PROBABILITY_THRESHOLD",
+      "parameter": "stop_full_probability"
+    },
+    {
+      "opportunityKey": "opportunity-07",
+      "kind": "SIGNAL",
+      "decisionTick": 68,
+      "vehicleId": "taxi-08",
+      "sampledUnit": 0.8813886968418956,
+      "opportunitySeed": 2410551076,
+      "leftAction": "STOP",
+      "leftReason": "STOP_LINE_APPROACH",
+      "rightAction": "PROCEED",
+      "rightReason": "CROSS_RED_BY_PROFILE",
+      "thresholdLeft": 1,
+      "thresholdRight": 0.75,
+      "divergent": true,
+      "cause": "PROBABILITY_THRESHOLD",
+      "parameter": "red_stop_probability"
+    },
+    {
+      "opportunityKey": "opportunity-08",
+      "kind": "STOP",
+      "decisionTick": 69,
+      "vehicleId": "taxi-09",
+      "sampledUnit": 0.7881907664705068,
+      "opportunitySeed": 2112806896,
+      "leftAction": "APPROACH",
+      "leftReason": "STOP_APPROACH",
+      "rightAction": "ROLL_THROUGH",
+      "rightReason": "ROLLING_STOP_BY_PROFILE",
+      "thresholdLeft": 1,
+      "thresholdRight": 0.6,
+      "divergent": true,
+      "cause": "PROBABILITY_THRESHOLD",
+      "parameter": "stop_full_probability"
+    },
+    {
+      "opportunityKey": "opportunity-12",
+      "kind": "STOP",
+      "decisionTick": 73,
+      "vehicleId": "taxi-13",
+      "sampledUnit": 0.24663381092250347,
+      "opportunitySeed": 2960909625,
+      "leftAction": "HOLD",
+      "leftReason": "DWELL_IN_PROGRESS",
+      "rightAction": "RELEASE",
+      "rightReason": "DWELL_SATISFIED",
+      "thresholdLeft": 1,
+      "thresholdRight": 0.6,
+      "divergent": true,
+      "cause": "GEOMETRY_PARAMETER",
+      "parameter": "stop_dwell_time"
+    },
+    {
+      "opportunityKey": "opportunity-15",
+      "kind": "SIGNAL",
+      "decisionTick": 76,
+      "vehicleId": "taxi-16",
+      "sampledUnit": 0.8481228661257774,
+      "opportunitySeed": 1881083966,
+      "leftAction": "STOP",
+      "leftReason": "STOP_LINE_APPROACH",
+      "rightAction": "PROCEED",
+      "rightReason": "CROSS_RED_BY_PROFILE",
+      "thresholdLeft": 1,
+      "thresholdRight": 0.75,
+      "divergent": true,
+      "cause": "PROBABILITY_THRESHOLD",
+      "parameter": "red_stop_probability"
+    },
+    {
+      "opportunityKey": "opportunity-20",
+      "kind": "STOP",
+      "decisionTick": 81,
+      "vehicleId": "taxi-21",
+      "sampledUnit": 0.8339242918882519,
+      "opportunitySeed": 3853736872,
+      "leftAction": "HOLD",
+      "leftReason": "DWELL_IN_PROGRESS",
+      "rightAction": "ROLL_THROUGH",
+      "rightReason": "ROLLING_STOP_BY_PROFILE",
+      "thresholdLeft": 1,
+      "thresholdRight": 0.6,
+      "divergent": true,
+      "cause": "PROBABILITY_THRESHOLD",
+      "parameter": "stop_full_probability"
+    },
+    {
+      "opportunityKey": "opportunity-21",
+      "kind": "SIGNAL",
+      "decisionTick": 82,
+      "vehicleId": "taxi-22",
+      "sampledUnit": 0.9835877877194434,
+      "opportunitySeed": 3248411908,
+      "leftAction": "STOP",
+      "leftReason": "STOP_LINE_APPROACH",
+      "rightAction": "PROCEED",
+      "rightReason": "CROSS_RED_BY_PROFILE",
+      "thresholdLeft": 1,
+      "thresholdRight": 0.75,
+      "divergent": true,
+      "cause": "PROBABILITY_THRESHOLD",
+      "parameter": "red_stop_probability"
+    }
+  ],
+  "repeat": {
+    "identical": true,
+    "traceDigests": [
+      "daf459fc",
+      "525ff680"
+    ]
+  },
+  "refusals": [
+    {
+      "probe": "incompatible-snapshot",
+      "stage": "SNAPSHOT",
+      "codes": [
+        "SNAPSHOT_REFUSED"
+      ],
+      "paths": [],
+      "detail": "The 140 snapshot load refused in COMPATIBILITY: engineVersion: stored babylon-9.28.0, current babylon-9.29.0; physicsVersion: stored ammo-0.4.0, current rapier-0.21.0; mapVersion: stored city-v2, current city-v1"
+    },
+    {
+      "probe": "profile-incomplete",
+      "stage": "PROFILE",
+      "codes": [
+        "PROFILE_INCOMPLETE"
+      ],
+      "paths": [
+        "profiles[0].profile.parameters.stop_full_probability"
+      ],
+      "detail": "PROFILE_INCOMPLETE at profiles[0].profile.parameters.stop_full_probability: The profile incomplete@1 has no stop_full_probability"
+    },
+    {
+      "probe": "scenario-horizon",
+      "stage": "SCENARIO",
+      "codes": [
+        "TICK_OUT_OF_HORIZON"
+      ],
+      "paths": [
+        "scenario.opportunities[0].decisionTick"
+      ],
+      "detail": "TICK_OUT_OF_HORIZON at scenario.opportunities[0].decisionTick: 62 is outside (60, 61]"
+    },
+    {
+      "probe": "profile-duplicate",
+      "stage": "PROFILE",
+      "codes": [
+        "PROFILE_DUPLICATE"
+      ],
+      "paths": [
+        "profiles[1].profile.versionId"
+      ],
+      "detail": "PROFILE_DUPLICATE at profiles[1].profile.versionId: The profile version same@1 is compared with itself"
+    },
+    {
+      "probe": "ledger-changed",
+      "stage": "LEDGER",
+      "codes": [
+        "LEDGER_CHANGED"
+      ],
+      "paths": [
+        "ledger.KPI"
+      ],
+      "detail": "Live ledgers changed during the rerun: KPI"
+    }
+  ],
+  "ledger": {
+    "learning": "5f9bdd0d3962f6e8f25b1d4264d0cccb4bcde4f22369479e7fe1aaeac1409a51",
+    "rewards": "719e691629d32c21b2582bfa63ce9ef292e9a500f4848beb29374aa133bbf1b6",
+    "kpi": "0be4b6ba31b22957f3141cbab7b433423604e0aa7373b597be4fbbed8b94d10c",
+    "before": "0be4b6ba31b22957f3141cbab7b433423604e0aa7373b597be4fbbed8b94d10c",
+    "after": "0be4b6ba31b22957f3141cbab7b433423604e0aa7373b597be4fbbed8b94d10c",
+    "unchanged": true,
+    "liveWrites": 0,
+    "refusedWrites": 0,
+    "copyWrites": 0,
+    "controlDetected": true
+  },
+  "checks": [
+    {
+      "name": "snapshot-tick",
+      "expected": 60,
+      "actual": 60,
+      "pass": true,
+      "detail": "the 140 snapshot loads at its own tick"
+    },
+    {
+      "name": "snapshot-bytes",
+      "expected": 64378,
+      "actual": 64378,
+      "pass": true,
+      "detail": "the 206 payload is the pinned one"
+    },
+    {
+      "name": "snapshot-checksum",
+      "expected": "c5a0738c0be1b8a149726738b9b9cccad5655229c542396b04d8aa9d24d8bcb5",
+      "actual": "c5a0738c0be1b8a149726738b9b9cccad5655229c542396b04d8aa9d24d8bcb5",
+      "pass": true,
+      "detail": "SHA-256 of the payload"
+    },
+    {
+      "name": "snapshot-fields",
+      "expected": 3080,
+      "actual": 3080,
+      "pass": true,
+      "detail": "leaf fields compared by 140"
+    },
+    {
+      "name": "snapshot-entities",
+      "expected": 287,
+      "actual": 287,
+      "pass": true,
+      "detail": "section entries compared by 140"
+    },
+    {
+      "name": "snapshot-mismatches",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "stored versus restored state"
+    },
+    {
+      "name": "snapshot-ticks-advanced",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the load neither jumps nor rewinds"
+    },
+    {
+      "name": "scenario-seed",
+      "expected": 1360032776,
+      "actual": 1360032776,
+      "pass": true,
+      "detail": "deriveScenarioSeed(baseSeed, scenarioId)"
+    },
+    {
+      "name": "seed-profile-independent",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "the profile id never enters the seed"
+    },
+    {
+      "name": "request-identical",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "one request digest for both runs"
+    },
+    {
+      "name": "state-identical",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "one start state for both runs"
+    },
+    {
+      "name": "seed-identical",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "one opportunity seed per opportunity"
+    },
+    {
+      "name": "opportunities",
+      "expected": 24,
+      "actual": 24,
+      "pass": true,
+      "detail": "authored opportunity instances"
+    },
+    {
+      "name": "decisions-per-profile",
+      "expected": 24,
+      "actual": 24,
+      "pass": true,
+      "detail": "one decision per opportunity and profile"
+    },
+    {
+      "name": "divergent",
+      "expected": 8,
+      "actual": 8,
+      "pass": true,
+      "detail": "opportunities whose outcome differs"
+    },
+    {
+      "name": "identical",
+      "expected": 16,
+      "actual": 16,
+      "pass": true,
+      "detail": "opportunities whose outcome is the same"
+    },
+    {
+      "name": "seed-divergences",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the sampled units are shared, so no divergence is a resampling"
+    },
+    {
+      "name": "unattributed-divergences",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "every divergence names the profile parameter that caused it"
+    },
+    {
+      "name": "prudent-trace",
+      "expected": "daf459fc",
+      "actual": "daf459fc",
+      "pass": true,
+      "detail": "FNV-1a digest of the PRUDENT trace"
+    },
+    {
+      "name": "impulsive-trace",
+      "expected": "525ff680",
+      "actual": "525ff680",
+      "pass": true,
+      "detail": "FNV-1a digest of the IMPULSIVE trace"
+    },
+    {
+      "name": "repeatable",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "a repeated request produces the same trace digests"
+    },
+    {
+      "name": "ledger-unchanged",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "learning/rewards/KPI fingerprints before and after"
+    },
+    {
+      "name": "ledger-live-writes",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the experiment has no live mutator"
+    },
+    {
+      "name": "cross-platform-bit-exactness",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "declared, not implied"
+    },
+    {
+      "name": "ledger-control-detected",
+      "expected": "LEDGER_CHANGED",
+      "actual": "LEDGER_CHANGED",
+      "pass": true,
+      "detail": "a moving ledger is refused"
+    }
+  ],
+  "summary": {
+    "probes": 5,
+    "checks": 25,
+    "passed": 25,
+    "pass": true
+  }
+}
