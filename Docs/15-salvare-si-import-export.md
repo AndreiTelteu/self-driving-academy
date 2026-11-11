@@ -184,3 +184,5 @@ Dovezi: [Evidence/222-bounded-pipeline](Evidence/222-bounded-pipeline/README.md)
 **Limite declarate.** Un rând de tracker respectă bugetul de corp 127 (256 KiB): o sesiune al cărei registru de identități de eveniment depășește bugetul este refuzată explicit cu `BODY_TOO_LARGE`, nu trunchiată. Jurnalul de campanie este plafonat la 256 de operații, cât capacitatea de finalizări a lui 125. Save-ul nu compune singur trackerul sau ledgerul: apelează modulele reale și nu are ceas de perete, DOM sau aleator.
 
 Dovezi: [Evidence/130-progress-save](Evidence/130-progress-save/README.md).
+
+**Arhiva de sesiune (135).** Exportul/importul unei sesiuni întregi — checkpoint 206, progres 130, campanie, setări 009, referința de generație a profilului și scenariile 127 — este documentat separat în [29-savefile-si-integritate.md](29-savefile-si-integritate.md), împreună cu regulile de mărime declarată, integritate și înlocuire atomică fără adunare de recompense. Dovezi: [Evidence/135-session-archive](Evidence/135-session-archive/README.md).
