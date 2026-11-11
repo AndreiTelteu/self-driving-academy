@@ -32,6 +32,63 @@ Schema veche se migrează numai după verificarea checksumului folosind regulile
 
 Înainte de înlocuire, UI arată sumarul fișierului validat și cere confirmarea înlocuirii sesiunii, păstrând un checkpoint de recuperare al sesiunii curente. Nu cere utilizatorului să aprobe un fișier neverificat. Commitul înlocuiește progresul, nu îl adună; inputul este eliberat, joburile precedente sunt invalidate și jocul pornește în pauză/AUTO. Daily se reconciliază cu data reală potrivit modulului 23. Eșecul parsingului, hashingului, migrării, pregătirii lumii sau storage-ului păstrează sesiunea anterioară. Limita de un writer între taburi se aplică și aici.
 
+## Contract implementat V1 (PBI 135) — arhiva de sesiune
+
+Arhiva este un document JSON versionat (`self-driving-academy-session-archive`, `formatVersion 1`, `schemaVersion 1`, unități `SI`) care capturează **o singură sesiune** și o poate înlocui integral. Nu este savefile-ul `.sdasave` al modulului 234 (acela adaugă envelope-ul, acțiunile de fișier și confirmarea UI peste snapshotul de aici) și nu este exportul de profil 133 (profilul rămâne o acțiune separată, 134).
+
+### Structura explicită și mărimea declarată
+
+Fiecare componentă are propriul slot, cu parserul modulului care o deține; `null` înseamnă „absent”, nu „gol”:
+
+| Slot | Conținut | Parser la citire |
+| --- | --- | --- |
+| `checkpoint` | rândul 206/127 al lumii (`CheckpointRecord`, cu `body` = snapshot 206) | `parseCheckpointRecord` + `readWorldSnapshot` |
+| `progress` | rândul 130 `MISSION_TRACKER` al sesiunii | `parsePersistedRecord` + `decodePlayerSave` |
+| `campaign` | rândul 130 `CAMPAIGN_LEDGER` al sesiunii | `parsePersistedRecord` + `decodePlayerSave` (rejucarea 125) |
+| `settings` | rândul 009 `RuntimeSettings` al jucătorului | `parseSettingsRecord` |
+| `profile` | referința de generație: `profileId`, `activeVersionId`, `activationSequence`, checksumul 109 al versiunii, `engineVersion` și rândul 110 de activare | `parseActivationRecord` |
+| `scenarios` | rânduri 127 `SCENARIO` explicite (maximum 8) | `parsePersistedRecord` |
+
+Documentul declară un **bilanț de mărime** (`sizes`): bytes canonici UTF-8 pentru fiecare componentă, suma lor (`total`) și plafonul față de care a fost construit (`limit = 2 097 152`). Cititorul remăsoară fiecare componentă cu `measureJsonBytes` (bugetul 127, adică exact ce poate fi scris înapoi), refuză o declarație care nu corespunde (`SIZE_MISMATCH`), o componentă peste bugetul ei (`COMPONENT_TOO_LARGE`: checkpoint/progres/campanie/scenarii 524 288, setări 131 072, referință profil 65 536) și un total peste plafon (`ARCHIVE_TOO_LARGE`). O arhivă prea mare este **refuzată explicit, niciodată trunchiată**.
+
+### Integritate
+
+Envelope-ul are `checksum = { algorithm: "SHA-256", canonicalization: "SDA-CJSON-1", value }`, calculat peste forma canonică a întregului document fără câmpul `checksum` (deci include metadatele, componentele și bilanțul de mărime). Se refolosesc `parseStrictJson`/`canonicalizeJson`/`sha256Hex` din 206/133; nu există un al doilea parser și nici un fallback fără integritate. `formatVersion`/`schemaVersion` mai noi decât build-ul sunt refuzate **înainte** de interpretarea checksumului (`FORMAT_VERSION_TOO_NEW`, `SCHEMA_TOO_NEW`).
+
+Checksumul de envelope nu este singura barieră: snapshotul 206 își păstrează checksumul propriu (verificat de `readWorldSnapshot`), rândurile 130 își păstrează digesturile (recalculate de decodor), iar jurnalul de campanie este **rejucat** în ledgerul 125 real și comparat cu digestul și totalurile stocate. Un fișier rescris și re-stampat corect este deci încă refuzat dacă lumea, progresul sau economia nu mai reproduc contractele lor.
+
+### Coerență înainte de orice scriere
+
+Ordinea la import este: limită de mărime/adâncime → parsare strictă → envelope/checksum → declarația de mărime → parserele componentelor → coerența între componente → (abia apoi) tranzacția. Coerența verificată:
+
+- fiecare componentă aparține aceleiași `sessionId` și aceluiași `worldEpoch` (`SESSION_MISMATCH`, `WORLD_EPOCH_MISMATCH`);
+- checkpointul folosește tripla engine/fizică/hartă a documentului (`VERSION_MISMATCH`) și snapshotul lui coincide cu propriul envelope (tick, `worldEpoch`, `learningEpoch`, `profileId`), exact regulile de citire ale 206;
+- referința de profil este chiar generația checkpointului: `profileId`, `activeVersionId` și `activationSequence` din snapshotul lumii trebuie să fie identice cu slotul `profile` și cu rândul 110 de activare (`PROFILE_GENERATION_MISMATCH`);
+- rândurile de progres sunt exact rândurile documentate 130 (`tracker:<sessionId>`, `campaign:<sessionId>`), au `sessionId`/`worldEpoch`-ul sesiunii, iar decodorul 130 acceptă snapshotul de tracker și rejucarea campaniei împotriva catalogului acestui build;
+- setările aparțin jucătorului sesiunii (`SETTINGS_INVALID`), iar scenariile aparțin sesiunii și epocii lumii.
+
+Un checkpoint care trimite la un profil inexistent este **refuzat**, nu „reparat”: la import, versiunea 109 numită trebuie să existe deja în baza țintă, cu același checksum, iar activarea 110 stocată trebuie să fie exact generația numită (`PROFILE_VERSION_MISSING`, `PROFILE_GENERATION_MISMATCH`). Importul de profil rămâne acțiunea explicită 134 și nu este un bypass pentru Load game.
+
+### Import atomic și înlocuitor
+
+`commitSessionArchiveRows` rulează într-o **singură tranzacție** peste `profiles`, `profileActivations`, `checkpoints`, `progress`, `settings` și `scenarios`:
+
+1. rezolvă referința de profil înainte de prima scriere;
+2. citește și validează fiecare rând care va fi șters (un rând stocat corupt este raportat, nu suprascris tăcut);
+3. șterge rândurile de progres, scenariile și checkpointurile sesiunii și rândul de setări al jucătorului — starea este **înlocuită**, nu fuzionată, deci nu pot rămâne rânduri orfane sau două economii paralele;
+4. scrie generația arhivei: cele două rânduri 130 cu revizie monotonă, setările (sau valorile implicite documentate dacă arhiva nu le are), scenariile explicite și checkpointul 206;
+5. recitește sesiunea **în aceeași tranzacție** și compară digesturile 130 și totalul XP cu arhiva; orice diferență anulează tot (`SAVE_DIGEST_MISMATCH`, `LEDGER_REPLAY_MISMATCH`).
+
+Recompensele **nu se adună**: modulul nu apelează niciodată `settle`, rândul de campanie este scris verbatim din arhivă, iar verificarea din tranzacție compară XP-ul scris cu cel arhivat. O arhivă invalidă, un eșec înainte de commit sau o lipsă de storage lasă sesiunea anterioară **byte cu byte** neatinsă; un import repetat al aceleiași arhive este idempotent. Ca și restul persistenței, importul cere pagina care deține lock-ul de scriitor (`WRITER_REQUIRED` pentru al doilea tab).
+
+### Scenarii
+
+Scenariile nu sunt un câmp liber: fiecare este un rând 127 `SCENARIO` validat (`sessionId`, `worldEpoch`, identitate unică, plafon de 8 rânduri, buget de componente), iar la import setul de scenarii al sesiunii este înlocuit cu cel din arhivă. Replay-urile și telemetria brută nu fac parte din arhivă; ele rămân opționale și separate, conform politicii de retenție.
+
+### Acoperire și verificare
+
+Testele deterministe (`tests/persistence/session-archive.test.ts`, 15 cazuri) acoperă round-trip export→import, arhivă cu checksum modificat, jurnal de campanie rescris cu envelope re-stampat, referință de profil ruptă, rând din altă sesiune, componentă peste buget, total declarat peste plafon, mărime declarată greșită, import peste o sesiune cu mai multe recompense, import repetat, rollback înainte de commit, al doilea tab, generație de profil deplasată, arhivă fără componente, chei duplicate și format mai nou. Transcriptul numeric este `Docs/Evidence/135-session-archive/report.json` (58/58 verificări), regenerabil cu `npm run save:session-archive` și verificabil cu `-- --check`.
+
 ## Acoperire și verificare
 
 135/215 furnizează exportul coerent și persistența existentă; 234 implementează envelope-ul, checksumul și acțiunile de fișier, 235 regresiile integrate. Vectorii de verificare acoperă Unicode, obiecte imbricate, reordonarea cheilor/whitespace, -0, array-uri reordonate, base64, chei duplicate și numere unsafe. Se testează roundtrip, editarea XP fără checksum nou, checksum recalculat cu schemă invalidă, checksum lipsă/greșit, fișier trunchiat/prea mare, migrare, două taburi, quota și reload. Nicio eroare nu activează parțial profiluri sau recompense. Benchmarkul verifică export/import în pause pe istoricul maxim admis și menține UI cu progres/anulare.

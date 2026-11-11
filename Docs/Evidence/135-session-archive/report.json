@@ -1,0 +1,534 @@
+{
+  "version": "135-session-archive-report-v1",
+  "generatedBy": "npm run save:session-archive",
+  "oracleRule": "Arhiva este dovedită prin ciclu complet: snapshotul 206 este capturat de writerul real, rândurile 130 sunt scrise de store-ul de progres, campania este finalizată de modulele reale 116/125, iar fiecare valoare așteptată este contractul documentat. Refuzurile sunt măsurate pe aceeași bază în memorie, cu amprentă byte cu byte înainte și după fiecare fișier respins; nu există ceas de perete și nici Math.random.",
+  "structure": {
+    "format": "self-driving-academy-session-archive",
+    "sessionId": "session-116-missions",
+    "playerId": "player:130",
+    "worldEpoch": 1,
+    "checkpointId": "checkpoint-135",
+    "checkpointTick": 4000,
+    "engineVersion": "engine-127",
+    "profileId": "profile-1",
+    "activeVersionId": "profile-1@2",
+    "activationSequence": 3,
+    "sizes": {
+      "checkpoint": 54470,
+      "progress": 7430,
+      "campaign": 1460,
+      "settings": 914,
+      "profile": 315,
+      "scenarios": 274,
+      "total": 64863,
+      "limit": 2097152
+    },
+    "checksumLength": 64,
+    "canonicalBytes": 65538,
+    "counts": {
+      "trackerInstances": 3,
+      "trackerRewards": 6,
+      "campaignEvents": 3,
+      "campaignCompleted": 3,
+      "xp": 300,
+      "rewardsGranted": 6,
+      "scenarios": 1
+    },
+    "digests": {
+      "tracker": "c3f00b5a8636a28ca52a6369ff12ffc82b29b3c76ec5483b5f9a382d6cd1a10b",
+      "campaign": "80e2d713db35fecceef8fb50ad9f857f5aae194125a760c7f3323fa1f01c5f2d"
+    },
+    "rows": [
+      {
+        "recordId": "campaign:session-116-missions",
+        "revision": 2,
+        "bodyBytes": 1229
+      },
+      {
+        "recordId": "tracker:session-116-missions",
+        "revision": 2,
+        "bodyBytes": 7200
+      }
+    ]
+  },
+  "roundTrip": {
+    "checksumVerified": true,
+    "canonicalBytesSame": true,
+    "trackerDigestSame": true,
+    "campaignDigestSame": true,
+    "settingsSame": true,
+    "xpBefore": 300,
+    "xpAfter": 300,
+    "completedAfter": 3,
+    "instancesAfter": 3,
+    "scenariosAfter": 1,
+    "checkpointTickAfter": 4000,
+    "checkpointSame": true,
+    "afterDigests": {
+      "tracker": "c3f00b5a8636a28ca52a6369ff12ffc82b29b3c76ec5483b5f9a382d6cd1a10b",
+      "campaign": "80e2d713db35fecceef8fb50ad9f857f5aae194125a760c7f3323fa1f01c5f2d"
+    },
+    "revisionsBefore": [
+      1,
+      1
+    ],
+    "revisionsAfter": [
+      2,
+      2
+    ],
+    "replaced": {
+      "progress": 2,
+      "scenarios": 1,
+      "checkpoints": 1,
+      "settings": true
+    }
+  },
+  "rewards": {
+    "targetXpBefore": 600,
+    "targetCompletedBefore": 6,
+    "archiveXp": 300,
+    "archiveGranted": 6,
+    "afterXp": 300,
+    "afterGranted": 6,
+    "afterCompleted": 3,
+    "notAdded": true,
+    "duplicateStatus": "DUPLICATE",
+    "duplicateXp": 0,
+    "secondImportXp": 300,
+    "secondImportGranted": 6
+  },
+  "refusals": {
+    "checksum": "CHECKSUM_MISMATCH",
+    "checksumLeftSessionUntouched": true,
+    "campaignDigest": "CAMPAIGN_INVALID",
+    "campaignDigestLeftSessionUntouched": true,
+    "mixedSession": "SESSION_MISMATCH",
+    "archiveGeneration": "PROFILE_GENERATION_MISMATCH",
+    "storedGeneration": "PROFILE_GENERATION_MISMATCH",
+    "missingVersion": "PROFILE_VERSION_MISSING",
+    "componentBudget": "COMPONENT_TOO_LARGE",
+    "declaredTotal": "ARCHIVE_TOO_LARGE",
+    "declaredSize": "SIZE_MISMATCH",
+    "duplicateKey": "DUPLICATE_KEY",
+    "newerFormat": "FORMAT_VERSION_TOO_NEW",
+    "wrongSession": "SESSION_MISMATCH",
+    "secondTab": "WRITER_REQUIRED",
+    "rollback": "TRANSACTION_ABORTED",
+    "rollbackLeftSessionUntouched": true,
+    "emptyArchive": "ARCHIVE_EMPTY"
+  },
+  "checks": [
+    {
+      "name": "format marker",
+      "expected": "self-driving-academy-session-archive",
+      "actual": "self-driving-academy-session-archive",
+      "pass": true,
+      "detail": "The reader accepts exactly one envelope format."
+    },
+    {
+      "name": "session identity",
+      "expected": "session-116-missions",
+      "actual": "session-116-missions",
+      "pass": true,
+      "detail": "The archive carries the session it replaces."
+    },
+    {
+      "name": "player identity",
+      "expected": "player:130",
+      "actual": "player:130",
+      "pass": true,
+      "detail": "The settings and the activation belong to the same player."
+    },
+    {
+      "name": "world epoch",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "Every component belongs to one world epoch."
+    },
+    {
+      "name": "checkpoint identity",
+      "expected": "checkpoint-135",
+      "actual": "checkpoint-135",
+      "pass": true,
+      "detail": "The 206 checkpoint has its own slot."
+    },
+    {
+      "name": "checkpoint tick",
+      "expected": 4000,
+      "actual": 4000,
+      "pass": true,
+      "detail": "The world is captured on its tick boundary."
+    },
+    {
+      "name": "profile reference",
+      "expected": "profile-1@2",
+      "actual": "profile-1@2",
+      "pass": true,
+      "detail": "The checkpoint names a stored 109 version."
+    },
+    {
+      "name": "activation sequence",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "The checkpoint and the 110 activation are one generation."
+    },
+    {
+      "name": "campaign completions",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "The fixture completes three real missions."
+    },
+    {
+      "name": "tracker instances",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "The tracker stores three real instances."
+    },
+    {
+      "name": "scenario rows",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "Scenarios are explicit rows, not a free field."
+    },
+    {
+      "name": "component ledger sum",
+      "expected": 64863,
+      "actual": 64863,
+      "pass": true,
+      "detail": "The declared total is the sum of the components."
+    },
+    {
+      "name": "archive limit",
+      "expected": 2097152,
+      "actual": 2097152,
+      "pass": true,
+      "detail": "The document declares the build limit."
+    },
+    {
+      "name": "checksum length",
+      "expected": 64,
+      "actual": 64,
+      "pass": true,
+      "detail": "The envelope checksum is a full SHA-256."
+    },
+    {
+      "name": "canonical bytes",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The validated document is the exported document byte for byte."
+    },
+    {
+      "name": "checksum verified",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The reader recomputes the envelope checksum."
+    },
+    {
+      "name": "tracker digest after import",
+      "expected": "c3f00b5a8636a28ca52a6369ff12ffc82b29b3c76ec5483b5f9a382d6cd1a10b",
+      "actual": "c3f00b5a8636a28ca52a6369ff12ffc82b29b3c76ec5483b5f9a382d6cd1a10b",
+      "pass": true,
+      "detail": "The stored tracker digest is the archived one."
+    },
+    {
+      "name": "campaign digest after import",
+      "expected": "80e2d713db35fecceef8fb50ad9f857f5aae194125a760c7f3323fa1f01c5f2d",
+      "actual": "80e2d713db35fecceef8fb50ad9f857f5aae194125a760c7f3323fa1f01c5f2d",
+      "pass": true,
+      "detail": "The stored campaign digest is the archived one."
+    },
+    {
+      "name": "settings restored",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The 009 preferences survive the replacement."
+    },
+    {
+      "name": "xp after import",
+      "expected": 300,
+      "actual": 300,
+      "pass": true,
+      "detail": "The replacement keeps the archived XP."
+    },
+    {
+      "name": "completions after import",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "The campaign keeps its three completions."
+    },
+    {
+      "name": "instances after import",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "The tracker keeps its three instances."
+    },
+    {
+      "name": "scenarios after import",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "The explicit scenario rows are replaced, not merged."
+    },
+    {
+      "name": "checkpoint after import",
+      "expected": 4000,
+      "actual": 4000,
+      "pass": true,
+      "detail": "The latest checkpoint is the archived world."
+    },
+    {
+      "name": "checkpoint replaced",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The archived checkpoint is the latest one."
+    },
+    {
+      "name": "progress rows replaced",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "Both 130 rows of the previous session are replaced."
+    },
+    {
+      "name": "scenarios replaced",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "The previous scenario rows are replaced."
+    },
+    {
+      "name": "checkpoints replaced",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "The previous checkpoint generation is replaced."
+    },
+    {
+      "name": "settings replaced",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The previous settings row is replaced."
+    },
+    {
+      "name": "target completed before",
+      "expected": 6,
+      "actual": 6,
+      "pass": true,
+      "detail": "The target session is further into the campaign."
+    },
+    {
+      "name": "target had more xp",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The target XP is above the archived XP."
+    },
+    {
+      "name": "xp replaced, not added",
+      "expected": 300,
+      "actual": 300,
+      "pass": true,
+      "detail": "The import replaces the XP total."
+    },
+    {
+      "name": "xp not summed",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The result is not the previous XP plus the archive."
+    },
+    {
+      "name": "rewards granted replaced",
+      "expected": 6,
+      "actual": 6,
+      "pass": true,
+      "detail": "The granted reward count is the archived one."
+    },
+    {
+      "name": "completions replaced",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "The campaign is the archived one."
+    },
+    {
+      "name": "duplicate settlement",
+      "expected": "DUPLICATE",
+      "actual": "DUPLICATE",
+      "pass": true,
+      "detail": "The same 116 completion cannot pay again."
+    },
+    {
+      "name": "duplicate xp",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "A duplicate grants zero XP."
+    },
+    {
+      "name": "second import xp",
+      "expected": 300,
+      "actual": 300,
+      "pass": true,
+      "detail": "A second import is idempotent."
+    },
+    {
+      "name": "second import granted",
+      "expected": 6,
+      "actual": 6,
+      "pass": true,
+      "detail": "A second import grants nothing."
+    },
+    {
+      "name": "checksum refusal",
+      "expected": "CHECKSUM_MISMATCH",
+      "actual": "CHECKSUM_MISMATCH",
+      "pass": true,
+      "detail": "A modified file is refused before parsing."
+    },
+    {
+      "name": "checksum refusal untouched",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The current session is byte-identical after a refused file."
+    },
+    {
+      "name": "campaign digest refusal",
+      "expected": "CAMPAIGN_INVALID",
+      "actual": "CAMPAIGN_INVALID",
+      "pass": true,
+      "detail": "A re-stamped file still cannot forge the 125 ledger."
+    },
+    {
+      "name": "campaign digest untouched",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "A forged ledger leaves the session untouched."
+    },
+    {
+      "name": "mixed session refusal",
+      "expected": "SESSION_MISMATCH",
+      "actual": "SESSION_MISMATCH",
+      "pass": true,
+      "detail": "A row of another session is refused."
+    },
+    {
+      "name": "archive generation refusal",
+      "expected": "PROFILE_GENERATION_MISMATCH",
+      "actual": "PROFILE_GENERATION_MISMATCH",
+      "pass": true,
+      "detail": "A checkpoint naming another version is refused."
+    },
+    {
+      "name": "stored generation refusal",
+      "expected": "PROFILE_GENERATION_MISMATCH",
+      "actual": "PROFILE_GENERATION_MISMATCH",
+      "pass": true,
+      "detail": "A target profile generation that moved on is refused."
+    },
+    {
+      "name": "missing version refusal",
+      "expected": "PROFILE_VERSION_MISSING",
+      "actual": "PROFILE_VERSION_MISSING",
+      "pass": true,
+      "detail": "A profile import is a separate action."
+    },
+    {
+      "name": "component budget refusal",
+      "expected": "COMPONENT_TOO_LARGE",
+      "actual": "COMPONENT_TOO_LARGE",
+      "pass": true,
+      "detail": "A component over its budget is refused."
+    },
+    {
+      "name": "declared total refusal",
+      "expected": "ARCHIVE_TOO_LARGE",
+      "actual": "ARCHIVE_TOO_LARGE",
+      "pass": true,
+      "detail": "A declared total over the limit is refused."
+    },
+    {
+      "name": "declared size refusal",
+      "expected": "SIZE_MISMATCH",
+      "actual": "SIZE_MISMATCH",
+      "pass": true,
+      "detail": "A wrong declared size is refused."
+    },
+    {
+      "name": "duplicate key refusal",
+      "expected": "DUPLICATE_KEY",
+      "actual": "DUPLICATE_KEY",
+      "pass": true,
+      "detail": "The strict parser rejects duplicated keys."
+    },
+    {
+      "name": "newer format refusal",
+      "expected": "FORMAT_VERSION_TOO_NEW",
+      "actual": "FORMAT_VERSION_TOO_NEW",
+      "pass": true,
+      "detail": "A newer layout is refused before the checksum."
+    },
+    {
+      "name": "wrong session refusal",
+      "expected": "SESSION_MISMATCH",
+      "actual": "SESSION_MISMATCH",
+      "pass": true,
+      "detail": "The file must belong to the requested session."
+    },
+    {
+      "name": "second tab refusal",
+      "expected": "WRITER_REQUIRED",
+      "actual": "WRITER_REQUIRED",
+      "pass": true,
+      "detail": "Only the writer page imports."
+    },
+    {
+      "name": "rollback refusal",
+      "expected": "TRANSACTION_ABORTED",
+      "actual": "TRANSACTION_ABORTED",
+      "pass": true,
+      "detail": "A failure before commit aborts the transaction."
+    },
+    {
+      "name": "rollback untouched",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The session is byte-identical after a rollback."
+    },
+    {
+      "name": "empty archive refusal",
+      "expected": "ARCHIVE_EMPTY",
+      "actual": "ARCHIVE_EMPTY",
+      "pass": true,
+      "detail": "An archive replaces a session with a session."
+    },
+    {
+      "name": "progress bytes inside the 127 row budget",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Every component is written back through a 127 row."
+    }
+  ],
+  "summary": {
+    "checks": 58,
+    "passed": 58,
+    "scenarios": 3,
+    "pass": true
+  }
+}
