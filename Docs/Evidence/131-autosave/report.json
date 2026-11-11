@@ -1,0 +1,563 @@
+{
+  "version": "131-autosave-v1",
+  "generatedBy": "scripts/run-autosave-report.mjs",
+  "oracleRule": "A number is recorded only if the real 127/130/222 code produced it; the transcript has no wall clock and two runs are byte-identical.",
+  "budgets": {
+    "source": "Docs/performance-budgets.json",
+    "budgetVersion": "203-initial-1",
+    "intervalTicks": 900,
+    "intervalSeconds": 15,
+    "tickHz": 60,
+    "capturesPerInterval": 1,
+    "preparingGenerations": 1,
+    "committingGenerations": 1,
+    "transferIngressBytes": 16777216,
+    "maxCheckpointBytes": 1048576,
+    "maxProgressBodyBytes": 262144,
+    "recorderRamBytes": 33554432
+  },
+  "fleet": {
+    "taxis": 30,
+    "civilians": 40,
+    "vehicles": 70,
+    "signals": 8,
+    "snapshotBytes": 64425,
+    "snapshotChecksum": "df748f9b8d4e4c69d1b8509f9f3282047d32842de21acb8c1b686516304bd68d"
+  },
+  "tickPath": {
+    "clockReadsOnSkippedTicks": 0,
+    "clockReadsPerOffer": 2,
+    "synchronousWorkInsideTickMs": 1,
+    "storageWorkInsideTickMs": 0,
+    "skippedTicks": 899
+  },
+  "stages": {
+    "clock": "STUB_CLOCK",
+    "captureMs": 1,
+    "encodeMs": 4,
+    "copyMs": 1,
+    "transferMs": 1,
+    "commitMs": 2,
+    "progressMs": 1,
+    "checkpointMs": 1,
+    "totalMs": 9
+  },
+  "periodic": {
+    "ticks": 900,
+    "intervalTicks": 900,
+    "requests": 1,
+    "captured": 1,
+    "commits": 1,
+    "progressCommits": 1,
+    "skippedTicks": 899,
+    "unsavedTicks": 0,
+    "lastSavedTick": 900,
+    "checkpointBytes": 64425,
+    "progressBytes": 8429,
+    "trackerRowsBeforeCheckpoint": 1
+  },
+  "coalescing": {
+    "intervalTicks": 60,
+    "ticks": 181,
+    "captured": 2,
+    "deferredRequests": 1,
+    "catchUpRequests": 1,
+    "handedTicks": [
+      60,
+      181
+    ],
+    "maxPrepared": 0,
+    "maxCommitting": 1,
+    "deferredWhileStalled": 180,
+    "unsavedTicksWhileStalled": 180,
+    "unsavedTicksAfterCatchUp": 0,
+    "clockReadsWhileDeferred": 0
+  },
+  "closeDuringWrite": {
+    "closeTick": 75,
+    "handedBeforeRelease": 1,
+    "handedAfterClose": [
+      60,
+      75
+    ],
+    "status": "SAVED",
+    "progress": "COMMITTED",
+    "checkpoint": "COMMITTED",
+    "durableTick": 75,
+    "unsavedTicks": 0
+  },
+  "closeFailure": {
+    "failedStatus": "FAILED",
+    "failedProgress": "REJECTED",
+    "failedCheckpoint": "SKIPPED",
+    "failedCode": "STORAGE_FULL",
+    "failedErrorStage": "PROGRESS",
+    "retryable": true,
+    "unsavedTicks": 30,
+    "retriedStatus": "SAVED",
+    "retriedDurableTick": 30,
+    "attempts": 2,
+    "viewClaimsCompletedSaveWhileFailed": false
+  },
+  "reload": {
+    "autosaveTick": 900,
+    "closeTick": 950,
+    "savedTrackerDigest": "c3f00b5a8636a28ca52a6369ff12ffc82b29b3c76ec5483b5f9a382d6cd1a10b",
+    "reloadedTrackerDigest": "c3f00b5a8636a28ca52a6369ff12ffc82b29b3c76ec5483b5f9a382d6cd1a10b",
+    "sameDigest": true,
+    "progressRows": 2,
+    "settingsSource": "STORED",
+    "secondSessionCheckpointTick": 950
+  },
+  "closeOnly": {
+    "status": "SAVED",
+    "progress": "NOT_REQUESTED",
+    "checkpoint": "COMMITTED",
+    "durableTick": 40,
+    "unsavedTicks": 0
+  },
+  "view": {
+    "pendingClaimsCompletedSave": false,
+    "successClaimsCompletedSave": true,
+    "errorClaimsCompletedSave": false,
+    "labels": [
+      "SAVING",
+      "SAVED",
+      "SAVE_FAILED"
+    ]
+  },
+  "checks": [
+    {
+      "name": "interval is 900 ticks",
+      "expected": 900,
+      "actual": 900,
+      "pass": true,
+      "detail": "Docs/15 15 s at 60 Hz"
+    },
+    {
+      "name": "interval is 15 seconds",
+      "expected": 15,
+      "actual": 15,
+      "pass": true,
+      "detail": "900 / 60"
+    },
+    {
+      "name": "fixed tick is 60 Hz",
+      "expected": 60,
+      "actual": 60,
+      "pass": true,
+      "detail": "authoritative loop"
+    },
+    {
+      "name": "tick path has no storage work",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "ms"
+    },
+    {
+      "name": "skipped ticks cost zero clock reads",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "reads"
+    },
+    {
+      "name": "a capture reads the clock twice",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "capture only"
+    },
+    {
+      "name": "periodic requests",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "one window in 900 ticks"
+    },
+    {
+      "name": "periodic captures",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "one generation"
+    },
+    {
+      "name": "periodic commits",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "confirmed by the store"
+    },
+    {
+      "name": "periodic progress commits",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "one 130 transaction"
+    },
+    {
+      "name": "periodic skipped ticks",
+      "expected": 899,
+      "actual": 899,
+      "pass": true,
+      "detail": "899 ticks do no work"
+    },
+    {
+      "name": "periodic unsaved ticks",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "nothing left unsaved"
+    },
+    {
+      "name": "periodic saved tick",
+      "expected": 900,
+      "actual": 900,
+      "pass": true,
+      "detail": "the interval tick"
+    },
+    {
+      "name": "tracker row before checkpoint",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "order"
+    },
+    {
+      "name": "checkpoint under its byte cap",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "64425 of 1048576 bytes"
+    },
+    {
+      "name": "fleet vehicles",
+      "expected": 70,
+      "actual": 70,
+      "pass": true,
+      "detail": "30 taxis + 40 civilians"
+    },
+    {
+      "name": "snapshot checksum present",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "SHA-256"
+    },
+    {
+      "name": "capture is the only tick stage",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "ms"
+    },
+    {
+      "name": "commit is the sum of both writes",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "ms"
+    },
+    {
+      "name": "total is the sum of the stages",
+      "expected": 9,
+      "actual": 9,
+      "pass": true,
+      "detail": "ms"
+    },
+    {
+      "name": "coalescing keeps one deferred slot",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "bounded"
+    },
+    {
+      "name": "coalescing never captures twice",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "initial + catch-up"
+    },
+    {
+      "name": "coalescing hands two generations",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "no per-tick write"
+    },
+    {
+      "name": "coalescing catch-up count",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "one catch-up"
+    },
+    {
+      "name": "coalescing keeps the order",
+      "expected": "60,181",
+      "actual": "60,181",
+      "pass": true,
+      "detail": "initial then next boundary"
+    },
+    {
+      "name": "coalescing prepares no second generation",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the deferred slot is not a prepared generation"
+    },
+    {
+      "name": "coalescing committing slots",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "at most one"
+    },
+    {
+      "name": "coalescing blocks no tick",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "ticks never await storage or read the clock"
+    },
+    {
+      "name": "coalescing leaves nothing unsaved",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "ticks"
+    },
+    {
+      "name": "close waits for the in-flight write",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "one writer"
+    },
+    {
+      "name": "close result is saved",
+      "expected": "SAVED",
+      "actual": "SAVED",
+      "pass": true,
+      "detail": "explicit result"
+    },
+    {
+      "name": "close writes progress",
+      "expected": "COMMITTED",
+      "actual": "COMMITTED",
+      "pass": true,
+      "detail": "130"
+    },
+    {
+      "name": "close writes the checkpoint",
+      "expected": "COMMITTED",
+      "actual": "COMMITTED",
+      "pass": true,
+      "detail": "222"
+    },
+    {
+      "name": "close saves the close tick",
+      "expected": 75,
+      "actual": 75,
+      "pass": true,
+      "detail": "tick"
+    },
+    {
+      "name": "close has nothing unsaved",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "ticks"
+    },
+    {
+      "name": "close keeps the lane order",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "ticks 60 then 75"
+    },
+    {
+      "name": "failed close is not SAVED",
+      "expected": "FAILED",
+      "actual": "FAILED",
+      "pass": true,
+      "detail": "explicit error"
+    },
+    {
+      "name": "failed close blames progress",
+      "expected": "REJECTED",
+      "actual": "REJECTED",
+      "pass": true,
+      "detail": "STORAGE_FULL"
+    },
+    {
+      "name": "failed close skips the checkpoint",
+      "expected": "SKIPPED",
+      "actual": "SKIPPED",
+      "pass": true,
+      "detail": "no newer world over stale rewards"
+    },
+    {
+      "name": "failed close keeps the payload",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "retryable"
+    },
+    {
+      "name": "failed close names the stage",
+      "expected": "PROGRESS",
+      "actual": "PROGRESS",
+      "pass": true,
+      "detail": "stage"
+    },
+    {
+      "name": "failed close does not claim a save",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "view"
+    },
+    {
+      "name": "retried close succeeds",
+      "expected": "SAVED",
+      "actual": "SAVED",
+      "pass": true,
+      "detail": "second attempt"
+    },
+    {
+      "name": "retried close saves the close tick",
+      "expected": 30,
+      "actual": 30,
+      "pass": true,
+      "detail": "tick"
+    },
+    {
+      "name": "reload reads the autosave tick",
+      "expected": 900,
+      "actual": 900,
+      "pass": true,
+      "detail": "checkpoint"
+    },
+    {
+      "name": "reload reads the close tick",
+      "expected": 950,
+      "actual": 950,
+      "pass": true,
+      "detail": "checkpoint"
+    },
+    {
+      "name": "reload keeps the progress digest",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "130 snapshot"
+    },
+    {
+      "name": "reload keeps two progress rows",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "tracker + campaign"
+    },
+    {
+      "name": "reload reads the settings row",
+      "expected": "STORED",
+      "actual": "STORED",
+      "pass": true,
+      "detail": "009"
+    },
+    {
+      "name": "reload of the closed session",
+      "expected": 950,
+      "actual": 950,
+      "pass": true,
+      "detail": "tick"
+    },
+    {
+      "name": "close-only session is saved",
+      "expected": "SAVED",
+      "actual": "SAVED",
+      "pass": true,
+      "detail": "checkpoint only"
+    },
+    {
+      "name": "close-only invents no progress",
+      "expected": "NOT_REQUESTED",
+      "actual": "NOT_REQUESTED",
+      "pass": true,
+      "detail": "no 130 payload"
+    },
+    {
+      "name": "close-only saves the close tick",
+      "expected": 40,
+      "actual": 40,
+      "pass": true,
+      "detail": "tick"
+    },
+    {
+      "name": "pending never claims a save",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "view"
+    },
+    {
+      "name": "success claims a save",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "view"
+    },
+    {
+      "name": "error never claims a save",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "view"
+    },
+    {
+      "name": "the three labels are distinct",
+      "expected": "SAVING,SAVED,SAVE_FAILED",
+      "actual": "SAVING,SAVED,SAVE_FAILED",
+      "pass": true,
+      "detail": "labels"
+    },
+    {
+      "name": "transfer ingress matches the manifest",
+      "expected": 16777216,
+      "actual": 16777216,
+      "pass": true,
+      "detail": "bytes"
+    },
+    {
+      "name": "one preparing generation",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "222"
+    },
+    {
+      "name": "one committing generation",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "222"
+    },
+    {
+      "name": "at most one capture per interval",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "per 900 ticks"
+    }
+  ],
+  "summary": {
+    "checks": 61,
+    "passed": 61,
+    "pass": true
+  }
+}
