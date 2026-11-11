@@ -782,6 +782,31 @@ export type WorldCheckpointLoadResult =
   | WorldCheckpointIncompatible
   | WorldCheckpointLoadRejected;
 
+/** Decoded (or refused) single generation, before the caller decides which candidate to use. */
+export type WorldCheckpointDecoded =
+  | {
+      readonly status: 'ACCEPTED';
+      readonly checkpoint: CheckpointRecord;
+      readonly snapshot: WorldSnapshot;
+      readonly state: WorldSnapshotState;
+      readonly resume: WorldResumePlan;
+      readonly bytes: number;
+      readonly checksum: string;
+    }
+  | {
+      readonly status: 'INCOMPATIBLE';
+      readonly checkpoint: CheckpointRecord;
+      readonly snapshot: WorldSnapshot;
+      readonly stored: WorldCheckpointVersions;
+      readonly current: WorldCheckpointVersions;
+      readonly detail: string;
+    }
+  | {
+      readonly status: 'REJECTED';
+      readonly checkpoint: CheckpointRecord;
+      readonly rejection: WorldCheckpointRejection;
+    };
+
 function loadRejected(
   code: WorldCheckpointRejectionCode,
   text: string,
@@ -792,6 +817,102 @@ function loadRejected(
     status: 'REJECTED' as const,
     checkpoint,
     rejection: rejection(code, text, path),
+  });
+}
+
+/**
+ * Decides whether one stored generation can continue the world.
+ *
+ * The checks are the documented ones: the payload checksum first, then the envelope↔snapshot
+ * coherence (tick, profile, learning epoch), then the engine/physics/map versions. 136 uses this
+ * same function for every candidate, so "the last valid checkpoint" is decided by exactly the
+ * rules that decide "the latest checkpoint".
+ */
+export function decodeWorldCheckpoint(
+  checkpoint: CheckpointRecord,
+  options: WorldCheckpointLoadOptions,
+): WorldCheckpointDecoded {
+  const read = readWorldSnapshot(checkpoint.body);
+  if (read.status === 'REJECTED') {
+    return Object.freeze({
+      status: 'REJECTED' as const,
+      checkpoint,
+      rejection: rejection(read.rejection.code, read.rejection.message, read.rejection.path),
+    });
+  }
+  const snapshot = read.snapshot;
+  if (snapshot.tick !== checkpoint.tick) {
+    return Object.freeze({
+      status: 'REJECTED' as const,
+      checkpoint,
+      rejection: rejection(
+        'TICK_MISMATCH',
+        `The envelope is at tick ${checkpoint.tick} but the snapshot is at ${snapshot.tick}`,
+        'checkpoint.tick',
+      ),
+    });
+  }
+  if (snapshot.profile.profileId !== checkpoint.profileId) {
+    return Object.freeze({
+      status: 'REJECTED' as const,
+      checkpoint,
+      rejection: rejection(
+        'PROFILE_MISMATCH',
+        `The envelope names profile ${checkpoint.profileId} but the snapshot names ${snapshot.profile.profileId}`,
+        'checkpoint.profileId',
+      ),
+    });
+  }
+  if (snapshot.learning.learningEpoch !== checkpoint.learningEpoch) {
+    return Object.freeze({
+      status: 'REJECTED' as const,
+      checkpoint,
+      rejection: rejection(
+        'LEARNING_EPOCH_MISMATCH',
+        `The envelope is in learning epoch ${checkpoint.learningEpoch} but the snapshot is in ${snapshot.learning.learningEpoch}`,
+        'checkpoint.learningEpoch',
+      ),
+    });
+  }
+
+  const stored: WorldCheckpointVersions = Object.freeze({
+    engineVersion: checkpoint.engineVersion,
+    physicsVersion: checkpoint.physicsVersion,
+    mapVersion: checkpoint.mapVersion,
+  });
+  const current: WorldCheckpointVersions = Object.freeze({
+    engineVersion: options.versions.engineVersion,
+    physicsVersion: options.versions.physicsVersion,
+    mapVersion: options.versions.mapVersion,
+  });
+  const incompatible = (['engineVersion', 'physicsVersion', 'mapVersion'] as const).filter(
+    (field) => stored[field] !== current[field],
+  );
+  if (incompatible.length > 0) {
+    return Object.freeze({
+      status: 'INCOMPATIBLE' as const,
+      checkpoint,
+      snapshot,
+      stored,
+      current,
+      detail: incompatible
+        .map((field) => `${field}: stored ${stored[field]}, current ${current[field]}`)
+        .join('; '),
+    });
+  }
+
+  const restored = restoreWorldState(snapshot, {
+    currentProfileId: options.currentProfileId,
+    currentLearningEpoch: options.currentLearningEpoch,
+  });
+  return Object.freeze({
+    status: 'ACCEPTED' as const,
+    checkpoint,
+    snapshot,
+    state: restored.state,
+    resume: restored.resume,
+    bytes: read.bytes,
+    checksum: read.checksum,
   });
 }
 
@@ -818,86 +939,41 @@ export async function loadLatestWorldCheckpoint(
   }
   if (checkpoint === null) return Object.freeze({ status: 'EMPTY' as const, checkpoint: null });
 
-  const read = readWorldSnapshot(checkpoint.body);
-  if (read.status === 'REJECTED') {
+  const decoded = decodeWorldCheckpoint(checkpoint, options);
+  if (decoded.status === 'REJECTED') {
     return loadRejected(
-      read.rejection.code,
-      read.rejection.message,
+      decoded.rejection.code,
+      decoded.rejection.message,
       checkpoint,
-      read.rejection.path,
+      decoded.rejection.path,
     );
   }
-  const snapshot = read.snapshot;
-  if (snapshot.tick !== checkpoint.tick) {
-    return loadRejected(
-      'TICK_MISMATCH',
-      `The envelope is at tick ${checkpoint.tick} but the snapshot is at ${snapshot.tick}`,
-      checkpoint,
-      'checkpoint.tick',
-    );
-  }
-  if (snapshot.profile.profileId !== checkpoint.profileId) {
-    return loadRejected(
-      'PROFILE_MISMATCH',
-      `The envelope names profile ${checkpoint.profileId} but the snapshot names ${snapshot.profile.profileId}`,
-      checkpoint,
-      'checkpoint.profileId',
-    );
-  }
-  if (snapshot.learning.learningEpoch !== checkpoint.learningEpoch) {
-    return loadRejected(
-      'LEARNING_EPOCH_MISMATCH',
-      `The envelope is in learning epoch ${checkpoint.learningEpoch} but the snapshot is in ${snapshot.learning.learningEpoch}`,
-      checkpoint,
-      'checkpoint.learningEpoch',
-    );
-  }
-
-  const stored: WorldCheckpointVersions = Object.freeze({
-    engineVersion: checkpoint.engineVersion,
-    physicsVersion: checkpoint.physicsVersion,
-    mapVersion: checkpoint.mapVersion,
-  });
-  const current: WorldCheckpointVersions = Object.freeze({
-    engineVersion: options.versions.engineVersion,
-    physicsVersion: options.versions.physicsVersion,
-    mapVersion: options.versions.mapVersion,
-  });
-  const incompatible = (['engineVersion', 'physicsVersion', 'mapVersion'] as const).filter(
-    (field) => stored[field] !== current[field],
-  );
-  if (incompatible.length > 0) {
+  if (decoded.status === 'INCOMPATIBLE') {
     return Object.freeze({
       status: 'INCOMPATIBLE' as const,
       checkpoint,
-      snapshot,
-      stored,
-      current,
+      snapshot: decoded.snapshot,
+      stored: decoded.stored,
+      current: decoded.current,
       reason: 'INCOMPATIBLE_VERSION' as const,
-      detail: incompatible
-        .map((field) => `${field}: stored ${stored[field]}, current ${current[field]}`)
-        .join('; '),
+      detail: decoded.detail,
       tick: checkpoint.tick,
       generation: checkpoint.generation,
     });
   }
 
-  const restored = restoreWorldState(snapshot, {
-    currentProfileId: options.currentProfileId,
-    currentLearningEpoch: options.currentLearningEpoch,
-  });
   const ageTicks =
     options.currentTick === undefined ? null : Math.max(0, options.currentTick - checkpoint.tick);
   return Object.freeze({
     status: 'RESUMABLE' as const,
     checkpoint,
-    snapshot,
-    state: restored.state,
-    resume: restored.resume,
+    snapshot: decoded.snapshot,
+    state: decoded.state,
+    resume: decoded.resume,
     tick: checkpoint.tick,
     generation: checkpoint.generation,
-    bytes: read.bytes,
-    checksum: read.checksum,
+    bytes: decoded.bytes,
+    checksum: decoded.checksum,
     ageTicks,
   });
 }

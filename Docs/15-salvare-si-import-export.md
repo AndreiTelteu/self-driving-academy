@@ -227,3 +227,25 @@ Dovezi: [Evidence/131-autosave](Evidence/131-autosave/README.md).
 
 Dovezi: [Evidence/132-data-retention](Evidence/132-data-retention/README.md).
 
+## Contract implementat V1 (PBI 136) — migrare versionată și continuarea sesiunii după restart
+
+`src/persistence/save-migration.ts` (contract `136-save-migration-v1`) face operativ istoricul de schemă declarat de 127 și `src/persistence/session-restore.ts` (contract `136-session-restore-v1`) decide ce anume se reia după un restart. Niciunul nu inventează un al doilea sistem: migrarea rulează pașii `PERSISTENCE_SCHEMA_STEPS`, iar reluarea folosește snapshotul, checksum-ul și planul de reluare ale lui 206.
+
+**Migrarea are versiuni explicite, nu deduse.** `saveMigrationPlan(from)` întoarce exact pașii lipsă (`1 → 2` este `127-v2-checkpoints-and-lifecycle-indexes`, iar `2 → 2` este lista vidă), iar un plan cerut de la o versiune mai nouă decât build-ul este refuzat cu `SCHEMA_TOO_NEW`. `migrateSaveDatabase` descoperă versiunea reală deschizând baza întâi la versiunea 1: o bază deja la versiunea build-ului răspunde `CURRENT` fără niciun pas, una mai veche este citită, exportată și abia apoi urcată (`MIGRATED`), una nou-născută raportează ambele treceri (`CREATED`, `127-v1-base-layout` + `127-v2-checkpoints-and-lifecycle-indexes`), iar una scrisă de un build mai nou este refuzată cu `SCHEMA_TOO_NEW` înainte de a fi deschisă cu mai puține store-uri. Fiecare tranziție suportată are test propriu.
+
+**Exportul pre-migrare este luat înainte de schimbare.** Documentul `self-driving-academy-save-migration-export` (format versiunea 1) copiază toate rândurile store-urilor existente la versiunea sursă, le canonicalizează `SDA-CJSON-1` și le acoperă cu un `SHA-256` al documentului plus un digest separat al rândurilor. Marcajul de schemă din `meta` este declarat prin `sourceSchemaVersion`/`targetSchemaVersion`, nu copiat ca rând de utilizator, ca o recuperare să nu rescrie marcajul build-ului. Cititorul verifică formatul, versiunile, contoarele, checksum-ul și digestul înainte de a folosi vreun rând.
+
+**O migrare eșuată nu mișcă nimic.** Upgrade-ul rulează în tranzacția adaptorului; după un refuz, modulul redeschide baza la versiunea sursă și raportează `untouched` numai dacă digestul rândurilor este identic cu cel exportat. Pe fixture-ul de raport, o versiune 1 cu 3 rânduri rămâne la versiunea 1, fără store-ul `checkpoints`, cu digest neschimbat, iar exportul (3 rânduri) este sursa reală de recuperare.
+
+**Recuperarea este o cale executabilă.** `recoverSaveMigration` refuză un target care conține deja rânduri (`RECOVERY_TARGET_NOT_EMPTY`), scrie toate rândurile exportate într-o singură tranzacție și re-calculează digestul în interiorul aceleiași tranzacții; o diferență anulează scrierea (`RECOVERY_WRITE_FAILED`), deci nu poate rămâne o jumătate de salvare. Un export editat este refuzat cu `EXPORT_CHECKSUM_MISMATCH` înainte de orice scriere.
+
+**Restartul reia ultimul checkpoint valid, nu ultimul scris.** `restoreSession` citește toate generațiile sesiunii (`listCheckpoints`, cea mai nouă primul după tick și generație), le decodează pe fiecare cu exact regulile 206 (`decodeWorldCheckpoint`) și o sare pe cea care nu trece, cu codul și calea exacte: `CHECKSUM_MISMATCH`, `TICK_MISMATCH`, `PROFILE_MISMATCH`, `LEARNING_EPOCH_MISMATCH` sau `INCOMPATIBLE_VERSION`. Prima generație acceptată este lumea reluată; pozițiile, cursele și pasagerii vin din snapshotul ei, iar generațiile sărite rămân raportate cu identitate, tick și generație. Dacă nicio generație nu trece, rezultatul este `BLOCKED`/`CHECKPOINT_INVALID`, nu o reluare optimistă; o sesiune fără checkpoint este `EMPTY`.
+
+**Pornirea este în pauză/AUTO, cu inputul eliberat.** Rezultatul are `launch.mode = PAUSED_AUTO`, `paused`, `auto`, `inputReleased`, `manualVehicles = 0` și `vehiclesInAuto` egal cu numărul de vehicule; modurile anterioare sunt raportate (`previousManualVehicles`), dar niciun vehicul nu rămâne în `MANUAL`. Segmentele `OPEN` devin `INCOMPLETE` cu motivul `RELOAD`, deci sunt numite, nu pierdute.
+
+**Joburile se reiau numai în `learningEpoch` valid.** Un job este `RELAUNCH` doar dacă `profileId` și `learningEpoch` corespund profilului și epoch-ului activ; altfel este `INVALIDATED` cu `PROFILE_MISMATCH`, `LEARNING_EPOCH_MISMATCH` sau `PROFILE_AND_EPOCH_MISMATCH` și este contorizat. Observațiile LEARNING finalizate se reiau idempotent, cu cheia `segmentId:observationId`, iar rezultatele deja acceptate sunt păstrate: `rewardsReapplied` este `0`. Pe fixture-ul de 70 de vehicule, 2 joburi se reiau și 4 sunt anulate; cu un epoch schimbat, 0 se reiau și 6 sunt anulate.
+
+**Ledger-ele continuă cu lumea.** `restoreSession` citește rândurile 130 durabile ale sesiunii și le acoperă cu un digest `SDA-CJSON-1`/`SHA-256`; o citire eșuată a ledgerului blochează reluarea (`LEDGER_UNREADABLE`) în loc să promită o lume fără recompensele ei. Restaurarea nu scrie niciun rând: testul compară amprenta bazei înainte și după, iar `rewardsReapplied` rămâne `0`.
+
+Dovezi: [Evidence/136-session-restore](Evidence/136-session-restore/README.md).
+

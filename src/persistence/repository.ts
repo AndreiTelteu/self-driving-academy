@@ -111,6 +111,14 @@ export interface LocalRepository {
   getSettings(playerId: string): Promise<RuntimeSettings | null>;
   getCheckpoint(checkpointId: string): Promise<CheckpointRecord | null>;
   latestCheckpoint(sessionId: string): Promise<CheckpointRecord | null>;
+  /**
+   * Every durable checkpoint of one session, newest first (tick, then generation).
+   *
+   * 136 needs the whole bounded list, not only the newest row: an invalid newest generation is
+   * skipped in favour of the last valid one, and the skip is reported instead of silently rolling
+   * back. The order is computed here so every caller sees the same deterministic sequence.
+   */
+  listCheckpoints(sessionId: string): Promise<readonly CheckpointRecord[]>;
   putProfile(profile: unknown): Promise<WriteResult<ProfileVersion>>;
   activateProfile(activation: unknown): Promise<WriteResult<ActivationRecord>>;
   /**
@@ -672,6 +680,25 @@ export function createLocalRepository(options: LocalRepositoryOptions): LocalRep
     return latest;
   }
 
+  async function listCheckpoints(sessionId: string): Promise<readonly CheckpointRecord[]> {
+    const key = storageKey(sessionId, 'sessionId');
+    const rows = await read(['checkpoints'], (transaction) =>
+      transaction.getAllByIndex('checkpoints', 'bySession', key),
+    );
+    const checkpoints = bounded(parseAll(rows, parseCheckpointRecord), 'checkpoints');
+    return Object.freeze(
+      [...checkpoints].sort((left, right) => {
+        if (left.tick !== right.tick) return right.tick - left.tick;
+        if (left.generation !== right.generation) return right.generation - left.generation;
+        return left.checkpointId < right.checkpointId
+          ? -1
+          : left.checkpointId > right.checkpointId
+            ? 1
+            : 0;
+      }),
+    );
+  }
+
   async function putProfile(profile: unknown): Promise<WriteResult<ProfileVersion>> {
     try {
       const record = parseProfileRecord(profile);
@@ -1093,6 +1120,7 @@ export function createLocalRepository(options: LocalRepositoryOptions): LocalRep
     getSettings,
     getCheckpoint,
     latestCheckpoint,
+    listCheckpoints,
     putProfile,
     activateProfile,
     commitProfileActivation,
