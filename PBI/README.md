@@ -22,7 +22,7 @@
 | Oraș | Completed | 0 | 0 | 12 / 12 | `██████████` 100% |
 | Oraș și fizică | V1 | 1 | 0 | 0 / 1 | `░░░░░░░░░░` 0% |
 | Parametri V2 | V2 | 10 | 0 | 0 / 10 | `░░░░░░░░░░` 0% |
-| Persistență | V1 | 9 | 0 | 5 / 14 | `███░░░░░░░` 36% |
+| Persistență | V1 | 8 | 0 | 6 / 14 | `████░░░░░░` 43% |
 | Produs | Completed | 0 | 0 | 1 / 1 | `██████████` 100% |
 | Profiluri | Completed | 0 | 0 | 8 / 8 | `██████████` 100% |
 | Profiluri și interfață | Completed | 0 | 0 | 1 / 1 | `██████████` 100% |
@@ -34,7 +34,7 @@
 | Validare și release | V1 | 12 | 0 | 0 / 12 | `░░░░░░░░░░` 0% |
 | Validare V2 | V2 | 2 | 0 | 0 / 2 | `░░░░░░░░░░` 0% |
 | Vehicule și fizică | Completed | 0 | 0 | 11 / 11 | `██████████` 100% |
-| Total | - | 87 | 0 | 148 / 235 | `██████░░░░` 63% |
+| Total | - | 86 | 0 | 149 / 235 | `██████░░░░` 63% |
 <!-- loop-pbi:progress:end -->
 
 # Backlog Kanban Self Driving Academy
