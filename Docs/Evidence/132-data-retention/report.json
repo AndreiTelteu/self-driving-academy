@@ -1,0 +1,747 @@
+{
+  "version": "132-data-retention-v1",
+  "generatedBy": "npm run retention:data",
+  "oracleRule": "A domain quota is exceeded iff the sum of its declared bytes is above the manifest cap; a cleanup must have an export digest, evict only unprotected rows of that one domain, and leave every protected row byte-identical.",
+  "budgets": {
+    "source": "Docs/performance-budgets.json",
+    "budgetVersion": "203-initial-1",
+    "recorderRamBytes": 33554432,
+    "optionalReplayStorageBytes": 134217728,
+    "persistenceIngressBytes": 16777216,
+    "interventionRecordStoreBytes": 33554432,
+    "gaps": [
+      {
+        "key": "interventionTelemetryDbBytes",
+        "status": "NOT_FIXED_IN_MANIFEST",
+        "handling": "PERSISTENCE_INGRESS_BYTES_USED_AS_FINITE_DURABLE_QUOTA_AND_GAP_DECLARED"
+      },
+      {
+        "key": "totalHeapBytes",
+        "status": "NOT_AVAILABLE",
+        "handling": "OWNERSHIP_COUNTERS_ONLY"
+      }
+    ]
+  },
+  "quotas": [
+    {
+      "domain": "INTERVENTION_TELEMETRY",
+      "ramBytes": 33554432,
+      "ramProvenance": "CONTRACT_LIMIT",
+      "ramKey": "069-intervention-lifecycle-v1.INTERVENTION_LIMITS.recordStoreBytes",
+      "dbBytes": 16777216,
+      "dbProvenance": "MANIFEST",
+      "dbKey": "resourceAdmissionContracts.workers.persistenceIngressBytes"
+    },
+    {
+      "domain": "WORLD_RECORDER",
+      "ramBytes": 33554432,
+      "ramProvenance": "MANIFEST",
+      "ramKey": "proposedCapacities.recorderRamBytes",
+      "dbBytes": 134217728,
+      "dbProvenance": "MANIFEST",
+      "dbKey": "proposedCapacities.optionalReplayStorageBytes"
+    }
+  ],
+  "inventory": {
+    "artifacts": 25,
+    "protectedArtifacts": 5,
+    "evictableArtifacts": 20,
+    "ramBytes": 51404800,
+    "dbBytes": 55853056,
+    "byDomain": [
+      {
+        "domain": "INTERVENTION_TELEMETRY",
+        "artifacts": 12,
+        "ramBytes": 17633280,
+        "dbBytes": 22061056
+      },
+      {
+        "domain": "WORLD_RECORDER",
+        "artifacts": 13,
+        "ramBytes": 33771520,
+        "dbBytes": 33792000
+      }
+    ]
+  },
+  "worldRecorder": {
+    "before": {
+      "domain": "WORLD_RECORDER",
+      "status": "EXCEEDED",
+      "artifacts": 13,
+      "protectedArtifacts": 3,
+      "evictableArtifacts": 10,
+      "ramBytes": 33771520,
+      "ramCapBytes": 33554432,
+      "ramOverBytes": 217088,
+      "dbBytes": 33792000,
+      "dbCapBytes": 134217728,
+      "dbOverBytes": 0
+    },
+    "export": {
+      "digest": "274dd0ecbcdc553ded10f0c3570f6c2591599b16f602fa048c12a5db20182915",
+      "reason": "QUOTA_EXCEEDED",
+      "artifacts": 13,
+      "partialArtifacts": 0,
+      "ramBytes": 33771520,
+      "dbBytes": 33792000,
+      "checksumHexLength": 64
+    },
+    "plan": {
+      "digest": "3ac7773e93713633ade820e9f0f6f47c44e3c251f59b8112b596ec7af19cf7c3",
+      "criterion": "OLDEST_FIRST",
+      "exportDigest": "274dd0ecbcdc553ded10f0c3570f6c2591599b16f602fa048c12a5db20182915",
+      "evicted": [
+        "checkpoint:superseded-1",
+        "checkpoint:superseded-2",
+        "clip:incident-a:0"
+      ],
+      "evictedRamBytes": 4325376,
+      "evictedDbBytes": 4325376,
+      "retained": {
+        "artifacts": 10,
+        "protectedArtifacts": 3,
+        "ramBytes": 29446144,
+        "dbBytes": 29466624
+      },
+      "projected": {
+        "ramBytes": 29446144,
+        "dbBytes": 29466624,
+        "ramCapBytes": 33554432,
+        "dbCapBytes": 134217728,
+        "status": "WITHIN"
+      }
+    },
+    "cleanup": {
+      "digest": "df78026375f76c40118afe5e1e7f7ea7d51a0c4a905dc12b8a3ca7f09345c358",
+      "evicted": [
+        "checkpoint:superseded-1",
+        "checkpoint:superseded-2",
+        "clip:incident-a:0"
+      ],
+      "evictedBytes": {
+        "ram": 4325376,
+        "db": 4325376
+      },
+      "retained": {
+        "artifacts": 10,
+        "protectedArtifacts": 3,
+        "ramBytes": 29446144,
+        "dbBytes": 29466624
+      },
+      "usageAfter": {
+        "domain": "WORLD_RECORDER",
+        "status": "WITHIN",
+        "artifacts": 10,
+        "protectedArtifacts": 3,
+        "evictableArtifacts": 7,
+        "ramBytes": 29446144,
+        "ramCapBytes": 33554432,
+        "ramOverBytes": 0,
+        "dbBytes": 29466624,
+        "dbCapBytes": 134217728,
+        "dbOverBytes": 0
+      },
+      "partials": [
+        {
+          "artifactId": "clip:incident-a:1",
+          "clipId": "clip:incident-a",
+          "status": "PARTIAL",
+          "reasons": [
+            "RETENTION_EVICTED"
+          ],
+          "missingSequences": [
+            0
+          ]
+        },
+        {
+          "artifactId": "clip:incident-a:2",
+          "clipId": "clip:incident-a",
+          "status": "PARTIAL",
+          "reasons": [
+            "RETENTION_EVICTED"
+          ],
+          "missingSequences": [
+            0
+          ]
+        },
+        {
+          "artifactId": "clip:incident-a:3",
+          "clipId": "clip:incident-a",
+          "status": "PARTIAL",
+          "reasons": [
+            "RETENTION_EVICTED"
+          ],
+          "missingSequences": [
+            0
+          ]
+        },
+        {
+          "artifactId": "clip:incident-a:4",
+          "clipId": "clip:incident-a",
+          "status": "PARTIAL",
+          "reasons": [
+            "RETENTION_EVICTED"
+          ],
+          "missingSequences": [
+            0
+          ]
+        }
+      ]
+    },
+    "after": {
+      "domain": "WORLD_RECORDER",
+      "status": "WITHIN",
+      "artifacts": 10,
+      "protectedArtifacts": 3,
+      "evictableArtifacts": 7,
+      "ramBytes": 29446144,
+      "ramCapBytes": 33554432,
+      "ramOverBytes": 0,
+      "dbBytes": 29466624,
+      "dbCapBytes": 134217728,
+      "dbOverBytes": 0
+    },
+    "interventionUsageBefore": {
+      "domain": "INTERVENTION_TELEMETRY",
+      "status": "EXCEEDED",
+      "artifacts": 12,
+      "protectedArtifacts": 2,
+      "evictableArtifacts": 10,
+      "ramBytes": 17633280,
+      "ramCapBytes": 33554432,
+      "ramOverBytes": 0,
+      "dbBytes": 22061056,
+      "dbCapBytes": 16777216,
+      "dbOverBytes": 5283840
+    },
+    "interventionUsageAfter": {
+      "domain": "INTERVENTION_TELEMETRY",
+      "status": "EXCEEDED",
+      "artifacts": 12,
+      "protectedArtifacts": 2,
+      "evictableArtifacts": 10,
+      "ramBytes": 17633280,
+      "ramCapBytes": 33554432,
+      "ramOverBytes": 0,
+      "dbBytes": 22061056,
+      "dbCapBytes": 16777216,
+      "dbOverBytes": 5283840
+    }
+  },
+  "interventionTelemetry": {
+    "before": {
+      "domain": "INTERVENTION_TELEMETRY",
+      "status": "EXCEEDED",
+      "artifacts": 12,
+      "protectedArtifacts": 2,
+      "evictableArtifacts": 10,
+      "ramBytes": 17633280,
+      "ramCapBytes": 33554432,
+      "ramOverBytes": 0,
+      "dbBytes": 22061056,
+      "dbCapBytes": 16777216,
+      "dbOverBytes": 5283840
+    },
+    "export": {
+      "digest": "58b03159780487ed1714f0eca05621801ca91a4caa249040549ae36ac3a32672",
+      "reason": "QUOTA_EXCEEDED",
+      "artifacts": 12,
+      "partialArtifacts": 0,
+      "ramBytes": 17633280,
+      "dbBytes": 22061056,
+      "checksumHexLength": 64
+    },
+    "plan": {
+      "digest": "13423713acacbdefcc63cbf6999b53978ee8b39372376199c8554ad3c31a37bd",
+      "criterion": "LARGEST_FIRST",
+      "exportDigest": "58b03159780487ed1714f0eca05621801ca91a4caa249040549ae36ac3a32672",
+      "evicted": [
+        "intervention-segment:0",
+        "intervention-segment:1",
+        "intervention-segment:2"
+      ],
+      "evictedRamBytes": 4608000,
+      "evictedDbBytes": 7864320,
+      "retained": {
+        "artifacts": 9,
+        "protectedArtifacts": 2,
+        "ramBytes": 13025280,
+        "dbBytes": 14196736
+      },
+      "projected": {
+        "ramBytes": 13025280,
+        "dbBytes": 14196736,
+        "ramCapBytes": 33554432,
+        "dbCapBytes": 16777216,
+        "status": "WITHIN"
+      }
+    },
+    "cleanup": {
+      "digest": "6a689f67378d3b3563e50cdf61a4de3c5064b28aee62b881439ef8d096c109cc",
+      "evicted": [
+        "intervention-segment:0",
+        "intervention-segment:1",
+        "intervention-segment:2"
+      ],
+      "evictedBytes": {
+        "ram": 4608000,
+        "db": 7864320
+      },
+      "retained": {
+        "artifacts": 9,
+        "protectedArtifacts": 2,
+        "ramBytes": 13025280,
+        "dbBytes": 14196736
+      },
+      "usageAfter": {
+        "domain": "INTERVENTION_TELEMETRY",
+        "status": "WITHIN",
+        "artifacts": 9,
+        "protectedArtifacts": 2,
+        "evictableArtifacts": 7,
+        "ramBytes": 13025280,
+        "ramCapBytes": 33554432,
+        "ramOverBytes": 0,
+        "dbBytes": 14196736,
+        "dbCapBytes": 16777216,
+        "dbOverBytes": 0
+      },
+      "partials": []
+    },
+    "after": {
+      "domain": "INTERVENTION_TELEMETRY",
+      "status": "WITHIN",
+      "artifacts": 9,
+      "protectedArtifacts": 2,
+      "evictableArtifacts": 7,
+      "ramBytes": 13025280,
+      "ramCapBytes": 33554432,
+      "ramOverBytes": 0,
+      "dbBytes": 14196736,
+      "dbCapBytes": 16777216,
+      "dbOverBytes": 0
+    }
+  },
+  "telemetryPartialClip": {
+    "before": {
+      "domain": "INTERVENTION_TELEMETRY",
+      "status": "EXCEEDED",
+      "artifacts": 12,
+      "protectedArtifacts": 2,
+      "evictableArtifacts": 10,
+      "ramBytes": 17633280,
+      "ramCapBytes": 33554432,
+      "ramOverBytes": 0,
+      "dbBytes": 22061056,
+      "dbCapBytes": 16777216,
+      "dbOverBytes": 5283840
+    },
+    "export": {
+      "digest": "58b03159780487ed1714f0eca05621801ca91a4caa249040549ae36ac3a32672",
+      "reason": "QUOTA_EXCEEDED",
+      "artifacts": 12,
+      "partialArtifacts": 0,
+      "ramBytes": 17633280,
+      "dbBytes": 22061056,
+      "checksumHexLength": 64
+    },
+    "plan": {
+      "digest": "06a147a5915fab47d94d5cc51a569dcffa4250e2edce01b85b44f32ad0fe472c",
+      "criterion": "LARGEST_FIRST",
+      "exportDigest": "58b03159780487ed1714f0eca05621801ca91a4caa249040549ae36ac3a32672",
+      "evicted": [
+        "intervention-segment:0",
+        "intervention-segment:1",
+        "intervention-segment:2",
+        "intervention-segment:3",
+        "intervention-segment:4",
+        "intervention-segment:5",
+        "telemetry-chunk:ride-0",
+        "telemetry-chunk:ride-1"
+      ],
+      "evictedRamBytes": 13410304,
+      "evictedDbBytes": 18874368,
+      "retained": {
+        "artifacts": 4,
+        "protectedArtifacts": 2,
+        "ramBytes": 4222976,
+        "dbBytes": 3186688
+      },
+      "projected": {
+        "ramBytes": 4222976,
+        "dbBytes": 3186688,
+        "ramCapBytes": 33554432,
+        "dbCapBytes": 16777216,
+        "status": "WITHIN"
+      }
+    },
+    "cleanup": {
+      "digest": "2a711053b5cd99d3a162857d2b345c000e279f400218ed4af0f61adde7257b0e",
+      "evicted": [
+        "intervention-segment:0",
+        "intervention-segment:1",
+        "intervention-segment:2",
+        "intervention-segment:3",
+        "intervention-segment:4",
+        "intervention-segment:5",
+        "telemetry-chunk:ride-0",
+        "telemetry-chunk:ride-1"
+      ],
+      "evictedBytes": {
+        "ram": 13410304,
+        "db": 18874368
+      },
+      "retained": {
+        "artifacts": 4,
+        "protectedArtifacts": 2,
+        "ramBytes": 4222976,
+        "dbBytes": 3186688
+      },
+      "usageAfter": {
+        "domain": "INTERVENTION_TELEMETRY",
+        "status": "WITHIN",
+        "artifacts": 4,
+        "protectedArtifacts": 2,
+        "evictableArtifacts": 2,
+        "ramBytes": 4222976,
+        "ramCapBytes": 33554432,
+        "ramOverBytes": 0,
+        "dbBytes": 3186688,
+        "dbCapBytes": 16777216,
+        "dbOverBytes": 0
+      },
+      "partials": [
+        {
+          "artifactId": "telemetry-chunk:ride-2",
+          "clipId": "intervention:ride",
+          "status": "PARTIAL",
+          "reasons": [
+            "RETENTION_EVICTED"
+          ],
+          "missingSequences": [
+            0,
+            1
+          ]
+        },
+        {
+          "artifactId": "telemetry-chunk:ride-3",
+          "clipId": "intervention:ride",
+          "status": "PARTIAL",
+          "reasons": [
+            "RETENTION_EVICTED"
+          ],
+          "missingSequences": [
+            0,
+            1
+          ]
+        }
+      ]
+    },
+    "after": {
+      "domain": "INTERVENTION_TELEMETRY",
+      "status": "WITHIN",
+      "artifacts": 4,
+      "protectedArtifacts": 2,
+      "evictableArtifacts": 2,
+      "ramBytes": 4222976,
+      "ramCapBytes": 33554432,
+      "ramOverBytes": 0,
+      "dbBytes": 3186688,
+      "dbCapBytes": 16777216,
+      "dbOverBytes": 0
+    }
+  },
+  "wholeDomain": {
+    "domain": "INTERVENTION_TELEMETRY",
+    "evicted": [
+      "intervention-segment:0",
+      "intervention-segment:1",
+      "intervention-segment:2",
+      "intervention-segment:3",
+      "intervention-segment:4",
+      "intervention-segment:5",
+      "telemetry-chunk:ride-0",
+      "telemetry-chunk:ride-1",
+      "telemetry-chunk:ride-2",
+      "telemetry-chunk:ride-3"
+    ],
+    "retained": [
+      "profile:active",
+      "ledger:intervention-admission",
+      "checkpoint:superseded-1",
+      "checkpoint:superseded-2",
+      "checkpoint:active",
+      "progress:session",
+      "ledger:replay-events",
+      "clip:incident-a:0",
+      "clip:incident-a:1",
+      "clip:incident-a:2",
+      "clip:incident-a:3",
+      "clip:incident-a:4",
+      "clip:incident-b:0",
+      "clip:incident-b:1",
+      "clip:incident-b:2"
+    ],
+    "evictedBytes": {
+      "ram": 17604608,
+      "db": 22020096
+    },
+    "worldRecorderUntouched": true
+  },
+  "protectedOnly": {
+    "before": {
+      "domain": "INTERVENTION_TELEMETRY",
+      "status": "PROTECTED_OVERFLOW",
+      "artifacts": 2,
+      "protectedArtifacts": 2,
+      "evictableArtifacts": 0,
+      "ramBytes": 46137344,
+      "ramCapBytes": 33554432,
+      "ramOverBytes": 12582912,
+      "dbBytes": 20971520,
+      "dbCapBytes": 16777216,
+      "dbOverBytes": 4194304
+    },
+    "telemetryStatus": "PROTECTED_OVERFLOW",
+    "worldStatus": "PROTECTED_OVERFLOW",
+    "planEvictions": 0,
+    "applyCode": "NOTHING_TO_EVICT",
+    "protectedAfter": [
+      "profile:active",
+      "ledger:intervention-admission",
+      "checkpoint:active",
+      "progress:session",
+      "ledger:replay-events"
+    ],
+    "missingAfter": []
+  },
+  "determinism": {
+    "forward": {
+      "exportDigest": "274dd0ecbcdc553ded10f0c3570f6c2591599b16f602fa048c12a5db20182915",
+      "planDigest": "3ac7773e93713633ade820e9f0f6f47c44e3c251f59b8112b596ec7af19cf7c3",
+      "resultDigest": "df78026375f76c40118afe5e1e7f7ea7d51a0c4a905dc12b8a3ca7f09345c358",
+      "evicted": [
+        "checkpoint:superseded-1",
+        "checkpoint:superseded-2",
+        "clip:incident-a:0"
+      ]
+    },
+    "reversed": {
+      "exportDigest": "274dd0ecbcdc553ded10f0c3570f6c2591599b16f602fa048c12a5db20182915",
+      "planDigest": "3ac7773e93713633ade820e9f0f6f47c44e3c251f59b8112b596ec7af19cf7c3",
+      "resultDigest": "df78026375f76c40118afe5e1e7f7ea7d51a0c4a905dc12b8a3ca7f09345c358",
+      "evicted": [
+        "checkpoint:superseded-1",
+        "checkpoint:superseded-2",
+        "clip:incident-a:0"
+      ]
+    },
+    "identical": true
+  },
+  "refusalCodes": {
+    "missingBudget": "QUOTA_MISSING",
+    "cleanupWithoutExport": "EXPORT_REQUIRED",
+    "forgedPlan": "PLAN_UNKNOWN",
+    "stalePlan": "PLAN_UNKNOWN"
+  },
+  "checks": [
+    {
+      "name": "domains:two-separate-retention-domains",
+      "expected": [
+        "INTERVENTION_TELEMETRY",
+        "WORLD_RECORDER"
+      ],
+      "actual": [
+        "INTERVENTION_TELEMETRY",
+        "WORLD_RECORDER"
+      ],
+      "pass": true,
+      "detail": "There is no shared budget and no global cleanup over both domains."
+    },
+    {
+      "name": "quotas:manifest-values",
+      "expected": {
+        "recorderRamBytes": 33554432,
+        "optionalReplayStorageBytes": 134217728,
+        "persistenceIngressBytes": 16777216
+      },
+      "actual": {
+        "recorderRamBytes": 33554432,
+        "optionalReplayStorageBytes": 134217728,
+        "persistenceIngressBytes": 16777216
+      },
+      "pass": true,
+      "detail": "Every quota is a manifest capacity; a missing one is refused, not invented."
+    },
+    {
+      "name": "quotas:069-contract-limit-in-bytes",
+      "expected": 33554432,
+      "actual": 33554432,
+      "pass": true,
+      "detail": "The telemetry RAM quota is the delivered 069 record store cap."
+    },
+    {
+      "name": "quotas:bytes-not-durations",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Both RAM and DB limits are byte counts; no quota is expressed as a duration."
+    },
+    {
+      "name": "quotas:missing-budget-is-refused",
+      "expected": "QUOTA_MISSING",
+      "actual": "QUOTA_MISSING",
+      "pass": true,
+      "detail": "A null manifest capacity never becomes an unbounded quota."
+    },
+    {
+      "name": "quota:world-recorder-ram-exceeded",
+      "expected": "EXCEEDED",
+      "actual": "EXCEEDED",
+      "pass": true,
+      "detail": "The world recorder domain is 217088 bytes over its RAM quota."
+    },
+    {
+      "name": "export:ready-at-quota-full",
+      "expected": "QUOTA_EXCEEDED",
+      "actual": "QUOTA_EXCEEDED",
+      "pass": true,
+      "detail": "Export declares 13 artifacts and 33792000 DB bytes."
+    },
+    {
+      "name": "export:canonical-sha256",
+      "expected": 64,
+      "actual": 64,
+      "pass": true,
+      "detail": "The export carries a SHA-256 over SDA-CJSON-1, not a hand-made format."
+    },
+    {
+      "name": "plan:cleanup-without-export-is-refused",
+      "expected": "EXPORT_REQUIRED",
+      "actual": "EXPORT_REQUIRED",
+      "pass": true,
+      "detail": "No plan exists without a copy of the same domain; nothing was deleted."
+    },
+    {
+      "name": "cleanup:world-recorder-oldest-first",
+      "expected": true,
+      "actual": [
+        "checkpoint:superseded-1",
+        "checkpoint:superseded-2",
+        "clip:incident-a:0"
+      ],
+      "pass": true,
+      "detail": "3 rows evicted (4325376 RAM bytes, 4325376 DB bytes)."
+    },
+    {
+      "name": "cleanup:world-recorder-partial-clip-declared",
+      "expected": 4,
+      "actual": 4,
+      "pass": true,
+      "detail": "Retained rows of the trimmed clip: clip:incident-a:1, clip:incident-a:2, clip:incident-a:3, clip:incident-a:4."
+    },
+    {
+      "name": "cleanup:intervention-largest-first-fits-db",
+      "expected": true,
+      "actual": {
+        "evicted": [
+          "intervention-segment:0",
+          "intervention-segment:1",
+          "intervention-segment:2"
+        ],
+        "dbBytes": 14196736
+      },
+      "pass": true,
+      "detail": "DB 22061056 -> 14196736 of 16777216 bytes."
+    },
+    {
+      "name": "cleanup:size-target-declares-partial-telemetry-clip",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "A sealed 090 clip lost 2 of 4 chunks and the 2 retained chunks are declared PARTIAL: telemetry-chunk:ride-2, telemetry-chunk:ride-3."
+    },
+    {
+      "name": "cleanup:whole-domain-keeps-the-other-domain",
+      "expected": true,
+      "actual": {
+        "worldRecorderUntouched": true
+      },
+      "pass": true,
+      "detail": "Explicit domain cleanup removed 10 telemetry rows and left the world recorder at 33792000 DB bytes."
+    },
+    {
+      "name": "protected:profile-progress-checkpoint-ledgers-intact",
+      "expected": [],
+      "actual": [],
+      "pass": true,
+      "detail": "Protected rows after the world cleanup: checkpoint:active, progress:session, ledger:replay-events, profile:active, ledger:intervention-admission."
+    },
+    {
+      "name": "protected:overflow-is-declared-not-silent",
+      "expected": "PROTECTED_OVERFLOW",
+      "actual": {
+        "telemetry": "PROTECTED_OVERFLOW",
+        "world": "PROTECTED_OVERFLOW"
+      },
+      "pass": true,
+      "detail": "With only protected rows over quota the plan evicts nothing and apply reports NOTHING_TO_EVICT."
+    },
+    {
+      "name": "determinism:same-input-same-digests",
+      "expected": true,
+      "actual": {
+        "forward": {
+          "exportDigest": "274dd0ecbcdc553ded10f0c3570f6c2591599b16f602fa048c12a5db20182915",
+          "planDigest": "3ac7773e93713633ade820e9f0f6f47c44e3c251f59b8112b596ec7af19cf7c3",
+          "resultDigest": "df78026375f76c40118afe5e1e7f7ea7d51a0c4a905dc12b8a3ca7f09345c358",
+          "evicted": [
+            "checkpoint:superseded-1",
+            "checkpoint:superseded-2",
+            "clip:incident-a:0"
+          ]
+        },
+        "reversed": {
+          "exportDigest": "274dd0ecbcdc553ded10f0c3570f6c2591599b16f602fa048c12a5db20182915",
+          "planDigest": "3ac7773e93713633ade820e9f0f6f47c44e3c251f59b8112b596ec7af19cf7c3",
+          "resultDigest": "df78026375f76c40118afe5e1e7f7ea7d51a0c4a905dc12b8a3ca7f09345c358",
+          "evicted": [
+            "checkpoint:superseded-1",
+            "checkpoint:superseded-2",
+            "clip:incident-a:0"
+          ]
+        }
+      },
+      "pass": true,
+      "detail": "A reversed inventory array produces the same export, plan and result digest."
+    },
+    {
+      "name": "isolation:cleanup-of-one-domain-does-not-touch-the-other",
+      "expected": true,
+      "actual": {
+        "before": 22061056,
+        "after": 22061056
+      },
+      "pass": true,
+      "detail": "The telemetry domain keeps its artifacts and bytes after a world recorder cleanup."
+    },
+    {
+      "name": "refusals:forged-and-replayed-plans",
+      "expected": {
+        "forged": "PLAN_UNKNOWN",
+        "stale": "PLAN_STALE"
+      },
+      "actual": {
+        "forged": "PLAN_UNKNOWN",
+        "stale": "PLAN_UNKNOWN"
+      },
+      "pass": true,
+      "detail": "A plan that names a protected row is unknown; a plan applied twice is stale."
+    }
+  ],
+  "summary": {
+    "checks": 19,
+    "passed": 19,
+    "pass": true
+  }
+}
