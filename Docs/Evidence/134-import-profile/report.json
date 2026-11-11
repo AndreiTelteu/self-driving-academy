@@ -1,0 +1,478 @@
+{
+  "version": "134-import-profile-v1",
+  "generatedBy": "node --import ./scripts/register-typescript.mjs scripts/run-import-profile-report.mjs",
+  "oracleRule": "Every value is a real run of src/persistence/profile-import against the in-memory IndexedDB double and the real 205/110 fixture; the expected value is the documented contract, never a copy of the actual one.",
+  "contract": "134-profile-import-v1",
+  "format": {
+    "format": "self-driving-academy-profile-export",
+    "formatVersion": 1,
+    "schemaVersion": 1,
+    "maxFileBytes": 1048576,
+    "maxVersions": 128
+  },
+  "validation": {
+    "status": "ACCEPTED",
+    "checksumVerified": true,
+    "versions": 3,
+    "baseVersions": 1,
+    "derivedVersions": 2,
+    "tipVersionId": "profile-v3",
+    "activeVersionId": "profile-v3",
+    "reservedParameters": 56,
+    "bytes": 4491
+  },
+  "import": {
+    "status": "COMMITTED",
+    "versionIds": [
+      "profile-v1",
+      "profile-v2",
+      "profile-v3"
+    ],
+    "versionsCreated": 3,
+    "versionsExisting": 0,
+    "activated": false,
+    "activation": null,
+    "storedVersions": 3,
+    "storedActiveVersionId": null,
+    "storedActivationSequence": null
+  },
+  "activation": {
+    "staleTickCode": "IMPORT_ACTIVATION_STALE_TICK",
+    "pendingStatus": "PENDING",
+    "pendingWritesActivation": false,
+    "appliedStatus": "ACTIVATED",
+    "sequence": 1,
+    "lifecycleEpoch": 2,
+    "activateAtTick": 2,
+    "durableVersionId": "profile-v2",
+    "fleetBefore": [
+      "profile-v1"
+    ],
+    "fleetApplied": [
+      "profile-v2"
+    ],
+    "lateResultStatus": "LATE_RESULT",
+    "lateResultAccepted": false,
+    "repeatedStatus": "ALREADY_ACTIVE"
+  },
+  "refusals": {
+    "modifiedDocument": "CHECKSUM_MISMATCH",
+    "perVersionChecksum": "PROFILE_CHECKSUM_MISMATCH",
+    "unknownUnit": "UNIT_MISMATCH",
+    "outOfRange": "VALUE_OUT_OF_RANGE",
+    "reservedKeyWithValue": "RESERVED_KEY_SET",
+    "unknownParameter": "UNKNOWN_PARAMETER",
+    "schemaTooNew": "SCHEMA_TOO_NEW",
+    "formatVersionTooNew": "FORMAT_VERSION_TOO_NEW",
+    "malformedJson": "PARSE_ERROR",
+    "duplicateKey": "DUPLICATE_KEY",
+    "fileTooLarge": "FILE_TOO_LARGE",
+    "fileTooLargeImported": "FILE_TOO_LARGE"
+  },
+  "atomicity": {
+    "faultCode": "IMPORT_WRITE_FAILED",
+    "storedVersionsAfterFault": 0,
+    "activationAfterFault": false,
+    "retryCreated": 3
+  },
+  "digest": {
+    "canonicalBytes": 4491,
+    "platform": "7902d243e224a18c506c15db3a8a55dffcd7831cf6c7ef83c0d5d05036a3194f",
+    "own": "7902d243e224a18c506c15db3a8a55dffcd7831cf6c7ef83c0d5d05036a3194f",
+    "equal": true
+  },
+  "checks": [
+    {
+      "name": "contract",
+      "expected": "134-profile-import-v1",
+      "actual": "134-profile-import-v1",
+      "pass": true,
+      "detail": "Contract id"
+    },
+    {
+      "name": "format",
+      "expected": "self-driving-academy-profile-export",
+      "actual": "self-driving-academy-profile-export",
+      "pass": true,
+      "detail": "The 133 format"
+    },
+    {
+      "name": "format-version",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "The 133 format version"
+    },
+    {
+      "name": "schema-version",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "The 133 schema version"
+    },
+    {
+      "name": "file-budget",
+      "expected": 1048576,
+      "actual": 1048576,
+      "pass": true,
+      "detail": "The fixed 1 MiB budget"
+    },
+    {
+      "name": "version-budget",
+      "expected": 128,
+      "actual": 128,
+      "pass": true,
+      "detail": "The fixed version cap"
+    },
+    {
+      "name": "validation-status",
+      "expected": "ACCEPTED",
+      "actual": "ACCEPTED",
+      "pass": true,
+      "detail": "The document validates"
+    },
+    {
+      "name": "validation-checksum",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The checksum verifies"
+    },
+    {
+      "name": "validation-versions",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "Three versions"
+    },
+    {
+      "name": "validation-base",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "One base version"
+    },
+    {
+      "name": "validation-derived",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "Two derived versions"
+    },
+    {
+      "name": "validation-tip",
+      "expected": "profile-v3",
+      "actual": "profile-v3",
+      "pass": true,
+      "detail": "The deepest version"
+    },
+    {
+      "name": "validation-active",
+      "expected": "profile-v3",
+      "actual": "profile-v3",
+      "pass": true,
+      "detail": "The named active"
+    },
+    {
+      "name": "validation-reserved",
+      "expected": 56,
+      "actual": 56,
+      "pass": true,
+      "detail": "The 56 reserved R keys are null"
+    },
+    {
+      "name": "import-status",
+      "expected": "COMMITTED",
+      "actual": "COMMITTED",
+      "pass": true,
+      "detail": "The import commits"
+    },
+    {
+      "name": "import-versions",
+      "expected": [
+        "profile-v1",
+        "profile-v2",
+        "profile-v3"
+      ],
+      "actual": [
+        "profile-v1",
+        "profile-v2",
+        "profile-v3"
+      ],
+      "pass": true,
+      "detail": "Depth order"
+    },
+    {
+      "name": "import-created",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "Three rows written"
+    },
+    {
+      "name": "import-existing",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "No pre-existing row"
+    },
+    {
+      "name": "import-activated",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "Import never activates"
+    },
+    {
+      "name": "import-activation-null",
+      "expected": null,
+      "actual": null,
+      "pass": true,
+      "detail": "No activation payload"
+    },
+    {
+      "name": "import-stored",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "Three stored versions"
+    },
+    {
+      "name": "import-stored-active",
+      "expected": null,
+      "actual": null,
+      "pass": true,
+      "detail": "No stored pointer"
+    },
+    {
+      "name": "import-stored-sequence",
+      "expected": null,
+      "actual": null,
+      "pass": true,
+      "detail": "No stored sequence"
+    },
+    {
+      "name": "activation-stale-tick",
+      "expected": "IMPORT_ACTIVATION_STALE_TICK",
+      "actual": "IMPORT_ACTIVATION_STALE_TICK",
+      "pass": true,
+      "detail": "A stale tick is refused"
+    },
+    {
+      "name": "activation-pending",
+      "expected": "PENDING",
+      "actual": "PENDING",
+      "pass": true,
+      "detail": "Resolved next tick"
+    },
+    {
+      "name": "activation-pending-writes",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "A pending barrier writes no activation"
+    },
+    {
+      "name": "activation-applied",
+      "expected": "ACTIVATED",
+      "actual": "ACTIVATED",
+      "pass": true,
+      "detail": "Explicit activation"
+    },
+    {
+      "name": "activation-sequence",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "First stored sequence"
+    },
+    {
+      "name": "activation-epoch",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "The 205 epoch advanced"
+    },
+    {
+      "name": "activation-tick",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "The 110 tick boundary"
+    },
+    {
+      "name": "activation-durable",
+      "expected": "profile-v2",
+      "actual": "profile-v2",
+      "pass": true,
+      "detail": "The durable pointer"
+    },
+    {
+      "name": "activation-fleet-before",
+      "expected": [
+        "profile-v1"
+      ],
+      "actual": [
+        "profile-v1"
+      ],
+      "pass": true,
+      "detail": "Old base"
+    },
+    {
+      "name": "activation-fleet-applied",
+      "expected": [
+        "profile-v2"
+      ],
+      "actual": [
+        "profile-v2"
+      ],
+      "pass": true,
+      "detail": "The 110 fleet applies the imported version"
+    },
+    {
+      "name": "activation-late",
+      "expected": "LATE_RESULT",
+      "actual": "LATE_RESULT",
+      "pass": true,
+      "detail": "Old generation"
+    },
+    {
+      "name": "activation-late-accepted",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "Ignored"
+    },
+    {
+      "name": "activation-repeated",
+      "expected": "ALREADY_ACTIVE",
+      "actual": "ALREADY_ACTIVE",
+      "pass": true,
+      "detail": "Idempotent activation"
+    },
+    {
+      "name": "refusal-modified",
+      "expected": "CHECKSUM_MISMATCH",
+      "actual": "CHECKSUM_MISMATCH",
+      "pass": true,
+      "detail": "A modified document"
+    },
+    {
+      "name": "refusal-per-version",
+      "expected": "PROFILE_CHECKSUM_MISMATCH",
+      "actual": "PROFILE_CHECKSUM_MISMATCH",
+      "pass": true,
+      "detail": "A version that fails its 109 checksum"
+    },
+    {
+      "name": "refusal-unit",
+      "expected": "UNIT_MISMATCH",
+      "actual": "UNIT_MISMATCH",
+      "pass": true,
+      "detail": "An unknown unit"
+    },
+    {
+      "name": "refusal-range",
+      "expected": "VALUE_OUT_OF_RANGE",
+      "actual": "VALUE_OUT_OF_RANGE",
+      "pass": true,
+      "detail": "Out of the 092 range"
+    },
+    {
+      "name": "refusal-reserved",
+      "expected": "RESERVED_KEY_SET",
+      "actual": "RESERVED_KEY_SET",
+      "pass": true,
+      "detail": "A reserved key with a value"
+    },
+    {
+      "name": "refusal-unknown-parameter",
+      "expected": "UNKNOWN_PARAMETER",
+      "actual": "UNKNOWN_PARAMETER",
+      "pass": true,
+      "detail": "An unknown usable key"
+    },
+    {
+      "name": "refusal-schema",
+      "expected": "SCHEMA_TOO_NEW",
+      "actual": "SCHEMA_TOO_NEW",
+      "pass": true,
+      "detail": "A newer schema"
+    },
+    {
+      "name": "refusal-format",
+      "expected": "FORMAT_VERSION_TOO_NEW",
+      "actual": "FORMAT_VERSION_TOO_NEW",
+      "pass": true,
+      "detail": "A newer format"
+    },
+    {
+      "name": "refusal-malformed",
+      "expected": "PARSE_ERROR",
+      "actual": "PARSE_ERROR",
+      "pass": true,
+      "detail": "Malformed JSON"
+    },
+    {
+      "name": "refusal-duplicate",
+      "expected": "DUPLICATE_KEY",
+      "actual": "DUPLICATE_KEY",
+      "pass": true,
+      "detail": "Duplicate keys"
+    },
+    {
+      "name": "refusal-size",
+      "expected": "FILE_TOO_LARGE",
+      "actual": "FILE_TOO_LARGE",
+      "pass": true,
+      "detail": "Above the size budget"
+    },
+    {
+      "name": "refusal-size-import",
+      "expected": "FILE_TOO_LARGE",
+      "actual": "FILE_TOO_LARGE",
+      "pass": true,
+      "detail": "The writer is never reached"
+    },
+    {
+      "name": "atomicity-fault",
+      "expected": "IMPORT_WRITE_FAILED",
+      "actual": "IMPORT_WRITE_FAILED",
+      "pass": true,
+      "detail": "The aborted import is reported"
+    },
+    {
+      "name": "atomicity-versions",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "No version survives the abort"
+    },
+    {
+      "name": "atomicity-activation",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "No activation survives the abort"
+    },
+    {
+      "name": "atomicity-retry",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "The retry imports cleanly"
+    },
+    {
+      "name": "digest-equal",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The SHA-256 matches the platform digest"
+    }
+  ],
+  "summary": {
+    "checks": 53,
+    "passed": 53,
+    "pass": true
+  }
+}
