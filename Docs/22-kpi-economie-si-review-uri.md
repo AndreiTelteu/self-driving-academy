@@ -1,4 +1,4 @@
-# KPI-uri, economie și review-uri
+﻿# KPI-uri, economie și review-uri
 
 Versiune 0.5 · 4 octombrie 2026. Parte din [planul complet](README.md). Scope V1 confirmat; formulele și valorile numerice sunt propuneri de calibrare, nu rezultate implementate.
 
@@ -71,3 +71,21 @@ Bucketurile KPI se actualizează în același apel cu settle-ul și review-ul: z
 Limitele sunt fixe: 4096 settle-uri FIFO, 4096 review-uri FIFO cu 8192 chei de idempotență, 512 zile și 24 luni, cu motive de refuz închise. `reset` golește cele trei structuri împreună. Nu fac parte din acest contract: feedbackul rating→cerere (revizie ulterioară), persistarea în savefile, popup-ul KPI, paginarea review-urilor și downsampling-ul graficelor (210).
 
 Dovezile reale sunt în [Evidence/209-fleet-economy-reviews](Evidence/209-fleet-economy-reviews/README.md): `npm run fleet:economy` produce un raport determinist cu 10/10 verificări, deviz 551 neschimbat de un ocol de 300 s, settle-uri 551/0/0/165, rating mediu 5 pentru stilul eficient și 1,333333 pentru cel agresiv, iar bucketul zilei raportează 4 curse terminale, 3 review-uri și `historyScans: 0`.
+
+## Contract implementat în V1 (PBI 210)
+
+Pop-up-ul KPI consumă exclusiv read model-ul 209: `src/economy/kpi-history.ts` expune `210-kpi-history-v1` și `selectKpiHistory(snapshot, { months?, maximumDailyPoints? })`, iar `snapshot` este validat ca `209-fleet-kpi-v1` cu `historyScans: 0`. Selectorul nu are ledger, store, renderer sau ceas propriu; `src/ui/kpi-history-format.ts` (`210-kpi-history-popup-v1`) proiectează selecția în text, tabele accesibile și bare de grafic, iar `src/ui/kpi-history.ts` montează pop-up-ul.
+
+Fereastra implicită este de 12 luni simulate (`KPI_HISTORY_LIMITS.months`; maximum 24). Sloturile sunt umplute lună cu lună: o lună fără bucket rămâne `NO_DATA` cu valorile `null` și textul „fără date”, niciodată `0` sau o medie inventată. O lună care există cu revenue `0` este un zero real și își păstrează eșantionul. Media este mereu `ratingSum / reviewCount` peste sumele exacte, atât pe fereastră, cât și pe fiecare grup vizual; totalurile adună `ratingSum` și `reviewCount`, niciodată media mediilor. Histograma 0–5 însumează aceleași review-uri, iar o zi cu curse și fără review-uri are media indisponibilă (`NO_REVIEWS`).
+
+Luna curentă este marcată `PARTIAL`, primește nota „Lună parțială: arată doar intervalul observat și nu se compară cu o lună încheiată” și are o bară proiectată separată. Proiecția folosește aceleași praguri 209 (10 curse terminale, 300 s de expunere), iar când nu le atinge raportează `INSUFFICIENT_DATA` cu motivul închis (`FEW_RIDES`, `SHORT_EXPOSURE`, `NO_MONTH`) și cu minimumul afișat; încasarea realizată nu este înlocuită de proiecție.
+
+Downsampling-ul este numai vizual: plafonul implicit este 60 de puncte, maximum 90 (`KPI_HISTORY_LIMITS`), iar zilele exacte rămân disponibile până la capacitatea 209 (4096). Un grup de zile păstrează sumele exacte ale membrilor și numărul de zile acoperite (`exactPoints`), deci media grupului este tot `ratingSum / reviewCount`; tooltip-ul barei și tabelul afișează valorile exacte. Tabelul lunar are un rând stabil pentru fiecare slot (12 rânduri), tabelul zilnic are rândurile punctelor vizuale, iar distribuția are șase rânduri 0–5; toate au `<caption>`, `<th scope>` și text, nu numai culoare.
+
+Pop-up-ul montează un `<button type="button">KPIs</button>` nativ și un `role="dialog"` cu `aria-labelledby`/`aria-describedby`. La deschidere citește read model-ul o singură dată, mută focusul pe butonul „Închide”, ține Tab/Shift+Tab în dialog și readuce focusul anterior la închidere; Escape închide. Nu instalează niciun listener pe `window`/`document`, deci tastele de condus nu sunt furate. Hotkey-ul K rămâne al hostului (binding 009/039), care apelează `open()`.
+
+Pauza este decisă de 070, nu de pop-up: portul `setSurface` se leagă la `pauseFocus.setSurface('panel', open)`. În MANUAL și LEARNING deschiderea suspendă simularea cu cauza `panel`, iar închiderea reia exact modul anterior; în observare AUTO pop-up-ul rămâne live și nu suspendă nimic. Panoul nu are cale pe tick: cât timp este închis, `refresh()` întoarce `SKIPPED_CLOSED` fără citire și fără randare, iar deschiderea nu rescanează ledgerul (`historyScans` rămâne `0`).
+
+Costul este raportat la nivelul `targeted` al `performance_checks: ["ui", "frame"]`: zero citiri/randări când panoul este închis, trei listeners (buton, Închide, dialog), zero listeners globali, bare și rânduri mărginite de plafonul de 12 luni și 60 de puncte. Nu se pretinde FPS sau cost GPU pe hardware real; probele integrate rămân gate-urilor 155/159/220/224. Stilurile pop-up-ului sunt inline, ca să nu modifice foaia globală în afara ownership-ului acestui PBI.
+
+Dovezile reale sunt în [Evidence/210-kpi-history-popup](Evidence/210-kpi-history-popup/README.md): `npm run kpi:history` produce un raport determinist cu 26/26 verificări pe 12 luni sintetice (310 settle-uri, 284 review-uri), 11 luni cu date, una fără date, una parțială, 310 zile exacte → 60 de puncte vizuale, revenue 31960 SDA, media ponderată 2.552817 față de 2.5 cât ar da media mediilor lunare, distribuția 49/45/45/45/45/55 și `historyScans: 0` înainte și după deschidere.
