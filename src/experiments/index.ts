@@ -10,3 +10,4 @@ export * from './learning-gate24';
 export * from './experiment-ledger-isolation';
 export * from './experiment-snapshot';
 export * from './experiment-rerun';
+export * from './experiment-replay';
