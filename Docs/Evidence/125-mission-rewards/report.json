@@ -1,0 +1,647 @@
+{
+  "version": "125-mission-rewards-report-v1",
+  "contract": {
+    "schema": "125-mission-rewards-v1",
+    "campaignOrder": [
+      "campaign-1-first-taxi",
+      "campaign-2-first-demonstration",
+      "campaign-3-following-distance",
+      "campaign-4-stops-and-signals",
+      "campaign-5-passenger",
+      "campaign-6-city-copies-you",
+      "campaign-7-changing-a-habit",
+      "campaign-8-fleet-challenge"
+    ],
+    "states": [
+      "LOCKED",
+      "AVAILABLE",
+      "COMPLETED"
+    ],
+    "settlementStatuses": [
+      "GRANTED",
+      "NO_REWARD",
+      "DUPLICATE"
+    ],
+    "rewardStatuses": [
+      "GRANTED",
+      "DUPLICATE"
+    ],
+    "duplicateReasons": [
+      "COMPLETION_ALREADY_SETTLED",
+      "REWARD_ALREADY_GRANTED"
+    ],
+    "capabilityKinds": [
+      "BASE_ACCESS",
+      "CHALLENGE",
+      "VEHICLE_CLASS",
+      "ANALYSIS_TOOL"
+    ],
+    "baseCapabilities": [
+      "access:drive-existing-vehicles",
+      "access:select-any-taxi",
+      "vehicle-class:sedan",
+      "vehicle-class:compact"
+    ],
+    "identity": {
+      "id": "MISSION_VERSION",
+      "rewardKey": "namespace + missionId + definitionVersion + rewardId",
+      "completionKey": "namespace + missionId + attempt",
+      "xpScope": "MISSION_VERSION",
+      "unlockScope": "MISSION_VERSION",
+      "replayGrants": false
+    },
+    "limits": {
+      "missions": 32,
+      "completionsPerMission": 8,
+      "completions": 256,
+      "rewards": 256,
+      "capabilities": 128,
+      "vehicles": 70
+    }
+  },
+  "completions": [
+    {
+      "missionId": "campaign-1-first-taxi",
+      "attempt": 1,
+      "status": "GRANTED",
+      "rewardsGranted": 2,
+      "rewardsDuplicate": 0,
+      "xpGranted": 100,
+      "unlocked": [
+        "challenge:first-demonstration"
+      ],
+      "campaignState": "COMPLETED",
+      "xpTotal": 100,
+      "grantsTotal": 2,
+      "capabilitiesTotal": 1
+    },
+    {
+      "missionId": "campaign-2-first-demonstration",
+      "attempt": 1,
+      "status": "GRANTED",
+      "rewardsGranted": 2,
+      "rewardsDuplicate": 0,
+      "xpGranted": 100,
+      "unlocked": [
+        "analysis:learning-review"
+      ],
+      "campaignState": "COMPLETED",
+      "xpTotal": 200,
+      "grantsTotal": 4,
+      "capabilitiesTotal": 2
+    },
+    {
+      "missionId": "campaign-3-following-distance",
+      "attempt": 1,
+      "status": "GRANTED",
+      "rewardsGranted": 2,
+      "rewardsDuplicate": 0,
+      "xpGranted": 100,
+      "unlocked": [
+        "challenge:following-comparison"
+      ],
+      "campaignState": "COMPLETED",
+      "xpTotal": 300,
+      "grantsTotal": 6,
+      "capabilitiesTotal": 3
+    },
+    {
+      "missionId": "campaign-4-stops-and-signals",
+      "attempt": 1,
+      "status": "GRANTED",
+      "rewardsGranted": 2,
+      "rewardsDuplicate": 0,
+      "xpGranted": 100,
+      "unlocked": [
+        "analysis:opportunity-review"
+      ],
+      "campaignState": "COMPLETED",
+      "xpTotal": 400,
+      "grantsTotal": 8,
+      "capabilitiesTotal": 4
+    },
+    {
+      "missionId": "campaign-5-passenger",
+      "attempt": 1,
+      "status": "GRANTED",
+      "rewardsGranted": 2,
+      "rewardsDuplicate": 0,
+      "xpGranted": 100,
+      "unlocked": [
+        "vehicle-class:comfort-sedan"
+      ],
+      "campaignState": "COMPLETED",
+      "xpTotal": 500,
+      "grantsTotal": 10,
+      "capabilitiesTotal": 5
+    },
+    {
+      "missionId": "campaign-6-city-copies-you",
+      "attempt": 1,
+      "status": "GRANTED",
+      "rewardsGranted": 2,
+      "rewardsDuplicate": 0,
+      "xpGranted": 100,
+      "unlocked": [
+        "challenge:fleet-scenario"
+      ],
+      "campaignState": "COMPLETED",
+      "xpTotal": 600,
+      "grantsTotal": 12,
+      "capabilitiesTotal": 6
+    },
+    {
+      "missionId": "campaign-7-changing-a-habit",
+      "attempt": 1,
+      "status": "GRANTED",
+      "rewardsGranted": 2,
+      "rewardsDuplicate": 0,
+      "xpGranted": 100,
+      "unlocked": [
+        "analysis:version-comparison"
+      ],
+      "campaignState": "COMPLETED",
+      "xpTotal": 700,
+      "grantsTotal": 14,
+      "capabilitiesTotal": 7
+    },
+    {
+      "missionId": "campaign-8-fleet-challenge",
+      "attempt": 1,
+      "status": "GRANTED",
+      "rewardsGranted": 2,
+      "rewardsDuplicate": 0,
+      "xpGranted": 100,
+      "unlocked": [
+        "challenge:fleet-championship"
+      ],
+      "campaignState": "COMPLETED",
+      "xpTotal": 800,
+      "grantsTotal": 16,
+      "capabilitiesTotal": 8
+    }
+  ],
+  "repeats": [
+    {
+      "missionId": "campaign-1-first-taxi",
+      "attempt": 2,
+      "status": "NO_REWARD",
+      "rewardsGranted": 0,
+      "rewardsDuplicate": 2,
+      "xpGranted": 0,
+      "unlocked": [],
+      "campaignState": "COMPLETED",
+      "xpTotal": 800,
+      "grantsTotal": 16,
+      "capabilitiesTotal": 8
+    }
+  ],
+  "access": [
+    {
+      "checkpoint": "before any mission",
+      "capabilities": 0,
+      "taxis": 24,
+      "taxisSelectable": 24,
+      "vehicles": 64,
+      "vehiclesDriveable": 64,
+      "civilians": 40,
+      "revoked": 0,
+      "blockedTaxis": 0,
+      "baseCapabilitiesPresent": true
+    },
+    {
+      "checkpoint": "after campaign-1-first-taxi",
+      "capabilities": 1,
+      "taxis": 24,
+      "taxisSelectable": 24,
+      "vehicles": 64,
+      "vehiclesDriveable": 64,
+      "civilians": 40,
+      "revoked": 0,
+      "blockedTaxis": 0,
+      "baseCapabilitiesPresent": true
+    },
+    {
+      "checkpoint": "after campaign-2-first-demonstration",
+      "capabilities": 2,
+      "taxis": 24,
+      "taxisSelectable": 24,
+      "vehicles": 64,
+      "vehiclesDriveable": 64,
+      "civilians": 40,
+      "revoked": 0,
+      "blockedTaxis": 0,
+      "baseCapabilitiesPresent": true
+    },
+    {
+      "checkpoint": "after campaign-3-following-distance",
+      "capabilities": 3,
+      "taxis": 24,
+      "taxisSelectable": 24,
+      "vehicles": 64,
+      "vehiclesDriveable": 64,
+      "civilians": 40,
+      "revoked": 0,
+      "blockedTaxis": 0,
+      "baseCapabilitiesPresent": true
+    },
+    {
+      "checkpoint": "after campaign-4-stops-and-signals",
+      "capabilities": 4,
+      "taxis": 24,
+      "taxisSelectable": 24,
+      "vehicles": 64,
+      "vehiclesDriveable": 64,
+      "civilians": 40,
+      "revoked": 0,
+      "blockedTaxis": 0,
+      "baseCapabilitiesPresent": true
+    },
+    {
+      "checkpoint": "after campaign-5-passenger",
+      "capabilities": 5,
+      "taxis": 24,
+      "taxisSelectable": 24,
+      "vehicles": 64,
+      "vehiclesDriveable": 64,
+      "civilians": 40,
+      "revoked": 0,
+      "blockedTaxis": 0,
+      "baseCapabilitiesPresent": true
+    },
+    {
+      "checkpoint": "after campaign-6-city-copies-you",
+      "capabilities": 6,
+      "taxis": 24,
+      "taxisSelectable": 24,
+      "vehicles": 64,
+      "vehiclesDriveable": 64,
+      "civilians": 40,
+      "revoked": 0,
+      "blockedTaxis": 0,
+      "baseCapabilitiesPresent": true
+    },
+    {
+      "checkpoint": "after campaign-7-changing-a-habit",
+      "capabilities": 7,
+      "taxis": 24,
+      "taxisSelectable": 24,
+      "vehicles": 64,
+      "vehiclesDriveable": 64,
+      "civilians": 40,
+      "revoked": 0,
+      "blockedTaxis": 0,
+      "baseCapabilitiesPresent": true
+    },
+    {
+      "checkpoint": "after campaign-8-fleet-challenge",
+      "capabilities": 8,
+      "taxis": 24,
+      "taxisSelectable": 24,
+      "vehicles": 64,
+      "vehiclesDriveable": 64,
+      "civilians": 40,
+      "revoked": 0,
+      "blockedTaxis": 0,
+      "baseCapabilitiesPresent": true
+    }
+  ],
+  "resets": [
+    {
+      "missionId": "campaign-5-passenger",
+      "clearedCompletions": 1,
+      "resets": 1,
+      "rewardsRetained": 10,
+      "unlocksRetained": 5,
+      "state": "AVAILABLE",
+      "attempts": 0,
+      "nextAttempt": 1,
+      "playable": true,
+      "xpTotal": 500,
+      "grantsTotal": 10
+    },
+    {
+      "missionId": "campaign-1-first-taxi",
+      "clearedCompletions": 1,
+      "resets": 1,
+      "rewardsRetained": 10,
+      "unlocksRetained": 5,
+      "state": "AVAILABLE",
+      "attempts": 0,
+      "nextAttempt": 1,
+      "playable": true,
+      "xpTotal": 500,
+      "grantsTotal": 10
+    }
+  ],
+  "upgraded": {
+    "definitionVersion": "2",
+    "status": "GRANTED",
+    "xpGranted": 100,
+    "rewardIdChanged": true
+  },
+  "totals": {
+    "settlements": 9,
+    "grantedRewards": 16,
+    "duplicateRewards": 2,
+    "xp": 800,
+    "unlocks": 8,
+    "profileWrites": 0,
+    "learningJobs": 0
+  },
+  "checks": [
+    {
+      "name": "campaign-missions",
+      "expected": 8,
+      "actual": 8,
+      "pass": true,
+      "detail": "the full 116 campaign completed"
+    },
+    {
+      "name": "campaign-order",
+      "expected": "campaign-1-first-taxi,campaign-2-first-demonstration,campaign-3-following-distance,campaign-4-stops-and-signals,campaign-5-passenger,campaign-6-city-copies-you,campaign-7-changing-a-habit,campaign-8-fleet-challenge",
+      "actual": "campaign-1-first-taxi,campaign-2-first-demonstration,campaign-3-following-distance,campaign-4-stops-and-signals,campaign-5-passenger,campaign-6-city-copies-you,campaign-7-changing-a-habit,campaign-8-fleet-challenge",
+      "pass": true,
+      "detail": "completions follow the prerequisite DAG"
+    },
+    {
+      "name": "base-capabilities",
+      "expected": 4,
+      "actual": 4,
+      "pass": true,
+      "detail": "two access capabilities plus two real 023 classes"
+    },
+    {
+      "name": "first-status",
+      "expected": "GRANTED",
+      "actual": "GRANTED",
+      "pass": true,
+      "detail": "the first completion pays"
+    },
+    {
+      "name": "first-xp",
+      "expected": 100,
+      "actual": 100,
+      "pass": true,
+      "detail": "the authored XP amount"
+    },
+    {
+      "name": "first-unlocked",
+      "expected": "challenge:first-demonstration",
+      "actual": "challenge:first-demonstration",
+      "pass": true,
+      "detail": "the authored challenge"
+    },
+    {
+      "name": "last-state",
+      "expected": "COMPLETED",
+      "actual": "COMPLETED",
+      "pass": true,
+      "detail": "the campaign ends completed"
+    },
+    {
+      "name": "total-grants",
+      "expected": 16,
+      "actual": 16,
+      "pass": true,
+      "detail": "eight missions times two rewards"
+    },
+    {
+      "name": "total-xp",
+      "expected": 800,
+      "actual": 800,
+      "pass": true,
+      "detail": "eight authored XP rewards"
+    },
+    {
+      "name": "total-unlocks",
+      "expected": 8,
+      "actual": 8,
+      "pass": true,
+      "detail": "one unlock per mission"
+    },
+    {
+      "name": "unlock-order",
+      "expected": "challenge:first-demonstration,analysis:learning-review,challenge:following-comparison,analysis:opportunity-review,vehicle-class:comfort-sedan,challenge:fleet-scenario,analysis:version-comparison,challenge:fleet-championship",
+      "actual": "challenge:first-demonstration,analysis:learning-review,challenge:following-comparison,analysis:opportunity-review,vehicle-class:comfort-sedan,challenge:fleet-scenario,analysis:version-comparison,challenge:fleet-championship",
+      "pass": true,
+      "detail": "unlocks are appended in campaign order"
+    },
+    {
+      "name": "replay-status",
+      "expected": "NO_REWARD",
+      "actual": "NO_REWARD",
+      "pass": true,
+      "detail": "a replay is a new completion that pays nothing"
+    },
+    {
+      "name": "replay-granted",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no reward is granted twice"
+    },
+    {
+      "name": "replay-duplicates",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "both authored rewards are duplicates"
+    },
+    {
+      "name": "replay-attempt",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "the real 116 replay is the second attempt"
+    },
+    {
+      "name": "replay-xp",
+      "expected": 800,
+      "actual": 800,
+      "pass": true,
+      "detail": "the XP total did not change"
+    },
+    {
+      "name": "replay-grants",
+      "expected": 16,
+      "actual": 16,
+      "pass": true,
+      "detail": "no extra grant row"
+    },
+    {
+      "name": "replay-capabilities",
+      "expected": 8,
+      "actual": 8,
+      "pass": true,
+      "detail": "the unlock list did not change"
+    },
+    {
+      "name": "access-checkpoints",
+      "expected": 9,
+      "actual": 9,
+      "pass": true,
+      "detail": "base access and one checkpoint after every unlock"
+    },
+    {
+      "name": "access-taxis",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "all 24 real taxis stay selectable at every checkpoint"
+    },
+    {
+      "name": "access-vehicles",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "all 64 real vehicles stay driveable at every checkpoint"
+    },
+    {
+      "name": "access-revoked",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no access is ever revoked"
+    },
+    {
+      "name": "access-blocked-taxis",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no taxi is ever blocked"
+    },
+    {
+      "name": "access-base-present",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "base capabilities are present at every checkpoint"
+    },
+    {
+      "name": "access-classes",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "every real class keeps every vehicle"
+    },
+    {
+      "name": "reset-count",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "two missions reset"
+    },
+    {
+      "name": "reset-cleared",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "one completion record per mission"
+    },
+    {
+      "name": "reset-state",
+      "expected": "AVAILABLE",
+      "actual": "AVAILABLE",
+      "pass": true,
+      "detail": "the reset mission is playable again"
+    },
+    {
+      "name": "reset-attempts",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the attempt counter starts over"
+    },
+    {
+      "name": "reset-next-attempt",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the next attempt is the first one"
+    },
+    {
+      "name": "reset-rewards-retained",
+      "expected": 10,
+      "actual": 10,
+      "pass": true,
+      "detail": "every granted reward is kept"
+    },
+    {
+      "name": "reset-unlocks-retained",
+      "expected": 5,
+      "actual": 5,
+      "pass": true,
+      "detail": "every unlock is kept"
+    },
+    {
+      "name": "reset-xp",
+      "expected": 500,
+      "actual": 500,
+      "pass": true,
+      "detail": "the XP total before the resets"
+    },
+    {
+      "name": "reset-keeps-xp",
+      "expected": 500,
+      "actual": 500,
+      "pass": true,
+      "detail": "the XP total survives both resets"
+    },
+    {
+      "name": "reset-no-regrant",
+      "expected": "NO_REWARD",
+      "actual": "NO_REWARD",
+      "pass": true,
+      "detail": "re-completing after the reset grants nothing new"
+    },
+    {
+      "name": "reset-no-regrant-xp",
+      "expected": 500,
+      "actual": 500,
+      "pass": true,
+      "detail": "the XP total is unchanged by the re-completion"
+    },
+    {
+      "name": "upgraded-status",
+      "expected": "GRANTED",
+      "actual": "GRANTED",
+      "pass": true,
+      "detail": "a new definition version is a new authored reward"
+    },
+    {
+      "name": "upgraded-xp",
+      "expected": 100,
+      "actual": 100,
+      "pass": true,
+      "detail": "the new version pays its own XP"
+    },
+    {
+      "name": "upgraded-identity",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the reward identity changes with the version"
+    },
+    {
+      "name": "structural-read-only",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no profile write and no learning job anywhere"
+    },
+    {
+      "name": "determinism",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "two independent transcripts are byte-identical"
+    }
+  ],
+  "summary": {
+    "scenarios": 3,
+    "checks": 41,
+    "passed": 41,
+    "pass": true
+  }
+}
