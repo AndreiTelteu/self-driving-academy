@@ -80,3 +80,7 @@ Butonul KPIs din panoul flotei și hotkey-ul K sunt disponibile de la început. 
 ## Experiențe și acțiuni suplimentare
 
 Academie/Haos se aleg ca sesiuni, fără a înlocui AUTO/MANUAL/LEARNING. Meniul oferă „Reglaje”, „Oraș proaspăt, păstrează stilul”, „Salvează jocul în fișier” și „Încarcă jocul din fișier”. Popup-ul Reglaje pune simularea pe pauză inclusiv în AUTO. Schimbarea sesiunii și resetul au reguli în [modulul 26](26-joaca-libera-haos-si-distrugere.md); confirmarea înlocuirii după verificarea savefile-ului este în [modulul 29](29-savefile-si-integritate.md). Provocările [random](28-provocari-random-si-revenire.md) arată o ofertă discretă și un singur obiectiv activ, fără întreruperea cursei existente.
+
+## Panoul misiunilor și obiective live (PBI 126)
+
+Panoul misiunilor respectă aceleași reguli de focus, Escape și lipsă a listenerilor globali ca pop-up-ul de KPIs: buton nativ `<button type="button">Misiuni</button>`, dialog cu rol și nume accesibil, focus mutat în panou la deschidere și readus la buton la închidere, Tab rămâne în panou. Afișează obiectivele, progresul, motivele de eșec și opțiunile de reluare exact cum le raportează contractele 116 și 125, fără să recalculeze progresul și fără să consume încercări. Contractul complet, cu stările afișate și dovezile, este în [13-misiuni-si-progres.md](13-misiuni-si-progres.md) și [Evidence/126-mission-panel](Evidence/126-mission-panel/README.md).
