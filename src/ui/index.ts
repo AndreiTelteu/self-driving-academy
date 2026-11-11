@@ -941,3 +941,34 @@ export type {
   KpiImpactTone,
   KpiImpactView,
 } from './kpi-impact-format';
+
+export {
+  EXPERIMENT_COMPARE_CHART_KEYS,
+  EXPERIMENT_COMPARE_TEXT,
+  EXPERIMENT_COMPARE_UI_VERSION,
+  emptyExperimentCompareView,
+  formatExperimentCompareNumber,
+  formatExperimentCompareShare,
+  projectExperimentCompare,
+} from './experiment-compare-format';
+export type {
+  ExperimentCompareBar,
+  ExperimentCompareChart,
+  ExperimentCompareChartGroup,
+  ExperimentCompareChartKey,
+  ExperimentCompareCoexistenceView,
+  ExperimentCompareIsolatedView,
+  ExperimentCompareMetricView,
+  ExperimentCompareSummaryView,
+  ExperimentCompareTable,
+  ExperimentCompareUncertaintyView,
+  ExperimentCompareView,
+} from './experiment-compare-format';
+export { createExperimentComparePanel } from './experiment-compare-panel';
+export type {
+  ExperimentComparePanel,
+  ExperimentComparePanelAdapter,
+  ExperimentComparePanelOptions,
+  ExperimentComparePanelStats,
+  ExperimentCompareRefreshStatus,
+} from './experiment-compare-panel';
