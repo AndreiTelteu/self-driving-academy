@@ -195,6 +195,34 @@ export type {
   CityVersionAdoption,
 } from './city';
 export {
+  HABIT_LIMITS,
+  HABIT_MISSION_ID,
+  HABIT_OBJECTIVE,
+  HABIT_POLICY,
+  HABIT_SCHEMA_VERSION,
+  evaluateHabitMission,
+  habitDirections,
+  habitMissionGate,
+  habitMissionOutcomes,
+  habitMissionReasons,
+  habitRejectionCodes,
+  habitStatuses,
+} from './habit';
+export type {
+  HabitComparison,
+  HabitDemonstrationStep,
+  HabitDirection,
+  HabitMissionGate,
+  HabitMissionInput,
+  HabitMissionOutcome,
+  HabitMissionReason,
+  HabitMissionResult,
+  HabitRejectionCode,
+  HabitStatus,
+  HabitTrend,
+  HabitVersionFact,
+} from './habit';
+export {
   TUTORIAL_ID,
   TUTORIAL_LIMITS,
   TUTORIAL_NAMESPACE,

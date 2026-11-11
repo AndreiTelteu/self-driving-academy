@@ -1,0 +1,1074 @@
+{
+  "version": "123-mission-habit-report-v1",
+  "contract": {
+    "missionId": "campaign-7-changing-a-habit",
+    "schema": "123-mission-habit-v1",
+    "key": "stop_full_probability",
+    "unit": "probability",
+    "objectiveId": "distinct-versions",
+    "objectiveKind": "DISTINCT_PROFILE_VERSIONS",
+    "objectiveTarget": 2,
+    "stepsToReplace": 3,
+    "stepsToReverse": 2,
+    "versions": 128,
+    "valueEpsilon": 1e-9,
+    "statuses": [
+      "REPLACED",
+      "BUILDING",
+      "NO_DEMONSTRATIONS",
+      "REJECTED"
+    ],
+    "directions": [
+      "INCREASE",
+      "DECREASE",
+      "NONE"
+    ],
+    "rejectionCodes": [
+      "INVALID_INPUT",
+      "HISTORY_LIMIT",
+      "PROFILE_MISMATCH",
+      "NO_BASE_VERSION",
+      "DUPLICATE_VERSION",
+      "MISSING_INTERMEDIATE_VERSION",
+      "ENGINE_VERSION_MISMATCH",
+      "VERSION_WITHOUT_KEY",
+      "DEMONSTRATION_WITHOUT_EVIDENCE",
+      "CHECKSUM_MISMATCH",
+      "VALUE_MISMATCH"
+    ],
+    "gateReasons": [
+      "NO_DEMONSTRATIONS",
+      "TENDENCY_NOT_REPLACED"
+    ],
+    "gateOutcomes": [
+      "PROGRESS",
+      "NO_PROGRESS"
+    ]
+  },
+  "runs": [
+    {
+      "name": "repeated",
+      "plan": [
+        [
+          4,
+          0
+        ],
+        [
+          4,
+          0
+        ],
+        [
+          4,
+          0
+        ],
+        [
+          4,
+          0
+        ]
+      ],
+      "values": [
+        0.6,
+        0.8,
+        0.9,
+        0.95,
+        0.975
+      ],
+      "candidates": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "pipelineStatuses": [
+        "COMPOSED",
+        "COMPOSED",
+        "COMPOSED",
+        "COMPOSED"
+      ],
+      "activationTicks": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "updatedVehicles": [
+        64,
+        64,
+        64,
+        64
+      ],
+      "unit": "probability",
+      "status": "REPLACED",
+      "gate": "PROGRESS",
+      "gateReason": null,
+      "direction": "INCREASE",
+      "consecutiveSteps": 4,
+      "longestRun": 4,
+      "progress": 1,
+      "replaced": true,
+      "contradictions": 0,
+      "absorbedContradictions": 0,
+      "reversals": 0,
+      "baseVersionId": "city-profile-123-base",
+      "baseValue": 0.6,
+      "baseChecksum": "fnv1a64:cde8499189515654",
+      "headVersionId": "habit-repeated-4~112",
+      "headValue": 0.975,
+      "headChecksum": "fnv1a64:48ef3a922c31c100",
+      "change": 0.375,
+      "comparisonDirection": "INCREASE",
+      "versions": 5,
+      "demonstrations": 4,
+      "storeChecksums": 4,
+      "profileWrites": 0,
+      "learningJobs": 0,
+      "deterministic": true,
+      "steps": [
+        {
+          "order": 1,
+          "versionId": "habit-repeated-1~112",
+          "parentVersionId": "city-profile-123-base",
+          "segmentId": "habit-repeated-1",
+          "sourceSegmentIds": [
+            "habit-repeated-1"
+          ],
+          "checksum": "fnv1a64:8b86f77d39ca37eb",
+          "previousValue": 0.6,
+          "newValue": 0.8,
+          "change": 0.2,
+          "direction": "INCREASE",
+          "trendDirection": "INCREASE",
+          "consecutiveSteps": 1,
+          "absorbed": false,
+          "reversal": false,
+          "totalChange": 0.2,
+          "storeChecksumMatches": true
+        },
+        {
+          "order": 2,
+          "versionId": "habit-repeated-2~112",
+          "parentVersionId": "habit-repeated-1~112",
+          "segmentId": "habit-repeated-2",
+          "sourceSegmentIds": [
+            "habit-repeated-1",
+            "habit-repeated-2"
+          ],
+          "checksum": "fnv1a64:8ef9902ae9aa6bd5",
+          "previousValue": 0.8,
+          "newValue": 0.9,
+          "change": 0.1,
+          "direction": "INCREASE",
+          "trendDirection": "INCREASE",
+          "consecutiveSteps": 2,
+          "absorbed": false,
+          "reversal": false,
+          "totalChange": 0.3,
+          "storeChecksumMatches": true
+        },
+        {
+          "order": 3,
+          "versionId": "habit-repeated-3~112",
+          "parentVersionId": "habit-repeated-2~112",
+          "segmentId": "habit-repeated-3",
+          "sourceSegmentIds": [
+            "habit-repeated-1",
+            "habit-repeated-2",
+            "habit-repeated-3"
+          ],
+          "checksum": "fnv1a64:11ee04e60f19bb15",
+          "previousValue": 0.9,
+          "newValue": 0.95,
+          "change": 0.05,
+          "direction": "INCREASE",
+          "trendDirection": "INCREASE",
+          "consecutiveSteps": 3,
+          "absorbed": false,
+          "reversal": false,
+          "totalChange": 0.35,
+          "storeChecksumMatches": true
+        },
+        {
+          "order": 4,
+          "versionId": "habit-repeated-4~112",
+          "parentVersionId": "habit-repeated-3~112",
+          "segmentId": "habit-repeated-4",
+          "sourceSegmentIds": [
+            "habit-repeated-1",
+            "habit-repeated-2",
+            "habit-repeated-3",
+            "habit-repeated-4"
+          ],
+          "checksum": "fnv1a64:48ef3a922c31c100",
+          "previousValue": 0.95,
+          "newValue": 0.975,
+          "change": 0.025,
+          "direction": "INCREASE",
+          "trendDirection": "INCREASE",
+          "consecutiveSteps": 4,
+          "absorbed": false,
+          "reversal": false,
+          "totalChange": 0.375,
+          "storeChecksumMatches": true
+        }
+      ]
+    },
+    {
+      "name": "single-contradiction",
+      "plan": [
+        [
+          4,
+          0
+        ],
+        [
+          4,
+          0
+        ],
+        [
+          4,
+          0
+        ],
+        [
+          4,
+          1
+        ]
+      ],
+      "values": [
+        0.6,
+        0.8,
+        0.9,
+        0.95,
+        0.8667
+      ],
+      "candidates": [
+        1,
+        1,
+        1,
+        0.8
+      ],
+      "pipelineStatuses": [
+        "COMPOSED",
+        "COMPOSED",
+        "COMPOSED",
+        "COMPOSED"
+      ],
+      "activationTicks": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "updatedVehicles": [
+        64,
+        64,
+        64,
+        64
+      ],
+      "unit": "probability",
+      "status": "REPLACED",
+      "gate": "PROGRESS",
+      "gateReason": null,
+      "direction": "INCREASE",
+      "consecutiveSteps": 3,
+      "longestRun": 3,
+      "progress": 1,
+      "replaced": true,
+      "contradictions": 1,
+      "absorbedContradictions": 1,
+      "reversals": 0,
+      "baseVersionId": "city-profile-123-base",
+      "baseValue": 0.6,
+      "baseChecksum": "fnv1a64:cde8499189515654",
+      "headVersionId": "habit-single-contradiction-4~112",
+      "headValue": 0.8667,
+      "headChecksum": "fnv1a64:1a3e818418626d31",
+      "change": 0.2667,
+      "comparisonDirection": "INCREASE",
+      "versions": 5,
+      "demonstrations": 4,
+      "storeChecksums": 4,
+      "profileWrites": 0,
+      "learningJobs": 0,
+      "deterministic": true,
+      "steps": [
+        {
+          "order": 1,
+          "versionId": "habit-single-contradiction-1~112",
+          "parentVersionId": "city-profile-123-base",
+          "segmentId": "habit-single-contradiction-1",
+          "sourceSegmentIds": [
+            "habit-single-contradiction-1"
+          ],
+          "checksum": "fnv1a64:509cf4cfe7606c07",
+          "previousValue": 0.6,
+          "newValue": 0.8,
+          "change": 0.2,
+          "direction": "INCREASE",
+          "trendDirection": "INCREASE",
+          "consecutiveSteps": 1,
+          "absorbed": false,
+          "reversal": false,
+          "totalChange": 0.2,
+          "storeChecksumMatches": true
+        },
+        {
+          "order": 2,
+          "versionId": "habit-single-contradiction-2~112",
+          "parentVersionId": "habit-single-contradiction-1~112",
+          "segmentId": "habit-single-contradiction-2",
+          "sourceSegmentIds": [
+            "habit-single-contradiction-1",
+            "habit-single-contradiction-2"
+          ],
+          "checksum": "fnv1a64:e09735e4d12c765b",
+          "previousValue": 0.8,
+          "newValue": 0.9,
+          "change": 0.1,
+          "direction": "INCREASE",
+          "trendDirection": "INCREASE",
+          "consecutiveSteps": 2,
+          "absorbed": false,
+          "reversal": false,
+          "totalChange": 0.3,
+          "storeChecksumMatches": true
+        },
+        {
+          "order": 3,
+          "versionId": "habit-single-contradiction-3~112",
+          "parentVersionId": "habit-single-contradiction-2~112",
+          "segmentId": "habit-single-contradiction-3",
+          "sourceSegmentIds": [
+            "habit-single-contradiction-1",
+            "habit-single-contradiction-2",
+            "habit-single-contradiction-3"
+          ],
+          "checksum": "fnv1a64:d8ea06ac84b40f05",
+          "previousValue": 0.9,
+          "newValue": 0.95,
+          "change": 0.05,
+          "direction": "INCREASE",
+          "trendDirection": "INCREASE",
+          "consecutiveSteps": 3,
+          "absorbed": false,
+          "reversal": false,
+          "totalChange": 0.35,
+          "storeChecksumMatches": true
+        },
+        {
+          "order": 4,
+          "versionId": "habit-single-contradiction-4~112",
+          "parentVersionId": "habit-single-contradiction-3~112",
+          "segmentId": "habit-single-contradiction-4",
+          "sourceSegmentIds": [
+            "habit-single-contradiction-1",
+            "habit-single-contradiction-2",
+            "habit-single-contradiction-3",
+            "habit-single-contradiction-4"
+          ],
+          "checksum": "fnv1a64:1a3e818418626d31",
+          "previousValue": 0.95,
+          "newValue": 0.8667,
+          "change": -0.0833,
+          "direction": "DECREASE",
+          "trendDirection": "INCREASE",
+          "consecutiveSteps": 3,
+          "absorbed": true,
+          "reversal": false,
+          "totalChange": 0.2667,
+          "storeChecksumMatches": true
+        }
+      ]
+    },
+    {
+      "name": "repeated-contradictions",
+      "plan": [
+        [
+          4,
+          0
+        ],
+        [
+          4,
+          0
+        ],
+        [
+          4,
+          0
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          4,
+          1
+        ]
+      ],
+      "values": [
+        0.6,
+        0.8,
+        0.9,
+        0.95,
+        0.8667,
+        0.8296,
+        0.8132
+      ],
+      "candidates": [
+        1,
+        1,
+        1,
+        0.8,
+        0.8,
+        0.8
+      ],
+      "pipelineStatuses": [
+        "COMPOSED",
+        "COMPOSED",
+        "COMPOSED",
+        "COMPOSED",
+        "COMPOSED",
+        "COMPOSED"
+      ],
+      "activationTicks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "updatedVehicles": [
+        64,
+        64,
+        64,
+        64,
+        64,
+        64
+      ],
+      "unit": "probability",
+      "status": "REPLACED",
+      "gate": "PROGRESS",
+      "gateReason": null,
+      "direction": "DECREASE",
+      "consecutiveSteps": 3,
+      "longestRun": 3,
+      "progress": 1,
+      "replaced": true,
+      "contradictions": 2,
+      "absorbedContradictions": 1,
+      "reversals": 1,
+      "baseVersionId": "city-profile-123-base",
+      "baseValue": 0.6,
+      "baseChecksum": "fnv1a64:cde8499189515654",
+      "headVersionId": "habit-repeated-contradictions-6~112",
+      "headValue": 0.8132,
+      "headChecksum": "fnv1a64:0cd1fbb80b28d172",
+      "change": 0.2132,
+      "comparisonDirection": "INCREASE",
+      "versions": 7,
+      "demonstrations": 6,
+      "storeChecksums": 6,
+      "profileWrites": 0,
+      "learningJobs": 0,
+      "deterministic": true,
+      "steps": [
+        {
+          "order": 1,
+          "versionId": "habit-repeated-contradictions-1~112",
+          "parentVersionId": "city-profile-123-base",
+          "segmentId": "habit-repeated-contradictions-1",
+          "sourceSegmentIds": [
+            "habit-repeated-contradictions-1"
+          ],
+          "checksum": "fnv1a64:b43a24fe3651b86f",
+          "previousValue": 0.6,
+          "newValue": 0.8,
+          "change": 0.2,
+          "direction": "INCREASE",
+          "trendDirection": "INCREASE",
+          "consecutiveSteps": 1,
+          "absorbed": false,
+          "reversal": false,
+          "totalChange": 0.2,
+          "storeChecksumMatches": true
+        },
+        {
+          "order": 2,
+          "versionId": "habit-repeated-contradictions-2~112",
+          "parentVersionId": "habit-repeated-contradictions-1~112",
+          "segmentId": "habit-repeated-contradictions-2",
+          "sourceSegmentIds": [
+            "habit-repeated-contradictions-1",
+            "habit-repeated-contradictions-2"
+          ],
+          "checksum": "fnv1a64:ec8a1bf4601e248a",
+          "previousValue": 0.8,
+          "newValue": 0.9,
+          "change": 0.1,
+          "direction": "INCREASE",
+          "trendDirection": "INCREASE",
+          "consecutiveSteps": 2,
+          "absorbed": false,
+          "reversal": false,
+          "totalChange": 0.3,
+          "storeChecksumMatches": true
+        },
+        {
+          "order": 3,
+          "versionId": "habit-repeated-contradictions-3~112",
+          "parentVersionId": "habit-repeated-contradictions-2~112",
+          "segmentId": "habit-repeated-contradictions-3",
+          "sourceSegmentIds": [
+            "habit-repeated-contradictions-1",
+            "habit-repeated-contradictions-2",
+            "habit-repeated-contradictions-3"
+          ],
+          "checksum": "fnv1a64:f51fa6afe79e5e45",
+          "previousValue": 0.9,
+          "newValue": 0.95,
+          "change": 0.05,
+          "direction": "INCREASE",
+          "trendDirection": "INCREASE",
+          "consecutiveSteps": 3,
+          "absorbed": false,
+          "reversal": false,
+          "totalChange": 0.35,
+          "storeChecksumMatches": true
+        },
+        {
+          "order": 4,
+          "versionId": "habit-repeated-contradictions-4~112",
+          "parentVersionId": "habit-repeated-contradictions-3~112",
+          "segmentId": "habit-repeated-contradictions-4",
+          "sourceSegmentIds": [
+            "habit-repeated-contradictions-1",
+            "habit-repeated-contradictions-2",
+            "habit-repeated-contradictions-3",
+            "habit-repeated-contradictions-4"
+          ],
+          "checksum": "fnv1a64:6fddd8b5dcfd165e",
+          "previousValue": 0.95,
+          "newValue": 0.8667,
+          "change": -0.0833,
+          "direction": "DECREASE",
+          "trendDirection": "INCREASE",
+          "consecutiveSteps": 3,
+          "absorbed": true,
+          "reversal": false,
+          "totalChange": 0.2667,
+          "storeChecksumMatches": true
+        },
+        {
+          "order": 5,
+          "versionId": "habit-repeated-contradictions-5~112",
+          "parentVersionId": "habit-repeated-contradictions-4~112",
+          "segmentId": "habit-repeated-contradictions-5",
+          "sourceSegmentIds": [
+            "habit-repeated-contradictions-1",
+            "habit-repeated-contradictions-2",
+            "habit-repeated-contradictions-3",
+            "habit-repeated-contradictions-4",
+            "habit-repeated-contradictions-5"
+          ],
+          "checksum": "fnv1a64:dfea48401e191e35",
+          "previousValue": 0.8667,
+          "newValue": 0.8296,
+          "change": -0.0371,
+          "direction": "DECREASE",
+          "trendDirection": "DECREASE",
+          "consecutiveSteps": 2,
+          "absorbed": false,
+          "reversal": true,
+          "totalChange": 0.2296,
+          "storeChecksumMatches": true
+        },
+        {
+          "order": 6,
+          "versionId": "habit-repeated-contradictions-6~112",
+          "parentVersionId": "habit-repeated-contradictions-5~112",
+          "segmentId": "habit-repeated-contradictions-6",
+          "sourceSegmentIds": [
+            "habit-repeated-contradictions-1",
+            "habit-repeated-contradictions-2",
+            "habit-repeated-contradictions-3",
+            "habit-repeated-contradictions-4",
+            "habit-repeated-contradictions-5",
+            "habit-repeated-contradictions-6"
+          ],
+          "checksum": "fnv1a64:0cd1fbb80b28d172",
+          "previousValue": 0.8296,
+          "newValue": 0.8132,
+          "change": -0.0164,
+          "direction": "DECREASE",
+          "trendDirection": "DECREASE",
+          "consecutiveSteps": 3,
+          "absorbed": false,
+          "reversal": false,
+          "totalChange": 0.2132,
+          "storeChecksumMatches": true
+        }
+      ]
+    },
+    {
+      "name": "no-demonstrations",
+      "plan": [],
+      "values": [
+        0.6
+      ],
+      "candidates": [],
+      "pipelineStatuses": [],
+      "activationTicks": [],
+      "updatedVehicles": [],
+      "unit": "probability",
+      "status": "NO_DEMONSTRATIONS",
+      "gate": "NO_PROGRESS",
+      "gateReason": "NO_DEMONSTRATIONS",
+      "direction": "NONE",
+      "consecutiveSteps": 0,
+      "longestRun": 0,
+      "progress": 0,
+      "replaced": false,
+      "contradictions": 0,
+      "absorbedContradictions": 0,
+      "reversals": 0,
+      "baseVersionId": "city-profile-123-base",
+      "baseValue": 0.6,
+      "baseChecksum": "fnv1a64:cde8499189515654",
+      "headVersionId": "city-profile-123-base",
+      "headValue": 0.6,
+      "headChecksum": "fnv1a64:cde8499189515654",
+      "change": 0,
+      "comparisonDirection": "NONE",
+      "versions": 1,
+      "demonstrations": 0,
+      "storeChecksums": 0,
+      "profileWrites": 0,
+      "learningJobs": 0,
+      "deterministic": true,
+      "steps": []
+    }
+  ],
+  "checks": [
+    {
+      "name": "contract-schema",
+      "expected": "123-mission-habit-v1",
+      "actual": "123-mission-habit-v1",
+      "pass": true,
+      "detail": "mission schema"
+    },
+    {
+      "name": "mission-id",
+      "expected": "campaign-7-changing-a-habit",
+      "actual": "campaign-7-changing-a-habit",
+      "pass": true,
+      "detail": "116 campaign stage"
+    },
+    {
+      "name": "objective",
+      "expected": "distinct-versions/DISTINCT_PROFILE_VERSIONS/2",
+      "actual": "distinct-versions/DISTINCT_PROFILE_VERSIONS/2",
+      "pass": true,
+      "detail": "the authored 116 objective this mission implements"
+    },
+    {
+      "name": "steps-to-replace",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "three consecutive demonstrations"
+    },
+    {
+      "name": "steps-to-reverse",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "two consecutive contradictions"
+    },
+    {
+      "name": "version-capacity",
+      "expected": 128,
+      "actual": 128,
+      "pass": true,
+      "detail": "109 per-profile capacity"
+    },
+    {
+      "name": "value-epsilon",
+      "expected": 1e-9,
+      "actual": 1e-9,
+      "pass": true,
+      "detail": "value comparison tolerance"
+    },
+    {
+      "name": "statuses",
+      "expected": "REPLACED,BUILDING,NO_DEMONSTRATIONS,REJECTED",
+      "actual": "REPLACED,BUILDING,NO_DEMONSTRATIONS,REJECTED",
+      "pass": true,
+      "detail": "closed status vocabulary"
+    },
+    {
+      "name": "directions",
+      "expected": "INCREASE,DECREASE,NONE",
+      "actual": "INCREASE,DECREASE,NONE",
+      "pass": true,
+      "detail": "closed directions"
+    },
+    {
+      "name": "rejection-codes",
+      "expected": "INVALID_INPUT,HISTORY_LIMIT,PROFILE_MISMATCH,NO_BASE_VERSION,DUPLICATE_VERSION,MISSING_INTERMEDIATE_VERSION,ENGINE_VERSION_MISMATCH,VERSION_WITHOUT_KEY,DEMONSTRATION_WITHOUT_EVIDENCE,CHECKSUM_MISMATCH,VALUE_MISMATCH",
+      "actual": "INVALID_INPUT,HISTORY_LIMIT,PROFILE_MISMATCH,NO_BASE_VERSION,DUPLICATE_VERSION,MISSING_INTERMEDIATE_VERSION,ENGINE_VERSION_MISMATCH,VERSION_WITHOUT_KEY,DEMONSTRATION_WITHOUT_EVIDENCE,CHECKSUM_MISMATCH,VALUE_MISMATCH",
+      "pass": true,
+      "detail": "every inconsistency has a code"
+    },
+    {
+      "name": "gate-reasons",
+      "expected": "NO_DEMONSTRATIONS,TENDENCY_NOT_REPLACED",
+      "actual": "NO_DEMONSTRATIONS,TENDENCY_NOT_REPLACED",
+      "pass": true,
+      "detail": "closed gate refusals"
+    },
+    {
+      "name": "gate-outcomes",
+      "expected": "PROGRESS,NO_PROGRESS",
+      "actual": "PROGRESS,NO_PROGRESS",
+      "pass": true,
+      "detail": "closed gate outcomes"
+    },
+    {
+      "name": "repeated-values",
+      "expected": "0.6,0.8,0.9,0.95,0.975",
+      "actual": "0.6,0.8,0.9,0.95,0.975",
+      "pass": true,
+      "detail": "four real demonstrations"
+    },
+    {
+      "name": "repeated-status",
+      "expected": "REPLACED",
+      "actual": "REPLACED",
+      "pass": true,
+      "detail": "three consecutive increases"
+    },
+    {
+      "name": "repeated-gate",
+      "expected": "PROGRESS",
+      "actual": "PROGRESS",
+      "pass": true,
+      "detail": "the tendency is established"
+    },
+    {
+      "name": "repeated-steps",
+      "expected": 4,
+      "actual": 4,
+      "pass": true,
+      "detail": "one real 109 version per demonstration"
+    },
+    {
+      "name": "repeated-versions",
+      "expected": 5,
+      "actual": 5,
+      "pass": true,
+      "detail": "base plus four versions are compared"
+    },
+    {
+      "name": "repeated-direction",
+      "expected": "INCREASE",
+      "actual": "INCREASE",
+      "pass": true,
+      "detail": "the new habit is a stop"
+    },
+    {
+      "name": "repeated-consecutive",
+      "expected": 4,
+      "actual": 4,
+      "pass": true,
+      "detail": "every demonstration agrees"
+    },
+    {
+      "name": "repeated-progress",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "progress is capped at one"
+    },
+    {
+      "name": "repeated-contradictions",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no contradiction observed"
+    },
+    {
+      "name": "repeated-store-checksums",
+      "expected": 4,
+      "actual": 4,
+      "pass": true,
+      "detail": "every reported checksum is the 109 record"
+    },
+    {
+      "name": "repeated-step-order",
+      "expected": "1,2,3,4",
+      "actual": "1,2,3,4",
+      "pass": true,
+      "detail": "the steps keep the 109 depth order"
+    },
+    {
+      "name": "repeated-step-parents",
+      "expected": "city-profile-123-base,habit-repeated-1~112,habit-repeated-2~112,habit-repeated-3~112",
+      "actual": "city-profile-123-base,habit-repeated-1~112,habit-repeated-2~112,habit-repeated-3~112",
+      "pass": true,
+      "detail": "every step continues the previous version of the chain"
+    },
+    {
+      "name": "repeated-provenance",
+      "expected": 4,
+      "actual": 4,
+      "pass": true,
+      "detail": "the head carries every demonstration segment"
+    },
+    {
+      "name": "repeated-distinct-checksums",
+      "expected": 4,
+      "actual": 4,
+      "pass": true,
+      "detail": "each intermediate version has its own content hash"
+    },
+    {
+      "name": "repeated-activations",
+      "expected": 4,
+      "actual": 4,
+      "pass": true,
+      "detail": "every version reached the fleet on a common tick"
+    },
+    {
+      "name": "repeated-fleet",
+      "expected": 64,
+      "actual": 64,
+      "pass": true,
+      "detail": "taxis and civilians updated"
+    },
+    {
+      "name": "single-contradiction-values",
+      "expected": "0.6,0.8,0.9,0.95,0.8667",
+      "actual": "0.6,0.8,0.9,0.95,0.8667",
+      "pass": true,
+      "detail": "one mixed demonstration moves the value down"
+    },
+    {
+      "name": "single-contradiction-status",
+      "expected": "REPLACED",
+      "actual": "REPLACED",
+      "pass": true,
+      "detail": "the tendency survives the single contradiction"
+    },
+    {
+      "name": "single-contradiction-direction",
+      "expected": "INCREASE",
+      "actual": "INCREASE",
+      "pass": true,
+      "detail": "the reported tendency does not flip"
+    },
+    {
+      "name": "single-contradiction-absorbed",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the contradiction is reported, not hidden"
+    },
+    {
+      "name": "single-contradiction-consecutive",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "the run of three increases is preserved"
+    },
+    {
+      "name": "single-contradiction-reversals",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "one contradiction can never reverse"
+    },
+    {
+      "name": "single-contradiction-above-base",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the head is still on the new side of the old habit"
+    },
+    {
+      "name": "single-contradiction-step-absorbed",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the step is inspectable as an absorbed contradiction"
+    },
+    {
+      "name": "repeated-contradictions-direction",
+      "expected": "DECREASE",
+      "actual": "DECREASE",
+      "pass": true,
+      "detail": "two consecutive contradictions flip the tendency"
+    },
+    {
+      "name": "repeated-contradictions-reversals",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "exactly one reversal"
+    },
+    {
+      "name": "repeated-contradictions-status",
+      "expected": "REPLACED",
+      "actual": "REPLACED",
+      "pass": true,
+      "detail": "three consecutive decreases establish the reversed tendency"
+    },
+    {
+      "name": "repeated-contradictions-reversal-step",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the reversing step is marked and is not absorbed"
+    },
+    {
+      "name": "repeated-contradictions-values",
+      "expected": "0.6,0.8,0.9,0.95,0.8667,0.8296,0.8132",
+      "actual": "0.6,0.8,0.9,0.95,0.8667,0.8296,0.8132",
+      "pass": true,
+      "detail": "the value follows both tendencies"
+    },
+    {
+      "name": "no-demonstrations-status",
+      "expected": "NO_DEMONSTRATIONS",
+      "actual": "NO_DEMONSTRATIONS",
+      "pass": true,
+      "detail": "a base-only history is an empty run"
+    },
+    {
+      "name": "no-demonstrations-gate",
+      "expected": "NO_PROGRESS",
+      "actual": "NO_PROGRESS",
+      "pass": true,
+      "detail": "nothing to compare"
+    },
+    {
+      "name": "no-demonstrations-reason",
+      "expected": "NO_DEMONSTRATIONS",
+      "actual": "NO_DEMONSTRATIONS",
+      "pass": true,
+      "detail": "the closed reason says why"
+    },
+    {
+      "name": "no-demonstrations-steps",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no version was invented"
+    },
+    {
+      "name": "no-demonstrations-versions",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "only the base version exists"
+    },
+    {
+      "name": "structural-profile-writes",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the mission never writes a profile or queues a learning job"
+    },
+    {
+      "name": "deterministic",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "evaluating the same chain twice produces the identical bytes"
+    },
+    {
+      "name": "refuses-invalid-input",
+      "expected": "INVALID_INPUT",
+      "actual": "INVALID_INPUT",
+      "pass": true,
+      "detail": "a missing history field is a closed rejection, not an exception"
+    },
+    {
+      "name": "refuses-history-limit",
+      "expected": "HISTORY_LIMIT",
+      "actual": "HISTORY_LIMIT",
+      "pass": true,
+      "detail": "a chain longer than the 109 per-profile capacity is refused"
+    },
+    {
+      "name": "refuses-profile-mismatch",
+      "expected": "PROFILE_MISMATCH",
+      "actual": "PROFILE_MISMATCH",
+      "pass": true,
+      "detail": "a version of another profile is refused"
+    },
+    {
+      "name": "refuses-duplicate-version",
+      "expected": "DUPLICATE_VERSION",
+      "actual": "DUPLICATE_VERSION",
+      "pass": true,
+      "detail": "the same version twice is refused"
+    },
+    {
+      "name": "refuses-missing-base",
+      "expected": "NO_BASE_VERSION",
+      "actual": "NO_BASE_VERSION",
+      "pass": true,
+      "detail": "a chain that does not start at a base version is refused"
+    },
+    {
+      "name": "refuses-missing-intermediate",
+      "expected": "MISSING_INTERMEDIATE_VERSION",
+      "actual": "MISSING_INTERMEDIATE_VERSION",
+      "pass": true,
+      "detail": "a gap in the chain is refused instead of skipped"
+    },
+    {
+      "name": "refuses-engine-mismatch",
+      "expected": "ENGINE_VERSION_MISMATCH",
+      "actual": "ENGINE_VERSION_MISMATCH",
+      "pass": true,
+      "detail": "a version from another engine build is refused"
+    },
+    {
+      "name": "refuses-version-without-key",
+      "expected": "VERSION_WITHOUT_KEY",
+      "actual": "VERSION_WITHOUT_KEY",
+      "pass": true,
+      "detail": "a base version without the demonstrated key is refused"
+    },
+    {
+      "name": "refuses-demonstration-without-evidence",
+      "expected": "DEMONSTRATION_WITHOUT_EVIDENCE",
+      "actual": "DEMONSTRATION_WITHOUT_EVIDENCE",
+      "pass": true,
+      "detail": "a derived version without a demonstrated segment is refused"
+    },
+    {
+      "name": "refuses-checksum-mismatch",
+      "expected": "CHECKSUM_MISMATCH",
+      "actual": "CHECKSUM_MISMATCH",
+      "pass": true,
+      "detail": "a version whose content no longer matches its 109 checksum is refused"
+    },
+    {
+      "name": "refuses-value-mismatch",
+      "expected": "VALUE_MISMATCH",
+      "actual": "VALUE_MISMATCH",
+      "pass": true,
+      "detail": "a version whose value does not match its recorded delta is refused"
+    }
+  ],
+  "summary": {
+    "runs": 4,
+    "checks": 59,
+    "passed": 59,
+    "pass": true
+  }
+}
