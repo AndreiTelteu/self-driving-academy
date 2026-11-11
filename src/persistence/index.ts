@@ -369,3 +369,50 @@ export type {
   ProfileImportValidationResult,
 } from './profile-import';
 export type { ProfileImportInput, ProfileImportOutcome } from './repository';
+export {
+  BOUNDED_PIPELINE_BUDGET,
+  BOUNDED_PIPELINE_VERSION,
+  boundedPipelineBudgetGaps,
+  boundedPipelineCodes,
+  boundedPipelinePhases,
+  boundedPipelineStages,
+  createBoundedPipeline,
+  protectedFactKinds,
+} from './bounded-pipeline';
+export type {
+  BoundedChunkDecision,
+  BoundedCommitReport,
+  BoundedGeneration,
+  BoundedGenerationSummary,
+  BoundedPipeline,
+  BoundedPipelineCode,
+  BoundedPipelineOptions,
+  BoundedPipelinePhase,
+  BoundedPipelineRejectionCode,
+  BoundedPipelineStage,
+  BoundedPipelineStats,
+  BoundedPipelineStore,
+  BoundedPrepareCost,
+  BoundedProtectedDecision,
+  BoundedReplayChunk,
+  BoundedStageCost,
+  BoundedStoreCommit,
+  BoundedTickDecision,
+  BoundedTickStatus,
+  BoundedVersions,
+  ProtectedFact,
+  ProtectedFactInput,
+  ProtectedFactKind,
+} from './bounded-pipeline';
+export {
+  BOUNDED_PIPELINE_FACT_RECORD_PREFIX,
+  boundedPipelineFactRecordId,
+  createRepositoryPipelineStore,
+  pipelineCheckpointRecord,
+  protectedFactRecord,
+  recoverBoundedPipeline,
+} from './bounded-pipeline-store';
+export type {
+  BoundedRecoverySnapshot,
+  RepositoryPipelineStoreOptions,
+} from './bounded-pipeline-store';
