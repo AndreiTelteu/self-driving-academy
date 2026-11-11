@@ -1,0 +1,630 @@
+{
+  "version": "222-bounded-pipeline-v1",
+  "generatedBy": "node --import ./scripts/register-typescript.mjs scripts/run-bounded-pipeline-report.mjs",
+  "oracleRule": "Every expected value is the documented contract; the actual value is a real run against the deterministic 30/40 world, the real 207 recorder, the synchronous store double and the in-memory IndexedDB, with no wall clock and no Math.random.",
+  "budgets": {
+    "source": "Docs/performance-budgets.json",
+    "budgetVersion": "203-initial-1",
+    "recorderRamBytes": 33554432,
+    "pendingWorkerPayloadBytes": 16777216,
+    "optionalReplayStorageBytes": 134217728,
+    "preparingCheckpoints": 1,
+    "committingCheckpoints": 1,
+    "heavyBackgroundJobs": 1,
+    "gaps": [
+      {
+        "key": "twoSessionCheckpointBytes",
+        "owner": "222/228/234",
+        "status": "UNCALIBRATED"
+      },
+      {
+        "key": "totalHeapBytes",
+        "owner": "203/218/224",
+        "status": "NOT_AVAILABLE"
+      }
+    ]
+  },
+  "fleet": {
+    "taxis": 30,
+    "civilians": 40,
+    "vehicles": 70,
+    "signals": 8,
+    "snapshotBytes": 64378,
+    "snapshotChecksum": "c5a0738c0be1b8a149726738b9b9cccad5655229c542396b04d8aa9d24d8bcb5",
+    "opportunities": 64
+  },
+  "stages": {
+    "clock": "STUB_CLOCK",
+    "capture": 0.4,
+    "encode": 16,
+    "copy": 2.4,
+    "transfer": 0.8,
+    "commit": 0.05,
+    "total": 19.65,
+    "captureWithinTickBudget": true
+  },
+  "tickPath": {
+    "clockReadsPerOffer": 2,
+    "generationsCaptured": 1,
+    "synchronousWorkInsideTickMs": 0.4,
+    "storageWorkInsideTickMs": 0
+  },
+  "autosave": {
+    "ticks": 900,
+    "autosaveEveryTicks": 60,
+    "offers": 15,
+    "captured": 15,
+    "committed": 15,
+    "coalesced": 0,
+    "replaced": 0,
+    "rejected": 0,
+    "bytesWritten": 966677,
+    "checkpointBytes": 64425,
+    "chunksSealed": 1,
+    "chunksCommitted": 1,
+    "factsCommitted": 60,
+    "finalCommitAgeTicks": 0,
+    "recorderChunksRetained": 0
+  },
+  "longIntervention": {
+    "ticks": 1800,
+    "factsRecorded": 1890,
+    "factsCommitted": 1890,
+    "factsPending": 0,
+    "ledgerPeakBytes": 116872,
+    "ledgerCapBytes": 262144,
+    "chunksSealed": 6,
+    "replayPeakBytes": 866187,
+    "replayCapBytes": 878625,
+    "evictedChunks": 2,
+    "partial": true,
+    "commits": 2
+  },
+  "slowStorage": {
+    "offeredTicks": 7,
+    "capturedGenerations": 3,
+    "coalescedTicks": 5,
+    "committingWhileStalled": 60,
+    "pendingWhileStalled": 420,
+    "commitAgeWhileStalled": null,
+    "unsavedTicksWhileStalled": 420,
+    "finalCommitAge": 0,
+    "committed": 2,
+    "factsCommitted": 1,
+    "factsLost": 0,
+    "blockedTicks": 0
+  },
+  "quotaFull": {
+    "offers": 5,
+    "rejections": 2,
+    "committedAfterRecovery": 3,
+    "factsRecorded": 5,
+    "factsCommitted": 5,
+    "factsLost": 0,
+    "retryCarriedPendingFacts": 1,
+    "blockedTicks": 0
+  },
+  "crash": {
+    "durableGeneration": 1,
+    "durableTick": 60,
+    "partialGenerations": 0,
+    "orphanFacts": 3,
+    "orphanGenerations": [
+      2
+    ],
+    "ramOnlyPreparedGeneration": 2
+  },
+  "twoSessions": {
+    "tick": 60,
+    "bytesA": 64378,
+    "bytesB": 64378,
+    "sameBytes": true,
+    "sameChecksum": true,
+    "sessionA": "session-222-a",
+    "sessionB": "session-222-b"
+  },
+  "protectedData": {
+    "kinds": [
+      "COMMERCIAL_EVENT",
+      "REWARD",
+      "LEARNING_INVALIDATION",
+      "OPPORTUNITY_TICK"
+    ],
+    "committed": 1955,
+    "pending": 0,
+    "refused": 0,
+    "lost": 0
+  },
+  "replay": {
+    "staged": 4,
+    "committed": 2,
+    "evictedChunks": 2,
+    "evictedBytes": 866187,
+    "tooLarge": 3,
+    "failed": 0,
+    "partial": true,
+    "durable": true
+  },
+  "checks": [
+    {
+      "name": "budget-preparing-slots",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "One preparing slot"
+    },
+    {
+      "name": "budget-committing-slots",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "One committing slot"
+    },
+    {
+      "name": "budget-transfer-bytes",
+      "expected": 16777216,
+      "actual": 16777216,
+      "pass": true,
+      "detail": "Transfer ingress uses pendingWorkerPayloadBytes"
+    },
+    {
+      "name": "budget-replay-bytes",
+      "expected": 134217728,
+      "actual": 134217728,
+      "pass": true,
+      "detail": "Replay retention uses optionalReplayStorageBytes"
+    },
+    {
+      "name": "budget-gap-declared",
+      "expected": [
+        "twoSessionCheckpointBytes",
+        "totalHeapBytes"
+      ],
+      "actual": [
+        "twoSessionCheckpointBytes",
+        "totalHeapBytes"
+      ],
+      "pass": true,
+      "detail": "Missing capacities are declared, not invented"
+    },
+    {
+      "name": "fleet-taxis",
+      "expected": 30,
+      "actual": 30,
+      "pass": true,
+      "detail": "The fixture is the V1 workload"
+    },
+    {
+      "name": "fleet-civilians",
+      "expected": 40,
+      "actual": 40,
+      "pass": true,
+      "detail": "The fixture is the V1 workload"
+    },
+    {
+      "name": "fleet-vehicles",
+      "expected": 70,
+      "actual": 70,
+      "pass": true,
+      "detail": "Every vehicle stays in the captured world"
+    },
+    {
+      "name": "fleet-opportunities",
+      "expected": 64,
+      "actual": 64,
+      "pass": true,
+      "detail": "The evaluated opportunities travel with it"
+    },
+    {
+      "name": "fleet-snapshot-bytes",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The snapshot stays inside the body budget"
+    },
+    {
+      "name": "stage-capture-separate",
+      "expected": 0.4,
+      "actual": 0.4,
+      "pass": true,
+      "detail": "Capture is measured on its own"
+    },
+    {
+      "name": "stage-encode-separate",
+      "expected": 16,
+      "actual": 16,
+      "pass": true,
+      "detail": "Encode is measured on its own"
+    },
+    {
+      "name": "stage-copy-separate",
+      "expected": 2.4,
+      "actual": 2.4,
+      "pass": true,
+      "detail": "Copy is measured on its own"
+    },
+    {
+      "name": "stage-transfer-separate",
+      "expected": 0.8,
+      "actual": 0.8,
+      "pass": true,
+      "detail": "Transfer is measured on its own"
+    },
+    {
+      "name": "stage-commit-separate",
+      "expected": 0.05,
+      "actual": 0.05,
+      "pass": true,
+      "detail": "Commit is measured on its own"
+    },
+    {
+      "name": "stage-total-is-sum",
+      "expected": 19.65,
+      "actual": 19.65,
+      "pass": true,
+      "detail": "The total is the sum of the five stages, not a separate aggregate"
+    },
+    {
+      "name": "stage-capture-in-tick-budget",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The capture fits the desktop authoritative-tick budget"
+    },
+    {
+      "name": "autosave-offers",
+      "expected": 15,
+      "actual": 15,
+      "pass": true,
+      "detail": "One autosave request every simulated second"
+    },
+    {
+      "name": "autosave-captured",
+      "expected": 15,
+      "actual": 15,
+      "pass": true,
+      "detail": "Every autosave tick is captured"
+    },
+    {
+      "name": "autosave-committed",
+      "expected": 15,
+      "actual": 15,
+      "pass": true,
+      "detail": "Every autosave request is committed"
+    },
+    {
+      "name": "autosave-rejected",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "The tick path never refuses an autosave"
+    },
+    {
+      "name": "autosave-chunks-sealed",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "The recorder sealed one incident chunk"
+    },
+    {
+      "name": "autosave-chunks-committed",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "The chunk reached the store"
+    },
+    {
+      "name": "autosave-facts",
+      "expected": 60,
+      "actual": 60,
+      "pass": true,
+      "detail": "Four protected facts per autosave tick, each committed once"
+    },
+    {
+      "name": "autosave-final-age",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "The last tick is the committed one"
+    },
+    {
+      "name": "autosave-bytes",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Fifteen generations of a 70-vehicle snapshot"
+    },
+    {
+      "name": "long-facts-recorded",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The intervention produces thousands of facts"
+    },
+    {
+      "name": "long-facts-committed",
+      "expected": 1890,
+      "actual": 1890,
+      "pass": true,
+      "detail": "No protected fact is lost"
+    },
+    {
+      "name": "long-facts-pending",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "The ledger is empty after the last commit"
+    },
+    {
+      "name": "long-ledger-within-cap",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The protected ledger never exceeds the body budget"
+    },
+    {
+      "name": "long-commits",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "Two autosaves across the intervention"
+    },
+    {
+      "name": "long-replay-within-cap",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The replay window never exceeds its byte cap"
+    },
+    {
+      "name": "long-replay-evicts",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "A two-chunk window evicts old chunks"
+    },
+    {
+      "name": "long-partial-declared",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The replay is declared partial"
+    },
+    {
+      "name": "slow-never-blocked",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "A slow store never blocks the tick"
+    },
+    {
+      "name": "slow-one-committing",
+      "expected": 60,
+      "actual": 60,
+      "pass": true,
+      "detail": "One generation is in commit"
+    },
+    {
+      "name": "slow-pending-slot",
+      "expected": 420,
+      "actual": 420,
+      "pass": true,
+      "detail": "The newest tick waits in one pending slot"
+    },
+    {
+      "name": "slow-unsaved-age",
+      "expected": 420,
+      "actual": 420,
+      "pass": true,
+      "detail": "The age of the unsaved state is measured in ticks, not guessed"
+    },
+    {
+      "name": "slow-coalesced",
+      "expected": 5,
+      "actual": 5,
+      "pass": true,
+      "detail": "Five offers are coalesced behind the commit"
+    },
+    {
+      "name": "slow-committed",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "The stalled commit and the newest tick are both written"
+    },
+    {
+      "name": "slow-final-age",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "The pipeline converges on the newest tick"
+    },
+    {
+      "name": "slow-facts-lost",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "The fare survives a stalled commit"
+    },
+    {
+      "name": "quota-never-blocked",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "A full quota never blocks the tick"
+    },
+    {
+      "name": "quota-rejections",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "Two commits are refused by the store"
+    },
+    {
+      "name": "quota-retry-carries-facts",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The retry carries the facts the failed commits did not release"
+    },
+    {
+      "name": "quota-facts-lost",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "No fact is lost across the failed commits"
+    },
+    {
+      "name": "quota-committed",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "The later autosaves commit"
+    },
+    {
+      "name": "crash-durable-generation",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "Only the committed generation is durable"
+    },
+    {
+      "name": "crash-durable-tick",
+      "expected": 60,
+      "actual": 60,
+      "pass": true,
+      "detail": "The durable tick is the committed one"
+    },
+    {
+      "name": "crash-partial-generations",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "A generation is one transaction"
+    },
+    {
+      "name": "crash-orphan-facts",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "Facts that outlived the crash are named"
+    },
+    {
+      "name": "crash-ram-only",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "The prepared generation lived in RAM only"
+    },
+    {
+      "name": "two-sessions-same-tick",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The same tick encodes to the same bytes"
+    },
+    {
+      "name": "two-sessions-same-checksum",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The same state has the same checksum"
+    },
+    {
+      "name": "two-sessions-distinct",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Each session writes its own row"
+    },
+    {
+      "name": "two-sessions-measured",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The uncalibrated twoSessionCheckpointBytes is measured, not invented"
+    },
+    {
+      "name": "protected-committed",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Thousands of protected facts are released"
+    },
+    {
+      "name": "protected-pending",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "No protected fact is left pending"
+    },
+    {
+      "name": "protected-refused",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "No fact is refused inside the caps"
+    },
+    {
+      "name": "protected-lost",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "No protected fact is lost"
+    },
+    {
+      "name": "replay-staged",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The recorder chunks reach the pipeline"
+    },
+    {
+      "name": "replay-partial",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Eviction is declared partial"
+    },
+    {
+      "name": "replay-too-large-declared",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "A chunk larger than the whole window is refused and declared, never truncated"
+    },
+    {
+      "name": "replay-durable-port",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "A store with a chunk port commits them"
+    },
+    {
+      "name": "tick-clock-reads",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "The tick reads the clock for the capture only"
+    },
+    {
+      "name": "tick-no-storage",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "No storage work runs inside the tick"
+    },
+    {
+      "name": "tick-one-generation",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "One offer captures one generation"
+    }
+  ],
+  "summary": {
+    "checks": 67,
+    "passed": 67,
+    "pass": true
+  }
+}

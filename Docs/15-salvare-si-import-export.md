@@ -142,3 +142,27 @@ Dovezi: [Evidence/206-world-checkpoint](Evidence/206-world-checkpoint/README.md)
 **Progresia nu este atinsă.** Importul nu citește și nu scrie `progress`, `settings` sau economie; testele demonstrează că rândurile de progres și setări sunt identice înainte și după un import reușit și după un import anulat.
 
 Dovezi: [Evidence/134-import-profile](Evidence/134-import-profile/README.md).
+
+## Contract implementat V1 (PBI 222) — pipeline plafonat pentru recorder, checkpoint și autosave
+
+`src/persistence/bounded-pipeline.ts` (contract `222-bounded-pipeline-v1`) este stratul care face operative cerințele din secțiunea „Buget de captură și commit”: captura se plătește pe tick și este măsurată separat, iar encode-ul, copia, transferul și commitul se întâmplă în afara tick-ului, cu cel mult o generație în pregătire și una în commit. Nu este un al doilea checkpoint: documentul snapshot rămâne al lui 206, chunkul de replay rămâne al lui 207, iar pipeline-ul le integrează și le plafonează.
+
+**Cinci etape măsurate separat.** Fiecare generație raportează `captureMs`, `encodeMs`, `copyMs`, `transferMs` și `commitMs`:
+
+1. `capture` este citirea sincronă a lumii la limita de tick (`source.capture()`); este singura etapă care rulează în tick și singura care atinge ceasul înainte ca `offerTick` să returneze (exact două citiri, început și sfârșit — verificat în transcriere).
+2. `encode` este validarea, normalizarea, canonicalizarea `SDA-CJSON-1` și `SHA-256` prin `captureWorldSnapshot` (206); rulează într-un microtask, după ce tick-ul s-a încheiat.
+3. `copy` este copia în imaginea de octeți deținută de pipeline (`Uint8Array`) care este taxată și predată; lungimea ei trebuie să fie exact `bytes`-ul encodat, altfel `ENCODE_MISMATCH`.
+4. `transfer` este intrarea sincronă în adaptorul de stocare (`handoff`): adaptorul construiește rândurile și preia proprietatea imaginii, apoi întoarce promisiunea commitului. Octeții sunt taxați pe `pendingWorkerPayloadBytes`.
+5. `commit` este `await`-ul pe acea promisiune; tranzacția este scurtă și nu așteaptă niciun mesaj de worker.
+
+**Mașina de stări este explicită.** `IDLE` → `PREPARING` → `COMMITTING` → `IDLE`, cu `DISPOSED` terminal. `PREPARING` acoperă generația care se encodează și generația pregătită care așteaptă singura bandă de commit; `COMMITTING` domină cât timp un commit rulează, iar slotul de pregătire se poate umple simultan — exact o generație în pregătire și una în commit, niciodată două.
+
+**Coalescing fără pierdere.** Un tick care sosește cât timp alta se encodează este ținut într-un singur slot `pending` (cel mai nou câștigă); un tick mai nou decât o generație pregătită dar neîncepută o înlocuiește (regula 206), iar o generație care așteaptă banda de commit este înlocuită la eliberarea ei dacă există un tick mai nou, ca checkpointul scris să fie cel mai proaspăt. Evenimentele comerciale, recompensele, invalidările de learning și tick-urile oportunităților trăiesc într-un registru protejat separat, cu propriul plafon în bytes: se atașează următoarei generații (numai faptele cu `tick` ≤ tickul generației) și se eliberează numai după ce stocarea le raportează durabile. Un commit refuzat le păstrează în așteptare; un retry le duce mai departe. Când registrul atinge plafonul, faptul este refuzat explicit (`PROTECTED_OVERFLOW`) și pipeline-ul intră în `suspended`, nu îl aruncă tacit; `resume()` este gestul explicit al apelantului după export/curățare.
+
+**Limite în bytes și degradare declarată.** Generația pregătită este plafonată de bugetul de înregistrare (`maxRecordBytes`, 1 MiB), ingressul de transfer de `pendingWorkerPayloadBytes` (16 MiB), registrul protejat de bugetul de corp (`maxBodyBytes`, 256 KiB), iar fereastra de replay de `optionalReplayStorageBytes` (128 MiB). Fereastra de replay evacuează determinist cea mai veche secvență când se atinge plafonul, declară `partial` și refuză cu `CHUNK_TOO_LARGE` un chunk mai mare decât fereastra întreagă; evacuarea nu atinge niciodată checkpointul sau registrul protejat.
+
+**Stocare lentă, quota plină, crash.** Un commit lent nu blochează tick-ul: tick-urile continuă, se coalescează, iar vârsta nesalvată este raportată în tick-uri (`commitAgeTicks`, `unsavedTicks`). Un refuz `STORAGE_FULL` este contorizat, faptele rămân în așteptare, iar următorul autosave reușit le eliberează. `src/persistence/bounded-pipeline-store.ts` scrie întâi rândurile protejate (identitate stabilă `bounded-pipeline-fact:<factId>`, generația ca revizie) și apoi rândul unic de checkpoint al sesiunii, într-o singură tranzacție; un crash între cele două lasă faptele durabile și checkpointul anterior intact, iar `recoverBoundedPipeline` raportează generația durabilă, faptele orfane (durabile, dar nepublicate) și faptul structural că o generație parțială nu poate exista. O sesiune reluată primește `startGeneration` din recovery, ca un proces nou să nu reutilizeze un număr aflat deja pe disc.
+
+**Bugetele nu se inventează.** Valorile vin din `Docs/performance-budgets.json` și sunt păzite de un test care le compară cu manifestul. Capacitățile nulle rămân lacune raportate: `twoSessionCheckpointBytes` (owner 222/228/234) este măsurată și raportată, nu impusă, iar `totalHeapBytes` rămâne indisponibil; contorii de proprietate (bytes facturați) nu sunt o citire a heap-ului.
+
+Dovezi: [Evidence/222-bounded-pipeline](Evidence/222-bounded-pipeline/README.md).
