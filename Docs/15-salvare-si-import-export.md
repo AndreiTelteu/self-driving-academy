@@ -249,3 +249,17 @@ Dovezi: [Evidence/132-data-retention](Evidence/132-data-retention/README.md).
 
 Dovezi: [Evidence/136-session-restore](Evidence/136-session-restore/README.md).
 
+## Contract implementat V1 (PBI 225) — frontiera de persistență dintre Academie și Haos
+
+`src/persistence/session-kinds.ts` (contract `225-session-kinds-v1`) adaugă dimensiunea `SessionKind` peste contractele deja livrate și nu creează un al doilea sistem de salvare: profilul rămâne al lui 109, checkpointul lumii al lui 206, calendarul daily al lui 211/212, ledgerul XP al lui 213, recompensele de campanie ale lui 125, iar reluarea PAUSED_AUTO refolosește contractul `136-session-restore-v1`.
+
+**Checkpointurile sunt separate pe tip de sesiune.** Un `SessionKindCheckpoint` poartă `sessionKind`, `sessionId`, `profileId`, `worldEpoch`, `learningEpoch`, `tick`, `generation`, `launch: PAUSED_AUTO`, `body` canonic și un checksum SHA-256 peste documentul fără câmpul `checksum`. Un checkpoint nu este acceptat după nume: restaurarea verifică mai întâi checksum-ul și apoi potrivirea `sessionKind`/`sessionId`, deci un rând Haos nu poate fi reluat ca Academie (`FOREIGN_CHECKPOINT`), iar un rând modificat este refuzat (`CHECKPOINT_INVALID`).
+
+**Portul durabil este explicit.** Interfața `SessionKindCheckpointStore` are `commit`, `latest`, `list` și `stats`; modulul livrează magazinul determinist în memorie, cu plafon pe tip și refuz `SAVE_FAILED` injectabil pentru proba de salvare eșuată. Adaptorul IndexedDB rămâne al stratului de compoziție, care poate scrie aceleași documente prin repository-ul 127 fără să schimbe contractul.
+
+**Izolarea se măsoară prin amprentă.** `createSessionKindIsolation` digeră snapshoturile reale 212/213/125 cu `SDA-CJSON-1`/SHA-256. În Haos, cele șase operații contabile răspund `ISOLATED` înainte de a atinge proprietarul, iar amprenta combinată rămâne identică înainte și după; în Academie aceeași poartă deleagă operațiile reale. Astfel „Haos nu consumă daily/XP/recompense” este o comparație de numere, nu o promisiune.
+
+**Promovarea este închisă.** Doar `PROFILE_COPY` Academie→Haos și `STYLE_COPY` Haos→Academie sunt permise; importul, exportul, checkpointul, restaurarea și arhiva din Haos în Academie sunt refuzate cu `PROMOTION_REFUSED`, iar copierea de stil validează profilul și declară zero progres transferat.
+
+Dovezi: [Evidence/225-session-kinds](Evidence/225-session-kinds/README.md).
+

@@ -1,0 +1,439 @@
+{
+  "version": "225-session-kinds-v1",
+  "fixture": "225-session-kinds-v1",
+  "fixedNow": "2026-11-11T20:00:00.000Z",
+  "structure": {
+    "kinds": [
+      "ACADEMY",
+      "CHAOS"
+    ],
+    "controlModes": [
+      "MANUAL",
+      "LEARNING",
+      "AUTO"
+    ],
+    "capabilities": 9,
+    "parityIdentical": true,
+    "academyLabel": "Academie",
+    "chaosLabel": "Joacă liberă / Haos",
+    "sessionKindIsControlMode": false
+  },
+  "profile": {
+    "sourceProfileId": "profile-1",
+    "sourceVersionId": "profile-1@1",
+    "sourceChecksum": "fnv1a64:0ed612cdcb47c703",
+    "copyProfileId": "chaos:haos-copy-1",
+    "copyVersionId": "chaos:haos-copy-1@1",
+    "copyChecksum": "fnv1a64:75d6cb7a8c268687",
+    "copyValid": true,
+    "copiedParameters": 2,
+    "sourceValue": 10,
+    "tunedValue": 14,
+    "copyValueAfterAcademyChange": 10,
+    "progressTransferred": false,
+    "sourceSegmentsTransferred": 0
+  },
+  "isolation": {
+    "before": {
+      "daily": "sha256:893e9ab761bd41bc754295b6b64c78e1fc44ead95b4cfd872e466ce3008aff0d",
+      "xp": "sha256:506b64af3a98b360c32373b1254486b18ff3094f459f638332e1753f2b3cfcae",
+      "campaign": "sha256:3d6a9a9564694a7e2532ece3e726fff144dc1a3d9b089056e29199cc3c555abd",
+      "combined": "sha256:0756ca4b7ebc914f06a48e883c5674e2eaad1eedef48137f5a2f28a7e5ce3b68",
+      "counts": {
+        "dailySets": 1,
+        "dailyRewards": 0,
+        "dailyCompleted": 0,
+        "xpEntries": 0,
+        "xpBalanceMicroXp": 0,
+        "rewardGrants": 0,
+        "campaignDuplicates": 0,
+        "historyScans": 0
+      }
+    },
+    "after": {
+      "daily": "sha256:893e9ab761bd41bc754295b6b64c78e1fc44ead95b4cfd872e466ce3008aff0d",
+      "xp": "sha256:506b64af3a98b360c32373b1254486b18ff3094f459f638332e1753f2b3cfcae",
+      "campaign": "sha256:3d6a9a9564694a7e2532ece3e726fff144dc1a3d9b089056e29199cc3c555abd",
+      "combined": "sha256:0756ca4b7ebc914f06a48e883c5674e2eaad1eedef48137f5a2f28a7e5ce3b68",
+      "counts": {
+        "dailySets": 1,
+        "dailyRewards": 0,
+        "dailyCompleted": 0,
+        "xpEntries": 0,
+        "xpBalanceMicroXp": 0,
+        "rewardGrants": 0,
+        "campaignDuplicates": 0,
+        "historyScans": 0
+      }
+    },
+    "identical": true,
+    "refusedOperations": [
+      "DAILY_INGEST",
+      "DAILY_ADVANCE",
+      "XP_MISSION",
+      "XP_DAILY",
+      "XP_ACTIVE_TIME",
+      "CAMPAIGN_SETTLE"
+    ],
+    "refusedCount": 6,
+    "delegatedCount": 2,
+    "xpBalanceMicroXp": 500000,
+    "xpEntries": 1,
+    "dailyRewards": 0,
+    "rewardGrants": 2,
+    "historyScans": 0
+  },
+  "checkpoints": {
+    "switches": 20,
+    "committed": 20,
+    "academyRows": 10,
+    "chaosRows": 10,
+    "totalBodyBytes": 773,
+    "maxBodyBytes": 40,
+    "liveWorlds": 1,
+    "residentJobs": 2,
+    "listeners": 1,
+    "profileCopies": 1,
+    "orphanWorlds": 0,
+    "orphanJobs": 0,
+    "checksumLength": 64,
+    "verifiedCheckpoints": 20
+  },
+  "failure": {
+    "failedSwitches": 1,
+    "keptWorld": "ACADEMY",
+    "retrySucceeded": true,
+    "epochAfterFailure": 1,
+    "checkpointsAfterFailure": 0
+  },
+  "restore": {
+    "status": "RESTORED",
+    "sessionKind": "CHAOS",
+    "launch": "PAUSED_AUTO",
+    "academyFingerprintUnchanged": true,
+    "academyRowsUnchanged": true,
+    "chaosRows": 1
+  },
+  "adoption": {
+    "status": "ADOPTED",
+    "profileValid": true,
+    "fingerprintUnchanged": true,
+    "transferred": {
+      "progress": "NONE",
+      "dailyRewards": 0,
+      "xp": 0,
+      "campaignRewards": 0,
+      "checkpoints": 0,
+      "records": 0,
+      "unlocks": 0
+    }
+  },
+  "promotion": {
+    "refusedPaths": [
+      "IMPORT",
+      "EXPORT",
+      "CHECKPOINT",
+      "RESTORE",
+      "ARCHIVE"
+    ],
+    "styleCopyAllowed": true,
+    "profileCopyAllowed": true,
+    "academyIntoChaosImportRefused": true
+  },
+  "memory": {
+    "exactHeapBytes": null,
+    "reason": "The budget manifest leaves totalHeapBytes null; owned resource counters stay separate instead of being summed as heap.",
+    "ownershipCounters": {
+      "liveWorlds": 1,
+      "residentJobs": 2,
+      "listeners": 1,
+      "profileCopies": 1,
+      "checkpoints": 20
+    }
+  },
+  "checks": [
+    {
+      "name": "capabilities are identical in both kinds",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "both kinds expose the three control modes",
+      "expected": [
+        "MANUAL",
+        "LEARNING",
+        "AUTO"
+      ],
+      "actual": [
+        "MANUAL",
+        "LEARNING",
+        "AUTO"
+      ],
+      "pass": true
+    },
+    {
+      "name": "the session kind is not a control mode",
+      "expected": false,
+      "actual": false,
+      "pass": true
+    },
+    {
+      "name": "both kinds allow any existing vehicle",
+      "expected": "ANY_EXISTING",
+      "actual": "ANY_EXISTING",
+      "pass": true
+    },
+    {
+      "name": "the copy has its own profile identity",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "the copied profile checksum is valid",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "the copy carries no progress",
+      "expected": false,
+      "actual": false,
+      "pass": true
+    },
+    {
+      "name": "the copy carries no source segments",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "a Haos tuning changes only the copy",
+      "expected": 14,
+      "actual": 14,
+      "pass": true
+    },
+    {
+      "name": "the Academy profile keeps its value after a Haos tuning",
+      "expected": 10,
+      "actual": 10,
+      "pass": true
+    },
+    {
+      "name": "the copy keeps its value after an Academy change",
+      "expected": 10,
+      "actual": 10,
+      "pass": true
+    },
+    {
+      "name": "all six Academy ledger operations are isolated in Haos",
+      "expected": 6,
+      "actual": 6,
+      "pass": true
+    },
+    {
+      "name": "the Academy ledger fingerprint is identical after Haos",
+      "expected": "sha256:0756ca4b7ebc914f06a48e883c5674e2eaad1eedef48137f5a2f28a7e5ce3b68",
+      "actual": "sha256:0756ca4b7ebc914f06a48e883c5674e2eaad1eedef48137f5a2f28a7e5ce3b68",
+      "pass": true
+    },
+    {
+      "name": "Haos grants no daily reward",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "Haos grants no reward",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "Haos grants no XP",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "the Academy gate delegates a real active window",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "the Academy gate delegates a real campaign settle",
+      "expected": "DELEGATED",
+      "actual": "DELEGATED",
+      "pass": true
+    },
+    {
+      "name": "the Academy XP balance grows only through the gate",
+      "expected": 500000,
+      "actual": 500000,
+      "pass": true
+    },
+    {
+      "name": "two Academy operations are delegated",
+      "expected": 2,
+      "actual": 2,
+      "pass": true
+    },
+    {
+      "name": "twenty transitions succeed",
+      "expected": 20,
+      "actual": 20,
+      "pass": true
+    },
+    {
+      "name": "exactly one world is live after twenty transitions",
+      "expected": 1,
+      "actual": 1,
+      "pass": true
+    },
+    {
+      "name": "twenty transitions leave no orphan world",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "twenty transitions leave one Haos profile copy",
+      "expected": 1,
+      "actual": 1,
+      "pass": true
+    },
+    {
+      "name": "every committed checkpoint verifies",
+      "expected": 20,
+      "actual": 20,
+      "pass": true
+    },
+    {
+      "name": "checkpoints are split between the two kinds",
+      "expected": 20,
+      "actual": 20,
+      "pass": true
+    },
+    {
+      "name": "the failed switch is reported as SAVE_FAILED",
+      "expected": "SAVE_FAILED",
+      "actual": "SAVE_FAILED",
+      "pass": true
+    },
+    {
+      "name": "a failed save keeps the Academy world",
+      "expected": "ACADEMY",
+      "actual": "ACADEMY",
+      "pass": true
+    },
+    {
+      "name": "a failed save does not advance the epoch",
+      "expected": 1,
+      "actual": 1,
+      "pass": true
+    },
+    {
+      "name": "a failed save writes no checkpoint",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "the retry after a failed save switches",
+      "expected": "SWITCHED",
+      "actual": "SWITCHED",
+      "pass": true
+    },
+    {
+      "name": "a Haos checkpoint restores",
+      "expected": "RESTORED",
+      "actual": "RESTORED",
+      "pass": true
+    },
+    {
+      "name": "a restored world launches in PAUSED_AUTO",
+      "expected": "PAUSED_AUTO",
+      "actual": "PAUSED_AUTO",
+      "pass": true
+    },
+    {
+      "name": "a Haos restore leaves the Academy rows alone",
+      "expected": "[{\"version\":\"225-session-kinds-v1\",\"checkpointId\":\"checkpoint:ACADEMY:session-225-academy:1\",\"sessionKind\":\"ACADEMY\",\"sessionId\":\"session-225-academy\",\"profileId\":\"profile-1\",\"worldEpoch\":1,\"learningEpoch\":0,\"tick\":1,\"generation\":1,\"reason\":\"SESSION_SWITCH\",\"createdAt\":\"2026-11-11T20:00:00.000Z\",\"vehicles\":4,\"manualVehicles\":1,\"launch\":\"PAUSED_AUTO\",\"body\":{\"tick\":1,\"worldEpoch\":1,\"vehicles\":4},\"bodyBytes\":38,\"checksum\":\"20235af12d7f900caa446a697140823288645ea94c39fce9658cdba33dd0e84f\"}]",
+      "actual": "[{\"version\":\"225-session-kinds-v1\",\"checkpointId\":\"checkpoint:ACADEMY:session-225-academy:1\",\"sessionKind\":\"ACADEMY\",\"sessionId\":\"session-225-academy\",\"profileId\":\"profile-1\",\"worldEpoch\":1,\"learningEpoch\":0,\"tick\":1,\"generation\":1,\"reason\":\"SESSION_SWITCH\",\"createdAt\":\"2026-11-11T20:00:00.000Z\",\"vehicles\":4,\"manualVehicles\":1,\"launch\":\"PAUSED_AUTO\",\"body\":{\"tick\":1,\"worldEpoch\":1,\"vehicles\":4},\"bodyBytes\":38,\"checksum\":\"20235af12d7f900caa446a697140823288645ea94c39fce9658cdba33dd0e84f\"}]",
+      "pass": true
+    },
+    {
+      "name": "a Haos restore leaves the Academy ledger alone",
+      "expected": "sha256:0756ca4b7ebc914f06a48e883c5674e2eaad1eedef48137f5a2f28a7e5ce3b68",
+      "actual": "sha256:0756ca4b7ebc914f06a48e883c5674e2eaad1eedef48137f5a2f28a7e5ce3b68",
+      "pass": true
+    },
+    {
+      "name": "the Haos style copy into the Academy is accepted",
+      "expected": "ADOPTED",
+      "actual": "ADOPTED",
+      "pass": true
+    },
+    {
+      "name": "the adopted style is a valid profile version",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "the adopted style transfers no XP",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "the adopted style transfers no daily reward",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "the adoption leaves the Academy ledger alone",
+      "expected": "sha256:0756ca4b7ebc914f06a48e883c5674e2eaad1eedef48137f5a2f28a7e5ce3b68",
+      "actual": "sha256:0756ca4b7ebc914f06a48e883c5674e2eaad1eedef48137f5a2f28a7e5ce3b68",
+      "pass": true
+    },
+    {
+      "name": "the promotion paths are refused",
+      "expected": 5,
+      "actual": 5,
+      "pass": true
+    },
+    {
+      "name": "the explicit style copy is allowed",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "the explicit profile copy is allowed",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "an Academy import into Haos is refused",
+      "expected": false,
+      "actual": false,
+      "pass": true
+    },
+    {
+      "name": "a history scan is never used",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    }
+  ],
+  "summary": {
+    "checks": 45,
+    "passed": 45,
+    "pass": true
+  }
+}
