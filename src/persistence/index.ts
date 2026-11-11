@@ -218,3 +218,43 @@ export type {
   TransactionPort,
   VersionChangeEvent,
 } from './ports';
+export {
+  PROFILE_IMPORT_TRANSACTION_LIMITS,
+  PROFILE_IMPORT_TRANSACTION_VERSION,
+  commitProfileImportRows,
+} from './profile-import-transaction';
+export type {
+  ProfileImportCommit,
+  ProfileImportTransactionInput,
+} from './profile-import-transaction';
+export {
+  PROFILE_IMPORT_LIMITS,
+  PROFILE_IMPORT_VERSION,
+  activateImportedProfile,
+  importProfileDocument,
+  profileImportRejectionCodes,
+  validateProfileImport,
+} from './profile-import';
+export type {
+  ProfileImportAccepted,
+  ProfileImportActivationAccepted,
+  ProfileImportActivationRejected,
+  ProfileImportActivationRequest,
+  ProfileImportActivationResult,
+  ProfileImportActivationSources,
+  ProfileImportBarrierPort,
+  ProfileImportBarrierRecord,
+  ProfileImportBarrierRequestResult,
+  ProfileImportBarrierResolveResult,
+  ProfileImportExpectation,
+  ProfileImportGeneration,
+  ProfileImportRejected,
+  ProfileImportRejection,
+  ProfileImportRejectionCode,
+  ProfileImportRequest,
+  ProfileImportResult,
+  ProfileImportValidationAccepted,
+  ProfileImportValidationRejected,
+  ProfileImportValidationResult,
+} from './profile-import';
+export type { ProfileImportInput, ProfileImportOutcome } from './repository';

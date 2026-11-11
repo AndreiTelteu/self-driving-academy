@@ -38,6 +38,8 @@ import type {
   ProfileHistory,
   ProfileTransactionHooks,
 } from './profile-transaction';
+import { commitProfileImportRows } from './profile-import-transaction';
+import type { ProfileImportCommit } from './profile-import-transaction';
 import { createWriterAuthority } from './writer';
 import type { WriterAuthority } from './writer';
 import type {
@@ -113,6 +115,16 @@ export interface LocalRepository {
     input: ProfileActivationInput,
     hooks?: ProfileTransactionHooks,
   ): Promise<ProfileActivationOutcome>;
+  /**
+   * Publishes imported profile versions in one `profiles` transaction (PBI 134).
+   *
+   * No activation row is written: importing a profile must not activate it. Activation stays an
+   * explicit, separate call; an interrupted import leaves no version behind.
+   */
+  commitProfileImport(
+    input: ProfileImportInput,
+    hooks?: ProfileTransactionHooks,
+  ): Promise<ProfileImportOutcome>;
   putSegment(record: unknown): Promise<WriteResult<PersistedRecord>>;
   putScenario(record: unknown): Promise<WriteResult<PersistedRecord>>;
   putProgress(record: unknown): Promise<WriteResult<PersistedRecord>>;
@@ -142,6 +154,28 @@ export type ProfileActivationOutcome =
   | {
       readonly status: 'CRASHED_AFTER_COMMIT';
       readonly value: ProfileActivationCommit;
+    }
+  | {
+      readonly status: 'REJECTED';
+      readonly value: null;
+      readonly rejection: PersistenceRejection;
+    };
+
+/** The version rows written by one atomic import (PBI 134). */
+export interface ProfileImportInput {
+  readonly profileId: string;
+  readonly versions: readonly unknown[];
+}
+
+/** Outcome of the atomic import transaction; it never carries an activation. */
+export type ProfileImportOutcome =
+  | {
+      readonly status: 'COMMITTED';
+      readonly value: ProfileImportCommit;
+    }
+  | {
+      readonly status: 'CRASHED_AFTER_COMMIT';
+      readonly value: ProfileImportCommit;
     }
   | {
       readonly status: 'REJECTED';
@@ -702,6 +736,50 @@ export function createLocalRepository(options: LocalRepositoryOptions): LocalRep
     }
   }
 
+  async function commitProfileImport(
+    input: ProfileImportInput,
+    hooks: ProfileTransactionHooks = {},
+  ): Promise<ProfileImportOutcome> {
+    try {
+      if (disposed)
+        throw new PersistenceError('REPOSITORY_DISPOSED', 'The repository was disposed');
+      if (state !== 'READY' || database === null) {
+        throw new PersistenceError('REPOSITORY_CLOSED', `The repository is ${state}`);
+      }
+      if (writerRole() !== 'WRITER') {
+        counters.rejections += 1;
+        return Object.freeze({
+          status: 'REJECTED' as const,
+          value: null,
+          rejection: persistenceRejection(
+            'WRITER_REQUIRED',
+            'This page does not own the writer lock',
+            'writer',
+          ),
+        });
+      }
+      counters.transactions += 1;
+      const value = await database.transact(['profiles'], 'readwrite', (transaction) =>
+        commitProfileImportRows(transaction, input, hooks),
+      );
+      counters.writes += 1;
+      try {
+        hooks.afterCommit?.();
+      } catch {
+        // The transaction already committed: the imported versions are durable.
+        return Object.freeze({ status: 'CRASHED_AFTER_COMMIT' as const, value });
+      }
+      return Object.freeze({ status: 'COMMITTED' as const, value });
+    } catch (error) {
+      counters.rejections += 1;
+      return Object.freeze({
+        status: 'REJECTED' as const,
+        value: null,
+        rejection: rejectionFor(error),
+      });
+    }
+  }
+
   function persistedWriter(
     store: 'segments' | 'scenarios' | 'progress',
     kind: 'SEGMENT' | 'SCENARIO' | 'PROGRESS',
@@ -858,6 +936,7 @@ export function createLocalRepository(options: LocalRepositoryOptions): LocalRep
     putProfile,
     activateProfile,
     commitProfileActivation,
+    commitProfileImport,
     putSegment: persistedWriter('segments', 'SEGMENT'),
     putScenario: persistedWriter('scenarios', 'SCENARIO'),
     putProgress: persistedWriter('progress', 'PROGRESS'),
