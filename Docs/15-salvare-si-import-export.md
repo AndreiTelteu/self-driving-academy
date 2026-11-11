@@ -204,3 +204,26 @@ Dovezi: [Evidence/130-progress-save](Evidence/130-progress-save/README.md).
 **Costul este atribuit, nu ascuns.** Pipeline-ul raportează cele cinci etape 222, iar adaptorul separă în interiorul commitului `progressMs` și `checkpointMs`, cu ceas monotonic injectat. Transcriptul determinist folosește un ceas scriptat (`STUB_CLOCK`); costul real al mașinii este scris separat în `cost.json`/`cost.md` de `--cost` și nu intră în `report.json`. Pe fixture-ul de 70 de vehicule, captura din tick este 0,024/0,027/0,082 ms (min/median/max), iar encode-ul și commitul rulează în afara tick-ului.
 
 Dovezi: [Evidence/131-autosave](Evidence/131-autosave/README.md).
+
+## Contract implementat V1 (PBI 132) — retenția datelor și cote locale
+
+`src/persistence/data-retention.ts` (contract `132-data-retention-v1`) definește retenția ca **două domenii separate**, fiecare cu cota lui în bytes: `INTERVENTION_TELEMETRY` (segmentele închise 069/129 și chunkurile compactate 090) și `WORLD_RECORDER` (chunkurile sigilate 207 și checkpointurile 206 pe care se ancorează). Nu există o „curățenie globală": o cerere de curățare numește exact un domeniu, iar motorul nu vede niciodată rândurile celuilalt domeniu.
+
+**Cotele sunt în bytes, cu sursă declarată.** Domeniul recorderului ia RAM-ul din `proposedCapacities.recorderRamBytes` (33 554 432 B) și spațiul durabil din `proposedCapacities.optionalReplayStorageBytes` (134 217 728 B). Domeniul telemetriei ia RAM-ul din limita livrată a contractului 069 (`INTERVENTION_LIMITS.recordStoreBytes`, 33 554 432 B) și spațiul durabil din `resourceAdmissionContracts.workers.persistenceIngressBytes` (16 777 216 B). Manifestul nu fixează o cotă durabilă dedicată telemetriei, deci lacuna este publicată în `retentionBudgetGaps` (`interventionTelemetryDbBytes`) și în raport, nu înlocuită cu un număr inventat; o valoare `null`, infinită sau neîntreagă este refuzată cu `QUOTA_MISSING`, niciodată interpretată ca „nelimitat". Nicio cotă nu este exprimată în durate.
+
+**Inventarul este un port, nu un al doilea sistem.** Fiecare rând este un `RetentionArtifact` cu `artifactId`, `domain`, `kind`, `sequence`, `ramBytes`, `dbBytes`, `clipId`/`clipSequence`, `protection` și `status`. Domeniul și tipul sunt verificate (un segment în domeniul recorderului este refuzat), iar rândurile de profil, progres și ledger primesc tipul explicit `PROTECTED_ROW`.
+
+**Export înainte de ștergere, structural.** `exportDomain(domain)` produce documentul `self-driving-academy-retention-export` (format versiunea 1) cu totalurile domeniului și un checksum `SHA-256` peste forma canonică `SDA-CJSON-1`, aceleași reguli ca în [modulul 29](29-savefile-si-integritate.md). `planCleanup` cere digestul exportului și refuză cu `EXPORT_REQUIRED` fără el; `applyCleanup` recalculează exportul domeniului și refuză cu `EXPORT_MISMATCH` dacă digestul nu mai descrie inventarul curent. Astfel nu poate exista nicio ștergere fără o copie verificabilă a exact aceleiași stări.
+
+**Curățare selectivă pe criteriu explicit.** `OLDEST_FIRST` evacuează după `sequence` crescător (la egalitate, după `artifactId` în ordinea punctelor de cod), `LARGEST_FIRST` după bytes-ii declarați descrescători, iar `WHOLE_DOMAIN` elimină toate rândurile evacuabile ale domeniului. Ținta implicită este cota domeniului; `targetRamBytes`/`targetDbBytes` pot coborî ținta, iar `maxEvictions` plafonează planul. Rezultatul raportează ce s-a șters (`evicted`, `evictedBytes`), ce rămâne (`retained`) și starea de dinainte și de după.
+
+**Datele protejate nu sunt atinse.** `PROFILE`, `PROGRESS`, `ACTIVE_CHECKPOINT` și `DEDUP_LEDGER` consumă cotă, dar nu intră niciodată în candidați; un plan care ar numi un astfel de rând este refuzat. Când doar rânduri protejate depășesc cota, starea este `PROTECTED_OVERFLOW`, planul nu evacuează nimic, iar aplicarea răspunde `NOTHING_TO_EVICT` — nu o ștergere tăcută și nu o promisiune de spațiu.
+
+**Un clip parțial este declarat.** Rândurile sigilate ale unui clip împart `clipId`. Dacă evacuarea atinge doar o parte a clipului, fiecare rând păstrat este re-declarat `PARTIAL` cu motivul închis `RETENTION_EVICTED` și cu secvențele lipsă exacte (`missingSequences`), atât în rezultat, cât și în inventarul ulterior și în următorul export.
+
+**Evicția este deterministă.** Ordinea candidatului este un comparator explicit peste numere și puncte de cod; nu participă ordinea unui `Map`, ceasul de perete, timerele sau `Math.random`. Același inventar și aceeași cerere produc același digest de plan și același digest de rezultat, indiferent de ordinea în care au fost furnizate rândurile.
+
+**Vocabular de refuz închis.** `QUOTA_MISSING`, `INVENTORY_INVALID`, `DOMAIN_UNKNOWN`, `CRITERION_UNKNOWN`, `REQUEST_INVALID`, `EXPORT_REQUIRED`, `EXPORT_MISMATCH`, `PLAN_UNKNOWN`, `PLAN_STALE`, `PROTECTED_EVICTION` și `NOTHING_TO_EVICT`. Un plan emis de altă instanță, un plan aplicat de două ori și un plan modificat sunt refuzate fără să atingă inventarul.
+
+Dovezi: [Evidence/132-data-retention](Evidence/132-data-retention/README.md).
+
