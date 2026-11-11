@@ -193,3 +193,54 @@ Limitele sunt fixe: 32 de misiuni, 8 încercări pe misiune, 256 de finalizări,
 
 
 
+
+## Contract implementat în V1 (PBI 126): panoul misiunilor și obiective live
+
+`src/ui/mission-panel-format.ts` (`126-mission-panel-v1`) și `src/ui/mission-panel.ts` afișează obiectivele, progresul, motivele de eșec și opțiunile de reluare. Panoul este o proiecție **read-only** peste contractele livrate 116 și 125: nu recalculează progresul, nu inventează verdicte și nu ține o a doua stare de adevăr.
+
+### De unde vine fiecare text
+
+- Răspunsul campaniei (`LOCKED`/`AVAILABLE`/`COMPLETED`, `attempts`, `nextAttempt`, `playable`, prerechizitele lipsă, `lastCompletedTick`, `resets`, `rewardsGranted`) este copiat din `CampaignProgress` al lui 125.
+- Răspunsul evaluării (obiectivele, `progress`, `target`, `satisfied`, `failureReason`, fereastra, termenul, bugetul de incidente, `incidents`, `appliedEvents`, `replayedFrom`) este copiat din cea mai recentă instanță 116 a misiunii.
+- Textul autorat (titlu, etichete de obiectiv, praguri pe dificultate, recompense, politica de reluare) este copiat din **versiunea definiției pe care o raportează instanța**, deci două versiuni de definiție nu se amestecă niciodată.
+
+### API
+
+- `composeMissionPanelSnapshot({ sessionId, worldEpoch, tick, catalog, progress, instances })` compune snapshotul din read model-ele reale și îl trece prin parser, ca o compoziție inconsistentă să eșueze în loc să fie afișată.
+- `parseMissionPanelSnapshot(value)` refuză orice abatere de la contracte: un obiectiv `satisfied` care contravine pragului, un `nextAttempt` care nu respectă regula 125, o misiune finalizată fără finalizare reală, o încercare care nu aparține misiunii sau versiunii pe care o declară, un câmp necunoscut.
+- `projectMissionPanel(snapshot, { selectedMissionId? })` produce vederea deterministă: etichete, bare procentuale și semnătura stabilă folosită de `refresh()`.
+- `createMissionPanel(host, { read, setSurface?, open?, idPrefix? })` montează butonul `<button type="button">Misiuni</button>` și dialogul `role="dialog"`. `read` este portul compus de host din 116/125; `setSurface` este portul 070 (`pauseFocus.setSurface('panel', open)`), apelat o dată la deschidere și o dată la închidere.
+- `open`, `close`, `toggle`, `refresh`, `isOpen`, `selectMission`, `getSelectedMissionId`, `getView`, `getSnapshot`, `getTrigger`, `getPanel`, `getStats`, `dispose`.
+
+### Stările afișate
+
+| Stare | Sursa reală | Ce scrie panoul |
+| --- | --- | --- |
+| Disponibil | `CampaignMissionState: AVAILABLE`, fără instanță | eticheta de campanie, „Nicio încercare înregistrată”, obiective `Neevaluat`, reluare de la `nextAttempt` |
+| În desfășurare | instanța 116 `ACTIVE` | „În desfășurare” și progresul real `n din target` |
+| Finalizat cu succes | instanța 116 `COMPLETED` | „Finalizat”, „Finalizat cu succes”, obiectivele îndeplinite și recompensele acordate |
+| Eșuat cu motiv | instanța 116 `FAILED` | motivul închis (`INCIDENT_BUDGET_EXCEEDED`, `EVALUATION_WINDOW_EXPIRED`, `SCENARIO_RESET`, `PLAYER_ABANDONED`), tick-ul și progresul atins |
+| Blocat | `LOCKED` și prerechizitele lipsă | „Blocat”, lista prerechizitelor lipsă, „Reluare indisponibilă” |
+| Inspectat | `selectMission` pe orice misiune | detaliile misiunii, fără nicio scriere în contracte |
+| Reluare disponibilă | `playable` și `nextAttempt` din 125 | „Reluare disponibilă: încercarea n din 8” împreună cu politica de profil a definiției |
+
+### Versiunea aplicată
+
+`composeMissionPanelSnapshot` compară versiunea și titlul definiției cu `definitionVersion` raportat de 125 și refuză compunerea dacă diferă; parserul refuză și o instanță a cărei `missionVersion` nu este versiunea aplicată. Astfel, cu două versiuni în catalog, panoul arată versiunea aplicată, nu pe cea mai nouă sau pe cea mai veche, iar un catalog vechi nu poate fi afișat.
+
+### Inspectarea unui obiectiv blocat
+
+`selectMission(missionId)` este o schimbare pur vizuală: mută doar pointerul de selecție, re-proiectează snapshotul deja citit și nu apelează `read`, trackerul, ledgerul sau `resetMission`. Deschiderea și închiderea panoului pe o misiune blocată nu consumă încercări și nu modifică `instances`, `attempts` sau `resets`; `player progress` și recompensele rămân neschimbate.
+
+### Reluarea
+
+Reluarea este o **opțiune afișată**, nu o acțiune a panoului: textul spune ce încercare urmează și ce politică de profil se aplică, iar pornirea rămâne a hostului prin `MissionTracker.replay`. Un eșec nu consumă slotul de finalizare din 125 (`attempts` numără finalizările încheiate), deci panoul afișează `0 din 8 încercări încheiate` și totodată starea `FAILED` cu motivul ei.
+
+### Accesibilitate, randare și cost
+
+- Buton nativ cu `type="button"`, `aria-haspopup="dialog"`, `aria-expanded` sincronizat și `aria-controls`; dialogul are `role="dialog"`, `aria-modal="true"`, nume din titlu și descriere.
+- Focusul intră în panou la deschidere (butonul misiunii selectate), `Tab`/`Shift+Tab` rămân în panou, `Escape` închide și focusul anterior este restaurat. Toate listeners sunt pe elemente deținute: zero listeners pe `window`/`document`, deci tastele de condus rămân ale jocului.
+- Randarea este deterministă din valori (elemente HTML, bare `role="progressbar"` cu `aria-valuenow`/`aria-valuemax`), fără librării noi și fără intrare în bucla 3D. Panoul citește o dată la deschidere și doar la `refresh()` cât timp este deschis; închis, `refresh()` întoarce `SKIPPED_CLOSED` fără citire și fără randare, iar o semnătură neschimbată întoarce `SKIPPED_UNCHANGED`.
+- Fiecare misiune are `data-state`, `data-attempt-state`, `data-failure` și `data-replay`, ca starea să fie verificabilă fără a citi culoarea.
+
+Dovezile sunt în [Evidence/126-mission-panel](Evidence/126-mission-panel/README.md): 23/23 verificări deterministe, 8 misiuni parcurse, 4 motive de eșec reale și zero listeners globali.

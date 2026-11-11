@@ -794,3 +794,50 @@ export type {
   KpiHistoryTotalsView,
   KpiHistoryView,
 } from './kpi-history-format';
+
+export { createMissionPanel } from './mission-panel';
+export type {
+  MissionPanel,
+  MissionPanelAdapter,
+  MissionPanelOptions,
+  MissionPanelRefreshStatus,
+  MissionPanelStats,
+} from './mission-panel';
+export {
+  MISSION_PANEL_ATTEMPT_LABELS,
+  MISSION_PANEL_ATTEMPT_STATES,
+  MISSION_PANEL_CAMPAIGN_STATES,
+  MISSION_PANEL_DIFFICULTIES,
+  MISSION_PANEL_FAILURE_LABELS,
+  MISSION_PANEL_FAILURE_REASONS,
+  MISSION_PANEL_LIMITS,
+  MISSION_PANEL_OBJECTIVE_KINDS,
+  MISSION_PANEL_OBJECTIVE_LABELS,
+  MISSION_PANEL_PROFILE_SOURCES,
+  MISSION_PANEL_REWARD_KINDS,
+  MISSION_PANEL_REWARD_LABELS,
+  MISSION_PANEL_STATE_LABELS,
+  MISSION_PANEL_TEXT,
+  MISSION_PANEL_VERSION,
+  composeMissionPanelSnapshot,
+  emptyMissionPanelView,
+  parseMissionPanelSnapshot,
+  projectMissionPanel,
+} from './mission-panel-format';
+export type {
+  MissionPanelAttempt,
+  MissionPanelAttemptState,
+  MissionPanelCampaignState,
+  MissionPanelCounts,
+  MissionPanelDifficultyTargets,
+  MissionPanelMission,
+  MissionPanelMissionView,
+  MissionPanelObjective,
+  MissionPanelObjectiveProgress,
+  MissionPanelObjectiveView,
+  MissionPanelReplay,
+  MissionPanelReward,
+  MissionPanelSnapshot,
+  MissionPanelSources,
+  MissionPanelView,
+} from './mission-panel-format';
