@@ -1,0 +1,1104 @@
+{
+  "version": "211-mission-daily-report-v1",
+  "contract": {
+    "schema": "211-mission-daily-v1",
+    "missionsPerDay": 3,
+    "missionXp": 100,
+    "dayLengths": [
+      82800,
+      86400,
+      90000
+    ],
+    "capabilityGaps": [
+      "LEARNING_KEYS",
+      "LEARNING_MODE",
+      "CAMPAIGN_PROGRESS",
+      "ZONES"
+    ],
+    "clockActions": [
+      "NEW_DAY",
+      "SAME_DAY",
+      "ROLLBACK",
+      "FORWARD_JUMP"
+    ],
+    "generatorAttempts": 8,
+    "retainedSets": 32,
+    "templateCatalogVersion": "211-daily-templates-v1",
+    "templateFamilies": [
+      "daily-manual-service",
+      "daily-clean-service",
+      "daily-service-window",
+      "daily-learning-demonstration",
+      "daily-stop-discipline",
+      "daily-lane-flow"
+    ]
+  },
+  "runs": [
+    {
+      "name": "consecutive-days",
+      "detail": "three consecutive local days, same player, same capabilities",
+      "days": [
+        {
+          "dailyDate": "2026-11-09",
+          "seed": 766487483,
+          "signature": "daily-learning-demonstration@1#1#zone:airport,daily-service-window@1#4#zone:suburb,daily-manual-service@1#3#zone:suburb",
+          "families": [
+            "daily-learning-demonstration",
+            "daily-service-window",
+            "daily-manual-service"
+          ],
+          "targets": [
+            1,
+            4,
+            3
+          ],
+          "zones": [
+            "zone:airport",
+            "zone:suburb",
+            "zone:suburb"
+          ],
+          "difficulties": [
+            "NORMAL",
+            "NORMAL",
+            "NORMAL"
+          ],
+          "manualInstances": 2,
+          "learningInstances": 1,
+          "learningKeys": [
+            "speed_delta_urban",
+            null,
+            null
+          ],
+          "instanceIds": [
+            "daily-v1:player:211-daily:2026-11-09:s1:daily-learning-demonstration@1",
+            "daily-v1:player:211-daily:2026-11-09:s2:daily-service-window@1",
+            "daily-v1:player:211-daily:2026-11-09:s3:daily-manual-service@1"
+          ],
+          "dayStartMs": 1794175200000,
+          "expiresAtMs": 1794261600000,
+          "windowHours": 24
+        },
+        {
+          "dailyDate": "2026-11-10",
+          "seed": 244603478,
+          "signature": "daily-service-window@1#4#zone:suburb,daily-lane-flow@1#4#zone:suburb,daily-learning-demonstration@1#1#zone:airport",
+          "families": [
+            "daily-service-window",
+            "daily-lane-flow",
+            "daily-learning-demonstration"
+          ],
+          "targets": [
+            4,
+            4,
+            1
+          ],
+          "zones": [
+            "zone:suburb",
+            "zone:suburb",
+            "zone:airport"
+          ],
+          "difficulties": [
+            "NORMAL",
+            "NORMAL",
+            "NORMAL"
+          ],
+          "manualInstances": 2,
+          "learningInstances": 1,
+          "learningKeys": [
+            null,
+            null,
+            "following_time_headway"
+          ],
+          "instanceIds": [
+            "daily-v1:player:211-daily:2026-11-10:s1:daily-service-window@1",
+            "daily-v1:player:211-daily:2026-11-10:s2:daily-lane-flow@1",
+            "daily-v1:player:211-daily:2026-11-10:s3:daily-learning-demonstration@1"
+          ],
+          "dayStartMs": 1794261600000,
+          "expiresAtMs": 1794348000000,
+          "windowHours": 24
+        },
+        {
+          "dailyDate": "2026-11-11",
+          "seed": 2203151200,
+          "signature": "daily-lane-flow@1#3#zone:center,daily-clean-service@1#2#zone:center,daily-learning-demonstration@1#1#zone:airport",
+          "families": [
+            "daily-lane-flow",
+            "daily-clean-service",
+            "daily-learning-demonstration"
+          ],
+          "targets": [
+            3,
+            2,
+            1
+          ],
+          "zones": [
+            "zone:center",
+            "zone:center",
+            "zone:airport"
+          ],
+          "difficulties": [
+            "NORMAL",
+            "NORMAL",
+            "NORMAL"
+          ],
+          "manualInstances": 2,
+          "learningInstances": 1,
+          "learningKeys": [
+            null,
+            null,
+            "speed_delta_urban"
+          ],
+          "instanceIds": [
+            "daily-v1:player:211-daily:2026-11-11:s1:daily-lane-flow@1",
+            "daily-v1:player:211-daily:2026-11-11:s2:daily-clean-service@1",
+            "daily-v1:player:211-daily:2026-11-11:s3:daily-learning-demonstration@1"
+          ],
+          "dayStartMs": 1794348000000,
+          "expiresAtMs": 1794434400000,
+          "windowHours": 24
+        }
+      ],
+      "numbers": {
+        "days": 3,
+        "instances": 9,
+        "distinctInstances": 9,
+        "distinctSignatures": 3,
+        "distinctSeeds": 3,
+        "distinctVariants": 6,
+        "manualInstances": 6,
+        "minManualPerDay": 2,
+        "contiguityGaps": 0,
+        "maxGapMs": 0
+      }
+    },
+    {
+      "name": "same-day-resume",
+      "detail": "generate once, reload, resume at 23:59:59.999 and unlock a capability: the retained set never changes",
+      "days": [
+        {
+          "dailyDate": "2026-11-11",
+          "seed": 2203151200,
+          "signature": "daily-lane-flow@1#3#zone:center,daily-clean-service@1#2#zone:center,daily-learning-demonstration@1#1#zone:airport",
+          "families": [
+            "daily-lane-flow",
+            "daily-clean-service",
+            "daily-learning-demonstration"
+          ],
+          "targets": [
+            3,
+            2,
+            1
+          ],
+          "zones": [
+            "zone:center",
+            "zone:center",
+            "zone:airport"
+          ],
+          "difficulties": [
+            "NORMAL",
+            "NORMAL",
+            "NORMAL"
+          ],
+          "manualInstances": 2,
+          "learningInstances": 1,
+          "learningKeys": [
+            null,
+            null,
+            "speed_delta_urban"
+          ],
+          "instanceIds": [
+            "daily-v1:player:211-daily:2026-11-11:s1:daily-lane-flow@1",
+            "daily-v1:player:211-daily:2026-11-11:s2:daily-clean-service@1",
+            "daily-v1:player:211-daily:2026-11-11:s3:daily-learning-demonstration@1"
+          ],
+          "dayStartMs": 1794348000000,
+          "expiresAtMs": 1794434400000,
+          "windowHours": 24
+        }
+      ],
+      "numbers": {
+        "reloadedBytesEqual": true,
+        "sameDayAction": "SAME_DAY",
+        "sameDayRegenerated": false,
+        "sameDayBytesEqual": true,
+        "generatedAtMs": 1794380400000,
+        "originalGeneratedAtMs": 1794380400000,
+        "setsAfterSameDay": 1,
+        "capabilityDrift": false,
+        "unlockBytesEqual": true,
+        "unlockAction": "SAME_DAY",
+        "unlockDrift": true,
+        "setsAfterUnlock": 1,
+        "otherPlayerInstances": 3,
+        "sharedInstanceIds": 0
+      }
+    },
+    {
+      "name": "small-catalog",
+      "detail": "a lean snapshot (no learning key, no zone, no campaign progress) with the delivered catalog and with a two-family catalog",
+      "days": [
+        {
+          "dailyDate": "2026-11-11",
+          "seed": 234373870,
+          "signature": "daily-stop-discipline@1#1#-,daily-manual-service@1#1#-,daily-manual-service@1#2#-",
+          "families": [
+            "daily-stop-discipline",
+            "daily-manual-service",
+            "daily-manual-service"
+          ],
+          "targets": [
+            1,
+            1,
+            2
+          ],
+          "zones": [
+            null,
+            null,
+            null
+          ],
+          "difficulties": [
+            "EASY",
+            "EASY",
+            "EASY"
+          ],
+          "manualInstances": 3,
+          "learningInstances": 0,
+          "learningKeys": [
+            null,
+            null,
+            null
+          ],
+          "instanceIds": [
+            "daily-v1:player:211-daily:2026-11-11:s1:daily-stop-discipline@1",
+            "daily-v1:player:211-daily:2026-11-11:s2:daily-manual-service@1",
+            "daily-v1:player:211-daily:2026-11-11:s3:daily-manual-service@1"
+          ],
+          "dayStartMs": 1794348000000,
+          "expiresAtMs": 1794434400000,
+          "windowHours": 24
+        },
+        {
+          "dailyDate": "2026-11-11",
+          "seed": 2203151200,
+          "signature": "daily-clean-service@1#1#-,daily-manual-service@1#1#-,daily-lane-flow@1#2#-",
+          "families": [
+            "daily-clean-service",
+            "daily-manual-service",
+            "daily-lane-flow"
+          ],
+          "targets": [
+            1,
+            1,
+            2
+          ],
+          "zones": [
+            null,
+            null,
+            null
+          ],
+          "difficulties": [
+            "EASY",
+            "EASY",
+            "EASY"
+          ],
+          "manualInstances": 3,
+          "learningInstances": 0,
+          "learningKeys": [
+            null,
+            null,
+            null
+          ],
+          "instanceIds": [
+            "daily-v1:player:211-daily:2026-11-11:s1:daily-clean-service@1",
+            "daily-v1:player:211-daily:2026-11-11:s2:daily-manual-service@1",
+            "daily-v1:player:211-daily:2026-11-11:s3:daily-lane-flow@1"
+          ],
+          "dayStartMs": 1794348000000,
+          "expiresAtMs": 1794434400000,
+          "windowHours": 24
+        }
+      ],
+      "numbers": {
+        "instances": 3,
+        "distinctInstances": 3,
+        "distinctVariants": 3,
+        "fallbacks": 1,
+        "manualInstances": 3,
+        "learningInstances": 0,
+        "capabilityGaps": "CAMPAIGN_PROGRESS,LEARNING_KEYS,LEARNING_MODE,ZONES",
+        "excludedFamilies": "",
+        "templateCatalogVersion": "report-small-v1",
+        "defaultCatalogInstances": 3,
+        "defaultCatalogExcluded": "daily-learning-demonstration,daily-service-window",
+        "defaultCatalogZonesNull": 3
+      }
+    },
+    {
+      "name": "midnight",
+      "detail": "the expiry boundary is exclusive and generates exactly one next-day set",
+      "days": [
+        {
+          "dailyDate": "2026-11-11",
+          "seed": 2203151200,
+          "signature": "daily-lane-flow@1#3#zone:center,daily-clean-service@1#2#zone:center,daily-learning-demonstration@1#1#zone:airport",
+          "families": [
+            "daily-lane-flow",
+            "daily-clean-service",
+            "daily-learning-demonstration"
+          ],
+          "targets": [
+            3,
+            2,
+            1
+          ],
+          "zones": [
+            "zone:center",
+            "zone:center",
+            "zone:airport"
+          ],
+          "difficulties": [
+            "NORMAL",
+            "NORMAL",
+            "NORMAL"
+          ],
+          "manualInstances": 2,
+          "learningInstances": 1,
+          "learningKeys": [
+            null,
+            null,
+            "speed_delta_urban"
+          ],
+          "instanceIds": [
+            "daily-v1:player:211-daily:2026-11-11:s1:daily-lane-flow@1",
+            "daily-v1:player:211-daily:2026-11-11:s2:daily-clean-service@1",
+            "daily-v1:player:211-daily:2026-11-11:s3:daily-learning-demonstration@1"
+          ],
+          "dayStartMs": 1794348000000,
+          "expiresAtMs": 1794434400000,
+          "windowHours": 24
+        },
+        {
+          "dailyDate": "2026-11-12",
+          "seed": 1078834390,
+          "signature": "daily-stop-discipline@1#3#zone:suburb,daily-lane-flow@1#2#zone:airport,daily-learning-demonstration@1#2#zone:center",
+          "families": [
+            "daily-stop-discipline",
+            "daily-lane-flow",
+            "daily-learning-demonstration"
+          ],
+          "targets": [
+            3,
+            2,
+            2
+          ],
+          "zones": [
+            "zone:suburb",
+            "zone:airport",
+            "zone:center"
+          ],
+          "difficulties": [
+            "NORMAL",
+            "NORMAL",
+            "NORMAL"
+          ],
+          "manualInstances": 2,
+          "learningInstances": 1,
+          "learningKeys": [
+            null,
+            null,
+            "following_time_headway"
+          ],
+          "instanceIds": [
+            "daily-v1:player:211-daily:2026-11-12:s1:daily-stop-discipline@1",
+            "daily-v1:player:211-daily:2026-11-12:s2:daily-lane-flow@1",
+            "daily-v1:player:211-daily:2026-11-12:s3:daily-learning-demonstration@1"
+          ],
+          "dayStartMs": 1794434400000,
+          "expiresAtMs": 1794520800000,
+          "windowHours": 24
+        }
+      ],
+      "numbers": {
+        "windowHours": 24,
+        "phaseBeforeBoundary": "ACTIVE",
+        "phaseAtBoundary": "EXPIRED",
+        "nextDate": "2026-11-12",
+        "nextStartEqualsExpiry": true,
+        "action": "NEW_DAY",
+        "skippedDays": 0,
+        "sets": 2,
+        "expiredSets": 1,
+        "gapMs": 0,
+        "contiguous": true
+      }
+    },
+    {
+      "name": "clock-changes",
+      "detail": "DST spring forward and fall back, a clock rollback and a forward jump, all on explicit instants",
+      "days": [
+        {
+          "dailyDate": "2026-03-29",
+          "seed": 3367446488,
+          "signature": "daily-service-window@1#3#zone:center,daily-clean-service@1#1#zone:airport,daily-stop-discipline@1#1#zone:airport",
+          "families": [
+            "daily-service-window",
+            "daily-clean-service",
+            "daily-stop-discipline"
+          ],
+          "targets": [
+            3,
+            1,
+            1
+          ],
+          "zones": [
+            "zone:center",
+            "zone:airport",
+            "zone:airport"
+          ],
+          "difficulties": [
+            "NORMAL",
+            "NORMAL",
+            "NORMAL"
+          ],
+          "manualInstances": 3,
+          "learningInstances": 0,
+          "learningKeys": [
+            null,
+            null,
+            null
+          ],
+          "instanceIds": [
+            "daily-v1:player:211-daily:2026-03-29:s1:daily-service-window@1",
+            "daily-v1:player:211-daily:2026-03-29:s2:daily-clean-service@1",
+            "daily-v1:player:211-daily:2026-03-29:s3:daily-stop-discipline@1"
+          ],
+          "dayStartMs": 1774735200000,
+          "expiresAtMs": 1774818000000,
+          "windowHours": 23
+        },
+        {
+          "dailyDate": "2026-10-25",
+          "seed": 1190898704,
+          "signature": "daily-stop-discipline@1#1#zone:airport,daily-service-window@1#3#zone:center,daily-learning-demonstration@1#1#zone:airport",
+          "families": [
+            "daily-stop-discipline",
+            "daily-service-window",
+            "daily-learning-demonstration"
+          ],
+          "targets": [
+            1,
+            3,
+            1
+          ],
+          "zones": [
+            "zone:airport",
+            "zone:center",
+            "zone:airport"
+          ],
+          "difficulties": [
+            "NORMAL",
+            "NORMAL",
+            "NORMAL"
+          ],
+          "manualInstances": 2,
+          "learningInstances": 1,
+          "learningKeys": [
+            null,
+            null,
+            "following_time_headway"
+          ],
+          "instanceIds": [
+            "daily-v1:player:211-daily:2026-10-25:s1:daily-stop-discipline@1",
+            "daily-v1:player:211-daily:2026-10-25:s2:daily-service-window@1",
+            "daily-v1:player:211-daily:2026-10-25:s3:daily-learning-demonstration@1"
+          ],
+          "dayStartMs": 1792875600000,
+          "expiresAtMs": 1792965600000,
+          "windowHours": 25
+        },
+        {
+          "dailyDate": "2026-11-15",
+          "seed": 1316550714,
+          "signature": "daily-lane-flow@1#3#zone:center,daily-manual-service@1#1#zone:airport,daily-service-window@1#2#zone:airport",
+          "families": [
+            "daily-lane-flow",
+            "daily-manual-service",
+            "daily-service-window"
+          ],
+          "targets": [
+            3,
+            1,
+            2
+          ],
+          "zones": [
+            "zone:center",
+            "zone:airport",
+            "zone:airport"
+          ],
+          "difficulties": [
+            "NORMAL",
+            "NORMAL",
+            "NORMAL"
+          ],
+          "manualInstances": 3,
+          "learningInstances": 0,
+          "learningKeys": [
+            null,
+            null,
+            null
+          ],
+          "instanceIds": [
+            "daily-v1:player:211-daily:2026-11-15:s1:daily-lane-flow@1",
+            "daily-v1:player:211-daily:2026-11-15:s2:daily-manual-service@1",
+            "daily-v1:player:211-daily:2026-11-15:s3:daily-service-window@1"
+          ],
+          "dayStartMs": 1794693600000,
+          "expiresAtMs": 1794780000000,
+          "windowHours": 24
+        }
+      ],
+      "numbers": {
+        "springWindowHours": 23,
+        "springGapMs": 0,
+        "fallWindowHours": 25,
+        "fallGapMs": 0,
+        "springDailyDate": "2026-03-29",
+        "fallDailyDate": "2026-10-25",
+        "rollbackAction": "ROLLBACK",
+        "rollbackRegenerated": false,
+        "rollbackHighestDate": "2026-11-11",
+        "rollbackSets": 2,
+        "rollbackRewardRetained": true,
+        "duplicateGrant": true,
+        "duplicateGranted": false,
+        "rewardsAfterRollback": 1,
+        "jumpAction": "FORWARD_JUMP",
+        "jumpSkippedDays": 3,
+        "jumpSets": 3,
+        "jumpRewards": 1,
+        "jumpForwardJumps": 1,
+        "jumpDates": "2026-11-10,2026-11-11,2026-11-15"
+      }
+    }
+  ],
+  "checks": [
+    {
+      "name": "contract-schema",
+      "expected": "211-mission-daily-v1",
+      "actual": "211-mission-daily-v1",
+      "pass": true,
+      "detail": "daily mission schema"
+    },
+    {
+      "name": "missions-per-day",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "exactly three missions each day"
+    },
+    {
+      "name": "mission-xp",
+      "expected": 100,
+      "actual": 100,
+      "pass": true,
+      "detail": "XP proposal of Docs/23"
+    },
+    {
+      "name": "day-lengths",
+      "expected": "82800,86400,90000",
+      "actual": "82800,86400,90000",
+      "pass": true,
+      "detail": "23 h, 24 h, 25 h"
+    },
+    {
+      "name": "capability-gaps",
+      "expected": "LEARNING_KEYS,LEARNING_MODE,CAMPAIGN_PROGRESS,ZONES",
+      "actual": "LEARNING_KEYS,LEARNING_MODE,CAMPAIGN_PROGRESS,ZONES",
+      "pass": true,
+      "detail": "closed capability gaps"
+    },
+    {
+      "name": "clock-actions",
+      "expected": "NEW_DAY,SAME_DAY,ROLLBACK,FORWARD_JUMP",
+      "actual": "NEW_DAY,SAME_DAY,ROLLBACK,FORWARD_JUMP",
+      "pass": true,
+      "detail": "closed calendar decisions"
+    },
+    {
+      "name": "generator-attempts",
+      "expected": 8,
+      "actual": 8,
+      "pass": true,
+      "detail": "bounded anti-repeat attempts"
+    },
+    {
+      "name": "retained-sets",
+      "expected": 32,
+      "actual": 32,
+      "pass": true,
+      "detail": "bounded per-player history"
+    },
+    {
+      "name": "template-catalog",
+      "expected": "211-daily-templates-v1",
+      "actual": "211-daily-templates-v1",
+      "pass": true,
+      "detail": "delivered versioned catalog"
+    },
+    {
+      "name": "template-families",
+      "expected": 6,
+      "actual": 6,
+      "pass": true,
+      "detail": "delivered V1 families"
+    },
+    {
+      "name": "consecutive-days",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "local days generated in a row"
+    },
+    {
+      "name": "consecutive-instances",
+      "expected": 9,
+      "actual": 9,
+      "pass": true,
+      "detail": "three per day"
+    },
+    {
+      "name": "consecutive-distinct-instances",
+      "expected": 9,
+      "actual": 9,
+      "pass": true,
+      "detail": "instance identity includes the local date"
+    },
+    {
+      "name": "consecutive-distinct-signatures",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "no two days share a content signature"
+    },
+    {
+      "name": "consecutive-distinct-seeds",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "seed includes the day"
+    },
+    {
+      "name": "consecutive-distinct-variants",
+      "expected": ">= 6",
+      "actual": 6,
+      "pass": true,
+      "detail": "distinct family/target/zone variants across three days; signatures are always distinct"
+    },
+    {
+      "name": "consecutive-manual-instances",
+      "expected": ">= 3",
+      "actual": 6,
+      "pass": true,
+      "detail": "MANUAL objectives without learning: at least one per day"
+    },
+    {
+      "name": "consecutive-manual-minimum",
+      "expected": ">= 1",
+      "actual": 2,
+      "pass": true,
+      "detail": "the smallest daily count of MANUAL objectives"
+    },
+    {
+      "name": "consecutive-contiguity",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "days tile the local calendar without gaps"
+    },
+    {
+      "name": "reload-bytes",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "saved set parses to same bytes"
+    },
+    {
+      "name": "same-day-action",
+      "expected": "SAME_DAY",
+      "actual": "SAME_DAY",
+      "pass": true,
+      "detail": "resume inside the day"
+    },
+    {
+      "name": "same-day-regenerated",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "no regeneration"
+    },
+    {
+      "name": "same-day-bytes",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "retained set is authoritative"
+    },
+    {
+      "name": "same-day-generated-at",
+      "expected": 1794380400000,
+      "actual": 1794380400000,
+      "pass": true,
+      "detail": "generation instant is preserved"
+    },
+    {
+      "name": "same-day-sets",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "a refresh adds no set"
+    },
+    {
+      "name": "same-day-drift",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "capabilities did not change"
+    },
+    {
+      "name": "unlock-bytes",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "a later unlock does not rerandomise the day"
+    },
+    {
+      "name": "unlock-action",
+      "expected": "SAME_DAY",
+      "actual": "SAME_DAY",
+      "pass": true,
+      "detail": "same local date"
+    },
+    {
+      "name": "unlock-drift",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the drift is reported"
+    },
+    {
+      "name": "unlock-sets",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "one set per local day"
+    },
+    {
+      "name": "new-profile-instances",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "a new player gets its own three missions"
+    },
+    {
+      "name": "new-profile-no-shared-identity",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "player is part of the identity"
+    },
+    {
+      "name": "small-instances",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "three missions still generated"
+    },
+    {
+      "name": "small-distinct-instances",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "distinct identities in a small catalog"
+    },
+    {
+      "name": "small-distinct-variants",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "distinct family/parameter"
+    },
+    {
+      "name": "small-fallbacks",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the third slot repeats a family"
+    },
+    {
+      "name": "small-manual",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "MANUAL stays available"
+    },
+    {
+      "name": "small-learning",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no learning key, no learning task"
+    },
+    {
+      "name": "small-gaps",
+      "expected": "CAMPAIGN_PROGRESS,LEARNING_KEYS,LEARNING_MODE,ZONES",
+      "actual": "CAMPAIGN_PROGRESS,LEARNING_KEYS,LEARNING_MODE,ZONES",
+      "pass": true,
+      "detail": "every missing capability is named"
+    },
+    {
+      "name": "small-excluded",
+      "expected": "daily-learning-demonstration,daily-service-window",
+      "actual": "daily-learning-demonstration,daily-service-window",
+      "pass": true,
+      "detail": "the delivered catalog excludes the ineligible families, not fakes them"
+    },
+    {
+      "name": "small-custom-excluded",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the two-family catalog has nothing left to exclude"
+    },
+    {
+      "name": "small-catalog-version",
+      "expected": "report-small-v1",
+      "actual": "report-small-v1",
+      "pass": true,
+      "detail": "the accepted catalog version is recorded"
+    },
+    {
+      "name": "small-default-zones-null",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "without map zones the parameter is null, never invented"
+    },
+    {
+      "name": "midnight-window",
+      "expected": 24,
+      "actual": 24,
+      "pass": true,
+      "detail": "a regular local day is 24 hours"
+    },
+    {
+      "name": "midnight-before",
+      "expected": "ACTIVE",
+      "actual": "ACTIVE",
+      "pass": true,
+      "detail": "last active instant"
+    },
+    {
+      "name": "midnight-at",
+      "expected": "EXPIRED",
+      "actual": "EXPIRED",
+      "pass": true,
+      "detail": "exclusive boundary"
+    },
+    {
+      "name": "midnight-next-date",
+      "expected": "2026-11-12",
+      "actual": "2026-11-12",
+      "pass": true,
+      "detail": "the instant is a new date"
+    },
+    {
+      "name": "midnight-next-start",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the next day starts exactly at the expiry"
+    },
+    {
+      "name": "midnight-action",
+      "expected": "NEW_DAY",
+      "actual": "NEW_DAY",
+      "pass": true,
+      "detail": "one new set"
+    },
+    {
+      "name": "midnight-skipped",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no skipped day"
+    },
+    {
+      "name": "midnight-sets",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "the expired set is retained"
+    },
+    {
+      "name": "midnight-expired",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "one expired set is counted"
+    },
+    {
+      "name": "midnight-gap",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no gap at the boundary"
+    },
+    {
+      "name": "dst-spring-window",
+      "expected": 23,
+      "actual": 23,
+      "pass": true,
+      "detail": "23 h local day"
+    },
+    {
+      "name": "dst-spring-gap",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the spring day tiles exactly"
+    },
+    {
+      "name": "dst-spring-date",
+      "expected": "2026-03-29",
+      "actual": "2026-03-29",
+      "pass": true,
+      "detail": "the local date is kept"
+    },
+    {
+      "name": "dst-fall-window",
+      "expected": 25,
+      "actual": 25,
+      "pass": true,
+      "detail": "25 h local day"
+    },
+    {
+      "name": "dst-fall-gap",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the fall day tiles exactly"
+    },
+    {
+      "name": "dst-fall-date",
+      "expected": "2026-10-25",
+      "actual": "2026-10-25",
+      "pass": true,
+      "detail": "the local date is kept"
+    },
+    {
+      "name": "rollback-action",
+      "expected": "ROLLBACK",
+      "actual": "ROLLBACK",
+      "pass": true,
+      "detail": "an earlier instant"
+    },
+    {
+      "name": "rollback-regenerated",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "no rerandomisation"
+    },
+    {
+      "name": "rollback-highest-date",
+      "expected": "2026-11-11",
+      "actual": "2026-11-11",
+      "pass": true,
+      "detail": "the highest observed date is not lowered"
+    },
+    {
+      "name": "rollback-sets",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "retained sets are kept"
+    },
+    {
+      "name": "rollback-reward",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "a rewarded mission is not reactivated"
+    },
+    {
+      "name": "rollback-duplicate",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the second grant is a duplicate"
+    },
+    {
+      "name": "rollback-no-grant",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "no second XP credit"
+    },
+    {
+      "name": "rollback-rewards",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "exactly one reward record"
+    },
+    {
+      "name": "jump-action",
+      "expected": "FORWARD_JUMP",
+      "actual": "FORWARD_JUMP",
+      "pass": true,
+      "detail": "a clock jump forward"
+    },
+    {
+      "name": "jump-skipped",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "three skipped local days"
+    },
+    {
+      "name": "jump-sets",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "the two retained days plus the current one"
+    },
+    {
+      "name": "jump-rewards",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "skipped days credit no XP; the earlier real reward is retained"
+    },
+    {
+      "name": "jump-count",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the jump is counted"
+    },
+    {
+      "name": "jump-dates",
+      "expected": "2026-11-10,2026-11-11,2026-11-15",
+      "actual": "2026-11-10,2026-11-11,2026-11-15",
+      "pass": true,
+      "detail": "no set is invented for a skipped day"
+    }
+  ],
+  "summary": {
+    "runs": 5,
+    "checks": 73,
+    "passed": 73,
+    "pass": true
+  }
+}
