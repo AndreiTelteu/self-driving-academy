@@ -1,0 +1,638 @@
+{
+  "version": "130-progress-save-report-v1",
+  "generatedBy": "npm run save:progress",
+  "oracleRule": "Reîncărcarea este dovedită prin ciclu complet: trackerul este restaurat prin restore-ul real 116, jurnalul de campanie este reluat într-un ledger 125 proaspăt și comparat digest cu digest, iar aceeași finalizare este livrată din nou ledgerului restaurat. Izolarea unui reset de categorie este dovedită prin compararea celorlalte categorii byte cu byte.",
+  "reload": {
+    "categories": {
+      "settings": true,
+      "campaign": true,
+      "progress": true
+    },
+    "instancesBefore": 4,
+    "instancesAfter": 4,
+    "completedBefore": 3,
+    "completedAfter": 3,
+    "activeBefore": 1,
+    "activeAfter": 1,
+    "xpBefore": 300,
+    "xpAfter": 300,
+    "unlocksBefore": 3,
+    "unlocksAfter": 3,
+    "rewardsBefore": 6,
+    "rewardsAfter": 6,
+    "settingsMatch": true,
+    "rerampsRestored": "KeyI/ArrowDown/KeyV",
+    "preferenceRestored": "mph/HIGH/audio:true/fov:92",
+    "trackerFactsMatch": true,
+    "trackerDigestMatch": true,
+    "campaignDigestMatch": true,
+    "trackerRow": {
+      "recordId": "tracker:session-116-missions",
+      "revision": 1,
+      "status": "ACTIVE",
+      "bodyBytes": 8090,
+      "digest": "8a92e7c564f7a53a0381d768f38bce035452c18ff48fe6144befddd4a6ffe638"
+    },
+    "campaignRow": {
+      "recordId": "campaign:session-116-missions",
+      "revision": 1,
+      "status": "ACTIVE",
+      "bodyBytes": 1229,
+      "digest": "80e2d713db35fecceef8fb50ad9f857f5aae194125a760c7f3323fa1f01c5f2d"
+    },
+    "settingsSource": "STORED",
+    "rowsRead": 2
+  },
+  "uniqueReward": {
+    "repeatStatus": "DUPLICATE",
+    "repeatXpGranted": 0,
+    "repeatReasons": [
+      "COMPLETION_ALREADY_SETTLED"
+    ],
+    "xpBeforeRepeat": 300,
+    "xpAfterRepeat": 300,
+    "grantedBeforeRepeat": 6,
+    "grantedAfterRepeat": 6,
+    "replayStatus": "NO_REWARD",
+    "replayXpGranted": 0,
+    "replayReasons": [
+      "REWARD_ALREADY_GRANTED"
+    ],
+    "xpAfterReplay": 300,
+    "completions": 4
+  },
+  "resetSettings": {
+    "deletedTracker": false,
+    "deletedCampaign": false,
+    "keptTracker": true,
+    "keptCampaign": true,
+    "settingsChanged": true,
+    "settingsAfter": "DEFAULTS",
+    "throttleAfter": "KeyW",
+    "unitsAfter": "km/h",
+    "qualityAfter": "MEDIUM",
+    "trackerDigestKept": true,
+    "campaignDigestKept": true,
+    "campaignCompletedKept": 3,
+    "settingsSurviveReload": true
+  },
+  "resetCampaign": {
+    "deletedCampaign": true,
+    "deletedTracker": false,
+    "keptTracker": true,
+    "keptSettings": true,
+    "campaignAfter": "ABSENT",
+    "trackerDigestKept": true,
+    "settingsKept": true,
+    "campaignCompletedAfter": 0
+  },
+  "resetProgress": {
+    "deletedTracker": true,
+    "deletedCampaign": false,
+    "keptCampaign": true,
+    "keptSettings": true,
+    "trackerAfter": "ABSENT",
+    "campaignDigestKept": true,
+    "settingsKept": true,
+    "restoredInstances": 0
+  },
+  "failedWrite": {
+    "status": "REJECTED",
+    "code": "TRANSACTION_ABORTED",
+    "rowsBefore": 2,
+    "rowsAfter": 2,
+    "fingerprintMatch": true,
+    "revisionsMatch": true
+  },
+  "defaults": {
+    "settingsSource": "DEFAULTS",
+    "empty": true,
+    "throttle": "KeyW",
+    "brake": "KeyS",
+    "units": "km/h/m",
+    "quality": "MEDIUM",
+    "audioMuted": false
+  },
+  "refusals": {
+    "tamperedCampaign": "LEDGER_REPLAY_MISMATCH",
+    "tamperedTracker": "SAVE_DIGEST_MISMATCH",
+    "otherCatalog": "CATALOG_MISMATCH",
+    "emptySave": "SAVE_EMPTY",
+    "unknownReset": "SAVE_CATEGORY_UNKNOWN",
+    "writerRequired": "WRITER_REQUIRED"
+  },
+  "checks": [
+    {
+      "name": "reload.categories",
+      "expected": {
+        "settings": true,
+        "campaign": true,
+        "progress": true
+      },
+      "actual": {
+        "settings": true,
+        "campaign": true,
+        "progress": true
+      },
+      "pass": true,
+      "detail": "All three categories read back."
+    },
+    {
+      "name": "reload.instances",
+      "expected": 4,
+      "actual": 4,
+      "pass": true,
+      "detail": "Instances restored."
+    },
+    {
+      "name": "reload.completed",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "Completions restored."
+    },
+    {
+      "name": "reload.active",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "The ACTIVE mission stays active."
+    },
+    {
+      "name": "reload.xp",
+      "expected": 300,
+      "actual": 300,
+      "pass": true,
+      "detail": "XP total identical after reload."
+    },
+    {
+      "name": "reload.unlocks",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "Unlock count identical."
+    },
+    {
+      "name": "reload.rewards",
+      "expected": 6,
+      "actual": 6,
+      "pass": true,
+      "detail": "Granted rewards identical."
+    },
+    {
+      "name": "reload.settings",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Every preference restored exactly."
+    },
+    {
+      "name": "reload.remaps",
+      "expected": "KeyI/ArrowDown/KeyV",
+      "actual": "KeyI/ArrowDown/KeyV",
+      "pass": true,
+      "detail": "Keyboard remaps restored."
+    },
+    {
+      "name": "reload.preferences",
+      "expected": "mph/HIGH/audio:true/fov:92",
+      "actual": "mph/HIGH/audio:true/fov:92",
+      "pass": true,
+      "detail": "Units, quality, audio and FOV restored."
+    },
+    {
+      "name": "reload.trackerFacts",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Objectives, verdicts, versions and reasons identical."
+    },
+    {
+      "name": "reload.trackerDigest",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Stored tracker digest equals the replayed one."
+    },
+    {
+      "name": "reload.campaignDigest",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Campaign replay digest equals the live ledger."
+    },
+    {
+      "name": "reload.trackerRow",
+      "expected": "ACTIVE",
+      "actual": "ACTIVE",
+      "pass": true,
+      "detail": "Tracker row lifecycle status."
+    },
+    {
+      "name": "reload.rows",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "Two progress rows: one tracker, one campaign."
+    },
+    {
+      "name": "reload.settingsSource",
+      "expected": "STORED",
+      "actual": "STORED",
+      "pass": true,
+      "detail": "Settings come from the stored row."
+    },
+    {
+      "name": "reward.repeatStatus",
+      "expected": "DUPLICATE",
+      "actual": "DUPLICATE",
+      "pass": true,
+      "detail": "The same completion is a duplicate."
+    },
+    {
+      "name": "reward.repeatXp",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "A duplicate pays no XP."
+    },
+    {
+      "name": "reward.repeatReasons",
+      "expected": [
+        "COMPLETION_ALREADY_SETTLED"
+      ],
+      "actual": [
+        "COMPLETION_ALREADY_SETTLED"
+      ],
+      "pass": true,
+      "detail": "Closed duplicate reason."
+    },
+    {
+      "name": "reward.xpAfterRepeat",
+      "expected": 300,
+      "actual": 300,
+      "pass": true,
+      "detail": "XP unchanged by the duplicate."
+    },
+    {
+      "name": "reward.grantsAfterRepeat",
+      "expected": 6,
+      "actual": 6,
+      "pass": true,
+      "detail": "Grant count unchanged."
+    },
+    {
+      "name": "reward.replayStatus",
+      "expected": "NO_REWARD",
+      "actual": "NO_REWARD",
+      "pass": true,
+      "detail": "A new attempt pays nothing."
+    },
+    {
+      "name": "reward.replayXp",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "Reward identity already granted."
+    },
+    {
+      "name": "reward.replayReasons",
+      "expected": [
+        "REWARD_ALREADY_GRANTED"
+      ],
+      "actual": [
+        "REWARD_ALREADY_GRANTED"
+      ],
+      "pass": true,
+      "detail": "Closed replay reason."
+    },
+    {
+      "name": "reward.xpAfterReplay",
+      "expected": 300,
+      "actual": 300,
+      "pass": true,
+      "detail": "XP unchanged by the replay."
+    },
+    {
+      "name": "reward.completions",
+      "expected": 4,
+      "actual": 4,
+      "pass": true,
+      "detail": "Three completions plus the replayed attempt."
+    },
+    {
+      "name": "resetSettings.deletedTracker",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "Mission progress untouched."
+    },
+    {
+      "name": "resetSettings.deletedCampaign",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "Campaign untouched."
+    },
+    {
+      "name": "resetSettings.keptTracker",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Tracker row still stored."
+    },
+    {
+      "name": "resetSettings.keptCampaign",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Campaign row still stored."
+    },
+    {
+      "name": "resetSettings.changed",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The reset really changed the settings."
+    },
+    {
+      "name": "resetSettings.values",
+      "expected": "DEFAULTS",
+      "actual": "DEFAULTS",
+      "pass": true,
+      "detail": "Documented 009 defaults restored."
+    },
+    {
+      "name": "resetSettings.bindings",
+      "expected": "KeyW/km/h/MEDIUM",
+      "actual": "KeyW/km/h/MEDIUM",
+      "pass": true,
+      "detail": "Defaults for remaps, units and quality."
+    },
+    {
+      "name": "resetSettings.trackerDigest",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Tracker digest unchanged."
+    },
+    {
+      "name": "resetSettings.campaignDigest",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Campaign digest unchanged."
+    },
+    {
+      "name": "resetSettings.completed",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "Campaign keeps three completions."
+    },
+    {
+      "name": "resetSettings.reload",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The reset survives a reload."
+    },
+    {
+      "name": "resetCampaign.deletedCampaign",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Only the campaign row is deleted."
+    },
+    {
+      "name": "resetCampaign.deletedTracker",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "Mission progress untouched."
+    },
+    {
+      "name": "resetCampaign.keptTracker",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Tracker row still stored."
+    },
+    {
+      "name": "resetCampaign.keptSettings",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Settings row still stored."
+    },
+    {
+      "name": "resetCampaign.campaignAfter",
+      "expected": "ABSENT",
+      "actual": "ABSENT",
+      "pass": true,
+      "detail": "No campaign row after the reset."
+    },
+    {
+      "name": "resetCampaign.trackerDigest",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Tracker digest unchanged."
+    },
+    {
+      "name": "resetCampaign.settingsKept",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Settings identical."
+    },
+    {
+      "name": "resetCampaign.completed",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "No campaign completions remain."
+    },
+    {
+      "name": "resetProgress.deletedTracker",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Only the tracker row is deleted."
+    },
+    {
+      "name": "resetProgress.deletedCampaign",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "Campaign untouched."
+    },
+    {
+      "name": "resetProgress.keptCampaign",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Campaign row still stored."
+    },
+    {
+      "name": "resetProgress.keptSettings",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Settings row still stored."
+    },
+    {
+      "name": "resetProgress.trackerAfter",
+      "expected": "ABSENT",
+      "actual": "ABSENT",
+      "pass": true,
+      "detail": "No tracker row after the reset."
+    },
+    {
+      "name": "resetProgress.campaignDigest",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Campaign digest unchanged."
+    },
+    {
+      "name": "resetProgress.settingsKept",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Settings identical."
+    },
+    {
+      "name": "resetProgress.restored",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "A reset progress opens an empty tracker."
+    },
+    {
+      "name": "failedWrite.status",
+      "expected": "REJECTED",
+      "actual": "REJECTED",
+      "pass": true,
+      "detail": "The write is reported as rejected."
+    },
+    {
+      "name": "failedWrite.code",
+      "expected": "TRANSACTION_ABORTED",
+      "actual": "TRANSACTION_ABORTED",
+      "pass": true,
+      "detail": "The transaction aborted."
+    },
+    {
+      "name": "failedWrite.rows",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "No row was added."
+    },
+    {
+      "name": "failedWrite.fingerprint",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Stored rows byte-identical."
+    },
+    {
+      "name": "failedWrite.revisions",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Revisions did not move."
+    },
+    {
+      "name": "defaults.source",
+      "expected": "DEFAULTS",
+      "actual": "DEFAULTS",
+      "pass": true,
+      "detail": "No stored row means defaults."
+    },
+    {
+      "name": "defaults.empty",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "An untouched session is empty."
+    },
+    {
+      "name": "defaults.bindings",
+      "expected": "KeyW/KeyS",
+      "actual": "KeyW/KeyS",
+      "pass": true,
+      "detail": "Default remaps."
+    },
+    {
+      "name": "defaults.units",
+      "expected": "km/h/m",
+      "actual": "km/h/m",
+      "pass": true,
+      "detail": "Default units."
+    },
+    {
+      "name": "defaults.quality",
+      "expected": "MEDIUM",
+      "actual": "MEDIUM",
+      "pass": true,
+      "detail": "Default quality preset."
+    },
+    {
+      "name": "defaults.audio",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "Default audio is not muted."
+    },
+    {
+      "name": "refusal.tamperedCampaign",
+      "expected": "LEDGER_REPLAY_MISMATCH",
+      "actual": "LEDGER_REPLAY_MISMATCH",
+      "pass": true,
+      "detail": "A tampered campaign digest is refused."
+    },
+    {
+      "name": "refusal.tamperedTracker",
+      "expected": "SAVE_DIGEST_MISMATCH",
+      "actual": "SAVE_DIGEST_MISMATCH",
+      "pass": true,
+      "detail": "A tampered tracker digest is refused."
+    },
+    {
+      "name": "refusal.otherCatalog",
+      "expected": "CATALOG_MISMATCH",
+      "actual": "CATALOG_MISMATCH",
+      "pass": true,
+      "detail": "Another catalog cannot read the ledger."
+    },
+    {
+      "name": "refusal.emptySave",
+      "expected": "SAVE_EMPTY",
+      "actual": "SAVE_EMPTY",
+      "pass": true,
+      "detail": "A save without a category is refused."
+    },
+    {
+      "name": "refusal.unknownReset",
+      "expected": "SAVE_CATEGORY_UNKNOWN",
+      "actual": "SAVE_CATEGORY_UNKNOWN",
+      "pass": true,
+      "detail": "An unknown reset category is refused."
+    },
+    {
+      "name": "refusal.writerRequired",
+      "expected": "WRITER_REQUIRED",
+      "actual": "WRITER_REQUIRED",
+      "pass": true,
+      "detail": "A page without the writer lock cannot save."
+    }
+  ],
+  "summary": {
+    "checks": 70,
+    "passed": 70,
+    "scenarios": 8,
+    "pass": true
+  }
+}

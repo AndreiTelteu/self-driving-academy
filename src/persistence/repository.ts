@@ -40,6 +40,14 @@ import type {
 } from './profile-transaction';
 import { commitProfileImportRows } from './profile-import-transaction';
 import type { ProfileImportCommit } from './profile-import-transaction';
+import { commitPlayerResetRows, commitPlayerSaveRows } from './progress-save';
+import type {
+  PlayerResetCommit,
+  PlayerResetRequest,
+  PlayerSaveCommit,
+  PlayerSaveRequest,
+  PlayerSaveRows,
+} from './progress-save';
 import { createWriterAuthority } from './writer';
 import type { WriterAuthority } from './writer';
 import type {
@@ -130,6 +138,23 @@ export interface LocalRepository {
   putProgress(record: unknown): Promise<WriteResult<PersistedRecord>>;
   putSettings(settings: unknown): Promise<WriteResult<RuntimeSettings>>;
   putCheckpoint(checkpoint: unknown): Promise<WriteResult<CheckpointRecord>>;
+  /**
+   * Publishes the 130 save categories (settings, mission tracker, campaign log) in one transaction.
+   *
+   * `CRASHED_AFTER_COMMIT` means the fault hook fired after the transaction committed: the rows are
+   * durable even though the caller did not receive a plain success.
+   */
+  commitPlayerSave(
+    input: PlayerSaveRequest,
+    hooks?: ProfileTransactionHooks,
+  ): Promise<PlayerSaveOutcome>;
+  /** Resets exactly one 130 category inside one transaction; profiles are never touched. */
+  resetPlayerSave(
+    input: PlayerResetRequest,
+    hooks?: ProfileTransactionHooks,
+  ): Promise<PlayerResetOutcome>;
+  /** Reads the rows of one 130 player save in a single read transaction. */
+  readPlayerSave(sessionId: string, playerId: string): Promise<PlayerSaveRows>;
   deleteCheckpoint(
     checkpointId: string,
   ): Promise<WriteResult<{ readonly checkpointId: string; readonly deleted: boolean }>>;
@@ -176,6 +201,38 @@ export type ProfileImportOutcome =
   | {
       readonly status: 'CRASHED_AFTER_COMMIT';
       readonly value: ProfileImportCommit;
+    }
+  | {
+      readonly status: 'REJECTED';
+      readonly value: null;
+      readonly rejection: PersistenceRejection;
+    };
+
+/** Outcome of the atomic 130 save transaction (settings + mission tracker + campaign log). */
+export type PlayerSaveOutcome =
+  | {
+      readonly status: 'COMMITTED';
+      readonly value: PlayerSaveCommit;
+    }
+  | {
+      readonly status: 'CRASHED_AFTER_COMMIT';
+      readonly value: PlayerSaveCommit;
+    }
+  | {
+      readonly status: 'REJECTED';
+      readonly value: null;
+      readonly rejection: PersistenceRejection;
+    };
+
+/** Outcome of the atomic 130 category reset. */
+export type PlayerResetOutcome =
+  | {
+      readonly status: 'COMMITTED';
+      readonly value: PlayerResetCommit;
+    }
+  | {
+      readonly status: 'CRASHED_AFTER_COMMIT';
+      readonly value: PlayerResetCommit;
     }
   | {
       readonly status: 'REJECTED';
@@ -780,6 +837,109 @@ export function createLocalRepository(options: LocalRepositoryOptions): LocalRep
     }
   }
 
+  async function commitPlayerSave(
+    input: PlayerSaveRequest,
+    hooks: ProfileTransactionHooks = {},
+  ): Promise<PlayerSaveOutcome> {
+    try {
+      if (disposed)
+        throw new PersistenceError('REPOSITORY_DISPOSED', 'The repository was disposed');
+      if (state !== 'READY' || database === null) {
+        throw new PersistenceError('REPOSITORY_CLOSED', `The repository is ${state}`);
+      }
+      if (writerRole() !== 'WRITER') {
+        counters.rejections += 1;
+        return Object.freeze({
+          status: 'REJECTED' as const,
+          value: null,
+          rejection: persistenceRejection(
+            'WRITER_REQUIRED',
+            'This page does not own the writer lock',
+            'writer',
+          ),
+        });
+      }
+      counters.transactions += 1;
+      const value = await database.transact(['progress', 'settings'], 'readwrite', (transaction) =>
+        commitPlayerSaveRows(transaction, { ...input, createdAt: now() }, hooks),
+      );
+      counters.writes += 1;
+      try {
+        hooks.afterCommit?.();
+      } catch {
+        // The transaction already committed: the save rows are durable.
+        return Object.freeze({ status: 'CRASHED_AFTER_COMMIT' as const, value });
+      }
+      return Object.freeze({ status: 'COMMITTED' as const, value });
+    } catch (error) {
+      counters.rejections += 1;
+      return Object.freeze({
+        status: 'REJECTED' as const,
+        value: null,
+        rejection: rejectionFor(error),
+      });
+    }
+  }
+
+  async function resetPlayerSave(
+    input: PlayerResetRequest,
+    hooks: ProfileTransactionHooks = {},
+  ): Promise<PlayerResetOutcome> {
+    try {
+      if (disposed)
+        throw new PersistenceError('REPOSITORY_DISPOSED', 'The repository was disposed');
+      if (state !== 'READY' || database === null) {
+        throw new PersistenceError('REPOSITORY_CLOSED', `The repository is ${state}`);
+      }
+      if (writerRole() !== 'WRITER') {
+        counters.rejections += 1;
+        return Object.freeze({
+          status: 'REJECTED' as const,
+          value: null,
+          rejection: persistenceRejection(
+            'WRITER_REQUIRED',
+            'This page does not own the writer lock',
+            'writer',
+          ),
+        });
+      }
+      counters.transactions += 1;
+      const value = await database.transact(['progress', 'settings'], 'readwrite', (transaction) =>
+        commitPlayerResetRows(transaction, input, hooks),
+      );
+      counters.writes += 1;
+      try {
+        hooks.afterCommit?.();
+      } catch {
+        return Object.freeze({ status: 'CRASHED_AFTER_COMMIT' as const, value });
+      }
+      return Object.freeze({ status: 'COMMITTED' as const, value });
+    } catch (error) {
+      counters.rejections += 1;
+      return Object.freeze({
+        status: 'REJECTED' as const,
+        value: null,
+        rejection: rejectionFor(error),
+      });
+    }
+  }
+
+  async function readPlayerSave(sessionId: string, playerId: string): Promise<PlayerSaveRows> {
+    const sessionKey = storageKey(sessionId, 'sessionId');
+    const playerKey = storageKey(playerId, 'playerId');
+    return read(['progress', 'settings'], async (transaction) => {
+      const progressRows = await transaction.getAllByIndex('progress', 'bySession', sessionKey);
+      const settingsRow = await transaction.get('settings', playerKey);
+      return Object.freeze({
+        progress: bounded(
+          parseAll(progressRows, (row) => parsePersistedRecord(row, 'PROGRESS')),
+          'progress',
+        ),
+        settings: settingsRow === undefined ? null : parseSettingsRecord(settingsRow),
+      });
+    });
+  }
+
   function persistedWriter(
     store: 'segments' | 'scenarios' | 'progress',
     kind: 'SEGMENT' | 'SCENARIO' | 'PROGRESS',
@@ -944,6 +1104,9 @@ export function createLocalRepository(options: LocalRepositoryOptions): LocalRep
     putCheckpoint,
     deleteCheckpoint,
     deleteRecord,
+    commitPlayerSave,
+    resetPlayerSave,
+    readPlayerSave,
   });
 }
 
