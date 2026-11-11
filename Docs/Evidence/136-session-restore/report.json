@@ -1,0 +1,735 @@
+{
+  "version": "136-session-restore-report-v1",
+  "generatedBy": "npm run restore:session",
+  "oracleRule": "Migrarea este dovedită pe o bază reală în memorie (versiunea 1 cu rânduri, upgrade eșuat injectat, export, recuperare și refuz), iar reluarea pe checkpointul real al writerului 206, cu o generație mai nouă coruptă intenționată; fiecare valoare așteptată este contractul documentat, fără ceas de perete și fără Math.random.",
+  "world": {
+    "vehicles": 70,
+    "rides": 30,
+    "passengers": 30,
+    "segments": 3,
+    "learningJobs": 3,
+    "dispatchJobs": 3,
+    "observations": 2
+  },
+  "selected": {
+    "checkpointId": "checkpoint-136-valid",
+    "tick": 60,
+    "generation": 1,
+    "bytes": 64378,
+    "checksumLength": 64,
+    "skipped": [
+      {
+        "checkpointId": "checkpoint-136-invalid-newest",
+        "code": "CHECKSUM_MISMATCH"
+      }
+    ],
+    "candidates": 2
+  },
+  "launch": {
+    "mode": "PAUSED_AUTO",
+    "paused": true,
+    "auto": true,
+    "inputReleased": true,
+    "manualVehicles": 0,
+    "vehiclesInAuto": 70,
+    "previousManualVehicles": 1
+  },
+  "segments": {
+    "open": 1,
+    "incomplete": 1,
+    "entries": [
+      {
+        "segmentId": "segment-taxi-01",
+        "from": "OPEN",
+        "to": "INCOMPLETE",
+        "reason": "RELOAD"
+      }
+    ]
+  },
+  "jobs": {
+    "relaunched": 2,
+    "invalidated": 4,
+    "relaunchedIds": [
+      "dispatch-01",
+      "learning-01"
+    ],
+    "reasons": [
+      "LEARNING_EPOCH_MISMATCH",
+      "PROFILE_MISMATCH"
+    ]
+  },
+  "observations": {
+    "replayed": 2,
+    "alreadyRewarded": 1,
+    "idempotencyKeys": [
+      "segment-taxi-06:observation-01",
+      "segment-taxi-06:observation-02"
+    ]
+  },
+  "ledger": {
+    "rows": 2,
+    "digest": "53b23f20259597bc4b656ad92d487872f3edce72c1fc17a5e0ea64f33ef570bf",
+    "rewardsReapplied": 0
+  },
+  "cases": {
+    "epochInvalid": {
+      "relaunched": 0,
+      "invalidated": 6,
+      "reasons": [
+        "LEARNING_EPOCH_MISMATCH",
+        "PROFILE_AND_EPOCH_MISMATCH"
+      ]
+    },
+    "profileChanged": {
+      "relaunched": 2,
+      "invalidated": 4
+    },
+    "envelopeMismatch": {
+      "candidates": 3,
+      "skipped": [
+        "CHECKSUM_MISMATCH",
+        "LEARNING_EPOCH_MISMATCH"
+      ],
+      "selected": "checkpoint-136-valid"
+    },
+    "empty": "EMPTY",
+    "brokenOnly": {
+      "status": "BLOCKED",
+      "code": "CHECKPOINT_INVALID",
+      "skipped": "CHECKSUM_MISMATCH"
+    },
+    "incompatible": {
+      "status": "BLOCKED",
+      "code": "CHECKPOINT_INVALID"
+    },
+    "readOnly": true
+  },
+  "migration": {
+    "version": "136-save-migration-v1",
+    "exportFormat": "self-driving-academy-save-migration-export",
+    "currentSchemaVersion": 2,
+    "transitions": [
+      {
+        "from": 1,
+        "to": 2,
+        "steps": [
+          "127-v2-checkpoints-and-lifecycle-indexes"
+        ]
+      },
+      {
+        "from": 2,
+        "to": 2,
+        "steps": []
+      }
+    ],
+    "migrated": {
+      "status": "MIGRATED",
+      "fromVersion": 1,
+      "applied": [
+        "127-v2-checkpoints-and-lifecycle-indexes"
+      ],
+      "stores": 7,
+      "rows": 3,
+      "exportBytes": 2346,
+      "digest": "d34458a870d072c3084a3fc10bb7ccaddeac77e2d5d0b69fd4d242f1d3ad3e44",
+      "rowsUnchanged": true,
+      "versionAfter": 2,
+      "storesAfter": 8
+    },
+    "fresh": {
+      "status": "CREATED",
+      "applied": [
+        "127-v1-base-layout",
+        "127-v2-checkpoints-and-lifecycle-indexes"
+      ],
+      "rows": 0,
+      "versionAfter": 2
+    },
+    "current": {
+      "status": "CURRENT",
+      "applied": []
+    },
+    "tooNew": {
+      "plan": "SCHEMA_TOO_NEW",
+      "migration": "SCHEMA_TOO_NEW",
+      "untouched": false
+    },
+    "failed": {
+      "code": "MIGRATION_FAILED",
+      "untouched": true,
+      "versionAfter": 1,
+      "hasCheckpointStore": false,
+      "exportRows": 3,
+      "digestSameAsBefore": true
+    },
+    "recovery": {
+      "status": "RECOVERED",
+      "verified": true,
+      "rows": 3,
+      "digestMatchesExport": true,
+      "secondTarget": "RECOVERY_TARGET_NOT_EMPTY",
+      "tampered": "EXPORT_CHECKSUM_MISMATCH"
+    }
+  },
+  "checks": [
+    {
+      "name": "migration version",
+      "expected": "136-save-migration-v1",
+      "actual": "136-save-migration-v1",
+      "pass": true,
+      "detail": "The contract is named."
+    },
+    {
+      "name": "migration current schema",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "The build schema version is the target of every step."
+    },
+    {
+      "name": "migration transition 1->2",
+      "expected": [
+        "127-v2-checkpoints-and-lifecycle-indexes"
+      ],
+      "actual": [
+        "127-v2-checkpoints-and-lifecycle-indexes"
+      ],
+      "pass": true,
+      "detail": "Every supported transition is declared, not computed."
+    },
+    {
+      "name": "migration transition 2->2",
+      "expected": [],
+      "actual": [],
+      "pass": true,
+      "detail": "A database already at the build version needs no step."
+    },
+    {
+      "name": "migration status",
+      "expected": "MIGRATED",
+      "actual": "MIGRATED",
+      "pass": true,
+      "detail": "An older save is migrated in place."
+    },
+    {
+      "name": "migration source version",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "The source version is discovered."
+    },
+    {
+      "name": "migration applied step",
+      "expected": [
+        "127-v2-checkpoints-and-lifecycle-indexes"
+      ],
+      "actual": [
+        "127-v2-checkpoints-and-lifecycle-indexes"
+      ],
+      "pass": true,
+      "detail": "Exactly the missing step ran."
+    },
+    {
+      "name": "migration stores",
+      "expected": 7,
+      "actual": 7,
+      "pass": true,
+      "detail": "Every version-1 store is exported."
+    },
+    {
+      "name": "migration rows",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "The three user rows survive the export."
+    },
+    {
+      "name": "migration version after",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "The database ends at the build version."
+    },
+    {
+      "name": "migration stores after",
+      "expected": 8,
+      "actual": 8,
+      "pass": true,
+      "detail": "The checkpoints store is added."
+    },
+    {
+      "name": "fresh database",
+      "expected": "CREATED",
+      "actual": "CREATED",
+      "pass": true,
+      "detail": "A new installation is created explicitly."
+    },
+    {
+      "name": "fresh applied steps",
+      "expected": [
+        "127-v1-base-layout",
+        "127-v2-checkpoints-and-lifecycle-indexes"
+      ],
+      "actual": [
+        "127-v1-base-layout",
+        "127-v2-checkpoints-and-lifecycle-indexes"
+      ],
+      "pass": true,
+      "detail": "Both declared steps ran on the fresh database."
+    },
+    {
+      "name": "fresh rows",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "Nothing user-authored exists yet."
+    },
+    {
+      "name": "current database",
+      "expected": "CURRENT",
+      "actual": "CURRENT",
+      "pass": true,
+      "detail": "A database at the build version is not touched."
+    },
+    {
+      "name": "current steps",
+      "expected": [],
+      "actual": [],
+      "pass": true,
+      "detail": "No step is applied twice."
+    },
+    {
+      "name": "plan refuses newer",
+      "expected": "SCHEMA_TOO_NEW",
+      "actual": "SCHEMA_TOO_NEW",
+      "pass": true,
+      "detail": "A newer plan is refused."
+    },
+    {
+      "name": "migration refuses newer",
+      "expected": "SCHEMA_TOO_NEW",
+      "actual": "SCHEMA_TOO_NEW",
+      "pass": true,
+      "detail": "A newer database is refused before any layout is used."
+    },
+    {
+      "name": "failure code",
+      "expected": "MIGRATION_FAILED",
+      "actual": "MIGRATION_FAILED",
+      "pass": true,
+      "detail": "A failed upgrade is a closed code."
+    },
+    {
+      "name": "failure untouched",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The row digest still matches the export."
+    },
+    {
+      "name": "failure version",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "A failed upgrade keeps the old version."
+    },
+    {
+      "name": "failure has no checkpoint store",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "A failed upgrade leaves no half-created store."
+    },
+    {
+      "name": "failure export",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "The pre-migration export holds every row."
+    },
+    {
+      "name": "failure digest",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The rows are byte-identical."
+    },
+    {
+      "name": "recovery status",
+      "expected": "RECOVERED",
+      "actual": "RECOVERED",
+      "pass": true,
+      "detail": "The export is a real recovery path."
+    },
+    {
+      "name": "recovery verified",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Recovery verifies its own write."
+    },
+    {
+      "name": "recovery rows",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "Every exported row is written."
+    },
+    {
+      "name": "recovery digest",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The recovered rows reproduce the export digest."
+    },
+    {
+      "name": "recovery non-empty target",
+      "expected": "RECOVERY_TARGET_NOT_EMPTY",
+      "actual": "RECOVERY_TARGET_NOT_EMPTY",
+      "pass": true,
+      "detail": "Recovery never merges into existing rows."
+    },
+    {
+      "name": "tampered export",
+      "expected": "EXPORT_CHECKSUM_MISMATCH",
+      "actual": "EXPORT_CHECKSUM_MISMATCH",
+      "pass": true,
+      "detail": "An edited export is refused before writing."
+    },
+    {
+      "name": "world vehicles",
+      "expected": 70,
+      "actual": 70,
+      "pass": true,
+      "detail": "The 206 fixture is 30 taxis + 40 civilians."
+    },
+    {
+      "name": "world rides",
+      "expected": 30,
+      "actual": 30,
+      "pass": true,
+      "detail": "Every passenger has a ride."
+    },
+    {
+      "name": "world learning jobs",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "The learning queue is real."
+    },
+    {
+      "name": "world dispatch jobs",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "The dispatch queue is real."
+    },
+    {
+      "name": "selected checkpoint",
+      "expected": "checkpoint-136-valid",
+      "actual": "checkpoint-136-valid",
+      "pass": true,
+      "detail": "The last valid checkpoint wins over the newer broken one."
+    },
+    {
+      "name": "selected tick",
+      "expected": 60,
+      "actual": 60,
+      "pass": true,
+      "detail": "The valid tick is restored."
+    },
+    {
+      "name": "candidates",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "Both generations are considered."
+    },
+    {
+      "name": "skipped newest",
+      "expected": [
+        {
+          "checkpointId": "checkpoint-136-invalid-newest",
+          "code": "CHECKSUM_MISMATCH"
+        }
+      ],
+      "actual": [
+        {
+          "checkpointId": "checkpoint-136-invalid-newest",
+          "code": "CHECKSUM_MISMATCH"
+        }
+      ],
+      "pass": true,
+      "detail": "The broken newer generation is reported, not hidden."
+    },
+    {
+      "name": "checksum length",
+      "expected": 64,
+      "actual": 64,
+      "pass": true,
+      "detail": "The selected payload is verified."
+    },
+    {
+      "name": "launch mode",
+      "expected": "PAUSED_AUTO",
+      "actual": "PAUSED_AUTO",
+      "pass": true,
+      "detail": "The restart opens paused/AUTO."
+    },
+    {
+      "name": "launch paused",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The session starts paused."
+    },
+    {
+      "name": "launch auto",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Every vehicle is AUTO."
+    },
+    {
+      "name": "launch input released",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The input is released."
+    },
+    {
+      "name": "launch manual vehicles",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "No vehicle stays in MANUAL."
+    },
+    {
+      "name": "launch vehicles in auto",
+      "expected": 70,
+      "actual": 70,
+      "pass": true,
+      "detail": "All 70 vehicles are AUTO."
+    },
+    {
+      "name": "previous manual vehicles",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "The previous MANUAL taxi is reported, not restored as control."
+    },
+    {
+      "name": "open segments",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "The open manual segment is named."
+    },
+    {
+      "name": "incomplete segments",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "The open segment becomes INCOMPLETE."
+    },
+    {
+      "name": "segment transition",
+      "expected": [
+        {
+          "segmentId": "segment-taxi-01",
+          "from": "OPEN",
+          "to": "INCOMPLETE",
+          "reason": "RELOAD"
+        }
+      ],
+      "actual": [
+        {
+          "segmentId": "segment-taxi-01",
+          "from": "OPEN",
+          "to": "INCOMPLETE",
+          "reason": "RELOAD"
+        }
+      ],
+      "pass": true,
+      "detail": "The transition carries its exact reason."
+    },
+    {
+      "name": "jobs relaunched",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "Only matching jobs relaunch."
+    },
+    {
+      "name": "jobs invalidated",
+      "expected": 4,
+      "actual": 4,
+      "pass": true,
+      "detail": "The other jobs are invalidated."
+    },
+    {
+      "name": "relaunched identities",
+      "expected": [
+        "dispatch-01",
+        "learning-01"
+      ],
+      "actual": [
+        "dispatch-01",
+        "learning-01"
+      ],
+      "pass": true,
+      "detail": "The relaunched jobs are the ones in the active profile and epoch."
+    },
+    {
+      "name": "invalidation reasons",
+      "expected": [
+        "LEARNING_EPOCH_MISMATCH",
+        "PROFILE_MISMATCH"
+      ],
+      "actual": [
+        "LEARNING_EPOCH_MISMATCH",
+        "PROFILE_MISMATCH"
+      ],
+      "pass": true,
+      "detail": "Every invalidation names its reason."
+    },
+    {
+      "name": "observations replayed",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "Completed observations replay."
+    },
+    {
+      "name": "observations already rewarded",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "An accepted result is recognised, not paid again."
+    },
+    {
+      "name": "ledger rows",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "The tracker and campaign rows of the same session are read."
+    },
+    {
+      "name": "ledger digest length",
+      "expected": 64,
+      "actual": 64,
+      "pass": true,
+      "detail": "The ledger is digested."
+    },
+    {
+      "name": "rewards reapplied",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "A restart pays nothing twice."
+    },
+    {
+      "name": "invalid epoch",
+      "expected": {
+        "relaunched": 0,
+        "invalidated": 6,
+        "reasons": [
+          "LEARNING_EPOCH_MISMATCH",
+          "PROFILE_AND_EPOCH_MISMATCH"
+        ]
+      },
+      "actual": {
+        "relaunched": 0,
+        "invalidated": 6,
+        "reasons": [
+          "LEARNING_EPOCH_MISMATCH",
+          "PROFILE_AND_EPOCH_MISMATCH"
+        ]
+      },
+      "pass": true,
+      "detail": "With a changed epoch every job is invalidated explicitly."
+    },
+    {
+      "name": "changed profile",
+      "expected": {
+        "relaunched": 2,
+        "invalidated": 4
+      },
+      "actual": {
+        "relaunched": 2,
+        "invalidated": 4
+      },
+      "pass": true,
+      "detail": "A changed profile relaunches only its own jobs."
+    },
+    {
+      "name": "incoherent envelope",
+      "expected": {
+        "candidates": 3,
+        "skipped": [
+          "CHECKSUM_MISMATCH",
+          "LEARNING_EPOCH_MISMATCH"
+        ],
+        "selected": "checkpoint-136-valid"
+      },
+      "actual": {
+        "candidates": 3,
+        "skipped": [
+          "CHECKSUM_MISMATCH",
+          "LEARNING_EPOCH_MISMATCH"
+        ],
+        "selected": "checkpoint-136-valid"
+      },
+      "pass": true,
+      "detail": "An envelope mismatch is skipped with its own code."
+    },
+    {
+      "name": "empty session",
+      "expected": "EMPTY",
+      "actual": "EMPTY",
+      "pass": true,
+      "detail": "No checkpoint is not an error."
+    },
+    {
+      "name": "broken only",
+      "expected": {
+        "status": "BLOCKED",
+        "code": "CHECKPOINT_INVALID",
+        "skipped": "CHECKSUM_MISMATCH"
+      },
+      "actual": {
+        "status": "BLOCKED",
+        "code": "CHECKPOINT_INVALID",
+        "skipped": "CHECKSUM_MISMATCH"
+      },
+      "pass": true,
+      "detail": "A session with no valid generation is blocked with the exact skip."
+    },
+    {
+      "name": "incompatible versions",
+      "expected": {
+        "status": "BLOCKED",
+        "code": "CHECKPOINT_INVALID"
+      },
+      "actual": {
+        "status": "BLOCKED",
+        "code": "CHECKPOINT_INVALID"
+      },
+      "pass": true,
+      "detail": "Another physics version never resumes the old world."
+    },
+    {
+      "name": "read only",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Restore writes no row."
+    }
+  ],
+  "summary": {
+    "checks": 65,
+    "passed": 65,
+    "scenarios": 8,
+    "pass": true
+  }
+}
