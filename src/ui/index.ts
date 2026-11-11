@@ -761,3 +761,36 @@ export type {
   StyleSlidersProjection,
   StyleSlidersSaveState,
 } from './style-sliders-format';
+
+export { createKpiHistoryPanel } from './kpi-history';
+export type {
+  KpiHistoryPanel,
+  KpiHistoryPanelAdapter,
+  KpiHistoryPanelOptions,
+  KpiHistoryPanelStats,
+  KpiHistoryRefreshStatus,
+} from './kpi-history';
+export {
+  emptyKpiHistoryView,
+  formatKpiHistoryAverage,
+  formatKpiHistoryNumber,
+  KPI_HISTORY_CHART_KEYS,
+  KPI_HISTORY_CHART_TITLES,
+  KPI_HISTORY_CHART_UNITS,
+  KPI_HISTORY_TEXT,
+  KPI_HISTORY_UI_VERSION,
+  projectKpiHistory,
+} from './kpi-history-format';
+export type {
+  KpiHistoryBarState,
+  KpiHistoryChart,
+  KpiHistoryChartBar,
+  KpiHistoryChartGroup,
+  KpiHistoryChartKey,
+  KpiHistoryDownsamplingView,
+  KpiHistoryMonthView,
+  KpiHistoryProjectionView,
+  KpiHistoryTable,
+  KpiHistoryTotalsView,
+  KpiHistoryView,
+} from './kpi-history-format';

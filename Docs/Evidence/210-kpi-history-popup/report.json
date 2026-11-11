@@ -1,0 +1,268 @@
+{
+  "version": "210-kpi-history-report-v1",
+  "generatedBy": "npm run kpi:history",
+  "contract": {
+    "pbi": "210",
+    "kpiHistory": "210-kpi-history-v1",
+    "ui": "210-kpi-history-popup-v1",
+    "economyClock": "209-economy-clock-v1",
+    "monthWindow": 12,
+    "dailyPointCap": 60
+  },
+  "history": {
+    "settlements": 310,
+    "reviews": 284,
+    "months": 12,
+    "monthsWithData": 11,
+    "monthsWithoutData": 1,
+    "partialMonths": 1,
+    "completedMonths": 10,
+    "exactPoints": 310,
+    "visualPoints": 52,
+    "downsampled": true,
+    "maximumDailyPoints": 60,
+    "revenueMinorUnits": 31960,
+    "terminalRides": 310,
+    "reviewCount": 284,
+    "ratingSum": 725,
+    "averageRating": 2.552817,
+    "meanOfMonthlyMeans": 2.5,
+    "distribution": [
+      49,
+      45,
+      45,
+      45,
+      45,
+      55
+    ],
+    "projectionStatus": "PROJECTED",
+    "projectedRevenueMinorUnits": 3483,
+    "observedSeconds": 10800.15,
+    "historyScansBefore": 0,
+    "historyScansAfter": 0
+  },
+  "ui": {
+    "elements": 1369,
+    "textNodes": 748,
+    "listeners": 3,
+    "globalListeners": 0,
+    "opens": 1,
+    "closes": 1,
+    "renders": 1,
+    "reads": 1,
+    "bars": 175,
+    "tableRows": 70,
+    "charts": [
+      "MONTH_REVENUE",
+      "DAILY_RIDES",
+      "DAILY_REVIEWS",
+      "DAILY_RATING",
+      "RATING_DISTRIBUTION"
+    ],
+    "tables": [
+      "months",
+      "days",
+      "distribution"
+    ],
+    "escapes": 1,
+    "focusMoves": 1,
+    "focusRestores": 1,
+    "surfaceCalls": 2,
+    "ariaExpanded": "true",
+    "ariaExpandedClosed": "false",
+    "toolbarButtonType": "button"
+  },
+  "checks": [
+    {
+      "name": "closed-panel-reads-nothing",
+      "pass": true,
+      "actual": "SKIPPED_CLOSED/0/0",
+      "expected": "SKIPPED_CLOSED/0/0",
+      "note": "Un panou închis nu citește KPI-ul și nu reconstruiește grafice."
+    },
+    {
+      "name": "open-reads-once",
+      "pass": true,
+      "actual": "1/1",
+      "expected": "1/1",
+      "note": "Deschiderea citește read model-ul o singură dată."
+    },
+    {
+      "name": "kpi-never-rescans",
+      "pass": true,
+      "actual": "0/0/0",
+      "expected": "0/0/0",
+      "note": "Ledgerul nu este rescadat nici înainte, nici după deschidere."
+    },
+    {
+      "name": "ledger-counts-stable",
+      "pass": true,
+      "actual": "310/284",
+      "expected": "310/284",
+      "note": "Citirea popup-ului nu adaugă settle-uri sau review-uri."
+    },
+    {
+      "name": "twelve-month-window",
+      "pass": true,
+      "actual": "12/12/0",
+      "expected": "12/12/0",
+      "note": "Fereastra acoperă exact 12 luni simulate, inclusiv golurile."
+    },
+    {
+      "name": "missing-month-is-not-zero",
+      "pass": true,
+      "actual": "NO_DATA/fără date/1",
+      "expected": "NO_DATA/fără date/1",
+      "note": "Luna fără date este „fără date”, nu 0 și nu medie inventată."
+    },
+    {
+      "name": "real-zero-month",
+      "pass": true,
+      "actual": "0/0/0 SDA",
+      "expected": "0/0/0 SDA",
+      "note": "Un zero real rămâne 0 și își păstrează eșantionul de 4 review-uri."
+    },
+    {
+      "name": "partial-month-not-compared",
+      "pass": true,
+      "actual": "PARTIAL/PROJECTED/3483",
+      "expected": "PARTIAL/PROJECTED/valoare diferită de efectiv",
+      "note": "Luna curentă este parțială și are proiecție separată, nu o comparație cu o lună încheiată."
+    },
+    {
+      "name": "weighted-average",
+      "pass": true,
+      "actual": "725/284=2.552817",
+      "expected": "ratingSum/reviewCount",
+      "note": "Media ferestrei este raportul sumelor exacte."
+    },
+    {
+      "name": "mean-of-means-differs",
+      "pass": true,
+      "actual": "2.5 vs 2.552817",
+      "expected": "diferență > 0.01",
+      "note": "Media mediilor lunare ar fi greșită; dovada arată că nu este folosită."
+    },
+    {
+      "name": "distribution-exact",
+      "pass": true,
+      "actual": "49,45,45,45,45,55=284",
+      "expected": "49,45,45,45,45,55=284",
+      "note": "Histograma 0–5 însumează exact review-urile ferestrei."
+    },
+    {
+      "name": "no-review-day-has-no-mean",
+      "pass": true,
+      "actual": "26 zile fără review-uri",
+      "expected": "26 zile fără medie",
+      "note": "O zi cu curse dar fără review-uri nu primește medie."
+    },
+    {
+      "name": "downsampling-visual-only",
+      "pass": true,
+      "actual": "310→10, 31960/31960, 284/284",
+      "expected": "310→10, sums equal",
+      "note": "Gruparea este doar vizuală; sumele rămân exacte."
+    },
+    {
+      "name": "grouped-average-weighted",
+      "pass": true,
+      "actual": "2.419355",
+      "expected": "2.419355",
+      "note": "Media unui grup este calculată din sumele membrilor."
+    },
+    {
+      "name": "projection-sample",
+      "pass": true,
+      "actual": "10/300/10800.15",
+      "expected": "10/300/≥300",
+      "note": "Proiecția păstrează pragurile publicate de 209."
+    },
+    {
+      "name": "charts-present",
+      "pass": true,
+      "actual": "5/12/52",
+      "expected": "5/12/60",
+      "note": "Revenue, curse/zi, review-uri/zi, media/zi și distribuția sunt proiectate din valori."
+    },
+    {
+      "name": "month-table",
+      "pass": true,
+      "actual": "12/7",
+      "expected": "12/7",
+      "note": "Tabelul lunar are un rând stabil pentru fiecare lună, inclusiv golul."
+    },
+    {
+      "name": "exact-tables",
+      "pass": true,
+      "actual": "52/6",
+      "expected": "52/6",
+      "note": "Tabelul zilnic și histograma accesibilă păstrează valorile exacte."
+    },
+    {
+      "name": "native-trigger-and-dialog",
+      "pass": true,
+      "actual": "button/button/dialog",
+      "expected": "button/button/dialog",
+      "note": "Butonul este nativ, iar popup-ul are rol și nume accesibil."
+    },
+    {
+      "name": "focus-and-escape",
+      "pass": true,
+      "actual": "true/true/true/true/1",
+      "expected": "true/true/true/true/1",
+      "note": "Focusul intră în popup, Tab rămâne înăuntru, Escape îl închide și readuce focusul."
+    },
+    {
+      "name": "target-resolution-fit",
+      "pass": true,
+      "actual": "928x648@1280x720, 928x736@1920x1080, 785.06x432@853x480",
+      "expected": "încadrare cu scroll intern la toate rezoluțiile țintă",
+      "note": "Dialogul are lățime/înălțime maxime în vw/rem și scroll intern, deci se încadrează la 1280×720, 1920×1080 și 853×480."
+    },
+    {
+      "name": "pause-manual-round-trip",
+      "pass": true,
+      "actual": "true/panel/false/MANUAL",
+      "expected": "true/panel/false/MANUAL",
+      "note": "MANUAL este suspendat la deschidere și revine exact la starea anterioară la închidere."
+    },
+    {
+      "name": "auto-stays-live",
+      "pass": true,
+      "actual": "false/null/0",
+      "expected": "false/null/0",
+      "note": "În observare AUTO popup-ul nu suspendă simularea."
+    },
+    {
+      "name": "no-global-listeners",
+      "pass": true,
+      "actual": "0/3",
+      "expected": "0/3",
+      "note": "Niciun listener pe window/document; doar butonul, Închide și dialogul."
+    },
+    {
+      "name": "empty-source-explicit",
+      "pass": true,
+      "actual": "true/0",
+      "expected": "true/0",
+      "note": "Fără economie, popup-ul spune explicit că nu există date."
+    },
+    {
+      "name": "deterministic-transcript",
+      "pass": true,
+      "actual": "equal",
+      "expected": "equal",
+      "note": "Două scenarii identice produc aceeași selecție și aceeași semnătură a popup-ului."
+    }
+  ],
+  "summary": {
+    "checks": 26,
+    "passed": 26,
+    "pass": true
+  },
+  "determinism": {
+    "runs": 2,
+    "equal": true
+  }
+}
