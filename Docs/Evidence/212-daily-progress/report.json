@@ -1,0 +1,337 @@
+{
+  "schemaVersion": 1,
+  "version": "212-daily-progress-v1",
+  "panelVersion": "212-daily-progress-panel-v1",
+  "readVersion": "212-daily-progress-v1",
+  "checks": [
+    {
+      "name": "the day carries exactly three objectives from the 211 set",
+      "pass": true,
+      "detail": "instances 3, slots 1/2/3"
+    },
+    {
+      "name": "every objective publishes its promised XP and its control requirement",
+      "pass": true,
+      "detail": "MANUAL_DROPOFFS:MANUAL/100 XP, CLEAN_DROPOFFS:ANY/100 XP, LEARNING_ACTIVATIONS:LEARNING/100 XP"
+    },
+    {
+      "name": "no reward is granted before an objective is completed",
+      "pass": true,
+      "detail": "partial 1/?, granted 200"
+    },
+    {
+      "name": "the partial objective is displayed as its real ratio and percentage",
+      "pass": true,
+      "detail": "1 din 2 = 50%"
+    },
+    {
+      "name": "a MANUAL objective counts only real MANUAL ride intervals",
+      "pass": true,
+      "detail": "manual 2, mismatches 1"
+    },
+    {
+      "name": "the ride interval is the real PICKUP..DROPOFF pair with its real tick duration",
+      "pass": true,
+      "detail": "pickup 840 → dropoff 1080 = 240 ticks"
+    },
+    {
+      "name": "a completed objective grants the 211 reward identity exactly once",
+      "pass": true,
+      "detail": "daily-reward-v1:player:211-daily:daily-v1:player:211-daily:2026-11-11:s1:daily-test-manual@1"
+    },
+    {
+      "name": "the day keeps one reward per completed objective",
+      "pass": true,
+      "detail": "rewards 2, XP 200/300"
+    },
+    {
+      "name": "a foreign session, an old epoch and an irrelevant type are counted refusals",
+      "pass": true,
+      "detail": "FOREIGN_SESSION=2, IRRELEVANT=1, NO_RIDE=1, STALE_EPOCH=1"
+    },
+    {
+      "name": "no foreign event advances an objective and no rejection is silent",
+      "pass": true,
+      "detail": "rejected 5, accepted 1, duplicates 1"
+    },
+    {
+      "name": "the last rejection is reported with its reason for the UI",
+      "pass": true,
+      "detail": "212:dropoff:ride:212:orphan · NO_RIDE"
+    },
+    {
+      "name": "an event one millisecond before the boundary still completes",
+      "pass": true,
+      "detail": "phase EXPIRED, completed 1"
+    },
+    {
+      "name": "an event exactly at expiresAtMs is refused as outside the day",
+      "pass": true,
+      "detail": "rejected 1, phase EXPIRED"
+    },
+    {
+      "name": "incomplete objectives are explicitly EXPIRED, never ambiguous",
+      "pass": true,
+      "detail": "MANUAL_DROPOFFS:EXPIRED, CLEAN_DROPOFFS:EXPIRED, LEARNING_ACTIVATIONS:COMPLETED"
+    },
+    {
+      "name": "a reload restores the same completed row and the same single reward",
+      "pass": true,
+      "detail": "rewards 1, XP 100, rebound true"
+    },
+    {
+      "name": "replaying the same day is a duplicate and a new event cannot pay again",
+      "pass": true,
+      "detail": "DUPLICATE, ACCEPTED, rewards 0, afterCompletion 1"
+    },
+    {
+      "name": "a new local day creates three new rows and keeps the old reward",
+      "pass": true,
+      "detail": "NEW_DAY 2026-11-12: created 3, dropped 3, retained rewards 1"
+    },
+    {
+      "name": "a declared evaluation window closes late events with WINDOW_CLOSED",
+      "pass": true,
+      "detail": "progress 1, deadline 900, reason WINDOW_CLOSED"
+    },
+    {
+      "name": "an exceeded incident budget stops the objective with a counted reason",
+      "pass": true,
+      "detail": "collisions 1/0, reason INCIDENT_BUDGET_EXCEEDED"
+    },
+    {
+      "name": "the panel renders every state with its real label",
+      "pass": true,
+      "detail": "COMPLETED=Îndeplinit, COMPLETED=Îndeplinit, ACTIVE=În desfășurare, EXPIRED=Expirat, EXPIRED=Expirat, COMPLETED=Îndeplinit, ACTIVE=În desfășurare, INELIGIBLE=Neeligibil, ACTIVE=În desfășurare"
+    },
+    {
+      "name": "the expired and ineligible states carry a readable reason",
+      "pass": true,
+      "detail": "ziua s-a încheiat înainte de îndeplinire / bugetul de incidente a fost depășit"
+    },
+    {
+      "name": "the panel shows the time zone, the reset moment and the promised XP",
+      "pass": true,
+      "detail": "Fus orar: Europe/Bucharest (UTC+02:00) · Reset: 2026-11-12 00:00 (Europe/Bucharest (UTC+02:00))"
+    },
+    {
+      "name": "the panel keeps zero global listeners and one read per open",
+      "pass": true,
+      "detail": "listeners 3, global 0, reads 4"
+    },
+    {
+      "name": "Escape closes, focus is restored and Tab stays inside the panel",
+      "pass": true,
+      "detail": "escapes 1, restores 1, wraps 1"
+    },
+    {
+      "name": "two identical runs produce the same read model",
+      "pass": true,
+      "detail": "runs 2, equal true"
+    },
+    {
+      "name": "the declined read model is refused when it contradicts the contracts",
+      "pass": true,
+      "detail": "satisfied flag contradicting its target is refused"
+    }
+  ],
+  "summary": {
+    "checks": 26,
+    "passed": 26,
+    "failed": 0,
+    "pass": true
+  },
+  "scenario": {
+    "objectives": [
+      {
+        "slot": 1,
+        "instanceId": "daily-v1:player:211-daily:2026-11-11:s1:daily-test-manual@1",
+        "objectiveKind": "MANUAL_DROPOFFS",
+        "controlRequirement": "MANUAL",
+        "target": 2,
+        "rewardXp": 100
+      },
+      {
+        "slot": 2,
+        "instanceId": "daily-v1:player:211-daily:2026-11-11:s2:daily-test-clean@1",
+        "objectiveKind": "CLEAN_DROPOFFS",
+        "controlRequirement": "ANY",
+        "target": 2,
+        "rewardXp": 100
+      },
+      {
+        "slot": 3,
+        "instanceId": "daily-v1:player:211-daily:2026-11-11:s3:daily-test-learning@1",
+        "objectiveKind": "LEARNING_ACTIVATIONS",
+        "controlRequirement": "LEARNING",
+        "target": 1,
+        "rewardXp": 100
+      }
+    ],
+    "promisedXp": 300,
+    "grantedXp": 200,
+    "rewards": 2,
+    "rides": 4,
+    "manualRides": 3,
+    "autoRides": 1,
+    "mixedRides": 0,
+    "partialProgress": 1,
+    "partialPercent": 50,
+    "completedObjectives": 2,
+    "lastRideRideId": "ride:212:manual-2",
+    "lastRideMode": "MANUAL",
+    "lastRideDurationSeconds": 4,
+    "lastRidePickupTick": 840,
+    "lastRideDropoffTick": 1080
+  },
+  "refusals": {
+    "reasons": [
+      {
+        "reason": "FOREIGN_SESSION",
+        "count": 2
+      },
+      {
+        "reason": "IRRELEVANT",
+        "count": 1
+      },
+      {
+        "reason": "NO_RIDE",
+        "count": 1
+      },
+      {
+        "reason": "STALE_EPOCH",
+        "count": 1
+      }
+    ],
+    "rejected": 5,
+    "duplicates": 1,
+    "accepted": 1,
+    "lastRejection": "NO_RIDE",
+    "lastRejectionLabel": "livrare fără îmbarcare: intervalul cursei lipsește"
+  },
+  "boundary": {
+    "dayStartMs": 1794348000000,
+    "expiresAtMs": 1794434400000,
+    "acceptedAtBoundaryMinusOne": "COMPLETED",
+    "rejectedAtBoundary": "OUTSIDE_DAY",
+    "phaseBeforeDay": "PENDING",
+    "phaseAtBoundary": "EXPIRED",
+    "completedSurvives": true,
+    "expiredObjectives": 2,
+    "expiredReason": "EXPIRED"
+  },
+  "reload": {
+    "rewardsBefore": 1,
+    "rewardsAfter": 1,
+    "grantedXpAfter": 100,
+    "duplicateStatus": "DUPLICATE",
+    "replayStatus": "ACCEPTED",
+    "replayRewardsGranted": 0,
+    "afterCompletionEvents": 1,
+    "rebound": true,
+    "regenerated": 0
+  },
+  "day": {
+    "action": "NEW_DAY",
+    "dailyDate": "2026-11-12",
+    "createdRows": 3,
+    "droppedRows": 3,
+    "grantedXp": 0,
+    "retainedRewards": 1
+  },
+  "limits": {
+    "windowDeadline": 900,
+    "windowReason": "WINDOW_CLOSED",
+    "budgetCollisions": 1,
+    "budgetReason": "INCIDENT_BUDGET_EXCEEDED"
+  },
+  "panel": {
+    "states": [
+      {
+        "state": "COMPLETED",
+        "reason": null,
+        "stateLabel": "Îndeplinit",
+        "progressLabel": "2 din 2",
+        "xpLabel": "100 XP acordat"
+      },
+      {
+        "state": "COMPLETED",
+        "reason": null,
+        "stateLabel": "Îndeplinit",
+        "progressLabel": "2 din 2",
+        "xpLabel": "100 XP acordat"
+      },
+      {
+        "state": "ACTIVE",
+        "reason": null,
+        "stateLabel": "În desfășurare",
+        "progressLabel": "0 din 1",
+        "xpLabel": "100 XP promis"
+      },
+      {
+        "state": "EXPIRED",
+        "reason": "EXPIRED",
+        "stateLabel": "Expirat",
+        "progressLabel": "0 din 2",
+        "xpLabel": "100 XP promis"
+      },
+      {
+        "state": "EXPIRED",
+        "reason": "EXPIRED",
+        "stateLabel": "Expirat",
+        "progressLabel": "0 din 2",
+        "xpLabel": "100 XP promis"
+      },
+      {
+        "state": "COMPLETED",
+        "reason": null,
+        "stateLabel": "Îndeplinit",
+        "progressLabel": "1 din 1",
+        "xpLabel": "100 XP acordat"
+      },
+      {
+        "state": "ACTIVE",
+        "reason": null,
+        "stateLabel": "În desfășurare",
+        "progressLabel": "0 din 2",
+        "xpLabel": "100 XP promis"
+      },
+      {
+        "state": "INELIGIBLE",
+        "reason": "INCIDENT_BUDGET_EXCEEDED",
+        "stateLabel": "Neeligibil",
+        "progressLabel": "0 din 2",
+        "xpLabel": "100 XP promis"
+      },
+      {
+        "state": "ACTIVE",
+        "reason": null,
+        "stateLabel": "În desfășurare",
+        "progressLabel": "0 din 1",
+        "xpLabel": "100 XP promis"
+      }
+    ],
+    "phaseLabel": "Activă",
+    "dayLabel": "Zi locală: 2026-11-11 (Europe/Bucharest (UTC+02:00))",
+    "resetLabel": "Reset: 2026-11-12 00:00 (Europe/Bucharest (UTC+02:00))",
+    "timeZoneLabel": "Fus orar: Europe/Bucharest (UTC+02:00)",
+    "rejectionLabel": "Evenimente respinse: Niciuna.",
+    "elements": 61,
+    "textNodes": 44,
+    "listeners": 3,
+    "globalListeners": 0,
+    "focusMoves": 2,
+    "focusRestores": 1,
+    "escapes": 1,
+    "tabWraps": 1,
+    "reads": 4,
+    "renders": 3,
+    "skippedClosed": "SKIPPED_CLOSED",
+    "skippedUnchanged": "SKIPPED_UNCHANGED",
+    "surfaceCalls": 3
+  },
+  "determinism": {
+    "runs": 2,
+    "equal": true
+  }
+}
