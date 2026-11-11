@@ -1,0 +1,287 @@
+{
+  "schemaVersion": 1,
+  "version": "214-kpi-impact-v1",
+  "uiVersion": "214-kpi-impact-feedback-v1",
+  "checks": [
+    {
+      "name": "the 214 contract is the published read model of the 209 KPI",
+      "pass": true,
+      "detail": "214-kpi-impact-v1; historyScans 0; UI 214-kpi-impact-feedback-v1"
+    },
+    {
+      "name": "revenue up with rating down keeps both facts",
+      "pass": true,
+      "detail": "venit +500, rating 5 → 2"
+    },
+    {
+      "name": "revenue down with rating up is the inverse",
+      "pass": true,
+      "detail": "venit -500, rating 2 → 5"
+    },
+    {
+      "name": "both KPI fall while the real incident is reported",
+      "pass": true,
+      "detail": "venit -800, rating 5 → 1, 1 incident, 1 review-uri mici"
+    },
+    {
+      "name": "a steady day is FLAT and a first day has no baseline",
+      "pass": true,
+      "detail": "flat 0; prima zi NO_BASELINE; fără evenimente NO_EVENT"
+    },
+    {
+      "name": "a real failed ride and its real review reach the consequence",
+      "pass": true,
+      "detail": "cursă FAILED, review real 1, 1 incident, 2 review-uri mici"
+    },
+    {
+      "name": "MANUAL, LEARNING and AUTO produce the same consequence",
+      "pass": true,
+      "detail": "rating 4 pentru cele trei moduri, direcții FLAT/DOWN"
+    },
+    {
+      "name": "lower KPI, an accident and a failed objective never lower XP or the level",
+      "pass": true,
+      "detail": "sold 100.5 → 100.5, nivel 2 → 2, obiectiv eșuat refuzat true"
+    },
+    {
+      "name": "a negative credit is refused explicitly",
+      "pass": true,
+      "detail": "true: Expected finite number in range; sold neschimbat 100.5"
+    },
+    {
+      "name": "a duplicate reward grants nothing",
+      "pass": true,
+      "detail": "prima livrare 100 XP, duplicat 0 XP"
+    },
+    {
+      "name": "a profile reset and import keeps the XP balance and the level",
+      "pass": true,
+      "detail": "sold 200.5, nivel 2, profileWrites 0, debits 0"
+    },
+    {
+      "name": "the feedback keeps three separate planes",
+      "pass": true,
+      "detail": "MISSION / FIDELITY / SERVICE"
+    },
+    {
+      "name": "no consequence message promises a loss of XP",
+      "pass": true,
+      "detail": "146 texte verificate, 0 potriviri din 5 fragmente interzise"
+    },
+    {
+      "name": "a failed mission and a duplicate delivery show 0 XP",
+      "pass": true,
+      "detail": "FAILED 0 XP, REFUSED 0 XP"
+    },
+    {
+      "name": "the HUD reads at 10 Hz and renders once per KPI change",
+      "pass": true,
+      "detail": "600 tick-uri: 100 citiri, 2 randări, 500 tick-uri plafonate, interval 6 tick-uri"
+    },
+    {
+      "name": "the HUD writes only the changed plane and owns no listener",
+      "pass": true,
+      "detail": "4 scrieri de plan din 2 randări, 0 listeners"
+    }
+  ],
+  "scenarios": [
+    {
+      "name": "revenue-up-rating-down",
+      "state": "COMPARABLE",
+      "revenueBefore": 500,
+      "revenueAfter": 1000,
+      "revenueDelta": 500,
+      "revenueDirection": "UP",
+      "ratingBefore": 5,
+      "ratingAfter": 2,
+      "ratingDelta": -3,
+      "ratingDirection": "DOWN",
+      "incidentRides": 0,
+      "incidentState": "NONE",
+      "lowRatingReviews": 1,
+      "reviewCount": 1
+    },
+    {
+      "name": "revenue-down-rating-up",
+      "state": "COMPARABLE",
+      "revenueBefore": 1000,
+      "revenueAfter": 500,
+      "revenueDelta": -500,
+      "revenueDirection": "DOWN",
+      "ratingBefore": 2,
+      "ratingAfter": 5,
+      "ratingDelta": 3,
+      "ratingDirection": "UP",
+      "incidentRides": 0,
+      "incidentState": "NONE",
+      "lowRatingReviews": 0,
+      "reviewCount": 1
+    },
+    {
+      "name": "both-down",
+      "state": "COMPARABLE",
+      "revenueBefore": 1000,
+      "revenueAfter": 200,
+      "revenueDelta": -800,
+      "revenueDirection": "DOWN",
+      "ratingBefore": 5,
+      "ratingAfter": 1,
+      "ratingDelta": -4,
+      "ratingDirection": "DOWN",
+      "incidentRides": 1,
+      "incidentState": "INCREASED",
+      "lowRatingReviews": 1,
+      "reviewCount": 1
+    },
+    {
+      "name": "steady",
+      "state": "COMPARABLE",
+      "revenueBefore": 500,
+      "revenueAfter": 500,
+      "revenueDelta": 0,
+      "revenueDirection": "FLAT",
+      "ratingBefore": 4,
+      "ratingAfter": 4,
+      "ratingDelta": 0,
+      "ratingDirection": "FLAT",
+      "incidentRides": 0,
+      "incidentState": "NONE",
+      "lowRatingReviews": 0,
+      "reviewCount": 1
+    },
+    {
+      "name": "first-day",
+      "state": "NO_BASELINE",
+      "revenueBefore": 0,
+      "revenueAfter": 500,
+      "revenueDelta": 500,
+      "revenueDirection": "UP",
+      "ratingBefore": null,
+      "ratingAfter": 4,
+      "ratingDelta": null,
+      "ratingDirection": "UNKNOWN",
+      "incidentRides": 0,
+      "incidentState": "NONE",
+      "lowRatingReviews": 0,
+      "reviewCount": 1
+    },
+    {
+      "name": "no-events",
+      "state": "NO_EVENT",
+      "revenueBefore": 0,
+      "revenueAfter": 0,
+      "revenueDelta": 0,
+      "revenueDirection": "UNKNOWN",
+      "ratingBefore": null,
+      "ratingAfter": null,
+      "ratingDelta": null,
+      "ratingDirection": "UNKNOWN",
+      "incidentRides": 0,
+      "incidentState": "NONE",
+      "lowRatingReviews": 0,
+      "reviewCount": 0
+    }
+  ],
+  "incident": {
+    "terminalState": "FAILED",
+    "rating": 1,
+    "failedRides": 1,
+    "incidentRides": 1,
+    "lowRatingReviews": 2,
+    "revenueDirection": "UP",
+    "ratingDirection": "DOWN"
+  },
+  "controlModes": [
+    {
+      "controlMode": "MANUAL",
+      "rating": 4,
+      "revenueDirection": "FLAT",
+      "ratingDirection": "DOWN",
+      "xpDebits": 0,
+      "identicalFacts": true
+    },
+    {
+      "controlMode": "LEARNING",
+      "rating": 4,
+      "revenueDirection": "FLAT",
+      "ratingDirection": "DOWN",
+      "xpDebits": 0,
+      "identicalFacts": true
+    },
+    {
+      "controlMode": "AUTO",
+      "rating": 4,
+      "revenueDirection": "FLAT",
+      "ratingDirection": "DOWN",
+      "xpDebits": 0,
+      "identicalFacts": true
+    }
+  ],
+  "xp": {
+    "beforeBalance": 100.5,
+    "afterBalance": 100.5,
+    "beforeLevel": 2,
+    "afterLevel": 2,
+    "levelFromBalance": 2,
+    "entries": 2,
+    "missionXp": 100,
+    "activeWindowMs": 30000,
+    "kpiRevenueAfter": 200,
+    "kpiRatingAfter": 1,
+    "accidentRating": 1,
+    "failedMissionRefused": true,
+    "negativeCreditRefused": true,
+    "negativeCreditReason": "Expected finite number in range",
+    "duplicateRewardXp": 0,
+    "profileRestoreBalance": 200.5,
+    "profileRestoreLevel": 2,
+    "profileWrites": 0,
+    "debits": 0
+  },
+  "feedback": {
+    "planes": 3,
+    "textsChecked": 146,
+    "forbiddenFragments": [
+      "-xp",
+      "pierdere",
+      "penalizare",
+      "penalty",
+      "xp negativ"
+    ],
+    "forbiddenHits": 0,
+    "missionFailedXp": 0,
+    "duplicateXp": 0,
+    "serviceState": "COMPARABLE",
+    "revenueDirection": "DOWN",
+    "ratingDirection": "DOWN",
+    "incidentState": "INCREASED",
+    "serviceText": "Consecințele de serviciu: comparație cu ziua precedentă Venit: -800 SDA (în scădere) · 1000 → 200 SDA Rating: 5 → 1 (-4) · 0 review-uri Incidente de serviciu: 1 (incidente în creștere) · Review-uri cu nota 2 sau mai mică: 1 Ziua precedentă: d0000 · Ziua curentă: d0001",
+    "missionText": "Rezultatul misiunii: Eșuată Misiune: campaign-1-first-taxi · Încercare: 2 Recompensă: 0 XP Obiectivul nu a fost îndeplinit: recompensa rămâne 0 XP, iar soldul de XP nu se modifică.",
+    "fidelityText": "Fidelitatea stilului: MANUAL Mod de control: MANUAL · campaign-1-first-taxi Intervale de confort: 8 · Confort evaluat: 0 puncte"
+  },
+  "hud": {
+    "frames": 600,
+    "changeAt": 300,
+    "reads": 100,
+    "renders": 2,
+    "planeUpdates": 4,
+    "skippedThrottled": 500,
+    "skippedUnchanged": 98,
+    "minimumReadIntervalTicks": 6,
+    "maximumReadHz": 10,
+    "historyRebuilds": 0,
+    "xpLossMessages": 0,
+    "listeners": 0,
+    "globalListeners": 0
+  },
+  "summary": {
+    "checks": 16,
+    "passed": 16,
+    "failed": 0,
+    "pass": true
+  },
+  "determinism": {
+    "runs": 2,
+    "equal": true
+  }
+}

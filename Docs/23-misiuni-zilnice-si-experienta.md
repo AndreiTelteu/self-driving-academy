@@ -104,4 +104,14 @@ Ledgerul de experiență este `src/missions/player-progress.ts`, cu schema `213-
 
 **Limite.** Modulul nu are ceas, DOM, renderer, store de profil, coadă de learning sau aleator; compoziția (hostul) trebuie să furnizeze ferestrele reale de observare și verdictul AFK. Nu există UI pentru sold, nivel și istoric, iar persistarea în savefile rămâne a modulelor 127–136: checkpointul este un contract de date, nu un fișier. Pragurile de AFK, fereastră și XP/minut sunt propuneri de calibrare, nu valori certificate. Nivelul de validare este `funcțional izolat`, fără browser real și fără FPS/GPU.
 
+## Contract implementat în V1 (PBI 214): consecințele serviciului fără pierdere de XP
+
+Consecințele comerciale ale MANUAL/LEARNING sunt citite din agregările 209, nu din ledgerul de XP: `src/economy/kpi-impact.ts` (`214-kpi-impact-v1`) compară ziua simulată curentă cu ziua precedentă și raportează venitul, cursele terminale, incidentele, numărul de review-uri, media exactă și notele 0–2. Feedbackul scurt din `src/ui/kpi-impact-format.ts` păstrează trei planuri separate — rezultatul misiunii, fidelitatea stilului și consecințele de serviciu — și nu afișează niciodată un mesaj care să promită o pierdere de XP; `src/ui/kpi-impact-hud.ts` citește cel mult o dată la 6 tick-uri (10 Hz) și scrie numai planul schimbat, cu zero reconstrucții de istoric.
+
+**Invarianta este testată, nu doar declarată.** `tests/economy/kpi-impact.test.ts` scade ambii KPI, produce un accident real (cursă 209 `FAILED` plus review-ul ei real) și un obiectiv 116 eșuat pe care ledgerul 125 refuză să îl deconteze, apoi compară soldul și nivelul înainte și după: ele rămân egale (100,5 XP, nivel 2). Un credit negativ este refuzat explicit de validatorul 213 (`ContractValidationError`), nu ignorat; un duplicat de recompensă acordă 0 XP; un reset/import de stil nu atinge ledgerul jucătorului. Nicio cale AUTO/MANUAL/LEARNING nu lansează evaluări negative, joburi contrafactuale sau vreo operație de debit: read model-ul raportează structural `debits: 0`, `credits: 0` și `negativeCredits: false`.
+
+**Numere reale** (din [Evidence/214-kpi-impact](Evidence/214-kpi-impact/README.md), 16/16 verificări): venit +500 cu rating 5 → 2, inversul −500 cu 2 → 5, ambele în scădere −800 și 5 → 1; o cursă FAILED reală adaugă 1 incident și 2 review-uri cu nota 2 sau mai mică; cele trei moduri de control dau același rating 4 pe aceleași fapte; soldul 100,5 și nivelul 2 rămân neschimbate pe toate căile; HUD-ul face 100 de citiri, 2 randări și 4 scrieri de plan pentru 600 de tick-uri.
+
+**Limite.** Feedbackul citește agregatele 209 și nu paginează ledgerul de review-uri, deci nu inventează motive individuale de review. Montarea în HUD și hotkey-ul rămân ale hostului. Nivelul de validare este `targeted`, cu cost UI structural, fără FPS/GPU pe hardware real.
+
 
