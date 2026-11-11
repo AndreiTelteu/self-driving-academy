@@ -1,0 +1,926 @@
+{
+  "version": "141-experiment-replay-v1",
+  "contract": {
+    "source": {
+      "chunk": "207-world-replay-chunk-v1",
+      "anchor": "206-world-snapshot-v1"
+    },
+    "rejectionCodes": [
+      "INVALID_REQUEST",
+      "INVALID_SOURCE",
+      "CHECKSUM_MISMATCH",
+      "FOREIGN_SOURCE",
+      "INCIDENT_OUTSIDE_WINDOW",
+      "SEEK_OUT_OF_WINDOW",
+      "SOURCE_EMPTY"
+    ],
+    "absenceReasons": [
+      "TICK_NOT_OBSERVED",
+      "WINDOW_TRUNCATED_BEFORE",
+      "WINDOW_TRUNCATED_AFTER",
+      "ENTITY_NOT_YET_CREATED",
+      "ENTITY_REMOVED",
+      "ENTITY_UNKNOWN",
+      "ENTITY_NOT_OBSERVED",
+      "OUT_OF_WINDOW"
+    ],
+    "immutableFacts": [
+      "profile",
+      "revenue",
+      "ratings",
+      "missions",
+      "xp"
+    ],
+    "immutableCoverage": {
+      "profile": "PROFILE",
+      "revenue": "KPI",
+      "ratings": "KPI",
+      "missions": "REWARDS",
+      "xp": "REWARDS"
+    },
+    "tickHz": 60,
+    "sampleHz": 20,
+    "cadenceTicks": 3
+  },
+  "source": {
+    "chunkId": "session-141:incident:event-collision-141-400",
+    "checksum": "ff37f798e578fc928ef6d5660613843ff51e639b2bbea8349bc86692a4ded218",
+    "bytes": 129377,
+    "startTick": 340,
+    "endTick": 520,
+    "sealTick": 520,
+    "windowFromTick": 340,
+    "windowToTick": 520,
+    "incidentTick": 400,
+    "completeness": "COMPLETE",
+    "partialReasons": [],
+    "observedTicks": 60,
+    "firstObservedTick": 342,
+    "lastObservedTick": 519,
+    "cameraRecordedVehicles": 40,
+    "cameraOutOfCameraVehicles": 2049
+  },
+  "incident": {
+    "autoOnly": true,
+    "visibility": "OUTSIDE_CAMERA",
+    "invisible": true,
+    "classifiedFromTick": 399,
+    "entities": [
+      {
+        "entityId": "taxi-02",
+        "vehicleClass": "TAXI",
+        "controlMode": "AUTO",
+        "inCamera": false
+      },
+      {
+        "entityId": "taxi-03",
+        "vehicleClass": "TAXI",
+        "controlMode": "AUTO",
+        "inCamera": false
+      }
+    ],
+    "createdInWindow": [
+      {
+        "entityId": "civil-01",
+        "tick": 380
+      }
+    ],
+    "removedInWindow": [
+      {
+        "entityId": "civil-03",
+        "tick": 406
+      }
+    ]
+  },
+  "seek": {
+    "requestedTick": 400,
+    "landedTick": 399,
+    "exact": false,
+    "atIncident": true,
+    "missing": [
+      {
+        "reason": "TICK_NOT_OBSERVED",
+        "fromTick": 400,
+        "toTick": 400,
+        "detail": "The seek target 400 has no recorded row; the replay lands on 399 and declares 1 tick(s) absent"
+      }
+    ]
+  },
+  "pause": {
+    "status": "PAUSED",
+    "tickBefore": 399,
+    "tickAfter": 399,
+    "frameIdentical": true,
+    "positionIdentical": true,
+    "playWhilePausedStatus": "PAUSED"
+  },
+  "lifecycle": {
+    "createdTick": 380,
+    "createdFirstRowTick": 381,
+    "removedTick": 406,
+    "removedPoseAtRemoval": "ABSENT/ENTITY_REMOVED",
+    "resurrectedFrames": 0,
+    "presentOnRowBefore": true,
+    "absentAfterRemoval": true
+  },
+  "replay": {
+    "frames": 41,
+    "ticks": 41,
+    "firstTick": 399,
+    "lastTick": 519,
+    "declaredAbsences": 0
+  },
+  "partial": {
+    "completeness": "PARTIAL",
+    "declaredPartial": true,
+    "reasons": [
+      "CAPTURE_FINALIZED_EARLY"
+    ],
+    "storedEndTick": 430,
+    "declaredFromTick": 431,
+    "declaredToTick": 520
+  },
+  "gap": {
+    "completeness": "PARTIAL",
+    "gapFromTick": 441,
+    "gapToTick": 468,
+    "skipped": [
+      {
+        "reason": "TICK_NOT_OBSERVED",
+        "fromTick": 441,
+        "toTick": 468,
+        "detail": "10 cadence tick(s) inside the clip have no recorded row (441..468); the state is absent, not interpolated"
+      }
+    ],
+    "poseAtGap": "ABSENT/TICK_NOT_OBSERVED"
+  },
+  "interpolation": {
+    "tick": 400,
+    "fromTick": 399,
+    "toTick": 402,
+    "alpha": 0.3333333333333333,
+    "matches207": true,
+    "interpolation": "LINEAR"
+  },
+  "immutability": {
+    "operations": [
+      "SEEK",
+      "PAUSE",
+      "RESUME",
+      "SEEK",
+      "PLAY",
+      "REPLAY"
+    ],
+    "unchanged": true,
+    "liveWrites": 0,
+    "changed": [],
+    "profileChecksum": "fnv1a64:883e718e91bbcbd5",
+    "learning": "5f9bdd0d3962f6e8f25b1d4264d0cccb4bcde4f22369479e7fe1aaeac1409a51",
+    "rewards": "1e4092d867943b66ef2dcef9103fdb0271a6ac0c827097ec28375aaf8e5de1ef",
+    "kpi": "715c118ae2024171eabcb1eae9e69d6eef649767be327054252433a566eea146",
+    "checks": [
+      {
+        "operation": "SEEK",
+        "ledgerBefore": {
+          "learning": "5f9bdd0d3962f6e8f25b1d4264d0cccb4bcde4f22369479e7fe1aaeac1409a51",
+          "rewards": "1e4092d867943b66ef2dcef9103fdb0271a6ac0c827097ec28375aaf8e5de1ef",
+          "kpi": "715c118ae2024171eabcb1eae9e69d6eef649767be327054252433a566eea146"
+        },
+        "ledgerAfter": {
+          "learning": "5f9bdd0d3962f6e8f25b1d4264d0cccb4bcde4f22369479e7fe1aaeac1409a51",
+          "rewards": "1e4092d867943b66ef2dcef9103fdb0271a6ac0c827097ec28375aaf8e5de1ef",
+          "kpi": "715c118ae2024171eabcb1eae9e69d6eef649767be327054252433a566eea146"
+        },
+        "profileBefore": {
+          "profileId": "profile-141",
+          "versionId": "profile-141@1",
+          "checksum": "fnv1a64:883e718e91bbcbd5"
+        },
+        "profileAfter": {
+          "profileId": "profile-141",
+          "versionId": "profile-141@1",
+          "checksum": "fnv1a64:883e718e91bbcbd5"
+        },
+        "unchanged": true,
+        "changed": [],
+        "liveWrites": 0
+      },
+      {
+        "operation": "PAUSE",
+        "ledgerBefore": {
+          "learning": "5f9bdd0d3962f6e8f25b1d4264d0cccb4bcde4f22369479e7fe1aaeac1409a51",
+          "rewards": "1e4092d867943b66ef2dcef9103fdb0271a6ac0c827097ec28375aaf8e5de1ef",
+          "kpi": "715c118ae2024171eabcb1eae9e69d6eef649767be327054252433a566eea146"
+        },
+        "ledgerAfter": {
+          "learning": "5f9bdd0d3962f6e8f25b1d4264d0cccb4bcde4f22369479e7fe1aaeac1409a51",
+          "rewards": "1e4092d867943b66ef2dcef9103fdb0271a6ac0c827097ec28375aaf8e5de1ef",
+          "kpi": "715c118ae2024171eabcb1eae9e69d6eef649767be327054252433a566eea146"
+        },
+        "profileBefore": {
+          "profileId": "profile-141",
+          "versionId": "profile-141@1",
+          "checksum": "fnv1a64:883e718e91bbcbd5"
+        },
+        "profileAfter": {
+          "profileId": "profile-141",
+          "versionId": "profile-141@1",
+          "checksum": "fnv1a64:883e718e91bbcbd5"
+        },
+        "unchanged": true,
+        "changed": [],
+        "liveWrites": 0
+      },
+      {
+        "operation": "RESUME",
+        "ledgerBefore": {
+          "learning": "5f9bdd0d3962f6e8f25b1d4264d0cccb4bcde4f22369479e7fe1aaeac1409a51",
+          "rewards": "1e4092d867943b66ef2dcef9103fdb0271a6ac0c827097ec28375aaf8e5de1ef",
+          "kpi": "715c118ae2024171eabcb1eae9e69d6eef649767be327054252433a566eea146"
+        },
+        "ledgerAfter": {
+          "learning": "5f9bdd0d3962f6e8f25b1d4264d0cccb4bcde4f22369479e7fe1aaeac1409a51",
+          "rewards": "1e4092d867943b66ef2dcef9103fdb0271a6ac0c827097ec28375aaf8e5de1ef",
+          "kpi": "715c118ae2024171eabcb1eae9e69d6eef649767be327054252433a566eea146"
+        },
+        "profileBefore": {
+          "profileId": "profile-141",
+          "versionId": "profile-141@1",
+          "checksum": "fnv1a64:883e718e91bbcbd5"
+        },
+        "profileAfter": {
+          "profileId": "profile-141",
+          "versionId": "profile-141@1",
+          "checksum": "fnv1a64:883e718e91bbcbd5"
+        },
+        "unchanged": true,
+        "changed": [],
+        "liveWrites": 0
+      },
+      {
+        "operation": "SEEK",
+        "ledgerBefore": {
+          "learning": "5f9bdd0d3962f6e8f25b1d4264d0cccb4bcde4f22369479e7fe1aaeac1409a51",
+          "rewards": "1e4092d867943b66ef2dcef9103fdb0271a6ac0c827097ec28375aaf8e5de1ef",
+          "kpi": "715c118ae2024171eabcb1eae9e69d6eef649767be327054252433a566eea146"
+        },
+        "ledgerAfter": {
+          "learning": "5f9bdd0d3962f6e8f25b1d4264d0cccb4bcde4f22369479e7fe1aaeac1409a51",
+          "rewards": "1e4092d867943b66ef2dcef9103fdb0271a6ac0c827097ec28375aaf8e5de1ef",
+          "kpi": "715c118ae2024171eabcb1eae9e69d6eef649767be327054252433a566eea146"
+        },
+        "profileBefore": {
+          "profileId": "profile-141",
+          "versionId": "profile-141@1",
+          "checksum": "fnv1a64:883e718e91bbcbd5"
+        },
+        "profileAfter": {
+          "profileId": "profile-141",
+          "versionId": "profile-141@1",
+          "checksum": "fnv1a64:883e718e91bbcbd5"
+        },
+        "unchanged": true,
+        "changed": [],
+        "liveWrites": 0
+      },
+      {
+        "operation": "PLAY",
+        "ledgerBefore": {
+          "learning": "5f9bdd0d3962f6e8f25b1d4264d0cccb4bcde4f22369479e7fe1aaeac1409a51",
+          "rewards": "1e4092d867943b66ef2dcef9103fdb0271a6ac0c827097ec28375aaf8e5de1ef",
+          "kpi": "715c118ae2024171eabcb1eae9e69d6eef649767be327054252433a566eea146"
+        },
+        "ledgerAfter": {
+          "learning": "5f9bdd0d3962f6e8f25b1d4264d0cccb4bcde4f22369479e7fe1aaeac1409a51",
+          "rewards": "1e4092d867943b66ef2dcef9103fdb0271a6ac0c827097ec28375aaf8e5de1ef",
+          "kpi": "715c118ae2024171eabcb1eae9e69d6eef649767be327054252433a566eea146"
+        },
+        "profileBefore": {
+          "profileId": "profile-141",
+          "versionId": "profile-141@1",
+          "checksum": "fnv1a64:883e718e91bbcbd5"
+        },
+        "profileAfter": {
+          "profileId": "profile-141",
+          "versionId": "profile-141@1",
+          "checksum": "fnv1a64:883e718e91bbcbd5"
+        },
+        "unchanged": true,
+        "changed": [],
+        "liveWrites": 0
+      },
+      {
+        "operation": "REPLAY",
+        "ledgerBefore": {
+          "learning": "5f9bdd0d3962f6e8f25b1d4264d0cccb4bcde4f22369479e7fe1aaeac1409a51",
+          "rewards": "1e4092d867943b66ef2dcef9103fdb0271a6ac0c827097ec28375aaf8e5de1ef",
+          "kpi": "715c118ae2024171eabcb1eae9e69d6eef649767be327054252433a566eea146"
+        },
+        "ledgerAfter": {
+          "learning": "5f9bdd0d3962f6e8f25b1d4264d0cccb4bcde4f22369479e7fe1aaeac1409a51",
+          "rewards": "1e4092d867943b66ef2dcef9103fdb0271a6ac0c827097ec28375aaf8e5de1ef",
+          "kpi": "715c118ae2024171eabcb1eae9e69d6eef649767be327054252433a566eea146"
+        },
+        "profileBefore": {
+          "profileId": "profile-141",
+          "versionId": "profile-141@1",
+          "checksum": "fnv1a64:883e718e91bbcbd5"
+        },
+        "profileAfter": {
+          "profileId": "profile-141",
+          "versionId": "profile-141@1",
+          "checksum": "fnv1a64:883e718e91bbcbd5"
+        },
+        "unchanged": true,
+        "changed": [],
+        "liveWrites": 0
+      }
+    ],
+    "revenueWriteChangesKpiOnly": true,
+    "profileActivationChangesChecksum": true
+  },
+  "refusals": [
+    {
+      "probe": "CHECKSUM_CORRUPTED",
+      "stage": "SOURCE",
+      "codes": [
+        "CHECKSUM_MISMATCH"
+      ],
+      "detail": "CHECKSUM_MISMATCH: The stored chunk does not match its checksum (chunk.checksum)"
+    },
+    {
+      "probe": "CHUNK_VERSION",
+      "stage": "SOURCE",
+      "codes": [
+        "INVALID_SOURCE"
+      ],
+      "detail": "INCOMPATIBLE_VERSION: Expected 207-world-replay-chunk-v1 (chunk.chunkVersion)"
+    },
+    {
+      "probe": "NOT_PINNED",
+      "stage": "SOURCE",
+      "codes": [
+        "INVALID_SOURCE"
+      ],
+      "detail": "INVALID_CHUNK: Only pinned incident chunks are stored (chunk.pinned)"
+    },
+    {
+      "probe": "FOREIGN_SESSION",
+      "stage": "IDENTITY",
+      "codes": [
+        "FOREIGN_SOURCE"
+      ],
+      "detail": "The chunk belongs to session-other/1, the experiment to session-141/1"
+    },
+    {
+      "probe": "FOREIGN_EPOCH",
+      "stage": "IDENTITY",
+      "codes": [
+        "FOREIGN_SOURCE"
+      ],
+      "detail": "The chunk belongs to session-141/2, the experiment to session-141/1"
+    },
+    {
+      "probe": "INVALID_REQUEST",
+      "stage": "REQUEST",
+      "codes": [
+        "INVALID_REQUEST"
+      ],
+      "detail": "The isolation needs a ledger port and a profile port (request.isolation)"
+    },
+    {
+      "probe": "SEEK_OUT_OF_WINDOW",
+      "stage": "SEEK",
+      "codes": [
+        "SEEK_OUT_OF_WINDOW"
+      ],
+      "detail": "The seek target 2000 is outside the stored clip 340..520"
+    }
+  ],
+  "checks": [
+    {
+      "name": "contract-version",
+      "expected": "141-experiment-replay-v1",
+      "actual": "141-experiment-replay-v1",
+      "pass": true,
+      "detail": "141 contract"
+    },
+    {
+      "name": "source-contract",
+      "expected": "207-world-replay-chunk-v1+206-world-snapshot-v1",
+      "actual": "207-world-replay-chunk-v1+206-world-snapshot-v1",
+      "pass": true,
+      "detail": "the projection consumes the sealed 207 chunk and its 206 anchor"
+    },
+    {
+      "name": "no-policy",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "the replay never re-runs the policy"
+    },
+    {
+      "name": "no-physics",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "the replay never re-runs the physics step"
+    },
+    {
+      "name": "no-invented-ticks",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "an unobserved tick is declared, not invented"
+    },
+    {
+      "name": "no-live-writes",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "a replay never writes live state"
+    },
+    {
+      "name": "chunk-checksum",
+      "expected": "ff37f798e578fc928ef6d5660613843ff51e639b2bbea8349bc86692a4ded218",
+      "actual": "ff37f798e578fc928ef6d5660613843ff51e639b2bbea8349bc86692a4ded218",
+      "pass": true,
+      "detail": "SHA-256 of the sealed chunk"
+    },
+    {
+      "name": "chunk-bytes",
+      "expected": 129377,
+      "actual": 129377,
+      "pass": true,
+      "detail": "canonical bytes of the sealed chunk"
+    },
+    {
+      "name": "chunk-ticks",
+      "expected": "340..520",
+      "actual": "340..520",
+      "pass": true,
+      "detail": "stored window"
+    },
+    {
+      "name": "chunk-completeness",
+      "expected": "COMPLETE",
+      "actual": "COMPLETE",
+      "pass": true,
+      "detail": "the complete capture declares itself complete"
+    },
+    {
+      "name": "observed-ticks",
+      "expected": 60,
+      "actual": 60,
+      "pass": true,
+      "detail": "recorded 20 Hz rows within the window"
+    },
+    {
+      "name": "first-observed",
+      "expected": 342,
+      "actual": 342,
+      "pass": true,
+      "detail": "first recorded row of the pin"
+    },
+    {
+      "name": "last-observed",
+      "expected": 519,
+      "actual": 519,
+      "pass": true,
+      "detail": "last recorded row of the pin"
+    },
+    {
+      "name": "auto-only",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the incident is AUTO only"
+    },
+    {
+      "name": "outside-camera",
+      "expected": "OUTSIDE_CAMERA",
+      "actual": "OUTSIDE_CAMERA",
+      "pass": true,
+      "detail": "both colliding vehicles are outside the camera"
+    },
+    {
+      "name": "invisible",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "no involved vehicle was visible"
+    },
+    {
+      "name": "incident-modes",
+      "expected": "AUTO,AUTO",
+      "actual": "AUTO,AUTO",
+      "pass": true,
+      "detail": "the mode read from the classified tick"
+    },
+    {
+      "name": "incident-classified-at",
+      "expected": 399,
+      "actual": 399,
+      "pass": true,
+      "detail": "the tick the classification was read from"
+    },
+    {
+      "name": "camera-filter",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "the camera is recorded, never used as a filter"
+    },
+    {
+      "name": "created-in-window",
+      "expected": "civil-01@380",
+      "actual": "civil-01@380",
+      "pass": true,
+      "detail": "a vehicle is created inside the pinned window"
+    },
+    {
+      "name": "removed-in-window",
+      "expected": "civil-03@406",
+      "actual": "civil-03@406",
+      "pass": true,
+      "detail": "a vehicle is removed inside the pinned window"
+    },
+    {
+      "name": "seek-requested",
+      "expected": 400,
+      "actual": 400,
+      "pass": true,
+      "detail": "the default seek target is the incident"
+    },
+    {
+      "name": "seek-landed",
+      "expected": 399,
+      "actual": 399,
+      "pass": true,
+      "detail": "the last recorded row before the incident"
+    },
+    {
+      "name": "seek-exact",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "tick 400 has no transform row of its own"
+    },
+    {
+      "name": "seek-at-incident",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the landing is the incident anchor"
+    },
+    {
+      "name": "seek-missing",
+      "expected": "TICK_NOT_OBSERVED 400..400",
+      "actual": "TICK_NOT_OBSERVED 400..400",
+      "pass": true,
+      "detail": "the seek declares the tick it could not land on"
+    },
+    {
+      "name": "seek-window",
+      "expected": "340..520",
+      "actual": "340..520",
+      "pass": true,
+      "detail": "the requested pin window is reported"
+    },
+    {
+      "name": "pause-status",
+      "expected": "PAUSED",
+      "actual": "PAUSED",
+      "pass": true,
+      "detail": "pause freezes the replay"
+    },
+    {
+      "name": "pause-tick",
+      "expected": 399,
+      "actual": 399,
+      "pass": true,
+      "detail": "the tick does not move"
+    },
+    {
+      "name": "pause-frame-identical",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the frame is byte-identical before and after the pause"
+    },
+    {
+      "name": "pause-position-identical",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "only the paused flag changes"
+    },
+    {
+      "name": "pause-play-frozen",
+      "expected": "PAUSED",
+      "actual": "PAUSED",
+      "pass": true,
+      "detail": "play while paused does not advance"
+    },
+    {
+      "name": "pause-play-frozen-ticks",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "a frozen play advances zero ticks"
+    },
+    {
+      "name": "removed-pose",
+      "expected": "ABSENT/ENTITY_REMOVED",
+      "actual": "ABSENT/ENTITY_REMOVED",
+      "pass": true,
+      "detail": "no pose is interpolated across the removal"
+    },
+    {
+      "name": "removed-before",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the vehicle is still drawn on the row before its removal"
+    },
+    {
+      "name": "removed-before-tick",
+      "expected": 405,
+      "actual": 405,
+      "pass": true,
+      "detail": "the row before the removal lands exactly on 405"
+    },
+    {
+      "name": "removed-after",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the vehicle is gone from every later recorded row"
+    },
+    {
+      "name": "removed-no-resurrection",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no frame after the removal tick carries the removed vehicle"
+    },
+    {
+      "name": "created-before",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "the created vehicle does not exist before its creation tick"
+    },
+    {
+      "name": "created-pose",
+      "expected": "ABSENT/ENTITY_NOT_YET_CREATED",
+      "actual": "ABSENT/ENTITY_NOT_YET_CREATED",
+      "pass": true,
+      "detail": "a pose before the creation tick is declared absent"
+    },
+    {
+      "name": "created-first-row",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the first row after the creation tick carries the new vehicle"
+    },
+    {
+      "name": "created-seek",
+      "expected": 381,
+      "actual": 381,
+      "pass": true,
+      "detail": "the created vehicle appears at the first recorded row after 380"
+    },
+    {
+      "name": "partial-declared",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "an early seal is declared partial"
+    },
+    {
+      "name": "partial-status",
+      "expected": "PARTIAL",
+      "actual": "PARTIAL",
+      "pass": true,
+      "detail": "the partial clip is not presented whole"
+    },
+    {
+      "name": "partial-reason",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the reason is the closed 207 vocabulary"
+    },
+    {
+      "name": "partial-missing",
+      "expected": "431..520",
+      "actual": "431..520",
+      "pass": true,
+      "detail": "the missing post-incident span is declared"
+    },
+    {
+      "name": "gap-declared",
+      "expected": "TICK_NOT_OBSERVED",
+      "actual": "TICK_NOT_OBSERVED",
+      "pass": true,
+      "detail": "a capture gap is a declared absence"
+    },
+    {
+      "name": "gap-range",
+      "expected": "441..468",
+      "actual": "441..468",
+      "pass": true,
+      "detail": "the exact lost cadence span"
+    },
+    {
+      "name": "gap-skipped",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "a step over the gap reports what it skipped"
+    },
+    {
+      "name": "gap-pose",
+      "expected": "ABSENT/TICK_NOT_OBSERVED",
+      "actual": "ABSENT/TICK_NOT_OBSERVED",
+      "pass": true,
+      "detail": "no pose is interpolated inside the gap"
+    },
+    {
+      "name": "gap-step-tick",
+      "expected": 471,
+      "actual": 471,
+      "pass": true,
+      "detail": "the next recorded row after the gap"
+    },
+    {
+      "name": "interpolation-from",
+      "expected": 399,
+      "actual": 399,
+      "pass": true,
+      "detail": "the pose is interpolated from the recorded row 399"
+    },
+    {
+      "name": "interpolation-to",
+      "expected": 402,
+      "actual": 402,
+      "pass": true,
+      "detail": "to the recorded row 402"
+    },
+    {
+      "name": "interpolation-matches-207",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "same result as the 207 helper"
+    },
+    {
+      "name": "replay-frames",
+      "expected": 41,
+      "actual": 41,
+      "pass": true,
+      "detail": "the run replays from the incident anchor (index 19) to the last observed row"
+    },
+    {
+      "name": "replay-ticks",
+      "expected": 41,
+      "actual": 41,
+      "pass": true,
+      "detail": "one frame per recorded row"
+    },
+    {
+      "name": "replay-last-tick",
+      "expected": 519,
+      "actual": 519,
+      "pass": true,
+      "detail": "the run ends on the last recorded row"
+    },
+    {
+      "name": "replay-absences",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the complete window has no capture gap; sub-cadence ticks are the declared 20 Hz interpolation"
+    },
+    {
+      "name": "immutability-operations",
+      "expected": "SEEK,PAUSE,RESUME,SEEK,PLAY,REPLAY",
+      "actual": "SEEK,PAUSE,RESUME,SEEK,PLAY,REPLAY",
+      "pass": true,
+      "detail": "every projection operation is verified"
+    },
+    {
+      "name": "immutability-unchanged",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "profile, revenue, ratings, missions and XP are unchanged"
+    },
+    {
+      "name": "immutability-live-writes",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no live row was written"
+    },
+    {
+      "name": "immutability-checks-unchanged",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "each operation compares its own before/after"
+    },
+    {
+      "name": "immutability-ledger",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the three ledger digests are identical"
+    },
+    {
+      "name": "immutability-profile",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the profile checksum is identical"
+    },
+    {
+      "name": "control-revenue",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "a real revenue write changes the KPI digest and nothing else"
+    },
+    {
+      "name": "control-profile",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "a real profile activation changes the profile checksum"
+    },
+    {
+      "name": "refusal-checksum",
+      "expected": "SOURCE/CHECKSUM_MISMATCH",
+      "actual": "SOURCE/CHECKSUM_MISMATCH",
+      "pass": true,
+      "detail": "a corrupted chunk is refused by the 207 reader"
+    },
+    {
+      "name": "refusal-version",
+      "expected": "SOURCE/INVALID_SOURCE",
+      "actual": "SOURCE/INVALID_SOURCE",
+      "pass": true,
+      "detail": "another chunk version is refused"
+    },
+    {
+      "name": "refusal-unpinned",
+      "expected": "SOURCE/INVALID_SOURCE",
+      "actual": "SOURCE/INVALID_SOURCE",
+      "pass": true,
+      "detail": "a chunk that is not a pinned incident clip is refused"
+    },
+    {
+      "name": "refusal-session",
+      "expected": "IDENTITY/FOREIGN_SOURCE",
+      "actual": "IDENTITY/FOREIGN_SOURCE",
+      "pass": true,
+      "detail": "a chunk recorded in another session is refused"
+    },
+    {
+      "name": "refusal-epoch",
+      "expected": "IDENTITY/FOREIGN_SOURCE",
+      "actual": "IDENTITY/FOREIGN_SOURCE",
+      "pass": true,
+      "detail": "a chunk of another world epoch is refused"
+    },
+    {
+      "name": "refusal-request",
+      "expected": "REQUEST/INVALID_REQUEST",
+      "actual": "REQUEST/INVALID_REQUEST",
+      "pass": true,
+      "detail": "an incomplete request is refused before any source is read"
+    },
+    {
+      "name": "refusal-seek",
+      "expected": "SEEK/SEEK_OUT_OF_WINDOW",
+      "actual": "SEEK/SEEK_OUT_OF_WINDOW",
+      "pass": true,
+      "detail": "a seek outside the stored window is refused"
+    },
+    {
+      "name": "deterministic",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "two independent runs replay the same frames"
+    }
+  ],
+  "summary": {
+    "probes": 7,
+    "checks": 74,
+    "passed": 74,
+    "pass": true
+  }
+}
