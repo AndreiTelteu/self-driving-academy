@@ -1,0 +1,1508 @@
+{
+  "version": "143-experiment-compare-v1",
+  "suiteId": "suite-143-compare",
+  "sources": {
+    "rerun": "142-experiment-rerun-v1",
+    "policiesEvaluated": 0
+  },
+  "distribution": {
+    "cohorts": 6,
+    "evaluations": 288,
+    "decisions": 144,
+    "divergent": 43,
+    "identical": 101,
+    "causes": {
+      "PROBABILITY_THRESHOLD": 37,
+      "GEOMETRY_PARAMETER": 6,
+      "SEED_DIVERGENCE": 0,
+      "UNCLASSIFIED": 0
+    },
+    "parameters": [
+      {
+        "key": "red_stop_probability",
+        "count": 20,
+        "share": 0.465116
+      },
+      {
+        "key": "stop_full_probability",
+        "count": 17,
+        "share": 0.395349
+      },
+      {
+        "key": "stop_dwell_time",
+        "count": 4,
+        "share": 0.093023
+      },
+      {
+        "key": "red_stop_line_offset",
+        "count": 2,
+        "share": 0.046512
+      }
+    ],
+    "categories": [
+      {
+        "kind": "SIGNAL",
+        "opportunities": 72,
+        "evaluations": 144,
+        "divergent": 22
+      },
+      {
+        "kind": "STOP",
+        "opportunities": 72,
+        "evaluations": 144,
+        "divergent": 21
+      }
+    ],
+    "unattributed": 0,
+    "seedDivergences": 0,
+    "distinctCauses": 2,
+    "distinctParameters": 4,
+    "dominant": {
+      "key": "red_stop_probability",
+      "count": 20,
+      "share": 0.465116
+    },
+    "criterionSatisfied": true,
+    "singleParameterOnlyCases": []
+  },
+  "exposure": {
+    "evaluations": 288,
+    "visible": 96,
+    "invisible": 192,
+    "visibleFraction": 0.333333,
+    "evaluatedOpportunities": 144,
+    "windows": [
+      {
+        "fromTick": 61,
+        "toTick": 84,
+        "ticks": 24,
+        "cohorts": 6
+      }
+    ],
+    "sources": [
+      "CAMERA",
+      "CONTROLLED_FIXTURE"
+    ],
+    "perCohort": [
+      {
+        "cohortId": "identical-pair",
+        "evaluations": 48,
+        "visible": 16,
+        "invisible": 32
+      },
+      {
+        "cohortId": "isolated-red-stop-probability",
+        "evaluations": 48,
+        "visible": 16,
+        "invisible": 32
+      },
+      {
+        "cohortId": "isolated-red-stop-line-offset",
+        "evaluations": 48,
+        "visible": 16,
+        "invisible": 32
+      },
+      {
+        "cohortId": "complex-seed-142000",
+        "evaluations": 48,
+        "visible": 16,
+        "invisible": 32
+      },
+      {
+        "cohortId": "complex-seed-142001",
+        "evaluations": 48,
+        "visible": 16,
+        "invisible": 32
+      },
+      {
+        "cohortId": "complex-seed-142002",
+        "evaluations": 48,
+        "visible": 16,
+        "invisible": 32
+      }
+    ]
+  },
+  "seeds": {
+    "baseSeeds": [
+      142000,
+      142001,
+      142002
+    ],
+    "baseSeedHex": [
+      "00022ab0",
+      "00022ab1",
+      "00022ab2"
+    ],
+    "scenarioSeeds": [
+      1360032776,
+      1645111649,
+      1964521874
+    ],
+    "scenarioSeedHex": [
+      "51107408",
+      "620e6961",
+      "75183992"
+    ],
+    "distinctBaseSeeds": 3,
+    "distinctScenarioSeeds": 3,
+    "distinctOpportunitySeeds": 72,
+    "perSeed": [
+      {
+        "baseSeed": 142000,
+        "scenarioSeedHex": "51107408",
+        "cohorts": 4,
+        "decisions": 96,
+        "divergent": 20,
+        "parameters": [
+          "red_stop_line_offset",
+          "red_stop_probability",
+          "stop_dwell_time",
+          "stop_full_probability"
+        ]
+      },
+      {
+        "baseSeed": 142001,
+        "scenarioSeedHex": "620e6961",
+        "cohorts": 1,
+        "decisions": 24,
+        "divergent": 13,
+        "parameters": [
+          "red_stop_probability",
+          "stop_dwell_time",
+          "stop_full_probability"
+        ]
+      },
+      {
+        "baseSeed": 142002,
+        "scenarioSeedHex": "75183992",
+        "cohorts": 1,
+        "decisions": 24,
+        "divergent": 10,
+        "parameters": [
+          "red_stop_probability",
+          "stop_dwell_time",
+          "stop_full_probability"
+        ]
+      }
+    ]
+  },
+  "uncertainty": {
+    "status": "MULTI_SEED_SAMPLE",
+    "seeds": 3,
+    "cohorts": 6,
+    "evaluations": 288,
+    "decisions": 144,
+    "divergences": 43,
+    "divergentMin": 10,
+    "divergentMax": 20,
+    "divergentSpread": 10,
+    "generalizable": false,
+    "statement": "Eșantionul are 3 seed-uri distincte, 6 cohorte și 144 decizii comparate; numărătoarea divergențelor pe seed variază între 10 și 20. Rezultatul descrie exact aceste rulări; nu este o estimare pentru alte seed-uri, alte profiluri sau orașul live și nu se raportează un interval de încredere.",
+    "limitations": [
+      "Divergențele sunt cele raportate de 142 pentru oportunitățile scenariului; traiectoriile divergente pot produce oportunități diferite în lumea reală.",
+      "Vizibilitatea este un fapt declarat de apelant (camera reală sau fixture controlat), nu o rază trasată de acest modul.",
+      "Eșantionul este mic și controlat: numerele sunt exacte pentru aceste rulări, nu rate pentru populație.",
+      "Reproductibilitatea este promisă numai pe aceeași platformă, cu același snapshot și același seed de bază."
+    ]
+  },
+  "isolated": [
+    {
+      "cohortId": "isolated-red-stop-probability",
+      "targetParameter": "red_stop_probability",
+      "unit": "probability",
+      "left": 1,
+      "right": 0,
+      "changedParameters": [
+        "red_stop_probability"
+      ],
+      "onlyTargetChanged": true,
+      "divergences": 10,
+      "namedParameters": [
+        "red_stop_probability"
+      ],
+      "foreignParameters": [],
+      "attributable": true
+    },
+    {
+      "cohortId": "isolated-red-stop-line-offset",
+      "targetParameter": "red_stop_line_offset",
+      "unit": "m",
+      "left": 1.2,
+      "right": 5,
+      "changedParameters": [
+        "red_stop_line_offset"
+      ],
+      "onlyTargetChanged": true,
+      "divergences": 2,
+      "namedParameters": [
+        "red_stop_line_offset"
+      ],
+      "foreignParameters": [],
+      "attributable": true
+    }
+  ],
+  "coexistence": {
+    "total": 20,
+    "coexisting": 3,
+    "singleCause": 17,
+    "opportunities": [
+      {
+        "opportunityKey": "opportunity-00",
+        "kind": "STOP",
+        "distinctCauses": 1,
+        "distinctParameters": 1,
+        "coexists": false,
+        "causes": [
+          {
+            "cohortId": "complex-seed-142001",
+            "cause": "PROBABILITY_THRESHOLD",
+            "parameter": "stop_full_probability"
+          },
+          {
+            "cohortId": "complex-seed-142002",
+            "cause": "PROBABILITY_THRESHOLD",
+            "parameter": "stop_full_probability"
+          }
+        ]
+      },
+      {
+        "opportunityKey": "opportunity-02",
+        "kind": "STOP",
+        "distinctCauses": 1,
+        "distinctParameters": 1,
+        "coexists": false,
+        "causes": [
+          {
+            "cohortId": "complex-seed-142001",
+            "cause": "PROBABILITY_THRESHOLD",
+            "parameter": "stop_full_probability"
+          }
+        ]
+      },
+      {
+        "opportunityKey": "opportunity-03",
+        "kind": "SIGNAL",
+        "distinctCauses": 1,
+        "distinctParameters": 1,
+        "coexists": false,
+        "causes": [
+          {
+            "cohortId": "isolated-red-stop-probability",
+            "cause": "PROBABILITY_THRESHOLD",
+            "parameter": "red_stop_probability"
+          },
+          {
+            "cohortId": "complex-seed-142001",
+            "cause": "PROBABILITY_THRESHOLD",
+            "parameter": "red_stop_probability"
+          }
+        ]
+      },
+      {
+        "opportunityKey": "opportunity-04",
+        "kind": "STOP",
+        "distinctCauses": 1,
+        "distinctParameters": 1,
+        "coexists": false,
+        "causes": [
+          {
+            "cohortId": "complex-seed-142000",
+            "cause": "PROBABILITY_THRESHOLD",
+            "parameter": "stop_full_probability"
+          },
+          {
+            "cohortId": "complex-seed-142001",
+            "cause": "PROBABILITY_THRESHOLD",
+            "parameter": "stop_full_probability"
+          },
+          {
+            "cohortId": "complex-seed-142002",
+            "cause": "PROBABILITY_THRESHOLD",
+            "parameter": "stop_full_probability"
+          }
+        ]
+      },
+      {
+        "opportunityKey": "opportunity-05",
+        "kind": "SIGNAL",
+        "distinctCauses": 2,
+        "distinctParameters": 2,
+        "coexists": true,
+        "causes": [
+          {
+            "cohortId": "isolated-red-stop-probability",
+            "cause": "PROBABILITY_THRESHOLD",
+            "parameter": "red_stop_probability"
+          },
+          {
+            "cohortId": "isolated-red-stop-line-offset",
+            "cause": "GEOMETRY_PARAMETER",
+            "parameter": "red_stop_line_offset"
+          }
+        ]
+      },
+      {
+        "opportunityKey": "opportunity-06",
+        "kind": "STOP",
+        "distinctCauses": 1,
+        "distinctParameters": 1,
+        "coexists": false,
+        "causes": [
+          {
+            "cohortId": "complex-seed-142000",
+            "cause": "PROBABILITY_THRESHOLD",
+            "parameter": "stop_full_probability"
+          },
+          {
+            "cohortId": "complex-seed-142002",
+            "cause": "PROBABILITY_THRESHOLD",
+            "parameter": "stop_full_probability"
+          }
+        ]
+      },
+      {
+        "opportunityKey": "opportunity-07",
+        "kind": "SIGNAL",
+        "distinctCauses": 1,
+        "distinctParameters": 1,
+        "coexists": false,
+        "causes": [
+          {
+            "cohortId": "isolated-red-stop-probability",
+            "cause": "PROBABILITY_THRESHOLD",
+            "parameter": "red_stop_probability"
+          },
+          {
+            "cohortId": "complex-seed-142000",
+            "cause": "PROBABILITY_THRESHOLD",
+            "parameter": "red_stop_probability"
+          },
+          {
+            "cohortId": "complex-seed-142001",
+            "cause": "PROBABILITY_THRESHOLD",
+            "parameter": "red_stop_probability"
+          }
+        ]
+      },
+      {
+        "opportunityKey": "opportunity-08",
+        "kind": "STOP",
+        "distinctCauses": 1,
+        "distinctParameters": 1,
+        "coexists": false,
+        "causes": [
+          {
+            "cohortId": "complex-seed-142000",
+            "cause": "PROBABILITY_THRESHOLD",
+            "parameter": "stop_full_probability"
+          },
+          {
+            "cohortId": "complex-seed-142001",
+            "cause": "PROBABILITY_THRESHOLD",
+            "parameter": "stop_full_probability"
+          }
+        ]
+      },
+      {
+        "opportunityKey": "opportunity-09",
+        "kind": "SIGNAL",
+        "distinctCauses": 1,
+        "distinctParameters": 1,
+        "coexists": false,
+        "causes": [
+          {
+            "cohortId": "isolated-red-stop-probability",
+            "cause": "PROBABILITY_THRESHOLD",
+            "parameter": "red_stop_probability"
+          },
+          {
+            "cohortId": "complex-seed-142001",
+            "cause": "PROBABILITY_THRESHOLD",
+            "parameter": "red_stop_probability"
+          }
+        ]
+      },
+      {
+        "opportunityKey": "opportunity-11",
+        "kind": "SIGNAL",
+        "distinctCauses": 1,
+        "distinctParameters": 1,
+        "coexists": false,
+        "causes": [
+          {
+            "cohortId": "isolated-red-stop-probability",
+            "cause": "PROBABILITY_THRESHOLD",
+            "parameter": "red_stop_probability"
+          },
+          {
+            "cohortId": "complex-seed-142002",
+            "cause": "PROBABILITY_THRESHOLD",
+            "parameter": "red_stop_probability"
+          }
+        ]
+      },
+      {
+        "opportunityKey": "opportunity-12",
+        "kind": "STOP",
+        "distinctCauses": 1,
+        "distinctParameters": 1,
+        "coexists": false,
+        "causes": [
+          {
+            "cohortId": "complex-seed-142000",
+            "cause": "GEOMETRY_PARAMETER",
+            "parameter": "stop_dwell_time"
+          },
+          {
+            "cohortId": "complex-seed-142001",
+            "cause": "GEOMETRY_PARAMETER",
+            "parameter": "stop_dwell_time"
+          },
+          {
+            "cohortId": "complex-seed-142002",
+            "cause": "GEOMETRY_PARAMETER",
+            "parameter": "stop_dwell_time"
+          }
+        ]
+      },
+      {
+        "opportunityKey": "opportunity-13",
+        "kind": "SIGNAL",
+        "distinctCauses": 1,
+        "distinctParameters": 1,
+        "coexists": false,
+        "causes": [
+          {
+            "cohortId": "isolated-red-stop-probability",
+            "cause": "PROBABILITY_THRESHOLD",
+            "parameter": "red_stop_probability"
+          }
+        ]
+      },
+      {
+        "opportunityKey": "opportunity-14",
+        "kind": "STOP",
+        "distinctCauses": 1,
+        "distinctParameters": 1,
+        "coexists": false,
+        "causes": [
+          {
+            "cohortId": "complex-seed-142001",
+            "cause": "PROBABILITY_THRESHOLD",
+            "parameter": "stop_full_probability"
+          },
+          {
+            "cohortId": "complex-seed-142002",
+            "cause": "PROBABILITY_THRESHOLD",
+            "parameter": "stop_full_probability"
+          }
+        ]
+      },
+      {
+        "opportunityKey": "opportunity-15",
+        "kind": "SIGNAL",
+        "distinctCauses": 2,
+        "distinctParameters": 2,
+        "coexists": true,
+        "causes": [
+          {
+            "cohortId": "isolated-red-stop-probability",
+            "cause": "PROBABILITY_THRESHOLD",
+            "parameter": "red_stop_probability"
+          },
+          {
+            "cohortId": "isolated-red-stop-line-offset",
+            "cause": "GEOMETRY_PARAMETER",
+            "parameter": "red_stop_line_offset"
+          },
+          {
+            "cohortId": "complex-seed-142000",
+            "cause": "PROBABILITY_THRESHOLD",
+            "parameter": "red_stop_probability"
+          }
+        ]
+      },
+      {
+        "opportunityKey": "opportunity-16",
+        "kind": "STOP",
+        "distinctCauses": 1,
+        "distinctParameters": 1,
+        "coexists": false,
+        "causes": [
+          {
+            "cohortId": "complex-seed-142002",
+            "cause": "PROBABILITY_THRESHOLD",
+            "parameter": "stop_full_probability"
+          }
+        ]
+      },
+      {
+        "opportunityKey": "opportunity-17",
+        "kind": "SIGNAL",
+        "distinctCauses": 1,
+        "distinctParameters": 1,
+        "coexists": false,
+        "causes": [
+          {
+            "cohortId": "isolated-red-stop-probability",
+            "cause": "PROBABILITY_THRESHOLD",
+            "parameter": "red_stop_probability"
+          },
+          {
+            "cohortId": "complex-seed-142002",
+            "cause": "PROBABILITY_THRESHOLD",
+            "parameter": "red_stop_probability"
+          }
+        ]
+      },
+      {
+        "opportunityKey": "opportunity-18",
+        "kind": "STOP",
+        "distinctCauses": 1,
+        "distinctParameters": 1,
+        "coexists": false,
+        "causes": [
+          {
+            "cohortId": "complex-seed-142001",
+            "cause": "PROBABILITY_THRESHOLD",
+            "parameter": "stop_full_probability"
+          },
+          {
+            "cohortId": "complex-seed-142002",
+            "cause": "PROBABILITY_THRESHOLD",
+            "parameter": "stop_full_probability"
+          }
+        ]
+      },
+      {
+        "opportunityKey": "opportunity-20",
+        "kind": "STOP",
+        "distinctCauses": 2,
+        "distinctParameters": 2,
+        "coexists": true,
+        "causes": [
+          {
+            "cohortId": "complex-seed-142000",
+            "cause": "PROBABILITY_THRESHOLD",
+            "parameter": "stop_full_probability"
+          },
+          {
+            "cohortId": "complex-seed-142001",
+            "cause": "PROBABILITY_THRESHOLD",
+            "parameter": "stop_full_probability"
+          },
+          {
+            "cohortId": "complex-seed-142002",
+            "cause": "GEOMETRY_PARAMETER",
+            "parameter": "stop_dwell_time"
+          }
+        ]
+      },
+      {
+        "opportunityKey": "opportunity-21",
+        "kind": "SIGNAL",
+        "distinctCauses": 1,
+        "distinctParameters": 1,
+        "coexists": false,
+        "causes": [
+          {
+            "cohortId": "isolated-red-stop-probability",
+            "cause": "PROBABILITY_THRESHOLD",
+            "parameter": "red_stop_probability"
+          },
+          {
+            "cohortId": "complex-seed-142000",
+            "cause": "PROBABILITY_THRESHOLD",
+            "parameter": "red_stop_probability"
+          },
+          {
+            "cohortId": "complex-seed-142001",
+            "cause": "PROBABILITY_THRESHOLD",
+            "parameter": "red_stop_probability"
+          }
+        ]
+      },
+      {
+        "opportunityKey": "opportunity-23",
+        "kind": "SIGNAL",
+        "distinctCauses": 1,
+        "distinctParameters": 1,
+        "coexists": false,
+        "causes": [
+          {
+            "cohortId": "isolated-red-stop-probability",
+            "cause": "PROBABILITY_THRESHOLD",
+            "parameter": "red_stop_probability"
+          },
+          {
+            "cohortId": "complex-seed-142001",
+            "cause": "PROBABILITY_THRESHOLD",
+            "parameter": "red_stop_probability"
+          }
+        ]
+      }
+    ]
+  },
+  "metrics": [
+    {
+      "id": "overall.violationRate",
+      "source": "BEHAVIOR_138",
+      "unit": "%",
+      "left": 0,
+      "right": 50,
+      "delta": 50,
+      "state": "DELTA",
+      "direction": "HIGHER"
+    },
+    {
+      "id": "overall.meanAccelerationAbsMps2",
+      "source": "COMFORT_139",
+      "unit": "m/s²",
+      "left": 1.2,
+      "right": 2.1,
+      "delta": 0.9,
+      "state": "DELTA",
+      "direction": "HIGHER"
+    }
+  ],
+  "divergences": [
+    {
+      "cohortId": "isolated-red-stop-probability",
+      "opportunityKey": "opportunity-03",
+      "kind": "SIGNAL",
+      "decisionTick": 64,
+      "leftAction": "STOP",
+      "rightAction": "PROCEED",
+      "cause": "PROBABILITY_THRESHOLD",
+      "parameter": "red_stop_probability"
+    },
+    {
+      "cohortId": "isolated-red-stop-probability",
+      "opportunityKey": "opportunity-05",
+      "kind": "SIGNAL",
+      "decisionTick": 66,
+      "leftAction": "STOP",
+      "rightAction": "PROCEED",
+      "cause": "PROBABILITY_THRESHOLD",
+      "parameter": "red_stop_probability"
+    },
+    {
+      "cohortId": "isolated-red-stop-probability",
+      "opportunityKey": "opportunity-07",
+      "kind": "SIGNAL",
+      "decisionTick": 68,
+      "leftAction": "STOP",
+      "rightAction": "PROCEED",
+      "cause": "PROBABILITY_THRESHOLD",
+      "parameter": "red_stop_probability"
+    },
+    {
+      "cohortId": "isolated-red-stop-probability",
+      "opportunityKey": "opportunity-09",
+      "kind": "SIGNAL",
+      "decisionTick": 70,
+      "leftAction": "STOP",
+      "rightAction": "PROCEED",
+      "cause": "PROBABILITY_THRESHOLD",
+      "parameter": "red_stop_probability"
+    },
+    {
+      "cohortId": "isolated-red-stop-probability",
+      "opportunityKey": "opportunity-11",
+      "kind": "SIGNAL",
+      "decisionTick": 72,
+      "leftAction": "STOP",
+      "rightAction": "PROCEED",
+      "cause": "PROBABILITY_THRESHOLD",
+      "parameter": "red_stop_probability"
+    },
+    {
+      "cohortId": "isolated-red-stop-probability",
+      "opportunityKey": "opportunity-13",
+      "kind": "SIGNAL",
+      "decisionTick": 74,
+      "leftAction": "STOP",
+      "rightAction": "PROCEED",
+      "cause": "PROBABILITY_THRESHOLD",
+      "parameter": "red_stop_probability"
+    },
+    {
+      "cohortId": "isolated-red-stop-probability",
+      "opportunityKey": "opportunity-15",
+      "kind": "SIGNAL",
+      "decisionTick": 76,
+      "leftAction": "STOP",
+      "rightAction": "PROCEED",
+      "cause": "PROBABILITY_THRESHOLD",
+      "parameter": "red_stop_probability"
+    },
+    {
+      "cohortId": "isolated-red-stop-probability",
+      "opportunityKey": "opportunity-17",
+      "kind": "SIGNAL",
+      "decisionTick": 78,
+      "leftAction": "STOP",
+      "rightAction": "PROCEED",
+      "cause": "PROBABILITY_THRESHOLD",
+      "parameter": "red_stop_probability"
+    },
+    {
+      "cohortId": "isolated-red-stop-probability",
+      "opportunityKey": "opportunity-21",
+      "kind": "SIGNAL",
+      "decisionTick": 82,
+      "leftAction": "STOP",
+      "rightAction": "PROCEED",
+      "cause": "PROBABILITY_THRESHOLD",
+      "parameter": "red_stop_probability"
+    },
+    {
+      "cohortId": "isolated-red-stop-probability",
+      "opportunityKey": "opportunity-23",
+      "kind": "SIGNAL",
+      "decisionTick": 84,
+      "leftAction": "STOP",
+      "rightAction": "PROCEED",
+      "cause": "PROBABILITY_THRESHOLD",
+      "parameter": "red_stop_probability"
+    },
+    {
+      "cohortId": "isolated-red-stop-line-offset",
+      "opportunityKey": "opportunity-05",
+      "kind": "SIGNAL",
+      "decisionTick": 66,
+      "leftAction": "STOP",
+      "rightAction": "STOP",
+      "cause": "GEOMETRY_PARAMETER",
+      "parameter": "red_stop_line_offset"
+    },
+    {
+      "cohortId": "isolated-red-stop-line-offset",
+      "opportunityKey": "opportunity-15",
+      "kind": "SIGNAL",
+      "decisionTick": 76,
+      "leftAction": "STOP",
+      "rightAction": "STOP",
+      "cause": "GEOMETRY_PARAMETER",
+      "parameter": "red_stop_line_offset"
+    },
+    {
+      "cohortId": "complex-seed-142000",
+      "opportunityKey": "opportunity-04",
+      "kind": "STOP",
+      "decisionTick": 65,
+      "leftAction": "HOLD",
+      "rightAction": "ROLL_THROUGH",
+      "cause": "PROBABILITY_THRESHOLD",
+      "parameter": "stop_full_probability"
+    },
+    {
+      "cohortId": "complex-seed-142000",
+      "opportunityKey": "opportunity-06",
+      "kind": "STOP",
+      "decisionTick": 67,
+      "leftAction": "APPROACH",
+      "rightAction": "ROLL_THROUGH",
+      "cause": "PROBABILITY_THRESHOLD",
+      "parameter": "stop_full_probability"
+    },
+    {
+      "cohortId": "complex-seed-142000",
+      "opportunityKey": "opportunity-07",
+      "kind": "SIGNAL",
+      "decisionTick": 68,
+      "leftAction": "STOP",
+      "rightAction": "PROCEED",
+      "cause": "PROBABILITY_THRESHOLD",
+      "parameter": "red_stop_probability"
+    },
+    {
+      "cohortId": "complex-seed-142000",
+      "opportunityKey": "opportunity-08",
+      "kind": "STOP",
+      "decisionTick": 69,
+      "leftAction": "APPROACH",
+      "rightAction": "ROLL_THROUGH",
+      "cause": "PROBABILITY_THRESHOLD",
+      "parameter": "stop_full_probability"
+    },
+    {
+      "cohortId": "complex-seed-142000",
+      "opportunityKey": "opportunity-12",
+      "kind": "STOP",
+      "decisionTick": 73,
+      "leftAction": "HOLD",
+      "rightAction": "RELEASE",
+      "cause": "GEOMETRY_PARAMETER",
+      "parameter": "stop_dwell_time"
+    },
+    {
+      "cohortId": "complex-seed-142000",
+      "opportunityKey": "opportunity-15",
+      "kind": "SIGNAL",
+      "decisionTick": 76,
+      "leftAction": "STOP",
+      "rightAction": "PROCEED",
+      "cause": "PROBABILITY_THRESHOLD",
+      "parameter": "red_stop_probability"
+    },
+    {
+      "cohortId": "complex-seed-142000",
+      "opportunityKey": "opportunity-20",
+      "kind": "STOP",
+      "decisionTick": 81,
+      "leftAction": "HOLD",
+      "rightAction": "ROLL_THROUGH",
+      "cause": "PROBABILITY_THRESHOLD",
+      "parameter": "stop_full_probability"
+    },
+    {
+      "cohortId": "complex-seed-142000",
+      "opportunityKey": "opportunity-21",
+      "kind": "SIGNAL",
+      "decisionTick": 82,
+      "leftAction": "STOP",
+      "rightAction": "PROCEED",
+      "cause": "PROBABILITY_THRESHOLD",
+      "parameter": "red_stop_probability"
+    },
+    {
+      "cohortId": "complex-seed-142001",
+      "opportunityKey": "opportunity-00",
+      "kind": "STOP",
+      "decisionTick": 61,
+      "leftAction": "APPROACH",
+      "rightAction": "ROLL_THROUGH",
+      "cause": "PROBABILITY_THRESHOLD",
+      "parameter": "stop_full_probability"
+    },
+    {
+      "cohortId": "complex-seed-142001",
+      "opportunityKey": "opportunity-02",
+      "kind": "STOP",
+      "decisionTick": 63,
+      "leftAction": "APPROACH",
+      "rightAction": "ROLL_THROUGH",
+      "cause": "PROBABILITY_THRESHOLD",
+      "parameter": "stop_full_probability"
+    },
+    {
+      "cohortId": "complex-seed-142001",
+      "opportunityKey": "opportunity-03",
+      "kind": "SIGNAL",
+      "decisionTick": 64,
+      "leftAction": "STOP",
+      "rightAction": "PROCEED",
+      "cause": "PROBABILITY_THRESHOLD",
+      "parameter": "red_stop_probability"
+    },
+    {
+      "cohortId": "complex-seed-142001",
+      "opportunityKey": "opportunity-04",
+      "kind": "STOP",
+      "decisionTick": 65,
+      "leftAction": "HOLD",
+      "rightAction": "ROLL_THROUGH",
+      "cause": "PROBABILITY_THRESHOLD",
+      "parameter": "stop_full_probability"
+    },
+    {
+      "cohortId": "complex-seed-142001",
+      "opportunityKey": "opportunity-07",
+      "kind": "SIGNAL",
+      "decisionTick": 68,
+      "leftAction": "STOP",
+      "rightAction": "PROCEED",
+      "cause": "PROBABILITY_THRESHOLD",
+      "parameter": "red_stop_probability"
+    },
+    {
+      "cohortId": "complex-seed-142001",
+      "opportunityKey": "opportunity-08",
+      "kind": "STOP",
+      "decisionTick": 69,
+      "leftAction": "APPROACH",
+      "rightAction": "ROLL_THROUGH",
+      "cause": "PROBABILITY_THRESHOLD",
+      "parameter": "stop_full_probability"
+    },
+    {
+      "cohortId": "complex-seed-142001",
+      "opportunityKey": "opportunity-09",
+      "kind": "SIGNAL",
+      "decisionTick": 70,
+      "leftAction": "STOP",
+      "rightAction": "STOP",
+      "cause": "PROBABILITY_THRESHOLD",
+      "parameter": "red_stop_probability"
+    },
+    {
+      "cohortId": "complex-seed-142001",
+      "opportunityKey": "opportunity-12",
+      "kind": "STOP",
+      "decisionTick": 73,
+      "leftAction": "HOLD",
+      "rightAction": "RELEASE",
+      "cause": "GEOMETRY_PARAMETER",
+      "parameter": "stop_dwell_time"
+    },
+    {
+      "cohortId": "complex-seed-142001",
+      "opportunityKey": "opportunity-14",
+      "kind": "STOP",
+      "decisionTick": 75,
+      "leftAction": "APPROACH",
+      "rightAction": "ROLL_THROUGH",
+      "cause": "PROBABILITY_THRESHOLD",
+      "parameter": "stop_full_probability"
+    },
+    {
+      "cohortId": "complex-seed-142001",
+      "opportunityKey": "opportunity-18",
+      "kind": "STOP",
+      "decisionTick": 79,
+      "leftAction": "APPROACH",
+      "rightAction": "ROLL_THROUGH",
+      "cause": "PROBABILITY_THRESHOLD",
+      "parameter": "stop_full_probability"
+    },
+    {
+      "cohortId": "complex-seed-142001",
+      "opportunityKey": "opportunity-20",
+      "kind": "STOP",
+      "decisionTick": 81,
+      "leftAction": "HOLD",
+      "rightAction": "ROLL_THROUGH",
+      "cause": "PROBABILITY_THRESHOLD",
+      "parameter": "stop_full_probability"
+    },
+    {
+      "cohortId": "complex-seed-142001",
+      "opportunityKey": "opportunity-21",
+      "kind": "SIGNAL",
+      "decisionTick": 82,
+      "leftAction": "STOP",
+      "rightAction": "PROCEED",
+      "cause": "PROBABILITY_THRESHOLD",
+      "parameter": "red_stop_probability"
+    },
+    {
+      "cohortId": "complex-seed-142001",
+      "opportunityKey": "opportunity-23",
+      "kind": "SIGNAL",
+      "decisionTick": 84,
+      "leftAction": "STOP",
+      "rightAction": "PROCEED",
+      "cause": "PROBABILITY_THRESHOLD",
+      "parameter": "red_stop_probability"
+    },
+    {
+      "cohortId": "complex-seed-142002",
+      "opportunityKey": "opportunity-00",
+      "kind": "STOP",
+      "decisionTick": 61,
+      "leftAction": "APPROACH",
+      "rightAction": "ROLL_THROUGH",
+      "cause": "PROBABILITY_THRESHOLD",
+      "parameter": "stop_full_probability"
+    },
+    {
+      "cohortId": "complex-seed-142002",
+      "opportunityKey": "opportunity-04",
+      "kind": "STOP",
+      "decisionTick": 65,
+      "leftAction": "HOLD",
+      "rightAction": "ROLL_THROUGH",
+      "cause": "PROBABILITY_THRESHOLD",
+      "parameter": "stop_full_probability"
+    },
+    {
+      "cohortId": "complex-seed-142002",
+      "opportunityKey": "opportunity-06",
+      "kind": "STOP",
+      "decisionTick": 67,
+      "leftAction": "APPROACH",
+      "rightAction": "ROLL_THROUGH",
+      "cause": "PROBABILITY_THRESHOLD",
+      "parameter": "stop_full_probability"
+    },
+    {
+      "cohortId": "complex-seed-142002",
+      "opportunityKey": "opportunity-11",
+      "kind": "SIGNAL",
+      "decisionTick": 72,
+      "leftAction": "STOP",
+      "rightAction": "PROCEED",
+      "cause": "PROBABILITY_THRESHOLD",
+      "parameter": "red_stop_probability"
+    },
+    {
+      "cohortId": "complex-seed-142002",
+      "opportunityKey": "opportunity-12",
+      "kind": "STOP",
+      "decisionTick": 73,
+      "leftAction": "HOLD",
+      "rightAction": "RELEASE",
+      "cause": "GEOMETRY_PARAMETER",
+      "parameter": "stop_dwell_time"
+    },
+    {
+      "cohortId": "complex-seed-142002",
+      "opportunityKey": "opportunity-14",
+      "kind": "STOP",
+      "decisionTick": 75,
+      "leftAction": "APPROACH",
+      "rightAction": "ROLL_THROUGH",
+      "cause": "PROBABILITY_THRESHOLD",
+      "parameter": "stop_full_probability"
+    },
+    {
+      "cohortId": "complex-seed-142002",
+      "opportunityKey": "opportunity-16",
+      "kind": "STOP",
+      "decisionTick": 77,
+      "leftAction": "APPROACH",
+      "rightAction": "ROLL_THROUGH",
+      "cause": "PROBABILITY_THRESHOLD",
+      "parameter": "stop_full_probability"
+    },
+    {
+      "cohortId": "complex-seed-142002",
+      "opportunityKey": "opportunity-17",
+      "kind": "SIGNAL",
+      "decisionTick": 78,
+      "leftAction": "STOP",
+      "rightAction": "PROCEED",
+      "cause": "PROBABILITY_THRESHOLD",
+      "parameter": "red_stop_probability"
+    },
+    {
+      "cohortId": "complex-seed-142002",
+      "opportunityKey": "opportunity-18",
+      "kind": "STOP",
+      "decisionTick": 79,
+      "leftAction": "APPROACH",
+      "rightAction": "ROLL_THROUGH",
+      "cause": "PROBABILITY_THRESHOLD",
+      "parameter": "stop_full_probability"
+    },
+    {
+      "cohortId": "complex-seed-142002",
+      "opportunityKey": "opportunity-20",
+      "kind": "STOP",
+      "decisionTick": 81,
+      "leftAction": "HOLD",
+      "rightAction": "RELEASE",
+      "cause": "GEOMETRY_PARAMETER",
+      "parameter": "stop_dwell_time"
+    }
+  ],
+  "repeat": {
+    "signature": "f6006a31",
+    "identical": true,
+    "rerunUnchanged": true
+  },
+  "refusals": [
+    {
+      "probe": "exposure-incomplete",
+      "codes": [
+        "EXPOSURE_INCOMPLETE"
+      ],
+      "paths": [
+        "cohorts[0].visibility.facts.opportunity-00"
+      ],
+      "detail": "EXPOSURE_INCOMPLETE at cohorts[0].visibility.facts.opportunity-00: The evaluated opportunity opportunity-00 has no visibility fact"
+    },
+    {
+      "probe": "exposure-tick-mismatch",
+      "codes": [
+        "EXPOSURE_TICK_MISMATCH"
+      ],
+      "paths": [
+        "cohorts[0].visibility.facts.opportunity-00.decisionTick"
+      ],
+      "detail": "EXPOSURE_TICK_MISMATCH at cohorts[0].visibility.facts.opportunity-00.decisionTick: The visibility fact is bound to tick 62, but the opportunity is decided at tick 61"
+    },
+    {
+      "probe": "cohort-duplicate",
+      "codes": [
+        "COHORT_DUPLICATE"
+      ],
+      "paths": [
+        "cohorts[1].cohortId"
+      ],
+      "detail": "COHORT_DUPLICATE at cohorts[1].cohortId: The cohort id identical-pair is used twice"
+    },
+    {
+      "probe": "isolated-two-parameters",
+      "codes": [
+        "ISOLATED_PARAMETER_NOT_ISOLATED"
+      ],
+      "paths": [
+        "cohorts[0].targetParameter"
+      ],
+      "detail": "ISOLATED_PARAMETER_NOT_ISOLATED at cohorts[0].targetParameter: Only red_stop_probability may differ, but the profile versions differ in red_stop_probability, stop_dwell_time"
+    },
+    {
+      "probe": "refused-rerun",
+      "codes": [
+        "RERUN_NOT_READY"
+      ],
+      "paths": [
+        "cohorts[0].rerun.status"
+      ],
+      "detail": "RERUN_NOT_READY at cohorts[0].rerun.status: The 142 result is REFUSED and carries no comparison"
+    }
+  ],
+  "checks": [
+    {
+      "name": "version",
+      "expected": "143-experiment-compare-v1",
+      "actual": "143-experiment-compare-v1",
+      "pass": true,
+      "detail": "143 compare read model"
+    },
+    {
+      "name": "rerun-source",
+      "expected": "142-experiment-rerun-v1",
+      "actual": "142-experiment-rerun-v1",
+      "pass": true,
+      "detail": "reads the 142 contract"
+    },
+    {
+      "name": "policies-evaluated",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no 050/051 call in this layer"
+    },
+    {
+      "name": "cohorts",
+      "expected": 6,
+      "actual": 6,
+      "pass": true,
+      "detail": "controlled cases plus multi-seed"
+    },
+    {
+      "name": "evaluations",
+      "expected": 288,
+      "actual": 288,
+      "pass": true,
+      "detail": "opportunities × profiles"
+    },
+    {
+      "name": "decisions",
+      "expected": 144,
+      "actual": 144,
+      "pass": true,
+      "detail": "one decision per opportunity"
+    },
+    {
+      "name": "divergent",
+      "expected": 43,
+      "actual": 43,
+      "pass": true,
+      "detail": "differences reported by 142"
+    },
+    {
+      "name": "identical",
+      "expected": 101,
+      "actual": 101,
+      "pass": true,
+      "detail": "unchanged opportunities"
+    },
+    {
+      "name": "divergent-equals-142-sum",
+      "expected": 43,
+      "actual": 43,
+      "pass": true,
+      "detail": "the compare count is the 142 count, not a re-derivation"
+    },
+    {
+      "name": "identical-control",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "identical parameters produce no difference"
+    },
+    {
+      "name": "cause-threshold",
+      "expected": 37,
+      "actual": 37,
+      "pass": true,
+      "detail": "threshold"
+    },
+    {
+      "name": "cause-geometry",
+      "expected": 6,
+      "actual": 6,
+      "pass": true,
+      "detail": "geometry"
+    },
+    {
+      "name": "distinct-causes",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "two causes coexist"
+    },
+    {
+      "name": "distinct-parameters",
+      "expected": 4,
+      "actual": 4,
+      "pass": true,
+      "detail": "four parameters, never one"
+    },
+    {
+      "name": "dominant-share-below-one",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "no parameter explains every difference"
+    },
+    {
+      "name": "criterion-satisfied",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "acceptance criterion 1"
+    },
+    {
+      "name": "unattributed",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no UNCLASSIFIED divergence"
+    },
+    {
+      "name": "signal-divergences",
+      "expected": 22,
+      "actual": 22,
+      "pass": true,
+      "detail": "SIGNAL"
+    },
+    {
+      "name": "stop-divergences",
+      "expected": 21,
+      "actual": 21,
+      "pass": true,
+      "detail": "STOP"
+    },
+    {
+      "name": "coexisting",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "same opportunity, two causes"
+    },
+    {
+      "name": "coexistence-example",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "opportunity-15: threshold in one cohort, geometry in another"
+    },
+    {
+      "name": "evaluated-opportunities",
+      "expected": 144,
+      "actual": 144,
+      "pass": true,
+      "detail": "authored opportunities across cohorts"
+    },
+    {
+      "name": "visible",
+      "expected": 96,
+      "actual": 96,
+      "pass": true,
+      "detail": "declared visible evaluations"
+    },
+    {
+      "name": "invisible",
+      "expected": 192,
+      "actual": 192,
+      "pass": true,
+      "detail": "declared invisible evaluations"
+    },
+    {
+      "name": "exposure-window",
+      "expected": "61-84/24",
+      "actual": "61-84/24",
+      "pass": true,
+      "detail": "real tick window"
+    },
+    {
+      "name": "base-seeds",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "three base seeds"
+    },
+    {
+      "name": "scenario-seeds",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "one scenario seed each"
+    },
+    {
+      "name": "opportunity-seeds",
+      "expected": 72,
+      "actual": 72,
+      "pass": true,
+      "detail": "distinct (taxi, event) seeds"
+    },
+    {
+      "name": "seed-spread",
+      "expected": "10-20",
+      "actual": "10-20",
+      "pass": true,
+      "detail": "real per-seed min and max"
+    },
+    {
+      "name": "multi-seed",
+      "expected": "MULTI_SEED_SAMPLE",
+      "actual": "MULTI_SEED_SAMPLE",
+      "pass": true,
+      "detail": "declared sample kind"
+    },
+    {
+      "name": "not-generalizable",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "declared limitation"
+    },
+    {
+      "name": "isolated-probability-only-target",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "only red_stop_probability changes"
+    },
+    {
+      "name": "isolated-probability-divergences",
+      "expected": 10,
+      "actual": 10,
+      "pass": true,
+      "detail": "every red-like opportunity differs"
+    },
+    {
+      "name": "isolated-probability-attributed",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "no foreign parameter named"
+    },
+    {
+      "name": "isolated-offset-only-target",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "only red_stop_line_offset changes"
+    },
+    {
+      "name": "isolated-offset-divergences",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "the 4 m stop lines cross the new offset"
+    },
+    {
+      "name": "isolated-offset-attributed",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "no foreign parameter named"
+    },
+    {
+      "name": "metric-pairs",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "138 and 139 read models"
+    },
+    {
+      "name": "behavior-delta",
+      "expected": 50,
+      "actual": 50,
+      "pass": true,
+      "detail": "violationRate"
+    },
+    {
+      "name": "comfort-delta",
+      "expected": 0.9,
+      "actual": 0.9,
+      "pass": true,
+      "detail": "mean |acceleration|"
+    },
+    {
+      "name": "repeat-signature",
+      "expected": "f6006a31",
+      "actual": "f6006a31",
+      "pass": true,
+      "detail": "the same request produces the same signature"
+    },
+    {
+      "name": "rerun-not-mutated",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the 142 results are read only"
+    },
+    {
+      "name": "refusal-probes",
+      "expected": 5,
+      "actual": 5,
+      "pass": true,
+      "detail": "closed refusal codes"
+    },
+    {
+      "name": "refusal-exposure",
+      "expected": "EXPOSURE_INCOMPLETE",
+      "actual": "EXPOSURE_INCOMPLETE",
+      "pass": true,
+      "detail": "missing fact"
+    },
+    {
+      "name": "refusal-tick",
+      "expected": "EXPOSURE_TICK_MISMATCH",
+      "actual": "EXPOSURE_TICK_MISMATCH",
+      "pass": true,
+      "detail": "shifted tick"
+    },
+    {
+      "name": "refusal-duplicate",
+      "expected": "COHORT_DUPLICATE",
+      "actual": "COHORT_DUPLICATE",
+      "pass": true,
+      "detail": "two cohorts"
+    },
+    {
+      "name": "refusal-isolation",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "two parameters"
+    },
+    {
+      "name": "refusal-rerun",
+      "expected": "RERUN_NOT_READY",
+      "actual": "RERUN_NOT_READY",
+      "pass": true,
+      "detail": "refused 142"
+    },
+    {
+      "name": "refusal-metric",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "a metric must be bound to a real cohort pair"
+    }
+  ],
+  "summary": {
+    "probes": 5,
+    "checks": 49,
+    "passed": 49,
+    "pass": true
+  }
+}
