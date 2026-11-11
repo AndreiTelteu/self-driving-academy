@@ -7,3 +7,5 @@ export * from './inverse-learning';
 export * from './cross-class-fidelity';
 export * from './learning-edgecases';
 export * from './learning-gate24';
+export * from './experiment-ledger-isolation';
+export * from './experiment-snapshot';

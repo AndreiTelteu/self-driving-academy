@@ -1,0 +1,580 @@
+{
+  "version": "140-experiment-snapshot-v1",
+  "ledgerVersion": "140-experiment-ledger-isolation-v1",
+  "contract": {
+    "sections": [
+      "snapshotVersion",
+      "units",
+      "tick",
+      "worldEpoch",
+      "profile",
+      "vehicles",
+      "controllers",
+      "rides",
+      "passengers",
+      "segments",
+      "opportunities",
+      "signals",
+      "dispatch",
+      "learning",
+      "rng",
+      "dedup"
+    ],
+    "rejectionCodes": [
+      "CAPTURE_REJECTED",
+      "SNAPSHOT_INVALID",
+      "CHECKSUM_MISMATCH",
+      "TICK_MISMATCH",
+      "ENGINE_VERSION_MISMATCH",
+      "PHYSICS_BACKEND_MISMATCH",
+      "MAP_VERSION_MISMATCH",
+      "ROUNDTRIP_FIELD_MISMATCH",
+      "LEDGER_CHANGED"
+    ],
+    "ledgerNames": [
+      "LEARNING",
+      "REWARDS",
+      "KPI"
+    ],
+    "ledgerCodes": [
+      "LIVE_LEDGER_READ_ONLY",
+      "EXPERIMENT_LEDGER_MISMATCH"
+    ],
+    "integrity": {
+      "canonicalization": "SDA-CJSON-1",
+      "algorithm": "SHA-256"
+    },
+    "integrityMatches206": true,
+    "tickHz": 60
+  },
+  "snapshot": {
+    "experimentId": "experiment-140-fixture",
+    "tick": 60,
+    "expectedTick": 60,
+    "ticksAdvanced": 0,
+    "bytes": 64378,
+    "checksum": "c5a0738c0be1b8a149726738b9b9cccad5655229c542396b04d8aa9d24d8bcb5",
+    "entities": 287,
+    "fields": 3080,
+    "mismatches": [],
+    "sections": [
+      {
+        "section": "snapshotVersion",
+        "entities": 1,
+        "fields": 1
+      },
+      {
+        "section": "units",
+        "entities": 1,
+        "fields": 1
+      },
+      {
+        "section": "tick",
+        "entities": 1,
+        "fields": 1
+      },
+      {
+        "section": "worldEpoch",
+        "entities": 1,
+        "fields": 1
+      },
+      {
+        "section": "profile",
+        "entities": 1,
+        "fields": 3
+      },
+      {
+        "section": "vehicles",
+        "entities": 70,
+        "fields": 1680
+      },
+      {
+        "section": "controllers",
+        "entities": 70,
+        "fields": 560
+      },
+      {
+        "section": "rides",
+        "entities": 30,
+        "fields": 240
+      },
+      {
+        "section": "passengers",
+        "entities": 30,
+        "fields": 150
+      },
+      {
+        "section": "segments",
+        "entities": 3,
+        "fields": 21
+      },
+      {
+        "section": "opportunities",
+        "entities": 64,
+        "fields": 320
+      },
+      {
+        "section": "signals",
+        "entities": 8,
+        "fields": 32
+      },
+      {
+        "section": "dispatch",
+        "entities": 4,
+        "fields": 24
+      },
+      {
+        "section": "learning",
+        "entities": 1,
+        "fields": 33
+      },
+      {
+        "section": "rng",
+        "entities": 1,
+        "fields": 4
+      },
+      {
+        "section": "dedup",
+        "entities": 1,
+        "fields": 9
+      }
+    ],
+    "resumeVersion": "206-world-resume-v1"
+  },
+  "continuation": {
+    "ticks": 60,
+    "identical": true,
+    "digest": "c1347393390deb7bb6a5b504986720aff53c40348e7777362caa327c643f8a6a"
+  },
+  "refusals": [
+    {
+      "probe": "STORED_CHECKSUM_CORRUPTED",
+      "stage": "READ",
+      "codes": [
+        "CHECKSUM_MISMATCH"
+      ],
+      "detail": "CHECKSUM_MISMATCH: The stored snapshot does not match its checksum (snapshot.checksum)"
+    },
+    {
+      "probe": "ENGINE_VERSION",
+      "stage": "COMPATIBILITY",
+      "codes": [
+        "ENGINE_VERSION_MISMATCH"
+      ],
+      "detail": "engineVersion: stored babylon-9.28.0, current babylon-9.29.0"
+    },
+    {
+      "probe": "PHYSICS_BACKEND",
+      "stage": "COMPATIBILITY",
+      "codes": [
+        "PHYSICS_BACKEND_MISMATCH"
+      ],
+      "detail": "physicsVersion: stored ammo-0.4.0, current rapier-0.21.0"
+    },
+    {
+      "probe": "MAP_VERSION",
+      "stage": "COMPATIBILITY",
+      "codes": [
+        "MAP_VERSION_MISMATCH"
+      ],
+      "detail": "mapVersion: stored city-v2, current city-v1"
+    },
+    {
+      "probe": "ALL_THREE",
+      "stage": "COMPATIBILITY",
+      "codes": [
+        "ENGINE_VERSION_MISMATCH",
+        "PHYSICS_BACKEND_MISMATCH",
+        "MAP_VERSION_MISMATCH"
+      ],
+      "detail": "engineVersion: stored babylon-9.28.0, current babylon-9.29.0; physicsVersion: stored ammo-0.4.0, current rapier-0.21.0; mapVersion: stored city-v2, current city-v1"
+    },
+    {
+      "probe": "OTHER_TICK",
+      "stage": "TICK",
+      "codes": [
+        "TICK_MISMATCH"
+      ],
+      "detail": "The snapshot is at tick 60, the experiment starts at 61"
+    },
+    {
+      "probe": "CAPTURE_INSIDE_STEP",
+      "stage": "CAPTURE",
+      "codes": [
+        "CAPTURE_REJECTED"
+      ],
+      "detail": "TICK_NOT_BOUNDARY: A checkpoint may only be captured on a tick boundary (snapshot.tickBoundary)"
+    }
+  ],
+  "ledger": {
+    "structuralSurface": [
+      "fingerprint",
+      "fork",
+      "structuralIsolation",
+      "verify",
+      "version",
+      "write"
+    ],
+    "structuralIsolation": true,
+    "directWrite": {
+      "status": "REFUSED",
+      "code": "LIVE_LEDGER_READ_ONLY",
+      "ledger": "REWARDS",
+      "rowId": "probe-direct",
+      "appliedToLive": false,
+      "copyRows": 0,
+      "detail": "The live ledger is read-only for an experiment; write into a fork to change a copy"
+    },
+    "copyWrite": {
+      "status": "ACCEPTED_IN_COPY",
+      "code": null,
+      "ledger": "REWARDS",
+      "rowId": "probe-copy",
+      "appliedToLive": false,
+      "copyRows": 1,
+      "detail": "The row was appended to the detached copy; the live ledger was not touched"
+    },
+    "copyRows": 1,
+    "crossLedgerWrite": {
+      "status": "REFUSED",
+      "code": "EXPERIMENT_LEDGER_MISMATCH",
+      "ledger": "KPI",
+      "rowId": "probe-wrong",
+      "appliedToLive": false,
+      "copyRows": 1,
+      "detail": "The REWARDS fork only accepts REWARDS rows"
+    },
+    "verification": {
+      "before": {
+        "learning": "5f9bdd0d3962f6e8f25b1d4264d0cccb4bcde4f22369479e7fe1aaeac1409a51",
+        "rewards": "719e691629d32c21b2582bfa63ce9ef292e9a500f4848beb29374aa133bbf1b6",
+        "kpi": "0be4b6ba31b22957f3141cbab7b433423604e0aa7373b597be4fbbed8b94d10c"
+      },
+      "after": {
+        "learning": "5f9bdd0d3962f6e8f25b1d4264d0cccb4bcde4f22369479e7fe1aaeac1409a51",
+        "rewards": "719e691629d32c21b2582bfa63ce9ef292e9a500f4848beb29374aa133bbf1b6",
+        "kpi": "0be4b6ba31b22957f3141cbab7b433423604e0aa7373b597be4fbbed8b94d10c"
+      },
+      "unchanged": true,
+      "changedLedgers": [],
+      "liveWrites": 0,
+      "refusedWrites": 2,
+      "copyWrites": 1,
+      "forks": 1
+    },
+    "controlWriteDetected": true,
+    "controlChangedLedgers": [
+      "KPI"
+    ],
+    "fingerprintStableAroundLoad": true
+  },
+  "checks": [
+    {
+      "name": "contract-version",
+      "expected": "140-experiment-snapshot-v1",
+      "actual": "140-experiment-snapshot-v1",
+      "pass": true,
+      "detail": "140 snapshot contract"
+    },
+    {
+      "name": "integrity-matches-206",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the experiment reuses SDA-CJSON-1 + SHA-256, not a second format"
+    },
+    {
+      "name": "section-count",
+      "expected": 16,
+      "actual": 16,
+      "pass": true,
+      "detail": "the 206 payload sections"
+    },
+    {
+      "name": "tick-restored",
+      "expected": 60,
+      "actual": 60,
+      "pass": true,
+      "detail": "the restored tick is the snapshot tick"
+    },
+    {
+      "name": "tick-expected",
+      "expected": 60,
+      "actual": 60,
+      "pass": true,
+      "detail": "the experiment requests that same tick"
+    },
+    {
+      "name": "no-advance",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the load never advances the fixed-tick loop"
+    },
+    {
+      "name": "snapshot-bytes",
+      "expected": 64378,
+      "actual": 64378,
+      "pass": true,
+      "detail": "the complete 70-vehicle snapshot size"
+    },
+    {
+      "name": "snapshot-checksum",
+      "expected": "c5a0738c0be1b8a149726738b9b9cccad5655229c542396b04d8aa9d24d8bcb5",
+      "actual": "c5a0738c0be1b8a149726738b9b9cccad5655229c542396b04d8aa9d24d8bcb5",
+      "pass": true,
+      "detail": "deterministic SHA-256 of the captured payload"
+    },
+    {
+      "name": "vehicles",
+      "expected": 70,
+      "actual": 70,
+      "pass": true,
+      "detail": "30 taxis + 40 civilians"
+    },
+    {
+      "name": "controllers",
+      "expected": 70,
+      "actual": 70,
+      "pass": true,
+      "detail": "one controller memory per vehicle"
+    },
+    {
+      "name": "passengers",
+      "expected": 30,
+      "actual": 30,
+      "pass": true,
+      "detail": "waiting, onboard and delivered passengers"
+    },
+    {
+      "name": "rides",
+      "expected": 30,
+      "actual": 30,
+      "pass": true,
+      "detail": "one ride per passenger"
+    },
+    {
+      "name": "segments",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "open, closed and incomplete segments"
+    },
+    {
+      "name": "opportunities",
+      "expected": 64,
+      "actual": 64,
+      "pass": true,
+      "detail": "evaluated opportunities"
+    },
+    {
+      "name": "signals",
+      "expected": 8,
+      "actual": 8,
+      "pass": true,
+      "detail": "signal phases and remaining ticks"
+    },
+    {
+      "name": "dispatch-entities",
+      "expected": 4,
+      "actual": 4,
+      "pass": true,
+      "detail": "3 pending jobs + 1 accepted result"
+    },
+    {
+      "name": "dispatch-fields",
+      "expected": 24,
+      "actual": 24,
+      "pass": true,
+      "detail": "pending and accepted rows compared leaf by leaf"
+    },
+    {
+      "name": "entities-total",
+      "expected": 287,
+      "actual": 287,
+      "pass": true,
+      "detail": "entities compared in the roundtrip"
+    },
+    {
+      "name": "fields-total",
+      "expected": 3080,
+      "actual": 3080,
+      "pass": true,
+      "detail": "leaf fields compared in the roundtrip"
+    },
+    {
+      "name": "mismatches",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "stored and restored states are identical"
+    },
+    {
+      "name": "comparison-recomputed",
+      "expected": 3080,
+      "actual": 3080,
+      "pass": true,
+      "detail": "an independent comparison of capture and restored state reports the same field count"
+    },
+    {
+      "name": "resume-plan",
+      "expected": "206-world-resume-v1",
+      "actual": "206-world-resume-v1",
+      "pass": true,
+      "detail": "the experiment gets the real 206 resume plan"
+    },
+    {
+      "name": "checksum-corrupted-refused",
+      "expected": "READ/CHECKSUM_MISMATCH",
+      "actual": "READ/CHECKSUM_MISMATCH",
+      "pass": true,
+      "detail": "a modified payload is refused before any value is used"
+    },
+    {
+      "name": "engine-refused",
+      "expected": "COMPATIBILITY/ENGINE_VERSION_MISMATCH",
+      "actual": "COMPATIBILITY/ENGINE_VERSION_MISMATCH",
+      "pass": true,
+      "detail": "another engine build is a closed refusal"
+    },
+    {
+      "name": "physics-refused",
+      "expected": "COMPATIBILITY/PHYSICS_BACKEND_MISMATCH",
+      "actual": "COMPATIBILITY/PHYSICS_BACKEND_MISMATCH",
+      "pass": true,
+      "detail": "another physics backend is a closed refusal"
+    },
+    {
+      "name": "map-refused",
+      "expected": "COMPATIBILITY/MAP_VERSION_MISMATCH",
+      "actual": "COMPATIBILITY/MAP_VERSION_MISMATCH",
+      "pass": true,
+      "detail": "another map is a closed refusal"
+    },
+    {
+      "name": "combined-refused",
+      "expected": "ENGINE_VERSION_MISMATCH,PHYSICS_BACKEND_MISMATCH,MAP_VERSION_MISMATCH",
+      "actual": "ENGINE_VERSION_MISMATCH,PHYSICS_BACKEND_MISMATCH,MAP_VERSION_MISMATCH",
+      "pass": true,
+      "detail": "every incompatible field is named at once"
+    },
+    {
+      "name": "tick-refused",
+      "expected": "TICK/TICK_MISMATCH",
+      "actual": "TICK/TICK_MISMATCH",
+      "pass": true,
+      "detail": "a snapshot from another tick is not loaded as the experiment start"
+    },
+    {
+      "name": "capture-boundary-refused",
+      "expected": "CAPTURE/CAPTURE_REJECTED",
+      "actual": "CAPTURE/CAPTURE_REJECTED",
+      "pass": true,
+      "detail": "a capture inside the fixed step is refused"
+    },
+    {
+      "name": "ledger-surface",
+      "expected": "fingerprint,fork,structuralIsolation,verify,version,write",
+      "actual": "fingerprint,fork,structuralIsolation,verify,version,write",
+      "pass": true,
+      "detail": "the experiment handle exposes observation, a copy and a refusing write only"
+    },
+    {
+      "name": "ledger-direct-refused",
+      "expected": "REFUSED/LIVE_LEDGER_READ_ONLY",
+      "actual": "REFUSED/LIVE_LEDGER_READ_ONLY",
+      "pass": true,
+      "detail": "a direct write never reaches the live ledger"
+    },
+    {
+      "name": "ledger-direct-not-live",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "no live row was appended"
+    },
+    {
+      "name": "ledger-copy-accepted",
+      "expected": "ACCEPTED_IN_COPY",
+      "actual": "ACCEPTED_IN_COPY",
+      "pass": true,
+      "detail": "the fork accepts the same write"
+    },
+    {
+      "name": "ledger-copy-not-live",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "the fork write stays in the copy"
+    },
+    {
+      "name": "ledger-copy-rows",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the copied row count is reported"
+    },
+    {
+      "name": "ledger-cross-refused",
+      "expected": "EXPERIMENT_LEDGER_MISMATCH",
+      "actual": "EXPERIMENT_LEDGER_MISMATCH",
+      "pass": true,
+      "detail": "a fork only accepts its own ledger"
+    },
+    {
+      "name": "ledger-unchanged",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "learning, rewards and KPI fingerprints are identical"
+    },
+    {
+      "name": "ledger-live-writes",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the experiment wrote zero live rows"
+    },
+    {
+      "name": "ledger-stable-around-load",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the successful load leaves the fingerprints unchanged"
+    },
+    {
+      "name": "ledger-control-detected",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "a real write on the live KPI ledger changes its fingerprint"
+    },
+    {
+      "name": "ledger-control-scope",
+      "expected": "KPI",
+      "actual": "KPI",
+      "pass": true,
+      "detail": "only the ledger that was written changes"
+    },
+    {
+      "name": "continuation-identical",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "original and restored worlds agree after 60 ticks"
+    },
+    {
+      "name": "deterministic",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "two runs produce byte-identical results"
+    }
+  ],
+  "summary": {
+    "probes": 7,
+    "checks": 43,
+    "passed": 43,
+    "pass": true
+  }
+}
