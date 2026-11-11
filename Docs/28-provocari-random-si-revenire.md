@@ -48,3 +48,5 @@ Un meniu de provocări rejucabile păstrează șabloanele descoperite și record
 ## Acoperire și verificare
 
 231 livrează catalogul și evaluatorii, 232 directorul și integrarea curselor, 233 UI/reluare/recompense și conectarea la daily; 235 validează retenția ca ipoteză prin playtest, fără procente inventate. Se verifică seed/reload, catalog insuficient, scenariu fără spital/toaletă, traseu imposibil, conflict cu pasager existent, refuz, deadline în pauză, reset, R, schimbare de mașină, reward duplicat și izolarea Haos. Performanța măsoară directorul, query-urile, checkpointurile și istoric plafonat. Playtestul consemnează dacă participanții cer spontan încă o încercare și ce provocări se repetă prea repede.
+
+Generatorul zilnic din [modulul 23](23-misiuni-zilnice-si-experienta.md) acceptă deja familii de șabloane versionate (`parseDailyTemplateCatalog`), cu obiective din vocabularul 116 și parametri variați. Catalogul de provocări din acest modul se conectează în 233 printr-un catalog versionat propriu; până atunci, setul de trei misiuni folosește numai șabloane cu evaluator livrat, iar un șablon fără evaluator este exclus, nu finalizat pe text HUD.
