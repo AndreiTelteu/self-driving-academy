@@ -20,7 +20,7 @@ Formatul documentului are patru secțiuni: `profile` (versiuni cu proveniență,
 activarea și cheile rezervate), `aggregates` (contoare, indicatori, dovezi), `telemetry`
 (referințe și, doar la cerere explicită, evenimente brute plafonate) și `checksum`
 (`SHA-256` peste forma canonică `SDA-CJSON-1` a documentului fără câmpul `checksum`, conform
-[modulului 29](../../../../Docs/29-savefile-si-integritate.md)). Un exemplu real, generat de
+[modulului 29](../../29-savefile-si-integritate.md)). Un exemplu real, generat de
 scriptul de raport, este în [sample-export.json](sample-export.json), iar transcriptul complet în
 [report.json](report.json) și [report.md](report.md).
 

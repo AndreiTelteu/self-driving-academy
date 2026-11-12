@@ -102,4 +102,4 @@ Scriptul rulează peste `createNeighbourhoodMap()` real, tipărește raportul Ma
 
 ## Dovezi
 
-[PBI043](../Evidence/043-map-integrity/README.md) păstrează raportul JSON/Markdown, ieșirile verificărilor, testele de corupție și porțile executate.
+[PBI043](Evidence/043-map-integrity/README.md) păstrează raportul JSON/Markdown, ieșirile verificărilor, testele de corupție și porțile executate.

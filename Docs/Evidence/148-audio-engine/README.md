@@ -1,6 +1,6 @@
 # Doveze PBI 148 — motor audio (motor, frâne, anvelope, impact)
 
-Implementarea motorului audio din [modulul 16](../../../../Docs/16-asseturi-vizual-si-audio.md):
+Implementarea motorului audio din [modulul 16](../../16-asseturi-vizual-si-audio.md):
 sunetele legate de viteză, sarcină și contactele fizice, cu pornire după gestul jucătorului,
 volume separate, mute izolat și plafon explicit de voci cu ownership.
 
