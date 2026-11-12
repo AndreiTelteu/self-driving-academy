@@ -110,3 +110,38 @@ Generatorul zilnic din [modulul 23](23-misiuni-zilnice-si-experienta.md) accept�
 **Bugete.** Capacitățile sunt finite: 32 rânduri de record, 64 chei de recompensă (cheia cea mai veche este aruncată cu contor, iar ledgerul 213 deduplică în continuare), 240 de unități per replică de reacție și zero listeners globali. În manifest, `challengeHistoryEntries` este `null`; PBI-ul stabilește capacitatea finită provizorie și raportează lacuna de calibrare, fără să pretindă un buget calibrat. Panoul nu adaugă lucru pe tick, deci bugetele de frame rămân cele din [Docs/performance-budgets.json](performance-budgets.json), nemăsurate aici (PBI `targeted`).
 
 
+
+## Verificarea integrată V1 (PBI 235) — motive de rejucare: mecanism dovedit, retenție nemăsurată
+
+`npm run qa:fun` tratează cele cinci motive cerute ca două coloane care nu se amestecă. Coloana
+„mecanism” este dovedită de probe reale; coloana „retenție” este `NOT_RUN` pentru toate, pentru că nu
+există sesiuni de revenire. Raportul nu conține procent, rată de revenire sau număr de jucători, iar
+verificatorul respinge un raport care ar pretinde altceva.
+
+**Haos și distrugere.** 225 dovedește 20 de tranziții fără lumi orfane, 227 dovedește 3 zone cu 35 de
+obiecte și 20 de cicluri de reset cu un singur checksum, iar 228 dovedește 6 profiluri de material, 24
+de reacții per incident și 4 voci impact. Mecanismul există și e testat. Ipoteza „distrugerea oferă o
+sesiune scurtă de joacă liberă” rămâne neverificată: ar cere minimum cinci participanți observați în
+Haos și o revenire în Academie.
+
+**Provocările.** 233 are 55/55 verificări, 3 șabloane exprimabile în daily din 12, un singur rând de
+ledger per recompensă și zero listeners globali. O provocare scurtă poate fi oferită, acceptată și
+creditată; că jucătorii o aleg voluntar nu este măsurat.
+
+**Daily.** Generatorul produce 3 șabloane pe zi, în 3 familii distincte, determinist pe dată; 212
+verifică oferta, refuzurile și schimbarea zilei (26/26). Ipoteza că cele trei misiuni aduc jucătorul
+înapoi a doua zi cere sesiuni de revenire la 24 de ore și la 7 zile.
+
+**Recordurile.** 233 demonstrează 4 rânduri de record: o rulare mai rapidă îmbunătățește recordul
+(300 → 120 tick-uri), iar una mai lentă sau egală nu îl scade. Recordul nu regresează, dar nu se poate
+deduce de aici că determină reluarea.
+
+**Reluarea rapidă.** O provocare eșuată este reluată la încercarea 2, cu același șablon, identitate
+nouă și 0 XP; o provocare neeșuată este refuzată cu `NOT_FAILED`. Fluxul este dovedit, abandonul după
+eșec nu.
+
+**Playtestul.** PBI-ul cere minimum cinci participanți pentru condus liber, prima schimbare de stil,
+distrugere și reluarea unei provocări, plus consemnarea celor care reîncearcă spontan. Rularea are 0
+participanți, deci verdictul este `NOT_RUN`, iar secțiunea „Ce nu s-a măsurat” din
+[Evidence/235-fun-qa](Evidence/235-fun-qa/README.md) enumeră exact dovezile lipsă și condițiile unei
+sesiuni viitoare.

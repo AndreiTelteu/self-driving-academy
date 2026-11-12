@@ -127,3 +127,39 @@ Dovezi: [Evidence/227-destructible-decor](Evidence/227-destructible-decor/README
 **Limite declarate.** Meshurile, materialele și randarea efectelor rămân la 146; contractul livrează descriptorul vizual, nu desenează. `seek`-ul și proiecția transformărilor rămân ale modulului 141, iar replay-ul 228 citește același chunk. Nivelul de validare este `targeted`.
 
 Dovezi: [Evidence/228-destruction-feedback](Evidence/228-destruction-feedback/README.md).
+
+## Verificarea integrată V1 (PBI 235) — Haos, distrugere și mecanismele de revenire
+
+`npm run qa:fun` reexecută în aceeași rulare probele 225, 226, 227 și 228 și agregă rezultatul în
+[Evidence/235-fun-qa](Evidence/235-fun-qa/README.md). Verdictul pe criterii este derivat din rapoartele
+reale ale probelor, iar mecanismul dovedit este ținut separat de ipoteza de retenție: nu există playtest
+uman, deci motivele de rejucare au `retention: NOT_RUN`, fără procent și fără rată de revenire.
+
+**Academie și Haos rămân separate.** 225 comite 20 de tranziții (10 Academie / 10 Haos) cu 20 de
+checkpointuri verificate, 773 B în total (maximum 40 B per rând), o singură copie de profil, o singură
+lume vie și zero lumi sau joburi orfane. `sessionKind` nu este confundat cu modul de control: cele trei
+moduri MANUAL/LEARNING/AUTO rămân ortogonale celor două sesiuni.
+
+**R și resetul nu ating progresul.** 226 recuperează vehiculul în 0 tick-uri până la mobilitate, în 5
+etape sincrone, cu `colliderCount=0` și fără checkpoint, fără serie economică și fără închidere de
+activitate. Resetul reface lumea (64 corpuri, 40 vehicule de trafic, 1 listener, 2 joburi, o lume vie),
+închide activitățile o singură dată cu `SCENARIO_RESET`, invalidează 2 joburi cu `WORLD_RESET` și scrie
+checkpointul înainte de commit. După 20 de reseturi: 20 de checkpointuri, 21 de serii economice, o
+singură închidere de scenă, zero închideri duplicate, corpuri/listeners/joburi constante, XP
+`500000` micro-XP neschimbat, profil cu checksum stabil și recompense nemodificate.
+
+**Distrugerea are o singură cale de impact.** 227 expune 3 zone și 35 de obiecte din 6 arhetipuri;
+aceeași amprentă este produsă de MANUAL, LEARNING și AUTO, iar 20 de cicluri de reset păstrează 35 de
+corpuri, 35 de collidere, 0 fragmente, 43 de intrări în index și un singur checksum de baseline.
+`DESTRUCTIBLE_BROKEN` se publică o dată per obiect și generație, cu instigator real.
+
+**Feedbackul este derivat, nu inventat.** 228 leagă evenimentul de 6 profiluri acustice distincte pe
+același cue `impact`, cu plafon de 24 de reacții per incident, 4 voci impact și 192 de fragmente
+cosmetice declarate structural fără trafic, scor sau coliziuni. Replay-ul citește chunk-ul 207 sigilat:
+3/3 evenimente, 0 reacții inventate, 0 pași de simulare, 0 reevaluări de politică, 0 recompense și 0
+artefacte de învățare.
+
+**Ce rămâne deschis.** Playtestul uman cerut de PBI (minimum cinci participanți, condus liber, prima
+schimbare de stil, distrugere și reluarea unei provocări) este `NOT_RUN` cu 0 participanți. Fără o
+sesiune de revenire la 24 de ore nu se poate afirma nimic despre revenire; raportul enumeră exact ce ar
+fi nevoie. Frame-ul și FPS-ul rămân `NOT_VALIDATED` la gate-ul 224.

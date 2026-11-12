@@ -74,3 +74,39 @@ V1 oferă camera din spate și first-person din poziția șoferului; C comută �
 017 implementează cele două camere, 025 filtrarea configurabilă, 073 HUD simplu, 079 feedbackul, 081 preferințele. 229 livrează popup-ul de control (slidere, preseturi, draft/aplică/anulează/reset, pauză 070, publicare la tick și dovezi în [Evidence/229-control-sliders](Evidence/229-control-sliders/README.md)), iar [230](Evidence/230-style-sliders/README.md) livrează tabul de stil (opt slidere 092, versiune MANUAL_TUNING cu before/after, barieră 205, activare 110, restore 114, izolare Academia/Haos și dovezi proprii). 235 verifică întregul flux: draft/anulare, profil depășit, analiză în curs, extreme de slider, focus, remapare, 1280×720, tastatură, cameră la impact și reload. Playtestul verifică dacă jucătorul înțelege ce schimbă fiecare tab fără să citească numele tehnice.
 
 [Setările 081](game-settings.md) materializează preferințele de dispozitiv: unitățile de afișare km/h↔mph și m↔ft convertesc exclusiv pentru prezentare, camera CHASE/FIRST_PERSON și cele șapte slidere de confort rămân în `ControlPreferences`, iar grafica folosește `QualityPreferences`. Salvarea schimbă numai secțiunile editate, păstrează bindingurile, jucătorul și scenariul și incrementează revizia de control o singură dată când se schimbă confortul. Resetul propune valorile reale după confirmare, iar secțiunea audio este explicit `Indisponibil · 148`, fără volum sau mut inventat. Editorul de stil rămâne separat, iar panoul nu atinge profilul învățat, AI-ul sau stilul flotei.
+
+## Verificarea integrată V1 (PBI 235) — HUD, cameră first-person și slidere
+
+Consumatorii popup-ului de reglaje sunt verificați împreună de `npm run qa:fun`, care reexecută 229,
+230, 084, 083 și citește dovezile de browser ale 153. Contractele de confort trec; accesibilitatea la
+1280×720 are însă findings reale, raportate mai jos, pentru că PBI 235 nu are voie să modifice `src/`.
+
+**Controlul (229): 53/53 verificări.** Șapte câmpuri (`steeringSensitivity`, `returnRate`,
+`speedAttenuation`, `throttleRamp`, `brakeRamp`, `cameraMotion`, `fov`), trei preseturi
+(`ACCESSIBLE`, `BALANCED`, `DIRECT`), scriere la 10 Hz, pauză 070 respectată și camera
+`FIRST_PERSON`. Extremele sunt exercitate pe **două clase** (sedan și compact), iar mașina, frânarea,
+aderența și stilul AI rămân neschimbate. La 1280×720 panoul încape, derulează și păstrează patru
+rânduri vizibile; contrastul minim al perechilor de text este 11,13:1 față de pragul de 4,5:1.
+
+**Stilul (230): 70/70 verificări.** Cele opt slidere 092 fac round-trip prin catalog, versiunea
+MANUAL_TUNING păstrează before/after, draftul este invalidat la schimbarea sesiunii, iar un publish
+stale este refuzat fără scriere. Versiunile Academie și Haos rămân separate, iar panoul nu adaugă
+listeners globali și nici scrieri pe frame.
+
+**Layout și accesibilitate.** 084 acoperă 42 de verificări de layout responsive, iar 083 acoperă 53 de
+verificări de contrast, focus, ordine de tab și Escape. Ambele trec.
+
+**Findings reale de accesibilitate (153).** Capturile comise de 153 (Chromium 156, componentele reale
+din `src/ui`) au 308 verificări, 300 trecute și 5 eșecuri de contract: D4 — cel mai mic text din panoul
+camerei are 11,52 px (prag 12 px); D5 și D7 — pop-up-ul KPI are text de 11 px la 1280×720 și la
+1920×1080; D6 și D8 — patru etichete „fără review-uri” depășesc caseta graficului. Cele trei findings
+de stres (D1–D3) apar la zoom 200% pe 640×360, unde lista flotei și notificările ies din viewport.
+PBI 235 nu a recapturat aceste măsurători (worktree-ul nu are Playwright) și nu a modificat `src/`;
+defectele sunt raportate cu captură și pași de reproducere în [Evidence/153-ui-qa](Evidence/153-ui-qa/README.md).
+
+**Verificare scurtă în browser.** `npm run qa:fun -- --browser` construiește bundle-ul de producție,
+îl servește local și îl randează în Chromium headless la 1280×720. Captura
+[Evidence/235-fun-qa/browser-1280x720.png](Evidence/235-fun-qa/browser-1280x720.png) (20 149 B)
+dovedește pornirea și linia WEBGL2; poarta de start nu a fost apăsată, deci inputul, focusul, senzația
+de condus și lizibilitatea textului rămân `NOT_RUN`. Confortul subiectiv cere playtest uman, care nu a
+fost executat.

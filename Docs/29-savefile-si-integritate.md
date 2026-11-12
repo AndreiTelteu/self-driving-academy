@@ -194,3 +194,27 @@ Dovezile sunt în [Evidence/234-savefile](Evidence/234-savefile/README.md): rapo
 ## Acoperire și verificare
 
 135/215 furnizează exportul coerent și persistența existentă; 234 implementează envelope-ul, checksumul și acțiunile de fișier, 235 regresiile integrate. Vectorii de verificare acoperă Unicode, obiecte imbricate, reordonarea cheilor/whitespace, -0, array-uri reordonate, base64, chei duplicate și numere unsafe. Se testează roundtrip, editarea XP fără checksum nou, checksum recalculat cu schemă invalidă, checksum lipsă/greșit, fișier trunchiat/prea mare, migrare, două taburi, quota și reload. Nicio eroare nu activează parțial profiluri sau recompense. Benchmarkul verifică export/import în pause pe istoricul maxim admis și menține UI cu progres/anulare.
+
+## Verificarea integrată V1 (PBI 235) — savefile în QA-ul de experiență
+
+Savefile-ul 234 este reexecutat de `npm run qa:fun` împreună cu restul experiențelor V1, ca să se vadă
+că un fișier complet nu contaminează progresul și nu dublează creditele.
+
+**Rezultatul rulării curente: 84/84 verificări.** Fișierul canonic are 174 732 de unități de cod din
+12 285 272 B, payload-ul 174 113 B din 12 154 200 B, checksum SHA-256 de 64 de caractere, două sesiuni
+(Academie și Haos) cu 35 + 35 de obiecte de decor și un replay opțional de 7 B. Round-trip-ul este
+`ACCEPTED`, cu checksum stabil și ordine de chei reordonată acceptată.
+
+**Importul nu dublează nimic.** Primul import comite 100,5 XP pe sesiunea activă, cu 1 recompensă daily,
+3 decontări și lansare `PAUSED_AUTO`; al doilea import are delta 0 XP și aceeași revizie economică.
+Nu există `settle`, `creditMission`, `creditDaily` sau `recordDailyReward` pe calea de import, deci
+creditele rămân aceleași.
+
+**Legătura cu celelalte probe.** 226 dovedește că 20 de reseturi păstrează XP, profilul, daily,
+recompensele, misiunile și dovezile; 233 dovedește că un duplicat de provocare plătește 0 XP și că un
+rollback de calendar este `SKIPPED`; 234 dovedește că al doilea import are delta 0. Împreună acoperă
+criteriul „evenimente duplicate, joburi stale, schimbarea zilei și importul nu dublează credite”.
+
+**Ce rămâne deschis.** Verificarea checksum-ului în WebCrypto și scrierea fișierului pe disc sunt
+dovedite de proba de browser a 234, nu recapturate aici. Nivelul rămâne determinist în Node; un import
+real într-un browser cu două taburi rămâne proba 234.
