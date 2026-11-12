@@ -1,0 +1,120 @@
+{
+  "version": "160-ci-pipeline-v1",
+  "startedAt": "2026-11-12T12:49:46.642Z",
+  "finishedAt": "2026-11-12T12:52:53.729Z",
+  "lane": "verify",
+  "outcome": "PASSED_WITH_PLAN_DEBT",
+  "delivery": {
+    "state": "STATIC_VERIFIED",
+    "staticVerified": true,
+    "note": "Artefactul static a fost construit și servit prin HTTP. Livrarea de release rămâne condiționată de verdictul 224 pe hardware real, pe aceeași revizie."
+  },
+  "gate": {
+    "structural": "PASS",
+    "release": "NOT_VALIDATED",
+    "openCriteria": [
+      "Criteriul 1: gate-ul FPS se închide numai pe hardware real, aceeași revizie"
+    ],
+    "report": "Docs/Evidence/224-performance-gate/report.json"
+  },
+  "planDebt": {
+    "file": "Docs/map-integrity.md",
+    "link": "../Evidence/043-map-integrity/README.md",
+    "message": "Link local rupt în Docs/map-integrity.md: ../Evidence/043-map-integrity/README.md",
+    "blocking": false,
+    "reason": "Link local rupt într-un fișier care nu este atins de această schimbare; datoria există pe commitul de bază."
+  },
+  "failedStep": null,
+  "steps": [
+    {
+      "label": "preflight:typecheck",
+      "command": "npm.cmd run typecheck",
+      "exitCode": 0,
+      "durationMs": 5413,
+      "status": "PASS"
+    },
+    {
+      "label": "preflight:lint",
+      "command": "npm.cmd run lint",
+      "exitCode": 0,
+      "durationMs": 23750,
+      "status": "PASS"
+    },
+    {
+      "label": "preflight:format",
+      "command": "npm.cmd run format:check",
+      "exitCode": 0,
+      "durationMs": 29040,
+      "status": "PASS"
+    },
+    {
+      "label": "preflight:architecture",
+      "command": "npm.cmd run check:architecture",
+      "exitCode": 0,
+      "durationMs": 1649,
+      "status": "PASS"
+    },
+    {
+      "label": "preflight:parameter-catalog",
+      "command": "npm.cmd run check:parameter-catalog",
+      "exitCode": 0,
+      "durationMs": 639,
+      "status": "PASS"
+    },
+    {
+      "label": "tests:full",
+      "command": "npm.cmd test",
+      "exitCode": 0,
+      "durationMs": 94090,
+      "status": "PASS"
+    },
+    {
+      "label": "plan:validate",
+      "command": "pwsh.exe -NoProfile -ExecutionPolicy Bypass -File C:\\Users\\aandr\\Sites\\self-driving-academy\\.worktrees\\build-160-01\\PBI\\Validate-Plan.ps1",
+      "exitCode": 1,
+      "durationMs": 4873,
+      "status": "DEBT"
+    },
+    {
+      "label": "board:validate",
+      "command": "pwsh.exe -NoProfile -ExecutionPolicy Bypass -File C:\\Users\\aandr\\Sites\\self-driving-academy\\.worktrees\\build-160-01\\PBI\\Validate-Board.ps1",
+      "exitCode": 0,
+      "durationMs": 817,
+      "status": "PASS"
+    },
+    {
+      "label": "assets:manifest",
+      "command": "npm.cmd run assets:manifest -- --check",
+      "exitCode": 0,
+      "durationMs": 2389,
+      "status": "PASS"
+    },
+    {
+      "label": "gate:224",
+      "command": "npm.cmd run perf:gate -- --check",
+      "exitCode": 0,
+      "durationMs": 12111,
+      "status": "PASS"
+    },
+    {
+      "label": "build:production",
+      "command": "npm.cmd run build",
+      "exitCode": 0,
+      "durationMs": 7141,
+      "status": "PASS"
+    },
+    {
+      "label": "delivery:static",
+      "command": "npm.cmd run build:report -- --check",
+      "exitCode": 0,
+      "durationMs": 4832,
+      "status": "PASS"
+    }
+  ],
+  "artifacts": [
+    "dist/index.html",
+    "Docs/Evidence/160-build-delivery/report.json",
+    "Docs/Evidence/160-build-delivery/report.md",
+    "Docs/Evidence/160-build-delivery/ci-pipeline.json"
+  ]
+}

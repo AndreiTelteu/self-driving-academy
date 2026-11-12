@@ -1,0 +1,51 @@
+{
+  "version": "160-ci-pipeline-v1",
+  "startedAt": "2026-11-12T12:40:53.296Z",
+  "finishedAt": "2026-11-12T12:41:54.618Z",
+  "lane": "verify",
+  "outcome": "FAILED",
+  "delivery": {
+    "state": "NOT_DELIVERED",
+    "staticVerified": false,
+    "note": "Niciun artefact de livrare nu este publicat după un pas eșuat."
+  },
+  "gate": {
+    "structural": "PASS",
+    "release": "NOT_VALIDATED",
+    "openCriteria": [
+      "Criteriul 1: gate-ul FPS se închide numai pe hardware real, aceeași revizie"
+    ],
+    "report": "Docs/Evidence/224-performance-gate/report.json"
+  },
+  "planDebt": null,
+  "failedStep": "preflight:format",
+  "steps": [
+    {
+      "label": "preflight:typecheck",
+      "command": "npm.cmd run typecheck",
+      "exitCode": 0,
+      "durationMs": 6276,
+      "status": "PASS"
+    },
+    {
+      "label": "preflight:lint",
+      "command": "npm.cmd run lint",
+      "exitCode": 0,
+      "durationMs": 24944,
+      "status": "PASS"
+    },
+    {
+      "label": "preflight:format",
+      "command": "npm.cmd run format:check",
+      "exitCode": 1,
+      "durationMs": 30097,
+      "status": "FAIL"
+    }
+  ],
+  "artifacts": [
+    "dist/index.html",
+    "Docs/Evidence/160-build-delivery/report.json",
+    "Docs/Evidence/160-build-delivery/report.md",
+    "Docs/Evidence/160-build-delivery/negative/ci-pipeline.json"
+  ]
+}

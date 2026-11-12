@@ -194,3 +194,25 @@ PBI-ul care deține `src/ui/rendering-view.ts`.
 
 Dovezile, cu matricea, capturile, verificările deterministe și limitările, sunt în
 [Evidence/154-compat-matrix](Evidence/154-compat-matrix/README.md).
+
+## Build de producție și livrare statică (PBI 160, 12 noiembrie 2026)
+
+PBI 160 închide segmentul dintre verificare și livrare: buildul de producție are o configurație explicită, fiecare artefact este măsurat și servit static, iar verificările obligatorii, gate-ul 224 și buildul rulează într-o singură comandă CI, cu livrare doar după ce totul trece.
+
+**Configurația buildului.** `vite.config.ts` fixează `base: './'`, deci toate referințele din `dist/index.html` sunt relative și artefactul poate fi servit din rădăcina unui site sau dintr-un subdirector, fără server de dezvoltare; `sourcemap: false` ține sursele în afara livrării, iar `emptyOutDir` garantează că un build nu păstrează artefacte vechi. `npm run build` rămâne `typecheck + vite build`, iar `src/` nu este modificat de acest PBI.
+
+**Artefactul real.** Buildul reviziei curente produce 130 de fișiere: 3 478 683 B JS, 2 646 596 B WASM, 43 917 B CSS și 2 882 B HTML, în total 6 172 078 B (5,89 MiB), respectiv 1 769 518 B gzip pentru JS+WASM+CSS. JS+WASM împreună au 6 125 279 B, adică 73,02 % din capacitatea de 8 MiB din [manifestul de bugete](performance-budgets.json). Două builduri independente produc același arbore: 130 de artefacte și amprenta SHA-256 `81e33b1d8c54a53b97087288dac3b7cf1f9f833f66eef07b108a23dc2042d3a9`.
+
+**WASM-ul și asseturile intră în build.** Cele două module WASM reale ale engine-ului sunt emise de build și identice byte cu fișierele din pachet și cu intrările `runtime:wasm:glslang` (943 680 B) și `runtime:wasm:twgsl` (1 702 916 B) din manifestul 150, cu encoding `IDENTITY`. Modulele lor JS de încărcare (`glslang-DqqdIFnr.js`, 16 030 B; `twgsl-DqdFeK3J.js`, 74 555 B) sunt și ele emise, iar bundle-ul le referă prin `new URL(..., import.meta.url)`, deci căile rămân valide la servire statică. Rapier rămâne inline base64 în bundle-ul său, exact cum îl descrie manifestul 150; în V1 nu există GLB final, iar geometria și audio-ul procedurale sunt generate la runtime, nu copiate ca fișiere.
+
+**Ce este exclus în producție.** Măsurat pe artefact: 0 source maps, 0 instrucțiuni `debugger`, 0 apeluri `console.log/debug/info/trace`, 0 chunk-uri de inspector și 0 apariții `import.meta.env` neînlocuite. Inspectorul Babylon rămâne dependență de dezvoltare și nu ajunge în bundle.
+
+**Livrare statică verificată, nu presupusă.** `scripts/build-report.mjs` pornește un server `node:http` minimal (fără Vite dev server) și cere prin HTTP `index.html`, toate cele 130 de artefacte și rădăcina: 132 de cereri, fiecare cu status 200, mărime identică și SHA-256 identic cu fișierul de pe disc, iar WASM-ul cu `Content-Type: application/wasm`. Referințele din `index.html` sunt relative, deci nu depind de `base` sau de numele directorului de găzduire.
+
+**CI.** `npm run ci:verify` rulează, în ordine: `typecheck`, `lint`, `format:check`, `check:architecture`, `check:parameter-catalog`, suita completă (2 888 teste, 0 eșecuri), `Validate-Plan.ps1`, `Validate-Board.ps1`, `assets:manifest --check`, gate-ul 224 (`perf:gate --check`) și abia apoi buildul și verificarea statică. Fiecare pas este oprit la primul eșec, iar livrarea este ultima: un rezultat eșuat nu produce artefact publicat. Banda `npm run ci:release` refolosește jobul 224 cu `--require=release` și iese cu cod 1 fără să declare livrare cât timp FPS-ul pe hardware real nu este măsurat pe aceeași revizie; FPS headless/software nu este acceptat ca substitut.
+
+**Datoria de plan, publicată.** `Validate-Plan.ps1` are pe commitul de bază șase linkuri locale rupte, în fișiere pe care acest PBI nu le deține: `Docs/map-integrity.md` → `../Evidence/043-map-integrity/README.md`, `Docs/Evidence/133-export-profile/README.md` și `Docs/Evidence/148-audio-engine/README.md` (adâncime greșită către `Docs/29`, respectiv `Docs/16`) și trei linkuri în `PBI/Done` (067, 145, 146). Regulile boardului interzic modificarea altor PBI, deci datoria este raportată, nu ascunsă: pipeline-ul o clasifică `DEBT` numai când fișierul care conține linkul nu este atins de schimbare; un board invalid, un link rupt într-un fișier modificat aici sau orice altă eroare de plan rămân blocante. Rezultatul reviziei este `PASSED_WITH_PLAN_DEBT`, cu gate 224 structural `PASS`, release `NOT_VALIDATED` și livrare `STATIC_VERIFIED`.
+
+**Ce rămâne deschis.** FPS-ul și lucrul GPU pe hardware real rămân la gate-ul 224; verificarea livrării este la nivel HTTP (status, mărime, hash, MIME), nu o rulare de browser cu GPU, iar `dist/` nu este comis (este reproductibil din `npm run build`). Configurația de HTTPS/CDN și cache-ul de producție nu fac parte din acest PBI.
+
+Comenzile, tabelele de artefacte, dovada negativă (un `format:check` rupt oprește pipeline-ul înainte de build) și limitările sunt în [Evidence/160-build-delivery](Evidence/160-build-delivery/README.md).
