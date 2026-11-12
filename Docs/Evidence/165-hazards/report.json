@@ -1,0 +1,1048 @@
+{
+  "generatedBy": "scripts/run-hazard-report.mjs",
+  "command": "npm run hazards:report",
+  "contract": "165-hazards-v1",
+  "oracleRule": "Un stimul există numai când pericolul este observabil (în rază și în conul frontal); o reacție este numai un front după debut; o trecere este „curată” numai dacă distanța minimă măsurată depășește marja, iar un contact există numai ca fapt al proprietarului coliziunilor.",
+  "fixture": {
+    "mapId": "neighbourhood-compact-v1",
+    "laneId": "lane:00E0",
+    "laneLengthM": 172.39999999999998,
+    "obstacleLongitudinalM": 100,
+    "obstacles": 96,
+    "refusedObstacles": 9,
+    "refuseReasons": {
+      "DUPLICATE_ID": 1,
+      "OUTSIDE_MAP_BOUNDS": 1,
+      "INVALID_GEOMETRY": 1,
+      "UNKNOWN_TYPE": 1,
+      "INVALID_SCHEDULE": 1,
+      "UNKNOWN_EDGE_POLICY": 1,
+      "CAPACITY": 3
+    },
+    "seed": 165,
+    "appearTick": 71
+  },
+  "scenarios": [
+    {
+      "scenarioId": "sudden-obstacle",
+      "title": "Obstacol brusc, debut observabil și reacție întârziată",
+      "description": "Obstacolul apare la un tick derivat din seed; stimulul se naște abia după apariție, iar frânarea pornește la 45 de tick-uri după debut.",
+      "ticks": 420,
+      "stimuli": 1,
+      "reactions": 1,
+      "hornOpportunities": 1,
+      "hornUses": 0,
+      "hornRefusals": 0,
+      "counts": {
+        "obstacles": 1,
+        "refusedObstacles": 0,
+        "stimuli": 1,
+        "reactions": 1,
+        "brakeReactions": 1,
+        "steerReactions": 0,
+        "hornOpportunities": 1,
+        "hornUses": 0,
+        "hornRefusals": 0,
+        "hornRefusalsNoOpportunity": 0,
+        "hornRefusalsAlreadyUsed": 0,
+        "stopped": 1,
+        "passedClear": 0,
+        "passedClose": 0,
+        "contacts": 0,
+        "released": 0,
+        "pending": 0
+      },
+      "coverage": {
+        "steps": 420,
+        "completeSteps": 420,
+        "incompleteSteps": 0,
+        "vehiclesObserved": 420
+      },
+      "latency": {
+        "reactions": 1,
+        "minTicks": 45,
+        "meanTicks": 45,
+        "maxTicks": 45,
+        "minS": 0.75,
+        "meanS": 0.75,
+        "maxS": 0.75
+      },
+      "denominators": {
+        "reactionRate": {
+          "id": "REACTION_RATE",
+          "numerator": 1,
+          "denominator": 1,
+          "value": 1,
+          "status": "OBSERVED",
+          "reason": null
+        }
+      },
+      "gaps": [],
+      "encounters": [
+        {
+          "stimulusId": "id-v1:hazard-stimulus:hazards-165-tests|11|obstacle-1|vehicle-1|inc-1",
+          "hazardId": "obstacle-1",
+          "kind": "OBSTACLE",
+          "vehicleId": "vehicle-1",
+          "controlMode": "AUTO",
+          "onsetTick": 71,
+          "outcome": "STOPPED",
+          "resolvedTick": 205,
+          "minimumDistanceM": 5.899999999999935,
+          "latencyTicks": 45,
+          "hornOpportunityId": "id-v1:hazard-stimulus:hazards-165-tests|11|obstacle-1|vehicle-1|inc-1:horn",
+          "contactTick": null,
+          "contactImpulseNs": 0
+        }
+      ],
+      "checks": [
+        {
+          "id": "single-stimulus",
+          "passed": true,
+          "detail": "stimuli 1"
+        },
+        {
+          "id": "observable-onset",
+          "passed": true,
+          "detail": "onset tick 71, distance 25.80 m"
+        },
+        {
+          "id": "reaction-latency",
+          "passed": true,
+          "detail": "BRAKE after 45 ticks"
+        },
+        {
+          "id": "no-fictitious-denominator",
+          "passed": true,
+          "detail": "reaction rate 1"
+        },
+        {
+          "id": "appearance-window",
+          "passed": true,
+          "detail": "appearTick 71 in [60, 90]"
+        },
+        {
+          "id": "no-stimulus-before-appearance",
+          "passed": true,
+          "detail": "zero stimuli before appearTick"
+        },
+        {
+          "id": "latency-exact",
+          "passed": true,
+          "detail": "latency 45 ticks"
+        },
+        {
+          "id": "stopped",
+          "passed": true,
+          "detail": "outcome STOPPED at 205"
+        },
+        {
+          "id": "clearance",
+          "passed": true,
+          "detail": "minimum distance 5.90 m"
+        },
+        {
+          "id": "stimulus-distance",
+          "passed": true,
+          "detail": "distance 25.80 m at tick 71, TTC 2.15 s"
+        },
+        {
+          "id": "reaction-rate",
+          "passed": true,
+          "detail": "reaction rate 1"
+        }
+      ],
+      "pass": true
+    },
+    {
+      "scenarioId": "delayed-reaction",
+      "title": "Reacție întârziată, aceeași identitate a stimulului",
+      "description": "Aceeași apropiere, dar frânarea pornește la 90 de tick-uri după debut: identitatea stimulului nu depinde de momentul observării, doar latența măsurată se schimbă.",
+      "ticks": 460,
+      "stimuli": 1,
+      "reactions": 1,
+      "hornOpportunities": 1,
+      "hornUses": 0,
+      "hornRefusals": 0,
+      "counts": {
+        "obstacles": 1,
+        "refusedObstacles": 0,
+        "stimuli": 1,
+        "reactions": 1,
+        "brakeReactions": 1,
+        "steerReactions": 0,
+        "hornOpportunities": 1,
+        "hornUses": 0,
+        "hornRefusals": 0,
+        "hornRefusalsNoOpportunity": 0,
+        "hornRefusalsAlreadyUsed": 0,
+        "stopped": 1,
+        "passedClear": 0,
+        "passedClose": 0,
+        "contacts": 0,
+        "released": 0,
+        "pending": 0
+      },
+      "coverage": {
+        "steps": 460,
+        "completeSteps": 460,
+        "incompleteSteps": 0,
+        "vehiclesObserved": 460
+      },
+      "latency": {
+        "reactions": 1,
+        "minTicks": 90,
+        "meanTicks": 90,
+        "maxTicks": 90,
+        "minS": 1.5,
+        "meanS": 1.5,
+        "maxS": 1.5
+      },
+      "denominators": {
+        "reactionRate": {
+          "id": "REACTION_RATE",
+          "numerator": 1,
+          "denominator": 1,
+          "value": 1,
+          "status": "OBSERVED",
+          "reason": null
+        }
+      },
+      "gaps": [],
+      "encounters": [
+        {
+          "stimulusId": "id-v1:hazard-stimulus:hazards-165-tests|11|obstacle-1|vehicle-1|inc-1",
+          "hazardId": "obstacle-1",
+          "kind": "OBSTACLE",
+          "vehicleId": "vehicle-1",
+          "controlMode": "AUTO",
+          "onsetTick": 0,
+          "outcome": "STOPPED",
+          "resolvedTick": 179,
+          "minimumDistanceM": 11.099999999999923,
+          "latencyTicks": 90,
+          "hornOpportunityId": "id-v1:hazard-stimulus:hazards-165-tests|11|obstacle-1|vehicle-1|inc-1:horn",
+          "contactTick": null,
+          "contactImpulseNs": 0
+        }
+      ],
+      "checks": [
+        {
+          "id": "single-stimulus",
+          "passed": true,
+          "detail": "stimuli 1"
+        },
+        {
+          "id": "observable-onset",
+          "passed": true,
+          "detail": "onset tick 0, distance 40.00 m"
+        },
+        {
+          "id": "reaction-latency",
+          "passed": true,
+          "detail": "BRAKE after 90 ticks"
+        },
+        {
+          "id": "no-fictitious-denominator",
+          "passed": true,
+          "detail": "reaction rate 1"
+        },
+        {
+          "id": "latency-exact",
+          "passed": true,
+          "detail": "latency 90 ticks"
+        },
+        {
+          "id": "stable-identity",
+          "passed": true,
+          "detail": "the same stimulus id as the sudden-obstacle scenario"
+        },
+        {
+          "id": "stopped",
+          "passed": true,
+          "detail": "outcome STOPPED at 179"
+        },
+        {
+          "id": "latency-in-seconds",
+          "passed": true,
+          "detail": "latency 1.500 s"
+        }
+      ],
+      "pass": true
+    },
+    {
+      "scenarioId": "evasive-manoeuvre",
+      "title": "Manevră evazivă măsurată față de debut",
+      "description": "Virarea începe la 30 de tick-uri după debut; vehiculul ocolește obstacolul, iar trecerea este marcată drept curată doar dacă distanța minimă depășește marja.",
+      "ticks": 300,
+      "stimuli": 1,
+      "reactions": 1,
+      "hornOpportunities": 1,
+      "hornUses": 0,
+      "hornRefusals": 0,
+      "counts": {
+        "obstacles": 1,
+        "refusedObstacles": 0,
+        "stimuli": 1,
+        "reactions": 1,
+        "brakeReactions": 0,
+        "steerReactions": 1,
+        "hornOpportunities": 1,
+        "hornUses": 0,
+        "hornRefusals": 0,
+        "hornRefusalsNoOpportunity": 0,
+        "hornRefusalsAlreadyUsed": 0,
+        "stopped": 0,
+        "passedClear": 1,
+        "passedClose": 0,
+        "contacts": 0,
+        "released": 0,
+        "pending": 0
+      },
+      "coverage": {
+        "steps": 300,
+        "completeSteps": 300,
+        "incompleteSteps": 0,
+        "vehiclesObserved": 300
+      },
+      "latency": {
+        "reactions": 1,
+        "minTicks": 30,
+        "meanTicks": 30,
+        "maxTicks": 30,
+        "minS": 0.5,
+        "meanS": 0.5,
+        "maxS": 0.5
+      },
+      "denominators": {
+        "reactionRate": {
+          "id": "REACTION_RATE",
+          "numerator": 1,
+          "denominator": 1,
+          "value": 1,
+          "status": "OBSERVED",
+          "reason": null
+        }
+      },
+      "gaps": [],
+      "encounters": [
+        {
+          "stimulusId": "id-v1:hazard-stimulus:hazards-165-tests|11|obstacle-1|vehicle-1|inc-1",
+          "hazardId": "obstacle-1",
+          "kind": "OBSTACLE",
+          "vehicleId": "vehicle-1",
+          "controlMode": "AUTO",
+          "onsetTick": 0,
+          "outcome": "PASSED_CLEAR",
+          "resolvedTick": 129,
+          "minimumDistanceM": 5.288667128870935,
+          "latencyTicks": 30,
+          "hornOpportunityId": "id-v1:hazard-stimulus:hazards-165-tests|11|obstacle-1|vehicle-1|inc-1:horn",
+          "contactTick": null,
+          "contactImpulseNs": 0
+        }
+      ],
+      "checks": [
+        {
+          "id": "single-stimulus",
+          "passed": true,
+          "detail": "stimuli 1"
+        },
+        {
+          "id": "observable-onset",
+          "passed": true,
+          "detail": "onset tick 0, distance 30.00 m"
+        },
+        {
+          "id": "reaction-latency",
+          "passed": true,
+          "detail": "STEER after 30 ticks"
+        },
+        {
+          "id": "no-fictitious-denominator",
+          "passed": true,
+          "detail": "reaction rate 1"
+        },
+        {
+          "id": "steer-reaction",
+          "passed": true,
+          "detail": "STEER after 30 ticks"
+        },
+        {
+          "id": "passed-clear",
+          "passed": true,
+          "detail": "outcome PASSED_CLEAR, minimum 5.29 m"
+        },
+        {
+          "id": "lateral-clearance",
+          "passed": true,
+          "detail": "minimum distance 5.29 m"
+        },
+        {
+          "id": "no-contact",
+          "passed": true,
+          "detail": "contacts 0"
+        }
+      ],
+      "pass": true
+    },
+    {
+      "scenarioId": "physical-same-physics",
+      "title": "Aceeași fizică pentru jucător și AUTO, fără imunitate",
+      "description": "Rapier real: același vehicul și același obstacol sunt conduse cu comenzi identice sub etichete MANUAL și AUTO; contactul și oprirea sunt identice, iar diferența apare doar când comenzile diferă.",
+      "ticks": 520,
+      "stimuli": 6,
+      "reactions": 6,
+      "hornOpportunities": 0,
+      "hornUses": 0,
+      "hornRefusals": 0,
+      "counts": {
+        "obstacles": 1,
+        "refusedObstacles": 0,
+        "stimuli": 6,
+        "reactions": 6,
+        "brakeReactions": 4,
+        "steerReactions": 2,
+        "hornOpportunities": 0,
+        "hornUses": 0,
+        "hornRefusals": 0,
+        "hornRefusalsNoOpportunity": 0,
+        "hornRefusalsAlreadyUsed": 0,
+        "stopped": 2,
+        "passedClear": 2,
+        "passedClose": 0,
+        "contacts": 2,
+        "released": 0,
+        "pending": 0
+      },
+      "coverage": {
+        "steps": 520,
+        "completeSteps": 520,
+        "incompleteSteps": 0,
+        "vehiclesObserved": 520
+      },
+      "latency": null,
+      "denominators": {
+        "reactionRate": {
+          "id": "REACTION_RATE",
+          "numerator": 6,
+          "denominator": 6,
+          "value": 1,
+          "status": "OBSERVED",
+          "reason": null
+        }
+      },
+      "gaps": [],
+      "encounters": [],
+      "physical": {
+        "arms": [
+          {
+            "mode": "MANUAL",
+            "action": "BRAKE",
+            "collider": "OBSTACLE",
+            "onsetTick": 0,
+            "latencyTicks": 121,
+            "contactTick": null,
+            "impulseNs": 0,
+            "minimumDistanceM": 17.05,
+            "finalZM": -19.66814,
+            "finalSpeedMps": 0,
+            "outcome": "STOPPED"
+          },
+          {
+            "mode": "AUTO",
+            "action": "BRAKE",
+            "collider": "OBSTACLE",
+            "onsetTick": 0,
+            "latencyTicks": 121,
+            "contactTick": null,
+            "impulseNs": 0,
+            "minimumDistanceM": 17.05,
+            "finalZM": -19.66814,
+            "finalSpeedMps": 0,
+            "outcome": "STOPPED"
+          },
+          {
+            "mode": "MANUAL",
+            "action": "LATE",
+            "collider": "OBSTACLE",
+            "onsetTick": 0,
+            "latencyTicks": 211,
+            "contactTick": 242,
+            "impulseNs": 14033.656,
+            "minimumDistanceM": 1.998,
+            "finalZM": -4.615791,
+            "finalSpeedMps": 0,
+            "outcome": "CONTACT"
+          },
+          {
+            "mode": "AUTO",
+            "action": "LATE",
+            "collider": "OBSTACLE",
+            "onsetTick": 0,
+            "latencyTicks": 211,
+            "contactTick": 242,
+            "impulseNs": 14033.656,
+            "minimumDistanceM": 1.998,
+            "finalZM": -4.615791,
+            "finalSpeedMps": 0,
+            "outcome": "CONTACT"
+          },
+          {
+            "mode": "MANUAL",
+            "action": "EVADE",
+            "collider": "OBSTACLE",
+            "onsetTick": 0,
+            "latencyTicks": 31,
+            "contactTick": null,
+            "impulseNs": 0,
+            "minimumDistanceM": 17.911,
+            "finalZM": 42.896202,
+            "finalSpeedMps": 21.436,
+            "outcome": "PASSED_CLEAR"
+          },
+          {
+            "mode": "AUTO",
+            "action": "EVADE",
+            "collider": "OBSTACLE",
+            "onsetTick": 0,
+            "latencyTicks": 31,
+            "contactTick": null,
+            "impulseNs": 0,
+            "minimumDistanceM": 17.911,
+            "finalZM": 42.896202,
+            "finalSpeedMps": 21.436,
+            "outcome": "PASSED_CLEAR"
+          },
+          {
+            "mode": "MANUAL",
+            "action": "BRAKE",
+            "collider": "GENERIC_CONTACT",
+            "onsetTick": 0,
+            "latencyTicks": 121,
+            "contactTick": null,
+            "impulseNs": 0,
+            "minimumDistanceM": 17.05,
+            "finalZM": -19.66814,
+            "finalSpeedMps": 0,
+            "outcome": "STOPPED"
+          },
+          {
+            "mode": "MANUAL",
+            "action": "LATE",
+            "collider": "GENERIC_CONTACT",
+            "onsetTick": 0,
+            "latencyTicks": 211,
+            "contactTick": 242,
+            "impulseNs": 14033.656,
+            "minimumDistanceM": 1.998,
+            "finalZM": -4.615791,
+            "finalSpeedMps": 0,
+            "outcome": "STOPPED"
+          }
+        ],
+        "comparisons": [
+          {
+            "id": "manual-auto-brake-identical",
+            "passed": true,
+            "detail": "stop z -19.66814 vs -19.66814, contact null vs null"
+          },
+          {
+            "id": "manual-auto-contact-identical",
+            "passed": true,
+            "detail": "contact tick 242 vs 242, impulse 14033.656 vs 14033.656 N·s"
+          },
+          {
+            "id": "late-input-is-the-only-difference",
+            "passed": true,
+            "detail": "the late brake arm contacts the obstacle while the early brake arm stops clear"
+          },
+          {
+            "id": "manual-auto-evade-identical",
+            "passed": true,
+            "detail": "clearance 17.911 vs 17.911 m, zero contacts"
+          },
+          {
+            "id": "obstacle-is-an-ordinary-contact",
+            "passed": true,
+            "detail": "stop z -19.66814 vs generic -19.66814; contact 242 vs 242"
+          },
+          {
+            "id": "collider-registered-once",
+            "passed": true,
+            "detail": "the hazard obstacle is a named box in the shared collision registry"
+          },
+          {
+            "id": "brake-latency-measured",
+            "passed": true,
+            "detail": "brake latency 121 ticks"
+          },
+          {
+            "id": "evade-latency-measured",
+            "passed": true,
+            "detail": "steer latency 31 ticks"
+          }
+        ]
+      },
+      "checks": [
+        {
+          "id": "manual-auto-brake-identical",
+          "passed": true,
+          "detail": "stop z -19.66814 vs -19.66814, contact null vs null"
+        },
+        {
+          "id": "manual-auto-contact-identical",
+          "passed": true,
+          "detail": "contact tick 242 vs 242, impulse 14033.656 vs 14033.656 N·s"
+        },
+        {
+          "id": "late-input-is-the-only-difference",
+          "passed": true,
+          "detail": "the late brake arm contacts the obstacle while the early brake arm stops clear"
+        },
+        {
+          "id": "manual-auto-evade-identical",
+          "passed": true,
+          "detail": "clearance 17.911 vs 17.911 m, zero contacts"
+        },
+        {
+          "id": "obstacle-is-an-ordinary-contact",
+          "passed": true,
+          "detail": "stop z -19.66814 vs generic -19.66814; contact 242 vs 242"
+        },
+        {
+          "id": "collider-registered-once",
+          "passed": true,
+          "detail": "the hazard obstacle is a named box in the shared collision registry"
+        },
+        {
+          "id": "brake-latency-measured",
+          "passed": true,
+          "detail": "brake latency 121 ticks"
+        },
+        {
+          "id": "evade-latency-measured",
+          "passed": true,
+          "detail": "steer latency 31 ticks"
+        }
+      ],
+      "pass": true
+    },
+    {
+      "scenarioId": "horn-opportunity",
+      "title": "Claxon ca oportunitate cu condiții observabile",
+      "description": "Pieton real în traversare, la 15 m: oportunitatea se deschide la debut cu condiții observabile, claxonul din fixture este măsurat, iar un claxon fără oportunitate este refuzat.",
+      "ticks": 140,
+      "stimuli": 1,
+      "reactions": 0,
+      "hornOpportunities": 1,
+      "hornUses": 1,
+      "hornRefusals": 1,
+      "counts": {
+        "obstacles": 0,
+        "refusedObstacles": 0,
+        "stimuli": 1,
+        "reactions": 0,
+        "brakeReactions": 0,
+        "steerReactions": 0,
+        "hornOpportunities": 1,
+        "hornUses": 1,
+        "hornRefusals": 1,
+        "hornRefusalsNoOpportunity": 0,
+        "hornRefusalsAlreadyUsed": 1,
+        "stopped": 0,
+        "passedClear": 0,
+        "passedClose": 1,
+        "contacts": 0,
+        "released": 0,
+        "pending": 0
+      },
+      "coverage": {
+        "steps": 140,
+        "completeSteps": 140,
+        "incompleteSteps": 0,
+        "vehiclesObserved": 140
+      },
+      "latency": null,
+      "denominators": {
+        "reactionRate": {
+          "id": "REACTION_RATE",
+          "numerator": 0,
+          "denominator": 1,
+          "value": 0,
+          "status": "OBSERVED",
+          "reason": null
+        }
+      },
+      "gaps": [
+        "NO_OBSTACLE_DATA: the scene supplied no obstacle data"
+      ],
+      "encounters": [
+        {
+          "stimulusId": "id-v1:hazard-stimulus:hazards-165-tests|11|pedestrian-fixture-1|vehicle-1|inc-1",
+          "hazardId": "pedestrian-fixture-1",
+          "kind": "PEDESTRIAN",
+          "vehicleId": "vehicle-1",
+          "controlMode": "MANUAL",
+          "onsetTick": 0,
+          "outcome": "PASSED_CLOSE",
+          "resolvedTick": 113,
+          "minimumDistanceM": 0.06666666666660603,
+          "latencyTicks": null,
+          "hornOpportunityId": "id-v1:hazard-stimulus:hazards-165-tests|11|pedestrian-fixture-1|vehicle-1|inc-1:horn",
+          "contactTick": null,
+          "contactImpulseNs": 0
+        }
+      ],
+      "checks": [
+        {
+          "id": "opportunity-opened-at-onset",
+          "passed": true,
+          "detail": "opened tick 0 vs onset 0"
+        },
+        {
+          "id": "observable-conditions",
+          "passed": true,
+          "detail": "conditions IMMINENT_HAZARD + PEDESTRIAN_IN_PATH"
+        },
+        {
+          "id": "horn-measured",
+          "passed": true,
+          "detail": "horn after 18 ticks"
+        },
+        {
+          "id": "second-press-refused",
+          "passed": true,
+          "detail": "OPPORTUNITY_ALREADY_USED"
+        },
+        {
+          "id": "press-without-opportunity-refused",
+          "passed": true,
+          "detail": "NO_OPEN_OPPORTUNITY"
+        },
+        {
+          "id": "no-live-channel",
+          "passed": true,
+          "detail": "live input UNAVAILABLE; requires 3 additions"
+        },
+        {
+          "id": "opportunity-closed",
+          "passed": true,
+          "detail": "closed tick 113"
+        }
+      ],
+      "pass": true
+    },
+    {
+      "scenarioId": "obstacle-data",
+      "title": "Obstacole ca date, cu politici de margine și refuzuri",
+      "description": "Pozițiile vin din harta reală, nu din scenă; fiecare intrare invalidă este refuzată cu un motiv închis, iar politica de margine fie refuză, fie decupează.",
+      "ticks": 0,
+      "stimuli": 0,
+      "reactions": 0,
+      "hornOpportunities": 0,
+      "hornUses": 0,
+      "hornRefusals": 0,
+      "counts": {
+        "obstacles": 96,
+        "refusedObstacles": 9,
+        "stimuli": 0,
+        "reactions": 0,
+        "brakeReactions": 0,
+        "steerReactions": 0,
+        "hornOpportunities": 0,
+        "hornUses": 0,
+        "hornRefusals": 0,
+        "hornRefusalsNoOpportunity": 0,
+        "hornRefusalsAlreadyUsed": 0,
+        "stopped": 0,
+        "passedClear": 0,
+        "passedClose": 0,
+        "contacts": 0,
+        "released": 0,
+        "pending": 0
+      },
+      "coverage": {
+        "steps": 0,
+        "completeSteps": 0,
+        "incompleteSteps": 0,
+        "vehiclesObserved": 0
+      },
+      "latency": null,
+      "denominators": {
+        "reactionRate": {
+          "id": "REACTION_RATE",
+          "numerator": 0,
+          "denominator": 0,
+          "value": null,
+          "status": "MISSING",
+          "reason": "NO_RESOLVED_STIMULUS"
+        }
+      },
+      "gaps": [
+        "NO_RESOLVED_STIMULUS: no hazard encounter was resolved"
+      ],
+      "encounters": [],
+      "checks": [
+        {
+          "id": "accepted-count",
+          "passed": true,
+          "detail": "accepted 96"
+        },
+        {
+          "id": "duplicate-refused",
+          "passed": true,
+          "detail": "duplicate 1"
+        },
+        {
+          "id": "outside-refused",
+          "passed": true,
+          "detail": "outside 1"
+        },
+        {
+          "id": "geometry-refused",
+          "passed": true,
+          "detail": "invalid geometry 1"
+        },
+        {
+          "id": "type-refused",
+          "passed": true,
+          "detail": "unknown type 1"
+        },
+        {
+          "id": "schedule-refused",
+          "passed": true,
+          "detail": "invalid schedule 1"
+        },
+        {
+          "id": "policy-refused",
+          "passed": true,
+          "detail": "unknown policy 1"
+        },
+        {
+          "id": "capacity-refused",
+          "passed": true,
+          "detail": "capacity 3"
+        },
+        {
+          "id": "clip-applied",
+          "passed": true,
+          "detail": "overshoot 4.00 m, half x 3"
+        },
+        {
+          "id": "physics-identity",
+          "passed": true,
+          "detail": "entity id cone-1"
+        },
+        {
+          "id": "lane-derived-position",
+          "passed": true,
+          "detail": "x 103.800 vs lane 103.800"
+        },
+        {
+          "id": "no-scene-constants",
+          "passed": true,
+          "detail": "positions come from the lane fixture, not from hardcoded scene coordinates"
+        }
+      ],
+      "pass": true,
+      "refusals": [
+        {
+          "obstacleId": "cone-1",
+          "reason": "DUPLICATE_ID",
+          "detail": "duplicate cone-1"
+        },
+        {
+          "obstacleId": "outside-1",
+          "reason": "OUTSIDE_MAP_BOUNDS",
+          "detail": "overshoot 4.000 m"
+        },
+        {
+          "obstacleId": "degenerate-1",
+          "reason": "INVALID_GEOMETRY",
+          "detail": "half size 0,0.2,0.2 outside (0, 50]"
+        },
+        {
+          "obstacleId": "unknown-type",
+          "reason": "UNKNOWN_TYPE",
+          "detail": "ROCKET"
+        },
+        {
+          "obstacleId": "bad-schedule",
+          "reason": "INVALID_SCHEDULE",
+          "detail": "activeFromTick=-5"
+        },
+        {
+          "obstacleId": "bad-policy",
+          "reason": "UNKNOWN_EDGE_POLICY",
+          "detail": "WRAP"
+        },
+        {
+          "obstacleId": "capacity-94",
+          "reason": "CAPACITY",
+          "detail": "cap 96"
+        },
+        {
+          "obstacleId": "capacity-95",
+          "reason": "CAPACITY",
+          "detail": "cap 96"
+        },
+        {
+          "obstacleId": "capacity-96",
+          "reason": "CAPACITY",
+          "detail": "cap 96"
+        }
+      ]
+    },
+    {
+      "scenarioId": "determinism",
+      "title": "Determinism sub seed explicit",
+      "description": "Aceleași intrări și același seed produc aceiași stimuli, aceleași momente și aceeași amprentă; alt seed schimbă doar momentul apariției, pentru că jitter-ul este derivat din seed.",
+      "ticks": 260,
+      "stimuli": 1,
+      "reactions": 1,
+      "hornOpportunities": 1,
+      "hornUses": 0,
+      "hornRefusals": 0,
+      "counts": {
+        "obstacles": 1,
+        "refusedObstacles": 0,
+        "stimuli": 1,
+        "reactions": 1,
+        "brakeReactions": 1,
+        "steerReactions": 0,
+        "hornOpportunities": 1,
+        "hornUses": 0,
+        "hornRefusals": 0,
+        "hornRefusalsNoOpportunity": 0,
+        "hornRefusalsAlreadyUsed": 0,
+        "stopped": 1,
+        "passedClear": 0,
+        "passedClose": 0,
+        "contacts": 0,
+        "released": 0,
+        "pending": 0
+      },
+      "coverage": {
+        "steps": 260,
+        "completeSteps": 260,
+        "incompleteSteps": 0,
+        "vehiclesObserved": 260
+      },
+      "latency": {
+        "reactions": 1,
+        "minTicks": 45,
+        "meanTicks": 45,
+        "maxTicks": 45,
+        "minS": 0.75,
+        "meanS": 0.75,
+        "maxS": 0.75
+      },
+      "denominators": {
+        "reactionRate": {
+          "id": "REACTION_RATE",
+          "numerator": 1,
+          "denominator": 1,
+          "value": 1,
+          "status": "OBSERVED",
+          "reason": null
+        }
+      },
+      "gaps": [],
+      "encounters": [
+        {
+          "stimulusId": "id-v1:hazard-stimulus:hazards-165-tests|11|obstacle-1|vehicle-1|inc-1",
+          "hazardId": "obstacle-1",
+          "kind": "OBSTACLE",
+          "vehicleId": "vehicle-1",
+          "controlMode": "AUTO",
+          "onsetTick": 71,
+          "outcome": "STOPPED",
+          "resolvedTick": 205,
+          "minimumDistanceM": 5.899999999999935,
+          "latencyTicks": 45,
+          "hornOpportunityId": "id-v1:hazard-stimulus:hazards-165-tests|11|obstacle-1|vehicle-1|inc-1:horn",
+          "contactTick": null,
+          "contactImpulseNs": 0
+        }
+      ],
+      "checks": [
+        {
+          "id": "same-seed-digest",
+          "passed": true,
+          "detail": "digest cb7be00c54458ef6…"
+        },
+        {
+          "id": "same-seed-appearance",
+          "passed": true,
+          "detail": "appear ticks 71 / 71"
+        },
+        {
+          "id": "seed-drives-appearance",
+          "passed": true,
+          "detail": "seed 165 → 71, seed 166 → 84"
+        },
+        {
+          "id": "different-seed-digest",
+          "passed": true,
+          "detail": "digests differ: true"
+        }
+      ],
+      "pass": true
+    }
+  ],
+  "summary": {
+    "scenarios": 7,
+    "passed": 7,
+    "pass": true,
+    "stimuli": 11,
+    "reactions": 10,
+    "brakeReactions": 7,
+    "steerReactions": 3,
+    "hornOpportunities": 5,
+    "hornUses": 1,
+    "hornRefusals": 1,
+    "contacts": 2,
+    "stopped": 5,
+    "passedClear": 3,
+    "passedClose": 1,
+    "released": 0,
+    "pending": 0
+  },
+  "determinism": {
+    "runs": 2,
+    "identical": true,
+    "digest": "cb7be00c54458ef6a338cba30ba411ec33fdeaea79cfcfae18b25ffce1a201cb",
+    "appearTicks": [
+      71,
+      71,
+      84
+    ],
+    "digestBySeed": [
+      {
+        "seed": 165,
+        "digest": "cb7be00c54458ef6a338cba30ba411ec33fdeaea79cfcfae18b25ffce1a201cb"
+      },
+      {
+        "seed": 166,
+        "digest": "6d871a0ef4bc4a0c81778a28d92eb93db142d53f5e65a821b385bb7801b3c548"
+      }
+    ]
+  },
+  "cost": {
+    "scenarioId": "cost-600-steps",
+    "steps": 600,
+    "hazardEvaluations": 600,
+    "vehicleEvaluations": 600,
+    "peakHazardsPerStep": 1,
+    "peakVehiclesPerStep": 1
+  },
+  "limitations": [
+    "Nivel determinist în Node: fără browser, GPU sau input uman. Mișcarea vehiculului este scriptată de fixture în scenariile deterministe; numai scenariul „physical-same-physics” rulează fizica Rapier reală.",
+    "Claxonul nu are canal live: VehicleCommand nu expune horn, deci oportunitatea și apăsarea sunt dovedite prin fixture controlat; pentru live este nevoie de un keybinding, un câmp/eveniment pe VehicleCommand și feedback audio/HUD.",
+    "Pietonii din scenariul de claxon sunt un fapt de fixture (poziție și stare); populația reală rămâne a contractului 164. Modulul nu detectează fizic impactul și nu inventează contacte.",
+    "Politica de margine este plană (X/Z), derivată din bounds-ul hărții; nu modelează înălțimea clădirilor sau trotuarele.",
+    "Pragurile numerice (rază, con, frână, virare, TTC de claxon) sunt candidate de design raportate explicit, nu valori de calibrare în catalogul de parametri.",
+    "Timpul local de generare nu este o măsurătoare de performanță hardware: PBI 165 nu are performance_checks, iar costul raportat este structural."
+  ]
+}
