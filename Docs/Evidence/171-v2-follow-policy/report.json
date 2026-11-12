@@ -1,0 +1,432 @@
+{
+  "version": "171-follow-policy-v1",
+  "parameters": [
+    {
+      "key": "cutin_brake_response",
+      "unit": "ratio",
+      "minimum": 0,
+      "maximum": 1,
+      "defaultValue": 0.7
+    },
+    {
+      "key": "closing_ttc_threshold",
+      "unit": "s",
+      "minimum": 0.3,
+      "maximum": 8,
+      "defaultValue": 3
+    },
+    {
+      "key": "leader_change_delay",
+      "unit": "s",
+      "minimum": 0,
+      "maximum": 2,
+      "defaultValue": 0.2
+    },
+    {
+      "key": "following_hysteresis",
+      "unit": "m",
+      "minimum": 0,
+      "maximum": 5,
+      "defaultValue": 1
+    }
+  ],
+  "episodes": [
+    {
+      "name": "cut-in",
+      "scenario": "un vehicul nou se interpune la 18 m; ego 15 m/s, angajament anterior 12 m/s"
+    },
+    {
+      "name": "timp până la contact",
+      "scenario": "apropiere cu 6 m/s de un lider de 8 m/s aflat la 36 m"
+    },
+    {
+      "name": "schimbarea liderului",
+      "scenario": "liderul anterior părăsește banda; noul lider este la 60 m și mai rapid"
+    },
+    {
+      "name": "histerezis",
+      "scenario": "decalajul oscilează ±2 m în jurul decalajului dorit, fără apropiere, cu același lider"
+    }
+  ],
+  "effects": [
+    {
+      "key": "cutin_brake_response",
+      "episode": "cut-in",
+      "unit": "m/s",
+      "lowValue": 0.2,
+      "highValue": 1,
+      "lowOutcome": 9.940000000000001,
+      "highOutcome": 1.7000000000000028,
+      "difference": -8.239999999999998,
+      "note": "aceeași intrare (lider la 18 m, ego 15 m/s): preferința 048 este 1.700 m/s, iar o reacție mai mare coboară ținta commitată spre ea"
+    },
+    {
+      "key": "closing_ttc_threshold",
+      "episode": "timp până la contact",
+      "unit": "m/s",
+      "lowValue": 0.3,
+      "highValue": 8,
+      "lowOutcome": 15.260000000000002,
+      "highOutcome": 11.875,
+      "difference": -3.3850000000000016,
+      "note": "apropiere 6 m/s la 36 m: plafon 111.333 vs 11.875 m/s; preferința 048 este 15.260 m/s"
+    },
+    {
+      "key": "leader_change_delay",
+      "episode": "schimbarea liderului",
+      "unit": "tick",
+      "lowValue": 0,
+      "highValue": 2,
+      "lowOutcome": 1,
+      "highOutcome": 121,
+      "difference": 120,
+      "note": "primul tick în care ținta commitată atinge preferința noului lider 16.000 m/s, la 60 Hz"
+    },
+    {
+      "key": "following_hysteresis",
+      "episode": "histerezis",
+      "unit": "m/s",
+      "lowValue": 0,
+      "highValue": 5,
+      "lowOutcome": 30.800000000000008,
+      "highOutcome": 0,
+      "difference": -30.800000000000008,
+      "note": "variația totală a țintei commitate pe 12 tick-uri, cu decalajul oscilând ±2 m în jurul decalajului dorit"
+    }
+  ],
+  "separation": [
+    {
+      "key": "closing_ttc_threshold",
+      "episode": "cut-in",
+      "unit": "m/s",
+      "lowValue": 0.3,
+      "highValue": 8,
+      "lowOutcome": 4.790000000000003,
+      "highOutcome": 4.790000000000003,
+      "difference": 0,
+      "note": "`closing_ttc_threshold` este inertă în episodul cut-in"
+    },
+    {
+      "key": "leader_change_delay",
+      "episode": "cut-in",
+      "unit": "m/s",
+      "lowValue": 0,
+      "highValue": 2,
+      "lowOutcome": 4.790000000000003,
+      "highOutcome": 4.790000000000003,
+      "difference": 0,
+      "note": "`leader_change_delay` este inertă în episodul cut-in"
+    },
+    {
+      "key": "following_hysteresis",
+      "episode": "cut-in",
+      "unit": "m/s",
+      "lowValue": 0,
+      "highValue": 5,
+      "lowOutcome": 4.790000000000003,
+      "highOutcome": 4.790000000000003,
+      "difference": 0,
+      "note": "`following_hysteresis` este inertă în episodul cut-in"
+    },
+    {
+      "key": "cutin_brake_response",
+      "episode": "timp până la contact",
+      "unit": "m/s",
+      "lowValue": 1,
+      "highValue": 0,
+      "lowOutcome": 15.260000000000002,
+      "highOutcome": 15.260000000000002,
+      "difference": 0,
+      "note": "`cutin_brake_response` este inertă în episodul timp până la contact"
+    },
+    {
+      "key": "leader_change_delay",
+      "episode": "timp până la contact",
+      "unit": "m/s",
+      "lowValue": 0,
+      "highValue": 2,
+      "lowOutcome": 15.260000000000002,
+      "highOutcome": 15.260000000000002,
+      "difference": 0,
+      "note": "`leader_change_delay` este inertă în episodul timp până la contact"
+    },
+    {
+      "key": "following_hysteresis",
+      "episode": "timp până la contact",
+      "unit": "m/s",
+      "lowValue": 0,
+      "highValue": 5,
+      "lowOutcome": 15.260000000000002,
+      "highOutcome": 15.260000000000002,
+      "difference": 0,
+      "note": "`following_hysteresis` este inertă în episodul timp până la contact"
+    },
+    {
+      "key": "cutin_brake_response",
+      "episode": "schimbarea liderului",
+      "unit": "m/s",
+      "lowValue": 1,
+      "highValue": 0,
+      "lowOutcome": 16,
+      "highOutcome": 16,
+      "difference": 0,
+      "note": "`cutin_brake_response` este inertă în episodul schimbarea liderului"
+    },
+    {
+      "key": "closing_ttc_threshold",
+      "episode": "schimbarea liderului",
+      "unit": "m/s",
+      "lowValue": 0.3,
+      "highValue": 8,
+      "lowOutcome": 16,
+      "highOutcome": 16,
+      "difference": 0,
+      "note": "`closing_ttc_threshold` este inertă în episodul schimbarea liderului"
+    },
+    {
+      "key": "following_hysteresis",
+      "episode": "schimbarea liderului",
+      "unit": "m/s",
+      "lowValue": 0,
+      "highValue": 5,
+      "lowOutcome": 16,
+      "highOutcome": 16,
+      "difference": 0,
+      "note": "`following_hysteresis` este inertă în episodul schimbarea liderului"
+    },
+    {
+      "key": "cutin_brake_response",
+      "episode": "histerezis",
+      "unit": "m/s",
+      "lowValue": 1,
+      "highValue": 0,
+      "lowOutcome": 10,
+      "highOutcome": 10,
+      "difference": 0,
+      "note": "`cutin_brake_response` este inertă în episodul histerezis"
+    },
+    {
+      "key": "closing_ttc_threshold",
+      "episode": "histerezis",
+      "unit": "m/s",
+      "lowValue": 0.3,
+      "highValue": 8,
+      "lowOutcome": 10,
+      "highOutcome": 10,
+      "difference": 0,
+      "note": "`closing_ttc_threshold` este inertă în episodul histerezis"
+    },
+    {
+      "key": "leader_change_delay",
+      "episode": "histerezis",
+      "unit": "m/s",
+      "lowValue": 0,
+      "highValue": 2,
+      "lowOutcome": 10,
+      "highOutcome": 10,
+      "difference": 0,
+      "note": "`leader_change_delay` este inertă în episodul histerezis"
+    }
+  ],
+  "safety": [
+    {
+      "key": "oprire cerută",
+      "episode": "siguranță",
+      "unit": "ratio",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 0,
+      "highOutcome": 0,
+      "difference": 0,
+      "note": "toate cheile la valoarea cea mai permisivă: oprirea cere tot 0 m/s"
+    },
+    {
+      "key": "podea de contact 3 m",
+      "episode": "siguranță",
+      "unit": "ratio",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 0,
+      "highOutcome": 0,
+      "difference": 0,
+      "note": "un lider în interiorul podelei de 5 m cere 0 m/s, oricare ar fi cheile"
+    },
+    {
+      "key": "marja timpului până la contact",
+      "episode": "siguranță",
+      "unit": "m/s",
+      "lowValue": 0,
+      "highValue": 8,
+      "lowOutcome": 0,
+      "highOutcome": 0.125,
+      "difference": 0.125,
+      "note": "cu pragul maxim la 1 m în afara podelei, viteza de apropiere 0.125 m/s păstrează marja rămasă timp de 8.000 s"
+    },
+    {
+      "key": "confort la pragul maxim",
+      "episode": "siguranță",
+      "unit": "m/s²",
+      "lowValue": 0,
+      "highValue": 8,
+      "lowOutcome": 0,
+      "highOutcome": 1.7837053571428572,
+      "difference": 1.7837053571428572,
+      "note": "12 m/s la 40 m cu lider oprit: plafonul 4.375 m/s cere 1.784 m/s², în limita comfort_deceleration 2"
+    },
+    {
+      "key": "reducere în timpul ținerii",
+      "episode": "siguranță",
+      "unit": "m/s",
+      "lowValue": 0,
+      "highValue": 2,
+      "lowOutcome": 3.7,
+      "highOutcome": 3.7,
+      "difference": 0,
+      "note": "ambele valori ale întârzierii adoptă reducerea imediat (0 tick-uri rămase); o întârziere maximă nu amână niciodată o reducere sigură"
+    },
+    {
+      "key": "cut-in la reacție maximă",
+      "episode": "siguranță",
+      "unit": "m/s",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 9.625,
+      "highOutcome": 1.7000000000000028,
+      "difference": -7.924999999999997,
+      "note": "reacția se oprește exact la preferința 048 livrată (1.700 m/s), iar valoarea fără reacție rămâne mărginită de plafonul timpului până la contact"
+    }
+  ],
+  "compatibility": {
+    "identicalFollowingTicks": true,
+    "comparableTicks": 60,
+    "identicalTicks": 60,
+    "neutralForwardTicks": 60,
+    "activeDifferingTicks": 40,
+    "maximumDifferenceMps": 4.19999999999999,
+    "mUnits": {
+      "speed_delta_urban": "m/s",
+      "following_time_headway": "s",
+      "following_min_gap": "m",
+      "queue_standstill_gap": "m",
+      "following_speed_gain": "1/s"
+    },
+    "rUnits": {
+      "cutin_brake_response": "ratio",
+      "closing_ttc_threshold": "s",
+      "leader_change_delay": "s",
+      "following_hysteresis": "m"
+    }
+  },
+  "determinism": {
+    "ticks": 6,
+    "digest": "fnv1a32:d746186b",
+    "repeatedDigest": "fnv1a32:d746186b"
+  },
+  "checks": [
+    {
+      "id": "key-cutin-effect",
+      "pass": true,
+      "detail": "9.940 -> 1.700 m/s, exact preferința 048"
+    },
+    {
+      "id": "key-cutin-no-reaction",
+      "pass": true,
+      "detail": "reacția zero păstrează angajamentul anterior de 12 m/s"
+    },
+    {
+      "id": "key-ttc-effect",
+      "pass": true,
+      "detail": "15.260 -> 11.875 m/s"
+    },
+    {
+      "id": "key-ttc-margin",
+      "pass": true,
+      "detail": "viteza de apropiere plafonată păstrează 8.000 s de marjă"
+    },
+    {
+      "id": "key-leader-delay-effect",
+      "pass": true,
+      "detail": "adoptat la tick-ul 1 față de tick-ul 121"
+    },
+    {
+      "id": "key-leader-delay-reduction",
+      "pass": true,
+      "detail": "o reducere este adoptată pe tick-ul de ținere (3.700 m/s)"
+    },
+    {
+      "id": "key-hysteresis-effect",
+      "pass": true,
+      "detail": "variația totală 30.800 -> 0.000 m/s"
+    },
+    {
+      "id": "separation-cutin",
+      "pass": true,
+      "detail": "doar cutin_brake_response acționează în episodul cut-in"
+    },
+    {
+      "id": "separation-ttc",
+      "pass": true,
+      "detail": "doar closing_ttc_threshold acționează în episodul timpului până la contact"
+    },
+    {
+      "id": "separation-leader-change",
+      "pass": true,
+      "detail": "doar leader_change_delay acționează în episodul schimbării liderului"
+    },
+    {
+      "id": "separation-hysteresis",
+      "pass": true,
+      "detail": "doar following_hysteresis acționează în episodul histerezisului"
+    },
+    {
+      "id": "safety-stop",
+      "pass": true,
+      "detail": "o cerere de oprire comandă 0 m/s cu toate cheile la valoarea cea mai permisivă"
+    },
+    {
+      "id": "safety-floor",
+      "pass": true,
+      "detail": "un lider în interiorul a 5 m comandă 0 m/s"
+    },
+    {
+      "id": "safety-ttc-comfort",
+      "pass": true,
+      "detail": "1.784 m/s² necesari pentru pragul maxim, confort 2 m/s²"
+    },
+    {
+      "id": "safety-cutin-bound",
+      "pass": true,
+      "detail": "reacția maximă se oprește la preferința 048 livrată și niciodată sub ea"
+    },
+    {
+      "id": "safety-coverage",
+      "pass": true,
+      "detail": "fiecare țintă commitată rămâne în 0-30 m/s"
+    },
+    {
+      "id": "m-following-identical",
+      "pass": true,
+      "detail": "60/60 rezultate 048 identice cu cheile R neutre vs active"
+    },
+    {
+      "id": "m-neutral-forwards",
+      "pass": true,
+      "detail": "60/60 tick-uri neutre forwardează ținta 048; 40 tick-uri active diferă cu până la 4.200 m/s"
+    },
+    {
+      "id": "catalog-ranges",
+      "pass": true,
+      "detail": "cutin_brake_response 0-1 ratio, closing_ttc_threshold 0.3-8 s, leader_change_delay 0-2 s, following_hysteresis 0-5 m"
+    },
+    {
+      "id": "determinism",
+      "pass": true,
+      "detail": "digest fnv1a32:d746186b"
+    }
+  ],
+  "summary": {
+    "checks": 20,
+    "passed": 20,
+    "pass": true
+  }
+}
