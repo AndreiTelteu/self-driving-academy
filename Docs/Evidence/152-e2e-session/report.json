@@ -1,0 +1,1766 @@
+{
+  "version": "152-e2e-session-v1",
+  "generatedBy": "scripts/run-e2e-session-report.mjs",
+  "command": "npm run e2e:session",
+  "seed": 152,
+  "oracleRule": "Fiecare valoare așteptată este contractul livrat (stările 061, tranzițiile 067, închiderea 068, suma 213, cele trei misiuni 211), nu o copie a valorii observate; exportul și restartul se compară prin amprente SHA-256 ale stării.",
+  "steps": [
+    {
+      "id": "S0-new-profile",
+      "order": 0,
+      "title": "Profil nou: o singură versiune de bază pentru toată flota",
+      "contract": "109 profile store + 057 fleet registry",
+      "input": {
+        "profileId": "city-profile-115",
+        "engineVersion": "engine-115"
+      },
+      "actual": {
+        "versions": 1,
+        "baseVersions": 1,
+        "activeVersionId": "city-style-base-115",
+        "taxiHistogram": "{\"city-style-base-115\":30}",
+        "civilianHistogram": "{\"city-style-base-115\":40}"
+      },
+      "checks": [
+        {
+          "name": "profile versions",
+          "expected": 1,
+          "actual": 1,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "un profil nou pornește cu exact o versiune de bază"
+        },
+        {
+          "name": "base versions",
+          "expected": 1,
+          "actual": 1,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "versiunea de start este BASE, nu o versiune derivată"
+        },
+        {
+          "name": "taxis",
+          "expected": 30,
+          "actual": 30,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "flota V1 are 30 de taxiuri"
+        },
+        {
+          "name": "civilians",
+          "expected": 40,
+          "actual": 40,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "traficul civil are 40 de vehicule"
+        },
+        {
+          "name": "fleet on base version",
+          "expected": [
+            "city-style-base-115"
+          ],
+          "actual": [
+            "city-style-base-115"
+          ],
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "toate taxiurile folosesc versiunea de bază"
+        },
+        {
+          "name": "civil on base version",
+          "expected": [
+            "city-style-base-115"
+          ],
+          "actual": [
+            "city-style-base-115"
+          ],
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "toate civilele folosesc versiunea de bază"
+        },
+        {
+          "name": "initial mode",
+          "expected": "AUTO",
+          "actual": "AUTO",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "sesiunea pornește în AUTO, fără scaun de jucător"
+        }
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "id": "S1-auto",
+      "order": 1,
+      "title": "AUTO: simularea rulează fără autoritate de jucător",
+      "contract": "024 + 066 control authority",
+      "input": {
+        "ticks": 2
+      },
+      "actual": {
+        "tick": 2,
+        "mode": "AUTO",
+        "seat": null,
+        "segments": 0
+      },
+      "checks": [
+        {
+          "name": "auto mode",
+          "expected": "AUTO",
+          "actual": "AUTO",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "modul rămâne AUTO"
+        },
+        {
+          "name": "auto seat",
+          "expected": null,
+          "actual": null,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "niciun jucător nu deține un vehicul"
+        },
+        {
+          "name": "auto segment",
+          "expected": 0,
+          "actual": 0,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "AUTO nu deschide segment de intervenție"
+        },
+        {
+          "name": "auto tick",
+          "expected": true,
+          "actual": true,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "ceasul fix a avansat"
+        }
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "id": "S2-ride-begin",
+      "order": 2,
+      "title": "Cursă reală: dispeceratul 060 alocă taxiul, 061 pornește cursa",
+      "contract": "059 ride demand + 060 dispatcher + 061 ride FSM",
+      "input": {
+        "tick": 10,
+        "requestId": "id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000",
+        "taxiId": "id-v1:7:vehicle14:city:115:slice4:TAXI4:0002"
+      },
+      "actual": {
+        "state": "TO_PICKUP",
+        "taxiId": "id-v1:7:vehicle14:city:115:slice4:TAXI4:0002",
+        "taxiStatus": "ASSIGNED",
+        "selected": "id-v1:7:vehicle14:city:115:slice4:TAXI4:0002",
+        "activeRides": 1
+      },
+      "checks": [
+        {
+          "name": "ride state",
+          "expected": "TO_PICKUP",
+          "actual": "TO_PICKUP",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "ASSIGNED deschide cursa în TO_PICKUP"
+        },
+        {
+          "name": "ride taxi",
+          "expected": "id-v1:7:vehicle14:city:115:slice4:TAXI4:0002",
+          "actual": "id-v1:7:vehicle14:city:115:slice4:TAXI4:0002",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "cursa aparține taxiului alocat de 060"
+        },
+        {
+          "name": "taxi claimed",
+          "expected": "ASSIGNED",
+          "actual": "ASSIGNED",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "taxiul este revendicat de cursă"
+        },
+        {
+          "name": "camera on ride taxi",
+          "expected": "id-v1:7:vehicle14:city:115:slice4:TAXI4:0002",
+          "actual": "id-v1:7:vehicle14:city:115:slice4:TAXI4:0002",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "camera urmărește taxiul cursei, fără a lua scaunul"
+        },
+        {
+          "name": "active rides",
+          "expected": 1,
+          "actual": 1,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "exact o cursă activă"
+        }
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "id": "S3-manual",
+      "order": 3,
+      "title": "MANUAL: jucătorul preia taxiul cursei și deschide intervenția",
+      "contract": "067 mode controls + 066 authority + 005 segment",
+      "input": {
+        "action": "M",
+        "tick": 12,
+        "vehicleId": "id-v1:7:vehicle14:city:115:slice4:TAXI4:0002"
+      },
+      "actual": {
+        "claim": "ACCEPTED",
+        "mode": "MANUAL",
+        "seat": "{\"identity\":{\"entityId\":\"id-v1:7:vehicle14:city:115:slice4:TAXI4:0002\",\"handle\":2,\"generation\":1},\"mode\":\"MANUAL\"}",
+        "segment": "segment-152-1",
+        "completeness": "OPEN",
+        "startTick": 12
+      },
+      "checks": [
+        {
+          "name": "manual claim",
+          "expected": "ACCEPTED",
+          "actual": "ACCEPTED",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "tasta M este acceptată la tick-ul următor"
+        },
+        {
+          "name": "manual mode",
+          "expected": "MANUAL",
+          "actual": "MANUAL",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "HUD și simularea sunt MANUAL"
+        },
+        {
+          "name": "manual seat",
+          "expected": "id-v1:7:vehicle14:city:115:slice4:TAXI4:0002",
+          "actual": "id-v1:7:vehicle14:city:115:slice4:TAXI4:0002",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "jucătorul deține taxiul cursei"
+        },
+        {
+          "name": "manual seat mode",
+          "expected": "MANUAL",
+          "actual": "MANUAL",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "scaunul raportează MANUAL"
+        },
+        {
+          "name": "segment open",
+          "expected": "OPEN",
+          "actual": "OPEN",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "intervenția este deschisă"
+        },
+        {
+          "name": "segment start",
+          "expected": 12,
+          "actual": 12,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "segmentul pornește la tick-ul acceptat"
+        }
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "id": "S4-mid-ride",
+      "order": 4,
+      "title": "La mijlocul cursei: pickup-ul este complet, taxiul rămâne revendicat",
+      "contract": "061 ride FSM (tranziții legale) + 005 OPEN",
+      "input": {
+        "events": [
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE"
+        ],
+        "tick": 14
+      },
+      "actual": {
+        "state": "TO_DROPOFF",
+        "transitions": 3,
+        "taxiStatus": "ASSIGNED",
+        "segment": "OPEN",
+        "activeRides": 1
+      },
+      "checks": [
+        {
+          "name": "mid-ride state",
+          "expected": "TO_DROPOFF",
+          "actual": "TO_DROPOFF",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "pasagerul este la bord"
+        },
+        {
+          "name": "mid-ride transitions",
+          "expected": 3,
+          "actual": 3,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "ASSIGNED + ARRIVED_PICKUP + PICKUP_COMPLETE"
+        },
+        {
+          "name": "mid-ride taxi claimed",
+          "expected": "ASSIGNED",
+          "actual": "ASSIGNED",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "cursa deține încă taxiul"
+        },
+        {
+          "name": "mid-ride segment open",
+          "expected": "OPEN",
+          "actual": "OPEN",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "intervenția MANUAL este încă deschisă"
+        },
+        {
+          "name": "mid-ride active rides",
+          "expected": 1,
+          "actual": 1,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "cursa este activă în momentul schimbării"
+        }
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "id": "S5-vehicle-switch",
+      "order": 5,
+      "title": "Schimbarea vehiculului la mijlocul cursei închide explicit intervenția, nu cursa",
+      "contract": "068 vehicle selection + 005 VEHICLE_SWITCH + 061 ride FSM",
+      "input": {
+        "from": "id-v1:7:vehicle14:city:115:slice4:TAXI4:0002",
+        "to": "id-v1:7:vehicle14:city:115:slice4:TAXI4:0001",
+        "source": "FLEET",
+        "tick": 15
+      },
+      "actual": {
+        "selection": "ACCEPTED",
+        "camera": "id-v1:7:vehicle14:city:115:slice4:TAXI4:0001",
+        "seat": null,
+        "segmentCompleteness": "CLOSED",
+        "closeReason": "VEHICLE_SWITCH",
+        "segmentEndTick": 15,
+        "rideState": "TO_DROPOFF",
+        "rideTransitions": 3,
+        "activeRides": 1,
+        "segmentHistory": 1
+      },
+      "checks": [
+        {
+          "name": "selection accepted",
+          "expected": "ACCEPTED",
+          "actual": "ACCEPTED",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "068 acceptă schimbarea la tick-ul următor"
+        },
+        {
+          "name": "camera follows switch",
+          "expected": "id-v1:7:vehicle14:city:115:slice4:TAXI4:0001",
+          "actual": "id-v1:7:vehicle14:city:115:slice4:TAXI4:0001",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "camera trece pe celălalt taxi"
+        },
+        {
+          "name": "seat released",
+          "expected": null,
+          "actual": null,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "scaunul MANUAL este eliberat, nu mutat implicit"
+        },
+        {
+          "name": "segment closed explicitly",
+          "expected": "CLOSED",
+          "actual": "CLOSED",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "intervenția se închide explicit"
+        },
+        {
+          "name": "segment close reason",
+          "expected": "VEHICLE_SWITCH",
+          "actual": "VEHICLE_SWITCH",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "motivul este schimbarea vehiculului"
+        },
+        {
+          "name": "segment close tick",
+          "expected": 15,
+          "actual": 15,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "segmentul se închide la tick-ul acceptat"
+        },
+        {
+          "name": "segment retained",
+          "expected": true,
+          "actual": true,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "același segment, cu start și identitate neschimbate"
+        },
+        {
+          "name": "ride survives switch",
+          "expected": "TO_DROPOFF",
+          "actual": "TO_DROPOFF",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "cursa continuă din aceeași stare"
+        },
+        {
+          "name": "ride history intact",
+          "expected": 3,
+          "actual": 3,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "schimbarea nu adaugă și nu taie tranziții"
+        },
+        {
+          "name": "no orphan ride",
+          "expected": 1,
+          "actual": 1,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "cursa rămâne activă, nu orfană"
+        },
+        {
+          "name": "ride owner unchanged",
+          "expected": "id-v1:7:vehicle14:city:115:slice4:TAXI4:0002",
+          "actual": "id-v1:7:vehicle14:city:115:slice4:TAXI4:0002",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "cursa rămâne a taxiului inițial"
+        },
+        {
+          "name": "assignment unchanged",
+          "expected": "id-v1:19:dispatch-assignment18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r000044:id-v1:7:vehicle14:city:115:slice4:TAXI4:0002",
+          "actual": "id-v1:19:dispatch-assignment18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r000044:id-v1:7:vehicle14:city:115:slice4:TAXI4:0002",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "claim-ul 060 nu este rescris de cameră"
+        },
+        {
+          "name": "trip fingerprint unchanged",
+          "expected": "ride-id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000",
+          "actual": "ride-id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "identitatea călătoriei rămâne aceeași după schimbare"
+        },
+        {
+          "name": "segment history complete",
+          "expected": 1,
+          "actual": 1,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "istoricul păstrează fiecare segment închis"
+        }
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "id": "S6-ride-complete",
+      "order": 6,
+      "title": "Cursa se închide o singură dată după schimbare, cu taxiul eliberat",
+      "contract": "061 ride FSM + 060 release",
+      "input": {
+        "events": [
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "tick": 17
+      },
+      "actual": {
+        "state": "COMPLETED",
+        "transitions": 5,
+        "releases": 1,
+        "taxiStatus": "AVAILABLE",
+        "activeRides": 0,
+        "completed": 1
+      },
+      "checks": [
+        {
+          "name": "ride completed",
+          "expected": "COMPLETED",
+          "actual": "COMPLETED",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "dropoff-ul închide cursa"
+        },
+        {
+          "name": "ride states",
+          "expected": [
+            "TO_PICKUP",
+            "PICKUP",
+            "TO_DROPOFF",
+            "DROPOFF",
+            "COMPLETED"
+          ],
+          "actual": [
+            "TO_PICKUP",
+            "PICKUP",
+            "TO_DROPOFF",
+            "DROPOFF",
+            "COMPLETED"
+          ],
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "traseul 061 este complet, inclusiv după schimbare"
+        },
+        {
+          "name": "ride transitions",
+          "expected": 5,
+          "actual": 5,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "istoricul cursei are cele cinci tranziții"
+        },
+        {
+          "name": "single release",
+          "expected": 1,
+          "actual": 1,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "claim-ul este eliberat exact o dată"
+        },
+        {
+          "name": "taxi available",
+          "expected": "AVAILABLE",
+          "actual": "AVAILABLE",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "taxiul reintră în dispecerat"
+        },
+        {
+          "name": "no active rides",
+          "expected": 0,
+          "actual": 0,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "nicio cursă orfană nu rămâne activă"
+        },
+        {
+          "name": "one completed ride",
+          "expected": 1,
+          "actual": 1,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "cursa este numărată o singură dată"
+        }
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "id": "S7-learning",
+      "order": 7,
+      "title": "LEARNING: segmentul închis produce o versiune activă pentru taxi și civil",
+      "contract": "100 + 101 + 102 + 103 + 109 + 110 + 112",
+      "input": {
+        "action": "L",
+        "segmentId": "segment-152-learning",
+        "interventionId": "segment-152-2",
+        "key": "stop_full_probability"
+      },
+      "actual": {
+        "learningClaim": "ACCEPTED",
+        "returnClaim": "ACCEPTED",
+        "mode": "AUTO",
+        "learningEndTick": 23,
+        "status": "COMPOSED",
+        "versionBefore": "city-style-base-115",
+        "versionAfter": "segment-152-learning~112",
+        "activationTick": 23,
+        "appliedTick": 23,
+        "value": 0.84,
+        "taxiHistogram": "{\"segment-152-learning~112\":30}",
+        "civilianHistogram": "{\"segment-152-learning~112\":40}",
+        "hiddenOverrides": 0
+      },
+      "checks": [
+        {
+          "name": "learning claim",
+          "expected": "ACCEPTED",
+          "actual": "ACCEPTED",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "tasta L preia LEARNING pe taxiul selectat"
+        },
+        {
+          "name": "learning claim mode",
+          "expected": "LEARNING",
+          "actual": "LEARNING",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "modul LEARNING este activ după tasta L"
+        },
+        {
+          "name": "learning segment closed",
+          "expected": "RETURN_TO_AUTO",
+          "actual": "RETURN_TO_AUTO",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "segmentul se închide la revenirea în AUTO"
+        },
+        {
+          "name": "return claim",
+          "expected": "ACCEPTED",
+          "actual": "ACCEPTED",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "revenirea în AUTO este acceptată"
+        },
+        {
+          "name": "return mode",
+          "expected": "AUTO",
+          "actual": "AUTO",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "scaunul este eliberat"
+        },
+        {
+          "name": "pipeline composition",
+          "expected": true,
+          "actual": true,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "pipeline-ul 112 compune versiunea reală"
+        },
+        {
+          "name": "new active version",
+          "expected": true,
+          "actual": true,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "versiunea activă se schimbă după publicare"
+        },
+        {
+          "name": "learned value applied",
+          "expected": true,
+          "actual": true,
+          "tolerance": {
+            "kind": "ABSOLUTE",
+            "value": 1e-12,
+            "unit": "ratio"
+          },
+          "pass": true,
+          "detail": "valoarea învățată depășește baza 0,6"
+        },
+        {
+          "name": "taxi activation",
+          "expected": {
+            "segment-152-learning~112": 30
+          },
+          "actual": {
+            "segment-152-learning~112": 30
+          },
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "toate taxiurile adoptă aceeași versiune"
+        },
+        {
+          "name": "civil activation",
+          "expected": {
+            "segment-152-learning~112": 40
+          },
+          "actual": {
+            "segment-152-learning~112": 40
+          },
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "toate civilele adoptă aceeași versiune"
+        },
+        {
+          "name": "single version in fleet",
+          "expected": 1,
+          "actual": 1,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "flota nu rămâne pe două versiuni"
+        },
+        {
+          "name": "no hidden override",
+          "expected": 0,
+          "actual": 0,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "nicio suprascriere ascunsă de profil per vehicul"
+        },
+        {
+          "name": "learning end tick",
+          "expected": true,
+          "actual": true,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "segmentul LEARNING are durată reală"
+        }
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "id": "S8-kpi-daily-xp",
+      "order": 8,
+      "title": "KPI, daily și XP primesc faptele reale ale aceleiași curse și ale aceleiași zile",
+      "contract": "209 KPI + 211 daily + 212 daily progress + 213 XP",
+      "input": {
+        "rideId": "id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000",
+        "dailyDate": "2026-11-11",
+        "activeWindowMs": 30000
+      },
+      "actual": {
+        "settlements": 1,
+        "reviews": 1,
+        "revenueMinorUnits": 551,
+        "ratingSum": 5,
+        "dailyInstances": 3,
+        "dailyRewarded": 1,
+        "dailyXp": 100,
+        "dailyRows": 3,
+        "xpBalance": 200.5,
+        "xpLevel": 2,
+        "xpEntries": 3,
+        "missionIds": "[\"campaign-1-first-taxi\"]",
+        "duplicateDaily": "DUPLICATE",
+        "duplicateMission": "DUPLICATE",
+        "kpiDays": 1
+      },
+      "checks": [
+        {
+          "name": "kpi settlement",
+          "expected": 1,
+          "actual": 1,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "o cursă terminală produce un settlement 209"
+        },
+        {
+          "name": "kpi review",
+          "expected": 1,
+          "actual": 1,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "pasagerul lasă o recenzie reală"
+        },
+        {
+          "name": "kpi revenue",
+          "expected": true,
+          "actual": true,
+          "tolerance": {
+            "kind": "RELATIVE",
+            "value": 1,
+            "unit": "minor units"
+          },
+          "pass": true,
+          "detail": "venitul vine din tariful real, nu dintr-o constantă"
+        },
+        {
+          "name": "kpi rating range",
+          "expected": true,
+          "actual": true,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "nota este în intervalul 1–5"
+        },
+        {
+          "name": "daily set size",
+          "expected": 3,
+          "actual": 3,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "211 generează exact trei misiuni"
+        },
+        {
+          "name": "daily rows",
+          "expected": 3,
+          "actual": 3,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "212 păstrează un rând per misiune"
+        },
+        {
+          "name": "daily rewarded",
+          "expected": 1,
+          "actual": 1,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "o singură misiune daily este recompensată"
+        },
+        {
+          "name": "daily xp",
+          "expected": 100,
+          "actual": 100,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "recompensa daily este cea publicată"
+        },
+        {
+          "name": "xp balance",
+          "expected": 200.5,
+          "actual": 200.5,
+          "tolerance": {
+            "kind": "ABSOLUTE",
+            "value": 0.000001,
+            "unit": "XP"
+          },
+          "pass": true,
+          "detail": "100 misiune + 100 daily + 0,5 timp activ"
+        },
+        {
+          "name": "xp level",
+          "expected": 2,
+          "actual": 2,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "nivelul derivat din sold"
+        },
+        {
+          "name": "xp entries",
+          "expected": 3,
+          "actual": 3,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "o intrare per sursă"
+        },
+        {
+          "name": "mission survives",
+          "expected": [
+            "campaign-1-first-taxi"
+          ],
+          "actual": [
+            "campaign-1-first-taxi"
+          ],
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "misiunea campaniei este în ledgerul XP"
+        },
+        {
+          "name": "daily date survives",
+          "expected": [
+            "2026-11-11"
+          ],
+          "actual": [
+            "2026-11-11"
+          ],
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "ziua daily este în ledgerul XP"
+        },
+        {
+          "name": "duplicate daily refused",
+          "expected": "DUPLICATE",
+          "actual": "DUPLICATE",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "aceeași recompensă daily nu se plătește de două ori"
+        },
+        {
+          "name": "duplicate mission refused",
+          "expected": "DUPLICATE",
+          "actual": "DUPLICATE",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "același settlement nu se plătește de două ori"
+        }
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "id": "S9-export",
+      "order": 9,
+      "title": "Export: profilul flotei și progresul sunt scrise ca documente verificabile",
+      "contract": "133 profile export + 215 economy save",
+      "input": {
+        "activeVersionId": "segment-152-learning~112",
+        "versions": 2,
+        "sessionId": "session-152-e2e"
+      },
+      "actual": {
+        "profileStatus": "ACCEPTED",
+        "profileBytes": 5851,
+        "profileChecksum": "70416980af8b7c1d",
+        "versions": 2,
+        "activeVersionId": "segment-152-learning~112",
+        "rawTelemetryIncluded": false,
+        "economyStatus": "ACCEPTED",
+        "economyBytes": 13362,
+        "economyChecksum": "2c0391aaa8e33425",
+        "dailyBytes": 5029,
+        "economyBytesComponent": 5428,
+        "playerBytes": 2433
+      },
+      "checks": [
+        {
+          "name": "profile export",
+          "expected": "ACCEPTED",
+          "actual": "ACCEPTED",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "133 acceptă documentul"
+        },
+        {
+          "name": "profile checksum",
+          "expected": true,
+          "actual": true,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "SHA-256 peste forma canonică"
+        },
+        {
+          "name": "exported versions",
+          "expected": 2,
+          "actual": 2,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "versiunea de bază plus cea învățată"
+        },
+        {
+          "name": "exported active version",
+          "expected": "segment-152-learning~112",
+          "actual": "segment-152-learning~112",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "pointerul activ este versiunea învățată"
+        },
+        {
+          "name": "raw telemetry excluded",
+          "expected": false,
+          "actual": false,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "exportul nu publică evenimente brute"
+        },
+        {
+          "name": "economy save",
+          "expected": "ACCEPTED",
+          "actual": "ACCEPTED",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "215 acceptă bundle-ul"
+        },
+        {
+          "name": "economy components",
+          "expected": [
+            "daily",
+            "economy",
+            "player"
+          ],
+          "actual": [
+            "daily",
+            "economy",
+            "player"
+          ],
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "bundle-ul are cele trei componente"
+        },
+        {
+          "name": "component budgets",
+          "expected": true,
+          "actual": true,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "bundle-ul respectă plafonul de 1 MiB"
+        },
+        {
+          "name": "fleet active profile",
+          "expected": [
+            "segment-152-learning~112"
+          ],
+          "actual": [
+            "segment-152-learning~112"
+          ],
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "întreaga flotă este pe versiunea exportată"
+        }
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "id": "S10-restart",
+      "order": 10,
+      "title": "Restart: exportul este re-citit din text și amprentele coincid",
+      "contract": "133 read-back + 215 read-back + 212 restore",
+      "input": {
+        "profileBytes": 5851,
+        "economyBytes": 13362,
+        "xpFingerprint": "876d4783216c46c2d99b75013b2825c2f8cb766bd45e43230ab3398ec542f1bd",
+        "dailyFingerprint": "71c2de1c72cc4e13b256c1cfe661f4dfdfa385b3c86eab5f5e15890ad3483a24",
+        "kpiFingerprint": "08715908155a5e0d9b0ea44ccd063d38a8f6f4255f85ea620110986050954f33"
+      },
+      "actual": {
+        "profileStatus": "ACCEPTED",
+        "profileChecksumVerified": true,
+        "economyStatus": "ACCEPTED",
+        "economyChecksumVerified": true,
+        "activeVersionId": "segment-152-learning~112",
+        "xpBalance": 200.5,
+        "xpLevel": 2,
+        "xpEntries": 3,
+        "dailyRewarded": 1,
+        "kpiRevenue": 551,
+        "kpiRatings": 1,
+        "xpFingerprintMatch": true,
+        "dailyFingerprintMatch": true,
+        "kpiFingerprintMatch": true,
+        "fleetFingerprintMatch": true,
+        "segmentHistory": 2
+      },
+      "checks": [
+        {
+          "name": "profile read",
+          "expected": "ACCEPTED",
+          "actual": "ACCEPTED",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "fișierul se re-citește"
+        },
+        {
+          "name": "profile checksum verified",
+          "expected": true,
+          "actual": true,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "checksumul este recalculat la citire"
+        },
+        {
+          "name": "economy read",
+          "expected": "ACCEPTED",
+          "actual": "ACCEPTED",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "bundle-ul se re-citește"
+        },
+        {
+          "name": "economy checksum verified",
+          "expected": true,
+          "actual": true,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "checksumul bundle-ului este recalculat"
+        },
+        {
+          "name": "xp balance after restart",
+          "expected": 200.5,
+          "actual": 200.5,
+          "tolerance": {
+            "kind": "ABSOLUTE",
+            "value": 0.000001,
+            "unit": "XP"
+          },
+          "pass": true,
+          "detail": "soldul XP este identic"
+        },
+        {
+          "name": "xp level after restart",
+          "expected": 2,
+          "actual": 2,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "nivelul este identic"
+        },
+        {
+          "name": "xp entries after restart",
+          "expected": 3,
+          "actual": 3,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "intrările XP sunt identice"
+        },
+        {
+          "name": "xp fingerprint",
+          "expected": true,
+          "actual": true,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "amprenta XP înainte/după este aceeași"
+        },
+        {
+          "name": "mission after restart",
+          "expected": [
+            "campaign-1-first-taxi"
+          ],
+          "actual": [
+            "campaign-1-first-taxi"
+          ],
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "misiunea creditată este în checkpoint"
+        },
+        {
+          "name": "daily date after restart",
+          "expected": [
+            "2026-11-11"
+          ],
+          "actual": [
+            "2026-11-11"
+          ],
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "ziua daily este în checkpoint"
+        },
+        {
+          "name": "daily fingerprint",
+          "expected": true,
+          "actual": true,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "setul daily și recompensa sunt identice"
+        },
+        {
+          "name": "daily rewarded after restart",
+          "expected": 1,
+          "actual": 1,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "exact o recompensă daily supraviețuiește"
+        },
+        {
+          "name": "kpi fingerprint",
+          "expected": true,
+          "actual": true,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "KPI (venit, note, curse) este identic"
+        },
+        {
+          "name": "kpi revenue after restart",
+          "expected": 551,
+          "actual": 551,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "venitul în unități minore este identic"
+        },
+        {
+          "name": "kpi reviews after restart",
+          "expected": 1,
+          "actual": 1,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "numărul de recenzii este identic"
+        },
+        {
+          "name": "fleet profile after restart",
+          "expected": "segment-152-learning~112",
+          "actual": "segment-152-learning~112",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "profilul flotei rămâne versiunea activă exportată"
+        },
+        {
+          "name": "fleet categories after restart",
+          "expected": [
+            "segment-152-learning~112"
+          ],
+          "actual": [
+            "segment-152-learning~112"
+          ],
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "taxiurile și civilele erau pe aceeași versiune la export"
+        },
+        {
+          "name": "intervention history retained",
+          "expected": 2,
+          "actual": 2,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "ambele intervenții (MANUAL și LEARNING) sunt în istoric"
+        },
+        {
+          "name": "course not lost",
+          "expected": "COMPLETED",
+          "actual": "COMPLETED",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "cursa este terminală înainte de export"
+        }
+      ],
+      "verdict": "PASS"
+    }
+  ],
+  "summary": {
+    "steps": 11,
+    "checks": 104,
+    "passed": 11,
+    "fail": 0,
+    "failChecks": [],
+    "pass": true
+  },
+  "restart": {
+    "profileExportStatus": "ACCEPTED",
+    "profileChecksumVerified": true,
+    "economyReadStatus": "ACCEPTED",
+    "economyChecksumVerified": true,
+    "xpBefore": {
+      "balanceXp": 200.5,
+      "balanceMicroXp": 200500000,
+      "level": 2,
+      "entries": 3,
+      "byCause": {
+        "MISSION_REWARD": 100,
+        "DAILY_REWARD": 100,
+        "ACTIVE_TIME": 0.5
+      },
+      "missionIds": [
+        "campaign-1-first-taxi"
+      ],
+      "dailyDates": [
+        "2026-11-11"
+      ]
+    },
+    "xpAfter": {
+      "balanceXp": 200.5,
+      "balanceMicroXp": 200500000,
+      "level": 2,
+      "entries": 3,
+      "byCause": {
+        "MISSION_REWARD": 100,
+        "DAILY_REWARD": 100,
+        "ACTIVE_TIME": 0.5
+      },
+      "missionIds": [
+        "campaign-1-first-taxi"
+      ],
+      "dailyDates": [
+        "2026-11-11"
+      ]
+    },
+    "xpFingerprint": "876d4783216c46c2d99b75013b2825c2f8cb766bd45e43230ab3398ec542f1bd",
+    "dailyBefore": {
+      "dailyDate": "2026-11-11",
+      "instances": [
+        "daily-v1:player-152:2026-11-11:s1:daily-learning-demonstration@1",
+        "daily-v1:player-152:2026-11-11:s2:daily-service-window@1",
+        "daily-v1:player-152:2026-11-11:s3:daily-clean-service@1"
+      ],
+      "rewarded": 1,
+      "xpPromised": 100,
+      "rows": 3
+    },
+    "dailyAfter": {
+      "dailyDate": "2026-11-11",
+      "instances": [
+        "daily-v1:player-152:2026-11-11:s1:daily-learning-demonstration@1",
+        "daily-v1:player-152:2026-11-11:s2:daily-service-window@1",
+        "daily-v1:player-152:2026-11-11:s3:daily-clean-service@1"
+      ],
+      "rewarded": 1,
+      "xpPromised": 100,
+      "rows": 3
+    },
+    "dailyFingerprint": "71c2de1c72cc4e13b256c1cfe661f4dfdfa385b3c86eab5f5e15890ad3483a24",
+    "kpiBefore": {
+      "settlements": 1,
+      "reviews": 1,
+      "revenueMinorUnits": 551,
+      "ratingSum": 5,
+      "ratingCount": 1,
+      "completedRides": 1,
+      "days": 1
+    },
+    "kpiAfter": {
+      "settlements": 1,
+      "reviews": 1,
+      "revenueMinorUnits": 551,
+      "ratingSum": 5,
+      "ratingCount": 1,
+      "completedRides": 1,
+      "days": 1
+    },
+    "kpiFingerprint": "08715908155a5e0d9b0ea44ccd063d38a8f6f4255f85ea620110986050954f33",
+    "fleetBefore": {
+      "profileId": "city-profile-115",
+      "activeVersionId": "segment-152-learning~112",
+      "taxiHistogram": {
+        "segment-152-learning~112": 30
+      },
+      "civilianHistogram": {
+        "segment-152-learning~112": 40
+      },
+      "taxis": 30,
+      "civilians": 40
+    },
+    "fleetAfterVersionId": "segment-152-learning~112",
+    "fleetFingerprint": "df96f5a9f7112271f37d8b2312732874be36f627ca5c6e56293a9058398d4320",
+    "persistedBytes": {
+      "profile": 5851,
+      "economy": 13362
+    },
+    "versionChecksums": [
+      "fnv1a64:04272752f8b03537",
+      "fnv1a64:b62f09a0c88905e8"
+    ]
+  },
+  "vehicleSwitch": {
+    "rideId": "id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000",
+    "taxiId": "id-v1:7:vehicle14:city:115:slice4:TAXI4:0002",
+    "stateBeforeSwitch": "TO_DROPOFF",
+    "stateAfterSwitch": "TO_DROPOFF",
+    "segmentId": "segment-152-1",
+    "segmentStartTick": 12,
+    "segmentEndTick": 15,
+    "closeReason": "VEHICLE_SWITCH",
+    "segmentHistory": 1,
+    "transitionsBefore": 3,
+    "transitionsAfter": 3,
+    "activeRidesAfter": 1,
+    "assignmentIdBefore": "id-v1:19:dispatch-assignment18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r000044:id-v1:7:vehicle14:city:115:slice4:TAXI4:0002",
+    "assignmentIdAfter": "id-v1:19:dispatch-assignment18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r000044:id-v1:7:vehicle14:city:115:slice4:TAXI4:0002",
+    "tripFingerprintBefore": "ride-id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000",
+    "tripFingerprintAfter": "ride-id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000",
+    "otherTaxiId": "id-v1:7:vehicle14:city:115:slice4:TAXI4:0001",
+    "seatAfterSwitch": null
+  },
+  "session": {
+    "sessionId": "session-152-e2e",
+    "playerId": "player-152",
+    "profileId": "city-profile-115",
+    "taxis": 30,
+    "civilians": 40,
+    "modePath": [
+      "AUTO",
+      "MANUAL",
+      "LEARNING",
+      "AUTO"
+    ],
+    "segmentHistory": 2,
+    "rideStates": [
+      "TO_PICKUP",
+      "PICKUP",
+      "TO_DROPOFF",
+      "DROPOFF",
+      "COMPLETED"
+    ],
+    "finalTick": 23
+  },
+  "reproductions": {
+    "pass": true,
+    "digest": "8f8664e167f462703814d40c49539b5f254a933060630d0ac0b0b1aae1e2ae1d"
+  },
+  "browser": {
+    "status": "NOT_RUN",
+    "reason": "Transcriptul determinist nu pornește un browser. Rularea reală în Chromium, cu profil nou și restart prin reîncărcarea paginii, este proba separată `npm run e2e:session -- --browser`; fără Playwright raportul rămâne explicit neacoperit pe această parte."
+  },
+  "limitations": [
+    "Nivel determinist în Node: fără GPU, renderer Babylon, input uman sau FPS; fizica nativă este „un dublu contorizat, același folosit de testele 068, iar browserul real este o probă separată.",
+    "Segmentele 005 din sesiune au boundary real (start, end, motiv), dar fără eșantioane de telemetrie: harness-ul nu inventează samples și nu pretinde un recorder live.",
+    "Recenzia 209 folosește confortul `null` (fără probe de confort în sesiune), deci nota provine din facturile reale ale cursei, nu dintr-o calibrare de confort.",
+    "Misiunea de campanie creditată este settlement-ul real 116/125 al fixture-ului, nu o misiune jucată în harta din sesiune; daily 211/212 sunt reale pentru ziua aleasă.",
+    "Exportul 133 nu publică telemetrie brută, iar bundle-ul 215 nu conține starea lumii (206); profilul flotei este dovedit prin versiunea activă și histogramele ei.",
+    "Fără browser real, playtestul vizual și senzația de condus rămân ale gate-urilor 153/220/224/235."
+  ]
+}
