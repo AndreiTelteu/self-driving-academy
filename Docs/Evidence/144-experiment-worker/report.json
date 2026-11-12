@@ -1,0 +1,1237 @@
+{
+  "version": "144-experiment-worker-v1",
+  "budgets": {
+    "status": "READY",
+    "version": "221-synthetic-1",
+    "residentWorlds": 1,
+    "activeHeavyJobs": 1,
+    "executionJobs": 8,
+    "sliceMaximumMs": 10,
+    "progressIntervalMinimumMs": 200,
+    "progressHzMaximum": 5,
+    "cancellationTargetMaximumMs": 100,
+    "ownedPendingPayloadBytes": 16777216,
+    "gaps": [
+      "workerSchedulingProposal.queueCountAndAge",
+      "proposedCapacities.totalHeapBytes",
+      "proposedCapacities.wasmBytes",
+      "capacityValidation.additionalSuballocations"
+    ]
+  },
+  "refusalProbe": {
+    "status": "REFUSED",
+    "codes": [
+      "BUDGET_MISSING"
+    ],
+    "paths": [
+      "resourceAdmissionContracts"
+    ]
+  },
+  "scenarios": [
+    {
+      "name": "complete",
+      "status": "COMPLETED",
+      "totalSlices": 5,
+      "completedSlices": 5,
+      "fraction": 1,
+      "attempts": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "completeRows": 5,
+      "partialRows": 0,
+      "partialReason": null,
+      "rowLabels": [
+        "COMPLETE",
+        "COMPLETE",
+        "COMPLETE",
+        "COMPLETE",
+        "COMPLETE"
+      ],
+      "codes": [],
+      "refusals": {},
+      "learning": {
+        "pauseCount": 0,
+        "resumeCount": 0,
+        "preemptedSlices": 0,
+        "interrupts": []
+      },
+      "model": {
+        "kind": "FULL",
+        "physicsFidelity": true,
+        "disclaimer": "FULL: the batch runs the validated physics"
+      },
+      "progress": [
+        {
+          "state": "RUNNING",
+          "completedSlices": 0,
+          "fraction": 0
+        },
+        {
+          "state": "RUNNING",
+          "completedSlices": 1,
+          "fraction": 0.2
+        },
+        {
+          "state": "RUNNING",
+          "completedSlices": 2,
+          "fraction": 0.4
+        },
+        {
+          "state": "RUNNING",
+          "completedSlices": 3,
+          "fraction": 0.6
+        },
+        {
+          "state": "RUNNING",
+          "completedSlices": 4,
+          "fraction": 0.8
+        },
+        {
+          "state": "RUNNING",
+          "completedSlices": 5,
+          "fraction": 1
+        }
+      ],
+      "summary": {
+        "runs": 5,
+        "decisions": 120,
+        "identical": 106,
+        "divergent": 14,
+        "causes": {
+          "PROBABILITY_THRESHOLD": 14
+        },
+        "parameters": [
+          "red_stop_probability"
+        ]
+      },
+      "cancelled": false,
+      "discardedSlices": 0,
+      "note": "Five slices, one progress event per slice, only COMPLETE results"
+    },
+    {
+      "name": "cancel",
+      "status": "CANCELLED",
+      "totalSlices": 5,
+      "completedSlices": 2,
+      "fraction": 0.4,
+      "attempts": [
+        1,
+        1,
+        1
+      ],
+      "completeRows": 0,
+      "partialRows": 2,
+      "partialReason": "CANCELLED_BY_REQUEST",
+      "rowLabels": [
+        "PARTIAL",
+        "PARTIAL"
+      ],
+      "codes": [],
+      "refusals": {},
+      "learning": {
+        "pauseCount": 0,
+        "resumeCount": 0,
+        "preemptedSlices": 0,
+        "interrupts": []
+      },
+      "model": {
+        "kind": "FULL",
+        "physicsFidelity": true,
+        "disclaimer": "FULL: the batch runs the validated physics"
+      },
+      "progress": [
+        {
+          "state": "RUNNING",
+          "completedSlices": 0,
+          "fraction": 0
+        },
+        {
+          "state": "RUNNING",
+          "completedSlices": 1,
+          "fraction": 0.2
+        },
+        {
+          "state": "RUNNING",
+          "completedSlices": 2,
+          "fraction": 0.4
+        }
+      ],
+      "summary": {
+        "runs": 2,
+        "decisions": 48,
+        "identical": 45,
+        "divergent": 3,
+        "causes": {
+          "PROBABILITY_THRESHOLD": 3
+        },
+        "parameters": [
+          "red_stop_probability"
+        ]
+      },
+      "cancelled": true,
+      "discardedSlices": 1,
+      "note": "Cancelled after two slices; the produced rows are kept as PARTIAL"
+    },
+    {
+      "name": "learning",
+      "status": "COMPLETED",
+      "totalSlices": 4,
+      "completedSlices": 4,
+      "fraction": 1,
+      "attempts": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "completeRows": 4,
+      "partialRows": 0,
+      "partialReason": null,
+      "rowLabels": [
+        "COMPLETE",
+        "COMPLETE",
+        "COMPLETE",
+        "COMPLETE"
+      ],
+      "codes": [],
+      "refusals": {},
+      "learning": {
+        "pauseCount": 1,
+        "resumeCount": 1,
+        "preemptedSlices": 0,
+        "interrupts": [
+          {
+            "learningEpoch": 12,
+            "atSliceIndex": 1,
+            "inFlight": true,
+            "status": "RESUMED",
+            "resumeAtSliceIndex": 2
+          }
+        ]
+      },
+      "model": {
+        "kind": "FULL",
+        "physicsFidelity": true,
+        "disclaimer": "FULL: the batch runs the validated physics"
+      },
+      "progress": [
+        {
+          "state": "RUNNING",
+          "completedSlices": 0,
+          "fraction": 0
+        },
+        {
+          "state": "RUNNING",
+          "completedSlices": 1,
+          "fraction": 0.25
+        },
+        {
+          "state": "PAUSED",
+          "completedSlices": 1,
+          "fraction": 0.25
+        },
+        {
+          "state": "PAUSED",
+          "completedSlices": 2,
+          "fraction": 0.5
+        },
+        {
+          "state": "RUNNING",
+          "completedSlices": 2,
+          "fraction": 0.5
+        },
+        {
+          "state": "RUNNING",
+          "completedSlices": 3,
+          "fraction": 0.75
+        },
+        {
+          "state": "RUNNING",
+          "completedSlices": 4,
+          "fraction": 1
+        }
+      ],
+      "summary": {
+        "runs": 4,
+        "decisions": 96,
+        "identical": 86,
+        "divergent": 10,
+        "causes": {
+          "PROBABILITY_THRESHOLD": 10
+        },
+        "parameters": [
+          "red_stop_probability"
+        ]
+      },
+      "cancelled": false,
+      "discardedSlices": 0,
+      "note": "Learning pauses the batch at a slice boundary and resumes it"
+    },
+    {
+      "name": "world",
+      "status": "REFUSED",
+      "totalSlices": 2,
+      "completedSlices": 0,
+      "fraction": 0,
+      "attempts": [],
+      "completeRows": 0,
+      "partialRows": 0,
+      "partialReason": null,
+      "rowLabels": [],
+      "codes": [
+        "WORLD_RESERVED"
+      ],
+      "refusals": {
+        "WORLD_RESERVED": 1
+      },
+      "learning": {
+        "pauseCount": 0,
+        "resumeCount": 0,
+        "preemptedSlices": 0,
+        "interrupts": []
+      },
+      "model": {
+        "kind": "FULL",
+        "physicsFidelity": true,
+        "disclaimer": "FULL: the batch runs the validated physics"
+      },
+      "progress": [],
+      "summary": {
+        "runs": 0,
+        "decisions": 0,
+        "identical": 0,
+        "divergent": 0,
+        "causes": {},
+        "parameters": []
+      },
+      "cancelled": false,
+      "discardedSlices": 0,
+      "note": "The second batch names the holder of the single resident world"
+    },
+    {
+      "name": "simplified",
+      "status": "COMPLETED",
+      "totalSlices": 2,
+      "completedSlices": 2,
+      "fraction": 1,
+      "attempts": [
+        1,
+        1
+      ],
+      "completeRows": 2,
+      "partialRows": 0,
+      "partialReason": null,
+      "rowLabels": [
+        "COMPLETE",
+        "COMPLETE"
+      ],
+      "codes": [],
+      "refusals": {},
+      "learning": {
+        "pauseCount": 0,
+        "resumeCount": 0,
+        "preemptedSlices": 0,
+        "interrupts": []
+      },
+      "model": {
+        "kind": "SIMPLIFIED",
+        "physicsFidelity": false,
+        "disclaimer": "SIMPLIFIED: kinematic lane following without tyre slip; not validated for wet friction, heavy vehicles"
+      },
+      "progress": [
+        {
+          "state": "RUNNING",
+          "completedSlices": 0,
+          "fraction": 0
+        },
+        {
+          "state": "RUNNING",
+          "completedSlices": 1,
+          "fraction": 0.5
+        },
+        {
+          "state": "RUNNING",
+          "completedSlices": 2,
+          "fraction": 1
+        }
+      ],
+      "summary": {
+        "runs": 2,
+        "decisions": 48,
+        "identical": 45,
+        "divergent": 3,
+        "causes": {
+          "PROBABILITY_THRESHOLD": 3
+        },
+        "parameters": [
+          "red_stop_probability"
+        ]
+      },
+      "cancelled": false,
+      "discardedSlices": 0,
+      "note": "The approximation is labelled and never reported as physics"
+    },
+    {
+      "name": "slice-budget",
+      "status": "COMPLETED",
+      "totalSlices": 3,
+      "completedSlices": 3,
+      "fraction": 1,
+      "attempts": [
+        1,
+        1,
+        1
+      ],
+      "completeRows": 3,
+      "partialRows": 0,
+      "partialReason": null,
+      "rowLabels": [
+        "COMPLETE",
+        "COMPLETE",
+        "COMPLETE"
+      ],
+      "codes": [],
+      "refusals": {},
+      "learning": {
+        "pauseCount": 0,
+        "resumeCount": 0,
+        "preemptedSlices": 0,
+        "interrupts": []
+      },
+      "model": {
+        "kind": "FULL",
+        "physicsFidelity": true,
+        "disclaimer": "FULL: the batch runs the validated physics"
+      },
+      "progress": [
+        {
+          "state": "RUNNING",
+          "completedSlices": 0,
+          "fraction": 0
+        },
+        {
+          "state": "RUNNING",
+          "completedSlices": 1,
+          "fraction": 0.333333
+        },
+        {
+          "state": "RUNNING",
+          "completedSlices": 2,
+          "fraction": 0.666667
+        },
+        {
+          "state": "RUNNING",
+          "completedSlices": 3,
+          "fraction": 1
+        }
+      ],
+      "summary": {
+        "runs": 3,
+        "decisions": 72,
+        "identical": 61,
+        "divergent": 11,
+        "causes": {
+          "PROBABILITY_THRESHOLD": 11
+        },
+        "parameters": [
+          "red_stop_probability"
+        ]
+      },
+      "cancelled": false,
+      "discardedSlices": 0,
+      "note": "A 12 ms step against the 10 ms manifest budget is reported"
+    },
+    {
+      "name": "live-221",
+      "status": "COMPLETED",
+      "totalSlices": 3,
+      "completedSlices": 3,
+      "fraction": 1,
+      "attempts": [
+        1,
+        1,
+        1
+      ],
+      "completeRows": 3,
+      "partialRows": 0,
+      "partialReason": null,
+      "rowLabels": [
+        "COMPLETE",
+        "COMPLETE",
+        "COMPLETE"
+      ],
+      "codes": [],
+      "refusals": {},
+      "learning": {
+        "pauseCount": 0,
+        "resumeCount": 0,
+        "preemptedSlices": 0,
+        "interrupts": []
+      },
+      "model": {
+        "kind": "FULL",
+        "physicsFidelity": true,
+        "disclaimer": "FULL: the batch runs the validated physics"
+      },
+      "progress": [
+        {
+          "state": "RUNNING",
+          "completedSlices": 0,
+          "fraction": 0
+        },
+        {
+          "state": "RUNNING",
+          "completedSlices": 1,
+          "fraction": 0.333333
+        },
+        {
+          "state": "RUNNING",
+          "completedSlices": 2,
+          "fraction": 0.666667
+        },
+        {
+          "state": "RUNNING",
+          "completedSlices": 3,
+          "fraction": 1
+        }
+      ],
+      "summary": {
+        "runs": 3,
+        "decisions": 72,
+        "identical": 41,
+        "divergent": 31,
+        "causes": {
+          "PROBABILITY_THRESHOLD": 27,
+          "GEOMETRY_PARAMETER": 4
+        },
+        "parameters": [
+          "red_stop_probability",
+          "stop_dwell_time",
+          "stop_full_probability"
+        ]
+      },
+      "cancelled": false,
+      "discardedSlices": 0,
+      "note": "Three real 142 run cells, each admitted by the shared 221 coordinator"
+    },
+    {
+      "name": "refused-221",
+      "status": "REFUSED",
+      "totalSlices": 1,
+      "completedSlices": 0,
+      "fraction": 0,
+      "attempts": [
+        1
+      ],
+      "completeRows": 0,
+      "partialRows": 0,
+      "partialReason": "CAPACITY_INSUFFICIENT",
+      "rowLabels": [],
+      "codes": [
+        "CAPACITY_INSUFFICIENT"
+      ],
+      "refusals": {
+        "CAPACITY_INSUFFICIENT": 1
+      },
+      "learning": {
+        "pauseCount": 0,
+        "resumeCount": 0,
+        "preemptedSlices": 0,
+        "interrupts": []
+      },
+      "model": {
+        "kind": "FULL",
+        "physicsFidelity": true,
+        "disclaimer": "FULL: the batch runs the validated physics"
+      },
+      "progress": [
+        {
+          "state": "RUNNING",
+          "completedSlices": 0,
+          "fraction": 0
+        }
+      ],
+      "summary": {
+        "runs": 0,
+        "decisions": 0,
+        "identical": 0,
+        "divergent": 0,
+        "causes": {},
+        "parameters": []
+      },
+      "cancelled": false,
+      "discardedSlices": 0,
+      "note": "The coordinator has no capacity, so the slice is refused"
+    },
+    {
+      "name": "worker-error",
+      "status": "FAILED",
+      "totalSlices": 3,
+      "completedSlices": 1,
+      "fraction": 0.333333,
+      "attempts": [
+        1,
+        1
+      ],
+      "completeRows": 0,
+      "partialRows": 1,
+      "partialReason": "SLICE_FAILED",
+      "rowLabels": [
+        "PARTIAL"
+      ],
+      "codes": [
+        "SLICE_FAILED"
+      ],
+      "refusals": {
+        "SLICE_FAILED": 1
+      },
+      "learning": {
+        "pauseCount": 0,
+        "resumeCount": 0,
+        "preemptedSlices": 0,
+        "interrupts": []
+      },
+      "model": {
+        "kind": "FULL",
+        "physicsFidelity": true,
+        "disclaimer": "FULL: the batch runs the validated physics"
+      },
+      "progress": [
+        {
+          "state": "RUNNING",
+          "completedSlices": 0,
+          "fraction": 0
+        },
+        {
+          "state": "RUNNING",
+          "completedSlices": 1,
+          "fraction": 0.333333
+        }
+      ],
+      "summary": {
+        "runs": 1,
+        "decisions": 24,
+        "identical": 16,
+        "divergent": 8,
+        "causes": {
+          "PROBABILITY_THRESHOLD": 7,
+          "GEOMETRY_PARAMETER": 1
+        },
+        "parameters": [
+          "red_stop_probability",
+          "stop_dwell_time",
+          "stop_full_probability"
+        ]
+      },
+      "cancelled": false,
+      "discardedSlices": 0,
+      "note": "The worker fails on the second run cell"
+    },
+    {
+      "name": "learning-preemption",
+      "status": "COMPLETED",
+      "totalSlices": 2,
+      "completedSlices": 2,
+      "fraction": 1,
+      "attempts": [
+        1,
+        1
+      ],
+      "completeRows": 2,
+      "partialRows": 0,
+      "partialReason": null,
+      "rowLabels": [
+        "COMPLETE",
+        "COMPLETE"
+      ],
+      "codes": [],
+      "refusals": {},
+      "learning": {
+        "pauseCount": 1,
+        "resumeCount": 1,
+        "preemptedSlices": 1,
+        "interrupts": [
+          {
+            "learningEpoch": 3,
+            "atSliceIndex": 0,
+            "inFlight": true,
+            "status": "RESUMED",
+            "resumeAtSliceIndex": 1
+          }
+        ]
+      },
+      "model": {
+        "kind": "FULL",
+        "physicsFidelity": true,
+        "disclaimer": "FULL: the batch runs the validated physics"
+      },
+      "progress": [
+        {
+          "state": "RUNNING",
+          "completedSlices": 0,
+          "fraction": 0
+        },
+        {
+          "state": "PAUSED",
+          "completedSlices": 0,
+          "fraction": 0
+        },
+        {
+          "state": "PAUSED",
+          "completedSlices": 1,
+          "fraction": 0.5
+        },
+        {
+          "state": "RUNNING",
+          "completedSlices": 1,
+          "fraction": 0.5
+        },
+        {
+          "state": "RUNNING",
+          "completedSlices": 2,
+          "fraction": 1
+        }
+      ],
+      "summary": {
+        "runs": 2,
+        "decisions": 48,
+        "identical": 27,
+        "divergent": 21,
+        "causes": {
+          "PROBABILITY_THRESHOLD": 19,
+          "GEOMETRY_PARAMETER": 2
+        },
+        "parameters": [
+          "red_stop_probability",
+          "stop_dwell_time",
+          "stop_full_probability"
+        ]
+      },
+      "cancelled": false,
+      "discardedSlices": 0,
+      "note": "An interactive learning job preempts the slice in 221, then the batch pauses and resumes"
+    }
+  ],
+  "checks": [
+    {
+      "name": "budget.manifest.status",
+      "expected": "READY",
+      "actual": "READY",
+      "pass": true,
+      "detail": "The budgets are read from Docs/performance-budgets.json, never typed here"
+    },
+    {
+      "name": "budget.manifest.version",
+      "expected": "221-synthetic-1",
+      "actual": "221-synthetic-1",
+      "pass": true,
+      "detail": "The 221 worker admission contract version"
+    },
+    {
+      "name": "budget.manifest.residentWorlds",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "One resident experiment world"
+    },
+    {
+      "name": "budget.manifest.sliceMaximumMs",
+      "expected": 10,
+      "actual": 10,
+      "pass": true,
+      "detail": "Per-slice budget used to flag an overrun"
+    },
+    {
+      "name": "budget.manifest.progressHzMaximum",
+      "expected": 5,
+      "actual": 5,
+      "pass": true,
+      "detail": "Progress cap derived from the 200 ms interval"
+    },
+    {
+      "name": "budget.manifest.cancellationTargetMaximumMs",
+      "expected": 100,
+      "actual": 100,
+      "pass": true,
+      "detail": "Cooperative cancellation target"
+    },
+    {
+      "name": "budget.manifest.gaps",
+      "expected": 4,
+      "actual": 4,
+      "pass": true,
+      "detail": "Uncalibrated values are reported: workerSchedulingProposal.queueCountAndAge, proposedCapacities.totalHeapBytes, proposedCapacities.wasmBytes, capacityValidation.additionalSuballocations"
+    },
+    {
+      "name": "budget.missing.status",
+      "expected": "REFUSED",
+      "actual": "REFUSED",
+      "pass": true,
+      "detail": "A manifest without the 221 contract is refused instead of defaulted"
+    },
+    {
+      "name": "budget.missing.code",
+      "expected": "BUDGET_MISSING",
+      "actual": "BUDGET_MISSING",
+      "pass": true,
+      "detail": "The closed budget refusal code"
+    },
+    {
+      "name": "budget.missing.path",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The refusal names the missing manifest path"
+    },
+    {
+      "name": "complete.status",
+      "expected": "COMPLETED",
+      "actual": "COMPLETED",
+      "pass": true,
+      "detail": "A batch that runs every slice completes"
+    },
+    {
+      "name": "complete.slices",
+      "expected": 5,
+      "actual": 5,
+      "pass": true,
+      "detail": "One slice per base seed"
+    },
+    {
+      "name": "complete.completed",
+      "expected": 5,
+      "actual": 5,
+      "pass": true,
+      "detail": "All five slices ran"
+    },
+    {
+      "name": "complete.fraction",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "Progress reaches one"
+    },
+    {
+      "name": "complete.rows",
+      "expected": 5,
+      "actual": 5,
+      "pass": true,
+      "detail": "Five complete rows"
+    },
+    {
+      "name": "complete.partialRows",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "Nothing is partial"
+    },
+    {
+      "name": "complete.progressSequence",
+      "expected": "0,1,2,3,4,5",
+      "actual": "0,1,2,3,4,5",
+      "pass": true,
+      "detail": "Progress is emitted before the first slice and after each one"
+    },
+    {
+      "name": "complete.labels",
+      "expected": "COMPLETE,COMPLETE,COMPLETE,COMPLETE,COMPLETE",
+      "actual": "COMPLETE,COMPLETE,COMPLETE,COMPLETE,COMPLETE",
+      "pass": true,
+      "detail": "Every row carries the COMPLETE label"
+    },
+    {
+      "name": "complete.decisions",
+      "expected": 120,
+      "actual": 120,
+      "pass": true,
+      "detail": "Five real run cells report 24 decisions each"
+    },
+    {
+      "name": "complete.refusals",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "No slice was refused"
+    },
+    {
+      "name": "complete.worldReleased",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "The world lease is released"
+    },
+    {
+      "name": "complete.fixtureRuns",
+      "expected": 5,
+      "actual": 5,
+      "pass": true,
+      "detail": "The port ran exactly one slice per seed"
+    },
+    {
+      "name": "cancel.status",
+      "expected": "CANCELLED",
+      "actual": "CANCELLED",
+      "pass": true,
+      "detail": "A cancelled batch never claims completion"
+    },
+    {
+      "name": "cancel.completed",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "Two slices finished before the stop"
+    },
+    {
+      "name": "cancel.completeRows",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "No result is presented as complete"
+    },
+    {
+      "name": "cancel.partialRows",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "Both produced rows are kept"
+    },
+    {
+      "name": "cancel.partialReason",
+      "expected": "CANCELLED_BY_REQUEST",
+      "actual": "CANCELLED_BY_REQUEST",
+      "pass": true,
+      "detail": "The reason is explicit"
+    },
+    {
+      "name": "cancel.labels",
+      "expected": "PARTIAL,PARTIAL",
+      "actual": "PARTIAL,PARTIAL",
+      "pass": true,
+      "detail": "Each kept row is labelled PARTIAL"
+    },
+    {
+      "name": "cancel.discarded",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "The in-flight slice was discarded"
+    },
+    {
+      "name": "cancel.progressStates",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The transcript never shows a cancelled batch reaching full progress"
+    },
+    {
+      "name": "learning.status",
+      "expected": "COMPLETED",
+      "actual": "COMPLETED",
+      "pass": true,
+      "detail": "The resumed batch finishes"
+    },
+    {
+      "name": "learning.pauseCount",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "One learning interrupt was applied"
+    },
+    {
+      "name": "learning.resumeCount",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "One explicit resume"
+    },
+    {
+      "name": "learning.atSlice",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "Paused while slice 1 was in flight"
+    },
+    {
+      "name": "learning.resumeAt",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "It continued at the next boundary, not from scratch"
+    },
+    {
+      "name": "learning.interruptStatus",
+      "expected": "RESUMED",
+      "actual": "RESUMED",
+      "pass": true,
+      "detail": "The interrupt records both pause and resume"
+    },
+    {
+      "name": "learning.rows",
+      "expected": 4,
+      "actual": 4,
+      "pass": true,
+      "detail": "Every slice still produced its row"
+    },
+    {
+      "name": "world.status",
+      "expected": "REFUSED",
+      "actual": "REFUSED",
+      "pass": true,
+      "detail": "A second world is refused, not cloned"
+    },
+    {
+      "name": "world.code",
+      "expected": "WORLD_RESERVED",
+      "actual": "WORLD_RESERVED",
+      "pass": true,
+      "detail": "The refusal code is closed"
+    },
+    {
+      "name": "world.holder",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The refusal names the holder"
+    },
+    {
+      "name": "world.refusals",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "The refusal is counted"
+    },
+    {
+      "name": "model.simplifiedStatus",
+      "expected": "COMPLETED",
+      "actual": "COMPLETED",
+      "pass": true,
+      "detail": "A declared approximation may run"
+    },
+    {
+      "name": "model.kind",
+      "expected": "SIMPLIFIED",
+      "actual": "SIMPLIFIED",
+      "pass": true,
+      "detail": "The kind is carried in the result"
+    },
+    {
+      "name": "model.physicsFidelity",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "A simplified model is never full physics"
+    },
+    {
+      "name": "model.reportFidelity",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "The report label cannot upgrade it either"
+    },
+    {
+      "name": "model.disclaimer",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The disclaimer names what is not validated"
+    },
+    {
+      "name": "model.claimedStatus",
+      "expected": "REFUSED",
+      "actual": "REFUSED",
+      "pass": true,
+      "detail": "A simplified model that claims fidelity is refused"
+    },
+    {
+      "name": "model.claimedCode",
+      "expected": "SIMPLIFIED_CLAIMS_FIDELITY",
+      "actual": "SIMPLIFIED_CLAIMS_FIDELITY",
+      "pass": true,
+      "detail": "The claim has its own closed code"
+    },
+    {
+      "name": "sliceBudget.overruns",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "All three slices are over budget"
+    },
+    {
+      "name": "sliceBudget.stepMs",
+      "expected": 12,
+      "actual": 12,
+      "pass": true,
+      "detail": "The real step is kept"
+    },
+    {
+      "name": "sliceBudget.allocated",
+      "expected": 10,
+      "actual": 10,
+      "pass": true,
+      "detail": "The allocation comes from the manifest"
+    },
+    {
+      "name": "live.status",
+      "expected": "COMPLETED",
+      "actual": "COMPLETED",
+      "pass": true,
+      "detail": "The real stack completes the batch"
+    },
+    {
+      "name": "live.rows",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "One row per real run cell"
+    },
+    {
+      "name": "live.decisions",
+      "expected": 72,
+      "actual": 72,
+      "pass": true,
+      "detail": "Three seeds × 24 decisions"
+    },
+    {
+      "name": "live.divergent",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Real divergences: 31"
+    },
+    {
+      "name": "live.causes",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Cause distribution read from 142: {\"PROBABILITY_THRESHOLD\":27,\"GEOMETRY_PARAMETER\":4}"
+    },
+    {
+      "name": "live.refusals",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "No slice was refused"
+    },
+    {
+      "name": "live.admitted",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "Every slice went through the coordinator"
+    },
+    {
+      "name": "refusal.status",
+      "expected": "REFUSED",
+      "actual": "REFUSED",
+      "pass": true,
+      "detail": "The refusal is explicit"
+    },
+    {
+      "name": "refusal.code",
+      "expected": "CAPACITY_INSUFFICIENT",
+      "actual": "CAPACITY_INSUFFICIENT",
+      "pass": true,
+      "detail": "The 221 refusal is carried"
+    },
+    {
+      "name": "refusal.count",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "The refusal is counted"
+    },
+    {
+      "name": "refusal.rows",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "A refused first slice produced nothing"
+    },
+    {
+      "name": "error.status",
+      "expected": "FAILED",
+      "actual": "FAILED",
+      "pass": true,
+      "detail": "A worker error stops the batch"
+    },
+    {
+      "name": "error.code",
+      "expected": "SLICE_FAILED",
+      "actual": "SLICE_FAILED",
+      "pass": true,
+      "detail": "The failure has its own code"
+    },
+    {
+      "name": "error.completed",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "Only the first slice finished"
+    },
+    {
+      "name": "error.partialRows",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "Its row is kept, labelled PARTIAL"
+    },
+    {
+      "name": "error.partialReason",
+      "expected": "SLICE_FAILED",
+      "actual": "SLICE_FAILED",
+      "pass": true,
+      "detail": "The partial reason names the failure"
+    },
+    {
+      "name": "preemption.status",
+      "expected": "COMPLETED",
+      "actual": "COMPLETED",
+      "pass": true,
+      "detail": "The batch finishes after the interrupt"
+    },
+    {
+      "name": "preemption.preempted",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "221 preempted exactly one slice"
+    },
+    {
+      "name": "preemption.pause",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "The batch paused once"
+    },
+    {
+      "name": "preemption.resume",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "The batch resumed once"
+    },
+    {
+      "name": "preemption.inFlight",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The interrupt landed while a slice was running"
+    },
+    {
+      "name": "preemption.rows",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "Both run cells produced their row"
+    }
+  ],
+  "summary": {
+    "checks": 73,
+    "passed": 73,
+    "pass": true
+  }
+}

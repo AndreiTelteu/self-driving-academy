@@ -12,3 +12,5 @@ export * from './experiment-snapshot';
 export * from './experiment-rerun';
 export * from './experiment-replay';
 export * from './experiment-compare';
+export * from './experiment-worker';
+export * from './experiment-worker-governor';
