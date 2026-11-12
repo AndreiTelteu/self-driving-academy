@@ -1,0 +1,1149 @@
+{
+  "version": "179-lateral-policy-v2",
+  "parameters": [
+    {
+      "key": "lane_center_offset",
+      "unit": "m",
+      "minimum": -1,
+      "maximum": 1,
+      "defaultValue": 0
+    },
+    {
+      "key": "steering_response_time",
+      "unit": "s",
+      "minimum": 0.05,
+      "maximum": 1.5,
+      "defaultValue": 0.3
+    },
+    {
+      "key": "steering_rate_limit",
+      "unit": "rad/s",
+      "minimum": 0.1,
+      "maximum": 4,
+      "defaultValue": 1
+    },
+    {
+      "key": "turn_entry_speed",
+      "unit": "m/s",
+      "minimum": 1,
+      "maximum": 18,
+      "defaultValue": 5
+    },
+    {
+      "key": "turn_exit_acceleration",
+      "unit": "m/s²",
+      "minimum": 0.2,
+      "maximum": 6,
+      "defaultValue": 1.5
+    },
+    {
+      "key": "corner_cutting_bias",
+      "unit": "ratio",
+      "minimum": 0,
+      "maximum": 1,
+      "defaultValue": 0
+    },
+    {
+      "key": "lateral_clearance",
+      "unit": "m",
+      "minimum": 0.1,
+      "maximum": 3,
+      "defaultValue": 0.8
+    },
+    {
+      "key": "lateral_correction_deadband",
+      "unit": "m",
+      "minimum": 0,
+      "maximum": 0.6,
+      "defaultValue": 0.1
+    }
+  ],
+  "scenarios": [
+    {
+      "name": "deplasare față de centrul benzii",
+      "scenario": "bandă autorată de 4 m pe un drum drept, fără abatere laterală: deplasarea țintă față de centrul benzii, în metri"
+    },
+    {
+      "name": "răspunsul comenzii de direcție",
+      "scenario": "viraj autorat de 15,7 m, cu 049 cerând −0,170 rad la roată și starea pornind de la 0: numărul de tick-uri până la prima mișcare a direcției"
+    },
+    {
+      "name": "limita de viteză a comenzii de direcție",
+      "scenario": "același viraj, cu răspunsul la minim: pasul de unghi la roată aplicat la prima mișcare, în radiani pe tick"
+    },
+    {
+      "name": "viteza de intrare în viraj",
+      "scenario": "viraj autorat de 15,7 m cu `curve_lateral_accel` 2,5 m/s²: viteza de intrare comandată, în m/s"
+    },
+    {
+      "name": "accelerația la ieșirea din viraj",
+      "scenario": "ieșirea din viraj pe drumul drept, cu latch-ul de viraj purtat din tick-ul anterior: accelerația preferată la ieșire, în m/s²"
+    },
+    {
+      "name": "tăierea virajului",
+      "scenario": "viraj autorat de 15,7 m: deplasarea spre interiorul curbei, în metri (magnitudine)"
+    },
+    {
+      "name": "spațiul lateral liber",
+      "scenario": "obstacol declarat la 4 m de centrul benzii, lat de 1 m, deci 2,6 m liberi între caroserie și obstacol: dacă manevra laterală este permisă"
+    },
+    {
+      "name": "banda moartă a corecției",
+      "scenario": "viraj autorat cu abatere laterală de 0,3 m: dacă corecția de cross-track este activă"
+    }
+  ],
+  "effects": [
+    {
+      "key": "lane_center_offset",
+      "scenario": "deplasare față de centrul benzii",
+      "keyUnit": "m",
+      "unit": "m",
+      "lowValue": -1,
+      "highValue": 1,
+      "lowOutcome": -0.9000000000000001,
+      "highOutcome": 0.9000000000000001,
+      "difference": 1.8000000000000003,
+      "note": "coridorul 049 este `4/2 − 1,8/2 − 0,2 = 0,9 m`, deci și −1 m și +1 m sunt plafonate la ±0,9 m: roțile nu părăsesc banda autorată"
+    },
+    {
+      "key": "steering_response_time",
+      "scenario": "răspunsul comenzii de direcție",
+      "keyUnit": "s",
+      "unit": "ticks",
+      "lowValue": 0.05,
+      "highValue": 1.5,
+      "lowOutcome": 3,
+      "highOutcome": 90,
+      "difference": 87,
+      "note": "intervalul mort este `max(1, ceil(cheie · 60))`: 0,05 s ține comanda 3 tick-uri, 1,5 s o ține 90 de tick-uri, iar limita de rată nu schimbă momentul primei mișcări"
+    },
+    {
+      "key": "steering_rate_limit",
+      "scenario": "limita de viteză a comenzii de direcție",
+      "keyUnit": "rad/s",
+      "unit": "rad",
+      "lowValue": 0.1,
+      "highValue": 4,
+      "lowOutcome": 0.0016666666666666668,
+      "highOutcome": 0.025,
+      "difference": 0.023333333333333334,
+      "note": "pasul este `min(cheie, 1,5 rad/s) / 60`: 0,1 rad/s dă 0,001667 rad/tick, iar 4 rad/s este plafonat la 1,5 rad/s, adică 0,025 rad/tick"
+    },
+    {
+      "key": "turn_entry_speed",
+      "scenario": "viteza de intrare în viraj",
+      "keyUnit": "m/s",
+      "unit": "m/s",
+      "lowValue": 1,
+      "highValue": 18,
+      "lowOutcome": 1,
+      "highOutcome": 6.26876888130155,
+      "difference": 5.26876888130155,
+      "note": "plafonul de aderență este `min(sqrt(2,5 · 15,719), avizul 049)` = 6,269 m/s: cheia de 18 m/s nu poate intra în viraj peste limita fizică"
+    },
+    {
+      "key": "turn_exit_acceleration",
+      "scenario": "accelerația la ieșirea din viraj",
+      "keyUnit": "m/s²",
+      "unit": "m/s²",
+      "lowValue": 0.2,
+      "highValue": 6,
+      "lowOutcome": 0.2,
+      "highOutcome": 1.5,
+      "difference": 1.3,
+      "note": "accelerația este plafonată de cheia M `desired_acceleration` (1,5 m/s²): cheia de 6 m/s² nu cere niciodată mai mult decât stilul deja livrat de 047"
+    },
+    {
+      "key": "corner_cutting_bias",
+      "scenario": "tăierea virajului",
+      "keyUnit": "ratio",
+      "unit": "m",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 0,
+      "highOutcome": 0.9000000000000001,
+      "difference": 0.9000000000000001,
+      "note": "tăierea este `cheie · coridor` (0,9 m) spre interiorul curbei, în același coridor ca deplasarea de bandă; virajul autorat este la stânga, deci deplasarea este negativă"
+    },
+    {
+      "key": "lateral_clearance",
+      "scenario": "spațiul lateral liber",
+      "keyUnit": "m",
+      "unit": "ratio",
+      "lowValue": 0.1,
+      "highValue": 3,
+      "lowOutcome": 1,
+      "highOutcome": 0,
+      "difference": -1,
+      "note": "spațiul efectiv este `max(cheie, 1,8 + 0,2)` = 2,0 m la minimum și 3,0 m la maximum; 2,6 m liberi permit trecerea la 2,0 m și o interzic la 3,0 m"
+    },
+    {
+      "key": "lateral_correction_deadband",
+      "scenario": "banda moartă a corecției",
+      "keyUnit": "m",
+      "unit": "ratio",
+      "lowValue": 0,
+      "highValue": 0.6,
+      "lowOutcome": 1,
+      "highOutcome": 0,
+      "difference": -1,
+      "note": "abaterea de 0,3 m este sub banda de 0,6 m, deci corecția se oprește; peste bandă rămâne numai urmărirea de geometrie a lui 049"
+    }
+  ],
+  "separation": [
+    {
+      "key": "steering_response_time",
+      "scenario": "deplasare față de centrul benzii",
+      "keyUnit": "s",
+      "unit": "m",
+      "lowValue": 0.05,
+      "highValue": 1.5,
+      "lowOutcome": 0,
+      "highOutcome": 0,
+      "difference": 0,
+      "note": "`steering_response_time` este inertă în scenariul deplasare față de centrul benzii"
+    },
+    {
+      "key": "steering_rate_limit",
+      "scenario": "deplasare față de centrul benzii",
+      "keyUnit": "rad/s",
+      "unit": "m",
+      "lowValue": 0.1,
+      "highValue": 4,
+      "lowOutcome": 0,
+      "highOutcome": 0,
+      "difference": 0,
+      "note": "`steering_rate_limit` este inertă în scenariul deplasare față de centrul benzii"
+    },
+    {
+      "key": "turn_entry_speed",
+      "scenario": "deplasare față de centrul benzii",
+      "keyUnit": "m/s",
+      "unit": "m",
+      "lowValue": 1,
+      "highValue": 18,
+      "lowOutcome": 0,
+      "highOutcome": 0,
+      "difference": 0,
+      "note": "`turn_entry_speed` este inertă în scenariul deplasare față de centrul benzii"
+    },
+    {
+      "key": "turn_exit_acceleration",
+      "scenario": "deplasare față de centrul benzii",
+      "keyUnit": "m/s²",
+      "unit": "m",
+      "lowValue": 0.2,
+      "highValue": 6,
+      "lowOutcome": 0,
+      "highOutcome": 0,
+      "difference": 0,
+      "note": "`turn_exit_acceleration` este inertă în scenariul deplasare față de centrul benzii"
+    },
+    {
+      "key": "corner_cutting_bias",
+      "scenario": "deplasare față de centrul benzii",
+      "keyUnit": "ratio",
+      "unit": "m",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 0,
+      "highOutcome": 0,
+      "difference": 0,
+      "note": "`corner_cutting_bias` este inertă în scenariul deplasare față de centrul benzii"
+    },
+    {
+      "key": "lateral_clearance",
+      "scenario": "deplasare față de centrul benzii",
+      "keyUnit": "m",
+      "unit": "m",
+      "lowValue": 0.1,
+      "highValue": 3,
+      "lowOutcome": 0,
+      "highOutcome": 0,
+      "difference": 0,
+      "note": "`lateral_clearance` este inertă în scenariul deplasare față de centrul benzii"
+    },
+    {
+      "key": "lateral_correction_deadband",
+      "scenario": "deplasare față de centrul benzii",
+      "keyUnit": "m",
+      "unit": "m",
+      "lowValue": 0,
+      "highValue": 0.6,
+      "lowOutcome": 0,
+      "highOutcome": 0,
+      "difference": 0,
+      "note": "`lateral_correction_deadband` este inertă în scenariul deplasare față de centrul benzii"
+    },
+    {
+      "key": "lane_center_offset",
+      "scenario": "răspunsul comenzii de direcție",
+      "keyUnit": "m",
+      "unit": "ticks",
+      "lowValue": -1,
+      "highValue": 1,
+      "lowOutcome": 3,
+      "highOutcome": 3,
+      "difference": 0,
+      "note": "`lane_center_offset` este inertă în scenariul răspunsul comenzii de direcție"
+    },
+    {
+      "key": "steering_rate_limit",
+      "scenario": "răspunsul comenzii de direcție",
+      "keyUnit": "rad/s",
+      "unit": "ticks",
+      "lowValue": 0.1,
+      "highValue": 4,
+      "lowOutcome": 3,
+      "highOutcome": 3,
+      "difference": 0,
+      "note": "`steering_rate_limit` este inertă în scenariul răspunsul comenzii de direcție"
+    },
+    {
+      "key": "turn_entry_speed",
+      "scenario": "răspunsul comenzii de direcție",
+      "keyUnit": "m/s",
+      "unit": "ticks",
+      "lowValue": 1,
+      "highValue": 18,
+      "lowOutcome": 3,
+      "highOutcome": 3,
+      "difference": 0,
+      "note": "`turn_entry_speed` este inertă în scenariul răspunsul comenzii de direcție"
+    },
+    {
+      "key": "turn_exit_acceleration",
+      "scenario": "răspunsul comenzii de direcție",
+      "keyUnit": "m/s²",
+      "unit": "ticks",
+      "lowValue": 0.2,
+      "highValue": 6,
+      "lowOutcome": 3,
+      "highOutcome": 3,
+      "difference": 0,
+      "note": "`turn_exit_acceleration` este inertă în scenariul răspunsul comenzii de direcție"
+    },
+    {
+      "key": "corner_cutting_bias",
+      "scenario": "răspunsul comenzii de direcție",
+      "keyUnit": "ratio",
+      "unit": "ticks",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 3,
+      "highOutcome": 3,
+      "difference": 0,
+      "note": "`corner_cutting_bias` este inertă în scenariul răspunsul comenzii de direcție"
+    },
+    {
+      "key": "lateral_clearance",
+      "scenario": "răspunsul comenzii de direcție",
+      "keyUnit": "m",
+      "unit": "ticks",
+      "lowValue": 0.1,
+      "highValue": 3,
+      "lowOutcome": 3,
+      "highOutcome": 3,
+      "difference": 0,
+      "note": "`lateral_clearance` este inertă în scenariul răspunsul comenzii de direcție"
+    },
+    {
+      "key": "lateral_correction_deadband",
+      "scenario": "răspunsul comenzii de direcție",
+      "keyUnit": "m",
+      "unit": "ticks",
+      "lowValue": 0,
+      "highValue": 0.6,
+      "lowOutcome": 3,
+      "highOutcome": 3,
+      "difference": 0,
+      "note": "`lateral_correction_deadband` este inertă în scenariul răspunsul comenzii de direcție"
+    },
+    {
+      "key": "lane_center_offset",
+      "scenario": "limita de viteză a comenzii de direcție",
+      "keyUnit": "m",
+      "unit": "rad",
+      "lowValue": -1,
+      "highValue": 1,
+      "lowOutcome": 0.0016666666666666668,
+      "highOutcome": 0.0016666666666666668,
+      "difference": 0,
+      "note": "`lane_center_offset` este inertă în scenariul limita de viteză a comenzii de direcție"
+    },
+    {
+      "key": "steering_response_time",
+      "scenario": "limita de viteză a comenzii de direcție",
+      "keyUnit": "s",
+      "unit": "rad",
+      "lowValue": 0.05,
+      "highValue": 1.5,
+      "lowOutcome": 0.0016666666666666668,
+      "highOutcome": 0.0016666666666666668,
+      "difference": 0,
+      "note": "`steering_response_time` este inertă în scenariul limita de viteză a comenzii de direcție"
+    },
+    {
+      "key": "turn_entry_speed",
+      "scenario": "limita de viteză a comenzii de direcție",
+      "keyUnit": "m/s",
+      "unit": "rad",
+      "lowValue": 1,
+      "highValue": 18,
+      "lowOutcome": 0.0016666666666666668,
+      "highOutcome": 0.0016666666666666668,
+      "difference": 0,
+      "note": "`turn_entry_speed` este inertă în scenariul limita de viteză a comenzii de direcție"
+    },
+    {
+      "key": "turn_exit_acceleration",
+      "scenario": "limita de viteză a comenzii de direcție",
+      "keyUnit": "m/s²",
+      "unit": "rad",
+      "lowValue": 0.2,
+      "highValue": 6,
+      "lowOutcome": 0.0016666666666666668,
+      "highOutcome": 0.0016666666666666668,
+      "difference": 0,
+      "note": "`turn_exit_acceleration` este inertă în scenariul limita de viteză a comenzii de direcție"
+    },
+    {
+      "key": "corner_cutting_bias",
+      "scenario": "limita de viteză a comenzii de direcție",
+      "keyUnit": "ratio",
+      "unit": "rad",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 0.0016666666666666668,
+      "highOutcome": 0.0016666666666666668,
+      "difference": 0,
+      "note": "`corner_cutting_bias` este inertă în scenariul limita de viteză a comenzii de direcție"
+    },
+    {
+      "key": "lateral_clearance",
+      "scenario": "limita de viteză a comenzii de direcție",
+      "keyUnit": "m",
+      "unit": "rad",
+      "lowValue": 0.1,
+      "highValue": 3,
+      "lowOutcome": 0.0016666666666666668,
+      "highOutcome": 0.0016666666666666668,
+      "difference": 0,
+      "note": "`lateral_clearance` este inertă în scenariul limita de viteză a comenzii de direcție"
+    },
+    {
+      "key": "lateral_correction_deadband",
+      "scenario": "limita de viteză a comenzii de direcție",
+      "keyUnit": "m",
+      "unit": "rad",
+      "lowValue": 0,
+      "highValue": 0.6,
+      "lowOutcome": 0.0016666666666666668,
+      "highOutcome": 0.0016666666666666668,
+      "difference": 0,
+      "note": "`lateral_correction_deadband` este inertă în scenariul limita de viteză a comenzii de direcție"
+    },
+    {
+      "key": "lane_center_offset",
+      "scenario": "viteza de intrare în viraj",
+      "keyUnit": "m",
+      "unit": "m/s",
+      "lowValue": -1,
+      "highValue": 1,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "note": "`lane_center_offset` este inertă în scenariul viteza de intrare în viraj"
+    },
+    {
+      "key": "steering_response_time",
+      "scenario": "viteza de intrare în viraj",
+      "keyUnit": "s",
+      "unit": "m/s",
+      "lowValue": 0.05,
+      "highValue": 1.5,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "note": "`steering_response_time` este inertă în scenariul viteza de intrare în viraj"
+    },
+    {
+      "key": "steering_rate_limit",
+      "scenario": "viteza de intrare în viraj",
+      "keyUnit": "rad/s",
+      "unit": "m/s",
+      "lowValue": 0.1,
+      "highValue": 4,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "note": "`steering_rate_limit` este inertă în scenariul viteza de intrare în viraj"
+    },
+    {
+      "key": "turn_exit_acceleration",
+      "scenario": "viteza de intrare în viraj",
+      "keyUnit": "m/s²",
+      "unit": "m/s",
+      "lowValue": 0.2,
+      "highValue": 6,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "note": "`turn_exit_acceleration` este inertă în scenariul viteza de intrare în viraj"
+    },
+    {
+      "key": "corner_cutting_bias",
+      "scenario": "viteza de intrare în viraj",
+      "keyUnit": "ratio",
+      "unit": "m/s",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "note": "`corner_cutting_bias` este inertă în scenariul viteza de intrare în viraj"
+    },
+    {
+      "key": "lateral_clearance",
+      "scenario": "viteza de intrare în viraj",
+      "keyUnit": "m",
+      "unit": "m/s",
+      "lowValue": 0.1,
+      "highValue": 3,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "note": "`lateral_clearance` este inertă în scenariul viteza de intrare în viraj"
+    },
+    {
+      "key": "lateral_correction_deadband",
+      "scenario": "viteza de intrare în viraj",
+      "keyUnit": "m",
+      "unit": "m/s",
+      "lowValue": 0,
+      "highValue": 0.6,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "note": "`lateral_correction_deadband` este inertă în scenariul viteza de intrare în viraj"
+    },
+    {
+      "key": "lane_center_offset",
+      "scenario": "accelerația la ieșirea din viraj",
+      "keyUnit": "m",
+      "unit": "m/s²",
+      "lowValue": -1,
+      "highValue": 1,
+      "lowOutcome": 0.2,
+      "highOutcome": 0.2,
+      "difference": 0,
+      "note": "`lane_center_offset` este inertă în scenariul accelerația la ieșirea din viraj"
+    },
+    {
+      "key": "steering_response_time",
+      "scenario": "accelerația la ieșirea din viraj",
+      "keyUnit": "s",
+      "unit": "m/s²",
+      "lowValue": 0.05,
+      "highValue": 1.5,
+      "lowOutcome": 0.2,
+      "highOutcome": 0.2,
+      "difference": 0,
+      "note": "`steering_response_time` este inertă în scenariul accelerația la ieșirea din viraj"
+    },
+    {
+      "key": "steering_rate_limit",
+      "scenario": "accelerația la ieșirea din viraj",
+      "keyUnit": "rad/s",
+      "unit": "m/s²",
+      "lowValue": 0.1,
+      "highValue": 4,
+      "lowOutcome": 0.2,
+      "highOutcome": 0.2,
+      "difference": 0,
+      "note": "`steering_rate_limit` este inertă în scenariul accelerația la ieșirea din viraj"
+    },
+    {
+      "key": "turn_entry_speed",
+      "scenario": "accelerația la ieșirea din viraj",
+      "keyUnit": "m/s",
+      "unit": "m/s²",
+      "lowValue": 1,
+      "highValue": 18,
+      "lowOutcome": 0.2,
+      "highOutcome": 0.2,
+      "difference": 0,
+      "note": "`turn_entry_speed` este inertă în scenariul accelerația la ieșirea din viraj"
+    },
+    {
+      "key": "corner_cutting_bias",
+      "scenario": "accelerația la ieșirea din viraj",
+      "keyUnit": "ratio",
+      "unit": "m/s²",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 0.2,
+      "highOutcome": 0.2,
+      "difference": 0,
+      "note": "`corner_cutting_bias` este inertă în scenariul accelerația la ieșirea din viraj"
+    },
+    {
+      "key": "lateral_clearance",
+      "scenario": "accelerația la ieșirea din viraj",
+      "keyUnit": "m",
+      "unit": "m/s²",
+      "lowValue": 0.1,
+      "highValue": 3,
+      "lowOutcome": 0.2,
+      "highOutcome": 0.2,
+      "difference": 0,
+      "note": "`lateral_clearance` este inertă în scenariul accelerația la ieșirea din viraj"
+    },
+    {
+      "key": "lateral_correction_deadband",
+      "scenario": "accelerația la ieșirea din viraj",
+      "keyUnit": "m",
+      "unit": "m/s²",
+      "lowValue": 0,
+      "highValue": 0.6,
+      "lowOutcome": 0.2,
+      "highOutcome": 0.2,
+      "difference": 0,
+      "note": "`lateral_correction_deadband` este inertă în scenariul accelerația la ieșirea din viraj"
+    },
+    {
+      "key": "lane_center_offset",
+      "scenario": "tăierea virajului",
+      "keyUnit": "m",
+      "unit": "m",
+      "lowValue": -1,
+      "highValue": 1,
+      "lowOutcome": 0,
+      "highOutcome": 0,
+      "difference": 0,
+      "note": "`lane_center_offset` este inertă în scenariul tăierea virajului"
+    },
+    {
+      "key": "steering_response_time",
+      "scenario": "tăierea virajului",
+      "keyUnit": "s",
+      "unit": "m",
+      "lowValue": 0.05,
+      "highValue": 1.5,
+      "lowOutcome": 0,
+      "highOutcome": 0,
+      "difference": 0,
+      "note": "`steering_response_time` este inertă în scenariul tăierea virajului"
+    },
+    {
+      "key": "steering_rate_limit",
+      "scenario": "tăierea virajului",
+      "keyUnit": "rad/s",
+      "unit": "m",
+      "lowValue": 0.1,
+      "highValue": 4,
+      "lowOutcome": 0,
+      "highOutcome": 0,
+      "difference": 0,
+      "note": "`steering_rate_limit` este inertă în scenariul tăierea virajului"
+    },
+    {
+      "key": "turn_entry_speed",
+      "scenario": "tăierea virajului",
+      "keyUnit": "m/s",
+      "unit": "m",
+      "lowValue": 1,
+      "highValue": 18,
+      "lowOutcome": 0,
+      "highOutcome": 0,
+      "difference": 0,
+      "note": "`turn_entry_speed` este inertă în scenariul tăierea virajului"
+    },
+    {
+      "key": "turn_exit_acceleration",
+      "scenario": "tăierea virajului",
+      "keyUnit": "m/s²",
+      "unit": "m",
+      "lowValue": 0.2,
+      "highValue": 6,
+      "lowOutcome": 0,
+      "highOutcome": 0,
+      "difference": 0,
+      "note": "`turn_exit_acceleration` este inertă în scenariul tăierea virajului"
+    },
+    {
+      "key": "lateral_clearance",
+      "scenario": "tăierea virajului",
+      "keyUnit": "m",
+      "unit": "m",
+      "lowValue": 0.1,
+      "highValue": 3,
+      "lowOutcome": 0,
+      "highOutcome": 0,
+      "difference": 0,
+      "note": "`lateral_clearance` este inertă în scenariul tăierea virajului"
+    },
+    {
+      "key": "lateral_correction_deadband",
+      "scenario": "tăierea virajului",
+      "keyUnit": "m",
+      "unit": "m",
+      "lowValue": 0,
+      "highValue": 0.6,
+      "lowOutcome": 0,
+      "highOutcome": 0,
+      "difference": 0,
+      "note": "`lateral_correction_deadband` este inertă în scenariul tăierea virajului"
+    },
+    {
+      "key": "lane_center_offset",
+      "scenario": "spațiul lateral liber",
+      "keyUnit": "m",
+      "unit": "ratio",
+      "lowValue": -1,
+      "highValue": 1,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "note": "`lane_center_offset` este inertă în scenariul spațiul lateral liber"
+    },
+    {
+      "key": "steering_response_time",
+      "scenario": "spațiul lateral liber",
+      "keyUnit": "s",
+      "unit": "ratio",
+      "lowValue": 0.05,
+      "highValue": 1.5,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "note": "`steering_response_time` este inertă în scenariul spațiul lateral liber"
+    },
+    {
+      "key": "steering_rate_limit",
+      "scenario": "spațiul lateral liber",
+      "keyUnit": "rad/s",
+      "unit": "ratio",
+      "lowValue": 0.1,
+      "highValue": 4,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "note": "`steering_rate_limit` este inertă în scenariul spațiul lateral liber"
+    },
+    {
+      "key": "turn_entry_speed",
+      "scenario": "spațiul lateral liber",
+      "keyUnit": "m/s",
+      "unit": "ratio",
+      "lowValue": 1,
+      "highValue": 18,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "note": "`turn_entry_speed` este inertă în scenariul spațiul lateral liber"
+    },
+    {
+      "key": "turn_exit_acceleration",
+      "scenario": "spațiul lateral liber",
+      "keyUnit": "m/s²",
+      "unit": "ratio",
+      "lowValue": 0.2,
+      "highValue": 6,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "note": "`turn_exit_acceleration` este inertă în scenariul spațiul lateral liber"
+    },
+    {
+      "key": "corner_cutting_bias",
+      "scenario": "spațiul lateral liber",
+      "keyUnit": "ratio",
+      "unit": "ratio",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "note": "`corner_cutting_bias` este inertă în scenariul spațiul lateral liber"
+    },
+    {
+      "key": "lateral_correction_deadband",
+      "scenario": "spațiul lateral liber",
+      "keyUnit": "m",
+      "unit": "ratio",
+      "lowValue": 0,
+      "highValue": 0.6,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "note": "`lateral_correction_deadband` este inertă în scenariul spațiul lateral liber"
+    },
+    {
+      "key": "lane_center_offset",
+      "scenario": "banda moartă a corecției",
+      "keyUnit": "m",
+      "unit": "ratio",
+      "lowValue": -1,
+      "highValue": 1,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "note": "`lane_center_offset` este inertă în scenariul banda moartă a corecției"
+    },
+    {
+      "key": "steering_response_time",
+      "scenario": "banda moartă a corecției",
+      "keyUnit": "s",
+      "unit": "ratio",
+      "lowValue": 0.05,
+      "highValue": 1.5,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "note": "`steering_response_time` este inertă în scenariul banda moartă a corecției"
+    },
+    {
+      "key": "steering_rate_limit",
+      "scenario": "banda moartă a corecției",
+      "keyUnit": "rad/s",
+      "unit": "ratio",
+      "lowValue": 0.1,
+      "highValue": 4,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "note": "`steering_rate_limit` este inertă în scenariul banda moartă a corecției"
+    },
+    {
+      "key": "turn_entry_speed",
+      "scenario": "banda moartă a corecției",
+      "keyUnit": "m/s",
+      "unit": "ratio",
+      "lowValue": 1,
+      "highValue": 18,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "note": "`turn_entry_speed` este inertă în scenariul banda moartă a corecției"
+    },
+    {
+      "key": "turn_exit_acceleration",
+      "scenario": "banda moartă a corecției",
+      "keyUnit": "m/s²",
+      "unit": "ratio",
+      "lowValue": 0.2,
+      "highValue": 6,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "note": "`turn_exit_acceleration` este inertă în scenariul banda moartă a corecției"
+    },
+    {
+      "key": "corner_cutting_bias",
+      "scenario": "banda moartă a corecției",
+      "keyUnit": "ratio",
+      "unit": "ratio",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "note": "`corner_cutting_bias` este inertă în scenariul banda moartă a corecției"
+    },
+    {
+      "key": "lateral_clearance",
+      "scenario": "banda moartă a corecției",
+      "keyUnit": "m",
+      "unit": "ratio",
+      "lowValue": 0.1,
+      "highValue": 3,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "note": "`lateral_clearance` este inertă în scenariul banda moartă a corecției"
+    }
+  ],
+  "safety": [
+    {
+      "key": "plafonul deplasării de bandă",
+      "scenario": "banda de 4 m, cheia +1 m, sedan (coridor 0,9 m)",
+      "keyUnit": "m",
+      "unit": "m",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 0,
+      "highOutcome": 0.9000000000000001,
+      "difference": 0.9000000000000001,
+      "note": "deplasarea este plafonată la coridorul 049 de 0.900000 m; pe clasa compact coridorul este 1.000000 m, deci cheia de 1 m încape fără plafonare"
+    },
+    {
+      "key": "plafonul de rată al direcției",
+      "scenario": "cheia 0,1 rad/s și cheia 4 rad/s, răspuns la minim: pasul aplicat",
+      "keyUnit": "rad/s",
+      "unit": "rad",
+      "lowValue": 0.1,
+      "highValue": 4,
+      "lowOutcome": 0.0016666666666666668,
+      "highOutcome": 0.025,
+      "difference": 0.023333333333333334,
+      "note": "rata efectivă la cheia 4 rad/s este 1.5 rad/s, deci pasul rămâne 0.025000 rad/tick, nu 0.066667; comanda nu devine un salt"
+    },
+    {
+      "key": "minimul de spațiu lateral (sedan)",
+      "scenario": "cheia minimă 0,1 m și maximă 3 m, clasa sedan: spațiul efectiv",
+      "keyUnit": "m",
+      "unit": "m",
+      "lowValue": 0.1,
+      "highValue": 3,
+      "lowOutcome": 2,
+      "highOutcome": 3,
+      "difference": 1,
+      "note": "minimul este lățimea de cale plus marjă (1,8 + 0,2 = 2,0 m): cheia de 0,1 m nu poate coborî sub el, iar 3 m urcă peste"
+    },
+    {
+      "key": "minimul de spațiu lateral (compact)",
+      "scenario": "cheia minimă 0,1 m, clasa compact: spațiul efectiv",
+      "keyUnit": "m",
+      "unit": "m",
+      "lowValue": 0.1,
+      "highValue": 0.1,
+      "lowOutcome": 1.8,
+      "highOutcome": 1.8,
+      "difference": 0,
+      "note": "pentru compact minimul este 1,6 + 0,2 = 1,8 m, derivat din geometria clasei și nu dintr-o constantă globală"
+    },
+    {
+      "key": "vetoul de spațiu lateral",
+      "scenario": "1,5 m liberi între caroserie și obstacol, cheia minimă 0,1 m",
+      "keyUnit": "m",
+      "unit": "ratio",
+      "lowValue": 0.1,
+      "highValue": 3,
+      "lowOutcome": 0,
+      "highOutcome": 0,
+      "difference": 0,
+      "note": "CLEARANCE_HOLD: 1.500 m liberi sub minimul efectiv 2.000 m, deci nici cheia minimă nu permite trecerea"
+    },
+    {
+      "key": "plafonul de aderență la intrarea în viraj",
+      "scenario": "grilă de 18 valori ale cheii pe virajul de 15,7 m",
+      "keyUnit": "m/s",
+      "unit": "m/s",
+      "lowValue": 1,
+      "highValue": 18,
+      "lowOutcome": 1,
+      "highOutcome": 6.26876888130155,
+      "difference": 5.26876888130155,
+      "note": "niciuna din cele 18 valori nu depășește plafonul de aderență 6.268769 m/s, sub cheia maximă de 18 m/s"
+    },
+    {
+      "key": "proiecția 049 inutilizabilă",
+      "scenario": "observație discontinuă, toate cheile la maxim",
+      "keyUnit": "ratio",
+      "unit": "ratio",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 0,
+      "highOutcome": 1,
+      "difference": 1,
+      "note": "PROJECTION_UNUSABLE (OBSERVATION_DISCONTINUITY); direcția rămâne 0.000000 rad și nicio cheie nu inventează o comandă"
+    },
+    {
+      "key": "proiecție veche refuzată",
+      "scenario": "proiecția 049 din alt tick, cheile neutre",
+      "keyUnit": "ratio",
+      "unit": "ratio",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 0,
+      "highOutcome": 1,
+      "difference": 1,
+      "note": "FOREIGN_OR_STALE_PROJECTION; un rezultat 049 care nu aparține tick-ului nu este acceptat"
+    },
+    {
+      "key": "proiecție străină refuzată",
+      "scenario": "proiecția 049 a altui actor, cheile neutre",
+      "keyUnit": "ratio",
+      "unit": "ratio",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 0,
+      "highOutcome": 1,
+      "difference": 1,
+      "note": "FOREIGN_OR_STALE_PROJECTION; actorul proiecției trebuie să fie subiectul deciziei"
+    },
+    {
+      "key": "banda moartă nu oprește urmărirea",
+      "scenario": "abatere 0,3 m, banda moartă 0 și 0,6 m, 12 tick-uri",
+      "keyUnit": "m",
+      "unit": "rad",
+      "lowValue": 0,
+      "highValue": 0.6,
+      "lowOutcome": -0.21992707596153027,
+      "highOutcome": -0.17010683995133624,
+      "difference": 0.04982023601019403,
+      "note": "cu banda 0,6 m corecția este false și direcția urmărește exact geometria 049 (-0.170107 rad); cu banda 0 corecția adaugă deviația și direcția ajunge la -0.219927 rad"
+    },
+    {
+      "key": "valorile din afara catalogului",
+      "scenario": "cheia `lane_center_offset` la 2 m și la 1 m",
+      "keyUnit": "m",
+      "unit": "ratio",
+      "lowValue": 2,
+      "highValue": 1,
+      "lowOutcome": 0,
+      "highOutcome": 1,
+      "difference": 1,
+      "note": "2 m este refuzat de catalog înainte de orice efect; 1 m este admis și plafonat la coridor"
+    }
+  ],
+  "compatibility": {
+    "comparableTicks": 60,
+    "identicalProjectionTicks": 60,
+    "neutralBaseTicks": 60,
+    "activeDifferingTicks": 60,
+    "maximumSteeringDifference": 0.1,
+    "curveAccelCeilings": [
+      {
+        "key": 2.5,
+        "ceiling": 6.26876888130155
+      },
+      {
+        "key": 8,
+        "ceiling": 7.483314773546315
+      }
+    ],
+    "exitCaps": [
+      {
+        "key": 1.5,
+        "cap": 1.5
+      },
+      {
+        "key": 4,
+        "cap": 4
+      }
+    ],
+    "mUnits": {
+      "curve_lateral_accel": "m/s²",
+      "desired_acceleration": "m/s²"
+    },
+    "rUnits": {
+      "lane_center_offset": "m",
+      "steering_response_time": "s",
+      "steering_rate_limit": "rad/s",
+      "turn_entry_speed": "m/s",
+      "turn_exit_acceleration": "m/s²",
+      "corner_cutting_bias": "ratio",
+      "lateral_clearance": "m",
+      "lateral_correction_deadband": "m"
+    }
+  },
+  "determinism": {
+    "ticks": 8,
+    "digest": "fnv1a32:3a40c2b1",
+    "repeatedDigest": "fnv1a32:3a40c2b1"
+  },
+  "checks": [
+    {
+      "id": "key-lane-center-offset",
+      "pass": true,
+      "detail": "deplasare țintă -0.900 -> 0.900 m"
+    },
+    {
+      "id": "key-steering-response-time",
+      "pass": true,
+      "detail": "prima mișcare după 3 -> 90 tick-uri"
+    },
+    {
+      "id": "key-steering-rate-limit",
+      "pass": true,
+      "detail": "pas 0.001667 -> 0.025000 rad/tick"
+    },
+    {
+      "id": "key-turn-entry-speed",
+      "pass": true,
+      "detail": "viteză 1.000 -> 6.269 m/s"
+    },
+    {
+      "id": "key-turn-exit-acceleration",
+      "pass": true,
+      "detail": "accelerație 0.200 -> 1.500 m/s²"
+    },
+    {
+      "id": "key-corner-cutting-bias",
+      "pass": true,
+      "detail": "tăiere 0.000 -> 0.900 m"
+    },
+    {
+      "id": "key-lateral-clearance",
+      "pass": true,
+      "detail": "manevră permisă 1 -> 0"
+    },
+    {
+      "id": "key-lateral-correction-deadband",
+      "pass": true,
+      "detail": "corecție activă 1 -> 0"
+    },
+    {
+      "id": "safety-offset-corridor",
+      "pass": true,
+      "detail": "sedan 0.900 m din 1 m; compact 1.000 m din 1 m"
+    },
+    {
+      "id": "safety-steering-rate-ceiling",
+      "pass": true,
+      "detail": "4 rad/s este plafonat: pas 0.025000 rad/tick, nu 0.066667"
+    },
+    {
+      "id": "safety-clearance-floor",
+      "pass": true,
+      "detail": "minim 2 m sedan / 1.8 m compact; 1,5 m liberi sunt refuzați"
+    },
+    {
+      "id": "safety-adherence-ceiling",
+      "pass": true,
+      "detail": "maxim pe grilă 6.268769 m/s; cu curve_lateral_accel 8 m/s² plafonul urcă la 7.483315 m/s, tot sub 18"
+    },
+    {
+      "id": "safety-projection-dominant",
+      "pass": true,
+      "detail": "proiecția inutilizabilă, veche sau străină este refuzată înaintea oricărei chei"
+    },
+    {
+      "id": "safety-deadband-keeps-tracking",
+      "pass": true,
+      "detail": "corecția este oprită, dar direcția atinge -0.170107 rad, exact geometria 049"
+    },
+    {
+      "id": "keys-separated",
+      "pass": true,
+      "detail": "56 perechi de separare, toate cu diferența 0"
+    },
+    {
+      "id": "catalog-ranges",
+      "pass": true,
+      "detail": "lane_center_offset -1-1 m, steering_response_time 0.05-1.5 s, steering_rate_limit 0.1-4 rad/s, turn_entry_speed 1-18 m/s, turn_exit_acceleration 0.2-6 m/s², corner_cutting_bias 0-1 ratio, lateral_clearance 0.1-3 m, lateral_correction_deadband 0-0.6 m"
+    },
+    {
+      "id": "units",
+      "pass": true,
+      "detail": "lane_center_offset m, steering_response_time s, steering_rate_limit rad/s, turn_entry_speed m/s, turn_exit_acceleration m/s², corner_cutting_bias ratio, lateral_clearance m, lateral_correction_deadband m"
+    },
+    {
+      "id": "m-compatible",
+      "pass": true,
+      "detail": "60/60 proiecții 049 identice; 60/60 comenzi neutre reproduc direcția 049; 60 tick-uri active diferă; plafonul de ieșire urmează cheia M 1,5 -> 4 m/s²"
+    },
+    {
+      "id": "determinism",
+      "pass": true,
+      "detail": "digest fnv1a32:3a40c2b1"
+    }
+  ],
+  "summary": {
+    "checks": 19,
+    "passed": 19,
+    "pass": true
+  }
+}
