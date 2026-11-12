@@ -1,0 +1,4326 @@
+{
+  "version": "153-ui-qa-v1",
+  "generatedBy": "scripts/run-ui-qa-report.mjs",
+  "command": "npm run qa:ui",
+  "oracleRule": "Un rezultat este PASS numai dacă fiecare verificare a scenariului are numărul real în limitele declarate; un scenariu STRESS nu este ascuns, ci raportat ca finding.",
+  "browser": "Chromium 156.0.8078.4",
+  "viewports": [
+    {
+      "id": "1280x720",
+      "widthPx": 1280,
+      "heightPx": 720,
+      "zoom": 1,
+      "tier": "CONTRACT",
+      "note": null,
+      "region": "STANDARD"
+    },
+    {
+      "id": "1920x1080",
+      "widthPx": 1920,
+      "heightPx": 1080,
+      "zoom": 1,
+      "tier": "CONTRACT",
+      "note": null,
+      "region": "LARGE"
+    },
+    {
+      "id": "zoom-150",
+      "widthPx": 1280,
+      "heightPx": 720,
+      "zoom": 1.5,
+      "tier": "CONTRACT",
+      "note": "Documented zoom case: 1280×720 at 150% is laid out as 853×480.",
+      "region": "COMPACT"
+    },
+    {
+      "id": "zoom-200",
+      "widthPx": 1920,
+      "heightPx": 1080,
+      "zoom": 2,
+      "tier": "CONTRACT",
+      "note": "200% zoom of the full-HD target: 960×540 effective, inside the COMPACT band.",
+      "region": "COMPACT"
+    },
+    {
+      "id": "zoom-200-720",
+      "widthPx": 1280,
+      "heightPx": 720,
+      "zoom": 2,
+      "tier": "STRESS",
+      "note": "200% zoom of the 720p window: 640×360 effective, below the 084 COMPACT band.",
+      "region": "COMPACT"
+    }
+  ],
+  "scenarios": [
+    {
+      "screenshot": "capture-hud-1280x720.png",
+      "bytes": 124153,
+      "scenario": "hud",
+      "viewport": "1280x720",
+      "tier": "CONTRACT",
+      "surface": null,
+      "region": "STANDARD",
+      "verdict": "PASS",
+      "checks": [
+        {
+          "id": "viewport-mapping",
+          "pass": true,
+          "actual": {
+            "region": "STANDARD",
+            "expectedRegion": "STANDARD",
+            "effectiveWidthPx": 1280,
+            "expectedEffectiveWidthPx": 1280,
+            "effectiveHeightPx": 720,
+            "expectedEffectiveHeightPx": 720,
+            "compact": false,
+            "large": false
+          },
+          "detail": "viewport 1280×720 at 100% is laid out as 1280×720 (STANDARD)."
+        },
+        {
+          "id": "text-legible",
+          "pass": true,
+          "actual": {
+            "minFontPx": 12,
+            "minFontDescriptor": "span.fleet-panel__caption \"Filtru\"",
+            "minLineHeightRatio": 1.4,
+            "minLineHeightDescriptor": "span \"Viteză\""
+          },
+          "detail": "smallest visible text is 12 px with a 1.4 line-height ratio; the floor is 12 px and 1.4."
+        },
+        {
+          "id": "text-not-clipped",
+          "pass": true,
+          "actual": [],
+          "detail": "No visible text is clipped horizontally."
+        },
+        {
+          "id": "text-not-overlapping",
+          "pass": true,
+          "actual": [],
+          "detail": "No two text boxes in the same row overlap."
+        },
+        {
+          "id": "contrast-aa",
+          "pass": true,
+          "actual": [],
+          "detail": "Every measured text pair reaches the WCAG AA ratio for its size."
+        },
+        {
+          "id": "controls-visible",
+          "pass": true,
+          "actual": [],
+          "detail": "36 controls have a non-zero rectangle."
+        },
+        {
+          "id": "controls-hit-testable",
+          "pass": true,
+          "actual": [],
+          "detail": "Every enabled control inside the viewport wins its own centre hit-test."
+        },
+        {
+          "id": "essentials-visible",
+          "pass": true,
+          "actual": {
+            "missing": [],
+            "outsideHarness": [
+              "mode-buttons: Butoanele M/L sunt compuse de 067 și poziționate de host: componenta nu are reguli în src/style.css.",
+              "pause-control: Pauza este a meniului de aplicație (src/main.ts + rendering-view), nu o suprafață din src/ui.",
+              "recovery-control: Recuperarea este montată de host în containerul ei (createRecoveryHud nu are stiluri proprii)."
+            ]
+          },
+          "detail": "2 essential controls mounted by the harness are visible."
+        },
+        {
+          "id": "no-critical-overlap",
+          "pass": true,
+          "actual": [],
+          "detail": "No two measured surfaces overlap."
+        },
+        {
+          "id": "scroll-policy",
+          "pass": true,
+          "actual": [
+            {
+              "id": "fleet",
+              "scroll": {
+                "scrollHeight": 2153,
+                "clientHeight": 206,
+                "overflowY": "auto",
+                "maxHeight": "324px"
+              }
+            }
+          ],
+          "detail": "1 overflowing surfaces scroll vertically with `overflow-y: auto`."
+        },
+        {
+          "id": "surface-inside-viewport",
+          "pass": true,
+          "actual": [],
+          "detail": "Every visible surface stays inside the viewport."
+        },
+        {
+          "id": "tab-order",
+          "pass": true,
+          "actual": {
+            "stops": 14,
+            "order": [
+              "1:summary \"Detalii\"",
+              "2:select.fleet-panel__filter \"ToateÎn cursăLibereBlocate\"",
+              "3:select.fleet-panel__sort \"SlotStareETA\"",
+              "4:button.fleet-panel__row \"Taxi #1În cursăA · Conduce AI…\"",
+              "5:button.fleet-panel__row \"Taxi #2În cursăA · Conduce AI…\"",
+              "6:button.fleet-panel__row \"Taxi #3În cursăA · Conduce AI…\"",
+              "7:button.fleet-panel__row \"Taxi #4În cursăA · Conduce AI…\"",
+              "8:button.fleet-panel__row \"Taxi #5În cursăM · Conduci · …\"",
+              "9:button.fleet-panel__row \"Taxi #6În cursăA · Conduce AI…\"",
+              "10:button.fleet-panel__row \"Taxi #7În cursăA · Conduce AI…\"",
+              "11:button.fleet-panel__row \"Taxi #8În cursăA · Conduce AI…\"",
+              "12:button.fleet-panel__row \"Taxi #9În cursăA · Conduce AI…\"",
+              "13:button.fleet-panel__row \"Taxi #10În cursăM · Conduci ·…\"",
+              "14:button.fleet-panel__row \"Taxi #11LiberA · Conduce AI-u…\""
+            ],
+            "duplicates": [],
+            "outsideDialog": [],
+            "dialogOpenBefore": false
+          },
+          "detail": "14 tab stops, 0 duplicates, 0 escapes from the open panel, dialog open before: false."
+        },
+        {
+          "id": "focus-visible",
+          "pass": true,
+          "actual": [],
+          "detail": "Every keyboard stop draws a visible focus ring of at least 3 px."
+        },
+        {
+          "id": "escape-closes",
+          "pass": true,
+          "actual": {
+            "trapExpected": false,
+            "escapeReason": "Scenariul nu are un dialog modal de închis.",
+            "dialogOpenBefore": false,
+            "dialogOpenAfter": false,
+            "focusRestored": false,
+            "dialogStops": 0
+          },
+          "detail": "No modal dialog is in front, so Escape has nothing to close."
+        }
+      ],
+      "failed": [],
+      "numbers": {
+        "effectiveWidthPx": 1280,
+        "effectiveHeightPx": 720,
+        "minFontPx": 12,
+        "minLineHeightRatio": 1.4,
+        "controls": 36,
+        "surfaces": 4,
+        "tabStops": 14,
+        "overlaps": 0
+      }
+    },
+    {
+      "screenshot": "capture-hud-1920x1080.png",
+      "bytes": 173012,
+      "scenario": "hud",
+      "viewport": "1920x1080",
+      "tier": "CONTRACT",
+      "surface": null,
+      "region": "LARGE",
+      "verdict": "PASS",
+      "checks": [
+        {
+          "id": "viewport-mapping",
+          "pass": true,
+          "actual": {
+            "region": "LARGE",
+            "expectedRegion": "LARGE",
+            "effectiveWidthPx": 1920,
+            "expectedEffectiveWidthPx": 1920,
+            "effectiveHeightPx": 1080,
+            "expectedEffectiveHeightPx": 1080,
+            "compact": false,
+            "large": true
+          },
+          "detail": "viewport 1920×1080 at 100% is laid out as 1920×1080 (LARGE)."
+        },
+        {
+          "id": "text-legible",
+          "pass": true,
+          "actual": {
+            "minFontPx": 12,
+            "minFontDescriptor": "span.fleet-panel__caption \"Filtru\"",
+            "minLineHeightRatio": 1.4,
+            "minLineHeightDescriptor": "span \"Viteză\""
+          },
+          "detail": "smallest visible text is 12 px with a 1.4 line-height ratio; the floor is 12 px and 1.4."
+        },
+        {
+          "id": "text-not-clipped",
+          "pass": true,
+          "actual": [],
+          "detail": "No visible text is clipped horizontally."
+        },
+        {
+          "id": "text-not-overlapping",
+          "pass": true,
+          "actual": [],
+          "detail": "No two text boxes in the same row overlap."
+        },
+        {
+          "id": "contrast-aa",
+          "pass": true,
+          "actual": [],
+          "detail": "Every measured text pair reaches the WCAG AA ratio for its size."
+        },
+        {
+          "id": "controls-visible",
+          "pass": true,
+          "actual": [],
+          "detail": "36 controls have a non-zero rectangle."
+        },
+        {
+          "id": "controls-hit-testable",
+          "pass": true,
+          "actual": [],
+          "detail": "Every enabled control inside the viewport wins its own centre hit-test."
+        },
+        {
+          "id": "essentials-visible",
+          "pass": true,
+          "actual": {
+            "missing": [],
+            "outsideHarness": [
+              "mode-buttons: Butoanele M/L sunt compuse de 067 și poziționate de host: componenta nu are reguli în src/style.css.",
+              "pause-control: Pauza este a meniului de aplicație (src/main.ts + rendering-view), nu o suprafață din src/ui.",
+              "recovery-control: Recuperarea este montată de host în containerul ei (createRecoveryHud nu are stiluri proprii)."
+            ]
+          },
+          "detail": "2 essential controls mounted by the harness are visible."
+        },
+        {
+          "id": "no-critical-overlap",
+          "pass": true,
+          "actual": [],
+          "detail": "No two measured surfaces overlap."
+        },
+        {
+          "id": "scroll-policy",
+          "pass": true,
+          "actual": [
+            {
+              "id": "fleet",
+              "scroll": {
+                "scrollHeight": 1829,
+                "clientHeight": 566,
+                "overflowY": "auto",
+                "maxHeight": "684px"
+              }
+            }
+          ],
+          "detail": "1 overflowing surfaces scroll vertically with `overflow-y: auto`."
+        },
+        {
+          "id": "surface-inside-viewport",
+          "pass": true,
+          "actual": [],
+          "detail": "Every visible surface stays inside the viewport."
+        },
+        {
+          "id": "tab-order",
+          "pass": true,
+          "actual": {
+            "stops": 14,
+            "order": [
+              "1:button.fleet-panel__row \"Taxi #13LiberA · Conduce AI-u…\"",
+              "2:button.fleet-panel__row \"Taxi #14LiberA · Conduce AI-u…\"",
+              "3:button.fleet-panel__row \"Taxi #15LiberM · Conduci · în…\"",
+              "4:button.fleet-panel__row \"Taxi #16LiberA · Conduce AI-u…\"",
+              "5:button.fleet-panel__row \"Taxi #17LiberA · Conduce AI-u…\"",
+              "6:button.fleet-panel__row \"Taxi #18LiberA · Conduce AI-u…\"",
+              "7:button.fleet-panel__row \"Taxi #19LiberA · Conduce AI-u…\"",
+              "8:button.fleet-panel__row \"Taxi #20LiberM · Conduci · în…\"",
+              "9:button.fleet-panel__row \"Taxi #21BlocatA · Conduce AI-…\"",
+              "10:button.fleet-panel__row \"Taxi #22BlocatA · Conduce AI-…\"",
+              "11:button.fleet-panel__row \"Taxi #23BlocatA · Conduce AI-…\"",
+              "12:button.fleet-panel__row \"Taxi #24BlocatA · Conduce AI-…\"",
+              "13:button.fleet-panel__row \"Taxi #25BlocatM · Conduci · î…\"",
+              "14:button.fleet-panel__row \"Taxi #26BlocatA · Conduce AI-…\""
+            ],
+            "duplicates": [],
+            "outsideDialog": [],
+            "dialogOpenBefore": false
+          },
+          "detail": "14 tab stops, 0 duplicates, 0 escapes from the open panel, dialog open before: false."
+        },
+        {
+          "id": "focus-visible",
+          "pass": true,
+          "actual": [],
+          "detail": "Every keyboard stop draws a visible focus ring of at least 3 px."
+        },
+        {
+          "id": "escape-closes",
+          "pass": true,
+          "actual": {
+            "trapExpected": false,
+            "escapeReason": "Scenariul nu are un dialog modal de închis.",
+            "dialogOpenBefore": false,
+            "dialogOpenAfter": false,
+            "focusRestored": false,
+            "dialogStops": 0
+          },
+          "detail": "No modal dialog is in front, so Escape has nothing to close."
+        }
+      ],
+      "failed": [],
+      "numbers": {
+        "effectiveWidthPx": 1920,
+        "effectiveHeightPx": 1080,
+        "minFontPx": 12,
+        "minLineHeightRatio": 1.4,
+        "controls": 36,
+        "surfaces": 4,
+        "tabStops": 14,
+        "overlaps": 0
+      }
+    },
+    {
+      "screenshot": "capture-hud-zoom-150.png",
+      "bytes": 63225,
+      "scenario": "hud",
+      "viewport": "zoom-150",
+      "tier": "CONTRACT",
+      "surface": null,
+      "region": "COMPACT",
+      "verdict": "PASS",
+      "checks": [
+        {
+          "id": "viewport-mapping",
+          "pass": true,
+          "actual": {
+            "region": "COMPACT",
+            "expectedRegion": "COMPACT",
+            "effectiveWidthPx": 853,
+            "expectedEffectiveWidthPx": 853.33,
+            "effectiveHeightPx": 480,
+            "expectedEffectiveHeightPx": 480,
+            "compact": true,
+            "large": false
+          },
+          "detail": "viewport 1280×720 at 150% is laid out as 853.33×480 (COMPACT)."
+        },
+        {
+          "id": "text-legible",
+          "pass": true,
+          "actual": {
+            "minFontPx": 12,
+            "minFontDescriptor": "span.minimap__route \"Rută: 2 benzi · 25% · 120 m\"",
+            "minLineHeightRatio": 1.4,
+            "minLineHeightDescriptor": "span \"Viteză\""
+          },
+          "detail": "smallest visible text is 12 px with a 1.4 line-height ratio; the floor is 12 px and 1.4."
+        },
+        {
+          "id": "text-not-clipped",
+          "pass": true,
+          "actual": [],
+          "detail": "No visible text is clipped horizontally."
+        },
+        {
+          "id": "text-not-overlapping",
+          "pass": true,
+          "actual": [],
+          "detail": "No two text boxes in the same row overlap."
+        },
+        {
+          "id": "contrast-aa",
+          "pass": true,
+          "actual": [],
+          "detail": "Every measured text pair reaches the WCAG AA ratio for its size."
+        },
+        {
+          "id": "controls-visible",
+          "pass": true,
+          "actual": [],
+          "detail": "36 controls have a non-zero rectangle."
+        },
+        {
+          "id": "controls-hit-testable",
+          "pass": true,
+          "actual": [],
+          "detail": "Every enabled control inside the viewport wins its own centre hit-test."
+        },
+        {
+          "id": "essentials-visible",
+          "pass": true,
+          "actual": {
+            "missing": [],
+            "outsideHarness": [
+              "mode-buttons: Butoanele M/L sunt compuse de 067 și poziționate de host: componenta nu are reguli în src/style.css.",
+              "pause-control: Pauza este a meniului de aplicație (src/main.ts + rendering-view), nu o suprafață din src/ui.",
+              "recovery-control: Recuperarea este montată de host în containerul ei (createRecoveryHud nu are stiluri proprii)."
+            ]
+          },
+          "detail": "2 essential controls mounted by the harness are visible."
+        },
+        {
+          "id": "no-critical-overlap",
+          "pass": true,
+          "actual": [],
+          "detail": "No two measured surfaces overlap."
+        },
+        {
+          "id": "scroll-policy",
+          "pass": true,
+          "actual": [
+            {
+              "id": "fleet",
+              "scroll": {
+                "scrollHeight": 4001,
+                "clientHeight": 80,
+                "overflowY": "auto",
+                "maxHeight": "96px"
+              }
+            },
+            {
+              "id": "notifications",
+              "scroll": {
+                "scrollHeight": 597,
+                "clientHeight": 144,
+                "overflowY": "auto",
+                "maxHeight": "144px"
+              }
+            }
+          ],
+          "detail": "2 overflowing surfaces scroll vertically with `overflow-y: auto`."
+        },
+        {
+          "id": "surface-inside-viewport",
+          "pass": true,
+          "actual": [],
+          "detail": "Every visible surface stays inside the viewport."
+        },
+        {
+          "id": "tab-order",
+          "pass": true,
+          "actual": {
+            "stops": 14,
+            "order": [
+              "1:button.fleet-panel__row \"Taxi #28BlocatA · Conduce AI-…\"",
+              "2:button.fleet-panel__row \"Taxi #29BlocatA · Conduce AI-…\"",
+              "3:button.fleet-panel__row \"Taxi #30BlocatM · Conduci · î…\"",
+              "4:section.learning-notifications \"✓Candidat validat, nepublicat…\"",
+              "5:summary \"Detalii\"",
+              "6:select.fleet-panel__filter \"ToateÎn cursăLibereBlocate\"",
+              "7:select.fleet-panel__sort \"SlotStareETA\"",
+              "8:button.fleet-panel__row \"Taxi #1În cursăA · Conduce AI…\"",
+              "9:button.fleet-panel__row \"Taxi #2În cursăA · Conduce AI…\"",
+              "10:button.fleet-panel__row \"Taxi #3În cursăA · Conduce AI…\"",
+              "11:button.fleet-panel__row \"Taxi #4În cursăA · Conduce AI…\"",
+              "12:button.fleet-panel__row \"Taxi #5În cursăM · Conduci · …\"",
+              "13:button.fleet-panel__row \"Taxi #6În cursăA · Conduce AI…\"",
+              "14:button.fleet-panel__row \"Taxi #7În cursăA · Conduce AI…\""
+            ],
+            "duplicates": [],
+            "outsideDialog": [],
+            "dialogOpenBefore": false
+          },
+          "detail": "14 tab stops, 0 duplicates, 0 escapes from the open panel, dialog open before: false."
+        },
+        {
+          "id": "focus-visible",
+          "pass": true,
+          "actual": [],
+          "detail": "Every keyboard stop draws a visible focus ring of at least 3 px."
+        },
+        {
+          "id": "escape-closes",
+          "pass": true,
+          "actual": {
+            "trapExpected": false,
+            "escapeReason": "Scenariul nu are un dialog modal de închis.",
+            "dialogOpenBefore": false,
+            "dialogOpenAfter": false,
+            "focusRestored": false,
+            "dialogStops": 0
+          },
+          "detail": "No modal dialog is in front, so Escape has nothing to close."
+        }
+      ],
+      "failed": [],
+      "numbers": {
+        "effectiveWidthPx": 853,
+        "effectiveHeightPx": 480,
+        "minFontPx": 12,
+        "minLineHeightRatio": 1.4,
+        "controls": 36,
+        "surfaces": 4,
+        "tabStops": 14,
+        "overlaps": 1
+      }
+    },
+    {
+      "screenshot": "capture-hud-zoom-200.png",
+      "bytes": 66503,
+      "scenario": "hud",
+      "viewport": "zoom-200",
+      "tier": "CONTRACT",
+      "surface": null,
+      "region": "COMPACT",
+      "verdict": "PASS",
+      "checks": [
+        {
+          "id": "viewport-mapping",
+          "pass": true,
+          "actual": {
+            "region": "COMPACT",
+            "expectedRegion": "COMPACT",
+            "effectiveWidthPx": 960,
+            "expectedEffectiveWidthPx": 960,
+            "effectiveHeightPx": 540,
+            "expectedEffectiveHeightPx": 540,
+            "compact": true,
+            "large": false
+          },
+          "detail": "viewport 1920×1080 at 200% is laid out as 960×540 (COMPACT)."
+        },
+        {
+          "id": "text-legible",
+          "pass": true,
+          "actual": {
+            "minFontPx": 12,
+            "minFontDescriptor": "span.minimap__route \"Rută: 2 benzi · 25% · 120 m\"",
+            "minLineHeightRatio": 1.4,
+            "minLineHeightDescriptor": "span \"Viteză\""
+          },
+          "detail": "smallest visible text is 12 px with a 1.4 line-height ratio; the floor is 12 px and 1.4."
+        },
+        {
+          "id": "text-not-clipped",
+          "pass": true,
+          "actual": [],
+          "detail": "No visible text is clipped horizontally."
+        },
+        {
+          "id": "text-not-overlapping",
+          "pass": true,
+          "actual": [],
+          "detail": "No two text boxes in the same row overlap."
+        },
+        {
+          "id": "contrast-aa",
+          "pass": true,
+          "actual": [],
+          "detail": "Every measured text pair reaches the WCAG AA ratio for its size."
+        },
+        {
+          "id": "controls-visible",
+          "pass": true,
+          "actual": [],
+          "detail": "36 controls have a non-zero rectangle."
+        },
+        {
+          "id": "controls-hit-testable",
+          "pass": true,
+          "actual": [],
+          "detail": "Every enabled control inside the viewport wins its own centre hit-test."
+        },
+        {
+          "id": "essentials-visible",
+          "pass": true,
+          "actual": {
+            "missing": [],
+            "outsideHarness": [
+              "mode-buttons: Butoanele M/L sunt compuse de 067 și poziționate de host: componenta nu are reguli în src/style.css.",
+              "pause-control: Pauza este a meniului de aplicație (src/main.ts + rendering-view), nu o suprafață din src/ui.",
+              "recovery-control: Recuperarea este montată de host în containerul ei (createRecoveryHud nu are stiluri proprii)."
+            ]
+          },
+          "detail": "2 essential controls mounted by the harness are visible."
+        },
+        {
+          "id": "no-critical-overlap",
+          "pass": true,
+          "actual": [],
+          "detail": "No two measured surfaces overlap."
+        },
+        {
+          "id": "scroll-policy",
+          "pass": true,
+          "actual": [
+            {
+              "id": "fleet",
+              "scroll": {
+                "scrollHeight": 4001,
+                "clientHeight": 80,
+                "overflowY": "auto",
+                "maxHeight": "144px"
+              }
+            },
+            {
+              "id": "notifications",
+              "scroll": {
+                "scrollHeight": 597,
+                "clientHeight": 144,
+                "overflowY": "auto",
+                "maxHeight": "144px"
+              }
+            }
+          ],
+          "detail": "2 overflowing surfaces scroll vertically with `overflow-y: auto`."
+        },
+        {
+          "id": "surface-inside-viewport",
+          "pass": true,
+          "actual": [],
+          "detail": "Every visible surface stays inside the viewport."
+        },
+        {
+          "id": "tab-order",
+          "pass": true,
+          "actual": {
+            "stops": 14,
+            "order": [
+              "1:button.fleet-panel__row \"Taxi #9În cursăA · Conduce AI…\"",
+              "2:button.fleet-panel__row \"Taxi #10În cursăM · Conduci ·…\"",
+              "3:button.fleet-panel__row \"Taxi #11LiberA · Conduce AI-u…\"",
+              "4:button.fleet-panel__row \"Taxi #12LiberA · Conduce AI-u…\"",
+              "5:button.fleet-panel__row \"Taxi #13LiberA · Conduce AI-u…\"",
+              "6:button.fleet-panel__row \"Taxi #14LiberA · Conduce AI-u…\"",
+              "7:button.fleet-panel__row \"Taxi #15LiberM · Conduci · în…\"",
+              "8:button.fleet-panel__row \"Taxi #16LiberA · Conduce AI-u…\"",
+              "9:button.fleet-panel__row \"Taxi #17LiberA · Conduce AI-u…\"",
+              "10:button.fleet-panel__row \"Taxi #18LiberA · Conduce AI-u…\"",
+              "11:button.fleet-panel__row \"Taxi #19LiberA · Conduce AI-u…\"",
+              "12:button.fleet-panel__row \"Taxi #20LiberM · Conduci · în…\"",
+              "13:button.fleet-panel__row \"Taxi #21BlocatA · Conduce AI-…\"",
+              "14:button.fleet-panel__row \"Taxi #22BlocatA · Conduce AI-…\""
+            ],
+            "duplicates": [],
+            "outsideDialog": [],
+            "dialogOpenBefore": false
+          },
+          "detail": "14 tab stops, 0 duplicates, 0 escapes from the open panel, dialog open before: false."
+        },
+        {
+          "id": "focus-visible",
+          "pass": true,
+          "actual": [],
+          "detail": "Every keyboard stop draws a visible focus ring of at least 3 px."
+        },
+        {
+          "id": "escape-closes",
+          "pass": true,
+          "actual": {
+            "trapExpected": false,
+            "escapeReason": "Scenariul nu are un dialog modal de închis.",
+            "dialogOpenBefore": false,
+            "dialogOpenAfter": false,
+            "focusRestored": false,
+            "dialogStops": 0
+          },
+          "detail": "No modal dialog is in front, so Escape has nothing to close."
+        }
+      ],
+      "failed": [],
+      "numbers": {
+        "effectiveWidthPx": 960,
+        "effectiveHeightPx": 540,
+        "minFontPx": 12,
+        "minLineHeightRatio": 1.4,
+        "controls": 36,
+        "surfaces": 4,
+        "tabStops": 14,
+        "overlaps": 1
+      }
+    },
+    {
+      "screenshot": "capture-hud-zoom-200-720.png",
+      "bytes": 46929,
+      "scenario": "hud",
+      "viewport": "zoom-200-720",
+      "tier": "STRESS",
+      "surface": null,
+      "region": "COMPACT",
+      "verdict": "FAIL",
+      "checks": [
+        {
+          "id": "viewport-mapping",
+          "pass": true,
+          "actual": {
+            "region": "COMPACT",
+            "expectedRegion": "COMPACT",
+            "effectiveWidthPx": 640,
+            "expectedEffectiveWidthPx": 640,
+            "effectiveHeightPx": 360,
+            "expectedEffectiveHeightPx": 360,
+            "compact": true,
+            "large": false
+          },
+          "detail": "viewport 1280×720 at 200% is laid out as 640×360 (COMPACT)."
+        },
+        {
+          "id": "text-legible",
+          "pass": true,
+          "actual": {
+            "minFontPx": 12,
+            "minFontDescriptor": "span.minimap__route \"Rută: 2 benzi · 25% · 120 m\"",
+            "minLineHeightRatio": 1.4,
+            "minLineHeightDescriptor": "span \"Viteză\""
+          },
+          "detail": "smallest visible text is 12 px with a 1.4 line-height ratio; the floor is 12 px and 1.4."
+        },
+        {
+          "id": "text-not-clipped",
+          "pass": true,
+          "actual": [],
+          "detail": "No visible text is clipped horizontally."
+        },
+        {
+          "id": "text-not-overlapping",
+          "pass": true,
+          "actual": [],
+          "detail": "No two text boxes in the same row overlap."
+        },
+        {
+          "id": "contrast-aa",
+          "pass": true,
+          "actual": [],
+          "detail": "Every measured text pair reaches the WCAG AA ratio for its size."
+        },
+        {
+          "id": "controls-visible",
+          "pass": true,
+          "actual": [],
+          "detail": "36 controls have a non-zero rectangle."
+        },
+        {
+          "id": "controls-hit-testable",
+          "pass": true,
+          "actual": [],
+          "detail": "Every enabled control inside the viewport wins its own centre hit-test."
+        },
+        {
+          "id": "essentials-visible",
+          "pass": true,
+          "actual": {
+            "missing": [],
+            "outsideHarness": [
+              "mode-buttons: Butoanele M/L sunt compuse de 067 și poziționate de host: componenta nu are reguli în src/style.css.",
+              "pause-control: Pauza este a meniului de aplicație (src/main.ts + rendering-view), nu o suprafață din src/ui.",
+              "recovery-control: Recuperarea este montată de host în containerul ei (createRecoveryHud nu are stiluri proprii)."
+            ]
+          },
+          "detail": "2 essential controls mounted by the harness are visible."
+        },
+        {
+          "id": "no-critical-overlap",
+          "pass": true,
+          "actual": [],
+          "detail": "No two measured surfaces overlap."
+        },
+        {
+          "id": "scroll-policy",
+          "pass": true,
+          "actual": [
+            {
+              "id": "fleet",
+              "scroll": {
+                "scrollHeight": 4001,
+                "clientHeight": 80,
+                "overflowY": "auto",
+                "maxHeight": "96px"
+              }
+            },
+            {
+              "id": "notifications",
+              "scroll": {
+                "scrollHeight": 597,
+                "clientHeight": 144,
+                "overflowY": "auto",
+                "maxHeight": "144px"
+              }
+            }
+          ],
+          "detail": "2 overflowing surfaces scroll vertically with `overflow-y: auto`."
+        },
+        {
+          "id": "surface-inside-viewport",
+          "pass": false,
+          "actual": [
+            {
+              "id": "fleet",
+              "rect": {
+                "x": 16,
+                "y": 380,
+                "width": 224,
+                "height": 96,
+                "right": 240,
+                "bottom": 476
+              },
+              "bottomOverflowPx": 116
+            },
+            {
+              "id": "notifications",
+              "rect": {
+                "x": 464,
+                "y": 240,
+                "width": 160,
+                "height": 144,
+                "right": 624,
+                "bottom": 384
+              },
+              "bottomOverflowPx": 24
+            }
+          ],
+          "detail": "Surfaces outside the viewport: fleet (bottom 476 > 360), notifications (bottom 384 > 360)."
+        },
+        {
+          "id": "tab-order",
+          "pass": true,
+          "actual": {
+            "stops": 14,
+            "order": [
+              "1:button.fleet-panel__row \"Taxi #24BlocatA · Conduce AI-…\"",
+              "2:button.fleet-panel__row \"Taxi #25BlocatM · Conduci · î…\"",
+              "3:button.fleet-panel__row \"Taxi #26BlocatA · Conduce AI-…\"",
+              "4:button.fleet-panel__row \"Taxi #27BlocatA · Conduce AI-…\"",
+              "5:button.fleet-panel__row \"Taxi #28BlocatA · Conduce AI-…\"",
+              "6:button.fleet-panel__row \"Taxi #29BlocatA · Conduce AI-…\"",
+              "7:button.fleet-panel__row \"Taxi #30BlocatM · Conduci · î…\"",
+              "8:section.learning-notifications \"✓Candidat validat, nepublicat…\"",
+              "9:summary \"Detalii\"",
+              "10:select.fleet-panel__filter \"ToateÎn cursăLibereBlocate\"",
+              "11:select.fleet-panel__sort \"SlotStareETA\"",
+              "12:button.fleet-panel__row \"Taxi #1În cursăA · Conduce AI…\"",
+              "13:button.fleet-panel__row \"Taxi #2În cursăA · Conduce AI…\"",
+              "14:button.fleet-panel__row \"Taxi #3În cursăA · Conduce AI…\""
+            ],
+            "duplicates": [],
+            "outsideDialog": [],
+            "dialogOpenBefore": false
+          },
+          "detail": "14 tab stops, 0 duplicates, 0 escapes from the open panel, dialog open before: false."
+        },
+        {
+          "id": "focus-visible",
+          "pass": true,
+          "actual": [],
+          "detail": "Every keyboard stop draws a visible focus ring of at least 3 px."
+        },
+        {
+          "id": "escape-closes",
+          "pass": true,
+          "actual": {
+            "trapExpected": false,
+            "escapeReason": "Scenariul nu are un dialog modal de închis.",
+            "dialogOpenBefore": false,
+            "dialogOpenAfter": false,
+            "focusRestored": false,
+            "dialogStops": 0
+          },
+          "detail": "No modal dialog is in front, so Escape has nothing to close."
+        }
+      ],
+      "failed": [
+        "surface-inside-viewport"
+      ],
+      "numbers": {
+        "effectiveWidthPx": 640,
+        "effectiveHeightPx": 360,
+        "minFontPx": 12,
+        "minLineHeightRatio": 1.4,
+        "controls": 36,
+        "surfaces": 4,
+        "tabStops": 14,
+        "overlaps": 1
+      }
+    },
+    {
+      "screenshot": "capture-fleet-1280x720.png",
+      "bytes": 124909,
+      "scenario": "fleet",
+      "viewport": "1280x720",
+      "tier": "CONTRACT",
+      "surface": "fleet",
+      "region": "STANDARD",
+      "verdict": "PASS",
+      "checks": [
+        {
+          "id": "viewport-mapping",
+          "pass": true,
+          "actual": {
+            "region": "STANDARD",
+            "expectedRegion": "STANDARD",
+            "effectiveWidthPx": 1280,
+            "expectedEffectiveWidthPx": 1280,
+            "effectiveHeightPx": 720,
+            "expectedEffectiveHeightPx": 720,
+            "compact": false,
+            "large": false
+          },
+          "detail": "viewport 1280×720 at 100% is laid out as 1280×720 (STANDARD)."
+        },
+        {
+          "id": "text-legible",
+          "pass": true,
+          "actual": {
+            "minFontPx": 12,
+            "minFontDescriptor": "span.fleet-panel__caption \"Filtru\"",
+            "minLineHeightRatio": 1.4,
+            "minLineHeightDescriptor": "span \"Viteză\""
+          },
+          "detail": "smallest visible text is 12 px with a 1.4 line-height ratio; the floor is 12 px and 1.4."
+        },
+        {
+          "id": "text-not-clipped",
+          "pass": true,
+          "actual": [],
+          "detail": "No visible text is clipped horizontally."
+        },
+        {
+          "id": "text-not-overlapping",
+          "pass": true,
+          "actual": [],
+          "detail": "No two text boxes in the same row overlap."
+        },
+        {
+          "id": "contrast-aa",
+          "pass": true,
+          "actual": [],
+          "detail": "Every measured text pair reaches the WCAG AA ratio for its size."
+        },
+        {
+          "id": "controls-visible",
+          "pass": true,
+          "actual": [],
+          "detail": "36 controls have a non-zero rectangle."
+        },
+        {
+          "id": "controls-hit-testable",
+          "pass": true,
+          "actual": [],
+          "detail": "Every enabled control inside the viewport wins its own centre hit-test."
+        },
+        {
+          "id": "essentials-visible",
+          "pass": true,
+          "actual": {
+            "missing": [],
+            "outsideHarness": [
+              "mode-buttons: Butoanele M/L sunt compuse de 067 și poziționate de host: componenta nu are reguli în src/style.css.",
+              "pause-control: Pauza este a meniului de aplicație (src/main.ts + rendering-view), nu o suprafață din src/ui.",
+              "recovery-control: Recuperarea este montată de host în containerul ei (createRecoveryHud nu are stiluri proprii)."
+            ]
+          },
+          "detail": "2 essential controls mounted by the harness are visible."
+        },
+        {
+          "id": "no-critical-overlap",
+          "pass": true,
+          "actual": [],
+          "detail": "No two measured surfaces overlap."
+        },
+        {
+          "id": "scroll-policy",
+          "pass": true,
+          "actual": [
+            {
+              "id": "fleet",
+              "scroll": {
+                "scrollHeight": 2153,
+                "clientHeight": 206,
+                "overflowY": "auto",
+                "maxHeight": "324px"
+              }
+            }
+          ],
+          "detail": "1 overflowing surfaces scroll vertically with `overflow-y: auto`."
+        },
+        {
+          "id": "surface-inside-viewport",
+          "pass": true,
+          "actual": [],
+          "detail": "Every visible surface stays inside the viewport."
+        },
+        {
+          "id": "tab-order",
+          "pass": true,
+          "actual": {
+            "stops": 14,
+            "order": [
+              "1:select.fleet-panel__sort \"SlotStareETA\"",
+              "2:button.fleet-panel__row \"Taxi #1În cursăA · Conduce AI…\"",
+              "3:button.fleet-panel__row \"Taxi #2În cursăA · Conduce AI…\"",
+              "4:button.fleet-panel__row \"Taxi #3În cursăA · Conduce AI…\"",
+              "5:button.fleet-panel__row \"Taxi #4În cursăA · Conduce AI…\"",
+              "6:button.fleet-panel__row \"Taxi #5În cursăM · Conduci · …\"",
+              "7:button.fleet-panel__row \"Taxi #6În cursăA · Conduce AI…\"",
+              "8:button.fleet-panel__row \"Taxi #7În cursăA · Conduce AI…\"",
+              "9:button.fleet-panel__row \"Taxi #8În cursăA · Conduce AI…\"",
+              "10:button.fleet-panel__row \"Taxi #9În cursăA · Conduce AI…\"",
+              "11:button.fleet-panel__row \"Taxi #10În cursăM · Conduci ·…\"",
+              "12:button.fleet-panel__row \"Taxi #11LiberA · Conduce AI-u…\"",
+              "13:button.fleet-panel__row \"Taxi #12LiberA · Conduce AI-u…\"",
+              "14:button.fleet-panel__row \"Taxi #13LiberA · Conduce AI-u…\""
+            ],
+            "duplicates": [],
+            "outsideDialog": [],
+            "dialogOpenBefore": false
+          },
+          "detail": "14 tab stops, 0 duplicates, 0 escapes from the open panel, dialog open before: false."
+        },
+        {
+          "id": "focus-visible",
+          "pass": true,
+          "actual": [],
+          "detail": "Every keyboard stop draws a visible focus ring of at least 3 px."
+        },
+        {
+          "id": "escape-closes",
+          "pass": true,
+          "actual": {
+            "trapExpected": false,
+            "escapeReason": "Scenariul nu are un dialog modal de închis.",
+            "dialogOpenBefore": false,
+            "dialogOpenAfter": false,
+            "focusRestored": false,
+            "dialogStops": 0
+          },
+          "detail": "No modal dialog is in front, so Escape has nothing to close."
+        }
+      ],
+      "failed": [],
+      "numbers": {
+        "effectiveWidthPx": 1280,
+        "effectiveHeightPx": 720,
+        "minFontPx": 12,
+        "minLineHeightRatio": 1.4,
+        "controls": 36,
+        "surfaces": 4,
+        "tabStops": 14,
+        "overlaps": 0
+      }
+    },
+    {
+      "screenshot": "capture-fleet-zoom-200-720.png",
+      "bytes": 46929,
+      "scenario": "fleet",
+      "viewport": "zoom-200-720",
+      "tier": "STRESS",
+      "surface": "fleet",
+      "region": "COMPACT",
+      "verdict": "FAIL",
+      "checks": [
+        {
+          "id": "viewport-mapping",
+          "pass": true,
+          "actual": {
+            "region": "COMPACT",
+            "expectedRegion": "COMPACT",
+            "effectiveWidthPx": 640,
+            "expectedEffectiveWidthPx": 640,
+            "effectiveHeightPx": 360,
+            "expectedEffectiveHeightPx": 360,
+            "compact": true,
+            "large": false
+          },
+          "detail": "viewport 1280×720 at 200% is laid out as 640×360 (COMPACT)."
+        },
+        {
+          "id": "text-legible",
+          "pass": true,
+          "actual": {
+            "minFontPx": 12,
+            "minFontDescriptor": "span.minimap__route \"Rută: 2 benzi · 25% · 120 m\"",
+            "minLineHeightRatio": 1.4,
+            "minLineHeightDescriptor": "span \"Viteză\""
+          },
+          "detail": "smallest visible text is 12 px with a 1.4 line-height ratio; the floor is 12 px and 1.4."
+        },
+        {
+          "id": "text-not-clipped",
+          "pass": true,
+          "actual": [],
+          "detail": "No visible text is clipped horizontally."
+        },
+        {
+          "id": "text-not-overlapping",
+          "pass": true,
+          "actual": [],
+          "detail": "No two text boxes in the same row overlap."
+        },
+        {
+          "id": "contrast-aa",
+          "pass": true,
+          "actual": [],
+          "detail": "Every measured text pair reaches the WCAG AA ratio for its size."
+        },
+        {
+          "id": "controls-visible",
+          "pass": true,
+          "actual": [],
+          "detail": "36 controls have a non-zero rectangle."
+        },
+        {
+          "id": "controls-hit-testable",
+          "pass": true,
+          "actual": [],
+          "detail": "Every enabled control inside the viewport wins its own centre hit-test."
+        },
+        {
+          "id": "essentials-visible",
+          "pass": true,
+          "actual": {
+            "missing": [],
+            "outsideHarness": [
+              "mode-buttons: Butoanele M/L sunt compuse de 067 și poziționate de host: componenta nu are reguli în src/style.css.",
+              "pause-control: Pauza este a meniului de aplicație (src/main.ts + rendering-view), nu o suprafață din src/ui.",
+              "recovery-control: Recuperarea este montată de host în containerul ei (createRecoveryHud nu are stiluri proprii)."
+            ]
+          },
+          "detail": "2 essential controls mounted by the harness are visible."
+        },
+        {
+          "id": "no-critical-overlap",
+          "pass": true,
+          "actual": [],
+          "detail": "No two measured surfaces overlap."
+        },
+        {
+          "id": "scroll-policy",
+          "pass": true,
+          "actual": [
+            {
+              "id": "fleet",
+              "scroll": {
+                "scrollHeight": 4001,
+                "clientHeight": 80,
+                "overflowY": "auto",
+                "maxHeight": "96px"
+              }
+            },
+            {
+              "id": "notifications",
+              "scroll": {
+                "scrollHeight": 597,
+                "clientHeight": 144,
+                "overflowY": "auto",
+                "maxHeight": "144px"
+              }
+            }
+          ],
+          "detail": "2 overflowing surfaces scroll vertically with `overflow-y: auto`."
+        },
+        {
+          "id": "surface-inside-viewport",
+          "pass": false,
+          "actual": [
+            {
+              "id": "fleet",
+              "rect": {
+                "x": 16,
+                "y": 380,
+                "width": 224,
+                "height": 96,
+                "right": 240,
+                "bottom": 476
+              },
+              "bottomOverflowPx": 116
+            },
+            {
+              "id": "notifications",
+              "rect": {
+                "x": 464,
+                "y": 240,
+                "width": 160,
+                "height": 144,
+                "right": 624,
+                "bottom": 384
+              },
+              "bottomOverflowPx": 24
+            }
+          ],
+          "detail": "Surfaces outside the viewport: fleet (bottom 476 > 360), notifications (bottom 384 > 360)."
+        },
+        {
+          "id": "tab-order",
+          "pass": true,
+          "actual": {
+            "stops": 14,
+            "order": [
+              "1:button.fleet-panel__row \"Taxi #15LiberM · Conduci · în…\"",
+              "2:button.fleet-panel__row \"Taxi #16LiberA · Conduce AI-u…\"",
+              "3:button.fleet-panel__row \"Taxi #17LiberA · Conduce AI-u…\"",
+              "4:button.fleet-panel__row \"Taxi #18LiberA · Conduce AI-u…\"",
+              "5:button.fleet-panel__row \"Taxi #19LiberA · Conduce AI-u…\"",
+              "6:button.fleet-panel__row \"Taxi #20LiberM · Conduci · în…\"",
+              "7:button.fleet-panel__row \"Taxi #21BlocatA · Conduce AI-…\"",
+              "8:button.fleet-panel__row \"Taxi #22BlocatA · Conduce AI-…\"",
+              "9:button.fleet-panel__row \"Taxi #23BlocatA · Conduce AI-…\"",
+              "10:button.fleet-panel__row \"Taxi #24BlocatA · Conduce AI-…\"",
+              "11:button.fleet-panel__row \"Taxi #25BlocatM · Conduci · î…\"",
+              "12:button.fleet-panel__row \"Taxi #26BlocatA · Conduce AI-…\"",
+              "13:button.fleet-panel__row \"Taxi #27BlocatA · Conduce AI-…\"",
+              "14:button.fleet-panel__row \"Taxi #28BlocatA · Conduce AI-…\""
+            ],
+            "duplicates": [],
+            "outsideDialog": [],
+            "dialogOpenBefore": false
+          },
+          "detail": "14 tab stops, 0 duplicates, 0 escapes from the open panel, dialog open before: false."
+        },
+        {
+          "id": "focus-visible",
+          "pass": true,
+          "actual": [],
+          "detail": "Every keyboard stop draws a visible focus ring of at least 3 px."
+        },
+        {
+          "id": "escape-closes",
+          "pass": true,
+          "actual": {
+            "trapExpected": false,
+            "escapeReason": "Scenariul nu are un dialog modal de închis.",
+            "dialogOpenBefore": false,
+            "dialogOpenAfter": false,
+            "focusRestored": false,
+            "dialogStops": 0
+          },
+          "detail": "No modal dialog is in front, so Escape has nothing to close."
+        }
+      ],
+      "failed": [
+        "surface-inside-viewport"
+      ],
+      "numbers": {
+        "effectiveWidthPx": 640,
+        "effectiveHeightPx": 360,
+        "minFontPx": 12,
+        "minLineHeightRatio": 1.4,
+        "controls": 36,
+        "surfaces": 4,
+        "tabStops": 14,
+        "overlaps": 1
+      }
+    },
+    {
+      "screenshot": "capture-notifications-1280x720.png",
+      "bytes": 124015,
+      "scenario": "notifications",
+      "viewport": "1280x720",
+      "tier": "CONTRACT",
+      "surface": "notifications",
+      "region": "STANDARD",
+      "verdict": "PASS",
+      "checks": [
+        {
+          "id": "viewport-mapping",
+          "pass": true,
+          "actual": {
+            "region": "STANDARD",
+            "expectedRegion": "STANDARD",
+            "effectiveWidthPx": 1280,
+            "expectedEffectiveWidthPx": 1280,
+            "effectiveHeightPx": 720,
+            "expectedEffectiveHeightPx": 720,
+            "compact": false,
+            "large": false
+          },
+          "detail": "viewport 1280×720 at 100% is laid out as 1280×720 (STANDARD)."
+        },
+        {
+          "id": "text-legible",
+          "pass": true,
+          "actual": {
+            "minFontPx": 12,
+            "minFontDescriptor": "span.fleet-panel__caption \"Filtru\"",
+            "minLineHeightRatio": 1.4,
+            "minLineHeightDescriptor": "span \"Viteză\""
+          },
+          "detail": "smallest visible text is 12 px with a 1.4 line-height ratio; the floor is 12 px and 1.4."
+        },
+        {
+          "id": "text-not-clipped",
+          "pass": true,
+          "actual": [],
+          "detail": "No visible text is clipped horizontally."
+        },
+        {
+          "id": "text-not-overlapping",
+          "pass": true,
+          "actual": [],
+          "detail": "No two text boxes in the same row overlap."
+        },
+        {
+          "id": "contrast-aa",
+          "pass": true,
+          "actual": [],
+          "detail": "Every measured text pair reaches the WCAG AA ratio for its size."
+        },
+        {
+          "id": "controls-visible",
+          "pass": true,
+          "actual": [],
+          "detail": "36 controls have a non-zero rectangle."
+        },
+        {
+          "id": "controls-hit-testable",
+          "pass": true,
+          "actual": [],
+          "detail": "Every enabled control inside the viewport wins its own centre hit-test."
+        },
+        {
+          "id": "essentials-visible",
+          "pass": true,
+          "actual": {
+            "missing": [],
+            "outsideHarness": [
+              "mode-buttons: Butoanele M/L sunt compuse de 067 și poziționate de host: componenta nu are reguli în src/style.css.",
+              "pause-control: Pauza este a meniului de aplicație (src/main.ts + rendering-view), nu o suprafață din src/ui.",
+              "recovery-control: Recuperarea este montată de host în containerul ei (createRecoveryHud nu are stiluri proprii)."
+            ]
+          },
+          "detail": "2 essential controls mounted by the harness are visible."
+        },
+        {
+          "id": "no-critical-overlap",
+          "pass": true,
+          "actual": [],
+          "detail": "No two measured surfaces overlap."
+        },
+        {
+          "id": "scroll-policy",
+          "pass": true,
+          "actual": [
+            {
+              "id": "fleet",
+              "scroll": {
+                "scrollHeight": 2153,
+                "clientHeight": 206,
+                "overflowY": "auto",
+                "maxHeight": "324px"
+              }
+            }
+          ],
+          "detail": "1 overflowing surfaces scroll vertically with `overflow-y: auto`."
+        },
+        {
+          "id": "surface-inside-viewport",
+          "pass": true,
+          "actual": [],
+          "detail": "Every visible surface stays inside the viewport."
+        },
+        {
+          "id": "tab-order",
+          "pass": true,
+          "actual": {
+            "stops": 14,
+            "order": [
+              "1:button.fleet-panel__row \"Taxi #30BlocatM · Conduci · î…\"",
+              "2:select.fleet-panel__filter \"ToateÎn cursăLibereBlocate\"",
+              "3:select.fleet-panel__sort \"SlotStareETA\"",
+              "4:button.fleet-panel__row \"Taxi #1În cursăA · Conduce AI…\"",
+              "5:button.fleet-panel__row \"Taxi #2În cursăA · Conduce AI…\"",
+              "6:button.fleet-panel__row \"Taxi #3În cursăA · Conduce AI…\"",
+              "7:button.fleet-panel__row \"Taxi #4În cursăA · Conduce AI…\"",
+              "8:button.fleet-panel__row \"Taxi #5În cursăM · Conduci · …\"",
+              "9:button.fleet-panel__row \"Taxi #6În cursăA · Conduce AI…\"",
+              "10:button.fleet-panel__row \"Taxi #7În cursăA · Conduce AI…\"",
+              "11:button.fleet-panel__row \"Taxi #8În cursăA · Conduce AI…\"",
+              "12:button.fleet-panel__row \"Taxi #9În cursăA · Conduce AI…\"",
+              "13:button.fleet-panel__row \"Taxi #10În cursăM · Conduci ·…\"",
+              "14:button.fleet-panel__row \"Taxi #11LiberA · Conduce AI-u…\""
+            ],
+            "duplicates": [],
+            "outsideDialog": [],
+            "dialogOpenBefore": false
+          },
+          "detail": "14 tab stops, 0 duplicates, 0 escapes from the open panel, dialog open before: false."
+        },
+        {
+          "id": "focus-visible",
+          "pass": true,
+          "actual": [],
+          "detail": "Every keyboard stop draws a visible focus ring of at least 3 px."
+        },
+        {
+          "id": "escape-closes",
+          "pass": true,
+          "actual": {
+            "trapExpected": false,
+            "escapeReason": "Scenariul nu are un dialog modal de închis.",
+            "dialogOpenBefore": false,
+            "dialogOpenAfter": false,
+            "focusRestored": false,
+            "dialogStops": 0
+          },
+          "detail": "No modal dialog is in front, so Escape has nothing to close."
+        }
+      ],
+      "failed": [],
+      "numbers": {
+        "effectiveWidthPx": 1280,
+        "effectiveHeightPx": 720,
+        "minFontPx": 12,
+        "minLineHeightRatio": 1.4,
+        "controls": 36,
+        "surfaces": 4,
+        "tabStops": 14,
+        "overlaps": 0
+      }
+    },
+    {
+      "screenshot": "capture-notifications-zoom-150.png",
+      "bytes": 60588,
+      "scenario": "notifications",
+      "viewport": "zoom-150",
+      "tier": "CONTRACT",
+      "surface": "notifications",
+      "region": "COMPACT",
+      "verdict": "PASS",
+      "checks": [
+        {
+          "id": "viewport-mapping",
+          "pass": true,
+          "actual": {
+            "region": "COMPACT",
+            "expectedRegion": "COMPACT",
+            "effectiveWidthPx": 853,
+            "expectedEffectiveWidthPx": 853.33,
+            "effectiveHeightPx": 480,
+            "expectedEffectiveHeightPx": 480,
+            "compact": true,
+            "large": false
+          },
+          "detail": "viewport 1280×720 at 150% is laid out as 853.33×480 (COMPACT)."
+        },
+        {
+          "id": "text-legible",
+          "pass": true,
+          "actual": {
+            "minFontPx": 12,
+            "minFontDescriptor": "span.minimap__route \"Rută: 2 benzi · 25% · 120 m\"",
+            "minLineHeightRatio": 1.4,
+            "minLineHeightDescriptor": "span \"Viteză\""
+          },
+          "detail": "smallest visible text is 12 px with a 1.4 line-height ratio; the floor is 12 px and 1.4."
+        },
+        {
+          "id": "text-not-clipped",
+          "pass": true,
+          "actual": [],
+          "detail": "No visible text is clipped horizontally."
+        },
+        {
+          "id": "text-not-overlapping",
+          "pass": true,
+          "actual": [],
+          "detail": "No two text boxes in the same row overlap."
+        },
+        {
+          "id": "contrast-aa",
+          "pass": true,
+          "actual": [],
+          "detail": "Every measured text pair reaches the WCAG AA ratio for its size."
+        },
+        {
+          "id": "controls-visible",
+          "pass": true,
+          "actual": [],
+          "detail": "36 controls have a non-zero rectangle."
+        },
+        {
+          "id": "controls-hit-testable",
+          "pass": true,
+          "actual": [],
+          "detail": "Every enabled control inside the viewport wins its own centre hit-test."
+        },
+        {
+          "id": "essentials-visible",
+          "pass": true,
+          "actual": {
+            "missing": [],
+            "outsideHarness": [
+              "mode-buttons: Butoanele M/L sunt compuse de 067 și poziționate de host: componenta nu are reguli în src/style.css.",
+              "pause-control: Pauza este a meniului de aplicație (src/main.ts + rendering-view), nu o suprafață din src/ui.",
+              "recovery-control: Recuperarea este montată de host în containerul ei (createRecoveryHud nu are stiluri proprii)."
+            ]
+          },
+          "detail": "2 essential controls mounted by the harness are visible."
+        },
+        {
+          "id": "no-critical-overlap",
+          "pass": true,
+          "actual": [],
+          "detail": "No two measured surfaces overlap."
+        },
+        {
+          "id": "scroll-policy",
+          "pass": true,
+          "actual": [
+            {
+              "id": "fleet",
+              "scroll": {
+                "scrollHeight": 4001,
+                "clientHeight": 80,
+                "overflowY": "auto",
+                "maxHeight": "96px"
+              }
+            },
+            {
+              "id": "notifications",
+              "scroll": {
+                "scrollHeight": 597,
+                "clientHeight": 144,
+                "overflowY": "auto",
+                "maxHeight": "144px"
+              }
+            }
+          ],
+          "detail": "2 overflowing surfaces scroll vertically with `overflow-y: auto`."
+        },
+        {
+          "id": "surface-inside-viewport",
+          "pass": true,
+          "actual": [],
+          "detail": "Every visible surface stays inside the viewport."
+        },
+        {
+          "id": "tab-order",
+          "pass": true,
+          "actual": {
+            "stops": 14,
+            "order": [
+              "1:button.fleet-panel__row \"Taxi #13LiberA · Conduce AI-u…\"",
+              "2:button.fleet-panel__row \"Taxi #14LiberA · Conduce AI-u…\"",
+              "3:button.fleet-panel__row \"Taxi #15LiberM · Conduci · în…\"",
+              "4:button.fleet-panel__row \"Taxi #16LiberA · Conduce AI-u…\"",
+              "5:button.fleet-panel__row \"Taxi #17LiberA · Conduce AI-u…\"",
+              "6:button.fleet-panel__row \"Taxi #18LiberA · Conduce AI-u…\"",
+              "7:button.fleet-panel__row \"Taxi #19LiberA · Conduce AI-u…\"",
+              "8:button.fleet-panel__row \"Taxi #20LiberM · Conduci · în…\"",
+              "9:button.fleet-panel__row \"Taxi #21BlocatA · Conduce AI-…\"",
+              "10:button.fleet-panel__row \"Taxi #22BlocatA · Conduce AI-…\"",
+              "11:button.fleet-panel__row \"Taxi #23BlocatA · Conduce AI-…\"",
+              "12:button.fleet-panel__row \"Taxi #24BlocatA · Conduce AI-…\"",
+              "13:button.fleet-panel__row \"Taxi #25BlocatM · Conduci · î…\"",
+              "14:button.fleet-panel__row \"Taxi #26BlocatA · Conduce AI-…\""
+            ],
+            "duplicates": [],
+            "outsideDialog": [],
+            "dialogOpenBefore": false
+          },
+          "detail": "14 tab stops, 0 duplicates, 0 escapes from the open panel, dialog open before: false."
+        },
+        {
+          "id": "focus-visible",
+          "pass": true,
+          "actual": [],
+          "detail": "Every keyboard stop draws a visible focus ring of at least 3 px."
+        },
+        {
+          "id": "escape-closes",
+          "pass": true,
+          "actual": {
+            "trapExpected": false,
+            "escapeReason": "Scenariul nu are un dialog modal de închis.",
+            "dialogOpenBefore": false,
+            "dialogOpenAfter": false,
+            "focusRestored": false,
+            "dialogStops": 0
+          },
+          "detail": "No modal dialog is in front, so Escape has nothing to close."
+        }
+      ],
+      "failed": [],
+      "numbers": {
+        "effectiveWidthPx": 853,
+        "effectiveHeightPx": 480,
+        "minFontPx": 12,
+        "minLineHeightRatio": 1.4,
+        "controls": 36,
+        "surfaces": 4,
+        "tabStops": 14,
+        "overlaps": 1
+      }
+    },
+    {
+      "screenshot": "capture-profile-1280x720.png",
+      "bytes": 232325,
+      "scenario": "profile",
+      "viewport": "1280x720",
+      "tier": "CONTRACT",
+      "surface": "profile",
+      "region": "STANDARD",
+      "verdict": "PASS",
+      "checks": [
+        {
+          "id": "viewport-mapping",
+          "pass": true,
+          "actual": {
+            "region": "STANDARD",
+            "expectedRegion": "STANDARD",
+            "effectiveWidthPx": 1280,
+            "expectedEffectiveWidthPx": 1280,
+            "effectiveHeightPx": 720,
+            "expectedEffectiveHeightPx": 720,
+            "compact": false,
+            "large": false
+          },
+          "detail": "viewport 1280×720 at 100% is laid out as 1280×720 (STANDARD)."
+        },
+        {
+          "id": "text-legible",
+          "pass": true,
+          "actual": {
+            "minFontPx": 12,
+            "minFontDescriptor": "span.fleet-panel__caption \"Filtru\"",
+            "minLineHeightRatio": 1.4,
+            "minLineHeightDescriptor": "span \"Viteză\""
+          },
+          "detail": "smallest visible text is 12 px with a 1.4 line-height ratio; the floor is 12 px and 1.4."
+        },
+        {
+          "id": "text-not-clipped",
+          "pass": true,
+          "actual": [],
+          "detail": "No visible text is clipped horizontally."
+        },
+        {
+          "id": "text-not-overlapping",
+          "pass": true,
+          "actual": [],
+          "detail": "No two text boxes in the same row overlap."
+        },
+        {
+          "id": "contrast-aa",
+          "pass": true,
+          "actual": [],
+          "detail": "Every measured text pair reaches the WCAG AA ratio for its size."
+        },
+        {
+          "id": "controls-visible",
+          "pass": true,
+          "actual": [],
+          "detail": "37 controls have a non-zero rectangle."
+        },
+        {
+          "id": "controls-hit-testable",
+          "pass": true,
+          "actual": [],
+          "detail": "Every enabled control inside the viewport wins its own centre hit-test."
+        },
+        {
+          "id": "essentials-visible",
+          "pass": true,
+          "actual": {
+            "missing": [],
+            "outsideHarness": [
+              "mode-buttons: Butoanele M/L sunt compuse de 067 și poziționate de host: componenta nu are reguli în src/style.css.",
+              "pause-control: Pauza este a meniului de aplicație (src/main.ts + rendering-view), nu o suprafață din src/ui.",
+              "recovery-control: Recuperarea este montată de host în containerul ei (createRecoveryHud nu are stiluri proprii)."
+            ]
+          },
+          "detail": "2 essential controls mounted by the harness are visible."
+        },
+        {
+          "id": "no-critical-overlap",
+          "pass": true,
+          "actual": [],
+          "detail": "No two measured surfaces overlap."
+        },
+        {
+          "id": "scroll-policy",
+          "pass": true,
+          "actual": [
+            {
+              "id": "fleet",
+              "scroll": {
+                "scrollHeight": 2153,
+                "clientHeight": 206,
+                "overflowY": "auto",
+                "maxHeight": "324px"
+              }
+            },
+            {
+              "id": "profile",
+              "scroll": {
+                "scrollHeight": 6794,
+                "clientHeight": 646,
+                "overflowY": "auto",
+                "maxHeight": "648px"
+              }
+            }
+          ],
+          "detail": "2 overflowing surfaces scroll vertically with `overflow-y: auto`."
+        },
+        {
+          "id": "surface-inside-viewport",
+          "pass": true,
+          "actual": [],
+          "detail": "Every visible surface stays inside the viewport."
+        },
+        {
+          "id": "tab-order",
+          "pass": true,
+          "actual": {
+            "stops": 1,
+            "order": [
+              "1:summary \"Checksum și dovezi\""
+            ],
+            "duplicates": [],
+            "outsideDialog": [],
+            "dialogOpenBefore": true
+          },
+          "detail": "1 tab stops, 0 duplicates, 0 escapes from the open panel, dialog open before: true."
+        },
+        {
+          "id": "focus-visible",
+          "pass": true,
+          "actual": [],
+          "detail": "Every keyboard stop draws a visible focus ring of at least 3 px."
+        },
+        {
+          "id": "escape-closes",
+          "pass": true,
+          "actual": {
+            "trapExpected": true,
+            "escapeReason": null,
+            "dialogOpenBefore": true,
+            "dialogOpenAfter": false,
+            "focusRestored": true,
+            "dialogStops": 1
+          },
+          "detail": "Escape closed the dialog: true; focus restored: true."
+        }
+      ],
+      "failed": [],
+      "numbers": {
+        "effectiveWidthPx": 1280,
+        "effectiveHeightPx": 720,
+        "minFontPx": 12,
+        "minLineHeightRatio": 1.4,
+        "controls": 37,
+        "surfaces": 5,
+        "tabStops": 1,
+        "overlaps": 0
+      }
+    },
+    {
+      "screenshot": "capture-profile-1920x1080.png",
+      "bytes": 329817,
+      "scenario": "profile",
+      "viewport": "1920x1080",
+      "tier": "CONTRACT",
+      "surface": "profile",
+      "region": "LARGE",
+      "verdict": "PASS",
+      "checks": [
+        {
+          "id": "viewport-mapping",
+          "pass": true,
+          "actual": {
+            "region": "LARGE",
+            "expectedRegion": "LARGE",
+            "effectiveWidthPx": 1920,
+            "expectedEffectiveWidthPx": 1920,
+            "effectiveHeightPx": 1080,
+            "expectedEffectiveHeightPx": 1080,
+            "compact": false,
+            "large": true
+          },
+          "detail": "viewport 1920×1080 at 100% is laid out as 1920×1080 (LARGE)."
+        },
+        {
+          "id": "text-legible",
+          "pass": true,
+          "actual": {
+            "minFontPx": 12,
+            "minFontDescriptor": "span.fleet-panel__caption \"Filtru\"",
+            "minLineHeightRatio": 1.4,
+            "minLineHeightDescriptor": "span \"Viteză\""
+          },
+          "detail": "smallest visible text is 12 px with a 1.4 line-height ratio; the floor is 12 px and 1.4."
+        },
+        {
+          "id": "text-not-clipped",
+          "pass": true,
+          "actual": [],
+          "detail": "No visible text is clipped horizontally."
+        },
+        {
+          "id": "text-not-overlapping",
+          "pass": true,
+          "actual": [],
+          "detail": "No two text boxes in the same row overlap."
+        },
+        {
+          "id": "contrast-aa",
+          "pass": true,
+          "actual": [],
+          "detail": "Every measured text pair reaches the WCAG AA ratio for its size."
+        },
+        {
+          "id": "controls-visible",
+          "pass": true,
+          "actual": [],
+          "detail": "37 controls have a non-zero rectangle."
+        },
+        {
+          "id": "controls-hit-testable",
+          "pass": true,
+          "actual": [],
+          "detail": "Every enabled control inside the viewport wins its own centre hit-test."
+        },
+        {
+          "id": "essentials-visible",
+          "pass": true,
+          "actual": {
+            "missing": [],
+            "outsideHarness": [
+              "mode-buttons: Butoanele M/L sunt compuse de 067 și poziționate de host: componenta nu are reguli în src/style.css.",
+              "pause-control: Pauza este a meniului de aplicație (src/main.ts + rendering-view), nu o suprafață din src/ui.",
+              "recovery-control: Recuperarea este montată de host în containerul ei (createRecoveryHud nu are stiluri proprii)."
+            ]
+          },
+          "detail": "2 essential controls mounted by the harness are visible."
+        },
+        {
+          "id": "no-critical-overlap",
+          "pass": true,
+          "actual": [],
+          "detail": "No two measured surfaces overlap."
+        },
+        {
+          "id": "scroll-policy",
+          "pass": true,
+          "actual": [
+            {
+              "id": "fleet",
+              "scroll": {
+                "scrollHeight": 1829,
+                "clientHeight": 566,
+                "overflowY": "auto",
+                "maxHeight": "684px"
+              }
+            },
+            {
+              "id": "profile",
+              "scroll": {
+                "scrollHeight": 6124,
+                "clientHeight": 862,
+                "overflowY": "auto",
+                "maxHeight": "864px"
+              }
+            }
+          ],
+          "detail": "2 overflowing surfaces scroll vertically with `overflow-y: auto`."
+        },
+        {
+          "id": "surface-inside-viewport",
+          "pass": true,
+          "actual": [],
+          "detail": "Every visible surface stays inside the viewport."
+        },
+        {
+          "id": "tab-order",
+          "pass": true,
+          "actual": {
+            "stops": 1,
+            "order": [
+              "1:summary \"Checksum și dovezi\""
+            ],
+            "duplicates": [],
+            "outsideDialog": [],
+            "dialogOpenBefore": true
+          },
+          "detail": "1 tab stops, 0 duplicates, 0 escapes from the open panel, dialog open before: true."
+        },
+        {
+          "id": "focus-visible",
+          "pass": true,
+          "actual": [],
+          "detail": "Every keyboard stop draws a visible focus ring of at least 3 px."
+        },
+        {
+          "id": "escape-closes",
+          "pass": true,
+          "actual": {
+            "trapExpected": true,
+            "escapeReason": null,
+            "dialogOpenBefore": true,
+            "dialogOpenAfter": false,
+            "focusRestored": true,
+            "dialogStops": 1
+          },
+          "detail": "Escape closed the dialog: true; focus restored: true."
+        }
+      ],
+      "failed": [],
+      "numbers": {
+        "effectiveWidthPx": 1920,
+        "effectiveHeightPx": 1080,
+        "minFontPx": 12,
+        "minLineHeightRatio": 1.4,
+        "controls": 37,
+        "surfaces": 5,
+        "tabStops": 1,
+        "overlaps": 0
+      }
+    },
+    {
+      "screenshot": "capture-profile-zoom-150.png",
+      "bytes": 124961,
+      "scenario": "profile",
+      "viewport": "zoom-150",
+      "tier": "CONTRACT",
+      "surface": "profile",
+      "region": "COMPACT",
+      "verdict": "PASS",
+      "checks": [
+        {
+          "id": "viewport-mapping",
+          "pass": true,
+          "actual": {
+            "region": "COMPACT",
+            "expectedRegion": "COMPACT",
+            "effectiveWidthPx": 853,
+            "expectedEffectiveWidthPx": 853.33,
+            "effectiveHeightPx": 480,
+            "expectedEffectiveHeightPx": 480,
+            "compact": true,
+            "large": false
+          },
+          "detail": "viewport 1280×720 at 150% is laid out as 853.33×480 (COMPACT)."
+        },
+        {
+          "id": "text-legible",
+          "pass": true,
+          "actual": {
+            "minFontPx": 12,
+            "minFontDescriptor": "span.minimap__route \"Rută: 2 benzi · 25% · 120 m\"",
+            "minLineHeightRatio": 1.4,
+            "minLineHeightDescriptor": "span \"Viteză\""
+          },
+          "detail": "smallest visible text is 12 px with a 1.4 line-height ratio; the floor is 12 px and 1.4."
+        },
+        {
+          "id": "text-not-clipped",
+          "pass": true,
+          "actual": [],
+          "detail": "No visible text is clipped horizontally."
+        },
+        {
+          "id": "text-not-overlapping",
+          "pass": true,
+          "actual": [],
+          "detail": "No two text boxes in the same row overlap."
+        },
+        {
+          "id": "contrast-aa",
+          "pass": true,
+          "actual": [],
+          "detail": "Every measured text pair reaches the WCAG AA ratio for its size."
+        },
+        {
+          "id": "controls-visible",
+          "pass": true,
+          "actual": [],
+          "detail": "37 controls have a non-zero rectangle."
+        },
+        {
+          "id": "controls-hit-testable",
+          "pass": true,
+          "actual": [],
+          "detail": "Every enabled control inside the viewport wins its own centre hit-test."
+        },
+        {
+          "id": "essentials-visible",
+          "pass": true,
+          "actual": {
+            "missing": [],
+            "outsideHarness": [
+              "mode-buttons: Butoanele M/L sunt compuse de 067 și poziționate de host: componenta nu are reguli în src/style.css.",
+              "pause-control: Pauza este a meniului de aplicație (src/main.ts + rendering-view), nu o suprafață din src/ui.",
+              "recovery-control: Recuperarea este montată de host în containerul ei (createRecoveryHud nu are stiluri proprii)."
+            ]
+          },
+          "detail": "2 essential controls mounted by the harness are visible."
+        },
+        {
+          "id": "no-critical-overlap",
+          "pass": true,
+          "actual": [],
+          "detail": "No two measured surfaces overlap."
+        },
+        {
+          "id": "scroll-policy",
+          "pass": true,
+          "actual": [
+            {
+              "id": "fleet",
+              "scroll": {
+                "scrollHeight": 4001,
+                "clientHeight": 80,
+                "overflowY": "auto",
+                "maxHeight": "96px"
+              }
+            },
+            {
+              "id": "notifications",
+              "scroll": {
+                "scrollHeight": 597,
+                "clientHeight": 144,
+                "overflowY": "auto",
+                "maxHeight": "144px"
+              }
+            },
+            {
+              "id": "profile",
+              "scroll": {
+                "scrollHeight": 7277,
+                "clientHeight": 430,
+                "overflowY": "auto",
+                "maxHeight": "432px"
+              }
+            }
+          ],
+          "detail": "3 overflowing surfaces scroll vertically with `overflow-y: auto`."
+        },
+        {
+          "id": "surface-inside-viewport",
+          "pass": true,
+          "actual": [],
+          "detail": "Every visible surface stays inside the viewport."
+        },
+        {
+          "id": "tab-order",
+          "pass": true,
+          "actual": {
+            "stops": 1,
+            "order": [
+              "1:summary \"Checksum și dovezi\""
+            ],
+            "duplicates": [],
+            "outsideDialog": [],
+            "dialogOpenBefore": true
+          },
+          "detail": "1 tab stops, 0 duplicates, 0 escapes from the open panel, dialog open before: true."
+        },
+        {
+          "id": "focus-visible",
+          "pass": true,
+          "actual": [],
+          "detail": "Every keyboard stop draws a visible focus ring of at least 3 px."
+        },
+        {
+          "id": "escape-closes",
+          "pass": true,
+          "actual": {
+            "trapExpected": true,
+            "escapeReason": null,
+            "dialogOpenBefore": true,
+            "dialogOpenAfter": false,
+            "focusRestored": true,
+            "dialogStops": 1
+          },
+          "detail": "Escape closed the dialog: true; focus restored: true."
+        }
+      ],
+      "failed": [],
+      "numbers": {
+        "effectiveWidthPx": 853,
+        "effectiveHeightPx": 480,
+        "minFontPx": 12,
+        "minLineHeightRatio": 1.4,
+        "controls": 37,
+        "surfaces": 5,
+        "tabStops": 1,
+        "overlaps": 1
+      }
+    },
+    {
+      "screenshot": "capture-profile-zoom-200.png",
+      "bytes": 146320,
+      "scenario": "profile",
+      "viewport": "zoom-200",
+      "tier": "CONTRACT",
+      "surface": "profile",
+      "region": "COMPACT",
+      "verdict": "PASS",
+      "checks": [
+        {
+          "id": "viewport-mapping",
+          "pass": true,
+          "actual": {
+            "region": "COMPACT",
+            "expectedRegion": "COMPACT",
+            "effectiveWidthPx": 960,
+            "expectedEffectiveWidthPx": 960,
+            "effectiveHeightPx": 540,
+            "expectedEffectiveHeightPx": 540,
+            "compact": true,
+            "large": false
+          },
+          "detail": "viewport 1920×1080 at 200% is laid out as 960×540 (COMPACT)."
+        },
+        {
+          "id": "text-legible",
+          "pass": true,
+          "actual": {
+            "minFontPx": 12,
+            "minFontDescriptor": "span.minimap__route \"Rută: 2 benzi · 25% · 120 m\"",
+            "minLineHeightRatio": 1.4,
+            "minLineHeightDescriptor": "span \"Viteză\""
+          },
+          "detail": "smallest visible text is 12 px with a 1.4 line-height ratio; the floor is 12 px and 1.4."
+        },
+        {
+          "id": "text-not-clipped",
+          "pass": true,
+          "actual": [],
+          "detail": "No visible text is clipped horizontally."
+        },
+        {
+          "id": "text-not-overlapping",
+          "pass": true,
+          "actual": [],
+          "detail": "No two text boxes in the same row overlap."
+        },
+        {
+          "id": "contrast-aa",
+          "pass": true,
+          "actual": [],
+          "detail": "Every measured text pair reaches the WCAG AA ratio for its size."
+        },
+        {
+          "id": "controls-visible",
+          "pass": true,
+          "actual": [],
+          "detail": "37 controls have a non-zero rectangle."
+        },
+        {
+          "id": "controls-hit-testable",
+          "pass": true,
+          "actual": [],
+          "detail": "Every enabled control inside the viewport wins its own centre hit-test."
+        },
+        {
+          "id": "essentials-visible",
+          "pass": true,
+          "actual": {
+            "missing": [],
+            "outsideHarness": [
+              "mode-buttons: Butoanele M/L sunt compuse de 067 și poziționate de host: componenta nu are reguli în src/style.css.",
+              "pause-control: Pauza este a meniului de aplicație (src/main.ts + rendering-view), nu o suprafață din src/ui.",
+              "recovery-control: Recuperarea este montată de host în containerul ei (createRecoveryHud nu are stiluri proprii)."
+            ]
+          },
+          "detail": "2 essential controls mounted by the harness are visible."
+        },
+        {
+          "id": "no-critical-overlap",
+          "pass": true,
+          "actual": [],
+          "detail": "No two measured surfaces overlap."
+        },
+        {
+          "id": "scroll-policy",
+          "pass": true,
+          "actual": [
+            {
+              "id": "fleet",
+              "scroll": {
+                "scrollHeight": 4001,
+                "clientHeight": 80,
+                "overflowY": "auto",
+                "maxHeight": "144px"
+              }
+            },
+            {
+              "id": "notifications",
+              "scroll": {
+                "scrollHeight": 597,
+                "clientHeight": 144,
+                "overflowY": "auto",
+                "maxHeight": "144px"
+              }
+            },
+            {
+              "id": "profile",
+              "scroll": {
+                "scrollHeight": 7277,
+                "clientHeight": 484,
+                "overflowY": "auto",
+                "maxHeight": "486px"
+              }
+            }
+          ],
+          "detail": "3 overflowing surfaces scroll vertically with `overflow-y: auto`."
+        },
+        {
+          "id": "surface-inside-viewport",
+          "pass": true,
+          "actual": [],
+          "detail": "Every visible surface stays inside the viewport."
+        },
+        {
+          "id": "tab-order",
+          "pass": true,
+          "actual": {
+            "stops": 1,
+            "order": [
+              "1:summary \"Checksum și dovezi\""
+            ],
+            "duplicates": [],
+            "outsideDialog": [],
+            "dialogOpenBefore": true
+          },
+          "detail": "1 tab stops, 0 duplicates, 0 escapes from the open panel, dialog open before: true."
+        },
+        {
+          "id": "focus-visible",
+          "pass": true,
+          "actual": [],
+          "detail": "Every keyboard stop draws a visible focus ring of at least 3 px."
+        },
+        {
+          "id": "escape-closes",
+          "pass": true,
+          "actual": {
+            "trapExpected": true,
+            "escapeReason": null,
+            "dialogOpenBefore": true,
+            "dialogOpenAfter": false,
+            "focusRestored": true,
+            "dialogStops": 1
+          },
+          "detail": "Escape closed the dialog: true; focus restored: true."
+        }
+      ],
+      "failed": [],
+      "numbers": {
+        "effectiveWidthPx": 960,
+        "effectiveHeightPx": 540,
+        "minFontPx": 12,
+        "minLineHeightRatio": 1.4,
+        "controls": 37,
+        "surfaces": 5,
+        "tabStops": 1,
+        "overlaps": 1
+      }
+    },
+    {
+      "screenshot": "capture-profile-zoom-200-720.png",
+      "bytes": 81930,
+      "scenario": "profile",
+      "viewport": "zoom-200-720",
+      "tier": "STRESS",
+      "surface": "profile",
+      "region": "COMPACT",
+      "verdict": "FAIL",
+      "checks": [
+        {
+          "id": "viewport-mapping",
+          "pass": true,
+          "actual": {
+            "region": "COMPACT",
+            "expectedRegion": "COMPACT",
+            "effectiveWidthPx": 640,
+            "expectedEffectiveWidthPx": 640,
+            "effectiveHeightPx": 360,
+            "expectedEffectiveHeightPx": 360,
+            "compact": true,
+            "large": false
+          },
+          "detail": "viewport 1280×720 at 200% is laid out as 640×360 (COMPACT)."
+        },
+        {
+          "id": "text-legible",
+          "pass": true,
+          "actual": {
+            "minFontPx": 12,
+            "minFontDescriptor": "span.minimap__route \"Rută: 2 benzi · 25% · 120 m\"",
+            "minLineHeightRatio": 1.4,
+            "minLineHeightDescriptor": "span \"Viteză\""
+          },
+          "detail": "smallest visible text is 12 px with a 1.4 line-height ratio; the floor is 12 px and 1.4."
+        },
+        {
+          "id": "text-not-clipped",
+          "pass": true,
+          "actual": [],
+          "detail": "No visible text is clipped horizontally."
+        },
+        {
+          "id": "text-not-overlapping",
+          "pass": true,
+          "actual": [],
+          "detail": "No two text boxes in the same row overlap."
+        },
+        {
+          "id": "contrast-aa",
+          "pass": true,
+          "actual": [],
+          "detail": "Every measured text pair reaches the WCAG AA ratio for its size."
+        },
+        {
+          "id": "controls-visible",
+          "pass": true,
+          "actual": [],
+          "detail": "37 controls have a non-zero rectangle."
+        },
+        {
+          "id": "controls-hit-testable",
+          "pass": true,
+          "actual": [],
+          "detail": "Every enabled control inside the viewport wins its own centre hit-test."
+        },
+        {
+          "id": "essentials-visible",
+          "pass": true,
+          "actual": {
+            "missing": [],
+            "outsideHarness": [
+              "mode-buttons: Butoanele M/L sunt compuse de 067 și poziționate de host: componenta nu are reguli în src/style.css.",
+              "pause-control: Pauza este a meniului de aplicație (src/main.ts + rendering-view), nu o suprafață din src/ui.",
+              "recovery-control: Recuperarea este montată de host în containerul ei (createRecoveryHud nu are stiluri proprii)."
+            ]
+          },
+          "detail": "2 essential controls mounted by the harness are visible."
+        },
+        {
+          "id": "no-critical-overlap",
+          "pass": true,
+          "actual": [],
+          "detail": "No two measured surfaces overlap."
+        },
+        {
+          "id": "scroll-policy",
+          "pass": true,
+          "actual": [
+            {
+              "id": "fleet",
+              "scroll": {
+                "scrollHeight": 4001,
+                "clientHeight": 80,
+                "overflowY": "auto",
+                "maxHeight": "96px"
+              }
+            },
+            {
+              "id": "notifications",
+              "scroll": {
+                "scrollHeight": 597,
+                "clientHeight": 144,
+                "overflowY": "auto",
+                "maxHeight": "144px"
+              }
+            },
+            {
+              "id": "profile",
+              "scroll": {
+                "scrollHeight": 32151,
+                "clientHeight": 322,
+                "overflowY": "auto",
+                "maxHeight": "324px"
+              }
+            }
+          ],
+          "detail": "3 overflowing surfaces scroll vertically with `overflow-y: auto`."
+        },
+        {
+          "id": "surface-inside-viewport",
+          "pass": false,
+          "actual": [
+            {
+              "id": "fleet",
+              "rect": {
+                "x": 16,
+                "y": 380,
+                "width": 224,
+                "height": 96,
+                "right": 240,
+                "bottom": 476
+              },
+              "bottomOverflowPx": 116
+            },
+            {
+              "id": "notifications",
+              "rect": {
+                "x": 464,
+                "y": 240,
+                "width": 160,
+                "height": 144,
+                "right": 624,
+                "bottom": 384
+              },
+              "bottomOverflowPx": 24
+            }
+          ],
+          "detail": "Surfaces outside the viewport: fleet (bottom 476 > 360), notifications (bottom 384 > 360)."
+        },
+        {
+          "id": "tab-order",
+          "pass": true,
+          "actual": {
+            "stops": 1,
+            "order": [
+              "1:summary \"Checksum și dovezi\""
+            ],
+            "duplicates": [],
+            "outsideDialog": [],
+            "dialogOpenBefore": true
+          },
+          "detail": "1 tab stops, 0 duplicates, 0 escapes from the open panel, dialog open before: true."
+        },
+        {
+          "id": "focus-visible",
+          "pass": true,
+          "actual": [],
+          "detail": "Every keyboard stop draws a visible focus ring of at least 3 px."
+        },
+        {
+          "id": "escape-closes",
+          "pass": true,
+          "actual": {
+            "trapExpected": true,
+            "escapeReason": null,
+            "dialogOpenBefore": true,
+            "dialogOpenAfter": false,
+            "focusRestored": true,
+            "dialogStops": 1
+          },
+          "detail": "Escape closed the dialog: true; focus restored: true."
+        }
+      ],
+      "failed": [
+        "surface-inside-viewport"
+      ],
+      "numbers": {
+        "effectiveWidthPx": 640,
+        "effectiveHeightPx": 360,
+        "minFontPx": 12,
+        "minLineHeightRatio": 1.4,
+        "controls": 37,
+        "surfaces": 5,
+        "tabStops": 1,
+        "overlaps": 1
+      }
+    },
+    {
+      "screenshot": "capture-city-1280x720.png",
+      "bytes": 198974,
+      "scenario": "city",
+      "viewport": "1280x720",
+      "tier": "CONTRACT",
+      "surface": "city",
+      "region": "STANDARD",
+      "verdict": "PASS",
+      "checks": [
+        {
+          "id": "viewport-mapping",
+          "pass": true,
+          "actual": {
+            "region": "STANDARD",
+            "expectedRegion": "STANDARD",
+            "effectiveWidthPx": 1280,
+            "expectedEffectiveWidthPx": 1280,
+            "effectiveHeightPx": 720,
+            "expectedEffectiveHeightPx": 720,
+            "compact": false,
+            "large": false
+          },
+          "detail": "viewport 1280×720 at 100% is laid out as 1280×720 (STANDARD)."
+        },
+        {
+          "id": "text-legible",
+          "pass": true,
+          "actual": {
+            "minFontPx": 12,
+            "minFontDescriptor": "span.fleet-panel__caption \"Filtru\"",
+            "minLineHeightRatio": 1.4,
+            "minLineHeightDescriptor": "span \"Viteză\""
+          },
+          "detail": "smallest visible text is 12 px with a 1.4 line-height ratio; the floor is 12 px and 1.4."
+        },
+        {
+          "id": "text-not-clipped",
+          "pass": true,
+          "actual": [],
+          "detail": "No visible text is clipped horizontally."
+        },
+        {
+          "id": "text-not-overlapping",
+          "pass": true,
+          "actual": [],
+          "detail": "No two text boxes in the same row overlap."
+        },
+        {
+          "id": "contrast-aa",
+          "pass": true,
+          "actual": [],
+          "detail": "Every measured text pair reaches the WCAG AA ratio for its size."
+        },
+        {
+          "id": "controls-visible",
+          "pass": true,
+          "actual": [],
+          "detail": "40 controls have a non-zero rectangle."
+        },
+        {
+          "id": "controls-hit-testable",
+          "pass": true,
+          "actual": [],
+          "detail": "Every enabled control inside the viewport wins its own centre hit-test."
+        },
+        {
+          "id": "essentials-visible",
+          "pass": true,
+          "actual": {
+            "missing": [],
+            "outsideHarness": [
+              "mode-buttons: Butoanele M/L sunt compuse de 067 și poziționate de host: componenta nu are reguli în src/style.css.",
+              "pause-control: Pauza este a meniului de aplicație (src/main.ts + rendering-view), nu o suprafață din src/ui.",
+              "recovery-control: Recuperarea este montată de host în containerul ei (createRecoveryHud nu are stiluri proprii)."
+            ]
+          },
+          "detail": "2 essential controls mounted by the harness are visible."
+        },
+        {
+          "id": "no-critical-overlap",
+          "pass": true,
+          "actual": [],
+          "detail": "No two measured surfaces overlap."
+        },
+        {
+          "id": "scroll-policy",
+          "pass": true,
+          "actual": [
+            {
+              "id": "fleet",
+              "scroll": {
+                "scrollHeight": 2153,
+                "clientHeight": 206,
+                "overflowY": "auto",
+                "maxHeight": "324px"
+              }
+            },
+            {
+              "id": "city",
+              "scroll": {
+                "scrollHeight": 855,
+                "clientHeight": 646,
+                "overflowY": "auto",
+                "maxHeight": "648px"
+              }
+            }
+          ],
+          "detail": "2 overflowing surfaces scroll vertically with `overflow-y: auto`."
+        },
+        {
+          "id": "surface-inside-viewport",
+          "pass": true,
+          "actual": [],
+          "detail": "Every visible surface stays inside the viewport."
+        },
+        {
+          "id": "tab-order",
+          "pass": true,
+          "actual": {
+            "stops": 4,
+            "order": [
+              "1:button.city-dashboard__incident-row \"ÎncălcareSever · tick 200 · t…\"",
+              "2:button.city-dashboard__incident-row \"BlocajMinor · tick 120 · taxi…\"",
+              "3:button.city-dashboard__incident-row \"ColiziuneModerat · tick 40 · …\"",
+              "4:button.city-dashboard__incident-row \"ConfortMinor · tick 260 · tax…\""
+            ],
+            "duplicates": [],
+            "outsideDialog": [],
+            "dialogOpenBefore": true
+          },
+          "detail": "4 tab stops, 0 duplicates, 0 escapes from the open panel, dialog open before: true."
+        },
+        {
+          "id": "focus-visible",
+          "pass": true,
+          "actual": [],
+          "detail": "Every keyboard stop draws a visible focus ring of at least 3 px."
+        },
+        {
+          "id": "escape-closes",
+          "pass": true,
+          "actual": {
+            "trapExpected": true,
+            "escapeReason": null,
+            "dialogOpenBefore": true,
+            "dialogOpenAfter": false,
+            "focusRestored": true,
+            "dialogStops": 4
+          },
+          "detail": "Escape closed the dialog: true; focus restored: true."
+        }
+      ],
+      "failed": [],
+      "numbers": {
+        "effectiveWidthPx": 1280,
+        "effectiveHeightPx": 720,
+        "minFontPx": 12,
+        "minLineHeightRatio": 1.4,
+        "controls": 40,
+        "surfaces": 5,
+        "tabStops": 4,
+        "overlaps": 0
+      }
+    },
+    {
+      "screenshot": "capture-city-1920x1080.png",
+      "bytes": 289667,
+      "scenario": "city",
+      "viewport": "1920x1080",
+      "tier": "CONTRACT",
+      "surface": "city",
+      "region": "LARGE",
+      "verdict": "PASS",
+      "checks": [
+        {
+          "id": "viewport-mapping",
+          "pass": true,
+          "actual": {
+            "region": "LARGE",
+            "expectedRegion": "LARGE",
+            "effectiveWidthPx": 1920,
+            "expectedEffectiveWidthPx": 1920,
+            "effectiveHeightPx": 1080,
+            "expectedEffectiveHeightPx": 1080,
+            "compact": false,
+            "large": true
+          },
+          "detail": "viewport 1920×1080 at 100% is laid out as 1920×1080 (LARGE)."
+        },
+        {
+          "id": "text-legible",
+          "pass": true,
+          "actual": {
+            "minFontPx": 12,
+            "minFontDescriptor": "span.fleet-panel__caption \"Filtru\"",
+            "minLineHeightRatio": 1.4,
+            "minLineHeightDescriptor": "span \"Viteză\""
+          },
+          "detail": "smallest visible text is 12 px with a 1.4 line-height ratio; the floor is 12 px and 1.4."
+        },
+        {
+          "id": "text-not-clipped",
+          "pass": true,
+          "actual": [],
+          "detail": "No visible text is clipped horizontally."
+        },
+        {
+          "id": "text-not-overlapping",
+          "pass": true,
+          "actual": [],
+          "detail": "No two text boxes in the same row overlap."
+        },
+        {
+          "id": "contrast-aa",
+          "pass": true,
+          "actual": [],
+          "detail": "Every measured text pair reaches the WCAG AA ratio for its size."
+        },
+        {
+          "id": "controls-visible",
+          "pass": true,
+          "actual": [],
+          "detail": "40 controls have a non-zero rectangle."
+        },
+        {
+          "id": "controls-hit-testable",
+          "pass": true,
+          "actual": [],
+          "detail": "Every enabled control inside the viewport wins its own centre hit-test."
+        },
+        {
+          "id": "essentials-visible",
+          "pass": true,
+          "actual": {
+            "missing": [],
+            "outsideHarness": [
+              "mode-buttons: Butoanele M/L sunt compuse de 067 și poziționate de host: componenta nu are reguli în src/style.css.",
+              "pause-control: Pauza este a meniului de aplicație (src/main.ts + rendering-view), nu o suprafață din src/ui.",
+              "recovery-control: Recuperarea este montată de host în containerul ei (createRecoveryHud nu are stiluri proprii)."
+            ]
+          },
+          "detail": "2 essential controls mounted by the harness are visible."
+        },
+        {
+          "id": "no-critical-overlap",
+          "pass": true,
+          "actual": [],
+          "detail": "No two measured surfaces overlap."
+        },
+        {
+          "id": "scroll-policy",
+          "pass": true,
+          "actual": [
+            {
+              "id": "fleet",
+              "scroll": {
+                "scrollHeight": 1829,
+                "clientHeight": 566,
+                "overflowY": "auto",
+                "maxHeight": "684px"
+              }
+            }
+          ],
+          "detail": "1 overflowing surfaces scroll vertically with `overflow-y: auto`."
+        },
+        {
+          "id": "surface-inside-viewport",
+          "pass": true,
+          "actual": [],
+          "detail": "Every visible surface stays inside the viewport."
+        },
+        {
+          "id": "tab-order",
+          "pass": true,
+          "actual": {
+            "stops": 4,
+            "order": [
+              "1:button.city-dashboard__incident-row \"ÎncălcareSever · tick 200 · t…\"",
+              "2:button.city-dashboard__incident-row \"BlocajMinor · tick 120 · taxi…\"",
+              "3:button.city-dashboard__incident-row \"ColiziuneModerat · tick 40 · …\"",
+              "4:button.city-dashboard__incident-row \"ConfortMinor · tick 260 · tax…\""
+            ],
+            "duplicates": [],
+            "outsideDialog": [],
+            "dialogOpenBefore": true
+          },
+          "detail": "4 tab stops, 0 duplicates, 0 escapes from the open panel, dialog open before: true."
+        },
+        {
+          "id": "focus-visible",
+          "pass": true,
+          "actual": [],
+          "detail": "Every keyboard stop draws a visible focus ring of at least 3 px."
+        },
+        {
+          "id": "escape-closes",
+          "pass": true,
+          "actual": {
+            "trapExpected": true,
+            "escapeReason": null,
+            "dialogOpenBefore": true,
+            "dialogOpenAfter": false,
+            "focusRestored": true,
+            "dialogStops": 4
+          },
+          "detail": "Escape closed the dialog: true; focus restored: true."
+        }
+      ],
+      "failed": [],
+      "numbers": {
+        "effectiveWidthPx": 1920,
+        "effectiveHeightPx": 1080,
+        "minFontPx": 12,
+        "minLineHeightRatio": 1.4,
+        "controls": 40,
+        "surfaces": 5,
+        "tabStops": 4,
+        "overlaps": 0
+      }
+    },
+    {
+      "screenshot": "capture-settings-1280x720.png",
+      "bytes": 186108,
+      "scenario": "settings",
+      "viewport": "1280x720",
+      "tier": "CONTRACT",
+      "surface": "settings",
+      "region": "STANDARD",
+      "verdict": "PASS",
+      "checks": [
+        {
+          "id": "viewport-mapping",
+          "pass": true,
+          "actual": {
+            "region": "STANDARD",
+            "expectedRegion": "STANDARD",
+            "effectiveWidthPx": 1280,
+            "expectedEffectiveWidthPx": 1280,
+            "effectiveHeightPx": 720,
+            "expectedEffectiveHeightPx": 720,
+            "compact": false,
+            "large": false
+          },
+          "detail": "viewport 1280×720 at 100% is laid out as 1280×720 (STANDARD)."
+        },
+        {
+          "id": "text-legible",
+          "pass": true,
+          "actual": {
+            "minFontPx": 12,
+            "minFontDescriptor": "span.fleet-panel__caption \"Filtru\"",
+            "minLineHeightRatio": 1.4,
+            "minLineHeightDescriptor": "span \"Viteză\""
+          },
+          "detail": "smallest visible text is 12 px with a 1.4 line-height ratio; the floor is 12 px and 1.4."
+        },
+        {
+          "id": "text-not-clipped",
+          "pass": true,
+          "actual": [],
+          "detail": "No visible text is clipped horizontally."
+        },
+        {
+          "id": "text-not-overlapping",
+          "pass": true,
+          "actual": [],
+          "detail": "No two text boxes in the same row overlap."
+        },
+        {
+          "id": "contrast-aa",
+          "pass": true,
+          "actual": [],
+          "detail": "Every measured text pair reaches the WCAG AA ratio for its size."
+        },
+        {
+          "id": "controls-visible",
+          "pass": true,
+          "actual": [],
+          "detail": "53 controls have a non-zero rectangle."
+        },
+        {
+          "id": "controls-hit-testable",
+          "pass": true,
+          "actual": [],
+          "detail": "Every enabled control inside the viewport wins its own centre hit-test."
+        },
+        {
+          "id": "essentials-visible",
+          "pass": true,
+          "actual": {
+            "missing": [],
+            "outsideHarness": [
+              "mode-buttons: Butoanele M/L sunt compuse de 067 și poziționate de host: componenta nu are reguli în src/style.css.",
+              "pause-control: Pauza este a meniului de aplicație (src/main.ts + rendering-view), nu o suprafață din src/ui.",
+              "recovery-control: Recuperarea este montată de host în containerul ei (createRecoveryHud nu are stiluri proprii)."
+            ]
+          },
+          "detail": "2 essential controls mounted by the harness are visible."
+        },
+        {
+          "id": "no-critical-overlap",
+          "pass": true,
+          "actual": [],
+          "detail": "No two measured surfaces overlap."
+        },
+        {
+          "id": "scroll-policy",
+          "pass": true,
+          "actual": [
+            {
+              "id": "fleet",
+              "scroll": {
+                "scrollHeight": 2153,
+                "clientHeight": 206,
+                "overflowY": "auto",
+                "maxHeight": "324px"
+              }
+            },
+            {
+              "id": "settings",
+              "scroll": {
+                "scrollHeight": 880,
+                "clientHeight": 646,
+                "overflowY": "auto",
+                "maxHeight": "648px"
+              }
+            }
+          ],
+          "detail": "2 overflowing surfaces scroll vertically with `overflow-y: auto`."
+        },
+        {
+          "id": "surface-inside-viewport",
+          "pass": true,
+          "actual": [],
+          "detail": "Every visible surface stays inside the viewport."
+        },
+        {
+          "id": "tab-order",
+          "pass": true,
+          "actual": {
+            "stops": 3,
+            "order": [
+              "1:select.game-settings__select \"metri (m)picioare (ft)\"",
+              "2:select.game-settings__select \"Din spateFirst-person din poz…\"",
+              "3:input.game-settings__range"
+            ],
+            "duplicates": [],
+            "outsideDialog": [],
+            "dialogOpenBefore": true
+          },
+          "detail": "3 tab stops, 0 duplicates, 0 escapes from the open panel, dialog open before: true."
+        },
+        {
+          "id": "focus-visible",
+          "pass": true,
+          "actual": [],
+          "detail": "Every keyboard stop draws a visible focus ring of at least 3 px."
+        },
+        {
+          "id": "escape-closes",
+          "pass": true,
+          "actual": {
+            "trapExpected": true,
+            "escapeReason": null,
+            "dialogOpenBefore": true,
+            "dialogOpenAfter": false,
+            "focusRestored": true,
+            "dialogStops": 3
+          },
+          "detail": "Escape closed the dialog: true; focus restored: true."
+        }
+      ],
+      "failed": [],
+      "numbers": {
+        "effectiveWidthPx": 1280,
+        "effectiveHeightPx": 720,
+        "minFontPx": 12,
+        "minLineHeightRatio": 1.4,
+        "controls": 53,
+        "surfaces": 5,
+        "tabStops": 3,
+        "overlaps": 0
+      }
+    },
+    {
+      "screenshot": "capture-settings-zoom-150.png",
+      "bytes": 85321,
+      "scenario": "settings",
+      "viewport": "zoom-150",
+      "tier": "CONTRACT",
+      "surface": "settings",
+      "region": "COMPACT",
+      "verdict": "PASS",
+      "checks": [
+        {
+          "id": "viewport-mapping",
+          "pass": true,
+          "actual": {
+            "region": "COMPACT",
+            "expectedRegion": "COMPACT",
+            "effectiveWidthPx": 853,
+            "expectedEffectiveWidthPx": 853.33,
+            "effectiveHeightPx": 480,
+            "expectedEffectiveHeightPx": 480,
+            "compact": true,
+            "large": false
+          },
+          "detail": "viewport 1280×720 at 150% is laid out as 853.33×480 (COMPACT)."
+        },
+        {
+          "id": "text-legible",
+          "pass": true,
+          "actual": {
+            "minFontPx": 12,
+            "minFontDescriptor": "span.minimap__route \"Rută: 2 benzi · 25% · 120 m\"",
+            "minLineHeightRatio": 1.4,
+            "minLineHeightDescriptor": "span \"Viteză\""
+          },
+          "detail": "smallest visible text is 12 px with a 1.4 line-height ratio; the floor is 12 px and 1.4."
+        },
+        {
+          "id": "text-not-clipped",
+          "pass": true,
+          "actual": [],
+          "detail": "No visible text is clipped horizontally."
+        },
+        {
+          "id": "text-not-overlapping",
+          "pass": true,
+          "actual": [],
+          "detail": "No two text boxes in the same row overlap."
+        },
+        {
+          "id": "contrast-aa",
+          "pass": true,
+          "actual": [],
+          "detail": "Every measured text pair reaches the WCAG AA ratio for its size."
+        },
+        {
+          "id": "controls-visible",
+          "pass": true,
+          "actual": [],
+          "detail": "53 controls have a non-zero rectangle."
+        },
+        {
+          "id": "controls-hit-testable",
+          "pass": true,
+          "actual": [],
+          "detail": "Every enabled control inside the viewport wins its own centre hit-test."
+        },
+        {
+          "id": "essentials-visible",
+          "pass": true,
+          "actual": {
+            "missing": [],
+            "outsideHarness": [
+              "mode-buttons: Butoanele M/L sunt compuse de 067 și poziționate de host: componenta nu are reguli în src/style.css.",
+              "pause-control: Pauza este a meniului de aplicație (src/main.ts + rendering-view), nu o suprafață din src/ui.",
+              "recovery-control: Recuperarea este montată de host în containerul ei (createRecoveryHud nu are stiluri proprii)."
+            ]
+          },
+          "detail": "2 essential controls mounted by the harness are visible."
+        },
+        {
+          "id": "no-critical-overlap",
+          "pass": true,
+          "actual": [],
+          "detail": "No two measured surfaces overlap."
+        },
+        {
+          "id": "scroll-policy",
+          "pass": true,
+          "actual": [
+            {
+              "id": "fleet",
+              "scroll": {
+                "scrollHeight": 4001,
+                "clientHeight": 80,
+                "overflowY": "auto",
+                "maxHeight": "96px"
+              }
+            },
+            {
+              "id": "notifications",
+              "scroll": {
+                "scrollHeight": 597,
+                "clientHeight": 144,
+                "overflowY": "auto",
+                "maxHeight": "144px"
+              }
+            },
+            {
+              "id": "settings",
+              "scroll": {
+                "scrollHeight": 1421,
+                "clientHeight": 430,
+                "overflowY": "auto",
+                "maxHeight": "432px"
+              }
+            }
+          ],
+          "detail": "3 overflowing surfaces scroll vertically with `overflow-y: auto`."
+        },
+        {
+          "id": "surface-inside-viewport",
+          "pass": true,
+          "actual": [],
+          "detail": "Every visible surface stays inside the viewport."
+        },
+        {
+          "id": "tab-order",
+          "pass": true,
+          "actual": {
+            "stops": 3,
+            "order": [
+              "1:select.game-settings__select \"metri (m)picioare (ft)\"",
+              "2:select.game-settings__select \"Din spateFirst-person din poz…\"",
+              "3:input.game-settings__range"
+            ],
+            "duplicates": [],
+            "outsideDialog": [],
+            "dialogOpenBefore": true
+          },
+          "detail": "3 tab stops, 0 duplicates, 0 escapes from the open panel, dialog open before: true."
+        },
+        {
+          "id": "focus-visible",
+          "pass": true,
+          "actual": [],
+          "detail": "Every keyboard stop draws a visible focus ring of at least 3 px."
+        },
+        {
+          "id": "escape-closes",
+          "pass": true,
+          "actual": {
+            "trapExpected": true,
+            "escapeReason": null,
+            "dialogOpenBefore": true,
+            "dialogOpenAfter": false,
+            "focusRestored": true,
+            "dialogStops": 3
+          },
+          "detail": "Escape closed the dialog: true; focus restored: true."
+        }
+      ],
+      "failed": [],
+      "numbers": {
+        "effectiveWidthPx": 853,
+        "effectiveHeightPx": 480,
+        "minFontPx": 12,
+        "minLineHeightRatio": 1.4,
+        "controls": 53,
+        "surfaces": 5,
+        "tabStops": 3,
+        "overlaps": 1
+      }
+    },
+    {
+      "screenshot": "capture-settings-zoom-200.png",
+      "bytes": 96948,
+      "scenario": "settings",
+      "viewport": "zoom-200",
+      "tier": "CONTRACT",
+      "surface": "settings",
+      "region": "COMPACT",
+      "verdict": "PASS",
+      "checks": [
+        {
+          "id": "viewport-mapping",
+          "pass": true,
+          "actual": {
+            "region": "COMPACT",
+            "expectedRegion": "COMPACT",
+            "effectiveWidthPx": 960,
+            "expectedEffectiveWidthPx": 960,
+            "effectiveHeightPx": 540,
+            "expectedEffectiveHeightPx": 540,
+            "compact": true,
+            "large": false
+          },
+          "detail": "viewport 1920×1080 at 200% is laid out as 960×540 (COMPACT)."
+        },
+        {
+          "id": "text-legible",
+          "pass": true,
+          "actual": {
+            "minFontPx": 12,
+            "minFontDescriptor": "span.minimap__route \"Rută: 2 benzi · 25% · 120 m\"",
+            "minLineHeightRatio": 1.4,
+            "minLineHeightDescriptor": "span \"Viteză\""
+          },
+          "detail": "smallest visible text is 12 px with a 1.4 line-height ratio; the floor is 12 px and 1.4."
+        },
+        {
+          "id": "text-not-clipped",
+          "pass": true,
+          "actual": [],
+          "detail": "No visible text is clipped horizontally."
+        },
+        {
+          "id": "text-not-overlapping",
+          "pass": true,
+          "actual": [],
+          "detail": "No two text boxes in the same row overlap."
+        },
+        {
+          "id": "contrast-aa",
+          "pass": true,
+          "actual": [],
+          "detail": "Every measured text pair reaches the WCAG AA ratio for its size."
+        },
+        {
+          "id": "controls-visible",
+          "pass": true,
+          "actual": [],
+          "detail": "53 controls have a non-zero rectangle."
+        },
+        {
+          "id": "controls-hit-testable",
+          "pass": true,
+          "actual": [],
+          "detail": "Every enabled control inside the viewport wins its own centre hit-test."
+        },
+        {
+          "id": "essentials-visible",
+          "pass": true,
+          "actual": {
+            "missing": [],
+            "outsideHarness": [
+              "mode-buttons: Butoanele M/L sunt compuse de 067 și poziționate de host: componenta nu are reguli în src/style.css.",
+              "pause-control: Pauza este a meniului de aplicație (src/main.ts + rendering-view), nu o suprafață din src/ui.",
+              "recovery-control: Recuperarea este montată de host în containerul ei (createRecoveryHud nu are stiluri proprii)."
+            ]
+          },
+          "detail": "2 essential controls mounted by the harness are visible."
+        },
+        {
+          "id": "no-critical-overlap",
+          "pass": true,
+          "actual": [],
+          "detail": "No two measured surfaces overlap."
+        },
+        {
+          "id": "scroll-policy",
+          "pass": true,
+          "actual": [
+            {
+              "id": "fleet",
+              "scroll": {
+                "scrollHeight": 4001,
+                "clientHeight": 80,
+                "overflowY": "auto",
+                "maxHeight": "144px"
+              }
+            },
+            {
+              "id": "notifications",
+              "scroll": {
+                "scrollHeight": 597,
+                "clientHeight": 144,
+                "overflowY": "auto",
+                "maxHeight": "144px"
+              }
+            },
+            {
+              "id": "settings",
+              "scroll": {
+                "scrollHeight": 1421,
+                "clientHeight": 484,
+                "overflowY": "auto",
+                "maxHeight": "486px"
+              }
+            }
+          ],
+          "detail": "3 overflowing surfaces scroll vertically with `overflow-y: auto`."
+        },
+        {
+          "id": "surface-inside-viewport",
+          "pass": true,
+          "actual": [],
+          "detail": "Every visible surface stays inside the viewport."
+        },
+        {
+          "id": "tab-order",
+          "pass": true,
+          "actual": {
+            "stops": 3,
+            "order": [
+              "1:select.game-settings__select \"metri (m)picioare (ft)\"",
+              "2:select.game-settings__select \"Din spateFirst-person din poz…\"",
+              "3:input.game-settings__range"
+            ],
+            "duplicates": [],
+            "outsideDialog": [],
+            "dialogOpenBefore": true
+          },
+          "detail": "3 tab stops, 0 duplicates, 0 escapes from the open panel, dialog open before: true."
+        },
+        {
+          "id": "focus-visible",
+          "pass": true,
+          "actual": [],
+          "detail": "Every keyboard stop draws a visible focus ring of at least 3 px."
+        },
+        {
+          "id": "escape-closes",
+          "pass": true,
+          "actual": {
+            "trapExpected": true,
+            "escapeReason": null,
+            "dialogOpenBefore": true,
+            "dialogOpenAfter": false,
+            "focusRestored": true,
+            "dialogStops": 3
+          },
+          "detail": "Escape closed the dialog: true; focus restored: true."
+        }
+      ],
+      "failed": [],
+      "numbers": {
+        "effectiveWidthPx": 960,
+        "effectiveHeightPx": 540,
+        "minFontPx": 12,
+        "minLineHeightRatio": 1.4,
+        "controls": 53,
+        "surfaces": 5,
+        "tabStops": 3,
+        "overlaps": 1
+      }
+    },
+    {
+      "screenshot": "capture-camera-1280x720.png",
+      "bytes": 195126,
+      "scenario": "camera",
+      "viewport": "1280x720",
+      "tier": "CONTRACT",
+      "surface": "camera",
+      "region": "STANDARD",
+      "verdict": "FAIL",
+      "checks": [
+        {
+          "id": "viewport-mapping",
+          "pass": true,
+          "actual": {
+            "region": "STANDARD",
+            "expectedRegion": "STANDARD",
+            "effectiveWidthPx": 1280,
+            "expectedEffectiveWidthPx": 1280,
+            "effectiveHeightPx": 720,
+            "expectedEffectiveHeightPx": 720,
+            "compact": false,
+            "large": false
+          },
+          "detail": "viewport 1280×720 at 100% is laid out as 1280×720 (STANDARD)."
+        },
+        {
+          "id": "text-legible",
+          "pass": false,
+          "actual": {
+            "minFontPx": 11.52,
+            "minFontDescriptor": "span \"Lină\"",
+            "minLineHeightRatio": 1.4,
+            "minLineHeightDescriptor": "span \"Viteză\""
+          },
+          "detail": "smallest visible text is 11.52 px with a 1.4 line-height ratio; the floor is 12 px and 1.4."
+        },
+        {
+          "id": "text-not-clipped",
+          "pass": true,
+          "actual": [],
+          "detail": "No visible text is clipped horizontally."
+        },
+        {
+          "id": "text-not-overlapping",
+          "pass": true,
+          "actual": [],
+          "detail": "No two text boxes in the same row overlap."
+        },
+        {
+          "id": "contrast-aa",
+          "pass": true,
+          "actual": [],
+          "detail": "Every measured text pair reaches the WCAG AA ratio for its size."
+        },
+        {
+          "id": "controls-visible",
+          "pass": true,
+          "actual": [],
+          "detail": "52 controls have a non-zero rectangle."
+        },
+        {
+          "id": "controls-hit-testable",
+          "pass": true,
+          "actual": [],
+          "detail": "Every enabled control inside the viewport wins its own centre hit-test."
+        },
+        {
+          "id": "essentials-visible",
+          "pass": true,
+          "actual": {
+            "missing": [],
+            "outsideHarness": [
+              "mode-buttons: Butoanele M/L sunt compuse de 067 și poziționate de host: componenta nu are reguli în src/style.css.",
+              "pause-control: Pauza este a meniului de aplicație (src/main.ts + rendering-view), nu o suprafață din src/ui.",
+              "recovery-control: Recuperarea este montată de host în containerul ei (createRecoveryHud nu are stiluri proprii)."
+            ]
+          },
+          "detail": "2 essential controls mounted by the harness are visible."
+        },
+        {
+          "id": "no-critical-overlap",
+          "pass": true,
+          "actual": [],
+          "detail": "No two measured surfaces overlap."
+        },
+        {
+          "id": "scroll-policy",
+          "pass": true,
+          "actual": [
+            {
+              "id": "fleet",
+              "scroll": {
+                "scrollHeight": 2153,
+                "clientHeight": 206,
+                "overflowY": "auto",
+                "maxHeight": "324px"
+              }
+            }
+          ],
+          "detail": "1 overflowing surfaces scroll vertically with `overflow-y: auto`."
+        },
+        {
+          "id": "surface-inside-viewport",
+          "pass": true,
+          "actual": [],
+          "detail": "Every visible surface stays inside the viewport."
+        },
+        {
+          "id": "tab-order",
+          "pass": true,
+          "actual": {
+            "stops": 4,
+            "order": [
+              "1:button.control-sliders__preset \"Accesibil\"",
+              "2:button.control-sliders__preset \"Echilibrat\"",
+              "3:button.control-sliders__preset \"Direct\"",
+              "4:input.control-sliders__range"
+            ],
+            "duplicates": [],
+            "outsideDialog": [],
+            "dialogOpenBefore": true
+          },
+          "detail": "4 tab stops, 0 duplicates, 0 escapes from the open panel, dialog open before: true."
+        },
+        {
+          "id": "focus-visible",
+          "pass": true,
+          "actual": [],
+          "detail": "Every keyboard stop draws a visible focus ring of at least 3 px."
+        },
+        {
+          "id": "escape-closes",
+          "pass": true,
+          "actual": {
+            "trapExpected": true,
+            "escapeReason": null,
+            "dialogOpenBefore": true,
+            "dialogOpenAfter": false,
+            "focusRestored": true,
+            "dialogStops": 4
+          },
+          "detail": "Escape closed the dialog: true; focus restored: true."
+        }
+      ],
+      "failed": [
+        "text-legible"
+      ],
+      "numbers": {
+        "effectiveWidthPx": 1280,
+        "effectiveHeightPx": 720,
+        "minFontPx": 11.52,
+        "minLineHeightRatio": 1.4,
+        "controls": 52,
+        "surfaces": 5,
+        "tabStops": 4,
+        "overlaps": 0
+      }
+    },
+    {
+      "screenshot": "capture-kpis-1280x720.png",
+      "bytes": 167460,
+      "scenario": "kpis",
+      "viewport": "1280x720",
+      "tier": "CONTRACT",
+      "surface": "kpis",
+      "region": "STANDARD",
+      "verdict": "FAIL",
+      "checks": [
+        {
+          "id": "viewport-mapping",
+          "pass": true,
+          "actual": {
+            "region": "STANDARD",
+            "expectedRegion": "STANDARD",
+            "effectiveWidthPx": 1280,
+            "expectedEffectiveWidthPx": 1280,
+            "effectiveHeightPx": 720,
+            "expectedEffectiveHeightPx": 720,
+            "compact": false,
+            "large": false
+          },
+          "detail": "viewport 1280×720 at 100% is laid out as 1280×720 (STANDARD)."
+        },
+        {
+          "id": "text-legible",
+          "pass": false,
+          "actual": {
+            "minFontPx": 11,
+            "minFontDescriptor": "span.kpi-history__chart-group-label \"Luna 0\"",
+            "minLineHeightRatio": 1.4,
+            "minLineHeightDescriptor": "span \"Viteză\""
+          },
+          "detail": "smallest visible text is 11 px with a 1.4 line-height ratio; the floor is 12 px and 1.4."
+        },
+        {
+          "id": "text-not-clipped",
+          "pass": false,
+          "actual": [
+            {
+              "surface": "kpis",
+              "descriptor": "span.kpi-history__chart-group-value \"fără review-uri\"",
+              "text": "fără review-uri",
+              "scrollWidth": 36,
+              "clientWidth": 14,
+              "overflowX": "visible"
+            },
+            {
+              "surface": "kpis",
+              "descriptor": "span.kpi-history__chart-group-value \"fără review-uri\"",
+              "text": "fără review-uri",
+              "scrollWidth": 36,
+              "clientWidth": 14,
+              "overflowX": "visible"
+            },
+            {
+              "surface": "kpis",
+              "descriptor": "span.kpi-history__chart-group-value \"fără review-uri\"",
+              "text": "fără review-uri",
+              "scrollWidth": 36,
+              "clientWidth": 14,
+              "overflowX": "visible"
+            },
+            {
+              "surface": "kpis",
+              "descriptor": "span.kpi-history__chart-group-value \"fără review-uri\"",
+              "text": "fără review-uri",
+              "scrollWidth": 36,
+              "clientWidth": 14,
+              "overflowX": "visible"
+            }
+          ],
+          "detail": "4 text nodes overflow their box: kpis:span.kpi-history__chart-group-value \"fără review-uri\", kpis:span.kpi-history__chart-group-value \"fără review-uri\", kpis:span.kpi-history__chart-group-value \"fără review-uri\", kpis:span.kpi-history__chart-group-value \"fără review-uri\"."
+        },
+        {
+          "id": "text-not-overlapping",
+          "pass": true,
+          "actual": [],
+          "detail": "No two text boxes in the same row overlap."
+        },
+        {
+          "id": "contrast-aa",
+          "pass": true,
+          "actual": [],
+          "detail": "Every measured text pair reaches the WCAG AA ratio for its size."
+        },
+        {
+          "id": "controls-visible",
+          "pass": true,
+          "actual": [],
+          "detail": "37 controls have a non-zero rectangle."
+        },
+        {
+          "id": "controls-hit-testable",
+          "pass": true,
+          "actual": [],
+          "detail": "Every enabled control inside the viewport wins its own centre hit-test."
+        },
+        {
+          "id": "essentials-visible",
+          "pass": true,
+          "actual": {
+            "missing": [],
+            "outsideHarness": [
+              "mode-buttons: Butoanele M/L sunt compuse de 067 și poziționate de host: componenta nu are reguli în src/style.css.",
+              "pause-control: Pauza este a meniului de aplicație (src/main.ts + rendering-view), nu o suprafață din src/ui.",
+              "recovery-control: Recuperarea este montată de host în containerul ei (createRecoveryHud nu are stiluri proprii)."
+            ]
+          },
+          "detail": "2 essential controls mounted by the harness are visible."
+        },
+        {
+          "id": "no-critical-overlap",
+          "pass": true,
+          "actual": [],
+          "detail": "No two measured surfaces overlap."
+        },
+        {
+          "id": "scroll-policy",
+          "pass": true,
+          "actual": [
+            {
+              "id": "fleet",
+              "scroll": {
+                "scrollHeight": 2153,
+                "clientHeight": 206,
+                "overflowY": "auto",
+                "maxHeight": "324px"
+              }
+            }
+          ],
+          "detail": "1 overflowing surfaces scroll vertically with `overflow-y: auto`."
+        },
+        {
+          "id": "surface-inside-viewport",
+          "pass": true,
+          "actual": [],
+          "detail": "Every visible surface stays inside the viewport."
+        },
+        {
+          "id": "tab-order",
+          "pass": true,
+          "actual": {
+            "stops": 2,
+            "order": [
+              "1:div.kpi-history__body \"12 luni (11 cu date, 1 fără d…\"",
+              "2:button.kpi-history__close \"Închide\""
+            ],
+            "duplicates": [],
+            "outsideDialog": [],
+            "dialogOpenBefore": true
+          },
+          "detail": "2 tab stops, 0 duplicates, 0 escapes from the open panel, dialog open before: true."
+        },
+        {
+          "id": "focus-visible",
+          "pass": true,
+          "actual": [],
+          "detail": "Every keyboard stop draws a visible focus ring of at least 3 px."
+        },
+        {
+          "id": "escape-closes",
+          "pass": true,
+          "actual": {
+            "trapExpected": true,
+            "escapeReason": null,
+            "dialogOpenBefore": true,
+            "dialogOpenAfter": false,
+            "focusRestored": true,
+            "dialogStops": 2
+          },
+          "detail": "Escape closed the dialog: true; focus restored: true."
+        }
+      ],
+      "failed": [
+        "text-legible",
+        "text-not-clipped"
+      ],
+      "numbers": {
+        "effectiveWidthPx": 1280,
+        "effectiveHeightPx": 720,
+        "minFontPx": 11,
+        "minLineHeightRatio": 1.4,
+        "controls": 37,
+        "surfaces": 5,
+        "tabStops": 2,
+        "overlaps": 4
+      }
+    },
+    {
+      "screenshot": "capture-kpis-1920x1080.png",
+      "bytes": 238350,
+      "scenario": "kpis",
+      "viewport": "1920x1080",
+      "tier": "CONTRACT",
+      "surface": "kpis",
+      "region": "LARGE",
+      "verdict": "FAIL",
+      "checks": [
+        {
+          "id": "viewport-mapping",
+          "pass": true,
+          "actual": {
+            "region": "LARGE",
+            "expectedRegion": "LARGE",
+            "effectiveWidthPx": 1920,
+            "expectedEffectiveWidthPx": 1920,
+            "effectiveHeightPx": 1080,
+            "expectedEffectiveHeightPx": 1080,
+            "compact": false,
+            "large": true
+          },
+          "detail": "viewport 1920×1080 at 100% is laid out as 1920×1080 (LARGE)."
+        },
+        {
+          "id": "text-legible",
+          "pass": false,
+          "actual": {
+            "minFontPx": 11,
+            "minFontDescriptor": "span.kpi-history__chart-group-label \"Luna 0\"",
+            "minLineHeightRatio": 1.4,
+            "minLineHeightDescriptor": "span \"Viteză\""
+          },
+          "detail": "smallest visible text is 11 px with a 1.4 line-height ratio; the floor is 12 px and 1.4."
+        },
+        {
+          "id": "text-not-clipped",
+          "pass": false,
+          "actual": [
+            {
+              "surface": "kpis",
+              "descriptor": "span.kpi-history__chart-group-value \"fără review-uri\"",
+              "text": "fără review-uri",
+              "scrollWidth": 36,
+              "clientWidth": 14,
+              "overflowX": "visible"
+            },
+            {
+              "surface": "kpis",
+              "descriptor": "span.kpi-history__chart-group-value \"fără review-uri\"",
+              "text": "fără review-uri",
+              "scrollWidth": 36,
+              "clientWidth": 14,
+              "overflowX": "visible"
+            },
+            {
+              "surface": "kpis",
+              "descriptor": "span.kpi-history__chart-group-value \"fără review-uri\"",
+              "text": "fără review-uri",
+              "scrollWidth": 36,
+              "clientWidth": 14,
+              "overflowX": "visible"
+            },
+            {
+              "surface": "kpis",
+              "descriptor": "span.kpi-history__chart-group-value \"fără review-uri\"",
+              "text": "fără review-uri",
+              "scrollWidth": 36,
+              "clientWidth": 14,
+              "overflowX": "visible"
+            }
+          ],
+          "detail": "4 text nodes overflow their box: kpis:span.kpi-history__chart-group-value \"fără review-uri\", kpis:span.kpi-history__chart-group-value \"fără review-uri\", kpis:span.kpi-history__chart-group-value \"fără review-uri\", kpis:span.kpi-history__chart-group-value \"fără review-uri\"."
+        },
+        {
+          "id": "text-not-overlapping",
+          "pass": true,
+          "actual": [],
+          "detail": "No two text boxes in the same row overlap."
+        },
+        {
+          "id": "contrast-aa",
+          "pass": true,
+          "actual": [],
+          "detail": "Every measured text pair reaches the WCAG AA ratio for its size."
+        },
+        {
+          "id": "controls-visible",
+          "pass": true,
+          "actual": [],
+          "detail": "37 controls have a non-zero rectangle."
+        },
+        {
+          "id": "controls-hit-testable",
+          "pass": true,
+          "actual": [],
+          "detail": "Every enabled control inside the viewport wins its own centre hit-test."
+        },
+        {
+          "id": "essentials-visible",
+          "pass": true,
+          "actual": {
+            "missing": [],
+            "outsideHarness": [
+              "mode-buttons: Butoanele M/L sunt compuse de 067 și poziționate de host: componenta nu are reguli în src/style.css.",
+              "pause-control: Pauza este a meniului de aplicație (src/main.ts + rendering-view), nu o suprafață din src/ui.",
+              "recovery-control: Recuperarea este montată de host în containerul ei (createRecoveryHud nu are stiluri proprii)."
+            ]
+          },
+          "detail": "2 essential controls mounted by the harness are visible."
+        },
+        {
+          "id": "no-critical-overlap",
+          "pass": true,
+          "actual": [],
+          "detail": "No two measured surfaces overlap."
+        },
+        {
+          "id": "scroll-policy",
+          "pass": true,
+          "actual": [
+            {
+              "id": "fleet",
+              "scroll": {
+                "scrollHeight": 1829,
+                "clientHeight": 566,
+                "overflowY": "auto",
+                "maxHeight": "684px"
+              }
+            }
+          ],
+          "detail": "1 overflowing surfaces scroll vertically with `overflow-y: auto`."
+        },
+        {
+          "id": "surface-inside-viewport",
+          "pass": true,
+          "actual": [],
+          "detail": "Every visible surface stays inside the viewport."
+        },
+        {
+          "id": "tab-order",
+          "pass": true,
+          "actual": {
+            "stops": 2,
+            "order": [
+              "1:div.kpi-history__body \"12 luni (11 cu date, 1 fără d…\"",
+              "2:button.kpi-history__close \"Închide\""
+            ],
+            "duplicates": [],
+            "outsideDialog": [],
+            "dialogOpenBefore": true
+          },
+          "detail": "2 tab stops, 0 duplicates, 0 escapes from the open panel, dialog open before: true."
+        },
+        {
+          "id": "focus-visible",
+          "pass": true,
+          "actual": [],
+          "detail": "Every keyboard stop draws a visible focus ring of at least 3 px."
+        },
+        {
+          "id": "escape-closes",
+          "pass": true,
+          "actual": {
+            "trapExpected": true,
+            "escapeReason": null,
+            "dialogOpenBefore": true,
+            "dialogOpenAfter": false,
+            "focusRestored": true,
+            "dialogStops": 2
+          },
+          "detail": "Escape closed the dialog: true; focus restored: true."
+        }
+      ],
+      "failed": [
+        "text-legible",
+        "text-not-clipped"
+      ],
+      "numbers": {
+        "effectiveWidthPx": 1920,
+        "effectiveHeightPx": 1080,
+        "minFontPx": 11,
+        "minLineHeightRatio": 1.4,
+        "controls": 37,
+        "surfaces": 5,
+        "tabStops": 2,
+        "overlaps": 0
+      }
+    }
+  ],
+  "comparisons": [
+    {
+      "viewport": "1280x720",
+      "region": "STANDARD",
+      "tier": "CONTRACT",
+      "surface": "hud",
+      "widthPx": 352,
+      "heightPx": 313.44,
+      "fontPx": 12,
+      "lineHeightRatio": 1.4,
+      "visibleRows": null,
+      "scrollHeight": 311,
+      "clientHeight": 311,
+      "verdict": "PASS"
+    },
+    {
+      "viewport": "1920x1080",
+      "region": "LARGE",
+      "tier": "CONTRACT",
+      "surface": "hud",
+      "widthPx": 352,
+      "heightPx": 322.42,
+      "fontPx": 12,
+      "lineHeightRatio": 1.4,
+      "visibleRows": null,
+      "scrollHeight": 320,
+      "clientHeight": 320,
+      "verdict": "PASS"
+    },
+    {
+      "viewport": "zoom-150",
+      "region": "COMPACT",
+      "tier": "CONTRACT",
+      "surface": "hud",
+      "widthPx": 240,
+      "heightPx": 332.63,
+      "fontPx": 12,
+      "lineHeightRatio": 1.4,
+      "visibleRows": null,
+      "scrollHeight": 331,
+      "clientHeight": 331,
+      "verdict": "PASS"
+    },
+    {
+      "viewport": "zoom-200",
+      "region": "COMPACT",
+      "tier": "CONTRACT",
+      "surface": "hud",
+      "widthPx": 240,
+      "heightPx": 332.63,
+      "fontPx": 12,
+      "lineHeightRatio": 1.4,
+      "visibleRows": null,
+      "scrollHeight": 331,
+      "clientHeight": 331,
+      "verdict": "PASS"
+    },
+    {
+      "viewport": "zoom-200-720",
+      "region": "COMPACT",
+      "tier": "STRESS",
+      "surface": "hud",
+      "widthPx": 240,
+      "heightPx": 332.63,
+      "fontPx": 12,
+      "lineHeightRatio": 1.4,
+      "visibleRows": null,
+      "scrollHeight": 331,
+      "clientHeight": 331,
+      "verdict": "FAIL"
+    },
+    {
+      "viewport": "1280x720",
+      "region": "STANDARD",
+      "tier": "CONTRACT",
+      "surface": "fleet",
+      "widthPx": 384,
+      "heightPx": 324,
+      "fontPx": 12,
+      "lineHeightRatio": 1.4,
+      "visibleRows": 30,
+      "scrollHeight": 2153,
+      "clientHeight": 206,
+      "verdict": "PASS"
+    },
+    {
+      "viewport": "zoom-200-720",
+      "region": "COMPACT",
+      "tier": "STRESS",
+      "surface": "fleet",
+      "widthPx": 224,
+      "heightPx": 96,
+      "fontPx": 12,
+      "lineHeightRatio": 1.4,
+      "visibleRows": 30,
+      "scrollHeight": 4001,
+      "clientHeight": 80,
+      "verdict": "FAIL"
+    },
+    {
+      "viewport": "1280x720",
+      "region": "STANDARD",
+      "tier": "CONTRACT",
+      "surface": "notifications",
+      "widthPx": 384,
+      "heightPx": 255.81,
+      "fontPx": 12,
+      "lineHeightRatio": 1.4,
+      "visibleRows": null,
+      "scrollHeight": 256,
+      "clientHeight": 256,
+      "verdict": "PASS"
+    },
+    {
+      "viewport": "zoom-150",
+      "region": "COMPACT",
+      "tier": "CONTRACT",
+      "surface": "notifications",
+      "widthPx": 160,
+      "heightPx": 144,
+      "fontPx": 12,
+      "lineHeightRatio": 1.4,
+      "visibleRows": null,
+      "scrollHeight": 597,
+      "clientHeight": 144,
+      "verdict": "PASS"
+    },
+    {
+      "viewport": "1280x720",
+      "region": "STANDARD",
+      "tier": "CONTRACT",
+      "surface": "profile",
+      "widthPx": 416,
+      "heightPx": 648,
+      "fontPx": 12,
+      "lineHeightRatio": 1.4,
+      "visibleRows": null,
+      "scrollHeight": 6794,
+      "clientHeight": 646,
+      "verdict": "PASS"
+    },
+    {
+      "viewport": "1920x1080",
+      "region": "LARGE",
+      "tier": "CONTRACT",
+      "surface": "profile",
+      "widthPx": 512,
+      "heightPx": 864,
+      "fontPx": 12,
+      "lineHeightRatio": 1.4,
+      "visibleRows": null,
+      "scrollHeight": 6124,
+      "clientHeight": 862,
+      "verdict": "PASS"
+    },
+    {
+      "viewport": "zoom-150",
+      "region": "COMPACT",
+      "tier": "CONTRACT",
+      "surface": "profile",
+      "widthPx": 384,
+      "heightPx": 432,
+      "fontPx": 12,
+      "lineHeightRatio": 1.4,
+      "visibleRows": null,
+      "scrollHeight": 7277,
+      "clientHeight": 430,
+      "verdict": "PASS"
+    },
+    {
+      "viewport": "zoom-200",
+      "region": "COMPACT",
+      "tier": "CONTRACT",
+      "surface": "profile",
+      "widthPx": 384,
+      "heightPx": 486,
+      "fontPx": 12,
+      "lineHeightRatio": 1.4,
+      "visibleRows": null,
+      "scrollHeight": 7277,
+      "clientHeight": 484,
+      "verdict": "PASS"
+    },
+    {
+      "viewport": "zoom-200-720",
+      "region": "COMPACT",
+      "tier": "STRESS",
+      "surface": "profile",
+      "widthPx": 192,
+      "heightPx": 324,
+      "fontPx": 12,
+      "lineHeightRatio": 1.4,
+      "visibleRows": null,
+      "scrollHeight": 32151,
+      "clientHeight": 322,
+      "verdict": "FAIL"
+    },
+    {
+      "viewport": "1280x720",
+      "region": "STANDARD",
+      "tier": "CONTRACT",
+      "surface": "city",
+      "widthPx": 416,
+      "heightPx": 648,
+      "fontPx": 12,
+      "lineHeightRatio": 1.4,
+      "visibleRows": null,
+      "scrollHeight": 855,
+      "clientHeight": 646,
+      "verdict": "PASS"
+    },
+    {
+      "viewport": "1920x1080",
+      "region": "LARGE",
+      "tier": "CONTRACT",
+      "surface": "city",
+      "widthPx": 512,
+      "heightPx": 789.23,
+      "fontPx": 12,
+      "lineHeightRatio": 1.4,
+      "visibleRows": null,
+      "scrollHeight": 787,
+      "clientHeight": 787,
+      "verdict": "PASS"
+    },
+    {
+      "viewport": "1280x720",
+      "region": "STANDARD",
+      "tier": "CONTRACT",
+      "surface": "settings",
+      "widthPx": 416,
+      "heightPx": 648,
+      "fontPx": 12,
+      "lineHeightRatio": 1.4,
+      "visibleRows": null,
+      "scrollHeight": 880,
+      "clientHeight": 646,
+      "verdict": "PASS"
+    },
+    {
+      "viewport": "zoom-150",
+      "region": "COMPACT",
+      "tier": "CONTRACT",
+      "surface": "settings",
+      "widthPx": 384,
+      "heightPx": 432,
+      "fontPx": 12,
+      "lineHeightRatio": 1.4,
+      "visibleRows": null,
+      "scrollHeight": 1421,
+      "clientHeight": 430,
+      "verdict": "PASS"
+    },
+    {
+      "viewport": "zoom-200",
+      "region": "COMPACT",
+      "tier": "CONTRACT",
+      "surface": "settings",
+      "widthPx": 384,
+      "heightPx": 486,
+      "fontPx": 12,
+      "lineHeightRatio": 1.4,
+      "visibleRows": null,
+      "scrollHeight": 1421,
+      "clientHeight": 484,
+      "verdict": "PASS"
+    },
+    {
+      "viewport": "1280x720",
+      "region": "STANDARD",
+      "tier": "CONTRACT",
+      "surface": "camera",
+      "widthPx": 416,
+      "heightPx": 648,
+      "fontPx": 11.52,
+      "lineHeightRatio": 1.4,
+      "visibleRows": null,
+      "scrollHeight": 646,
+      "clientHeight": 646,
+      "verdict": "FAIL"
+    },
+    {
+      "viewport": "1280x720",
+      "region": "STANDARD",
+      "tier": "CONTRACT",
+      "surface": "kpis",
+      "widthPx": 970,
+      "heightPx": 690,
+      "fontPx": 11,
+      "lineHeightRatio": 1.4,
+      "visibleRows": null,
+      "scrollHeight": 688,
+      "clientHeight": 688,
+      "verdict": "FAIL"
+    },
+    {
+      "viewport": "1920x1080",
+      "region": "LARGE",
+      "tier": "CONTRACT",
+      "surface": "kpis",
+      "widthPx": 970,
+      "heightPx": 778,
+      "fontPx": 11,
+      "lineHeightRatio": 1.4,
+      "visibleRows": null,
+      "scrollHeight": 776,
+      "clientHeight": 776,
+      "verdict": "FAIL"
+    }
+  ],
+  "findings": [
+    {
+      "id": "D1",
+      "severity": "MEDIUM",
+      "tier": "STRESS",
+      "surface": "hud",
+      "viewport": "zoom-200-720",
+      "check": "surface-inside-viewport",
+      "summary": "A surface is positioned outside the viewport. (Surfaces outside the viewport: fleet (bottom 476 > 360), notifications (bottom 384 > 360).)",
+      "repro": [
+        "npm run qa:ui -- --browser",
+        "Deschide captura Docs/Evidence/153-ui-qa/capture-hud-zoom-200-720.png.",
+        "Viewport 1280×720 la 200% zoom (640×360 CSS px efectivi).",
+        "Scenariul „hud”, verificarea `surface-inside-viewport`: Surfaces outside the viewport: fleet (bottom 476 > 360), notifications (bottom 384 > 360)."
+      ]
+    },
+    {
+      "id": "D2",
+      "severity": "MEDIUM",
+      "tier": "STRESS",
+      "surface": "fleet",
+      "viewport": "zoom-200-720",
+      "check": "surface-inside-viewport",
+      "summary": "A surface is positioned outside the viewport. (Surfaces outside the viewport: fleet (bottom 476 > 360), notifications (bottom 384 > 360).)",
+      "repro": [
+        "npm run qa:ui -- --browser",
+        "Deschide captura Docs/Evidence/153-ui-qa/capture-fleet-zoom-200-720.png.",
+        "Viewport 1280×720 la 200% zoom (640×360 CSS px efectivi).",
+        "Scenariul „fleet”, verificarea `surface-inside-viewport`: Surfaces outside the viewport: fleet (bottom 476 > 360), notifications (bottom 384 > 360)."
+      ]
+    },
+    {
+      "id": "D3",
+      "severity": "MEDIUM",
+      "tier": "STRESS",
+      "surface": "profile",
+      "viewport": "zoom-200-720",
+      "check": "surface-inside-viewport",
+      "summary": "A surface is positioned outside the viewport. (Surfaces outside the viewport: fleet (bottom 476 > 360), notifications (bottom 384 > 360).)",
+      "repro": [
+        "npm run qa:ui -- --browser",
+        "Deschide captura Docs/Evidence/153-ui-qa/capture-profile-zoom-200-720.png.",
+        "Viewport 1280×720 la 200% zoom (640×360 CSS px efectivi).",
+        "Scenariul „profile”, verificarea `surface-inside-viewport`: Surfaces outside the viewport: fleet (bottom 476 > 360), notifications (bottom 384 > 360)."
+      ]
+    },
+    {
+      "id": "D4",
+      "severity": "MEDIUM",
+      "tier": "CONTRACT",
+      "surface": "camera",
+      "viewport": "1280x720",
+      "check": "text-legible",
+      "summary": "Visible text falls below the 12 CSS px / 1.4 line-height floor. (smallest visible text is 11.52 px with a 1.4 line-height ratio; the floor is 12 px and 1.4.)",
+      "repro": [
+        "npm run qa:ui -- --browser",
+        "Deschide captura Docs/Evidence/153-ui-qa/capture-camera-1280x720.png.",
+        "Viewport 1280×720 la 100% zoom (1280×720 CSS px efectivi).",
+        "Scenariul „camera”, verificarea `text-legible`: smallest visible text is 11.52 px with a 1.4 line-height ratio; the floor is 12 px and 1.4."
+      ]
+    },
+    {
+      "id": "D5",
+      "severity": "MEDIUM",
+      "tier": "CONTRACT",
+      "surface": "kpis",
+      "viewport": "1280x720",
+      "check": "text-legible",
+      "summary": "Visible text falls below the 12 CSS px / 1.4 line-height floor. (smallest visible text is 11 px with a 1.4 line-height ratio; the floor is 12 px and 1.4.)",
+      "repro": [
+        "npm run qa:ui -- --browser",
+        "Deschide captura Docs/Evidence/153-ui-qa/capture-kpis-1280x720.png.",
+        "Viewport 1280×720 la 100% zoom (1280×720 CSS px efectivi).",
+        "Scenariul „kpis”, verificarea `text-legible`: smallest visible text is 11 px with a 1.4 line-height ratio; the floor is 12 px and 1.4."
+      ]
+    },
+    {
+      "id": "D6",
+      "severity": "MEDIUM",
+      "tier": "CONTRACT",
+      "surface": "kpis",
+      "viewport": "1280x720",
+      "check": "text-not-clipped",
+      "summary": "Visible text overflows or is clipped by its own box. (4 text nodes overflow their box: kpis:span.kpi-history__chart-group-value \"fără review-uri\", kpis:span.kpi-history__chart-group-value \"fără review-uri\", kpis:span.kpi-history__chart-group-value \"fără review-uri\", kpis:span.kpi-history__chart-group-value \"fără review-uri\".)",
+      "repro": [
+        "npm run qa:ui -- --browser",
+        "Deschide captura Docs/Evidence/153-ui-qa/capture-kpis-1280x720.png.",
+        "Viewport 1280×720 la 100% zoom (1280×720 CSS px efectivi).",
+        "Scenariul „kpis”, verificarea `text-not-clipped`: 4 text nodes overflow their box: kpis:span.kpi-history__chart-group-value \"fără review-uri\", kpis:span.kpi-history__chart-group-value \"fără review-uri\", kpis:span.kpi-history__chart-group-value \"fără review-uri\", kpis:span.kpi-history__chart-group-value \"fără review-uri\"."
+      ]
+    },
+    {
+      "id": "D7",
+      "severity": "MEDIUM",
+      "tier": "CONTRACT",
+      "surface": "kpis",
+      "viewport": "1920x1080",
+      "check": "text-legible",
+      "summary": "Visible text falls below the 12 CSS px / 1.4 line-height floor. (smallest visible text is 11 px with a 1.4 line-height ratio; the floor is 12 px and 1.4.)",
+      "repro": [
+        "npm run qa:ui -- --browser",
+        "Deschide captura Docs/Evidence/153-ui-qa/capture-kpis-1920x1080.png.",
+        "Viewport 1920×1080 la 100% zoom (1920×1080 CSS px efectivi).",
+        "Scenariul „kpis”, verificarea `text-legible`: smallest visible text is 11 px with a 1.4 line-height ratio; the floor is 12 px and 1.4."
+      ]
+    },
+    {
+      "id": "D8",
+      "severity": "MEDIUM",
+      "tier": "CONTRACT",
+      "surface": "kpis",
+      "viewport": "1920x1080",
+      "check": "text-not-clipped",
+      "summary": "Visible text overflows or is clipped by its own box. (4 text nodes overflow their box: kpis:span.kpi-history__chart-group-value \"fără review-uri\", kpis:span.kpi-history__chart-group-value \"fără review-uri\", kpis:span.kpi-history__chart-group-value \"fără review-uri\", kpis:span.kpi-history__chart-group-value \"fără review-uri\".)",
+      "repro": [
+        "npm run qa:ui -- --browser",
+        "Deschide captura Docs/Evidence/153-ui-qa/capture-kpis-1920x1080.png.",
+        "Viewport 1920×1080 la 100% zoom (1920×1080 CSS px efectivi).",
+        "Scenariul „kpis”, verificarea `text-not-clipped`: 4 text nodes overflow their box: kpis:span.kpi-history__chart-group-value \"fără review-uri\", kpis:span.kpi-history__chart-group-value \"fără review-uri\", kpis:span.kpi-history__chart-group-value \"fără review-uri\", kpis:span.kpi-history__chart-group-value \"fără review-uri\"."
+      ]
+    }
+  ],
+  "summary": {
+    "captures": 22,
+    "contractCaptures": 19,
+    "stressCaptures": 3,
+    "checks": 308,
+    "passed": 300,
+    "failed": 8,
+    "contractFailed": 5,
+    "contractPass": false,
+    "findings": 8,
+    "verdict": "FAIL"
+  }
+}
