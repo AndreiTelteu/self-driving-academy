@@ -1,0 +1,645 @@
+{
+  "version": "compat-matrix-v1",
+  "capturedBy": "scripts/run-compat-matrix-report.mjs --browser",
+  "capturedAt": "2026-11-12T03:37:38.549Z",
+  "host": {
+    "os": "Windows 11 Home (10.0.26300)",
+    "cpu": "AMD Ryzen 7 7735U with Radeon Graphics",
+    "threads": 16,
+    "memoryGiB": 14,
+    "node": "24.19.0",
+    "chromium": "156.0.8078.4"
+  },
+  "note": "Observații reale din Chromium: intrarea de producție src/main.ts, contractele src/rendering apelate direct, fallback forțat prin eliminarea navigator.gpu și pierderi native de dispozitiv/context. Capturile și statisticile de pixeli sunt dovezi, nu verdictul.",
+  "batch": [
+    {
+      "id": "production-headed-auto",
+      "title": "Bootstrap de producție — AUTO alege backendul disponibil",
+      "entry": "production",
+      "scenario": "AUTO",
+      "preference": "AUTO",
+      "capabilities": {
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36",
+        "browser": "Chromium 156.0.8078.4",
+        "browserVersion": "156.0.8078.4",
+        "headless": false,
+        "platform": "Windows 11 Home (10.0.26300)",
+        "secureContext": true,
+        "devicePixelRatio": 1,
+        "webgpu": {
+          "available": true,
+          "adapter": {
+            "vendor": "amd",
+            "architecture": "rdna-2",
+            "device": null,
+            "description": null
+          },
+          "error": null
+        },
+        "webgl2": {
+          "available": true,
+          "vendor": "Google Inc. (AMD)",
+          "renderer": "ANGLE (AMD, AMD Radeon(TM) Graphics (0x00001681) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+        },
+        "webgl1": {
+          "available": true
+        }
+      },
+      "backend": "WEBGPU",
+      "statusText": "Bootstrap pregătit · Babylon.js · WEBGPU",
+      "visibleContent": true,
+      "retryVisible": true,
+      "errorMessage": null,
+      "renderEvidence": {
+        "contextAlive": true,
+        "activeMeshes": null,
+        "framesAdvanced": null,
+        "canvasWidth": 640,
+        "canvasHeight": 320
+      },
+      "recovery": null,
+      "screenshots": [
+        "production-headed-auto.png"
+      ],
+      "screenshotStats": [
+        {
+          "file": "production-headed-auto.png",
+          "bytes": 20066,
+          "width": 1280,
+          "height": 720,
+          "distinctColors": 279,
+          "lumaSpread": 222
+        }
+      ],
+      "pageErrors": []
+    },
+    {
+      "id": "production-headed-webgpu-off",
+      "title": "Fallback forțat — navigator.gpu eliminat înainte de module",
+      "entry": "production",
+      "scenario": "WEBGPU_UNAVAILABLE",
+      "preference": "AUTO",
+      "capabilities": {
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36",
+        "browser": "Chromium 156.0.8078.4",
+        "browserVersion": "156.0.8078.4",
+        "headless": false,
+        "platform": "Windows 11 Home (10.0.26300)",
+        "secureContext": true,
+        "devicePixelRatio": 1,
+        "webgpu": {
+          "available": false,
+          "adapter": null,
+          "error": "navigator.gpu lipsește"
+        },
+        "webgl2": {
+          "available": true,
+          "vendor": "Google Inc. (AMD)",
+          "renderer": "ANGLE (AMD, AMD Radeon(TM) Graphics (0x00001681) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+        },
+        "webgl1": {
+          "available": true
+        }
+      },
+      "backend": "WEBGL2",
+      "statusText": "Bootstrap pregătit · Babylon.js · WEBGL2",
+      "visibleContent": true,
+      "retryVisible": true,
+      "errorMessage": null,
+      "renderEvidence": {
+        "contextAlive": true,
+        "activeMeshes": null,
+        "framesAdvanced": null,
+        "canvasWidth": 640,
+        "canvasHeight": 320
+      },
+      "recovery": null,
+      "screenshots": [
+        "production-headed-webgpu-off.png"
+      ],
+      "screenshotStats": [
+        {
+          "file": "production-headed-webgpu-off.png",
+          "bytes": 20083,
+          "width": 1280,
+          "height": 720,
+          "distinctColors": 279,
+          "lumaSpread": 222
+        }
+      ],
+      "pageErrors": []
+    },
+    {
+      "id": "production-headed-no-backend",
+      "title": "Fără WebGPU și fără WebGL 2 — mesaj explicit, fără ecran gol",
+      "entry": "production",
+      "scenario": "NO_BACKEND",
+      "preference": "AUTO",
+      "capabilities": {
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36",
+        "browser": "Chromium 156.0.8078.4",
+        "browserVersion": "156.0.8078.4",
+        "headless": false,
+        "platform": "Windows 11 Home (10.0.26300)",
+        "secureContext": true,
+        "devicePixelRatio": 1,
+        "webgpu": {
+          "available": false,
+          "adapter": null,
+          "error": "navigator.gpu lipsește"
+        },
+        "webgl2": {
+          "available": false,
+          "vendor": null,
+          "renderer": null
+        },
+        "webgl1": {
+          "available": false
+        }
+      },
+      "backend": "NONE",
+      "statusText": "Randarea nu a pornit. Randarea nu a pornit. WebGPU și WebGL 2 nu sunt disponibile. Poți reîncerca.",
+      "visibleContent": true,
+      "retryVisible": true,
+      "errorMessage": "Randarea nu a pornit. Randarea nu a pornit. WebGPU și WebGL 2 nu sunt disponibile. Poți reîncerca.",
+      "renderEvidence": {
+        "contextAlive": false,
+        "activeMeshes": null,
+        "framesAdvanced": null,
+        "canvasWidth": 0,
+        "canvasHeight": 0
+      },
+      "recovery": null,
+      "screenshots": [
+        "production-headed-no-backend.png"
+      ],
+      "screenshotStats": [
+        {
+          "file": "production-headed-no-backend.png",
+          "bytes": 21724,
+          "width": 1280,
+          "height": 720,
+          "distinctColors": 254,
+          "lumaSpread": 222
+        }
+      ],
+      "pageErrors": []
+    },
+    {
+      "id": "production-headed-webgl1-only",
+      "title": "Doar WebGL 1 — refuz explicit, fără fallback ascuns",
+      "entry": "production",
+      "scenario": "WEBGL1_ONLY",
+      "preference": "AUTO",
+      "capabilities": {
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36",
+        "browser": "Chromium 156.0.8078.4",
+        "browserVersion": "156.0.8078.4",
+        "headless": false,
+        "platform": "Windows 11 Home (10.0.26300)",
+        "secureContext": true,
+        "devicePixelRatio": 1,
+        "webgpu": {
+          "available": false,
+          "adapter": null,
+          "error": "navigator.gpu lipsește"
+        },
+        "webgl2": {
+          "available": false,
+          "vendor": null,
+          "renderer": null
+        },
+        "webgl1": {
+          "available": true
+        }
+      },
+      "backend": "NONE",
+      "statusText": "Randarea nu a pornit. Randarea nu a pornit. WebGPU și WebGL 2 nu sunt disponibile. Poți reîncerca.",
+      "visibleContent": true,
+      "retryVisible": true,
+      "errorMessage": "Randarea nu a pornit. Randarea nu a pornit. WebGPU și WebGL 2 nu sunt disponibile. Poți reîncerca.",
+      "renderEvidence": {
+        "contextAlive": false,
+        "activeMeshes": null,
+        "framesAdvanced": null,
+        "canvasWidth": 0,
+        "canvasHeight": 0
+      },
+      "recovery": null,
+      "screenshots": [
+        "production-headed-webgl1-only.png"
+      ],
+      "screenshotStats": [
+        {
+          "file": "production-headed-webgl1-only.png",
+          "bytes": 21724,
+          "width": 1280,
+          "height": 720,
+          "distinctColors": 254,
+          "lumaSpread": 222
+        }
+      ],
+      "pageErrors": []
+    },
+    {
+      "id": "production-headless-auto",
+      "title": "Bootstrap de producție headless — WebGL 2 pe SwiftShader",
+      "entry": "production",
+      "scenario": "AUTO",
+      "preference": "AUTO",
+      "capabilities": {
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36",
+        "browser": "Chromium 156.0.8078.4",
+        "browserVersion": "156.0.8078.4",
+        "headless": true,
+        "platform": "Windows 11 Home (10.0.26300)",
+        "secureContext": true,
+        "devicePixelRatio": 1,
+        "webgpu": {
+          "available": false,
+          "adapter": null,
+          "error": null
+        },
+        "webgl2": {
+          "available": true,
+          "vendor": "Google Inc. (Google)",
+          "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+        },
+        "webgl1": {
+          "available": true
+        }
+      },
+      "backend": "WEBGL2",
+      "statusText": "Bootstrap pregătit · Babylon.js · WEBGL2",
+      "visibleContent": true,
+      "retryVisible": true,
+      "errorMessage": null,
+      "renderEvidence": {
+        "contextAlive": true,
+        "activeMeshes": null,
+        "framesAdvanced": null,
+        "canvasWidth": 640,
+        "canvasHeight": 320
+      },
+      "recovery": null,
+      "screenshots": [
+        "production-headless-auto.png"
+      ],
+      "screenshotStats": [
+        {
+          "file": "production-headless-auto.png",
+          "bytes": 20149,
+          "width": 1280,
+          "height": 720,
+          "distinctColors": 277,
+          "lumaSpread": 222
+        }
+      ],
+      "pageErrors": []
+    },
+    {
+      "id": "harness-headed-auto",
+      "title": "Contractele reale apelate direct — backend AUTO pe GPU real",
+      "entry": "compat-harness",
+      "scenario": "AUTO",
+      "preference": "AUTO",
+      "capabilities": {
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36",
+        "browser": "Chromium 156.0.8078.4",
+        "browserVersion": "156.0.8078.4",
+        "headless": false,
+        "platform": "Windows 11 Home (10.0.26300)",
+        "secureContext": true,
+        "devicePixelRatio": 1,
+        "webgpu": {
+          "available": true,
+          "adapter": {
+            "vendor": "amd",
+            "architecture": "rdna-2",
+            "device": null,
+            "description": null
+          },
+          "error": null
+        },
+        "webgl2": {
+          "available": true,
+          "vendor": "Google Inc. (AMD)",
+          "renderer": "ANGLE (AMD, AMD Radeon(TM) Graphics (0x00001681) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+        },
+        "webgl1": {
+          "available": true
+        }
+      },
+      "backend": "WEBGPU",
+      "statusText": "Scenă de probă READY · WEBGPU",
+      "visibleContent": true,
+      "retryVisible": false,
+      "errorMessage": null,
+      "renderEvidence": {
+        "contextAlive": true,
+        "activeMeshes": 1,
+        "framesAdvanced": true,
+        "canvasWidth": 640,
+        "canvasHeight": 360
+      },
+      "recovery": null,
+      "screenshots": [
+        "harness-headed-auto.png"
+      ],
+      "screenshotStats": [
+        {
+          "file": "harness-headed-auto.png",
+          "bytes": 14737,
+          "width": 1280,
+          "height": 720,
+          "distinctColors": 635,
+          "lumaSpread": 255
+        }
+      ],
+      "pageErrors": []
+    },
+    {
+      "id": "harness-headless-auto",
+      "title": "Contractele reale apelate direct — backend AUTO pe WebGL 2 software",
+      "entry": "compat-harness",
+      "scenario": "AUTO",
+      "preference": "AUTO",
+      "capabilities": {
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36",
+        "browser": "Chromium 156.0.8078.4",
+        "browserVersion": "156.0.8078.4",
+        "headless": true,
+        "platform": "Windows 11 Home (10.0.26300)",
+        "secureContext": true,
+        "devicePixelRatio": 1,
+        "webgpu": {
+          "available": false,
+          "adapter": null,
+          "error": null
+        },
+        "webgl2": {
+          "available": true,
+          "vendor": "Google Inc. (Google)",
+          "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+        },
+        "webgl1": {
+          "available": true
+        }
+      },
+      "backend": "WEBGL2",
+      "statusText": "Scenă de probă READY · WEBGL2",
+      "visibleContent": true,
+      "retryVisible": false,
+      "errorMessage": null,
+      "renderEvidence": {
+        "contextAlive": true,
+        "activeMeshes": 1,
+        "framesAdvanced": true,
+        "canvasWidth": 640,
+        "canvasHeight": 360
+      },
+      "recovery": null,
+      "screenshots": [
+        "harness-headless-auto.png"
+      ],
+      "screenshotStats": [
+        {
+          "file": "harness-headless-auto.png",
+          "bytes": 12951,
+          "width": 1280,
+          "height": 720,
+          "distinctColors": 572,
+          "lumaSpread": 255
+        }
+      ],
+      "pageErrors": []
+    },
+    {
+      "id": "harness-headed-recovery-webgpu",
+      "title": "Pierdere reală de dispozitiv WebGPU, eșec repetat și reluare",
+      "entry": "compat-harness",
+      "scenario": "RECOVERY_LOSS",
+      "preference": "WEBGPU",
+      "capabilities": {
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36",
+        "browser": "Chromium 156.0.8078.4",
+        "browserVersion": "156.0.8078.4",
+        "headless": false,
+        "platform": "Windows 11 Home (10.0.26300)",
+        "secureContext": true,
+        "devicePixelRatio": 1,
+        "webgpu": {
+          "available": true,
+          "adapter": {
+            "vendor": "amd",
+            "architecture": "rdna-2",
+            "device": null,
+            "description": null
+          },
+          "error": null
+        },
+        "webgl2": {
+          "available": true,
+          "vendor": "Google Inc. (AMD)",
+          "renderer": "ANGLE (AMD, AMD Radeon(TM) Graphics (0x00001681) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+        },
+        "webgl1": {
+          "available": true
+        }
+      },
+      "backend": "WEBGPU",
+      "statusText": "Scenă de probă READY · generația 5",
+      "visibleContent": true,
+      "retryVisible": false,
+      "errorMessage": "Injected compat reconstruction failure",
+      "renderEvidence": {
+        "contextAlive": true,
+        "activeMeshes": 1,
+        "framesAdvanced": true,
+        "canvasWidth": 640,
+        "canvasHeight": 360
+      },
+      "recovery": {
+        "preference": "WEBGPU",
+        "backend": "WEBGPU",
+        "lossSignal": "GPUDevice.destroy",
+        "stateSequence": [
+          "RECOVERING",
+          "READY",
+          "RECOVERING",
+          "READY",
+          "RECOVERING",
+          "ERROR",
+          "RECOVERING",
+          "ERROR",
+          "RECOVERING",
+          "READY",
+          "DISPOSED"
+        ],
+        "generationBefore": 1,
+        "generationAfterLoss": 2,
+        "generationAfterRetry": 5,
+        "tickBefore": 417,
+        "tickAfterLoss": 417,
+        "tickAfterRetry": 417,
+        "framesWhileReady": 9,
+        "framesWhileError": 6,
+        "activeMeshes": 1,
+        "framesAdvanced": true,
+        "errorMessage": "Injected compat reconstruction failure",
+        "retryAvailable": true,
+        "rendererReleasedOnError": true,
+        "retryRestored": true,
+        "diagnostics": {
+          "meshes": 1,
+          "camera": true,
+          "canvasConnected": true
+        },
+        "pass": true
+      },
+      "screenshots": [
+        "harness-headed-recovery-webgpu-ready.png",
+        "harness-headed-recovery-webgpu-error.png",
+        "harness-headed-recovery-webgpu-retry.png"
+      ],
+      "screenshotStats": [
+        {
+          "file": "harness-headed-recovery-webgpu-ready.png",
+          "bytes": 15818,
+          "width": 1280,
+          "height": 720,
+          "distinctColors": 649,
+          "lumaSpread": 255
+        },
+        {
+          "file": "harness-headed-recovery-webgpu-error.png",
+          "bytes": 17276,
+          "width": 1280,
+          "height": 720,
+          "distinctColors": 691,
+          "lumaSpread": 255
+        },
+        {
+          "file": "harness-headed-recovery-webgpu-retry.png",
+          "bytes": 15867,
+          "width": 1280,
+          "height": 720,
+          "distinctColors": 649,
+          "lumaSpread": 255
+        }
+      ],
+      "pageErrors": []
+    },
+    {
+      "id": "harness-headless-recovery-webgl2",
+      "title": "Pierdere reală de context WebGL 2 (SwiftShader), eșec repetat și reluare",
+      "entry": "compat-harness",
+      "scenario": "RECOVERY_LOSS",
+      "preference": "WEBGL2",
+      "capabilities": {
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36",
+        "browser": "Chromium 156.0.8078.4",
+        "browserVersion": "156.0.8078.4",
+        "headless": true,
+        "platform": "Windows 11 Home (10.0.26300)",
+        "secureContext": true,
+        "devicePixelRatio": 1,
+        "webgpu": {
+          "available": false,
+          "adapter": null,
+          "error": null
+        },
+        "webgl2": {
+          "available": true,
+          "vendor": "Google Inc. (Google)",
+          "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+        },
+        "webgl1": {
+          "available": true
+        }
+      },
+      "backend": "WEBGL2",
+      "statusText": "Scenă de probă READY · generația 5",
+      "visibleContent": true,
+      "retryVisible": false,
+      "errorMessage": "Injected compat reconstruction failure",
+      "renderEvidence": {
+        "contextAlive": true,
+        "activeMeshes": 1,
+        "framesAdvanced": true,
+        "canvasWidth": 640,
+        "canvasHeight": 360
+      },
+      "recovery": {
+        "preference": "WEBGL2",
+        "backend": "WEBGL2",
+        "lossSignal": "WEBGL_lose_context.loseContext",
+        "stateSequence": [
+          "RECOVERING",
+          "READY",
+          "RECOVERING",
+          "READY",
+          "RECOVERING",
+          "ERROR",
+          "RECOVERING",
+          "ERROR",
+          "RECOVERING",
+          "READY",
+          "DISPOSED"
+        ],
+        "generationBefore": 1,
+        "generationAfterLoss": 2,
+        "generationAfterRetry": 5,
+        "tickBefore": 417,
+        "tickAfterLoss": 417,
+        "tickAfterRetry": 417,
+        "framesWhileReady": 5,
+        "framesWhileError": 6,
+        "activeMeshes": 1,
+        "framesAdvanced": true,
+        "errorMessage": "Injected compat reconstruction failure",
+        "retryAvailable": true,
+        "rendererReleasedOnError": true,
+        "retryRestored": true,
+        "diagnostics": {
+          "meshes": 1,
+          "camera": true,
+          "canvasConnected": true
+        },
+        "pass": true
+      },
+      "screenshots": [
+        "harness-headless-recovery-webgl2-ready.png",
+        "harness-headless-recovery-webgl2-error.png",
+        "harness-headless-recovery-webgl2-retry.png"
+      ],
+      "screenshotStats": [
+        {
+          "file": "harness-headless-recovery-webgl2-ready.png",
+          "bytes": 13894,
+          "width": 1280,
+          "height": 720,
+          "distinctColors": 588,
+          "lumaSpread": 255
+        },
+        {
+          "file": "harness-headless-recovery-webgl2-error.png",
+          "bytes": 14864,
+          "width": 1280,
+          "height": 720,
+          "distinctColors": 628,
+          "lumaSpread": 255
+        },
+        {
+          "file": "harness-headless-recovery-webgl2-retry.png",
+          "bytes": 13888,
+          "width": 1280,
+          "height": 720,
+          "distinctColors": 588,
+          "lumaSpread": 255
+        }
+      ],
+      "pageErrors": []
+    }
+  ]
+}

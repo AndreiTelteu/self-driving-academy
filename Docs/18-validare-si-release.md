@@ -153,3 +153,44 @@ cititoarele de ecran și inputul fizic uman rămân în afara scope-ului; gate-u
 
 Dovezile, cu rezoluțiile, zoomurile, verdictul per componentă și cele 22 de capturi, sunt în
 [Evidence/153-ui-qa](Evidence/153-ui-qa/README.md).
+
+## Matricea de compatibilitate WebGPU și WebGL 2 (PBI 154)
+
+PBI 154 verifică backendul efectiv pe combinațiile browser/OS/GPU de referință și garantează că un
+browser fără suport nu produce ecran gol. `npm run qa:compat` derivă un raport determinist din
+observațiile reale comise (`report.json`, `report.md`), `--check` compară fișierele, iar `--browser`
+reface probele în Chromium (necesită Playwright prin `PLAYWRIGHT_MODULE`). Backendul efectiv este
+raportat de `rendererKind` din contractele `src/rendering`, nu dedus din user-agent; combinația
+browser/OS/GPU vine din versiunea Chromium, `navigator.userAgent` și driverul expus de
+`navigator.gpu` / `WEBGL_debug_renderer_info` (`unknown` când driverul îl ascunde).
+
+**Matricea rulată.** Nouă combinații reale, nouă PASS: intrarea de producție `src/main.ts` pe Chromium
+156 headed cu GPU AMD Radeon Graphics (RDNA-2) alege **WebGPU**; aceeași intrare cu `navigator.gpu`
+eliminat înainte de module alege **WebGL 2** (ANGLE/Direct3D11); Chromium headless alege **WebGL 2** pe
+**SwiftShader**; cu WebGPU și WebGL 2 lipsă, și separat cu doar WebGL 1, aplicația afișează mesajul
+explicit „Randarea nu a pornit. WebGPU și WebGL 2 nu sunt disponibile. Poți reîncerca.” cu butonul
+**Reîncearcă** vizibil, fără canvas gol. Pagina de harness repetă probele pe aceleași contracte, cu un
+cub iluminat, și dovedește `activeMeshes = 1` plus cadre care avansează pe ambele backenduri.
+
+**Fallback și recuperare.** Fallback-ul forțat este probat prin eliminarea `navigator.gpu` înainte de
+încărcarea modulelor și prin refuzul explicit al WebGL 1 (`WebGL 1 is unsupported`); politica reală
+`initializeBackend` este verificată și determinist pe cele patru combinații de capabilități, inclusiv
+`RenderingInitializationError` cu mesajul românesc și cauzele agregate. Recuperarea folosește pierderi
+native (`GPUDevice.destroy()` pe WebGPU, `WEBGL_lose_context.loseContext()` pe WebGL 2): scena este
+reconstruită din același checkpoint RAM, tick-ul 417 rămâne neschimbat, generația avansează 1 → 2, iar
+după două eșecuri injectate starea `ERROR` afișează mesajul și butonul de reîncercare, cu bucla de
+cadre activă; a doua reîncercare revine în `READY` cu același checkpoint. Cele 11 verificări
+deterministe (6 de fallback, 5 de recuperare) trec fără GPU.
+
+**Ce rămâne.** Un singur GPU real și un singur OS: NVIDIA, Intel, macOS/Metal, Linux/Vulkan, Firefox,
+WebKit/Safari, Edge stable, Chrome stable separat, Android și iOS sunt declarate `NOT_RUN`, cu motiv,
+nu presupuse. Chromium headless rulează WebGL 2 pe SwiftShader, deci rezultatul dovedește fallback-ul,
+contextul și mesajele, nu FPS sau senzația de condus. Pierderea este injectată, nu o defectare
+hardware; timpul de recompilare a shader-elor nu este măsurat. Gate-ul rămas este 220/224/235.
+
+**Constatare neblocantă.** View-ul real dublează prefixul mesajului de eroare („Randarea nu a pornit.
+Randarea nu a pornit. …”); `src/` nu a fost modificat, deci defectul este raportat cu captură pentru
+PBI-ul care deține `src/ui/rendering-view.ts`.
+
+Dovezile, cu matricea, capturile, verificările deterministe și limitările, sunt în
+[Evidence/154-compat-matrix](Evidence/154-compat-matrix/README.md).
