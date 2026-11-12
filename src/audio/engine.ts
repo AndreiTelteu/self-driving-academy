@@ -53,6 +53,24 @@ export interface ImpactAudioResult {
   readonly reason: 'PLAYED' | 'AWAITING_GESTURE' | 'DROPPED' | 'DISPOSED';
 }
 
+/**
+ * One destruction impact of PBI 228.
+ *
+ * The cue is the existing 148 impact placeholder: the material is expressed by the playback rate
+ * and the additive gain the destruction feedback derives from the real event, never by a second
+ * buffer or a second voice pool. `ownerId` is the destruction event identity, so the caller can
+ * release exactly the voices it owns.
+ */
+export interface DestructionImpactRequest {
+  readonly ownerId: string;
+  readonly impulseNs: number;
+  readonly distanceM: number;
+  /** Material playback rate of the same impact buffer, in (0, 4]. */
+  readonly playbackRate: number;
+  /** Material gain scale in [0,1]; the engine still applies distance and category gains. */
+  readonly gain: number;
+}
+
 export interface AudioEngineStats {
   readonly state: AudioEngineState;
   readonly muted: boolean;
@@ -486,6 +504,67 @@ export function createAudioEngine(options: AudioEngineOptions) {
         impactsSkipped += 1;
         return Object.freeze({ played: false, voiceId: null, reason: 'DROPPED' });
       }
+      impactsPlayed += 1;
+      return Object.freeze({ played: true, voiceId: record.voiceId, reason: 'PLAYED' });
+    },
+    /**
+     * Plays the destruction impact of a PBI 228 event with a material-derived playback rate.
+     *
+     * The voice pool, the impact category cap, the distance attenuation and the gain threshold are
+     * the 148 ones: the destruction feedback only chooses the rate and the material gain scale of
+     * the same `impact` cue.
+     */
+    playDestructionImpact(request: DestructionImpactRequest): ImpactAudioResult {
+      assertLive();
+      requireContract(
+        typeof request.ownerId === 'string' && request.ownerId.length > 0,
+        'Bad destruction impact owner',
+      );
+      requireContract(
+        Number.isFinite(request.impulseNs) && request.impulseNs >= 0,
+        'Bad destruction impact impulse',
+      );
+      requireContract(
+        Number.isFinite(request.distanceM) && request.distanceM >= 0,
+        'Bad destruction impact distance',
+      );
+      requireContract(
+        Number.isFinite(request.playbackRate) &&
+          request.playbackRate > 0 &&
+          request.playbackRate <= 4,
+        'Bad destruction playback rate',
+      );
+      requireContract(
+        Number.isFinite(request.gain) && request.gain >= 0 && request.gain <= 1,
+        'Bad destruction gain',
+      );
+      if (state !== 'RUNNING') {
+        skippedBeforeGesture += 1;
+        impactsSkipped += 1;
+        return Object.freeze({ played: false, voiceId: null, reason: 'AWAITING_GESTURE' });
+      }
+      expireOneShots();
+      const distanceFactor = clamp01(1 - request.distanceM / limits.audibleDistanceM);
+      const impulseGain = clamp01(request.impulseNs / 5_000_000);
+      const gain = clamp01(Math.max(0.2, impulseGain) * distanceFactor * request.gain);
+      if (gain < limits.audibleGainThreshold) {
+        impactsSkipped += 1;
+        return Object.freeze({ played: false, voiceId: null, reason: 'DROPPED' });
+      }
+      const record = allocateVoice({
+        cueId: 'impact',
+        category: 'impact',
+        ownerId: request.ownerId,
+        gain,
+        priority: 60,
+        loop: false,
+        durationS: audioCue('impact').durationS,
+      });
+      if (record === null) {
+        impactsSkipped += 1;
+        return Object.freeze({ played: false, voiceId: null, reason: 'DROPPED' });
+      }
+      record.backend.setPlaybackRate(request.playbackRate);
       impactsPlayed += 1;
       return Object.freeze({ played: true, voiceId: record.voiceId, reason: 'PLAYED' });
     },

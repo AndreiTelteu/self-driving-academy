@@ -94,3 +94,11 @@ Cue-urile sunt cele șapte ale motorului 148: 149 nu adaugă cue, buffer sau voc
 **Echivalent vizual obligatoriu.** Orice informație transmisă audio are și un echivalent vizual: `src/ui/audio-feedback-indicator.ts` este o **linie de stare** mărginită (un singur rând, fără listă, fără istoric, fără fereastră de deduplicare, fără coadă de expirare) care arată simbolul, textul și atributele `data-*` ale ultimului feedback acceptat. Nu este un sistem paralel de notificări: mesajele detaliate de învățare și publicare rămân pe rândurile reale ale infrastructurii 079 (`★ Profil publicat`), iar preluarea rămâne pe indicatorul de mod 067. Indicatoarea este desenată și când motorul refuză sunetul (de exemplu `AWAITING_GESTURE`), deci informația nu depinde de sunet.
 
 Dovezile sunt în [Docs/Evidence/149-audio-feedback](Evidence/149-audio-feedback/README.md).
+
+## Contractul audio 228: reacțiile de material ale distrugerii
+
+[228](26-joaca-libera-haos-si-distrugere.md) închide bucla dintre decorul destructibil 227 și sunetul real. Feedback-ul de distrugere **nu** adaugă un cue, un buffer sau un pool paralel: `src/audio/destruction-feedback.ts` (`228-destruction-feedback-v1`) folosește exact cue-ul `impact` al motorului 148, dar îi aplică un playback rate și un gain de material derivate din arhetipul 227 — gard `WOOD` 0,82, con `PLASTIC` 1,25, ladă `WOOD` 0,70, pubelă `METAL` 1,05, indicator `GLASS` 1,45, mobilier `METAL` 0,60. Metoda `playDestructionImpact` intră în același pool de 4 voci `impact` și în aceleași plafoane de buffere, deci un burst este limitat, iar fiecare sunet are un companion vizual cu material, intensitate și variantă (`FRAGMENT_BURST`/`SHOCK_RING`).
+
+**Aceleași reguli de gest, mute și date.** Contextul audio continuă să existe numai după o interacțiune a jucătorului: înainte de gest, o distrugere răspunde `AWAITING_GESTURE`, nu creează buffer și nu pornește nicio voce, dar indicatorul vizual și fragmentele cosmetice rămân. `setMuted(true)` pune câștigul efectiv pe zero fără să elimine reacția. Fără o poziție de ascultător, reacția este derivată, dar nu sună (`NO_LISTENER`); fără o definiție 227, obiectul este `ABSENT`, nu primește un material inventat.
+
+Dovezi: [Docs/Evidence/228-destruction-feedback](Evidence/228-destruction-feedback/README.md).
