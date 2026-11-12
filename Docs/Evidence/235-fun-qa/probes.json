@@ -1,0 +1,457 @@
+{
+  "version": "235-fun-qa-probes-v1",
+  "generatedBy": "scripts/run-fun-qa-report.mjs",
+  "command": "npm run qa:fun",
+  "budgetVersion": "203-initial-1",
+  "probes": [
+    {
+      "id": "qa-216",
+      "pbi": "216",
+      "title": "Regresia V1: moduri, KPI, daily, XP, replay",
+      "command": "npm run qa:v1-regression",
+      "verdict": "PASS",
+      "checks": 29,
+      "passed": 27,
+      "detail": "29 rânduri, 27 PASS, 0 FAIL, 2 NOT_RUN; XP 200.5 → 200.5, pierderi 0, debitări 0"
+    },
+    {
+      "id": "scenarios-151",
+      "pbi": "151",
+      "title": "Suita de scenarii V1 pe patru familii",
+      "command": "npm run scenarios:v1",
+      "verdict": "PASS",
+      "checks": 12,
+      "passed": 12,
+      "detail": "13 scenarii, 12 executate, 12 PASS, 0 FAIL, 1 NOT_RUN; seed fix, fără ceas de perete"
+    },
+    {
+      "id": "e2e-152",
+      "pbi": "152",
+      "title": "Sesiunea integrală: profil → cursă → learning → KPI → daily → XP → export → restart",
+      "command": "npm run e2e:session",
+      "verdict": "PASS",
+      "checks": 104,
+      "passed": 104,
+      "detail": "11 pași, 104 verificări, 0 FAIL; restart XP 200.5 → 200.5, nivel 2 → 2"
+    },
+    {
+      "id": "gate-224",
+      "pbi": "224",
+      "title": "Gate de performanță și soak: toate sistemele noi",
+      "command": "npm run perf:gate",
+      "verdict": "PASS",
+      "checks": 17,
+      "passed": 16,
+      "detail": "17 rânduri, 16 PASS, 0 FAIL, 1 NOT_VALIDATED; structural PASS, release NOT_VALIDATED; soak 60.001 min / 20 cicluri"
+    },
+    {
+      "id": "session-kinds-225",
+      "pbi": "225",
+      "title": "Academie și Haos: două sesiuni separate",
+      "command": "npm run session:kinds",
+      "verdict": "PASS",
+      "checks": 45,
+      "passed": 45,
+      "detail": "20 tranziții (10 Academie / 10 Haos), 20 checkpointuri comise, lumi orfane 0, joburi orfane 0"
+    },
+    {
+      "id": "world-recovery-226",
+      "pbi": "226",
+      "title": "R, resetul orașului și restaurarea stilului",
+      "command": "npm run world:recovery",
+      "verdict": "PASS",
+      "checks": 65,
+      "passed": 65,
+      "detail": "RECOVERED în 0 tick-uri; 20 reseturi, 0 eșuate, corpuri 64, XP 500000 micro-XP neschimbat"
+    },
+    {
+      "id": "destructible-227",
+      "pbi": "227",
+      "title": "Decor destructibil și zone de joacă",
+      "command": "npm run world:destructibles",
+      "verdict": "PASS",
+      "checks": 24,
+      "passed": 24,
+      "detail": "3 zone, 35 obiecte, 20 cicluri de reset cu 1 checksum distinct"
+    },
+    {
+      "id": "destruction-feedback-228",
+      "pbi": "228",
+      "title": "Feedback audio-vizual și replay al distrugerii",
+      "command": "npm run world:destruction-feedback",
+      "verdict": "PASS",
+      "checks": 20,
+      "passed": 20,
+      "detail": "6 profiluri de material, 24 reacții/incident, 4 voci impact; replay 3/3 evenimente, 0 inventate, 0 pași de simulare"
+    },
+    {
+      "id": "challenge-233",
+      "pbi": "233",
+      "title": "Reluare, recorduri, recompense și daily pentru provocări",
+      "command": "npm run missions:challenge-experience",
+      "verdict": "PASS",
+      "checks": 55,
+      "passed": 55,
+      "detail": "2 credit, 1 duplicat cu 0 XP, 4 rânduri de record, reluare RESTARTED la încercarea 2"
+    },
+    {
+      "id": "savefile-234",
+      "pbi": "234",
+      "title": "Savefile cu checksum și încărcare atomică",
+      "command": "npm run save:file",
+      "verdict": "PASS",
+      "checks": 84,
+      "passed": 84,
+      "detail": "84 verificări, 174732 B din 12285272 B, checksum 64 caractere, 2 sesiuni, 35 obiecte de decor"
+    },
+    {
+      "id": "control-sliders-229",
+      "pbi": "229",
+      "title": "Sliderele de control și camera first-person",
+      "command": "npm run ui:control-sliders",
+      "verdict": "PASS",
+      "checks": 53,
+      "passed": 53,
+      "detail": "53 verificări, camera FIRST_PERSON, două clase (sedan + compact), layout 1280×720, contrast minim 11.13:1"
+    },
+    {
+      "id": "style-sliders-230",
+      "pbi": "230",
+      "title": "Sliderele de stil, publicare, stale și separarea sesiunilor",
+      "command": "npm run ui:style-sliders",
+      "verdict": "PASS",
+      "checks": 70,
+      "passed": 70,
+      "detail": "70 verificări, 2 versiuni Academie / 2 Haos, draft invalidat la schimbarea sesiunii"
+    },
+    {
+      "id": "daily-212",
+      "pbi": "212",
+      "title": "Daily: ofertă, refuzuri și schimbarea zilei",
+      "command": "npm run missions:daily-progress",
+      "verdict": "PASS",
+      "checks": 26,
+      "passed": 26,
+      "detail": "26 verificări, 1 recompense reținute, 5 refuzuri, 0 XP acordat"
+    },
+    {
+      "id": "responsive-084",
+      "pbi": "084",
+      "title": "Layout responsive la 1280×720 și 1920×1080",
+      "command": "npm run ui:responsive",
+      "verdict": "PASS",
+      "checks": 42,
+      "passed": 42,
+      "detail": "42 verificări de layout responsive, 42 trecute"
+    },
+    {
+      "id": "accessibility-083",
+      "pbi": "083",
+      "title": "Contractul de accesibilitate al suprafețelor UI",
+      "command": "npm run ui:accessibility",
+      "verdict": "PASS",
+      "checks": 53,
+      "passed": 53,
+      "detail": "53 verificări pe 7 scenarii; contrast, focus, tab, Escape"
+    },
+    {
+      "id": "ui-qa-153",
+      "pbi": "153",
+      "title": "QA vizual și accesibilitate pe componentele reale din Chromium",
+      "command": "npm run qa:ui",
+      "verdict": "FAIL",
+      "checks": 308,
+      "passed": 300,
+      "detail": "308 verificări în Chromium 156.0.8078.4, 5 verificări de contract eșuate, verdict FAIL"
+    }
+  ],
+  "facts": {
+    "e2eSteps": 11,
+    "e2eChecks": 104,
+    "e2eXpBefore": 200.5,
+    "e2eXpAfter": 200.5,
+    "e2eLevelBefore": 2,
+    "e2eLevelAfter": 2,
+    "scenarioExecuted": 12,
+    "scenarioPassed": 12,
+    "scenarioNotRun": 1,
+    "scenarioFamilies": 4,
+    "regressionRows": 29,
+    "regressionFail": 0,
+    "regressionNotRun": 2,
+    "xpLosses": 0,
+    "xpDebits": 0,
+    "xpFingerprintIdentical": true,
+    "dailyChecks": 26,
+    "dailyRejected": 5,
+    "dailyRewards": 1,
+    "challengeChecks": 55,
+    "challengeCredits": 2,
+    "challengeDuplicateDelta": 0,
+    "challengeCalendarRollback": "SKIPPED",
+    "challengeRetryStatus": "RESTARTED",
+    "challengeRetryAttempt": 2,
+    "challengeRetrySameTemplate": true,
+    "challengeRetryNewIdentity": true,
+    "challengeRetryXpDelta": 0,
+    "challengeRetryRefusal": "NOT_FAILED",
+    "challengeRecords": 4,
+    "challengeRecordImprovedOnFaster": true,
+    "challengeRecordKeptOnSlower": true,
+    "challengeDailyTemplates": 3,
+    "challengeDailyFamilies": 3,
+    "challengeExpressible": 3,
+    "sessionTransitions": 20,
+    "sessionAcademyRows": 10,
+    "sessionChaosRows": 10,
+    "sessionOrphanWorlds": 0,
+    "sessionOrphanJobs": 0,
+    "sessionProfileCopies": 1,
+    "sessionLiveWorlds": 1,
+    "sessionCommittedCheckpoints": 20,
+    "resets": 20,
+    "failedResets": 0,
+    "resetBodies": 64,
+    "resetListeners": 1,
+    "resetJobs": 2,
+    "resetCheckpoints": 20,
+    "resetEconomySeries": 21,
+    "resetSceneClosures": 1,
+    "resetXpMicroXp": 500000,
+    "xpDecreased": false,
+    "profileChecksumStable": true,
+    "rewardsUnchanged": true,
+    "stalePlanRefused": true,
+    "recoveryStatus": "RECOVERED",
+    "recoveryTicksToMobility": 0,
+    "invalidatedJobs": 2,
+    "destroyedObjects": 35,
+    "playgroundZones": 3,
+    "destructionResetCycles": 20,
+    "destructionChecksums": 1,
+    "destructionEvents": 20,
+    "controlSourceParity": true,
+    "materials": 6,
+    "reactionsPerIncident": 24,
+    "impactVoices": 4,
+    "replayRecordedEvents": 3,
+    "replayReplayedEvents": 3,
+    "replayInventedReactions": 0,
+    "replayStepsSimulation": 0,
+    "savefileChecks": 84,
+    "savefileBytes": 174732,
+    "savefileMaxBytes": 12285272,
+    "checksumLength": 64,
+    "savefileSessions": 2,
+    "savefileDecor": 35,
+    "importXpDelta": 201,
+    "secondImportXpDelta": 0,
+    "controlChecks": 53,
+    "controlPassed": 53,
+    "styleChecks": 70,
+    "stylePassed": 70,
+    "controlClasses": 2,
+    "cameraMode": "FIRST_PERSON",
+    "cameraStable": true,
+    "layout1280Fits": true,
+    "layout1280Scrolls": true,
+    "contrastMin": 11.13,
+    "contrastRequired": 4.5,
+    "responsiveChecks": 42,
+    "accessibilityChecks": 53
+  },
+  "gate": {
+    "reportVersion": "224-performance-gate-report-v1",
+    "commit": "757e7168dfd641ea94fa7bcf95ae6841055e1244",
+    "budgetVersion": "203-initial-1",
+    "manifestModified": false,
+    "structural": "PASS",
+    "release": "NOT_VALIDATED",
+    "pass": 16,
+    "fail": 0,
+    "notValidated": 1,
+    "rows": [
+      {
+        "id": "bundle-critical-transfer",
+        "verdict": "PASS",
+        "detail": "5.84 MiB (6125279 B) din 8.00 MiB; JS 3478683 B + WASM 2646596 B, gzip 1769518 B, 130 artefacte"
+      },
+      {
+        "id": "bundle-regression",
+        "verdict": "PASS",
+        "detail": "baseline 5.84 MiB (f5fb79fd07c7); 0/5 repetări peste >10% și >5.00 MiB; prag de confirmare 3/5"
+      },
+      {
+        "id": "capacity-render",
+        "verdict": "PASS",
+        "detail": "draw calls 48/128, instanțe thin 78/8192, batchuri 40/512, obiecte Babylon 12/4096, 923 elemente randate"
+      },
+      {
+        "id": "determinism",
+        "verdict": "PASS",
+        "detail": "5 builduri, 5 probe de randare; digesturi distincte: 1 build / 1 randare"
+      },
+      {
+        "id": "soak-60min",
+        "verdict": "PASS",
+        "detail": "60.001 min, 20 cicluri (20 curate), 7/7 tendințe PLATEAU, heap +1.82 MiB din 5.00 MiB, coadă max 1 joburi / 4 B, throttling OBSERVED"
+      },
+      {
+        "id": "fps-hardware",
+        "verdict": "NOT_VALIDATED",
+        "detail": ""
+      },
+      {
+        "id": "probe-render-budget",
+        "verdict": "PASS",
+        "detail": "157: 17 PASS, 0 FAIL, 2 NOT_MEASURED; --check exit 0, captura 546fa29e5ac6"
+      },
+      {
+        "id": "probe-simulation-budget",
+        "verdict": "PASS",
+        "detail": "158: decizii PASS, estimare PASS, transferuri PASS, 3 echivalențe IDENTICAL; --check exit 0"
+      },
+      {
+        "id": "probe-traffic-benchmark",
+        "verdict": "PASS",
+        "detail": "156: 36 PASS, 0 FAIL, 12 STRESS, 60 REPORTED; --check exit 0"
+      },
+      {
+        "id": "probe-hardware-budget",
+        "verdict": "PASS",
+        "detail": "155: 85 PASS, 0 FAIL, 6 NOT_MEASURED declarate; --check exit 0"
+      },
+      {
+        "id": "probe-soak-integrity",
+        "verdict": "PASS",
+        "detail": "159: SOAK_PASS, 60.002 min, 20 cicluri, commit 917a7de9; --check exit 0"
+      },
+      {
+        "id": "gameplay-systems-max-v1",
+        "verdict": "PASS",
+        "detail": "workload maxim V1 30/40: 12 rânduri de gate, sisteme BASELINE, LEARNING, RECORDER_AUTOSAVE, XP, tick p95 maxim 7.00 ms din 8 ms"
+      },
+      {
+        "id": "destruction-effects-audio",
+        "verdict": "PASS",
+        "detail": "227: 24/24 verificări, 20 cicluri de reset cu 35 corpuri; 228: 20/20, max 4 voci impact și 24 reacții/incident; 149: 32/32, 1/14 voci active. Frame: NOT_MEASURED declarat"
+      },
+      {
+        "id": "challenge-director",
+        "verdict": "PASS",
+        "detail": "232: 56/56, istoric 24/24 intrări și 1071/4096 unități; 233: 55/55, 1 rând de ledger din 32, 0 listeners globali"
+      },
+      {
+        "id": "savefile-integrity",
+        "verdict": "PASS",
+        "detail": "234: 84/84 verificări, fișier 174732 B din 12285272 B, payload 174113 B din ingress 16777216 B, checksum 64 B; encode/hash fără ceas de perete (declarat)"
+      },
+      {
+        "id": "academy-chaos-cycles",
+        "verdict": "PASS",
+        "detail": "225: 20 tranziții (10 Academie / 10 Haos), 20 checkpointuri comise, 773 B total (max 40 B), 0 lumi/joburi orfane; 226: 20 reseturi, 0 eșuate, corpuri 64, 1 listener, lumi vii 1"
+      },
+      {
+        "id": "backend-matrix",
+        "verdict": "PASS",
+        "detail": "154: 9/9 combinații reale, 11/11 verificări deterministe, 11 combinații declarate NOT_RUN; backenduri acoperite: WEBGPU și WEBGL 2"
+      }
+    ],
+    "requiredRows": [
+      "destruction-effects-audio",
+      "challenge-director",
+      "savefile-integrity",
+      "academy-chaos-cycles",
+      "soak-60min",
+      "gameplay-systems-max-v1",
+      "fps-hardware"
+    ],
+    "missingRequiredRows": [],
+    "unpassedRequiredRows": [],
+    "issues": [],
+    "soakMinutes": 60.001,
+    "soakRequiredMinutes": 60,
+    "soakCycles": 20,
+    "soakRequiredCycles": 20,
+    "soakVerdict": "SOAK_PASS"
+  },
+  "uiQa": {
+    "command": "npm run qa:ui",
+    "verdict": "FAIL",
+    "checks": 308,
+    "passed": 300,
+    "contractFailed": 5,
+    "findings": [
+      {
+        "id": "D1",
+        "tier": "STRESS",
+        "surface": "hud",
+        "viewport": "zoom-200-720",
+        "check": "surface-inside-viewport",
+        "summary": "A surface is positioned outside the viewport. (Surfaces outside the viewport: fleet (bottom 476 > 360), notifications (bottom 384 > 360).)"
+      },
+      {
+        "id": "D2",
+        "tier": "STRESS",
+        "surface": "fleet",
+        "viewport": "zoom-200-720",
+        "check": "surface-inside-viewport",
+        "summary": "A surface is positioned outside the viewport. (Surfaces outside the viewport: fleet (bottom 476 > 360), notifications (bottom 384 > 360).)"
+      },
+      {
+        "id": "D3",
+        "tier": "STRESS",
+        "surface": "profile",
+        "viewport": "zoom-200-720",
+        "check": "surface-inside-viewport",
+        "summary": "A surface is positioned outside the viewport. (Surfaces outside the viewport: fleet (bottom 476 > 360), notifications (bottom 384 > 360).)"
+      },
+      {
+        "id": "D4",
+        "tier": "CONTRACT",
+        "surface": "camera",
+        "viewport": "1280x720",
+        "check": "text-legible",
+        "summary": "Visible text falls below the 12 CSS px / 1.4 line-height floor. (smallest visible text is 11.52 px with a 1.4 line-height ratio; the floor is 12 px and 1.4.)"
+      },
+      {
+        "id": "D5",
+        "tier": "CONTRACT",
+        "surface": "kpis",
+        "viewport": "1280x720",
+        "check": "text-legible",
+        "summary": "Visible text falls below the 12 CSS px / 1.4 line-height floor. (smallest visible text is 11 px with a 1.4 line-height ratio; the floor is 12 px and 1.4.)"
+      },
+      {
+        "id": "D6",
+        "tier": "CONTRACT",
+        "surface": "kpis",
+        "viewport": "1280x720",
+        "check": "text-not-clipped",
+        "summary": "Visible text overflows or is clipped by its own box. (4 text nodes overflow their box: kpis:span.kpi-history__chart-group-value \"fără review-uri\", kpis:span.kpi-history__chart-group-value \"fără review-uri\", kpis:span.kpi-history__chart-group-value \"fără review-uri\", kpis:span.kpi-history__chart-group-value \"fără review-uri\".)"
+      },
+      {
+        "id": "D7",
+        "tier": "CONTRACT",
+        "surface": "kpis",
+        "viewport": "1920x1080",
+        "check": "text-legible",
+        "summary": "Visible text falls below the 12 CSS px / 1.4 line-height floor. (smallest visible text is 11 px with a 1.4 line-height ratio; the floor is 12 px and 1.4.)"
+      },
+      {
+        "id": "D8",
+        "tier": "CONTRACT",
+        "surface": "kpis",
+        "viewport": "1920x1080",
+        "check": "text-not-clipped",
+        "summary": "Visible text overflows or is clipped by its own box. (4 text nodes overflow their box: kpis:span.kpi-history__chart-group-value \"fără review-uri\", kpis:span.kpi-history__chart-group-value \"fără review-uri\", kpis:span.kpi-history__chart-group-value \"fără review-uri\", kpis:span.kpi-history__chart-group-value \"fără review-uri\".)"
+      }
+    ]
+  },
+  "limitations": [
+    "Nivel `soak` declarat de PBI, dar playtestul uman și retenția rămân `NOT_RUN`: niciun jucător real nu a fost observat.",
+    "FPS/frame p95/p99 pe hardware real rămân `NOT_VALIDATED` în gate-ul 224; capturile 220 sunt pe alt build.",
+    "Textul și contrastul din 153 sunt măsurate pe capturile comise de 153, nu recapturate aici (fără Playwright în worktree).",
+    "Costurile de memorie sunt contoare de ownership, nu heap total; `totalHeapBytes` este `null` în manifest."
+  ]
+}

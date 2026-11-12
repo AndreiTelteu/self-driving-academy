@@ -194,3 +194,46 @@ PBI-ul care deține `src/ui/rendering-view.ts`.
 
 Dovezile, cu matricea, capturile, verificările deterministe și limitările, sunt în
 [Evidence/154-compat-matrix](Evidence/154-compat-matrix/README.md).
+
+## Verificarea integrată a distracției și a revenirii (PBI 235)
+
+Gate-ul de experiență rulează o singură comandă locală, `npm run qa:fun`, și leagă probele reale ale
+extensiilor V1: regresia 216, scenariile 151, sesiunea integrală 152, dovezile gate-ului 224, sesiunile
+225/226, distrugerea 227/228, sliderele 229/230, daily 212, savefile 234, layout 084, accesibilitate
+083 și QA-ul vizual 153. Fiecare probă este reexecutată în procesul raportului, cu numerele ei reale;
+raportul agregat are verdict pe fiecare dintre cele șase criterii ale PBI-ului.
+
+**Rezultatul reviziei: 4 criterii `PASS`, 1 `FAIL`, 1 `NOT_RUN`; 16 sonde, 15 `PASS`, 1 `FAIL`.**
+`FAIL` este C3, pentru că 153 raportează cinci eșecuri reale de contract la textul panoului camerei și
+al pop-up-ului KPI; sunt raportate cu captură, nu ascunse. `NOT_RUN` este C5, playtestul uman, care
+cere minimum cinci participanți și nu a fost executat.
+
+| Criteriu | Verdict | Dovada principală |
+| --- | --- | --- |
+| C1 combinații fără contaminare | PASS | 225: 20 tranziții, 0 lumi/joburi orfane; 226: 20 reseturi, 0 eșuate, XP și profil neschimbate; 234: 84/84, al doilea import 0 XP |
+| C2 XP fără pierderi și fără dubluri | PASS | 216: pierderi 0, debitări 0, amprentă identică; 233: duplicat 0 XP, rollback `SKIPPED`; 212: 5 refuzuri |
+| C3 HUD/cameră/slidere accesibile | FAIL | 229: 53/53, două clase, cameră `FIRST_PERSON`, contrast 11,13:1; 230: 70/70; 153: 5 eșecuri de contract (D4–D8) |
+| C4 benchmarkul 224 | PASS | 17 rânduri, 16 PASS, 1 `NOT_VALIDATED`; 60,001 min, 20 cicluri; manifest `203-initial-1` nemodificat |
+| C5 playtest uman | NOT_RUN | 0/5 participanți; fluxurile sunt acoperite mecanic, nu jucate de oameni |
+| C6 eșecuri explicite, fără return rate | PASS | 8 findings de la 153; toate motivele de rejucare au `retention: NOT_RUN` |
+
+**Mecanism versus retenție.** Raportul separă explicit „mecanismul există și e testat” de „oamenii
+chiar revin”. Haos/distrugere, provocările, daily, recordurile și reluarea rapidă au dovada mecanismului
+(225–233), dar toate au `retention: NOT_RUN`: nu există sesiuni de revenire, deci nu se raportează
+procent, rată sau număr de jucători. Verificatorul respinge un raport care ar transforma ipoteza într-o
+măsurătoare, care ar declara playtestul rulat sau care ar închide release-ul cu criterii deschise.
+
+**Ce s-a executat efectiv.** `npm run qa:fun` (26,3 s) scrie `probes.json`, `report.json` și
+`report.md`; `npm run qa:fun -- --check` confirmă că dovezile comise sunt curente;
+`npm run qa:fun -- --strict` transformă un criteriu `FAIL` în exit code 1. `npm run qa:fun -- --browser`
+construiește bundle-ul de producție și păstrează o captură Chromium 1280×720 (20 149 B) care dovedește
+pornirea și linia WEBGL2; nu dovedește gameplay, input sau lizibilitate.
+
+**Ce nu s-a măsurat.** Playtestul uman și retenția (24 h / 7 zile) rămân `NOT_RUN`. FPS, frame p95/p99
+și lucrul GPU pe hardware real rămân `NOT_VALIDATED` în gate-ul 224, pentru că măsurătoarea hardware
+aparține altei revizii. Memoria este raportată ca contoare de ownership, nu ca heap total. Findings-urile
+153 nu au fost recapturate: worktree-ul nu are Playwright. Niciun procent de revenire nu este prezent în
+raport.
+
+Dovezile complete, cu matricea pe criterii, comenzile și rezultatele reale, sunt în
+[Evidence/235-fun-qa](Evidence/235-fun-qa/README.md).

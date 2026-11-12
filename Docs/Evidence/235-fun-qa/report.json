@@ -1,0 +1,695 @@
+{
+  "version": "235-fun-qa-v1",
+  "generatedBy": "scripts/run-fun-qa-report.mjs",
+  "command": "npm run qa:fun",
+  "budgetVersion": "203-initial-1",
+  "oracleRule": "Fiecare verdict este derivat din raportul real al probei citate, nu din copierea unei valori observate; mecanismul dovedit și ipoteza de retenție sunt coloane separate, iar `NOT_RUN` nu se transformă niciodată în procent.",
+  "validation": {
+    "level": "soak",
+    "playtest": "NOT_RUN",
+    "retention": "NOT_RUN",
+    "frame": "NOT_VALIDATED",
+    "reason": "Politica de validare 2026-10-08: PBI-ul cere soak pentru stabilitate, dar playtestul uman și retenția nu pot fi executate de un agent. Gate-ul 224 păstrează FPS-ul pe hardware real `NOT_VALIDATED`."
+  },
+  "probes": [
+    {
+      "id": "qa-216",
+      "pbi": "216",
+      "title": "Regresia V1: moduri, KPI, daily, XP, replay",
+      "command": "npm run qa:v1-regression",
+      "verdict": "PASS",
+      "checks": 29,
+      "passed": 27,
+      "detail": "29 rânduri, 27 PASS, 0 FAIL, 2 NOT_RUN; XP 200.5 → 200.5, pierderi 0, debitări 0"
+    },
+    {
+      "id": "scenarios-151",
+      "pbi": "151",
+      "title": "Suita de scenarii V1 pe patru familii",
+      "command": "npm run scenarios:v1",
+      "verdict": "PASS",
+      "checks": 12,
+      "passed": 12,
+      "detail": "13 scenarii, 12 executate, 12 PASS, 0 FAIL, 1 NOT_RUN; seed fix, fără ceas de perete"
+    },
+    {
+      "id": "e2e-152",
+      "pbi": "152",
+      "title": "Sesiunea integrală: profil → cursă → learning → KPI → daily → XP → export → restart",
+      "command": "npm run e2e:session",
+      "verdict": "PASS",
+      "checks": 104,
+      "passed": 104,
+      "detail": "11 pași, 104 verificări, 0 FAIL; restart XP 200.5 → 200.5, nivel 2 → 2"
+    },
+    {
+      "id": "gate-224",
+      "pbi": "224",
+      "title": "Gate de performanță și soak: toate sistemele noi",
+      "command": "npm run perf:gate",
+      "verdict": "PASS",
+      "checks": 17,
+      "passed": 16,
+      "detail": "17 rânduri, 16 PASS, 0 FAIL, 1 NOT_VALIDATED; structural PASS, release NOT_VALIDATED; soak 60.001 min / 20 cicluri"
+    },
+    {
+      "id": "session-kinds-225",
+      "pbi": "225",
+      "title": "Academie și Haos: două sesiuni separate",
+      "command": "npm run session:kinds",
+      "verdict": "PASS",
+      "checks": 45,
+      "passed": 45,
+      "detail": "20 tranziții (10 Academie / 10 Haos), 20 checkpointuri comise, lumi orfane 0, joburi orfane 0"
+    },
+    {
+      "id": "world-recovery-226",
+      "pbi": "226",
+      "title": "R, resetul orașului și restaurarea stilului",
+      "command": "npm run world:recovery",
+      "verdict": "PASS",
+      "checks": 65,
+      "passed": 65,
+      "detail": "RECOVERED în 0 tick-uri; 20 reseturi, 0 eșuate, corpuri 64, XP 500000 micro-XP neschimbat"
+    },
+    {
+      "id": "destructible-227",
+      "pbi": "227",
+      "title": "Decor destructibil și zone de joacă",
+      "command": "npm run world:destructibles",
+      "verdict": "PASS",
+      "checks": 24,
+      "passed": 24,
+      "detail": "3 zone, 35 obiecte, 20 cicluri de reset cu 1 checksum distinct"
+    },
+    {
+      "id": "destruction-feedback-228",
+      "pbi": "228",
+      "title": "Feedback audio-vizual și replay al distrugerii",
+      "command": "npm run world:destruction-feedback",
+      "verdict": "PASS",
+      "checks": 20,
+      "passed": 20,
+      "detail": "6 profiluri de material, 24 reacții/incident, 4 voci impact; replay 3/3 evenimente, 0 inventate, 0 pași de simulare"
+    },
+    {
+      "id": "challenge-233",
+      "pbi": "233",
+      "title": "Reluare, recorduri, recompense și daily pentru provocări",
+      "command": "npm run missions:challenge-experience",
+      "verdict": "PASS",
+      "checks": 55,
+      "passed": 55,
+      "detail": "2 credit, 1 duplicat cu 0 XP, 4 rânduri de record, reluare RESTARTED la încercarea 2"
+    },
+    {
+      "id": "savefile-234",
+      "pbi": "234",
+      "title": "Savefile cu checksum și încărcare atomică",
+      "command": "npm run save:file",
+      "verdict": "PASS",
+      "checks": 84,
+      "passed": 84,
+      "detail": "84 verificări, 174732 B din 12285272 B, checksum 64 caractere, 2 sesiuni, 35 obiecte de decor"
+    },
+    {
+      "id": "control-sliders-229",
+      "pbi": "229",
+      "title": "Sliderele de control și camera first-person",
+      "command": "npm run ui:control-sliders",
+      "verdict": "PASS",
+      "checks": 53,
+      "passed": 53,
+      "detail": "53 verificări, camera FIRST_PERSON, două clase (sedan + compact), layout 1280×720, contrast minim 11.13:1"
+    },
+    {
+      "id": "style-sliders-230",
+      "pbi": "230",
+      "title": "Sliderele de stil, publicare, stale și separarea sesiunilor",
+      "command": "npm run ui:style-sliders",
+      "verdict": "PASS",
+      "checks": 70,
+      "passed": 70,
+      "detail": "70 verificări, 2 versiuni Academie / 2 Haos, draft invalidat la schimbarea sesiunii"
+    },
+    {
+      "id": "daily-212",
+      "pbi": "212",
+      "title": "Daily: ofertă, refuzuri și schimbarea zilei",
+      "command": "npm run missions:daily-progress",
+      "verdict": "PASS",
+      "checks": 26,
+      "passed": 26,
+      "detail": "26 verificări, 1 recompense reținute, 5 refuzuri, 0 XP acordat"
+    },
+    {
+      "id": "responsive-084",
+      "pbi": "084",
+      "title": "Layout responsive la 1280×720 și 1920×1080",
+      "command": "npm run ui:responsive",
+      "verdict": "PASS",
+      "checks": 42,
+      "passed": 42,
+      "detail": "42 verificări de layout responsive, 42 trecute"
+    },
+    {
+      "id": "accessibility-083",
+      "pbi": "083",
+      "title": "Contractul de accesibilitate al suprafețelor UI",
+      "command": "npm run ui:accessibility",
+      "verdict": "PASS",
+      "checks": 53,
+      "passed": 53,
+      "detail": "53 verificări pe 7 scenarii; contrast, focus, tab, Escape"
+    },
+    {
+      "id": "ui-qa-153",
+      "pbi": "153",
+      "title": "QA vizual și accesibilitate pe componentele reale din Chromium",
+      "command": "npm run qa:ui",
+      "verdict": "FAIL",
+      "checks": 308,
+      "passed": 300,
+      "detail": "308 verificări în Chromium 156.0.8078.4, 5 verificări de contract eșuate, verdict FAIL"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "C1",
+      "title": "Scenariile combinate Academie/Haos, learning/slidere, R/reset, distrugere, provocări/daily și savefile trec fără contaminarea progresului",
+      "verdict": "PASS",
+      "probes": [
+        "qa-216",
+        "scenarios-151",
+        "e2e-152",
+        "session-kinds-225",
+        "world-recovery-226",
+        "control-sliders-229",
+        "style-sliders-230",
+        "destructible-227",
+        "destruction-feedback-228",
+        "challenge-233",
+        "daily-212",
+        "savefile-234"
+      ],
+      "checks": [
+        {
+          "name": "Academie/Haos fără contaminare",
+          "verdict": "PASS",
+          "detail": "20 tranziții (10 Academie / 10 Haos), lumi orfane 0, joburi orfane 0, 1 copie de profil"
+        },
+        {
+          "name": "R/reset separate de stil",
+          "verdict": "PASS",
+          "detail": "RECOVERED la tick-ul cererii (0 tick-uri până la mobilitate), 1 închidere de scenă la 20 reseturi"
+        },
+        {
+          "name": "Learning/slidere fără schimbarea mașinii",
+          "verdict": "PASS",
+          "detail": "53 + 70 verificări; mașina, frânarea, aderența și stilul AI rămân neschimbate"
+        },
+        {
+          "name": "Distrugere și replay",
+          "verdict": "PASS",
+          "detail": "35 obiecte în 3 zone; aceeași amprentă pentru MANUAL/LEARNING/AUTO; replay 3/3 evenimente din înregistrare"
+        },
+        {
+          "name": "Provocări și daily",
+          "verdict": "PASS",
+          "detail": "55 verificări de provocări, 3 șabloane/zi în 3 familii; daily 26 verificări"
+        },
+        {
+          "name": "Savefile fără coruperea sesiunii",
+          "verdict": "PASS",
+          "detail": "84 verificări, 174732 B, 2 sesiuni, 35 obiecte de decor; al doilea import 0 XP"
+        },
+        {
+          "name": "Sesiunea integrală și regresia V1",
+          "verdict": "PASS",
+          "detail": "e2e 11 pași/104 verificări, XP 200.5 → 200.5; regresie 29 rânduri, 0 FAIL; scenarii 12/12 executate în 4 familii"
+        }
+      ],
+      "note": "Progresul este citit prin amprente reale (profil, XP, daily, recompense, misiuni, dovezi) înainte și după fiecare tranziție."
+    },
+    {
+      "id": "C2",
+      "title": "XP/nivel nu scad prin accidente/KPI/eșec; evenimente duplicate, joburi stale, schimbarea zilei și importul nu dublează credite",
+      "verdict": "PASS",
+      "probes": [
+        "qa-216",
+        "e2e-152",
+        "world-recovery-226",
+        "challenge-233",
+        "daily-212",
+        "style-sliders-230",
+        "savefile-234"
+      ],
+      "checks": [
+        {
+          "name": "XP fără pierderi",
+          "verdict": "PASS",
+          "detail": "pierderi 0, debitări 0, amprentă identică true"
+        },
+        {
+          "name": "Resetul nu scade XP",
+          "verdict": "PASS",
+          "detail": "XP 500000 micro-XP după 20 reseturi, scădere false, profil true"
+        },
+        {
+          "name": "Recompense duplicate refuzate",
+          "verdict": "PASS",
+          "detail": "duplicat de provocare 0 XP; daily 5 refuzuri, 1 recompense"
+        },
+        {
+          "name": "Schimbarea zilei și rollback-ul nu dublează",
+          "verdict": "PASS",
+          "detail": "rollback de calendar SKIPPED; recompensa rămâne pe identitatea familie/zi"
+        },
+        {
+          "name": "Joburi stale și importuri repetate",
+          "verdict": "PASS",
+          "detail": "stale respins fără scriere true; 2 joburi invalidate la reset; al doilea import 0 XP"
+        }
+      ],
+      "note": "Amprenta XP și contoarele de refuz sunt separate: un duplicat refuzat poate crește un contor fără să plătească sau să scadă XP."
+    },
+    {
+      "id": "C3",
+      "title": "HUD/camera first-person și sliderele sunt confortabile în două clase și accesibile la 1280×720; feedbackul destructibil este verificat vizual/audio",
+      "verdict": "FAIL",
+      "probes": [
+        "control-sliders-229",
+        "style-sliders-230",
+        "responsive-084",
+        "accessibility-083",
+        "destruction-feedback-228",
+        "ui-qa-153"
+      ],
+      "checks": [
+        {
+          "name": "Două clase și camera first-person",
+          "verdict": "PASS",
+          "detail": "2/2 clase la extreme, camera FIRST_PERSON, stabilă true"
+        },
+        {
+          "name": "Layout 1280×720",
+          "verdict": "PASS",
+          "detail": "încape true, derulează true; responsive 42 verificări"
+        },
+        {
+          "name": "Contrast",
+          "verdict": "PASS",
+          "detail": "minim 11.13:1 din 4.5:1"
+        },
+        {
+          "name": "Feedback destructibil vizual/audio",
+          "verdict": "PASS",
+          "detail": "6 profiluri acustice, plafon 24 reacții/incident, 4 voci impact"
+        },
+        {
+          "name": "Text lizibil la 1280×720 (153)",
+          "verdict": "FAIL",
+          "detail": "5 verificări de contract eșuate în npm run qa:ui: D4/camera/1280x720/text-legible, D5/kpis/1280x720/text-legible, D6/kpis/1280x720/text-not-clipped, D7/kpis/1920x1080/text-legible, D8/kpis/1920x1080/text-not-clipped"
+        }
+      ],
+      "note": "Confortul subiectiv rămâne neexecutat (vezi C5). Verificările de contract ale 153 sunt citite din dovezile comise: 5 eșecuri reale de text (11,52 px pe panoul camerei, 11 px și 4 etichete tăiate în pop-up-ul KPI)."
+    },
+    {
+      "id": "C4",
+      "title": "Benchmarkul 224 include toate noile sisteme și 20 de cicluri reset/sesiune; păstrează măsurători reale, plafoane și limitări",
+      "verdict": "PASS",
+      "probes": [
+        "gate-224",
+        "destructible-227",
+        "destruction-feedback-228",
+        "challenge-233",
+        "savefile-234",
+        "session-kinds-225",
+        "world-recovery-226"
+      ],
+      "checks": [
+        {
+          "name": "Rândurile sistemelor noi în gate",
+          "verdict": "PASS",
+          "detail": "rânduri cerute: destruction-effects-audio, challenge-director, savefile-integrity, academy-chaos-cycles, soak-60min, gameplay-systems-max-v1, fps-hardware; lipsă 0, neconforme 0"
+        },
+        {
+          "name": "Raportul gate se verifică",
+          "verdict": "PASS",
+          "detail": "contractul 224 acceptă raportul (16 PASS, 0 FAIL, 1 NOT_VALIDATED)"
+        },
+        {
+          "name": "Soak 60 de minute și 20 de cicluri",
+          "verdict": "PASS",
+          "detail": "60.001 min din 60, 20 cicluri din 20, verdict SOAK_PASS"
+        },
+        {
+          "name": "Baseline neschimbat",
+          "verdict": "PASS",
+          "detail": "manifest 203-initial-1, modificat false"
+        },
+        {
+          "name": "Sistemele noi reexecutate în acest raport",
+          "verdict": "PASS",
+          "detail": "20 cicluri de distrugere (1 checksum), 55 verificări de provocări, 84 de savefile, 20 tranziții, 20 reseturi"
+        }
+      ],
+      "note": "Gate-ul 224 rămâne cu release `NOT_VALIDATED`: FPS pe hardware real este `NOT_VALIDATED` și este raportat ca atare, nu dedus."
+    },
+    {
+      "id": "C5",
+      "title": "Playtest cu minimum cinci participanți acoperă condus liber, prima schimbare de stil, distrugere și reluarea unei provocări; consemnează cine reîncearcă spontan și de ce",
+      "verdict": "NOT_RUN",
+      "probes": [],
+      "checks": [
+        {
+          "name": "Playtest cu minimum 5 participanți",
+          "verdict": "NOT_RUN",
+          "detail": "0/5 participanți: niciun jucător real nu a fost observat în acest PBI"
+        },
+        {
+          "name": "Condus liber, prima schimbare de stil, distrugere, reluarea unei provocări",
+          "verdict": "NOT_RUN",
+          "detail": "fluxurile sunt acoperite mecanic (225–233), dar nu au fost jucate de oameni"
+        },
+        {
+          "name": "Cine reîncearcă spontan și de ce",
+          "verdict": "NOT_RUN",
+          "detail": "nu există observație de sesiune umană; nu se inventează motive sau procente"
+        }
+      ],
+      "note": "Nu se pretinde playtest: 0 participanți. Ce ar fi nevoie este în secțiunea „Playtest” a raportului."
+    },
+    {
+      "id": "C6",
+      "title": "Eșecurile/limitările de experiență sunt explicite; rezultatele nu declară return rate fără sesiuni de revenire măsurate",
+      "verdict": "PASS",
+      "probes": [
+        "ui-qa-153"
+      ],
+      "checks": [
+        {
+          "name": "Eșecuri de experiență explicite",
+          "verdict": "PASS",
+          "detail": "8 findings din 153, inclusiv 5 de contract, raportate cu captură și reproducere"
+        },
+        {
+          "name": "Fără return rate inventat",
+          "verdict": "PASS",
+          "detail": "toate motivele de rejucare au `retention: NOT_RUN`; raportul nu conține procente sau rata de revenire"
+        },
+        {
+          "name": "Limitările neacoperite sunt enumerate",
+          "verdict": "PASS",
+          "detail": "4 limitări declarate; vezi secțiunea „Ce nu s-a măsurat”"
+        }
+      ],
+      "note": "Motivele de rejucare au două coloane separate: mecanismul dovedit și ipoteza de retenție `NOT_RUN`."
+    }
+  ],
+  "summary": {
+    "criteria": 6,
+    "pass": 4,
+    "fail": 1,
+    "notRun": 1,
+    "probes": 16,
+    "probePass": 15,
+    "probeFail": 1,
+    "probeNotRun": 0
+  },
+  "replayMotives": [
+    {
+      "id": "HAOS_DESTRUCTION",
+      "mechanism": "TESTED",
+      "mechanismEvidence": "20 tranziții Academie/Haos fără lumi orfane; 35 obiecte în 3 zone, 20 cicluri de reset cu 1 checksum; 6 profiluri de material și 24 reacții/incident cu 4 voci",
+      "probes": [
+        "session-kinds-225",
+        "destructible-227",
+        "destruction-feedback-228"
+      ],
+      "retention": "NOT_RUN",
+      "hypothesis": "Ipoteză neverificată: distrugerea oferă o sesiune scurtă de joacă liberă după o cursă serioasă.",
+      "wouldNeed": "Minimum cinci participanți în Haos, cu observarea primei distrugeri și a revenirii în Academie, plus o sesiune de revenire la 24 de ore pentru a putea vorbi despre revenire."
+    },
+    {
+      "id": "CHALLENGES",
+      "mechanism": "TESTED",
+      "mechanismEvidence": "55 verificări de provocări, 2 credit XP, 3 șabloane exprimabile în daily; panoul are 0 listeners globali și o citire pe deschidere",
+      "probes": [
+        "challenge-233",
+        "daily-212"
+      ],
+      "retention": "NOT_RUN",
+      "hypothesis": "Ipoteză neverificată: o provocare scurtă oferă un punct de intrare pentru o sesiune de cinci minute.",
+      "wouldNeed": "Playtest cu ofertă reală de provocare și măsurarea alegerii voluntare, nu doar existența catalogului."
+    },
+    {
+      "id": "DAILY",
+      "mechanism": "TESTED",
+      "mechanismEvidence": "3 șabloane pe zi în 3 familii, determinist pe dată; 26 verificări daily, 1 recompense, 5 refuzuri",
+      "probes": [
+        "challenge-233",
+        "daily-212"
+      ],
+      "retention": "NOT_RUN",
+      "hypothesis": "Ipoteză neverificată: cele trei misiuni zilnice aduc jucătorul înapoi a doua zi.",
+      "wouldNeed": "Sesiuni de revenire măsurate la 24 de ore și la 7 zile, cu același participant și aceeași ofertă zilnică."
+    },
+    {
+      "id": "RECORDS",
+      "mechanism": "TESTED",
+      "mechanismEvidence": "4 rânduri de record: o rulare mai rapidă îmbunătățește recordul (true), una mai lentă sau egală nu îl scade (true)",
+      "probes": [
+        "challenge-233"
+      ],
+      "retention": "NOT_RUN",
+      "hypothesis": "Ipoteză neverificată: recordul personal îl determină pe jucător să reîncerce aceeași provocare.",
+      "wouldNeed": "Observarea reluărilor spontane după un record, cu numărul de încercări per participant; nu se deduce din existența clasamentului."
+    },
+    {
+      "id": "QUICK_RESTART",
+      "mechanism": "TESTED",
+      "mechanismEvidence": "reluarea unei provocări eșuate produce `RESTARTED` la încercarea 2, același șablon true, identitate nouă true, 0 XP; o provocare neeșuată este refuzată cu `NOT_FAILED`",
+      "probes": [
+        "challenge-233"
+      ],
+      "retention": "NOT_RUN",
+      "hypothesis": "Ipoteză neverificată: reluarea în doi pași reduce abandonul după un eșec.",
+      "wouldNeed": "Măsurarea abandonului și a reluării într-un playtest cu eșec provocat, nu doar apelul de restart al directorului."
+    }
+  ],
+  "experienceFailures": [
+    {
+      "id": "D1",
+      "tier": "STRESS",
+      "surface": "hud",
+      "viewport": "zoom-200-720",
+      "check": "surface-inside-viewport",
+      "summary": "A surface is positioned outside the viewport. (Surfaces outside the viewport: fleet (bottom 476 > 360), notifications (bottom 384 > 360).)"
+    },
+    {
+      "id": "D2",
+      "tier": "STRESS",
+      "surface": "fleet",
+      "viewport": "zoom-200-720",
+      "check": "surface-inside-viewport",
+      "summary": "A surface is positioned outside the viewport. (Surfaces outside the viewport: fleet (bottom 476 > 360), notifications (bottom 384 > 360).)"
+    },
+    {
+      "id": "D3",
+      "tier": "STRESS",
+      "surface": "profile",
+      "viewport": "zoom-200-720",
+      "check": "surface-inside-viewport",
+      "summary": "A surface is positioned outside the viewport. (Surfaces outside the viewport: fleet (bottom 476 > 360), notifications (bottom 384 > 360).)"
+    },
+    {
+      "id": "D4",
+      "tier": "CONTRACT",
+      "surface": "camera",
+      "viewport": "1280x720",
+      "check": "text-legible",
+      "summary": "Visible text falls below the 12 CSS px / 1.4 line-height floor. (smallest visible text is 11.52 px with a 1.4 line-height ratio; the floor is 12 px and 1.4.)"
+    },
+    {
+      "id": "D5",
+      "tier": "CONTRACT",
+      "surface": "kpis",
+      "viewport": "1280x720",
+      "check": "text-legible",
+      "summary": "Visible text falls below the 12 CSS px / 1.4 line-height floor. (smallest visible text is 11 px with a 1.4 line-height ratio; the floor is 12 px and 1.4.)"
+    },
+    {
+      "id": "D6",
+      "tier": "CONTRACT",
+      "surface": "kpis",
+      "viewport": "1280x720",
+      "check": "text-not-clipped",
+      "summary": "Visible text overflows or is clipped by its own box. (4 text nodes overflow their box: kpis:span.kpi-history__chart-group-value \"fără review-uri\", kpis:span.kpi-history__chart-group-value \"fără review-uri\", kpis:span.kpi-history__chart-group-value \"fără review-uri\", kpis:span.kpi-history__chart-group-value \"fără review-uri\".)"
+    },
+    {
+      "id": "D7",
+      "tier": "CONTRACT",
+      "surface": "kpis",
+      "viewport": "1920x1080",
+      "check": "text-legible",
+      "summary": "Visible text falls below the 12 CSS px / 1.4 line-height floor. (smallest visible text is 11 px with a 1.4 line-height ratio; the floor is 12 px and 1.4.)"
+    },
+    {
+      "id": "D8",
+      "tier": "CONTRACT",
+      "surface": "kpis",
+      "viewport": "1920x1080",
+      "check": "text-not-clipped",
+      "summary": "Visible text overflows or is clipped by its own box. (4 text nodes overflow their box: kpis:span.kpi-history__chart-group-value \"fără review-uri\", kpis:span.kpi-history__chart-group-value \"fără review-uri\", kpis:span.kpi-history__chart-group-value \"fără review-uri\", kpis:span.kpi-history__chart-group-value \"fără review-uri\".)"
+    }
+  ],
+  "notMeasured": [
+    "Playtest uman cu minimum cinci participanți: condus liber, prima schimbare de stil, distrugere și reluarea unei provocări — `NOT_RUN`, 0/5.",
+    "Cine reîncearcă spontan și de ce — `NOT_RUN`; nu există observație de sesiune.",
+    "Return rate / retenție la 24 de ore și 7 zile — `NOT_RUN`; nu se raportează niciun procent.",
+    "FPS, frame p95/p99 și lucrul GPU pe hardware real, ambele backenduri — `NOT_VALIDATED` în gate-ul 224 (release `NOT_VALIDATED`).",
+    "Memoria exactă a paginii și a GPU — `totalHeapBytes` este `null`; probele raportează contoare de ownership.",
+    "Latența audio reală și plăcerea sunetului — 228 dovedește planul de reacție și plafoanele, nu mixerul pe hardware.",
+    "Confortul subiectiv al camerei (motion sickness) și senzația de condus — fără jucător uman.",
+    "Textul din 153 nu a fost recapturat aici: worktree-ul nu are Playwright, deci findings-urile D4–D8 sunt citite din dovezile comise."
+  ],
+  "playtest": {
+    "status": "NOT_RUN",
+    "participants": 0,
+    "requiredParticipants": 5,
+    "flows": [
+      "condus liber în Academie și Haos",
+      "prima schimbare de stil din popup-ul de reglaje",
+      "distrugere în zonele de joacă",
+      "reluarea unei provocări eșuate"
+    ],
+    "wouldNeed": [
+      "Minimum cinci participanți, fiecare cu o sesiune de minimum 20 de minute.",
+      "Un observator care notează prima schimbare de stil, prima distrugere și decizia de a relua o provocare.",
+      "O sesiune de revenire la 24 de ore (și ideal la 7 zile) pentru orice afirmație despre revenire.",
+      "Consimțământ și stocare locală a notițelor; fără telemetrie de identificare personală."
+    ]
+  },
+  "gate": {
+    "reportVersion": "224-performance-gate-report-v1",
+    "commit": "757e7168dfd641ea94fa7bcf95ae6841055e1244",
+    "budgetVersion": "203-initial-1",
+    "manifestModified": false,
+    "structural": "PASS",
+    "release": "NOT_VALIDATED",
+    "pass": 16,
+    "fail": 0,
+    "notValidated": 1,
+    "rows": [
+      {
+        "id": "bundle-critical-transfer",
+        "verdict": "PASS",
+        "detail": "5.84 MiB (6125279 B) din 8.00 MiB; JS 3478683 B + WASM 2646596 B, gzip 1769518 B, 130 artefacte"
+      },
+      {
+        "id": "bundle-regression",
+        "verdict": "PASS",
+        "detail": "baseline 5.84 MiB (f5fb79fd07c7); 0/5 repetări peste >10% și >5.00 MiB; prag de confirmare 3/5"
+      },
+      {
+        "id": "capacity-render",
+        "verdict": "PASS",
+        "detail": "draw calls 48/128, instanțe thin 78/8192, batchuri 40/512, obiecte Babylon 12/4096, 923 elemente randate"
+      },
+      {
+        "id": "determinism",
+        "verdict": "PASS",
+        "detail": "5 builduri, 5 probe de randare; digesturi distincte: 1 build / 1 randare"
+      },
+      {
+        "id": "soak-60min",
+        "verdict": "PASS",
+        "detail": "60.001 min, 20 cicluri (20 curate), 7/7 tendințe PLATEAU, heap +1.82 MiB din 5.00 MiB, coadă max 1 joburi / 4 B, throttling OBSERVED"
+      },
+      {
+        "id": "fps-hardware",
+        "verdict": "NOT_VALIDATED",
+        "detail": ""
+      },
+      {
+        "id": "probe-render-budget",
+        "verdict": "PASS",
+        "detail": "157: 17 PASS, 0 FAIL, 2 NOT_MEASURED; --check exit 0, captura 546fa29e5ac6"
+      },
+      {
+        "id": "probe-simulation-budget",
+        "verdict": "PASS",
+        "detail": "158: decizii PASS, estimare PASS, transferuri PASS, 3 echivalențe IDENTICAL; --check exit 0"
+      },
+      {
+        "id": "probe-traffic-benchmark",
+        "verdict": "PASS",
+        "detail": "156: 36 PASS, 0 FAIL, 12 STRESS, 60 REPORTED; --check exit 0"
+      },
+      {
+        "id": "probe-hardware-budget",
+        "verdict": "PASS",
+        "detail": "155: 85 PASS, 0 FAIL, 6 NOT_MEASURED declarate; --check exit 0"
+      },
+      {
+        "id": "probe-soak-integrity",
+        "verdict": "PASS",
+        "detail": "159: SOAK_PASS, 60.002 min, 20 cicluri, commit 917a7de9; --check exit 0"
+      },
+      {
+        "id": "gameplay-systems-max-v1",
+        "verdict": "PASS",
+        "detail": "workload maxim V1 30/40: 12 rânduri de gate, sisteme BASELINE, LEARNING, RECORDER_AUTOSAVE, XP, tick p95 maxim 7.00 ms din 8 ms"
+      },
+      {
+        "id": "destruction-effects-audio",
+        "verdict": "PASS",
+        "detail": "227: 24/24 verificări, 20 cicluri de reset cu 35 corpuri; 228: 20/20, max 4 voci impact și 24 reacții/incident; 149: 32/32, 1/14 voci active. Frame: NOT_MEASURED declarat"
+      },
+      {
+        "id": "challenge-director",
+        "verdict": "PASS",
+        "detail": "232: 56/56, istoric 24/24 intrări și 1071/4096 unități; 233: 55/55, 1 rând de ledger din 32, 0 listeners globali"
+      },
+      {
+        "id": "savefile-integrity",
+        "verdict": "PASS",
+        "detail": "234: 84/84 verificări, fișier 174732 B din 12285272 B, payload 174113 B din ingress 16777216 B, checksum 64 B; encode/hash fără ceas de perete (declarat)"
+      },
+      {
+        "id": "academy-chaos-cycles",
+        "verdict": "PASS",
+        "detail": "225: 20 tranziții (10 Academie / 10 Haos), 20 checkpointuri comise, 773 B total (max 40 B), 0 lumi/joburi orfane; 226: 20 reseturi, 0 eșuate, corpuri 64, 1 listener, lumi vii 1"
+      },
+      {
+        "id": "backend-matrix",
+        "verdict": "PASS",
+        "detail": "154: 9/9 combinații reale, 11/11 verificări deterministe, 11 combinații declarate NOT_RUN; backenduri acoperite: WEBGPU și WEBGL 2"
+      }
+    ],
+    "requiredRows": [
+      "destruction-effects-audio",
+      "challenge-director",
+      "savefile-integrity",
+      "academy-chaos-cycles",
+      "soak-60min",
+      "gameplay-systems-max-v1",
+      "fps-hardware"
+    ],
+    "missingRequiredRows": [],
+    "unpassedRequiredRows": [],
+    "issues": [],
+    "soakMinutes": 60.001,
+    "soakRequiredMinutes": 60,
+    "soakCycles": 20,
+    "soakRequiredCycles": 20,
+    "soakVerdict": "SOAK_PASS"
+  },
+  "limitations": [
+    "Nivel `soak` declarat de PBI, dar playtestul uman și retenția rămân `NOT_RUN`: niciun jucător real nu a fost observat.",
+    "FPS/frame p95/p99 pe hardware real rămân `NOT_VALIDATED` în gate-ul 224; capturile 220 sunt pe alt build.",
+    "Textul și contrastul din 153 sunt măsurate pe capturile comise de 153, nu recapturate aici (fără Playwright în worktree).",
+    "Costurile de memorie sunt contoare de ownership, nu heap total; `totalHeapBytes` este `null` în manifest."
+  ]
+}
