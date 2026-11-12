@@ -6,7 +6,12 @@ import type { Material } from '@babylonjs/core/Materials/material.js';
 import { VehiclePickingRegistry } from './vehicle-picking-registry';
 import { RENDER_ASSET_CAPS } from '../asset-budgets';
 import type { QualityPreset } from '../quality-policy';
-import { QUALITY_PRESETS } from '../quality-policy';
+import {
+  assertDistantSourceCovers,
+  lodBands,
+  resolveBatchLod,
+  type BatchLodLevel,
+} from '../lod-policy';
 
 export interface BatchInstance {
   readonly entityId: string | null;
@@ -29,7 +34,7 @@ interface Batch {
   materials: Material[];
   center: Vector3;
   radius: number;
-  distant: boolean;
+  level: BatchLodLevel;
   nearMatrices: Float32Array;
   farMatrices: Float32Array | null;
 }
@@ -46,14 +51,21 @@ export class BabylonCellBatches {
       throw new Error('Foreign/disposed batch scene');
   }
   get metrics() {
+    const batches = [...this.batches.values()];
     return {
-      cells: new Set([...this.batches.values()].map((b) => b.definition.cell)).size,
+      cells: new Set(batches.map((b) => b.definition.cell)).size,
       batches: this.batches.size,
-      instances: [...this.batches.values()].reduce((n, b) => n + b.definition.instances.length, 0),
-      distantBatches: [...this.batches.values()].filter((b) => b.distant).length,
-      meshes: [...this.batches.values()].reduce((n, b) => n + 1 + Number(!!b.far), 0),
-      frozenMaterials: [...this.batches.values()].reduce((n, b) => n + b.materials.length, 0),
-      matrixBufferBytes: [...this.batches.values()].reduce(
+      instances: batches.reduce((n, b) => n + b.definition.instances.length, 0),
+      distantBatches: batches.filter((b) => b.far && b.level === 'FAR').length,
+      nearBatches: batches.filter((b) => b.level === 'NEAR').length,
+      /** Hosts the renderer would submit right now: exactly one per batch with a far source. */
+      drawnHosts: batches.reduce(
+        (n, b) => n + Number(b.near.isEnabled()) + Number(b.far?.isEnabled() ?? false),
+        0,
+      ),
+      meshes: batches.reduce((n, b) => n + 1 + Number(!!b.far), 0),
+      frozenMaterials: batches.reduce((n, b) => n + b.materials.length, 0),
+      matrixBufferBytes: batches.reduce(
         (n, b) => n + b.nearMatrices.byteLength + (b.farMatrices?.byteLength ?? 0),
         0,
       ),
@@ -105,7 +117,7 @@ export class BabylonCellBatches {
         materials,
         center: Vector3.Zero(),
         radius: 0,
-        distant: false,
+        level: 'NEAR',
         nearMatrices: new Float32Array(0),
         farMatrices: null,
       };
@@ -136,16 +148,16 @@ export class BabylonCellBatches {
     this.assertLive();
     if (![camera.x, camera.y, camera.z].every(Number.isFinite))
       throw new Error('Invalid LOD camera');
-    const distance = QUALITY_PRESETS[preset]?.lodDistance;
-    if (!distance) throw new Error('Invalid LOD preset');
+    if (!lodBands(preset)) throw new Error('Invalid LOD preset');
     for (const batch of this.batches.values()) {
       if (!batch.far) continue;
-      // Conservative nearest edge plus hysteresis; broad cells never discard nearby detail.
+      // Conservative nearest edge plus the declared hysteresis band; broad cells never discard
+      // nearby detail, and a camera dithering on the boundary cannot strobe the geometry.
       const nearest = Math.max(0, Vector3.Distance(camera, batch.center) - batch.radius);
-      const distant = nearest > distance + (batch.distant ? -5 : 5);
-      batch.near.setEnabled(!distant);
-      batch.far.setEnabled(distant);
-      batch.distant = distant;
+      const { level } = resolveBatchLod({ edgeDistanceM: nearest, current: batch.level, preset });
+      batch.level = level;
+      batch.near.setEnabled(level === 'NEAR');
+      batch.far.setEnabled(level === 'FAR');
     }
   }
   /** Motion-only path retains identity order and reuses GPU submission buffers. */
@@ -200,6 +212,13 @@ export class BabylonCellBatches {
     for (const source of [definition.source, definition.distantSource])
       if (source?.material && source.material.getScene() !== this.scene)
         throw new Error('Batch source material must belong to the local scene');
+    // Pop-free LOD admission: the coarse proxy cannot be smaller than the detailed source, so the
+    // switch cannot make an object shrink or disappear.
+    if (definition.distantSource)
+      assertDistantSourceCovers(
+        definition.source.getBoundingInfo().boundingSphere.radius,
+        definition.distantSource.getBoundingInfo().boundingSphere.radius,
+      );
     if (
       definition.instances.length < 1 ||
       definition.instances.length > RENDER_ASSET_CAPS.maxPerBatch

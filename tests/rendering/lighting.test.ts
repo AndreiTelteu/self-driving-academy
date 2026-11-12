@@ -93,6 +93,7 @@ test('daylight quality switches preserve materials/signals/domain and release sh
   assert.equal(light.getQuality().internalWidth, 800);
   light.removeShadowCaster(vehicle);
   assert.equal(light.getResourceCounts().retainedCasters, 0);
+  assert.equal(light.getResourceCounts().essentialCasters, 0);
   light.dispose();
   light.dispose();
   assert.deepEqual(light.getResourceCounts(), {
@@ -100,6 +101,7 @@ test('daylight quality switches preserve materials/signals/domain and release sh
     materials: 0,
     shadowMaps: 0,
     retainedCasters: 0,
+    essentialCasters: 0,
   });
   assert.equal(scene.lights.length, 0);
   assert.equal(scene.materials.length, 0);
@@ -150,6 +152,69 @@ test('removed active caster is refilled deterministically; foreign/disposed mesh
     () => createDaylight(scene, preferences, { width: 640, height: 360, dpr: 1 }),
     /disposed/,
   );
+  engine.dispose();
+});
+
+test('the shadow budget keeps the essential caster when the map is full', () => {
+  const engine = new NullEngine(),
+    scene = new Scene(engine);
+  const daylight = createDaylight(scene, preferences, { width: 640, height: 360, dpr: 1 });
+  const traffic = Array.from({ length: 48 }, (_, index) => new Mesh(`traffic${index}`, scene));
+  for (const mesh of traffic) daylight.addShadowCaster(mesh, 'standard');
+  const player = new Mesh('player-taxi', scene);
+  // The fifth-eight caster is the one the player looks at: it must enter, a prop must leave.
+  assert.equal(daylight.addShadowCaster(player, 'essential'), true);
+  const shadow = scene.lights[1]!.getShadowGenerator()!;
+  const renderList = shadow.getShadowMap()!.renderList!;
+  assert.equal(renderList.length, 48);
+  assert.ok(renderList.includes(player), 'the essential caster is in the shadow map');
+  assert.equal(renderList.includes(traffic[47]!), false, 'the last prop is dropped instead');
+  assert.equal(renderList[0]!.name, 'player-taxi', 'essential casters are admitted first');
+  const budget = daylight.getShadowBudget();
+  assert.equal(budget.preset, 'MEDIUM');
+  assert.equal(budget.limit, 48);
+  assert.equal(budget.registered, 49);
+  assert.equal(budget.admitted, 48);
+  assert.equal(budget.rejected, 1);
+  assert.equal(budget.essentialDropped, 0);
+  assert.equal(budget.byPriority.essential, 1);
+  assert.equal(budget.includes.length > 0, true);
+  assert.equal(budget.excludes.length > 0, true);
+  // Promotion of an already registered caster keeps one entry and adds no duplicate.
+  daylight.addShadowCaster(traffic[0]!, 'essential');
+  const promoted = daylight.getShadowBudget();
+  assert.equal(promoted.registered, 49);
+  assert.equal(promoted.byPriority.essential, 2);
+  assert.equal(promoted.rejected, 1, 'the map stays full without evicting an essential caster');
+  assert.equal(
+    scene.lights[1]!.getShadowGenerator()!.getShadowMap()!.renderList![0]!.name,
+    traffic[0]!.name,
+    'equal priorities keep the registration order',
+  );
+  assert.throws(() => daylight.addShadowCaster(player, 'urgent' as never), /priority/);
+  daylight.dispose();
+  scene.dispose();
+  engine.dispose();
+});
+
+test('a low preset has no shadow map, so nothing enters it', () => {
+  const engine = new NullEngine(),
+    scene = new Scene(engine);
+  const daylight = createDaylight(
+    scene,
+    { ...preferences, preset: 'LOW' },
+    { width: 640, height: 360, dpr: 1 },
+  );
+  assert.equal(daylight.addShadowCaster(new Mesh('taxi', scene), 'essential'), true);
+  const budget = daylight.getShadowBudget();
+  assert.equal(budget.limit, 0);
+  assert.equal(budget.admitted, 0);
+  assert.equal(budget.essentialDropped, 0);
+  assert.equal(budget.shadowMapSize, 0);
+  assert.equal(daylight.getResourceCounts().shadowMaps, 0);
+  assert.equal(daylight.getResourceCounts().retainedCasters, 1);
+  daylight.dispose();
+  scene.dispose();
   engine.dispose();
 });
 

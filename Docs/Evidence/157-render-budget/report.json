@@ -1,0 +1,329 @@
+{
+  "version": "157-render-budget-v1",
+  "manifest": {
+    "budgetVersion": "203-initial-1",
+    "modified": false
+  },
+  "captures": {
+    "before": {
+      "capturedAt": "2026-11-12T06:06:49.434Z",
+      "commit": "546fa29e5ac6b4ed770c7acf6181d191956e1537",
+      "label": "baseline înainte de optimizare (sursa neatinsă)",
+      "machine": "AMD Ryzen 7 7735U with Radeon Graphics; 16 fire logice; 14 GiB RAM; Node 24.19.0; Windows; NullEngine (fără renderer hardware)",
+      "command": "npm run perf:render-budget -- --measure --capture=before",
+      "fixture": "layout real 042 + decor 146 + 70 vehicule × 3 preseturi + 32 raze"
+    },
+    "after": {
+      "capturedAt": "2026-11-12T06:04:42.327Z",
+      "commit": "546fa29e5ac6b4ed770c7acf6181d191956e1537",
+      "label": "după optimizare (aceeași probă, același fixture)",
+      "machine": "AMD Ryzen 7 7735U with Radeon Graphics; 16 fire logice; 14 GiB RAM; Node 24.19.0; Windows; NullEngine (fără renderer hardware)",
+      "command": "npm run perf:render-budget -- --measure --capture=after",
+      "fixture": "layout real 042 + decor 146 + 70 vehicule × 3 preseturi + 32 raze"
+    }
+  },
+  "rows": [
+    {
+      "id": "city-draw-calls",
+      "metric": "draw calls ale layout-ului orașului (042)",
+      "unit": "draw calls",
+      "before": 155,
+      "after": 12,
+      "budget": {
+        "value": 128,
+        "direction": "maximum",
+        "source": "Docs/performance-budgets.json resourceAdmissionContracts.rendering.drawCalls"
+      },
+      "verdict": "PASS",
+      "note": "923 elemente în 12 mesh-uri (4 hosturi thin cu 78 instanțe)"
+    },
+    {
+      "id": "city-thin-instances",
+      "metric": "instanțe thin în batchurile orașului",
+      "unit": "instances",
+      "before": 0,
+      "after": 78,
+      "budget": {
+        "value": 8192,
+        "direction": "maximum",
+        "source": "Docs/performance-budgets.json resourceAdmissionContracts.rendering.instances"
+      },
+      "verdict": "PASS",
+      "note": "semnalele repetate sunt instanțiate pe geometrie unitară partajată"
+    },
+    {
+      "id": "city-babylon-objects",
+      "metric": "obiecte Babylon deținute de scena orașului",
+      "unit": "objects",
+      "before": 155,
+      "after": 12,
+      "budget": null,
+      "verdict": "REPORTED",
+      "note": "mesh-uri, nu instanțe: o instanță nu creează un obiect Babylon"
+    },
+    {
+      "id": "scene-material-batches",
+      "metric": "batchuri statice pe material (oraș + decor)",
+      "unit": "batches",
+      "before": 36,
+      "after": 40,
+      "budget": {
+        "value": 512,
+        "direction": "maximum",
+        "source": "Docs/performance-budgets.json resourceAdmissionContracts.rendering.batches"
+      },
+      "verdict": "PASS",
+      "note": "celule de decor 146 plus hosturile thin ale orașului; un host înlocuiește zeci de mesh-uri per element"
+    },
+    {
+      "id": "decor-draw-calls",
+      "metric": "draw calls ale decorului 146 (control neschimbat)",
+      "unit": "draw calls",
+      "before": 36,
+      "after": 36,
+      "budget": {
+        "value": 128,
+        "direction": "maximum",
+        "source": "Docs/performance-budgets.json resourceAdmissionContracts.rendering.drawCalls"
+      },
+      "verdict": "PASS",
+      "note": "1585 itemuri în 36 celule"
+    },
+    {
+      "id": "scene-draw-calls",
+      "metric": "draw calls totale ale scenei de referință (oraș + decor)",
+      "unit": "draw calls",
+      "before": 191,
+      "after": 48,
+      "budget": {
+        "value": 128,
+        "direction": "maximum",
+        "source": "Docs/performance-budgets.json resourceAdmissionContracts.rendering.drawCalls"
+      },
+      "verdict": "PASS",
+      "note": "suma celor două fixture-uri reale, aceeași scenă și același layout"
+    },
+    {
+      "id": "city-element-bounds",
+      "metric": "abaterea maximă a limitelor unui element față de baseline",
+      "unit": "px",
+      "before": 0,
+      "after": 0.000029,
+      "budget": {
+        "value": 0.0001,
+        "direction": "maximum",
+        "source": "contract 042: aceeași poziție și aceeași amprentă (0,1 mm, limita float32)"
+      },
+      "verdict": "PASS",
+      "note": "923 elemente comparate față de 122; elemente lipsă 0"
+    },
+    {
+      "id": "city-lane-geometry",
+      "metric": "digest-uri de vârfuri de bandă identice",
+      "unit": "count",
+      "before": 96,
+      "after": 96,
+      "budget": null,
+      "verdict": "PASS",
+      "note": "diferite: 0"
+    },
+    {
+      "id": "shadows-low-essential",
+      "metric": "casters esențiali (taxiul selectat) în shadow map",
+      "unit": "count",
+      "before": 0,
+      "after": 0,
+      "budget": {
+        "value": 1,
+        "direction": "minimum",
+        "source": "contract 016: umbrele esențiale nu dispar la plafon"
+      },
+      "verdict": "PASS",
+      "note": "preset LOW: harta de umbre e dezactivată prin contract, deci nimic nu intră"
+    },
+    {
+      "id": "shadows-low-admitted",
+      "metric": "casters admiși în shadow map",
+      "unit": "count",
+      "before": 0,
+      "after": 0,
+      "budget": {
+        "value": 0,
+        "direction": "maximum",
+        "source": "Docs/performance-budgets.json + contract 016 (LOW)"
+      },
+      "verdict": "PASS",
+      "note": "înregistrați 71, respinși 71; harta 0²"
+    },
+    {
+      "id": "shadows-medium-essential",
+      "metric": "casters esențiali (taxiul selectat) în shadow map",
+      "unit": "count",
+      "before": 0,
+      "after": 1,
+      "budget": {
+        "value": 1,
+        "direction": "minimum",
+        "source": "contract 016: umbrele esențiale nu dispar la plafon"
+      },
+      "verdict": "PASS",
+      "note": "plafon 48, admitere pe prioritate (esențial → standard → opțional)"
+    },
+    {
+      "id": "shadows-medium-admitted",
+      "metric": "casters admiși în shadow map",
+      "unit": "count",
+      "before": 48,
+      "after": 48,
+      "budget": {
+        "value": 48,
+        "direction": "maximum",
+        "source": "Docs/performance-budgets.json + contract 016 (MEDIUM)"
+      },
+      "verdict": "PASS",
+      "note": "înregistrați 71, respinși 23; harta 1024²"
+    },
+    {
+      "id": "shadows-high-essential",
+      "metric": "casters esențiali (taxiul selectat) în shadow map",
+      "unit": "count",
+      "before": 1,
+      "after": 1,
+      "budget": {
+        "value": 1,
+        "direction": "minimum",
+        "source": "contract 016: umbrele esențiale nu dispar la plafon"
+      },
+      "verdict": "PASS",
+      "note": "plafon 96, admitere pe prioritate (esențial → standard → opțional)"
+    },
+    {
+      "id": "shadows-high-admitted",
+      "metric": "casters admiși în shadow map",
+      "unit": "count",
+      "before": 71,
+      "after": 71,
+      "budget": {
+        "value": 96,
+        "direction": "maximum",
+        "source": "Docs/performance-budgets.json + contract 016 (HIGH)"
+      },
+      "verdict": "PASS",
+      "note": "înregistrați 71, respinși 0; harta 2048²"
+    },
+    {
+      "id": "lod-low",
+      "metric": "tranziții LOD pe balaria de distanță (0 … 4×prag)",
+      "unit": "count",
+      "before": 1,
+      "after": 1,
+      "budget": {
+        "value": 1,
+        "direction": "maximum",
+        "source": "contract LOD declarat: NEAR ≤ 45 m, revenire FAR→NEAR sub 40 m"
+      },
+      "verdict": "PASS",
+      "note": "nivele: NEAR → NEAR → NEAR → NEAR → NEAR → FAR → FAR; oscilații în banda de histerezis: 0"
+    },
+    {
+      "id": "lod-medium",
+      "metric": "tranziții LOD pe balaria de distanță (0 … 4×prag)",
+      "unit": "count",
+      "before": 1,
+      "after": 1,
+      "budget": {
+        "value": 1,
+        "direction": "maximum",
+        "source": "contract LOD declarat: NEAR ≤ 90 m, revenire FAR→NEAR sub 85 m"
+      },
+      "verdict": "PASS",
+      "note": "nivele: NEAR → NEAR → NEAR → NEAR → NEAR → FAR → FAR; oscilații în banda de histerezis: 0"
+    },
+    {
+      "id": "lod-high",
+      "metric": "tranziții LOD pe balaria de distanță (0 … 4×prag)",
+      "unit": "count",
+      "before": 1,
+      "after": 1,
+      "budget": {
+        "value": 1,
+        "direction": "maximum",
+        "source": "contract LOD declarat: NEAR ≤ 150 m, revenire FAR→NEAR sub 145 m"
+      },
+      "verdict": "PASS",
+      "note": "nivele: NEAR → NEAR → NEAR → NEAR → NEAR → FAR → FAR; oscilații în banda de histerezis: 0"
+    },
+    {
+      "id": "picking-equivalence",
+      "metric": "raze cu aceeași identitate înainte/după instanțiere",
+      "unit": "count",
+      "before": 32,
+      "after": 32,
+      "budget": {
+        "value": 32,
+        "direction": "minimum",
+        "source": "contract 014/013: aceeași selecție pentru același ray"
+      },
+      "verdict": "PASS",
+      "note": "7 raze au nimerit un vehicul; toate cele 32 au aceeași identitate"
+    },
+    {
+      "id": "frame-p95",
+      "metric": "interval de cadru p95 (hardware)",
+      "unit": "ms",
+      "before": null,
+      "after": null,
+      "budget": {
+        "value": 35,
+        "direction": "maximum",
+        "source": "Docs/performance-budgets.json proposedBudgets.laptop.frameP95Ms"
+      },
+      "verdict": "NOT_MEASURED",
+      "note": "proba este structurală, în NullEngine: nu există renderer hardware, deci frame time-ul nu este măsurat și nu se raportează 0"
+    },
+    {
+      "id": "gpu-p95",
+      "metric": "lucru GPU p95",
+      "unit": "ms",
+      "before": null,
+      "after": null,
+      "budget": {
+        "value": 28,
+        "direction": "maximum",
+        "source": "Docs/performance-budgets.json proposedBudgets.laptop.gpuP95Ms"
+      },
+      "verdict": "NOT_MEASURED",
+      "note": "fără context GPU nu există timer; valoarea rămâne null (Docs/25: headless/software nu dovedește FPS)"
+    }
+  ],
+  "deviations": [],
+  "structural": [
+    "923 elemente randate înainte și 923 după; identitatea fiecărui element este păstrată",
+    "instanțe thin: 0 → 78; mesh-uri: 155 → 12",
+    "materiale înghețate: 0 → 12",
+    "vârfuri/triunghiuri: 19172/10054 → 18580/9314",
+    "picking: 32/32 raze identice (7 nimeresc un vehicul)",
+    "LOD: LOW 1 tranziție/0 oscilații; MEDIUM 1 tranziție/0 oscilații; HIGH 1 tranziție/0 oscilații",
+    "umbre: LOW 0/0 admiși, esențial 0; MEDIUM 48/48 admiși, esențial 1; HIGH 71/96 admiși, esențial 1",
+    "manifest: Docs/performance-budgets.json (203-initial-1); bugetele nu au fost modificate"
+  ],
+  "notMeasured": [
+    {
+      "metric": "interval de cadru p95 (hardware)",
+      "reason": "proba este structurală, în NullEngine: nu există renderer hardware, deci frame time-ul nu este măsurat și nu se raportează 0"
+    },
+    {
+      "metric": "lucru GPU p95",
+      "reason": "fără context GPU nu există timer; valoarea rămâne null (Docs/25: headless/software nu dovedește FPS)"
+    }
+  ],
+  "summary": {
+    "pass": 17,
+    "fail": 0,
+    "notMeasured": 2,
+    "structural": 8,
+    "gate": "STRUCTURAL_PASS",
+    "hardwareGameplayGate": "NOT_VALIDATED",
+    "note": "Verdictul acoperă numai partea structurală măsurabilă determinist; gate-ul hardware al jocului complet rămâne NOT_VALIDATED."
+  }
+}

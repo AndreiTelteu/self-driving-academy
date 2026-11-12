@@ -39,3 +39,26 @@ PBI 203 fixează configurațiile și metoda de măsurare înaintea prototipului 
 ## Rezultat măsurat la gate-ul 220 (22 octombrie 2026)
 
 Pe laptopul cu GPU integrat (Ryzen 7 7735U / Radeon 680M, 1920×1080 CSS și intern, DPR 1, preset LOW fix), 20/24/30 de taxiuri cu până la 40 de civili au intrat în bugetele coloanei `laptop` pe ambele backenduri, cu build de producție și cinci repetări: frame p95 16,8 ms, p99 16,9–17,0 ms, tick autoritar p95 3,1–5,5 ms, Rapier p95 0,3–0,4 ms, input p95 1,6–2,5 ms, learning 17,3–17,8 ms și raport timp simulat/timp real 1,0001. WebGL2 a raportat timer GPU (p95 ≈ 1,09 ms); WebGPU a raportat timerul indisponibil, deci valoarea GPU este `null`, nu zero. Proba de suprasarcină 30/80 a rămas separată, fără gate FPS normal. Detaliile, corecțiile și limitele sunt în [raportul gate-ului](Evidence/220-fleet-gate/README.md). Paritatea de gameplay dintre backenduri rămâne de verificat în workload-ul integrat 155; acest rezultat acoperă costul de cadru, simulare, input și learning, nu efectele vizuale finale.
+
+## Optimizarea randării 157 (12 noiembrie 2026)
+
+PBI 157 închide costul vizual măsurat pe contractele reale de prezentare, fără să schimbe starea simulării. Proba este **structurală și deterministă** (`npm run perf:render-budget`, cu `--check`): aceleași fixture-uri ca în dovezi, rulare în Babylon `NullEngine`, fără renderer hardware, deci fără timpi de perete. Rezultatele comise sunt în [Docs/Evidence/157-render-budget](Evidence/157-render-budget/README.md).
+
+| Metrică (aceeași probă) | Înainte | După | Buget citat |
+| --- | ---: | ---: | --- |
+| Draw calls ale layout-ului 042 | 155 | **12** | `drawCalls` 128 |
+| Instanțe thin ale orașului | 0 | **78** | `instances` 8192 |
+| Obiecte Babylon ale scenei orașului | 155 | **12** | `babylonObjects` 4096 |
+| Draw calls totale (oraș + decor 146) | 191 | **48** | `drawCalls` 128 |
+| Abaterea limitelor unui element față de baseline | — | **2,9 × 10⁻⁵ m** | 1 × 10⁻⁴ m |
+| Casters esențiali în shadow map la MEDIUM (71 înregistrați) | 0 | **1** | cel puțin 1 |
+
+**Instanțiere.** Benzile (96) sunt fuzionate într-un singur mesh de asfalt, cu interval de vârfuri per element; stâlpii și carcasele celor 26 de semafoare plus lămpile lor sunt instanțe thin ale unei cutii unitare. Matricele sunt compoziția `T · R · S` a cutiilor coapte anterior, deci poziția, rotația și scara sunt identice; dovada este compararea limitelor fiecărui element cu baseline-ul (0,029 mm, limita `float32`) plus digest-urile de vârfuri pentru benzi.
+
+**LOD.** Pragurile sunt declarate într-un contract propriu (`src/rendering/lod-policy.ts`): `lodDistance` din preset (45/90/150 m) este distanța nominală măsurată la **marginea cea mai apropiată** a batchului, tranziția cere 5 m histerezis în ambele sensuri, iar un proxy îndepărtat mai mic de 95 % din sfera sursei detaliate este respins. Un batch lat își păstrează geometria detaliată, pentru că marginea apropiată rămâne aproape — cazul de margine documentat și testat. Testele acoperă monotonitatea, egalitatea exactă la prag, 2000 de eșantioane de dither în bandă cu zero oscilații și o singură comutare la traversarea pragului.
+
+**Umbre.** Bugetul este explicit: `essential` (vehiculul selectat) → `standard` (trafic) → `optional` (decor mic), în ordinea înregistrării în interiorul unei priorități; plafonul rămâne cel din contractul 016 (0/48/96). Nu intră în shadow map layout-ul static, decorul 146, marcajele și lămpile emisive. Pe proba cu 70 de vehicule și taxiul selectat înregistrat ultimul, baseline-ul îl scotea din hartă la MEDIUM; acum intră și iese ultimul caster standard. Rotația, materialele și semnalele rămân cele din 016.
+
+**Picking.** Instanțierea rupe cel mai des selecția; de aceea există un test dedicat: aceleași 48 de raze pe 70 de vehicule construite o dată ca mesh-uri obișnuite și o dată ca instanțe thin rezolvă aceleași ID-uri, inclusiv după reordonare, eliminare și comutare LOD. Orașul rămâne ne-pickabil, ca înainte.
+
+**`NOT_MEASURED`, declarat.** Frame p95/p99 și lucrul GPU p95 rămân `null`, cu motiv: proba nu are renderer hardware, iar un cadru software/headless nu este dovadă pentru FPS (vezi secțiunea de protocol). Gate-ul hardware al jocului complet rămâne `NOT_VALIDATED`; 157 nu îl înlocuiește pe 224.

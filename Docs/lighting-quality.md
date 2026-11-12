@@ -25,3 +25,13 @@ Compoziția poate apela observe din portul de randare existent, folosind metrici
 Limitele asseturilor finale pentru texturi/LOD/transparență/efecte și bugetele hardware sunt în 223/203; 016 aplică rezoluția, lumina, materiale simple și umbrele. Nu declară un enforcement inexistent pentru asseturi viitoare.
 
 [Verificarea](Evidence/016-lighting/verification.md) include 6 teste, 20 switch-uri cu resource cleanup, ambele backenduri reale în LOW/MEDIUM, patru capturi și baseline/cost nou separat. API-ul de umbre a fost verificat în sursa instalată9.29.0 și [documentația Babylon pentru umbre direcționale](https://github.com/BabylonJS/Documentation/blob/master/content/features/featuresDeepDive/lights/mathShadows.md).
+
+## Bugetul explicit de umbre după 157 (12 noiembrie 2026)
+
+PBI 157 păstrează plafoanele și harta de umbre din tabelul de mai sus, dar schimbă **ce** intră în ele când plafonul nu încape tot. Casters se înregistrează în continuare explicit cu `addShadowCaster(mesh)`, care acceptă acum o prioritate: `essential` (vehiculul selectat), `standard` (traficul simulat) și `optional` (decor mic). Lista de randare se compune pe prioritate, iar în interiorul aceleiași priorități ordinea rămâne cea a înregistrării; `removeShadowCaster` și re-înregistrarea păstrează aceeași stabilitate.
+
+Consecința practică: la MEDIUM (48 de locuri) cu 71 de casters înregistrați, taxiul selectat intră în hartă chiar dacă este înregistrat ultimul, iar iese ultimul caster `standard`. Baseline-ul dinainte de 157 tăia lista în ordinea înregistrării, deci taxiul selectat putea lipsi complet din shadow map — comportamentul este raportat ca defect în dovezi, nu păstrat.
+
+Nu intră în shadow map, declarat explicit în `SHADOW_MAP_CONTENT`: layout-ul static 042 (doar `receiveShadows`), decorul 146, marcajele și lămpile emisive (materiale unlit), precum și orice mesh neînregistrat. `getShadowBudget()` întoarce starea citibilă: preset, plafon, dimensiunea hărții, admiși/respinși, esențiali lipsă (`essentialDropped`), distribuția pe priorități și lista de incluse/excluse. La LOW harta este dezactivată prin contract, deci `essentialDropped` rămâne 0 și `essentialExcluded` numără casters esențiali care nu au unde intra.
+
+Verificare: `node --import ./scripts/register-typescript.mjs --test tests/rendering/lighting.test.ts` (inclusiv cazul 48 standard + 1 esențial) și proba structurală `npm run perf:render-budget -- --check`.

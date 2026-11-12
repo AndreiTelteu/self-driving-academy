@@ -18,6 +18,14 @@ export {
 } from './asset-budgets';
 export type { AssetBudgetManifest, BudgetedAsset, BudgetDiagnostic } from './asset-budgets';
 export type { QualityPreset, QualitySample } from './quality-policy';
+export {
+  LOD_HYSTERESIS_M,
+  MIN_DISTANT_SOURCE_RADIUS_RATIO,
+  lodBands,
+  resolveBatchLod,
+  assertDistantSourceCovers,
+} from './lod-policy';
+export type { BatchLodLevel, LodBands, BatchLodInput } from './lod-policy';
 export { VehicleCameraController, validateCameraPreferences } from './vehicle-camera';
 export type {
   VehicleCameraMode,
