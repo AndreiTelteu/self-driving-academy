@@ -1,0 +1,382 @@
+{
+  "version": "159-soak-report-v1",
+  "fixtureVersion": "159-soak-v1",
+  "commit": "917a7de9",
+  "measuredAt": "2026-11-12T09:43:38.375Z",
+  "environment": {
+    "cpuModel": "AMD Ryzen 7 7735U with Radeon Graphics",
+    "logicalCores": 16,
+    "node": "v24.19.0"
+  },
+  "protocol": {
+    "durationMinutes": 60,
+    "cycles": 20,
+    "sampleIntervalSeconds": 30,
+    "workload": "24 taxiuri / 40 civili (workload normal V1)",
+    "pacing": "WALL_CLOCK_60HZ"
+  },
+  "duration": {
+    "actualMinutes": 60.002,
+    "requiredMinutes": 60,
+    "passesMinimum": true,
+    "simulatedSeconds": 3590.572
+  },
+  "lifecycle": {
+    "cycles": 20,
+    "requiredCycles": 20,
+    "passesMinimum": true,
+    "cleanCycles": 20,
+    "reloads": 19,
+    "racesDispatched": 640,
+    "manualInterventions": 120,
+    "learningSegments": 701,
+    "learningActivations": 701,
+    "workerJobs": 2770,
+    "checkpointsOffered": 2380,
+    "pipelineCommits": 2380
+  },
+  "memory": {
+    "baselineHeapUsedBytes": 45843032,
+    "finalHeapUsedBytes": 47738952,
+    "deltaHeapUsedBytes": 1895920,
+    "baselineRssBytes": 330346496,
+    "finalRssBytes": 334946304,
+    "deltaRssBytes": 4599808,
+    "allowedGrowthBytes": 5242880,
+    "retained": true,
+    "baselineKind": "FIRST_CYCLE_AFTER_RESET",
+    "coldBaselineHeapUsedBytes": 23417064,
+    "coldBaselineRssBytes": 100835328
+  },
+  "trends": [
+    {
+      "id": "heapUsedBytes",
+      "unit": "bytes",
+      "samples": 20,
+      "firstValue": 45843032,
+      "lastValue": 47738952,
+      "windowMedian": 47680184,
+      "windowMin": 47626904,
+      "windowMax": 47738952,
+      "growthWithinWindow": 112048,
+      "growthRatio": 0.0023499909312430507,
+      "slopePerMinute": 3351.8311960328347,
+      "allowedGrowth": 5242880,
+      "classification": "PLATEAU",
+      "rule": "după fiecare reset (GC forțat), creștere ≤ max(5 MiB, 10 % din mediană)"
+    },
+    {
+      "id": "rssBytes",
+      "unit": "bytes",
+      "samples": 20,
+      "firstValue": 330346496,
+      "lastValue": 334946304,
+      "windowMedian": 335159296,
+      "windowMin": 334807040,
+      "windowMax": 338567168,
+      "growthWithinWindow": 3760128,
+      "growthRatio": 0.011218927969105175,
+      "slopePerMinute": -110067.06267578539,
+      "allowedGrowth": 33515929.6,
+      "classification": "PLATEAU",
+      "rule": "după fiecare reset, creștere ≤ max(5 MiB, 10 % din mediană)"
+    },
+    {
+      "id": "governorBytes",
+      "unit": "bytes",
+      "samples": 20,
+      "firstValue": 0,
+      "lastValue": 0,
+      "windowMedian": 0,
+      "windowMin": 0,
+      "windowMax": 0,
+      "growthWithinWindow": 0,
+      "growthRatio": 0,
+      "slopePerMinute": 0,
+      "allowedGrowth": 1048576,
+      "classification": "PLATEAU",
+      "rule": "bytes în coada 221 la închiderea ciclului: interval ≤ max(1 MiB, 0)"
+    },
+    {
+      "id": "governorJobs",
+      "unit": "count",
+      "samples": 20,
+      "firstValue": 0,
+      "lastValue": 0,
+      "windowMedian": 0,
+      "windowMin": 0,
+      "windowMax": 0,
+      "growthWithinWindow": 0,
+      "growthRatio": 0,
+      "slopePerMinute": 0,
+      "allowedGrowth": 1,
+      "classification": "PLATEAU",
+      "rule": "joburi în coada 221 la închiderea ciclului: interval ≤ 1"
+    },
+    {
+      "id": "recorderChargedBytes",
+      "unit": "bytes",
+      "samples": 20,
+      "firstValue": 18266131,
+      "lastValue": 18267355,
+      "windowMedian": 18267355,
+      "windowMin": 18267035,
+      "windowMax": 18267675,
+      "growthWithinWindow": 640,
+      "growthRatio": 0.00003503517613797947,
+      "slopePerMinute": 21.01743979313226,
+      "allowedGrowth": 5242880,
+      "classification": "PLATEAU",
+      "rule": "vârful ferestrei 207 per ciclu: interval ≤ max(5 MiB, 0)"
+    },
+    {
+      "id": "retentionDbBytes",
+      "unit": "bytes",
+      "samples": 20,
+      "firstValue": 18266131,
+      "lastValue": 127872125,
+      "windowMedian": 127872125,
+      "windowMin": 127871805,
+      "windowMax": 127872125,
+      "growthWithinWindow": 320,
+      "growthRatio": 0.0000025025000562084975,
+      "slopePerMinute": 21.20849912674913,
+      "allowedGrowth": 134217728,
+      "classification": "PLATEAU",
+      "rule": "retenția 132 rămâne sub cota durabilă din manifest; evacuarea la cotă este mărginită"
+    },
+    {
+      "id": "retentionArtifacts",
+      "unit": "count",
+      "samples": 20,
+      "firstValue": 1,
+      "lastValue": 7,
+      "windowMedian": 7,
+      "windowMin": 7,
+      "windowMax": 7,
+      "growthWithinWindow": 0,
+      "growthRatio": 0,
+      "slopePerMinute": 0,
+      "allowedGrowth": 8,
+      "classification": "PLATEAU",
+      "rule": "panta numărului de artefacte 132 în fereastra finală ≤ 8"
+    }
+  ],
+  "checks": [
+    {
+      "id": "soak.duration",
+      "metric": "durata reală a soak-ului",
+      "observed": 60,
+      "unit": "minutes",
+      "budget": 60,
+      "direction": "minimum",
+      "source": "PBI 159: minimum 60 de minute de timp de perete",
+      "verdict": "PASS",
+      "note": "măsurată cu ceasul procesului, nu simulată"
+    },
+    {
+      "id": "soak.cycles",
+      "metric": "cicluri de lifecycle",
+      "observed": 20,
+      "unit": "count",
+      "budget": 20,
+      "direction": "minimum",
+      "source": "PBI 159: 20 de cicluri lifecycle",
+      "verdict": "PASS",
+      "note": "minimul de 20 cicluri"
+    },
+    {
+      "id": "soak.cleanup",
+      "metric": "cicluri cu cleanup complet",
+      "observed": 20,
+      "unit": "count",
+      "budget": 20,
+      "direction": "minimum",
+      "source": "PBI 159: fără creștere necontrolată de resurse",
+      "verdict": "PASS",
+      "note": "din 20; corpurile revin la 0 după fiecare reset"
+    },
+    {
+      "id": "soak.incidents",
+      "metric": "incidente recuperate",
+      "observed": 87,
+      "unit": "count",
+      "budget": 87,
+      "direction": "minimum",
+      "source": "PBI 159: blocajele sunt raportate și recuperabile",
+      "verdict": "PASS",
+      "note": "87 incidente, 0 nerecuperate"
+    },
+    {
+      "id": "memory.tracked",
+      "metric": "creșterea heap-ului în fereastra finală",
+      "observed": 112048,
+      "unit": "bytes",
+      "budget": 5242880,
+      "direction": "maximum",
+      "source": "Docs/performance-budgets.json (203-initial-1) regressionProposal.memoryAbsoluteIncreaseBytes/relative",
+      "verdict": "PASS",
+      "note": "heap JS măsurat după GC forțat; RSS este raportat separat, mai zgomotos"
+    },
+    {
+      "id": "memory.totalHeapBytes",
+      "metric": "memoria exactă a paginii",
+      "observed": null,
+      "unit": "bytes",
+      "budget": null,
+      "direction": "maximum",
+      "source": "Docs/performance-budgets.json (203-initial-1) proposedCapacities.totalHeapBytes",
+      "verdict": "NOT_MEASURED",
+      "note": "manifestul o lasă null; API-ul exact nu este portabil, se raportează heap/RSS și contoarele de ownership"
+    },
+    {
+      "id": "retention.recorderRamBytes",
+      "metric": "vârful memoriei recorder-ului 207",
+      "observed": 18267355,
+      "unit": "bytes",
+      "budget": 33554432,
+      "direction": "maximum",
+      "source": "Docs/performance-budgets.json (203-initial-1) proposedCapacities.recorderRamBytes",
+      "verdict": "PASS",
+      "note": "chargedBytes/peakChargedBytes raportate de contractul 207"
+    },
+    {
+      "id": "retention.optionalReplayStorageBytes",
+      "metric": "retenția durabilă 132",
+      "observed": 127872181,
+      "unit": "bytes",
+      "budget": 134217728,
+      "direction": "maximum",
+      "source": "Docs/performance-budgets.json (203-initial-1) proposedCapacities.optionalReplayStorageBytes",
+      "verdict": "PASS",
+      "note": "ledger-ul 132 evacuează după export când cota este depășită"
+    },
+    {
+      "id": "retention.diagnosticSamples",
+      "metric": "eșantioane reținute de recorder",
+      "observed": 2400,
+      "unit": "count",
+      "budget": 4096,
+      "direction": "maximum",
+      "source": "Docs/performance-budgets.json (203-initial-1) proposedCapacities.diagnosticSamples",
+      "verdict": "PASS",
+      "note": "fereastra RAM a recorder-ului rămâne mărginită"
+    },
+    {
+      "id": "workers.pendingWorkerPayloadBytes",
+      "metric": "bytes în așteptare în governor-ul 221",
+      "observed": 4,
+      "unit": "bytes",
+      "budget": 16777216,
+      "direction": "maximum",
+      "source": "Docs/performance-budgets.json (203-initial-1) proposedCapacities.pendingWorkerPayloadBytes",
+      "verdict": "PASS",
+      "note": "coada de payloaduri a worker-ului"
+    },
+    {
+      "id": "workers.heavyBackgroundJobs",
+      "metric": "joburi grele simultane",
+      "observed": 1,
+      "unit": "count",
+      "budget": 1,
+      "direction": "maximum",
+      "source": "Docs/performance-budgets.json (203-initial-1) proposedCapacities.heavyBackgroundJobs",
+      "verdict": "PASS",
+      "note": "cel mult un job greu simultan, conform 221"
+    },
+    {
+      "id": "workers.cancellationResponse",
+      "metric": "răspuns la recuperarea unui job expirat",
+      "observed": 84,
+      "unit": "count",
+      "budget": 100,
+      "direction": "maximum",
+      "source": "Docs/performance-budgets.json (203-initial-1) workerSchedulingProposal.cancellationResponseMaximumMs",
+      "verdict": "PASS",
+      "note": "răspunsul la anularea explicită a unui job opțional aflat în execuție"
+    },
+    {
+      "id": "storage.preparingCheckpoints",
+      "metric": "generații de checkpoint în pregătire",
+      "observed": 0,
+      "unit": "count",
+      "budget": 1,
+      "direction": "maximum",
+      "source": "Docs/performance-budgets.json (203-initial-1) proposedCapacities.preparingCheckpoints",
+      "verdict": "PASS",
+      "note": "pipeline-ul 222 ține cel mult o generație în pregătire"
+    },
+    {
+      "id": "storage.committingCheckpoints",
+      "metric": "generații de checkpoint în commit",
+      "observed": 0,
+      "unit": "count",
+      "budget": 1,
+      "direction": "maximum",
+      "source": "Docs/performance-budgets.json (203-initial-1) proposedCapacities.committingCheckpoints",
+      "verdict": "PASS",
+      "note": "pipeline-ul 222 ține cel mult o generație în commit"
+    },
+    {
+      "id": "frame.renderFps",
+      "metric": "cadența de render",
+      "observed": null,
+      "unit": "count",
+      "budget": 30,
+      "direction": "maximum",
+      "source": "Docs/performance-budgets.json (203-initial-1) proposedBudgets.laptop.renderFps",
+      "verdict": "NOT_MEASURED",
+      "note": "proba este headless, fără renderer; FPS-ul nu este măsurabil aici și nu se raportează ca 0"
+    },
+    {
+      "id": "frame.gpuP95Ms",
+      "metric": "lucrul GPU p95",
+      "observed": null,
+      "unit": "count",
+      "budget": 28,
+      "direction": "maximum",
+      "source": "Docs/performance-budgets.json (203-initial-1) proposedBudgets.laptop.gpuP95Ms",
+      "verdict": "NOT_MEASURED",
+      "note": "fără renderer nu există timer GPU; valoarea rămâne null"
+    }
+  ],
+  "incidents": {
+    "total": 87,
+    "recovered": 87,
+    "unrecovered": 0,
+    "byKind": {
+      "FLEET_BLOCKED": 72,
+      "WORKER_JOB_EXPIRED": 2,
+      "WORKER_QUEUE_PRESSURE": 0,
+      "LEARNING_SEGMENT_STALLED": 0,
+      "CHECKPOINT_STORE_STALLED": 0,
+      "RETENTION_OVER_QUOTA": 13
+    },
+    "cancellationResponseMaxMs": 84
+  },
+  "throttling": {
+    "status": "OBSERVED",
+    "cpuSpeedMhzMin": 2695,
+    "cpuSpeedMhzMax": 2695,
+    "cpuSpeedMhzMedian": 2695,
+    "cpuSpeedVariationRatio": 0,
+    "tickP50MinMs": 2.8519999999552965,
+    "tickP95MinMs": 5.158199999947101,
+    "tickP95MaxMs": 8.850399999999354,
+    "tickP95Ratio": 1.7158,
+    "maxDriftMs": 77,
+    "note": "throttling-ul este raportat cu variația frecvenței citite din OS și cu variația p95 a tick-ului; absența unei variații nu dovedește absența throttling-ului termic"
+  },
+  "manifest": {
+    "budgetVersion": "203-initial-1",
+    "hashLike": "FIXED_INITIAL_CONTRACT_WITH_PROVISIONAL_GAMEPLAY_BUDGETS"
+  },
+  "verdict": {
+    "status": "SOAK_PASS",
+    "failures": [],
+    "diagnosticReasons": []
+  },
+  "notes": [
+    "baseline-ul de memorie a fost citit înainte de prima lume; finalul după ultimul reset (heap forcible GC: da)"
+  ]
+}
