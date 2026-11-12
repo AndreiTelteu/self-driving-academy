@@ -281,8 +281,15 @@ function observation(value: unknown): AdmittedObservation {
   requireContract((leadGapM === null) === (leadSpeedMps === null), 'Incomplete lead vehicle facts');
   return result;
 }
-/** Hard traffic constraint: no closing speed inside the minimum gap, bounded closing time beyond it. */
-function trafficLimitMps(gapM: number | null, leadSpeedMps: number | null): number | null {
+/**
+ * Hard traffic constraint: no closing speed inside the minimum gap, bounded closing time beyond it.
+ * Exported because the 168 learning estimator must exclude exactly the same constrained samples;
+ * the formula and its semantics are unchanged.
+ */
+export function speedPolicyTrafficLimitMps(
+  gapM: number | null,
+  leadSpeedMps: number | null,
+): number | null {
   if (gapM === null || leadSpeedMps === null) return null;
   if (gapM <= SPEED_POLICY_LIMITS.minimumLeadGapM) return 0;
   return Math.max(
@@ -380,7 +387,7 @@ export function evaluateSpeedPolicy(input: SpeedPolicyInput): SpeedPolicyCommand
         : requested!.targetMps;
       const curveCap = arterial ? null : requested!.preferredCurveMps,
         approachCap = arterial ? null : requested!.preferredApproachMps,
-        trafficCap = trafficLimitMps(observed.leadGapM, observed.leadSpeedMps);
+        trafficCap = speedPolicyTrafficLimitMps(observed.leadGapM, observed.leadSpeedMps);
       // The tempo keys may only use the budget the driver already asked for, or the posted limit.
       styleCeilingMps = Math.min(
         Math.max(baseStyleMps, observed.postedLimitMps),
