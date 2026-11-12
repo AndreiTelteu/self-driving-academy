@@ -1,0 +1,531 @@
+{
+  "version": "174-signal-estimator-v2",
+  "parameters": [
+    {
+      "key": "yellow_stop_probability",
+      "unit": "probability",
+      "minimum": 0,
+      "maximum": 1,
+      "defaultValue": 0.8
+    },
+    {
+      "key": "red_run_gap_acceptance",
+      "unit": "s",
+      "minimum": 0.1,
+      "maximum": 8,
+      "defaultValue": 2.5
+    },
+    {
+      "key": "yellow_commit_time",
+      "unit": "s",
+      "minimum": 0.2,
+      "maximum": 6,
+      "defaultValue": 2
+    },
+    {
+      "key": "green_launch_acceleration",
+      "unit": "m/s²",
+      "minimum": 0.2,
+      "maximum": 6,
+      "defaultValue": 1.5
+    }
+  ],
+  "rows": [
+    {
+      "key": "yellow_stop_probability",
+      "scenario": "YELLOW_FEASIBILITY",
+      "unit": "probability",
+      "context": "o apropiere de galben în mișcare, cu geometrie cunoscută, în care 173 a ajuns la eșantionul său de fezabilitate (nu era deja angajată), plus factorul M de conformitate al aceluiași tick",
+      "status": "CANDIDATE",
+      "value": 0.8875,
+      "uncertainty": 0.049278271580890536,
+      "uncertaintyThreshold": 0.2,
+      "estimateEpisodes": 2,
+      "validationEpisodes": 2,
+      "validationStatus": "VALIDATED",
+      "validationValue": 0.7625,
+      "validationError": 0.125,
+      "validationTolerance": 0.15,
+      "reason": null
+    },
+    {
+      "key": "red_run_gap_acceptance",
+      "scenario": "RED_RUN_GAP",
+      "unit": "s",
+      "context": "o traversare de roșu propusă de 050, în care lumea a raportat un gap conflictual; acceptarea dă limita superioară, refuzul peste plasa de siguranță de 3 s dă limita inferioară",
+      "status": "CANDIDATE",
+      "value": 4.5,
+      "uncertainty": 0.5,
+      "uncertaintyThreshold": 1,
+      "estimateEpisodes": 2,
+      "validationEpisodes": 2,
+      "validationStatus": "VALIDATED",
+      "validationValue": 4.5,
+      "validationError": 0,
+      "validationTolerance": 1,
+      "reason": null
+    },
+    {
+      "key": "yellow_commit_time",
+      "scenario": "YELLOW_COMMITMENT",
+      "unit": "s",
+      "context": "o apropiere de galben în care 173 a intrat fie angajat, fie eșantionat, deci timpul până la linie delimitează orizontul de angajare",
+      "status": "CANDIDATE",
+      "value": 2.05,
+      "uncertainty": 0.15000000000000013,
+      "uncertaintyThreshold": 0.6,
+      "estimateEpisodes": 4,
+      "validationEpisodes": 4,
+      "validationStatus": "VALIDATED",
+      "validationValue": 2.05,
+      "validationError": 0,
+      "validationTolerance": 0.5,
+      "reason": null
+    },
+    {
+      "key": "green_launch_acceleration",
+      "scenario": "GREEN_LAUNCH",
+      "unit": "m/s²",
+      "context": "o plecare de pe loc la verde, după expirarea ținerii M de la verde, în care 173 comandă accelerația de plecare",
+      "status": "CANDIDATE",
+      "value": 1.5,
+      "uncertainty": 0.05,
+      "uncertaintyThreshold": 0.35,
+      "estimateEpisodes": 2,
+      "validationEpisodes": 2,
+      "validationStatus": "VALIDATED",
+      "validationValue": 1.5,
+      "validationError": 0,
+      "validationTolerance": 0.4,
+      "reason": null
+    }
+  ],
+  "unobserved": [
+    {
+      "key": "yellow_stop_probability",
+      "scenario": "YELLOW_FEASIBILITY",
+      "demonstration": "oportunități sub pragul de eșantioane",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "YELLOW_TRIALS_BELOW_MINIMUM",
+      "excluded": {
+        "YELLOW_TRIALS_BELOW_MINIMUM": 2
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "yellow_stop_probability",
+      "scenario": "YELLOW_FEASIBILITY",
+      "demonstration": "opt rate de oprire reale, dar împrăștiate (0–1)",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "UNCERTAINTY_ABOVE_THRESHOLD",
+      "excluded": {},
+      "validationStatus": "OUTSIDE_TOLERANCE"
+    },
+    {
+      "key": "yellow_stop_probability",
+      "scenario": "YELLOW_FEASIBILITY",
+      "demonstration": "demonstrații MANUAL, neeligibile",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "NO_ELIGIBLE_EPISODES",
+      "excluded": {},
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "yellow_commit_time",
+      "scenario": "YELLOW_COMMITMENT",
+      "demonstration": "doar apropieri angajate, fără limită superioară",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "COMMIT_UPPER_BOUND_UNOBSERVED",
+      "excluded": {},
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "yellow_commit_time",
+      "scenario": "YELLOW_COMMITMENT",
+      "demonstration": "doar apropieri eșantionate, fără limită inferioară",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "COMMIT_LOWER_BOUND_UNOBSERVED",
+      "excluded": {},
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "yellow_commit_time",
+      "scenario": "YELLOW_COMMITMENT",
+      "demonstration": "limite reale, dar prea largi (0,4–4,0 s)",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "UNCERTAINTY_ABOVE_THRESHOLD",
+      "excluded": {},
+      "validationStatus": "VALIDATED"
+    },
+    {
+      "key": "yellow_commit_time",
+      "scenario": "YELLOW_COMMITMENT",
+      "demonstration": "două limite incompatibile în același episod",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "CONTRADICTORY_COMMIT_BOUNDS",
+      "excluded": {
+        "CONTRADICTORY_COMMIT_BOUNDS": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "yellow_commit_time",
+      "scenario": "YELLOW_COMMITMENT",
+      "demonstration": "oprire M de frânare târzie, care precede orizontul",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "COMMIT_PREEMPTED_BY_LATE_BRAKE",
+      "excluded": {
+        "COMMIT_PREEMPTED_BY_LATE_BRAKE": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "red_run_gap_acceptance",
+      "scenario": "RED_RUN_GAP",
+      "demonstration": "doar traversări acceptate, fără limită inferioară",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "RED_RUN_LOWER_BOUND_UNOBSERVED",
+      "excluded": {},
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "red_run_gap_acceptance",
+      "scenario": "RED_RUN_GAP",
+      "demonstration": "doar refuzuri peste plasa de siguranță",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "RED_RUN_UPPER_BOUND_UNOBSERVED",
+      "excluded": {},
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "red_run_gap_acceptance",
+      "scenario": "RED_RUN_GAP",
+      "demonstration": "toate refuzurile sub plasa de siguranță de 3 s",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "RED_RUN_SAFETY_CAP",
+      "excluded": {
+        "RED_RUN_SAFETY_CAP": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "red_run_gap_acceptance",
+      "scenario": "RED_RUN_GAP",
+      "demonstration": "acceptare sub un refuz, imposibil de satisfăcut",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "CONTRADICTORY_GAP_BOUNDS",
+      "excluded": {
+        "CONTRADICTORY_GAP_BOUNDS": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "red_run_gap_acceptance",
+      "scenario": "RED_RUN_GAP",
+      "demonstration": "limită reală, dar prea largă (3–8 s)",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "UNCERTAINTY_ABOVE_THRESHOLD",
+      "excluded": {},
+      "validationStatus": "VALIDATED"
+    },
+    {
+      "key": "red_run_gap_acceptance",
+      "scenario": "RED_RUN_GAP",
+      "demonstration": "gap conflictual necunoscut",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "RED_RUN_GAP_UNKNOWN",
+      "excluded": {
+        "RED_RUN_GAP_UNKNOWN": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "red_run_gap_acceptance",
+      "scenario": "RED_RUN_GAP",
+      "demonstration": "050 păstrează oprirea, nicio traversare propusă",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "RED_RUN_NOT_PROPOSED",
+      "excluded": {
+        "RED_RUN_NOT_PROPOSED": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "green_launch_acceleration",
+      "scenario": "GREEN_LAUNCH",
+      "demonstration": "ținerea M de la verde încă activă",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "GREEN_LAUNCH_HELD_BY_DELAY",
+      "excluded": {
+        "GREEN_LAUNCH_HELD_BY_DELAY": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "green_launch_acceleration",
+      "scenario": "GREEN_LAUNCH",
+      "demonstration": "eliberare din mișcare, nu plecare de pe loc",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "GREEN_LAUNCH_NOT_FROM_STANDSTILL",
+      "excluded": {
+        "GREEN_LAUNCH_NOT_FROM_STANDSTILL": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "green_launch_acceleration",
+      "scenario": "GREEN_LAUNCH",
+      "demonstration": "patru plecări reale, dar împrăștiate (0,3–6)",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "UNCERTAINTY_ABOVE_THRESHOLD",
+      "excluded": {},
+      "validationStatus": "OUTSIDE_TOLERANCE"
+    },
+    {
+      "key": "yellow_stop_probability",
+      "scenario": "YELLOW_FEASIBILITY",
+      "demonstration": "set fără episoade",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "NO_ELIGIBLE_EPISODES",
+      "excluded": {},
+      "validationStatus": "NO_DATA"
+    }
+  ],
+  "groupConstraints": [
+    {
+      "id": "YELLOW_STOP_AND_RED_COMPLIANCE_SHARED",
+      "keys": [
+        "yellow_stop_probability"
+      ],
+      "explanation": "Probabilitatea de galben și probabilitatea M de oprire la roșu împart aceeași decizie: 173 oprește cu probabilitatea efectivă `red_stop_probability · yellow_stop_probability`. Din comportament se vede numai produsul, deci factorul M observat este denominatorul onest al cheii; cu un factor M nul nicio oprire la galben nu este posibilă și cheia rămâne neobservată, în loc să fie dedusă dintr-un raport imposibil."
+    },
+    {
+      "id": "YELLOW_PROBABILITY_AND_COMMIT_SHARE_APPROACH",
+      "keys": [
+        "yellow_stop_probability",
+        "yellow_commit_time"
+      ],
+      "explanation": "Probabilitatea de galben și orizontul de angajare împart aceeași apropiere: 173 verifică întâi orizontul, apoi eșantionează. O apropiere angajată dovedește doar o limită inferioară a orizontului și nu intră în numitorul opririlor, iar una eșantionată dă o limită superioară a orizontului și un singur eșantion de conformitate. Niciuna nu este dedusă din cealaltă."
+    },
+    {
+      "id": "RED_RUN_GAP_DEPENDS_ON_OBSERVED_GAP",
+      "keys": [
+        "red_run_gap_acceptance"
+      ],
+      "explanation": "Gap-ul pe roșu este identificabil numai când lumea raportează un gap conflictual: un gap necunoscut refuză traversarea și nu dovedește nimic. Sub plasa de siguranță de 3 s a lui 173 cerința efectivă este plasa, nu cheia, deci un refuz acolo nu oferă limită inferioară; cheia se măsoară doar din decizii în care capul de siguranță nu a decis."
+    },
+    {
+      "id": "GREEN_LAUNCH_AFTER_START_DELAY",
+      "keys": [
+        "green_launch_acceleration"
+      ],
+      "explanation": "Accelerația de plecare este identificabilă numai după ce ținerea M de la verde a expirat și vehiculul este încă oprit: cât timp 173 raportează `GREEN_START_DELAY`, comanda este ținerea, nu plecarea, iar un vehicul deja în mișcare raportează o eliberare, nu o plecare de pe loc."
+    },
+    {
+      "id": "SIGNAL_KEYS_FROM_ONE_APPROACH",
+      "keys": [
+        "yellow_stop_probability",
+        "red_run_gap_acceptance",
+        "yellow_commit_time",
+        "green_launch_acceleration"
+      ],
+      "explanation": "Cele patru chei pot fi observate în aceeași călătorie, dar nu din aceleași fapte: probabilitatea de galben cere un eșantion de fezabilitate, orizontul cere o apropiere angajată sau eșantionată, gap-ul pe roșu cere o traversare propusă cu gap observat, iar plecarea cere un verde de pe loc după ținerea M. Un set cu un singur tip de fapt lasă celelalte chei neobservate."
+    }
+  ],
+  "refusals": [
+    {
+      "episodeId": "yellow-feasibility-1",
+      "reason": "NOT_LEARNING_ELIGIBLE"
+    },
+    {
+      "episodeId": "yellow-feasibility-2",
+      "reason": "NOT_LEARNING_ELIGIBLE"
+    },
+    {
+      "episodeId": "yellow-feasibility-3",
+      "reason": "NOT_LEARNING_ELIGIBLE"
+    },
+    {
+      "episodeId": "yellow-feasibility-4",
+      "reason": "NOT_LEARNING_ELIGIBLE"
+    },
+    {
+      "episodeId": "yellow-feasibility-1",
+      "reason": "DUPLICATE_EPISODE"
+    }
+  ],
+  "split": {
+    "seed": 174,
+    "admitted": 16,
+    "disjoint": true
+  },
+  "compatibility": {
+    "policyVersion": "173-signal-policy-v2",
+    "candidateOnly": true,
+    "changesPolicySemantics": false,
+    "redRunSafetyCapS": 3,
+    "maximumLaunchAccelerationMps2": 6,
+    "yellowStopSample": 0.4562870757654309,
+    "yellowStopReason": "YELLOW_STOP",
+    "yellowProceedSample": 0.9620480709709227,
+    "yellowProceedReason": "YELLOW_PROCEED",
+    "commitTimeS": 2,
+    "commitReason": "YELLOW_COMMIT",
+    "sampledTimeS": 2.1,
+    "sampledReason": "YELLOW_STOP",
+    "requiredRedGapS": 4.5,
+    "acceptedGapS": 4.5,
+    "accepted": true,
+    "rejectedGapS": 4.4,
+    "rejected": false,
+    "launchAccelerationMps2": 1.5
+  },
+  "determinism": {
+    "seed": 174,
+    "digest": "fnv1a32:adefc652",
+    "repeatedDigest": "fnv1a32:adefc652"
+  },
+  "checks": [
+    {
+      "id": "scenario-yellow",
+      "pass": true,
+      "detail": "yellow-only stop rate 0.8875 probability; engagement, red run and launch stay unobserved"
+    },
+    {
+      "id": "scenario-commit",
+      "pass": true,
+      "detail": "commitment-only horizon 2.0500 s; the other three stay unobserved"
+    },
+    {
+      "id": "scenario-red",
+      "pass": true,
+      "detail": "red-run-only gap 4.5000 s; the yellow keys and launch stay unobserved"
+    },
+    {
+      "id": "scenario-launch",
+      "pass": true,
+      "detail": "launch-only acceleration 1.5000 m/s²; the other three stay unobserved"
+    },
+    {
+      "id": "zero-stop-observed",
+      "pass": true,
+      "detail": "a demonstrated stop rate of zero is a real zero, not missing evidence"
+    },
+    {
+      "id": "uncertainty-reported",
+      "pass": true,
+      "detail": "yellow_stop_probability 0.0493 <= 0.2 probability, red_run_gap_acceptance 0.5000 <= 1 s, yellow_commit_time 0.1500 <= 0.6 s, green_launch_acceleration 0.0500 <= 0.35 m/s²"
+    },
+    {
+      "id": "uncertainty-yellow",
+      "pass": true,
+      "detail": "scattered stop rates measure 0.3020 > 0.2 and stay unobserved"
+    },
+    {
+      "id": "uncertainty-launch",
+      "pass": true,
+      "detail": "scattered launches measure 0.6504 m/s² > 0.35 and stay unobserved"
+    },
+    {
+      "id": "uncertainty-commit",
+      "pass": true,
+      "detail": "a 0.4–4.0 s bound measures ±1.8000 s and stays unobserved"
+    },
+    {
+      "id": "uncertainty-gap",
+      "pass": true,
+      "detail": "a 3–8 s bound measures ±2.5000 s and stays unobserved"
+    },
+    {
+      "id": "validation-split",
+      "pass": true,
+      "detail": "seed 174: every key validates on held-out episodes (yellow_stop_probability 2+2, red_run_gap_acceptance 2+2, yellow_commit_time 4+4, green_launch_acceleration 2+2)"
+    },
+    {
+      "id": "validation-too-small",
+      "pass": true,
+      "detail": "three episodes leave 1 held-out episode, reported as TOO_SMALL"
+    },
+    {
+      "id": "unobserved-safety-cap",
+      "pass": true,
+      "detail": "below the 3 s safety cap the cap decides, and a 050 stop proposes no crossing at all"
+    },
+    {
+      "id": "unobserved-unknown-gap",
+      "pass": true,
+      "detail": "an unknown conflict gap refuses the crossing and proves no key value"
+    },
+    {
+      "id": "unobserved-bounds",
+      "pass": true,
+      "detail": "a single inequality is a bound, two incompatible demonstrations have no value, and the M late brake precedes the horizon"
+    },
+    {
+      "id": "unobserved-green-launch",
+      "pass": true,
+      "detail": "the M start delay and a release from motion are not launch observations"
+    },
+    {
+      "id": "shared-channel-separation",
+      "pass": true,
+      "detail": "an engagement approach never supplies a compliance trial, and a red run never proves the yellow keys"
+    },
+    {
+      "id": "no-fabricated-values",
+      "pass": true,
+      "detail": "19 unobserved demonstrations carry value null and an explicit reason"
+    },
+    {
+      "id": "group-constraints",
+      "pass": true,
+      "detail": "YELLOW_STOP_AND_RED_COMPLIANCE_SHARED, YELLOW_PROBABILITY_AND_COMMIT_SHARE_APPROACH, RED_RUN_GAP_DEPENDS_ON_OBSERVED_GAP, GREEN_LAUNCH_AFTER_START_DELAY, SIGNAL_KEYS_FROM_ONE_APPROACH"
+    },
+    {
+      "id": "invalid-input-refused",
+      "pass": true,
+      "detail": "NaN speed refused; yellow-feasibility-1:NOT_LEARNING_ELIGIBLE, yellow-feasibility-2:NOT_LEARNING_ELIGIBLE, yellow-feasibility-3:NOT_LEARNING_ELIGIBLE, yellow-feasibility-4:NOT_LEARNING_ELIGIBLE, yellow-feasibility-1:DUPLICATE_EPISODE"
+    },
+    {
+      "id": "determinism",
+      "pass": true,
+      "detail": "digest fnv1a32:adefc652"
+    },
+    {
+      "id": "catalog-ranges",
+      "pass": true,
+      "detail": "yellow_stop_probability 0.8875 probability, red_run_gap_acceptance 4.5000 s, yellow_commit_time 2.0500 s, green_launch_acceleration 1.5000 m/s²"
+    },
+    {
+      "id": "policy-compatibility",
+      "pass": true,
+      "detail": "173 reads the estimate without a semantic change: yellow samples 0.4563 → YELLOW_STOP and 0.9620 → YELLOW_PROCEED, engagement 2.0000 s → YELLOW_COMMIT, required red gap 4.5000 s (4.5 accepted / 4.4 rejected), launch 1.5000 m/s²"
+    }
+  ],
+  "summary": {
+    "checks": 23,
+    "passed": 23,
+    "pass": true,
+    "candidateKeys": 4,
+    "unobservedKeys": 19
+  }
+}
