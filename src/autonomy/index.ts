@@ -12,3 +12,4 @@ export * from './lane-change-policy';
 export * from './blocked-recovery';
 export * from './takeover-continuity';
 export * from './decision-explanation';
+export * from './speed-policy';
