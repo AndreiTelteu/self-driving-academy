@@ -258,3 +258,35 @@ PBI 160 închide segmentul dintre verificare și livrare: buildul de producție 
 **Ce rămâne deschis.** FPS-ul și lucrul GPU pe hardware real rămân la gate-ul 224; verificarea livrării este la nivel HTTP (status, mărime, hash, MIME), nu o rulare de browser cu GPU, iar `dist/` nu este comis (este reproductibil din `npm run build`). Configurația de HTTPS/CDN și cache-ul de producție nu fac parte din acest PBI.
 
 Comenzile, tabelele de artefacte, dovada negativă (un `format:check` rupt oprește pipeline-ul înainte de build) și limitările sunt în [Evidence/160-build-delivery](Evidence/160-build-delivery/README.md).
+
+## Manualul de utilizare și operare V1 (PBI 161, 12 noiembrie 2026)
+
+PBI 161 adaugă documentația pentru jucător și operator, distinctă de contractele de modul: pași, taste,
+nume de butoane, praguri și ce înseamnă fiecare indicator. Manualul are un cuprins propriu și șapte
+secțiuni scurte, ca să poată fi citit liniar la prima sesiune și consultat pe sărituri după aceea:
+pornire și control, cele trei moduri, Academie/Haos și recuperare, KPI și economie, misiuni zilnice/XP/
+provocări, slidere și camera first-person, salvare și recuperare din fișier. Punctul de intrare este
+[manual/README.md](manual/README.md).
+
+**De ce `Docs/manual/` și nu un singur `Docs/30-*`.** Manualul se adresează jucătorului, nu dezvoltatorului,
+și nu descrie arhitectura; un director propriu păstrează documentele de modul ca sursă tehnică și lasă
+manualul să fie rescris fără să atingă contractele. Fiecare secțiune rămâne suficient de scurtă pentru o
+singură lectură, iar cuprinsul nu crește odată cu planul modular.
+
+**Două straturi, declarate explicit.** Bootstrapul din `src/main.ts` montează doar suprafața de randare și
+panoul „Diagnostic”; HUD-ul, lista flotei, panourile de misiuni/KPI/provocări, pop-up-ul de reglaje și
+acțiunile de fișier sunt module cu contracte livrate, montate de stratul de compoziție. Manualul spune
+lucrul acesta la fiecare punct unde contează, în loc să descrie un ecran care nu există încă.
+
+**Verificarea.** Fiecare afirmație a fost confruntată cu codul reviziei curente sau cu documentul de modul
+care o deține: tastele implicite din `createDefaultSettings`, textele din `src/ui/rendering-view.ts` și
+`backend-policy.ts`, etichetele modurilor din `src/ui/taxi-hud-format.ts`, pragurile XP din
+`src/missions/player-progress.ts`, ceasul economic și pragul de proiecție din `src/economy/kpi.ts`,
+plafoanele și codurile de refuz din `src/persistence/savefile.ts`, respectiv operațiile de recuperare din
+`src/persistence/world-recovery.ts`. Tabelul complet afirmație → fișier și simbol este în
+[Evidence/161-release-docs](Evidence/161-release-docs/README.md).
+
+**Ce rămâne nevalidat.** Sesiunea de onboarding cu oameni cerută de PBI nu a fost executată (zero
+participanți), deci lizibilitatea și confortul manualului sunt `NOT_RUN`; playtestul și retenția rămân
+`NOT_RUN`, iar FPS-ul pe hardware real rămâne `NOT_VALIDATED` la gate-ul 224. Manualul nu conține procente
+de revenire, promisiuni de învățare „mai bună” sau rate de cadre.
