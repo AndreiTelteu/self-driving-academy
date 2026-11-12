@@ -1,0 +1,342 @@
+{
+  "version": "169-accel-policy-v1",
+  "parameters": [
+    {
+      "key": "braking_jerk",
+      "unit": "m/s³",
+      "minimum": 0.2,
+      "maximum": 20,
+      "defaultValue": 3
+    },
+    {
+      "key": "throttle_release_delay",
+      "unit": "s",
+      "minimum": 0,
+      "maximum": 3,
+      "defaultValue": 0.2
+    },
+    {
+      "key": "launch_intensity",
+      "unit": "ratio",
+      "minimum": 0,
+      "maximum": 1,
+      "defaultValue": 0.6
+    },
+    {
+      "key": "coasting_bias",
+      "unit": "ratio",
+      "minimum": 0,
+      "maximum": 1,
+      "defaultValue": 0.4
+    }
+  ],
+  "effects": [
+    {
+      "key": "braking_jerk",
+      "scenario": "047 braking demand 2 m/s² (brake 0.25), from rest of actuation, 8 ticks",
+      "unit": "m/s²",
+      "lowValue": 0.2,
+      "highValue": 20,
+      "lowOutcome": 0.02666666666666667,
+      "highOutcome": 2,
+      "difference": 1.9733333333333334,
+      "note": "deceleration after 8 ticks; both start braking on tick 1, the 20 m/s³ ramp settles at 2.00 m/s²"
+    },
+    {
+      "key": "throttle_release_delay",
+      "scenario": "lift from 1.5 m/s² and 0.4 throttle at 8 m/s, first release tick",
+      "unit": "ratio",
+      "lowValue": 0,
+      "highValue": 3,
+      "lowOutcome": 0,
+      "highOutcome": 0.4,
+      "difference": 0.4,
+      "note": "held throttle ticks 0 vs 180 at 60 Hz"
+    },
+    {
+      "key": "launch_intensity",
+      "scenario": "launch at 0.5 m/s with a 047 request of 1.5 m/s² and 0.4 throttle",
+      "unit": "m/s²",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 0.5249999999999999,
+      "highOutcome": 1.5,
+      "difference": 0.9750000000000001,
+      "note": "throttle 0.140 vs 0.400; above 2 m/s the key is inert"
+    },
+    {
+      "key": "coasting_bias",
+      "scenario": "mild 0.4 m/s² request (0.12 throttle) at 8 m/s, one tick",
+      "unit": "m/s²",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 0.4,
+      "highOutcome": 0,
+      "difference": 0.4,
+      "note": "throttle 0.12 vs 0.00, no brake in either case"
+    }
+  ],
+  "separation": [
+    {
+      "key": "launch_intensity in braking scene",
+      "scenario": "braking demand 2 m/s², 8 ticks, launch_intensity 0 vs 1",
+      "unit": "m/s²",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 2,
+      "highOutcome": 2,
+      "difference": 0,
+      "note": "launch is not a braking channel"
+    },
+    {
+      "key": "coasting_bias in launch scene",
+      "scenario": "launch at 0.5 m/s, coasting_bias 0 vs 1",
+      "unit": "m/s²",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 1.5,
+      "highOutcome": 1.5,
+      "difference": 0,
+      "note": "coasting only applies above the 2 m/s launch speed"
+    },
+    {
+      "key": "throttle_release_delay in coasting scene",
+      "scenario": "mild 0.4 m/s² request at 8 m/s, delay 0 vs 3 s",
+      "unit": "m/s²",
+      "lowValue": 0,
+      "highValue": 3,
+      "lowOutcome": 0.4,
+      "highOutcome": 0.4,
+      "difference": 0,
+      "note": "the delay only reacts to a request that fell to zero"
+    },
+    {
+      "key": "braking_jerk in launch scene",
+      "scenario": "launch at 0.5 m/s, braking_jerk 0.2 vs 20 m/s³",
+      "unit": "m/s²",
+      "lowValue": 0.2,
+      "highValue": 20,
+      "lowOutcome": 1.5,
+      "highOutcome": 1.5,
+      "difference": 0,
+      "note": "braking jerk is not a launch channel"
+    },
+    {
+      "key": "braking_jerk in lift scene",
+      "scenario": "lift at 8 m/s, braking_jerk 0.2 vs 20 m/s³",
+      "unit": "ratio",
+      "lowValue": 0.2,
+      "highValue": 20,
+      "lowOutcome": 0,
+      "highOutcome": 0,
+      "difference": 0,
+      "note": "the lift throttle is decided by the release delay alone"
+    },
+    {
+      "key": "coasting_bias in lift scene",
+      "scenario": "lift at 8 m/s, coasting_bias 0 vs 1",
+      "unit": "ratio",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 0,
+      "highOutcome": 0,
+      "difference": 0,
+      "note": "coasting needs a positive mild request, not an already lifted one"
+    }
+  ],
+  "safety": [
+    {
+      "key": "stop required",
+      "scenario": "launch request 1.5 m/s² with every style key at maximum, stop required",
+      "unit": "ratio",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 0.4,
+      "highOutcome": 0,
+      "difference": -0.4,
+      "note": "safety veto true, committed 0.00 m/s²"
+    },
+    {
+      "key": "lead gap 3 m",
+      "scenario": "launch request 1.5 m/s² with every style key at maximum, lead at 3 m",
+      "unit": "ratio",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 0.4,
+      "highOutcome": 0,
+      "difference": -0.4,
+      "note": "safety veto true, the 5 m floor wins"
+    },
+    {
+      "key": "braking demand",
+      "scenario": "braking request 2 m/s² with release delay 3 s and stop required",
+      "unit": "ratio",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 0,
+      "highOutcome": 0.041666666666666664,
+      "difference": 0.041666666666666664,
+      "note": "throttle held false, brake applied on the onset tick"
+    },
+    {
+      "key": "maximum braking",
+      "scenario": "maximum braking_jerk 20 m/s³, 30 ticks of demand 2 m/s²",
+      "unit": "m/s²",
+      "lowValue": 0,
+      "highValue": 20,
+      "lowOutcome": 0,
+      "highOutcome": 2,
+      "difference": 2,
+      "note": "never above comfort_deceleration 2 m/s²; the demand bounds the ramp"
+    },
+    {
+      "key": "maximum launch",
+      "scenario": "maximum launch_intensity 1, 047 request 1.5 m/s²",
+      "unit": "m/s²",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 0,
+      "highOutcome": 1.5,
+      "difference": 1.5,
+      "note": "equals desired_acceleration 1.5 m/s² and never exceeds it"
+    },
+    {
+      "key": "strong request",
+      "scenario": "maximum coasting_bias 1 with a 1.2 m/s² request (above the 0.6 threshold)",
+      "unit": "m/s²",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 0,
+      "highOutcome": 1.2,
+      "difference": 1.2,
+      "note": "a strong request is not released to coasting"
+    }
+  ],
+  "compatibility": {
+    "identicalRequests": true,
+    "comparableTicks": 100,
+    "identicalTicks": 100,
+    "firstBrakeTick": 73,
+    "settledBrake": 0.25,
+    "settledDecelerationMps2": -2,
+    "mUnits": {
+      "desired_acceleration": "m/s²",
+      "comfort_deceleration": "m/s²",
+      "acceleration_jerk": "m/s³",
+      "brake_reaction_delay": "s"
+    },
+    "rUnits": {
+      "braking_jerk": "m/s³",
+      "throttle_release_delay": "s",
+      "launch_intensity": "ratio",
+      "coasting_bias": "ratio"
+    }
+  },
+  "determinism": {
+    "ticks": 60,
+    "digest": "fnv1a32:912eb553",
+    "repeatedDigest": "fnv1a32:912eb553"
+  },
+  "checks": [
+    {
+      "id": "key-braking-jerk-effect",
+      "pass": true,
+      "detail": "0.027 -> 2.000 m/s² after 8 ticks"
+    },
+    {
+      "id": "key-braking-jerk-bounded",
+      "pass": true,
+      "detail": "maximum 20 m/s³ never exceeds the 2 m/s² demand"
+    },
+    {
+      "id": "key-release-delay-effect",
+      "pass": true,
+      "detail": "held throttle ticks 0 vs 180"
+    },
+    {
+      "id": "key-release-delay-cancelled",
+      "pass": true,
+      "detail": "brake 0.04 on the onset tick, no hold"
+    },
+    {
+      "id": "key-launch-effect",
+      "pass": true,
+      "detail": "0.525 -> 1.500 m/s²"
+    },
+    {
+      "id": "key-launch-bounded",
+      "pass": true,
+      "detail": "full launch equals desired_acceleration 1.5 m/s²"
+    },
+    {
+      "id": "key-coasting-effect",
+      "pass": true,
+      "detail": "throttle 0.12 -> 0"
+    },
+    {
+      "id": "key-coasting-strong-request",
+      "pass": true,
+      "detail": "a 1.2 m/s² request is not released by coasting_bias 1"
+    },
+    {
+      "id": "separation-braking",
+      "pass": true,
+      "detail": "launch and coasting do not change the braking scene"
+    },
+    {
+      "id": "separation-launch",
+      "pass": true,
+      "detail": "coasting and braking jerk do not change the launch scene"
+    },
+    {
+      "id": "separation-coasting",
+      "pass": true,
+      "detail": "the release delay does not change the coasting scene"
+    },
+    {
+      "id": "separation-lift",
+      "pass": true,
+      "detail": "braking jerk and coasting do not change the lift scene"
+    },
+    {
+      "id": "safety-stop",
+      "pass": true,
+      "detail": "committed 0.00 m/s² with every style key at maximum"
+    },
+    {
+      "id": "safety-gap-floor",
+      "pass": true,
+      "detail": "a lead inside 5 m vetoes throttle"
+    },
+    {
+      "id": "safety-braking-wins",
+      "pass": true,
+      "detail": "braking wins over the release delay and over stop required"
+    },
+    {
+      "id": "m-requests-identical",
+      "pass": true,
+      "detail": "100/100 request ticks identical with R neutral vs R active"
+    },
+    {
+      "id": "m-braking-settles",
+      "pass": true,
+      "detail": "neutral ramp settles at -2.00 m/s² / brake 0.25"
+    },
+    {
+      "id": "catalog-ranges",
+      "pass": true,
+      "detail": "braking_jerk 0.2-20 m/s³, throttle_release_delay 0-3 s, launch_intensity 0-1 ratio, coasting_bias 0-1 ratio"
+    },
+    {
+      "id": "determinism",
+      "pass": true,
+      "detail": "digest fnv1a32:912eb553"
+    }
+  ],
+  "summary": {
+    "checks": 19,
+    "passed": 19,
+    "pass": true
+  }
+}
