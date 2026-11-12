@@ -1,0 +1,107 @@
+{
+  "version": "224-performance-gate-regression-demo-v1",
+  "injectedPayloadBytes": 3300000,
+  "runs": [
+    {
+      "id": "01-baseline",
+      "injectedPayloadBytes": 0,
+      "exitCode": 0,
+      "durationMs": 22216,
+      "structural": "PASS",
+      "release": "NOT_VALIDATED",
+      "bundleVerdict": "PASS",
+      "bundleDetail": "5.84 MiB (6125279 B) din 8.00 MiB; JS 3478683 B + WASM 2646596 B, gzip 1769518 B, 130 artefacte",
+      "bundleReason": "",
+      "regressionVerdict": "PASS",
+      "failRows": [],
+      "buildBytes": [
+        6125279,
+        6125279,
+        6125279,
+        6125279,
+        6125279
+      ],
+      "renderDigests": [
+        "b6c188a777eb626e",
+        "b6c188a777eb626e",
+        "b6c188a777eb626e",
+        "b6c188a777eb626e",
+        "b6c188a777eb626e"
+      ],
+      "files": [
+        "Docs/Evidence/224-performance-gate/regression-demo/01-baseline/report.json",
+        "Docs/Evidence/224-performance-gate/regression-demo/01-baseline/report.md",
+        "Docs/Evidence/224-performance-gate/regression-demo/01-baseline/measurement.json"
+      ]
+    },
+    {
+      "id": "02-regression",
+      "injectedPayloadBytes": 3300000,
+      "exitCode": 1,
+      "durationMs": 22337,
+      "structural": "FAIL",
+      "release": "FAIL",
+      "bundleVerdict": "FAIL",
+      "bundleDetail": "8.99 MiB (9425362 B) din 8.00 MiB; JS 6778766 B + WASM 2646596 B, gzip 1772810 B, 130 artefacte",
+      "bundleReason": "bundle-ul depășește capacitatea de 8.00 MiB cu 0.99 MiB",
+      "regressionVerdict": "PASS",
+      "failRows": [
+        "bundle-critical-transfer"
+      ],
+      "buildBytes": [
+        9425362,
+        9425362,
+        9425362,
+        9425362,
+        9425362
+      ],
+      "renderDigests": [
+        "b6c188a777eb626e",
+        "b6c188a777eb626e",
+        "b6c188a777eb626e",
+        "b6c188a777eb626e",
+        "b6c188a777eb626e"
+      ],
+      "files": [
+        "Docs/Evidence/224-performance-gate/regression-demo/02-regression/report.json",
+        "Docs/Evidence/224-performance-gate/regression-demo/02-regression/report.md",
+        "Docs/Evidence/224-performance-gate/regression-demo/02-regression/measurement.json"
+      ]
+    },
+    {
+      "id": "03-restored",
+      "injectedPayloadBytes": 0,
+      "exitCode": 0,
+      "durationMs": 21049,
+      "structural": "PASS",
+      "release": "NOT_VALIDATED",
+      "bundleVerdict": "PASS",
+      "bundleDetail": "5.84 MiB (6125279 B) din 8.00 MiB; JS 3478683 B + WASM 2646596 B, gzip 1769518 B, 130 artefacte",
+      "bundleReason": "",
+      "regressionVerdict": "PASS",
+      "failRows": [],
+      "buildBytes": [
+        6125279,
+        6125279,
+        6125279,
+        6125279,
+        6125279
+      ],
+      "renderDigests": [
+        "b6c188a777eb626e",
+        "b6c188a777eb626e",
+        "b6c188a777eb626e",
+        "b6c188a777eb626e",
+        "b6c188a777eb626e"
+      ],
+      "files": [
+        "Docs/Evidence/224-performance-gate/regression-demo/03-restored/report.json",
+        "Docs/Evidence/224-performance-gate/regression-demo/03-restored/report.md",
+        "Docs/Evidence/224-performance-gate/regression-demo/03-restored/measurement.json"
+      ]
+    }
+  ],
+  "detected": true,
+  "recovered": true,
+  "note": "Regresia este un modul generat de 3,3 MB adăugat în entry-ul buildului de producție; nu atinge src/ și nu rămâne în commit. Gate-ul o detectează prin capacitatea de bundle din manifest și revine la PASS după eliminare."
+}

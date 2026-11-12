@@ -1,0 +1,76 @@
+{
+  "version": "224-performance-gate-ci-job-v1",
+  "startedAt": "2026-11-12T11:37:20.377Z",
+  "finishedAt": "2026-11-12T11:39:11.947Z",
+  "requirement": "structural",
+  "commit": "757e7168dfd641ea94fa7bcf95ae6841055e1244",
+  "verdicts": {
+    "structural": "PASS",
+    "release": "NOT_VALIDATED"
+  },
+  "openCriteria": [
+    "Criteriul 1: gate-ul FPS se închide numai pe hardware real, aceeași revizie"
+  ],
+  "notValidated": [
+    {
+      "id": "fps-hardware",
+      "criterion": "fps",
+      "reason": "capturile hardware 220 din Docs/Evidence/155-hardware-budget/report.json sunt pe buildul 2d68b43c8cdf; revizia curentă este 757e7168dfd6. Pragurile absolute FPS/GPU (35 ms p95, 28 ms GPU) cer aceeași revizie, deci FPS rămâne NOT_VALIDATED până la o rulare pe hardware real al acestei revizii."
+    }
+  ],
+  "steps": [
+    {
+      "label": "preflight:typecheck",
+      "command": "npm run typecheck",
+      "exitCode": 0,
+      "durationMs": 6107
+    },
+    {
+      "label": "preflight:lint",
+      "command": "npm run lint",
+      "exitCode": 0,
+      "durationMs": 33255
+    },
+    {
+      "label": "preflight:format",
+      "command": "npm run format:check",
+      "exitCode": 0,
+      "durationMs": 38802
+    },
+    {
+      "label": "preflight:architecture",
+      "command": "npm run check:architecture",
+      "exitCode": 0,
+      "durationMs": 1902
+    },
+    {
+      "label": "preflight:parameter-catalog",
+      "command": "npm run check:parameter-catalog",
+      "exitCode": 0,
+      "durationMs": 592
+    },
+    {
+      "label": "gate:check",
+      "command": "npm run perf:gate -- --check",
+      "exitCode": 0,
+      "durationMs": 12394
+    },
+    {
+      "label": "gate:measure",
+      "command": "npm run perf:gate -- --measure",
+      "exitCode": 0,
+      "durationMs": 18512
+    }
+  ],
+  "artifacts": [
+    "Docs/Evidence/224-performance-gate/report.json",
+    "Docs/Evidence/224-performance-gate/report.md",
+    "Docs/Evidence/224-performance-gate/measurement.json",
+    "Docs/Evidence/224-performance-gate/soak/report.json"
+  ],
+  "outcome": "PASSED",
+  "notes": [
+    "Probele 155/156/157/158/159 sunt apelate cu --check; acest job nu le modifică.",
+    "Fără GPU real, criteriul FPS rămâne NOT_VALIDATED; --require=release transformă această stare în eșec."
+  ]
+}
