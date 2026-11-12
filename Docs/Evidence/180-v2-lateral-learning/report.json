@@ -1,0 +1,662 @@
+{
+  "version": "180-lateral-estimator-v2",
+  "parameters": [
+    {
+      "key": "lane_center_offset",
+      "unit": "m",
+      "minimum": -1,
+      "maximum": 1,
+      "defaultValue": 0
+    },
+    {
+      "key": "steering_response_time",
+      "unit": "s",
+      "minimum": 0.05,
+      "maximum": 1.5,
+      "defaultValue": 0.3
+    },
+    {
+      "key": "steering_rate_limit",
+      "unit": "rad/s",
+      "minimum": 0.1,
+      "maximum": 4,
+      "defaultValue": 1
+    },
+    {
+      "key": "turn_entry_speed",
+      "unit": "m/s",
+      "minimum": 1,
+      "maximum": 18,
+      "defaultValue": 5
+    },
+    {
+      "key": "turn_exit_acceleration",
+      "unit": "m/s²",
+      "minimum": 0.2,
+      "maximum": 6,
+      "defaultValue": 1.5
+    },
+    {
+      "key": "corner_cutting_bias",
+      "unit": "ratio",
+      "minimum": 0,
+      "maximum": 1,
+      "defaultValue": 0
+    },
+    {
+      "key": "lateral_clearance",
+      "unit": "m",
+      "minimum": 0.1,
+      "maximum": 3,
+      "defaultValue": 0.8
+    },
+    {
+      "key": "lateral_correction_deadband",
+      "unit": "m",
+      "minimum": 0,
+      "maximum": 0.6,
+      "defaultValue": 0.1
+    }
+  ],
+  "rows": [
+    {
+      "key": "lane_center_offset",
+      "scenario": "LANE_OFFSET",
+      "unit": "m",
+      "context": "o comandă 179 activă în care deplasarea țintă este în interiorul coridorului 049: `clamp(cheie, ±coridor)` este identitatea, deci ținta este chiar cheia; o țintă pe coridor dovedește doar `|cheie| ≥ coridor`",
+      "status": "CANDIDATE",
+      "value": 0.4,
+      "uncertainty": 0.02,
+      "uncertaintyThreshold": 0.15,
+      "estimateEpisodes": 16,
+      "validationEpisodes": 16,
+      "validationStatus": "VALIDATED",
+      "validationValue": 0.4,
+      "validationError": 0,
+      "validationTolerance": 0.15,
+      "reason": null
+    },
+    {
+      "key": "steering_response_time",
+      "scenario": "STEERING_RESPONSE",
+      "unit": "s",
+      "context": "un latch proaspăt în care o țintă nouă de direcție produce o reacție: numărul de tick-uri de comandă ținută înainte de primul pas nenul inversează `max(1, ceil(cheie · 60))`, iar valoarea raportată confirmă măsurătoarea",
+      "status": "CANDIDATE",
+      "value": 0.3416666666666667,
+      "uncertainty": 0.02,
+      "uncertaintyThreshold": 0.2,
+      "estimateEpisodes": 4,
+      "validationEpisodes": 4,
+      "validationStatus": "VALIDATED",
+      "validationValue": 0.3416666666666667,
+      "validationError": 0,
+      "validationTolerance": 0.2,
+      "reason": null
+    },
+    {
+      "key": "steering_rate_limit",
+      "scenario": "STEERING_RATE",
+      "unit": "rad/s",
+      "context": "un pas de direcție aplicat când ținta commitată este mai departe decât un pas, deci pasul este saturat: `|pas| · 60` este cheia, iar un pas pe plafonul de 1,5 rad/s dovedește doar `cheie ≥ 1,5`",
+      "status": "CANDIDATE",
+      "value": 0.6,
+      "uncertainty": 0.05,
+      "uncertaintyThreshold": 0.25,
+      "estimateEpisodes": 4,
+      "validationEpisodes": 4,
+      "validationStatus": "VALIDATED",
+      "validationValue": 0.6,
+      "validationError": 0,
+      "validationTolerance": 0.25,
+      "reason": null
+    },
+    {
+      "key": "turn_entry_speed",
+      "scenario": "TURN_ENTRY_SPEED",
+      "unit": "m/s",
+      "context": "un tick real în viraj (rază locală ≤ 40 m) în care comanda raportează limita de viteză și plafonul de aderență: `min(cheie, plafon)` sub plafon este cheia, iar o limită pe plafon este doar o margine inferioară",
+      "status": "CANDIDATE",
+      "value": 3.5,
+      "uncertainty": 0.05,
+      "uncertaintyThreshold": 0.8,
+      "estimateEpisodes": 10,
+      "validationEpisodes": 10,
+      "validationStatus": "VALIDATED",
+      "validationValue": 3.5,
+      "validationError": 0,
+      "validationTolerance": 0.8,
+      "reason": null
+    },
+    {
+      "key": "turn_exit_acceleration",
+      "scenario": "TURN_EXIT_ACCELERATION",
+      "unit": "m/s²",
+      "context": "primul tick după viraj, cu latch-ul de viraj purtat din tick-ul anterior: `min(cheie, desired_acceleration)` sub plafonul M este cheia, iar o valoare pe plafon este doar o margine inferioară; un zero în afara ieșirii este structural",
+      "status": "CANDIDATE",
+      "value": 0.9,
+      "uncertainty": 0.05,
+      "uncertaintyThreshold": 0.25,
+      "estimateEpisodes": 2,
+      "validationEpisodes": 2,
+      "validationStatus": "VALIDATED",
+      "validationValue": 0.9,
+      "validationError": 0,
+      "validationTolerance": 0.25,
+      "reason": null
+    },
+    {
+      "key": "corner_cutting_bias",
+      "scenario": "CORNER_CUTTING",
+      "unit": "ratio",
+      "context": "un tick real în viraj cu coridor pozitiv: tăierea este `cheie · coridor`, deci `|cornerCutM| / coridor` este cheia; în afara virajului tăierea este structural zero, iar o tăiere zero în viraj este un zero demonstrat",
+      "status": "CANDIDATE",
+      "value": 0.3,
+      "uncertainty": 0.02,
+      "uncertaintyThreshold": 0.15,
+      "estimateEpisodes": 10,
+      "validationEpisodes": 10,
+      "validationStatus": "VALIDATED",
+      "validationValue": 0.3,
+      "validationError": 0,
+      "validationTolerance": 0.15,
+      "reason": null
+    },
+    {
+      "key": "lateral_clearance",
+      "scenario": "OBSTACLE_CLEARANCE",
+      "unit": "m",
+      "context": "un tick activ cu un obstacol declarat, în care spațiul lateral disponibil este raportat: `max(cheie, ecartament + 0,2 m)` peste podea este cheia, iar o valoare pe podea este doar o margine superioară",
+      "status": "CANDIDATE",
+      "value": 2.4,
+      "uncertainty": 0.05,
+      "uncertaintyThreshold": 0.15,
+      "estimateEpisodes": 2,
+      "validationEpisodes": 2,
+      "validationStatus": "VALIDATED",
+      "validationValue": 2.4,
+      "validationError": 0,
+      "validationTolerance": 0.15,
+      "reason": null
+    },
+    {
+      "key": "lateral_correction_deadband",
+      "scenario": "CORRECTION_DEADBAND",
+      "unit": "m",
+      "context": "un tick activ în care abaterea laterală este cunoscută: corecția este activă exact când `|eroare| > cheie`, deci fiecare eșantion este o inegalitate, iar estimarea este intersecția lor, niciodată o valoare exactă",
+      "status": "CANDIDATE",
+      "value": 0.1,
+      "uncertainty": 0.02,
+      "uncertaintyThreshold": 0.12,
+      "estimateEpisodes": 16,
+      "validationEpisodes": 16,
+      "validationStatus": "VALIDATED",
+      "validationValue": 0.1,
+      "validationError": 0,
+      "validationTolerance": 0.1,
+      "reason": null
+    }
+  ],
+  "unobserved": [
+    {
+      "key": "lane_center_offset",
+      "scenario": "LANE_OFFSET",
+      "demonstration": "deplasări de +1 m pe o bandă de 4 m: coridorul de 0,9 m le plafonează",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "OFFSET_CORRIDOR_SATURATED",
+      "excluded": {
+        "OFFSET_CORRIDOR_SATURATED": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "steering_response_time",
+      "scenario": "STEERING_RESPONSE",
+      "demonstration": "fereastră tăiată înainte de reacție: timpul mort este cenzat",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "RESPONSE_CENSORED",
+      "excluded": {
+        "RESPONSE_CENSORED": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "steering_response_time",
+      "scenario": "STEERING_RESPONSE",
+      "demonstration": "fereastră care începe după recunoașterea țintei: latch-ul lipsește",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "RESPONSE_LATCH_MISSING",
+      "excluded": {
+        "RESPONSE_LATCH_MISSING": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "steering_rate_limit",
+      "scenario": "STEERING_RATE",
+      "demonstration": "cheie de 4 rad/s: pasul este plafonat la 1,5 rad/s",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "STEERING_RATE_CEILING_SATURATED",
+      "excluded": {
+        "STEERING_RATE_CEILING_SATURATED": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "turn_entry_speed",
+      "scenario": "TURN_ENTRY_SPEED",
+      "demonstration": "cheie de 18 m/s: intrarea este plafonată de aderență la 6,269 m/s",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "TURN_ENTRY_ADHERENCE_SATURATED",
+      "excluded": {
+        "TURN_ENTRY_ADHERENCE_SATURATED": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "turn_exit_acceleration",
+      "scenario": "TURN_EXIT_ACCELERATION",
+      "demonstration": "cheie de 6 m/s²: ieșirea este plafonată de cheia M la 1,5 m/s²",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "TURN_EXIT_ACCELERATION_SATURATED",
+      "excluded": {
+        "TURN_EXIT_ACCELERATION_SATURATED": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "turn_exit_acceleration",
+      "scenario": "TURN_EXIT_ACCELERATION",
+      "demonstration": "fereastră care nu conține tick-ul de după viraj",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "NO_TURN_EXIT_EPISODE",
+      "excluded": {
+        "NO_TURN_EXIT_EPISODE": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "lateral_clearance",
+      "scenario": "OBSTACLE_CLEARANCE",
+      "demonstration": "chei de 0,5–1,2 m: podeaua de 2,0 m a sedanului le ascunde",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "LATERAL_CLEARANCE_FLOOR_SATURATED",
+      "excluded": {
+        "LATERAL_CLEARANCE_FLOOR_SATURATED": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "lateral_correction_deadband",
+      "scenario": "CORRECTION_DEADBAND",
+      "demonstration": "corecție care nu se activează niciodată: doar limita inferioară",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "DEADBAND_UPPER_BOUND_UNOBSERVED",
+      "excluded": {},
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "lateral_correction_deadband",
+      "scenario": "CORRECTION_DEADBAND",
+      "demonstration": "corecție care se activează mereu: doar limita superioară",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "DEADBAND_LOWER_BOUND_UNOBSERVED",
+      "excluded": {},
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "lateral_correction_deadband",
+      "scenario": "CORRECTION_DEADBAND",
+      "demonstration": "inactivă la eroarea de 0,2 m și activă la 0,02 m: limite incompatibile",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "CONTRADICTORY_DEADBAND_BOUNDS",
+      "excluded": {
+        "CONTRADICTORY_DEADBAND_BOUNDS": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "lateral_correction_deadband",
+      "scenario": "CORRECTION_DEADBAND",
+      "demonstration": "interval real, dar prea larg (0–0,55 m) pentru un prag de 0,12 m",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": 0.27499999999999997,
+      "reason": "UNCERTAINTY_ABOVE_THRESHOLD",
+      "excluded": {},
+      "validationStatus": "VALIDATED"
+    },
+    {
+      "key": "lane_center_offset",
+      "scenario": "LANE_OFFSET",
+      "demonstration": "demonstrații MANUAL, neeligibile",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "NO_ELIGIBLE_EPISODES",
+      "excluded": {},
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "lane_center_offset",
+      "scenario": "LANE_OFFSET",
+      "demonstration": "demonstrații fără prefix utilizabil",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "NO_ELIGIBLE_EPISODES",
+      "excluded": {},
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "lane_center_offset",
+      "scenario": "LANE_OFFSET",
+      "demonstration": "set fără episoade",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "NO_ELIGIBLE_EPISODES",
+      "excluded": {},
+      "validationStatus": "NO_DATA"
+    }
+  ],
+  "groupConstraints": [
+    {
+      "id": "RATE_CEILING_HIDES_HIGH_KEYS",
+      "keys": [
+        "steering_rate_limit"
+      ],
+      "explanation": "Plafonul explicit al politicii, `maximumSteeringRateRadPerS = 1,5 rad/s`, face ca fiecare cheie din intervalul 1,5–4 rad/s al catalogului să producă exact același pas de 0,025 rad/tick: un pas pe plafon dovedește doar `cheie ≥ 1,5`, deci banda 1,5–4 rămâne neidentificabilă din comportament și cheia rămâne neobservată în loc să primească plafonul."
+    },
+    {
+      "id": "CLEARANCE_FLOOR_HIDES_LOW_KEYS",
+      "keys": [
+        "lateral_clearance"
+      ],
+      "explanation": "Podeaua de siguranță `ecartament + 0,2 m` (2,0 m pentru sedan, 1,8 m pentru compact) transformă orice cheie sub ea în aceeași comandă: spațiul efectiv raportat este podeaua, deci tot intervalul 0,1–2,0 m al catalogului este ascuns și cheia rămâne neobservată."
+    },
+    {
+      "id": "ENTRY_SPEED_ADHERENCE_CEILING",
+      "keys": [
+        "turn_entry_speed"
+      ],
+      "explanation": "Viteza de intrare este plafonată de aderență, `min(sqrt(curve_lateral_accel · rază), avizul 049)`: pe virajul de 15,7 m cu 2,5 m/s² plafonul este 6,269 m/s, deci nicio cheie peste el (catalogul merge până la 18 m/s) nu poate fi observată. Plafonul depinde de geometrie și de cheia M `curve_lateral_accel`, nu de stilul șoferului."
+    },
+    {
+      "id": "EXIT_ACCELERATION_M_CAP",
+      "keys": [
+        "turn_exit_acceleration"
+      ],
+      "explanation": "Accelerația de ieșire este plafonată de cheia M `desired_acceleration` a lui 047: cu 1,5 m/s² orice cheie de la 1,5 la 6 m/s² produce aceeași comandă. Ea este și singura cheie măsurată pe un singur tick de tranziție, deci fereastra trebuie să conțină ambele tick-uri ale ieșirii; altfel ieșirea este cenzată, nu zero."
+    },
+    {
+      "id": "CORRIDOR_CLAMP_SHARES_OFFSET_AND_CUT",
+      "keys": [
+        "lane_center_offset",
+        "corner_cutting_bias"
+      ],
+      "explanation": "Deplasarea de bandă și tăierea virajului împart același coridor 049 (`lățime/2 − ecartament/2 − 0,2 m`) și aceeași ordine de ramuri: tăierea se adaugă peste deplasarea deja plafonată și suma este plafonată din nou. O țintă sau o tăiere pe coridor nu distinge cheia de orice valoare mai mare, iar o tăiere este observabilă numai în viraj."
+    },
+    {
+      "id": "DEAD_TIME_AND_CORRECTION_SHARE_LATCH",
+      "keys": [
+        "steering_response_time",
+        "lateral_correction_deadband"
+      ],
+      "explanation": "Timpul mort și corecția depind de continuitatea latch-ului purtat de apelant: timpul mort se numără numai dintr-o țintă nouă recunoscută după ce latch-ul s-a golit, iar corecția depinde de eroarea de cross-track a aceluiași tick. O fereastră care începe în mijlocul unui hold nu are reacție de măsurat, iar una tăiată înainte de reacție cenzează timpul mort."
+    },
+    {
+      "id": "LATERAL_KEYS_FROM_ONE_TICK",
+      "keys": [
+        "lane_center_offset",
+        "steering_response_time",
+        "steering_rate_limit",
+        "turn_entry_speed",
+        "turn_exit_acceleration",
+        "corner_cutting_bias",
+        "lateral_clearance",
+        "lateral_correction_deadband"
+      ],
+      "explanation": "Cele opt chei pot apărea în aceeași călătorie, dar nu din același fapt: ordinea ramurilor 179 dă fiecărui tick o singură situație — refuz de proiecție, deplasare de bandă, tăiere, timp mort și pas de direcție, plafon de aderență în viraj, accelerație de ieșire, spațiu lateral sau corecție. Un set cu un singur tip de demonstrație lasă celelalte șapte chei neobservate."
+    }
+  ],
+  "refusals": [
+    {
+      "episodeId": "key-lane_center_offset-1",
+      "reason": "NOT_LEARNING_ELIGIBLE"
+    },
+    {
+      "episodeId": "key-lane_center_offset-2",
+      "reason": "NOT_LEARNING_ELIGIBLE"
+    },
+    {
+      "episodeId": "key-lane_center_offset-3",
+      "reason": "NOT_LEARNING_ELIGIBLE"
+    },
+    {
+      "episodeId": "key-lane_center_offset-4",
+      "reason": "NOT_LEARNING_ELIGIBLE"
+    },
+    {
+      "episodeId": "key-lane_center_offset-1",
+      "reason": "DUPLICATE_EPISODE"
+    }
+  ],
+  "split": {
+    "seed": 180,
+    "admitted": 32,
+    "disjoint": true
+  },
+  "compatibility": {
+    "policyVersion": "179-lateral-policy-v2",
+    "candidateOnly": true,
+    "changesPolicySemantics": false,
+    "tickHz": 60,
+    "maximumSteeringRateRadPerS": 1.5,
+    "corridorM": 0.9000000000000001,
+    "laneOffsetTargetM": 0.4,
+    "responseTicks": 21,
+    "rateStepRad": 0.01,
+    "rateRadPerS": 0.6,
+    "turnSpeedLimitMps": 3.5,
+    "adherenceCeilingMps": 6.26876888130155,
+    "exitAccelerationMps2": 0.9,
+    "exitCapMps2": 1.5,
+    "cornerCutM": -0.27,
+    "clearanceM": 2.4,
+    "clearanceFloorM": 2,
+    "permittedManoeuvre": true,
+    "deadbandLowErrorActive": false,
+    "deadbandHighErrorActive": true,
+    "deadbandError": 0.1,
+    "corridorSaturatedTargetM": 0.9000000000000001,
+    "corridorSaturatedKeyM": 1,
+    "rateCeilingStepRad": 0.025,
+    "rateCeilingKey": 4
+  },
+  "determinism": {
+    "seed": 180,
+    "digest": "fnv1a32:de102d60",
+    "repeatedDigest": "fnv1a32:de102d60"
+  },
+  "checks": [
+    {
+      "id": "contexts-eight-distinct",
+      "pass": true,
+      "detail": "opt chei și opt scenarii distincte: lane_center_offset=LANE_OFFSET, steering_response_time=STEERING_RESPONSE, steering_rate_limit=STEERING_RATE, turn_entry_speed=TURN_ENTRY_SPEED, turn_exit_acceleration=TURN_EXIT_ACCELERATION, corner_cutting_bias=CORNER_CUTTING, lateral_clearance=OBSTACLE_CLEARANCE, lateral_correction_deadband=CORRECTION_DEADBAND"
+    },
+    {
+      "id": "scenario-offset",
+      "pass": true,
+      "detail": "bandă dreaptă: offset 0.4000 m; turn_entry_speed=UNOBSERVED, corner_cutting_bias=UNOBSERVED, turn_exit_acceleration=UNOBSERVED, lateral_clearance=UNOBSERVED"
+    },
+    {
+      "id": "scenario-response",
+      "pass": true,
+      "detail": "țintă de cross-track pe drum drept: 0.3417 s = 20,5/60; turn_entry_speed=UNOBSERVED, corner_cutting_bias=UNOBSERVED, turn_exit_acceleration=UNOBSERVED, lateral_clearance=UNOBSERVED"
+    },
+    {
+      "id": "scenario-rate",
+      "pass": true,
+      "detail": "pas saturat în viraj: 0.6000 rad/s; turn_exit_acceleration=UNOBSERVED, lateral_clearance=UNOBSERVED"
+    },
+    {
+      "id": "scenario-entry",
+      "pass": true,
+      "detail": "viraj de 15,7 m: intrare 3.5000 m/s; turn_exit_acceleration=UNOBSERVED, lateral_clearance=UNOBSERVED, steering_response_time=UNOBSERVED"
+    },
+    {
+      "id": "scenario-exit",
+      "pass": true,
+      "detail": "tick-ul de după viraj: ieșire 0.9000 m/s²; lateral_clearance=UNOBSERVED, steering_response_time=UNOBSERVED"
+    },
+    {
+      "id": "scenario-cut",
+      "pass": true,
+      "detail": "tăiere în viraj: 0.3000; turn_exit_acceleration=UNOBSERVED, lateral_clearance=UNOBSERVED, steering_response_time=UNOBSERVED"
+    },
+    {
+      "id": "scenario-clearance",
+      "pass": true,
+      "detail": "obstacol declarat la 6 m: spațiu 2.4000 m; turn_exit_acceleration=UNOBSERVED, steering_response_time=UNOBSERVED"
+    },
+    {
+      "id": "scenario-deadband",
+      "pass": true,
+      "detail": "inactivă la 0,09 m și activă la 0,11 m: bandă 0.1000 m; turn_entry_speed=UNOBSERVED, corner_cutting_bias=UNOBSERVED, turn_exit_acceleration=UNOBSERVED, lateral_clearance=UNOBSERVED"
+    },
+    {
+      "id": "uncertainty-reported",
+      "pass": true,
+      "detail": "lane_center_offset ±0.0200 ≤ 0.15 m, steering_response_time ±0.0200 ≤ 0.2 s, steering_rate_limit ±0.0500 ≤ 0.25 rad/s, turn_entry_speed ±0.0500 ≤ 0.8 m/s, turn_exit_acceleration ±0.0500 ≤ 0.25 m/s², corner_cutting_bias ±0.0200 ≤ 0.15 ratio, lateral_clearance ±0.0500 ≤ 0.15 m, lateral_correction_deadband ±0.0200 ≤ 0.12 m"
+    },
+    {
+      "id": "uncertainty-per-key-threshold",
+      "pass": true,
+      "detail": "lane_center_offset ±0.1643 > 0.15, steering_response_time ±0.2628 > 0.2, steering_rate_limit ±0.2957 > 0.25, turn_entry_speed ±1.1170 > 0.8, turn_exit_acceleration ±0.2628 > 0.25, corner_cutting_bias ±0.1971 > 0.15, lateral_clearance ±0.1971 > 0.15, lateral_correction_deadband ±0.2750 > 0.12"
+    },
+    {
+      "id": "validation-split",
+      "pass": true,
+      "detail": "seed 180: fiecare cheie se validează pe episoade ținute deoparte (lane_center_offset 16+16, steering_response_time 4+4, steering_rate_limit 4+4, turn_entry_speed 10+10, turn_exit_acceleration 2+2, corner_cutting_bias 10+10, lateral_clearance 2+2, lateral_correction_deadband 16+16)"
+    },
+    {
+      "id": "validation-too-small",
+      "pass": true,
+      "detail": "trei episoade lasă 1 episod de validare, raportat TOO_SMALL"
+    },
+    {
+      "id": "zero-offset-demostrat",
+      "pass": true,
+      "detail": "o țintă exact pe centrul benzii este un zero demonstrat, nu dovezi lipsă"
+    },
+    {
+      "id": "zero-cut-demostrat",
+      "pass": true,
+      "detail": "o tăiere de 0 m într-un viraj real este un zero demonstrat, distinct de lipsa virajului"
+    },
+    {
+      "id": "rate-ceiling",
+      "pass": true,
+      "detail": "patru chei de 4 rad/s produc același pas de 0.0250 rad/tick, adică 1.5000 rad/s: cheia rămâne neobservată"
+    },
+    {
+      "id": "clearance-floor",
+      "pass": true,
+      "detail": "cheile de 0,5–1,2 m sunt ascunse de podeaua de 2.0000 m a sedanului"
+    },
+    {
+      "id": "clearance-floor-follows-class",
+      "pass": true,
+      "detail": "aceeași comandă de 1,9 m este exactă pe clasa compact (podeaua 1,8 m) și plafonată pe sedan (2,0 m)"
+    },
+    {
+      "id": "entry-adherence-ceiling",
+      "pass": true,
+      "detail": "cheia de 18 m/s este plafonată de aderență la 6.2688 m/s: intrarea peste plafon nu este observabilă"
+    },
+    {
+      "id": "exit-m-cap",
+      "pass": true,
+      "detail": "cheia de 6 m/s² este plafonată de cheia M `desired_acceleration` la 1,5 m/s²: valoarea de ieșire rămâne doar o margine"
+    },
+    {
+      "id": "offset-corridor",
+      "pass": true,
+      "detail": "cheile de +1 m sunt plafonate la coridorul de 0.9000 m: ținta dovedește doar |cheie| ≥ coridor"
+    },
+    {
+      "id": "response-latch",
+      "pass": true,
+      "detail": "o fereastră tăiată înainte de reacție cenzează timpul mort, iar una care începe după recunoașterea țintei nu are latch de măsurat"
+    },
+    {
+      "id": "exit-window",
+      "pass": true,
+      "detail": "ieșirea se măsoară numai pe tick-ul de tranziție; o fereastră care se oprește în viraj nu are ieșire"
+    },
+    {
+      "id": "deadband-bounds",
+      "pass": true,
+      "detail": "o singură latură este doar o margine, două limite incompatibile nu au valoare, iar un interval prea larg rămâne neobservat"
+    },
+    {
+      "id": "no-fabricated-values",
+      "pass": true,
+      "detail": "15 demonstrații neobservate au valoare null și motiv explicit"
+    },
+    {
+      "id": "group-constraints",
+      "pass": true,
+      "detail": "RATE_CEILING_HIDES_HIGH_KEYS, CLEARANCE_FLOOR_HIDES_LOW_KEYS, ENTRY_SPEED_ADHERENCE_CEILING, EXIT_ACCELERATION_M_CAP, CORRIDOR_CLAMP_SHARES_OFFSET_AND_CUT, DEAD_TIME_AND_CORRECTION_SHARE_LATCH, LATERAL_KEYS_FROM_ONE_TICK"
+    },
+    {
+      "id": "invalid-input-refused",
+      "pass": true,
+      "detail": "o valoare NaN este refuzată; key-lane_center_offset-1:NOT_LEARNING_ELIGIBLE, key-lane_center_offset-2:NOT_LEARNING_ELIGIBLE, key-lane_center_offset-3:NOT_LEARNING_ELIGIBLE, key-lane_center_offset-4:NOT_LEARNING_ELIGIBLE, key-lane_center_offset-1:DUPLICATE_EPISODE"
+    },
+    {
+      "id": "determinism",
+      "pass": true,
+      "detail": "digest fnv1a32:de102d60"
+    },
+    {
+      "id": "catalog-ranges",
+      "pass": true,
+      "detail": "lane_center_offset 0.4000 m, steering_response_time 0.3417 s, steering_rate_limit 0.6000 rad/s, turn_entry_speed 3.5000 m/s, turn_exit_acceleration 0.9000 m/s², corner_cutting_bias 0.3000 ratio, lateral_clearance 2.4000 m, lateral_correction_deadband 0.1000 m"
+    },
+    {
+      "id": "policy-compatibility",
+      "pass": true,
+      "detail": "179 citește estimarea fără schimbare de semantică: offset 0.4000 m, 21 tick-uri până la reacție, pas 0.0100 rad/tick (0.6000 rad/s), intrare 3.5000 m/s sub plafonul 6.2688 m/s, ieșire 0.9000 m/s², tăiere -0.2700 m, spațiu 2.4000 m, bandă moartă inactivă la 0.5000 m și activă la 0.5010 m, 30 tick-uri sub limita de 0.0100 rad/tick"
+    }
+  ],
+  "summary": {
+    "checks": 30,
+    "passed": 30,
+    "pass": true,
+    "candidateKeys": 8,
+    "unobservedKeys": 15
+  }
+}
