@@ -1,0 +1,618 @@
+{
+  "version": "176-stop-priority-estimator-v1",
+  "parameters": [
+    {
+      "key": "rolling_stop_speed",
+      "unit": "m/s",
+      "minimum": 0.2,
+      "maximum": 5,
+      "defaultValue": 1
+    },
+    {
+      "key": "priority_assertiveness",
+      "unit": "ratio",
+      "minimum": 0,
+      "maximum": 1,
+      "defaultValue": 0.3
+    },
+    {
+      "key": "allway_stop_patience",
+      "unit": "s",
+      "minimum": 0,
+      "maximum": 10,
+      "defaultValue": 2
+    },
+    {
+      "key": "blocked_intersection_entry_probability",
+      "unit": "probability",
+      "minimum": 0,
+      "maximum": 1,
+      "defaultValue": 0
+    }
+  ],
+  "rows": [
+    {
+      "key": "rolling_stop_speed",
+      "scenario": "ROLLING_STOP",
+      "unit": "m/s",
+      "context": "o comandă `ROLL_THROUGH` reală a lui 051, în care 175 raportează viteza de traversare: o comandă neplafonată dă cheia exact, una plafonată dovedește doar `cheie > 2,5 m/s`",
+      "status": "CANDIDATE",
+      "value": 1.2,
+      "uncertainty": 0.05,
+      "uncertaintyThreshold": 0.5,
+      "estimateEpisodes": 2,
+      "validationEpisodes": 2,
+      "validationStatus": "VALIDATED",
+      "validationValue": 1.2,
+      "validationError": 0,
+      "validationTolerance": 0.5,
+      "reason": null
+    },
+    {
+      "key": "priority_assertiveness",
+      "scenario": "PRIORITY_CLAIM",
+      "unit": "ratio",
+      "context": "un refuz real 052 cu un separator cunoscut, în care 175 revendică sau cedează: revendicarea dă limita inferioară, cedarea dă limita superioară a asertivității",
+      "status": "CANDIDATE",
+      "value": 0.36666666666666653,
+      "uncertainty": 0.033333333333333215,
+      "uncertaintyThreshold": 0.15,
+      "estimateEpisodes": 2,
+      "validationEpisodes": 2,
+      "validationStatus": "VALIDATED",
+      "validationValue": 0.36666666666666653,
+      "validationError": 0,
+      "validationTolerance": 0.15,
+      "reason": null
+    },
+    {
+      "key": "allway_stop_patience",
+      "scenario": "ALLWAY_PATIENCE",
+      "unit": "s",
+      "context": "o eliberare 051 la un all-way stop unde subiectul nu este primul sosit: ținerea dă limita inferioară, trecerea dă limita superioară a răbdării",
+      "status": "CANDIDATE",
+      "value": 4,
+      "uncertainty": 0.20000000000000018,
+      "uncertaintyThreshold": 0.5,
+      "estimateEpisodes": 2,
+      "validationEpisodes": 2,
+      "validationStatus": "VALIDATED",
+      "validationValue": 4,
+      "validationError": 0,
+      "validationTolerance": 0.5,
+      "reason": null
+    },
+    {
+      "key": "blocked_intersection_entry_probability",
+      "scenario": "BLOCKED_ENTRY",
+      "unit": "probability",
+      "context": "o oportunitate de intrare fără spațiu de ieșire declarat, fără veto, în care 175 a extras eșantionul determinist: acceptarea dă limita inferioară, așteptarea sub plafon dă limita superioară",
+      "status": "CANDIDATE",
+      "value": 0.280446020886302,
+      "uncertainty": 0.0911519427318126,
+      "uncertaintyThreshold": 0.15,
+      "estimateEpisodes": 2,
+      "validationEpisodes": 2,
+      "validationStatus": "VALIDATED",
+      "validationValue": 0.280446020886302,
+      "validationError": 0,
+      "validationTolerance": 0.15,
+      "reason": null
+    }
+  ],
+  "unobserved": [
+    {
+      "key": "rolling_stop_speed",
+      "scenario": "ROLLING_STOP",
+      "demonstration": "comenzi plafonate la 2,5 m/s: cheia peste plafon nu este identificabilă",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "ROLLING_STOP_CAP_SATURATED",
+      "excluded": {
+        "ROLLING_STOP_CAP_SATURATED": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "rolling_stop_speed",
+      "scenario": "ROLLING_STOP",
+      "demonstration": "viteze reale împrăștiate între 0,2 și 2,5 m/s",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "UNCERTAINTY_ABOVE_THRESHOLD",
+      "excluded": {},
+      "validationStatus": "VALIDATED"
+    },
+    {
+      "key": "rolling_stop_speed",
+      "scenario": "ROLLING_STOP",
+      "demonstration": "demonstrații care pretind simultan ≤ 2,5 m/s și > 2,5 m/s",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "ROLLING_STOP_CAP_INCONSISTENT",
+      "excluded": {
+        "ROLLING_STOP_CAP_INCONSISTENT": 1
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "rolling_stop_speed",
+      "scenario": "ROLLING_STOP",
+      "demonstration": "demonstrații MANUAL, neeligibile",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "NO_ELIGIBLE_EPISODES",
+      "excluded": {},
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "priority_assertiveness",
+      "scenario": "PRIORITY_CLAIM",
+      "demonstration": "doar revendicări, fără limită superioară",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "ASSERTIVENESS_UPPER_BOUND_UNOBSERVED",
+      "excluded": {},
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "priority_assertiveness",
+      "scenario": "PRIORITY_CLAIM",
+      "demonstration": "doar cedări, fără limită inferioară",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "ASSERTIVENESS_LOWER_BOUND_UNOBSERVED",
+      "excluded": {},
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "priority_assertiveness",
+      "scenario": "PRIORITY_CLAIM",
+      "demonstration": "revendicare sub o cedare: limite incompatibile",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "CONTRADICTORY_ASSERTIVENESS_BOUNDS",
+      "excluded": {
+        "CONTRADICTORY_ASSERTIVENESS_BOUNDS": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "priority_assertiveness",
+      "scenario": "PRIORITY_CLAIM",
+      "demonstration": "limită reală, dar prea largă (0,07–0,60)",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "UNCERTAINTY_ABOVE_THRESHOLD",
+      "excluded": {},
+      "validationStatus": "VALIDATED"
+    },
+    {
+      "key": "priority_assertiveness",
+      "scenario": "PRIORITY_CLAIM",
+      "demonstration": "yield_time_gap la podeaua de 3 s: cheia este inertă",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "ASSERTIVENESS_INERT_AT_FLOOR",
+      "excluded": {
+        "ASSERTIVENESS_INERT_AT_FLOOR": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "priority_assertiveness",
+      "scenario": "PRIORITY_CLAIM",
+      "demonstration": "052 a acordat prioritatea: nicio revendicare",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "PRIORITY_NOT_REFUSED",
+      "excluded": {
+        "PRIORITY_NOT_REFUSED": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "priority_assertiveness",
+      "scenario": "PRIORITY_CLAIM",
+      "demonstration": "refuz 052 fără separator raportat",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "PRIORITY_SEPARATION_UNKNOWN",
+      "excluded": {
+        "PRIORITY_SEPARATION_UNKNOWN": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "allway_stop_patience",
+      "scenario": "ALLWAY_PATIENCE",
+      "demonstration": "doar eliberări, fără limită inferioară",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "ALLWAY_LOWER_BOUND_UNOBSERVED",
+      "excluded": {},
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "allway_stop_patience",
+      "scenario": "ALLWAY_PATIENCE",
+      "demonstration": "doar țineri, fără limită superioară",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "ALLWAY_UPPER_BOUND_UNOBSERVED",
+      "excluded": {},
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "allway_stop_patience",
+      "scenario": "ALLWAY_PATIENCE",
+      "demonstration": "ținere peste o eliberare: limite incompatibile",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "CONTRADICTORY_ALLWAY_BOUNDS",
+      "excluded": {
+        "CONTRADICTORY_ALLWAY_BOUNDS": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "allway_stop_patience",
+      "scenario": "ALLWAY_PATIENCE",
+      "demonstration": "limită reală, dar prea largă (2–9 s)",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "UNCERTAINTY_ABOVE_THRESHOLD",
+      "excluded": {},
+      "validationStatus": "VALIDATED"
+    },
+    {
+      "key": "allway_stop_patience",
+      "scenario": "ALLWAY_PATIENCE",
+      "demonstration": "primul sosit la all-way stop: niciodată întârziat",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "ALLWAY_FIRST_ARRIVAL",
+      "excluded": {
+        "ALLWAY_FIRST_ARRIVAL": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "allway_stop_patience",
+      "scenario": "ALLWAY_PATIENCE",
+      "demonstration": "apropiere 051 încă în STOP, fără eliberare",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "ALLWAY_STOP_NOT_RELEASED",
+      "excluded": {
+        "ALLWAY_STOP_NOT_RELEASED": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "blocked_intersection_entry_probability",
+      "scenario": "BLOCKED_ENTRY",
+      "demonstration": "veto de intersecție blocată, fără eșantion",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "BLOCKED_INTERSECTION_VETO",
+      "excluded": {
+        "BLOCKED_INTERSECTION_VETO": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "blocked_intersection_entry_probability",
+      "scenario": "BLOCKED_ENTRY",
+      "demonstration": "spațiu de ieșire declarat: eșantionul este ocolit",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "EXIT_SPACE_DECLARED",
+      "excluded": {
+        "EXIT_SPACE_DECLARED": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "blocked_intersection_entry_probability",
+      "scenario": "BLOCKED_ENTRY",
+      "demonstration": "doar acceptări, fără limită superioară",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "BLOCKED_ENTRY_UPPER_BOUND_UNOBSERVED",
+      "excluded": {},
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "blocked_intersection_entry_probability",
+      "scenario": "BLOCKED_ENTRY",
+      "demonstration": "doar așteptări sub plafon, fără limită inferioară",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "BLOCKED_ENTRY_LOWER_BOUND_UNOBSERVED",
+      "excluded": {},
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "blocked_intersection_entry_probability",
+      "scenario": "BLOCKED_ENTRY",
+      "demonstration": "acceptare lângă plafonul de 0,5: cheia peste plafon nu se vede",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "BLOCKED_ENTRY_CAP_SATURATED",
+      "excluded": {},
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "blocked_intersection_entry_probability",
+      "scenario": "BLOCKED_ENTRY",
+      "demonstration": "acceptare sub o așteptare: limite incompatibile",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "CONTRADICTORY_BLOCKED_ENTRY_BOUNDS",
+      "excluded": {
+        "CONTRADICTORY_BLOCKED_ENTRY_BOUNDS": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "blocked_intersection_entry_probability",
+      "scenario": "BLOCKED_ENTRY",
+      "demonstration": "limită reală, dar prea largă (0,02–0,49)",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "UNCERTAINTY_ABOVE_THRESHOLD",
+      "excluded": {},
+      "validationStatus": "VALIDATED"
+    },
+    {
+      "key": "blocked_intersection_entry_probability",
+      "scenario": "BLOCKED_ENTRY",
+      "demonstration": "set fără episoade",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "NO_ELIGIBLE_EPISODES",
+      "excluded": {},
+      "validationStatus": "NO_DATA"
+    }
+  ],
+  "groupConstraints": [
+    {
+      "id": "ROLLING_STOP_AND_STOP_INTENT_SHARED",
+      "keys": [
+        "rolling_stop_speed"
+      ],
+      "explanation": "Viteza de rolling stop există numai în scenariul în care 051 a declarat `ROLL_THROUGH`: rolul opririi complete este decis de cheile M `stop_full_probability` și `stop_dwell_time`, deci un tick cu oprire completă sau cu apropiere nu spune nimic despre viteză. Schimbarea probabilității M mută proporția de oportunități care ajung la cheie, fără să o estimeze."
+    },
+    {
+      "id": "ROLLING_STOP_CAP_CEILING",
+      "keys": [
+        "rolling_stop_speed"
+      ],
+      "explanation": "Plafonul explicit al politicii, `rollingStopMaximumMps = 2,5 m/s`, face ca orice valoare peste el să fie invizibilă: comanda raportează 2,5 m/s cu `rollingStopCapped`, adică doar limita inferioară `cheie > 2,5`. Intervalul catalogului merge până la 5 m/s, dar acea zonă nu este identificabilă din comportament, deci cheia rămâne neobservată în loc să primească plafonul ca valoare."
+    },
+    {
+      "id": "ASSERTIVENESS_AND_YIELD_GAP_SHARED",
+      "keys": [
+        "priority_assertiveness"
+      ],
+      "explanation": "Asertivitatea este identificabilă numai din refuzul 052 cu separator cunoscut: cerința efectivă este `yield_time_gap − asertivitate · (yield_time_gap − 3 s)`. Un `yield_time_gap` deja sub podeaua de 3 s lasă cheia inertă — cerința rămâne pragul M — deci acolo nu se măsoară nimic, iar o prioritate acordată de 052 nu este o decizie de revendicare."
+    },
+    {
+      "id": "ALLWAY_PATIENCE_AFTER_M_DWELL",
+      "keys": [
+        "allway_stop_patience"
+      ],
+      "explanation": "Răbdarea se numără de la momentul în care propria oprire 051 (`stop_dwell_time`) a fost satisfăcută și numai pentru un sosit care nu este primul: primul sosit pleacă fără întârziere, iar o apropiere ori o ținere 051 domină cheia. Un episod fără `RELEASE` nu oferă nicio latură a intervalului, iar durata M a opririi deplasează momentul din care se măsoară."
+    },
+    {
+      "id": "BLOCKED_ENTRY_VETO_SHADOWS_PROBABILITY",
+      "keys": [
+        "blocked_intersection_entry_probability"
+      ],
+      "explanation": "Vetoul de intersecție blocată este absolut și este evaluat primul: comanda rămâne `STOP` fără eșantion, deci un astfel de tick nu spune nimic despre probabilitate. Un spațiu de ieșire declarat ocolește complet eșantionul, iar plafonul de 0,5 al politicii ascunde orice valoare peste el — cheia rămâne neobservată, nu plafonul."
+    },
+    {
+      "id": "STOP_PRIORITY_KEYS_FROM_ONE_APPROACH",
+      "keys": [
+        "rolling_stop_speed",
+        "priority_assertiveness",
+        "allway_stop_patience",
+        "blocked_intersection_entry_probability"
+      ],
+      "explanation": "Cele patru chei pot apărea în aceeași călătorie, dar nu din același fapt: ordinea ramurilor 175 dă fiecărui tick un singur fapt — veto, intenție 051, rolling stop, all-way, refuz 052 sau eșantion de intrare. Un set cu un singur tip de demonstrație lasă celelalte trei chei neobservate."
+    }
+  ],
+  "refusals": [
+    {
+      "episodeId": "rolling-1",
+      "reason": "NOT_LEARNING_ELIGIBLE"
+    },
+    {
+      "episodeId": "rolling-2",
+      "reason": "NOT_LEARNING_ELIGIBLE"
+    },
+    {
+      "episodeId": "rolling-3",
+      "reason": "NOT_LEARNING_ELIGIBLE"
+    },
+    {
+      "episodeId": "rolling-4",
+      "reason": "NOT_LEARNING_ELIGIBLE"
+    },
+    {
+      "episodeId": "rolling-1",
+      "reason": "DUPLICATE_EPISODE"
+    }
+  ],
+  "split": {
+    "seed": 176,
+    "admitted": 16,
+    "disjoint": true
+  },
+  "compatibility": {
+    "policyVersion": "175-stop-priority-policy-v1",
+    "candidateOnly": true,
+    "changesPolicySemantics": false,
+    "rollingStopCapMps": 2.5,
+    "priorityFloorS": 3,
+    "blockedEntryCap": 0.5,
+    "rollThroughSpeedMps": 1.2,
+    "rollingStopReason": "ROLLING_STOP_AT_SPEED",
+    "rollingStopCapped": false,
+    "requiredGapS": 4.9,
+    "claimedGapS": 4.9,
+    "claimed": true,
+    "yieldedGapS": 4.8500000000000005,
+    "yielded": true,
+    "patienceHoldS": 3.9,
+    "holdReason": "ALLWAY_PATIENCE",
+    "patienceTurnS": 4.1,
+    "turnReason": "ALLWAY_TURN",
+    "grantDraw": 0.1892940781544894,
+    "grantReason": "BLOCKED_ENTRY_ACCEPTED",
+    "grantGranted": true,
+    "denialDraw": 0.3715979636181146,
+    "denialReason": "BLOCKED_ENTRY_WAIT",
+    "denialGranted": false
+  },
+  "determinism": {
+    "seed": 176,
+    "digest": "fnv1a32:cf5e99b7",
+    "repeatedDigest": "fnv1a32:cf5e99b7"
+  },
+  "checks": [
+    {
+      "id": "scenario-rolling",
+      "pass": true,
+      "detail": "rolling-only speed 1.2000 m/s; assertiveness, patience and entry stay unobserved"
+    },
+    {
+      "id": "scenario-priority",
+      "pass": true,
+      "detail": "refusal-only assertiveness 0.3667 ratio; the other three stay unobserved"
+    },
+    {
+      "id": "scenario-allway",
+      "pass": true,
+      "detail": "all-way-only patience 4.0000 s; the other three stay unobserved"
+    },
+    {
+      "id": "scenario-blocked",
+      "pass": true,
+      "detail": "entry-only probability 0.2804 between the draws 0.1893 and 0.3716"
+    },
+    {
+      "id": "zero-patience-observed",
+      "pass": true,
+      "detail": "a release at 0 s is a demonstrated patience of zero, not missing evidence"
+    },
+    {
+      "id": "uncertainty-reported",
+      "pass": true,
+      "detail": "rolling_stop_speed 0.0500 <= 0.5 m/s, priority_assertiveness 0.0333 <= 0.15 ratio, allway_stop_patience 0.2000 <= 0.5 s, blocked_intersection_entry_probability 0.0912 <= 0.15 probability"
+    },
+    {
+      "id": "uncertainty-rolling",
+      "pass": true,
+      "detail": "scattered speeds measure ±1.5112 m/s > 0.5 and stay unobserved"
+    },
+    {
+      "id": "uncertainty-assertiveness",
+      "pass": true,
+      "detail": "a 0.07–0.60 bound measures ±0.2667 > 0.15 and stays unobserved"
+    },
+    {
+      "id": "uncertainty-patience",
+      "pass": true,
+      "detail": "a 2–9 s bound measures ±3.5000 s and stays unobserved"
+    },
+    {
+      "id": "uncertainty-entry",
+      "pass": true,
+      "detail": "a wide draw interval measures ±0.2333 > 0.15 and stays unobserved"
+    },
+    {
+      "id": "validation-split",
+      "pass": true,
+      "detail": "seed 176: every key validates on held-out episodes (rolling_stop_speed 2+2, priority_assertiveness 2+2, allway_stop_patience 2+2, blocked_intersection_entry_probability 2+2)"
+    },
+    {
+      "id": "validation-too-small",
+      "pass": true,
+      "detail": "three episodes leave 1 held-out episode, reported as TOO_SMALL"
+    },
+    {
+      "id": "rolling-cap",
+      "pass": true,
+      "detail": "a capped command proves only `key > 2,5 m/s`, and a set that mixes both sides of the cap has no value"
+    },
+    {
+      "id": "assertiveness-floor",
+      "pass": true,
+      "detail": "below the 3 s floor the M threshold decides and nothing is measured; a single inequality is only a bound"
+    },
+    {
+      "id": "assertiveness-no-decision",
+      "pass": true,
+      "detail": "a granted priority and an unknown separation are not claim observations, and two incompatible bounds have no value"
+    },
+    {
+      "id": "patience-context",
+      "pass": true,
+      "detail": "the first arrival and a held 051 STOP never observe patience; one-sided demonstrations remain bounds"
+    },
+    {
+      "id": "entry-veto",
+      "pass": true,
+      "detail": "the veto decides before the draw and a declared exit bypasses it, so neither proves the probability"
+    },
+    {
+      "id": "entry-ceiling",
+      "pass": true,
+      "detail": "above the 0.5 cap the key is invisible, hard refusal and acceptance bounds can contradict, and a single side stays unobserved"
+    },
+    {
+      "id": "shared-channel-separation",
+      "pass": true,
+      "detail": "a rolling stop never supplies a claim, a refusal never supplies a crawl speed, and an entry draw never proves patience"
+    },
+    {
+      "id": "no-fabricated-values",
+      "pass": true,
+      "detail": "25 unobserved demonstrations carry value null and an explicit reason"
+    },
+    {
+      "id": "group-constraints",
+      "pass": true,
+      "detail": "ROLLING_STOP_AND_STOP_INTENT_SHARED, ROLLING_STOP_CAP_CEILING, ASSERTIVENESS_AND_YIELD_GAP_SHARED, ALLWAY_PATIENCE_AFTER_M_DWELL, BLOCKED_ENTRY_VETO_SHADOWS_PROBABILITY, STOP_PRIORITY_KEYS_FROM_ONE_APPROACH"
+    },
+    {
+      "id": "invalid-input-refused",
+      "pass": true,
+      "detail": "NaN rolling speed refused; rolling-1:NOT_LEARNING_ELIGIBLE, rolling-2:NOT_LEARNING_ELIGIBLE, rolling-3:NOT_LEARNING_ELIGIBLE, rolling-4:NOT_LEARNING_ELIGIBLE, rolling-1:DUPLICATE_EPISODE"
+    },
+    {
+      "id": "determinism",
+      "pass": true,
+      "detail": "digest fnv1a32:cf5e99b7"
+    },
+    {
+      "id": "catalog-ranges",
+      "pass": true,
+      "detail": "rolling_stop_speed 1.2000 m/s, priority_assertiveness 0.3667 ratio, allway_stop_patience 4.0000 s, blocked_intersection_entry_probability 0.2804 probability"
+    },
+    {
+      "id": "policy-compatibility",
+      "pass": true,
+      "detail": "175 reads the estimate without a semantic change: crawl 1.2000 m/s, required gap 4.9000 s (4.9000 claimed / 4.8500 yielded), patience 4.0000 s held at 3.9000 s and turned at 4.1000 s, entry accepted at draw 0.1893 and waited at draw 0.3716"
+    }
+  ],
+  "summary": {
+    "checks": 25,
+    "passed": 25,
+    "pass": true,
+    "candidateKeys": 4,
+    "unobservedKeys": 25
+  }
+}

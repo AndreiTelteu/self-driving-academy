@@ -15,3 +15,4 @@ export * from './tempo-estimator';
 export * from './accel-estimator';
 export * from './follow-estimator';
 export * from './signal-v2-estimator';
+export * from './stop-priority-estimator';
