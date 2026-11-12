@@ -119,3 +119,37 @@ Testul 152 parcurge o singură sesiune cap-coadă, pe contractele livrate 057/05
 **Browser.** Transcriptul determinist nu pornește un browser și declară explicit partea aceasta. Proba `npm run e2e:session -- --browser` a rulat în Chromium 156 pe un context nou, cu stocare goală: a parcurs aceleași 104 verificări, a scris documentele în IndexedDB, a reîncărcat pagina și a re-citit documentele; toate cele opt comparații de restart au trecut, fără erori de pagină. Fără Playwright, comanda raportează `SKIP`, nu un succes.
 
 Dovezile, cu numerele reale, comenzile și limitările, sunt în [Evidence/152-e2e-session](Evidence/152-e2e-session/README.md).
+
+## QA vizual și accesibilitate (PBI 153)
+
+PBI 153 verifică HUD-ul, panourile, notificările și suprafețele camerei pe componentele reale din
+`src/ui`, cu CSS-ul real, într-un browser real. `npm run qa:ui` derivă un raport determinist din
+măsurătorile comise (`report.json`, `report.md`), `--check` compară fișierele, `--browser` reface
+capturile în Chromium, iar `--strict` transformă un finding CONTRACT în exit code 1.
+
+**Matricea.** Cinci viewport-uri: 1280×720 și 1920×1080 (țintele PC), 150% pe 1280×720 (853×480, cazul
+documentat de 084), 200% pe 1920×1080 (960×540) și 200% pe 1280×720 (640×360, marcat `STRESS` pentru că
+iese din banda declarată). Opt scenarii reale: HUD + minimapă + flotă cu 30 de taxiuri + trei notificări,
+lista flotei deschisă, notificările, profilul, tabloul orașului, setările (unități, cameră, confort),
+reglajele camerei (229) și pop-up-ul KPI (210). Fiecare captură are 14 verificări: maparea
+viewport/regiune, text de minimum 12 px cu line-height 1,4, text netăiat, text nesuprapus, contrast
+WCAG AA pe perechile compuse, controale cu dreptunghi și hit-test, controale esențiale, fără suprapunere
+critică, politica de scroll, suprafață în viewport, ordine de tab, focus vizibil de 3 px și Escape.
+
+**Rezultatul primei rulări.** 22 de capturi, 308 verificări, 300 trecute, 8 eșuate, 8 findings; 9 538 de
+noduri text măsurate pentru contrast, cu zero abateri de la AA, și 874 de controale măsurate. Tastatura
+trece în toate scenariile: Tab rămâne în dialog, Escape închide și readuce focusul. La 150% și la 200% pe
+ținta full-HD layoutul rămâne întreg.
+
+**Defecte raportate, nu reparate aici.** 153 nu are voie să modifice `src/`, deci abaterile reale sunt
+findings cu captură și pași de reproducere: la 640×360 (200% pe 720p) coloana flotei începe la y=380 și
+iese complet sub un viewport de 360 px, iar notificările depășesc cu 24 px; reglajele camerei (229) au
+text de 11,52 px, iar pop-up-ul KPI (210) are etichete de 11 px și valoarea „fără review-uri” (36 px de
+text într-o coloană de 14 px) care se suprapune peste grupurile vecine.
+
+**Limite.** Chromium headless fără GPU: capturile dovedesc layout, text, focus și scroll, nu FPS, senzația
+de condus sau camera 3D randată. Zoomul este reprodus prin viewport-ul CSS efectiv, iar `forced-colors`,
+cititoarele de ecran și inputul fizic uman rămân în afara scope-ului; gate-ul integrat rămâne 235.
+
+Dovezile, cu rezoluțiile, zoomurile, verdictul per componentă și cele 22 de capturi, sunt în
+[Evidence/153-ui-qa](Evidence/153-ui-qa/README.md).
