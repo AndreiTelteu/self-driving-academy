@@ -14,3 +14,4 @@ export * from './takeover-continuity';
 export * from './decision-explanation';
 export * from './speed-policy';
 export * from './accel-policy';
+export * from './follow-policy';
