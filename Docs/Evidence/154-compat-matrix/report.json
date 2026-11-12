@@ -1,0 +1,707 @@
+{
+  "version": "compat-matrix-v1",
+  "generatedBy": "scripts/run-compat-matrix-report.mjs",
+  "command": "npm run qa:compat",
+  "capturedAt": "2026-11-12T03:37:38.549Z",
+  "host": {
+    "os": "Windows 11 Home (10.0.26300)",
+    "cpu": "AMD Ryzen 7 7735U with Radeon Graphics",
+    "threads": 16,
+    "memoryGiB": 14,
+    "node": "24.19.0",
+    "chromium": "156.0.8078.4"
+  },
+  "method": [
+    "Backendul efectiv este raportat de contractele reale din `src/rendering` (`rendererKind`), nu dedus din user-agent.",
+    "Combinația browser/OS/GPU vine din `navigator.userAgent`, versiunea raportată de Chromium și driverul expus de `navigator.gpu` / `WEBGL_debug_renderer_info`; când driverul ascunde numele, valoarea este `unknown`.",
+    "`production` înseamnă intrarea reală `src/main.ts` (lifecycle 012 + recuperare 020 + view-ul real); `compat-harness` înseamnă aceleași contracte apelate direct, pentru probe de backend și pierdere de dispozitiv.",
+    "Fallback forțat: `navigator.gpu` este eliminat înainte de încărcarea modulelor, apoi `AUTO` trebuie să aleagă WebGL 2; cazul fără niciun backend cere un mesaj explicit și buton de reîncercare.",
+    "Recuperarea este declanșată nativ: `GPUDevice.destroy()` pe WebGPU și `WEBGL_lose_context.loseContext()` pe WebGL 2, apoi reconstrucția din același checkpoint RAM.",
+    "Verificările deterministe (fără GPU) rulează pe contractele pure de politică a backendului și de recuperare; `--check` compară raportul derivat cu fișierele comise."
+  ],
+  "matrix": [
+    {
+      "id": "production-headed-auto",
+      "title": "Bootstrap de producție — AUTO alege backendul disponibil",
+      "entry": "production",
+      "scenario": "AUTO",
+      "preference": "AUTO",
+      "browser": "Chromium 156.0.8078.4",
+      "channel": "headed",
+      "os": "Windows 11 Home (10.0.26300)",
+      "gpu": {
+        "source": "webgpu-adapter",
+        "label": "amd · rdna-2 · ANGLE (AMD, AMD Radeon(TM) Graphics (0x00001681) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "webgpu": {
+          "vendor": "amd",
+          "architecture": "rdna-2",
+          "device": null,
+          "description": null
+        },
+        "webglRenderer": "ANGLE (AMD, AMD Radeon(TM) Graphics (0x00001681) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+      },
+      "expectedBackend": "WEBGPU",
+      "backend": "WEBGPU",
+      "verdict": "PASS",
+      "checks": [
+        {
+          "name": "backend-efectiv",
+          "pass": true,
+          "detail": "așteptat WEBGPU, observat WEBGPU"
+        },
+        {
+          "name": "fara-ecran-gol",
+          "pass": true,
+          "detail": "conținut vizibil true, context activ true"
+        },
+        {
+          "name": "erori-de-pagina",
+          "pass": true,
+          "detail": "nicio eroare de pagină"
+        }
+      ],
+      "recovery": null,
+      "screenshots": [
+        "production-headed-auto.png"
+      ]
+    },
+    {
+      "id": "production-headed-webgpu-off",
+      "title": "Fallback forțat — navigator.gpu eliminat înainte de module",
+      "entry": "production",
+      "scenario": "WEBGPU_UNAVAILABLE",
+      "preference": "AUTO",
+      "browser": "Chromium 156.0.8078.4",
+      "channel": "headed",
+      "os": "Windows 11 Home (10.0.26300)",
+      "gpu": {
+        "source": "webgl-debug-renderer",
+        "label": "ANGLE (AMD, AMD Radeon(TM) Graphics (0x00001681) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "webgpu": null,
+        "webglRenderer": "ANGLE (AMD, AMD Radeon(TM) Graphics (0x00001681) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+      },
+      "expectedBackend": "WEBGL2",
+      "backend": "WEBGL2",
+      "verdict": "PASS",
+      "checks": [
+        {
+          "name": "backend-efectiv",
+          "pass": true,
+          "detail": "așteptat WEBGL2, observat WEBGL2"
+        },
+        {
+          "name": "fara-ecran-gol",
+          "pass": true,
+          "detail": "conținut vizibil true, context activ true"
+        },
+        {
+          "name": "erori-de-pagina",
+          "pass": true,
+          "detail": "nicio eroare de pagină"
+        }
+      ],
+      "recovery": null,
+      "screenshots": [
+        "production-headed-webgpu-off.png"
+      ]
+    },
+    {
+      "id": "production-headed-no-backend",
+      "title": "Fără WebGPU și fără WebGL 2 — mesaj explicit, fără ecran gol",
+      "entry": "production",
+      "scenario": "NO_BACKEND",
+      "preference": "AUTO",
+      "browser": "Chromium 156.0.8078.4",
+      "channel": "headed",
+      "os": "Windows 11 Home (10.0.26300)",
+      "gpu": {
+        "source": "unknown",
+        "label": "unknown",
+        "webgpu": null,
+        "webglRenderer": null
+      },
+      "expectedBackend": "NONE",
+      "backend": "NONE",
+      "verdict": "PASS",
+      "checks": [
+        {
+          "name": "backend-efectiv",
+          "pass": true,
+          "detail": "așteptat NONE, observat NONE"
+        },
+        {
+          "name": "fara-ecran-gol",
+          "pass": true,
+          "detail": "conținut vizibil true, mesaj explicit true, reîncercare vizibilă true"
+        },
+        {
+          "name": "erori-de-pagina",
+          "pass": true,
+          "detail": "nicio eroare de pagină"
+        }
+      ],
+      "recovery": null,
+      "screenshots": [
+        "production-headed-no-backend.png"
+      ]
+    },
+    {
+      "id": "production-headed-webgl1-only",
+      "title": "Doar WebGL 1 — refuz explicit, fără fallback ascuns",
+      "entry": "production",
+      "scenario": "WEBGL1_ONLY",
+      "preference": "AUTO",
+      "browser": "Chromium 156.0.8078.4",
+      "channel": "headed",
+      "os": "Windows 11 Home (10.0.26300)",
+      "gpu": {
+        "source": "unknown",
+        "label": "unknown",
+        "webgpu": null,
+        "webglRenderer": null
+      },
+      "expectedBackend": "NONE",
+      "backend": "NONE",
+      "verdict": "PASS",
+      "checks": [
+        {
+          "name": "backend-efectiv",
+          "pass": true,
+          "detail": "așteptat NONE, observat NONE"
+        },
+        {
+          "name": "fara-ecran-gol",
+          "pass": true,
+          "detail": "conținut vizibil true, mesaj explicit true, reîncercare vizibilă true"
+        },
+        {
+          "name": "erori-de-pagina",
+          "pass": true,
+          "detail": "nicio eroare de pagină"
+        }
+      ],
+      "recovery": null,
+      "screenshots": [
+        "production-headed-webgl1-only.png"
+      ]
+    },
+    {
+      "id": "production-headless-auto",
+      "title": "Bootstrap de producție headless — WebGL 2 pe SwiftShader",
+      "entry": "production",
+      "scenario": "AUTO",
+      "preference": "AUTO",
+      "browser": "Chromium 156.0.8078.4",
+      "channel": "headless",
+      "os": "Windows 11 Home (10.0.26300)",
+      "gpu": {
+        "source": "webgl-debug-renderer",
+        "label": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "webgpu": null,
+        "webglRenderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+      },
+      "expectedBackend": "WEBGL2",
+      "backend": "WEBGL2",
+      "verdict": "PASS",
+      "checks": [
+        {
+          "name": "backend-efectiv",
+          "pass": true,
+          "detail": "așteptat WEBGL2, observat WEBGL2"
+        },
+        {
+          "name": "fara-ecran-gol",
+          "pass": true,
+          "detail": "conținut vizibil true, context activ true"
+        },
+        {
+          "name": "erori-de-pagina",
+          "pass": true,
+          "detail": "nicio eroare de pagină"
+        }
+      ],
+      "recovery": null,
+      "screenshots": [
+        "production-headless-auto.png"
+      ]
+    },
+    {
+      "id": "harness-headed-auto",
+      "title": "Contractele reale apelate direct — backend AUTO pe GPU real",
+      "entry": "compat-harness",
+      "scenario": "AUTO",
+      "preference": "AUTO",
+      "browser": "Chromium 156.0.8078.4",
+      "channel": "headed",
+      "os": "Windows 11 Home (10.0.26300)",
+      "gpu": {
+        "source": "webgpu-adapter",
+        "label": "amd · rdna-2 · ANGLE (AMD, AMD Radeon(TM) Graphics (0x00001681) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "webgpu": {
+          "vendor": "amd",
+          "architecture": "rdna-2",
+          "device": null,
+          "description": null
+        },
+        "webglRenderer": "ANGLE (AMD, AMD Radeon(TM) Graphics (0x00001681) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+      },
+      "expectedBackend": "WEBGPU",
+      "backend": "WEBGPU",
+      "verdict": "PASS",
+      "checks": [
+        {
+          "name": "backend-efectiv",
+          "pass": true,
+          "detail": "așteptat WEBGPU, observat WEBGPU"
+        },
+        {
+          "name": "fara-ecran-gol",
+          "pass": true,
+          "detail": "conținut vizibil true, context activ true"
+        },
+        {
+          "name": "randare-activa",
+          "pass": true,
+          "detail": "mesh-uri active 1, cadre avansate true"
+        },
+        {
+          "name": "erori-de-pagina",
+          "pass": true,
+          "detail": "nicio eroare de pagină"
+        }
+      ],
+      "recovery": null,
+      "screenshots": [
+        "harness-headed-auto.png"
+      ]
+    },
+    {
+      "id": "harness-headless-auto",
+      "title": "Contractele reale apelate direct — backend AUTO pe WebGL 2 software",
+      "entry": "compat-harness",
+      "scenario": "AUTO",
+      "preference": "AUTO",
+      "browser": "Chromium 156.0.8078.4",
+      "channel": "headless",
+      "os": "Windows 11 Home (10.0.26300)",
+      "gpu": {
+        "source": "webgl-debug-renderer",
+        "label": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "webgpu": null,
+        "webglRenderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+      },
+      "expectedBackend": "WEBGL2",
+      "backend": "WEBGL2",
+      "verdict": "PASS",
+      "checks": [
+        {
+          "name": "backend-efectiv",
+          "pass": true,
+          "detail": "așteptat WEBGL2, observat WEBGL2"
+        },
+        {
+          "name": "fara-ecran-gol",
+          "pass": true,
+          "detail": "conținut vizibil true, context activ true"
+        },
+        {
+          "name": "randare-activa",
+          "pass": true,
+          "detail": "mesh-uri active 1, cadre avansate true"
+        },
+        {
+          "name": "erori-de-pagina",
+          "pass": true,
+          "detail": "nicio eroare de pagină"
+        }
+      ],
+      "recovery": null,
+      "screenshots": [
+        "harness-headless-auto.png"
+      ]
+    },
+    {
+      "id": "harness-headed-recovery-webgpu",
+      "title": "Pierdere reală de dispozitiv WebGPU, eșec repetat și reluare",
+      "entry": "compat-harness",
+      "scenario": "RECOVERY_LOSS",
+      "preference": "WEBGPU",
+      "browser": "Chromium 156.0.8078.4",
+      "channel": "headed",
+      "os": "Windows 11 Home (10.0.26300)",
+      "gpu": {
+        "source": "webgpu-adapter",
+        "label": "amd · rdna-2 · ANGLE (AMD, AMD Radeon(TM) Graphics (0x00001681) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "webgpu": {
+          "vendor": "amd",
+          "architecture": "rdna-2",
+          "device": null,
+          "description": null
+        },
+        "webglRenderer": "ANGLE (AMD, AMD Radeon(TM) Graphics (0x00001681) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+      },
+      "expectedBackend": "WEBGPU",
+      "backend": "WEBGPU",
+      "verdict": "PASS",
+      "checks": [
+        {
+          "name": "backend-efectiv",
+          "pass": true,
+          "detail": "așteptat WEBGPU, observat WEBGPU"
+        },
+        {
+          "name": "fara-ecran-gol",
+          "pass": true,
+          "detail": "conținut vizibil true, context activ true"
+        },
+        {
+          "name": "randare-activa",
+          "pass": true,
+          "detail": "mesh-uri active 1, cadre avansate true"
+        },
+        {
+          "name": "erori-de-pagina",
+          "pass": true,
+          "detail": "nicio eroare de pagină"
+        },
+        {
+          "name": "recuperare",
+          "pass": true,
+          "detail": "semnal GPUDevice.destroy, generații 1→2→5, tick 417/417/417"
+        }
+      ],
+      "recovery": {
+        "preference": "WEBGPU",
+        "backend": "WEBGPU",
+        "lossSignal": "GPUDevice.destroy",
+        "stateSequence": [
+          "RECOVERING",
+          "READY",
+          "RECOVERING",
+          "READY",
+          "RECOVERING",
+          "ERROR",
+          "RECOVERING",
+          "ERROR",
+          "RECOVERING",
+          "READY",
+          "DISPOSED"
+        ],
+        "generationBefore": 1,
+        "generationAfterLoss": 2,
+        "generationAfterRetry": 5,
+        "tickBefore": 417,
+        "tickAfterLoss": 417,
+        "tickAfterRetry": 417,
+        "framesWhileReady": 9,
+        "framesWhileError": 6,
+        "activeMeshes": 1,
+        "framesAdvanced": true,
+        "errorMessage": "Injected compat reconstruction failure",
+        "retryAvailable": true,
+        "rendererReleasedOnError": true,
+        "retryRestored": true,
+        "diagnostics": {
+          "meshes": 1,
+          "camera": true,
+          "canvasConnected": true
+        },
+        "pass": true
+      },
+      "screenshots": [
+        "harness-headed-recovery-webgpu-ready.png",
+        "harness-headed-recovery-webgpu-error.png",
+        "harness-headed-recovery-webgpu-retry.png"
+      ]
+    },
+    {
+      "id": "harness-headless-recovery-webgl2",
+      "title": "Pierdere reală de context WebGL 2 (SwiftShader), eșec repetat și reluare",
+      "entry": "compat-harness",
+      "scenario": "RECOVERY_LOSS",
+      "preference": "WEBGL2",
+      "browser": "Chromium 156.0.8078.4",
+      "channel": "headless",
+      "os": "Windows 11 Home (10.0.26300)",
+      "gpu": {
+        "source": "webgl-debug-renderer",
+        "label": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "webgpu": null,
+        "webglRenderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+      },
+      "expectedBackend": "WEBGL2",
+      "backend": "WEBGL2",
+      "verdict": "PASS",
+      "checks": [
+        {
+          "name": "backend-efectiv",
+          "pass": true,
+          "detail": "așteptat WEBGL2, observat WEBGL2"
+        },
+        {
+          "name": "fara-ecran-gol",
+          "pass": true,
+          "detail": "conținut vizibil true, context activ true"
+        },
+        {
+          "name": "randare-activa",
+          "pass": true,
+          "detail": "mesh-uri active 1, cadre avansate true"
+        },
+        {
+          "name": "erori-de-pagina",
+          "pass": true,
+          "detail": "nicio eroare de pagină"
+        },
+        {
+          "name": "recuperare",
+          "pass": true,
+          "detail": "semnal WEBGL_lose_context.loseContext, generații 1→2→5, tick 417/417/417"
+        }
+      ],
+      "recovery": {
+        "preference": "WEBGL2",
+        "backend": "WEBGL2",
+        "lossSignal": "WEBGL_lose_context.loseContext",
+        "stateSequence": [
+          "RECOVERING",
+          "READY",
+          "RECOVERING",
+          "READY",
+          "RECOVERING",
+          "ERROR",
+          "RECOVERING",
+          "ERROR",
+          "RECOVERING",
+          "READY",
+          "DISPOSED"
+        ],
+        "generationBefore": 1,
+        "generationAfterLoss": 2,
+        "generationAfterRetry": 5,
+        "tickBefore": 417,
+        "tickAfterLoss": 417,
+        "tickAfterRetry": 417,
+        "framesWhileReady": 5,
+        "framesWhileError": 6,
+        "activeMeshes": 1,
+        "framesAdvanced": true,
+        "errorMessage": "Injected compat reconstruction failure",
+        "retryAvailable": true,
+        "rendererReleasedOnError": true,
+        "retryRestored": true,
+        "diagnostics": {
+          "meshes": 1,
+          "camera": true,
+          "canvasConnected": true
+        },
+        "pass": true
+      },
+      "screenshots": [
+        "harness-headless-recovery-webgl2-ready.png",
+        "harness-headless-recovery-webgl2-error.png",
+        "harness-headless-recovery-webgl2-retry.png"
+      ]
+    }
+  ],
+  "declared": [
+    {
+      "id": "firefox-stable",
+      "browser": "Firefox stable",
+      "os": "oricare",
+      "gpu": "oricare",
+      "status": "NOT_RUN",
+      "reason": "Runtime Firefox nu este instalat în ms-playwright (există doar chromium-1248); nu a fost rulat.",
+      "owner": "154 (mașină separată sau instalare Playwright Firefox)"
+    },
+    {
+      "id": "webkit-safari",
+      "browser": "WebKit / Safari",
+      "os": "oricare",
+      "gpu": "oricare",
+      "status": "NOT_RUN",
+      "reason": "Runtime WebKit nu este instalat, iar Safari nu există pe Windows.",
+      "owner": "154 (hardware macOS)"
+    },
+    {
+      "id": "edge-stable",
+      "browser": "Microsoft Edge stable",
+      "os": "Windows 11",
+      "gpu": "oricare",
+      "status": "NOT_RUN",
+      "reason": "Canalul Edge stable nu este instalat; Chromium de test acoperă motorul, nu integrarea Edge.",
+      "owner": "154 (instalare Edge)"
+    },
+    {
+      "id": "chrome-stable",
+      "browser": "Google Chrome stable",
+      "os": "Windows 11",
+      "gpu": "oricare",
+      "status": "NOT_RUN",
+      "reason": "Nu există o instalare Chrome stable separată; Chromium 156 din Playwright este singurul runtime.",
+      "owner": "154 (instalare Chrome)"
+    },
+    {
+      "id": "windows-nvidia",
+      "browser": "Chromium 156",
+      "os": "Windows 11",
+      "gpu": "NVIDIA (GeForce)",
+      "status": "NOT_RUN",
+      "reason": "Mașina are un iGPU AMD; nu există GPU NVIDIA pentru proba driverului proprietar.",
+      "owner": "220 / 224"
+    },
+    {
+      "id": "windows-intel",
+      "browser": "Chromium 156",
+      "os": "Windows 11",
+      "gpu": "Intel (Arc / Iris Xe)",
+      "status": "NOT_RUN",
+      "reason": "Nu există GPU Intel pe mașină.",
+      "owner": "220 / 224"
+    },
+    {
+      "id": "macos-metal",
+      "browser": "Safari / Chromium",
+      "os": "macOS",
+      "gpu": "Apple Metal",
+      "status": "NOT_RUN",
+      "reason": "Nu există hardware macOS; WebGPU pe Metal și fallback-ul WebGL 2 nu pot fi rulate aici.",
+      "owner": "224 / 235"
+    },
+    {
+      "id": "linux-vulkan",
+      "browser": "Chromium / Firefox",
+      "os": "Linux",
+      "gpu": "AMD / Intel Vulkan",
+      "status": "NOT_RUN",
+      "reason": "Nu există hardware Linux; driverul Vulkan și compozitorul nu pot fi verificate aici.",
+      "owner": "224 / 235"
+    },
+    {
+      "id": "android-chrome",
+      "browser": "Chrome Android",
+      "os": "Android",
+      "gpu": "SoC mobil",
+      "status": "NOT_RUN",
+      "reason": "Nu există dispozitiv Android; suportul WebGPU mobil rămâne nevalidat.",
+      "owner": "224 / 235"
+    },
+    {
+      "id": "ios-safari",
+      "browser": "Safari iOS",
+      "os": "iOS / iPadOS",
+      "gpu": "Apple Metal",
+      "status": "NOT_RUN",
+      "reason": "Nu există dispozitiv iOS; WebGPU și fallback-ul pe WebKit mobil rămân nevalidate.",
+      "owner": "224 / 235"
+    },
+    {
+      "id": "chromium-headless-webgpu",
+      "browser": "Chromium 156 headless",
+      "os": "Windows 11",
+      "gpu": "SwiftShader",
+      "status": "NOT_RUN",
+      "reason": "Chromium headless nu expune un adapter WebGPU utilizabil; pe această configurație se verifică doar fallback-ul WebGL 2 software.",
+      "owner": "154 (flag-uri headless sau GPU real)"
+    }
+  ],
+  "deterministic": {
+    "fallback": [
+      {
+        "id": "fallback-webgpu-disponibil",
+        "title": "WebGPU disponibil → backend efectiv WebGPU",
+        "pass": true,
+        "detail": "backend efectiv WEBGPU"
+      },
+      {
+        "id": "fallback-webgpu-lipsa",
+        "title": "WebGPU absent → fallback automat pe WebGL 2",
+        "pass": true,
+        "detail": "backend efectiv WEBGL2"
+      },
+      {
+        "id": "fallback-webgl2-fortat",
+        "title": "Preferința WebGL 2 nu consultă WebGPU",
+        "pass": true,
+        "detail": "backend efectiv WEBGL2"
+      },
+      {
+        "id": "fallback-preferinta-webgpu",
+        "title": "Preferința WebGPU fără suport → WebGL 2",
+        "pass": true,
+        "detail": "backend efectiv WEBGL2"
+      },
+      {
+        "id": "fallback-fara-backend",
+        "title": "Niciun backend → eroare explicită, nu ecran gol",
+        "pass": true,
+        "detail": "backend NONE; RenderingInitializationError: Randarea nu a pornit. WebGPU și WebGL 2 nu sunt disponibile. Poți reîncerca. (cauze: WebGPU unavailable | WebGL 2 context unavailable)"
+      },
+      {
+        "id": "fallback-doar-webgl1",
+        "title": "Doar WebGL 1 → refuz explicit, fără fallback ascuns",
+        "pass": true,
+        "detail": "backend NONE; RenderingInitializationError: Randarea nu a pornit. WebGPU și WebGL 2 nu sunt disponibile. Poți reîncerca. (cauze: WebGPU unavailable | WebGL 1 is unsupported)"
+      }
+    ],
+    "recovery": [
+      {
+        "id": "recuperare-pornire",
+        "title": "Pornirea ajunge în READY pe primul renderer",
+        "pass": true,
+        "detail": "stări: RECOVERING → READY"
+      },
+      {
+        "id": "recuperare-pierdere",
+        "title": "Pierderea de dispozitiv reconstruiește din același tick",
+        "pass": true,
+        "detail": "stări: RECOVERING → READY → RECOVERING → READY"
+      },
+      {
+        "id": "recuperare-esec-mesaj",
+        "title": "Eșecul repetat afișează mesaj și reîncercare",
+        "pass": true,
+        "detail": "stări: RECOVERING → READY → RECOVERING → READY → RECOVERING → ERROR"
+      },
+      {
+        "id": "recuperare-checkpoint-stabil",
+        "title": "Reîncercarea păstrează același checkpoint RAM",
+        "pass": true,
+        "detail": "stări: RECOVERING → READY → RECOVERING → READY → RECOVERING → ERROR → RECOVERING → ERROR"
+      },
+      {
+        "id": "recuperare-reluare",
+        "title": "Reîncercarea explicită restaurează READY fără reset",
+        "pass": true,
+        "detail": "stări: RECOVERING → READY → RECOVERING → READY → RECOVERING → ERROR → RECOVERING → ERROR → RECOVERING → READY"
+      }
+    ]
+  },
+  "summary": {
+    "rows": 9,
+    "pass": 9,
+    "fail": 0,
+    "declaredNotRun": 11,
+    "deterministicChecks": 11,
+    "deterministicPass": 11,
+    "covered": [
+      "Chromium 156.0.8078.4 · headed · Windows 11 Home (10.0.26300) · amd · rdna-2 · ANGLE (AMD, AMD Radeon(TM) Graphics (0x00001681) Direct3D11 vs_5_0 ps_5_0, D3D11) · WEBGPU",
+      "Chromium 156.0.8078.4 · headed · Windows 11 Home (10.0.26300) · ANGLE (AMD, AMD Radeon(TM) Graphics (0x00001681) Direct3D11 vs_5_0 ps_5_0, D3D11) · WEBGL2",
+      "Chromium 156.0.8078.4 · headed · Windows 11 Home (10.0.26300) · unknown · NONE",
+      "Chromium 156.0.8078.4 · headless · Windows 11 Home (10.0.26300) · ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver) · WEBGL2"
+    ],
+    "pendingGates": [
+      "220",
+      "224",
+      "235"
+    ]
+  },
+  "gateStatement": "Acoperit acum: 9 combinații reale (9 PASS, 0 FAIL), 4 medii distincte, pe Windows 11 Home (10.0.26300). Verificări deterministe fără GPU: 11/11 trecute. Rămâne pentru gate-urile 220/224/235: hardware de referință NVIDIA/Intel și macOS/Linux, Firefox/WebKit/Safari/Edge, FPS și senzația de condus, soak-ul de 60 de minute și paritatea vizuală completă.",
+  "limitations": [
+    "Un singur GPU real (AMD Radeon Graphics / RDNA-2, iGPU-ul Ryzen 7 7735U) și un singur OS (Windows 11). NVIDIA, Intel, macOS/Metal și Linux/Vulkan rămân NOT_RUN.",
+    "Chromium 156 este singurul runtime Playwright instalat; Firefox, WebKit/Safari și Edge stable nu au fost rulate.",
+    "Chromium headless rulează WebGL 2 pe SwiftShader (software); rezultatul dovedește fallback-ul și mesajele, nu FPS sau senzația de condus pe GPU.",
+    "Pierderea de dispozitiv este injectată deliberat (destroy / lose-context), nu o defectare hardware observată; recuperarea nu măsoară timpul de recompilare a shader-elor.",
+    "Scena de probă este un cub iluminat, nu gameplay-ul complet; paritatea vizuală și costul de cadru rămân ale gate-urilor 220, 224 și 235."
+  ]
+}
