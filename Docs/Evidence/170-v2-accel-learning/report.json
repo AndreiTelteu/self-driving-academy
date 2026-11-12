@@ -1,0 +1,414 @@
+{
+  "version": "170-accel-estimator-v1",
+  "parameters": [
+    {
+      "key": "braking_jerk",
+      "unit": "m/s³",
+      "minimum": 0.2,
+      "maximum": 20,
+      "defaultValue": 3
+    },
+    {
+      "key": "throttle_release_delay",
+      "unit": "s",
+      "minimum": 0,
+      "maximum": 3,
+      "defaultValue": 0.2
+    },
+    {
+      "key": "launch_intensity",
+      "unit": "ratio",
+      "minimum": 0,
+      "maximum": 1,
+      "defaultValue": 0.6
+    },
+    {
+      "key": "coasting_bias",
+      "unit": "ratio",
+      "minimum": 0,
+      "maximum": 1,
+      "defaultValue": 0.4
+    }
+  ],
+  "rows": [
+    {
+      "key": "braking_jerk",
+      "unit": "m/s³",
+      "context": "frânări reale cerute de 047, măsurate ca panta decelerației commitate după onset, cu cererea de decelerație constantă și rampa complet observată sub ea",
+      "status": "CANDIDATE",
+      "value": 3.0000000000000027,
+      "uncertainty": 0.05,
+      "uncertaintyThreshold": 1.5,
+      "estimateEpisodes": 2,
+      "validationEpisodes": 2,
+      "validationStatus": "VALIDATED",
+      "validationValue": 3,
+      "validationError": 2.6645352591003757e-15,
+      "validationTolerance": 1.5,
+      "reason": null
+    },
+    {
+      "key": "throttle_release_delay",
+      "unit": "s",
+      "context": "ridicări reale de throttle (cerere 047 căzută la zero, fără cerere de frânare), măsurate ca numărul de tick-uri în care accelerația și throttle-ul anterior sunt menținute",
+      "status": "CANDIDATE",
+      "value": 0.2,
+      "uncertainty": 0.002,
+      "uncertaintyThreshold": 0.25,
+      "estimateEpisodes": 2,
+      "validationEpisodes": 2,
+      "validationStatus": "VALIDATED",
+      "validationValue": 0.2,
+      "validationError": 0,
+      "validationTolerance": 0.1,
+      "reason": null
+    },
+    {
+      "key": "launch_intensity",
+      "unit": "ratio",
+      "context": "plecări reale sub 2 m/s, măsurate ca raportul dintre accelerația aplicată și cererea 047, între fracțiunea minimă a politicii 169 și cererea integrală",
+      "status": "CANDIDATE",
+      "value": 0.6,
+      "uncertainty": 0.06570436210785391,
+      "uncertaintyThreshold": 0.1,
+      "estimateEpisodes": 2,
+      "validationEpisodes": 2,
+      "validationStatus": "VALIDATED",
+      "validationValue": 0.5999999999999999,
+      "validationError": 1.1102230246251565e-16,
+      "validationTolerance": 0.06,
+      "reason": null
+    },
+    {
+      "key": "coasting_bias",
+      "unit": "ratio",
+      "context": "coasting real peste 2 m/s, măsurat ca eliberarea unei cereri pozitive mici (≤ 0,6 m/s²) între cererea integrală și rularea liberă",
+      "status": "CANDIDATE",
+      "value": 0.39999999999999997,
+      "uncertainty": 0.06570436210785398,
+      "uncertaintyThreshold": 0.1,
+      "estimateEpisodes": 2,
+      "validationEpisodes": 2,
+      "validationStatus": "VALIDATED",
+      "validationValue": 0.4,
+      "validationError": 5.551115123125783e-17,
+      "validationTolerance": 0.06,
+      "reason": null
+    }
+  ],
+  "unobserved": [
+    {
+      "key": "braking_jerk",
+      "scenario": "rampa de frÃ¢nare este tÄƒiatÄƒ Ã®nainte de cererea 047",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "BRAKING_RAMP_CENSORED",
+      "excluded": {
+        "BRAKING_RAMP_CENSORED": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "braking_jerk",
+      "scenario": "cererea 047 este atinsÄƒ Ã®n primul tick de frÃ¢nare",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "BRAKING_RAMP_NOT_OBSERVED",
+      "excluded": {
+        "BRAKING_RAMP_NOT_OBSERVED": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "braking_jerk",
+      "scenario": "cererea 047 se schimbÄƒ Ã®n timpul rampei",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "BRAKING_DEMAND_CHANGED",
+      "excluded": {
+        "BRAKING_DEMAND_CHANGED": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "braking_jerk",
+      "scenario": "patru rampe reale, dar Ã®mprÄƒÈ™tiate (2, 8, 14, 20 m/sÂ³)",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "UNCERTAINTY_ABOVE_THRESHOLD",
+      "excluded": {},
+      "validationStatus": "OUTSIDE_TOLERANCE"
+    },
+    {
+      "key": "throttle_release_delay",
+      "scenario": "fereastra de dovezi taie È›inerea",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "RELEASE_HOLD_CENSORED",
+      "excluded": {
+        "RELEASE_HOLD_CENSORED": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "throttle_release_delay",
+      "scenario": "frÃ¢narea anuleazÄƒ ridicarea",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "RELEASE_CANCELLED_BY_BRAKING",
+      "excluded": {
+        "RELEASE_CANCELLED_BY_BRAKING": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "throttle_release_delay",
+      "scenario": "oprire cerutÄƒ pe toatÄƒ ridicarea",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "SAFETY_CONSTRAINED",
+      "excluded": {
+        "SAFETY_CONSTRAINED": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "launch_intensity",
+      "scenario": "cerere puternicÄƒ constantÄƒ, fÄƒrÄƒ plecare",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "NO_LAUNCH_EVENT",
+      "excluded": {
+        "NO_LAUNCH_EVENT": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "launch_intensity",
+      "scenario": "raport aplicat/cerut peste anvelopa 169",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "LAUNCH_FACTOR_OUT_OF_ENVELOPE",
+      "excluded": {
+        "LAUNCH_FACTOR_OUT_OF_ENVELOPE": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "coasting_bias",
+      "scenario": "doar cereri puternice (1,2 m/sÂ²)",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "STRONG_REQUEST",
+      "excluded": {
+        "STRONG_REQUEST": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "coasting_bias",
+      "scenario": "raport aplicat/cerut peste anvelopa 169",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "COASTING_FACTOR_OUT_OF_ENVELOPE",
+      "excluded": {
+        "COASTING_FACTOR_OUT_OF_ENVELOPE": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "coasting_bias",
+      "scenario": "oprire cerutÄƒ pe toatÄƒ rularea",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "SAFETY_CONSTRAINED",
+      "excluded": {
+        "SAFETY_CONSTRAINED": 4
+      },
+      "validationStatus": "NO_DATA"
+    }
+  ],
+  "groupConstraints": [
+    {
+      "id": "BRAKING_AND_RELEASE_SHARED_TRANSITION",
+      "keys": [
+        "braking_jerk",
+        "throttle_release_delay"
+      ],
+      "explanation": "Jerk-ul de frânare și întârzierea de ridicare împart aceeași tranziție de pedală: o cerere de frânare anulează imediat ținerea de throttle, deci aceleași tick-uri nu pot dovedi ambele chei. O ridicare urmată de frânare dă cel mult una dintre valori, iar un episod care conține ambele fapte separat le estimează pe rând, din intervale disjuncte."
+    },
+    {
+      "id": "LAUNCH_AND_COAST_SHARED_REQUEST",
+      "keys": [
+        "launch_intensity",
+        "coasting_bias"
+      ],
+      "explanation": "Plecarea și coasting-ul citesc același raport dintre accelerația aplicată și cererea 047; numai pragul de 2 m/s al politicii 169 le separă. Un segment care rămâne sub 2 m/s nu poate dovedi coasting-ul, iar unul care rulează doar peste 2 m/s nu poate dovedi plecarea, deci niciuna dintre chei nu se deduce din cealaltă."
+    },
+    {
+      "id": "JERK_ABOVE_DEMAND_RAMP",
+      "keys": [
+        "braking_jerk"
+      ],
+      "explanation": "Rampa de frânare este plafonată de cererea 047: dacă decelerația atinge cererea în primul tick observat, jerk-ul rămâne doar o limită inferioară, nu o valoare. Rampa trunchiată sau cu cerere schimbată la mijloc lasă cheia neobservată în loc să producă o pantă inventată."
+    },
+    {
+      "id": "VETO_SPLITS_BRAKING_FROM_THROTTLE",
+      "keys": [
+        "braking_jerk",
+        "throttle_release_delay",
+        "launch_intensity",
+        "coasting_bias"
+      ],
+      "explanation": "Veto-ul dur al politicii 169 (oprire cerută sau lider în interiorul a 5 m) anulează throttle-ul, ținerea, plecarea și coasting-ul, dar nu frânarea: o cerere de frânare este aplicată de la primul tick. Același segment constrâns poate deci dovedi `braking_jerk` și nu poate dovedi niciodată celelalte trei chei."
+    }
+  ],
+  "refusals": [
+    {
+      "episodeId": "manual-demo",
+      "reason": "NOT_LEARNING_ELIGIBLE"
+    },
+    {
+      "episodeId": "duplicate-demo",
+      "reason": "DUPLICATE_EPISODE"
+    }
+  ],
+  "split": {
+    "seed": 170,
+    "admitted": 16,
+    "disjoint": true
+  },
+  "compatibility": {
+    "policyVersion": "169-accel-policy-v1",
+    "candidateOnly": true,
+    "changesPolicySemantics": false,
+    "launchFactor": 0.74,
+    "expectedLaunchFactor": 0.74,
+    "coastingFactor": 0.6000000000000001,
+    "expectedCoastingFactor": 0.6000000000000001,
+    "heldThrottleTicks": 12,
+    "expectedHeldThrottleTicks": 12,
+    "brakingTicksToDemand": 40,
+    "expectedBrakingTicksToDemand": 40,
+    "brakingCommitTick5Mps2": -0.2500000000000002
+  },
+  "determinism": {
+    "seed": 170,
+    "digest": "fnv1a32:eaa7cad7",
+    "repeatedDigest": "fnv1a32:eaa7cad7"
+  },
+  "checks": [
+    {
+      "id": "context-braking",
+      "pass": true,
+      "detail": "braking-only jerk 3.0000 m/sÂ³; release, launch and coasting stay unobserved"
+    },
+    {
+      "id": "context-release",
+      "pass": true,
+      "detail": "release-only delay 0.2000 s; braking, launch and coasting stay unobserved"
+    },
+    {
+      "id": "context-launch",
+      "pass": true,
+      "detail": "launch-only intensity 0.6000; coasting is not read from the launch ratio"
+    },
+    {
+      "id": "context-coasting",
+      "pass": true,
+      "detail": "coasting-only bias 0.4000; launch is not read from the coasting ratio"
+    },
+    {
+      "id": "uncertainty-reported",
+      "pass": true,
+      "detail": "braking_jerk 0.0500 <= 1.5 m/s³, throttle_release_delay 0.0020 <= 0.25 s, launch_intensity 0.0657 <= 0.1 ratio, coasting_bias 0.0657 <= 0.1 ratio"
+    },
+    {
+      "id": "uncertainty-threshold",
+      "pass": true,
+      "detail": "noisy braking uncertainty 3.9423 > 1.5 m/sÂ³ keeps the key unobserved"
+    },
+    {
+      "id": "validation-split",
+      "pass": true,
+      "detail": "seed 170: every key validates on held-out episodes (braking_jerk 2+2, throttle_release_delay 2+2, launch_intensity 2+2, coasting_bias 2+2)"
+    },
+    {
+      "id": "validation-too-small",
+      "pass": true,
+      "detail": "three braking episodes leave 1 held-out episode(s), reported as TOO_SMALL"
+    },
+    {
+      "id": "unobserved-steady-request",
+      "pass": true,
+      "detail": "a steady 1,5 m/sÂ² request proves none of the four facts"
+    },
+    {
+      "id": "unobserved-braking-ramp",
+      "pass": true,
+      "detail": "a cut ramp, a ramp hidden by its own demand and a moving demand all stay unobserved"
+    },
+    {
+      "id": "unobserved-release",
+      "pass": true,
+      "detail": "a cut hold, a hold cancelled by braking and a vetoed hold are excluded, not measured"
+    },
+    {
+      "id": "unobserved-coasting",
+      "pass": true,
+      "detail": "strong requests are not coasting and a ratio above one is outside the 169 envelope"
+    },
+    {
+      "id": "unobserved-launch-envelope",
+      "pass": true,
+      "detail": "a launch ratio above the 047 request is outside the 169 envelope"
+    },
+    {
+      "id": "shared-transition-separation",
+      "pass": true,
+      "detail": "the same lift-then-brake transition proves jerk and cannot prove the hold"
+    },
+    {
+      "id": "veto-separation",
+      "pass": true,
+      "detail": "the 5 m floor zeroes throttle, hold, launch and coasting, never the braking ramp"
+    },
+    {
+      "id": "no-fabricated-values",
+      "pass": true,
+      "detail": "12 unobserved demonstrations carry value null and an explicit reason"
+    },
+    {
+      "id": "group-constraints",
+      "pass": true,
+      "detail": "BRAKING_AND_RELEASE_SHARED_TRANSITION, LAUNCH_AND_COAST_SHARED_REQUEST, JERK_ABOVE_DEMAND_RAMP, VETO_SPLITS_BRAKING_FROM_THROTTLE"
+    },
+    {
+      "id": "invalid-input-refused",
+      "pass": true,
+      "detail": "NaN speed refused; manual-demo:NOT_LEARNING_ELIGIBLE, duplicate-demo:DUPLICATE_EPISODE"
+    },
+    {
+      "id": "determinism",
+      "pass": true,
+      "detail": "digest fnv1a32:eaa7cad7"
+    },
+    {
+      "id": "catalog-ranges",
+      "pass": true,
+      "detail": "braking_jerk 3.0000 m/s³, throttle_release_delay 0.2000 s, launch_intensity 0.6000 ratio, coasting_bias 0.4000 ratio"
+    },
+    {
+      "id": "policy-compatibility",
+      "pass": true,
+      "detail": "169 reads launch factor 0.7400, coasting factor 0.6000, 12 held throttle ticks, braking demand reached after 40 ticks (expected 40)"
+    }
+  ],
+  "summary": {
+    "checks": 21,
+    "passed": 21,
+    "pass": true,
+    "candidateKeys": 4,
+    "unobservedKeys": 12
+  }
+}

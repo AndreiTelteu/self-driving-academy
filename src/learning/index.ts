@@ -12,3 +12,4 @@ export * from './profile-store';
 export * from './estimator-task';
 export * from './estimator-worker';
 export * from './tempo-estimator';
+export * from './accel-estimator';
