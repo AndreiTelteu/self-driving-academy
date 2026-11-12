@@ -3,6 +3,8 @@ import { StandardMaterial } from '@babylonjs/core/Materials/standardMaterial.js'
 import { Mesh } from '@babylonjs/core/Meshes/mesh.js';
 import { VertexData } from '@babylonjs/core/Meshes/mesh.vertexData.js';
 import { TransformNode } from '@babylonjs/core/Meshes/transformNode.js';
+import { Matrix, Quaternion, Vector3 } from '@babylonjs/core/Maths/math.vector.js';
+import '@babylonjs/core/Meshes/thinInstanceMesh.js';
 import type { Scene } from '@babylonjs/core/scene.js';
 import type {
   CityElementKind,
@@ -18,8 +20,15 @@ import type {
  * released by `dispose()`, and no simulation service or map authoring happens in this module.
  * Element geometry is written in absolute map coordinates, so the rendered transform of an element
  * is exactly the layout footprint and can be compared with the map by tests without guessing a
- * pivot. Repeated paint and architecture are merged into one mesh per material; lane surfaces and
- * signal heads stay individual because their identity carries traffic meaning.
+ * pivot.
+ *
+ * Presentation, not identity: repeated paint and architecture are merged into one mesh per
+ * material, lane surfaces are merged into a single surface mesh, and the 26 signal heads are thin
+ * instances of one unit box per part (post, housing, lamp). The layout keeps every element ID:
+ * `elementGeometry` returns the vertex slice of a merged element, `instanceIndexFor` returns the
+ * index inside a thin batch, and `elementBounds` returns the same world bounds the per-element
+ * meshes used to expose. Instance matrices are authored with the exact position/rotation/scale of
+ * the previous baked boxes, so instancing changes the draw calls, not the geometry on screen.
  */
 export type CityMaterialKey =
   | 'asphalt'
@@ -42,10 +51,18 @@ export interface CitySceneOptions {
 
 export interface CitySceneStats {
   readonly elements: number;
+  /** Enabled meshes the renderer would submit, i.e. draw calls, not instances. */
   readonly meshes: number;
+  readonly drawCalls: number;
+  /** Static meshes carrying merged geometry (one per material). */
   readonly batches: number;
-  readonly individualElements: number;
+  /** Elements merged into a shared mesh. */
   readonly mergedElements: number;
+  /** Elements drawn as thin instances of a shared unit box. */
+  readonly instancedElements: number;
+  readonly thinBatches: number;
+  readonly thinInstances: number;
+  readonly frozenMaterials: number;
   readonly vertices: number;
   readonly triangles: number;
   readonly elementsByKind: Readonly<Record<CityElementKind, number>>;
@@ -58,16 +75,33 @@ export interface CitySceneResourceCounts {
   readonly nodes: number;
 }
 
+/** Slice of a merged host mesh that belongs to one layout element, in vertices. */
+export interface CityElementGeometry {
+  readonly host: Mesh;
+  readonly offset: number;
+  readonly count: number;
+}
+
+export type CitySignalPart = 'post' | 'housing' | 'lamp';
+
 export interface CityScene {
   readonly root: TransformNode;
   readonly layout: CityLayout;
   readonly stats: CitySceneStats;
   /** Element IDs that produced geometry, in layout order. */
   getRenderedElementIds(): readonly string[];
-  /** Mesh created for an element, or null when the element is unknown/disposed. */
+  /** Mesh that carries an element's geometry (a merged batch or a thin-instance host). */
   meshFor(elementId: string): Mesh | null;
-  /** Lamp mesh of a signal head (null for every other kind). */
+  /** Lamp host of a signal head (null for every other kind). */
   lampFor(elementId: string): Mesh | null;
+  /** Merged vertex slice of an element, or null for an instanced element. */
+  elementGeometry(elementId: string): CityElementGeometry | null;
+  /** Index inside the thin batch of a signal part, or null. */
+  instanceIndexFor(elementId: string, part: CitySignalPart): number | null;
+  /** Thin-instance host that carries a signal part (diagnostics and tests). */
+  signalHostFor(elementId: string, part: CitySignalPart): Mesh | null;
+  /** World AABB of the element as `[minX, minY, minZ, maxX, maxY, maxZ]`. */
+  elementBounds(elementId: string): readonly number[] | null;
   getResourceCounts(): CitySceneResourceCounts;
   dispose(): void;
 }
@@ -115,6 +149,11 @@ const BUILDERS: readonly CityMaterialKey[] = [
   'lampAmber',
   'lampGreen',
 ];
+/** Signal head parts share one unit box: post, housing and lamp differ only by matrix. */
+const POST_SIZE_M = 0.16;
+const LAMP_SIZE = Object.freeze({ x: 0.28, y: 0.28, z: 0.08 });
+const LAMP_OFFSET_M = 0.02;
+const LAMP_HEIGHT_OFFSET_M = 0.28;
 
 type Point = { readonly x: number; readonly y: number; readonly z: number };
 const point = (x: number, z: number, y = 0): Point => ({ x, y, z });
@@ -399,23 +438,37 @@ export function createCityScene(
     return created;
   };
   const meshes: Mesh[] = [];
-  const meshByElement = new Map<string, Mesh>();
-  const lampByElement = new Map<string, Mesh>();
+  const hostByMaterial = new Map<CityMaterialKey, Mesh>();
+  const mergedRanges = new Map<string, { key: CityMaterialKey; offset: number; count: number }>();
+  const headInstances = new Map<
+    string,
+    {
+      post: number;
+      housing: number;
+      lamp: number;
+      lampColor: CityMaterialKey;
+      lampHost: Mesh;
+      housingHost: Mesh;
+    }
+  >();
   const rendered: string[] = [];
   const kindCounts = new Map<CityElementKind, number>();
   let mergedElements = 0;
-  let individualElements = 0;
+  let instancedElements = 0;
 
+  const applyGeometry = (mesh: Mesh, positions: readonly number[], indices: readonly number[]) => {
+    const data = new VertexData();
+    data.positions = [...positions];
+    data.indices = [...indices];
+    const normals: number[] = [];
+    VertexData.ComputeNormals(data.positions, data.indices, normals);
+    data.normals = normals;
+    data.applyToMesh(mesh);
+  };
   const createMesh = (name: string, builder: GeometryBuilder): Mesh => {
     if (builder.positions.length === 0) throw new Error('Empty city geometry');
     const mesh = new Mesh(`city:${name}`, scene);
-    const data = new VertexData();
-    data.positions = builder.positions;
-    data.indices = builder.indices;
-    const normals: number[] = [];
-    VertexData.ComputeNormals(builder.positions, builder.indices, normals);
-    data.normals = normals;
-    data.applyToMesh(mesh);
+    applyGeometry(mesh, builder.positions, builder.indices);
     mesh.material = materials.get(builder.color) ?? null;
     mesh.parent = root;
     mesh.receiveShadows = true;
@@ -423,18 +476,45 @@ export function createCityScene(
     meshes.push(mesh);
     return mesh;
   };
+  /** Thin-instance host: one shared unit box, per-instance matrices, never a per-element mesh. */
+  const createHost = (name: string, material: StandardMaterial, matrices: readonly Matrix[]) => {
+    const unit: GeometryBuilder = { positions: [], indices: [], color: 'housing' };
+    pushBox(unit, point(0, 0, 0), { x: 1, y: 1, z: 1 }, 0);
+    const mesh = new Mesh(`city:${name}`, scene);
+    applyGeometry(mesh, unit.positions, unit.indices);
+    mesh.material = material;
+    mesh.parent = root;
+    mesh.receiveShadows = true;
+    mesh.isPickable = false;
+    if (matrices.length === 0) throw new Error('Empty city instance batch');
+    const buffer = new Float32Array(matrices.length * 16);
+    matrices.forEach((matrix, index) => matrix.copyToArray(buffer, index * 16));
+    mesh.thinInstanceSetBuffer('matrix', buffer, 16, true);
+    mesh.thinInstanceRefreshBoundingInfo(true);
+    meshes.push(mesh);
+    return mesh;
+  };
   const count = (kind: CityElementKind): void => {
     kindCounts.set(kind, (kindCounts.get(kind) ?? 0) + 1);
   };
+  const record = (elementId: string, builder: GeometryBuilder, from: number): void => {
+    mergedRanges.set(elementId, {
+      key: builder.color,
+      offset: from,
+      count: builder.positions.length / 3 - from,
+    });
+  };
 
-  // Individual lane surfaces: identity matters for traffic alignment.
+  // Lane surfaces are merged into the asphalt batch: the identity that matters for traffic is the
+  // element ID and its vertex slice, not a mesh per lane.
   for (const element of layout.elements) {
     if (element.kind !== 'LANE_SURFACE') continue;
-    const builder: GeometryBuilder = { positions: [], indices: [], color: 'asphalt' };
+    const builder = builderFor('asphalt');
+    const from = builder.positions.length / 3;
     pushRibbon(builder, element.footprintM, element.baseYM);
-    meshByElement.set(element.id, createMesh(`lane:${element.laneId ?? element.id}`, builder));
+    record(element.id, builder, from);
     rendered.push(element.id);
-    individualElements += 1;
+    mergedElements += 1;
     count(element.kind);
   }
 
@@ -442,66 +522,106 @@ export function createCityScene(
   for (const element of layout.elements) {
     if (element.kind === 'LANE_SURFACE' || element.kind === 'SIGNAL_HEAD') continue;
     const builder = builderFor(colorForPlanar(element));
+    const from = builder.positions.length / 3;
     if (element.kind === 'BUILDING')
       pushPrism(builder, element.footprintM, element.baseYM, element.heightM);
     else if (element.kind === 'CROSSWALK') pushCrosswalk(builder, element);
     else if (element.kind === 'LANE_MARKING') pushMarking(builder, element, layout);
     else if (element.topology === 'RIBBON') pushRibbon(builder, element.footprintM, element.baseYM);
     else pushPolygon(builder, element.footprintM, element.baseYM);
+    record(element.id, builder, from);
     mergedElements += 1;
     rendered.push(element.id);
     count(element.kind);
   }
 
-  // Individual signal heads: post + housing plus a lamp mesh carrying the authored state.
+  const batches: Mesh[] = [];
+  for (const [color, builder] of [...builders].sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))) {
+    if (builder.positions.length === 0) continue;
+    const mesh = createMesh(`batch:${color}`, builder);
+    hostByMaterial.set(color, mesh);
+    batches.push(mesh);
+  }
+  builders.clear();
+
+  // Signal heads: post, housing and lamp are instances of one unit box. Matrices reproduce the
+  // exact position/rotation/scale of the previously baked boxes.
+  const posts: Matrix[] = [];
+  const housings: Matrix[] = [];
+  const lamps = new Map<CityMaterialKey, Matrix[]>();
+  const headParts = new Map<
+    string,
+    {
+      readonly post: number;
+      readonly housing: number;
+      readonly lamp: number;
+      readonly lampColor: CityMaterialKey;
+    }
+  >();
+  let headIndex = 0;
+  const lampCounters = new Map<CityMaterialKey, number>();
   for (const element of layout.elements) {
     if (element.kind !== 'SIGNAL_HEAD') continue;
     const head = element as CitySignalHeadElement;
     const rotationY = Math.atan2(Math.cos(head.facingRad), Math.sin(head.facingRad));
-    const housing: GeometryBuilder = { positions: [], indices: [], color: 'housing' };
-    pushBox(
-      housing,
-      point(head.positionM.x, head.positionM.z, head.postHeightM / 2),
-      { x: 0.16, y: head.postHeightM, z: 0.16 },
-      rotationY,
+    const rotation = Quaternion.RotationYawPitchRoll(rotationY, 0, 0);
+    posts.push(
+      Matrix.Compose(
+        new Vector3(POST_SIZE_M, head.postHeightM, POST_SIZE_M),
+        rotation,
+        new Vector3(head.positionM.x, head.postHeightM / 2, head.positionM.z),
+      ),
     );
-    pushBox(
-      housing,
-      point(head.positionM.x, head.positionM.z, head.postHeightM),
-      { x: head.housingWidthM, y: head.housingHeightM, z: head.housingDepthM },
-      rotationY,
+    housings.push(
+      Matrix.Compose(
+        new Vector3(head.housingWidthM, head.housingHeightM, head.housingDepthM),
+        rotation,
+        new Vector3(head.positionM.x, head.postHeightM, head.positionM.z),
+      ),
     );
-    meshByElement.set(head.id, createMesh(`head:${head.id}`, housing));
     const lampColor: CityMaterialKey =
       head.lampState === 'GREEN'
         ? 'lampGreen'
         : head.lampState === 'YELLOW'
           ? 'lampAmber'
           : 'lampRed';
-    const lamp: GeometryBuilder = { positions: [], indices: [], color: lampColor };
-    pushBox(
-      lamp,
-      point(
-        head.positionM.x + Math.cos(head.facingRad) * (head.housingDepthM / 2 + 0.02),
-        head.positionM.z + Math.sin(head.facingRad) * (head.housingDepthM / 2 + 0.02),
-        head.postHeightM + 0.28,
+    const lampMatrices = lamps.get(lampColor) ?? [];
+    lamps.set(lampColor, lampMatrices);
+    lampMatrices.push(
+      Matrix.Compose(
+        new Vector3(LAMP_SIZE.x, LAMP_SIZE.y, LAMP_SIZE.z),
+        rotation,
+        new Vector3(
+          head.positionM.x + Math.cos(head.facingRad) * (head.housingDepthM / 2 + LAMP_OFFSET_M),
+          head.postHeightM + LAMP_HEIGHT_OFFSET_M,
+          head.positionM.z + Math.sin(head.facingRad) * (head.housingDepthM / 2 + LAMP_OFFSET_M),
+        ),
       ),
-      { x: 0.28, y: 0.28, z: 0.08 },
-      rotationY,
     );
-    lampByElement.set(head.id, createMesh(`lamp:${head.id}`, lamp));
-    rendered.push(head.id);
-    individualElements += 1;
-    count(head.kind);
+    const lampIndex = lampCounters.get(lampColor) ?? 0;
+    lampCounters.set(lampColor, lampIndex + 1);
+    headParts.set(head.id, { post: headIndex, housing: headIndex, lamp: lampIndex, lampColor });
+    headIndex += 1;
+  }
+  const housingMaterial = materials.get('housing')!;
+  const postHost = createHost('signal:post', housingMaterial, posts);
+  const housingHost = createHost('signal:housing', housingMaterial, housings);
+  const lampHosts = new Map<CityMaterialKey, Mesh>();
+  for (const color of ['lampRed', 'lampAmber', 'lampGreen'] as const) {
+    const matrices = lamps.get(color);
+    if (!matrices || matrices.length === 0) continue;
+    lampHosts.set(color, createHost(`signal:${color}`, materials.get(color)!, matrices));
+  }
+  for (const [id, parts] of headParts) {
+    const lampHost = lampHosts.get(parts.lampColor);
+    if (!lampHost) throw new Error('Missing city lamp batch');
+    headInstances.set(id, { ...parts, lampHost, housingHost });
+    rendered.push(id);
+    instancedElements += 1;
+    count('SIGNAL_HEAD');
   }
 
-  const batches: Mesh[] = [];
-  for (const [color, builder] of [...builders].sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))) {
-    if (builder.positions.length === 0) continue;
-    batches.push(createMesh(`batch:${color}`, builder));
-  }
-  builders.clear();
-
+  // One float32 buffer per host: instance indices follow the layout order of each part.
   let vertices = 0;
   let triangles = 0;
   for (const mesh of meshes) {
@@ -522,17 +642,53 @@ export function createCityScene(
     BUILDING: 0,
   };
   for (const [kind, value] of kindCounts) byKind[kind] = value;
+  let frozenMaterials = 0;
+  for (const material of ownedMaterials) {
+    material.freeze();
+    if (material.isFrozen) frozenMaterials += 1;
+  }
+  const thinInstances = posts.length + housings.length + headParts.size;
   const stats: CitySceneStats = Object.freeze({
     elements: rendered.length,
     meshes: meshes.length,
+    drawCalls: meshes.length,
     batches: batches.length,
-    individualElements,
     mergedElements,
+    instancedElements,
+    thinBatches: 2 + lampHosts.size,
+    thinInstances,
+    frozenMaterials,
     vertices,
     triangles,
     elementsByKind: Object.freeze(byKind),
   });
   let disposed = false;
+  const corners = [-0.5, 0.5];
+  const expand = (
+    matrix: Matrix,
+    bounds: { min: Vector3; max: Vector3 } | null,
+  ): { min: Vector3; max: Vector3 } => {
+    const result = bounds ?? {
+      min: new Vector3(
+        Number.POSITIVE_INFINITY,
+        Number.POSITIVE_INFINITY,
+        Number.POSITIVE_INFINITY,
+      ),
+      max: new Vector3(
+        Number.NEGATIVE_INFINITY,
+        Number.NEGATIVE_INFINITY,
+        Number.NEGATIVE_INFINITY,
+      ),
+    };
+    for (const x of corners)
+      for (const y of corners)
+        for (const z of corners) {
+          const world = Vector3.TransformCoordinates(new Vector3(x, y, z), matrix);
+          result.min.minimizeInPlace(world);
+          result.max.maximizeInPlace(world);
+        }
+    return result;
+  };
   return {
     root,
     layout,
@@ -540,11 +696,85 @@ export function createCityScene(
     getRenderedElementIds: () => Object.freeze([...rendered]),
     meshFor(elementId: string): Mesh | null {
       if (disposed || scene.isDisposed) return null;
-      return meshByElement.get(elementId) ?? null;
+      const instance = headInstances.get(elementId);
+      if (instance) return instance.housingHost;
+      const range = mergedRanges.get(elementId);
+      return range ? (hostByMaterial.get(range.key) ?? null) : null;
     },
     lampFor(elementId: string): Mesh | null {
       if (disposed || scene.isDisposed) return null;
-      return lampByElement.get(elementId) ?? null;
+      return headInstances.get(elementId)?.lampHost ?? null;
+    },
+    elementGeometry(elementId: string): CityElementGeometry | null {
+      if (disposed || scene.isDisposed) return null;
+      const range = mergedRanges.get(elementId);
+      const host = range ? hostByMaterial.get(range.key) : null;
+      if (!range || !host) return null;
+      return Object.freeze({ host, offset: range.offset, count: range.count });
+    },
+    instanceIndexFor(elementId: string, part: CitySignalPart): number | null {
+      if (disposed || scene.isDisposed) return null;
+      const instance = headInstances.get(elementId);
+      if (!instance) return null;
+      return part === 'post'
+        ? instance.post
+        : part === 'housing'
+          ? instance.housing
+          : instance.lamp;
+    },
+    signalHostFor(elementId: string, part: CitySignalPart): Mesh | null {
+      if (disposed || scene.isDisposed) return null;
+      const instance = headInstances.get(elementId);
+      if (!instance) return null;
+      if (part === 'post') return postHost;
+      return part === 'housing' ? housingHost : instance.lampHost;
+    },
+    elementBounds(elementId: string): readonly number[] | null {
+      if (disposed || scene.isDisposed) return null;
+      let bounds: { min: Vector3; max: Vector3 } | null = null;
+      const instance = headInstances.get(elementId);
+      if (instance) {
+        bounds = expand(posts[instance.post]!, bounds);
+        bounds = expand(housings[instance.housing]!, bounds);
+        const lampMatrices = lamps.get(instance.lampColor);
+        if (lampMatrices?.[instance.lamp]) bounds = expand(lampMatrices[instance.lamp]!, bounds);
+      } else {
+        const range = mergedRanges.get(elementId);
+        const host = range ? hostByMaterial.get(range.key) : null;
+        const positions = host?.getVerticesData('position');
+        if (!range || !positions) return null;
+        const min = new Vector3(
+          Number.POSITIVE_INFINITY,
+          Number.POSITIVE_INFINITY,
+          Number.POSITIVE_INFINITY,
+        );
+        const max = new Vector3(
+          Number.NEGATIVE_INFINITY,
+          Number.NEGATIVE_INFINITY,
+          Number.NEGATIVE_INFINITY,
+        );
+        for (let index = range.offset; index < range.offset + range.count; index += 1) {
+          min.minimizeInPlaceFromFloats(
+            positions[index * 3]!,
+            positions[index * 3 + 1]!,
+            positions[index * 3 + 2]!,
+          );
+          max.maximizeInPlaceFromFloats(
+            positions[index * 3]!,
+            positions[index * 3 + 1]!,
+            positions[index * 3 + 2]!,
+          );
+        }
+        bounds = { min, max };
+      }
+      return Object.freeze([
+        bounds.min.x,
+        bounds.min.y,
+        bounds.min.z,
+        bounds.max.x,
+        bounds.max.y,
+        bounds.max.z,
+      ]);
     },
     getResourceCounts: () => ({
       meshes: disposed ? 0 : meshes.filter((mesh) => !mesh.isDisposed()).length,
@@ -557,8 +787,10 @@ export function createCityScene(
       disposed = true;
       for (const mesh of meshes) if (!mesh.isDisposed()) mesh.dispose(false, false);
       meshes.length = 0;
-      meshByElement.clear();
-      lampByElement.clear();
+      mergedRanges.clear();
+      headInstances.clear();
+      hostByMaterial.clear();
+      lampHosts.clear();
       for (const material of ownedMaterials) material.dispose(false, false);
       ownedMaterials.length = 0;
       materials.clear();

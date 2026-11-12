@@ -3,7 +3,14 @@ import type { BootstrapView, Renderer } from '../index';
 export { createRenderingBackend, type RenderingBackend } from './backend';
 export { BabylonSceneAdapter, type VisualRepresentation } from './scene-adapter';
 export { BabylonSnapshotPresenter, type WheelNodeResolver } from './snapshot-presenter';
-export { createDaylight, type DaylightMaterial, type QualityViewport } from './daylight';
+export {
+  createDaylight,
+  SHADOW_CASTER_PRIORITIES,
+  SHADOW_MAP_CONTENT,
+  type DaylightMaterial,
+  type QualityViewport,
+  type ShadowCasterPriority,
+} from './daylight';
 export { BabylonVehicleCamera, type BabylonVehicleCameraOptions } from './vehicle-camera';
 export { bindVehicleCameraInput, type VehicleCameraInputOptions } from './vehicle-camera-input';
 export { diagnoseBackend, type BabylonDiagnostics } from './diagnostics-adapter';
@@ -16,11 +23,13 @@ export { BabylonVehiclePicker, type SelectVehicleIntent } from './vehicle-pickin
 export { BabylonCellBatches, type BatchInstance, type CellBatchDefinition } from './cell-batches';
 export {
   createCityScene,
+  type CityElementGeometry,
   type CityMaterialKey,
   type CityScene,
   type CitySceneOptions,
   type CitySceneResourceCounts,
   type CitySceneStats,
+  type CitySignalPart,
 } from './city-scene';
 export {
   createCityDecorScene,

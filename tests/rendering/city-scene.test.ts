@@ -38,6 +38,17 @@ function verticesOf(mesh: AbstractMesh) {
     points.push({ x: data[index]!, y: data[index + 1]!, z: data[index + 2]! });
   return points;
 }
+/** Vertices of one element inside its merged host: an element is a slice, not a mesh. */
+function elementVerticesOf(city: CityScene, elementId: string) {
+  const geometry = city.elementGeometry(elementId);
+  assert.ok(geometry, `${elementId} merged slice`);
+  const data = geometry.host.getVerticesData('position');
+  assert.ok(data, `${elementId} host has positions`);
+  const points: { x: number; y: number; z: number }[] = [];
+  for (let index = geometry.offset; index < geometry.offset + geometry.count; index += 1)
+    points.push({ x: data[index * 3]!, y: data[index * 3 + 1]!, z: data[index * 3 + 2]! });
+  return points;
+}
 function key(point: { x: number; y: number; z: number }): string {
   return `${point.x.toFixed(4)}|${point.y.toFixed(4)}|${point.z.toFixed(4)}`;
 }
@@ -62,29 +73,41 @@ function distanceToPolyline(
   return best;
 }
 
-test('the Babylon scene renders every layout element and reports batching/instances', () => {
+test('the Babylon scene renders every layout element with few draw calls and thin instances', () => {
   withScene((scene, city) => {
     const rendered = city.getRenderedElementIds();
     assert.equal(rendered.length, layout.elements.length);
     assert.deepEqual([...rendered].sort(), layout.elements.map((element) => element.id).sort());
     assert.equal(city.stats.elements, layout.elements.length);
-    assert.equal(city.stats.individualElements + city.stats.mergedElements, layout.elements.length);
+    assert.equal(city.stats.mergedElements + city.stats.instancedElements, layout.elements.length);
     assert.deepEqual(city.stats.elementsByKind, layout.stats.elementsByKind);
     assert.ok(city.stats.batches >= 4, `batches ${city.stats.batches}`);
     assert.ok(city.stats.meshes >= city.stats.batches);
     assert.ok(city.stats.vertices > 0 && city.stats.triangles > 0);
     assert.equal(
-      city.stats.mergedElements,
-      layout.stats.elements - layout.stats.signalHeads - layout.stats.elementsByKind.LANE_SURFACE,
+      city.stats.instancedElements,
+      layout.stats.elementsByKind.SIGNAL_HEAD,
+      'signal heads are the repeated objects',
     );
-    // Every signal head has a housing mesh and a lamp mesh; nothing else does.
+    // Instancing is what turns the per-element meshes into a fixed number of hosts.
+    assert.equal(city.stats.meshes, city.stats.drawCalls);
+    assert.ok(
+      city.stats.meshes <= 16,
+      `${city.stats.elements} elements in ${city.stats.meshes} meshes`,
+    );
+    assert.equal(city.stats.thinInstances, layout.stats.elementsByKind.SIGNAL_HEAD * 3);
+    assert.ok(city.stats.frozenMaterials > 0, 'owned static materials are frozen');
+    // Every signal head has a housing host and a lamp host; nothing else does.
     const heads = layout.elements.filter((element) => element.kind === 'SIGNAL_HEAD');
     assert.equal(heads.length, layout.stats.signalHeads);
     for (const head of heads) {
       assert.ok(city.meshFor(head.id));
       assert.ok(city.lampFor(head.id));
+      assert.ok(city.instanceIndexFor(head.id, 'post') !== null);
+      assert.ok(city.instanceIndexFor(head.id, 'housing') !== null);
+      assert.ok(city.instanceIndexFor(head.id, 'lamp') !== null);
     }
-    assert.equal(scene.meshes.filter((mesh) => mesh.name.includes('lamp')).length, heads.length);
+    assert.ok(scene.meshes.some((mesh) => mesh.name.includes('lamp')));
     // No rendered counterpart is missing or unknown when the report is fed the real ids.
     const report = createCityLayoutReport(layout, rendered);
     assert.deepEqual(report.missingRenderedElementIds, []);
@@ -101,7 +124,7 @@ test('lane surfaces sit exactly on the lane-graph centreline and width', () => {
       )!;
       const mesh = city.meshFor(element.id);
       assert.ok(mesh, `${lane.id} mesh`);
-      const points = verticesOf(mesh);
+      const points = elementVerticesOf(city, element.id);
       const path = graph.getDirectedPath(lane.id)!;
       assert.equal(points.length, 4 * (path.points.length - 1));
       for (const vertex of points) {
@@ -193,16 +216,49 @@ test('batched paint, markings and signal heads keep their source coordinates', (
       checked += 1;
     }
     assert.ok(checked > 200, `checked ${checked}`);
-    // Signal head housing is centred on its declared post position (x/z) and stands on the ground.
+    // Signal head instances reproduce the baked boxes exactly: position, rotation and scale.
     for (const head of layout.elements) {
       if (head.kind !== 'SIGNAL_HEAD') continue;
-      const mesh = city.meshFor(head.id)!;
-      const box = mesh.getBoundingInfo().boundingBox;
-      assert.ok(Math.abs(box.centerWorld.x - head.positionM.x) <= 1e-6);
-      assert.ok(Math.abs(box.centerWorld.z - head.positionM.z) <= 1e-6);
-      assert.ok(box.minimumWorld.y >= -1e-6);
+      const rotationY = Math.atan2(Math.cos(head.facingRad), Math.sin(head.facingRad));
+      for (const [part, scale, center] of [
+        [
+          'post',
+          { x: 0.16, y: head.postHeightM, z: 0.16 },
+          { x: head.positionM.x, y: head.postHeightM / 2, z: head.positionM.z },
+        ] as const,
+        [
+          'housing',
+          { x: head.housingWidthM, y: head.housingHeightM, z: head.housingDepthM },
+          { x: head.positionM.x, y: head.postHeightM, z: head.positionM.z },
+        ] as const,
+      ]) {
+        const index = city.instanceIndexFor(head.id, part)!;
+        const host = city.signalHostFor(head.id, part)!;
+        const matrix = host.thinInstanceGetWorldMatrices()[index];
+        assert.ok(matrix, `${head.id} ${part} matrix`);
+        const translation = matrix.getTranslation();
+        // Instance matrices live in a Float32Array, so equality means float32-exact (0,1 mm).
+        assert.ok(Math.abs(translation.x - center.x) <= 1e-4, `${head.id} ${part} x`);
+        assert.ok(Math.abs(translation.y - center.y) <= 1e-4, `${head.id} ${part} y`);
+        assert.ok(Math.abs(translation.z - center.z) <= 1e-4, `${head.id} ${part} z`);
+        assert.ok(Math.abs(matrix.getRow(0)!.length() - scale.x) <= 1e-4, `${head.id} ${part} sx`);
+        assert.ok(Math.abs(matrix.getRow(1)!.length() - scale.y) <= 1e-4, `${head.id} ${part} sy`);
+        assert.ok(Math.abs(matrix.getRow(2)!.length() - scale.z) <= 1e-4, `${head.id} ${part} sz`);
+        // The local +X axis points where pushBox rotated it: (cos, 0, -sin).
+        const axis = matrix.getRow(0)!.normalizeToNew();
+        assert.ok(
+          Math.abs(axis.x - Math.cos(rotationY)) <= 1e-4 &&
+            Math.abs(axis.z + Math.sin(rotationY)) <= 1e-4,
+          `${head.id} ${part} rotation`,
+        );
+      }
+      const bounds = city.elementBounds(head.id)!;
+      assert.ok(Math.abs((bounds[0]! + bounds[3]!) / 2 - head.positionM.x) <= 0.2);
+      assert.ok(Math.abs((bounds[2]! + bounds[5]!) / 2 - head.positionM.z) <= 0.2);
+      assert.ok(bounds[1]! >= -1e-6);
       assert.ok(
-        Math.abs(box.maximumWorld.y - (head.postHeightM + head.housingHeightM / 2)) <= 1e-6,
+        Math.abs(bounds[4]! - (head.postHeightM + head.housingHeightM / 2)) <= 1e-5,
+        `${head.id} top`,
       );
     }
   });
@@ -220,13 +276,12 @@ test('a missing or moved head is observable from the rendered meshes', () => {
     z: (victim as unknown as { positionM: { x: number; z: number } }).positionM.z,
   });
   const city = createCityScene(scene, tampered);
-  const mesh = city.meshFor(victim.id)!;
-  const box = mesh.getBoundingInfo().boundingBox;
-  assert.ok(Math.abs(box.centerWorld.x - victim.positionM.x) <= 1e-6);
+  const bounds = city.elementBounds(victim.id)!;
+  assert.ok(Math.abs((bounds[0]! + bounds[3]!) / 2 - victim.positionM.x) <= 0.2);
   const originalPosition = layout.elements.find((element) => element.id === victim.id) as
     { positionM: { x: number; z: number } } | undefined;
   assert.ok(originalPosition);
-  assert.ok(Math.abs(box.centerWorld.x - originalPosition.positionM.x) > 0.4);
+  assert.ok(Math.abs((bounds[0]! + bounds[3]!) / 2 - originalPosition.positionM.x) > 0.3);
   city.dispose();
   scene.dispose();
   engine.dispose();
@@ -237,7 +292,8 @@ test('disposal returns the scene to zero resources and is idempotent', () => {
   const scene = new Scene(engine);
   const baseline = scene.meshes.length;
   const city = createCityScene(scene, layout);
-  assert.ok(city.getResourceCounts().meshes > 100);
+  assert.ok(city.getResourceCounts().meshes >= 12);
+  assert.equal(city.getResourceCounts().meshes, city.stats.meshes);
   assert.ok(city.getResourceCounts().materials > 0);
   assert.equal(city.getResourceCounts().nodes, 1);
   city.dispose();
@@ -281,7 +337,10 @@ test('two independent builds are byte-identical and borrow caller materials', ()
   const cityA = createCityScene(firstScene, layout, { materials: { marking: owned } });
   const cityB = createCityScene(secondScene, layout);
   assert.equal(checksum(firstScene), checksum(secondScene));
-  assert.deepEqual(cityA.stats, cityB.stats);
+  assert.deepEqual({ ...cityA.stats, frozenMaterials: 0 }, { ...cityB.stats, frozenMaterials: 0 });
+  // Only owned materials are frozen: the caller's material stays mutable.
+  assert.equal(owned.isFrozen, false, 'borrowed material is never frozen');
+  assert.equal(cityA.stats.frozenMaterials, cityB.stats.frozenMaterials - 1);
   cityA.dispose();
   assert.equal(firstScene.materials.includes(owned), true, 'borrowed material is not disposed');
   owned.dispose();

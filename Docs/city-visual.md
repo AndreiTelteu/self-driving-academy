@@ -90,3 +90,34 @@ node scripts/city-visual-report.mjs --json Docs/Evidence/042-city-visual/geometr
 `node --import ./scripts/register-typescript.mjs --test tests/world/neighbourhood.test.ts tests/world/city-layout.test.ts tests/rendering/city-scene.test.ts`
 
 Rezultatele, capturile și raportul geometric sunt în [Docs/Evidence/042-city-visual](Evidence/042-city-visual/README.md).
+
+## Revizuire 157 — instanțiere, LOD și umbre pe aceleași date
+
+PBI 157 păstrează regula de derivare și schimbă doar **cum** se trimit aceleași date către GPU. Nicio poziție, amprentă, culoare sau identitate nu se recalculează: `createCityScene` construiește în continuare geometria din `CityLayout`, dar o grupează.
+
+| Ce se schimbă | Înainte | După |
+| --- | --- | --- |
+| `LANE_SURFACE` | câte un mesh per bandă (96) | un singur mesh de asfalt, cu interval de vârfuri per element |
+| `SIGNAL_HEAD` (stâlp + carcasă) | câte un mesh per cap (26), cu două cutii coapte | instanțe thin ale unei cutii unitare: un host pentru stâlpi, unul pentru carcase |
+| Lămpi de semafor | câte un mesh per cap (26) | un host thin per stare (roșu/galben/verde), cu 26 de instanțe în total |
+| Draw calls ale layout-ului | 155 | 12 |
+| Materiale statice proprii | neînghețate | înghețate (`freeze()`); materialele împrumutate de la caller rămân mutabile |
+
+Identitatea rămâne explicită, ca date, nu ca mesh-uri per element:
+
+- `elementGeometry(id)` → `{ host, offset, count }` pentru elementele fuzionate (benzi, marcaje, clădiri, trotuare);
+- `instanceIndexFor(id, 'post' | 'housing' | 'lamp')` și `signalHostFor(id, part)` pentru capetele de semafor;
+- `elementBounds(id)` → `[minX, minY, minZ, maxX, maxY, maxZ]` în coordonate de lume, calculat din intervalul de vârfuri sau din matricele instanțelor;
+- `meshFor(id)` întoarce hostul care poartă elementul (nu mai este un mesh exclusiv), iar `lampFor(id)` hostul lămpii.
+
+Matricele instanțelor sunt exact compoziția `T · R · S` a cutiilor coapte anterior (aceeași poziție, rotație `atan2(cos(facingRad), sin(facingRad))` și scară), deci silueta de pe ecran nu se schimbă. Diferența maximă măsurată între limitele unui element înainte și după este **2,9 × 10⁻⁵ m** (0,029 mm), adică limita de reprezentare `float32` a bufferelor de vârfuri. Instanțele nu creează obiecte Babylon: 923 de elemente ocupă 12 mesh-uri.
+
+Pickingul nu este afectat: mesh-urile orașului rămân `isPickable = false`, iar selecția vehiculelor este acoperită separat de `VehiclePickingRegistry` (vezi `tests/rendering/render-instancing.test.ts`, care compară 48 de raze între varianta cu mesh-uri per vehicul și cea cu instanțe thin).
+
+Limite declarate:
+
+- starea lămpii este per host: schimbarea stării unui singur cap la runtime ar cere mutarea instanței între hosturi, deci nu este expusă; semafoarele rămân statice în layout, ca înainte;
+- LOD-ul rămâne la nivel de batch (`BabylonCellBatches.updateLod`), nu per element de layout, pentru că un batch de celulă are o singură siluetă de comutat;
+- orașul nu este înregistrat ca shadow caster: primește umbre (`receiveShadows`), nu aruncă, conform bugetului de umbre din [iluminare](lighting-quality.md).
+
+Verificare: `npm run perf:render-budget -- --check` (proba structurală) și `node --import ./scripts/register-typescript.mjs --test tests/rendering/city-scene.test.ts tests/rendering/render-instancing.test.ts`.

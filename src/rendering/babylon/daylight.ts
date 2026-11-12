@@ -18,6 +18,34 @@ export interface QualityViewport {
   readonly height: number;
   readonly dpr: number;
 }
+/**
+ * PBI 157 — explicit shadow-map budget.
+ *
+ * `essential` is the vehicle the player is looking at, `standard` is simulated traffic, `optional`
+ * is small scenery. Admission is priority-first and insertion-stable inside a priority, so a
+ * bounded map never drops the essential caster in favour of a prop. What never enters the map is
+ * declared here as well: the static city layout only receives shadows, the 146 decor and the
+ * emissive markings/lamps are unlit, and nothing outside the registered set is submitted.
+ */
+export type ShadowCasterPriority = 'essential' | 'standard' | 'optional';
+export const SHADOW_CASTER_PRIORITIES: readonly ShadowCasterPriority[] = Object.freeze([
+  'essential',
+  'standard',
+  'optional',
+]);
+export const SHADOW_MAP_CONTENT = Object.freeze({
+  includes: Object.freeze([
+    'vehiculele selectate (essential)',
+    'traficul simulat din fereastra jocului (standard)',
+    'decorul mic care aruncă umbră (optional)',
+  ]),
+  excludes: Object.freeze([
+    'layout-ul static 042 (doar receiveShadows, fără caster)',
+    'decorul 146 (batch static, nu se înregistrează)',
+    'marcaje și lămpi emisive (materiale unlit)',
+    'orice mesh neînregistrat explicit',
+  ]),
+});
 
 /** Scene-local resource owner: presentation only, no simulation ports or authority. */
 export function createDaylight(
@@ -32,7 +60,8 @@ export function createDaylight(
   let adaptation = createAdaptiveQuality(initial.preset, initial.adaptive);
   let disposed = false;
   let shadow: ShadowGenerator | null = null;
-  const casters = new Set<AbstractMesh>();
+  /** Insertion-ordered registry; the priority is the admission key of the bounded map. */
+  const casters = new Map<AbstractMesh, ShadowCasterPriority>();
   const previousClear = scene.clearColor;
   const processing = new ImageProcessingConfiguration();
   processing.toneMappingEnabled = true;
@@ -73,9 +102,17 @@ export function createDaylight(
     if (disposed || scene.isDisposed) throw new Error('Daylight disposed');
   };
   const syncCasters = (): void => {
-    for (const caster of casters) if (caster.isDisposed()) casters.delete(caster);
+    for (const caster of casters.keys()) if (caster.isDisposed()) casters.delete(caster);
     const map = shadow?.getShadowMap();
-    if (map) map.renderList = [...casters].slice(0, quality.limits.maxShadowCasters);
+    if (map)
+      map.renderList = [...casters.entries()]
+        // Array#sort is stable: equal priorities keep the registration order PBI016 declared.
+        .sort(
+          ([, left], [, right]) =>
+            SHADOW_CASTER_PRIORITIES.indexOf(left) - SHADOW_CASTER_PRIORITIES.indexOf(right),
+        )
+        .map(([mesh]) => mesh)
+        .slice(0, quality.limits.maxShadowCasters);
   };
   const apply = (): void => {
     shadow?.dispose();
@@ -139,14 +176,20 @@ export function createDaylight(
       apply();
       return true;
     },
-    addShadowCaster(mesh: AbstractMesh): boolean {
+    addShadowCaster(mesh: AbstractMesh, priority: ShadowCasterPriority = 'standard'): boolean {
       assertActive();
       if (mesh.getScene() !== scene || mesh.isDisposed()) throw new Error('Invalid shadow caster');
-      if (casters.has(mesh)) return true;
+      if (!SHADOW_CASTER_PRIORITIES.includes(priority)) throw new Error('Invalid shadow priority');
+      if (casters.has(mesh)) {
+        // A promotion/demotion never recreates the entry; the insertion order stays stable.
+        casters.set(mesh, priority);
+        syncCasters();
+        return true;
+      }
       syncCasters();
       // Absolute HIGH cap bounds retained resources even while LOW is active.
       if (casters.size >= 96) return false;
-      casters.add(mesh);
+      casters.set(mesh, priority);
       syncCasters();
       return true;
     },
@@ -155,11 +198,58 @@ export function createDaylight(
       casters.delete(mesh);
       syncCasters();
     },
+    /** Read-only view of the declared budget: what is in the map, what was rejected and why. */
+    getShadowBudget() {
+      assertActive();
+      const limit = quality.limits.maxShadowCasters;
+      const list = shadow?.getShadowMap()?.renderList ?? [];
+      const admitted = new Set(list);
+      const byPriority: Record<ShadowCasterPriority, number> = {
+        essential: 0,
+        standard: 0,
+        optional: 0,
+      };
+      const retainedByPriority: Record<ShadowCasterPriority, number> = {
+        essential: 0,
+        standard: 0,
+        optional: 0,
+      };
+      let essentialDropped = 0;
+      let essentialExcluded = 0;
+      for (const [mesh, priority] of casters) {
+        retainedByPriority[priority] += 1;
+        if (!admitted.has(mesh)) {
+          if (priority === 'essential') {
+            if (limit === 0) essentialExcluded += 1;
+            else essentialDropped += 1;
+          }
+          continue;
+        }
+        byPriority[priority] += 1;
+      }
+      return Object.freeze({
+        preset: quality.preset,
+        limit,
+        shadowMapSize: quality.limits.shadowMapSize,
+        shadowDistanceM: quality.limits.shadowDistance,
+        registered: casters.size,
+        admitted: list.length,
+        rejected: casters.size - list.length,
+        essentialDropped,
+        /** Essential casters that stayed out because the preset disables the shadow map. */
+        essentialExcluded,
+        byPriority: Object.freeze(byPriority),
+        retainedByPriority: Object.freeze(retainedByPriority),
+        includes: SHADOW_MAP_CONTENT.includes,
+        excludes: SHADOW_MAP_CONTENT.excludes,
+      });
+    },
     getResourceCounts: () => ({
       lights: disposed ? 0 : 2,
       materials: materials.size,
       shadowMaps: shadow ? 1 : 0,
       retainedCasters: casters.size,
+      essentialCasters: [...casters.values()].filter((entry) => entry === 'essential').length,
     }),
     dispose(): void {
       if (disposed) return;
