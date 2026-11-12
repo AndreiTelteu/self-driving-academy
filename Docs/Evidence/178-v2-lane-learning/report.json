@@ -1,0 +1,495 @@
+{
+  "version": "178-lane-estimator-v2",
+  "parameters": [
+    {
+      "key": "lane_change_duration",
+      "unit": "s",
+      "minimum": 0.5,
+      "maximum": 5,
+      "defaultValue": 2
+    },
+    {
+      "key": "signal_lead_time",
+      "unit": "s",
+      "minimum": 0,
+      "maximum": 5,
+      "defaultValue": 1
+    },
+    {
+      "key": "signal_use_probability",
+      "unit": "probability",
+      "minimum": 0,
+      "maximum": 1,
+      "defaultValue": 1
+    },
+    {
+      "key": "pass_on_right_probability",
+      "unit": "probability",
+      "minimum": 0,
+      "maximum": 1,
+      "defaultValue": 0
+    }
+  ],
+  "rows": [
+    {
+      "key": "lane_change_duration",
+      "scenario": "MANOEUVRE_DURATION",
+      "unit": "s",
+      "context": "o manevră reală a lui 177 în care progresul lateral este observat: tick-urile efective `D` inversează plafonul `ceil(max(cheie, 1 s) · 60)`, deci cheia se află în `((D − 1)/60, D/60]`; podeaua de 1 s face `D = 60` ambiguu pentru tot intervalul 0,5–1 s",
+      "status": "CANDIDATE",
+      "value": 1.9916666666666667,
+      "uncertainty": 0.05,
+      "uncertaintyThreshold": 0.5,
+      "estimateEpisodes": 2,
+      "validationEpisodes": 2,
+      "validationStatus": "VALIDATED",
+      "validationValue": 1.9916666666666667,
+      "validationError": 0,
+      "validationTolerance": 0.5,
+      "reason": null
+    },
+    {
+      "key": "signal_lead_time",
+      "scenario": "SIGNAL_LEAD",
+      "unit": "s",
+      "context": "o manevră semnalizată care a pornit efectiv: numărul de tick-uri dintre pornirea indicatorului și prima mișcare laterală inversează același plafon; fără indicator nu există avans de măsurat",
+      "status": "CANDIDATE",
+      "value": 1.9916666666666667,
+      "uncertainty": 0.05,
+      "uncertaintyThreshold": 0.5,
+      "estimateEpisodes": 3,
+      "validationEpisodes": 2,
+      "validationStatus": "VALIDATED",
+      "validationValue": 1.9916666666666667,
+      "validationError": 0,
+      "validationTolerance": 0.5,
+      "reason": null
+    },
+    {
+      "key": "signal_use_probability",
+      "scenario": "INDICATOR_USE",
+      "unit": "probability",
+      "context": "oportunități distincte care au ajuns la decizia indicatorului: numitorul este numărul de oportunități, nu numărul de cadre, iar numărătorul este oportunitățile cu indicatorul pornit",
+      "status": "CANDIDATE",
+      "value": 0.38461538461538464,
+      "uncertainty": 0.09541133429939112,
+      "uncertaintyThreshold": 0.15,
+      "estimateEpisodes": 8,
+      "validationEpisodes": 8,
+      "validationStatus": "VALIDATED",
+      "validationValue": 0.4230769230769231,
+      "validationError": 0.038461538461538436,
+      "validationTolerance": 0.15,
+      "reason": null
+    },
+    {
+      "key": "pass_on_right_probability",
+      "scenario": "RIGHT_SIDE_PASS",
+      "unit": "probability",
+      "context": "o oportunitate de depășire prin dreapta în care harta permite manevra și spațiul declarat acoperă pragul M, deci 177 a extras eșantionul: acceptarea dă limita inferioară, refuzul dă limita superioară",
+      "status": "CANDIDATE",
+      "value": 0.3377120152581483,
+      "uncertainty": 0.0879574732389301,
+      "uncertaintyThreshold": 0.15,
+      "estimateEpisodes": 2,
+      "validationEpisodes": 2,
+      "validationStatus": "VALIDATED",
+      "validationValue": 0.3377120152581483,
+      "validationError": 0,
+      "validationTolerance": 0.15,
+      "reason": null
+    }
+  ],
+  "unobserved": [
+    {
+      "key": "lane_change_duration",
+      "scenario": "MANOEUVRE_DURATION",
+      "demonstration": "manevre care ating podeaua de 1 s (chei 0,5–1 s): banda nu este identificabilă",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "DURATION_FLOOR_SATURATED",
+      "excluded": {},
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "lane_change_duration",
+      "scenario": "MANOEUVRE_DURATION",
+      "demonstration": "manevre care pretind simultan podeaua și o durată exactă",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "DURATION_FLOOR_INCONSISTENT",
+      "excluded": {
+        "DURATION_FLOOR_INCONSISTENT": 1
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "lane_change_duration",
+      "scenario": "MANOEUVRE_DURATION",
+      "demonstration": "durate reale împrăștiate între 1,5 și 4,5 s",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "UNCERTAINTY_ABOVE_THRESHOLD",
+      "excluded": {},
+      "validationStatus": "OUTSIDE_TOLERANCE"
+    },
+    {
+      "key": "lane_change_duration",
+      "scenario": "MANOEUVRE_DURATION",
+      "demonstration": "demonstrații MANUAL, neeligibile",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "NO_ELIGIBLE_EPISODES",
+      "excluded": {},
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "signal_lead_time",
+      "scenario": "SIGNAL_LEAD",
+      "demonstration": "manevre fără indicator: avansul nu există",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "SIGNAL_LEAD_WITHOUT_INDICATOR",
+      "excluded": {
+        "SIGNAL_LEAD_WITHOUT_INDICATOR": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "signal_lead_time",
+      "scenario": "SIGNAL_LEAD",
+      "demonstration": "manevre semnalizate a căror mișcare nu a pornit: avans cenzat",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "SIGNAL_LEAD_CENSORED",
+      "excluded": {
+        "SIGNAL_LEAD_CENSORED": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "signal_lead_time",
+      "scenario": "SIGNAL_LEAD",
+      "demonstration": "avansuri reale împrăștiate între 1,5 și 4,5 s",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "UNCERTAINTY_ABOVE_THRESHOLD",
+      "excluded": {},
+      "validationStatus": "OUTSIDE_TOLERANCE"
+    },
+    {
+      "key": "signal_use_probability",
+      "scenario": "INDICATOR_USE",
+      "demonstration": "episoade contradictorii, fără indicator în unele și mereu în altele",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "UNCERTAINTY_ABOVE_THRESHOLD",
+      "excluded": {},
+      "validationStatus": "VALIDATED"
+    },
+    {
+      "key": "signal_use_probability",
+      "scenario": "INDICATOR_USE",
+      "demonstration": "prea puține oportunități distincte pentru o rată",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "INDICATOR_TRIALS_BELOW_MINIMUM",
+      "excluded": {},
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "pass_on_right_probability",
+      "scenario": "RIGHT_SIDE_PASS",
+      "demonstration": "hartă care interzice, nu declară sau nu acoperă spațiul: niciun eșantion extras",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "RIGHT_PASS_PRECONDITION",
+      "excluded": {
+        "RIGHT_PASS_PRECONDITION": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "pass_on_right_probability",
+      "scenario": "RIGHT_SIDE_PASS",
+      "demonstration": "doar acceptări, fără limită superioară",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "RIGHT_PASS_UPPER_BOUND_UNOBSERVED",
+      "excluded": {},
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "pass_on_right_probability",
+      "scenario": "RIGHT_SIDE_PASS",
+      "demonstration": "doar refuzuri, fără limită inferioară",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "RIGHT_PASS_LOWER_BOUND_UNOBSERVED",
+      "excluded": {},
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "pass_on_right_probability",
+      "scenario": "RIGHT_SIDE_PASS",
+      "demonstration": "acceptare peste un refuz: limite incompatibile",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "CONTRADICTORY_RIGHT_PASS_BOUNDS",
+      "excluded": {
+        "CONTRADICTORY_RIGHT_PASS_BOUNDS": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "pass_on_right_probability",
+      "scenario": "RIGHT_SIDE_PASS",
+      "demonstration": "limită reală, dar prea largă (0,05–0,47)",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "UNCERTAINTY_ABOVE_THRESHOLD",
+      "excluded": {},
+      "validationStatus": "VALIDATED"
+    },
+    {
+      "key": "pass_on_right_probability",
+      "scenario": "RIGHT_SIDE_PASS",
+      "demonstration": "set fără episoade",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "NO_ELIGIBLE_EPISODES",
+      "excluded": {},
+      "validationStatus": "NO_DATA"
+    }
+  ],
+  "groupConstraints": [
+    {
+      "id": "DURATION_FLOOR_HIDES_SUB_SECOND",
+      "keys": [
+        "lane_change_duration"
+      ],
+      "explanation": "Podeaua explicită a politicii, `minimumManoeuvreDurationS = 1 s`, face ca orice cheie din intervalul 0,5–1 s al catalogului să producă aceleași 60 de tick-uri: `D = 60` dovedește doar `cheie ≤ 1 s`, deci acea bandă nu este identificabilă din comportament și cheia rămâne neobservată în loc să primească podeaua ca valoare."
+    },
+    {
+      "id": "MANOEUVRE_TIMELINE_SHARED",
+      "keys": [
+        "lane_change_duration",
+        "signal_lead_time"
+      ],
+      "explanation": "Cele două durate sunt segmente ale aceleiași cronologii de tick-uri: avansul de semnalizare precede prima mișcare, iar durata numără tick-urile de după ea. O fereastră trunchiată înainte de pornire cenzează avansul, iar una tăiată în timpul mișcării cenzează durata; aceeași manevră nu poate furniza două valori independente din același tick."
+    },
+    {
+      "id": "SIGNAL_LEAD_DEPENDS_ON_INDICATOR",
+      "keys": [
+        "signal_lead_time",
+        "signal_use_probability"
+      ],
+      "explanation": "Avansul există prin definiție numai când indicatorul este folosit: fără indicator manevra pornește în tick-ul validării, deci nu există interval de măsurat. Cele două chei împart aceeași oportunitate — un eșantion `signal-use` decide indicatorul, iar avansul se numără numai după el — dar niciuna nu se deduce din cealaltă."
+    },
+    {
+      "id": "RIGHT_PASS_REFUSAL_PRECEDES_SAMPLE",
+      "keys": [
+        "pass_on_right_probability"
+      ],
+      "explanation": "Declarația de siguranță a lumii precede eșantionul: o depășire prin dreapta interzisă, o permisiune `UNKNOWN` sau un spațiu declarat sub `lane_change_front_gap` refuză manevra înainte de orice extragere. Un astfel de tick nu spune nimic despre probabilitate, iar plafonul de spațiu al lui 053 mută proporția de oportunități care ajung la cheie."
+    },
+    {
+      "id": "LANE_KEYS_FROM_ONE_MANOEUVRE",
+      "keys": [
+        "lane_change_duration",
+        "signal_lead_time",
+        "signal_use_probability",
+        "pass_on_right_probability"
+      ],
+      "explanation": "Cele patru chei pot apărea în aceeași călătorie, dar nu din același fapt: ordinea ramurilor 177 dă fiecărui tick un singur fapt — refuz 053, refuz de permisiune ori spațiu, eșantion de depășire prin dreapta, eșantion de indicator, avans de semnalizare sau progres lateral. Un set cu un singur tip de demonstrație lasă celelalte trei chei neobservate."
+    }
+  ],
+  "refusals": [
+    {
+      "episodeId": "duration-1",
+      "reason": "NOT_LEARNING_ELIGIBLE"
+    },
+    {
+      "episodeId": "duration-2",
+      "reason": "NOT_LEARNING_ELIGIBLE"
+    },
+    {
+      "episodeId": "duration-3",
+      "reason": "NOT_LEARNING_ELIGIBLE"
+    },
+    {
+      "episodeId": "duration-4",
+      "reason": "NOT_LEARNING_ELIGIBLE"
+    },
+    {
+      "episodeId": "duration-1",
+      "reason": "DUPLICATE_EPISODE"
+    }
+  ],
+  "split": {
+    "seed": 178,
+    "admitted": 16,
+    "disjoint": true
+  },
+  "compatibility": {
+    "policyVersion": "177-lane-policy-v2",
+    "candidateOnly": true,
+    "changesPolicySemantics": false,
+    "tickHz": 60,
+    "minimumManoeuvreDurationS": 1,
+    "durationTicks": 120,
+    "durationProgressAfter30": 0.25,
+    "durationFloorTicks": 60,
+    "durationCeilingTicks": 300,
+    "durationReason": "CHANGE_WITHOUT_SIGNAL",
+    "leadTicks": 120,
+    "leadFirstReason": "SIGNAL_LEAD",
+    "leadFinalReason": "SIGNAL_LEAD_COMPLETE",
+    "leadProgressAtStart": 0,
+    "indicatorKey": 0.38461538461538464,
+    "indicatorOnSample": 0.3248302654828876,
+    "indicatorOnUsed": true,
+    "indicatorOffSample": 0.5529060733970255,
+    "indicatorOffUsed": false,
+    "grantDraw": 0.2497545420192182,
+    "grantGranted": true,
+    "grantReason": "CHANGE_WITHOUT_SIGNAL",
+    "refusalDraw": 0.4256694884970784,
+    "refusalGranted": false,
+    "refusalReason": "RIGHT_OVERTAKE_REFUSED"
+  },
+  "determinism": {
+    "seed": 178,
+    "digest": "fnv1a32:61224c01",
+    "repeatedDigest": "fnv1a32:61224c01"
+  },
+  "checks": [
+    {
+      "id": "scenario-duration",
+      "pass": true,
+      "detail": "duration-only duration 1.9917 s; lead, indicator and right pass stay unobserved"
+    },
+    {
+      "id": "scenario-lead",
+      "pass": true,
+      "detail": "lead-only lead 1.9917 s; duration, indicator and right pass stay unobserved"
+    },
+    {
+      "id": "scenario-indicator",
+      "pass": true,
+      "detail": "indicator-only probability 0.4000 over distinct opportunities; duration and right pass stay unobserved"
+    },
+    {
+      "id": "scenario-right-pass",
+      "pass": true,
+      "detail": "right-pass-only probability 0.3377 between the draws 0.2498 and 0.4257"
+    },
+    {
+      "id": "zero-lead-observed",
+      "pass": true,
+      "detail": "signalling that starts the movement in the same tick is a demonstrated lead of 0 s, not missing evidence"
+    },
+    {
+      "id": "zero-indicator-observed",
+      "pass": true,
+      "detail": "forty opportunities without a single indicator are a demonstrated zero probability"
+    },
+    {
+      "id": "uncertainty-reported",
+      "pass": true,
+      "detail": "lane_change_duration 0.0500 <= 0.5 s, signal_lead_time 0.0500 <= 0.5 s, signal_use_probability 0.0954 <= 0.15 probability, pass_on_right_probability 0.0880 <= 0.15 probability"
+    },
+    {
+      "id": "uncertainty-duration",
+      "pass": true,
+      "detail": "scattered durations measure ±0.6570 s > 0.5 and stay unobserved"
+    },
+    {
+      "id": "uncertainty-lead",
+      "pass": true,
+      "detail": "scattered leads measure ±0.6570 s > 0.5 and stay unobserved"
+    },
+    {
+      "id": "uncertainty-indicator",
+      "pass": true,
+      "detail": "never-versus-always indicator episodes measure ±0.6570 > 0.15 and stay unobserved"
+    },
+    {
+      "id": "uncertainty-right-pass",
+      "pass": true,
+      "detail": "a 0.05–0.47 bound measures ±0.2088 > 0.15 and stays unobserved"
+    },
+    {
+      "id": "validation-split",
+      "pass": true,
+      "detail": "seed 178: every key validates on held-out episodes (lane_change_duration 2+2, signal_lead_time 3+2, signal_use_probability 8+8, pass_on_right_probability 2+2)"
+    },
+    {
+      "id": "validation-too-small",
+      "pass": true,
+      "detail": "three episodes leave 1 held-out episode, reported as TOO_SMALL"
+    },
+    {
+      "id": "duration-floor",
+      "pass": true,
+      "detail": "the explicit one-second floor makes every key in 0.5–1 s produce the same 60 ticks, so that band stays unobserved and a set that mixes the floor with an exact duration has no value"
+    },
+    {
+      "id": "lead-requires-indicator",
+      "pass": true,
+      "detail": "without the indicator there is no lead, a signalled manoeuvre whose movement never started is only a censored wait, and only a started signalled manoeuvre measures the key"
+    },
+    {
+      "id": "right-pass-precondition",
+      "pass": true,
+      "detail": "a forbidden, undeclared or too-tight right lane refuses the manoeuvre before the draw, so it says nothing about the probability"
+    },
+    {
+      "id": "right-pass-bounds",
+      "pass": true,
+      "detail": "a grant is only a lower bound, a refusal only an upper bound, and a grant above a refusal has no intersection"
+    },
+    {
+      "id": "indicator-trials",
+      "pass": true,
+      "detail": "the rate rests on 26 distinct opportunities, not on frames"
+    },
+    {
+      "id": "no-fabricated-values",
+      "pass": true,
+      "detail": "15 unobserved demonstrations carry value null and an explicit reason"
+    },
+    {
+      "id": "group-constraints",
+      "pass": true,
+      "detail": "DURATION_FLOOR_HIDES_SUB_SECOND, MANOEUVRE_TIMELINE_SHARED, SIGNAL_LEAD_DEPENDS_ON_INDICATOR, RIGHT_PASS_REFUSAL_PRECEDES_SAMPLE, LANE_KEYS_FROM_ONE_MANOEUVRE"
+    },
+    {
+      "id": "invalid-input-refused",
+      "pass": true,
+      "detail": "NaN lateral progress refused; duration-1:NOT_LEARNING_ELIGIBLE, duration-2:NOT_LEARNING_ELIGIBLE, duration-3:NOT_LEARNING_ELIGIBLE, duration-4:NOT_LEARNING_ELIGIBLE, duration-1:DUPLICATE_EPISODE"
+    },
+    {
+      "id": "determinism",
+      "pass": true,
+      "detail": "digest fnv1a32:61224c01"
+    },
+    {
+      "id": "catalog-ranges",
+      "pass": true,
+      "detail": "lane_change_duration 1.9917 s, signal_lead_time 1.9917 s, signal_use_probability 0.3846 probability, pass_on_right_probability 0.3377 probability"
+    },
+    {
+      "id": "policy-compatibility",
+      "pass": true,
+      "detail": "177 reads the estimate without a semantic change: 120 ticks of lateral movement at 0.2500 after 30 ticks, 120 lead ticks, indicator on at draw 0.3248 and off at 0.5529, right pass granted at draw 0.2498 and refused at 0.4257"
+    }
+  ],
+  "summary": {
+    "checks": 24,
+    "passed": 24,
+    "pass": true,
+    "candidateKeys": 4,
+    "unobservedKeys": 15
+  }
+}
