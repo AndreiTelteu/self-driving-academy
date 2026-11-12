@@ -31,10 +31,10 @@
 | Telemetrie | Completed | 0 | 0 | 7 / 7 | `██████████` 100% |
 | UI | Completed | 0 | 0 | 1 / 1 | `██████████` 100% |
 | Validare | Completed | 0 | 0 | 4 / 4 | `██████████` 100% |
-| Validare și release | V1 | 3 | 0 | 9 / 12 | `███████░░░` 75% |
+| Validare și release | V1 | 2 | 0 | 10 / 12 | `████████░░` 83% |
 | Validare V2 | V2 | 2 | 0 | 0 / 2 | `░░░░░░░░░░` 0% |
 | Vehicule și fizică | Completed | 0 | 0 | 11 / 11 | `██████████` 100% |
-| Total | - | 43 | 0 | 192 / 235 | `████████░░` 82% |
+| Total | - | 42 | 0 | 193 / 235 | `████████░░` 82% |
 <!-- loop-pbi:progress:end -->
 
 # Backlog Kanban Self Driving Academy
