@@ -1,0 +1,796 @@
+{
+  "version": "233-challenge-experience-report-v1",
+  "contract": {
+    "experience": "233-challenge-experience-v1",
+    "state": "233-challenge-experience-state-v1",
+    "record": "233-challenge-record-v1",
+    "reaction": "233-challenge-reaction-v1",
+    "panel": "233-challenge-panel-v1",
+    "rewardKeyExample": "id-v1:16:challenge-reward27:233-challenge-experience-v19:PRECISION10:2026-11-12",
+    "limits": {
+      "records": 32,
+      "rewardedKeys": 64,
+      "dailyPicks": 3,
+      "reactionCodeUnits": 240,
+      "globalListeners": 0
+    }
+  },
+  "credit": [
+    {
+      "scenario": "academy_first_completion",
+      "status": "CREDITED",
+      "reason": null,
+      "family": "PRECISION",
+      "dailyDate": "2026-11-12",
+      "calendar": "NEW_DAY",
+      "academyXp": 80,
+      "creditedXp": 80,
+      "xpBalance": 80,
+      "entries": 1,
+      "account": "one authored credit through the real 213 ledger"
+    },
+    {
+      "scenario": "academy_same_family_same_day",
+      "status": "DUPLICATE",
+      "reason": "FAMILY_REWARDED_TODAY",
+      "family": "PRECISION",
+      "dailyDate": "2026-11-12",
+      "calendar": "SAME_DAY",
+      "academyXp": 80,
+      "creditedXp": 0,
+      "xpBalance": 80,
+      "entries": 1,
+      "account": "the family/day identity is already credited"
+    },
+    {
+      "scenario": "calendar_rollback",
+      "status": "SKIPPED",
+      "reason": "CALENDAR_ROLLBACK",
+      "family": "PRECISION",
+      "dailyDate": "2026-11-11",
+      "calendar": "ROLLBACK",
+      "academyXp": 80,
+      "creditedXp": 0,
+      "xpBalance": 80,
+      "entries": 1,
+      "account": "a past date opens no new credit"
+    },
+    {
+      "scenario": "declined_offer",
+      "status": "SKIPPED",
+      "reason": "NOT_COMPLETED",
+      "family": "EXPERIMENT",
+      "dailyDate": "2026-11-12",
+      "calendar": "SAME_DAY",
+      "academyXp": 0,
+      "creditedXp": 0,
+      "xpBalance": 80,
+      "entries": 1,
+      "account": "a refusal costs no XP"
+    },
+    {
+      "scenario": "deadline_failure",
+      "status": "SKIPPED",
+      "reason": "NOT_COMPLETED",
+      "family": "EFFICIENCY",
+      "dailyDate": "2026-11-12",
+      "calendar": "SAME_DAY",
+      "academyXp": 0,
+      "creditedXp": 0,
+      "xpBalance": 80,
+      "entries": 1,
+      "account": "a failure costs no XP"
+    },
+    {
+      "scenario": "haos_completion",
+      "status": "SKIPPED",
+      "reason": "LOCAL_RECORD_ONLY",
+      "family": "PRECISION",
+      "dailyDate": "2026-11-12",
+      "calendar": "NEW_DAY",
+      "academyXp": 0,
+      "creditedXp": 0,
+      "xpBalance": 0,
+      "entries": 0,
+      "account": "Haos keeps a local record only"
+    },
+    {
+      "scenario": "academy_same_family_next_day",
+      "status": "CREDITED",
+      "reason": null,
+      "family": "PRECISION",
+      "dailyDate": "2026-11-13",
+      "calendar": "NEW_DAY",
+      "academyXp": 80,
+      "creditedXp": 80,
+      "xpBalance": 160,
+      "entries": 2,
+      "account": "a new local date pays the family credit again"
+    }
+  ],
+  "records": {
+    "rows": [
+      {
+        "scenario": "first_record",
+        "comparison": "FIRST_RECORD",
+        "elapsedTicks": 300,
+        "bestElapsedTicks": 300,
+        "improved": true,
+        "rank": [
+          1,
+          -300,
+          0
+        ]
+      },
+      {
+        "scenario": "slower_run",
+        "comparison": "WORSE",
+        "elapsedTicks": 900,
+        "bestElapsedTicks": 300,
+        "improved": false,
+        "rank": [
+          1,
+          -300,
+          0
+        ]
+      },
+      {
+        "scenario": "equal_run",
+        "comparison": "EQUAL",
+        "elapsedTicks": 300,
+        "bestElapsedTicks": 300,
+        "improved": false,
+        "rank": [
+          1,
+          -300,
+          0
+        ]
+      },
+      {
+        "scenario": "faster_run",
+        "comparison": "BETTER",
+        "elapsedTicks": 120,
+        "bestElapsedTicks": 120,
+        "improved": true,
+        "rank": [
+          1,
+          -120,
+          0
+        ]
+      }
+    ],
+    "templateId": "challenge-valet-with-style"
+  },
+  "retry": {
+    "rows": [
+      {
+        "status": "RESTARTED",
+        "code": null,
+        "attempt": 2,
+        "sameTemplate": true,
+        "newIdentity": true,
+        "xpDelta": 0
+      },
+      {
+        "status": "REFUSED",
+        "code": "NOT_FAILED",
+        "attempt": 2,
+        "sameTemplate": true,
+        "newIdentity": false,
+        "xpDelta": 0
+      }
+    ],
+    "creditedAfterRetry": 80,
+    "duplicateAfterRetry": "FAMILY_REWARDED_TODAY"
+  },
+  "daily": [
+    {
+      "dailyDate": "2026-11-09",
+      "templates": [
+        "challenge-city-copies-me",
+        "challenge-forgot-something",
+        "challenge-influencer-no-spill"
+      ],
+      "families": 3,
+      "manual": 2,
+      "checks": {
+        "exactlyThree": true,
+        "uniqueTemplates": true,
+        "atLeastOneManual": true,
+        "distinctFamilies": true,
+        "catalogOnly": true,
+        "noChaosOnly": true,
+        "noRepeatOfPrevious": true
+      }
+    },
+    {
+      "dailyDate": "2026-11-10",
+      "templates": [
+        "challenge-city-tour-backwards",
+        "challenge-valet-with-style",
+        "challenge-maternity-run"
+      ],
+      "families": 3,
+      "manual": 3,
+      "checks": {
+        "exactlyThree": true,
+        "uniqueTemplates": true,
+        "atLeastOneManual": true,
+        "distinctFamilies": true,
+        "catalogOnly": true,
+        "noChaosOnly": true,
+        "noRepeatOfPrevious": true
+      }
+    },
+    {
+      "dailyDate": "2026-11-11",
+      "templates": [
+        "challenge-influencer-parking-drift",
+        "challenge-last-minute-airport",
+        "challenge-influencer-no-spill"
+      ],
+      "families": 3,
+      "manual": 3,
+      "checks": {
+        "exactlyThree": true,
+        "uniqueTemplates": true,
+        "atLeastOneManual": true,
+        "distinctFamilies": true,
+        "catalogOnly": true,
+        "noChaosOnly": true,
+        "noRepeatOfPrevious": true
+      }
+    },
+    {
+      "dailyDate": "2026-11-12",
+      "templates": [
+        "challenge-influencer-single-frame",
+        "challenge-city-copies-me",
+        "challenge-maternity-run"
+      ],
+      "families": 3,
+      "manual": 2,
+      "checks": {
+        "exactlyThree": true,
+        "uniqueTemplates": true,
+        "atLeastOneManual": true,
+        "distinctFamilies": true,
+        "catalogOnly": true,
+        "noChaosOnly": true,
+        "noRepeatOfPrevious": true
+      }
+    },
+    {
+      "dailyDate": "2026-11-13",
+      "templates": [
+        "challenge-last-minute-airport",
+        "challenge-toilet-sos",
+        "challenge-influencer-parking-drift"
+      ],
+      "families": 3,
+      "manual": 3,
+      "checks": {
+        "exactlyThree": true,
+        "uniqueTemplates": true,
+        "atLeastOneManual": true,
+        "distinctFamilies": true,
+        "catalogOnly": true,
+        "noChaosOnly": true,
+        "noRepeatOfPrevious": true
+      }
+    }
+  ],
+  "connection": {
+    "bridgeVersion": "231-challenge-daily-bridge-v1",
+    "dailyMissionsPerDay": 3,
+    "expressible": 3,
+    "deferred": 9,
+    "expressibleTemplateIds": [
+      "challenge-city-copies-me",
+      "challenge-last-minute-airport",
+      "challenge-maternity-run"
+    ],
+    "deferredTemplateIds": [
+      "challenge-cake-delivery",
+      "challenge-city-tour-backwards",
+      "challenge-forgot-something",
+      "challenge-influencer-demolition",
+      "challenge-influencer-no-spill",
+      "challenge-influencer-parking-drift",
+      "challenge-influencer-single-frame",
+      "challenge-toilet-sos",
+      "challenge-valet-with-style"
+    ]
+  },
+  "reactions": [
+    {
+      "trigger": "OFFER",
+      "tone": "NEUTRAL",
+      "effect": "NONE",
+      "xpStatement": "XP_PENDING",
+      "authored": true,
+      "xpDelta": 0,
+      "text": "Parchează precis. Un valet cu stil nu lasă mașina strâmbă."
+    },
+    {
+      "trigger": "PROGRESS",
+      "tone": "NEUTRAL",
+      "effect": "NONE",
+      "xpStatement": "XP_PENDING",
+      "authored": true,
+      "xpDelta": 0,
+      "text": "Aproape de loc. Încet, cu orientarea cerută."
+    },
+    {
+      "trigger": "SUCCESS",
+      "tone": "CELEBRATION",
+      "effect": "CELEBRATION",
+      "xpStatement": "XP_PENDING",
+      "authored": true,
+      "xpDelta": 0,
+      "text": "Parcare perfectă: viteză mică, orientare exactă."
+    },
+    {
+      "trigger": "SUCCESS",
+      "tone": "CELEBRATION",
+      "effect": "CELEBRATION",
+      "xpStatement": "XP_CREDITED",
+      "authored": true,
+      "xpDelta": 0,
+      "text": "Parcare perfectă: viteză mică, orientare exactă."
+    },
+    {
+      "trigger": "SUCCESS",
+      "tone": "CELEBRATION",
+      "effect": "CELEBRATION",
+      "xpStatement": "RECORD_ONLY",
+      "authored": true,
+      "xpDelta": 0,
+      "text": "Parcare perfectă: viteză mică, orientare exactă."
+    },
+    {
+      "trigger": "DECLINE",
+      "tone": "SHRUG",
+      "effect": "SHRUG",
+      "xpStatement": "NO_XP_LOSS",
+      "authored": false,
+      "xpDelta": 0,
+      "text": "Clientul s-a răzgândit: „Las-o pentru data viitoare.” Niciun XP nu se pierde."
+    },
+    {
+      "trigger": "FAILURE",
+      "tone": "COMMISERATION",
+      "effect": "COMMISERATION",
+      "xpStatement": "NO_XP_LOSS",
+      "authored": true,
+      "xpDelta": 0,
+      "text": "Am pierdut zborul. Reluăm cu altă rută."
+    }
+  ],
+  "storage": {
+    "snapshotBytes": 1116,
+    "ledgerEntryBytes": 786,
+    "ledgerEntries": 1,
+    "records": 1,
+    "rewardedKeys": 1,
+    "manifestChallengeHistoryEntries": "NULL_IN_MANIFEST",
+    "admissionCap": "PROVISIONAL_FINITE"
+  },
+  "performance": {
+    "simulation": {
+      "creditCalls": 7,
+      "ledgerCredits": 2,
+      "ledgerDuplicates": 0,
+      "perTickWork": "NONE",
+      "clock": "NOT_MEASURED"
+    },
+    "ui": {
+      "panelVersion": "233-challenge-panel-v1",
+      "globalListeners": 0,
+      "readsPerOpen": 1,
+      "loopJoined": false,
+      "frameBudgetP95Ms": 18.5,
+      "frameBudgetSource": "Docs/performance-budgets.json",
+      "frameMeasurement": "NOT_MEASURED_DEV"
+    },
+    "storage": {
+      "stateVersion": "233-challenge-experience-state-v1",
+      "recordRowsCap": 32,
+      "rewardedKeysCap": 64,
+      "droppedKeyPolicy": "the oldest reward key is dropped with a counter; the real 213 ledger still deduplicates it",
+      "clock": "NOT_MEASURED"
+    }
+  },
+  "checks": [
+    {
+      "name": "experience-version",
+      "expected": "233-challenge-experience-v1",
+      "actual": "233-challenge-experience-v1",
+      "pass": true,
+      "detail": "versioned contract"
+    },
+    {
+      "name": "state-version",
+      "expected": "233-challenge-experience-state-v1",
+      "actual": "233-challenge-experience-state-v1",
+      "pass": true,
+      "detail": "versioned snapshot"
+    },
+    {
+      "name": "record-version",
+      "expected": "233-challenge-record-v1",
+      "actual": "233-challenge-record-v1",
+      "pass": true,
+      "detail": "versioned record rows"
+    },
+    {
+      "name": "reaction-version",
+      "expected": "233-challenge-reaction-v1",
+      "actual": "233-challenge-reaction-v1",
+      "pass": true,
+      "detail": "versioned reactions"
+    },
+    {
+      "name": "panel-version",
+      "expected": "233-challenge-panel-v1",
+      "actual": "233-challenge-panel-v1",
+      "pass": true,
+      "detail": "read-only UI projection"
+    },
+    {
+      "name": "records-cap",
+      "expected": 32,
+      "actual": 32,
+      "pass": true,
+      "detail": "finite record rows"
+    },
+    {
+      "name": "rewarded-keys-cap",
+      "expected": 64,
+      "actual": 64,
+      "pass": true,
+      "detail": "finite calendar keys"
+    },
+    {
+      "name": "daily-picks",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "exactly three daily challenges"
+    },
+    {
+      "name": "credit-first",
+      "expected": "CREDITED",
+      "actual": "CREDITED",
+      "pass": true,
+      "detail": "the first Academy completion pays its authored XP"
+    },
+    {
+      "name": "credit-first-xp",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the credited amount is the real authored XP"
+    },
+    {
+      "name": "credit-duplicate",
+      "expected": "DUPLICATE",
+      "actual": "DUPLICATE",
+      "pass": true,
+      "detail": "the same family and day never pays twice"
+    },
+    {
+      "name": "credit-duplicate-zero",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "a duplicate pays nothing"
+    },
+    {
+      "name": "credit-rollback",
+      "expected": "CALENDAR_ROLLBACK",
+      "actual": "CALENDAR_ROLLBACK",
+      "pass": true,
+      "detail": "a past date opens no credit"
+    },
+    {
+      "name": "credit-decline",
+      "expected": "NOT_COMPLETED",
+      "actual": "NOT_COMPLETED",
+      "pass": true,
+      "detail": "a refusal pays nothing"
+    },
+    {
+      "name": "credit-failure",
+      "expected": "NOT_COMPLETED",
+      "actual": "NOT_COMPLETED",
+      "pass": true,
+      "detail": "a failure pays nothing"
+    },
+    {
+      "name": "credit-haos",
+      "expected": "LOCAL_RECORD_ONLY",
+      "actual": "LOCAL_RECORD_ONLY",
+      "pass": true,
+      "detail": "Haos keeps a local record only"
+    },
+    {
+      "name": "credit-next-day",
+      "expected": "CREDITED",
+      "actual": "CREDITED",
+      "pass": true,
+      "detail": "a new day pays the family credit again"
+    },
+    {
+      "name": "credit-ledger-entries",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "two real 213 entries for two real credits"
+    },
+    {
+      "name": "record-first",
+      "expected": "FIRST_RECORD",
+      "actual": "FIRST_RECORD",
+      "pass": true,
+      "detail": "first pass is a record"
+    },
+    {
+      "name": "record-worse",
+      "expected": "WORSE",
+      "actual": "WORSE",
+      "pass": true,
+      "detail": "a slower pass is worse"
+    },
+    {
+      "name": "record-equal",
+      "expected": "EQUAL",
+      "actual": "EQUAL",
+      "pass": true,
+      "detail": "an equal pass is equal"
+    },
+    {
+      "name": "record-better",
+      "expected": "BETTER",
+      "actual": "BETTER",
+      "pass": true,
+      "detail": "a faster pass is better"
+    },
+    {
+      "name": "record-never-lowers",
+      "expected": "300,300,300,120",
+      "actual": "300,300,300,120",
+      "pass": true,
+      "detail": "a worse or equal run never rewrites the best; only a faster run does"
+    },
+    {
+      "name": "record-improved-flags",
+      "expected": "true,false,false,true",
+      "actual": "true,false,false,true",
+      "pass": true,
+      "detail": "only a first or a strictly better run rewrites the best"
+    },
+    {
+      "name": "retry-status",
+      "expected": "RESTARTED",
+      "actual": "RESTARTED",
+      "pass": true,
+      "detail": "a failed challenge restarts immediately"
+    },
+    {
+      "name": "retry-new-identity",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the retry has a new instance identity"
+    },
+    {
+      "name": "retry-same-template",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the template identity is unchanged"
+    },
+    {
+      "name": "retry-attempt",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "the retry is a new attempt"
+    },
+    {
+      "name": "retry-no-xp",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "a retry never changes the balance"
+    },
+    {
+      "name": "retry-credit-once",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the first completion after the retry pays once"
+    },
+    {
+      "name": "retry-duplicate",
+      "expected": "FAMILY_REWARDED_TODAY",
+      "actual": "FAMILY_REWARDED_TODAY",
+      "pass": true,
+      "detail": "a further same-family run that day is a duplicate"
+    },
+    {
+      "name": "retry-refuses-completed",
+      "expected": "NOT_FAILED",
+      "actual": "NOT_FAILED",
+      "pass": true,
+      "detail": "a completed challenge is not retried"
+    },
+    {
+      "name": "daily-exactly-three",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "five days of exactly three"
+    },
+    {
+      "name": "daily-unique",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "no template repeats in a day"
+    },
+    {
+      "name": "daily-manual",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "at least one MANUAL per day"
+    },
+    {
+      "name": "daily-families",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "varied families"
+    },
+    {
+      "name": "daily-no-chaos",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "no Haos-only objective"
+    },
+    {
+      "name": "daily-no-repeat",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "a previous day is not repeated when alternatives exist"
+    },
+    {
+      "name": "daily-bridge",
+      "expected": "231-challenge-daily-bridge-v1",
+      "actual": "231-challenge-daily-bridge-v1",
+      "pass": true,
+      "detail": "the 211 bridge stays authoritative"
+    },
+    {
+      "name": "daily-expressible",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "three template families map to 211"
+    },
+    {
+      "name": "daily-deferred",
+      "expected": 9,
+      "actual": 9,
+      "pass": true,
+      "detail": "nine objectives keep their own 231 evaluator"
+    },
+    {
+      "name": "reaction-offer",
+      "expected": "OFFER",
+      "actual": "OFFER",
+      "pass": true,
+      "detail": "the offer shows the authored premise"
+    },
+    {
+      "name": "reaction-progress",
+      "expected": "PROGRESS",
+      "actual": "PROGRESS",
+      "pass": true,
+      "detail": "the live attempt shows the authored progress line"
+    },
+    {
+      "name": "reaction-success",
+      "expected": "SUCCESS",
+      "actual": "SUCCESS",
+      "pass": true,
+      "detail": "a completion shows the authored success line"
+    },
+    {
+      "name": "reaction-credited",
+      "expected": "XP_CREDITED",
+      "actual": "XP_CREDITED",
+      "pass": true,
+      "detail": "a credit states the single XP credit"
+    },
+    {
+      "name": "reaction-record-only",
+      "expected": "RECORD_ONLY",
+      "actual": "RECORD_ONLY",
+      "pass": true,
+      "detail": "a duplicate states record only"
+    },
+    {
+      "name": "reaction-decline",
+      "expected": "DECLINE",
+      "actual": "DECLINE",
+      "pass": true,
+      "detail": "a refusal has a closed safe line"
+    },
+    {
+      "name": "reaction-failure",
+      "expected": "FAILURE",
+      "actual": "FAILURE",
+      "pass": true,
+      "detail": "a failure shows the authored failure line"
+    },
+    {
+      "name": "reaction-xp-safe",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "every reaction carries xpDelta 0"
+    },
+    {
+      "name": "storage-records",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the snapshot keeps the record"
+    },
+    {
+      "name": "storage-keys",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the snapshot keeps the family/day denial key"
+    },
+    {
+      "name": "storage-highest-date",
+      "expected": "2026-11-12",
+      "actual": "2026-11-12",
+      "pass": true,
+      "detail": "the calendar never lowers the highest observed date"
+    },
+    {
+      "name": "storage-snapshot-bounded",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "bounded snapshot bytes"
+    },
+    {
+      "name": "ledger-balance",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the ledger is the single XP truth"
+    },
+    {
+      "name": "record-template",
+      "expected": "challenge-valet-with-style",
+      "actual": "challenge-valet-with-style",
+      "pass": true,
+      "detail": "the record belongs to the offered template"
+    }
+  ],
+  "summary": {
+    "checks": 55,
+    "passed": 55,
+    "pass": true
+  }
+}

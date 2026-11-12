@@ -972,3 +972,47 @@ export type {
   ExperimentComparePanelStats,
   ExperimentCompareRefreshStatus,
 } from './experiment-compare-panel';
+export { createChallengePanel } from './challenge-panel';
+export type {
+  ChallengePanel,
+  ChallengePanelAdapter,
+  ChallengePanelOptions,
+  ChallengePanelRefreshStatus,
+  ChallengePanelStats,
+} from './challenge-panel';
+export {
+  CHALLENGE_PANEL_ACTION_LABELS,
+  CHALLENGE_PANEL_ACTIONS,
+  CHALLENGE_PANEL_COMPARISON_LABELS,
+  CHALLENGE_PANEL_CONTROL_LABELS,
+  CHALLENGE_PANEL_LIMITS,
+  CHALLENGE_PANEL_SESSION_LABELS,
+  CHALLENGE_PANEL_SNAPSHOT_VERSION,
+  CHALLENGE_PANEL_STATUSES,
+  CHALLENGE_PANEL_STATUS_LABELS,
+  CHALLENGE_PANEL_TEXT,
+  CHALLENGE_PANEL_VERSION,
+  composeChallengePanelSnapshot,
+  emptyChallengePanelView,
+  parseChallengePanelSnapshot,
+  projectChallengePanel,
+} from './challenge-panel-format';
+export type {
+  ChallengePanelAction,
+  ChallengePanelActionView,
+  ChallengePanelActive,
+  ChallengePanelActiveView,
+  ChallengePanelComposeInput,
+  ChallengePanelDailyPick,
+  ChallengePanelDailyView,
+  ChallengePanelOffer,
+  ChallengePanelOfferView,
+  ChallengePanelRecord,
+  ChallengePanelRecordView,
+  ChallengePanelResult,
+  ChallengePanelResultStatus,
+  ChallengePanelResultView,
+  ChallengePanelSnapshot,
+  ChallengePanelTemplateRow,
+  ChallengePanelView,
+} from './challenge-panel-format';
