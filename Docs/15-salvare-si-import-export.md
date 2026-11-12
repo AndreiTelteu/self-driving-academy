@@ -263,3 +263,11 @@ Dovezi: [Evidence/136-session-restore](Evidence/136-session-restore/README.md).
 
 Dovezi: [Evidence/225-session-kinds](Evidence/225-session-kinds/README.md).
 
+## Contract implementat V2 (PBI 166) — citirea unui profil V1 de către un build V2
+
+Formatul de export/import rămâne cel al lui 133/134 (`self-driving-academy-profile-export`, `formatVersion 1`, `schemaVersion 1`); PBI 166 nu schimbă documentul de fișier și nu adaugă un al doilea importator. Ce se schimbă este **citirea**: [`src/profiles/profile-v2.ts`](../src/profiles/profile-v2.ts) expune `readProfileDocument`, care acceptă un document `schemaVersion: 2` curent, migrează explicit un document `schemaVersion: 1` și refuză orice altă versiune cu `SCHEMA_TOO_NEW`/`CATALOG_TOO_NEW` înainte de a interpreta valori. Un profil V2 nu poate fi citit de parserul V1 și invers, deci o versiune viitoare nu este „ghicită”.
+
+Migrarea nu inventează date de salvare: cheile V1 își păstrează valoarea, unitatea, proveniența și dovezile, iar cheile noi primesc `defaultul` din catalogul 092, marcate `DEFAULT`/`CATALOG_DEFAULT` (sau rămân `UNSET` cu motiv, la cerere). `migratedFrom` păstrează documentul V1, iar `rollbackProfileV2ToV1` îl întoarce exact, cu checksum-ul original — deci un export vechi poate fi re-emis fără pierdere. Documentul V2 este un read model derivat pentru proiecția UI; nu s-a adăugat un rând nou în schema 127, iar rândurile 109 rămân sursa imuabilă.
+
+Comenzi: `npm run profile:v2` și `npm run profile:v2 -- --check`; dovezile sunt în [Evidence/166-profile-v2](Evidence/166-profile-v2/README.md).
+

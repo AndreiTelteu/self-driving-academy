@@ -269,7 +269,11 @@ const FNV_OFFSET_BASIS = 0xcbf29ce484222325n;
 const FNV_PRIME = 0x100000001b3n;
 const UINT64_MASK = 0xffffffffffffffffn;
 
-function fnv1a64(value: string): string {
+/**
+ * Deterministic FNV-1a 64 content hash, shared by the 109 version checksum and the 166 V2 profile
+ * checksum. It is an integrity fingerprint for history comparisons, not a security signature.
+ */
+export function profileContentHash(value: string): string {
   let hash = FNV_OFFSET_BASIS;
   for (let index = 0; index < value.length; index += 1) {
     hash ^= BigInt(value.charCodeAt(index));
@@ -320,7 +324,7 @@ export function computeProfileVersionChecksum(version: ProfileVersionContent): s
         ],
     parameters,
   ]);
-  return `${PROFILE_STORE_CHECKSUM_ALGORITHM}:${fnv1a64(canonical)}`;
+  return `${PROFILE_STORE_CHECKSUM_ALGORITHM}:${profileContentHash(canonical)}`;
 }
 
 export function verifyProfileVersionChecksum(version: ProfileVersion): boolean {
