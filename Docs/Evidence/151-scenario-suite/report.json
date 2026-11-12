@@ -1,0 +1,1977 @@
+{
+  "version": "151-scenario-suite-v1",
+  "generatedBy": "scripts/run-scenario-suite-report.mjs",
+  "command": "npm run scenarios:v1",
+  "oracleRule": "Fiecare rezultat așteptat este contractul livrat (oracolul 050, formula 101, tabelul 061 și identitatea 125), nu o copie a valorii observate. Seed fix 151, zero ceas de perete, zero aleator în transcript.",
+  "seeds": [
+    151
+  ],
+  "scenarios": [
+    {
+      "id": "autonomy-green-start-delay",
+      "family": "AUTONOMY",
+      "polarity": "POSITIVE",
+      "title": "Un taxi oprit la verde așteaptă green_start_delay înainte să pornească",
+      "contract": "050-signal-policy-v1 + Docs/18 (control)",
+      "executed": true,
+      "seed": 151,
+      "steps": 1,
+      "input": {
+        "state": "GREEN",
+        "speedMps": 0,
+        "phaseElapsedS": 0.35,
+        "greenStartDelayS": 0.7,
+        "decisionTick": 100
+      },
+      "expected": {
+        "action": "START_DELAY",
+        "reason": "GREEN_START_DELAY",
+        "stopRequested": true
+      },
+      "actual": {
+        "action": "START_DELAY",
+        "reason": "GREEN_START_DELAY",
+        "stopRequested": true
+      },
+      "checks": [
+        {
+          "name": "green action",
+          "expected": "START_DELAY",
+          "actual": "START_DELAY",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "valoarea trebuie să fie identică cu cea a contractului"
+          },
+          "pass": true,
+          "detail": "viteza sub 0,1 m/s și faza sub green_start_delay cer întârziere de pornire"
+        },
+        {
+          "name": "green reason",
+          "expected": "GREEN_START_DELAY",
+          "actual": "GREEN_START_DELAY",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "valoarea trebuie să fie identică cu cea a contractului"
+          },
+          "pass": true,
+          "detail": "motivul este cel publicat de contractul 050"
+        },
+        {
+          "name": "green stop requested",
+          "expected": true,
+          "actual": true,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "valoarea trebuie să fie identică cu cea a contractului"
+          },
+          "pass": true,
+          "detail": "START_DELAY ține frâna, GREEN_RELEASE o eliberează"
+        },
+        {
+          "name": "green state",
+          "expected": "GREEN",
+          "actual": "GREEN",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "valoarea trebuie să fie identică cu cea a contractului"
+          },
+          "pass": true,
+          "detail": "starea observată este verde"
+        },
+        {
+          "name": "green start delay echo",
+          "expected": 0.7,
+          "actual": 0.7,
+          "tolerance": {
+            "kind": "ABSOLUTE",
+            "value": 1e-12,
+            "unit": "s",
+            "rule": "profilul este proiectat din registrul de parametri"
+          },
+          "pass": true,
+          "detail": "valoarea de profil folosită de politică"
+        },
+        {
+          "name": "green reason has no stop-line distance",
+          "expected": null,
+          "actual": null,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "valoarea trebuie să fie identică cu cea a contractului"
+          },
+          "pass": true,
+          "detail": "calea verde nu raportează distanță rămasă la linia de STOP"
+        }
+      ],
+      "verdict": "PASS",
+      "note": "Faza verde este la jumătatea întârzierii configurate, deci pornirea este amânată.",
+      "notRunReason": null
+    },
+    {
+      "id": "autonomy-green-delay-boundary",
+      "family": "AUTONOMY",
+      "polarity": "POSITIVE",
+      "title": "La borna exactă a întârzierii pornirea este eliberată",
+      "contract": "050-signal-policy-v1 + Docs/18 (control)",
+      "executed": true,
+      "seed": 151,
+      "steps": 1,
+      "input": {
+        "state": "GREEN",
+        "speedMps": 0,
+        "phaseElapsedS": 0.7,
+        "greenStartDelayS": 0.7,
+        "decisionTick": 100
+      },
+      "expected": {
+        "action": "PROCEED",
+        "reason": "GREEN_RELEASE",
+        "stopRequested": false
+      },
+      "actual": {
+        "action": "PROCEED",
+        "reason": "GREEN_RELEASE",
+        "stopRequested": false
+      },
+      "checks": [
+        {
+          "name": "green action",
+          "expected": "PROCEED",
+          "actual": "PROCEED",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "valoarea trebuie să fie identică cu cea a contractului"
+          },
+          "pass": true,
+          "detail": "la borna green_start_delay (strict mai mic) pornirea nu mai este întârziată"
+        },
+        {
+          "name": "green reason",
+          "expected": "GREEN_RELEASE",
+          "actual": "GREEN_RELEASE",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "valoarea trebuie să fie identică cu cea a contractului"
+          },
+          "pass": true,
+          "detail": "motivul este cel publicat de contractul 050"
+        },
+        {
+          "name": "green stop requested",
+          "expected": false,
+          "actual": false,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "valoarea trebuie să fie identică cu cea a contractului"
+          },
+          "pass": true,
+          "detail": "START_DELAY ține frâna, GREEN_RELEASE o eliberează"
+        },
+        {
+          "name": "green state",
+          "expected": "GREEN",
+          "actual": "GREEN",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "valoarea trebuie să fie identică cu cea a contractului"
+          },
+          "pass": true,
+          "detail": "starea observată este verde"
+        },
+        {
+          "name": "green start delay echo",
+          "expected": 0.7,
+          "actual": 0.7,
+          "tolerance": {
+            "kind": "ABSOLUTE",
+            "value": 1e-12,
+            "unit": "s",
+            "rule": "profilul este proiectat din registrul de parametri"
+          },
+          "pass": true,
+          "detail": "valoarea de profil folosită de politică"
+        },
+        {
+          "name": "green reason has no stop-line distance",
+          "expected": null,
+          "actual": null,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "valoarea trebuie să fie identică cu cea a contractului"
+          },
+          "pass": true,
+          "detail": "calea verde nu raportează distanță rămasă la linia de STOP"
+        }
+      ],
+      "verdict": "PASS",
+      "note": "Contractul compară strict `phaseElapsedS < green_start_delay`, deci borna exactă eliberează.",
+      "notRunReason": null
+    },
+    {
+      "id": "autonomy-stale-observation",
+      "family": "AUTONOMY",
+      "polarity": "NEGATIVE",
+      "title": "O observație de semafor mai veche de 6 tick-uri este refuzată explicit",
+      "contract": "050-signal-policy-v1 (fereastră de observație)",
+      "executed": true,
+      "seed": 151,
+      "steps": 1,
+      "input": {
+        "state": "RED",
+        "observationTick": 100,
+        "decisionTick": 120,
+        "ageTicks": 20,
+        "speedMps": 8
+      },
+      "expected": {
+        "action": "UNKNOWN",
+        "reason": "UNAVAILABLE",
+        "stopRequested": false,
+        "sampledUnit": null,
+        "behaviorFacts": null
+      },
+      "actual": {
+        "action": "UNKNOWN",
+        "reason": "UNAVAILABLE",
+        "stopRequested": false,
+        "sampledUnit": null,
+        "behaviorFacts": null
+      },
+      "checks": [
+        {
+          "name": "stale action",
+          "expected": "UNKNOWN",
+          "actual": "UNKNOWN",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "valoarea trebuie să fie identică cu cea a contractului"
+          },
+          "pass": true,
+          "detail": "observația expirată nu produce decizie"
+        },
+        {
+          "name": "stale reason",
+          "expected": "UNAVAILABLE",
+          "actual": "UNAVAILABLE",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "valoarea trebuie să fie identică cu cea a contractului"
+          },
+          "pass": true,
+          "detail": "motivul refuzului este explicit"
+        },
+        {
+          "name": "stale age exceeds the observed window",
+          "expected": true,
+          "actual": 20,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "condiția booleană trebuie să fie adevărată"
+          },
+          "pass": true,
+          "detail": "fereastra publicată este de maximum 6 tick-uri"
+        },
+        {
+          "name": "stale sample not drawn",
+          "expected": null,
+          "actual": null,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "valoarea trebuie să fie identică cu cea a contractului"
+          },
+          "pass": true,
+          "detail": "un refuz nu consumă eșantionul de conformitate"
+        },
+        {
+          "name": "stale fact not fabricated",
+          "expected": null,
+          "actual": null,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "valoarea trebuie să fie identică cu cea a contractului"
+          },
+          "pass": true,
+          "detail": "refuzul nu inventează un fapt STOP pentru FSM"
+        },
+        {
+          "name": "red stop-line offset echo",
+          "expected": 1,
+          "actual": 1,
+          "tolerance": {
+            "kind": "ABSOLUTE",
+            "value": 1e-12,
+            "unit": "m",
+            "rule": "profilul este proiectat din registrul de parametri"
+          },
+          "pass": true,
+          "detail": "profilul rămâne citibil și când observația este refuzată"
+        }
+      ],
+      "verdict": "PASS",
+      "note": "Nicio decizie de circulație nu este derivată dintr-o observație expirată.",
+      "notRunReason": null
+    },
+    {
+      "id": "rides-full-lifecycle",
+      "family": "RIDES",
+      "polarity": "POSITIVE",
+      "title": "O cursă completă trece pickup, dropoff și eliberează taxiul o singură dată",
+      "contract": "061-ride-fsm-v1 + 060 dispatcher claim",
+      "executed": true,
+      "seed": 151,
+      "steps": 5,
+      "input": {
+        "events": [
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE"
+        ],
+        "startTick": 10,
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0002",
+        "pickupZoneId": "sz:0-0"
+      },
+      "expected": {
+        "states": [
+          "TO_PICKUP",
+          "PICKUP",
+          "TO_DROPOFF",
+          "DROPOFF",
+          "COMPLETED"
+        ],
+        "transitions": 5,
+        "releases": 1,
+        "taxiStatus": "AVAILABLE",
+        "completed": 1
+      },
+      "actual": {
+        "states": [
+          "TO_PICKUP",
+          "PICKUP",
+          "TO_DROPOFF",
+          "DROPOFF",
+          "COMPLETED"
+        ],
+        "transitions": 5,
+        "releases": 1,
+        "taxiStatus": "AVAILABLE",
+        "completed": 1
+      },
+      "checks": [
+        {
+          "name": "ride state path",
+          "expected": [
+            "TO_PICKUP",
+            "PICKUP",
+            "TO_DROPOFF",
+            "DROPOFF",
+            "COMPLETED"
+          ],
+          "actual": [
+            "TO_PICKUP",
+            "PICKUP",
+            "TO_DROPOFF",
+            "DROPOFF",
+            "COMPLETED"
+          ],
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "valoarea trebuie să fie identică cu cea a contractului"
+          },
+          "pass": true,
+          "detail": "traseul publicat de 061"
+        },
+        {
+          "name": "ride terminal",
+          "expected": true,
+          "actual": true,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "valoarea trebuie să fie identică cu cea a contractului"
+          },
+          "pass": true,
+          "detail": "DROPOFF_COMPLETE închide cursa"
+        },
+        {
+          "name": "ride terminal reason",
+          "expected": null,
+          "actual": null,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "valoarea trebuie să fie identică cu cea a contractului"
+          },
+          "pass": true,
+          "detail": "o cursă completă nu are motiv de eșec"
+        },
+        {
+          "name": "ride transitions",
+          "expected": 5,
+          "actual": 5,
+          "tolerance": {
+            "kind": "ABSOLUTE",
+            "value": 0,
+            "unit": "tranziții",
+            "rule": "numărul de tranziții este exact"
+          },
+          "pass": true,
+          "detail": "created + patru evenimente de traseu"
+        },
+        {
+          "name": "release reason",
+          "expected": "COMPLETED",
+          "actual": "COMPLETED",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "valoarea trebuie să fie identică cu cea a contractului"
+          },
+          "pass": true,
+          "detail": "claim-ul 060 este eliberat"
+        },
+        {
+          "name": "release tick",
+          "expected": 14,
+          "actual": 14,
+          "tolerance": {
+            "kind": "ABSOLUTE",
+            "value": 0,
+            "unit": "tick",
+            "rule": "tick-ul este exact"
+          },
+          "pass": true,
+          "detail": "ultimul eveniment este aplicat la tick 14"
+        },
+        {
+          "name": "dispatcher releases",
+          "expected": 1,
+          "actual": 1,
+          "tolerance": {
+            "kind": "ABSOLUTE",
+            "value": 0,
+            "unit": "eliberări",
+            "rule": "o singură eliberare pentru o cursă"
+          },
+          "pass": true,
+          "detail": "claim-ul este eliberat exact o dată"
+        },
+        {
+          "name": "taxi status after ride",
+          "expected": "AVAILABLE",
+          "actual": "AVAILABLE",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "valoarea trebuie să fie identică cu cea a contractului"
+          },
+          "pass": true,
+          "detail": "taxiul reintră în dispecerat"
+        },
+        {
+          "name": "taxi available again",
+          "expected": true,
+          "actual": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0002",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "condiția booleană trebuie să fie adevărată"
+          },
+          "pass": true,
+          "detail": "taxiul poate primi o cursă nouă"
+        },
+        {
+          "name": "lifecycle completed",
+          "expected": 1,
+          "actual": 1,
+          "tolerance": {
+            "kind": "ABSOLUTE",
+            "value": 0,
+            "unit": "curse",
+            "rule": "contorul este exact"
+          },
+          "pass": true,
+          "detail": "o cursă finalizată"
+        },
+        {
+          "name": "lifecycle active",
+          "expected": 0,
+          "actual": 0,
+          "tolerance": {
+            "kind": "ABSOLUTE",
+            "value": 0,
+            "unit": "curse",
+            "rule": "contorul este exact"
+          },
+          "pass": true,
+          "detail": "nicio cursă activă după terminal"
+        }
+      ],
+      "verdict": "PASS",
+      "note": "Cursa folosește dispeceratul real și eliberează claim-ul exact la tick-ul terminal.",
+      "notRunReason": null
+    },
+    {
+      "id": "rides-duplicate-terminal-event",
+      "family": "RIDES",
+      "polarity": "POSITIVE",
+      "title": "Rejucarea evenimentului terminal este idempotentă și nu dublează recompensa",
+      "contract": "061-ride-fsm-v1 (idempotență pe eventId)",
+      "executed": true,
+      "seed": 151,
+      "steps": 6,
+      "input": {
+        "events": [
+          "ARRIVED_PICKUP",
+          "PICKUP_COMPLETE",
+          "ARRIVED_DROPOFF",
+          "DROPOFF_COMPLETE",
+          "DROPOFF_COMPLETE"
+        ],
+        "duplicateEventId": "151:replay:DROPOFF_COMPLETE",
+        "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0002"
+      },
+      "expected": {
+        "duplicate": true,
+        "releases": 1,
+        "completed": 1,
+        "transitions": 5
+      },
+      "actual": {
+        "duplicate": true,
+        "releases": 1,
+        "completed": 1,
+        "transitions": 5
+      },
+      "checks": [
+        {
+          "name": "duplicate flagged",
+          "expected": true,
+          "actual": true,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "valoarea trebuie să fie identică cu cea a contractului"
+          },
+          "pass": true,
+          "detail": "al doilea terminal este marcat duplicat"
+        },
+        {
+          "name": "duplicate releases",
+          "expected": 1,
+          "actual": 1,
+          "tolerance": {
+            "kind": "ABSOLUTE",
+            "value": 0,
+            "unit": "eliberări",
+            "rule": "un singur claim eliberat"
+          },
+          "pass": true,
+          "detail": "idempotența nu eliberează de două ori"
+        },
+        {
+          "name": "duplicate completed",
+          "expected": 1,
+          "actual": 1,
+          "tolerance": {
+            "kind": "ABSOLUTE",
+            "value": 0,
+            "unit": "curse",
+            "rule": "contorul este exact"
+          },
+          "pass": true,
+          "detail": "cursa este numărată o singură dată"
+        },
+        {
+          "name": "duplicate transitions",
+          "expected": 5,
+          "actual": 5,
+          "tolerance": {
+            "kind": "ABSOLUTE",
+            "value": 0,
+            "unit": "tranziții",
+            "rule": "istoricul nu crește"
+          },
+          "pass": true,
+          "detail": "istoricul rămâne cel al primei execuții"
+        }
+      ],
+      "verdict": "PASS",
+      "note": "Același eventId este respins ca duplicat, fără o a doua scriere în dispecerat.",
+      "notRunReason": null
+    },
+    {
+      "id": "rides-illegal-dropoff-before-pickup",
+      "family": "RIDES",
+      "polarity": "NEGATIVE",
+      "title": "Dropoff-ul înainte de pickup este refuzat fără a muta starea sau claim-ul",
+      "contract": "061-ride-fsm-v1 (tabel de tranziții)",
+      "executed": true,
+      "seed": 151,
+      "steps": 2,
+      "input": {
+        "event": "DROPOFF_COMPLETE",
+        "fromState": "TO_PICKUP",
+        "tick": 11
+      },
+      "expected": {
+        "refused": true,
+        "message": "Illegal ride transition",
+        "state": "TO_PICKUP",
+        "transitions": 1,
+        "releases": 0,
+        "taxiStatus": "ASSIGNED"
+      },
+      "actual": {
+        "refused": true,
+        "message": "Illegal ride transition TO_PICKUP -> COMPLETED",
+        "state": "TO_PICKUP",
+        "transitions": 1,
+        "releases": 0,
+        "taxiStatus": "ASSIGNED"
+      },
+      "checks": [
+        {
+          "name": "illegal transition refused",
+          "expected": true,
+          "actual": "Illegal ride transition TO_PICKUP -> COMPLETED",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "condiția booleană trebuie să fie adevărată"
+          },
+          "pass": true,
+          "detail": "FSM-ul aruncă un refuz explicit"
+        },
+        {
+          "name": "state unchanged",
+          "expected": "TO_PICKUP",
+          "actual": "TO_PICKUP",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "valoarea trebuie să fie identică cu cea a contractului"
+          },
+          "pass": true,
+          "detail": "starea rămâne cea de dinainte"
+        },
+        {
+          "name": "history unchanged",
+          "expected": 1,
+          "actual": 1,
+          "tolerance": {
+            "kind": "ABSOLUTE",
+            "value": 0,
+            "unit": "tranziții",
+            "rule": "istoricul nu primește o tranziție refuzată"
+          },
+          "pass": true,
+          "detail": "doar tranziția de assign este în istoric"
+        },
+        {
+          "name": "no release on refusal",
+          "expected": 0,
+          "actual": 0,
+          "tolerance": {
+            "kind": "ABSOLUTE",
+            "value": 0,
+            "unit": "eliberări",
+            "rule": "un refuz nu eliberează claim-ul"
+          },
+          "pass": true,
+          "detail": "taxiul rămâne alocat cursei"
+        },
+        {
+          "name": "taxi still assigned",
+          "expected": "ASSIGNED",
+          "actual": "ASSIGNED",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "valoarea trebuie să fie identică cu cea a contractului"
+          },
+          "pass": true,
+          "detail": "claim-ul 060 rămâne activ"
+        }
+      ],
+      "verdict": "PASS",
+      "note": "Un eveniment ilegal nu produce stare parțială și nu eliberează taxiul.",
+      "notRunReason": null
+    },
+    {
+      "id": "learning-single-episode-bounded",
+      "family": "LEARNING",
+      "polarity": "POSITIVE",
+      "title": "O singură demonstrație mută profilul doar până la plafonul de dovezi noi",
+      "contract": "101-profile-blend-v1 (plafon dovezi noi) + 100 evidence gate",
+      "executed": true,
+      "seed": 151,
+      "steps": 1,
+      "input": {
+        "key": "speed_delta_urban",
+        "oldValue": 1.5,
+        "estimate": 4,
+        "episodes": 1,
+        "observedTicks": 600,
+        "ageSeconds": 0
+      },
+      "expected": {
+        "learningWeight": 0.15,
+        "value": 1.875,
+        "resolution": "APPLIED"
+      },
+      "actual": {
+        "learningWeight": 0.15,
+        "value": 1.875,
+        "resolution": "APPLIED"
+      },
+      "checks": [
+        {
+          "name": "single learning weight",
+          "expected": 0.15,
+          "actual": 0.15,
+          "tolerance": {
+            "kind": "ABSOLUTE",
+            "value": 0.0001,
+            "unit": "ratio",
+            "rule": "pasul este rotunjit la 4 zecimale de contract"
+          },
+          "pass": true,
+          "detail": "greutatea combină calitatea, saturația și recența"
+        },
+        {
+          "name": "single new value",
+          "expected": 1.875,
+          "actual": 1.875,
+          "tolerance": {
+            "kind": "ABSOLUTE",
+            "value": 0.0001,
+            "unit": "m/s",
+            "rule": "valoarea este rotunjită la 4 zecimale de contract"
+          },
+          "pass": true,
+          "detail": "newValue = oldValue + weight × (estimate − oldValue)"
+        },
+        {
+          "name": "single resolution",
+          "expected": "APPLIED",
+          "actual": "APPLIED",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "valoarea trebuie să fie identică cu cea a contractului"
+          },
+          "pass": true,
+          "detail": "dovada suficientă aplică pasul"
+        },
+        {
+          "name": "single changed flag",
+          "expected": true,
+          "actual": true,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "valoarea trebuie să fie identică cu cea a contractului"
+          },
+          "pass": true,
+          "detail": "valoarea chiar se schimbă"
+        },
+        {
+          "name": "single step stays bounded",
+          "expected": true,
+          "actual": 1.875,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "condiția booleană trebuie să fie adevărată"
+          },
+          "pass": true,
+          "detail": "pasul nu poate depăși plafonul publicat per actualizare"
+        },
+        {
+          "name": "single not published",
+          "expected": false,
+          "actual": false,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "valoarea trebuie să fie identică cu cea a contractului"
+          },
+          "pass": true,
+          "detail": "modulul nu publică profilul"
+        },
+        {
+          "name": "single not learned",
+          "expected": false,
+          "actual": false,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "valoarea trebuie să fie identică cu cea a contractului"
+          },
+          "pass": true,
+          "detail": "modulul nu marchează cheia ca învățată"
+        }
+      ],
+      "verdict": "PASS",
+      "note": "O demonstrație izolată este tratată ca dovadă, nu ca obicei: plafon 0,15 per actualizare.",
+      "notRunReason": null
+    },
+    {
+      "id": "learning-repeated-evidence",
+      "family": "LEARNING",
+      "polarity": "POSITIVE",
+      "title": "Șaisprezece episoade consistente produc pasul maxim de 0,6",
+      "contract": "101-profile-blend-v1 (saturație și plafon maxim)",
+      "executed": true,
+      "seed": 151,
+      "steps": 16,
+      "input": {
+        "key": "speed_delta_urban",
+        "oldValue": 1.5,
+        "estimate": 4,
+        "episodes": 16,
+        "observedTicks": 600,
+        "ageSeconds": 0
+      },
+      "expected": {
+        "learningWeight": 0.6,
+        "value": 3,
+        "saturation": 0.8
+      },
+      "actual": {
+        "learningWeight": 0.6,
+        "value": 3,
+        "effectiveEpisodeCount": 16
+      },
+      "checks": [
+        {
+          "name": "repeated learning weight",
+          "expected": 0.6,
+          "actual": 0.6,
+          "tolerance": {
+            "kind": "ABSOLUTE",
+            "value": 0.0001,
+            "unit": "ratio",
+            "rule": "pasul este rotunjit la 4 zecimale de contract"
+          },
+          "pass": true,
+          "detail": "greutatea combină calitatea, saturația și recența"
+        },
+        {
+          "name": "repeated new value",
+          "expected": 3,
+          "actual": 3,
+          "tolerance": {
+            "kind": "ABSOLUTE",
+            "value": 0.0001,
+            "unit": "m/s",
+            "rule": "valoarea este rotunjită la 4 zecimale de contract"
+          },
+          "pass": true,
+          "detail": "newValue = oldValue + weight × (estimate − oldValue)"
+        },
+        {
+          "name": "repeated resolution",
+          "expected": "APPLIED",
+          "actual": "APPLIED",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "valoarea trebuie să fie identică cu cea a contractului"
+          },
+          "pass": true,
+          "detail": "dovada suficientă aplică pasul"
+        },
+        {
+          "name": "repeated changed flag",
+          "expected": true,
+          "actual": true,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "valoarea trebuie să fie identică cu cea a contractului"
+          },
+          "pass": true,
+          "detail": "valoarea chiar se schimbă"
+        },
+        {
+          "name": "repeated step stays bounded",
+          "expected": true,
+          "actual": 3,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "condiția booleană trebuie să fie adevărată"
+          },
+          "pass": true,
+          "detail": "pasul nu poate depăși plafonul publicat per actualizare"
+        },
+        {
+          "name": "repeated not published",
+          "expected": false,
+          "actual": false,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "valoarea trebuie să fie identică cu cea a contractului"
+          },
+          "pass": true,
+          "detail": "modulul nu publică profilul"
+        },
+        {
+          "name": "repeated not learned",
+          "expected": false,
+          "actual": false,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "valoarea trebuie să fie identică cu cea a contractului"
+          },
+          "pass": true,
+          "detail": "modulul nu marchează cheia ca învățată"
+        },
+        {
+          "name": "repeated effective episodes",
+          "expected": 16,
+          "actual": 16,
+          "tolerance": {
+            "kind": "ABSOLUTE",
+            "value": 0.000001,
+            "unit": "episoade",
+            "rule": "fiecare episod complet contribuie cu 1"
+          },
+          "pass": true,
+          "detail": "16 episoade complet expuse"
+        }
+      ],
+      "verdict": "PASS",
+      "note": "Dovezile repetate ridică saturația la 0,8, dar plafonul per actualizare rămâne 0,6.",
+      "notRunReason": null
+    },
+    {
+      "id": "learning-contradiction-holds-profile",
+      "family": "LEARNING",
+      "polarity": "NEGATIVE",
+      "title": "Un interval de estimator inversat este contradicție severă și profilul rămâne neschimbat",
+      "contract": "100-evidence-confidence-v1 + 101-profile-blend-v1",
+      "executed": true,
+      "seed": 151,
+      "steps": 1,
+      "input": {
+        "key": "speed_delta_urban",
+        "oldValue": 1.5,
+        "candidateInterval": [
+          5,
+          3
+        ],
+        "episodes": 4,
+        "observedTicks": 600
+      },
+      "expected": {
+        "resolution": "HELD_CONTRADICTION",
+        "contradiction": "SEVERE",
+        "value": 1.5,
+        "estimate": null,
+        "changed": false
+      },
+      "actual": {
+        "resolution": "HELD_CONTRADICTION",
+        "contradiction": "SEVERE",
+        "value": 1.5,
+        "estimate": null,
+        "changed": false
+      },
+      "checks": [
+        {
+          "name": "contradiction resolution",
+          "expected": "HELD_CONTRADICTION",
+          "actual": "HELD_CONTRADICTION",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "valoarea trebuie să fie identică cu cea a contractului"
+          },
+          "pass": true,
+          "detail": "contradicția severă blochează pasul"
+        },
+        {
+          "name": "contradiction severity",
+          "expected": "SEVERE",
+          "actual": "SEVERE",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "valoarea trebuie să fie identică cu cea a contractului"
+          },
+          "pass": true,
+          "detail": "intervalul inversat este sever"
+        },
+        {
+          "name": "contradiction leaves value unchanged",
+          "expected": 1.5,
+          "actual": 1.5,
+          "tolerance": {
+            "kind": "ABSOLUTE",
+            "value": 0,
+            "unit": "m/s",
+            "rule": "nicio mișcare nu este acceptată"
+          },
+          "pass": true,
+          "detail": "profilul păstrează valoarea de dinainte"
+        },
+        {
+          "name": "contradiction has no estimate",
+          "expected": null,
+          "actual": null,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "valoarea trebuie să fie identică cu cea a contractului"
+          },
+          "pass": true,
+          "detail": "estimarea nu este aplicată"
+        },
+        {
+          "name": "contradiction not changed",
+          "expected": false,
+          "actual": false,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "valoarea trebuie să fie identică cu cea a contractului"
+          },
+          "pass": true,
+          "detail": "rezultatul declară neschimbat"
+        },
+        {
+          "name": "contradiction not published",
+          "expected": false,
+          "actual": false,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "valoarea trebuie să fie identică cu cea a contractului"
+          },
+          "pass": true,
+          "detail": "nimic nu este publicat"
+        },
+        {
+          "name": "contradiction not learned",
+          "expected": false,
+          "actual": false,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "valoarea trebuie să fie identică cu cea a contractului"
+          },
+          "pass": true,
+          "detail": "cheia nu este marcată învățată"
+        }
+      ],
+      "verdict": "PASS",
+      "note": "Dovezile contradictorii nu sunt mediiate și nu rescriu profilul.",
+      "notRunReason": null
+    },
+    {
+      "id": "campaign-first-mission",
+      "family": "CAMPAIGN",
+      "polarity": "POSITIVE",
+      "title": "Prima misiune de campanie plătește două recompense și 100 XP o singură dată",
+      "contract": "125-mission-rewards-v1 + 116 mission lifecycle",
+      "executed": true,
+      "seed": 151,
+      "steps": 1,
+      "input": {
+        "missionId": "campaign-1-first-taxi",
+        "startTick": 100,
+        "order": [
+          "campaign-1-first-taxi",
+          "campaign-2-first-demonstration",
+          "campaign-3-following-distance",
+          "campaign-4-stops-and-signals",
+          "campaign-5-passenger",
+          "campaign-6-city-copies-you",
+          "campaign-7-changing-a-habit",
+          "campaign-8-fleet-challenge"
+        ]
+      },
+      "expected": {
+        "status": "GRANTED",
+        "rewardsGranted": 2,
+        "xpGranted": 100,
+        "unlocked": [
+          "challenge:first-demonstration"
+        ]
+      },
+      "actual": {
+        "status": "GRANTED",
+        "rewardsGranted": 2,
+        "xpGranted": 100,
+        "unlocked": [
+          "challenge:first-demonstration"
+        ]
+      },
+      "checks": [
+        {
+          "name": "campaign mission count",
+          "expected": 8,
+          "actual": 8,
+          "tolerance": {
+            "kind": "ABSOLUTE",
+            "value": 0,
+            "unit": "misiuni",
+            "rule": "catalogul authorează 8 misiuni"
+          },
+          "pass": true,
+          "detail": "catalogul de campanie este cel livrat"
+        },
+        {
+          "name": "campaign order starts with the first taxi",
+          "expected": "campaign-1-first-taxi",
+          "actual": "campaign-1-first-taxi",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "valoarea trebuie să fie identică cu cea a contractului"
+          },
+          "pass": true,
+          "detail": "ordinea publicată începe cu prima misiune"
+        },
+        {
+          "name": "campaign initial available",
+          "expected": 1,
+          "actual": 1,
+          "tolerance": {
+            "kind": "ABSOLUTE",
+            "value": 0,
+            "unit": "misiuni",
+            "rule": "o singură misiune este deblocată la început"
+          },
+          "pass": true,
+          "detail": "misiunea 1 este disponibilă"
+        },
+        {
+          "name": "campaign initial locked",
+          "expected": 7,
+          "actual": 7,
+          "tolerance": {
+            "kind": "ABSOLUTE",
+            "value": 0,
+            "unit": "misiuni",
+            "rule": "restul sunt blocate de prerechizite"
+          },
+          "pass": true,
+          "detail": "șapte misiuni așteaptă prerechizite"
+        },
+        {
+          "name": "campaign next mission",
+          "expected": "campaign-1-first-taxi",
+          "actual": "campaign-1-first-taxi",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "valoarea trebuie să fie identică cu cea a contractului"
+          },
+          "pass": true,
+          "detail": "următoarea misiune este prima"
+        },
+        {
+          "name": "settlement status",
+          "expected": "GRANTED",
+          "actual": "GRANTED",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "valoarea trebuie să fie identică cu cea a contractului"
+          },
+          "pass": true,
+          "detail": "prima finalizare este plătită"
+        },
+        {
+          "name": "rewards granted",
+          "expected": 2,
+          "actual": 2,
+          "tolerance": {
+            "kind": "ABSOLUTE",
+            "value": 0,
+            "unit": "recompense",
+            "rule": "misiunea authorează două recompense"
+          },
+          "pass": true,
+          "detail": "recompensele misiunii 1"
+        },
+        {
+          "name": "rewards duplicated",
+          "expected": 0,
+          "actual": 0,
+          "tolerance": {
+            "kind": "ABSOLUTE",
+            "value": 0,
+            "unit": "recompense",
+            "rule": "prima plată nu are duplicate"
+          },
+          "pass": true,
+          "detail": "nicio recompensă nu este duplicată la prima plată"
+        },
+        {
+          "name": "xp granted",
+          "expected": 100,
+          "actual": 100,
+          "tolerance": {
+            "kind": "ABSOLUTE",
+            "value": 0,
+            "unit": "XP",
+            "rule": "suma authorează este plătită integral"
+          },
+          "pass": true,
+          "detail": "XP-ul misiunii 1 este plătit o singură dată"
+        },
+        {
+          "name": "unlock granted",
+          "expected": [
+            "challenge:first-demonstration"
+          ],
+          "actual": [
+            "challenge:first-demonstration"
+          ],
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "valoarea trebuie să fie identică cu cea a contractului"
+          },
+          "pass": true,
+          "detail": "deblocarea authorează este raportată"
+        },
+        {
+          "name": "ledger granted total",
+          "expected": 2,
+          "actual": 2,
+          "tolerance": {
+            "kind": "ABSOLUTE",
+            "value": 0,
+            "unit": "recompense",
+            "rule": "totalul ledgerului este exact"
+          },
+          "pass": true,
+          "detail": "ledger-ul 125 înregistrează două recompense"
+        },
+        {
+          "name": "ledger xp total",
+          "expected": 100,
+          "actual": 100,
+          "tolerance": {
+            "kind": "ABSOLUTE",
+            "value": 0,
+            "unit": "XP",
+            "rule": "totalul ledgerului este exact"
+          },
+          "pass": true,
+          "detail": "ledger-ul 125 înregistrează 100 XP"
+        },
+        {
+          "name": "campaign completed",
+          "expected": 1,
+          "actual": 1,
+          "tolerance": {
+            "kind": "ABSOLUTE",
+            "value": 0,
+            "unit": "misiuni",
+            "rule": "o misiune finalizată"
+          },
+          "pass": true,
+          "detail": "prima misiune este finalizată"
+        },
+        {
+          "name": "first mission state",
+          "expected": "COMPLETED",
+          "actual": "COMPLETED",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "valoarea trebuie să fie identică cu cea a contractului"
+          },
+          "pass": true,
+          "detail": "progresul misiunii 1"
+        },
+        {
+          "name": "first mission attempts",
+          "expected": 1,
+          "actual": 1,
+          "tolerance": {
+            "kind": "ABSOLUTE",
+            "value": 0,
+            "unit": "încercări",
+            "rule": "o singură încercare"
+          },
+          "pass": true,
+          "detail": "finalizarea este prima încercare"
+        }
+      ],
+      "verdict": "PASS",
+      "note": "Finalizarea vine din tracker-ul real 116, nu dintr-un obiect de test construit manual.",
+      "notRunReason": null
+    },
+    {
+      "id": "campaign-chain-unlocks-next",
+      "family": "CAMPAIGN",
+      "polarity": "POSITIVE",
+      "title": "Finalizarea primei misiuni deblochează exact următoarea verigă a campaniei",
+      "contract": "125-mission-rewards-v1 (CampaignProgress)",
+      "executed": true,
+      "seed": 151,
+      "steps": 1,
+      "input": {
+        "missionId": "campaign-1-first-taxi",
+        "completedThrough": "campaign-1-first-taxi"
+      },
+      "expected": {
+        "completed": 1,
+        "available": 1,
+        "second": "AVAILABLE",
+        "third": "LOCKED",
+        "thirdPrerequisite": [
+          "campaign-2-first-demonstration"
+        ]
+      },
+      "actual": {
+        "completed": 1,
+        "available": 1,
+        "second": "AVAILABLE",
+        "third": "LOCKED",
+        "thirdPrerequisite": [
+          "campaign-2-first-demonstration"
+        ]
+      },
+      "checks": [
+        {
+          "name": "second mission available",
+          "expected": "AVAILABLE",
+          "actual": "AVAILABLE",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "valoarea trebuie să fie identică cu cea a contractului"
+          },
+          "pass": true,
+          "detail": "prerechizita este îndeplinită"
+        },
+        {
+          "name": "third mission locked",
+          "expected": "LOCKED",
+          "actual": "LOCKED",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "valoarea trebuie să fie identică cu cea a contractului"
+          },
+          "pass": true,
+          "detail": "lanțul cere misiunea 2"
+        },
+        {
+          "name": "third mission prerequisite",
+          "expected": [
+            "campaign-2-first-demonstration"
+          ],
+          "actual": [
+            "campaign-2-first-demonstration"
+          ],
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "valoarea trebuie să fie identică cu cea a contractului"
+          },
+          "pass": true,
+          "detail": "prerechizita lipsă este cea publicată"
+        },
+        {
+          "name": "campaign available after first",
+          "expected": 1,
+          "actual": 1,
+          "tolerance": {
+            "kind": "ABSOLUTE",
+            "value": 0,
+            "unit": "misiuni",
+            "rule": "exact o misiune nouă este disponibilă"
+          },
+          "pass": true,
+          "detail": "lanțul avansează cu exact o misiune"
+        }
+      ],
+      "verdict": "PASS",
+      "note": "Lanțul de campanie respectă ordinea authorează și prerechizitele fiecărei misiuni.",
+      "notRunReason": null
+    },
+    {
+      "id": "campaign-duplicate-settlement-refused",
+      "family": "CAMPAIGN",
+      "polarity": "NEGATIVE",
+      "title": "Aceeași finalizare rejucată este refuzată ca duplicat, fără XP sau recompensă nouă",
+      "contract": "125-mission-rewards-v1 (identitatea recompensei)",
+      "executed": true,
+      "seed": 151,
+      "steps": 2,
+      "input": {
+        "missionId": "campaign-1-first-taxi",
+        "completionId": "id-v1:16:mission-instance12:campaign:11621:campaign-1-first-taxi5:a0001",
+        "settleCount": 2
+      },
+      "expected": {
+        "status": "DUPLICATE",
+        "rewardsGranted": 0,
+        "xpGranted": 0,
+        "duplicateReasons": [
+          "COMPLETION_ALREADY_SETTLED"
+        ],
+        "totals": {
+          "granted": 2,
+          "xp": 100
+        }
+      },
+      "actual": {
+        "status": "DUPLICATE",
+        "rewardsGranted": 0,
+        "xpGranted": 0,
+        "duplicateReasons": [
+          "COMPLETION_ALREADY_SETTLED"
+        ],
+        "totals": {
+          "granted": 2,
+          "xp": 100
+        }
+      },
+      "checks": [
+        {
+          "name": "duplicate status",
+          "expected": "DUPLICATE",
+          "actual": "DUPLICATE",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "valoarea trebuie să fie identică cu cea a contractului"
+          },
+          "pass": true,
+          "detail": "rejucarea aceleiași finalizări este refuzată"
+        },
+        {
+          "name": "duplicate rewards granted",
+          "expected": 0,
+          "actual": 0,
+          "tolerance": {
+            "kind": "ABSOLUTE",
+            "value": 0,
+            "unit": "recompense",
+            "rule": "un duplicat nu plătește"
+          },
+          "pass": true,
+          "detail": "nicio recompensă nouă"
+        },
+        {
+          "name": "duplicate xp granted",
+          "expected": 0,
+          "actual": 0,
+          "tolerance": {
+            "kind": "ABSOLUTE",
+            "value": 0,
+            "unit": "XP",
+            "rule": "un duplicat nu plătește XP"
+          },
+          "pass": true,
+          "detail": "niciun XP nou"
+        },
+        {
+          "name": "duplicate reasons",
+          "expected": [
+            "COMPLETION_ALREADY_SETTLED"
+          ],
+          "actual": [
+            "COMPLETION_ALREADY_SETTLED"
+          ],
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "valoarea trebuie să fie identică cu cea a contractului"
+          },
+          "pass": true,
+          "detail": "motivul refuzului este cel publicat"
+        },
+        {
+          "name": "duplicate unlocks nothing",
+          "expected": [],
+          "actual": [],
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "valoarea trebuie să fie identică cu cea a contractului"
+          },
+          "pass": true,
+          "detail": "un duplicat nu deblochează"
+        },
+        {
+          "name": "ledger total unchanged",
+          "expected": 100,
+          "actual": 100,
+          "tolerance": {
+            "kind": "ABSOLUTE",
+            "value": 0,
+            "unit": "XP",
+            "rule": "totalul rămâne cel al primei plăți"
+          },
+          "pass": true,
+          "detail": "contorul de XP nu crește"
+        },
+        {
+          "name": "ledger grant count unchanged",
+          "expected": 2,
+          "actual": 2,
+          "tolerance": {
+            "kind": "ABSOLUTE",
+            "value": 0,
+            "unit": "recompense",
+            "rule": "totalul de recompense nu crește"
+          },
+          "pass": true,
+          "detail": "nicio recompensă dublă în ledger"
+        },
+        {
+          "name": "duplicate rows counted, not paid",
+          "expected": 2,
+          "actual": 2,
+          "tolerance": {
+            "kind": "ABSOLUTE",
+            "value": 0,
+            "unit": "rânduri",
+            "rule": "ambele recompense ale finalizării sunt raportate ca duplicate"
+          },
+          "pass": true,
+          "detail": "refuzul este numărat separat, fără plată"
+        }
+      ],
+      "verdict": "PASS",
+      "note": "Recompensele nu se acordă de două ori pentru aceeași finalizare a aceleiași versiuni.",
+      "notRunReason": null
+    },
+    {
+      "id": "integration-browser-playtest",
+      "family": "AUTONOMY",
+      "polarity": "POSITIVE",
+      "title": "Playtest în browser: explicații, senzație de condus și HUD",
+      "contract": "Docs/18 (QA vizual) + Docs/validation-policy.md",
+      "executed": false,
+      "seed": null,
+      "steps": 0,
+      "input": {
+        "browser": "real",
+        "input": "uman",
+        "viewports": [
+          "1280x720",
+          "1920x1080"
+        ]
+      },
+      "expected": {
+        "executed": false,
+        "verdict": "NOT_RUN"
+      },
+      "actual": {},
+      "checks": [],
+      "verdict": "NOT_RUN",
+      "note": "Scenariul nu a fost executat; este raportat NOT_RUN cu motiv, nu bifat.",
+      "notRunReason": "Necesită browser real, GPU, input uman și focus fizic. Nivelul suitei este determinist în Node, fără renderer; playtestul rămâne al gate-urilor 153/235 și nu este declarat trecut."
+    }
+  ],
+  "reuse": [
+    {
+      "source": "216-v1-regression",
+      "contract": "Docs/18 (regresia V1) + Docs/Evidence/216-v1-regression/report.json",
+      "scenarioIds": [
+        "B5",
+        "B6",
+        "B7",
+        "B8"
+      ],
+      "evidence": "Docs/Evidence/216-v1-regression/report.json",
+      "what": "Daily 211/212 pozitiv și negativ, XP 213 pozitiv și negativ, amprenta XP fără pierderi și graful boardului. Suita 151 nu reexecută aceste verificări.",
+      "checks": [
+        {
+          "name": "216 rows",
+          "expected": 29,
+          "actual": 29,
+          "tolerance": {
+            "kind": "ABSOLUTE",
+            "value": 0,
+            "unit": "rânduri",
+            "rule": "matricea 216 are 29 de rânduri"
+          },
+          "pass": true,
+          "detail": "matricea comisă are 29 de rânduri"
+        },
+        {
+          "name": "216 failures",
+          "expected": 0,
+          "actual": 0,
+          "tolerance": {
+            "kind": "ABSOLUTE",
+            "value": 0,
+            "unit": "eșecuri",
+            "rule": "matricea comisă nu are eșecuri"
+          },
+          "pass": true,
+          "detail": "niciun rând 216 nu este FAIL"
+        },
+        {
+          "name": "216 not-run rows",
+          "expected": 2,
+          "actual": 2,
+          "tolerance": {
+            "kind": "ABSOLUTE",
+            "value": 0,
+            "unit": "rânduri",
+            "rule": "doar playtestul și frame-ul sunt NOT_RUN"
+          },
+          "pass": true,
+          "detail": "cele două rânduri neexecutate sunt declarate"
+        },
+        {
+          "name": "216 not-run rows carry a reason",
+          "expected": true,
+          "actual": 2,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "condiția booleană trebuie să fie adevărată"
+          },
+          "pass": true,
+          "detail": "un rând NOT_RUN are motiv explicit"
+        },
+        {
+          "name": "216 xp losses",
+          "expected": 0,
+          "actual": 0,
+          "tolerance": {
+            "kind": "ABSOLUTE",
+            "value": 0,
+            "unit": "pierderi",
+            "rule": "nicio cale de scădere nu pierde XP"
+          },
+          "pass": true,
+          "detail": "XP fără pierderi în matricea 216"
+        },
+        {
+          "name": "216 xp fingerprint unchanged",
+          "expected": "85df901a8cacee6620dfdc7eb2c3f8e48ee5f135e27516d4a607b2643112e3cc",
+          "actual": "85df901a8cacee6620dfdc7eb2c3f8e48ee5f135e27516d4a607b2643112e3cc",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "valoarea trebuie să fie identică cu cea a contractului"
+          },
+          "pass": true,
+          "detail": "amprenta XP este identică înainte/după"
+        },
+        {
+          "name": "216 dependency cycles",
+          "expected": 0,
+          "actual": 0,
+          "tolerance": {
+            "kind": "ABSOLUTE",
+            "value": 0,
+            "unit": "cicluri",
+            "rule": "graful boardului este aciclic"
+          },
+          "pass": true,
+          "detail": "nicio dependență ciclică"
+        },
+        {
+          "name": "216 daily and XP rows referenced",
+          "expected": [
+            "B5",
+            "B6",
+            "B7",
+            "B8"
+          ],
+          "actual": [
+            "B5",
+            "B6",
+            "B7",
+            "B8"
+          ],
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "valoarea trebuie să fie identică cu cea a contractului"
+          },
+          "pass": true,
+          "detail": "rândurile daily/XP refolosite sunt cele patru rânduri publice"
+        }
+      ],
+      "verdict": "PASS"
+    },
+    {
+      "source": "056-auto-scenarios",
+      "contract": "Docs/18 (strategia de validare) + Docs/Evidence/056-auto-scenarios/report.json",
+      "scenarioIds": [
+        "cruise-urban-free-road",
+        "cruise-residential-curve",
+        "cruise-intersection-approach",
+        "signal-red-green",
+        "stop-rule-profiles",
+        "route-junction-cautious",
+        "route-junction-risky",
+        "follow-leader",
+        "yield-conflict",
+        "lane-change",
+        "blocked-recovery",
+        "accelerate-native"
+      ],
+      "evidence": "Docs/Evidence/056-auto-scenarios/report.json",
+      "what": "Matricea roșu/verde a semaforului, STOP, urmărire, cedare, schimbare de bandă, recuperare blocată și cele 10 refuzuri explicit. Suita 151 adaugă doar green_start_delay și fereastra de observație, care nu sunt acoperite de 056.",
+      "checks": [
+        {
+          "name": "056 suite summary",
+          "expected": true,
+          "actual": true,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "valoarea trebuie să fie identică cu cea a contractului"
+          },
+          "pass": true,
+          "detail": "suita 056 este raportată integral trecută"
+        },
+        {
+          "name": "056 scenarios",
+          "expected": 12,
+          "actual": 12,
+          "tolerance": {
+            "kind": "ABSOLUTE",
+            "value": 0,
+            "unit": "scenarii",
+            "rule": "suita 056 are 12 scenarii"
+          },
+          "pass": true,
+          "detail": "cele 12 comportamente de autonomie"
+        },
+        {
+          "name": "056 scenarios passed",
+          "expected": 12,
+          "actual": 12,
+          "tolerance": {
+            "kind": "ABSOLUTE",
+            "value": 0,
+            "unit": "scenarii",
+            "rule": "toate cele 12 scenarii au trecut"
+          },
+          "pass": true,
+          "detail": "nicio scenă de autonomie nu este declarată fără execuție"
+        },
+        {
+          "name": "056 negative cases",
+          "expected": 10,
+          "actual": 10,
+          "tolerance": {
+            "kind": "ABSOLUTE",
+            "value": 0,
+            "unit": "cazuri",
+            "rule": "suita 056 are 10 cazuri negative"
+          },
+          "pass": true,
+          "detail": "refuzurile explicite de autonomie"
+        },
+        {
+          "name": "056 negative cases passed",
+          "expected": 10,
+          "actual": 10,
+          "tolerance": {
+            "kind": "ABSOLUTE",
+            "value": 0,
+            "unit": "cazuri",
+            "rule": "toate cele 10 cazuri negative au trecut"
+          },
+          "pass": true,
+          "detail": "fiecare refuz este dovedit"
+        },
+        {
+          "name": "056 negative reasons are explicit",
+          "expected": true,
+          "actual": true,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "valoarea trebuie să fie identică cu cea a contractului"
+          },
+          "pass": true,
+          "detail": "fiecare caz negativ raportează rezultatul real"
+        },
+        {
+          "name": "056 scenarios have checks",
+          "expected": true,
+          "actual": true,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "identic",
+            "rule": "valoarea trebuie să fie identică cu cea a contractului"
+          },
+          "pass": true,
+          "detail": "fiecare scenariu 056 are cel puțin o verificare"
+        },
+        {
+          "name": "056 mutation probes",
+          "expected": 5,
+          "actual": 5,
+          "tolerance": {
+            "kind": "ABSOLUTE",
+            "value": 0,
+            "unit": "probe",
+            "rule": "cele 5 probe de mutație sunt respinse"
+          },
+          "pass": true,
+          "detail": "oracolul 056 respinge implementările plauzibile greșite"
+        }
+      ],
+      "verdict": "PASS"
+    }
+  ],
+  "families": [
+    {
+      "family": "AUTONOMY",
+      "scenarios": 4,
+      "executed": 3,
+      "positive": 3,
+      "negative": 1,
+      "pass": 3,
+      "fail": 0,
+      "notRun": 1
+    },
+    {
+      "family": "RIDES",
+      "scenarios": 3,
+      "executed": 3,
+      "positive": 2,
+      "negative": 1,
+      "pass": 3,
+      "fail": 0,
+      "notRun": 0
+    },
+    {
+      "family": "LEARNING",
+      "scenarios": 3,
+      "executed": 3,
+      "positive": 2,
+      "negative": 1,
+      "pass": 3,
+      "fail": 0,
+      "notRun": 0
+    },
+    {
+      "family": "CAMPAIGN",
+      "scenarios": 3,
+      "executed": 3,
+      "positive": 2,
+      "negative": 1,
+      "pass": 3,
+      "fail": 0,
+      "notRun": 0
+    }
+  ],
+  "summary": {
+    "scenarios": 13,
+    "executed": 12,
+    "passed": 12,
+    "fail": 0,
+    "notRun": 1,
+    "positive": 9,
+    "negative": 4,
+    "families": 4,
+    "reuse": 2,
+    "allFamiliesCovered": true,
+    "everyFamilyPositiveAndNegative": true,
+    "pass": true
+  },
+  "reproducibility": {
+    "runs": 2,
+    "digest": "602a17e79db6d8ce70ebf75541df35b0f56778226ae7adbcd384f81a01789838",
+    "rule": "Două rulări independente ale aceleiași funcții produc același JSON; testul compară cele două transcripturi, iar scriptul compară fișierul comis prin --check."
+  },
+  "limitations": [
+    "Nivel determinist în Node: fără browser real, GPU, input uman, FPS sau hardware de referință; playtestul este NOT_RUN.",
+    "Condusul de autonomie este politica 050 evaluată pe observații authorează, nu fizica Babylon/Rapier live.",
+    "Cursa folosește fixture-ul real 057/059/060 din tests/fleet, nu o hartă generată în browser.",
+    "Învățarea este pasul candidat 101; publicarea profilului și joburile worker rămân ale modulelor 109/112, nefiind republicate aici.",
+    "Campania folosește catalogul authorează 116/125; misiunile zilnice 211 și XP 213 sunt refolosite din transcriptul 216, nu reexecutate.",
+    "Suita nu a fost comparată cu un playtest uman și nu pretinde performanță de cadru; gate-urile 153/220/224/235 rămân obligatorii."
+  ]
+}
