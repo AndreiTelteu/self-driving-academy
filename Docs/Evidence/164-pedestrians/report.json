@@ -1,0 +1,819 @@
+{
+  "generatedBy": "scripts/run-pedestrian-report.mjs",
+  "command": "npm run pedestrians:report",
+  "contract": "164-pedestrians-v1",
+  "oracleRule": "O cedare este numărată numai când un vehicul observabil era în apropiere în timpul traversării și a fost văzut oprit; o traversare liberă cere enumerare completă și zero conflicte; fără numitor real, rata rămâne null cu lacună declarată.",
+  "fixture": {
+    "mapId": "neighbourhood-compact-v1",
+    "crosswalks": 80,
+    "links": 48,
+    "refusedLinks": [
+      {
+        "crosswalkId": "cw:0-0:E",
+        "reason": "NO_SIDEWALK"
+      },
+      {
+        "crosswalkId": "cw:0-0:N",
+        "reason": "NO_SIDEWALK"
+      },
+      {
+        "crosswalkId": "cw:0-1:N",
+        "reason": "NO_SIDEWALK"
+      },
+      {
+        "crosswalkId": "cw:0-1:S",
+        "reason": "NO_SIDEWALK"
+      },
+      {
+        "crosswalkId": "cw:0-2:N",
+        "reason": "NO_SIDEWALK"
+      },
+      {
+        "crosswalkId": "cw:0-2:S",
+        "reason": "NO_SIDEWALK"
+      },
+      {
+        "crosswalkId": "cw:0-3:N",
+        "reason": "NO_SIDEWALK"
+      },
+      {
+        "crosswalkId": "cw:0-3:S",
+        "reason": "NO_SIDEWALK"
+      },
+      {
+        "crosswalkId": "cw:0-4:E",
+        "reason": "NO_SIDEWALK"
+      },
+      {
+        "crosswalkId": "cw:0-4:S",
+        "reason": "NO_SIDEWALK"
+      },
+      {
+        "crosswalkId": "cw:1-0:E",
+        "reason": "NO_SIDEWALK"
+      },
+      {
+        "crosswalkId": "cw:1-0:W",
+        "reason": "NO_SIDEWALK"
+      },
+      {
+        "crosswalkId": "cw:1-4:E",
+        "reason": "NO_SIDEWALK"
+      },
+      {
+        "crosswalkId": "cw:1-4:W",
+        "reason": "NO_SIDEWALK"
+      },
+      {
+        "crosswalkId": "cw:2-0:E",
+        "reason": "NO_SIDEWALK"
+      },
+      {
+        "crosswalkId": "cw:2-0:W",
+        "reason": "NO_SIDEWALK"
+      },
+      {
+        "crosswalkId": "cw:2-4:E",
+        "reason": "NO_SIDEWALK"
+      },
+      {
+        "crosswalkId": "cw:2-4:W",
+        "reason": "NO_SIDEWALK"
+      },
+      {
+        "crosswalkId": "cw:3-0:E",
+        "reason": "NO_SIDEWALK"
+      },
+      {
+        "crosswalkId": "cw:3-0:W",
+        "reason": "NO_SIDEWALK"
+      },
+      {
+        "crosswalkId": "cw:3-4:E",
+        "reason": "NO_SIDEWALK"
+      },
+      {
+        "crosswalkId": "cw:3-4:W",
+        "reason": "NO_SIDEWALK"
+      },
+      {
+        "crosswalkId": "cw:4-0:N",
+        "reason": "NO_SIDEWALK"
+      },
+      {
+        "crosswalkId": "cw:4-0:W",
+        "reason": "NO_SIDEWALK"
+      },
+      {
+        "crosswalkId": "cw:4-1:N",
+        "reason": "NO_SIDEWALK"
+      },
+      {
+        "crosswalkId": "cw:4-1:S",
+        "reason": "NO_SIDEWALK"
+      },
+      {
+        "crosswalkId": "cw:4-2:N",
+        "reason": "NO_SIDEWALK"
+      },
+      {
+        "crosswalkId": "cw:4-2:S",
+        "reason": "NO_SIDEWALK"
+      },
+      {
+        "crosswalkId": "cw:4-3:N",
+        "reason": "NO_SIDEWALK"
+      },
+      {
+        "crosswalkId": "cw:4-3:S",
+        "reason": "NO_SIDEWALK"
+      },
+      {
+        "crosswalkId": "cw:4-4:S",
+        "reason": "NO_SIDEWALK"
+      },
+      {
+        "crosswalkId": "cw:4-4:W",
+        "reason": "NO_SIDEWALK"
+      }
+    ],
+    "pedestriansRequested": 48,
+    "pedestriansCreated": 48,
+    "capacityTruncated": 0,
+    "linkedLanes": 64,
+    "lanesWithoutLine": 0,
+    "crossingLengthM": {
+      "min": 10,
+      "max": 17.399999999999977,
+      "mean": 12.46666666666666
+    },
+    "refusedReasons": {
+      "NO_SIDEWALK": 32
+    },
+    "pedestriansPerCrosswalk": 1
+  },
+  "target": {
+    "crosswalkId": "cw:0-1:E",
+    "laneId": "lane:01W0",
+    "longitudinalM": 168.79999999999998,
+    "laneLengthM": 172.39999999999998,
+    "crossingLengthM": 10
+  },
+  "scenarios": [
+    {
+      "scenarioId": "crossing-free",
+      "title": "Traversare liberă",
+      "description": "Pietonul ajunge la bordură și traversează fără niciun vehicul observat; dungă fără conflict nu devine cedare.",
+      "ticks": 1100,
+      "pedestrians": 48,
+      "finalStates": {
+        "ON_SIDEWALK": 0,
+        "WAITING": 0,
+        "CROSSING": 0,
+        "CROSSED": 0,
+        "WITHDRAWN": 48
+      },
+      "counts": {
+        "created": 48,
+        "withdrawn": 48,
+        "live": 0,
+        "crossingsStarted": 48,
+        "crossingsCompleted": 48,
+        "crossingsInterrupted": 0,
+        "gapCrossings": 48,
+        "assertedCrossings": 0,
+        "freeCrossings": 48,
+        "yieldedCrossings": 0,
+        "crossingsWithoutYield": 0,
+        "unobservedCrossings": 0,
+        "conflictRecords": 0,
+        "stopEvents": 0,
+        "yieldStopEvents": 0,
+        "collisions": 0
+      },
+      "coverage": {
+        "steps": 1100,
+        "completeSteps": 1100,
+        "incompleteSteps": 0
+      },
+      "denominators": {
+        "yieldRate": {
+          "id": "YIELD_RATE",
+          "numerator": 0,
+          "denominator": 0,
+          "value": null,
+          "status": "MISSING",
+          "reason": "NO_COMPLETE_CONFLICT_EPISODE"
+        },
+        "crossingCompletionRate": {
+          "id": "CROSSING_COMPLETION_RATE",
+          "numerator": 48,
+          "denominator": 48,
+          "value": 1,
+          "status": "OBSERVED",
+          "reason": null
+        }
+      },
+      "gaps": [
+        "REFUSED_CROSSWALK_LINK",
+        "NO_COMPLETE_CONFLICT_EPISODE"
+      ],
+      "conflicts": [],
+      "stops": [],
+      "collisions": [],
+      "targetPedestrian": {
+        "pedestrianId": "id-v1:10:pedestrian21:pedestrians-164-tests1:724:neighbourhood-compact-v18:cw:0-1:E1:0",
+        "finalState": "WITHDRAWN",
+        "withdrawalReason": "ROUTE_COMPLETE",
+        "crossingProgress": 1
+      },
+      "checks": [
+        {
+          "id": "FREE_CROSSINGS_COMPLETED",
+          "passed": true,
+          "detail": "traversări libere finalizate: 48"
+        },
+        {
+          "id": "NO_CONFLICT_WITH_EMPTY_ROAD",
+          "passed": true,
+          "detail": "conflicte pe drum gol: 0"
+        },
+        {
+          "id": "YIELD_RATE_WITHOUT_DENOMINATOR",
+          "passed": true,
+          "detail": "rata de cedare null (MISSING)"
+        }
+      ],
+      "pass": true
+    },
+    {
+      "scenarioId": "conflict-yield",
+      "title": "Traversare cu conflict și cedare",
+      "description": "Pietonul așteaptă un vehicul care se apropie, apoi se angajează; vehiculul frânează cât timp pietonul traversează.",
+      "ticks": 900,
+      "pedestrians": 48,
+      "finalStates": {
+        "ON_SIDEWALK": 0,
+        "WAITING": 0,
+        "CROSSING": 3,
+        "CROSSED": 3,
+        "WITHDRAWN": 42
+      },
+      "counts": {
+        "created": 48,
+        "withdrawn": 42,
+        "live": 6,
+        "crossingsStarted": 48,
+        "crossingsCompleted": 45,
+        "crossingsInterrupted": 0,
+        "gapCrossings": 47,
+        "assertedCrossings": 1,
+        "freeCrossings": 44,
+        "yieldedCrossings": 1,
+        "crossingsWithoutYield": 0,
+        "unobservedCrossings": 0,
+        "conflictRecords": 1,
+        "stopEvents": 1,
+        "yieldStopEvents": 1,
+        "collisions": 0
+      },
+      "coverage": {
+        "steps": 900,
+        "completeSteps": 900,
+        "incompleteSteps": 0
+      },
+      "denominators": {
+        "yieldRate": {
+          "id": "YIELD_RATE",
+          "numerator": 1,
+          "denominator": 1,
+          "value": 1,
+          "status": "OBSERVED",
+          "reason": null
+        },
+        "crossingCompletionRate": {
+          "id": "CROSSING_COMPLETION_RATE",
+          "numerator": 45,
+          "denominator": 48,
+          "value": 0.9375,
+          "status": "OBSERVED",
+          "reason": null
+        }
+      },
+      "gaps": [
+        "REFUSED_CROSSWALK_LINK"
+      ],
+      "conflicts": [
+        {
+          "vehicleId": "vehicle-1",
+          "tick": 206,
+          "distanceM": 9.399999999999835,
+          "speedMps": 6,
+          "timeToConflictS": 1.5666666666666391,
+          "crossingRemainingS": 6.830902867324286,
+          "outcome": "YIELDED",
+          "stopTick": 250,
+          "stopDistanceM": 7.1999999999998465,
+          "minimumDistanceM": 7.1999999999998465,
+          "maximumSpeedMps": 6
+        }
+      ],
+      "stops": [
+        {
+          "tick": 250,
+          "distanceM": 7.1999999999998465,
+          "speedMps": 0.1333333333333284,
+          "duringCrossing": true,
+          "pedestrianId": "id-v1:10:pedestrian21:pedestrians-164-tests1:724:neighbourhood-compact-v18:cw:0-1:E1:0"
+        }
+      ],
+      "collisions": [],
+      "targetPedestrian": {
+        "pedestrianId": "id-v1:10:pedestrian21:pedestrians-164-tests1:724:neighbourhood-compact-v18:cw:0-1:E1:0",
+        "finalState": "WITHDRAWN",
+        "withdrawalReason": "ROUTE_COMPLETE",
+        "crossingProgress": 1
+      },
+      "checks": [
+        {
+          "id": "PEDESTRIAN_WAITED",
+          "passed": true,
+          "detail": "traversări angajate după așteptare: 1"
+        },
+        {
+          "id": "OBSERVABLE_CONFLICT",
+          "passed": true,
+          "detail": "conflicte cu timp până la conflict numeric: 1"
+        },
+        {
+          "id": "YIELD_OBSERVED",
+          "passed": true,
+          "detail": "traversări cu cedare: 1, opriri în timpul traversării: 1"
+        }
+      ],
+      "pass": true
+    },
+    {
+      "scenarioId": "conflict-no-yield",
+      "title": "Traversare cu conflict fără cedare",
+      "description": "Pietonul se angajează, vehiculul își păstrează viteza și trece prin dreptul lui; distanța minimă rămâne înregistrată.",
+      "ticks": 900,
+      "pedestrians": 48,
+      "finalStates": {
+        "ON_SIDEWALK": 0,
+        "WAITING": 0,
+        "CROSSING": 3,
+        "CROSSED": 3,
+        "WITHDRAWN": 42
+      },
+      "counts": {
+        "created": 48,
+        "withdrawn": 42,
+        "live": 6,
+        "crossingsStarted": 48,
+        "crossingsCompleted": 45,
+        "crossingsInterrupted": 0,
+        "gapCrossings": 47,
+        "assertedCrossings": 1,
+        "freeCrossings": 44,
+        "yieldedCrossings": 0,
+        "crossingsWithoutYield": 1,
+        "unobservedCrossings": 0,
+        "conflictRecords": 1,
+        "stopEvents": 0,
+        "yieldStopEvents": 0,
+        "collisions": 0
+      },
+      "coverage": {
+        "steps": 900,
+        "completeSteps": 900,
+        "incompleteSteps": 0
+      },
+      "denominators": {
+        "yieldRate": {
+          "id": "YIELD_RATE",
+          "numerator": 0,
+          "denominator": 1,
+          "value": 0,
+          "status": "OBSERVED",
+          "reason": null
+        },
+        "crossingCompletionRate": {
+          "id": "CROSSING_COMPLETION_RATE",
+          "numerator": 45,
+          "denominator": 48,
+          "value": 0.9375,
+          "status": "OBSERVED",
+          "reason": null
+        }
+      },
+      "gaps": [
+        "REFUSED_CROSSWALK_LINK"
+      ],
+      "conflicts": [
+        {
+          "vehicleId": "vehicle-1",
+          "tick": 206,
+          "distanceM": 9.399999999999835,
+          "speedMps": 6,
+          "timeToConflictS": 1.5666666666666391,
+          "crossingRemainingS": 6.830902867324286,
+          "outcome": "CROSSED_WITHOUT_YIELD",
+          "stopTick": null,
+          "stopDistanceM": null,
+          "minimumDistanceM": 0.09999999999988063,
+          "maximumSpeedMps": 6
+        }
+      ],
+      "stops": [],
+      "collisions": [],
+      "targetPedestrian": {
+        "pedestrianId": "id-v1:10:pedestrian21:pedestrians-164-tests1:724:neighbourhood-compact-v18:cw:0-1:E1:0",
+        "finalState": "WITHDRAWN",
+        "withdrawalReason": "ROUTE_COMPLETE",
+        "crossingProgress": 1
+      },
+      "checks": [
+        {
+          "id": "NO_YIELD_OBSERVED",
+          "passed": true,
+          "detail": "traversări fără cedare: 1, opriri: 0"
+        },
+        {
+          "id": "MINIMUM_DISTANCE_RECORDED",
+          "passed": true,
+          "detail": "distanță minimă 0.10"
+        }
+      ],
+      "pass": true
+    },
+    {
+      "scenarioId": "contact-impact",
+      "title": "Contact autoritar în timpul traversării",
+      "description": "Proprietarul coliziunilor raportează un contact în timpul traversării; pietonul se retrage cu motiv IMPACT, iar traversarea întreruptă nu devine finalizată.",
+      "ticks": 900,
+      "pedestrians": 48,
+      "finalStates": {
+        "ON_SIDEWALK": 0,
+        "WAITING": 0,
+        "CROSSING": 3,
+        "CROSSED": 3,
+        "WITHDRAWN": 42
+      },
+      "counts": {
+        "created": 48,
+        "withdrawn": 42,
+        "live": 6,
+        "crossingsStarted": 48,
+        "crossingsCompleted": 44,
+        "crossingsInterrupted": 1,
+        "gapCrossings": 47,
+        "assertedCrossings": 1,
+        "freeCrossings": 44,
+        "yieldedCrossings": 0,
+        "crossingsWithoutYield": 0,
+        "unobservedCrossings": 0,
+        "conflictRecords": 1,
+        "stopEvents": 0,
+        "yieldStopEvents": 0,
+        "collisions": 1
+      },
+      "coverage": {
+        "steps": 900,
+        "completeSteps": 900,
+        "incompleteSteps": 0
+      },
+      "denominators": {
+        "yieldRate": {
+          "id": "YIELD_RATE",
+          "numerator": 0,
+          "denominator": 0,
+          "value": null,
+          "status": "MISSING",
+          "reason": "NO_COMPLETE_CONFLICT_EPISODE"
+        },
+        "crossingCompletionRate": {
+          "id": "CROSSING_COMPLETION_RATE",
+          "numerator": 44,
+          "denominator": 48,
+          "value": 0.9166666666666666,
+          "status": "OBSERVED",
+          "reason": null
+        }
+      },
+      "gaps": [
+        "REFUSED_CROSSWALK_LINK",
+        "NO_COMPLETE_CONFLICT_EPISODE"
+      ],
+      "conflicts": [
+        {
+          "vehicleId": "vehicle-1",
+          "tick": 206,
+          "distanceM": 9.399999999999835,
+          "speedMps": 6,
+          "timeToConflictS": 1.5666666666666391,
+          "crossingRemainingS": 6.830902867324286,
+          "outcome": "CROSSED_WITHOUT_YIELD",
+          "stopTick": null,
+          "stopDistanceM": null,
+          "minimumDistanceM": 0.09999999999988063,
+          "maximumSpeedMps": 6
+        }
+      ],
+      "stops": [],
+      "collisions": [
+        {
+          "tick": 300,
+          "vehicleId": "vehicle-1",
+          "state": "CROSSING",
+          "speedMps": 6
+        }
+      ],
+      "targetPedestrian": {
+        "pedestrianId": "id-v1:10:pedestrian21:pedestrians-164-tests1:724:neighbourhood-compact-v18:cw:0-1:E1:0",
+        "finalState": "WITHDRAWN",
+        "withdrawalReason": "IMPACT",
+        "crossingProgress": 0.22934986737417012
+      },
+      "checks": [
+        {
+          "id": "CONTACT_RECORDED",
+          "passed": true,
+          "detail": "contacte înregistrate: 1"
+        },
+        {
+          "id": "WITHDRAWN_BY_IMPACT",
+          "passed": true,
+          "detail": "stare finală WITHDRAWN (IMPACT)"
+        },
+        {
+          "id": "INTERRUPTED_NOT_COMPLETED",
+          "passed": true,
+          "detail": "traversări întrerupte: 1"
+        }
+      ],
+      "pass": true
+    },
+    {
+      "scenarioId": "coverage-incomplete",
+      "title": "Acoperire incompletă a vehiculelor",
+      "description": "Aceeași apropiere, dar enumerarea vehiculelor este declarată incompletă; traversarea nu devine „liberă\" și nici cedare dovedită.",
+      "ticks": 900,
+      "pedestrians": 48,
+      "finalStates": {
+        "ON_SIDEWALK": 0,
+        "WAITING": 0,
+        "CROSSING": 3,
+        "CROSSED": 3,
+        "WITHDRAWN": 42
+      },
+      "counts": {
+        "created": 48,
+        "withdrawn": 42,
+        "live": 6,
+        "crossingsStarted": 48,
+        "crossingsCompleted": 45,
+        "crossingsInterrupted": 0,
+        "gapCrossings": 47,
+        "assertedCrossings": 1,
+        "freeCrossings": 0,
+        "yieldedCrossings": 0,
+        "crossingsWithoutYield": 0,
+        "unobservedCrossings": 45,
+        "conflictRecords": 1,
+        "stopEvents": 0,
+        "yieldStopEvents": 0,
+        "collisions": 0
+      },
+      "coverage": {
+        "steps": 900,
+        "completeSteps": 0,
+        "incompleteSteps": 900
+      },
+      "denominators": {
+        "yieldRate": {
+          "id": "YIELD_RATE",
+          "numerator": 0,
+          "denominator": 0,
+          "value": null,
+          "status": "MISSING",
+          "reason": "NO_COMPLETE_CONFLICT_EPISODE"
+        },
+        "crossingCompletionRate": {
+          "id": "CROSSING_COMPLETION_RATE",
+          "numerator": 45,
+          "denominator": 48,
+          "value": 0.9375,
+          "status": "OBSERVED",
+          "reason": null
+        }
+      },
+      "gaps": [
+        "REFUSED_CROSSWALK_LINK",
+        "INCOMPLETE_VEHICLE_COVERAGE",
+        "NO_COMPLETE_CONFLICT_EPISODE"
+      ],
+      "conflicts": [
+        {
+          "vehicleId": "vehicle-1",
+          "tick": 206,
+          "distanceM": 9.399999999999835,
+          "speedMps": 6,
+          "timeToConflictS": 1.5666666666666391,
+          "crossingRemainingS": 6.830902867324286,
+          "outcome": "CROSSED_WITHOUT_YIELD",
+          "stopTick": null,
+          "stopDistanceM": null,
+          "minimumDistanceM": 0.09999999999988063,
+          "maximumSpeedMps": 6
+        }
+      ],
+      "stops": [],
+      "collisions": [],
+      "targetPedestrian": {
+        "pedestrianId": "id-v1:10:pedestrian21:pedestrians-164-tests1:724:neighbourhood-compact-v18:cw:0-1:E1:0",
+        "finalState": "WITHDRAWN",
+        "withdrawalReason": "ROUTE_COMPLETE",
+        "crossingProgress": 1
+      },
+      "checks": [
+        {
+          "id": "INCOMPLETE_COVERAGE_REPORTED",
+          "passed": true,
+          "detail": "900/900 pași incompleți"
+        },
+        {
+          "id": "NO_FAKE_FREE_CROSSING",
+          "passed": true,
+          "detail": "traversări neobservate: 45, libere: 0"
+        }
+      ],
+      "pass": true
+    },
+    {
+      "scenarioId": "density-default",
+      "title": "Densitate implicită, fără trafic",
+      "description": "Configurația implicită (doi pietoni pe fiecare trecere legată) dovedește costul structural mărginit.",
+      "ticks": 1100,
+      "pedestrians": 96,
+      "finalStates": {
+        "ON_SIDEWALK": 0,
+        "WAITING": 0,
+        "CROSSING": 0,
+        "CROSSED": 0,
+        "WITHDRAWN": 96
+      },
+      "counts": {
+        "created": 96,
+        "withdrawn": 96,
+        "live": 0,
+        "crossingsStarted": 96,
+        "crossingsCompleted": 96,
+        "crossingsInterrupted": 0,
+        "gapCrossings": 96,
+        "assertedCrossings": 0,
+        "freeCrossings": 96,
+        "yieldedCrossings": 0,
+        "crossingsWithoutYield": 0,
+        "unobservedCrossings": 0,
+        "conflictRecords": 0,
+        "stopEvents": 0,
+        "yieldStopEvents": 0,
+        "collisions": 0
+      },
+      "coverage": {
+        "steps": 1100,
+        "completeSteps": 1100,
+        "incompleteSteps": 0
+      },
+      "denominators": {
+        "yieldRate": {
+          "id": "YIELD_RATE",
+          "numerator": 0,
+          "denominator": 0,
+          "value": null,
+          "status": "MISSING",
+          "reason": "NO_COMPLETE_CONFLICT_EPISODE"
+        },
+        "crossingCompletionRate": {
+          "id": "CROSSING_COMPLETION_RATE",
+          "numerator": 96,
+          "denominator": 96,
+          "value": 1,
+          "status": "OBSERVED",
+          "reason": null
+        }
+      },
+      "gaps": [
+        "REFUSED_CROSSWALK_LINK",
+        "NO_COMPLETE_CONFLICT_EPISODE"
+      ],
+      "conflicts": [],
+      "stops": [],
+      "collisions": [],
+      "targetPedestrian": {
+        "pedestrianId": "id-v1:10:pedestrian21:pedestrians-164-tests1:724:neighbourhood-compact-v18:cw:0-1:E1:0",
+        "finalState": "WITHDRAWN",
+        "withdrawalReason": "ROUTE_COMPLETE",
+        "crossingProgress": 1
+      },
+      "checks": [
+        {
+          "id": "DEFAULT_DENSITY",
+          "passed": true,
+          "detail": "96 pietoni"
+        },
+        {
+          "id": "BOUNDED_EVALUATION",
+          "passed": true,
+          "detail": "96 pietoni creați, 96 retrași cu motiv"
+        }
+      ],
+      "pass": true
+    }
+  ],
+  "summary": {
+    "scenarios": 6,
+    "passed": 6,
+    "pedestrians": 96,
+    "crossingsStarted": 336,
+    "crossingsCompleted": 323,
+    "freeCrossings": 276,
+    "yieldedCrossings": 1,
+    "crossingsWithoutYield": 1,
+    "unobservedCrossings": 45,
+    "conflictRecords": 4,
+    "stopEvents": 1,
+    "yieldStopEvents": 1,
+    "collisions": 1,
+    "pass": true
+  },
+  "refusals": [
+    {
+      "case": "unknown-option",
+      "refused": true,
+      "message": "Unknown pedestrian option"
+    },
+    {
+      "case": "non-integer-seed",
+      "refused": true,
+      "message": "Expected uint32 pedestrian seed"
+    },
+    {
+      "case": "missing-seed",
+      "refused": true,
+      "message": "Expected finite number in range"
+    },
+    {
+      "case": "stale-tick",
+      "refused": true,
+      "message": "Stale pedestrian step tick"
+    },
+    {
+      "case": "duplicate-vehicle",
+      "refused": true,
+      "message": "Duplicate pedestrian vehicle observation"
+    },
+    {
+      "case": "unknown-lane",
+      "refused": true,
+      "message": "Vehicle lane is not part of the pedestrian map"
+    },
+    {
+      "case": "vehicle-capacity",
+      "refused": true,
+      "message": "Pedestrian vehicle capacity exceeded"
+    },
+    {
+      "case": "contact-unknown-pedestrian",
+      "refused": true,
+      "message": "Contact references an unknown pedestrian"
+    },
+    {
+      "case": "contact-foreign-tick",
+      "refused": true,
+      "message": "Pedestrian contact does not belong to this step"
+    }
+  ],
+  "determinism": {
+    "runs": 2,
+    "digest": "aee3db57b40c8b3e480506dee567cf7d6b86928517f8b67dae9e279706322ff8",
+    "identical": true
+  },
+  "cost": {
+    "steps": 600,
+    "pedestrianEvaluations": 54456,
+    "vehicleEvaluations": 600,
+    "peakPedestriansPerStep": 96,
+    "peakVehiclesPerStep": 1
+  },
+  "limitations": [
+    "Nivel determinist în Node: fără browser, GPU, fizică live sau input uman; mișcarea vehiculelor este scriptată de fixture.",
+    "Contactele sunt fapte autoritare ale proprietarului coliziunilor; modulul nu detectează fizic impactul.",
+    "Trotuarul este banda derivată din harta 032 de layout-ul PBI 042; apropierea este un segment drept, nu un graf de trotuare.",
+    "Trecerea de pietoni este perpendiculară pe banda de referință; o geometrie de hartă nealiniată este refuzată explicit, nu aproximată.",
+    "Trecările de la marginea hărții nu au trotuar derivat și rămân fără pietoni, raportate ca lacună NO_SIDEWALK.",
+    "Pragurile numerice (viteză de mers, răbdare, marjă) sunt seedate și raportate per pieton, nu calibrate pentru gameplay.",
+    "Costul local de mai sus este structural (numărători deterministe), nu o măsurare de FPS sau de hardware."
+  ]
+}
