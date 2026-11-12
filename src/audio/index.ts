@@ -12,4 +12,5 @@ export * from './feedback';
 export * from './fake-backend';
 export * from './web-audio-backend';
 export * from './collision-bridge';
+export * from './destruction-feedback';
 export * from './procedural';
