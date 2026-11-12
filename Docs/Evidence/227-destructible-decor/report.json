@@ -1,0 +1,447 @@
+{
+  "version": "227-destructible-decor-v1",
+  "fixture": "227-destructible-decor-v1",
+  "mapId": "neighbourhood-compact-v1",
+  "playground": {
+    "zones": 3,
+    "zonesByKind": {
+      "DRIFT_PAD": 1,
+      "RAMP": 1,
+      "DEMOLITION_ALLEY": 1
+    },
+    "entries": 6,
+    "routes": 6,
+    "drivableEntries": 6,
+    "landmarks": 3,
+    "destructibles": 35,
+    "archetypes": 6,
+    "ramp": {
+      "lengthM": 12,
+      "widthM": 3.2,
+      "riseM": 0.6
+    },
+    "alley": {
+      "zoneId": "zone:alley:walk:blk:3-0:N",
+      "destructibles": 35
+    },
+    "issues": []
+  },
+  "calibration": {
+    "label": "PROVISIONAL_UNCALIBRATED",
+    "formula": "impulse = massKg * objectSpeed",
+    "archetypes": [
+      {
+        "archetype": "FENCE_LIGHT",
+        "massKg": 26,
+        "obstacleClass": "LARGE",
+        "moveImpulseNs": 15.6,
+        "breakImpulseNs": 117,
+        "fragments": 4
+      },
+      {
+        "archetype": "CONE",
+        "massKg": 5,
+        "obstacleClass": "LIGHT",
+        "moveImpulseNs": 1.25,
+        "breakImpulseNs": 37.5,
+        "fragments": 3
+      },
+      {
+        "archetype": "CRATE",
+        "massKg": 18,
+        "obstacleClass": "LIGHT",
+        "moveImpulseNs": 7.2,
+        "breakImpulseNs": 99,
+        "fragments": 4
+      },
+      {
+        "archetype": "BIN",
+        "massKg": 22,
+        "obstacleClass": "LIGHT",
+        "moveImpulseNs": 7.7,
+        "breakImpulseNs": 110,
+        "fragments": 3
+      },
+      {
+        "archetype": "DECOR_SIGN",
+        "massKg": 12,
+        "obstacleClass": "LIGHT",
+        "moveImpulseNs": 3.6,
+        "breakImpulseNs": 72,
+        "fragments": 2
+      },
+      {
+        "archetype": "STREET_FURNITURE",
+        "massKg": 45,
+        "obstacleClass": "LARGE",
+        "moveImpulseNs": 22.5,
+        "breakImpulseNs": 180,
+        "fragments": 4
+      }
+    ]
+  },
+  "transitions": {
+    "weak": {
+      "state": "INTACT",
+      "damageNs": 0.5,
+      "event": false
+    },
+    "continuous": [
+      "INTACT",
+      "MOVED",
+      "MOVED"
+    ],
+    "strong": {
+      "state": "BROKEN",
+      "damageNs": 42,
+      "event": "DESTRUCTIBLE_BROKEN"
+    },
+    "terminal": true,
+    "duplicateBreaks": 1
+  },
+  "controlSourceParity": {
+    "sources": [
+      "MANUAL",
+      "LEARNING",
+      "AUTO"
+    ],
+    "identical": true,
+    "fingerprint": "{\"state\":\"BROKEN\",\"damageNs\":120,\"eventId\":\"id-v1:19:destructible-broken24:session-227-destructible1:21:046:destructible:zone:alley:walk:blk:3-0:N:crate:3\",\"payload\":{\"objectId\":\"destructible:zone:alley:walk:blk:3-0:N:crate:3\",\"instigatorId\":\"taxi-227\",\"impulseNs\":120},\"reaction\":{\"impulseNs\":120,\"blocking\":false,\"vehicleDeltaVMps\":0.085714}}",
+    "counts": {
+      "MANUAL": 1,
+      "LEARNING": 1,
+      "AUTO": 1
+    }
+  },
+  "chain": {
+    "parent": "destructible:zone:alley:walk:blk:3-0:N:cone:1",
+    "child": "destructible:zone:alley:walk:blk:3-0:N:crate:2",
+    "childState": "BROKEN",
+    "instigator": "destructible:zone:alley:walk:blk:3-0:N:cone:1",
+    "entityIds": [
+      "destructible:zone:alley:walk:blk:3-0:N:crate:2",
+      "destructible:zone:alley:walk:blk:3-0:N:cone:1"
+    ],
+    "events": 1
+  },
+  "dedupe": {
+    "attempts": 4,
+    "events": 1,
+    "busRetained": 1,
+    "repeatStatus": "duplicate",
+    "duplicateBreaks": 3
+  },
+  "lightReaction": {
+    "archetype": "CONE",
+    "impulseNs": 60,
+    "reactionImpulseNs": 60,
+    "vehicleDeltaVMps": 0.042857,
+    "blocking": false
+  },
+  "largeObstacle": {
+    "objectId": "destructible:zone:alley:walk:blk:3-0:N:fence_light:0",
+    "state": "MOVED",
+    "displacementM": 1.6909,
+    "laneId": "lane:31E0",
+    "reported": true,
+    "cameraInputAccepted": false
+  },
+  "structural": {
+    "structuralIds": 467,
+    "destructibleIds": 35,
+    "overlaps": 0,
+    "untouched": true,
+    "cycles": 20
+  },
+  "checkpoint": {
+    "bytes": 6152,
+    "checksum": "fnv1a32:fb2bccd1",
+    "broken": 1,
+    "moved": 1,
+    "restoredBroken": 1,
+    "restoredMoved": 1,
+    "generation": 1,
+    "bodiesBefore": 33,
+    "bodiesAfterReset": 35
+  },
+  "resetCycles": {
+    "cycles": 20,
+    "bodies": [
+      35
+    ],
+    "colliders": [
+      35
+    ],
+    "fragments": [
+      0
+    ],
+    "indexEntries": [
+      43
+    ],
+    "distinctEvents": 20,
+    "distinctChecksums": 1
+  },
+  "presets": {
+    "low": {
+      "state": "BROKEN",
+      "fragments": 1,
+      "eventId": "id-v1:19:destructible-broken24:session-227-destructible1:21:045:destructible:zone:alley:walk:blk:3-0:N:cone:9"
+    },
+    "high": {
+      "state": "BROKEN",
+      "fragments": 3,
+      "eventId": "id-v1:19:destructible-broken24:session-227-destructible1:21:045:destructible:zone:alley:walk:blk:3-0:N:cone:9"
+    },
+    "gameplayIdentical": true
+  },
+  "performance": {
+    "simulation": {
+      "objects": 35,
+      "bodies": 33,
+      "colliders": 33,
+      "evaluatedObjects": 1,
+      "indexEntries": 40,
+      "indexCells": 17,
+      "chainEvents": 1
+    },
+    "assets": {
+      "textures": 0,
+      "meshes": 0,
+      "note": "No texture, mesh or material is added by PBI 227; fragment presets are presentation budgets owned with 146/228."
+    },
+    "memory": {
+      "snapshotBytes": 6152,
+      "bodies": 35,
+      "colliders": 35,
+      "fragments": 0,
+      "heapBytes": null
+    },
+    "frame": {
+      "status": "NOT_MEASURED",
+      "note": "No browser, hardware or FPS measurement was executed; the deterministic structural cost is reported instead."
+    },
+    "budgets": {
+      "destructionBodies": null,
+      "physicsObstacles": 96,
+      "physicsBodies": 207,
+      "physicsColliders": 256,
+      "maxObjects": 96,
+      "status": "FINITE_PROVISIONAL_ADMISSION_NOT_GAMEPLAY_CALIBRATION"
+    }
+  },
+  "refusals": {
+    "duplicateObjectId": "Duplicate destructible object id",
+    "structuralObject": "Structural objects are not destructible",
+    "unknownZone": "Unknown playground zone zone:none",
+    "offSurface": "destructible:probe:off-surface is not on a sidewalk or playground surface",
+    "invalidThreshold": "Break threshold must exceed the move threshold",
+    "capacity": "Destructible object capacity exceeded"
+  },
+  "checks": [
+    {
+      "name": "playground zones",
+      "expected": 3,
+      "actual": 3,
+      "pass": true
+    },
+    {
+      "name": "every zone entry is drivable without walking",
+      "expected": 6,
+      "actual": 6,
+      "pass": true
+    },
+    {
+      "name": "playground verification issues",
+      "expected": [],
+      "actual": [],
+      "pass": true
+    },
+    {
+      "name": "destructible archetypes",
+      "expected": 6,
+      "actual": 6,
+      "pass": true
+    },
+    {
+      "name": "weak impact leaves the object intact",
+      "expected": "INTACT",
+      "actual": "INTACT",
+      "pass": true
+    },
+    {
+      "name": "continuous impact reaches MOVED deterministically",
+      "expected": "MOVED",
+      "actual": "MOVED",
+      "pass": true
+    },
+    {
+      "name": "strong impact breaks once",
+      "expected": "BROKEN",
+      "actual": "BROKEN",
+      "pass": true
+    },
+    {
+      "name": "BROKEN is terminal inside a generation",
+      "expected": [
+        null,
+        1
+      ],
+      "actual": [
+        null,
+        1
+      ],
+      "pass": true
+    },
+    {
+      "name": "MANUAL/LEARNING/AUTO produce one identical outcome",
+      "expected": [
+        "fnv1a32:e7b5561e",
+        "fnv1a32:e7b5561e",
+        "fnv1a32:e7b5561e"
+      ],
+      "actual": [
+        "fnv1a32:e7b5561e",
+        "fnv1a32:e7b5561e",
+        "fnv1a32:e7b5561e"
+      ],
+      "pass": true
+    },
+    {
+      "name": "chain instigator is the real object",
+      "expected": "destructible:zone:alley:walk:blk:3-0:N:cone:1",
+      "actual": "destructible:zone:alley:walk:blk:3-0:N:cone:1",
+      "pass": true
+    },
+    {
+      "name": "chain event references both objects",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "one DESTRUCTIBLE_BROKEN per object and generation",
+      "expected": 1,
+      "actual": 1,
+      "pass": true
+    },
+    {
+      "name": "a repeated publication is a duplicate",
+      "expected": "duplicate",
+      "actual": "duplicate",
+      "pass": true
+    },
+    {
+      "name": "light object cannot act as an invisible wall",
+      "expected": [
+        false,
+        true
+      ],
+      "actual": [
+        false,
+        true
+      ],
+      "pass": true
+    },
+    {
+      "name": "a large object yields but stays an obstacle",
+      "expected": [
+        "MOVED",
+        true
+      ],
+      "actual": [
+        "MOVED",
+        true
+      ],
+      "pass": true
+    },
+    {
+      "name": "the displaced obstacle lands on the drivable surface",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "the obstacle query accepts no camera input",
+      "expected": "REFUSED",
+      "actual": "REFUSED",
+      "pass": true
+    },
+    {
+      "name": "buildings, lanes and STOP/signal rules stay structural",
+      "expected": [
+        0,
+        true
+      ],
+      "actual": [
+        0,
+        true
+      ],
+      "pass": true
+    },
+    {
+      "name": "reload restores moved and broken decor exactly",
+      "expected": [
+        1,
+        1
+      ],
+      "actual": [
+        1,
+        1
+      ],
+      "pass": true
+    },
+    {
+      "name": "reset rebuilds the baseline body count",
+      "expected": 35,
+      "actual": 35,
+      "pass": true
+    },
+    {
+      "name": "twenty reset cycles keep bodies, colliders and fragments at the baseline",
+      "expected": [
+        1,
+        1,
+        1,
+        1,
+        20
+      ],
+      "actual": [
+        1,
+        1,
+        1,
+        1,
+        20
+      ],
+      "pass": true
+    },
+    {
+      "name": "reset returns to one baseline decor fingerprint",
+      "expected": 1,
+      "actual": 1,
+      "pass": true
+    },
+    {
+      "name": "presentation presets change fragments only",
+      "expected": [
+        true,
+        true
+      ],
+      "actual": [
+        true,
+        true
+      ],
+      "pass": true
+    },
+    {
+      "name": "invalid input is refused",
+      "expected": 6,
+      "actual": 6,
+      "pass": true
+    }
+  ],
+  "summary": {
+    "checks": 24,
+    "passed": 24,
+    "pass": true
+  }
+}
