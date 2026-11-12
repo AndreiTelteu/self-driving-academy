@@ -39,7 +39,7 @@ Jobul CI: [ci-job.json](ci-job.json). Regresia controlată: [regression-demo/sum
 ## Verdictul agregat
 
 Revizia măsurată: `757e7168dfd641ea94fa7bcf95ae6841055e1244`, manifest `203-initial-1`, măsurat
-`2026-11-12T11:38:09.996Z`. **17 rânduri: 16 `PASS`, 0 `FAIL`, 1 `NOT_VALIDATED`.**
+`2026-11-12T11:39:11.741Z`. **17 rânduri: 16 `PASS`, 0 `FAIL`, 1 `NOT_VALIDATED`.**
 
 | Probă | Criteriu | Fel | Verdict | Detaliu |
 | --- | --- | --- | --- | --- |
@@ -182,8 +182,8 @@ senzor termic; cauza termică nu poate fi dovedită sau exclusă aici.
 | `npm run perf:hardware-budget -- --check` | exit 0 (85 PASS, 0 FAIL, 6 NOT_MEASURED) |
 | `npm run perf:soak -- --check` | exit 0 (SOAK_PASS, 60,002 min, 20 cicluri) |
 
-Jobul CI, măsurat de la început la sfârșit: typecheck 6,4 s, lint 31,9 s, format 33,3 s, arhitectură
-2,0 s, catalog de parametri 0,7 s, `perf:gate --check` 14,6 s, `perf:gate --measure` 22,3 s. Artefactul
+Jobul CI, măsurat de la început la sfârșit: typecheck 6,1 s, lint 33,3 s, format 38,8 s, arhitectură
+1,9 s, catalog de parametri 0,6 s, `perf:gate --check` 12,4 s, `perf:gate --measure` 18,5 s. Artefactul
 [ci-job.json](ci-job.json) păstrează codurile de ieșire, duratele, verdictul și lista criteriilor deschise.
 
 Mediul: AMD Ryzen 7 7735U, 16 fire logice, 14 GiB RAM, Windows 10.0.26300, Node v24.19.0; soak-ul și
