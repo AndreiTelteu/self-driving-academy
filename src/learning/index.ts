@@ -13,3 +13,4 @@ export * from './estimator-task';
 export * from './estimator-worker';
 export * from './tempo-estimator';
 export * from './accel-estimator';
+export * from './follow-estimator';
