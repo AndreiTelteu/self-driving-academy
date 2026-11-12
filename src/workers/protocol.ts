@@ -35,10 +35,30 @@ const identityKeys = [
   'sessionId',
   'worldEpoch',
 ] as const;
+/** Control packets carry no bytes; one shared immutable buffer avoids an allocation per message. */
+const EMPTY_BUFFER = new ArrayBuffer(0);
+/** Packets that already passed the strict envelope; re-sending them must not copy the object again. */
+const validatedPackets = new WeakSet<object>();
+function assertBuffer(buffer: ArrayBuffer, payloadBytes: number): void {
+  if (
+    !(buffer instanceof ArrayBuffer) ||
+    buffer.byteLength !== payloadBytes ||
+    buffer.byteLength > limits.bytes ||
+    (buffer as ArrayBuffer & { detached?: boolean; resizable?: boolean }).detached ||
+    (buffer as ArrayBuffer & { resizable?: boolean }).resizable
+  )
+    throw new Error('Invalid bytes');
+}
 export function sameIdentity(a: JobIdentity, b: JobIdentity): boolean {
   return identityKeys.every((key) => a[key] === b[key]);
 }
 export function parsePacket(value: unknown): Packet {
+  if (typeof value === 'object' && value !== null && validatedPackets.has(value)) {
+    const packet = value as Packet;
+    // The frozen envelope cannot change, but its buffer can still be detached after a transfer.
+    assertBuffer(packet.buffer, packet.payloadBytes);
+    return packet;
+  }
   if (!value || typeof value !== 'object') throw new Error('Invalid packet');
   if (![Object.prototype, null].includes(Object.getPrototypeOf(value)))
     throw new Error('Invalid prototype');
@@ -84,14 +104,7 @@ export function parsePacket(value: unknown): Packet {
     !['copy', 'transfer'].includes(p.ownership as string)
   )
     throw new Error('Invalid discriminant');
-  if (
-    !(p.buffer instanceof ArrayBuffer) ||
-    p.buffer.byteLength !== p.payloadBytes ||
-    p.buffer.byteLength > limits.bytes ||
-    (p.buffer as ArrayBuffer & { detached?: boolean; resizable?: boolean }).detached ||
-    (p.buffer as ArrayBuffer & { resizable?: boolean }).resizable
-  )
-    throw new Error('Invalid bytes');
+  assertBuffer(p.buffer as ArrayBuffer, p.payloadBytes as number);
   if (
     p.type === 'progress'
       ? typeof p.progress !== 'number' ||
@@ -113,7 +126,9 @@ export function parsePacket(value: unknown): Packet {
   )
     throw new Error('Control payload must be empty');
   if (p.type === 'start' && p.sequence !== 0) throw new Error('Start sequence must be zero');
-  return Object.freeze({ ...p }) as unknown as Packet;
+  const packet = Object.freeze({ ...p }) as unknown as Packet;
+  validatedPackets.add(packet);
+  return packet;
 }
 export interface Transport {
   send(packet: Packet, transfer: readonly ArrayBuffer[]): void;
@@ -135,7 +150,7 @@ export function control(
     type,
     sequence,
     payloadBytes: 0,
-    buffer: new ArrayBuffer(0),
+    buffer: EMPTY_BUFFER,
     ownership: 'copy',
     ...(type === 'progress' ? { progress: detail } : {}),
     ...(type === 'error' ? { error: detail } : {}),

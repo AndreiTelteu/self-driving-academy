@@ -195,6 +195,9 @@ function assertHistory(history: readonly ProfileBlendUpdate[], key: ParameterKey
   }
 }
 
+/** Frozen empty history shared by estimates that carry no prior updates. */
+const EMPTY_HISTORY: readonly ProfileBlendUpdate[] = Object.freeze([]);
+
 /**
  * Applies one documented update:
  *
@@ -211,7 +214,7 @@ export function blendProfileValue(input: ProfileBlendInput): ProfileBlendResult 
   const { key, oldValue, evidence, episodes, candidate } = input;
   if (!Number.isFinite(oldValue)) throw new Error(`Invalid profile blend old value for ${key}`);
   const definition = getParameterDefinition(key);
-  const prior = Object.freeze([...(input.history ?? [])]);
+  const prior = input.history === undefined ? EMPTY_HISTORY : Object.freeze([...input.history]);
   assertHistory(prior, key);
 
   const assessment = assessEvidenceConfidence({ key, evidence, episodes, candidate });
