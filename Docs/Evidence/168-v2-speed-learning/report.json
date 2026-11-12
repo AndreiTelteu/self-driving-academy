@@ -1,0 +1,310 @@
+{
+  "version": "168-tempo-estimator-v1",
+  "parameters": [
+    {
+      "key": "speed_delta_arterial",
+      "unit": "m/s",
+      "minimum": -10,
+      "maximum": 20,
+      "defaultValue": 0
+    },
+    {
+      "key": "cruise_speed_variability",
+      "unit": "m/s",
+      "minimum": 0,
+      "maximum": 3,
+      "defaultValue": 0.3
+    },
+    {
+      "key": "overtake_speed_bonus",
+      "unit": "m/s",
+      "minimum": 0,
+      "maximum": 10,
+      "defaultValue": 2
+    },
+    {
+      "key": "cruise_accel_deadband",
+      "unit": "m/s",
+      "minimum": 0.05,
+      "maximum": 2,
+      "defaultValue": 0.3
+    }
+  ],
+  "rows": [
+    {
+      "key": "speed_delta_arterial",
+      "unit": "m/s",
+      "context": "probe arteriale FREE_TRAFFIC/ELIGIBLE fără constrângere de lider, măsurate ca viteză − limita postată",
+      "status": "CANDIDATE",
+      "value": 4.074999999999999,
+      "uncertaintyMps": 0.1,
+      "uncertaintyThresholdMps": 1,
+      "estimateEpisodes": 2,
+      "validationEpisodes": 2,
+      "validationStatus": "VALIDATED",
+      "validationValue": 3.9499999999999993,
+      "validationErrorMps": 0.125,
+      "validationToleranceMps": 1,
+      "reason": null
+    },
+    {
+      "key": "cruise_speed_variability",
+      "unit": "m/s",
+      "context": "cicluri de croazieră FREE_TRAFFIC/ELIGIBLE de minimum 600 tick-uri, fără depășiri și fără lider",
+      "status": "CANDIDATE",
+      "value": 1.2000640762228256,
+      "uncertaintyMps": 0.05,
+      "uncertaintyThresholdMps": 0.5,
+      "estimateEpisodes": 2,
+      "validationEpisodes": 2,
+      "validationStatus": "VALIDATED",
+      "validationValue": 1.2000611592078045,
+      "validationErrorMps": 0.0000029170150210866552,
+      "validationToleranceMps": 0.5,
+      "reason": null
+    },
+    {
+      "key": "overtake_speed_bonus",
+      "unit": "m/s",
+      "context": "depășiri reale, neconstrânse de trafic, comparate cu linia de croazieră a aceluiași episod",
+      "status": "CANDIDATE",
+      "value": 2,
+      "uncertaintyMps": 0.2,
+      "uncertaintyThresholdMps": 1.5,
+      "estimateEpisodes": 2,
+      "validationEpisodes": 2,
+      "validationStatus": "VALIDATED",
+      "validationValue": 2,
+      "validationErrorMps": 0,
+      "validationToleranceMps": 1.5,
+      "reason": null
+    },
+    {
+      "key": "cruise_accel_deadband",
+      "unit": "m/s",
+      "context": "pași de țintă observați care au ținut commit-ul anterior (limită inferioară) sau l-au mișcat (limită superioară)",
+      "status": "CANDIDATE",
+      "value": 0.3250000000000002,
+      "uncertaintyMps": 0.07500000000000018,
+      "uncertaintyThresholdMps": 0.4,
+      "estimateEpisodes": 2,
+      "validationEpisodes": 2,
+      "validationStatus": "VALIDATED",
+      "validationValue": null,
+      "validationErrorMps": null,
+      "validationToleranceMps": 0.1,
+      "reason": null
+    }
+  ],
+  "unobserved": [
+    {
+      "key": "speed_delta_arterial",
+      "scenario": "arterial samples capped by a slow lead",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "TRAFFIC_DOMINATED",
+      "excluded": {
+        "TRAFFIC_CONSTRAINED": 3
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "cruise_speed_variability",
+      "scenario": "cruise stretches shorter than 600 ticks",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "NO_ELIGIBLE_EPISODES",
+      "excluded": {
+        "SHORT_CRUISE_CYCLE": 3
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "overtake_speed_bonus",
+      "scenario": "overtakes at the 167 traffic envelope",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "TRAFFIC_DOMINATED",
+      "excluded": {
+        "TRAFFIC_DOMINATED": 2
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "cruise_accel_deadband",
+      "scenario": "every step stays inside the band",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "DEADBAND_UPPER_BOUND_UNOBSERVED",
+      "excluded": {},
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "cruise_accel_deadband",
+      "scenario": "held and moved steps contradict",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "CONTRADICTORY_STEP_BOUNDS",
+      "excluded": {},
+      "validationStatus": "NO_DATA"
+    }
+  ],
+  "groupConstraints": [
+    {
+      "id": "CRUISE_DISPERSION_SHARED",
+      "keys": [
+        "cruise_speed_variability",
+        "cruise_accel_deadband"
+      ],
+      "explanation": "Variația de croazieră și deadband-ul acționează asupra aceleiași serii de viteză: dispersia de croazieră poate fi explicată fie de unda de ritm, fie de o bandă de toleranță care filtrează unda. Deadband-ul nu se estimează din dispersie, ci doar din pași de țintă observați; fără pași ținuți și pași mișcați, cheia rămâne neobservată."
+    },
+    {
+      "id": "OVERTAKE_ADVANTAGE_UNDER_LEAD",
+      "keys": [
+        "overtake_speed_bonus"
+      ],
+      "explanation": "Avantajul de viteză la depășire este bonus numai când liderul nu plafonează viteza. Depășirile în care viteza atinge anvelopa de trafic 167 sunt excluse, deci un set format doar din astfel de manevre produce `TRAFFIC_DOMINATED`, nu un bonus."
+    },
+    {
+      "id": "ARTERIAL_DELTA_UNDER_LEAD",
+      "keys": [
+        "speed_delta_arterial"
+      ],
+      "explanation": "Delta arterială este diferența de stil față de limita postată. Probele arteriale cu lider apropiat sunt plafonate de trafic și nu pot deveni preferință; ele sunt excluse înainte de estimare, la fel ca în estimatorul 094 pentru drumurile urbane."
+    },
+    {
+      "id": "TEMPO_FROM_ONE_TRAJECTORY",
+      "keys": [
+        "speed_delta_arterial",
+        "cruise_speed_variability",
+        "overtake_speed_bonus",
+        "cruise_accel_deadband"
+      ],
+      "explanation": "Cele patru chei de tempo pot fi observate în aceeași călătorie, dar nu din aceleași fapte: arterialul cere probe arteriale libere, variabilitatea cere cicluri de croazieră, bonusul cere depășiri reale, iar deadband-ul cere pași de țintă. Un set care conține doar un tip de fapt lasă celelalte chei neobservate, în loc să le deducă din traiectoria comună."
+    }
+  ],
+  "refusals": [
+    {
+      "episodeId": "manual-demo",
+      "reason": "NOT_LEARNING_ELIGIBLE"
+    },
+    {
+      "episodeId": "duplicate-demo",
+      "reason": "DUPLICATE_EPISODE"
+    }
+  ],
+  "split": {
+    "seed": 168,
+    "admitted": 16,
+    "disjoint": true
+  },
+  "determinism": {
+    "seed": 168,
+    "digest": "fnv1a32:60f0a4cf",
+    "repeatedDigest": "fnv1a32:60f0a4cf"
+  },
+  "checks": [
+    {
+      "id": "context-arterial",
+      "pass": true,
+      "detail": "arterial-only estimate 4.075 m/s; cruise, overtake and deadband stay unobserved"
+    },
+    {
+      "id": "context-cruise",
+      "pass": true,
+      "detail": "cruise-only variability 1.200 m/s; deadband is not inferred from the same dispersion"
+    },
+    {
+      "id": "context-overtake",
+      "pass": true,
+      "detail": "overtake-only bonus 2.000 m/s"
+    },
+    {
+      "id": "context-deadband",
+      "pass": true,
+      "detail": "deadband 0.325 ± 0.075 m/s from held and moved steps only"
+    },
+    {
+      "id": "uncertainty-reported",
+      "pass": true,
+      "detail": "speed_delta_arterial 0.100 <= 1, cruise_speed_variability 0.050 <= 0.5, overtake_speed_bonus 0.200 <= 1.5, cruise_accel_deadband 0.075 <= 0.4"
+    },
+    {
+      "id": "uncertainty-threshold",
+      "pass": true,
+      "detail": "noisy arterial uncertainty 3.942 > 1 m/s keeps the key unobserved"
+    },
+    {
+      "id": "validation-split",
+      "pass": true,
+      "detail": "seed 168: continuous keys validate on held-out episodes; deadband validates on 2 held-out episodes"
+    },
+    {
+      "id": "validation-too-small",
+      "pass": true,
+      "detail": "three arterial episodes leave 1 held-out episode(s), reported as TOO_SMALL"
+    },
+    {
+      "id": "unobserved-arterial-traffic",
+      "pass": true,
+      "detail": "3 arterial episodes excluded at the 167 traffic envelope"
+    },
+    {
+      "id": "unobserved-overtake-traffic",
+      "pass": true,
+      "detail": "2 overtakes at the traffic envelope cannot prove a style bonus"
+    },
+    {
+      "id": "unobserved-short-cruise",
+      "pass": true,
+      "detail": "3 cruise stretches shorter than one full 600-tick cycle are excluded"
+    },
+    {
+      "id": "unobserved-covering-deadband",
+      "pass": true,
+      "detail": "a band that holds every observed step has no upper bound"
+    },
+    {
+      "id": "unobserved-contradictory-deadband",
+      "pass": true,
+      "detail": "a held 0.5 m/s step and a moved 0.3 m/s step leave no admissible interval"
+    },
+    {
+      "id": "no-fabricated-values",
+      "pass": true,
+      "detail": "5 unobserved demonstrations carry value null and an explicit reason"
+    },
+    {
+      "id": "group-constraints",
+      "pass": true,
+      "detail": "CRUISE_DISPERSION_SHARED, OVERTAKE_ADVANTAGE_UNDER_LEAD, ARTERIAL_DELTA_UNDER_LEAD, TEMPO_FROM_ONE_TRAJECTORY"
+    },
+    {
+      "id": "invalid-input-refused",
+      "pass": true,
+      "detail": "NaN speed refused; manual-demo:NOT_LEARNING_ELIGIBLE, duplicate-demo:DUPLICATE_EPISODE"
+    },
+    {
+      "id": "determinism",
+      "pass": true,
+      "detail": "digest fnv1a32:60f0a4cf"
+    },
+    {
+      "id": "catalog-ranges",
+      "pass": true,
+      "detail": "speed_delta_arterial 4.075 m/s, cruise_speed_variability 1.200 m/s, overtake_speed_bonus 2.000 m/s, cruise_accel_deadband 0.325 m/s"
+    },
+    {
+      "id": "policy-compatibility",
+      "pass": true,
+      "detail": "167 reads base 17.975 m/s, ceiling 17.975 m/s, deadband 0.325 m/s, commit 16.808 m/s"
+    }
+  ],
+  "summary": {
+    "checks": 19,
+    "passed": 19,
+    "pass": true,
+    "candidateKeys": 4,
+    "unobservedKeys": 5
+  }
+}
