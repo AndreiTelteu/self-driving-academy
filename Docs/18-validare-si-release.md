@@ -105,3 +105,17 @@ Suita 151 leagă autonomia, cursele, învățarea și campania într-un singur t
 **Reutilizare.** Matricea 216 rămâne sursa pentru daily 211/212 și XP 213 (rândurile B5–B8, amprenta XP fără pierderi, graful boardului), iar suita 056 rămâne sursa pentru matricea roșu/verde și cele 10 refuzuri de autonomie. 151 le citează ca dovadă comisă și adaugă doar cazurile care lipsesc acolo, fără a le reexecuta sub alt nume.
 
 Dovezile, cu numerele reale per scenariu, sunt în [Evidence/151-scenario-suite](Evidence/151-scenario-suite/README.md).
+
+## Testul integral de sesiune și progres (PBI 152)
+
+Testul 152 parcurge o singură sesiune cap-coadă, pe contractele livrate 057/058/059/060/061/066/067/068, 109/110/112, 209, 211/212/213, 133 și 215. `npm run e2e:session` rulează cele unsprezece etape, scrie transcriptul și iese cu cod diferit de zero dacă o verificare pică; `--check` compară `report.json` și `report.md` cu fișierele comise, iar `--browser` este proba separată în Chromium (necesită Playwright prin `PLAYWRIGHT_MODULE`).
+
+**Ce acoperă.** Un profil nou cu o singură versiune de bază pe 30 de taxiuri și 40 de civile; AUTO fără scaun de jucător; cursa reală a dispeceratului 060 și a FSM-ului 061; preluarea MANUAL și deschiderea intervenției 005; schimbarea vehiculului la mijlocul cursei, care închide explicit segmentul cu `VEHICLE_SWITCH` fără să atingă cursa sau assignment-ul; terminarea cursei cu o singură eliberare a taxiului; LEARNING prin pipeline-ul 112 și activarea aceleiași versiuni pe taxiuri și civile; KPI 209 cu settlement și recenzie reală; daily 211/212 cu exact trei misiuni și o recompensă; XP 213 cu misiune, daily și timp activ; exportul 133 plus bundle-ul 215; restartul care re-citește textele și compară amprentele.
+
+**Cum se dovedește restartul.** Cele două documente sunt serializate ca text, apoi re-citite dintr-o stare nouă. Soldul XP (200,5), nivelul (2), cele trei intrări, misiunea creditată și ziua daily sunt identice; setul daily (3 misiuni, 1 recompensă), KPI (551 unități minore, 1 recenzie, notă 5) și versiunea activă a flotei (`segment-152-learning~112`, 30 taxiuri + 40 civile) au aceleași amprente SHA-256. Checksum-urile 133/215 sunt recalculate la citire, iar un fișier modificat este refuzat.
+
+**Cum se dovedește schimbarea vehiculului.** În mijlocul cursei, când pasagerul este la bord (`TO_DROPOFF`), camera trece de pe taxiul cursei pe alt taxi. Contractul 068 eliberează scaunul MANUAL și cere închiderea segmentului 005 cu motivul `VEHICLE_SWITCH`; cursa rămâne activă, cu același `rideId`, același `taxiId`, același assignment 060 și aceleași trei tranziții, iar ulterior se închide normal. Istoricul intervenției păstrează ambele segmente (MANUAL și LEARNING), fără curse orfane și fără istoric trunchiat.
+
+**Browser.** Transcriptul determinist nu pornește un browser și declară explicit partea aceasta. Proba `npm run e2e:session -- --browser` a rulat în Chromium 156 pe un context nou, cu stocare goală: a parcurs aceleași 104 verificări, a scris documentele în IndexedDB, a reîncărcat pagina și a re-citit documentele; toate cele opt comparații de restart au trecut, fără erori de pagină. Fără Playwright, comanda raportează `SKIP`, nu un succes.
+
+Dovezile, cu numerele reale, comenzile și limitările, sunt în [Evidence/152-e2e-session](Evidence/152-e2e-session/README.md).

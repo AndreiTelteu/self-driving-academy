@@ -1,0 +1,140 @@
+{
+  "schemaVersion": 1,
+  "generatedBy": "scripts/run-e2e-session-report.mjs --browser",
+  "browser": "Chromium 156.0.8078.4",
+  "viewport": "1440x900",
+  "profile": "new browser context with empty storage",
+  "session": {
+    "pass": true,
+    "summary": {
+      "steps": 11,
+      "checks": 104,
+      "pass": true
+    },
+    "bytes": {
+      "profile": 5851,
+      "economy": 13362
+    }
+  },
+  "restart": {
+    "pass": true,
+    "comparison": {
+      "pass": true,
+      "checks": [
+        {
+          "name": "profile read",
+          "expected": "ACCEPTED",
+          "actual": "ACCEPTED",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "fișierul se re-citește"
+        },
+        {
+          "name": "profile checksum verified",
+          "expected": true,
+          "actual": true,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "checksumul este recalculat la citire"
+        },
+        {
+          "name": "economy read",
+          "expected": "ACCEPTED",
+          "actual": "ACCEPTED",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "bundle-ul se re-citește"
+        },
+        {
+          "name": "economy checksum verified",
+          "expected": true,
+          "actual": true,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "checksumul bundle-ului este recalculat"
+        },
+        {
+          "name": "xp fingerprint",
+          "expected": true,
+          "actual": true,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "amprenta XP înainte/după este aceeași"
+        },
+        {
+          "name": "daily fingerprint",
+          "expected": true,
+          "actual": true,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "setul daily și recompensa sunt identice"
+        },
+        {
+          "name": "kpi fingerprint",
+          "expected": true,
+          "actual": true,
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "KPI (venit, note, curse) este identic"
+        },
+        {
+          "name": "fleet profile",
+          "expected": "segment-152-learning~112",
+          "actual": "segment-152-learning~112",
+          "tolerance": {
+            "kind": "EXACT",
+            "value": 0,
+            "unit": "—"
+          },
+          "pass": true,
+          "detail": "profilul flotei rămâne versiunea activă exportată"
+        }
+      ],
+      "numbers": {
+        "profileStatus": "ACCEPTED",
+        "profileChecksumVerified": true,
+        "economyStatus": "ACCEPTED",
+        "economyChecksumVerified": true,
+        "xpBalance": 200.5,
+        "xpLevel": 2,
+        "dailyRewarded": 1,
+        "dailyInstances": 3,
+        "kpiRevenueMinorUnits": 551,
+        "kpiReviews": 1,
+        "fleetVersionId": "segment-152-learning~112"
+      }
+    },
+    "reason": null
+  },
+  "pageErrors": [],
+  "pass": true,
+  "note": "Un context de browser nou este profilul nou; reîncărcarea paginii este restartul; IndexedDB păstrează documentele exportate între cele două încărcări."
+}
