@@ -290,3 +290,56 @@ plafoanele și codurile de refuz din `src/persistence/savefile.ts`, respectiv op
 participanți), deci lizibilitatea și confortul manualului sunt `NOT_RUN`; playtestul și retenția rămân
 `NOT_RUN`, iar FPS-ul pe hardware real rămâne `NOT_VALIDATED` la gate-ul 224. Manualul nu conține procente
 de revenire, promisiuni de învățare „mai bună” sau rate de cadre.
+
+## Checklist-ul executat al release-ului V1 (PBI 162, 12 noiembrie 2026)
+
+PBI 162 închide seria de validare cu o comandă care rulează efectiv verificările de release și
+publică un verdict agregat: `npm run release:checklist`. Checklist-ul nu are pași noi — fiecare
+criteriu este o comandă deja livrată (`typecheck`, `lint`, `format:check`, arhitectură, catalog,
+suita completă, board, manifest de asseturi, `perf:gate` 224, `qa:fun` 235, `qa:ui` 153,
+`qa:compat` 154, `build:report` 160) sau o dovadă comisă a unei dependențe. `--check` reexecută tot
+și compară cele trei fișiere generate byte cu byte, iar `--strict` transformă un release care nu
+este `PASS` în exit code 1.
+
+**Verdictul reviziei: `NOT_VALIDATED`.** 13 criterii: **8 `PASS`, 2 `FAIL`, 1 `NOT_VALIDATED`,
+2 `NOT_RUN`**; 13 verificări executate, 0 eșuate; **26 de itemi deschiși**, cu sursă și motiv.
+Release-ul nu se declară gata, iar `FAIL` nu este ascuns sub „nevalidat”.
+
+| Criteriu | Verdict | Dovada principală |
+| --- | --- | --- |
+| Dependențele V1 în Done, cu dovezi comise | `PASS` | 10/10: 161, 154, 152, 108, 039, 076, 141, 216, 217, 235 |
+| Verificări statice obligatorii | `PASS` | 6/6 pași cu exit 0 |
+| Suita completă de teste | `PASS` | 2 898 teste, 2 898 trecute, 0 eșuate |
+| Board PBI valid | `PASS` | `Valid: true`, 235 de task-uri, 162 într-o singură coloană |
+| Pipeline-ul CI 160 pe revizie | `PASS` | `PASSED_WITH_PLAN_DEBT`, livrare `STATIC_VERIFIED`, datoria de plan publicată |
+| Gate-ul 224 | `NOT_VALIDATED` | 16 `PASS`, 0 `FAIL`, 1 `NOT_VALIDATED` (`fps-hardware`); release `NOT_VALIDATED` |
+| Gate-ul 235 | `FAIL` | 4 `PASS`, 1 `FAIL` (C3), 1 `NOT_RUN` (C5); 15/16 sonde; playtest 0/5 |
+| QA vizual 153 | `FAIL` | 300/308 verificări, 5 eșecuri de contract, 8 findings |
+| Matricea 154 | `PASS` | 9/9 combinații reale, 11/11 deterministe, 11 declarate `NOT_RUN` |
+| Artefactul de livrare 160 | `PASS` | 130 artefacte, 6 172 078 B, JS+WASM 6 125 279 B din 8 MiB, digest `81e33b1d…` |
+| Documentația de release | `PASS` | 11 fișiere, 0 linkuri locale rupte, index coerent |
+| Demonstrația pe hardware agreat | `NOT_RUN` | doar probe Node și Chromium headless pe SwiftShader |
+| Playtest uman | `NOT_RUN` | 0/5 participanți, retenție 24 h / 7 zile nemăsurată |
+
+**Ce lipsește, pe scurt.** FPS-ul, frame p95/p99 și lucrul GPU pe hardware real, pe aceeași revizie și
+pe ambele backenduri (224); repararea celor cinci eșecuri de contract ale 153, care cere un PBI ce
+deține `src/ui`; playtestul uman cu minimum cinci participanți și o sesiune de revenire; demonstrația
+pe hardware-ul agreat și combinațiile de browser/OS declarate `NOT_RUN` de 154. Niciuna dintre ele nu
+este înlocuită cu o estimare.
+
+**Artefactul.** Buildul de producție rămâne al pipeline-ului 160: 130 de fișiere, 6 172 078 B total,
+6 125 279 B JS+WASM (73,02 % din capacitatea de 8 MiB din [manifest](performance-budgets.json)),
+1 769 518 B gzip, arbore SHA-256 `81e33b1d8c54a53b97087288dac3b7cf1f9f833f66eef07b108a23dc2042d3a9`,
+132 de cereri HTTP cu 130 payloaduri verificate. Checklist-ul compară acești bytes cu rândul
+`bundle-critical-transfer` al gate-ului 224: ambele rapoarte spun 6 125 279 B.
+
+**Transparență.** Parserul datoriei de plan din `scripts/ci/run-release-pipeline.mjs` a fost făcut
+robust la mesajul PowerShell împachetat pe mai multe linii: linkul rupt preexistent din
+`PBI/Done/067-mode_toggle.md` este acum clasificat `DEBT` și publicat, în loc să pară o eroare
+necunoscută. Banda `ci:release` nu a fost rulată aici, pentru că jobul ei reîmprospătează dovezile
+224 (`--measure`) din afara ownership-ului acestui PBI; refuzul de livrare fără hardware este dovedit
+de verdictul 224 și de checklist.
+
+Dovezile complete — checklist-ul per criteriu, comenzile cu exit code, tabelul dependențelor,
+artefactul și lista explicită a ce rămâne deschis — sunt în
+[Evidence/162-release-v1](Evidence/162-release-v1/README.md).
