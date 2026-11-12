@@ -1,0 +1,425 @@
+{
+  "version": "172-follow-estimator-v1",
+  "parameters": [
+    {
+      "key": "cutin_brake_response",
+      "unit": "ratio",
+      "minimum": 0,
+      "maximum": 1,
+      "defaultValue": 0.7
+    },
+    {
+      "key": "closing_ttc_threshold",
+      "unit": "s",
+      "minimum": 0.3,
+      "maximum": 8,
+      "defaultValue": 3
+    },
+    {
+      "key": "leader_change_delay",
+      "unit": "s",
+      "minimum": 0,
+      "maximum": 2,
+      "defaultValue": 0.2
+    },
+    {
+      "key": "following_hysteresis",
+      "unit": "m",
+      "minimum": 0,
+      "maximum": 5,
+      "defaultValue": 1
+    }
+  ],
+  "rows": [
+    {
+      "key": "cutin_brake_response",
+      "episode": "CUT_IN",
+      "unit": "ratio",
+      "context": "un cut-in real declarat de observație, în care 048 cere o reducere sub angajamentul anterior, măsurat ca fracțiunea din diferență aplicată imediat de 171",
+      "status": "CANDIDATE",
+      "value": 0.7,
+      "uncertainty": 0.02,
+      "uncertaintyThreshold": 0.15,
+      "estimateEpisodes": 2,
+      "validationEpisodes": 2,
+      "validationStatus": "VALIDATED",
+      "validationValue": 0.7,
+      "validationError": 0,
+      "validationTolerance": 0.1,
+      "reason": null
+    },
+    {
+      "key": "closing_ttc_threshold",
+      "episode": "CLOSING_TTC",
+      "unit": "s",
+      "context": "o apropiere reală de lider (viteză de închidere pozitivă, decalaj peste podeaua de 5 m) în care plafonul de contact al 171 limitează efectiv ținta sub preferința 048",
+      "status": "CANDIDATE",
+      "value": 3,
+      "uncertainty": 0.05,
+      "uncertaintyThreshold": 0.5,
+      "estimateEpisodes": 2,
+      "validationEpisodes": 2,
+      "validationStatus": "VALIDATED",
+      "validationValue": 3,
+      "validationError": 0,
+      "validationTolerance": 0.5,
+      "reason": null
+    },
+    {
+      "key": "leader_change_delay",
+      "episode": "LEADER_CHANGE",
+      "unit": "s",
+      "context": "o schimbare reală de lider fără cut-in, în care adoptarea liderului nou ar însemna accelerare, măsurată ca numărul de tick-uri ținute înainte de adopție",
+      "status": "CANDIDATE",
+      "value": 0.19166666666666668,
+      "uncertainty": 0.008333333333333333,
+      "uncertaintyThreshold": 0.1,
+      "estimateEpisodes": 2,
+      "validationEpisodes": 2,
+      "validationStatus": "VALIDATED",
+      "validationValue": 0.19166666666666668,
+      "validationError": 0,
+      "validationTolerance": 0.05,
+      "reason": null
+    },
+    {
+      "key": "following_hysteresis",
+      "episode": "HYSTERESIS",
+      "unit": "m",
+      "context": "o oscilație reală a decalajului în jurul decalajului dorit al 048, cu eșantioane ținute în bandă și eșantioane care ies din ea",
+      "status": "CANDIDATE",
+      "value": 1,
+      "uncertainty": 0.1999999999999993,
+      "uncertaintyThreshold": 0.5,
+      "estimateEpisodes": 2,
+      "validationEpisodes": 2,
+      "validationStatus": "VALIDATED",
+      "validationValue": 1,
+      "validationError": 0,
+      "validationTolerance": 0.2,
+      "reason": null
+    }
+  ],
+  "unobserved": [
+    {
+      "key": "cutin_brake_response",
+      "episode": "CUT_IN",
+      "scenario": "cut-in fără reducere oferită de 048",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "CUT_IN_WITHOUT_REDUCTION",
+      "excluded": {
+        "CUT_IN_WITHOUT_REDUCTION": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "cutin_brake_response",
+      "episode": "CUT_IN",
+      "scenario": "patru reacții reale, dar împrăștiate (0,1–1)",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "UNCERTAINTY_ABOVE_THRESHOLD",
+      "excluded": {},
+      "validationStatus": "OUTSIDE_TOLERANCE"
+    },
+    {
+      "key": "closing_ttc_threshold",
+      "episode": "CLOSING_TTC",
+      "scenario": "apropiere reală fără plafon activ",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "TTC_CAP_NOT_BOUND",
+      "excluded": {
+        "TTC_CAP_NOT_BOUND": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "leader_change_delay",
+      "episode": "LEADER_CHANGE",
+      "scenario": "ținere tăiată de fereastra de dovezi",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "LEADER_HOLD_CENSORED",
+      "excluded": {
+        "LEADER_HOLD_CENSORED": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "leader_change_delay",
+      "episode": "LEADER_CHANGE",
+      "scenario": "ținere întreruptă de o reducere",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "LEADER_HOLD_INTERRUPTED_BY_REDUCTION",
+      "excluded": {
+        "LEADER_HOLD_INTERRUPTED_BY_REDUCTION": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "leader_change_delay",
+      "episode": "LEADER_CHANGE",
+      "scenario": "întârzieri reale, dar împrăștiate (0–2 s)",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "UNCERTAINTY_ABOVE_THRESHOLD",
+      "excluded": {},
+      "validationStatus": "OUTSIDE_TOLERANCE"
+    },
+    {
+      "key": "following_hysteresis",
+      "episode": "HYSTERESIS",
+      "scenario": "bandă depășită, dar nicio ieșire observată",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "HYSTERESIS_UPPER_BOUND_UNOBSERVED",
+      "excluded": {
+        "HYSTERESIS_UPPER_BOUND_UNOBSERVED": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "following_hysteresis",
+      "episode": "HYSTERESIS",
+      "scenario": "oscilație doar deasupra decalajului dorit",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "NO_BAND_OSCILLATION",
+      "excluded": {
+        "NO_BAND_OSCILLATION": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "following_hysteresis",
+      "episode": "HYSTERESIS",
+      "scenario": "două benzi incompatibile",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "CONTRADICTORY_BAND_BOUNDS",
+      "excluded": {},
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "cutin_brake_response",
+      "episode": "CUT_IN",
+      "scenario": "demonstrații MANUAL, neeligibile",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "NO_ELIGIBLE_EPISODES",
+      "excluded": {},
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "closing_ttc_threshold",
+      "episode": "CLOSING_TTC",
+      "scenario": "set fără episoade",
+      "status": "UNOBSERVED",
+      "value": null,
+      "reason": "NO_ELIGIBLE_EPISODES",
+      "excluded": {},
+      "validationStatus": "NO_DATA"
+    }
+  ],
+  "groupConstraints": [
+    {
+      "id": "CUT_IN_AND_TTC_SHARE_BRAKE",
+      "keys": [
+        "cutin_brake_response",
+        "closing_ttc_threshold"
+      ],
+      "explanation": "Cut-in-ul și plafonul timpului până la contact împart aceeași frânare: pe un tick de cut-in 171 aplică reacția, apoi plafonul de contact peste ea, deci aceeași reducere poate fi explicată de oricare dintre chei. De aceea un episod de cut-in nu este admis la măsurarea pragului TTC, iar un episod TTC trebuie să nu declare cut-in; altfel una dintre valori ar fi dedusă din cealaltă."
+    },
+    {
+      "id": "HYSTERESIS_DEPENDS_ON_GAP_BAND",
+      "keys": [
+        "following_hysteresis"
+      ],
+      "explanation": "Histerezisul este identificabil numai față de banda de decalaj a lui 048: cheia ține angajamentul cât timp |decalaj − decalaj dorit| rămâne sub toleranță. Fără eșantioane ținute și eșantioane care ies din bandă, cheia rămâne neobservată; o singură latură a benzii este doar o limită, nu o valoare. Când decalajul nu oscilează, banda nu se separă de câștigul de viteză al lui 048."
+    },
+    {
+      "id": "LEADER_CHANGE_REQUIRES_NO_CUT_IN",
+      "keys": [
+        "leader_change_delay"
+      ],
+      "explanation": "Întârzierea se măsoară doar la un lider nou apărut fără cut-in: politica 171 adoptă cut-in-ul imediat și nu îl poate amâna, deci un astfel de episod nu poate dovedi niciodată întârzierea. O reducere se adoptă pe loc chiar și în timpul ținerii, deci o ținere întreruptă de o frânare lasă cheia neobservată."
+    },
+    {
+      "id": "FOLLOW_KEYS_FROM_ONE_TRAJECTORY",
+      "keys": [
+        "cutin_brake_response",
+        "closing_ttc_threshold",
+        "leader_change_delay",
+        "following_hysteresis"
+      ],
+      "explanation": "Cele patru chei pot fi observate în aceeași călătorie, dar nu din aceleași fapte: cut-in-ul cere o interpunere declarată, pragul TTC cere o închidere în care plafonul leagă, întârzierea cere un lider nou fără cut-in, iar histerezisul cere o oscilație reală în bandă. Un set care conține doar un tip de fapt lasă celelalte chei neobservate, în loc să le deducă din traiectoria comună."
+    }
+  ],
+  "refusals": [
+    {
+      "episodeId": "manual-1",
+      "reason": "NOT_LEARNING_ELIGIBLE"
+    },
+    {
+      "episodeId": "manual-2",
+      "reason": "NOT_LEARNING_ELIGIBLE"
+    },
+    {
+      "episodeId": "manual-3",
+      "reason": "NOT_LEARNING_ELIGIBLE"
+    },
+    {
+      "episodeId": "manual-4",
+      "reason": "NOT_LEARNING_ELIGIBLE"
+    },
+    {
+      "episodeId": "cutin-1",
+      "reason": "DUPLICATE_EPISODE"
+    }
+  ],
+  "split": {
+    "seed": 172,
+    "admitted": 16,
+    "disjoint": true
+  },
+  "compatibility": {
+    "policyVersion": "171-follow-policy-v1",
+    "candidateOnly": true,
+    "changesPolicySemantics": false,
+    "cutInCommittedMps": 7.950000000000001,
+    "expectedCutInMps": 7.950000000000001,
+    "ttcCapMps": 22.333333333333332,
+    "expectedTtcCapMps": 22.333333333333332,
+    "leaderHoldTicks": 12,
+    "expectedLeaderHoldTicks": 12,
+    "hysteresisHeldInside": true,
+    "hysteresisHeldOutside": false
+  },
+  "determinism": {
+    "seed": 172,
+    "digest": "fnv1a32:3e8addc1",
+    "repeatedDigest": "fnv1a32:3e8addc1"
+  },
+  "checks": [
+    {
+      "id": "context-cutin",
+      "pass": true,
+      "detail": "cut-in-only response 0.7000 ratio; the other three keys stay unobserved"
+    },
+    {
+      "id": "context-closing",
+      "pass": true,
+      "detail": "closing-only threshold 3.0000 s; cut-in and delay stay unobserved"
+    },
+    {
+      "id": "context-leader-change",
+      "pass": true,
+      "detail": "leader-change-only delay 0.1917 s; cut-in and closing stay unobserved"
+    },
+    {
+      "id": "context-hysteresis",
+      "pass": true,
+      "detail": "hysteresis-only band 1.0000 m; cut-in and delay stay unobserved"
+    },
+    {
+      "id": "zero-delay-observed",
+      "pass": true,
+      "detail": "a demonstrated adoption without delay is a real zero, not missing evidence"
+    },
+    {
+      "id": "uncertainty-reported",
+      "pass": true,
+      "detail": "cutin_brake_response 0.0200 <= 0.15 ratio, closing_ttc_threshold 0.0500 <= 0.5 s, leader_change_delay 0.0083 <= 0.1 s, following_hysteresis 0.2000 <= 0.5 m"
+    },
+    {
+      "id": "uncertainty-threshold-cutin",
+      "pass": true,
+      "detail": "scattered cut-in reactions measure 0.4599 > 0.15 and stay unobserved"
+    },
+    {
+      "id": "uncertainty-threshold-delay",
+      "pass": true,
+      "detail": "delays from 0 to 2 s measure 0.3230 s > 0.1 s and stay unobserved"
+    },
+    {
+      "id": "validation-split",
+      "pass": true,
+      "detail": "seed 172: every key validates on held-out episodes (cutin_brake_response 2+2, closing_ttc_threshold 2+2, leader_change_delay 2+2, following_hysteresis 2+2)"
+    },
+    {
+      "id": "validation-too-small",
+      "pass": true,
+      "detail": "three cut-in episodes leave 1 held-out episode, reported as TOO_SMALL"
+    },
+    {
+      "id": "unobserved-cutin-without-reduction",
+      "pass": true,
+      "detail": "a cut-in that asks for more speed offers no reduction to measure"
+    },
+    {
+      "id": "unobserved-closing-not-bound",
+      "pass": true,
+      "detail": "a real closing whose cap never binds leaves only a bound, not a threshold"
+    },
+    {
+      "id": "unobserved-censored-hold",
+      "pass": true,
+      "detail": "a hold cut by the evidence window is reported as censored, not measured"
+    },
+    {
+      "id": "unobserved-interrupted-hold",
+      "pass": true,
+      "detail": "a brake during the hold is adopted at once, so the delay is not read from it"
+    },
+    {
+      "id": "unobserved-band-bounds",
+      "pass": true,
+      "detail": "a missing escape, a one-sided drift and two incompatible bands all stay unobserved"
+    },
+    {
+      "id": "shared-channel-separation",
+      "pass": true,
+      "detail": "a cut-in never proves the TTC threshold and a closing never proves the cut-in reaction"
+    },
+    {
+      "id": "no-fabricated-values",
+      "pass": true,
+      "detail": "11 unobserved demonstrations carry value null and an explicit reason"
+    },
+    {
+      "id": "group-constraints",
+      "pass": true,
+      "detail": "CUT_IN_AND_TTC_SHARE_BRAKE, HYSTERESIS_DEPENDS_ON_GAP_BAND, LEADER_CHANGE_REQUIRES_NO_CUT_IN, FOLLOW_KEYS_FROM_ONE_TRAJECTORY"
+    },
+    {
+      "id": "invalid-input-refused",
+      "pass": true,
+      "detail": "NaN speed refused; manual-1:NOT_LEARNING_ELIGIBLE, manual-2:NOT_LEARNING_ELIGIBLE, manual-3:NOT_LEARNING_ELIGIBLE, manual-4:NOT_LEARNING_ELIGIBLE, cutin-1:DUPLICATE_EPISODE"
+    },
+    {
+      "id": "determinism",
+      "pass": true,
+      "detail": "digest fnv1a32:3e8addc1"
+    },
+    {
+      "id": "catalog-ranges",
+      "pass": true,
+      "detail": "cutin_brake_response 0.7000 ratio, closing_ttc_threshold 3.0000 s, leader_change_delay 0.1917 s, following_hysteresis 1.0000 m"
+    },
+    {
+      "id": "policy-compatibility",
+      "pass": true,
+      "detail": "171 reads cut-in commitment 7.9500 m/s (expected 7.9500), contact cap 22.3333 m/s (expected 22.3333), 12 held ticks for 0.1917 s, hysteresis held true/false"
+    }
+  ],
+  "summary": {
+    "checks": 22,
+    "passed": 22,
+    "pass": true,
+    "candidateKeys": 4,
+    "unobservedKeys": 11
+  }
+}
