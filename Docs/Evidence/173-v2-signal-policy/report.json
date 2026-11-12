@@ -1,0 +1,453 @@
+{
+  "version": "173-signal-policy-v2",
+  "parameters": [
+    {
+      "key": "yellow_stop_probability",
+      "unit": "probability",
+      "minimum": 0,
+      "maximum": 1,
+      "defaultValue": 0.8
+    },
+    {
+      "key": "red_run_gap_acceptance",
+      "unit": "s",
+      "minimum": 0.1,
+      "maximum": 8,
+      "defaultValue": 2.5
+    },
+    {
+      "key": "yellow_commit_time",
+      "unit": "s",
+      "minimum": 0.2,
+      "maximum": 6,
+      "defaultValue": 2
+    },
+    {
+      "key": "green_launch_acceleration",
+      "unit": "m/s²",
+      "minimum": 0.2,
+      "maximum": 6,
+      "defaultValue": 1.5
+    }
+  ],
+  "scenarios": [
+    {
+      "name": "fezabilitate la galben",
+      "scenario": "galben cu 7,875 s până la punctul de oprire, oprire fezabilă, eșantion per oportunitate"
+    },
+    {
+      "name": "angajare la galben",
+      "scenario": "galben cu 0,875 s până la punctul de oprire și 6 s de fază rămasă"
+    },
+    {
+      "name": "gap pe roșu",
+      "scenario": "roșu traversat de profilul 050, gap declarat de 5 s către conflict"
+    },
+    {
+      "name": "plecare la verde",
+      "scenario": "verde eliberat după întârzierea M, ego oprit la linie"
+    }
+  ],
+  "effects": [
+    {
+      "key": "yellow_stop_probability",
+      "scenario": "fezabilitate la galben",
+      "unit": "ratio",
+      "lowValue": 0.2,
+      "highValue": 1,
+      "lowOutcome": 0.15833333333333333,
+      "highOutcome": 1,
+      "difference": 0.8416666666666667,
+      "note": "rata de oprire pe 120 de oportunități, cu condiția de conformitate M la 1 și oprirea fezabilă; la 1 fiecare oportunitate se oprește"
+    },
+    {
+      "key": "yellow_commit_time",
+      "scenario": "angajare la galben",
+      "unit": "ratio",
+      "lowValue": 0.2,
+      "highValue": 6,
+      "lowOutcome": 0,
+      "highOutcome": 1,
+      "difference": 1,
+      "note": "timp până la punctul de oprire 0.875 s: cu orizontul 0,2 s oprirea rămâne fezabilă, cu 6 s vehiculul este deja angajat"
+    },
+    {
+      "key": "red_run_gap_acceptance",
+      "scenario": "gap pe roșu",
+      "unit": "ratio",
+      "lowValue": 0.1,
+      "highValue": 8,
+      "lowOutcome": 1,
+      "highOutcome": 0,
+      "difference": -1,
+      "note": "gap declarat 5 s; cerința efectivă este max(cheie, 3 s) = 3.0 s, respectiv 8.0 s"
+    },
+    {
+      "key": "green_launch_acceleration",
+      "scenario": "plecare la verde",
+      "unit": "m/s²",
+      "lowValue": 0.2,
+      "highValue": 6,
+      "lowOutcome": 0.2,
+      "highOutcome": 6,
+      "difference": 5.8,
+      "note": "accelerația comandată la plecarea de pe loc după întârzierea M: 10 m/s se ating în 50.000 s, respectiv 1.667 s, dacă accelerația este aplicată constant"
+    }
+  ],
+  "separation": [
+    {
+      "key": "yellow_commit_time",
+      "scenario": "fezabilitate la galben",
+      "unit": "ratio",
+      "lowValue": 0.2,
+      "highValue": 6,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "note": "`yellow_commit_time` este inertă în scenariul fezabilitate la galben"
+    },
+    {
+      "key": "red_run_gap_acceptance",
+      "scenario": "fezabilitate la galben",
+      "unit": "ratio",
+      "lowValue": 0.1,
+      "highValue": 8,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "note": "`red_run_gap_acceptance` este inertă în scenariul fezabilitate la galben"
+    },
+    {
+      "key": "green_launch_acceleration",
+      "scenario": "fezabilitate la galben",
+      "unit": "ratio",
+      "lowValue": 0.2,
+      "highValue": 6,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "note": "`green_launch_acceleration` este inertă în scenariul fezabilitate la galben"
+    },
+    {
+      "key": "yellow_stop_probability",
+      "scenario": "angajare la galben",
+      "unit": "ratio",
+      "lowValue": 0.2,
+      "highValue": 1,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "note": "`yellow_stop_probability` este inertă în scenariul angajare la galben"
+    },
+    {
+      "key": "red_run_gap_acceptance",
+      "scenario": "angajare la galben",
+      "unit": "ratio",
+      "lowValue": 0.1,
+      "highValue": 8,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "note": "`red_run_gap_acceptance` este inertă în scenariul angajare la galben"
+    },
+    {
+      "key": "green_launch_acceleration",
+      "scenario": "angajare la galben",
+      "unit": "ratio",
+      "lowValue": 0.2,
+      "highValue": 6,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "note": "`green_launch_acceleration` este inertă în scenariul angajare la galben"
+    },
+    {
+      "key": "yellow_stop_probability",
+      "scenario": "gap pe roșu",
+      "unit": "ratio",
+      "lowValue": 0.2,
+      "highValue": 1,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "note": "`yellow_stop_probability` este inertă în scenariul gap pe roșu"
+    },
+    {
+      "key": "yellow_commit_time",
+      "scenario": "gap pe roșu",
+      "unit": "ratio",
+      "lowValue": 0.2,
+      "highValue": 6,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "note": "`yellow_commit_time` este inertă în scenariul gap pe roșu"
+    },
+    {
+      "key": "green_launch_acceleration",
+      "scenario": "gap pe roșu",
+      "unit": "ratio",
+      "lowValue": 0.2,
+      "highValue": 6,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "note": "`green_launch_acceleration` este inertă în scenariul gap pe roșu"
+    },
+    {
+      "key": "yellow_stop_probability",
+      "scenario": "plecare la verde",
+      "unit": "ratio",
+      "lowValue": 0.2,
+      "highValue": 1,
+      "lowOutcome": 2,
+      "highOutcome": 2,
+      "difference": 0,
+      "note": "`yellow_stop_probability` este inertă în scenariul plecare la verde"
+    },
+    {
+      "key": "yellow_commit_time",
+      "scenario": "plecare la verde",
+      "unit": "ratio",
+      "lowValue": 0.2,
+      "highValue": 6,
+      "lowOutcome": 2,
+      "highOutcome": 2,
+      "difference": 0,
+      "note": "`yellow_commit_time` este inertă în scenariul plecare la verde"
+    },
+    {
+      "key": "red_run_gap_acceptance",
+      "scenario": "plecare la verde",
+      "unit": "ratio",
+      "lowValue": 0.1,
+      "highValue": 8,
+      "lowOutcome": 2,
+      "highOutcome": 2,
+      "difference": 0,
+      "note": "`red_run_gap_acceptance` este inertă în scenariul plecare la verde"
+    }
+  ],
+  "safety": [
+    {
+      "key": "plafonul de gap pe roșu",
+      "scenario": "cheia minimă 0,1 s, gap 2 s",
+      "unit": "ratio",
+      "lowValue": 0.1,
+      "highValue": 8,
+      "lowOutcome": 0,
+      "highOutcome": 0,
+      "difference": 0,
+      "note": "podeaua explicită de 3 s nu acceptă un gap de 2 s nici la valoarea minimă a cheii"
+    },
+    {
+      "key": "gap necunoscut",
+      "scenario": "gap 5 s înlocuit de null",
+      "unit": "ratio",
+      "lowValue": 0.1,
+      "highValue": 8,
+      "lowOutcome": 0,
+      "highOutcome": 0,
+      "difference": 0,
+      "note": "fără gap declarat, trecerea pe roșu este refuzată pentru ambele capete ale cheii"
+    },
+    {
+      "key": "stopul 050 dominant",
+      "scenario": "roșu cu conformitate 1",
+      "unit": "ratio",
+      "lowValue": 0.1,
+      "highValue": 8,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "note": "comanda 050 (STOP_LINE_APPROACH) rămâne RED_STOP; cheia nu poate transforma un stop în trecere"
+    },
+    {
+      "key": "frânare târzie pe galben",
+      "scenario": "galben cu orizontul M atins",
+      "unit": "ratio",
+      "lowValue": 0.2,
+      "highValue": 0,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "note": "comanda 050 (LATE_RED_BRAKE) rămâne YELLOW_LATE_BRAKE și oprește chiar dacă probabilitatea galbenului este 0"
+    },
+    {
+      "key": "galben fără intrare pe roșu",
+      "scenario": "3 s până la linie, 1 s de faza galbenă",
+      "unit": "ratio",
+      "lowValue": 0.2,
+      "highValue": 6,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "note": "cu orizontul maxim de 6 s comanda rămâne YELLOW_STOP_RED_AHEAD, pentru că intrarea ar cădea după galben"
+    },
+    {
+      "key": "plafonul plecării",
+      "scenario": "plecare de pe loc cu cheia maximă",
+      "unit": "m/s²",
+      "lowValue": 0.2,
+      "highValue": 6,
+      "lowOutcome": 0.2,
+      "highOutcome": 6,
+      "difference": 5.8,
+      "note": "accelerația comandată nu depășește plafonul de 6 m/s² al catalogului"
+    },
+    {
+      "key": "întârzierea M la verde",
+      "scenario": "verde încă în întârzierea de plecare",
+      "unit": "m/s²",
+      "lowValue": 0.2,
+      "highValue": 6,
+      "lowOutcome": 0,
+      "highOutcome": 0,
+      "difference": 0,
+      "note": "comanda rămâne GREEN_START_DELAY și nu comandă accelerație până la expirarea întârzierii M"
+    }
+  ],
+  "compatibility": {
+    "identicalSignalTicks": true,
+    "comparableTicks": 60,
+    "identicalTicks": 60,
+    "neutralForwardTicks": 60,
+    "activeDifferingTicks": 30,
+    "maximumLaunchDifferenceMps2": 5.8,
+    "mUnits": {
+      "red_stop_probability": "probability",
+      "green_start_delay": "s",
+      "red_stop_line_offset": "m",
+      "late_red_brake_threshold": "s",
+      "speed_delta_urban": "m/s"
+    },
+    "rUnits": {
+      "yellow_stop_probability": "probability",
+      "red_run_gap_acceptance": "s",
+      "yellow_commit_time": "s",
+      "green_launch_acceleration": "m/s²"
+    }
+  },
+  "determinism": {
+    "ticks": 6,
+    "digest": "fnv1a32:d42cd88e",
+    "repeatedDigest": "fnv1a32:d42cd88e"
+  },
+  "checks": [
+    {
+      "id": "key-yellow-probability-effect",
+      "pass": true,
+      "detail": "0.158 -> 1.000 rata de oprire pe 120 de oportunități"
+    },
+    {
+      "id": "key-yellow-probability-sample",
+      "pass": true,
+      "detail": "aceeași oportunitate păstrează eșantionul 0.456287 la tick-uri diferite"
+    },
+    {
+      "id": "key-yellow-commit-effect",
+      "pass": true,
+      "detail": "angajare nu la 0,2 s și da la 6 s"
+    },
+    {
+      "id": "key-yellow-commit-red-ahead",
+      "pass": true,
+      "detail": "3 s până la linie cu 1 s de galben: YELLOW_STOP_RED_AHEAD"
+    },
+    {
+      "id": "key-red-gap-effect",
+      "pass": true,
+      "detail": "gap 5 s: acceptat la 0,1 s (cerință 3 s) și refuzat la 8 s"
+    },
+    {
+      "id": "key-red-gap-floor",
+      "pass": true,
+      "detail": "gap 2 s refuzat chiar la valoarea minimă a cheii"
+    },
+    {
+      "id": "key-red-gap-unknown",
+      "pass": true,
+      "detail": "gap necunoscut refuză trecerea pe roșu"
+    },
+    {
+      "id": "key-launch-effect",
+      "pass": true,
+      "detail": "0.200 -> 6.000 m/s²"
+    },
+    {
+      "id": "key-launch-delay",
+      "pass": true,
+      "detail": "întârzierea M de la verde nu este scurtată de cheia de plecare"
+    },
+    {
+      "id": "separation-yellow-feasibility",
+      "pass": true,
+      "detail": "doar yellow_stop_probability acționează în scenariul de fezabilitate"
+    },
+    {
+      "id": "separation-yellow-commit",
+      "pass": true,
+      "detail": "doar yellow_commit_time acționează în scenariul de angajare"
+    },
+    {
+      "id": "separation-red",
+      "pass": true,
+      "detail": "doar red_run_gap_acceptance acționează în scenariul de gap pe roșu"
+    },
+    {
+      "id": "separation-green",
+      "pass": true,
+      "detail": "doar green_launch_acceleration acționează în scenariul de plecare"
+    },
+    {
+      "id": "safety-red-stop-dominant",
+      "pass": true,
+      "detail": "comanda 050 STOP_LINE_APPROACH rămâne stop"
+    },
+    {
+      "id": "safety-late-brake",
+      "pass": true,
+      "detail": "orizontul M de frânare târzie oprește pe galben indiferent de cheia galbenului"
+    },
+    {
+      "id": "safety-tightens-red",
+      "pass": true,
+      "detail": "pe grila de gapuri, 173 nu transformă niciodată un stop 050 în trecere"
+    },
+    {
+      "id": "safety-launch-bound",
+      "pass": true,
+      "detail": "plecarea maximă comandă 6.000 m/s²"
+    },
+    {
+      "id": "m-signal-identical",
+      "pass": true,
+      "detail": "60/60 rezultate 050 identice cu cheile R neutre vs active"
+    },
+    {
+      "id": "m-neutral-forwards",
+      "pass": true,
+      "detail": "60/60 acțiuni neutre identice cu 050; 30 tick-uri active diferă, până la 5.800 m/s²"
+    },
+    {
+      "id": "m-yellow-probability-scaled",
+      "pass": true,
+      "detail": "cu red_stop_probability 0 galbenul nu se oprește, cu 1 se oprește la aceeași cheie a galbenului"
+    },
+    {
+      "id": "catalog-ranges",
+      "pass": true,
+      "detail": "yellow_stop_probability 0-1 probability, red_run_gap_acceptance 0.1-8 s, yellow_commit_time 0.2-6 s, green_launch_acceleration 0.2-6 m/s²"
+    },
+    {
+      "id": "determinism",
+      "pass": true,
+      "detail": "digest fnv1a32:d42cd88e"
+    }
+  ],
+  "summary": {
+    "checks": 22,
+    "passed": 22,
+    "pass": true
+  }
+}
