@@ -15,3 +15,4 @@ export * from './decision-explanation';
 export * from './speed-policy';
 export * from './accel-policy';
 export * from './follow-policy';
+export * from './signal-policy-v2';
