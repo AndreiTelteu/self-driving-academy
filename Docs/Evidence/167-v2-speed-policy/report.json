@@ -1,0 +1,244 @@
+{
+  "version": "167-speed-policy-v1",
+  "parameters": [
+    {
+      "key": "speed_delta_arterial",
+      "unit": "m/s",
+      "minimum": -10,
+      "maximum": 20,
+      "defaultValue": 0
+    },
+    {
+      "key": "cruise_speed_variability",
+      "unit": "m/s",
+      "minimum": 0,
+      "maximum": 3,
+      "defaultValue": 0.3
+    },
+    {
+      "key": "overtake_speed_bonus",
+      "unit": "m/s",
+      "minimum": 0,
+      "maximum": 10,
+      "defaultValue": 2
+    },
+    {
+      "key": "cruise_accel_deadband",
+      "unit": "m/s",
+      "minimum": 0.05,
+      "maximum": 2,
+      "defaultValue": 0.3
+    }
+  ],
+  "effects": [
+    {
+      "key": "speed_delta_arterial",
+      "scenario": "arterial 13.9 m/s posted, no lead vehicle, tempo keys neutral",
+      "unit": "m/s",
+      "lowValue": -10,
+      "highValue": 20,
+      "lowOutcome": 3.9000000000000004,
+      "highOutcome": 30,
+      "difference": 26.1,
+      "note": "arterial delta inert on URBAN: 10.90 m/s"
+    },
+    {
+      "key": "cruise_speed_variability",
+      "scenario": "urban target 10.9 m/s, posted 13.9 m/s, 600 ticks, deadband 0.05 m/s",
+      "unit": "m/s",
+      "lowValue": 0.3,
+      "highValue": 3,
+      "lowOutcome": 0.5688431883669782,
+      "highOutcome": 5.9442660879832125,
+      "difference": 5.375422899616234,
+      "note": "peak-to-peak of the committed target; changes 22 vs 199, max 13.87 m/s"
+    },
+    {
+      "key": "overtake_speed_bonus",
+      "scenario": "urban target 10.9 m/s, overtaking an observed lead, tempo keys neutral",
+      "unit": "m/s",
+      "lowValue": 0,
+      "highValue": 2,
+      "lowOutcome": 10.9,
+      "highOutcome": 12.9,
+      "difference": 2,
+      "note": "10 m/s bonus saturates at 13.90 m/s; not overtaking keeps 10.90 m/s"
+    },
+    {
+      "key": "cruise_accel_deadband",
+      "scenario": "urban target 10.9 m/s, speed 9.6 m/s, previous commit 10.5 m/s",
+      "unit": "m/s",
+      "lowValue": 0.05,
+      "highValue": 2,
+      "lowOutcome": 10.9,
+      "highOutcome": 10.5,
+      "difference": 0.40000000000000036,
+      "note": "request ACCELERATE vs HOLD"
+    }
+  ],
+  "separation": [
+    {
+      "key": "traffic gap",
+      "scenario": "lead at 9 m/s, 8 m gap, maximum tempo keys vs minimal tempo keys",
+      "unit": "m/s",
+      "lowValue": 0,
+      "highValue": 10,
+      "lowOutcome": 10.5,
+      "highOutcome": 10.5,
+      "difference": 0,
+      "note": "binding TRAFFIC"
+    },
+    {
+      "key": "traffic gap",
+      "scenario": "lead at 9 m/s, 3 m gap (inside the 5 m minimum), maximum tempo keys vs minimal",
+      "unit": "m/s",
+      "lowValue": 0,
+      "highValue": 10,
+      "lowOutcome": 0,
+      "highOutcome": 0,
+      "difference": 0,
+      "note": "hard traffic constraint commands 0 m/s"
+    },
+    {
+      "key": "signal",
+      "scenario": "stop required, previous commit 12 m/s, deadband 2 m/s",
+      "unit": "m/s",
+      "lowValue": 0,
+      "highValue": 10,
+      "lowOutcome": 0,
+      "highOutcome": 0,
+      "difference": 0,
+      "note": "binding SIGNAL, deadband cannot delay the stop"
+    },
+    {
+      "key": "curve",
+      "scenario": "046 curve preference 8 m/s, maximum overtake bonus vs minimal tempo keys",
+      "unit": "m/s",
+      "lowValue": 0,
+      "highValue": 10,
+      "lowOutcome": 8,
+      "highOutcome": 8,
+      "difference": 0,
+      "note": "binding CURVE"
+    },
+    {
+      "key": "legal ceiling",
+      "scenario": "urban target 10.9 m/s, posted 13.9 m/s, maximum overtake bonus vs minimal",
+      "unit": "m/s",
+      "lowValue": 0,
+      "highValue": 10,
+      "lowOutcome": 10.9,
+      "highOutcome": 13.9,
+      "difference": 3,
+      "note": "binding STYLE_CEILING, posted 13.9 m/s"
+    }
+  ],
+  "compatibility": {
+    "mTargetMps": 10,
+    "tempoTargetMps": 10,
+    "identical": true,
+    "units": {
+      "speed_delta_urban": "m/s",
+      "speed_delta_residential": "m/s",
+      "curve_lateral_accel": "m/s²",
+      "intersection_approach_speed": "m/s",
+      "speed_delta_arterial": "m/s",
+      "cruise_speed_variability": "m/s",
+      "overtake_speed_bonus": "m/s",
+      "cruise_accel_deadband": "m/s"
+    }
+  },
+  "determinism": {
+    "seed": 7,
+    "ticks": 60,
+    "digest": "fnv1a32:6a605666",
+    "repeatedDigest": "fnv1a32:6a605666"
+  },
+  "checks": [
+    {
+      "id": "m-compat-target",
+      "pass": true,
+      "detail": "046 target 10 m/s with R neutral and 10 m/s with R active; tempo-neutral commit 10 m/s"
+    },
+    {
+      "id": "key-arterial-effect",
+      "pass": true,
+      "detail": "3.90 -> 30.00 m/s"
+    },
+    {
+      "id": "key-arterial-scope",
+      "pass": true,
+      "detail": "urban commit 10.90 m/s with arterial delta 20"
+    },
+    {
+      "id": "key-variability-effect",
+      "pass": true,
+      "detail": "peak-to-peak 0.57 vs 5.94 m/s"
+    },
+    {
+      "id": "key-variability-bounded",
+      "pass": true,
+      "detail": "maximum 13.87 m/s <= posted 13.9 m/s"
+    },
+    {
+      "id": "key-bonus-effect",
+      "pass": true,
+      "detail": "10.90 -> 12.90 m/s"
+    },
+    {
+      "id": "key-bonus-overtake-only",
+      "pass": true,
+      "detail": "not overtaking commit 10.90 m/s"
+    },
+    {
+      "id": "key-bonus-legal-ceiling",
+      "pass": true,
+      "detail": "10 m/s bonus commits 13.90 m/s against posted 13.9 m/s"
+    },
+    {
+      "id": "key-deadband-request",
+      "pass": true,
+      "detail": "ACCELERATE vs HOLD"
+    },
+    {
+      "id": "key-deadband-hold",
+      "pass": true,
+      "detail": "10.90 vs 10.50 m/s"
+    },
+    {
+      "id": "separation-traffic",
+      "pass": true,
+      "detail": "maximum 10.50 m/s, minimal 10.50 m/s"
+    },
+    {
+      "id": "separation-gap-floor",
+      "pass": true,
+      "detail": "inside the 5 m minimum both variants commit 0 m/s"
+    },
+    {
+      "id": "separation-signal",
+      "pass": true,
+      "detail": "deadband 2 m/s still commits 0.00 m/s"
+    },
+    {
+      "id": "separation-curve",
+      "pass": true,
+      "detail": "curve cap holds 8.00 m/s"
+    },
+    {
+      "id": "catalog-ranges",
+      "pass": true,
+      "detail": "speed_delta_arterial -10-20 m/s, cruise_speed_variability 0-3 m/s, overtake_speed_bonus 0-10 m/s, cruise_accel_deadband 0.05-2 m/s"
+    },
+    {
+      "id": "determinism",
+      "pass": true,
+      "detail": "digest fnv1a32:6a605666"
+    }
+  ],
+  "summary": {
+    "checks": 16,
+    "passed": 16,
+    "pass": true
+  }
+}
