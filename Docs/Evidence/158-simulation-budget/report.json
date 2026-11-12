@@ -1,0 +1,252 @@
+{
+  "version": "158-simulation-budget-v1",
+  "budgetVersion": "203-initial-1",
+  "fixtureVersion": "158-simulation-v1",
+  "baseline": {
+    "commit": "546fa29e5ac6b4ed770c7acf6181d191956e1537-dirty",
+    "capturedAt": "2026-11-12T06:13:11.707Z"
+  },
+  "after": {
+    "commit": "546fa29e5ac6b4ed770c7acf6181d191956e1537-dirty",
+    "capturedAt": "2026-11-12T06:13:41.024Z"
+  },
+  "hardware": {
+    "cpu": "AMD Ryzen 7 7735U with Radeon Graphics",
+    "logicalCpus": 16,
+    "ramBytes": 14702026752,
+    "os": "win32 10.0.26300"
+  },
+  "protocol": {
+    "decisionWarmupTicks": 120,
+    "decisionMeasuredTicks": 360,
+    "decisionRepeats": 3,
+    "decisionPublicationPeriodTicks": 6,
+    "decisionSlots": 6,
+    "estimateWarmupIterations": 20,
+    "estimateMeasuredIterations": 200,
+    "estimateRepeats": 3,
+    "transferMessages": 1000,
+    "transferRepeats": 3,
+    "passes": 3,
+    "statistic": "median-of-repetition-percentiles",
+    "backend": "Node CPU; no renderer, browser, GPU or frame pacing in this probe"
+  },
+  "workload": {
+    "vehicles": 110,
+    "obstacles": 96,
+    "zones": 256,
+    "decisionsPerTick": 19,
+    "episodesPerEstimate": 16,
+    "estimates": 1980,
+    "messages": 9000
+  },
+  "equivalence": [
+    {
+      "component": "decisions",
+      "before": "de26979479d1423d1e769016ebdf8c22c1e317f3759a9c8f7a905375e15cf07b",
+      "after": "de26979479d1423d1e769016ebdf8c22c1e317f3759a9c8f7a905375e15cf07b",
+      "entries": 26400,
+      "status": "IDENTICAL"
+    },
+    {
+      "component": "estimation",
+      "before": "05d0a9d1af8c5b5ea4975584db9fc4d1d846a56946e98cf575a187223a5c1173",
+      "after": "05d0a9d1af8c5b5ea4975584db9fc4d1d846a56946e98cf575a187223a5c1173",
+      "entries": 1320,
+      "status": "IDENTICAL"
+    },
+    {
+      "component": "transfer",
+      "before": "ed6c2c141ddc76df9c9647617258432d7d0ba60f77edb9c8847cc0ae2dad8370",
+      "after": "ed6c2c141ddc76df9c9647617258432d7d0ba60f77edb9c8847cc0ae2dad8370",
+      "entries": 6000,
+      "status": "IDENTICAL"
+    }
+  ],
+  "rows": [
+    {
+      "id": "decisions.tickP95Ms",
+      "component": "decisions",
+      "metric": "Tick de decizii (publicare 044 când e rândul + slotul 219) p95",
+      "unit": "ms",
+      "before": 6.9296,
+      "after": 6.3242,
+      "budget": {
+        "value": 8,
+        "direction": "maximum",
+        "source": "Docs/performance-budgets.json (203-initial-1) proposedBudgets.laptop.authoritativeTickP95Ms"
+      },
+      "verdict": "PASS",
+      "note": "Costul componentei de decizii pe cadentța reală (fazare pe 6 tick-uri, publicare la 10 Hz), nu tick-ul autoritar complet; bugetul de tick acoperă întregul tick, deci limita este superioară."
+    },
+    {
+      "id": "decisions.publicationP95Ms",
+      "component": "decisions",
+      "metric": "Publicare context 044 (admitere cadru + index) p95",
+      "unit": "ms",
+      "before": 6.3779,
+      "after": 4.8106,
+      "budget": null,
+      "verdict": "REPORTED",
+      "note": "înainte 6.3779 → după 4.8106 (-24.6%)"
+    },
+    {
+      "id": "decisions.slotDeriveP95Ms",
+      "component": "decisions",
+      "metric": "Derivare contexte pentru slotul de decizie (≈18 vehicule) p95",
+      "unit": "ms",
+      "before": 3.0996,
+      "after": 3.3785,
+      "budget": null,
+      "verdict": "REPORTED",
+      "note": "înainte 3.0996 → după 3.3785 (9%)"
+    },
+    {
+      "id": "estimation.mainThreadSubmitP95Ms",
+      "component": "estimation",
+      "metric": "Estimare: cost sincron pe firul principal per cerere p95",
+      "unit": "ms",
+      "before": 0.0171,
+      "after": 0.0145,
+      "budget": {
+        "value": 20,
+        "direction": "maximum",
+        "source": "Docs/performance-budgets.json (203-initial-1) proposedBudgets.laptop.mainThreadP95Ms"
+      },
+      "verdict": "PASS",
+      "note": "Criteriul „estimarea nu blochează inputul”: costul sincron de admitere, comparat cu bugetul de main-thread."
+    },
+    {
+      "id": "estimation.workerStepP95Ms",
+      "component": "estimation",
+      "metric": "Estimare: felie worker (decode + blend 101 + encode) p95",
+      "unit": "ms",
+      "before": 0.0534,
+      "after": 0.046,
+      "budget": {
+        "value": 10,
+        "direction": "maximum",
+        "source": "Docs/performance-budgets.json (203-initial-1) resourceAdmissionContracts.workers.sliceMaximumMs"
+      },
+      "verdict": "PASS",
+      "note": "înainte 0.0534 → după 0.046 (-13.9%)"
+    },
+    {
+      "id": "estimation.largeSubmitP95Ms",
+      "component": "estimation",
+      "metric": "Estimare: admitere sincronă pentru 4096 episoade p95",
+      "unit": "ms",
+      "before": 1.6334,
+      "after": 2.1253,
+      "budget": {
+        "value": 10,
+        "direction": "maximum",
+        "source": "Docs/performance-budgets.json (203-initial-1) resourceAdmissionContracts.workers.sliceMaximumMs"
+      },
+      "verdict": "PASS",
+      "note": "Plafonul de admitere (4096 episoade) trebuie să rămână sub felia de 10 ms."
+    },
+    {
+      "id": "transfer.payloadCopiesPerEstimate",
+      "component": "transfer",
+      "metric": "Copii de payload per estimare (slice de ArrayBuffer)",
+      "unit": "count",
+      "before": 2,
+      "after": 0,
+      "budget": {
+        "value": 2,
+        "direction": "maximum",
+        "source": "PBI 158: zero copii de payload; se compară cu baseline-ul măsurat"
+      },
+      "verdict": "PASS",
+      "note": "Aceleași date livrate (digest identic), dar fără copierea suplimentară a bufferului de cerere/rezultat."
+    },
+    {
+      "id": "transfer.payloadCopiedBytesPerEstimate",
+      "component": "transfer",
+      "metric": "Bytes copiați per estimare",
+      "unit": "bytes",
+      "before": 2199.627,
+      "after": 0,
+      "budget": {
+        "value": 2199.627,
+        "direction": "maximum",
+        "source": "PBI 158: zero bytes copiați; se compară cu baseline-ul măsurat"
+      },
+      "verdict": "PASS",
+      "note": "înainte 2199.627 → după 0 (-100%)"
+    },
+    {
+      "id": "transfer.requestBytes",
+      "component": "transfer",
+      "metric": "Payload de cerere per estimare",
+      "unit": "bytes",
+      "before": 1971,
+      "after": 1971,
+      "budget": {
+        "value": 16777216,
+        "direction": "maximum",
+        "source": "Docs/performance-budgets.json (203-initial-1) proposedCapacities.pendingWorkerPayloadBytes"
+      },
+      "verdict": "PASS",
+      "note": "înainte 1971 → după 1971 (0%)"
+    },
+    {
+      "id": "transfer.deliveredPayloadBytes",
+      "component": "transfer",
+      "metric": "Bytes de date livrate în proba de transfer",
+      "unit": "bytes",
+      "before": 2304000,
+      "after": 2304000,
+      "budget": {
+        "value": 16777216,
+        "direction": "maximum",
+        "source": "Docs/performance-budgets.json (203-initial-1) proposedCapacities.pendingWorkerPayloadBytes"
+      },
+      "verdict": "PASS",
+      "note": "Trebuie să rămână identic: optimizarea reduce copiile, nu datele."
+    },
+    {
+      "id": "transfer.perMessageP95Ms",
+      "component": "transfer",
+      "metric": "Cost per mesaj worker (send + receive + control) p95",
+      "unit": "ms",
+      "before": 0.0234,
+      "after": 0.0176,
+      "budget": null,
+      "verdict": "REPORTED",
+      "note": "înainte 0.0234 → după 0.0176 (-24.8%)"
+    },
+    {
+      "id": "transfer.controlBufferAllocations",
+      "component": "transfer",
+      "metric": "Alocări de buffer per pachet de control",
+      "unit": "count",
+      "before": 1,
+      "after": 0,
+      "budget": {
+        "value": 0,
+        "direction": "maximum",
+        "source": "PBI 158: buffer zero partajat, fără alocare per mesaj"
+      },
+      "verdict": "PASS",
+      "note": "înainte 1 → după 0 (-100%)"
+    }
+  ],
+  "verdicts": {
+    "decisions": "PASS",
+    "estimation": "PASS",
+    "transfer": "PASS",
+    "equivalence": "PASS",
+    "overall": "PASS"
+  },
+  "limitations": [
+    "Proba este headless (Node): nu măsoară randare, frame, GPU sau pacing real.",
+    "Costurile sunt per componentă pe fixture-ul de 110 vehicule/96 obstacole/256 zone, nu tick-ul complet al jocului.",
+    "Baseline-ul este o măsurătoare reală dinaintea optimizării; nu se reexecută pe codul optimizat și nu se reclasifică.",
+    "Timpii de perete sunt re-măsurați la fiecare rulare; digests și bytes sunt deterministe.",
+    "Fiecare metrică este mediana a 3 treceri independente × repetările din trecere, ca în protocolul 155/156/220; o singură rulare încărcată nu mută verdictul.",
+    "Coloana `laptop` a manifestului este aplicată; coloana `desktop` nu se împrumută.",
+    "Pragul relativ de regresie (10% și 1 ms) este cel din manifest."
+  ]
+}

@@ -120,12 +120,23 @@ export function parseLearningEstimateRequest(value: unknown): LearningEstimateRe
   });
 }
 
+/**
+ * Hands the encoder's own buffer over when it already covers exactly the encoded bytes. TextEncoder
+ * always returns a zero-offset, exact-length view, so the extra `slice` copy was pure overhead on a
+ * path that runs once per estimate; the fallback keeps the contract for any other view.
+ */
+function exactBuffer(bytes: Uint8Array): ArrayBuffer {
+  return bytes.byteOffset === 0 && bytes.byteLength === bytes.buffer.byteLength
+    ? (bytes.buffer as ArrayBuffer)
+    : (bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength) as ArrayBuffer);
+}
+
 export function encodeLearningEstimateRequest(request: LearningEstimateRequest): ArrayBuffer {
   const parsed = parseLearningEstimateRequest(request);
   const bytes = encoder.encode(JSON.stringify(parsed));
   if (bytes.byteLength > learningEstimateLimits.maxRequestBytes)
     fail('request', `must be at most ${learningEstimateLimits.maxRequestBytes} bytes`);
-  return bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength) as ArrayBuffer;
+  return exactBuffer(bytes);
 }
 
 export function decodeLearningEstimateRequest(buffer: ArrayBuffer): LearningEstimateRequest {
@@ -144,8 +155,7 @@ export function decodeLearningEstimateRequest(buffer: ArrayBuffer): LearningEsti
 }
 
 export function encodeLearningEstimateResult(result: LearningEstimateResult): ArrayBuffer {
-  const bytes = encoder.encode(JSON.stringify(result));
-  return bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength) as ArrayBuffer;
+  return exactBuffer(encoder.encode(JSON.stringify(result)));
 }
 
 export function decodeLearningEstimateResult(buffer: ArrayBuffer): LearningEstimateResult {

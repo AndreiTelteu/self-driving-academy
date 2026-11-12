@@ -145,7 +145,8 @@ interface PreparedFrame {
   frame: RoadContextFrame;
   index: SpatialIndex;
   actors: ReadonlyMap<string, RoadContextVehicle>;
-  fingerprint: string;
+  /** Authored signals indexed without building a key string on every decision. */
+  signalByMovement: ReadonlyMap<string, ReadonlyMap<string, MovementSignal>>;
 }
 const scalar = (value: unknown, min: number, max: number): number => {
   if (typeof value !== 'number' || !Number.isFinite(value) || value < min || value > max)
@@ -432,14 +433,19 @@ function prepare(
       completeness,
       discontinuity,
     });
-    const fingerprint = JSON.stringify(frame);
-    if (fingerprint.length > ROAD_CONTEXT_LIMITS.fingerprintCodeUnits)
-      throw new Error('Road context fingerprint bound violated');
+    // Duplicate (intersectionId, movementId) pairs are rejected above, so a nested map is exactly
+    // the same selection as the previous linear scan, without rescanning or allocating a key.
+    const signalByMovement = new Map<string, Map<string, MovementSignal>>();
+    for (const signal of signals) {
+      const byMovement = signalByMovement.get(signal.intersectionId);
+      if (byMovement) byMovement.set(signal.movementId, signal);
+      else signalByMovement.set(signal.intersectionId, new Map([[signal.movementId, signal]]));
+    }
     return {
       frame,
       index,
       actors: new Map(vehicles.map((vehicle) => [vehicle.id, vehicle])),
-      fingerprint,
+      signalByMovement,
     };
   } catch (error) {
     index.dispose();
@@ -497,6 +503,8 @@ export function createRoadContext(
   const radiusM = scalar(config.queryRadiusM ?? 60, 0, 1e6);
   const cache = new Map<string, RoadContext>(),
     dirty = new Set<string>();
+  // Intersections with an authored program never change within this engine's map.
+  const signaledIntersections = new Set(map.signals.map((item) => item.intersectionId));
   // Geometry is immutable within an accepted frame; reuse only that frame's projections.
   const projections = new Map<string, LaneProjection | null>();
   const incarnations = new Map<string, { incarnation: number; kind: SpatialKind }>(),
@@ -506,6 +514,17 @@ export function createRoadContext(
     disposed = false,
     busy = false;
   let owner: { sessionId: string; worldEpoch: number } | null = null;
+  /**
+   * Canonical frame string, materialized only for the same-tick comparison that needs it. Every
+   * publication is already bounded by `estimatedUnits` during preparation, so the exact string is
+   * not an admission prerequisite; not retaining it keeps the publication allocation-free.
+   */
+  const fingerprintOf = (prepared: PreparedFrame): string => {
+    const fingerprint = JSON.stringify(prepared.frame);
+    if (fingerprint.length > ROAD_CONTEXT_LIMITS.fingerprintCodeUnits)
+      throw new Error('Road context fingerprint bound violated');
+    return fingerprint;
+  };
   const alive = () => {
     if (disposed || busy) throw new Error('Road context disposed or reentrant');
   };
@@ -531,7 +550,7 @@ export function createRoadContext(
     );
   }
   function derive(subject: RoadContextVehicle): RoadContext {
-    const { frame, index, actors } = current!;
+    const { frame, index, actors, signalByMovement } = current!;
     const nearby = index.query({
       centerM: subject.positionM,
       radiusM,
@@ -577,10 +596,7 @@ export function createRoadContext(
         relations.some((relation) => relation.movementIds.includes(actor.route!.movementId)),
     );
     const signal = route
-      ? (frame.signals.find(
-          (item) =>
-            item.intersectionId === route.intersectionId && item.movementId === route.movementId,
-        ) ?? null)
+      ? (signalByMovement.get(route.intersectionId)?.get(route.movementId) ?? null)
       : null;
     const arrival = (actor: RoadContextVehicle, relationId: string): PriorityArrival | null => {
       if (frame.discontinuity) return null;
@@ -629,7 +645,7 @@ export function createRoadContext(
         ? 'KNOWN'
         : !route
           ? 'UNKNOWN_ROUTE'
-          : map.signals.some((item) => item.intersectionId === route.intersectionId)
+          : signaledIntersections.has(route.intersectionId)
             ? 'MISSING_OBSERVATION'
             : 'UNSIGNALED',
       conflictRelationIds: Object.freeze(relations.map((relation) => relation.id).sort()),
@@ -686,7 +702,7 @@ export function createRoadContext(
             next.frame.worldEpoch === current.frame.worldEpoch &&
             next.frame.tick === current.frame.tick
           ) {
-            if (next.fingerprint !== current.fingerprint)
+            if (fingerprintOf(next) !== fingerprintOf(current))
               throw new Error('Conflicting road context frame for the same tick');
             next.index.dispose();
             return;
@@ -809,7 +825,8 @@ export function createRoadContext(
         cachedContexts: cache.size,
         laneProjections: projections.size,
         invalidatedContexts: dirty.size,
-        fingerprintCodeUnits: current?.fingerprint.length ?? 0,
+        // The canonical string is not retained: reporting 0 means "not materialized at admission".
+        fingerprintCodeUnits: 0,
         identities: incarnations.size,
         retiredIdentities: retired.size,
         disposed,
