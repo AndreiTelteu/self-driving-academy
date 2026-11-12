@@ -112,6 +112,85 @@ Arhiva de sesiune are o versiune 2 (`215-session-archive-economy-v1`): envelope-
 
 Dovezile reale sunt în [Evidence/215-save-economy](Evidence/215-save-economy/README.md): `npm run save:economy` produce un raport determinist cu 32/32 verificări (bundle 14 005 bytes din 1 048 576, rând 14 647 bytes din 1 048 576, arhivă v2 80 033 bytes din 3 149 824), sold 100,5 XP și nivel 2 identice după export→import, 3 settle-uri, 1 review, 1 zi KPI cu venit 690 SDA și o recompensă daily, `historyScans: 0`, delta 0 XP la al doilea import și toate refuzurile închise.
 
+## Contract implementat V1 (PBI 234) — savefile `.sdasave` cu checksum și încărcare atomică
+
+`src/persistence/savefile.ts` (contract `234-savefile-v1`) este envelope-ul de fișier cerut de acest document. Nu este un al doilea sistem de salvare: fiecare slot este documentul owner-ului său — arhiva 135/215 pentru sesiune, economia/daily/XP 215, snapshotul de decor 227 — iar modulul adaugă doar fișierul, verificarea lui și înlocuirea atomică.
+
+### Ce conține fișierul și cum este versionat
+
+Envelope-ul are exact `format = "self-driving-academy-save"`, `formatVersion = 1`, `integrityVersion = 1`, `schemaVersion = 1`, `createdAt`, `payload` și `checksum`. `payload` conține:
+
+| Slot | Conținut | Owner la citire |
+| --- | --- | --- |
+| `versions` | `engine`, `physics`, `map`, `schema = "234-savefile-schema-1"` | build-ul și cititorul de fișier |
+| `sessions.ACADEMY` / `sessions.CHAOS` | documentul 135 v1 sau 215 v2 al fiecărei sesiuni: checkpoint 206, progres 130, campanie, setări 009, referință profil 109/110, scenarii 127, daily 211/212, ledger 209 și XP 213 | `readSessionArchiveWithEconomy` (215) |
+| `decor.ACADEMY` / `decor.CHAOS` | snapshotul 227 al decorului destructibil, cu `sessionId`, `worldEpoch` și checksum-ul lui | cititorul de fișier validează forma; `restore` 227 validează checksum-ul și acoperirea |
+| `optional.replays` | maximum 4 replay-uri base64, cu dimensiunea decodată declarată | cititorul de fișier |
+| `sizes` | bytes canonici pe slot, totalul și plafonul | cititorul de fișier |
+
+`null` înseamnă slot absent, nu sesiune goală. Cele două sesiuni sunt păstrate separat: un fișier cu același `sessionId` în ambele sloturi este refuzat (`DUPLICATE_SESSION`), iar XP-ul total raportat este suma soldurilor, nu o fuziune. Replay-urile sunt opționale și nu invalidează fișierul când lipsesc; ele sunt plafonate separat.
+
+Versiunile sunt explicite, nu deduse: `formatVersion` descrie layout-ul fișierului, `integrityVersion` descrie regulile de checksum, `schemaVersion` descrie payload-ul, iar `payload.versions.schema` numește identitatea schemei. O versiune mai nouă de format este refuzată înainte de interpretarea checksum-ului; o schemă mai nouă este refuzată după ce checksum-ul a trecut.
+
+### Checksum calculat și verificat în browser
+
+Checksum-ul este `SHA-256` peste bytes UTF-8 ai formei canonice `SDA-CJSON-1` a envelope-ului **fără câmpul top-level `checksum`**. Sunt acoperite metadatele (`format`, versiunile, `createdAt`), ambele sesiuni cu toate componentele lor, ambele snapshoturi de decor, replay-urile și bilanțul de mărime; checksum-ul nu se include pe sine. `computeSaveFileChecksum` este folosit și la construcție, și la citire, deci nu există o a doua formulă.
+
+Regulile `SDA-CJSON-1` sunt cele deja livrate: chei sortate UTF-16 la fiecare nivel, ordinea array-urilor păstrată, `-0` devine `0`, fără whitespace, numai valori JSON finite, chei periculoase refuzate, iar parserul strict refuză cheile duplicate înainte de hashing. Numerele întregi din schemă trebuie să fie safe integers; un `1e400` este `INVALID_NUMBER`, nu `Infinity` tăcut. Base64 este validat sintactic, iar dimensiunea declarată trebuie să corespundă lungimii decodate.
+
+În dovada de browser, pagina construiește fișierul, calculează din nou checksum-ul cu `crypto.subtle.digest` peste forma canonică și obține exact aceeași valoare (`f0f5b9d2…c98cb4f106`). Apoi scrie fișierul printr-un `Blob`/`File`, îl descarcă real, iar runner-ul îl salvează pe disc; aceleași bytes sunt recitiți și verificați cu cititorul livrat. Checksum-ul detectează modificarea și coruperea, dar nu este semnătură: un fișier rescris și re-stampat corect trebuie să treacă în continuare schema, componentele 135/215 și restaurarea 227. Jocul nu îl prezintă drept anti-cheat.
+
+### Ordinea la citire și refuzurile închise
+
+Ordinea este: buget de bytes/adâncime → `parseStrictJson` → `format`/`formatVersion`/`integrityVersion` → formă canonică și buget de bytes → checksum (algoritm, canonicalizare, valoare) → `schemaVersion` și schema → sloturile de sesiune/decor/replay → bilanțul de mărime. Verificarea checksum-ului precede schema și migrarea; un checksum recalculat nu face o schemă invalidă acceptabilă.
+
+| Caz | Cod |
+| --- | --- |
+| editare fără checksum nou (inclusiv XP) | `CHECKSUM_MISMATCH` |
+| chei duplicate în text | `DUPLICATE_KEY` |
+| fișier trunchiat / conținut după document | `PARSE_ERROR` / `TRAILING_CONTENT` |
+| fișier peste plafon | `FILE_TOO_LARGE` |
+| checksum lipsă / algoritm sau canonicalizare necunoscute | `MISSING_FIELD` / `UNSUPPORTED_ALGORITHM` / `UNSUPPORTED_CANONICALIZATION` |
+| reguli de integritate necunoscute | `UNSUPPORTED_INTEGRITY` |
+| format mai nou | `FORMAT_VERSION_TOO_NEW` |
+| schemă mai nouă / necunoscută (checksum valid) | `SCHEMA_TOO_NEW` / `UNSUPPORTED_SCHEMA` |
+| ambii timpi: schemă nouă și checksum stricat | `CHECKSUM_MISMATCH` (checksum-ul este primul) |
+| replay invalid / peste plafon | `REPLAY_INVALID` / `REPLAY_TOO_LARGE` |
+| contor nesigur / număr invalid | `INVALID_COUNTER` / `INVALID_NUMBER` |
+| decor din altă sesiune sau altă epocă | `DECOR_SESSION_MISMATCH` |
+| două sloturi cu același `sessionId` | `DUPLICATE_SESSION` |
+| slot activ absent / fișier fără sesiune | `ACTIVE_SESSION_MISSING` / `SAVEFILE_EMPTY` |
+| arhivă 135/215 simplă, nu savefile | `LEGACY_SAVEFILE` |
+| înlocuire fără sumar / cu alt sumar | `PREVIEW_REQUIRED` / `PREVIEW_STALE` |
+| al doilea tab | `WRITER_REQUIRED` |
+| anulare sau lume nestagabilă | `CANCELLED` / `WORLD_PREPARE_FAILED` |
+
+Un fișier refuzat nu atinge sesiunea: citirea nu scrie nimic, iar importul verifică tot fișierul înainte de prima scriere.
+
+### Sumar, staging și înlocuire atomică
+
+`createSaveFileStore(...).preview` validează fișierul și întoarce sumarul lui (sesiuni, checkpoint, XP, nivel, daily, scenarii, decor, replay-uri, checksum, bytes) împreună cu starea curentă a sesiunilor pe care le-ar înlocui; nu scrie nimic. Importul cere identitatea acelui preview (`confirmation.previewId`), deci confirmarea nu poate aproba alt fișier decât cel afișat.
+
+Înainte de tranzacție, un port de lume (`SaveFileWorldPort.prepare`) pregătește o generație nouă și restaurează decorul prin contractul 227, fără să atingă lumea live. Apoi o **singură tranzacție** peste `profiles`, `profileActivations`, `checkpoints`, `progress`, `settings`, `scenarios` și `meta` înlocuiește ambele sesiuni: `commitSessionArchiveRows` scrie rândurile 135, iar bundle-ul 215 este scris sau șters cu `commitEconomySaveRows`. În aceeași tranzacție, fiecare slot este recitit și comparat cu arhiva (digesturi 130, total XP, sold micro-XP, recompense daily, settle-uri). Numai după commit este publicată lumea pregătită; un refuz sau o anulare o aruncă (`discard`) și lasă baza byte cu byte neschimbată.
+
+Nu există niciun apel `settle`, `creditMission`, `creditDaily` sau `recordDailyReward` în această cale. Recompensele sunt înlocuite, nu adunate: un fișier cu 100,5 XP importat peste o sesiune goală lasă 100,5 XP, iar un al doilea import al aceleiași arhive raportează `xpDelta 0` și păstrează o singură recompensă daily. Al doilea tab este refuzat cu `WRITER_REQUIRED`. O anulare verificată înainte de commit, inclusiv din hook-ul `beforeCommit`, anulează tranzacția.
+
+### Export, progres, anulare și reluare
+
+`exportSaveFile` citește numai din store-urile durabile: arhiva 135/215 a fiecărei sesiuni, economia ei și snapshotul 227 primit de la proprietarul lumii. Nu inventează valori și nu scrie. Exportul și importul primesc un `SaveFileJob` cu patru pași, fracție 0–1 și `cancel()`; anularea este cooperativă între faze și înainte de commit. Proiecția `saveFileView` distinge explicit `FILE_READY` (fișier pregătit pentru descărcare) de `AUTOSAVE_SAVED` (autosave în browser), iar `claimsBrowserWrite` este mereu `false`: browserul nu poate confirma scrierea pe disc.
+
+După o înlocuire reușită, pornirea este `PAUSED_AUTO`, cu inputul eliberat și zero vehicule în `MANUAL` (`SAVEFILE_LAUNCH`).
+
+### Compatibilitate și migrare
+
+Un fișier `.sdasave` de versiune 1 este citit de acest build. Un fișier cu `formatVersion` mai mare este refuzat explicit, nu interpretat optimist. O arhivă de sesiune 135 v1 sau 215 v2 este refuzată de cititorul de savefile cu `LEGACY_SAVEFILE` (nu este ghicită ca savefile); `migrateSessionArchiveToSaveFile` o împachetează explicit într-un slot, păstrând documentul interior și checksum-ul lui. Un slot interior v1 rămâne `LEGACY` și este raportat ca atare.
+
+### Bugete și măsurători reale
+
+Plafoanele derivă din straturile livrate: un slot de sesiune este bugetul 215 plus envelope-ul lui (3 215 360 B), decorul este 65 536 B (227), replay-urile sunt 4 MiB decodificați (fereastra 132), iar fișierul are 12 285 272 B, sub `persistenceIngressBytes` (16 MiB) din manifest. `twoSessionCheckpointBytes` rămâne `null` în manifest, deci raportul măsoară fișierul produs (174 732 code units canonici, 174 757 bytes UTF-8 pe disc) și declară lacuna, fără să pretindă o capacitate calibrată. Memoria este raportată ca bytes deținuți (payload 174 113 B, sesiuni 161 732 B, decor 12 290 B), nu ca heap: `totalHeapBytes` rămâne `null`.
+
+Dovezile sunt în [Evidence/234-savefile](Evidence/234-savefile/README.md): raportul determinist 84/84, fișierul produs, checksum-ul, refuzurile închise, importul atomic și proba din Chromium 156 (WebCrypto și fișierul de pe disc).
+
 ## Acoperire și verificare
 
 135/215 furnizează exportul coerent și persistența existentă; 234 implementează envelope-ul, checksumul și acțiunile de fișier, 235 regresiile integrate. Vectorii de verificare acoperă Unicode, obiecte imbricate, reordonarea cheilor/whitespace, -0, array-uri reordonate, base64, chei duplicate și numere unsafe. Se testează roundtrip, editarea XP fără checksum nou, checksum recalculat cu schemă invalidă, checksum lipsă/greșit, fișier trunchiat/prea mare, migrare, două taburi, quota și reload. Nicio eroare nu activează parțial profiluri sau recompense. Benchmarkul verifică export/import în pause pe istoricul maxim admis și menține UI cu progres/anulare.
