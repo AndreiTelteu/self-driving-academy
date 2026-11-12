@@ -1,0 +1,1472 @@
+{
+  "version": "231-challenge-catalog-report-v1",
+  "contract": {
+    "schema": "231-challenge-catalog-v1",
+    "templateCatalogVersion": "231-challenge-templates-v1",
+    "evaluatorVersion": "231-challenge-evaluators-v1",
+    "capabilityVersion": "231-challenge-capabilities-v1",
+    "dailyBridgeVersion": "231-challenge-daily-bridge-v1",
+    "tickHz": 60,
+    "templates": 12,
+    "families": [
+      "PRECISION",
+      "DISCIPLINE",
+      "EXPLORATION",
+      "CONTROLLED_DESTRUCTION",
+      "EFFICIENCY",
+      "EXPERIMENT"
+    ],
+    "zoneKinds": [
+      "HOSPITAL",
+      "TOILET",
+      "TERMINAL",
+      "CHECKPOINT",
+      "PARKING",
+      "DRIFT_PAD",
+      "DEMOLITION_ALLEY",
+      "LANDMARK"
+    ],
+    "objectiveKinds": [
+      "CHECKPOINTS",
+      "ZONE_ORDER",
+      "TIMED_DROPOFF",
+      "COMFORT",
+      "PARKING",
+      "DRIFT",
+      "DISTRUCTION",
+      "LEARNING"
+    ],
+    "verdictStatuses": [
+      "PASSED",
+      "FAILED",
+      "INCOMPLETE",
+      "EXCLUDED"
+    ],
+    "minimumTemplates": 12,
+    "catalogCapacity": 32,
+    "historyCapacity": 32
+  },
+  "catalog": {
+    "templates": 12,
+    "families": {
+      "CONTROLLED_DESTRUCTION": 1,
+      "DISCIPLINE": 2,
+      "EFFICIENCY": 2,
+      "EXPERIMENT": 1,
+      "EXPLORATION": 3,
+      "PRECISION": 3
+    },
+    "evaluators": [
+      "checkpoint-sequence",
+      "comfort-budget",
+      "distinct-destruction",
+      "drift-accumulation",
+      "learning-observation",
+      "parking-precision",
+      "timed-dropoff",
+      "zone-order"
+    ],
+    "sessions": {
+      "ACADEMY": 11,
+      "CHAOS": 11
+    },
+    "filmingTemplates": 4,
+    "dialogueLines": 48,
+    "thresholds": 15,
+    "rewardsAcademyXp": 925,
+    "rewardsChaosOnly": 1
+  },
+  "plans": [
+    {
+      "templateId": "challenge-cake-delivery",
+      "family": "DISCIPLINE",
+      "objectiveKind": "COMFORT",
+      "evaluatorId": "comfort-budget",
+      "sessionKind": "ACADEMY",
+      "target": 1,
+      "margin": 0.2,
+      "deadlineTick": 7200,
+      "incidentBudget": 1,
+      "zoneIds": [],
+      "learningKey": null,
+      "thresholdKeys": [
+        "maxAccelerationMps2",
+        "maxJerkMps3"
+      ]
+    },
+    {
+      "templateId": "challenge-city-copies-me",
+      "family": "EXPERIMENT",
+      "objectiveKind": "LEARNING",
+      "evaluatorId": "learning-observation",
+      "sessionKind": "ACADEMY",
+      "target": 1,
+      "margin": 0.25,
+      "deadlineTick": 11250,
+      "incidentBudget": 0,
+      "zoneIds": [],
+      "learningKey": "speed_delta_urban",
+      "thresholdKeys": [
+        "maxObservationDelayTicks"
+      ]
+    },
+    {
+      "templateId": "challenge-city-tour-backwards",
+      "family": "EXPLORATION",
+      "objectiveKind": "CHECKPOINTS",
+      "evaluatorId": "checkpoint-sequence",
+      "sessionKind": "ACADEMY",
+      "target": 3,
+      "margin": 0.25,
+      "deadlineTick": 11250,
+      "incidentBudget": 0,
+      "zoneIds": [
+        "zone:checkpoint:tower",
+        "zone:checkpoint:museum",
+        "zone:checkpoint:river"
+      ],
+      "learningKey": null,
+      "thresholdKeys": [
+        "stopToleranceS"
+      ]
+    },
+    {
+      "templateId": "challenge-forgot-something",
+      "family": "EXPLORATION",
+      "objectiveKind": "ZONE_ORDER",
+      "evaluatorId": "zone-order",
+      "sessionKind": "ACADEMY",
+      "target": 2,
+      "margin": 0.25,
+      "deadlineTick": 8250,
+      "incidentBudget": 0,
+      "zoneIds": [
+        "zone:landmark:party",
+        "zone:landmark:home"
+      ],
+      "learningKey": null,
+      "thresholdKeys": [
+        "anyOf"
+      ]
+    },
+    {
+      "templateId": "challenge-influencer-demolition",
+      "family": "CONTROLLED_DESTRUCTION",
+      "objectiveKind": "DISTRUCTION",
+      "evaluatorId": "distinct-destruction",
+      "sessionKind": "CHAOS",
+      "target": 5,
+      "margin": 0.15,
+      "deadlineTick": 6210,
+      "incidentBudget": 2,
+      "zoneIds": [
+        "zone:alley:playground"
+      ],
+      "learningKey": null,
+      "thresholdKeys": []
+    },
+    {
+      "templateId": "challenge-influencer-no-spill",
+      "family": "DISCIPLINE",
+      "objectiveKind": "COMFORT",
+      "evaluatorId": "comfort-budget",
+      "sessionKind": "ACADEMY",
+      "target": 1,
+      "margin": 0.35,
+      "deadlineTick": 9720,
+      "incidentBudget": 0,
+      "zoneIds": [],
+      "learningKey": null,
+      "thresholdKeys": [
+        "maxAccelerationMps2",
+        "maxJerkMps3"
+      ]
+    },
+    {
+      "templateId": "challenge-influencer-parking-drift",
+      "family": "PRECISION",
+      "objectiveKind": "DRIFT",
+      "evaluatorId": "drift-accumulation",
+      "sessionKind": "ACADEMY",
+      "target": 1,
+      "margin": 0.25,
+      "deadlineTick": 9000,
+      "incidentBudget": 1,
+      "zoneIds": [
+        "zone:drift:playground"
+      ],
+      "learningKey": null,
+      "thresholdKeys": [
+        "minSeconds",
+        "minSlipAngleRad",
+        "minSpeedMps"
+      ]
+    },
+    {
+      "templateId": "challenge-influencer-single-frame",
+      "family": "PRECISION",
+      "objectiveKind": "CHECKPOINTS",
+      "evaluatorId": "checkpoint-sequence",
+      "sessionKind": "ACADEMY",
+      "target": 2,
+      "margin": 0.25,
+      "deadlineTick": 11250,
+      "incidentBudget": 1,
+      "zoneIds": [
+        "zone:checkpoint:tower",
+        "zone:checkpoint:museum",
+        "zone:checkpoint:river"
+      ],
+      "learningKey": null,
+      "thresholdKeys": [
+        "stopToleranceS"
+      ]
+    },
+    {
+      "templateId": "challenge-last-minute-airport",
+      "family": "EFFICIENCY",
+      "objectiveKind": "TIMED_DROPOFF",
+      "evaluatorId": "timed-dropoff",
+      "sessionKind": "ACADEMY",
+      "target": 1,
+      "margin": 0.15,
+      "deadlineTick": 8280,
+      "incidentBudget": 0,
+      "zoneIds": [
+        "zone:airport"
+      ],
+      "learningKey": null,
+      "thresholdKeys": []
+    },
+    {
+      "templateId": "challenge-maternity-run",
+      "family": "EFFICIENCY",
+      "objectiveKind": "TIMED_DROPOFF",
+      "evaluatorId": "timed-dropoff",
+      "sessionKind": "ACADEMY",
+      "target": 1,
+      "margin": 0.35,
+      "deadlineTick": 7290,
+      "incidentBudget": 2,
+      "zoneIds": [
+        "zone:hospital:central"
+      ],
+      "learningKey": null,
+      "thresholdKeys": []
+    },
+    {
+      "templateId": "challenge-toilet-sos",
+      "family": "EXPLORATION",
+      "objectiveKind": "ZONE_ORDER",
+      "evaluatorId": "zone-order",
+      "sessionKind": "ACADEMY",
+      "target": 1,
+      "margin": 0.25,
+      "deadlineTick": 5625,
+      "incidentBudget": 1,
+      "zoneIds": [
+        "zone:toilet:park",
+        "zone:toilet:garage",
+        "zone:toilet:market"
+      ],
+      "learningKey": null,
+      "thresholdKeys": [
+        "anyOf"
+      ]
+    },
+    {
+      "templateId": "challenge-valet-with-style",
+      "family": "PRECISION",
+      "objectiveKind": "PARKING",
+      "evaluatorId": "parking-precision",
+      "sessionKind": "ACADEMY",
+      "target": 1,
+      "margin": 0.25,
+      "deadlineTick": 6750,
+      "incidentBudget": 0,
+      "zoneIds": [
+        "zone:parking:opera"
+      ],
+      "learningKey": null,
+      "thresholdKeys": [
+        "maxHeadingErrorRad",
+        "maxSpeedMps",
+        "minDwellS"
+      ]
+    }
+  ],
+  "eligibility": {
+    "lean": {
+      "eligible": 2,
+      "excluded": 10,
+      "missing": [
+        "CAMPAIGN:1",
+        "CAPABILITY:DESTRUCTIBLE_DECOR",
+        "CAPABILITY:LEARNING",
+        "CONTROL:LEARNING",
+        "LEARNING_KEY:speed_delta_urban",
+        "SESSION:ACADEMY",
+        "VEHICLE_CLASS:sedan",
+        "ZONE:CHECKPOINT",
+        "ZONE:DEMOLITION_ALLEY",
+        "ZONE:DRIFT_PAD",
+        "ZONE:HOSPITAL",
+        "ZONE:LANDMARK",
+        "ZONE:PARKING",
+        "ZONE:TERMINAL",
+        "ZONE:TOILET"
+      ],
+      "excludedTemplates": [
+        "challenge-city-copies-me",
+        "challenge-city-tour-backwards",
+        "challenge-forgot-something",
+        "challenge-influencer-demolition",
+        "challenge-influencer-parking-drift",
+        "challenge-influencer-single-frame",
+        "challenge-last-minute-airport",
+        "challenge-maternity-run",
+        "challenge-toilet-sos",
+        "challenge-valet-with-style"
+      ]
+    },
+    "academy": {
+      "eligible": 11,
+      "excluded": 1,
+      "missing": [
+        "SESSION:ACADEMY"
+      ],
+      "excludedTemplates": [
+        "challenge-influencer-demolition"
+      ]
+    },
+    "chaos": {
+      "eligible": 11,
+      "excluded": 1,
+      "missing": [
+        "SESSION:CHAOS"
+      ],
+      "excludedTemplates": [
+        "challenge-city-copies-me"
+      ]
+    },
+    "incremental": {
+      "leanEligible": 2,
+      "withHospital": 3,
+      "withSedanStillMissingClass": 0,
+      "fullyEquipped": 11
+    }
+  },
+  "evaluations": {
+    "passing": [
+      {
+        "templateId": "challenge-cake-delivery",
+        "status": "PASSED",
+        "reason": "TARGET_REACHED",
+        "progress": 1,
+        "target": 1,
+        "fingerprint": "fnv1a32:1356657f",
+        "measured": {
+          "samplesExamined": 2,
+          "checkpointsReached": 0,
+          "zonesVisited": 0,
+          "dropoffs": 1,
+          "parkedAttempts": 0,
+          "peakAccelerationMps2": 0.9,
+          "peakJerkMps3": 0.8,
+          "validDriftSeconds": 0,
+          "rotationOnlyTicks": 0,
+          "collisionTicks": 0,
+          "distinctDestroyed": 0,
+          "orderViolations": 0,
+          "stopViolationTicks": 0,
+          "learningObserved": 0
+        }
+      },
+      {
+        "templateId": "challenge-city-copies-me",
+        "status": "PASSED",
+        "reason": "TARGET_REACHED",
+        "progress": 1,
+        "target": 1,
+        "fingerprint": "fnv1a32:d3d6de09",
+        "measured": {
+          "samplesExamined": 1,
+          "checkpointsReached": 0,
+          "zonesVisited": 0,
+          "dropoffs": 0,
+          "parkedAttempts": 0,
+          "peakAccelerationMps2": 0,
+          "peakJerkMps3": 0,
+          "validDriftSeconds": 0,
+          "rotationOnlyTicks": 0,
+          "collisionTicks": 0,
+          "distinctDestroyed": 0,
+          "orderViolations": 0,
+          "stopViolationTicks": 0,
+          "learningObserved": 1
+        }
+      },
+      {
+        "templateId": "challenge-city-tour-backwards",
+        "status": "PASSED",
+        "reason": "TARGET_REACHED",
+        "progress": 3,
+        "target": 3,
+        "fingerprint": "fnv1a32:298ba002",
+        "measured": {
+          "samplesExamined": 3,
+          "checkpointsReached": 3,
+          "zonesVisited": 0,
+          "dropoffs": 0,
+          "parkedAttempts": 0,
+          "peakAccelerationMps2": 0,
+          "peakJerkMps3": 0,
+          "validDriftSeconds": 0,
+          "rotationOnlyTicks": 0,
+          "collisionTicks": 0,
+          "distinctDestroyed": 0,
+          "orderViolations": 0,
+          "stopViolationTicks": 0,
+          "learningObserved": 0
+        }
+      },
+      {
+        "templateId": "challenge-forgot-something",
+        "status": "PASSED",
+        "reason": "TARGET_REACHED",
+        "progress": 2,
+        "target": 2,
+        "fingerprint": "fnv1a32:1e7b8b11",
+        "measured": {
+          "samplesExamined": 2,
+          "checkpointsReached": 0,
+          "zonesVisited": 2,
+          "dropoffs": 0,
+          "parkedAttempts": 0,
+          "peakAccelerationMps2": 0,
+          "peakJerkMps3": 0,
+          "validDriftSeconds": 0,
+          "rotationOnlyTicks": 0,
+          "collisionTicks": 0,
+          "distinctDestroyed": 0,
+          "orderViolations": 0,
+          "stopViolationTicks": 0,
+          "learningObserved": 0
+        }
+      },
+      {
+        "templateId": "challenge-influencer-demolition",
+        "status": "PASSED",
+        "reason": "TARGET_REACHED",
+        "progress": 5,
+        "target": 5,
+        "fingerprint": "fnv1a32:fdb41477",
+        "measured": {
+          "samplesExamined": 6,
+          "checkpointsReached": 0,
+          "zonesVisited": 0,
+          "dropoffs": 0,
+          "parkedAttempts": 0,
+          "peakAccelerationMps2": 0,
+          "peakJerkMps3": 0,
+          "validDriftSeconds": 0,
+          "rotationOnlyTicks": 0,
+          "collisionTicks": 0,
+          "distinctDestroyed": 5,
+          "orderViolations": 0,
+          "stopViolationTicks": 0,
+          "learningObserved": 0
+        }
+      },
+      {
+        "templateId": "challenge-influencer-no-spill",
+        "status": "PASSED",
+        "reason": "TARGET_REACHED",
+        "progress": 1,
+        "target": 1,
+        "fingerprint": "fnv1a32:18b6371e",
+        "measured": {
+          "samplesExamined": 2,
+          "checkpointsReached": 0,
+          "zonesVisited": 0,
+          "dropoffs": 1,
+          "parkedAttempts": 0,
+          "peakAccelerationMps2": 0.9,
+          "peakJerkMps3": 0.8,
+          "validDriftSeconds": 0,
+          "rotationOnlyTicks": 0,
+          "collisionTicks": 0,
+          "distinctDestroyed": 0,
+          "orderViolations": 0,
+          "stopViolationTicks": 0,
+          "learningObserved": 0
+        }
+      },
+      {
+        "templateId": "challenge-influencer-parking-drift",
+        "status": "PASSED",
+        "reason": "TARGET_REACHED",
+        "progress": 1,
+        "target": 1,
+        "fingerprint": "fnv1a32:01cfd57e",
+        "measured": {
+          "samplesExamined": 200,
+          "checkpointsReached": 0,
+          "zonesVisited": 0,
+          "dropoffs": 0,
+          "parkedAttempts": 0,
+          "peakAccelerationMps2": 0,
+          "peakJerkMps3": 0,
+          "validDriftSeconds": 3.3333,
+          "rotationOnlyTicks": 0,
+          "collisionTicks": 0,
+          "distinctDestroyed": 0,
+          "orderViolations": 0,
+          "stopViolationTicks": 0,
+          "learningObserved": 0
+        }
+      },
+      {
+        "templateId": "challenge-influencer-single-frame",
+        "status": "PASSED",
+        "reason": "TARGET_REACHED",
+        "progress": 2,
+        "target": 2,
+        "fingerprint": "fnv1a32:cc0dbed2",
+        "measured": {
+          "samplesExamined": 2,
+          "checkpointsReached": 2,
+          "zonesVisited": 0,
+          "dropoffs": 0,
+          "parkedAttempts": 0,
+          "peakAccelerationMps2": 0,
+          "peakJerkMps3": 0,
+          "validDriftSeconds": 0,
+          "rotationOnlyTicks": 0,
+          "collisionTicks": 0,
+          "distinctDestroyed": 0,
+          "orderViolations": 0,
+          "stopViolationTicks": 0,
+          "learningObserved": 0
+        }
+      },
+      {
+        "templateId": "challenge-last-minute-airport",
+        "status": "PASSED",
+        "reason": "TARGET_REACHED",
+        "progress": 1,
+        "target": 1,
+        "fingerprint": "fnv1a32:239a2a05",
+        "measured": {
+          "samplesExamined": 1,
+          "checkpointsReached": 0,
+          "zonesVisited": 0,
+          "dropoffs": 1,
+          "parkedAttempts": 0,
+          "peakAccelerationMps2": 0,
+          "peakJerkMps3": 0,
+          "validDriftSeconds": 0,
+          "rotationOnlyTicks": 0,
+          "collisionTicks": 0,
+          "distinctDestroyed": 0,
+          "orderViolations": 0,
+          "stopViolationTicks": 0,
+          "learningObserved": 0
+        }
+      },
+      {
+        "templateId": "challenge-maternity-run",
+        "status": "PASSED",
+        "reason": "TARGET_REACHED",
+        "progress": 1,
+        "target": 1,
+        "fingerprint": "fnv1a32:5765fe37",
+        "measured": {
+          "samplesExamined": 1,
+          "checkpointsReached": 0,
+          "zonesVisited": 0,
+          "dropoffs": 1,
+          "parkedAttempts": 0,
+          "peakAccelerationMps2": 0,
+          "peakJerkMps3": 0,
+          "validDriftSeconds": 0,
+          "rotationOnlyTicks": 0,
+          "collisionTicks": 0,
+          "distinctDestroyed": 0,
+          "orderViolations": 0,
+          "stopViolationTicks": 0,
+          "learningObserved": 0
+        }
+      },
+      {
+        "templateId": "challenge-toilet-sos",
+        "status": "PASSED",
+        "reason": "TARGET_REACHED",
+        "progress": 1,
+        "target": 1,
+        "fingerprint": "fnv1a32:c0e2c09d",
+        "measured": {
+          "samplesExamined": 1,
+          "checkpointsReached": 0,
+          "zonesVisited": 1,
+          "dropoffs": 0,
+          "parkedAttempts": 0,
+          "peakAccelerationMps2": 0,
+          "peakJerkMps3": 0,
+          "validDriftSeconds": 0,
+          "rotationOnlyTicks": 0,
+          "collisionTicks": 0,
+          "distinctDestroyed": 0,
+          "orderViolations": 0,
+          "stopViolationTicks": 0,
+          "learningObserved": 0
+        }
+      },
+      {
+        "templateId": "challenge-valet-with-style",
+        "status": "PASSED",
+        "reason": "TARGET_REACHED",
+        "progress": 1,
+        "target": 1,
+        "fingerprint": "fnv1a32:3fb76db8",
+        "measured": {
+          "samplesExamined": 1,
+          "checkpointsReached": 0,
+          "zonesVisited": 0,
+          "dropoffs": 0,
+          "parkedAttempts": 1,
+          "peakAccelerationMps2": 0,
+          "peakJerkMps3": 0,
+          "validDriftSeconds": 0,
+          "rotationOnlyTicks": 0,
+          "collisionTicks": 0,
+          "distinctDestroyed": 0,
+          "orderViolations": 0,
+          "stopViolationTicks": 0,
+          "learningObserved": 0
+        }
+      }
+    ],
+    "failing": [
+      {
+        "templateId": "challenge-cake-delivery",
+        "status": "FAILED",
+        "reason": "COMFORT_LIMIT",
+        "progress": 1,
+        "target": 1,
+        "fingerprint": "fnv1a32:941c81a7",
+        "measured": {
+          "samplesExamined": 1,
+          "checkpointsReached": 0,
+          "zonesVisited": 0,
+          "dropoffs": 1,
+          "parkedAttempts": 0,
+          "peakAccelerationMps2": 1.8,
+          "peakJerkMps3": 1.8,
+          "validDriftSeconds": 0,
+          "rotationOnlyTicks": 0,
+          "collisionTicks": 0,
+          "distinctDestroyed": 0,
+          "orderViolations": 0,
+          "stopViolationTicks": 0,
+          "learningObserved": 0
+        }
+      },
+      {
+        "templateId": "challenge-city-copies-me",
+        "status": "FAILED",
+        "reason": "EFFECT_NOT_OBSERVED",
+        "progress": 0,
+        "target": 1,
+        "fingerprint": "fnv1a32:0e8bd1c3",
+        "measured": {
+          "samplesExamined": 1,
+          "checkpointsReached": 0,
+          "zonesVisited": 0,
+          "dropoffs": 0,
+          "parkedAttempts": 0,
+          "peakAccelerationMps2": 0,
+          "peakJerkMps3": 0,
+          "validDriftSeconds": 0,
+          "rotationOnlyTicks": 0,
+          "collisionTicks": 0,
+          "distinctDestroyed": 0,
+          "orderViolations": 0,
+          "stopViolationTicks": 0,
+          "learningObserved": 0
+        }
+      },
+      {
+        "templateId": "challenge-city-tour-backwards",
+        "status": "FAILED",
+        "reason": "ORDER_VIOLATION",
+        "progress": 0,
+        "target": 3,
+        "fingerprint": "fnv1a32:ee3a7fc9",
+        "measured": {
+          "samplesExamined": 2,
+          "checkpointsReached": 0,
+          "zonesVisited": 0,
+          "dropoffs": 0,
+          "parkedAttempts": 0,
+          "peakAccelerationMps2": 0,
+          "peakJerkMps3": 0,
+          "validDriftSeconds": 0,
+          "rotationOnlyTicks": 0,
+          "collisionTicks": 0,
+          "distinctDestroyed": 0,
+          "orderViolations": 1,
+          "stopViolationTicks": 0,
+          "learningObserved": 0
+        }
+      },
+      {
+        "templateId": "challenge-forgot-something",
+        "status": "FAILED",
+        "reason": "ORDER_VIOLATION",
+        "progress": 0,
+        "target": 2,
+        "fingerprint": "fnv1a32:a843e946",
+        "measured": {
+          "samplesExamined": 2,
+          "checkpointsReached": 0,
+          "zonesVisited": 0,
+          "dropoffs": 0,
+          "parkedAttempts": 0,
+          "peakAccelerationMps2": 0,
+          "peakJerkMps3": 0,
+          "validDriftSeconds": 0,
+          "rotationOnlyTicks": 0,
+          "collisionTicks": 0,
+          "distinctDestroyed": 0,
+          "orderViolations": 1,
+          "stopViolationTicks": 0,
+          "learningObserved": 0
+        }
+      },
+      {
+        "templateId": "challenge-influencer-demolition",
+        "status": "EXCLUDED",
+        "reason": "SESSION_NOT_ALLOWED",
+        "progress": 0,
+        "target": 5,
+        "fingerprint": "fnv1a32:4d18261c",
+        "measured": {
+          "samplesExamined": 0,
+          "checkpointsReached": 0,
+          "zonesVisited": 0,
+          "dropoffs": 0,
+          "parkedAttempts": 0,
+          "peakAccelerationMps2": 0,
+          "peakJerkMps3": 0,
+          "validDriftSeconds": 0,
+          "rotationOnlyTicks": 0,
+          "collisionTicks": 0,
+          "distinctDestroyed": 0,
+          "orderViolations": 0,
+          "stopViolationTicks": 0,
+          "learningObserved": 0
+        }
+      },
+      {
+        "templateId": "challenge-influencer-no-spill",
+        "status": "FAILED",
+        "reason": "COMFORT_LIMIT",
+        "progress": 1,
+        "target": 1,
+        "fingerprint": "fnv1a32:5786f3d1",
+        "measured": {
+          "samplesExamined": 2,
+          "checkpointsReached": 0,
+          "zonesVisited": 0,
+          "dropoffs": 1,
+          "parkedAttempts": 0,
+          "peakAccelerationMps2": 3,
+          "peakJerkMps3": 2.5,
+          "validDriftSeconds": 0,
+          "rotationOnlyTicks": 0,
+          "collisionTicks": 0,
+          "distinctDestroyed": 0,
+          "orderViolations": 0,
+          "stopViolationTicks": 0,
+          "learningObserved": 0
+        }
+      },
+      {
+        "templateId": "challenge-influencer-parking-drift",
+        "status": "FAILED",
+        "reason": "NO_VALID_DRIFT",
+        "progress": 0,
+        "target": 1,
+        "fingerprint": "fnv1a32:592624eb",
+        "measured": {
+          "samplesExamined": 201,
+          "checkpointsReached": 0,
+          "zonesVisited": 0,
+          "dropoffs": 0,
+          "parkedAttempts": 0,
+          "peakAccelerationMps2": 0,
+          "peakJerkMps3": 0,
+          "validDriftSeconds": 0,
+          "rotationOnlyTicks": 200,
+          "collisionTicks": 1,
+          "distinctDestroyed": 0,
+          "orderViolations": 0,
+          "stopViolationTicks": 0,
+          "learningObserved": 0
+        }
+      },
+      {
+        "templateId": "challenge-influencer-single-frame",
+        "status": "FAILED",
+        "reason": "ORDER_VIOLATION",
+        "progress": 0,
+        "target": 2,
+        "fingerprint": "fnv1a32:dc3ea92b",
+        "measured": {
+          "samplesExamined": 2,
+          "checkpointsReached": 0,
+          "zonesVisited": 0,
+          "dropoffs": 0,
+          "parkedAttempts": 0,
+          "peakAccelerationMps2": 0,
+          "peakJerkMps3": 0,
+          "validDriftSeconds": 0,
+          "rotationOnlyTicks": 0,
+          "collisionTicks": 0,
+          "distinctDestroyed": 0,
+          "orderViolations": 1,
+          "stopViolationTicks": 0,
+          "learningObserved": 0
+        }
+      },
+      {
+        "templateId": "challenge-last-minute-airport",
+        "status": "FAILED",
+        "reason": "DEADLINE_EXPIRED",
+        "progress": 0,
+        "target": 1,
+        "fingerprint": "fnv1a32:16729698",
+        "measured": {
+          "samplesExamined": 0,
+          "checkpointsReached": 0,
+          "zonesVisited": 0,
+          "dropoffs": 0,
+          "parkedAttempts": 0,
+          "peakAccelerationMps2": 0,
+          "peakJerkMps3": 0,
+          "validDriftSeconds": 0,
+          "rotationOnlyTicks": 0,
+          "collisionTicks": 0,
+          "distinctDestroyed": 0,
+          "orderViolations": 0,
+          "stopViolationTicks": 0,
+          "learningObserved": 0
+        }
+      },
+      {
+        "templateId": "challenge-maternity-run",
+        "status": "FAILED",
+        "reason": "INCIDENT_BUDGET_EXCEEDED",
+        "progress": 0,
+        "target": 1,
+        "fingerprint": "fnv1a32:310656ee",
+        "measured": {
+          "samplesExamined": 0,
+          "checkpointsReached": 0,
+          "zonesVisited": 0,
+          "dropoffs": 0,
+          "parkedAttempts": 0,
+          "peakAccelerationMps2": 0,
+          "peakJerkMps3": 0,
+          "validDriftSeconds": 0,
+          "rotationOnlyTicks": 0,
+          "collisionTicks": 0,
+          "distinctDestroyed": 0,
+          "orderViolations": 0,
+          "stopViolationTicks": 0,
+          "learningObserved": 0
+        }
+      },
+      {
+        "templateId": "challenge-toilet-sos",
+        "status": "FAILED",
+        "reason": "WRONG_ZONE",
+        "progress": 0,
+        "target": 1,
+        "fingerprint": "fnv1a32:31309e2a",
+        "measured": {
+          "samplesExamined": 0,
+          "checkpointsReached": 0,
+          "zonesVisited": 0,
+          "dropoffs": 0,
+          "parkedAttempts": 0,
+          "peakAccelerationMps2": 0,
+          "peakJerkMps3": 0,
+          "validDriftSeconds": 0,
+          "rotationOnlyTicks": 0,
+          "collisionTicks": 0,
+          "distinctDestroyed": 0,
+          "orderViolations": 0,
+          "stopViolationTicks": 0,
+          "learningObserved": 0
+        }
+      },
+      {
+        "templateId": "challenge-valet-with-style",
+        "status": "FAILED",
+        "reason": "PARKING_SPEED",
+        "progress": 0,
+        "target": 1,
+        "fingerprint": "fnv1a32:aed77113",
+        "measured": {
+          "samplesExamined": 1,
+          "checkpointsReached": 0,
+          "zonesVisited": 0,
+          "dropoffs": 0,
+          "parkedAttempts": 1,
+          "peakAccelerationMps2": 0,
+          "peakJerkMps3": 0,
+          "validDriftSeconds": 0,
+          "rotationOnlyTicks": 0,
+          "collisionTicks": 0,
+          "distinctDestroyed": 0,
+          "orderViolations": 0,
+          "stopViolationTicks": 0,
+          "learningObserved": 0
+        }
+      }
+    ]
+  },
+  "drift": {
+    "validSeconds": 4,
+    "rotationOnlySeconds": 0,
+    "rotationTicks": 240,
+    "collisionSeconds": 0,
+    "collisionTicks": 240,
+    "outsideZoneSeconds": 0,
+    "verdict": "FAILED"
+  },
+  "destruction": {
+    "deduplicatedDistinct": 4,
+    "deduplicatedStatus": "INCOMPLETE",
+    "passedDistinct": 5,
+    "passedStatus": "PASSED",
+    "academyStatus": "EXCLUDED",
+    "academyReason": "SESSION_NOT_ALLOWED"
+  },
+  "determinism": {
+    "evaluations": 1200,
+    "distinctFingerprints": 12,
+    "distinctTemplates": 12,
+    "permutationEqual": true,
+    "cloneEqual": true,
+    "seed": 12345
+  },
+  "compatibility": {
+    "dailyCatalogVersion": "211-daily-templates-v1",
+    "dailyFamilies": 6,
+    "bridgeVersion": "231-challenge-daily-bridge-v1",
+    "bridgeFamilies": [
+      "challenge-city-copies-me",
+      "challenge-last-minute-airport",
+      "challenge-maternity-run"
+    ],
+    "generatedMissions": 3,
+    "generatedDistinctInstances": 3,
+    "generatedFamilies": [
+      "challenge-city-copies-me",
+      "challenge-last-minute-airport",
+      "challenge-maternity-run"
+    ],
+    "dailyCatalogStillDelivered": true
+  },
+  "performance": {
+    "simulation": {
+      "templates": 12,
+      "evaluations": 1200,
+      "factRowsExamined": 22200,
+      "maxDriftSamples": 200,
+      "maxFactsExaminedPerVerdict": 200,
+      "clock": "NOT_MEASURED"
+    },
+    "memory": {
+      "catalogBytes": 19272,
+      "maxPlanBytes": 1152,
+      "maxFactsBytes": 20661,
+      "maxVerdictBytes": 455,
+      "catalogTemplates": 12,
+      "historyCapacity": 32,
+      "challengeHistoryBudget": "NULL_IN_MANIFEST"
+    }
+  },
+  "checks": [
+    {
+      "name": "schema",
+      "expected": "231-challenge-catalog-v1",
+      "actual": "231-challenge-catalog-v1",
+      "pass": true,
+      "detail": "catalog schema"
+    },
+    {
+      "name": "template-catalog-version",
+      "expected": "231-challenge-templates-v1",
+      "actual": "231-challenge-templates-v1",
+      "pass": true,
+      "detail": "versioned authored catalog"
+    },
+    {
+      "name": "evaluator-version",
+      "expected": "231-challenge-evaluators-v1",
+      "actual": "231-challenge-evaluators-v1",
+      "pass": true,
+      "detail": "versioned evaluator thresholds"
+    },
+    {
+      "name": "capability-version",
+      "expected": "231-challenge-capabilities-v1",
+      "actual": "231-challenge-capabilities-v1",
+      "pass": true,
+      "detail": "versioned prerequisite snapshot"
+    },
+    {
+      "name": "tick-hz",
+      "expected": 60,
+      "actual": 60,
+      "pass": true,
+      "detail": "authoritative simulation tick"
+    },
+    {
+      "name": "templates",
+      "expected": 12,
+      "actual": 12,
+      "pass": true,
+      "detail": "minimum V1 catalog"
+    },
+    {
+      "name": "minimum-templates",
+      "expected": 12,
+      "actual": 12,
+      "pass": true,
+      "detail": "declared minimum"
+    },
+    {
+      "name": "catalog-capacity",
+      "expected": 32,
+      "actual": 32,
+      "pass": true,
+      "detail": "finite template capacity"
+    },
+    {
+      "name": "families",
+      "expected": 6,
+      "actual": 6,
+      "pass": true,
+      "detail": "family coverage"
+    },
+    {
+      "name": "evaluators",
+      "expected": 8,
+      "actual": 8,
+      "pass": true,
+      "detail": "one evaluator per objective kind"
+    },
+    {
+      "name": "zone-kinds",
+      "expected": 8,
+      "actual": 8,
+      "pass": true,
+      "detail": "closed zone vocabulary"
+    },
+    {
+      "name": "objective-kinds",
+      "expected": 8,
+      "actual": 8,
+      "pass": true,
+      "detail": "closed objective vocabulary"
+    },
+    {
+      "name": "verdict-statuses",
+      "expected": 4,
+      "actual": 4,
+      "pass": true,
+      "detail": "closed verdict statuses"
+    },
+    {
+      "name": "distinct-objectives",
+      "expected": 12,
+      "actual": 12,
+      "pass": true,
+      "detail": "no two templates repeat the same authored objective"
+    },
+    {
+      "name": "filming-internal",
+      "expected": 4,
+      "actual": 4,
+      "pass": true,
+      "detail": "the filming premise is internal replay only"
+    },
+    {
+      "name": "dialogue-lines",
+      "expected": 48,
+      "actual": 48,
+      "pass": true,
+      "detail": "four real-event lines per template"
+    },
+    {
+      "name": "replay-rules",
+      "expected": 12,
+      "actual": 12,
+      "pass": true,
+      "detail": "R starts a new instance and a reset loses no XP"
+    },
+    {
+      "name": "replay-xp",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "a replay never pays XP"
+    },
+    {
+      "name": "chaos-only-rewards",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "Haos-only templates pay local records, not Academy XP"
+    },
+    {
+      "name": "learning-academy-only",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "a LEARNING objective publishes in the Academy only"
+    },
+    {
+      "name": "feasible-deadlines",
+      "expected": 12,
+      "actual": 12,
+      "pass": true,
+      "detail": "every margin produces a deadline above the reference and inside four minutes"
+    },
+    {
+      "name": "lean-eligible",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "only templates that need no map zone"
+    },
+    {
+      "name": "lean-excluded",
+      "expected": 10,
+      "actual": 10,
+      "pass": true,
+      "detail": "every other template is excluded"
+    },
+    {
+      "name": "lean-missing-zones",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "named missing zone"
+    },
+    {
+      "name": "lean-missing-class",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "named missing class"
+    },
+    {
+      "name": "lean-missing-learning",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "named missing key"
+    },
+    {
+      "name": "lean-missing-campaign",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "named missing progress"
+    },
+    {
+      "name": "with-hospital-eligible",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "adding the hospital realises maternity"
+    },
+    {
+      "name": "with-sedan-missing-class",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the class prerequisite disappears when the sedan exists"
+    },
+    {
+      "name": "academy-eligible",
+      "expected": 11,
+      "actual": 11,
+      "pass": true,
+      "detail": "demolition is not offered in the Academy"
+    },
+    {
+      "name": "academy-excluded",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "demolition is the only exclusion"
+    },
+    {
+      "name": "chaos-eligible",
+      "expected": 11,
+      "actual": 11,
+      "pass": true,
+      "detail": "the LEARNING experiment is not offered in Haos"
+    },
+    {
+      "name": "chaos-excluded",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "only the LEARNING experiment is excluded"
+    },
+    {
+      "name": "passing",
+      "expected": 12,
+      "actual": 12,
+      "pass": true,
+      "detail": "all templates pass a realisable fixture"
+    },
+    {
+      "name": "passing-reason",
+      "expected": 12,
+      "actual": 12,
+      "pass": true,
+      "detail": "target reached"
+    },
+    {
+      "name": "passing-distinct-fingerprints",
+      "expected": 12,
+      "actual": 12,
+      "pass": true,
+      "detail": "each objective produces its own deterministic identity"
+    },
+    {
+      "name": "failing",
+      "expected": 12,
+      "actual": 12,
+      "pass": true,
+      "detail": "all invalid fixtures are refused"
+    },
+    {
+      "name": "failing-excluded",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the Haos-only objective is excluded, not failed as gameplay"
+    },
+    {
+      "name": "failing-reasons",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "failures use distinct closed reasons"
+    },
+    {
+      "name": "drift-valid",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "three valid seconds pass"
+    },
+    {
+      "name": "drift-rotation",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "spinning in place accumulates nothing"
+    },
+    {
+      "name": "drift-rotation-ticks",
+      "expected": 240,
+      "actual": 240,
+      "pass": true,
+      "detail": "the rotation ticks are reported"
+    },
+    {
+      "name": "drift-collision",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "a collision impulse accumulates nothing"
+    },
+    {
+      "name": "drift-collision-ticks",
+      "expected": 240,
+      "actual": 240,
+      "pass": true,
+      "detail": "the collision ticks are reported"
+    },
+    {
+      "name": "drift-outside-zone",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "only the declared drift zone accumulates"
+    },
+    {
+      "name": "destruction-dedup",
+      "expected": 4,
+      "actual": 4,
+      "pass": true,
+      "detail": "repeated and foreign objects are deduplicated"
+    },
+    {
+      "name": "destruction-dedup-status",
+      "expected": "INCOMPLETE",
+      "actual": "INCOMPLETE",
+      "pass": true,
+      "detail": "four distinct objects are not five"
+    },
+    {
+      "name": "destruction-passed",
+      "expected": 5,
+      "actual": 5,
+      "pass": true,
+      "detail": "five distinct objects pass"
+    },
+    {
+      "name": "destruction-passed-status",
+      "expected": "PASSED",
+      "actual": "PASSED",
+      "pass": true,
+      "detail": "the real objective is met"
+    },
+    {
+      "name": "destruction-academy",
+      "expected": "EXCLUDED",
+      "actual": "EXCLUDED",
+      "pass": true,
+      "detail": "destruction cannot be earned in the Academy"
+    },
+    {
+      "name": "destruction-academy-reason",
+      "expected": "SESSION_NOT_ALLOWED",
+      "actual": "SESSION_NOT_ALLOWED",
+      "pass": true,
+      "detail": "explicit exclusion"
+    },
+    {
+      "name": "determinism-evaluations",
+      "expected": 1200,
+      "actual": 1200,
+      "pass": true,
+      "detail": "one hundred evaluations per template"
+    },
+    {
+      "name": "determinism-fingerprints",
+      "expected": 12,
+      "actual": 12,
+      "pass": true,
+      "detail": "one fingerprint per objective"
+    },
+    {
+      "name": "determinism-permutation",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "fact order does not change the verdict"
+    },
+    {
+      "name": "determinism-clone",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "a reload-shaped clone produces the same bytes"
+    },
+    {
+      "name": "compatibility-daily-version",
+      "expected": "211-daily-templates-v1",
+      "actual": "211-daily-templates-v1",
+      "pass": true,
+      "detail": "211 stays unchanged"
+    },
+    {
+      "name": "compatibility-daily-families",
+      "expected": 6,
+      "actual": 6,
+      "pass": true,
+      "detail": "211 still ships six families"
+    },
+    {
+      "name": "compatibility-bridge-version",
+      "expected": "231-challenge-daily-bridge-v1",
+      "actual": "231-challenge-daily-bridge-v1",
+      "pass": true,
+      "detail": "versioned bridge"
+    },
+    {
+      "name": "compatibility-bridge-families",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "only real 116 objectives cross the bridge"
+    },
+    {
+      "name": "compatibility-missions",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "the daily generator still produces three missions"
+    },
+    {
+      "name": "compatibility-distinct",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "the bridge instances have distinct identities"
+    },
+    {
+      "name": "simulation-evaluations",
+      "expected": 1200,
+      "actual": 1200,
+      "pass": true,
+      "detail": "evaluations in the determinism run"
+    },
+    {
+      "name": "simulation-fact-rows",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "every verdict examined real fact rows"
+    },
+    {
+      "name": "simulation-max-facts",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "bounded work per verdict"
+    },
+    {
+      "name": "memory-catalog",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "catalog document under 1 MiB"
+    },
+    {
+      "name": "memory-history-cap",
+      "expected": 32,
+      "actual": 32,
+      "pass": true,
+      "detail": "finite catalog capacity declared for 232/233"
+    }
+  ],
+  "summary": {
+    "checks": 66,
+    "passed": 66,
+    "pass": true
+  }
+}
