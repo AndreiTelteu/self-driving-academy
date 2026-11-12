@@ -53,6 +53,10 @@ function relativeToRoot(file) {
   return relative(root, file).replaceAll('\\', '/');
 }
 
+function escapeRegExp(text) {
+  return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 function changedFiles() {
   try {
     return execFileSync('git', ['status', '--porcelain', '--untracked-files=all'], {
@@ -145,13 +149,17 @@ function planStep() {
     return { step, debt: null };
   }
   const plain = stripAnsi(output);
-  const broken = plain.match(/Link local rupt[^\n]*?([A-Za-z]:\\[^\n:]+\.md):/);
-  const boardInvalid = /Board invalid/i.test(plain);
+  // PowerShell împachetează mesajul excepției pe mai multe linii (și intercalează coduri ANSI), deci
+  // spațiile sunt normalizate înainte de căutare; altfel datoria preexistentă apare ca o eroare
+  // necunoscută, deși `Validate-Plan` a raportat clar un link rupt.
+  const flat = plain.replace(/\s+/g, ' ').trim();
+  const broken = flat.match(/Link local rupt[\s\S]{0,80}?([A-Za-z]:\\[^:]+?\.md):/);
+  const boardInvalid = /Board invalid/i.test(flat);
   const file = broken?.[1] ?? null;
   const owned = file !== null && changedFiles().includes(resolve(file));
   if (file !== null && !owned && !boardInvalid) {
-    const link =
-      plain.match(/Link local rupt[\s\S]{0,200}?\.md:\s*(?:\|\s*)?([^\s]+)/)?.[1]?.trim() ?? '';
+    const pattern = new RegExp(`${escapeRegExp(file)}:\\s*\\|?\\s*(\\S+)`);
+    const link = flat.match(pattern)?.[1] ?? '';
     const debt = Object.freeze({
       file: relativeToRoot(file),
       link,
@@ -172,13 +180,13 @@ function planStep() {
 }
 
 function planError(plain) {
-  const line = plain
-    .split(/\r?\n/)
-    .map((entry) => entry.trim())
-    .filter((entry) => entry.startsWith('Link local rupt'));
-  if (line.length > 0) return line[0];
-  const board = plain.split(/\r?\n/).find((entry) => /Board invalid/i.test(entry));
-  return board?.trim() ?? 'Validate-Plan a eșuat fără un link sau un board invalid identificabil.';
+  const flat = stripAnsi(plain).replace(/\s+/g, ' ').trim();
+  const broken = flat.match(/Link local rupt[\s\S]{0,120}?\.md:\s*(\S+)/);
+  if (broken !== null) return broken[0];
+  const board = flat.match(/Board invalid[\s\S]{0,200}/i);
+  return (
+    board?.[0]?.trim() ?? 'Validate-Plan a eșuat fără un link sau un board invalid identificabil.'
+  );
 }
 
 const mandatory = [

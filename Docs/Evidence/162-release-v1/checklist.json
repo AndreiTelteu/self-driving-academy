@@ -1,0 +1,503 @@
+{
+  "version": "162-release-checklist-v1",
+  "command": "npm run release:checklist",
+  "generatedBy": "scripts/run-release-checklist.mjs",
+  "checks": [
+    {
+      "label": "typecheck",
+      "command": "npm run typecheck",
+      "exitCode": 0,
+      "status": "PASS"
+    },
+    {
+      "label": "lint",
+      "command": "npm run lint",
+      "exitCode": 0,
+      "status": "PASS"
+    },
+    {
+      "label": "format",
+      "command": "npm run format:check",
+      "exitCode": 0,
+      "status": "PASS"
+    },
+    {
+      "label": "architecture",
+      "command": "npm run check:architecture",
+      "exitCode": 0,
+      "status": "PASS"
+    },
+    {
+      "label": "parameter-catalog",
+      "command": "npm run check:parameter-catalog",
+      "exitCode": 0,
+      "status": "PASS"
+    },
+    {
+      "label": "tests",
+      "command": "npm test",
+      "exitCode": 0,
+      "status": "PASS"
+    },
+    {
+      "label": "board",
+      "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File PBI/Validate-Board.ps1",
+      "exitCode": 0,
+      "status": "PASS"
+    },
+    {
+      "label": "assets:manifest",
+      "command": "npm run assets:manifest -- --check",
+      "exitCode": 0,
+      "status": "PASS"
+    },
+    {
+      "label": "perf:gate",
+      "command": "npm run perf:gate -- --check",
+      "exitCode": 0,
+      "status": "PASS"
+    },
+    {
+      "label": "qa:fun",
+      "command": "npm run qa:fun -- --check",
+      "exitCode": 0,
+      "status": "PASS"
+    },
+    {
+      "label": "qa:ui",
+      "command": "npm run qa:ui -- --check",
+      "exitCode": 0,
+      "status": "PASS"
+    },
+    {
+      "label": "qa:compat",
+      "command": "npm run qa:compat -- --check",
+      "exitCode": 0,
+      "status": "PASS"
+    },
+    {
+      "label": "build:report",
+      "command": "npm run build:report -- --check",
+      "exitCode": 0,
+      "status": "PASS"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "161",
+      "title": "Manual de utilizare și operare",
+      "done": true,
+      "file": "PBI/Done/161-release_docs.md",
+      "evidence": "Docs/Evidence/161-release-docs/README.md",
+      "evidencePresent": true,
+      "placeholder": false,
+      "verdict": "PASS",
+      "detail": "dovadă de documentație (README/report)"
+    },
+    {
+      "id": "154",
+      "title": "Matrice de compatibilitate WebGPU/WebGL 2",
+      "done": true,
+      "file": "PBI/Done/154-compat_matrix.md",
+      "evidence": "Docs/Evidence/154-compat-matrix/report.json",
+      "evidencePresent": true,
+      "placeholder": false,
+      "verdict": "PASS",
+      "detail": "9 rânduri: 9 PASS, 0 FAIL, 0 NOT_RUN, 11 declarate NOT_RUN"
+    },
+    {
+      "id": "152",
+      "title": "Sesiune integrală și progres",
+      "done": true,
+      "file": "PBI/Done/152-e2e_session.md",
+      "evidence": "Docs/Evidence/152-e2e-session/report.json",
+      "evidencePresent": true,
+      "placeholder": false,
+      "verdict": "PASS",
+      "detail": "11 pași, 104 verificări, 0 eșuate"
+    },
+    {
+      "id": "108",
+      "title": "Gate learning 24 de parametri",
+      "done": true,
+      "file": "PBI/Done/108-learning_gate24.md",
+      "evidence": "Docs/Evidence/108-learning-gate24/report.json",
+      "evidencePresent": true,
+      "placeholder": false,
+      "verdict": "PASS",
+      "detail": "7 scenarii, 48 trecute, 0 eșuate, 0 NOT_RUN"
+    },
+    {
+      "id": "039",
+      "title": "Zone de trecere",
+      "done": true,
+      "file": "PBI/Done/039-crosswalk_zones.md",
+      "evidence": "Docs/Evidence/039-crosswalk-zones/report.md",
+      "evidencePresent": true,
+      "placeholder": false,
+      "verdict": "PASS",
+      "detail": "dovadă de documentație (README/report)"
+    },
+    {
+      "id": "076",
+      "title": "Selecție hartă",
+      "done": true,
+      "file": "PBI/Done/076-map_selection.md",
+      "evidence": "Docs/Evidence/076-map-selection/report.json",
+      "evidencePresent": true,
+      "placeholder": false,
+      "verdict": "PASS",
+      "detail": "43/43 verificări"
+    },
+    {
+      "id": "141",
+      "title": "Replay de incidente",
+      "done": true,
+      "file": "PBI/Done/141-replay.md",
+      "evidence": "Docs/Evidence/141-experiment-replay/report.json",
+      "evidencePresent": true,
+      "placeholder": false,
+      "verdict": "PASS",
+      "detail": "74/74 verificări"
+    },
+    {
+      "id": "216",
+      "title": "Regresia V1: moduri, KPI, daily, XP",
+      "done": true,
+      "file": "PBI/Done/216-qa_expanded_v1.md",
+      "evidence": "Docs/Evidence/216-v1-regression/report.json",
+      "evidencePresent": true,
+      "placeholder": false,
+      "verdict": "PASS",
+      "detail": "29 rânduri: 27 PASS, 0 FAIL, 2 NOT_RUN"
+    },
+    {
+      "id": "217",
+      "title": "Trei moduri de control",
+      "done": true,
+      "file": "PBI/Done/217-three_modes.md",
+      "evidence": "Docs/Evidence/217-three-modes/report.json",
+      "evidencePresent": true,
+      "placeholder": false,
+      "verdict": "PASS",
+      "detail": "28/28 verificări"
+    },
+    {
+      "id": "235",
+      "title": "Gate de experiență și revenire",
+      "done": true,
+      "file": "PBI/Done/235-fun_experience_qa.md",
+      "evidence": "Docs/Evidence/235-fun-qa/report.json",
+      "evidencePresent": true,
+      "placeholder": false,
+      "verdict": "PASS",
+      "detail": "6 criterii: 4 PASS, 1 FAIL, 1 NOT_RUN; 16 sonde"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "dependencies",
+      "title": "Toate dependențele V1 sunt în Done și au dovezi comise, fără placeholder",
+      "verdict": "PASS",
+      "command": "citire PBI/Done + Docs/Evidence (fără execuție)",
+      "evidence": "PBI/Done/, Docs/Evidence/161,154,152,108,039,076,141,216,217,235",
+      "result": "10/10 dependențe cu fișier în Done și dovezi fără placeholder"
+    },
+    {
+      "id": "preflight",
+      "title": "Verificările statice obligatorii trec pe revizia curentă",
+      "verdict": "PASS",
+      "command": "npm run typecheck / lint / format:check / check:architecture / check:parameter-catalog / assets:manifest -- --check",
+      "evidence": "ieșirea comenzilor, exit code per pas",
+      "result": "6/6 pași cu exit 0"
+    },
+    {
+      "id": "tests",
+      "title": "Suita completă de teste trece fără eșecuri",
+      "verdict": "PASS",
+      "command": "npm test",
+      "evidence": "ieșirea TAP a suitei complete",
+      "result": "2 898 teste, 2 898 trecute, 0 eșuate, 0 sărite"
+    },
+    {
+      "id": "board",
+      "title": "Boardul PBI este valid și 162 apare într-o singură coloană",
+      "verdict": "PASS",
+      "command": "pwsh ./PBI/Validate-Board.ps1",
+      "evidence": "ieșirea JSON a validatorului",
+      "result": "Valid true, Total 235, 162 în 1 coloană"
+    },
+    {
+      "id": "pipeline-160",
+      "title": "Pipeline-ul CI 160 a rulat pe această revizie, cu livrare statică verificată",
+      "verdict": "PASS",
+      "command": "npm run ci:verify",
+      "evidence": "Docs/Evidence/162-release-v1/pipeline/ci-pipeline.json",
+      "result": "banda verify: PASSED_WITH_PLAN_DEBT, 12 pași (0 eșuate), gate structural PASS, livrare STATIC_VERIFIED"
+    },
+    {
+      "id": "gate-224",
+      "title": "Gate-ul de performanță și soak 224 trece structural, fără să ascundă FPS-ul",
+      "verdict": "NOT_VALIDATED",
+      "command": "npm run perf:gate -- --check",
+      "evidence": "Docs/Evidence/224-performance-gate/report.json",
+      "result": "17 rânduri: 16 PASS, 0 FAIL, 1 NOT_VALIDATED (fps-hardware); structural PASS, release NOT_VALIDATED"
+    },
+    {
+      "id": "gate-235",
+      "title": "Gate-ul de experiență și revenire 235 are verdict executat pe toate criteriile",
+      "verdict": "FAIL",
+      "command": "npm run qa:fun -- --check",
+      "evidence": "Docs/Evidence/235-fun-qa/report.json",
+      "result": "6 criterii: 4 PASS, 1 FAIL (C3), 1 NOT_RUN (C5); 16 sonde: 15 PASS, 1 FAIL; playtest NOT_RUN 0/5"
+    },
+    {
+      "id": "qa-ui-153",
+      "title": "QA vizual și accesibilitate 153 nu are eșecuri de contract",
+      "verdict": "FAIL",
+      "command": "npm run qa:ui -- --check",
+      "evidence": "Docs/Evidence/153-ui-qa/report.json",
+      "result": "22 capturi, 308 verificări, 300 trecute, 8 eșuate (5 de contract), 8 findings"
+    },
+    {
+      "id": "compat-154",
+      "title": "Matricea de compatibilitate 154 acoperă WebGPU și WebGL 2 și declară ce nu a rulat",
+      "verdict": "PASS",
+      "command": "npm run qa:compat -- --check",
+      "evidence": "Docs/Evidence/154-compat-matrix/report.json",
+      "result": "9/9 combinații reale, 11/11 verificări deterministe, 11 combinații declarate NOT_RUN"
+    },
+    {
+      "id": "delivery-160",
+      "title": "Artefactul de livrare (build de producție + manifest) este reproductibil și servit static",
+      "verdict": "PASS",
+      "command": "npm run build:report -- --check",
+      "evidence": "Docs/Evidence/160-build-delivery/report.json",
+      "result": "130 artefacte, 6 172 078 B (5.89 MiB), JS+WASM 6 125 279 B = 73.02 % din capacitate, gzip 1 769 518 B, arbore SHA-256 81e33b1d8c54a53b97087288dac3b7cf1f9f833f66eef07b108a23dc2042d3a9, 132 cereri HTTP, 130 payloaduri verificate"
+    },
+    {
+      "id": "docs",
+      "title": "Documentația de release este coerentă, iar linkurile din fișierele atinse se rezolvă",
+      "verdict": "PASS",
+      "command": "citire Docs/18 + Docs/manual + Docs/README.md + verificare de linkuri",
+      "evidence": "Docs/18-validare-si-release.md, Docs/manual/, Docs/README.md",
+      "result": "11 fișiere, 43 linkuri locale, 0 rupte; index: 18 prezent, manual prezent"
+    },
+    {
+      "id": "hardware-demo",
+      "title": "Demonstrație completă pe hardware-ul agreat (GPU real, OS/browser de referință)",
+      "verdict": "NOT_RUN",
+      "command": "demonstrație manuală pe hardware agreat",
+      "evidence": "Docs/Evidence/154-compat-matrix, 224-performance-gate (fps-hardware), 155-hardware-budget",
+      "result": "0 rulări pe hardware agreat; pe această mașină au rulat doar probe Node și Chromium headless pe SwiftShader",
+      "reason": "Demo-ul cerut are nevoie de GPU real și de cealaltă combinație OS/browser; pagina de joc completă nu există încă (bootstrap de randare), iar FPS-ul rămâne NOT_VALIDATED la 224."
+    },
+    {
+      "id": "human-playtest",
+      "title": "Playtest uman cu minimum cinci participanți și sesiune de revenire",
+      "verdict": "NOT_RUN",
+      "command": "sesiune de playtest cu observator",
+      "evidence": "Docs/Evidence/235-fun-qa/report.json (playtest)",
+      "result": "0/5 participanți; retenție 24 h / 7 zile nemăsurată",
+      "reason": "Niciun playtest uman nu a fost executat; mecanismele sunt acoperite de probe deterministe, dar senzația de condus și revenirea nu sunt măsurate."
+    }
+  ],
+  "open": [
+    {
+      "source": "151",
+      "id": "integration-browser-playtest",
+      "verdict": "NOT_RUN",
+      "reason": "Playtest în browser: explicații, senzație de condus și HUD"
+    },
+    {
+      "source": "153",
+      "id": "D1",
+      "verdict": "FAIL",
+      "reason": "MEDIUM surface-inside-viewport (hud@zoom-200-720): A surface is positioned outside the viewport. (Surfaces outside the viewport: fleet (bottom 476 > 360), notifications (bottom 384 > 360).)"
+    },
+    {
+      "source": "153",
+      "id": "D2",
+      "verdict": "FAIL",
+      "reason": "MEDIUM surface-inside-viewport (fleet@zoom-200-720): A surface is positioned outside the viewport. (Surfaces outside the viewport: fleet (bottom 476 > 360), notifications (bottom 384 > 360).)"
+    },
+    {
+      "source": "153",
+      "id": "D3",
+      "verdict": "FAIL",
+      "reason": "MEDIUM surface-inside-viewport (profile@zoom-200-720): A surface is positioned outside the viewport. (Surfaces outside the viewport: fleet (bottom 476 > 360), notifications (bottom 384 > 360).)"
+    },
+    {
+      "source": "153",
+      "id": "D4",
+      "verdict": "FAIL",
+      "reason": "MEDIUM text-legible (camera@1280x720): Visible text falls below the 12 CSS px / 1.4 line-height floor. (smallest visible text is 11.52 px with a 1.4 line-height ratio; the floor is 12 px and 1.4.)"
+    },
+    {
+      "source": "153",
+      "id": "D5",
+      "verdict": "FAIL",
+      "reason": "MEDIUM text-legible (kpis@1280x720): Visible text falls below the 12 CSS px / 1.4 line-height floor. (smallest visible text is 11 px with a 1.4 line-height ratio; the floor is 12 px and 1.4.)"
+    },
+    {
+      "source": "153",
+      "id": "D6",
+      "verdict": "FAIL",
+      "reason": "MEDIUM text-not-clipped (kpis@1280x720): Visible text overflows or is clipped by its own box. (4 text nodes overflow their box: kpis:span.kpi-history__chart-group-value \"fără review-uri\", kpis:span.kpi-history__chart-group-value \"fără review-uri\", kpis:span.kpi-history__chart-group-value \"fără review-uri\", kpis:span.kpi-history__chart-group-value \"fără review-uri\".)"
+    },
+    {
+      "source": "153",
+      "id": "D7",
+      "verdict": "FAIL",
+      "reason": "MEDIUM text-legible (kpis@1920x1080): Visible text falls below the 12 CSS px / 1.4 line-height floor. (smallest visible text is 11 px with a 1.4 line-height ratio; the floor is 12 px and 1.4.)"
+    },
+    {
+      "source": "153",
+      "id": "D8",
+      "verdict": "FAIL",
+      "reason": "MEDIUM text-not-clipped (kpis@1920x1080): Visible text overflows or is clipped by its own box. (4 text nodes overflow their box: kpis:span.kpi-history__chart-group-value \"fără review-uri\", kpis:span.kpi-history__chart-group-value \"fără review-uri\", kpis:span.kpi-history__chart-group-value \"fără review-uri\", kpis:span.kpi-history__chart-group-value \"fără review-uri\".)"
+    },
+    {
+      "source": "154",
+      "id": "android-chrome",
+      "verdict": "NOT_RUN",
+      "reason": "Nu există dispozitiv Android; suportul WebGPU mobil rămâne nevalidat."
+    },
+    {
+      "source": "154",
+      "id": "chrome-stable",
+      "verdict": "NOT_RUN",
+      "reason": "Nu există o instalare Chrome stable separată; Chromium 156 din Playwright este singurul runtime."
+    },
+    {
+      "source": "154",
+      "id": "chromium-headless-webgpu",
+      "verdict": "NOT_RUN",
+      "reason": "Chromium headless nu expune un adapter WebGPU utilizabil; pe această configurație se verifică doar fallback-ul WebGL 2 software."
+    },
+    {
+      "source": "154",
+      "id": "edge-stable",
+      "verdict": "NOT_RUN",
+      "reason": "Canalul Edge stable nu este instalat; Chromium de test acoperă motorul, nu integrarea Edge."
+    },
+    {
+      "source": "154",
+      "id": "firefox-stable",
+      "verdict": "NOT_RUN",
+      "reason": "Runtime Firefox nu este instalat în ms-playwright (există doar chromium-1248); nu a fost rulat."
+    },
+    {
+      "source": "154",
+      "id": "ios-safari",
+      "verdict": "NOT_RUN",
+      "reason": "Nu există dispozitiv iOS; WebGPU și fallback-ul pe WebKit mobil rămân nevalidate."
+    },
+    {
+      "source": "154",
+      "id": "linux-vulkan",
+      "verdict": "NOT_RUN",
+      "reason": "Nu există hardware Linux; driverul Vulkan și compozitorul nu pot fi verificate aici."
+    },
+    {
+      "source": "154",
+      "id": "macos-metal",
+      "verdict": "NOT_RUN",
+      "reason": "Nu există hardware macOS; WebGPU pe Metal și fallback-ul WebGL 2 nu pot fi rulate aici."
+    },
+    {
+      "source": "154",
+      "id": "webkit-safari",
+      "verdict": "NOT_RUN",
+      "reason": "Runtime WebKit nu este instalat, iar Safari nu există pe Windows."
+    },
+    {
+      "source": "154",
+      "id": "windows-intel",
+      "verdict": "NOT_RUN",
+      "reason": "Nu există GPU Intel pe mașină."
+    },
+    {
+      "source": "154",
+      "id": "windows-nvidia",
+      "verdict": "NOT_RUN",
+      "reason": "Mașina are un iGPU AMD; nu există GPU NVIDIA pentru proba driverului proprietar."
+    },
+    {
+      "source": "216",
+      "id": "C3",
+      "verdict": "NOT_RUN",
+      "reason": "Nu s-a rulat un browser real sau input uman. Nivelul atins este `targeted`, cu scenarii deterministe în Node; playtestul rămâne pentru gate-ul 235."
+    },
+    {
+      "source": "216",
+      "id": "C4",
+      "verdict": "NOT_RUN",
+      "reason": "Suita nu are renderer, GPU sau browser; bugetul de cadru rămâne al gate-urilor 220/224/155. Nu se raportează FPS headless."
+    },
+    {
+      "source": "224",
+      "id": "fps-hardware",
+      "verdict": "NOT_VALIDATED",
+      "reason": "capturile hardware 220 din Docs/Evidence/155-hardware-budget/report.json sunt pe buildul 2d68b43c8cdf; revizia curentă este 757e7168dfd6. Pragurile absolute FPS/GPU (35 ms p95, 28 ms GPU) cer aceeași revizie, deci FPS rămâne NOT_VALIDATED până la o rulare pe hardware real al acestei revizii."
+    },
+    {
+      "source": "235",
+      "id": "C3",
+      "verdict": "FAIL",
+      "reason": "HUD/camera first-person și sliderele sunt confortabile în două clase și accesibile la 1280×720; feedbackul destructibil este verificat vizual/audio"
+    },
+    {
+      "source": "235",
+      "id": "C5",
+      "verdict": "NOT_RUN",
+      "reason": "Playtest cu minimum cinci participanți acoperă condus liber, prima schimbare de stil, distrugere și reluarea unei provocări; consemnează cine reîncearcă spontan și de ce"
+    },
+    {
+      "source": "235",
+      "id": "playtest",
+      "verdict": "NOT_RUN",
+      "reason": "0/5 participanți; 4 fluxuri neacoperite de oameni"
+    }
+  ],
+  "artifact": {
+    "version": "162-release-artifact-v1",
+    "source": "Docs/Evidence/160-build-delivery/report.json",
+    "producedBy": "npm run build:report -- --check (pipeline-ul 160, nescris aici)",
+    "artifactCount": 130,
+    "bytes": 6172078,
+    "gzipBytes": 1769518,
+    "criticalJsWasmBytes": 6125279,
+    "capacityBytes": 8388608,
+    "capacityRatio": 0.7301901578903198,
+    "javascriptBytes": 3478683,
+    "wasmBytes": 2646596,
+    "cssBytes": 43917,
+    "htmlBytes": 2882,
+    "treeDigest": "81e33b1d8c54a53b97087288dac3b7cf1f9f833f66eef07b108a23dc2042d3a9",
+    "reproducible": true,
+    "indexHtmlSha256": "3052f5e2cc4334639c2aa2f916119fac5da561256c2842bd7e1e6d60e147f2b3",
+    "http": {
+      "requests": 132,
+      "checkedPayloads": 130,
+      "failedPayloads": 0,
+      "pass": true
+    },
+    "fullManifest": "Docs/Evidence/160-build-delivery/report.json",
+    "verifiedByChecklist": true
+  },
+  "summary": {
+    "criteria": 13,
+    "pass": 8,
+    "fail": 2,
+    "notValidated": 1,
+    "notRun": 2,
+    "release": "NOT_VALIDATED",
+    "ready": false,
+    "failed": true,
+    "steps": 13,
+    "failedSteps": 0,
+    "openItems": 26,
+    "note": "Release-ul V1 nu se declară gata: lista `open` conține exact ce este FAIL, NOT_VALIDATED sau NOT_RUN."
+  }
+}
