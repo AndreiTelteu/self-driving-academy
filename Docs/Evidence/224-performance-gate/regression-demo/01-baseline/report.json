@@ -1,0 +1,245 @@
+{
+  "version": "224-performance-gate-report-v1",
+  "budgetVersion": "203-initial-1",
+  "commit": "757e7168dfd641ea94fa7bcf95ae6841055e1244",
+  "measuredAt": "2026-11-12T11:33:07.802Z",
+  "manifest": {
+    "budgetVersion": "203-initial-1",
+    "modified": false,
+    "baselineReplacedAutomatically": false,
+    "automaticBaselineReplacement": false
+  },
+  "hardware": {
+    "measured": true,
+    "reason": "capturile hardware 220 din Docs/Evidence/155-hardware-budget/report.json sunt pe buildul 2d68b43c8cdf; revizia curentă este 757e7168dfd6. Pragurile absolute FPS/GPU (35 ms p95, 28 ms GPU) cer aceeași revizie, deci FPS rămâne NOT_VALIDATED până la o rulare pe hardware real al acestei revizii.",
+    "revision": "2d68b43c8cdf",
+    "sameRevision": false
+  },
+  "repetitions": {
+    "required": 5,
+    "count": 5,
+    "identical": true,
+    "buildBytes": [
+      6125279,
+      6125279,
+      6125279,
+      6125279,
+      6125279
+    ],
+    "renderDigests": [
+      "b6c188a777eb626e",
+      "b6c188a777eb626e",
+      "b6c188a777eb626e",
+      "b6c188a777eb626e",
+      "b6c188a777eb626e"
+    ],
+    "note": "cele 5 repetări produc aceiași bytes și aceeași probă structurală (variație 0)"
+  },
+  "rows": [
+    {
+      "id": "bundle-critical-transfer",
+      "criterion": "bundle",
+      "title": "bundle JS+WASM sub capacitatea critică de transfer",
+      "verdict": "PASS",
+      "detail": "5.84 MiB (6125279 B) din 8.00 MiB; JS 3478683 B + WASM 2646596 B, gzip 1769518 B, 130 artefacte",
+      "reason": "",
+      "evidence": "Docs/performance-budgets.json proposedCapacities.criticalJsWasmTransferBytes",
+      "kind": "PORTABLE",
+      "revision": null
+    },
+    {
+      "id": "bundle-regression",
+      "criterion": "bundle",
+      "title": "bundle-ul nu crește peste pragul relativ confirmat",
+      "verdict": "PASS",
+      "detail": "baseline 5.84 MiB (f5fb79fd07c7); 0/5 repetări peste >10% și >5.00 MiB; prag de confirmare 3/5",
+      "reason": "",
+      "evidence": "Docs/Evidence/155-hardware-budget/build-transfer.json + Docs/performance-budgets.json regressionProposal",
+      "kind": "PORTABLE",
+      "revision": null
+    },
+    {
+      "id": "capacity-render",
+      "criterion": "capacity",
+      "title": "draw calls, instanțe și obiecte Babylon sub capacitățile fixate",
+      "verdict": "PASS",
+      "detail": "draw calls 48/128, instanțe thin 78/8192, batchuri 40/512, obiecte Babylon 12/4096, 923 elemente randate",
+      "reason": "",
+      "evidence": "Docs/performance-budgets.json resourceAdmissionContracts.rendering",
+      "kind": "PORTABLE",
+      "revision": null
+    },
+    {
+      "id": "determinism",
+      "criterion": "capacity",
+      "title": "cinci repetări produc aceiași bytes și aceeași probă structurală",
+      "verdict": "PASS",
+      "detail": "5 builduri, 5 probe de randare; digesturi distincte: 1 build / 1 randare",
+      "reason": "",
+      "evidence": "repetițiile gate-ului",
+      "kind": "PORTABLE",
+      "revision": null
+    },
+    {
+      "id": "soak-60min",
+      "criterion": "soak",
+      "title": "soak de minimum 60 de minute și 20 de cicluri, cu platou",
+      "kind": "EVIDENCE",
+      "verdict": "PASS",
+      "detail": "60.001 min, 20 cicluri (20 curate), 7/7 tendințe PLATEAU, heap +1.82 MiB din 5.00 MiB, coadă max 1 joburi / 4 B, throttling OBSERVED",
+      "reason": "",
+      "evidence": "Docs/Evidence/224-performance-gate/soak/report.json",
+      "revision": "757e7168dfd641ea94fa7bcf95ae6841055e1244"
+    },
+    {
+      "id": "fps-hardware",
+      "criterion": "fps",
+      "title": "FPS și frame p95 pe hardware real, pe aceeași revizie și ambele backenduri",
+      "kind": "EVIDENCE",
+      "verdict": "NOT_VALIDATED",
+      "detail": "",
+      "reason": "capturile hardware 220 din Docs/Evidence/155-hardware-budget/report.json sunt pe buildul 2d68b43c8cdf; revizia curentă este 757e7168dfd6. Pragurile absolute FPS/GPU (35 ms p95, 28 ms GPU) cer aceeași revizie, deci FPS rămâne NOT_VALIDATED până la o rulare pe hardware real al acestei revizii.",
+      "evidence": "Docs/Evidence/155-hardware-budget/report.json",
+      "revision": "2d68b43c8cdf"
+    },
+    {
+      "id": "probe-render-budget",
+      "criterion": "capacity",
+      "title": "proba 157 (buget de randare) este curentă față de sursă",
+      "kind": "EVIDENCE",
+      "verdict": "PASS",
+      "detail": "157: 17 PASS, 0 FAIL, 2 NOT_MEASURED; --check exit 0, captura 546fa29e5ac6",
+      "reason": "",
+      "evidence": "Docs/Evidence/157-render-budget/report.json",
+      "revision": "546fa29e5ac6b4ed770c7acf6181d191956e1537"
+    },
+    {
+      "id": "probe-simulation-budget",
+      "criterion": "gameplay",
+      "title": "proba 158 (buget de simulare) este curentă față de sursă",
+      "kind": "EVIDENCE",
+      "verdict": "PASS",
+      "detail": "158: decizii PASS, estimare PASS, transferuri PASS, 3 echivalențe IDENTICAL; --check exit 0",
+      "reason": "",
+      "evidence": "Docs/Evidence/158-simulation-budget/report.json",
+      "revision": "546fa29e5ac6b4ed770c7acf6181d191956e1537-dirty"
+    },
+    {
+      "id": "probe-traffic-benchmark",
+      "criterion": "gameplay",
+      "title": "proba 156 (benchmark de flotă/trafic) este curentă față de sursă",
+      "kind": "EVIDENCE",
+      "verdict": "PASS",
+      "detail": "156: 36 PASS, 0 FAIL, 12 STRESS, 60 REPORTED; --check exit 0",
+      "reason": "",
+      "evidence": "Docs/Evidence/156-traffic-benchmark/report.json",
+      "revision": null
+    },
+    {
+      "id": "probe-hardware-budget",
+      "criterion": "gameplay",
+      "title": "proba 155 (hardware și bugete) este curentă față de sursă",
+      "kind": "EVIDENCE",
+      "verdict": "PASS",
+      "detail": "155: 85 PASS, 0 FAIL, 6 NOT_MEASURED declarate; --check exit 0",
+      "reason": "",
+      "evidence": "Docs/Evidence/155-hardware-budget/report.json",
+      "revision": "f5fb79fd07c7e92c2c7b541b109bfa83367cc1d6"
+    },
+    {
+      "id": "probe-soak-integrity",
+      "criterion": "soak",
+      "title": "raportul soak 159 este curent față de măsurătoarea comisă",
+      "kind": "EVIDENCE",
+      "verdict": "PASS",
+      "detail": "159: SOAK_PASS, 60.002 min, 20 cicluri, commit 917a7de9; --check exit 0",
+      "reason": "",
+      "evidence": "Docs/Evidence/159-soak/report.json",
+      "revision": "917a7de9"
+    },
+    {
+      "id": "gameplay-systems-max-v1",
+      "criterion": "gameplay",
+      "title": "learning, recorder+autosave și XP trec pe workload maxim V1 (156)",
+      "kind": "EVIDENCE",
+      "verdict": "PASS",
+      "detail": "workload maxim V1 30/40: 12 rânduri de gate, sisteme BASELINE, LEARNING, RECORDER_AUTOSAVE, XP, tick p95 maxim 7.00 ms din 8 ms",
+      "reason": "",
+      "evidence": "Docs/Evidence/156-traffic-benchmark/report.json",
+      "revision": null
+    },
+    {
+      "id": "destruction-effects-audio",
+      "criterion": "destruction",
+      "title": "distrugere, efecte și audio în buget (227/228/149)",
+      "kind": "EVIDENCE",
+      "verdict": "PASS",
+      "detail": "227: 24/24 verificări, 20 cicluri de reset cu 35 corpuri; 228: 20/20, max 4 voci impact și 24 reacții/incident; 149: 32/32, 1/14 voci active. Frame: NOT_MEASURED declarat",
+      "reason": "",
+      "evidence": "Docs/Evidence/227-destructible-decor/report.json, Docs/Evidence/228-destruction-feedback/report.json, Docs/Evidence/149-audio-feedback/report.json",
+      "revision": null
+    },
+    {
+      "id": "challenge-director",
+      "criterion": "challenges",
+      "title": "directorul de provocări random și experiența în buget (232/233)",
+      "kind": "EVIDENCE",
+      "verdict": "PASS",
+      "detail": "232: 56/56, istoric 24/24 intrări și 1071/4096 unități; 233: 55/55, 1 rând de ledger din 32, 0 listeners globali",
+      "reason": "",
+      "evidence": "Docs/Evidence/232-challenge-director/report.json, Docs/Evidence/233-challenge-experience/report.json",
+      "revision": null
+    },
+    {
+      "id": "savefile-integrity",
+      "criterion": "savefile",
+      "title": "encode/canonicalizare/hash de savefile în buget (234)",
+      "kind": "EVIDENCE",
+      "verdict": "PASS",
+      "detail": "234: 84/84 verificări, fișier 174732 B din 12285272 B, payload 174113 B din ingress 16777216 B, checksum 64 B; encode/hash fără ceas de perete (declarat)",
+      "reason": "",
+      "evidence": "Docs/Evidence/234-savefile/report.json",
+      "revision": null
+    },
+    {
+      "id": "academy-chaos-cycles",
+      "criterion": "lifecycle",
+      "title": "20 de schimbări Academie/Haos și 20 de reseturi în buget (225/226)",
+      "kind": "EVIDENCE",
+      "verdict": "PASS",
+      "detail": "225: 20 tranziții (10 Academie / 10 Haos), 20 checkpointuri comise, 773 B total (max 40 B), 0 lumi/joburi orfane; 226: 20 reseturi, 0 eșuate, corpuri 64, 1 listener, lumi vii 1",
+      "reason": "",
+      "evidence": "Docs/Evidence/225-session-kinds/report.json, Docs/Evidence/226-world-recovery/report.json",
+      "revision": null
+    },
+    {
+      "id": "backend-matrix",
+      "criterion": "backends",
+      "title": "matricea WEBGPU + WEBGL 2 este declarată (154)",
+      "kind": "EVIDENCE",
+      "verdict": "PASS",
+      "detail": "154: 9/9 combinații reale, 11/11 verificări deterministe, 11 combinații declarate NOT_RUN; backenduri acoperite: WEBGPU și WEBGL 2",
+      "reason": "",
+      "evidence": "Docs/Evidence/154-compat-matrix/report.json",
+      "revision": null
+    }
+  ],
+  "notValidated": [
+    {
+      "id": "fps-hardware",
+      "criterion": "fps",
+      "reason": "capturile hardware 220 din Docs/Evidence/155-hardware-budget/report.json sunt pe buildul 2d68b43c8cdf; revizia curentă este 757e7168dfd6. Pragurile absolute FPS/GPU (35 ms p95, 28 ms GPU) cer aceeași revizie, deci FPS rămâne NOT_VALIDATED până la o rulare pe hardware real al acestei revizii."
+    }
+  ],
+  "summary": {
+    "pass": 16,
+    "fail": 0,
+    "notValidated": 1,
+    "structural": "PASS",
+    "release": "NOT_VALIDATED",
+    "openCriteria": [
+      "Criteriul 1: gate-ul FPS se închide numai pe hardware real, aceeași revizie"
+    ],
+    "note": "Verdictul structural acoperă probele portabile ale reviziei curente. Verdictul de release poate fi PASS numai când nicio probă obligatorie nu este NOT_VALIDATED; fără GPU real, FPS rămâne deschis."
+  }
+}

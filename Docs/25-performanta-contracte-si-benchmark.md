@@ -183,3 +183,63 @@ PBI 159 rulează soak-ul cerut de contract: **minimum 60 de minute de timp de pe
 
 Raportul determinist (`npm run perf:soak`, cu `--check`; `--measure` reexecută soak-ul) derivă `report.json` + `report.md` din măsurătoarea comisă și refuză un PASS fără măsurătoare, sub 60 de minute, sub 20 de cicluri, cu incidente nerecuperate sau cu o tendință în creștere. Dovezile și limitele sunt în [Docs/Evidence/159-soak](Evidence/159-soak/README.md). Soak-ul nu înlocuiește gate-ul de release 224 și nici workload-ul integrat cu asseturile finale din 155/223; gate-ul hardware al jocului complet rămâne `NOT_VALIDATED`.
 
+## Gate-ul de regresii și soak-ul de release (PBI 224, 12 noiembrie 2026)
+
+PBI 224 transformă probele separate într-un **gate obligatoriu executabil local**: `npm run perf:gate`
+rulează probele portabile ale reviziei curente, leagă măsurătorile hardware și soak-ul de aceeași revizie
+și produce un verdict agregat cu trei stări — `PASS`, `FAIL`, `NOT_VALIDATED` — cu verdictul și motivul
+fiecărei probe. Rularea implicită rederivă raportul din măsurătoarea comisă; `--measure` reface
+măsurătoarea, iar `--check` reexecută miezul portabil, refuză o măsurătoare învechită și compară raportul
+byte cu byte.
+
+**Ce leagă.** Gate-ul nu duplică niciun sistem: apelează comenzile `--check` ale probelor livrate
+(157 buget de randare, 158 buget de simulare, 156 benchmark de flotă/trafic, 155 hardware și bugete,
+159 soak) și verifică dovezile comise ale criteriilor 2 și 4 (156 pentru learning/recorder/autosave/XP pe
+workload maxim V1, 227/228/149 pentru distrugere/efecte/audio, 232/233 pentru directorul de provocări,
+234 pentru savefile, 225/226 pentru cele 20 de schimbări Academie/Haos și 20 de reseturi, 154 pentru
+matricea de backenduri). Pe lângă ele, gate-ul măsoară **el însuși**, pe revizia curentă, un build de
+producție real (bytes JS+WASM față de `criticalJsWasmTransferBytes`) și proba structurală 157
+(draw calls, instanțe thin, batchuri, obiecte Babylon față de `resourceAdmissionContracts.rendering`).
+
+**Rezultatul reviziei `757e7168`.** 17 rânduri: **16 `PASS`, 0 `FAIL`, 1 `NOT_VALIDATED`**. Bundle
+5,84 MiB (6 125 279 B) din 8 MiB, cu 130 de artefacte; 48/128 draw calls, 78/8192 instanțe thin,
+40/512 batchuri, 12/4096 obiecte Babylon; probele 155/156/157/158/159 trec toate `--check`-ul. Singurul
+rând deschis este **`fps-hardware`**: capturile reale ale gate-ului 220 sunt pe buildul `2d68b43c8cdf`,
+iar pragurile absolute cer aceeași revizie. Fără GPU real pe commitul curent, FPS-ul rămâne
+`NOT_VALIDATED`, verdictul de release nu poate fi `PASS`, iar contractul respinge explicit un raport care
+ar închide FPS fără măsurătoare.
+
+**Cinci repetări.** Miezul portabil rulează de cinci ori; toate cele cinci builduri au aceiași bytes
+(6 125 279 B, digest `3ac5f69c276c`), iar cele cinci probe structurale au același digest
+(`b6c188a777eb626e`) și aceleași 923 de elemente: variație 0. Pentru probele cronometrate nu se inventează
+o a șasea serie — rămân cele cinci repetări ale lui 155/220, cele două repetări per rând ale lui 156 și
+cele 120 de eșantioane ale soak-ului.
+
+**Regresia controlată.** Gate-ul este dovedit pe o regresie reală și reversibilă: un modul generat de
+3 300 000 B este adăugat în entry-ul buildului (fără nicio modificare în `src/`), gate-ul raportează
+`FAIL` cu 9 425 362 B („depășește capacitatea de 8,00 MiB cu 0,99 MiB”), apoi revine la `PASS` cu exact
+aceiași bytes și digests după eliminare. Cele trei rapoarte sunt păstrate în
+[Docs/Evidence/224-performance-gate/regression-demo](Evidence/224-performance-gate/regression-demo/README.md).
+
+**Soak-ul aceleiași revizii.** Gate-ul rulează soak-ul la commitul curent cu aceeași funcție a lui 159:
+**60,001 minute, 20 de cicluri curate, 19 reload-uri, 640 de curse, 701 segmente/activări de learning,
+2 380 de checkpointuri comise, 85 de incidente toate recuperate**. Toate cele 7 tendințe sunt `PLATEAU`:
+heap +1,82 MiB din pragul de 5 MiB, RSS +13,46 MiB din 33,85 MiB, cozi maxime 1 job / 4 B, retenție
+121,95 MiB stabilă. Baseline-ul nu se actualizează: gate-ul citește manifestul, verifică `modified: false`
+și refuză un soak sub 60 de minute, sub 20 de cicluri, cu tendință în creștere sau cu manifest modificat.
+Throttling-ul rămâne raportat (`OBSERVED`, tick p95 5,14–9,44 ms, frecvență OS constantă la 2 695 MHz).
+
+**CI.** `scripts/ci/run-performance-gate-job.mjs` este jobul provider-neutral: preflight static
+(typecheck, lint, format, arhitectură, catalog de parametri), `perf:gate --check`, `perf:gate --measure`,
+apoi verdict. `FAIL` oprește jobul; `NOT_VALIDATED` îl oprește numai cu `--require=release` (pe un runner
+cu hardware real), altfel publică lista criteriilor deschise în `ci-job.json`. Jobul de verificare a
+raportat `PASSED` structural și a lăsat FPS deschis, exact cum cere contractul.
+
+**Ce rămâne deschis.** FPS, frame p95/p99 și lucrul GPU pe hardware real pentru această revizie, pe ambele
+backenduri; lucrul GPU pe WEBGPU (timer indisponibil, `null`, nu 0); memoria exactă a paginii/GPU
+(`totalHeapBytes` este `null` în manifest); layout/paint DOM și Long Tasks cu randare (probele rulează în
+Node); trace-urile Chrome pentru FPS, care aparțin probei 220. `qa:ui` (153) nu face parte din gate: este
+un contract de layout/accesibilitate, cu verdict `FAIL` raportat de 153, nu o metrică de performanță.
+Dovezile complete, cele cinci repetări, demonstrația de regresie și lista `NOT_VALIDATED` sunt în
+[Docs/Evidence/224-performance-gate](Evidence/224-performance-gate/README.md).
+
