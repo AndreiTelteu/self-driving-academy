@@ -1,0 +1,2331 @@
+{
+  "version": "163-v2-contexts-v1",
+  "generatedBy": "tests/telemetry/v2-contexts-suite.ts",
+  "command": "npm run v2:contexts",
+  "oracleRule": "Fiecare context este numărat din faptele reale ale contractelor 085/069, 007, 030, 033/219 și 061; nicio valoare nu este afirmată fără un eșantion care o conține.",
+  "catalog": {
+    "version": "163-v2-contexts-v1",
+    "keys": 56,
+    "categories": 10,
+    "perCategory": [
+      {
+        "category": "SPEED",
+        "keys": 4
+      },
+      {
+        "category": "LONGITUDINAL",
+        "keys": 4
+      },
+      {
+        "category": "FOLLOWING",
+        "keys": 4
+      },
+      {
+        "category": "SIGNALS",
+        "keys": 4
+      },
+      {
+        "category": "STOP_PRIORITY",
+        "keys": 4
+      },
+      {
+        "category": "LANE_CHANGE",
+        "keys": 4
+      },
+      {
+        "category": "LATERAL",
+        "keys": 8
+      },
+      {
+        "category": "ROUTING",
+        "keys": 8
+      },
+      {
+        "category": "HAZARDS",
+        "keys": 8
+      },
+      {
+        "category": "SERVICE",
+        "keys": 8
+      }
+    ],
+    "withOpportunityKind": 10,
+    "v1Keys": 24
+  },
+  "v1Compatibility": {
+    "version": "163-v1-compatibility-v1",
+    "protectedKeys": 24,
+    "preservedCatalogFields": [
+      "default",
+      "min",
+      "max",
+      "unit",
+      "category",
+      "implementationStage"
+    ],
+    "renamedKeys": [],
+    "changedThresholds": [],
+    "migration": "none: no V1 key was renamed or re-thresholded by 163",
+    "disjointFromR": true,
+    "evidence": [
+      {
+        "path": "Docs/Evidence/151-scenario-suite/report.json",
+        "present": true,
+        "sha256": "d56435127da3dfdb8e50350f35ccf8edbb598115a24f7134f5e395e90bb7fac6"
+      },
+      {
+        "path": "Docs/Evidence/216-v1-regression/report.json",
+        "present": true,
+        "sha256": "b9ac66fdb82a7ef2951dcd9a16351032e1292d7ca1731dba81900d95fdd16593"
+      },
+      {
+        "path": "Docs/Evidence/142-experiment-rerun/report.json",
+        "present": true,
+        "sha256": "c56e2b1de6161b6f4ad4a3bd7597451f01abde312269151e038591ab87c8f4b5"
+      },
+      {
+        "path": "Docs/Evidence/056-auto-scenarios/report.json",
+        "present": true,
+        "sha256": "d1f93dbd96e9b9fd8577f3b5bd4fcacbd3f77a07f826166d2f851dd4ca97487b"
+      }
+    ]
+  },
+  "scenarios": [
+    {
+      "scenarioId": "speed-arterial-rhythm",
+      "category": "SPEED",
+      "title": "Ritm de croazieră pe arteră",
+      "frames": 6,
+      "firstTick": 100,
+      "lastTick": 400,
+      "categoryKeys": 4,
+      "observableKeys": 4,
+      "representative": true,
+      "missingKeys": [],
+      "failedTriggers": [],
+      "triggers": [
+        {
+          "id": "CRUISING_ON_TWO_ROAD_TYPES",
+          "description": "Croazieră măsurată pe cel puțin două tipuri de drum, fără lider.",
+          "observed": true,
+          "evidence": "3 tipuri de drum fără lider: ARTERIAL, RESIDENTIAL, URBAN"
+        },
+        {
+          "id": "SPEED_ABOVE_AND_BELOW_LIMIT",
+          "description": "Aceeași croazieră conține atât depășire, cât și respectare a limitei.",
+          "observed": true,
+          "evidence": "1 eșantioane peste limită, 5 sub limită"
+        }
+      ],
+      "keys": [
+        {
+          "key": "speed_delta_arterial",
+          "category": "SPEED",
+          "contextId": "v2c-arterial-cruise",
+          "label": "Croazieră pe arteră, fără lider",
+          "observable": true,
+          "observableFrames": 5,
+          "firstObservableTick": 160,
+          "missingFacets": [],
+          "opportunityKind": null,
+          "constraint": "NONE"
+        },
+        {
+          "key": "cruise_speed_variability",
+          "category": "SPEED",
+          "contextId": "v2c-cruise-variability",
+          "label": "Variație naturală a vitezei de croazieră",
+          "observable": true,
+          "observableFrames": 1,
+          "firstObservableTick": 400,
+          "missingFacets": [],
+          "opportunityKind": null,
+          "constraint": "NONE"
+        },
+        {
+          "key": "overtake_speed_bonus",
+          "category": "SPEED",
+          "contextId": "v2c-overtake-bonus",
+          "label": "Bonus de viteză la depășire",
+          "observable": true,
+          "observableFrames": 1,
+          "firstObservableTick": 340,
+          "missingFacets": [],
+          "opportunityKind": null,
+          "constraint": "NONE"
+        },
+        {
+          "key": "cruise_accel_deadband",
+          "category": "SPEED",
+          "contextId": "v2c-accel-deadband",
+          "label": "Bandă moartă a accelerației de croazieră",
+          "observable": true,
+          "observableFrames": 6,
+          "firstObservableTick": 100,
+          "missingFacets": [],
+          "opportunityKind": null,
+          "constraint": "NONE"
+        }
+      ],
+      "otherCategoryObservableKeys": [
+        "throttle_release_delay",
+        "coasting_bias",
+        "closing_ttc_threshold",
+        "following_hysteresis",
+        "pass_on_right_probability"
+      ]
+    },
+    {
+      "scenarioId": "longitudinal-coast-brake",
+      "category": "LONGITUDINAL",
+      "title": "Coasting și frână progresivă",
+      "frames": 6,
+      "firstTick": 100,
+      "lastTick": 400,
+      "categoryKeys": 4,
+      "observableKeys": 4,
+      "representative": true,
+      "missingKeys": [],
+      "failedTriggers": [],
+      "triggers": [
+        {
+          "id": "ACCELERATION_AND_DECELERATION",
+          "description": "Fereastra conține atât accelerare, cât și decelerare măsurată.",
+          "observed": true,
+          "evidence": "accelerație maximă 0.80 m/s², minimă -3.20 m/s²"
+        },
+        {
+          "id": "BRAKE_ONSET_BEHIND_LEADER",
+          "description": "Frâna este aplicată în timp ce un lider este măsurat în față.",
+          "observed": true,
+          "evidence": "3 eșantioane cu frână și lider"
+        }
+      ],
+      "keys": [
+        {
+          "key": "braking_jerk",
+          "category": "LONGITUDINAL",
+          "contextId": "v2c-braking-jerk",
+          "label": "Jerk la intrarea în frână",
+          "observable": true,
+          "observableFrames": 3,
+          "firstObservableTick": 280,
+          "missingFacets": [],
+          "opportunityKind": null,
+          "constraint": "NONE"
+        },
+        {
+          "key": "throttle_release_delay",
+          "category": "LONGITUDINAL",
+          "contextId": "v2c-throttle-release",
+          "label": "Întârzierea ridicării accelerației",
+          "observable": true,
+          "observableFrames": 5,
+          "firstObservableTick": 160,
+          "missingFacets": [],
+          "opportunityKind": null,
+          "constraint": "LEADER"
+        },
+        {
+          "key": "launch_intensity",
+          "category": "LONGITUDINAL",
+          "contextId": "v2c-launch-intensity",
+          "label": "Intensitatea plecării de pe loc",
+          "observable": true,
+          "observableFrames": 1,
+          "firstObservableTick": 400,
+          "missingFacets": [],
+          "opportunityKind": null,
+          "constraint": "NONE"
+        },
+        {
+          "key": "coasting_bias",
+          "category": "LONGITUDINAL",
+          "contextId": "v2c-coasting-bias",
+          "label": "Preferința pentru coasting",
+          "observable": true,
+          "observableFrames": 5,
+          "firstObservableTick": 160,
+          "missingFacets": [],
+          "opportunityKind": null,
+          "constraint": "NONE"
+        }
+      ],
+      "otherCategoryObservableKeys": [
+        "cruise_speed_variability",
+        "cruise_accel_deadband",
+        "closing_ttc_threshold",
+        "following_hysteresis",
+        "rolling_stop_speed"
+      ]
+    },
+    {
+      "scenarioId": "following-leader-gap",
+      "category": "FOLLOWING",
+      "title": "Urmărire cu schimbare de lider",
+      "frames": 6,
+      "firstTick": 100,
+      "lastTick": 400,
+      "categoryKeys": 4,
+      "observableKeys": 4,
+      "representative": true,
+      "missingKeys": [],
+      "failedTriggers": [],
+      "triggers": [
+        {
+          "id": "LEADER_GAP_SEQUENCE",
+          "description": "Cel puțin trei eșantioane consecutive cu lider și spațiu în scădere.",
+          "observed": true,
+          "evidence": "6 eșantioane cu lider, 5 pași de scădere"
+        },
+        {
+          "id": "LEADER_CHANGE_OBSERVED",
+          "description": "Liderul se schimbă cel puțin o dată, cu faptul publicat de 007.",
+          "observed": true,
+          "evidence": "2 eșantioane cu LEADER_ACQUIRED"
+        }
+      ],
+      "keys": [
+        {
+          "key": "cutin_brake_response",
+          "category": "FOLLOWING",
+          "contextId": "v2c-cutin-brake",
+          "label": "Reacția la un vehicul care se bagă în față",
+          "observable": true,
+          "observableFrames": 3,
+          "firstObservableTick": 280,
+          "missingFacets": [],
+          "opportunityKind": null,
+          "constraint": "LEADER"
+        },
+        {
+          "key": "closing_ttc_threshold",
+          "category": "FOLLOWING",
+          "contextId": "v2c-closing-ttc",
+          "label": "Prag de închidere a timpului până la coliziune",
+          "observable": true,
+          "observableFrames": 6,
+          "firstObservableTick": 100,
+          "missingFacets": [],
+          "opportunityKind": null,
+          "constraint": "LEADER"
+        },
+        {
+          "key": "leader_change_delay",
+          "category": "FOLLOWING",
+          "contextId": "v2c-leader-change",
+          "label": "Întârzierea la schimbarea liderului",
+          "observable": true,
+          "observableFrames": 3,
+          "firstObservableTick": 280,
+          "missingFacets": [],
+          "opportunityKind": null,
+          "constraint": "LEADER"
+        },
+        {
+          "key": "following_hysteresis",
+          "category": "FOLLOWING",
+          "contextId": "v2c-following-hysteresis",
+          "label": "Histerezisul distanței de urmărire",
+          "observable": true,
+          "observableFrames": 6,
+          "firstObservableTick": 100,
+          "missingFacets": [],
+          "opportunityKind": null,
+          "constraint": "LEADER"
+        }
+      ],
+      "otherCategoryObservableKeys": [
+        "cruise_accel_deadband",
+        "braking_jerk"
+      ]
+    },
+    {
+      "scenarioId": "signals-red-green-cycle",
+      "category": "SIGNALS",
+      "title": "Ciclu complet de semafor",
+      "frames": 6,
+      "firstTick": 100,
+      "lastTick": 400,
+      "categoryKeys": 4,
+      "observableKeys": 4,
+      "representative": true,
+      "missingKeys": [],
+      "failedTriggers": [],
+      "triggers": [
+        {
+          "id": "RED_TO_GREEN_CYCLE",
+          "description": "Ciclul roșu → verde este observat cu linie de oprire măsurată.",
+          "observed": true,
+          "evidence": "3 roșu, 2 verde, 6 cu linie de oprire"
+        },
+        {
+          "id": "SIGNAL_PHASE_CHANGE_EVENT",
+          "description": "Tranziția de fază este publicată de fluxul real 036.",
+          "observed": true,
+          "evidence": "1 evenimente SIGNAL_PHASE_CHANGED"
+        }
+      ],
+      "keys": [
+        {
+          "key": "yellow_stop_probability",
+          "category": "SIGNALS",
+          "contextId": "v2c-yellow-stop",
+          "label": "Decizia de oprire pe galben",
+          "observable": true,
+          "observableFrames": 2,
+          "firstObservableTick": 340,
+          "missingFacets": [],
+          "opportunityKind": null,
+          "constraint": "NONE"
+        },
+        {
+          "key": "red_run_gap_acceptance",
+          "category": "SIGNALS",
+          "contextId": "v2c-red-run-gap",
+          "label": "Acceptarea unui interval de trecere pe roșu",
+          "observable": true,
+          "observableFrames": 1,
+          "firstObservableTick": 400,
+          "missingFacets": [],
+          "opportunityKind": "RED",
+          "constraint": "NONE"
+        },
+        {
+          "key": "yellow_commit_time",
+          "category": "SIGNALS",
+          "contextId": "v2c-yellow-commit",
+          "label": "Timpul de angajare pe galben",
+          "observable": true,
+          "observableFrames": 2,
+          "firstObservableTick": 340,
+          "missingFacets": [],
+          "opportunityKind": null,
+          "constraint": "NONE"
+        },
+        {
+          "key": "green_launch_acceleration",
+          "category": "SIGNALS",
+          "contextId": "v2c-green-launch",
+          "label": "Accelerația la plecarea pe verde",
+          "observable": true,
+          "observableFrames": 4,
+          "firstObservableTick": 220,
+          "missingFacets": [],
+          "opportunityKind": "GREEN",
+          "constraint": "NONE"
+        }
+      ],
+      "otherCategoryObservableKeys": [
+        "cruise_accel_deadband",
+        "braking_jerk",
+        "launch_intensity",
+        "rolling_stop_speed"
+      ]
+    },
+    {
+      "scenarioId": "stop-priority-conflict",
+      "category": "STOP_PRIORITY",
+      "title": "STOP cu prioritate și conflict",
+      "frames": 6,
+      "firstTick": 100,
+      "lastTick": 400,
+      "categoryKeys": 4,
+      "observableKeys": 4,
+      "representative": true,
+      "missingKeys": [],
+      "failedTriggers": [],
+      "triggers": [
+        {
+          "id": "STOP_APPROACH_AND_FULL_STOP",
+          "description": "Apropierea STOP și oprirea completă sunt ambele publicate.",
+          "observed": true,
+          "evidence": "1 STOP_APPROACH, 1 FULL_STOP"
+        },
+        {
+          "id": "PRIORITY_CONFLICT_SERIES",
+          "description": "Un conflict de prioritate este măsurat în cel puțin două eșantioane.",
+          "observed": true,
+          "evidence": "2 eșantioane cu conflict"
+        }
+      ],
+      "keys": [
+        {
+          "key": "rolling_stop_speed",
+          "category": "STOP_PRIORITY",
+          "contextId": "v2c-rolling-stop",
+          "label": "Viteza la un STOP rostogolit",
+          "observable": true,
+          "observableFrames": 5,
+          "firstObservableTick": 160,
+          "missingFacets": [],
+          "opportunityKind": "STOP",
+          "constraint": "NONE"
+        },
+        {
+          "key": "priority_assertiveness",
+          "category": "STOP_PRIORITY",
+          "contextId": "v2c-priority-assertiveness",
+          "label": "Asertivitatea la cedarea de prioritate",
+          "observable": true,
+          "observableFrames": 2,
+          "firstObservableTick": 340,
+          "missingFacets": [],
+          "opportunityKind": "YIELD",
+          "constraint": "LEADER"
+        },
+        {
+          "key": "allway_stop_patience",
+          "category": "STOP_PRIORITY",
+          "contextId": "v2c-allway-patience",
+          "label": "Răbdarea la o intersecție cu prioritate din toate direcțiile",
+          "observable": true,
+          "observableFrames": 4,
+          "firstObservableTick": 220,
+          "missingFacets": [],
+          "opportunityKind": "STOP",
+          "constraint": "LEADER"
+        },
+        {
+          "key": "blocked_intersection_entry_probability",
+          "category": "STOP_PRIORITY",
+          "contextId": "v2c-blocked-entry",
+          "label": "Intrarea într-o intersecție blocată",
+          "observable": true,
+          "observableFrames": 2,
+          "firstObservableTick": 340,
+          "missingFacets": [],
+          "opportunityKind": "STOP",
+          "constraint": "LEADER"
+        }
+      ],
+      "otherCategoryObservableKeys": [
+        "cruise_accel_deadband",
+        "braking_jerk",
+        "launch_intensity",
+        "closing_ttc_threshold",
+        "following_hysteresis"
+      ]
+    },
+    {
+      "scenarioId": "lane-change-overtake",
+      "category": "LANE_CHANGE",
+      "title": "Depășire cu semnalizare",
+      "frames": 6,
+      "firstTick": 100,
+      "lastTick": 400,
+      "categoryKeys": 4,
+      "observableKeys": 4,
+      "representative": true,
+      "missingKeys": [],
+      "failedTriggers": [],
+      "triggers": [
+        {
+          "id": "LANE_CHANGE_START_AND_COMPLETE",
+          "description": "Manevra are început și final publicate, pentru aceleași benzi.",
+          "observed": true,
+          "evidence": "1 începute, 1 finalizate, 1 perechi"
+        },
+        {
+          "id": "TURN_SIGNAL_BEFORE_MANOEUVRE",
+          "description": "Semnalizarea este prezentă înainte de începerea manevrei.",
+          "observed": true,
+          "evidence": "semnalizare la index 0, manevră la index 2"
+        }
+      ],
+      "keys": [
+        {
+          "key": "lane_change_duration",
+          "category": "LANE_CHANGE",
+          "contextId": "v2c-lane-change-duration",
+          "label": "Durata manevrei de schimbare a benzii",
+          "observable": true,
+          "observableFrames": 1,
+          "firstObservableTick": 340,
+          "missingFacets": [],
+          "opportunityKind": "LANE_CHANGE",
+          "constraint": "NONE"
+        },
+        {
+          "key": "signal_lead_time",
+          "category": "LANE_CHANGE",
+          "contextId": "v2c-signal-lead-time",
+          "label": "Timpul dintre semnalizare și manevră",
+          "observable": true,
+          "observableFrames": 2,
+          "firstObservableTick": 220,
+          "missingFacets": [],
+          "opportunityKind": "LANE_CHANGE",
+          "constraint": "NONE"
+        },
+        {
+          "key": "signal_use_probability",
+          "category": "LANE_CHANGE",
+          "contextId": "v2c-signal-use",
+          "label": "Probabilitatea de a semnaliza",
+          "observable": true,
+          "observableFrames": 1,
+          "firstObservableTick": 220,
+          "missingFacets": [],
+          "opportunityKind": "LANE_CHANGE",
+          "constraint": "NONE"
+        },
+        {
+          "key": "pass_on_right_probability",
+          "category": "LANE_CHANGE",
+          "contextId": "v2c-pass-on-right",
+          "label": "Depășirea prin dreapta",
+          "observable": true,
+          "observableFrames": 4,
+          "firstObservableTick": 220,
+          "missingFacets": [],
+          "opportunityKind": "LANE_CHANGE",
+          "constraint": "LEADER"
+        }
+      ],
+      "otherCategoryObservableKeys": [
+        "overtake_speed_bonus",
+        "cruise_accel_deadband",
+        "closing_ttc_threshold",
+        "following_hysteresis"
+      ]
+    },
+    {
+      "scenarioId": "lateral-curve-tracking",
+      "category": "LATERAL",
+      "title": "Urmărire de curbă și clearance lateral",
+      "frames": 6,
+      "firstTick": 100,
+      "lastTick": 400,
+      "categoryKeys": 8,
+      "observableKeys": 8,
+      "representative": true,
+      "missingKeys": [],
+      "failedTriggers": [],
+      "triggers": [
+        {
+          "id": "CURVATURE_WITH_STEERING",
+          "description": "Curba are curbură măsurată, viraj aplicat și accelerație laterală.",
+          "observed": true,
+          "evidence": "6 cu curbură, 6 cu viraj, 6 cu accelerație laterală"
+        },
+        {
+          "id": "SUSTAINED_LATERAL_LOAD",
+          "description": "Accelerația laterală este susținută în cel puțin trei eșantioane.",
+          "observed": true,
+          "evidence": "6 eșantioane cu accelerație laterală"
+        }
+      ],
+      "keys": [
+        {
+          "key": "lane_center_offset",
+          "category": "LATERAL",
+          "contextId": "v2c-lane-center-offset",
+          "label": "Offsetul față de centrul benzii",
+          "observable": true,
+          "observableFrames": 6,
+          "firstObservableTick": 100,
+          "missingFacets": [],
+          "opportunityKind": null,
+          "constraint": "NONE"
+        },
+        {
+          "key": "steering_response_time",
+          "category": "LATERAL",
+          "contextId": "v2c-steering-response",
+          "label": "Timpul de răspuns al direcției",
+          "observable": true,
+          "observableFrames": 6,
+          "firstObservableTick": 100,
+          "missingFacets": [],
+          "opportunityKind": null,
+          "constraint": "NONE"
+        },
+        {
+          "key": "steering_rate_limit",
+          "category": "LATERAL",
+          "contextId": "v2c-steering-rate",
+          "label": "Limita vitezei de bracare",
+          "observable": true,
+          "observableFrames": 6,
+          "firstObservableTick": 100,
+          "missingFacets": [],
+          "opportunityKind": null,
+          "constraint": "NONE"
+        },
+        {
+          "key": "turn_entry_speed",
+          "category": "LATERAL",
+          "contextId": "v2c-turn-entry-speed",
+          "label": "Viteza de intrare în viraj",
+          "observable": true,
+          "observableFrames": 6,
+          "firstObservableTick": 100,
+          "missingFacets": [],
+          "opportunityKind": null,
+          "constraint": "NONE"
+        },
+        {
+          "key": "turn_exit_acceleration",
+          "category": "LATERAL",
+          "contextId": "v2c-turn-exit-accel",
+          "label": "Accelerația la ieșirea din viraj",
+          "observable": true,
+          "observableFrames": 6,
+          "firstObservableTick": 100,
+          "missingFacets": [],
+          "opportunityKind": null,
+          "constraint": "NONE"
+        },
+        {
+          "key": "corner_cutting_bias",
+          "category": "LATERAL",
+          "contextId": "v2c-corner-cutting",
+          "label": "Tendința de a tăia virajul",
+          "observable": true,
+          "observableFrames": 6,
+          "firstObservableTick": 100,
+          "missingFacets": [],
+          "opportunityKind": null,
+          "constraint": "NONE"
+        },
+        {
+          "key": "lateral_clearance",
+          "category": "LATERAL",
+          "contextId": "v2c-lateral-clearance",
+          "label": "Distanța laterală față de un obstacol",
+          "observable": true,
+          "observableFrames": 1,
+          "firstObservableTick": 400,
+          "missingFacets": [],
+          "opportunityKind": null,
+          "constraint": "IMPACT"
+        },
+        {
+          "key": "lateral_correction_deadband",
+          "category": "LATERAL",
+          "contextId": "v2c-lateral-deadband",
+          "label": "Banda moartă a corecțiilor laterale",
+          "observable": true,
+          "observableFrames": 6,
+          "firstObservableTick": 100,
+          "missingFacets": [],
+          "opportunityKind": null,
+          "constraint": "NONE"
+        }
+      ],
+      "otherCategoryObservableKeys": [
+        "cruise_accel_deadband"
+      ]
+    },
+    {
+      "scenarioId": "routing-blocked-reroute",
+      "category": "ROUTING",
+      "title": "Rerutare și recuperare",
+      "frames": 6,
+      "firstTick": 100,
+      "lastTick": 400,
+      "categoryKeys": 8,
+      "observableKeys": 8,
+      "representative": true,
+      "missingKeys": [],
+      "failedTriggers": [],
+      "triggers": [
+        {
+          "id": "COMPARABLE_ALTERNATIVES",
+          "description": "Planificatorul a evaluat cel puțin două alternative comparabile.",
+          "observed": true,
+          "evidence": "3 alternative evaluate"
+        },
+        {
+          "id": "BLOCKED_THEN_REROUTE",
+          "description": "O bandă blocată este urmată de decizia de rerutare.",
+          "observed": true,
+          "evidence": "blocat true, rerutare true"
+        },
+        {
+          "id": "REVERSE_RECOVERY_OBSERVED",
+          "description": "Recuperarea prin mers înapoi este observată cu viteză măsurată.",
+          "observed": true,
+          "evidence": "1 eșantioane în recuperare, 6 cu viteză"
+        }
+      ],
+      "keys": [
+        {
+          "key": "route_time_weight",
+          "category": "ROUTING",
+          "contextId": "v2c-route-time",
+          "label": "Ponderea timpului în alegerea traseului",
+          "observable": true,
+          "observableFrames": 4,
+          "firstObservableTick": 100,
+          "missingFacets": [],
+          "opportunityKind": null,
+          "constraint": "NONE"
+        },
+        {
+          "key": "route_distance_weight",
+          "category": "ROUTING",
+          "contextId": "v2c-route-distance",
+          "label": "Ponderea distanței în alegerea traseului",
+          "observable": true,
+          "observableFrames": 4,
+          "firstObservableTick": 100,
+          "missingFacets": [],
+          "opportunityKind": null,
+          "constraint": "NONE"
+        },
+        {
+          "key": "route_turn_penalty",
+          "category": "ROUTING",
+          "contextId": "v2c-route-turn-penalty",
+          "label": "Penalizarea virajelor în costul traseului",
+          "observable": true,
+          "observableFrames": 4,
+          "firstObservableTick": 100,
+          "missingFacets": [],
+          "opportunityKind": null,
+          "constraint": "NONE"
+        },
+        {
+          "key": "route_signal_penalty",
+          "category": "ROUTING",
+          "contextId": "v2c-route-signal-penalty",
+          "label": "Penalizarea semafoarelor în costul traseului",
+          "observable": true,
+          "observableFrames": 4,
+          "firstObservableTick": 100,
+          "missingFacets": [],
+          "opportunityKind": null,
+          "constraint": "NONE"
+        },
+        {
+          "key": "route_congestion_penalty",
+          "category": "ROUTING",
+          "contextId": "v2c-route-congestion",
+          "label": "Penalizarea congestiei în costul traseului",
+          "observable": true,
+          "observableFrames": 4,
+          "firstObservableTick": 100,
+          "missingFacets": [],
+          "opportunityKind": null,
+          "constraint": "LEADER"
+        },
+        {
+          "key": "reroute_patience",
+          "category": "ROUTING",
+          "contextId": "v2c-reroute-patience",
+          "label": "Răbdarea înainte de rerutare",
+          "observable": true,
+          "observableFrames": 1,
+          "firstObservableTick": 280,
+          "missingFacets": [],
+          "opportunityKind": null,
+          "constraint": "MECHANICAL_LIMIT"
+        },
+        {
+          "key": "u_turn_willingness",
+          "category": "ROUTING",
+          "contextId": "v2c-u-turn",
+          "label": "Disponibilitatea pentru întoarcere",
+          "observable": true,
+          "observableFrames": 2,
+          "firstObservableTick": 340,
+          "missingFacets": [],
+          "opportunityKind": null,
+          "constraint": "NONE"
+        },
+        {
+          "key": "reverse_recovery_duration",
+          "category": "ROUTING",
+          "contextId": "v2c-reverse-recovery",
+          "label": "Durata recuperării prin mers înapoi",
+          "observable": true,
+          "observableFrames": 1,
+          "firstObservableTick": 400,
+          "missingFacets": [],
+          "opportunityKind": null,
+          "constraint": "MECHANICAL_LIMIT"
+        }
+      ],
+      "otherCategoryObservableKeys": [
+        "cruise_accel_deadband",
+        "braking_jerk",
+        "launch_intensity",
+        "closing_ttc_threshold",
+        "following_hysteresis",
+        "yellow_stop_probability",
+        "red_run_gap_acceptance",
+        "yellow_commit_time",
+        "rolling_stop_speed",
+        "priority_assertiveness",
+        "blocked_intersection_entry_probability",
+        "steering_response_time",
+        "steering_rate_limit",
+        "lateral_clearance"
+      ]
+    },
+    {
+      "scenarioId": "hazards-crosswalk-obstacle",
+      "category": "HAZARDS",
+      "title": "Pieton și obstacol pe bandă",
+      "frames": 6,
+      "firstTick": 100,
+      "lastTick": 400,
+      "categoryKeys": 8,
+      "observableKeys": 8,
+      "representative": true,
+      "missingKeys": [],
+      "failedTriggers": [],
+      "triggers": [
+        {
+          "id": "PEDESTRIAN_OBSERVABLE",
+          "description": "Un pieton activ și observabil este în zona de conflict.",
+          "observed": true,
+          "evidence": "4 eșantioane cu pieton observabil"
+        },
+        {
+          "id": "OBSTACLE_OBSERVABLE",
+          "description": "Un obstacol activ și observabil este pe bandă.",
+          "observed": true,
+          "evidence": "2 eșantioane cu obstacol observabil"
+        },
+        {
+          "id": "HAZARD_RESPONSE",
+          "description": "Răspunsul (frână sau viraj) apare în timpul pericolului.",
+          "observed": true,
+          "evidence": "5 eșantioane cu pericol și răspuns"
+        }
+      ],
+      "keys": [
+        {
+          "key": "pedestrian_yield_probability",
+          "category": "HAZARDS",
+          "contextId": "v2c-pedestrian-yield",
+          "label": "Cedarea către un pieton",
+          "observable": true,
+          "observableFrames": 5,
+          "firstObservableTick": 160,
+          "missingFacets": [],
+          "opportunityKind": null,
+          "constraint": "NONE"
+        },
+        {
+          "key": "pedestrian_clearance",
+          "category": "HAZARDS",
+          "contextId": "v2c-pedestrian-clearance",
+          "label": "Distanța de siguranță față de pieton",
+          "observable": true,
+          "observableFrames": 6,
+          "firstObservableTick": 100,
+          "missingFacets": [],
+          "opportunityKind": null,
+          "constraint": "NONE"
+        },
+        {
+          "key": "hazard_reaction_delay",
+          "category": "HAZARDS",
+          "contextId": "v2c-hazard-reaction",
+          "label": "Întârzierea de reacție la pericol",
+          "observable": true,
+          "observableFrames": 5,
+          "firstObservableTick": 160,
+          "missingFacets": [],
+          "opportunityKind": null,
+          "constraint": "NONE"
+        },
+        {
+          "key": "obstacle_clearance",
+          "category": "HAZARDS",
+          "contextId": "v2c-obstacle-clearance",
+          "label": "Distanța față de un obstacol",
+          "observable": true,
+          "observableFrames": 3,
+          "firstObservableTick": 280,
+          "missingFacets": [],
+          "opportunityKind": null,
+          "constraint": "NONE"
+        },
+        {
+          "key": "emergency_brake_intensity",
+          "category": "HAZARDS",
+          "contextId": "v2c-emergency-brake",
+          "label": "Intensitatea frânei de urgență",
+          "observable": true,
+          "observableFrames": 3,
+          "firstObservableTick": 280,
+          "missingFacets": [],
+          "opportunityKind": null,
+          "constraint": "IMPACT"
+        },
+        {
+          "key": "evasive_steer_willingness",
+          "category": "HAZARDS",
+          "contextId": "v2c-evasive-steer",
+          "label": "Disponibilitatea pentru viraj de evitare",
+          "observable": true,
+          "observableFrames": 2,
+          "firstObservableTick": 280,
+          "missingFacets": [],
+          "opportunityKind": null,
+          "constraint": "IMPACT"
+        },
+        {
+          "key": "crosswalk_approach_speed",
+          "category": "HAZARDS",
+          "contextId": "v2c-crosswalk-approach",
+          "label": "Viteza de apropiere de trecerea de pietoni",
+          "observable": true,
+          "observableFrames": 6,
+          "firstObservableTick": 100,
+          "missingFacets": [],
+          "opportunityKind": null,
+          "constraint": "NONE"
+        },
+        {
+          "key": "horn_use_probability",
+          "category": "HAZARDS",
+          "contextId": "v2c-horn-use",
+          "label": "Folosirea claxonului într-o oportunitate",
+          "observable": true,
+          "observableFrames": 1,
+          "firstObservableTick": 400,
+          "missingFacets": [],
+          "opportunityKind": null,
+          "constraint": "NONE"
+        }
+      ],
+      "otherCategoryObservableKeys": [
+        "cruise_accel_deadband",
+        "braking_jerk",
+        "launch_intensity",
+        "rolling_stop_speed",
+        "steering_response_time",
+        "steering_rate_limit"
+      ]
+    },
+    {
+      "scenarioId": "service-pickup-dropoff",
+      "category": "SERVICE",
+      "title": "Pickup și dropoff cu pasager",
+      "frames": 6,
+      "firstTick": 100,
+      "lastTick": 400,
+      "categoryKeys": 8,
+      "observableKeys": 8,
+      "representative": true,
+      "missingKeys": [],
+      "failedTriggers": [],
+      "triggers": [
+        {
+          "id": "PICKUP_AND_DROPOFF_EVENTS",
+          "description": "Ambele capete ale cursei sunt publicate de FSM-ul real 061.",
+          "observed": true,
+          "evidence": "1 PICKUP, 1 DROPOFF"
+        },
+        {
+          "id": "PASSENGER_ONBOARD_SEGMENT",
+          "description": "Segmentul cu pasager este măsurat cu accelerații și viteză.",
+          "observed": true,
+          "evidence": "2 eșantioane cu pasager la bord"
+        }
+      ],
+      "keys": [
+        {
+          "key": "pickup_approach_speed",
+          "category": "SERVICE",
+          "contextId": "v2c-pickup-approach",
+          "label": "Viteza de apropiere de pickup",
+          "observable": true,
+          "observableFrames": 6,
+          "firstObservableTick": 100,
+          "missingFacets": [],
+          "opportunityKind": null,
+          "constraint": "NONE"
+        },
+        {
+          "key": "pickup_curb_distance",
+          "category": "SERVICE",
+          "contextId": "v2c-pickup-curb",
+          "label": "Distanța la bordură la pickup",
+          "observable": true,
+          "observableFrames": 6,
+          "firstObservableTick": 100,
+          "missingFacets": [],
+          "opportunityKind": null,
+          "constraint": "NONE"
+        },
+        {
+          "key": "pickup_stop_precision",
+          "category": "SERVICE",
+          "contextId": "v2c-pickup-precision",
+          "label": "Precizia opririi la pickup",
+          "observable": true,
+          "observableFrames": 4,
+          "firstObservableTick": 220,
+          "missingFacets": [],
+          "opportunityKind": null,
+          "constraint": "NONE"
+        },
+        {
+          "key": "pickup_dwell_time",
+          "category": "SERVICE",
+          "contextId": "v2c-pickup-dwell",
+          "label": "Timpul de staționare la pickup",
+          "observable": true,
+          "observableFrames": 2,
+          "firstObservableTick": 220,
+          "missingFacets": [],
+          "opportunityKind": null,
+          "constraint": "NONE"
+        },
+        {
+          "key": "dropoff_approach_speed",
+          "category": "SERVICE",
+          "contextId": "v2c-dropoff-approach",
+          "label": "Viteza de apropiere de dropoff",
+          "observable": true,
+          "observableFrames": 3,
+          "firstObservableTick": 280,
+          "missingFacets": [],
+          "opportunityKind": null,
+          "constraint": "NONE"
+        },
+        {
+          "key": "dropoff_curb_distance",
+          "category": "SERVICE",
+          "contextId": "v2c-dropoff-curb",
+          "label": "Distanța la bordură la dropoff",
+          "observable": true,
+          "observableFrames": 2,
+          "firstObservableTick": 340,
+          "missingFacets": [],
+          "opportunityKind": null,
+          "constraint": "NONE"
+        },
+        {
+          "key": "occupied_acceleration_scale",
+          "category": "SERVICE",
+          "contextId": "v2c-occupied-accel",
+          "label": "Scalarea accelerației cu pasager",
+          "observable": true,
+          "observableFrames": 3,
+          "firstObservableTick": 280,
+          "missingFacets": [],
+          "opportunityKind": null,
+          "constraint": "NONE"
+        },
+        {
+          "key": "occupied_lateral_accel_scale",
+          "category": "SERVICE",
+          "contextId": "v2c-occupied-lateral",
+          "label": "Scalarea accelerației laterale cu pasager",
+          "observable": true,
+          "observableFrames": 3,
+          "firstObservableTick": 280,
+          "missingFacets": [],
+          "opportunityKind": null,
+          "constraint": "NONE"
+        }
+      ],
+      "otherCategoryObservableKeys": [
+        "cruise_accel_deadband",
+        "braking_jerk",
+        "turn_exit_acceleration"
+      ]
+    }
+  ],
+  "control": {
+    "version": "163-v2-contexts-v1",
+    "scenarioId": "control-flat-cruise",
+    "category": null,
+    "title": "Control: croazieră urbană uniformă",
+    "frames": 4,
+    "firstTick": 100,
+    "lastTick": 280,
+    "categoryKeys": 56,
+    "observableKeys": 0,
+    "keys": [],
+    "triggers": [],
+    "representative": false,
+    "missingKeys": [
+      "speed_delta_arterial",
+      "cruise_speed_variability",
+      "overtake_speed_bonus",
+      "cruise_accel_deadband",
+      "braking_jerk",
+      "throttle_release_delay",
+      "launch_intensity",
+      "coasting_bias",
+      "cutin_brake_response",
+      "closing_ttc_threshold",
+      "leader_change_delay",
+      "following_hysteresis",
+      "yellow_stop_probability",
+      "red_run_gap_acceptance",
+      "yellow_commit_time",
+      "green_launch_acceleration",
+      "rolling_stop_speed",
+      "priority_assertiveness",
+      "allway_stop_patience",
+      "blocked_intersection_entry_probability",
+      "lane_change_duration",
+      "signal_lead_time",
+      "signal_use_probability",
+      "pass_on_right_probability",
+      "lane_center_offset",
+      "steering_response_time",
+      "steering_rate_limit",
+      "turn_entry_speed",
+      "turn_exit_acceleration",
+      "corner_cutting_bias",
+      "lateral_clearance",
+      "lateral_correction_deadband",
+      "route_time_weight",
+      "route_distance_weight",
+      "route_turn_penalty",
+      "route_signal_penalty",
+      "route_congestion_penalty",
+      "reroute_patience",
+      "u_turn_willingness",
+      "reverse_recovery_duration",
+      "pedestrian_yield_probability",
+      "pedestrian_clearance",
+      "hazard_reaction_delay",
+      "obstacle_clearance",
+      "emergency_brake_intensity",
+      "evasive_steer_willingness",
+      "crosswalk_approach_speed",
+      "horn_use_probability",
+      "pickup_approach_speed",
+      "pickup_curb_distance",
+      "pickup_stop_precision",
+      "pickup_dwell_time",
+      "dropoff_approach_speed",
+      "dropoff_curb_distance",
+      "occupied_acceleration_scale",
+      "occupied_lateral_accel_scale"
+    ],
+    "failedTriggers": []
+  },
+  "contextTable": [
+    {
+      "key": "speed_delta_arterial",
+      "category": "SPEED",
+      "categoryTitle": "Viteză și ritm",
+      "contextId": "v2c-arterial-cruise",
+      "label": "Croazieră pe arteră, fără lider",
+      "scenarioId": "speed-arterial-rhythm",
+      "requires": [
+        "ROAD_TYPE_ARTERIAL",
+        "SPEED_MEASURED"
+      ],
+      "opportunityKind": null,
+      "constraint": "NONE",
+      "manual": {
+        "setup": "Pornește un taxi în LEARNING pe o arteră cu limită ridicată și fără trafic în față.",
+        "action": "Menține 20–30 s o viteză constantă, fără frână și fără schimbare de bandă.",
+        "evidence": "Eșantioane cu roadType ARTERIAL, viteza peste 5 m/s și leaderId null."
+      }
+    },
+    {
+      "key": "cruise_speed_variability",
+      "category": "SPEED",
+      "categoryTitle": "Viteză și ritm",
+      "contextId": "v2c-cruise-variability",
+      "label": "Variație naturală a vitezei de croazieră",
+      "scenarioId": "speed-arterial-rhythm",
+      "requires": [
+        "SPEED_MEASURED",
+        "LONGITUDINAL_ACCEL",
+        "COASTING"
+      ],
+      "opportunityKind": null,
+      "constraint": "NONE",
+      "manual": {
+        "setup": "Rulează în LEARNING pe același drum drept, cu banda liberă.",
+        "action": "Lasă accelerația să varieze natural câteva secunde, apoi ridică piciorul de pe accelerație.",
+        "evidence": "Cel puțin un eșantion cu throttle 0 și brake 0 la viteză peste 1 m/s, plus accelerație longitudinală nenulă."
+      }
+    },
+    {
+      "key": "overtake_speed_bonus",
+      "category": "SPEED",
+      "categoryTitle": "Viteză și ritm",
+      "contextId": "v2c-overtake-bonus",
+      "label": "Bonus de viteză la depășire",
+      "scenarioId": "speed-arterial-rhythm",
+      "requires": [
+        "LEADER_GAP",
+        "LANE_CHANGE_OPEN",
+        "THROTTLE_INPUT"
+      ],
+      "opportunityKind": null,
+      "constraint": "NONE",
+      "manual": {
+        "setup": "Așază-te în spatele unui vehicul mai lent, pe o bandă cu a doua bandă liberă.",
+        "action": "Semnalizează, schimbă banda și depășește vehiculul din față.",
+        "evidence": "Eșantion cu lider măsurat, eveniment LANE_CHANGE_STARTED și throttle peste 0 în aceeași fereastră."
+      }
+    },
+    {
+      "key": "cruise_accel_deadband",
+      "category": "SPEED",
+      "categoryTitle": "Viteză și ritm",
+      "contextId": "v2c-accel-deadband",
+      "label": "Bandă moartă a accelerației de croazieră",
+      "scenarioId": "speed-arterial-rhythm",
+      "requires": [
+        "THROTTLE_INPUT",
+        "SPEED_MEASURED",
+        "LONGITUDINAL_ACCEL"
+      ],
+      "opportunityKind": null,
+      "constraint": "NONE",
+      "manual": {
+        "setup": "Rulează în LEARNING la viteză de croazieră pe drum drept.",
+        "action": "Ține accelerația aproape constantă, cu mici corecții sub 10 %.",
+        "evidence": "Eșantioane consecutive cu throttle peste 0, viteză peste 5 m/s și accelerație longitudinală mică, dar nenulă."
+      }
+    },
+    {
+      "key": "braking_jerk",
+      "category": "LONGITUDINAL",
+      "categoryTitle": "Accelerație și frânare",
+      "contextId": "v2c-braking-jerk",
+      "label": "Jerk la intrarea în frână",
+      "scenarioId": "longitudinal-coast-brake",
+      "requires": [
+        "BRAKE_INPUT",
+        "LONGITUDINAL_ACCEL"
+      ],
+      "opportunityKind": null,
+      "constraint": "NONE",
+      "manual": {
+        "setup": "Abordează o intersecție cu semafor roșu, la viteză de oraș.",
+        "action": "Apasă frâna progresiv până la oprire, fără să eliberezi brusc pedala.",
+        "evidence": "Eșantioane cu brake peste 0 și accelerație longitudinală negativă în aceeași fereastră."
+      }
+    },
+    {
+      "key": "throttle_release_delay",
+      "category": "LONGITUDINAL",
+      "categoryTitle": "Accelerație și frânare",
+      "contextId": "v2c-throttle-release",
+      "label": "Întârzierea ridicării accelerației",
+      "scenarioId": "longitudinal-coast-brake",
+      "requires": [
+        "COASTING",
+        "LEADER_GAP"
+      ],
+      "opportunityKind": null,
+      "constraint": "LEADER",
+      "manual": {
+        "setup": "Intră în urmărirea unui vehicul mai lent, cu spațiu de 15–25 m.",
+        "action": "Ridică accelerația când spațiul scade, apoi rulează în coasting înainte de a frâna.",
+        "evidence": "Eșantion cu lider măsurat, throttle 0 și brake 0 la viteză peste 1 m/s."
+      }
+    },
+    {
+      "key": "launch_intensity",
+      "category": "LONGITUDINAL",
+      "categoryTitle": "Accelerație și frânare",
+      "contextId": "v2c-launch-intensity",
+      "label": "Intensitatea plecării de pe loc",
+      "scenarioId": "longitudinal-coast-brake",
+      "requires": [
+        "THROTTLE_INPUT",
+        "LONGITUDINAL_ACCEL",
+        "STOP_LINE"
+      ],
+      "opportunityKind": null,
+      "constraint": "NONE",
+      "manual": {
+        "setup": "Oprește complet la o linie STOP sau la un semafor verde.",
+        "action": "Pleacă de pe loc cu accelerație moderată, fără patinare.",
+        "evidence": "Eșantioane cu linie de oprire măsurată, throttle peste 0 și accelerație longitudinală pozitivă."
+      }
+    },
+    {
+      "key": "coasting_bias",
+      "category": "LONGITUDINAL",
+      "categoryTitle": "Accelerație și frânare",
+      "contextId": "v2c-coasting-bias",
+      "label": "Preferința pentru coasting",
+      "scenarioId": "longitudinal-coast-brake",
+      "requires": [
+        "COASTING",
+        "SPEED_MEASURED",
+        "LONGITUDINAL_ACCEL"
+      ],
+      "opportunityKind": null,
+      "constraint": "NONE",
+      "manual": {
+        "setup": "Rulează pe un drum drept, cu o coborâre ușoară sau o apropiere de intersecție.",
+        "action": "Eliberează complet accelerația și lasă mașina să încetinească singură câteva secunde.",
+        "evidence": "Cel puțin două eșantioane cu throttle 0, brake 0 și viteză peste 1 m/s."
+      }
+    },
+    {
+      "key": "cutin_brake_response",
+      "category": "FOLLOWING",
+      "categoryTitle": "Urmărire și distanțe",
+      "contextId": "v2c-cutin-brake",
+      "label": "Reacția la un vehicul care se bagă în față",
+      "scenarioId": "following-leader-gap",
+      "requires": [
+        "LEADER_GAP",
+        "BRAKE_INPUT",
+        "LEADER_CHANGE"
+      ],
+      "opportunityKind": null,
+      "constraint": "LEADER",
+      "manual": {
+        "setup": "Rulează în urmărirea unui lider, cu un al doilea vehicul pe banda alăturată.",
+        "action": "Lasă vehiculul lateral să intre în față și frânează ca să refaci spațiul.",
+        "evidence": "Eveniment LEADER_ACQUIRED, lider măsurat în eșantion și brake peste 0 imediat după."
+      }
+    },
+    {
+      "key": "closing_ttc_threshold",
+      "category": "FOLLOWING",
+      "categoryTitle": "Urmărire și distanțe",
+      "contextId": "v2c-closing-ttc",
+      "label": "Prag de închidere a timpului până la coliziune",
+      "scenarioId": "following-leader-gap",
+      "requires": [
+        "LEADER_GAP",
+        "SPEED_MEASURED",
+        "LONGITUDINAL_ACCEL"
+      ],
+      "opportunityKind": null,
+      "constraint": "LEADER",
+      "manual": {
+        "setup": "Apropie-te de un lider care merge cu 3–5 m/s mai încet.",
+        "action": "Menține apropierea fără să frânezi până când spațiul devine incomod, apoi reglează.",
+        "evidence": "Eșantioane consecutive cu lider, viteză peste 5 m/s și spațiu în scădere."
+      }
+    },
+    {
+      "key": "leader_change_delay",
+      "category": "FOLLOWING",
+      "categoryTitle": "Urmărire și distanțe",
+      "contextId": "v2c-leader-change",
+      "label": "Întârzierea la schimbarea liderului",
+      "scenarioId": "following-leader-gap",
+      "requires": [
+        "LEADER_CHANGE",
+        "LEADER_GAP"
+      ],
+      "opportunityKind": null,
+      "constraint": "LEADER",
+      "manual": {
+        "setup": "Urmează un lider care părăsește banda (virează) și lasă loc unui al doilea lider.",
+        "action": "Continuă fără să accelerezi până când noul lider este confirmat.",
+        "evidence": "Două evenimente LEADER_ACQUIRED cu id-uri diferite și lider măsurat în eșantionul din aceeași fereastră."
+      }
+    },
+    {
+      "key": "following_hysteresis",
+      "category": "FOLLOWING",
+      "categoryTitle": "Urmărire și distanțe",
+      "contextId": "v2c-following-hysteresis",
+      "label": "Histerezisul distanței de urmărire",
+      "scenarioId": "following-leader-gap",
+      "requires": [
+        "LEADER_GAP",
+        "SPEED_MEASURED",
+        "LONGITUDINAL_ACCEL"
+      ],
+      "opportunityKind": null,
+      "constraint": "LEADER",
+      "manual": {
+        "setup": "Urmează un lider care își variază ușor viteza, pe o bandă dreaptă.",
+        "action": "Lasă spațiul să oscileze și corectează doar când se atinge limita de confort.",
+        "evidence": "Cel puțin trei eșantioane cu lider și accelerație longitudinală atât pozitivă, cât și negativă."
+      }
+    },
+    {
+      "key": "yellow_stop_probability",
+      "category": "SIGNALS",
+      "categoryTitle": "Semafoare",
+      "contextId": "v2c-yellow-stop",
+      "label": "Decizia de oprire pe galben",
+      "scenarioId": "signals-red-green-cycle",
+      "requires": [
+        "SIGNAL_YELLOW",
+        "STOP_LINE"
+      ],
+      "opportunityKind": null,
+      "constraint": "NONE",
+      "manual": {
+        "setup": "Abordează o intersecție semaforizată la 40–60 m, cu semaforul verde.",
+        "action": "Continuă până când semaforul devine galben, apoi decide oprirea sau trecerea.",
+        "evidence": "Eșantioane cu signalState YELLOW și distanță la linia de oprire măsurată."
+      }
+    },
+    {
+      "key": "red_run_gap_acceptance",
+      "category": "SIGNALS",
+      "categoryTitle": "Semafoare",
+      "contextId": "v2c-red-run-gap",
+      "label": "Acceptarea unui interval de trecere pe roșu",
+      "scenarioId": "signals-red-green-cycle",
+      "requires": [
+        "SIGNAL_RED",
+        "STOP_LINE",
+        "CONFLICT"
+      ],
+      "opportunityKind": "RED",
+      "constraint": "NONE",
+      "manual": {
+        "setup": "Stai la roșu, cu un vehicul care traversează pe direcția conflictuală.",
+        "action": "Așteaptă roșul și evaluează dacă intervalul dintre vehicule permite trecerea.",
+        "evidence": "Oportunitate RED cu linie de oprire măsurată și conflict activ în aceeași fereastră."
+      }
+    },
+    {
+      "key": "yellow_commit_time",
+      "category": "SIGNALS",
+      "categoryTitle": "Semafoare",
+      "contextId": "v2c-yellow-commit",
+      "label": "Timpul de angajare pe galben",
+      "scenarioId": "signals-red-green-cycle",
+      "requires": [
+        "SIGNAL_YELLOW",
+        "SPEED_MEASURED",
+        "STOP_LINE"
+      ],
+      "opportunityKind": null,
+      "constraint": "NONE",
+      "manual": {
+        "setup": "Apropie-te de intersecție cu 8–12 m/s, la 30 m de linie.",
+        "action": "Menține viteza când apare galbenul, fără frână bruscă.",
+        "evidence": "Eșantioane cu signalState YELLOW, viteză peste 5 m/s și linie de oprire măsurată."
+      }
+    },
+    {
+      "key": "green_launch_acceleration",
+      "category": "SIGNALS",
+      "categoryTitle": "Semafoare",
+      "contextId": "v2c-green-launch",
+      "label": "Accelerația la plecarea pe verde",
+      "scenarioId": "signals-red-green-cycle",
+      "requires": [
+        "SIGNAL_GREEN",
+        "THROTTLE_INPUT",
+        "LONGITUDINAL_ACCEL"
+      ],
+      "opportunityKind": "GREEN",
+      "constraint": "NONE",
+      "manual": {
+        "setup": "Fii primul în coadă la un semafor roșu, în LEARNING.",
+        "action": "Pleacă imediat ce semaforul devine verde, cu accelerație constantă.",
+        "evidence": "Oportunitate GREEN urmată de eșantioane cu throttle peste 0 și accelerație longitudinală pozitivă."
+      }
+    },
+    {
+      "key": "rolling_stop_speed",
+      "category": "STOP_PRIORITY",
+      "categoryTitle": "STOP și prioritate",
+      "contextId": "v2c-rolling-stop",
+      "label": "Viteza la un STOP rostogolit",
+      "scenarioId": "stop-priority-conflict",
+      "requires": [
+        "STOP_LINE",
+        "SPEED_MEASURED",
+        "BRAKE_INPUT"
+      ],
+      "opportunityKind": "STOP",
+      "constraint": "NONE",
+      "manual": {
+        "setup": "Abordează o intersecție fără semafor, cu linie STOP marcată.",
+        "action": "Ridică accelerația devreme și rulează prin zonă fără oprire completă.",
+        "evidence": "Oportunitate STOP cu viteză peste 0.5 m/s la linie și brake peste 0 în apropiere."
+      }
+    },
+    {
+      "key": "priority_assertiveness",
+      "category": "STOP_PRIORITY",
+      "categoryTitle": "STOP și prioritate",
+      "contextId": "v2c-priority-assertiveness",
+      "label": "Asertivitatea la cedarea de prioritate",
+      "scenarioId": "stop-priority-conflict",
+      "requires": [
+        "CONFLICT",
+        "LEADER_GAP"
+      ],
+      "opportunityKind": "YIELD",
+      "constraint": "LEADER",
+      "manual": {
+        "setup": "Ajunge la o intersecție cu prioritate din toate direcțiile, cu un vehicul care are prioritate.",
+        "action": "Alege să insiști sau să cedezi, în funcție de intervalul disponibil.",
+        "evidence": "Stimul YIELD cu id-uri de relație și lider măsurat în aceeași fereastră."
+      }
+    },
+    {
+      "key": "allway_stop_patience",
+      "category": "STOP_PRIORITY",
+      "categoryTitle": "STOP și prioritate",
+      "contextId": "v2c-allway-patience",
+      "label": "Răbdarea la o intersecție cu prioritate din toate direcțiile",
+      "scenarioId": "stop-priority-conflict",
+      "requires": [
+        "STOP_LINE",
+        "LEADER_QUEUE"
+      ],
+      "opportunityKind": "STOP",
+      "constraint": "LEADER",
+      "manual": {
+        "setup": "Ajunge al doilea la o intersecție cu prioritate din toate direcțiile.",
+        "action": "Așteaptă oprirea liderului din față înainte de a intra în intersecție.",
+        "evidence": "Oportunitate STOP cu lider oprit în față, sub pragul de standstill."
+      }
+    },
+    {
+      "key": "blocked_intersection_entry_probability",
+      "category": "STOP_PRIORITY",
+      "categoryTitle": "STOP și prioritate",
+      "contextId": "v2c-blocked-entry",
+      "label": "Intrarea într-o intersecție blocată",
+      "scenarioId": "stop-priority-conflict",
+      "requires": [
+        "CONFLICT",
+        "STOP_LINE",
+        "LEADER_GAP"
+      ],
+      "opportunityKind": "STOP",
+      "constraint": "LEADER",
+      "manual": {
+        "setup": "Intersecție aglomerată, cu coadă care blochează ieșirea.",
+        "action": "Hotărăște dacă intri în intersecție sau aștepți eliberarea ei.",
+        "evidence": "Linie de oprire măsurată, conflict activ și lider în aceeași fereastră."
+      }
+    },
+    {
+      "key": "lane_change_duration",
+      "category": "LANE_CHANGE",
+      "categoryTitle": "Schimbare de bandă și depășire",
+      "contextId": "v2c-lane-change-duration",
+      "label": "Durata manevrei de schimbare a benzii",
+      "scenarioId": "lane-change-overtake",
+      "requires": [
+        "LANE_CHANGE_OPEN",
+        "LANE_CHANGE_CLOSED"
+      ],
+      "opportunityKind": "LANE_CHANGE",
+      "constraint": "NONE",
+      "manual": {
+        "setup": "Rulează pe un bulevard cu două benzi pe sens, banda din dreapta liberă.",
+        "action": "Semnalizează și schimbă banda o singură dată, lin, fără corecții.",
+        "evidence": "Evenimente LANE_CHANGE_STARTED și LANE_CHANGE_COMPLETED pentru aceeași bandă sursă și destinație."
+      }
+    },
+    {
+      "key": "signal_lead_time",
+      "category": "LANE_CHANGE",
+      "categoryTitle": "Schimbare de bandă și depășire",
+      "contextId": "v2c-signal-lead-time",
+      "label": "Timpul dintre semnalizare și manevră",
+      "scenarioId": "lane-change-overtake",
+      "requires": [
+        "LANE_CHANGE_OPEN",
+        "TURN_SIGNAL",
+        "STEERING_INPUT"
+      ],
+      "opportunityKind": "LANE_CHANGE",
+      "constraint": "NONE",
+      "manual": {
+        "setup": "Pregătește o depășire pe un drum cu două benzi.",
+        "action": "Semnalizează cu câteva secunde înainte de a începe virajul de bandă.",
+        "evidence": "Eșantion cu turnSignal LEFT/RIGHT înainte de LANE_CHANGE_STARTED și viraj peste 0."
+      }
+    },
+    {
+      "key": "signal_use_probability",
+      "category": "LANE_CHANGE",
+      "categoryTitle": "Schimbare de bandă și depășire",
+      "contextId": "v2c-signal-use",
+      "label": "Probabilitatea de a semnaliza",
+      "scenarioId": "lane-change-overtake",
+      "requires": [
+        "LANE_CHANGE_OPEN",
+        "TURN_SIGNAL"
+      ],
+      "opportunityKind": "LANE_CHANGE",
+      "constraint": "NONE",
+      "manual": {
+        "setup": "Ai de făcut o schimbare de bandă pe un drum liber.",
+        "action": "Alege conștient dacă semnalizezi sau nu înainte de manevră.",
+        "evidence": "Eveniment LANE_CHANGE_STARTED cu turnSignal LEFT/RIGHT în eșantionul din aceeași fereastră."
+      }
+    },
+    {
+      "key": "pass_on_right_probability",
+      "category": "LANE_CHANGE",
+      "categoryTitle": "Schimbare de bandă și depășire",
+      "contextId": "v2c-pass-on-right",
+      "label": "Depășirea prin dreapta",
+      "scenarioId": "lane-change-overtake",
+      "requires": [
+        "LANE_CHANGE_OPEN",
+        "LEADER_GAP",
+        "THROTTLE_INPUT"
+      ],
+      "opportunityKind": "LANE_CHANGE",
+      "constraint": "LEADER",
+      "manual": {
+        "setup": "Un vehicul lent ocupă banda din stânga pe un drum cu două benzi.",
+        "action": "Continuă pe banda din dreapta și depășește prin dreapta.",
+        "evidence": "Lider măsurat, LANE_CHANGE_STARTED în aceeași fereastră și throttle peste 0."
+      }
+    },
+    {
+      "key": "lane_center_offset",
+      "category": "LATERAL",
+      "categoryTitle": "Control lateral și viraje",
+      "contextId": "v2c-lane-center-offset",
+      "label": "Offsetul față de centrul benzii",
+      "scenarioId": "lateral-curve-tracking",
+      "requires": [
+        "STEERING_INPUT",
+        "CURVATURE",
+        "LATERAL_ACCEL"
+      ],
+      "opportunityKind": null,
+      "constraint": "NONE",
+      "manual": {
+        "setup": "Intră într-o curbă de rază medie, pe o bandă marcată.",
+        "action": "Parcurge curba cu corecții mici, fără să atingi marcajul.",
+        "evidence": "Eșantioane cu curbură nenulă, viraj nenul și accelerație laterală măsurată."
+      }
+    },
+    {
+      "key": "steering_response_time",
+      "category": "LATERAL",
+      "categoryTitle": "Control lateral și viraje",
+      "contextId": "v2c-steering-response",
+      "label": "Timpul de răspuns al direcției",
+      "scenarioId": "lateral-curve-tracking",
+      "requires": [
+        "STEERING_INPUT",
+        "LATERAL_ACCEL"
+      ],
+      "opportunityKind": null,
+      "constraint": "NONE",
+      "manual": {
+        "setup": "Rulează pe un drum drept, apoi intră într-o curbă ușoară.",
+        "action": "Aplică o corecție scurtă de direcție și observă când apare accelerația laterală.",
+        "evidence": "Eșantioane cu viraj nenul și accelerație laterală nenulă în aceeași fereastră."
+      }
+    },
+    {
+      "key": "steering_rate_limit",
+      "category": "LATERAL",
+      "categoryTitle": "Control lateral și viraje",
+      "contextId": "v2c-steering-rate",
+      "label": "Limita vitezei de bracare",
+      "scenarioId": "lateral-curve-tracking",
+      "requires": [
+        "STEERING_INPUT",
+        "LATERAL_ACCEL",
+        "SPEED_MEASURED"
+      ],
+      "opportunityKind": null,
+      "constraint": "NONE",
+      "manual": {
+        "setup": "Abordează o curbă strânsă la 50–60 km/h.",
+        "action": "Braciază rapid la intrare și menține direcția prin curbă.",
+        "evidence": "Eșantioane cu viteză peste 5 m/s, viraj nenul și accelerație laterală măsurată."
+      }
+    },
+    {
+      "key": "turn_entry_speed",
+      "category": "LATERAL",
+      "categoryTitle": "Control lateral și viraje",
+      "contextId": "v2c-turn-entry-speed",
+      "label": "Viteza de intrare în viraj",
+      "scenarioId": "lateral-curve-tracking",
+      "requires": [
+        "CURVATURE",
+        "SPEED_MEASURED",
+        "STEERING_INPUT"
+      ],
+      "opportunityKind": null,
+      "constraint": "NONE",
+      "manual": {
+        "setup": "Apropie-te de un viraj de 90 de grade, cu vizibilitate bună.",
+        "action": "Frânează înainte de viraj și intră cu viteză constantă.",
+        "evidence": "Eșantioane cu curbură peste prag, viteză peste 5 m/s și viraj nenul."
+      }
+    },
+    {
+      "key": "turn_exit_acceleration",
+      "category": "LATERAL",
+      "categoryTitle": "Control lateral și viraje",
+      "contextId": "v2c-turn-exit-accel",
+      "label": "Accelerația la ieșirea din viraj",
+      "scenarioId": "lateral-curve-tracking",
+      "requires": [
+        "CURVATURE",
+        "LONGITUDINAL_ACCEL",
+        "THROTTLE_INPUT"
+      ],
+      "opportunityKind": null,
+      "constraint": "NONE",
+      "manual": {
+        "setup": "Ieși dintr-un viraj de 90 de grade pe un drum drept.",
+        "action": "Accelerează progresiv după ce direcția este stabilizată.",
+        "evidence": "Eșantioane cu curbură măsurată, throttle peste 0 și accelerație longitudinală pozitivă."
+      }
+    },
+    {
+      "key": "corner_cutting_bias",
+      "category": "LATERAL",
+      "categoryTitle": "Control lateral și viraje",
+      "contextId": "v2c-corner-cutting",
+      "label": "Tendința de a tăia virajul",
+      "scenarioId": "lateral-curve-tracking",
+      "requires": [
+        "CURVATURE",
+        "STEERING_INPUT",
+        "LATERAL_ACCEL"
+      ],
+      "opportunityKind": null,
+      "constraint": "NONE",
+      "manual": {
+        "setup": "Virează la stânga într-o intersecție fără trafic.",
+        "action": "Alege traiectoria: arcuiește larg sau taie colțul.",
+        "evidence": "Eșantioane cu curbură mare, viraj susținut și accelerație laterală măsurată."
+      }
+    },
+    {
+      "key": "lateral_clearance",
+      "category": "LATERAL",
+      "categoryTitle": "Control lateral și viraje",
+      "contextId": "v2c-lateral-clearance",
+      "label": "Distanța laterală față de un obstacol",
+      "scenarioId": "lateral-curve-tracking",
+      "requires": [
+        "CONFLICT",
+        "LATERAL_ACCEL",
+        "STEERING_INPUT"
+      ],
+      "opportunityKind": null,
+      "constraint": "IMPACT",
+      "manual": {
+        "setup": "Treacă pe lângă un vehicul oprit pe marginea benzii.",
+        "action": "Alege cât de aproape treci și corectează direcția.",
+        "evidence": "Conflict activ în eșantion, viraj nenul și accelerație laterală măsurată."
+      }
+    },
+    {
+      "key": "lateral_correction_deadband",
+      "category": "LATERAL",
+      "categoryTitle": "Control lateral și viraje",
+      "contextId": "v2c-lateral-deadband",
+      "label": "Banda moartă a corecțiilor laterale",
+      "scenarioId": "lateral-curve-tracking",
+      "requires": [
+        "STEERING_INPUT",
+        "CURVATURE",
+        "LATERAL_ACCEL"
+      ],
+      "opportunityKind": null,
+      "constraint": "NONE",
+      "manual": {
+        "setup": "Rulează pe un drum drept, cu derivă mică spre marginea benzii.",
+        "action": "Lasă deriva să crească și corectează doar când este vizibilă.",
+        "evidence": "Eșantioane cu viraj mic, curbură măsurată și accelerație laterală nenulă."
+      }
+    },
+    {
+      "key": "route_time_weight",
+      "category": "ROUTING",
+      "categoryTitle": "Trasee și recuperare",
+      "contextId": "v2c-route-time",
+      "label": "Ponderea timpului în alegerea traseului",
+      "scenarioId": "routing-blocked-reroute",
+      "requires": [
+        "ROUTE_ALTERNATIVE",
+        "ROUTE_SIGNAL"
+      ],
+      "opportunityKind": null,
+      "constraint": "NONE",
+      "manual": {
+        "setup": "Pornește o cursă cu două trasee comparabile, unul cu mai puține semafoare.",
+        "action": "Lasă planificatorul să aleagă și repetă cursa de trei ori.",
+        "evidence": "Fapt de rutare cu cel puțin două alternative și semafoare numărate pe traseu."
+      }
+    },
+    {
+      "key": "route_distance_weight",
+      "category": "ROUTING",
+      "categoryTitle": "Trasee și recuperare",
+      "contextId": "v2c-route-distance",
+      "label": "Ponderea distanței în alegerea traseului",
+      "scenarioId": "routing-blocked-reroute",
+      "requires": [
+        "ROUTE_ALTERNATIVE",
+        "ROUTE_TURN"
+      ],
+      "opportunityKind": null,
+      "constraint": "NONE",
+      "manual": {
+        "setup": "Pornește o cursă cu un traseu scurt cu viraje și unul lung drept.",
+        "action": "Compară cele două alegeri în două curse identice.",
+        "evidence": "Fapt de rutare cu alternative multiple și viraje numărate."
+      }
+    },
+    {
+      "key": "route_turn_penalty",
+      "category": "ROUTING",
+      "categoryTitle": "Trasee și recuperare",
+      "contextId": "v2c-route-turn-penalty",
+      "label": "Penalizarea virajelor în costul traseului",
+      "scenarioId": "routing-blocked-reroute",
+      "requires": [
+        "ROUTE_ALTERNATIVE",
+        "ROUTE_TURN"
+      ],
+      "opportunityKind": null,
+      "constraint": "NONE",
+      "manual": {
+        "setup": "Alege între un traseu cu două viraje și unul drept, de lungime apropiată.",
+        "action": "Rulează ambele variante și compară timpii.",
+        "evidence": "Alternative comparabile cu număr de viraje măsurat pe fiecare."
+      }
+    },
+    {
+      "key": "route_signal_penalty",
+      "category": "ROUTING",
+      "categoryTitle": "Trasee și recuperare",
+      "contextId": "v2c-route-signal-penalty",
+      "label": "Penalizarea semafoarelor în costul traseului",
+      "scenarioId": "routing-blocked-reroute",
+      "requires": [
+        "ROUTE_ALTERNATIVE",
+        "ROUTE_SIGNAL",
+        "SIGNAL_RED"
+      ],
+      "opportunityKind": null,
+      "constraint": "NONE",
+      "manual": {
+        "setup": "Alege între un traseu cu trei semafoare și unul cu unul singur.",
+        "action": "Rulează traseul cu semafoare și oprește la roșu, apoi compară.",
+        "evidence": "Alternative cu semafoare numărate și cel puțin un eșantion cu semafor roșu."
+      }
+    },
+    {
+      "key": "route_congestion_penalty",
+      "category": "ROUTING",
+      "categoryTitle": "Trasee și recuperare",
+      "contextId": "v2c-route-congestion",
+      "label": "Penalizarea congestiei în costul traseului",
+      "scenarioId": "routing-blocked-reroute",
+      "requires": [
+        "ROUTE_ALTERNATIVE",
+        "ROUTE_CONGESTION",
+        "CONFLICT"
+      ],
+      "opportunityKind": null,
+      "constraint": "LEADER",
+      "manual": {
+        "setup": "Pornește într-o zonă cu trafic, cu o alternativă liberă.",
+        "action": "Observă dacă planificatorul ocolește zona congestionată.",
+        "evidence": "Alternative cu congestie raportată și conflict activ în aceeași fereastră."
+      }
+    },
+    {
+      "key": "reroute_patience",
+      "category": "ROUTING",
+      "categoryTitle": "Trasee și recuperare",
+      "contextId": "v2c-reroute-patience",
+      "label": "Răbdarea înainte de rerutare",
+      "scenarioId": "routing-blocked-reroute",
+      "requires": [
+        "ROUTE_BLOCKED",
+        "REROUTE"
+      ],
+      "opportunityKind": null,
+      "constraint": "MECHANICAL_LIMIT",
+      "manual": {
+        "setup": "Intră pe o bandă blocată de un vehicul oprit, cu alternativă disponibilă.",
+        "action": "Așteaptă fără să ocolești până când decizia de rerutare apare.",
+        "evidence": "Fapt de rutare BLOCKED urmat de etapa REROUTE în aceeași fereastră."
+      }
+    },
+    {
+      "key": "u_turn_willingness",
+      "category": "ROUTING",
+      "categoryTitle": "Trasee și recuperare",
+      "contextId": "v2c-u-turn",
+      "label": "Disponibilitatea pentru întoarcere",
+      "scenarioId": "routing-blocked-reroute",
+      "requires": [
+        "U_TURN",
+        "ROUTE_ALTERNATIVE"
+      ],
+      "opportunityKind": null,
+      "constraint": "NONE",
+      "manual": {
+        "setup": "Ratează intrarea pe destinație și primește o alternativă cu întoarcere.",
+        "action": "Alege între întoarcere și un ocol lung.",
+        "evidence": "Fapt de rutare cu întoarcere disponibilă și alternative multiple."
+      }
+    },
+    {
+      "key": "reverse_recovery_duration",
+      "category": "ROUTING",
+      "categoryTitle": "Trasee și recuperare",
+      "contextId": "v2c-reverse-recovery",
+      "label": "Durata recuperării prin mers înapoi",
+      "scenarioId": "routing-blocked-reroute",
+      "requires": [
+        "REVERSE_RECOVERY",
+        "SPEED_MEASURED"
+      ],
+      "opportunityKind": null,
+      "constraint": "MECHANICAL_LIMIT",
+      "manual": {
+        "setup": "Blochează-te într-o fundătură îngustă, fără spațiu de întoarcere.",
+        "action": "Execută manevra de recuperare prin mers înapoi până la ieșire.",
+        "evidence": "Fapt de recuperare în etapa RECOVERY și eșantioane cu viteză măsurată."
+      }
+    },
+    {
+      "key": "pedestrian_yield_probability",
+      "category": "HAZARDS",
+      "categoryTitle": "Pietoni și pericole",
+      "contextId": "v2c-pedestrian-yield",
+      "label": "Cedarea către un pieton",
+      "scenarioId": "hazards-crosswalk-obstacle",
+      "requires": [
+        "PEDESTRIAN",
+        "BRAKE_INPUT"
+      ],
+      "opportunityKind": null,
+      "constraint": "NONE",
+      "manual": {
+        "setup": "Apropie-te de o trecere de pietoni cu un pieton observabil pe trotuar.",
+        "action": "Decide dacă oprești sau continui când pietonul intră în zonă.",
+        "evidence": "Observație de pericol PEDESTRIAN activă și observabilă, plus brake peste 0."
+      }
+    },
+    {
+      "key": "pedestrian_clearance",
+      "category": "HAZARDS",
+      "categoryTitle": "Pietoni și pericole",
+      "contextId": "v2c-pedestrian-clearance",
+      "label": "Distanța de siguranță față de pieton",
+      "scenarioId": "hazards-crosswalk-obstacle",
+      "requires": [
+        "PEDESTRIAN",
+        "SPEED_MEASURED"
+      ],
+      "opportunityKind": null,
+      "constraint": "NONE",
+      "manual": {
+        "setup": "Treacă pe lângă un pieton care așteaptă la marginea trecerii.",
+        "action": "Alege viteza și traiectoria de trecere.",
+        "evidence": "Pericol PEDESTRIAN observabil și viteză măsurată în aceeași fereastră."
+      }
+    },
+    {
+      "key": "hazard_reaction_delay",
+      "category": "HAZARDS",
+      "categoryTitle": "Pietoni și pericole",
+      "contextId": "v2c-hazard-reaction",
+      "label": "Întârzierea de reacție la pericol",
+      "scenarioId": "hazards-crosswalk-obstacle",
+      "requires": [
+        "PEDESTRIAN",
+        "BRAKE_INPUT",
+        "LONGITUDINAL_ACCEL"
+      ],
+      "opportunityKind": null,
+      "constraint": "NONE",
+      "manual": {
+        "setup": "Pietonul apare la 25 m, pe o trecere fără semafor.",
+        "action": "Frânează cât de repede consideri necesar.",
+        "evidence": "Pericol observabil, brake peste 0 și accelerație longitudinală negativă imediat după."
+      }
+    },
+    {
+      "key": "obstacle_clearance",
+      "category": "HAZARDS",
+      "categoryTitle": "Pietoni și pericole",
+      "contextId": "v2c-obstacle-clearance",
+      "label": "Distanța față de un obstacol",
+      "scenarioId": "hazards-crosswalk-obstacle",
+      "requires": [
+        "OBSTACLE",
+        "SPEED_MEASURED"
+      ],
+      "opportunityKind": null,
+      "constraint": "NONE",
+      "manual": {
+        "setup": "Un obstacol oprește banda la 30 m.",
+        "action": "Alege dacă încetinești sau ocolești.",
+        "evidence": "Pericol OBSTACLE observabil și viteză măsurată în aceeași fereastră."
+      }
+    },
+    {
+      "key": "emergency_brake_intensity",
+      "category": "HAZARDS",
+      "categoryTitle": "Pietoni și pericole",
+      "contextId": "v2c-emergency-brake",
+      "label": "Intensitatea frânei de urgență",
+      "scenarioId": "hazards-crosswalk-obstacle",
+      "requires": [
+        "OBSTACLE",
+        "BRAKE_INPUT",
+        "LONGITUDINAL_ACCEL"
+      ],
+      "opportunityKind": null,
+      "constraint": "IMPACT",
+      "manual": {
+        "setup": "Obstacolul apare brusc la 15 m, fără timp de ocolire.",
+        "action": "Apasă frâna la maximum.",
+        "evidence": "Pericol observabil, brake peste 0 și decelerație măsurată în aceeași fereastră."
+      }
+    },
+    {
+      "key": "evasive_steer_willingness",
+      "category": "HAZARDS",
+      "categoryTitle": "Pietoni și pericole",
+      "contextId": "v2c-evasive-steer",
+      "label": "Disponibilitatea pentru viraj de evitare",
+      "scenarioId": "hazards-crosswalk-obstacle",
+      "requires": [
+        "OBSTACLE",
+        "STEERING_INPUT",
+        "LATERAL_ACCEL"
+      ],
+      "opportunityKind": null,
+      "constraint": "IMPACT",
+      "manual": {
+        "setup": "Obstacol pe bandă, cu banda alăturată liberă.",
+        "action": "Alege între frână și viraj de evitare.",
+        "evidence": "Pericol observabil, viraj nenul și accelerație laterală măsurată."
+      }
+    },
+    {
+      "key": "crosswalk_approach_speed",
+      "category": "HAZARDS",
+      "categoryTitle": "Pietoni și pericole",
+      "contextId": "v2c-crosswalk-approach",
+      "label": "Viteza de apropiere de trecerea de pietoni",
+      "scenarioId": "hazards-crosswalk-obstacle",
+      "requires": [
+        "PEDESTRIAN",
+        "STOP_LINE",
+        "SPEED_MEASURED"
+      ],
+      "opportunityKind": null,
+      "constraint": "NONE",
+      "manual": {
+        "setup": "Apropie-te de o trecere de pietoni marcată, cu pieton vizibil.",
+        "action": "Menține viteza de oraș până la trecere.",
+        "evidence": "Pericol PEDESTRIAN observabil, linie de oprire măsurată și viteză peste 5 m/s."
+      }
+    },
+    {
+      "key": "horn_use_probability",
+      "category": "HAZARDS",
+      "categoryTitle": "Pietoni și pericole",
+      "contextId": "v2c-horn-use",
+      "label": "Folosirea claxonului într-o oportunitate",
+      "scenarioId": "hazards-crosswalk-obstacle",
+      "requires": [
+        "PEDESTRIAN",
+        "HORN_ACTION"
+      ],
+      "opportunityKind": null,
+      "constraint": "NONE",
+      "manual": {
+        "setup": "Pietonul întârzie pe trecere, iar banda este liberă.",
+        "action": "Apasă claxonul când pietonul nu reacționează.",
+        "evidence": "Pericol PEDESTRIAN observabil și acțiunea de claxon declarată de fixture-ul controlat."
+      }
+    },
+    {
+      "key": "pickup_approach_speed",
+      "category": "SERVICE",
+      "categoryTitle": "Pickup și confortul pasagerilor",
+      "contextId": "v2c-pickup-approach",
+      "label": "Viteza de apropiere de pickup",
+      "scenarioId": "service-pickup-dropoff",
+      "requires": [
+        "SERVICE_APPROACH",
+        "SPEED_MEASURED",
+        "CURB_DISTANCE"
+      ],
+      "opportunityKind": null,
+      "constraint": "NONE",
+      "manual": {
+        "setup": "Acceptă o cursă cu punct de pickup pe o stradă îngustă.",
+        "action": "Apropie-te de zona de serviciu și oprește la bordură.",
+        "evidence": "Fapt de serviciu în faza TO_PICKUP, distanță la bordură măsurată și viteză peste 1 m/s."
+      }
+    },
+    {
+      "key": "pickup_curb_distance",
+      "category": "SERVICE",
+      "categoryTitle": "Pickup și confortul pasagerilor",
+      "contextId": "v2c-pickup-curb",
+      "label": "Distanța la bordură la pickup",
+      "scenarioId": "service-pickup-dropoff",
+      "requires": [
+        "CURB_DISTANCE",
+        "SERVICE_APPROACH"
+      ],
+      "opportunityKind": null,
+      "constraint": "NONE",
+      "manual": {
+        "setup": "Oprește la un pickup cu bordură înaltă.",
+        "action": "Alege cât de aproape de bordură oprești.",
+        "evidence": "Fapt de serviciu cu distanță la bordură măsurată în faza de apropiere."
+      }
+    },
+    {
+      "key": "pickup_stop_precision",
+      "category": "SERVICE",
+      "categoryTitle": "Pickup și confortul pasagerilor",
+      "contextId": "v2c-pickup-precision",
+      "label": "Precizia opririi la pickup",
+      "scenarioId": "service-pickup-dropoff",
+      "requires": [
+        "STOP_PRECISION",
+        "CURB_DISTANCE"
+      ],
+      "opportunityKind": null,
+      "constraint": "NONE",
+      "manual": {
+        "setup": "Punctul de pickup este marcat pe trotuar, cu o singură poziție validă.",
+        "action": "Oprește cât mai aproape de marcajul pasagerului.",
+        "evidence": "Fapt de serviciu cu precizie de oprire și distanță la bordură măsurate."
+      }
+    },
+    {
+      "key": "pickup_dwell_time",
+      "category": "SERVICE",
+      "categoryTitle": "Pickup și confortul pasagerilor",
+      "contextId": "v2c-pickup-dwell",
+      "label": "Timpul de staționare la pickup",
+      "scenarioId": "service-pickup-dropoff",
+      "requires": [
+        "PICKUP_EVENT",
+        "STOP_PRECISION"
+      ],
+      "opportunityKind": null,
+      "constraint": "NONE",
+      "manual": {
+        "setup": "Pasagerul urcă la un pickup aglomerat.",
+        "action": "Așteaptă până când pasagerul este urcat, apoi pleacă.",
+        "evidence": "Eveniment PICKUP cu precizia opririi măsurată în aceeași fereastră."
+      }
+    },
+    {
+      "key": "dropoff_approach_speed",
+      "category": "SERVICE",
+      "categoryTitle": "Pickup și confortul pasagerilor",
+      "contextId": "v2c-dropoff-approach",
+      "label": "Viteza de apropiere de dropoff",
+      "scenarioId": "service-pickup-dropoff",
+      "requires": [
+        "SERVICE_APPROACH",
+        "PASSENGER_ONBOARD",
+        "SPEED_MEASURED"
+      ],
+      "opportunityKind": null,
+      "constraint": "NONE",
+      "manual": {
+        "setup": "Ai pasager la bord și te apropii de destinație.",
+        "action": "Încetinești progresiv până la zona de dropoff.",
+        "evidence": "Fapt de serviciu în faza TO_DROPOFF, pasager la bord și viteză peste 1 m/s."
+      }
+    },
+    {
+      "key": "dropoff_curb_distance",
+      "category": "SERVICE",
+      "categoryTitle": "Pickup și confortul pasagerilor",
+      "contextId": "v2c-dropoff-curb",
+      "label": "Distanța la bordură la dropoff",
+      "scenarioId": "service-pickup-dropoff",
+      "requires": [
+        "CURB_DISTANCE",
+        "DROPOFF_EVENT"
+      ],
+      "opportunityKind": null,
+      "constraint": "NONE",
+      "manual": {
+        "setup": "Destinația are o bordură joasă, fără refugiu.",
+        "action": "Oprește cât mai aproape de bordură fără să blochezi banda.",
+        "evidence": "Eveniment DROPOFF cu distanță la bordură măsurată în aceeași fereastră."
+      }
+    },
+    {
+      "key": "occupied_acceleration_scale",
+      "category": "SERVICE",
+      "categoryTitle": "Pickup și confortul pasagerilor",
+      "contextId": "v2c-occupied-accel",
+      "label": "Scalarea accelerației cu pasager",
+      "scenarioId": "service-pickup-dropoff",
+      "requires": [
+        "PASSENGER_ONBOARD",
+        "LONGITUDINAL_ACCEL",
+        "THROTTLE_INPUT"
+      ],
+      "opportunityKind": null,
+      "constraint": "NONE",
+      "manual": {
+        "setup": "Pornește de la pickup cu pasagerul la bord.",
+        "action": "Pleacă lin și accelerează progresiv.",
+        "evidence": "Pasager la bord, throttle peste 0 și accelerație longitudinală pozitivă."
+      }
+    },
+    {
+      "key": "occupied_lateral_accel_scale",
+      "category": "SERVICE",
+      "categoryTitle": "Pickup și confortul pasagerilor",
+      "contextId": "v2c-occupied-lateral",
+      "label": "Scalarea accelerației laterale cu pasager",
+      "scenarioId": "service-pickup-dropoff",
+      "requires": [
+        "PASSENGER_ONBOARD",
+        "LATERAL_ACCEL",
+        "CURVATURE"
+      ],
+      "opportunityKind": null,
+      "constraint": "NONE",
+      "manual": {
+        "setup": "Cu pasager la bord, intră într-o curbă de rază medie.",
+        "action": "Alege viteza de trecere prin curbă.",
+        "evidence": "Pasager la bord, accelerație laterală măsurată și curbură nenulă."
+      }
+    }
+  ],
+  "summary": {
+    "keys": 56,
+    "coveredKeys": 56,
+    "categories": 10,
+    "representativeCategories": 10,
+    "scenarios": 10,
+    "representativeScenarios": 10,
+    "frames": 60,
+    "controlObservableKeys": 0,
+    "controlRepresentative": false,
+    "pass": true
+  },
+  "reproducibility": {
+    "digest": "d224cf567f54ac9d0846b78986657ecc320c4712eaf05b8e4c9be96169cf4243",
+    "rule": "Aceleași scenarii și aceeași ordine; SHA-256 peste catalog, evaluări și tabela de contexte."
+  },
+  "limitations": [
+    "Nivel determinist în Node: fără browser real, GPU, input uman sau fizică live; contextul este dovedit pe eșantioane și fapte authoreză, nu pe o sesiune jucată.",
+    "Claxonul nu are încă un canal live de input; contextul horn_use_probability este dovedit exclusiv prin fixture-ul controlat și rămâne o lacună declarată pentru canalul runtime.",
+    "Faptele de rutare și de serviciu primesc valori măsurate de proprietarul lor (033/219, respectiv 061) sau de un fixture controlat; contractul le validează, nu le recalculează din geometrie.",
+    "Pragurile numerice ale parametrilor rămân cele din catalogul de proiectare; 163 definește contextele, etichetele și scenariile, nu calibrează valorile."
+  ]
+}

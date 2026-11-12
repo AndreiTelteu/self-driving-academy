@@ -14,3 +14,4 @@ export * from './vehicle-normalization';
 export * from './segment-compaction';
 export * from './validation-protocol';
 export * from './demonstration-fixtures';
+export * from './v2-contexts';
