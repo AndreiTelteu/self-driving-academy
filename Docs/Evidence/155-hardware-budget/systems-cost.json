@@ -1,0 +1,116 @@
+{
+  "measuredAt": "2026-11-12T04:15:58.563Z",
+  "machine": "AMD Ryzen 7 7735U with Radeon Graphics; 16 fire logice; 14 GiB RAM; Node 24.19.0; Windows",
+  "command": "npm run perf:hardware-budget -- --measure",
+  "ticksPerSample": 600,
+  "samples": 5,
+  "vehicles": 70,
+  "baselineMs": [
+    64.82110000000011,
+    47.414700000000266,
+    48.63459999999941,
+    45.05490000000009,
+    57.7511999999997
+  ],
+  "warmupSamples": 1,
+  "order": "baseline first on even samples, last on odd samples",
+  "arms": [
+    {
+      "system": "learning",
+      "cadence": "o închidere de segment la fiecare 5 s simulate (două pe eșantion)",
+      "invocationsPerSample": 2,
+      "totalMs": [
+        73.08579999999984,
+        79.63200000000006,
+        57.3107,
+        125.90200000000004,
+        67.18069999999989
+      ],
+      "counters": {
+        "segments": 2,
+        "activations": 2
+      }
+    },
+    {
+      "system": "recorder",
+      "cadence": "un apel pe tick; recorderul decimează intern la 20 Hz",
+      "invocationsPerSample": 600,
+      "totalMs": [
+        136.29050000000007,
+        104.4101999999998,
+        109.0681999999997,
+        167.4930000000004,
+        155.92370000000028
+      ],
+      "counters": {
+        "peakChargedBytes": 1395200,
+        "samplesRecorded": 200
+      }
+    },
+    {
+      "system": "kpi",
+      "cadence": "settle + review la fiecare 1 s simulată, snapshot agregat la 10 Hz",
+      "invocationsPerSample": 120,
+      "totalMs": [
+        69.00690000000031,
+        45.12379999999985,
+        62.944800000000214,
+        46.79060000000027,
+        66.64669999999933
+      ],
+      "counters": {
+        "settlements": 10,
+        "reviews": 10
+      }
+    },
+    {
+      "system": "xp",
+      "cadence": "fereastră activă de 30 s + citire la 10 Hz",
+      "invocationsPerSample": 102,
+      "totalMs": [
+        65.79370000000017,
+        43.17390000000023,
+        63.483400000000074,
+        46.64860000000044,
+        46.054700000000594
+      ],
+      "counters": {
+        "windows": 2,
+        "entries": 2
+      }
+    },
+    {
+      "system": "challenges",
+      "cadence": "advance per tick + o încercare completă la fiecare 10 s simulate",
+      "invocationsPerSample": 603,
+      "totalMs": [
+        84.2185999999997,
+        49.76749999999993,
+        94.33530000000064,
+        60.735499999999774,
+        44.01230000000032
+      ],
+      "counters": {
+        "attempts": 1,
+        "credits": 1
+      }
+    },
+    {
+      "system": "destruction",
+      "cadence": "advance per tick + un impact la fiecare 50 de tick-uri",
+      "invocationsPerSample": 612,
+      "totalMs": [
+        99.86590000000024,
+        48.129399999999805,
+        71.61830000000009,
+        64.01230000000032,
+        45.11160000000018
+      ],
+      "counters": {
+        "impacts": 12,
+        "objects": 35,
+        "brokenObjects": 7
+      }
+    }
+  ]
+}
