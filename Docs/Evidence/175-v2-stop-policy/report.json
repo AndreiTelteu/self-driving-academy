@@ -1,0 +1,477 @@
+{
+  "version": "175-stop-priority-policy-v1",
+  "parameters": [
+    {
+      "key": "rolling_stop_speed",
+      "unit": "m/s",
+      "minimum": 0.2,
+      "maximum": 5,
+      "defaultValue": 1
+    },
+    {
+      "key": "priority_assertiveness",
+      "unit": "ratio",
+      "minimum": 0,
+      "maximum": 1,
+      "defaultValue": 0.3
+    },
+    {
+      "key": "allway_stop_patience",
+      "unit": "s",
+      "minimum": 0,
+      "maximum": 10,
+      "defaultValue": 2
+    },
+    {
+      "key": "blocked_intersection_entry_probability",
+      "unit": "probability",
+      "minimum": 0,
+      "maximum": 1,
+      "defaultValue": 0
+    }
+  ],
+  "scenarios": [
+    {
+      "name": "rolling stop",
+      "scenario": "viteza comandată prin zona STOP după o oprire completă omisă; plafonul de politică este 2.5 m/s, sub maximul de catalog de 5 m/s"
+    },
+    {
+      "name": "revendicare la prioritate",
+      "scenario": "cerința efectivă scade de la pragul M `yield_time_gap` 6 s spre podeaua de 3 s; separatorul declarat este 3 s, deci valoarea 0 refuză, iar valoarea 1 revendică"
+    },
+    {
+      "name": "răbdare la all-way stop",
+      "scenario": "al doilea vehicul la all-way stop, cu 4 s scurse de la îndeplinirea opririi proprii: 0 s eliberează imediat, 10 s ține oprirea suplimentară"
+    },
+    {
+      "name": "intrare în intersecție fără spațiu confirmat",
+      "scenario": "spațiu de ieșire nedeclarat și intersecție nedeclarată blocată: probabilitatea efectivă este plafonată la 0.5, iar eșantionul oportunității este 0.289662"
+    }
+  ],
+  "effects": [
+    {
+      "key": "rolling_stop_speed",
+      "scenario": "rolling stop",
+      "unit": "m/s",
+      "lowValue": 0.2,
+      "highValue": 5,
+      "lowOutcome": 0.2,
+      "highOutcome": 2.5,
+      "difference": 2.3,
+      "note": "viteza comandată prin zona STOP după o oprire completă omisă; plafonul de politică este 2.5 m/s, sub maximul de catalog de 5 m/s"
+    },
+    {
+      "key": "priority_assertiveness",
+      "scenario": "revendicare la prioritate",
+      "unit": "ratio",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 0,
+      "highOutcome": 1,
+      "difference": 1,
+      "note": "cerința efectivă scade de la pragul M `yield_time_gap` 6 s spre podeaua de 3 s; separatorul declarat este 3 s, deci valoarea 0 refuză, iar valoarea 1 revendică"
+    },
+    {
+      "key": "allway_stop_patience",
+      "scenario": "răbdare la all-way stop",
+      "unit": "ratio",
+      "lowValue": 0,
+      "highValue": 10,
+      "lowOutcome": 1,
+      "highOutcome": 0,
+      "difference": -1,
+      "note": "al doilea vehicul la all-way stop, cu 4 s scurse de la îndeplinirea opririi proprii: 0 s eliberează imediat, 10 s ține oprirea suplimentară"
+    },
+    {
+      "key": "blocked_intersection_entry_probability",
+      "scenario": "intrare în intersecție fără spațiu confirmat",
+      "unit": "ratio",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 0,
+      "highOutcome": 1,
+      "difference": 1,
+      "note": "spațiu de ieșire nedeclarat și intersecție nedeclarată blocată: probabilitatea efectivă este plafonată la 0.5, iar eșantionul oportunității este 0.289662"
+    }
+  ],
+  "separation": [
+    {
+      "key": "priority_assertiveness",
+      "scenario": "rolling stop",
+      "unit": "ratio",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "note": "`priority_assertiveness` este inertă în scenariul rolling stop"
+    },
+    {
+      "key": "allway_stop_patience",
+      "scenario": "rolling stop",
+      "unit": "ratio",
+      "lowValue": 0,
+      "highValue": 10,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "note": "`allway_stop_patience` este inertă în scenariul rolling stop"
+    },
+    {
+      "key": "blocked_intersection_entry_probability",
+      "scenario": "rolling stop",
+      "unit": "ratio",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "note": "`blocked_intersection_entry_probability` este inertă în scenariul rolling stop"
+    },
+    {
+      "key": "rolling_stop_speed",
+      "scenario": "revendicare la prioritate",
+      "unit": "ratio",
+      "lowValue": 0.2,
+      "highValue": 5,
+      "lowOutcome": 0,
+      "highOutcome": 0,
+      "difference": 0,
+      "note": "`rolling_stop_speed` este inertă în scenariul revendicare la prioritate"
+    },
+    {
+      "key": "allway_stop_patience",
+      "scenario": "revendicare la prioritate",
+      "unit": "ratio",
+      "lowValue": 0,
+      "highValue": 10,
+      "lowOutcome": 0,
+      "highOutcome": 0,
+      "difference": 0,
+      "note": "`allway_stop_patience` este inertă în scenariul revendicare la prioritate"
+    },
+    {
+      "key": "blocked_intersection_entry_probability",
+      "scenario": "revendicare la prioritate",
+      "unit": "ratio",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 0,
+      "highOutcome": 0,
+      "difference": 0,
+      "note": "`blocked_intersection_entry_probability` este inertă în scenariul revendicare la prioritate"
+    },
+    {
+      "key": "rolling_stop_speed",
+      "scenario": "răbdare la all-way stop",
+      "unit": "ratio",
+      "lowValue": 0.2,
+      "highValue": 5,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "note": "`rolling_stop_speed` este inertă în scenariul răbdare la all-way stop"
+    },
+    {
+      "key": "priority_assertiveness",
+      "scenario": "răbdare la all-way stop",
+      "unit": "ratio",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "note": "`priority_assertiveness` este inertă în scenariul răbdare la all-way stop"
+    },
+    {
+      "key": "blocked_intersection_entry_probability",
+      "scenario": "răbdare la all-way stop",
+      "unit": "ratio",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "note": "`blocked_intersection_entry_probability` este inertă în scenariul răbdare la all-way stop"
+    },
+    {
+      "key": "rolling_stop_speed",
+      "scenario": "intrare în intersecție fără spațiu confirmat",
+      "unit": "ratio",
+      "lowValue": 0.2,
+      "highValue": 5,
+      "lowOutcome": 0,
+      "highOutcome": 0,
+      "difference": 0,
+      "note": "`rolling_stop_speed` este inertă în scenariul intrare în intersecție fără spațiu confirmat"
+    },
+    {
+      "key": "priority_assertiveness",
+      "scenario": "intrare în intersecție fără spațiu confirmat",
+      "unit": "ratio",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 0,
+      "highOutcome": 0,
+      "difference": 0,
+      "note": "`priority_assertiveness` este inertă în scenariul intrare în intersecție fără spațiu confirmat"
+    },
+    {
+      "key": "allway_stop_patience",
+      "scenario": "intrare în intersecție fără spațiu confirmat",
+      "unit": "ratio",
+      "lowValue": 0,
+      "highValue": 10,
+      "lowOutcome": 0,
+      "highOutcome": 0,
+      "difference": 0,
+      "note": "`allway_stop_patience` este inertă în scenariul intrare în intersecție fără spațiu confirmat"
+    }
+  ],
+  "safety": [
+    {
+      "key": "plafonul rolling stop",
+      "scenario": "051 rolling stop, cheia la maximul de catalog 5 m/s",
+      "unit": "m/s",
+      "lowValue": 0.2,
+      "highValue": 5,
+      "lowOutcome": 0.2,
+      "highOutcome": 2.5,
+      "difference": 2.3,
+      "note": "viteza comandată este plafonată la 2.5 m/s, sub maximul de catalog de 5 m/s, deci o rolling stop rămâne o traversare lentă"
+    },
+    {
+      "key": "veto intersecție blocată",
+      "scenario": "interior blocat declarat, cheia maximă",
+      "unit": "ratio",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "note": "comanda rămâne BLOCKED_INTERSECTION_VETO pentru ambele capete ale cheii; veto-ul precede orice eșantion"
+    },
+    {
+      "key": "spațiu de ieșire insuficient",
+      "scenario": "3 m de spațiu de ieșire, cheia maximă",
+      "unit": "ratio",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "note": "sub 5 m de stocare ieșirea nu este sigură: EXIT_SPACE_INSUFFICIENT"
+    },
+    {
+      "key": "plafonul intrării blocate",
+      "scenario": "spațiu nedeclarat, cheia maximă",
+      "unit": "ratio",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 0,
+      "highOutcome": 0.5,
+      "difference": 0.5,
+      "note": "probabilitatea efectivă este plafonată la 0.5, nu la maximul de catalog 1"
+    },
+    {
+      "key": "podeaua asertivității",
+      "scenario": "yield_time_gap 8 s, separator 2,9 s, asertivitate 1",
+      "unit": "ratio",
+      "lowValue": 2.9,
+      "highValue": 3,
+      "lowOutcome": 1,
+      "highOutcome": 0,
+      "difference": -1,
+      "note": "podeaua de 3 s nu este coborâtă; 2,9 s rămâne refuzat, 3 s este revendicat"
+    },
+    {
+      "key": "inertă sub podea",
+      "scenario": "yield_time_gap 0,2 s, separator 0,2 s, asertivitate 1",
+      "unit": "ratio",
+      "lowValue": 0.2,
+      "highValue": 1,
+      "lowOutcome": 0.2,
+      "highOutcome": 0.2,
+      "difference": 0,
+      "note": "pragul M rămâne 0.2 s, deci consecința lui 052 nu este rescrisă"
+    },
+    {
+      "key": "stopul 051 dominant",
+      "scenario": "051 APPROACH cu toate cheile la maxim",
+      "unit": "ratio",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "note": "intenția 051 rămâne STOP_REQUIRED; nicio cheie nu o transformă în trecere"
+    },
+    {
+      "key": "primul la all-way",
+      "scenario": "poziția 1 la all-way stop, răbdare 10 s",
+      "unit": "ratio",
+      "lowValue": 0,
+      "highValue": 10,
+      "lowOutcome": 0,
+      "highOutcome": 0,
+      "difference": 0,
+      "note": "primul sosit nu este întârziat: PROCEED"
+    },
+    {
+      "key": "rezultat 052 indisponibil",
+      "scenario": "acoperire LOCAL_ONLY, asertivitate 1",
+      "unit": "ratio",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "note": "052 UNKNOWN (UNAVAILABLE) rămâne YIELD_UNAVAILABLE; cheia nu inventează o revendicare"
+    }
+  ],
+  "compatibility": {
+    "identicalStopTicks": true,
+    "identicalYieldTicks": true,
+    "comparableTicks": 60,
+    "identicalStopResults": 60,
+    "identicalYieldResults": 60,
+    "neutralForwardTicks": 60,
+    "activeDifferingTicks": 18,
+    "maximumRollingSpeedDifferenceMps": 1.5,
+    "mUnits": {
+      "stop_full_probability": "probability",
+      "stop_dwell_time": "s",
+      "stop_line_offset": "m",
+      "yield_time_gap": "s",
+      "speed_delta_urban": "m/s"
+    },
+    "rUnits": {
+      "rolling_stop_speed": "m/s",
+      "priority_assertiveness": "ratio",
+      "allway_stop_patience": "s",
+      "blocked_intersection_entry_probability": "probability"
+    }
+  },
+  "determinism": {
+    "ticks": 6,
+    "digest": "fnv1a32:7099b7c7",
+    "repeatedDigest": "fnv1a32:7099b7c7"
+  },
+  "checks": [
+    {
+      "id": "key-rolling-effect",
+      "pass": true,
+      "detail": "0.200 -> 2.500 m/s"
+    },
+    {
+      "id": "key-rolling-cap",
+      "pass": true,
+      "detail": "cheia 5 m/s comandă 2.500 m/s"
+    },
+    {
+      "id": "key-assertiveness-effect",
+      "pass": true,
+      "detail": "separator 3 s: refuz la 0 și revendicare la 1, cerință 3 s"
+    },
+    {
+      "id": "key-patience-effect",
+      "pass": true,
+      "detail": "eliberare la 0 s și oprire suplimentară la 10 s (1 -> 0)"
+    },
+    {
+      "id": "key-blocked-effect",
+      "pass": true,
+      "detail": "eșantion 0.289662: așteptare la 0 și intrare la 1 (plafon 0,5)"
+    },
+    {
+      "id": "safety-rolling-cap",
+      "pass": true,
+      "detail": "maximul comandat rămâne 2.5 m/s"
+    },
+    {
+      "id": "safety-blocked-veto",
+      "pass": true,
+      "detail": "intersecția blocată este veto absolut pentru orice valoare a cheii"
+    },
+    {
+      "id": "safety-exit-storage",
+      "pass": true,
+      "detail": "3 m de spațiu de ieșire rămân sub pragul de stocare"
+    },
+    {
+      "id": "safety-blocked-cap",
+      "pass": true,
+      "detail": "probabilitatea efectivă maximă este 0.5"
+    },
+    {
+      "id": "safety-assertiveness-floor",
+      "pass": true,
+      "detail": "2,9 s refuzat și 3 s revendicat la podeaua explicită"
+    },
+    {
+      "id": "safety-assertiveness-inert",
+      "pass": true,
+      "detail": "un `yield_time_gap` sub podea nu este rescris de asertivitate"
+    },
+    {
+      "id": "safety-stop-dominant",
+      "pass": true,
+      "detail": "intenția 051 rămâne stop cu toate cheile la maxim"
+    },
+    {
+      "id": "safety-first-arrival",
+      "pass": true,
+      "detail": "primul sosit la all-way stop nu este întârziat de răbdare"
+    },
+    {
+      "id": "safety-yield-unknown",
+      "pass": true,
+      "detail": "052 indisponibil rămâne YIELD_UNAVAILABLE"
+    },
+    {
+      "id": "separation-rolling",
+      "pass": true,
+      "detail": "doar rolling_stop_speed acționează în scenariul de rolling stop"
+    },
+    {
+      "id": "separation-priority",
+      "pass": true,
+      "detail": "doar priority_assertiveness acționează în scenariul de revendicare"
+    },
+    {
+      "id": "separation-patience",
+      "pass": true,
+      "detail": "doar allway_stop_patience acționează în scenariul all-way"
+    },
+    {
+      "id": "separation-blocked",
+      "pass": true,
+      "detail": "doar blocked_intersection_entry_probability acționează în scenariul blocat"
+    },
+    {
+      "id": "m-identical-delivered-results",
+      "pass": true,
+      "detail": "60/60 rezultate 051 și 60/60 rezultate 052 identice cu cheile R neutre vs active"
+    },
+    {
+      "id": "m-neutral-forwards",
+      "pass": true,
+      "detail": "60/60 acțiuni neutre identice cu 051/052; 18 tick-uri active diferă, până la 1.500 m/s"
+    },
+    {
+      "id": "catalog-ranges",
+      "pass": true,
+      "detail": "rolling_stop_speed 0.2-5 m/s, priority_assertiveness 0-1 ratio, allway_stop_patience 0-10 s, blocked_intersection_entry_probability 0-1 probability"
+    },
+    {
+      "id": "determinism",
+      "pass": true,
+      "detail": "digest fnv1a32:7099b7c7"
+    }
+  ],
+  "summary": {
+    "checks": 22,
+    "passed": 22,
+    "pass": true
+  }
+}
