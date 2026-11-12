@@ -126,7 +126,10 @@
     "perf:render-budget": "node --import ./scripts/register-typescript.mjs scripts/run-render-budget-report.mjs",
     "perf:soak": "node --expose-gc --import ./scripts/register-typescript.mjs scripts/run-soak-report.mjs",
     "perf:gate": "node --import ./scripts/register-typescript.mjs scripts/run-performance-gate.mjs",
-    "qa:fun": "node --import ./scripts/register-typescript.mjs scripts/run-fun-qa-report.mjs"
+    "qa:fun": "node --import ./scripts/register-typescript.mjs scripts/run-fun-qa-report.mjs",
+    "build:report": "node --import ./scripts/register-typescript.mjs scripts/build-report.mjs",
+    "ci:verify": "node scripts/ci/run-release-pipeline.mjs",
+    "ci:release": "node scripts/ci/run-release-pipeline.mjs --lane=release"
   },
   "dependencies": {
     "@babylonjs/core": "9.29.0",
