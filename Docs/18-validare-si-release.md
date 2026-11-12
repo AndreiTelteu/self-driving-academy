@@ -91,3 +91,17 @@ Regresia 216 este o matrice executată, nu o listă de promisiuni. `npm run qa:v
 **Costuri.** Bugetele din [manifest](performance-budgets.json) sunt comparate direct (recorder, checkpoint, progres, bundle economic, generații de checkpoint). Unde manifestul nu are buget — frame p95, punctele graficului KPI, bundle-ul 215 — lacuna este raportată, fără prag inventat. Nivelul este `targeted`: suita nu are renderer, GPU, input uman sau hardware de referință, deci playtestul și frame-ul rămân `NOT_RUN` și sunt preluate de gate-urile 220/224/235.
 
 Dovezile reale, cu numerele, comenzile și limitările, sunt în [Evidence/216-v1-regression](Evidence/216-v1-regression/README.md).
+
+## Suita de scenarii V1 (PBI 151)
+
+Suita 151 leagă autonomia, cursele, învățarea și campania într-un singur transcript reproductibil. `npm run scenarios:v1` rulează cele patru familii pe contractele livrate, cu seed fix 151, fără ceas de perete și fără aleator în rezultat; `--check` compară `report.json` și `report.md` cu fișierele comise, iar două rulări independente produc același JSON (amprentă SHA-256 în raport).
+
+**Familii și contracte.** `AUTONOMY` evaluează politica 050 pe observații authoreză (întârzierea de pornire la verde, borna exactă a întârzierii și refuzul unei observații mai vechi de 6 tick-uri). `RIDES` conduce ciclul de viață 061 pe flota reală 057/059/060: cursă completă, eveniment terminal rejucat și dropoff ilegal înainte de pickup. `LEARNING` aplică pasul 101 peste poarta 100: o singură demonstrație, șaisprezece episoade consistente și o contradicție severă care ține profilul neschimbat. `CAMPAIGN` folosește tracker-ul real 116 și ledgerul 125: prima misiune, deblocarea exactă a următoarei verigi și refuzul unei finalizări duplicate.
+
+**Toleranțe explicite.** Fiecare comparație numerică are o regulă declarată: `EXACT` pentru valori de contract (stări, motive, contoare, listă de deblocări), `ABSOLUTE` pentru mărimi cu precizie publicată (1e-12 s sau m la ecouri de profil, 1e-4 m/s și 1e-4 ratio la pasul de învățare, 1e-6 episoade la expunere) și `RELATIVE` pentru rapoarte. Nu există „aprox egal”: o valoare numerică fără toleranță declarată nu poate intra în transcript.
+
+**Cazuri negative.** Fiecare familie are cel puțin un refuz explicit: observație de semafor expirată (`UNKNOWN`/`UNAVAILABLE`, fără fapt inventat), tranziție de cursă ilegală (stare și claim neschimbate), contradicție de dovezi (`HELD_CONTRADICTION`, valoare neschimbată) și finalizare de misiune duplicată (`DUPLICATE`, zero XP). Un scenariu care cere browser real este raportat `NOT_RUN` cu motiv și nu este numărat ca trecut.
+
+**Reutilizare.** Matricea 216 rămâne sursa pentru daily 211/212 și XP 213 (rândurile B5–B8, amprenta XP fără pierderi, graful boardului), iar suita 056 rămâne sursa pentru matricea roșu/verde și cele 10 refuzuri de autonomie. 151 le citează ca dovadă comisă și adaugă doar cazurile care lipsesc acolo, fără a le reexecuta sub alt nume.
+
+Dovezile, cu numerele reale per scenariu, sunt în [Evidence/151-scenario-suite](Evidence/151-scenario-suite/README.md).
