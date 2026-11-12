@@ -1,0 +1,815 @@
+{
+  "version": "232-challenge-director-report-v1",
+  "contract": {
+    "directorVersion": "232-challenge-director-v1",
+    "stateVersion": "232-challenge-director-state-v1",
+    "seed": 4242,
+    "sessionId": "session:fixture",
+    "worldEpoch": 1,
+    "tickHz": 60,
+    "states": [
+      "OFFERED",
+      "ACCEPTED",
+      "ACTIVE",
+      "COMPLETED",
+      "FAILED",
+      "CANCELLED",
+      "DECLINED",
+      "EXPIRED"
+    ],
+    "terminalStates": [
+      "COMPLETED",
+      "FAILED",
+      "CANCELLED",
+      "DECLINED",
+      "EXPIRED"
+    ],
+    "refusals": [
+      "OFFERS_DISABLED",
+      "OFFER_ALREADY_ACTIVE",
+      "INSTANCE_ALREADY_ACTIVE",
+      "COOLDOWN_ACTIVE",
+      "NO_ELIGIBLE_TEMPLATE",
+      "NO_FREE_TAXI",
+      "TAXI_ASSIGNED",
+      "PASSENGER_ABOARD",
+      "SESSION_INVALID",
+      "SESSION_TRANSFER_IN_PROGRESS",
+      "ROUTE_UNREACHABLE",
+      "DEADLINE_INFEASIBLE",
+      "UNKNOWN_INSTANCE",
+      "INVALID_STATE",
+      "ATTEMPT_LIMIT",
+      "BOUND_TO_TAXI",
+      "INVALID_REQUEST",
+      "SNAPSHOT_INVALID"
+    ],
+    "cancellationReasons": [
+      "PLAYER_CANCELLED",
+      "CITY_RESET",
+      "SESSION_LEFT",
+      "RESTART",
+      "RIDE_CANCELLED",
+      "OFFERS_DISABLED"
+    ],
+    "transitions": {
+      "OFFERED": [
+        "ACCEPTED",
+        "DECLINED",
+        "EXPIRED"
+      ],
+      "ACCEPTED": [
+        "ACTIVE",
+        "CANCELLED"
+      ],
+      "ACTIVE": [
+        "COMPLETED",
+        "FAILED",
+        "CANCELLED"
+      ],
+      "COMPLETED": [],
+      "FAILED": [],
+      "CANCELLED": [],
+      "DECLINED": [],
+      "EXPIRED": []
+    },
+    "limits": {
+      "activeOffers": 1,
+      "activeInstances": 1,
+      "cooldownTicks": 10800,
+      "offerWindowTicks": 2700,
+      "recentTemplates": 3,
+      "historyEntries": 24,
+      "historyCodeUnits": 4096,
+      "retainedOutcomes": 32,
+      "outcomeCodeUnits": 16384,
+      "routeProbesPerOffer": 8,
+      "attemptsPerTemplate": 8,
+      "feasibilitySlackSeconds": 5,
+      "transitionsPerInstance": 4
+    }
+  },
+  "preflight": [
+    {
+      "status": "OFFERED",
+      "code": null,
+      "detail": [
+        "ride:assignment:fixture:1",
+        "passenger:customer:fixture:1",
+        "cancelled:false"
+      ],
+      "name": "offer_during_ride"
+    },
+    {
+      "status": "REFUSED",
+      "code": "PASSENGER_ABOARD",
+      "detail": [
+        "id-v1:18:challenge-instance26:231-challenge-templates-v17:ACADEMY26:challenge-valet-with-style1:110:39835820661:1"
+      ],
+      "name": "accept_passenger_aboard"
+    },
+    {
+      "status": "REFUSED",
+      "code": "OFFER_ALREADY_ACTIVE",
+      "detail": [
+        "id-v1:18:challenge-instance26:231-challenge-templates-v17:ACADEMY26:challenge-valet-with-style1:110:39835820661:1"
+      ],
+      "name": "duplicate_offer"
+    },
+    {
+      "status": "REFUSED",
+      "code": "INSTANCE_ALREADY_ACTIVE",
+      "detail": [
+        "id-v1:18:challenge-instance26:231-challenge-templates-v17:ACADEMY26:challenge-valet-with-style1:110:39835820661:1"
+      ],
+      "name": "duplicate_instance"
+    },
+    {
+      "status": "ACCEPTED",
+      "code": "DUPLICATE",
+      "detail": [],
+      "name": "duplicate_accept"
+    },
+    {
+      "status": "REFUSED",
+      "code": "TAXI_ASSIGNED",
+      "detail": [
+        "assignment:fixture:2"
+      ],
+      "name": "accept_taxi_assigned"
+    },
+    {
+      "status": "REFUSED",
+      "code": "COOLDOWN_ACTIVE",
+      "detail": [
+        "10800"
+      ],
+      "name": "cooldown_after_decline"
+    },
+    {
+      "status": "REFUSED",
+      "code": "OFFERS_DISABLED",
+      "detail": [],
+      "name": "toggle_off"
+    },
+    {
+      "status": "REFUSED",
+      "code": "EXPIRED",
+      "detail": [],
+      "name": "toggle_retracts_offer"
+    },
+    {
+      "status": "REFUSED",
+      "code": "SESSION_TRANSFER_IN_PROGRESS",
+      "detail": [],
+      "name": "session_transfer"
+    },
+    {
+      "status": "REFUSED",
+      "code": "SESSION_INVALID",
+      "detail": [
+        "bound:session:fixture@1",
+        "world:session:other@2"
+      ],
+      "name": "session_mismatch"
+    },
+    {
+      "status": "REFUSED",
+      "code": "NO_FREE_TAXI",
+      "detail": [
+        "taxi:taxi:player:OFFLINE"
+      ],
+      "name": "no_free_taxi"
+    },
+    {
+      "status": "REFUSED",
+      "code": "NO_ELIGIBLE_TEMPLATE",
+      "detail": [
+        "ROUTE_UNREACHABLE:challenge-valet-with-style:zone:parking:opera",
+        "ROUTE_UNREACHABLE:challenge-cake-delivery:zone:dropoff:central",
+        "ROUTE_UNREACHABLE:challenge-city-copies-me:zone:dropoff:central",
+        "ROUTE_UNREACHABLE:challenge-city-tour-backwards:zone:checkpoint:river",
+        "ROUTE_UNREACHABLE:challenge-forgot-something:zone:landmark:home",
+        "ROUTE_UNREACHABLE:challenge-influencer-no-spill:zone:dropoff:central",
+        "ROUTE_UNREACHABLE:challenge-influencer-parking-drift:zone:drift:playground",
+        "ROUTE_UNREACHABLE:challenge-influencer-single-frame:zone:checkpoint:tower"
+      ],
+      "name": "route_unreachable"
+    },
+    {
+      "status": "REFUSED",
+      "code": "NO_ELIGIBLE_TEMPLATE",
+      "detail": [
+        "DEADLINE_INFEASIBLE:challenge-valet-with-style:900s>125.99999999999999s",
+        "DEADLINE_INFEASIBLE:challenge-cake-delivery:900s>120s",
+        "DEADLINE_INFEASIBLE:challenge-city-copies-me:900s>187.5s",
+        "DEADLINE_INFEASIBLE:challenge-city-tour-backwards:900s>187.5s",
+        "DEADLINE_INFEASIBLE:challenge-forgot-something:900s>137.5s",
+        "DEADLINE_INFEASIBLE:challenge-influencer-no-spill:900s>162s",
+        "DEADLINE_INFEASIBLE:challenge-influencer-parking-drift:900s>168s",
+        "DEADLINE_INFEASIBLE:challenge-influencer-single-frame:900s>187.5s"
+      ],
+      "name": "deadline_infeasible"
+    },
+    {
+      "status": "REFUSED",
+      "code": "BOUND_TO_TAXI",
+      "detail": [
+        "taxi:player",
+        "taxi:other"
+      ],
+      "name": "bound_to_taxi"
+    },
+    {
+      "status": "REFUSED",
+      "code": "INVALID_STATE",
+      "detail": [
+        "id-v1:18:challenge-instance26:231-challenge-templates-v17:ACADEMY26:challenge-valet-with-style1:110:39835820661:1"
+      ],
+      "name": "terminal_is_final"
+    },
+    {
+      "status": "REFUSED",
+      "code": "ATTEMPT_LIMIT",
+      "detail": [
+        "challenge-valet-with-style:8"
+      ],
+      "name": "attempt_limit"
+    }
+  ],
+  "lifecycle": {
+    "rows": [
+      {
+        "templateId": "challenge-valet-with-style",
+        "family": "PRECISION",
+        "seed": 3983582066,
+        "attempt": 1,
+        "state": "DECLINED",
+        "reason": "DECLINED_BY_PLAYER",
+        "startedTick": null,
+        "deadlineTick": 10260,
+        "durationTicks": 7560,
+        "completedAtTick": 0,
+        "xpEligible": false,
+        "academyXp": 0,
+        "transitions": 2
+      },
+      {
+        "templateId": "challenge-influencer-single-frame",
+        "family": "PRECISION",
+        "seed": 753336492,
+        "attempt": 1,
+        "state": "DECLINED",
+        "reason": "DECLINED_BY_PLAYER",
+        "startedTick": null,
+        "deadlineTick": 26100,
+        "durationTicks": 12600,
+        "completedAtTick": 10800,
+        "xpEligible": false,
+        "academyXp": 0,
+        "transitions": 2
+      },
+      {
+        "templateId": "challenge-last-minute-airport",
+        "family": "EFFICIENCY",
+        "seed": 2501920397,
+        "attempt": 1,
+        "state": "DECLINED",
+        "reason": "DECLINED_BY_PLAYER",
+        "startedTick": null,
+        "deadlineTick": 33660,
+        "durationTicks": 9360,
+        "completedAtTick": 21600,
+        "xpEligible": false,
+        "academyXp": 0,
+        "transitions": 2
+      },
+      {
+        "templateId": "challenge-toilet-sos",
+        "family": "EXPLORATION",
+        "seed": 3638991346,
+        "attempt": 1,
+        "state": "COMPLETED",
+        "reason": "TARGET_REACHED",
+        "startedTick": 32400,
+        "deadlineTick": 39150,
+        "durationTicks": 6750,
+        "completedAtTick": 39150,
+        "xpEligible": true,
+        "academyXp": 60,
+        "transitions": 4
+      },
+      {
+        "templateId": "challenge-city-copies-me",
+        "family": "EXPERIMENT",
+        "seed": 4258736153,
+        "attempt": 1,
+        "state": "FAILED",
+        "reason": "DEADLINE_EXPIRED",
+        "startedTick": 43200,
+        "deadlineTick": 54450,
+        "durationTicks": 11250,
+        "completedAtTick": 54450,
+        "xpEligible": false,
+        "academyXp": 0,
+        "transitions": 4
+      },
+      {
+        "templateId": "challenge-influencer-single-frame",
+        "family": "PRECISION",
+        "seed": 1389579861,
+        "attempt": 2,
+        "state": "CANCELLED",
+        "reason": "PLAYER_CANCELLED",
+        "startedTick": 108450,
+        "deadlineTick": 121050,
+        "durationTicks": 12600,
+        "completedAtTick": 108450,
+        "xpEligible": false,
+        "academyXp": 0,
+        "transitions": 4
+      },
+      {
+        "templateId": "challenge-forgot-something",
+        "family": "EXPLORATION",
+        "seed": 2306341115,
+        "attempt": 1,
+        "state": "EXPIRED",
+        "reason": "OFFER_EXPIRED",
+        "startedTick": null,
+        "deadlineTick": 131190,
+        "durationTicks": 9240,
+        "completedAtTick": 121950,
+        "xpEligible": false,
+        "academyXp": 0,
+        "transitions": 2
+      }
+    ],
+    "totals": {
+      "OFFERED": 7,
+      "ACCEPTED": 3,
+      "ACTIVE": 3,
+      "COMPLETED": 1,
+      "FAILED": 1,
+      "CANCELLED": 1,
+      "DECLINED": 3,
+      "EXPIRED": 1
+    },
+    "completed": 1,
+    "failed": 1,
+    "cancelled": 1,
+    "declined": 3,
+    "expired": 1,
+    "rewardKeys": 1,
+    "academyXp": 60
+  },
+  "reload": {
+    "instanceId": "id-v1:18:challenge-instance26:231-challenge-templates-v17:ACADEMY29:challenge-last-minute-airport1:16:9876541:1",
+    "templateId": "challenge-last-minute-airport",
+    "seed": 987654,
+    "samePlan": true,
+    "sameDeadline": true,
+    "sameFingerprint": true,
+    "sameRewardKey": true,
+    "snapshotBytes": 1892
+  },
+  "history": {
+    "entries": 24,
+    "dropped": 6,
+    "codeUnits": 1071,
+    "capEntries": 24,
+    "capCodeUnits": 4096,
+    "distinctTemplates": 10,
+    "bytes": 2843
+  },
+  "probes": {
+    "offers": 6,
+    "routeProbes": 6,
+    "maxProbesPerOffer": 1,
+    "attemptsWithoutProbe": 0
+  },
+  "performance": {
+    "simulation": {
+      "offers": 6,
+      "refusals": 15,
+      "routeProbes": 6,
+      "maxProbesPerOffer": 1,
+      "clock": "NOT_MEASURED"
+    },
+    "memory": {
+      "snapshotBytes": 1892,
+      "historyBytes": 2843,
+      "historyEntries": 24,
+      "historyCodeUnits": 1071,
+      "retainedOutcomesCap": 32,
+      "manifestHistoryBudget": "NULL_IN_MANIFEST",
+      "admissionCap": "PROVISIONAL_FINITE"
+    },
+    "storage": {
+      "snapshotFields": 16,
+      "instanceFields": 27,
+      "stateVersion": "232-challenge-director-state-v1",
+      "reloadIdentity": "id-v1:18:challenge-instance26:231-challenge-templates-v17:ACADEMY29:challenge-last-minute-airport1:16:9876541:1",
+      "clock": "NOT_MEASURED"
+    }
+  },
+  "checks": [
+    {
+      "name": "director-version",
+      "expected": "232-challenge-director-v1",
+      "actual": "232-challenge-director-v1",
+      "pass": true,
+      "detail": "versioned contract"
+    },
+    {
+      "name": "state-version",
+      "expected": "232-challenge-director-state-v1",
+      "actual": "232-challenge-director-state-v1",
+      "pass": true,
+      "detail": "versioned snapshot"
+    },
+    {
+      "name": "states",
+      "expected": 8,
+      "actual": 8,
+      "pass": true,
+      "detail": "closed lifecycle states"
+    },
+    {
+      "name": "one-visible-offer",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "at most one offer"
+    },
+    {
+      "name": "one-live-instance",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "at most one instance"
+    },
+    {
+      "name": "cooldown",
+      "expected": 10800,
+      "actual": 10800,
+      "pass": true,
+      "detail": "three active minutes at 60 Hz"
+    },
+    {
+      "name": "offer-window",
+      "expected": 2700,
+      "actual": 2700,
+      "pass": true,
+      "detail": "forty-five active seconds"
+    },
+    {
+      "name": "recent-templates",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "anti-repetition window"
+    },
+    {
+      "name": "history-cap",
+      "expected": 24,
+      "actual": 24,
+      "pass": true,
+      "detail": "finite history entries"
+    },
+    {
+      "name": "history-units",
+      "expected": 4096,
+      "actual": 4096,
+      "pass": true,
+      "detail": "finite history code units"
+    },
+    {
+      "name": "attempt-cap",
+      "expected": 8,
+      "actual": 8,
+      "pass": true,
+      "detail": "per-template attempts"
+    },
+    {
+      "name": "offer-during-ride",
+      "expected": "OFFERED",
+      "actual": "OFFERED",
+      "pass": true,
+      "detail": "an offer never interrupts a ride"
+    },
+    {
+      "name": "offer-during-ride-ride",
+      "expected": "ride:assignment:fixture:1",
+      "actual": "ride:assignment:fixture:1",
+      "pass": true,
+      "detail": "the real assignment is echoed unchanged"
+    },
+    {
+      "name": "offer-during-ride-passenger",
+      "expected": "passenger:customer:fixture:1",
+      "actual": "passenger:customer:fixture:1",
+      "pass": true,
+      "detail": "the real passenger is echoed unchanged"
+    },
+    {
+      "name": "accept-passenger-aboard",
+      "expected": "PASSENGER_ABOARD",
+      "actual": "PASSENGER_ABOARD",
+      "pass": true,
+      "detail": "the existing passenger is never abandoned"
+    },
+    {
+      "name": "duplicate-offer",
+      "expected": "OFFER_ALREADY_ACTIVE",
+      "actual": "OFFER_ALREADY_ACTIVE",
+      "pass": true,
+      "detail": "a second offer is refused explicitly"
+    },
+    {
+      "name": "duplicate-instance",
+      "expected": "INSTANCE_ALREADY_ACTIVE",
+      "actual": "INSTANCE_ALREADY_ACTIVE",
+      "pass": true,
+      "detail": "a second live instance is refused"
+    },
+    {
+      "name": "duplicate-accept",
+      "expected": "DUPLICATE",
+      "actual": "DUPLICATE",
+      "pass": true,
+      "detail": "accepting twice reserves nothing twice"
+    },
+    {
+      "name": "cooldown",
+      "expected": "COOLDOWN_ACTIVE",
+      "actual": "COOLDOWN_ACTIVE",
+      "pass": true,
+      "detail": "the cooldown blocks the next offer"
+    },
+    {
+      "name": "toggle-off",
+      "expected": "OFFERS_DISABLED",
+      "actual": "OFFERS_DISABLED",
+      "pass": true,
+      "detail": "the toggle stops offers"
+    },
+    {
+      "name": "toggle-retract",
+      "expected": "EXPIRED",
+      "actual": "EXPIRED",
+      "pass": true,
+      "detail": "disabling retracts the visible offer"
+    },
+    {
+      "name": "session-transfer",
+      "expected": "SESSION_TRANSFER_IN_PROGRESS",
+      "actual": "SESSION_TRANSFER_IN_PROGRESS",
+      "pass": true,
+      "detail": "a transfer blocks generation"
+    },
+    {
+      "name": "session-mismatch",
+      "expected": "SESSION_INVALID",
+      "actual": "SESSION_INVALID",
+      "pass": true,
+      "detail": "the session is checked"
+    },
+    {
+      "name": "no-free-taxi",
+      "expected": "NO_FREE_TAXI",
+      "actual": "NO_FREE_TAXI",
+      "pass": true,
+      "detail": "a dispatch is never interrupted"
+    },
+    {
+      "name": "accept-taxi-assigned",
+      "expected": "TAXI_ASSIGNED",
+      "actual": "TAXI_ASSIGNED",
+      "pass": true,
+      "detail": "the existing assignment is never replaced"
+    },
+    {
+      "name": "route-unreachable",
+      "expected": "NO_ELIGIBLE_TEMPLATE",
+      "actual": "NO_ELIGIBLE_TEMPLATE",
+      "pass": true,
+      "detail": "an unreachable route excludes every candidate"
+    },
+    {
+      "name": "route-unreachable-detail",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the refusal names the template and zone"
+    },
+    {
+      "name": "deadline-infeasible",
+      "expected": "NO_ELIGIBLE_TEMPLATE",
+      "actual": "NO_ELIGIBLE_TEMPLATE",
+      "pass": true,
+      "detail": "an infeasible deadline excludes every candidate"
+    },
+    {
+      "name": "deadline-infeasible-detail",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the refusal names the real estimate"
+    },
+    {
+      "name": "bound-to-taxi",
+      "expected": "BOUND_TO_TAXI",
+      "actual": "BOUND_TO_TAXI",
+      "pass": true,
+      "detail": "a change of car never duplicates"
+    },
+    {
+      "name": "terminal-is-final",
+      "expected": "INVALID_STATE",
+      "actual": "INVALID_STATE",
+      "pass": true,
+      "detail": "a cancelled instance cannot restart"
+    },
+    {
+      "name": "attempt-limit",
+      "expected": "ATTEMPT_LIMIT",
+      "actual": "ATTEMPT_LIMIT",
+      "pass": true,
+      "detail": "R is bounded per template"
+    },
+    {
+      "name": "refusal-codes-exercised",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the report exercises the closed refusal vocabulary"
+    },
+    {
+      "name": "lifecycle-rows",
+      "expected": 7,
+      "actual": 7,
+      "pass": true,
+      "detail": "decline, completion, failure, cancel, expiry"
+    },
+    {
+      "name": "declined",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "three real declines"
+    },
+    {
+      "name": "completed",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "one real evaluator completion"
+    },
+    {
+      "name": "failed",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "one real deadline failure"
+    },
+    {
+      "name": "cancelled",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "one explicit cancellation"
+    },
+    {
+      "name": "expired",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "one unanswered offer"
+    },
+    {
+      "name": "totals-offered",
+      "expected": 7,
+      "actual": 7,
+      "pass": true,
+      "detail": "every lifecycle started from an offer"
+    },
+    {
+      "name": "totals-accepted",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "three offers were accepted"
+    },
+    {
+      "name": "totals-active",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "three instances started"
+    },
+    {
+      "name": "reward-keys",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "only the completion is XP-eligible"
+    },
+    {
+      "name": "academy-xp",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the authored XP is recorded, not paid"
+    },
+    {
+      "name": "reload-plan",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the objective snapshot is byte-identical"
+    },
+    {
+      "name": "reload-deadline",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the remaining simulated time is identical"
+    },
+    {
+      "name": "reload-fingerprint",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the verdict fingerprint is identical"
+    },
+    {
+      "name": "reload-reward-key",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the reward identity is identical"
+    },
+    {
+      "name": "reload-seed",
+      "expected": 987654,
+      "actual": 987654,
+      "pass": true,
+      "detail": "the saved seed is preserved"
+    },
+    {
+      "name": "reload-snapshot-bounded",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "bounded snapshot bytes"
+    },
+    {
+      "name": "history-cap",
+      "expected": 24,
+      "actual": 24,
+      "pass": true,
+      "detail": "the history never exceeds its cap"
+    },
+    {
+      "name": "history-dropped",
+      "expected": 6,
+      "actual": 6,
+      "pass": true,
+      "detail": "older entries are dropped explicitly"
+    },
+    {
+      "name": "history-units-bound",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the code-unit budget is respected"
+    },
+    {
+      "name": "history-variety",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the anti-repetition window keeps the offers varied"
+    },
+    {
+      "name": "probe-budget",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "one bounded walk per offer"
+    },
+    {
+      "name": "no-probe-after-offer",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "advancing never probes a route"
+    }
+  ],
+  "summary": {
+    "checks": 56,
+    "passed": 56,
+    "pass": true
+  }
+}
