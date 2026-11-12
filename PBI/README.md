@@ -9,7 +9,7 @@
 | Experiență | Completed | 0 | 0 | 2 / 2 | `██████████` 100% |
 | Experimente | Completed | 0 | 0 | 1 / 1 | `██████████` 100% |
 | Experimente și indicatori | Completed | 0 | 0 | 8 / 8 | `██████████` 100% |
-| Extindere V2 | V2 | 1 | 0 | 3 / 4 | `███████░░░` 75% |
+| Extindere V2 | Completed | 0 | 0 | 4 / 4 | `██████████` 100% |
 | Flotă și curse | Completed | 0 | 0 | 9 / 9 | `██████████` 100% |
 | Fundație | Completed | 0 | 0 | 14 / 14 | `██████████` 100% |
 | Interfață | Completed | 0 | 0 | 13 / 13 | `██████████` 100% |
@@ -34,7 +34,7 @@
 | Validare și release | Completed | 0 | 0 | 12 / 12 | `██████████` 100% |
 | Validare V2 | V2 | 2 | 0 | 0 / 2 | `░░░░░░░░░░` 0% |
 | Vehicule și fizică | Completed | 0 | 0 | 11 / 11 | `██████████` 100% |
-| Total | - | 37 | 0 | 198 / 235 | `████████░░` 84% |
+| Total | - | 36 | 0 | 199 / 235 | `████████░░` 85% |
 <!-- loop-pbi:progress:end -->
 
 # Backlog Kanban Self Driving Academy
