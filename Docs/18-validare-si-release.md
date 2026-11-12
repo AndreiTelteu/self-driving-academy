@@ -79,3 +79,15 @@ Soak-ul are minimum 60 minute și 20 de cicluri de lifecycle, cu retenție, cozi
 ## Validare eficientă — 8 octombrie 2026
 
 [Politica de validare](validation-policy.md) diferențiază verificările locale de gate-urile full/soak și permite corectitudinea izolată în paralel. Harness-ul comun are preflight export, profil DEV 3 × 2 × (15 s + 30 s), salvare automată fără suprascriere și checkpoint-uri imutabile de perechi. După preflight, folosește butonul Dezvoltare pentru cost local; proba completă rămâne pentru gate-uri. Pentru reluare, păstrează ID-ul sesiunii și confirmă condițiile comparabile; perechea întreruptă reîncepe integral. DEV/SMOKE nu certifică hardware/release. Aceste instrumente noi necesită propria verificare browser înainte de folosirea lor ca dovadă hardware; nu sunt prezentate ca probe executate.
+
+## Regresia V1 pentru moduri, KPI-uri, daily și XP (PBI 216)
+
+Regresia 216 este o matrice executată, nu o listă de promisiuni. `npm run qa:v1-regression` rulează împreună contractele 205–217 pe fixture-uri deterministe și scrie un transcript cu scenariu, comandă, numere reale și verdict; `--check` compară transcriptul cu cel comis, iar `--cost` măsoară separat costul real al căii de tick. Fiecare rând are o polaritate (`POSITIVE`, `NEGATIVE`, `COST`, `DOCUMENT`), iar un scenariu neexecutat este `NOT_RUN` cu motiv, niciodată bifat.
+
+**Ce acoperă.** Cele trei moduri pe taxi și civil (șase tranziții fiecare), fizica păstrată, cinci defecte injectate, propagarea taxi/civil 208, bariera 205 pozitiv și negativ; KPI 209/214 în ambele direcții, graficele 210 pe 12 luni și pop-up-ul cu zero scanări, daily 211/212 pozitiv și negativ, XP 213 cu fracții de minut și ferestre excluse; checkpoint 206 și replay 207/141 fără scrieri; proba combinată learning + recorder + autosave + KPI + XP pe aceeași sesiune de condus; graful boardului cu gate-ul 235 al extensiilor 225–234.
+
+**XP fără pierderi.** Invarianta este dovedită prin amprente înainte/după pe cele cinci căi de scădere (KPI, incident, misiune eșuată, recompensă refuzată, zi ratată), nu prin absența erorilor. Amprenta acoperă soldul, nivelul, intrările și cursorul de contorizare; contoarele de refuz sunt intenționat în afara ei, pentru că un duplicat refuzat crește un contor fără să plătească sau să scadă XP.
+
+**Costuri.** Bugetele din [manifest](performance-budgets.json) sunt comparate direct (recorder, checkpoint, progres, bundle economic, generații de checkpoint). Unde manifestul nu are buget — frame p95, punctele graficului KPI, bundle-ul 215 — lacuna este raportată, fără prag inventat. Nivelul este `targeted`: suita nu are renderer, GPU, input uman sau hardware de referință, deci playtestul și frame-ul rămân `NOT_RUN` și sunt preluate de gate-urile 220/224/235.
+
+Dovezile reale, cu numerele, comenzile și limitările, sunt în [Evidence/216-v1-regression](Evidence/216-v1-regression/README.md).

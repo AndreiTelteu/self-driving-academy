@@ -1,0 +1,812 @@
+{
+  "version": "216-v1-regression-v1",
+  "generatedBy": "scripts/run-v1-regression-report.mjs",
+  "command": "npm run qa:v1-regression",
+  "oracleRule": "Fiecare valoare așteptată este contractul documentat (Docs/18, 22, 23, 25 și dovezile 205–215, 217), nu o copie a valorii observate. Zero ceas de perete, zero aleator.",
+  "validation": {
+    "level": "targeted",
+    "playtest": "NOT_RUN",
+    "frame": "NOT_RUN",
+    "memory": "STRUCTURAL_OWNERSHIP_COUNTERS",
+    "reason": "Politica de validare 2026-10-08: scenarii deterministe, cost structural și integrare limitată. Suita nu are browser, GPU sau hardware de referință.",
+    "playtestRemaining": [
+      "Lizibilitatea explicațiilor și a HUD-ului la 1280×720 și 1920×1080",
+      "Senzația de condus MANUAL/LEARNING și revenirea după panouri",
+      "Input real, focus/blur și pauza în browser",
+      "Frame p95/p99 pe hardware-ul de referință (gate 220/224)"
+    ]
+  },
+  "versions": {
+    "threeModes": "217-three-modes-v1",
+    "cityStyle": "208-city-style-v1",
+    "learningEpoch": "205-learning-epoch-v1",
+    "worldSnapshot": "206-world-snapshot-v1",
+    "worldRecorder": "207-world-recorder-v1",
+    "worldReplayChunk": "207-world-replay-chunk-v1",
+    "kpi": "209-economy-clock-v1",
+    "kpiHistory": "210-kpi-history-v1",
+    "kpiImpact": "214-kpi-impact-v1",
+    "dailyGenerator": "211-daily-generator-v1",
+    "dailyProgress": "212-daily-progress-v1",
+    "budgetVersion": "203-initial-1"
+  },
+  "rows": [
+    {
+      "id": "A1",
+      "category": "MODES",
+      "contract": "217-three-modes-v1",
+      "scenario": "Toate cele șase tranziții pe taxi, cu un singur scaun PLAYER",
+      "polarity": "POSITIVE",
+      "command": "npm run qa:v1-regression",
+      "actual": {
+        "rows": 6,
+        "transitions": [
+          "AUTO->MANUAL",
+          "AUTO->LEARNING",
+          "MANUAL->AUTO",
+          "MANUAL->LEARNING",
+          "LEARNING->AUTO",
+          "LEARNING->MANUAL"
+        ],
+        "failures": 0,
+        "maxPlayerSeats": 1
+      },
+      "verdict": "PASS",
+      "note": "Cele șase tranziții AUTO/MANUAL/LEARNING sunt separate de segmente la tick-ul acceptat.",
+      "notRunReason": null
+    },
+    {
+      "id": "A2",
+      "category": "MODES",
+      "contract": "217-three-modes-v1",
+      "scenario": "Toate cele șase tranziții pe un vehicul civil",
+      "polarity": "POSITIVE",
+      "command": "npm run qa:v1-regression",
+      "actual": {
+        "rows": 6,
+        "failures": 0,
+        "modes": [
+          "MANUAL",
+          "LEARNING"
+        ]
+      },
+      "verdict": "PASS",
+      "note": "Un civil acceptă aceleași tranziții și același contract de segmente.",
+      "notRunReason": null
+    },
+    {
+      "id": "A3",
+      "category": "MODES",
+      "contract": "217-three-modes-v1",
+      "scenario": "Tranziția păstrează viteza, direcția și pasul de poziție",
+      "polarity": "POSITIVE",
+      "command": "npm run qa:v1-regression",
+      "actual": {
+        "preserved": 12,
+        "maxStepErrorM": 0
+      },
+      "verdict": "PASS",
+      "note": "Nicio tranziție nu produce teleportare sau schimbare de viteză.",
+      "notRunReason": null
+    },
+    {
+      "id": "A4",
+      "category": "MODES",
+      "contract": "217-three-modes-v1",
+      "scenario": "Defecte injectate: salt de poziție și schimbare de viteză",
+      "polarity": "NEGATIVE",
+      "command": "npm run qa:v1-regression",
+      "actual": {
+        "jumpKinds": [
+          "PHYSICS_POSITION_STEP"
+        ],
+        "speedKinds": [
+          "PHYSICS_SPEED"
+        ]
+      },
+      "verdict": "PASS",
+      "note": "Contractul refuză explicit o fizică discontinuă, nu o toleră.",
+      "notRunReason": null
+    },
+    {
+      "id": "A5",
+      "category": "MODES",
+      "contract": "217-three-modes-v1",
+      "scenario": "Defecte injectate: două scaune, segment lipsă și segment străin",
+      "polarity": "NEGATIVE",
+      "command": "npm run qa:v1-regression",
+      "actual": {
+        "extraSeatKinds": [
+          "MULTIPLE_PLAYER_SEATS"
+        ],
+        "missingKinds": [
+          "MISSING_CLOSED_SEGMENT"
+        ],
+        "wrongKinds": [
+          "WRONG_CLOSED_SEGMENT",
+          "OLD_SEGMENT_MODE"
+        ]
+      },
+      "verdict": "PASS",
+      "note": "Fiecare defect are un cod propriu de eșec.",
+      "notRunReason": null
+    },
+    {
+      "id": "A6",
+      "category": "PROPAGATION",
+      "contract": "208-city-style-v1",
+      "scenario": "Taxiurile și civilii adoptă aceeași versiune de stil",
+      "polarity": "POSITIVE",
+      "command": "npm run qa:v1-regression",
+      "actual": {
+        "phases": 7,
+        "checks": 71,
+        "commonVersionAfter": "segment-208-fleet~112",
+        "crossCategoryUpdated": true,
+        "hiddenOverrides": 0
+      },
+      "verdict": "PASS",
+      "note": "Propagarea se face la tick-ul comun, pentru ambele categorii.",
+      "notRunReason": null
+    },
+    {
+      "id": "A7",
+      "category": "PROPAGATION",
+      "contract": "208-city-style-v1",
+      "scenario": "Un segment MANUAL civil nu învață și nu publică",
+      "polarity": "NEGATIVE",
+      "command": "npm run qa:v1-regression",
+      "actual": {
+        "manualStatus": "SKIPPED_MANUAL",
+        "manualVersionChanges": 0,
+        "manualActivations": 0
+      },
+      "verdict": "PASS",
+      "note": "MANUAL rămâne telemetrie, fără job, versiune sau activare.",
+      "notRunReason": null
+    },
+    {
+      "id": "A8",
+      "category": "LEARNING_BARRIER",
+      "contract": "205-learning-epoch-v1",
+      "scenario": "Restore cu un job în coadă: jobul este anulat, rezultatul târziu refuzat",
+      "polarity": "POSITIVE",
+      "command": "npm run qa:v1-regression",
+      "actual": {
+        "epoch": 2,
+        "cancelledJobs": 1,
+        "lateResults": 1,
+        "versionsBefore": 3,
+        "versionsAfter": 3
+      },
+      "verdict": "PASS",
+      "note": "Bariera invalidează joburile epoch-ului vechi înainte de a aplica noul profil.",
+      "notRunReason": null
+    },
+    {
+      "id": "A9",
+      "category": "LEARNING_BARRIER",
+      "contract": "205-learning-epoch-v1",
+      "scenario": "Import invalid: refuz fără generație nouă",
+      "polarity": "NEGATIVE",
+      "command": "npm run qa:v1-regression",
+      "actual": {
+        "status": "REJECTED",
+        "code": "IMPORT_INVALID",
+        "pending": null,
+        "generations": 1
+      },
+      "verdict": "PASS",
+      "note": "Un import invalid păstrează coada și generația curentă.",
+      "notRunReason": null
+    },
+    {
+      "id": "B1",
+      "category": "KPI",
+      "contract": "214-kpi-impact-v1",
+      "scenario": "Venit și rating în ambele direcții, plus un incident real",
+      "polarity": "POSITIVE",
+      "command": "npm run qa:v1-regression",
+      "actual": {
+        "upDown": {
+          "revenue": 500,
+          "rating": -3
+        },
+        "downUp": {
+          "revenue": -500,
+          "rating": 3
+        },
+        "downDown": {
+          "revenue": -800,
+          "rating": -4,
+          "incidents": 1
+        }
+      },
+      "verdict": "PASS",
+      "note": "Consecințele afișate sunt exact agregatele 209, fără evaluator de penalizare.",
+      "notRunReason": null
+    },
+    {
+      "id": "B2",
+      "category": "KPI",
+      "contract": "209-kpi-review-v1",
+      "scenario": "Aceleași fapte, trei moduri de control",
+      "polarity": "POSITIVE",
+      "command": "npm run qa:v1-regression",
+      "actual": {
+        "ratings": [
+          4,
+          4,
+          4
+        ],
+        "modes": [
+          "MANUAL",
+          "LEARNING",
+          "AUTO"
+        ]
+      },
+      "verdict": "PASS",
+      "note": "Ratingul nu are termen de mod; MANUAL/LEARNING/AUTO nu sunt pedepsite.",
+      "notRunReason": null
+    },
+    {
+      "id": "B3",
+      "category": "KPI",
+      "contract": "210-kpi-history-v1",
+      "scenario": "Douăsprezece luni sintetice, paginare vizuală și medie ponderată",
+      "polarity": "POSITIVE",
+      "command": "npm run qa:v1-regression",
+      "actual": {
+        "months": 12,
+        "monthsWithData": 11,
+        "monthsWithoutData": 1,
+        "partialMonths": 1,
+        "exactDays": 310,
+        "visualPoints": 52,
+        "revenue": 31960,
+        "reviews": 284,
+        "weightedMean": 2.552817,
+        "cappedPoints": 20
+      },
+      "verdict": "PASS",
+      "note": "Lipsa datelor rămâne NO_DATA, iar media este mereu ratingSum / reviewCount.",
+      "notRunReason": null
+    },
+    {
+      "id": "B4",
+      "category": "KPI",
+      "contract": "210-kpi-history-popup-v1",
+      "scenario": "Pop-up închis fără citiri, deschidere cu o singură citire, pauză în MANUAL",
+      "polarity": "POSITIVE",
+      "command": "npm run qa:v1-regression",
+      "actual": {
+        "closedRefresh": "SKIPPED_CLOSED",
+        "readsBefore": 0,
+        "readsAfterOpen": 1,
+        "rendersAfterOpen": 1,
+        "suspensions": [
+          "panel"
+        ],
+        "resumes": 1
+      },
+      "verdict": "PASS",
+      "note": "Un panou închis nu reconstruiește grafice; deschiderea citește o dată.",
+      "notRunReason": null
+    },
+    {
+      "id": "B5",
+      "category": "DAILY",
+      "contract": "211-mission-daily-v1",
+      "scenario": "Exact trei misiuni, obiectiv MANUAL îndeplinit și recompense unice pe obiectiv",
+      "polarity": "POSITIVE",
+      "command": "npm run qa:v1-regression",
+      "actual": {
+        "instances": 3,
+        "promisedXp": 300,
+        "grantedXp": 200,
+        "rewards": 2,
+        "manualState": "COMPLETED",
+        "manualProgress": 2
+      },
+      "verdict": "PASS",
+      "note": "Progresul consumă evenimente 007 reale, iar recompensa are o singură identitate.",
+      "notRunReason": null
+    },
+    {
+      "id": "B6",
+      "category": "DAILY",
+      "contract": "212-daily-progress-v1",
+      "scenario": "Eveniment străin, mod nepotrivit și ziua următoare",
+      "polarity": "NEGATIVE",
+      "command": "npm run qa:v1-regression",
+      "actual": {
+        "rejection": "FOREIGN_SESSION",
+        "nextDayAction": "NEW_DAY",
+        "nextDayRows": 3,
+        "rewardsKept": 0
+      },
+      "verdict": "PASS",
+      "note": "O sesiune străină și un mod greșit nu avansează obiectivul; ziua nouă păstrează istoricul.",
+      "notRunReason": null
+    },
+    {
+      "id": "B7",
+      "category": "XP",
+      "contract": "213-player-progress-v1",
+      "scenario": "Credite idempotente, fracții de minut și ferestre excluse",
+      "polarity": "POSITIVE",
+      "command": "npm run qa:v1-regression",
+      "actual": {
+        "missionXp": 100,
+        "duplicateXp": 0,
+        "replayXp": 0,
+        "dailyXp": 100,
+        "balance": 202.666666,
+        "level": 2,
+        "pausedSkips": 1,
+        "backgroundSkips": 1
+      },
+      "verdict": "PASS",
+      "note": "Soldul este suma intrărilor, iar o fereastră de 10 s plătește exact 0,5 XP.",
+      "notRunReason": null
+    },
+    {
+      "id": "B8",
+      "category": "XP",
+      "contract": "213-player-progress-v1",
+      "scenario": "Un credit negativ este refuzat, nu debitat",
+      "polarity": "NEGATIVE",
+      "command": "npm run qa:v1-regression",
+      "actual": {
+        "refused": true,
+        "balanceMicroXp": 202666666
+      },
+      "verdict": "PASS",
+      "note": "Validatorul 213 refuză suma negativă înainte de orice scriere.",
+      "notRunReason": null
+    },
+    {
+      "id": "B9",
+      "category": "XP",
+      "contract": "214-kpi-impact-v1 + 213-player-progress-v1",
+      "scenario": "Amprente înainte/după pe cele cinci căi de scădere",
+      "polarity": "POSITIVE",
+      "command": "npm run qa:v1-regression",
+      "actual": {
+        "balanceBefore": 200.5,
+        "balanceAfter": 200.5,
+        "levelBefore": 2,
+        "levelAfter": 2,
+        "fingerprintBefore": "85df901a8cacee6620dfdc7eb2c3f8e48ee5f135e27516d4a607b2643112e3cc",
+        "fingerprintAfter": "85df901a8cacee6620dfdc7eb2c3f8e48ee5f135e27516d4a607b2643112e3cc",
+        "paths": [
+          {
+            "id": "KPI_DOWN",
+            "fingerprint": "85df901a8cacee6620dfdc7eb2c3f8e48ee5f135e27516d4a607b2643112e3cc",
+            "unchanged": true
+          },
+          {
+            "id": "INCIDENT",
+            "fingerprint": "85df901a8cacee6620dfdc7eb2c3f8e48ee5f135e27516d4a607b2643112e3cc",
+            "unchanged": true
+          },
+          {
+            "id": "MISSION_FAILED",
+            "fingerprint": "85df901a8cacee6620dfdc7eb2c3f8e48ee5f135e27516d4a607b2643112e3cc",
+            "unchanged": true
+          },
+          {
+            "id": "GOAL_REFUSED",
+            "fingerprint": "85df901a8cacee6620dfdc7eb2c3f8e48ee5f135e27516d4a607b2643112e3cc",
+            "unchanged": true
+          },
+          {
+            "id": "DAY_MISSED",
+            "fingerprint": "85df901a8cacee6620dfdc7eb2c3f8e48ee5f135e27516d4a607b2643112e3cc",
+            "unchanged": true
+          }
+        ]
+      },
+      "verdict": "PASS",
+      "note": "XP nu scade pe KPI, incident, misiune eșuată, recompensă refuzată sau zi ratată.",
+      "notRunReason": null
+    },
+    {
+      "id": "B10",
+      "category": "CHECKPOINT",
+      "contract": "206-world-checkpoint-v1",
+      "scenario": "Captură, commit, reluare și 60 de tick-uri identice cu oracolul",
+      "polarity": "POSITIVE",
+      "command": "npm run qa:v1-regression",
+      "actual": {
+        "tick": 60,
+        "vehicles": 70,
+        "bytes": 64378,
+        "checksum": "c5a0738c0be1b8a149726738b9b9cccad5655229c542396b04d8aa9d24d8bcb5",
+        "resumeMode": "PAUSED_AUTO",
+        "continuationTicks": 60
+      },
+      "verdict": "PASS",
+      "note": "Un checkpoint complet este reluat în pauză/AUTO și continuă identic.",
+      "notRunReason": null
+    },
+    {
+      "id": "B11",
+      "category": "CHECKPOINT",
+      "contract": "206-world-checkpoint-v1",
+      "scenario": "Captură în interiorul tick-ului și snapshot modificat",
+      "polarity": "NEGATIVE",
+      "command": "npm run qa:v1-regression",
+      "actual": {
+        "inStep": "TICK_NOT_BOUNDARY",
+        "tampered": "CHECKSUM_MISMATCH"
+      },
+      "verdict": "PASS",
+      "note": "Limita de tick și checksumul refuză date incoerente.",
+      "notRunReason": null
+    },
+    {
+      "id": "B12",
+      "category": "REPLAY",
+      "contract": "207-world-replay-chunk-v1",
+      "scenario": "Fereastră completă, checksum reproductibil și rând modificat refuzat",
+      "polarity": "POSITIVE",
+      "command": "npm run qa:v1-regression",
+      "actual": {
+        "bytes": 129377,
+        "samples": 60,
+        "status": "COMPLETE",
+        "events": 1,
+        "checksum": "ff37f798e578fc928ef6d5660613843ff51e639b2bbea8349bc86692a4ded218"
+      },
+      "verdict": "PASS",
+      "note": "Replay-ul păstrează tick-urile exacte și refuză o fereastră falsificată.",
+      "notRunReason": null
+    },
+    {
+      "id": "B13",
+      "category": "REPLAY",
+      "contract": "141-experiment-replay-v1",
+      "scenario": "Seek și redare fără venit, review, reward sau XP",
+      "polarity": "POSITIVE",
+      "command": "npm run qa:v1-regression",
+      "actual": {
+        "seekStatus": "SEEKED",
+        "landedTick": 399,
+        "atIncident": true,
+        "frames": 41,
+        "liveWrites": 0,
+        "xpBalanceMicroXp": 100000000
+      },
+      "verdict": "PASS",
+      "note": "Replay-ul este read-only: amprentele ledgerelor și soldul XP rămân identice.",
+      "notRunReason": null
+    },
+    {
+      "id": "C1",
+      "category": "COMBINED",
+      "contract": "115-vertical-slice-v1 + 207 + 131 + 209 + 213",
+      "scenario": "Conducere cu learning, recorder, autosave, KPI și XP în aceeași sesiune",
+      "polarity": "POSITIVE",
+      "command": "npm run qa:v1-regression",
+      "actual": {
+        "ticks": 1900,
+        "vehicles": 70,
+        "baseCompliance": 78.57142857142857,
+        "learnedCompliance": 100,
+        "systemsCompliance": 100,
+        "learningDelta": 21.428571,
+        "systemsUnchanged": true,
+        "settlements": 3,
+        "reviews": 3,
+        "xpBalance": 200.5,
+        "captures": 4,
+        "recorderPeakBytes": 4909260
+      },
+      "verdict": "PASS",
+      "note": "Learning schimbă condusul; sistemele atașate nu îl schimbă și își raportează costul.",
+      "notRunReason": null
+    },
+    {
+      "id": "C2",
+      "category": "BENCHMARK",
+      "contract": "Docs/25 performance contract + performance-budgets.json",
+      "scenario": "Costurile noi ale stack-ului combinat, față de bugetele din manifest",
+      "polarity": "COST",
+      "command": "npm run qa:v1-regression",
+      "actual": {
+        "budgetVersion": "203-initial-1",
+        "recorderPeakBytes": 4909260,
+        "recorderCapBytes": 25165824,
+        "chunkBytes": 632652,
+        "chunkBytesPerSimulatedSecond": 30367,
+        "checkpointBytes": 64900,
+        "progressBytes": 9804,
+        "economyBytes": 14483,
+        "economyComponents": {
+          "daily": 4919,
+          "economy": 7341,
+          "player": 1745
+        },
+        "measuredBudgets": 7
+      },
+      "verdict": "PASS",
+      "note": "Costurile sunt contoare reale de ownership și bytes; nu se pretinde FPS sau RAM totală.",
+      "notRunReason": null
+    },
+    {
+      "id": "C3",
+      "category": "PLAYTEST",
+      "contract": "Docs/validation-policy.md",
+      "scenario": "Playtest în browser: explicații, senzație de condus, HUD",
+      "polarity": "POSITIVE",
+      "command": "npm run qa:v1-regression",
+      "actual": {},
+      "verdict": "NOT_RUN",
+      "note": "Scenariul nu a fost executat; motivul este obligatoriu.",
+      "notRunReason": "Nu s-a rulat un browser real sau input uman. Nivelul atins este `targeted`, cu scenarii deterministe în Node; playtestul rămâne pentru gate-ul 235."
+    },
+    {
+      "id": "C4",
+      "category": "BENCHMARK",
+      "contract": "performance-budgets.json proposedBudgets.frameP95Ms",
+      "scenario": "Frame p95/p99 pe hardware real",
+      "polarity": "COST",
+      "command": "npm run qa:v1-regression",
+      "actual": {},
+      "verdict": "NOT_RUN",
+      "note": "Scenariul nu a fost executat; motivul este obligatoriu.",
+      "notRunReason": "Suita nu are renderer, GPU sau browser; bugetul de cadru rămâne al gate-urilor 220/224/155. Nu se raportează FPS headless."
+    },
+    {
+      "id": "D1",
+      "category": "DEPENDENCIES",
+      "contract": "PBI/235 + 225-234",
+      "scenario": "Gate separat pentru extensii, fără dependență inversă",
+      "polarity": "DOCUMENT",
+      "command": "npm run qa:v1-regression",
+      "actual": {
+        "gate": "235",
+        "gateDependencies": [
+          "216",
+          "224",
+          "226",
+          "228",
+          "229",
+          "230",
+          "233",
+          "234",
+          "084"
+        ],
+        "extensionClosure": 10,
+        "missing": [],
+        "inverse": []
+      },
+      "verdict": "PASS",
+      "note": "235 este gate-ul extensiilor 225–234, iar niciuna nu depinde de el.",
+      "notRunReason": null
+    },
+    {
+      "id": "D2",
+      "category": "DEPENDENCIES",
+      "contract": "PBI board",
+      "scenario": "Graful complet de dependențe nu are cicluri",
+      "polarity": "DOCUMENT",
+      "command": "npm run qa:v1-regression",
+      "actual": {
+        "nodes": 235,
+        "edges": 235,
+        "cycles": 0,
+        "duplicates": 0,
+        "external": 0
+      },
+      "verdict": "PASS",
+      "note": "Un ciclu sau un id duplicat ar bloca planul, deci este raportat explicit.",
+      "notRunReason": null
+    },
+    {
+      "id": "D3",
+      "category": "DEPENDENCIES",
+      "contract": "PBI/216",
+      "scenario": "Dependențele regresiei V1 sunt în Done",
+      "polarity": "DOCUMENT",
+      "command": "npm run qa:v1-regression",
+      "actual": {
+        "dependencies": [
+          "215",
+          "141",
+          "108",
+          "208",
+          "217",
+          "205"
+        ],
+        "undone": []
+      },
+      "verdict": "PASS",
+      "note": "Regresia pornește numai după contractele pe care le verifică.",
+      "notRunReason": null
+    }
+  ],
+  "summary": {
+    "rows": 29,
+    "pass": 27,
+    "fail": 0,
+    "notRun": 2,
+    "categories": {
+      "BENCHMARK": 2,
+      "CHECKPOINT": 2,
+      "COMBINED": 1,
+      "DAILY": 2,
+      "DEPENDENCIES": 3,
+      "KPI": 4,
+      "LEARNING_BARRIER": 2,
+      "MODES": 5,
+      "PLAYTEST": 1,
+      "PROPAGATION": 2,
+      "REPLAY": 2,
+      "XP": 3
+    }
+  },
+  "xp": {
+    "before": {
+      "balance": 200.5,
+      "level": 2,
+      "entries": 3
+    },
+    "after": {
+      "balance": 200.5,
+      "level": 2,
+      "entries": 3
+    },
+    "fingerprintBefore": "85df901a8cacee6620dfdc7eb2c3f8e48ee5f135e27516d4a607b2643112e3cc",
+    "fingerprintAfter": "85df901a8cacee6620dfdc7eb2c3f8e48ee5f135e27516d4a607b2643112e3cc",
+    "paths": [
+      {
+        "id": "KPI_DOWN",
+        "fingerprint": "85df901a8cacee6620dfdc7eb2c3f8e48ee5f135e27516d4a607b2643112e3cc",
+        "unchanged": true
+      },
+      {
+        "id": "INCIDENT",
+        "fingerprint": "85df901a8cacee6620dfdc7eb2c3f8e48ee5f135e27516d4a607b2643112e3cc",
+        "unchanged": true
+      },
+      {
+        "id": "MISSION_FAILED",
+        "fingerprint": "85df901a8cacee6620dfdc7eb2c3f8e48ee5f135e27516d4a607b2643112e3cc",
+        "unchanged": true
+      },
+      {
+        "id": "GOAL_REFUSED",
+        "fingerprint": "85df901a8cacee6620dfdc7eb2c3f8e48ee5f135e27516d4a607b2643112e3cc",
+        "unchanged": true
+      },
+      {
+        "id": "DAY_MISSED",
+        "fingerprint": "85df901a8cacee6620dfdc7eb2c3f8e48ee5f135e27516d4a607b2643112e3cc",
+        "unchanged": true
+      }
+    ],
+    "losses": 0,
+    "debits": 0,
+    "negativeCredits": false
+  },
+  "budgets": [
+    {
+      "metric": "recorder peak charged bytes",
+      "actual": 4909260,
+      "budget": 33554432,
+      "unit": "bytes",
+      "source": "performance-budgets.json proposedCapacities.recorderRamBytes",
+      "note": "Ownership counter of the 207 ring, pinned chunk and event reserve; not page RAM.",
+      "verdict": "PASS"
+    },
+    {
+      "metric": "recorder sealed chunk bytes",
+      "actual": 632652,
+      "budget": 134217728,
+      "unit": "bytes",
+      "source": "performance-budgets.json proposedCapacities.optionalReplayStorageBytes",
+      "note": "One pinned incident chunk stays far below the optional replay cap.",
+      "verdict": "PASS"
+    },
+    {
+      "metric": "autosave checkpoint bytes",
+      "actual": 64900,
+      "budget": 1048576,
+      "unit": "bytes",
+      "source": "131-autosave-v1 AUTOSAVE_BUDGET.maxCheckpointBytes (PERSISTENCE_LIMITS)",
+      "note": "One 206 checkpoint row written by the real 131 cycle.",
+      "verdict": "PASS"
+    },
+    {
+      "metric": "autosave progress body bytes",
+      "actual": 9804,
+      "budget": 262144,
+      "unit": "bytes",
+      "source": "131-autosave-v1 AUTOSAVE_BUDGET.maxProgressBodyBytes (PERSISTENCE_LIMITS)",
+      "note": "The 130 progress rows of the same cycle.",
+      "verdict": "PASS"
+    },
+    {
+      "metric": "economy bundle bytes",
+      "actual": 14483,
+      "budget": 1048576,
+      "unit": "bytes",
+      "source": "215-economy-save-v1 ECONOMY_SAVE_LIMITS.maxDocumentBytes",
+      "note": "Daily, economy and XP bundle; the component caps are the enforceable limits.",
+      "verdict": "PASS"
+    },
+    {
+      "metric": "preparing checkpoints",
+      "actual": 0,
+      "budget": 1,
+      "unit": "generations",
+      "source": "performance-budgets.json proposedCapacities.preparingCheckpoints",
+      "note": "At most one generation prepares at a time.",
+      "verdict": "PASS"
+    },
+    {
+      "metric": "committing checkpoints",
+      "actual": 0,
+      "budget": 1,
+      "unit": "generations",
+      "source": "performance-budgets.json proposedCapacities.committingCheckpoints",
+      "note": "At most one generation commits at a time.",
+      "verdict": "PASS"
+    },
+    {
+      "metric": "KPI visual chart points",
+      "actual": 52,
+      "budget": null,
+      "unit": "points",
+      "source": "no manifest budget; 210 KPI_HISTORY_LIMITS caps the chart",
+      "note": "The cap is a UI component limit, not a performance budget.",
+      "verdict": "NOT_RUN"
+    },
+    {
+      "metric": "frame p95",
+      "actual": null,
+      "budget": 18.5,
+      "unit": "ms",
+      "source": "performance-budgets.json proposedBudgets.desktop.frameP95Ms",
+      "note": "No renderer ran in this suite; the frame budget stays owned by 220/224/155.",
+      "verdict": "NOT_RUN"
+    }
+  ],
+  "gaps": [
+    {
+      "component": "frame / render",
+      "reason": "Manifestul are buget frame p95, dar suita nu are renderer; nu se inventează o măsurătoare headless."
+    },
+    {
+      "component": "KPI chart points",
+      "reason": "Manifestul nu are buget pentru punctele graficului; limita aplicabilă este KPI_HISTORY_LIMITS (60 implicit, 90 maximum), raportată ca limită de componentă."
+    },
+    {
+      "component": "economy bundle",
+      "reason": "Manifestul nu are buget dedicat bundle-ului 215; limita aplicabilă este ECONOMY_SAVE_LIMITS.maxDocumentBytes (un rând de 1 MiB)."
+    },
+    {
+      "component": "local Node tick cost",
+      "reason": "Costul per tick al stack-ului este măsurabil doar cu ceas de perete; rulează separat cu `--cost` și nu este o probă de cadru."
+    }
+  ],
+  "dependencies": {
+    "nodes": 235,
+    "edges": 235,
+    "external": [],
+    "cycles": [],
+    "gateCoversExtensions": true,
+    "inverseDependencies": [],
+    "duplicates": []
+  },
+  "limitations": [
+    "Nivel `targeted`: fără browser, GPU, input uman sau hardware de referință; playtestul și frame-ul rămân NOT_RUN.",
+    "Condusul din proba combinată este comportamentul simulat 115 (oportunități declarate), nu fizica Babylon/Rapier live.",
+    "Costurile de memorie sunt contoare de ownership (recorder, checkpoint, bundle), nu RAM totală a paginii.",
+    "Review-urile din proba combinată folosesc durata reală a cursei din fixture și un read model 139 real pentru cursele finalizate; formula completă de confort rămâne a dovezilor 209/214.",
+    "Costul per tick al stack-ului este măsurat separat, cu ceas de perete, de `npm run qa:v1-regression -- --cost`; nu este o probă de cadru sau de FPS.",
+    "Nu s-a modificat `src/`; orice defect găsit ar fi raportat aici, nu reparat."
+  ]
+}
