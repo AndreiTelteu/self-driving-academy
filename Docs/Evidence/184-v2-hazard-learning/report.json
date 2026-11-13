@@ -1,0 +1,874 @@
+{
+  "version": "184-hazard-estimator-v1",
+  "parameters": [
+    {
+      "key": "pedestrian_yield_probability",
+      "unit": "probability",
+      "minimum": 0,
+      "maximum": 1,
+      "defaultValue": 1
+    },
+    {
+      "key": "pedestrian_clearance",
+      "unit": "m",
+      "minimum": 0.1,
+      "maximum": 6,
+      "defaultValue": 2
+    },
+    {
+      "key": "hazard_reaction_delay",
+      "unit": "s",
+      "minimum": 0,
+      "maximum": 3,
+      "defaultValue": 0.5
+    },
+    {
+      "key": "obstacle_clearance",
+      "unit": "m",
+      "minimum": 0.1,
+      "maximum": 4,
+      "defaultValue": 1
+    },
+    {
+      "key": "emergency_brake_intensity",
+      "unit": "ratio",
+      "minimum": 0,
+      "maximum": 1,
+      "defaultValue": 1
+    },
+    {
+      "key": "evasive_steer_willingness",
+      "unit": "probability",
+      "minimum": 0,
+      "maximum": 1,
+      "defaultValue": 0.3
+    },
+    {
+      "key": "crosswalk_approach_speed",
+      "unit": "m/s",
+      "minimum": 0.5,
+      "maximum": 15,
+      "defaultValue": 5
+    },
+    {
+      "key": "horn_use_probability",
+      "unit": "probability",
+      "minimum": 0,
+      "maximum": 1,
+      "defaultValue": 0.1
+    }
+  ],
+  "rows": [
+    {
+      "key": "pedestrian_yield_probability",
+      "scenario": "PEDESTRIAN_CROSSING",
+      "context": "o traversare reală 164 în care 183 a extras eșantionul determinist `pedestrian-yield` și traversarea nu este un conflict fizic (marja peste `yield_time_gap`): cedarea dovedește `cheie > eșantion`, trecerea dovedește `cheie ≤ eșantion`, iar numitorul este numărul de oportunități distincte, niciodată numărul de cadre",
+      "status": "CANDIDATE",
+      "value": 0.5,
+      "unit": "probability",
+      "uncertainty": 0.10206207261596575,
+      "uncertaintyThreshold": 0.15,
+      "sourceEpisodes": 12,
+      "sourceSamples": 24,
+      "validationStatus": "VALIDATED",
+      "validationEpisodes": 12,
+      "validationValue": 0.5,
+      "validationError": 0,
+      "validationTolerance": 0.15,
+      "reason": null,
+      "excluded": {}
+    },
+    {
+      "key": "pedestrian_clearance",
+      "scenario": "PEDESTRIAN_CLEARANCE_APPROACH",
+      "context": "un tick cu plafon de viteză față de un pieton, peste podeaua fizică `lățime + 0,5 m`, cu `comfort_deceleration` M declarat: camera se recuperează din `plafon² / (2 · comfort)` și cheia este `distanță − cameră`; fără M cunoscut cheia nu se poate izola de plafon",
+      "status": "CANDIDATE",
+      "value": 2.5,
+      "unit": "m",
+      "uncertainty": 0.02,
+      "uncertaintyThreshold": 0.15,
+      "sourceEpisodes": 12,
+      "sourceSamples": 24,
+      "validationStatus": "VALIDATED",
+      "validationEpisodes": 12,
+      "validationValue": 2.5,
+      "validationError": 0,
+      "validationTolerance": 0.15,
+      "reason": null,
+      "excluded": {}
+    },
+    {
+      "key": "hazard_reaction_delay",
+      "scenario": "HAZARD_REACTION",
+      "context": "un stimul 165 observabil cu reacție **nesaturată**: `delayS − brake_reaction_delay` este cheia, iar o întârziere tăiată de plafonul de oprire dovedește doar o margine inferioară",
+      "status": "CANDIDATE",
+      "value": 0.8,
+      "unit": "s",
+      "uncertainty": 0.02,
+      "uncertaintyThreshold": 0.2,
+      "sourceEpisodes": 8,
+      "sourceSamples": 8,
+      "validationStatus": "VALIDATED",
+      "validationEpisodes": 8,
+      "validationValue": 0.8,
+      "validationError": 0,
+      "validationTolerance": 0.15,
+      "reason": null,
+      "excluded": {}
+    },
+    {
+      "key": "obstacle_clearance",
+      "scenario": "OBSTACLE_CLEARANCE_APPROACH",
+      "context": "același plafon de viteză, față de o cutie de obstacol autorată, peste podeaua fizică `lățime/2 + jumătate de cutie + 0,5 m`, cu `comfort_deceleration` M declarat",
+      "status": "CANDIDATE",
+      "value": 2.3999999999999986,
+      "unit": "m",
+      "uncertainty": 0.02,
+      "uncertaintyThreshold": 0.15,
+      "sourceEpisodes": 9,
+      "sourceSamples": 9,
+      "validationStatus": "VALIDATED",
+      "validationEpisodes": 7,
+      "validationValue": 2.3999999999999986,
+      "validationError": 0,
+      "validationTolerance": 0.15,
+      "reason": null,
+      "excluded": {}
+    },
+    {
+      "key": "emergency_brake_intensity",
+      "scenario": "EMERGENCY_BRAKE",
+      "context": "o frânare de urgență pe o suprafață cu aderență cunoscută, **sub** plafonul de aderență: `decelerație / brakeAcceleration` este chiar cheia, iar o decelerație plafonată de anvelopă nu spune nimic despre intensitate",
+      "status": "CANDIDATE",
+      "value": 0.65,
+      "unit": "ratio",
+      "uncertainty": 0.02,
+      "uncertaintyThreshold": 0.15,
+      "sourceEpisodes": 8,
+      "sourceSamples": 8,
+      "validationStatus": "VALIDATED",
+      "validationEpisodes": 8,
+      "validationValue": 0.65,
+      "validationError": 0,
+      "validationTolerance": 0.15,
+      "reason": null,
+      "excluded": {}
+    },
+    {
+      "key": "evasive_steer_willingness",
+      "scenario": "EVASION_OPPORTUNITY",
+      "context": "o oportunitate de ocolire cu spațiu lateral verificat peste marja fizică, în care 183 a extras eșantionul determinist `evasion`: acceptarea dovedește `cheie > eșantion`, refuzul dovedește `cheie ≤ eșantion`",
+      "status": "CANDIDATE",
+      "value": 0.30529861024115235,
+      "unit": "probability",
+      "uncertainty": 0.02,
+      "uncertaintyThreshold": 0.15,
+      "sourceEpisodes": 4,
+      "sourceSamples": 8,
+      "validationStatus": "VALIDATED",
+      "validationEpisodes": 4,
+      "validationValue": 0.2929252675967291,
+      "validationError": 0.012373342644423246,
+      "validationTolerance": 0.15,
+      "reason": null,
+      "excluded": {}
+    },
+    {
+      "key": "crosswalk_approach_speed",
+      "scenario": "CROSSWALK_APPROACH",
+      "context": "o apropiere de trecere autorată în care comanda este **sub** limita postată: `min(cheie, limită)` sub limită este cheia, iar o comandă egală cu limita este doar o margine inferioară",
+      "status": "CANDIDATE",
+      "value": 6,
+      "unit": "m/s",
+      "uncertainty": 0.05,
+      "uncertaintyThreshold": 0.5,
+      "sourceEpisodes": 3,
+      "sourceSamples": 3,
+      "validationStatus": "VALIDATED",
+      "validationEpisodes": 5,
+      "validationValue": 6,
+      "validationError": 0,
+      "validationTolerance": 0.5,
+      "reason": null,
+      "excluded": {}
+    },
+    {
+      "key": "horn_use_probability",
+      "scenario": "HORN_OPPORTUNITY",
+      "context": "o oportunitate 165 în care lumea permite claxonul și 183 a extras eșantionul determinist `horn`: folosirea dovedește `cheie > eșantion`, refuzul dovedește `cheie ≤ eșantion`; unde claxonul este interzis nu se trage niciun eșantion",
+      "status": "CANDIDATE",
+      "value": 0.2520623210584745,
+      "unit": "probability",
+      "uncertainty": 0.02,
+      "uncertaintyThreshold": 0.15,
+      "sourceEpisodes": 4,
+      "sourceSamples": 8,
+      "validationStatus": "VALIDATED",
+      "validationEpisodes": 4,
+      "validationValue": 0.25967638101428747,
+      "validationError": 0.007614059955812991,
+      "validationTolerance": 0.15,
+      "reason": null,
+      "excluded": {}
+    }
+  ],
+  "demonstrations": [
+    {
+      "demonstration": "flux fără decelerația de confort M",
+      "key": "pedestrian_clearance",
+      "scenario": "PEDESTRIAN_CLEARANCE_APPROACH",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "CLEARANCE_M_UNKNOWN",
+      "excluded": {
+        "CLEARANCE_M_UNKNOWN": 4
+      }
+    },
+    {
+      "demonstration": "flux fără decelerația de confort M",
+      "key": "obstacle_clearance",
+      "scenario": "OBSTACLE_CLEARANCE_APPROACH",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "CLEARANCE_M_UNKNOWN",
+      "excluded": {
+        "CLEARANCE_M_UNKNOWN": 4
+      }
+    },
+    {
+      "demonstration": "decelerație de confort M declarată greșit",
+      "key": "pedestrian_clearance",
+      "scenario": "PEDESTRIAN_CLEARANCE_APPROACH",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "CLEARANCE_M_INCONSISTENT",
+      "excluded": {
+        "CLEARANCE_M_INCONSISTENT": 4
+      }
+    },
+    {
+      "demonstration": "decelerație de confort M declarată greșit",
+      "key": "obstacle_clearance",
+      "scenario": "OBSTACLE_CLEARANCE_APPROACH",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "CLEARANCE_M_INCONSISTENT",
+      "excluded": {
+        "CLEARANCE_M_INCONSISTENT": 4
+      }
+    },
+    {
+      "demonstration": "spațiu demonstrat sub podeaua fizică",
+      "key": "pedestrian_clearance",
+      "scenario": "PEDESTRIAN_CLEARANCE_APPROACH",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "CLEARANCE_FLOOR_SATURATED",
+      "excluded": {
+        "CLEARANCE_FLOOR_SATURATED": 4
+      }
+    },
+    {
+      "demonstration": "spațiu demonstrat sub podeaua fizică",
+      "key": "obstacle_clearance",
+      "scenario": "OBSTACLE_CLEARANCE_APPROACH",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "CLEARANCE_FLOOR_SATURATED",
+      "excluded": {
+        "CLEARANCE_FLOOR_SATURATED": 4
+      }
+    },
+    {
+      "demonstration": "hazard deja în marjă, comandă 0 m/s",
+      "key": "pedestrian_clearance",
+      "scenario": "PEDESTRIAN_CLEARANCE_APPROACH",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "CLEARANCE_ROOM_EXHAUSTED",
+      "excluded": {
+        "CLEARANCE_ROOM_EXHAUSTED": 4
+      }
+    },
+    {
+      "demonstration": "hazard deja în marjă, comandă 0 m/s",
+      "key": "obstacle_clearance",
+      "scenario": "OBSTACLE_CLEARANCE_APPROACH",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "CLEARANCE_ROOM_EXHAUSTED",
+      "excluded": {
+        "CLEARANCE_ROOM_EXHAUSTED": 4
+      }
+    },
+    {
+      "demonstration": "reacție saturată de plafonul de oprire",
+      "key": "hazard_reaction_delay",
+      "scenario": "HAZARD_REACTION",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "REACTION_DELAY_SATURATED",
+      "excluded": {
+        "REACTION_DELAY_SATURATED": 4
+      }
+    },
+    {
+      "demonstration": "frânare de urgență pe aderență redusă",
+      "key": "emergency_brake_intensity",
+      "scenario": "EMERGENCY_BRAKE",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "ADHESION_CAP_SATURATED",
+      "excluded": {
+        "ADHESION_CAP_SATURATED": 4
+      }
+    },
+    {
+      "demonstration": "ocolire fără spațiul lateral verificat",
+      "key": "evasive_steer_willingness",
+      "scenario": "EVASION_OPPORTUNITY",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "EVASION_NO_SPACE",
+      "excluded": {
+        "EVASION_NO_SPACE": 4
+      }
+    },
+    {
+      "demonstration": "apropiere de trecere plafonată de limită",
+      "key": "crosswalk_approach_speed",
+      "scenario": "CROSSWALK_APPROACH",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "CROSSWALK_LIMIT_SATURATED",
+      "excluded": {
+        "CROSSWALK_LIMIT_SATURATED": 4
+      }
+    },
+    {
+      "demonstration": "claxon interzis de lume",
+      "key": "horn_use_probability",
+      "scenario": "HORN_OPPORTUNITY",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "HORN_FORBIDDEN",
+      "excluded": {
+        "HORN_FORBIDDEN": 4
+      }
+    },
+    {
+      "demonstration": "cedare obligatorie la fiecare traversare",
+      "key": "pedestrian_yield_probability",
+      "scenario": "PEDESTRIAN_CROSSING",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "PEDESTRIAN_ALL_CROSSINGS_MANDATORY",
+      "excluded": {
+        "PEDESTRIAN_ALL_CROSSINGS_MANDATORY": 4
+      }
+    },
+    {
+      "demonstration": "reacții împrăștiate peste pragul de incertitudine",
+      "key": "hazard_reaction_delay",
+      "scenario": "HAZARD_REACTION",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": 0.74336,
+      "reason": "UNCERTAINTY_ABOVE_THRESHOLD",
+      "excluded": {}
+    },
+    {
+      "demonstration": "episoade MANUAL",
+      "key": "pedestrian_yield_probability",
+      "scenario": "PEDESTRIAN_CROSSING",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "NO_ELIGIBLE_EPISODES",
+      "excluded": {}
+    },
+    {
+      "demonstration": "episoade MANUAL",
+      "key": "pedestrian_clearance",
+      "scenario": "PEDESTRIAN_CLEARANCE_APPROACH",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "NO_ELIGIBLE_EPISODES",
+      "excluded": {}
+    },
+    {
+      "demonstration": "episoade MANUAL",
+      "key": "hazard_reaction_delay",
+      "scenario": "HAZARD_REACTION",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "NO_ELIGIBLE_EPISODES",
+      "excluded": {}
+    },
+    {
+      "demonstration": "episoade MANUAL",
+      "key": "obstacle_clearance",
+      "scenario": "OBSTACLE_CLEARANCE_APPROACH",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "NO_ELIGIBLE_EPISODES",
+      "excluded": {}
+    },
+    {
+      "demonstration": "episoade MANUAL",
+      "key": "emergency_brake_intensity",
+      "scenario": "EMERGENCY_BRAKE",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "NO_ELIGIBLE_EPISODES",
+      "excluded": {}
+    },
+    {
+      "demonstration": "episoade MANUAL",
+      "key": "evasive_steer_willingness",
+      "scenario": "EVASION_OPPORTUNITY",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "NO_ELIGIBLE_EPISODES",
+      "excluded": {}
+    },
+    {
+      "demonstration": "episoade MANUAL",
+      "key": "crosswalk_approach_speed",
+      "scenario": "CROSSWALK_APPROACH",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "NO_ELIGIBLE_EPISODES",
+      "excluded": {}
+    },
+    {
+      "demonstration": "episoade MANUAL",
+      "key": "horn_use_probability",
+      "scenario": "HORN_OPPORTUNITY",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "NO_ELIGIBLE_EPISODES",
+      "excluded": {}
+    },
+    {
+      "demonstration": "fereastră fără prefix utilizabil",
+      "key": "pedestrian_yield_probability",
+      "scenario": "PEDESTRIAN_CROSSING",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "NO_ELIGIBLE_EPISODES",
+      "excluded": {}
+    },
+    {
+      "demonstration": "fereastră fără prefix utilizabil",
+      "key": "pedestrian_clearance",
+      "scenario": "PEDESTRIAN_CLEARANCE_APPROACH",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "NO_ELIGIBLE_EPISODES",
+      "excluded": {}
+    },
+    {
+      "demonstration": "fereastră fără prefix utilizabil",
+      "key": "hazard_reaction_delay",
+      "scenario": "HAZARD_REACTION",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "NO_ELIGIBLE_EPISODES",
+      "excluded": {}
+    },
+    {
+      "demonstration": "fereastră fără prefix utilizabil",
+      "key": "obstacle_clearance",
+      "scenario": "OBSTACLE_CLEARANCE_APPROACH",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "NO_ELIGIBLE_EPISODES",
+      "excluded": {}
+    },
+    {
+      "demonstration": "fereastră fără prefix utilizabil",
+      "key": "emergency_brake_intensity",
+      "scenario": "EMERGENCY_BRAKE",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "NO_ELIGIBLE_EPISODES",
+      "excluded": {}
+    },
+    {
+      "demonstration": "fereastră fără prefix utilizabil",
+      "key": "evasive_steer_willingness",
+      "scenario": "EVASION_OPPORTUNITY",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "NO_ELIGIBLE_EPISODES",
+      "excluded": {}
+    },
+    {
+      "demonstration": "fereastră fără prefix utilizabil",
+      "key": "crosswalk_approach_speed",
+      "scenario": "CROSSWALK_APPROACH",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "NO_ELIGIBLE_EPISODES",
+      "excluded": {}
+    },
+    {
+      "demonstration": "fereastră fără prefix utilizabil",
+      "key": "horn_use_probability",
+      "scenario": "HORN_OPPORTUNITY",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "NO_ELIGIBLE_EPISODES",
+      "excluded": {}
+    }
+  ],
+  "zeros": [
+    {
+      "demonstration": "claxon nefolosit la fiecare oportunitate",
+      "key": "horn_use_probability",
+      "scenario": "HORN_OPPORTUNITY",
+      "status": "CANDIDATE",
+      "value": 0,
+      "uncertainty": 0.02,
+      "reason": null,
+      "excluded": {}
+    },
+    {
+      "demonstration": "ocolire refuzată la fiecare oportunitate",
+      "key": "evasive_steer_willingness",
+      "scenario": "EVASION_OPPORTUNITY",
+      "status": "CANDIDATE",
+      "value": 0,
+      "uncertainty": 0.02,
+      "reason": null,
+      "excluded": {}
+    }
+  ],
+  "groupConstraints": [
+    {
+      "id": "CLEARANCE_SPEED_CAP_DEPENDS_ON_M",
+      "keys": [
+        "pedestrian_clearance",
+        "obstacle_clearance"
+      ],
+      "explanation": "183 nu raportează spațiul ca poziție, ci ca plafon de viteză `sqrt(2 · comfort_deceleration · cameră)`, unde camera este `distanță − max(cheie, minim fizic)`. Plafonul amestecă deci cheia cu cheia M `comfort_deceleration`: ca să izolezi cheia trebuie să cunoști decelerația de confort din același tick. Estimatorul recuperează camera din plafon și M declarat și refuză proba când M lipsește (`CLEARANCE_M_UNKNOWN`) sau când M declarat nu reproduce plafonul raportat (`CLEARANCE_M_INCONSISTENT`); nu presupune niciodată o valoare de confort."
+    },
+    {
+      "id": "CLEARANCE_FLOOR_HIDES_SMALL_VALUES",
+      "keys": [
+        "pedestrian_clearance",
+        "obstacle_clearance"
+      ],
+      "explanation": "Spațiul efectiv este `max(cheie, minim fizic)`, cu minimul `lățime + 0,5 m` față de pieton (2,30 m pentru sedan) și `lățime/2 + jumătate de cutie + 0,5 m` față de obstacol (1,70 m pentru con, 3,40 m pentru barieră). Sub podea toate cheile produc aceeași comandă, deci banda 0,10–2,30 m (respectiv 0,10–1,70 m) a catalogului este ascunsă: o probă ridicată de podea dovedește doar `cheie ≤ minim` și rămâne `CLEARANCE_FLOOR_SATURATED`."
+    },
+    {
+      "id": "REACTION_CAP_HIDES_LARGE_DELAYS",
+      "keys": [
+        "hazard_reaction_delay"
+      ],
+      "explanation": "Întârzierea totală este `min(brake_reaction_delay + cheie, (cameră − v² / (2 · capability)) / v)`. Peste plafonul fezabil politica saturează și raportează `saturated`, deci o asemenea probă dovedește doar `cheie ≥ plafon − M` și nu este o estimare: catalogul merge până la 3 s, dar dintr-un stimul apropiat și rapid sunt observabile numai întârzierile care încă mai opresc vehiculul în camera declarată (`REACTION_DELAY_SATURATED`)."
+    },
+    {
+      "id": "ADHESION_CAP_HIDES_HIGH_INTENSITIES",
+      "keys": [
+        "emergency_brake_intensity"
+      ],
+      "explanation": "Decelerația comandată este `min(cheie · brakeAcceleration, grip · tireGripScale · g)`. Pe `reduced-adhesion` plafonul fizic este 4,463550 m/s², sub capacitatea de frânare de 8 m/s², deci orice intensitate peste 0,557944 produce aceeași frânare la limita anvelopei: proba este refuzată (`ADHESION_CAP_SATURATED`) în loc să fie citită ca intensitate."
+    },
+    {
+      "id": "HAZARD_IN_MARGIN_COMMANDS_ZERO_WITHOUT_CLEARANCE",
+      "keys": [
+        "pedestrian_clearance",
+        "obstacle_clearance"
+      ],
+      "explanation": "Când hazardul este deja în interiorul spațiului efectiv, `camera = max(0, distanță − spațiu)` este zero, plafonul de viteză este 0 și comanda este 0 m/s la orice valoare a cheii. Oprirea demonstrează siguranța, nu spațiul dorit: proba rămâne `CLEARANCE_ROOM_EXHAUSTED` și nu devine o valoare mică inventată."
+    },
+    {
+      "id": "YIELD_AND_HORN_ARE_BINARY_OPPORTUNITIES",
+      "keys": [
+        "pedestrian_yield_probability",
+        "horn_use_probability"
+      ],
+      "explanation": "Cedarea și claxonul sunt decizii binare pe oportunități identificate, nu rate pe cadre: numitorul este numărul de traversări (respectiv de oportunități de claxon) distincte, iar un eșantion se trage o singură dată per oportunitate. O cedare obligatorie (pietonul nu poate elibera calea în `yield_time_gap`) nu este o decizie de stil și iese din numitor, iar unde claxonul este interzis nu se trage niciun eșantion."
+    },
+    {
+      "id": "EVASION_DEPENDS_ON_VERIFIED_SPACE",
+      "keys": [
+        "evasive_steer_willingness"
+      ],
+      "explanation": "Disponibilitatea de ocolire este inertă sub marja fizică `lățime/2 + jumătate de cutie + 0,5 m`: fără spațiul lateral verificat, 183 nu trage eșantion și nu se deplasează, la orice valoare a cheii. O asemenea oportunitate nu spune nimic despre disponibilitate și rămâne `EVASION_NO_SPACE`."
+    },
+    {
+      "id": "HAZARD_KEYS_FROM_ONE_TICK",
+      "keys": [
+        "pedestrian_yield_probability",
+        "pedestrian_clearance",
+        "hazard_reaction_delay",
+        "obstacle_clearance",
+        "emergency_brake_intensity",
+        "evasive_steer_willingness",
+        "crosswalk_approach_speed",
+        "horn_use_probability"
+      ],
+      "explanation": "Ordinea ramurilor 183 hotărăște ce fapte există într-un tick: traversarea, cele două plafoane de spațiu, apropierea de trecere, reacția cu frânarea de urgență, ocolirea și claxonul. Un tick poate purta simultan cedarea și plafonul de spațiu față de pieton, dar nicio cheie nu este dedusă din alta: un set cu un singur tip de demonstrație lasă celelalte chei neobservate."
+    }
+  ],
+  "refusals": [],
+  "compatibility": {
+    "policyVersion": "183-hazard-policy-v2",
+    "candidateOnly": true,
+    "changesPolicySemantics": false,
+    "mReadByPolicy": [
+      "comfort_deceleration",
+      "brake_reaction_delay",
+      "curve_lateral_accel",
+      "yield_time_gap"
+    ],
+    "tickHz": 60,
+    "clearanceReserveM": 0.5,
+    "standardGravityMps2": 9.81,
+    "probes": [
+      {
+        "key": "pedestrian_yield_probability",
+        "authored": "true",
+        "estimate": "true",
+        "identical": true
+      },
+      {
+        "key": "pedestrian_clearance",
+        "authored": "2.5",
+        "estimate": "2.5",
+        "identical": true
+      },
+      {
+        "key": "hazard_reaction_delay",
+        "authored": "78",
+        "estimate": "78",
+        "identical": true
+      },
+      {
+        "key": "obstacle_clearance",
+        "authored": "2.4",
+        "estimate": "2.4",
+        "identical": true
+      },
+      {
+        "key": "emergency_brake_intensity",
+        "authored": "5.2",
+        "estimate": "5.2",
+        "identical": true
+      },
+      {
+        "key": "evasive_steer_willingness",
+        "authored": "0.44999999999999996",
+        "estimate": "0.44999999999999996",
+        "identical": true
+      },
+      {
+        "key": "crosswalk_approach_speed",
+        "authored": "6",
+        "estimate": "6",
+        "identical": true
+      },
+      {
+        "key": "horn_use_probability",
+        "authored": "false",
+        "estimate": "false",
+        "identical": true
+      }
+    ],
+    "identicalProbes": 8,
+    "reportedQuantity": {
+      "pedestrian_yield_probability": "rata pe oportunități distincte de traversare discreționară, nu pe cadre",
+      "pedestrian_clearance": "cheia în metri, inversată din `distanță − plafon² / (2 · comfort_deceleration)`",
+      "hazard_reaction_delay": "contribuția R în secunde, `delayS − brake_reaction_delay`, doar nesaturată",
+      "obstacle_clearance": "aceeași inversare, față de cutia de obstacol autorată",
+      "emergency_brake_intensity": "raportul `decelerație / brakeAcceleration` sub plafonul de aderență",
+      "evasive_steer_willingness": "probabilitatea în sine, intersectată din eșantioane",
+      "crosswalk_approach_speed": "viteza comandată sub limita postată, în m/s",
+      "horn_use_probability": "probabilitatea în sine, intersectată din eșantioane"
+    },
+    "evidenceFields": [
+      "tick",
+      "speedMps",
+      "postedLimitMps",
+      "policyActive",
+      "reason",
+      "action",
+      "geometry",
+      "surfaceId",
+      "declaredM",
+      "pedestrian",
+      "obstacleId",
+      "clearance",
+      "reaction",
+      "emergencyBrake",
+      "evasion",
+      "crosswalk",
+      "horn"
+    ]
+  },
+  "split": {
+    "seed": 184,
+    "admitted": 72,
+    "refused": 0
+  },
+  "determinism": {
+    "digest": "fnv1a32:57a8782d",
+    "repeatedDigest": "fnv1a32:57a8782d"
+  },
+  "checks": [
+    {
+      "id": "catalog",
+      "pass": true,
+      "detail": "pedestrian_yield_probability 0-1 probability, pedestrian_clearance 0.1-6 m, hazard_reaction_delay 0-3 s, obstacle_clearance 0.1-4 m, emergency_brake_intensity 0-1 ratio, evasive_steer_willingness 0-1 probability, crosswalk_approach_speed 0.5-15 m/s, horn_use_probability 0-1 probability"
+    },
+    {
+      "id": "contexts",
+      "pass": true,
+      "detail": "8 scenarii și 8 contexte eligibile distincte: pedestrian_yield_probability->PEDESTRIAN_CROSSING, pedestrian_clearance->PEDESTRIAN_CLEARANCE_APPROACH, hazard_reaction_delay->HAZARD_REACTION, obstacle_clearance->OBSTACLE_CLEARANCE_APPROACH, emergency_brake_intensity->EMERGENCY_BRAKE, evasive_steer_willingness->EVASION_OPPORTUNITY, crosswalk_approach_speed->CROSSWALK_APPROACH, horn_use_probability->HORN_OPPORTUNITY"
+    },
+    {
+      "id": "candidates",
+      "pass": true,
+      "detail": "pedestrian_yield_probability 0.5000 probability, pedestrian_clearance 2.5000 m, hazard_reaction_delay 0.8000 s, obstacle_clearance 2.4000 m, emergency_brake_intensity 0.6500 ratio, evasive_steer_willingness 0.3053 probability, crosswalk_approach_speed 6.0000 m/s, horn_use_probability 0.2521 probability"
+    },
+    {
+      "id": "uncertainty",
+      "pass": true,
+      "detail": "pedestrian_yield_probability ±0.1021/0.15, pedestrian_clearance ±0.0200/0.15, hazard_reaction_delay ±0.0200/0.2, obstacle_clearance ±0.0200/0.15, emergency_brake_intensity ±0.0200/0.15, evasive_steer_willingness ±0.0200/0.15, crosswalk_approach_speed ±0.0500/0.5, horn_use_probability ±0.0200/0.15"
+    },
+    {
+      "id": "validation",
+      "pass": true,
+      "detail": "pedestrian_yield_probability VALIDATED 12 episoade, eroare 0.0000; pedestrian_clearance VALIDATED 12 episoade, eroare 0.0000; hazard_reaction_delay VALIDATED 8 episoade, eroare 0.0000; obstacle_clearance VALIDATED 7 episoade, eroare 0.0000; emergency_brake_intensity VALIDATED 8 episoade, eroare 0.0000; evasive_steer_willingness VALIDATED 4 episoade, eroare 0.0124; crosswalk_approach_speed VALIDATED 5 episoade, eroare 0.0000; horn_use_probability VALIDATED 4 episoade, eroare 0.0076"
+    },
+    {
+      "id": "clearance-m-unknown",
+      "pass": true,
+      "detail": "pedestrian_clearance UNOBSERVED / CLEARANCE_M_UNKNOWN, obstacle_clearance UNOBSERVED / CLEARANCE_M_UNKNOWN"
+    },
+    {
+      "id": "clearance-m-inconsistent",
+      "pass": true,
+      "detail": "pedestrian_clearance UNOBSERVED / CLEARANCE_M_INCONSISTENT, obstacle_clearance UNOBSERVED / CLEARANCE_M_INCONSISTENT"
+    },
+    {
+      "id": "clearance-floor",
+      "pass": true,
+      "detail": "pedestrian_clearance UNOBSERVED / CLEARANCE_FLOOR_SATURATED (CLEARANCE_FLOOR_SATURATED×4), obstacle_clearance UNOBSERVED / CLEARANCE_FLOOR_SATURATED (CLEARANCE_FLOOR_SATURATED×4)"
+    },
+    {
+      "id": "clearance-margin",
+      "pass": true,
+      "detail": "pedestrian_clearance UNOBSERVED / CLEARANCE_ROOM_EXHAUSTED, obstacle_clearance UNOBSERVED / CLEARANCE_ROOM_EXHAUSTED"
+    },
+    {
+      "id": "reaction-saturation",
+      "pass": true,
+      "detail": "reacție saturată: UNOBSERVED / REACTION_DELAY_SATURATED"
+    },
+    {
+      "id": "adhesion-cap",
+      "pass": true,
+      "detail": "aderență redusă: UNOBSERVED / ADHESION_CAP_SATURATED"
+    },
+    {
+      "id": "evasion-no-space",
+      "pass": true,
+      "detail": "ocolire fără spațiu: UNOBSERVED / EVASION_NO_SPACE"
+    },
+    {
+      "id": "crosswalk-limit",
+      "pass": true,
+      "detail": "trecere plafonată: UNOBSERVED / CROSSWALK_LIMIT_SATURATED"
+    },
+    {
+      "id": "horn-forbidden",
+      "pass": true,
+      "detail": "claxon interzis: UNOBSERVED / HORN_FORBIDDEN"
+    },
+    {
+      "id": "yield-mandatory",
+      "pass": true,
+      "detail": "cedare obligatorie: UNOBSERVED / PEDESTRIAN_ALL_CROSSINGS_MANDATORY, spațiul rămâne CANDIDATE"
+    },
+    {
+      "id": "reaction-uncertainty",
+      "pass": true,
+      "detail": "reacții împrăștiate: UNOBSERVED / UNCERTAINTY_ABOVE_THRESHOLD, incertitudine 0.7434 > 0.2"
+    },
+    {
+      "id": "zero-horn",
+      "pass": true,
+      "detail": "refuz constant: CANDIDATE valoare 0, incertitudine 0.0200"
+    },
+    {
+      "id": "zero-evasion",
+      "pass": true,
+      "detail": "ocolire refuzată constant: CANDIDATE valoare 0, incertitudine 0.0200"
+    },
+    {
+      "id": "refusals",
+      "pass": true,
+      "detail": "MANUAL: 4 episoade refuzate, 0 admise; fără prefix: 4; toate cheile rămân neobservate"
+    },
+    {
+      "id": "policy-facts-only",
+      "pass": true,
+      "detail": "eșantionul poartă numai fapte ale comenzii 183: tick, speedMps, postedLimitMps, policyActive, reason, action, geometry, surfaceId, declaredM, pedestrian, obstacleId, clearance, reaction, emergencyBrake, evasion, crosswalk, horn"
+    },
+    {
+      "id": "policy-compatibility",
+      "pass": true,
+      "detail": "8/8 fapte rejucate cu profilul estimat sunt identice cu cele ale profilului autorat (pedestrian_yield_probability:true=true, pedestrian_clearance:2.5=2.5, hazard_reaction_delay:78=78, obstacle_clearance:2.4=2.4, emergency_brake_intensity:5.2=5.2, evasive_steer_willingness:0.44999999999999996=0.44999999999999996, crosswalk_approach_speed:6=6, horn_use_probability:false=false)"
+    },
+    {
+      "id": "candidate-only",
+      "pass": true,
+      "detail": "politica 183-hazard-policy-v2, candidate-only true, semantică schimbată false, M citite comfort_deceleration/brake_reaction_delay/curve_lateral_accel/yield_time_gap, rată 60 Hz"
+    },
+    {
+      "id": "determinism",
+      "pass": true,
+      "detail": "digest fnv1a32:57a8782d"
+    }
+  ],
+  "summary": {
+    "checks": 23,
+    "passed": 23,
+    "pass": true,
+    "candidateKeys": 8,
+    "unobservedKeys": 0
+  }
+}
