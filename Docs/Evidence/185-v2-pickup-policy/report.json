@@ -1,0 +1,1493 @@
+{
+  "version": "185-pickup-policy-v2",
+  "fixture": {
+    "mapId": "neighbourhood-compact-v1",
+    "rideId": "id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000",
+    "taxiId": "id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0001",
+    "pickupZoneId": "sz:0-0",
+    "dropoffZoneId": "sz:1-0",
+    "toPickup": "TO_PICKUP",
+    "pickup": "PICKUP",
+    "toDropoff": "TO_DROPOFF",
+    "dropoff": "DROPOFF",
+    "completed": "COMPLETED",
+    "pickupLengthM": 5.5,
+    "pickupStopOffsetM": 2.75,
+    "pickupCurbBandM": 3,
+    "dropoffLengthM": 5.5,
+    "dropoffStopOffsetM": 2.75,
+    "dropoffCurbBandM": 3,
+    "civilOnlyZoneId": "sz:2-2"
+  },
+  "parameters": [
+    {
+      "key": "pickup_approach_speed",
+      "unit": "m/s",
+      "minimum": 0.5,
+      "maximum": 8,
+      "defaultValue": 3
+    },
+    {
+      "key": "pickup_curb_distance",
+      "unit": "m",
+      "minimum": 0.1,
+      "maximum": 2,
+      "defaultValue": 0.5
+    },
+    {
+      "key": "pickup_stop_precision",
+      "unit": "m",
+      "minimum": 0.2,
+      "maximum": 5,
+      "defaultValue": 1
+    },
+    {
+      "key": "pickup_dwell_time",
+      "unit": "s",
+      "minimum": 1,
+      "maximum": 10,
+      "defaultValue": 3
+    },
+    {
+      "key": "dropoff_approach_speed",
+      "unit": "m/s",
+      "minimum": 0.5,
+      "maximum": 8,
+      "defaultValue": 3
+    },
+    {
+      "key": "dropoff_curb_distance",
+      "unit": "m",
+      "minimum": 0.1,
+      "maximum": 2,
+      "defaultValue": 0.5
+    },
+    {
+      "key": "occupied_acceleration_scale",
+      "unit": "ratio",
+      "minimum": 0.3,
+      "maximum": 1.5,
+      "defaultValue": 0.85
+    },
+    {
+      "key": "occupied_lateral_accel_scale",
+      "unit": "ratio",
+      "minimum": 0.3,
+      "maximum": 1.5,
+      "defaultValue": 0.85
+    }
+  ],
+  "scenarios": [
+    {
+      "name": "viteza de apropiere de pickup",
+      "scenario": "zona reală `sz:0-0` (PICKUP, TAXI) pe banda `lane:00W0`, cu 5.50 m lungime și 3.00 m adâncime; ego la 5,00 m înainte de intrare, 7.75 m până la punctul de oprire"
+    },
+    {
+      "name": "distanța la bordură (pickup)",
+      "scenario": "ego oprit pe punctul de oprire din zona reală de pickup, caroseria la 0,50 m de bordură"
+    },
+    {
+      "name": "precizia opririi",
+      "scenario": "același punct de oprire marcat, cu 1,00 s de staționare acumulată"
+    },
+    {
+      "name": "staționarea la pickup",
+      "scenario": "ego oprit în zonă, cu 1,00 s de staționare și îmbarcarea încă neconfirmată de 061"
+    },
+    {
+      "name": "viteza de apropiere de dropoff",
+      "scenario": "zona reală `sz:1-0` (DROPOFF) pe banda `lane:10W0`, cu pasager la bord, la 5,00 m înainte de intrare"
+    },
+    {
+      "name": "distanța la bordură (dropoff)",
+      "scenario": "ego oprit pe punctul de oprire din zona reală de dropoff, cu pasager la bord"
+    },
+    {
+      "name": "accelerația cu pasager",
+      "scenario": "pasager la bord (061 `TO_DROPOFF`) pe drum liber, fără serviciu în curs"
+    },
+    {
+      "name": "accelerația laterală cu pasager",
+      "scenario": "același pasager la bord, fără serviciu în curs: numai plafonul lateral"
+    }
+  ],
+  "effects": [
+    {
+      "key": "pickup_approach_speed",
+      "scenario": "apropiere pickup",
+      "keyUnit": "m/s",
+      "unit": "m/s",
+      "lowValue": 0.5,
+      "highValue": 8,
+      "lowOutcome": 0.5,
+      "highOutcome": 5.5677643628300215,
+      "difference": 5.0677643628300215,
+      "coupling": false,
+      "note": "viteza comandată este `min(cheie, sqrt(2 · comfort_deceleration · distanță))`, deci oprirea nu poate depăși punctul marcat"
+    },
+    {
+      "key": "pickup_curb_distance",
+      "scenario": "distanța la bordură (pickup)",
+      "keyUnit": "m",
+      "unit": "m",
+      "lowValue": 0.1,
+      "highValue": 2,
+      "lowOutcome": 0.15,
+      "highOutcome": 1.2,
+      "difference": 1.05,
+      "coupling": false,
+      "note": "distanța efectivă este plafonată de banda autorată: `[0,15 m, adâncime − lățime]`"
+    },
+    {
+      "key": "pickup_stop_precision",
+      "scenario": "precizia opririi",
+      "keyUnit": "m",
+      "unit": "m",
+      "lowValue": 0.2,
+      "highValue": 5,
+      "lowOutcome": 0.2,
+      "highOutcome": 2.75,
+      "difference": 2.55,
+      "coupling": false,
+      "note": "toleranța efectivă este ridicată la toleranța fizică 062 și plafonată la semilățimea punctului marcat"
+    },
+    {
+      "key": "pickup_dwell_time",
+      "scenario": "staționarea la pickup",
+      "keyUnit": "s",
+      "unit": "s",
+      "lowValue": 1,
+      "highValue": 10,
+      "lowOutcome": 3,
+      "highOutcome": 10,
+      "difference": 7,
+      "coupling": false,
+      "note": "durata efectivă este `max(cheie, 3 s îmbarcare 062, M stop_dwell_time)`"
+    },
+    {
+      "key": "dropoff_approach_speed",
+      "scenario": "apropiere dropoff",
+      "keyUnit": "m/s",
+      "unit": "m/s",
+      "lowValue": 0.5,
+      "highValue": 8,
+      "lowOutcome": 0.5,
+      "highOutcome": 5.5677643628300215,
+      "difference": 5.0677643628300215,
+      "coupling": false,
+      "note": "același plafon cinematic, pe faza reală de dropoff cu pasager la bord"
+    },
+    {
+      "key": "dropoff_curb_distance",
+      "scenario": "distanța la bordură (dropoff)",
+      "keyUnit": "m",
+      "unit": "m",
+      "lowValue": 0.1,
+      "highValue": 2,
+      "lowOutcome": 0.15,
+      "highOutcome": 1.2,
+      "difference": 1.05,
+      "coupling": false,
+      "note": "aceeași bandă autorată, pe faza reală de dropoff"
+    },
+    {
+      "key": "occupied_acceleration_scale",
+      "scenario": "accelerația cu pasager",
+      "keyUnit": "ratio",
+      "unit": "m/s²",
+      "lowValue": 0.3,
+      "highValue": 1.5,
+      "lowOutcome": 0.44999999999999996,
+      "highOutcome": 2,
+      "difference": 1.55,
+      "coupling": false,
+      "note": "scara se aplică numai cu pasager la bord și este plafonată de confort și de aderență"
+    },
+    {
+      "key": "occupied_lateral_accel_scale",
+      "scenario": "accelerația laterală cu pasager",
+      "keyUnit": "ratio",
+      "unit": "m/s²",
+      "lowValue": 0.3,
+      "highValue": 1.5,
+      "lowOutcome": 0.75,
+      "highOutcome": 2.5,
+      "difference": 1.75,
+      "coupling": false,
+      "note": "scara laterală este plafonată de preferința M `curve_lateral_accel` și de aderență"
+    }
+  ],
+  "separation": [
+    {
+      "key": "pickup_curb_distance",
+      "scenario": "viteza de apropiere de pickup",
+      "keyUnit": "m",
+      "unit": "m/s",
+      "lowValue": 0.1,
+      "highValue": 2,
+      "lowOutcome": 3,
+      "highOutcome": 3,
+      "difference": 0,
+      "coupling": false,
+      "note": "`pickup_curb_distance` este inertă în scenariul viteza de apropiere de pickup"
+    },
+    {
+      "key": "pickup_stop_precision",
+      "scenario": "viteza de apropiere de pickup",
+      "keyUnit": "m",
+      "unit": "m/s",
+      "lowValue": 0.2,
+      "highValue": 5,
+      "lowOutcome": 3,
+      "highOutcome": 3,
+      "difference": 0,
+      "coupling": false,
+      "note": "`pickup_stop_precision` este inertă în scenariul viteza de apropiere de pickup"
+    },
+    {
+      "key": "pickup_dwell_time",
+      "scenario": "viteza de apropiere de pickup",
+      "keyUnit": "s",
+      "unit": "m/s",
+      "lowValue": 1,
+      "highValue": 10,
+      "lowOutcome": 3,
+      "highOutcome": 3,
+      "difference": 0,
+      "coupling": false,
+      "note": "`pickup_dwell_time` este inertă în scenariul viteza de apropiere de pickup"
+    },
+    {
+      "key": "dropoff_approach_speed",
+      "scenario": "viteza de apropiere de pickup",
+      "keyUnit": "m/s",
+      "unit": "m/s",
+      "lowValue": 0.5,
+      "highValue": 8,
+      "lowOutcome": 3,
+      "highOutcome": 3,
+      "difference": 0,
+      "coupling": false,
+      "note": "`dropoff_approach_speed` este inertă în scenariul viteza de apropiere de pickup"
+    },
+    {
+      "key": "dropoff_curb_distance",
+      "scenario": "viteza de apropiere de pickup",
+      "keyUnit": "m",
+      "unit": "m/s",
+      "lowValue": 0.1,
+      "highValue": 2,
+      "lowOutcome": 3,
+      "highOutcome": 3,
+      "difference": 0,
+      "coupling": false,
+      "note": "`dropoff_curb_distance` este inertă în scenariul viteza de apropiere de pickup"
+    },
+    {
+      "key": "occupied_acceleration_scale",
+      "scenario": "viteza de apropiere de pickup",
+      "keyUnit": "ratio",
+      "unit": "m/s",
+      "lowValue": 0.3,
+      "highValue": 1.5,
+      "lowOutcome": 3,
+      "highOutcome": 3,
+      "difference": 0,
+      "coupling": false,
+      "note": "`occupied_acceleration_scale` este inertă în scenariul viteza de apropiere de pickup"
+    },
+    {
+      "key": "occupied_lateral_accel_scale",
+      "scenario": "viteza de apropiere de pickup",
+      "keyUnit": "ratio",
+      "unit": "m/s",
+      "lowValue": 0.3,
+      "highValue": 1.5,
+      "lowOutcome": 3,
+      "highOutcome": 3,
+      "difference": 0,
+      "coupling": false,
+      "note": "`occupied_lateral_accel_scale` este inertă în scenariul viteza de apropiere de pickup"
+    },
+    {
+      "key": "pickup_approach_speed",
+      "scenario": "distanța la bordură (pickup)",
+      "keyUnit": "m/s",
+      "unit": "m",
+      "lowValue": 0.5,
+      "highValue": 8,
+      "lowOutcome": 0.5,
+      "highOutcome": 0.5,
+      "difference": 0,
+      "coupling": false,
+      "note": "`pickup_approach_speed` este inertă în scenariul distanța la bordură (pickup)"
+    },
+    {
+      "key": "pickup_stop_precision",
+      "scenario": "distanța la bordură (pickup)",
+      "keyUnit": "m",
+      "unit": "m",
+      "lowValue": 0.2,
+      "highValue": 5,
+      "lowOutcome": 0.5,
+      "highOutcome": 0.5,
+      "difference": 0,
+      "coupling": false,
+      "note": "`pickup_stop_precision` este inertă în scenariul distanța la bordură (pickup)"
+    },
+    {
+      "key": "pickup_dwell_time",
+      "scenario": "distanța la bordură (pickup)",
+      "keyUnit": "s",
+      "unit": "m",
+      "lowValue": 1,
+      "highValue": 10,
+      "lowOutcome": 0.5,
+      "highOutcome": 0.5,
+      "difference": 0,
+      "coupling": false,
+      "note": "`pickup_dwell_time` este inertă în scenariul distanța la bordură (pickup)"
+    },
+    {
+      "key": "dropoff_approach_speed",
+      "scenario": "distanța la bordură (pickup)",
+      "keyUnit": "m/s",
+      "unit": "m",
+      "lowValue": 0.5,
+      "highValue": 8,
+      "lowOutcome": 0.5,
+      "highOutcome": 0.5,
+      "difference": 0,
+      "coupling": false,
+      "note": "`dropoff_approach_speed` este inertă în scenariul distanța la bordură (pickup)"
+    },
+    {
+      "key": "dropoff_curb_distance",
+      "scenario": "distanța la bordură (pickup)",
+      "keyUnit": "m",
+      "unit": "m",
+      "lowValue": 0.1,
+      "highValue": 2,
+      "lowOutcome": 0.5,
+      "highOutcome": 0.5,
+      "difference": 0,
+      "coupling": false,
+      "note": "`dropoff_curb_distance` este inertă în scenariul distanța la bordură (pickup)"
+    },
+    {
+      "key": "occupied_acceleration_scale",
+      "scenario": "distanța la bordură (pickup)",
+      "keyUnit": "ratio",
+      "unit": "m",
+      "lowValue": 0.3,
+      "highValue": 1.5,
+      "lowOutcome": 0.5,
+      "highOutcome": 0.5,
+      "difference": 0,
+      "coupling": false,
+      "note": "`occupied_acceleration_scale` este inertă în scenariul distanța la bordură (pickup)"
+    },
+    {
+      "key": "occupied_lateral_accel_scale",
+      "scenario": "distanța la bordură (pickup)",
+      "keyUnit": "ratio",
+      "unit": "m",
+      "lowValue": 0.3,
+      "highValue": 1.5,
+      "lowOutcome": 0.5,
+      "highOutcome": 0.5,
+      "difference": 0,
+      "coupling": false,
+      "note": "`occupied_lateral_accel_scale` este inertă în scenariul distanța la bordură (pickup)"
+    },
+    {
+      "key": "pickup_approach_speed",
+      "scenario": "precizia opririi",
+      "keyUnit": "m/s",
+      "unit": "m",
+      "lowValue": 0.5,
+      "highValue": 8,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "coupling": false,
+      "note": "`pickup_approach_speed` este inertă în scenariul precizia opririi"
+    },
+    {
+      "key": "pickup_curb_distance",
+      "scenario": "precizia opririi",
+      "keyUnit": "m",
+      "unit": "m",
+      "lowValue": 0.1,
+      "highValue": 2,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "coupling": false,
+      "note": "`pickup_curb_distance` este inertă în scenariul precizia opririi"
+    },
+    {
+      "key": "pickup_dwell_time",
+      "scenario": "precizia opririi",
+      "keyUnit": "s",
+      "unit": "m",
+      "lowValue": 1,
+      "highValue": 10,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "coupling": false,
+      "note": "`pickup_dwell_time` este inertă în scenariul precizia opririi"
+    },
+    {
+      "key": "dropoff_approach_speed",
+      "scenario": "precizia opririi",
+      "keyUnit": "m/s",
+      "unit": "m",
+      "lowValue": 0.5,
+      "highValue": 8,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "coupling": false,
+      "note": "`dropoff_approach_speed` este inertă în scenariul precizia opririi"
+    },
+    {
+      "key": "dropoff_curb_distance",
+      "scenario": "precizia opririi",
+      "keyUnit": "m",
+      "unit": "m",
+      "lowValue": 0.1,
+      "highValue": 2,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "coupling": false,
+      "note": "`dropoff_curb_distance` este inertă în scenariul precizia opririi"
+    },
+    {
+      "key": "occupied_acceleration_scale",
+      "scenario": "precizia opririi",
+      "keyUnit": "ratio",
+      "unit": "m",
+      "lowValue": 0.3,
+      "highValue": 1.5,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "coupling": false,
+      "note": "`occupied_acceleration_scale` este inertă în scenariul precizia opririi"
+    },
+    {
+      "key": "occupied_lateral_accel_scale",
+      "scenario": "precizia opririi",
+      "keyUnit": "ratio",
+      "unit": "m",
+      "lowValue": 0.3,
+      "highValue": 1.5,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "coupling": false,
+      "note": "`occupied_lateral_accel_scale` este inertă în scenariul precizia opririi"
+    },
+    {
+      "key": "pickup_approach_speed",
+      "scenario": "staționarea la pickup",
+      "keyUnit": "m/s",
+      "unit": "s",
+      "lowValue": 0.5,
+      "highValue": 8,
+      "lowOutcome": 3,
+      "highOutcome": 3,
+      "difference": 0,
+      "coupling": false,
+      "note": "`pickup_approach_speed` este inertă în scenariul staționarea la pickup"
+    },
+    {
+      "key": "pickup_curb_distance",
+      "scenario": "staționarea la pickup",
+      "keyUnit": "m",
+      "unit": "s",
+      "lowValue": 0.1,
+      "highValue": 2,
+      "lowOutcome": 3,
+      "highOutcome": 3,
+      "difference": 0,
+      "coupling": false,
+      "note": "`pickup_curb_distance` este inertă în scenariul staționarea la pickup"
+    },
+    {
+      "key": "pickup_stop_precision",
+      "scenario": "staționarea la pickup",
+      "keyUnit": "m",
+      "unit": "s",
+      "lowValue": 0.2,
+      "highValue": 5,
+      "lowOutcome": 3,
+      "highOutcome": 3,
+      "difference": 0,
+      "coupling": false,
+      "note": "`pickup_stop_precision` este inertă în scenariul staționarea la pickup"
+    },
+    {
+      "key": "dropoff_approach_speed",
+      "scenario": "staționarea la pickup",
+      "keyUnit": "m/s",
+      "unit": "s",
+      "lowValue": 0.5,
+      "highValue": 8,
+      "lowOutcome": 3,
+      "highOutcome": 3,
+      "difference": 0,
+      "coupling": false,
+      "note": "`dropoff_approach_speed` este inertă în scenariul staționarea la pickup"
+    },
+    {
+      "key": "dropoff_curb_distance",
+      "scenario": "staționarea la pickup",
+      "keyUnit": "m",
+      "unit": "s",
+      "lowValue": 0.1,
+      "highValue": 2,
+      "lowOutcome": 3,
+      "highOutcome": 3,
+      "difference": 0,
+      "coupling": false,
+      "note": "`dropoff_curb_distance` este inertă în scenariul staționarea la pickup"
+    },
+    {
+      "key": "occupied_acceleration_scale",
+      "scenario": "staționarea la pickup",
+      "keyUnit": "ratio",
+      "unit": "s",
+      "lowValue": 0.3,
+      "highValue": 1.5,
+      "lowOutcome": 3,
+      "highOutcome": 3,
+      "difference": 0,
+      "coupling": false,
+      "note": "`occupied_acceleration_scale` este inertă în scenariul staționarea la pickup"
+    },
+    {
+      "key": "occupied_lateral_accel_scale",
+      "scenario": "staționarea la pickup",
+      "keyUnit": "ratio",
+      "unit": "s",
+      "lowValue": 0.3,
+      "highValue": 1.5,
+      "lowOutcome": 3,
+      "highOutcome": 3,
+      "difference": 0,
+      "coupling": false,
+      "note": "`occupied_lateral_accel_scale` este inertă în scenariul staționarea la pickup"
+    },
+    {
+      "key": "pickup_approach_speed",
+      "scenario": "viteza de apropiere de dropoff",
+      "keyUnit": "m/s",
+      "unit": "m/s",
+      "lowValue": 0.5,
+      "highValue": 8,
+      "lowOutcome": 3,
+      "highOutcome": 3,
+      "difference": 0,
+      "coupling": false,
+      "note": "`pickup_approach_speed` este inertă în scenariul viteza de apropiere de dropoff"
+    },
+    {
+      "key": "pickup_curb_distance",
+      "scenario": "viteza de apropiere de dropoff",
+      "keyUnit": "m",
+      "unit": "m/s",
+      "lowValue": 0.1,
+      "highValue": 2,
+      "lowOutcome": 3,
+      "highOutcome": 3,
+      "difference": 0,
+      "coupling": false,
+      "note": "`pickup_curb_distance` este inertă în scenariul viteza de apropiere de dropoff"
+    },
+    {
+      "key": "pickup_stop_precision",
+      "scenario": "viteza de apropiere de dropoff",
+      "keyUnit": "m",
+      "unit": "m/s",
+      "lowValue": 0.2,
+      "highValue": 5,
+      "lowOutcome": 3,
+      "highOutcome": 3,
+      "difference": 0,
+      "coupling": false,
+      "note": "`pickup_stop_precision` este inertă în scenariul viteza de apropiere de dropoff"
+    },
+    {
+      "key": "pickup_dwell_time",
+      "scenario": "viteza de apropiere de dropoff",
+      "keyUnit": "s",
+      "unit": "m/s",
+      "lowValue": 1,
+      "highValue": 10,
+      "lowOutcome": 3,
+      "highOutcome": 3,
+      "difference": 0,
+      "coupling": false,
+      "note": "`pickup_dwell_time` este inertă în scenariul viteza de apropiere de dropoff"
+    },
+    {
+      "key": "dropoff_curb_distance",
+      "scenario": "viteza de apropiere de dropoff",
+      "keyUnit": "m",
+      "unit": "m/s",
+      "lowValue": 0.1,
+      "highValue": 2,
+      "lowOutcome": 3,
+      "highOutcome": 3,
+      "difference": 0,
+      "coupling": false,
+      "note": "`dropoff_curb_distance` este inertă în scenariul viteza de apropiere de dropoff"
+    },
+    {
+      "key": "occupied_acceleration_scale",
+      "scenario": "viteza de apropiere de dropoff",
+      "keyUnit": "ratio",
+      "unit": "m/s",
+      "lowValue": 0.3,
+      "highValue": 1.5,
+      "lowOutcome": 3,
+      "highOutcome": 3,
+      "difference": 0,
+      "coupling": false,
+      "note": "`occupied_acceleration_scale` este inertă în scenariul viteza de apropiere de dropoff"
+    },
+    {
+      "key": "occupied_lateral_accel_scale",
+      "scenario": "viteza de apropiere de dropoff",
+      "keyUnit": "ratio",
+      "unit": "m/s",
+      "lowValue": 0.3,
+      "highValue": 1.5,
+      "lowOutcome": 3,
+      "highOutcome": 3,
+      "difference": 0,
+      "coupling": false,
+      "note": "`occupied_lateral_accel_scale` este inertă în scenariul viteza de apropiere de dropoff"
+    },
+    {
+      "key": "pickup_approach_speed",
+      "scenario": "distanța la bordură (dropoff)",
+      "keyUnit": "m/s",
+      "unit": "m",
+      "lowValue": 0.5,
+      "highValue": 8,
+      "lowOutcome": 0.5,
+      "highOutcome": 0.5,
+      "difference": 0,
+      "coupling": false,
+      "note": "`pickup_approach_speed` este inertă în scenariul distanța la bordură (dropoff)"
+    },
+    {
+      "key": "pickup_curb_distance",
+      "scenario": "distanța la bordură (dropoff)",
+      "keyUnit": "m",
+      "unit": "m",
+      "lowValue": 0.1,
+      "highValue": 2,
+      "lowOutcome": 0.5,
+      "highOutcome": 0.5,
+      "difference": 0,
+      "coupling": false,
+      "note": "`pickup_curb_distance` este inertă în scenariul distanța la bordură (dropoff)"
+    },
+    {
+      "key": "pickup_stop_precision",
+      "scenario": "distanța la bordură (dropoff)",
+      "keyUnit": "m",
+      "unit": "m",
+      "lowValue": 0.2,
+      "highValue": 5,
+      "lowOutcome": 0.5,
+      "highOutcome": 0.5,
+      "difference": 0,
+      "coupling": false,
+      "note": "`pickup_stop_precision` este inertă în scenariul distanța la bordură (dropoff)"
+    },
+    {
+      "key": "pickup_dwell_time",
+      "scenario": "distanța la bordură (dropoff)",
+      "keyUnit": "s",
+      "unit": "m",
+      "lowValue": 1,
+      "highValue": 10,
+      "lowOutcome": 0.5,
+      "highOutcome": 0.5,
+      "difference": 0,
+      "coupling": false,
+      "note": "`pickup_dwell_time` este inertă în scenariul distanța la bordură (dropoff)"
+    },
+    {
+      "key": "dropoff_approach_speed",
+      "scenario": "distanța la bordură (dropoff)",
+      "keyUnit": "m/s",
+      "unit": "m",
+      "lowValue": 0.5,
+      "highValue": 8,
+      "lowOutcome": 0.5,
+      "highOutcome": 0.5,
+      "difference": 0,
+      "coupling": false,
+      "note": "`dropoff_approach_speed` este inertă în scenariul distanța la bordură (dropoff)"
+    },
+    {
+      "key": "occupied_acceleration_scale",
+      "scenario": "distanța la bordură (dropoff)",
+      "keyUnit": "ratio",
+      "unit": "m",
+      "lowValue": 0.3,
+      "highValue": 1.5,
+      "lowOutcome": 0.5,
+      "highOutcome": 0.5,
+      "difference": 0,
+      "coupling": false,
+      "note": "`occupied_acceleration_scale` este inertă în scenariul distanța la bordură (dropoff)"
+    },
+    {
+      "key": "occupied_lateral_accel_scale",
+      "scenario": "distanța la bordură (dropoff)",
+      "keyUnit": "ratio",
+      "unit": "m",
+      "lowValue": 0.3,
+      "highValue": 1.5,
+      "lowOutcome": 0.5,
+      "highOutcome": 0.5,
+      "difference": 0,
+      "coupling": false,
+      "note": "`occupied_lateral_accel_scale` este inertă în scenariul distanța la bordură (dropoff)"
+    },
+    {
+      "key": "pickup_approach_speed",
+      "scenario": "accelerația cu pasager",
+      "keyUnit": "m/s",
+      "unit": "m/s²",
+      "lowValue": 0.5,
+      "highValue": 8,
+      "lowOutcome": 1.275,
+      "highOutcome": 1.275,
+      "difference": 0,
+      "coupling": false,
+      "note": "`pickup_approach_speed` este inertă în scenariul accelerația cu pasager"
+    },
+    {
+      "key": "pickup_curb_distance",
+      "scenario": "accelerația cu pasager",
+      "keyUnit": "m",
+      "unit": "m/s²",
+      "lowValue": 0.1,
+      "highValue": 2,
+      "lowOutcome": 1.275,
+      "highOutcome": 1.275,
+      "difference": 0,
+      "coupling": false,
+      "note": "`pickup_curb_distance` este inertă în scenariul accelerația cu pasager"
+    },
+    {
+      "key": "pickup_stop_precision",
+      "scenario": "accelerația cu pasager",
+      "keyUnit": "m",
+      "unit": "m/s²",
+      "lowValue": 0.2,
+      "highValue": 5,
+      "lowOutcome": 1.275,
+      "highOutcome": 1.275,
+      "difference": 0,
+      "coupling": false,
+      "note": "`pickup_stop_precision` este inertă în scenariul accelerația cu pasager"
+    },
+    {
+      "key": "pickup_dwell_time",
+      "scenario": "accelerația cu pasager",
+      "keyUnit": "s",
+      "unit": "m/s²",
+      "lowValue": 1,
+      "highValue": 10,
+      "lowOutcome": 1.275,
+      "highOutcome": 1.275,
+      "difference": 0,
+      "coupling": false,
+      "note": "`pickup_dwell_time` este inertă în scenariul accelerația cu pasager"
+    },
+    {
+      "key": "dropoff_approach_speed",
+      "scenario": "accelerația cu pasager",
+      "keyUnit": "m/s",
+      "unit": "m/s²",
+      "lowValue": 0.5,
+      "highValue": 8,
+      "lowOutcome": 1.275,
+      "highOutcome": 1.275,
+      "difference": 0,
+      "coupling": false,
+      "note": "`dropoff_approach_speed` este inertă în scenariul accelerația cu pasager"
+    },
+    {
+      "key": "dropoff_curb_distance",
+      "scenario": "accelerația cu pasager",
+      "keyUnit": "m",
+      "unit": "m/s²",
+      "lowValue": 0.1,
+      "highValue": 2,
+      "lowOutcome": 1.275,
+      "highOutcome": 1.275,
+      "difference": 0,
+      "coupling": false,
+      "note": "`dropoff_curb_distance` este inertă în scenariul accelerația cu pasager"
+    },
+    {
+      "key": "occupied_lateral_accel_scale",
+      "scenario": "accelerația cu pasager",
+      "keyUnit": "ratio",
+      "unit": "m/s²",
+      "lowValue": 0.3,
+      "highValue": 1.5,
+      "lowOutcome": 1.275,
+      "highOutcome": 1.275,
+      "difference": 0,
+      "coupling": false,
+      "note": "`occupied_lateral_accel_scale` este inertă în scenariul accelerația cu pasager"
+    },
+    {
+      "key": "pickup_approach_speed",
+      "scenario": "accelerația laterală cu pasager",
+      "keyUnit": "m/s",
+      "unit": "m/s²",
+      "lowValue": 0.5,
+      "highValue": 8,
+      "lowOutcome": 2.125,
+      "highOutcome": 2.125,
+      "difference": 0,
+      "coupling": false,
+      "note": "`pickup_approach_speed` este inertă în scenariul accelerația laterală cu pasager"
+    },
+    {
+      "key": "pickup_curb_distance",
+      "scenario": "accelerația laterală cu pasager",
+      "keyUnit": "m",
+      "unit": "m/s²",
+      "lowValue": 0.1,
+      "highValue": 2,
+      "lowOutcome": 2.125,
+      "highOutcome": 2.125,
+      "difference": 0,
+      "coupling": false,
+      "note": "`pickup_curb_distance` este inertă în scenariul accelerația laterală cu pasager"
+    },
+    {
+      "key": "pickup_stop_precision",
+      "scenario": "accelerația laterală cu pasager",
+      "keyUnit": "m",
+      "unit": "m/s²",
+      "lowValue": 0.2,
+      "highValue": 5,
+      "lowOutcome": 2.125,
+      "highOutcome": 2.125,
+      "difference": 0,
+      "coupling": false,
+      "note": "`pickup_stop_precision` este inertă în scenariul accelerația laterală cu pasager"
+    },
+    {
+      "key": "pickup_dwell_time",
+      "scenario": "accelerația laterală cu pasager",
+      "keyUnit": "s",
+      "unit": "m/s²",
+      "lowValue": 1,
+      "highValue": 10,
+      "lowOutcome": 2.125,
+      "highOutcome": 2.125,
+      "difference": 0,
+      "coupling": false,
+      "note": "`pickup_dwell_time` este inertă în scenariul accelerația laterală cu pasager"
+    },
+    {
+      "key": "dropoff_approach_speed",
+      "scenario": "accelerația laterală cu pasager",
+      "keyUnit": "m/s",
+      "unit": "m/s²",
+      "lowValue": 0.5,
+      "highValue": 8,
+      "lowOutcome": 2.125,
+      "highOutcome": 2.125,
+      "difference": 0,
+      "coupling": false,
+      "note": "`dropoff_approach_speed` este inertă în scenariul accelerația laterală cu pasager"
+    },
+    {
+      "key": "dropoff_curb_distance",
+      "scenario": "accelerația laterală cu pasager",
+      "keyUnit": "m",
+      "unit": "m/s²",
+      "lowValue": 0.1,
+      "highValue": 2,
+      "lowOutcome": 2.125,
+      "highOutcome": 2.125,
+      "difference": 0,
+      "coupling": false,
+      "note": "`dropoff_curb_distance` este inertă în scenariul accelerația laterală cu pasager"
+    },
+    {
+      "key": "occupied_acceleration_scale",
+      "scenario": "accelerația laterală cu pasager",
+      "keyUnit": "ratio",
+      "unit": "m/s²",
+      "lowValue": 0.3,
+      "highValue": 1.5,
+      "lowOutcome": 2.125,
+      "highOutcome": 2.125,
+      "difference": 0,
+      "coupling": false,
+      "note": "`occupied_acceleration_scale` este inertă în scenariul accelerația laterală cu pasager"
+    }
+  ],
+  "couplings": [],
+  "mandatoryStability": [
+    {
+      "key": "pickup_approach_speed",
+      "scenario": "distanța la bordură (pickup)",
+      "lowValue": 0.5,
+      "highValue": 8,
+      "identical": true,
+      "lowStopAllowed": true,
+      "highStopAllowed": true,
+      "lowBlockedReason": null,
+      "highBlockedReason": null
+    },
+    {
+      "key": "pickup_curb_distance",
+      "scenario": "distanța la bordură (pickup)",
+      "lowValue": 0.1,
+      "highValue": 2,
+      "identical": true,
+      "lowStopAllowed": true,
+      "highStopAllowed": true,
+      "lowBlockedReason": null,
+      "highBlockedReason": null
+    },
+    {
+      "key": "pickup_stop_precision",
+      "scenario": "distanța la bordură (pickup)",
+      "lowValue": 0.2,
+      "highValue": 5,
+      "identical": true,
+      "lowStopAllowed": true,
+      "highStopAllowed": true,
+      "lowBlockedReason": null,
+      "highBlockedReason": null
+    },
+    {
+      "key": "pickup_dwell_time",
+      "scenario": "distanța la bordură (pickup)",
+      "lowValue": 1,
+      "highValue": 10,
+      "identical": true,
+      "lowStopAllowed": true,
+      "highStopAllowed": true,
+      "lowBlockedReason": null,
+      "highBlockedReason": null
+    }
+  ],
+  "preferenceGrid": {
+    "scenarios": [
+      "apropiere pickup",
+      "distanța la bordură (pickup)"
+    ],
+    "valuesPerKey": 3,
+    "cases": 162,
+    "violations": 0,
+    "mandatoryChanges": 0,
+    "detail": "**162/162** cazuri respectă pragul obligatoriu; 0 schimbări ale blocului obligatoriu"
+  },
+  "blockers": [
+    {
+      "id": "civil-only",
+      "scenario": "zonă fără acces TAXI",
+      "blockedReason": "ZONE_NOT_TAXI",
+      "stopAllowed": false,
+      "preferenceInert": true,
+      "detail": "la toate cele patru extreme de preferință: oprirea este refuzată cu `ZONE_NOT_TAXI`"
+    },
+    {
+      "id": "beyond-zone",
+      "scenario": "oprire peste zona marcată",
+      "blockedReason": "STOP_BEYOND_ZONE",
+      "stopAllowed": false,
+      "preferenceInert": true,
+      "detail": "la toate cele patru extreme de preferință: oprirea este refuzată cu `STOP_BEYOND_ZONE`"
+    },
+    {
+      "id": "kind-mismatch",
+      "scenario": "serviciu incompatibil cu zona",
+      "blockedReason": "ZONE_KIND_MISMATCH",
+      "stopAllowed": false,
+      "preferenceInert": true,
+      "detail": "la toate cele patru extreme de preferință: oprirea este refuzată cu `ZONE_KIND_MISMATCH`"
+    }
+  ],
+  "safety": [
+    {
+      "id": "curb-band",
+      "limit": "banda autorată a bordurii",
+      "key": "pickup_curb_distance",
+      "scenario": "distanța la bordură (pickup)",
+      "unit": "m",
+      "lowValue": 0.1,
+      "lowOutcome": 0.15,
+      "highValue": 2,
+      "highOutcome": 1.2,
+      "difference": 1.05,
+      "verdict": "minimul de 0,10 m este ridicat la 0,15 m, iar maximul de 2,00 m este plafonat la 1,20 m: caroseria rămâne în bay, nu pe bordură și nu în banda de circulație"
+    },
+    {
+      "id": "precision-window",
+      "limit": "fereastra de oprire în zona marcată",
+      "key": "pickup_stop_precision",
+      "scenario": "precizia opririi",
+      "unit": "m",
+      "lowValue": 0.2,
+      "lowOutcome": 0.2,
+      "highValue": 5,
+      "highOutcome": 2.75,
+      "difference": 2.55,
+      "verdict": "toleranța efectivă nu coboară sub 0,05 m (dovada 062) și nu depășește semilățimea punctului marcat (2,75 m), deci fereastra rămâne în bay"
+    },
+    {
+      "id": "approach-cap",
+      "limit": "plafonul cinematic de apropiere",
+      "key": "pickup_approach_speed",
+      "scenario": "apropiere pickup",
+      "unit": "m/s",
+      "lowValue": 0.5,
+      "lowOutcome": 0.5,
+      "highValue": 8,
+      "highOutcome": 5.5677643628300215,
+      "difference": 5.0677643628300215,
+      "verdict": "viteza este `min(cheie, sqrt(2 · comfort · distanță))`: distanța de oprire nu depășește distanța până la punctul marcat"
+    },
+    {
+      "id": "dwell-floor",
+      "limit": "minimul de staționare",
+      "key": "pickup_dwell_time",
+      "scenario": "staționarea la pickup",
+      "unit": "s",
+      "lowValue": 1,
+      "lowOutcome": 3,
+      "highValue": 10,
+      "highOutcome": 10,
+      "difference": 7,
+      "verdict": "1 s este ridicat la 3 s (dwell-ul de îmbarcare 062); nicio valoare nu permite plecarea fără confirmarea 061"
+    },
+    {
+      "id": "accel-adhesion-cap",
+      "limit": "plafonul de aderență (accelerație)",
+      "key": "occupied_acceleration_scale",
+      "scenario": "accelerația cu pasager",
+      "unit": "m/s²",
+      "lowValue": 0.3,
+      "lowOutcome": 1.2,
+      "highValue": 1.5,
+      "highOutcome": 4.46355,
+      "difference": 3.2635499999999995,
+      "verdict": "cu pasager la bord, scara cere 1,5 × 4 m/s², dar aderența redusă a anvelopei oprește la 4,463550 m/s²"
+    },
+    {
+      "id": "lateral-adhesion-cap",
+      "limit": "plafonul de aderență (lateral)",
+      "key": "occupied_lateral_accel_scale",
+      "scenario": "accelerația laterală cu pasager",
+      "unit": "m/s²",
+      "lowValue": 0.3,
+      "lowOutcome": 2.4,
+      "highValue": 1.5,
+      "highOutcome": 4.46355,
+      "difference": 2.0635499999999998,
+      "verdict": "cu pasager la bord, scara cere 1,5 × 8 m/s², dar aderența redusă oprește la 4,463550 m/s²"
+    }
+  ],
+  "departure": {
+    "unconfirmedAtTenSeconds": false,
+    "unconfirmedReason": "SERVICE_NOT_CONFIRMED",
+    "confirmedAtLowKey": true,
+    "confirmedAtHighKey": false,
+    "confirmedHighReason": "DWELL_PENDING",
+    "confirmedNotStationary": false
+  },
+  "compliance": [
+    {
+      "id": "mandatory-stability",
+      "pass": true,
+      "detail": "`pickup_approach_speed` 0.5 / 8 → bloc obligatoriu identic; `pickup_curb_distance` 0.1 / 2 → bloc obligatoriu identic; `pickup_stop_precision` 0.2 / 5 → bloc obligatoriu identic; `pickup_dwell_time` 1 / 10 → bloc obligatoriu identic"
+    },
+    {
+      "id": "preference-grid",
+      "pass": true,
+      "detail": "**162/162** cazuri respectă pragul obligatoriu; 0 schimbări ale blocului obligatoriu"
+    },
+    {
+      "id": "blockers",
+      "pass": true,
+      "detail": "civil-only: oprit=false, inerție=true; beyond-zone: oprit=false, inerție=true; kind-mismatch: oprit=false, inerție=true"
+    },
+    {
+      "id": "curb-and-precision",
+      "pass": true,
+      "detail": "0.15 → 1.2 m; precizie 0.2 → 2.75 m"
+    },
+    {
+      "id": "approach-cap",
+      "pass": true,
+      "detail": "0.5 → 5.567764 m/s (plafon cinematic 5.567764)"
+    },
+    {
+      "id": "dwell-floor",
+      "pass": true,
+      "detail": "3 → 10 s"
+    },
+    {
+      "id": "occupied-caps",
+      "pass": true,
+      "detail": "accelerație 1.2 → 4.46355 m/s²; lateral 2.4 → 4.46355 m/s²"
+    },
+    {
+      "id": "departure-gate",
+      "pass": true,
+      "detail": "neconfirmat la 10 s: false (SERVICE_NOT_CONFIRMED); confirmat 3,2 s: cheie 1 → true, cheie 10 → false (DWELL_PENDING); în mișcare → false"
+    },
+    {
+      "id": "occupancy",
+      "pass": true,
+      "detail": "TO_PICKUP: 1.5 / 1.5 m/s²; PICKUP: 1.5 / 1.5 m/s²; TO_DROPOFF: 0.45 / 2 m/s²; DROPOFF: 0.45 / 2 m/s²; COMPLETED: 1.5 / 1.5 m/s²"
+    },
+    {
+      "id": "m-comfort",
+      "pass": true,
+      "detail": "2 → 5.567764 / 2.5 → 6.22495 / 8 → 11.135529"
+    },
+    {
+      "id": "m-dwell",
+      "pass": true,
+      "detail": "M 0 s → 3 / 10 s; M 1 s → 3 / 10 s; M 4 s → 4 / 10 s"
+    },
+    {
+      "id": "m-acceleration",
+      "pass": true,
+      "detail": "0.5 → 0.425 (NONE); 1.5 → 1.275 (NONE); 4 → 2 (COMFORT)"
+    },
+    {
+      "id": "m-lateral",
+      "pass": true,
+      "detail": "1 → 0.85; 2.5 → 2.125; 8 → 6.8"
+    },
+    {
+      "id": "effects",
+      "pass": true,
+      "detail": "pickup_approach_speed 0.500 → 5.568; pickup_curb_distance 0.150 → 1.200; pickup_stop_precision 0.200 → 2.750; pickup_dwell_time 3.000 → 10.000; dropoff_approach_speed 0.500 → 5.568; dropoff_curb_distance 0.150 → 1.200; occupied_acceleration_scale 0.450 → 2.000; occupied_lateral_accel_scale 0.750 → 2.500"
+    },
+    {
+      "id": "separation",
+      "pass": true,
+      "detail": "56/56 perechi inerte, 0 cuplaje"
+    },
+    {
+      "id": "determinism",
+      "pass": true,
+      "detail": "digest fnv1a32:f9043488"
+    },
+    {
+      "id": "admission",
+      "pass": true,
+      "detail": "manual NO_AUTO_AUTHORITY, vechi FOREIGN_OR_STALE_OBSERVATION, actor FOREIGN_OR_STALE_OBSERVATION, sesiune FOREIGN_OR_STALE_OBSERVATION, profil lipsă MISSING_PROFILE; refuzuri: foreignProfile REFUSED, wrongObservation REFUSED, wrongMechanics REFUSED, unknownRideState REFUSED, phaseMismatch REFUSED, negativeDistance REFUSED, stopOffsetOutsideBay REFUSED"
+    },
+    {
+      "id": "units",
+      "pass": true,
+      "detail": "R: pickup_approach_speed m/s, pickup_curb_distance m, pickup_stop_precision m, pickup_dwell_time s, dropoff_approach_speed m/s, dropoff_curb_distance m, occupied_acceleration_scale ratio, occupied_lateral_accel_scale ratio; M: desired_acceleration m/s², comfort_deceleration m/s², curve_lateral_accel m/s², stop_dwell_time s"
+    },
+    {
+      "id": "catalog",
+      "pass": true,
+      "detail": "pickup_approach_speed 0.5-8 → 3, pickup_curb_distance 0.1-2 → 0.5, pickup_stop_precision 0.2-5 → 1, pickup_dwell_time 1-10 → 3, dropoff_approach_speed 0.5-8 → 3, dropoff_curb_distance 0.1-2 → 0.5, occupied_acceleration_scale 0.3-1.5 → 0.85, occupied_lateral_accel_scale 0.3-1.5 → 0.85"
+    }
+  ],
+  "compatibility": {
+    "comfortDeceleration": [
+      {
+        "comfortDecelerationMps2": 2,
+        "feasibleSpeedMps": 5.567764
+      },
+      {
+        "comfortDecelerationMps2": 2.5,
+        "feasibleSpeedMps": 6.22495
+      },
+      {
+        "comfortDecelerationMps2": 8,
+        "feasibleSpeedMps": 11.135529
+      }
+    ],
+    "dwell": [
+      {
+        "stopDwellTimeS": 0,
+        "effectiveAtMinimumKeyS": 3,
+        "effectiveAtMaximumKeyS": 10
+      },
+      {
+        "stopDwellTimeS": 1,
+        "effectiveAtMinimumKeyS": 3,
+        "effectiveAtMaximumKeyS": 10
+      },
+      {
+        "stopDwellTimeS": 4,
+        "effectiveAtMinimumKeyS": 4,
+        "effectiveAtMaximumKeyS": 10
+      }
+    ],
+    "acceleration": [
+      {
+        "desiredAccelerationMps2": 0.5,
+        "scale": 0.85,
+        "commandedMps2": 0.425,
+        "cappedBy": "NONE"
+      },
+      {
+        "desiredAccelerationMps2": 1.5,
+        "scale": 0.85,
+        "commandedMps2": 1.275,
+        "cappedBy": "NONE"
+      },
+      {
+        "desiredAccelerationMps2": 4,
+        "scale": 0.85,
+        "commandedMps2": 2,
+        "cappedBy": "COMFORT"
+      }
+    ],
+    "lateralAccel": [
+      {
+        "curveLateralAccelMps2": 1,
+        "scale": 0.85,
+        "commandedMps2": 0.85,
+        "cappedBy": "NONE"
+      },
+      {
+        "curveLateralAccelMps2": 2.5,
+        "scale": 0.85,
+        "commandedMps2": 2.125,
+        "cappedBy": "NONE"
+      },
+      {
+        "curveLateralAccelMps2": 8,
+        "scale": 0.85,
+        "commandedMps2": 6.8,
+        "cappedBy": "NONE"
+      }
+    ],
+    "mUnits": {
+      "desired_acceleration": "m/s²",
+      "comfort_deceleration": "m/s²",
+      "curve_lateral_accel": "m/s²",
+      "stop_dwell_time": "s"
+    },
+    "rUnits": {
+      "pickup_approach_speed": "m/s",
+      "pickup_curb_distance": "m",
+      "pickup_stop_precision": "m",
+      "pickup_dwell_time": "s",
+      "dropoff_approach_speed": "m/s",
+      "dropoff_curb_distance": "m",
+      "occupied_acceleration_scale": "ratio",
+      "occupied_lateral_accel_scale": "ratio"
+    }
+  },
+  "occupancy": [
+    {
+      "rideState": "TO_PICKUP",
+      "aboard": false,
+      "lowScaleMps2": 1.5,
+      "highScaleMps2": 1.5,
+      "inert": true,
+      "cappedBy": "NONE"
+    },
+    {
+      "rideState": "PICKUP",
+      "aboard": false,
+      "lowScaleMps2": 1.5,
+      "highScaleMps2": 1.5,
+      "inert": true,
+      "cappedBy": "NONE"
+    },
+    {
+      "rideState": "TO_DROPOFF",
+      "aboard": true,
+      "lowScaleMps2": 0.45,
+      "highScaleMps2": 2,
+      "inert": false,
+      "cappedBy": "COMFORT"
+    },
+    {
+      "rideState": "DROPOFF",
+      "aboard": true,
+      "lowScaleMps2": 0.45,
+      "highScaleMps2": 2,
+      "inert": false,
+      "cappedBy": "COMFORT"
+    },
+    {
+      "rideState": "COMPLETED",
+      "aboard": false,
+      "lowScaleMps2": 1.5,
+      "highScaleMps2": 1.5,
+      "inert": true,
+      "cappedBy": "NONE"
+    }
+  ],
+  "thresholds": {
+    "pickup": {
+      "zoneId": "sz:0-0",
+      "kind": "PICKUP",
+      "taxiAccess": true,
+      "lengthM": 5.5,
+      "stopOffsetM": 2.75,
+      "curbBandM": 3,
+      "curbMinimumM": 0.15,
+      "curbMaximumM": 1.2,
+      "dwellMinimumS": 3,
+      "precisionFloorM": 0.05,
+      "precisionMaximumM": 2.75,
+      "entryOffsetM": 2.75,
+      "insideZone": true,
+      "stopAllowed": true,
+      "blockedReason": null
+    },
+    "dropoff": {
+      "zoneId": "sz:1-0",
+      "kind": "DROPOFF",
+      "taxiAccess": true,
+      "lengthM": 5.5,
+      "stopOffsetM": 2.75,
+      "curbBandM": 3,
+      "curbMinimumM": 0.15,
+      "curbMaximumM": 1.2,
+      "dwellMinimumS": 3,
+      "precisionFloorM": 0.05,
+      "precisionMaximumM": 2.75,
+      "entryOffsetM": 2.75,
+      "insideZone": true,
+      "stopAllowed": true,
+      "blockedReason": null
+    }
+  },
+  "determinism": {
+    "decisions": 16,
+    "digest": "fnv1a32:f9043488",
+    "repeatedDigest": "fnv1a32:f9043488"
+  },
+  "checks": [
+    {
+      "id": "mandatory-stability",
+      "pass": true,
+      "detail": "`pickup_approach_speed` 0.5 / 8 → bloc obligatoriu identic; `pickup_curb_distance` 0.1 / 2 → bloc obligatoriu identic; `pickup_stop_precision` 0.2 / 5 → bloc obligatoriu identic; `pickup_dwell_time` 1 / 10 → bloc obligatoriu identic"
+    },
+    {
+      "id": "preference-grid",
+      "pass": true,
+      "detail": "**162/162** cazuri respectă pragul obligatoriu; 0 schimbări ale blocului obligatoriu"
+    },
+    {
+      "id": "blockers",
+      "pass": true,
+      "detail": "civil-only: oprit=false, inerție=true; beyond-zone: oprit=false, inerție=true; kind-mismatch: oprit=false, inerție=true"
+    },
+    {
+      "id": "curb-and-precision",
+      "pass": true,
+      "detail": "0.15 → 1.2 m; precizie 0.2 → 2.75 m"
+    },
+    {
+      "id": "approach-cap",
+      "pass": true,
+      "detail": "0.5 → 5.567764 m/s (plafon cinematic 5.567764)"
+    },
+    {
+      "id": "dwell-floor",
+      "pass": true,
+      "detail": "3 → 10 s"
+    },
+    {
+      "id": "occupied-caps",
+      "pass": true,
+      "detail": "accelerație 1.2 → 4.46355 m/s²; lateral 2.4 → 4.46355 m/s²"
+    },
+    {
+      "id": "departure-gate",
+      "pass": true,
+      "detail": "neconfirmat la 10 s: false (SERVICE_NOT_CONFIRMED); confirmat 3,2 s: cheie 1 → true, cheie 10 → false (DWELL_PENDING); în mișcare → false"
+    },
+    {
+      "id": "occupancy",
+      "pass": true,
+      "detail": "TO_PICKUP: 1.5 / 1.5 m/s²; PICKUP: 1.5 / 1.5 m/s²; TO_DROPOFF: 0.45 / 2 m/s²; DROPOFF: 0.45 / 2 m/s²; COMPLETED: 1.5 / 1.5 m/s²"
+    },
+    {
+      "id": "m-comfort",
+      "pass": true,
+      "detail": "2 → 5.567764 / 2.5 → 6.22495 / 8 → 11.135529"
+    },
+    {
+      "id": "m-dwell",
+      "pass": true,
+      "detail": "M 0 s → 3 / 10 s; M 1 s → 3 / 10 s; M 4 s → 4 / 10 s"
+    },
+    {
+      "id": "m-acceleration",
+      "pass": true,
+      "detail": "0.5 → 0.425 (NONE); 1.5 → 1.275 (NONE); 4 → 2 (COMFORT)"
+    },
+    {
+      "id": "m-lateral",
+      "pass": true,
+      "detail": "1 → 0.85; 2.5 → 2.125; 8 → 6.8"
+    },
+    {
+      "id": "effects",
+      "pass": true,
+      "detail": "pickup_approach_speed 0.500 → 5.568; pickup_curb_distance 0.150 → 1.200; pickup_stop_precision 0.200 → 2.750; pickup_dwell_time 3.000 → 10.000; dropoff_approach_speed 0.500 → 5.568; dropoff_curb_distance 0.150 → 1.200; occupied_acceleration_scale 0.450 → 2.000; occupied_lateral_accel_scale 0.750 → 2.500"
+    },
+    {
+      "id": "separation",
+      "pass": true,
+      "detail": "56/56 perechi inerte, 0 cuplaje"
+    },
+    {
+      "id": "determinism",
+      "pass": true,
+      "detail": "digest fnv1a32:f9043488"
+    },
+    {
+      "id": "admission",
+      "pass": true,
+      "detail": "manual NO_AUTO_AUTHORITY, vechi FOREIGN_OR_STALE_OBSERVATION, actor FOREIGN_OR_STALE_OBSERVATION, sesiune FOREIGN_OR_STALE_OBSERVATION, profil lipsă MISSING_PROFILE; refuzuri: foreignProfile REFUSED, wrongObservation REFUSED, wrongMechanics REFUSED, unknownRideState REFUSED, phaseMismatch REFUSED, negativeDistance REFUSED, stopOffsetOutsideBay REFUSED"
+    },
+    {
+      "id": "units",
+      "pass": true,
+      "detail": "R: pickup_approach_speed m/s, pickup_curb_distance m, pickup_stop_precision m, pickup_dwell_time s, dropoff_approach_speed m/s, dropoff_curb_distance m, occupied_acceleration_scale ratio, occupied_lateral_accel_scale ratio; M: desired_acceleration m/s², comfort_deceleration m/s², curve_lateral_accel m/s², stop_dwell_time s"
+    },
+    {
+      "id": "catalog",
+      "pass": true,
+      "detail": "pickup_approach_speed 0.5-8 → 3, pickup_curb_distance 0.1-2 → 0.5, pickup_stop_precision 0.2-5 → 1, pickup_dwell_time 1-10 → 3, dropoff_approach_speed 0.5-8 → 3, dropoff_curb_distance 0.1-2 → 0.5, occupied_acceleration_scale 0.3-1.5 → 0.85, occupied_lateral_accel_scale 0.3-1.5 → 0.85"
+    }
+  ],
+  "summary": {
+    "checks": 19,
+    "passed": 19,
+    "pass": true
+  }
+}
