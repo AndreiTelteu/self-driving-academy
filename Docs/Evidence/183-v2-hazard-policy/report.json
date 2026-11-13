@@ -1,0 +1,1321 @@
+{
+  "version": "183-hazard-policy-v2",
+  "fixture": {
+    "crosswalkId": "cw:0-1:E",
+    "laneId": "lane:01W0",
+    "pedestrianId": "id-v1:10:pedestrian21:pedestrians-164-tests1:724:neighbourhood-compact-v18:cw:0-1:E1:0",
+    "crossingLengthM": 10,
+    "walkSpeedMps": 1.463935,
+    "crossingRemainingS": 6.830903,
+    "waitingDistanceM": 27.55,
+    "crossingDistanceM": 27.5,
+    "obstacleLaneId": "lane:00E0",
+    "obstacleAtM": 100,
+    "headingRad": 0
+  },
+  "parameters": [
+    {
+      "key": "pedestrian_yield_probability",
+      "unit": "probability",
+      "minimum": 0,
+      "maximum": 1,
+      "defaultValue": 1
+    },
+    {
+      "key": "pedestrian_clearance",
+      "unit": "m",
+      "minimum": 0.1,
+      "maximum": 6,
+      "defaultValue": 2
+    },
+    {
+      "key": "hazard_reaction_delay",
+      "unit": "s",
+      "minimum": 0,
+      "maximum": 3,
+      "defaultValue": 0.5
+    },
+    {
+      "key": "obstacle_clearance",
+      "unit": "m",
+      "minimum": 0.1,
+      "maximum": 4,
+      "defaultValue": 1
+    },
+    {
+      "key": "emergency_brake_intensity",
+      "unit": "ratio",
+      "minimum": 0,
+      "maximum": 1,
+      "defaultValue": 1
+    },
+    {
+      "key": "evasive_steer_willingness",
+      "unit": "probability",
+      "minimum": 0,
+      "maximum": 1,
+      "defaultValue": 0.3
+    },
+    {
+      "key": "crosswalk_approach_speed",
+      "unit": "m/s",
+      "minimum": 0.5,
+      "maximum": 15,
+      "defaultValue": 5
+    },
+    {
+      "key": "horn_use_probability",
+      "unit": "probability",
+      "minimum": 0,
+      "maximum": 1,
+      "defaultValue": 0.1
+    }
+  ],
+  "scenarios": [
+    {
+      "name": "cedarea la traversare",
+      "scenario": "traversarea reală `cw:0-1:E` de pe banda `lane:01W0`: pietonul traversează pe 10.00 m la 1.464 m/s și are nevoie de 6.831 s să elibereze calea"
+    },
+    {
+      "name": "spațiul față de pieton",
+      "scenario": "același pieton real `id-v1:10:pedestrian21:pedestrians-164-tests1:724:neighbourhood-compact-v18:cw:0-1:E1:0` oprit la bordura trecerii `cw:0-1:E`, fără nicio oportunitate de traversare angajată"
+    },
+    {
+      "name": "reacția la pericol",
+      "scenario": "stimulul real 165 `id-v1:hazard-stimulus:hazards-165-tests|11|obstacle-1|vehicle-1|inc-1` apărut la 38.000 m, cu 8.000 m/s"
+    },
+    {
+      "name": "spațiul față de obstacol",
+      "scenario": "conul real `obstacle-1` (cutie autorată de 0,30 m jumătate de lățime) la 12 m, fără spațiu lateral declarat"
+    },
+    {
+      "name": "frânarea de urgență",
+      "scenario": "același stimul real 165 `id-v1:hazard-stimulus:hazards-165-tests|11|obstacle-1|vehicle-1|inc-1`, cu aderența suprafeței livrate `dry-asphalt`"
+    },
+    {
+      "name": "ocolirea prin viraj",
+      "scenario": "bariera reală la 20 m, cu 4,50 m de spațiu lateral declarat: ocolirea este posibilă fizic"
+    },
+    {
+      "name": "viteza de apropiere de trecere",
+      "scenario": "trecerea reală `cw:0-1:E`, fără pieton angajat, la 25 m de linia autorată"
+    },
+    {
+      "name": "claxonul",
+      "scenario": "oportunitate reală de claxon 165, cu claxonul permis de lume în acest loc"
+    }
+  ],
+  "effects": [
+    {
+      "key": "pedestrian_yield_probability",
+      "scenario": "traversare",
+      "keyUnit": "probability",
+      "unit": "decizie",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 0,
+      "highOutcome": 1,
+      "difference": 1,
+      "coupling": false,
+      "note": "pietonul are peste 3 s de marjă peste timpul de traversare, deci cedarea e discreționară: 0 nu cedează, 1 cedează"
+    },
+    {
+      "key": "pedestrian_clearance",
+      "scenario": "pieton la bordură",
+      "keyUnit": "m",
+      "unit": "m/s",
+      "lowValue": 0.1,
+      "highValue": 6,
+      "lowOutcome": 6.2289646009589745,
+      "highOutcome": 4.898979485566356,
+      "difference": -1.3299851153926188,
+      "coupling": false,
+      "note": "spațiul dorit devine plafon de viteză `sqrt(2 · comfort_deceleration · cameră)`; minimul de catalog este ridicat la lățimea vehiculului plus rezervă"
+    },
+    {
+      "key": "hazard_reaction_delay",
+      "scenario": "reacție",
+      "keyUnit": "s",
+      "unit": "m",
+      "lowValue": 0,
+      "highValue": 3,
+      "lowOutcome": 28.000000000000014,
+      "highOutcome": 4.000000000000014,
+      "difference": -24,
+      "coupling": false,
+      "note": "marja de oprire rămasă după întârziere: întârzierea totală este cea M moștenită plus cheia R, plafonată de spațiul real"
+    },
+    {
+      "key": "obstacle_clearance",
+      "scenario": "obstacol",
+      "keyUnit": "m",
+      "unit": "m/s",
+      "lowValue": 0.1,
+      "highValue": 4,
+      "lowOutcome": 6.32455532033676,
+      "highOutcome": 5.549774770204644,
+      "difference": -0.7747805501321157,
+      "coupling": false,
+      "note": "aceeași formulă de plafon de viteză, cu lățimea reală a cutiei de obstacol în minimul fizic"
+    },
+    {
+      "key": "emergency_brake_intensity",
+      "scenario": "frânare de urgență",
+      "keyUnit": "ratio",
+      "unit": "m/s²",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 0,
+      "highOutcome": 8,
+      "difference": 8,
+      "coupling": false,
+      "note": "intensitatea scalează capacitatea de frânare a clasei livrate, plafonată de aderența disponibilă"
+    },
+    {
+      "key": "evasive_steer_willingness",
+      "scenario": "ocolire",
+      "keyUnit": "probability",
+      "unit": "m",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 0,
+      "highOutcome": 0.44999999999999996,
+      "difference": 0.44999999999999996,
+      "coupling": false,
+      "note": "deplasarea laterală commitată: minimul dintre spațiul rămas peste marja fizică și distanța realizabilă la accelerația laterală M"
+    },
+    {
+      "key": "crosswalk_approach_speed",
+      "scenario": "apropiere de trecere",
+      "keyUnit": "m/s",
+      "unit": "m/s",
+      "lowValue": 0.5,
+      "highValue": 15,
+      "lowOutcome": 0.5,
+      "highOutcome": 15,
+      "difference": 14.5,
+      "coupling": false,
+      "note": "viteza comandată la apropierea trecerii, plafonată de limita autorată a drumului"
+    },
+    {
+      "key": "horn_use_probability",
+      "scenario": "claxon",
+      "keyUnit": "probability",
+      "unit": "decizie",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 0,
+      "highOutcome": 1,
+      "difference": 1,
+      "coupling": false,
+      "note": "un singur eșantion determinist per oportunitate decide folosirea claxonului, acolo unde lumea îl permite"
+    }
+  ],
+  "separation": [
+    {
+      "key": "pedestrian_clearance",
+      "scenario": "cedarea la traversare",
+      "keyUnit": "m",
+      "unit": "decizie",
+      "lowValue": 0.1,
+      "highValue": 6,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "coupling": false,
+      "note": "`pedestrian_clearance` este inertă în scenariul cedarea la traversare"
+    },
+    {
+      "key": "hazard_reaction_delay",
+      "scenario": "cedarea la traversare",
+      "keyUnit": "s",
+      "unit": "decizie",
+      "lowValue": 0,
+      "highValue": 3,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "coupling": false,
+      "note": "`hazard_reaction_delay` este inertă în scenariul cedarea la traversare"
+    },
+    {
+      "key": "obstacle_clearance",
+      "scenario": "cedarea la traversare",
+      "keyUnit": "m",
+      "unit": "decizie",
+      "lowValue": 0.1,
+      "highValue": 4,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "coupling": false,
+      "note": "`obstacle_clearance` este inertă în scenariul cedarea la traversare"
+    },
+    {
+      "key": "emergency_brake_intensity",
+      "scenario": "cedarea la traversare",
+      "keyUnit": "ratio",
+      "unit": "decizie",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "coupling": false,
+      "note": "`emergency_brake_intensity` este inertă în scenariul cedarea la traversare"
+    },
+    {
+      "key": "evasive_steer_willingness",
+      "scenario": "cedarea la traversare",
+      "keyUnit": "probability",
+      "unit": "decizie",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "coupling": false,
+      "note": "`evasive_steer_willingness` este inertă în scenariul cedarea la traversare"
+    },
+    {
+      "key": "crosswalk_approach_speed",
+      "scenario": "cedarea la traversare",
+      "keyUnit": "m/s",
+      "unit": "decizie",
+      "lowValue": 0.5,
+      "highValue": 15,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "coupling": false,
+      "note": "`crosswalk_approach_speed` este inertă în scenariul cedarea la traversare"
+    },
+    {
+      "key": "horn_use_probability",
+      "scenario": "cedarea la traversare",
+      "keyUnit": "probability",
+      "unit": "decizie",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "coupling": false,
+      "note": "`horn_use_probability` este inertă în scenariul cedarea la traversare"
+    },
+    {
+      "key": "pedestrian_yield_probability",
+      "scenario": "spațiul față de pieton",
+      "keyUnit": "probability",
+      "unit": "m/s",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 6.2289646009589745,
+      "highOutcome": 6.2289646009589745,
+      "difference": 0,
+      "coupling": false,
+      "note": "`pedestrian_yield_probability` este inertă în scenariul spațiul față de pieton"
+    },
+    {
+      "key": "hazard_reaction_delay",
+      "scenario": "spațiul față de pieton",
+      "keyUnit": "s",
+      "unit": "m/s",
+      "lowValue": 0,
+      "highValue": 3,
+      "lowOutcome": 6.2289646009589745,
+      "highOutcome": 6.2289646009589745,
+      "difference": 0,
+      "coupling": false,
+      "note": "`hazard_reaction_delay` este inertă în scenariul spațiul față de pieton"
+    },
+    {
+      "key": "obstacle_clearance",
+      "scenario": "spațiul față de pieton",
+      "keyUnit": "m",
+      "unit": "m/s",
+      "lowValue": 0.1,
+      "highValue": 4,
+      "lowOutcome": 6.2289646009589745,
+      "highOutcome": 6.2289646009589745,
+      "difference": 0,
+      "coupling": false,
+      "note": "`obstacle_clearance` este inertă în scenariul spațiul față de pieton"
+    },
+    {
+      "key": "emergency_brake_intensity",
+      "scenario": "spațiul față de pieton",
+      "keyUnit": "ratio",
+      "unit": "m/s",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 6.2289646009589745,
+      "highOutcome": 6.2289646009589745,
+      "difference": 0,
+      "coupling": false,
+      "note": "`emergency_brake_intensity` este inertă în scenariul spațiul față de pieton"
+    },
+    {
+      "key": "evasive_steer_willingness",
+      "scenario": "spațiul față de pieton",
+      "keyUnit": "probability",
+      "unit": "m/s",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 6.2289646009589745,
+      "highOutcome": 6.2289646009589745,
+      "difference": 0,
+      "coupling": false,
+      "note": "`evasive_steer_willingness` este inertă în scenariul spațiul față de pieton"
+    },
+    {
+      "key": "crosswalk_approach_speed",
+      "scenario": "spațiul față de pieton",
+      "keyUnit": "m/s",
+      "unit": "m/s",
+      "lowValue": 0.5,
+      "highValue": 15,
+      "lowOutcome": 6.2289646009589745,
+      "highOutcome": 6.2289646009589745,
+      "difference": 0,
+      "coupling": false,
+      "note": "`crosswalk_approach_speed` este inertă în scenariul spațiul față de pieton"
+    },
+    {
+      "key": "horn_use_probability",
+      "scenario": "spațiul față de pieton",
+      "keyUnit": "probability",
+      "unit": "m/s",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 6.2289646009589745,
+      "highOutcome": 6.2289646009589745,
+      "difference": 0,
+      "coupling": false,
+      "note": "`horn_use_probability` este inertă în scenariul spațiul față de pieton"
+    },
+    {
+      "key": "pedestrian_yield_probability",
+      "scenario": "reacția la pericol",
+      "keyUnit": "probability",
+      "unit": "m",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 24.000000000000014,
+      "highOutcome": 24.000000000000014,
+      "difference": 0,
+      "coupling": false,
+      "note": "`pedestrian_yield_probability` este inertă în scenariul reacția la pericol"
+    },
+    {
+      "key": "pedestrian_clearance",
+      "scenario": "reacția la pericol",
+      "keyUnit": "m",
+      "unit": "m",
+      "lowValue": 0.1,
+      "highValue": 6,
+      "lowOutcome": 24.000000000000014,
+      "highOutcome": 24.000000000000014,
+      "difference": 0,
+      "coupling": false,
+      "note": "`pedestrian_clearance` este inertă în scenariul reacția la pericol"
+    },
+    {
+      "key": "obstacle_clearance",
+      "scenario": "reacția la pericol",
+      "keyUnit": "m",
+      "unit": "m",
+      "lowValue": 0.1,
+      "highValue": 4,
+      "lowOutcome": 24.000000000000014,
+      "highOutcome": 24.000000000000014,
+      "difference": 0,
+      "coupling": false,
+      "note": "`obstacle_clearance` este inertă în scenariul reacția la pericol"
+    },
+    {
+      "key": "emergency_brake_intensity",
+      "scenario": "reacția la pericol",
+      "keyUnit": "ratio",
+      "unit": "m",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 24.000000000000014,
+      "highOutcome": 24.000000000000014,
+      "difference": 0,
+      "coupling": false,
+      "note": "`emergency_brake_intensity` este inertă în scenariul reacția la pericol"
+    },
+    {
+      "key": "evasive_steer_willingness",
+      "scenario": "reacția la pericol",
+      "keyUnit": "probability",
+      "unit": "m",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 24.000000000000014,
+      "highOutcome": 24.000000000000014,
+      "difference": 0,
+      "coupling": false,
+      "note": "`evasive_steer_willingness` este inertă în scenariul reacția la pericol"
+    },
+    {
+      "key": "crosswalk_approach_speed",
+      "scenario": "reacția la pericol",
+      "keyUnit": "m/s",
+      "unit": "m",
+      "lowValue": 0.5,
+      "highValue": 15,
+      "lowOutcome": 24.000000000000014,
+      "highOutcome": 24.000000000000014,
+      "difference": 0,
+      "coupling": false,
+      "note": "`crosswalk_approach_speed` este inertă în scenariul reacția la pericol"
+    },
+    {
+      "key": "horn_use_probability",
+      "scenario": "reacția la pericol",
+      "keyUnit": "probability",
+      "unit": "m",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 24.000000000000014,
+      "highOutcome": 24.000000000000014,
+      "difference": 0,
+      "coupling": false,
+      "note": "`horn_use_probability` este inertă în scenariul reacția la pericol"
+    },
+    {
+      "key": "pedestrian_yield_probability",
+      "scenario": "spațiul față de obstacol",
+      "keyUnit": "probability",
+      "unit": "m/s",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 6.32455532033676,
+      "highOutcome": 6.32455532033676,
+      "difference": 0,
+      "coupling": false,
+      "note": "`pedestrian_yield_probability` este inertă în scenariul spațiul față de obstacol"
+    },
+    {
+      "key": "pedestrian_clearance",
+      "scenario": "spațiul față de obstacol",
+      "keyUnit": "m",
+      "unit": "m/s",
+      "lowValue": 0.1,
+      "highValue": 6,
+      "lowOutcome": 6.32455532033676,
+      "highOutcome": 6.32455532033676,
+      "difference": 0,
+      "coupling": false,
+      "note": "`pedestrian_clearance` este inertă în scenariul spațiul față de obstacol"
+    },
+    {
+      "key": "hazard_reaction_delay",
+      "scenario": "spațiul față de obstacol",
+      "keyUnit": "s",
+      "unit": "m/s",
+      "lowValue": 0,
+      "highValue": 3,
+      "lowOutcome": 6.32455532033676,
+      "highOutcome": 6.32455532033676,
+      "difference": 0,
+      "coupling": false,
+      "note": "`hazard_reaction_delay` este inertă în scenariul spațiul față de obstacol"
+    },
+    {
+      "key": "emergency_brake_intensity",
+      "scenario": "spațiul față de obstacol",
+      "keyUnit": "ratio",
+      "unit": "m/s",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 6.32455532033676,
+      "highOutcome": 6.32455532033676,
+      "difference": 0,
+      "coupling": false,
+      "note": "`emergency_brake_intensity` este inertă în scenariul spațiul față de obstacol"
+    },
+    {
+      "key": "evasive_steer_willingness",
+      "scenario": "spațiul față de obstacol",
+      "keyUnit": "probability",
+      "unit": "m/s",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 6.32455532033676,
+      "highOutcome": 6.32455532033676,
+      "difference": 0,
+      "coupling": false,
+      "note": "`evasive_steer_willingness` este inertă în scenariul spațiul față de obstacol"
+    },
+    {
+      "key": "crosswalk_approach_speed",
+      "scenario": "spațiul față de obstacol",
+      "keyUnit": "m/s",
+      "unit": "m/s",
+      "lowValue": 0.5,
+      "highValue": 15,
+      "lowOutcome": 6.32455532033676,
+      "highOutcome": 6.32455532033676,
+      "difference": 0,
+      "coupling": false,
+      "note": "`crosswalk_approach_speed` este inertă în scenariul spațiul față de obstacol"
+    },
+    {
+      "key": "horn_use_probability",
+      "scenario": "spațiul față de obstacol",
+      "keyUnit": "probability",
+      "unit": "m/s",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 6.32455532033676,
+      "highOutcome": 6.32455532033676,
+      "difference": 0,
+      "coupling": false,
+      "note": "`horn_use_probability` este inertă în scenariul spațiul față de obstacol"
+    },
+    {
+      "key": "pedestrian_yield_probability",
+      "scenario": "frânarea de urgență",
+      "keyUnit": "probability",
+      "unit": "m/s²",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 8,
+      "highOutcome": 8,
+      "difference": 0,
+      "coupling": false,
+      "note": "`pedestrian_yield_probability` este inertă în scenariul frânarea de urgență"
+    },
+    {
+      "key": "pedestrian_clearance",
+      "scenario": "frânarea de urgență",
+      "keyUnit": "m",
+      "unit": "m/s²",
+      "lowValue": 0.1,
+      "highValue": 6,
+      "lowOutcome": 8,
+      "highOutcome": 8,
+      "difference": 0,
+      "coupling": false,
+      "note": "`pedestrian_clearance` este inertă în scenariul frânarea de urgență"
+    },
+    {
+      "key": "hazard_reaction_delay",
+      "scenario": "frânarea de urgență",
+      "keyUnit": "s",
+      "unit": "m/s²",
+      "lowValue": 0,
+      "highValue": 3,
+      "lowOutcome": 8,
+      "highOutcome": 8,
+      "difference": 0,
+      "coupling": false,
+      "note": "`hazard_reaction_delay` este inertă în scenariul frânarea de urgență"
+    },
+    {
+      "key": "obstacle_clearance",
+      "scenario": "frânarea de urgență",
+      "keyUnit": "m",
+      "unit": "m/s²",
+      "lowValue": 0.1,
+      "highValue": 4,
+      "lowOutcome": 8,
+      "highOutcome": 8,
+      "difference": 0,
+      "coupling": false,
+      "note": "`obstacle_clearance` este inertă în scenariul frânarea de urgență"
+    },
+    {
+      "key": "evasive_steer_willingness",
+      "scenario": "frânarea de urgență",
+      "keyUnit": "probability",
+      "unit": "m/s²",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 8,
+      "highOutcome": 8,
+      "difference": 0,
+      "coupling": false,
+      "note": "`evasive_steer_willingness` este inertă în scenariul frânarea de urgență"
+    },
+    {
+      "key": "crosswalk_approach_speed",
+      "scenario": "frânarea de urgență",
+      "keyUnit": "m/s",
+      "unit": "m/s²",
+      "lowValue": 0.5,
+      "highValue": 15,
+      "lowOutcome": 8,
+      "highOutcome": 8,
+      "difference": 0,
+      "coupling": false,
+      "note": "`crosswalk_approach_speed` este inertă în scenariul frânarea de urgență"
+    },
+    {
+      "key": "horn_use_probability",
+      "scenario": "frânarea de urgență",
+      "keyUnit": "probability",
+      "unit": "m/s²",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 8,
+      "highOutcome": 8,
+      "difference": 0,
+      "coupling": false,
+      "note": "`horn_use_probability` este inertă în scenariul frânarea de urgență"
+    },
+    {
+      "key": "pedestrian_yield_probability",
+      "scenario": "ocolirea prin viraj",
+      "keyUnit": "probability",
+      "unit": "m",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 0,
+      "highOutcome": 0,
+      "difference": 0,
+      "coupling": false,
+      "note": "`pedestrian_yield_probability` este inertă în scenariul ocolirea prin viraj"
+    },
+    {
+      "key": "pedestrian_clearance",
+      "scenario": "ocolirea prin viraj",
+      "keyUnit": "m",
+      "unit": "m",
+      "lowValue": 0.1,
+      "highValue": 6,
+      "lowOutcome": 0,
+      "highOutcome": 0,
+      "difference": 0,
+      "coupling": false,
+      "note": "`pedestrian_clearance` este inertă în scenariul ocolirea prin viraj"
+    },
+    {
+      "key": "hazard_reaction_delay",
+      "scenario": "ocolirea prin viraj",
+      "keyUnit": "s",
+      "unit": "m",
+      "lowValue": 0,
+      "highValue": 3,
+      "lowOutcome": 0,
+      "highOutcome": 0,
+      "difference": 0,
+      "coupling": false,
+      "note": "`hazard_reaction_delay` este inertă în scenariul ocolirea prin viraj"
+    },
+    {
+      "key": "obstacle_clearance",
+      "scenario": "ocolirea prin viraj",
+      "keyUnit": "m",
+      "unit": "m",
+      "lowValue": 0.1,
+      "highValue": 4,
+      "lowOutcome": 0,
+      "highOutcome": 0,
+      "difference": 0,
+      "coupling": false,
+      "note": "`obstacle_clearance` este inertă în scenariul ocolirea prin viraj"
+    },
+    {
+      "key": "emergency_brake_intensity",
+      "scenario": "ocolirea prin viraj",
+      "keyUnit": "ratio",
+      "unit": "m",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 0,
+      "highOutcome": 0,
+      "difference": 0,
+      "coupling": false,
+      "note": "`emergency_brake_intensity` este inertă în scenariul ocolirea prin viraj"
+    },
+    {
+      "key": "crosswalk_approach_speed",
+      "scenario": "ocolirea prin viraj",
+      "keyUnit": "m/s",
+      "unit": "m",
+      "lowValue": 0.5,
+      "highValue": 15,
+      "lowOutcome": 0,
+      "highOutcome": 0,
+      "difference": 0,
+      "coupling": false,
+      "note": "`crosswalk_approach_speed` este inertă în scenariul ocolirea prin viraj"
+    },
+    {
+      "key": "horn_use_probability",
+      "scenario": "ocolirea prin viraj",
+      "keyUnit": "probability",
+      "unit": "m",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 0,
+      "highOutcome": 0,
+      "difference": 0,
+      "coupling": false,
+      "note": "`horn_use_probability` este inertă în scenariul ocolirea prin viraj"
+    },
+    {
+      "key": "pedestrian_yield_probability",
+      "scenario": "viteza de apropiere de trecere",
+      "keyUnit": "probability",
+      "unit": "m/s",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 5,
+      "highOutcome": 5,
+      "difference": 0,
+      "coupling": false,
+      "note": "`pedestrian_yield_probability` este inertă în scenariul viteza de apropiere de trecere"
+    },
+    {
+      "key": "pedestrian_clearance",
+      "scenario": "viteza de apropiere de trecere",
+      "keyUnit": "m",
+      "unit": "m/s",
+      "lowValue": 0.1,
+      "highValue": 6,
+      "lowOutcome": 5,
+      "highOutcome": 5,
+      "difference": 0,
+      "coupling": false,
+      "note": "`pedestrian_clearance` este inertă în scenariul viteza de apropiere de trecere"
+    },
+    {
+      "key": "hazard_reaction_delay",
+      "scenario": "viteza de apropiere de trecere",
+      "keyUnit": "s",
+      "unit": "m/s",
+      "lowValue": 0,
+      "highValue": 3,
+      "lowOutcome": 5,
+      "highOutcome": 5,
+      "difference": 0,
+      "coupling": false,
+      "note": "`hazard_reaction_delay` este inertă în scenariul viteza de apropiere de trecere"
+    },
+    {
+      "key": "obstacle_clearance",
+      "scenario": "viteza de apropiere de trecere",
+      "keyUnit": "m",
+      "unit": "m/s",
+      "lowValue": 0.1,
+      "highValue": 4,
+      "lowOutcome": 5,
+      "highOutcome": 5,
+      "difference": 0,
+      "coupling": false,
+      "note": "`obstacle_clearance` este inertă în scenariul viteza de apropiere de trecere"
+    },
+    {
+      "key": "emergency_brake_intensity",
+      "scenario": "viteza de apropiere de trecere",
+      "keyUnit": "ratio",
+      "unit": "m/s",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 5,
+      "highOutcome": 5,
+      "difference": 0,
+      "coupling": false,
+      "note": "`emergency_brake_intensity` este inertă în scenariul viteza de apropiere de trecere"
+    },
+    {
+      "key": "evasive_steer_willingness",
+      "scenario": "viteza de apropiere de trecere",
+      "keyUnit": "probability",
+      "unit": "m/s",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 5,
+      "highOutcome": 5,
+      "difference": 0,
+      "coupling": false,
+      "note": "`evasive_steer_willingness` este inertă în scenariul viteza de apropiere de trecere"
+    },
+    {
+      "key": "horn_use_probability",
+      "scenario": "viteza de apropiere de trecere",
+      "keyUnit": "probability",
+      "unit": "m/s",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 5,
+      "highOutcome": 5,
+      "difference": 0,
+      "coupling": false,
+      "note": "`horn_use_probability` este inertă în scenariul viteza de apropiere de trecere"
+    },
+    {
+      "key": "pedestrian_yield_probability",
+      "scenario": "claxonul",
+      "keyUnit": "probability",
+      "unit": "decizie",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 0,
+      "highOutcome": 0,
+      "difference": 0,
+      "coupling": false,
+      "note": "`pedestrian_yield_probability` este inertă în scenariul claxonul"
+    },
+    {
+      "key": "pedestrian_clearance",
+      "scenario": "claxonul",
+      "keyUnit": "m",
+      "unit": "decizie",
+      "lowValue": 0.1,
+      "highValue": 6,
+      "lowOutcome": 0,
+      "highOutcome": 0,
+      "difference": 0,
+      "coupling": false,
+      "note": "`pedestrian_clearance` este inertă în scenariul claxonul"
+    },
+    {
+      "key": "hazard_reaction_delay",
+      "scenario": "claxonul",
+      "keyUnit": "s",
+      "unit": "decizie",
+      "lowValue": 0,
+      "highValue": 3,
+      "lowOutcome": 0,
+      "highOutcome": 0,
+      "difference": 0,
+      "coupling": false,
+      "note": "`hazard_reaction_delay` este inertă în scenariul claxonul"
+    },
+    {
+      "key": "obstacle_clearance",
+      "scenario": "claxonul",
+      "keyUnit": "m",
+      "unit": "decizie",
+      "lowValue": 0.1,
+      "highValue": 4,
+      "lowOutcome": 0,
+      "highOutcome": 0,
+      "difference": 0,
+      "coupling": false,
+      "note": "`obstacle_clearance` este inertă în scenariul claxonul"
+    },
+    {
+      "key": "emergency_brake_intensity",
+      "scenario": "claxonul",
+      "keyUnit": "ratio",
+      "unit": "decizie",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 0,
+      "highOutcome": 0,
+      "difference": 0,
+      "coupling": false,
+      "note": "`emergency_brake_intensity` este inertă în scenariul claxonul"
+    },
+    {
+      "key": "evasive_steer_willingness",
+      "scenario": "claxonul",
+      "keyUnit": "probability",
+      "unit": "decizie",
+      "lowValue": 0,
+      "highValue": 1,
+      "lowOutcome": 0,
+      "highOutcome": 0,
+      "difference": 0,
+      "coupling": false,
+      "note": "`evasive_steer_willingness` este inertă în scenariul claxonul"
+    },
+    {
+      "key": "crosswalk_approach_speed",
+      "scenario": "claxonul",
+      "keyUnit": "m/s",
+      "unit": "decizie",
+      "lowValue": 0.5,
+      "highValue": 15,
+      "lowOutcome": 0,
+      "highOutcome": 0,
+      "difference": 0,
+      "coupling": false,
+      "note": "`crosswalk_approach_speed` este inertă în scenariul claxonul"
+    }
+  ],
+  "couplings": [],
+  "safety": [
+    {
+      "id": "mandatory-yield",
+      "limit": "cedare obligatorie",
+      "key": "pedestrian_yield_probability",
+      "scenario": "traversare",
+      "unit": "decizie",
+      "lowValue": 0,
+      "lowOutcome": 1,
+      "highValue": 1,
+      "highOutcome": 1,
+      "difference": 0,
+      "verdict": "un pieton care nu poate elibera calea în timpul M `yield_time_gap` este o cedare obligatorie la orice valoare a cheii"
+    },
+    {
+      "id": "pedestrian-floor",
+      "limit": "minim de spațiu (pieton)",
+      "key": "pedestrian_clearance",
+      "scenario": "pieton la bordură",
+      "unit": "m",
+      "lowValue": 0.1,
+      "lowOutcome": 2.3,
+      "highValue": 6,
+      "highOutcome": 6,
+      "difference": 3.7,
+      "verdict": "minimul de catalog de 0,10 m este ridicat la lățimea vehiculului plus rezervă (2,30 m pentru sedan)"
+    },
+    {
+      "id": "obstacle-floor",
+      "limit": "minim de spațiu (obstacol)",
+      "key": "obstacle_clearance",
+      "scenario": "obstacol în marjă",
+      "unit": "m",
+      "lowValue": 0.1,
+      "lowOutcome": 3.4,
+      "highValue": 4,
+      "highOutcome": 4,
+      "difference": 0.6000000000000001,
+      "verdict": "marja fizică a cutiei late (3,40 m) nu poate fi coborâtă de nicio valoare de catalog"
+    },
+    {
+      "id": "reaction-cap",
+      "limit": "plafon de reacție",
+      "key": "hazard_reaction_delay",
+      "scenario": "reacție plafonată",
+      "unit": "s",
+      "lowValue": 0,
+      "lowOutcome": 0.5,
+      "highValue": 3,
+      "highOutcome": 1,
+      "difference": 0.5,
+      "verdict": "întârzierea este saturată la maximul fezabil: frânarea mai poate opri în spațiul rămas"
+    },
+    {
+      "id": "adhesion-cap",
+      "limit": "plafon de aderență",
+      "key": "emergency_brake_intensity",
+      "scenario": "frânare pe aderență redusă",
+      "unit": "m/s²",
+      "lowValue": 0,
+      "lowOutcome": 0,
+      "highValue": 1,
+      "highOutcome": 4.46355,
+      "difference": 4.46355,
+      "verdict": "frânarea de urgență nu depășește aderența disponibilă, oricare ar fi intensitatea"
+    },
+    {
+      "id": "evasion-no-space",
+      "limit": "subordonarea ocolirii",
+      "key": "evasive_steer_willingness",
+      "scenario": "ocolire fără spațiu",
+      "unit": "m",
+      "lowValue": 0,
+      "lowOutcome": 0,
+      "highValue": 1,
+      "highOutcome": 0,
+      "difference": 0,
+      "verdict": "fără spațiul lateral verificat, cheia este inertă la ambele extremități"
+    },
+    {
+      "id": "horn-forbidden",
+      "limit": "subordonarea claxonului",
+      "key": "horn_use_probability",
+      "scenario": "claxon interzis",
+      "unit": "decizie",
+      "lowValue": 0,
+      "lowOutcome": 0,
+      "highValue": 1,
+      "highOutcome": 0,
+      "difference": 0,
+      "verdict": "unde claxonul este interzis, eșantionul nu se trage și cheia este inertă"
+    }
+  ],
+  "compliance": [
+    {
+      "id": "pedestrian-floor",
+      "pass": true,
+      "detail": "0,10 m → 2.3 m (ridicat), 6 m → 6 m; viteza comandată 0 / 0 m/s"
+    },
+    {
+      "id": "obstacle-floor",
+      "pass": true,
+      "detail": "0,10 m → 3.4 m (ridicat), 4 m → 4 m; viteza comandată 0 / 0 m/s"
+    },
+    {
+      "id": "reaction-cap",
+      "pass": true,
+      "detail": "0 s → 0.5 s (marjă 4 m), 3 s → 1 s (saturat, marjă 0 m)"
+    },
+    {
+      "id": "adhesion-cap",
+      "pass": true,
+      "detail": "aderență redusă: 0,5 → 4 m/s², 1 → 4.46355 m/s² (cerut 8); uscat 1 → 8 m/s²"
+    },
+    {
+      "id": "evasion-subordination",
+      "pass": true,
+      "detail": "fără spațiu (3,00 m < 3.4 m): 0 / 0 m; cu spațiu: 0 → 0.45 m"
+    },
+    {
+      "id": "horn-subordination",
+      "pass": true,
+      "detail": "interzis: eșantion null, folosit false; permis: 0 → false, 1 → true"
+    },
+    {
+      "id": "mandatory-yield",
+      "pass": true,
+      "detail": "obligatoriu (marjă -4.831 s < 3 s): cedare true la 0; discreționar (marjă 3.169 s): false → true"
+    },
+    {
+      "id": "m-comfort",
+      "pass": true,
+      "detail": "comfort_deceleration 2 / 2,5 / 8 m/s² → plafon 6.228965 / 6.964194 / 12.457929 m/s"
+    },
+    {
+      "id": "m-reaction",
+      "pass": true,
+      "detail": "delay M 0 / 0,5 / 3 s + 0,5 s R → 0.5 s (30 tick-uri) / 1 s (60 tick-uri) / 3.5 s (210 tick-uri)"
+    },
+    {
+      "id": "m-lateral",
+      "pass": true,
+      "detail": "curve_lateral_accel 2,5 → 0.45 m, 8 → 1.1 m"
+    },
+    {
+      "id": "m-yield-gap",
+      "pass": true,
+      "detail": "yield_time_gap 3 s → obligatoriu false (0 → false, 1 → true); 8 s → obligatoriu true (0 → true)"
+    },
+    {
+      "id": "geometry",
+      "pass": true,
+      "detail": "lățimi 1.8 / 1.6 m; aderență 12.753 / 14.715 / 4.46355 m/s²; capacitate 8 / 9 m/s²"
+    }
+  ],
+  "compatibility": {
+    "comfortDeceleration": [
+      {
+        "comfortDecelerationMps2": 2,
+        "speedCapMps": 6.228965
+      },
+      {
+        "comfortDecelerationMps2": 2.5,
+        "speedCapMps": 6.964194
+      },
+      {
+        "comfortDecelerationMps2": 8,
+        "speedCapMps": 12.457929
+      }
+    ],
+    "reactionDelay": [
+      {
+        "brakeReactionDelayS": 0,
+        "inheritedDelayS": 0,
+        "demandedDelayS": 0.5,
+        "delayTicks": 30,
+        "saturated": false
+      },
+      {
+        "brakeReactionDelayS": 0.5,
+        "inheritedDelayS": 0.5,
+        "demandedDelayS": 1,
+        "delayTicks": 60,
+        "saturated": false
+      },
+      {
+        "brakeReactionDelayS": 3,
+        "inheritedDelayS": 3,
+        "demandedDelayS": 3.5,
+        "delayTicks": 210,
+        "saturated": false
+      }
+    ],
+    "lateralAccel": [
+      {
+        "curveLateralAccelMps2": 2.5,
+        "lateralAccelMps2": 2.5,
+        "reachableOffsetM": 0.45,
+        "offsetM": 0.45
+      },
+      {
+        "curveLateralAccelMps2": 8,
+        "lateralAccelMps2": 8,
+        "reachableOffsetM": 1.44,
+        "offsetM": 1.1
+      }
+    ],
+    "yieldGap": [
+      {
+        "yieldTimeGapS": 3,
+        "gapS": 3.169097,
+        "mandatoryYield": false,
+        "yieldedAtZero": false,
+        "yieldedAtOne": true
+      },
+      {
+        "yieldTimeGapS": 8,
+        "gapS": 3.169097,
+        "mandatoryYield": true,
+        "yieldedAtZero": true,
+        "yieldedAtOne": true
+      }
+    ],
+    "mUnits": {
+      "comfort_deceleration": "m/s²",
+      "brake_reaction_delay": "s",
+      "curve_lateral_accel": "m/s²",
+      "yield_time_gap": "s"
+    },
+    "rUnits": {
+      "pedestrian_yield_probability": "probability",
+      "pedestrian_clearance": "m",
+      "hazard_reaction_delay": "s",
+      "obstacle_clearance": "m",
+      "emergency_brake_intensity": "ratio",
+      "evasive_steer_willingness": "probability",
+      "crosswalk_approach_speed": "m/s",
+      "horn_use_probability": "probability"
+    }
+  },
+  "geometry": [
+    {
+      "classId": "sedan",
+      "surfaceId": "dry-asphalt",
+      "widthM": 1.8,
+      "brakeAccelerationMps2": 8,
+      "grip": 1.3,
+      "tireGripScale": 1,
+      "adhesionLimitMps2": 12.753,
+      "brakeCapabilityMps2": 8,
+      "pedestrianFloorM": 2.3,
+      "coneFloorM": 1.7,
+      "barrierFloorM": 3.4
+    },
+    {
+      "classId": "compact",
+      "surfaceId": "dry-asphalt",
+      "widthM": 1.6,
+      "brakeAccelerationMps2": 9,
+      "grip": 1.5,
+      "tireGripScale": 1,
+      "adhesionLimitMps2": 14.715,
+      "brakeCapabilityMps2": 9,
+      "pedestrianFloorM": 2.1,
+      "coneFloorM": 1.6,
+      "barrierFloorM": 3.3
+    },
+    {
+      "classId": "sedan",
+      "surfaceId": "reduced-adhesion",
+      "widthM": 1.8,
+      "brakeAccelerationMps2": 8,
+      "grip": 1.3,
+      "tireGripScale": 0.35,
+      "adhesionLimitMps2": 4.46355,
+      "brakeCapabilityMps2": 4.46355,
+      "pedestrianFloorM": 2.3,
+      "coneFloorM": 1.7,
+      "barrierFloorM": 3.4
+    }
+  ],
+  "samples": {
+    "repeated": true,
+    "otherOpportunityDiffers": true,
+    "otherSeedDiffers": true,
+    "hornWithoutPermission": null,
+    "evasionWithoutSpace": null,
+    "yieldWhileWaiting": null
+  },
+  "determinism": {
+    "decisions": 16,
+    "digest": "fnv1a32:76d1c68d",
+    "repeatedDigest": "fnv1a32:76d1c68d"
+  },
+  "checks": [
+    {
+      "id": "catalog",
+      "pass": true,
+      "detail": "pedestrian_yield_probability 0-1 probability, pedestrian_clearance 0.1-6 m, hazard_reaction_delay 0-3 s, obstacle_clearance 0.1-4 m, emergency_brake_intensity 0-1 ratio, evasive_steer_willingness 0-1 probability, crosswalk_approach_speed 0.5-15 m/s, horn_use_probability 0-1 probability"
+    },
+    {
+      "id": "units",
+      "pass": true,
+      "detail": "R: pedestrian_yield_probability probability, pedestrian_clearance m, hazard_reaction_delay s, obstacle_clearance m, emergency_brake_intensity ratio, evasive_steer_willingness probability, crosswalk_approach_speed m/s, horn_use_probability probability; M: comfort_deceleration m/s², brake_reaction_delay s, curve_lateral_accel m/s², yield_time_gap s"
+    },
+    {
+      "id": "effects",
+      "pass": true,
+      "detail": "pedestrian_yield_probability 0.000 → 1.000; pedestrian_clearance 6.229 → 4.899; hazard_reaction_delay 28.000 → 4.000; obstacle_clearance 6.325 → 5.550; emergency_brake_intensity 0.000 → 8.000; evasive_steer_willingness 0.000 → 0.450; crosswalk_approach_speed 0.500 → 15.000; horn_use_probability 0.000 → 1.000"
+    },
+    {
+      "id": "separation",
+      "pass": true,
+      "detail": "56/56 perechi inerte, 0 cuplaje"
+    },
+    {
+      "id": "safety-clearance",
+      "pass": true,
+      "detail": "0,10 m → 2.3 m (ridicat), 6 m → 6 m; viteza comandată 0 / 0 m/s; 0,10 m → 3.4 m (ridicat), 4 m → 4 m; viteza comandată 0 / 0 m/s"
+    },
+    {
+      "id": "safety-reaction",
+      "pass": true,
+      "detail": "0 s → 0.5 s (marjă 4 m), 3 s → 1 s (saturat, marjă 0 m)"
+    },
+    {
+      "id": "safety-adhesion",
+      "pass": true,
+      "detail": "aderență redusă: 0,5 → 4 m/s², 1 → 4.46355 m/s² (cerut 8); uscat 1 → 8 m/s²"
+    },
+    {
+      "id": "safety-evasion",
+      "pass": true,
+      "detail": "fără spațiu (3,00 m < 3.4 m): 0 / 0 m; cu spațiu: 0 → 0.45 m"
+    },
+    {
+      "id": "safety-horn",
+      "pass": true,
+      "detail": "interzis: eșantion null, folosit false; permis: 0 → false, 1 → true"
+    },
+    {
+      "id": "mandatory-yield",
+      "pass": true,
+      "detail": "obligatoriu (marjă -4.831 s < 3 s): cedare true la 0; discreționar (marjă 3.169 s): false → true"
+    },
+    {
+      "id": "m-compatible",
+      "pass": true,
+      "detail": "comfort_deceleration 2 / 2,5 / 8 m/s² → plafon 6.228965 / 6.964194 / 12.457929 m/s; delay M 0 / 0,5 / 3 s + 0,5 s R → 0.5 s (30 tick-uri) / 1 s (60 tick-uri) / 3.5 s (210 tick-uri); curve_lateral_accel 2,5 → 0.45 m, 8 → 1.1 m; yield_time_gap 3 s → obligatoriu false (0 → false, 1 → true); 8 s → obligatoriu true (0 → true)"
+    },
+    {
+      "id": "geometry",
+      "pass": true,
+      "detail": "lățimi 1.8 / 1.6 m; aderență 12.753 / 14.715 / 4.46355 m/s²; capacitate 8 / 9 m/s²"
+    },
+    {
+      "id": "samples",
+      "pass": true,
+      "detail": "repetare identică true, altă oportunitate diferă true, alt seed diferă true, eșantioane absente: claxon null, ocolire null, așteptare null"
+    },
+    {
+      "id": "determinism",
+      "pass": true,
+      "detail": "digest fnv1a32:76d1c68d"
+    },
+    {
+      "id": "admission",
+      "pass": true,
+      "detail": "manual NO_AUTO_AUTHORITY, vechi FOREIGN_OR_STALE_OBSERVATION, actor FOREIGN_OR_STALE_OBSERVATION, sesiune FOREIGN_OR_STALE_OBSERVATION, profil lipsă MISSING_PROFILE; refuzate: token REFUSED, versiune REFUSED, traversare inconsistentă REFUSED, distanță negativă REFUSED, mecanică REFUSED"
+    }
+  ],
+  "summary": {
+    "checks": 15,
+    "passed": 15,
+    "pass": true
+  }
+}
