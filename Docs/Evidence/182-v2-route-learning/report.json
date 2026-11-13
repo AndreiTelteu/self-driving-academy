@@ -1,0 +1,882 @@
+{
+  "version": "182-route-estimator-v1",
+  "parameters": [
+    {
+      "key": "route_time_weight",
+      "unit": "weight",
+      "minimum": 0,
+      "maximum": 1,
+      "defaultValue": 0.6
+    },
+    {
+      "key": "route_distance_weight",
+      "unit": "weight",
+      "minimum": 0,
+      "maximum": 1,
+      "defaultValue": 0.3
+    },
+    {
+      "key": "route_turn_penalty",
+      "unit": "s",
+      "minimum": 0,
+      "maximum": 20,
+      "defaultValue": 2
+    },
+    {
+      "key": "route_signal_penalty",
+      "unit": "s",
+      "minimum": 0,
+      "maximum": 60,
+      "defaultValue": 5
+    },
+    {
+      "key": "route_congestion_penalty",
+      "unit": "ratio",
+      "minimum": 0,
+      "maximum": 2,
+      "defaultValue": 0.5
+    },
+    {
+      "key": "reroute_patience",
+      "unit": "s",
+      "minimum": 2,
+      "maximum": 120,
+      "defaultValue": 20
+    },
+    {
+      "key": "u_turn_willingness",
+      "unit": "probability",
+      "minimum": 0,
+      "maximum": 1,
+      "defaultValue": 0
+    },
+    {
+      "key": "reverse_recovery_duration",
+      "unit": "s",
+      "minimum": 0,
+      "maximum": 8,
+      "defaultValue": 2
+    }
+  ],
+  "rows": [
+    {
+      "key": "route_time_weight",
+      "scenario": "TIME_VERSUS_DISTANCE",
+      "context": "o decizie 181 reală între exact două alternative admise care diferă în timp de stil și lungime, cu virajele, semafoarele și congestia identice: alegerea dovedește doar raportul `share_timp / share_distanță`, niciodată o pondere absolută",
+      "status": "CANDIDATE",
+      "value": 0.0724359891828052,
+      "unit": "weight",
+      "uncertainty": 0.005,
+      "uncertaintyThreshold": 0.03,
+      "sourceEpisodes": 4,
+      "sourceSamples": 18,
+      "validationStatus": "VALIDATED",
+      "validationEpisodes": 4,
+      "validationValue": 0.07235046641241388,
+      "validationError": 0.00008552277039131084,
+      "validationTolerance": 0.03,
+      "reason": null
+    },
+    {
+      "key": "route_distance_weight",
+      "scenario": "DISTANCE_VERSUS_TIME",
+      "context": "aceeași pereche comparabilă, citită de cealaltă parte: reciproca aceluiași raport, pentru că cele două ponderi sunt fețele aceleiași decizii",
+      "status": "CANDIDATE",
+      "value": 0.03539227110461782,
+      "unit": "weight",
+      "uncertainty": 0.005,
+      "uncertaintyThreshold": 0.03,
+      "sourceEpisodes": 4,
+      "sourceSamples": 18,
+      "validationStatus": "VALIDATED",
+      "validationEpisodes": 4,
+      "validationValue": 0.03547779387500913,
+      "validationError": 0.00008552277039131084,
+      "validationTolerance": 0.03,
+      "reason": null
+    },
+    {
+      "key": "route_turn_penalty",
+      "scenario": "TURN_VERSUS_LENGTH",
+      "context": "o pereche de aceeași viteză liberă (deci termenii de timp și distanță sunt coliniari) care diferă în lungime și în virajele declarate: alegerea dovedește doar `share_viraj / (share_timp + share_distanță)`; o pereche cu geometrie identică este ordinală",
+      "status": "CANDIDATE",
+      "value": 0.23565116486655363,
+      "unit": "s",
+      "uncertainty": 0.016382035913718965,
+      "uncertaintyThreshold": 0.04,
+      "sourceEpisodes": 2,
+      "sourceSamples": 4,
+      "validationStatus": "VALIDATED",
+      "validationEpisodes": 2,
+      "validationValue": 0.2353002152441942,
+      "validationError": 0.00035094962235943106,
+      "validationTolerance": 0.04,
+      "reason": null
+    },
+    {
+      "key": "route_signal_penalty",
+      "scenario": "SIGNAL_VERSUS_LENGTH",
+      "context": "o pereche de aceeași viteză liberă care diferă în lungime și în semafoarele declarate: alegerea dovedește doar `share_semafor / (share_timp + share_distanță)`",
+      "status": "CANDIDATE",
+      "value": 0.589127912166384,
+      "unit": "s",
+      "uncertainty": 0.022068410650692205,
+      "uncertaintyThreshold": 0.06,
+      "sourceEpisodes": 2,
+      "sourceSamples": 4,
+      "validationStatus": "VALIDATED",
+      "validationEpisodes": 2,
+      "validationValue": 0.5879459924671593,
+      "validationError": 0.001181919699224765,
+      "validationTolerance": 0.06,
+      "reason": null
+    },
+    {
+      "key": "route_congestion_penalty",
+      "scenario": "CONGESTION_VERSUS_LENGTH",
+      "context": "o pereche de aceeași viteză liberă care diferă în lungime și în întârzierea de congestie declarată: alegerea dovedește doar `share_congestie / (share_timp + share_distanță)`",
+      "status": "CANDIDATE",
+      "value": 0.0673926626796394,
+      "unit": "ratio",
+      "uncertainty": 0.012572462389112127,
+      "uncertaintyThreshold": 0.03,
+      "sourceEpisodes": 2,
+      "sourceSamples": 4,
+      "validationStatus": "VALIDATED",
+      "validationEpisodes": 2,
+      "validationValue": 0.06722320433627103,
+      "validationError": 0.00016945834336837273,
+      "validationTolerance": 0.03,
+      "reason": null
+    },
+    {
+      "key": "reroute_patience",
+      "scenario": "KEEP_TO_SWITCH",
+      "context": "tranziția reală WAIT → COMMIT între două rute admise: primul tick scurs care commitează este `max(1, ceil(cheie · 60))`, deci `P` tick-uri admit `cheie ∈ ((P − 1)/60, P/60]`",
+      "status": "CANDIDATE",
+      "value": 19.991666666666667,
+      "unit": "s",
+      "uncertainty": 0.05,
+      "uncertaintyThreshold": 0.5,
+      "sourceEpisodes": 2,
+      "sourceSamples": 14,
+      "validationStatus": "VALIDATED",
+      "validationEpisodes": 2,
+      "validationValue": 19.983333333333334,
+      "validationError": 0.00833333333333286,
+      "validationTolerance": 0.5,
+      "reason": null
+    },
+    {
+      "key": "u_turn_willingness",
+      "scenario": "U_TURN_OPPORTUNITY",
+      "context": "o oportunitate cu întoarcerea declarată permisă, în care 181 a extras eșantionul determinist: admiterea dovedește `cheie > eșantion`, refuzul dovedește `cheie ≤ eșantion`; o întoarcere interzisă sau nedeclarată nu trage eșantion",
+      "status": "CANDIDATE",
+      "value": 0.10418014856986701,
+      "unit": "probability",
+      "uncertainty": 0.043441585497930646,
+      "uncertaintyThreshold": 0.15,
+      "sourceEpisodes": 2,
+      "sourceSamples": 2,
+      "validationStatus": "VALIDATED",
+      "validationEpisodes": 2,
+      "validationValue": 0.12602327717468143,
+      "validationError": 0.02184312860481441,
+      "validationTolerance": 0.15,
+      "reason": null
+    },
+    {
+      "key": "reverse_recovery_duration",
+      "scenario": "RECOVERY_COMMIT",
+      "context": "o recuperare cerută și commitată cu spațiul din spate declarat liber: durata commitată este `max(cheie, 2,5 s)`, deci peste podea valoarea este chiar cheia, iar pe podea este doar o margine superioară",
+      "status": "CANDIDATE",
+      "value": 4,
+      "unit": "s",
+      "uncertainty": 0.05,
+      "uncertaintyThreshold": 0.5,
+      "sourceEpisodes": 2,
+      "sourceSamples": 2,
+      "validationStatus": "VALIDATED",
+      "validationEpisodes": 2,
+      "validationValue": 4,
+      "validationError": 0,
+      "validationTolerance": 0.5,
+      "reason": null
+    }
+  ],
+  "demonstrations": [
+    {
+      "demonstration": "întoarcere interzisă",
+      "key": "u_turn_willingness",
+      "scenario": "U_TURN_OPPORTUNITY",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "U_TURN_PERMISSION_NOT_DECLARED",
+      "excluded": {
+        "U_TURN_PERMISSION_NOT_DECLARED": 4
+      }
+    },
+    {
+      "demonstration": "recuperare pe podeaua de 2,5 s",
+      "key": "reverse_recovery_duration",
+      "scenario": "RECOVERY_COMMIT",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "RECOVERY_FLOOR_SATURATED",
+      "excluded": {
+        "RECOVERY_FLOOR_SATURATED": 1
+      }
+    },
+    {
+      "demonstration": "recuperare fără spațiu liber",
+      "key": "reverse_recovery_duration",
+      "scenario": "RECOVERY_COMMIT",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "RECOVERY_BLOCKED_NO_COMMAND",
+      "excluded": {
+        "RECOVERY_BLOCKED_NO_COMMAND": 4
+      }
+    },
+    {
+      "demonstration": "fereastră închisă înainte de commit",
+      "key": "reroute_patience",
+      "scenario": "KEEP_TO_SWITCH",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "PATIENCE_UPPER_BOUND_UNOBSERVED",
+      "excluded": {}
+    },
+    {
+      "demonstration": "raport timp/distanță pe o singură parte",
+      "key": "route_time_weight",
+      "scenario": "TIME_VERSUS_DISTANCE",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "TIME_DISTANCE_UPPER_BOUND_UNOBSERVED",
+      "excluded": {
+        "TIME_DISTANCE_PAIR_MISSING": 1
+      }
+    },
+    {
+      "demonstration": "raport timp/distanță pe o singură parte",
+      "key": "route_distance_weight",
+      "scenario": "DISTANCE_VERSUS_TIME",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "TIME_DISTANCE_UPPER_BOUND_UNOBSERVED",
+      "excluded": {
+        "TIME_DISTANCE_PAIR_MISSING": 1
+      }
+    },
+    {
+      "demonstration": "raport timp/distanță pe o singură parte",
+      "key": "route_turn_penalty",
+      "scenario": "TURN_VERSUS_LENGTH",
+      "status": "CANDIDATE",
+      "value": 0.23565116486655363,
+      "uncertainty": 0.016382035913718965,
+      "reason": null,
+      "excluded": {
+        "TURN_TRADE_OFF_MISSING": 1
+      }
+    },
+    {
+      "demonstration": "raport timp/distanță pe o singură parte",
+      "key": "route_signal_penalty",
+      "scenario": "SIGNAL_VERSUS_LENGTH",
+      "status": "CANDIDATE",
+      "value": 0.589127912166384,
+      "uncertainty": 0.022068410650692205,
+      "reason": null,
+      "excluded": {
+        "SIGNAL_TRADE_OFF_MISSING": 1
+      }
+    },
+    {
+      "demonstration": "raport timp/distanță pe o singură parte",
+      "key": "route_congestion_penalty",
+      "scenario": "CONGESTION_VERSUS_LENGTH",
+      "status": "CANDIDATE",
+      "value": 0.0673926626796394,
+      "uncertainty": 0.012572462389112127,
+      "reason": null,
+      "excluded": {
+        "CONGESTION_TRADE_OFF_MISSING": 1
+      }
+    },
+    {
+      "demonstration": "o penalizare pe o singură parte",
+      "key": "route_time_weight",
+      "scenario": "TIME_VERSUS_DISTANCE",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "SHARE_BUDGET_INCOMPLETE",
+      "excluded": {
+        "TIME_DISTANCE_PAIR_MISSING": 1
+      }
+    },
+    {
+      "demonstration": "o penalizare pe o singură parte",
+      "key": "route_distance_weight",
+      "scenario": "DISTANCE_VERSUS_TIME",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "SHARE_BUDGET_INCOMPLETE",
+      "excluded": {
+        "TIME_DISTANCE_PAIR_MISSING": 1
+      }
+    },
+    {
+      "demonstration": "o penalizare pe o singură parte",
+      "key": "route_turn_penalty",
+      "scenario": "TURN_VERSUS_LENGTH",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "TURN_TRADE_OFF_UPPER_BOUND_UNOBSERVED",
+      "excluded": {
+        "TURN_TRADE_OFF_MISSING": 1
+      }
+    },
+    {
+      "demonstration": "o penalizare pe o singură parte",
+      "key": "route_signal_penalty",
+      "scenario": "SIGNAL_VERSUS_LENGTH",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "SHARE_BUDGET_INCOMPLETE",
+      "excluded": {
+        "SIGNAL_TRADE_OFF_MISSING": 1
+      }
+    },
+    {
+      "demonstration": "o penalizare pe o singură parte",
+      "key": "route_congestion_penalty",
+      "scenario": "CONGESTION_VERSUS_LENGTH",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "SHARE_BUDGET_INCOMPLETE",
+      "excluded": {
+        "CONGESTION_TRADE_OFF_MISSING": 1
+      }
+    },
+    {
+      "demonstration": "doi șoferi contrazicători",
+      "key": "route_time_weight",
+      "scenario": "TIME_VERSUS_DISTANCE",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "CONTRADICTORY_TIME_DISTANCE_BOUNDS",
+      "excluded": {
+        "TIME_DISTANCE_PAIR_MISSING": 1
+      }
+    },
+    {
+      "demonstration": "doi șoferi contrazicători",
+      "key": "route_distance_weight",
+      "scenario": "DISTANCE_VERSUS_TIME",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "CONTRADICTORY_TIME_DISTANCE_BOUNDS",
+      "excluded": {
+        "TIME_DISTANCE_PAIR_MISSING": 1
+      }
+    },
+    {
+      "demonstration": "doi șoferi contrazicători",
+      "key": "route_turn_penalty",
+      "scenario": "TURN_VERSUS_LENGTH",
+      "status": "CANDIDATE",
+      "value": 0.23565116486655363,
+      "uncertainty": 0.016382035913718965,
+      "reason": null,
+      "excluded": {
+        "TURN_TRADE_OFF_MISSING": 1
+      }
+    },
+    {
+      "demonstration": "doi șoferi contrazicători",
+      "key": "route_signal_penalty",
+      "scenario": "SIGNAL_VERSUS_LENGTH",
+      "status": "CANDIDATE",
+      "value": 0.589127912166384,
+      "uncertainty": 0.022068410650692205,
+      "reason": null,
+      "excluded": {
+        "SIGNAL_TRADE_OFF_MISSING": 1
+      }
+    },
+    {
+      "demonstration": "doi șoferi contrazicători",
+      "key": "route_congestion_penalty",
+      "scenario": "CONGESTION_VERSUS_LENGTH",
+      "status": "CANDIDATE",
+      "value": 0.0673926626796394,
+      "uncertainty": 0.012572462389112127,
+      "reason": null,
+      "excluded": {
+        "CONGESTION_TRADE_OFF_MISSING": 1
+      }
+    },
+    {
+      "demonstration": "episoade MANUAL",
+      "key": "route_time_weight",
+      "scenario": "TIME_VERSUS_DISTANCE",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "NO_ELIGIBLE_EPISODES",
+      "excluded": {}
+    },
+    {
+      "demonstration": "episoade MANUAL",
+      "key": "route_distance_weight",
+      "scenario": "DISTANCE_VERSUS_TIME",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "NO_ELIGIBLE_EPISODES",
+      "excluded": {}
+    },
+    {
+      "demonstration": "episoade MANUAL",
+      "key": "route_turn_penalty",
+      "scenario": "TURN_VERSUS_LENGTH",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "NO_ELIGIBLE_EPISODES",
+      "excluded": {}
+    },
+    {
+      "demonstration": "episoade MANUAL",
+      "key": "route_signal_penalty",
+      "scenario": "SIGNAL_VERSUS_LENGTH",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "NO_ELIGIBLE_EPISODES",
+      "excluded": {}
+    },
+    {
+      "demonstration": "episoade MANUAL",
+      "key": "route_congestion_penalty",
+      "scenario": "CONGESTION_VERSUS_LENGTH",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "NO_ELIGIBLE_EPISODES",
+      "excluded": {}
+    },
+    {
+      "demonstration": "episoade MANUAL",
+      "key": "reroute_patience",
+      "scenario": "KEEP_TO_SWITCH",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "NO_ELIGIBLE_EPISODES",
+      "excluded": {}
+    },
+    {
+      "demonstration": "episoade MANUAL",
+      "key": "u_turn_willingness",
+      "scenario": "U_TURN_OPPORTUNITY",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "NO_ELIGIBLE_EPISODES",
+      "excluded": {}
+    },
+    {
+      "demonstration": "episoade MANUAL",
+      "key": "reverse_recovery_duration",
+      "scenario": "RECOVERY_COMMIT",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "NO_ELIGIBLE_EPISODES",
+      "excluded": {}
+    },
+    {
+      "demonstration": "fereastră fără prefix utilizabil",
+      "key": "route_time_weight",
+      "scenario": "TIME_VERSUS_DISTANCE",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "NO_ELIGIBLE_EPISODES",
+      "excluded": {}
+    },
+    {
+      "demonstration": "fereastră fără prefix utilizabil",
+      "key": "route_distance_weight",
+      "scenario": "DISTANCE_VERSUS_TIME",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "NO_ELIGIBLE_EPISODES",
+      "excluded": {}
+    },
+    {
+      "demonstration": "fereastră fără prefix utilizabil",
+      "key": "route_turn_penalty",
+      "scenario": "TURN_VERSUS_LENGTH",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "NO_ELIGIBLE_EPISODES",
+      "excluded": {}
+    },
+    {
+      "demonstration": "fereastră fără prefix utilizabil",
+      "key": "route_signal_penalty",
+      "scenario": "SIGNAL_VERSUS_LENGTH",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "NO_ELIGIBLE_EPISODES",
+      "excluded": {}
+    },
+    {
+      "demonstration": "fereastră fără prefix utilizabil",
+      "key": "route_congestion_penalty",
+      "scenario": "CONGESTION_VERSUS_LENGTH",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "NO_ELIGIBLE_EPISODES",
+      "excluded": {}
+    },
+    {
+      "demonstration": "fereastră fără prefix utilizabil",
+      "key": "reroute_patience",
+      "scenario": "KEEP_TO_SWITCH",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "NO_ELIGIBLE_EPISODES",
+      "excluded": {}
+    },
+    {
+      "demonstration": "fereastră fără prefix utilizabil",
+      "key": "u_turn_willingness",
+      "scenario": "U_TURN_OPPORTUNITY",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "NO_ELIGIBLE_EPISODES",
+      "excluded": {}
+    },
+    {
+      "demonstration": "fereastră fără prefix utilizabil",
+      "key": "reverse_recovery_duration",
+      "scenario": "RECOVERY_COMMIT",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "NO_ELIGIBLE_EPISODES",
+      "excluded": {}
+    }
+  ],
+  "zeros": [
+    {
+      "demonstration": "U refuzat la fiecare oportunitate",
+      "key": "u_turn_willingness",
+      "scenario": "U_TURN_OPPORTUNITY",
+      "status": "CANDIDATE",
+      "value": 0,
+      "uncertainty": 0.028206395683810115,
+      "reason": null,
+      "excluded": {}
+    },
+    {
+      "demonstration": "răbdarea de la podeaua catalogului",
+      "key": "reroute_patience",
+      "scenario": "KEEP_TO_SWITCH",
+      "status": "CANDIDATE",
+      "value": 2,
+      "uncertainty": 0.05,
+      "reason": null,
+      "excluded": {}
+    }
+  ],
+  "groupConstraints": [
+    {
+      "id": "SHARE_SCALE_UNIDENTIFIABLE",
+      "keys": [
+        "route_time_weight",
+        "route_distance_weight",
+        "route_turn_penalty",
+        "route_signal_penalty",
+        "route_congestion_penalty"
+      ],
+      "explanation": "181 împarte fiecare pondere la suma celor cinci, `share_k = w_k / Σw`, cuantizat la 1e-12, deci orice profil scris la altă scară produce exact aceiași coeficienți și aceeași politică. Din comportament sunt identificabile doar rapoarte între cote, niciodată cele cinci ponderi absolute: familia `λ · w` dă aceeași politică pentru orice `λ > 0`. Estimatorul raportează reprezentantul canonic cu sumă 1, `w_k := share_k`, care este în intervalul fiecărei chei și pe care 181 îl normalizează înapoi la exact aceiași coeficienți; nu inversează niciodată un scor brut într-o pondere, pentru că acea inversare presupune o scală pe care 181 a eliminat-o."
+    },
+    {
+      "id": "TIME_AND_DISTANCE_SHARE_ONE_TRADE_OFF",
+      "keys": [
+        "route_time_weight",
+        "route_distance_weight"
+      ],
+      "explanation": "Ponderea timpului și ponderea distanței sunt fețele aceleiași decizii: o singură pereche în care timpul și distanța se opun dovedește raportul `rho = share_timp / share_distanță`, iar cealaltă cheie este reciproca lui. Pe o pereche de aceeași viteză liberă timpul de stil și lungimea sunt coliniari, deci perechea nu separă deloc cele două ponderi; ele nu pot fi estimate independent una de alta din aceeași alegere."
+    },
+    {
+      "id": "SHARE_BUDGET_COUPLES_THE_FIVE_WEIGHTS",
+      "keys": [
+        "route_turn_penalty",
+        "route_signal_penalty",
+        "route_congestion_penalty"
+      ],
+      "explanation": "Cota unei penalizări este `κ / (1 + κ_viraj + κ_semafor + κ_congestie)`, iar cotele timpului și distanței împart numitorul `(1 + ρ) · (1 + Σκ)`: o penalizare demonstrată doar pe o singură parte lasă toate cele cinci cote neidentificabile, pentru că numitorul comun nu poate fi format. Asimetria reală este cealaltă: ρ cenzat lasă neobservate doar timpul și distanța, în timp ce cele trei penalizări rămân identificabile din perechile lor de aceeași viteză."
+    },
+    {
+      "id": "PENALTY_MAGNITUDE_NEEDS_A_LENGTH_TRADE_OFF",
+      "keys": [
+        "route_turn_penalty",
+        "route_signal_penalty"
+      ],
+      "explanation": "O pereche cu geometrie identică în care doar numărul de viraje sau de semafoare diferă este pur ordinală: pentru orice penalizare pozitivă câștigă aceeași alternativă, iar o penalizare zero este departajată după id. Mărimea penalizării este observabilă numai când numărătoarea se opune lungimii, adică atunci când șoferul acceptă un ocol declarat ca să evite un viraj sau un semafor."
+    },
+    {
+      "id": "U_TURN_PERMISSION_SHADOWS_WILLINGNESS",
+      "keys": [
+        "u_turn_willingness"
+      ],
+      "explanation": "Cu întoarcerea interzisă (`FORBIDDEN`) sau nedeclarată (`UNKNOWN`), 181 nu extrage niciun eșantion și nu admite niciodată alternativa cu U, la orice valoare a cheii: o asemenea secvență nu spune nimic despre disponibilitate și lasă cheia neobservată."
+    },
+    {
+      "id": "RECOVERY_FLOOR_HIDES_SHORT_DURATIONS",
+      "keys": [
+        "reverse_recovery_duration"
+      ],
+      "explanation": "Durata commitată este `max(cheie, 2,5 s)`, derivată din 3 m la 1,2 m/s, deci fiecare cheie din banda 0–2,5 s a catalogului produce aceeași manevră de 150 de tick-uri și 3 m: o recuperare commitată pe podea dovedește doar `cheie ≤ 2,5 s` și nu devine valoare."
+    },
+    {
+      "id": "PATIENCE_ONLY_BETWEEN_ADMISSIBLE_ROUTES",
+      "keys": [
+        "reroute_patience"
+      ],
+      "explanation": "Răbdarea guvernează numai schimbarea între două rute admise: o rută curentă care nu mai este admisă este părăsită imediat (`FORCED_REROUTE`), iar o rută curentă optimă este ținută (`KEPT`). Nicio comandă forțată și nicio primă decizie fără rută curentă nu observă cheia."
+    },
+    {
+      "id": "ROUTE_KEYS_FROM_ONE_DECISION",
+      "keys": [
+        "route_time_weight",
+        "route_distance_weight",
+        "route_turn_penalty",
+        "route_signal_penalty",
+        "route_congestion_penalty",
+        "reroute_patience",
+        "u_turn_willingness",
+        "reverse_recovery_duration"
+      ],
+      "explanation": "Cele opt chei pot apărea în aceeași călătorie, dar nu din același fapt: o decizie 181 oferă cel mult o pereche de alternative punctată, o tranziție de răbdare, un eșantion de U sau o recuperare commitată. Un set cu un singur tip de demonstrație lasă celelalte chei neobservate, iar estimatorul nu deduce niciodată o cheie din alta."
+    }
+  ],
+  "refusals": [],
+  "compatibility": {
+    "policyVersion": "181-route-policy-v2",
+    "candidateOnly": true,
+    "changesPolicySemantics": false,
+    "tickHz": 60,
+    "minimumReverseRecoveryS": 2.5,
+    "coefficients": {
+      "rho": 2.0466612320155426,
+      "kappaTurn": 2.185430463576159,
+      "kappaSignal": 5.4635761589403975,
+      "kappaCongestion": 0.6250000000000002
+    },
+    "estimatedShares": {
+      "route_time_weight": 0.0724359891828052,
+      "route_distance_weight": 0.03539227110461782,
+      "route_turn_penalty": 0.23565116486655363,
+      "route_signal_penalty": 0.589127912166384,
+      "route_congestion_penalty": 0.0673926626796394
+    },
+    "authoredShares": {
+      "route_time_weight": 0.071428571429,
+      "route_distance_weight": 0.035714285714,
+      "route_turn_penalty": 0.238095238095,
+      "route_signal_penalty": 0.595238095238,
+      "route_congestion_penalty": 0.059523809524
+    },
+    "normalizedSum": 1,
+    "estimatedWeightCount": 8,
+    "decisions": 12,
+    "identicalDecisions": 12,
+    "scaleFactors": [
+      1,
+      10
+    ],
+    "scaleIdentical": true,
+    "scaleDecisions": 12,
+    "scaleIdenticalDecisions": 12,
+    "reportedQuantity": {
+      "route_time_weight": "cota `share_timp` din bugetul normalizat al lui 181",
+      "route_distance_weight": "cota `share_distanță` din bugetul normalizat al lui 181",
+      "route_turn_penalty": "cota `share_viraj` din bugetul normalizat al lui 181",
+      "route_signal_penalty": "cota `share_semafor` din bugetul normalizat al lui 181",
+      "route_congestion_penalty": "cota `share_congestie` din bugetul normalizat al lui 181",
+      "reroute_patience": "cheia în secunde, inversată din `max(1, ceil(cheie · 60))`",
+      "u_turn_willingness": "probabilitatea în sine, intersectată din eșantioane",
+      "reverse_recovery_duration": "cheia în secunde, citită peste podeaua de 2,5 s"
+    },
+    "evidenceFields": [
+      "tick",
+      "policyActive",
+      "reason",
+      "action",
+      "referenceSeconds",
+      "referenceMetres",
+      "currentRouteId",
+      "candidateRouteId",
+      "selectedRouteId",
+      "reroute",
+      "uTurn",
+      "recovery",
+      "routes"
+    ]
+  },
+  "split": {
+    "seed": 182,
+    "admitted": 28,
+    "refused": 0
+  },
+  "determinism": {
+    "digest": "fnv1a32:e438ed74",
+    "repeatedDigest": "fnv1a32:e438ed74"
+  },
+  "checks": [
+    {
+      "id": "catalog",
+      "pass": true,
+      "detail": "route_time_weight 0-1 weight, route_distance_weight 0-1 weight, route_turn_penalty 0-20 s, route_signal_penalty 0-60 s, route_congestion_penalty 0-2 ratio, reroute_patience 2-120 s, u_turn_willingness 0-1 probability, reverse_recovery_duration 0-8 s"
+    },
+    {
+      "id": "contexts",
+      "pass": true,
+      "detail": "8 scenarii și 8 contexte eligibile distincte: route_time_weight->TIME_VERSUS_DISTANCE, route_distance_weight->DISTANCE_VERSUS_TIME, route_turn_penalty->TURN_VERSUS_LENGTH, route_signal_penalty->SIGNAL_VERSUS_LENGTH, route_congestion_penalty->CONGESTION_VERSUS_LENGTH, reroute_patience->KEEP_TO_SWITCH, u_turn_willingness->U_TURN_OPPORTUNITY, reverse_recovery_duration->RECOVERY_COMMIT"
+    },
+    {
+      "id": "candidates",
+      "pass": true,
+      "detail": "route_time_weight 0.0724 weight, route_distance_weight 0.0354 weight, route_turn_penalty 0.2357 s, route_signal_penalty 0.5891 s, route_congestion_penalty 0.0674 ratio, reroute_patience 19.9917 s, u_turn_willingness 0.1042 probability, reverse_recovery_duration 4.0000 s"
+    },
+    {
+      "id": "uncertainty",
+      "pass": true,
+      "detail": "route_time_weight ±0.0050/0.03, route_distance_weight ±0.0050/0.03, route_turn_penalty ±0.0164/0.04, route_signal_penalty ±0.0221/0.06, route_congestion_penalty ±0.0126/0.03, reroute_patience ±0.0500/0.5, u_turn_willingness ±0.0434/0.15, reverse_recovery_duration ±0.0500/0.5"
+    },
+    {
+      "id": "validation",
+      "pass": true,
+      "detail": "route_time_weight VALIDATED 4 episoade, eroare 0.0001; route_distance_weight VALIDATED 4 episoade, eroare 0.0001; route_turn_penalty VALIDATED 2 episoade, eroare 0.0004; route_signal_penalty VALIDATED 2 episoade, eroare 0.0012; route_congestion_penalty VALIDATED 2 episoade, eroare 0.0002; reroute_patience VALIDATED 2 episoade, eroare 0.0083; u_turn_willingness VALIDATED 2 episoade, eroare 0.0218; reverse_recovery_duration VALIDATED 2 episoade, eroare 0.0000"
+    },
+    {
+      "id": "shares-sum",
+      "pass": true,
+      "detail": "suma celor cinci cote raportate este 1.0000000000000002"
+    },
+    {
+      "id": "shares-renormalize",
+      "pass": true,
+      "detail": "5/5 cote raportate se renormalizează la ele însele prin 181 (aceleași cifre la 1e-9)"
+    },
+    {
+      "id": "scale-invariance",
+      "pass": true,
+      "detail": "profilul scris la factorii 1/10 produce aceeași alegere în 12/12 decizii"
+    },
+    {
+      "id": "policy-compatibility",
+      "pass": true,
+      "detail": "12/12 decizii rejucate cu profilul estimat aleg exact ce alege profilul autorat"
+    },
+    {
+      "id": "u-turn-forbidden",
+      "pass": true,
+      "detail": "întoarcere interzisă: UNOBSERVED / U_TURN_PERMISSION_NOT_DECLARED"
+    },
+    {
+      "id": "recovery-floor",
+      "pass": true,
+      "detail": "recuperare pe podea: UNOBSERVED / RECOVERY_FLOOR_SATURATED"
+    },
+    {
+      "id": "recovery-blocked",
+      "pass": true,
+      "detail": "recuperare blocată: UNOBSERVED / RECOVERY_BLOCKED_NO_COMMAND"
+    },
+    {
+      "id": "patience-censored",
+      "pass": true,
+      "detail": "răbdare cenzurată: UNOBSERVED / PATIENCE_UPPER_BOUND_UNOBSERVED"
+    },
+    {
+      "id": "one-sided-rho",
+      "pass": true,
+      "detail": "raport pe o singură parte: timp TIME_DISTANCE_UPPER_BOUND_UNOBSERVED, viraj CANDIDATE"
+    },
+    {
+      "id": "budget-coupling",
+      "pass": true,
+      "detail": "route_time_weight SHARE_BUDGET_INCOMPLETE, route_distance_weight SHARE_BUDGET_INCOMPLETE, route_turn_penalty TURN_TRADE_OFF_UPPER_BOUND_UNOBSERVED, route_signal_penalty SHARE_BUDGET_INCOMPLETE, route_congestion_penalty SHARE_BUDGET_INCOMPLETE"
+    },
+    {
+      "id": "contradiction",
+      "pass": true,
+      "detail": "doi șoferi: timp CONTRADICTORY_TIME_DISTANCE_BOUNDS, semafor CANDIDATE"
+    },
+    {
+      "id": "zero-u-turn",
+      "pass": true,
+      "detail": "refuz constant: CANDIDATE valoare 0, incertitudine 0.0282"
+    },
+    {
+      "id": "floor-patience",
+      "pass": true,
+      "detail": "răbdarea de la podea: CANDIDATE valoare 2 (demonstrată)"
+    },
+    {
+      "id": "refusals",
+      "pass": true,
+      "detail": "MANUAL: 28 episoade refuzate, 0 admise; fără prefix: 28; toate cheile rămân neobservate"
+    },
+    {
+      "id": "no-profile-leak",
+      "pass": true,
+      "detail": "eșantionul nu poartă nici pondere, nici scor: tick, policyActive, reason, action, referenceSeconds, referenceMetres, currentRouteId, candidateRouteId, selectedRouteId, reroute, uTurn, recovery, routes"
+    },
+    {
+      "id": "candidate-only",
+      "pass": true,
+      "detail": "politica 181-route-policy-v2, candidate-only true, semantică schimbată false, podea 2.5 s, rată 60 Hz"
+    },
+    {
+      "id": "determinism",
+      "pass": true,
+      "detail": "digest fnv1a32:e438ed74"
+    }
+  ],
+  "summary": {
+    "checks": 22,
+    "passed": 22,
+    "pass": true,
+    "candidateKeys": 8,
+    "unobservedKeys": 0
+  }
+}
