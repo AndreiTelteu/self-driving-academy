@@ -209,7 +209,7 @@ test('the UI projection declares support and evidence for each of the 80 keys', 
   assert.equal(byKey.get('following_min_gap')?.origin, 'INHERITED_V1');
   assert.equal(byKey.get('following_min_gap')?.originLabel, 'moștenită din V1');
   assert.equal(byKey.get('speed_delta_residential')?.support, 'SUPPORTED');
-  assert.equal(byKey.get('yield_time_gap')?.support, 'DEFAULT_ONLY');
+  assert.equal(byKey.get('yield_time_gap')?.support, 'SUPPORTED');
   assert.equal(byKey.get('speed_delta_arterial')?.origin, 'DEFAULT');
   assert.equal(byKey.get('speed_delta_arterial')?.originLabel, 'default din catalog');
   assert.equal(byKey.get('following_time_headway')?.evidenceCount, 6);
@@ -235,7 +235,7 @@ test('the UI projection declares support and evidence for each of the 80 keys', 
       inherited: 4,
       default: 71,
       unset: 0,
-      supported: 23,
+      supported: 24,
       reserved: 56,
     },
   );

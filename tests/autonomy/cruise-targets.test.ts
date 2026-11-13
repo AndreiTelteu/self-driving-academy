@@ -444,7 +444,7 @@ test('046 detached bounded setup never rereads descriptor traps that grow a prev
   assert.throws(() => compileCruiseProfile(late), /range/);
 });
 
-test('046 compilation retains four immutable values with arbitrary engine metadata and explicit BASE/IMPORTED/MANUAL support, never estimator support', () => {
+test('046 compilation retains four immutable values with arbitrary engine metadata and explicit BASE/IMPORTED/MANUAL support, with certified LEARNED requiring evidence', () => {
   for (const source of ['BASE', 'IMPORTED', 'MANUAL_TUNING']) {
     const profile = cruiseProfile(cruiseValues[0]);
     profile.engineVersion = 'application-version-9';
@@ -473,14 +473,23 @@ test('046 compilation retains four immutable values with arbitrary engine metada
   );
   Object.assign(learned, { sourceSegmentIds: ['segment'], evidenceByParameter: observed });
   for (const key of CRUISE_KEYS) learned.provenanceByParameter[key] = 'LEARNED';
-  assert.throws(() => compileCruiseProfile(learned));
+  // 187 certifies the estimator of all four keys, so LEARNED is accepted; the evidence itself
+  // never grants the capability and stays mandatory.
+  assert.doesNotThrow(() => compileCruiseProfile(learned));
+  const withoutEvidence = cruiseProfile(cruiseValues[0]);
+  Object.assign(withoutEvidence, { sourceSegmentIds: ['segment'], evidenceByParameter: observed });
+  for (const key of CRUISE_KEYS) {
+    withoutEvidence.provenanceByParameter[key] = 'LEARNED';
+    withoutEvidence.evidenceByParameter[key] = null;
+  }
+  assert.throws(() => compileCruiseProfile(withoutEvidence));
   const reserved = cruiseProfile(cruiseValues[0]);
   reserved.parameters.following_time_headway = 1.8;
   reserved.unitsByParameter.following_time_headway = 's';
   reserved.provenanceByParameter.following_time_headway = 'BASE';
   reserved.evidenceByParameter.following_time_headway = null;
   assert.equal(Object.keys(compileCruiseProfile(reserved).values).length, 4);
-  assert.equal(getParameterDefinition('cutin_brake_response').implemented, false);
+  assert.equal(getParameterDefinition('cutin_brake_response').implemented, true);
   assert.equal(CRUISE_LIMITS.retainedHistory, 0);
 });
 

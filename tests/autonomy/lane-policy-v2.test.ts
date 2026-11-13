@@ -64,7 +64,7 @@ const opportunity = laneOpportunity(0),
     pass_on_right_probability: 1,
   } as const;
 
-test('177 compileLanePolicyProfile reads the four R and four M keys without granting support', () => {
+test('177 compileLanePolicyProfile reads the four R and four M keys with the certified capability', () => {
   assert.deepEqual(LANE_POLICY_V2_KEYS, [
     'lane_change_duration',
     'signal_lead_time',
@@ -102,11 +102,11 @@ test('177 compileLanePolicyProfile reads the four R and four M keys without gran
   });
   assert(Object.isFrozen(profile));
   assert(Object.isFrozen(profile.values));
-  // The planned catalog stays fail-closed: reading a key never marks it implemented.
+  // The capability comes from the certified 187 gate table, never from reading a key.
   for (const key of LANE_POLICY_V2_KEYS) {
     const definition = getParameterDefinition(key);
     assert.equal(definition.unit, key.endsWith('_probability') ? 'probability' : 's');
-    assert.equal(definition.implemented, false);
+    assert.equal(definition.implemented, true);
   }
   assert.deepEqual(getLanePolicyV2Stats(), {
     compiling: false,

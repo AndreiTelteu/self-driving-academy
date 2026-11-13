@@ -314,8 +314,8 @@ test('106 never mutates the registry, fleet kinds or publication state', () => {
   assert.equal(first.overall.storeWrites, 0);
   assert.equal(first.overall.fleetMutations, 0);
   assert.equal(first.overall.profilePublications, 0);
-  assert.equal(parameterRegistry.speed_delta_urban.estimable, false);
-  assert.equal(parameterRegistry.desired_acceleration.estimable, false);
+  assert.equal(parameterRegistry.speed_delta_urban.estimable, true);
+  assert.equal(parameterRegistry.desired_acceleration.estimable, true);
   for (const run of first.runs) for (const row of run.keys) assert.ok(row.tolerance.effective > 0);
 });
 

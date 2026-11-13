@@ -402,8 +402,8 @@ test('107 never mutates the registry, store, publication or fleet', () => {
   assert.equal(first.summary.storeWrites, 0);
   assert.equal(first.summary.fleetMutations, 0);
   assert.equal(first.summary.candidatesProduced, 0);
-  assert.equal(parameterRegistry.speed_delta_urban.estimable, false);
-  assert.equal(parameterRegistry.following_time_headway.estimable, false);
+  assert.equal(parameterRegistry.speed_delta_urban.estimable, true);
+  assert.equal(parameterRegistry.following_time_headway.estimable, true);
 });
 
 test('107 report counts and frozen rows sum to the per-case results', () => {

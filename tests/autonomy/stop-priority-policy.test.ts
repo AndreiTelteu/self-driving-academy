@@ -115,7 +115,7 @@ function baseInput(scene: StopPriorityScene = priorityScene): StopPriorityPolicy
   };
 }
 
-test('175 compileStopPriorityProfile reads the four R and four M keys without granting support', () => {
+test('175 compileStopPriorityProfile reads the four R and four M keys with the certified capability', () => {
   assert.deepEqual(STOP_PRIORITY_POLICY_KEYS, [
     'rolling_stop_speed',
     'priority_assertiveness',
@@ -152,8 +152,8 @@ test('175 compileStopPriorityProfile reads the four R and four M keys without gr
   assert.equal(getParameterDefinition('allway_stop_patience').default, 2);
   for (const key of STOP_PRIORITY_POLICY_KEYS) {
     assert.equal(profile.provenance[key], 'BASE');
-    assert.equal(getParameterDefinition(key).implemented, false);
-    assert.equal(getParameterDefinition(key).estimable, false);
+    assert.equal(getParameterDefinition(key).implemented, true);
+    assert.equal(getParameterDefinition(key).estimable, true);
     assert.equal(getParameterDefinition(key).implementationStage, 'extension');
   }
   const missing = stopPriorityDocument();

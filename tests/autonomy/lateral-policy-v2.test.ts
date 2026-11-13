@@ -42,7 +42,7 @@ const turn: LateralPolicyScene = {
   exitState = turnState(turn),
   close = (left: number, right: number, epsilon = 1e-9) => Math.abs(left - right) <= epsilon;
 
-test('179 compiles the eight R and two delivered M keys without granting support', () => {
+test('179 compiles the eight R and two delivered M keys with their catalog units', () => {
   assert.deepEqual(LATERAL_POLICY_V2_KEYS, [
     'lane_center_offset',
     'steering_response_time',
@@ -78,10 +78,10 @@ test('179 compiles the eight R and two delivered M keys without granting support
   assert(Object.isFrozen(profile));
   assert(Object.isFrozen(profile.values));
   assert(Object.isFrozen(profile.mValues));
-  // The planned catalog stays fail-closed: reading a key never marks it implemented.
+  // The capability comes from the certified 187 gate table, never from reading a key.
   for (const key of LATERAL_POLICY_V2_KEYS) {
     const definition = getParameterDefinition(key);
-    assert.equal(definition.implemented, false);
+    assert.equal(definition.implemented, true);
     assert.equal(definition.unit, profile.units[key]);
   }
   assert.deepEqual(getLateralPolicyV2Stats(), {

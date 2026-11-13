@@ -100,7 +100,7 @@ function packet(overrides: Partial<LaneChangeInput> = {}): LaneChangeInput {
     ...overrides,
   };
 }
-test('053 projectLaneChangeProfile reads only its four published values and does not grant estimator support', () => {
+test('053 projectLaneChangeProfile reads only its four published values; the 187 gate certifies the estimator', () => {
   const projected = projectLaneChangeProfile(published({ lane_change_speed_gain: 3.5 }));
   assert.deepEqual(projected, {
     versionId: 'lane-base-v1',
@@ -117,7 +117,7 @@ test('053 projectLaneChangeProfile reads only its four published values and does
     'lane_change_cooldown',
   ]) {
     assert.equal(getParameterDefinition(key).implemented, true);
-    assert.equal(getParameterDefinition(key).estimable, false);
+    assert.equal(getParameterDefinition(key).estimable, true);
   }
   assert.throws(() =>
     projectLaneChangeProfile({

@@ -58,7 +58,7 @@ test('182 estimates the eight 181 route keys in the catalog ranges and units', (
     const definition = getParameterDefinition(key);
     assert.equal(definition.min, minimum, key);
     assert.equal(definition.max, maximum, key);
-    assert.equal(definition.implemented, false, key);
+    assert.equal(definition.implemented, true, key);
     assert.equal(positive.keys[key as keyof typeof positive.keys].unit, definition.unit, key);
   }
   assert.equal(ROUTE_V2_ESTIMATOR_LIMITS.retainedHistory, 0);

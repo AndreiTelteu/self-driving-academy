@@ -246,17 +246,17 @@ test('047 descriptor compiler is detached, bounded, rejects getters/forged units
   assert.throws(() => compileLongitudinalProfile(proxy), /Reentrant/);
   assert.equal(compileLongitudinalProfile(longitudinalProfile()).values.desired_acceleration, 1.5);
 });
-test('047 only four new policies allow manual publication; positive LEARNED evidence cannot grant estimator support', () => {
+test('047 only four new policies allow manual publication; LEARNED needs the certified estimator and real evidence', () => {
   const candidate = longitudinalProfile();
   for (const key of LONGITUDINAL_KEYS) {
     assert.equal(getParameterDefinition(key).implemented, true);
-    assert.equal(getParameterDefinition(key).estimable, false);
+    assert.equal(getParameterDefinition(key).estimable, true);
     candidate.provenanceByParameter[key] = 'MANUAL_TUNING';
   }
   const manual = compileLongitudinalProfile(candidate);
   assert(LONGITUDINAL_KEYS.every((key) => manual.provenance[key] === 'MANUAL_TUNING'));
-  assert.equal(getParameterDefinition('braking_jerk').implemented, false);
-  assert.equal(getParameterDefinition('cutin_brake_response').implemented, false);
+  assert.equal(getParameterDefinition('braking_jerk').implemented, true);
+  assert.equal(getParameterDefinition('cutin_brake_response').implemented, true);
   const learned = {
     ...candidate,
     provenanceByParameter: { ...candidate.provenanceByParameter, desired_acceleration: 'LEARNED' },
@@ -274,7 +274,12 @@ test('047 only four new policies allow manual publication; positive LEARNED evid
     },
     sourceSegmentIds: ['observed'],
   };
-  assert.throws(() => compileLongitudinalProfile(learned), /LEARNED/);
+  assert.equal(compileLongitudinalProfile(learned).provenance.desired_acceleration, 'LEARNED');
+  const withoutEvidence = {
+    ...learned,
+    evidenceByParameter: { ...learned.evidenceByParameter, desired_acceleration: null },
+  };
+  assert.throws(() => compileLongitudinalProfile(withoutEvidence));
 });
 test('047 caches one deeply frozen target, reparses mutable target/actor and clears cache on lifecycle release', () => {
   const s = setup([1.5, 2.5, 4, 0]);

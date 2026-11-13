@@ -293,7 +293,7 @@ test('105 does not mutate the parameter registry or the known-profile fixtures',
   assert.ok(
     parameterDefinitions
       .filter((definition) => definition.implementationStage === 'initial_learning_target')
-      .every((definition) => definition.estimable === false),
+      .every((definition) => definition.estimable === true),
   );
 });
 

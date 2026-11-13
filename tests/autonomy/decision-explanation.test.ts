@@ -552,27 +552,26 @@ test('055 explains YIELD, CHANGE_LANE and BLOCKED/recovery without inventing a k
       { name: 'yieldThresholdS', value: yieldDecision.thresholdS },
       { name: 'minimumGapS', value: yieldDecision.minimumGapS! },
     ],
-    // 092 does not mark yield_time_gap implemented, so YIELD exposes the quantity, not a key.
+    // 187 certifies yield_time_gap, so YIELD can attribute the quantity to its key.
     influences: inf(),
   });
   assertFrozenExplanation(explanation, yieldBehavior);
   assert.equal(explanation.influences.length, 0);
-  assert.equal(getParameterDefinition('yield_time_gap').implemented, false);
-  assert.throws(
-    () =>
-      explainDecision({
-        sessionId,
-        worldEpoch: 0,
-        actor,
-        decisionTick: 60,
-        behavior: yieldBehavior,
-        reasons: [yieldDecision.reason, yieldBehavior.reason],
-        action: yieldDecision.action,
-        targets: [],
-        influences: inf(['yield_time_gap', yieldDecision.thresholdS]),
-      }),
-    ContractValidationError,
-  );
+  assert.equal(getParameterDefinition('yield_time_gap').implemented, true);
+  const attributed = explainDecision({
+    sessionId,
+    worldEpoch: 0,
+    actor,
+    decisionTick: 60,
+    behavior: yieldBehavior,
+    reasons: [yieldDecision.reason, yieldBehavior.reason],
+    action: yieldDecision.action,
+    targets: [],
+    influences: inf(['yield_time_gap', yieldDecision.thresholdS]),
+  });
+  assert.deepEqual(attributed.influences, [
+    { key: 'yield_time_gap', value: yieldDecision.thresholdS, implemented: true },
+  ]);
   behavior.dispose();
 
   // CHANGE_LANE through the real 053 policy on the real033 adjacency, then the real 045 FSM.
@@ -719,7 +718,7 @@ test('055 explains YIELD, CHANGE_LANE and BLOCKED/recovery without inventing a k
   blockedFixture.dispose();
 });
 
-test('055 refuses any unimplemented parameter influence (acceptance criterion 2)', () => {
+test('055 attributes only certified parameter influences and refuses unknown or duplicate ones', () => {
   const sessionId = '055-negative',
     scope = { sessionId, worldEpoch: 0 },
     actor: BehaviorActor = { id: 'car', incarnation: 1 },
@@ -753,12 +752,17 @@ test('055 refuses any unimplemented parameter influence (acceptance criterion 2)
     targets: [],
     influences,
   });
-  // A V2 catalog key with no runtime policy must never surface.
-  assert.equal(getParameterDefinition('speed_delta_arterial').implemented, false);
-  assert.throws(() => explainDecision(build(inf(['speed_delta_arterial', 5]))), /Unimplemented/);
-  // 052's own policy key is not marked implemented by 092, so it is refused too.
-  assert.equal(getParameterDefinition('yield_time_gap').implemented, false);
-  assert.throws(() => explainDecision(build(inf(['yield_time_gap', 3]))), /Unimplemented/);
+  // 187 certifies both keys for the gate, so they are now explicit influences.
+  assert.equal(getParameterDefinition('speed_delta_arterial').implemented, true);
+  const certified = explainDecision(build(inf(['speed_delta_arterial', 5])));
+  assert.deepEqual(certified.influences, [
+    { key: 'speed_delta_arterial', value: 5, implemented: true },
+  ]);
+  assert.equal(getParameterDefinition('yield_time_gap').implemented, true);
+  const yieldInfluence = explainDecision(build(inf(['yield_time_gap', 3])));
+  assert.deepEqual(yieldInfluence.influences, [
+    { key: 'yield_time_gap', value: 3, implemented: true },
+  ]);
   // Unknown and duplicate keys are rejected; a null value is "not consumed" and is dropped.
   assert.throws(() => explainDecision(build(inf(['not_a_key', 1]))), ContractValidationError);
   assert.throws(

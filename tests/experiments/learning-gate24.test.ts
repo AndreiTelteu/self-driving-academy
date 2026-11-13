@@ -332,7 +332,7 @@ test('108 is frozen, uses only closed reasons and performs no store or fleet wri
     assert.equal(Object.isFrozen(row), true);
     assert.ok(row.reasons.every((reason) => learningGate24Reasons.includes(reason)));
   }
-  for (const key of learningGate24MKeys) assert.equal(parameterRegistry[key].estimable, false);
+  for (const key of learningGate24MKeys) assert.equal(parameterRegistry[key].estimable, true);
   assert.equal(JSON.stringify(parameterRegistry), before);
 });
 

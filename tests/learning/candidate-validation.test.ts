@@ -186,7 +186,8 @@ test('102 an R extension key is refused with an explicit stage reason', () => {
   assert.equal(result.rejections[0].value, 'speed_delta_arterial');
   assert.equal(result.acceptedKeyCount, 0);
   assert.equal(result.delta, null);
-  assert.equal(parameterRegistry.speed_delta_arterial.implemented, false);
+  // The 187 gate certifies the consumer and the estimator; the refusal comes from the R stage.
+  assert.equal(parameterRegistry.speed_delta_arterial.implemented, true);
 });
 
 test('102 a unit that does not match 092 is rejected', () => {
