@@ -103,7 +103,7 @@ function packet(overrides: Partial<StopPolicyInput> = {}): StopPolicyInput {
     ...overrides,
   };
 }
-test('051 projectStopProfile reads only its three published values and does not grant estimator support', () => {
+test('051 projectStopProfile reads only its three published values; the 187 gate certifies the estimator', () => {
   const projected = projectStopProfile(published({ stop_full_probability: 0.4 }));
   assert.deepEqual(projected, {
     versionId: 'stop-base-v1',
@@ -114,7 +114,7 @@ test('051 projectStopProfile reads only its three published values and does not 
   assert(Object.isFrozen(projected));
   for (const key of ['stop_full_probability', 'stop_dwell_time', 'stop_line_offset']) {
     assert.equal(getParameterDefinition(key).implemented, true);
-    assert.equal(getParameterDefinition(key).estimable, false);
+    assert.equal(getParameterDefinition(key).estimable, true);
   }
   assert.equal(getParameterDefinition('stop_full_probability').unit, 'probability');
   assert.throws(() =>

@@ -87,7 +87,7 @@ function baseInput(scene: SignalV2Scene = yellowFeasibilityScene): SignalPolicyV
   };
 }
 
-test('173 compileSignalPolicyV2Profile reads the four R and four M keys without granting support', () => {
+test('173 compileSignalPolicyV2Profile reads the four R and four M keys with the certified capability', () => {
   assert.deepEqual(SIGNAL_POLICY_V2_KEYS, [
     'yellow_stop_probability',
     'red_run_gap_acceptance',
@@ -123,8 +123,8 @@ test('173 compileSignalPolicyV2Profile reads the four R and four M keys without 
   assert.equal(profile.mUnits.red_stop_line_offset, 'm');
   for (const key of SIGNAL_POLICY_V2_KEYS) {
     assert.equal(profile.provenance[key], 'BASE');
-    assert.equal(getParameterDefinition(key).implemented, false);
-    assert.equal(getParameterDefinition(key).estimable, false);
+    assert.equal(getParameterDefinition(key).implemented, true);
+    assert.equal(getParameterDefinition(key).estimable, true);
     assert.equal(getParameterDefinition(key).implementationStage, 'extension');
   }
   const missing = signalPolicyV2Document();

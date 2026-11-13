@@ -550,12 +550,12 @@ test('211 refusals: invalid calendar, capability and catalog inputs are rejected
   assert.equal(structurallyValid.capabilityDigest, valid.capabilityDigest);
 });
 
-test('211 refusals: an unimplemented learning key and a catalog without MANUAL are rejected', () => {
+test('211 refusals: an uncertified learning key and a catalog without MANUAL are rejected', () => {
   const implemented = fullCapabilities();
   refuses(
     () =>
       dailyCapabilities({
-        learningKeys: ['speed_delta_arterial'],
+        learningKeys: ['speed_delta_moon'],
         zones: [...implemented.zones],
         vehicleClasses: [...implemented.vehicleClasses],
         controlModes: [...implemented.controlModes],

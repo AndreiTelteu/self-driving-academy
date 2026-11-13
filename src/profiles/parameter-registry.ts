@@ -1,6 +1,7 @@
 import { choice, fields, list, number, requireContract, text } from '../sessions';
 import { parseDrivingProfile, parameterUnits } from './contracts';
 import type { DrivingProfile } from './contracts';
+import { getParameterCapability } from './parameter-capabilities';
 import { parameterCatalogData } from './parameter-catalog.generated';
 
 export type ParameterKey = (typeof parameterCatalogData.parameters)[number]['key'];
@@ -118,36 +119,17 @@ export function parseParameterCatalog(value: unknown): readonly ParameterDefinit
   return definitions;
 }
 
-/** Verified policy046/047/048/050/051/053 capabilities. Design metadata never grants runtime support. */
-const policyKeys = new Set<string>([
-  'speed_delta_urban',
-  'speed_delta_residential',
-  'curve_lateral_accel',
-  'intersection_approach_speed',
-  'desired_acceleration',
-  'comfort_deceleration',
-  'acceleration_jerk',
-  'brake_reaction_delay',
-  'following_time_headway',
-  'following_min_gap',
-  'queue_standstill_gap',
-  'following_speed_gain',
-  'red_stop_probability',
-  'green_start_delay',
-  'red_stop_line_offset',
-  'late_red_brake_threshold',
-  'stop_full_probability',
-  'stop_dwell_time',
-  'stop_line_offset',
-  'lane_change_front_gap',
-  'lane_change_back_gap',
-  'lane_change_speed_gain',
-  'lane_change_cooldown',
-]);
+/** Capabilities are derived from the single `parameter-capabilities` table, never from the catalog JSON. */
 const definitions = Object.freeze(
-  parseParameterCatalog(parameterCatalogData).map((definition) =>
-    Object.freeze({ ...definition, implemented: policyKeys.has(definition.key) }),
-  ),
+  parseParameterCatalog(parameterCatalogData).map((definition) => {
+    const capability = getParameterCapability(definition.key);
+    requireContract(capability !== undefined, `Missing capability declaration: ${definition.key}`);
+    return Object.freeze({
+      ...definition,
+      implemented: capability.policy !== null,
+      estimable: capability.estimator !== null,
+    });
+  }),
 );
 const byKey: Record<string, ParameterDefinition> = Object.create(null);
 for (const definition of definitions) byKey[definition.key] = definition;

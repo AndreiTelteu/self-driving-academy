@@ -121,7 +121,7 @@ test('specifications cover exactly the 24 registry M keys with identical units a
     assert.equal(spec.unit, definition.unit);
     assert.equal(spec.min, definition.min);
     assert.equal(spec.max, definition.max);
-    assert.equal(definition.estimable, false);
+    assert.equal(definition.estimable, true);
   }
   const owners = new Map<string, string[]>();
   for (const spec of parameterEvidenceSpecs) {

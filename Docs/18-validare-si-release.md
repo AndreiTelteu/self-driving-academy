@@ -343,3 +343,73 @@ de verdictul 224 și de checklist.
 Dovezile complete — checklist-ul per criteriu, comenzile cu exit code, tabelul dependențelor,
 artefactul și lista explicită a ce rămâne deschis — sunt în
 [Evidence/162-release-v1](Evidence/162-release-v1/README.md).
+
+## Poarta celor 80 de parametri (PBI 187, 14 noiembrie 2026)
+
+PBI 187 închide seria V2 de politică și învățare cu o poartă executabilă: cele 80 de chei ale
+catalogului primesc fiecare un consumator real în politică, un estimator, o dovadă comisă și un test
+independent. Poarta nu este o listă de afirmații: `npm run validate:parameters` derivă verdictul din
+catalog și din fișierele livrate, iar `--check` compară raportul generat cu cel comis.
+
+**Sursă unică de adevăr.** `src/profiles/parameter-capabilities.ts` conține o intrare per cheie cu
+`policy` (`CORE` pentru cele 24 de chei livrate de 046–053, `V2` pentru cele 56 de extensii, cu
+modulul și simbolul exportat care consumă cheia), `estimator` (modul și simbol, sau `null` = `NONE`),
+`evidence` (directorul din `Docs/Evidence/…`) și `test` (calea și titlul exact al testului care
+verifică scenariul și efectul). `src/profiles/parameter-registry.ts` derivă `implemented` din
+`policy !== null` și `estimable` din `estimator !== null`, deci nu mai există două liste paralele.
+Catalogul de date rămâne fail-closed: `parseParameterCatalog` păstrează
+`requireContract(entry.implemented === false, 'No policies implemented in this registry')`, iar un
+JSON care ar declara o capabilitate este respins.
+
+**Ce verifică poarta, fail-closed.** Pentru fiecare dintre cele 80 de definiții citite din
+`Docs/driving-parameters.json`: intrarea există exact o dată și numai pentru chei din catalog; modulul
+de politică există și exportă simbolul declarat; modulul de estimator există și exportă simbolul
+(sau cheia este `NONE`); documentul de dovezi există; fișierul de test există și conține titlul
+declarat; scenariul are text; efectul este o linie măsurată în `report.json` al grupului (56 de chei
+V2) sau consecința M păstrată, dovedită de testul de regresie (24 de chei CORE); registrul raportează
+exact valorile derivate din tabel. Orice lipsă este finding și verdict `FAIL`, nu avertisment.
+
+**Proba negativă.** Poarta este respinsă demonstrativ pe două căi, în fiecare rulare și în testul
+independent: o cheie declarată în tabel cu un modul de politică inexistent produce
+`policy-consumer-missing`, iar o cheie din catalog fără intrare în tabel produce `capability-missing`.
+Astfel, o cheie nu poate fi declarată învățată doar pentru că apare în JSON: declarația cere un
+consumator și un estimator reali, iar proba dovedește că poarta îi cere.
+
+**Convenții canonice pentru ambiguități.** Cele opt convenții sunt derivate din catalog, nu listate
+manual, deci o cheie nouă care intră într-un tipar nu poate scăpa: `speed_delta_*` este delta în m/s
+față de limita de circulație, nu o viteză absolută; `route_*_penalty` este cost în secunde per
+eveniment (viraj, respectiv semafor); `route_*_weight` este o pondere normalizată la un buget unic;
+`route_congestion_penalty` este o sensibilitate adimensională, nu secunde; `*_line_offset` este o
+distanță în amonte de linie; cheile de tip probabilitate se aplică o dată per oportunitate;
+`occupied_*` este factor peste valoarea M, nu o valoare absolută; vitezele de apropiere și de intrare
+în viraj sunt plafoane, nu ținte.
+
+**Rezultatul reviziei: 80/80 chei, verdict `PASS`.** 12 verificări `PASS`, 0 findings, 24 de chei
+`CORE` + 56 de chei `V2`, 80 de estimatori declarați și 0 `NONE`, 56 de efecte măsurate și 24 de
+consecințe M păstrate, 8 convenții canonice, 2 probe fail-closed respinse. Registrul raportează acum
+`implemented = true` și `estimable = true` pentru toate cele 80 de chei, exact cât certifică tabelul;
+proiecția UI pentru profile trece de la 23 la 24 de chei `SUPPORTED`, iar cele 56 de chei `extension`
+rămân `RESERVED` prin etapa de plan, neschimbată de acest PBI.
+
+**Teste existente actualizate.** Activarea capabilităților schimbă aserțiunile care fixau starea
+fail-closed dinainte de 187, nu regulile: `tests/parameters/registry.test.ts` verifică acum derivarea
+din tabel și păstrează catalogul JSON fail-closed; testele modulelor 046/047/048/050/051/053/055 și
+ale experimentelor 105–109 citesc `implemented`/`estimable` din tabel în loc de `false`; refuzul
+cheilor R rămâne la regula de etapă (`KEY_EXTENSION_STAGE`), testat neschimbat; `055` atribuie acum
+explicit cheile certificate și refuză în continuare cheile necunoscute și duplicate. Nu a fost
+slăbită nicio regulă de siguranță: limitele 046–053, plafoanele, veto-urile și refuzurile de
+proveniență rămân testate.
+
+**Ce rămâne deschis.** Cele 56 de chei `extension` sunt certificate de poartă, dar etapa de plan le
+păstrează rezervate: `candidate-validation` le refuză cu `KEY_EXTENSION_STAGE`, iar exportul le
+marchează `reservedParameters`; migrarea etapei aparține planului/catalogului, nu acestui PBI. Două
+rapoarte comise embed-uiesc starea registrului și devin inconsecvente până la regenerare:
+`Docs/Evidence/108-learning-gate24/report.json` și `Docs/Evidence/166-profile-v2/report.json`
+(`npm run learning:gate24 -- --check`, respectiv `npm run profile:v2 -- --check`); ele aparțin
+PBI-urilor 108/166 și nu au fost rescrise aici. `Docs/parameter-registry.md` descrie încă regula V1
+(`estimable=false` pentru toate cheile) și trebuie actualizat de proprietarul documentului. Poarta
+nu dovedește comportament integrat în bucla live: straturile V2 rămân contracte de politică, iar
+browserul/playtestul rămân la gate-urile 188/189.
+
+Dovezile, cu tabelul celor 80 de chei, convențiile, probele negative și comenzile reale, sunt în
+[Evidence/187-v2-parameter-gate](Evidence/187-v2-parameter-gate/README.md).

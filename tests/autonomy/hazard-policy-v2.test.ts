@@ -65,7 +65,7 @@ test('183 compiles the eight R and four delivered M keys with their catalog unit
     assert.equal(definition.min, minimum);
     assert.equal(definition.max, maximum);
     assert.equal(definition.unit, expectedUnits[key as keyof typeof expectedUnits]);
-    assert.equal(definition.implemented, false);
+    assert.equal(definition.implemented, true);
   }
   for (const [key, unit] of Object.entries(expectedMUnits)) {
     assert.equal(getParameterDefinition(key).unit, unit);

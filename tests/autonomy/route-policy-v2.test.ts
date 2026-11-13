@@ -59,7 +59,7 @@ test('181 compiles the eight R and two delivered M keys with their catalog units
     assert.equal(definition.min, minimum);
     assert.equal(definition.max, maximum);
     assert.equal(definition.unit, expectedUnits[key as keyof typeof expectedUnits]);
-    assert.equal(definition.implemented, false);
+    assert.equal(definition.implemented, true);
   }
   const profile = routePolicyProfile({
     route_time_weight: 0.9,

@@ -1,0 +1,2302 @@
+{
+  "version": "187-v2-parameter-gate-v1",
+  "catalog": {
+    "path": "Docs/driving-parameters.json",
+    "keys": 80,
+    "initialLearningTargets": 24
+  },
+  "capability": {
+    "declared": 80,
+    "core": 24,
+    "v2": 56,
+    "estimators": 80,
+    "nonePolicy": 0,
+    "noneEstimator": 0,
+    "measuredEffects": 56,
+    "preservedMEffects": 24
+  },
+  "checks": [
+    {
+      "id": "catalog-schema",
+      "passed": true,
+      "detail": "80 catalog definitions, 24 M targets, SI units"
+    },
+    {
+      "id": "catalog-fail-closed",
+      "passed": true,
+      "detail": "the catalog JSON grants no implemented/estimable capability; only the table does"
+    },
+    {
+      "id": "capability-table",
+      "passed": true,
+      "detail": "80/80 keys declared once, exactly the catalog keys"
+    },
+    {
+      "id": "policy-consumers",
+      "passed": true,
+      "detail": "24 CORE (046-053) + 56 V2 policy consumers exist and export the declared symbol"
+    },
+    {
+      "id": "estimators",
+      "passed": true,
+      "detail": "80 estimators declared, 0 NONE"
+    },
+    {
+      "id": "evidence",
+      "passed": true,
+      "detail": "every key points at an existing evidence document"
+    },
+    {
+      "id": "independent-tests",
+      "passed": true,
+      "detail": "every key points at an existing test whose declared title exists in the file"
+    },
+    {
+      "id": "scenarios-and-effects",
+      "passed": true,
+      "detail": "56 keys with a measured effect row, 24 M keys with a preserved 046-053 regression effect"
+    },
+    {
+      "id": "registry-derivation",
+      "passed": true,
+      "detail": "the registry derives implemented/estimable from this table, not from the JSON"
+    },
+    {
+      "id": "canonical-conventions",
+      "passed": true,
+      "detail": "8 ambiguity conventions derived from the catalog"
+    },
+    {
+      "id": "fail-closed-probes",
+      "passed": true,
+      "detail": "declared-key-without-consumer:rejected, catalog-key-without-declaration:rejected"
+    },
+    {
+      "id": "evidence-document",
+      "passed": true,
+      "detail": "the gate evidence document exists"
+    }
+  ],
+  "probes": [
+    {
+      "id": "declared-key-without-consumer",
+      "passed": true,
+      "detail": "a declared key with a missing policy module is rejected"
+    },
+    {
+      "id": "catalog-key-without-declaration",
+      "passed": true,
+      "detail": "a catalog key without a capability declaration is rejected"
+    }
+  ],
+  "conventions": [
+    {
+      "id": "speed-delta",
+      "statement": "speed_delta_* este o diferență în m/s față de limita de circulație (viteza liberă), adăugată țintei de drum, niciodată o viteză absolută; rezultatul rămâne plafonat de limita legală.",
+      "keys": [
+        "speed_delta_urban",
+        "speed_delta_residential",
+        "speed_delta_arterial"
+      ],
+      "anchor": {
+        "path": "tests/autonomy/speed-policy.test.ts",
+        "title": "167 arterial delta is the only key that moves the arterial road target"
+      }
+    },
+    {
+      "id": "event-penalty-seconds",
+      "statement": "route_*_penalty este un cost în secunde per eveniment (un viraj, respectiv un semafor), adăugat la costul rutei; unitatea canonică este s, iar numărul de evenimente vine din ruta evaluată.",
+      "keys": [
+        "route_turn_penalty",
+        "route_signal_penalty"
+      ],
+      "anchor": {
+        "path": "tests/autonomy/route-policy-v2.test.ts",
+        "title": "181 gives every key its own observable effect, on comparable real alternatives"
+      }
+    },
+    {
+      "id": "route-share-weights",
+      "statement": "route_*_weight este o pondere normalizată: coeficienții sunt împărțiți la suma ponderilor, deci doar raportul contează, nu scara absolută; două seturi proporționale produc aceeași alegere.",
+      "keys": [
+        "route_time_weight",
+        "route_distance_weight"
+      ],
+      "anchor": {
+        "path": "tests/autonomy/route-policy-v2.test.ts",
+        "title": "181 normalizes the weights: shares of one budget, identical coefficients at every scale"
+      }
+    },
+    {
+      "id": "route-congestion-sensitivity",
+      "statement": "route_congestion_penalty este o sensibilitate adimensională la aglomerație (factor peste costul de bază), nu o penalitate în secunde; este singura cheie route_*_penalty fără unitate de timp.",
+      "keys": [
+        "route_congestion_penalty"
+      ],
+      "anchor": {
+        "path": "tests/autonomy/route-policy-v2.test.ts",
+        "title": "181 gives every key its own observable effect, on comparable real alternatives"
+      }
+    },
+    {
+      "id": "upstream-line-offset",
+      "statement": "stop_line_offset și red_stop_line_offset sunt metri măsurați în amonte de linie (pozitiv înaintea liniei), nu o depășire a liniei; oprirea rămâne înaintea marcajului.",
+      "keys": [
+        "red_stop_line_offset",
+        "stop_line_offset"
+      ],
+      "anchor": {
+        "path": "tests/autonomy/stop-policy.test.ts",
+        "title": "051 a free STOP approaches the offset point, holds until the authoritative proof and then releases"
+      }
+    },
+    {
+      "id": "probability-per-opportunity",
+      "statement": "Cheile de tip probabilitate se aplică pe oportunitate, cu un singur eșantion determinist per oportunitate, nu per tick; valoarea 0 nu produce niciodată evenimentul, valoarea 1 îl produce mereu.",
+      "keys": [
+        "red_stop_probability",
+        "yellow_stop_probability",
+        "stop_full_probability",
+        "blocked_intersection_entry_probability",
+        "signal_use_probability",
+        "pass_on_right_probability",
+        "u_turn_willingness",
+        "pedestrian_yield_probability",
+        "evasive_steer_willingness",
+        "horn_use_probability"
+      ],
+      "anchor": {
+        "path": "tests/autonomy/hazard-policy-v2.test.ts",
+        "title": "183 subordinates the horn to the world permission and samples once per opportunity"
+      }
+    },
+    {
+      "id": "occupied-scale-factor",
+      "statement": "occupied_* este un factor multiplicativ peste valoarea M (accelerație longitudinală, respectiv laterală), aplicat numai cu pasager la bord și plafonat de confort și aderență; nu este o valoare absolută în m/s².",
+      "keys": [
+        "occupied_acceleration_scale",
+        "occupied_lateral_accel_scale"
+      ],
+      "anchor": {
+        "path": "tests/autonomy/pickup-policy-v2.test.ts",
+        "title": "185 applies the occupied scales only with a passenger and caps them by comfort and adhesion"
+      }
+    },
+    {
+      "id": "approach-speed-ceiling",
+      "statement": "Vitezele de apropiere (intersecție, trecere, pickup, dropoff) și viteza de intrare în viraj sunt plafoane superioare, limitate de distanța de oprire, geometrie și aderență; nu sunt ținte care cer accelerarea.",
+      "keys": [
+        "intersection_approach_speed",
+        "turn_entry_speed",
+        "crosswalk_approach_speed",
+        "pickup_approach_speed",
+        "dropoff_approach_speed"
+      ],
+      "anchor": {
+        "path": "tests/autonomy/hazard-policy-v2.test.ts",
+        "title": "183 saturates the reaction delay at the room that is really there"
+      }
+    }
+  ],
+  "keys": [
+    {
+      "key": "speed_delta_urban",
+      "policy": {
+        "kind": "CORE",
+        "module": "src/autonomy/cruise-targets.ts",
+        "symbol": "evaluateCruiseTarget"
+      },
+      "estimator": {
+        "module": "src/learning/speed-estimator.ts",
+        "symbol": "estimateSpeedParameters"
+      },
+      "evidence": "Docs/Evidence/167-v2-speed-policy/",
+      "test": {
+        "path": "tests/autonomy/cruise-targets.test.ts",
+        "title": "046 each of four parameters individually changes target in an unsaturated isolated scenario"
+      },
+      "scenario": "Trafic liber urban: ținta de drum este limita postată plus delta, iar un delta pozitiv crește ținta până la plafonul legal.",
+      "effect": {
+        "kind": "PRESERVED_M",
+        "title": "046 each of four parameters individually changes target in an unsaturated isolated scenario"
+      }
+    },
+    {
+      "key": "speed_delta_residential",
+      "policy": {
+        "kind": "CORE",
+        "module": "src/autonomy/cruise-targets.ts",
+        "symbol": "evaluateCruiseTarget"
+      },
+      "estimator": {
+        "module": "src/learning/speed-estimator.ts",
+        "symbol": "estimateSpeedParameters"
+      },
+      "evidence": "Docs/Evidence/167-v2-speed-policy/",
+      "test": {
+        "path": "tests/autonomy/cruise-targets.test.ts",
+        "title": "046 each of four parameters individually changes target in an unsaturated isolated scenario"
+      },
+      "scenario": "Trafic liber rezidențial: delta se adaugă la limita rezidențială și nu înlocuiește ținta 046.",
+      "effect": {
+        "kind": "PRESERVED_M",
+        "title": "046 each of four parameters individually changes target in an unsaturated isolated scenario"
+      }
+    },
+    {
+      "key": "speed_delta_arterial",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/speed-policy.ts",
+        "symbol": "evaluateSpeedPolicy"
+      },
+      "estimator": {
+        "module": "src/learning/tempo-estimator.ts",
+        "symbol": "estimateSpeedPolicyTempo"
+      },
+      "evidence": "Docs/Evidence/167-v2-speed-policy/",
+      "test": {
+        "path": "tests/autonomy/speed-policy.test.ts",
+        "title": "167 arterial delta is the only key that moves the arterial road target"
+      },
+      "scenario": "Drum arterial fără lider la limita postată: delta mută ținta de drum de la valoarea joasă la plafonul legal.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "arterial 13.9 m/s posted, no lead vehicle, tempo keys neutral",
+        "unit": "m/s",
+        "lowValue": -10,
+        "highValue": 20,
+        "lowOutcome": 3.9000000000000004,
+        "highOutcome": 30,
+        "difference": 26.1
+      }
+    },
+    {
+      "key": "curve_lateral_accel",
+      "policy": {
+        "kind": "CORE",
+        "module": "src/autonomy/cruise-targets.ts",
+        "symbol": "evaluateCruiseTarget"
+      },
+      "estimator": {
+        "module": "src/learning/speed-estimator.ts",
+        "symbol": "estimateSpeedParameters"
+      },
+      "evidence": "Docs/Evidence/167-v2-speed-policy/",
+      "test": {
+        "path": "tests/autonomy/cruise-targets.test.ts",
+        "title": "046 each of four parameters individually changes target in an unsaturated isolated scenario"
+      },
+      "scenario": "Curbă cu rază cunoscută: plafonul de viteză derivă din accelerația laterală preferată, deci o valoare mai mare permite o viteză de trecere mai mare.",
+      "effect": {
+        "kind": "PRESERVED_M",
+        "title": "046 each of four parameters individually changes target in an unsaturated isolated scenario"
+      }
+    },
+    {
+      "key": "intersection_approach_speed",
+      "policy": {
+        "kind": "CORE",
+        "module": "src/autonomy/cruise-targets.ts",
+        "symbol": "evaluateCruiseTarget"
+      },
+      "estimator": {
+        "module": "src/learning/speed-estimator.ts",
+        "symbol": "estimateSpeedParameters"
+      },
+      "evidence": "Docs/Evidence/167-v2-speed-policy/",
+      "test": {
+        "path": "tests/autonomy/cruise-targets.test.ts",
+        "title": "046 each of four parameters individually changes target in an unsaturated isolated scenario"
+      },
+      "scenario": "Apropiere de intersecție fără oprire impusă: ținta scade la viteza de apropiere, iar oprirea impusă rămâne dominantă.",
+      "effect": {
+        "kind": "PRESERVED_M",
+        "title": "046 each of four parameters individually changes target in an unsaturated isolated scenario"
+      }
+    },
+    {
+      "key": "cruise_speed_variability",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/speed-policy.ts",
+        "symbol": "evaluateSpeedPolicy"
+      },
+      "estimator": {
+        "module": "src/learning/tempo-estimator.ts",
+        "symbol": "estimateSpeedPolicyTempo"
+      },
+      "evidence": "Docs/Evidence/167-v2-speed-policy/",
+      "test": {
+        "path": "tests/autonomy/speed-policy.test.ts",
+        "title": "167 arterial delta is the only key that moves the arterial road target"
+      },
+      "scenario": "Țintă urbană constantă pe 600 de tick-uri: amplitudinea undei deterministe crește cu valoarea cheii, fără să depășească limita postată.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "urban target 10.9 m/s, posted 13.9 m/s, 600 ticks, deadband 0.05 m/s",
+        "unit": "m/s",
+        "lowValue": 0.3,
+        "highValue": 3,
+        "lowOutcome": 0.5688431883669782,
+        "highOutcome": 5.9442660879832125,
+        "difference": 5.375422899616234
+      }
+    },
+    {
+      "key": "overtake_speed_bonus",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/speed-policy.ts",
+        "symbol": "evaluateSpeedPolicy"
+      },
+      "estimator": {
+        "module": "src/learning/tempo-estimator.ts",
+        "symbol": "estimateSpeedPolicyTempo"
+      },
+      "evidence": "Docs/Evidence/167-v2-speed-policy/",
+      "test": {
+        "path": "tests/autonomy/speed-policy.test.ts",
+        "title": "167 arterial delta is the only key that moves the arterial road target"
+      },
+      "scenario": "Depășire observată pe o țintă urbană: bonusul ridică ținta, saturată la limita legală, și nu are efect fără depășire.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "urban target 10.9 m/s, overtaking an observed lead, tempo keys neutral",
+        "unit": "m/s",
+        "lowValue": 0,
+        "highValue": 2,
+        "lowOutcome": 10.9,
+        "highOutcome": 12.9,
+        "difference": 2
+      }
+    },
+    {
+      "key": "cruise_accel_deadband",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/speed-policy.ts",
+        "symbol": "evaluateSpeedPolicy"
+      },
+      "estimator": {
+        "module": "src/learning/tempo-estimator.ts",
+        "symbol": "estimateSpeedPolicyTempo"
+      },
+      "evidence": "Docs/Evidence/167-v2-speed-policy/",
+      "test": {
+        "path": "tests/autonomy/speed-policy.test.ts",
+        "title": "167 arterial delta is the only key that moves the arterial road target"
+      },
+      "scenario": "Țintă commitată anterior și viteză curentă în interiorul benzii: banda mare păstrează comanda HOLD, banda mică accelerează spre țintă.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "urban target 10.9 m/s, speed 9.6 m/s, previous commit 10.5 m/s",
+        "unit": "m/s",
+        "lowValue": 0.05,
+        "highValue": 2,
+        "lowOutcome": 10.9,
+        "highOutcome": 10.5,
+        "difference": 0.40000000000000036
+      }
+    },
+    {
+      "key": "desired_acceleration",
+      "policy": {
+        "kind": "CORE",
+        "module": "src/autonomy/longitudinal-control.ts",
+        "symbol": "createLongitudinalController"
+      },
+      "estimator": {
+        "module": "src/learning/acceleration-estimator.ts",
+        "symbol": "estimateAccelerationParameters"
+      },
+      "evidence": "Docs/Evidence/169-v2-accel-policy/",
+      "test": {
+        "path": "tests/autonomy/longitudinal-control.test.ts",
+        "title": "047 each of four parameters is individually observable; braking_jerk stays outside this contract"
+      },
+      "scenario": "Accelerare pe drum uscat: cererea de accelerație este limitată de valoarea preferată și nu o depășește.",
+      "effect": {
+        "kind": "PRESERVED_M",
+        "title": "047 each of four parameters is individually observable; braking_jerk stays outside this contract"
+      }
+    },
+    {
+      "key": "comfort_deceleration",
+      "policy": {
+        "kind": "CORE",
+        "module": "src/autonomy/longitudinal-control.ts",
+        "symbol": "createLongitudinalController"
+      },
+      "estimator": {
+        "module": "src/learning/acceleration-estimator.ts",
+        "symbol": "estimateAccelerationParameters"
+      },
+      "evidence": "Docs/Evidence/169-v2-accel-policy/",
+      "test": {
+        "path": "tests/autonomy/longitudinal-control.test.ts",
+        "title": "047 each of four parameters is individually observable; braking_jerk stays outside this contract"
+      },
+      "scenario": "Frânare obișnuită: modulul decelerației cerute este plafonat la valoarea de confort.",
+      "effect": {
+        "kind": "PRESERVED_M",
+        "title": "047 each of four parameters is individually observable; braking_jerk stays outside this contract"
+      }
+    },
+    {
+      "key": "acceleration_jerk",
+      "policy": {
+        "kind": "CORE",
+        "module": "src/autonomy/longitudinal-control.ts",
+        "symbol": "createLongitudinalController"
+      },
+      "estimator": {
+        "module": "src/learning/acceleration-estimator.ts",
+        "symbol": "estimateAccelerationParameters"
+      },
+      "evidence": "Docs/Evidence/169-v2-accel-policy/",
+      "test": {
+        "path": "tests/autonomy/longitudinal-control.test.ts",
+        "title": "047 each of four parameters is individually observable; braking_jerk stays outside this contract"
+      },
+      "scenario": "Pornire de la oprire: creșterea accelerației este limitată de jerk, deci rampa devine mai lungă la valori mici.",
+      "effect": {
+        "kind": "PRESERVED_M",
+        "title": "047 each of four parameters is individually observable; braking_jerk stays outside this contract"
+      }
+    },
+    {
+      "key": "braking_jerk",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/accel-policy.ts",
+        "symbol": "evaluateAccelPolicy"
+      },
+      "estimator": {
+        "module": "src/learning/accel-estimator.ts",
+        "symbol": "estimateAccelPolicyStyle"
+      },
+      "evidence": "Docs/Evidence/169-v2-accel-policy/",
+      "test": {
+        "path": "tests/autonomy/accel-policy.test.ts",
+        "title": "169 braking_jerk only changes how fast the demanded braking grows"
+      },
+      "scenario": "Frânare cerută: jerk-ul de frânare schimbă doar cât de repede crește cererea, nu nivelul final.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "047 braking demand 2 m/s² (brake 0.25), from rest of actuation, 8 ticks",
+        "unit": "m/s²",
+        "lowValue": 0.2,
+        "highValue": 20,
+        "lowOutcome": 0.02666666666666667,
+        "highOutcome": 2,
+        "difference": 1.9733333333333334
+      }
+    },
+    {
+      "key": "throttle_release_delay",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/accel-policy.ts",
+        "symbol": "evaluateAccelPolicy"
+      },
+      "estimator": {
+        "module": "src/learning/accel-estimator.ts",
+        "symbol": "estimateAccelPolicyStyle"
+      },
+      "evidence": "Docs/Evidence/169-v2-accel-policy/",
+      "test": {
+        "path": "tests/autonomy/accel-policy.test.ts",
+        "title": "169 braking_jerk only changes how fast the demanded braking grows"
+      },
+      "scenario": "Ridicarea accelerației: accelerația anterioară este ținută până la expirarea întârzierii, apoi este eliberată.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "lift from 1.5 m/s² and 0.4 throttle at 8 m/s, first release tick",
+        "unit": "ratio",
+        "lowValue": 0,
+        "highValue": 3,
+        "lowOutcome": 0,
+        "highOutcome": 0.4,
+        "difference": 0.4
+      }
+    },
+    {
+      "key": "brake_reaction_delay",
+      "policy": {
+        "kind": "CORE",
+        "module": "src/autonomy/longitudinal-control.ts",
+        "symbol": "createLongitudinalController"
+      },
+      "estimator": {
+        "module": "src/learning/acceleration-estimator.ts",
+        "symbol": "estimateAccelerationParameters"
+      },
+      "evidence": "Docs/Evidence/169-v2-accel-policy/",
+      "test": {
+        "path": "tests/autonomy/longitudinal-control.test.ts",
+        "title": "047 each of four parameters is individually observable; braking_jerk stays outside this contract"
+      },
+      "scenario": "Stimul de frânare observat: frânarea începe după întârzierea declarată, fără să sară peste limitele de siguranță.",
+      "effect": {
+        "kind": "PRESERVED_M",
+        "title": "047 each of four parameters is individually observable; braking_jerk stays outside this contract"
+      }
+    },
+    {
+      "key": "launch_intensity",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/accel-policy.ts",
+        "symbol": "evaluateAccelPolicy"
+      },
+      "estimator": {
+        "module": "src/learning/accel-estimator.ts",
+        "symbol": "estimateAccelPolicyStyle"
+      },
+      "evidence": "Docs/Evidence/169-v2-accel-policy/",
+      "test": {
+        "path": "tests/autonomy/accel-policy.test.ts",
+        "title": "169 braking_jerk only changes how fast the demanded braking grows"
+      },
+      "scenario": "Plecare sub viteza de lansare: intensitatea scalează cererea de accelerație, fără a depăși limita 047.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "launch at 0.5 m/s with a 047 request of 1.5 m/s² and 0.4 throttle",
+        "unit": "m/s²",
+        "lowValue": 0,
+        "highValue": 1,
+        "lowOutcome": 0.5249999999999999,
+        "highOutcome": 1.5,
+        "difference": 0.9750000000000001
+      }
+    },
+    {
+      "key": "coasting_bias",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/accel-policy.ts",
+        "symbol": "evaluateAccelPolicy"
+      },
+      "estimator": {
+        "module": "src/learning/accel-estimator.ts",
+        "symbol": "estimateAccelPolicyStyle"
+      },
+      "evidence": "Docs/Evidence/169-v2-accel-policy/",
+      "test": {
+        "path": "tests/autonomy/accel-policy.test.ts",
+        "title": "169 braking_jerk only changes how fast the demanded braking grows"
+      },
+      "scenario": "Cruise blând peste viteza de lansare: biasul eliberează cererea de accelerație proporțional, fără a frâna.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "mild 0.4 m/s² request (0.12 throttle) at 8 m/s, one tick",
+        "unit": "m/s²",
+        "lowValue": 0,
+        "highValue": 1,
+        "lowOutcome": 0.4,
+        "highOutcome": 0,
+        "difference": 0.4
+      }
+    },
+    {
+      "key": "following_time_headway",
+      "policy": {
+        "kind": "CORE",
+        "module": "src/autonomy/following.ts",
+        "symbol": "evaluateFollowingTarget"
+      },
+      "estimator": {
+        "module": "src/learning/following-estimator.ts",
+        "symbol": "estimateFollowingParameters"
+      },
+      "evidence": "Docs/Evidence/171-v2-follow-policy/",
+      "test": {
+        "path": "tests/autonomy/following.test.ts",
+        "title": "048 all four parameters individually effective, queue gap does not inherit moving minimum"
+      },
+      "scenario": "Lider cu viteză constantă: spațiul țintă crește cu intervalul temporal înmulțit cu viteza.",
+      "effect": {
+        "kind": "PRESERVED_M",
+        "title": "048 all four parameters individually effective, queue gap does not inherit moving minimum"
+      }
+    },
+    {
+      "key": "following_min_gap",
+      "policy": {
+        "kind": "CORE",
+        "module": "src/autonomy/following.ts",
+        "symbol": "evaluateFollowingTarget"
+      },
+      "estimator": {
+        "module": "src/learning/following-estimator.ts",
+        "symbol": "estimateFollowingParameters"
+      },
+      "evidence": "Docs/Evidence/171-v2-follow-policy/",
+      "test": {
+        "path": "tests/autonomy/following.test.ts",
+        "title": "048 all four parameters individually effective, queue gap does not inherit moving minimum"
+      },
+      "scenario": "Lider apropiat: spațiul fix minim se adaugă intervalului temporal și crește distanța țintă.",
+      "effect": {
+        "kind": "PRESERVED_M",
+        "title": "048 all four parameters individually effective, queue gap does not inherit moving minimum"
+      }
+    },
+    {
+      "key": "queue_standstill_gap",
+      "policy": {
+        "kind": "CORE",
+        "module": "src/autonomy/following.ts",
+        "symbol": "evaluateFollowingTarget"
+      },
+      "estimator": {
+        "module": "src/learning/following-estimator.ts",
+        "symbol": "estimateFollowingParameters"
+      },
+      "evidence": "Docs/Evidence/171-v2-follow-policy/",
+      "test": {
+        "path": "tests/autonomy/following.test.ts",
+        "title": "048 all four parameters individually effective, queue gap does not inherit moving minimum"
+      },
+      "scenario": "Coadă oprită: spațiul de staționare cere distanța proprie, fără să moștenească minimul de mers.",
+      "effect": {
+        "kind": "PRESERVED_M",
+        "title": "048 all four parameters individually effective, queue gap does not inherit moving minimum"
+      }
+    },
+    {
+      "key": "cutin_brake_response",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/follow-policy.ts",
+        "symbol": "evaluateFollowPolicy"
+      },
+      "estimator": {
+        "module": "src/learning/follow-estimator.ts",
+        "symbol": "estimateFollowPolicyStyle"
+      },
+      "evidence": "Docs/Evidence/171-v2-follow-policy/",
+      "test": {
+        "path": "tests/autonomy/follow-policy.test.ts",
+        "title": "171 cutin_brake_response only changes the size of the cut-in reaction"
+      },
+      "scenario": "Intrare în față: răspunsul de frânare scalează doar mărimea reacției, nu pragul de siguranță.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "cut-in",
+        "unit": "m/s",
+        "lowValue": 0.2,
+        "highValue": 1,
+        "lowOutcome": 9.940000000000001,
+        "highOutcome": 1.7000000000000028,
+        "difference": -8.239999999999998
+      }
+    },
+    {
+      "key": "following_speed_gain",
+      "policy": {
+        "kind": "CORE",
+        "module": "src/autonomy/following.ts",
+        "symbol": "evaluateFollowingTarget"
+      },
+      "estimator": {
+        "module": "src/learning/following-estimator.ts",
+        "symbol": "estimateFollowingParameters"
+      },
+      "evidence": "Docs/Evidence/171-v2-follow-policy/",
+      "test": {
+        "path": "tests/autonomy/following.test.ts",
+        "title": "048 all four parameters individually effective, queue gap does not inherit moving minimum"
+      },
+      "scenario": "Diferență de viteză față de lider: câștigul scalează reacția, deci aceeași diferență produce o cerere mai mare.",
+      "effect": {
+        "kind": "PRESERVED_M",
+        "title": "048 all four parameters individually effective, queue gap does not inherit moving minimum"
+      }
+    },
+    {
+      "key": "closing_ttc_threshold",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/follow-policy.ts",
+        "symbol": "evaluateFollowPolicy"
+      },
+      "estimator": {
+        "module": "src/learning/follow-estimator.ts",
+        "symbol": "estimateFollowPolicyStyle"
+      },
+      "evidence": "Docs/Evidence/171-v2-follow-policy/",
+      "test": {
+        "path": "tests/autonomy/follow-policy.test.ts",
+        "title": "171 cutin_brake_response only changes the size of the cut-in reaction"
+      },
+      "scenario": "Apropiere în închidere: pragul TTC plafonează viteza cerută cât timp timpul până la contact este sub valoare.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "timp până la contact",
+        "unit": "m/s",
+        "lowValue": 0.3,
+        "highValue": 8,
+        "lowOutcome": 15.260000000000002,
+        "highOutcome": 11.875,
+        "difference": -3.3850000000000016
+      }
+    },
+    {
+      "key": "leader_change_delay",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/follow-policy.ts",
+        "symbol": "evaluateFollowPolicy"
+      },
+      "estimator": {
+        "module": "src/learning/follow-estimator.ts",
+        "symbol": "estimateFollowPolicyStyle"
+      },
+      "evidence": "Docs/Evidence/171-v2-follow-policy/",
+      "test": {
+        "path": "tests/autonomy/follow-policy.test.ts",
+        "title": "171 cutin_brake_response only changes the size of the cut-in reaction"
+      },
+      "scenario": "Lider nou: creșterea țintei este întârziată, în timp ce reducerea de siguranță se aplică imediat.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "schimbarea liderului",
+        "unit": "tick",
+        "lowValue": 0,
+        "highValue": 2,
+        "lowOutcome": 1,
+        "highOutcome": 121,
+        "difference": 120
+      }
+    },
+    {
+      "key": "following_hysteresis",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/follow-policy.ts",
+        "symbol": "evaluateFollowPolicy"
+      },
+      "estimator": {
+        "module": "src/learning/follow-estimator.ts",
+        "symbol": "estimateFollowPolicyStyle"
+      },
+      "evidence": "Docs/Evidence/171-v2-follow-policy/",
+      "test": {
+        "path": "tests/autonomy/follow-policy.test.ts",
+        "title": "171 cutin_brake_response only changes the size of the cut-in reaction"
+      },
+      "scenario": "În interiorul benzii de toleranță: histereza ține angajamentul anterior și evită oscilația comenzii.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "histerezis",
+        "unit": "m/s",
+        "lowValue": 0,
+        "highValue": 5,
+        "lowOutcome": 30.800000000000008,
+        "highOutcome": 0,
+        "difference": -30.800000000000008
+      }
+    },
+    {
+      "key": "red_stop_probability",
+      "policy": {
+        "kind": "CORE",
+        "module": "src/autonomy/signal-policy.ts",
+        "symbol": "evaluateSignalPolicy"
+      },
+      "estimator": {
+        "module": "src/learning/signal-estimator.ts",
+        "symbol": "estimateSignalParameters"
+      },
+      "evidence": "Docs/Evidence/173-v2-signal-policy/",
+      "test": {
+        "path": "tests/autonomy/signal-policy-v2.test.ts",
+        "title": "173 M keys keep their units, their 050 consequences and the yellow probability scaling"
+      },
+      "scenario": "Oportunitate de roșu: probabilitatea 1 oprește și 0 traversează, cu un singur eșantion per oportunitate.",
+      "effect": {
+        "kind": "PRESERVED_M",
+        "title": "173 M keys keep their units, their 050 consequences and the yellow probability scaling"
+      }
+    },
+    {
+      "key": "yellow_stop_probability",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/signal-policy-v2.ts",
+        "symbol": "evaluateSignalPolicyV2"
+      },
+      "estimator": {
+        "module": "src/learning/signal-v2-estimator.ts",
+        "symbol": "estimateSignalPolicyStyleV2"
+      },
+      "evidence": "Docs/Evidence/173-v2-signal-policy/",
+      "test": {
+        "path": "tests/autonomy/signal-policy-v2.test.ts",
+        "title": "173 yellow_stop_probability changes only the yellow stop of a feasible approach"
+      },
+      "scenario": "Galben cu oprire fezabilă: probabilitatea decide oprirea pe eșantionul oportunității.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "fezabilitate la galben",
+        "unit": "ratio",
+        "lowValue": 0.2,
+        "highValue": 1,
+        "lowOutcome": 0.15833333333333333,
+        "highOutcome": 1,
+        "difference": 0.8416666666666667
+      }
+    },
+    {
+      "key": "green_start_delay",
+      "policy": {
+        "kind": "CORE",
+        "module": "src/autonomy/signal-policy.ts",
+        "symbol": "evaluateSignalPolicy"
+      },
+      "estimator": {
+        "module": "src/learning/signal-estimator.ts",
+        "symbol": "estimateSignalParameters"
+      },
+      "evidence": "Docs/Evidence/173-v2-signal-policy/",
+      "test": {
+        "path": "tests/autonomy/signal-policy-v2.test.ts",
+        "title": "173 M keys keep their units, their 050 consequences and the yellow probability scaling"
+      },
+      "scenario": "Primul în coadă la verde: plecarea este întârziată cu valoarea cheii, apoi accelerația de lansare preia.",
+      "effect": {
+        "kind": "PRESERVED_M",
+        "title": "173 M keys keep their units, their 050 consequences and the yellow probability scaling"
+      }
+    },
+    {
+      "key": "red_stop_line_offset",
+      "policy": {
+        "kind": "CORE",
+        "module": "src/autonomy/signal-policy.ts",
+        "symbol": "evaluateSignalPolicy"
+      },
+      "estimator": {
+        "module": "src/learning/signal-estimator.ts",
+        "symbol": "estimateSignalParameters"
+      },
+      "evidence": "Docs/Evidence/173-v2-signal-policy/",
+      "test": {
+        "path": "tests/autonomy/signal-policy-v2.test.ts",
+        "title": "173 M keys keep their units, their 050 consequences and the yellow probability scaling"
+      },
+      "scenario": "Roșu cu oprire fezabilă: oprirea este plasată înaintea liniei cu offsetul declarat.",
+      "effect": {
+        "kind": "PRESERVED_M",
+        "title": "173 M keys keep their units, their 050 consequences and the yellow probability scaling"
+      }
+    },
+    {
+      "key": "red_run_gap_acceptance",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/signal-policy-v2.ts",
+        "symbol": "evaluateSignalPolicyV2"
+      },
+      "estimator": {
+        "module": "src/learning/signal-v2-estimator.ts",
+        "symbol": "estimateSignalPolicyStyleV2"
+      },
+      "evidence": "Docs/Evidence/173-v2-signal-policy/",
+      "test": {
+        "path": "tests/autonomy/signal-policy-v2.test.ts",
+        "title": "173 yellow_stop_probability changes only the yellow stop of a feasible approach"
+      },
+      "scenario": "Traversare pe roșu: gap-ul temporal acceptat este strâns de cheie și de plafonul explicit de 3 s.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "gap pe roșu",
+        "unit": "ratio",
+        "lowValue": 0.1,
+        "highValue": 8,
+        "lowOutcome": 1,
+        "highOutcome": 0,
+        "difference": -1
+      }
+    },
+    {
+      "key": "yellow_commit_time",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/signal-policy-v2.ts",
+        "symbol": "evaluateSignalPolicyV2"
+      },
+      "estimator": {
+        "module": "src/learning/signal-v2-estimator.ts",
+        "symbol": "estimateSignalPolicyStyleV2"
+      },
+      "evidence": "Docs/Evidence/173-v2-signal-policy/",
+      "test": {
+        "path": "tests/autonomy/signal-policy-v2.test.ts",
+        "title": "173 yellow_stop_probability changes only the yellow stop of a feasible approach"
+      },
+      "scenario": "Galben: angajarea se produce doar în orizontul cheii și în galbenul rămas.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "angajare la galben",
+        "unit": "ratio",
+        "lowValue": 0.2,
+        "highValue": 6,
+        "lowOutcome": 0,
+        "highOutcome": 1,
+        "difference": 1
+      }
+    },
+    {
+      "key": "green_launch_acceleration",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/signal-policy-v2.ts",
+        "symbol": "evaluateSignalPolicyV2"
+      },
+      "estimator": {
+        "module": "src/learning/signal-v2-estimator.ts",
+        "symbol": "estimateSignalPolicyStyleV2"
+      },
+      "evidence": "Docs/Evidence/173-v2-signal-policy/",
+      "test": {
+        "path": "tests/autonomy/signal-policy-v2.test.ts",
+        "title": "173 yellow_stop_probability changes only the yellow stop of a feasible approach"
+      },
+      "scenario": "Plecare de la verde: accelerația de lansare se aplică după întârzierea M și rămâne mărginită.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "plecare la verde",
+        "unit": "m/s²",
+        "lowValue": 0.2,
+        "highValue": 6,
+        "lowOutcome": 0.2,
+        "highOutcome": 6,
+        "difference": 5.8
+      }
+    },
+    {
+      "key": "late_red_brake_threshold",
+      "policy": {
+        "kind": "CORE",
+        "module": "src/autonomy/signal-policy.ts",
+        "symbol": "evaluateSignalPolicy"
+      },
+      "estimator": {
+        "module": "src/learning/signal-estimator.ts",
+        "symbol": "estimateSignalParameters"
+      },
+      "evidence": "Docs/Evidence/173-v2-signal-policy/",
+      "test": {
+        "path": "tests/autonomy/signal-policy-v2.test.ts",
+        "title": "173 M keys keep their units, their 050 consequences and the yellow probability scaling"
+      },
+      "scenario": "Roșu surprins la orizont: frânarea este inițiată când timpul rămas este sub pragul cheii.",
+      "effect": {
+        "kind": "PRESERVED_M",
+        "title": "173 M keys keep their units, their 050 consequences and the yellow probability scaling"
+      }
+    },
+    {
+      "key": "stop_full_probability",
+      "policy": {
+        "kind": "CORE",
+        "module": "src/autonomy/stop-policy.ts",
+        "symbol": "evaluateStopPolicy"
+      },
+      "estimator": {
+        "module": "src/learning/stop-yield-estimator.ts",
+        "symbol": "estimateStopYieldParameters"
+      },
+      "evidence": "Docs/Evidence/175-v2-stop-policy/",
+      "test": {
+        "path": "tests/autonomy/stop-priority-policy.test.ts",
+        "title": "175 M keys keep their units and their 051/052 consequences with neutral and active R keys"
+      },
+      "scenario": "Oportunitate STOP: probabilitatea 1 produce oprirea completă, iar 0 o omite.",
+      "effect": {
+        "kind": "PRESERVED_M",
+        "title": "175 M keys keep their units and their 051/052 consequences with neutral and active R keys"
+      }
+    },
+    {
+      "key": "stop_dwell_time",
+      "policy": {
+        "kind": "CORE",
+        "module": "src/autonomy/stop-policy.ts",
+        "symbol": "evaluateStopPolicy"
+      },
+      "estimator": {
+        "module": "src/learning/stop-yield-estimator.ts",
+        "symbol": "estimateStopYieldParameters"
+      },
+      "evidence": "Docs/Evidence/175-v2-stop-policy/",
+      "test": {
+        "path": "tests/autonomy/stop-priority-policy.test.ts",
+        "title": "175 M keys keep their units and their 051/052 consequences with neutral and active R keys"
+      },
+      "scenario": "STOP oprit: durata de staționare este cea declarată înainte de reluare.",
+      "effect": {
+        "kind": "PRESERVED_M",
+        "title": "175 M keys keep their units and their 051/052 consequences with neutral and active R keys"
+      }
+    },
+    {
+      "key": "stop_line_offset",
+      "policy": {
+        "kind": "CORE",
+        "module": "src/autonomy/stop-policy.ts",
+        "symbol": "evaluateStopPolicy"
+      },
+      "estimator": {
+        "module": "src/learning/stop-yield-estimator.ts",
+        "symbol": "estimateStopYieldParameters"
+      },
+      "evidence": "Docs/Evidence/175-v2-stop-policy/",
+      "test": {
+        "path": "tests/autonomy/stop-priority-policy.test.ts",
+        "title": "175 M keys keep their units and their 051/052 consequences with neutral and active R keys"
+      },
+      "scenario": "STOP: oprirea este plasată înaintea liniei cu offsetul declarat.",
+      "effect": {
+        "kind": "PRESERVED_M",
+        "title": "175 M keys keep their units and their 051/052 consequences with neutral and active R keys"
+      }
+    },
+    {
+      "key": "yield_time_gap",
+      "policy": {
+        "kind": "CORE",
+        "module": "src/autonomy/yield-policy.ts",
+        "symbol": "evaluateYieldPolicy"
+      },
+      "estimator": {
+        "module": "src/learning/stop-yield-estimator.ts",
+        "symbol": "estimateStopYieldParameters"
+      },
+      "evidence": "Docs/Evidence/175-v2-stop-policy/",
+      "test": {
+        "path": "tests/autonomy/stop-priority-policy.test.ts",
+        "title": "175 M keys keep their units and their 051/052 consequences with neutral and active R keys"
+      },
+      "scenario": "Cedare de prioritate: gap-ul temporal acceptat decide traversarea, iar sub pragul efectiv se refuză.",
+      "effect": {
+        "kind": "PRESERVED_M",
+        "title": "175 M keys keep their units and their 051/052 consequences with neutral and active R keys"
+      }
+    },
+    {
+      "key": "rolling_stop_speed",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/stop-priority-policy.ts",
+        "symbol": "evaluateStopPriorityPolicy"
+      },
+      "estimator": {
+        "module": "src/learning/stop-priority-estimator.ts",
+        "symbol": "estimateStopPriorityStyle"
+      },
+      "evidence": "Docs/Evidence/175-v2-stop-policy/",
+      "test": {
+        "path": "tests/autonomy/stop-priority-policy.test.ts",
+        "title": "175 rolling_stop_speed changes only the rolling speed and is capped below a crossing at speed"
+      },
+      "scenario": "STOP ratat: viteza de rulare este plafonată de cheie, sub viteza de traversare.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "rolling stop",
+        "unit": "m/s",
+        "lowValue": 0.2,
+        "highValue": 5,
+        "lowOutcome": 0.2,
+        "highOutcome": 2.5,
+        "difference": 2.3
+      }
+    },
+    {
+      "key": "priority_assertiveness",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/stop-priority-policy.ts",
+        "symbol": "evaluateStopPriorityPolicy"
+      },
+      "estimator": {
+        "module": "src/learning/stop-priority-estimator.ts",
+        "symbol": "estimateStopPriorityStyle"
+      },
+      "evidence": "Docs/Evidence/175-v2-stop-policy/",
+      "test": {
+        "path": "tests/autonomy/stop-priority-policy.test.ts",
+        "title": "175 rolling_stop_speed changes only the rolling speed and is capped below a crossing at speed"
+      },
+      "scenario": "Conflict de prioritate: asertivitatea decide revendicarea doar în interiorul podelei de siguranță.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "revendicare la prioritate",
+        "unit": "ratio",
+        "lowValue": 0,
+        "highValue": 1,
+        "lowOutcome": 0,
+        "highOutcome": 1,
+        "difference": 1
+      }
+    },
+    {
+      "key": "allway_stop_patience",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/stop-priority-policy.ts",
+        "symbol": "evaluateStopPriorityPolicy"
+      },
+      "estimator": {
+        "module": "src/learning/stop-priority-estimator.ts",
+        "symbol": "estimateStopPriorityStyle"
+      },
+      "evidence": "Docs/Evidence/175-v2-stop-policy/",
+      "test": {
+        "path": "tests/autonomy/stop-priority-policy.test.ts",
+        "title": "175 rolling_stop_speed changes only the rolling speed and is capped below a crossing at speed"
+      },
+      "scenario": "STOP în patru direcții: răbdarea ține eliberarea unui vehicul care nu este primul.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "răbdare la all-way stop",
+        "unit": "ratio",
+        "lowValue": 0,
+        "highValue": 10,
+        "lowOutcome": 1,
+        "highOutcome": 0,
+        "difference": -1
+      }
+    },
+    {
+      "key": "blocked_intersection_entry_probability",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/stop-priority-policy.ts",
+        "symbol": "evaluateStopPriorityPolicy"
+      },
+      "estimator": {
+        "module": "src/learning/stop-priority-estimator.ts",
+        "symbol": "estimateStopPriorityStyle"
+      },
+      "evidence": "Docs/Evidence/175-v2-stop-policy/",
+      "test": {
+        "path": "tests/autonomy/stop-priority-policy.test.ts",
+        "title": "175 rolling_stop_speed changes only the rolling speed and is capped below a crossing at speed"
+      },
+      "scenario": "Intersecție blocată: probabilitatea 0 interzice intrarea fără spațiu de ieșire, iar 1 eșantionează intrarea.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "intrare în intersecție fără spațiu confirmat",
+        "unit": "ratio",
+        "lowValue": 0,
+        "highValue": 1,
+        "lowOutcome": 0,
+        "highOutcome": 1,
+        "difference": 1
+      }
+    },
+    {
+      "key": "lane_change_front_gap",
+      "policy": {
+        "kind": "CORE",
+        "module": "src/autonomy/lane-change-policy.ts",
+        "symbol": "evaluateLaneChange"
+      },
+      "estimator": {
+        "module": "src/learning/lane-estimator.ts",
+        "symbol": "estimateLaneChangeParameters"
+      },
+      "evidence": "Docs/Evidence/177-v2-lane-policy/",
+      "test": {
+        "path": "tests/autonomy/lane-policy-v2.test.ts",
+        "title": "177 keeps the delivered 053 results with the four M keys unchanged"
+      },
+      "scenario": "Spațiu liber în față: sub gap-ul minim schimbarea de bandă este refuzată, iar peste el este admisă.",
+      "effect": {
+        "kind": "PRESERVED_M",
+        "title": "177 keeps the delivered 053 results with the four M keys unchanged"
+      }
+    },
+    {
+      "key": "lane_change_back_gap",
+      "policy": {
+        "kind": "CORE",
+        "module": "src/autonomy/lane-change-policy.ts",
+        "symbol": "evaluateLaneChange"
+      },
+      "estimator": {
+        "module": "src/learning/lane-estimator.ts",
+        "symbol": "estimateLaneChangeParameters"
+      },
+      "evidence": "Docs/Evidence/177-v2-lane-policy/",
+      "test": {
+        "path": "tests/autonomy/lane-policy-v2.test.ts",
+        "title": "177 keeps the delivered 053 results with the four M keys unchanged"
+      },
+      "scenario": "Vehicul în spate: gap-ul minim din spate trebuie acoperit înainte de inițiere.",
+      "effect": {
+        "kind": "PRESERVED_M",
+        "title": "177 keeps the delivered 053 results with the four M keys unchanged"
+      }
+    },
+    {
+      "key": "lane_change_speed_gain",
+      "policy": {
+        "kind": "CORE",
+        "module": "src/autonomy/lane-change-policy.ts",
+        "symbol": "evaluateLaneChange"
+      },
+      "estimator": {
+        "module": "src/learning/lane-estimator.ts",
+        "symbol": "estimateLaneChangeParameters"
+      },
+      "evidence": "Docs/Evidence/177-v2-lane-policy/",
+      "test": {
+        "path": "tests/autonomy/lane-policy-v2.test.ts",
+        "title": "177 keeps the delivered 053 results with the four M keys unchanged"
+      },
+      "scenario": "Schimbare opțională: avantajul de viteză trebuie să atingă câștigul cerut.",
+      "effect": {
+        "kind": "PRESERVED_M",
+        "title": "177 keeps the delivered 053 results with the four M keys unchanged"
+      }
+    },
+    {
+      "key": "lane_change_cooldown",
+      "policy": {
+        "kind": "CORE",
+        "module": "src/autonomy/lane-change-policy.ts",
+        "symbol": "evaluateLaneChange"
+      },
+      "estimator": {
+        "module": "src/learning/lane-estimator.ts",
+        "symbol": "estimateLaneChangeParameters"
+      },
+      "evidence": "Docs/Evidence/177-v2-lane-policy/",
+      "test": {
+        "path": "tests/autonomy/lane-policy-v2.test.ts",
+        "title": "177 keeps the delivered 053 results with the four M keys unchanged"
+      },
+      "scenario": "Două schimbări opționale: cooldown-ul impune timpul minim între ele.",
+      "effect": {
+        "kind": "PRESERVED_M",
+        "title": "177 keeps the delivered 053 results with the four M keys unchanged"
+      }
+    },
+    {
+      "key": "lane_change_duration",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/lane-policy-v2.ts",
+        "symbol": "evaluateLanePolicyV2"
+      },
+      "estimator": {
+        "module": "src/learning/lane-v2-estimator.ts",
+        "symbol": "estimateLaneV2Style"
+      },
+      "evidence": "Docs/Evidence/177-v2-lane-policy/",
+      "test": {
+        "path": "tests/autonomy/lane-policy-v2.test.ts",
+        "title": "177 lane_change_duration changes the lateral progress in its own episode"
+      },
+      "scenario": "Maneveră de bandă: durata cheii controlează progresul lateral și nu poate deveni instantanee.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "durata manevrei",
+        "unit": "ratio",
+        "lowValue": 0.5,
+        "highValue": 5,
+        "lowOutcome": 0.5,
+        "highOutcome": 0.1,
+        "difference": -0.4
+      }
+    },
+    {
+      "key": "signal_lead_time",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/lane-policy-v2.ts",
+        "symbol": "evaluateLanePolicyV2"
+      },
+      "estimator": {
+        "module": "src/learning/lane-v2-estimator.ts",
+        "symbol": "estimateLaneV2Style"
+      },
+      "evidence": "Docs/Evidence/177-v2-lane-policy/",
+      "test": {
+        "path": "tests/autonomy/lane-policy-v2.test.ts",
+        "title": "177 lane_change_duration changes the lateral progress in its own episode"
+      },
+      "scenario": "Semnalizare: indicatorul pornește cu timpul declarat înaintea manevrei.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "semnalizare înainte de manevră",
+        "unit": "ticks",
+        "lowValue": 0,
+        "highValue": 5,
+        "lowOutcome": 0,
+        "highOutcome": 300,
+        "difference": 300
+      }
+    },
+    {
+      "key": "signal_use_probability",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/lane-policy-v2.ts",
+        "symbol": "evaluateLanePolicyV2"
+      },
+      "estimator": {
+        "module": "src/learning/lane-v2-estimator.ts",
+        "symbol": "estimateLaneV2Style"
+      },
+      "evidence": "Docs/Evidence/177-v2-lane-policy/",
+      "test": {
+        "path": "tests/autonomy/lane-policy-v2.test.ts",
+        "title": "177 lane_change_duration changes the lateral progress in its own episode"
+      },
+      "scenario": "Oportunitate de semnalizare: probabilitatea decide aprinderea indicatorului pe eșantion.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "folosirea semnalizării",
+        "unit": "ratio",
+        "lowValue": 0,
+        "highValue": 1,
+        "lowOutcome": 0,
+        "highOutcome": 1,
+        "difference": 1
+      }
+    },
+    {
+      "key": "pass_on_right_probability",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/lane-policy-v2.ts",
+        "symbol": "evaluateLanePolicyV2"
+      },
+      "estimator": {
+        "module": "src/learning/lane-v2-estimator.ts",
+        "symbol": "estimateLaneV2Style"
+      },
+      "evidence": "Docs/Evidence/177-v2-lane-policy/",
+      "test": {
+        "path": "tests/autonomy/lane-policy-v2.test.ts",
+        "title": "177 lane_change_duration changes the lateral progress in its own episode"
+      },
+      "scenario": "Depășire prin dreapta: probabilitatea este subordonată hărții și spațiului declarat.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "depășire prin dreapta",
+        "unit": "ratio",
+        "lowValue": 0,
+        "highValue": 1,
+        "lowOutcome": 0,
+        "highOutcome": 1,
+        "difference": 1
+      }
+    },
+    {
+      "key": "lane_center_offset",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/lateral-policy-v2.ts",
+        "symbol": "evaluateLateralPolicyV2"
+      },
+      "estimator": {
+        "module": "src/learning/lateral-v2-estimator.ts",
+        "symbol": "estimateLateralV2Style"
+      },
+      "evidence": "Docs/Evidence/179-v2-lateral-policy/",
+      "test": {
+        "path": "tests/autonomy/lateral-policy-v2.test.ts",
+        "title": "179 each of the eight keys changes its own observable in an isolated scene"
+      },
+      "scenario": "Urmărire de bandă: offsetul mută ținta lateral față de centru, în interiorul coridorului.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "deplasare față de centrul benzii",
+        "unit": "m",
+        "lowValue": -1,
+        "highValue": 1,
+        "lowOutcome": -0.9000000000000001,
+        "highOutcome": 0.9000000000000001,
+        "difference": 1.8000000000000003
+      }
+    },
+    {
+      "key": "steering_response_time",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/lateral-policy-v2.ts",
+        "symbol": "evaluateLateralPolicyV2"
+      },
+      "estimator": {
+        "module": "src/learning/lateral-v2-estimator.ts",
+        "symbol": "estimateLateralV2Style"
+      },
+      "evidence": "Docs/Evidence/179-v2-lateral-policy/",
+      "test": {
+        "path": "tests/autonomy/lateral-policy-v2.test.ts",
+        "title": "179 each of the eight keys changes its own observable in an isolated scene"
+      },
+      "scenario": "Comandă de direcție: timpul de răspuns netezește atingerea unghiului cerut.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "răspunsul comenzii de direcție",
+        "unit": "ticks",
+        "lowValue": 0.05,
+        "highValue": 1.5,
+        "lowOutcome": 3,
+        "highOutcome": 90,
+        "difference": 87
+      }
+    },
+    {
+      "key": "steering_rate_limit",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/lateral-policy-v2.ts",
+        "symbol": "evaluateLateralPolicyV2"
+      },
+      "estimator": {
+        "module": "src/learning/lateral-v2-estimator.ts",
+        "symbol": "estimateLateralV2Style"
+      },
+      "evidence": "Docs/Evidence/179-v2-lateral-policy/",
+      "test": {
+        "path": "tests/autonomy/lateral-policy-v2.test.ts",
+        "title": "179 each of the eight keys changes its own observable in an isolated scene"
+      },
+      "scenario": "Viraj strâns: limita de rată împiedică saltul comenzii de direcție.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "limita de viteză a comenzii de direcție",
+        "unit": "rad",
+        "lowValue": 0.1,
+        "highValue": 4,
+        "lowOutcome": 0.0016666666666666668,
+        "highOutcome": 0.025,
+        "difference": 0.023333333333333334
+      }
+    },
+    {
+      "key": "turn_entry_speed",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/lateral-policy-v2.ts",
+        "symbol": "evaluateLateralPolicyV2"
+      },
+      "estimator": {
+        "module": "src/learning/lateral-v2-estimator.ts",
+        "symbol": "estimateLateralV2Style"
+      },
+      "evidence": "Docs/Evidence/179-v2-lateral-policy/",
+      "test": {
+        "path": "tests/autonomy/lateral-policy-v2.test.ts",
+        "title": "179 each of the eight keys changes its own observable in an isolated scene"
+      },
+      "scenario": "Intrare în viraj: viteza de intrare este plafonată de aderența și geometria reală.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "viteza de intrare în viraj",
+        "unit": "m/s",
+        "lowValue": 1,
+        "highValue": 18,
+        "lowOutcome": 1,
+        "highOutcome": 6.26876888130155,
+        "difference": 5.26876888130155
+      }
+    },
+    {
+      "key": "turn_exit_acceleration",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/lateral-policy-v2.ts",
+        "symbol": "evaluateLateralPolicyV2"
+      },
+      "estimator": {
+        "module": "src/learning/lateral-v2-estimator.ts",
+        "symbol": "estimateLateralV2Style"
+      },
+      "evidence": "Docs/Evidence/179-v2-lateral-policy/",
+      "test": {
+        "path": "tests/autonomy/lateral-policy-v2.test.ts",
+        "title": "179 each of the eight keys changes its own observable in an isolated scene"
+      },
+      "scenario": "Ieșire din viraj: accelerația urmează valoarea M a accelerației dorite și nu o depășește.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "accelerația la ieșirea din viraj",
+        "unit": "m/s²",
+        "lowValue": 0.2,
+        "highValue": 6,
+        "lowOutcome": 0.2,
+        "highOutcome": 1.5,
+        "difference": 1.3
+      }
+    },
+    {
+      "key": "corner_cutting_bias",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/lateral-policy-v2.ts",
+        "symbol": "evaluateLateralPolicyV2"
+      },
+      "estimator": {
+        "module": "src/learning/lateral-v2-estimator.ts",
+        "symbol": "estimateLateralV2Style"
+      },
+      "evidence": "Docs/Evidence/179-v2-lateral-policy/",
+      "test": {
+        "path": "tests/autonomy/lateral-policy-v2.test.ts",
+        "title": "179 each of the eight keys changes its own observable in an isolated scene"
+      },
+      "scenario": "Viraj: biasul scurtează traiectoria doar în interiorul coridorului 049.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "tăierea virajului",
+        "unit": "m",
+        "lowValue": 0,
+        "highValue": 1,
+        "lowOutcome": 0,
+        "highOutcome": 0.9000000000000001,
+        "difference": 0.9000000000000001
+      }
+    },
+    {
+      "key": "lateral_clearance",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/lateral-policy-v2.ts",
+        "symbol": "evaluateLateralPolicyV2"
+      },
+      "estimator": {
+        "module": "src/learning/lateral-v2-estimator.ts",
+        "symbol": "estimateLateralV2Style"
+      },
+      "evidence": "Docs/Evidence/179-v2-lateral-policy/",
+      "test": {
+        "path": "tests/autonomy/lateral-policy-v2.test.ts",
+        "title": "179 each of the eight keys changes its own observable in an isolated scene"
+      },
+      "scenario": "Obstacol lateral: spațiul cerut este o podea peste lățimea vehiculului plus marjă.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "spațiul lateral liber",
+        "unit": "ratio",
+        "lowValue": 0.1,
+        "highValue": 3,
+        "lowOutcome": 1,
+        "highOutcome": 0,
+        "difference": -1
+      }
+    },
+    {
+      "key": "lateral_correction_deadband",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/lateral-policy-v2.ts",
+        "symbol": "evaluateLateralPolicyV2"
+      },
+      "estimator": {
+        "module": "src/learning/lateral-v2-estimator.ts",
+        "symbol": "estimateLateralV2Style"
+      },
+      "evidence": "Docs/Evidence/179-v2-lateral-policy/",
+      "test": {
+        "path": "tests/autonomy/lateral-policy-v2.test.ts",
+        "title": "179 each of the eight keys changes its own observable in an isolated scene"
+      },
+      "scenario": "Abatere laterală mică: deadband-ul oprește corecția, nu urmărirea geometriei.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "banda moartă a corecției",
+        "unit": "ratio",
+        "lowValue": 0,
+        "highValue": 0.6,
+        "lowOutcome": 1,
+        "highOutcome": 0,
+        "difference": -1
+      }
+    },
+    {
+      "key": "route_time_weight",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/route-policy-v2.ts",
+        "symbol": "evaluateRoutePolicyV2"
+      },
+      "estimator": {
+        "module": "src/learning/route-v2-estimator.ts",
+        "symbol": "estimateRouteV2Style"
+      },
+      "evidence": "Docs/Evidence/181-v2-route-policy/",
+      "test": {
+        "path": "tests/autonomy/route-policy-v2.test.ts",
+        "title": "181 gives every key its own observable effect, on comparable real alternatives"
+      },
+      "scenario": "Alternative comparabile: ponderea timpului schimbă alegerea, normalizată ca parte dintr-un buget unic.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "timp",
+        "unit": "s",
+        "lowValue": 0,
+        "highValue": 1,
+        "lowOutcome": 113.2952303175248,
+        "highOutcome": 60.65578140908708,
+        "difference": -52.639448908437714
+      }
+    },
+    {
+      "key": "route_distance_weight",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/route-policy-v2.ts",
+        "symbol": "evaluateRoutePolicyV2"
+      },
+      "estimator": {
+        "module": "src/learning/route-v2-estimator.ts",
+        "symbol": "estimateRouteV2Style"
+      },
+      "evidence": "Docs/Evidence/181-v2-route-policy/",
+      "test": {
+        "path": "tests/autonomy/route-policy-v2.test.ts",
+        "title": "181 gives every key its own observable effect, on comparable real alternatives"
+      },
+      "scenario": "Alternative comparabile: ponderea distanței schimbă alegerea la orice scală, prin share normalizat.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "distanță",
+        "unit": "m",
+        "lowValue": 0,
+        "highValue": 1,
+        "lowOutcome": 1094.4271909999159,
+        "highOutcome": 666.4761515876239,
+        "difference": -427.95103941229195
+      }
+    },
+    {
+      "key": "route_turn_penalty",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/route-policy-v2.ts",
+        "symbol": "evaluateRoutePolicyV2"
+      },
+      "estimator": {
+        "module": "src/learning/route-v2-estimator.ts",
+        "symbol": "estimateRouteV2Style"
+      },
+      "evidence": "Docs/Evidence/181-v2-route-policy/",
+      "test": {
+        "path": "tests/autonomy/route-policy-v2.test.ts",
+        "title": "181 gives every key its own observable effect, on comparable real alternatives"
+      },
+      "scenario": "Rută cu viraje: fiecare viraj adaugă penalitatea în secunde la costul rutei.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "viraje",
+        "unit": "viraje",
+        "lowValue": 0,
+        "highValue": 20,
+        "lowOutcome": 4,
+        "highOutcome": 1,
+        "difference": -3
+      }
+    },
+    {
+      "key": "route_signal_penalty",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/route-policy-v2.ts",
+        "symbol": "evaluateRoutePolicyV2"
+      },
+      "estimator": {
+        "module": "src/learning/route-v2-estimator.ts",
+        "symbol": "estimateRouteV2Style"
+      },
+      "evidence": "Docs/Evidence/181-v2-route-policy/",
+      "test": {
+        "path": "tests/autonomy/route-policy-v2.test.ts",
+        "title": "181 gives every key its own observable effect, on comparable real alternatives"
+      },
+      "scenario": "Rută cu semafoare: fiecare semafor adaugă penalitatea în secunde la costul rutei.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "semafoare",
+        "unit": "semafoare",
+        "lowValue": 0,
+        "highValue": 60,
+        "lowOutcome": 3,
+        "highOutcome": 0,
+        "difference": -3
+      }
+    },
+    {
+      "key": "route_congestion_penalty",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/route-policy-v2.ts",
+        "symbol": "evaluateRoutePolicyV2"
+      },
+      "estimator": {
+        "module": "src/learning/route-v2-estimator.ts",
+        "symbol": "estimateRouteV2Style"
+      },
+      "evidence": "Docs/Evidence/181-v2-route-policy/",
+      "test": {
+        "path": "tests/autonomy/route-policy-v2.test.ts",
+        "title": "181 gives every key its own observable effect, on comparable real alternatives"
+      },
+      "scenario": "Rută aglomerată: sensibilitatea la aglomerație crește costul relativ al rutei încărcate.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "congestie",
+        "unit": "s",
+        "lowValue": 0,
+        "highValue": 2,
+        "lowOutcome": 20.000000000000007,
+        "highOutcome": 0,
+        "difference": -20.000000000000007
+      }
+    },
+    {
+      "key": "reroute_patience",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/route-policy-v2.ts",
+        "symbol": "evaluateRoutePolicyV2"
+      },
+      "estimator": {
+        "module": "src/learning/route-v2-estimator.ts",
+        "symbol": "estimateRouteV2Style"
+      },
+      "evidence": "Docs/Evidence/181-v2-route-policy/",
+      "test": {
+        "path": "tests/autonomy/route-policy-v2.test.ts",
+        "title": "181 gives every key its own observable effect, on comparable real alternatives"
+      },
+      "scenario": "Blocaj: recalcularea așteaptă răbdarea declarată înainte de a schimba ruta.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "rerutare",
+        "unit": "ticks",
+        "lowValue": 2,
+        "highValue": 120,
+        "lowOutcome": 60,
+        "highOutcome": 7140,
+        "difference": 7080
+      }
+    },
+    {
+      "key": "u_turn_willingness",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/route-policy-v2.ts",
+        "symbol": "evaluateRoutePolicyV2"
+      },
+      "estimator": {
+        "module": "src/learning/route-v2-estimator.ts",
+        "symbol": "estimateRouteV2Style"
+      },
+      "evidence": "Docs/Evidence/181-v2-route-policy/",
+      "test": {
+        "path": "tests/autonomy/route-policy-v2.test.ts",
+        "title": "181 gives every key its own observable effect, on comparable real alternatives"
+      },
+      "scenario": "Întoarcere interzisă de hartă: disponibilitatea nu poate admite o întoarcere nedorită și se eșantionează o dată per oportunitate.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "întoarcere",
+        "unit": "s",
+        "lowValue": 0,
+        "highValue": 1,
+        "lowOutcome": 66.05551275463989,
+        "highOutcome": 40.04876631265462,
+        "difference": -26.00674644198527
+      }
+    },
+    {
+      "key": "reverse_recovery_duration",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/route-policy-v2.ts",
+        "symbol": "evaluateRoutePolicyV2"
+      },
+      "estimator": {
+        "module": "src/learning/route-v2-estimator.ts",
+        "symbol": "estimateRouteV2Style"
+      },
+      "evidence": "Docs/Evidence/181-v2-route-policy/",
+      "test": {
+        "path": "tests/autonomy/route-policy-v2.test.ts",
+        "title": "181 gives every key its own observable effect, on comparable real alternatives"
+      },
+      "scenario": "Recuperare: durata de marșarier este podeaua cerută și nu se aplică fără spațiu liber declarat.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "recuperare",
+        "unit": "s",
+        "lowValue": 0,
+        "highValue": 8,
+        "lowOutcome": 2.5,
+        "highOutcome": 8,
+        "difference": 5.5
+      }
+    },
+    {
+      "key": "pedestrian_yield_probability",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/hazard-policy-v2.ts",
+        "symbol": "evaluateHazardPolicyV2"
+      },
+      "estimator": {
+        "module": "src/learning/hazard-v2-estimator.ts",
+        "symbol": "estimateHazardV2Style"
+      },
+      "evidence": "Docs/Evidence/183-v2-hazard-policy/",
+      "test": {
+        "path": "tests/autonomy/hazard-policy-v2.test.ts",
+        "title": "183 gives every key its own observable effect at the two catalog extremes"
+      },
+      "scenario": "Pieton în traversare: probabilitatea decide cedarea pe eșantionul oportunității.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "traversare",
+        "unit": "decizie",
+        "lowValue": 0,
+        "highValue": 1,
+        "lowOutcome": 0,
+        "highOutcome": 1,
+        "difference": 1
+      }
+    },
+    {
+      "key": "pedestrian_clearance",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/hazard-policy-v2.ts",
+        "symbol": "evaluateHazardPolicyV2"
+      },
+      "estimator": {
+        "module": "src/learning/hazard-v2-estimator.ts",
+        "symbol": "estimateHazardV2Style"
+      },
+      "evidence": "Docs/Evidence/183-v2-hazard-policy/",
+      "test": {
+        "path": "tests/autonomy/hazard-policy-v2.test.ts",
+        "title": "183 gives every key its own observable effect at the two catalog extremes"
+      },
+      "scenario": "Pieton: spațiul cerut este o podea fizică peste marja vehiculului.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "pieton la bordură",
+        "unit": "m/s",
+        "lowValue": 0.1,
+        "highValue": 6,
+        "lowOutcome": 6.2289646009589745,
+        "highOutcome": 4.898979485566356,
+        "difference": -1.3299851153926188
+      }
+    },
+    {
+      "key": "hazard_reaction_delay",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/hazard-policy-v2.ts",
+        "symbol": "evaluateHazardPolicyV2"
+      },
+      "estimator": {
+        "module": "src/learning/hazard-v2-estimator.ts",
+        "symbol": "estimateHazardV2Style"
+      },
+      "evidence": "Docs/Evidence/183-v2-hazard-policy/",
+      "test": {
+        "path": "tests/autonomy/hazard-policy-v2.test.ts",
+        "title": "183 gives every key its own observable effect at the two catalog extremes"
+      },
+      "scenario": "Stimul de pericol: reacția este întârziată și saturată de spațiul real disponibil.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "reacție",
+        "unit": "m",
+        "lowValue": 0,
+        "highValue": 3,
+        "lowOutcome": 28.000000000000014,
+        "highOutcome": 4.000000000000014,
+        "difference": -24
+      }
+    },
+    {
+      "key": "obstacle_clearance",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/hazard-policy-v2.ts",
+        "symbol": "evaluateHazardPolicyV2"
+      },
+      "estimator": {
+        "module": "src/learning/hazard-v2-estimator.ts",
+        "symbol": "estimateHazardV2Style"
+      },
+      "evidence": "Docs/Evidence/183-v2-hazard-policy/",
+      "test": {
+        "path": "tests/autonomy/hazard-policy-v2.test.ts",
+        "title": "183 gives every key its own observable effect at the two catalog extremes"
+      },
+      "scenario": "Obstacol pe bandă: spațiul cerut este o podea fizică și nu permite avansarea prin obstacol.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "obstacol",
+        "unit": "m/s",
+        "lowValue": 0.1,
+        "highValue": 4,
+        "lowOutcome": 6.32455532033676,
+        "highOutcome": 5.549774770204644,
+        "difference": -0.7747805501321157
+      }
+    },
+    {
+      "key": "emergency_brake_intensity",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/hazard-policy-v2.ts",
+        "symbol": "evaluateHazardPolicyV2"
+      },
+      "estimator": {
+        "module": "src/learning/hazard-v2-estimator.ts",
+        "symbol": "estimateHazardV2Style"
+      },
+      "evidence": "Docs/Evidence/183-v2-hazard-policy/",
+      "test": {
+        "path": "tests/autonomy/hazard-policy-v2.test.ts",
+        "title": "183 gives every key its own observable effect at the two catalog extremes"
+      },
+      "scenario": "Frânare de urgență: intensitatea este fracția din capacitatea disponibilă, plafonată de aderență.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "frânare de urgență",
+        "unit": "m/s²",
+        "lowValue": 0,
+        "highValue": 1,
+        "lowOutcome": 0,
+        "highOutcome": 8,
+        "difference": 8
+      }
+    },
+    {
+      "key": "evasive_steer_willingness",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/hazard-policy-v2.ts",
+        "symbol": "evaluateHazardPolicyV2"
+      },
+      "estimator": {
+        "module": "src/learning/hazard-v2-estimator.ts",
+        "symbol": "estimateHazardV2Style"
+      },
+      "evidence": "Docs/Evidence/183-v2-hazard-policy/",
+      "test": {
+        "path": "tests/autonomy/hazard-policy-v2.test.ts",
+        "title": "183 gives every key its own observable effect at the two catalog extremes"
+      },
+      "scenario": "Maneveră evazivă: disponibilitatea este subordonată spațiului lateral verificat.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "ocolire",
+        "unit": "m",
+        "lowValue": 0,
+        "highValue": 1,
+        "lowOutcome": 0,
+        "highOutcome": 0.44999999999999996,
+        "difference": 0.44999999999999996
+      }
+    },
+    {
+      "key": "crosswalk_approach_speed",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/hazard-policy-v2.ts",
+        "symbol": "evaluateHazardPolicyV2"
+      },
+      "estimator": {
+        "module": "src/learning/hazard-v2-estimator.ts",
+        "symbol": "estimateHazardV2Style"
+      },
+      "evidence": "Docs/Evidence/183-v2-hazard-policy/",
+      "test": {
+        "path": "tests/autonomy/hazard-policy-v2.test.ts",
+        "title": "183 gives every key its own observable effect at the two catalog extremes"
+      },
+      "scenario": "Apropiere de trecere: viteza este un plafon, limitat de distanța de oprire.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "apropiere de trecere",
+        "unit": "m/s",
+        "lowValue": 0.5,
+        "highValue": 15,
+        "lowOutcome": 0.5,
+        "highOutcome": 15,
+        "difference": 14.5
+      }
+    },
+    {
+      "key": "horn_use_probability",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/hazard-policy-v2.ts",
+        "symbol": "evaluateHazardPolicyV2"
+      },
+      "estimator": {
+        "module": "src/learning/hazard-v2-estimator.ts",
+        "symbol": "estimateHazardV2Style"
+      },
+      "evidence": "Docs/Evidence/183-v2-hazard-policy/",
+      "test": {
+        "path": "tests/autonomy/hazard-policy-v2.test.ts",
+        "title": "183 gives every key its own observable effect at the two catalog extremes"
+      },
+      "scenario": "Oportunitate de claxon: probabilitatea este subordonată permisiunii lumii și eșantionată o dată.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "claxon",
+        "unit": "decizie",
+        "lowValue": 0,
+        "highValue": 1,
+        "lowOutcome": 0,
+        "highOutcome": 1,
+        "difference": 1
+      }
+    },
+    {
+      "key": "pickup_approach_speed",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/pickup-policy-v2.ts",
+        "symbol": "evaluatePickupPolicyV2"
+      },
+      "estimator": {
+        "module": "src/learning/pickup-v2-estimator.ts",
+        "symbol": "estimatePickupV2Style"
+      },
+      "evidence": "Docs/Evidence/185-v2-pickup-policy/",
+      "test": {
+        "path": "tests/autonomy/pickup-policy-v2.test.ts",
+        "title": "185 gives every key its own observable effect at the two catalog extremes"
+      },
+      "scenario": "Apropiere de pickup: viteza este plafonată de distanța până la punctul marcat.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "apropiere pickup",
+        "unit": "m/s",
+        "lowValue": 0.5,
+        "highValue": 8,
+        "lowOutcome": 0.5,
+        "highOutcome": 5.5677643628300215,
+        "difference": 5.0677643628300215
+      }
+    },
+    {
+      "key": "pickup_curb_distance",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/pickup-policy-v2.ts",
+        "symbol": "evaluatePickupPolicyV2"
+      },
+      "estimator": {
+        "module": "src/learning/pickup-v2-estimator.ts",
+        "symbol": "estimatePickupV2Style"
+      },
+      "evidence": "Docs/Evidence/185-v2-pickup-policy/",
+      "test": {
+        "path": "tests/autonomy/pickup-policy-v2.test.ts",
+        "title": "185 gives every key its own observable effect at the two catalog extremes"
+      },
+      "scenario": "Zonă de serviciu: distanța față de bordură este o bandă cu podea.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "distanța la bordură (pickup)",
+        "unit": "m",
+        "lowValue": 0.1,
+        "highValue": 2,
+        "lowOutcome": 0.15,
+        "highOutcome": 1.2,
+        "difference": 1.05
+      }
+    },
+    {
+      "key": "pickup_stop_precision",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/pickup-policy-v2.ts",
+        "symbol": "evaluatePickupPolicyV2"
+      },
+      "estimator": {
+        "module": "src/learning/pickup-v2-estimator.ts",
+        "symbol": "estimatePickupV2Style"
+      },
+      "evidence": "Docs/Evidence/185-v2-pickup-policy/",
+      "test": {
+        "path": "tests/autonomy/pickup-policy-v2.test.ts",
+        "title": "185 gives every key its own observable effect at the two catalog extremes"
+      },
+      "scenario": "Oprire la pickup: fereastra de precizie rămâne în interiorul zonei.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "precizia opririi",
+        "unit": "m",
+        "lowValue": 0.2,
+        "highValue": 5,
+        "lowOutcome": 0.2,
+        "highOutcome": 2.75,
+        "difference": 2.55
+      }
+    },
+    {
+      "key": "pickup_dwell_time",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/pickup-policy-v2.ts",
+        "symbol": "evaluatePickupPolicyV2"
+      },
+      "estimator": {
+        "module": "src/learning/pickup-v2-estimator.ts",
+        "symbol": "estimatePickupV2Style"
+      },
+      "evidence": "Docs/Evidence/185-v2-pickup-policy/",
+      "test": {
+        "path": "tests/autonomy/pickup-policy-v2.test.ts",
+        "title": "185 gives every key its own observable effect at the two catalog extremes"
+      },
+      "scenario": "Staționare la pickup: durata crește până la dovada îmbarcării și nu pleacă înainte de confirmarea 061.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "staționarea la pickup",
+        "unit": "s",
+        "lowValue": 1,
+        "highValue": 10,
+        "lowOutcome": 3,
+        "highOutcome": 10,
+        "difference": 7
+      }
+    },
+    {
+      "key": "dropoff_approach_speed",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/pickup-policy-v2.ts",
+        "symbol": "evaluatePickupPolicyV2"
+      },
+      "estimator": {
+        "module": "src/learning/pickup-v2-estimator.ts",
+        "symbol": "estimatePickupV2Style"
+      },
+      "evidence": "Docs/Evidence/185-v2-pickup-policy/",
+      "test": {
+        "path": "tests/autonomy/pickup-policy-v2.test.ts",
+        "title": "185 gives every key its own observable effect at the two catalog extremes"
+      },
+      "scenario": "Apropiere de dropoff: viteza este plafonată de distanța până la punctul marcat.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "apropiere dropoff",
+        "unit": "m/s",
+        "lowValue": 0.5,
+        "highValue": 8,
+        "lowOutcome": 0.5,
+        "highOutcome": 5.5677643628300215,
+        "difference": 5.0677643628300215
+      }
+    },
+    {
+      "key": "dropoff_curb_distance",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/pickup-policy-v2.ts",
+        "symbol": "evaluatePickupPolicyV2"
+      },
+      "estimator": {
+        "module": "src/learning/pickup-v2-estimator.ts",
+        "symbol": "estimatePickupV2Style"
+      },
+      "evidence": "Docs/Evidence/185-v2-pickup-policy/",
+      "test": {
+        "path": "tests/autonomy/pickup-policy-v2.test.ts",
+        "title": "185 gives every key its own observable effect at the two catalog extremes"
+      },
+      "scenario": "Dropoff: distanța față de bordură este o bandă cu podea.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "distanța la bordură (dropoff)",
+        "unit": "m",
+        "lowValue": 0.1,
+        "highValue": 2,
+        "lowOutcome": 0.15,
+        "highOutcome": 1.2,
+        "difference": 1.05
+      }
+    },
+    {
+      "key": "occupied_acceleration_scale",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/pickup-policy-v2.ts",
+        "symbol": "evaluatePickupPolicyV2"
+      },
+      "estimator": {
+        "module": "src/learning/pickup-v2-estimator.ts",
+        "symbol": "estimatePickupV2Style"
+      },
+      "evidence": "Docs/Evidence/185-v2-pickup-policy/",
+      "test": {
+        "path": "tests/autonomy/pickup-policy-v2.test.ts",
+        "title": "185 gives every key its own observable effect at the two catalog extremes"
+      },
+      "scenario": "Cu pasager la bord: scara înmulțește accelerația M și este plafonată de confort și aderență.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "accelerația cu pasager",
+        "unit": "m/s²",
+        "lowValue": 0.3,
+        "highValue": 1.5,
+        "lowOutcome": 0.44999999999999996,
+        "highOutcome": 2,
+        "difference": 1.55
+      }
+    },
+    {
+      "key": "occupied_lateral_accel_scale",
+      "policy": {
+        "kind": "V2",
+        "module": "src/autonomy/pickup-policy-v2.ts",
+        "symbol": "evaluatePickupPolicyV2"
+      },
+      "estimator": {
+        "module": "src/learning/pickup-v2-estimator.ts",
+        "symbol": "estimatePickupV2Style"
+      },
+      "evidence": "Docs/Evidence/185-v2-pickup-policy/",
+      "test": {
+        "path": "tests/autonomy/pickup-policy-v2.test.ts",
+        "title": "185 gives every key its own observable effect at the two catalog extremes"
+      },
+      "scenario": "Cu pasager la bord: scara înmulțește accelerația laterală M și este plafonată de confort și aderență.",
+      "effect": {
+        "kind": "MEASURED",
+        "scenario": "accelerația laterală cu pasager",
+        "unit": "m/s²",
+        "lowValue": 0.3,
+        "highValue": 1.5,
+        "lowOutcome": 0.75,
+        "highOutcome": 2.5,
+        "difference": 1.75
+      }
+    }
+  ],
+  "findings": [],
+  "verdict": "PASS",
+  "summary": "80/80 keys with policy, evidence and independent test"
+}

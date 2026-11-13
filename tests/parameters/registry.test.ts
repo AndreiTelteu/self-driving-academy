@@ -12,6 +12,7 @@ import {
   validateParameterValue,
 } from '../../src/profiles';
 import type { ParameterKey } from '../../src/profiles';
+import { getParameterCapability } from '../../src/profiles/parameter-capabilities';
 import { ContractValidationError } from '../../src/sessions';
 
 const canonicalPath = new URL('../../Docs/driving-parameters.json', import.meta.url);
@@ -51,7 +52,7 @@ function profile(key = 'following_time_headway', source = 'BASE') {
   };
 }
 
-test('80 unique keys, 24 M targets; planned stages grant no capabilities', () => {
+test('80 unique keys, 24 M targets; capabilities come only from the certified 187 table', () => {
   const typedKey: ParameterKey = 'speed_delta_urban';
   assert.equal(parameterRegistry[typedKey].key, typedKey);
   assert.equal(parameterDefinitions.length, 80);
@@ -62,39 +63,20 @@ test('80 unique keys, 24 M targets; planned stages grant no capabilities', () =>
       .length,
     24,
   );
-  assert(parameterDefinitions.every((entry) => !entry.estimable));
-  assert.deepEqual(
-    parameterDefinitions.filter((entry) => entry.implemented).map((entry) => entry.key),
-    [
-      'speed_delta_urban',
-      'speed_delta_residential',
-      'curve_lateral_accel',
-      'intersection_approach_speed',
-      'desired_acceleration',
-      'comfort_deceleration',
-      'acceleration_jerk',
-      'brake_reaction_delay',
-      'following_time_headway',
-      'following_min_gap',
-      'queue_standstill_gap',
-      'following_speed_gain',
-      'red_stop_probability',
-      'green_start_delay',
-      'red_stop_line_offset',
-      'late_red_brake_threshold',
-      'stop_full_probability',
-      'stop_dwell_time',
-      'stop_line_offset',
-      'lane_change_front_gap',
-      'lane_change_back_gap',
-      'lane_change_speed_gain',
-      'lane_change_cooldown',
-    ],
-  );
+  // Every key derives its capability from the single certified table, never from the JSON.
+  for (const entry of parameterDefinitions) {
+    const capability = getParameterCapability(entry.key);
+    assert(capability !== undefined, entry.key);
+    assert.equal(entry.implemented, capability.policy !== null, entry.key);
+    assert.equal(entry.estimable, capability.estimator !== null, entry.key);
+  }
+  assert.equal(parameterDefinitions.filter((entry) => entry.implemented).length, 80);
+  assert.equal(parameterDefinitions.filter((entry) => entry.estimable).length, 80);
+  // The data catalog remains fail-closed: it grants no capability at all.
   assert(parseParameterCatalog(catalog()).every((entry) => !entry.implemented && !entry.estimable));
   assert.deepEqual(
     parseParameterCatalog(catalog()),
-    parameterDefinitions.map((entry) => ({ ...entry, implemented: false })),
+    parameterDefinitions.map((entry) => ({ ...entry, implemented: false, estimable: false })),
   );
 });
 
@@ -125,13 +107,17 @@ test('every key validates default, inclusive bounds, canonical unit and finite r
   assert.equal(getParameterDefinition('route_time_weight').unit, 'weight');
 });
 
-test('publication gate rejects LEARNED and manual tuning for all unsupported keys', () => {
+test('publication gate accepts LEARNED and manual tuning only where the gate certified the key', () => {
   for (const entry of parameterDefinitions) {
+    const capability = getParameterCapability(entry.key);
+    assert(capability !== undefined, entry.key);
+    const hasPolicy = capability.policy !== null;
+    const hasEstimator = capability.estimator !== null;
     for (const source of ['LEARNED', 'MANUAL_TUNING']) {
       const candidate = profile(entry.key, source);
       assert.doesNotThrow(() => parseDrivingProfile(candidate));
-      if (source === 'MANUAL_TUNING' && entry.implemented)
-        assert.doesNotThrow(() => parsePublishableDrivingProfile(candidate));
+      const allowed = source === 'LEARNED' ? hasPolicy && hasEstimator : hasPolicy;
+      if (allowed) assert.doesNotThrow(() => parsePublishableDrivingProfile(candidate));
       else assert.throws(() => parsePublishableDrivingProfile(candidate), ContractValidationError);
     }
     for (const source of ['BASE', 'IMPORTED']) {
@@ -139,6 +125,13 @@ test('publication gate rejects LEARNED and manual tuning for all unsupported key
       assert.deepEqual(parsePublishableDrivingProfile(candidate), parseDrivingProfile(candidate));
     }
   }
+  // The publication gate still refuses an unknown key regardless of provenance.
+  const unknown = profile('following_time_headway', 'LEARNED');
+  unknown.parameters = { unknown_key: 1 };
+  unknown.unitsByParameter = { unknown_key: 's' };
+  unknown.provenanceByParameter = { unknown_key: 'LEARNED' };
+  unknown.evidenceByParameter = { unknown_key: null };
+  assert.throws(() => parsePublishableDrivingProfile(unknown), ContractValidationError);
 });
 
 test('publication gate rejects unknown keys, wrong units and invalid ranges for all provenance', () => {

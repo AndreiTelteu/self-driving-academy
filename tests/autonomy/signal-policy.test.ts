@@ -128,7 +128,7 @@ const RED_REFERENCE: ReferenceSignalInput = {
   complianceSample: 0,
 };
 
-test('050 projectSignalProfile reads only its four published values and does not grant estimator support', () => {
+test('050 projectSignalProfile reads only its four published values; the 187 gate certifies the estimator', () => {
   const projected = projectSignalProfile(published({ red_stop_probability: 0.25 }));
   assert.deepEqual(projected, {
     versionId: 'signal-base-v1',
@@ -145,7 +145,7 @@ test('050 projectSignalProfile reads only its four published values and does not
     'late_red_brake_threshold',
   ]) {
     assert.equal(getParameterDefinition(key).implemented, true);
-    assert.equal(getParameterDefinition(key).estimable, false);
+    assert.equal(getParameterDefinition(key).estimable, true);
   }
   assert.equal(getParameterDefinition('red_stop_probability').unit, 'probability');
   assert.throws(() =>

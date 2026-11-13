@@ -40,7 +40,7 @@ function packet(): YieldPolicyInput {
     ],
   };
 }
-test('selected common published profile is immutable and grants no estimator/publication capability', () => {
+test('selected common published profile is immutable and the 187 gate certifies its estimator', () => {
   const profile = parsePublishableDrivingProfile({
     schemaVersion: 1,
     units: 'SI',
@@ -59,7 +59,7 @@ test('selected common published profile is immutable and grants no estimator/pub
   const projected = projectYieldProfile(profile);
   assert.deepEqual(projected, { versionId: 'base-v1', yieldTimeGapS: 0.2 });
   assert(Object.isFrozen(projected));
-  assert.equal(getParameterDefinition('yield_time_gap').estimable, false);
+  assert.equal(getParameterDefinition('yield_time_gap').estimable, true);
   assert.throws(() =>
     projectYieldProfile({ ...profile, unitsByParameter: { yield_time_gap: 'm' } }),
   );

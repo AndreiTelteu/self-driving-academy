@@ -13,6 +13,7 @@ import {
   profileStoreRejectionCodes,
   verifyProfileVersionChecksum,
 } from '../../src/profiles';
+import { getParameterCapability } from '../../src/profiles/parameter-capabilities';
 import type {
   ProfileDeltaRequest,
   ProfileDeltaValidator,
@@ -681,8 +682,15 @@ test('109 the store never publishes, marks LEARNED or activates 092 capabilities
     definition.estimable,
   ]);
   assert.deepEqual(after, before);
-  assert(parameterDefinitions.every((definition) => !definition.estimable));
-  assert.equal(parameterRegistry.route_turn_penalty.implemented, false);
+  assert(
+    parameterDefinitions.every((definition) => {
+      const capability = getParameterCapability(definition.key);
+      return capability !== undefined && definition.estimable === (capability.estimator !== null);
+    }),
+  );
+  const routePenalty = getParameterCapability('route_turn_penalty');
+  assert(routePenalty !== undefined);
+  assert.equal(parameterRegistry.route_turn_penalty.implemented, routePenalty.policy !== null);
   assert.equal(PROFILE_STORE_POLICY.publishesProfile, false);
   assert.equal(PROFILE_STORE_POLICY.publishesDelta, false);
   assert.equal(PROFILE_STORE_POLICY.marksLearned, false);
