@@ -16,9 +16,9 @@ niciun rând `DEFAULT`/`UNSET` nu are dovezi, încredere sau estimări.
 | Chei moștenite din V1 | **4** |
 | Chei default | **71** |
 | Chei nesetate | **0** |
-| Checksum V2 | `fnv1a64:3e31e4d29b287964` |
+| Checksum V2 | `fnv1a64:ec54f338b21766a2` |
 | Checksum V1 păstrat la rollback | `fixture:academy-style-v7` |
-| Amprenta SHA-256 a raportului | `094228fac6b9332d5597a8ae9343256f05002d09a9eb2bcfa880b8375c4f80ad` |
+| Amprenta SHA-256 a raportului | `2eb61ea13463972d359f165539cc0e4adc7b3ebe6e941087216d1f09c884c455` |
 | Verdict | **PASS** |
 
 ## Verificări
@@ -32,7 +32,7 @@ niciun rând `DEFAULT`/`UNSET` nu are dovezi, încredere sau estimări.
 | `DEFAULTS_ARE_NOT_ESTIMATES` | PASS | Nicio valoare default nu are dovezi sau încredere fabricată. | toate rândurile DEFAULT au evidenceCount 0 și quality 0 |
 | `UI_DECLARES_ALL_KEYS` | PASS | Proiecția pentru UI declară originea, sursa, suportul și dovezile fiecărei chei. | 80 rânduri, fiecare cu origine, suport, sursă de dovezi și motiv |
 | `ROLLBACK_EXACT` | PASS | Rollback-ul întoarce exact profilul V1, cu checksum-ul lui. | 9 chei, checksum fixture:academy-style-v7 |
-| `DETERMINISTIC` | PASS | Două migrări ale aceleiași intrări produc același checksum. | fnv1a64:3e31e4d29b287964 / fnv1a64:3e31e4d29b287964 |
+| `DETERMINISTIC` | PASS | Două migrări ale aceleiași intrări produc același checksum. | fnv1a64:ec54f338b21766a2 / fnv1a64:ec54f338b21766a2 |
 | `SCHEMA_TOO_NEW_REFUSED` | PASS | O schemă mai nouă este refuzată explicit, nu interpretată. | SCHEMA_TOO_NEW |
 | `CATALOG_TOO_NEW_REFUSED` | PASS | Un catalog mai nou este refuzat explicit. | CATALOG_TOO_NEW |
 | `INVALID_ENTRY_REFUSED` | PASS | Un document V2 incomplet este refuzat. | INVALID_PROFILE |
@@ -91,7 +91,7 @@ niciun rând `DEFAULT`/`UNSET` nu are dovezi, încredere sau estimări.
 | `stop_full_probability` | V1 | DEFAULT | catalog:092-catalog-1@2026-10-04#default | SUPPORTED | CATALOG_DEFAULT | 1 | 0 |
 | `stop_dwell_time` | V1 | INHERITED_V1 | v1:BASE | SUPPORTED | V1_PROVENANCE | 1.9 | 0 |
 | `stop_line_offset` | V1 | DEFAULT | catalog:092-catalog-1@2026-10-04#default | SUPPORTED | CATALOG_DEFAULT | 1 | 0 |
-| `yield_time_gap` | V1 | INHERITED_V1 | v1:BASE | DEFAULT_ONLY | V1_PROVENANCE | 4 | 0 |
+| `yield_time_gap` | V1 | INHERITED_V1 | v1:BASE | SUPPORTED | V1_PROVENANCE | 4 | 0 |
 | `rolling_stop_speed` | R | DEFAULT | catalog:092-catalog-1@2026-10-04#default | RESERVED | CATALOG_DEFAULT | 1 | 0 |
 | `priority_assertiveness` | R | DEFAULT | catalog:092-catalog-1@2026-10-04#default | RESERVED | CATALOG_DEFAULT | 0.3 | 0 |
 | `allway_stop_patience` | R | DEFAULT | catalog:092-catalog-1@2026-10-04#default | RESERVED | CATALOG_DEFAULT | 2 | 0 |

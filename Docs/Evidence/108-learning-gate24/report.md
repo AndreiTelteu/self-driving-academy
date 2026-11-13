@@ -17,7 +17,7 @@ five sources agree; the gate is never forced closed.
 - 105 scenario rows: 96
 - 107 cases read: 13
 - Matrix errors: None.
-- Signature: `fnv1a64:a7dc00cd4e0dbc08`
+- Signature: `fnv1a64:dd707a29b9c06871`
 
 ## Dedicated versus carrier opportunities
 
