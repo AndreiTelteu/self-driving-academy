@@ -20,3 +20,4 @@ export * from './lane-v2-estimator';
 export * from './lateral-v2-estimator';
 export * from './route-v2-estimator';
 export * from './hazard-v2-estimator';
+export * from './pickup-v2-estimator';

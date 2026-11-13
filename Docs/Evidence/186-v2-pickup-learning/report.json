@@ -1,0 +1,849 @@
+{
+  "version": "186-pickup-estimator-v1",
+  "parameters": [
+    {
+      "key": "pickup_approach_speed",
+      "unit": "m/s",
+      "minimum": 0.5,
+      "maximum": 8,
+      "defaultValue": 3
+    },
+    {
+      "key": "pickup_curb_distance",
+      "unit": "m",
+      "minimum": 0.1,
+      "maximum": 2,
+      "defaultValue": 0.5
+    },
+    {
+      "key": "pickup_stop_precision",
+      "unit": "m",
+      "minimum": 0.2,
+      "maximum": 5,
+      "defaultValue": 1
+    },
+    {
+      "key": "pickup_dwell_time",
+      "unit": "s",
+      "minimum": 1,
+      "maximum": 10,
+      "defaultValue": 3
+    },
+    {
+      "key": "dropoff_approach_speed",
+      "unit": "m/s",
+      "minimum": 0.5,
+      "maximum": 8,
+      "defaultValue": 3
+    },
+    {
+      "key": "dropoff_curb_distance",
+      "unit": "m",
+      "minimum": 0.1,
+      "maximum": 2,
+      "defaultValue": 0.5
+    },
+    {
+      "key": "occupied_acceleration_scale",
+      "unit": "ratio",
+      "minimum": 0.3,
+      "maximum": 1.5,
+      "defaultValue": 0.85
+    },
+    {
+      "key": "occupied_lateral_accel_scale",
+      "unit": "ratio",
+      "minimum": 0.3,
+      "maximum": 1.5,
+      "defaultValue": 0.85
+    }
+  ],
+  "rows": [
+    {
+      "key": "pickup_approach_speed",
+      "scenario": "PICKUP_APPROACH",
+      "unit": "m/s",
+      "context": "un tick de fază PICKUP în care oprirea este permisă de pragurile obligatorii și în care plafonul cinematic nu leagă: comanda este `min(cheie, sqrt(2 · comfort_deceleration · distanță))`, deci viteza raportată este chiar cheia; o comandă pe plafon dovedește doar `cheie ≥ plafon`",
+      "status": "CANDIDATE",
+      "value": 3,
+      "uncertainty": 0.05,
+      "uncertaintyThreshold": 0.5,
+      "estimateEpisodes": 2,
+      "validationEpisodes": 2,
+      "validationStatus": "VALIDATED",
+      "validationValue": 3,
+      "validationError": 0,
+      "validationTolerance": 0.5,
+      "reason": null
+    },
+    {
+      "key": "pickup_curb_distance",
+      "scenario": "PICKUP_CURB",
+      "unit": "m",
+      "context": "un tick de fază PICKUP cu oprirea permisă, în care distanța efectivă la bordură este strict în interiorul benzii autorate: `clamp(cheie, 0,15 m, adâncime − ecartament)` este identitatea, deci valoarea raportată este cheia; o valoare pe oricare margine este unilaterală",
+      "status": "CANDIDATE",
+      "value": 0.5,
+      "uncertainty": 0.05,
+      "uncertaintyThreshold": 0.15,
+      "estimateEpisodes": 8,
+      "validationEpisodes": 8,
+      "validationStatus": "VALIDATED",
+      "validationValue": 0.5,
+      "validationError": 0,
+      "validationTolerance": 0.15,
+      "reason": null
+    },
+    {
+      "key": "pickup_stop_precision",
+      "scenario": "PICKUP_PRECISION",
+      "unit": "m",
+      "context": "un tick de fază PICKUP cu oprirea permisă, în care toleranța efectivă nu atinge nici podeaua fizică de 0,05 m, nici plafonul `min(punct, lungime − punct)`: valoarea este cheia, iar o valoare la plafon este ambiguă",
+      "status": "CANDIDATE",
+      "value": 1,
+      "uncertainty": 0.05,
+      "uncertaintyThreshold": 0.25,
+      "estimateEpisodes": 8,
+      "validationEpisodes": 8,
+      "validationStatus": "VALIDATED",
+      "validationValue": 1,
+      "validationError": 0,
+      "validationTolerance": 0.25,
+      "reason": null
+    },
+    {
+      "key": "pickup_dwell_time",
+      "scenario": "PICKUP_DWELL",
+      "unit": "s",
+      "context": "un tick de fază PICKUP cu oprirea permisă, în care staționarea efectivă este strict peste podeaua `max(3 s, M stop_dwell_time)`: valoarea raportată este cheia; pe podea, orice cheie sub ea produce aceeași durată",
+      "status": "CANDIDATE",
+      "value": 5,
+      "uncertainty": 0.15,
+      "uncertaintyThreshold": 0.5,
+      "estimateEpisodes": 8,
+      "validationEpisodes": 8,
+      "validationStatus": "VALIDATED",
+      "validationValue": 5,
+      "validationError": 0,
+      "validationTolerance": 0.5,
+      "reason": null
+    },
+    {
+      "key": "dropoff_approach_speed",
+      "scenario": "DROPOFF_APPROACH",
+      "unit": "m/s",
+      "context": "același plafon cinematic, pe un tick de fază DROPOFF cu oprirea permisă: viteza raportată sub plafon este a doua preferință de apropiere, distinctă de cea de pickup",
+      "status": "CANDIDATE",
+      "value": 3,
+      "uncertainty": 0.05,
+      "uncertaintyThreshold": 0.5,
+      "estimateEpisodes": 2,
+      "validationEpisodes": 2,
+      "validationStatus": "VALIDATED",
+      "validationValue": 3,
+      "validationError": 0,
+      "validationTolerance": 0.5,
+      "reason": null
+    },
+    {
+      "key": "dropoff_curb_distance",
+      "scenario": "DROPOFF_CURB",
+      "unit": "m",
+      "context": "aceeași bandă autorată a bordurii, pe un tick de fază DROPOFF cu oprirea permisă: distanța efectivă din interiorul benzii este a doua preferință de bordură",
+      "status": "CANDIDATE",
+      "value": 0.5,
+      "uncertainty": 0.05,
+      "uncertaintyThreshold": 0.15,
+      "estimateEpisodes": 4,
+      "validationEpisodes": 4,
+      "validationStatus": "VALIDATED",
+      "validationValue": 0.5,
+      "validationError": 0,
+      "validationTolerance": 0.15,
+      "reason": null
+    },
+    {
+      "key": "occupied_acceleration_scale",
+      "scenario": "OCCUPIED_ACCELERATION",
+      "unit": "ratio",
+      "context": "un tick cu pasager la bord (061 `TO_DROPOFF`/`DROPOFF`) în care scara este aplicată și niciun plafon nu leagă: `comandat / desired_acceleration` este cheia; sub plafonul de confort sau de aderență, comanda dovedește doar `cheie ≥ plafon / bază`",
+      "status": "CANDIDATE",
+      "value": 0.85,
+      "uncertainty": 0.02,
+      "uncertaintyThreshold": 0.15,
+      "estimateEpisodes": 8,
+      "validationEpisodes": 8,
+      "validationStatus": "VALIDATED",
+      "validationValue": 0.85,
+      "validationError": 0,
+      "validationTolerance": 0.15,
+      "reason": null
+    },
+    {
+      "key": "occupied_lateral_accel_scale",
+      "scenario": "OCCUPIED_LATERAL_ACCEL",
+      "unit": "ratio",
+      "context": "același tick cu pasager la bord, pe canalul lateral: `comandat / curve_lateral_accel` este cheia numai când `min(curve_lateral_accel, aderență)` nu taie cererea",
+      "status": "CANDIDATE",
+      "value": 0.85,
+      "uncertainty": 0.02,
+      "uncertaintyThreshold": 0.12,
+      "estimateEpisodes": 8,
+      "validationEpisodes": 8,
+      "validationStatus": "VALIDATED",
+      "validationValue": 0.85,
+      "validationError": 0,
+      "validationTolerance": 0.12,
+      "reason": null
+    }
+  ],
+  "unobserved": [
+    {
+      "key": "pickup_approach_speed",
+      "scenario": "PICKUP_APPROACH",
+      "demonstration": "cheie de 8 m/s pe apropierea reală de 7,75 m: plafonul cinematic de 5,567764 m/s o taie",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "PICKUP_APPROACH_SPEED_SATURATED",
+      "excluded": {
+        "PICKUP_APPROACH_SPEED_SATURATED": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "pickup_approach_speed",
+      "scenario": "PICKUP_APPROACH",
+      "demonstration": "ego oprit exact pe punctul marcat: plafonul este 0 m/s, un zero structural, nu o preferință",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "PICKUP_APPROACH_SPEED_SATURATED",
+      "excluded": {
+        "PICKUP_APPROACH_SPEED_SATURATED": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "pickup_curb_distance",
+      "scenario": "PICKUP_CURB",
+      "demonstration": "cheie de 0,10 m sub rezerva de caroserie: comanda este podeaua de 0,15 m",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "CURB_DISTANCE_FLOOR_SATURATED",
+      "excluded": {
+        "CURB_DISTANCE_FLOOR_SATURATED": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "pickup_curb_distance",
+      "scenario": "PICKUP_CURB",
+      "demonstration": "cheie de 2 m pe bay-ul real de 3,00 m: plafonul sedanului este 1,20 m",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "CURB_DISTANCE_BAND_SATURATED",
+      "excluded": {
+        "CURB_DISTANCE_BAND_SATURATED": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "pickup_stop_precision",
+      "scenario": "PICKUP_PRECISION",
+      "demonstration": "cheie de 1 m pe un punct marcat la 0,50 m de margine: plafonul este 0,50 m",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "PICKUP_STOP_PRECISION_CAP_SATURATED",
+      "excluded": {
+        "PICKUP_STOP_PRECISION_CAP_SATURATED": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "pickup_dwell_time",
+      "scenario": "PICKUP_DWELL",
+      "demonstration": "cheie de 1 s sub dovada de îmbarcare de 3 s: comanda este podeaua",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "PICKUP_DWELL_FLOOR_SATURATED",
+      "excluded": {
+        "PICKUP_DWELL_FLOOR_SATURATED": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "pickup_dwell_time",
+      "scenario": "PICKUP_DWELL",
+      "demonstration": "cheie de 3 s sub un M `stop_dwell_time` de 4 s: podeaua M urcă la 4 s",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "PICKUP_DWELL_FLOOR_SATURATED",
+      "excluded": {
+        "PICKUP_DWELL_FLOOR_SATURATED": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "occupied_acceleration_scale",
+      "scenario": "OCCUPIED_ACCELERATION",
+      "demonstration": "cheie de 1,5 cu `desired_acceleration` 1,5: confortul taie cererea de 2,25 m/s² la 2 m/s²",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "OCCUPIED_ACCELERATION_SCALE_CAP_SATURATED",
+      "excluded": {
+        "OCCUPIED_ACCELERATION_SCALE_CAP_SATURATED": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "occupied_acceleration_scale",
+      "scenario": "OCCUPIED_ACCELERATION",
+      "demonstration": "cheie de 1,5 pe `reduced-adhesion` cu `desired` 4: anvelopa taie la 4,46355 m/s²",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "OCCUPIED_ACCELERATION_SCALE_CAP_SATURATED",
+      "excluded": {
+        "OCCUPIED_ACCELERATION_SCALE_CAP_SATURATED": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "occupied_lateral_accel_scale",
+      "scenario": "OCCUPIED_LATERAL_ACCEL",
+      "demonstration": "cheie de 1,5 pe `reduced-adhesion` cu `curve_lateral_accel` 8: anvelopa taie la 4,46355 m/s²",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "OCCUPIED_LATERAL_ACCEL_SCALE_CAP_SATURATED",
+      "excluded": {
+        "OCCUPIED_LATERAL_ACCEL_SCALE_CAP_SATURATED": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "occupied_acceleration_scale",
+      "scenario": "OCCUPIED_ACCELERATION",
+      "demonstration": "cabină goală (`TO_PICKUP`): scara longitudinală este inertă",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "PASSENGER_NOT_ABOARD",
+      "excluded": {
+        "PASSENGER_NOT_ABOARD": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "occupied_lateral_accel_scale",
+      "scenario": "OCCUPIED_LATERAL_ACCEL",
+      "demonstration": "cabină goală (`TO_PICKUP`): scara laterală este inertă",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "PASSENGER_NOT_ABOARD",
+      "excluded": {
+        "PASSENGER_NOT_ABOARD": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "pickup_approach_speed",
+      "scenario": "PICKUP_APPROACH",
+      "demonstration": "zonă reală cu accesul TAXI refuzat: refuzul ascunde toate cele patru preferințe de pickup",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "PREFERENCE_MASKED_BY_ZONE_ACCESS",
+      "excluded": {
+        "PREFERENCE_MASKED_BY_ZONE_ACCESS": 4,
+        "ZONE_NOT_TAXI": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "pickup_curb_distance",
+      "scenario": "PICKUP_CURB",
+      "demonstration": "zonă reală cu accesul TAXI refuzat: refuzul ascunde toate cele patru preferințe de pickup",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "PREFERENCE_MASKED_BY_ZONE_ACCESS",
+      "excluded": {
+        "PREFERENCE_MASKED_BY_ZONE_ACCESS": 4,
+        "ZONE_NOT_TAXI": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "pickup_stop_precision",
+      "scenario": "PICKUP_PRECISION",
+      "demonstration": "zonă reală cu accesul TAXI refuzat: refuzul ascunde toate cele patru preferințe de pickup",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "PREFERENCE_MASKED_BY_ZONE_ACCESS",
+      "excluded": {
+        "PREFERENCE_MASKED_BY_ZONE_ACCESS": 4,
+        "ZONE_NOT_TAXI": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "pickup_dwell_time",
+      "scenario": "PICKUP_DWELL",
+      "demonstration": "zonă reală cu accesul TAXI refuzat: refuzul ascunde toate cele patru preferințe de pickup",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "PREFERENCE_MASKED_BY_ZONE_ACCESS",
+      "excluded": {
+        "PREFERENCE_MASKED_BY_ZONE_ACCESS": 4,
+        "ZONE_NOT_TAXI": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "dropoff_curb_distance",
+      "scenario": "DROPOFF_CURB",
+      "demonstration": "zona reală `sz:2-2`, numai CIVIL: cele două preferințe de dropoff sunt ascunse",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "PREFERENCE_MASKED_BY_ZONE_ACCESS",
+      "excluded": {
+        "PREFERENCE_MASKED_BY_ZONE_ACCESS": 4,
+        "ZONE_NOT_TAXI": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "dropoff_approach_speed",
+      "scenario": "DROPOFF_APPROACH",
+      "demonstration": "fază DROPOFF pe o zonă autorată PICKUP: tipul zonei refuză oprirea",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "PREFERENCE_MASKED_BY_ZONE_KIND",
+      "excluded": {
+        "PREFERENCE_MASKED_BY_ZONE_KIND": 4,
+        "ZONE_KIND_MISMATCH": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "pickup_approach_speed",
+      "scenario": "PICKUP_APPROACH",
+      "demonstration": "ego la 3,00 m după punctul marcat, deci după ieșirea din bay",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "PREFERENCE_MASKED_BY_BEYOND_ZONE",
+      "excluded": {
+        "PREFERENCE_MASKED_BY_BEYOND_ZONE": 4,
+        "STOP_BEYOND_ZONE": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "pickup_curb_distance",
+      "scenario": "PICKUP_CURB",
+      "demonstration": "bay de 1,90 m, mai îngust decât ecartamentul plus rezerva de 0,15 m",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "PREFERENCE_MASKED_BY_NARROW_BAY",
+      "excluded": {
+        "BAY_TOO_NARROW": 4,
+        "PREFERENCE_MASKED_BY_NARROW_BAY": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "pickup_stop_precision",
+      "scenario": "PICKUP_PRECISION",
+      "demonstration": "punct marcat la 0,02 m de marginea bay-ului: nicio toleranță admisibilă nu încape",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "PREFERENCE_MASKED_BY_STOP_WINDOW",
+      "excluded": {
+        "PREFERENCE_MASKED_BY_STOP_WINDOW": 4,
+        "STOP_WINDOW_TOO_TIGHT": 4
+      },
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "pickup_curb_distance",
+      "scenario": "PICKUP_CURB",
+      "demonstration": "demonstrații MANUAL, neeligibile",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "NO_ELIGIBLE_EPISODES",
+      "excluded": {},
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "pickup_curb_distance",
+      "scenario": "PICKUP_CURB",
+      "demonstration": "demonstrații fără prefix utilizabil",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "NO_ELIGIBLE_EPISODES",
+      "excluded": {},
+      "validationStatus": "NO_DATA"
+    },
+    {
+      "key": "pickup_curb_distance",
+      "scenario": "PICKUP_CURB",
+      "demonstration": "set fără episoade",
+      "status": "UNOBSERVED",
+      "value": null,
+      "uncertainty": null,
+      "reason": "NO_ELIGIBLE_EPISODES",
+      "excluded": {},
+      "validationStatus": "NO_DATA"
+    }
+  ],
+  "groupConstraints": [
+    {
+      "id": "PICKUP_AND_DROPOFF_SHARE_ZONE_REFUSALS",
+      "keys": [
+        "pickup_approach_speed",
+        "pickup_curb_distance",
+        "pickup_stop_precision",
+        "pickup_dwell_time",
+        "dropoff_approach_speed",
+        "dropoff_curb_distance"
+      ],
+      "explanation": "Pickup și dropoff folosesc aceeași zonă autorată 032 și aceleași praguri obligatorii: un refuz de acces TAXI, de tip de zonă sau de poziție ascunde simultan preferințele ambelor faze. Refuzul nu este o măsurătoare a preferinței și nu se extrapolează dintr-o fază în cealaltă, chiar dacă 185 raportează un număr și pe tick-ul blocat."
+    },
+    {
+      "id": "TAXI_REFUSAL_HIDES_ALL_FOUR_PICKUP_PREFERENCES",
+      "keys": [
+        "pickup_approach_speed",
+        "pickup_curb_distance",
+        "pickup_stop_precision",
+        "pickup_dwell_time"
+      ],
+      "explanation": "Un singur refuz obligatoriu — zona fără acces TAXI — lasă neobservate toate cele patru preferințe de pickup deodată: apropierea, bordura, precizia și staționarea sunt calculate de 185 pe același tick, dar oprirea nu are loc, deci niciuna nu este demonstrată. Estimatorul numără refuzul o dată per episod și per cheie, nu patru valori."
+    },
+    {
+      "id": "PRECISION_AND_DWELL_BELONG_TO_PICKUP_PHASE",
+      "keys": [
+        "pickup_stop_precision",
+        "pickup_dwell_time"
+      ],
+      "explanation": "Precizia opririi și staționarea aparțin fazei de pickup: 185 nu le calculează pe faza de dropoff, iar catalogul 092 nu are chei echivalente pentru dropoff. Un set de dropoff nu poate estima niciodată aceste două chei, iar un set de pickup nu poate estima viteza și bordura de dropoff."
+    },
+    {
+      "id": "APPROACH_CAP_DEPENDS_ON_COMFORT_AND_DISTANCE",
+      "keys": [
+        "pickup_approach_speed",
+        "dropoff_approach_speed"
+      ],
+      "explanation": "Viteza de apropiere este `min(cheie, sqrt(2 · comfort_deceleration · distanță))`: când plafonul cinematic leagă, comanda dovedește doar `cheie ≥ plafon`, iar plafonul depinde de cheia M `comfort_deceleration` și de distanța până la punctul marcat, nu de preferință. Cele două chei de apropiere împart formula, dar nu și faptul: fiecare are faza ei."
+    },
+    {
+      "id": "CURB_BAND_CLAMP_SHARES_PICKUP_AND_DROPOFF",
+      "keys": [
+        "pickup_curb_distance",
+        "dropoff_curb_distance"
+      ],
+      "explanation": "Ambele preferințe de bordură sunt tăiate de aceeași bandă autorată `[0,15 m, adâncime − ecartament]`. Podeaua de 0,15 m ascunde capătul de jos al catalogului (0,1–0,15 m), iar plafonul depinde de adâncimea bay-ului și de ecartamentul clasei: pe bay-ul real de 3,00 m un sedan are plafonul 1,20 m, deci cheile 1,20–2 m nu sunt identificabile pe acea zonă."
+    },
+    {
+      "id": "PRECISION_WINDOW_CLAMP_IS_AMBIGUOUS_AT_THE_CAP",
+      "keys": [
+        "pickup_stop_precision"
+      ],
+      "explanation": "Toleranța de oprire este `clamp(cheie, 0,05 m, min(punct, lungime − punct))`. Plafonul este semilățimea ferestrei marcate: când comanda raportează exact plafonul cu flagul `capped`, cheia poate fi orice valoare mai mare, deci estimatorul raportează saturația, nu plafonul. O cheie exact egală cu plafonul rămâne observabilă, pentru că 185 nu o marchează `capped`."
+    },
+    {
+      "id": "DWELL_FLOOR_HIDES_SUB_FLOOR_KEYS",
+      "keys": [
+        "pickup_dwell_time"
+      ],
+      "explanation": "Staționarea efectivă este `max(cheie, 3 s, M stop_dwell_time)`. Podeaua de îmbarcare de 3 s acoperă banda 1–3 s a catalogului, iar un M `stop_dwell_time` mai mare mută podeaua și mai sus: pe podea, nicio valoare a cheii nu este identificabilă, iar durata raportată nu este preferința."
+    },
+    {
+      "id": "OCCUPIED_SCALES_CAPPED_BY_COMFORT_AND_ADHESION",
+      "keys": [
+        "occupied_acceleration_scale",
+        "occupied_lateral_accel_scale"
+      ],
+      "explanation": "Ambele scări sunt `min(cheie · M, plafon de confort, aderență)`. Când oricare plafon leagă — `comfort_deceleration` sau `curve_lateral_accel` pentru longitudinal, respectiv `curve_lateral_accel` sau `grip · tireGripScale · g` pentru lateral — comanda este chiar plafonul, iar cheia nu este separabilă de el. Estimatorul păstrează doar marginea `cheie ≥ plafon / bază` și nu raportează niciodată plafonul ca estimare."
+    },
+    {
+      "id": "OCCUPIED_SCALES_ONLY_WITH_PASSENGER",
+      "keys": [
+        "occupied_acceleration_scale",
+        "occupied_lateral_accel_scale"
+      ],
+      "explanation": "Scările sunt inerte fără pasager: pe `TO_PICKUP`, `PICKUP` sau `COMPLETED` comanda raportează accelerația M livrată, indiferent de cheie. Numai starea 061 `TO_DROPOFF`/`DROPOFF` produce o demonstrație, deci un set fără pasager la bord lasă ambele chei neobservate chiar dacă raportează valori numerice."
+    },
+    {
+      "id": "PICKUP_KEYS_FROM_ONE_STOP",
+      "keys": [
+        "pickup_approach_speed",
+        "pickup_curb_distance",
+        "pickup_stop_precision",
+        "pickup_dwell_time",
+        "dropoff_approach_speed",
+        "dropoff_curb_distance",
+        "occupied_acceleration_scale",
+        "occupied_lateral_accel_scale"
+      ],
+      "explanation": "Un tick de serviciu 185 raportează simultan apropierea, bordura, precizia și staționarea fazei lui, dar fiecare cheie are faptul ei: plafonul cinematic, banda bordurii, fereastra marcată și podeaua de îmbarcare. Un refuz obligatoriu le ascunde pe toate, iar un tick fără serviciu nu produce niciuna. Nicio cheie nu este dedusă din alta, iar scările cer un tick ocupat separat."
+    }
+  ],
+  "refusals": [
+    {
+      "episodeId": "key-pickup_curb_distance-1",
+      "reason": "NOT_LEARNING_ELIGIBLE"
+    },
+    {
+      "episodeId": "key-pickup_curb_distance-2",
+      "reason": "NOT_LEARNING_ELIGIBLE"
+    },
+    {
+      "episodeId": "key-pickup_curb_distance-3",
+      "reason": "NOT_LEARNING_ELIGIBLE"
+    },
+    {
+      "episodeId": "key-pickup_curb_distance-4",
+      "reason": "NOT_LEARNING_ELIGIBLE"
+    },
+    {
+      "episodeId": "key-pickup_approach_speed-1",
+      "reason": "DUPLICATE_EPISODE"
+    }
+  ],
+  "split": {
+    "seed": 186,
+    "admitted": 32,
+    "disjoint": true
+  },
+  "compatibility": {
+    "policyVersion": "185-pickup-policy-v2",
+    "candidateOnly": true,
+    "changesPolicySemantics": false,
+    "tickHz": 60,
+    "boardingDwellS": 3,
+    "minimumCurbClearanceM": 0.15,
+    "physicalPositionToleranceM": 0.05,
+    "pickupZoneId": "sz:0-0",
+    "dropoffZoneId": "sz:1-0",
+    "bayLengthM": 5.5,
+    "stopOffsetM": 2.75,
+    "curbBandM": 3,
+    "curbMinimumM": 0.15,
+    "curbMaximumM": 1.2,
+    "approachDistanceM": 7.75,
+    "approachFeasibleMps": 5.5677643628300215,
+    "approachCommandedMps": 3,
+    "approachStoppingDistanceM": 2.25,
+    "approachProjectedStopOffsetM": -2.75,
+    "curbEffectiveM": 0.5,
+    "precisionEffectiveM": 1,
+    "precisionWindowFromM": 1.75,
+    "precisionWindowToM": 3.75,
+    "dwellEffectiveS": 5,
+    "dwellMinimumS": 3,
+    "dropoffApproachMps": 3,
+    "dropoffCurbM": 0.5,
+    "accelerationCommandedMps2": 1.275,
+    "accelerationBaseMps2": 1.5,
+    "accelerationCap": "NONE",
+    "lateralCommandedMps2": 5.1,
+    "lateralBaseMps2": 6,
+    "lateralCap": "NONE"
+  },
+  "determinism": {
+    "seed": 186,
+    "digest": "fnv1a32:2f6c0cae",
+    "repeatedDigest": "fnv1a32:2f6c0cae"
+  },
+  "checks": [
+    {
+      "id": "contexts-eight-distinct",
+      "pass": true,
+      "detail": "opt chei și opt scenarii distincte: pickup_approach_speed=PICKUP_APPROACH, pickup_curb_distance=PICKUP_CURB, pickup_stop_precision=PICKUP_PRECISION, pickup_dwell_time=PICKUP_DWELL, dropoff_approach_speed=DROPOFF_APPROACH, dropoff_curb_distance=DROPOFF_CURB, occupied_acceleration_scale=OCCUPIED_ACCELERATION, occupied_lateral_accel_scale=OCCUPIED_LATERAL_ACCEL"
+    },
+    {
+      "id": "scenario-pickup-approach",
+      "pass": true,
+      "detail": "apropiere reală de 7,75 m: 3.0000 m/s; faza de dropoff și scările rămân neobservate"
+    },
+    {
+      "id": "scenario-pickup-curb",
+      "pass": true,
+      "detail": "oprit pe punctul marcat: bordură 0.5000 m; a doua preferință de bordură rămâne neobservată"
+    },
+    {
+      "id": "scenario-pickup-precision",
+      "pass": true,
+      "detail": "fereastră marcată de 2,75 m: toleranță 1.0000 m"
+    },
+    {
+      "id": "scenario-pickup-dwell",
+      "pass": true,
+      "detail": "peste podeaua de 3 s: staționare 5.0000 s"
+    },
+    {
+      "id": "scenario-dropoff-approach",
+      "pass": true,
+      "detail": "apropiere de dropoff 3.0000 m/s; preferințele de pickup rămân neobservate"
+    },
+    {
+      "id": "scenario-dropoff-curb",
+      "pass": true,
+      "detail": "bordură de dropoff 0.5000 m; bordură de pickup neobservată"
+    },
+    {
+      "id": "scenario-occupied-acceleration",
+      "pass": true,
+      "detail": "pasager la bord, fără serviciu: scară 0.8500; niciun fapt de oprire"
+    },
+    {
+      "id": "scenario-occupied-lateral",
+      "pass": true,
+      "detail": "același pasager, canalul lateral: scară 0.8500"
+    },
+    {
+      "id": "uncertainty-reported",
+      "pass": true,
+      "detail": "pickup_approach_speed ±0.0500 ≤ 0.5 m/s, pickup_curb_distance ±0.0500 ≤ 0.15 m, pickup_stop_precision ±0.0500 ≤ 0.25 m, pickup_dwell_time ±0.1500 ≤ 0.5 s, dropoff_approach_speed ±0.0500 ≤ 0.5 m/s, dropoff_curb_distance ±0.0500 ≤ 0.15 m, occupied_acceleration_scale ±0.0200 ≤ 0.15 ratio, occupied_lateral_accel_scale ±0.0200 ≤ 0.12 ratio"
+    },
+    {
+      "id": "uncertainty-per-key-threshold",
+      "pass": true,
+      "detail": "pickup_approach_speed ±0.5256 > 0.5, pickup_curb_distance ±0.3942 > 0.15, pickup_stop_precision ±0.5913 > 0.25, pickup_dwell_time ±0.5913 > 0.5, dropoff_approach_speed ±0.5256 > 0.5, dropoff_curb_distance ±0.3942 > 0.15, occupied_acceleration_scale ±0.1971 > 0.15, occupied_lateral_accel_scale ±0.1511 > 0.12"
+    },
+    {
+      "id": "validation-split",
+      "pass": true,
+      "detail": "seed 186: fiecare cheie se validează pe episoade ținute deoparte (pickup_approach_speed 2+2, pickup_curb_distance 8+8, pickup_stop_precision 8+8, pickup_dwell_time 8+8, dropoff_approach_speed 2+2, dropoff_curb_distance 4+4, occupied_acceleration_scale 8+8, occupied_lateral_accel_scale 8+8)"
+    },
+    {
+      "id": "validation-too-small",
+      "pass": true,
+      "detail": "trei episoade lasă 1 episod de validare, raportat TOO_SMALL"
+    },
+    {
+      "id": "low-band-is-honest",
+      "pass": true,
+      "detail": "minimul catalogului rămâne candidat demonstrat (0,5 m/s, 0,2 m, 0,3), iar benzile ascunse de podea sunt raportate saturate, nu ca valori"
+    },
+    {
+      "id": "structural-zero-not-a-preference",
+      "pass": true,
+      "detail": "un plafon de 0 m/s la punctul marcat este structural: nu devine o preferință de 0 m/s"
+    },
+    {
+      "id": "refusal-taxi-masks-four",
+      "pass": true,
+      "detail": "accesul TAXI refuzat lasă neobservate simultan toate cele patru preferințe de pickup, deși comanda 185 raportează în continuare un număr pe tick-ul blocat"
+    },
+    {
+      "id": "refusal-civil-only-dropoff",
+      "pass": true,
+      "detail": "zona reală `sz:2-2` fără TAXI ascunde ambele preferințe de dropoff"
+    },
+    {
+      "id": "refusal-kind-mismatch",
+      "pass": true,
+      "detail": "o fază de dropoff pe o zonă PICKUP este refuzată de tipul zonei, nu de preferință"
+    },
+    {
+      "id": "refusal-beyond-zone",
+      "pass": true,
+      "detail": "un ego după ieșirea din bay nu demonstrează nicio preferință de oprire"
+    },
+    {
+      "id": "refusal-narrow-bay",
+      "pass": true,
+      "detail": "un bay mai îngust decât ecartamentul plus rezervă refuză oprirea înainte de orice cheie"
+    },
+    {
+      "id": "refusal-tight-window",
+      "pass": true,
+      "detail": "o fereastră de oprire sub toleranța fizică refuză oprirea, deci și precizia"
+    },
+    {
+      "id": "precision-cap-ambiguous",
+      "pass": true,
+      "detail": "cheia de 1 m pe un plafon de 0,5 m rămâne saturată; cheia exact 0,5 m rămâne observabilă (0.5000 m)"
+    },
+    {
+      "id": "curb-both-sides",
+      "pass": true,
+      "detail": "banda autorată este un clamp cu două laturi: podeaua de 0,15 m și plafonul de 1,20 m sunt raportate ca saturații, nu ca valori"
+    },
+    {
+      "id": "dwell-floor",
+      "pass": true,
+      "detail": "podeaua de îmbarcare de 3 s și un M `stop_dwell_time` de 4 s ascund banda de sub ele"
+    },
+    {
+      "id": "occupied-comfort-cap",
+      "pass": true,
+      "detail": "cheia de 1,5 cere 2,25 m/s², dar confortul comandă 2 m/s²: plafonul nu este estimarea cheii"
+    },
+    {
+      "id": "occupied-adhesion-cap",
+      "pass": true,
+      "detail": "pe `reduced-adhesion` anvelopa de 4,46355 m/s² taie înaintea scării, pe ambele canale"
+    },
+    {
+      "id": "occupied-inert-without-passenger",
+      "pass": true,
+      "detail": "fără pasager la bord scara nu se aplică, deci valorile raportate nu sunt dovezi"
+    },
+    {
+      "id": "no-fabricated-values",
+      "pass": true,
+      "detail": "24 demonstrații neobservate au valoare null și motiv explicit"
+    },
+    {
+      "id": "group-constraints",
+      "pass": true,
+      "detail": "PICKUP_AND_DROPOFF_SHARE_ZONE_REFUSALS, TAXI_REFUSAL_HIDES_ALL_FOUR_PICKUP_PREFERENCES, PRECISION_AND_DWELL_BELONG_TO_PICKUP_PHASE, APPROACH_CAP_DEPENDS_ON_COMFORT_AND_DISTANCE, CURB_BAND_CLAMP_SHARES_PICKUP_AND_DROPOFF, PRECISION_WINDOW_CLAMP_IS_AMBIGUOUS_AT_THE_CAP, DWELL_FLOOR_HIDES_SUB_FLOOR_KEYS, OCCUPIED_SCALES_CAPPED_BY_COMFORT_AND_ADHESION, OCCUPIED_SCALES_ONLY_WITH_PASSENGER, PICKUP_KEYS_FROM_ONE_STOP"
+    },
+    {
+      "id": "invalid-input-refused",
+      "pass": true,
+      "detail": "o valoare NaN este refuzată; key-pickup_curb_distance-1:NOT_LEARNING_ELIGIBLE, key-pickup_curb_distance-2:NOT_LEARNING_ELIGIBLE, key-pickup_curb_distance-3:NOT_LEARNING_ELIGIBLE, key-pickup_curb_distance-4:NOT_LEARNING_ELIGIBLE, key-pickup_approach_speed-1:DUPLICATE_EPISODE"
+    },
+    {
+      "id": "determinism",
+      "pass": true,
+      "detail": "digest fnv1a32:2f6c0cae"
+    },
+    {
+      "id": "catalog-ranges",
+      "pass": true,
+      "detail": "pickup_approach_speed 3.0000 m/s, pickup_curb_distance 0.5000 m, pickup_stop_precision 1.0000 m, pickup_dwell_time 5.0000 s, dropoff_approach_speed 3.0000 m/s, dropoff_curb_distance 0.5000 m, occupied_acceleration_scale 0.8500 ratio, occupied_lateral_accel_scale 0.8500 ratio"
+    },
+    {
+      "id": "policy-compatibility",
+      "pass": true,
+      "detail": "185 citește estimarea fără schimbare de semantică: apropiere 3.0000 m/s, bordură 0.5000 m, precizie 1.0000 m, staționare 5.0000 s, dropoff 3.0000 m/s și 0.5000 m, accelerație 1.2750 m/s² (NONE), lateral 5.1000 m/s² (NONE)"
+    }
+  ],
+  "summary": {
+    "checks": 33,
+    "passed": 33,
+    "pass": true,
+    "candidateKeys": 8,
+    "unobservedKeys": 24
+  }
+}
