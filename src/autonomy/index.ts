@@ -19,3 +19,4 @@ export * from './signal-policy-v2';
 export * from './stop-priority-policy';
 export * from './lane-policy-v2';
 export * from './lateral-policy-v2';
+export * from './route-policy-v2';
