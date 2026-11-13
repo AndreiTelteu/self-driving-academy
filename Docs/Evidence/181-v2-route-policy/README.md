@@ -182,10 +182,11 @@ identic la rulare repetată.
   (schimbări de direcție peste 45°) și le folosește implicit; în scenariul virajelor, unde cele două
   alternative au geometrie identică, numărătoarea (4 vs 1) este declarată explicit, iar semafoarele
   (3 vs 0) sunt declarate în scenariul lor. Restul scenariilor folosesc valorile derivate (0 sau 1).
-- `Docs/11` indică în tabelul de proiectare intervalul 2–8 pentru `reverse_recovery_duration`, iar
-  catalogul machine-readable (`Docs/driving-parameters.json`, sursa registrului runtime) dă 0–8.
-  Politica respectă registrul (0–8) și își apără minimul cu podeaua explicită de 2,5 s, deci
-  divergența nu produce o recuperare instantanee.
+- `Docs/11` și catalogul machine-readable (`Docs/driving-parameters.json`) sunt de acord asupra lui
+  `reverse_recovery_duration`: interval 0–8 s, cu **valoarea implicită 2**. (Cifra `2` din tabelul de
+  proiectare este defaultul, nu limita inferioară.) Politica respectă registrul — acceptă 0–8 — și își
+  apără minimul cu podeaua explicită de 2,5 s, deci valoarea de catalog 0 nu produce o recuperare
+  instantanee.
 - Delta M se aplică vitezei libere medii a rutei (lungime / timp liber), nu fiecărei benzi: o rută
   care traversează clase diferite este agregată de proprietarul hărții, la fel ca restul faptelor.
 - Politica nu planifică și nu validează geometric un traseu; primește alternative deja valide de la
