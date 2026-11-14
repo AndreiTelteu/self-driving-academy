@@ -1,0 +1,2480 @@
+{
+  "contract": "200-walking-save-v1",
+  "command": "npm run walking:save",
+  "version": "200-walking-save-v1",
+  "formatVersions": {
+    "session135": 1,
+    "economy215": 2,
+    "current": 3
+  },
+  "schemaVersion": 3,
+  "characterVersion": "200-walking-character-v1",
+  "limits": {
+    "maxFileBytes": 3280896,
+    "sessionBytes": 2101248,
+    "economyBytes": 1048576,
+    "characterBytes": 65536,
+    "maxTotalBytes": 3215360,
+    "maxVehicleIds": 128,
+    "maxDepth": 38
+  },
+  "launch": {
+    "mode": "PAUSED_AUTO",
+    "paused": true,
+    "auto": true,
+    "inputReleased": true,
+    "heldKeysActive": 0,
+    "bodiesCreated": 0
+  },
+  "defaultRule": [
+    "Poziția: spawn-ul de mers autorat al sesiunii, acceptat numai dacă walker-ul real 192 îl acceptă (un punct într-un solid este refuzat cu SPAWN_BLOCKED).",
+    "Autoritatea: CHARACTER:<characterId>, fără nicio tastă ținută, deci nicio accelerație nu poate supraviețui reluării.",
+    "Camera: pe același personaj, la același tick, cu orbita implicită 194 și controlul 009 al sesiunii; nicio primă cadrare nu este inventată.",
+    "Segmentele: ținta 198 este generația de profil a sesiunii (profileId, activeVersionId, learningEpoch); fără profil, ținta se leagă de identitatea sesiunii (profileId = playerId, baseVersionId = sessionId). Modelul pornește gol la tick-ul salvării: 0 tick-uri de mers, 0 segmente, 0 candidați.",
+    "Flota: un singur corp, la spawn, fără focus și fără corp suspendat."
+  ],
+  "scenarios": [
+    {
+      "id": "V2_WALKING",
+      "label": "V2 → V3, personaj pe jos",
+      "slot": "character",
+      "sourceFormatVersion": 2,
+      "targetFormatVersion": 3,
+      "characterSource": "SNAPSHOT",
+      "checksum": "8cc80793014f184301da7e475c0d6333f4e52e3ae1974bec8e5a2b68190c13df",
+      "documentDigest": "5b0bed64d38fe7e0fcb48d944d9b606c69849785d358bedcd66a07ce1df535c9",
+      "documentBytes": 83190,
+      "sessionBytes": 65534,
+      "economyBytes": 14495,
+      "characterBytes": 2584,
+      "componentsBefore": {
+        "session": "65ce2a18a6194ff6b6d92d6e177a5d4e5d3dfc362bde33a13828703136c92e7f",
+        "economy": "ee4cb5c644d2c5d1fd64d2e3c37103bbce75fb05ed95ac772226e33b505e2427"
+      },
+      "componentsAfter": {
+        "session": "65ce2a18a6194ff6b6d92d6e177a5d4e5d3dfc362bde33a13828703136c92e7f",
+        "economy": "ee4cb5c644d2c5d1fd64d2e3c37103bbce75fb05ed95ac772226e33b505e2427",
+        "character": "8bc79fbafbaedc0c7d3d414d2d78568af2d623483219170d38e49854f9b9c956"
+      },
+      "componentsIdentical": true,
+      "counts": {
+        "settlements": 3,
+        "reviews": 1,
+        "kpiDays": 1,
+        "xpBalance": 100.5,
+        "xpBalanceMicroXp": 100500000,
+        "level": 2,
+        "dailyRewards": 1,
+        "historyScans": 0,
+        "debits": 0,
+        "negativeCredits": false
+      },
+      "reload": {
+        "paused": true,
+        "mode": "PAUSED_AUTO",
+        "auto": true,
+        "inputReleased": true,
+        "authority": "CHARACTER:character:player-1",
+        "cameraEntityId": "character:player-1",
+        "entities": 71,
+        "vehicles": 70,
+        "bodiesCreated": 0,
+        "heldKeysActive": 0,
+        "neutralizedKeys": 1,
+        "xpBalance": 100.5,
+        "xpMicroXp": 100500000,
+        "dailyRewards": 1,
+        "settlements": 3,
+        "openSegmentId": null,
+        "secondReadSameDigest": true,
+        "secondReadSameCounts": true
+      },
+      "checks": [
+        {
+          "name": "formatVersion",
+          "expected": 3,
+          "actual": 3,
+          "pass": true
+        },
+        {
+          "name": "schemaVersion",
+          "expected": 3,
+          "actual": 3,
+          "pass": true
+        },
+        {
+          "name": "checksumLength",
+          "expected": 64,
+          "actual": 64,
+          "pass": true
+        },
+        {
+          "name": "checksumRecomputed",
+          "expected": "8cc80793014f184301da7e475c0d6333f4e52e3ae1974bec8e5a2b68190c13df",
+          "actual": "8cc80793014f184301da7e475c0d6333f4e52e3ae1974bec8e5a2b68190c13df",
+          "pass": true
+        },
+        {
+          "name": "sessionBytesIdentical",
+          "expected": "65ce2a18a6194ff6b6d92d6e177a5d4e5d3dfc362bde33a13828703136c92e7f",
+          "actual": "65ce2a18a6194ff6b6d92d6e177a5d4e5d3dfc362bde33a13828703136c92e7f",
+          "pass": true
+        },
+        {
+          "name": "economyBytesIdentical",
+          "expected": "ee4cb5c644d2c5d1fd64d2e3c37103bbce75fb05ed95ac772226e33b505e2427",
+          "actual": "ee4cb5c644d2c5d1fd64d2e3c37103bbce75fb05ed95ac772226e33b505e2427",
+          "pass": true
+        },
+        {
+          "name": "sizesSession",
+          "expected": 65534,
+          "actual": 65534,
+          "pass": true
+        },
+        {
+          "name": "sizesEconomy",
+          "expected": 14495,
+          "actual": 14495,
+          "pass": true
+        },
+        {
+          "name": "sizesCharacter",
+          "expected": 2584,
+          "actual": 2584,
+          "pass": true
+        },
+        {
+          "name": "xpBalance",
+          "expected": 100.5,
+          "actual": 100.5,
+          "pass": true
+        },
+        {
+          "name": "xpMicroXp",
+          "expected": 100500000,
+          "actual": 100500000,
+          "pass": true
+        },
+        {
+          "name": "level",
+          "expected": 2,
+          "actual": 2,
+          "pass": true
+        },
+        {
+          "name": "dailyRewards",
+          "expected": 1,
+          "actual": 1,
+          "pass": true
+        },
+        {
+          "name": "settlements",
+          "expected": 3,
+          "actual": 3,
+          "pass": true
+        },
+        {
+          "name": "reviews",
+          "expected": 1,
+          "actual": 1,
+          "pass": true
+        },
+        {
+          "name": "kpiDays",
+          "expected": 1,
+          "actual": 1,
+          "pass": true
+        },
+        {
+          "name": "paused",
+          "expected": true,
+          "actual": true,
+          "pass": true
+        },
+        {
+          "name": "mode",
+          "expected": "PAUSED_AUTO",
+          "actual": "PAUSED_AUTO",
+          "pass": true
+        },
+        {
+          "name": "auto",
+          "expected": true,
+          "actual": true,
+          "pass": true
+        },
+        {
+          "name": "inputReleased",
+          "expected": true,
+          "actual": true,
+          "pass": true
+        },
+        {
+          "name": "heldKeysActive",
+          "expected": 0,
+          "actual": 0,
+          "pass": true
+        },
+        {
+          "name": "bodiesCreated",
+          "expected": 0,
+          "actual": 0,
+          "pass": true
+        },
+        {
+          "name": "entitiesTotal",
+          "expected": 71,
+          "actual": 71,
+          "pass": true
+        },
+        {
+          "name": "entitiesVehicles",
+          "expected": 70,
+          "actual": 70,
+          "pass": true
+        },
+        {
+          "name": "cameraOnAuthorityOrFocus",
+          "expected": "character:player-1",
+          "actual": "character:player-1",
+          "pass": true
+        },
+        {
+          "name": "authorityLabel",
+          "expected": "CHARACTER:character:player-1",
+          "actual": "CHARACTER:character:player-1",
+          "pass": true
+        },
+        {
+          "name": "tickSharedByAuthorityAndCamera",
+          "expected": 40,
+          "actual": 40,
+          "pass": true
+        },
+        {
+          "name": "cameraSameTick",
+          "expected": 40,
+          "actual": 40,
+          "pass": true
+        },
+        {
+          "name": "reappliedAuthorityTick",
+          "expected": 40,
+          "actual": 40,
+          "pass": true
+        },
+        {
+          "name": "reappliedEveryHeldNeutralized",
+          "expected": true,
+          "actual": true,
+          "pass": true
+        },
+        {
+          "name": "reappliedCameraEntity",
+          "expected": "character:player-1",
+          "actual": "character:player-1",
+          "pass": true
+        },
+        {
+          "name": "reappliedCameraTick",
+          "expected": 40,
+          "actual": 40,
+          "pass": true
+        },
+        {
+          "name": "reappliedBodyBits",
+          "expected": true,
+          "actual": true,
+          "pass": true
+        },
+        {
+          "name": "reappliedSegmentsTick",
+          "expected": 40,
+          "actual": 40,
+          "pass": true
+        },
+        {
+          "name": "reappliedOpenSegment",
+          "expected": null,
+          "actual": null,
+          "pass": true
+        },
+        {
+          "name": "secondReadAccepted",
+          "expected": true,
+          "actual": true,
+          "pass": true
+        },
+        {
+          "name": "secondReadSameDigest",
+          "expected": "5b0bed64d38fe7e0fcb48d944d9b606c69849785d358bedcd66a07ce1df535c9",
+          "actual": "5b0bed64d38fe7e0fcb48d944d9b606c69849785d358bedcd66a07ce1df535c9",
+          "pass": true
+        },
+        {
+          "name": "secondReadSameCounts",
+          "expected": {
+            "settlements": 3,
+            "reviews": 1,
+            "kpiDays": 1,
+            "xpBalance": 100.5,
+            "xpBalanceMicroXp": 100500000,
+            "level": 2,
+            "dailyRewards": 1,
+            "historyScans": 0,
+            "debits": 0,
+            "negativeCredits": false
+          },
+          "actual": {
+            "settlements": 3,
+            "reviews": 1,
+            "kpiDays": 1,
+            "xpBalance": 100.5,
+            "xpBalanceMicroXp": 100500000,
+            "level": 2,
+            "dailyRewards": 1,
+            "historyScans": 0,
+            "debits": 0,
+            "negativeCredits": false
+          },
+          "pass": true
+        },
+        {
+          "name": "storeUntouched",
+          "expected": true,
+          "actual": true,
+          "pass": true
+        }
+      ],
+      "verdict": "PASS",
+      "failedChecks": []
+    },
+    {
+      "id": "V2_SEATED",
+      "label": "V2 → V3, personaj în taxi",
+      "slot": "character",
+      "sourceFormatVersion": 2,
+      "targetFormatVersion": 3,
+      "characterSource": "SNAPSHOT",
+      "checksum": "89124a0fd19ecd36d603e9f6735038b0ec5c8521b210df6832378e15a220553e",
+      "documentDigest": "3a34811176e678f4157926ccdb3010faa0e0ffcafe8231954f2baa7540f6a009",
+      "documentBytes": 83610,
+      "sessionBytes": 65534,
+      "economyBytes": 14495,
+      "characterBytes": 3004,
+      "componentsBefore": {
+        "session": "47aac6ba22195c277b5279eadf5ae91c2643298d2b3a1153755ef0b1289b96ca",
+        "economy": "ee4cb5c644d2c5d1fd64d2e3c37103bbce75fb05ed95ac772226e33b505e2427"
+      },
+      "componentsAfter": {
+        "session": "47aac6ba22195c277b5279eadf5ae91c2643298d2b3a1153755ef0b1289b96ca",
+        "economy": "ee4cb5c644d2c5d1fd64d2e3c37103bbce75fb05ed95ac772226e33b505e2427",
+        "character": "43e8b4f7d08060243b2c90da8e0ed9a2880a3a9f8d07c9ad568ec3d8b1751d39"
+      },
+      "componentsIdentical": true,
+      "counts": {
+        "settlements": 3,
+        "reviews": 1,
+        "kpiDays": 1,
+        "xpBalance": 100.5,
+        "xpBalanceMicroXp": 100500000,
+        "level": 2,
+        "dailyRewards": 1,
+        "historyScans": 0,
+        "debits": 0,
+        "negativeCredits": false
+      },
+      "reload": {
+        "paused": true,
+        "mode": "PAUSED_AUTO",
+        "auto": true,
+        "inputReleased": true,
+        "authority": "VEHICLE:vehicle:taxi-197",
+        "cameraEntityId": "vehicle:taxi-197",
+        "entities": 72,
+        "vehicles": 71,
+        "bodiesCreated": 0,
+        "heldKeysActive": 0,
+        "neutralizedKeys": 0,
+        "xpBalance": 100.5,
+        "xpMicroXp": 100500000,
+        "dailyRewards": 1,
+        "settlements": 3,
+        "openSegmentId": "player:130:segment:1",
+        "secondReadSameDigest": true,
+        "secondReadSameCounts": true
+      },
+      "checks": [
+        {
+          "name": "formatVersion",
+          "expected": 3,
+          "actual": 3,
+          "pass": true
+        },
+        {
+          "name": "schemaVersion",
+          "expected": 3,
+          "actual": 3,
+          "pass": true
+        },
+        {
+          "name": "checksumLength",
+          "expected": 64,
+          "actual": 64,
+          "pass": true
+        },
+        {
+          "name": "checksumRecomputed",
+          "expected": "89124a0fd19ecd36d603e9f6735038b0ec5c8521b210df6832378e15a220553e",
+          "actual": "89124a0fd19ecd36d603e9f6735038b0ec5c8521b210df6832378e15a220553e",
+          "pass": true
+        },
+        {
+          "name": "sessionBytesIdentical",
+          "expected": "47aac6ba22195c277b5279eadf5ae91c2643298d2b3a1153755ef0b1289b96ca",
+          "actual": "47aac6ba22195c277b5279eadf5ae91c2643298d2b3a1153755ef0b1289b96ca",
+          "pass": true
+        },
+        {
+          "name": "economyBytesIdentical",
+          "expected": "ee4cb5c644d2c5d1fd64d2e3c37103bbce75fb05ed95ac772226e33b505e2427",
+          "actual": "ee4cb5c644d2c5d1fd64d2e3c37103bbce75fb05ed95ac772226e33b505e2427",
+          "pass": true
+        },
+        {
+          "name": "sizesSession",
+          "expected": 65534,
+          "actual": 65534,
+          "pass": true
+        },
+        {
+          "name": "sizesEconomy",
+          "expected": 14495,
+          "actual": 14495,
+          "pass": true
+        },
+        {
+          "name": "sizesCharacter",
+          "expected": 3004,
+          "actual": 3004,
+          "pass": true
+        },
+        {
+          "name": "xpBalance",
+          "expected": 100.5,
+          "actual": 100.5,
+          "pass": true
+        },
+        {
+          "name": "xpMicroXp",
+          "expected": 100500000,
+          "actual": 100500000,
+          "pass": true
+        },
+        {
+          "name": "level",
+          "expected": 2,
+          "actual": 2,
+          "pass": true
+        },
+        {
+          "name": "dailyRewards",
+          "expected": 1,
+          "actual": 1,
+          "pass": true
+        },
+        {
+          "name": "settlements",
+          "expected": 3,
+          "actual": 3,
+          "pass": true
+        },
+        {
+          "name": "reviews",
+          "expected": 1,
+          "actual": 1,
+          "pass": true
+        },
+        {
+          "name": "kpiDays",
+          "expected": 1,
+          "actual": 1,
+          "pass": true
+        },
+        {
+          "name": "paused",
+          "expected": true,
+          "actual": true,
+          "pass": true
+        },
+        {
+          "name": "mode",
+          "expected": "PAUSED_AUTO",
+          "actual": "PAUSED_AUTO",
+          "pass": true
+        },
+        {
+          "name": "auto",
+          "expected": true,
+          "actual": true,
+          "pass": true
+        },
+        {
+          "name": "inputReleased",
+          "expected": true,
+          "actual": true,
+          "pass": true
+        },
+        {
+          "name": "heldKeysActive",
+          "expected": 0,
+          "actual": 0,
+          "pass": true
+        },
+        {
+          "name": "bodiesCreated",
+          "expected": 0,
+          "actual": 0,
+          "pass": true
+        },
+        {
+          "name": "entitiesTotal",
+          "expected": 72,
+          "actual": 72,
+          "pass": true
+        },
+        {
+          "name": "entitiesVehicles",
+          "expected": 71,
+          "actual": 71,
+          "pass": true
+        },
+        {
+          "name": "cameraOnAuthorityOrFocus",
+          "expected": "vehicle:taxi-197",
+          "actual": "vehicle:taxi-197",
+          "pass": true
+        },
+        {
+          "name": "authorityLabel",
+          "expected": "VEHICLE:vehicle:taxi-197",
+          "actual": "VEHICLE:vehicle:taxi-197",
+          "pass": true
+        },
+        {
+          "name": "tickSharedByAuthorityAndCamera",
+          "expected": 41,
+          "actual": 41,
+          "pass": true
+        },
+        {
+          "name": "cameraSameTick",
+          "expected": 41,
+          "actual": 41,
+          "pass": true
+        },
+        {
+          "name": "reappliedAuthorityTick",
+          "expected": 41,
+          "actual": 41,
+          "pass": true
+        },
+        {
+          "name": "reappliedEveryHeldNeutralized",
+          "expected": true,
+          "actual": true,
+          "pass": true
+        },
+        {
+          "name": "reappliedCameraEntity",
+          "expected": "vehicle:taxi-197",
+          "actual": "vehicle:taxi-197",
+          "pass": true
+        },
+        {
+          "name": "reappliedCameraTick",
+          "expected": 41,
+          "actual": 41,
+          "pass": true
+        },
+        {
+          "name": "reappliedBodyBits",
+          "expected": true,
+          "actual": true,
+          "pass": true
+        },
+        {
+          "name": "reappliedSegmentsTick",
+          "expected": 41,
+          "actual": 41,
+          "pass": true
+        },
+        {
+          "name": "reappliedOpenSegment",
+          "expected": "player:130:segment:1",
+          "actual": "player:130:segment:1",
+          "pass": true
+        },
+        {
+          "name": "suspendedBodyBits",
+          "expected": "405680000000000000000000000000004066166666666666",
+          "actual": "405680000000000000000000000000004066166666666666",
+          "pass": true
+        },
+        {
+          "name": "openSegmentKind",
+          "expected": "MANUAL",
+          "actual": "MANUAL",
+          "pass": true
+        },
+        {
+          "name": "cameraMidTransition",
+          "expected": 17,
+          "actual": 17,
+          "pass": true
+        },
+        {
+          "name": "secondReadAccepted",
+          "expected": true,
+          "actual": true,
+          "pass": true
+        },
+        {
+          "name": "secondReadSameDigest",
+          "expected": "3a34811176e678f4157926ccdb3010faa0e0ffcafe8231954f2baa7540f6a009",
+          "actual": "3a34811176e678f4157926ccdb3010faa0e0ffcafe8231954f2baa7540f6a009",
+          "pass": true
+        },
+        {
+          "name": "secondReadSameCounts",
+          "expected": {
+            "settlements": 3,
+            "reviews": 1,
+            "kpiDays": 1,
+            "xpBalance": 100.5,
+            "xpBalanceMicroXp": 100500000,
+            "level": 2,
+            "dailyRewards": 1,
+            "historyScans": 0,
+            "debits": 0,
+            "negativeCredits": false
+          },
+          "actual": {
+            "settlements": 3,
+            "reviews": 1,
+            "kpiDays": 1,
+            "xpBalance": 100.5,
+            "xpBalanceMicroXp": 100500000,
+            "level": 2,
+            "dailyRewards": 1,
+            "historyScans": 0,
+            "debits": 0,
+            "negativeCredits": false
+          },
+          "pass": true
+        }
+      ],
+      "verdict": "PASS",
+      "failedChecks": []
+    },
+    {
+      "id": "V2_DEFAULT",
+      "label": "V2 → V3, sesiune fără slot de personaj",
+      "slot": "character(default)",
+      "sourceFormatVersion": 2,
+      "targetFormatVersion": 3,
+      "characterSource": "MIGRATION_DEFAULT",
+      "checksum": "eee3d147f880bb9f108df42f23f189c97b2d045ca5e8a3f53fd9cf0e58548d82",
+      "documentDigest": "9030c2d7141bbc2abd01b1c510dcb28ba1ba03b15158d20194af776f24d51150",
+      "documentBytes": 83784,
+      "sessionBytes": 65534,
+      "economyBytes": 14495,
+      "characterBytes": 3178,
+      "componentsBefore": {
+        "session": "65ce2a18a6194ff6b6d92d6e177a5d4e5d3dfc362bde33a13828703136c92e7f",
+        "economy": "ee4cb5c644d2c5d1fd64d2e3c37103bbce75fb05ed95ac772226e33b505e2427"
+      },
+      "componentsAfter": {
+        "session": "65ce2a18a6194ff6b6d92d6e177a5d4e5d3dfc362bde33a13828703136c92e7f",
+        "economy": "ee4cb5c644d2c5d1fd64d2e3c37103bbce75fb05ed95ac772226e33b505e2427",
+        "character": "26578118ef6bc199061c7ecbdc159d288a898f445b45835cd2b6870b142b2e2c"
+      },
+      "componentsIdentical": true,
+      "counts": {
+        "settlements": 3,
+        "reviews": 1,
+        "kpiDays": 1,
+        "xpBalance": 100.5,
+        "xpBalanceMicroXp": 100500000,
+        "level": 2,
+        "dailyRewards": 1,
+        "historyScans": 0,
+        "debits": 0,
+        "negativeCredits": false
+      },
+      "reload": {
+        "paused": true,
+        "mode": "PAUSED_AUTO",
+        "auto": true,
+        "inputReleased": true,
+        "authority": "CHARACTER:character:player-1",
+        "cameraEntityId": "character:player-1",
+        "entities": 71,
+        "vehicles": 70,
+        "bodiesCreated": 0,
+        "heldKeysActive": 0,
+        "neutralizedKeys": 0,
+        "xpBalance": 100.5,
+        "xpMicroXp": 100500000,
+        "dailyRewards": 1,
+        "settlements": 3,
+        "openSegmentId": null,
+        "secondReadSameDigest": true,
+        "secondReadSameCounts": true
+      },
+      "checks": [
+        {
+          "name": "formatVersion",
+          "expected": 3,
+          "actual": 3,
+          "pass": true
+        },
+        {
+          "name": "schemaVersion",
+          "expected": 3,
+          "actual": 3,
+          "pass": true
+        },
+        {
+          "name": "checksumLength",
+          "expected": 64,
+          "actual": 64,
+          "pass": true
+        },
+        {
+          "name": "checksumRecomputed",
+          "expected": "eee3d147f880bb9f108df42f23f189c97b2d045ca5e8a3f53fd9cf0e58548d82",
+          "actual": "eee3d147f880bb9f108df42f23f189c97b2d045ca5e8a3f53fd9cf0e58548d82",
+          "pass": true
+        },
+        {
+          "name": "sessionBytesIdentical",
+          "expected": "65ce2a18a6194ff6b6d92d6e177a5d4e5d3dfc362bde33a13828703136c92e7f",
+          "actual": "65ce2a18a6194ff6b6d92d6e177a5d4e5d3dfc362bde33a13828703136c92e7f",
+          "pass": true
+        },
+        {
+          "name": "economyBytesIdentical",
+          "expected": "ee4cb5c644d2c5d1fd64d2e3c37103bbce75fb05ed95ac772226e33b505e2427",
+          "actual": "ee4cb5c644d2c5d1fd64d2e3c37103bbce75fb05ed95ac772226e33b505e2427",
+          "pass": true
+        },
+        {
+          "name": "sizesSession",
+          "expected": 65534,
+          "actual": 65534,
+          "pass": true
+        },
+        {
+          "name": "sizesEconomy",
+          "expected": 14495,
+          "actual": 14495,
+          "pass": true
+        },
+        {
+          "name": "sizesCharacter",
+          "expected": 3178,
+          "actual": 3178,
+          "pass": true
+        },
+        {
+          "name": "xpBalance",
+          "expected": 100.5,
+          "actual": 100.5,
+          "pass": true
+        },
+        {
+          "name": "xpMicroXp",
+          "expected": 100500000,
+          "actual": 100500000,
+          "pass": true
+        },
+        {
+          "name": "level",
+          "expected": 2,
+          "actual": 2,
+          "pass": true
+        },
+        {
+          "name": "dailyRewards",
+          "expected": 1,
+          "actual": 1,
+          "pass": true
+        },
+        {
+          "name": "settlements",
+          "expected": 3,
+          "actual": 3,
+          "pass": true
+        },
+        {
+          "name": "reviews",
+          "expected": 1,
+          "actual": 1,
+          "pass": true
+        },
+        {
+          "name": "kpiDays",
+          "expected": 1,
+          "actual": 1,
+          "pass": true
+        },
+        {
+          "name": "paused",
+          "expected": true,
+          "actual": true,
+          "pass": true
+        },
+        {
+          "name": "mode",
+          "expected": "PAUSED_AUTO",
+          "actual": "PAUSED_AUTO",
+          "pass": true
+        },
+        {
+          "name": "auto",
+          "expected": true,
+          "actual": true,
+          "pass": true
+        },
+        {
+          "name": "inputReleased",
+          "expected": true,
+          "actual": true,
+          "pass": true
+        },
+        {
+          "name": "heldKeysActive",
+          "expected": 0,
+          "actual": 0,
+          "pass": true
+        },
+        {
+          "name": "bodiesCreated",
+          "expected": 0,
+          "actual": 0,
+          "pass": true
+        },
+        {
+          "name": "entitiesTotal",
+          "expected": 71,
+          "actual": 71,
+          "pass": true
+        },
+        {
+          "name": "entitiesVehicles",
+          "expected": 70,
+          "actual": 70,
+          "pass": true
+        },
+        {
+          "name": "cameraOnAuthorityOrFocus",
+          "expected": "character:player-1",
+          "actual": "character:player-1",
+          "pass": true
+        },
+        {
+          "name": "authorityLabel",
+          "expected": "CHARACTER:character:player-1",
+          "actual": "CHARACTER:character:player-1",
+          "pass": true
+        },
+        {
+          "name": "tickSharedByAuthorityAndCamera",
+          "expected": 40,
+          "actual": 40,
+          "pass": true
+        },
+        {
+          "name": "cameraSameTick",
+          "expected": 40,
+          "actual": 40,
+          "pass": true
+        },
+        {
+          "name": "secondReadAccepted",
+          "expected": true,
+          "actual": true,
+          "pass": true
+        },
+        {
+          "name": "secondReadSameDigest",
+          "expected": "9030c2d7141bbc2abd01b1c510dcb28ba1ba03b15158d20194af776f24d51150",
+          "actual": "9030c2d7141bbc2abd01b1c510dcb28ba1ba03b15158d20194af776f24d51150",
+          "pass": true
+        },
+        {
+          "name": "secondReadSameCounts",
+          "expected": {
+            "settlements": 3,
+            "reviews": 1,
+            "kpiDays": 1,
+            "xpBalance": 100.5,
+            "xpBalanceMicroXp": 100500000,
+            "level": 2,
+            "dailyRewards": 1,
+            "historyScans": 0,
+            "debits": 0,
+            "negativeCredits": false
+          },
+          "actual": {
+            "settlements": 3,
+            "reviews": 1,
+            "kpiDays": 1,
+            "xpBalance": 100.5,
+            "xpBalanceMicroXp": 100500000,
+            "level": 2,
+            "dailyRewards": 1,
+            "historyScans": 0,
+            "debits": 0,
+            "negativeCredits": false
+          },
+          "pass": true
+        }
+      ],
+      "verdict": "PASS",
+      "failedChecks": []
+    },
+    {
+      "id": "V1_LEGACY",
+      "label": "V1 → V3, arhiva 135 fără economie",
+      "slot": "character(default)",
+      "sourceFormatVersion": 1,
+      "targetFormatVersion": 3,
+      "characterSource": "MIGRATION_DEFAULT",
+      "checksum": "d4b1561f45367b3a1ab98aecacf235306541d13e459fe4238069009582c390a1",
+      "documentDigest": "74531fe2ecdc3bbf279cb36c85a0405d81a70c368e7bdb8f06fa9f20155adc35",
+      "documentBytes": 69301,
+      "sessionBytes": 65534,
+      "economyBytes": 4,
+      "characterBytes": 3178,
+      "componentsBefore": {
+        "session": "65ce2a18a6194ff6b6d92d6e177a5d4e5d3dfc362bde33a13828703136c92e7f",
+        "economy": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+      },
+      "componentsAfter": {
+        "session": "65ce2a18a6194ff6b6d92d6e177a5d4e5d3dfc362bde33a13828703136c92e7f",
+        "economy": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+        "character": "26578118ef6bc199061c7ecbdc159d288a898f445b45835cd2b6870b142b2e2c"
+      },
+      "componentsIdentical": true,
+      "counts": {
+        "settlements": 0,
+        "reviews": 0,
+        "kpiDays": 0,
+        "xpBalance": 0,
+        "xpBalanceMicroXp": 0,
+        "level": 0,
+        "dailyRewards": 0,
+        "historyScans": 0,
+        "debits": 0,
+        "negativeCredits": false
+      },
+      "reload": {
+        "paused": true,
+        "mode": "PAUSED_AUTO",
+        "auto": true,
+        "inputReleased": true,
+        "authority": "CHARACTER:character:player-1",
+        "cameraEntityId": "character:player-1",
+        "entities": 71,
+        "vehicles": 70,
+        "bodiesCreated": 0,
+        "heldKeysActive": 0,
+        "neutralizedKeys": 0,
+        "xpBalance": 0,
+        "xpMicroXp": 0,
+        "dailyRewards": 0,
+        "settlements": 0,
+        "openSegmentId": null,
+        "secondReadSameDigest": true,
+        "secondReadSameCounts": true
+      },
+      "checks": [
+        {
+          "name": "formatVersion",
+          "expected": 3,
+          "actual": 3,
+          "pass": true
+        },
+        {
+          "name": "schemaVersion",
+          "expected": 3,
+          "actual": 3,
+          "pass": true
+        },
+        {
+          "name": "checksumLength",
+          "expected": 64,
+          "actual": 64,
+          "pass": true
+        },
+        {
+          "name": "checksumRecomputed",
+          "expected": "d4b1561f45367b3a1ab98aecacf235306541d13e459fe4238069009582c390a1",
+          "actual": "d4b1561f45367b3a1ab98aecacf235306541d13e459fe4238069009582c390a1",
+          "pass": true
+        },
+        {
+          "name": "sessionBytesIdentical",
+          "expected": "65ce2a18a6194ff6b6d92d6e177a5d4e5d3dfc362bde33a13828703136c92e7f",
+          "actual": "65ce2a18a6194ff6b6d92d6e177a5d4e5d3dfc362bde33a13828703136c92e7f",
+          "pass": true
+        },
+        {
+          "name": "economyBytesIdentical",
+          "expected": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "actual": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "pass": true
+        },
+        {
+          "name": "sizesSession",
+          "expected": 65534,
+          "actual": 65534,
+          "pass": true
+        },
+        {
+          "name": "sizesEconomy",
+          "expected": 4,
+          "actual": 4,
+          "pass": true
+        },
+        {
+          "name": "sizesCharacter",
+          "expected": 3178,
+          "actual": 3178,
+          "pass": true
+        },
+        {
+          "name": "xpBalance",
+          "expected": 0,
+          "actual": 0,
+          "pass": true
+        },
+        {
+          "name": "xpMicroXp",
+          "expected": 0,
+          "actual": 0,
+          "pass": true
+        },
+        {
+          "name": "level",
+          "expected": 0,
+          "actual": 0,
+          "pass": true
+        },
+        {
+          "name": "dailyRewards",
+          "expected": 0,
+          "actual": 0,
+          "pass": true
+        },
+        {
+          "name": "settlements",
+          "expected": 0,
+          "actual": 0,
+          "pass": true
+        },
+        {
+          "name": "reviews",
+          "expected": 0,
+          "actual": 0,
+          "pass": true
+        },
+        {
+          "name": "kpiDays",
+          "expected": 0,
+          "actual": 0,
+          "pass": true
+        },
+        {
+          "name": "paused",
+          "expected": true,
+          "actual": true,
+          "pass": true
+        },
+        {
+          "name": "mode",
+          "expected": "PAUSED_AUTO",
+          "actual": "PAUSED_AUTO",
+          "pass": true
+        },
+        {
+          "name": "auto",
+          "expected": true,
+          "actual": true,
+          "pass": true
+        },
+        {
+          "name": "inputReleased",
+          "expected": true,
+          "actual": true,
+          "pass": true
+        },
+        {
+          "name": "heldKeysActive",
+          "expected": 0,
+          "actual": 0,
+          "pass": true
+        },
+        {
+          "name": "bodiesCreated",
+          "expected": 0,
+          "actual": 0,
+          "pass": true
+        },
+        {
+          "name": "entitiesTotal",
+          "expected": 71,
+          "actual": 71,
+          "pass": true
+        },
+        {
+          "name": "entitiesVehicles",
+          "expected": 70,
+          "actual": 70,
+          "pass": true
+        },
+        {
+          "name": "cameraOnAuthorityOrFocus",
+          "expected": "character:player-1",
+          "actual": "character:player-1",
+          "pass": true
+        },
+        {
+          "name": "authorityLabel",
+          "expected": "CHARACTER:character:player-1",
+          "actual": "CHARACTER:character:player-1",
+          "pass": true
+        },
+        {
+          "name": "tickSharedByAuthorityAndCamera",
+          "expected": 40,
+          "actual": 40,
+          "pass": true
+        },
+        {
+          "name": "cameraSameTick",
+          "expected": 40,
+          "actual": 40,
+          "pass": true
+        },
+        {
+          "name": "secondReadAccepted",
+          "expected": true,
+          "actual": true,
+          "pass": true
+        },
+        {
+          "name": "secondReadSameDigest",
+          "expected": "74531fe2ecdc3bbf279cb36c85a0405d81a70c368e7bdb8f06fa9f20155adc35",
+          "actual": "74531fe2ecdc3bbf279cb36c85a0405d81a70c368e7bdb8f06fa9f20155adc35",
+          "pass": true
+        },
+        {
+          "name": "secondReadSameCounts",
+          "expected": {
+            "settlements": 0,
+            "reviews": 0,
+            "kpiDays": 0,
+            "xpBalance": 0,
+            "xpBalanceMicroXp": 0,
+            "level": 0,
+            "dailyRewards": 0,
+            "historyScans": 0,
+            "debits": 0,
+            "negativeCredits": false
+          },
+          "actual": {
+            "settlements": 0,
+            "reviews": 0,
+            "kpiDays": 0,
+            "xpBalance": 0,
+            "xpBalanceMicroXp": 0,
+            "level": 0,
+            "dailyRewards": 0,
+            "historyScans": 0,
+            "debits": 0,
+            "negativeCredits": false
+          },
+          "pass": true
+        }
+      ],
+      "verdict": "PASS",
+      "failedChecks": []
+    }
+  ],
+  "refusals": [
+    {
+      "id": "CHECKSUM",
+      "label": "Checksum modificat",
+      "mutation": "checksum.value rescris, fără recalculare",
+      "code": "CHECKSUM_MISMATCH",
+      "path": "checksum.value",
+      "message": "The archive was modified or is corrupted; the session was not loaded",
+      "inputUnchanged": true,
+      "pass": true
+    },
+    {
+      "id": "MISSING_SLOT",
+      "label": "Slot de personaj lipsă",
+      "mutation": "components.character șters, envelope re-stampat",
+      "code": "MISSING_FIELD",
+      "path": "components.character",
+      "message": "Missing field: character",
+      "inputUnchanged": true,
+      "pass": true
+    },
+    {
+      "id": "FUTURE_FORMAT",
+      "label": "Format viitor",
+      "mutation": "formatVersion = 4, envelope re-stampat",
+      "code": "FORMAT_VERSION_TOO_NEW",
+      "path": "formatVersion",
+      "message": "The file declares format version 4; this build reads 3",
+      "inputUnchanged": true,
+      "pass": true
+    },
+    {
+      "id": "FUTURE_SCHEMA",
+      "label": "Schemă viitoare",
+      "mutation": "schemaVersion = 4, envelope re-stampat",
+      "code": "SCHEMA_TOO_NEW",
+      "path": "schemaVersion",
+      "message": "Unsupported version 3 archive schema: 4",
+      "inputUnchanged": true,
+      "pass": true
+    },
+    {
+      "id": "CHECKSUM_BEFORE_SCHEMA",
+      "label": "Schemă viitoare cu checksum stricat",
+      "mutation": "schemaVersion = 4 fără re-stampare",
+      "code": "CHECKSUM_MISMATCH",
+      "path": "checksum.value",
+      "message": "The archive was modified or is corrupted; the session was not loaded",
+      "inputUnchanged": true,
+      "pass": true
+    },
+    {
+      "id": "PARSE_ERROR",
+      "label": "JSON invalid",
+      "mutation": "document trunchiat la 120 de caractere",
+      "code": "PARSE_ERROR",
+      "path": "$.createdAt",
+      "message": "Unterminated string",
+      "inputUnchanged": true,
+      "pass": true
+    },
+    {
+      "id": "DUPLICATE_KEY",
+      "label": "Chei duplicate",
+      "mutation": "cheia format duplicată în text",
+      "code": "DUPLICATE_KEY",
+      "path": "$.format",
+      "message": "Duplicate object key: format",
+      "inputUnchanged": true,
+      "pass": true
+    },
+    {
+      "id": "LEGACY_READ",
+      "label": "Arhivă V2 citită ca V3",
+      "mutation": "documentul V2 dat cititorului V3",
+      "code": "LEGACY_WALKING_SAVE",
+      "path": "formatVersion",
+      "message": "The file declares format version 2; it must be migrated to 3 first",
+      "inputUnchanged": true,
+      "pass": true
+    },
+    {
+      "id": "ALREADY_CURRENT",
+      "label": "Arhivă deja V3",
+      "mutation": "upgrade pe un document V3",
+      "code": "ALREADY_CURRENT",
+      "path": "formatVersion",
+      "message": "The document already declares format version 3; it is not older data",
+      "inputUnchanged": true,
+      "pass": true
+    },
+    {
+      "id": "SESSION_MISMATCH",
+      "label": "Slot din altă sesiune",
+      "mutation": "character.sessionId schimbat, envelope re-stampat",
+      "code": "SESSION_MISMATCH",
+      "path": "character",
+      "message": "The character slot belongs to session-other/player:130/1, not session-116-missions/player:130/1",
+      "inputUnchanged": true,
+      "pass": true
+    },
+    {
+      "id": "SIZE_MISMATCH",
+      "label": "Bilanț de mărime mincinos",
+      "mutation": "sizes.character + 1, envelope re-stampat",
+      "code": "SIZE_MISMATCH",
+      "path": "sizes.character",
+      "message": "The declared character size is 2585, measured 2584",
+      "inputUnchanged": true,
+      "pass": true
+    },
+    {
+      "id": "CAMERA_AUTHORITY",
+      "label": "Camera pe altă entitate",
+      "mutation": "character.camera.entityId mutat pe un vehicul, envelope re-stampat",
+      "code": "CAMERA_AUTHORITY_MISMATCH",
+      "path": "character.camera.entityId",
+      "message": "The camera watches civil-01, the authority target is character:player-1",
+      "inputUnchanged": true,
+      "pass": true
+    },
+    {
+      "id": "AUTHORITY_MISMATCH",
+      "label": "Autoritate 193 ≠ flotă 197",
+      "mutation": "fleet.authority numește alt personaj, envelope re-stampat",
+      "code": "AUTHORITY_MISMATCH",
+      "path": "character.fleet.authority",
+      "message": "The 193 authority and the 197 fleet state name different entities",
+      "inputUnchanged": true,
+      "pass": true
+    },
+    {
+      "id": "TICK_MISMATCH",
+      "label": "Tick incoerent",
+      "mutation": "character.tick + 1, envelope re-stampat",
+      "code": "TICK_MISMATCH",
+      "path": "character.authority.tick",
+      "message": "The authority is at tick 40, not the slot tick 41",
+      "inputUnchanged": true,
+      "pass": true
+    },
+    {
+      "id": "XP_TAMPERED",
+      "label": "XP modificat în slotul economic",
+      "mutation": "accountedThroughMs + 1, doar envelope-ul V3 re-stampat",
+      "code": "CHECKSUM_MISMATCH",
+      "path": "checksum.value",
+      "message": "The bundle was modified or is corrupted; the economy was not loaded",
+      "inputUnchanged": true,
+      "pass": true
+    },
+    {
+      "id": "WORLD_TAMPERED",
+      "label": "Lume modificată în slotul 135",
+      "mutation": "checkpoint.body.tick + 1, doar envelope-ul V3 re-stampat",
+      "code": "CHECKSUM_MISMATCH",
+      "path": "checksum.value",
+      "message": "The archive was modified or is corrupted; the session was not loaded",
+      "inputUnchanged": true,
+      "pass": true
+    },
+    {
+      "id": "ENTITY_SET",
+      "label": "Set de entități diferit la reload",
+      "mutation": "un vehicul viu în plus",
+      "code": "ENTITY_SET_MISMATCH",
+      "path": "character.vehicleIds",
+      "message": "The live world has 71 vehicle(s), the save has 70",
+      "inputUnchanged": true,
+      "pass": true
+    },
+    {
+      "id": "SPAWN_BLOCKED",
+      "label": "Spawn blocat",
+      "mutation": "spawn în interiorul primei clădiri autorate",
+      "code": "SPAWN_BLOCKED",
+      "path": "character.spawn",
+      "message": "The authored walk spawn is not a legal standing point: WALK_START_BLOCKED: start position is inside bld:blk:0-0:0-0",
+      "inputUnchanged": true,
+      "pass": true
+    }
+  ],
+  "checks": [
+    {
+      "name": "formatVersion",
+      "expected": 3,
+      "actual": 3,
+      "pass": true
+    },
+    {
+      "name": "schemaVersion",
+      "expected": 3,
+      "actual": 3,
+      "pass": true
+    },
+    {
+      "name": "checksumLength",
+      "expected": 64,
+      "actual": 64,
+      "pass": true
+    },
+    {
+      "name": "checksumRecomputed",
+      "expected": "8cc80793014f184301da7e475c0d6333f4e52e3ae1974bec8e5a2b68190c13df",
+      "actual": "8cc80793014f184301da7e475c0d6333f4e52e3ae1974bec8e5a2b68190c13df",
+      "pass": true
+    },
+    {
+      "name": "sessionBytesIdentical",
+      "expected": "65ce2a18a6194ff6b6d92d6e177a5d4e5d3dfc362bde33a13828703136c92e7f",
+      "actual": "65ce2a18a6194ff6b6d92d6e177a5d4e5d3dfc362bde33a13828703136c92e7f",
+      "pass": true
+    },
+    {
+      "name": "economyBytesIdentical",
+      "expected": "ee4cb5c644d2c5d1fd64d2e3c37103bbce75fb05ed95ac772226e33b505e2427",
+      "actual": "ee4cb5c644d2c5d1fd64d2e3c37103bbce75fb05ed95ac772226e33b505e2427",
+      "pass": true
+    },
+    {
+      "name": "sizesSession",
+      "expected": 65534,
+      "actual": 65534,
+      "pass": true
+    },
+    {
+      "name": "sizesEconomy",
+      "expected": 14495,
+      "actual": 14495,
+      "pass": true
+    },
+    {
+      "name": "sizesCharacter",
+      "expected": 2584,
+      "actual": 2584,
+      "pass": true
+    },
+    {
+      "name": "xpBalance",
+      "expected": 100.5,
+      "actual": 100.5,
+      "pass": true
+    },
+    {
+      "name": "xpMicroXp",
+      "expected": 100500000,
+      "actual": 100500000,
+      "pass": true
+    },
+    {
+      "name": "level",
+      "expected": 2,
+      "actual": 2,
+      "pass": true
+    },
+    {
+      "name": "dailyRewards",
+      "expected": 1,
+      "actual": 1,
+      "pass": true
+    },
+    {
+      "name": "settlements",
+      "expected": 3,
+      "actual": 3,
+      "pass": true
+    },
+    {
+      "name": "reviews",
+      "expected": 1,
+      "actual": 1,
+      "pass": true
+    },
+    {
+      "name": "kpiDays",
+      "expected": 1,
+      "actual": 1,
+      "pass": true
+    },
+    {
+      "name": "paused",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "mode",
+      "expected": "PAUSED_AUTO",
+      "actual": "PAUSED_AUTO",
+      "pass": true
+    },
+    {
+      "name": "auto",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "inputReleased",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "heldKeysActive",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "bodiesCreated",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "entitiesTotal",
+      "expected": 71,
+      "actual": 71,
+      "pass": true
+    },
+    {
+      "name": "entitiesVehicles",
+      "expected": 70,
+      "actual": 70,
+      "pass": true
+    },
+    {
+      "name": "cameraOnAuthorityOrFocus",
+      "expected": "character:player-1",
+      "actual": "character:player-1",
+      "pass": true
+    },
+    {
+      "name": "authorityLabel",
+      "expected": "CHARACTER:character:player-1",
+      "actual": "CHARACTER:character:player-1",
+      "pass": true
+    },
+    {
+      "name": "tickSharedByAuthorityAndCamera",
+      "expected": 40,
+      "actual": 40,
+      "pass": true
+    },
+    {
+      "name": "cameraSameTick",
+      "expected": 40,
+      "actual": 40,
+      "pass": true
+    },
+    {
+      "name": "reappliedAuthorityTick",
+      "expected": 40,
+      "actual": 40,
+      "pass": true
+    },
+    {
+      "name": "reappliedEveryHeldNeutralized",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "reappliedCameraEntity",
+      "expected": "character:player-1",
+      "actual": "character:player-1",
+      "pass": true
+    },
+    {
+      "name": "reappliedCameraTick",
+      "expected": 40,
+      "actual": 40,
+      "pass": true
+    },
+    {
+      "name": "reappliedBodyBits",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "reappliedSegmentsTick",
+      "expected": 40,
+      "actual": 40,
+      "pass": true
+    },
+    {
+      "name": "reappliedOpenSegment",
+      "expected": null,
+      "actual": null,
+      "pass": true
+    },
+    {
+      "name": "secondReadAccepted",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "secondReadSameDigest",
+      "expected": "5b0bed64d38fe7e0fcb48d944d9b606c69849785d358bedcd66a07ce1df535c9",
+      "actual": "5b0bed64d38fe7e0fcb48d944d9b606c69849785d358bedcd66a07ce1df535c9",
+      "pass": true
+    },
+    {
+      "name": "secondReadSameCounts",
+      "expected": {
+        "settlements": 3,
+        "reviews": 1,
+        "kpiDays": 1,
+        "xpBalance": 100.5,
+        "xpBalanceMicroXp": 100500000,
+        "level": 2,
+        "dailyRewards": 1,
+        "historyScans": 0,
+        "debits": 0,
+        "negativeCredits": false
+      },
+      "actual": {
+        "settlements": 3,
+        "reviews": 1,
+        "kpiDays": 1,
+        "xpBalance": 100.5,
+        "xpBalanceMicroXp": 100500000,
+        "level": 2,
+        "dailyRewards": 1,
+        "historyScans": 0,
+        "debits": 0,
+        "negativeCredits": false
+      },
+      "pass": true
+    },
+    {
+      "name": "storeUntouched",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "formatVersion",
+      "expected": 3,
+      "actual": 3,
+      "pass": true
+    },
+    {
+      "name": "schemaVersion",
+      "expected": 3,
+      "actual": 3,
+      "pass": true
+    },
+    {
+      "name": "checksumLength",
+      "expected": 64,
+      "actual": 64,
+      "pass": true
+    },
+    {
+      "name": "checksumRecomputed",
+      "expected": "89124a0fd19ecd36d603e9f6735038b0ec5c8521b210df6832378e15a220553e",
+      "actual": "89124a0fd19ecd36d603e9f6735038b0ec5c8521b210df6832378e15a220553e",
+      "pass": true
+    },
+    {
+      "name": "sessionBytesIdentical",
+      "expected": "47aac6ba22195c277b5279eadf5ae91c2643298d2b3a1153755ef0b1289b96ca",
+      "actual": "47aac6ba22195c277b5279eadf5ae91c2643298d2b3a1153755ef0b1289b96ca",
+      "pass": true
+    },
+    {
+      "name": "economyBytesIdentical",
+      "expected": "ee4cb5c644d2c5d1fd64d2e3c37103bbce75fb05ed95ac772226e33b505e2427",
+      "actual": "ee4cb5c644d2c5d1fd64d2e3c37103bbce75fb05ed95ac772226e33b505e2427",
+      "pass": true
+    },
+    {
+      "name": "sizesSession",
+      "expected": 65534,
+      "actual": 65534,
+      "pass": true
+    },
+    {
+      "name": "sizesEconomy",
+      "expected": 14495,
+      "actual": 14495,
+      "pass": true
+    },
+    {
+      "name": "sizesCharacter",
+      "expected": 3004,
+      "actual": 3004,
+      "pass": true
+    },
+    {
+      "name": "xpBalance",
+      "expected": 100.5,
+      "actual": 100.5,
+      "pass": true
+    },
+    {
+      "name": "xpMicroXp",
+      "expected": 100500000,
+      "actual": 100500000,
+      "pass": true
+    },
+    {
+      "name": "level",
+      "expected": 2,
+      "actual": 2,
+      "pass": true
+    },
+    {
+      "name": "dailyRewards",
+      "expected": 1,
+      "actual": 1,
+      "pass": true
+    },
+    {
+      "name": "settlements",
+      "expected": 3,
+      "actual": 3,
+      "pass": true
+    },
+    {
+      "name": "reviews",
+      "expected": 1,
+      "actual": 1,
+      "pass": true
+    },
+    {
+      "name": "kpiDays",
+      "expected": 1,
+      "actual": 1,
+      "pass": true
+    },
+    {
+      "name": "paused",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "mode",
+      "expected": "PAUSED_AUTO",
+      "actual": "PAUSED_AUTO",
+      "pass": true
+    },
+    {
+      "name": "auto",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "inputReleased",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "heldKeysActive",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "bodiesCreated",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "entitiesTotal",
+      "expected": 72,
+      "actual": 72,
+      "pass": true
+    },
+    {
+      "name": "entitiesVehicles",
+      "expected": 71,
+      "actual": 71,
+      "pass": true
+    },
+    {
+      "name": "cameraOnAuthorityOrFocus",
+      "expected": "vehicle:taxi-197",
+      "actual": "vehicle:taxi-197",
+      "pass": true
+    },
+    {
+      "name": "authorityLabel",
+      "expected": "VEHICLE:vehicle:taxi-197",
+      "actual": "VEHICLE:vehicle:taxi-197",
+      "pass": true
+    },
+    {
+      "name": "tickSharedByAuthorityAndCamera",
+      "expected": 41,
+      "actual": 41,
+      "pass": true
+    },
+    {
+      "name": "cameraSameTick",
+      "expected": 41,
+      "actual": 41,
+      "pass": true
+    },
+    {
+      "name": "reappliedAuthorityTick",
+      "expected": 41,
+      "actual": 41,
+      "pass": true
+    },
+    {
+      "name": "reappliedEveryHeldNeutralized",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "reappliedCameraEntity",
+      "expected": "vehicle:taxi-197",
+      "actual": "vehicle:taxi-197",
+      "pass": true
+    },
+    {
+      "name": "reappliedCameraTick",
+      "expected": 41,
+      "actual": 41,
+      "pass": true
+    },
+    {
+      "name": "reappliedBodyBits",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "reappliedSegmentsTick",
+      "expected": 41,
+      "actual": 41,
+      "pass": true
+    },
+    {
+      "name": "reappliedOpenSegment",
+      "expected": "player:130:segment:1",
+      "actual": "player:130:segment:1",
+      "pass": true
+    },
+    {
+      "name": "suspendedBodyBits",
+      "expected": "405680000000000000000000000000004066166666666666",
+      "actual": "405680000000000000000000000000004066166666666666",
+      "pass": true
+    },
+    {
+      "name": "openSegmentKind",
+      "expected": "MANUAL",
+      "actual": "MANUAL",
+      "pass": true
+    },
+    {
+      "name": "cameraMidTransition",
+      "expected": 17,
+      "actual": 17,
+      "pass": true
+    },
+    {
+      "name": "secondReadAccepted",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "secondReadSameDigest",
+      "expected": "3a34811176e678f4157926ccdb3010faa0e0ffcafe8231954f2baa7540f6a009",
+      "actual": "3a34811176e678f4157926ccdb3010faa0e0ffcafe8231954f2baa7540f6a009",
+      "pass": true
+    },
+    {
+      "name": "secondReadSameCounts",
+      "expected": {
+        "settlements": 3,
+        "reviews": 1,
+        "kpiDays": 1,
+        "xpBalance": 100.5,
+        "xpBalanceMicroXp": 100500000,
+        "level": 2,
+        "dailyRewards": 1,
+        "historyScans": 0,
+        "debits": 0,
+        "negativeCredits": false
+      },
+      "actual": {
+        "settlements": 3,
+        "reviews": 1,
+        "kpiDays": 1,
+        "xpBalance": 100.5,
+        "xpBalanceMicroXp": 100500000,
+        "level": 2,
+        "dailyRewards": 1,
+        "historyScans": 0,
+        "debits": 0,
+        "negativeCredits": false
+      },
+      "pass": true
+    },
+    {
+      "name": "formatVersion",
+      "expected": 3,
+      "actual": 3,
+      "pass": true
+    },
+    {
+      "name": "schemaVersion",
+      "expected": 3,
+      "actual": 3,
+      "pass": true
+    },
+    {
+      "name": "checksumLength",
+      "expected": 64,
+      "actual": 64,
+      "pass": true
+    },
+    {
+      "name": "checksumRecomputed",
+      "expected": "eee3d147f880bb9f108df42f23f189c97b2d045ca5e8a3f53fd9cf0e58548d82",
+      "actual": "eee3d147f880bb9f108df42f23f189c97b2d045ca5e8a3f53fd9cf0e58548d82",
+      "pass": true
+    },
+    {
+      "name": "sessionBytesIdentical",
+      "expected": "65ce2a18a6194ff6b6d92d6e177a5d4e5d3dfc362bde33a13828703136c92e7f",
+      "actual": "65ce2a18a6194ff6b6d92d6e177a5d4e5d3dfc362bde33a13828703136c92e7f",
+      "pass": true
+    },
+    {
+      "name": "economyBytesIdentical",
+      "expected": "ee4cb5c644d2c5d1fd64d2e3c37103bbce75fb05ed95ac772226e33b505e2427",
+      "actual": "ee4cb5c644d2c5d1fd64d2e3c37103bbce75fb05ed95ac772226e33b505e2427",
+      "pass": true
+    },
+    {
+      "name": "sizesSession",
+      "expected": 65534,
+      "actual": 65534,
+      "pass": true
+    },
+    {
+      "name": "sizesEconomy",
+      "expected": 14495,
+      "actual": 14495,
+      "pass": true
+    },
+    {
+      "name": "sizesCharacter",
+      "expected": 3178,
+      "actual": 3178,
+      "pass": true
+    },
+    {
+      "name": "xpBalance",
+      "expected": 100.5,
+      "actual": 100.5,
+      "pass": true
+    },
+    {
+      "name": "xpMicroXp",
+      "expected": 100500000,
+      "actual": 100500000,
+      "pass": true
+    },
+    {
+      "name": "level",
+      "expected": 2,
+      "actual": 2,
+      "pass": true
+    },
+    {
+      "name": "dailyRewards",
+      "expected": 1,
+      "actual": 1,
+      "pass": true
+    },
+    {
+      "name": "settlements",
+      "expected": 3,
+      "actual": 3,
+      "pass": true
+    },
+    {
+      "name": "reviews",
+      "expected": 1,
+      "actual": 1,
+      "pass": true
+    },
+    {
+      "name": "kpiDays",
+      "expected": 1,
+      "actual": 1,
+      "pass": true
+    },
+    {
+      "name": "paused",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "mode",
+      "expected": "PAUSED_AUTO",
+      "actual": "PAUSED_AUTO",
+      "pass": true
+    },
+    {
+      "name": "auto",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "inputReleased",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "heldKeysActive",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "bodiesCreated",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "entitiesTotal",
+      "expected": 71,
+      "actual": 71,
+      "pass": true
+    },
+    {
+      "name": "entitiesVehicles",
+      "expected": 70,
+      "actual": 70,
+      "pass": true
+    },
+    {
+      "name": "cameraOnAuthorityOrFocus",
+      "expected": "character:player-1",
+      "actual": "character:player-1",
+      "pass": true
+    },
+    {
+      "name": "authorityLabel",
+      "expected": "CHARACTER:character:player-1",
+      "actual": "CHARACTER:character:player-1",
+      "pass": true
+    },
+    {
+      "name": "tickSharedByAuthorityAndCamera",
+      "expected": 40,
+      "actual": 40,
+      "pass": true
+    },
+    {
+      "name": "cameraSameTick",
+      "expected": 40,
+      "actual": 40,
+      "pass": true
+    },
+    {
+      "name": "secondReadAccepted",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "secondReadSameDigest",
+      "expected": "9030c2d7141bbc2abd01b1c510dcb28ba1ba03b15158d20194af776f24d51150",
+      "actual": "9030c2d7141bbc2abd01b1c510dcb28ba1ba03b15158d20194af776f24d51150",
+      "pass": true
+    },
+    {
+      "name": "secondReadSameCounts",
+      "expected": {
+        "settlements": 3,
+        "reviews": 1,
+        "kpiDays": 1,
+        "xpBalance": 100.5,
+        "xpBalanceMicroXp": 100500000,
+        "level": 2,
+        "dailyRewards": 1,
+        "historyScans": 0,
+        "debits": 0,
+        "negativeCredits": false
+      },
+      "actual": {
+        "settlements": 3,
+        "reviews": 1,
+        "kpiDays": 1,
+        "xpBalance": 100.5,
+        "xpBalanceMicroXp": 100500000,
+        "level": 2,
+        "dailyRewards": 1,
+        "historyScans": 0,
+        "debits": 0,
+        "negativeCredits": false
+      },
+      "pass": true
+    },
+    {
+      "name": "formatVersion",
+      "expected": 3,
+      "actual": 3,
+      "pass": true
+    },
+    {
+      "name": "schemaVersion",
+      "expected": 3,
+      "actual": 3,
+      "pass": true
+    },
+    {
+      "name": "checksumLength",
+      "expected": 64,
+      "actual": 64,
+      "pass": true
+    },
+    {
+      "name": "checksumRecomputed",
+      "expected": "d4b1561f45367b3a1ab98aecacf235306541d13e459fe4238069009582c390a1",
+      "actual": "d4b1561f45367b3a1ab98aecacf235306541d13e459fe4238069009582c390a1",
+      "pass": true
+    },
+    {
+      "name": "sessionBytesIdentical",
+      "expected": "65ce2a18a6194ff6b6d92d6e177a5d4e5d3dfc362bde33a13828703136c92e7f",
+      "actual": "65ce2a18a6194ff6b6d92d6e177a5d4e5d3dfc362bde33a13828703136c92e7f",
+      "pass": true
+    },
+    {
+      "name": "economyBytesIdentical",
+      "expected": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "actual": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "pass": true
+    },
+    {
+      "name": "sizesSession",
+      "expected": 65534,
+      "actual": 65534,
+      "pass": true
+    },
+    {
+      "name": "sizesEconomy",
+      "expected": 4,
+      "actual": 4,
+      "pass": true
+    },
+    {
+      "name": "sizesCharacter",
+      "expected": 3178,
+      "actual": 3178,
+      "pass": true
+    },
+    {
+      "name": "xpBalance",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "xpMicroXp",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "level",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "dailyRewards",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "settlements",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "reviews",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "kpiDays",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "paused",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "mode",
+      "expected": "PAUSED_AUTO",
+      "actual": "PAUSED_AUTO",
+      "pass": true
+    },
+    {
+      "name": "auto",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "inputReleased",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "heldKeysActive",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "bodiesCreated",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "entitiesTotal",
+      "expected": 71,
+      "actual": 71,
+      "pass": true
+    },
+    {
+      "name": "entitiesVehicles",
+      "expected": 70,
+      "actual": 70,
+      "pass": true
+    },
+    {
+      "name": "cameraOnAuthorityOrFocus",
+      "expected": "character:player-1",
+      "actual": "character:player-1",
+      "pass": true
+    },
+    {
+      "name": "authorityLabel",
+      "expected": "CHARACTER:character:player-1",
+      "actual": "CHARACTER:character:player-1",
+      "pass": true
+    },
+    {
+      "name": "tickSharedByAuthorityAndCamera",
+      "expected": 40,
+      "actual": 40,
+      "pass": true
+    },
+    {
+      "name": "cameraSameTick",
+      "expected": 40,
+      "actual": 40,
+      "pass": true
+    },
+    {
+      "name": "secondReadAccepted",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "secondReadSameDigest",
+      "expected": "74531fe2ecdc3bbf279cb36c85a0405d81a70c368e7bdb8f06fa9f20155adc35",
+      "actual": "74531fe2ecdc3bbf279cb36c85a0405d81a70c368e7bdb8f06fa9f20155adc35",
+      "pass": true
+    },
+    {
+      "name": "secondReadSameCounts",
+      "expected": {
+        "settlements": 0,
+        "reviews": 0,
+        "kpiDays": 0,
+        "xpBalance": 0,
+        "xpBalanceMicroXp": 0,
+        "level": 0,
+        "dailyRewards": 0,
+        "historyScans": 0,
+        "debits": 0,
+        "negativeCredits": false
+      },
+      "actual": {
+        "settlements": 0,
+        "reviews": 0,
+        "kpiDays": 0,
+        "xpBalance": 0,
+        "xpBalanceMicroXp": 0,
+        "level": 0,
+        "dailyRewards": 0,
+        "historyScans": 0,
+        "debits": 0,
+        "negativeCredits": false
+      },
+      "pass": true
+    },
+    {
+      "name": "refusal:CHECKSUM",
+      "expected": "CHECKSUM_MISMATCH",
+      "actual": "CHECKSUM_MISMATCH",
+      "pass": true
+    },
+    {
+      "name": "refusal:MISSING_SLOT",
+      "expected": "MISSING_FIELD",
+      "actual": "MISSING_FIELD",
+      "pass": true
+    },
+    {
+      "name": "refusal:FUTURE_FORMAT",
+      "expected": "FORMAT_VERSION_TOO_NEW",
+      "actual": "FORMAT_VERSION_TOO_NEW",
+      "pass": true
+    },
+    {
+      "name": "refusal:FUTURE_SCHEMA",
+      "expected": "SCHEMA_TOO_NEW",
+      "actual": "SCHEMA_TOO_NEW",
+      "pass": true
+    },
+    {
+      "name": "refusal:CHECKSUM_BEFORE_SCHEMA",
+      "expected": "CHECKSUM_MISMATCH",
+      "actual": "CHECKSUM_MISMATCH",
+      "pass": true
+    },
+    {
+      "name": "refusal:PARSE_ERROR",
+      "expected": "PARSE_ERROR",
+      "actual": "PARSE_ERROR",
+      "pass": true
+    },
+    {
+      "name": "refusal:DUPLICATE_KEY",
+      "expected": "DUPLICATE_KEY",
+      "actual": "DUPLICATE_KEY",
+      "pass": true
+    },
+    {
+      "name": "refusal:LEGACY_READ",
+      "expected": "LEGACY_WALKING_SAVE",
+      "actual": "LEGACY_WALKING_SAVE",
+      "pass": true
+    },
+    {
+      "name": "refusal:ALREADY_CURRENT",
+      "expected": "ALREADY_CURRENT",
+      "actual": "ALREADY_CURRENT",
+      "pass": true
+    },
+    {
+      "name": "refusal:SESSION_MISMATCH",
+      "expected": "SESSION_MISMATCH",
+      "actual": "SESSION_MISMATCH",
+      "pass": true
+    },
+    {
+      "name": "refusal:SIZE_MISMATCH",
+      "expected": "SIZE_MISMATCH",
+      "actual": "SIZE_MISMATCH",
+      "pass": true
+    },
+    {
+      "name": "refusal:CAMERA_AUTHORITY",
+      "expected": "CAMERA_AUTHORITY_MISMATCH",
+      "actual": "CAMERA_AUTHORITY_MISMATCH",
+      "pass": true
+    },
+    {
+      "name": "refusal:AUTHORITY_MISMATCH",
+      "expected": "AUTHORITY_MISMATCH",
+      "actual": "AUTHORITY_MISMATCH",
+      "pass": true
+    },
+    {
+      "name": "refusal:TICK_MISMATCH",
+      "expected": "TICK_MISMATCH",
+      "actual": "TICK_MISMATCH",
+      "pass": true
+    },
+    {
+      "name": "refusal:XP_TAMPERED",
+      "expected": "CHECKSUM_MISMATCH",
+      "actual": "CHECKSUM_MISMATCH",
+      "pass": true
+    },
+    {
+      "name": "refusal:WORLD_TAMPERED",
+      "expected": "CHECKSUM_MISMATCH",
+      "actual": "CHECKSUM_MISMATCH",
+      "pass": true
+    },
+    {
+      "name": "refusal:ENTITY_SET",
+      "expected": "ENTITY_SET_MISMATCH",
+      "actual": "ENTITY_SET_MISMATCH",
+      "pass": true
+    },
+    {
+      "name": "refusal:SPAWN_BLOCKED",
+      "expected": "SPAWN_BLOCKED",
+      "actual": "SPAWN_BLOCKED",
+      "pass": true
+    }
+  ],
+  "summary": {
+    "checks": 160,
+    "passed": 160,
+    "scenarios": 4,
+    "scenariosPassed": 4,
+    "refusals": 18,
+    "refusalsClosed": 18,
+    "migrationPreservesEverything": true,
+    "reloadCoherent": true,
+    "noDuplicates": true,
+    "storeUntouched": true,
+    "pass": true
+  },
+  "limitations": [
+    "Walker-ul 192 nu expune un invers al stării: reluarea recreează corpul la poziția salvată (biți identici) și tick-ul walker-ului repornește de la 0, în timp ce tick-ul sesiunii rămâne cel salvat în slot.",
+    "Slotul este un contract pur: cablarea din aplicație (pauză, capturare la export, aplicarea la reload) rămâne a consumatorului; modulul nu scrie în IndexedDB și nu creează writer.",
+    "Camera salvată în mijlocul unei tranziții de 18 tick-uri este restaurată exact (17 tick-uri rămase), dar continuarea ei depinde de tick-urile reale ale consumatorului.",
+    "Spațiul de nume al vehiculelor din slot este lista de entități a lumii (maximum 128 din 206); un vehicul care nu există în lume nu poate fi salvat."
+  ],
+  "determinism": {
+    "runs": 2,
+    "identical": true,
+    "digest": "dbe3045fa22e35b7a2002d242b58e7dbdf1569c3508b4000b5e672bafd57d650",
+    "scenarioDigests": [
+      "5b0bed64d38fe7e0fcb48d944d9b606c69849785d358bedcd66a07ce1df535c9",
+      "3a34811176e678f4157926ccdb3010faa0e0ffcafe8231954f2baa7540f6a009",
+      "9030c2d7141bbc2abd01b1c510dcb28ba1ba03b15158d20194af776f24d51150",
+      "74531fe2ecdc3bbf279cb36c85a0405d81a70c368e7bdb8f06fa9f20155adc35"
+    ]
+  }
+}

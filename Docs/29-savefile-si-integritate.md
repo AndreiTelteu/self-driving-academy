@@ -218,3 +218,134 @@ criteriul „evenimente duplicate, joburi stale, schimbarea zilei și importul n
 **Ce rămâne deschis.** Verificarea checksum-ului în WebCrypto și scrierea fișierului pe disc sunt
 dovedite de proba de browser a 234, nu recapturate aici. Nivelul rămâne determinist în Node; un import
 real într-un browser cu două taburi rămâne proba 234.
+
+## Contract implementat V3 (PBI 200) — slotul de personaj și migrarea arhivei
+
+`src/persistence/walking-save.ts` (contract `200-walking-save-v1`) este versiunea 3 a familiei de
+arhive de sesiune: `formatVersion = 3`, `schemaVersion = 3`, aceleași metadate (`format`, `units`,
+`createdAt`, `versions`, `session`, `sizes`, `checksum`), dar cu un al treilea slot. Sloturile livrate
+rămân **neschimbate** și își păstrează checksum-urile proprii: `session` este documentul 135 exact
+(lume, progres, campanie, setări 009, referință de profil 109/110, scenarii 127), `economy` este
+bundle-ul 215 exact (daily 211/212, ledger 209, review-uri 209, bucketuri KPI 209, checkpoint XP 213),
+iar `character` este slotul nou. Un fișier v1 sau v2 **nu** este citit de cititorul v3: este refuzat
+cu `LEGACY_WALKING_SAVE` și migrat explicit cu `upgradeWalkingSave`, care copiază sloturile existente
+prin referință, nu le rescrie.
+
+### Ce conține slotul `character`
+
+| Câmp | Conținut | Proprietar la citire |
+| --- | --- | --- |
+| `version` | `200-walking-character-v1` | cititorul slotului |
+| `source` | `SNAPSHOT` (capturat din joc) sau `MIGRATION_DEFAULT` (regula de mai jos) | cititorul slotului |
+| `sessionId`, `playerId`, `worldEpoch` | identitatea sesiunii, comparată cu envelope-ul | cititorul slotului |
+| `tick` | tick-ul sesiunii, comun autorității și camerei | cititorul slotului |
+| `characterTick` | tick-ul walker-ului 192 care deține corpul | cititorul slotului |
+| `authority` | snapshot-ul 193 (`version`, `tick`, `authority`, `held`, `neutralized`, `transitions`) | `createInputAuthorityArbiter(...).restore` |
+| `camera` | snapshot-ul 194 (`entityId`, `positionM`, `lookAtM`, `orbit`, `transition`, `knownEntityIds`, `control`) | `createCharacterCamera(...).restore` |
+| `segments` | starea 198 (țintă, segment deschis, ultimul închis, contoare, secvență) | `parseWalkingSegmentsState` |
+| `fleet` | starea 197 (autoritate, corpul unic, focus, corp suspendat, jurnale, comenzi) | `parseFleetSwitchState` |
+| `vehicleIds` | entitățile vehicul care existau la salvare (maximum 128, plafonul 206) | cititorul slotului |
+
+Corpul personajului este unic: blocul `fleet.character` are exact forma stării 192 (`entityId`,
+`positionM`, `yawRad`), iar builderul refuză cu `BODY_MISMATCH` un walker și o flotă care descriu
+poziții diferite. Nu există o a doua copie a poziției, deci nu poate exista o a doua autoritate.
+
+Cititorul adaugă numai verificările pe care niciun proprietar nu le poate face singur: același tick
+pentru autoritate și cameră (`TICK_MISMATCH`), aceeași entitate în 193 și în 197
+(`AUTHORITY_MISMATCH`), camera exact pe entitatea autorității sau pe cea a unui `FOCUS` 197 explicit
+(`CAMERA_AUTHORITY_MISMATCH`), segmentele aparțin aceluiași personaj și aceleiași sesiuni
+(`BODY_MISMATCH`, `SESSION_MISMATCH`), iar fiecare entitate cunoscută de cameră este corpul sau un
+vehicul salvat (`ENTITY_REFERENCE_MISSING`).
+
+### Migrarea 2 → 3 și regula pentru sesiunile fără slot de personaj
+
+`upgradeWalkingSave` citește intrarea cu cititorul ei real (135 pentru v1, 215 pentru v2), apoi
+construiește envelope-ul v3 cu aceleași obiecte de componente. Digestul canonic al slotului `session`
+și al slotului `economy` este calculat **înainte și după** migrare; o diferență este `BODY_MISMATCH`
+și nimic nu este publicat. Un document care declară deja versiunea 3 este refuzat cu
+`ALREADY_CURRENT`: nu este date mai vechi.
+
+O sesiune fără slot de personaj primește starea documentată `MIGRATION_DEFAULT`:
+
+1. **Poziția** este spawn-ul de mers autorat al sesiunii, acceptat numai dacă walker-ul real 192 îl
+   acceptă pe harta reală; un punct într-un solid este `SPAWN_BLOCKED`, iar un spawn lipsit este
+   `SPAWN_REQUIRED`. Nu se inventează o poziție „aproximativă”.
+2. **Autoritatea** este `CHARACTER:<characterId>`, fără nicio tastă ținută.
+3. **Camera** este pe același personaj, la același tick, cu orbita implicită 194 și controlul 009 al
+   sesiunii (din slotul `settings`, altfel valorile implicite 009); nicio primă cadrare nu este
+   inventată (`positionM` rămâne `null`).
+4. **Segmentele** au ținta generației de profil a sesiunii (`profileId`, `activeVersionId`,
+   `learningEpoch` din checkpoint); fără profil, ținta se leagă de identitatea sesiunii
+   (`profileId = playerId`, `baseVersionId = sessionId`), deci nu se scrie un profil inexistent.
+   Modelul pornește **gol** la tick-ul salvării: 0 tick-uri de mers, 0 segmente, 0 candidați,
+   `learningEligible: false`.
+5. **Flota** are un singur corp, la spawn, fără focus și fără corp suspendat, iar `vehicleIds` sunt
+   entitățile vehicul din snapshotul 206 al sesiunii.
+
+### Checksum, ordinea la citire și refuzurile închise
+
+Checksum-ul este `SHA-256` peste bytes UTF-8 ai formei canonice `SDA-CJSON-1` a envelope-ului fără
+câmpul top-level `checksum`; acoperă metadatele, cele trei sloturi și bilanțul de mărime. Se refolosesc
+`canonicalizeJson`, `parseStrictJson` și `sha256Hex`; nu există un al doilea format. Ordinea la citire
+este: buget de bytes/adâncime → parsare strictă → `format`/`formatVersion` → formă canonică și buget →
+checksum → `schemaVersion` → sloturile, fiecare cu cititorul proprietarului → bilanțul de mărime.
+Checksum-ul este verificat **înainte** de schemă și de sloturi, deci o schemă declarată „viitoare”
+peste un payload stricat este `CHECKSUM_MISMATCH`, nu `SCHEMA_TOO_NEW`.
+
+| Caz | Cod |
+| --- | --- |
+| editare fără checksum nou (inclusiv XP sau poziție) | `CHECKSUM_MISMATCH` |
+| XP modificat în slotul 215, doar envelope-ul v3 re-stampat | `CHECKSUM_MISMATCH` (checksum-ul 215/213) |
+| lume modificată în slotul 135, doar envelope-ul v3 re-stampat | `CHECKSUM_MISMATCH` (checksum-ul 206/135) |
+| slot `character` lipsă | `MISSING_FIELD` |
+| format mai nou | `FORMAT_VERSION_TOO_NEW` |
+| schemă mai nouă | `SCHEMA_TOO_NEW` |
+| JSON trunchiat / chei duplicate | `PARSE_ERROR` / `DUPLICATE_KEY` |
+| arhivă v1/v2 dată cititorului v3 | `LEGACY_WALKING_SAVE` |
+| migrare peste un document v3 | `ALREADY_CURRENT` |
+| slot din altă sesiune | `SESSION_MISMATCH` |
+| mărime declarată greșită | `SIZE_MISMATCH` |
+| camera pe altă entitate decât autoritatea | `CAMERA_AUTHORITY_MISMATCH` |
+| autoritatea 193 ≠ autoritatea 197 | `AUTHORITY_MISMATCH` |
+| tick incoerent între autoritate, cameră și slot | `TICK_MISMATCH` |
+| setul de vehicule viu diferit de cel salvat | `ENTITY_SET_MISMATCH` |
+| spawn în solid | `SPAWN_BLOCKED` |
+
+Un refuz nu migrează parțial și nu scrie nimic: modulul nu primește nici repository, nici writer, nici
+port de stocare, iar dovezile compară digestul intrării înainte și după apel și re-exportă aceeași
+sesiune byte cu byte.
+
+### Reload coerent
+
+`walkingSaveReload` nu aplică nimic; descrie lansarea și verifică setul de entități:
+
+- `launch = { mode: 'PAUSED_AUTO', paused: true, auto: true, inputReleased: true, heldKeysActive: 0,
+  bodiesCreated: 0 }` — jocul pornește în pauză, cu inputul eliberat;
+- fiecare tastă ținută la salvare este neutralizată de `restore` din 193, deci `heldKeysActive` este 0
+  structural: o accelerație apăsată înainte de salvare nu produce nimic după reluare;
+- autoritatea este cea salvată (`CHARACTER:<id>` sau `VEHICLE:<id>`), iar camera este pe aceeași
+  entitate (sau pe ținta unui `FOCUS` 197 explicit);
+- `entities = { characters: 1, vehicles: vehicleIds.length, total: vehicleIds.length + 1, created: 0 }`
+  — un reload nu poate adăuga sau pierde un corp; un set viu diferit este `ENTITY_SET_MISMATCH`;
+- XP, recompensele daily și decontările sunt citite din slotul 215 purtat, deci un al doilea reload
+  raportează exact aceleași contoare și același digest.
+
+### Bugete și măsurători reale
+
+Plafoanele derivă din cele livrate: `session` și `economy` păstrează exact bugetele 215
+(2 101 248 B și 1 048 576 B), slotul `character` este un sfert dintr-un corp de rând 130
+(262 144 / 4 = 65 536 B), totalul este 3 215 360 B, iar fișierul 3 280 896 B. În proba reală:
+documentul are 83 190 de unități de cod (slot `session` 65 534 B, `economy` 14 495 B, `character`
+2 584 B) pentru mersul pe jos și 83 610 pentru reload-ul din taxi, cu slot de personaj de 3 004 B;
+varianta migrată implicit are 83 784 și 3 178 B.
+
+Dovezile sunt în [Evidence/200-v3-walking-save](Evidence/200-v3-walking-save/README.md): raportul
+determinist 160/160, patru scenarii (mers, taxi, migrare implicită, arhivă v1), 18 refuzuri închise,
+digestul SHA-256 `dbe3045fa22e35b7a2002d242b58e7dbdf1569c3508b4000b5e672bafd57d650`, regenerabil cu
+`npm run walking:save` și verificabil cu `npm run walking:save -- --check`.
+
+**Ce rămâne deschis.** Walker-ul 192 nu expune un invers al stării, deci reluarea recreează corpul la
+poziția salvată (biți identici) și tick-ul walker-ului repornește de la 0, în timp ce tick-ul sesiunii
+rămâne cel salvat. Cablarea în aplicație (pauză, capturare la export, aplicare la reload) rămâne a
+consumatorului: acest contract nu scrie în IndexedDB și nu creează writer.
+
