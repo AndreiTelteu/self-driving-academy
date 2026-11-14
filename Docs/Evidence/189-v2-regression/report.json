@@ -1,0 +1,361 @@
+{
+  "schemaVersion": 1,
+  "pbi": "189",
+  "generatedBy": "npm run qa:v2-regression",
+  "command": "npm run qa:v2-regression",
+  "workload": {
+    "id": "189-workload-v2-1",
+    "release": "V2",
+    "definition": {
+      "fleet": {
+        "taxis": 30,
+        "civilians": 40,
+        "source": "Docs/performance-budgets.json workloads.maximumV1"
+      },
+      "pedestrians": {
+        "entities": 96,
+        "crosswalks": 80,
+        "scenarios": 6,
+        "source": "Docs/Evidence/164-pedestrians/report.json"
+      },
+      "hazards": {
+        "obstacles": 96,
+        "stimuli": 11,
+        "scenarios": 7,
+        "source": "Docs/Evidence/165-hazards/report.json"
+      },
+      "catalog": {
+        "keys": 80,
+        "findings": 0,
+        "source": "Docs/Evidence/187-v2-parameter-gate/report.json"
+      },
+      "challenges": {
+        "count": 15,
+        "families": 5,
+        "checks": 40,
+        "source": "Docs/Evidence/188-v2-challenges/report.json"
+      },
+      "lifecycle": {
+        "cycles": 20,
+        "minutes": 60.002,
+        "source": "Docs/Evidence/159-soak/report.json"
+      }
+    },
+    "functionalEvidence": [
+      "pedestrians-v2",
+      "hazards-v2",
+      "parameter-gate",
+      "challenges-v2"
+    ],
+    "timing": {
+      "verdict": "NOT_RUN",
+      "reason": "Harness-ul de performanță nu are fixture cu pietoni/pericole: 33 fișiere în tests/harness, 0 referințe de pietoni și 0 de pericole; dovezile 155/156/158/224 au 0 referințe. Măsurarea frame/simulare pe workload-ul V2 cere o pagină de harness și un GPU real, indisponibile aici."
+    }
+  },
+  "baseline": {
+    "file": "Docs/performance-budgets.json",
+    "budgetVersion": "203-initial-1",
+    "approvedGate": false,
+    "sha256": "10d78ab5c999215684c821a1f32fd7045392f0f6d8c140c54115d0f73475a21c",
+    "headSha256": "10d78ab5c999215684c821a1f32fd7045392f0f6d8c140c54115d0f73475a21c",
+    "unmodified": true,
+    "hardwareGameplayGate": "NOT_VALIDATED"
+  },
+  "criteria": [
+    {
+      "id": "C1",
+      "title": "Suita V1 revizia 0.3 este reexecutată: moduri, civili, economie/reviews, daily, XP și checkpoint/replay",
+      "verdict": "PASS",
+      "basis": "29 rânduri: 27 PASS, 0 FAIL, 2 NOT_RUN; acoperire cerută 27/27; pierderi XP 0, debitări 0; rânduri declarate NOT_RUN în afara listei: C3, C4",
+      "commands": [
+        "v1-suite"
+      ]
+    },
+    {
+      "id": "C2",
+      "title": "Hardware-ul de referință trece țintele cu pietoni și catalog complet sau gate-ul rămâne deschis",
+      "verdict": "NOT_RUN",
+      "basis": "fps-hardware NOT_VALIDATED: capturile hardware 220 sunt pe buildul 2d68b43c8cdf, iar măsurătoarea gate-ului reexecutat raportează structural PASS și release NOT_VALIDATED; pragurile absolute cer aceeași revizie. 155 raportează 85 PASS pe configurația laptop, dar fără pietoni/pericole în workload. Gate-ul rămâne deschis.",
+      "commands": [
+        "hardware-budget",
+        "performance-gate"
+      ]
+    },
+    {
+      "id": "C3",
+      "title": "Contractul 25 și gate-urile V1 sunt reexecutate pe workload V2 versionat; baseline-ul nu este relaxat tacit",
+      "verdict": "NOT_RUN",
+      "basis": "Contractul 25 reexecutat: 158 PASS, 157 STRUCTURAL_PASS, 159 SOAK_PASS, 156 MEASURED_GATE_PASS, 224 structural PASS; manifest 203-initial-1 nemodificat. Workload-ul V2 are 0 referințe de pietoni/pericole în dovezile de performanță și 0 în `tests/harness`, deci gate-urile de timp nu îl pot rula: partea V2 rămâne NOT_RUN.",
+      "commands": [
+        "simulation-budget",
+        "render-budget",
+        "soak-report",
+        "traffic-benchmark",
+        "performance-gate"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "id": "v1-suite",
+      "criterion": "C1",
+      "command": "npm run qa:v1-regression -- --check",
+      "exitCode": 0,
+      "verdict": "PASS",
+      "figure": "29 rânduri, 27 PASS, 0 FAIL, 2 NOT_RUN; pierderi XP 0, debitări 0"
+    },
+    {
+      "id": "compat-matrix",
+      "criterion": "compat",
+      "command": "npm run qa:compat -- --check",
+      "exitCode": 0,
+      "verdict": "PASS",
+      "figure": "9/9 combinații reale PASS, 0 FAIL, 11/11 verificări deterministe, 11 combinații declarate NOT_RUN"
+    },
+    {
+      "id": "hardware-budget",
+      "criterion": "C2",
+      "command": "npm run perf:hardware-budget -- --check",
+      "exitCode": 0,
+      "verdict": "PASS",
+      "figure": "155: 85 PASS, 0 FAIL, 6 NOT_MEASURED; laptop 8 configurații, hardwareGameplayGate NOT_VALIDATED"
+    },
+    {
+      "id": "simulation-budget",
+      "criterion": "C3",
+      "command": "npm run perf:simulation-budget -- --check",
+      "exitCode": 0,
+      "verdict": "PASS",
+      "figure": "158: decizii PASS, estimare PASS, transferuri PASS, 3/3 echivalențe IDENTICAL"
+    },
+    {
+      "id": "render-budget",
+      "criterion": "C3",
+      "command": "npm run perf:render-budget -- --check",
+      "exitCode": 0,
+      "verdict": "PASS",
+      "figure": "157: 17 PASS, 0 FAIL, 2 NOT_MEASURED, gate STRUCTURAL_PASS"
+    },
+    {
+      "id": "soak-report",
+      "criterion": "C3",
+      "command": "npm run perf:soak -- --check",
+      "exitCode": 0,
+      "verdict": "PASS",
+      "figure": "159: SOAK_PASS, 60.002 min, 20 cicluri, 16 verificări"
+    },
+    {
+      "id": "traffic-benchmark",
+      "criterion": "C3",
+      "command": "npm run perf:traffic-benchmark -- --check",
+      "exitCode": 0,
+      "verdict": "PASS",
+      "figure": "156: 36 PASS, 0 FAIL, 12 STRESS, 60 REPORTED, gate MEASURED_GATE_PASS"
+    },
+    {
+      "id": "performance-gate",
+      "criterion": "C3",
+      "command": "npm run perf:gate -- --measure --out=Docs/Evidence/189-v2-regression/gate-measure",
+      "exitCode": 0,
+      "verdict": "PASS",
+      "figure": "224 reexecutat: structural PASS, release NOT_VALIDATED, 16 PASS, 0 FAIL, 1 NOT_VALIDATED; bundle 5.97 MiB (6262960 B) din 8.00 MiB; JS 3616364 B + WASM 2646596 B, gzip 1805985 B, 130 artefacte"
+    },
+    {
+      "id": "parameter-gate",
+      "criterion": "regressions",
+      "command": "npm run validate:parameters -- --check",
+      "exitCode": 0,
+      "verdict": "PASS",
+      "figure": "187: 80 chei, 0 findings, verdict PASS"
+    },
+    {
+      "id": "challenges-v2",
+      "criterion": "regressions",
+      "command": "npm run missions:challenges-v2 -- --check",
+      "exitCode": 0,
+      "verdict": "PASS",
+      "figure": "188: 15 provocări, 5 familii, 40/40 verificări"
+    },
+    {
+      "id": "pedestrians-v2",
+      "criterion": "workload",
+      "command": "npm run pedestrians:report -- --check",
+      "exitCode": 0,
+      "verdict": "PASS",
+      "figure": "164: 96 pietoni, 80 treceri, 6 scenarii, 4 conflicte"
+    },
+    {
+      "id": "hazards-v2",
+      "criterion": "workload",
+      "command": "npm run hazards:report -- --check",
+      "exitCode": 0,
+      "verdict": "PASS",
+      "figure": "165: 96 obstacole, 11 stimuli, 7 scenarii, 10 reacții"
+    },
+    {
+      "id": "full-test-suite",
+      "criterion": "regressions",
+      "command": "npm test",
+      "exitCode": 0,
+      "verdict": "PASS",
+      "figure": "3250 teste, 3250 trecute, 0 eșuate"
+    }
+  ],
+  "regressions": {
+    "verdict": "PASS",
+    "basis": "3250 teste (0 eșuate); 187 80 chei/0 findings; 188 15 provocări/40 verificări; 164 PASS; 165 PASS"
+  },
+  "compatibility": {
+    "verdict": "PASS",
+    "rows": [
+      {
+        "id": "production-headed-auto",
+        "scenario": "AUTO",
+        "backend": "WEBGPU",
+        "verdict": "PASS"
+      },
+      {
+        "id": "production-headed-webgpu-off",
+        "scenario": "WEBGPU_UNAVAILABLE",
+        "backend": "WEBGL2",
+        "verdict": "PASS"
+      },
+      {
+        "id": "production-headed-no-backend",
+        "scenario": "NO_BACKEND",
+        "backend": "NONE",
+        "verdict": "PASS"
+      },
+      {
+        "id": "production-headed-webgl1-only",
+        "scenario": "WEBGL1_ONLY",
+        "backend": "NONE",
+        "verdict": "PASS"
+      },
+      {
+        "id": "production-headless-auto",
+        "scenario": "AUTO",
+        "backend": "WEBGL2",
+        "verdict": "PASS"
+      },
+      {
+        "id": "harness-headed-auto",
+        "scenario": "AUTO",
+        "backend": "WEBGPU",
+        "verdict": "PASS"
+      },
+      {
+        "id": "harness-headless-auto",
+        "scenario": "AUTO",
+        "backend": "WEBGL2",
+        "verdict": "PASS"
+      },
+      {
+        "id": "harness-headed-recovery-webgpu",
+        "scenario": "RECOVERY_LOSS",
+        "backend": "WEBGPU",
+        "verdict": "PASS"
+      },
+      {
+        "id": "harness-headless-recovery-webgl2",
+        "scenario": "RECOVERY_LOSS",
+        "backend": "WEBGL2",
+        "verdict": "PASS"
+      }
+    ],
+    "deterministic": {
+      "pass": 11,
+      "checks": 11
+    },
+    "declaredNotRun": 11
+  },
+  "findings": [
+    {
+      "id": "committed-gate-staleness",
+      "command": "npm run perf:gate -- --check",
+      "exitCode": 1,
+      "owner": "224",
+      "detail": "Dovada comisă a gate-ului 224 este învechită față de sursă după revizia pe care a fost măsurată: `--check` raportează „măsurătoarea de build este învechită față de sursă”. PBI 189 nu suprascrie dovezile 224; gate-ul este reexecutat proaspăt în `gate-measure/` pentru revizia curentă (structural PASS)."
+    }
+  ],
+  "notRun": [
+    {
+      "id": "hardware-v2",
+      "reason": "Țintele FPS/frame/GPU pe hardware real cu pietoni și catalog complet nu au fost măsurate: nu există sesiune de browser cu GPU pe această revizie, iar fixture-ul 220 nu include pietoni/pericole. Gate-ul rămâne deschis."
+    },
+    {
+      "id": "workload-v2-timing",
+      "reason": "Workload-ul 189-workload-v2-1 este definit și dovedit funcțional, dar nu are probe de timp: harness-ul existent (155/156/158/220) exprimă doar flotă + civili."
+    },
+    {
+      "id": "soak-v2",
+      "reason": "Soak-ul de 60 de minute este dovedit de măsurătoarea comisă 159/224 (commit 917a7de9), nu reexecutat aici; soak-ul V2 cu pietoni/pericole nu are fixture."
+    }
+  ],
+  "limitations": [
+    "Probele de timp rulează în Node, fără renderer, GPU sau input uman; ele nu dovedesc FPS, frame p95/p99 sau latența pe hardware.",
+    "Workload-ul V2 nu poate fi exprimat de harness-ul existent: 155/156/158/220 acoperă flotă și civili, fără pietoni sau pericole. Cifrele de timp pentru V2 nu sunt inventate.",
+    "Soak-ul de 60 de minute este citit din măsurătoarea comisă a lui 159/224, nu reexecutat; o rulare reală durează o oră și aparține gate-ului complet.",
+    "Capturile hardware 220 sunt pe buildul 2d68b43c8cdf, iar măsurătoarea 224 pe 757e7168; pragurile absolute cer aceeași revizie, deci FPS rămâne NOT_VALIDATED.",
+    "Raportul nu include commitul HEAD, ca `--check` să rămână valabil după commit; proveniența intrărilor este dată de SHA-256."
+  ],
+  "inputs": [
+    {
+      "file": "Docs/performance-budgets.json",
+      "sha256": "10d78ab5c999215684c821a1f32fd7045392f0f6d8c140c54115d0f73475a21c"
+    },
+    {
+      "file": "Docs/Evidence/216-v1-regression/report.json",
+      "sha256": "b9ac66fdb82a7ef2951dcd9a16351032e1292d7ca1731dba81900d95fdd16593"
+    },
+    {
+      "file": "Docs/Evidence/154-compat-matrix/report.json",
+      "sha256": "92136164b1e176831c49b96d2f319dfe2976db860aa5cde12a41ac17304e925e"
+    },
+    {
+      "file": "Docs/Evidence/155-hardware-budget/report.json",
+      "sha256": "e35c6f5d2ccb3a243fcba52e2a7ea6b481a30b551b561a27d18f1ae129b98653"
+    },
+    {
+      "file": "Docs/Evidence/156-traffic-benchmark/report.json",
+      "sha256": "1d02e17af747d32c2a3fd9c35afdd3ff1e7df460983c32c164f3d5a5936e6553"
+    },
+    {
+      "file": "Docs/Evidence/157-render-budget/report.json",
+      "sha256": "04e9075c82283834487603217639985736ccdbe0364367c5de1d72701317d759"
+    },
+    {
+      "file": "Docs/Evidence/158-simulation-budget/report.json",
+      "sha256": "eee9479bf4cc0086c4519fd0b1d8c1c14deac97943aebea0792035c5f2bd26f7"
+    },
+    {
+      "file": "Docs/Evidence/159-soak/report.json",
+      "sha256": "59c8b2b649c96af728bcf2df9a34ae0bd18277ffea1529c8595d0f0540d2fe5d"
+    },
+    {
+      "file": "Docs/Evidence/187-v2-parameter-gate/report.json",
+      "sha256": "2a6b7e6ac7dc51d5bab7c8c8ce133653d3a55403f92a7d6405723d6a094909fe"
+    },
+    {
+      "file": "Docs/Evidence/188-v2-challenges/report.json",
+      "sha256": "a1ae6cb49ea0b95ca58769660bfb33a282288b700e5e35c062b6e7a9979601d0"
+    },
+    {
+      "file": "Docs/Evidence/164-pedestrians/report.json",
+      "sha256": "b43d4361d2ee2156176dad1f877a6b313be7dafffbea014915d593e816f5c5bf"
+    },
+    {
+      "file": "Docs/Evidence/165-hazards/report.json",
+      "sha256": "567b0052fed43b219ca9e82350321c88b36319aeb1fb85a9919f864d34c0534d"
+    },
+    {
+      "file": "Docs/Evidence/224-performance-gate/report.json",
+      "sha256": "baac4afce8a573ca8141a1cd3aebdd953eacb9208de87a6729ed6b217020dc7f"
+    }
+  ],
+  "totals": {
+    "pass": 1,
+    "fail": 0,
+    "notRun": 2
+  }
+}

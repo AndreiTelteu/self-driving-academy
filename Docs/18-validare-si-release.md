@@ -413,3 +413,42 @@ browserul/playtestul rămân la gate-urile 188/189.
 
 Dovezile, cu tabelul celor 80 de chei, convențiile, probele negative și comenzile reale, sunt în
 [Evidence/187-v2-parameter-gate](Evidence/187-v2-parameter-gate/README.md).
+
+## Regresiile de compatibilitate și performanță V2 (PBI 189, 14 noiembrie 2026)
+
+PBI 189 reexecută suita V1 revizia 0.3, matricea de compatibilitate și gate-urile de performanță pe
+revizia curentă și leagă rezultatul de un workload V2 versionat. Comanda este `npm run qa:v2-regression`;
+ea rulează efectiv cele 13 comenzi, scrie `report.json` + `report.md` cu tabelul criteriu → comandă →
+exit code → verdict → cifră, iar `--check` regenerează raportul și îl compară byte cu byte. Un verdict nu
+se declară fără execuție: fiecare rând are exit code-ul real.
+
+**Verdictul reviziei: 1 criteriu `PASS`, 0 `FAIL`, 2 `NOT_RUN`; 13/13 comenzi cu exit 0.** `NOT_RUN` lasă
+gate-ul deschis și nu este raportat ca `PASS`.
+
+| Criteriu | Verdict | Dovada principală |
+| --- | --- | --- |
+| C1 suita V1 revizia 0.3 | `PASS` | `qa:v1-regression -- --check`: 29 rânduri, 27 `PASS`, 0 `FAIL`, 2 `NOT_RUN` declarate (playtest, frame); cele 27 de rânduri cerute (A1–A9, B1–B13, C1, C2, D1–D3) sunt `PASS`; pierderi XP 0 |
+| C2 hardware cu pietoni și catalog complet | `NOT_RUN` | `fps-hardware` = `NOT_VALIDATED`; capturile 220 sunt pe buildul `2d68b43c8cdf`, iar pragurile absolute cer aceeași revizie. 155: 85 `PASS`, 0 `FAIL`, 6 `NOT_MEASURED`, dar pe flotă + civili |
+| C3 contractul 25 pe workload V2, baseline nerelaxat | `NOT_RUN` | 158 `PASS`, 157 `STRUCTURAL_PASS`, 159 `SOAK_PASS`, 156 `MEASURED_GATE_PASS`, 224 reexecutat structural `PASS` (16/0/1); manifest `203-initial-1` nemodificat, SHA-256 identic cu `HEAD`. Partea de timp pe workload V2 nu are harness |
+
+**Workload-ul V2 versionat.** `189-workload-v2-1` compune 30 de taxiuri și 40 de civili (workload-ul maxim
+V1 din manifest), 96 de pietoni pe 80 de treceri (164), 96 de obstacole și 11 stimuli (165), catalogul
+complet de 80 de chei (187), 15 provocări în 5 familii (188) și ciclurile soak de 60 de minute / 20 de
+cicluri (159). Componentele sunt reexecutate funcțional (`pedestrians:report`, `hazards:report`,
+`validate:parameters`, `missions:challenges-v2`, toate exit 0), dar **timpul rămâne `NOT_RUN`**: cele 33
+de fișiere din `tests/harness` și dovezile 155/156/158/224 au zero referințe la pietoni sau pericole, deci
+harness-ul existent nu poate exprima workload-ul V2. Nu s-au inventat cifre de FPS sau de tick pentru V2.
+
+**Baseline-ul nu a fost relaxat.** `Docs/performance-budgets.json` are același SHA-256 ca în `HEAD`
+(`10d78ab5…75a21c`), `budgetVersion` rămâne `203-initial-1`, `approvedGate` este `false`, iar
+`hardwareGameplayGate` rămâne `NOT_VALIDATED`. Gate-ul 224 a fost reexecutat proaspăt, cu `--measure
+--out` în dovezile acestui PBI, ca să nu suprascrie măsurătoarea comisă: bundle 6 262 960 B (5,97 MiB din
+8 MiB), structural `PASS`, release `NOT_VALIDATED`, tick p95 maxim 7,00 ms din 8 ms pe workload-ul maxim
+V1. `perf:gate -- --check` pe dovezile comise iese cu exit 1 („măsurătoarea de build este învechită față
+de sursă”), o constatare reală lăsată proprietarului 224.
+
+**Ce rămâne deschis.** FPS/frame/GPU pe hardware real, pe aceeași revizie și ambele backenduri; un fixture
+de harness cu pietoni și pericole pentru probele de timp V2; soak-ul V2; playtestul uman moștenit din 216.
+Gate-ul se deblochează prin re-măsurarea dovezilor 224, extinderea harness-ului 220/224 cu workload-ul V2
+și o sesiune pe hardware real. Dovezile, cu tabelul complet, cifrele, comenzile și ce nu a putut rula,
+sunt în [Evidence/189-v2-regression](Evidence/189-v2-regression/README.md).
