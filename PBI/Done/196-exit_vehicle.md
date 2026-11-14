@@ -1,4 +1,4 @@
-﻿---
+---
 id: "196"
 title: "Ieșirea din mașină și punct valid"
 status: "Done"
