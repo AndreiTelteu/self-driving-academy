@@ -5,3 +5,4 @@ export * from './mode-keyboard';
 export * from './vehicle-selection';
 export * from './recovery-input';
 export * from './pause-focus-input';
+export * from './authority-arbiter';
