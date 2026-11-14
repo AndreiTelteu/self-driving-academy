@@ -1,6 +1,6 @@
 ---
 id: "188"
-title: "Provocari pentru comportamentele extinse"
+title: "Provocări pentru comportamentele extinse"
 status: "Done"
 release: "V2"
 module: "Misiuni V2"

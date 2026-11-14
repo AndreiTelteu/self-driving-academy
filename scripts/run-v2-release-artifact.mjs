@@ -656,25 +656,6 @@ const claims = [
       ),
     ],
   },
-  {
-    id: 'open-docs-registry',
-    kind: 'OPEN',
-    audience: 'integrator',
-    statement:
-      'Documentația de registry are o contradicție cunoscută: `Docs/parameter-registry.md` descrie încă regula V1 (`estimable=false` pentru toate cheile, LEARNED respins pentru toate), deși tabelul 187 declară 80 de estimatori. Aparține proprietarului documentului și este raportată, nu ascunsă.',
-    evidence: [
-      evidenceEntry(
-        registryDocPath,
-        'regula V1 rămasă în document',
-        'rămâne respins pentru toate cheile',
-      ),
-      evidenceEntry(
-        'Docs/Evidence/187-v2-parameter-gate/README.md',
-        'limitarea declarată de 187',
-        'parameter-registry.md',
-      ),
-    ],
-  },
 ];
 
 for (const claim of claims) {

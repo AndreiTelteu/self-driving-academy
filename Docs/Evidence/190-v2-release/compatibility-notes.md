@@ -2,7 +2,7 @@
 
 > Fișier generat determinist de `npm run release:v2`. Nu edita manual.
 
-Fiecare afirmație are cel puțin o referință la o dovadă comisă; un detaliu derivat din fișier este afișat lângă referință. **15/15 afirmații susținute de dovezi existente** (5 schimbări, 3 identice, 3 noutăți, 4 deschise).
+Fiecare afirmație are cel puțin o referință la o dovadă comisă; un detaliu derivat din fișier este afișat lângă referință. **14/14 afirmații susținute de dovezi existente** (5 schimbări, 3 identice, 3 noutăți, 3 deschise).
 
 ## Ce s-a schimbat față de 0.3
 
@@ -37,7 +37,6 @@ Fiecare afirmație are cel puțin o referință la o dovadă comisă; un detaliu
 | Cele 56 chei extinse sunt certificate, dar încă rezervate de etapa de plan: `candidate-validation` le refuză cu `KEY_EXTENSION_STAGE`, iar exportul le scrie în `reservedParameters`; certificarea 187 nu le face livrabile end-to-end. | ambii | `src/learning/candidate-validation.ts`<br>`src/persistence/profile-export.ts`<br>`Docs/Evidence/187-v2-parameter-gate/README.md` | refuzul cheilor de extensie la validarea candidaților<br>cheile rezervate publicate cu valoarea null<br>limitarea declarată de poartă | SUSȚINUTĂ |
 | Provocările 188 acoperă 15 din 56 chei V2; 41 rămân fără o provocare dedicată, deci nu au încă o demonstrație de joc. | jucător | `Docs/Evidence/188-v2-challenges/report.json`<br>`Docs/Evidence/188-v2-challenges/README.md` | 15 chei acoperite, 41 neacoperite<br>lista cheilor neacoperite | SUSȚINUTĂ |
 | Performanța V2 rămâne `NOT_RUN`: FPS-ul pe hardware este `NOT_VALIDATED`, harness-ul de performanță nu are fixture cu pietoni și pericole (NOT_RUN), iar soak-ul V2 nu are variantă cu acel workload. | ambii | `Docs/Evidence/189-v2-regression/report.json`<br>`Docs/Evidence/224-performance-gate/report.json`<br>`Docs/Evidence/189-v2-regression/README.md` | 3 rânduri NOT_RUN declarate<br>16 PASS, 0 FAIL, 1 NOT_VALIDATED; release NOT_VALIDATED<br>harness-ul existent nu poate exprima workload-ul V2 | SUSȚINUTĂ |
-| Documentația de registry are o contradicție cunoscută: `Docs/parameter-registry.md` descrie încă regula V1 (`estimable=false` pentru toate cheile, LEARNED respins pentru toate), deși tabelul 187 declară 80 de estimatori. Aparține proprietarului documentului și este raportată, nu ascunsă. | integrator | `Docs/parameter-registry.md`<br>`Docs/Evidence/187-v2-parameter-gate/README.md` | regula V1 rămasă în document<br>limitarea declarată de 187 | SUSȚINUTĂ |
 
 ## Verdictul notelor
 

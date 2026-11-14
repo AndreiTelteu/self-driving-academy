@@ -225,7 +225,7 @@ Pentru fiecare dintre cele 10 familii V2, valoarea candidată vine din estimator
 | `challenge-coverage` | PASS | 15 chei livrate prin provocările 188, 41 neacoperite |
 | `conventions` | PASS | 8 convenții canonice, fiecare cu cel puțin o cheie |
 | `style-transfer` | PASS | 10/10 familii cu valoare candidată estimată și efect măsurat în politică; transferul către flotă este blocat de etapa de plan |
-| `compatibility-evidence` | PASS | 15/15 afirmații cu dovadă existentă și literal verificat |
+| `compatibility-evidence` | PASS | 14/14 afirmații cu dovadă existentă și literal verificat |
 | `dependencies-done` | PASS | 27/27 PBI-uri 163–189 în Done, cu dovezi fără placeholder |
 | `evidence-files` | PASS | directorul de dovezi al release-ului există |
 

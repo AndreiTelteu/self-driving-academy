@@ -2,7 +2,7 @@
 
 > Fișier generat determinist de `npm run release:v2`. Nu edita manual.
 
-**Verdict: NOT_VALIDATED.** 10 `PASS`, 2 `FAIL`, 5 `NOT_RUN`; 7 rânduri deschise, fiecare cu owner. Un rând `NOT_RUN` nu este promovat la `PASS`, iar un rând fără dovadă comisă nu poate primi `PASS`.
+**Verdict: NOT_VALIDATED.** 11 `PASS`, 1 `FAIL`, 5 `NOT_RUN`; 6 rânduri deschise, fiecare cu owner. Un rând `NOT_RUN` nu este promovat la `PASS`, iar un rând fără dovadă comisă nu poate primi `PASS`.
 
 ## Rândurile checklist-ului
 
@@ -18,7 +18,7 @@
 | `save-roundtrip` | Salvare | Export/import păstrează valorile și cheile rezervate | PASS | — | `Docs/Evidence/133-export-profile/report.json`<br>`Docs/Evidence/134-import-profile/report.json` | export 53/53, import 53/53, 56 chei rezervate |
 | `e2e-restart` | Salvare | Sesiunea integrală re-citește aceleași documente după restart | PASS | — | `Docs/Evidence/152-e2e-session/report.json` | 11 pași, 104 verificări, 0 eșuate |
 | `docs-11-support` | Documentație | Docs/11 descrie suportul real după 187, fără afirmația V1 despre LEARNED | PASS | — | `Docs/11-catalog-parametri.md`<br>`Docs/Evidence/187-v2-parameter-gate/report.json` | secțiunea de suport real există și trimite la 187 |
-| `docs-registry-v1-rule` | Documentație | Docs/parameter-registry.md descrie regula reală de estimare | FAIL | proprietarul Docs/parameter-registry.md (semnalat de 187, în afara ownership-ului 190) | `Docs/parameter-registry.md`<br>`Docs/Evidence/187-v2-parameter-gate/report.json` | documentul afirmă încă „estimable=false / LEARNED respins pentru toate cheile”, contrazis de cei 80 de estimatori certificați |
+| `docs-registry-v1-rule` | Documentație | Docs/parameter-registry.md descrie regula reală de estimare | PASS | — | `Docs/parameter-registry.md`<br>`Docs/Evidence/187-v2-parameter-gate/report.json` | documentul nu mai afirmă regula V1 |
 | `inherited-v1-gates` | Moștenire V1 | Gate-urile V1 deschise (153, 235) rămân vizibile în release-ul V2 | FAIL | proprietarul 235 (experiență) și 153 (QA vizual) | `Docs/Evidence/162-release-v1/checklist.json` | checklist V1 162: 8 PASS, 2 FAIL, 1 NOT_VALIDATED, 2 NOT_RUN (26 itemi deschiși) |
 | `fps-hardware` | Performanță | FPS, frame p95/p99 și lucru GPU pe hardware real, ambele backenduri | NOT_RUN | operatorul cu hardware real + proprietarul 224 | `Docs/Evidence/224-performance-gate/report.json`<br>`Docs/Evidence/189-v2-regression/report.json` | 224: NOT_VALIDATED; capturile hardware 220 sunt pe alt build, pragurile cer aceeași revizie. Nu se raportează FPS headless. |
 | `harness-v2` | Performanță | Harness de performanță cu workload-ul V2 (pietoni, pericole, catalog complet) | NOT_RUN | proprietarul harness-ului 220/224 | `Docs/Evidence/189-v2-regression/report.json` | Harness-ul de performanță nu are fixture cu pietoni/pericole: 33 fișiere în tests/harness, 0 referințe de pietoni și 0 de pericole; dovezile 155/156/158/224 au 0 referințe. Măsurarea frame/simulare pe workload-ul V2 cere o pagină de harness și un GPU real, indisponibile aici. |
@@ -55,14 +55,13 @@
 | `185` | Politică extinsă pentru pickup și confortul pasagerilor | `PBI/Done/185-v2_policy_10.md` | DA | `2026-11-13T21:50:58+02:00` | `Docs/Evidence/185-v2-pickup-policy/README.md` | PASS |
 | `186` | Învățare extinsă pentru pickup și confortul pasagerilor | `PBI/Done/186-v2_learn_10.md` | DA | `2026-11-13T23:30:53+02:00` | `Docs/Evidence/186-v2-pickup-learning/README.md` | PASS |
 | `187` | Validarea tuturor celor 80 de parametri | `PBI/Done/187-gate80.md` | DA | `2026-11-14T00:24:02+02:00` | `Docs/Evidence/187-v2-parameter-gate/README.md` | PASS |
-| `188` | Provocari pentru comportamentele extinse | `PBI/Done/188-missions_v2.md` | DA | `2026-11-14T04:20:58+02:00` | `Docs/Evidence/188-v2-challenges/README.md` | PASS |
+| `188` | Provocări pentru comportamentele extinse | `PBI/Done/188-missions_v2.md` | DA | `2026-11-14T04:20:58+02:00` | `Docs/Evidence/188-v2-challenges/README.md` | PASS |
 | `189` | Regresii compatibilitate și performanță V2 | `PBI/Done/189-qa_v2.md` | DA | `2026-11-14T04:54:57.027+02:00` | `Docs/Evidence/189-v2-regression/README.md` | PASS |
 
 **27/27** PBI-uri V2 sunt în `PBI/Done`, cu `status: Done`, `completed_at` completat și un README de dovezi fără „De completat".
 
 ## Rândurile deschise
 
-- `docs-registry-v1-rule` (**FAIL**) — documentul afirmă încă „estimable=false / LEARNED respins pentru toate cheile”, contrazis de cei 80 de estimatori certificați · owner: proprietarul Docs/parameter-registry.md (semnalat de 187, în afara ownership-ului 190)
 - `inherited-v1-gates` (**FAIL**) — checklist V1 162: 8 PASS, 2 FAIL, 1 NOT_VALIDATED, 2 NOT_RUN (26 itemi deschiși) · owner: proprietarul 235 (experiență) și 153 (QA vizual)
 - `fps-hardware` (**NOT_RUN**) — 224: NOT_VALIDATED; capturile hardware 220 sunt pe alt build, pragurile cer aceeași revizie. Nu se raportează FPS headless. · owner: operatorul cu hardware real + proprietarul 224
 - `harness-v2` (**NOT_RUN**) — Harness-ul de performanță nu are fixture cu pietoni/pericole: 33 fișiere în tests/harness, 0 referințe de pietoni și 0 de pericole; dovezile 155/156/158/224 au 0 referințe. Măsurarea frame/simulare pe workload-ul V2 cere o pagină de harness și un GPU real, indisponibile aici. · owner: proprietarul harness-ului 220/224
