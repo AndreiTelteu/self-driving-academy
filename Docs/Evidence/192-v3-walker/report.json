@@ -1,0 +1,432 @@
+{
+  "generatedBy": "scripts/run-v3-walker-report.mjs",
+  "command": "npm run walker:report",
+  "contract": "192-walker-v1",
+  "tickHz": 60,
+  "policy": {
+    "contract": "192-walker-v1",
+    "tickHz": 60,
+    "dtSeconds": 0.016666666666666666,
+    "maxSubstepM": 0.05,
+    "solverIterations": 8,
+    "solverToleranceM": 1e-9,
+    "stepCeilingM": 0.14,
+    "vehicleContactMarginM": 0.05,
+    "obstacleMarginM": 0.05,
+    "turnRateRadps": 12,
+    "accelerationMps2": 6,
+    "decelerationMps2": 10,
+    "idleSpeedMps": 0.05,
+    "runClipRatio": 1.05,
+    "eventCapacity": 96
+  },
+  "gaitSpeedsMps": {
+    "WALK": 1.370967741935484,
+    "RUN": 2.909090909090909
+  },
+  "capsule": {
+    "radiusM": 0.15000000000000002,
+    "heightM": 1.78,
+    "source": "PBI 191 amprentă 0.300 × 0.260 m (rază = latura mare / 2) și înălțime 1.780 m"
+  },
+  "reference": {
+    "mapId": "neighbourhood-compact-v1",
+    "cityElements": 923,
+    "surfaces": 313,
+    "blockers": 86,
+    "buildings": 86,
+    "sidewalkElevationM": 0.14,
+    "sidewalkStrip": "walk:blk:0-0:N",
+    "buildingId": "bld:blk:0-0:0-0",
+    "vehicleClassId": "sedan",
+    "vehicleColliderHalfExtentsM": {
+      "x": 0.85,
+      "z": 2
+    }
+  },
+  "scenarios": [
+    {
+      "id": "wall",
+      "label": "Mers în zidul unei clădiri reale",
+      "expectation": "STOPPED_BY_WALL",
+      "world": "city:neighbourhood-compact-v1:bld:blk:0-0:0-0",
+      "startM": {
+        "x": 34.11893333333333,
+        "y": 0.14,
+        "z": 22.715371599999997
+      },
+      "steps": 240,
+      "input": {
+        "gait": "RUN",
+        "intensity": 1,
+        "headingRad": 0
+      },
+      "finalPositionM": {
+        "x": 34.11893333333333,
+        "y": 0.14,
+        "z": 24.5653716
+      },
+      "distanceM": 1.8500000000000014,
+      "finalSpeedMps": 0,
+      "finalClipId": "idle",
+      "maxPenetrationM": 1.4432899320127035e-15,
+      "insideSolidTicks": 0,
+      "minClearanceM": -1.4432899320127035e-15,
+      "stepUps": 0,
+      "stepDowns": 0,
+      "stepRefusals": 0,
+      "vehicleContacts": 0,
+      "blockedTicks": 188,
+      "events": [
+        "BLOCKED"
+      ],
+      "expectedOutcome": true,
+      "verdict": "PASS"
+    },
+    {
+      "id": "sidewalk",
+      "label": "Mers pe trotuarul real",
+      "expectation": "REMAINED_ON_SIDEWALK",
+      "world": "city:neighbourhood-compact-v1:walk:blk:0-0:N",
+      "startM": {
+        "x": 90,
+        "y": 0.14,
+        "z": 175
+      },
+      "steps": 120,
+      "input": {
+        "gait": "WALK",
+        "intensity": 1,
+        "headingRad": 1.5707963267948966
+      },
+      "finalPositionM": {
+        "x": 92.5965591397841,
+        "y": 0.14,
+        "z": 175
+      },
+      "distanceM": 2.5965591397841052,
+      "finalSpeedMps": 1.3709677419350896,
+      "finalClipId": "walk",
+      "maxPenetrationM": 0,
+      "insideSolidTicks": 0,
+      "minClearanceM": 0,
+      "stepUps": 0,
+      "stepDowns": 0,
+      "stepRefusals": 0,
+      "vehicleContacts": 0,
+      "blockedTicks": 0,
+      "events": [],
+      "expectedOutcome": true,
+      "verdict": "PASS"
+    },
+    {
+      "id": "curb-step-up",
+      "label": "Urcarea bordurii reale de 0.14 m",
+      "expectation": "STEPPED_UP",
+      "world": "city:neighbourhood-compact-v1:walk:blk:0-0:N",
+      "startM": {
+        "x": 90,
+        "y": 0,
+        "z": 176.7
+      },
+      "steps": 120,
+      "input": {
+        "gait": "WALK",
+        "intensity": 1,
+        "headingRad": -3.141592653589793
+      },
+      "finalPositionM": {
+        "x": 90,
+        "y": 0.14,
+        "z": 174.10344086021436
+      },
+      "distanceM": 2.596559139785626,
+      "finalSpeedMps": 1.3709677419359423,
+      "finalClipId": "walk",
+      "maxPenetrationM": 0,
+      "insideSolidTicks": 0,
+      "minClearanceM": 0,
+      "stepUps": 1,
+      "stepDowns": 0,
+      "stepRefusals": 0,
+      "vehicleContacts": 0,
+      "blockedTicks": 0,
+      "events": [
+        "STEP_UP"
+      ],
+      "expectedOutcome": true,
+      "verdict": "PASS"
+    },
+    {
+      "id": "curb-step-down",
+      "label": "Coborârea bordurii reale de 0.14 m",
+      "expectation": "STEPPED_DOWN",
+      "world": "city:neighbourhood-compact-v1:walk:blk:0-0:N",
+      "startM": {
+        "x": 90,
+        "y": 0.14,
+        "z": 175
+      },
+      "steps": 120,
+      "input": {
+        "gait": "WALK",
+        "intensity": 1,
+        "headingRad": 0
+      },
+      "finalPositionM": {
+        "x": 90,
+        "y": 0,
+        "z": 177.59655913978563
+      },
+      "distanceM": 2.596559139785626,
+      "finalSpeedMps": 1.3709677419359423,
+      "finalClipId": "walk",
+      "maxPenetrationM": 0,
+      "insideSolidTicks": 0,
+      "minClearanceM": 0,
+      "stepUps": 0,
+      "stepDowns": 1,
+      "stepRefusals": 0,
+      "vehicleContacts": 0,
+      "blockedTicks": 0,
+      "events": [
+        "STEP_DOWN"
+      ],
+      "expectedOutcome": true,
+      "verdict": "PASS"
+    },
+    {
+      "id": "step-over-ceiling",
+      "label": "Treaptă de 0.30 m, peste plafonul de 0.14 m",
+      "expectation": "REFUSED_STEP",
+      "world": "fixture:step",
+      "startM": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "steps": 120,
+      "input": {
+        "gait": "RUN",
+        "intensity": 1,
+        "headingRad": 0
+      },
+      "finalPositionM": {
+        "x": 0,
+        "y": 0,
+        "z": 1.85
+      },
+      "distanceM": 1.85,
+      "finalSpeedMps": 0,
+      "finalClipId": "idle",
+      "maxPenetrationM": 0,
+      "insideSolidTicks": 0,
+      "minClearanceM": 0,
+      "stepUps": 0,
+      "stepDowns": 0,
+      "stepRefusals": 1,
+      "vehicleContacts": 0,
+      "blockedTicks": 68,
+      "events": [
+        "BLOCKED",
+        "STEP_REFUSED_ASCENT:fixture:platform"
+      ],
+      "expectedOutcome": true,
+      "verdict": "PASS"
+    },
+    {
+      "id": "drop-over-ceiling",
+      "label": "Coborâre de 0.28 m, peste plafon",
+      "expectation": "REFUSED_DROP",
+      "world": "fixture:drop",
+      "startM": {
+        "x": 0,
+        "y": 0.14,
+        "z": 0
+      },
+      "steps": 120,
+      "input": {
+        "gait": "RUN",
+        "intensity": 1,
+        "headingRad": 0
+      },
+      "finalPositionM": {
+        "x": 0,
+        "y": 0.14,
+        "z": 1.85
+      },
+      "distanceM": 1.85,
+      "finalSpeedMps": 0,
+      "finalClipId": "idle",
+      "maxPenetrationM": 0,
+      "insideSolidTicks": 0,
+      "minClearanceM": 0,
+      "stepUps": 0,
+      "stepDowns": 0,
+      "stepRefusals": 1,
+      "vehicleContacts": 0,
+      "blockedTicks": 68,
+      "events": [
+        "BLOCKED",
+        "STEP_REFUSED_DESCENT:fixture:lower"
+      ],
+      "expectedOutcome": true,
+      "verdict": "PASS"
+    },
+    {
+      "id": "obstacle",
+      "label": "Obstacol static pe carosabil",
+      "expectation": "STOPPED_BY_OBSTACLE",
+      "world": "fixture:obstacle",
+      "startM": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "steps": 180,
+      "input": {
+        "gait": "RUN",
+        "intensity": 1,
+        "headingRad": 0
+      },
+      "finalPositionM": {
+        "x": 0,
+        "y": 0,
+        "z": 2.4
+      },
+      "distanceM": 2.4,
+      "finalSpeedMps": 0,
+      "finalClipId": "idle",
+      "maxPenetrationM": 0,
+      "insideSolidTicks": 0,
+      "minClearanceM": 0.050000000000000155,
+      "stepUps": 0,
+      "stepDowns": 0,
+      "stepRefusals": 0,
+      "vehicleContacts": 0,
+      "blockedTicks": 117,
+      "events": [
+        "BLOCKED"
+      ],
+      "expectedOutcome": true,
+      "verdict": "PASS"
+    },
+    {
+      "id": "vehicle-contact",
+      "label": "Contact cu sedanul real (0.15 m rază + 0.85 m jumătate lățime + 0.05 m marjă)",
+      "expectation": "STOPPED_BY_VEHICLE",
+      "world": "city:neighbourhood-compact-v1:sedan-192",
+      "startM": {
+        "x": 90,
+        "y": 0,
+        "z": -1
+      },
+      "steps": 180,
+      "input": {
+        "gait": "RUN",
+        "intensity": 1,
+        "headingRad": 0
+      },
+      "finalPositionM": {
+        "x": 90,
+        "y": 0,
+        "z": 0.7500000000000001
+      },
+      "distanceM": 1.7499999999999998,
+      "finalSpeedMps": 0,
+      "finalClipId": "idle",
+      "maxPenetrationM": 0,
+      "insideSolidTicks": 0,
+      "minClearanceM": 0.04999999999999993,
+      "stepUps": 0,
+      "stepDowns": 0,
+      "stepRefusals": 0,
+      "vehicleContacts": 1,
+      "blockedTicks": 130,
+      "events": [
+        "BLOCKED",
+        "VEHICLE_CONTACT:sedan-192"
+      ],
+      "expectedOutcome": true,
+      "verdict": "PASS"
+    }
+  ],
+  "vehicleBodiesCreated": 0,
+  "vehicleMutation": {
+    "ticks": 180,
+    "parkedBits": "405680000000000000000000000000003ffccccccccccccd",
+    "bitsUnchangedByWalking": true,
+    "movedByOwner": true,
+    "ownerBitsPreserved": true,
+    "reactionFollowedVehicle": true
+  },
+  "registrationRefusal": {
+    "registerVehicleBodyRefused": true,
+    "registerVehicleBodyCode": "VEHICLE_BODY_WRITE_REFUSED",
+    "writeVehicleStateRefused": true,
+    "writeVehicleStateCode": "VEHICLE_STATE_WRITE_REFUSED",
+    "bodiesAfterRefusals": 0
+  },
+  "authority": {
+    "ticks": 120,
+    "renderFrames": 120,
+    "identicalFrames": 120,
+    "positionWrites": 52,
+    "animationPositionWrites": 0,
+    "secondWriters": 0,
+    "animationWriteRefused": true,
+    "animationWriteCode": "AUTHORITY_WRITE_REFUSED",
+    "stateFrozen": true
+  },
+  "clipFromMeasuredSpeed": [
+    {
+      "situation": "comandă RUN pe teren liber",
+      "measuredSpeedMps": 2.909090909090901,
+      "clipId": "run",
+      "expectedClipId": "run",
+      "pass": true
+    },
+    {
+      "situation": "comandă WALK pe teren liber",
+      "measuredSpeedMps": 1.3709677419354893,
+      "clipId": "walk",
+      "expectedClipId": "walk",
+      "pass": true
+    },
+    {
+      "situation": "fără comandă de mers",
+      "measuredSpeedMps": 0,
+      "clipId": "idle",
+      "expectedClipId": "idle",
+      "pass": true
+    },
+    {
+      "situation": "comandă RUN într-un perete",
+      "measuredSpeedMps": 0,
+      "clipId": "idle",
+      "expectedClipId": "idle",
+      "pass": true
+    }
+  ],
+  "summary": {
+    "scenarios": 8,
+    "scenariosPassed": 8,
+    "maxPenetrationM": 1.4432899320127035e-15,
+    "criterion1": true,
+    "criterion2": true,
+    "singleAuthority": true,
+    "pass": true
+  },
+  "limitations": [
+    "Coliziunea este planară: personajul e un cilindru, iar lumea e reprezentată prin poligoane convexe cu înălțime. Pantele continue și interioarele nu fac parte din contractul 042 și nu sunt simulate.",
+    "Vehiculele sunt citite ca amprente înghețate (colliderul real 0,85 × 2,00 m din 022/145); walker-ul nu creează, nu înregistrează și nu scrie niciun corp auto.",
+    "Camera, intrarea în vehicul și transferul autorității aparțin PBI 195; aici există doar deplasarea pe sol, coliziunile și treptele.",
+    "Treptele sunt tratate ca suprafață + plafon de urcare/coborâre; o muchie peste plafon se comportă ca un perete, nu ca o rampă.",
+    "Proba este headless și deterministă; integrarea vizuală în scena Babylon folosește reprezentarea deja livrată de 191."
+  ],
+  "determinism": {
+    "runs": 2,
+    "identical": true,
+    "digest": "c9d66eca1d3f7b4164537d9113467851b76cd238ae34fc719cf072019d8fa228"
+  }
+}
