@@ -1,0 +1,384 @@
+{
+  "version": "190-v2-compatibility-notes-v1",
+  "command": "npm run release:v2",
+  "generatedBy": "scripts/run-v2-release-artifact.mjs",
+  "baseline": "revizia 0.3 (V1), checklist 162",
+  "claims": [
+    {
+      "id": "player-challenges",
+      "kind": "CHANGED",
+      "audience": "jucător",
+      "statement": "Față de 0.3, jucătorul primește 15 provocări extinse noi în 5 familii, publicate alături de cele 12 template-uri V1 într-un catalog compus de 27.",
+      "evidence": [
+        {
+          "path": "Docs/Evidence/188-v2-challenges/report.json",
+          "detail": "40/40 verificări, 15 provocări, catalog compus 27",
+          "present": true,
+          "contains": null,
+          "literalPresent": true
+        },
+        {
+          "path": "Docs/Evidence/188-v2-challenges/README.md",
+          "detail": "tabelul provocare → familie → cheie → obiectiv observabil",
+          "present": true,
+          "contains": null,
+          "literalPresent": true
+        }
+      ],
+      "supported": true
+    },
+    {
+      "id": "player-world-pedestrians-hazards",
+      "kind": "CHANGED",
+      "audience": "jucător",
+      "statement": "Lumea are acum pietoni și pericole reale: 96 pietoni pe 80 treceri (6 scenarii) și 11 stimuli de pericol cu 7 scenarii.",
+      "evidence": [
+        {
+          "path": "Docs/Evidence/164-pedestrians/report.json",
+          "detail": "6/6 scenarii trecute, 96 pietoni",
+          "present": true,
+          "contains": null,
+          "literalPresent": true
+        },
+        {
+          "path": "Docs/Evidence/165-hazards/report.json",
+          "detail": "7/7 scenarii trecute, 10 reacții",
+          "present": true,
+          "contains": null,
+          "literalPresent": true
+        }
+      ],
+      "supported": true
+    },
+    {
+      "id": "integrator-policy-layers",
+      "kind": "CHANGED",
+      "audience": "integrator",
+      "statement": "Integratorul primește 56 straturi de politică V2, fiecare cu estimator, dovezi comise și test independent; poarta 187 certifică 80/80 chei.",
+      "evidence": [
+        {
+          "path": "Docs/Evidence/187-v2-parameter-gate/report.json",
+          "detail": "verdict PASS, 24 CORE + 56 V2, 0 findings",
+          "present": true,
+          "contains": null,
+          "literalPresent": true
+        },
+        {
+          "path": "src/profiles/parameter-capabilities.ts",
+          "detail": "tabelul unic de capabilități, cu politică, estimator, dovezi și test per cheie",
+          "present": true,
+          "contains": null,
+          "literalPresent": true
+        }
+      ],
+      "supported": true
+    },
+    {
+      "id": "integrator-gate-command",
+      "kind": "CHANGED",
+      "audience": "integrator",
+      "statement": "Poarta este executabilă, nu declarativă: `npm run validate:parameters` derivă verdictul din catalog și din fișiere, iar `--check` refuză un raport neactualizat; 2 probe fail-closed sunt respinse la fiecare rulare.",
+      "evidence": [
+        {
+          "path": "Docs/Evidence/187-v2-parameter-gate/report.json",
+          "detail": "12/12 verificări PASS, 2 probe respinse",
+          "present": true,
+          "contains": null,
+          "literalPresent": true
+        },
+        {
+          "path": "scripts/run-v2-parameter-gate.mjs",
+          "detail": "comanda porții și modul `--check`",
+          "present": true,
+          "contains": "--check",
+          "literalPresent": true
+        }
+      ],
+      "supported": true
+    },
+    {
+      "id": "integrator-test-suite",
+      "kind": "CHANGED",
+      "audience": "integrator",
+      "statement": "Suita completă crește de la V1 la V2: 3250 teste, 3250 trecute, 0 eșuate pe revizia 189, față de 2 898 teste, 2 898 trecute, 0 eșuate, 0 sărite la checklist-ul V1 162.",
+      "evidence": [
+        {
+          "path": "Docs/Evidence/189-v2-regression/report.json",
+          "detail": "3250 teste, 3250 trecute, 0 eșuate",
+          "present": true,
+          "contains": null,
+          "literalPresent": true
+        },
+        {
+          "path": "Docs/Evidence/162-release-v1/checklist.json",
+          "detail": "2 898 teste, 2 898 trecute, 0 eșuate, 0 sărite",
+          "present": true,
+          "contains": null,
+          "literalPresent": true
+        }
+      ],
+      "supported": true
+    },
+    {
+      "id": "new-extension-keys",
+      "kind": "NEW",
+      "audience": "ambii",
+      "statement": "Nou față de 0.3: 56 chei de extensie certificate (V2) lângă cele 24 chei CORE, cu 80 politici și 80 estimatori declarați, 0 fără estimator.",
+      "evidence": [
+        {
+          "path": "src/profiles/parameter-capabilities.ts",
+          "detail": "tabelul cu 24 de intrări CORE și 56 V2",
+          "present": true,
+          "contains": "v2Policy",
+          "literalPresent": true
+        },
+        {
+          "path": "Docs/Evidence/187-v2-parameter-gate/report.json",
+          "detail": "56 efecte măsurate + 24 consecințe M păstrate",
+          "present": true,
+          "contains": null,
+          "literalPresent": true
+        }
+      ],
+      "supported": true
+    },
+    {
+      "id": "new-parameter-gate",
+      "kind": "NEW",
+      "audience": "integrator",
+      "statement": "Nou față de 0.3: poarta celor 80 de parametri, care cere pentru fiecare cheie consumator real în politică, estimator, dovezi și test cu titlul declarat; o cheie declarată fără consumator este respinsă.",
+      "evidence": [
+        {
+          "path": "Docs/Evidence/187-v2-parameter-gate/report.json",
+          "detail": "8 convenții canonice, 0 findings",
+          "present": true,
+          "contains": null,
+          "literalPresent": true
+        },
+        {
+          "path": "Docs/Evidence/187-v2-parameter-gate/README.md",
+          "detail": "probele negative și convențiile ambiguităților",
+          "present": true,
+          "contains": "policy-consumer-missing",
+          "literalPresent": true
+        }
+      ],
+      "supported": true
+    },
+    {
+      "id": "new-v2-workload",
+      "kind": "NEW",
+      "audience": "integrator",
+      "statement": "Nou față de 0.3: workload-ul V2 versionat `189-workload-v2-1` compune 30 taxiuri și 40 civili, 96 pietoni, 96 obstacole, catalogul de 80 chei și 15 provocări.",
+      "evidence": [
+        {
+          "path": "Docs/Evidence/189-v2-regression/report.json",
+          "detail": "timing NOT_RUN; 4 dovezi funcționale reexecutate",
+          "present": true,
+          "contains": null,
+          "literalPresent": true
+        }
+      ],
+      "supported": true
+    },
+    {
+      "id": "identical-v1-progress",
+      "kind": "IDENTICAL",
+      "audience": "jucător",
+      "statement": "Progresul V1 rămâne identic: 27 rânduri PASS din 29 (2 NOT_RUN declarate), 0 eșecuri, pierderi XP 0; importul de progres al lui 188 dă același digest înainte/după (fnv1a32:7f45fc70), cu 0 scrieri de profil.",
+      "evidence": [
+        {
+          "path": "Docs/Evidence/216-v1-regression/report.json",
+          "detail": "27/29 PASS",
+          "present": true,
+          "contains": null,
+          "literalPresent": true
+        },
+        {
+          "path": "Docs/Evidence/189-v2-regression/report.json",
+          "detail": "29 rânduri, 27 PASS, 0 FAIL, 2 NOT_RUN; pierderi XP 0, debitări 0",
+          "present": true,
+          "contains": null,
+          "literalPresent": true
+        },
+        {
+          "path": "Docs/Evidence/188-v2-challenges/report.json",
+          "detail": "beforeAfterEqual true, profileWrites 0",
+          "present": true,
+          "contains": null,
+          "literalPresent": true
+        }
+      ],
+      "supported": true
+    },
+    {
+      "id": "identical-vehicle-access",
+      "kind": "IDENTICAL",
+      "audience": "jucător",
+      "statement": "Accesul la vehicule rămâne identic: 64/64 vehicule conduse, 24/24 taxiuri selectabile, 0 revocări și 0 taxiuri blocate, cu digestul fnv1a32:bdd636b4.",
+      "evidence": [
+        {
+          "path": "Docs/Evidence/188-v2-challenges/report.json",
+          "detail": "v1AccessDigest fnv1a32:bdd636b4",
+          "present": true,
+          "contains": null,
+          "literalPresent": true
+        },
+        {
+          "path": "Docs/Evidence/188-v2-challenges/README.md",
+          "detail": "instantaneul accesului la vehicule înainte/după",
+          "present": true,
+          "contains": null,
+          "literalPresent": true
+        }
+      ],
+      "supported": true
+    },
+    {
+      "id": "identical-save-agreements",
+      "kind": "IDENTICAL",
+      "audience": "ambii",
+      "statement": "Acordurile de salvare rămân identice: exportul și importul trec 53/53, respectiv 53/53 verificări, păstrează 56 chei rezervate cu valoarea `null`, iar restartul sesiunii re-citește aceleași documente în 104 verificări.",
+      "evidence": [
+        {
+          "path": "Docs/Evidence/133-export-profile/report.json",
+          "detail": "53/53 verificări",
+          "present": true,
+          "contains": null,
+          "literalPresent": true
+        },
+        {
+          "path": "Docs/Evidence/134-import-profile/report.json",
+          "detail": "53/53 verificări, 56 chei rezervate",
+          "present": true,
+          "contains": null,
+          "literalPresent": true
+        },
+        {
+          "path": "Docs/Evidence/152-e2e-session/report.json",
+          "detail": "11 pași, 104 verificări",
+          "present": true,
+          "contains": null,
+          "literalPresent": true
+        }
+      ],
+      "supported": true
+    },
+    {
+      "id": "open-reserved-56",
+      "kind": "OPEN",
+      "audience": "ambii",
+      "statement": "Cele 56 chei extinse sunt certificate, dar încă rezervate de etapa de plan: `candidate-validation` le refuză cu `KEY_EXTENSION_STAGE`, iar exportul le scrie în `reservedParameters`; certificarea 187 nu le face livrabile end-to-end.",
+      "evidence": [
+        {
+          "path": "src/learning/candidate-validation.ts",
+          "detail": "refuzul cheilor de extensie la validarea candidaților",
+          "present": true,
+          "contains": "KEY_EXTENSION_STAGE",
+          "literalPresent": true
+        },
+        {
+          "path": "src/persistence/profile-export.ts",
+          "detail": "cheile rezervate publicate cu valoarea null",
+          "present": true,
+          "contains": "reservedParameters",
+          "literalPresent": true
+        },
+        {
+          "path": "Docs/Evidence/187-v2-parameter-gate/README.md",
+          "detail": "limitarea declarată de poartă",
+          "present": true,
+          "contains": "KEY_EXTENSION_STAGE",
+          "literalPresent": true
+        }
+      ],
+      "supported": true
+    },
+    {
+      "id": "open-challenge-coverage",
+      "kind": "OPEN",
+      "audience": "jucător",
+      "statement": "Provocările 188 acoperă 15 din 56 chei V2; 41 rămân fără o provocare dedicată, deci nu au încă o demonstrație de joc.",
+      "evidence": [
+        {
+          "path": "Docs/Evidence/188-v2-challenges/report.json",
+          "detail": "15 chei acoperite, 41 neacoperite",
+          "present": true,
+          "contains": null,
+          "literalPresent": true
+        },
+        {
+          "path": "Docs/Evidence/188-v2-challenges/README.md",
+          "detail": "lista cheilor neacoperite",
+          "present": true,
+          "contains": "Limitări",
+          "literalPresent": true
+        }
+      ],
+      "supported": true
+    },
+    {
+      "id": "open-performance-v2",
+      "kind": "OPEN",
+      "audience": "ambii",
+      "statement": "Performanța V2 rămâne `NOT_RUN`: FPS-ul pe hardware este `NOT_VALIDATED`, harness-ul de performanță nu are fixture cu pietoni și pericole (NOT_RUN), iar soak-ul V2 nu are variantă cu acel workload.",
+      "evidence": [
+        {
+          "path": "Docs/Evidence/189-v2-regression/report.json",
+          "detail": "3 rânduri NOT_RUN declarate",
+          "present": true,
+          "contains": null,
+          "literalPresent": true
+        },
+        {
+          "path": "Docs/Evidence/224-performance-gate/report.json",
+          "detail": "16 PASS, 0 FAIL, 1 NOT_VALIDATED; release NOT_VALIDATED",
+          "present": true,
+          "contains": null,
+          "literalPresent": true
+        },
+        {
+          "path": "Docs/Evidence/189-v2-regression/README.md",
+          "detail": "harness-ul existent nu poate exprima workload-ul V2",
+          "present": true,
+          "contains": "referințe la pietoni",
+          "literalPresent": true
+        }
+      ],
+      "supported": true
+    },
+    {
+      "id": "open-docs-registry",
+      "kind": "OPEN",
+      "audience": "integrator",
+      "statement": "Documentația de registry are o contradicție cunoscută: `Docs/parameter-registry.md` descrie încă regula V1 (`estimable=false` pentru toate cheile, LEARNED respins pentru toate), deși tabelul 187 declară 80 de estimatori. Aparține proprietarului documentului și este raportată, nu ascunsă.",
+      "evidence": [
+        {
+          "path": "Docs/parameter-registry.md",
+          "detail": "regula V1 rămasă în document",
+          "present": true,
+          "contains": "rămâne respins pentru toate cheile",
+          "literalPresent": true
+        },
+        {
+          "path": "Docs/Evidence/187-v2-parameter-gate/README.md",
+          "detail": "limitarea declarată de 187",
+          "present": true,
+          "contains": "parameter-registry.md",
+          "literalPresent": true
+        }
+      ],
+      "supported": true
+    }
+  ],
+  "summary": {
+    "claims": 15,
+    "changed": 5,
+    "identical": 3,
+    "added": 3,
+    "open": 4,
+    "supported": 15,
+    "unsupported": 0
+  },
+  "verdict": "PASS"
+}

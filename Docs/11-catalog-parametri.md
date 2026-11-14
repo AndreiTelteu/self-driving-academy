@@ -164,7 +164,7 @@ Opriri intenționate în zone de serviciu și segmente cu pasager. Aceste prefer
 
 ## Catalog machine readable și acoperire
 
-[driving-parameters.json](driving-parameters.json) este catalogul de proiectare. implemented este false pentru toate cheile până la implementare și verificare; etapa inițială are 24 de ținte M și extensia 56 R. Starea suportului din aplicație va fi derivată din registry-ul implementat, fără a confunda planul cu un runtime existent.
+[driving-parameters.json](driving-parameters.json) este catalogul de proiectare. JSON-ul păstrează `implemented: false` pentru toate cele 80 de chei, iar suportul real se citește din tabelul de capabilități certificat de 187 — vezi „Suport real după 187" mai jos; etapa inițială are 24 de ținte M și extensia 56 R. Starea suportului din aplicație este derivată din registry-ul implementat, fără a confunda planul cu un runtime existent.
 
 [Acoperirea funcționalităților](21-acoperire-functionalitati.md) mapează fiecare cheie la PBI de politică, estimare și validare. Activarea unei chei este acceptată numai când toate componentele ei sunt verificate.
 
@@ -174,7 +174,13 @@ Opriri intenționate în zone de serviciu și segmente cu pasager. Aceste prefer
 
 ## Suport runtime pentru viteze
 
-[Politica 046](cruise-targets.md) implementează explicit speed_delta_urban, speed_delta_residential, curve_lateral_accel și intersection_approach_speed. Catalogul de proiectare păstrează valorile propuse și flagurile false; [registry-ul runtime](parameter-registry.md) permite MANUAL_TUNING pentru cele patru chei verificate. Estimarea și publicarea LEARNED rămân dezactivate până la implementarea estimatorilor. Valorile și proveniența folosite în decizie sunt păstrate în tokenul compilat al profilului.
+[Politica 046](cruise-targets.md) implementează explicit speed_delta_urban, speed_delta_residential, curve_lateral_accel și intersection_approach_speed. Catalogul de proiectare păstrează valorile propuse și flagurile false; [registry-ul runtime](parameter-registry.md) derivă `implemented` și `estimable` din tabelul 187, deci cele patru chei au și estimator (`estimateSpeedParameters`), iar `LEARNED` este permis pentru orice cheie certificată. Valorile și proveniența folosite în decizie sunt păstrate în tokenul compilat al profilului.
+
+## Suport real după 187
+
+Poarta 187 certifică toate cele 80 de chei: fiecare are un consumator real în politică, un estimator, dovezi comise și un test independent, iar [registry-ul runtime](parameter-registry.md) derivă `implemented` și `estimable` din acel tabel. Catalogul de date rămâne fail-closed — `Docs/driving-parameters.json` păstrează `implemented: false` pentru toate cele 80 — deci suportul nu se acordă prin editarea JSON-ului.
+
+Certificarea nu înseamnă livrare end-to-end. Cele 56 de chei `extension` sunt încă rezervate de etapa de plan: `candidate-validation` le refuză cu `KEY_EXTENSION_STAGE`, iar exportul le scrie `null` în `reservedParameters`, deci nu pot fi învățate sau publicate până la migrarea etapei. Cele 24 de chei CORE sunt livrate în bucla V1 de politicile 046–053, iar 15 dintre cele 56 de chei V2 au o demonstrație de joc în provocările 188. Detaliile, convențiile și limitările sunt în [Evidence/187-v2-parameter-gate/README.md](Evidence/187-v2-parameter-gate/README.md) și în [artefactul de release V2](Evidence/190-v2-release/parameter-artifact.md).
 
 ## Contract implementat V2 (PBI 167) — politică de viteză și ritm
 
