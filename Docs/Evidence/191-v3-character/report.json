@@ -1,0 +1,4087 @@
+{
+  "generatedBy": "scripts/run-v3-character-report.mjs",
+  "command": "npm run character:report",
+  "contract": "191-character-v1",
+  "samplingHz": 60,
+  "reference": {
+    "source": "PBI 042 city layout defaults + rețeaua reală de 96 benzi din harta neighbourhood, PBI 023 sedan mechanics 023-mechanics-v1, PBI 145 sedan NEAR geometry",
+    "sidewalkWidthM": 2.4,
+    "curbHeightM": 0.14,
+    "laneWidthM": 3.4,
+    "vehicle": {
+      "classId": "sedan",
+      "doorClearanceM": 1.6500000000000001,
+      "cabinWidthM": 1.51,
+      "sillHeightM": 0.54
+    },
+    "derivation": {
+      "mapId": "neighbourhood-compact-v1",
+      "laneCount": 96,
+      "laneWidthsM": [
+        3.4
+      ],
+      "vehicleClassVersion": "023-mechanics-v1",
+      "wheelBottomM": -0.8200000000000001,
+      "roofTopM": 0.8300000000000001,
+      "bodySillM": -0.28,
+      "geometryGpuBytes": 28112
+    }
+  },
+  "asset": {
+    "id": "pedestrian-adult-01",
+    "version": "191-character-v1",
+    "scale": 1,
+    "declared": {
+      "heightM": 1.78,
+      "eyeHeightM": 1.645,
+      "armSpanM": 1.78
+    },
+    "measured": {
+      "heightM": 1.78,
+      "eyeHeightM": 1.645,
+      "armSpanM": 1.78,
+      "shoulderWidthM": 0.52,
+      "hipWidthM": 0.2,
+      "footprintWidthM": 0.30000000000000004,
+      "footprintDepthM": 0.26,
+      "hipHeightM": 0.9349999999999999,
+      "legReachM": 0.935,
+      "ankleToSoleM": 0.075,
+      "lowestRestPointM": -9.71445146547012e-17,
+      "stepHeightM": 0.15996582668606885,
+      "entryHeightM": 1.2811974498325998
+    },
+    "scaleTable": [
+      {
+        "metric": "Înălțime totală",
+        "value": 1.78,
+        "unit": "m"
+      },
+      {
+        "metric": "Înălțime ochi",
+        "value": 1.645,
+        "unit": "m"
+      },
+      {
+        "metric": "Anvergură brațe",
+        "value": 1.78,
+        "unit": "m"
+      },
+      {
+        "metric": "Lățime umeri",
+        "value": 0.52,
+        "unit": "m"
+      },
+      {
+        "metric": "Lățime șolduri",
+        "value": 0.2,
+        "unit": "m"
+      },
+      {
+        "metric": "Amprentă lățime",
+        "value": 0.30000000000000004,
+        "unit": "m"
+      },
+      {
+        "metric": "Amprentă adâncime",
+        "value": 0.26,
+        "unit": "m"
+      },
+      {
+        "metric": "Înălțime șold",
+        "value": 0.9349999999999999,
+        "unit": "m"
+      },
+      {
+        "metric": "Lungime picior (șold–talpă)",
+        "value": 0.935,
+        "unit": "m"
+      },
+      {
+        "metric": "Talpă sub gleznă",
+        "value": 0.075,
+        "unit": "m"
+      },
+      {
+        "metric": "Pas maxim (mers)",
+        "value": 0.15996582668606885,
+        "unit": "m"
+      },
+      {
+        "metric": "Înălțime la intrarea în mașină",
+        "value": 1.2811974498325998,
+        "unit": "m"
+      },
+      {
+        "metric": "Punctul cel mai de jos la repaus",
+        "value": -9.71445146547012e-17,
+        "unit": "m"
+      }
+    ]
+  },
+  "compatibility": {
+    "accepted": true,
+    "checks": [
+      {
+        "id": "DECLARATION",
+        "label": "Declarație vs. măsurătoare (înălțime, ochi, anvergură)",
+        "actual": 0,
+        "reference": 0,
+        "tolerance": 1e-9,
+        "unit": "m",
+        "pass": true,
+        "refusal": null,
+        "detail": "height 1.780 m, eye 1.645 m, span 1.780 m"
+      },
+      {
+        "id": "HEIGHT",
+        "label": "Înălțime totală în intervalul uman",
+        "actual": 1.78,
+        "reference": 1.5,
+        "tolerance": 0.5,
+        "unit": "m",
+        "pass": true,
+        "refusal": null,
+        "detail": "interval admis 1.50–2.00 m"
+      },
+      {
+        "id": "EYE_HEIGHT",
+        "label": "Raport înălțime ochi / înălțime totală",
+        "actual": 0.9241573033707865,
+        "reference": 0.88,
+        "tolerance": 0.06999999999999995,
+        "unit": "ratio",
+        "pass": true,
+        "refusal": null,
+        "detail": "interval admis 0.88–0.95"
+      },
+      {
+        "id": "SIDEWALK_FIT",
+        "label": "Lățime necesară pe trotuar (umeri + marjă)",
+        "actual": 1.02,
+        "reference": 2.4,
+        "tolerance": 0,
+        "unit": "m",
+        "pass": true,
+        "refusal": null,
+        "detail": "trotuar real 2.40 m"
+      },
+      {
+        "id": "CURB_STEP",
+        "label": "Pas maxim din mers față de înălțimea bordurii",
+        "actual": 0.15996582668606885,
+        "reference": 0.14,
+        "tolerance": 0.01,
+        "unit": "m",
+        "pass": true,
+        "refusal": null,
+        "detail": "bordură reală 0.14 m + marjă 0.01 m"
+      },
+      {
+        "id": "DOOR_ENTRY",
+        "label": "Înălțime de intrare în vehicul (ghemuit) + marjă",
+        "actual": 1.3311974498325998,
+        "reference": 1.6500000000000001,
+        "tolerance": 0,
+        "unit": "m",
+        "pass": true,
+        "refusal": null,
+        "detail": "ușă sedan 1.65 m"
+      },
+      {
+        "id": "CABIN_WIDTH",
+        "label": "Lățime șolduri + marjă față de cabina reală",
+        "actual": 0.30000000000000004,
+        "reference": 1.51,
+        "tolerance": 0,
+        "unit": "m",
+        "pass": true,
+        "refusal": null,
+        "detail": "cabină sedan 1.510 m"
+      },
+      {
+        "id": "GROUND_PIVOT",
+        "label": "Pivotul cel mai de jos stă pe planul solului",
+        "actual": 9.71445146547012e-17,
+        "reference": 0,
+        "tolerance": 1e-9,
+        "unit": "m",
+        "pass": true,
+        "refusal": null,
+        "detail": "cel mai de jos punct la repaus -0.000000 m"
+      },
+      {
+        "id": "CLIPS",
+        "label": "Clipuri idle/walk/run/enter-vehicle/exit-vehicle complete",
+        "actual": 5,
+        "reference": 5,
+        "tolerance": 0,
+        "unit": "count",
+        "pass": true,
+        "refusal": null,
+        "detail": "5 clipuri, eșantionare 60 Hz"
+      }
+    ],
+    "refusals": [],
+    "reference": {
+      "source": "PBI 042 city layout defaults + rețeaua reală de 96 benzi din harta neighbourhood, PBI 023 sedan mechanics 023-mechanics-v1, PBI 145 sedan NEAR geometry",
+      "sidewalkWidthM": 2.4,
+      "curbHeightM": 0.14,
+      "laneWidthM": 3.4,
+      "vehicle": {
+        "classId": "sedan",
+        "doorClearanceM": 1.6500000000000001,
+        "cabinWidthM": 1.51,
+        "sillHeightM": 0.54
+      },
+      "derivation": {
+        "mapId": "neighbourhood-compact-v1",
+        "laneCount": 96,
+        "laneWidthsM": [
+          3.4
+        ],
+        "vehicleClassVersion": "023-mechanics-v1",
+        "wheelBottomM": -0.8200000000000001,
+        "roofTopM": 0.8300000000000001,
+        "bodySillM": -0.28,
+        "geometryGpuBytes": 28112
+      }
+    }
+  },
+  "clips": [
+    {
+      "clipId": "idle",
+      "kind": "IDLE",
+      "durationS": 2,
+      "frames": 120,
+      "loop": true,
+      "samplingHz": 60,
+      "nominalSpeedMps": 0,
+      "toleranceM": 0.004,
+      "lowestMinM": -9.71445146547012e-17,
+      "lowestMaxM": 1.3877787807814457e-17,
+      "leftSoleMinM": -9.71445146547012e-17,
+      "leftSoleMaxM": 1.3877787807814457e-17,
+      "rightSoleMinM": -9.71445146547012e-17,
+      "rightSoleMaxM": 1.3877787807814457e-17,
+      "maxPenetrationM": 9.71445146547012e-17,
+      "maxFloatM": 1.3877787807814457e-17,
+      "supportFrames": 120,
+      "bothFeetFrames": 120,
+      "headTopMinM": 1.7683058428864957,
+      "headTopMaxM": 1.772235559634796,
+      "reasons": [],
+      "verdict": "PASS",
+      "frameDetail": [
+        {
+          "tick": 0,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 0
+        },
+        {
+          "tick": 1,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 1
+        },
+        {
+          "tick": 2,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 2
+        },
+        {
+          "tick": 3,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 3
+        },
+        {
+          "tick": 4,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 4
+        },
+        {
+          "tick": 5,
+          "leftSoleM": -9.71445146547012e-17,
+          "rightSoleM": -9.71445146547012e-17,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 5
+        },
+        {
+          "tick": 6,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 6
+        },
+        {
+          "tick": 7,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 7
+        },
+        {
+          "tick": 8,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 8
+        },
+        {
+          "tick": 9,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 9
+        },
+        {
+          "tick": 10,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 10
+        },
+        {
+          "tick": 11,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 11
+        },
+        {
+          "tick": 12,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 12
+        },
+        {
+          "tick": 13,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 13
+        },
+        {
+          "tick": 14,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 14
+        },
+        {
+          "tick": 15,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 15
+        },
+        {
+          "tick": 16,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 16
+        },
+        {
+          "tick": 17,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 17
+        },
+        {
+          "tick": 18,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 18
+        },
+        {
+          "tick": 19,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 19
+        },
+        {
+          "tick": 20,
+          "leftSoleM": -9.71445146547012e-17,
+          "rightSoleM": -9.71445146547012e-17,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 20
+        },
+        {
+          "tick": 21,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 21
+        },
+        {
+          "tick": 22,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 22
+        },
+        {
+          "tick": 23,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 23
+        },
+        {
+          "tick": 24,
+          "leftSoleM": -9.71445146547012e-17,
+          "rightSoleM": -9.71445146547012e-17,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 24
+        },
+        {
+          "tick": 25,
+          "leftSoleM": -9.71445146547012e-17,
+          "rightSoleM": -9.71445146547012e-17,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 25
+        },
+        {
+          "tick": 26,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 26
+        },
+        {
+          "tick": 27,
+          "leftSoleM": -9.71445146547012e-17,
+          "rightSoleM": -9.71445146547012e-17,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 27
+        },
+        {
+          "tick": 28,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 28
+        },
+        {
+          "tick": 29,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 29
+        },
+        {
+          "tick": 30,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 30
+        },
+        {
+          "tick": 31,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 31
+        },
+        {
+          "tick": 32,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 32
+        },
+        {
+          "tick": 33,
+          "leftSoleM": -9.71445146547012e-17,
+          "rightSoleM": -9.71445146547012e-17,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 33
+        },
+        {
+          "tick": 34,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 34
+        },
+        {
+          "tick": 35,
+          "leftSoleM": -9.71445146547012e-17,
+          "rightSoleM": -9.71445146547012e-17,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 35
+        },
+        {
+          "tick": 36,
+          "leftSoleM": -9.71445146547012e-17,
+          "rightSoleM": -9.71445146547012e-17,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 36
+        },
+        {
+          "tick": 37,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 37
+        },
+        {
+          "tick": 38,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 38
+        },
+        {
+          "tick": 39,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 39
+        },
+        {
+          "tick": 40,
+          "leftSoleM": -9.71445146547012e-17,
+          "rightSoleM": -9.71445146547012e-17,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 40
+        },
+        {
+          "tick": 41,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 41
+        },
+        {
+          "tick": 42,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 42
+        },
+        {
+          "tick": 43,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 43
+        },
+        {
+          "tick": 44,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 44
+        },
+        {
+          "tick": 45,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 45
+        },
+        {
+          "tick": 46,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 46
+        },
+        {
+          "tick": 47,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 47
+        },
+        {
+          "tick": 48,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 48
+        },
+        {
+          "tick": 49,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 49
+        },
+        {
+          "tick": 50,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 50
+        },
+        {
+          "tick": 51,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 51
+        },
+        {
+          "tick": 52,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 52
+        },
+        {
+          "tick": 53,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 53
+        },
+        {
+          "tick": 54,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 54
+        },
+        {
+          "tick": 55,
+          "leftSoleM": -9.71445146547012e-17,
+          "rightSoleM": -9.71445146547012e-17,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 55
+        },
+        {
+          "tick": 56,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 56
+        },
+        {
+          "tick": 57,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 57
+        },
+        {
+          "tick": 58,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 58
+        },
+        {
+          "tick": 59,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 59
+        },
+        {
+          "tick": 60,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 60
+        },
+        {
+          "tick": 61,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 61
+        },
+        {
+          "tick": 62,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 62
+        },
+        {
+          "tick": 63,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 63
+        },
+        {
+          "tick": 64,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 64
+        },
+        {
+          "tick": 65,
+          "leftSoleM": -9.71445146547012e-17,
+          "rightSoleM": -9.71445146547012e-17,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 65
+        },
+        {
+          "tick": 66,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 66
+        },
+        {
+          "tick": 67,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 67
+        },
+        {
+          "tick": 68,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 68
+        },
+        {
+          "tick": 69,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 69
+        },
+        {
+          "tick": 70,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 70
+        },
+        {
+          "tick": 71,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 71
+        },
+        {
+          "tick": 72,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 72
+        },
+        {
+          "tick": 73,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 73
+        },
+        {
+          "tick": 74,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 74
+        },
+        {
+          "tick": 75,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 75
+        },
+        {
+          "tick": 76,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 76
+        },
+        {
+          "tick": 77,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 77
+        },
+        {
+          "tick": 78,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 78
+        },
+        {
+          "tick": 79,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 79
+        },
+        {
+          "tick": 80,
+          "leftSoleM": -9.71445146547012e-17,
+          "rightSoleM": -9.71445146547012e-17,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 80
+        },
+        {
+          "tick": 81,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 81
+        },
+        {
+          "tick": 82,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 82
+        },
+        {
+          "tick": 83,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 83
+        },
+        {
+          "tick": 84,
+          "leftSoleM": -9.71445146547012e-17,
+          "rightSoleM": -9.71445146547012e-17,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 84
+        },
+        {
+          "tick": 85,
+          "leftSoleM": -9.71445146547012e-17,
+          "rightSoleM": -9.71445146547012e-17,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 85
+        },
+        {
+          "tick": 86,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 86
+        },
+        {
+          "tick": 87,
+          "leftSoleM": -9.71445146547012e-17,
+          "rightSoleM": -9.71445146547012e-17,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 87
+        },
+        {
+          "tick": 88,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 88
+        },
+        {
+          "tick": 89,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 89
+        },
+        {
+          "tick": 90,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 90
+        },
+        {
+          "tick": 91,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 91
+        },
+        {
+          "tick": 92,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 92
+        },
+        {
+          "tick": 93,
+          "leftSoleM": -9.71445146547012e-17,
+          "rightSoleM": -9.71445146547012e-17,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 93
+        },
+        {
+          "tick": 94,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 94
+        },
+        {
+          "tick": 95,
+          "leftSoleM": -9.71445146547012e-17,
+          "rightSoleM": -9.71445146547012e-17,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 95
+        },
+        {
+          "tick": 96,
+          "leftSoleM": -9.71445146547012e-17,
+          "rightSoleM": -9.71445146547012e-17,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 96
+        },
+        {
+          "tick": 97,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 97
+        },
+        {
+          "tick": 98,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 98
+        },
+        {
+          "tick": 99,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 99
+        },
+        {
+          "tick": 100,
+          "leftSoleM": -9.71445146547012e-17,
+          "rightSoleM": -9.71445146547012e-17,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 100
+        },
+        {
+          "tick": 101,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 101
+        },
+        {
+          "tick": 102,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 102
+        },
+        {
+          "tick": 103,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 103
+        },
+        {
+          "tick": 104,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 104
+        },
+        {
+          "tick": 105,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 105
+        },
+        {
+          "tick": 106,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 106
+        },
+        {
+          "tick": 107,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 107
+        },
+        {
+          "tick": 108,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 108
+        },
+        {
+          "tick": 109,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 109
+        },
+        {
+          "tick": 110,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 110
+        },
+        {
+          "tick": 111,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 111
+        },
+        {
+          "tick": 112,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 112
+        },
+        {
+          "tick": 113,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 113
+        },
+        {
+          "tick": 114,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 114
+        },
+        {
+          "tick": 115,
+          "leftSoleM": -9.71445146547012e-17,
+          "rightSoleM": -9.71445146547012e-17,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 115
+        },
+        {
+          "tick": 116,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 116
+        },
+        {
+          "tick": 117,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 117
+        },
+        {
+          "tick": 118,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 118
+        },
+        {
+          "tick": 119,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 119
+        }
+      ]
+    },
+    {
+      "clipId": "walk",
+      "kind": "GAIT",
+      "durationS": 0.8,
+      "frames": 48,
+      "loop": true,
+      "samplingHz": 60,
+      "nominalSpeedMps": 1.370967741935484,
+      "toleranceM": 0.004,
+      "lowestMinM": -2.636779683484747e-16,
+      "lowestMaxM": 1.8041124150158794e-16,
+      "leftSoleMinM": -2.0816681711721685e-16,
+      "leftSoleMaxM": 0.15996582668606885,
+      "rightSoleMinM": -2.636779683484747e-16,
+      "rightSoleMaxM": 0.15996582668606885,
+      "maxPenetrationM": 2.636779683484747e-16,
+      "maxFloatM": 1.8041124150158794e-16,
+      "supportFrames": 48,
+      "bothFeetFrames": 12,
+      "headTopMinM": 1.7056423256402797,
+      "headTopMaxM": 1.776418354126712,
+      "reasons": [],
+      "verdict": "PASS",
+      "frameDetail": [
+        {
+          "tick": 0,
+          "leftSoleM": 1.249000902703301e-16,
+          "rightSoleM": -9.71445146547012e-17,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 0
+        },
+        {
+          "tick": 1,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -1.5265566588595902e-16,
+          "lowestM": -1.5265566588595902e-16,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 1
+        },
+        {
+          "tick": 2,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": -2.636779683484747e-16,
+          "lowestM": -2.636779683484747e-16,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 2
+        },
+        {
+          "tick": 3,
+          "leftSoleM": -9.71445146547012e-17,
+          "rightSoleM": -2.0816681711721685e-16,
+          "lowestM": -2.0816681711721685e-16,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 3
+        },
+        {
+          "tick": 4,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": -9.71445146547012e-17,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 4
+        },
+        {
+          "tick": 5,
+          "leftSoleM": 6.938893903907228e-17,
+          "rightSoleM": 6.938893903907228e-17,
+          "lowestM": 6.938893903907228e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 5
+        },
+        {
+          "tick": 6,
+          "leftSoleM": -9.71445146547012e-17,
+          "rightSoleM": 0.00661199587981022,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 6
+        },
+        {
+          "tick": 7,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 0.03391251949149911,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 7
+        },
+        {
+          "tick": 8,
+          "leftSoleM": 1.249000902703301e-16,
+          "rightSoleM": 0.06020949951165351,
+          "lowestM": 1.249000902703301e-16,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 8
+        },
+        {
+          "tick": 9,
+          "leftSoleM": 6.938893903907228e-17,
+          "rightSoleM": 0.08472475236171341,
+          "lowestM": 6.938893903907228e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 9
+        },
+        {
+          "tick": 10,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 0.10673281956022625,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 10
+        },
+        {
+          "tick": 11,
+          "leftSoleM": -1.5265566588595902e-16,
+          "rightSoleM": 0.1255824355825334,
+          "lowestM": -1.5265566588595902e-16,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 11
+        },
+        {
+          "tick": 12,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 0.14071580019303825,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 12
+        },
+        {
+          "tick": 13,
+          "leftSoleM": 6.938893903907228e-17,
+          "rightSoleM": 0.15168508494074517,
+          "lowestM": 6.938893903907228e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 13
+        },
+        {
+          "tick": 14,
+          "leftSoleM": 6.938893903907228e-17,
+          "rightSoleM": 0.1581656853557612,
+          "lowestM": 6.938893903907228e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 14
+        },
+        {
+          "tick": 15,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 0.15996582668606885,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 15
+        },
+        {
+          "tick": 16,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 0.15703223892038676,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 16
+        },
+        {
+          "tick": 17,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": 0.14945173316112187,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 17
+        },
+        {
+          "tick": 18,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": 0.13744863269918156,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 18
+        },
+        {
+          "tick": 19,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": 0.12137813481060851,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 19
+        },
+        {
+          "tick": 20,
+          "leftSoleM": 6.938893903907228e-17,
+          "rightSoleM": 0.10171579971359486,
+          "lowestM": 6.938893903907228e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 20
+        },
+        {
+          "tick": 21,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": 0.0790434777300006,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 21
+        },
+        {
+          "tick": 22,
+          "leftSoleM": -9.71445146547012e-17,
+          "rightSoleM": 0.05403209109659847,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 22
+        },
+        {
+          "tick": 23,
+          "leftSoleM": -9.71445146547012e-17,
+          "rightSoleM": 0.027421779948879912,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 23
+        },
+        {
+          "tick": 24,
+          "leftSoleM": -9.71445146547012e-17,
+          "rightSoleM": 1.249000902703301e-16,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 24
+        },
+        {
+          "tick": 25,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 25
+        },
+        {
+          "tick": 26,
+          "leftSoleM": -2.0816681711721685e-16,
+          "rightSoleM": -2.0816681711721685e-16,
+          "lowestM": -2.0816681711721685e-16,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 26
+        },
+        {
+          "tick": 27,
+          "leftSoleM": -2.0816681711721685e-16,
+          "rightSoleM": -9.71445146547012e-17,
+          "lowestM": -2.0816681711721685e-16,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 27
+        },
+        {
+          "tick": 28,
+          "leftSoleM": -1.5265566588595902e-16,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -1.5265566588595902e-16,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 28
+        },
+        {
+          "tick": 29,
+          "leftSoleM": 6.938893903907228e-17,
+          "rightSoleM": 1.249000902703301e-16,
+          "lowestM": 6.938893903907228e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 29
+        },
+        {
+          "tick": 30,
+          "leftSoleM": 0.00661199587981022,
+          "rightSoleM": -9.71445146547012e-17,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "right"
+          ],
+          "frame": 30
+        },
+        {
+          "tick": 31,
+          "leftSoleM": 0.03391251949149894,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "right"
+          ],
+          "frame": 31
+        },
+        {
+          "tick": 32,
+          "leftSoleM": 0.060209499511653566,
+          "rightSoleM": 1.8041124150158794e-16,
+          "lowestM": 1.8041124150158794e-16,
+          "plantedSoles": [
+            "right"
+          ],
+          "frame": 32
+        },
+        {
+          "tick": 33,
+          "leftSoleM": 0.08472475236171341,
+          "rightSoleM": 6.938893903907228e-17,
+          "lowestM": 6.938893903907228e-17,
+          "plantedSoles": [
+            "right"
+          ],
+          "frame": 33
+        },
+        {
+          "tick": 34,
+          "leftSoleM": 0.10673281956022608,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "right"
+          ],
+          "frame": 34
+        },
+        {
+          "tick": 35,
+          "leftSoleM": 0.1255824355825335,
+          "rightSoleM": -1.5265566588595902e-16,
+          "lowestM": -1.5265566588595902e-16,
+          "plantedSoles": [
+            "right"
+          ],
+          "frame": 35
+        },
+        {
+          "tick": 36,
+          "leftSoleM": 0.14071580019303825,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "right"
+          ],
+          "frame": 36
+        },
+        {
+          "tick": 37,
+          "leftSoleM": 0.15168508494074517,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "right"
+          ],
+          "frame": 37
+        },
+        {
+          "tick": 38,
+          "leftSoleM": 0.1581656853557613,
+          "rightSoleM": 1.249000902703301e-16,
+          "lowestM": 1.249000902703301e-16,
+          "plantedSoles": [
+            "right"
+          ],
+          "frame": 38
+        },
+        {
+          "tick": 39,
+          "leftSoleM": 0.15996582668606885,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "right"
+          ],
+          "frame": 39
+        },
+        {
+          "tick": 40,
+          "leftSoleM": 0.15703223892038704,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "right"
+          ],
+          "frame": 40
+        },
+        {
+          "tick": 41,
+          "leftSoleM": 0.14945173316112198,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "right"
+          ],
+          "frame": 41
+        },
+        {
+          "tick": 42,
+          "leftSoleM": 0.13744863269918156,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "right"
+          ],
+          "frame": 42
+        },
+        {
+          "tick": 43,
+          "leftSoleM": 0.1213781348106084,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "right"
+          ],
+          "frame": 43
+        },
+        {
+          "tick": 44,
+          "leftSoleM": 0.10171579971359497,
+          "rightSoleM": 6.938893903907228e-17,
+          "lowestM": 6.938893903907228e-17,
+          "plantedSoles": [
+            "right"
+          ],
+          "frame": 44
+        },
+        {
+          "tick": 45,
+          "leftSoleM": 0.0790434777300006,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "right"
+          ],
+          "frame": 45
+        },
+        {
+          "tick": 46,
+          "leftSoleM": 0.05403209109659836,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "right"
+          ],
+          "frame": 46
+        },
+        {
+          "tick": 47,
+          "leftSoleM": 0.027421779948879968,
+          "rightSoleM": -1.5265566588595902e-16,
+          "lowestM": -1.5265566588595902e-16,
+          "plantedSoles": [
+            "right"
+          ],
+          "frame": 47
+        }
+      ]
+    },
+    {
+      "clipId": "run",
+      "kind": "GAIT",
+      "durationS": 0.5,
+      "frames": 30,
+      "loop": true,
+      "samplingHz": 60,
+      "nominalSpeedMps": 2.909090909090909,
+      "toleranceM": 0.004,
+      "lowestMinM": -2.0816681711721685e-16,
+      "lowestMaxM": 1.249000902703301e-16,
+      "leftSoleMinM": -2.0816681711721685e-16,
+      "leftSoleMaxM": 0.2395939579851043,
+      "rightSoleMinM": -2.0816681711721685e-16,
+      "rightSoleMaxM": 0.23959395798510436,
+      "maxPenetrationM": 2.0816681711721685e-16,
+      "maxFloatM": 1.249000902703301e-16,
+      "supportFrames": 30,
+      "bothFeetFrames": 4,
+      "headTopMinM": 1.684412002650544,
+      "headTopMaxM": 1.7840598649764123,
+      "reasons": [],
+      "verdict": "PASS",
+      "frameDetail": [
+        {
+          "tick": 0,
+          "leftSoleM": 1.8041124150158794e-16,
+          "rightSoleM": -9.71445146547012e-17,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 0
+        },
+        {
+          "tick": 1,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": 1.249000902703301e-16,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 1
+        },
+        {
+          "tick": 2,
+          "leftSoleM": -2.0816681711721685e-16,
+          "rightSoleM": 0.02786229939005526,
+          "lowestM": -2.0816681711721685e-16,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 2
+        },
+        {
+          "tick": 3,
+          "leftSoleM": 1.249000902703301e-16,
+          "rightSoleM": 0.08208483439816046,
+          "lowestM": 1.249000902703301e-16,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 3
+        },
+        {
+          "tick": 4,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 0.13188215473699333,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 4
+        },
+        {
+          "tick": 5,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 0.17456967397753148,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 5
+        },
+        {
+          "tick": 6,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": 0.20784609690826505,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 6
+        },
+        {
+          "tick": 7,
+          "leftSoleM": 6.938893903907228e-17,
+          "rightSoleM": 0.2299174829557173,
+          "lowestM": 6.938893903907228e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 7
+        },
+        {
+          "tick": 8,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 0.23959395798510436,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 8
+        },
+        {
+          "tick": 9,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 0.23635386072292985,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 9
+        },
+        {
+          "tick": 10,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": 0.22037186565126582,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 10
+        },
+        {
+          "tick": 11,
+          "leftSoleM": -1.5265566588595902e-16,
+          "rightSoleM": 0.19250956626121057,
+          "lowestM": -1.5265566588595902e-16,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 11
+        },
+        {
+          "tick": 12,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": 0.15426902632476946,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 12
+        },
+        {
+          "tick": 13,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 0.10771180324811104,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 13
+        },
+        {
+          "tick": 14,
+          "leftSoleM": -1.5265566588595902e-16,
+          "rightSoleM": 0.05534780897818549,
+          "lowestM": -1.5265566588595902e-16,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 14
+        },
+        {
+          "tick": 15,
+          "leftSoleM": -9.71445146547012e-17,
+          "rightSoleM": 1.8041124150158794e-16,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 15
+        },
+        {
+          "tick": 16,
+          "leftSoleM": -2.0816681711721685e-16,
+          "rightSoleM": 6.938893903907228e-17,
+          "lowestM": -2.0816681711721685e-16,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 16
+        },
+        {
+          "tick": 17,
+          "leftSoleM": 0.02786229939005526,
+          "rightSoleM": -2.0816681711721685e-16,
+          "lowestM": -2.0816681711721685e-16,
+          "plantedSoles": [
+            "right"
+          ],
+          "frame": 17
+        },
+        {
+          "tick": 18,
+          "leftSoleM": 0.08208483439816035,
+          "rightSoleM": 6.938893903907228e-17,
+          "lowestM": 6.938893903907228e-17,
+          "plantedSoles": [
+            "right"
+          ],
+          "frame": 18
+        },
+        {
+          "tick": 19,
+          "leftSoleM": 0.13188215473699333,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "right"
+          ],
+          "frame": 19
+        },
+        {
+          "tick": 20,
+          "leftSoleM": 0.17456967397753165,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "right"
+          ],
+          "frame": 20
+        },
+        {
+          "tick": 21,
+          "leftSoleM": 0.20784609690826505,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "right"
+          ],
+          "frame": 21
+        },
+        {
+          "tick": 22,
+          "leftSoleM": 0.22991748295571718,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "right"
+          ],
+          "frame": 22
+        },
+        {
+          "tick": 23,
+          "leftSoleM": 0.2395939579851043,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "right"
+          ],
+          "frame": 23
+        },
+        {
+          "tick": 24,
+          "leftSoleM": 0.23635386072292985,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "right"
+          ],
+          "frame": 24
+        },
+        {
+          "tick": 25,
+          "leftSoleM": 0.22037186565126582,
+          "rightSoleM": -9.71445146547012e-17,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "right"
+          ],
+          "frame": 25
+        },
+        {
+          "tick": 26,
+          "leftSoleM": 0.19250956626121057,
+          "rightSoleM": -1.5265566588595902e-16,
+          "lowestM": -1.5265566588595902e-16,
+          "plantedSoles": [
+            "right"
+          ],
+          "frame": 26
+        },
+        {
+          "tick": 27,
+          "leftSoleM": 0.15426902632476935,
+          "rightSoleM": -9.71445146547012e-17,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "right"
+          ],
+          "frame": 27
+        },
+        {
+          "tick": 28,
+          "leftSoleM": 0.10771180324811104,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "right"
+          ],
+          "frame": 28
+        },
+        {
+          "tick": 29,
+          "leftSoleM": 0.0553478089781856,
+          "rightSoleM": -9.71445146547012e-17,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "right"
+          ],
+          "frame": 29
+        }
+      ]
+    },
+    {
+      "clipId": "enter-vehicle",
+      "kind": "TRANSITION",
+      "durationS": 0.8,
+      "frames": 48,
+      "loop": false,
+      "samplingHz": 60,
+      "nominalSpeedMps": 0,
+      "toleranceM": 0.004,
+      "lowestMinM": -1.5265566588595902e-16,
+      "lowestMaxM": 1.5265566588595902e-16,
+      "leftSoleMinM": -1.5265566588595902e-16,
+      "leftSoleMaxM": 1.8041124150158794e-16,
+      "rightSoleMinM": -1.5265566588595902e-16,
+      "rightSoleMaxM": 2.636779683484747e-16,
+      "maxPenetrationM": 1.5265566588595902e-16,
+      "maxFloatM": 1.5265566588595902e-16,
+      "supportFrames": 48,
+      "bothFeetFrames": 48,
+      "headTopMinM": 1.2811974498325998,
+      "headTopMaxM": 1.7721598300599275,
+      "reasons": [],
+      "verdict": "PASS",
+      "frameDetail": [
+        {
+          "tick": 0,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 0
+        },
+        {
+          "tick": 1,
+          "leftSoleM": -9.71445146547012e-17,
+          "rightSoleM": 6.938893903907228e-17,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 1
+        },
+        {
+          "tick": 2,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -9.71445146547012e-17,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 2
+        },
+        {
+          "tick": 3,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 3
+        },
+        {
+          "tick": 4,
+          "leftSoleM": -9.71445146547012e-17,
+          "rightSoleM": 6.938893903907228e-17,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 4
+        },
+        {
+          "tick": 5,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": -1.5265566588595902e-16,
+          "lowestM": -1.5265566588595902e-16,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 5
+        },
+        {
+          "tick": 6,
+          "leftSoleM": -9.71445146547012e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 6
+        },
+        {
+          "tick": 7,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 7
+        },
+        {
+          "tick": 8,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": -1.5265566588595902e-16,
+          "lowestM": -1.5265566588595902e-16,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 8
+        },
+        {
+          "tick": 9,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": -9.71445146547012e-17,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 9
+        },
+        {
+          "tick": 10,
+          "leftSoleM": -9.71445146547012e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 10
+        },
+        {
+          "tick": 11,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.249000902703301e-16,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 11
+        },
+        {
+          "tick": 12,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 12
+        },
+        {
+          "tick": 13,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.8041124150158794e-16,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 13
+        },
+        {
+          "tick": 14,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 14
+        },
+        {
+          "tick": 15,
+          "leftSoleM": 6.938893903907228e-17,
+          "rightSoleM": -9.71445146547012e-17,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 15
+        },
+        {
+          "tick": 16,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 16
+        },
+        {
+          "tick": 17,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 17
+        },
+        {
+          "tick": 18,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 18
+        },
+        {
+          "tick": 19,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 19
+        },
+        {
+          "tick": 20,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -9.71445146547012e-17,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 20
+        },
+        {
+          "tick": 21,
+          "leftSoleM": -1.5265566588595902e-16,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -1.5265566588595902e-16,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 21
+        },
+        {
+          "tick": 22,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -9.71445146547012e-17,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 22
+        },
+        {
+          "tick": 23,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -9.71445146547012e-17,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 23
+        },
+        {
+          "tick": 24,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 24
+        },
+        {
+          "tick": 25,
+          "leftSoleM": -9.71445146547012e-17,
+          "rightSoleM": -9.71445146547012e-17,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 25
+        },
+        {
+          "tick": 26,
+          "leftSoleM": -1.5265566588595902e-16,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -1.5265566588595902e-16,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 26
+        },
+        {
+          "tick": 27,
+          "leftSoleM": 6.938893903907228e-17,
+          "rightSoleM": 4.163336342344337e-17,
+          "lowestM": 4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 27
+        },
+        {
+          "tick": 28,
+          "leftSoleM": 6.938893903907228e-17,
+          "rightSoleM": -6.938893903907228e-17,
+          "lowestM": -6.938893903907228e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 28
+        },
+        {
+          "tick": 29,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 29
+        },
+        {
+          "tick": 30,
+          "leftSoleM": -9.71445146547012e-17,
+          "rightSoleM": 6.938893903907228e-17,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 30
+        },
+        {
+          "tick": 31,
+          "leftSoleM": -9.71445146547012e-17,
+          "rightSoleM": 6.938893903907228e-17,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 31
+        },
+        {
+          "tick": 32,
+          "leftSoleM": 4.163336342344337e-17,
+          "rightSoleM": -9.71445146547012e-17,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 32
+        },
+        {
+          "tick": 33,
+          "leftSoleM": 6.938893903907228e-17,
+          "rightSoleM": -6.938893903907228e-17,
+          "lowestM": -6.938893903907228e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 33
+        },
+        {
+          "tick": 34,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 34
+        },
+        {
+          "tick": 35,
+          "leftSoleM": -1.3877787807814457e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": -1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 35
+        },
+        {
+          "tick": 36,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 9.71445146547012e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 36
+        },
+        {
+          "tick": 37,
+          "leftSoleM": 1.8041124150158794e-16,
+          "rightSoleM": -6.938893903907228e-17,
+          "lowestM": -6.938893903907228e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 37
+        },
+        {
+          "tick": 38,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 38
+        },
+        {
+          "tick": 39,
+          "leftSoleM": 4.163336342344337e-17,
+          "rightSoleM": -1.3877787807814457e-17,
+          "lowestM": -1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 39
+        },
+        {
+          "tick": 40,
+          "leftSoleM": 4.163336342344337e-17,
+          "rightSoleM": 1.5265566588595902e-16,
+          "lowestM": 4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 40
+        },
+        {
+          "tick": 41,
+          "leftSoleM": 1.8041124150158794e-16,
+          "rightSoleM": -6.938893903907228e-17,
+          "lowestM": -6.938893903907228e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 41
+        },
+        {
+          "tick": 42,
+          "leftSoleM": 9.71445146547012e-17,
+          "rightSoleM": 2.636779683484747e-16,
+          "lowestM": 9.71445146547012e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 42
+        },
+        {
+          "tick": 43,
+          "leftSoleM": 1.5265566588595902e-16,
+          "rightSoleM": 2.636779683484747e-16,
+          "lowestM": 1.5265566588595902e-16,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 43
+        },
+        {
+          "tick": 44,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 44
+        },
+        {
+          "tick": 45,
+          "leftSoleM": -9.71445146547012e-17,
+          "rightSoleM": 2.7755575615628914e-17,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 45
+        },
+        {
+          "tick": 46,
+          "leftSoleM": -1.249000902703301e-16,
+          "rightSoleM": 8.326672684688674e-17,
+          "lowestM": -1.249000902703301e-16,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 46
+        },
+        {
+          "tick": 47,
+          "leftSoleM": 9.71445146547012e-17,
+          "rightSoleM": 1.8041124150158794e-16,
+          "lowestM": 9.71445146547012e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 47
+        }
+      ]
+    },
+    {
+      "clipId": "exit-vehicle",
+      "kind": "TRANSITION",
+      "durationS": 0.9,
+      "frames": 54,
+      "loop": false,
+      "samplingHz": 60,
+      "nominalSpeedMps": 0,
+      "toleranceM": 0.004,
+      "lowestMinM": -9.71445146547012e-17,
+      "lowestMaxM": 1.249000902703301e-16,
+      "leftSoleMinM": -9.71445146547012e-17,
+      "leftSoleMaxM": 1.249000902703301e-16,
+      "rightSoleMinM": -9.71445146547012e-17,
+      "rightSoleMaxM": 0.09986899586495442,
+      "maxPenetrationM": 9.71445146547012e-17,
+      "maxFloatM": 1.249000902703301e-16,
+      "supportFrames": 54,
+      "bothFeetFrames": 26,
+      "headTopMinM": 1.2811974498325998,
+      "headTopMaxM": 1.7722169796798293,
+      "reasons": [],
+      "verdict": "PASS",
+      "frameDetail": [
+        {
+          "tick": 0,
+          "leftSoleM": 9.71445146547012e-17,
+          "rightSoleM": 9.71445146547012e-17,
+          "lowestM": 9.71445146547012e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 0
+        },
+        {
+          "tick": 1,
+          "leftSoleM": 1.249000902703301e-16,
+          "rightSoleM": 1.249000902703301e-16,
+          "lowestM": 1.249000902703301e-16,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 1
+        },
+        {
+          "tick": 2,
+          "leftSoleM": 4.163336342344337e-17,
+          "rightSoleM": 4.163336342344337e-17,
+          "lowestM": 4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 2
+        },
+        {
+          "tick": 3,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 3
+        },
+        {
+          "tick": 4,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 4
+        },
+        {
+          "tick": 5,
+          "leftSoleM": 4.163336342344337e-17,
+          "rightSoleM": 4.163336342344337e-17,
+          "lowestM": 4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 5
+        },
+        {
+          "tick": 6,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 6
+        },
+        {
+          "tick": 7,
+          "leftSoleM": -9.71445146547012e-17,
+          "rightSoleM": -9.71445146547012e-17,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 7
+        },
+        {
+          "tick": 8,
+          "leftSoleM": -6.938893903907228e-17,
+          "rightSoleM": 0.0005388640565167219,
+          "lowestM": -6.938893903907228e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 8
+        },
+        {
+          "tick": 9,
+          "leftSoleM": 6.938893903907228e-17,
+          "rightSoleM": 0.01129206355190028,
+          "lowestM": 6.938893903907228e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 9
+        },
+        {
+          "tick": 10,
+          "leftSoleM": -1.3877787807814457e-17,
+          "rightSoleM": 0.02191423160058463,
+          "lowestM": -1.3877787807814457e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 10
+        },
+        {
+          "tick": 11,
+          "leftSoleM": -1.3877787807814457e-17,
+          "rightSoleM": 0.03228211012488523,
+          "lowestM": -1.3877787807814457e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 11
+        },
+        {
+          "tick": 12,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 0.042275391785404695,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 12
+        },
+        {
+          "tick": 13,
+          "leftSoleM": -1.3877787807814457e-17,
+          "rightSoleM": 0.05177811600972544,
+          "lowestM": -1.3877787807814457e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 13
+        },
+        {
+          "tick": 14,
+          "leftSoleM": 9.71445146547012e-17,
+          "rightSoleM": 0.06068001458185936,
+          "lowestM": 9.71445146547012e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 14
+        },
+        {
+          "tick": 15,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 0.06887779117842714,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 15
+        },
+        {
+          "tick": 16,
+          "leftSoleM": 6.938893903907228e-17,
+          "rightSoleM": 0.07627632000402192,
+          "lowestM": 6.938893903907228e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 16
+        },
+        {
+          "tick": 17,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 0.0827897496169643,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 17
+        },
+        {
+          "tick": 18,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 0.08834249913682131,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 18
+        },
+        {
+          "tick": 19,
+          "leftSoleM": -9.71445146547012e-17,
+          "rightSoleM": 0.09287013527384054,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 19
+        },
+        {
+          "tick": 20,
+          "leftSoleM": -9.71445146547012e-17,
+          "rightSoleM": 0.09632012000337899,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 20
+        },
+        {
+          "tick": 21,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": 0.09865242020942351,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 21
+        },
+        {
+          "tick": 22,
+          "leftSoleM": -9.71445146547012e-17,
+          "rightSoleM": 0.09983997222298831,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 22
+        },
+        {
+          "tick": 23,
+          "leftSoleM": 6.938893903907228e-17,
+          "rightSoleM": 0.09986899586495442,
+          "lowestM": 6.938893903907228e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 23
+        },
+        {
+          "tick": 24,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 0.09873915434924375,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 24
+        },
+        {
+          "tick": 25,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": 0.09646355819083598,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 25
+        },
+        {
+          "tick": 26,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 0.09306861307327714,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 26
+        },
+        {
+          "tick": 27,
+          "leftSoleM": -9.71445146547012e-17,
+          "rightSoleM": 0.08859371344100865,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 27
+        },
+        {
+          "tick": 28,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": 0.08309078537201887,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 28
+        },
+        {
+          "tick": 29,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": 0.07662368403526305,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 29
+        },
+        {
+          "tick": 30,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 0.06926745272466268,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 30
+        },
+        {
+          "tick": 31,
+          "leftSoleM": -9.71445146547012e-17,
+          "rightSoleM": 0.06110745206774622,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 31
+        },
+        {
+          "tick": 32,
+          "leftSoleM": -9.71445146547012e-17,
+          "rightSoleM": 0.052238369513466346,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 32
+        },
+        {
+          "tick": 33,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": 0.04276312059295152,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 33
+        },
+        {
+          "tick": 34,
+          "leftSoleM": 6.938893903907228e-17,
+          "rightSoleM": 0.03279165470280067,
+          "lowestM": 6.938893903907228e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 34
+        },
+        {
+          "tick": 35,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": 0.022439679268436166,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 35
+        },
+        {
+          "tick": 36,
+          "leftSoleM": -9.71445146547012e-17,
+          "rightSoleM": 0.01182731709213665,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left"
+          ],
+          "frame": 36
+        },
+        {
+          "tick": 37,
+          "leftSoleM": -9.71445146547012e-17,
+          "rightSoleM": 0.0010777124656835696,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 37
+        },
+        {
+          "tick": 38,
+          "leftSoleM": -9.71445146547012e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 38
+        },
+        {
+          "tick": 39,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": 1.249000902703301e-16,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 39
+        },
+        {
+          "tick": 40,
+          "leftSoleM": -9.71445146547012e-17,
+          "rightSoleM": 6.938893903907228e-17,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 40
+        },
+        {
+          "tick": 41,
+          "leftSoleM": -9.71445146547012e-17,
+          "rightSoleM": 6.938893903907228e-17,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 41
+        },
+        {
+          "tick": 42,
+          "leftSoleM": 1.249000902703301e-16,
+          "rightSoleM": 1.8041124150158794e-16,
+          "lowestM": 1.249000902703301e-16,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 42
+        },
+        {
+          "tick": 43,
+          "leftSoleM": -9.71445146547012e-17,
+          "rightSoleM": -9.71445146547012e-17,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 43
+        },
+        {
+          "tick": 44,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": 6.938893903907228e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 44
+        },
+        {
+          "tick": 45,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 45
+        },
+        {
+          "tick": 46,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.249000902703301e-16,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 46
+        },
+        {
+          "tick": 47,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 47
+        },
+        {
+          "tick": 48,
+          "leftSoleM": -9.71445146547012e-17,
+          "rightSoleM": 6.938893903907228e-17,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 48
+        },
+        {
+          "tick": 49,
+          "leftSoleM": -9.71445146547012e-17,
+          "rightSoleM": -9.71445146547012e-17,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 49
+        },
+        {
+          "tick": 50,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.8041124150158794e-16,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 50
+        },
+        {
+          "tick": 51,
+          "leftSoleM": -9.71445146547012e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": -9.71445146547012e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 51
+        },
+        {
+          "tick": 52,
+          "leftSoleM": 1.3877787807814457e-17,
+          "rightSoleM": 1.3877787807814457e-17,
+          "lowestM": 1.3877787807814457e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 52
+        },
+        {
+          "tick": 53,
+          "leftSoleM": -4.163336342344337e-17,
+          "rightSoleM": -4.163336342344337e-17,
+          "lowestM": -4.163336342344337e-17,
+          "plantedSoles": [
+            "left",
+            "right"
+          ],
+          "frame": 53
+        }
+      ]
+    }
+  ],
+  "authority": {
+    "entityId": "pedestrian-001",
+    "positionBits": "40934a4584fd0fdfbfb99999999999a0408edd3c0d2a903b",
+    "yawRad": 0.1234567890123457,
+    "clips": [
+      {
+        "clipId": "idle",
+        "framesSampled": 123,
+        "extraTicks": [
+          120,
+          853,
+          120120
+        ],
+        "identical": true,
+        "mismatchedFrames": 0
+      },
+      {
+        "clipId": "walk",
+        "framesSampled": 51,
+        "extraTicks": [
+          48,
+          349,
+          48048
+        ],
+        "identical": true,
+        "mismatchedFrames": 0
+      },
+      {
+        "clipId": "run",
+        "framesSampled": 33,
+        "extraTicks": [
+          30,
+          223,
+          30030
+        ],
+        "identical": true,
+        "mismatchedFrames": 0
+      },
+      {
+        "clipId": "enter-vehicle",
+        "framesSampled": 48,
+        "extraTicks": [],
+        "identical": true,
+        "mismatchedFrames": 0
+      },
+      {
+        "clipId": "exit-vehicle",
+        "framesSampled": 54,
+        "extraTicks": [],
+        "identical": true,
+        "mismatchedFrames": 0
+      }
+    ],
+    "positionIndependentOfAuthority": true,
+    "refusals": [
+      {
+        "case": "writer.writeEntityPositionM",
+        "refused": true,
+        "code": "AUTHORITY_WRITE_REFUSED",
+        "positionBitsUnchanged": true,
+        "message": "AUTHORITY_WRITE_REFUSED: animation may not write the authoritative entity position"
+      },
+      {
+        "case": "writer.writeRootMotionM",
+        "refused": true,
+        "code": "AUTHORITY_WRITE_REFUSED",
+        "positionBitsUnchanged": true,
+        "message": "AUTHORITY_WRITE_REFUSED: clips are in place; root motion belongs to the PBI 192 walker"
+      },
+      {
+        "case": "applyCharacterPose cu positionM",
+        "refused": true,
+        "code": "POSE_CONTAINS_ENTITY_POSITION",
+        "positionBitsUnchanged": true,
+        "message": "POSE_CONTAINS_ENTITY_POSITION: pose carries positionM; animation may not write the authoritative transform"
+      },
+      {
+        "case": "applyCharacterPose cu root motion pe X",
+        "refused": true,
+        "code": "ROOT_MOTION_IN_CLIP",
+        "positionBitsUnchanged": true,
+        "message": "ROOT_MOTION_IN_CLIP: root translation must be zero on X/Z; clips are in-place"
+      },
+      {
+        "case": "applyCharacterPose cu transform străin",
+        "refused": true,
+        "code": "POSE_CONTAINS_ENTITY_POSITION",
+        "positionBitsUnchanged": true,
+        "message": "POSE_CONTAINS_ENTITY_POSITION: pose carries transform; animation may not write the authoritative transform"
+      }
+    ]
+  },
+  "refusals": [
+    {
+      "case": "Asset supradimensionat (×1.45, 2.58 m)",
+      "refused": true,
+      "reasons": [
+        "HEIGHT_OUT_OF_RANGE",
+        "DOOR_TOO_LOW"
+      ],
+      "message": "ASSET_REFUSED: oversized-probe refused: HEIGHT_OUT_OF_RANGE, DOOR_TOO_LOW",
+      "detail": [
+        {
+          "id": "DECLARATION",
+          "label": "Declarație vs. măsurătoare (înălțime, ochi, anvergură)",
+          "actual": 0,
+          "reference": 0,
+          "tolerance": 1e-9,
+          "unit": "m",
+          "pass": true,
+          "refusal": null,
+          "detail": "height 2.581 m, eye 2.385 m, span 2.581 m"
+        },
+        {
+          "id": "HEIGHT",
+          "label": "Înălțime totală în intervalul uman",
+          "actual": 2.581,
+          "reference": 1.5,
+          "tolerance": 0.5,
+          "unit": "m",
+          "pass": false,
+          "refusal": "HEIGHT_OUT_OF_RANGE",
+          "detail": "interval admis 1.50–2.00 m"
+        },
+        {
+          "id": "EYE_HEIGHT",
+          "label": "Raport înălțime ochi / înălțime totală",
+          "actual": 0.9241573033707866,
+          "reference": 0.88,
+          "tolerance": 0.06999999999999995,
+          "unit": "ratio",
+          "pass": true,
+          "refusal": null,
+          "detail": "interval admis 0.88–0.95"
+        },
+        {
+          "id": "SIDEWALK_FIT",
+          "label": "Lățime necesară pe trotuar (umeri + marjă)",
+          "actual": 1.254,
+          "reference": 2.4,
+          "tolerance": 0,
+          "unit": "m",
+          "pass": true,
+          "refusal": null,
+          "detail": "trotuar real 2.40 m"
+        },
+        {
+          "id": "CURB_STEP",
+          "label": "Pas maxim din mers față de înălțimea bordurii",
+          "actual": 0.23195044869480014,
+          "reference": 0.14,
+          "tolerance": 0.01,
+          "unit": "m",
+          "pass": true,
+          "refusal": null,
+          "detail": "bordură reală 0.14 m + marjă 0.01 m"
+        },
+        {
+          "id": "DOOR_ENTRY",
+          "label": "Înălțime de intrare în vehicul (ghemuit) + marjă",
+          "actual": 1.9077363022572693,
+          "reference": 1.6500000000000001,
+          "tolerance": 0,
+          "unit": "m",
+          "pass": false,
+          "refusal": "DOOR_TOO_LOW",
+          "detail": "ușă sedan 1.65 m"
+        },
+        {
+          "id": "CABIN_WIDTH",
+          "label": "Lățime șolduri + marjă față de cabina reală",
+          "actual": 0.39,
+          "reference": 1.51,
+          "tolerance": 0,
+          "unit": "m",
+          "pass": true,
+          "refusal": null,
+          "detail": "cabină sedan 1.510 m"
+        },
+        {
+          "id": "GROUND_PIVOT",
+          "label": "Pivotul cel mai de jos stă pe planul solului",
+          "actual": 1.3877787807814457e-17,
+          "reference": 0,
+          "tolerance": 1e-9,
+          "unit": "m",
+          "pass": true,
+          "refusal": null,
+          "detail": "cel mai de jos punct la repaus 0.000000 m"
+        },
+        {
+          "id": "CLIPS",
+          "label": "Clipuri idle/walk/run/enter-vehicle/exit-vehicle complete",
+          "actual": 5,
+          "reference": 5,
+          "tolerance": 0,
+          "unit": "count",
+          "pass": true,
+          "refusal": null,
+          "detail": "5 clipuri, eșantionare 60 Hz"
+        }
+      ]
+    },
+    {
+      "case": "Trotuar îngust de 0.90 m",
+      "refused": true,
+      "reasons": [
+        "SIDEWALK_TOO_NARROW"
+      ],
+      "message": "ASSET_REFUSED: pedestrian-adult-01 refused: SIDEWALK_TOO_NARROW",
+      "detail": [
+        {
+          "id": "DECLARATION",
+          "label": "Declarație vs. măsurătoare (înălțime, ochi, anvergură)",
+          "actual": 0,
+          "reference": 0,
+          "tolerance": 1e-9,
+          "unit": "m",
+          "pass": true,
+          "refusal": null,
+          "detail": "height 1.780 m, eye 1.645 m, span 1.780 m"
+        },
+        {
+          "id": "HEIGHT",
+          "label": "Înălțime totală în intervalul uman",
+          "actual": 1.78,
+          "reference": 1.5,
+          "tolerance": 0.5,
+          "unit": "m",
+          "pass": true,
+          "refusal": null,
+          "detail": "interval admis 1.50–2.00 m"
+        },
+        {
+          "id": "EYE_HEIGHT",
+          "label": "Raport înălțime ochi / înălțime totală",
+          "actual": 0.9241573033707865,
+          "reference": 0.88,
+          "tolerance": 0.06999999999999995,
+          "unit": "ratio",
+          "pass": true,
+          "refusal": null,
+          "detail": "interval admis 0.88–0.95"
+        },
+        {
+          "id": "SIDEWALK_FIT",
+          "label": "Lățime necesară pe trotuar (umeri + marjă)",
+          "actual": 1.02,
+          "reference": 0.9,
+          "tolerance": 0,
+          "unit": "m",
+          "pass": false,
+          "refusal": "SIDEWALK_TOO_NARROW",
+          "detail": "trotuar real 0.90 m"
+        },
+        {
+          "id": "CURB_STEP",
+          "label": "Pas maxim din mers față de înălțimea bordurii",
+          "actual": 0.15996582668606885,
+          "reference": 0.14,
+          "tolerance": 0.01,
+          "unit": "m",
+          "pass": true,
+          "refusal": null,
+          "detail": "bordură reală 0.14 m + marjă 0.01 m"
+        },
+        {
+          "id": "DOOR_ENTRY",
+          "label": "Înălțime de intrare în vehicul (ghemuit) + marjă",
+          "actual": 1.3311974498325998,
+          "reference": 1.6500000000000001,
+          "tolerance": 0,
+          "unit": "m",
+          "pass": true,
+          "refusal": null,
+          "detail": "ușă sedan 1.65 m"
+        },
+        {
+          "id": "CABIN_WIDTH",
+          "label": "Lățime șolduri + marjă față de cabina reală",
+          "actual": 0.30000000000000004,
+          "reference": 1.51,
+          "tolerance": 0,
+          "unit": "m",
+          "pass": true,
+          "refusal": null,
+          "detail": "cabină sedan 1.510 m"
+        },
+        {
+          "id": "GROUND_PIVOT",
+          "label": "Pivotul cel mai de jos stă pe planul solului",
+          "actual": 9.71445146547012e-17,
+          "reference": 0,
+          "tolerance": 1e-9,
+          "unit": "m",
+          "pass": true,
+          "refusal": null,
+          "detail": "cel mai de jos punct la repaus -0.000000 m"
+        },
+        {
+          "id": "CLIPS",
+          "label": "Clipuri idle/walk/run/enter-vehicle/exit-vehicle complete",
+          "actual": 5,
+          "reference": 5,
+          "tolerance": 0,
+          "unit": "count",
+          "pass": true,
+          "refusal": null,
+          "detail": "5 clipuri, eșantionare 60 Hz"
+        }
+      ]
+    },
+    {
+      "case": "Declarație mincinoasă de scară (înălțime 2.40 m)",
+      "refused": true,
+      "reasons": [
+        "DECLARATION_MISMATCH"
+      ],
+      "message": "ASSET_REFUSED: lying-declaration-probe refused: DECLARATION_MISMATCH",
+      "detail": [
+        {
+          "id": "DECLARATION",
+          "label": "Declarație vs. măsurătoare (înălțime, ochi, anvergură)",
+          "actual": 0.6199999999999999,
+          "reference": 0,
+          "tolerance": 1e-9,
+          "unit": "m",
+          "pass": false,
+          "refusal": "DECLARATION_MISMATCH",
+          "detail": "height 1.780 m, eye 1.645 m, span 1.780 m"
+        },
+        {
+          "id": "HEIGHT",
+          "label": "Înălțime totală în intervalul uman",
+          "actual": 1.78,
+          "reference": 1.5,
+          "tolerance": 0.5,
+          "unit": "m",
+          "pass": true,
+          "refusal": null,
+          "detail": "interval admis 1.50–2.00 m"
+        },
+        {
+          "id": "EYE_HEIGHT",
+          "label": "Raport înălțime ochi / înălțime totală",
+          "actual": 0.9241573033707865,
+          "reference": 0.88,
+          "tolerance": 0.06999999999999995,
+          "unit": "ratio",
+          "pass": true,
+          "refusal": null,
+          "detail": "interval admis 0.88–0.95"
+        },
+        {
+          "id": "SIDEWALK_FIT",
+          "label": "Lățime necesară pe trotuar (umeri + marjă)",
+          "actual": 1.02,
+          "reference": 2.4,
+          "tolerance": 0,
+          "unit": "m",
+          "pass": true,
+          "refusal": null,
+          "detail": "trotuar real 2.40 m"
+        },
+        {
+          "id": "CURB_STEP",
+          "label": "Pas maxim din mers față de înălțimea bordurii",
+          "actual": 0.15996582668606885,
+          "reference": 0.14,
+          "tolerance": 0.01,
+          "unit": "m",
+          "pass": true,
+          "refusal": null,
+          "detail": "bordură reală 0.14 m + marjă 0.01 m"
+        },
+        {
+          "id": "DOOR_ENTRY",
+          "label": "Înălțime de intrare în vehicul (ghemuit) + marjă",
+          "actual": 1.3311974498325998,
+          "reference": 1.6500000000000001,
+          "tolerance": 0,
+          "unit": "m",
+          "pass": true,
+          "refusal": null,
+          "detail": "ușă sedan 1.65 m"
+        },
+        {
+          "id": "CABIN_WIDTH",
+          "label": "Lățime șolduri + marjă față de cabina reală",
+          "actual": 0.30000000000000004,
+          "reference": 1.51,
+          "tolerance": 0,
+          "unit": "m",
+          "pass": true,
+          "refusal": null,
+          "detail": "cabină sedan 1.510 m"
+        },
+        {
+          "id": "GROUND_PIVOT",
+          "label": "Pivotul cel mai de jos stă pe planul solului",
+          "actual": 9.71445146547012e-17,
+          "reference": 0,
+          "tolerance": 1e-9,
+          "unit": "m",
+          "pass": true,
+          "refusal": null,
+          "detail": "cel mai de jos punct la repaus -0.000000 m"
+        },
+        {
+          "id": "CLIPS",
+          "label": "Clipuri idle/walk/run/enter-vehicle/exit-vehicle complete",
+          "actual": 5,
+          "reference": 5,
+          "tolerance": 0,
+          "unit": "count",
+          "pass": true,
+          "refusal": null,
+          "detail": "5 clipuri, eșantionare 60 Hz"
+        }
+      ]
+    }
+  ],
+  "visual": {
+    "lods": [
+      {
+        "lod": "NEAR",
+        "parts": 17,
+        "vertices": 408,
+        "indices": 612,
+        "gpuBytes": 18768,
+        "drawCalls": 4,
+        "materialGroups": [
+          "SKIN",
+          "TORSO",
+          "LEGS",
+          "BOOTS"
+        ]
+      },
+      {
+        "lod": "MID",
+        "parts": 14,
+        "vertices": 336,
+        "indices": 504,
+        "gpuBytes": 15456,
+        "drawCalls": 4,
+        "materialGroups": [
+          "SKIN",
+          "TORSO",
+          "LEGS",
+          "BOOTS"
+        ]
+      },
+      {
+        "lod": "FAR",
+        "parts": 7,
+        "vertices": 168,
+        "indices": 252,
+        "gpuBytes": 7728,
+        "drawCalls": 3,
+        "materialGroups": [
+          "SKIN",
+          "TORSO",
+          "LEGS"
+        ]
+      }
+    ],
+    "alignmentIssues": [],
+    "inventoryEntries": 4,
+    "inventoryBytes": 41952,
+    "budgetAccepted": true,
+    "budgetDiagnostics": 0
+  },
+  "summary": {
+    "compatibilityPassed": 9,
+    "compatibilityChecks": 9,
+    "clipsPassed": 5,
+    "clips": 5,
+    "authorityFrames": 309,
+    "refusedCases": 3,
+    "refusedCasesTotal": 3,
+    "visualIssues": 0,
+    "pass": true
+  },
+  "limitations": [
+    "Verificarea este headless: contractul de asset, animațiile și contactul cu solul sunt dovedite numeric, fără browser. Proba vizuală WebGPU/WebGL2 rămâne pentru integrarea personajului în 192.",
+    "Reprezentarea este un contract de cutii pe pivoturi, nu un skin/GLB final; înlocuirea mesh-urilor nu schimbă contractul.",
+    "Viteza nominală a clipurilor este derivată din pas și faza de sprijin; deplasarea autoritară, coliziunile și camera personajului aparțin PBI 192.",
+    "Toleranța de contact este 0.004 m; ea acoperă eroarea numerică a solverului, nu o alegere vizuală."
+  ],
+  "determinism": {
+    "runs": 2,
+    "identical": true,
+    "digest": "e713aecda0fc8f8c1ed6add649fcff7547e8aee1bc9d986ca850a6518811895a"
+  }
+}
