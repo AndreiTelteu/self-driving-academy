@@ -1,0 +1,704 @@
+{
+  "version": "199-walking-tutorial-report-v1",
+  "contract": "199-walking-tutorial-v1",
+  "generatedBy": "npm run walking:tutorial",
+  "command": "npm run walking:tutorial",
+  "policy": {
+    "contract": "199-walking-tutorial-v1",
+    "oneEventPerStep": true,
+    "clock": "NONE",
+    "frames": "NONE",
+    "taxiAccess": "NEVER_GATED",
+    "learning": "REFUSED",
+    "drivingXp": "NONE",
+    "walkingTimeXp": "NOT_IMPLEMENTED",
+    "eventSources": {
+      "TAXI_SELECTION": "068",
+      "WALKER_MOTION": "192",
+      "VEHICLE_ENTRY": "195",
+      "RIDE_PICKUP": "007",
+      "RIDE_DROPOFF": "007",
+      "VEHICLE_EXIT": "196"
+    }
+  },
+  "limits": {
+    "version": "199-walking-tutorial-v1",
+    "steps": 6,
+    "evidencePerStep": 4,
+    "retainedObservations": 64,
+    "idCodeUnits": 256,
+    "instanceIdCodeUnits": 512
+  },
+  "ticks": {
+    "start": 0,
+    "selection": 5,
+    "baseline": 10,
+    "motion": 11,
+    "entry": 200,
+    "pickup": 210,
+    "dropoff": 220,
+    "exit": 230,
+    "abandon": 231,
+    "v1Mission": 500
+  },
+  "fixture": {
+    "taxiId": "vehicle:taxi-199",
+    "doorDistanceM": 0.29999999999999993,
+    "movedM": 0.018333333333333757
+  },
+  "steps": [
+    {
+      "stepId": "SELECT_TAXI",
+      "order": 1,
+      "title": "Alege un taxi",
+      "event": "TAXI_SELECTION",
+      "source": "068"
+    },
+    {
+      "stepId": "WALK_TO_TAXI",
+      "order": 2,
+      "title": "Mergi până la taxi",
+      "event": "WALKER_MOTION",
+      "source": "192"
+    },
+    {
+      "stepId": "ENTER_VEHICLE",
+      "order": 3,
+      "title": "Intră în mașină",
+      "event": "VEHICLE_ENTRY",
+      "source": "195"
+    },
+    {
+      "stepId": "BOARD_PASSENGER",
+      "order": 4,
+      "title": "Ia pasagerul",
+      "event": "RIDE_PICKUP",
+      "source": "007"
+    },
+    {
+      "stepId": "FINISH_RIDE",
+      "order": 5,
+      "title": "Du pasagerul la destinație",
+      "event": "RIDE_DROPOFF",
+      "source": "007"
+    },
+    {
+      "stepId": "EXIT_VEHICLE",
+      "order": 6,
+      "title": "Coboară din mașină",
+      "event": "VEHICLE_EXIT",
+      "source": "196"
+    }
+  ],
+  "positive": [
+    {
+      "stepId": "SELECT_TAXI",
+      "order": 1,
+      "title": "Alege un taxi",
+      "event": "TAXI_SELECTION",
+      "source": "068",
+      "tick": 5,
+      "status": "SATISFIED",
+      "advanced": true,
+      "evidence": [
+        "selection:5:vehicle:taxi-199"
+      ]
+    },
+    {
+      "stepId": "WALK_TO_TAXI",
+      "order": 2,
+      "title": "Mergi până la taxi",
+      "event": "WALKER_MOTION",
+      "source": "192",
+      "tick": 11,
+      "status": "SATISFIED",
+      "advanced": true,
+      "evidence": [
+        "walk:11:0.018333"
+      ]
+    },
+    {
+      "stepId": "ENTER_VEHICLE",
+      "order": 3,
+      "title": "Intră în mașină",
+      "event": "VEHICLE_ENTRY",
+      "source": "195",
+      "tick": 200,
+      "status": "SATISFIED",
+      "advanced": true,
+      "evidence": [
+        "entry:200:vehicle:taxi-199"
+      ]
+    },
+    {
+      "stepId": "BOARD_PASSENGER",
+      "order": 4,
+      "title": "Ia pasagerul",
+      "event": "RIDE_PICKUP",
+      "source": "007",
+      "tick": 210,
+      "status": "SATISFIED",
+      "advanced": true,
+      "evidence": [
+        "199:pickup:210:ride:199-1"
+      ]
+    },
+    {
+      "stepId": "FINISH_RIDE",
+      "order": 5,
+      "title": "Du pasagerul la destinație",
+      "event": "RIDE_DROPOFF",
+      "source": "007",
+      "tick": 220,
+      "status": "SATISFIED",
+      "advanced": true,
+      "evidence": [
+        "199:dropoff:220:ride:199-1"
+      ]
+    },
+    {
+      "stepId": "EXIT_VEHICLE",
+      "order": 6,
+      "title": "Coboară din mașină",
+      "event": "VEHICLE_EXIT",
+      "source": "196",
+      "tick": 230,
+      "status": "SATISFIED",
+      "advanced": true,
+      "evidence": [
+        "exit:230:vehicle:taxi-199"
+      ]
+    }
+  ],
+  "negative": [
+    {
+      "stepId": "SELECT_TAXI",
+      "expectedEvent": "TAXI_SELECTION",
+      "eventFed": "WALKER_MOTION",
+      "tick": 1,
+      "status": "IGNORED",
+      "reason": "WRONG_STEP",
+      "advanced": false,
+      "pass": true
+    },
+    {
+      "stepId": "SELECT_TAXI",
+      "expectedEvent": "TAXI_SELECTION",
+      "eventFed": "VEHICLE_ENTRY",
+      "tick": 1,
+      "status": "IGNORED",
+      "reason": "FOREIGN_VEHICLE",
+      "advanced": false,
+      "pass": true
+    },
+    {
+      "stepId": "SELECT_TAXI",
+      "expectedEvent": "TAXI_SELECTION",
+      "eventFed": "RIDE_PICKUP",
+      "tick": 1,
+      "status": "IGNORED",
+      "reason": "NO_SELECTED_TAXI",
+      "advanced": false,
+      "pass": true
+    },
+    {
+      "stepId": "SELECT_TAXI",
+      "expectedEvent": "TAXI_SELECTION",
+      "eventFed": "RIDE_DROPOFF",
+      "tick": 1,
+      "status": "IGNORED",
+      "reason": "NO_SELECTED_TAXI",
+      "advanced": false,
+      "pass": true
+    },
+    {
+      "stepId": "SELECT_TAXI",
+      "expectedEvent": "TAXI_SELECTION",
+      "eventFed": "VEHICLE_EXIT",
+      "tick": 1,
+      "status": "IGNORED",
+      "reason": "FOREIGN_VEHICLE",
+      "advanced": false,
+      "pass": true
+    },
+    {
+      "stepId": "WALK_TO_TAXI",
+      "expectedEvent": "WALKER_MOTION",
+      "eventFed": "TAXI_SELECTION",
+      "tick": 6,
+      "status": "IGNORED",
+      "reason": "WRONG_STEP",
+      "advanced": false,
+      "pass": true
+    },
+    {
+      "stepId": "WALK_TO_TAXI",
+      "expectedEvent": "WALKER_MOTION",
+      "eventFed": "VEHICLE_ENTRY",
+      "tick": 6,
+      "status": "IGNORED",
+      "reason": "WRONG_STEP",
+      "advanced": false,
+      "pass": true
+    },
+    {
+      "stepId": "WALK_TO_TAXI",
+      "expectedEvent": "WALKER_MOTION",
+      "eventFed": "RIDE_PICKUP",
+      "tick": 6,
+      "status": "IGNORED",
+      "reason": "WRONG_STEP",
+      "advanced": false,
+      "pass": true
+    },
+    {
+      "stepId": "WALK_TO_TAXI",
+      "expectedEvent": "WALKER_MOTION",
+      "eventFed": "RIDE_DROPOFF",
+      "tick": 6,
+      "status": "IGNORED",
+      "reason": "RIDE_NOT_BOARDED",
+      "advanced": false,
+      "pass": true
+    },
+    {
+      "stepId": "WALK_TO_TAXI",
+      "expectedEvent": "WALKER_MOTION",
+      "eventFed": "VEHICLE_EXIT",
+      "tick": 6,
+      "status": "IGNORED",
+      "reason": "FOREIGN_VEHICLE",
+      "advanced": false,
+      "pass": true
+    },
+    {
+      "stepId": "ENTER_VEHICLE",
+      "expectedEvent": "VEHICLE_ENTRY",
+      "eventFed": "TAXI_SELECTION",
+      "tick": 11,
+      "status": "IGNORED",
+      "reason": "WRONG_STEP",
+      "advanced": false,
+      "pass": true
+    },
+    {
+      "stepId": "ENTER_VEHICLE",
+      "expectedEvent": "VEHICLE_ENTRY",
+      "eventFed": "WALKER_MOTION",
+      "tick": 11,
+      "status": "IGNORED",
+      "reason": "WRONG_STEP",
+      "advanced": false,
+      "pass": true
+    },
+    {
+      "stepId": "ENTER_VEHICLE",
+      "expectedEvent": "VEHICLE_ENTRY",
+      "eventFed": "RIDE_PICKUP",
+      "tick": 11,
+      "status": "IGNORED",
+      "reason": "WRONG_STEP",
+      "advanced": false,
+      "pass": true
+    },
+    {
+      "stepId": "ENTER_VEHICLE",
+      "expectedEvent": "VEHICLE_ENTRY",
+      "eventFed": "RIDE_DROPOFF",
+      "tick": 11,
+      "status": "IGNORED",
+      "reason": "RIDE_NOT_BOARDED",
+      "advanced": false,
+      "pass": true
+    },
+    {
+      "stepId": "ENTER_VEHICLE",
+      "expectedEvent": "VEHICLE_ENTRY",
+      "eventFed": "VEHICLE_EXIT",
+      "tick": 11,
+      "status": "IGNORED",
+      "reason": "FOREIGN_VEHICLE",
+      "advanced": false,
+      "pass": true
+    },
+    {
+      "stepId": "BOARD_PASSENGER",
+      "expectedEvent": "RIDE_PICKUP",
+      "eventFed": "TAXI_SELECTION",
+      "tick": 201,
+      "status": "IGNORED",
+      "reason": "WRONG_STEP",
+      "advanced": false,
+      "pass": true
+    },
+    {
+      "stepId": "BOARD_PASSENGER",
+      "expectedEvent": "RIDE_PICKUP",
+      "eventFed": "WALKER_MOTION",
+      "tick": 201,
+      "status": "IGNORED",
+      "reason": "WRONG_STEP",
+      "advanced": false,
+      "pass": true
+    },
+    {
+      "stepId": "BOARD_PASSENGER",
+      "expectedEvent": "RIDE_PICKUP",
+      "eventFed": "VEHICLE_ENTRY",
+      "tick": 201,
+      "status": "IGNORED",
+      "reason": "WRONG_STEP",
+      "advanced": false,
+      "pass": true
+    },
+    {
+      "stepId": "BOARD_PASSENGER",
+      "expectedEvent": "RIDE_PICKUP",
+      "eventFed": "RIDE_DROPOFF",
+      "tick": 201,
+      "status": "IGNORED",
+      "reason": "RIDE_NOT_BOARDED",
+      "advanced": false,
+      "pass": true
+    },
+    {
+      "stepId": "BOARD_PASSENGER",
+      "expectedEvent": "RIDE_PICKUP",
+      "eventFed": "VEHICLE_EXIT",
+      "tick": 201,
+      "status": "IGNORED",
+      "reason": "WRONG_STEP",
+      "advanced": false,
+      "pass": true
+    },
+    {
+      "stepId": "FINISH_RIDE",
+      "expectedEvent": "RIDE_DROPOFF",
+      "eventFed": "TAXI_SELECTION",
+      "tick": 211,
+      "status": "IGNORED",
+      "reason": "WRONG_STEP",
+      "advanced": false,
+      "pass": true
+    },
+    {
+      "stepId": "FINISH_RIDE",
+      "expectedEvent": "RIDE_DROPOFF",
+      "eventFed": "WALKER_MOTION",
+      "tick": 211,
+      "status": "IGNORED",
+      "reason": "WRONG_STEP",
+      "advanced": false,
+      "pass": true
+    },
+    {
+      "stepId": "FINISH_RIDE",
+      "expectedEvent": "RIDE_DROPOFF",
+      "eventFed": "VEHICLE_ENTRY",
+      "tick": 211,
+      "status": "IGNORED",
+      "reason": "WRONG_STEP",
+      "advanced": false,
+      "pass": true
+    },
+    {
+      "stepId": "FINISH_RIDE",
+      "expectedEvent": "RIDE_DROPOFF",
+      "eventFed": "RIDE_PICKUP",
+      "tick": 211,
+      "status": "IGNORED",
+      "reason": "WRONG_STEP",
+      "advanced": false,
+      "pass": true
+    },
+    {
+      "stepId": "FINISH_RIDE",
+      "expectedEvent": "RIDE_DROPOFF",
+      "eventFed": "VEHICLE_EXIT",
+      "tick": 211,
+      "status": "IGNORED",
+      "reason": "WRONG_STEP",
+      "advanced": false,
+      "pass": true
+    },
+    {
+      "stepId": "EXIT_VEHICLE",
+      "expectedEvent": "VEHICLE_EXIT",
+      "eventFed": "TAXI_SELECTION",
+      "tick": 221,
+      "status": "IGNORED",
+      "reason": "WRONG_STEP",
+      "advanced": false,
+      "pass": true
+    },
+    {
+      "stepId": "EXIT_VEHICLE",
+      "expectedEvent": "VEHICLE_EXIT",
+      "eventFed": "WALKER_MOTION",
+      "tick": 221,
+      "status": "IGNORED",
+      "reason": "WRONG_STEP",
+      "advanced": false,
+      "pass": true
+    },
+    {
+      "stepId": "EXIT_VEHICLE",
+      "expectedEvent": "VEHICLE_EXIT",
+      "eventFed": "VEHICLE_ENTRY",
+      "tick": 221,
+      "status": "IGNORED",
+      "reason": "WRONG_STEP",
+      "advanced": false,
+      "pass": true
+    },
+    {
+      "stepId": "EXIT_VEHICLE",
+      "expectedEvent": "VEHICLE_EXIT",
+      "eventFed": "RIDE_PICKUP",
+      "tick": 221,
+      "status": "IGNORED",
+      "reason": "WRONG_STEP",
+      "advanced": false,
+      "pass": true
+    },
+    {
+      "stepId": "EXIT_VEHICLE",
+      "expectedEvent": "VEHICLE_EXIT",
+      "eventFed": "RIDE_DROPOFF",
+      "tick": 221,
+      "status": "IGNORED",
+      "reason": "RIDE_NOT_BOARDED",
+      "advanced": false,
+      "pass": true
+    }
+  ],
+  "replay": {
+    "firstDigest": "sha256:6b87e70aca1a1977de87a48b63ca7cb98a29c1096497e4178315cd55f01d4a53",
+    "secondDigest": "sha256:6b87e70aca1a1977de87a48b63ca7cb98a29c1096497e4178315cd55f01d4a53",
+    "identical": true,
+    "completedReplayProgressStable": true,
+    "accepted": 6
+  },
+  "abandoned": {
+    "state": "ABANDONED",
+    "stepIndex": 2,
+    "steps": 6,
+    "digest": "sha256:4f6fa55dd89a4fdd32beddce5c5f2d8a4847f06e2a25edffbeb9e146878b9592",
+    "blockedTaxisAfterAbandon": 0
+  },
+  "skipped": {
+    "state": "COMPLETED",
+    "skippedSteps": 5,
+    "completedBy": "SKIP"
+  },
+  "learning": {
+    "learningJobs": 0,
+    "profileVersions": 0,
+    "demonstrations": 0,
+    "estimatorCandidates": 0,
+    "learningActivationsObserved": 0,
+    "walkingTicks": 1,
+    "walkingDistanceM": 0.018333333333333757,
+    "witnessWalkTicks": 120,
+    "witnessWalkSegments": 0,
+    "witnessWalkCandidates": 0,
+    "witnessControlCandidates": 1,
+    "xpGranted": 0,
+    "walkingTimeXp": "NOT_IMPLEMENTED"
+  },
+  "compatibility": {
+    "catalog": {
+      "challengeTemplates": 12,
+      "extendedChallenges": 15,
+      "composedTotal": 27,
+      "campaignMissions": 8,
+      "templateIds": [
+        "challenge-cake-delivery",
+        "challenge-city-copies-me",
+        "challenge-city-tour-backwards",
+        "challenge-forgot-something",
+        "challenge-influencer-demolition",
+        "challenge-influencer-no-spill",
+        "challenge-influencer-parking-drift",
+        "challenge-influencer-single-frame",
+        "challenge-last-minute-airport",
+        "challenge-maternity-run",
+        "challenge-toilet-sos",
+        "challenge-valet-with-style"
+      ],
+      "challengeIds": [
+        "v2-challenge-crosswalk-approach",
+        "v2-challenge-dropoff-curb",
+        "v2-challenge-emergency-brake",
+        "v2-challenge-green-launch",
+        "v2-challenge-hazard-reaction",
+        "v2-challenge-obstacle-clearance",
+        "v2-challenge-pedestrian-clearance",
+        "v2-challenge-pedestrian-yield",
+        "v2-challenge-pickup-dwell",
+        "v2-challenge-pickup-precision",
+        "v2-challenge-red-gap",
+        "v2-challenge-reroute-patience",
+        "v2-challenge-reverse-recovery",
+        "v2-challenge-u-turn-discipline",
+        "v2-challenge-yellow-decision"
+      ]
+    },
+    "daily": {
+      "date": "2026-11-15",
+      "instances": 3,
+      "instanceIds": [
+        "daily-v1:player:211-daily:2026-11-15:s1:daily-lane-flow@1",
+        "daily-v1:player:211-daily:2026-11-15:s2:daily-manual-service@1",
+        "daily-v1:player:211-daily:2026-11-15:s3:daily-service-window@1"
+      ]
+    },
+    "progress": {
+      "completed": 0,
+      "completedIds": []
+    },
+    "unlocks": {
+      "capabilities": 4,
+      "capabilityIds": []
+    },
+    "fleet": {
+      "vehicles": 64,
+      "taxis": 24,
+      "driveable": 64,
+      "selectable": 24,
+      "revoked": 0,
+      "blockedTaxis": 0
+    },
+    "before": {
+      "digest": "sha256:7845ca3ceaf90076ae9b2e0575f445fd9c4a13cd659ecf23219facebccd32035",
+      "challengeCatalog": "sha256:8b16253fcd4d8792f2f66dc4468cc3614175dc6935af1597b6a3cb97704d6f89",
+      "extendedCatalog": "sha256:2f1708b5e95ce61c43181f46756f795aec66e427ada1442686124be9b6e7f913",
+      "daily": "sha256:62fb673902333d1a9ea3a487676064802c8ebc31ea6fa5e4bc6921a1dd2df052",
+      "progress": "sha256:368822f6e5bf0b783fed389843863c2b1eca9bf41de1e49c49bf91f7c5ef2ea3",
+      "unlocks": "sha256:f4771c8335357442648e94189bef2ad6ff4c17074be6e08c5d699f150c265017",
+      "access": "sha256:29eb133a97582c17cab46432d666f5c88c122b2817b8c166e0f7178744716a98",
+      "playerProgress": "sha256:bf123d04969c9885de658a66f856057a637676a846187ab490c5beb9873771f9"
+    },
+    "afterFull": {
+      "digest": "sha256:7845ca3ceaf90076ae9b2e0575f445fd9c4a13cd659ecf23219facebccd32035",
+      "challengeCatalog": "sha256:8b16253fcd4d8792f2f66dc4468cc3614175dc6935af1597b6a3cb97704d6f89",
+      "extendedCatalog": "sha256:2f1708b5e95ce61c43181f46756f795aec66e427ada1442686124be9b6e7f913",
+      "daily": "sha256:62fb673902333d1a9ea3a487676064802c8ebc31ea6fa5e4bc6921a1dd2df052",
+      "progress": "sha256:368822f6e5bf0b783fed389843863c2b1eca9bf41de1e49c49bf91f7c5ef2ea3",
+      "unlocks": "sha256:f4771c8335357442648e94189bef2ad6ff4c17074be6e08c5d699f150c265017",
+      "access": "sha256:29eb133a97582c17cab46432d666f5c88c122b2817b8c166e0f7178744716a98",
+      "playerProgress": "sha256:bf123d04969c9885de658a66f856057a637676a846187ab490c5beb9873771f9"
+    },
+    "afterAbandoned": {
+      "digest": "sha256:7845ca3ceaf90076ae9b2e0575f445fd9c4a13cd659ecf23219facebccd32035",
+      "challengeCatalog": "sha256:8b16253fcd4d8792f2f66dc4468cc3614175dc6935af1597b6a3cb97704d6f89",
+      "extendedCatalog": "sha256:2f1708b5e95ce61c43181f46756f795aec66e427ada1442686124be9b6e7f913",
+      "daily": "sha256:62fb673902333d1a9ea3a487676064802c8ebc31ea6fa5e4bc6921a1dd2df052",
+      "progress": "sha256:368822f6e5bf0b783fed389843863c2b1eca9bf41de1e49c49bf91f7c5ef2ea3",
+      "unlocks": "sha256:f4771c8335357442648e94189bef2ad6ff4c17074be6e08c5d699f150c265017",
+      "access": "sha256:29eb133a97582c17cab46432d666f5c88c122b2817b8c166e0f7178744716a98",
+      "playerProgress": "sha256:bf123d04969c9885de658a66f856057a637676a846187ab490c5beb9873771f9"
+    },
+    "identicalFull": true,
+    "identicalAbandoned": true,
+    "v1Mission": {
+      "missionId": "campaign-1-first-taxi",
+      "state": "COMPLETED",
+      "digest": "sha256:735ead62deb61ebbf97fe999ad86e09c96c8c71e7b91cf7babdad6278a7d7cbf"
+    }
+  },
+  "checks": [
+    {
+      "id": "one-event-per-step",
+      "expected": 6,
+      "actual": 6,
+      "pass": true,
+      "detail": "Fiecare pas satisface exact evenimentul pe care îl declară."
+    },
+    {
+      "id": "negative-per-step",
+      "expected": 30,
+      "actual": 30,
+      "pass": true,
+      "detail": "Fiecare pas refuză toate celelalte cinci evenimente reale."
+    },
+    {
+      "id": "no-double-check",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Progresul nu se dublează când faptele sunt rejucate."
+    },
+    {
+      "id": "criterion-1-fleet",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Catalog 231, provocări 188, daily, misiuni, deblocări, acces și player progress bit-identice."
+    },
+    {
+      "id": "criterion-1-v1-mission",
+      "expected": "COMPLETED",
+      "actual": "COMPLETED",
+      "pass": true,
+      "detail": "O misiune V1 se finalizează prin tracker-ul real 116 după tutorial."
+    },
+    {
+      "id": "no-learning",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "Nicio cale de la tutorial la un candidat de estimator; poarta 198 rămâne funcțională."
+    },
+    {
+      "id": "taxi-access",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Accesul la taxiuri nu este filtrat niciodată de tutorial."
+    },
+    {
+      "id": "replay-identical",
+      "expected": "sha256:6b87e70aca1a1977de87a48b63ca7cb98a29c1096497e4178315cd55f01d4a53",
+      "actual": "sha256:6b87e70aca1a1977de87a48b63ca7cb98a29c1096497e4178315cd55f01d4a53",
+      "pass": true,
+      "detail": "Aceeași secvență produce aceeași stare finală."
+    },
+    {
+      "id": "serializable",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Starea trece prin JSON și prin parserul strict fără pierderi."
+    },
+    {
+      "id": "walking-xp-explicit",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "XP de timp pentru mers nu este implementat aici și nu este simulat."
+    }
+  ],
+  "summary": {
+    "steps": 6,
+    "positives": 6,
+    "negatives": 30,
+    "checks": 10,
+    "passed": 10,
+    "compatibility": true,
+    "noLearning": true,
+    "deterministic": true,
+    "pass": true
+  },
+  "limitations": [
+    "XP pentru timpul de mers nu este implementat aici; Docs/20 îl permite, contractul îl raportează explicit ca NOT_IMPLEMENTED și nu îl simulează.",
+    "Tutorialul este un contract headless: UI-ul, tastatura și HUD-ul rămân ale modulelor existente; proba folosește stări 192 și decizii 195/196 reale, nu un browser.",
+    "Provocările 231/188, misiunile zilnice și deblocările sunt citite ca snapshot comparativ, nu modificate: tutorialul nu are nicio legătură de scriere cu ele.",
+    "Reluarea este idempotentă pe progres, nu pe contoarele de dovadă: un fapt rejucat este refuzat, dar numărul de observații crește, exact ca la 117."
+  ],
+  "determinism": {
+    "runs": 2,
+    "identical": true,
+    "digest": "sha256:e3c83000985001c76f6f9ebed6a94a8e45067862a8c87a278b2e86c767a3f898"
+  }
+}

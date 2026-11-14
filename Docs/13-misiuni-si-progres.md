@@ -261,3 +261,30 @@ Dovezile sunt în [Evidence/126-mission-panel](Evidence/126-mission-panel/README
 
 **Limite:** 32 de provocări într-un catalog, 32 de fapte per flux, 8 încercări per challenge, identități de maximum 256 de unități UTF-16. Catalogul livrat acoperă 15 dintre cele 56 de chei V2; cele 41 rămase sunt raportate explicit de `missions:challenges-v2`. Nu fac parte din contract: programarea ofertelor, ciclul de viață al instanței, acordarea de XP și istoricul de reluare (233), UI-ul și captura de condus. Comanda deterministă este `npm run missions:challenges-v2` (cu `--check`), iar dovezile sunt în [Evidence/188-v2-challenges](Evidence/188-v2-challenges/README.md): 40/40 verificări, 15 provocări, 5 familii, 15 chei V2 acoperite și digestul `fnv1a32:a043542d`.
 
+
+## Contract implementat în V3 (PBI 199): tutorialul de mers, intrare și ieșire
+
+`src/missions/walking-tutorial.ts` publică contractul `199-walking-tutorial-v1` și este **pur, headless și determinist**: fără Babylon, fără DOM, fără ceas, fără `Math.random`, fără scriere în telemetrie, fără profil și fără serviciu de simulare. Este un model de progres ca tutorialul 117, cu aceeași promisiune explicită: învață mersul, intrarea și ieșirea **fără să producă learning**.
+
+**Șase pași, fiecare dintr-un singur eveniment real.** Pasul declară evenimentul care îl poate satisface, iar tutorialul nu are nicio altă cale de avansare — nici timp, nici cadru, nici poziție în listă:
+
+| Pas | Eveniment | Sursă |
+| --- | --- | --- |
+| `SELECT_TAXI` | selecția acceptată de taxi | 068 |
+| `WALK_TO_TAXI` | mișcarea reală a walker-ului | 192 |
+| `ENTER_VEHICLE` | intrarea acceptată | 195 |
+| `BOARD_PASSENGER` | `PICKUP` validat pentru taxiul ales | 007 |
+| `FINISH_RIDE` | `DROPOFF` validat pentru cursa îmbarcată | 007 |
+| `EXIT_VEHICLE` | ieșirea acceptată | 196 |
+
+**Mersul este măsurat, nu presupus.** Prima stare 192 observată doar înregistrează poziția autoritară (`WALK_BASELINE_RECORDED`); pasul avansează numai când poziția următoare diferă, deci un cadru, o viteză comandată sau o stare repetată nu pot bifa nimic. Intrarea și ieșirea sunt acceptate numai din deciziile reale 195/196: modul impus (`MANUAL`, respectiv `AUTO`), autoritatea 193 corectă, numărul de entități neschimbat și amprenta stării mașinii identică înainte/după. Un refuz real (`ENTRY_REFUSED`, `EXIT_REFUSED`) nu avansează pasul.
+
+**Un eveniment greșit nu avansează nimic, iar un pas nu se bifează de două ori.** Vocabularul de refuz este închis (`WRONG_STEP`, `FOREIGN_VEHICLE`, `NO_SELECTED_TAXI`, `RIDE_NOT_BOARDED`, `UNRELATED_EVENT`, `EVENT_ALREADY_APPLIED`, `NO_WALKER_MOTION`, …). Proba introduce, pentru fiecare pas, toate celelalte cinci evenimente reale: 30/30 sunt refuzate fără să schimbe progresul. Faptele rejucate pe un tutorial complet sunt refuzate cu `TUTORIAL_COMPLETE`, iar pașii rămân `SATISFIED` o singură dată, cu același `satisfiedTick`.
+
+**Criteriul 1 este un snapshot comparativ, nu o afirmație.** Testul construiește independent, înainte de tutorial și după el, catalogul 231 (12 template-uri), provocările 188 (15, total 27), setul zilnic 211 pentru o dată fixă (3 instanțe), progresul și deblocările 125, accesul la flota reală 057 (64 vehicule, 24 taxiuri, 64 conduse, 24 selectabile, zero revocări, zero taxiuri blocate), `PlayerProgress` 213 și o misiune V1 finalizată prin tracker-ul real 116. Comparația este pe JSON complet și pe digeste SHA-256, inclusiv pentru tutorialul abandonat la mijloc: totul este bit-identic. Tutorialul nu are nicio legătură de scriere cu aceste module, deci abandonul nu poate lăsa flota într-o stare blocată.
+
+**Fără learning, cu martor.** `stats()` raportează structural `learningJobs: 0`, `profileVersions: 0`, `demonstrations: 0`, `estimatorCandidates: 0`, `blockedSelections: 0` și `xpGranted: 0`. Un eveniment `PROFILE_ACTIVATE` este păstrat doar ca dovadă (`learningActivationsObserved`) și nu avansează niciun pas. Martorul 198 rulează aceleași tick-uri de mers prin contractul real de segmente: 120 de tick-uri produc 0 segmente și 0 candidați, în timp ce un segment `LEARNING` închis produce exact 1 candidat — deci poarta 069 nu este tautologică. Modulul nu importă learning, telemetrie, profile sau experiments și nu expune nicio funcție de candidat.
+
+**Reluare, serializare și XP.** Aceeași secvență de evenimente, rulată de două ori, produce aceeași stare finală și același digest; reluarea din mijloc prin `snapshot()` + `parseWalkingTutorialState` continuă exact ca rularea neîntreruptă, iar parserul strict refuză versiunea necunoscută, ordinea schimbată a pașilor, contoarele inconsistente și un pas terminal rămas `PENDING`. Starea este date pure, gata pentru 200. XP-ul pentru timpul de mers, permis de [Docs/20](20-extensii-si-mers-pe-jos.md), **nu este implementat aici**: `WALKING_TUTORIAL_POLICY.walkingTimeXp` este `NOT_IMPLEMENTED` și `stats().xpGranted` rămâne zero. Nu este simulat și nu devine demonstrație de driving.
+
+Comenzi: `npm run walking:tutorial` derivă `Docs/Evidence/199-v3-walking-tutorial/report.json` și `report.md` (tabel pas → eveniment → avansat?, refuzurile negative, reluarea, abandonul, martorul 198 și snapshot-ul de compatibilitate), iar `npm run walking:tutorial -- --check` refuză un raport neactualizat. Testele `tests/missions/walking-tutorial*.test.ts` acoperă cei șase pași, cele 30 de refuzuri, dubla bifare, mersul fără mișcare, refuzurile 195/196, cursa străină, lipsa learning-ului, martorul 198, reluarea, starea serializabilă, accesul la taxiuri și snapshot-ul de compatibilitate. Numerele reale: 6/6 pași, 30/30 refuzuri, 10/10 verificări, digest SHA-256 `sha256:e3c83000985001c76f6f9ebed6a94a8e45067862a8c87a278b2e86c767a3f898`; limitările sunt în [Evidence/199-v3-walking-tutorial](Evidence/199-v3-walking-tutorial/README.md).
