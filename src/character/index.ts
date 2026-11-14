@@ -201,3 +201,32 @@ export type {
   VehicleEntryState,
   VehicleEntryVehicle,
 } from './enter-vehicle';
+export {
+  EXIT_CANDIDATE_REFUSAL_CODES,
+  EXIT_VEHICLE_CONTRACT_VERSION,
+  VEHICLE_EXIT_ERROR_CODES,
+  VEHICLE_EXIT_POLICY,
+  VEHICLE_EXIT_REFUSAL_CODES,
+  VEHICLE_EXIT_SIDES,
+  VehicleExitError,
+  decideVehicleExit,
+  vehicleExitRouteBits,
+} from './exit-vehicle';
+export type {
+  ExitCandidateRefusalCode,
+  VehicleExitAcceptance,
+  VehicleExitCameraRequest,
+  VehicleExitCandidate,
+  VehicleExitCharacterBody,
+  VehicleExitDecision,
+  VehicleExitEntityCounts,
+  VehicleExitErrorCode,
+  VehicleExitRefusal,
+  VehicleExitRefusalCode,
+  VehicleExitRequest,
+  VehicleExitSide,
+  VehicleExitStart,
+  VehicleExitState,
+  VehicleExitVehicle,
+  VehicleExitWorld,
+} from './exit-vehicle';

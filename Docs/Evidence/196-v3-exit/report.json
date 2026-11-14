@@ -1,0 +1,1003 @@
+{
+  "generatedBy": "scripts/run-v3-exit-report.mjs",
+  "command": "npm run exit:report",
+  "contract": "196-exit-vehicle-v1",
+  "tickHz": 60,
+  "policy": {
+    "contract": "196-exit-vehicle-v1",
+    "tickHz": 60,
+    "releaseMode": "AUTO",
+    "clearanceM": 0.05,
+    "stepOutM": 0.6,
+    "maxGroundStepM": 0.14,
+    "maxExitSpeedMps": 1.370967741935484,
+    "cameraTransitionTicks": 18
+  },
+  "reference": {
+    "mapId": "neighbourhood-compact-v1",
+    "cityElements": 923,
+    "surfaces": 313,
+    "blockers": 86,
+    "characterRadiusM": 0.15000000000000002,
+    "characterHeightM": 1.78,
+    "vehicleColliderHalfExtentsM": {
+      "x": 0.85,
+      "z": 2
+    },
+    "sidewalkElevationM": 0.14
+  },
+  "scenarios": [
+    {
+      "id": "open-street",
+      "label": "Civil parked at the real kerb; the left door leads to the roadway",
+      "result": "ACCEPTED",
+      "code": null,
+      "speedMps": 0,
+      "attempts": 1,
+      "candidates": [
+        {
+          "id": "LEFT:R0",
+          "side": "LEFT",
+          "ring": 0,
+          "valid": true,
+          "code": null,
+          "blockerId": null,
+          "detail": "valid exit point",
+          "groundM": 0,
+          "groundStepM": 0,
+          "clearanceM": 0.05000000000001703,
+          "nearestBlockerId": "vehicle:civil-196",
+          "positionM": {
+            "x": 90,
+            "y": 0,
+            "z": 176.79999999999998
+          }
+        }
+      ],
+      "chosen": {
+        "id": "LEFT:R0",
+        "side": "LEFT",
+        "ring": 0,
+        "groundM": 0,
+        "groundStepM": 0,
+        "clearanceM": 0.05000000000001703,
+        "nearestBlockerId": "vehicle:civil-196"
+      },
+      "measured": {
+        "maxPenetrationM": 0,
+        "minClearanceM": 0.05000000000001703,
+        "insideSolid": false,
+        "groundClearanceM": 0
+      },
+      "walkerStart": "ACCEPTED",
+      "walkerPositionBits": {
+        "exit": "405680000000000000000000000000004066199999999999",
+        "walker": "405680000000000000000000000000004066199999999999",
+        "identical": true
+      },
+      "colliderRefusals": {
+        "candidates": 0,
+        "refusedByWalker": 0
+      },
+      "contractOnlyRefusals": 0,
+      "mode": "AUTO",
+      "previousMode": "MANUAL",
+      "baselineMode": "AUTO",
+      "routeBitsIdentical": true,
+      "verdict": "PASS"
+    },
+    {
+      "id": "door-obstacle",
+      "label": "A real 165 obstacle box covers the left door; the next valid point must be chosen",
+      "result": "ACCEPTED",
+      "code": null,
+      "speedMps": 0,
+      "attempts": 2,
+      "candidates": [
+        {
+          "id": "LEFT:R0",
+          "side": "LEFT",
+          "ring": 0,
+          "valid": false,
+          "code": "SOLID",
+          "blockerId": "hazard:exit-196",
+          "detail": "obstacle hazard:exit-196 leaves -0.2000 m of free gap",
+          "groundM": 0,
+          "groundStepM": 0,
+          "clearanceM": -0.2,
+          "nearestBlockerId": "hazard:exit-196",
+          "positionM": {
+            "x": 90,
+            "y": 0,
+            "z": 176.79999999999998
+          }
+        },
+        {
+          "id": "RIGHT:R0",
+          "side": "RIGHT",
+          "ring": 0,
+          "valid": true,
+          "code": null,
+          "blockerId": null,
+          "detail": "valid exit point",
+          "groundM": 0,
+          "groundStepM": 0,
+          "clearanceM": 0.05000000000001703,
+          "nearestBlockerId": "vehicle:civil-196",
+          "positionM": {
+            "x": 90,
+            "y": 0,
+            "z": 178.9
+          }
+        }
+      ],
+      "chosen": {
+        "id": "RIGHT:R0",
+        "side": "RIGHT",
+        "ring": 0,
+        "groundM": 0,
+        "groundStepM": 0,
+        "clearanceM": 0.05000000000001703,
+        "nearestBlockerId": "vehicle:civil-196"
+      },
+      "measured": {
+        "maxPenetrationM": 0,
+        "minClearanceM": 0.05000000000001703,
+        "insideSolid": false,
+        "groundClearanceM": 0
+      },
+      "walkerStart": "ACCEPTED",
+      "walkerPositionBits": {
+        "exit": "4056800000000000000000000000000040665ccccccccccd",
+        "walker": "4056800000000000000000000000000040665ccccccccccd",
+        "identical": true
+      },
+      "colliderRefusals": {
+        "candidates": 1,
+        "refusedByWalker": 1
+      },
+      "contractOnlyRefusals": 0,
+      "mode": "AUTO",
+      "previousMode": "MANUAL",
+      "baselineMode": "AUTO",
+      "routeBitsIdentical": true,
+      "verdict": "PASS"
+    },
+    {
+      "id": "occupied-by-car",
+      "label": "Another parked car 0.10 m away leaves no room for the 191 footprint",
+      "result": "ACCEPTED",
+      "code": null,
+      "speedMps": 0,
+      "attempts": 2,
+      "candidates": [
+        {
+          "id": "LEFT:R0",
+          "side": "LEFT",
+          "ring": 0,
+          "valid": false,
+          "code": "OTHER_VEHICLE",
+          "blockerId": "vehicle:vehicle:neighbour-196",
+          "detail": "parked car vehicle:vehicle:neighbour-196 leaves -0.2000 m of free gap",
+          "groundM": 0,
+          "groundStepM": 0,
+          "clearanceM": -0.2,
+          "nearestBlockerId": "vehicle:vehicle:neighbour-196",
+          "positionM": {
+            "x": -1.05,
+            "y": 0,
+            "z": 0
+          }
+        },
+        {
+          "id": "RIGHT:R0",
+          "side": "RIGHT",
+          "ring": 0,
+          "valid": true,
+          "code": null,
+          "blockerId": null,
+          "detail": "valid exit point",
+          "groundM": 0,
+          "groundStepM": 0,
+          "clearanceM": 0.050000000000000044,
+          "nearestBlockerId": "vehicle:target-196",
+          "positionM": {
+            "x": 1.05,
+            "y": 0,
+            "z": 0
+          }
+        }
+      ],
+      "chosen": {
+        "id": "RIGHT:R0",
+        "side": "RIGHT",
+        "ring": 0,
+        "groundM": 0,
+        "groundStepM": 0,
+        "clearanceM": 0.050000000000000044,
+        "nearestBlockerId": "vehicle:target-196"
+      },
+      "measured": {
+        "maxPenetrationM": 0,
+        "minClearanceM": 0.050000000000000044,
+        "insideSolid": false,
+        "groundClearanceM": 0
+      },
+      "walkerStart": "ACCEPTED",
+      "walkerPositionBits": {
+        "exit": "3ff0cccccccccccd00000000000000000000000000000000",
+        "walker": "3ff0cccccccccccd00000000000000000000000000000000",
+        "identical": true
+      },
+      "colliderRefusals": {
+        "candidates": 1,
+        "refusedByWalker": 1
+      },
+      "contractOnlyRefusals": 0,
+      "mode": "AUTO",
+      "previousMode": "MANUAL",
+      "baselineMode": "AUTO",
+      "routeBitsIdentical": true,
+      "verdict": "PASS"
+    },
+    {
+      "id": "rear-only",
+      "label": "Both doors boxed in; the rear ring is the next valid point",
+      "result": "ACCEPTED",
+      "code": null,
+      "speedMps": 0,
+      "attempts": 3,
+      "candidates": [
+        {
+          "id": "LEFT:R0",
+          "side": "LEFT",
+          "ring": 0,
+          "valid": false,
+          "code": "SOLID",
+          "blockerId": "fixture:left",
+          "detail": "obstacle fixture:left leaves -0.2000 m of free gap",
+          "groundM": 0,
+          "groundStepM": 0,
+          "clearanceM": -0.2,
+          "nearestBlockerId": "fixture:left",
+          "positionM": {
+            "x": -1.05,
+            "y": 0,
+            "z": 0
+          }
+        },
+        {
+          "id": "RIGHT:R0",
+          "side": "RIGHT",
+          "ring": 0,
+          "valid": false,
+          "code": "SOLID",
+          "blockerId": "fixture:right",
+          "detail": "obstacle fixture:right leaves -0.2000 m of free gap",
+          "groundM": 0,
+          "groundStepM": 0,
+          "clearanceM": -0.2,
+          "nearestBlockerId": "fixture:right",
+          "positionM": {
+            "x": 1.05,
+            "y": 0,
+            "z": 0
+          }
+        },
+        {
+          "id": "REAR:R0",
+          "side": "REAR",
+          "ring": 0,
+          "valid": true,
+          "code": null,
+          "blockerId": null,
+          "detail": "valid exit point",
+          "groundM": 0,
+          "groundStepM": 0,
+          "clearanceM": 0.04999999999999971,
+          "nearestBlockerId": "vehicle:target-196",
+          "positionM": {
+            "x": 0,
+            "y": 0,
+            "z": -2.1999999999999997
+          }
+        }
+      ],
+      "chosen": {
+        "id": "REAR:R0",
+        "side": "REAR",
+        "ring": 0,
+        "groundM": 0,
+        "groundStepM": 0,
+        "clearanceM": 0.04999999999999971,
+        "nearestBlockerId": "vehicle:target-196"
+      },
+      "measured": {
+        "maxPenetrationM": 0,
+        "minClearanceM": 0.04999999999999971,
+        "insideSolid": false,
+        "groundClearanceM": 0
+      },
+      "walkerStart": "ACCEPTED",
+      "walkerPositionBits": {
+        "exit": "00000000000000000000000000000000c001999999999999",
+        "walker": "00000000000000000000000000000000c001999999999999",
+        "identical": true
+      },
+      "colliderRefusals": {
+        "candidates": 2,
+        "refusedByWalker": 2
+      },
+      "contractOnlyRefusals": 0,
+      "mode": "AUTO",
+      "previousMode": "MANUAL",
+      "baselineMode": "AUTO",
+      "routeBitsIdentical": true,
+      "verdict": "PASS"
+    },
+    {
+      "id": "real-wall",
+      "label": "Real building bld:blk:0-0:0-0 covers the left door; the right side is on the court",
+      "result": "ACCEPTED",
+      "code": null,
+      "speedMps": 0,
+      "attempts": 2,
+      "candidates": [
+        {
+          "id": "LEFT:R0",
+          "side": "LEFT",
+          "ring": 0,
+          "valid": false,
+          "code": "SOLID",
+          "blockerId": "bld:blk:0-0:0-0",
+          "detail": "building bld:blk:0-0:0-0 leaves -0.1500 m of free gap",
+          "groundM": 0.14,
+          "groundStepM": 0,
+          "clearanceM": -0.15000000000000002,
+          "nearestBlockerId": "bld:blk:0-0:0-0",
+          "positionM": {
+            "x": 13.216853866666666,
+            "y": 0.14,
+            "z": 47.799879999999995
+          }
+        },
+        {
+          "id": "RIGHT:R0",
+          "side": "RIGHT",
+          "ring": 0,
+          "valid": true,
+          "code": null,
+          "blockerId": null,
+          "detail": "valid exit point",
+          "groundM": 0.14,
+          "groundStepM": 0,
+          "clearanceM": 0.050000000000001044,
+          "nearestBlockerId": "vehicle:wall-196",
+          "positionM": {
+            "x": 11.116853866666665,
+            "y": 0.14,
+            "z": 47.799879999999995
+          }
+        }
+      ],
+      "chosen": {
+        "id": "RIGHT:R0",
+        "side": "RIGHT",
+        "ring": 0,
+        "groundM": 0.14,
+        "groundStepM": 0,
+        "clearanceM": 0.050000000000001044,
+        "nearestBlockerId": "vehicle:wall-196"
+      },
+      "measured": {
+        "maxPenetrationM": 0,
+        "minClearanceM": 0.050000000000001044,
+        "insideSolid": false,
+        "groundClearanceM": 0
+      },
+      "walkerStart": "ACCEPTED",
+      "walkerPositionBits": {
+        "exit": "40263bd4451f7d2b3fc1eb851eb851ec4047e66277c45cbb",
+        "walker": "40263bd4451f7d2b3fc1eb851eb851ec4047e66277c45cbb",
+        "identical": true
+      },
+      "colliderRefusals": {
+        "candidates": 1,
+        "refusedByWalker": 1
+      },
+      "contractOnlyRefusals": 0,
+      "mode": "AUTO",
+      "previousMode": "MANUAL",
+      "baselineMode": "AUTO",
+      "routeBitsIdentical": true,
+      "verdict": "PASS"
+    },
+    {
+      "id": "step-too-high",
+      "label": "A 0.60 m platform covers the left door, above the real 0.14 m curb ceiling",
+      "result": "ACCEPTED",
+      "code": null,
+      "speedMps": 0,
+      "attempts": 2,
+      "candidates": [
+        {
+          "id": "LEFT:R0",
+          "side": "LEFT",
+          "ring": 0,
+          "valid": false,
+          "code": "STEP_TOO_HIGH",
+          "blockerId": null,
+          "detail": "step of 0.6000 m exceeds the 0.1400 m curb ceiling",
+          "groundM": 0.6,
+          "groundStepM": 0.6,
+          "clearanceM": null,
+          "nearestBlockerId": null,
+          "positionM": {
+            "x": 0.10000000000000009,
+            "y": 0.6,
+            "z": 1.285879139104721e-16
+          }
+        },
+        {
+          "id": "RIGHT:R0",
+          "side": "RIGHT",
+          "ring": 0,
+          "valid": true,
+          "code": null,
+          "blockerId": null,
+          "detail": "valid exit point",
+          "groundM": 0,
+          "groundStepM": 0,
+          "clearanceM": 0.050000000000000155,
+          "nearestBlockerId": "vehicle:ledge-196",
+          "positionM": {
+            "x": -2,
+            "y": 0,
+            "z": -1.285879139104721e-16
+          }
+        }
+      ],
+      "chosen": {
+        "id": "RIGHT:R0",
+        "side": "RIGHT",
+        "ring": 0,
+        "groundM": 0,
+        "groundStepM": 0,
+        "clearanceM": 0.050000000000000155,
+        "nearestBlockerId": "vehicle:ledge-196"
+      },
+      "measured": {
+        "maxPenetrationM": 0,
+        "minClearanceM": 0.050000000000000155,
+        "insideSolid": false,
+        "groundClearanceM": 0
+      },
+      "walkerStart": "ACCEPTED",
+      "walkerPositionBits": {
+        "exit": "c0000000000000000000000000000000bca2880e826efa3b",
+        "walker": "c0000000000000000000000000000000bca2880e826efa3b",
+        "identical": true
+      },
+      "colliderRefusals": {
+        "candidates": 0,
+        "refusedByWalker": 0
+      },
+      "contractOnlyRefusals": 1,
+      "mode": "AUTO",
+      "previousMode": "MANUAL",
+      "baselineMode": "AUTO",
+      "routeBitsIdentical": true,
+      "verdict": "PASS"
+    },
+    {
+      "id": "below-map",
+      "label": "A hole 0.50 m below the map plane covers the left door; the body may not appear there",
+      "result": "ACCEPTED",
+      "code": null,
+      "speedMps": 0,
+      "attempts": 2,
+      "candidates": [
+        {
+          "id": "LEFT:R0",
+          "side": "LEFT",
+          "ring": 0,
+          "valid": false,
+          "code": "BELOW_MAP",
+          "blockerId": null,
+          "detail": "ground -0.5000 m is below the map plane 0.0000 m",
+          "groundM": -0.5,
+          "groundStepM": -0.5,
+          "clearanceM": null,
+          "nearestBlockerId": null,
+          "positionM": {
+            "x": 0.10000000000000009,
+            "y": -0.5,
+            "z": 1.285879139104721e-16
+          }
+        },
+        {
+          "id": "RIGHT:R0",
+          "side": "RIGHT",
+          "ring": 0,
+          "valid": true,
+          "code": null,
+          "blockerId": null,
+          "detail": "valid exit point",
+          "groundM": 0,
+          "groundStepM": 0,
+          "clearanceM": 0.050000000000000155,
+          "nearestBlockerId": "vehicle:pit-196",
+          "positionM": {
+            "x": -2,
+            "y": 0,
+            "z": -1.285879139104721e-16
+          }
+        }
+      ],
+      "chosen": {
+        "id": "RIGHT:R0",
+        "side": "RIGHT",
+        "ring": 0,
+        "groundM": 0,
+        "groundStepM": 0,
+        "clearanceM": 0.050000000000000155,
+        "nearestBlockerId": "vehicle:pit-196"
+      },
+      "measured": {
+        "maxPenetrationM": 0,
+        "minClearanceM": 0.050000000000000155,
+        "insideSolid": false,
+        "groundClearanceM": 0
+      },
+      "walkerStart": "ACCEPTED",
+      "walkerPositionBits": {
+        "exit": "c0000000000000000000000000000000bca2880e826efa3b",
+        "walker": "c0000000000000000000000000000000bca2880e826efa3b",
+        "identical": true
+      },
+      "colliderRefusals": {
+        "candidates": 0,
+        "refusedByWalker": 0
+      },
+      "contractOnlyRefusals": 1,
+      "mode": "AUTO",
+      "previousMode": "MANUAL",
+      "baselineMode": "AUTO",
+      "routeBitsIdentical": true,
+      "verdict": "PASS"
+    },
+    {
+      "id": "moving-slow",
+      "label": "A creeping 0.30 m/s car may still be left at the contact ring",
+      "result": "ACCEPTED",
+      "code": null,
+      "speedMps": 0.3,
+      "attempts": 1,
+      "candidates": [
+        {
+          "id": "LEFT:R0",
+          "side": "LEFT",
+          "ring": 0,
+          "valid": true,
+          "code": null,
+          "blockerId": null,
+          "detail": "valid exit point",
+          "groundM": 0,
+          "groundStepM": 0,
+          "clearanceM": 0.05000000000001703,
+          "nearestBlockerId": "vehicle:civil-196",
+          "positionM": {
+            "x": 90,
+            "y": 0,
+            "z": 176.79999999999998
+          }
+        }
+      ],
+      "chosen": {
+        "id": "LEFT:R0",
+        "side": "LEFT",
+        "ring": 0,
+        "groundM": 0,
+        "groundStepM": 0,
+        "clearanceM": 0.05000000000001703,
+        "nearestBlockerId": "vehicle:civil-196"
+      },
+      "measured": {
+        "maxPenetrationM": 0,
+        "minClearanceM": 0.05000000000001703,
+        "insideSolid": false,
+        "groundClearanceM": 0
+      },
+      "walkerStart": "ACCEPTED",
+      "walkerPositionBits": {
+        "exit": "405680000000000000000000000000004066199999999999",
+        "walker": "405680000000000000000000000000004066199999999999",
+        "identical": true
+      },
+      "colliderRefusals": {
+        "candidates": 0,
+        "refusedByWalker": 0
+      },
+      "contractOnlyRefusals": 0,
+      "mode": "AUTO",
+      "previousMode": "MANUAL",
+      "baselineMode": "AUTO",
+      "routeBitsIdentical": true,
+      "verdict": "PASS"
+    },
+    {
+      "id": "moving-fast",
+      "label": "An 8.50 m/s car may not be left: the explicit stop rule refuses it",
+      "result": "REFUSED",
+      "code": "VEHICLE_MOVING",
+      "speedMps": 8.5,
+      "attempts": 0,
+      "candidates": [],
+      "chosen": null,
+      "measured": null,
+      "walkerStart": "NOT_APPLICABLE",
+      "walkerPositionBits": null,
+      "colliderRefusals": {
+        "candidates": 0,
+        "refusedByWalker": 0
+      },
+      "contractOnlyRefusals": 0,
+      "mode": null,
+      "previousMode": null,
+      "baselineMode": null,
+      "routeBitsIdentical": false,
+      "verdict": "PASS"
+    },
+    {
+      "id": "no-valid-exit",
+      "label": "All four sides and both rings are blocked; no teleport is allowed",
+      "result": "REFUSED",
+      "code": "NO_VALID_EXIT",
+      "speedMps": 0,
+      "attempts": 8,
+      "candidates": [
+        {
+          "id": "LEFT:R0",
+          "side": "LEFT",
+          "ring": 0,
+          "valid": false,
+          "code": "SOLID",
+          "blockerId": "fixture:left",
+          "detail": "obstacle fixture:left leaves -0.2000 m of free gap",
+          "groundM": 0,
+          "groundStepM": 0,
+          "clearanceM": -0.2,
+          "nearestBlockerId": "fixture:left",
+          "positionM": {
+            "x": -1.05,
+            "y": 0,
+            "z": 0
+          }
+        },
+        {
+          "id": "RIGHT:R0",
+          "side": "RIGHT",
+          "ring": 0,
+          "valid": false,
+          "code": "SOLID",
+          "blockerId": "fixture:right",
+          "detail": "obstacle fixture:right leaves -0.2000 m of free gap",
+          "groundM": 0,
+          "groundStepM": 0,
+          "clearanceM": -0.2,
+          "nearestBlockerId": "fixture:right",
+          "positionM": {
+            "x": 1.05,
+            "y": 0,
+            "z": 0
+          }
+        },
+        {
+          "id": "REAR:R0",
+          "side": "REAR",
+          "ring": 0,
+          "valid": false,
+          "code": "SOLID",
+          "blockerId": "fixture:rear",
+          "detail": "obstacle fixture:rear leaves -0.2000 m of free gap",
+          "groundM": 0,
+          "groundStepM": 0,
+          "clearanceM": -0.2,
+          "nearestBlockerId": "fixture:rear",
+          "positionM": {
+            "x": 0,
+            "y": 0,
+            "z": -2.1999999999999997
+          }
+        },
+        {
+          "id": "FRONT:R0",
+          "side": "FRONT",
+          "ring": 0,
+          "valid": false,
+          "code": "SOLID",
+          "blockerId": "fixture:front",
+          "detail": "obstacle fixture:front leaves -0.2000 m of free gap",
+          "groundM": 0,
+          "groundStepM": 0,
+          "clearanceM": -0.2,
+          "nearestBlockerId": "fixture:front",
+          "positionM": {
+            "x": 0,
+            "y": 0,
+            "z": 2.1999999999999997
+          }
+        },
+        {
+          "id": "LEFT:R1",
+          "side": "LEFT",
+          "ring": 1,
+          "valid": false,
+          "code": "SOLID",
+          "blockerId": "fixture:left",
+          "detail": "obstacle fixture:left leaves -0.2000 m of free gap",
+          "groundM": 0,
+          "groundStepM": 0,
+          "clearanceM": -0.2,
+          "nearestBlockerId": "fixture:left",
+          "positionM": {
+            "x": -1.65,
+            "y": 0,
+            "z": 0
+          }
+        },
+        {
+          "id": "RIGHT:R1",
+          "side": "RIGHT",
+          "ring": 1,
+          "valid": false,
+          "code": "SOLID",
+          "blockerId": "fixture:right",
+          "detail": "obstacle fixture:right leaves -0.2000 m of free gap",
+          "groundM": 0,
+          "groundStepM": 0,
+          "clearanceM": -0.2,
+          "nearestBlockerId": "fixture:right",
+          "positionM": {
+            "x": 1.65,
+            "y": 0,
+            "z": 0
+          }
+        },
+        {
+          "id": "REAR:R1",
+          "side": "REAR",
+          "ring": 1,
+          "valid": false,
+          "code": "SOLID",
+          "blockerId": "fixture:rear",
+          "detail": "obstacle fixture:rear leaves -0.2000 m of free gap",
+          "groundM": 0,
+          "groundStepM": 0,
+          "clearanceM": -0.2,
+          "nearestBlockerId": "fixture:rear",
+          "positionM": {
+            "x": 0,
+            "y": 0,
+            "z": -2.8
+          }
+        },
+        {
+          "id": "FRONT:R1",
+          "side": "FRONT",
+          "ring": 1,
+          "valid": false,
+          "code": "SOLID",
+          "blockerId": "fixture:front",
+          "detail": "obstacle fixture:front leaves -0.2000 m of free gap",
+          "groundM": 0,
+          "groundStepM": 0,
+          "clearanceM": -0.2,
+          "nearestBlockerId": "fixture:front",
+          "positionM": {
+            "x": 0,
+            "y": 0,
+            "z": 2.8
+          }
+        }
+      ],
+      "chosen": null,
+      "measured": null,
+      "walkerStart": "NOT_APPLICABLE",
+      "walkerPositionBits": null,
+      "colliderRefusals": {
+        "candidates": 8,
+        "refusedByWalker": 8
+      },
+      "contractOnlyRefusals": 0,
+      "mode": null,
+      "previousMode": null,
+      "baselineMode": null,
+      "routeBitsIdentical": false,
+      "verdict": "PASS"
+    },
+    {
+      "id": "seat-not-controlled",
+      "label": "The authority is already the character, so no car seat can be released",
+      "result": "REFUSED",
+      "code": "NOT_CONTROLLED",
+      "speedMps": null,
+      "attempts": 0,
+      "candidates": [],
+      "chosen": null,
+      "measured": null,
+      "walkerStart": "NOT_APPLICABLE",
+      "walkerPositionBits": null,
+      "colliderRefusals": {
+        "candidates": 0,
+        "refusedByWalker": 0
+      },
+      "contractOnlyRefusals": 0,
+      "mode": null,
+      "previousMode": null,
+      "baselineMode": null,
+      "routeBitsIdentical": false,
+      "verdict": "PASS"
+    },
+    {
+      "id": "second-exit",
+      "label": "A second exit in the same fixed tick is refused by the journal",
+      "result": "REFUSED",
+      "code": "DOUBLE_EXIT_REFUSED",
+      "speedMps": null,
+      "attempts": 0,
+      "candidates": [],
+      "chosen": null,
+      "measured": null,
+      "walkerStart": "NOT_APPLICABLE",
+      "walkerPositionBits": null,
+      "colliderRefusals": {
+        "candidates": 0,
+        "refusedByWalker": 0
+      },
+      "contractOnlyRefusals": 0,
+      "mode": null,
+      "previousMode": null,
+      "baselineMode": null,
+      "routeBitsIdentical": false,
+      "verdict": "PASS"
+    }
+  ],
+  "authority": {
+    "authorityConsumer": "CHARACTER",
+    "commandConsumer": "CHARACTER",
+    "characterId": "player-character",
+    "vehicleCommandsBefore": 210,
+    "characterCommandsAfter": 1,
+    "vehicleCommandsAfter": 0,
+    "vehicleDeliveryRefused": true,
+    "vehicleRefusalCode": "INACTIVE_CONSUMER_REFUSED",
+    "doubleDeliveryRefused": true,
+    "doubleDeliveryCode": "DOUBLE_DELIVERY_REFUSED",
+    "neutralizedActions": [
+      "throttle"
+    ],
+    "characterCommandEmpty": true,
+    "transitions": 1,
+    "entityCountBefore": 2,
+    "entityCountAfter": 2,
+    "secondExitSameTickRefused": true,
+    "secondExitSameTickCode": "DOUBLE_EXIT_REFUSED",
+    "reExitAfterReleaseCode": "NOT_CONTROLLED",
+    "startAccepted": true,
+    "startPositionBits": "405680000000000000000000000000004066199999999999"
+  },
+  "resumption": [
+    {
+      "vehicleId": "vehicle:civil-196",
+      "baselineMode": "AUTO",
+      "previousMode": "MANUAL",
+      "mode": "AUTO",
+      "bitsBaseline": "1:0|1:30|1:0|0000000000000000",
+      "bitsReleased": "1:0|1:30|1:0|0000000000000000",
+      "bitsIdentical": true,
+      "fields": [
+        {
+          "field": "state.laneId",
+          "baseline": "null",
+          "released": "null",
+          "identical": true
+        },
+        {
+          "field": "state.routeLaneIds",
+          "baseline": "[]",
+          "released": "[]",
+          "identical": true
+        },
+        {
+          "field": "state.rideId",
+          "baseline": "null",
+          "released": "null",
+          "identical": true
+        },
+        {
+          "field": "state.rideProgressM",
+          "baseline": "0",
+          "released": "0",
+          "identical": true
+        }
+      ]
+    },
+    {
+      "vehicleId": "vehicle:taxi-196",
+      "baselineMode": "LEARNING",
+      "previousMode": "MANUAL",
+      "mode": "AUTO",
+      "bitsBaseline": "22:6c.61.6e.65.3a.61.76.65.6e.75.65.3a.73.6f.75.74.68.62.6f.75.6e.64|1:33|22:6c.61.6e.65.3a.61.76.65.6e.75.65.3a.73.6f.75.74.68.62.6f.75.6e.64|13:6c.61.6e.65.3a.6a.75.6e.63.74.69.6f.6e|19:6c.61.6e.65.3a.73.74.72.65.65.74.3a.64.72.6f.70.6f.66.66|12:72.69.64.65.2d.30.36.31.2d.31.39.36|4079c80000000000",
+      "bitsReleased": "22:6c.61.6e.65.3a.61.76.65.6e.75.65.3a.73.6f.75.74.68.62.6f.75.6e.64|1:33|22:6c.61.6e.65.3a.61.76.65.6e.75.65.3a.73.6f.75.74.68.62.6f.75.6e.64|13:6c.61.6e.65.3a.6a.75.6e.63.74.69.6f.6e|19:6c.61.6e.65.3a.73.74.72.65.65.74.3a.64.72.6f.70.6f.66.66|12:72.69.64.65.2d.30.36.31.2d.31.39.36|4079c80000000000",
+      "bitsIdentical": true,
+      "fields": [
+        {
+          "field": "state.laneId",
+          "baseline": "\"lane:avenue:southbound\"",
+          "released": "\"lane:avenue:southbound\"",
+          "identical": true
+        },
+        {
+          "field": "state.routeLaneIds",
+          "baseline": "[\"lane:avenue:southbound\",\"lane:junction\",\"lane:street:dropoff\"]",
+          "released": "[\"lane:avenue:southbound\",\"lane:junction\",\"lane:street:dropoff\"]",
+          "identical": true
+        },
+        {
+          "field": "state.rideId",
+          "baseline": "\"ride-061-196\"",
+          "released": "\"ride-061-196\"",
+          "identical": true
+        },
+        {
+          "field": "state.rideProgressM",
+          "baseline": "412.5",
+          "released": "412.5",
+          "identical": true
+        }
+      ]
+    }
+  ],
+  "camera": {
+    "tick": 211,
+    "previousEntityId": "vehicle:civil-196",
+    "authorityEntityId": "player-character",
+    "frameEntityId": "player-character",
+    "sameTick": true,
+    "transitioning": true,
+    "remainingStart": 17,
+    "transitionFrames": 18,
+    "remainingEnd": 0,
+    "everyFrameIsAuthority": true,
+    "transitions": 1,
+    "transitionTicks": 18,
+    "entityClones": 0,
+    "targetWrites": 0
+  },
+  "summary": {
+    "scenarios": 12,
+    "scenariosPassed": 12,
+    "criterion1": true,
+    "criterion2a": true,
+    "criterion2b": true,
+    "camera": true,
+    "walkerStart": true,
+    "pass": true
+  },
+  "limitations": [
+    "Contractul este pur headless: nu creează scenă, cameră Babylon, input sau corpuri; compunerea (input 066, camera 194, vehiculul 024) aplică decizia în tick-ul curent.",
+    "Punctul de ieșire este planar, ca fizica 192: se măsoară în X/Z, iar verticalitatea intră doar prin înălțimea suprafeței și prin plafonul real de 0,14 m. Un portal, o trapă sau un gard suspendat nu sunt modelate.",
+    "Punctul este mijlocul flancului sau al capului caroseriei, nu un mâner modelat; inelul al doilea este la 0,60 m, deci o mașină parcată la mai puțin de 0,80 m de un zid nu are o ieșire „prin” zid.",
+    "Registrul 068 scrie doar `tick`, `controlMode` și `appliedProfileVersion`; ruta, banda, cursa și progresul restaurate sunt returnate ca date și trebuie aplicate de proprietarul 061/044. Contractul compară datele returnate bit-identic cu snapshot-ul de dinainte de preluare, dar nu poate muta singur registrul flotei.",
+    "Progresul pe rută este cel de dinainte de preluare, nu cel condus manual: segmentul MANUAL/LEARNING se închide separat (069), iar poziția fizică a mașinii rămâne cea reală. Dacă designul cere ca progresul manual să continue cursa, baseline-ul trebuie să fie starea curentă și contractul nu este locul potrivit.",
+    "Regula mașinii în mișcare este explicită: peste viteza nominală a clipului de mers din 191 (1,3710 m/s) ieșirea este refuzată cu `VEHICLE_MOVING`; sub ea, punctul se calculează din poza mașinii din același tick.",
+    "Mapa este planul de sol implicit: o suprafață sub el este refuzată cu `BELOW_MAP`. O hartă autorată cu alt plan de bază trebuie să își declare propriul `defaultGroundM`.",
+    "Proba este deterministă și headless; feel-ul ieșirii, animația `exit-vehicle` din 191 și validarea în browser rămân la integrarea 196."
+  ],
+  "determinism": {
+    "runs": 2,
+    "identical": true,
+    "digest": "419c5643fe21039781692ccc69bda3594330ac82044c5940e6f3d4c2d4b75d0c"
+  }
+}
