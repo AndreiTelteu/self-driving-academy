@@ -1,0 +1,612 @@
+{
+  "generatedBy": "scripts/run-v3-authority-report.mjs",
+  "command": "npm run authority:report",
+  "contract": "193-input-authority-v1",
+  "tickHz": 60,
+  "reference": {
+    "context": {
+      "schemaVersion": 1,
+      "units": "SI",
+      "sessionId": "evidence-193-authority",
+      "worldEpoch": 7
+    },
+    "character": "player-character",
+    "vehicle": "taxi-193",
+    "actions": [
+      "throttle",
+      "brake",
+      "steerLeft",
+      "steerRight",
+      "handbrake",
+      "signalLeft",
+      "signalRight",
+      "sprint"
+    ],
+    "driveActions": [
+      "throttle",
+      "brake",
+      "steerLeft",
+      "steerRight",
+      "handbrake",
+      "signalLeft",
+      "signalRight"
+    ],
+    "transitionRule": "NEUTRALIZE_UNTIL_RELEASE",
+    "consumerOfEmptyCommand": "ACTIVE_AUTHORITY_ONLY"
+  },
+  "scenarios": [
+    {
+      "id": "character-idle",
+      "label": "Personaj activ, nicio tastă",
+      "source": "arbiter",
+      "authority": "CHARACTER:player-character",
+      "held": [],
+      "consumer": "CHARACTER",
+      "command": "gait=NONE intensity=0.000 headingRad=0.400000",
+      "empty": true,
+      "expectation": "gait NONE, intensitate 0",
+      "verdict": "PASS"
+    },
+    {
+      "id": "character-walk",
+      "label": "Personaj activ, accelerație ținută",
+      "source": "arbiter",
+      "authority": "CHARACTER:player-character",
+      "held": [
+        "throttle"
+      ],
+      "consumer": "CHARACTER",
+      "command": "gait=WALK intensity=1.000 headingRad=0.400000",
+      "empty": false,
+      "expectation": "gait WALK, intensitate 1, heading = yaw",
+      "verdict": "PASS"
+    },
+    {
+      "id": "character-run",
+      "label": "Personaj activ, accelerație + sprint",
+      "source": "arbiter",
+      "authority": "CHARACTER:player-character",
+      "held": [
+        "throttle",
+        "sprint"
+      ],
+      "consumer": "CHARACTER",
+      "command": "gait=RUN intensity=1.000 headingRad=0.400000",
+      "empty": false,
+      "expectation": "gait RUN, intensitate 1",
+      "verdict": "PASS"
+    },
+    {
+      "id": "character-turn-right",
+      "label": "Personaj activ, virare dreapta",
+      "source": "arbiter",
+      "authority": "CHARACTER:player-character",
+      "held": [
+        "throttle",
+        "steerRight"
+      ],
+      "consumer": "CHARACTER",
+      "command": "gait=WALK intensity=1.000 headingRad=1.570796",
+      "empty": false,
+      "expectation": "heading = yaw + π/2",
+      "verdict": "PASS"
+    },
+    {
+      "id": "character-turn-left",
+      "label": "Personaj activ, virare stânga",
+      "source": "arbiter",
+      "authority": "CHARACTER:player-character",
+      "held": [
+        "throttle",
+        "steerLeft"
+      ],
+      "consumer": "CHARACTER",
+      "command": "gait=WALK intensity=1.000 headingRad=-1.570796",
+      "empty": false,
+      "expectation": "heading = yaw − π/2",
+      "verdict": "PASS"
+    },
+    {
+      "id": "character-brake-stops",
+      "label": "Personaj activ, frână fără accelerație",
+      "source": "arbiter",
+      "authority": "CHARACTER:player-character",
+      "held": [
+        "brake"
+      ],
+      "consumer": "CHARACTER",
+      "command": "gait=NONE intensity=0.000 headingRad=0.400000",
+      "empty": true,
+      "expectation": "comandă vidă (192 nu are mers înapoi)",
+      "verdict": "PASS"
+    },
+    {
+      "id": "vehicle-idle",
+      "label": "Vehicul activ, nicio tastă",
+      "source": "arbiter",
+      "authority": "VEHICLE:taxi-193",
+      "held": [],
+      "consumer": "VEHICLE",
+      "command": "throttle=0.000 brake=0.000 steering=0.000 handbrake=false signal=OFF",
+      "empty": true,
+      "expectation": "throttle 0, brake 0, steering 0, semnal OFF",
+      "verdict": "PASS"
+    },
+    {
+      "id": "vehicle-throttle-left",
+      "label": "Vehicul activ, accelerație + virare stânga",
+      "source": "arbiter",
+      "authority": "VEHICLE:taxi-193",
+      "held": [
+        "throttle",
+        "steerLeft"
+      ],
+      "consumer": "VEHICLE",
+      "command": "throttle=1.000 brake=0.000 steering=-1.000 handbrake=false signal=OFF",
+      "empty": false,
+      "expectation": "throttle 1, steering −1, source PLAYER",
+      "verdict": "PASS"
+    },
+    {
+      "id": "vehicle-brake",
+      "label": "Vehicul activ, frână",
+      "source": "arbiter",
+      "authority": "VEHICLE:taxi-193",
+      "held": [
+        "brake"
+      ],
+      "consumer": "VEHICLE",
+      "command": "throttle=0.000 brake=1.000 steering=0.000 handbrake=false signal=OFF",
+      "empty": false,
+      "expectation": "brake 1, throttle 0",
+      "verdict": "PASS"
+    },
+    {
+      "id": "vehicle-handbrake",
+      "label": "Vehicul activ, frână de mână",
+      "source": "arbiter",
+      "authority": "VEHICLE:taxi-193",
+      "held": [
+        "handbrake"
+      ],
+      "consumer": "VEHICLE",
+      "command": "throttle=0.000 brake=0.000 steering=0.000 handbrake=true signal=OFF",
+      "empty": false,
+      "expectation": "handbrake true, axe pe zero",
+      "verdict": "PASS"
+    },
+    {
+      "id": "vehicle-hazard",
+      "label": "Vehicul activ, ambele semnale",
+      "source": "arbiter",
+      "authority": "VEHICLE:taxi-193",
+      "held": [
+        "signalLeft",
+        "signalRight"
+      ],
+      "consumer": "VEHICLE",
+      "command": "throttle=0.000 brake=0.000 steering=0.000 handbrake=false signal=HAZARD",
+      "empty": false,
+      "expectation": "turnSignal HAZARD",
+      "verdict": "PASS"
+    },
+    {
+      "id": "vehicle-opposite-axes-cancel",
+      "label": "Vehicul activ, accelerație și frână simultan",
+      "source": "arbiter",
+      "authority": "VEHICLE:taxi-193",
+      "held": [
+        "throttle",
+        "brake"
+      ],
+      "consumer": "VEHICLE",
+      "command": "throttle=0.000 brake=0.000 steering=0.000 handbrake=false signal=OFF",
+      "empty": true,
+      "expectation": "axele se anulează (aceeași regulă ca filtrul 066)",
+      "verdict": "PASS"
+    },
+    {
+      "id": "focus-text-field",
+      "label": "Tastă peste un câmp de text (legare 066 reală)",
+      "source": "066-focus",
+      "authority": "CHARACTER:player-character",
+      "held": [],
+      "consumer": "CHARACTER",
+      "command": "gait=NONE intensity=0.000 headingRad=0.000000",
+      "empty": true,
+      "expectation": "câmpul de text blochează intenția (comandă vidă, 0 m); după ieșire, comanda redevine activă",
+      "verdict": "PASS"
+    }
+  ],
+  "exhaustive": {
+    "combinationsPerAuthority": 256,
+    "authorities": 2,
+    "ticks": 512,
+    "addressed": 512,
+    "deliveredCharacter": 256,
+    "deliveredVehicle": 256,
+    "characterNonEmptyTicks": 64,
+    "vehicleNonEmptyTicks": 248,
+    "emptyTicks": 200,
+    "simultaneousNonEmptyTicks": 0,
+    "wrongConsumerDeliveries": 0
+  },
+  "delivery": {
+    "characterDeliveries": 1,
+    "vehicleDeliveries": 0,
+    "doubleDeliveryRefused": true,
+    "inactiveConsumerRefused": true,
+    "staleResultRefused": true,
+    "codes": [
+      "DOUBLE_DELIVERY_REFUSED",
+      "DOUBLE_DELIVERY_REFUSED",
+      "INACTIVE_CONSUMER_REFUSED",
+      "STALE_RESULT"
+    ],
+    "refused": {
+      "doubleDelivery": 2,
+      "inactiveConsumer": 1,
+      "staleResult": 1
+    }
+  },
+  "transitions": [
+    {
+      "direction": "CHARACTER→VEHICLE",
+      "held": [
+        "throttle"
+      ],
+      "transitioned": true,
+      "beforeCommand": "gait=WALK intensity=1.000 headingRad=0.400000",
+      "beforeEmpty": false,
+      "afterCommand": "throttle=0.000 brake=0.000 steering=0.000 handbrake=false signal=OFF",
+      "afterEmpty": true,
+      "afterConsumer": "VEHICLE",
+      "rearmedCommand": "throttle=1.000 brake=0.000 steering=0.000 handbrake=false signal=OFF",
+      "rearmedEmpty": false,
+      "controlCommand": "throttle=1.000 brake=0.000 steering=0.000 handbrake=false signal=OFF",
+      "verdict": "PASS"
+    },
+    {
+      "direction": "CHARACTER→VEHICLE",
+      "held": [
+        "brake"
+      ],
+      "transitioned": true,
+      "beforeCommand": "gait=NONE intensity=0.000 headingRad=0.400000",
+      "beforeEmpty": true,
+      "afterCommand": "throttle=0.000 brake=0.000 steering=0.000 handbrake=false signal=OFF",
+      "afterEmpty": true,
+      "afterConsumer": "VEHICLE",
+      "rearmedCommand": "throttle=0.000 brake=1.000 steering=0.000 handbrake=false signal=OFF",
+      "rearmedEmpty": false,
+      "controlCommand": "throttle=0.000 brake=1.000 steering=0.000 handbrake=false signal=OFF",
+      "verdict": "PASS"
+    },
+    {
+      "direction": "CHARACTER→VEHICLE",
+      "held": [
+        "steerLeft"
+      ],
+      "transitioned": true,
+      "beforeCommand": "gait=NONE intensity=0.000 headingRad=-1.170796",
+      "beforeEmpty": true,
+      "afterCommand": "throttle=0.000 brake=0.000 steering=0.000 handbrake=false signal=OFF",
+      "afterEmpty": true,
+      "afterConsumer": "VEHICLE",
+      "rearmedCommand": "throttle=0.000 brake=0.000 steering=-1.000 handbrake=false signal=OFF",
+      "rearmedEmpty": false,
+      "controlCommand": "throttle=0.000 brake=0.000 steering=-1.000 handbrake=false signal=OFF",
+      "verdict": "PASS"
+    },
+    {
+      "direction": "CHARACTER→VEHICLE",
+      "held": [
+        "steerRight"
+      ],
+      "transitioned": true,
+      "beforeCommand": "gait=NONE intensity=0.000 headingRad=1.970796",
+      "beforeEmpty": true,
+      "afterCommand": "throttle=0.000 brake=0.000 steering=0.000 handbrake=false signal=OFF",
+      "afterEmpty": true,
+      "afterConsumer": "VEHICLE",
+      "rearmedCommand": "throttle=0.000 brake=0.000 steering=1.000 handbrake=false signal=OFF",
+      "rearmedEmpty": false,
+      "controlCommand": "throttle=0.000 brake=0.000 steering=1.000 handbrake=false signal=OFF",
+      "verdict": "PASS"
+    },
+    {
+      "direction": "CHARACTER→VEHICLE",
+      "held": [
+        "handbrake"
+      ],
+      "transitioned": true,
+      "beforeCommand": "gait=NONE intensity=0.000 headingRad=0.400000",
+      "beforeEmpty": true,
+      "afterCommand": "throttle=0.000 brake=0.000 steering=0.000 handbrake=false signal=OFF",
+      "afterEmpty": true,
+      "afterConsumer": "VEHICLE",
+      "rearmedCommand": "throttle=0.000 brake=0.000 steering=0.000 handbrake=true signal=OFF",
+      "rearmedEmpty": false,
+      "controlCommand": "throttle=0.000 brake=0.000 steering=0.000 handbrake=true signal=OFF",
+      "verdict": "PASS"
+    },
+    {
+      "direction": "CHARACTER→VEHICLE",
+      "held": [
+        "signalLeft"
+      ],
+      "transitioned": true,
+      "beforeCommand": "gait=NONE intensity=0.000 headingRad=0.400000",
+      "beforeEmpty": true,
+      "afterCommand": "throttle=0.000 brake=0.000 steering=0.000 handbrake=false signal=OFF",
+      "afterEmpty": true,
+      "afterConsumer": "VEHICLE",
+      "rearmedCommand": "throttle=0.000 brake=0.000 steering=0.000 handbrake=false signal=LEFT",
+      "rearmedEmpty": false,
+      "controlCommand": "throttle=0.000 brake=0.000 steering=0.000 handbrake=false signal=LEFT",
+      "verdict": "PASS"
+    },
+    {
+      "direction": "CHARACTER→VEHICLE",
+      "held": [
+        "signalRight"
+      ],
+      "transitioned": true,
+      "beforeCommand": "gait=NONE intensity=0.000 headingRad=0.400000",
+      "beforeEmpty": true,
+      "afterCommand": "throttle=0.000 brake=0.000 steering=0.000 handbrake=false signal=OFF",
+      "afterEmpty": true,
+      "afterConsumer": "VEHICLE",
+      "rearmedCommand": "throttle=0.000 brake=0.000 steering=0.000 handbrake=false signal=RIGHT",
+      "rearmedEmpty": false,
+      "controlCommand": "throttle=0.000 brake=0.000 steering=0.000 handbrake=false signal=RIGHT",
+      "verdict": "PASS"
+    },
+    {
+      "direction": "CHARACTER→VEHICLE",
+      "held": [
+        "sprint"
+      ],
+      "transitioned": true,
+      "beforeCommand": "gait=NONE intensity=0.000 headingRad=0.400000",
+      "beforeEmpty": true,
+      "afterCommand": "throttle=0.000 brake=0.000 steering=0.000 handbrake=false signal=OFF",
+      "afterEmpty": true,
+      "afterConsumer": "VEHICLE",
+      "rearmedCommand": "throttle=0.000 brake=0.000 steering=0.000 handbrake=false signal=OFF",
+      "rearmedEmpty": true,
+      "controlCommand": "throttle=0.000 brake=0.000 steering=0.000 handbrake=false signal=OFF",
+      "verdict": "PASS"
+    },
+    {
+      "direction": "CHARACTER→VEHICLE",
+      "held": [
+        "throttle",
+        "brake",
+        "steerLeft",
+        "steerRight",
+        "handbrake",
+        "signalLeft",
+        "signalRight",
+        "sprint"
+      ],
+      "transitioned": true,
+      "beforeCommand": "gait=NONE intensity=0.000 headingRad=0.400000",
+      "beforeEmpty": true,
+      "afterCommand": "throttle=0.000 brake=0.000 steering=0.000 handbrake=false signal=OFF",
+      "afterEmpty": true,
+      "afterConsumer": "VEHICLE",
+      "rearmedCommand": "throttle=0.000 brake=0.000 steering=0.000 handbrake=true signal=HAZARD",
+      "rearmedEmpty": false,
+      "controlCommand": "throttle=0.000 brake=0.000 steering=0.000 handbrake=true signal=HAZARD",
+      "verdict": "PASS"
+    },
+    {
+      "direction": "VEHICLE→CHARACTER",
+      "held": [
+        "throttle"
+      ],
+      "transitioned": true,
+      "beforeCommand": "throttle=1.000 brake=0.000 steering=0.000 handbrake=false signal=OFF",
+      "beforeEmpty": false,
+      "afterCommand": "gait=NONE intensity=0.000 headingRad=0.400000",
+      "afterEmpty": true,
+      "afterConsumer": "CHARACTER",
+      "rearmedCommand": "gait=WALK intensity=1.000 headingRad=0.400000",
+      "rearmedEmpty": false,
+      "controlCommand": "gait=WALK intensity=1.000 headingRad=0.400000",
+      "verdict": "PASS"
+    },
+    {
+      "direction": "VEHICLE→CHARACTER",
+      "held": [
+        "brake"
+      ],
+      "transitioned": true,
+      "beforeCommand": "throttle=0.000 brake=1.000 steering=0.000 handbrake=false signal=OFF",
+      "beforeEmpty": false,
+      "afterCommand": "gait=NONE intensity=0.000 headingRad=0.400000",
+      "afterEmpty": true,
+      "afterConsumer": "CHARACTER",
+      "rearmedCommand": "gait=NONE intensity=0.000 headingRad=0.400000",
+      "rearmedEmpty": true,
+      "controlCommand": "gait=NONE intensity=0.000 headingRad=0.400000",
+      "verdict": "PASS"
+    },
+    {
+      "direction": "VEHICLE→CHARACTER",
+      "held": [
+        "steerLeft"
+      ],
+      "transitioned": true,
+      "beforeCommand": "throttle=0.000 brake=0.000 steering=-1.000 handbrake=false signal=OFF",
+      "beforeEmpty": false,
+      "afterCommand": "gait=NONE intensity=0.000 headingRad=0.400000",
+      "afterEmpty": true,
+      "afterConsumer": "CHARACTER",
+      "rearmedCommand": "gait=NONE intensity=0.000 headingRad=-1.170796",
+      "rearmedEmpty": true,
+      "controlCommand": "gait=NONE intensity=0.000 headingRad=-1.170796",
+      "verdict": "PASS"
+    },
+    {
+      "direction": "VEHICLE→CHARACTER",
+      "held": [
+        "steerRight"
+      ],
+      "transitioned": true,
+      "beforeCommand": "throttle=0.000 brake=0.000 steering=1.000 handbrake=false signal=OFF",
+      "beforeEmpty": false,
+      "afterCommand": "gait=NONE intensity=0.000 headingRad=0.400000",
+      "afterEmpty": true,
+      "afterConsumer": "CHARACTER",
+      "rearmedCommand": "gait=NONE intensity=0.000 headingRad=1.970796",
+      "rearmedEmpty": true,
+      "controlCommand": "gait=NONE intensity=0.000 headingRad=1.970796",
+      "verdict": "PASS"
+    },
+    {
+      "direction": "VEHICLE→CHARACTER",
+      "held": [
+        "handbrake"
+      ],
+      "transitioned": true,
+      "beforeCommand": "throttle=0.000 brake=0.000 steering=0.000 handbrake=true signal=OFF",
+      "beforeEmpty": false,
+      "afterCommand": "gait=NONE intensity=0.000 headingRad=0.400000",
+      "afterEmpty": true,
+      "afterConsumer": "CHARACTER",
+      "rearmedCommand": "gait=NONE intensity=0.000 headingRad=0.400000",
+      "rearmedEmpty": true,
+      "controlCommand": "gait=NONE intensity=0.000 headingRad=0.400000",
+      "verdict": "PASS"
+    },
+    {
+      "direction": "VEHICLE→CHARACTER",
+      "held": [
+        "signalLeft"
+      ],
+      "transitioned": true,
+      "beforeCommand": "throttle=0.000 brake=0.000 steering=0.000 handbrake=false signal=LEFT",
+      "beforeEmpty": false,
+      "afterCommand": "gait=NONE intensity=0.000 headingRad=0.400000",
+      "afterEmpty": true,
+      "afterConsumer": "CHARACTER",
+      "rearmedCommand": "gait=NONE intensity=0.000 headingRad=0.400000",
+      "rearmedEmpty": true,
+      "controlCommand": "gait=NONE intensity=0.000 headingRad=0.400000",
+      "verdict": "PASS"
+    },
+    {
+      "direction": "VEHICLE→CHARACTER",
+      "held": [
+        "signalRight"
+      ],
+      "transitioned": true,
+      "beforeCommand": "throttle=0.000 brake=0.000 steering=0.000 handbrake=false signal=RIGHT",
+      "beforeEmpty": false,
+      "afterCommand": "gait=NONE intensity=0.000 headingRad=0.400000",
+      "afterEmpty": true,
+      "afterConsumer": "CHARACTER",
+      "rearmedCommand": "gait=NONE intensity=0.000 headingRad=0.400000",
+      "rearmedEmpty": true,
+      "controlCommand": "gait=NONE intensity=0.000 headingRad=0.400000",
+      "verdict": "PASS"
+    },
+    {
+      "direction": "VEHICLE→CHARACTER",
+      "held": [
+        "sprint"
+      ],
+      "transitioned": true,
+      "beforeCommand": "throttle=0.000 brake=0.000 steering=0.000 handbrake=false signal=OFF",
+      "beforeEmpty": true,
+      "afterCommand": "gait=NONE intensity=0.000 headingRad=0.400000",
+      "afterEmpty": true,
+      "afterConsumer": "CHARACTER",
+      "rearmedCommand": "gait=NONE intensity=0.000 headingRad=0.400000",
+      "rearmedEmpty": true,
+      "controlCommand": "gait=NONE intensity=0.000 headingRad=0.400000",
+      "verdict": "PASS"
+    },
+    {
+      "direction": "VEHICLE→CHARACTER",
+      "held": [
+        "throttle",
+        "brake",
+        "steerLeft",
+        "steerRight",
+        "handbrake",
+        "signalLeft",
+        "signalRight",
+        "sprint"
+      ],
+      "transitioned": true,
+      "beforeCommand": "throttle=0.000 brake=0.000 steering=0.000 handbrake=true signal=HAZARD",
+      "beforeEmpty": false,
+      "afterCommand": "gait=NONE intensity=0.000 headingRad=0.400000",
+      "afterEmpty": true,
+      "afterConsumer": "CHARACTER",
+      "rearmedCommand": "gait=NONE intensity=0.000 headingRad=0.400000",
+      "rearmedEmpty": true,
+      "controlCommand": "gait=NONE intensity=0.000 headingRad=0.400000",
+      "verdict": "PASS"
+    }
+  ],
+  "focus": {
+    "throttleBinding": "KeyW",
+    "fieldConsumer": "CHARACTER",
+    "fieldHeldKeys": 0,
+    "fieldCommandEmpty": true,
+    "fieldWalkerDistanceM": 0,
+    "fieldDefaultPrevented": false,
+    "resumedHeldKeys": 1,
+    "resumedCommandEmpty": false,
+    "resumedWalkerDistanceM": 0.5401,
+    "resumedDefaultPrevented": true,
+    "listenersAfterDispose": 0
+  },
+  "state": {
+    "bytes": 169,
+    "keys": [
+      "version",
+      "tick",
+      "authority",
+      "held",
+      "neutralized",
+      "transitions"
+    ],
+    "authorityPreserved": true,
+    "tickPreserved": true,
+    "heldPreserved": true,
+    "neutralizedOnRestore": true,
+    "firstTickAfterRestoreEmpty": true,
+    "firstTickAfterRestoreConsumer": "VEHICLE",
+    "plainJson": true,
+    "restoreRefusals": 4
+  },
+  "summary": {
+    "scenarios": 13,
+    "scenariosPassed": 13,
+    "transitionRows": 18,
+    "transitionsPassed": 18,
+    "criterion1": true,
+    "criterion2": true,
+    "focus": true,
+    "serializable": true,
+    "pass": true
+  },
+  "limitations": [
+    "Walker-ul 192 are doar mers înainte: axa negativă comandă oprirea, nu mers înapoi. Mersul înapoi și alergarea cu direcție inversă rămân în afara contractului 192.",
+    "Virarea personajului este o direcție absolută derivată din fețarea curentă (±π/2 la capătul barei), nu un model de tanc cu viteză unghiulară proprie; urmărirea unghiului aparține walker-ului (12 rad/s).",
+    "Arbitrajul nu citește tastatura: focusul, dialogurile și câmpurile de text sunt garantate de legarea 066 (`bindKeyboardDriveInput`), al cărei port este exact `arbiter.port`.",
+    "Comutarea autorității este o decizie a compoziției (195 pentru intrarea în mașină, 194 pentru cameră); acest contract oferă tranziția, refuzurile și starea, nu proximitatea.",
+    "Persistarea efectivă și migrarea sesiunilor V3 aparțin PBI 200; aici există doar snapshot-ul explicit, validat și determinist.",
+    "Proba este headless: nu desenează camera third-person și nu măsoară latența percepută a tastelor."
+  ],
+  "determinism": {
+    "runs": 2,
+    "identical": true,
+    "digest": "9e31131be1109d754939d528961914c26c72942f9ff7ba8544735387c4bad418"
+  }
+}
