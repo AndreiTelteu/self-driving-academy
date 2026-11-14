@@ -1,0 +1,261 @@
+{
+  "generatedBy": "scripts/run-v3-character-camera-report.mjs",
+  "command": "npm run character:camera",
+  "contract": "194-character-camera-v1",
+  "tickHz": 60,
+  "policy": {
+    "contract": "194-character-camera-v1",
+    "tickHz": 60,
+    "transitionTicks": 18,
+    "minDistanceM": 2,
+    "maxDistanceM": 8,
+    "minPitchRad": -0.3490658503988659,
+    "maxPitchRad": 1.1309733552923256,
+    "cameraRadiusM": 0.2,
+    "obstacleMarginM": 0.05,
+    "groundClearanceM": 0.4,
+    "depenetrationPasses": 8,
+    "depenetrationEpsilonM": 0.001,
+    "sweepEpsilon": 0.000001,
+    "minimumFollowFactor": 0.25,
+    "minimumLookDistanceM": 0.000001
+  },
+  "reference": {
+    "mapId": "neighbourhood-compact-v1",
+    "cityElements": 923,
+    "surfaces": 313,
+    "blockers": 86,
+    "buildingId": "bld:blk:0-0:0-0",
+    "characterEyeHeightM": 1.645,
+    "vehicleColliderHalfExtentsM": {
+      "x": 0.85,
+      "z": 2
+    }
+  },
+  "scenarios": [
+    {
+      "id": "character-open",
+      "label": "Urmărire personaj pe teren liber",
+      "entityId": "character-194",
+      "targetKind": "CHARACTER",
+      "obstacleId": null,
+      "ticks": 60,
+      "requestedDistanceM": 4.5,
+      "finalDistanceM": 4.5,
+      "minClearanceM": null,
+      "obstructedTicks": 0,
+      "finalPositionM": {
+        "x": 90,
+        "y": 2.522906449072577,
+        "z": -5.413533761814537
+      },
+      "stableTailM": 0,
+      "insideWorld": true,
+      "bothAxesBlocked": null,
+      "expected": true,
+      "verdict": "PASS"
+    },
+    {
+      "id": "vehicle-open",
+      "label": "Urmărire vehicul pe teren liber",
+      "entityId": "sedan-194",
+      "targetKind": "VEHICLE",
+      "obstacleId": null,
+      "ticks": 60,
+      "requestedDistanceM": 4.5,
+      "finalDistanceM": 4.499999999999997,
+      "minClearanceM": null,
+      "obstructedTicks": 0,
+      "finalPositionM": {
+        "x": 85.58646623818547,
+        "y": 2.077906449072577,
+        "z": 1.8000000000000003
+      },
+      "stableTailM": 0,
+      "insideWorld": true,
+      "bothAxesBlocked": null,
+      "expected": true,
+      "verdict": "PASS"
+    },
+    {
+      "id": "building-wall",
+      "label": "Raza camerei trunchiată de clădirea reală",
+      "entityId": "bld:blk:0-0:0-0",
+      "targetKind": "CHARACTER",
+      "obstacleId": "bld:blk:0-0:0-0",
+      "ticks": 60,
+      "requestedDistanceM": 6,
+      "finalDistanceM": 1.7855885590513765,
+      "minClearanceM": 0.05000433149746114,
+      "obstructedTicks": 60,
+      "finalPositionM": {
+        "x": 34.11893333333333,
+        "y": 2.139741684102055,
+        "z": 24.465367268501954
+      },
+      "stableTailM": 0,
+      "insideWorld": true,
+      "bothAxesBlocked": null,
+      "expected": true,
+      "verdict": "PASS"
+    },
+    {
+      "id": "vehicle-box",
+      "label": "Raza camerei trunchiată de sedanul real",
+      "entityId": "character-194",
+      "targetKind": "CHARACTER",
+      "obstacleId": "sedan-194",
+      "ticks": 60,
+      "requestedDistanceM": 6,
+      "finalDistanceM": 1.7499955937516525,
+      "minClearanceM": 0.050004406247749766,
+      "obstructedTicks": 60,
+      "finalPositionM": {
+        "x": 90,
+        "y": 1.645,
+        "z": -2.7499955937516525
+      },
+      "stableTailM": 0,
+      "insideWorld": true,
+      "bothAxesBlocked": null,
+      "expected": true,
+      "verdict": "PASS"
+    },
+    {
+      "id": "corner-both-axes",
+      "label": "Colț cu ambele axe blocate: punct valid, fără oscilație",
+      "entityId": "character-194",
+      "targetKind": "CHARACTER",
+      "obstacleId": "corner:x-wall",
+      "ticks": 120,
+      "requestedDistanceM": 6,
+      "finalDistanceM": 1.072701345953872,
+      "minClearanceM": 0.05000290312368022,
+      "obstructedTicks": 120,
+      "finalPositionM": {
+        "x": 0.7499970968758353,
+        "y": 1.805302485841263,
+        "z": 0.749997096875834
+      },
+      "stableTailM": 0,
+      "insideWorld": true,
+      "bothAxesBlocked": true,
+      "expected": true,
+      "verdict": "PASS"
+    }
+  ],
+  "transition": {
+    "ticks": 48,
+    "transitionTicks": 18,
+    "fromEntityId": "character-194",
+    "toEntityId": "sedan-194",
+    "firstFrameEntityId": "sedan-194",
+    "lastFrameEntityId": "sedan-194",
+    "everyFrameEntityIsAuthority": true,
+    "transitionFrames": 18,
+    "remainingStart": 17,
+    "remainingEnd": 0,
+    "maxStepM": 0.3340095457383623,
+    "noTeleport": true,
+    "settledDistanceM": 4.5,
+    "entityClones": 0,
+    "targetWrites": 0
+  },
+  "refusal": {
+    "sameEntityAccepted": false,
+    "sameEntityReason": "SAME_ENTITY",
+    "unknownEntityAccepted": false,
+    "unknownEntityReason": "UNKNOWN_ENTITY",
+    "sameEntityStepTransitions": 0,
+    "unknownStepCode": "CAMERA_UNKNOWN_ENTITY",
+    "unknownStepRefusals": 1,
+    "entityCloneCountAfterRefusals": 0
+  },
+  "settings": [
+    {
+      "setting": "cameraMotion",
+      "source": "src/settings ControlPreferences (PBI 009), citit prin parseControlPreferences",
+      "fromValue": "0",
+      "toValue": "100",
+      "metric": "delta poziție cameră (m) după 30 tick-uri cu țintă în mișcare",
+      "measured": 0.14996428358196612,
+      "changed": true
+    },
+    {
+      "setting": "fov",
+      "source": "src/settings ControlPreferences (PBI 009), citit prin parseControlPreferences",
+      "fromValue": "60°",
+      "toValue": "100°",
+      "metric": "delta FOV (rad)",
+      "measured": 0.6981317007977319,
+      "changed": true
+    },
+    {
+      "setting": "orbit.distanceM",
+      "source": "intenție explicită de orbită (input, nu al doilea sistem de setări)",
+      "fromValue": "2 m",
+      "toValue": "8 m",
+      "metric": "delta distanță finală (m)",
+      "measured": 5.999831262457073,
+      "changed": true
+    },
+    {
+      "setting": "orbit.invertYaw",
+      "source": "intenție explicită de orbită (inversare axă)",
+      "fromValue": "false",
+      "toValue": "true",
+      "metric": "delta poziție cameră (m)",
+      "measured": 8.827067523629074,
+      "changed": true
+    },
+    {
+      "setting": "orbit.invertPitch",
+      "source": "intenție explicită de orbită (inversare axă)",
+      "fromValue": "false",
+      "toValue": "true",
+      "metric": "delta poziție cameră (m)",
+      "measured": 1.1820808266453584,
+      "changed": true
+    }
+  ],
+  "settingsContractRefused": true,
+  "serialization": {
+    "savedBytes": 629,
+    "transitionSaved": true,
+    "knownEntities": 2,
+    "identicalAfterRestore": true,
+    "framesCompared": 25,
+    "tamperedVersionRefused": true
+  },
+  "noClone": {
+    "ticks": 30,
+    "targetFrozen": true,
+    "positionFrozen": true,
+    "targetUnchanged": true,
+    "entityClones": 0,
+    "targetWrites": 0
+  },
+  "summary": {
+    "scenarios": 5,
+    "scenariosPassed": 5,
+    "criterion1a": true,
+    "criterion1b": true,
+    "criterion2": true,
+    "serializable": true,
+    "noCloning": true,
+    "pass": true
+  },
+  "limitations": [
+    "Camera este un contract pur headless: nu creează cameră Babylon, mesh-uri, input sau renderer. Consumatorul 017/195 mapează poziția și FOV-ul pe camera reală.",
+    "Obstacolele sunt cutii AABB orientate pe axe; pentru amprente rotite (vehicule) apelantul furnizează AABB-ul conservator. O formă concavă sau un portal nu face parte din contract.",
+    "În timpul unei tranziții de autoritate camera poate fi temporar mai departe de noua țintă decât `maxDistanceM`, pentru că zboară din ultima poziție sigură; limita de distanță se aplică orbitei cerute, nu drumului de tranziție.",
+    "Dacă un zid desparte complet poziția veche de noua țintă, trunchierea fail-closed oprește camera pe partea sigură în loc să o teleporteze prin zid; tranziția vizuală poate rămâne la perete până când jucătorul se mișcă.",
+    "Setările existente 009 nu au astăzi slider pentru distanță sau inversare de axă; acelea rămân câmpuri explicite de intenție (input), nu un al doilea sistem de setări. `cameraMotion` și `fov` sunt citite direct din contractul 009.",
+    "Proba este headless și deterministă; integrarea vizuală reală și feel-ul camerei rămân de validat în browser la PBI 195."
+  ],
+  "determinism": {
+    "runs": 2,
+    "identical": true,
+    "digest": "da23bead1b80d42a8cc050d0ec7a6c4cbdb542352dddf296c03e1a98657d1290"
+  }
+}

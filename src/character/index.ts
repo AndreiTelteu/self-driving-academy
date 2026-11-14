@@ -146,3 +146,33 @@ export {
 export type { CirclePushOut, WalkBounds2, WalkPoint2, WalkPolygon } from './walk-geometry';
 export { CHARACTER_CONTRACT_ERROR_CODES, CharacterContractError } from './errors';
 export type { CharacterContractErrorCode } from './errors';
+export {
+  CHARACTER_CAMERA_CONTRACT_VERSION,
+  CHARACTER_CAMERA_DEFAULT_ORBIT,
+  CHARACTER_CAMERA_ERROR_CODES,
+  CHARACTER_CAMERA_POLICY,
+  CharacterCameraError,
+  characterCameraControl,
+  createCharacterCamera,
+  decideCameraSwitch,
+  resolveCharacterCameraOrbit,
+} from './character-camera';
+export type {
+  CharacterCamera,
+  CharacterCameraControl,
+  CharacterCameraErrorCode,
+  CharacterCameraFrame,
+  CharacterCameraObstacle,
+  CharacterCameraOptions,
+  CharacterCameraOrbit,
+  CharacterCameraSnapshot,
+  CharacterCameraState,
+  CharacterCameraStats,
+  CharacterCameraStepRequest,
+  CharacterCameraSwitchDecision,
+  CharacterCameraSwitchReason,
+  CharacterCameraTarget,
+  CharacterCameraTargetKind,
+  CharacterCameraTransition,
+  CharacterCameraWorld,
+} from './character-camera';
