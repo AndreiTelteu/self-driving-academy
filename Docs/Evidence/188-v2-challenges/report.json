@@ -1,0 +1,1283 @@
+{
+  "version": "188-extended-challenges-report-v1",
+  "schemaVersion": "188-extended-challenges-v1",
+  "catalogVersion": "188-extended-challenge-catalog-v1",
+  "tickHz": 60,
+  "limits": {
+    "version": "188-extended-challenges-v1",
+    "challenges": 32,
+    "minimumChallenges": 5,
+    "opportunities": 8,
+    "incidentBudgets": 4,
+    "margins": 3,
+    "factsPerStream": 32,
+    "attemptsPerChallenge": 8,
+    "idCodeUnits": 256,
+    "titleCodeUnits": 160,
+    "explanationCodeUnits": 320
+  },
+  "families": [
+    {
+      "family": "PEDESTRIAN",
+      "label": "Pietoni",
+      "challenges": [
+        "v2-challenge-crosswalk-approach",
+        "v2-challenge-pedestrian-clearance",
+        "v2-challenge-pedestrian-yield"
+      ],
+      "keys": [
+        "crosswalk_approach_speed",
+        "pedestrian_clearance",
+        "pedestrian_yield_probability"
+      ],
+      "evaluators": [
+        "crosswalk-approach-speed",
+        "pedestrian-clearance",
+        "pedestrian-yield"
+      ],
+      "count": 3
+    },
+    {
+      "family": "ROUTING",
+      "label": "Rutare",
+      "challenges": [
+        "v2-challenge-reroute-patience",
+        "v2-challenge-reverse-recovery",
+        "v2-challenge-u-turn-discipline"
+      ],
+      "keys": [
+        "reroute_patience",
+        "reverse_recovery_duration",
+        "u_turn_willingness"
+      ],
+      "evaluators": [
+        "reroute-patience",
+        "reverse-recovery",
+        "u-turn-discipline"
+      ],
+      "count": 3
+    },
+    {
+      "family": "SIGNALLING",
+      "label": "Semnalizare",
+      "challenges": [
+        "v2-challenge-green-launch",
+        "v2-challenge-red-gap",
+        "v2-challenge-yellow-decision"
+      ],
+      "keys": [
+        "green_launch_acceleration",
+        "red_run_gap_acceptance",
+        "yellow_stop_probability"
+      ],
+      "evaluators": [
+        "green-launch",
+        "red-gap",
+        "yellow-decision"
+      ],
+      "count": 3
+    },
+    {
+      "family": "HAZARD",
+      "label": "Pericole",
+      "challenges": [
+        "v2-challenge-emergency-brake",
+        "v2-challenge-hazard-reaction",
+        "v2-challenge-obstacle-clearance"
+      ],
+      "keys": [
+        "emergency_brake_intensity",
+        "hazard_reaction_delay",
+        "obstacle_clearance"
+      ],
+      "evaluators": [
+        "emergency-brake",
+        "hazard-reaction",
+        "obstacle-clearance"
+      ],
+      "count": 3
+    },
+    {
+      "family": "SERVICE",
+      "label": "Serviciu",
+      "challenges": [
+        "v2-challenge-dropoff-curb",
+        "v2-challenge-pickup-dwell",
+        "v2-challenge-pickup-precision"
+      ],
+      "keys": [
+        "dropoff_curb_distance",
+        "pickup_dwell_time",
+        "pickup_stop_precision"
+      ],
+      "evaluators": [
+        "dropoff-curb",
+        "pickup-dwell",
+        "pickup-precision"
+      ],
+      "count": 3
+    }
+  ],
+  "challenges": [
+    {
+      "challengeId": "v2-challenge-crosswalk-approach",
+      "title": "Apropiere de trecere",
+      "family": "PEDESTRIAN",
+      "evaluatorId": "crosswalk-approach-speed",
+      "learningKey": "crosswalk_approach_speed",
+      "derivation": "MAX_SPEED_MPS",
+      "comparison": "AT_MOST",
+      "unit": "mps",
+      "keyValue": 5,
+      "catalogDefault": 5,
+      "opportunities": 1,
+      "floor": null,
+      "threshold": 5,
+      "target": 1,
+      "deadlineTicks": 5880,
+      "incidentBudgets": [
+        0,
+        1
+      ],
+      "explanationEvent": "CROSSWALK_APPROACH",
+      "passing": "PASSED",
+      "failing": "FAILED",
+      "failingReason": "APPROACH_TOO_FAST",
+      "measured": {
+        "unit": "mps",
+        "measured": 7,
+        "threshold": 5,
+        "comparison": "AT_MOST",
+        "opportunities": 2,
+        "satisfied": 1,
+        "violated": 1,
+        "samplesExamined": 2
+      }
+    },
+    {
+      "challengeId": "v2-challenge-dropoff-curb",
+      "title": "Coborâre la bordură",
+      "family": "SERVICE",
+      "evaluatorId": "dropoff-curb",
+      "learningKey": "dropoff_curb_distance",
+      "derivation": "MAX_METRES",
+      "comparison": "AT_MOST",
+      "unit": "m",
+      "keyValue": 0.5,
+      "catalogDefault": 0.5,
+      "opportunities": 1,
+      "floor": null,
+      "threshold": 0.5,
+      "target": 1,
+      "deadlineTicks": 8100,
+      "incidentBudgets": [
+        0,
+        1
+      ],
+      "explanationEvent": "DROPOFF_STOP",
+      "passing": "PASSED",
+      "failing": "FAILED",
+      "failingReason": "CURB_TOO_FAR",
+      "measured": {
+        "unit": "m",
+        "measured": 1.4,
+        "threshold": 0.5,
+        "comparison": "AT_MOST",
+        "opportunities": 1,
+        "satisfied": 0,
+        "violated": 1,
+        "samplesExamined": 1
+      }
+    },
+    {
+      "challengeId": "v2-challenge-emergency-brake",
+      "title": "Frână de urgență",
+      "family": "HAZARD",
+      "evaluatorId": "emergency-brake",
+      "learningKey": "emergency_brake_intensity",
+      "derivation": "MIN_RATIO",
+      "comparison": "AT_LEAST",
+      "unit": "ratio",
+      "keyValue": 1,
+      "catalogDefault": 1,
+      "opportunities": 1,
+      "floor": null,
+      "threshold": 1,
+      "target": 1,
+      "deadlineTicks": 6885,
+      "incidentBudgets": [
+        0,
+        1
+      ],
+      "explanationEvent": "EMERGENCY_BRAKE",
+      "passing": "PASSED",
+      "failing": "FAILED",
+      "failingReason": "BRAKE_TOO_WEAK",
+      "measured": {
+        "unit": "ratio",
+        "measured": 0.5,
+        "threshold": 1,
+        "comparison": "AT_LEAST",
+        "opportunities": 1,
+        "satisfied": 0,
+        "violated": 1,
+        "samplesExamined": 1
+      }
+    },
+    {
+      "challengeId": "v2-challenge-green-launch",
+      "title": "Plecarea de la verde",
+      "family": "SIGNALLING",
+      "evaluatorId": "green-launch",
+      "learningKey": "green_launch_acceleration",
+      "derivation": "MAX_ACCEL_MPS2",
+      "comparison": "AT_MOST",
+      "unit": "mps2",
+      "keyValue": 1.5,
+      "catalogDefault": 1.5,
+      "opportunities": 1,
+      "floor": null,
+      "threshold": 1.5,
+      "target": 1,
+      "deadlineTicks": 5400,
+      "incidentBudgets": [
+        0,
+        1
+      ],
+      "explanationEvent": "GREEN_RELEASE",
+      "passing": "PASSED",
+      "failing": "FAILED",
+      "failingReason": "GREEN_LAUNCH_TOO_HARD",
+      "measured": {
+        "unit": "mps2",
+        "measured": 3.2,
+        "threshold": 1.5,
+        "comparison": "AT_MOST",
+        "opportunities": 1,
+        "satisfied": 0,
+        "violated": 1,
+        "samplesExamined": 1
+      }
+    },
+    {
+      "challengeId": "v2-challenge-hazard-reaction",
+      "title": "Prima reacție",
+      "family": "HAZARD",
+      "evaluatorId": "hazard-reaction",
+      "learningKey": "hazard_reaction_delay",
+      "derivation": "MAX_TICKS",
+      "comparison": "AT_MOST",
+      "unit": "ticks",
+      "keyValue": 0.5,
+      "catalogDefault": 0.5,
+      "opportunities": 1,
+      "floor": null,
+      "threshold": 30,
+      "target": 1,
+      "deadlineTicks": 6720,
+      "incidentBudgets": [
+        0,
+        1
+      ],
+      "explanationEvent": "HAZARD_REACTION",
+      "passing": "PASSED",
+      "failing": "FAILED",
+      "failingReason": "REACTION_TOO_SLOW",
+      "measured": {
+        "unit": "ticks",
+        "measured": 60,
+        "threshold": 30,
+        "comparison": "AT_MOST",
+        "opportunities": 1,
+        "satisfied": 0,
+        "violated": 1,
+        "samplesExamined": 1
+      }
+    },
+    {
+      "challengeId": "v2-challenge-obstacle-clearance",
+      "title": "Obstacol pe bandă",
+      "family": "HAZARD",
+      "evaluatorId": "obstacle-clearance",
+      "learningKey": "obstacle_clearance",
+      "derivation": "MIN_METRES",
+      "comparison": "AT_LEAST",
+      "unit": "m",
+      "keyValue": 1,
+      "catalogDefault": 1,
+      "opportunities": 1,
+      "floor": null,
+      "threshold": 1,
+      "target": 1,
+      "deadlineTicks": 6120,
+      "incidentBudgets": [
+        0,
+        1
+      ],
+      "explanationEvent": "OBSTACLE_PASS",
+      "passing": "PASSED",
+      "failing": "FAILED",
+      "failingReason": "OBSTACLE_CONTACT",
+      "measured": {
+        "unit": "m",
+        "measured": 1.5,
+        "threshold": 1,
+        "comparison": "AT_LEAST",
+        "opportunities": 2,
+        "satisfied": 2,
+        "violated": 1,
+        "samplesExamined": 2
+      }
+    },
+    {
+      "challengeId": "v2-challenge-pedestrian-clearance",
+      "title": "Spațiu pentru pieton",
+      "family": "PEDESTRIAN",
+      "evaluatorId": "pedestrian-clearance",
+      "learningKey": "pedestrian_clearance",
+      "derivation": "MIN_METRES",
+      "comparison": "AT_LEAST",
+      "unit": "m",
+      "keyValue": 2,
+      "catalogDefault": 2,
+      "opportunities": 1,
+      "floor": null,
+      "threshold": 2,
+      "target": 1,
+      "deadlineTicks": 6480,
+      "incidentBudgets": [
+        0,
+        1
+      ],
+      "explanationEvent": "PEDESTRIAN_CLEARED",
+      "passing": "PASSED",
+      "failing": "FAILED",
+      "failingReason": "CLEARANCE_SHORTFALL",
+      "measured": {
+        "unit": "m",
+        "measured": 1.2,
+        "threshold": 2,
+        "comparison": "AT_LEAST",
+        "opportunities": 2,
+        "satisfied": 1,
+        "violated": 1,
+        "samplesExamined": 2
+      }
+    },
+    {
+      "challengeId": "v2-challenge-pedestrian-yield",
+      "title": "Trecerea fără grabă",
+      "family": "PEDESTRIAN",
+      "evaluatorId": "pedestrian-yield",
+      "learningKey": "pedestrian_yield_probability",
+      "derivation": "MIN_YIELDS_PER_OPPORTUNITY",
+      "comparison": "AT_LEAST",
+      "unit": "count",
+      "keyValue": 1,
+      "catalogDefault": 1,
+      "opportunities": 4,
+      "floor": null,
+      "threshold": 4,
+      "target": 4,
+      "deadlineTicks": 5400,
+      "incidentBudgets": [
+        0,
+        1
+      ],
+      "explanationEvent": "PEDESTRIAN_YIELDED",
+      "passing": "PASSED",
+      "failing": "INCOMPLETE",
+      "failingReason": "PROGRESS",
+      "measured": {
+        "unit": "count",
+        "measured": 3,
+        "threshold": 4,
+        "comparison": "AT_LEAST",
+        "opportunities": 4,
+        "satisfied": 3,
+        "violated": 1,
+        "samplesExamined": 4
+      }
+    },
+    {
+      "challengeId": "v2-challenge-pickup-dwell",
+      "title": "Așteaptă îmbarcarea",
+      "family": "SERVICE",
+      "evaluatorId": "pickup-dwell",
+      "learningKey": "pickup_dwell_time",
+      "derivation": "MIN_TICKS",
+      "comparison": "AT_LEAST",
+      "unit": "ticks",
+      "keyValue": 3,
+      "catalogDefault": 3,
+      "opportunities": 1,
+      "floor": null,
+      "threshold": 180,
+      "target": 1,
+      "deadlineTicks": 8580,
+      "incidentBudgets": [
+        0,
+        1
+      ],
+      "explanationEvent": "PICKUP_BOARDING",
+      "passing": "PASSED",
+      "failing": "FAILED",
+      "failingReason": "DWELL_TOO_SHORT",
+      "measured": {
+        "unit": "ticks",
+        "measured": 60,
+        "threshold": 180,
+        "comparison": "AT_LEAST",
+        "opportunities": 1,
+        "satisfied": 0,
+        "violated": 1,
+        "samplesExamined": 1
+      }
+    },
+    {
+      "challengeId": "v2-challenge-pickup-precision",
+      "title": "Oprire la punct",
+      "family": "SERVICE",
+      "evaluatorId": "pickup-precision",
+      "learningKey": "pickup_stop_precision",
+      "derivation": "MAX_METRES",
+      "comparison": "AT_MOST",
+      "unit": "m",
+      "keyValue": 1,
+      "catalogDefault": 1,
+      "opportunities": 1,
+      "floor": null,
+      "threshold": 1,
+      "target": 1,
+      "deadlineTicks": 7200,
+      "incidentBudgets": [
+        0,
+        1
+      ],
+      "explanationEvent": "PICKUP_STOP",
+      "passing": "PASSED",
+      "failing": "FAILED",
+      "failingReason": "STOP_OUTSIDE_WINDOW",
+      "measured": {
+        "unit": "m",
+        "measured": 2,
+        "threshold": 1,
+        "comparison": "AT_MOST",
+        "opportunities": 1,
+        "satisfied": 0,
+        "violated": 1,
+        "samplesExamined": 1
+      }
+    },
+    {
+      "challengeId": "v2-challenge-red-gap",
+      "title": "Gap-ul de la roșu",
+      "family": "SIGNALLING",
+      "evaluatorId": "red-gap",
+      "learningKey": "red_run_gap_acceptance",
+      "derivation": "MIN_TICKS",
+      "comparison": "AT_LEAST",
+      "unit": "ticks",
+      "keyValue": 2.5,
+      "catalogDefault": 2.5,
+      "opportunities": 1,
+      "floor": null,
+      "threshold": 150,
+      "target": 1,
+      "deadlineTicks": 6480,
+      "incidentBudgets": [
+        0,
+        1
+      ],
+      "explanationEvent": "RED_GAP",
+      "passing": "PASSED",
+      "failing": "FAILED",
+      "failingReason": "RED_GAP_SHORTFALL",
+      "measured": {
+        "unit": "ticks",
+        "measured": 60,
+        "threshold": 150,
+        "comparison": "AT_LEAST",
+        "opportunities": 1,
+        "satisfied": 0,
+        "violated": 1,
+        "samplesExamined": 1
+      }
+    },
+    {
+      "challengeId": "v2-challenge-reroute-patience",
+      "title": "Răbdarea recalculării",
+      "family": "ROUTING",
+      "evaluatorId": "reroute-patience",
+      "learningKey": "reroute_patience",
+      "derivation": "MIN_TICKS",
+      "comparison": "AT_LEAST",
+      "unit": "ticks",
+      "keyValue": 20,
+      "catalogDefault": 20,
+      "opportunities": 1,
+      "floor": null,
+      "threshold": 1200,
+      "target": 1,
+      "deadlineTicks": 8640,
+      "incidentBudgets": [
+        0,
+        1
+      ],
+      "explanationEvent": "ROUTE_REROUTE",
+      "passing": "PASSED",
+      "failing": "FAILED",
+      "failingReason": "REROUTE_TOO_EARLY",
+      "measured": {
+        "unit": "ticks",
+        "measured": 300,
+        "threshold": 1200,
+        "comparison": "AT_LEAST",
+        "opportunities": 1,
+        "satisfied": 0,
+        "violated": 1,
+        "samplesExamined": 1
+      }
+    },
+    {
+      "challengeId": "v2-challenge-reverse-recovery",
+      "title": "Recuperare din marșarier",
+      "family": "ROUTING",
+      "evaluatorId": "reverse-recovery",
+      "learningKey": "reverse_recovery_duration",
+      "derivation": "MIN_TICKS",
+      "comparison": "AT_LEAST",
+      "unit": "ticks",
+      "keyValue": 2,
+      "catalogDefault": 2,
+      "opportunities": 1,
+      "floor": 2.5,
+      "threshold": 150,
+      "target": 1,
+      "deadlineTicks": 7500,
+      "incidentBudgets": [
+        0,
+        1
+      ],
+      "explanationEvent": "REVERSE_RECOVERY",
+      "passing": "PASSED",
+      "failing": "FAILED",
+      "failingReason": "RECOVERY_TOO_SHORT",
+      "measured": {
+        "unit": "ticks",
+        "measured": 60,
+        "threshold": 150,
+        "comparison": "AT_LEAST",
+        "opportunities": 1,
+        "satisfied": 0,
+        "violated": 1,
+        "samplesExamined": 1
+      }
+    },
+    {
+      "challengeId": "v2-challenge-u-turn-discipline",
+      "title": "Întoarcerea interzisă",
+      "family": "ROUTING",
+      "evaluatorId": "u-turn-discipline",
+      "learningKey": "u_turn_willingness",
+      "derivation": "MAX_COUNT_PER_OPPORTUNITY",
+      "comparison": "AT_MOST",
+      "unit": "count",
+      "keyValue": 0,
+      "catalogDefault": 0,
+      "opportunities": 3,
+      "floor": null,
+      "threshold": 0,
+      "target": 1,
+      "deadlineTicks": 7920,
+      "incidentBudgets": [
+        0,
+        1
+      ],
+      "explanationEvent": "U_TURN",
+      "passing": "PASSED",
+      "failing": "FAILED",
+      "failingReason": "ILLEGAL_U_TURN",
+      "measured": {
+        "unit": "count",
+        "measured": 1,
+        "threshold": 0,
+        "comparison": "AT_MOST",
+        "opportunities": 3,
+        "satisfied": 0,
+        "violated": 1,
+        "samplesExamined": 4
+      }
+    },
+    {
+      "challengeId": "v2-challenge-yellow-decision",
+      "title": "Galbenul fezabil",
+      "family": "SIGNALLING",
+      "evaluatorId": "yellow-decision",
+      "learningKey": "yellow_stop_probability",
+      "derivation": "MIN_YIELDS_PER_OPPORTUNITY",
+      "comparison": "AT_LEAST",
+      "unit": "count",
+      "keyValue": 0.8,
+      "catalogDefault": 0.8,
+      "opportunities": 2,
+      "floor": null,
+      "threshold": 2,
+      "target": 2,
+      "deadlineTicks": 6480,
+      "incidentBudgets": [
+        0,
+        1
+      ],
+      "explanationEvent": "YELLOW_DECISION",
+      "passing": "PASSED",
+      "failing": "FAILED",
+      "failingReason": "YELLOW_CROSSED",
+      "measured": {
+        "unit": "count",
+        "measured": 1,
+        "threshold": 2,
+        "comparison": "AT_LEAST",
+        "opportunities": 2,
+        "satisfied": 1,
+        "violated": 1,
+        "samplesExamined": 2
+      }
+    }
+  ],
+  "evaluators": [
+    {
+      "evaluatorId": "crosswalk-approach-speed",
+      "family": "PEDESTRIAN",
+      "version": "188-eval-crosswalk-approach-speed-v1",
+      "stream": "PEDESTRIAN_CROSSINGS",
+      "derivation": "MAX_SPEED_MPS",
+      "unit": "mps",
+      "comparison": "AT_MOST",
+      "targetKind": "SINGLE",
+      "floor": null,
+      "observations": [
+        "CROSSWALK_APPROACH",
+        "DEADLINE_EXPIRED",
+        "INCIDENT"
+      ]
+    },
+    {
+      "evaluatorId": "dropoff-curb",
+      "family": "SERVICE",
+      "version": "188-eval-dropoff-curb-v1",
+      "stream": "SERVICE_STOPS",
+      "derivation": "MAX_METRES",
+      "unit": "m",
+      "comparison": "AT_MOST",
+      "targetKind": "SINGLE",
+      "floor": null,
+      "observations": [
+        "DROPOFF_STOP",
+        "DEADLINE_EXPIRED",
+        "INCIDENT"
+      ]
+    },
+    {
+      "evaluatorId": "emergency-brake",
+      "family": "HAZARD",
+      "version": "188-eval-emergency-brake-v1",
+      "stream": "HAZARD_PASSES",
+      "derivation": "MIN_RATIO",
+      "unit": "ratio",
+      "comparison": "AT_LEAST",
+      "targetKind": "SINGLE",
+      "floor": null,
+      "observations": [
+        "EMERGENCY_BRAKE",
+        "DEADLINE_EXPIRED",
+        "INCIDENT"
+      ]
+    },
+    {
+      "evaluatorId": "green-launch",
+      "family": "SIGNALLING",
+      "version": "188-eval-green-launch-v1",
+      "stream": "SIGNAL_OPPORTUNITIES",
+      "derivation": "MAX_ACCEL_MPS2",
+      "unit": "mps2",
+      "comparison": "AT_MOST",
+      "targetKind": "SINGLE",
+      "floor": null,
+      "observations": [
+        "GREEN_RELEASE",
+        "DEADLINE_EXPIRED",
+        "INCIDENT"
+      ]
+    },
+    {
+      "evaluatorId": "hazard-reaction",
+      "family": "HAZARD",
+      "version": "188-eval-hazard-reaction-v1",
+      "stream": "HAZARD_PASSES",
+      "derivation": "MAX_TICKS",
+      "unit": "ticks",
+      "comparison": "AT_MOST",
+      "targetKind": "SINGLE",
+      "floor": null,
+      "observations": [
+        "HAZARD_REACTION",
+        "DEADLINE_EXPIRED",
+        "INCIDENT"
+      ]
+    },
+    {
+      "evaluatorId": "obstacle-clearance",
+      "family": "HAZARD",
+      "version": "188-eval-obstacle-clearance-v1",
+      "stream": "HAZARD_PASSES",
+      "derivation": "MIN_METRES",
+      "unit": "m",
+      "comparison": "AT_LEAST",
+      "targetKind": "SINGLE",
+      "floor": null,
+      "observations": [
+        "OBSTACLE_PASS",
+        "DEADLINE_EXPIRED",
+        "INCIDENT"
+      ]
+    },
+    {
+      "evaluatorId": "pedestrian-clearance",
+      "family": "PEDESTRIAN",
+      "version": "188-eval-pedestrian-clearance-v1",
+      "stream": "PEDESTRIAN_CROSSINGS",
+      "derivation": "MIN_METRES",
+      "unit": "m",
+      "comparison": "AT_LEAST",
+      "targetKind": "SINGLE",
+      "floor": null,
+      "observations": [
+        "PEDESTRIAN_CLEARED",
+        "DEADLINE_EXPIRED",
+        "INCIDENT"
+      ]
+    },
+    {
+      "evaluatorId": "pedestrian-yield",
+      "family": "PEDESTRIAN",
+      "version": "188-eval-pedestrian-yield-v1",
+      "stream": "PEDESTRIAN_CROSSINGS",
+      "derivation": "MIN_YIELDS_PER_OPPORTUNITY",
+      "unit": "count",
+      "comparison": "AT_LEAST",
+      "targetKind": "THRESHOLD",
+      "floor": null,
+      "observations": [
+        "PEDESTRIAN_YIELDED",
+        "DEADLINE_EXPIRED",
+        "INCIDENT"
+      ]
+    },
+    {
+      "evaluatorId": "pickup-dwell",
+      "family": "SERVICE",
+      "version": "188-eval-pickup-dwell-v1",
+      "stream": "SERVICE_STOPS",
+      "derivation": "MIN_TICKS",
+      "unit": "ticks",
+      "comparison": "AT_LEAST",
+      "targetKind": "SINGLE",
+      "floor": null,
+      "observations": [
+        "PICKUP_BOARDING",
+        "DEADLINE_EXPIRED",
+        "INCIDENT"
+      ]
+    },
+    {
+      "evaluatorId": "pickup-precision",
+      "family": "SERVICE",
+      "version": "188-eval-pickup-precision-v1",
+      "stream": "SERVICE_STOPS",
+      "derivation": "MAX_METRES",
+      "unit": "m",
+      "comparison": "AT_MOST",
+      "targetKind": "SINGLE",
+      "floor": null,
+      "observations": [
+        "PICKUP_STOP",
+        "DEADLINE_EXPIRED",
+        "INCIDENT"
+      ]
+    },
+    {
+      "evaluatorId": "red-gap",
+      "family": "SIGNALLING",
+      "version": "188-eval-red-gap-v1",
+      "stream": "SIGNAL_OPPORTUNITIES",
+      "derivation": "MIN_TICKS",
+      "unit": "ticks",
+      "comparison": "AT_LEAST",
+      "targetKind": "SINGLE",
+      "floor": null,
+      "observations": [
+        "RED_GAP",
+        "DEADLINE_EXPIRED",
+        "INCIDENT"
+      ]
+    },
+    {
+      "evaluatorId": "reroute-patience",
+      "family": "ROUTING",
+      "version": "188-eval-reroute-patience-v1",
+      "stream": "ROUTE_DECISIONS",
+      "derivation": "MIN_TICKS",
+      "unit": "ticks",
+      "comparison": "AT_LEAST",
+      "targetKind": "SINGLE",
+      "floor": null,
+      "observations": [
+        "ROUTE_REROUTE",
+        "DEADLINE_EXPIRED",
+        "INCIDENT"
+      ]
+    },
+    {
+      "evaluatorId": "reverse-recovery",
+      "family": "ROUTING",
+      "version": "188-eval-reverse-recovery-v1",
+      "stream": "RECOVERY_ATTEMPTS",
+      "derivation": "MIN_TICKS",
+      "unit": "ticks",
+      "comparison": "AT_LEAST",
+      "targetKind": "SINGLE",
+      "floor": 2.5,
+      "observations": [
+        "REVERSE_RECOVERY",
+        "DEADLINE_EXPIRED",
+        "INCIDENT"
+      ]
+    },
+    {
+      "evaluatorId": "u-turn-discipline",
+      "family": "ROUTING",
+      "version": "188-eval-u-turn-discipline-v1",
+      "stream": "ROUTE_DECISIONS",
+      "derivation": "MAX_COUNT_PER_OPPORTUNITY",
+      "unit": "count",
+      "comparison": "AT_MOST",
+      "targetKind": "SINGLE",
+      "floor": null,
+      "observations": [
+        "U_TURN",
+        "DEADLINE_EXPIRED",
+        "INCIDENT"
+      ]
+    },
+    {
+      "evaluatorId": "yellow-decision",
+      "family": "SIGNALLING",
+      "version": "188-eval-yellow-decision-v1",
+      "stream": "SIGNAL_OPPORTUNITIES",
+      "derivation": "MIN_YIELDS_PER_OPPORTUNITY",
+      "unit": "count",
+      "comparison": "AT_LEAST",
+      "targetKind": "THRESHOLD",
+      "floor": null,
+      "observations": [
+        "YELLOW_DECISION",
+        "DEADLINE_EXPIRED",
+        "INCIDENT"
+      ]
+    }
+  ],
+  "learningKeys": {
+    "extended": 56,
+    "covered": 15,
+    "uncovered": [
+      "allway_stop_patience",
+      "blocked_intersection_entry_probability",
+      "braking_jerk",
+      "closing_ttc_threshold",
+      "coasting_bias",
+      "corner_cutting_bias",
+      "cruise_accel_deadband",
+      "cruise_speed_variability",
+      "cutin_brake_response",
+      "dropoff_approach_speed",
+      "evasive_steer_willingness",
+      "following_hysteresis",
+      "horn_use_probability",
+      "lane_center_offset",
+      "lane_change_duration",
+      "lateral_clearance",
+      "lateral_correction_deadband",
+      "launch_intensity",
+      "leader_change_delay",
+      "occupied_acceleration_scale",
+      "occupied_lateral_accel_scale",
+      "overtake_speed_bonus",
+      "pass_on_right_probability",
+      "pickup_approach_speed",
+      "pickup_curb_distance",
+      "priority_assertiveness",
+      "rolling_stop_speed",
+      "route_congestion_penalty",
+      "route_distance_weight",
+      "route_signal_penalty",
+      "route_time_weight",
+      "route_turn_penalty",
+      "signal_lead_time",
+      "signal_use_probability",
+      "speed_delta_arterial",
+      "steering_rate_limit",
+      "steering_response_time",
+      "throttle_release_delay",
+      "turn_entry_speed",
+      "turn_exit_acceleration",
+      "yellow_commit_time"
+    ],
+    "v1KeysUsed": []
+  },
+  "compatibility": {
+    "v1CatalogVersion": "231-challenge-templates-v1",
+    "v1Templates": 12,
+    "v1TemplateIds": [
+      "challenge-cake-delivery",
+      "challenge-city-copies-me",
+      "challenge-city-tour-backwards",
+      "challenge-forgot-something",
+      "challenge-influencer-demolition",
+      "challenge-influencer-no-spill",
+      "challenge-influencer-parking-drift",
+      "challenge-influencer-single-frame",
+      "challenge-last-minute-airport",
+      "challenge-maternity-run",
+      "challenge-toilet-sos",
+      "challenge-valet-with-style"
+    ],
+    "v1CatalogDigest": "fnv1a32:9714302b",
+    "composed": {
+      "v1": 12,
+      "extended": 15,
+      "total": 27
+    },
+    "v1ProgressDigest": "fnv1a32:7f45fc70",
+    "v1UnlocksDigest": "fnv1a32:0da1f677",
+    "v1AccessDigest": "fnv1a32:bdd636b4",
+    "v1PlayerDigest": "fnv1a32:8646bf48",
+    "v1CheckpointDigest": "fnv1a32:92f67b0f",
+    "beforeAfterEqual": true,
+    "completedMissions": 8,
+    "availableMissions": 0,
+    "lockedMissions": 0,
+    "unlocksMonotone": true,
+    "vehicleAccess": {
+      "vehicles": 64,
+      "taxis": 24,
+      "civilians": 40,
+      "vehiclesDriveable": 64,
+      "taxisSelectable": 24,
+      "revoked": 0,
+      "blockedTaxis": 0,
+      "baseCapabilitiesPresent": true
+    },
+    "vehicleClasses": [
+      "compact",
+      "sedan"
+    ],
+    "importProgressDigest": "fnv1a32:4dbf7b01",
+    "importUnlocksDigest": "fnv1a32:99fbd1de",
+    "importStable": true,
+    "profileWrites": 0,
+    "learningJobs": 0
+  },
+  "determinism": {
+    "runs": 2,
+    "stable": true,
+    "digest": "fnv1a32:a043542d"
+  },
+  "checks": [
+    {
+      "id": "families",
+      "expected": 5,
+      "actual": 5,
+      "pass": true,
+      "detail": "The catalog covers the five authored families"
+    },
+    {
+      "id": "family-minimum",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "Each family carries at least one challenge, in the delivered catalog three"
+    },
+    {
+      "id": "challenges",
+      "expected": 15,
+      "actual": 15,
+      "pass": true,
+      "detail": "Fifteen extended challenges are authored"
+    },
+    {
+      "id": "v1-templates",
+      "expected": 12,
+      "actual": 12,
+      "pass": true,
+      "detail": "The delivered 231 catalog still has twelve templates"
+    },
+    {
+      "id": "composed-total",
+      "expected": 27,
+      "actual": 27,
+      "pass": true,
+      "detail": "The composed catalog publishes both halves without sharing an id"
+    },
+    {
+      "id": "v1-catalog-digest",
+      "expected": "fnv1a32:9714302b",
+      "actual": "fnv1a32:9714302b",
+      "pass": true,
+      "detail": "The 231 catalog bytes are the pre-188 bytes"
+    },
+    {
+      "id": "v2-keys",
+      "expected": 56,
+      "actual": 56,
+      "pass": true,
+      "detail": "The 187 table exposes the 56 extended keys"
+    },
+    {
+      "id": "covered-keys",
+      "expected": 15,
+      "actual": 15,
+      "pass": true,
+      "detail": "Fifteen distinct real V2 keys are covered by the delivered challenges"
+    },
+    {
+      "id": "no-v1-key",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "No challenge uses a V1 key as its context"
+    },
+    {
+      "id": "passing-fixtures",
+      "expected": 15,
+      "actual": 15,
+      "pass": true,
+      "detail": "Every challenge passes a realizable tick-window fixture"
+    },
+    {
+      "id": "failing-fixtures",
+      "expected": 15,
+      "actual": 15,
+      "pass": true,
+      "detail": "Every challenge fails an invalid fixture that changes only the governed fact"
+    },
+    {
+      "id": "v1-progress-digest",
+      "expected": "fnv1a32:7f45fc70",
+      "actual": "fnv1a32:7f45fc70",
+      "pass": true,
+      "detail": "The 125 campaign progress is the pre-188 snapshot"
+    },
+    {
+      "id": "v1-unlocks-digest",
+      "expected": "fnv1a32:0da1f677",
+      "actual": "fnv1a32:0da1f677",
+      "pass": true,
+      "detail": "The 125 unlock list is the pre-188 snapshot"
+    },
+    {
+      "id": "v1-access-digest",
+      "expected": "fnv1a32:bdd636b4",
+      "actual": "fnv1a32:bdd636b4",
+      "pass": true,
+      "detail": "The 125 vehicle access is the pre-188 snapshot"
+    },
+    {
+      "id": "v1-player-digest",
+      "expected": "fnv1a32:8646bf48",
+      "actual": "fnv1a32:8646bf48",
+      "pass": true,
+      "detail": "The 213 player progress is the pre-188 snapshot"
+    },
+    {
+      "id": "v1-checkpoint-digest",
+      "expected": "fnv1a32:92f67b0f",
+      "actual": "fnv1a32:92f67b0f",
+      "pass": true,
+      "detail": "The 213 progress import round-trips byte for byte"
+    },
+    {
+      "id": "v1-before-after",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Progress, unlocks, access and player progress are identical after the 188 work"
+    },
+    {
+      "id": "v1-missions-completed",
+      "expected": 8,
+      "actual": 8,
+      "pass": true,
+      "detail": "The whole delivered campaign completed through the real 116 tracker"
+    },
+    {
+      "id": "v1-taxis-selectable",
+      "expected": 24,
+      "actual": 24,
+      "pass": true,
+      "detail": "All 24 real taxis stay selectable"
+    },
+    {
+      "id": "v1-vehicles-driveable",
+      "expected": 64,
+      "actual": 64,
+      "pass": true,
+      "detail": "All 64 real fleet vehicles stay driveable"
+    },
+    {
+      "id": "v1-revoked",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "No unlock can revoke a vehicle"
+    },
+    {
+      "id": "v1-blocked-taxis",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "No taxi is blocked by progress"
+    },
+    {
+      "id": "v1-import-stable",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Importing the V1 progress returns the same digest before and after"
+    },
+    {
+      "id": "profile-writes",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "The whole extended catalog writes no profile"
+    },
+    {
+      "id": "learning-jobs",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "The whole extended catalog starts no learning job"
+    },
+    {
+      "id": "threshold:v2-challenge-crosswalk-approach",
+      "expected": "crosswalk_approach_speed",
+      "actual": "crosswalk_approach_speed",
+      "pass": true,
+      "detail": "MAX_SPEED_MPS -> 5 mps (AT_MOST) derived from crosswalk_approach_speed=5"
+    },
+    {
+      "id": "threshold:v2-challenge-dropoff-curb",
+      "expected": "dropoff_curb_distance",
+      "actual": "dropoff_curb_distance",
+      "pass": true,
+      "detail": "MAX_METRES -> 0.5 m (AT_MOST) derived from dropoff_curb_distance=0.5"
+    },
+    {
+      "id": "threshold:v2-challenge-emergency-brake",
+      "expected": "emergency_brake_intensity",
+      "actual": "emergency_brake_intensity",
+      "pass": true,
+      "detail": "MIN_RATIO -> 1 ratio (AT_LEAST) derived from emergency_brake_intensity=1"
+    },
+    {
+      "id": "threshold:v2-challenge-green-launch",
+      "expected": "green_launch_acceleration",
+      "actual": "green_launch_acceleration",
+      "pass": true,
+      "detail": "MAX_ACCEL_MPS2 -> 1.5 mps2 (AT_MOST) derived from green_launch_acceleration=1.5"
+    },
+    {
+      "id": "threshold:v2-challenge-hazard-reaction",
+      "expected": "hazard_reaction_delay",
+      "actual": "hazard_reaction_delay",
+      "pass": true,
+      "detail": "MAX_TICKS -> 30 ticks (AT_MOST) derived from hazard_reaction_delay=0.5"
+    },
+    {
+      "id": "threshold:v2-challenge-obstacle-clearance",
+      "expected": "obstacle_clearance",
+      "actual": "obstacle_clearance",
+      "pass": true,
+      "detail": "MIN_METRES -> 1 m (AT_LEAST) derived from obstacle_clearance=1"
+    },
+    {
+      "id": "threshold:v2-challenge-pedestrian-clearance",
+      "expected": "pedestrian_clearance",
+      "actual": "pedestrian_clearance",
+      "pass": true,
+      "detail": "MIN_METRES -> 2 m (AT_LEAST) derived from pedestrian_clearance=2"
+    },
+    {
+      "id": "threshold:v2-challenge-pedestrian-yield",
+      "expected": "pedestrian_yield_probability",
+      "actual": "pedestrian_yield_probability",
+      "pass": true,
+      "detail": "MIN_YIELDS_PER_OPPORTUNITY -> 4 count (AT_LEAST) derived from pedestrian_yield_probability=1"
+    },
+    {
+      "id": "threshold:v2-challenge-pickup-dwell",
+      "expected": "pickup_dwell_time",
+      "actual": "pickup_dwell_time",
+      "pass": true,
+      "detail": "MIN_TICKS -> 180 ticks (AT_LEAST) derived from pickup_dwell_time=3"
+    },
+    {
+      "id": "threshold:v2-challenge-pickup-precision",
+      "expected": "pickup_stop_precision",
+      "actual": "pickup_stop_precision",
+      "pass": true,
+      "detail": "MAX_METRES -> 1 m (AT_MOST) derived from pickup_stop_precision=1"
+    },
+    {
+      "id": "threshold:v2-challenge-red-gap",
+      "expected": "red_run_gap_acceptance",
+      "actual": "red_run_gap_acceptance",
+      "pass": true,
+      "detail": "MIN_TICKS -> 150 ticks (AT_LEAST) derived from red_run_gap_acceptance=2.5"
+    },
+    {
+      "id": "threshold:v2-challenge-reroute-patience",
+      "expected": "reroute_patience",
+      "actual": "reroute_patience",
+      "pass": true,
+      "detail": "MIN_TICKS -> 1200 ticks (AT_LEAST) derived from reroute_patience=20"
+    },
+    {
+      "id": "threshold:v2-challenge-reverse-recovery",
+      "expected": "reverse_recovery_duration",
+      "actual": "reverse_recovery_duration",
+      "pass": true,
+      "detail": "MIN_TICKS -> 150 ticks (AT_LEAST) derived from reverse_recovery_duration=2"
+    },
+    {
+      "id": "threshold:v2-challenge-u-turn-discipline",
+      "expected": "u_turn_willingness",
+      "actual": "u_turn_willingness",
+      "pass": true,
+      "detail": "MAX_COUNT_PER_OPPORTUNITY -> 0 count (AT_MOST) derived from u_turn_willingness=0"
+    },
+    {
+      "id": "threshold:v2-challenge-yellow-decision",
+      "expected": "yellow_stop_probability",
+      "actual": "yellow_stop_probability",
+      "pass": true,
+      "detail": "MIN_YIELDS_PER_OPPORTUNITY -> 2 count (AT_LEAST) derived from yellow_stop_probability=0.8"
+    }
+  ],
+  "summary": {
+    "checks": 40,
+    "passed": 40,
+    "pass": true
+  }
+}
