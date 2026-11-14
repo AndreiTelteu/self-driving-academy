@@ -123,3 +123,29 @@ export type {
   CityDecorCellGeometry,
   CityDecorInventoryEntry,
 } from './city-decor';
+export {
+  CHARACTER_BOX_INDICES,
+  CHARACTER_BOX_VERTICES,
+  CHARACTER_INDEX_BYTES,
+  CHARACTER_MATERIALS,
+  CHARACTER_VERTEX_BYTES,
+  CHARACTER_VISUAL_LODS,
+  CHARACTER_VISUAL_VERSION,
+  admitCharacterAssets,
+  buildCharacterVisual,
+  characterAssetBudget,
+  characterAssetInventory,
+  characterAssetManifest,
+  characterDrawCalls,
+  characterMaterial,
+  characterPartGroup,
+  characterVisualAlignment,
+} from './character-visuals';
+export type {
+  CharacterAssetInventoryEntry,
+  CharacterMaterial,
+  CharacterMaterialGroup,
+  CharacterMeshPart,
+  CharacterVisualDescription,
+  CharacterVisualLod,
+} from './character-visuals';
