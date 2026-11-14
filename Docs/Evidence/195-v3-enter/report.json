@@ -1,0 +1,447 @@
+{
+  "generatedBy": "scripts/run-v3-enter-report.mjs",
+  "command": "npm run enter:report",
+  "contract": "195-enter-vehicle-v1",
+  "tickHz": 60,
+  "policy": {
+    "contract": "195-enter-vehicle-v1",
+    "tickHz": 60,
+    "interactionRadiusM": 0.89,
+    "entryMode": "MANUAL"
+  },
+  "reference": {
+    "mapId": "neighbourhood-compact-v1",
+    "cityElements": 923,
+    "surfaces": 313,
+    "blockers": 86,
+    "cornerBuildingId": "bld:blk:0-0:0-0",
+    "cornerM": {
+      "x": 13.036853866666664,
+      "z": 24.715371599999997
+    },
+    "characterReachM": 0.89,
+    "vehicleColliderHalfExtentsM": {
+      "x": 0.85,
+      "z": 2
+    }
+  },
+  "scenarios": [
+    {
+      "id": "civil-open",
+      "label": "Civil parked in the near lane, character on the roadway at the door",
+      "vehicleId": "vehicle:civil-195",
+      "driverKind": "CIVILIAN",
+      "distanceM": 0.30000000000001137,
+      "doorSide": "LEFT",
+      "access": "ACCEPTED",
+      "code": null,
+      "blockerId": null,
+      "detail": null,
+      "verdict": "PASS"
+    },
+    {
+      "id": "taxi-in-ride",
+      "label": "Taxi already on a ride, same reach; the ride and the progress must survive",
+      "vehicleId": "vehicle:taxi-195",
+      "driverKind": "TAXI",
+      "distanceM": 0.30000000000001137,
+      "doorSide": "LEFT",
+      "access": "ACCEPTED",
+      "code": null,
+      "blockerId": null,
+      "detail": null,
+      "verdict": "PASS"
+    },
+    {
+      "id": "seat-occupied",
+      "label": "The single player seat already holds another car",
+      "vehicleId": "vehicle:taxi-195",
+      "driverKind": "UNKNOWN",
+      "distanceM": null,
+      "doorSide": null,
+      "access": "REFUSED",
+      "code": "VEHICLE_OCCUPIED",
+      "blockerId": "vehicle:taxi-195",
+      "detail": "the player seat already holds vehicle:taxi-195",
+      "verdict": "PASS"
+    },
+    {
+      "id": "same-tick-second-entry",
+      "label": "A second entry in the tick that already accepted one",
+      "vehicleId": "vehicle:taxi-195",
+      "driverKind": "UNKNOWN",
+      "distanceM": null,
+      "doorSide": null,
+      "access": "REFUSED",
+      "code": "DOUBLE_ENTRY_REFUSED",
+      "blockerId": null,
+      "detail": "tick 120 already accepted an entry into vehicle:taxi-195",
+      "verdict": "PASS"
+    },
+    {
+      "id": "out-of-range",
+      "label": "Character three metres away from the door, clear line",
+      "vehicleId": "vehicle:far-195",
+      "driverKind": "CIVILIAN",
+      "distanceM": 3.0149626863362684,
+      "doorSide": null,
+      "access": "REFUSED",
+      "code": "OUT_OF_RANGE",
+      "blockerId": null,
+      "detail": "door is 3.0150 m away, beyond the 0.8900 m reach",
+      "verdict": "PASS"
+    },
+    {
+      "id": "door-blocked",
+      "label": "A real obstacle box covers the door",
+      "vehicleId": "vehicle:civil-195",
+      "driverKind": "CIVILIAN",
+      "distanceM": 0.30000000000001137,
+      "doorSide": null,
+      "access": "REFUSED",
+      "code": "PATH_BLOCKED",
+      "blockerId": "hazard:obstacle-01",
+      "detail": "solid hazard:obstacle-01 stands between the character and the door",
+      "verdict": "PASS"
+    },
+    {
+      "id": "immobilized",
+      "label": "Vehicle availability is IMMOBILIZED in the PBI 023 damage state",
+      "vehicleId": "vehicle:civil-195",
+      "driverKind": "CIVILIAN",
+      "distanceM": null,
+      "doorSide": null,
+      "access": "REFUSED",
+      "code": "VEHICLE_UNAVAILABLE",
+      "blockerId": null,
+      "detail": "vehicle vehicle:civil-195 is IMMOBILIZED and cannot be driven",
+      "verdict": "PASS"
+    },
+    {
+      "id": "unknown-vehicle",
+      "label": "Intent names a car that is not in the fleet snapshot",
+      "vehicleId": "vehicle:missing-195",
+      "driverKind": "UNKNOWN",
+      "distanceM": null,
+      "doorSide": null,
+      "access": "REFUSED",
+      "code": "UNKNOWN_VEHICLE",
+      "blockerId": null,
+      "detail": "vehicle vehicle:missing-195 is not part of the fleet snapshot",
+      "verdict": "PASS"
+    },
+    {
+      "id": "vehicle-at-door",
+      "label": "Another car body covers the target door",
+      "vehicleId": "vehicle:civil-195",
+      "driverKind": "CIVILIAN",
+      "distanceM": 0.30000000000001137,
+      "doorSide": null,
+      "access": "REFUSED",
+      "code": "PATH_BLOCKED",
+      "blockerId": "vehicle:vehicle:neighbour-195",
+      "detail": "solid vehicle:vehicle:neighbour-195 stands between the character and the door",
+      "verdict": "PASS"
+    },
+    {
+      "id": "wall-between",
+      "label": "Building bld:blk:0-0:0-0 corner between the character and the door",
+      "vehicleId": "vehicle:wall-195",
+      "driverKind": "CIVILIAN",
+      "distanceM": 0.7071067811865476,
+      "doorSide": null,
+      "access": "REFUSED",
+      "code": "PATH_BLOCKED",
+      "blockerId": "bld:blk:0-0:0-0",
+      "detail": "solid bld:blk:0-0:0-0 stands between the character and the door",
+      "verdict": "PASS"
+    }
+  ],
+  "authority": {
+    "authorityConsumer": "VEHICLE",
+    "vehicleId": "vehicle:civil-195",
+    "commandConsumer": "VEHICLE",
+    "characterCommandsBefore": 42,
+    "vehicleCommandsAfter": 1,
+    "characterCommandsAfter": 0,
+    "characterDeliveryRefused": true,
+    "characterRefusalCode": "INACTIVE_CONSUMER_REFUSED",
+    "doubleDeliveryRefused": true,
+    "doubleDeliveryCode": "DOUBLE_DELIVERY_REFUSED",
+    "neutralizedActions": [
+      "throttle"
+    ],
+    "transitions": 1,
+    "entityCountBefore": 2,
+    "entityCountAfter": 2,
+    "characterBodyRetained": true,
+    "characterPositionBitsBefore": "405680000000000000000000000000004066166666666666",
+    "characterPositionBitsAfter": "405680000000000000000000000000004066166666666666",
+    "characterPositionUnchanged": true,
+    "secondEntrySameTickRefused": true,
+    "secondEntrySameTickCode": "DOUBLE_ENTRY_REFUSED",
+    "reEntryWithoutJournalCode": "VEHICLE_OCCUPIED"
+  },
+  "preserved": [
+    {
+      "vehicleId": "vehicle:civil-195",
+      "previousMode": "AUTO",
+      "mode": "MANUAL",
+      "bitsBefore": "17:76.65.68.69.63.6c.65.3a.63.69.76.69.6c.2d.31.39.35|8:43.49.56.49.4c.49.41.4e|5:73.65.64.61.6e|4056800000000000|0000000000000000|40663b3333333333|bff921fb54442d18|3feb333333333333|4000000000000000|3fe0a3d70a3d70a4|3ff1eb851eb851ec|9:41.56.41.49.4c.41.42.4c.45|405dc00000000000|0000000000000000|0000000000000000|0000000000000000|1:0|4:49.44.4c.45|1:30|1:0|0000000000000000|9:70.72.6f.66.69.6c.65.2d.31",
+      "bitsAfter": "17:76.65.68.69.63.6c.65.3a.63.69.76.69.6c.2d.31.39.35|8:43.49.56.49.4c.49.41.4e|5:73.65.64.61.6e|4056800000000000|0000000000000000|40663b3333333333|bff921fb54442d18|3feb333333333333|4000000000000000|3fe0a3d70a3d70a4|3ff1eb851eb851ec|9:41.56.41.49.4c.41.42.4c.45|405dc00000000000|0000000000000000|0000000000000000|0000000000000000|1:0|4:49.44.4c.45|1:30|1:0|0000000000000000|9:70.72.6f.66.69.6c.65.2d.31",
+      "bitsIdentical": true,
+      "rideId": null,
+      "routeLaneIds": [],
+      "rideProgressM": 0,
+      "fields": [
+        {
+          "field": "positionM",
+          "before": "{\"x\":90,\"y\":0,\"z\":177.85}",
+          "after": "{\"x\":90,\"y\":0,\"z\":177.85}",
+          "identical": true
+        },
+        {
+          "field": "yawRad",
+          "before": "-1.5707963267948966",
+          "after": "-1.5707963267948966",
+          "identical": true
+        },
+        {
+          "field": "halfExtentsM",
+          "before": "{\"x\":0.85,\"z\":2}",
+          "after": "{\"x\":0.85,\"z\":2}",
+          "identical": true
+        },
+        {
+          "field": "bottomM",
+          "before": "0.52",
+          "after": "0.52",
+          "identical": true
+        },
+        {
+          "field": "topM",
+          "before": "1.12",
+          "after": "1.12",
+          "identical": true
+        },
+        {
+          "field": "availability",
+          "before": "\"AVAILABLE\"",
+          "after": "\"AVAILABLE\"",
+          "identical": true
+        },
+        {
+          "field": "driverKind",
+          "before": "\"CIVILIAN\"",
+          "after": "\"CIVILIAN\"",
+          "identical": true
+        },
+        {
+          "field": "classId",
+          "before": "\"sedan\"",
+          "after": "\"sedan\"",
+          "identical": true
+        },
+        {
+          "field": "state.tick",
+          "before": "119",
+          "after": "119",
+          "identical": true
+        },
+        {
+          "field": "state.velocityMps",
+          "before": "{\"x\":0,\"y\":0,\"z\":0}",
+          "after": "{\"x\":0,\"y\":0,\"z\":0}",
+          "identical": true
+        },
+        {
+          "field": "state.laneId",
+          "before": "null",
+          "after": "null",
+          "identical": true
+        },
+        {
+          "field": "state.maneuverState",
+          "before": "\"IDLE\"",
+          "after": "\"IDLE\"",
+          "identical": true
+        },
+        {
+          "field": "state.routeLaneIds",
+          "before": "[]",
+          "after": "[]",
+          "identical": true
+        },
+        {
+          "field": "state.rideId",
+          "before": "null",
+          "after": "null",
+          "identical": true
+        },
+        {
+          "field": "state.rideProgressM",
+          "before": "0",
+          "after": "0",
+          "identical": true
+        },
+        {
+          "field": "state.appliedProfileVersion",
+          "before": "\"profile-1\"",
+          "after": "\"profile-1\"",
+          "identical": true
+        }
+      ]
+    },
+    {
+      "vehicleId": "vehicle:taxi-195",
+      "previousMode": "LEARNING",
+      "mode": "MANUAL",
+      "bitsBefore": "16:76.65.68.69.63.6c.65.3a.74.61.78.69.2d.31.39.35|4:54.41.58.49|5:73.65.64.61.6e|4056800000000000|0000000000000000|40663b3333333333|bff921fb54442d18|3feb333333333333|4000000000000000|3fe0a3d70a3d70a4|3ff1eb851eb851ec|9:41.56.41.49.4c.41.42.4c.45|405dc00000000000|0000000000000000|0000000000000000|4021000000000000|22:6c.61.6e.65.3a.61.76.65.6e.75.65.3a.73.6f.75.74.68.62.6f.75.6e.64|9:46.4f.4c.4c.4f.57.49.4e.47|1:33|22:6c.61.6e.65.3a.61.76.65.6e.75.65.3a.73.6f.75.74.68.62.6f.75.6e.64|13:6c.61.6e.65.3a.6a.75.6e.63.74.69.6f.6e|19:6c.61.6e.65.3a.73.74.72.65.65.74.3a.64.72.6f.70.6f.66.66|10:72.69.64.65.2d.30.36.31.2d.37|4079c80000000000|19:70.72.6f.66.69.6c.65.2d.76.65.72.73.69.6f.6e.2d.31.39.35",
+      "bitsAfter": "16:76.65.68.69.63.6c.65.3a.74.61.78.69.2d.31.39.35|4:54.41.58.49|5:73.65.64.61.6e|4056800000000000|0000000000000000|40663b3333333333|bff921fb54442d18|3feb333333333333|4000000000000000|3fe0a3d70a3d70a4|3ff1eb851eb851ec|9:41.56.41.49.4c.41.42.4c.45|405dc00000000000|0000000000000000|0000000000000000|4021000000000000|22:6c.61.6e.65.3a.61.76.65.6e.75.65.3a.73.6f.75.74.68.62.6f.75.6e.64|9:46.4f.4c.4c.4f.57.49.4e.47|1:33|22:6c.61.6e.65.3a.61.76.65.6e.75.65.3a.73.6f.75.74.68.62.6f.75.6e.64|13:6c.61.6e.65.3a.6a.75.6e.63.74.69.6f.6e|19:6c.61.6e.65.3a.73.74.72.65.65.74.3a.64.72.6f.70.6f.66.66|10:72.69.64.65.2d.30.36.31.2d.37|4079c80000000000|19:70.72.6f.66.69.6c.65.2d.76.65.72.73.69.6f.6e.2d.31.39.35",
+      "bitsIdentical": true,
+      "rideId": "ride-061-7",
+      "routeLaneIds": [
+        "lane:avenue:southbound",
+        "lane:junction",
+        "lane:street:dropoff"
+      ],
+      "rideProgressM": 412.5,
+      "fields": [
+        {
+          "field": "positionM",
+          "before": "{\"x\":90,\"y\":0,\"z\":177.85}",
+          "after": "{\"x\":90,\"y\":0,\"z\":177.85}",
+          "identical": true
+        },
+        {
+          "field": "yawRad",
+          "before": "-1.5707963267948966",
+          "after": "-1.5707963267948966",
+          "identical": true
+        },
+        {
+          "field": "halfExtentsM",
+          "before": "{\"x\":0.85,\"z\":2}",
+          "after": "{\"x\":0.85,\"z\":2}",
+          "identical": true
+        },
+        {
+          "field": "bottomM",
+          "before": "0.52",
+          "after": "0.52",
+          "identical": true
+        },
+        {
+          "field": "topM",
+          "before": "1.12",
+          "after": "1.12",
+          "identical": true
+        },
+        {
+          "field": "availability",
+          "before": "\"AVAILABLE\"",
+          "after": "\"AVAILABLE\"",
+          "identical": true
+        },
+        {
+          "field": "driverKind",
+          "before": "\"TAXI\"",
+          "after": "\"TAXI\"",
+          "identical": true
+        },
+        {
+          "field": "classId",
+          "before": "\"sedan\"",
+          "after": "\"sedan\"",
+          "identical": true
+        },
+        {
+          "field": "state.tick",
+          "before": "119",
+          "after": "119",
+          "identical": true
+        },
+        {
+          "field": "state.velocityMps",
+          "before": "{\"x\":0,\"y\":0,\"z\":8.5}",
+          "after": "{\"x\":0,\"y\":0,\"z\":8.5}",
+          "identical": true
+        },
+        {
+          "field": "state.laneId",
+          "before": "\"lane:avenue:southbound\"",
+          "after": "\"lane:avenue:southbound\"",
+          "identical": true
+        },
+        {
+          "field": "state.maneuverState",
+          "before": "\"FOLLOWING\"",
+          "after": "\"FOLLOWING\"",
+          "identical": true
+        },
+        {
+          "field": "state.routeLaneIds",
+          "before": "[\"lane:avenue:southbound\",\"lane:junction\",\"lane:street:dropoff\"]",
+          "after": "[\"lane:avenue:southbound\",\"lane:junction\",\"lane:street:dropoff\"]",
+          "identical": true
+        },
+        {
+          "field": "state.rideId",
+          "before": "\"ride-061-7\"",
+          "after": "\"ride-061-7\"",
+          "identical": true
+        },
+        {
+          "field": "state.rideProgressM",
+          "before": "412.5",
+          "after": "412.5",
+          "identical": true
+        },
+        {
+          "field": "state.appliedProfileVersion",
+          "before": "\"profile-version-195\"",
+          "after": "\"profile-version-195\"",
+          "identical": true
+        }
+      ]
+    }
+  ],
+  "camera": {
+    "tick": 43,
+    "previousEntityId": "player-character",
+    "authorityEntityId": "vehicle:civil-195",
+    "frameEntityId": "vehicle:civil-195",
+    "sameTick": true,
+    "transitioning": true,
+    "remainingStart": 17,
+    "transitionFrames": 18,
+    "remainingEnd": 0,
+    "everyFrameIsAuthority": true,
+    "transitions": 1,
+    "transitionTicks": 18,
+    "entityClones": 0,
+    "targetWrites": 0
+  },
+  "summary": {
+    "scenarios": 10,
+    "scenariosPassed": 10,
+    "criterion1": true,
+    "criterion2a": true,
+    "criterion2b": true,
+    "camera": true,
+    "pass": true
+  },
+  "limitations": [
+    "Contractul este pur headless: nu creează scenă, cameră Babylon, input sau corpuri; compunerea (input 066, camera 194, vehiculul 024) aplică decizia în tick-ul curent.",
+    "Accesul este planar, ca fizica 192: distanța se măsoară în X/Z, iar solidele contează doar dacă se suprapun vertical cu corpul personajului. Un portal, o trapă sau o ușă deschisă nu sunt modelate.",
+    "Ușa este mijlocul flancului caroseriei (amprenta reală 0,85 × 2,00 m), nu un mâner modelat; un vehicul cu o ușă în altă poziție ar cere un câmp de contract suplimentar.",
+    "„Ocupat” este singurul scaun de jucător din 068 (un vehicul primește inputul), nu al doilea jucător: contractul nu are noțiunea de alt șofer uman.",
+    "Indisponibilitatea folosește regula reală din 023 (`IMMOBILIZED` = accelerație zero și frână maximă); 068 nu are o misiune care să interzică preluarea, deci nu a fost inventată una.",
+    "Proba este deterministă și headless; feel-ul intrării, animația `enter-vehicle` din 191 și validarea în browser rămân la integrarea 195/196."
+  ],
+  "determinism": {
+    "runs": 2,
+    "identical": true,
+    "digest": "6af63aee34ce49530e7a250c89c488ed5bfbec06302e429390235736d140ba52"
+  }
+}

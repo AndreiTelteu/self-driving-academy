@@ -176,3 +176,28 @@ export type {
   CharacterCameraTransition,
   CharacterCameraWorld,
 } from './character-camera';
+export {
+  ENTER_VEHICLE_CONTRACT_VERSION,
+  VEHICLE_ENTRY_ERROR_CODES,
+  VEHICLE_ENTRY_POLICY,
+  VEHICLE_ENTRY_REFUSAL_CODES,
+  VehicleEntryError,
+  decideVehicleEntry,
+  vehicleEntryBits,
+  vehicleEntryDoor,
+} from './enter-vehicle';
+export type {
+  VehicleEntryAcceptance,
+  VehicleEntryCameraRequest,
+  VehicleEntryCharacterBody,
+  VehicleEntryDecision,
+  VehicleEntryDoor,
+  VehicleEntryDoorSide,
+  VehicleEntryEntityCounts,
+  VehicleEntryErrorCode,
+  VehicleEntryRefusal,
+  VehicleEntryRefusalCode,
+  VehicleEntryRequest,
+  VehicleEntryState,
+  VehicleEntryVehicle,
+} from './enter-vehicle';
