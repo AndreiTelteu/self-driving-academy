@@ -90,5 +90,59 @@ export {
   createCharacterPoseWriter,
 } from './authority';
 export type { CharacterAuthority, CharacterPoseWriter, CharacterRenderFrame } from './authority';
+export {
+  WALKER_CONTRACT_VERSION,
+  WALKER_GAITS,
+  WALKER_GAIT_SPEEDS_MPS,
+  WALKER_IDLE_INPUT,
+  WALKER_POLICY,
+  createWalker,
+  walkerClipForSpeed,
+} from './walker';
+export type {
+  Walker,
+  WalkerCapsule,
+  WalkerEvent,
+  WalkerEventKind,
+  WalkerGait,
+  WalkerInput,
+  WalkerOptions,
+  WalkerRegistrationGuard,
+  WalkerState,
+  WalkerStats,
+  WalkerStepInput,
+  WalkerStepResult,
+  WalkerVehicleSnapshot,
+} from './walker';
+export {
+  WALK_BLOCKER_KINDS,
+  WALK_CURB_HEIGHT_M,
+  WALK_SURFACE_KINDS,
+  createCityWalkWorld,
+  createWalkWorld,
+} from './walk-world';
+export type {
+  WalkBlocker,
+  WalkBlockerInput,
+  WalkBlockerKind,
+  WalkSurface,
+  WalkSurfaceInput,
+  WalkSurfaceKind,
+  WalkWorld,
+  WalkWorldInput,
+  WalkWorldStats,
+} from './walk-world';
+export {
+  boundsOverlap,
+  circlePenetrationM,
+  circlePushOut,
+  createOrientedRectanglePolygon,
+  createRectanglePolygon,
+  createWalkPolygon,
+  walkPolygonAreaM2,
+  walkPolygonContains,
+  walkPolygonDistanceM,
+} from './walk-geometry';
+export type { CirclePushOut, WalkBounds2, WalkPoint2, WalkPolygon } from './walk-geometry';
 export { CHARACTER_CONTRACT_ERROR_CODES, CharacterContractError } from './errors';
 export type { CharacterContractErrorCode } from './errors';
