@@ -32,9 +32,9 @@
 | UI | Completed | 0 | 0 | 1 / 1 | `██████████` 100% |
 | Validare | Completed | 0 | 0 | 4 / 4 | `██████████` 100% |
 | Validare și release | Completed | 0 | 0 | 12 / 12 | `██████████` 100% |
-| Validare V2 | V2 | 1 | 0 | 1 / 2 | `█████░░░░░` 50% |
+| Validare V2 | Completed | 0 | 0 | 2 / 2 | `██████████` 100% |
 | Vehicule și fizică | Completed | 0 | 0 | 11 / 11 | `██████████` 100% |
-| Total | - | 14 | 0 | 221 / 235 | `█████████░` 94% |
+| Total | - | 13 | 0 | 222 / 235 | `█████████░` 94% |
 <!-- loop-pbi:progress:end -->
 
 # Backlog Kanban Self Driving Academy
