@@ -452,3 +452,41 @@ de harness cu pietoni și pericole pentru probele de timp V2; soak-ul V2; playte
 Gate-ul se deblochează prin re-măsurarea dovezilor 224, extinderea harness-ului 220/224 cu workload-ul V2
 și o sesiune pe hardware real. Dovezile, cu tabelul complet, cifrele, comenzile și ce nu a putut rula,
 sunt în [Evidence/189-v2-regression](Evidence/189-v2-regression/README.md).
+
+## Validarea integrală V3 (PBI 201, 15 noiembrie 2026)
+
+Validarea V3 reexecută efectiv lanțul de personaj livrat de 191–200 și publică un verdict pe fiecare
+criteriu al PBI-ului, nu un verdict global. **Rezultatul acestei revizii: 2 criterii `PASS`, 0 `FAIL`,
+1 `NOT_RUN`; toate cele 11 comenzi ale raportului au exit code 0, iar suita completă are 3 408 teste
+trecute și 0 eșuate.** `NOT_RUN` este declarat, nu ascuns: fără GPU real și fără un harness cu personaj,
+pietoni și pericole, partea de timp a contractului 25 rămâne deschisă.
+
+| Criteriu | Verdict | Dovada principală |
+| --- | --- | --- |
+| C1 fluxurile manual/AUTO după intrare/ieșire | `PASS` | Lanțul real 192 → 195 → 193 → 196 → 197 → 198 rulează pentru `AUTO`, `MANUAL` și `LEARNING`: 3/3 moduri și 3/3 conduceri lungi trec; fiecare mod se reia după ieșire (FOCUS → TAKE → RETURN), iar personajul merge 1,226 m după ultima ieșire. 0 comenzi livrate consumatorului inactiv, 0 corpuri create de walker, 0 entități clonate de cameră |
+| C2 catalogul și indicatorii nu sunt alterați de mers | `PASS` | 9/9 digeste SHA-256 identice după 5 000 de tick-uri de mers (114,10 m) **și** după reload 200: catalog 092 (fișier + date + registru), capabilități 187, KPI 209, ledger 209, XP 213 (100,5 XP, nivel 2), daily 211 și sesiunea 135. Reload `ACCEPTED`, checksum verificat, 0 corpuri create, al doilea reload identic |
+| C3 contractul 25 pe workload V3 versionat | `NOT_RUN` | 158 `PASS` (3/3 echivalențe `IDENTICAL`), 157 `STRUCTURAL_PASS` (17 `PASS`, 0 `FAIL`, 2 `NOT_MEASURED`), 159 `SOAK_PASS` (60,002 min, 20 cicluri), 224 reexecutat structural `PASS` (16 `PASS`, 0 `FAIL`, 1 `NOT_VALIDATED`), 154 9/9 combinații, 188 15 provocări. Manifest `203-initial-1` nemodificat. FPS/frame pe GPU real lipsește, deci criteriul rămâne deschis |
+
+**Workload-ul V3 versionat.** `201-workload-v3-1` compune un personaj cu cele zece contracte 191–200,
+30 de taxiuri și 40 de civili (workload-ul maxim V1 din manifest), 96 de pietoni pe 80 de treceri (164),
+96 de obstacole și 11 stimuli (165), catalogul complet de 80 de chei (187) și 15 provocări în 5 familii
+(188). Bugetele rămân exact cele din `203-initial-1`; niciun prag V3 nu a fost adăugat sau relaxat.
+Componentele sunt reexecutate funcțional, dar **timpul rămâne `NOT_RUN`**: harness-ul 155/156/158/220/224
+exprimă doar flota și civilii, fără personaj, pietoni sau pericole. Nu s-au inventat cifre de FPS sau tick.
+
+**Dovada că mersul nu atinge catalogul și indicatorii.** Digestul este luat pe octeții canonici, nu pe
+impresii: catalogul 092 este citit din fișier și din datele încărcate de aplicație, tabelul 187 din modulul
+real, iar KPI-ul 209, ledgerul 209 și XP 213 din bundle-ul economic real al sesiunii, re-exportat din
+depozit după cele 5 000 de tick-uri de mers. Apoi arhiva v2 este migrată la v3 prin 200, citită strict și
+reluată, iar digesteurile se recalculează din documentul reluat: toate cele nouă rămân identice.
+
+**Baseline-ul nu a fost relaxat.** `Docs/performance-budgets.json` are același SHA-256 ca în `HEAD`
+(`10d78ab5…75a21c`), `budgetVersion` rămâne `203-initial-1`, `approvedGate` este `false`, iar
+`hardwareGameplayGate` rămâne `NOT_VALIDATED`. Gate-ul 224 a fost reexecutat proaspăt, cu `--measure
+--out` în dovezile acestui PBI, ca să nu suprascrie măsurătoarea comisă.
+
+**Ce rămâne deschis.** FPS/frame/GPU pe hardware real, pe aceeași revizie și ambele backenduri (224 și
+operatorul); un fixture de harness cu personaj, pietoni și pericole pentru probele de timp V3 (220/224);
+cei doi pași de streaming vizual `NOT_MEASURED` ai lui 157 (157/223); soak-ul V3 (159/224); playtestul
+uman moștenit din 216 (235/216). Dovezile, matricea criteriu → comandă → exit code → verdict, workload-ul
+și cifrele reale sunt în [Evidence/201-v3-validation](Evidence/201-v3-validation/README.md).
