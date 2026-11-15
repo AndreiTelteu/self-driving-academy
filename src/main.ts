@@ -40,6 +40,8 @@ const settings = captureConfig
       },
     }
   : defaultSettings;
+/** Calitatea curentă a sesiunii: pornește din setări și urmează comutările de preset live (PBI 241). */
+let sessionQuality = settings.quality;
 const compositionContext = Object.freeze({
   schemaVersion: 1 as const,
   units: 'SI' as const,
@@ -53,7 +55,7 @@ let releaseCapture: (() => void) | undefined;
 const diagnosticsPanel = createDiagnosticsPanel(app, {
   report: () => diagnostics?.report() ?? null,
   // Calitatea adaptivă are nevoie de eșantioane chiar și cu panoul închis.
-  setEnabled: (enabled) => diagnostics?.setEnabled(enabled || settings.quality.adaptive),
+  setEnabled: (enabled) => diagnostics?.setEnabled(enabled || sessionQuality.adaptive),
   resolution: () => {
     const state = composition?.view.daylight.getResolutionState();
     if (!state) return null;
@@ -159,11 +161,11 @@ const application = createApplicationLifecycle({
             });
           }
           owned = diagnoseBackend(backend, {
-            enabled: diagnosticsPanel.root.open || settings.quality.adaptive,
+            enabled: diagnosticsPanel.root.open || sessionQuality.adaptive,
             // Calitatea adaptivă (rezoluție întâi, apoi preset) numai când jucătorul a cerut-o.
             onSample: (sample) => {
               // Pauzele și tab-urile ascunse produc intervale uriașe: nu reprezintă costul cadrului.
-              if (!settings.quality.adaptive || sample.frameMs > 1000) return;
+              if (!sessionQuality.adaptive || sample.frameMs > 1000) return;
               ownedComposition?.view.daylight.observe(sample, performance.now());
             },
             counters: () => {
@@ -285,6 +287,12 @@ interface V3DebugGlobal {
   read(): unknown;
   backend(): unknown;
   stats(): unknown;
+  /** PBI 241: starea AA/post-procesării (cine aplică tone mappingul, HDR, efecte). */
+  postProcessing(): unknown;
+  /** PBI 241 (numai DEV, `?capture` sau `?debug`): comutare live de preset prin `applyPreferences`. */
+  setPreset?(preset: 'LOW' | 'MEDIUM' | 'HIGH'): void;
+  /** PBI 241 (numai DEV, `?capture` sau `?debug`): scena Babylon, pentru resurse și calibrare. */
+  scene?(): unknown;
   reset(): void;
   probeDoubleDelivery(): string;
 }
@@ -293,9 +301,24 @@ const debugGlobal: V3DebugGlobal = {
   read: () => composition?.read() ?? null,
   backend: () => composition?.backendInfo() ?? null,
   stats: () => composition?.stats() ?? null,
+  postProcessing: () => composition?.view.daylight.getPostProcessingState() ?? null,
   reset: () => composition?.reset(),
   probeDoubleDelivery: () => composition?.probeDoubleDelivery() ?? 'NO_COMPOSITION',
 };
+// Producția păstrează contractul numai-citire; scrierile de prezentare apar doar în DEV, cu
+// `?capture` sau `?debug`. Niciuna nu scrie în simulare.
+if (
+  import.meta.env.DEV ||
+  captureConfig ||
+  new URLSearchParams(window.location.search).has('debug')
+) {
+  debugGlobal.setPreset = (preset) => {
+    if (!composition) return;
+    sessionQuality = { ...sessionQuality, preset };
+    composition.view.daylight.applyPreferences(sessionQuality);
+  };
+  debugGlobal.scene = () => composition?.view.scene ?? null;
+}
 (globalThis as unknown as { __v3Composition?: V3DebugGlobal }).__v3Composition = debugGlobal;
 
 const dispose = (): void => {

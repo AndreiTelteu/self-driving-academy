@@ -29,6 +29,7 @@ Layoutul este bootstrap-ul din `index.html` și `src/style.css`; HUD-ul 236 este
 
 - [ ] Un ecran de start peste scena randată (cu orașul în fundal, cameră cinematică lentă) conține titlul jocului, „Joacă”, „Setări” și indicatorul de încărcare. Backendul, tick-ul și textele de bootstrap nu sunt vizibile jucătorului.
 - [ ] Meniul de pauză (Esc) are aceleași stiluri și include Reia, Setări, Reîncarcă și Ieși.
+- [ ] „Setări” montează panoul de setări existent (`createGameSettingsPanel`), iar schimbarea presetului de calitate se aplică live prin `daylight.applyPreferences` (241), fără reîncărcare și persistată în setări (mutat din 241).
 - [ ] HUD-ul de condus are un vitezometru clar (km/h), indicatorul de mod sau vehicul și pictograme de acțiune contextuale („G — Intră în taxi” numai lângă o mașină); HUD-ul de mers este minimal.
 - [ ] Panoul Diagnostic și citirile tick/backend sunt disponibile numai în dev sau cu un flag explicit (de exemplu `?debug=1`).
 - [ ] Un sistem de design unitar (tokeni de culoare, tipografie, spațiere, colțuri și umbre) pentru toate panourile; contrast WCAG AA; lizibil la 1280×720 și 2560×1440.

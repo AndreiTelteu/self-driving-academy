@@ -114,8 +114,8 @@ interface GeometryBuilder {
 
 const PALETTE: Readonly<Record<CityMaterialKey, readonly [number, number, number]>> = Object.freeze(
   {
-    asphalt: [0.1, 0.11, 0.13],
-    intersection: [0.13, 0.14, 0.16],
+    asphalt: [0.19, 0.2, 0.22],
+    intersection: [0.22, 0.23, 0.25],
     marking: [0.96, 0.94, 0.8],
     sidewalk: [0.62, 0.6, 0.56],
     curb: [0.75, 0.74, 0.7],

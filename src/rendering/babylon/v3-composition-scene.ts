@@ -111,6 +111,8 @@ export function createV3CompositionScene(options: V3CompositionSceneOptions): V3
   camera.maxZ = 600;
   camera.fov = 1.4;
   scene.activeCamera = camera;
+  // PBI 241: AA și post-procesarea se atașează camerei de joc, nu camerei de bootstrap.
+  daylight.attachCamera(camera);
   const representations = new Map<string, ReturnType<VehicleVisualStage['create']>>();
   let frames = 0;
 

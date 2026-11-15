@@ -37,6 +37,61 @@ export const QUALITY_PRESETS = Object.freeze({
   }),
 });
 const presets: readonly QualityPreset[] = ['LOW', 'MEDIUM', 'HIGH'];
+
+/**
+ * PBI 241 — antialiasing și post-procesare pe preset.
+ *
+ * - `pipeline: false` (LOW): fără `DefaultRenderingPipeline`. Tone mappingul se aplică în materiale
+ *   (o singură dată, din `scene.imageProcessingConfiguration`), iar marginile trec printr-un singur
+ *   pas FXAA pe ținta LDR a camerei. Bloom, sharpen, vignetă, grading și dithering sunt oprite.
+ * - `pipeline: true` (MEDIUM/HIGH): ținta HDR half-float; tone mappingul, vigneta, gradingul și
+ *   ditheringul se aplică în pipeline (materialele nu le mai aplică), urmate de FXAA sau MSAA.
+ * - `msaaSamples`: 4 pe HIGH. WebGPU acceptă numai 1 sau 4 eșantioane, deci 2× nu este portabil;
+ *   MEDIUM folosește FXAA (permis de PBI) ca ambele backenduri să dea aceeași imagine.
+ */
+export interface PostProcessingTier {
+  readonly pipeline: boolean;
+  readonly antialias: 'FXAA' | 'MSAA';
+  readonly msaaSamples: 1 | 4;
+  readonly bloom: boolean;
+  readonly sharpen: boolean;
+  readonly vignette: boolean;
+  readonly grading: boolean;
+  readonly dithering: boolean;
+}
+export const POST_PROCESSING_PRESETS: Readonly<Record<QualityPreset, PostProcessingTier>> =
+  Object.freeze({
+    LOW: Object.freeze({
+      pipeline: false,
+      antialias: 'FXAA',
+      msaaSamples: 1,
+      bloom: false,
+      sharpen: false,
+      vignette: false,
+      grading: false,
+      dithering: false,
+    }),
+    MEDIUM: Object.freeze({
+      pipeline: true,
+      antialias: 'FXAA',
+      msaaSamples: 1,
+      bloom: true,
+      sharpen: true,
+      vignette: true,
+      grading: true,
+      dithering: true,
+    }),
+    HIGH: Object.freeze({
+      pipeline: true,
+      antialias: 'MSAA',
+      msaaSamples: 4,
+      bloom: true,
+      sharpen: true,
+      vignette: true,
+      grading: true,
+      dithering: true,
+    }),
+  });
 /** Admit optional presentation resources before creation; never reject a simulated entity. */
 export function checkVisualResources(
   preset: QualityPreset,

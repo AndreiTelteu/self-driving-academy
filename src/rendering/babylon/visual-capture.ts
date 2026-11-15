@@ -203,6 +203,7 @@ export function installVisualCapture(options: VisualCaptureOptions): () => void 
         devicePixelRatio: window.devicePixelRatio,
         backend: composition.backendInfo(),
         stats: composition.stats(),
+        postProcessing: composition.view.daylight.getPostProcessingState(),
         currentView: current,
       };
     },

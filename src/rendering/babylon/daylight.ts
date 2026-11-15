@@ -2,14 +2,15 @@ import { HemisphericLight } from '@babylonjs/core/Lights/hemisphericLight.js';
 import { DirectionalLight } from '@babylonjs/core/Lights/directionalLight.js';
 import { ShadowGenerator } from '@babylonjs/core/Lights/Shadows/shadowGenerator.js';
 import { StandardMaterial } from '@babylonjs/core/Materials/standardMaterial.js';
-import { ImageProcessingConfiguration } from '@babylonjs/core/Materials/imageProcessingConfiguration.js';
-import { Color3, Color4 } from '@babylonjs/core/Maths/math.color.js';
+import { Color3 } from '@babylonjs/core/Maths/math.color.js';
 import { Vector3 } from '@babylonjs/core/Maths/math.vector.js';
 import type { Scene } from '@babylonjs/core/scene.js';
+import type { Camera } from '@babylonjs/core/Cameras/camera.js';
 import type { AbstractMesh } from '@babylonjs/core/Meshes/abstractMesh.js';
 import type { QualityPreferences } from '../../settings';
 import { resolveQuality, createAdaptiveQuality, effectiveResolutionScale } from '../quality-policy';
 import type { QualitySample } from '../quality-policy';
+import { createPostProcessing } from './post-processing';
 
 export type DaylightMaterial =
   'road' | 'marking' | 'vehicle' | 'signalHousing' | 'red' | 'amber' | 'green';
@@ -79,20 +80,17 @@ export function createDaylight(
   /** Insertion-ordered registry; the priority is the admission key of the bounded map. */
   const casters = new Map<AbstractMesh, ShadowCasterPriority>();
   const previousClear = scene.clearColor;
-  const processing = new ImageProcessingConfiguration();
-  processing.toneMappingEnabled = true;
-  processing.toneMappingType = ImageProcessingConfiguration.TONEMAPPING_ACES;
-  processing.exposure = 1;
-  processing.contrast = 1;
-  scene.clearColor = new Color4(0.55, 0.74, 0.88, 1);
+  // PBI 241: o singură configurație de imagine (`scene.imageProcessingConfiguration`) pentru toate
+  // materialele; `post` o calibrează și decide dacă o aplică pipeline-ul sau materialele.
+  const post = createPostProcessing(scene);
   const ambient = new HemisphericLight('daylight-ambient', Vector3.Up(), scene);
-  ambient.intensity = 0.75;
-  ambient.groundColor = new Color3(0.25, 0.28, 0.3);
+  ambient.intensity = 0.55;
+  ambient.groundColor = new Color3(0.42, 0.44, 0.46);
   const sun = new DirectionalLight('daylight-sun', new Vector3(-0.45, -1, 0.35).normalize(), scene);
   sun.position.set(25, 45, -25);
-  sun.intensity = 1.1;
+  sun.intensity = 0.95;
   const palette: Record<DaylightMaterial, [number, number, number]> = {
-    road: [0.09, 0.11, 0.14],
+    road: [0.17, 0.19, 0.22],
     marking: [0.98, 0.95, 0.78],
     vehicle: [0.95, 0.62, 0.07],
     signalHousing: [0.018, 0.025, 0.03],
@@ -103,7 +101,6 @@ export function createDaylight(
   const materials = new Map<DaylightMaterial, StandardMaterial>();
   for (const [key, rgb] of Object.entries(palette)) {
     const material = new StandardMaterial(`daylight-${key}`, scene);
-    material.imageProcessingConfiguration = processing;
     material.diffuseColor = new Color3(...rgb);
     material.specularColor = Color3.Black();
     material.maxSimultaneousLights = 2;
@@ -157,11 +154,18 @@ export function createDaylight(
       shadow.normalBias = 0.02;
       syncCasters();
     }
+    post.setPreset(quality.preset);
     applyResolution();
   };
   apply();
   return {
     getQuality: () => quality,
+    /** PBI 241: camera de joc la care se atașează AA și post-procesarea (fără ea, doar materialele). */
+    attachCamera(camera: Camera | null): void {
+      assertActive();
+      post.attachCamera(camera);
+    },
+    getPostProcessingState: () => post.getState(),
     material(key: DaylightMaterial): StandardMaterial {
       assertActive();
       const value = materials.get(key);
@@ -289,6 +293,7 @@ export function createDaylight(
       disposed = true;
       shadow?.dispose();
       shadow = null;
+      post.dispose();
       casters.clear();
       for (const material of materials.values()) material.dispose();
       materials.clear();
