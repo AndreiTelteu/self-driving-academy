@@ -1,0 +1,406 @@
+{
+  "version": "202-v3-capabilities-v1",
+  "command": "npm run release:v3",
+  "generatedBy": "scripts/run-v3-release-artifact.mjs",
+  "derivation": {
+    "sources": [
+      "PBI/Done/191…201",
+      "Docs/Evidence/191…201/report.json",
+      "src/character/index.ts",
+      "src/input/authority-arbiter.ts",
+      "src/settings/store.ts",
+      "src/main.ts"
+    ],
+    "rule": "Fiecare capabilitate este legată de contractul și raportul comis al PBI-ului care o livrează; numerele sunt citite din raport, iar nivelul de livrare este derivat din compoziția reală (`src/main.ts`).",
+    "honestyRule": "Un contract headless nu este prezentat ca funcționalitate jucabilă în browser; limitările 199 (XP de mers), 157/201 (streaming vizual) și etapa de plan (56 de chei) sunt declarate explicit."
+  },
+  "composition": {
+    "bootstrap": "src/main.ts",
+    "characterReferences": 0,
+    "authorityReferences": 0,
+    "walkerReferences": 0,
+    "driveBindingReferences": 0,
+    "modeBindingReferences": 0,
+    "verdict": "NOT_COMPOSED",
+    "detail": "Compoziția de browser (`src/main.ts`) leagă renderer-ul, ciclul de viață și focusul; contractele V3 191–200 sunt headless și dovedite de rapoartele lor, dar nu sunt cablate într-o sesiune de browser."
+  },
+  "capabilities": [
+    {
+      "id": "character-third-person",
+      "title": "Personaj third person cu schelet, scară umană și cinci clipuri",
+      "contract": "191-character-v1",
+      "what": "Personaj de 1.78 m, 17 articulații, clipurile idle, walk, run, enter-vehicle, exit-vehicle eșantionate la 60 Hz; contactul cu solul este măsurat pe fiecare cadru, nu apreciat.",
+      "evidence": [
+        "Docs/Evidence/191-v3-character/report.json",
+        "Docs/Evidence/191-v3-character/README.md"
+      ],
+      "metrics": {
+        "joints": 17,
+        "clips": 5,
+        "clipsPassed": 5,
+        "samplingHz": 60,
+        "compatibility": "9/9",
+        "authorityFrames": 309,
+        "visualIssues": 0
+      },
+      "limitation": "Reprezentarea Babylon (`src/rendering/character-visuals.ts`) este o descriere pură de mesh-uri; nu este instanțiată în `src/main.ts`.",
+      "level": "HEADLESS_CONTRACT"
+    },
+    {
+      "id": "walk-run-idle",
+      "title": "Mers, alergare și idle pe tick fix, cu coliziune și trepte reale",
+      "contract": "192-walker-v1",
+      "what": "Walker determinist la 60 Hz: mers 1.370968 m/s, alergare 2.909091 m/s, pas maxim 0.14 m (bordura reală), clipul ales din viteza măsurată.",
+      "evidence": [
+        "Docs/Evidence/192-v3-walker/report.json",
+        "Docs/Evidence/192-v3-walker/README.md"
+      ],
+      "metrics": {
+        "scenarios": "8/8",
+        "walkSpeedMps": 1.370967741935484,
+        "runSpeedMps": 2.909090909090909,
+        "stepCeilingM": 0.14,
+        "maxPenetrationM": 1.4432899320127035e-15,
+        "vehicleBodiesCreated": 0
+      },
+      "limitation": "Walker-ul nu creează corpuri de mașină și nu este pășit de compoziția de browser; probele sunt native, fără renderer.",
+      "level": "HEADLESS_CONTRACT"
+    },
+    {
+      "id": "single-input-authority",
+      "title": "O singură autoritate de input: personaj sau vehicul, niciodată ambele",
+      "contract": "193-input-authority-v1",
+      "what": "Arbitrajul 193 produce exact o comandă pe tick pentru entitatea activă; portul este exact portul de tastatură din 066, iar tastele ținute la tranziție rămân neutralizate până la o eliberare reală.",
+      "evidence": [
+        "Docs/Evidence/193-v3-authority/report.json",
+        "Docs/Evidence/193-v3-authority/README.md"
+      ],
+      "metrics": {
+        "scenarios": "13/13",
+        "exhaustiveTicks": 512,
+        "wrongConsumerDeliveries": 0,
+        "simultaneousNonEmptyTicks": 0,
+        "transitions": "18/18",
+        "snapshotBytes": 169
+      },
+      "limitation": "Arbitrajul nu citește tastatura singur; are nevoie de un consumator care să compună adaptorul 066 peste portul lui.",
+      "level": "HEADLESS_CONTRACT"
+    },
+    {
+      "id": "third-person-camera",
+      "title": "Cameră third person cu tranziție de 18 tick-uri și ocluzie reală",
+      "contract": "194-character-camera-v1",
+      "what": "Camera urmărește exact entitatea autoritară, trunchiază raza la primul obstacol cu marjă de 0.05 m, limitează pitch-ul și distanța și serializează starea pentru reload.",
+      "evidence": [
+        "Docs/Evidence/194-v3-camera/report.json",
+        "Docs/Evidence/194-v3-camera/README.md"
+      ],
+      "metrics": {
+        "scenarios": "5/5",
+        "transitionTicks": 18,
+        "transitionFrames": 18,
+        "maxStepM": 0.3340095457383623,
+        "entityClones": 0,
+        "targetWrites": 0
+      },
+      "limitation": "Orbita camerei este intenție explicită (`orbit.distanceM`, `invertYaw`, `invertPitch`); nu există un binding de mouse pentru camera personajului.",
+      "level": "HEADLESS_CONTRACT"
+    },
+    {
+      "id": "enter-any-vehicle",
+      "title": "Intrare în orice mașină accesibilă, cu autoritate și cursă păstrate",
+      "contract": "195-enter-vehicle-v1",
+      "what": "Ușa este pe flancul real al caroseriei, raza de interacțiune este 0.89 m (jumătatea anvergurii brațelor din 191), iar acceptarea impune modul MANUAL; poziția, ruta și cursa rămân bit-identice.",
+      "evidence": [
+        "Docs/Evidence/195-v3-enter/report.json",
+        "Docs/Evidence/195-v3-enter/README.md"
+      ],
+      "metrics": {
+        "scenarios": "10/10",
+        "interactionRadiusM": 0.89,
+        "entryMode": "MANUAL",
+        "cameraTransitionTicks": 18
+      },
+      "limitation": "Decizia este o funcție pură; nu există un adaptor de tastă pentru intrare compus în build-ul de browser.",
+      "level": "HEADLESS_CONTRACT"
+    },
+    {
+      "id": "exit-any-vehicle",
+      "title": "Ieșire într-un punct fizic valid, fără teleportare",
+      "contract": "196-exit-vehicle-v1",
+      "what": "Candidații sunt flancurile, spatele și fața caroseriei, cu marjă liberă de 0.05 m; mașina eliberată revine în AUTO cu ruta de dinainte de preluare, iar peste 1.370968 m/s ieșirea este refuzată.",
+      "evidence": [
+        "Docs/Evidence/196-v3-exit/report.json",
+        "Docs/Evidence/196-v3-exit/README.md"
+      ],
+      "metrics": {
+        "scenarios": "12/12",
+        "clearanceM": 0.05,
+        "releaseMode": "AUTO",
+        "maxExitSpeedMps": 1.370967741935484,
+        "entitiesAfter": 2
+      },
+      "limitation": "Ieșirea cere o decizie explicită a consumatorului; nu există un control live dedicat în afara contractului.",
+      "level": "HEADLESS_CONTRACT"
+    },
+    {
+      "id": "taxi-switch-from-list",
+      "title": "Schimbare rapidă a taxiului: FOCUS, TAKE și RETURN",
+      "contract": "197-fleet-switch-v1",
+      "what": "FOCUS mută doar camera și nu mișcă personajul (probă la 200 m), TAKE compune atomic ieșirea 196 cu intrarea 195, iar RETURN readuce corpul fie la poziția de dinainte de preluare, fie la punctul valid al ieșirii.",
+      "evidence": [
+        "Docs/Evidence/197-v3-fleet-switch/report.json",
+        "Docs/Evidence/197-v3-fleet-switch/README.md"
+      ],
+      "metrics": {
+        "scenarios": "12/12",
+        "focusProofDistanceM": 200,
+        "takeReachM": 0.89,
+        "projection": "PASS"
+      },
+      "limitation": "Lista propriu-zisă este panoul 075: rândurile sunt butoane și se aleg cu clic; nu există selecție din tastatură în listă.",
+      "level": "HEADLESS_CONTRACT"
+    },
+    {
+      "id": "manual-learning-segments",
+      "title": "Segmente MANUAL/LEARNING: mersul nu devine demonstrație de condus",
+      "contract": "198-walking-segments-v1",
+      "what": "Read model-ul 198 transformă tranzițiile 195/196/197 în segmente închise; 3600 tick-uri și 82.26 m de mers produc 0 segmente și 0 candidați, iar un singur segment LEARNING eligibil închis produce exact un candidat 069.",
+      "evidence": [
+        "Docs/Evidence/198-v3-walking-segments/report.json",
+        "Docs/Evidence/198-v3-walking-segments/README.md"
+      ],
+      "metrics": {
+        "scenarios": "16/16",
+        "walkingTicks": 3600,
+        "walkingDistanceM": 82.26000000000066,
+        "closedSegments": 0,
+        "candidates": 0,
+        "boundDistanceM": 50000
+      },
+      "limitation": "Contractul este un read model: nu scrie în telemetrie și nu lansează analiza; consumatorul real rămâne 069.",
+      "level": "HEADLESS_CONTRACT"
+    },
+    {
+      "id": "walking-tutorial",
+      "title": "Tutorial nou în șase pași care nu blochează accesul la taxiuri",
+      "contract": "199-walking-tutorial-v1",
+      "what": "Tutorialul avansează numai pe evenimente reale (selecție 068, mișcare 192, intrare 195, pickup/dropoff 007, ieșire 196); accesul la taxiuri este NEVER_GATED, iar faptele rejucate sunt refuzate.",
+      "evidence": [
+        "Docs/Evidence/199-v3-walking-tutorial/report.json",
+        "Docs/Evidence/199-v3-walking-tutorial/README.md"
+      ],
+      "metrics": {
+        "steps": 6,
+        "positives": 6,
+        "negatives": 30,
+        "taxiAccess": "NEVER_GATED",
+        "walkingTimeXp": "NOT_IMPLEMENTED",
+        "xpGranted": 0
+      },
+      "limitation": "Tutorialul este headless: UI-ul, tastatura și HUD-ul rămân ale modulelor existente; XP-ul de timp de mers este `NOT_IMPLEMENTED`.",
+      "level": "HEADLESS_CONTRACT"
+    },
+    {
+      "id": "v3-save",
+      "title": "Salvare V3 cu poziția personajului, camera și autoritatea",
+      "contract": "200-walking-save-v1",
+      "what": "Slotul 200 păstrează poziția bit-identică, yaw-ul, autoritatea, camera (inclusiv mijlocul tranziției de 18 tick-uri) și starea segmentelor; migrarea sesiunilor vechi produce o stare validă.",
+      "evidence": [
+        "Docs/Evidence/200-v3-walking-save/report.json",
+        "Docs/Evidence/200-v3-walking-save/README.md"
+      ],
+      "metrics": {
+        "checks": "160/160",
+        "scenarios": "4/4",
+        "refusals": "18/18",
+        "migrationPreservesEverything": true,
+        "reloadCoherent": true
+      },
+      "limitation": "Slotul este un contract pur: capturarea la export și aplicarea la reload rămân ale consumatorului; modulul nu scrie în IndexedDB.",
+      "level": "HEADLESS_CONTRACT"
+    },
+    {
+      "id": "three-modes-end-to-end",
+      "title": "Cele trei moduri AUTO/MANUAL/LEARNING, intrare–ieșire–revenire",
+      "contract": "201-v3-validation-flow-v1",
+      "what": "Lanțul real 192 → 195 → 193 → 196 → 197 → 198 trece în toate cele trei moduri: fiecare mod face FOCUS → TAKE → RETURN, iar personajul merge după ieșire; conducerea lungă 193/194 are un singur consumator pe tick.",
+      "evidence": [
+        "Docs/Evidence/201-v3-validation/report.json",
+        "Docs/Evidence/201-v3-validation/README.md"
+      ],
+      "metrics": {
+        "modes": "AUTO, MANUAL, LEARNING",
+        "cases": "3/3",
+        "seated": "3/3",
+        "walkedAfterM": 1.2255913978490156,
+        "criteria": "2 PASS / 0 FAIL / 1 NOT_RUN"
+      },
+      "limitation": "Validarea este headless: nu măsoară FPS, frame p95/p99 sau senzația din browser.",
+      "level": "HEADLESS_CONTRACT"
+    },
+    {
+      "id": "challenges-and-daily",
+      "title": "Provocări, misiuni zilnice și KPI/XP existente, neatinse de mers",
+      "contract": "188-v2-challenges-v1 + 211/213",
+      "what": "Catalogul compus are 12 template-uri V1 + 15 provocări extinse (27 în total); mersul nu atinge catalogul, KPI-urile, ledgerul, XP-ul sau starea zilnică (digest 9/9 identic la 201).",
+      "evidence": [
+        "Docs/Evidence/188-v2-challenges/report.json",
+        "Docs/Evidence/201-v3-validation/report.json"
+      ],
+      "metrics": {
+        "templates": 12,
+        "extendedChallenges": 15,
+        "composedTotal": 27,
+        "extendedKeysCovered": 15,
+        "extendedKeysTotal": 56,
+        "identicalDigests": 9
+      },
+      "limitation": "Provocările extinse acoperă 15 din 56 de chei; restul sunt certificate, dar fără o demonstrație de joc dedicată.",
+      "level": "HEADLESS_CONTRACT"
+    }
+  ],
+  "notDelivered": [
+    {
+      "id": "extended-keys-reserved",
+      "title": "Cele 56 de chei extinse rămân rezervate de etapa de plan",
+      "state": "NOT_DELIVERED_END_TO_END",
+      "detail": "Lista de chei rezervate are 56 intrări; validarea candidaților le refuză cu codul de etapă, iar exportul le scrie `null` în `reservedParameters`. Poarta 187 le certifică (80 chei, 0 findings), dar certificarea nu schimbă etapa.",
+      "evidence": [
+        "src/learning/candidate-validation.ts",
+        "src/profiles/parameter-registry.ts",
+        "Docs/Evidence/187-v2-parameter-gate/report.json"
+      ],
+      "owner": "proprietarul etapei de plan (migrarea `KEY_EXTENSION_STAGE`)"
+    },
+    {
+      "id": "challenge-coverage-15-of-56",
+      "title": "Provocările acoperă 15 din 56 de chei extinse",
+      "state": "PARTIAL",
+      "detail": "15 chei au o provocare dedicată, 41 nu; lipsa unei provocări nu este un eșec de catalog, dar nu există demonstrație de joc pentru cele 41.",
+      "evidence": [
+        "Docs/Evidence/188-v2-challenges/report.json"
+      ],
+      "owner": "proprietarul 188/231 (catalogul de provocări)"
+    },
+    {
+      "id": "walking-time-xp",
+      "title": "XP pentru timpul de mers nu este implementat",
+      "state": "NOT_IMPLEMENTED",
+      "detail": "Contractul 199 raportează `walkingTimeXp = NOT_IMPLEMENTED` și `xpGranted = 0`; Docs/20 a fost corectat să nu mai promită această contribuție.",
+      "evidence": [
+        "Docs/Evidence/199-v3-walking-tutorial/report.json",
+        "src/missions/walking-tutorial.ts"
+      ],
+      "owner": "proprietarul 199/213 (XP și progres)"
+    },
+    {
+      "id": "visual-streaming",
+      "title": "Streamingul vizual rămâne fără măsurătoare",
+      "state": "NOT_MEASURED",
+      "detail": "Doi pași ai streamingului vizual sunt `NOT_MEASURED` la 157; ei cer renderer real, nu probe structurale. Verdictul C3 al lui 201 este din acest motiv `NOT_RUN`.",
+      "evidence": [
+        "Docs/Evidence/157-render-budget/report.json",
+        "Docs/Evidence/201-v3-validation/report.json"
+      ],
+      "owner": "proprietarul 157/223"
+    },
+    {
+      "id": "hardware-fps",
+      "title": "FPS și frame p95/p99 pe hardware real nu sunt validate",
+      "state": "NOT_VALIDATED",
+      "detail": "Gate-ul 224 raportează `fps-hardware = NOT_VALIDATED`, iar release-ul lui este `NOT_VALIDATED`; capturile hardware 220 sunt pe alt build.",
+      "evidence": [
+        "Docs/Evidence/224-performance-gate/report.json",
+        "Docs/Evidence/201-v3-validation/report.json"
+      ],
+      "owner": "operatorul cu GPU real + proprietarul 224"
+    },
+    {
+      "id": "in-game-composition",
+      "title": "Contractele V3 nu sunt cablate în compoziția de browser",
+      "state": "NOT_COMPOSED",
+      "detail": "`src/main.ts` are 0 referințe la `character`, 0 la `authority`, 0 la `walker`, 0 la adaptorul de tastatură și 0 la adaptorul de moduri. Capabilitățile sunt livrate ca module headless cu dovezi, nu ca sesiune jucabilă în build.",
+      "evidence": [
+        "src/main.ts",
+        "src/app/index.ts"
+      ],
+      "owner": "proprietarul compoziției aplicației (src/main.ts)"
+    }
+  ],
+  "summary": {
+    "capabilities": 12,
+    "contracts": 12,
+    "levels": {
+      "HEADLESS_CONTRACT": 12,
+      "IN_GAME": 0
+    },
+    "notDelivered": 6,
+    "dependenciesDone": 11,
+    "dependencies": 11,
+    "coverage": "100%"
+  },
+  "checks": [
+    {
+      "id": "dependencies-done",
+      "passed": true,
+      "detail": "11/11 PBI-uri 191–201 în Done, cu dovezi și raport"
+    },
+    {
+      "id": "capability-evidence",
+      "passed": true,
+      "detail": "12/12 capabilități cu toate fișierele de dovadă existente"
+    },
+    {
+      "id": "capability-level-honest",
+      "passed": true,
+      "detail": "compoziția de browser nu referențiază contractele (0/0/0); fiecare capabilitate declară limitarea"
+    },
+    {
+      "id": "not-delivered-declared",
+      "passed": true,
+      "detail": "6 limitări declarate, fiecare cu owner și dovadă existentă"
+    },
+    {
+      "id": "controls-fail-closed",
+      "passed": true,
+      "detail": "6/6 verificări de controale"
+    },
+    {
+      "id": "reserved-keys",
+      "passed": true,
+      "detail": "56 chei rezervate, refuz `KEY_EXTENSION_STAGE` prezent"
+    },
+    {
+      "id": "catalog-composition",
+      "passed": true,
+      "detail": "catalog compus 27 (12 V1 + 15 extinse), acoperire chei 15/56"
+    },
+    {
+      "id": "walking-xp-not-promised",
+      "passed": true,
+      "detail": "Docs/20 declară `walkingTimeXp` = `NOT_IMPLEMENTED` și nu mai promite XP de mers"
+    },
+    {
+      "id": "docs-section-generated",
+      "passed": true,
+      "detail": "secțiunea finală generată există, trimite la artefact și declară `walkingTimeXp` = `NOT_IMPLEMENTED`"
+    },
+    {
+      "id": "checklist-owners",
+      "passed": true,
+      "detail": "0 rânduri deschise fără owner"
+    },
+    {
+      "id": "release-verdict-rule",
+      "passed": true,
+      "detail": "13 rânduri deschise, verdict NOT_VALIDATED"
+    },
+    {
+      "id": "evidence-files",
+      "passed": true,
+      "detail": "directorul de dovezi al release-ului există"
+    }
+  ],
+  "verdict": "PASS"
+}

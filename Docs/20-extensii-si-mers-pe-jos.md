@@ -31,7 +31,7 @@ Autoritatea este una singură: personaj sau vehicul. Selectarea unui taxi distan
 
 Ieșirea și schimbarea vehiculului închid segmentul MANUAL/LEARNING; analiza se lansează numai pentru LEARNING eligibil. Selectarea distantă mută doar camera; MANUAL/LEARNING preiau explicit vehiculul și suspendă inputul personajului, păstrându-i corpul fizic. Revenirea la personaj eliberează vehiculul în AUTO. Mersul pe jos nu contribuie la profilul de driving. O mașină în mișcare sau cu ieșire blocată folosește reguli explicite pentru transferul controlului; personajul nu apare într-un collider.
 
-Salvarea V3 păstrează poziția personajului, camera și autoritatea. Sesiunile vechi primesc o stare validă prin migrare. Tutorialul nou nu blochează accesul la taxiuri. Testele includ coliziuni, intrare/ieșire, focus, schimbare rapidă, cele trei moduri, telemetrie eligibilă, KPI-uri, misiuni zilnice, XP și regresii de flotă. Mersul activ poate contribui la XP de timp, fără a deveni demonstrație de driving.
+Salvarea V3 păstrează poziția personajului, camera și autoritatea. Sesiunile vechi primesc o stare validă prin migrare. Tutorialul nou nu blochează accesul la taxiuri. Testele includ coliziuni, intrare/ieșire, focus, schimbare rapidă, cele trei moduri, telemetrie eligibilă, KPI-uri, misiuni zilnice, XP și regresii de flotă. Mersul activ nu acordă XP de timp în această revizie: contractul 199 raportează `walkingTimeXp = NOT_IMPLEMENTED` și `xpGranted = 0`, deci contribuția rămâne o extensie de plan, fără a deveni demonstrație de driving.
 
 ## Scope ulterior neangajat
 
@@ -216,3 +216,58 @@ Contractul `198-walking-segments-v1` trăiește în [`src/character/walking-segm
 **Stare serializabilă pentru 200.** `snapshot()` întoarce date pure, înghețate: versiune, tick, owner, personaj, țintă, segmentul deschis, ultimul segment închis, contoare cumulative și următorul număr de secvență. `parseWalkingSegmentsState` este inversul strict: refuză versiunea necunoscută, contoarele inconsistente (`closedSegments ≠ closedManual + closedLearning`, `candidates > closedLearning`, comenzi care nu acoperă tranzițiile), un segment deschis în viitor și o țintă străină. Reluarea din mijlocul unui segment produce exact aceleași rezultate ca rularea neîntreruptă, iar secvența de ID-uri continuă corect.
 
 Comenzi: `npm run walking:segments` derivă `Docs/Evidence/198-v3-walking-segments/report.json` și `report.md` (tabel tranziție → segment închis → fel → candidați → verdict, dovada „mers = 0 segmente", matricea de moduri și verificarea încrucișată cu 069), iar `npm run walking:segments -- --check` refuză un raport neactualizat. Testele `tests/character/walking-segments*.test.ts` acoperă mersul de mii de tick-uri, refuzurile de autoritate, cele două dovezi ale criteriului 1, segmentul trunchiat, modul explicit, FOCUS-ul care nu închide nimic, matricea, starea serializabilă și puritatea contractului. Numerele reale: 16/16 scenarii, 3600 tick-uri/82,26 m cu 0 segmente și 0 candidați (plus plafonul de 50 km), 1 segment de control, poarta 069 identică pe 6 cazuri, digest SHA-256 `87a00a30855732eab84029ace8638843c5eb16e1389b3bd9b66ca1e03ecb14c2`; limitările sunt în [Evidence/198-v3-walking-segments](Evidence/198-v3-walking-segments/README.md).
+
+<!-- release:v3:begin -->
+## Artefactul de release V3 (PBI 202)
+
+> Secțiune generată determinist de `npm run release:v3`. Nu edita manual între marcaje.
+
+Release-ul V3 se închide ca **NOT_VALIDATED**: 10 rânduri `PASS`, 3 `FAIL`, 10 `NOT_RUN`. Un verdict `PASS` ar cere zero rânduri deschise.
+
+Dependențele V3 sunt **11/11** în `PBI/Done`, cu `completed_at`, dovezi fără „De completat" și raport propriu. Artefactul complet este în [Evidence/202-v3-release](Evidence/202-v3-release/README.md): [capabilități](Evidence/202-v3-release/capabilities.md), [controale](Evidence/202-v3-release/controls.md) și [checklist](Evidence/202-v3-release/release-checklist.md).
+
+### Ce poți face, cu nivelul real de livrare
+
+| Capabilitate | Contract | Dovadă | Nivel |
+| --- | --- | --- | --- |
+| Personaj third person cu schelet, scară umană și cinci clipuri | `191-character-v1` | `Docs/Evidence/191-v3-character/report.json` | HEADLESS_CONTRACT |
+| Mers, alergare și idle pe tick fix, cu coliziune și trepte reale | `192-walker-v1` | `Docs/Evidence/192-v3-walker/report.json` | HEADLESS_CONTRACT |
+| O singură autoritate de input: personaj sau vehicul, niciodată ambele | `193-input-authority-v1` | `Docs/Evidence/193-v3-authority/report.json` | HEADLESS_CONTRACT |
+| Cameră third person cu tranziție de 18 tick-uri și ocluzie reală | `194-character-camera-v1` | `Docs/Evidence/194-v3-camera/report.json` | HEADLESS_CONTRACT |
+| Intrare în orice mașină accesibilă, cu autoritate și cursă păstrate | `195-enter-vehicle-v1` | `Docs/Evidence/195-v3-enter/report.json` | HEADLESS_CONTRACT |
+| Ieșire într-un punct fizic valid, fără teleportare | `196-exit-vehicle-v1` | `Docs/Evidence/196-v3-exit/report.json` | HEADLESS_CONTRACT |
+| Schimbare rapidă a taxiului: FOCUS, TAKE și RETURN | `197-fleet-switch-v1` | `Docs/Evidence/197-v3-fleet-switch/report.json` | HEADLESS_CONTRACT |
+| Segmente MANUAL/LEARNING: mersul nu devine demonstrație de condus | `198-walking-segments-v1` | `Docs/Evidence/198-v3-walking-segments/report.json` | HEADLESS_CONTRACT |
+| Tutorial nou în șase pași care nu blochează accesul la taxiuri | `199-walking-tutorial-v1` | `Docs/Evidence/199-v3-walking-tutorial/report.json` | HEADLESS_CONTRACT |
+| Salvare V3 cu poziția personajului, camera și autoritatea | `200-walking-save-v1` | `Docs/Evidence/200-v3-walking-save/report.json` | HEADLESS_CONTRACT |
+| Cele trei moduri AUTO/MANUAL/LEARNING, intrare–ieșire–revenire | `201-v3-validation-flow-v1` | `Docs/Evidence/201-v3-validation/report.json` | HEADLESS_CONTRACT |
+| Provocări, misiuni zilnice și KPI/XP existente, neatinse de mers | `188-v2-challenges-v1 + 211/213` | `Docs/Evidence/188-v2-challenges/report.json` | HEADLESS_CONTRACT |
+
+Toate cele 12 capabilități sunt contracte headless dovedite de rapoartele 188–201. `src/main.ts` nu le compune: 0 referințe la `character`, 0 la `authority` și 0 la `walker`. O sesiune jucabilă în browser rămâne un pas de compunere, nu o funcționalitate declarată aici.
+
+### Controale
+
+Din cele 15 acțiuni 009, 10 au consumator real în cod (7 la 066, două la 067, una la 030), iar 5 sunt declarate și remapabile prin 080 fără listener de tastatură. Alergarea are canal în 193, dar nu are binding. Tabelul complet, cu tastele reale și gesturile de pointer, este în [Evidence/202-v3-release/controls.md](Evidence/202-v3-release/controls.md).
+
+### Ce rămâne deschis
+
+- `contract25-v3` (**NOT_RUN**) — NOT_RUN: Contractul 25 reexecutat pe workload-ul `201-workload-v3-1`: 158 PASS, 157 STRUCTURAL_PASS (17 PASS / 2 NOT_MEASURED), 159 SOAK_PASS, 224 structural PASS, 154 9/9 combinații. Manifest 203-initial-1 nemodificat (SHA-256 identic cu HEAD). FPS/frame pe GPU real rămâne NOT_RUN (fps-hardware NOT_VALIDATED): cei 2 pași vizuali NOT_MEASURED cer renderer real. · owner: proprietarul 201/224
+- `hardware-fps-v3` (**NOT_RUN**) — 224: `fps-hardware = NOT_VALIDATED`, release `NOT_VALIDATED`; FPS headless nu este raportat ca FPS real. · owner: operatorul cu GPU real + proprietarul 224
+- `harness-v3-timing` (**NOT_RUN**) — Harness-ul de performanță (155/156/158/220/224) exprimă flota și civilii; nu are fixture cu personaj, pietoni sau pericole. Măsurarea frame/simulare pe `201-workload-v3-1` cere o pagină de harness cu GPU real, care nu există în ownership-ul acestui PBI. Cifrele de FPS/tick pentru V3 nu sunt inventate. (workload `201-workload-v3-1`) · owner: proprietarul 220/224
+- `visual-streaming` (**NOT_RUN**) — Doi pași cer renderer real; 157 raportează `STRUCTURAL_PASS` cu 2 `NOT_MEASURED`, nu o măsurătoare vizuală. · owner: proprietarul 157/223
+- `soak-v3` (**NOT_RUN**) — Soak-ul comis (60,002 min, 20 cicluri) este pe workload-ul V1 și citit din dovezi, nu reexecutat; nu are variantă cu personaj, pietoni și pericole. · owner: proprietarul 159/224
+- `playtest-human` (**NOT_RUN**) — 235: `NOT_RUN`, 0/5 participanți; rândul C3 al lui 216 rămâne `NOT_RUN`. · owner: proprietarul 235/216
+- `qa-ui-153` (**FAIL**) — 8/308 verificări eșuate, 8 defecte MEDIUM deschise (D1, D2, D3, D4, D5, D6, D7, D8) · owner: proprietarul 153 (QA vizual)
+- `fun-experience-235` (**FAIL**) — C3 eșuat, C5 neexecutat; 4/6 criterii PASS · owner: proprietarul 235 (experiență)
+- `inherited-v2-gates` (**FAIL**) — 190 păstrează 6 rânduri deschise: `inherited-v1-gates`, `fps-hardware`, `harness-v2`, `soak-v2`, `playtest-human`, `remeasure-224` · owner: proprietarii rândurilor din 190 (224, 220, 159, 216/235)
+- `remeasure-224` (**NOT_RUN**) — 201 a reexecutat gate-ul într-un director propriu (`structural PASS`), fără să suprascrie dovada comisă a lui 224; `--check` pe dovada comisă rămâne deschis. · owner: proprietarul 224
+- `extended-keys-56` (**NOT_RUN**) — 56 chei rezervate; validarea candidaților le refuză cu codul etapei, iar exportul le scrie `null`. · owner: proprietarul etapei de plan (migrarea `KEY_EXTENSION_STAGE`)
+- `walking-time-xp` (**NOT_RUN**) — `walkingTimeXp = NOT_IMPLEMENTED`, `xpGranted = 0`; Docs/20 declară explicit această lipsă. · owner: proprietarul 199/213
+- `in-game-composition` (**NOT_RUN**) — 0 referințe la `character`, 0 la `authority`, 0 la `walker` în `src/main.ts`; dovada este contractul și raportul, nu o sesiune jucabilă. · owner: proprietarul compoziției aplicației (src/main.ts)
+
+### Corectură de onestitate
+
+XP-ul pentru timpul de mers este declarat explicit `walkingTimeXp` = `NOT_IMPLEMENTED` și `xpGranted` = 0 de contractul 199, iar Docs/20 nu îl mai prezintă ca livrabil. `src/` nu a fost modificat de acest PBI.
+
+Comenzi: `npm run release:v3` scrie artefactele și această secțiune; `npm run release:v3 -- --check` refuză un artefact neactualizat.
+<!-- release:v3:end -->

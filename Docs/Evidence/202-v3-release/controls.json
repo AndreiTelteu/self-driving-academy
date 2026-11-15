@@ -1,0 +1,251 @@
+{
+  "version": "202-v3-controls-v1",
+  "command": "npm run release:v3",
+  "generatedBy": "scripts/run-v3-release-artifact.mjs",
+  "sources": [
+    "src/settings/store.ts",
+    "src/settings/contracts.ts",
+    "src/input/keyboard-drive.ts",
+    "src/input/mode-keyboard.ts",
+    "src/input/recovery-input.ts",
+    "src/input/authority-arbiter.ts",
+    "src/ui/key-remapping-format.ts",
+    "src/rendering/babylon/vehicle-camera-input.ts",
+    "src/rendering/babylon/vehicle-picking-input.ts",
+    "src/ui/fleet-panel.ts",
+    "src/ui/panel-focus.ts"
+  ],
+  "derivation": "Tastele vin din `createDefaultSettings(...).input.bindings` (009). Consumatorii sunt derivați din adaptoarele reale: 066 pentru cele șapte acțiuni de condus, 067 pentru M/L, 030 pentru R. Restul acțiunilor sunt declarate și remapabile, dar nu au listener de tastatură. Gesturile de pointer sunt citite din adaptoarele 017/018 și din panouri.",
+  "keyboard": [
+    {
+      "action": "throttle",
+      "label": "Accelerație / înainte",
+      "code": "KeyW",
+      "vehicle": "throttle 024 (sursa PLAYER)",
+      "character": "mers înainte, intensitate 1",
+      "consumer": "066",
+      "state": "CONSUMED",
+      "remappable": true
+    },
+    {
+      "action": "brake",
+      "label": "Frână / înapoi",
+      "code": "KeyS",
+      "vehicle": "brake 024",
+      "character": "oprește (walker-ul nu merge înapoi)",
+      "consumer": "066",
+      "state": "CONSUMED",
+      "remappable": true
+    },
+    {
+      "action": "steerLeft",
+      "label": "Virare stânga",
+      "code": "KeyA",
+      "vehicle": "steering −1",
+      "character": "schimbă direcția −π/2",
+      "consumer": "066",
+      "state": "CONSUMED",
+      "remappable": true
+    },
+    {
+      "action": "steerRight",
+      "label": "Virare dreapta",
+      "code": "KeyD",
+      "vehicle": "steering +1",
+      "character": "schimbă direcția +π/2",
+      "consumer": "066",
+      "state": "CONSUMED",
+      "remappable": true
+    },
+    {
+      "action": "handbrake",
+      "label": "Frână de mână",
+      "code": "Space",
+      "vehicle": "handbrake 024",
+      "character": "ignorat de proiecția 193",
+      "consumer": "066",
+      "state": "CONSUMED",
+      "remappable": true
+    },
+    {
+      "action": "manualMode",
+      "label": "Mod MANUAL",
+      "code": "KeyM",
+      "vehicle": "067 intenție MANUAL",
+      "character": "nu se aplică",
+      "consumer": "067",
+      "state": "CONSUMED",
+      "remappable": true
+    },
+    {
+      "action": "learningMode",
+      "label": "Mod LEARNING",
+      "code": "KeyL",
+      "vehicle": "067 intenție LEARNING",
+      "character": "nu se aplică",
+      "consumer": "067",
+      "state": "CONSUMED",
+      "remappable": true
+    },
+    {
+      "action": "kpis",
+      "label": "Pop-up KPI",
+      "code": "KeyK",
+      "vehicle": "UI 210, buton",
+      "character": "nu se aplică",
+      "consumer": null,
+      "state": "DECLARED_ONLY",
+      "remappable": true
+    },
+    {
+      "action": "fleet",
+      "label": "Lista flotei",
+      "code": "Tab",
+      "vehicle": "UI 075, buton",
+      "character": "nu se aplică",
+      "consumer": null,
+      "state": "DECLARED_ONLY",
+      "remappable": true
+    },
+    {
+      "action": "signalLeft",
+      "label": "Semnal stânga",
+      "code": "KeyQ",
+      "vehicle": "turnSignal LEFT",
+      "character": "ignorat",
+      "consumer": "066",
+      "state": "CONSUMED",
+      "remappable": true
+    },
+    {
+      "action": "signalRight",
+      "label": "Semnal dreapta",
+      "code": "KeyE",
+      "vehicle": "turnSignal RIGHT",
+      "character": "ignorat",
+      "consumer": "066",
+      "state": "CONSUMED",
+      "remappable": true
+    },
+    {
+      "action": "camera",
+      "label": "Mod cameră",
+      "code": "KeyC",
+      "vehicle": "017 are toggle separat, implicit KeyC (nu citește bindingul 009)",
+      "character": "nu se aplică",
+      "consumer": null,
+      "state": "DECLARED_ONLY",
+      "remappable": true
+    },
+    {
+      "action": "profile",
+      "label": "Panoul profilului",
+      "code": "KeyP",
+      "vehicle": "UI 077, buton",
+      "character": "nu se aplică",
+      "consumer": null,
+      "state": "DECLARED_ONLY",
+      "remappable": true
+    },
+    {
+      "action": "pause",
+      "label": "Pauză",
+      "code": "Escape",
+      "vehicle": "UI 012, buton",
+      "character": "nu se aplică",
+      "consumer": null,
+      "state": "DECLARED_ONLY",
+      "remappable": true
+    },
+    {
+      "action": "recover",
+      "label": "Recuperare vehicul",
+      "code": "KeyR",
+      "vehicle": "030",
+      "character": "nu se aplică",
+      "consumer": "030",
+      "state": "CONSUMED",
+      "remappable": true
+    }
+  ],
+  "pointer": [
+    {
+      "id": "canvas-select-vehicle",
+      "gesture": "Clic stânga pe un vehicul din canvas",
+      "effect": "Emite intenția 068 de selecție (sursa WORLD); un drag peste 5 px anulează selecția.",
+      "evidence": "src/rendering/babylon/vehicle-picking-input.ts",
+      "state": "IMPLEMENTED"
+    },
+    {
+      "id": "fleet-row-click",
+      "gesture": "Clic pe un rând din lista flotei (Tab deschide/focus panoul)",
+      "effect": "Rândul este un buton cu rol de opțiune; clicul emite doar intenția de selecție, fără listener global de tastatură.",
+      "evidence": "src/ui/fleet-panel.ts",
+      "state": "IMPLEMENTED"
+    },
+    {
+      "id": "camera-pointer-lock",
+      "gesture": "Butonul de captură al camerei, apoi mișcarea mouse-ului",
+      "effect": "Pointer lock pe canvas; mișcarea relativă alimentează camera; Escape eliberează captura; butonul de recentrare readuce camera.",
+      "evidence": "src/rendering/babylon/vehicle-camera-input.ts",
+      "state": "IMPLEMENTED"
+    },
+    {
+      "id": "panel-focus-trap",
+      "gesture": "Tab / Shift+Tab în panoul deschis, Escape pentru închidere",
+      "effect": "Focusul este prins în panou, iar Escape este predat portului de închidere al gazdei.",
+      "evidence": "src/ui/panel-focus.ts",
+      "state": "IMPLEMENTED"
+    },
+    {
+      "id": "character-orbit-mouse",
+      "gesture": "Orbită de cameră third person cu mouse-ul",
+      "effect": "Nu există: camera 194 primește orbită doar ca intenție explicită, iar build-ul nu are un binding de mouse pentru personaj.",
+      "evidence": "src/character/character-camera.ts",
+      "state": "NOT_AVAILABLE"
+    }
+  ],
+  "summary": {
+    "actions": 15,
+    "consumed": 10,
+    "declaredOnly": 5,
+    "driveActions": 7,
+    "remappable": 15,
+    "pointerGestures": 5,
+    "pointerImplemented": 4,
+    "pointerNotAvailable": 1
+  },
+  "checks": [
+    {
+      "id": "bindings-count",
+      "passed": true,
+      "detail": "15 acțiuni 009, 15 coduri unice"
+    },
+    {
+      "id": "drive-actions",
+      "passed": true,
+      "detail": "7 acțiuni de condus consumate de adaptorul 066"
+    },
+    {
+      "id": "mode-actions",
+      "passed": true,
+      "detail": "M și L sunt singurele taste mapate de adaptorul 067"
+    },
+    {
+      "id": "sprint-not-bound",
+      "passed": true,
+      "detail": "alergarea există în vocabularul 193, dar nu are binding 009: este contract, nu control live"
+    },
+    {
+      "id": "remap-coverage",
+      "passed": true,
+      "detail": "15/15 acțiuni remapare prin 080"
+    },
+    {
+      "id": "pointer-inventory",
+      "passed": true,
+      "detail": "4 gesturi implementate, 1 declarate indisponibile"
+    }
+  ],
+  "verdict": "PASS"
+}
