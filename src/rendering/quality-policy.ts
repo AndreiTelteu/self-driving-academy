@@ -90,15 +90,34 @@ export function resolveQuality(
     internalHeight: Math.max(1, Math.floor(height * effectiveDpr * preferences.resolutionScale)),
   });
 }
+/** Limita inferioară a `resolutionScale` (aceeași ca în contractul de setări). */
+export const MIN_RESOLUTION_SCALE = 0.5;
+/**
+ * PBI 240 — treptele de scară adaptivă: factorul se înmulțește cu `resolutionScale` ales de jucător.
+ * Costul de fill-rate scade cu pătratul factorului, deci patru trepte acoperă un raport de ~3×.
+ */
+export const ADAPTIVE_RESOLUTION_FACTORS: readonly number[] = Object.freeze([1, 0.85, 0.7, 0.55]);
+/** Scara efectivă: alegerea jucătorului × factorul adaptiv, niciodată sub minimul contractului. */
+export function effectiveResolutionScale(base: number, factor: number): number {
+  finite(base, MIN_RESOLUTION_SCALE, 1);
+  finite(factor, 0.1, 1);
+  return Math.min(1, Math.max(MIN_RESOLUTION_SCALE, base * factor));
+}
 export interface QualitySample {
   readonly frameMs: number;
   readonly cpuMs: number;
   readonly gpuMs: number | null;
 }
 /** Bounded windows, asymmetric thresholds and cooldown; unknown/CPU-bound samples never adjust resolution. */
-export function createAdaptiveQuality(initial: QualityPreset, adaptive: boolean) {
+export function createAdaptiveQuality(
+  initial: QualityPreset,
+  adaptive: boolean,
+  options: { readonly adaptResolution?: boolean } = {},
+) {
   if (!presets.includes(initial)) throw new Error('Unknown quality preset');
+  const adaptResolution = options.adaptResolution === true;
   let preset = initial;
+  let factorIndex = 0;
   let samples: QualitySample[] = [];
   let badWindows = 0,
     goodWindows = 0;
@@ -106,11 +125,14 @@ export function createAdaptiveQuality(initial: QualityPreset, adaptive: boolean)
   let lastNow = -Infinity;
   return {
     getPreset: () => preset,
+    /** Factorul adaptiv curent al rezoluției (1 = fără reducere); mereu 1 fără `adaptResolution`. */
+    getResolutionFactor: () => ADAPTIVE_RESOLUTION_FACTORS[factorIndex]!,
     setManual(next: QualityPreset, nowMs: number): void {
       if (!presets.includes(next)) throw new Error('Unknown quality preset');
       finite(nowMs, 0, Number.MAX_SAFE_INTEGER);
       if (nowMs < lastNow) throw new Error('Quality clock regressed');
       preset = next;
+      factorIndex = 0;
       adaptive = false;
       samples = [];
       badWindows = goodWindows = 0;
@@ -139,6 +161,16 @@ export function createAdaptiveQuality(initial: QualityPreset, adaptive: boolean)
       goodWindows = good ? goodWindows + 1 : 0;
       const delta = badWindows >= 2 ? -1 : goodWindows >= 4 ? 1 : 0;
       if (!delta || nowMs - lastChange < 5000) return null;
+      if (adaptResolution) {
+        // Mai întâi rezoluția (fill-rate), abia apoi presetul; la revenire, invers.
+        const nextFactor = factorIndex - delta;
+        if (nextFactor >= 0 && nextFactor < ADAPTIVE_RESOLUTION_FACTORS.length) {
+          factorIndex = nextFactor;
+          lastChange = nowMs;
+          badWindows = goodWindows = 0;
+          return null;
+        }
+      }
       const index = presets.indexOf(preset),
         next = presets[index + delta];
       if (!next) return null;

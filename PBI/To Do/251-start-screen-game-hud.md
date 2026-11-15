@@ -32,6 +32,7 @@ Layoutul este bootstrap-ul din `index.html` și `src/style.css`; HUD-ul 236 este
 - [ ] HUD-ul de condus are un vitezometru clar (km/h), indicatorul de mod sau vehicul și pictograme de acțiune contextuale („G — Intră în taxi” numai lângă o mașină); HUD-ul de mers este minimal.
 - [ ] Panoul Diagnostic și citirile tick/backend sunt disponibile numai în dev sau cu un flag explicit (de exemplu `?debug=1`).
 - [ ] Un sistem de design unitar (tokeni de culoare, tipografie, spațiere, colțuri și umbre) pentru toate panourile; contrast WCAG AA; lizibil la 1280×720 și 2560×1440.
+- [ ] La lățimi sub 1100px (de exemplu 1000×700), overlay-urile, HUD-ul și Diagnosticul nu se suprapun și butoanele rămân accesibile (constatare din review-ul 240).
 - [ ] Testele UI existente (084, `qa:ui`, `ui:responsive`, `ui:accessibility`) trec sau sunt actualizate cu motivul schimbării.
 
 ## Verificare

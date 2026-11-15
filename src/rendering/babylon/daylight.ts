@@ -8,7 +8,7 @@ import { Vector3 } from '@babylonjs/core/Maths/math.vector.js';
 import type { Scene } from '@babylonjs/core/scene.js';
 import type { AbstractMesh } from '@babylonjs/core/Meshes/abstractMesh.js';
 import type { QualityPreferences } from '../../settings';
-import { resolveQuality, createAdaptiveQuality } from '../quality-policy';
+import { resolveQuality, createAdaptiveQuality, effectiveResolutionScale } from '../quality-policy';
 import type { QualitySample } from '../quality-policy';
 
 export type DaylightMaterial =
@@ -56,8 +56,24 @@ export function createDaylight(
   if (scene.isDisposed) throw new Error('Scene disposed');
   let preferences = { ...initial };
   let viewport = { ...initialViewport };
-  let quality = resolveQuality(preferences, viewport.width, viewport.height, viewport.dpr);
-  let adaptation = createAdaptiveQuality(initial.preset, initial.adaptive);
+  // PBI 240: scara adaptivă a rezoluției se aplică peste `resolutionScale` ales de jucător.
+  const newAdaptation = (preferred: QualityPreferences) =>
+    createAdaptiveQuality(preferred.preset, preferred.adaptive, { adaptResolution: true });
+  let adaptation = newAdaptation(initial);
+  const resolve = (): ReturnType<typeof resolveQuality> =>
+    resolveQuality(
+      {
+        ...preferences,
+        resolutionScale: effectiveResolutionScale(
+          preferences.resolutionScale,
+          adaptation.getResolutionFactor(),
+        ),
+      },
+      viewport.width,
+      viewport.height,
+      viewport.dpr,
+    );
+  let quality = resolve();
   let disposed = false;
   let shadow: ShadowGenerator | null = null;
   /** Insertion-ordered registry; the priority is the admission key of the bounded map. */
@@ -114,6 +130,16 @@ export function createDaylight(
         .map(([mesh]) => mesh)
         .slice(0, quality.limits.maxShadowCasters);
   };
+  /**
+   * Rezoluția internă = dimensiunea CSS × min(DPR, maxDpr) × scara. Se exprimă ca nivel hardware
+   * (inversul factorului) ca să rămână corectă și când ciclul de viață chemă `engine.resize()`,
+   * care citește dimensiunea CSS a canvasului; `setSize` direct ar fi fost suprascris la primul resize.
+   */
+  const applyResolution = (): void => {
+    const factor = quality.effectiveDpr * quality.resolutionScale;
+    // Epsilon: `floor(css / (1 / factor))` nu are voie să piardă un pixel din cauza rotunjirii.
+    scene.getEngine().setHardwareScalingLevel(1 / (factor * (1 + 1e-9)));
+  };
   const apply = (): void => {
     shadow?.dispose();
     shadow = null;
@@ -131,7 +157,7 @@ export function createDaylight(
       shadow.normalBias = 0.02;
       syncCasters();
     }
-    scene.getEngine().setSize(quality.internalWidth, quality.internalHeight);
+    applyResolution();
   };
   apply();
   return {
@@ -144,37 +170,44 @@ export function createDaylight(
     },
     applyPreferences(next: QualityPreferences, nextViewport: QualityViewport = viewport): void {
       assertActive();
-      const resolved = resolveQuality(
-        next,
-        nextViewport.width,
-        nextViewport.height,
-        nextViewport.dpr,
-      );
+      // Validează înainte de a muta starea: o intrare greșită nu lasă jumătate din schimbare.
+      resolveQuality(next, nextViewport.width, nextViewport.height, nextViewport.dpr);
       preferences = { ...next };
       viewport = { ...nextViewport };
-      quality = resolved;
-      adaptation = createAdaptiveQuality(next.preset, next.adaptive);
+      adaptation = newAdaptation(next);
+      quality = resolve();
       apply();
     },
+    /** Dimensiune CSS sau DPR nou (fereastră, ecran complet, alt monitor): fără recrearea scenei. */
     resize(nextViewport: QualityViewport): void {
       assertActive();
-      quality = resolveQuality(
-        preferences,
-        nextViewport.width,
-        nextViewport.height,
-        nextViewport.dpr,
-      );
+      resolveQuality(preferences, nextViewport.width, nextViewport.height, nextViewport.dpr);
       viewport = { ...nextViewport };
-      scene.getEngine().setSize(quality.internalWidth, quality.internalHeight);
+      quality = resolve();
+      applyResolution();
     },
     observe(sample: QualitySample, nowMs: number): boolean {
       assertActive();
+      const factorBefore = adaptation.getResolutionFactor();
       const next = adaptation.sample(sample, nowMs);
-      if (!next) return false;
-      preferences = { ...preferences, preset: next };
-      quality = resolveQuality(preferences, viewport.width, viewport.height, viewport.dpr);
-      apply();
+      const factorChanged = adaptation.getResolutionFactor() !== factorBefore;
+      if (!next && !factorChanged) return false;
+      if (next) preferences = { ...preferences, preset: next };
+      quality = resolve();
+      if (next) apply();
+      else applyResolution();
       return true;
+    },
+    /** Starea adaptivă pentru panoul Diagnostic: factorul, scara efectivă și rezoluția internă. */
+    getResolutionState() {
+      return Object.freeze({
+        factor: adaptation.getResolutionFactor(),
+        baseScale: preferences.resolutionScale,
+        effectiveScale: quality.resolutionScale,
+        effectiveDpr: quality.effectiveDpr,
+        internalWidth: quality.internalWidth,
+        internalHeight: quality.internalHeight,
+      });
     },
     addShadowCaster(mesh: AbstractMesh, priority: ShadowCasterPriority = 'standard'): boolean {
       assertActive();

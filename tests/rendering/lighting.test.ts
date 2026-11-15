@@ -218,7 +218,9 @@ test('a low preset has no shadow map, so nothing enters it', () => {
   engine.dispose();
 });
 
-test('automatic presentation port applies GPU downgrade and manual preferences stop it', () => {
+// PBI 240: contract schimbat intenționat. Costul de fill-rate se reduce întâi prin `resolutionScale`
+// (primul eșantion rău NU mai coboară presetul); presetul coboară abia când scara e la minim.
+test('automatic presentation port lowers resolution first, then the preset, and manual preferences stop it', () => {
   const engine = new NullEngine(),
     scene = new Scene(engine);
   const daylight = createDaylight(
@@ -226,16 +228,44 @@ test('automatic presentation port applies GPU downgrade and manual preferences s
     { ...preferences, adaptive: true },
     { width: 640, height: 360, dpr: 2 },
   );
-  let changes = 0;
-  for (let i = 1; i <= 60; i++)
-    if (daylight.observe({ frameMs: 30, cpuMs: 2, gpuMs: 20 }, i * 16)) changes++;
-  assert.equal(changes, 1);
+  let now = 0;
+  const feed = (count: number, frameMs: number, gpuMs: number): boolean[] => {
+    const changes: boolean[] = [];
+    for (let i = 0; i < count; i++) {
+      now += 16;
+      changes.push(daylight.observe({ frameMs, cpuMs: 2, gpuMs }, now));
+    }
+    return changes;
+  };
+  // MEDIUM, DPR 2 plafonat la 1,5: 640×360 CSS → 960×540 interni la scara 1.
+  assert.equal(daylight.getQuality().internalWidth, 960);
+  assert.equal(daylight.getResolutionState().factor, 1);
+  assert.equal(feed(60, 30, 20).filter(Boolean).length, 1);
+  assert.equal(daylight.getQuality().preset, 'MEDIUM');
+  assert.equal(daylight.getResolutionState().factor, 0.85);
+  assert.equal(daylight.getQuality().internalWidth, Math.floor(640 * 1.5 * 0.85));
+  assert.equal(daylight.getResourceCounts().shadowMaps, 1);
+  // Cooldown de 5 s între trepte; apoi două trepte rămase până la minim.
+  now += 5000;
+  feed(60, 30, 20);
+  now += 5000;
+  feed(60, 30, 20);
+  assert.equal(daylight.getResolutionState().factor, 0.55);
+  assert.equal(daylight.getQuality().preset, 'MEDIUM');
+  now += 5000;
+  feed(60, 30, 20);
   assert.equal(daylight.getQuality().preset, 'LOW');
-  assert.equal(daylight.getQuality().internalWidth, 640);
+  assert.equal(daylight.getQuality().internalWidth, Math.floor(640 * 1 * 0.55));
   assert.equal(daylight.getResourceCounts().shadowMaps, 0);
+  // Revenirea: întâi rezoluția, apoi presetul, când frame time-ul permite.
+  now += 5000;
+  feed(120, 10, 5);
+  assert.equal(daylight.getResolutionState().factor, 0.7);
+  assert.equal(daylight.getQuality().preset, 'LOW');
   daylight.applyPreferences(preferences);
+  assert.equal(daylight.getResolutionState().factor, 1);
   for (let i = 1; i <= 60; i++)
-    assert.equal(daylight.observe({ frameMs: 30, cpuMs: 2, gpuMs: 20 }, i * 16), false);
+    assert.equal(daylight.observe({ frameMs: 30, cpuMs: 2, gpuMs: 20 }, now + i * 16), false);
   assert.equal(daylight.getQuality().preset, 'MEDIUM');
   assert.equal(daylight.getResourceCounts().shadowMaps, 1);
   daylight.dispose();

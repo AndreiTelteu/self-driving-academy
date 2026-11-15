@@ -1,14 +1,22 @@
 import type { ApplicationState, RenderingState } from '../app';
 
 export function createRenderingView(root: HTMLDivElement) {
+  // PBI 240: canvasul de joc umple fereastra (`.game-stage`); titlul, starea și butoanele sunt un
+  // overlay compact deasupra lui (`.game-overlay`), în afara fluxului paginii. Start screen-ul și
+  // HUD-ul definitive vin cu PBI 251.
   const section = document.createElement('section');
+  section.className = 'game-shell';
+  const overlay = document.createElement('div');
+  overlay.className = 'game-overlay';
   const title = document.createElement('h1');
   title.textContent = 'Self Driving Academy';
   const status = document.createElement('p');
   status.setAttribute('role', 'status');
   status.setAttribute('aria-live', 'polite');
   const host = document.createElement('div');
+  host.className = 'game-stage';
   const canvas = document.createElement('canvas');
+  canvas.className = 'game-canvas';
   canvas.setAttribute('aria-label', 'Scenă de randare Babylon.js');
   host.append(canvas);
   const retry = document.createElement('button');
@@ -19,7 +27,11 @@ export function createRenderingView(root: HTMLDivElement) {
   play.textContent = 'Pornește';
   pause.textContent = 'Pauză';
   retry.hidden = play.hidden = pause.hidden = true;
-  section.append(title, status, host, play, pause, retry);
+  const actions = document.createElement('div');
+  actions.className = 'game-overlay__actions';
+  actions.append(play, pause, retry);
+  overlay.append(title, status, actions);
+  section.append(host, overlay);
   root.append(section);
   let onRetry = (): void => {};
   let onPlay = (): void => {};

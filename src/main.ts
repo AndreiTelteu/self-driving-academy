@@ -19,6 +19,7 @@ import {
   type RecoverySceneSnapshot,
   type V3BrowserComposition,
 } from './rendering/babylon';
+import { observeDisplaySurface, readDisplayMetrics } from './rendering';
 import { createRenderingView, createDiagnosticsPanel } from './ui';
 import './style.css';
 
@@ -51,7 +52,14 @@ let inspectScene: (() => Promise<boolean>) | undefined;
 let releaseCapture: (() => void) | undefined;
 const diagnosticsPanel = createDiagnosticsPanel(app, {
   report: () => diagnostics?.report() ?? null,
-  setEnabled: (enabled) => diagnostics?.setEnabled(enabled),
+  // Calitatea adaptivă are nevoie de eșantioane chiar și cu panoul închis.
+  setEnabled: (enabled) => diagnostics?.setEnabled(enabled || settings.quality.adaptive),
+  resolution: () => {
+    const state = composition?.view.daylight.getResolutionState();
+    if (!state) return null;
+    const scale = Number(state.effectiveScale.toFixed(2));
+    return `${state.internalWidth}×${state.internalHeight} · DPR ${state.effectiveDpr} · scară ${scale}${state.factor < 1 ? ` (adaptiv ×${state.factor})` : ''}`;
+  },
   ...(import.meta.env.DEV ? { inspector: () => inspectScene?.() ?? Promise.resolve(false) } : {}),
 });
 const preference = settings.quality.preferredBackend;
@@ -112,17 +120,13 @@ const application = createApplicationLifecycle({
         );
         let ownedComposition: V3BrowserComposition | undefined;
         let owned: BabylonDiagnostics | undefined;
+        let releaseSurface: (() => void) | undefined;
         try {
           const canvas = view.getCanvas();
           canvas.tabIndex = 0;
-          // Suprafața de joc a compunerii: 16:9 în coloana aplicației (640×360 la 1440×900).
-          canvas.style.width = '100%';
-          canvas.style.height = '360px';
-          canvas.style.maxWidth = '40rem';
-          canvas.style.display = 'block';
-          canvas.style.background = '#0b1f1a';
-          backend.resize();
-          const dpr = window.devicePixelRatio || 1;
+          // PBI 240: canvasul umple fereastra (CSS `.game-canvas`); rezoluția internă urmează
+          // dimensiunea CSS reală × min(DPR, maxDpr) × scara, nu o dimensiune fixă.
+          const initialMetrics = readDisplayMetrics(canvas, window);
           ownedComposition = createV3BrowserComposition({
             scene: backend.scene,
             surface: app,
@@ -134,14 +138,18 @@ const application = createApplicationLifecycle({
             vehicles: world.vehicles,
             rendererKind: backend.rendererKind,
             preset: settings.quality.preset,
-            viewport: {
-              width: Math.max(320, canvas.clientWidth || 1280),
-              height: Math.max(240, canvas.clientHeight || 720),
-              dpr,
-            },
+            viewport: initialMetrics,
             enabled: () => application.getState().kind === 'PLAYING',
           });
           composition = ownedComposition;
+          const surface = ownedComposition;
+          releaseSurface = observeDisplaySurface({
+            canvas,
+            env: window,
+            onChange: (metrics) => surface.resize(metrics),
+          }).dispose;
+          // Rezoluția exactă a canvasului după setarea nivelului hardware (la creare).
+          backend.resize();
           if (captureConfig) {
             releaseCapture?.();
             releaseCapture = installVisualCapture({
@@ -151,7 +159,13 @@ const application = createApplicationLifecycle({
             });
           }
           owned = diagnoseBackend(backend, {
-            enabled: diagnosticsPanel.root.open,
+            enabled: diagnosticsPanel.root.open || settings.quality.adaptive,
+            // Calitatea adaptivă (rezoluție întâi, apoi preset) numai când jucătorul a cerut-o.
+            onSample: (sample) => {
+              // Pauzele și tab-urile ascunse produc intervale uriașe: nu reprezintă costul cadrului.
+              if (!settings.quality.adaptive || sample.frameMs > 1000) return;
+              ownedComposition?.view.daylight.observe(sample, performance.now());
+            },
             counters: () => {
               const state = application.getSimulationState();
               const stats = ownedComposition?.stats();
@@ -167,6 +181,7 @@ const application = createApplicationLifecycle({
             },
           });
         } catch (error: unknown) {
+          releaseSurface?.();
           ownedComposition?.dispose();
           backend.dispose();
           throw error;
@@ -183,6 +198,8 @@ const application = createApplicationLifecycle({
             try {
               owned.backend.dispose();
             } finally {
+              releaseSurface?.();
+              releaseSurface = undefined;
               ownedComposition?.dispose();
               if (composition === ownedComposition) composition = undefined;
               if (diagnostics === owned) {

@@ -6,6 +6,8 @@ export function createDiagnosticsPanel(
     report: () => DiagnosticReport | null;
     setEnabled: (enabled: boolean) => void;
     inspector?: () => Promise<boolean>;
+    /** PBI 240: rezoluția internă și scara adaptivă (text gata formatat), `null` când nu e cunoscută. */
+    resolution?: () => string | null;
     now?: () => number;
     intervalMs?: number;
   },
@@ -15,6 +17,7 @@ export function createDiagnosticsPanel(
     throw new Error('Diagnostics UI interval must be >=200ms');
   const now = options.now ?? (() => performance.now());
   const root = document.createElement('details');
+  root.className = 'diagnostics-panel';
   const summary = document.createElement('summary');
   summary.textContent = 'Diagnostic';
   const table = document.createElement('dl');
@@ -23,6 +26,7 @@ export function createDiagnosticsPanel(
   host.append(root);
   const fields = [
     'Backend',
+    'Rezoluție internă',
     'CPU render p95',
     'GPU p95',
     'GPU status',
@@ -89,6 +93,7 @@ export function createDiagnosticsPanel(
         c = report.counters;
       const next = [
         report.backend,
+        options.resolution?.() ?? 'Indisponibil',
         value(report.cpuRenderMs?.p95, ' ms'),
         value(report.gpuMs?.p95, ' ms'),
         report.gpuStatus,

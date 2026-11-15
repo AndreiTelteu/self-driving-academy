@@ -26,6 +26,8 @@ export function diagnoseBackend(
     counters?: () => DiagnosticCounters;
     tickCpuMs?: () => number | null;
     enabled?: boolean;
+    /** PBI 240: eșantion per cadru pentru calitatea adaptivă (numai cadrele cu interval cunoscut). */
+    onSample?: (sample: { frameMs: number; cpuMs: number; gpuMs: number | null }) => void;
   } = {},
 ): BabylonDiagnostics {
   const collector = new DiagnosticsCollector(options.capacity);
@@ -100,6 +102,7 @@ export function diagnoseBackend(
           }
         }
         collector.record({ cpuRenderMs, frameMs, gpuMs, tickCpuMs: options.tickCpuMs?.() ?? null });
+        if (frameMs !== null) options.onSample?.({ frameMs, cpuMs: cpuRenderMs, gpuMs });
       },
       dispose: () => {
         try {

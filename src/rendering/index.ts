@@ -6,9 +6,13 @@ export type { RenderSnapshot, RenderVehiclePose, RenderWheelPose } from './rende
 export {
   resolveQuality,
   createAdaptiveQuality,
+  effectiveResolutionScale,
+  ADAPTIVE_RESOLUTION_FACTORS,
   QUALITY_PRESETS,
   checkVisualResources,
 } from './quality-policy';
+export { observeDisplaySurface, readDisplayMetrics } from './display-surface';
+export type { DisplayEnvironment, DisplayMetrics, DisplaySurfaceObserver } from './display-surface';
 export {
   RENDER_ASSET_CAPS,
   checkAssetManifest,

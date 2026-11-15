@@ -71,6 +71,8 @@ export interface V3CompositionScene {
   apply(frame: CompositionFrame, characterFrame: CharacterRenderFrame): void;
   /** Reprezentarea vizuală a unui vehicul, după apariția lui în primul cadru (239: capturi). */
   representation(vehicleId: string): ReturnType<VehicleVisualStage['create']> | undefined;
+  /** PBI 240: dimensiune CSS/DPR nouă; actualizează rezoluția internă fără a recrea scena. */
+  resize(viewport: Readonly<{ width: number; height: number; dpr: number }>): void;
   backendInfo(): V3BackendInfo;
   stats(): V3CompositionSceneStats;
   dispose(): void;
@@ -149,6 +151,9 @@ export function createV3CompositionScene(options: V3CompositionSceneOptions): V3
     },
     representation(vehicleId: string) {
       return representations.get(vehicleId);
+    },
+    resize(viewport: Readonly<{ width: number; height: number; dpr: number }>): void {
+      daylight.resize({ width: viewport.width, height: viewport.height, dpr: viewport.dpr });
     },
     backendInfo(): V3BackendInfo {
       const engine = scene.getEngine() as unknown as {

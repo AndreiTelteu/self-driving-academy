@@ -75,6 +75,8 @@ export interface V3BrowserComposition {
   read(): Readonly<Record<string, unknown>>;
   backendInfo(): ReturnType<V3CompositionScene['backendInfo']>;
   stats(): V3CompositionSceneStats;
+  /** PBI 240: propagă dimensiunea CSS și DPR-ul la rezoluția internă; nu recreează scena. */
+  resize(viewport: Readonly<{ width: number; height: number; dpr: number }>): void;
   dispose(): void;
 }
 
@@ -301,6 +303,9 @@ export function createV3BrowserComposition(
     },
     backendInfo(): ReturnType<V3CompositionScene['backendInfo']> {
       return view.backendInfo();
+    },
+    resize(viewport: Readonly<{ width: number; height: number; dpr: number }>): void {
+      if (!disposed) view.resize(viewport);
     },
     stats(): V3CompositionSceneStats {
       return view.stats();
