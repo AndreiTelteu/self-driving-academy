@@ -294,3 +294,18 @@ Contractul `236-v3-composition-v1` trăiește în [`src/app/walking-composition.
 
 Comenzi: `npm run composition:report` scrie `Docs/Evidence/236-browser-composition/{report.json,report.md}`, iar `-- --check` refuză un raport neactualizat; `-- --browser` adaugă `browser.json` și capturile. Testele `tests/character/walking-composition*.test.ts` acoperă ordinea tickului, o singură livrare pe tick, tranzițiile 195/196, poziția bit-identică a personajului, refuzul dublei livrări, HUD-ul și determinismul (42/42 verificări, 6 secvențe, două rulări identice).
 
+
+## Repararea virajului walker-ului (PBI 237)
+
+Jucarea compunerii din 236 a scos la iveală un defect în `turnToward` (walker 192): diferența unghiulară
+era calculată cu `%`, care în JavaScript păstrează semnul, așa că o țintă la `−π` producea `−3π/2` și
+personajul vira în partea lungă a cercului, oscilând între două tick-uri. A doua jumătate a defectului era
+`return targetYaw`: când ținta diferă de yaw-ul curent printr-un multiplu de `2π`, apropierea sărea o
+rotație completă, deși `−π` și `π` sunt aceeași direcție. Regula corectă este
+`Math.atan2(Math.sin(d), Math.cos(d))`, care dă întotdeauna diferența cea mai scurtă în `(−π, π]`, cu
+întoarcerea `currentYaw + delta` în loc de `targetYaw`. Dovada are două niveluri: patru teste deterministe
+pe walker-ul real (wrap `−π`, simetrie `A`/`D`, fără rotație completă) și un test de compunere care apasă
+`A`/`D` prin portul de input real timp de 30 de tick-uri și cere rotații egale în modul. Pe formula veche
+**1/4** teste trec, pe cea reparată **4/4**, iar suita integrală rămâne verde. Dovezile sunt în
+[Evidence/237-walker-turn](Evidence/237-walker-turn/README.md). Rata de viraj, coliziunea și pașii walker-ului
+nu s-au schimbat, iar proba vizuală rămâne cea din browser a lui 236.

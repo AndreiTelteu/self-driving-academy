@@ -38,7 +38,7 @@ Versiune 0.5 · 4 octombrie 2026. Aceste fișiere Markdown sunt planul curent al
 
 ## Implementare și Kanban
 
-[Backlogul PBI](../PBI/README.md) conține 236 task-uri: V1 are 195 (001–162 și 203–235), V2 are 28 (163–190), V3 are 12 (191–202). IDs sunt stabile; ordinea de lucru rezultă din graful dependențelor, inclusiv dependențe spre IDs noi mai mari. Toate sunt inițial în To Do. [Regulile pentru agenți](../PBI/AGENTS.md) cer mutarea efectivă To Do → In Progress → Done și verificarea finală obligatorie.
+[Backlogul PBI](../PBI/README.md) conține 237 task-uri: V1 are 195 (001–162 și 203–235), V2 are 28 (163–190), V3 are 12 (191–202). IDs sunt stabile; ordinea de lucru rezultă din graful dependențelor, inclusiv dependențe spre IDs noi mai mari. Toate sunt inițial în To Do. [Regulile pentru agenți](../PBI/AGENTS.md) cer mutarea efectivă To Do → In Progress → Done și verificarea finală obligatorie.
 
 [Catalogul JSON](driving-parameters.json) conține 80 de parametri propuși. [Matricea de acoperire](21-acoperire-functionalitati.md) leagă fiecare parametru de politică, estimare și gate de validare. V1 țintește 24; V2 extinde la 80; V3 adaugă mersul pe jos.
 

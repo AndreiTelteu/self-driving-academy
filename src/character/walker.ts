@@ -302,9 +302,12 @@ export function walkerClipForSpeed(speedMps: number): CharacterClipId {
 }
 
 function turnToward(currentYaw: number, targetYaw: number, maximumStep: number): number {
-  let delta = targetYaw - currentYaw;
-  delta = ((delta + Math.PI) % (Math.PI * 2)) - Math.PI;
-  if (Math.abs(delta) <= maximumStep) return targetYaw;
+  // `%` păstrează semnul în JavaScript, deci vechea formulă întorcea −3π/2 pentru o țintă la −π
+  // și vira în partea greșită. atan2 dă întotdeauna diferența cea mai scurtă, cu semnul corect.
+  const delta = Math.atan2(Math.sin(targetYaw - currentYaw), Math.cos(targetYaw - currentYaw));
+  // Rezultatul este current + delta, nu target: target-ul poate fi la 2π distanță și un snap
+  // direct ar sări o rotație completă (exact simptomul „se întoarce la poziția inițială”).
+  if (Math.abs(delta) <= maximumStep) return currentYaw + delta;
   return currentYaw + Math.sign(delta) * maximumStep;
 }
 

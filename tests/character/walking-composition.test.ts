@@ -139,3 +139,24 @@ test('compunerea nu poate fi pașită după eliberare', () => {
   assert.throws(() => model.step({ tick: 1 }), /eliberată/);
   model.dispose();
 });
+
+test('D virează la dreapta din taste, simetric cu A', () => {
+  const { composition: right } = composition();
+  right.port.setAction('throttle', true);
+  right.port.setAction('steerRight', true);
+  for (let tick = 1; tick <= 30; tick += 1) right.step({ tick });
+  const rightYaw = right.character().yawRad;
+  right.dispose();
+
+  const { composition: left } = composition();
+  left.port.setAction('throttle', true);
+  left.port.setAction('steerLeft', true);
+  for (let tick = 1; tick <= 30; tick += 1) left.step({ tick });
+  const leftYaw = left.character().yawRad;
+  left.dispose();
+
+  const start = Math.PI / 2;
+  assert.ok(rightYaw > start + 1, `dreapta: yaw ${rightYaw}`);
+  assert.ok(leftYaw < start - 1, `stânga: yaw ${leftYaw}`);
+  assert.ok(Math.abs(rightYaw - start - (start - leftYaw)) < 1e-9);
+});

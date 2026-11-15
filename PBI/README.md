@@ -15,7 +15,7 @@
 | Interfață | Completed | 0 | 0 | 13 / 13 | `██████████` 100% |
 | Învățare | Completed | 0 | 0 | 17 / 17 | `██████████` 100% |
 | Învățare V2 | Completed | 0 | 0 | 10 / 10 | `██████████` 100% |
-| Mers pe jos V3 | Completed | 0 | 0 | 13 / 13 | `██████████` 100% |
+| Mers pe jos V3 | Completed | 0 | 0 | 14 / 14 | `██████████` 100% |
 | Misiuni | Completed | 0 | 0 | 15 / 15 | `██████████` 100% |
 | Misiuni și interfață | Completed | 0 | 0 | 1 / 1 | `██████████` 100% |
 | Misiuni V2 | Completed | 0 | 0 | 1 / 1 | `██████████` 100% |
@@ -34,7 +34,7 @@
 | Validare și release | Completed | 0 | 0 | 12 / 12 | `██████████` 100% |
 | Validare V2 | Completed | 0 | 0 | 2 / 2 | `██████████` 100% |
 | Vehicule și fizică | Completed | 0 | 0 | 11 / 11 | `██████████` 100% |
-| Total | Completed | 0 | 0 | 236 / 236 | `██████████` 100% |
+| Total | Completed | 0 | 0 | 237 / 237 | `██████████` 100% |
 <!-- loop-pbi:progress:end -->
 
 # Backlog Kanban Self Driving Academy
@@ -55,7 +55,7 @@
 | --- | --- | --- | --- |
 | V1 | 001–162 și 203–235 | 195 | Joc PC browser, trei moduri, stil comun taxi/civil, 24 parametri, KPIs, daily, XP, salvare și comparații |
 | V2 | 163–190 | 28 | Toți cei 80 de parametri, pietoni, pericole și provocări extinse |
-| V3 | 191–202 și 236 | 13 | Personaj, mers pe jos și intrare/ieșire din mașini |
+| V3 | 191–202, 236–237 | 14 | Personaj, mers pe jos și intrare/ieșire din mașini |
 
 Statutul curent se citește din coloana fișierului și frontmatter. Indexul păstrează ID-urile fără statusuri duplicate și fără linkuri către o coloană care s-ar schimba la mutare. Găsește un task prin prefixul său în cele trei coloane.
 
@@ -299,6 +299,7 @@ Statutul curent se citește din coloana fișierului și frontmatter. Indexul pă
 | 234 | Savefile complet cu checksum și încărcare atomică | Persistență | V1 | 135, 215, 225, 227, 229, 230, 233, 222 |
 | 235 | Regresii și playtest pentru distracție și revenire | Validare | V1 | 216, 224, 226, 228, 229, 230, 233, 234, 084 |
 | 236 | Compunerea în browser a lanțului V3 | Mers pe jos V3 | V3 | 202, 193, 194, 195, 196, 197 |
+| 237 | Virarea walker-ului în partea scurtă și simetrică | Mers pe jos V3 | V3 | 236 |
 
 ## Verificarea consistenței planului
 

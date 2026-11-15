@@ -148,7 +148,7 @@ foreach ($planTask in $planTasks.Values) {
     }
 }
 
-foreach ($planGatePair in @(@('162', 1), @('190', 2), @('236', 3))) {
+foreach ($planGatePair in @(@('162', 1), @('190', 2), @('237', 3))) {
     $planGateId = $planGatePair[0]
     $planGateStage = [int]$planGatePair[1]
     $planGateAncestors = Get-PlanAncestors $planGateId
