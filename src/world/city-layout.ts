@@ -1,6 +1,7 @@
 import type { Vector3 } from '../vehicles';
 import { parseRoadMap } from './parser';
 import type { GeometryArea, Lane, RoadMap, StopLine } from './schema';
+import { deriveWorldLimit, type WorldLimit } from './world-limit';
 
 /**
  * Visual-semantic city layout derived from a validated PBI032 map.
@@ -195,6 +196,8 @@ export interface CityLayoutStats {
 export interface CityLayout {
   readonly mapId: string;
   readonly boundsM: { readonly minM: Vector3; readonly maxM: Vector3 };
+  /** PBI 242: limita jucabilă derivată din layout (parapetul vizibil și zidurile de coliziune). */
+  readonly worldLimit: WorldLimit;
   readonly elements: readonly CityElement[];
   readonly lanes: readonly CityLaneInfo[];
   readonly intersections: readonly CityIntersectionInfo[];
@@ -1280,10 +1283,13 @@ export function createCityLayout(input: unknown, options?: CityLayoutOptions): C
     footprintVertices,
   });
 
+  const boundsM = Object.freeze({ minM: map.bounds.minM, maxM: map.bounds.maxM });
+  const frozenElements = Object.freeze(elements);
   return Object.freeze({
     mapId: map.mapId,
-    boundsM: Object.freeze({ minM: map.bounds.minM, maxM: map.bounds.maxM }),
-    elements: Object.freeze(elements),
+    boundsM,
+    worldLimit: deriveWorldLimit({ boundsM, elements: frozenElements }),
+    elements: frozenElements,
     lanes: Object.freeze(laneInfo),
     intersections: Object.freeze(intersectionInfo),
     blocks: Object.freeze(blockInfo),

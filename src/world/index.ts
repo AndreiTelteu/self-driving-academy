@@ -193,6 +193,17 @@ export {
   type ResolvedCityLayoutOptions,
   type SignalLampState,
 } from './city-layout';
+export {
+  cityExtent,
+  deriveWorldLimit,
+  worldLimitWalls,
+  WORLD_LIMIT_POLICY,
+  WORLD_LIMIT_VERSION,
+  type WorldLimit,
+  type WorldLimitInput,
+  type WorldLimitWall,
+  type WorldRect,
+} from './world-limit';
 export type {
   RoadMap,
   Lane,

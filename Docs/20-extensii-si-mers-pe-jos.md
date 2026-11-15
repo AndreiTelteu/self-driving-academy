@@ -326,3 +326,15 @@ mers 192 și planul 146 (obstacol circular de rază `radiusM`). Corpul mașinii 
 componenta vitezei spre obstacol se anulează (alunecare). Din oprire, frâna ținută dă marșarier lent (maxim 3 m/s),
 altfel o mașină blocată nu ar mai putea ieși. Dovezile sunt în
 [Evidence/238-vehicle-static-collision](Evidence/238-vehicle-static-collision/README.md).
+
+## Limita hărții pentru mașina condusă și personaj (PBI 242)
+
+`layout.worldLimit` (`src/world/world-limit.ts`, `242-world-limit-v1`) este dreptunghiul `boundsM` retras cu 12 m (dar cu cel puțin
+2 m față de ultimul element randat: străzi, trotuare, clădiri; zebrele care depășesc marginea străzii nu contează). Pe hărțile
+implicite limita este la x, z ∈ [−28, 748]. Cele patru ziduri invizibile (grosime 4 m, înălțime 3 m, colțurile se suprapun)
+sunt blocatoare `kind: 'LIMIT'` în `createCityWalkWorld`, deci **același cod** care oprește personajul (192) și mașina condusă
+(238, `createVehicleCollisionWorld` primește `walkWorld.blockers`) le tratează ca pe o clădire: măturare în sub-pași de 0,1 m,
+translație minimă, alunecare, aceeași determinare. `WalkWorldStats` are câmpul nou `limits` (4) și `obstacles` rămâne 0 pe
+harta implicită. Contractul 238 și testele lui sunt neschimbate; solverul nu are cod nou. Vizibil: parapetul
+`src/rendering/babylon/world-edge-scene.ts` (grindă de oțel pe stâlpi, la 6 cm în afara limitei) și terenul din
+[documentul 30](30-calitate-vizuala-v4.md). Costul simulării: [Evidence/242-road-world-edge/sim-cost.txt](Evidence/242-road-world-edge/sim-cost.txt).

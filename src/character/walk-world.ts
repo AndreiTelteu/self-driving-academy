@@ -11,7 +11,12 @@
  * creates or owns a physics body.
  */
 import { CharacterContractError } from './errors';
-import { CITY_LAYOUT_DEFAULTS, type CityLayout } from '../world';
+import {
+  CITY_LAYOUT_DEFAULTS,
+  WORLD_LIMIT_POLICY,
+  worldLimitWalls,
+  type CityLayout,
+} from '../world';
 import {
   createRectanglePolygon,
   createWalkPolygon,
@@ -30,7 +35,8 @@ export const WALK_SURFACE_KINDS = Object.freeze([
 ] as const);
 export type WalkSurfaceKind = (typeof WALK_SURFACE_KINDS)[number];
 
-export const WALK_BLOCKER_KINDS = Object.freeze(['BUILDING', 'OBSTACLE'] as const);
+/** `LIMIT` (PBI 242): zidurile invizibile ale limitei hărții; nu sunt clădiri, obstacole sau vehicule. */
+export const WALK_BLOCKER_KINDS = Object.freeze(['BUILDING', 'OBSTACLE', 'LIMIT'] as const);
 export type WalkBlockerKind = (typeof WALK_BLOCKER_KINDS)[number];
 
 export interface WalkSurface {
@@ -56,6 +62,8 @@ export interface WalkWorldStats {
   readonly blockers: number;
   readonly buildings: number;
   readonly obstacles: number;
+  /** Zidurile limitei hărții (PBI 242). */
+  readonly limits: number;
 }
 
 export interface WalkWorld {
@@ -127,14 +135,16 @@ function freezeBlocker(blocker: WalkBlocker): WalkBlocker {
 
 function countKinds(
   blockers: readonly WalkBlocker[],
-): Pick<WalkWorldStats, 'buildings' | 'obstacles'> {
+): Pick<WalkWorldStats, 'buildings' | 'obstacles' | 'limits'> {
   let buildings = 0;
   let obstacles = 0;
+  let limits = 0;
   for (const blocker of blockers) {
     if (blocker.kind === 'BUILDING') buildings += 1;
+    else if (blocker.kind === 'LIMIT') limits += 1;
     else obstacles += 1;
   }
-  return { buildings, obstacles };
+  return { buildings, obstacles, limits };
 }
 
 function indexSurfaceIds(surfaces: readonly WalkSurface[]): void {
@@ -310,6 +320,17 @@ export function createCityWalkWorld(layout: CityLayout): WalkWorld {
       vertices: createRectanglePolygon(`court:${blockId}`, center, { x: halfX, z: halfZ }).vertices,
     });
   }
+  // PBI 242: limita hărții. Patru ziduri LIMIT în afara parapetului, tratate de walker (192) și de
+  // mașina condusă (238, care primește aceleași blocatoare) cu aceeași metodă de măturare.
+  for (const wall of worldLimitWalls(layout.worldLimit))
+    blockers.push({
+      id: wall.id,
+      kind: 'LIMIT',
+      bottomM: 0,
+      topM: WORLD_LIMIT_POLICY.wallHeightM,
+      marginM: 0,
+      vertices: wall.vertices,
+    });
   return createWalkWorld({
     surfaces,
     blockers,

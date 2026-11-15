@@ -3,7 +3,7 @@
 Probe structurale în NullEngine pe contractele reale de prezentare (`157-render-budget-v1`). Bugetele sunt citate din manifestul `203-initial-1` și **nu** sunt modificate.
 
 - Înainte: `baseline înainte de optimizare (sursa neatinsă)` · commit `546fa29e5ac6` · 2026-11-12T06:06:49.434Z
-- După: `după optimizare (aceeași probă, același fixture)` · commit `546fa29e5ac6` · 2026-11-12T06:04:42.327Z
+- După: `după optimizare (aceeași probă, același fixture)` · commit `21da795229db` · 2026-11-15T22:26:38.123Z
 - Sumar: **17 PASS**, **0 FAIL**, 2 NOT_MEASURED; gate structural `STRUCTURAL_PASS`, gate hardware `NOT_VALIDATED`
 
 ## Metrici structurale
@@ -36,7 +36,7 @@ Probe structurale în NullEngine pe contractele reale de prezentare (`157-render
 - 923 elemente randate înainte și 923 după; identitatea fiecărui element este păstrată
 - instanțe thin: 0 → 78; mesh-uri: 155 → 12
 - materiale înghețate: 0 → 12
-- vârfuri/triunghiuri: 19172/10054 → 18580/9314
+- vârfuri/triunghiuri: 19172/10054 → 19572/9810
 - picking: 32/32 raze identice (7 nimeresc un vehicul)
 - LOD: LOW 1 tranziție/0 oscilații; MEDIUM 1 tranziție/0 oscilații; HIGH 1 tranziție/0 oscilații
 - umbre: LOW 0/0 admiși, esențial 0; MEDIUM 48/48 admiși, esențial 1; HIGH 71/96 admiși, esențial 1

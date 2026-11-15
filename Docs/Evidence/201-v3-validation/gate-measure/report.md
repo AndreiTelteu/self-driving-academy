@@ -1,6 +1,6 @@
 # PBI 224 — raport agregat al gate-ului de regresii de performanță
 
-Verdict structural: `PASS` · verdict de release: `NOT_VALIDATED` · revizie `b1c76c146aa6` · manifest `203-initial-1` (nemodificat).
+Verdict structural: `PASS` · verdict de release: `NOT_VALIDATED` · revizie `21da795229db` · manifest `203-initial-1` (nemodificat).
 
 ## Sumar
 
@@ -12,13 +12,13 @@ Verdict structural: `PASS` · verdict de release: `NOT_VALIDATED` · revizie `b1
 
 | Probă | Criteriu | Fel | Verdict | Detaliu | Motiv | Dovadă |
 | --- | --- | --- | --- | --- | --- | --- |
-| bundle-critical-transfer · bundle JS+WASM sub capacitatea critică de transfer | Criteriul 1: bundle-ul și capacitățile resping depășirile | PORTABLE | `PASS` | 5.97 MiB (6262960 B) din 8.00 MiB; JS 3616364 B + WASM 2646596 B, gzip 1805985 B, 130 artefacte | — | Docs/performance-budgets.json proposedCapacities.criticalJsWasmTransferBytes |
+| bundle-critical-transfer · bundle JS+WASM sub capacitatea critică de transfer | Criteriul 1: bundle-ul și capacitățile resping depășirile | PORTABLE | `PASS` | 6.41 MiB (6717675 B) din 8.00 MiB; JS 4071079 B + WASM 2646596 B, gzip 1939812 B, 186 artefacte | — | Docs/performance-budgets.json proposedCapacities.criticalJsWasmTransferBytes |
 | bundle-regression · bundle-ul nu crește peste pragul relativ confirmat | Criteriul 1: bundle-ul și capacitățile resping depășirile | PORTABLE | `PASS` | baseline 5.84 MiB (f5fb79fd07c7); 0/5 repetări peste >10% și >5.00 MiB; prag de confirmare 3/5 | — | Docs/Evidence/155-hardware-budget/build-transfer.json + Docs/performance-budgets.json regressionProposal |
 | capacity-render · draw calls, instanțe și obiecte Babylon sub capacitățile fixate | Criteriul 1: capacități structurale peste buget sunt respinse | PORTABLE | `PASS` | draw calls 48/128, instanțe thin 78/8192, batchuri 40/512, obiecte Babylon 12/4096, 923 elemente randate | — | Docs/performance-budgets.json resourceAdmissionContracts.rendering |
 | determinism · cinci repetări produc aceiași bytes și aceeași probă structurală | Criteriul 1: capacități structurale peste buget sunt respinse | PORTABLE | `PASS` | 5 builduri, 5 probe de randare; digesturi distincte: 1 build / 1 randare | — | repetițiile gate-ului |
 | soak-60min · soak de minimum 60 de minute și 20 de cicluri, cu platou | Criteriul 3: soak de minimum 60 de minute, 20 de cicluri, platou, baseline neschimbat | EVIDENCE | `PASS` | 60.001 min, 20 cicluri (20 curate), 7/7 tendințe PLATEAU, heap +1.82 MiB din 5.00 MiB, coadă max 1 joburi / 4 B, throttling OBSERVED | — | Docs/Evidence/224-performance-gate/soak/report.json |
-| fps-hardware · FPS și frame p95 pe hardware real, pe aceeași revizie și ambele backenduri | Criteriul 1: gate-ul FPS se închide numai pe hardware real, aceeași revizie | EVIDENCE | `NOT_VALIDATED` | — | capturile hardware 220 din Docs/Evidence/155-hardware-budget/report.json sunt pe buildul 2d68b43c8cdf; revizia curentă este b1c76c146aa6. Pragurile absolute FPS/GPU (35 ms p95, 28 ms GPU) cer aceeași revizie, deci FPS rămâne NOT_VALIDATED până la o rulare pe hardware real al acestei revizii. | Docs/Evidence/155-hardware-budget/report.json |
-| probe-render-budget · proba 157 (buget de randare) este curentă față de sursă | Criteriul 1: capacități structurale peste buget sunt respinse | EVIDENCE | `PASS` | 157: 17 PASS, 0 FAIL, 2 NOT_MEASURED; --check exit 0, captura 546fa29e5ac6 | — | Docs/Evidence/157-render-budget/report.json |
+| fps-hardware · FPS și frame p95 pe hardware real, pe aceeași revizie și ambele backenduri | Criteriul 1: gate-ul FPS se închide numai pe hardware real, aceeași revizie | EVIDENCE | `NOT_VALIDATED` | — | capturile hardware 220 din Docs/Evidence/155-hardware-budget/report.json sunt pe buildul 2d68b43c8cdf; revizia curentă este 21da795229db. Pragurile absolute FPS/GPU (35 ms p95, 28 ms GPU) cer aceeași revizie, deci FPS rămâne NOT_VALIDATED până la o rulare pe hardware real al acestei revizii. | Docs/Evidence/155-hardware-budget/report.json |
+| probe-render-budget · proba 157 (buget de randare) este curentă față de sursă | Criteriul 1: capacități structurale peste buget sunt respinse | EVIDENCE | `PASS` | 157: 17 PASS, 0 FAIL, 2 NOT_MEASURED; --check exit 0, captura 21da795229db | — | Docs/Evidence/157-render-budget/report.json |
 | probe-simulation-budget · proba 158 (buget de simulare) este curentă față de sursă | Criteriul 2: learning, recorder, autosave, KPI și XP pe workload maxim V1 și ambele backenduri | EVIDENCE | `PASS` | 158: decizii PASS, estimare PASS, transferuri PASS, 3 echivalențe IDENTICAL; --check exit 0 | — | Docs/Evidence/158-simulation-budget/report.json |
 | probe-traffic-benchmark · proba 156 (benchmark de flotă/trafic) este curentă față de sursă | Criteriul 2: learning, recorder, autosave, KPI și XP pe workload maxim V1 și ambele backenduri | EVIDENCE | `PASS` | 156: 36 PASS, 0 FAIL, 12 STRESS, 60 REPORTED; --check exit 0 | — | Docs/Evidence/156-traffic-benchmark/report.json |
 | probe-hardware-budget · proba 155 (hardware și bugete) este curentă față de sursă | Criteriul 2: learning, recorder, autosave, KPI și XP pe workload maxim V1 și ambele backenduri | EVIDENCE | `PASS` | 155: 85 PASS, 0 FAIL, 6 NOT_MEASURED declarate; --check exit 0 | — | Docs/Evidence/155-hardware-budget/report.json |
@@ -32,12 +32,12 @@ Verdict structural: `PASS` · verdict de release: `NOT_VALIDATED` · revizie `b1
 
 ## Stabilitate pe repetări
 
-- Bytes per repetare: 6262960 B · 6262960 B · 6262960 B · 6262960 B · 6262960 B
-- Digesturi de randare: `b6c188a777eb626e` · `b6c188a777eb626e` · `b6c188a777eb626e` · `b6c188a777eb626e` · `b6c188a777eb626e`
+- Bytes per repetare: 6717675 B · 6717675 B · 6717675 B · 6717675 B · 6717675 B
+- Digesturi de randare: `08f554b7ab6f20e3` · `08f554b7ab6f20e3` · `08f554b7ab6f20e3` · `08f554b7ab6f20e3` · `08f554b7ab6f20e3`
 - cele 5 repetări produc aceiași bytes și aceeași probă structurală (variație 0)
 
 ## Ce rămâne deschis
 
-- **fps-hardware** (Criteriul 1: gate-ul FPS se închide numai pe hardware real, aceeași revizie): capturile hardware 220 din Docs/Evidence/155-hardware-budget/report.json sunt pe buildul 2d68b43c8cdf; revizia curentă este b1c76c146aa6. Pragurile absolute FPS/GPU (35 ms p95, 28 ms GPU) cer aceeași revizie, deci FPS rămâne NOT_VALIDATED până la o rulare pe hardware real al acestei revizii.
+- **fps-hardware** (Criteriul 1: gate-ul FPS se închide numai pe hardware real, aceeași revizie): capturile hardware 220 din Docs/Evidence/155-hardware-budget/report.json sunt pe buildul 2d68b43c8cdf; revizia curentă este 21da795229db. Pragurile absolute FPS/GPU (35 ms p95, 28 ms GPU) cer aceeași revizie, deci FPS rămâne NOT_VALIDATED până la o rulare pe hardware real al acestei revizii.
 
 Verdictul structural acoperă probele portabile ale reviziei curente. Verdictul de release poate fi PASS numai când nicio probă obligatorie nu este NOT_VALIDATED; fără GPU real, FPS rămâne deschis.

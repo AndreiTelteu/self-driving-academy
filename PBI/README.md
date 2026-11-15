@@ -4,7 +4,7 @@
 | Asseturi și audio | Completed | 0 | 0 | 7 / 7 | `██████████` 100% |
 | Autonomie | Completed | 0 | 0 | 14 / 14 | `██████████` 100% |
 | Babylon | Completed | 0 | 0 | 11 / 11 | `██████████` 100% |
-| Calitate vizuală V4 | V4 | 12 | 0 | 3 / 15 | `██░░░░░░░░` 20% |
+| Calitate vizuală V4 | V4 | 11 | 0 | 4 / 15 | `██░░░░░░░░` 27% |
 | Control manual | Completed | 0 | 0 | 8 / 8 | `██████████` 100% |
 | Economie | Completed | 0 | 0 | 1 / 1 | `██████████` 100% |
 | Experiență | Completed | 0 | 0 | 2 / 2 | `██████████` 100% |
@@ -35,7 +35,7 @@
 | Validare și release | Completed | 0 | 0 | 12 / 12 | `██████████` 100% |
 | Validare V2 | Completed | 0 | 0 | 2 / 2 | `██████████` 100% |
 | Vehicule și fizică | Completed | 0 | 0 | 11 / 11 | `██████████` 100% |
-| Total | - | 12 | 0 | 241 / 253 | `█████████░` 95% |
+| Total | - | 11 | 0 | 242 / 253 | `█████████░` 96% |
 <!-- loop-pbi:progress:end -->
 
 # Backlog Kanban Self Driving Academy

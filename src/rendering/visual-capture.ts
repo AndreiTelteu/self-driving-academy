@@ -220,6 +220,20 @@ const VIEWS: readonly CaptureView[] = [
     placement: CARS_AWAY,
   },
   {
+    // PBI 242: taxiul oprit de limita hărții (parapet + zid invizibil la x = 748 m).
+    id: 'map-edge-barrier',
+    category: 'map-edge',
+    title: 'Taxi oprit de parapetul de la marginea hărții',
+    surface: 'canvas',
+    pose: { position: at(738.5, 1.9, -3.4), target: at(747.5, 0.7, 1.5), fovRad: 0.9 },
+    placement: {
+      vehicles: {
+        'taxi-01': { x: 745.85, z: 1.3, yawRad: Math.PI / 2 },
+        'civil-01': { x: 300, z: 1.3, yawRad: Math.PI / 2 },
+      },
+    },
+  },
+  {
     id: 'ui-hud',
     category: 'ui',
     title: 'UI și HUD (pagina completă)',

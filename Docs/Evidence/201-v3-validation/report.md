@@ -30,7 +30,7 @@ Total: **2 PASS, 0 FAIL, 1 NOT_RUN**. Un verdict `NOT_RUN` lasă gate-ul deschis
 | C3 | `npm run perf:gate -- --measure --out=Docs/Evidence/201-v3-validation/gate-measure` | 0 | PASS | 224 reexecutat: structural PASS, release NOT_VALIDATED, 16 PASS, 0 FAIL, 1 NOT_VALIDATED |
 | C3 | `npm run qa:compat -- --check` | 0 | PASS | 9/9 combinații reale, 11/11 verificări deterministe, 11 declarate NOT_RUN |
 | C3 | `npm run missions:challenges-v2 -- --check` | 0 | PASS | 188: 15 provocări, 5 familii, 40/40 verificări |
-| C3 | `npm test` | 0 | PASS | 3408 teste, 3408 trecute, 0 eșuate |
+| C3 | `npm test` | 0 | PASS | 3490 teste, 3490 trecute, 0 eșuate |
 
 ## Criteriul 1 — lanțul real, pe fiecare mod
 
@@ -144,10 +144,10 @@ Măsurarea de timp pe acest workload este **NOT_RUN**: Harness-ul de performanț
 | Fișier | SHA-256 |
 | --- | --- |
 | `Docs/performance-budgets.json` | `10d78ab5c999215684c821a1f32fd7045392f0f6d8c140c54115d0f73475a21c` |
-| `Docs/Evidence/216-v1-regression/report.json` | `b9ac66fdb82a7ef2951dcd9a16351032e1292d7ca1731dba81900d95fdd16593` |
+| `Docs/Evidence/216-v1-regression/report.json` | `fa2ae11b14e7b77f057fffc9a7173c566c353401dfb7401214dd983c998c9942` |
 | `Docs/Evidence/154-compat-matrix/report.json` | `92136164b1e176831c49b96d2f319dfe2976db860aa5cde12a41ac17304e925e` |
 | `Docs/Evidence/158-simulation-budget/report.json` | `eee9479bf4cc0086c4519fd0b1d8c1c14deac97943aebea0792035c5f2bd26f7` |
-| `Docs/Evidence/157-render-budget/report.json` | `04e9075c82283834487603217639985736ccdbe0364367c5de1d72701317d759` |
+| `Docs/Evidence/157-render-budget/report.json` | `eb7abbd05893c0bd88ef06302418faceba3e31c4a4bddb3e6978862f91e53aa6` |
 | `Docs/Evidence/159-soak/report.json` | `59c8b2b649c96af728bcf2df9a34ae0bd18277ffea1529c8595d0f0540d2fe5d` |
 | `Docs/Evidence/187-v2-parameter-gate/report.json` | `2a6b7e6ac7dc51d5bab7c8c8ce133653d3a55403f92a7d6405723d6a094909fe` |
 | `Docs/Evidence/188-v2-challenges/report.json` | `a1ae6cb49ea0b95ca58769660bfb33a282288b700e5e35c062b6e7a9979601d0` |

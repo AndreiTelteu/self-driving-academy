@@ -92,6 +92,24 @@ export const POST_PROCESSING_PRESETS: Readonly<Record<QualityPreset, PostProcess
       dithering: true,
     }),
   });
+/**
+ * PBI 242 — terenul de dincolo de oraș, dealurile îndepărtate și parapetul limitei hărții.
+ *
+ * Costul este de 3 desenări pe orice preset (teren, parapet stâlpi, parapet grinzi); pe preset se
+ * schimbă doar densitatea: segmentele pe latura buclei de teren și pasul stâlpilor. Nu există
+ * umbre, texturi sau materiale transparente, deci LOW rămâne ieftin.
+ */
+export interface WorldEdgeTier {
+  /** Segmente pe latura fiecărei bucle dreptunghiulare de teren. */
+  readonly terrainSegmentsPerSide: number;
+  /** Distanța dintre stâlpii parapetului, în metri. */
+  readonly postSpacingM: number;
+}
+export const WORLD_EDGE_PRESETS: Readonly<Record<QualityPreset, WorldEdgeTier>> = Object.freeze({
+  LOW: Object.freeze({ terrainSegmentsPerSide: 28, postSpacingM: 8 }),
+  MEDIUM: Object.freeze({ terrainSegmentsPerSide: 48, postSpacingM: 4 }),
+  HIGH: Object.freeze({ terrainSegmentsPerSide: 72, postSpacingM: 4 }),
+});
 /** Admit optional presentation resources before creation; never reject a simulated entity. */
 export function checkVisualResources(
   preset: QualityPreset,

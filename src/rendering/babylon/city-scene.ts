@@ -12,6 +12,7 @@ import type {
   CityPlanarElement,
   CitySignalHeadElement,
 } from '../../world';
+import { deriveRoadFill } from '../road-surface';
 
 /**
  * Deterministic Babylon builder for the neighbourhood derived by `createCityLayout`.
@@ -149,6 +150,17 @@ const BUILDERS: readonly CityMaterialKey[] = [
   'lampAmber',
   'lampGreen',
 ];
+/**
+ * PBI 242 — offset de adâncime pe material (negativ = mai aproape de cameră). Vezi documentul 30:
+ * carosabil/intersecție 0, marcaje și zone de serviciu -2, teren +1 (sub trotuar și clădiri).
+ */
+export const DEPTH_BIAS: Readonly<
+  Partial<Record<CityMaterialKey, Readonly<{ factor: number; units: number }>>>
+> = Object.freeze({
+  marking: Object.freeze({ factor: -2, units: -2 }),
+  service: Object.freeze({ factor: -1, units: -1 }),
+  ground: Object.freeze({ factor: 1, units: 1 }),
+});
 /** Signal head parts share one unit box: post, housing and lamp differ only by matrix. */
 const POST_SIZE_M = 0.16;
 const LAMP_SIZE = Object.freeze({ x: 0.28, y: 0.28, z: 0.08 });
@@ -222,6 +234,51 @@ function pushPrism(
     if (outward >= 0)
       builder.indices.push(start, start + 1, start + 2, start, start + 2, start + 3);
     else builder.indices.push(start, start + 2, start + 1, start, start + 3, start + 2);
+  }
+}
+/**
+ * Perete vertical de la cota 0 la `topM` pe segmentul a→b, cu normala spre `outward` (unitară).
+ * Orientarea este verificată prin produsul vectorial, ca la `pushQuad`, nu presupusă.
+ */
+function pushWall(
+  builder: GeometryBuilder,
+  a: Point,
+  b: Point,
+  topM: number,
+  outward: { readonly x: number; readonly z: number },
+): void {
+  const start = builder.positions.length / 3;
+  builder.positions.push(a.x, 0, a.z, b.x, 0, b.z, b.x, topM, b.z, a.x, topM, a.z);
+  // Normala fețelor (a, b, sus-b): (b − a) × (0,1,0) în sistemul Babylon cu mâna stângă.
+  const nx = -(b.z - a.z);
+  const nz = b.x - a.x;
+  if (nx * outward.x + nz * outward.z >= 0)
+    builder.indices.push(start, start + 2, start + 1, start, start + 3, start + 2);
+  else builder.indices.push(start, start + 1, start + 2, start, start + 2, start + 3);
+}
+/** Muchia dinspre carosabil a unei borduri (latura lungă exterioară a benzii de bordură). */
+function curbFace(
+  element: CityPlanarElement,
+): { a: Point; b: Point; topM: number; outward: { x: number; z: number } } | null {
+  const side = element.id.split(':').pop();
+  const xs = element.footprintM.map((vertex) => vertex.x);
+  const zs = element.footprintM.map((vertex) => vertex.z);
+  const minX = Math.min(...xs);
+  const maxX = Math.max(...xs);
+  const minZ = Math.min(...zs);
+  const maxZ = Math.max(...zs);
+  const topM = element.baseYM;
+  switch (side) {
+    case 'S':
+      return { a: point(minX, minZ), b: point(maxX, minZ), topM, outward: { x: 0, z: -1 } };
+    case 'N':
+      return { a: point(minX, maxZ), b: point(maxX, maxZ), topM, outward: { x: 0, z: 1 } };
+    case 'W':
+      return { a: point(minX, minZ), b: point(minX, maxZ), topM, outward: { x: -1, z: 0 } };
+    case 'E':
+      return { a: point(maxX, minZ), b: point(maxX, maxZ), topM, outward: { x: 1, z: 0 } };
+    default:
+      return null;
   }
 }
 function pushBox(
@@ -421,6 +478,15 @@ export function createCityScene(
     material.specularColor = Color3.Black();
     material.maxSimultaneousLights = 2;
     material.backFaceCulling = false;
+    // PBI 242: ordinea pe verticală se păstrează cu offset de adâncime (polygon offset / depth bias),
+    // nu cu înălțimi alese pe ochi. Pe tot lanțul 0 (carosabil) < 0,015 (treceri) < 0,02 (marcaje)
+    // cotele rămân cele ale lui 042; offsetul garantează că marcajul câștigă și când rezoluția
+    // depth buffer-ului la distanță depășește cei 2 cm, iar terenul de sub trotuar pierde.
+    const bias = DEPTH_BIAS[key];
+    if (bias) {
+      material.zOffset = bias.factor;
+      material.zOffsetUnits = bias.units;
+    }
     if (EMISSIVE.includes(key)) {
       material.disableLighting = true;
       material.emissiveColor = material.diffuseColor;
@@ -516,6 +582,63 @@ export function createCityScene(
     rendered.push(element.id);
     mergedElements += 1;
     count(element.kind);
+  }
+  // PBI 242: rosturile dintre benzi (mediana de 0,8 m, intervalul de 0,3 m dintre benzile unei
+  // artere) sunt umplute cu asfalt în același batch, la aceeași cotă și fără suprapunere cu benzile,
+  // deci nu apare nici z-fighting, nici `clearColor` sub marcajul axial. Fâșiile nu sunt elemente
+  // ale lumii: nu au slice înregistrat și nu intră în `rendered`.
+  const roadFill = deriveRoadFill(layout);
+  for (const strip of roadFill.strips)
+    pushQuad(builderFor('asphalt'), strip.footprintM, strip.baseYM);
+
+  // PBI 242, cauza a doua a dungii de cer: trotuarul (0,14 m), bordura (0,16 m) și terenul (0,06 m)
+  // sunt plăci plate peste carosabilul de la cota 0, iar layout-ul nu are fața verticală a bordurii.
+  // Un fascicul razant dinspre stradă trece prin crăpătura de la marginea carosabilului pe sub plăci
+  // și ajunge la `clearColor` (verificat prin ray-cast în `tests/rendering/curb-faces.test.ts`).
+  // Fața bordurii este geometrie de prezentare (nu element al lumii) și folosește materialul bordurii.
+  for (const element of layout.elements) {
+    if (element.kind !== 'CURB') continue;
+    const face = curbFace(element);
+    if (face) pushWall(builderFor('curb'), face.a, face.b, face.topM, face.outward);
+  }
+  // Colțurile blocului: trotuarele N/S acoperă colțul pe toată adâncimea lor (2,4 m), iar bordurile
+  // E/V se opresc înaintea lui, deci capetele benzilor N/S au nevoie de câte un perete (la cota
+  // trotuarului, plus cota bordurii pe fâșia ei de 0,2 m), altfel colțul lasă o crăpătură spre cer.
+  for (const candidate of layout.elements) {
+    if (candidate.kind !== 'SIDEWALK') continue;
+    const element = candidate as CityPlanarElement;
+    const side = element.id.split(':').pop();
+    if (side !== 'N' && side !== 'S') continue;
+    const xs = element.footprintM.map((vertex) => vertex.x);
+    const zs = element.footprintM.map((vertex) => vertex.z);
+    const minX = Math.min(...xs);
+    const maxX = Math.max(...xs);
+    const minZ = Math.min(...zs);
+    const maxZ = Math.max(...zs);
+    const curb = layout.elements.find(
+      (candidate) =>
+        candidate.kind === 'CURB' && candidate.id === element.id.replace('walk:', 'curb:'),
+    ) as CityPlanarElement | undefined;
+    const builder = builderFor('curb');
+    for (const [x, outwardX] of [
+      [minX, -1],
+      [maxX, 1],
+    ] as const) {
+      pushWall(builder, point(x, minZ), point(x, maxZ), element.baseYM, { x: outwardX, z: 0 });
+      if (curb) {
+        const curbZs = curb.footprintM.map((vertex) => vertex.z);
+        pushWall(
+          builder,
+          point(x, Math.min(...curbZs)),
+          point(x, Math.max(...curbZs)),
+          curb.baseYM,
+          {
+            x: outwardX,
+            z: 0,
+          },
+        );
+      }
+    }
   }
 
   // Batched planar elements: one merged mesh per material.

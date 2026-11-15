@@ -20,6 +20,7 @@ import { createCharacterScene, type CharacterScene } from './character-scene';
 import { createCityDecorScene, type CityDecorScene } from './city-decor-scene';
 import { createCityScene, type CityScene } from './city-scene';
 import { createDaylight } from './daylight';
+import { createWorldEdgeScene, type WorldEdgeScene } from './world-edge-scene';
 import { createVehicleVisualStage, type VehicleVisualStage } from './vehicle-scene';
 
 export const V3_COMPOSITION_SCENE_VERSION = '236-v3-composition-scene-v1' as const;
@@ -51,6 +52,9 @@ export interface V3CompositionSceneStats {
   readonly cityMeshes: number;
   readonly cityDrawCalls: number;
   readonly decorMeshes: number;
+  /** PBI 242: teren, dealuri și parapet (desenări pe preset). */
+  readonly edgeMeshes: number;
+  readonly edgeDrawCalls: number;
   readonly characterMeshes: number;
   readonly characterDrawCalls: number;
   readonly vehicleMeshes: number;
@@ -64,6 +68,7 @@ export interface V3CompositionScene {
   readonly scene: Scene;
   readonly city: CityScene;
   readonly decor: CityDecorScene | null;
+  readonly worldEdge: WorldEdgeScene;
   readonly character: CharacterScene;
   readonly vehicles: VehicleVisualStage;
   readonly camera: FreeCamera;
@@ -102,13 +107,16 @@ export function createV3CompositionScene(options: V3CompositionSceneOptions): V3
     dpr: options.viewport.dpr,
   });
   const city = createCityScene(scene, layout);
+  const worldEdge = createWorldEdgeScene(scene, layout, options.preset);
   const decor = options.decor === false ? null : createCityDecorScene(scene, layout);
   const asset = createCharacterAsset();
   const character = createCharacterScene(scene, asset, 'NEAR');
   const vehicles = createVehicleVisualStage(scene, { preset: options.preset });
   const camera = new FreeCamera('v3-composition-camera', new Vector3(0, 3, -6), scene);
   camera.minZ = 0.1;
-  camera.maxZ = 600;
+  // PBI 242: relieful și crestele se întind până la ~2,5 km de limita hărții, deci planul îndepărtat
+  // nu mai taie orizontul (la 600 m terenul se termina într-o linie).
+  camera.maxZ = 3000;
   camera.fov = 1.4;
   scene.activeCamera = camera;
   // PBI 241: AA și post-procesarea se atașează camerei de joc, nu camerei de bootstrap.
@@ -121,6 +129,7 @@ export function createV3CompositionScene(options: V3CompositionSceneOptions): V3
     scene,
     city,
     decor,
+    worldEdge,
     character,
     vehicles,
     camera,
@@ -190,6 +199,8 @@ export function createV3CompositionScene(options: V3CompositionSceneOptions): V3
         cityMeshes: cityStats.meshes,
         cityDrawCalls: cityStats.drawCalls,
         decorMeshes: decor?.stats.meshes ?? 0,
+        edgeMeshes: worldEdge.stats.meshes,
+        edgeDrawCalls: worldEdge.stats.drawCalls,
         characterMeshes: characterStats.meshes,
         characterDrawCalls: characterStats.drawCalls,
         vehicleMeshes: vehicleMetrics.meshes,
@@ -204,6 +215,7 @@ export function createV3CompositionScene(options: V3CompositionSceneOptions): V3
       vehicles.dispose();
       character.dispose();
       decor?.dispose();
+      worldEdge.dispose();
       city.dispose();
       daylight.dispose();
       camera.dispose();
