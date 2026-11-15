@@ -662,6 +662,17 @@ export {
 } from './walking-composition';
 
 export {
+  VEHICLE_COLLISION_POLICY,
+  VEHICLE_COLLISION_VERSION,
+  createVehicleCollisionWorld,
+  type VehicleBody,
+  type VehicleCollisionWorld,
+  type VehicleContact,
+  type VehiclePose,
+  type VehicleSweep,
+} from './vehicle-collision';
+
+export {
   COMPOSITION_SPAWN_CURB_OFFSET_M,
   COMPOSITION_TAXI_CURB_OFFSET_M,
   V3_COMPOSITION_WORLD_VERSION,

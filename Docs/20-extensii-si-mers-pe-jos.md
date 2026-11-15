@@ -309,3 +309,20 @@ pe walker-ul real (wrap `−π`, simetrie `A`/`D`, fără rotație completă) ș
 **1/4** teste trec, pe cea reparată **4/4**, iar suita integrală rămâne verde. Dovezile sunt în
 [Evidence/237-walker-turn](Evidence/237-walker-turn/README.md). Rata de viraj, coliziunea și pașii walker-ului
 nu s-au schimbat, iar proba vizuală rămâne cea din browser a lui 236.
+
+## Coliziunea mașinii cu decorul și clădirile, și orientarea decorului (PBI 238)
+
+Jucarea compunerii din 236 a scos la iveală trei defecte. (1) `createCityDecorPlan` (146) rotea fiecare obiect
+cu `heading`, direcția de mers a trotuarului, deci spătarul băncii (−Z local) privea când spre stradă, când spre
+clădire; benzile, adăposturile și brațul stâlpului aveau aceeași problemă. Acum `bench`, `bus-shelter` și
+`street-lamp` primesc un yaw care îndreaptă +Z local spre cea mai apropiată margine de carosabil
+(`facingYaw`); copacii, hidranții, coșurile, indicatoarele și parcometrele sunt simetrice și rămân neschimbate.
+(2) și (3) `driveVehicle` integra poziția fără coliziune, iar decorul 146 nu are colliders prin contract, așa că
+mașina trecea prin tot și intra în clădiri (camera 194 rămânea în afara solidului). Decorul distructibil 227 nu
+este conectat la compunerea din browser, deci nu a fost reutilizat; coliziunea nouă
+(`src/app/vehicle-collision.ts`, `238-vehicle-collision-v1`) refolosește blocatoarele clădirilor din lumea de
+mers 192 și planul 146 (obstacol circular de rază `radiusM`). Corpul mașinii este dreptunghiul rotit
+(`halfExtentsM`, yaw); mișcarea este măturată în sub-pași de 0,1 m, o penetrare se rezolvă cu translația minimă, iar
+componenta vitezei spre obstacol se anulează (alunecare). Din oprire, frâna ținută dă marșarier lent (maxim 3 m/s),
+altfel o mașină blocată nu ar mai putea ieși. Dovezile sunt în
+[Evidence/238-vehicle-static-collision](Evidence/238-vehicle-static-collision/README.md).

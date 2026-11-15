@@ -42,6 +42,7 @@ ID-urile rămân stabile la mutarea între coloane. Găsește task-ul prin prefi
 | Catalog/director/UI provocări random | 231, 232, 233 | [Document](28-provocari-random-si-revenire.md) |
 | Savefile complet cu checksum | 234 | [Document](29-savefile-si-integritate.md) |
 | Regresii experiență și playtest | 235 | [Document](18-validare-si-release.md) |
+| Calitate vizuală V4 | 239 → 253 | [Document](30-calitate-vizuala-v4.md) |
 
 ## Acoperirea celor 80 de parametri
 
@@ -132,7 +133,7 @@ Fiecare cheie are un PBI de folosire în politică și unul de estimare. Gate-ul
 
 ## Închiderea completă
 
-V1 este închis de PBI 162, V2 de 190 și V3 de 202. Aceste gates depind de întregul lanț de livrare și nu pot fi mutate în Done înaintea verificărilor. Task-urile de release produc artefacte și dovada criteriilor; nu execută implicit o publicare externă necerută.
+V1 este închis de PBI 162, V2 de 190, V3 de 202 (cu extensia 238 în validator), iar V4 de 253. Aceste gates depind de întregul lanț de livrare și nu pot fi mutate în Done înaintea verificărilor. Task-urile de release produc artefacte și dovada criteriilor; nu execută implicit o publicare externă necerută.
 
 ## Metadate și gates
 

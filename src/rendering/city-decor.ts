@@ -176,6 +176,21 @@ const FORBIDDEN: readonly CityPlanarElement['kind'][] = Object.freeze([
   'BUILDING',
 ]);
 const ALLOWED: readonly CityPlanarElement['kind'][] = Object.freeze(['SIDEWALK', 'SERVICE_ZONE']);
+/** Surfaces a vehicle drives on; oriented furniture turns its front toward the nearest one. */
+const ROADWAY: readonly CityPlanarElement['kind'][] = Object.freeze([
+  'LANE_SURFACE',
+  'INTERSECTION_SURFACE',
+]);
+/**
+ * Kinds whose template has a front at local +Z (bench seat, shelter opening, lamp arm). A sidewalk
+ * heading is the walking direction, not the direction of the road, so these kinds are not rotated by
+ * the heading alone; `facingYaw` turns local +Z toward the roadway instead (PBI 238).
+ */
+const FACES_ROADWAY: readonly CityDecorKind[] = Object.freeze([
+  'street-lamp',
+  'bench',
+  'bus-shelter',
+]);
 /** Stable 32-bit hash so placement does not depend on iteration order or a random seed. */
 function hash(text: string): number {
   let value = 2166136261;
@@ -290,6 +305,45 @@ function distanceToFootprint(point: Point, footprint: readonly { x: number; z: n
     );
   return best;
 }
+function closestPointOnSegment(point: Point, a: Point, b: Point): Point {
+  const dx = b.x - a.x;
+  const dz = b.z - a.z;
+  const length = dx * dx + dz * dz;
+  const t =
+    length === 0
+      ? 0
+      : Math.max(0, Math.min(1, ((point.x - a.x) * dx + (point.z - a.z) * dz) / length));
+  return { x: a.x + t * dx, z: a.z + t * dz };
+}
+/**
+ * Yaw (item local +Z in world space is `(sin yaw, cos yaw)`) that points the item's front across the
+ * sidewalk toward the nearest roadway edge: one of the two directions perpendicular to the sidewalk
+ * heading, chosen by the nearest road boundary. The back therefore always faces away from the road.
+ */
+function facingYaw(point: Point, heading: number, roads: readonly CityPlanarElement[]): number {
+  const across = { x: Math.cos(heading), z: -Math.sin(heading) };
+  let nearest: Point | null = null;
+  let best = Infinity;
+  for (const road of roads) {
+    const ring = road.footprintM;
+    for (let index = 0; index < ring.length; index += 1) {
+      const candidate = closestPointOnSegment(
+        point,
+        ring[index]!,
+        ring[(index + 1) % ring.length]!,
+      );
+      const distance = Math.hypot(candidate.x - point.x, candidate.z - point.z);
+      if (distance < best) {
+        best = distance;
+        nearest = candidate;
+      }
+    }
+  }
+  if (!nearest) return heading;
+  const dot = (nearest.x - point.x) * across.x + (nearest.z - point.z) * across.z;
+  const sign = dot >= 0 ? 1 : -1;
+  return Math.atan2(across.x * sign, across.z * sign);
+}
 function clearOfForbidden(
   point: Point,
   radiusM: number,
@@ -354,6 +408,12 @@ export function createCityDecorPlan(
     (element): element is CityPlanarElement =>
       element.kind !== 'SIGNAL_HEAD' && ALLOWED.includes(element.kind),
   );
+  const roads = layout.elements.filter(
+    (element): element is CityPlanarElement =>
+      element.kind !== 'SIGNAL_HEAD' && ROADWAY.includes(element.kind),
+  );
+  const orient = (kind: CityDecorKind, at: Point, heading: number): number =>
+    FACES_ROADWAY.includes(kind) ? facingYaw(at, heading, roads) : heading;
   const sidewalks = layout.elements.filter(
     (element): element is CityPlanarElement =>
       element.kind === 'SIDEWALK' && element.footprintM.length >= 4,
@@ -382,7 +442,7 @@ export function createCityDecorPlan(
             rule.kind,
             x,
             z,
-            heading,
+            orient(rule.kind, { x, z }, heading),
             cellSizeM,
             `decor:${rule.kind}:${sidewalk.id}:${Math.round(distance)}`,
           ),
@@ -413,7 +473,7 @@ export function createCityDecorPlan(
         'bus-shelter',
         best.point.x,
         best.point.z,
-        best.heading,
+        orient('bus-shelter', best.point, best.heading),
         cellSizeM,
         `decor:bus-shelter:${zone.id}`,
       ),

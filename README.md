@@ -35,8 +35,8 @@ npm run check
 
 `npm run format` aplică formatul în cod/configuri, iar `npm run check` include și verificarea arhitecturii. [Convențiile de dezvoltare](Docs/development-conventions.md) explică unitățile SI, validarea datelor `unknown`, scope-ul comenzilor și separarea ESLint de verificarea semantică TypeScript.
 
-- [Planul modular](Docs/README.md): 29 de documente de produs și arhitectură.
-- [Backlog Kanban](PBI/README.md): 237 task-uri cu ID-uri stabile și dependențe explicite.
+- [Planul modular](Docs/README.md): 30 de documente de produs și arhitectură.
+- [Backlog Kanban](PBI/README.md): 253 task-uri cu ID-uri stabile și dependențe explicite.
 - [Workflow pentru agenți](PBI/AGENTS.md): To Do → In Progress → Done, cu mutare fizică obligatorie la finalizare.
 - [Catalogul parametrilor](Docs/11-catalog-parametri.md): 80 de parametri planificați; 24 pentru prima versiune.
 

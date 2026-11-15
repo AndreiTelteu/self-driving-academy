@@ -72,7 +72,7 @@ function Get-PlanAncestors([string]$TaskId) {
 }
 
 $planIndexText = Read-PlanText 'PBI/README.md'
-$planIndexRows = [regex]::Matches($planIndexText, '(?m)^\| (\d{3,}) \| ([^|]+) \| ([^|]+) \| (V[123]) \| ([^|]+) \|\r?$')
+$planIndexRows = [regex]::Matches($planIndexText, '(?m)^\| (\d{3,}) \| ([^|]+) \| ([^|]+) \| (V[1234]) \| ([^|]+) \|\r?$')
 $planIndexIds = @{}
 foreach ($planRow in $planIndexRows) {
     $planId = $planRow.Groups[1].Value
@@ -148,7 +148,7 @@ foreach ($planTask in $planTasks.Values) {
     }
 }
 
-foreach ($planGatePair in @(@('162', 1), @('190', 2), @('237', 3))) {
+foreach ($planGatePair in @(@('162', 1), @('190', 2), @('238', 3), @('253', 4))) {
     $planGateId = $planGatePair[0]
     $planGateStage = [int]$planGatePair[1]
     $planGateAncestors = Get-PlanAncestors $planGateId
@@ -237,12 +237,12 @@ foreach ($planFile in $planMarkdownFiles) {
 }
 
 $planStageCounts = [ordered]@{}
-foreach ($planStage in @('V1','V2','V3')) { $planStageCounts[$planStage] = @($planTasks.Values | Where-Object { $_.Release -eq $planStage }).Count }
+foreach ($planStage in @('V1','V2','V3','V4')) { $planStageCounts[$planStage] = @($planTasks.Values | Where-Object { $_.Release -eq $planStage }).Count }
 $planModuleCount = @(Get-ChildItem -LiteralPath (Join-Path $planRoot 'Docs') -File -Filter '*.md' | Where-Object { $_.Name -match '^\d{2}-' }).Count
 $planRootReadme = Read-PlanText 'README.md'
 $planDocsReadme = Read-PlanText 'Docs/README.md'
 if ($planRootReadme -notmatch ("$planModuleCount de documente") -or $planRootReadme -notmatch ("$($planTasks.Count) task-uri") -or $planDocsReadme -notmatch ("conține $($planTasks.Count) task-uri")) { throw 'Counts README diferite de plan' }
-foreach ($planStage in @('V1','V2','V3')) {
+foreach ($planStage in @('V1','V2','V3','V4')) {
     $planStageRow = [regex]::Match($planIndexText, '(?m)^\| ' + $planStage + ' \| [^|]+ \| (\d+) \|')
     if (-not $planStageRow.Success -or [int]$planStageRow.Groups[1].Value -ne $planStageCounts[$planStage]) { throw "Count etapă incompatibil: $planStage" }
 }

@@ -55,7 +55,12 @@ import {
   type InputAuthority,
   type InputAuthorityArbiter,
 } from '../input';
-import { VEHICLE_COLLISION_HALF_EXTENTS_M, vehicleGeometrySpec } from '../rendering';
+import {
+  VEHICLE_COLLISION_HALF_EXTENTS_M,
+  createCityDecorPlan,
+  vehicleGeometrySpec,
+} from '../rendering';
+import { createVehicleCollisionWorld, type VehicleCollisionWorld } from './vehicle-collision';
 import type { ContractContext } from '../sessions';
 import type { ControlPreferences } from '../settings';
 import { tractiveForceN, vehicleClass, type ControlMode } from '../vehicles';
@@ -72,6 +77,14 @@ export const V3_COMPOSITION_POLICY = Object.freeze({
   eventCapacity: 64,
   /** Sub această viteză mașina este oprită; 196 cere oprirea înainte de coborâre. */
   parkedSpeedMps: 1e-9,
+  /**
+   * PBI 238: o mașină blocată de un solid nu poate ieși altfel decât în marșarier, deci frâna ținută
+   * din staționare dă marșarier lent (viteză semnată, negativă). Limita este deliberat mică.
+   */
+  reverseMaxMps: 3,
+  reverseAccelerationShare: 0.4,
+  /** Sub această viteză, după o atingere, mașina este considerată oprită. */
+  contactStopSpeedMps: 0.05,
 });
 
 export type CompositionKind = 'CHARACTER' | 'VEHICLE';
@@ -199,6 +212,8 @@ export interface V3Composition {
   readonly policy: typeof V3_COMPOSITION_POLICY;
   readonly entityId: string;
   readonly walkWorld: WalkWorld;
+  /** Solidele statice pentru mașina condusă: clădirile 192 și decorul 146 (PBI 238). */
+  readonly vehicleCollision: VehicleCollisionWorld;
   readonly arbiter: InputAuthorityArbiter;
   readonly segments: WalkingSegments;
   readonly port: InputAuthorityArbiter['port'];
@@ -343,6 +358,11 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
   const entityId = options.entityId ?? 'player-character';
   const walkWorld = createCityWalkWorld(options.layout);
   const asset = createCharacterAsset();
+  // Același plan 146 ca al scenei: deterministic, deci ce se vede este ce lovește mașina.
+  const vehicleCollision = createVehicleCollisionWorld({
+    blockers: walkWorld.blockers,
+    decor: createCityDecorPlan(options.layout).items,
+  });
   const spawn = Object.freeze({
     x: options.start.x,
     z: options.start.z,
@@ -471,24 +491,65 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
     const mechanics = vehicleClass(vehicle.classId);
     const dt = V3_COMPOSITION_POLICY.dtSeconds;
     const current = vehicle.speedMps;
-    const brakeShare = Math.max(command.command.brake, command.command.handbrake ? 1 : 0);
-    const accel =
-      brakeShare > 0
-        ? -mechanics.brakeAcceleration * brakeShare
-        : (tractiveForceN(mechanics, current) / mechanics.massKg) * command.command.throttle;
-    const speed = Math.min(vehicle.speedLimitMps, Math.max(0, current + accel * dt));
+    const { throttle, brake, handbrake } = command.command;
+    const brakeShare = Math.max(brake, handbrake ? 1 : 0);
+    let speed: number;
+    if (current <= V3_COMPOSITION_POLICY.parkedSpeedMps && brake > 0 && !handbrake) {
+      // Din staționare (sau deja în marșarier), frâna ținută dă marșarier lent.
+      speed = Math.max(
+        -V3_COMPOSITION_POLICY.reverseMaxMps,
+        current -
+          mechanics.brakeAcceleration * V3_COMPOSITION_POLICY.reverseAccelerationShare * brake * dt,
+      );
+    } else if (current < 0) {
+      // Marșarier fără frână ținută: mașina se oprește (mai repede cu accelerația sau frâna de mână).
+      const decel = mechanics.brakeAcceleration * (throttle > 0 || handbrake ? 1 : 0.4);
+      speed = Math.min(0, current + decel * dt);
+    } else {
+      const accel =
+        brakeShare > 0
+          ? -mechanics.brakeAcceleration * brakeShare
+          : (tractiveForceN(mechanics, current) / mechanics.massKg) * throttle;
+      speed = Math.min(vehicle.speedLimitMps, Math.max(0, current + accel * dt));
+    }
     const steering = command.command.steering * mechanics.steeringRadians;
     const yawRate = (speed / mechanics.wheels.wheelbaseM) * Math.tan(steering);
     const yawRad = vehicle.yawRad + yawRate * dt;
+    // PBI 238: mișcarea este măturată cu corpul real (dreptunghi rotit) prin solidele statice; la
+    // atingere, componenta vitezei spre solid dispare și mașina alunecă pe suprafață.
+    const body = Object.freeze({ halfX: vehicle.halfExtentsM.x, halfZ: vehicle.halfExtentsM.z });
+    const swept = vehicleCollision.sweep(
+      { x: vehicle.positionM.x, z: vehicle.positionM.z, yawRad: vehicle.yawRad },
+      {
+        x: vehicle.positionM.x + Math.sin(yawRad) * speed * dt,
+        z: vehicle.positionM.z + Math.cos(yawRad) * speed * dt,
+        yawRad,
+      },
+      body,
+    );
+    let resolvedSpeed = speed;
+    if (swept.blocked) {
+      if (swept.normal === null) resolvedSpeed = 0;
+      else {
+        const forwardX = Math.sin(swept.pose.yawRad);
+        const forwardZ = Math.cos(swept.pose.yawRad);
+        let vx = forwardX * speed;
+        let vz = forwardZ * speed;
+        const into = vx * swept.normal.x + vz * swept.normal.z;
+        if (into < 0) {
+          vx -= into * swept.normal.x;
+          vz -= into * swept.normal.z;
+        }
+        resolvedSpeed = vx * forwardX + vz * forwardZ;
+      }
+      if (Math.abs(resolvedSpeed) < V3_COMPOSITION_POLICY.contactStopSpeedMps) resolvedSpeed = 0;
+    }
     setVehicle(
       withVehicle(vehicle, {
-        positionM: point(
-          vehicle.positionM.x + Math.sin(yawRad) * speed * dt,
-          vehicle.positionM.y,
-          vehicle.positionM.z + Math.cos(yawRad) * speed * dt,
-        ),
-        yawRad,
-        speedMps: speed <= V3_COMPOSITION_POLICY.parkedSpeedMps ? 0 : speed,
+        positionM: point(swept.pose.x, vehicle.positionM.y, swept.pose.z),
+        yawRad: swept.pose.yawRad,
+        speedMps:
+          Math.abs(resolvedSpeed) <= V3_COMPOSITION_POLICY.parkedSpeedMps ? 0 : resolvedSpeed,
         controlMode: 'MANUAL',
       }),
     );
@@ -840,6 +901,7 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
     policy: V3_COMPOSITION_POLICY,
     entityId,
     walkWorld,
+    vehicleCollision,
     arbiter,
     segments,
     port: arbiter.port,
