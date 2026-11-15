@@ -69,6 +69,8 @@ export interface V3CompositionScene {
   readonly camera: FreeCamera;
   readonly daylight: ReturnType<typeof createDaylight>;
   apply(frame: CompositionFrame, characterFrame: CharacterRenderFrame): void;
+  /** Reprezentarea vizuală a unui vehicul, după apariția lui în primul cadru (239: capturi). */
+  representation(vehicleId: string): ReturnType<VehicleVisualStage['create']> | undefined;
   backendInfo(): V3BackendInfo;
   stats(): V3CompositionSceneStats;
   dispose(): void;
@@ -144,6 +146,9 @@ export function createV3CompositionScene(options: V3CompositionSceneOptions): V3
       camera.fov = cameraFrame.fovRadians;
       vehicles.updateLod(camera.position, options.preset);
       void daylight;
+    },
+    representation(vehicleId: string) {
+      return representations.get(vehicleId);
     },
     backendInfo(): V3BackendInfo {
       const engine = scene.getEngine() as unknown as {

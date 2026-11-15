@@ -12,6 +12,8 @@ import {
   createBabylonRecoverySession,
   createV3BrowserComposition,
   diagnoseBackend,
+  installVisualCapture,
+  readCaptureConfig,
   showDevelopmentInspector,
   type BabylonDiagnostics,
   type RecoverySceneSnapshot,
@@ -24,7 +26,19 @@ const app = document.querySelector<HTMLDivElement>('#app');
 if (!app) throw new Error('Containerul aplicației #app lipsește.');
 const view = createRenderingView(app);
 const world = createCompositionWorld();
-const settings = createDefaultSettings('v3-composition');
+/** PBI 239: `?capture=1` pornește harnessul de capturi; fără steag este `null` și nimic nu se schimbă. */
+const captureConfig = readCaptureConfig(window.location.search);
+const defaultSettings = createDefaultSettings('v3-composition');
+const settings = captureConfig
+  ? {
+      ...defaultSettings,
+      quality: {
+        ...defaultSettings.quality,
+        preset: captureConfig.preset,
+        preferredBackend: captureConfig.backend,
+      },
+    }
+  : defaultSettings;
 const compositionContext = Object.freeze({
   schemaVersion: 1 as const,
   units: 'SI' as const,
@@ -34,6 +48,7 @@ const compositionContext = Object.freeze({
 let composition: V3BrowserComposition | undefined;
 let diagnostics: BabylonDiagnostics | undefined;
 let inspectScene: (() => Promise<boolean>) | undefined;
+let releaseCapture: (() => void) | undefined;
 const diagnosticsPanel = createDiagnosticsPanel(app, {
   report: () => diagnostics?.report() ?? null,
   setEnabled: (enabled) => diagnostics?.setEnabled(enabled),
@@ -127,6 +142,14 @@ const application = createApplicationLifecycle({
             enabled: () => application.getState().kind === 'PLAYING',
           });
           composition = ownedComposition;
+          if (captureConfig) {
+            releaseCapture?.();
+            releaseCapture = installVisualCapture({
+              composition: ownedComposition,
+              canvas,
+              config: captureConfig,
+            });
+          }
           owned = diagnoseBackend(backend, {
             enabled: diagnosticsPanel.root.open,
             counters: () => {
@@ -264,6 +287,8 @@ const dispose = (): void => {
     application.dispose();
   } finally {
     composition = undefined;
+    releaseCapture?.();
+    releaseCapture = undefined;
     (globalThis as unknown as { __v3Composition?: V3DebugGlobal }).__v3Composition = undefined;
     diagnosticsPanel.dispose();
     view.dispose();

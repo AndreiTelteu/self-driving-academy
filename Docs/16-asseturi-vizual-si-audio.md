@@ -6,6 +6,8 @@ Versiune 0.5 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon
 
 Propunere de direcție: oraș american stilizat cu clădiri joase, bulevarde, palmieri sau vegetație potrivită, benzinărie, zone comerciale și rezidențiale. Formele și texturile sunt stilizate, lizibile și coerente cu identitatea proprie a orașului. Vehiculele, clădirile, iconurile și sunetele sunt asseturi originale sau selectate pentru acest proiect.
 
+> **Decizie actualizată la 16 noiembrie 2026.** Formularea „forme și texturi stilizate” de mai sus rămâne ca istoric. Pentru V4 direcția este „realism stilizat curat”: proporții reale, materiale PBR, lumină fizică și umbre, în continuare cu asseturi originale. Decizia și auditul sunt în [Calitate vizuală V4](30-calitate-vizuala-v4.md#decizia-utilizatorului).
+
 Grafica pune în evidență semafoarele, benzile, distanțele și comportamentul. Un overlay de analiză poate afișa banda, ținta de viteză, liderul, spațiul urmărit și următoarea decizie; este o unealtă opțională, nu un obstacol în timpul cursei.
 
 Camera din spate urmărește vehiculul cu amortizare, adaptare la viteză și evitare a obstacolelor. Schimbarea taxiului mută camera cu o tranziție scurtă și arată imediat ID-ul și modul. Mișcarea camerei și intensitatea feedbackului sunt reglabile.

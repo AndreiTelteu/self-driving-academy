@@ -93,6 +93,18 @@ export {
   type V3CompositionSceneOptions,
   type V3CompositionSceneStats,
 } from './v3-composition-scene';
+export { installVisualCapture, type VisualCaptureApi } from './visual-capture';
+export {
+  CAPTURE_FIXED_CLOCK,
+  CAPTURE_SEED,
+  CAPTURE_VIEWPORT,
+  CAPTURE_VIEWS,
+  VISUAL_CAPTURE_VERSION,
+  captureView,
+  readCaptureConfig,
+  type CaptureConfig,
+  type CaptureView,
+} from '../visual-capture';
 export {
   COMPOSITION_KEYS,
   V3_BROWSER_COMPOSITION_VERSION,

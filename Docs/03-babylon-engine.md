@@ -46,6 +46,8 @@ PBI018 implementează [selecția prin picking](vehicle-picking.md), cu registry 
 
 Direcția inițială folosește materiale simple sau PBR moderat, lumină ambientală și direcțională, umbre limitate și niveluri de calitate. Orașul este stilizat cu atmosferă americană; fizica realistă nu obligă fotorealismul. Tonemappingul și spațiul de culoare rămân coerente între backenduri.
 
+> **Decizie actualizată la 16 noiembrie 2026.** Textul de mai sus rămâne ca istoric al direcției inițiale. Pentru V4, utilizatorul a cerut un aspect mai realist, curat și HD (materiale PBR, lumină fizică, umbre, atmosferă); noua țintă este „realism stilizat curat”, definită în [Calitate vizuală V4](30-calitate-vizuala-v4.md#decizia-utilizatorului). Comparațiile înainte/după se fac cu harnessul de capturi din același document.
+
 PBI016 implementează [iluminarea de zi și presetările de calitate](lighting-quality.md), cu materiale semantice lizibile, umbre plafonate și rezoluție internă/DPR explicite. Ajustarea automată folosește ferestre limitate, histerezis și metrici GPU disponibile; setările afectează numai prezentarea.
 
 Formatul de asset principal propus este glTF/GLB; loaderul, registry-ul, cache-ul și eliberarea resurselor sunt tratate explicit. Asseturile necesare pornirii au prioritate; decorul poate veni ulterior. O lipsă de decor permite placeholder, iar lipsa datelor de hartă sau a mașinii de bază blochează pornirea cu explicație. [Încărcarea formatelor](https://github.com/BabylonJS/Documentation/blob/master/content/features/featuresDeepDive/importers/loadingFileTypes.md)
