@@ -54,7 +54,7 @@ Categorii: BENCHMARK 2, CHECKPOINT 2, COMBINED 1, DAILY 2, DEPENDENCIES 3, KPI 4
 | C3 | PLAYTEST | POSITIVE | Playtest în browser: explicații, senzație de condus, HUD | Docs/validation-policy.md | NOT_RUN | Nu s-a rulat un browser real sau input uman. Nivelul atins este `targeted`, cu scenarii deterministe în Node; playtestul rămâne pentru gate-ul 235. |
 | C4 | BENCHMARK | COST | Frame p95/p99 pe hardware real | performance-budgets.json proposedBudgets.frameP95Ms | NOT_RUN | Suita nu are renderer, GPU sau browser; bugetul de cadru rămâne al gate-urilor 220/224/155. Nu se raportează FPS headless. |
 | D1 | DEPENDENCIES | DOCUMENT | Gate separat pentru extensii, fără dependență inversă | PBI/235 + 225-234 | PASS | {"gate":"235","gateDependencies":["216","224","226","228","229","230","233","234","084"],"extensionClosure":10,"missing":[],"inverse":[]} |
-| D2 | DEPENDENCIES | DOCUMENT | Graful complet de dependențe nu are cicluri | PBI board | PASS | {"nodes":235,"edges":235,"cycles":0,"duplicates":0,"external":0} |
+| D2 | DEPENDENCIES | DOCUMENT | Graful complet de dependențe nu are cicluri | PBI board | PASS | {"nodes":236,"edges":236,"cycles":0,"duplicates":0,"external":0} |
 | D3 | DEPENDENCIES | DOCUMENT | Dependențele regresiei V1 sunt în Done | PBI/216 | PASS | {"dependencies":["215","141","108","208","217","205"],"undone":[]} |
 
 ## XP fără pierderi
@@ -97,8 +97,8 @@ Lacune declarate, fără prag inventat:
 
 ## Dependențe
 
-- Noduri: 235
-- Muchii: 235
+- Noduri: 236
+- Muchii: 236
 - Cicluri: 0
 - Id-uri duplicate: 0
 - Gate 235 acoperă extensiile 225–234: true

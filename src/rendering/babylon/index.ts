@@ -78,3 +78,26 @@ export function createBabylonBootstrapRenderer(view: BootstrapView): Renderer {
     dispose: () => view.dispose(),
   };
 }
+
+export {
+  CHARACTER_SCENE_VERSION,
+  createCharacterScene,
+  type CharacterScene,
+  type CharacterSceneStats,
+} from './character-scene';
+export {
+  V3_COMPOSITION_SCENE_VERSION,
+  createV3CompositionScene,
+  type V3BackendInfo,
+  type V3CompositionScene,
+  type V3CompositionSceneOptions,
+  type V3CompositionSceneStats,
+} from './v3-composition-scene';
+export {
+  COMPOSITION_KEYS,
+  V3_BROWSER_COMPOSITION_VERSION,
+  createV3BrowserComposition,
+  type CostSummary,
+  type V3BrowserComposition,
+  type V3BrowserCompositionOptions,
+} from './v3-browser-composition';
