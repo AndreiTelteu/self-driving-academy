@@ -1016,3 +1016,11 @@ export type {
   ChallengePanelTemplateRow,
   ChallengePanelView,
 } from './challenge-panel-format';
+
+export {
+  CHARACTER_HUD_INTERVAL_TICKS,
+  CHARACTER_HUD_VERSION,
+  createCharacterHud,
+  type CharacterHud,
+  type CharacterHudOptions,
+} from './character-hud';

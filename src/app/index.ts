@@ -637,3 +637,35 @@ export {
   type StyleSlidersTickStatus,
   type StyleSlidersVersionSummary,
 } from './control-sliders-style';
+
+export {
+  V3_COMPOSITION_POLICY,
+  V3_COMPOSITION_VERSION,
+  characterWriterRefusals,
+  compositionHudLine,
+  compositionSnapshot,
+  createV3Composition,
+  sampleRenderFrame,
+  type CompositionCharacterFrame,
+  type CompositionEvent,
+  type CompositionFrame,
+  type CompositionHud,
+  type CompositionKind,
+  type CompositionMode,
+  type CompositionOptions,
+  type CompositionStats,
+  type CompositionStepRequest,
+  type CompositionTickSnapshot,
+  type CompositionVehicle,
+  type CompositionVehicleSeed,
+  type V3Composition,
+} from './walking-composition';
+
+export {
+  COMPOSITION_SPAWN_CURB_OFFSET_M,
+  COMPOSITION_TAXI_CURB_OFFSET_M,
+  V3_COMPOSITION_WORLD_VERSION,
+  compositionSpeedLimitMps,
+  createCompositionWorld,
+  type CompositionWorld,
+} from './composition-world';

@@ -1,0 +1,414 @@
+{
+  "schemaVersion": 1,
+  "generatedBy": "scripts/run-v3-composition-report.mjs",
+  "command": "npm run composition:report",
+  "contract": "236-v3-composition-v1",
+  "tickHz": 60,
+  "mapId": "neighbourhood-compact-v1",
+  "spawn": {
+    "x": 9.800000000000011,
+    "z": 3.2,
+    "yawRad": 1.5707963267948966
+  },
+  "rows": [
+    {
+      "sequence": "A-mers",
+      "input": "throttle ținut, 120 tick-uri",
+      "controlledEntity": "CHARACTER:player-character",
+      "mode": "MANUAL",
+      "position": "12.397,0.000,3.200",
+      "verdict": "OK"
+    },
+    {
+      "sequence": "B-alergare",
+      "input": "throttle + sprint ținute, 90 tick-uri",
+      "controlledEntity": "CHARACTER:player-character",
+      "mode": "MANUAL",
+      "position": "13.483,0.000,3.200",
+      "verdict": "OK"
+    },
+    {
+      "sequence": "C-intrare",
+      "input": "G (requestEntry taxi-01)",
+      "controlledEntity": "VEHICLE:taxi-01",
+      "mode": "MANUAL",
+      "position": "9.800,0.000,2.050",
+      "verdict": "OK"
+    },
+    {
+      "sequence": "D-conducere",
+      "input": "throttle ținut, 120 tick-uri",
+      "controlledEntity": "VEHICLE:taxi-01",
+      "mode": "MANUAL",
+      "position": "19.163,0.000,2.050",
+      "verdict": "OK"
+    },
+    {
+      "sequence": "E-ieșire",
+      "input": "G (requestExit) după oprire",
+      "controlledEntity": "CHARACTER:player-character",
+      "mode": "MANUAL",
+      "position": "24.475,0.000,3.100",
+      "verdict": "OK"
+    },
+    {
+      "sequence": "F-revenire-mers",
+      "input": "throttle ținut, 90 tick-uri",
+      "controlledEntity": "CHARACTER:player-character",
+      "mode": "MANUAL",
+      "position": "24.475,0.140,5.011",
+      "verdict": "OK"
+    }
+  ],
+  "checks": [
+    {
+      "name": "mers: clipul este walk",
+      "expected": "walk",
+      "actual": "walk",
+      "pass": true,
+      "detail": "clipul se alege din viteza măsurată de walker"
+    },
+    {
+      "name": "mers: autoritatea este personajul",
+      "expected": "CHARACTER:player-character",
+      "actual": "CHARACTER:player-character",
+      "pass": true,
+      "detail": "arbitrajul 193 produce comanda personajului"
+    },
+    {
+      "name": "mers: modul raportat este MANUAL",
+      "expected": "MANUAL",
+      "actual": "MANUAL",
+      "pass": true,
+      "detail": "personajul este condus manual; cele trei moduri rămân ale mașinii"
+    },
+    {
+      "name": "mers: camera urmărește aceeași entitate",
+      "expected": "player-character",
+      "actual": "player-character",
+      "pass": true,
+      "detail": "194 primește authorityEntityId din 193"
+    },
+    {
+      "name": "mers: camera nu este trunchiată de taxiul parcat",
+      "expected": null,
+      "actual": null,
+      "pass": true,
+      "detail": "distanța realizată 3.513 m din 3.500 m"
+    },
+    {
+      "name": "mers: s-a deplasat peste 1,5 m",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "deplasare 2.597 m"
+    },
+    {
+      "name": "mers: o singură livrare pe tick către personaj",
+      "expected": {
+        "CHARACTER": 120,
+        "VEHICLE": 0
+      },
+      "actual": {
+        "CHARACTER": 120,
+        "VEHICLE": 0
+      },
+      "pass": true,
+      "detail": "193 `deliver` este chemat exact o dată, pe consumatorul activ"
+    },
+    {
+      "name": "alergare: clipul este run",
+      "expected": "run",
+      "actual": "run",
+      "pass": true,
+      "detail": "peste 1,05 × viteza clipului de mers, clipul măsurat este run"
+    },
+    {
+      "name": "alergare: viteza depășește pragul de mers",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "viteza 2.9091 m/s vs prag 1.4395"
+    },
+    {
+      "name": "intrare: autoritatea trece pe taxi",
+      "expected": "VEHICLE:taxi-01",
+      "actual": "VEHICLE:taxi-01",
+      "pass": true,
+      "detail": "195 întoarce exact autoritatea 193 VEHICLE:<id>"
+    },
+    {
+      "name": "intrare: camera primește taxiul în același tick",
+      "expected": "taxi-01",
+      "actual": "taxi-01",
+      "pass": true,
+      "detail": "cererea 194 din 195 este aplicată în tick-ul intrării"
+    },
+    {
+      "name": "intrare: poziția personajului rămâne bit-identică",
+      "expected": "40239999999999a00000000000000000400999999999999a",
+      "actual": "40239999999999a00000000000000000400999999999999a",
+      "pass": true,
+      "detail": "195 nu mută corpul; walker-ul nu este pașit în tick-ul intrării"
+    },
+    {
+      "name": "intrare: walker-ul nu a primit tick",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "după TAKE personajul nu mai primește input"
+    },
+    {
+      "name": "intrare: modelul 198 deschide un segment MANUAL",
+      "expected": {
+        "opened": "MANUAL",
+        "kind": "MANUAL"
+      },
+      "actual": {
+        "opened": "MANUAL",
+        "kind": "MANUAL"
+      },
+      "pass": true,
+      "detail": "ENTER este exact tranziția 195/197"
+    },
+    {
+      "name": "intrare: livrările merg exclusiv către vehicul",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "exact un consumator per tick"
+    },
+    {
+      "name": "intrare: personajul nu primește nicio livrare în plus",
+      "expected": 210,
+      "actual": 210,
+      "pass": true,
+      "detail": "după TAKE inputul personajului este inactiv"
+    },
+    {
+      "name": "intrare: dubla livrare este refuzată de arbitraj",
+      "expected": "DOUBLE_DELIVERY_REFUSED",
+      "actual": "DOUBLE_DELIVERY_REFUSED",
+      "pass": true,
+      "detail": "refuzul vine din 193, nu din compunere"
+    },
+    {
+      "name": "intrare: o a doua cerere cât timp ești în mașină este ignorată",
+      "expected": "ENTRY_IGNORED",
+      "actual": "ENTRY_IGNORED",
+      "pass": true,
+      "detail": "compunerea nu inventează un al doilea TAKE"
+    },
+    {
+      "name": "conducere: taxiul s-a deplasat peste 3 m",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "deplasare 9.363 m"
+    },
+    {
+      "name": "conducere: modul rămâne MANUAL",
+      "expected": "MANUAL",
+      "actual": "MANUAL",
+      "pass": true,
+      "detail": "195 impune MANUAL și nu inventează un al patrulea mod"
+    },
+    {
+      "name": "conducere: corpul personajului este neschimbat",
+      "expected": "40239999999999a00000000000000000400999999999999a",
+      "actual": "40239999999999a00000000000000000400999999999999a",
+      "pass": true,
+      "detail": "walker-ul nu este pașit cât timp autoritatea este a mașinii"
+    },
+    {
+      "name": "conducere: comenzile merg exclusiv către vehicul",
+      "expected": 122,
+      "actual": 122,
+      "pass": true,
+      "detail": "120 de tick-uri de conducere, 120 livrări de vehicul"
+    },
+    {
+      "name": "conducere: camera urmărește taxiul",
+      "expected": "taxi-01",
+      "actual": "taxi-01",
+      "pass": true,
+      "detail": "194 urmărește exact authorityEntityId"
+    },
+    {
+      "name": "conducere: modelul 198 ține tick-ul cu FOCUS pe mașină",
+      "expected": "FOCUS",
+      "actual": "FOCUS",
+      "pass": true,
+      "detail": "198 nu are pas DRIVE; FOCUS nu schimbă autoritatea"
+    },
+    {
+      "name": "frânare: taxiul ajunge la 0 m/s",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "196 refuză ieșirea peste 1,371 m/s"
+    },
+    {
+      "name": "ieșire: autoritatea revine la personaj",
+      "expected": "CHARACTER:player-character",
+      "actual": "CHARACTER:player-character",
+      "pass": true,
+      "detail": "196 întoarce exact autoritatea 193 CHARACTER:<id>"
+    },
+    {
+      "name": "ieșire: mașina eliberată revine în AUTO",
+      "expected": "AUTO",
+      "actual": "AUTO",
+      "pass": true,
+      "detail": "singurul câmp schimbat de 196 este controlMode"
+    },
+    {
+      "name": "ieșire: camera primește personajul în același tick",
+      "expected": "player-character",
+      "actual": "player-character",
+      "pass": true,
+      "detail": "cererea 194 din 196 este aplicată în tick-ul ieșirii"
+    },
+    {
+      "name": "ieșire: segmentul MANUAL este închis cu RETURN_TO_AUTO",
+      "expected": "RETURN_TO_AUTO",
+      "actual": "RETURN_TO_AUTO",
+      "pass": true,
+      "detail": "198 închide segmentul la ieșire"
+    },
+    {
+      "name": "ieșire: niciun candidat de estimator pentru MANUAL",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "numai LEARNING eligibil produce candidat 069"
+    },
+    {
+      "name": "ieșire: personajul primește din nou input",
+      "expected": 211,
+      "actual": 211,
+      "pass": true,
+      "detail": "după RETURN vehiculul nu mai primește input"
+    },
+    {
+      "name": "ieșire: vehiculul nu primește nicio livrare în plus",
+      "expected": 192,
+      "actual": 192,
+      "pass": true,
+      "detail": "exact un consumator per tick, acum personajul"
+    },
+    {
+      "name": "ieșire: punctul de ieșire stă pe suprafața autorată",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "196 furnizează exact WalkerOptions.start, iar walker-ul confirmă cota"
+    },
+    {
+      "name": "ieșire: camera găsește un cadru liber după tranziție",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "distanță 3.500 m, obstacol null"
+    },
+    {
+      "name": "revenire: clipul este din nou walk",
+      "expected": "walk",
+      "actual": "walk",
+      "pass": true,
+      "detail": "după ieșire personajul merge din nou pe jos"
+    },
+    {
+      "name": "revenire: poziția s-a schimbat față de punctul de ieșire",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "mersul post-ieșire deplasează din nou corpul"
+    },
+    {
+      "name": "revenire: mașina eliberată nu mai primește input",
+      "expected": {
+        "x": 24.475000000000037,
+        "z": 2.0500000000000003,
+        "speed": 0
+      },
+      "actual": {
+        "x": 24.475000000000037,
+        "z": 2.0500000000000003,
+        "speed": 0
+      },
+      "pass": true,
+      "detail": "după RETURN vehiculul nu este pașit; poziția și viteza rămân înghețate"
+    },
+    {
+      "name": "animație: 60/60 cadre de render păstrează poziția bit-identică",
+      "expected": 60,
+      "actual": 60,
+      "pass": true,
+      "detail": "191 copiază poziția autoritară, nu o calculează"
+    },
+    {
+      "name": "animație: writer-ul refuză poziția și root motion",
+      "expected": [
+        "AUTHORITY_WRITE_REFUSED",
+        "AUTHORITY_WRITE_REFUSED"
+      ],
+      "actual": [
+        "AUTHORITY_WRITE_REFUSED",
+        "AUTHORITY_WRITE_REFUSED"
+      ],
+      "pass": true,
+      "detail": "canalele de scriere există ca să refuze explicit"
+    },
+    {
+      "name": "determinism: două rulări produc aceleași rânduri și verificări",
+      "expected": "272ec2f38409399ec26bc9602cf3c1afd2a901d7c4b03104fe6d3bbf43cb8950",
+      "actual": "272ec2f38409399ec26bc9602cf3c1afd2a901d7c4b03104fe6d3bbf43cb8950",
+      "pass": true,
+      "detail": "același input, același tick, aceeași poziție"
+    },
+    {
+      "name": "compunere: fiecare tick are exact o livrare",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "193 `deliver` este singurul canal către consumatori"
+    },
+    {
+      "name": "compunere: suma livrărilor acoperă toate tick-urile",
+      "expected": 518,
+      "actual": 518,
+      "pass": true,
+      "detail": "personaj + vehicul = tick-uri"
+    }
+  ],
+  "operations": {
+    "ticks": 518,
+    "deliveriesCharacter": 326,
+    "deliveriesVehicle": 192,
+    "ticksWithoutDelivery": 0,
+    "walkerTicks": 116,
+    "cameraFrames": 518,
+    "segmentCommands": 518,
+    "entryAttempts": 1,
+    "exitAttempts": 1
+  },
+  "digest": "f375524661172633ff68d1186b865f1023317ebb5136a9b1db1b78ca4c2156fb",
+  "summary": {
+    "rows": 6,
+    "checks": 42,
+    "passed": 42,
+    "failed": 0,
+    "pass": true
+  },
+  "cost": {
+    "status": "NOT_RUN",
+    "reason": "Măsurătoarea de frame/tick se face în browser real (SwiftShader) și se scrie în browser.json; Node headless nu este raportat ca FPS hardware."
+  },
+  "limitations": [
+    "Mișcarea mașinii conduse este un adaptor de jucabilitate peste comanda 024 și mecanica 023 (masă, forță, frână, ampatament, bracaj); fizica Rapier 022/024 nu este compusă aici.",
+    "198 nu are pas DRIVE: cât timp jucătorul stă în mașină, modelul este ținut în pas cu FOCUS pe vehiculul condus, iar contorul `focus` este raportat explicit.",
+    "Scenariul folosește resetarea de probă (`resetScenario`) între mers/alergare și intrare, pentru ca aceleași taste reale să poată fi probate din poziția de start.",
+    "Raportul headless nu măsoară frame/tick; costul real este în browser.json (backend software, nu hardware)."
+  ]
+}
