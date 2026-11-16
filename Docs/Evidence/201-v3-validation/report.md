@@ -30,7 +30,7 @@ Total: **2 PASS, 0 FAIL, 1 NOT_RUN**. Un verdict `NOT_RUN` lasă gate-ul deschis
 | C3 | `npm run perf:gate -- --measure --out=Docs/Evidence/201-v3-validation/gate-measure` | 0 | PASS | 224 reexecutat: structural PASS, release NOT_VALIDATED, 16 PASS, 0 FAIL, 1 NOT_VALIDATED |
 | C3 | `npm run qa:compat -- --check` | 0 | PASS | 9/9 combinații reale, 11/11 verificări deterministe, 11 declarate NOT_RUN |
 | C3 | `npm run missions:challenges-v2 -- --check` | 0 | PASS | 188: 15 provocări, 5 familii, 40/40 verificări |
-| C3 | `npm test` | 0 | PASS | 3490 teste, 3490 trecute, 0 eșuate |
+| C3 | `npm test` | 0 | PASS | 3498 teste, 3498 trecute, 0 eșuate |
 
 ## Criteriul 1 — lanțul real, pe fiecare mod
 

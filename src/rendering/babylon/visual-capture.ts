@@ -204,6 +204,7 @@ export function installVisualCapture(options: VisualCaptureOptions): () => void 
         backend: composition.backendInfo(),
         stats: composition.stats(),
         postProcessing: composition.view.daylight.getPostProcessingState(),
+        atmosphere: composition.view.daylight.getAtmosphereStats(),
         currentView: current,
       };
     },

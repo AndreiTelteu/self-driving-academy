@@ -10,7 +10,7 @@
  *   este un perete: relieful este continuu, cu înălțimea modulată de zgomot de valori determinist
  *   (hash întreg, fără `Math.random`), deci orizontul este o siluetă de creste, nu o linie dreaptă;
  * - culori pe vârf (iarbă, pădure, stâncă) amestecate spre culoarea cerului cu distanța
- *   (perspectivă atmosferică), compatibile cu `LOOK.sky`; PBI 243 adaugă ceața reală peste ele;
+ *   (perspectivă atmosferică ușoară); PBI 243 adaugă ceața reală a scenei peste ele (culoarea orizontului);
  * - parapetul: stâlpi și grinzi pe linia limitei.
  *
  * Reliefului nu i se atașează nicio coliziune: limita este oprită de zidurile 192/238 din
@@ -57,7 +57,7 @@ export const WORLD_EDGE_COLORS = Object.freeze({
   grassB: Object.freeze([0.19, 0.26, 0.14] as const),
   forest: Object.freeze([0.1, 0.19, 0.11] as const),
   rock: Object.freeze([0.33, 0.31, 0.28] as const),
-  /** `LOOK.sky` (0,55; 0,74; 0,88) în spațiu liniar, atenuat cu iluminarea medie a unui teren. */
+  /** Tenta orizontului (albastru-pal), aproape de culoarea ceții din starea de atmosferă (243). */
   haze: Object.freeze([0.22, 0.4, 0.58] as const),
 });
 
@@ -202,7 +202,9 @@ export function buildWorldEdgeTerrain(
       const withForest = mix(ground, WORLD_EDGE_COLORS.forest, woodland * 0.85);
       const rocky = smoothstep(0.5, 0.85, y / 170);
       const withRock = mix(withForest, WORLD_EDGE_COLORS.rock, rocky * 0.7);
-      const haze = 0.85 * Math.pow(smoothstep(120, 2400, d), 0.75);
+      // PBI 243: ceața reală a scenei (culoarea orizontului) face tranziția spre cer; culoarea pe vârf
+      // păstrează doar o tentă ușoară de perspectivă atmosferică, ca să nu se dubleze cu ceața.
+      const haze = 0.3 * Math.pow(smoothstep(120, 2400, d), 0.75);
       const color = mix(withRock, WORLD_EDGE_COLORS.haze, haze);
       const colorBase = (loop * perLoop + index) * 4;
       colors[colorBase] = color[0];

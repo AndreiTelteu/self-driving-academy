@@ -179,6 +179,15 @@ const VIEWS: readonly CaptureView[] = [
     placement: CARS_AWAY,
   },
   {
+    // PBI 243: privește spre soare (direcția `daylight-sun` inversată): discul, aureola și norii.
+    id: 'sky-sun',
+    category: 'horizon',
+    title: 'Cer cu soarele',
+    surface: 'canvas',
+    pose: { position: at(1.7, 1.7, 190), target: at(1.7 + 45, 1.7 + 100, 190 - 35), fovRad: 1.0 },
+    placement: CARS_AWAY,
+  },
+  {
     id: 'decor-tree-bench',
     category: 'decor',
     title: 'Decor: copac, bancă, hidrant',

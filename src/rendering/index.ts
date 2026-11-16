@@ -10,7 +10,9 @@ export {
   ADAPTIVE_RESOLUTION_FACTORS,
   QUALITY_PRESETS,
   checkVisualResources,
+  ATMOSPHERE_PRESETS,
 } from './quality-policy';
+export { ATMOSPHERE_VERSION, environmentTextureBytes } from './atmosphere';
 export { observeDisplaySurface, readDisplayMetrics } from './display-surface';
 export type { DisplayEnvironment, DisplayMetrics, DisplaySurfaceObserver } from './display-surface';
 export {

@@ -277,19 +277,23 @@ test('validation rejects duplicate ids, invalid versions and empty input', () =>
 test('real inventories produce the versioned manifest with no fabricated assets', () => {
   const collection = realCollection();
   const manifest = createAssetManifest(collection.records);
-  assert.equal(manifest.entries.length, 27);
-  assert.equal(manifest.entries.filter((entry) => entry.role === 'CRITICAL').length, 17);
+  assert.equal(manifest.entries.length, 29);
+  assert.equal(manifest.entries.filter((entry) => entry.role === 'CRITICAL').length, 19);
   assert.equal(manifest.entries.filter((entry) => entry.role === 'OPTIONAL').length, 10);
   assert.equal(manifest.entries.filter((entry) => entry.placeholder).length, 7);
   assert.equal(manifest.entries.filter((entry) => entry.kind === 'GLB').length, 0);
   assert.equal(manifest.entries.filter((entry) => entry.kind === 'WASM_MODULE').length, 3);
   assert.equal(manifest.entries.filter((entry) => entry.id.startsWith('city-decor:')).length, 9);
   assert.equal(manifest.entries.filter((entry) => entry.id.startsWith('vehicle:')).length, 7);
+  // 243: cerul procedural și cubul de mediu au sursă și licență în manifest.
+  const atmosphere = manifest.entries.filter((entry) => entry.id.startsWith('atmosphere:'));
+  assert.equal(atmosphere.length, 2);
+  assert.ok(atmosphere.every((entry) => entry.source.length > 0 && entry.license.length > 0));
   assert.equal(collection.registry.definitions, 0);
   assert.equal(collection.registry.decoderWasmBytes, 0);
   assert.equal(collection.registry.decoderWorkspaceBytes, 0);
   assert.deepEqual(collection.missing, []);
-  assert.equal(collection.criticalIds.length, 17);
+  assert.equal(collection.criticalIds.length, 19);
   const audit = auditAssetManifest(manifest, { criticalIds: collection.criticalIds });
   assert.equal(audit.reason, 'OK');
   assert.equal(audit.releaseBlocked, false);

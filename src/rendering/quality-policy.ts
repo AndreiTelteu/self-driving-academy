@@ -110,6 +110,27 @@ export const WORLD_EDGE_PRESETS: Readonly<Record<QualityPreset, WorldEdgeTier>> 
   MEDIUM: Object.freeze({ terrainSegmentsPerSide: 48, postSpacingM: 4 }),
   HIGH: Object.freeze({ terrainSegmentsPerSide: 72, postSpacingM: 4 }),
 });
+/**
+ * PBI 243 — cerul procedural, ceața și iluminarea din mediu (IBL).
+ *
+ * - `environmentSize`: latura cubului de mediu (half-float RGBA, lanț complet de mip-uri), generat o
+ *   singură dată la încărcare și la schimbarea stării de atmosferă. 32/64/128 → 0,05/0,2/1,05 MiB,
+ *   adică sub 0,3% din bugetul de texturi 223 chiar și pe LOW (256 MiB).
+ * - `clouds`: norii procedurali din shaderul cerului (fbm pe 4 octave): numai HIGH.
+ * - `domeSegments`: segmentele domului cerului (culoarea se calculează per pixel, deci puține).
+ * Ceața este aceeași pe toate presetările (nu costă nimic suplimentar), ca LOW, MEDIUM și HIGH să
+ * arate la fel.
+ */
+export interface AtmosphereTier {
+  readonly environmentSize: 32 | 64 | 128;
+  readonly clouds: boolean;
+  readonly domeSegments: number;
+}
+export const ATMOSPHERE_PRESETS: Readonly<Record<QualityPreset, AtmosphereTier>> = Object.freeze({
+  LOW: Object.freeze({ environmentSize: 32, clouds: false, domeSegments: 16 }),
+  MEDIUM: Object.freeze({ environmentSize: 64, clouds: false, domeSegments: 24 }),
+  HIGH: Object.freeze({ environmentSize: 128, clouds: true, domeSegments: 32 }),
+});
 /** Admit optional presentation resources before creation; never reject a simulated entity. */
 export function checkVisualResources(
   preset: QualityPreset,

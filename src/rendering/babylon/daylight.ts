@@ -8,8 +8,15 @@ import type { Scene } from '@babylonjs/core/scene.js';
 import type { Camera } from '@babylonjs/core/Cameras/camera.js';
 import type { AbstractMesh } from '@babylonjs/core/Meshes/abstractMesh.js';
 import type { QualityPreferences } from '../../settings';
-import { resolveQuality, createAdaptiveQuality, effectiveResolutionScale } from '../quality-policy';
+import {
+  POST_PROCESSING_PRESETS,
+  resolveQuality,
+  createAdaptiveQuality,
+  effectiveResolutionScale,
+} from '../quality-policy';
 import type { QualitySample } from '../quality-policy';
+import { createAtmosphereState, type AtmosphereState } from '../atmosphere';
+import { createAtmosphereScene } from './atmosphere-scene';
 import { createPostProcessing } from './post-processing';
 
 export type DaylightMaterial =
@@ -83,12 +90,33 @@ export function createDaylight(
   // PBI 241: o singură configurație de imagine (`scene.imageProcessingConfiguration`) pentru toate
   // materialele; `post` o calibrează și decide dacă o aplică pipeline-ul sau materialele.
   const post = createPostProcessing(scene);
+  // PBI 243: o singură stare de atmosferă dă cerul, ceața, culoarea de ștergere, cubul IBL, direcția
+  // și culoarea soarelui și ambientul de rezervă; nimic din acestea nu mai are valori proprii aici.
+  let atmosphereState = createAtmosphereState();
+  const atmosphere = createAtmosphereScene(scene, quality.preset, atmosphereState);
+  // Ambientul de rezervă: `StandardMaterial` nu citește `environmentTexture`, deci până când 245–249
+  // trec totul pe PBR, o lumină hemisferică redusă (0,55 → 0,42, colorată după cer) ține scena
+  // echilibrată. Un `PBRMaterial` primește ambientul din IBL: cât timp rămâne hemisfericul, el îl
+  // dublează, deci fiecare PBI PBR coboară `setLegacyAmbientIntensity` (0 când nu mai există
+  // `StandardMaterial` în scenă).
   const ambient = new HemisphericLight('daylight-ambient', Vector3.Up(), scene);
-  ambient.intensity = 0.55;
-  ambient.groundColor = new Color3(0.42, 0.44, 0.46);
-  const sun = new DirectionalLight('daylight-sun', new Vector3(-0.45, -1, 0.35).normalize(), scene);
+  const sun = new DirectionalLight(
+    'daylight-sun',
+    new Vector3(...atmosphereState.sunLightDirection),
+    scene,
+  );
   sun.position.set(25, 45, -25);
-  sun.intensity = 0.95;
+  let legacyAmbientScale = 1;
+  const applyAtmosphereLights = (): void => {
+    const state = atmosphereState;
+    ambient.intensity = state.legacyAmbient.intensity * legacyAmbientScale;
+    ambient.diffuse = new Color3(...state.legacyAmbient.skyColor);
+    ambient.groundColor = new Color3(...state.legacyAmbient.groundColor);
+    sun.direction = new Vector3(...state.sunLightDirection);
+    sun.diffuse = new Color3(...state.sun.lightColor);
+    sun.intensity = state.sun.lightIntensity;
+  };
+  applyAtmosphereLights();
   const palette: Record<DaylightMaterial, [number, number, number]> = {
     road: [0.17, 0.19, 0.22],
     marking: [0.98, 0.95, 0.78],
@@ -155,11 +183,31 @@ export function createDaylight(
       syncCasters();
     }
     post.setPreset(quality.preset);
+    // Pe LOW nu există pipeline: imaginea o aplică materialele, iar cerul și fundalul fac la fel.
+    atmosphere.setImageByMaterials(!POST_PROCESSING_PRESETS[quality.preset].pipeline);
+    atmosphere.setPreset(quality.preset);
     applyResolution();
   };
   apply();
   return {
     getQuality: () => quality,
+    /** PBI 243: starea de atmosferă curentă (cer, ceață, IBL, soare). */
+    getAtmosphere: () => atmosphereState,
+    getAtmosphereStats: () => atmosphere.getStats(),
+    /** Aplică o stare nouă de atmosferă (252: ora din zi); regenerează cubul IBL o singură dată. */
+    setAtmosphere(next: AtmosphereState): void {
+      assertActive();
+      atmosphereState = next;
+      atmosphere.apply(next);
+      applyAtmosphereLights();
+    },
+    /** 0..1: scara ambientului hemisferic de rezervă; 245–249 îl coboară când IBL îl înlocuiește. */
+    setLegacyAmbientScale(scale: number): void {
+      assertActive();
+      if (!(scale >= 0 && scale <= 1)) throw new Error('Scară de ambient invalidă');
+      legacyAmbientScale = scale;
+      applyAtmosphereLights();
+    },
     /** PBI 241: camera de joc la care se atașează AA și post-procesarea (fără ea, doar materialele). */
     attachCamera(camera: Camera | null): void {
       assertActive();
@@ -294,6 +342,7 @@ export function createDaylight(
       shadow?.dispose();
       shadow = null;
       post.dispose();
+      atmosphere.dispose();
       casters.clear();
       for (const material of materials.values()) material.dispose();
       materials.clear();

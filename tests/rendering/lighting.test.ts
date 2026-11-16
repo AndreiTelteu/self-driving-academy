@@ -84,7 +84,8 @@ test('daylight quality switches preserve materials/signals/domain and release sh
     light.applyPreferences(preferences);
     assert.equal(light.getResourceCounts().shadowMaps, 1);
     assert.equal(scene.lights.length, 2);
-    assert.equal(scene.materials.length, 7);
+    // 243: cele 7 materiale ale paletei + materialul shader al cerului (`atmosphere:sky`).
+    assert.equal(scene.materials.length, 8);
     assert.equal(scene.textures.length, 1);
     assert.equal(light.material('red'), red);
   }

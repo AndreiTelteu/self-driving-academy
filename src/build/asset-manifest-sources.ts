@@ -18,6 +18,9 @@ import {
   cityDecorInventory,
   vehicleAssetInventory,
   vehicleAssetManifest,
+  ATMOSPHERE_PRESETS,
+  ATMOSPHERE_VERSION,
+  environmentTextureBytes,
   type CityDecorPlan,
 } from '../rendering';
 import { createCityLayout, createNeighbourhoodMap } from '../world';
@@ -218,6 +221,36 @@ function decorRecords(plan: CityDecorPlan): readonly AssetSourceRecord[] {
   ];
 }
 
+/**
+ * PBI 243 — cerul procedural și cubul de mediu (IBL), generate la rulare din starea de atmosferă
+ * (`src/rendering/atmosphere.ts`): nu există fișier de transferat. Costul GPU este cel al celui mai
+ * mare preset (HIGH, 128 px half-float cu lanț de mip-uri); LOW folosește 32 px.
+ */
+function atmosphereRecords(): readonly AssetSourceRecord[] {
+  const base = {
+    kind: 'MATERIAL_SET' as const,
+    role: 'CRITICAL' as const,
+    version: ATMOSPHERE_VERSION,
+    source: 'PBI 243 procedural atmosphere src/rendering/atmosphere.ts (GLSL sky + generated cube)',
+    license: 'Project license — original procedural asset, no third-party texture or HDRI',
+    count: 1,
+    firstRide: false,
+    placeholder: false,
+    residencyBasis: 'CONTRACT_ESTIMATE' as const,
+    consumers: ['243'],
+  };
+  const largest = Math.max(...Object.values(ATMOSPHERE_PRESETS).map((t) => t.environmentSize));
+  return [
+    record({ ...base, id: 'atmosphere:sky-shader', shaderVariants: 2 }),
+    record({
+      ...base,
+      id: 'atmosphere:environment-cube',
+      shaderVariants: 0,
+      decoded: decoded({ textureBytes: environmentTextureBytes(largest) }),
+    }),
+  ];
+}
+
 function audioRecords(): readonly AssetSourceRecord[] {
   return AUDIO_CUE_IDS.map((cueId) => {
     const cue = AUDIO_CUES[cueId];
@@ -389,6 +422,7 @@ export function collectAssetManifestSources(
   const records = Object.freeze([
     ...vehicleRecords(),
     ...decorRecords(plan),
+    ...atmosphereRecords(),
     ...audioRecords(),
     ...passengerRecords(),
     ...wasm.records,

@@ -20,22 +20,21 @@
 import type { Camera } from '@babylonjs/core/Cameras/camera.js';
 import { ColorCurves } from '@babylonjs/core/Materials/colorCurves.js';
 import { ImageProcessingConfiguration } from '@babylonjs/core/Materials/imageProcessingConfiguration.js';
-import { Color3, Color4 } from '@babylonjs/core/Maths/math.color.js';
+import { Color4 } from '@babylonjs/core/Maths/math.color.js';
 import { DefaultRenderingPipeline } from '@babylonjs/core/PostProcesses/RenderPipeline/Pipelines/defaultRenderingPipeline.js';
 import { FxaaPostProcess } from '@babylonjs/core/PostProcesses/fxaaPostProcess.js';
 import { Constants } from '@babylonjs/core/Engines/constants.js';
-import type { Material } from '@babylonjs/core/Materials/material.js';
-import type { Observer } from '@babylonjs/core/Misc/observable.js';
 import type { Scene } from '@babylonjs/core/scene.js';
 import { POST_PROCESSING_PRESETS, type QualityPreset } from '../quality-policy';
+import { IMAGE_EXPOSURE } from '../atmosphere';
+import { cancelPendingRefresh, refreshFrozenMaterials } from './material-refresh';
 
 /** Calibrarea imaginii (HDR liniar → ecran). Valorile sunt verificate pe capturile 239. */
 export const LOOK = Object.freeze({
   toneMapping: ImageProcessingConfiguration.TONEMAPPING_KHR_PBR_NEUTRAL,
-  exposure: 1.45,
+  /** Din starea de atmosferă (243): cerul își ia culorile de afișare cu aceeași expunere. */
+  exposure: IMAGE_EXPOSURE,
   contrast: 1,
-  /** Cerul (culoarea de ștergere) așa cum apare pe ecran, în spațiul de afișare. */
-  sky: [0.55, 0.74, 0.88] as const,
   vignetteWeight: 1.2,
   ditheringIntensity: 1 / 255,
   bloomThreshold: 2.5,
@@ -115,26 +114,11 @@ export function createPostProcessing(scene: Scene) {
   /**
    * Materialele orașului sunt înghețate (`freeze`) și nu se recompilează singure: fără asta păstrează
    * shaderul compilat cu vechiul `applyByPostProcess` (LOW rămânea fără conversia în gamma după HIGH).
-   * Le dezghețăm, le marcăm murdare și le înghețăm din nou după ce shaderul nou a fost randat.
+   * Mecanismul (dezgheață, marchează murdar, îngheață după 3 cadre) este comun cu ceața și IBL din
+   * 243: `material-refresh.ts`.
    */
-  const refrozen = new Set<Material>();
-  let refreezeObserver: Observer<Scene> | null = null;
   const recompileMaterials = (): void => {
-    for (const material of scene.materials)
-      if (material.isFrozen) {
-        material.unfreeze();
-        refrozen.add(material);
-      }
-    scene.markAllMaterialsAsDirty(Constants.MATERIAL_ImageProcessingDirtyFlag);
-    if (refrozen.size === 0 || refreezeObserver) return;
-    let frames = 0;
-    refreezeObserver = scene.onAfterRenderObservable.add(() => {
-      if (++frames < 3) return;
-      scene.onAfterRenderObservable.remove(refreezeObserver);
-      refreezeObserver = null;
-      for (const material of refrozen) if (scene.materials.includes(material)) material.freeze();
-      refrozen.clear();
-    });
+    refreshFrozenMaterials(scene, Constants.MATERIAL_ImageProcessingDirtyFlag);
   };
 
   const releasePasses = (): void => {
@@ -155,10 +139,8 @@ export function createPostProcessing(scene: Scene) {
     recompileMaterials();
     if (preset === null) return;
     const tier = POST_PROCESSING_PRESETS[preset];
-    // Ținta HDR a pipeline-ului este liniară (convertită la ieșire); LOW șterge direct în ecran.
-    const sky = Color3.FromArray([...LOOK.sky]);
-    const clear = tier.pipeline ? sky.toLinearSpace() : sky;
-    scene.clearColor = new Color4(clear.r, clear.g, clear.b, 1);
+    // PBI 243: culoarea de ștergere nu mai este aici; o scrie `atmosphere-scene` din starea de
+    // atmosferă (liniară în pipeline, de afișare pe LOW), ca fundalul și cerul să nu poată diverge.
     config.vignetteEnabled = tier.vignette;
     config.colorCurvesEnabled = tier.grading;
     config.ditheringEnabled = tier.dithering;
@@ -249,8 +231,7 @@ export function createPostProcessing(scene: Scene) {
     dispose(): void {
       if (disposed) return;
       releasePasses();
-      if (refreezeObserver) scene.onAfterRenderObservable.remove(refreezeObserver);
-      refreezeObserver = null;
+      cancelPendingRefresh(scene);
       disposed = true;
       Object.assign(config, previous);
     },
