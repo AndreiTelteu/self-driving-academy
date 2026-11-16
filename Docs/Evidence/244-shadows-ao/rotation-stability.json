@@ -1,0 +1,13 @@
+{
+  "note": "Rulat cu rotation-stability.page.js pe build-ul final, Chromium WebGPU amd rdna-2, vederea street-eye-level. Deriva = deplasarea sub-texel a unui colt fix al lumii (118.37, 0, 41.91) in harta de umbra. 0 = marginea umbrei nu se misca fata de texeli.",
+  "HIGH": { "generator": "CascadedShadowGenerator", "cascades": 4, "mapSize": 2048,
+    "rotation360_120steps_of_3deg": { "worstDriftTexelPerCascade": [0,0,0,0], "stepsOver0.02Texel": [0,0,0,0] },
+    "translation_150steps_1.5cm": { "worstDriftTexelPerCascade": [0,0,0,0], "stepsOver0.02Texel": [0,0,0,0] } },
+  "MEDIUM": { "generator": "ShadowGenerator", "cascades": 1, "mapSize": 1024,
+    "rotation360_120steps_of_3deg": { "worstDriftTexelPerCascade": [0], "stepsOver0.02Texel": [0] },
+    "translation_150steps_1.5cm": { "worstDriftTexelPerCascade": [0], "stepsOver0.02Texel": [0] } },
+  "before_fixes": {
+    "note": "Prima varianta (camera de joc cu 0.1/3000 m ca sursa CSM): sfera cascadei isi schimba raza cu 1/16 m din cauza preciziei float32 la raportul 30000:1.",
+    "HIGH_cascades_steps_over_0.02_of_120": [0,12,19,43], "HIGH_worst_drift_texel": [0,0.177,0.466,0.250],
+    "MEDIUM_before_shadowOrthoScale_fix_worst_drift_texel": 0.5 }
+}

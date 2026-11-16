@@ -8,6 +8,7 @@
  */
 import { FreeCamera } from '@babylonjs/core/Cameras/freeCamera';
 import { Vector3 } from '@babylonjs/core/Maths/math.vector';
+import type { TransformNode } from '@babylonjs/core/Meshes/transformNode';
 import type { Scene } from '@babylonjs/core/scene';
 import { createCharacterAsset, type CharacterRenderFrame } from '../../character';
 import type { CompositionFrame } from '../../app';
@@ -19,7 +20,9 @@ import type { VisualTransform } from '../scene-contract';
 import { createCharacterScene, type CharacterScene } from './character-scene';
 import { createCityDecorScene, type CityDecorScene } from './city-decor-scene';
 import { createCityScene, type CityScene } from './city-scene';
-import { createDaylight } from './daylight';
+import { motionSignature } from '../shadow-math';
+import { createContactShadows, type ContactShadowTarget } from './contact-shadows';
+import { createDaylight, type ShadowCasterPriority } from './daylight';
 import { createWorldEdgeScene, type WorldEdgeScene } from './world-edge-scene';
 import { createVehicleVisualStage, type VehicleVisualStage } from './vehicle-scene';
 
@@ -73,6 +76,8 @@ export interface V3CompositionScene {
   readonly vehicles: VehicleVisualStage;
   readonly camera: FreeCamera;
   readonly daylight: ReturnType<typeof createDaylight>;
+  /** PBI 244: umbre de contact active (numai pe LOW). */
+  contactShadowCount(): number;
   apply(frame: CompositionFrame, characterFrame: CharacterRenderFrame): void;
   /** Reprezentarea vizuală a unui vehicul, după apariția lui în primul cadru (239: capturi). */
   representation(vehicleId: string): ReturnType<VehicleVisualStage['create']> | undefined;
@@ -121,8 +126,70 @@ export function createV3CompositionScene(options: V3CompositionSceneOptions): V3
   scene.activeCamera = camera;
   // PBI 241: AA și post-procesarea se atașează camerei de joc, nu camerei de bootstrap.
   daylight.attachCamera(camera);
+  // 244: umbrele urmăresc camera reală și mișcarea reală a casterilor, în fiecare cadru randat.
+  const shadowObserver = scene.onBeforeRenderObservable.add(() => {
+    const target = camera.getFrontPosition(1);
+    daylight.updateShadows({
+      cameraPosition: [camera.position.x, camera.position.y, camera.position.z],
+      cameraTarget: [target.x, target.y, target.z],
+      motionSignature: motionSignature(dynamicMotion()),
+    });
+  });
   const representations = new Map<string, ReturnType<VehicleVisualStage['create']>>();
   let frames = 0;
+  // PBI 244: casterii statici (clădiri, semafoare, decor) se înregistrează o dată; personajul și
+  // vehiculele dinamice la apariție. Terenul, drumul și trotuarul doar primesc umbre.
+  for (const mesh of city.shadowCasterMeshes()) daylight.addShadowCaster(mesh, 'optional');
+  for (const mesh of decor?.shadowCasterMeshes() ?? []) daylight.addShadowCaster(mesh, 'optional');
+  for (const mesh of character.meshes) daylight.addShadowCaster(mesh, 'standard');
+  const contactShadows = createContactShadows(scene);
+  const casterPriority = new Map<string, ShadowCasterPriority>();
+  /** Vehiculul urmărit de cameră (essential): cel condus, altfel taxiul cel mai apropiat. */
+  const heroVehicleId = (frame: CompositionFrame): string | null => {
+    const anchor = frame.camera.anchorM;
+    const driving = frame.camera.targetKind === 'VEHICLE';
+    let best: string | null = null;
+    let bestDistance = Number.POSITIVE_INFINITY;
+    for (const vehicle of frame.vehicles) {
+      if (!driving && vehicle.driverKind !== 'TAXI') continue;
+      const distance = Math.hypot(vehicle.positionM.x - anchor.x, vehicle.positionM.z - anchor.z);
+      if (distance < bestDistance) {
+        bestDistance = distance;
+        best = vehicle.vehicleId;
+      }
+    }
+    return best;
+  };
+  /**
+   * Semnătura mișcării: transformările locale (poziție, rotație, scară) ale tuturor nodurilor care
+   * aruncă umbră (rădăcinile vehiculelor, personajul și articulațiile lui) plus FOV-ul camerei.
+   * Se citește din scenă, nu din cadrul compunerii: capturile mută direct nodurile fără `apply`.
+   */
+  const characterNodes: readonly TransformNode[] = [
+    character.root,
+    ...character.root.getChildTransformNodes(false),
+  ];
+  function* dynamicMotion(): Generator<number> {
+    const nodes: TransformNode[] = [...characterNodes];
+    for (const representation of representations.values()) nodes.push(representation.root);
+    for (const node of nodes) {
+      yield node.position.x;
+      yield node.position.y;
+      yield node.position.z;
+      const q = node.rotationQuaternion;
+      if (q) {
+        yield q.x;
+        yield q.y;
+        yield q.z;
+        yield q.w;
+      } else {
+        yield node.rotation.x;
+        yield node.rotation.y;
+        yield node.rotation.z;
+      }
+    }
+    yield camera.fov;
+  }
 
   return Object.freeze({
     version: V3_COMPOSITION_SCENE_VERSION,
@@ -134,6 +201,7 @@ export function createV3CompositionScene(options: V3CompositionSceneOptions): V3
     vehicles,
     camera,
     daylight,
+    contactShadowCount: () => contactShadows.count,
     apply(frame: CompositionFrame, characterFrame: CharacterRenderFrame): void {
       frames += 1;
       character.applyFrame(characterFrame);
@@ -147,6 +215,15 @@ export function createV3CompositionScene(options: V3CompositionSceneOptions): V3
         const created = vehicles.create(vehicle.vehicleId, vehicle.classId, transform);
         representations.set(vehicle.vehicleId, created);
       }
+      // 244: prioritatea de umbră urmărește vehiculul din cadru; se rescrie numai la schimbare.
+      const hero = heroVehicleId(frame);
+      for (const vehicle of frame.vehicles) {
+        const wanted: ShadowCasterPriority = vehicle.vehicleId === hero ? 'essential' : 'standard';
+        if (casterPriority.get(vehicle.vehicleId) === wanted) continue;
+        casterPriority.set(vehicle.vehicleId, wanted);
+        for (const mesh of representations.get(vehicle.vehicleId)?.shadowCasters ?? [])
+          daylight.addShadowCaster(mesh, wanted);
+      }
       const cameraFrame = frame.camera;
       camera.position.set(
         cameraFrame.positionM.x,
@@ -158,7 +235,28 @@ export function createV3CompositionScene(options: V3CompositionSceneOptions): V3
       );
       camera.fov = cameraFrame.fovRadians;
       vehicles.updateLod(camera.position, options.preset);
-      void daylight;
+      // LOW: umbre de contact (fără shadow map) sub vehicule și personaj; altfel niciuna.
+      if (daylight.getQuality().preset === 'LOW') {
+        const targets: ContactShadowTarget[] = [];
+        for (const vehicle of frame.vehicles) {
+          const representation = representations.get(vehicle.vehicleId);
+          if (!representation) continue;
+          targets.push({
+            id: vehicle.vehicleId,
+            root: representation.root,
+            extentX: representation.footprintM.width,
+            extentZ: representation.footprintM.length,
+          });
+        }
+        targets.push({
+          id: 'character',
+          root: character.root,
+          extentX: 0.9,
+          extentZ: 0.9,
+          spread: 1,
+        });
+        contactShadows.sync(targets);
+      } else if (contactShadows.count > 0) contactShadows.sync([]);
     },
     representation(vehicleId: string) {
       return representations.get(vehicleId);
@@ -210,6 +308,8 @@ export function createV3CompositionScene(options: V3CompositionSceneOptions): V3
       });
     },
     dispose(): void {
+      scene.onBeforeRenderObservable.remove(shadowObserver);
+      contactShadows.dispose();
       for (const representation of representations.values()) representation.dispose();
       representations.clear();
       vehicles.dispose();

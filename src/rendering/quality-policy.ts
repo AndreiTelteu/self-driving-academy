@@ -27,7 +27,7 @@ export const QUALITY_PRESETS = Object.freeze({
   HIGH: Object.freeze({
     maxDpr: 2,
     shadowMapSize: 2048,
-    shadowDistance: 100,
+    shadowDistance: 140,
     maxShadowCasters: 96,
     materialLights: 2,
     lodDistance: 150,
@@ -130,6 +130,141 @@ export const ATMOSPHERE_PRESETS: Readonly<Record<QualityPreset, AtmosphereTier>>
   LOW: Object.freeze({ environmentSize: 32, clouds: false, domeSegments: 16 }),
   MEDIUM: Object.freeze({ environmentSize: 64, clouds: false, domeSegments: 24 }),
   HIGH: Object.freeze({ environmentSize: 128, clouds: true, domeSegments: 32 }),
+});
+/**
+ * PBI 244 — umbre de la soare pe preset.
+ *
+ * - `BLOB` (LOW): fără shadow map; o umbră de contact ieftină (un cvadrilater texturat) sub fiecare
+ *   vehicul și sub personaj. Clădirile și decorul nu aruncă umbră.
+ * - `MAP` (MEDIUM): o singură hartă ortografică PCF, mutată după cameră și aliniată pe texeli
+ *   (`shadow-math.ts`), deci marginile nu tremură la mișcare sau rotație.
+ * - `CASCADED` (HIGH): Cascaded Shadow Maps cu `stabilizeCascades` (sfere + aliniere pe texeli) și
+ *   PCF de calitate mare; cascadele își iau centrul din frustumul camerei.
+ * - `shadowMaxZ`: distanța maximă de la cameră (CASCADED) sau lățimea hărții (MAP), în metri.
+ * - `staticCache`: harta nu se mai randează în cadrele în care nimic nu s-a schimbat (soare, cameră,
+ *   mișcare a casterilor); vezi `daylight.updateShadows`.
+ * Costul de memorie GPU este `mapSize² × cascade × (2 B culoare + 4 B adâncime)`: HIGH ≈ 96 MiB,
+ * MEDIUM ≈ 6 MiB, LOW 0.
+ */
+export type ShadowMode = 'BLOB' | 'MAP' | 'CASCADED';
+export interface ShadowTier {
+  readonly mode: ShadowMode;
+  readonly cascades: number;
+  readonly mapSize: number;
+  readonly shadowMaxZ: number;
+  /** Amestecul logaritmic/uniform al limitelor cascadelor (1 = logaritmic, mai multă rezoluție aproape). */
+  readonly lambda: number;
+  readonly filter: 'NONE' | 'PCF';
+  readonly filteringQuality: 'LOW' | 'MEDIUM' | 'HIGH';
+  /** Bias de adâncime (în unități de hartă normalizată) și bias pe normală (metri). */
+  readonly bias: number;
+  readonly normalBias: number;
+  /** Cât de întunecată este umbra: 0 = negru complet, 1 = fără umbră. Ambientul completează restul. */
+  readonly darkness: number;
+  readonly staticCache: boolean;
+}
+export const SHADOW_PRESETS: Readonly<Record<QualityPreset, ShadowTier>> = Object.freeze({
+  LOW: Object.freeze({
+    mode: 'BLOB',
+    cascades: 0,
+    mapSize: 0,
+    shadowMaxZ: 0,
+    lambda: 0,
+    filter: 'NONE',
+    filteringQuality: 'LOW',
+    bias: 0,
+    normalBias: 0,
+    darkness: 1,
+    staticCache: false,
+  }),
+  MEDIUM: Object.freeze({
+    mode: 'MAP',
+    cascades: 1,
+    mapSize: 1024,
+    shadowMaxZ: 60,
+    lambda: 0,
+    filter: 'PCF',
+    filteringQuality: 'MEDIUM',
+    bias: 0.0015,
+    normalBias: 0.06,
+    darkness: 0.2,
+    staticCache: true,
+  }),
+  HIGH: Object.freeze({
+    mode: 'CASCADED',
+    cascades: 4,
+    mapSize: 2048,
+    shadowMaxZ: 140,
+    lambda: 0.85,
+    filter: 'PCF',
+    filteringQuality: 'HIGH',
+    bias: 0.002,
+    normalBias: 0.03,
+    darkness: 0.2,
+    staticCache: true,
+  }),
+});
+/**
+ * PBI 244 — ocluzie ambientală în spațiu-ecran (SSAO2) pe preset. LOW nu are AO.
+ *
+ * Valorile sunt calibrate pe capturile 239 (vederile `taxi-front-three-quarter`, `facades-close`,
+ * `decor-tree-bench`): raza mică (contact, nu pete mari), `maxZ` scurt (nu apar aureole la siluete
+ * față de cer), putere moderată. `resolutionRatio` este raportul texturii SSAO față de ecran.
+ */
+export interface AmbientOcclusionTier {
+  readonly enabled: boolean;
+  readonly samples: number;
+  readonly radius: number;
+  readonly totalStrength: number;
+  readonly base: number;
+  readonly maxZ: number;
+  readonly minZAspect: number;
+  readonly resolutionRatio: number;
+  readonly blurRatio: number;
+  /** Rezolutia bufferului de geometrie (adancime + normale) fata de ecran. */
+  readonly geometryScale: number;
+  readonly expensiveBlur: boolean;
+}
+export const AO_PRESETS: Readonly<Record<QualityPreset, AmbientOcclusionTier>> = Object.freeze({
+  LOW: Object.freeze({
+    enabled: false,
+    samples: 0,
+    radius: 0,
+    totalStrength: 0,
+    base: 0,
+    maxZ: 0,
+    minZAspect: 0,
+    resolutionRatio: 0,
+    blurRatio: 0,
+    geometryScale: 0,
+    expensiveBlur: false,
+  }),
+  MEDIUM: Object.freeze({
+    enabled: true,
+    samples: 8,
+    radius: 1.2,
+    totalStrength: 0.6,
+    base: 0.1,
+    maxZ: 60,
+    minZAspect: 0.5,
+    resolutionRatio: 0.5,
+    blurRatio: 0.5,
+    geometryScale: 0.5,
+    expensiveBlur: false,
+  }),
+  HIGH: Object.freeze({
+    enabled: true,
+    samples: 12,
+    radius: 1.5,
+    totalStrength: 0.9,
+    base: 0.1,
+    maxZ: 120,
+    minZAspect: 0.5,
+    resolutionRatio: 0.5,
+    blurRatio: 0.5,
+    geometryScale: 0.5,
+    expensiveBlur: true,
+  }),
 });
 /** Admit optional presentation resources before creation; never reject a simulated entity. */
 export function checkVisualResources(

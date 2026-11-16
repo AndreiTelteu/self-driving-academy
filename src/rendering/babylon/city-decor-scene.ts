@@ -38,6 +38,8 @@ export interface CityDecorScene {
   readonly root: TransformNode;
   readonly plan: CityDecorPlan;
   readonly stats: CityDecorSceneStats;
+  /** PBI 244: batch-urile statice (câte unul pe celulă) care aruncă umbră. */
+  shadowCasterMeshes(): readonly Mesh[];
   meshForCell(cell: string): Mesh | null;
   itemsInCell(cell: string): readonly CityDecorItem[];
   dispose(): void;
@@ -98,6 +100,7 @@ export function createCityDecorScene(
     root,
     plan,
     stats,
+    shadowCasterMeshes: () => (disposed ? [] : meshes.filter((mesh) => !mesh.isDisposed())),
     meshForCell: (cell) => (disposed ? null : (byCell.get(cell) ?? null)),
     itemsInCell: (cell) => plan.items.filter((entry) => entry.cell === cell),
     dispose(): void {

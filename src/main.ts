@@ -293,6 +293,8 @@ interface V3DebugGlobal {
   setPreset?(preset: 'LOW' | 'MEDIUM' | 'HIGH'): void;
   /** PBI 241 (numai DEV, `?capture` sau `?debug`): scena Babylon, pentru resurse și calibrare. */
   scene?(): unknown;
+  /** PBI 244 (numai DEV, `?capture` sau `?debug`): daylight, pentru statistici de umbre/AO și efecte on/off. */
+  daylight?(): unknown;
   reset(): void;
   probeDoubleDelivery(): string;
 }
@@ -318,6 +320,7 @@ if (
     composition.view.daylight.applyPreferences(sessionQuality);
   };
   debugGlobal.scene = () => composition?.view.scene ?? null;
+  debugGlobal.daylight = () => composition?.view.daylight ?? null;
 }
 (globalThis as unknown as { __v3Composition?: V3DebugGlobal }).__v3Composition = debugGlobal;
 

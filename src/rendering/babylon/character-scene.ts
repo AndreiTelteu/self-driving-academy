@@ -41,6 +41,8 @@ export interface CharacterSceneStats {
 export interface CharacterScene {
   readonly version: typeof CHARACTER_SCENE_VERSION;
   readonly root: TransformNode;
+  /** PBI 244: meshurile personajului (casteri și receptori de umbră). */
+  readonly meshes: readonly Mesh[];
   readonly stats: CharacterSceneStats;
   /** Copiază poziția, yaw-ul și articulațiile locale; nu inventează nicio poziție. */
   applyFrame(frame: CharacterRenderFrame): void;
@@ -97,12 +99,14 @@ export function createCharacterScene(
     mesh.position.set(part.localCentreM.x, part.localCentreM.y, part.localCentreM.z);
     mesh.material = materials.get(part.group) ?? null;
     mesh.isPickable = false;
+    mesh.receiveShadows = true;
     meshes.push(mesh);
   }
 
   const characterScene: CharacterScene = {
     version: CHARACTER_SCENE_VERSION,
     root,
+    meshes,
     get stats(): CharacterSceneStats {
       return Object.freeze({
         version: CHARACTER_SCENE_VERSION,

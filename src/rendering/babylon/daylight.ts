@@ -1,6 +1,10 @@
 import { HemisphericLight } from '@babylonjs/core/Lights/hemisphericLight.js';
 import { DirectionalLight } from '@babylonjs/core/Lights/directionalLight.js';
 import { ShadowGenerator } from '@babylonjs/core/Lights/Shadows/shadowGenerator.js';
+import { CascadedShadowGenerator } from '@babylonjs/core/Lights/Shadows/cascadedShadowGenerator.js';
+import { Constants } from '@babylonjs/core/Engines/constants.js';
+import { FreeCamera } from '@babylonjs/core/Cameras/freeCamera.js';
+import { RenderTargetTexture } from '@babylonjs/core/Materials/Textures/renderTargetTexture.js';
 import { StandardMaterial } from '@babylonjs/core/Materials/standardMaterial.js';
 import { Color3 } from '@babylonjs/core/Maths/math.color.js';
 import { Vector3 } from '@babylonjs/core/Maths/math.vector.js';
@@ -10,13 +14,16 @@ import type { AbstractMesh } from '@babylonjs/core/Meshes/abstractMesh.js';
 import type { QualityPreferences } from '../../settings';
 import {
   POST_PROCESSING_PRESETS,
+  SHADOW_PRESETS,
   resolveQuality,
   createAdaptiveQuality,
   effectiveResolutionScale,
 } from '../quality-policy';
-import type { QualitySample } from '../quality-policy';
+import type { QualityPreset, QualitySample, ShadowTier } from '../quality-policy';
 import { createAtmosphereState, type AtmosphereState } from '../atmosphere';
+import { followShadowFrame, groundFocus, type Vec3 } from '../shadow-math';
 import { createAtmosphereScene } from './atmosphere-scene';
+import { refreshFrozenMaterials } from './material-refresh';
 import { createPostProcessing } from './post-processing';
 
 export type DaylightMaterial =
@@ -27,13 +34,15 @@ export interface QualityViewport {
   readonly dpr: number;
 }
 /**
- * PBI 157 — explicit shadow-map budget.
+ * PBI 157 — explicit shadow-map budget; PBI 244 — lista de conținut extinsă la toată scena.
  *
- * `essential` is the vehicle the player is looking at, `standard` is simulated traffic, `optional`
- * is small scenery. Admission is priority-first and insertion-stable inside a priority, so a
- * bounded map never drops the essential caster in favour of a prop. What never enters the map is
- * declared here as well: the static city layout only receives shadows, the 146 decor and the
- * emissive markings/lamps are unlit, and nothing outside the registered set is submitted.
+ * `essential` is the vehicle the player is looking at, `standard` is simulated traffic and the
+ * character, `optional` is the static world (buildings, signal heads, decor 146). Admission is
+ * priority-first and insertion-stable inside a priority, so a bounded map never drops the essential
+ * caster in favour of a prop. Static (`optional`) casters farther than the shadow range from the
+ * camera focus are left out of the list, so the cap is spent on what can reach the image.
+ * Contract changed intentionally in 244: buildings, signal heads and decor now cast; the road,
+ * sidewalk, curb and terrain only receive.
  */
 export type ShadowCasterPriority = 'essential' | 'standard' | 'optional';
 export const SHADOW_CASTER_PRIORITIES: readonly ShadowCasterPriority[] = Object.freeze([
@@ -43,17 +52,32 @@ export const SHADOW_CASTER_PRIORITIES: readonly ShadowCasterPriority[] = Object.
 ]);
 export const SHADOW_MAP_CONTENT = Object.freeze({
   includes: Object.freeze([
-    'vehiculele selectate (essential)',
-    'traficul simulat din fereastra jocului (standard)',
-    'decorul mic care aruncă umbră (optional)',
+    'vehiculul urmărit (essential)',
+    'traficul simulat și personajul (standard)',
+    'clădirile 042, semafoarele și decorul 146 din raza hărții (optional)',
   ]),
   excludes: Object.freeze([
-    'layout-ul static 042 (doar receiveShadows, fără caster)',
-    'decorul 146 (batch static, nu se înregistrează)',
+    'carosabil, trotuar, bordură și teren (doar receiveShadows, fără caster)',
     'marcaje și lămpi emisive (materiale unlit)',
+    'roțile vehiculelor (instanțe; umbra caroseriei acoperă contactul, AO închide roata)',
     'orice mesh neînregistrat explicit',
   ]),
 });
+/** Marja (metri) în jurul razei hărții în care casterii statici rămân în lista de randare. */
+const STATIC_CASTER_MARGIN_M = 90;
+/** Cadre în care harta se randează fără pauză după fiecare (re)construire (shadere în compilare). */
+const WARM_FRAMES = 45;
+/** Plafonul registrului pentru casterii statici (`optional`), separat de cel esențial/standard. */
+const OPTIONAL_CASTER_CAP = 192;
+/** Cât de departe în față (m) este centrul hărții unice (MEDIUM) față de cameră. */
+const MAP_FOCUS_AHEAD_M = 18;
+
+export interface ShadowViewInput {
+  readonly cameraPosition: Vec3;
+  readonly cameraTarget: Vec3;
+  /** Semnătura mișcării casterilor dinamici (vehicule, personaj); o schimbare invalidează harta. */
+  readonly motionSignature: number;
+}
 
 /** Scene-local resource owner: presentation only, no simulation ports or authority. */
 export function createDaylight(
@@ -83,7 +107,15 @@ export function createDaylight(
     );
   let quality = resolve();
   let disposed = false;
-  let shadow: ShadowGenerator | null = null;
+  let shadow: ShadowGenerator | CascadedShadowGenerator | null = null;
+  let gameCamera: Camera | null = null;
+  /**
+   * Cameră-proxy pentru cascade: aceeași poză și FOV ca a jocului, dar cu planuri apropiat/îndepărtat
+   * (0,3 m / shadowMaxZ) în loc de 0,1 m / 3000 m. Cu raportul 30000:1 matricea inversă în float32
+   * dă raze de sferă care variază cu yaw-ul (măsurat: 43 din 120 de pași de rotație cu deriva >0,02
+   * texel pe ultima cascadă, harta se „mișcă” până la 0,47 texel); cu raportul ~470 deriva este 0.
+   */
+  let shadowCamera: FreeCamera | null = null;
   /** Insertion-ordered registry; the priority is the admission key of the bounded map. */
   const casters = new Map<AbstractMesh, ShadowCasterPriority>();
   const previousClear = scene.clearColor;
@@ -115,8 +147,9 @@ export function createDaylight(
     sun.direction = new Vector3(...state.sunLightDirection);
     sun.diffuse = new Color3(...state.sun.lightColor);
     sun.intensity = state.sun.lightIntensity;
+    // 244: soarele schimbat invalidează umbrele cache-uite (singurul motiv static de re-randare).
+    invalidateShadows('sun');
   };
-  applyAtmosphereLights();
   const palette: Record<DaylightMaterial, [number, number, number]> = {
     road: [0.17, 0.19, 0.22],
     marking: [0.98, 0.95, 0.78],
@@ -142,18 +175,208 @@ export function createDaylight(
   const assertActive = (): void => {
     if (disposed || scene.isDisposed) throw new Error('Daylight disposed');
   };
-  const syncCasters = (): void => {
-    for (const caster of casters.keys()) if (caster.isDisposed()) casters.delete(caster);
+
+  // ---- PBI 244: umbre ---------------------------------------------------------------------------
+  /** Focarul hărții: de aici se decide care casteri statici intră în lista de randare. */
+  let shadowFocus: Vec3 | null = null;
+  let lastListFocus: Vec3 | null = null;
+  let lastSignature = Number.NaN;
+  let lastCameraKey = '';
+  let lastCenterKey = '';
+  let warmFrames = 0;
+  let appliedKind = 'NONE';
+  let shadowsAllowed = true;
+  let activeTier: ShadowTier = SHADOW_PRESETS[quality.preset];
+  /** HIGH cere CSM; un motor fără suport (NullEngine, WebGL1) coboară la o singură hartă mare. */
+  const resolveShadowTier = (preset: QualityPreset): ShadowTier => {
+    const tier = SHADOW_PRESETS[preset];
+    if (tier.mode !== 'CASCADED' || CascadedShadowGenerator.IsSupported) return tier;
+    return Object.freeze({ ...tier, mode: 'MAP', cascades: 1, shadowMaxZ: 80 });
+  };
+  let shadowFrames = 0;
+  let shadowRenders = 0;
+  const invalidations = new Map<string, number>();
+  /** Raza (m) în jurul focarului în care un caster static poate arunca umbră vizibilă. */
+  const staticReach = (): number => {
+    const tier = activeTier;
+    return (tier.mode === 'MAP' ? tier.shadowMaxZ : tier.shadowMaxZ + 20) + STATIC_CASTER_MARGIN_M;
+  };
+  function invalidateShadows(reason: string): void {
+    invalidations.set(reason, (invalidations.get(reason) ?? 0) + 1);
     const map = shadow?.getShadowMap();
-    if (map)
-      map.renderList = [...casters.entries()]
+    if (map) map.resetRefreshCounter();
+  }
+  const orderedCasters = (): AbstractMesh[] => {
+    const reach = staticReach();
+    const focus = shadowFocus;
+    return (
+      [...casters.entries()]
+        // Static casters out of reach cannot put a shadow in the image: keep the cap for the rest.
+        .filter(([mesh, priority]) => {
+          if (priority !== 'optional' || !focus) return true;
+          const sphere = mesh.getBoundingInfo().boundingSphere;
+          const c = sphere.centerWorld;
+          return Math.hypot(c.x - focus[0], c.z - focus[2]) - sphere.radiusWorld <= reach;
+        })
         // Array#sort is stable: equal priorities keep the registration order PBI016 declared.
         .sort(
           ([, left], [, right]) =>
             SHADOW_CASTER_PRIORITIES.indexOf(left) - SHADOW_CASTER_PRIORITIES.indexOf(right),
         )
         .map(([mesh]) => mesh)
-        .slice(0, quality.limits.maxShadowCasters);
+        .slice(0, quality.limits.maxShadowCasters)
+    );
+  };
+  const syncCasters = (): void => {
+    for (const caster of casters.keys()) if (caster.isDisposed()) casters.delete(caster);
+    const map = shadow?.getShadowMap();
+    if (map) {
+      map.renderList = orderedCasters();
+      invalidateShadows('casters');
+    }
+  };
+  const disposeShadow = (): void => {
+    if (!shadow) return;
+    shadow.dispose();
+    shadow = null;
+    shadowCamera?.dispose();
+    shadowCamera = null;
+    lastSignature = Number.NaN;
+    lastCameraKey = '';
+    lastCenterKey = '';
+  };
+  const syncShadowCamera = (): void => {
+    const source = gameCamera as (Camera & { rotation?: Vector3 }) | null;
+    if (!shadowCamera || !source?.rotation) return;
+    shadowCamera.position.copyFrom(source.position);
+    shadowCamera.rotation.copyFrom(source.rotation);
+    shadowCamera.fov = source.fov;
+    shadowCamera.fovMode = source.fovMode;
+    // O cameră inactivă nu își actualizează matricele singură; CSM citește `getTransformationMatrix`.
+    shadowCamera.getViewMatrix(true);
+    shadowCamera.getProjectionMatrix(true);
+  };
+  const buildShadow = (): void => {
+    disposeShadow();
+    activeTier = resolveShadowTier(quality.preset);
+    const tier = activeTier;
+    warmFrames = WARM_FRAMES;
+    if (!shadowsAllowed) {
+      // diagnostic: fără hartă de umbră
+    } else if (tier.mode === 'MAP') {
+      const half = tier.shadowMaxZ / 2;
+      sun.autoUpdateExtends = false;
+      // Implicit Babylon lărgește frustumul cu 10% pe fiecare parte; texelul calculat în shadow-math
+      // trebuie să fie exact cel al hărții, altfel alinierea nu cade pe rețea.
+      sun.shadowOrthoScale = 0;
+      sun.orthoLeft = sun.orthoBottom = -half;
+      sun.orthoRight = sun.orthoTop = half;
+      sun.shadowMinZ = 1;
+      sun.shadowMaxZ = 2 * 100;
+      // Float complet: o hartă de 200 m adâncime în half-float ar avea pași de ~10 cm.
+      const generator = new ShadowGenerator(tier.mapSize, sun, true);
+      generator.usePercentageCloserFiltering = tier.filter === 'PCF';
+      generator.filteringQuality = ShadowGenerator[`QUALITY_${tier.filteringQuality}`];
+      generator.forceBackFacesOnly = true;
+      generator.bias = tier.bias;
+      generator.normalBias = tier.normalBias;
+      generator.setDarkness(tier.darkness);
+      shadow = generator;
+    } else if (tier.mode === 'CASCADED' && gameCamera) {
+      shadowCamera = new FreeCamera('daylight-shadow-camera', Vector3.Zero(), scene);
+      shadowCamera.minZ = 0.3;
+      shadowCamera.maxZ = tier.shadowMaxZ;
+      syncShadowCamera();
+      const generator = new CascadedShadowGenerator(tier.mapSize, sun, false, shadowCamera);
+      generator.numCascades = tier.cascades;
+      generator.stabilizeCascades = true;
+      generator.lambda = tier.lambda;
+      generator.shadowMaxZ = tier.shadowMaxZ;
+      generator.cascadeBlendPercentage = 0.15;
+      generator.depthClamp = true;
+      generator.autoCalcDepthBounds = false;
+      generator.usePercentageCloserFiltering = tier.filter === 'PCF';
+      generator.filteringQuality = ShadowGenerator[`QUALITY_${tier.filteringQuality}`];
+      generator.forceBackFacesOnly = true;
+      generator.bias = tier.bias;
+      generator.normalBias = tier.normalBias;
+      generator.setDarkness(tier.darkness);
+      // Materialele caută generatorul după camera activă (a jocului), nu după proxy.
+      sun.getShadowGenerators()?.set(gameCamera, generator);
+      shadow = generator;
+    }
+    const map = shadow?.getShadowMap();
+    if (map) {
+      // Cache: o singură randare, repetată numai când `invalidateShadows` o cere (vezi updateShadows).
+      map.refreshRate = tier.staticCache
+        ? RenderTargetTexture.REFRESHRATE_RENDER_ONCE
+        : RenderTargetTexture.REFRESHRATE_RENDER_ONEVERYFRAME;
+      map.onBeforeBindObservable.add(() => {
+        shadowRenders += 1;
+      });
+    }
+    syncCasters();
+    // Generatorul schimbă defines-urile shaderului: materialele înghețate ale orașului (241/243)
+    // trebuie recompilate, altfel rămân fără (sau cu) umbre după comutare. Numai la schimbare reală.
+    const kind = shadow ? `${tier.mode}:${tier.cascades}` : 'NONE';
+    if (kind !== appliedKind) {
+      appliedKind = kind;
+      refreshFrozenMaterials(scene, Constants.MATERIAL_LightDirtyFlag);
+    }
+  };
+  /**
+   * Chemată o dată pe cadru, înainte de randare: urmărește camera (MEDIUM: harta unică, aliniată pe
+   * texeli) și decide dacă harta cache-uită trebuie randată din nou. Fără schimbare de soare, de
+   * cameră sau de mișcare a casterilor dinamici, harta nu se mai randează (cache static).
+   */
+  const updateShadows = (view: ShadowViewInput): void => {
+    if (disposed || scene.isDisposed) return;
+    shadowFrames += 1;
+    syncShadowCamera();
+    const tier = activeTier;
+    if (tier.mode === 'BLOB') return;
+    const focus = groundFocus(view.cameraPosition, view.cameraTarget, MAP_FOCUS_AHEAD_M);
+    // Lista casterilor statici se reface doar când focarul s-a mutat vizibil (nu la fiecare cadru).
+    shadowFocus = [view.cameraPosition[0], 0, view.cameraPosition[2]];
+    if (
+      !lastListFocus ||
+      Math.hypot(shadowFocus[0] - lastListFocus[0], shadowFocus[2] - lastListFocus[2]) > 12
+    ) {
+      lastListFocus = shadowFocus;
+      syncCasters();
+    }
+    const map = shadow?.getShadowMap();
+    if (!shadow || !map) return;
+    let changed = false;
+    if (tier.mode === 'MAP') {
+      const half = tier.shadowMaxZ / 2;
+      const direction: Vec3 = [sun.direction.x, sun.direction.y, sun.direction.z];
+      const frame = followShadowFrame(focus, direction, half, tier.mapSize, 100);
+      sun.position.set(...frame.position);
+      sun.shadowMinZ = frame.minZ;
+      sun.shadowMaxZ = frame.maxZ;
+      const key = frame.center.map((value) => value.toFixed(5)).join(',');
+      if (key !== lastCenterKey) {
+        lastCenterKey = key;
+        changed = true;
+      }
+    } else {
+      const cameraKey = [...view.cameraPosition, ...view.cameraTarget]
+        .map((value) => value.toFixed(4))
+        .join(',');
+      if (cameraKey !== lastCameraKey) {
+        lastCameraKey = cameraKey;
+        changed = true;
+      }
+    }
+    if (view.motionSignature !== lastSignature) {
+      lastSignature = view.motionSignature;
+      changed = true;
+    }
+    if (changed || warmFrames > 0) {
+      if (warmFrames > 0) warmFrames -= 1;
+      invalidateShadows(changed ? 'view' : 'warmup');
+    }
   };
   /**
    * Rezoluția internă = dimensiunea CSS × min(DPR, maxDpr) × scara. Se exprimă ca nivel hardware
@@ -166,28 +389,14 @@ export function createDaylight(
     scene.getEngine().setHardwareScalingLevel(1 / (factor * (1 + 1e-9)));
   };
   const apply = (): void => {
-    shadow?.dispose();
-    shadow = null;
-    const limits = quality.limits;
-    if (limits.shadowMapSize) {
-      sun.shadowMinZ = 1;
-      sun.shadowMaxZ = limits.shadowDistance * 2;
-      sun.autoUpdateExtends = false;
-      sun.orthoLeft = sun.orthoBottom = -limits.shadowDistance / 2;
-      sun.orthoRight = sun.orthoTop = limits.shadowDistance / 2;
-      shadow = new ShadowGenerator(limits.shadowMapSize, sun);
-      shadow.usePercentageCloserFiltering = true;
-      shadow.filteringQuality = ShadowGenerator.QUALITY_LOW;
-      shadow.bias = 0.0005;
-      shadow.normalBias = 0.02;
-      syncCasters();
-    }
+    buildShadow();
     post.setPreset(quality.preset);
     // Pe LOW nu există pipeline: imaginea o aplică materialele, iar cerul și fundalul fac la fel.
     atmosphere.setImageByMaterials(!POST_PROCESSING_PRESETS[quality.preset].pipeline);
     atmosphere.setPreset(quality.preset);
     applyResolution();
   };
+  applyAtmosphereLights();
   apply();
   return {
     getQuality: () => quality,
@@ -211,9 +420,23 @@ export function createDaylight(
     /** PBI 241: camera de joc la care se atașează AA și post-procesarea (fără ea, doar materialele). */
     attachCamera(camera: Camera | null): void {
       assertActive();
+      gameCamera = camera;
       post.attachCamera(camera);
+      // 244: cascadele (HIGH) se leagă de camera de joc, deci generatorul se reface aici.
+      buildShadow();
     },
     getPostProcessingState: () => post.getState(),
+    /** PBI 244: starea AO (activ, tier, texturi) pentru diagnostic și teste. */
+    /** PBI 244 (diagnostic, DEV/capture): oprește umbrele și/sau AO ca să li se măsoare costul separat. */
+    setEffects(effects: { shadows?: boolean; occlusion?: boolean }): void {
+      assertActive();
+      if (effects.occlusion !== undefined) post.setAmbientOcclusionAllowed(effects.occlusion);
+      if (effects.shadows !== undefined && effects.shadows !== shadowsAllowed) {
+        shadowsAllowed = effects.shadows;
+        buildShadow();
+      }
+    },
+    getAmbientOcclusionState: () => post.getAmbientOcclusionState(),
     material(key: DaylightMaterial): StandardMaterial {
       assertActive();
       const value = materials.get(key);
@@ -272,8 +495,17 @@ export function createDaylight(
         return true;
       }
       syncCasters();
-      // Absolute HIGH cap bounds retained resources even while LOW is active.
-      if (casters.size >= 96) return false;
+      // Absolute HIGH cap bounds retained resources even while LOW is active (157, neschimbat pentru
+      // essential/standard). 244: casterii statici (clădiri, semafoare, celule de decor) au plafon propriu.
+      const dynamicCount = [...casters.values()].filter((entry) => entry !== 'optional').length;
+      if (
+        priority === 'optional'
+          ? casters.size - dynamicCount >= OPTIONAL_CASTER_CAP
+          : dynamicCount >= 96
+      )
+        return false;
+      // Cadrele sferei de includere ale meshurilor statice trebuie să existe înainte de prima randare.
+      if (priority === 'optional') mesh.computeWorldMatrix(true);
       casters.set(mesh, priority);
       syncCasters();
       return true;
@@ -282,6 +514,33 @@ export function createDaylight(
       assertActive();
       casters.delete(mesh);
       syncCasters();
+    },
+    /** PBI 244: invalidare explicită (ex.: schimbarea orei din zi în 252, geometrie nouă). */
+    invalidateShadows,
+    /** PBI 244: chemată o dată pe cadru de compunere; vezi `updateShadows`. */
+    updateShadows,
+    /** PBI 244: cum se comportă harta cache-uită (randări, cadre, motive de invalidare). */
+    getShadowStats() {
+      const tier = activeTier;
+      const map = shadow?.getShadowMap() ?? null;
+      return Object.freeze({
+        preset: quality.preset,
+        mode: tier.mode,
+        cascades: shadow ? tier.cascades : 0,
+        mapSize: shadow ? tier.mapSize : 0,
+        generator: shadow ? (shadow instanceof CascadedShadowGenerator ? 'CSM' : 'SINGLE') : 'NONE',
+        filter: tier.filter,
+        stabilizeCascades:
+          shadow instanceof CascadedShadowGenerator ? shadow.stabilizeCascades : false,
+        staticCache: tier.staticCache,
+        frames: shadowFrames,
+        renders: shadowRenders,
+        skipped: Math.max(0, shadowFrames - shadowRenders),
+        invalidations: Object.freeze(Object.fromEntries(invalidations)),
+        renderListLength: map?.renderList?.length ?? 0,
+        /** Octeți GPU aproximativi ai hărții: mapSize² × straturi × (2 B culoare R16 + 4 B adâncime). */
+        gpuBytes: shadow ? tier.mapSize * tier.mapSize * Math.max(1, tier.cascades) * 6 : 0,
+      });
     },
     /** Read-only view of the declared budget: what is in the map, what was rejected and why. */
     getShadowBudget() {
@@ -339,8 +598,7 @@ export function createDaylight(
     dispose(): void {
       if (disposed) return;
       disposed = true;
-      shadow?.dispose();
-      shadow = null;
+      disposeShadow();
       post.dispose();
       atmosphere.dispose();
       casters.clear();

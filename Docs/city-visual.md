@@ -118,7 +118,7 @@ Limite declarate:
 
 - starea lămpii este per host: schimbarea stării unui singur cap la runtime ar cere mutarea instanței între hosturi, deci nu este expusă; semafoarele rămân statice în layout, ca înainte;
 - LOD-ul rămâne la nivel de batch (`BabylonCellBatches.updateLod`), nu per element de layout, pentru că un batch de celulă are o singură siluetă de comutat;
-- orașul nu este înregistrat ca shadow caster: primește umbre (`receiveShadows`), nu aruncă, conform bugetului de umbre din [iluminare](lighting-quality.md).
+- **PBI 244:** clădirile și stâlpii/carcasele semafoarelor aruncă umbre (`shadowCasterMeshes()`, înregistrate `optional` de compunere); carosabilul, trotuarul, bordura și terenul doar primesc (`receiveShadows`). Vezi [iluminare](lighting-quality.md). Tot în 244: ordinea vârfurilor pereților din `pushPrism` era inversată (normale spre interior); a fost corectată, iar fețele clădirilor luminate de soare s-au inversat față de V3.
 
 Verificare: `npm run perf:render-budget -- --check` (proba structurală) și `node --import ./scripts/register-typescript.mjs --test tests/rendering/city-scene.test.ts tests/rendering/render-instancing.test.ts`.
 

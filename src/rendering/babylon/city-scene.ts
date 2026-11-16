@@ -93,6 +93,11 @@ export interface CityScene {
   getRenderedElementIds(): readonly string[];
   /** Mesh that carries an element's geometry (a merged batch or a thin-instance host). */
   meshFor(elementId: string): Mesh | null;
+  /**
+   * PBI 244: meshurile statice care aruncă umbră (clădirile și stâlpii/carcasele semafoarelor).
+   * Carosabilul, trotuarul, bordura și terenul doar primesc umbre.
+   */
+  shadowCasterMeshes(): readonly Mesh[];
   /** Lamp host of a signal head (null for every other kind). */
   lampFor(elementId: string): Mesh | null;
   /** Merged vertex slice of an element, or null for an instanced element. */
@@ -231,9 +236,12 @@ function pushPrism(
     // Outward wall normal: away from the footprint centroid.
     const outward =
       -(b.z - a.z) * ((a.x + b.x) / 2 - centerX) + (b.x - a.x) * ((a.z + b.z) / 2 - centerZ);
+    // PBI 244: ordinea era inversată (`VertexData.ComputeNormals` dădea normale spre interior, ca
+    // pushWall nu); cu umbre și AO se vedea: pereții primeau SSAO ca niște găuri. Verificat în
+    // `tests/rendering/shadows.test.ts` prin normalele calculate de Babylon.
     if (outward >= 0)
-      builder.indices.push(start, start + 1, start + 2, start, start + 2, start + 3);
-    else builder.indices.push(start, start + 2, start + 1, start, start + 3, start + 2);
+      builder.indices.push(start, start + 2, start + 1, start, start + 3, start + 2);
+    else builder.indices.push(start, start + 1, start + 2, start, start + 2, start + 3);
   }
 }
 /**
@@ -817,6 +825,14 @@ export function createCityScene(
     layout,
     stats,
     getRenderedElementIds: () => Object.freeze([...rendered]),
+    shadowCasterMeshes: () =>
+      disposed
+        ? []
+        : Object.freeze(
+            [hostByMaterial.get('building'), postHost, housingHost].filter(
+              (mesh): mesh is Mesh => !!mesh && !mesh.isDisposed(),
+            ),
+          ),
     meshFor(elementId: string): Mesh | null {
       if (disposed || scene.isDisposed) return null;
       const instance = headInstances.get(elementId);

@@ -60,6 +60,10 @@ export interface VehicleRepresentation {
   readonly lod: VehicleLodLevel;
   readonly lights: VehicleLightState;
   readonly wheelPivots: readonly TransformNode[];
+  /** PBI 244: meshurile care aruncă umbră (caroseria; roțile sunt instanțe și nu intră în hartă). */
+  readonly shadowCasters: readonly AbstractMesh[];
+  /** PBI 244: dimensiunile locale ale amprentei (m), pentru umbra de contact de pe LOW. */
+  readonly footprintM: Readonly<{ width: number; length: number }>;
   wheelPivot(wheelId: string): TransformNode | undefined;
   /** Visibility of the wheel mesh (the pivot node itself always keeps its identity). */
   wheelMeshVisible(wheelId: string): boolean;
@@ -156,6 +160,8 @@ function createGroupMesh(
   data.applyToMesh(mesh);
   mesh.material = material;
   mesh.isPickable = true;
+  // PBI 244: o mașină în umbra unei clădiri trebuie să se întunece și ea.
+  mesh.receiveShadows = true;
   return mesh;
 }
 function copyTransform(node: TransformNode, transform: VisualTransform): void {
@@ -278,6 +284,11 @@ export function createVehicleVisualStage(
         wheel.rotationQuaternion = Quaternion.Identity();
         wheelMeshes.push(wheel);
       }
+      const bodyBox = groupMeshes.get('BODY')?.getBoundingInfo().boundingBox;
+      const footprintM = Object.freeze({
+        width: bodyBox ? bodyBox.maximum.x - bodyBox.minimum.x : 1.8,
+        length: bodyBox ? bodyBox.maximum.z - bodyBox.minimum.z : 4.4,
+      });
       let lod: VehicleLodLevel = 'NEAR';
       let lights: VehicleLightState = VEHICLE_LIGHTS_OFF;
       const applyVisibility = (): void => {
@@ -307,6 +318,8 @@ export function createVehicleVisualStage(
           return lights;
         },
         wheelPivots: Object.freeze([...pivots.values()]),
+        shadowCasters: Object.freeze(groupMeshes.has('BODY') ? [groupMeshes.get('BODY')!] : []),
+        footprintM,
         wheelPivot: (wheelId) => pivots.get(wheelId),
         wheelMeshVisible: (wheelId) => {
           const index = specification.wheelPivots.findIndex((p) => p.wheelId === wheelId);

@@ -1,0 +1,12 @@
+{
+  "note": "20 cicluri MEDIUM->LOW->HIGH (60 comutari live prin __v3Composition.setPreset), Chromium WebGPU amd rdna-2, build final. Numaratori citite din scena/motor dupa 8-10 cadre de stabilizare.",
+  "perPreset": {
+    "HIGH":   {"sceneTextures": 8, "engineInternalTextures": 20, "postProcesses": 0, "pipelines": 2, "cameras": 3, "geometryBufferRenderer": true,  "shadowGenerators": 2},
+    "MEDIUM": {"sceneTextures": 8, "engineInternalTextures": 21, "postProcesses": 0, "pipelines": 2, "cameras": 2, "geometryBufferRenderer": true,  "shadowGenerators": 1},
+    "LOW":    {"sceneTextures": 2, "engineInternalTextures": 3,  "postProcesses": 1, "pipelines": 0, "cameras": 2, "geometryBufferRenderer": false, "shadowGenerators": 0}
+  },
+  "baselineHighAfterWarmup": {"sceneTextures": 8, "engineInternalTextures": 20, "meshes": 90, "materials": 33, "cameras": 3, "lights": 2, "pipelines": 2, "beforeRenderObservers": 2},
+  "after20Cycles":           {"sceneTextures": 8, "engineInternalTextures": 20, "meshes": 90, "materials": 33, "cameras": 3, "lights": 2, "pipelines": 2, "beforeRenderObservers": 2},
+  "identical": true,
+  "leakFoundAndFixed": "Prima varianta (SSAO2 cu bufferul de geometrie clasic) crestea cache-ul intern de texturi cu +42 dupa 20 de cicluri (textura 'gBuffer-DepthStencil' ramane in cache dupa GeometryBufferRenderer.dispose pe Babylon 9.29). HEAD fara AO: 0. Corectat prin purgeLeakedGeometryDepth in ambient-occlusion.ts."
+}

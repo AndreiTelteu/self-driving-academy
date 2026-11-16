@@ -25,9 +25,15 @@ import { DefaultRenderingPipeline } from '@babylonjs/core/PostProcesses/RenderPi
 import { FxaaPostProcess } from '@babylonjs/core/PostProcesses/fxaaPostProcess.js';
 import { Constants } from '@babylonjs/core/Engines/constants.js';
 import type { Scene } from '@babylonjs/core/scene.js';
-import { POST_PROCESSING_PRESETS, type QualityPreset } from '../quality-policy';
+import { AO_PRESETS, POST_PROCESSING_PRESETS, type QualityPreset } from '../quality-policy';
 import { IMAGE_EXPOSURE } from '../atmosphere';
 import { cancelPendingRefresh, refreshFrozenMaterials } from './material-refresh';
+import {
+  NO_AMBIENT_OCCLUSION,
+  createAmbientOcclusion,
+  type AmbientOcclusion,
+  type AmbientOcclusionState,
+} from './ambient-occlusion';
 
 /** Calibrarea imaginii (HDR liniar → ecran). Valorile sunt verificate pe capturile 239. */
 export const LOOK = Object.freeze({
@@ -109,6 +115,9 @@ export function createPostProcessing(scene: Scene) {
   let preset: QualityPreset | null = null;
   let pipeline: DefaultRenderingPipeline | null = null;
   let fxaa: FxaaPostProcess | null = null;
+  let occlusion: AmbientOcclusion | null = null;
+  /** Suprascriere de diagnostic (costul AO măsurat separat); implicit AO urmează presetul. */
+  let occlusionAllowed = true;
   let disposed = false;
 
   /**
@@ -122,6 +131,9 @@ export function createPostProcessing(scene: Scene) {
   };
 
   const releasePasses = (): void => {
+    // 244: AO-ul se demontează primul (este atașat după conducta principală).
+    occlusion?.dispose();
+    occlusion = null;
     // `dispose` repune `applyByPostProcess = false`; apoi materialele aplică din nou imaginea.
     pipeline?.dispose();
     pipeline = null;
@@ -173,6 +185,8 @@ export function createPostProcessing(scene: Scene) {
     if (tier.sharpen) next.sharpen.edgeAmount = LOOK.sharpenEdgeAmount;
     next.prepare();
     pipeline = next;
+    // 244: SSAO2 se atașează DUPĂ conducta principală (MSAA rămâne pe ținta ei; AO se combină pe LDR).
+    occlusion = occlusionAllowed ? createAmbientOcclusion(scene, camera, AO_PRESETS[preset]) : null;
   };
 
   return {
@@ -227,6 +241,16 @@ export function createPostProcessing(scene: Scene) {
         dithering: config.ditheringEnabled,
         cameraAttached: camera !== null,
       });
+    },
+    /** PBI 244 (diagnostic): oprește/pornește AO fără a schimba presetul. */
+    setAmbientOcclusionAllowed(allowed: boolean): void {
+      if (disposed || occlusionAllowed === allowed) return;
+      occlusionAllowed = allowed;
+      apply();
+    },
+    /** PBI 244: starea ocluziei ambientale (SSAO2) pentru diagnostic și teste. */
+    getAmbientOcclusionState(): AmbientOcclusionState {
+      return occlusion?.state ?? NO_AMBIENT_OCCLUSION;
     },
     dispose(): void {
       if (disposed) return;
