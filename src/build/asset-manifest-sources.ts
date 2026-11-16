@@ -21,6 +21,10 @@ import {
   ATMOSPHERE_PRESETS,
   ATMOSPHERE_VERSION,
   environmentTextureBytes,
+  SURFACE_PRESETS,
+  SURFACE_TEXTURES_VERSION,
+  SURFACE_TEXTURE_IDS,
+  SURFACE_TEXTURE_SPECS,
   type CityDecorPlan,
 } from '../rendering';
 import { createCityLayout, createNeighbourhoodMap } from '../world';
@@ -251,6 +255,37 @@ function atmosphereRecords(): readonly AssetSourceRecord[] {
   ];
 }
 
+/**
+ * PBI 245 — texturile procedurale ale suprafețelor (asfalt, marcaje, trotuar, bordură, iarbă, teren):
+ * generate la încărcare din zgomot determinist (`src/rendering/surface-textures.ts`), fără fișier. Câte un
+ * înregistrare pe textură; costul GPU este cel al presetului HIGH (1024 px de bază), LOW folosește 256.
+ */
+function surfaceRecords(): readonly AssetSourceRecord[] {
+  const largest = Math.max(...Object.values(SURFACE_PRESETS).map((t) => t.baseSize));
+  return SURFACE_TEXTURE_IDS.map((id) => {
+    const spec = SURFACE_TEXTURE_SPECS[id];
+    const width = Math.max(8, Math.round(largest * spec.sizeFraction.w));
+    const height = Math.max(8, Math.round(largest * spec.sizeFraction.h));
+    const images = 1 + (spec.hasNormal ? 1 : 0) + (spec.hasOrm ? 1 : 0);
+    return record({
+      id: `surface:texture:${id}`,
+      kind: 'MATERIAL_SET',
+      role: 'CRITICAL',
+      version: SURFACE_TEXTURES_VERSION,
+      source: `PBI 245 procedural surface texture src/rendering/surface-textures.ts (${spec.description})`,
+      license:
+        'Project license — original procedural texture, no photo, scan or third-party material',
+      count: 1,
+      firstRide: false,
+      placeholder: false,
+      shaderVariants: id === 'asphalt' ? 2 : 0,
+      residencyBasis: 'CONTRACT_ESTIMATE',
+      consumers: ['245'],
+      decoded: decoded({ textureBytes: Math.ceil(((width * height * 4 * 4) / 3) * images) }),
+    });
+  });
+}
+
 function audioRecords(): readonly AssetSourceRecord[] {
   return AUDIO_CUE_IDS.map((cueId) => {
     const cue = AUDIO_CUES[cueId];
@@ -423,6 +458,7 @@ export function collectAssetManifestSources(
     ...vehicleRecords(),
     ...decorRecords(plan),
     ...atmosphereRecords(),
+    ...surfaceRecords(),
     ...audioRecords(),
     ...passengerRecords(),
     ...wasm.records,

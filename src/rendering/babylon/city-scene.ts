@@ -1,5 +1,6 @@
 import { Color3 } from '@babylonjs/core/Maths/math.color.js';
 import { StandardMaterial } from '@babylonjs/core/Materials/standardMaterial.js';
+import type { Material } from '@babylonjs/core/Materials/material.js';
 import { Mesh } from '@babylonjs/core/Meshes/mesh.js';
 import { VertexData } from '@babylonjs/core/Meshes/mesh.vertexData.js';
 import { TransformNode } from '@babylonjs/core/Meshes/transformNode.js';
@@ -13,6 +14,7 @@ import type {
   CitySignalHeadElement,
 } from '../../world';
 import { deriveRoadFill } from '../road-surface';
+import { SURFACE_TILE_M, type SurfaceMaterials } from './surface-materials';
 
 /**
  * Deterministic Babylon builder for the neighbourhood derived by `createCityLayout`.
@@ -47,7 +49,16 @@ export type CityMaterialKey =
 
 export interface CitySceneOptions {
   /** Optional caller-owned materials; listed keys are borrowed and never disposed here. */
-  readonly materials?: Partial<Readonly<Record<CityMaterialKey, StandardMaterial>>>;
+  readonly materials?: Partial<Readonly<Record<CityMaterialKey, Material>>>;
+  /**
+   * PBI 245: materialele PBR ale suprafețelor (asfalt, marcaje, trotuar, bordură, iarbă). Cheile lor
+   * sunt împrumutate (proprietarul le îngheață și le eliberează); în plus, dacă `wear` este activ,
+   * se adaugă o fâșie de uzură în benzile roților. Fără `surfaces`, orașul folosește materialele
+   * `StandardMaterial` plate ca înainte (testele de geometrie rămân rapide).
+   */
+  readonly surfaces?: SurfaceMaterials;
+  /** Urmele de uzură ale roților (numai cu `surfaces`; MEDIUM/HIGH). */
+  readonly wearStrips?: boolean;
 }
 
 export interface CitySceneStats {
@@ -98,6 +109,8 @@ export interface CityScene {
    * Carosabilul, trotuarul, bordura și terenul doar primesc umbre.
    */
   shadowCasterMeshes(): readonly Mesh[];
+  /** PBI 245: meshurile cu material PBR (excluse din lumina de rezervă; vezi `excludeFromLegacyAmbient`). */
+  surfaceMeshes(): readonly Mesh[];
   /** Lamp host of a signal head (null for every other kind). */
   lampFor(elementId: string): Mesh | null;
   /** Merged vertex slice of an element, or null for an instanced element. */
@@ -112,17 +125,30 @@ export interface CityScene {
   dispose(): void;
 }
 
+/**
+ * PBI 245 — originea locală a mapării UV pentru un element (trotuarul își începe dalele la colțul lui) și,
+ * pentru bordură, axa transversală, ca textura să acopere lățimea de 0,2 m.
+ */
+interface UvOrigin {
+  readonly from: number;
+  readonly x: number;
+  readonly z: number;
+  readonly across: 'x' | 'z' | null;
+  readonly acrossMin: number;
+  readonly acrossSize: number;
+}
 interface GeometryBuilder {
   readonly positions: number[];
   readonly indices: number[];
   readonly color: CityMaterialKey;
+  readonly origins: UvOrigin[];
 }
 
 const PALETTE: Readonly<Record<CityMaterialKey, readonly [number, number, number]>> = Object.freeze(
   {
     asphalt: [0.19, 0.2, 0.22],
     intersection: [0.22, 0.23, 0.25],
-    marking: [0.96, 0.94, 0.8],
+    marking: [0.82, 0.8, 0.72],
     sidewalk: [0.62, 0.6, 0.56],
     curb: [0.75, 0.74, 0.7],
     building: [0.55, 0.47, 0.4],
@@ -134,13 +160,8 @@ const PALETTE: Readonly<Record<CityMaterialKey, readonly [number, number, number
     lampGreen: [0.05, 1, 0.2],
   },
 );
-const EMISSIVE: readonly CityMaterialKey[] = [
-  'marking',
-  'service',
-  'lampRed',
-  'lampAmber',
-  'lampGreen',
-];
+// PBI 245: marcajele nu mai sunt emisive (vopsea iluminată normal); rămân emisive zonele de serviciu și lămpile.
+const EMISSIVE: readonly CityMaterialKey[] = ['service', 'lampRed', 'lampAmber', 'lampGreen'];
 const BUILDERS: readonly CityMaterialKey[] = [
   'asphalt',
   'intersection',
@@ -374,6 +395,86 @@ function ribbonBetween(a: Point, b: Point, widthM: number): Point[] {
     point(a.x - nx, a.z - nz),
   ];
 }
+const NO_ORIGIN: UvOrigin = Object.freeze({
+  from: 0,
+  x: 0,
+  z: 0,
+  across: null,
+  acrossMin: 0,
+  acrossSize: 1,
+});
+/** Dimensiunea dalei (m) a texturii fiecărui material; cele fără textură folosesc 4 m. */
+function uvTileM(color: CityMaterialKey): number {
+  switch (color) {
+    case 'asphalt':
+    case 'intersection':
+      return SURFACE_TILE_M.asphalt;
+    case 'marking':
+      return SURFACE_TILE_M.marking;
+    case 'sidewalk':
+      return SURFACE_TILE_M.sidewalk;
+    case 'ground':
+      return SURFACE_TILE_M.ground;
+    default:
+      return 4;
+  }
+}
+/**
+ * PBI 245 — UV-uri în coordonate de lume: metri / dimensiunea dalei, deci textura nu se întinde pe o
+ * suprafață mare și nu apare repetiția evidentă a unei dale mari întinse. Fețele orizontale se mapează
+ * pe (x, z); pereții (normala aproape orizontală) pe (distanța de-a lungul peretelui, y). Vârfurile nu sunt
+ * partajate între fețe, deci normala vârfului este cea a fețe.
+ *
+ * Trotuarul își pornește dalele la colțul elementului (rosturile cad pe marginea trotuarului); bordura
+ * mapează lățimea elementului pe întreaga lățime a texturii (teșitura de pe ambele muchii) și rosturile
+ * se repetă la 1,5 m pe lungime.
+ */
+function surfaceUvs(
+  builder: GeometryBuilder,
+  positions: readonly number[],
+  normals: readonly number[],
+): number[] {
+  const count = positions.length / 3;
+  const uvs = new Array<number>(count * 2);
+  const origins = builder.origins;
+  const tile = uvTileM(builder.color);
+  let active = -1;
+  for (let vertex = 0; vertex < count; vertex += 1) {
+    while (active + 1 < origins.length && origins[active + 1]!.from <= vertex) active += 1;
+    const origin = active >= 0 ? origins[active]! : NO_ORIGIN;
+    const x = positions[vertex * 3]!;
+    const y = positions[vertex * 3 + 1]!;
+    const z = positions[vertex * 3 + 2]!;
+    const nx = normals[vertex * 3]!;
+    const nz = normals[vertex * 3 + 2]!;
+    const wall = Math.abs(normals[vertex * 3 + 1]!) < 0.5;
+    const alongIsX = Math.abs(nx) < Math.abs(nz);
+    let u: number;
+    let v: number;
+    if (builder.color === 'curb') {
+      const along = SURFACE_TILE_M.curbAlong;
+      if (wall) {
+        u = 0.3 + 1.5 * y;
+        v = (alongIsX ? x : z) / along;
+      } else if (origin.across) {
+        u = ((origin.across === 'x' ? x : z) - origin.acrossMin) / origin.acrossSize;
+        v = (origin.across === 'x' ? z : x) / along;
+      } else {
+        u = 0.5;
+        v = (x + z) / along;
+      }
+    } else if (wall) {
+      u = (alongIsX ? x - origin.x : z - origin.z) / tile;
+      v = y / tile;
+    } else {
+      u = (x - origin.x) / tile;
+      v = (z - origin.z) / tile;
+    }
+    uvs[vertex * 2] = u;
+    uvs[vertex * 2 + 1] = v;
+  }
+  return uvs;
+}
 function colorForPlanar(element: CityPlanarElement): CityMaterialKey {
   switch (element.kind) {
     case 'INTERSECTION_SURFACE':
@@ -465,19 +566,21 @@ export function createCityScene(
   if (!scene || scene.isDisposed) throw new Error('City scene requires a live scene');
   if (!layout || !Array.isArray(layout.elements) || typeof layout.mapId !== 'string')
     throw new Error('City scene requires a derived layout');
-  const borrowed = new Map<CityMaterialKey, StandardMaterial>();
-  for (const [key, material] of Object.entries(options.materials ?? {})) {
+  const borrowed = new Map<CityMaterialKey, Material>();
+  const surfaceMaterials = options.surfaces?.cityMaterials() ?? {};
+  const supplied = { ...surfaceMaterials, ...(options.materials ?? {}) };
+  for (const [key, material] of Object.entries(supplied)) {
     if (!(key in PALETTE)) throw new Error(`Unknown city material ${key}`);
     if (!material || material.getScene() !== scene)
       throw new Error('City materials must be live and scene-local');
     borrowed.set(key as CityMaterialKey, material);
   }
-  const materials = new Map<CityMaterialKey, StandardMaterial>();
+  const materials = new Map<CityMaterialKey, Material>();
   const ownedMaterials: StandardMaterial[] = [];
   for (const key of BUILDERS) {
-    const supplied = borrowed.get(key);
-    if (supplied) {
-      materials.set(key, supplied);
+    const lent = borrowed.get(key);
+    if (lent) {
+      materials.set(key, lent);
       continue;
     }
     const material = new StandardMaterial(`city:${key}`, scene);
@@ -507,7 +610,7 @@ export function createCityScene(
   const builderFor = (color: CityMaterialKey): GeometryBuilder => {
     const existing = builders.get(color);
     if (existing) return existing;
-    const created: GeometryBuilder = { positions: [], indices: [], color };
+    const created: GeometryBuilder = { positions: [], indices: [], color, origins: [] };
     builders.set(color, created);
     return created;
   };
@@ -530,19 +633,25 @@ export function createCityScene(
   let mergedElements = 0;
   let instancedElements = 0;
 
-  const applyGeometry = (mesh: Mesh, positions: readonly number[], indices: readonly number[]) => {
+  const applyGeometry = (
+    mesh: Mesh,
+    positions: readonly number[],
+    indices: readonly number[],
+    uvBuilder?: GeometryBuilder,
+  ) => {
     const data = new VertexData();
     data.positions = [...positions];
     data.indices = [...indices];
     const normals: number[] = [];
     VertexData.ComputeNormals(data.positions, data.indices, normals);
     data.normals = normals;
+    if (uvBuilder) data.uvs = surfaceUvs(uvBuilder, positions, normals);
     data.applyToMesh(mesh);
   };
   const createMesh = (name: string, builder: GeometryBuilder): Mesh => {
     if (builder.positions.length === 0) throw new Error('Empty city geometry');
     const mesh = new Mesh(`city:${name}`, scene);
-    applyGeometry(mesh, builder.positions, builder.indices);
+    applyGeometry(mesh, builder.positions, builder.indices, builder);
     mesh.material = materials.get(builder.color) ?? null;
     mesh.parent = root;
     mesh.receiveShadows = true;
@@ -551,8 +660,8 @@ export function createCityScene(
     return mesh;
   };
   /** Thin-instance host: one shared unit box, per-instance matrices, never a per-element mesh. */
-  const createHost = (name: string, material: StandardMaterial, matrices: readonly Matrix[]) => {
-    const unit: GeometryBuilder = { positions: [], indices: [], color: 'housing' };
+  const createHost = (name: string, material: Material, matrices: readonly Matrix[]) => {
+    const unit: GeometryBuilder = { positions: [], indices: [], color: 'housing', origins: [] };
     pushBox(unit, point(0, 0, 0), { x: 1, y: 1, z: 1 }, 0);
     const mesh = new Mesh(`city:${name}`, scene);
     applyGeometry(mesh, unit.positions, unit.indices);
@@ -654,6 +763,24 @@ export function createCityScene(
     if (element.kind === 'LANE_SURFACE' || element.kind === 'SIGNAL_HEAD') continue;
     const builder = builderFor(colorForPlanar(element));
     const from = builder.positions.length / 3;
+    if (element.kind === 'SIDEWALK' || element.kind === 'CURB') {
+      const footprint = (element as CityPlanarElement).footprintM;
+      const xs = footprint.map((vertex) => vertex.x);
+      const zs = footprint.map((vertex) => vertex.z);
+      const minX = Math.min(...xs);
+      const minZ = Math.min(...zs);
+      const sizeX = Math.max(...xs) - minX;
+      const sizeZ = Math.max(...zs) - minZ;
+      const across = sizeX <= sizeZ ? 'x' : 'z';
+      builder.origins.push({
+        from,
+        x: minX,
+        z: minZ,
+        across,
+        acrossMin: across === 'x' ? minX : minZ,
+        acrossSize: Math.max(1e-3, across === 'x' ? sizeX : sizeZ),
+      });
+    }
     if (element.kind === 'BUILDING')
       pushPrism(builder, element.footprintM, element.baseYM, element.heightM);
     else if (element.kind === 'CROSSWALK') pushCrosswalk(builder, element);
@@ -674,6 +801,76 @@ export function createCityScene(
     batches.push(mesh);
   }
   builders.clear();
+
+  // PBI 245: urmele de uzură ale roților — două fâșii de 0,5 m pe fiecare bandă, la ±0,82 m de axă
+  // (ecartamentul unei mașini ~1,6 m), cu alpha blend peste asfalt; numai MEDIUM/HIGH.
+  let wearMesh: Mesh | null = null;
+  const wearMaterial = options.surfaces?.materials.wear;
+  if (options.wearStrips && wearMaterial) {
+    const wearPositions: number[] = [];
+    const wearUvs: number[] = [];
+    const wearIndices: number[] = [];
+    for (const element of layout.elements) {
+      if (element.kind !== 'LANE_SURFACE' || element.topology !== 'RIBBON') continue;
+      const line = markingCenterline(element);
+      if (line.length < 2) continue;
+      for (const side of [-1, 1]) {
+        const first = wearPositions.length / 3;
+        let walked = 0;
+        for (let index = 0; index < line.length; index += 1) {
+          const a = line[Math.max(0, index - 1)]!;
+          const b = line[Math.min(line.length - 1, index + 1)]!;
+          const length = Math.hypot(b.x - a.x, b.z - a.z) || 1;
+          const nx = -(b.z - a.z) / length;
+          const nz = (b.x - a.x) / length;
+          if (index > 0)
+            walked += Math.hypot(
+              line[index]!.x - line[index - 1]!.x,
+              line[index]!.z - line[index - 1]!.z,
+            );
+          for (const edge of [-0.21, 0.21]) {
+            const offset = side * 0.82 + edge;
+            wearPositions.push(
+              line[index]!.x + nx * offset,
+              element.baseYM,
+              line[index]!.z + nz * offset,
+            );
+            wearUvs.push(edge < 0 ? 0 : 1, walked / SURFACE_TILE_M.wearAlong);
+          }
+        }
+        for (let index = 0; index < line.length - 1; index += 1) {
+          const i0 = first + index * 2;
+          const i1 = first + index * 2 + 1;
+          const i2 = first + index * 2 + 2;
+          const i3 = first + index * 2 + 3;
+          const ax = wearPositions[i0 * 3]!;
+          const az = wearPositions[i0 * 3 + 2]!;
+          const normal = normalY(
+            point(ax, az),
+            point(wearPositions[i1 * 3]!, wearPositions[i1 * 3 + 2]!),
+            point(wearPositions[i2 * 3]!, wearPositions[i2 * 3 + 2]!),
+          );
+          if (normal <= 0) wearIndices.push(i0, i1, i2, i1, i3, i2);
+          else wearIndices.push(i0, i2, i1, i1, i2, i3);
+        }
+      }
+    }
+    if (wearIndices.length > 0) {
+      wearMesh = new Mesh('city:wear', scene);
+      const data = new VertexData();
+      data.positions = wearPositions;
+      data.indices = wearIndices;
+      data.uvs = wearUvs;
+      data.normals = wearPositions.map((_, index) => (index % 3 === 1 ? 1 : 0));
+      data.applyToMesh(wearMesh);
+      wearMesh.material = wearMaterial;
+      wearMesh.parent = root;
+      wearMesh.receiveShadows = true;
+      wearMesh.isPickable = false;
+      wearMesh.alphaIndex = 1;
+      meshes.push(wearMesh);
+    }
+  }
 
   // Signal heads: post, housing and lamp are instances of one unit box. Matrices reproduce the
   // exact position/rotation/scale of the previously baked boxes.
@@ -825,6 +1022,17 @@ export function createCityScene(
     layout,
     stats,
     getRenderedElementIds: () => Object.freeze([...rendered]),
+    surfaceMeshes: () =>
+      disposed
+        ? []
+        : Object.freeze(
+            [
+              ...[...hostByMaterial]
+                .filter(([key]) => key in surfaceMaterials)
+                .map(([, mesh]) => mesh),
+              ...(wearMesh ? [wearMesh] : []),
+            ].filter((mesh) => !mesh.isDisposed()),
+          ),
     shadowCasterMeshes: () =>
       disposed
         ? []

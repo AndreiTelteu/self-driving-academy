@@ -11,7 +11,15 @@ export {
   QUALITY_PRESETS,
   checkVisualResources,
   ATMOSPHERE_PRESETS,
+  SURFACE_PRESETS,
 } from './quality-policy';
+export {
+  SURFACE_TEXTURES_VERSION,
+  SURFACE_TEXTURE_SPECS,
+  SURFACE_TEXTURE_IDS,
+  surfaceTextureBytes,
+  generateSurfaceTexture,
+} from './surface-textures';
 export { ATMOSPHERE_VERSION, environmentTextureBytes } from './atmosphere';
 export { observeDisplaySurface, readDisplayMetrics } from './display-surface';
 export type { DisplayEnvironment, DisplayMetrics, DisplaySurfaceObserver } from './display-surface';

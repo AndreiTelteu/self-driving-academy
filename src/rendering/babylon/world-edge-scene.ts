@@ -8,6 +8,7 @@
  */
 import { Color3 } from '@babylonjs/core/Maths/math.color.js';
 import { StandardMaterial } from '@babylonjs/core/Materials/standardMaterial.js';
+import type { BaseTexture } from '@babylonjs/core/Materials/Textures/baseTexture.js';
 import { Mesh } from '@babylonjs/core/Meshes/mesh.js';
 import { VertexData } from '@babylonjs/core/Meshes/mesh.vertexData.js';
 import { TransformNode } from '@babylonjs/core/Meshes/transformNode.js';
@@ -16,6 +17,7 @@ import '@babylonjs/core/Meshes/thinInstanceMesh.js';
 import type { Scene } from '@babylonjs/core/scene.js';
 import type { CityLayout, WorldLimit } from '../../world';
 import { WORLD_EDGE_PRESETS, type QualityPreset } from '../quality-policy';
+import { SURFACE_TILE_M } from './surface-materials';
 import {
   WORLD_EDGE_POLICY,
   buildGuardRail,
@@ -88,10 +90,19 @@ function unitBox(): VertexData {
   return data;
 }
 
+export interface WorldEdgeSceneOptions {
+  /**
+   * PBI 245: textură de detaliu împrumutată (proprietarul o eliberează), înmulțită cu culoarea pe vârf, UV
+   * în metri. Terenul rămâne `StandardMaterial` (ieftin pe tot ecranul); fără textură este plat ca înainte.
+   */
+  readonly terrainTexture?: BaseTexture;
+}
+
 export function createWorldEdgeScene(
   scene: Scene,
   layout: CityLayout,
   preset: QualityPreset,
+  options: WorldEdgeSceneOptions = {},
 ): WorldEdgeScene {
   if (!scene || scene.isDisposed) throw new Error('World edge requires a live scene');
   const tier = WORLD_EDGE_PRESETS[preset];
@@ -102,11 +113,17 @@ export function createWorldEdgeScene(
   const policy = WORLD_EDGE_POLICY;
   const root = new TransformNode(`world-edge:${layout.mapId}`, scene);
 
+  const borrowedTerrain = options.terrainTexture ?? null;
   const groundMaterial = new StandardMaterial('world-edge:terrain', scene);
   groundMaterial.diffuseColor = new Color3(1, 1, 1);
   groundMaterial.specularColor = Color3.Black();
   groundMaterial.maxSimultaneousLights = 2;
   groundMaterial.backFaceCulling = false;
+  if (borrowedTerrain) {
+    groundMaterial.diffuseTexture = borrowedTerrain;
+    // Textura are luminanța medie ~0,74 (sRGB al lui 0,5): coeficientul readuce media la 1.
+    groundMaterial.diffuseColor = new Color3(1.5, 1.5, 1.5);
+  }
   const steelMaterial = new StandardMaterial('world-edge:steel', scene);
   steelMaterial.diffuseColor = new Color3(0.66, 0.68, 0.7);
   steelMaterial.specularColor = new Color3(0.12, 0.12, 0.12);
@@ -127,6 +144,16 @@ export function createWorldEdgeScene(
   const normals: number[] = [];
   VertexData.ComputeNormals(terrainData.positions, terrainData.indices, normals);
   terrainData.normals = normals;
+  if (borrowedTerrain) {
+    // UV în coordonate de lume: textura de detaliu se repetă la fiecare `SURFACE_TILE_M.terrain` metri.
+    const uvs: number[] = [];
+    for (let index = 0; index < terrainData.positions.length; index += 3)
+      uvs.push(
+        terrainData.positions[index]! / SURFACE_TILE_M.terrain,
+        terrainData.positions[index + 2]! / SURFACE_TILE_M.terrain,
+      );
+    terrainData.uvs = uvs;
+  }
   terrainData.applyToMesh(terrainMesh);
   terrainMesh.material = groundMaterial;
   terrainMesh.parent = root;

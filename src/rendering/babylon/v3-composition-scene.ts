@@ -15,7 +15,7 @@ import type { CompositionFrame } from '../../app';
 import type { QualityPreferences } from '../../settings';
 import type { CityLayout } from '../../world';
 import type { RendererKind } from '../backend-policy';
-import type { QualityPreset } from '../quality-policy';
+import { SURFACE_PRESETS, type QualityPreset } from '../quality-policy';
 import type { VisualTransform } from '../scene-contract';
 import { createCharacterScene, type CharacterScene } from './character-scene';
 import { createCityDecorScene, type CityDecorScene } from './city-decor-scene';
@@ -23,6 +23,7 @@ import { createCityScene, type CityScene } from './city-scene';
 import { motionSignature } from '../shadow-math';
 import { createContactShadows, type ContactShadowTarget } from './contact-shadows';
 import { createDaylight, type ShadowCasterPriority } from './daylight';
+import { createSurfaceMaterials, type SurfaceMaterials } from './surface-materials';
 import { createWorldEdgeScene, type WorldEdgeScene } from './world-edge-scene';
 import { createVehicleVisualStage, type VehicleVisualStage } from './vehicle-scene';
 
@@ -72,6 +73,8 @@ export interface V3CompositionScene {
   readonly city: CityScene;
   readonly decor: CityDecorScene | null;
   readonly worldEdge: WorldEdgeScene;
+  /** PBI 245: materialele PBR ale suprafețelor (texturi procedurale, anizotropie pe preset). */
+  readonly surfaces: SurfaceMaterials;
   readonly character: CharacterScene;
   readonly vehicles: VehicleVisualStage;
   readonly camera: FreeCamera;
@@ -111,8 +114,21 @@ export function createV3CompositionScene(options: V3CompositionSceneOptions): V3
     height: options.viewport.height,
     dpr: options.viewport.dpr,
   });
-  const city = createCityScene(scene, layout);
-  const worldEdge = createWorldEdgeScene(scene, layout, options.preset);
+  // PBI 245: suprafețele orașului sunt PBR; presetul activ al luminii (nu cel cerut) decide rezoluția.
+  let surfacePreset = daylight.getQuality().preset;
+  const surfaces = createSurfaceMaterials(scene, surfacePreset);
+  const city = createCityScene(scene, layout, { surfaces, wearStrips: true });
+  const worldEdge = createWorldEdgeScene(scene, layout, options.preset, {
+    terrainTexture: surfaces.terrainTexture,
+  });
+  // Un PBRMaterial primește ambientul din IBL: meshurile PBR ies din lumina hemisferică de rezervă
+  // (care mai luminează vehiculele, clădirile, decorul și personajul, încă `StandardMaterial`). Materialele
+  // se îngheață abia după excludere, ca lista de lumini să nu se mai schimbe sub ele.
+  const wearMesh = city.surfaceMeshes().find((mesh) => mesh.name === 'city:wear') ?? null;
+  const applyWear = (): void => wearMesh?.setEnabled(SURFACE_PRESETS[surfacePreset].wearStrips);
+  applyWear();
+  for (const mesh of city.surfaceMeshes()) daylight.excludeFromLegacyAmbient(mesh);
+  surfaces.freeze();
   const decor = options.decor === false ? null : createCityDecorScene(scene, layout);
   const asset = createCharacterAsset();
   const character = createCharacterScene(scene, asset, 'NEAR');
@@ -128,6 +144,13 @@ export function createV3CompositionScene(options: V3CompositionSceneOptions): V3
   daylight.attachCamera(camera);
   // 244: umbrele urmăresc camera reală și mișcarea reală a casterilor, în fiecare cadru randat.
   const shadowObserver = scene.onBeforeRenderObservable.add(() => {
+    // 245: presetul se poate schimba live (setări, calitate adaptivă): texturile și anizotropia îl urmează.
+    const activePreset = daylight.getQuality().preset;
+    if (activePreset !== surfacePreset) {
+      surfacePreset = activePreset;
+      surfaces.setPreset(activePreset);
+      applyWear();
+    }
     const target = camera.getFrontPosition(1);
     daylight.updateShadows({
       cameraPosition: [camera.position.x, camera.position.y, camera.position.z],
@@ -197,6 +220,7 @@ export function createV3CompositionScene(options: V3CompositionSceneOptions): V3
     city,
     decor,
     worldEdge,
+    surfaces,
     character,
     vehicles,
     camera,
@@ -317,6 +341,7 @@ export function createV3CompositionScene(options: V3CompositionSceneOptions): V3
       decor?.dispose();
       worldEdge.dispose();
       city.dispose();
+      surfaces.dispose();
       daylight.dispose();
       camera.dispose();
     },

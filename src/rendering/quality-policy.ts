@@ -132,6 +132,28 @@ export const ATMOSPHERE_PRESETS: Readonly<Record<QualityPreset, AtmosphereTier>>
   HIGH: Object.freeze({ environmentSize: 128, clouds: true, domeSegments: 32 }),
 });
 /**
+ * PBI 245 — texturile procedurale ale suprafețelor (asfalt, marcaje, trotuar, bordură, iarbă).
+ *
+ * - `baseSize`: latura texturii de bază (asfalt și trotuar); celelalte texturi sunt fracții ale ei
+ *   (vezi `SURFACE_TEXTURE_SPECS`). 256/512/1024 → ≈ 4 / 11 / 45 MiB GPU cu lanț de mip-uri, mult sub
+ *   bugetul de texturi 223 (256 MiB pe LOW, 384 MiB pe MEDIUM/HIGH).
+ * - `anisotropy`: filtrarea anizotropă (8× pe HIGH): fără ea asfaltul și marcajele pâlpâie la unghi
+ *   razant; mip-urile singure îl fac doar neclar.
+ * - `specularAA`: antialiasing de specular pe normal map (HIGH/MEDIUM), contra scânteierii rugozității.
+ * - `wearStrips`: urmele de uzură ale benzilor (o desenare în plus, cu alpha blend); numai MEDIUM/HIGH.
+ */
+export interface SurfaceTier {
+  readonly baseSize: 256 | 512 | 1024;
+  readonly anisotropy: number;
+  readonly specularAA: boolean;
+  readonly wearStrips: boolean;
+}
+export const SURFACE_PRESETS: Readonly<Record<QualityPreset, SurfaceTier>> = Object.freeze({
+  LOW: Object.freeze({ baseSize: 256, anisotropy: 2, specularAA: false, wearStrips: false }),
+  MEDIUM: Object.freeze({ baseSize: 512, anisotropy: 4, specularAA: true, wearStrips: true }),
+  HIGH: Object.freeze({ baseSize: 1024, anisotropy: 8, specularAA: true, wearStrips: true }),
+});
+/**
  * PBI 244 — umbre de la soare pe preset.
  *
  * - `BLOB` (LOW): fără shadow map; o umbră de contact ieftină (un cvadrilater texturat) sub fiecare

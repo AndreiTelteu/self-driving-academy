@@ -417,6 +417,15 @@ export function createDaylight(
       legacyAmbientScale = scale;
       applyAtmosphereLights();
     },
+    /**
+     * PBI 245: un mesh cu material PBR primește ambientul din IBL, deci nu mai primește și lumina
+     * hemisferică de rezervă (ar dubla-o). Se cheamă înainte de a îngheța materialul meshului;
+     * obiectele încă `StandardMaterial` (vehicule, clădiri, decor, personaj) își păstrează ambientul.
+     */
+    excludeFromLegacyAmbient(mesh: AbstractMesh): void {
+      assertActive();
+      if (!ambient.excludedMeshes.includes(mesh)) ambient.excludedMeshes.push(mesh);
+    },
     /** PBI 241: camera de joc la care se atașează AA și post-procesarea (fără ea, doar materialele). */
     attachCamera(camera: Camera | null): void {
       assertActive();

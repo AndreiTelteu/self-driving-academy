@@ -134,3 +134,7 @@ Dunga de culoarea cerului din audit avea **două** cauze reale, ambele în geome
 **Limita hărții** este în `layout.worldLimit` (vezi [documentul 20](20-extensii-si-mers-pe-jos.md)). Terenul, dealurile și parapetul sunt `src/rendering/world-edge.ts` (geometrie pură) și `src/rendering/babylon/world-edge-scene.ts` (3 desenări pe orice preset: teren, stâlpi, grinzi). `WORLD_EDGE_PRESETS` schimbă numai densitatea: segmente pe latura buclei (28/48/72) și pasul stâlpilor (8/4/4 m). `camera.maxZ` crește de la 600 la 3000 m.
 
 Verificare: `tests/rendering/road-surface.test.ts` (acoperire pe secțiuni transversale, gol ≤ 1 mm, pe harta implicită, `minimal-road-v1` și cele două fixturi de intersecție; plus proba că fără fâșii golurile de 0,8 m există), `tests/rendering/curb-faces.test.ts` (ray-cast pe tot conturul fiecărui bloc, cu eșantionare deasă la colțuri: 0 din 22.720 de raze ating cerul; fără pereții de colț 1.120, fără niciun perete de bordură 3.638).
+
+## PBI 245: UV-uri și materiale PBR
+
+`createCityScene` scrie acum UV-uri în coordonate de lume (metri / dimensiunea dalei texturii, vezi `surfaceUvs` în `city-scene.ts`) și acceptă opțional `surfaces` (materiale PBR împrumutate, `babylon/surface-materials.ts`) și `wearStrips` (un mesh `city:wear` cu urmele roților, o desenare în plus). Geometria (poziții, indici, felii pe element) este neschimbată. Detalii în [documentul 30](30-calitate-vizuala-v4.md).

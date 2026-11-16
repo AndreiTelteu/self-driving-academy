@@ -6,12 +6,12 @@ Versiune contract: `150-asset-manifest-v1`, format `1`.
 
 | Câmp | Valoare |
 | --- | --- |
-| Intrări | 29 (19 critice, 10 opționale) |
+| Intrări | 37 (27 critice, 10 opționale) |
 | Placeholder-uri marcate | 7 |
-| Hash manifest | `14cef8490354940d6b4e57ecf2d6fe94b4f20cc4e7313198f64dba23866468d4` |
-| ETag | `"14cef8490354940d6b4e57ecf2d6fe94"` |
+| Hash manifest | `42f91c149435e517c87909372e8a0ab213c9f57a7a540d028a9ab8bb0c8dd1df` |
+| ETag | `"42f91c149435e517c87909372e8a0ab2"` |
 | Bytes pe wire | 6756068 B |
-| Resurse decodate estimate | 41983192 B |
+| Resurse decodate estimate | 87071962 B |
 
 ## Contabilitate separată
 
@@ -21,38 +21,38 @@ Versiune contract: `150-asset-manifest-v1`, format `1`.
 | Wire — encoded | 6756068 |
 | Wire — gzip comparativ | 2072500 |
 | Decodat — geometrie | 4469344 |
-| Decodat — texturi | 1048560 |
+| Decodat — texturi | 46137330 |
 | Decodat — WASM rezident | 36201028 |
 | Decodat — WASM decodere | 0 |
 | Decodat — workspace decodere | 0 |
 | Decodat — audio | 261956 |
 | Decodat — text | 2304 |
-| Decodat — total | 41983192 |
+| Decodat — total | 87071962 |
 
 ## Scenarii
 
-- `rebuild-one-asset` — Rebuild with vehicle:sedan:near geometry +640 B: only that cache entry is invalidated. → `{"changed":"vehicle:sedan:near","invalidatedIds":["vehicle:sedan:near"],"invalidated":1,"reused":28,"evicted":0,"manifestHashChanged":true}`
-- `format-version-bump` — Format version bump keeps every asset unchanged but invalidates all cache keys explicitly. → `{"formatVersion":2,"invalidated":29,"reused":0}`
-- `missing-critical-asset` — Two critical records removed: release blocked with the exact missing id list. → `{"removedIds":["runtime:wasm:rapier","vehicle:sedan:near"],"entries":27,"releaseBlocked":true,"reason":"MISSING_CRITICAL_ASSETS","missingCriticalIds":["runtime:wasm:rapier","vehicle:sedan:near"]}`
-- `missing-source-file` — Rapier WASM file unavailable: reported as missing source and the release is blocked. → `{"missing":[{"id":"runtime:wasm:rapier","reason":"WASM_FILE_MISSING"}],"entries":28,"releaseBlocked":true,"reason":"MISSING_CRITICAL_ASSETS","missingCriticalIds":["runtime:wasm:rapier"]}`
+- `rebuild-one-asset` — Rebuild with vehicle:sedan:near geometry +640 B: only that cache entry is invalidated. → `{"changed":"vehicle:sedan:near","invalidatedIds":["vehicle:sedan:near"],"invalidated":1,"reused":36,"evicted":0,"manifestHashChanged":true}`
+- `format-version-bump` — Format version bump keeps every asset unchanged but invalidates all cache keys explicitly. → `{"formatVersion":2,"invalidated":37,"reused":0}`
+- `missing-critical-asset` — Two critical records removed: release blocked with the exact missing id list. → `{"removedIds":["runtime:wasm:rapier","vehicle:sedan:near"],"entries":35,"releaseBlocked":true,"reason":"MISSING_CRITICAL_ASSETS","missingCriticalIds":["runtime:wasm:rapier","vehicle:sedan:near"]}`
+- `missing-source-file` — Rapier WASM file unavailable: reported as missing source and the release is blocked. → `{"missing":[{"id":"runtime:wasm:rapier","reason":"WASM_FILE_MISSING"}],"entries":36,"releaseBlocked":true,"reason":"MISSING_CRITICAL_ASSETS","missingCriticalIds":["runtime:wasm:rapier"]}`
 - `missing-provenance` — A manifest entry without licence is blocked before release. → `{"corrupted":"city-decor:tree","releaseBlocked":true,"reason":"MISSING_PROVENANCE","missingProvenanceIds":["city-decor:tree"]}`
-- `wire-vs-resident` — Base64 transport grows the Rapier module on the wire, while residency uses the 021 declared WASM estimate; gzip only shrinks transport. → `{"rapierRawBytes":3082103,"rapierEncodedBytes":4109472,"rapierResidentBytes":33554432,"rapierBase64Expansion":1027369,"glslangRawBytes":943680,"glslangGzipBytes":301882,"glslangResidentBytes":943680,"totalWireBytes":6756068,"totalDecodedBytes":41983192}`
+- `wire-vs-resident` — Base64 transport grows the Rapier module on the wire, while residency uses the 021 declared WASM estimate; gzip only shrinks transport. → `{"rapierRawBytes":3082103,"rapierEncodedBytes":4109472,"rapierResidentBytes":33554432,"rapierBase64Expansion":1027369,"glslangRawBytes":943680,"glslangGzipBytes":301882,"glslangResidentBytes":943680,"totalWireBytes":6756068,"totalDecodedBytes":87071962}`
 
 ## Verificări
 
 | Verificare | Rezultat | Detaliu |
 | --- | --- | --- |
-| `manifest-format-versioned` | PASS | format 1, version 150-asset-manifest-v1, entries 29, hash 14cef8490354… |
-| `manifest-provenance-complete` | PASS | audit OK; provenance complete for 29 entries |
+| `manifest-format-versioned` | PASS | format 1, version 150-asset-manifest-v1, entries 37, hash 42f91c149435… |
+| `manifest-provenance-complete` | PASS | audit OK; provenance complete for 37 entries |
 | `manifest-deterministic` | PASS | two collections of the same real sources produce the same hash and entries |
-| `selective-cache-invalidation` | PASS | invalidated 1 (vehicle:sedan:near), reused 28, evicted 0 |
-| `format-version-invalidates-all` | PASS | format bump invalidated 29/29 entries explicitly |
-| `missing-critical-blocks-release` | PASS | reason MISSING_CRITICAL_ASSETS, missing runtime:wasm:rapier, vehicle:sedan:near, entries 27 |
+| `selective-cache-invalidation` | PASS | invalidated 1 (vehicle:sedan:near), reused 36, evicted 0 |
+| `format-version-invalidates-all` | PASS | format bump invalidated 37/37 entries explicitly |
+| `missing-critical-blocks-release` | PASS | reason MISSING_CRITICAL_ASSETS, missing runtime:wasm:rapier, vehicle:sedan:near, entries 35 |
 | `missing-source-file-blocks-release` | PASS | reason MISSING_CRITICAL_ASSETS, missing runtime:wasm:rapier |
 | `missing-provenance-blocks-release` | PASS | reason MISSING_PROVENANCE, missing provenance city-decor:tree |
-| `wire-separated-from-resident` | PASS | wire 6756068 B, decoded 41983192 B, rapier base64 4109472 B > raw 3082103 B, resident 33554432 B |
+| `wire-separated-from-resident` | PASS | wire 6756068 B, decoded 87071962 B, rapier base64 4109472 B > raw 3082103 B, resident 33554432 B |
 | `transfer-budget-223` | PASS | first-ride transfer 6756068 B <= 20971520 B; critical WASM 6756068 B <= 8388608 B |
-| `resident-budgets-021-223-148` | PASS | geometry 4469344 B, textures 1048560 B, WASM resident 36201028 B, decoders 0 B / workspace 0 B, audio 261956 B |
+| `resident-budgets-021-223-148` | PASS | geometry 4469344 B, textures 46137330 B, WASM resident 36201028 B, decoders 0 B / workspace 0 B, audio 261956 B |
 | `registry-honest-empty` | PASS | no final GLB asset ships in V1; the registry decoder WASM/workspace stay 0 under the 8/16 MiB caps instead of fabricated entries |
 | `cross-check-145-vehicle-evidence` | PASS | manifest vehicle budget equals Docs/Evidence/145-vehicle-assets/measurement.json (7 assets) |
 | `cross-check-146-city-evidence` | PASS | decor inventory 8 kinds, 4354688 B equals the 146 measured 4354688 B and 1585 items |

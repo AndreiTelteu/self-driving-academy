@@ -277,8 +277,8 @@ test('validation rejects duplicate ids, invalid versions and empty input', () =>
 test('real inventories produce the versioned manifest with no fabricated assets', () => {
   const collection = realCollection();
   const manifest = createAssetManifest(collection.records);
-  assert.equal(manifest.entries.length, 29);
-  assert.equal(manifest.entries.filter((entry) => entry.role === 'CRITICAL').length, 19);
+  assert.equal(manifest.entries.length, 37);
+  assert.equal(manifest.entries.filter((entry) => entry.role === 'CRITICAL').length, 27);
   assert.equal(manifest.entries.filter((entry) => entry.role === 'OPTIONAL').length, 10);
   assert.equal(manifest.entries.filter((entry) => entry.placeholder).length, 7);
   assert.equal(manifest.entries.filter((entry) => entry.kind === 'GLB').length, 0);
@@ -293,7 +293,7 @@ test('real inventories produce the versioned manifest with no fabricated assets'
   assert.equal(collection.registry.decoderWasmBytes, 0);
   assert.equal(collection.registry.decoderWorkspaceBytes, 0);
   assert.deepEqual(collection.missing, []);
-  assert.equal(collection.criticalIds.length, 19);
+  assert.equal(collection.criticalIds.length, 27);
   const audit = auditAssetManifest(manifest, { criticalIds: collection.criticalIds });
   assert.equal(audit.reason, 'OK');
   assert.equal(audit.releaseBlocked, false);
