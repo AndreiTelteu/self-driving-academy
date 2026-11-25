@@ -235,3 +235,7 @@ Capturile din [auditul din 16 noiembrie 2026](Evidence/visual-audit-2026-11-16/R
 | 253 | Gate V4: calitate vizuală și performanță pe toate preseturile |
 | 254 | Import modele 3D realiste: vehicule, personaj și decor |
 | 255 | Modele 3D pentru clădiri și mobilierul stradal rămas |
+
+## Starea V4 după resetarea boardului — 26 noiembrie 2026
+
+Vizualul V4 este în mare parte livrat, dar buildul jucabil nu are încă bucla de Academie. Butonul „Setări” din ecranul de start și meniul de pauză rămâne TODO; panourile, first-person, minimapa și audio nu sunt montate. Gate-ul V4 și QA-ul final sunt acum taskul [287](../PBI/To Do/287-v4-final-qa-release.md), iar starea generală este în [Docs/31](31-stare-implementare-si-lacune.md).

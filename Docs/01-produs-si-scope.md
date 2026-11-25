@@ -20,7 +20,13 @@ Versiune 0.5 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon
 | KPI flotă | Revenue lunar, ratings 0–5, curse și review-uri pe zi; buton KPIs cu pop-up și grafice istorice |
 | Oraș | Cartier fictiv cu atmosferă americană, stilizată, cu repere și zone de joacă proprii |
 | Persistență | Single-player, autosave local, export/import de profil și savefile complet cu checksum verificat |
-| Mers pe jos | Extensie ulterioară |
+| Mers pe jos | Livrat în V3; integrarea cu bucla de Academie rămâne în boardul curent |
+
+## Stare la 26 noiembrie 2026
+
+Tabelul de mai sus este **scope-ul țintă**, nu starea buildului. În jocul jucabil există platforma browser, orașul 3D, mersul pe jos și un sandbox de conducere cu AUTO/MANUAL. Restul cerințelor sunt implementate ca module/contracte sau lipsesc; diferența exactă este în [Starea implementării și lacunele](31-stare-implementare-si-lacune.md).
+
+Boardul vechi (001–258) a fost retras; boardul curent are 29 de taskuri noi, 259–287, toate în To Do. Compania cu costuri, profit, cash și evoluție este o propunere separată în [Companie: profit și evoluție](32-companie-profit-si-evolutie.md) și nu face parte din V1 până la confirmare.
 
 ## Propuneri de calibrare
 
@@ -46,7 +52,7 @@ Manevrele pe care politica autonomă nu le poate reprezenta, precum cascadoriile
 
 ## Etapele produsului
 
-V1 este jocul complet pentru PC în browser cu 20–30 de taxiuri, condus realist, curse, campanie, 24 de parametri învățabili, profil comun pentru oraș, comparații, KPI-uri economice și ratings, trei misiuni zilnice, XP fără pierderi și salvare locală/savefile. Include Haos, decor destructibil, slidere, first-person și provocări random conform reviziei 0.5. V2 implementează și validează întregul catalog de 80 de parametri, inclusiv contexte suplimentare de pietoni, pericole, rutare și serviciu. V3 adaugă personajul și mersul pe jos, păstrând schimbarea rapidă a taxiului.
+V1 este ținta jocului complet pentru PC în browser cu 20–30 de taxiuri, condus realist, curse, campanie, 24 de parametri învățabili, profil comun pentru oraș, comparații, KPI-uri economice și ratings, trei misiuni zilnice, XP fără pierderi și salvare locală/savefile. Include Haos, decor destructibil, slidere, first-person și provocări random conform reviziei 0.5. **Starea reală a V1 este în [Docs/31](31-stare-implementare-si-lacune.md); V1 nu este declarat livrat.** V2 implementează și validează întregul catalog de 80 de parametri, inclusiv contexte suplimentare de pietoni, pericole, rutare și serviciu. V3 adaugă personajul și mersul pe jos, păstrând schimbarea rapidă a taxiului.
 
 Multiplayer-ul, vremea dinamică, interioarele complexe, percepția prin camere sau LiDAR și rețelele neuronale nu intră în backlogul confirmat. Implementarea lor ar necesita o extindere explicită a scope-ului. Diferența V1/V2/V3 este o ordine de livrare, nu omiterea funcționalităților planificate.
 

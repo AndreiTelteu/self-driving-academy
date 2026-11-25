@@ -32,47 +32,71 @@ function report(): Promise<V1RegressionReport> {
   return cached;
 }
 
-test('216 the matrix executed every category and no row failed', async () => {
-  const matrix = await report();
-  assert.equal(
-    matrix.summary.fail,
-    0,
-    JSON.stringify(matrix.rows.filter((row) => row.verdict === 'FAIL')),
-  );
-  assert.ok(matrix.summary.pass >= 20, `only ${matrix.summary.pass} passing rows`);
-  assert.equal(
-    matrix.summary.notRun,
-    2,
-    'only the browser playtest and the frame probe are NOT_RUN',
-  );
-  for (const row of matrix.rows) {
-    assert.notEqual(row.verdict, 'FAIL', `${row.id}: ${row.note}`);
-    if (row.verdict === 'NOT_RUN') assert.ok((row.notRunReason ?? '').length > 20, row.id);
-    else assert.ok(Object.keys(row.actual).length > 0, `${row.id} carries real numbers`);
-    assert.equal(row.command, 'npm run qa:v1-regression');
-  }
-  for (const category of ['MODES', 'PROPAGATION', 'LEARNING_BARRIER', 'KPI', 'DAILY', 'XP']) {
-    assert.ok((matrix.summary.categories[category] ?? 0) > 0, `missing ${category} rows`);
-  }
-  assert.ok((matrix.summary.categories.CHECKPOINT ?? 0) >= 2);
-  assert.ok((matrix.summary.categories.REPLAY ?? 0) >= 2);
-  assert.ok((matrix.summary.categories.COMBINED ?? 0) >= 1);
-  assert.ok((matrix.summary.categories.BENCHMARK ?? 0) >= 1);
-  assert.ok((matrix.summary.categories.DEPENDENCIES ?? 0) >= 1);
-});
+/**
+ * The 216 matrix is a historical transcript from generation 001-258. The board was reset on
+ * 2026-11-26 and those PBIs no longer exist, so this suite is archived rather than rewritten into a
+ * false green. The current board is validated by PBI/Validate-Plan.ps1 and loop-pbi.
+ */
+const boardConfig = JSON.parse(
+  readFileSync(
+    join(dirname(fileURLToPath(import.meta.url)), '..', '..', 'PBI', 'BOARD.json'),
+    'utf8',
+  ),
+) as { readonly firstId?: string };
+const historicalSkip =
+  Number(boardConfig.firstId ?? 1) >= 259
+    ? 'Arhivat după resetarea boardului 001-258; boardul curent este 259-287.'
+    : false;
 
-test('216 the three modes, the propagation and the barrier rows are positive and negative', async () => {
-  const matrix = await report();
-  const modes = matrix.rows.filter((row) => row.category === 'MODES');
-  assert.ok(modes.some((row) => row.polarity === 'POSITIVE'));
-  assert.ok(modes.some((row) => row.polarity === 'NEGATIVE'));
-  const propagation = matrix.rows.filter((row) => row.category === 'PROPAGATION');
-  assert.equal(propagation.length, 2);
-  assert.ok(propagation.some((row) => row.polarity === 'NEGATIVE'));
-  assert.equal(matrix.rows.filter((row) => row.category === 'LEARNING_BARRIER').length, 2);
-});
+test(
+  '216 the matrix executed every category and no row failed',
+  { skip: historicalSkip },
+  async () => {
+    const matrix = await report();
+    assert.equal(
+      matrix.summary.fail,
+      0,
+      JSON.stringify(matrix.rows.filter((row) => row.verdict === 'FAIL')),
+    );
+    assert.ok(matrix.summary.pass >= 20, `only ${matrix.summary.pass} passing rows`);
+    assert.equal(
+      matrix.summary.notRun,
+      2,
+      'only the browser playtest and the frame probe are NOT_RUN',
+    );
+    for (const row of matrix.rows) {
+      assert.notEqual(row.verdict, 'FAIL', `${row.id}: ${row.note}`);
+      if (row.verdict === 'NOT_RUN') assert.ok((row.notRunReason ?? '').length > 20, row.id);
+      else assert.ok(Object.keys(row.actual).length > 0, `${row.id} carries real numbers`);
+      assert.equal(row.command, 'npm run qa:v1-regression');
+    }
+    for (const category of ['MODES', 'PROPAGATION', 'LEARNING_BARRIER', 'KPI', 'DAILY', 'XP']) {
+      assert.ok((matrix.summary.categories[category] ?? 0) > 0, `missing ${category} rows`);
+    }
+    assert.ok((matrix.summary.categories.CHECKPOINT ?? 0) >= 2);
+    assert.ok((matrix.summary.categories.REPLAY ?? 0) >= 2);
+    assert.ok((matrix.summary.categories.COMBINED ?? 0) >= 1);
+    assert.ok((matrix.summary.categories.BENCHMARK ?? 0) >= 1);
+    assert.ok((matrix.summary.categories.DEPENDENCIES ?? 0) >= 1);
+  },
+);
 
-test('216 XP has zero losses on every degradation path', async () => {
+test(
+  '216 the three modes, the propagation and the barrier rows are positive and negative',
+  { skip: historicalSkip },
+  async () => {
+    const matrix = await report();
+    const modes = matrix.rows.filter((row) => row.category === 'MODES');
+    assert.ok(modes.some((row) => row.polarity === 'POSITIVE'));
+    assert.ok(modes.some((row) => row.polarity === 'NEGATIVE'));
+    const propagation = matrix.rows.filter((row) => row.category === 'PROPAGATION');
+    assert.equal(propagation.length, 2);
+    assert.ok(propagation.some((row) => row.polarity === 'NEGATIVE'));
+    assert.equal(matrix.rows.filter((row) => row.category === 'LEARNING_BARRIER').length, 2);
+  },
+);
+
+test('216 XP has zero losses on every degradation path', { skip: historicalSkip }, async () => {
   const matrix = await report();
   assert.equal(matrix.xp.losses, 0);
   assert.equal(matrix.xp.fingerprintBefore, matrix.xp.fingerprintAfter);
@@ -88,34 +112,42 @@ test('216 XP has zero losses on every degradation path', async () => {
   assert.equal(matrix.xp.negativeCredits, false);
 });
 
-test('216 the new costs are compared with the manifest, not with invented thresholds', async () => {
-  const matrix = await report();
-  const measured = matrix.budgets.filter((entry) => entry.verdict !== 'NOT_RUN');
-  assert.ok(measured.length >= 5, 'at least five real budgets were compared');
-  for (const entry of measured) {
-    assert.equal(entry.verdict, 'PASS', `${entry.metric}: ${entry.actual} > ${entry.budget}`);
-    assert.notEqual(entry.source, '');
-  }
-  const notRun = matrix.budgets.filter((entry) => entry.verdict === 'NOT_RUN');
-  assert.deepEqual(
-    notRun.map((entry) => entry.metric),
-    ['KPI visual chart points', 'frame p95'],
-    'a component without a manifest budget and the frame probe are declared, not faked',
-  );
-  assert.ok(matrix.gaps.length >= 3);
-});
+test(
+  '216 the new costs are compared with the manifest, not with invented thresholds',
+  { skip: historicalSkip },
+  async () => {
+    const matrix = await report();
+    const measured = matrix.budgets.filter((entry) => entry.verdict !== 'NOT_RUN');
+    assert.ok(measured.length >= 5, 'at least five real budgets were compared');
+    for (const entry of measured) {
+      assert.equal(entry.verdict, 'PASS', `${entry.metric}: ${entry.actual} > ${entry.budget}`);
+      assert.notEqual(entry.source, '');
+    }
+    const notRun = matrix.budgets.filter((entry) => entry.verdict === 'NOT_RUN');
+    assert.deepEqual(
+      notRun.map((entry) => entry.metric),
+      ['KPI visual chart points', 'frame p95'],
+      'a component without a manifest budget and the frame probe are declared, not faked',
+    );
+    assert.ok(matrix.gaps.length >= 3);
+  },
+);
 
-test('216 the extension gate has no inverse dependency and the graph is acyclic', async () => {
-  const matrix = await report();
-  assert.deepEqual([...matrix.dependencies.cycles], []);
-  assert.deepEqual([...matrix.dependencies.inverseDependencies], []);
-  assert.equal(matrix.dependencies.gateCoversExtensions, true);
-  assert.deepEqual([...matrix.dependencies.duplicates], []);
-  assert.ok(matrix.dependencies.nodes > 200, 'the whole board was read');
-  assert.ok(matrix.dependencies.edges > 0);
-});
+test(
+  '216 the extension gate has no inverse dependency and the graph is acyclic',
+  { skip: historicalSkip },
+  async () => {
+    const matrix = await report();
+    assert.deepEqual([...matrix.dependencies.cycles], []);
+    assert.deepEqual([...matrix.dependencies.inverseDependencies], []);
+    assert.equal(matrix.dependencies.gateCoversExtensions, true);
+    assert.deepEqual([...matrix.dependencies.duplicates], []);
+    assert.ok(matrix.dependencies.nodes > 200, 'the whole board was read');
+    assert.ok(matrix.dependencies.edges > 0);
+  },
+);
 
-test('216 the validation level is declared honestly', async () => {
+test('216 the validation level is declared honestly', { skip: historicalSkip }, async () => {
   const matrix = await report();
   assert.equal(matrix.validation.level, 'targeted');
   assert.equal(matrix.validation.playtest, 'NOT_RUN');
@@ -130,7 +162,7 @@ test('216 the validation level is declared honestly', async () => {
 
 test(
   '216 the committed regression report is the current transcript',
-  { skip: process.env.V1_REGRESSION_PREFLIGHT === '1' },
+  { skip: historicalSkip || process.env.V1_REGRESSION_PREFLIGHT === '1' },
   async () => {
     const saved = JSON.parse(readFileSync(EVIDENCE, 'utf8')) as V1RegressionReport;
     const fresh = await report();

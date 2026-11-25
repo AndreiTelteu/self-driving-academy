@@ -18,6 +18,13 @@ const root = fileURLToPath(new URL('../../', import.meta.url));
 const readText = (path: string): string => readFileSync(join(root, path), 'utf8');
 const readJson = <T>(path: string): T => JSON.parse(readText(path)) as T;
 
+/** The 202 artifact belongs to generation 001-258; the board reset retired those PBIs. */
+const boardConfig = readJson<{ readonly firstId?: string }>('PBI/BOARD.json');
+const historicalSkip =
+  Number(boardConfig.firstId ?? 1) >= 259
+    ? 'Arhivat după resetarea boardului 001-258; boardul curent este 259-287.'
+    : false;
+
 interface ChecklistRow {
   readonly id: string;
   readonly verdict: 'PASS' | 'FAIL' | 'NOT_RUN' | 'PENDING';
@@ -60,7 +67,7 @@ interface Controls {
   readonly verdict: 'PASS' | 'FAIL';
 }
 
-test('release:v3 regenerates byte-identical artifacts', () => {
+test('release:v3 regenerates byte-identical artifacts', { skip: historicalSkip }, () => {
   execFileSync(
     process.execPath,
     [
@@ -73,7 +80,7 @@ test('release:v3 regenerates byte-identical artifacts', () => {
   );
 });
 
-test('all eleven V3 dependencies are proven from disk', () => {
+test('all eleven V3 dependencies are proven from disk', { skip: historicalSkip }, () => {
   const checklist = readJson<Checklist>('Docs/Evidence/202-v3-release/release-checklist.json');
   assert.equal(checklist.dependencies.length, 11);
   assert.deepEqual(
@@ -85,15 +92,19 @@ test('all eleven V3 dependencies are proven from disk', () => {
   }
 });
 
-test('capability level is derived from the real composition, not claimed', () => {
-  const artifact = readJson<Capabilities>('Docs/Evidence/202-v3-release/capabilities.json');
-  assert.equal(artifact.verdict, 'PASS');
-  assert.equal(artifact.composition.verdict, 'NOT_COMPOSED');
-  assert.equal(artifact.capabilities.length, 12);
-  assert.ok(artifact.capabilities.every((entry) => entry.level === 'HEADLESS_CONTRACT'));
-});
+test(
+  'capability level is derived from the real composition, not claimed',
+  { skip: historicalSkip },
+  () => {
+    const artifact = readJson<Capabilities>('Docs/Evidence/202-v3-release/capabilities.json');
+    assert.equal(artifact.verdict, 'PASS');
+    assert.equal(artifact.composition.verdict, 'NOT_COMPOSED');
+    assert.equal(artifact.capabilities.length, 12);
+    assert.ok(artifact.capabilities.every((entry) => entry.level === 'HEADLESS_CONTRACT'));
+  },
+);
 
-test('what is not delivered is declared with an owner', () => {
+test('what is not delivered is declared with an owner', { skip: historicalSkip }, () => {
   const artifact = readJson<Capabilities>('Docs/Evidence/202-v3-release/capabilities.json');
   const ids = artifact.notDelivered.map((entry) => entry.id);
   assert.ok(ids.includes('extended-keys-reserved'));
@@ -108,7 +119,7 @@ test('what is not delivered is declared with an owner', () => {
   assert.equal(walkingXp?.state, 'NOT_IMPLEMENTED');
 });
 
-test('controls are real bindings with real consumers', () => {
+test('controls are real bindings with real consumers', { skip: historicalSkip }, () => {
   const controls = readJson<Controls>('Docs/Evidence/202-v3-release/controls.json');
   assert.equal(controls.verdict, 'PASS');
   assert.equal(controls.keyboard.length, 15);
@@ -124,7 +135,7 @@ test('controls are real bindings with real consumers', () => {
   assert.equal(orbit?.state, 'NOT_AVAILABLE');
 });
 
-test('release verdict cannot be PASS while rows are open', () => {
+test('release verdict cannot be PASS while rows are open', { skip: historicalSkip }, () => {
   const checklist = readJson<Checklist>('Docs/Evidence/202-v3-release/release-checklist.json');
   const open = checklist.rows.filter((entry) => entry.verdict !== 'PASS');
   assert.equal(checklist.summary.open, open.length);
@@ -141,11 +152,15 @@ test('release verdict cannot be PASS while rows are open', () => {
   );
 });
 
-test('Docs/20 publishes the release section without the walking-XP promise', () => {
-  const doc = readText('Docs/20-extensii-si-mers-pe-jos.md');
-  assert.ok(doc.includes('<!-- release:v3:begin -->'));
-  assert.ok(doc.includes('<!-- release:v3:end -->'));
-  assert.ok(doc.includes('Evidence/202-v3-release/release-checklist.md'));
-  assert.equal(doc.includes('Mersul activ poate contribui la XP de timp'), false);
-  assert.ok(doc.includes('walkingTimeXp = NOT_IMPLEMENTED'));
-});
+test(
+  'Docs/20 publishes the release section without the walking-XP promise',
+  { skip: historicalSkip },
+  () => {
+    const doc = readText('Docs/20-extensii-si-mers-pe-jos.md');
+    assert.ok(doc.includes('<!-- release:v3:begin -->'));
+    assert.ok(doc.includes('<!-- release:v3:end -->'));
+    assert.ok(doc.includes('Evidence/202-v3-release/release-checklist.md'));
+    assert.equal(doc.includes('Mersul activ poate contribui la XP de timp'), false);
+    assert.ok(doc.includes('walkingTimeXp = NOT_IMPLEMENTED'));
+  },
+);

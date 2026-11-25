@@ -1,341 +1,127 @@
 <!-- loop-pbi:progress:start -->
 | Module | Remaining phases | To Do | In Progress | Done / Total | Progress |
 |---|---|---:|---:|---:|---|
-| Asseturi și audio | Completed | 0 | 0 | 7 / 7 | `██████████` 100% |
-| Autonomie | Completed | 0 | 0 | 14 / 14 | `██████████` 100% |
-| Babylon | Completed | 0 | 0 | 11 / 11 | `██████████` 100% |
-| Calitate vizuala V4 | V4 | 1 | 0 | 17 / 18 | 94% |
-| Control manual | Completed | 0 | 0 | 9 / 9 | `██████████` 100% |
-| Economie | Completed | 0 | 0 | 1 / 1 | `██████████` 100% |
-| Experiență | Completed | 0 | 0 | 2 / 2 | `██████████` 100% |
-| Experimente | Completed | 0 | 0 | 1 / 1 | `██████████` 100% |
-| Experimente și indicatori | Completed | 0 | 0 | 8 / 8 | `██████████` 100% |
-| Extindere V2 | Completed | 0 | 0 | 4 / 4 | `██████████` 100% |
-| Flotă și curse | Completed | 0 | 0 | 10 / 10 | `██████████` 100% |
-| Fundație | Completed | 0 | 0 | 14 / 14 | `██████████` 100% |
-| Interfață | Completed | 0 | 0 | 13 / 13 | `██████████` 100% |
-| Învățare | Completed | 0 | 0 | 17 / 17 | `██████████` 100% |
-| Învățare V2 | Completed | 0 | 0 | 10 / 10 | `██████████` 100% |
-| Mers pe jos V3 | Completed | 0 | 0 | 16 / 16 | `██████████` 100% |
-| Misiuni | Completed | 0 | 0 | 15 / 15 | `██████████` 100% |
-| Misiuni și interfață | Completed | 0 | 0 | 1 / 1 | `██████████` 100% |
-| Misiuni V2 | Completed | 0 | 0 | 1 / 1 | `██████████` 100% |
-| Oraș | Completed | 0 | 0 | 12 / 12 | `██████████` 100% |
-| Oraș și fizică | Completed | 0 | 0 | 1 / 1 | `██████████` 100% |
-| Parametri V2 | Completed | 0 | 0 | 10 / 10 | `██████████` 100% |
-| Persistență | Completed | 0 | 0 | 14 / 14 | `██████████` 100% |
-| Produs | Completed | 0 | 0 | 1 / 1 | `██████████` 100% |
-| Profiluri | Completed | 0 | 0 | 8 / 8 | `██████████` 100% |
-| Profiluri și interfață | Completed | 0 | 0 | 1 / 1 | `██████████` 100% |
-| Progres | Completed | 0 | 0 | 2 / 2 | `██████████` 100% |
-| Release V2 | Completed | 0 | 0 | 1 / 1 | `██████████` 100% |
-| Telemetrie | Completed | 0 | 0 | 7 / 7 | `██████████` 100% |
-| UI | Completed | 0 | 0 | 1 / 1 | `██████████` 100% |
-| Validare | Completed | 0 | 0 | 4 / 4 | `██████████` 100% |
-| Validare și release | Completed | 0 | 0 | 12 / 12 | `██████████` 100% |
-| Validare V2 | Completed | 0 | 0 | 2 / 2 | `██████████` 100% |
-| Vehicule și fizică | Completed | 0 | 0 | 11 / 11 | `██████████` 100% |
-| Total | - | 1 | 0 | 257 / 258 | 99% |
+| Companie | V1 | 2 | 0 | 0 / 2 | `░░░░░░░░░░` 0% |
+| Documentație | V1 | 1 | 0 | 0 / 1 | `░░░░░░░░░░` 0% |
+| Economie | V1 | 1 | 0 | 0 / 1 | `░░░░░░░░░░` 0% |
+| Fizică | V1 | 1 | 0 | 0 / 1 | `░░░░░░░░░░` 0% |
+| Flotă și curse | V1 | 3 | 0 | 0 / 3 | `░░░░░░░░░░` 0% |
+| Haos | V1 | 1 | 0 | 0 / 1 | `░░░░░░░░░░` 0% |
+| Integrare joc | V1 | 1 | 0 | 0 / 1 | `░░░░░░░░░░` 0% |
+| Interfață | V1 | 7 | 0 | 0 / 7 | `░░░░░░░░░░` 0% |
+| Misiuni | V1 | 2 | 0 | 0 / 2 | `░░░░░░░░░░` 0% |
+| Moduri și learning | V1 | 3 | 0 | 0 / 3 | `░░░░░░░░░░` 0% |
+| Persistență | V1 | 1 | 0 | 0 / 1 | `░░░░░░░░░░` 0% |
+| Pietoni și pericole | V2 | 1 | 0 | 0 / 1 | `░░░░░░░░░░` 0% |
+| Progres | V1 | 1 | 0 | 0 / 1 | `░░░░░░░░░░` 0% |
+| Release | V4 | 1 | 0 | 0 / 1 | `░░░░░░░░░░` 0% |
+| Sesiuni | V1 | 1 | 0 | 0 / 1 | `░░░░░░░░░░` 0% |
+| Trafic | V1 | 2 | 0 | 0 / 2 | `░░░░░░░░░░` 0% |
+| Total | - | 29 | 0 | 0 / 29 | `░░░░░░░░░░` 0% |
 <!-- loop-pbi:progress:end -->
 
 # Backlog Kanban Self Driving Academy
 
-258 task-uri de implementare cu IDs stabile 001-257. Ordinea de implementare este definită de depends_on; IDs nu mai constituie o ordine topologică numerică. Toate sunt create inițial în To Do. Prefixele rămân stabile la mutarea între coloane.
+**Resetat la 26 noiembrie 2026.** Taskurile 001–258 au fost retrase din board; istoricul și dovezile lor rămân în Git și în `Docs/Evidence/`. Boardul curent conține **29 taskuri** pentru tot ce lipsește din jocul jucabil, cu ID-uri noi care continuă de la **259**. Nu reutiliza ID-urile 001–258.
 
-## Coloane și workflow
+Toate taskurile sunt în **To Do**. Nu s-a implementat niciunul; crearea planului nu este livrare. Fiecare task are obiectiv, ce lipsește, documentația completă, dependențe, criterii, verificare și dovadă.
 
-- [To Do](<To Do/>): implementare neîncepută.
-- [In Progress](<In Progress/>): implementare începută sau blocată.
-- [Done](Done/): implementare verificată și fișier mutat fizic.
+## De ce a fost resetat boardul
 
-[AGENTS.md](AGENTS.md) descrie pașii și regula obligatorie de mutare în Done. [Planul modular](../Docs/README.md) și [matricea de acoperire](../Docs/21-acoperire-functionalitati.md) definesc scope-ul.
+Boardul vechi avea 257/258 taskuri Done, dar majoritatea erau **contracte izolate**, nu funcționalități montate în joc. `src/main.ts` compunea doar randarea V3, iar Academie, flota, cursele, LEARNING, KPI, misiunile, XP, salvarea și compania nu erau în bucla jucabilă. Noul board tratează exact această diferență: fiecare task cere comportament observabil în joc, nu doar un modul testat.
+
+Starea completă, pe zone și cu linkuri, este în [Docs/31 — Starea implementării și lacunele](../Docs/31-stare-implementare-si-lacune.md).
 
 ## Etape
 
 | Etapă | IDs | Număr | Livrabil |
 | --- | --- | --- | --- |
-| V1 | 001–162 și 203–235 | 195 | Joc PC browser, trei moduri, stil comun taxi/civil, 24 parametri, KPIs, daily, XP, salvare și comparații |
-| V2 | 163–190 | 28 | Toți cei 80 de parametri, pietoni, pericole și provocări extinse |
-| V3 | 191–202, 236–238, 256–257 | 17 | Personaj, mers pe jos, intrare/ieșire, trafic AI și mod AUTO/MANUAL |
-| V4 | 239–255 | 17 | Calitate vizuală: imagine HD, lumină, umbre, materiale PBR, modele și UI de joc |
+| V1 | 259–285 | 27 | Integrarea jocului jucabil: shell, sesiuni, flotă, curse, economie, companie, moduri, learning, misiuni, XP, persistență, UI, fizică, trafic, destructibile |
+| V2 | 286 | 1 | Pietoni, treceri și pericole în lumea live |
+| V3 | — | 0 | Mersul pe jos este deja livrat; integrarea lui rămâne în taskurile V1 |
+| V4 | 287 | 1 | Gate vizual, QA final, playtest, hardware și release |
 
-Statutul curent se citește din coloana fișierului și frontmatter. Indexul păstrează ID-urile fără statusuri duplicate și fără linkuri către o coloană care s-ar schimba la mutare. Găsește un task prin prefixul său în cele trei coloane.
+## Index
 
-## Indexul task-urilor
-
-| ID | Task | Modul | Etapă | Dependențe |
+| ID | Titlu | Modul | Etapă | Dependențe |
 | --- | --- | --- | --- | --- |
-| 001 | Inițializare proiect TypeScript Vite și Babylon.js | Fundație | V1 | — |
-| 002 | Structură modulară și reguli de dependență | Fundație | V1 | 001 |
-| 003 | Typecheck lint și convenții de cod | Fundație | V1 | 001 |
-| 004 | Infrastructură de teste și scenarii | Fundație | V1 | 001, 002 |
-| 005 | Contracte de date și validatoare de runtime | Fundație | V1 | 002 |
-| 006 | Identificatori stabili și random determinist | Fundație | V1 | 005 |
-| 007 | Evenimente și procesare idempotentă | Fundație | V1 | 005, 006 |
-| 008 | Buclă de simulare cu pas fix | Fundație | V1 | 005, 007 |
-| 009 | Configurare runtime și preferințe | Fundație | V1 | 005 |
-| 010 | Protocol pentru workers și anulare | Fundație | V1 | 005, 006 |
-| 011 | Bootstrap Babylon WebGPU și WebGL 2 | Babylon | V1 | 001, 009 |
-| 012 | Stările aplicației și lifecycle | Babylon | V1 | 011, 008 |
-| 013 | Scenă Babylon și maparea entităților | Babylon | V1 | 011, 005 |
-| 014 | Sincronizarea snapshoturilor și interpolare | Babylon | V1 | 013, 008 |
-| 015 | Registry asseturi și încărcare GLB | Babylon | V1 | 013 |
-| 016 | Materiale lumină și niveluri de calitate | Babylon | V1 | 013, 009 |
-| 017 | Camere din spate și first-person | Babylon | V1 | 014, 009 |
-| 018 | Picking și selectarea mașinilor | Babylon | V1 | 013, 017 |
-| 019 | Diagnostic Babylon și resurse | Babylon | V1 | 011, 014 |
-| 020 | Resize disposal și recuperare GPU | Babylon | V1 | 012, 015, 014 |
-| 021 | Prototip Rapier și decizia de fizică | Vehicule și fizică | V1 | 001, 004, 203, 218 |
-| 022 | Adaptor fizică și conversii de coordonate | Vehicule și fizică | V1 | 021, 005, 013 |
-| 023 | Configurații pentru două clase de mașini | Vehicule și fizică | V1 | 022, 009 |
-| 024 | Controller auto și comenzi comune | Vehicule și fizică | V1 | 023, 008 |
-| 025 | Input de tastatură și filtrare | Vehicule și fizică | V1 | 024, 009 |
-| 026 | Roți suspensie și aderență | Vehicule și fizică | V1 | 024, 014 |
-| 027 | Frânare frână de mână și marșarier | Vehicule și fizică | V1 | 024, 025 |
-| 028 | Contacte fizice și incidente | Vehicule și fizică | V1 | 022, 007 |
-| 029 | Avarie și stare de vehicul blocat | Vehicule și fizică | V1 | 028, 024 |
-| 030 | Recuperare la punct valid | Vehicule și fizică | V1 | 029, 007 |
-| 031 | Calibrare și paritate manual autonom | Vehicule și fizică | V1 | 026, 027, 028 |
-| 032 | Schema hărții și validator semantic | Oraș | V1 | 005, 006 |
-| 033 | Graf direcționat de benzi | Oraș | V1 | 032 |
-| 034 | Index spațial pentru vecini | Oraș | V1 | 033, 022 |
-| 035 | Mișcări și conflicte în intersecții | Oraș | V1 | 033 |
-| 036 | Controller de semafoare | Oraș | V1 | 035, 008, 007 |
-| 037 | STOP linii și oprire completă | Oraș | V1 | 033, 007 |
-| 038 | Priorități și evaluarea spațiilor | Oraș | V1 | 035, 037 |
-| 039 | Treceri de pietoni și semantică de pericol | Oraș | V1 | 032 |
-| 040 | Zone de pickup dropoff și puncte valide | Oraș | V1 | 033, 030 |
-| 041 | Rutare A star și rute valide | Oraș | V1 | 033, 038, 040, 219 |
-| 042 | Construirea cartierului în Babylon | Oraș | V1 | 015, 016, 032, 040, 204 |
-| 043 | Validarea integrității întregii hărți | Oraș | V1 | 042, 041, 036 |
-| 044 | Context rutier pentru fiecare vehicul | Autonomie | V1 | 034, 036, 038 |
-| 045 | Mașina de stări comportamentale | Autonomie | V1 | 044, 005, 219 |
-| 046 | Ținte de viteză și curbe | Autonomie | V1 | 045, 031 |
-| 047 | Control longitudinal accelerație și frânare | Autonomie | V1 | 046, 024 |
-| 048 | Urmărirea liderului și distanțe | Autonomie | V1 | 047, 044 |
-| 049 | Controller lateral și urmărirea benzii | Autonomie | V1 | 045, 024, 033 |
-| 050 | Politica la roșu și verde | Autonomie | V1 | 047, 036, 006 |
-| 051 | Politica STOP și opriri incomplete | Autonomie | V1 | 047, 037, 006 |
-| 052 | Politica de prioritate și gap acceptat | Autonomie | V1 | 045, 038 |
-| 053 | Schimbări de bandă și depășire V1 | Autonomie | V1 | 048, 049, 044 |
-| 054 | Blocaje rerutare și reintrare după manual | Autonomie | V1 | 045, 041, 030 |
-| 055 | Motive de decizie și observabilitate | Autonomie | V1 | 050, 051, 052, 053, 054 |
-| 056 | Suita autonomiei de bază | Autonomie | V1 | 055, 043 |
-| 057 | Registry flotă și mașini civile | Flotă și curse | V1 | 056, 023 |
-| 058 | Trafic civil cu rute proprii și stilul comun al orașului | Flotă și curse | V1 | 057, 041 |
-| 059 | Cereri de curse și program de scenariu | Flotă și curse | V1 | 057, 040, 006 |
-| 060 | Dispecerizare după disponibilitate și cost | Flotă și curse | V1 | 059, 041 |
-| 061 | Lifecycle cursă și eșecuri | Flotă și curse | V1 | 060, 007 |
-| 062 | Pickup cu zonă viteză și staționare | Flotă și curse | V1 | 061, 040, 054 |
-| 063 | Dropoff și finalizarea cursei | Flotă și curse | V1 | 062 |
-| 064 | ETA și progresul traseului | Flotă și curse | V1 | 063, 041 |
-| 065 | Blocaje avarii și reset de scenariu | Flotă și curse | V1 | 058, 063, 029, 064 |
-| 066 | Arbitraj de comenzi și autoritate | Control manual | V1 | 024, 025, 007 |
-| 067 | Hotkey-uri M/L și cele trei moduri vizibile | Control manual | V1 | 066, 009 |
-| 068 | Schimbare rapidă între taxiuri și civile | Control manual | V1 | 067, 018, 017 |
-| 069 | Lifecycle de intervenție manuală | Control manual | V1 | 068, 005, 007 |
-| 070 | Pauză focus și modalitate de input | Control manual | V1 | 069, 012 |
-| 071 | Continuitatea fizică la preluare și revenire | Control manual | V1 | 069, 054, 070 |
-| 072 | Cursă completă și intervenție scurtă manuală | Control manual | V1 | 071, 063 |
-| 073 | HUD viteză mod taxi și cursă | Interfață | V1 | 072, 009 |
-| 074 | Minimap și traseul curent | Interfață | V1 | 073, 043 |
-| 075 | Lista taxiurilor filtre și sortare | Interfață | V1 | 073, 057, 064, 068 |
-| 076 | Selectarea vehiculelor prin hartă | Interfață | V1 | 074, 068, 058 |
-| 077 | Panou profil valori și dovezi | Interfață | V1 | 073 |
-| 078 | Istoric și restaurare profil în UI | Interfață | V1 | 077 |
-| 079 | Notificări de analiză și publicare | Interfață | V1 | 077, 069 |
-| 080 | Remaparea comenzilor și conflicte | Interfață | V1 | 067, 009, 073 |
-| 081 | Setări unități cameră grafică și audio | Interfață | V1 | 080, 016, 017 |
-| 082 | Tablou oraș și drilldown de evenimente | Interfață | V1 | 073, 028, 061 |
-| 083 | Accesibilitate contrast și tastatură | Interfață | V1 | 075, 078, 081, 082 |
-| 084 | Layout la rezoluții PC și viewport mic | Interfață | V1 | 083, 074 |
-| 085 | Eșantioane manuale și contexte la tick | Telemetrie | V1 | 069, 044, 025 |
-| 086 | Oportunități unice și denominatoare | Telemetrie | V1 | 085, 006, 036, 037 |
-| 087 | Ferestre eligibile și constrângeri externe | Telemetrie | V1 | 086, 048 |
-| 088 | Filtrarea artefactelor și segmente parțiale | Telemetrie | V1 | 087, 030 |
-| 089 | Normalizarea după clasa vehiculului | Telemetrie | V1 | 088, 023, 031 |
-| 090 | Compactare buffer și finalizare segment | Telemetrie | V1 | 089, 010 |
-| 091 | Validator și fixtures pentru demonstrații | Telemetrie | V1 | 090, 004 |
-| 092 | Schema celor 80 de parametri și stări de suport | Învățare | V1 | 005 |
-| 093 | Eligibilitate și dovezi pe parametru | Învățare | V1 | 092, 091 |
-| 094 | Estimator viteză curbe și apropiere | Învățare | V1 | 093, 046 |
-| 095 | Estimator accelerație frânare jerk și reacție | Învățare | V1 | 093, 047, 089 |
-| 096 | Estimator headway gap și răspuns la lider | Învățare | V1 | 093, 048 |
-| 097 | Estimator conformare roșu și reacție verde | Învățare | V1 | 093, 050 |
-| 098 | Estimator STOP și acceptare de prioritate | Învățare | V1 | 093, 051, 052 |
-| 099 | Estimator schimbare de bandă V1 | Învățare | V1 | 093, 053 |
-| 100 | Incertitudine praguri și număr efectiv | Învățare | V1 | 094, 095, 096, 097, 098, 099 |
-| 101 | Regularizare adaptare și memorii recente | Învățare | V1 | 100 |
-| 102 | Validarea numerică a unui delta | Învățare | V1 | 101, 092 |
-| 103 | Estimator în worker cu coadă serială | Învățare | V1 | 102, 010, 221 |
-| 104 | Explicația modificărilor și no change | Învățare | V1 | 103, 079 |
-| 105 | Validare inversă pe profile cunoscute | Învățare | V1 | 104, 056 |
-| 106 | Fidelitate între clase și condus liber | Învățare | V1 | 105, 089 |
-| 107 | Regresii pentru intervenții și dovezi | Învățare | V1 | 106, 069 |
-| 108 | Validarea celor 24 de parametri învățabili | Învățare | V1 | 107 |
-| 109 | Profile imuabile și istoric versionat | Profiluri | V1 | 092, 102 |
-| 110 | Activare atomică în întreaga flotă | Profiluri | V1 | 109, 057, 008 |
-| 111 | Manevre în curs și profil publicat | Profiluri | V1 | 110, 053, 050, 066 |
-| 112 | Integrare intervenție estimator și publicare | Profiluri | V1 | 111, 103, 204 |
-| 113 | Conectarea UI la profiluri reale | Profiluri | V1 | 112, 077, 078, 104 |
-| 114 | Restaurare și profil nou de la bază | Profiluri | V1 | 113, 205 |
-| 115 | Demonstrarea orașului care copiază jucătorul | Profiluri | V1 | 114, 072, 208, 217 |
-| 116 | Definiții și lifecycle de misiuni | Misiuni | V1 | 115, 007, 005, 220 |
-| 117 | Misiunea primul taxi și tutorialul de control | Misiuni | V1 | 116, 073 |
-| 118 | Misiunea prima demonstrație și dovezi | Misiuni | V1 | 117, 112 |
-| 119 | Provocarea a două stiluri de urmărire | Misiuni | V1 | 118, 096 |
-| 120 | Provocarea STOP roșu și verde | Misiuni | V1 | 118, 097, 098 |
-| 121 | Cursa cu obiectiv de confort | Misiuni | V1 | 116, 085 |
-| 122 | Misiunea orașul te copiază | Misiuni | V1 | 119, 120, 115 |
-| 123 | Misiunea schimbarea unui obicei | Misiuni | V1 | 122, 114 |
-| 124 | Provocarea finală de serviciu și incidente | Misiuni | V1 | 123, 121 |
-| 125 | Progres recompense și deblocări | Misiuni | V1 | 124 |
-| 126 | Panoul misiunilor și obiective live | Misiuni | V1 | 125, 084 |
-| 127 | Schema IndexedDB și repository local | Persistență | V1 | 005, 109, 116 |
-| 128 | Tranzacții pentru profil și activare | Persistență | V1 | 127, 110 |
-| 129 | Salvarea segmentelor și checkpointuri | Persistență | V1 | 127, 090 |
-| 130 | Persistența misiunilor și setărilor | Persistență | V1 | 127, 126, 081 |
-| 131 | Autosave și închiderea sesiunii | Persistență | V1 | 128, 129, 130, 206, 222 |
-| 132 | Retenția datelor și cote locale | Persistență | V1 | 131, 207 |
-| 133 | Export JSON de profil | Persistență | V1 | 128 |
-| 134 | Import validat și activare de profil | Persistență | V1 | 133, 114, 092 |
-| 135 | Export import de sesiune și scenarii | Persistență | V1 | 134, 129, 130, 206 |
-| 136 | Migrare și restaurare după restart | Persistență | V1 | 135, 132, 206 |
-| 137 | Indicatori de serviciu și expunere | Experimente și indicatori | V1 | 063, 028, 085 |
-| 138 | Indicatori de stil și încălcări | Experimente și indicatori | V1 | 137, 086 |
-| 139 | Indicatori de confort cu pasager | Experimente și indicatori | V1 | 137, 088, 121 |
-| 140 | Snapshot complet pentru experiment | Experimente și indicatori | V1 | 138, 139, 136, 206 |
-| 141 | Replay vizual din stări înregistrate | Experimente și indicatori | V1 | 140, 014, 207 |
-| 142 | Rerulare din snapshot cu profil ales | Experimente și indicatori | V1 | 140, 114 |
-| 143 | Comparație A B cu distribuții și dovezi | Experimente și indicatori | V1 | 142, 138, 139, 082 |
-| 144 | Experimente în worker progres și anulare | Experimente și indicatori | V1 | 143, 010, 221 |
-| 145 | Asseturi auto roți lumini și LOD | Asseturi și audio | V1 | 015, 023, 014, 220, 223 |
-| 146 | Asseturi cartier decor și optimizare | Asseturi și audio | V1 | 042, 015, 220, 223 |
-| 147 | Pasageri simplificați și markers | Asseturi și audio | V1 | 062, 063, 015 |
-| 148 | Audio motor frâne anvelope și impact | Asseturi și audio | V1 | 145, 028, 009 |
-| 149 | Feedback pentru moduri și învățare | Asseturi și audio | V1 | 148, 079, 112 |
-| 150 | Manifest și pipeline de asseturi pentru build | Asseturi și audio | V1 | 146, 145, 147, 149 |
-| 151 | Suita completă de scenarii V1 | Validare și release | V1 | 115, 126, 136, 143, 150, 216 |
-| 152 | Test integral de sesiune și progres | Validare și release | V1 | 151 |
-| 153 | QA vizual și accesibilitate V1 | Validare și release | V1 | 152, 084 |
-| 154 | Matrice browsere WebGPU și WebGL 2 | Validare și release | V1 | 153, 020 |
-| 155 | Verificarea finală a hardware-ului și bugetelor stabilite | Validare și release | V1 | 154, 019, 203, 220, 222, 223 |
-| 156 | Benchmark flotă și trafic | Validare și release | V1 | 155, 065, 144 |
-| 157 | Optimizare Babylon instanțiere LOD și umbre | Validare și release | V1 | 156, 150, 223 |
-| 158 | Optimizare simulare și estimare | Validare și release | V1 | 156, 034, 103, 219, 221, 222 |
-| 159 | Sesiune lungă memorie și stabilitatea flotei | Validare și release | V1 | 157, 158 |
-| 160 | Build producție CI și livrare statică | Validare și release | V1 | 159, 003, 151, 224 |
-| 161 | Instrucțiuni de utilizare și operare | Validare și release | V1 | 160 |
-| 162 | Gate și închiderea release-ului V1 | Validare și release | V1 | 161, 154, 152, 108, 039, 076, 141, 216, 217, 235 |
-| 163 | Scenarii și telemetrie pentru parametrii V2 | Extindere V2 | V2 | 162, 140 |
-| 164 | Pietoni autonomi și traversări | Extindere V2 | V2 | 163, 039, 022 |
-| 165 | Pericole obstacole și claxon în scenarii | Extindere V2 | V2 | 164, 024 |
-| 166 | Activarea schemelor și suportului V2 | Extindere V2 | V2 | 165, 136, 092 |
-| 167 | Politică extinsă pentru viteză și ritm | Parametri V2 | V2 | 166, 046 |
-| 168 | Învățare extinsă pentru viteză și ritm | Învățare V2 | V2 | 167, 163 |
-| 169 | Politică extinsă pentru accelerație și frânare | Parametri V2 | V2 | 166, 047 |
-| 170 | Învățare extinsă pentru accelerație și frânare | Învățare V2 | V2 | 169, 163 |
-| 171 | Politică extinsă pentru urmărire și distanțe | Parametri V2 | V2 | 166, 048 |
-| 172 | Învățare extinsă pentru urmărire și distanțe | Învățare V2 | V2 | 171, 163 |
-| 173 | Politică extinsă pentru semafoare | Parametri V2 | V2 | 166, 050 |
-| 174 | Învățare extinsă pentru semafoare | Învățare V2 | V2 | 173, 163 |
-| 175 | Politică extinsă pentru stop și prioritate | Parametri V2 | V2 | 166, 051 |
-| 176 | Învățare extinsă pentru stop și prioritate | Învățare V2 | V2 | 175, 163 |
-| 177 | Politică extinsă pentru schimbare de bandă și depășire | Parametri V2 | V2 | 166, 053 |
-| 178 | Învățare extinsă pentru schimbare de bandă și depășire | Învățare V2 | V2 | 177, 163 |
-| 179 | Politică extinsă pentru control lateral și viraje | Parametri V2 | V2 | 166, 049 |
-| 180 | Învățare extinsă pentru control lateral și viraje | Învățare V2 | V2 | 179, 163 |
-| 181 | Politică extinsă pentru trasee și recuperare | Parametri V2 | V2 | 166, 041 |
-| 182 | Învățare extinsă pentru trasee și recuperare | Învățare V2 | V2 | 181, 163 |
-| 183 | Politică extinsă pentru pietoni și pericole | Parametri V2 | V2 | 166, 052 |
-| 184 | Învățare extinsă pentru pietoni și pericole | Învățare V2 | V2 | 183, 163 |
-| 185 | Politică extinsă pentru pickup și confortul pasagerilor | Parametri V2 | V2 | 166, 062 |
-| 186 | Învățare extinsă pentru pickup și confortul pasagerilor | Învățare V2 | V2 | 185, 163 |
-| 187 | Validarea tuturor celor 80 de parametri | Validare V2 | V2 | 168, 170, 172, 174, 176, 178, 180, 182, 184, 186 |
-| 188 | Provocări pentru comportamentele extinse | Misiuni V2 | V2 | 187, 125 |
-| 189 | Regresii compatibilitate și performanță V2 | Validare V2 | V2 | 188, 187 |
-| 190 | Închiderea release-ului V2 | Release V2 | V2 | 189 |
-| 191 | Personaj animații și reprezentare | Mers pe jos V3 | V3 | 190, 150 |
-| 192 | Controller fizic pentru mers pe jos | Mers pe jos V3 | V3 | 191, 022 |
-| 193 | Autoritate input la personaj sau mașină | Mers pe jos V3 | V3 | 192, 066, 080 |
-| 194 | Cameră third person pentru personaj | Mers pe jos V3 | V3 | 193, 017 |
-| 195 | Intrarea în orice mașină din proximitate | Mers pe jos V3 | V3 | 194, 068 |
-| 196 | Ieșirea din mașină și punct valid | Mers pe jos V3 | V3 | 195, 040 |
-| 197 | Schimbare rapidă taxi și revenire la mers | Mers pe jos V3 | V3 | 196, 075 |
-| 198 | Intervenții și telemetrie cu personaj | Mers pe jos V3 | V3 | 197, 069 |
-| 199 | Tutorial și misiuni pentru mers și vehicule | Mers pe jos V3 | V3 | 198, 188 |
-| 200 | Salvarea personajului și migrare V3 | Mers pe jos V3 | V3 | 199, 136 |
-| 201 | Validare integrală V3 | Mers pe jos V3 | V3 | 200, 189 |
-| 202 | Închiderea release-ului complet cu mers pe jos | Mers pe jos V3 | V3 | 201 |
-| 203 | Hardware de referință înainte de fizică și oraș | Fundație | V1 | 001, 004, 019 |
-| 204 | Prototip timpuriu cu trei parametri și oraș care imită | Produs | V1 | 010, 017, 031, 033, 046, 049, 051, 066, 069, 085, 092, 203, 218, 219, 221 |
-| 205 | Barieră pentru learning la restore import și profil nou | Profiluri | V1 | 103, 109, 110, 069 |
-| 206 | Checkpoint complet și reluare coerentă a lumii | Persistență | V1 | 127, 128, 129, 065, 008, 010, 221 |
-| 207 | Recorder pentru replay taxiuri civile și incidente AUTO | Experimente | V1 | 014, 065, 028, 007, 206, 221 |
-| 208 | Propagarea stilului către taxiuri și civili | Autonomie | V1 | 110, 111, 058, 106 |
-| 209 | Revenue-ul flotei și review-uri ale curselor 0–5 | Economie | V1 | 063, 065, 137, 139, 208 |
-| 210 | Buton KPIs și grafice istorice ale flotei | UI | V1 | 209, 075, 082, 084 |
-| 211 | Trei misiuni noi pe zi și calendar stabil | Misiuni | V1 | 116, 117, 006, 009, 209 |
-| 212 | Progres și interfață pentru misiunile zilei | Misiuni | V1 | 211, 126, 063, 209 |
-| 213 | XP din misiuni și timp activ al jucătorului | Progres | V1 | 212, 125, 008, 009, 209 |
-| 214 | Feedbackul consecințelor fără pierdere XP | Progres | V1 | 213, 209, 073 |
-| 215 | Persistență pentru KPI-uri misiuni zilnice și XP | Persistență | V1 | 214, 210, 212, 131, 136 |
-| 216 | Regresii V1 pentru moduri KPI-uri daily și XP | Validare | V1 | 215, 141, 108, 208, 217, 205 |
-| 217 | Integrare AUTO MANUAL și LEARNING fără învățare accidentală | Control manual | V1 | 067, 069, 085, 112, 073, 080 |
-| 218 | Harness și rapoarte versionate de performanță | Fundație | V1 | 004, 019, 203, 008 |
-| 219 | Scheduler de simulare și protecție la suprasarcină | Fundație | V1 | 008, 010, 044, 218 |
-| 220 | Gate de performanță al flotei înainte de campanie și asseturi | Validare | V1 | 115, 065, 218, 219 |
-| 221 | Buget comun priorități și backpressure pentru workers | Fundație | V1 | 010, 203, 218 |
-| 222 | Pipeline plafonat pentru recorder checkpoint și autosave | Persistență | V1 | 090, 206, 207, 221, 218 |
-| 223 | Bugete de asseturi randare și calitate adaptivă | Babylon | V1 | 015, 016, 018, 203, 218 |
-| 224 | Gate de regresii performanță CI și soak complet | Validare | V1 | 159, 220, 221, 222, 223, 218, 228, 229, 230, 233, 234 |
-| 225 | Sesiuni Academie și Joacă liberă Haos | Experiență | V1 | 215, 205, 065, 070 |
-| 226 | Deblocare rapidă și resetul orașului cu stil păstrat | Experiență | V1 | 225, 030, 065, 206, 207 |
-| 227 | Decor destructibil și zone de joacă | Oraș și fizică | V1 | 226, 028, 042, 044, 223 |
-| 228 | Feedback audio vizual și replay al distrugerii | Asseturi și audio | V1 | 227, 148, 149, 207, 141 |
-| 229 | Popup cu slidere pentru control și confort | Interfață | V1 | 025, 081, 085, 070 |
-| 230 | Slidere de stil și versiuni MANUAL_TUNING | Profiluri și interfață | V1 | 229, 110, 114, 205, 102, 092 |
-| 231 | Catalog de provocări neobișnuite și evaluatori | Misiuni | V1 | 116, 040, 031, 227, 139 |
-| 232 | Director de provocări random și curse speciale | Misiuni | V1 | 231, 225, 061, 063, 064, 219 |
-| 233 | Interfață reluare recorduri și recompense pentru provocări | Misiuni și interfață | V1 | 232, 211, 212, 213, 126, 073, 225 |
-| 234 | Savefile complet cu checksum și încărcare atomică | Persistență | V1 | 135, 215, 225, 227, 229, 230, 233, 222 |
-| 235 | Regresii și playtest pentru distracție și revenire | Validare | V1 | 216, 224, 226, 228, 229, 230, 233, 234, 084 |
-| 236 | Compunerea în browser a lanțului V3 | Mers pe jos V3 | V3 | 202, 193, 194, 195, 196, 197 |
-| 237 | Virarea walker-ului în partea scurtă și simetrică | Mers pe jos V3 | V3 | 236 |
-| 238 | Coliziunea mașinii conduse cu decorul și clădirile, și orientarea decorului | Mers pe jos V3 | V3 | 236, 237, 256, 257 |
-| 239 | Direcția vizuală V4 și harness de capturi înainte/după | Calitate vizuală V4 | V4 | 238 |
-| 240 | Randare pe tot ecranul, la rezoluție HD și DPR real | Calitate vizuală V4 | V4 | 239 |
-| 241 | Antialiasing, tone mapping unitar și post-procesare | Calitate vizuală V4 | V4 | 240 |
-| 242 | Suprafață de drum fără goluri, teren până la orizont și limita hărții | Calitate vizuală V4 | V4 | 239 |
-| 243 | Cer, ceață atmosferică și iluminare din mediu (IBL) | Calitate vizuală V4 | V4 | 241, 242 |
-| 244 | Umbre reale pentru toată scena și ambient occlusion | Calitate vizuală V4 | V4 | 241 |
-| 245 | Materiale PBR pentru asfalt, marcaje, trotuar, borduri și iarbă | Calitate vizuală V4 | V4 | 243, 244 |
-| 246 | Clădiri cu fațade, ferestre, acoperișuri și variație | Calitate vizuală V4 | V4 | 245 |
-| 247 | Vehicule detaliate: caroserie, sticlă, jante, lumini și taxi recognoscibil | Calitate vizuală V4 | V4 | 243, 244 |
-| 248 | Personaj uman credibil: proporții, materiale și animație | Calitate vizuală V4 | V4 | 243, 244 |
-| 249 | Vegetație și mobilier stradal realiste | Calitate vizuală V4 | V4 | 245 |
-| 250 | Încadrarea camerei: FOV, înălțime, orbitare verticală și netezire | Calitate vizuală V4 | V4 | 240 |
-| 251 | Ecran de start, HUD de joc și eliminarea layoutului de debug | Calitate vizuală V4 | V4 | 240 |
-| 252 | Ora din zi, iluminat stradal și faruri | Calitate vizuală V4 | V4 | 246, 247, 249 |
-| 253 | Gate V4: calitate vizuală și performanță pe toate preseturile | Calitate vizuală V4 | V4 | 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 254, 255 |
-| 254 | Import modele 3D realiste: vehicule, personaj, clădiri și decor | Calitate vizuală V4 | V4 | 249 |
-| 255 | Modele 3D pentru clădiri și mobilierul stradal rămas | Calitate vizuală V4 | V4 | 254 |
-| 256 | Trafic AI vizibil în compunerea de browser | Flotă și curse | V3 | 058, 236 |
-| 257 | Mod AUTO/MANUAL, HUD de viteză și coliziune cu mașinile AI | Control manual | V3 | 236, 256, 067 |
-| 258 | Repară înălțimea vehiculelor, animația personajului și dispariția la intrare | Calitate vizuală V4 | V4 | 254 |
+| 259 | Gardă de sincronizare pentru documentația de stare și board | Documentație | V1 | — |
+| 260 | Shell-ul jocului și composition root pentru Academia jucabilă | Integrare joc | V1 | — |
+| 261 | Sesiuni Academie și Haos, schimbare, reset și recuperare | Sesiuni | V1 | 260 |
+| 262 | Flota live: 20–30 taxiuri și 20–40 civili, nu doar date în registry | Flotă și curse | V1 | 260 |
+| 263 | Selectarea oricărui taxi sau civil, camera și un singur scaun PLAYER | Interfață | V1 | 262 |
+| 264 | Cereri de curse live, coadă și dispecerizare către flota reală | Flotă și curse | V1 | 262 |
+| 265 | Ciclul complet al cursei: pickup, dropoff, pasager, ETA și HUD | Flotă și curse | V1 | 264 |
+| 266 | Economia live: revenue, review-uri, KPI și ceasul economic | Economie | V1 | 265 |
+| 267 | Panoul KPI, tabloul orașului și feedbackul consecințelor în joc | Interfață | V1 | 266 |
+| 268 | Modelul financiar al companiei: costuri, profit, cash și P&L | Companie | V1 | 266 |
+| 269 | Evoluția companiei: nivel, achiziții de vehicule și upgrade-uri | Companie | V1 | 268 |
+| 270 | Panoul companiei: profit, costuri, cash, flotă și investiții | Interfață | V1 | 268,269 |
+| 271 | Cele trei moduri live: AUTO, MANUAL, LEARNING și toate tranzițiile | Moduri și learning | V1 | 260,263 |
+| 272 | Telemetrie, oportunități și eligibilitate din condusul live | Moduri și learning | V1 | 271 |
+| 273 | Pipeline-ul de learning live: dovezi, worker, profil și activare | Moduri și learning | V1 | 272 |
+| 274 | Interfața de learning și profil: notificări, explicații, istoric și restore | Interfață | V1 | 273 |
+| 275 | Campania, tutorialul și panoul de misiuni în jocul live | Misiuni | V1 | 260,265,271 |
+| 276 | Trei misiuni zilnice, XP, nivel și progresul jucătorului în joc | Progres | V1 | 260,265,271 |
+| 277 | Provocările random, directorul, panoul și reluarea în joc | Misiuni | V1 | 260,265,271 |
+| 278 | Persistență live: autosave, checkpoint, savefile și recuperare | Persistență | V1 | 260,266,276 |
+| 279 | Setări, remapare taste și slidere de control/stil în joc | Interfață | V1 | 260 |
+| 280 | Camera first-person din poziția șoferului | Interfață | V1 | 260,263 |
+| 281 | Minimapa, harta de flotă și HUD-ul complet de joc | Interfață | V1 | 260,263 |
+| 282 | Fizica Rapier live pentru jucător și AI | Fizică | V1 | 260,262 |
+| 283 | Regulile de trafic live: semafoare, STOP, prioritate, yield și benzi | Trafic | V1 | 260,262,282 |
+| 284 | Traficul civil complet autonom și preluarea oricărei mașini | Trafic | V1 | 262,283 |
+| 285 | Decor destructibil, feedback audio și replay în joc | Haos | V1 | 282,283 |
+| 286 | Pietoni, treceri și pericole V2 în lumea live | Pietoni și pericole | V2 | 282,283 |
+| 287 | Gate V4, QA final, playtest și release verificat | Release | V4 | 259,260,261,262,263,264,265,266,267,268,269,270,271,272,273,274,275,276,277,278,279,280,281,282,283,284,285,286 |
 
-## Verificarea consistenței planului
+## Ordinea de lucru
 
-Rulează Validate-Board.ps1 pentru coloane/metadate/dependențe și Validate-Plan.ps1 pentru index, catalog, matrice și linkuri. Test-Validate-Plan.ps1 verifică detectarea regresiilor pe o copie temporară izolată. Noile IDs 203–235 aparțin V1 și sunt prerequisite ale unor task-uri cu IDs mai mici; se respectă graful, fără renumerotare. Lucrul la documentație nu finalizează aceste task-uri.
+1. **Fundația:** 259 (docs sync) și 260 (game shell).
+2. **Lumea live:** 261 (sesiuni), 262 (flotă), 263 (selecție), 264–265 (curse).
+3. **Economie și companie:** 266–270.
+4. **Moduri și learning:** 271–274.
+5. **Progres:** 275–277.
+6. **Persistență și UI:** 278–281.
+7. **Fizică, trafic, distracție:** 282–285.
+8. **V2:** 286.
+9. **Release:** 287.
 
-## Revizia 0.4: verificări de performanță
+Dependențele din fișiere sunt sursa de adevăr; ordinea de mai sus este o recomandare, nu o a doua matrice.
 
-218–224 și actualizările PBI existente implementează [contractul progresiv](../Docs/25-performanta-contracte-si-benchmark.md). performance_checks marchează probele necesare. Gate-ul 220 precede campania/asseturile finale; 224 precede livrarea. Noile task-uri sunt în To Do, fără rezultate de benchmark inventate.
+## Documentație pe zone
 
-## Revizia 0.5
+- [Starea implementării și lacunele](../Docs/31-stare-implementare-si-lacune.md)
+- [Companie: profit și evoluție](../Docs/32-companie-profit-si-evolutie.md)
+- [Produs și scope](../Docs/01-produs-si-scope.md)
+- [Flotă și curse](../Docs/07-flota-si-curse.md)
+- [Interfață, cameră și control](../Docs/08-interfata-camera-si-control.md)
+- [Învățarea stilului](../Docs/10-invatarea-stilului.md)
+- [Misiuni și progres](../Docs/13-misiuni-si-progres.md)
+- [KPI-uri, economie și review-uri](../Docs/22-kpi-economie-si-review-uri.md)
+- [Misiuni zilnice și XP](../Docs/23-misiuni-zilnice-si-experienta.md)
+- [Persistență](../Docs/15-salvare-si-import-export.md)
+- [Performanță](../Docs/25-performanta-contracte-si-benchmark.md)
+- [Validare](../Docs/18-validare-si-release.md)
 
-225–235 adaugă Haos/reset/distrugere, slidere, provocări random și savefile verificat. 017 include first-person, iar 214 este redefinit ca feedback/regresie fără pierdere XP, păstrând ID-ul și numele fișierului. 224 verifică costurile funcțiilor noi; 235 verifică integrarea/playtestul și condiționează 162. Toate task-urile rămân To Do; revizia documentației nu implementează jocul.
+## Validare
 
-## Revizia 0.6: calitate vizuală V4
+Din rădăcină:
 
-239–253 provin din [auditul vizual din 16 noiembrie 2026](../Docs/Evidence/visual-audit-2026-11-16/README.md) și implementează [Calitate vizuală V4](../Docs/30-calitate-vizuala-v4.md). Etapa V4 schimbă numai prezentarea (cu excepția limitei hărții din 242) și este închisă de gate-ul 253. Toate task-urile pornesc în To Do; crearea planului nu implementează nimic.
+```powershell
+& './PBI/Validate-Board.ps1'
+& './PBI/Validate-Plan.ps1'
+bun "$HOME/.agents/skills/loop-pbi/scripts/loop-pbi.ts" validate --root . --allow-project-commands
+```
+
+`Validate-Board.ps1` verifică plasarea fizică, statusul, owner-ul, dependențele și ciclurile. `Validate-Plan.ps1` verifică indexul, counturile, matricea Docs/21, acoperirea Docs/31 și linkurile locale. `loop-pbi validate` rulează aceleași comenzi prin configurația proiectului.
+
+## Reguli
+
+- Un task are un singur fișier; mută-l, nu îl copia.
+- Statusul din frontmatter trebuie să corespundă folderului.
+- Nu marca Done fără criterii, dovezi, verificări și mutare fizică.
+- Nu declara release-ul închis cât timp 287 are criterii deschise.
+- Nu folosi vechiul board ca dovadă că jocul este complet; folosește comportamentul observabil din buildul curent.
+
+[Regulile complete pentru agenți](AGENTS.md) rămân obligatorii.

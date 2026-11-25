@@ -114,3 +114,5 @@ raportate ca atare:
 PBI-ul care a găsit aceste defecte nu avea voie să modifice `src/`, deci ele sunt consemnate cu captură
 și pași de reproducere, nu ascunse. Confortul subiectiv și lizibilitatea pentru oameni cer playtest, care
 este `NOT_RUN`.
+
+**Stare 26.11.2026:** panoul de setări, sliderele și camera first-person nu sunt montate; butonul „Setări” este TODO. Vezi [Docs/31](../31-stare-implementare-si-lacune.md).

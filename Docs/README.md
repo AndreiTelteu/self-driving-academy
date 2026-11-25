@@ -1,6 +1,14 @@
 # Documentația Self Driving Academy
 
-Versiune 0.5 · 4 octombrie 2026. Aceste fișiere Markdown sunt planul curent al proiectului. Babylon.js este engine-ul confirmat. Gameplay-ul include condus realist, misiuni și o flotă care învață inclusiv greșelile jucătorului.
+Versiune 0.6 · 26 noiembrie 2026. Aceste fișiere Markdown sunt planul curent al proiectului. Babylon.js este engine-ul confirmat. Gameplay-ul țintă include condus realist, misiuni și o flotă care învață inclusiv greșelile jucătorului.
+
+## Stare curentă (26 noiembrie 2026)
+
+Boardul a fost resetat. Taskurile 001–258 sunt istorice; boardul curent are **29 de taskuri**, de la **259** la **287**, toate în To Do. Detaliile, dovezile vechi și diferența dintre „contract” și „jucabil” sunt în [Starea implementării și lacunele](31-stare-implementare-si-lacune.md).
+
+Jucabil în buildul curent: mers, intrare/ieșire, conducere de bază, AUTO/MANUAL, trafic AI civil, ora din zi și vizualul V4. **Nu** sunt montate: LEARNING, curse, pasageri, flotă selectabilă, KPI, misiuni, XP, salvare, companie, panouri, first-person, minimapă, sunet, decor destructibil, provocări, Haos, fizica Rapier și regulile de trafic.
+
+Profitul și evoluția companiei sunt o **propunere neconfirmată** în [Companie: profit și evoluție](32-companie-profit-si-evolutie.md), nu funcționalitate V1. Docs/22 rămâne contractul pentru revenue și ratings.
 
 ## Module
 
@@ -36,16 +44,18 @@ Versiune 0.5 · 4 octombrie 2026. Aceste fișiere Markdown sunt planul curent al
 | [Provocări random și revenire](28-provocari-random-si-revenire.md) | Clienți neobișnuiți, catalog, director, reluare și recorduri |
 | [Savefile și integritate](29-savefile-si-integritate.md) | Backup complet, checksum în browser și încărcare atomică |
 | [Calitate vizuală V4](30-calitate-vizuala-v4.md) | Imagine HD, lumină, umbre, materiale PBR, modele și UI de joc |
+| [Starea implementării și lacunele](31-stare-implementare-si-lacune.md) | Ce se joacă, ce este doar contract și ce lipsește, cu linkuri și PBI |
+| [Companie: profit și evoluție](32-companie-profit-si-evolutie.md) | Propunere pentru costuri, profit, cash, nivel și investiții; neconfirmată |
 
 ## Implementare și Kanban
 
-[Backlogul PBI](../PBI/README.md) conține 258 task-uri: V1 are 195 (001–162 și 203–235), V2 are 28 (163–190), V3 are 17 (191–202, 236–238, 256–257), V4 are 18 (239-255, 258–255). IDs sunt stabile; ordinea de lucru rezultă din graful dependențelor, inclusiv dependențe spre IDs noi mai mari. Toate sunt inițial în To Do. [Regulile pentru agenți](../PBI/AGENTS.md) cer mutarea efectivă To Do → In Progress → Done și verificarea finală obligatorie.
+[Backlogul PBI](../PBI/README.md) conține **29 de taskuri** noi, de la **259** la **287**, toate în To Do. Ele acoperă exact ce lipsește din jocul jucabil, nu modulele deja livrate. ID-urile 001–258 au fost retrase la 26 noiembrie 2026; istoricul rămâne în Git și în `Docs/Evidence/`, iar ID-urile nu se reutilizează. [Regulile pentru agenți](../PBI/AGENTS.md) cer mutarea efectivă To Do → In Progress → Done și verificarea finală obligatorie.
 
-[Catalogul JSON](driving-parameters.json) conține 80 de parametri propuși. [Matricea de acoperire](21-acoperire-functionalitati.md) leagă fiecare parametru de politică, estimare și gate de validare. V1 țintește 24; V2 extinde la 80; V3 adaugă mersul pe jos. V4 ridică calitatea vizuală la cererea utilizatorului din 16 noiembrie 2026.
+[Catalogul JSON](driving-parameters.json) conține 80 de parametri propuși. [Matricea de acoperire](21-acoperire-functionalitati.md) leagă acum fiecare lacună rămasă de un singur PBI și de documentația ei; maparea istorică a celor 80 de chei pe taskurile 046–187 este arhivă în Git. V1 țintește 24 de chei; V2 extinde la 80; V3 adaugă mersul pe jos. V4 ridică calitatea vizuală la cererea utilizatorului din 16 noiembrie 2026.
 
 ## Stare și istoric
 
-Bootstrapul aplicației browser TypeScript/Vite/Babylon.js și [backendul WebGPU/WebGL2](rendering-backend.md) sunt implementate; [README-ul proiectului](../README.md) documentează versiunile și comenzile locale. Fundația include contracte validate, identitate/random determinist, setări, registry-ul parametrilor, [event bus](event-bus.md) și [protocol workers](worker-protocol.md). Gameplay-ul și sistemele următoare rămân planificate. Valorile de calibrare și bugetele de performanță ale jocului sunt ținte de verificat. Task-urile nu sunt executate prin simpla creare a planului.
+Bootstrapul aplicației browser TypeScript/Vite/Babylon.js și [backendul WebGPU/WebGL2](rendering-backend.md) sunt implementate; [README-ul proiectului](../README.md) documentează versiunile și comenzile locale. Fundația include contracte validate, identitate/random determinist, setări, registry-ul parametrilor, [event bus](event-bus.md) și [protocol workers](worker-protocol.md). Buildul curent este un sandbox V3 de mers și condus; bucla de Academie nu este montată. Starea exactă și lacunele sunt în [Docs/31](31-stare-implementare-si-lacune.md). Valorile de calibrare și bugetele de performanță ale jocului sunt ținte de verificat. Task-urile nu sunt executate prin simpla creare a planului.
 
 [Planul inițial v0.1](Archive/GAME_DESIGN-v0.1.md) este păstrat pentru istoric. Page-ul creat anterior este tot o referință v0.1; nu este sincronizat automat cu documentele Markdown. Modificările viitoare de plan se fac în aceste module și în PBI-urile aferente.
 
@@ -82,6 +92,8 @@ Fundațiile suplimentare implementate sunt [bucla cu pas fix](fixed-tick.md), [m
 [Plannerul de rutare](route-planner.md) calculează trasee A* pe graful de benzi 033 cu cost explicit și versionat, destinații de tip bandă sau zonă de serviciu, rezultat explicit la lipsa rutei, cache plafonat cu invalidare și integrare cu coada schedulerului 219; nu acordă permisie de trecere și nu este dispecerul de flotă.
 
 ## Revizia 0.3
+
+> **Istoric.** Secțiunile de revizie descriu decizii din generația 001–258. Pentru starea curentă și boardul 259–287 vezi [Docs/31](31-stare-implementare-si-lacune.md) și [PBI/README](../PBI/README.md).
 
 Învățarea are loc numai în LEARNING; MANUAL permite intervenții fără schimbarea stilului. Taxiurile și civilii adoptă stilul comun. V1 include revenue și ratings cu grafice KPIs, trei misiuni zilnice și XP din misiuni/timp activ, fără pierderi XP, conform reviziei 0.5. Valorile economice și pragurile sunt propuneri de calibrare. Verifică boardul și planul cu PBI/Validate-Board.ps1 și PBI/Validate-Plan.ps1.
 

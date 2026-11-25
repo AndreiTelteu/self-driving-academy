@@ -111,3 +111,5 @@ istoricul flotei”. Ce este adevărat despre el:
   jucătorilor este `NOT_RUN`.
 - Un singur GPU real și un singur sistem de operare au fost probate pentru backend; NVIDIA, Intel,
   macOS, Linux, Firefox, Safari și dispozitivele mobile sunt `NOT_RUN`, cu motiv, nu presupuse.
+
+**Stare 26.11.2026:** KPI, review-urile și ledgerul economic nu sunt montate; nu se produce revenue în joc. Profitul/compania sunt o propunere separată în [Docs/32](../32-companie-profit-si-evolutie.md).

@@ -1,11 +1,21 @@
 [CmdletBinding()]
 param(
     [string[]]$RequireDone = @(),
-    [string]$BoardRoot = $PSScriptRoot
+    [string]$BoardRoot = ''
 )
 
 $ErrorActionPreference = 'Stop'
+if ([string]::IsNullOrWhiteSpace($BoardRoot)) { $BoardRoot = $PSScriptRoot }
+if ([string]::IsNullOrWhiteSpace($BoardRoot)) { $BoardRoot = Split-Path -Parent $MyInvocation.MyCommand.Path }
 $taskBoardRoot = (Resolve-Path -LiteralPath $BoardRoot).Path
+$taskBoardConfigPath = Join-Path $taskBoardRoot 'BOARD.json'
+$taskFirstId = 1
+$taskRetiredThrough = $null
+if (Test-Path -LiteralPath $taskBoardConfigPath -PathType Leaf) {
+    $taskBoardConfig = Get-Content -LiteralPath $taskBoardConfigPath -Raw -Encoding utf8 | ConvertFrom-Json
+    if ($null -ne $taskBoardConfig.firstId) { $taskFirstId = [int]$taskBoardConfig.firstId }
+    if ($null -ne $taskBoardConfig.retiredThrough) { $taskRetiredThrough = [int]$taskBoardConfig.retiredThrough }
+}
 $taskColumns = @('To Do', 'In Progress', 'Done')
 $taskEntries = @{}
 $taskCounts = [ordered]@{}
@@ -49,8 +59,9 @@ foreach ($taskColumn in $taskColumns) {
 if ($taskEntries.Count -eq 0) { throw 'Board fără PBI-uri' }
 $taskSortedIds = @($taskEntries.Keys | Sort-Object { [int]$_ })
 for ($taskIndex = 0; $taskIndex -lt $taskSortedIds.Count; $taskIndex++) {
-    if ([int]$taskSortedIds[$taskIndex] -ne ($taskIndex + 1)) { throw "Numerotare necontinuă la $($taskSortedIds[$taskIndex])" }
+    if ([int]$taskSortedIds[$taskIndex] -ne ($taskFirstId + $taskIndex)) { throw "Numerotare necontinuă la $($taskSortedIds[$taskIndex]); boardul începe la $taskFirstId" }
 }
+if ($null -ne $taskRetiredThrough -and $taskFirstId -le $taskRetiredThrough) { throw "firstId $taskFirstId nu poate fi sub retiredThrough $taskRetiredThrough" }
 foreach ($taskEntry in $taskEntries.Values) {
     foreach ($taskDep in $taskEntry.Dependencies) {
         if (-not $taskEntries.ContainsKey([string]$taskDep)) { throw "Dependență inexistentă $taskDep pentru $($taskEntry.Id)" }

@@ -105,3 +105,14 @@ Feedbackul consecințelor este un selector read-only peste agregările 209: `src
 **Numere reale** (din [Evidence/214-kpi-impact](Evidence/214-kpi-impact/README.md), 16/16 verificări): venit +500 cu rating 5 → 2, inversul −500 cu rating 2 → 5, ambele în scădere −800 și 5 → 1 cu un incident real și un review real cu nota 1; soldul 100,5 și nivelul 2 rămân identice după KPI în scădere, accident, obiectiv eșuat și credit negativ refuzat; o recompensă duplicată acordă 0 XP; un import de stil păstrează soldul; 146 de texte generate au 0 potriviri interzise; HUD-ul face 100 de citiri, 2 randări și 4 scrieri pentru 600 de tick-uri.
 
 **Limite.** Nivelul este `targeted`: costul UI este măsurat structural (citiri, randări, scrieri), nu prin FPS sau GPU pe hardware real. Feedbackul citește agregatele 209 și nu paginează ledgerul de review-uri, deci nu afișează motivele individuale ale unui review; acelea rămân în contractul 209. Montarea în stratul HUD al hostului și hotkey-ul rămân ale compoziției, ca la celelalte panouri.
+
+## Profit și evoluție companie — propunere 26 noiembrie 2026
+
+Contractul curent rămâne **revenue și ratings**, nu profit. Nu există costuri de operare, cash, valoare de flotă, nivel de companie sau investiții; acestea sunt descrise ca propunere neconfirmată în [Companie: profit și evoluție](32-companie-profit-si-evolutie.md).
+
+- Revenue: încasarea curselor, după rambursări.
+- Profit: revenue minus costuri versionate; poate fi negativ.
+- Cash: numerarul companiei; nu poate deveni negativ.
+- Evoluție: nivel de companie, achiziții și upgrade-uri, separate de XP.
+
+Taskurile propuse sunt 268 (finanțe), 269 (evoluție) și 270 (panou). Până la confirmarea produsului, ele rămân în To Do și nu schimbă formulele 209.

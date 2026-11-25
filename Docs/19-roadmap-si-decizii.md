@@ -98,3 +98,14 @@ V2 se închide ca un release **documentat și verificat, dar nevalidat pe hardwa
 **Ce se corectează în documentație.** [Catalogul parametrilor](11-catalog-parametri.md) afirma încă „estimarea și publicarea LEARNED rămân dezactivate până la implementarea estimatorilor", fals după 187: estimatorii sunt livrați, iar registrul derivă `estimable=true` pentru toate cele 80 de chei. Secțiunea a fost corectată cu starea reală și completată cu „Suport real după 187", care separă cele 24 de chei CORE livrate în bucla V1, cele 56 certificate dar rezervate și cele 15 cu provocare. Catalogul de date rămâne fail-closed: `implemented: false` în JSON nu s-a schimbat, iar suportul se citește numai din tabelul 187.
 
 **După V2.** Release-ul se poate declara `PASS` numai după o sesiune pe hardware real, pe aceeași revizie și ambele backenduri, după un fixture de harness cu pietoni și pericole, un soak pe workload-ul V2, un playtest uman și re-măsurarea dovezilor 224. Până atunci, FPS-ul nu este raportat, iar cele 56 de chei extinse rămân certificate, dar nepublicate.
+
+## Decizia din 26 noiembrie 2026 — integrare înainte de extindere
+
+Boardul 001–258 a fost retras, iar boardul curent are 29 de taskuri noi, 259–287, toate în To Do. Prioritatea nu mai este „încă un contract”, ci **montarea în joc** a shell-ului, sesiunilor, flotei, curselor, economiei, LEARNING-ului, misiunilor, XP-ului și salvării.
+
+Decizii de plan:
+
+- Un task Done trebuie să aibă comportament observabil în browser, nu doar module și teste izolate.
+- Compania cu costuri, profit, cash și evoluție este o propunere separată în [Companie: profit și evoluție](32-companie-profit-si-evolutie.md); nu se declară V1 până la confirmare.
+- Docs/21, Docs/31 și PBI/README se actualizează în același commit cu orice schimbare de scope.
+- Release-ul rămâne deschis cât timp [287](../PBI/To Do/287-v4-final-qa-release.md) are criterii neîndeplinite.

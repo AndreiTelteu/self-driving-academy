@@ -2,7 +2,19 @@
 
 Joc 3D pentru browser în care jucătorul conduce manual, iar taxiurile autonome și civilii îi adoptă stilul, inclusiv greșelile. Învățarea se face doar în LEARNING; MANUAL permite condus fără învățare. KPI-urile flotei, trei misiuni zilnice și XP urmăresc consecințele și progresul. Engine-ul ales este Babylon.js.
 
-Aplicația browser are bootstrap TypeScript/Vite și randare Babylon.js: preferă WebGPU, revine la WebGL2 verificat și oferă reîncercare după eșecul inițializării. Scena de bootstrap conține o cameră fixă și un cadru de culoare; gameplay-ul rămâne în PBI-urile următoare.
+Aplicația browser are bootstrap TypeScript/Vite și randare Babylon.js: preferă WebGPU, revine la WebGL2 verificat și oferă reîncercare după eșecul inițializării. Buildul curent este un **sandbox V3 de mers și condus**: personaj, intrare/ieșire, AUTO/MANUAL, trafic AI civil și vizualul V4. Bucla de Academie — flotă, curse, LEARNING, KPI, misiuni, XP, companie și salvare — nu este montată. Starea exactă și ce lipsește sunt în [Docs/31](Docs/31-stare-implementare-si-lacune.md); boardul curent are 29 de taskuri noi, 259–287.
+
+## Stare curentă
+
+| Zonă | Stare |
+| --- | --- |
+| Mers, intrare/ieșire, conducere de bază, AUTO/MANUAL, trafic AI, ora din zi, vizual V4 | **Jucabil** |
+| LEARNING, profil, propagare în flotă | **Contract**, neconectat |
+| Flotă 20–30 taxiuri, curse, pasageri, ETA | **Contract/parțial**, neconectat |
+| KPI, review-uri, misiuni, XP, provocări, Haos | **Contract**, neconectat |
+| Companie: costuri, profit, cash, evoluție | **Propunere neconfirmată** în [Docs/32](Docs/32-companie-profit-si-evolutie.md) |
+| Persistență, setări, first-person, minimapă, audio, destructibile | **Contract**, neconectat |
+| Fizica Rapier și regulile de trafic live | **Lipsesc** din buildul jucabil |
 
 ## Dezvoltare locală
 
@@ -35,8 +47,9 @@ npm run check
 
 `npm run format` aplică formatul în cod/configuri, iar `npm run check` include și verificarea arhitecturii. [Convențiile de dezvoltare](Docs/development-conventions.md) explică unitățile SI, validarea datelor `unknown`, scope-ul comenzilor și separarea ESLint de verificarea semantică TypeScript.
 
-- [Planul modular](Docs/README.md): 30 de documente de produs și arhitectură.
-- [Backlog Kanban](PBI/README.md): 257 task-uri cu ID-uri stabile și dependențe explicite.
+- [Planul modular](Docs/README.md): 32 de documente de produs și arhitectură.
+- [Backlog Kanban](PBI/README.md): 29 task-uri curente (259–287), cu dependențe explicite; 001–258 sunt istorice.
+- [Starea implementării și lacunele](Docs/31-stare-implementare-si-lacune.md): ce se joacă, ce este doar contract și ce lipsește.
 - [Workflow pentru agenți](PBI/AGENTS.md): To Do → In Progress → Done, cu mutare fizică obligatorie la finalizare.
 - [Catalogul parametrilor](Docs/11-catalog-parametri.md): 80 de parametri planificați; 24 pentru prima versiune.
 
@@ -54,7 +67,7 @@ Fundația de [identificatori și random determinist](Docs/identity-random.md) p�
 
 [Backendul Babylon](Docs/rendering-backend.md) documentează inițializarea, fallbackul și eliberarea resurselor. Fixture-ul `/tests/browser/rendering/` verifică backendurile reale, eșecurile injectate și retry-ul; dovezile disting aceste probe de benchmarkurile viitoare de gameplay/FPS.
 
-[Bucla cu pas fix](Docs/fixed-tick.md) rulează la 60 Hz, cu recuperare plafonată și pauză explicită de suprasarcină. [Adaptorul de scenă](Docs/scene-adapter.md) păstrează identitatea entităților la înlocuirea reprezentării vizuale. [Schema hărții](Docs/map-schema.md) separă geometria de regulile rutiere și validează legăturile, mișcările și accesibilitatea serviciilor. Aceste API-uri sunt fundații testate; bootstrapul browser nu conține încă o lume rutieră sau vehicule simulate.
+[Bucla cu pas fix](Docs/fixed-tick.md) rulează la 60 Hz, cu recuperare plafonată și pauză explicită de suprasarcină. [Adaptorul de scenă](Docs/scene-adapter.md) păstrează identitatea entităților la înlocuirea reprezentării vizuale. [Schema hărții](Docs/map-schema.md) separă geometria de regulile rutiere și validează legăturile, mișcările și accesibilitatea serviciilor. Aceste API-uri sunt fundații testate; buildul browser conține acum lumea V3, personajul, taxiul și traficul AI civil, dar nu bucla completă de Academie.
 
 [Lifecycle-ul aplicației](Docs/app-lifecycle.md) oferă Pornește/Pauză/Reia/Reîncarcă în bootstrap și exclude timpul petrecut în pauză sau background din simulare. Fixture-ul `/tests/browser/app-lifecycle/` verifică tranzițiile, erorile și cleanup-ul repetat.
 
@@ -70,3 +83,7 @@ Din rădăcina proiectului, în PowerShell:
 Etapele planificate sunt V1 cu gameplay, flotă și învățare inițială; V2 cu întregul catalog de parametri; V3 cu mers pe jos și intrare/ieșire din mașini.
 
 V1 include și Joacă liberă / Haos cu decor destructibil, provocări random, cameră first-person, slidere de control/stil și savefile complet cu checksum. XP nu scade prin gameplay. Aceste funcționalități sunt planificate în backlog.
+
+## Stare după resetarea boardului — 26 noiembrie 2026
+
+Mersul pe jos V3 este deja livrat, iar buildul curent este un sandbox de mers și condus. Boardul vechi 001–258 a fost retras; boardul curent are 29 de taskuri, 259–287, toate în To Do. Vezi [Docs/31](Docs/31-stare-implementare-si-lacune.md) și [PBI/README](PBI/README.md).

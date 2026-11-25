@@ -374,3 +374,9 @@ translație minimă, alunecare, aceeași determinare. `WalkWorldStats` are câmp
 harta implicită. Contractul 238 și testele lui sunt neschimbate; solverul nu are cod nou. Vizibil: parapetul
 `src/rendering/babylon/world-edge-scene.ts` (grindă de oțel pe stâlpi, la 6 cm în afara limitei) și terenul din
 [documentul 30](30-calitate-vizuala-v4.md). Costul simulării: [Evidence/242-road-world-edge/sim-cost.txt](Evidence/242-road-world-edge/sim-cost.txt).
+
+## Starea după resetarea boardului — 26 noiembrie 2026
+
+Secțiunile de mai sus descriu livrarea V3 din generația 001–258. Între timp, 236/256/257 au adăugat compunerea de browser pentru personaj, taxi, trafic AI civil și AUTO/MANUAL. Totuși, buildul jucabil nu are LEARNING, curse, pasageri, flotă selectabilă, KPI, misiuni, XP, companie, salvare, first-person, minimapă, audio, destructibile, fizica Rapier sau reguli de trafic.
+
+Boardul curent are 29 de taskuri noi, 259–287. Starea exactă și ce lipsește sunt în [Docs/31](31-stare-implementare-si-lacune.md); pașii de integrare sunt în [PBI/README](../PBI/README.md). Vechiul verdict `HEADLESS_CONTRACT` rămâne istoric și nu mai descrie singur buildul.

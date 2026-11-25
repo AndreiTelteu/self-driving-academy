@@ -118,3 +118,5 @@ Butonul din HUD se numește **„Deblochează mașina”** și are ca tastă imp
   gameplay.
 - Scorul din Haos rămâne record local. Nu există leaderboard competitiv și nu există promisiune de
   recompensă externă.
+
+**Stare 26.11.2026:** Academie/Haos, recuperarea și resetul cu stil păstrat nu sunt montate în buildul jucabil. Vezi [Docs/31](../31-stare-implementare-si-lacune.md).

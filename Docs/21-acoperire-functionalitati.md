@@ -1,140 +1,58 @@
-# Acoperirea funcționalităților prin PBI
+# Acoperirea funcționalităților rămase prin PBI
 
-Versiune 0.5 · 4 octombrie 2026. Parte din [planul complet](README.md).
+Versiune 0.6 · 26 noiembrie 2026. Boardul a fost resetat; ID-urile 001–258 sunt istorice, iar taskurile curente încep la 259. Fiecare rând leagă o lacună observabilă de un singur PBI și de documentația care o descrie complet.
 
-## Module și intervale de task-uri
+## Matrice
 
-ID-urile rămân stabile la mutarea între coloane. Găsește task-ul prin prefixul numeric în PBI; folderul lui este statusul curent. Indexul de mai jos nu copiază statusuri care ar putea deveni depășite.
+| Domeniu | Ce lipsește | PBI | Documentație |
+| --- | --- | --- | --- |
+| Documentație | Documentația de stare, counturile și linkurile nu au nicio verificare automată; după resetarea boardului pot diverge din nou. | 259 | [31-stare-implementare-si-lacune](31-stare-implementare-si-lacune.md), [18-validare-si-release](18-validare-si-release.md), [25-performanta-contracte-si-benchmark](25-performanta-contracte-si-benchmark.md), [validation-policy](validation-policy.md) |
+| Integrare joc | `src/main.ts` montează doar compunerea V3; nu există un composition root care să ruleze împreună sesiunea, flota, cursele, learning-ul, economia, misiunile și salvarea. | 260 | [02-arhitectura-si-contracte](02-arhitectura-si-contracte.md), [08-interfata-camera-si-control](08-interfata-camera-si-control.md), [15-salvare-si-import-export](15-salvare-si-import-export.md), [25-performanta-contracte-si-benchmark](25-performanta-contracte-si-benchmark.md), [31-stare-implementare-si-lacune](31-stare-implementare-si-lacune.md) |
+| Sesiuni | Sesiunea este hardcodată `v3-composition-236`; nu există alegere Academie/Haos, checkpoint propriu, schimbare sau reset cu stil păstrat. | 261 | [26-joaca-libera-haos-si-distrugere](26-joaca-libera-haos-si-distrugere.md), [15-salvare-si-import-export](15-salvare-si-import-export.md), [29-savefile-si-integritate](29-savefile-si-integritate.md), [31-stare-implementare-si-lacune](31-stare-implementare-si-lacune.md) |
+| Flotă și curse | Registry-ul creează 20 de taxiuri doar ca date; în lume există un taxi și 24 de civili AI. Nu există flotă de taxiuri simulată. | 262 | [07-flota-si-curse](07-flota-si-curse.md), [fleet-registry](fleet-registry.md), [civil-traffic](civil-traffic.md), [city-style](city-style.md), [31-stare-implementare-si-lacune](31-stare-implementare-si-lacune.md) |
+| Interfață | Nu există listă/hartă de flotă; mașinile AI refuză intrarea, iar în lume doar taxiul parcat și civilul static sunt preluabile. | 263 | [08-interfata-camera-si-control](08-interfata-camera-si-control.md), [fleet-panel](fleet-panel.md), [map-selection](map-selection.md), [vehicle-switch](vehicle-switch.md), [vehicle-picking](vehicle-picking.md), [31-stare-implementare-si-lacune](31-stare-implementare-si-lacune.md) |
+| Flotă și curse | Nu există cereri de curse, coadă sau dispecer în joc; taxiurile nu primesc și nu execută curse. | 264 | [07-flota-si-curse](07-flota-si-curse.md), [ride-demand](ride-demand.md), [dispatcher](dispatcher.md), [fleet-health](fleet-health.md), [31-stare-implementare-si-lacune](31-stare-implementare-si-lacune.md) |
+| Flotă și curse | Nu există ciclu de cursă în joc: pickup/dropoff fizic, pasager, ETA, progres și HUD de cursă lipsesc. | 265 | [07-flota-si-curse](07-flota-si-curse.md), [ride-fsm](ride-fsm.md), [pickup](pickup.md), [dropoff](dropoff.md), [eta](eta.md), [passenger-visual](passenger-visual.md), [hud](hud.md), [31-stare-implementare-si-lacune](31-stare-implementare-si-lacune.md) |
+| Economie | Ledgerul 209, review-urile și bucketurile KPI există ca module, dar în joc nu se produce revenue, rating sau istoric. | 266 | [22-kpi-economie-si-review-uri](22-kpi-economie-si-review-uri.md), [07-flota-si-curse](07-flota-si-curse.md), [metric-service](metric-service.md), [behavior-metrics](behavior-metrics.md), [comfort-metrics](comfort-metrics.md), [29-savefile-si-integritate](29-savefile-si-integritate.md), [31-stare-implementare-si-lacune](31-stare-implementare-si-lacune.md) |
+| Interfață | Pop-up-ul KPI, tabloul orașului și feedbackul 214 sunt implementate ca panouri, dar nu sunt montate; nu există buton sau hotkey în joc. | 267 | [22-kpi-economie-si-review-uri](22-kpi-economie-si-review-uri.md), [city-dashboard](city-dashboard.md), [ui-accessibility](ui-accessibility.md), [responsive-layout](responsive-layout.md), [31-stare-implementare-si-lacune](31-stare-implementare-si-lacune.md) |
+| Companie | Documentația definește doar revenue, explicit nu profit; nu există costuri de operare, cash, profit sau P&L de companie. | 268 | [32-companie-profit-si-evolutie](32-companie-profit-si-evolutie.md), [22-kpi-economie-si-review-uri](22-kpi-economie-si-review-uri.md), [07-flota-si-curse](07-flota-si-curse.md), [29-savefile-si-integritate](29-savefile-si-integritate.md), [31-stare-implementare-si-lacune](31-stare-implementare-si-lacune.md) |
+| Companie | Nu există evoluție de companie: nici nivel, nici cash de investit, nici achiziții sau upgrade-uri. XP-ul jucătorului nu este evoluția companiei. | 269 | [32-companie-profit-si-evolutie](32-companie-profit-si-evolutie.md), [13-misiuni-si-progres](13-misiuni-si-progres.md), [23-misiuni-zilnice-si-experienta](23-misiuni-zilnice-si-experienta.md), [07-flota-si-curse](07-flota-si-curse.md), [31-stare-implementare-si-lacune](31-stare-implementare-si-lacune.md) |
+| Interfață | Nu există nicio interfață pentru companie: profit, costuri, cash, valoare de flotă și investiții nu pot fi inspectate. | 270 | [32-companie-profit-si-evolutie](32-companie-profit-si-evolutie.md), [22-kpi-economie-si-review-uri](22-kpi-economie-si-review-uri.md), [ui-accessibility](ui-accessibility.md), [responsive-layout](responsive-layout.md), [31-stare-implementare-si-lacune](31-stare-implementare-si-lacune.md) |
+| Moduri și learning | Există doar `M` între AUTO și MANUAL. `L`, LEARNING, segmentele 069 și continuitatea la tranziție nu sunt montate. | 271 | [08-interfata-camera-si-control](08-interfata-camera-si-control.md), [10-invatarea-stilului](10-invatarea-stilului.md), [mode-controls](mode-controls.md), [three-modes](three-modes.md), [manual-trip](manual-trip.md), [takeover-continuity](takeover-continuity.md), [control-authority](control-authority.md), [31-stare-implementare-si-lacune](31-stare-implementare-si-lacune.md) |
+| Moduri și learning | Nu se înregistrează inputul, comenzile, contextul și oportunitățile jucătorului; pipeline-ul de learning nu are date live. | 272 | [09-telemetrie-si-oportunitati](09-telemetrie-si-oportunitati.md), [10-invatarea-stilului](10-invatarea-stilului.md), [telemetry-samples](telemetry-samples.md), [learning-evidence](learning-evidence.md), [behavior-metrics](behavior-metrics.md), [learning-edgecases](learning-edgecases.md), [31-stare-implementare-si-lacune](31-stare-implementare-si-lacune.md) |
+| Moduri și learning | Estimatoarele, worker-ul, profilul 109 și activarea 110 există ca module, dar nu sunt conectate la segmentele live; orașul folosește un profil default. | 273 | [10-invatarea-stilului](10-invatarea-stilului.md), [12-profiluri-si-propagare](12-profiluri-si-propagare.md), [learning-worker](learning-worker.md), [profile-pipeline](profile-pipeline.md), [profile-activation](profile-activation.md), [learning-epoch](learning-epoch.md), [early-learning-loop](early-learning-loop.md), [31-stare-implementare-si-lacune](31-stare-implementare-si-lacune.md) |
+| Interfață | Panourile de notificări, explicații, profil și istoric există, dar nu sunt montate; jucătorul nu vede ce a învățat orașul. | 274 | [08-interfata-camera-si-control](08-interfata-camera-si-control.md), [10-invatarea-stilului](10-invatarea-stilului.md), [learning-notifications](learning-notifications.md), [learning-explanation](learning-explanation.md), [profile-panel](profile-panel.md), [profile-history](profile-history.md), [profile-restore](profile-restore.md), [profile-ui-binding](profile-ui-binding.md), [31-stare-implementare-si-lacune](31-stare-implementare-si-lacune.md) |
+| Misiuni | Catalogul de campanie, tutorialul și panoul de misiuni există, dar nu sunt montate; nu există obiective live sau reluare. | 275 | [13-misiuni-si-progres](13-misiuni-si-progres.md), [08-interfata-camera-si-control](08-interfata-camera-si-control.md), [31-stare-implementare-si-lacune](31-stare-implementare-si-lacune.md) |
+| Progres | Daily-ul, XP, nivelul și panoul de progres există ca module, dar nu sunt montate; jocul nu acordă XP și nu are misiuni zilnice. | 276 | [23-misiuni-zilnice-si-experienta](23-misiuni-zilnice-si-experienta.md), [13-misiuni-si-progres](13-misiuni-si-progres.md), [22-kpi-economie-si-review-uri](22-kpi-economie-si-review-uri.md), [31-stare-implementare-si-lacune](31-stare-implementare-si-lacune.md) |
+| Misiuni | Catalogul, directorul și panoul de provocări există, dar nu sunt montate; jocul nu oferă provocări random sau reluare. | 277 | [28-provocari-random-si-revenire](28-provocari-random-si-revenire.md), [07-flota-si-curse](07-flota-si-curse.md), [26-joaca-libera-haos-si-distrugere](26-joaca-libera-haos-si-distrugere.md), [31-stare-implementare-si-lacune](31-stare-implementare-si-lacune.md) |
+| Persistență | Modulele de persistență există, dar jocul nu salvează nimic: nu există autosave, load, export/import sau recuperare după reload. | 278 | [15-salvare-si-import-export](15-salvare-si-import-export.md), [29-savefile-si-integritate](29-savefile-si-integritate.md), [25-performanta-contracte-si-benchmark](25-performanta-contracte-si-benchmark.md), [31-stare-implementare-si-lacune](31-stare-implementare-si-lacune.md) |
+| Interfață | Butonul „Setări” din start și pauză face `console.log`; panourile de setări, remapare și slidere nu sunt montate. | 279 | [08-interfata-camera-si-control](08-interfata-camera-si-control.md), [27-reglaje-hud-si-camera](27-reglaje-hud-si-camera.md), [game-settings](game-settings.md), [key-remapping](key-remapping.md), [ui-accessibility](ui-accessibility.md), [31-stare-implementare-si-lacune](31-stare-implementare-si-lacune.md) |
+| Interfață | Există doar camera de urmărire; `C` și camera first-person din scaunul șoferului nu sunt montate. | 280 | [08-interfata-camera-si-control](08-interfata-camera-si-control.md), [27-reglaje-hud-si-camera](27-reglaje-hud-si-camera.md), [vehicle-camera](vehicle-camera.md), [keyboard-input](keyboard-input.md), [31-stare-implementare-si-lacune](31-stare-implementare-si-lacune.md) |
+| Interfață | HUD-ul live are doar viteză și mod; minimapa, ruta, markerii de flotă, obiectivul și sesiunea lipsesc. | 281 | [08-interfata-camera-si-control](08-interfata-camera-si-control.md), [27-reglaje-hud-si-camera](27-reglaje-hud-si-camera.md), [minimap](minimap.md), [hud](hud.md), [responsive-layout](responsive-layout.md), [31-stare-implementare-si-lacune](31-stare-implementare-si-lacune.md) |
+| Fizică | Mașina condusă folosește un adaptor cinematic, nu Rapier; nu există roți, suspensie, daune sau recuperare fizică în joc. | 282 | [05-vehicule-si-fizica](05-vehicule-si-fizica.md), [physics-adapter](physics-adapter.md), [vehicle-controller](vehicle-controller.md), [wheel-dynamics](wheel-dynamics.md), [vehicle-damage](vehicle-damage.md), [vehicle-recovery](vehicle-recovery.md), [physics-calibration](physics-calibration.md), [31-stare-implementare-si-lacune](31-stare-implementare-si-lacune.md) |
+| Trafic | Semaforii sunt randați, dar traficul live are `signals: []`; STOP-ul este decorativ, iar prioritatea, yield-ul și schimbările de bandă nu sunt active. | 283 | [06-autonomie-si-trafic](06-autonomie-si-trafic.md), [signals](signals.md), [stop-policy](stop-policy.md), [stop-rules](stop-rules.md), [priority-rules](priority-rules.md), [yield-policy](yield-policy.md), [lane-change-policy](lane-change-policy.md), [blocked-recovery](blocked-recovery.md), [intersection-conflicts](intersection-conflicts.md), [31-stare-implementare-si-lacune](31-stare-implementare-si-lacune.md) |
+| Trafic | Traficul AI live folosește doar cruise/following, nu respectă semafoare și nu poate fi preluat; nu este autonomia documentată. | 284 | [07-flota-si-curse](07-flota-si-curse.md), [civil-traffic](civil-traffic.md), [browser-ai-traffic](browser-ai-traffic.md), [vehicle-switch](vehicle-switch.md), [manual-trip](manual-trip.md), [31-stare-implementare-si-lacune](31-stare-implementare-si-lacune.md) |
+| Haos | Decorul destructibil 227, feedbackul audio 228 și replay-ul nu sunt conectate la compunerea din browser. | 285 | [26-joaca-libera-haos-si-distrugere](26-joaca-libera-haos-si-distrugere.md), [16-asseturi-vizual-si-audio](16-asseturi-vizual-si-audio.md), [31-stare-implementare-si-lacune](31-stare-implementare-si-lacune.md) |
+| V2 | Modulele V2 de pietoni, treceri și pericole există, dar nu sunt montate în lumea jucabilă. | 286 | [20-extensii-si-mers-pe-jos](20-extensii-si-mers-pe-jos.md), [06-autonomie-si-trafic](06-autonomie-si-trafic.md), [crosswalk-zones](crosswalk-zones.md), [31-stare-implementare-si-lacune](31-stare-implementare-si-lacune.md) |
+| Release | Gate-ul V4 este singurul task rămas în vechiul board; nu există un release end-to-end, playtest uman sau dovadă hardware. | 287 | [30-calitate-vizuala-v4](30-calitate-vizuala-v4.md), [18-validare-si-release](18-validare-si-release.md), [25-performanta-contracte-si-benchmark](25-performanta-contracte-si-benchmark.md), [validation-policy](validation-policy.md), [performance-harness](performance-harness.md), [31-stare-implementare-si-lacune](31-stare-implementare-si-lacune.md) |
 
-| Funcționalitate | PBI de început și final | Plan |
-| --- | --- | --- |
-| Engine Babylon et lifecycle | 011 → 020 | [Document](03-babylon-engine.md) |
-| Fizică realistă și clase | 021 → 031 | [Document](05-vehicule-si-fizica.md) |
-| Oraș benzi și rutare | 032 → 043 | [Document](04-oras-si-retea-rutiera.md) |
-| Autonomie și greșeli | 045 → 056 | [Document](06-autonomie-si-trafic.md) |
-| Flotă și curse | 057 → 065 | [Document](07-flota-si-curse.md) |
-| Orice mașină și hotkey | 066 → 072 | [Document](08-interfata-camera-si-control.md) |
-| HUD flotă și accesibilitate | 073 → 084 | [Document](08-interfata-camera-si-control.md) |
-| Demonstrații și oportunități | 085 → 091 | [Document](09-telemetrie-si-oportunitati.md) |
-| Învățarea inițială | 092 → 108 | [Document](10-invatarea-stilului.md) |
-| Profil comun și activare | 109 → 115 | [Document](12-profiluri-si-propagare.md) |
-| Misiuni și campanie | 116 → 126 | [Document](13-misiuni-si-progres.md) |
-| Salvare și export | 127 → 136 | [Document](15-salvare-si-import-export.md) |
-| Statistici și comparații | 137 → 144 | [Document](14-experimente-si-indicatori.md) |
-| Asseturi și audio | 145 → 150 | [Document](16-asseturi-vizual-si-audio.md) |
-| QA performanță și V1 | 151 → 162 | [Document](18-validare-si-release.md) |
-| Întregul catalog și V2 | 163 → 190 | [Document](20-extensii-si-mers-pe-jos.md) |
-| Personaj și V3 | 191 → 202 | [Document](20-extensii-si-mers-pe-jos.md) |
-| Hardware și prototip timpuriu | 203, 204 | [Document](24-milestone-timpuriu-si-contracte.md) |
-| Barieră learning, checkpoint și recorder | 205, 206, 207 | [Document](15-salvare-si-import-export.md) |
-| Stil comun pentru civili | 208 | [Document](12-profiluri-si-propagare.md) |
-| Economie, reviews și grafice KPIs | 209, 210 | [Document](22-kpi-economie-si-review-uri.md) |
-| Trei misiuni zilnice, credite XP și feedback fără pierderi | 211, 212, 213, 214 | [Document](23-misiuni-zilnice-si-experienta.md) |
-| Salvare și QA ale reviziei V1 | 215, 216 | [Document](18-validare-si-release.md) |
-| AUTO/MANUAL/LEARNING integrate | 217 | [Document](08-interfata-camera-si-control.md) |
-| Harness, scheduler și gate timpuriu de flotă | 218, 219, 220 | [Document](25-performanta-contracte-si-benchmark.md) |
-| Bugete workers, date și randare/asseturi | 221, 222, 223 | [Document](25-performanta-contracte-si-benchmark.md) |
-| Gate CI și soak de performanță | 224 | [Document](25-performanta-contracte-si-benchmark.md) |
-| Academie/Haos și recuperarea lumii | 225, 226 | [Document](26-joaca-libera-haos-si-distrugere.md) |
-| Decor destructibil, sunet, efecte și replay | 227, 228 | [Document](26-joaca-libera-haos-si-distrugere.md) |
-| Slidere de control și stil | 229, 230 | [Document](27-reglaje-hud-si-camera.md) |
-| Cameră first-person și HUD simplu | 017, 073, 079, 081 | [Document](27-reglaje-hud-si-camera.md) |
-| Catalog/director/UI provocări random | 231, 232, 233 | [Document](28-provocari-random-si-revenire.md) |
-| Savefile complet cu checksum | 234 | [Document](29-savefile-si-integritate.md) |
-| Regresii experiență și playtest | 235 | [Document](18-validare-si-release.md) |
-| Calitate vizuală V4 | 239 → 255, 258 | [Document](30-calitate-vizuala-v4.md) |
+## Catalogul de parametri
 
-## Acoperirea celor 80 de parametri
+Cele 80 de chei rămân definite în [Catalogul parametrilor](11-catalog-parametri.md) și în [driving-parameters.json](driving-parameters.json); 24 sunt ținte inițiale, 56 sunt extensii. Maparea istorică a cheilor pe taskurile 046–187 este arhivă în Git și nu mai face parte din boardul curent. Modulele, estimatoarele și dovezile lor rămân sursa tehnică pentru chei; noile taskuri 272–274 și 282–286 leagă aceste module de bucla live.
 
-Fiecare cheie are un PBI de folosire în politică și unul de estimare. Gate-ul V1 verifică cele 24 M; gate-ul V2 verifică toate cele 80. Gruparea într-un PBI nu permite omiterea unei chei: criteriile și dovezile trebuie îndeplinite pentru fiecare.
+## Etape
 
-| Cheie | Etapă | Politică | Estimare | Gate |
-| --- | --- | --- | --- | --- |
-| speed_delta_urban | V1 | 046 | 094 | 108 |
-| speed_delta_residential | V1 | 046 | 094 | 108 |
-| speed_delta_arterial | V2 | 167 | 168 | 187 |
-| curve_lateral_accel | V1 | 046 | 094 | 108 |
-| intersection_approach_speed | V1 | 046 | 094 | 108 |
-| cruise_speed_variability | V2 | 167 | 168 | 187 |
-| overtake_speed_bonus | V2 | 167 | 168 | 187 |
-| cruise_accel_deadband | V2 | 167 | 168 | 187 |
-| desired_acceleration | V1 | 047 | 095 | 108 |
-| comfort_deceleration | V1 | 047 | 095 | 108 |
-| acceleration_jerk | V1 | 047 | 095 | 108 |
-| braking_jerk | V2 | 169 | 170 | 187 |
-| throttle_release_delay | V2 | 169 | 170 | 187 |
-| brake_reaction_delay | V1 | 047 | 095 | 108 |
-| launch_intensity | V2 | 169 | 170 | 187 |
-| coasting_bias | V2 | 169 | 170 | 187 |
-| following_time_headway | V1 | 048 | 096 | 108 |
-| following_min_gap | V1 | 048 | 096 | 108 |
-| queue_standstill_gap | V1 | 048 | 096 | 108 |
-| cutin_brake_response | V2 | 171 | 172 | 187 |
-| following_speed_gain | V1 | 048 | 096 | 108 |
-| closing_ttc_threshold | V2 | 171 | 172 | 187 |
-| leader_change_delay | V2 | 171 | 172 | 187 |
-| following_hysteresis | V2 | 171 | 172 | 187 |
-| red_stop_probability | V1 | 050 | 097 | 108 |
-| yellow_stop_probability | V2 | 173 | 174 | 187 |
-| green_start_delay | V1 | 050 | 097 | 108 |
-| red_stop_line_offset | V1 | 050 | 097 | 108 |
-| red_run_gap_acceptance | V2 | 173 | 174 | 187 |
-| yellow_commit_time | V2 | 173 | 174 | 187 |
-| green_launch_acceleration | V2 | 173 | 174 | 187 |
-| late_red_brake_threshold | V1 | 050 | 097 | 108 |
-| stop_full_probability | V1 | 051 | 098 | 108 |
-| stop_dwell_time | V1 | 051 | 098 | 108 |
-| stop_line_offset | V1 | 051 | 098 | 108 |
-| yield_time_gap | V1 | 052 | 098 | 108 |
-| rolling_stop_speed | V2 | 175 | 176 | 187 |
-| priority_assertiveness | V2 | 175 | 176 | 187 |
-| allway_stop_patience | V2 | 175 | 176 | 187 |
-| blocked_intersection_entry_probability | V2 | 175 | 176 | 187 |
-| lane_change_front_gap | V1 | 053 | 099 | 108 |
-| lane_change_back_gap | V1 | 053 | 099 | 108 |
-| lane_change_speed_gain | V1 | 053 | 099 | 108 |
-| lane_change_cooldown | V1 | 053 | 099 | 108 |
-| lane_change_duration | V2 | 177 | 178 | 187 |
-| signal_lead_time | V2 | 177 | 178 | 187 |
-| signal_use_probability | V2 | 177 | 178 | 187 |
-| pass_on_right_probability | V2 | 177 | 178 | 187 |
-| lane_center_offset | V2 | 179 | 180 | 187 |
-| steering_response_time | V2 | 179 | 180 | 187 |
-| steering_rate_limit | V2 | 179 | 180 | 187 |
-| turn_entry_speed | V2 | 179 | 180 | 187 |
-| turn_exit_acceleration | V2 | 179 | 180 | 187 |
-| corner_cutting_bias | V2 | 179 | 180 | 187 |
-| lateral_clearance | V2 | 179 | 180 | 187 |
-| lateral_correction_deadband | V2 | 179 | 180 | 187 |
-| route_time_weight | V2 | 181 | 182 | 187 |
-| route_distance_weight | V2 | 181 | 182 | 187 |
-| route_turn_penalty | V2 | 181 | 182 | 187 |
-| route_signal_penalty | V2 | 181 | 182 | 187 |
-| route_congestion_penalty | V2 | 181 | 182 | 187 |
-| reroute_patience | V2 | 181 | 182 | 187 |
-| u_turn_willingness | V2 | 181 | 182 | 187 |
-| reverse_recovery_duration | V2 | 181 | 182 | 187 |
-| pedestrian_yield_probability | V2 | 183 | 184 | 187 |
-| pedestrian_clearance | V2 | 183 | 184 | 187 |
-| hazard_reaction_delay | V2 | 183 | 184 | 187 |
-| obstacle_clearance | V2 | 183 | 184 | 187 |
-| emergency_brake_intensity | V2 | 183 | 184 | 187 |
-| evasive_steer_willingness | V2 | 183 | 184 | 187 |
-| crosswalk_approach_speed | V2 | 183 | 184 | 187 |
-| horn_use_probability | V2 | 183 | 184 | 187 |
-| pickup_approach_speed | V2 | 185 | 186 | 187 |
-| pickup_curb_distance | V2 | 185 | 186 | 187 |
-| pickup_stop_precision | V2 | 185 | 186 | 187 |
-| pickup_dwell_time | V2 | 185 | 186 | 187 |
-| dropoff_approach_speed | V2 | 185 | 186 | 187 |
-| dropoff_curb_distance | V2 | 185 | 186 | 187 |
-| occupied_acceleration_scale | V2 | 185 | 186 | 187 |
-| occupied_lateral_accel_scale | V2 | 185 | 186 | 187 |
+| Etapă | Ce acoperă |
+| --- | --- |
+| V1 | Shell jucabil, sesiuni, flotă, curse, economie, companie, moduri, learning, misiuni, XP, persistență, UI, fizică, trafic, destructibile |
+| V2 | Pietoni, treceri și pericole live |
+| V3 | Mersul pe jos este deja livrat; integrarea lui este în V1 |
+| V4 | Gate vizual, QA final, playtest și release |
 
-## Închiderea completă
+## Reguli de acoperire
 
-V1 este închis de PBI 162, V2 de 190, V3 de 202 (cu extensia 238 în validator), iar V4 de 253. Aceste gates depind de întregul lanț de livrare și nu pot fi mutate în Done înaintea verificărilor. Task-urile de release produc artefacte și dovada criteriilor; nu execută implicit o publicare externă necerută.
-
-## Metadate și gates
-
-PBI-urile de politică/estimare declară parameter_role și parameter_keys în frontmatter. Validate-Plan.ps1 verifică fiecare cheie din matrice față de aceste metadate și că gate-ul depinde tranzitiv de ambele task-uri. Toate cheile rămân implemented=false în catalogul de proiectare până la implementarea verificată. Gate-ul 162 include 203–217; V2 și V3 păstrează regresiile. ID-urile noi sunt stabile și pot fi dependențe ale celor vechi fără renumerotare.
+- Fiecare PBI apare exact o dată în matrice.
+- Un PBI fără rând în matrice sau un rând fără PBI este o eroare de plan.
+- Un task poate avea dependențe în lanț, dar nu poate depinde de un ID retras.
+- O lacună care nu poate fi descrisă observabil nu primește task; se clarifică mai întâi în Docs.
+- Documentația completă a fiecărei zone este în [Docs/31](31-stare-implementare-si-lacune.md).

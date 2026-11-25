@@ -1,6 +1,8 @@
 # Validare și release
 
-Versiune 0.5 · 4 octombrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
+Versiune 0.6 · 26 noiembrie 2026. Parte din [planul complet](README.md). Babylon.js este engine-ul ales. Valorile de calibrare și țintele de performanță necesită verificare prin prototip.
+
+> **Notă de stare.** Secțiunile de mai jos sunt istoricul validărilor din generația 001–258. Release-ul V1 a fost declarat `NOT_VALIDATED`, cu FAIL/NOT_RUN deschise. Boardul a fost resetat la 26 noiembrie 2026, iar starea curentă este în [Docs/31](31-stare-implementare-si-lacune.md) și [PBI/README](../PBI/README.md). Niciun release nou nu este declarat.
 
 ## Criterii de acceptare pentru prima versiune
 

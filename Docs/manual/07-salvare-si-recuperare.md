@@ -175,3 +175,5 @@ Recuperarea nu este doar fișierul. Ai trei mecanisme distincte, descrise în
 Iar la nivel de randare, după pierderea GPU scena este reconstruită din ultimul checkpoint din memorie,
 cu tick-ul neschimbat și generația avansată; după două eșecuri consecutive apare eroarea cu buton de
 reîncercare, iar reîncercarea revine cu același checkpoint.
+
+**Stare 26.11.2026:** salvarea, autosave-ul și savefile-ul nu sunt montate în joc. Vezi [Docs/31](../31-stare-implementare-si-lacune.md).

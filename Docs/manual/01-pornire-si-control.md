@@ -140,3 +140,5 @@ Regula de suspensie este a modulului de pauză și focus, nu a fiecărui panou �
 
 Dacă vrei să citești despre tastele din interiorul unui panou: `Tab`/`Shift+Tab` rămân în dialog,
 `Escape` îl închide și readuce focusul la butonul care l-a deschis.
+
+**Stare 26.11.2026:** mersul, intrarea/ieșirea și conducerea de bază sunt jucabile. Restul comenzilor din tabelul acestui capitol nu sunt montate în buildul curent. Vezi [Docs/31](../31-stare-implementare-si-lacune.md).

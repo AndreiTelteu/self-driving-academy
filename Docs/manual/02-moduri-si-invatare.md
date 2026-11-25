@@ -100,3 +100,5 @@ pasagerii vor fi mai mulțumiți — asta ar cere playtest, care este `NOT_RUN`.
 Niciun mod de control nu are o cale către ledgerul de XP. Închiderea unui segment, un accident, o cursă
 eșuată sau o notă mică nu retrag XP și nu coboară nivelul. Detaliile și dovezile sunt în
 [secțiunea 5](05-misiuni-xp-si-provocari.md).
+
+**Stare 26.11.2026:** buildul are doar AUTO și MANUAL. `L`, LEARNING, segmentele 069 și publicarea profilului nu sunt montate. Vezi [Docs/31](../31-stare-implementare-si-lacune.md).

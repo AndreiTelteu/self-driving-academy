@@ -71,3 +71,9 @@ contractele reale ale modulelor, cu tastele și pragurile exacte din cod.
 - Defectele reale de accesibilitate măsurate (text sub 12 px în panoul camerei și în pop-up-ul KPI,
   etichete care depășesc caseta graficului) sunt raportate, nu ascunse; vezi
   [secțiunea 6](06-slidere-si-camera.md#ce-nu-este-încă-în-regulă).
+
+## Stare la 26 noiembrie 2026
+
+Buildul curent este un **sandbox V3 de mers și condus**, nu doar un bootstrap de randare: personaj, intrare/ieșire, AUTO/MANUAL, trafic AI civil și vizual V4. Fluxurile descrise în capitole — LEARNING, Academie/Haos, KPI, misiuni zilnice, XP, provocări, slidere, first-person și savefile — rămân **contracte neconectate** la acest build.
+
+Capitolele descriu comportamentul țintă și contractele reale; nu trebuie citite ca o promisiune că fiecare ecran există deja. Starea exactă, pe zone, este în [Docs/31](../31-stare-implementare-si-lacune.md), iar boardul de integrare în [PBI/README](../../PBI/README.md).

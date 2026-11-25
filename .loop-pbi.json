@@ -1,4 +1,20 @@
 {
   "board": "PBI",
-  "overview": { "file": "PBI/README.md", "phaseField": "release" }
+  "overview": { "file": "PBI/README.md", "phaseField": "release" },
+  "validate": [
+    ["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "PBI/Validate-Board.ps1"],
+    ["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "PBI/Validate-Plan.ps1"]
+  ],
+  "requireDone": [
+    [
+      "powershell",
+      "-NoProfile",
+      "-ExecutionPolicy",
+      "Bypass",
+      "-File",
+      "PBI/Validate-Board.ps1",
+      "-RequireDone",
+      "{id}"
+    ]
+  ]
 }

@@ -69,8 +69,8 @@ Rulează din rădăcina proiectului. Exemplele folosesc primul PBI; pentru alt t
 ```powershell
 # Începere după setarea statusului In Progress, owner și started_at.
 $pbiRoot = (Resolve-Path -LiteralPath './PBI').Path
-$taskSource = Join-Path $pbiRoot 'To Do/001-bootstrap.md'
-$taskDestination = Join-Path $pbiRoot 'In Progress/001-bootstrap.md'
+$taskSource = Join-Path $pbiRoot 'To Do/259-docs-sync-guard.md'
+$taskDestination = Join-Path $pbiRoot 'In Progress/259-docs-sync-guard.md'
 $taskBoundary = $pbiRoot.TrimEnd('\') + '\'
 if (-not [IO.Path]::GetFullPath($taskSource).StartsWith($taskBoundary, [StringComparison]::OrdinalIgnoreCase)) { throw 'Sursă în afara PBI' }
 if (-not [IO.Path]::GetFullPath($taskDestination).StartsWith($taskBoundary, [StringComparison]::OrdinalIgnoreCase)) { throw 'Destinație în afara PBI' }
@@ -83,8 +83,8 @@ if ((Test-Path -LiteralPath $taskSource) -or -not (Test-Path -LiteralPath $taskD
 ```powershell
 # Finalizare după criterii, dovezi, status Done și completed_at.
 $pbiRoot = (Resolve-Path -LiteralPath './PBI').Path
-$taskSource = Join-Path $pbiRoot 'In Progress/001-bootstrap.md'
-$taskDestination = Join-Path $pbiRoot 'Done/001-bootstrap.md'
+$taskSource = Join-Path $pbiRoot 'In Progress/259-docs-sync-guard.md'
+$taskDestination = Join-Path $pbiRoot 'Done/259-docs-sync-guard.md'
 $taskBoundary = $pbiRoot.TrimEnd('\') + '\'
 if (-not [IO.Path]::GetFullPath($taskSource).StartsWith($taskBoundary, [StringComparison]::OrdinalIgnoreCase)) { throw 'Sursă în afara PBI' }
 if (-not [IO.Path]::GetFullPath($taskDestination).StartsWith($taskBoundary, [StringComparison]::OrdinalIgnoreCase)) { throw 'Destinație în afara PBI' }
@@ -92,7 +92,7 @@ if (Test-Path -LiteralPath $taskDestination) { throw 'Destinația există deja' 
 Move-Item -LiteralPath $taskSource -Destination $taskDestination
 if ((Test-Path -LiteralPath $taskSource) -or -not (Test-Path -LiteralPath $taskDestination)) { throw 'Mutare incompletă' }
 # Bifează în fișierul din Done mutarea fizică, apoi verifică.
-& './PBI/Validate-Board.ps1' -RequireDone '001'
+& './PBI/Validate-Board.ps1' -RequireDone '259'
 ```
 
 Nu folosi -Force pentru a suprascrie un PBI existent. Validatorul este read-only și nu mută task-uri automat.
@@ -118,3 +118,17 @@ Nu este obligatoriu să rulezi jocul complet pentru un contract timpuriu, dar pr
 ## Validare proporțională — politică aprobată la 8 octombrie 2026
 
 Aplică [politica targeted-validation-v1](../Docs/validation-policy.md) la fiecare PBI rămas. performance_checks selectează metrici, nu automat probe full pe ambele backenduri. Înregistrează nivelul, scenariile afectate și motivul escaladării înaintea măsurării. PBI-urile obișnuite folosesc corectitudine izolată, cost local și integrare browser scurtă; gate-urile explicite păstrează full/soak. Nu inventa un server/harness nou dacă adaptorul poate refolosi instrumentele comune. Rulează preflight înainte de full. Paralelizează numai corectitudinea fără resurse comune, niciodată benchmarkurile hardware. Refolosește dovezile neafectate; păstrează eșecurile și rapoartele istorice. Perechile complete pot fi reluate numai în condițiile politicii; soak-ul rămâne continuu. Un PBI targeted Done nu certifică performanța jocului integrat.
+
+
+## Resetarea boardului — 26 noiembrie 2026
+
+Boardul 001–258 a fost retras. Boardul curent are 29 de taskuri, 259–287, toate în To Do; ID-urile 001–258 nu se reutilizează. Exemplele de mai sus folosesc 259.
+
+Reguli actualizate:
+
+- Un task Done trebuie să aibă comportament observabil în joc, nu doar module și teste izolate.
+- Gate-urile vechi 220/224/221–223 nu mai există ca taskuri. Contractul de performanță rămâne [Docs/25](../Docs/25-performanta-contracte-si-benchmark.md), iar gate-ul final este [287](../PBI/To Do/287-v4-final-qa-release.md).
+- Pentru orice task cu `performance_checks`, păstrează baseline-ul, măsoară aceeași probă și raportează separat costul. FPS-ul headless/software nu înlocuiește hardware-ul real.
+- Un release nu se declară închis cât timp 287 are criterii deschise.
+- Docs/21, Docs/31 și PBI/README se actualizează în același commit cu orice schimbare de scope.
+- Validarea de plan se face cu `PBI/Validate-Plan.ps1` și cu `loop-pbi validate`; validarea de board rămâne `PBI/Validate-Board.ps1`.

@@ -134,3 +134,5 @@ eficiență și experiment. Sunt exact situațiile din documentul de modul, nu d
   acoperite mecanic, nu jucate de oameni.
 - Pragurile de XP, duratele provocărilor și recompensele sunt **propuneri de calibrare**, nu valori
   certificate prin măsurători.
+
+**Stare 26.11.2026:** misiunile, daily-ul, XP-ul și provocările nu sunt montate în buildul jucabil. Vezi [Docs/31](../31-stare-implementare-si-lacune.md).
