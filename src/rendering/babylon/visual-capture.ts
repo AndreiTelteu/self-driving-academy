@@ -89,7 +89,9 @@ export function installVisualCapture(options: VisualCaptureOptions): () => void 
   let disposed = false;
 
   const transform = (placement: CapturePlacement2D) => ({
-    positionM: { x: placement.x, y: 0, z: placement.z },
+    // 0,8 m: înălțimea de repaus a șasiului din simulare (contractul 023); altfel roțile
+    // (centrul la −0,5 m) stau sub asfalt în capturi.
+    positionM: { x: placement.x, y: 0.8, z: placement.z },
     rotationQuaternion: {
       x: 0,
       y: Math.sin(placement.yawRad / 2),
@@ -129,7 +131,9 @@ export function installVisualCapture(options: VisualCaptureOptions): () => void 
       representation.setTransform(transform(placement?.vehicles?.[vehicleId] ?? home));
     }
     placement?.extras?.forEach((extra, index) => {
-      extras.push(view.vehicles.create(`capture-extra-${index}`, extra.classId, transform(extra)));
+      extras.push(
+        view.vehicles.create(`capture-extra-${index}`, extra.classId, transform(extra), 'CIVILIAN'),
+      );
     });
     const character = placement?.character;
     view.character.applyFrame(

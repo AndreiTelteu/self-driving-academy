@@ -11,8 +11,11 @@ import { createCityWalkWorld, type WalkWorld } from '../character';
 import {
   CITY_LAYOUT_DEFAULTS,
   createCityLayout,
+  createLaneGraph,
   createNeighbourhoodMap,
   type CityLayout,
+  type LaneGraph,
+  type RoadMap,
 } from '../world';
 import type { CompositionVehicleSeed } from './walking-composition';
 
@@ -36,6 +39,10 @@ export interface CompositionWorld {
   readonly version: typeof V3_COMPOSITION_WORLD_VERSION;
   readonly mapId: string;
   readonly layout: CityLayout;
+  /** Harta 032 din care sunt derivate layout-ul și graful; folosită de traficul AI 058. */
+  readonly map: RoadMap;
+  /** Graful 033 cu aceleași benzi ca layout-ul, pentru rutele AI. */
+  readonly graph: LaneGraph;
   readonly walkWorld: WalkWorld;
   readonly spawn: Readonly<{ x: number; z: number; yawRad: number }>;
   readonly vehicles: readonly CompositionVehicleSeed[];
@@ -51,7 +58,9 @@ export function compositionSpeedLimitMps(layout: CityLayout): number {
 }
 
 export function createCompositionWorld(): CompositionWorld {
-  const layout = createCityLayout(createNeighbourhoodMap());
+  const map = createNeighbourhoodMap();
+  const layout = createCityLayout(map);
+  const graph = createLaneGraph(map);
   const walkWorld = createCityWalkWorld(layout);
   const speedLimitMps = compositionSpeedLimitMps(layout);
   for (const strip of layout.elements) {
@@ -103,6 +112,8 @@ export function createCompositionWorld(): CompositionWorld {
         version: V3_COMPOSITION_WORLD_VERSION,
         mapId: layout.mapId,
         layout,
+        map,
+        graph,
         walkWorld,
         spawn: Object.freeze({ x: spawn.x, z: spawn.z, yawRad }),
         vehicles: Object.freeze([

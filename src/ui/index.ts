@@ -1024,3 +1024,12 @@ export {
   type CharacterHud,
   type CharacterHudOptions,
 } from './character-hud';
+export {
+  FPS_COUNTER_REFRESH_MS,
+  FPS_COUNTER_VERSION,
+  createFpsCounter,
+  fpsColor,
+  summarizeFpsWindow,
+  type FpsCounter,
+  type FpsWindowSummary,
+} from './fps-counter';

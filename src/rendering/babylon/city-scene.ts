@@ -14,6 +14,14 @@ import type {
   CitySignalHeadElement,
 } from '../../world';
 import { deriveRoadFill } from '../road-surface';
+import {
+  planBuildingFacade,
+  resolveStyleMap,
+  facadeStyleSpec,
+  groundFloorKind,
+  type FacadeDetail,
+  type BuildingFacadePlan,
+} from '../building-facades';
 import { SURFACE_TILE_M, type SurfaceMaterials } from './surface-materials';
 
 /**
@@ -33,6 +41,18 @@ import { SURFACE_TILE_M, type SurfaceMaterials } from './surface-materials';
  * meshes used to expose. Instance matrices are authored with the exact position/rotation/scale of
  * the previous baked boxes, so instancing changes the draw calls, not the geometry on screen.
  */
+/**
+ * PBI 246 — cheile de material ale clădirilor: trei ziduri texturate (cărămidă, tencuială, beton),
+ * sticlă reflectorizantă IBL și tâmplărie/cornișe. Le cheamă `surfaces.cityMaterials()` când
+ * suprafețele PBR sunt active; altfel clădirile revin la `building` plat.
+ */
+export type BuildingCityMaterialKey =
+  | 'buildingWallBrick'
+  | 'buildingWallPlaster'
+  | 'buildingWallConcrete'
+  | 'buildingGlass'
+  | 'buildingTrim';
+
 export type CityMaterialKey =
   | 'asphalt'
   | 'intersection'
@@ -45,7 +65,8 @@ export type CityMaterialKey =
   | 'housing'
   | 'lampRed'
   | 'lampAmber'
-  | 'lampGreen';
+  | 'lampGreen'
+  | BuildingCityMaterialKey;
 
 export interface CitySceneOptions {
   /** Optional caller-owned materials; listed keys are borrowed and never disposed here. */
@@ -59,6 +80,12 @@ export interface CitySceneOptions {
   readonly surfaces?: SurfaceMaterials;
   /** Urmele de uzură ale roților (numai cu `surfaces`; MEDIUM/HIGH). */
   readonly wearStrips?: boolean;
+  /**
+   * PBI 246: nivelul de detaliu al fațadelor. LOW = mase netede (ca înainte); MEDIUM = ferestre
+   * retrasate, parter distinct, cornișă/parapet; HIGH = + interioare false, grilaje, detalii de
+   * acoperiș (AC, ventilație, rezervor). Implicit 'medium'.
+   */
+  readonly facadeDetail?: FacadeDetail;
 }
 
 export interface CitySceneStats {
@@ -85,6 +112,23 @@ export interface CitySceneResourceCounts {
   readonly materials: number;
   readonly geometries: number;
   readonly nodes: number;
+}
+
+/**
+ * PBI 246 — lotul unei clădiri: lotul de material are `parts`, iar fiecare parte e o clădire
+ * întreagă (slice contiguu, deci `elementBounds`/`elementGeometry` rămân corecte); la `createMesh`
+ * părțile se concatenează în ordinea de emitere într-un singur buffer cu un singur material.
+ */
+interface BuildingBatch {
+  readonly key: CityMaterialKey;
+  readonly parts: GeometryBuilder[];
+  /** Vârfurile emise până acum (offsetul următoarei părți în meshul final). */
+  vertexCount: number;
+}
+interface BuildingEmit {
+  readonly wall: GeometryBuilder;
+  readonly glass: GeometryBuilder;
+  readonly trim: GeometryBuilder;
 }
 
 /** Slice of a merged host mesh that belongs to one layout element, in vertices. */
@@ -142,6 +186,8 @@ interface GeometryBuilder {
   readonly indices: number[];
   readonly color: CityMaterialKey;
   readonly origins: UvOrigin[];
+  /** PBI 246: culori pe vârf (numai loturile de fațadă); vid = fără atribut color. */
+  readonly colors: number[];
 }
 
 const PALETTE: Readonly<Record<CityMaterialKey, readonly [number, number, number]>> = Object.freeze(
@@ -158,6 +204,12 @@ const PALETTE: Readonly<Record<CityMaterialKey, readonly [number, number, number
     lampRed: [1, 0.05, 0.03],
     lampAmber: [1, 0.6, 0.02],
     lampGreen: [0.05, 1, 0.2],
+    // 246: loturi de fațadă — neutru, culoarea reală vine pe vârf (sau din materialul PBR împrumutat).
+    buildingWallBrick: [0.62, 0.4, 0.3],
+    buildingWallPlaster: [0.78, 0.75, 0.68],
+    buildingWallConcrete: [0.6, 0.6, 0.58],
+    buildingGlass: [0.3, 0.4, 0.48],
+    buildingTrim: [0.7, 0.68, 0.62],
   },
 );
 // PBI 245: marcajele nu mai sunt emisive (vopsea iluminată normal); rămân emisive zonele de serviciu și lămpile.
@@ -175,6 +227,11 @@ const BUILDERS: readonly CityMaterialKey[] = [
   'lampRed',
   'lampAmber',
   'lampGreen',
+  'buildingWallBrick',
+  'buildingWallPlaster',
+  'buildingWallConcrete',
+  'buildingGlass',
+  'buildingTrim',
 ];
 /**
  * PBI 242 — offset de adâncime pe material (negativ = mai aproape de cameră). Vezi documentul 30:
@@ -234,38 +291,9 @@ function pushPolygon(builder: GeometryBuilder, footprint: readonly Point[], base
     if (ccw) builder.indices.push(start, start + index, start + index + 1);
     else builder.indices.push(start, start + index + 1, start + index);
 }
-function pushPrism(
-  builder: GeometryBuilder,
-  footprint: readonly Point[],
-  baseY: number,
-  heightM: number,
-): void {
-  const top = baseY + heightM;
-  const roofStart = builder.positions.length / 3;
-  for (const corner of footprint) builder.positions.push(corner.x, top, corner.z);
-  const roofCcw = normalY(footprint[0]!, footprint[1]!, footprint[2]!) <= 0;
-  for (let index = 1; index < footprint.length - 1; index += 1)
-    if (roofCcw) builder.indices.push(roofStart, roofStart + index, roofStart + index + 1);
-    else builder.indices.push(roofStart, roofStart + index + 1, roofStart + index);
-  const centerX = footprint.reduce((sum, vertex) => sum + vertex.x, 0) / footprint.length;
-  const centerZ = footprint.reduce((sum, vertex) => sum + vertex.z, 0) / footprint.length;
-  for (let index = 0; index < footprint.length; index += 1) {
-    const a = footprint[index]!;
-    const b = footprint[(index + 1) % footprint.length]!;
-    const start = builder.positions.length / 3;
-    builder.positions.push(a.x, baseY, a.z, b.x, baseY, b.z, b.x, top, b.z, a.x, top, a.z);
-    // Outward wall normal: away from the footprint centroid.
-    const outward =
-      -(b.z - a.z) * ((a.x + b.x) / 2 - centerX) + (b.x - a.x) * ((a.z + b.z) / 2 - centerZ);
-    // PBI 244: ordinea era inversată (`VertexData.ComputeNormals` dădea normale spre interior, ca
-    // pushWall nu); cu umbre și AO se vedea: pereții primeau SSAO ca niște găuri. Verificat în
-    // `tests/rendering/shadows.test.ts` prin normalele calculate de Babylon.
-    if (outward >= 0)
-      builder.indices.push(start, start + 2, start + 1, start, start + 3, start + 2);
-    else builder.indices.push(start, start + 1, start + 2, start, start + 2, start + 3);
-  }
-}
 /**
+ * PBI 246: `pushPrism` (masa oarbă de dinainte de fațade) nu mai este folosit de clădiri; orientarea
+ * pereților o moștenesc `pushRect`/`pushBand` (aceeași regulă `outward` ca aici).
  * Perete vertical de la cota 0 la `topM` pe segmentul a→b, cu normala spre `outward` (unitară).
  * Orientarea este verificată prin produsul vectorial, ca la `pushQuad`, nu presupusă.
  */
@@ -346,6 +374,293 @@ function pushBox(
   face(2, 3, 7, 6);
   face(3, 0, 4, 7);
 }
+
+// --- 246: emiterea fațadelor ------------------------------------------------------------------------
+
+/**
+ * Vârfurile unui dreptunghi pe un perete: `along` de-a lungul peretelui (m), `yOut` = înălțime.
+ * `insetM` este pozitiv spre EXTERIOR (piesa iese din perete), negativ = retras în gol.
+ * Ordinea muchiilor `sides` mai jos plus învârtirea (0,2,1 / 0,3,2) dau normala spre exterior
+ * pentru toate cele patru laturi (aceeași regulă ca `pushPrism`, verificată în shadows.test.ts).
+ */
+type WallFrame = {
+  readonly ax: number; // originea peretelui (vârful footprint-ului)
+  readonly az: number;
+  readonly dirX: number; // unitar, de-a lungul peretelui
+  readonly dirZ: number;
+  readonly outX: number; // unitar, spre exterior
+  readonly outZ: number;
+  readonly baseY: number;
+};
+const pushRect = (
+  builder: GeometryBuilder,
+  frame: WallFrame,
+  along0: number,
+  along1: number,
+  y0: number,
+  y1: number,
+  insetM: number,
+  color: readonly [number, number, number],
+): void => {
+  const start = builder.positions.length / 3;
+  const px = frame.ax + frame.dirX * along0 + frame.outX * insetM;
+  const pz = frame.az + frame.dirZ * along0 + frame.outZ * insetM;
+  const qx = frame.ax + frame.dirX * along1 + frame.outX * insetM;
+  const qz = frame.az + frame.dirZ * along1 + frame.outZ * insetM;
+  const yb = frame.baseY + y0;
+  const yt = frame.baseY + y1;
+  builder.positions.push(px, yb, pz, qx, yb, qz, qx, yt, qz, px, yt, pz);
+  for (let vertex = 0; vertex < 4; vertex += 1) builder.colors.push(color[0], color[1], color[2]);
+  // Orientare verificată matematic (nu presupusă): pentru orice inset, normala (b−a)×(0,1,0)
+  // arată spre exterior cu învârtirea (0,2,1) — convenția ComputeNormals, aceeași ca `pushWall`.
+  const nx = -(qz - pz);
+  const nz = qx - px;
+  if (nx * frame.outX + nz * frame.outZ >= 0)
+    builder.indices.push(start, start + 2, start + 1, start, start + 3, start + 2);
+  else builder.indices.push(start, start + 1, start + 2, start, start + 2, start + 3);
+};
+/** Bandă orizontală (cornișă, parapet, prag): față verticală + capac superior la `insetM`. */
+const pushBand = (
+  builder: GeometryBuilder,
+  frame: WallFrame,
+  along0: number,
+  along1: number,
+  y0: number,
+  y1: number,
+  insetM: number,
+  color: readonly [number, number, number],
+): void => {
+  pushRect(builder, frame, along0, along1, y0, y1, insetM, color);
+  if (insetM === 0) return; // bandă în planul peretelui: fără capac (ar fi degenerat, normala = 0).
+  // Capacul orizontal: un quad de la planul peretelui până la muchia exterioară a benzii, normală +Y.
+  const start = builder.positions.length / 3;
+  const a0x = frame.ax + frame.dirX * along0;
+  const a0z = frame.az + frame.dirZ * along0;
+  const a1x = frame.ax + frame.dirX * along1;
+  const a1z = frame.az + frame.dirZ * along1;
+  const top = frame.baseY + y1;
+  builder.positions.push(
+    a0x,
+    top,
+    a0z,
+    a1x,
+    top,
+    a1z,
+    a1x + frame.outX * insetM,
+    top,
+    a1z + frame.outZ * insetM,
+    a0x + frame.outX * insetM,
+    top,
+    a0z + frame.outZ * insetM,
+  );
+  for (let vertex = 0; vertex < 4; vertex += 1) builder.colors.push(color[0], color[1], color[2]);
+  // Ordinea depinde de semnul lui insetM: capacul trebuie să aibă normala +Y.
+  if (insetM > 0) builder.indices.push(start, start + 1, start + 2, start, start + 2, start + 3);
+  else builder.indices.push(start, start + 2, start + 1, start, start + 3, start + 2);
+};
+
+/** PBI 246: emite fațadele unei clădiri în loturile de zid/sticlă/tâmplărie (culori pe vârf). */
+function emitBuildingFacades(
+  element: CityPlanarElement,
+  plan: BuildingFacadePlan,
+  detail: FacadeDetail,
+  wallBuilder: GeometryBuilder,
+  glassBuilder: GeometryBuilder,
+  trimBuilder: GeometryBuilder,
+): void {
+  const xs = element.footprintM.map((vertex) => vertex.x);
+  const zs = element.footprintM.map((vertex) => vertex.z);
+  const minX = Math.min(...xs);
+  const maxX = Math.max(...xs);
+  const minZ = Math.min(...zs);
+  const maxZ = Math.max(...zs);
+  const centerX = (minX + maxX) / 2;
+  const centerZ = (minZ + maxZ) / 2;
+  const baseY = element.baseYM;
+  const topY = baseY + element.heightM;
+  const palette = plan.palette;
+  const wallColor = palette.wall;
+  const trimColor = palette.trim;
+  const glassLit: readonly [number, number, number] = [0.62, 0.5, 0.3];
+  const sillOut = 0.04; // pragul iese 4 cm din fațadă
+  const glassInset = -0.14; // sticla retrasă în gol (negativ = spre interior)
+
+  // Laturile footprint-ului (cvadrilater 042): 0=S (minZ), 1=E (maxX), 2=N (maxZ), 3=W (minX).
+  const sides = [
+    { a: point(minX, minZ), b: point(maxX, minZ), out: { x: 0, z: -1 } },
+    { a: point(maxX, minZ), b: point(maxX, maxZ), out: { x: 1, z: 0 } },
+    { a: point(maxX, maxZ), b: point(minX, maxZ), out: { x: 0, z: 1 } },
+    { a: point(minX, maxZ), b: point(minX, minZ), out: { x: -1, z: 0 } },
+  ] as const;
+
+  for (const wallPlan of plan.walls) {
+    const side = sides[wallPlan.side];
+    if (!side) continue;
+    const dx = side.b.x - side.a.x;
+    const dz = side.b.z - side.a.z;
+    const length = Math.hypot(dx, dz) || 1;
+    const frame: WallFrame = {
+      ax: side.a.x,
+      az: side.a.z,
+      dirX: dx / length,
+      dirZ: dz / length,
+      outX: side.out.x,
+      outZ: side.out.z,
+      baseY,
+    };
+    // Golurile pe acest perete, sortate pe verticală apoi orizontal: ferestrele planului.
+    const openings = [...wallPlan.windows].sort((p, q) =>
+      p.yBaseM === q.yBaseM ? p.alongM - q.alongM : p.yBaseM - q.yBaseM,
+    );
+    if (detail === 'low' || openings.length === 0) {
+      // LOW sau perete orb: peretele întreg, culoarea stilului.
+      pushRect(wallBuilder, frame, 0, wallPlan.lengthM, 0, element.heightM, 0, wallColor);
+      continue;
+    }
+    // Zid + ferestre retrasate: zidul rămâne pe planul fațadei; ferestrele sunt dreptunghiuri
+    // de sticlă retrase, cu tâmplărie (prag + montanți) pe lotul de trim.
+    const wallTop = element.heightM;
+    const visible = openings
+      .map((win) => ({
+        a0: Math.max(0, win.alongM - win.widthM / 2),
+        a1: Math.min(wallPlan.lengthM, win.alongM + win.widthM / 2),
+        y0: win.yBaseM,
+        y1: Math.min(win.yBaseM + win.heightM, wallTop),
+        lit: win.lit,
+      }))
+      .filter((win) => win.a1 - win.a0 > 0.05 && win.y1 - win.y0 > 0.05 && win.y0 < wallTop - 0.02)
+      .sort((p, q) => (p.y0 === q.y0 ? p.a0 - q.a0 : p.y0 - q.y0));
+    // Zidul se emite o dată pe rând: o bandă continuă, cu goluri numai la ferestrele rândului.
+    // Rosturile dintre rânduri și marginile peretelui rămân zid plin, deci nu există fisuri.
+    let rowBottom = 0;
+    const rows = [...new Set(visible.map((win) => win.y0))].sort((a, b) => a - b);
+    for (const rowY of rows) {
+      if (rowY > rowBottom + 0.02)
+        pushRect(wallBuilder, frame, 0, wallPlan.lengthM, rowBottom, rowY, 0, wallColor);
+      const rowWindows = visible.filter((win) => win.y0 === rowY);
+      let cursor = 0;
+      for (const win of rowWindows) {
+        if (win.a0 > cursor + 0.02)
+          pushRect(wallBuilder, frame, cursor, win.a0, rowY, win.y1, 0, wallColor);
+        cursor = Math.max(cursor, win.a1);
+        // Sticla retrasă + tâmplăria.
+        pushRect(
+          glassBuilder,
+          frame,
+          win.a0,
+          win.a1,
+          win.y0,
+          win.y1,
+          glassInset,
+          win.lit ? glassLit : palette.glass,
+        );
+        pushBand(
+          trimBuilder,
+          frame,
+          win.a0 - sillOut,
+          win.a1 + sillOut,
+          Math.max(0.02, win.y0 - 0.1),
+          win.y0,
+          sillOut,
+          trimColor,
+        );
+        pushRect(
+          trimBuilder,
+          frame,
+          win.a0 - sillOut,
+          win.a1 + sillOut,
+          win.y1,
+          win.y1 + 0.08,
+          0,
+          trimColor,
+        );
+        pushRect(trimBuilder, frame, win.a0 - 0.05, win.a0 + 0.02, win.y0, win.y1, 0.04, trimColor);
+        pushRect(trimBuilder, frame, win.a1 - 0.02, win.a1 + 0.05, win.y0, win.y1, 0.04, trimColor);
+        if (plan.mullions) {
+          const mid = (win.a0 + win.a1) / 2;
+          pushRect(trimBuilder, frame, mid - 0.025, mid + 0.025, win.y0, win.y1, 0.05, trimColor);
+          const midY = (win.y0 + win.y1) / 2;
+          pushRect(trimBuilder, frame, win.a0, win.a1, midY - 0.02, midY + 0.02, 0.05, trimColor);
+        }
+      }
+      if (cursor < wallPlan.lengthM - 0.02)
+        pushRect(
+          wallBuilder,
+          frame,
+          cursor,
+          wallPlan.lengthM,
+          rowY,
+          rowWindows[0]!.y1,
+          0,
+          wallColor,
+        );
+      rowBottom = rowWindows[0]!.y1;
+    }
+    if (rowBottom < wallTop - 0.02)
+      pushRect(wallBuilder, frame, 0, wallPlan.lengthM, rowBottom, wallTop, 0, wallColor);
+    // Cornișă în consolă la coroană (iese din fațadă) sau parapet pe muchia acoperișului.
+    // (`detail === 'low'` nu ajunge aici: peretele orb a ieșit deja din buclă.)
+    if (plan.cornice) {
+      pushBand(
+        trimBuilder,
+        frame,
+        0,
+        wallPlan.lengthM,
+        element.heightM - 0.35,
+        element.heightM - 0.1,
+        0.18,
+        trimColor,
+      );
+    } else if (plan.parapetHeightM > 0) {
+      pushBand(
+        trimBuilder,
+        frame,
+        0,
+        wallPlan.lengthM,
+        element.heightM,
+        element.heightM + plan.parapetHeightM,
+        0,
+        wallColor,
+      );
+    }
+  }
+
+  // Acoperișul: placă la `topY` (culoare de zid întunecată) + detalii (AC, ventilație, rezervor).
+  const roofColor: readonly [number, number, number] = [
+    wallColor[0] * 0.55,
+    wallColor[1] * 0.55,
+    wallColor[2] * 0.55,
+  ];
+  const roofStart = wallBuilder.positions.length / 3;
+  const roofQuad = [point(minX, minZ), point(maxX, minZ), point(maxX, maxZ), point(minX, maxZ)];
+  for (const corner of roofQuad) wallBuilder.positions.push(corner.x, topY, corner.z);
+  for (let vertex = 0; vertex < 4; vertex += 1)
+    wallBuilder.colors.push(roofColor[0], roofColor[1], roofColor[2]);
+  // Placa de acoperiș: footprint-ul 042 este [minX/minZ, maxX/minZ, maxX/maxZ, minX/maxZ] (CCW);
+  // fața din față în Babylon este cea cu învârtirea orară, deci ordinea directă dă normala +Y.
+  wallBuilder.indices.push(
+    roofStart,
+    roofStart + 1,
+    roofStart + 2,
+    roofStart,
+    roofStart + 2,
+    roofStart + 3,
+  );
+  if (detail !== 'low') {
+    for (const unit of plan.roofDetails) {
+      const color = palette.trim;
+      pushBox(
+        trimBuilder,
+        point(centerX + unit.offsetX, centerZ + unit.offsetZ, topY + unit.heightM / 2),
+        { x: unit.sizeXM, y: unit.heightM, z: unit.sizeZM },
+        0,
+      );
+      // `pushBox` nu scrie culori: le completăm aici, ca lotul să aibă atributul complet.
+      for (let vertex = 0; vertex < 8; vertex += 1)
+        trimBuilder.colors.push(color[0], color[1], color[2]);
+    }
+  }
+}
 function markingCenterline(element: CityPlanarElement): Point[] {
   const half = element.footprintM.length / 2;
   if (element.topology !== 'RIBBON' || half < 2)
@@ -415,6 +730,10 @@ function uvTileM(color: CityMaterialKey): number {
       return SURFACE_TILE_M.sidewalk;
     case 'ground':
       return SURFACE_TILE_M.ground;
+    case 'buildingWallBrick':
+    case 'buildingWallPlaster':
+    case 'buildingWallConcrete':
+      return SURFACE_TILE_M.facadeWall;
     default:
       return 4;
   }
@@ -589,6 +908,12 @@ export function createCityScene(
     material.specularColor = Color3.Black();
     material.maxSimultaneousLights = 2;
     material.backFaceCulling = false;
+    // 246: loturile de fațadă poartă culoarea stilului pe vârf; diffuseColor rămâne multiplicatorul.
+    if (key.startsWith('buildingWall') || key === 'buildingGlass' || key === 'buildingTrim') {
+      material.diffuseColor = Color3.White();
+      material.specularColor =
+        key === 'buildingGlass' ? new Color3(0.35, 0.35, 0.35) : Color3.Black();
+    }
     // PBI 242: ordinea pe verticală se păstrează cu offset de adâncime (polygon offset / depth bias),
     // nu cu înălțimi alese pe ochi. Pe tot lanțul 0 (carosabil) < 0,015 (treceri) < 0,02 (marcaje)
     // cotele rămân cele ale lui 042; offsetul garantează că marcajul câștigă și când rezoluția
@@ -606,13 +931,46 @@ export function createCityScene(
     ownedMaterials.push(material);
   }
   const root = new TransformNode(`city:${layout.mapId}`, scene);
+  const newBuilder = (color: CityMaterialKey): GeometryBuilder => ({
+    positions: [],
+    indices: [],
+    color,
+    origins: [],
+    colors: [],
+  });
   const builders = new Map<CityMaterialKey, GeometryBuilder>();
   const builderFor = (color: CityMaterialKey): GeometryBuilder => {
     const existing = builders.get(color);
     if (existing) return existing;
-    const created: GeometryBuilder = { positions: [], indices: [], color, origins: [] };
+    const created = newBuilder(color);
     builders.set(color, created);
     return created;
+  };
+  /** PBI 246: loturile de fațadă păstrează fiecare clădire contiguu (slice = clădirea întreagă). */
+  const buildingBatches = new Map<CityMaterialKey, BuildingBatch>();
+  const buildingEmitFor = (
+    wallKey: CityMaterialKey,
+    glassKey: CityMaterialKey,
+    trimKey: CityMaterialKey,
+  ): BuildingEmit => {
+    const part = (key: CityMaterialKey): GeometryBuilder => {
+      const batch = buildingBatches.get(key) ?? { key, parts: [], vertexCount: 0 };
+      if (!buildingBatches.has(key)) buildingBatches.set(key, batch);
+      const builder = newBuilder(key);
+      batch.parts.push(builder);
+      return builder;
+    };
+    return { wall: part(wallKey), glass: part(glassKey), trim: part(trimKey) };
+  };
+  /** PBI 246: lotul de zid al stilului (cărămidă/tencuială/beton PBR) sau `building` plat. */
+  const wallKeyFor = (material: 'brick' | 'plaster' | 'concrete'): CityMaterialKey => {
+    const key: CityMaterialKey =
+      material === 'brick'
+        ? 'buildingWallBrick'
+        : material === 'plaster'
+          ? 'buildingWallPlaster'
+          : 'buildingWallConcrete';
+    return borrowed.has(key) ? key : 'building';
   };
   const meshes: Mesh[] = [];
   const hostByMaterial = new Map<CityMaterialKey, Mesh>();
@@ -638,6 +996,7 @@ export function createCityScene(
     positions: readonly number[],
     indices: readonly number[],
     uvBuilder?: GeometryBuilder,
+    colors?: readonly number[],
   ) => {
     const data = new VertexData();
     data.positions = [...positions];
@@ -646,12 +1005,24 @@ export function createCityScene(
     VertexData.ComputeNormals(data.positions, data.indices, normals);
     data.normals = normals;
     if (uvBuilder) data.uvs = surfaceUvs(uvBuilder, positions, normals);
+    // 246: loturile de fațadă poartă culoarea stilului pe vârf (parțial = lipsă = alb).
+    if (colors && colors.length > 0) {
+      const full = new Array<number>(positions.length).fill(1);
+      for (let index = 0; index < colors.length; index += 1) full[index] = colors[index]!;
+      data.colors = full;
+    }
     data.applyToMesh(mesh);
   };
   const createMesh = (name: string, builder: GeometryBuilder): Mesh => {
     if (builder.positions.length === 0) throw new Error('Empty city geometry');
     const mesh = new Mesh(`city:${name}`, scene);
-    applyGeometry(mesh, builder.positions, builder.indices, builder);
+    applyGeometry(
+      mesh,
+      builder.positions,
+      builder.indices,
+      builder,
+      builder.colors.length > 0 ? builder.colors : undefined,
+    );
     mesh.material = materials.get(builder.color) ?? null;
     mesh.parent = root;
     mesh.receiveShadows = true;
@@ -659,9 +1030,20 @@ export function createCityScene(
     meshes.push(mesh);
     return mesh;
   };
+  /** PBI 246: lotul de fațadă = concatenarea părților (fiecare parte o clădire, slice contiguu). */
+  const createBuildingMesh = (name: string, batch: BuildingBatch): Mesh => {
+    const merged = newBuilder(batch.key);
+    for (const part of batch.parts) {
+      const offset = merged.positions.length / 3;
+      merged.positions.push(...part.positions);
+      merged.colors.push(...part.colors);
+      for (const index of part.indices) merged.indices.push(index + offset);
+    }
+    return createMesh(name, merged);
+  };
   /** Thin-instance host: one shared unit box, per-instance matrices, never a per-element mesh. */
   const createHost = (name: string, material: Material, matrices: readonly Matrix[]) => {
-    const unit: GeometryBuilder = { positions: [], indices: [], color: 'housing', origins: [] };
+    const unit: GeometryBuilder = newBuilder('housing');
     pushBox(unit, point(0, 0, 0), { x: 1, y: 1, z: 1 }, 0);
     const mesh = new Mesh(`city:${name}`, scene);
     applyGeometry(mesh, unit.positions, unit.indices);
@@ -686,6 +1068,15 @@ export function createCityScene(
       offset: from,
       count: builder.positions.length / 3 - from,
     });
+  };
+  /** 246: slice-ul unei clădiri într-un lot de fațadă — offset cumulat + lungimea propriei părți. */
+  const recordBuildingSlice = (
+    elementId: string,
+    batchKey: CityMaterialKey,
+    offset: number,
+    count: number,
+  ): void => {
+    mergedRanges.set(elementId, { key: batchKey, offset, count });
   };
 
   // Lane surfaces are merged into the asphalt batch: the identity that matters for traffic is the
@@ -758,11 +1149,71 @@ export function createCityScene(
     }
   }
 
+  // PBI 246: planurile de fațadă se rezolvă o singură dată pe scenă (stiluri anti-repetiție pe
+  // vecini, parterul din clasa benzii celei mai apropiate). La LOW nu se emit detalii.
+  const facadeDetail: FacadeDetail = options.facadeDetail ?? 'medium';
+  const buildingIds = layout.elements
+    .filter((element) => element.kind === 'BUILDING')
+    .map((element) => element.id);
+  const styleMap = resolveStyleMap(layout.mapId, buildingIds);
+  const arterialCount = layout.lanes.filter((lane) => lane.roadClass === 'ARTERIAL').length;
+  const lanePoint = (index: number): { x: number; z: number } => {
+    const surface = layout.elements.find(
+      (element) => element.id === layout.lanes[index]!.surfaceElementId,
+    ) as CityPlanarElement | undefined;
+    if (!surface) return { x: 0, z: 0 };
+    const xs = surface.footprintM.map((vertex) => vertex.x);
+    const zs = surface.footprintM.map((vertex) => vertex.z);
+    return {
+      x: (Math.min(...xs) + Math.max(...xs)) / 2,
+      z: (Math.min(...zs) + Math.max(...zs)) / 2,
+    };
+  };
+
   // Batched planar elements: one merged mesh per material.
   for (const element of layout.elements) {
     if (element.kind === 'LANE_SURFACE' || element.kind === 'SIGNAL_HEAD') continue;
-    const builder = builderFor(colorForPlanar(element));
-    const from = builder.positions.length / 3;
+    let builder: GeometryBuilder;
+    let from: number;
+    let buildingParts: readonly GeometryBuilder[] | null = null;
+    if (element.kind === 'BUILDING') {
+      const planar = element as CityPlanarElement;
+      const fpx = planar.footprintM.map((vertex) => vertex.x);
+      const fpz = planar.footprintM.map((vertex) => vertex.z);
+      const center = {
+        x: (Math.min(...fpx) + Math.max(...fpx)) / 2,
+        z: (Math.min(...fpz) + Math.max(...fpz)) / 2,
+      };
+      const ground = groundFloorKind(center, layout.lanes, lanePoint, arterialCount);
+      const styleId = styleMap.get(element.id) ?? 'brickClassic';
+      const style = facadeStyleSpec(styleId);
+      const plan = planBuildingFacade(planar, style, ground, facadeDetail);
+      const wallKey = wallKeyFor(plan.material);
+      const glassKey: CityMaterialKey = borrowed.has('buildingGlass')
+        ? 'buildingGlass'
+        : 'building';
+      const trimKey: CityMaterialKey = borrowed.has('buildingTrim') ? 'buildingTrim' : 'building';
+      const emit = buildingEmitFor(wallKey, glassKey, trimKey);
+      builder = emit.wall;
+      // 246: pe orice lot (plat sau PBR) fiecare clădire este o parte contiguă; offsetul slice-ului
+      // este cumulatul vârfurilor emise până la ea în lot (nu poziția din partea ei, mereu 0).
+      // La fallback toate cele trei părți (zid/sticlă/tâmplărie) cad în același lot, deci toate
+      // consumă vârfuri din același buffer, în ordinea zid → sticlă → tâmplărie.
+      const batch = buildingBatches.get(wallKey)!;
+      from = batch.vertexCount;
+      emitBuildingFacades(planar, plan, facadeDetail, emit.wall, emit.glass, emit.trim);
+      buildingParts = [emit.wall, emit.glass, emit.trim];
+      for (const part of buildingParts)
+        if (part.color === wallKey) batch.vertexCount += part.positions.length / 3;
+    } else {
+      builder = builderFor(colorForPlanar(element));
+      from = builder.positions.length / 3;
+      if (element.kind === 'CROSSWALK') pushCrosswalk(builder, element);
+      else if (element.kind === 'LANE_MARKING') pushMarking(builder, element, layout);
+      else if (element.topology === 'RIBBON')
+        pushRibbon(builder, element.footprintM, element.baseYM);
+      else pushPolygon(builder, element.footprintM, element.baseYM);
+    }
     if (element.kind === 'SIDEWALK' || element.kind === 'CURB') {
       const footprint = (element as CityPlanarElement).footprintM;
       const xs = footprint.map((vertex) => vertex.x);
@@ -781,19 +1232,28 @@ export function createCityScene(
         acrossSize: Math.max(1e-3, across === 'x' ? sizeX : sizeZ),
       });
     }
-    if (element.kind === 'BUILDING')
-      pushPrism(builder, element.footprintM, element.baseYM, element.heightM);
-    else if (element.kind === 'CROSSWALK') pushCrosswalk(builder, element);
-    else if (element.kind === 'LANE_MARKING') pushMarking(builder, element, layout);
-    else if (element.topology === 'RIBBON') pushRibbon(builder, element.footprintM, element.baseYM);
-    else pushPolygon(builder, element.footprintM, element.baseYM);
-    record(element.id, builder, from);
+    if (element.kind === 'BUILDING') {
+      // La fallback toate cele trei părți sunt în același lot (slice = suma lor); altfel numai zidul.
+      let sliceCount = 0;
+      for (const part of buildingParts ?? [])
+        if (part.color === builder.color) sliceCount += part.positions.length / 3;
+      recordBuildingSlice(element.id, builder.color, from, sliceCount);
+    } else record(element.id, builder, from);
     mergedElements += 1;
     rendered.push(element.id);
     count(element.kind);
   }
 
   const batches: Mesh[] = [];
+  // 246: întâi loturile de fațadă (o clădire = o parte contiguă), apoi loturile simple.
+  for (const [key, batch] of [...buildingBatches].sort(([a], [b]) =>
+    a < b ? -1 : a > b ? 1 : 0,
+  )) {
+    if (batch.parts.length === 0) continue;
+    const mesh = createBuildingMesh(`batch:${key}`, batch);
+    hostByMaterial.set(key, mesh);
+    batches.push(mesh);
+  }
   for (const [color, builder] of [...builders].sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))) {
     if (builder.positions.length === 0) continue;
     const mesh = createMesh(`batch:${color}`, builder);
@@ -1037,9 +1497,16 @@ export function createCityScene(
       disposed
         ? []
         : Object.freeze(
-            [hostByMaterial.get('building'), postHost, housingHost].filter(
-              (mesh): mesh is Mesh => !!mesh && !mesh.isDisposed(),
-            ),
+            [
+              hostByMaterial.get('building'),
+              hostByMaterial.get('buildingWallBrick'),
+              hostByMaterial.get('buildingWallPlaster'),
+              hostByMaterial.get('buildingWallConcrete'),
+              hostByMaterial.get('buildingTrim'),
+              hostByMaterial.get('buildingGlass'),
+              postHost,
+              housingHost,
+            ].filter((mesh): mesh is Mesh => !!mesh && !mesh.isDisposed()),
           ),
     meshFor(elementId: string): Mesh | null {
       if (disposed || scene.isDisposed) return null;

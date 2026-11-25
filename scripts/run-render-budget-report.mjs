@@ -9,8 +9,9 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
  *
  * `npm run perf:render-budget -- --measure` rulează proba structurală pe contractele reale de
  * prezentare (`createCityScene`, `createCityDecorScene`, `createDaylight`, `BabylonCellBatches`
- * plus picking pe raze) și scrie `after.json`. `--capture=before` scrie `before.json`, folosit
- * o singură dată, pe sursa dinaintea optimizării.
+ * plus picking pe raze) și scrie `after.json` — de re-rulat după orice schimbare intenționată a
+ * geometriei sau materialelor orașului (ex. 245, 246). `--capture=before` scrie `before.json`,
+ * folosit o singură dată, pe sursa dinaintea optimizării.
  *
  * `npm run perf:render-budget` derivează `report.json` + `report.md` din cele două capturi comise,
  * citind bugetele din `Docs/performance-budgets.json` fără să le modifice. `--check` reexecută

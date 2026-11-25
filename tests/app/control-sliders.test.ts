@@ -352,9 +352,13 @@ test('229 the camera extremes are finite, stable at motion 0 and inside the 60�
     const pose = controller.update(target, 1 / 60);
     assert.ok(pose);
     const radians = (preferences.fovDegrees * Math.PI) / 180;
-    assert.ok(Math.abs(pose.fovRadians - radians) < 1e-12);
+    // PBI 250: FOV crește cu viteza (max +8°); la 12 m/s boost = min(12/20,1)*8° = 4.8°
+    const speedBoost = (Math.min(target.speedMps / 20, 1) * (8 * Math.PI)) / 180;
+    const expectedFov = radians + speedBoost;
+    assert.ok(Math.abs(pose.fovRadians - expectedFov) < 1e-12);
     assert.ok(
-      pose.fovRadians >= Math.PI / 3 - 1e-9 && pose.fovRadians <= (100 * Math.PI) / 180 + 1e-9,
+      pose.fovRadians >= Math.PI / 3 - 1e-9 &&
+        pose.fovRadians <= ((100 + 8) * Math.PI) / 180 + 1e-9, // PBI 250: max 100° + 8° boost
     );
     for (const point of [pose.positionM, pose.lookAtM, pose.up])
       assert.ok([point.x, point.y, point.z].every((value) => Number.isFinite(value)));
@@ -391,7 +395,7 @@ test('229 the session refuses an invalid draft and an exhausted control revision
   fixture.session.open();
   fixture.session.setValue('fov', 130);
   assert.equal(fixture.session.queueApply(), 'INVALID');
-  assert.equal(fixture.store.getSnapshot().input.control.fov, 80);
+  assert.equal(fixture.store.getSnapshot().input.control.fov, 60); // PBI 250: default 60 (era 80)
   fixture.session.dispose();
 
   const exhausted = sessionFixture({

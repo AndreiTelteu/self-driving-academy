@@ -524,6 +524,32 @@ function laneHeading(points: readonly Vector3[]): number {
   return headingAt(points, 1);
 }
 
+/**
+ * Ground position of a signal head: on the right-hand side of the approach (right-hand traffic),
+ * `setbackM` past the carriageway edge, i.e. on the sidewalk. Heading 0 is +X and positive angles
+ * rotate toward +Z, so the right of travel is (sin h, -cos h). The carriageway edge is the farthest
+ * right-hand extent of the junction area, which matches the road width of the approach.
+ */
+function signalHeadPosition(
+  map: RoadMap,
+  intersection: RoadMap['intersections'][number],
+  anchor: { readonly x: number; readonly z: number },
+  heading: number,
+  setbackM: number,
+): Vector3 {
+  const right = { x: Math.sin(heading), z: -Math.cos(heading) };
+  const area = map.geometry.areas.find((candidate) => candidate.id === intersection.geometryId);
+  const nodes = new Map(map.geometry.nodes.map((node) => [node.id, node.positionM]));
+  let edgeM = 0;
+  for (const id of area?.vertexNodeIds ?? []) {
+    const vertex = nodes.get(id);
+    if (vertex)
+      edgeM = Math.max(edgeM, (vertex.x - anchor.x) * right.x + (vertex.z - anchor.z) * right.z);
+  }
+  const lateralM = edgeM + setbackM;
+  return point(anchor.x + right.x * lateralM, anchor.z + right.z * lateralM);
+}
+
 interface BlockCell {
   readonly blockId: string;
   readonly intersectionIds: readonly string[];
@@ -1060,8 +1086,13 @@ export function createCityLayout(input: unknown, options?: CityLayoutOptions): C
         (candidate) => candidate.kind !== 'CROSSWALK',
       );
       const anchor = line ? nodes.get(line.anchorNodeId)! : points[points.length - 1]!;
-      const right = { x: Math.sin(heading + Math.PI / 2), z: Math.cos(heading + Math.PI / 2) };
-      const setback = lane.widthM / 2 + resolved.signalHeadSetbackM;
+      const headPosition = signalHeadPosition(
+        map,
+        intersection,
+        anchor,
+        heading,
+        resolved.signalHeadSetbackM,
+      );
       const movementIds = intersection.movements
         .filter((movement) => movement.fromLaneId === laneId)
         .map((movement) => movement.id);
@@ -1080,7 +1111,7 @@ export function createCityLayout(input: unknown, options?: CityLayoutOptions): C
         sourceType: 'SIGNAL',
         sourceIds: Object.freeze([signal.id, line?.id ?? intersection.id]),
         baseYM: 0,
-        positionM: point(anchor.x + right.x * setback, anchor.z + right.z * setback),
+        positionM: headPosition,
         facingRad: normalizeAngle(heading + Math.PI),
         laneId,
         intersectionId: intersection.id,
@@ -1614,11 +1645,13 @@ export function verifyCityAlignment(
       const from = nodes.get(ordered[0]!)!;
       const to = nodes.get(ordered[ordered.length - 1]!)!;
       const heading = Math.atan2(to.z - from.z, to.x - from.x);
-      const setback = lane.widthM / 2 + layout.options.signalHeadSetbackM;
-      const expected = {
-        x: anchor.x + Math.sin(heading + Math.PI / 2) * setback,
-        z: anchor.z + Math.cos(heading + Math.PI / 2) * setback,
-      };
+      const expected = signalHeadPosition(
+        map,
+        intersection,
+        anchor,
+        heading,
+        layout.options.signalHeadSetbackM,
+      );
       if (Math.hypot(head.positionM.x - expected.x, head.positionM.z - expected.z) > tolerance)
         issues.push({
           code: 'SIGNAL_HEAD_OFFSET',

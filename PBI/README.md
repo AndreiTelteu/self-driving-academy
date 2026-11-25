@@ -4,19 +4,19 @@
 | Asseturi și audio | Completed | 0 | 0 | 7 / 7 | `██████████` 100% |
 | Autonomie | Completed | 0 | 0 | 14 / 14 | `██████████` 100% |
 | Babylon | Completed | 0 | 0 | 11 / 11 | `██████████` 100% |
-| Calitate vizuală V4 | V4 | 8 | 0 | 7 / 15 | `████░░░░░░` 47% |
-| Control manual | Completed | 0 | 0 | 8 / 8 | `██████████` 100% |
+| Calitate vizuală V4 | V4 | 3 | 0 | 14 / 17 | `████████░░` 82% |
+| Control manual | Completed | 0 | 0 | 9 / 9 | `██████████` 100% |
 | Economie | Completed | 0 | 0 | 1 / 1 | `██████████` 100% |
 | Experiență | Completed | 0 | 0 | 2 / 2 | `██████████` 100% |
 | Experimente | Completed | 0 | 0 | 1 / 1 | `██████████` 100% |
 | Experimente și indicatori | Completed | 0 | 0 | 8 / 8 | `██████████` 100% |
 | Extindere V2 | Completed | 0 | 0 | 4 / 4 | `██████████` 100% |
-| Flotă și curse | Completed | 0 | 0 | 9 / 9 | `██████████` 100% |
+| Flotă și curse | Completed | 0 | 0 | 10 / 10 | `██████████` 100% |
 | Fundație | Completed | 0 | 0 | 14 / 14 | `██████████` 100% |
 | Interfață | Completed | 0 | 0 | 13 / 13 | `██████████` 100% |
 | Învățare | Completed | 0 | 0 | 17 / 17 | `██████████` 100% |
 | Învățare V2 | Completed | 0 | 0 | 10 / 10 | `██████████` 100% |
-| Mers pe jos V3 | Completed | 0 | 0 | 15 / 15 | `██████████` 100% |
+| Mers pe jos V3 | Completed | 0 | 0 | 16 / 16 | `██████████` 100% |
 | Misiuni | Completed | 0 | 0 | 15 / 15 | `██████████` 100% |
 | Misiuni și interfață | Completed | 0 | 0 | 1 / 1 | `██████████` 100% |
 | Misiuni V2 | Completed | 0 | 0 | 1 / 1 | `██████████` 100% |
@@ -35,12 +35,12 @@
 | Validare și release | Completed | 0 | 0 | 12 / 12 | `██████████` 100% |
 | Validare V2 | Completed | 0 | 0 | 2 / 2 | `██████████` 100% |
 | Vehicule și fizică | Completed | 0 | 0 | 11 / 11 | `██████████` 100% |
-| Total | - | 8 | 0 | 245 / 253 | `█████████░` 97% |
+| Total | - | 3 | 0 | 254 / 257 | `██████████` 99% |
 <!-- loop-pbi:progress:end -->
 
 # Backlog Kanban Self Driving Academy
 
-253 task-uri de implementare cu IDs stabile 001–253. Ordinea de implementare este definită de depends_on; IDs nu mai constituie o ordine topologică numerică. Toate sunt create inițial în To Do. Prefixele rămân stabile la mutarea între coloane.
+257 task-uri de implementare cu IDs stabile 001-257. Ordinea de implementare este definită de depends_on; IDs nu mai constituie o ordine topologică numerică. Toate sunt create inițial în To Do. Prefixele rămân stabile la mutarea între coloane.
 
 ## Coloane și workflow
 
@@ -56,8 +56,8 @@
 | --- | --- | --- | --- |
 | V1 | 001–162 și 203–235 | 195 | Joc PC browser, trei moduri, stil comun taxi/civil, 24 parametri, KPIs, daily, XP, salvare și comparații |
 | V2 | 163–190 | 28 | Toți cei 80 de parametri, pietoni, pericole și provocări extinse |
-| V3 | 191–202, 236–238 | 15 | Personaj, mers pe jos și intrare/ieșire din mașini |
-| V4 | 239–253 | 15 | Calitate vizuală: imagine HD, lumină, umbre, materiale PBR, modele și UI de joc |
+| V3 | 191–202, 236–238, 256–257 | 17 | Personaj, mers pe jos, intrare/ieșire, trafic AI și mod AUTO/MANUAL |
+| V4 | 239–255 | 17 | Calitate vizuală: imagine HD, lumină, umbre, materiale PBR, modele și UI de joc |
 
 Statutul curent se citește din coloana fișierului și frontmatter. Indexul păstrează ID-urile fără statusuri duplicate și fără linkuri către o coloană care s-ar schimba la mutare. Găsește un task prin prefixul său în cele trei coloane.
 
@@ -302,7 +302,7 @@ Statutul curent se citește din coloana fișierului și frontmatter. Indexul pă
 | 235 | Regresii și playtest pentru distracție și revenire | Validare | V1 | 216, 224, 226, 228, 229, 230, 233, 234, 084 |
 | 236 | Compunerea în browser a lanțului V3 | Mers pe jos V3 | V3 | 202, 193, 194, 195, 196, 197 |
 | 237 | Virarea walker-ului în partea scurtă și simetrică | Mers pe jos V3 | V3 | 236 |
-| 238 | Coliziunea mașinii conduse cu decorul și clădirile, și orientarea decorului | Mers pe jos V3 | V3 | 236, 237 |
+| 238 | Coliziunea mașinii conduse cu decorul și clădirile, și orientarea decorului | Mers pe jos V3 | V3 | 236, 237, 256, 257 |
 | 239 | Direcția vizuală V4 și harness de capturi înainte/după | Calitate vizuală V4 | V4 | 238 |
 | 240 | Randare pe tot ecranul, la rezoluție HD și DPR real | Calitate vizuală V4 | V4 | 239 |
 | 241 | Antialiasing, tone mapping unitar și post-procesare | Calitate vizuală V4 | V4 | 240 |
@@ -317,7 +317,11 @@ Statutul curent se citește din coloana fișierului și frontmatter. Indexul pă
 | 250 | Încadrarea camerei: FOV, înălțime, orbitare verticală și netezire | Calitate vizuală V4 | V4 | 240 |
 | 251 | Ecran de start, HUD de joc și eliminarea layoutului de debug | Calitate vizuală V4 | V4 | 240 |
 | 252 | Ora din zi, iluminat stradal și faruri | Calitate vizuală V4 | V4 | 246, 247, 249 |
-| 253 | Gate V4: calitate vizuală și performanță pe toate preseturile | Calitate vizuală V4 | V4 | 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252 |
+| 253 | Gate V4: calitate vizuală și performanță pe toate preseturile | Calitate vizuală V4 | V4 | 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 254, 255 |
+| 254 | Import modele 3D realiste: vehicule, personaj, clădiri și decor | Calitate vizuală V4 | V4 | 249 |
+| 255 | Modele 3D pentru clădiri și mobilierul stradal rămas | Calitate vizuală V4 | V4 | 254 |
+| 256 | Trafic AI vizibil în compunerea de browser | Flotă și curse | V3 | 058, 236 |
+| 257 | Mod AUTO/MANUAL, HUD de viteză și coliziune cu mașinile AI | Control manual | V3 | 236, 256, 067 |
 
 ## Verificarea consistenței planului
 

@@ -92,6 +92,19 @@ export interface CivilTrafficOptions {
   readonly seed?: number;
   readonly graphVersion?: string;
   readonly costVersion?: string;
+  /**
+   * Optional deterministic spawn lanes for the first actors (in stable vehicle-ID order). They must
+   * be CIVIL lanes; duplicates or unknown lanes are rejected. If a preferred origin has no route,
+   * that actor falls back to the seeded origin search. This lets the composition root place visible
+   * traffic near the player without inventing a second router.
+   */
+  readonly spawnLanes?: readonly string[];
+  /**
+   * Optional initial distance along each preferred route, aligned with `spawnLanes`. Missing
+   * entries start at 0. Values are clamped to the route length; this only offsets the deterministic
+   * planner route, it never creates a route or a pose outside it.
+   */
+  readonly spawnOffsetsM?: readonly number[];
 }
 
 export interface CivilTrafficVehicleObservation {
@@ -266,6 +279,8 @@ function readOptions(value: unknown): {
   seed: number | null;
   graphVersion: string;
   costVersion: string;
+  spawnLanes: readonly string[];
+  spawnOffsetsM: readonly number[];
 } {
   const data = record(value);
   for (const key of Object.keys(data))
@@ -280,6 +295,8 @@ function readOptions(value: unknown): {
         'seed',
         'graphVersion',
         'costVersion',
+        'spawnLanes',
+        'spawnOffsetsM',
       ].includes(key),
       'Unknown civil traffic option',
     );
@@ -327,6 +344,31 @@ function readOptions(value: unknown): {
     data.graphVersion === undefined ? '033-lane-graph-v1' : boundedId(data.graphVersion, 128);
   const costVersion =
     data.costVersion === undefined ? ROUTE_COST_MODEL.version : boundedId(data.costVersion, 128);
+  const spawnLanes: string[] = [];
+  if (data.spawnLanes !== undefined) {
+    requireContract(Array.isArray(data.spawnLanes), 'Civil traffic spawn lanes must be an array');
+    requireContract(
+      data.spawnLanes.length <= CIVIL_TRAFFIC_LIMITS.actors,
+      'Civil traffic spawn lane capacity',
+    );
+    for (const raw of data.spawnLanes) {
+      const laneId = boundedId(raw);
+      requireContract(!spawnLanes.includes(laneId), 'Duplicate civil traffic spawn lane');
+      spawnLanes.push(laneId);
+    }
+  }
+  const spawnOffsetsM: number[] = [];
+  if (data.spawnOffsetsM !== undefined) {
+    requireContract(
+      Array.isArray(data.spawnOffsetsM),
+      'Civil traffic spawn offsets must be an array',
+    );
+    requireContract(
+      data.spawnOffsetsM.length <= spawnLanes.length,
+      'Civil traffic spawn offsets require a matching spawn lane',
+    );
+    for (const raw of data.spawnOffsetsM) spawnOffsetsM.push(finiteNumber(raw, 0, 1_000_000));
+  }
   return {
     registry,
     map: data.map,
@@ -343,6 +385,8 @@ function readOptions(value: unknown): {
     seed,
     graphVersion,
     costVersion,
+    spawnLanes: Object.freeze(spawnLanes),
+    spawnOffsetsM: Object.freeze(spawnOffsetsM),
   };
 }
 
@@ -437,6 +481,8 @@ class CivilTrafficImpl implements CivilTraffic {
   private readonly costVersion: string;
   private readonly seed: number;
   private readonly scenarioSeed: number;
+  private readonly spawnLanes: readonly string[];
+  private readonly spawnOffsetsM: readonly number[];
   private readonly civilians: readonly FleetVehicle[];
   private readonly civilianIds: ReadonlySet<string>;
   private readonly actors: ActorState[];
@@ -467,6 +513,8 @@ class CivilTrafficImpl implements CivilTraffic {
     this.costVersion = planner.costVersion ?? options.costVersion;
     this.seed = options.seed ?? this.registry.configuration.seed;
     this.scenarioSeed = deriveScenarioSeed(this.seed, this.registry.configuration.scenarioId);
+    this.spawnLanes = options.spawnLanes;
+    this.spawnOffsetsM = options.spawnOffsetsM;
     this.styleSource = options.styleSource;
     this.commonStyle = style;
     this.civilians = Object.freeze(
@@ -494,17 +542,19 @@ class CivilTrafficImpl implements CivilTraffic {
         .sort((left, right) =>
           left.vehicleId < right.vehicleId ? -1 : left.vehicleId > right.vehicleId ? 1 : 0,
         )
-        .map((vehicle) => {
+        .map((vehicle, index) => {
           const actor = Object.freeze({ id: vehicle.vehicleId, incarnation: 1 });
-          const route = this.spawnRoute(vehicle.vehicleId, 0, usedOrigins);
-          const pose = routePose(route, 0);
+          const route = this.spawnRoute(vehicle.vehicleId, 0, usedOrigins, this.spawnLanes[index]);
+          const requestedOffset = this.spawnOffsetsM[index] ?? 0;
+          const distanceM = Math.min(requestedOffset, Math.max(0, route.totalLengthM - 1));
+          const pose = routePose(route, distanceM);
           return {
             vehicle,
             actor,
             authority: this.registry.state(vehicle.vehicleId)!.controlMode,
             style,
             route,
-            distanceM: 0,
+            distanceM,
             speedMps: 0,
             pose,
             leader: null,
@@ -572,10 +622,27 @@ class CivilTrafficImpl implements CivilTraffic {
     throw new RangeError('No route for civil vehicle');
   }
 
-  private spawnRoute(vehicleId: string, cycle: number, usedOrigins?: Set<string>): RouteState {
+  private spawnRoute(
+    vehicleId: string,
+    cycle: number,
+    usedOrigins?: Set<string>,
+    preferredOrigin?: string,
+  ): RouteState {
     const vehicleSeed = this.vehicleSeed(vehicleId),
-      lanes = this.civilLaneIds(),
-      start = randomUint32(vehicleSeed, 'civil-origin', cycle) % lanes.length;
+      lanes = this.civilLaneIds();
+    if (preferredOrigin !== undefined) {
+      requireContract(lanes.includes(preferredOrigin), 'Unknown civil traffic spawn lane');
+      if (!usedOrigins?.has(preferredOrigin)) {
+        try {
+          const route = this.buildRoute(preferredOrigin, vehicleSeed, cycle);
+          usedOrigins?.add(preferredOrigin);
+          return route;
+        } catch {
+          // No route from the preferred origin: the seeded search below remains authoritative.
+        }
+      }
+    }
+    const start = randomUint32(vehicleSeed, 'civil-origin', cycle) % lanes.length;
     let origin = lanes[start]!;
     if (usedOrigins !== undefined) {
       for (let attempt = 0; attempt < lanes.length; attempt += 1) {

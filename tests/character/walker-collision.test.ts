@@ -286,7 +286,19 @@ test('viteza reală decide clipul, nu comanda de intrare', () => {
   runTicks(standing, 60, { headingRad: 0.7, gait: 'NONE', intensity: 0 });
   assert.equal(standing.state.clipId, 'idle');
   assert.equal(standing.state.positionM.z, 0);
-  assert.equal(standing.state.yawRad, 0, 'a gait without input does not spin the character');
+  // Pe loc, fețarea urmează direcția cerută (virare pe loc cu A/D), fără deplasare.
+  assert.ok(
+    Math.abs(standing.state.yawRad - 0.7) < 1e-9,
+    'standing still turns in place toward the requested heading',
+  );
+
+  const still = createWalker({
+    world: open,
+    start: { positionM: { x: 0, y: 0, z: 0 }, yawRad: 0.3 },
+    entityId: 'walker-clip-still',
+  });
+  runTicks(still, 60, { headingRad: 0.3, gait: 'NONE', intensity: 0 });
+  assert.equal(still.state.yawRad, 0.3, 'no turn input keeps the current facing');
 });
 
 test('startul în interiorul unui solid este refuzat explicit', () => {

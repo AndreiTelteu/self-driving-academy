@@ -71,8 +71,11 @@ export const WALKER_POLICY = Object.freeze({
   vehicleContactMarginM: 0.05,
   /** Free gap kept between the character cylinder and a static obstacle. */
   obstacleMarginM: 0.05,
-  /** Facing change limit; the walker turns deterministically instead of snapping. */
-  turnRateRadps: 12,
+  /**
+   * Facing change limit; the walker turns deterministically instead of snapping. 2.5 rad/s
+   * (~143°/s) keeps a short A/D tap to a small correction (~14° for 100 ms).
+   */
+  turnRateRadps: 2.5,
   accelerationMps2: 6,
   decelerationMps2: 10,
   /** Below this measured speed the character is idle, whatever the input asked for. */
@@ -89,13 +92,17 @@ export const WALKER_GAIT_SPEEDS_MPS = Object.freeze({
 });
 
 export interface WalkerInput {
-  /** Desired facing in radians; +Z is forward at yaw 0, the same convention as the chassis. */
+  /**
+   * Desired facing in radians; +Z is forward at yaw 0, the same convention as the chassis. It is
+   * honoured for every gait, including `NONE` (turning in place).
+   */
   readonly headingRad: number;
   readonly gait: WalkerGait;
   /** 0…1 fraction of the gait speed; zero means the character is commanded to stand. */
   readonly intensity: number;
 }
 
+/** Standing input facing yaw 0; to stand without turning, pass the current yaw as `headingRad`. */
 export const WALKER_IDLE_INPUT: WalkerInput = Object.freeze({
   headingRad: 0,
   gait: 'NONE',
@@ -441,10 +448,12 @@ export function createWalker(options: WalkerOptions): Walker {
       pushEvent(event);
     };
 
-    const yaw =
-      input.gait === 'NONE'
-        ? state.yawRad
-        : turnToward(state.yawRad, input.headingRad, WALKER_POLICY.turnRateRadps * DT_SECONDS);
+    // The facing follows `headingRad` even while standing, so A/D turn the character in place.
+    const yaw = turnToward(
+      state.yawRad,
+      input.headingRad,
+      WALKER_POLICY.turnRateRadps * DT_SECONDS,
+    );
     const desiredSpeedMps =
       input.gait === 'NONE' ? 0 : WALKER_GAIT_SPEEDS_MPS[input.gait] * input.intensity;
     const requestedSpeed = approachSpeed(state.speedMps, desiredSpeedMps, DT_SECONDS);

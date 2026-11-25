@@ -23,7 +23,7 @@ export interface CharacterHud {
 }
 
 const CONTROLS_HINT =
-  'W/S accelerează/frână · A/D virează · F alergare · G intră/iese din mașină · Space frână de mână';
+  'W/S accelerează/frână · A/D virează · F alergare · G intră/iese · M AUTO/MANUAL · Space frână de mână';
 
 export function createCharacterHud(
   root: HTMLElement,
@@ -41,6 +41,9 @@ export function createCharacterHud(
     'bottom:12px',
     'z-index:10',
     'min-width:260px',
+    // PBI 257: nu acoperă vitezometrul central pe ecrane late; sub 1100 px game-hud se mută sus.
+    'max-width:28vw',
+    'box-sizing:border-box',
     'padding:10px 12px',
     'border-radius:10px',
     'background:rgba(8,20,26,0.82)',

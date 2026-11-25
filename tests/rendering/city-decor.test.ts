@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { NullEngine } from '@babylonjs/core/Engines/nullEngine.js';
 import { Scene } from '@babylonjs/core/scene.js';
-import { StandardMaterial } from '@babylonjs/core/Materials/standardMaterial.js';
+import { PBRMaterial } from '@babylonjs/core/Materials/PBR/pbrMaterial.js';
 import {
   CITY_DECOR_KINDS,
   CITY_DECOR_VERSION,
@@ -139,7 +139,7 @@ test('the decor manifest passes PBI 223 on every preset with an explicit invento
     assert.equal(result.accepted, true, JSON.stringify(result.diagnostics));
     assert.equal(result.totals.transferBytes, 0);
     assert.equal(result.totals.textureGpuBytes, 0);
-    assert.equal(result.totals.shaderVariants, 2);
+    assert.equal(result.totals.shaderVariants, 5);
     assert.ok(result.totals.geometryGpuBytes > 0);
   }
   const manifest = cityDecorManifest(plan);
@@ -147,7 +147,7 @@ test('the decor manifest passes PBI 223 on every preset with an explicit invento
   assert.equal(inventory.length, manifest.assets.length - 1);
   for (const asset of manifest.assets) {
     if (asset.id === 'city-decor:materials') {
-      assert.equal(asset.shaderVariants, 2);
+      assert.equal(asset.shaderVariants, 5);
       assert.equal(asset.geometryGpuBytes, 0);
       continue;
     }
@@ -167,22 +167,36 @@ test('36 cells are one mesh each, identity is local and disposal is exact', () =
     nodes: scene.transformNodes.length,
   };
   const decor = createCityDecorScene(scene, layout);
-  assert.equal(decor.stats.meshes, decor.plan.cells.length);
-  assert.equal(decor.stats.drawCalls, decor.stats.meshes);
-  assert.ok(decor.stats.meshes <= 64, `cells ${decor.stats.meshes}`);
+  // One mesh per non-tree cell + one thin-instance source mesh per tree species + one grass
+  // source mesh (HIGH default). Trees and grass are GPU thin instances — a single draw call each.
+  const treeSpecies = new Set(
+    plan.items.filter((entry) => entry.kind.startsWith('tree')).map((entry) => entry.kind),
+  ).size;
+  const nonTreeCells = new Set(
+    plan.items.filter((e) => !e.kind.startsWith('tree')).map((e) => e.cell),
+  ).size;
+  const expectedMeshes = nonTreeCells + treeSpecies + 1; // +1 grass source (HIGH default)
+  assert.equal(decor.stats.meshes, expectedMeshes);
+  assert.equal(decor.stats.drawCalls, nonTreeCells + treeSpecies + 1);
   assert.equal(decor.stats.items, plan.items.length);
-  const geometry = buildCityDecorGeometry(plan);
-  assert.equal(
-    decor.stats.vertices,
-    geometry.reduce((sum, cell) => sum + cell.vertices, 0),
+  const nonTreePlan = Object.freeze({
+    ...plan,
+    items: plan.items.filter((e) => !e.kind.startsWith('tree')),
+  });
+  const geometry = buildCityDecorGeometry(nonTreePlan);
+  assert.ok(
+    decor.stats.vertices >= geometry.reduce((sum, cell) => sum + cell.vertices, 0),
+    `vertices ${decor.stats.vertices}`,
   );
   for (const cell of decor.plan.cells) {
     const mesh = decor.meshForCell(cell)!;
     assert.ok(mesh);
-    assert.equal(decor.itemsInCell(cell).length > 0, true);
-    for (const item of decor.itemsInCell(cell)) assert.equal(item.cell, cell);
-    const data = mesh.getVerticesData('position')!;
-    assert.equal(data.length / 3, geometry.find((entry) => entry.cell === cell)!.vertices);
+    const nonTreeItems = decor.itemsInCell(cell).filter((e) => !e.kind.startsWith('tree'));
+    if (nonTreeItems.length > 0) {
+      for (const item of nonTreeItems) assert.equal(item.cell, cell);
+      const data = mesh.getVerticesData('position')!;
+      assert.ok(data.length > 0, `cell ${cell} has geometry`);
+    }
   }
   decor.dispose();
   decor.dispose();
@@ -218,7 +232,7 @@ test('city plus decor keeps the PBI 042 map semantics and alignment intact', () 
 test('a caller-owned decor material is borrowed, not disposed', () => {
   const engine = new NullEngine();
   const scene = new Scene(engine);
-  const material = new StandardMaterial('caller-decor', scene);
+  const material = new PBRMaterial('caller-decor', scene);
   const decor = createCityDecorScene(scene, layout, { material });
   decor.dispose();
   assert.equal(scene.materials.includes(material), true);

@@ -109,6 +109,43 @@ function corners(pose: VehiclePose, body: VehicleBody): readonly [number, number
   return out;
 }
 
+/**
+ * PBI 257: SAT for two rotated vehicle bodies in the X/Z plane. The axes are the two local axes of
+ * each rectangle; a separating axis proves there is no contact. Touching/penetrating returns true.
+ */
+export function vehicleBodiesOverlap(
+  a: VehiclePose,
+  bodyA: VehicleBody,
+  b: VehiclePose,
+  bodyB: VehicleBody,
+): boolean {
+  const axes = [
+    [Math.sin(a.yawRad), Math.cos(a.yawRad)],
+    [Math.cos(a.yawRad), -Math.sin(a.yawRad)],
+    [Math.sin(b.yawRad), Math.cos(b.yawRad)],
+    [Math.cos(b.yawRad), -Math.sin(b.yawRad)],
+  ] as const;
+  const cornersA = corners(a, bodyA),
+    cornersB = corners(b, bodyB);
+  const project = (points: readonly [number, number][], axis: readonly [number, number]) => {
+    let minimum = Infinity,
+      maximum = -Infinity;
+    for (const [x, z] of points) {
+      const value = x * axis[0] + z * axis[1];
+      minimum = Math.min(minimum, value);
+      maximum = Math.max(maximum, value);
+    }
+    return { minimum, maximum };
+  };
+  for (const axis of axes) {
+    const first = project(cornersA, axis),
+      second = project(cornersB, axis);
+    if (first.maximum < second.minimum - 1e-9 || second.maximum < first.minimum - 1e-9)
+      return false;
+  }
+  return true;
+}
+
 function boundsOfPose(pose: VehiclePose, body: VehicleBody): Bounds {
   let minX = Infinity;
   let maxX = -Infinity;

@@ -327,6 +327,42 @@ componenta vitezei spre obstacol se anulează (alunecare). Din oprire, frâna ț
 altfel o mașină blocată nu ar mai putea ieși. Dovezile sunt în
 [Evidence/238-vehicle-static-collision](Evidence/238-vehicle-static-collision/README.md).
 
+## Traficul AI vizibil în compunerea de browser (PBI 256)
+
+Compunerea 236 afișa doar taxiul parcat și un civil static, deși contractul 058 exista. `createAmbientTraffic`
+(`src/app/ambient-traffic.ts`) creează acum 24 de mașini conduse de AI peste harta 032 și graful 033: un registry 057
+cu minimul de 20 de taxiuri plus 24 de civili, un stil comun construit din valorile implicite 092 și traficul 058 cu
+rute din planner-ul 041. Primele benzi de spawn sunt alese determinist după distanța originii față de jucător, ca
+orașul să pară viu din primul cadru; restul populației rămâne împrăștiat pe hartă. `createV3Composition` pașește 058
+înaintea arbitrajului de input, publică actorii în `frame.vehicles` și îi desenează prin aceeași scenă Babylon.
+
+Graful măsoară headingul cu `0 = +X`, compunerea cu `0 = +Z`; conversia `yaw = normalize(π/2 − heading)` este
+verificată pe un actor care avansează pe `+Z`. Taxiul și civilul static intră în cadrul 044 ca observații externe,
+deci mașinile AI frânează în spatele lor. Mașinile AI nu sunt preluabile: `requestEntry` le refuză cu
+`ENTER_REFUSED: AI_TRAFFIC`, deoarece 058 are propriul progres de rută. Proba reală în Chromium/WebGL2 (SwiftShader)
+raportează 26 de vehicule în scenă, **24/24 actori deplasați peste 1 m**, 0 erori de pagină/consolă, tick p50
+**3,70 ms** și p95 **5,50 ms** (sub bugetul provizoriu de 8 ms), plus capturile celor șapte secvențe. Frame-ul rămâne
+o măsurătoare software, nu hardware. Detalii în [traficul AI din browser](browser-ai-traffic.md) și
+[Evidence/256-browser-ai-traffic](Evidence/256-browser-ai-traffic/README.md).
+
+## Mod AUTO/MANUAL, HUD de viteză și coliziune cu mașinile AI (PBI 257)
+
+Jucarea traficului 256 a arătat trei lipsuri: HUD-ul central rămânea la `0 km/h`, eticheta `[A]
+Conduce AI-ul` nu era buton, iar mașina condusă trecea prin mașinile AI. Acum `M` și butonul HUD
+comută aceeași mașină între MANUAL și AUTO; `src/app/vehicle-auto-drive.ts` construiește o rută 041
+peste graful 033, pornește de pe banda cea mai apropiată și o urmează cu mecanica 023 la 80% din
+limita benzii. În MANUAL, comanda 024 a jucătorului redevine autoritară. HUD-ul citește
+`CompositionFrame` la ~10 Hz și afișează viteza reală în km/h și modul (`AI`/`M`), iar butonul are
+`aria-keyshortcuts="M"` și readuce focusul pe canvas.
+
+PBI 238 acoperea numai solidele statice. `vehicleBodiesOverlap` adaugă SAT pentru două caroserii
+rotite în X/Z, iar `driveVehicle` și driverul AUTO verifică toate celelalte mașini după măturarea
+statică; la contact, mașina rămâne pe poza anterioară și viteza devine 0. Camera revine în spate
+după 30 de tick-uri fără obstrucție, iar intrarea/ieșirea/resetul readuc imediat orbita implicită.
+Testele `tests/app/vehicle-mode-hud.test.ts` acoperă SAT, AUTO/MANUAL, oprirea la civilul static și
+resetul orbitei; proba de browser are pașii `AUTO` și `revenire MANUAL prin buton` și citește
+viteza din HUD. Detalii în [mod AUTO/MANUAL, HUD și coliziune](mode-auto-hud-collision.md).
+
 ## Limita hărții pentru mașina condusă și personaj (PBI 242)
 
 `layout.worldLimit` (`src/world/world-limit.ts`, `242-world-limit-v1`) este dreptunghiul `boundsM` retras cu 12 m (dar cu cel puțin

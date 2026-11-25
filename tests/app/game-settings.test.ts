@@ -155,7 +155,7 @@ test('081 reset restores display/camera/comfort/graphics defaults and preserves 
   assert.equal(saved.units.speed, 'km/h');
   assert.equal(saved.units.distance, 'm');
   assert.equal(saved.input.cameraMode, 'CHASE');
-  assert.equal(saved.input.control.fov, 80);
+  assert.equal(saved.input.control.fov, 60); // PBI 250: default 60 (era 80)
   assert.equal(saved.input.control.steeringSensitivity, 50);
   assert.equal(saved.input.control.cameraMotion, 50);
   assert.equal(saved.input.control.mappingVersion, '025-keyboard-v1');

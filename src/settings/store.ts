@@ -35,7 +35,7 @@ export function createDefaultSettings(playerId: string, controlVersion = 0): Run
         throttleRamp: 50,
         brakeRamp: 50,
         cameraMotion: 50,
-        fov: 80,
+        fov: 60, // PBI 250: 60° în range 55–65° (era 80°)
       },
     },
     units: { speed: 'km/h', distance: 'm' },

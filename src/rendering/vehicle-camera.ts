@@ -150,7 +150,8 @@ export class VehicleCameraController {
     const world = (p: CameraPoint) => add(target.transform.positionM, rotate(p, target.transform));
     const anchor = world(target.driverEyeM);
     const distance = this.preferences.distanceM + Math.min(4, target.speedMps * 0.08);
-    const desired = this.mode === 'FIRST_PERSON' ? anchor : world(vector(0, 2.5, -distance));
+    // PBI 250: camera mai sus pentru vizibilitate (era 2.5, acum 3.2m)
+    const desired = this.mode === 'FIRST_PERSON' ? anchor : world(vector(0, 3.2, -distance));
     const strength = this.preferences.motion / 100;
     const factor =
       strength === 0 ? 1 : 1 - Math.exp(-(18 - 12 * strength) * Math.min(0.25, dtSeconds));
@@ -179,6 +180,10 @@ export class VehicleCameraController {
       target.transform,
     );
     const lookAt = this.mode === 'FIRST_PERSON' ? add(swept, forward) : add(anchor, forward);
+    // PBI 250: FOV crește ușor cu viteza (max +8°)
+    const baseFovRad = (this.preferences.fovDegrees * Math.PI) / 180;
+    const speedBoost = (Math.min(target.speedMps / 20, 1) * (8 * Math.PI)) / 180;
+    const fovRadians = baseFovRad + speedBoost;
     return Object.freeze({
       entityId: target.entityId,
       mode: this.mode,
@@ -187,7 +192,7 @@ export class VehicleCameraController {
       up: Object.freeze(
         this.mode === 'FIRST_PERSON' ? rotate(vector(0, 1, 0), target.transform) : vector(0, 1, 0),
       ),
-      fovRadians: (this.preferences.fovDegrees * Math.PI) / 180,
+      fovRadians,
     });
   }
 }

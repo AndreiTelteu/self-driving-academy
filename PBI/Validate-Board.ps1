@@ -20,15 +20,16 @@ foreach ($taskColumn in $taskColumns) {
         $taskHeaderMatch = [regex]::Match($taskText, '\A---\r?\n([\s\S]*?)\r?\n---')
         if (-not $taskHeaderMatch.Success) { throw "Frontmatter lipsă: $($taskFile.Name)" }
         $taskHeader = $taskHeaderMatch.Groups[1].Value.Replace([string][char]13, '')
-        $taskIdMatch = [regex]::Match($taskHeader, '(?m)^id: "(\d{3,})"$')
-        $taskStatusMatch = [regex]::Match($taskHeader, '(?m)^status: "(To Do|In Progress|Done)"$')
-        $taskDepsMatch = [regex]::Match($taskHeader, '(?m)^depends_on: (\[.*\])$')
+        $taskIdMatch = [regex]::Match($taskHeader, '(?m)^id: "(\d{3,})"\r?$')
+        $taskStatusMatch = [regex]::Match($taskHeader, '(?m)^status: "(To Do|In Progress|Done)"\r?$')
+        $taskDepsMatch = [regex]::Match($taskHeader, '(?m)^depends_on: (\[.*\])\r?$')
         if (-not $taskIdMatch.Success -or -not $taskStatusMatch.Success -or -not $taskDepsMatch.Success) { throw "Metadate invalide: $($taskFile.Name)" }
         $taskId = $taskIdMatch.Groups[1].Value
         if (-not $taskFile.Name.StartsWith($taskId + '-')) { throw "Prefix incompatibil: $($taskFile.Name)" }
         if ($taskStatusMatch.Groups[1].Value -ne $taskColumn) { throw "Status diferit de folder: $($taskFile.Name)" }
         if ($taskEntries.ContainsKey($taskId)) { throw "ID duplicat în board: $taskId" }
-        $taskDeps = @($taskDepsMatch.Groups[1].Value | ConvertFrom-Json)
+        $taskDeps = @()
+        foreach ($taskDepItem in ($taskDepsMatch.Groups[1].Value | ConvertFrom-Json)) { $taskDeps += [string]$taskDepItem }
         if (@($taskDeps | Select-Object -Unique).Count -ne $taskDeps.Count) { throw "Dependențe duplicate: $taskId" }
         if ($taskColumn -ne 'To Do') {
             if (-not [regex]::IsMatch($taskHeader, '(?m)^owner: (?!null$).+$')) { throw "Owner lipsă: $taskId" }

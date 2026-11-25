@@ -1,5 +1,6 @@
 import {
   compositionSnapshot,
+  createAmbientTraffic,
   createApplicationLifecycle,
   createCompositionWorld,
   createPauseFocusOwner,
@@ -13,14 +14,16 @@ import {
   createV3BrowserComposition,
   diagnoseBackend,
   installVisualCapture,
+  loadGlbModelLibrary,
   readCaptureConfig,
   showDevelopmentInspector,
   type BabylonDiagnostics,
+  type GlbModelLibrary,
   type RecoverySceneSnapshot,
   type V3BrowserComposition,
 } from './rendering/babylon';
 import { observeDisplaySurface, readDisplayMetrics } from './rendering';
-import { createRenderingView, createDiagnosticsPanel } from './ui';
+import { createRenderingView, createDiagnosticsPanel, createFpsCounter } from './ui';
 import './style.css';
 
 const app = document.querySelector<HTMLDivElement>('#app');
@@ -29,6 +32,8 @@ const view = createRenderingView(app);
 const world = createCompositionWorld();
 /** PBI 239: `?capture=1` pornește harnessul de capturi; fără steag este `null` și nimic nu se schimbă. */
 const captureConfig = readCaptureConfig(window.location.search);
+/** Contor FPS permanent (stânga-sus), independent de diagnostic; omis în capturile deterministe. */
+if (!captureConfig) createFpsCounter(app);
 const defaultSettings = createDefaultSettings('v3-composition');
 const settings = captureConfig
   ? {
@@ -121,14 +126,36 @@ const application = createApplicationLifecycle({
           onLost,
         );
         let ownedComposition: V3BrowserComposition | undefined;
+        let ownedTraffic: ReturnType<typeof createAmbientTraffic> | undefined;
         let owned: BabylonDiagnostics | undefined;
         let releaseSurface: (() => void) | undefined;
+        let models: GlbModelLibrary | undefined;
         try {
           const canvas = view.getCanvas();
           canvas.tabIndex = 0;
           // PBI 240: canvasul umple fereastra (CSS `.game-canvas`); rezoluția internă urmează
           // dimensiunea CSS reală × min(DPR, maxDpr) × scara, nu o dimensiune fixă.
           const initialMetrics = readDisplayMetrics(canvas, window);
+          // PBI 254: modelele realiste se decodează o dată, înainte de construirea scenelor.
+          // `?capture=1&models=procedural` păstrează rig-ul vechi pentru dovada înainte/după.
+          if (captureConfig?.models !== 'procedural') {
+            models = await loadGlbModelLibrary(backend.scene);
+          }
+          // PBI 256: trafic proaspăt pentru fiecare backend; recuperarea GPU nu refolosește tick-ul 058.
+          ownedTraffic = createAmbientTraffic({
+            map: world.map,
+            graph: world.graph,
+            context: compositionContext,
+            seed: 256,
+            focus: { x: world.spawn.x, z: world.spawn.z },
+            avoid: [
+              { x: world.spawn.x, z: world.spawn.z },
+              ...world.vehicles.map((vehicle) => ({
+                x: vehicle.positionM.x,
+                z: vehicle.positionM.z,
+              })),
+            ],
+          });
           ownedComposition = createV3BrowserComposition({
             scene: backend.scene,
             surface: app,
@@ -138,10 +165,14 @@ const application = createApplicationLifecycle({
             context: compositionContext,
             spawn: world.spawn,
             vehicles: world.vehicles,
+            traffic: ownedTraffic.traffic,
+            map: world.map,
+            graph: world.graph,
             rendererKind: backend.rendererKind,
             preset: settings.quality.preset,
             viewport: initialMetrics,
             enabled: () => application.getState().kind === 'PLAYING',
+            models,
           });
           composition = ownedComposition;
           const surface = ownedComposition;
@@ -184,8 +215,19 @@ const application = createApplicationLifecycle({
           });
         } catch (error: unknown) {
           releaseSurface?.();
-          ownedComposition?.dispose();
-          backend.dispose();
+          try {
+            ownedComposition?.dispose();
+          } finally {
+            try {
+              ownedTraffic?.dispose();
+            } finally {
+              try {
+                models?.dispose();
+              } finally {
+                backend.dispose();
+              }
+            }
+          }
           throw error;
         }
         diagnostics = owned;
@@ -202,11 +244,16 @@ const application = createApplicationLifecycle({
             } finally {
               releaseSurface?.();
               releaseSurface = undefined;
-              ownedComposition?.dispose();
-              if (composition === ownedComposition) composition = undefined;
-              if (diagnostics === owned) {
-                diagnostics = undefined;
-                inspectScene = undefined;
+              try {
+                ownedComposition?.dispose();
+              } finally {
+                // PBI 256: compunerea nu deține traficul; registry-ul și actorii 058 se eliberează aici.
+                ownedTraffic?.dispose();
+                if (composition === ownedComposition) composition = undefined;
+                if (diagnostics === owned) {
+                  diagnostics = undefined;
+                  inspectScene = undefined;
+                }
               }
             }
           },
@@ -241,7 +288,15 @@ const application = createApplicationLifecycle({
     captureSnapshot: captureCompositionSnapshot,
     step: (step) => {
       if (!composition) throw new Error('Compunerea V3 nu este inițializată.');
-      composition.step(step.tick);
+      const frame = composition.step(step.tick);
+      // PBI 257: HUD-ul central se actualizează din frame-ul autoritativ, la ~10 Hz.
+      if (step.tick % 6 === 0)
+        view.updatePlayHud({
+          speedMps: frame.hud.speedMps,
+          mode: frame.hud.mode,
+          controlledKind: frame.hud.controlledKind,
+          canToggle: frame.hud.controlledKind === 'VEHICLE',
+        });
     },
     interpolate: (_previous, current) => current,
   }),
@@ -279,6 +334,11 @@ view.onPlay(() => {
   }
 });
 view.onPause(() => application.pause());
+view.onMode(() => {
+  composition?.toggleVehicleMode();
+  // Butonul HUD nu trebuie să rămână activ: altfel 025 blochează W/M în dialoguri/butoane.
+  view.getCanvas().focus();
+});
 void application.load(preference);
 
 /** Diagnostice read-only pentru proba de browser 236; nu expun nicio scriere de autoritate. */

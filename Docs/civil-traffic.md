@@ -15,6 +15,8 @@ const traffic = createCivilTraffic({
   style: cityProfile, // DrivingProfile comun, sau
   styleSource: { activeStyle: () => cityProfile }, // sursa activă a orașului
   seed, // opțional; implicit seed-ul registry-ului
+  spawnLanes, // opțional: benzile primelor actori, în ordinea stabilă a ID-urilor
+  spawnOffsetsM, // opțional: distanța inițială pe rută, aliniată cu spawnLanes
 });
 
 traffic.list(); // CivilActorSnapshot[] ordonat după vehicleId
@@ -43,6 +45,14 @@ Un rezultat `READY` cu un path nenul și de maximum `CIVIL_TRAFFIC_LIMITS.routeL
 
 Aceeași configurație, populație și seed produc aceleași rute, poziții și viteze, independent de ordinea de creare a array-urilor. Nu se citește ceasul de perete.
 
+`spawnLanes` este o extensie opțională pentru composition root: primii actori, în ordinea stabilă a
+ID-urilor, încearcă originile date. Fiecare bandă trebuie să fie `CIVIL` și unică; dacă planner-ul
+041 nu găsește o rută din ea, actorul revine la căutarea deterministă de origine. `spawnOffsetsM`
+este aliniat cu `spawnLanes` și mută actorul pe aceeași rută cu distanța dată, plafonată la lungimea
+rutei; nu inventează o poziție în afara path-ului. Nu este un al doilea router și nu ocolește
+`findRoute`; folosirea lor în joc este documentată în
+[traficul AI din browser](browser-ai-traffic.md).
+
 ## Stilul comun al orașului
 
 Modulul cere exact una dintre cele două intrări: `style` (un `DrivingProfile` publicat) sau `styleSource` (portul activ al orașului). Profilul trebuie să aibă `profileId`-ul din configurația flotei; un profil străin este respins. Toate cheile consumate sunt parametri reali din registry-ul 092: cele patru chei 046, cele patru chei 047, cele patru chei 048, plus cheile politicilor 050–053 folosite de lanțul de autonomie.
@@ -69,7 +79,7 @@ Traficul deține stările civililor, controllerul longitudinal 047, motorul 044 
 
 ## Verificare
 
-`tests/fleet/civil-traffic.test.ts` acoperă populația 057, rutele 041 identice cu planul real, determinismul, stilul comun versus un profil de jucător, independența stării, aderența la bandă, liderul taxi cu gap fizic, limitele, lipsa dependenței de cameră/renderer și disposal-ul la zero. `tests/fleet/civil-traffic-report.ts` + `scripts/run-civil-traffic-report.mjs` produc raportul mașină-citibil.
+`tests/fleet/civil-traffic.test.ts` acoperă populația 057, rutele 041 identice cu planul real, determinismul, stilul comun versus un profil de jucător, independența stării, aderența la bandă, liderul taxi cu gap fizic, limitele, `spawnLanes`, lipsa dependenței de cameră/renderer și disposal-ul la zero (12 teste). `tests/fleet/civil-traffic-report.ts` + `scripts/run-civil-traffic-report.mjs` produc raportul mașină-citibil.
 
 ```powershell
 npm test

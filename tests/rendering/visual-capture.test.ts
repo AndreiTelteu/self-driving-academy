@@ -14,16 +14,29 @@ test('239: modul de captură este inert fără ?capture=1', () => {
   assert.equal(readCaptureConfig('?capture=true'), null);
 });
 
-test('239: ?capture=1 citește presetul și backendul, valorile necunoscute cad pe implicit', () => {
-  assert.deepEqual(readCaptureConfig('?capture=1'), { preset: 'HIGH', backend: 'AUTO' });
+test('239: ?capture=1 citește presetul, backendul și sursa modelelor, valorile necunoscute cad pe implicit', () => {
+  assert.deepEqual(readCaptureConfig('?capture=1'), {
+    preset: 'HIGH',
+    backend: 'AUTO',
+    models: 'glb',
+  });
   assert.deepEqual(readCaptureConfig('?capture=1&preset=low&backend=webgl2'), {
     preset: 'LOW',
     backend: 'WEBGL2',
+    models: 'glb',
   });
   assert.deepEqual(readCaptureConfig('?capture=1&preset=ULTRA&backend=metal'), {
     preset: 'HIGH',
     backend: 'AUTO',
+    models: 'glb',
   });
+  // PBI 254: `models=procedural` păstrează rig-ul vechi pentru dovada înainte/după.
+  assert.deepEqual(readCaptureConfig('?capture=1&models=procedural'), {
+    preset: 'HIGH',
+    backend: 'AUTO',
+    models: 'procedural',
+  });
+  assert.equal(readCaptureConfig('?capture=1&models=other')?.models, 'glb');
 });
 
 test('239: cel puțin 12 vederi unice acoperă categoriile cerute', () => {

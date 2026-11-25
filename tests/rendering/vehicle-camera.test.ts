@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { VehicleCameraController, type CameraTarget } from '../../src/rendering/vehicle-camera';
 import { resolveCameraObstacles } from '../../src/rendering/camera-collision';
-const preferences = { mode: 'CHASE' as const, fovDegrees: 80, motion: 50, distanceM: 6 };
+const preferences = { mode: 'CHASE' as const, fovDegrees: 60, motion: 50, distanceM: 6 };
 function target(entityId = 'a', x = 0, speedMps = 0): CameraTarget {
   return Object.freeze({
     entityId,

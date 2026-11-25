@@ -12,14 +12,16 @@ import {
   V3_COMPOSITION_VERSION,
   createV3Composition,
   type CompositionFrame,
+  type CompositionMode,
   type CompositionVehicleSeed,
   type V3Composition,
 } from '../../app';
+import type { CivilTraffic } from '../../fleet';
 import { bindKeyboardDriveInput, type KeyboardDriveBinding } from '../../input';
 import type { ContractContext } from '../../sessions';
 import type { RuntimeSettings } from '../../settings';
 import { createCharacterHud, type CharacterHud } from '../../ui';
-import type { CityLayout } from '../../world';
+import type { CityLayout, LaneGraph, RoadMap } from '../../world';
 import type { RendererKind } from '../backend-policy';
 import type { QualityPreset } from '../quality-policy';
 import {
@@ -27,6 +29,7 @@ import {
   type V3CompositionScene,
   type V3CompositionSceneStats,
 } from './v3-composition-scene';
+import type { GlbModelLibrary } from './glb-model-library';
 
 export const V3_BROWSER_COMPOSITION_VERSION = '236-v3-browser-composition-v1' as const;
 
@@ -34,6 +37,8 @@ export const V3_BROWSER_COMPOSITION_VERSION = '236-v3-browser-composition-v1' as
 export const COMPOSITION_KEYS = Object.freeze({
   sprint: 'KeyF',
   interact: 'KeyG',
+  /** PBI 257: M comută MANUAL/AUTO pentru mașina condusă. */
+  mode: 'KeyM',
 });
 
 export interface V3BrowserCompositionOptions {
@@ -45,11 +50,18 @@ export interface V3BrowserCompositionOptions {
   readonly context: ContractContext;
   readonly spawn: Readonly<{ x: number; z: number; yawRad: number }>;
   readonly vehicles: readonly CompositionVehicleSeed[];
+  /** PBI 256: traficul AI 058, pasat compunerii; caller-ul îl eliberează. */
+  readonly traffic?: CivilTraffic;
+  /** PBI 257: harta/graful pentru driverul AUTO al mașinii conduse. */
+  readonly map?: RoadMap;
+  readonly graph?: LaneGraph;
   readonly rendererKind: RendererKind;
   readonly preset: QualityPreset;
   readonly viewport: Readonly<{ width: number; height: number; dpr: number }>;
   /** Cât timp inputul este admis (de regulă starea PLAYING a aplicației). */
   readonly enabled: () => boolean;
+  /** PBI 254: the already decoded GLB models; the composition owns them afterwards. */
+  readonly models?: GlbModelLibrary;
 }
 
 export interface CostSummary {
@@ -69,6 +81,10 @@ export interface V3BrowserComposition {
   step(tick: number): CompositionFrame;
   present(forceHud?: boolean): void;
   syncInput(): boolean;
+  /** PBI 257: modul mașinii conduse; `null` când jucătorul este pe jos. */
+  vehicleMode(): CompositionMode | null;
+  setVehicleMode(mode: 'AUTO' | 'MANUAL'): CompositionMode | null;
+  toggleVehicleMode(): CompositionMode | null;
   reset(): void;
   probeDoubleDelivery(): string;
   costs(): Readonly<{ tick: CostSummary; present: CostSummary; frame: CostSummary }>;
@@ -126,6 +142,7 @@ export function createV3BrowserComposition(
     preset: options.preset,
     viewport: options.viewport,
     rendererKind: options.rendererKind,
+    models: options.models,
   });
   const composition = createV3Composition({
     layout: options.layout,
@@ -133,6 +150,9 @@ export function createV3BrowserComposition(
     control: options.settings.input.control,
     context: options.context,
     vehicles: options.vehicles,
+    ...(options.traffic === undefined ? {} : { traffic: options.traffic }),
+    ...(options.map === undefined ? {} : { map: options.map }),
+    ...(options.graph === undefined ? {} : { graph: options.graph }),
   });
   const hud = createCharacterHud(options.hudRoot);
   const tickSamples: number[] = [];
@@ -163,6 +183,11 @@ export function createV3BrowserComposition(
       event.preventDefault();
       if (event.type === 'keydown' && event.repeat) return;
       composition.setSprint(event.type === 'keydown');
+      return;
+    }
+    if (event.code === COMPOSITION_KEYS.mode) {
+      event.preventDefault();
+      if (event.type === 'keydown' && !event.repeat) composition.toggleVehicleMode();
       return;
     }
     if (event.code !== COMPOSITION_KEYS.interact) return;
@@ -207,6 +232,15 @@ export function createV3BrowserComposition(
     present,
     syncInput(): boolean {
       return keyboard.sync();
+    },
+    vehicleMode(): CompositionMode | null {
+      return composition.vehicleMode();
+    },
+    setVehicleMode(mode: 'AUTO' | 'MANUAL'): CompositionMode | null {
+      return composition.setVehicleMode(mode);
+    },
+    toggleVehicleMode(): CompositionMode | null {
+      return composition.toggleVehicleMode();
     },
     reset(): void {
       composition.resetScenario();

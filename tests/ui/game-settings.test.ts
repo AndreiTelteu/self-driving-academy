@@ -221,7 +221,7 @@ test('081 reset proposes real defaults and revert restores the persisted section
   assert.equal(view.values.units.speed, 'km/h');
   assert.equal(view.values.units.distance, 'm');
   assert.equal(view.values.cameraMode, 'CHASE');
-  assert.equal(view.values.comfort.fov, 80);
+  assert.equal(view.values.comfort.fov, 60); // PBI 250: default 60 (era 80)
   assert.equal(view.values.comfort.steeringSensitivity, 50);
   assert.equal(view.values.comfort.cameraMotion, 50);
   assert.equal(view.values.comfort.version, 4);
@@ -336,7 +336,7 @@ test('081 comfort range and graphics controls update visible values locally', ()
   assert.equal(view.changed.graphics, true);
   assert.equal(view.controlVersionBump, 1);
   harness.cancelButton().dispatch('click');
-  assert.equal(harness.draft().proposed.comfort.fov, 80);
+  assert.equal(harness.draft().proposed.comfort.fov, 60); // PBI 250: default 60 (era 80)
   assert.equal(harness.cancelled.length, 1);
   harness.panel.dispose();
 });
@@ -352,7 +352,7 @@ test('081 invalid values show visible reasons and block the save intention', () 
   assert.match(harness.issues().textContent, /60 și 100/);
   harness.saveButton().dispatch('click');
   assert.equal(harness.saved.length, 0);
-  harness.setRange('fov', 80);
+  harness.setRange('fov', 60); // PBI 250: default 60 (era 80)
   assert.equal(harness.panel.getView().saveState, 'UNCHANGED');
   assert.equal(harness.issues().hasAttribute('hidden'), true);
   harness.panel.dispose();
@@ -370,7 +370,7 @@ test('081 reset needs confirmation, stays local and keeps bindings out of the dr
   assert.equal(harness.resetButton().textContent, 'Resetează');
   assert.equal(draft.proposed.units.speed, 'km/h');
   assert.equal(draft.proposed.cameraMode, 'CHASE');
-  assert.equal(draft.proposed.comfort.fov, 80);
+  assert.equal(draft.proposed.comfort.fov, 60); // PBI 250: default 60 (era 80)
   assert.equal(draft.proposed.graphics.preset, 'MEDIUM');
   assert.equal(draft.proposed.comfort.version, 4);
   assert.equal(draft.saved.comfort.version, 4);

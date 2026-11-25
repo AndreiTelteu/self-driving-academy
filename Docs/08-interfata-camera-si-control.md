@@ -93,3 +93,11 @@ Cele trei obiective ale zilei au propriul panou read-only, `<button type="button
 
 Comparația A/B are un panou read-only cu `<button type="button">Comparație A/B</button>`, care respectă aceleași reguli ca 126/210/212: dialog nativ cu `role="dialog"`, `aria-modal`, nume și descriere accesibile, focus mutat în panou la deschidere și readus la buton la închidere, Tab/Shift+Tab ținute în dialog, `Escape` închide și reia simularea suspendată prin portul 070, zero listeners pe `window`/`document` și niciun apel în bucla 3D. La deschidere citește o singură dată read model-ul `143-experiment-compare-v1`; un panou închis nu recitește nimic, iar un `refresh()` cu aceeași semnătură este sărit. Panoul afișează distribuția cauzelor, a parametrilor și a categoriilor, oportunitățile cu două cauze, expunerea cu numere și fereastra reală de tickuri, numărul de seed-uri, textul de incertitudine cu limitările lui, scenariile izolate și diferențele 138/139, ca tabele cu `scope` pe capete și rânduri plus bare deterministe cu înălțimi calculate din valorile reale. Textul și numerele vin numai din read model: panoul nu recalculează o diferență, nu inventează un procent și nu transformă o valoare indisponibilă în zero. Contractul este în [14-experimente-si-indicatori.md](14-experimente-si-indicatori.md#comparația-ab-cu-distribuții-și-dovezi-143), iar dovezile în [Evidence/143-experiment-compare](Evidence/143-experiment-compare/README.md).
 
+## HUD-ul de mod și viteză în compunerea V3 (PBI 257)
+
+HUD-ul central al compunerii V3 nu mai este static: `main.ts` citește `CompositionFrame` la ~10 Hz și
+afișează viteza reală în km/h și modul entității controlate. Butonul de mod este un `<button>` real,
+cu `aria-keyshortcuts="M"`; `M` și click-ul comută mașina condusă între MANUAL și AUTO. Simbolul
+AUTO este `AI` (nu tasta `A`, care rămâne viraj stânga), iar pe jos butonul este dezactivat.
+Detalii în [mod AUTO/MANUAL, HUD și coliziune](mode-auto-hud-collision.md).
+

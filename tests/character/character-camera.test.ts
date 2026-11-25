@@ -330,9 +330,9 @@ test('setările 009 existente schimbă camera fără un al doilea sistem', () =>
   const control = cameraControl();
   const projection = characterCameraControl(control);
   assert.equal(projection.cameraMotion, 50);
-  assert.equal(projection.fovDegrees, 80);
+  assert.equal(projection.fovDegrees, 60); // PBI 250: default 60 (era 80)
   assert.equal(projection.followFactor, 0.625);
-  assert.ok(Math.abs(projection.fovRadians - (80 * Math.PI) / 180) <= 1e-12);
+  assert.ok(Math.abs(projection.fovRadians - (60 * Math.PI) / 180) <= 1e-12);
 
   const world = cityCameraWorld();
   const target = characterTarget('character-194', { x: 0, y: 0, z: 0 }, 0);

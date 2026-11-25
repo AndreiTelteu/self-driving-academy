@@ -366,7 +366,7 @@ Rules: all 15 actions are always listed; an action without a valid code stays vi
 | Conflicts | — |
 | Summary | 2 comenzi modificate, niciun conflict. Salvează pentru a păstra. |
 | Saved bindings | throttle=KeyS, brake=KeyX, steerLeft=KeyA, steerRight=KeyD, handbrake=Space, manualMode=KeyM, learningMode=KeyL, kpis=KeyK, fleet=Tab, signalLeft=KeyQ, signalRight=KeyE, camera=KeyC, profile=KeyP, pause=Escape, recover=KeyR |
-| Non-binding settings | control 0/80, camera CHASE, units km/h/m, quality MEDIUM/AUTO/1/false, scenario provisional-city-v1/provisional-v1/1/24/40 |
+| Non-binding settings | control 0/60, camera CHASE, units km/h/m, quality MEDIUM/AUTO/1/false, scenario provisional-city-v1/provisional-v1/1/24/40 |
 | DOM elements / text nodes | 116 / 97 |
 | Listeners / capture listeners | 18 / 0 |
 

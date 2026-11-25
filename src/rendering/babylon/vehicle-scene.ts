@@ -6,9 +6,9 @@
  * recreated, and no collider, body or simulation service is touched. The stage keeps an explicit
  * `entityId` → representation map so picking stays stable across LOD changes.
  */
-import { Color3 } from '@babylonjs/core/Maths/math.color.js';
 import '@babylonjs/core/Meshes/instancedMesh.js';
 import { StandardMaterial } from '@babylonjs/core/Materials/standardMaterial.js';
+import type { PBRMaterial } from '@babylonjs/core/Materials/PBR/pbrMaterial.js';
 import { Mesh } from '@babylonjs/core/Meshes/mesh.js';
 import { VertexData } from '@babylonjs/core/Meshes/mesh.vertexData.js';
 import { TransformNode } from '@babylonjs/core/Meshes/transformNode.js';
@@ -33,12 +33,27 @@ import {
   type VehicleLightState,
   type VehicleLodLevel,
 } from '../vehicle-visuals';
+import {
+  createVehicleMaterials,
+  type VehicleMaterialKey,
+  type VehicleMaterialSet,
+} from './vehicle-materials';
+import { vehiclePaintMultiplier } from '../vehicle-body';
+import type { GlbModelLibrary } from './glb-model-library';
+import { createGlbVehicleRig } from './vehicle-glb';
 
-export type VehicleMaterialKey = 'body' | 'headlight' | 'taillight' | 'signal';
+export type { VehicleMaterialKey } from './vehicle-materials';
 export interface VehicleVisualOptions {
   readonly preset: QualityPreset;
   /** Optional caller-owned materials; listed keys are borrowed and never disposed here. */
-  readonly materials?: Partial<Readonly<Record<VehicleMaterialKey, StandardMaterial>>>;
+  readonly materials?: Partial<
+    Readonly<Record<VehicleMaterialKey, StandardMaterial | PBRMaterial>>
+  >;
+  /**
+   * PBI 254: realistic GLB models. When present the representation is built from the imported
+   * taxi/sedan; when absent (headless tests, model load failure) the procedural rig is used.
+   */
+  readonly models?: GlbModelLibrary;
 }
 export interface VehicleRenderWheel {
   readonly wheelId: string;
@@ -93,6 +108,7 @@ export interface VehicleVisualStage {
     entityId: string,
     classId: VehicleClassKey,
     transform: VisualTransform,
+    driverKind?: 'TAXI' | 'CIVILIAN',
   ): VehicleRepresentation;
   get(entityId: string): VehicleRepresentation | undefined;
   remove(entityId: string): boolean;
@@ -103,51 +119,40 @@ export interface VehicleVisualStage {
 }
 const LIGHT_GROUPS = [
   'BODY',
+  'GLASS',
   'HEADLIGHT',
   'TAILLIGHT',
   'BRAKE',
   'SIGNAL_LEFT',
   'SIGNAL_RIGHT',
 ] as const;
-const MATERIALS: readonly VehicleMaterialKey[] = ['body', 'headlight', 'taillight', 'signal'];
-const GROUP_MATERIAL: Readonly<Record<Exclude<VehicleMaterialGroup, 'WHEEL'>, VehicleMaterialKey>> =
-  Object.freeze({
-    BODY: 'body',
-    HEADLIGHT: 'headlight',
-    TAILLIGHT: 'taillight',
-    BRAKE: 'taillight',
-    SIGNAL_LEFT: 'signal',
-    SIGNAL_RIGHT: 'signal',
-  });
-const EMISSIVE: Readonly<
-  Record<Exclude<VehicleMaterialKey, 'body'>, readonly [number, number, number]>
+const MATERIALS: readonly VehicleMaterialKey[] = [
+  'body',
+  'glass',
+  'tire',
+  'rim',
+  'trim',
+  'headlight',
+  'taillight',
+  'signal',
+];
+const GROUP_MATERIAL: Readonly<
+  Record<Exclude<VehicleMaterialGroup, 'WHEEL' | 'RIM'>, VehicleMaterialKey>
 > = Object.freeze({
-  headlight: [1, 0.95, 0.82],
-  taillight: [0.9, 0.06, 0.05],
-  signal: [1, 0.55, 0.05],
+  BODY: 'body',
+  GLASS: 'glass',
+  HEADLIGHT: 'headlight',
+  TAILLIGHT: 'taillight',
+  BRAKE: 'taillight',
+  SIGNAL_LEFT: 'signal',
+  SIGNAL_RIGHT: 'signal',
 });
-function createMaterial(scene: Scene, key: VehicleMaterialKey): StandardMaterial {
-  const material = new StandardMaterial(`vehicle:${key}`, scene);
-  material.maxSimultaneousLights = 2;
-  material.specularColor = Color3.Black();
-  if (key === 'body') {
-    // Vertex colours carry the paint/glass/trim palette; the shared material stays white.
-    material.diffuseColor = new Color3(1, 1, 1);
-    material.ambientColor = new Color3(0.35, 0.35, 0.35);
-  } else {
-    const rgb = EMISSIVE[key];
-    material.disableLighting = true;
-    material.diffuseColor = Color3.Black();
-    material.emissiveColor = new Color3(rgb[0], rgb[1], rgb[2]);
-  }
-  return material;
-}
 function createGroupMesh(
   scene: Scene,
   name: string,
   geometry: VehicleGeometrySet,
   group: VehicleMaterialGroup,
-  material: StandardMaterial,
+  material: StandardMaterial | PBRMaterial,
 ): Mesh | null {
   const source = geometry.groups.find((entry) => entry.group === group);
   if (!source) return null;
@@ -176,8 +181,13 @@ export function createVehicleVisualStage(
 ): VehicleVisualStage {
   if (!scene || scene.isDisposed) throw new Error('Vehicle visuals require a live scene');
   const preset = options.preset;
-  const materials = new Map<VehicleMaterialKey, StandardMaterial>();
-  const owned: StandardMaterial[] = [];
+  const materials = new Map<VehicleMaterialKey, StandardMaterial | PBRMaterial>();
+  const owned: Array<StandardMaterial | PBRMaterial> = [];
+  const createdSet: VehicleMaterialSet | null = (() => {
+    const missing = MATERIALS.filter((key) => !options.materials?.[key]);
+    if (missing.length === 0) return null;
+    return createVehicleMaterials(scene, preset);
+  })();
   for (const key of MATERIALS) {
     const supplied = options.materials?.[key];
     if (supplied) {
@@ -186,16 +196,21 @@ export function createVehicleVisualStage(
       materials.set(key, supplied);
       continue;
     }
-    const created = createMaterial(scene, key);
+    const created = createdSet!.materials[key];
     materials.set(key, created);
     owned.push(created);
   }
   const geometryCache = new Map<string, VehicleGeometrySet>();
-  const geometryFor = (classId: VehicleClassKey, lod: VehicleLodLevel): VehicleGeometrySet => {
-    const key = `${classId}:${lod}`;
+  const geometryFor = (
+    classId: VehicleClassKey,
+    lod: VehicleLodLevel,
+    entityId: string,
+    driverKind: 'TAXI' | 'CIVILIAN',
+  ): VehicleGeometrySet => {
+    const key = `${classId}:${lod}:${entityId}:${driverKind}`;
     const existing = geometryCache.get(key);
     if (existing) return existing;
-    const built = buildVehicleGeometry(classId, lod);
+    const built = buildVehicleGeometry(classId, lod, entityId, driverKind);
     geometryCache.set(key, built);
     return built;
   };
@@ -204,6 +219,17 @@ export function createVehicleVisualStage(
   let disposed = false;
   const assertLive = (): void => {
     if (disposed || scene.isDisposed) throw new Error('Vehicle visuals disposed');
+  };
+  // PBI 247: repaint the BODY vertex colours with the deterministic taxi/civilian multiplier.
+  const repaintBody = (mesh: Mesh, multiplier: readonly [number, number, number]): void => {
+    const colors = mesh.getVerticesData('color');
+    if (!colors) return;
+    for (let index = 0; index < colors.length; index += 4) {
+      colors[index] *= multiplier[0];
+      colors[index + 1] *= multiplier[1];
+      colors[index + 2] *= multiplier[2];
+    }
+    mesh.updateVerticesData('color', colors);
   };
   const stage: VehicleVisualStage = {
     get size() {
@@ -231,15 +257,91 @@ export function createVehicleVisualStage(
         lodCounts: Object.freeze(lodCounts),
       });
     },
-    create(entityId, classId, transform) {
+    create(entityId, classId, transform, _driverKind = 'CIVILIAN') {
       assertLive();
       if (!entityId.trim() || entries.has(entityId))
         throw new Error(`Invalid/duplicate vehicle entity ID ${entityId}`);
       const specification = vehicleVisualClass(classId);
-      const near = geometryFor(classId, 'NEAR');
       const root = new TransformNode(`vehicle:${entityId}`, scene);
       root.rotationQuaternion = Quaternion.Identity();
       copyTransform(root, transform);
+      const rig = options.models
+        ? createGlbVehicleRig({
+            scene,
+            models: options.models,
+            entityId,
+            classId,
+            driverKind: _driverKind,
+            root,
+          })
+        : null;
+      if (rig) {
+        let glbLod: VehicleLodLevel = 'NEAR';
+        let glbLights: VehicleLightState = VEHICLE_LIGHTS_OFF;
+        const glbRepresentation: VehicleRepresentation = {
+          entityId,
+          classId,
+          root,
+          get lod() {
+            return glbLod;
+          },
+          get lights() {
+            return glbLights;
+          },
+          wheelPivots: rig.wheelPivots,
+          shadowCasters: rig.shadowCasters,
+          footprintM: rig.footprintM,
+          wheelPivot: (wheelId) => rig.wheelPivots.find((pivot) => pivot.name.endsWith(wheelId)),
+          wheelMeshVisible: (wheelId) => rig.wheelMeshVisible(wheelId),
+          setLod(level) {
+            if (disposed) return;
+            if (!['NEAR', 'MID', 'FAR'].includes(level))
+              throw new RangeError(`Unknown LOD ${level}`);
+            if (glbLod === level) return;
+            glbLod = level;
+            rig.applyLod(level);
+          },
+          applyWheels(wheels) {
+            if (disposed) return;
+            if (wheels.length !== specification.wheelPivots.length)
+              throw new RangeError('Vehicle wheel pose count');
+            rig.applyWheels(wheels);
+          },
+          setLights(state) {
+            if (disposed) return;
+            glbLights = Object.freeze({
+              headlights: !!state.headlights,
+              brake: !!state.brake,
+              turn: state.turn,
+            });
+            rig.setLights(glbLights);
+          },
+          setTransform(next) {
+            if (disposed) return;
+            copyTransform(root, next);
+          },
+          get metrics(): VehicleRepresentationMetrics {
+            return Object.freeze({
+              meshes: rig.meshes,
+              vertices: rig.vertices,
+              indices: rig.indices,
+              drawCalls: vehicleDrawCalls(glbLod, glbLights),
+              lod: glbLod,
+            });
+          },
+          dispose() {
+            if (!entries.has(entityId)) return;
+            entries.delete(entityId);
+            rootByEntity.delete(root);
+            rig.dispose();
+            if (!root.isDisposed()) root.dispose(false, false);
+          },
+        };
+        entries.set(entityId, glbRepresentation);
+        rootByEntity.set(root, entityId);
+        return glbRepresentation;
+      }
+      const near = geometryFor(classId, 'NEAR', entityId, _driverKind);
       const groupMeshes = new Map<VehicleMaterialGroup, Mesh>();
       for (const group of LIGHT_GROUPS) {
         const mesh = createGroupMesh(
@@ -253,6 +355,13 @@ export function createVehicleVisualStage(
         mesh.parent = root;
         groupMeshes.set(group, mesh);
       }
+      // PBI 247: the shared BODY material stays white; the paint comes from the vertex colours.
+      // Taxi/civilian repaint the BODY group with the deterministic multiplier from the plan.
+      const bodyMesh = groupMeshes.get('BODY');
+      if (bodyMesh) {
+        const paint = vehiclePaintMultiplier(classId, entityId, _driverKind);
+        repaintBody(bodyMesh, paint);
+      }
       const wheelGeometry = near.wheel;
       if (!wheelGeometry) throw new Error('Vehicle wheel geometry missing');
       const wheelTemplate = createGroupMesh(
@@ -260,11 +369,19 @@ export function createVehicleVisualStage(
         `vehicle:${entityId}:wheel-template`,
         near,
         'WHEEL',
-        materials.get('body')!,
+        materials.get('tire')!,
       );
       if (!wheelTemplate) throw new Error('Vehicle wheel mesh missing');
+      const rimTemplate = createGroupMesh(
+        scene,
+        `vehicle:${entityId}:rim-template`,
+        near,
+        'RIM',
+        materials.get('rim')!,
+      );
       const pivots = new Map<string, TransformNode>();
       const wheelMeshes: AbstractMesh[] = [];
+      const rimMeshes: AbstractMesh[] = [];
       for (let index = 0; index < specification.wheelPivots.length; index += 1) {
         const pivot = specification.wheelPivots[index]!;
         const node = new TransformNode(`vehicle:${entityId}:wheel-pivot:${pivot.wheelId}`, scene);
@@ -283,6 +400,19 @@ export function createVehicleVisualStage(
         wheel.position.setAll(0);
         wheel.rotationQuaternion = Quaternion.Identity();
         wheelMeshes.push(wheel);
+        if (rimTemplate) {
+          const rim =
+            index === 0
+              ? (() => {
+                  rimTemplate.name = `vehicle:${entityId}:rim:${pivot.wheelId}`;
+                  return rimTemplate as AbstractMesh;
+                })()
+              : rimTemplate.createInstance(`vehicle:${entityId}:rim:${pivot.wheelId}`);
+          rim.parent = node;
+          rim.position.setAll(0);
+          rim.rotationQuaternion = Quaternion.Identity();
+          rimMeshes.push(rim);
+        }
       }
       const bodyBox = groupMeshes.get('BODY')?.getBoundingInfo().boundingBox;
       const footprintM = Object.freeze({
@@ -306,6 +436,7 @@ export function createVehicleVisualStage(
         const wheelsVisible =
           specification.lods.find((entry) => entry.level === lod)?.wheelsVisible ?? false;
         for (const wheel of wheelMeshes) wheel.setEnabled(wheelsVisible);
+        for (const rim of rimMeshes) rim.setEnabled(wheelsVisible);
       };
       const representation: VehicleRepresentation = {
         entityId,
@@ -345,10 +476,10 @@ export function createVehicleVisualStage(
             // Live suspension/steering pose; the pure contract keeps the rest pose for tests.
             pivot.position.set(point.x, point.y, point.z);
             pivot.rotationQuaternion = Quaternion.RotationAxis(Vector3.Up(), pose.steeringRad);
-            wheelMeshes[index]!.rotationQuaternion = Quaternion.RotationAxis(
-              Vector3.Right(),
-              pose.spinRad,
-            );
+            const spin = Quaternion.RotationAxis(Vector3.Right(), pose.spinRad);
+            wheelMeshes[index]!.rotationQuaternion = spin;
+            const rim = rimMeshes[index];
+            if (rim) rim.rotationQuaternion = spin;
           }
         },
         setLights(state) {
@@ -366,8 +497,11 @@ export function createVehicleVisualStage(
         },
         get metrics(): VehicleRepresentationMetrics {
           const enabled = [...groupMeshes.values()].filter((mesh) => mesh.isEnabled()).length;
+          const wheelsEnabled =
+            wheelMeshes.filter((mesh) => mesh.isEnabled()).length +
+            rimMeshes.filter((mesh) => mesh.isEnabled()).length;
           return Object.freeze({
-            meshes: enabled + wheelMeshes.filter((mesh) => mesh.isEnabled()).length,
+            meshes: enabled + wheelsEnabled,
             vertices: near.vertices,
             indices: near.indices,
             drawCalls: vehicleDrawCalls(lod, lights),
@@ -378,7 +512,9 @@ export function createVehicleVisualStage(
           if (!entries.has(entityId)) return;
           entries.delete(entityId);
           rootByEntity.delete(root);
-          // Instances first: disposing the source releases the shared wheel geometry.
+          // Instances first: disposing the source releases the shared wheel/rim geometry.
+          for (const rim of rimMeshes.slice(1)) rim.dispose(false, false);
+          if (rimMeshes[0]) rimMeshes[0].dispose(false, false);
           for (const wheel of wheelMeshes.slice(1)) wheel.dispose(false, false);
           wheelMeshes[0]!.dispose(false, false);
           for (const mesh of groupMeshes.values()) mesh.dispose(false, false);

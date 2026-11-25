@@ -15,15 +15,15 @@ starea de flotă 197, într-un envelope cu checksum `SDA-CJSON-1`/SHA-256.
 - Reload coerent (pauză, autoritate, cameră, input eliberat): **PASS**.
 - Fără duplicate (0 corpuri create, același set de entități, al doilea reload identic): **PASS**.
 - Depozitul neatins după migrare (re-export identic): **PASS**.
-- Determinism: 2 rulări identice: **DA**, amprentă SHA-256 `dbe3045fa22e35b7a2002d242b58e7dbdf1569c3508b4000b5e672bafd57d650`.
+- Determinism: 2 rulări identice: **DA**, amprentă SHA-256 `f3418d66905b6f5fd7946e084d284105e73f489c76ec4429b395ed4bdd603da0`.
 - Verdict general: **PASS**.
 
 ## Scenariu → slot → checksum → migrare → componente identice → reload → verdict
 
 | Scenariu | Descriere | Slot | Migrare | Checksum | Sursă personaj | Componente identice | Autoritate / cameră | Entități | Corpuri create | XP | Verdict |
 | --- | --- | --- | --- | --- | --- | --- | --- | ---: | ---: | ---: | --- |
-| `V2_WALKING` | V2 → V3, personaj pe jos | `character` | v2 → v3 | `8cc80793014f…` | `SNAPSHOT` | DA | `CHARACTER:character:player-1` / `character:player-1` | 71 | 0 | 100.5 | PASS |
-| `V2_SEATED` | V2 → V3, personaj în taxi | `character` | v2 → v3 | `89124a0fd19e…` | `SNAPSHOT` | DA | `VEHICLE:vehicle:taxi-197` / `vehicle:taxi-197` | 72 | 0 | 100.5 | PASS |
+| `V2_WALKING` | V2 → V3, personaj pe jos | `character` | v2 → v3 | `8c6be44921ea…` | `SNAPSHOT` | DA | `CHARACTER:character:player-1` / `character:player-1` | 71 | 0 | 100.5 | PASS |
+| `V2_SEATED` | V2 → V3, personaj în taxi | `character` | v2 → v3 | `e708ace06e34…` | `SNAPSHOT` | DA | `VEHICLE:vehicle:taxi-197` / `vehicle:taxi-197` | 72 | 0 | 100.5 | PASS |
 | `V2_DEFAULT` | V2 → V3, sesiune fără slot de personaj | `character(default)` | v2 → v3 | `eee3d147f880…` | `MIGRATION_DEFAULT` | DA | `CHARACTER:character:player-1` / `character:player-1` | 71 | 0 | 100.5 | PASS |
 | `V1_LEGACY` | V1 → V3, arhiva 135 fără economie | `character(default)` | v1 → v3 | `d4b1561f4536…` | `MIGRATION_DEFAULT` | DA | `CHARACTER:character:player-1` / `character:player-1` | 71 | 0 | 0 | PASS |
 

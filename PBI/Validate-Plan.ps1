@@ -30,7 +30,8 @@ foreach ($planColumn in @('To Do', 'In Progress', 'Done')) {
         $planPerformanceMatch = [regex]::Match($planHeader, '(?m)^performance_checks: (.+)$')
         $planPerformanceChecks = @()
         if ($planPerformanceMatch.Success) {
-            $planPerformanceChecks = @($planPerformanceMatch.Groups[1].Value | ConvertFrom-Json)
+            $planParsedChecks = $planPerformanceMatch.Groups[1].Value | ConvertFrom-Json
+            foreach ($planParsedCheck in $planParsedChecks) { $planPerformanceChecks += [string]$planParsedCheck }
             if ($planPerformanceChecks.Count -eq 0 -or @($planPerformanceChecks | Select-Object -Unique).Count -ne $planPerformanceChecks.Count) { throw "Performance checks goale/duplicate: $planId" }
             foreach ($planPerformanceCheck in $planPerformanceChecks) {
                 if ($planPerformanceCheck -cnotin @('frame','simulation','memory','workers','storage','loading','ui','assets','soak')) { throw "Performance check necunoscut: $planPerformanceCheck în $planId" }
@@ -41,16 +42,20 @@ foreach ($planColumn in @('To Do', 'In Progress', 'Done')) {
         if ($planRoleMatch.Success -ne $planKeysMatch.Success) { throw "Metadate per parametru incomplete: $planId" }
         if ($planRoleMatch.Success) {
             $planRole = $planRoleMatch.Groups[1].Value | ConvertFrom-Json
-            $planKeys = @($planKeysMatch.Groups[1].Value | ConvertFrom-Json)
+            $planParsedKeys = $planKeysMatch.Groups[1].Value | ConvertFrom-Json
+            foreach ($planParsedKey in $planParsedKeys) { $planKeys += [string]$planParsedKey }
             if ($planRole -notin @('policy', 'estimator')) { throw "Rol necunoscut: $planId" }
             if ($planKeys.Count -eq 0 -or @($planKeys | Select-Object -Unique).Count -ne $planKeys.Count) { throw "Chei goale/duplicate: $planId" }
         }
+        $planDependencies = @()
+        $planParsedDependencies = Read-HeaderJson $planHeader 'depends_on'
+        foreach ($planDependencyId in $planParsedDependencies) { $planDependencies += [string]$planDependencyId }
         $planTasks[$planId] = [pscustomobject]@{
             Id = $planId
             Title = Read-HeaderJson $planHeader 'title'
             Module = Read-HeaderJson $planHeader 'module'
             Release = Read-HeaderJson $planHeader 'release'
-            Dependencies = @(Read-HeaderJson $planHeader 'depends_on')
+            Dependencies = $planDependencies
             Role = $planRole
             Keys = $planKeys
             PerformanceChecks = $planPerformanceChecks
@@ -81,7 +86,7 @@ foreach ($planRow in $planIndexRows) {
     $planTask = $planTasks[$planId]
     $planIndexDepsText = $planRow.Groups[5].Value.Trim()
     $planIndexDeps = @()
-    if ($planIndexDepsText -ne '—') { $planIndexDeps = @($planIndexDepsText -split ',' | ForEach-Object { $_.Trim() }) }
+    if ($planIndexDepsText -match '\d') { $planIndexDeps = @($planIndexDepsText -split ',' | ForEach-Object { $_.Trim() }) }
     if ($planTask.Title -cne $planRow.Groups[2].Value.Trim() -or $planTask.Module -cne $planRow.Groups[3].Value.Trim() -or $planTask.Release -cne $planRow.Groups[4].Value -or (@($planTask.Dependencies) -join ',') -cne ($planIndexDeps -join ',')) {
         throw "Indexul diferă de PBI $planId"
     }
@@ -110,7 +115,7 @@ foreach ($planRow in $planCatalogRows) {
     if ($planCatalogKeys.ContainsKey($planKey) -or -not $planParameters.ContainsKey($planKey)) { throw "Cheie Markdown duplicată/inexistentă: $planKey" }
     $planCatalogKeys[$planKey] = $true
     $planParameter = $planParameters[$planKey]
-    $planRange = $planRow.Groups[3].Value.Trim() -split '–'
+    $planRange = $planRow.Groups[3].Value.Trim() -split '[\u2013\u2014]'
     $planDefault = [double]::Parse($planRow.Groups[2].Value.Trim(), [Globalization.CultureInfo]::InvariantCulture)
     $planMinimum = [double]::Parse($planRange[0], [Globalization.CultureInfo]::InvariantCulture)
     $planMaximum = [double]::Parse($planRange[1], [Globalization.CultureInfo]::InvariantCulture)
@@ -241,7 +246,7 @@ foreach ($planStage in @('V1','V2','V3','V4')) { $planStageCounts[$planStage] = 
 $planModuleCount = @(Get-ChildItem -LiteralPath (Join-Path $planRoot 'Docs') -File -Filter '*.md' | Where-Object { $_.Name -match '^\d{2}-' }).Count
 $planRootReadme = Read-PlanText 'README.md'
 $planDocsReadme = Read-PlanText 'Docs/README.md'
-if ($planRootReadme -notmatch ("$planModuleCount de documente") -or $planRootReadme -notmatch ("$($planTasks.Count) task-uri") -or $planDocsReadme -notmatch ("conține $($planTasks.Count) task-uri")) { throw 'Counts README diferite de plan' }
+if ($planRootReadme -notmatch ("$planModuleCount de documente") -or $planRootReadme -notmatch ("$($planTasks.Count) task-uri") -or $planDocsReadme -notmatch ("$($planTasks.Count) task-uri")) { throw 'Counts README diferite de plan' }
 foreach ($planStage in @('V1','V2','V3','V4')) {
     $planStageRow = [regex]::Match($planIndexText, '(?m)^\| ' + $planStage + ' \| [^|]+ \| (\d+) \|')
     if (-not $planStageRow.Success -or [int]$planStageRow.Groups[1].Value -ne $planStageCounts[$planStage]) { throw "Count etapă incompatibil: $planStage" }

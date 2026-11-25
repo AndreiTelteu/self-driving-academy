@@ -26,8 +26,9 @@ import { createDaylight, type ShadowCasterPriority } from './daylight';
 import { createSurfaceMaterials, type SurfaceMaterials } from './surface-materials';
 import { createWorldEdgeScene, type WorldEdgeScene } from './world-edge-scene';
 import { createVehicleVisualStage, type VehicleVisualStage } from './vehicle-scene';
+import type { GlbModelLibrary } from './glb-model-library';
 
-export const V3_COMPOSITION_SCENE_VERSION = '236-v3-composition-scene-v1' as const;
+export const V3_COMPOSITION_SCENE_VERSION = '236-v3-composition-scene-v2' as const;
 
 export interface V3CompositionSceneOptions {
   readonly scene: Scene;
@@ -38,6 +39,8 @@ export interface V3CompositionSceneOptions {
   readonly rendererKind: RendererKind;
   /** Decorul 146 este opțional; orașul și personajul nu depind de el. */
   readonly decor?: boolean;
+  /** PBI 254: imported GLB models, owned (and disposed) by the composition. */
+  readonly models?: GlbModelLibrary;
 }
 
 export interface V3BackendInfo {
@@ -117,22 +120,34 @@ export function createV3CompositionScene(options: V3CompositionSceneOptions): V3
   // PBI 245: suprafețele orașului sunt PBR; presetul activ al luminii (nu cel cerut) decide rezoluția.
   let surfacePreset = daylight.getQuality().preset;
   const surfaces = createSurfaceMaterials(scene, surfacePreset);
-  const city = createCityScene(scene, layout, { surfaces, wearStrips: true });
+  // PBI 246: nivelul de detaliu al fațadelor urmează presetul curent; LOW rămâne la mase netede.
+  const facadeDetail =
+    surfacePreset === 'LOW' ? 'low' : surfacePreset === 'MEDIUM' ? 'medium' : 'high';
+  const city = createCityScene(scene, layout, { surfaces, wearStrips: true, facadeDetail });
   const worldEdge = createWorldEdgeScene(scene, layout, options.preset, {
     terrainTexture: surfaces.terrainTexture,
   });
   // Un PBRMaterial primește ambientul din IBL: meshurile PBR ies din lumina hemisferică de rezervă
-  // (care mai luminează vehiculele, clădirile, decorul și personajul, încă `StandardMaterial`). Materialele
+  // (care mai luminează vehiculele și clădirile, încă `StandardMaterial`). Materialele
   // se îngheață abia după excludere, ca lista de lumini să nu se mai schimbe sub ele.
   const wearMesh = city.surfaceMeshes().find((mesh) => mesh.name === 'city:wear') ?? null;
   const applyWear = (): void => wearMesh?.setEnabled(SURFACE_PRESETS[surfacePreset].wearStrips);
   applyWear();
   for (const mesh of city.surfaceMeshes()) daylight.excludeFromLegacyAmbient(mesh);
   surfaces.freeze();
-  const decor = options.decor === false ? null : createCityDecorScene(scene, layout);
+  const decor =
+    options.decor === false
+      ? null
+      : createCityDecorScene(scene, layout, { models: options.models });
+  // PBI 249: decorul este acum PBR; ca la suprafețele 245, meshurile PBR ies din lumina
+  // hemisferică de rezervă (altfel primesc ambient dublu: hemisferic + IBL).
+  for (const mesh of decor?.shadowCasterMeshes() ?? []) daylight.excludeFromLegacyAmbient(mesh);
   const asset = createCharacterAsset();
-  const character = createCharacterScene(scene, asset, 'NEAR');
-  const vehicles = createVehicleVisualStage(scene, { preset: options.preset });
+  const character = createCharacterScene(scene, asset, 'NEAR', { models: options.models });
+  const vehicles = createVehicleVisualStage(scene, {
+    preset: options.preset,
+    models: options.models,
+  });
   const camera = new FreeCamera('v3-composition-camera', new Vector3(0, 3, -6), scene);
   camera.minZ = 0.1;
   // PBI 242: relieful și crestele se întind până la ~2,5 km de limita hărții, deci planul îndepărtat
@@ -229,6 +244,8 @@ export function createV3CompositionScene(options: V3CompositionSceneOptions): V3
     apply(frame: CompositionFrame, characterFrame: CharacterRenderFrame): void {
       frames += 1;
       character.applyFrame(characterFrame);
+      // PBI 254: the imported character picks its locomotion clip from the authoritative frame.
+      character.setClip(frame.character.clipId, frame.character.speedMps);
       for (const vehicle of frame.vehicles) {
         const transform = visualTransform(vehicle.positionM, vehicle.yawRad);
         const existing = representations.get(vehicle.vehicleId);
@@ -236,7 +253,12 @@ export function createV3CompositionScene(options: V3CompositionSceneOptions): V3
           existing.setTransform(transform);
           continue;
         }
-        const created = vehicles.create(vehicle.vehicleId, vehicle.classId, transform);
+        const created = vehicles.create(
+          vehicle.vehicleId,
+          vehicle.classId,
+          transform,
+          vehicle.driverKind,
+        );
         representations.set(vehicle.vehicleId, created);
       }
       // 244: prioritatea de umbră urmărește vehiculul din cadru; se rescrie numai la schimbare.
@@ -344,6 +366,7 @@ export function createV3CompositionScene(options: V3CompositionSceneOptions): V3
       surfaces.dispose();
       daylight.dispose();
       camera.dispose();
+      options.models?.dispose();
     },
   });
 }

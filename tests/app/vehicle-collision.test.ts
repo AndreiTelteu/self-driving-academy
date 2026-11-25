@@ -171,6 +171,8 @@ function driveFullThrottle(
 
 const DECOR_KINDS: readonly CityDecorKind[] = [
   'tree',
+  'tree-maple',
+  'tree-oak',
   'street-lamp',
   'hydrant',
   'bench',

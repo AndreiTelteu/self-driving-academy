@@ -41,10 +41,10 @@ export interface CharacterMaterial {
 }
 
 export const CHARACTER_MATERIALS: readonly CharacterMaterial[] = Object.freeze([
-  Object.freeze({ group: 'SKIN', color: [0.78, 0.6, 0.48] as const, roughness: 0.75 }),
-  Object.freeze({ group: 'TORSO', color: [0.1, 0.24, 0.42] as const, roughness: 0.85 }),
-  Object.freeze({ group: 'LEGS', color: [0.18, 0.19, 0.22] as const, roughness: 0.9 }),
-  Object.freeze({ group: 'BOOTS', color: [0.06, 0.06, 0.07] as const, roughness: 0.95 }),
+  Object.freeze({ group: 'SKIN', color: [0.72, 0.52, 0.38] as const, roughness: 0.65 }),
+  Object.freeze({ group: 'TORSO', color: [0.08, 0.14, 0.22] as const, roughness: 0.8 }),
+  Object.freeze({ group: 'LEGS', color: [0.1, 0.12, 0.18] as const, roughness: 0.85 }),
+  Object.freeze({ group: 'BOOTS', color: [0.06, 0.05, 0.04] as const, roughness: 0.9 }),
 ]);
 
 const GROUP_BY_JOINT: Readonly<Record<CharacterJointId, CharacterMaterialGroup>> = Object.freeze({

@@ -639,6 +639,26 @@ export {
 } from './control-sliders-style';
 
 export {
+  AMBIENT_TRAFFIC_POLICY,
+  AMBIENT_TRAFFIC_VERSION,
+  createAmbientTraffic,
+  createCityStyleProfile,
+  type AmbientTraffic,
+  type AmbientTrafficOptions,
+} from './ambient-traffic';
+
+export {
+  VEHICLE_AUTO_DRIVE_POLICY,
+  VEHICLE_AUTO_DRIVE_VERSION,
+  createVehicleAutoDrive,
+  type AutoDrivePose,
+  type AutoDriveReport,
+  type AutoDriveStart,
+  type VehicleAutoDrive,
+  type VehicleAutoDriveOptions,
+} from './vehicle-auto-drive';
+
+export {
   V3_COMPOSITION_POLICY,
   V3_COMPOSITION_VERSION,
   characterWriterRefusals,
@@ -665,6 +685,7 @@ export {
   VEHICLE_COLLISION_POLICY,
   VEHICLE_COLLISION_VERSION,
   createVehicleCollisionWorld,
+  vehicleBodiesOverlap,
   type VehicleBody,
   type VehicleCollisionWorld,
   type VehicleContact,

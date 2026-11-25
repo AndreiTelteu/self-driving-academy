@@ -21,6 +21,15 @@ export {
   generateSurfaceTexture,
 } from './surface-textures';
 export { ATMOSPHERE_VERSION, environmentTextureBytes } from './atmosphere';
+export {
+  GLB_ASSETS,
+  GLB_ASSET_LICENSE,
+  getGlbAsset,
+  getGlbAssetsByCategory,
+  glbAssetBytes,
+  type GlbAssetCategory,
+  type GlbAssetDefinition,
+} from './babylon/glb-assets';
 export { observeDisplaySurface, readDisplayMetrics } from './display-surface';
 export type { DisplayEnvironment, DisplayMetrics, DisplaySurfaceObserver } from './display-surface';
 export {

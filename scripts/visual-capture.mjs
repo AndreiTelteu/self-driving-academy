@@ -36,6 +36,7 @@ function parseArgs(argv) {
     software: false,
     allowBackendFallback: false,
     measure: 30,
+    models: 'glb',
   };
   for (let index = 0; index < argv.length; index += 1) {
     const arg = argv[index];
@@ -51,6 +52,7 @@ function parseArgs(argv) {
     else if (arg === '--views') options.views = next().split(',');
     else if (arg === '--dist') options.dist = resolve(next());
     else if (arg === '--measure') options.measure = Number(next());
+    else if (arg === '--models') options.models = next().toLowerCase();
     else if (arg === '--headed') options.headed = true;
     else if (arg === '--software') options.software = true;
     else if (arg === '--allow-backend-fallback') options.allowBackendFallback = true;
@@ -60,6 +62,8 @@ function parseArgs(argv) {
     throw new Error('--preset trebuie să fie LOW, MEDIUM sau HIGH');
   if (!['webgpu', 'webgl2', 'auto'].includes(options.backend))
     throw new Error('--backend trebuie să fie webgpu, webgl2 sau auto');
+  if (!['glb', 'procedural'].includes(options.models))
+    throw new Error('--models trebuie să fie glb sau procedural');
   if (options.port !== null && !(options.port > 0 && options.port < 65536))
     throw new Error('--port invalid');
   options.out = resolve(
@@ -209,11 +213,15 @@ export async function run(argv) {
       capture: '1',
       preset: options.preset,
       backend: options.backend,
+      models: options.models,
     });
     await page.goto(`${origin}/?${query}`, { waitUntil: 'load' });
     await page.waitForFunction(() => globalThis.__visualCapture?.ready() === true, null, {
       timeout: 60000,
     });
+    // PBI 251 a așezat ecranul de start peste canvas în starea READY; capturile 239 trebuie să
+    // fotografieze scena, nu overlay-ul. Se ascunde doar în harness, starea rămâne READY.
+    await page.addStyleTag({ content: '.start-screen{display:none !important}' });
     const info = await page.evaluate(() => globalThis.__visualCapture.info());
     const adapter = await page.evaluate(async () => {
       try {
@@ -308,7 +316,7 @@ export async function run(argv) {
         playwright: specifier,
         flags,
       },
-      determinism: { seed: info.seed, clock: info.clock },
+      determinism: { seed: info.seed, clock: info.clock, models: options.models },
       measureFrames: options.measure,
       consoleErrors,
       pageErrors,

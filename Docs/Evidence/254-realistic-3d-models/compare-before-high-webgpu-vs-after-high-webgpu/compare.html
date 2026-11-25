@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ro"><head><meta charset="utf-8"><title>Comparație capturi V4</title>
+<style>
+body{font:14px/1.4 system-ui,sans-serif;margin:1.5rem;background:#10161a;color:#e6edf0}
+h1{margin:0 0 .25rem}.meta{color:#9fb3bd;margin:.1rem 0}
+table.sum{border-collapse:collapse;margin:1rem 0}.sum td,.sum th{border:1px solid #2c3a42;padding:.25rem .6rem;text-align:left}
+.pair{margin:1.5rem 0}.pair h2{font-size:1rem;margin:.2rem 0}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem}
+.grid figure{margin:0}.grid img{width:100%;display:block;background:#000}figcaption{color:#9fb3bd;font-size:12px}
+.ok{color:#7fd48a}.bad{color:#ff8a7a}
+</style></head><body>
+<h1>Comparație capturi V4</h1>
+<p class="meta">Înainte: HIGH / WEBGPU / amd rdna-2 / 93ea77eb+local</p>
+<p class="meta">După: HIGH / WEBGPU / amd rdna-2 / 93ea77eb+local</p>
+<p class="meta">Toleranță pe canal: 4/255. Cel mai mare procent: 72.606%.</p>
+<table class="sum"><tr><th>Cadru</th><th>Pixeli diferiți</th><th>CPU render înainte (ms)</th><th>CPU render după (ms)</th></tr>
+<tr><td><a href="#character-close">character-close</a></td><td class="ok">72.606%</td><td>13.31</td><td>14.60</td></tr>
+<tr><td><a href="#taxi-front-three-quarter">taxi-front-three-quarter</a></td><td class="ok">27.253%</td><td>7.56</td><td>8.25</td></tr>
+<tr><td><a href="#street-eye-level">street-eye-level</a></td><td class="ok">4.031%</td><td>7.76</td><td>10.42</td></tr>
+<tr><td><a href="#decor-tree-bench">decor-tree-bench</a></td><td class="ok">2.933%</td><td>8.44</td><td>8.16</td></tr>
+<tr><td><a href="#civil-cars">civil-cars</a></td><td class="ok">13.912%</td><td>9.62</td><td>11.36</td></tr>
+</table>
+<section class="pair" id="character-close"><h2>Personaj aproape — 72.606% pixeli diferiți</h2>
+<div class="grid">
+<figure><img src="../before-high-webgpu/character-close.png" alt="înainte"><figcaption>înainte</figcaption></figure>
+<figure><img src="../after-high-webgpu/character-close.png" alt="după"><figcaption>după</figcaption></figure>
+<figure><img src="diff/character-close.png" alt="diferență"><figcaption>diferență (roșu = peste toleranță)</figcaption></figure>
+</div></section>
+<section class="pair" id="taxi-front-three-quarter"><h2>Taxi aproape, 3/4 față — 27.253% pixeli diferiți</h2>
+<div class="grid">
+<figure><img src="../before-high-webgpu/taxi-front-three-quarter.png" alt="înainte"><figcaption>înainte</figcaption></figure>
+<figure><img src="../after-high-webgpu/taxi-front-three-quarter.png" alt="după"><figcaption>după</figcaption></figure>
+<figure><img src="diff/taxi-front-three-quarter.png" alt="diferență"><figcaption>diferență (roșu = peste toleranță)</figcaption></figure>
+</div></section>
+<section class="pair" id="street-eye-level"><h2>Stradă la nivelul ochilor — 4.031% pixeli diferiți</h2>
+<div class="grid">
+<figure><img src="../before-high-webgpu/street-eye-level.png" alt="înainte"><figcaption>înainte</figcaption></figure>
+<figure><img src="../after-high-webgpu/street-eye-level.png" alt="după"><figcaption>după</figcaption></figure>
+<figure><img src="diff/street-eye-level.png" alt="diferență"><figcaption>diferență (roșu = peste toleranță)</figcaption></figure>
+</div></section>
+<section class="pair" id="decor-tree-bench"><h2>Decor: copac, bancă, hidrant — 2.933% pixeli diferiți</h2>
+<div class="grid">
+<figure><img src="../before-high-webgpu/decor-tree-bench.png" alt="înainte"><figcaption>înainte</figcaption></figure>
+<figure><img src="../after-high-webgpu/decor-tree-bench.png" alt="după"><figcaption>după</figcaption></figure>
+<figure><img src="diff/decor-tree-bench.png" alt="diferență"><figcaption>diferență (roșu = peste toleranță)</figcaption></figure>
+</div></section>
+<section class="pair" id="civil-cars"><h2>Mașini civile — 13.912% pixeli diferiți</h2>
+<div class="grid">
+<figure><img src="../before-high-webgpu/civil-cars.png" alt="înainte"><figcaption>înainte</figcaption></figure>
+<figure><img src="../after-high-webgpu/civil-cars.png" alt="după"><figcaption>după</figcaption></figure>
+<figure><img src="diff/civil-cars.png" alt="diferență"><figcaption>diferență (roșu = peste toleranță)</figcaption></figure>
+</div></section>
+</body></html>

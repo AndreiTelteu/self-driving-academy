@@ -4,7 +4,7 @@ title: "Gate V4: calitate vizuală și performanță pe toate preseturile"
 status: "To Do"
 release: "V4"
 module: "Calitate vizuală V4"
-depends_on: ["239","240","241","242","243","244","245","246","247","248","249","250","251","252"]
+depends_on: ["239","240","241","242","243","244","245","246","247","248","249","250","251","252","254","255"]
 performance_checks: ["frame","memory","assets","loading","soak"]
 owner: null
 started_at: null

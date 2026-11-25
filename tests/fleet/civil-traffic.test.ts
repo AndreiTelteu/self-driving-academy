@@ -89,6 +89,33 @@ test('058 spawns every 057 civilian with its own READY route and the common city
   world.registry.dispose();
 });
 
+test('058 optional spawn lanes/offsets place the first stable actors on the requested CIVIL lanes', () => {
+  const lanes = ['lane:00N0', 'lane:00E0'] as const;
+  const offsets = [5, 10] as const;
+  const world = createCivilWorld({
+    traffic: { spawnLanes: [...lanes], spawnOffsetsM: [...offsets] },
+  });
+  try {
+    const actors = world.traffic.list();
+    assert.deepEqual(
+      actors.slice(0, lanes.length).map((actor) => actor.laneId),
+      [...lanes],
+    );
+    assert.deepEqual(
+      actors.slice(0, lanes.length).map((actor) => actor.distanceAlongRouteM),
+      [...offsets],
+    );
+    assert.equal(
+      new Set(actors.map((actor) => actor.laneId)).size,
+      actors.length,
+      'the preferred lanes are still unique across the population',
+    );
+  } finally {
+    world.traffic.dispose();
+    world.planner.dispose();
+  }
+});
+
 test('058 routes are exactly the real PBI041 plans over CIVIL directed edges', () => {
   const registry = civilRegistry(),
     map = createCivilWorld({ registry, createTraffic: false }).map,

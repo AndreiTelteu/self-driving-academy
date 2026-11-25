@@ -103,6 +103,7 @@ export {
   captureView,
   readCaptureConfig,
   type CaptureConfig,
+  type CaptureModels,
   type CaptureView,
 } from '../visual-capture';
 export {
@@ -113,3 +114,19 @@ export {
   type V3BrowserComposition,
   type V3BrowserCompositionOptions,
 } from './v3-browser-composition';
+export {
+  GLB_ASSETS,
+  GLB_ASSET_LICENSE,
+  getGlbAsset,
+  getGlbAssetsByCategory,
+  glbAssetBytes,
+  type GlbAssetCategory,
+  type GlbAssetDefinition,
+} from './glb-assets';
+export {
+  GLB_MODEL_LIBRARY_VERSION,
+  loadGlbModelLibrary,
+  type GlbModelFailure,
+  type GlbModelLibrary,
+  type GlbModelLibraryOptions,
+} from './glb-model-library';

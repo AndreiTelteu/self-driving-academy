@@ -20,7 +20,7 @@ import {
 } from './vehicle-geometry';
 import type { QualityPreset } from './quality-policy';
 
-export const VEHICLE_VISUAL_VERSION = '145-vehicle-visuals-v1';
+export const VEHICLE_VISUAL_VERSION = '145-vehicle-visuals-v2';
 /** PBI 023 suspension contract: connection point -0.15 m, 0.35 m rest length. */
 export const VEHICLE_CONNECTION_Y_M = -0.15;
 export const VEHICLE_REST_SPRING_M = 0.35;
@@ -79,6 +79,7 @@ export const VEHICLE_LIGHTS_OFF: VehicleLightState = Object.freeze({
 });
 const ALL_GROUPS: readonly VehicleMaterialGroup[] = Object.freeze([
   'BODY',
+  'GLASS',
   'HEADLIGHT',
   'TAILLIGHT',
   'BRAKE',
@@ -119,7 +120,7 @@ function visualClass(
       Object.freeze({
         level: 'MID' as const,
         distanceM: 0,
-        visibleGroups: Object.freeze(['BODY', 'HEADLIGHT', 'TAILLIGHT', 'BRAKE'] as const),
+        visibleGroups: Object.freeze(['BODY', 'GLASS', 'HEADLIGHT', 'TAILLIGHT', 'BRAKE'] as const),
         wheelsVisible: true,
       }),
       Object.freeze({
@@ -225,7 +226,7 @@ export function visibleGroupsFor(
 /** Presentation draw calls for the given light/turn state; never depends on LOD internals. */
 export function vehicleDrawCalls(lod: VehicleLodLevel, lights: VehicleLightState): number {
   if (lod === 'FAR') return 1;
-  let calls = 3; // body, headlight, taillight
+  let calls = 4; // body, glass, headlight, taillight
   if (lights.brake) calls += 1;
   if (lights.turn === 'LEFT' || lights.turn === 'RIGHT') calls += 1;
   else if (lights.turn === 'HAZARD') calls += 2;
@@ -298,7 +299,7 @@ export interface VehicleAssetInventoryEntry {
   readonly license: string;
   readonly costBytes: number;
 }
-const INVENTORY_SOURCE = 'Original procedural geometry authored in this repository (PBI 145)';
+const INVENTORY_SOURCE = 'Original procedural geometry authored in this repository (PBI 145/247)';
 const INVENTORY_LICENSE = 'Project license — original work, no third-party asset';
 /** Source/licence inventory for every visual asset this module admits. */
 export function vehicleAssetInventory(): readonly VehicleAssetInventoryEntry[] {

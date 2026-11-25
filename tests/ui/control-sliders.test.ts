@@ -56,7 +56,7 @@ test('229 the popup edits exactly the seven 009 control fields with simple ends 
     const input = harness.control(field),
       range = CONTROL_SLIDER_RANGES[field],
       output = harness.output(field),
-      initial = field === 'fov' ? 80 : 50;
+      initial = field === 'fov' ? 60 : 50; // PBI 250: default 60 (era 80)
     assert.equal(input.getAttribute('type'), 'range');
     assert.equal(input.getAttribute('min'), String(range.min));
     assert.equal(input.getAttribute('max'), String(range.max));
@@ -152,7 +152,7 @@ test('229 apply, cancel and reset only touch the local draft and stay explicit',
   for (const field of CONTROL_SLIDER_FIELDS)
     assert.equal(
       harness.view().values[field],
-      field === 'fov' ? 80 : 50,
+      field === 'fov' ? 60 : 50, // PBI 250: default 60 (era 80)
       `${field} returns to the 009 default`,
     );
   harness.panel.dispose();
@@ -191,12 +191,12 @@ test('229 preset, reset and revert are pure draft operations', () => {
   assert.equal(projectControlSliders(reset).saveState, 'UNCHANGED');
   assert.equal(projectControlSliders(reverted).saveState, 'UNCHANGED');
   assert.equal(reverted.proposed.steeringSensitivity, draft.saved.steeringSensitivity);
-  assert.equal(reset.proposed.fov, 80);
+  assert.equal(reset.proposed.fov, 60); // PBI 250: default 60 (era 80)
   assert.equal(reset.proposed.version, draft.saved.version);
 });
 
 test('229 keyboard steps are native-compatible, clamped and reversible at both ends', () => {
-  assert.equal(nudgeControlValue('fov', 80, 1), 81);
+  assert.equal(nudgeControlValue('fov', 60, 1), 61); // PBI 250: default 60 (era 80)
   assert.equal(nudgeControlValue('fov', 100, 1), 100);
   assert.equal(nudgeControlValue('fov', 60, -10), 60);
   assert.equal(nudgeControlValue('steeringSensitivity', 0, -1), 0);

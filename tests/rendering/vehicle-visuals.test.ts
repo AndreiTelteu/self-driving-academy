@@ -97,14 +97,20 @@ test('LOD changes detail groups only: collider envelope, identity fields and piv
       assert.equal(vehicleVisualClass(classId).wheelPivots.length, 4);
     }
     assert.deepEqual(visibleGroupsFor(classId, 'FAR'), ['BODY']);
-    assert.deepEqual(visibleGroupsFor(classId, 'MID'), ['BODY', 'HEADLIGHT', 'TAILLIGHT', 'BRAKE']);
+    assert.deepEqual(visibleGroupsFor(classId, 'MID'), [
+      'BODY',
+      'GLASS',
+      'HEADLIGHT',
+      'TAILLIGHT',
+      'BRAKE',
+    ]);
   }
   const base = { headlights: false, brake: false, turn: 'OFF' } as const;
   assert.equal(vehicleDrawCalls('FAR', base), 1);
-  assert.equal(vehicleDrawCalls('MID', base), 4);
-  assert.equal(vehicleDrawCalls('NEAR', base), 4);
-  assert.equal(vehicleDrawCalls('NEAR', { ...base, brake: true }), 5);
-  assert.equal(vehicleDrawCalls('NEAR', { ...base, brake: true, turn: 'HAZARD' }), 7);
+  assert.equal(vehicleDrawCalls('MID', base), 5);
+  assert.equal(vehicleDrawCalls('NEAR', base), 5);
+  assert.equal(vehicleDrawCalls('NEAR', { ...base, brake: true }), 6);
+  assert.equal(vehicleDrawCalls('NEAR', { ...base, brake: true, turn: 'HAZARD' }), 8);
   assert.ok(
     vehicleDrawCalls('FAR', { ...base, brake: true, turn: 'HAZARD' }) <
       vehicleDrawCalls('NEAR', { ...base, brake: true, turn: 'HAZARD' }),

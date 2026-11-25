@@ -34,6 +34,10 @@ import {
 export type SurfaceMaterialKey =
   'asphalt' | 'intersection' | 'marking' | 'sidewalk' | 'curb' | 'ground' | 'wear';
 
+/** PBI 246 — materialele PBR ale fațadelor (zid + sticlă + tâmplărie), separate de lotul suprafețelor. */
+export type BuildingMaterialKey =
+  'buildingBrick' | 'buildingPlaster' | 'buildingConcrete' | 'buildingGlass' | 'buildingTrim';
+
 /** Dimensiunea dalei (m) pe care o folosește geometria pentru UV-uri: o sursă unică de adevăr. */
 export const SURFACE_TILE_M = Object.freeze({
   asphalt: SURFACE_TEXTURE_SPECS.asphalt.tileM.u,
@@ -43,6 +47,7 @@ export const SURFACE_TILE_M = Object.freeze({
   ground: SURFACE_TEXTURE_SPECS.grass.tileM.u,
   wearAlong: SURFACE_TEXTURE_SPECS.wear.tileM.v,
   terrain: SURFACE_TEXTURE_SPECS.terrainDetail.tileM.u,
+  facadeWall: SURFACE_TEXTURE_SPECS.facadeBrick.tileM.u,
 });
 
 export interface SurfaceMaterialStats {
@@ -61,12 +66,27 @@ export interface SurfaceMaterialStats {
 
 export interface SurfaceMaterials {
   readonly materials: Readonly<Record<SurfaceMaterialKey, PBRMaterial>>;
+  /** PBI 246: materialele fațadelor (zid cărămidă/tencuială/beton, sticlă IBL, tâmplărie). */
+  readonly buildingMaterials: Readonly<Record<BuildingMaterialKey, PBRMaterial>>;
   /** Modulare de luminanță pentru terenul `StandardMaterial` de la orizont (UV în metri / `SURFACE_TILE_M.terrain`). */
   readonly terrainTexture: RawTexture;
   /** Materialele ca map parțial pentru `createCityScene({ materials })`. */
   cityMaterials(): Readonly<
     Partial<
-      Record<'asphalt' | 'intersection' | 'marking' | 'sidewalk' | 'curb' | 'ground', Material>
+      Record<
+        | 'asphalt'
+        | 'intersection'
+        | 'marking'
+        | 'sidewalk'
+        | 'curb'
+        | 'ground'
+        | 'buildingWallBrick'
+        | 'buildingWallPlaster'
+        | 'buildingWallConcrete'
+        | 'buildingGlass'
+        | 'buildingTrim',
+        Material
+      >
     >
   >;
   /** Înghețe materialele (după ce meshurile lor au fost excluse din lumina de rezervă). */
@@ -206,6 +226,49 @@ export function createSurfaceMaterials(
     }),
   };
 
+  /**
+   * PBI 246 — materialele fațadelor. Zidurile primesc culoarea clădirii pe vârf (albedoColor alb)
+   * ca 8 stiluri × palete să împartă aceleași trei texturi; Babylon activează VERTEXCOLOR singur
+   * (`mesh.useVertexColors` + buffer `color`, nu există o proprietate pe material). Sticla este
+   * dielectrică netedă și reflectă IBL-ul (interioarele false sunt panouri calde aprinse, nu cubemap).
+   */
+  const makeBuilding = (
+    key: BuildingMaterialKey,
+    options: {
+      readonly albedoScale?: readonly [number, number, number];
+      readonly flatRoughness?: number;
+      readonly metallic?: number;
+    },
+  ): PBRMaterial => {
+    const material = new PBRMaterial(`surface:${key}`, scene);
+    material.backFaceCulling = false;
+    material.maxSimultaneousLights = 2;
+    material.environmentIntensity = LIGHTING.environment;
+    material.directIntensity = LIGHTING.direct;
+    material.metallic = options.metallic ?? 0;
+    if (options.flatRoughness !== undefined) material.roughness = options.flatRoughness;
+    const scale = options.albedoScale ?? [1, 1, 1];
+    material.albedoColor = new Color3(scale[0], scale[1], scale[2]);
+    return material;
+  };
+  const building: Record<BuildingMaterialKey, PBRMaterial> = {
+    // Albedo neutru-alb pe ziduri: culoarea reală a fiecărei clădiri vine din vertex colors.
+    buildingBrick: makeBuilding('buildingBrick', {}),
+    buildingPlaster: makeBuilding('buildingPlaster', {}),
+    buildingConcrete: makeBuilding('buildingConcrete', {}),
+    buildingGlass: makeBuilding('buildingGlass', { flatRoughness: 0.06 }),
+    buildingTrim: makeBuilding('buildingTrim', { flatRoughness: 0.55 }),
+  };
+  // Sticla: reflexie IBL mai puternică decât zidurile (F0 dielectric, dar netedă).
+  building.buildingGlass.environmentIntensity = LIGHTING.environment * 2.2;
+  const BUILDING_MATERIAL_KEYS: readonly BuildingMaterialKey[] = [
+    'buildingBrick',
+    'buildingPlaster',
+    'buildingConcrete',
+    'buildingGlass',
+    'buildingTrim',
+  ];
+
   const bindTextures = (): void => {
     const macro = sets.get('asphaltMacro')!;
     const bind = (key: SurfaceMaterialKey, id: SurfaceTextureId): void => {
@@ -233,6 +296,23 @@ export function createSurfaceMaterials(
     bind('sidewalk', 'sidewalk');
     bind('curb', 'curb');
     bind('ground', 'grass');
+    // 246: pereții clădirilor (albedo neutru în textură, culoarea clădirii pe vârf).
+    const bindWall = (key: BuildingMaterialKey, id: SurfaceTextureId): void => {
+      const material = building[key];
+      const set = sets.get(id)!;
+      material.albedoTexture = set.albedo;
+      if (set.normal) material.bumpTexture = set.normal;
+      if (set.orm) {
+        material.metallicTexture = set.orm;
+        material.useRoughnessFromMetallicTextureGreen = true;
+        material.useAmbientOcclusionFromMetallicTextureRed = true;
+        material.metallic = null;
+        material.roughness = null;
+      }
+    };
+    bindWall('buildingBrick', 'facadeBrick');
+    bindWall('buildingPlaster', 'facadePlaster');
+    bindWall('buildingConcrete', 'facadeConcrete');
     materials.wear.albedoTexture = sets.get('wear')!.albedo;
     // RGBA8 brut nu declară alpha: fără asta fâșia ar fi opacă.
     sets.get('wear')!.albedo.hasAlpha = true;
@@ -256,6 +336,9 @@ export function createSurfaceMaterials(
     for (const key of SURFACE_MATERIAL_KEYS) {
       materials[key].enableSpecularAntiAliasing = tier.specularAA;
     }
+    for (const key of BUILDING_MATERIAL_KEYS) {
+      building[key].enableSpecularAntiAliasing = tier.specularAA;
+    }
   };
 
   // Terenul de la orizont rămâne `StandardMaterial` (PBR pe tot ecranul costa ~+3 ms pe LOW): textura lui
@@ -273,11 +356,17 @@ export function createSurfaceMaterials(
         materials[key].unfreeze();
         any = true;
       }
+    for (const key of BUILDING_MATERIAL_KEYS)
+      if (building[key].isFrozen) {
+        building[key].unfreeze();
+        any = true;
+      }
     return any;
   };
 
   return {
     materials,
+    buildingMaterials: building,
     terrainTexture,
     cityMaterials: () =>
       Object.freeze({
@@ -287,10 +376,16 @@ export function createSurfaceMaterials(
         sidewalk: materials.sidewalk,
         curb: materials.curb,
         ground: materials.ground,
+        buildingWallBrick: building.buildingBrick,
+        buildingWallPlaster: building.buildingPlaster,
+        buildingWallConcrete: building.buildingConcrete,
+        buildingGlass: building.buildingGlass,
+        buildingTrim: building.buildingTrim,
       }),
     freeze(): void {
       if (disposed) return;
       for (const key of SURFACE_MATERIAL_KEYS) materials[key].freeze();
+      for (const key of BUILDING_MATERIAL_KEYS) building[key].freeze();
     },
     setPreset(next: QualityPreset): void {
       if (disposed || next === preset) return;
@@ -307,19 +402,24 @@ export function createSurfaceMaterials(
       applyTier();
       for (const key of SURFACE_MATERIAL_KEYS)
         materials[key].markAsDirty(Constants.MATERIAL_AllDirtyFlag);
+      for (const key of BUILDING_MATERIAL_KEYS)
+        building[key].markAsDirty(Constants.MATERIAL_AllDirtyFlag);
       // Reînghețarea după recompilare se face de `refreshFrozenMaterials` (material-refresh.ts).
       if (wasFrozen) {
         let frames = 0;
         const observer = scene.onAfterRenderObservable.add(() => {
           if (++frames < 3) return;
           scene.onAfterRenderObservable.remove(observer);
-          if (!disposed) for (const key of SURFACE_MATERIAL_KEYS) materials[key].freeze();
+          if (!disposed) {
+            for (const key of SURFACE_MATERIAL_KEYS) materials[key].freeze();
+            for (const key of BUILDING_MATERIAL_KEYS) building[key].freeze();
+          }
         });
       }
     },
     getStats(): SurfaceMaterialStats {
       return Object.freeze({
-        version: '245-procedural-1',
+        version: '246-building-facades-1',
         preset,
         baseSize: currentBaseSize,
         anisotropy: tier.anisotropy,
@@ -330,13 +430,14 @@ export function createSurfaceMaterials(
         gpuBytes: surfaceTextureBytes(currentBaseSize),
         lastBuildMs,
         builds,
-        materials: SURFACE_MATERIAL_KEYS.length,
+        materials: SURFACE_MATERIAL_KEYS.length + BUILDING_MATERIAL_KEYS.length,
       });
     },
     dispose(): void {
       if (disposed) return;
       disposed = true;
       for (const key of SURFACE_MATERIAL_KEYS) materials[key].dispose(false, false);
+      for (const key of BUILDING_MATERIAL_KEYS) building[key].dispose(false, false);
       disposeSets(sets);
       terrainTexture.dispose();
     },

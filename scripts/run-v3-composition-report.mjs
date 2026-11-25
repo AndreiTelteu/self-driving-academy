@@ -69,6 +69,8 @@ function browserSection(browser) {
     `Browser: **${browser.browser}**, backend **${browser.backend.rendererKind}**` +
       ` (WebGL ${browser.backend.webGLVersion ?? '—'}, ${browser.backend.renderer}).`,
     `Capturi: ${browser.screenshots.map((file) => `[${file}](${file})`).join(', ')}.`,
+    `Trafic AI: **${browser.traffic?.actors ?? 0}** mașini, **${browser.traffic?.moved ?? 0}** s-au deplasat peste 1 m în timpul probei.`,
+    `HUD: **${browser.hud?.autoSpeedKmh ?? 0} km/h** în AUTO, mod afișat „${browser.hud?.autoModeText ?? '—'}”; după butonul HUD: „${browser.hud?.manualModeText ?? '—'}”.`,
     '',
     '| Secvență | Taste reale | Entitate controlată | Mod | Clip | Poziție (x,z) | Verdict |',
     '| --- | --- | --- | --- | --- | --- | --- |',
@@ -291,9 +293,20 @@ async function runBrowserProof() {
       );
       return;
     }
-    const play = page.getByRole('button', { name: 'Pornește' });
+    // `__v3Composition.ready()` există înainte de starea READY; butonul de start devine vizibil abia
+    // după ce ecranul de start iese din LOADING (cu 24 de mașini încărcarea este mai lungă).
+    await page.waitForFunction(
+      () =>
+        globalThis.document?.querySelector('.game-shell')?.getAttribute('data-state') === 'READY',
+      null,
+      { timeout: 120000 },
+    );
+    // PBI 251: ecranul de start are butonul „Joacă”; butonul „Pornește” rămâne pentru reluare.
+    const startButton = page.getByRole('button', { name: 'Joacă' });
+    const resumeButton = page.getByRole('button', { name: 'Pornește' });
+    const play = (await startButton.count()) > 0 ? startButton : resumeButton;
     if ((await play.count()) === 0) {
-      await writeBrowserNotRun('Butonul „Pornește” nu există; aplicația nu a ajuns în READY.', {
+      await writeBrowserNotRun('Butonul de pornire nu există; aplicația nu a ajuns în READY.', {
         backend,
       });
       return;
@@ -304,13 +317,52 @@ async function runBrowserProof() {
       if (active instanceof globalThis.HTMLElement) active.blur();
     });
     const read = () => page.evaluate(() => globalThis.__v3Composition.read());
+    const heldKeys = new Set();
+    const keyDown = async (key) => {
+      heldKeys.add(key);
+      await page.keyboard.down(key);
+    };
+    const keyUp = async (key) => {
+      heldKeys.delete(key);
+      await page.keyboard.up(key);
+    };
+    /**
+     * 256: pe SwiftShader, 24 de mașini plus modelele V4 pot depăși datoria de 250 ms a buclei
+     * fixe, iar aplicația intră corect în pauză de overload. Proba reia explicit pauza ca să poată
+     * măsura tick-urile reale; pe hardware normal această ramură nu se activează. Reia este și
+     * momentul în care 025 își golește comenzile ținute, deci tastele fizice se retrimit.
+     */
+    const resumeIfPaused = async () => {
+      const paused = await page.evaluate(
+        () =>
+          globalThis.document?.querySelector('.game-shell')?.getAttribute('data-state') ===
+          'PAUSED',
+      );
+      if (!paused) return false;
+      const resume = page.locator('.pause-menu [data-action="resume"]');
+      if ((await resume.count()) === 0) return false;
+      await resume.click();
+      // Butonul din dialog rămâne activ după click, iar 025 blochează intențiile în dialoguri.
+      await page.evaluate(() => {
+        const active = globalThis.document?.activeElement;
+        if (active instanceof globalThis.HTMLElement) active.blur();
+      });
+      for (const key of heldKeys) {
+        await page.keyboard.up(key);
+        await page.keyboard.down(key);
+      }
+      return true;
+    };
     const waitTicks = async (count) => {
       const start = (await read()).tick;
-      await page.waitForFunction(
-        (target) => globalThis.__v3Composition.read().tick >= target,
-        start + count,
-        { timeout: 30000 },
-      );
+      const deadline = Date.now() + 120000;
+      let resumes = 0;
+      while ((await read()).tick < start + count) {
+        if (Date.now() > deadline)
+          throw new Error(`Tick timeout: ${start} + ${count} after ${resumes} resumes`);
+        if (await resumeIfPaused()) resumes += 1;
+        await page.waitForTimeout(120);
+      }
     };
     const hud = async () => ({
       clip: await page.locator('.character-hud').getAttribute('data-clip'),
@@ -318,18 +370,23 @@ async function runBrowserProof() {
       controlled: await page.locator('.character-hud').getAttribute('data-controlled'),
       camera: await page.locator('.character-hud').getAttribute('data-camera'),
     });
+    const hudSpeedKmh = async () =>
+      Number((await page.locator('.game-hud__speed-value').textContent()) ?? 0);
+    const hudModeText = async () =>
+      (await page.locator('.game-hud__mode-text').textContent()) ?? '';
     const steps = [];
     const shot = async (name) => {
       await mkdir(screenshots, { recursive: true });
       const relative = `screenshots/${name}.png`;
-      await page.screenshot({ path: join(directory, relative) });
+      await page.screenshot({ path: join(directory, relative), timeout: 120000 });
       return relative;
     };
     await waitTicks(20);
     const initial = await read();
     steps.push(sequenceStep('start', '—', initial, await hud(), await shot('01-start'), true));
 
-    await page.keyboard.down('KeyW');
+    await resumeIfPaused();
+    await keyDown('KeyW');
     await waitTicks(90);
     const walk = await read();
     const walkHud = await hud();
@@ -347,7 +404,8 @@ async function runBrowserProof() {
       ),
     );
 
-    await page.keyboard.down('KeyF');
+    await resumeIfPaused();
+    await keyDown('KeyF');
     await waitTicks(80);
     const run = await read();
     const runHud = await hud();
@@ -361,13 +419,14 @@ async function runBrowserProof() {
         run.hud.clipId === 'run' && run.character.speedMps > 1.371 * 1.05,
       ),
     );
-    await page.keyboard.up('KeyF');
-    await page.keyboard.up('KeyW');
+    await keyUp('KeyF');
+    await keyUp('KeyW');
 
     await page.evaluate(() => globalThis.__v3Composition.reset());
     await waitTicks(6);
     const reset = await read();
 
+    await resumeIfPaused();
     await page.keyboard.press('KeyG');
     await waitTicks(25);
     const enter = await read();
@@ -386,19 +445,68 @@ async function runBrowserProof() {
       ),
     );
 
-    await page.keyboard.down('KeyW');
+    await resumeIfPaused();
+    await page.keyboard.press('KeyM');
+    await waitTicks(90);
+    const auto = await read();
+    const autoHud = await hud();
+    const autoTaxi = auto.vehicles.find((vehicle) => vehicle.vehicleId === 'taxi-01');
+    const enterTaxi = enter.vehicles.find((vehicle) => vehicle.vehicleId === 'taxi-01');
+    const autoSpeedKmh = await hudSpeedKmh();
+    const autoModeText = await hudModeText();
+    steps.push(
+      sequenceStep(
+        'AUTO',
+        'M',
+        auto,
+        autoHud,
+        await shot('05-auto'),
+        auto.hud.mode === 'AUTO' &&
+          autoSpeedKmh > 0 &&
+          autoModeText.includes('AUTO') &&
+          autoTaxi !== undefined &&
+          enterTaxi !== undefined &&
+          Math.hypot(
+            autoTaxi.positionM.x - enterTaxi.positionM.x,
+            autoTaxi.positionM.z - enterTaxi.positionM.z,
+          ) > 1,
+        `HUD ${autoSpeedKmh} km/h; mod „${autoModeText}”`,
+      ),
+    );
+
+    await resumeIfPaused();
+    await page.locator('.game-hud__mode').click();
+    await waitTicks(10);
+    const manual = await read();
+    const manualHud = await hud();
+    const manualModeText = await hudModeText();
+    steps.push(
+      sequenceStep(
+        'revenire MANUAL prin buton',
+        'click mod',
+        manual,
+        manualHud,
+        null,
+        manual.hud.mode === 'MANUAL' && manualModeText.includes('MANUAL'),
+        `buton HUD „${manualModeText}”; fără captură`,
+      ),
+    );
+
+    await resumeIfPaused();
+    await keyDown('KeyW');
     await waitTicks(120);
     const drive = await read();
     const driveHud = await hud();
     const taxiStart = enter.vehicles.find((vehicle) => vehicle.vehicleId === 'taxi-01');
     const taxiNow = drive.vehicles.find((vehicle) => vehicle.vehicleId === 'taxi-01');
+    const driveSpeedKmh = await hudSpeedKmh();
     steps.push(
       sequenceStep(
         'conducere',
         'W',
         drive,
         driveHud,
-        await shot('05-conducere'),
+        await shot('06-conducere'),
         drive.authority === 'VEHICLE:taxi-01' &&
           taxiStart !== undefined &&
           taxiNow !== undefined &&
@@ -406,23 +514,33 @@ async function runBrowserProof() {
             taxiNow.positionM.x - taxiStart.positionM.x,
             taxiNow.positionM.z - taxiStart.positionM.z,
           ) > 3 &&
+          driveSpeedKmh > 0 &&
           drive.character.positionBits === reset.character.positionBits,
       ),
     );
-    await page.keyboard.up('KeyW');
+    await keyUp('KeyW');
 
-    await page.keyboard.down('KeyS');
+    await resumeIfPaused();
+    await keyDown('KeyS');
     let stopped = false;
-    for (let attempt = 0; attempt < 160; attempt += 1) {
+    for (let attempt = 0; attempt < 600; attempt += 1) {
+      await resumeIfPaused();
       await page.waitForTimeout(50);
       const snapshot = await read();
       const taxi = snapshot.vehicles.find((vehicle) => vehicle.vehicleId === 'taxi-01');
-      if (taxi && taxi.speedMps === 0) {
+      // Sub 0,05 m/s mașina este oprită; dacă frâna ținută a trecut deja în marșarier, reluarea
+      // o lasă să se oprească fără a cere un eșantion exact de zero între două cadre SwiftShader.
+      if (taxi && taxi.speedMps <= 0.05) {
         stopped = true;
         break;
       }
     }
-    await page.keyboard.up('KeyS');
+    await keyUp('KeyS');
+    if (stopped) {
+      await waitTicks(90);
+      const parked = (await read()).vehicles.find((vehicle) => vehicle.vehicleId === 'taxi-01');
+      stopped = Boolean(parked && Math.abs(parked.speedMps) < 0.001);
+    }
     const braking = await read();
     steps.push(
       sequenceStep(
@@ -436,6 +554,7 @@ async function runBrowserProof() {
       ),
     );
 
+    await resumeIfPaused();
     await page.keyboard.press('KeyG');
     await waitTicks(25);
     const exit = await read();
@@ -447,14 +566,15 @@ async function runBrowserProof() {
         'G',
         exit,
         exitHud,
-        await shot('06-iesire'),
+        await shot('07-iesire'),
         exit.authority === 'CHARACTER:player-character' &&
           released?.controlMode === 'AUTO' &&
           exit.hud.cameraEntityId === 'player-character',
       ),
     );
 
-    await page.keyboard.down('KeyW');
+    await resumeIfPaused();
+    await keyDown('KeyW');
     await waitTicks(60);
     const afterWalk = await read();
     const afterHud = await hud();
@@ -464,21 +584,36 @@ async function runBrowserProof() {
         'W',
         afterWalk,
         afterHud,
-        await shot('07-revenire'),
+        await shot('08-revenire'),
         afterWalk.hud.clipId === 'walk' &&
           afterWalk.character.positionBits !== exit.character.positionBits,
       ),
     );
-    await page.keyboard.up('KeyW');
+    await keyUp('KeyW');
 
     const doubleDelivery = await page.evaluate(() =>
       globalThis.__v3Composition.probeDoubleDelivery(),
     );
     const stats = await page.evaluate(() => globalThis.__v3Composition.stats());
     const final = await read();
+    const aiAtStart = new Map(
+      initial.vehicles
+        .filter((vehicle) => vehicle.vehicleId !== 'taxi-01' && vehicle.vehicleId !== 'civil-01')
+        .map((vehicle) => [vehicle.vehicleId, { x: vehicle.positionM.x, z: vehicle.positionM.z }]),
+    );
+    const movedAi = final.vehicles.filter((vehicle) => {
+      const start = aiAtStart.get(vehicle.vehicleId);
+      return (
+        start !== undefined &&
+        Math.hypot(vehicle.positionM.x - start.x, vehicle.positionM.z - start.z) > 1
+      );
+    }).length;
+    const traffic = Object.freeze({ actors: aiAtStart.size, moved: movedAi });
     const pass =
       steps.every((step) => step.pass) &&
       doubleDelivery === 'DOUBLE_DELIVERY_REFUSED' &&
+      traffic.actors >= 20 &&
+      traffic.moved >= Math.ceil(traffic.actors * 0.8) &&
       pageErrors.length === 0 &&
       consoleErrors.length === 0;
     const proof = {
@@ -489,9 +624,16 @@ async function runBrowserProof() {
       viewport: '1440x900',
       backend,
       sequenceNote:
-        'Tastele sunt trimise de Playwright către documentul real; după mers/alergare scenariul de probă este resetat la spawn (butonul de reset al probei), apoi intrarea/ieșirea folosesc exact tastele G/S/W.',
+        'Tastele sunt trimise de Playwright către documentul real; după mers/alergare scenariul de probă este resetat la spawn, intrarea folosește G, apoi M/butonul HUD comută AUTO/MANUAL, iar frânarea/ieșirea folosesc exact S/G/W.',
       steps,
       doubleDelivery,
+      traffic,
+      hud: Object.freeze({
+        autoSpeedKmh,
+        autoModeText,
+        manualMode: manual.hud.mode,
+        manualModeText,
+      }),
       final: {
         authority: final.authority,
         deliveries: final.deliveries,

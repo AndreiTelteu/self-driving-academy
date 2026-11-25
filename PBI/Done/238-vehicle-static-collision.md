@@ -4,7 +4,7 @@ title: "Coliziunea mașinii conduse cu decorul și clădirile, și orientarea de
 status: "Done"
 release: "V3"
 module: "Mers pe jos V3"
-depends_on: ["236","237"]
+depends_on: ["236","237","256","257"]
 performance_checks: ["simulation"]
 owner: "orchestrator/sonnet-implementer"
 started_at: "2026-11-15T19:28:38+02:00"
@@ -79,3 +79,6 @@ Verificare finală obligatorie: rulează Validate-Board.ps1 -RequireDone '238' d
 
 - 2026-11-15: PBI creat după 237, din trei defecte reale observate la jucarea compunerii în browser.
 - 2026-11-15T20:00:04+02:00: verificat independent în browser, aprobat de orchestrator și mutat în Done.
+- 2026-11-25: Gate-ul V3 include acum PBI 256 (trafic AI vizibil) și 257 (mod AUTO/MANUAL, HUD și
+  coliziune cu mașinile AI), adăugate ulterior ca prerequisite ale etapei; implementarea și dovezile
+  238 rămân neschimbate.

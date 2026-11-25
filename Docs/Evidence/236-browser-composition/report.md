@@ -84,27 +84,31 @@ Ordinea unui tick în compunere: intenția reală (193) → tranziția cerută (
 
 ## Proba de browser
 
-Browser: **Chromium 159.0.8154.6**, backend **WEBGL2** (WebGL 2, ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)).
-Capturi: [screenshots/01-start.png](screenshots/01-start.png), [screenshots/02-mers.png](screenshots/02-mers.png), [screenshots/03-alergare.png](screenshots/03-alergare.png), [screenshots/04-intrare.png](screenshots/04-intrare.png), [screenshots/05-conducere.png](screenshots/05-conducere.png), [screenshots/06-iesire.png](screenshots/06-iesire.png), [screenshots/07-revenire.png](screenshots/07-revenire.png).
+Browser: **Chromium 156.0.8078.4**, backend **WEBGL2** (WebGL 2, ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)).
+Capturi: [screenshots/01-start.png](screenshots/01-start.png), [screenshots/02-mers.png](screenshots/02-mers.png), [screenshots/03-alergare.png](screenshots/03-alergare.png), [screenshots/04-intrare.png](screenshots/04-intrare.png), [screenshots/05-auto.png](screenshots/05-auto.png), [screenshots/06-conducere.png](screenshots/06-conducere.png), [screenshots/07-iesire.png](screenshots/07-iesire.png), [screenshots/08-revenire.png](screenshots/08-revenire.png).
+Trafic AI: **24** mașini, **24** s-au deplasat peste 1 m în timpul probei.
+HUD: **8 km/h** în AUTO, mod afișat „AUTO · Conduce AI-ul (M)”; după butonul HUD: „MANUAL · Conduci tu (M)”.
 
 | Secvență | Taste reale | Entitate controlată | Mod | Clip | Poziție (x,z) | Verdict |
 | --- | --- | --- | --- | --- | --- | --- |
 | start | `—` | `CHARACTER:player-character` | `MANUAL` | `idle` | 9.80, 3.20 | PASS |
-| mers | `W` | `CHARACTER:player-character` | `MANUAL` | `walk` | 11.78, 3.20 | PASS |
-| alergare | `W+F` | `CHARACTER:player-character` | `MANUAL` | `run` | 15.87, 3.20 | PASS |
+| mers | `W` | `CHARACTER:player-character` | `MANUAL` | `walk` | 11.76, 3.20 | PASS |
+| alergare | `W+F` | `CHARACTER:player-character` | `MANUAL` | `run` | 16.48, 3.20 | PASS |
 | intrare în taxi | `G` | `VEHICLE:taxi-01` | `MANUAL` | — | 9.80, 2.05 | PASS |
-| conducere | `W` | `VEHICLE:taxi-01` | `MANUAL` | — | 19.16, 2.05 | PASS |
-| frânare până la oprire | `S` | `VEHICLE:taxi-01` | `MANUAL` | — | 28.00, 2.05 | PASS |
-| ieșire din taxi | `G` | `CHARACTER:player-character` | `MANUAL` | `idle` | 28.00, 3.10 | PASS |
-| revenire la mers | `W` | `CHARACTER:player-character` | `MANUAL` | `walk` | 28.00, 4.37 | PASS |
+| AUTO | `M` | `VEHICLE:taxi-01` | `AUTO` | — | 8.02, 2.10 | PASS |
+| revenire MANUAL prin buton | `click mod` | `VEHICLE:taxi-01` | `MANUAL` | — | 4.80, 2.10 | PASS |
+| conducere | `W` | `VEHICLE:taxi-01` | `MANUAL` | — | -11.78, 2.10 | PASS |
+| frânare până la oprire | `S` | `VEHICLE:taxi-01` | `MANUAL` | — | -26.00, 2.10 | PASS |
+| ieșire din taxi | `G` | `CHARACTER:player-character` | `MANUAL` | `idle` | -26.00, 1.05 | PASS |
+| revenire la mers | `W` | `CHARACTER:player-character` | `MANUAL` | `walk` | -26.00, -0.18 | PASS |
 
 ### Cost măsurat în browser (software, nu hardware)
 
 | Metrică | eșantioane | medie ms | p50 ms | p95 ms | max ms |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| Tick de compunere | 600 | 0.6043 | 0.5000 | 1.1000 | 17.9000 |
-| Prezentare (personaj + cameră + HUD) | 507 | 0.3280 | 0.2000 | 1.2000 | 8.4000 |
-| Interval între cadre | 506 | 22.4176 | 20.9000 | 30.0000 | 713.4000 |
+| Tick de compunere | 600 | 5.6065 | 5.4000 | 7.7000 | 45.2000 |
+| Prezentare (personaj + cameră + HUD) | 284 | 1.5796 | 0.4000 | 0.6000 | 335.4000 |
+| Interval între cadre | 283 | 1834.1671 | 1480.2000 | 4762.6000 | 8156.2000 |
 
 Backendul este SwiftShader (randare software), deci intervalele de cadru **nu** sunt o
 măsurătoare FPS hardware și nu sunt comparate cu bugetul de GPU. Tick-ul de compunere este

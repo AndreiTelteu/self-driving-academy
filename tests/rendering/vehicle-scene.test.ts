@@ -61,7 +61,7 @@ test('LOD switches visibility without recreating nodes or changing entity IDs', 
     vehicle.setLod('MID');
     assert.equal(vehicle.lod, 'MID');
     assert.equal(vehicle.metrics.meshes, nearMeshes, 'same detail meshes at MID');
-    assert.equal(vehicle.metrics.drawCalls, 4);
+    assert.equal(vehicle.metrics.drawCalls, 5);
     vehicle.setLod('FAR');
     assert.equal(vehicle.metrics.drawCalls, 1);
     assert.ok(vehicle.metrics.meshes < nearMeshes);
@@ -141,8 +141,8 @@ test('stage LOD follows camera distance and keeps every entity resolvable', () =
     assert.equal(counts.MID, 1);
     assert.equal(counts.FAR, 1);
     assert.equal(stage.metrics.vehicles, 3);
-    assert.equal(stage.metrics.materials, 4);
-    assert.equal(stage.metrics.shaderVariants, 8);
+    assert.equal(stage.metrics.materials, 8);
+    assert.equal(stage.metrics.shaderVariants, 16);
     for (let index = 0; index < 3; index += 1) {
       const vehicle = stage.get(`taxi:${index}`)!;
       assert.equal(stage.entityIdFor(vehicle.root), `taxi:${index}`);

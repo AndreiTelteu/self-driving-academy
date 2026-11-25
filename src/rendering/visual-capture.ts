@@ -33,22 +33,29 @@ export type CaptureBackend = 'AUTO' | 'WEBGPU' | 'WEBGL2';
 export interface CaptureConfig {
   readonly preset: QualityPreset;
   readonly backend: CaptureBackend;
+  /** PBI 254: `procedural` photographs the fallback rig, `glb` (implicit) the imported models. */
+  readonly models: CaptureModels;
 }
 
 const PRESETS: readonly QualityPreset[] = ['LOW', 'MEDIUM', 'HIGH'];
 
+export type CaptureModels = 'glb' | 'procedural';
+
 /**
- * Citește `?capture=1&preset=HIGH&backend=webgpu`. Întoarce `null` când steagul lipsește, caz în
- * care aplicația nu instalează nimic. Valorile necunoscute cad pe HIGH / AUTO, nu aruncă.
+ * Citește `?capture=1&preset=HIGH&backend=webgpu&models=procedural`. Întoarce `null` când steagul
+ * lipsește, caz în care aplicația nu instalează nimic. Valorile necunoscute cad pe HIGH / AUTO /
+ * GLB, nu aruncă.
  */
 export function readCaptureConfig(search: string): CaptureConfig | null {
   const params = new URLSearchParams(search);
   if (params.get('capture') !== '1') return null;
   const preset = (params.get('preset') ?? 'HIGH').toUpperCase();
   const backend = (params.get('backend') ?? 'auto').toUpperCase();
+  const models = (params.get('models') ?? 'glb').toLowerCase();
   return Object.freeze({
     preset: PRESETS.find((candidate) => candidate === preset) ?? 'HIGH',
     backend: backend === 'WEBGPU' || backend === 'WEBGL2' ? backend : 'AUTO',
+    models: models === 'procedural' ? 'procedural' : 'glb',
   });
 }
 

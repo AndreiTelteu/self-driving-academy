@@ -13,7 +13,7 @@ Regula oracolului: Fiecare context este numărat din faptele reale ale contracte
 - Cadre evaluate: **60**.
 - Control negativ: **0** chei observabile, reprezentativ `false`.
 - Verdicte: **PASS**.
-- Amprenta SHA-256 a catalogului, evaluărilor și tabelei de contexte: `81a38a6772bdde13571c3a50921950f7ac4d2d73c7498f75a60df893290737ca`.
+- Amprenta SHA-256 a catalogului, evaluărilor și tabelei de contexte: `5a040ed01151e5f63979137d758396f1ef76287de351f82b8101772e765e427a`.
 
 ## Categorii și numărul de chei
 
@@ -204,7 +204,7 @@ Regula oracolului: Fiecare context este numărat din faptele reale ale contracte
 | Dovadă V1 | Stare | SHA-256 |
 | --- | --- | --- |
 | `Docs/Evidence/151-scenario-suite/report.json` | prezent | d56435127da3dfdb8e50350f35ccf8edbb598115a24f7134f5e395e90bb7fac6 |
-| `Docs/Evidence/216-v1-regression/report.json` | prezent | fa2ae11b14e7b77f057fffc9a7173c566c353401dfb7401214dd983c998c9942 |
+| `Docs/Evidence/216-v1-regression/report.json` | prezent | cd5c7500e352d78a87d8a081b6d72a2a2d1f77e92a416dae1e9cec93fdd65f5d |
 | `Docs/Evidence/142-experiment-rerun/report.json` | prezent | c56e2b1de6161b6f4ad4a3bd7597451f01abde312269151e038591ab87c8f4b5 |
 | `Docs/Evidence/056-auto-scenarios/report.json` | prezent | d1f93dbd96e9b9fd8577f3b5bd4fcacbd3f77a07f826166d2f851dd4ca97487b |
 

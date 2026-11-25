@@ -135,35 +135,50 @@ test('244: pereții clădirilor au normale spre exterior (altfel SSAO îi vede c
     const normals = mesh.getVerticesData('normal')!;
     const buildings = layout.elements.filter((element) => element.kind === 'BUILDING');
     const centre = new Map<string, [number, number]>();
+    const topY = new Map<string, number>();
     let wallVertices = 0;
     let inward = 0;
     // Un vârf de perete (normala orizontală) trebuie să arate departe de centrul clădirii lui.
+    // 246: cutiile de detaliu ale acoperișului (AC, ventilație, casa scării) sunt obiecte
+    // independente pe placă — nu au un „exterior” radial, deci nu intră în verificare.
+    // Le recunoaștem geometric: pereții clădirilor 042 sunt pe axe (o componentă a normalei este
+    // exact 0), iar vârfurile de colț ale cutiilor poartă normale mediate (ambele componente
+    // nenule), iar cele de sus stau peste cota plăcii.
     for (const building of buildings) {
-      const planar = building as unknown as { footprintM: { x: number; z: number }[] };
+      const planar = building as unknown as {
+        footprintM: { x: number; z: number }[];
+        baseYM: number;
+        heightM: number;
+      };
       const xs = planar.footprintM.map((p) => p.x);
       const zs = planar.footprintM.map((p) => p.z);
       centre.set(building.id, [
         xs.reduce((a, b) => a + b, 0) / xs.length,
         zs.reduce((a, b) => a + b, 0) / zs.length,
       ]);
+      topY.set(building.id, planar.baseYM + planar.heightM);
     }
     const geometry = (id: string) => city.elementGeometry(id)!;
     for (const building of buildings.slice(0, 20)) {
       const slice = geometry(building.id);
       const [cx, cz] = centre.get(building.id)!;
+      const roofY = topY.get(building.id)!;
       for (let v = slice.offset; v < slice.offset + slice.count; v += 1) {
+        const nx = normals[v * 3]!;
         const ny = normals[v * 3 + 1]!;
+        const nz = normals[v * 3 + 2]!;
         if (Math.abs(ny) > 0.5) continue;
+        if (positions[v * 3 + 1]! > roofY + 1e-3) continue; // detaliu de acoperiș (sus)
+        if (Math.min(Math.abs(nx), Math.abs(nz)) > 0.05) continue; // colț mediat, nu perete
         wallVertices += 1;
-        const toward =
-          (positions[v * 3]! - cx) * normals[v * 3]! +
-          (positions[v * 3 + 2]! - cz) * normals[v * 3 + 2]!;
+        const toward = (positions[v * 3]! - cx) * nx + (positions[v * 3 + 2]! - cz) * nz;
         if (toward < 0) inward += 1;
       }
     }
     assert.ok(wallVertices > 0);
     assert.equal(inward, 0, `${inward}/${wallVertices} vârfuri de perete cu normala spre interior`);
-    // Doar clădirile, semafoarele (stâlp/carcasă) intră ca casteri statici din oraș.
+    // 246: fără `surfaces` clădirile cad pe lotul plat `building` (cu vertex colors);
+    // stâlpii și carcasele semafoarelor rămân instanțe.
     assert.deepEqual(
       city.shadowCasterMeshes().map((entry) => entry.name),
       ['city:batch:building', 'city:signal:post', 'city:signal:housing'],

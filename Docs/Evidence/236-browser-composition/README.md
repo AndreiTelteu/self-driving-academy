@@ -94,12 +94,17 @@ Bugetele de performanță nu au fost modificate: `Docs/performance-budgets.json`
 
 ### Proba de browser (reală, nu simulată)
 
+> **Notă (PBI 257, 25 noiembrie 2026):** proba de browser a fost extinsă după 236 cu traficul AI 256
+> și cu pașii `AUTO`/`revenire MANUAL prin buton` din 257. Tabelul și costul de mai jos sunt
+> transcrierea istorică a rulării 236; sursa curentă este
+> [browser.json](browser.json) / [report.md](report.md), cu **8 pași**, 26 vehicule și HUD km/h.
+
 - Chromium 159.0.8154.6, headless, `--use-gl=angle --use-angle=swiftshader
   --enable-unsafe-swiftshader`, 1440×900 CSS, canvas 640×360.
 - Backend efectiv: **WEBGL2**, `WebGL 2.0 (OpenGL ES 3.0 Chromium)`, ANGLE
   `Vulkan 1.3.0 (SwiftShader Device (Subzero))`, driver SwiftShader.
 - Taste reale trimise de Playwright către document: `W`, `W+F`, `G`, `W`, `S`, `G`, `W`.
-- Capturi: `screenshots/01-start.png` … `screenshots/07-revenire.png`.
+- Capturi curente: `screenshots/01-start.png` … `screenshots/08-revenire.png`.
 
 | Secvență | Taste | Entitate controlată | Mod | Clip | Poziție (x,z) | Verdict |
 | --- | --- | --- | --- | --- | --- | --- |

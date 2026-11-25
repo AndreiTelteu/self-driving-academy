@@ -60,11 +60,23 @@ import {
   createCityDecorPlan,
   vehicleGeometrySpec,
 } from '../rendering';
-import { createVehicleCollisionWorld, type VehicleCollisionWorld } from './vehicle-collision';
+import {
+  createVehicleCollisionWorld,
+  vehicleBodiesOverlap,
+  type VehicleCollisionWorld,
+} from './vehicle-collision';
+import { createVehicleAutoDrive, type VehicleAutoDrive } from './vehicle-auto-drive';
+import type { CivilActorSnapshot, CivilTraffic, CivilTrafficVehicleObservation } from '../fleet';
 import type { ContractContext } from '../sessions';
 import type { ControlPreferences } from '../settings';
 import { tractiveForceN, vehicleClass, type ControlMode } from '../vehicles';
-import type { CityLayout } from '../world';
+import {
+  createRoutePlanner,
+  type CityLayout,
+  type LaneGraph,
+  type RoadMap,
+  type RoutePlanner,
+} from '../world';
 
 export const V3_COMPOSITION_VERSION = '236-v3-composition-v1' as const;
 
@@ -110,6 +122,16 @@ export interface CompositionOptions {
   readonly context: ContractContext;
   readonly vehicles: readonly CompositionVehicleSeed[];
   readonly orbit?: Partial<CharacterCameraOrbit>;
+  /**
+   * PBI 256: traficul 058 care devine parte vizibilă a compunerii. Compunerea îl pașește înaintea
+   * arbitrajului de input și publică actorii în `frame.vehicles`, dar NU îl deține: caller-ul îl
+   * creează proaspăt și îl eliberează împreună cu registry-ul. Mașinile AI nu sunt preluabile de
+   * jucător: `requestEntry` le refuză explicit.
+   */
+  readonly traffic?: CivilTraffic;
+  /** PBI 257: harta 032 și graful 033 pentru driverul AUTO. Fără ele, M rămâne indisponibil. */
+  readonly map?: RoadMap;
+  readonly graph?: LaneGraph;
 }
 
 /** Mașina compusă: contractul 195/196 plus viteza reală pe care o integrează compunerea. */
@@ -228,6 +250,11 @@ export interface V3Composition {
   /** Cererea este consumată la următorul tick; fără id se alege cea mai apropiată mașină. */
   requestEntry(vehicleId?: string): void;
   requestExit(): void;
+  /** PBI 257: modul mașinii conduse, `null` când autoritatea este pe personaj. */
+  vehicleMode(): CompositionMode | null;
+  /** PBI 257: AUTO cere hartă/graf și o rută READY; MANUAL oprește driverul AUTO. */
+  setVehicleMode(mode: 'AUTO' | 'MANUAL'): CompositionMode | null;
+  toggleVehicleMode(): CompositionMode | null;
   /** Cadrul de render 191 pentru tick-ul curent al walker-ului (poziția este copiată). */
   characterFrame(): CharacterRenderFrame;
   /** Resetează doar scenariul de probă: walker nou la spawn, autoritatea pe personaj. */
@@ -317,6 +344,45 @@ function vehicleFromSeed(seed: CompositionVehicleSeed): CompositionVehicle {
   });
 }
 
+/**
+ * PBI 256: graful 033 măsoară headingul în planul hărții (0 = +X, pozitiv spre +Z), iar compunerea
+ * folosește înainte = (sin yaw, cos yaw) (0 = +Z). Conversia este o rotație de 90°, nu o alegere
+ * cosmetică: fără ea mașinile AI ar conduce cu 90° lateral.
+ */
+function compositionYawFromTrafficHeading(headingRad: number): number {
+  return normalizeAngle(Math.PI / 2 - headingRad);
+}
+
+function trafficHeadingFromCompositionYaw(yawRad: number): number {
+  return normalizeAngle(Math.PI / 2 - yawRad);
+}
+
+function trafficActorVehicle(actor: CivilActorSnapshot, layout: CityLayout): CompositionVehicle {
+  const lane = layout.lanes.find((candidate) => candidate.laneId === actor.laneId);
+  return Object.freeze({
+    vehicleId: actor.vehicleId,
+    driverKind: 'CIVILIAN' as const,
+    classId: actor.classId,
+    positionM: point(actor.positionM.x, actor.positionM.y, actor.positionM.z),
+    yawRad: compositionYawFromTrafficHeading(actor.headingRad),
+    speedMps: actor.speedMps,
+    speedLimitMps: lane?.speedLimitMps ?? 11.2,
+    controlMode: actor.authority,
+    halfExtentsM: Object.freeze({
+      x: VEHICLE_COLLISION_HALF_EXTENTS_M.x,
+      z: VEHICLE_COLLISION_HALF_EXTENTS_M.z,
+    }),
+    bottomM: 0,
+    topM: 1.6,
+    laneId: actor.laneId,
+    routeLaneIds: Object.freeze([...actor.route.path]),
+    rideId: null,
+    rideProgressM: 0,
+    appliedProfileVersion: actor.styleVersionId,
+    maneuverState: 'IDLE',
+  });
+}
+
 function authorityEntityId(authority: InputAuthority): string {
   return authority.consumer === 'CHARACTER' ? authority.characterId : authority.vehicleId;
 }
@@ -376,7 +442,25 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
       entityId,
     });
   let walker = createSpawnWalker();
-  let vehicles = Object.freeze(options.vehicles.map(vehicleFromSeed));
+  const traffic = options.traffic ?? null;
+  const seededVehicles = options.vehicles.map(vehicleFromSeed);
+  const trafficIds = new Set<string>();
+  if (traffic !== null) {
+    for (const actor of traffic.list()) {
+      if (
+        trafficIds.has(actor.vehicleId) ||
+        seededVehicles.some((v) => v.vehicleId === actor.vehicleId)
+      )
+        throw new Error(`Vehiculul AI ${actor.vehicleId} dublează un vehicul al compunerii.`);
+      trafficIds.add(actor.vehicleId);
+    }
+  }
+  let vehicles: readonly CompositionVehicle[] = Object.freeze([
+    ...seededVehicles,
+    ...(traffic === null
+      ? []
+      : traffic.list().map((actor) => trafficActorVehicle(actor, options.layout))),
+  ]);
   const arbiter = createInputAuthorityArbiter({
     context: options.context,
     authority: characterAuthority(entityId),
@@ -430,8 +514,15 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
   let segmentCommands = 0;
   let disposed = false;
   /** Intenția de orbită 194; compunerea o rotește doar când camera este complet blocată. */
-  let orbitYawRad = options.orbit?.yawRad ?? CHARACTER_CAMERA_DEFAULT_ORBIT.yawRad;
+  const defaultOrbitYaw = options.orbit?.yawRad ?? CHARACTER_CAMERA_DEFAULT_ORBIT.yawRad;
+  let orbitYawRad = defaultOrbitYaw;
   let lastOrbitAdjustTick = Number.NEGATIVE_INFINITY;
+  let clearOrbitTicks = 0;
+  const resetCameraOrbit = (): void => {
+    orbitYawRad = defaultOrbitYaw;
+    lastOrbitAdjustTick = Number.NEGATIVE_INFINITY;
+    clearOrbitTicks = 0;
+  };
   const events: CompositionEvent[] = [];
 
   const emit = (kind: CompositionEvent['kind'], detail: string, atTick: number): void => {
@@ -445,6 +536,182 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
   const setVehicle = (next: CompositionVehicle): void => {
     vehicles = Object.freeze(
       vehicles.map((vehicle) => (vehicle.vehicleId === next.vehicleId ? next : vehicle)),
+    );
+  };
+
+  /** PBI 257: AUTO se sprijină pe harta 032 și graful 033; plannerul este creat o singură dată. */
+  let autoPlanner: RoutePlanner | null = null;
+  const autoDrives = new Map<string, VehicleAutoDrive>();
+  const ensureAutoPlanner = (): RoutePlanner | null => {
+    if (options.map === undefined || options.graph === undefined) return null;
+    if (autoPlanner === null)
+      autoPlanner = createRoutePlanner({
+        graph: options.graph,
+        map: options.map,
+        graphVersion: '033-lane-graph-v1',
+        costVersion: 'route-cost-v1',
+      });
+    return autoPlanner;
+  };
+  const vehicleBody = (vehicle: CompositionVehicle) =>
+    Object.freeze({ halfX: vehicle.halfExtentsM.x, halfZ: vehicle.halfExtentsM.z });
+  const overlapsAnyVehicle = (
+    vehicleId: string,
+    pose: Readonly<{ x: number; z: number; yawRad: number }>,
+    body: Readonly<{ halfX: number; halfZ: number }>,
+  ): boolean =>
+    vehicles.some((other) => {
+      if (other.vehicleId === vehicleId) return false;
+      // PBI 257: filtru ieftin înaintea SAT. Diagonalele maxime însumate sunt sub 4,4 m.
+      const dx = other.positionM.x - pose.x;
+      if (dx > 8 || dx < -8) return false;
+      const dz = other.positionM.z - pose.z;
+      if (dz > 8 || dz < -8) return false;
+      return vehicleBodiesOverlap(
+        pose,
+        body,
+        { x: other.positionM.x, z: other.positionM.z, yawRad: other.yawRad },
+        { halfX: other.halfExtentsM.x, halfZ: other.halfExtentsM.z },
+      );
+    });
+  const controlledVehicle = (): CompositionVehicle | null => {
+    const authority = arbiter.snapshot().authority;
+    return authority.consumer === 'VEHICLE' ? (vehicleById(authority.vehicleId) ?? null) : null;
+  };
+  const applyVehicleMode = (mode: 'AUTO' | 'MANUAL'): CompositionMode | null => {
+    const vehicle = controlledVehicle();
+    if (vehicle === null || trafficIds.has(vehicle.vehicleId)) return null;
+    if (mode === 'AUTO') {
+      const planner = ensureAutoPlanner();
+      if (planner === null || options.map === undefined || options.graph === undefined) return null;
+      let drive = autoDrives.get(vehicle.vehicleId);
+      if (drive === undefined) {
+        drive = createVehicleAutoDrive({
+          graph: options.graph,
+          planner,
+          map: options.map,
+          vehicleId: vehicle.vehicleId,
+          classId: vehicle.classId,
+          start: {
+            x: vehicle.positionM.x,
+            z: vehicle.positionM.z,
+            yawRad: vehicle.yawRad,
+          },
+          seed: 257,
+        });
+        autoDrives.set(vehicle.vehicleId, drive);
+      }
+      setVehicle(withVehicle(vehicle, { controlMode: 'AUTO' }));
+      arbiter.releaseAll();
+      return 'AUTO';
+    }
+    const drive = autoDrives.get(vehicle.vehicleId);
+    if (drive !== undefined) {
+      drive.dispose();
+      autoDrives.delete(vehicle.vehicleId);
+    }
+    setVehicle(withVehicle(vehicle, { controlMode: 'MANUAL' }));
+    arbiter.releaseAll();
+    return 'MANUAL';
+  };
+  const toggleControlledVehicleMode = (): CompositionMode | null => {
+    const vehicle = controlledVehicle();
+    return vehicle === null
+      ? null
+      : applyVehicleMode(vehicle.controlMode === 'AUTO' ? 'MANUAL' : 'AUTO');
+  };
+  const stepAutoDrives = (dtSeconds: number): void => {
+    if (autoDrives.size === 0) return;
+    for (const [vehicleId, drive] of autoDrives) {
+      const vehicle = vehicleById(vehicleId);
+      if (vehicle === undefined || vehicle.controlMode !== 'AUTO') {
+        drive.dispose();
+        autoDrives.delete(vehicleId);
+        continue;
+      }
+      const candidate = drive.step(dtSeconds);
+      const body = vehicleBody(vehicle);
+      const from = {
+        x: vehicle.positionM.x,
+        z: vehicle.positionM.z,
+        yawRad: vehicle.yawRad,
+      };
+      const to = {
+        x: candidate.positionM.x,
+        z: candidate.positionM.z,
+        yawRad: candidate.yawRad,
+      };
+      const swept = vehicleCollision.sweep(from, to, body);
+      if (
+        swept.blocked ||
+        overlapsAnyVehicle(
+          vehicleId,
+          { x: swept.pose.x, z: swept.pose.z, yawRad: swept.pose.yawRad },
+          body,
+        )
+      ) {
+        drive.stop();
+        setVehicle(
+          withVehicle(vehicle, {
+            speedMps: 0,
+            controlMode: 'AUTO',
+          }),
+        );
+        continue;
+      }
+      setVehicle(
+        withVehicle(vehicle, {
+          positionM: point(swept.pose.x, candidate.positionM.y, swept.pose.z),
+          yawRad: swept.pose.yawRad,
+          speedMps: candidate.speedMps,
+          laneId: candidate.laneId,
+          routeLaneIds: candidate.routeLaneIds,
+          controlMode: 'AUTO',
+        }),
+      );
+    }
+  };
+
+  /**
+   * PBI 256: vehiculele care nu aparțin traficului 058 intră în cadrul 044 al traficului ca
+   * observații externe. Taxiul jucătorului (parcat sau condus) și civilul static devin lideri
+   * semantici, deci mașinile AI frânează în spatele lor. Personajul pe jos nu este injectat ca
+   * vehicul: la spawn stă pe carosabil, lângă bordură, iar tratarea lui ca lider ar opri o bandă
+   * întreagă în primul cadru.
+   */
+  const trafficObservations = (): readonly CivilTrafficVehicleObservation[] =>
+    Object.freeze(
+      vehicles
+        .filter((vehicle) => !trafficIds.has(vehicle.vehicleId))
+        .map((vehicle) =>
+          Object.freeze({
+            vehicleId: vehicle.vehicleId,
+            driverKind: vehicle.driverKind,
+            positionM: Object.freeze({
+              x: vehicle.positionM.x,
+              y: vehicle.positionM.y,
+              z: vehicle.positionM.z,
+            }),
+            headingRad: trafficHeadingFromCompositionYaw(vehicle.yawRad),
+            speedMps: Math.max(0, vehicle.speedMps),
+            radiusM: VEHICLE_COLLISION_HALF_EXTENTS_M.z,
+          }),
+        ),
+    );
+
+  const stepTraffic = (atTick: number): void => {
+    if (traffic === null) return;
+    const frame = traffic.step({
+      tick: atTick,
+      dtSeconds: V3_COMPOSITION_POLICY.dtSeconds,
+      vehicles: trafficObservations(),
+    });
+    const updated = new Map(frame.actors.map((actor) => [actor.vehicleId, actor]));
+    vehicles = Object.freeze(
+      vehicles.map((vehicle) => {
+        const actor = updated.get(vehicle.vehicleId);
+        return actor === undefined ? vehicle : trafficActorVehicle(actor, options.layout);
+      }),
     );
   };
 
@@ -469,6 +736,8 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
     let best: CompositionVehicle | undefined;
     let bestDistance = Number.POSITIVE_INFINITY;
     for (const vehicle of vehicles) {
+      // PBI 256: mașinile AI nu sunt preluabile; G trebuie să aleagă taxiul, nu o mașină care trece.
+      if (trafficIds.has(vehicle.vehicleId)) continue;
       const distance = Math.hypot(vehicle.positionM.x - feet.x, vehicle.positionM.z - feet.z);
       if (distance < bestDistance) {
         best = vehicle;
@@ -488,6 +757,8 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
       throw new Error('Comanda de conducere nu este a unui vehicul.');
     const vehicle = vehicleById(command.vehicleId);
     if (!vehicle) throw new Error(`Vehiculul ${command.vehicleId} nu există în compunere.`);
+    // PBI 257: în AUTO, poziția a fost deja produsă de driverul auto înaintea arbitrajului.
+    if (vehicle.controlMode === 'AUTO') return;
     const mechanics = vehicleClass(vehicle.classId);
     const dt = V3_COMPOSITION_POLICY.dtSeconds;
     const current = vehicle.speedMps;
@@ -527,7 +798,8 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
       },
       body,
     );
-    let resolvedSpeed = speed;
+    let resolvedSpeed = speed,
+      finalPose = swept.pose;
     if (swept.blocked) {
       if (swept.normal === null) resolvedSpeed = 0;
       else {
@@ -544,10 +816,20 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
       }
       if (Math.abs(resolvedSpeed) < V3_COMPOSITION_POLICY.contactStopSpeedMps) resolvedSpeed = 0;
     }
+    // PBI 257: caroseria celorlalte mașini (AI sau static) este opacă pentru cea condusă. Fără
+    // această verificare, mașina trecea prin ele; la contact rămâne pe poziția anterioară.
+    if (overlapsAnyVehicle(vehicle.vehicleId, finalPose, body)) {
+      finalPose = {
+        x: vehicle.positionM.x,
+        z: vehicle.positionM.z,
+        yawRad: vehicle.yawRad,
+      };
+      resolvedSpeed = 0;
+    }
     setVehicle(
       withVehicle(vehicle, {
-        positionM: point(swept.pose.x, vehicle.positionM.y, swept.pose.z),
-        yawRad: swept.pose.yawRad,
+        positionM: point(finalPose.x, vehicle.positionM.y, finalPose.z),
+        yawRad: finalPose.yawRad,
         speedMps:
           Math.abs(resolvedSpeed) <= V3_COMPOSITION_POLICY.parkedSpeedMps ? 0 : resolvedSpeed,
         controlMode: 'MANUAL',
@@ -570,6 +852,12 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
       emit('ENTER_REFUSED', 'UNKNOWN_VEHICLE', atTick);
       return false;
     }
+    if (trafficIds.has(target.vehicleId)) {
+      // Traficul 058 are propriul progres de rută; o preluare fără reconcilierea poziției ar
+      // teleporta mașina înapoi la `resume`. Refuzul explicit păstrează ambele contracte curate.
+      emit('ENTER_REFUSED', 'AI_TRAFFIC: vehicle is driven by 058', atTick);
+      return false;
+    }
     const decision = decideVehicleEntry({
       tick: atTick,
       authority,
@@ -585,12 +873,18 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
     }
     previousEntry = decision.journal;
     takeover = decision.vehicle;
+    const entryDrive = autoDrives.get(target.vehicleId);
+    if (entryDrive !== undefined) {
+      entryDrive.dispose();
+      autoDrives.delete(target.vehicleId);
+    }
     setVehicle(
       withVehicle(target, {
-        controlMode: decision.vehicle.state.controlMode,
+        controlMode: 'MANUAL',
         speedMps: 0,
       }),
     );
+    resetCameraOrbit();
     arbiter.setAuthority(decision.authority);
     segments.step({
       tick: atTick,
@@ -654,6 +948,7 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
     }
     previousExit = decision.journal;
     takeover = null;
+    resetCameraOrbit();
     setVehicle(
       withVehicle(controlled, {
         controlMode: decision.vehicle.state.controlMode,
@@ -766,6 +1061,12 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
     const characterBefore = walker.state.positionM;
     let transitioned = false;
 
+    // 257 înaintea traficului: taxiul AUTO are poziția tick-ului curent când devine observație 044.
+    stepAutoDrives(V3_COMPOSITION_POLICY.dtSeconds);
+    // 058 înaintea arbitrajului: pozițiile AI sunt deja autoritare când intrarea/ieșirea, camera,
+    // coliziunea walker-ului și HUD-ul citesc cadrul acestui tick.
+    stepTraffic(atTick);
+
     if (pendingEntry !== null) {
       const request = pendingEntry;
       pendingEntry = null;
@@ -865,6 +1166,20 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
     ) {
       orbitYawRad = normalizeAngle(orbitYawRad + Math.PI / 2);
       lastOrbitAdjustTick = atTick;
+      clearOrbitTicks = 0;
+    } else if (
+      lastCamera.obstructedBy === null &&
+      lastCamera.distanceM >= CHARACTER_CAMERA_POLICY.minDistanceM
+    ) {
+      // PBI 257: o orbită rotită pentru a ieși dintr-un obstacol nu este permanentă. După 0,5 s
+      // fără obstrucție, camera revine în spatele entității; altfel rămânea lateral după depășire.
+      clearOrbitTicks += 1;
+      if (clearOrbitTicks >= 30 && orbitYawRad !== defaultOrbitYaw) {
+        orbitYawRad = defaultOrbitYaw;
+        clearOrbitTicks = 0;
+      }
+    } else {
+      clearOrbitTicks = 0;
     }
 
     if (!transitioned) {
@@ -927,6 +1242,15 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
       pendingExit = true;
       pendingEntry = null;
     },
+    vehicleMode(): CompositionMode | null {
+      return controlledVehicle()?.controlMode ?? null;
+    },
+    setVehicleMode(mode: 'AUTO' | 'MANUAL'): CompositionMode | null {
+      return applyVehicleMode(mode);
+    },
+    toggleVehicleMode(): CompositionMode | null {
+      return toggleControlledVehicleMode();
+    },
     character(): CompositionCharacterFrame {
       return readCharacter();
     },
@@ -942,11 +1266,18 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
       pendingExit = false;
       previousEntry = null;
       previousExit = null;
+      resetCameraOrbit();
+      for (const drive of autoDrives.values()) drive.dispose();
+      autoDrives.clear();
       emit('RESET', 'walker nou la spawn', tick);
     },
     dispose(): void {
       if (disposed) return;
       disposed = true;
+      for (const drive of autoDrives.values()) drive.dispose();
+      autoDrives.clear();
+      autoPlanner?.dispose();
+      autoPlanner = null;
       arbiter.dispose();
       segments.dispose();
     },

@@ -309,3 +309,38 @@ test('layout derivation is deterministic, frozen and rejects invalid options', (
   const phantomRendered = createCityLayoutReport(layout, ['phantom']);
   assert.deepEqual(phantomRendered.unknownRenderedElementIds, ['phantom']);
 });
+
+test('every signal head stands on a sidewalk on the right of its approach, never on the carriageway', () => {
+  const walks = layout.elements.filter(
+    (element): element is CityPlanarElement => element.kind === 'SIDEWALK',
+  );
+  const heads = layout.elements.filter((element) => element.kind === 'SIGNAL_HEAD');
+  assert.ok(heads.length > 0);
+  for (const head of heads) {
+    if (head.kind !== 'SIGNAL_HEAD') continue;
+    const onSidewalk = walks.some((walk) => {
+      const xs = walk.footprintM.map((vertex) => vertex.x);
+      const zs = walk.footprintM.map((vertex) => vertex.z);
+      return (
+        head.positionM.x >= Math.min(...xs) &&
+        head.positionM.x <= Math.max(...xs) &&
+        head.positionM.z >= Math.min(...zs) &&
+        head.positionM.z <= Math.max(...zs)
+      );
+    });
+    assert.ok(onSidewalk, `${head.id} stands on a sidewalk`);
+    // Right of travel: the head faces the approaching traffic, so the lane lies on its left side.
+    const lane = map.lanes.find((candidate) => candidate.id === head.laneId)!;
+    const path = map.geometry.paths.find((candidate) => candidate.id === lane.geometryId)!;
+    const ids = lane.direction === 'FORWARD' ? path.nodeIds : [...path.nodeIds].reverse();
+    const nodeById = new Map(map.geometry.nodes.map((node) => [node.id, node.positionM]));
+    const from = nodeById.get(ids[0]!)!;
+    const to = nodeById.get(ids[ids.length - 1]!)!;
+    const length = Math.hypot(to.x - from.x, to.z - from.z);
+    const dx = (to.x - from.x) / length;
+    const dz = (to.z - from.z) / length;
+    const lateral = (head.positionM.x - from.x) * -dz + (head.positionM.z - from.z) * dx;
+    const laneLateral = 0; // lane centre line passes through `from`.
+    assert.ok(lateral < laneLateral - lane.widthM / 2, `${head.id} is right of its lane`);
+  }
+});

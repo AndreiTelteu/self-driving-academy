@@ -41,6 +41,7 @@ import {
 } from '../../src/build/asset-manifest-sources';
 import { sha256Hex } from '../../src/build/content-hash';
 import { RENDER_ASSET_CAPS } from '../../src/rendering';
+import { GLB_ASSETS } from '../../src/rendering';
 import { AUDIO_LIMITS } from '../../src/audio';
 import { PASSENGER_VISUAL_LIMITS } from '../../src/ui';
 
@@ -522,6 +523,7 @@ export function buildAssetManifestEvidence(root: string): AssetManifestEvidence 
   const decorGpuBytes = manifest.entries
     .filter((entry) => entry.id.startsWith('city-decor:') && entry.id !== 'city-decor:materials')
     .reduce((sum, entry) => sum + entry.decoded.geometryBytes, 0);
+  const glbEntries = manifest.entries.filter((entry) => entry.kind === 'GLB');
   const emittedWasm = new Map(
     [build145, build146, build223].map((build) => [
       build,
@@ -635,14 +637,20 @@ export function buildAssetManifestEvidence(root: string): AssetManifestEvidence 
               .join('; '),
     },
     {
-      name: 'registry-honest-empty',
+      name: 'glb-core-only-no-decoder',
       pass:
         collection.registry.definitions === 0 &&
         collection.registry.decoderWasmBytes === 0 &&
         collection.registry.decoderWorkspaceBytes === 0 &&
-        manifest.entries.every((entry) => entry.kind !== 'GLB'),
-      detail:
-        'no final GLB asset ships in V1; the registry decoder WASM/workspace stay 0 under the 8/16 MiB caps instead of fabricated entries',
+        glbEntries.length === GLB_ASSETS.length &&
+        glbEntries.every(
+          (entry) =>
+            entry.wire.encoding === 'IDENTITY' &&
+            entry.wire.rawBytes === entry.wire.encodedBytes &&
+            entry.wire.rawBytes ===
+              GLB_ASSETS.find((asset) => entry.id === `glb:${asset.id}`)?.bytes,
+        ),
+      detail: `PBI 254 ships ${glbEntries.length} CC0 GLB models as core glTF (identity wire, embedded PNG/JPEG); no Draco/meshopt/KTX2 decoder WASM or workspace is admitted`,
     },
     {
       name: 'cross-check-145-vehicle-evidence',

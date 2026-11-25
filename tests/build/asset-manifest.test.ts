@@ -277,13 +277,27 @@ test('validation rejects duplicate ids, invalid versions and empty input', () =>
 test('real inventories produce the versioned manifest with no fabricated assets', () => {
   const collection = realCollection();
   const manifest = createAssetManifest(collection.records);
-  assert.equal(manifest.entries.length, 37);
-  assert.equal(manifest.entries.filter((entry) => entry.role === 'CRITICAL').length, 27);
-  assert.equal(manifest.entries.filter((entry) => entry.role === 'OPTIONAL').length, 10);
+  assert.equal(manifest.entries.length, 49);
+  assert.equal(manifest.entries.filter((entry) => entry.role === 'CRITICAL').length, 33);
+  assert.equal(manifest.entries.filter((entry) => entry.role === 'OPTIONAL').length, 16);
   assert.equal(manifest.entries.filter((entry) => entry.placeholder).length, 7);
-  assert.equal(manifest.entries.filter((entry) => entry.kind === 'GLB').length, 0);
+  // 254: șapte modele CC0, core glTF, cu bytes reali pe wire și proveniență completă.
+  const glb = manifest.entries.filter((entry) => entry.kind === 'GLB');
+  assert.equal(glb.length, 7);
+  assert.equal(glb.filter((entry) => entry.role === 'CRITICAL').length, 3);
+  assert.ok(
+    glb.every(
+      (entry) =>
+        entry.wire.encoding === 'IDENTITY' &&
+        entry.wire.rawBytes > 0 &&
+        entry.wire.rawBytes === entry.wire.encodedBytes &&
+        entry.source.length > 0 &&
+        entry.license.length > 0,
+    ),
+  );
   assert.equal(manifest.entries.filter((entry) => entry.kind === 'WASM_MODULE').length, 3);
-  assert.equal(manifest.entries.filter((entry) => entry.id.startsWith('city-decor:')).length, 9);
+  // 249: cele trei specii de copaci (platan, arțar, stejar) + restul mobilierului.
+  assert.equal(manifest.entries.filter((entry) => entry.id.startsWith('city-decor:')).length, 11);
   assert.equal(manifest.entries.filter((entry) => entry.id.startsWith('vehicle:')).length, 7);
   // 243: cerul procedural și cubul de mediu au sursă și licență în manifest.
   const atmosphere = manifest.entries.filter((entry) => entry.id.startsWith('atmosphere:'));
@@ -293,7 +307,11 @@ test('real inventories produce the versioned manifest with no fabricated assets'
   assert.equal(collection.registry.decoderWasmBytes, 0);
   assert.equal(collection.registry.decoderWorkspaceBytes, 0);
   assert.deepEqual(collection.missing, []);
-  assert.equal(collection.criticalIds.length, 27);
+  assert.equal(collection.criticalIds.length, 33);
+  // 246: cele trei texturi procedurale de fațadă sunt atribuite PBI-ului care le consumă.
+  const facades = manifest.entries.filter((entry) => entry.id.includes(':facade'));
+  assert.equal(facades.length, 3);
+  assert.ok(facades.every((entry) => entry.consumers.includes('246')));
   const audit = auditAssetManifest(manifest, { criticalIds: collection.criticalIds });
   assert.equal(audit.reason, 'OK');
   assert.equal(audit.releaseBlocked, false);

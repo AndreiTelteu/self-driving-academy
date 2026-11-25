@@ -18,6 +18,8 @@ export const CITY_DECOR_INDEX_BYTES = 4;
 export type CityDecorKind =
   | 'street-lamp'
   | 'tree'
+  | 'tree-maple'
+  | 'tree-oak'
   | 'bench'
   | 'hydrant'
   | 'trash-can'
@@ -27,6 +29,8 @@ export type CityDecorKind =
 export const CITY_DECOR_KINDS: readonly CityDecorKind[] = Object.freeze([
   'street-lamp',
   'tree',
+  'tree-maple',
+  'tree-oak',
   'bench',
   'hydrant',
   'trash-can',
@@ -89,12 +93,19 @@ type TemplatePart =
       readonly height: number;
       readonly color: readonly [number, number, number];
       readonly segments?: number;
+    }
+  | {
+      readonly type: 'sphere';
+      readonly center: readonly [number, number, number];
+      readonly radius: number;
+      readonly color: readonly [number, number, number];
+      readonly segments?: number;
     };
 const METAL: readonly [number, number, number] = [0.32, 0.33, 0.35];
 const DARK: readonly [number, number, number] = [0.11, 0.12, 0.13];
 const WOOD: readonly [number, number, number] = [0.42, 0.27, 0.14];
-const GREEN: readonly [number, number, number] = [0.16, 0.36, 0.16];
-const DEEP_GREEN: readonly [number, number, number] = [0.1, 0.27, 0.12];
+const GREEN: readonly [number, number, number] = [0.12, 0.28, 0.1];
+const DEEP_GREEN: readonly [number, number, number] = [0.08, 0.2, 0.08];
 const BARK: readonly [number, number, number] = [0.28, 0.19, 0.11];
 const RED: readonly [number, number, number] = [0.62, 0.09, 0.07];
 const GLASS: readonly [number, number, number] = [0.42, 0.6, 0.68];
@@ -103,30 +114,114 @@ const SIGN_GREEN: readonly [number, number, number] = [0.12, 0.36, 0.22];
 const BIN_GREEN: readonly [number, number, number] = [0.14, 0.3, 0.22];
 const TEMPLATES: Readonly<Record<CityDecorKind, readonly TemplatePart[]>> = Object.freeze({
   'street-lamp': [
-    { type: 'cylinder', center: [0, 2.4, 0], radius: 0.09, height: 4.8, color: METAL },
+    {
+      type: 'cylinder',
+      center: [0, 2.4, 0],
+      radius: 0.09,
+      height: 4.8,
+      color: METAL,
+      segments: 12,
+    },
     { type: 'box', center: [0, 4.78, 0.45], size: [0.12, 0.12, 1.0], color: METAL },
     { type: 'box', center: [0, 4.7, 0.9], size: [0.36, 0.14, 0.3], color: LAMP },
+    {
+      type: 'cylinder',
+      center: [0, 4.65, 0.9],
+      radius: 0.08,
+      height: 0.2,
+      color: DARK,
+      segments: 8,
+    },
   ],
+  // Three American-city species chosen by item id hash: plane tree (tall, open crown),
+  // maple (dense rounded crown) and oak (broad, layered crown). All share the same clearance
+  // contract: trunk base at origin, crown top below 5.7 m.
   tree: [
-    { type: 'cylinder', center: [0, 1.35, 0], radius: 0.17, height: 2.7, color: BARK },
-    { type: 'cone', center: [0, 3.5, 0], radius: 1.5, height: 2.6, color: GREEN },
-    { type: 'cone', center: [0, 4.7, 0], radius: 1.05, height: 1.9, color: DEEP_GREEN },
+    // Trunk with a slight taper and a branch collar.
+    { type: 'cylinder', center: [0, 1.2, 0], radius: 0.15, height: 2.4, color: BARK, segments: 10 },
+    { type: 'cylinder', center: [0, 2.5, 0], radius: 0.12, height: 0.6, color: BARK, segments: 8 },
+    // Crown: three overlapping spheres at different heights, slightly offset for a natural look.
+    { type: 'sphere', center: [0, 3.4, 0], radius: 1.3, color: GREEN, segments: 12 },
+    { type: 'sphere', center: [0.4, 4.1, 0.2], radius: 0.9, color: DEEP_GREEN, segments: 10 },
+    { type: 'sphere', center: [-0.3, 4.5, -0.1], radius: 0.7, color: GREEN, segments: 8 },
+  ],
+  'tree-maple': [
+    // Dense, rounded crown — lower and fuller than the plane tree.
+    { type: 'cylinder', center: [0, 1.0, 0], radius: 0.16, height: 2.0, color: BARK, segments: 10 },
+    { type: 'cylinder', center: [0, 2.2, 0], radius: 0.13, height: 0.5, color: BARK, segments: 8 },
+    { type: 'sphere', center: [0, 3.0, 0], radius: 1.5, color: GREEN, segments: 12 },
+    { type: 'sphere', center: [0.5, 3.6, 0.3], radius: 1.0, color: DEEP_GREEN, segments: 10 },
+    { type: 'sphere', center: [-0.4, 3.5, -0.2], radius: 0.9, color: GREEN, segments: 10 },
+  ],
+  'tree-oak': [
+    // Broad, layered crown — widest silhouette of the three.
+    { type: 'cylinder', center: [0, 1.1, 0], radius: 0.18, height: 2.2, color: BARK, segments: 10 },
+    { type: 'cylinder', center: [0, 2.4, 0], radius: 0.14, height: 0.6, color: BARK, segments: 8 },
+    { type: 'sphere', center: [0, 3.2, 0], radius: 1.6, color: GREEN, segments: 12 },
+    { type: 'sphere', center: [0.6, 3.9, 0.2], radius: 1.1, color: DEEP_GREEN, segments: 10 },
+    { type: 'sphere', center: [-0.5, 4.0, -0.3], radius: 1.0, color: GREEN, segments: 10 },
+    { type: 'sphere', center: [0.1, 4.6, 0.1], radius: 0.7, color: DEEP_GREEN, segments: 8 },
   ],
   bench: [
     { type: 'box', center: [0, 0.46, 0], size: [1.8, 0.09, 0.52], color: WOOD },
     { type: 'box', center: [0, 0.78, -0.24], size: [1.8, 0.48, 0.07], color: WOOD },
     { type: 'box', center: [-0.72, 0.22, 0], size: [0.08, 0.44, 0.46], color: METAL },
     { type: 'box', center: [0.72, 0.22, 0], size: [0.08, 0.44, 0.46], color: METAL },
+    // Back support slats.
+    { type: 'box', center: [0, 0.95, -0.24], size: [1.7, 0.04, 0.06], color: WOOD },
+    { type: 'box', center: [0, 0.62, -0.24], size: [1.7, 0.04, 0.06], color: WOOD },
   ],
   hydrant: [
-    { type: 'cylinder', center: [0, 0.4, 0], radius: 0.17, height: 0.8, color: RED },
+    { type: 'cylinder', center: [0, 0.4, 0], radius: 0.17, height: 0.8, color: RED, segments: 12 },
     { type: 'box', center: [0, 0.84, 0], size: [0.3, 0.12, 0.3], color: RED },
     { type: 'box', center: [0.19, 0.55, 0], size: [0.12, 0.12, 0.12], color: METAL },
     { type: 'box', center: [-0.19, 0.55, 0], size: [0.12, 0.12, 0.12], color: METAL },
+    // Top cap and side nozzles.
+    { type: 'cylinder', center: [0, 0.92, 0], radius: 0.1, height: 0.1, color: RED, segments: 8 },
+    {
+      type: 'cylinder',
+      center: [0.19, 0.55, 0],
+      radius: 0.05,
+      height: 0.08,
+      color: DARK,
+      segments: 6,
+    },
+    {
+      type: 'cylinder',
+      center: [-0.19, 0.55, 0],
+      radius: 0.05,
+      height: 0.08,
+      color: DARK,
+      segments: 6,
+    },
   ],
   'trash-can': [
-    { type: 'cylinder', center: [0, 0.45, 0], radius: 0.28, height: 0.9, color: BIN_GREEN },
-    { type: 'cylinder', center: [0, 0.93, 0], radius: 0.3, height: 0.07, color: DARK },
+    {
+      type: 'cylinder',
+      center: [0, 0.45, 0],
+      radius: 0.28,
+      height: 0.9,
+      color: BIN_GREEN,
+      segments: 12,
+    },
+    {
+      type: 'cylinder',
+      center: [0, 0.93, 0],
+      radius: 0.3,
+      height: 0.07,
+      color: DARK,
+      segments: 12,
+    },
+    // Lid rim and handle.
+    {
+      type: 'cylinder',
+      center: [0, 0.97, 0],
+      radius: 0.26,
+      height: 0.03,
+      color: DARK,
+      segments: 10,
+    },
+    { type: 'box', center: [0, 1.0, 0], size: [0.08, 0.02, 0.15], color: METAL },
   ],
   'bus-shelter': [
     { type: 'box', center: [-0.65, 1.1, -0.5], size: [0.08, 2.2, 0.08], color: METAL },
@@ -136,14 +231,36 @@ const TEMPLATES: Readonly<Record<CityDecorKind, readonly TemplatePart[]>> = Obje
     { type: 'box', center: [0, 2.26, 0], size: [1.6, 0.1, 1.24], color: DARK },
     { type: 'box', center: [0, 1.3, -0.58], size: [1.46, 1.8, 0.06], color: GLASS },
     { type: 'box', center: [0, 0.5, 0.25], size: [1.2, 0.09, 0.36], color: WOOD },
+    // Roof overhang and glass frame.
+    { type: 'box', center: [0, 2.32, 0], size: [1.7, 0.04, 1.3], color: METAL },
+    { type: 'box', center: [0, 1.3, -0.58], size: [1.5, 1.85, 0.02], color: METAL },
   ],
   'parking-meter': [
-    { type: 'cylinder', center: [0, 0.65, 0], radius: 0.05, height: 1.3, color: METAL },
+    {
+      type: 'cylinder',
+      center: [0, 0.65, 0],
+      radius: 0.05,
+      height: 1.3,
+      color: METAL,
+      segments: 10,
+    },
     { type: 'box', center: [0, 1.42, 0], size: [0.18, 0.3, 0.12], color: DARK },
+    // Display window and coin slot.
+    { type: 'box', center: [0, 1.45, 0.06], size: [0.14, 0.15, 0.02], color: GLASS },
+    { type: 'box', center: [0, 1.3, 0.06], size: [0.04, 0.02, 0.02], color: METAL },
   ],
   sign: [
-    { type: 'cylinder', center: [0, 1.3, 0], radius: 0.05, height: 2.6, color: METAL },
+    {
+      type: 'cylinder',
+      center: [0, 1.3, 0],
+      radius: 0.05,
+      height: 2.6,
+      color: METAL,
+      segments: 10,
+    },
     { type: 'box', center: [0, 2.3, 0], size: [0.5, 0.6, 0.04], color: SIGN_GREEN },
+    // Sign border and back panel.
+    { type: 'box', center: [0, 2.3, -0.02], size: [0.52, 0.62, 0.02], color: DARK },
   ],
 });
 /** Radius used for clearance and the per-kind footprint; heights are presentation-only. */
@@ -151,6 +268,8 @@ const CLEARANCE: Readonly<Record<CityDecorKind, { radiusM: number; heightM: numb
   Object.freeze({
     'street-lamp': { radiusM: 0.4, heightM: 4.9 },
     tree: { radiusM: 0.55, heightM: 5.7 },
+    'tree-maple': { radiusM: 0.55, heightM: 5.0 },
+    'tree-oak': { radiusM: 0.55, heightM: 5.2 },
     bench: { radiusM: 0.85, heightM: 0.9 },
     hydrant: { radiusM: 0.35, heightM: 0.9 },
     'trash-can': { radiusM: 0.4, heightM: 1.0 },
@@ -190,6 +309,12 @@ const FACES_ROADWAY: readonly CityDecorKind[] = Object.freeze([
   'street-lamp',
   'bench',
   'bus-shelter',
+]);
+/** All tree kinds are foliage — used for wind and impostor logic. */
+export const TREE_KINDS: readonly CityDecorKind[] = Object.freeze([
+  'tree',
+  'tree-maple',
+  'tree-oak',
 ]);
 /** Stable 32-bit hash so placement does not depend on iteration order or a random seed. */
 function hash(text: string): number {
@@ -414,6 +539,10 @@ export function createCityDecorPlan(
   );
   const orient = (kind: CityDecorKind, at: Point, heading: number): number =>
     FACES_ROADWAY.includes(kind) ? facingYaw(at, heading, roads) : heading;
+  const treeKindFor = (sidewalkId: string, distance: number): CityDecorKind => {
+    const species = hash(`${sidewalkId}:tree:${distance}`) % 3;
+    return TREE_KINDS[species]!;
+  };
   const sidewalks = layout.elements.filter(
     (element): element is CityPlanarElement =>
       element.kind === 'SIDEWALK' && element.footprintM.length >= 4,
@@ -437,12 +566,14 @@ export function createCityDecorPlan(
         const side = hash(`${sidewalk.id}:${rule.kind}:${distance}`) % 2 === 0 ? 1 : -1;
         const x = point.x + Math.cos(heading) * rule.offsetM * side;
         const z = point.z - Math.sin(heading) * rule.offsetM * side;
+        const kind =
+          rule.kind === 'tree' ? treeKindFor(sidewalk.id, Math.round(distance)) : rule.kind;
         add(
           item(
-            rule.kind,
+            kind,
             x,
             z,
-            orient(rule.kind, { x, z }, heading),
+            orient(kind, { x, z }, heading),
             cellSizeM,
             `decor:${rule.kind}:${sidewalk.id}:${Math.round(distance)}`,
           ),
@@ -690,6 +821,40 @@ function pushCylinder(
       else indices.push(center, ringTop + ((index + 1) % segments), ringTop + index);
   }
 }
+function pushSphere(
+  positions: number[],
+  normals: number[],
+  indices: number[],
+  colors: number[],
+  part: Extract<TemplatePart, { type: 'sphere' }>,
+): void {
+  const segments = part.segments ?? 12;
+  const rings = Math.max(4, Math.floor(segments / 2));
+  const [cx, cy, cz] = part.center;
+  const start = positions.length / 3;
+  // Latitude rings (top to bottom).
+  for (let ring = 0; ring <= rings; ring += 1) {
+    const phi = (ring / rings) * Math.PI;
+    const y = Math.cos(phi);
+    const radius = Math.sin(phi);
+    for (let segment = 0; segment <= segments; segment += 1) {
+      const theta = (segment / segments) * Math.PI * 2;
+      const x = radius * Math.cos(theta);
+      const z = radius * Math.sin(theta);
+      positions.push(cx + x * part.radius, cy + y * part.radius, cz + z * part.radius);
+      normals.push(x, y, z);
+      colors.push(part.color[0], part.color[1], part.color[2], 1);
+    }
+  }
+  // Indices: two triangles per quad.
+  for (let ring = 0; ring < rings; ring += 1) {
+    for (let segment = 0; segment < segments; segment += 1) {
+      const a = start + ring * (segments + 1) + segment;
+      const b = a + segments + 1;
+      indices.push(a, b, a + 1, a + 1, b, b + 1);
+    }
+  }
+}
 function templateGeometry(kind: CityDecorKind) {
   const positions: number[] = [];
   const normals: number[] = [];
@@ -697,6 +862,7 @@ function templateGeometry(kind: CityDecorKind) {
   const colors: number[] = [];
   for (const part of TEMPLATES[kind]) {
     if (part.type === 'box') pushBox(positions, normals, indices, colors, part);
+    else if (part.type === 'sphere') pushSphere(positions, normals, indices, colors, part);
     else pushCylinder(positions, normals, indices, colors, part, part.type === 'cone');
   }
   return { positions, normals, indices, colors };
@@ -791,7 +957,7 @@ export function cityDecorManifest(
       transferBytes: 0,
       geometryGpuBytes: 0,
       textureGpuBytes: 0,
-      shaderVariants: 2,
+      shaderVariants: 5,
     }),
   );
   return Object.freeze({
@@ -817,7 +983,7 @@ export interface CityDecorInventoryEntry {
   readonly costBytes: number;
 }
 const INVENTORY_SOURCE =
-  'Original procedural street furniture authored in this repository (PBI 146)';
+  'Original procedural street furniture authored in this repository (PBI 146/249)';
 const INVENTORY_LICENSE = 'Project license — original work, no third-party asset';
 export function cityDecorInventory(plan: CityDecorPlan): readonly CityDecorInventoryEntry[] {
   return Object.freeze(

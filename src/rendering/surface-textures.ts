@@ -19,10 +19,20 @@
  * Nu există un encoder KTX2/Basis în proiect și nicio sursă de texturi comprimate: texturile rămân RGBA8 cu
  * lanț de mip-uri (≈ 45 MiB GPU pe HIGH, vezi `surfaceTextureBytes`), mult sub bugetul 223.
  */
-export const SURFACE_TEXTURES_VERSION = '245-procedural-1';
+export const SURFACE_TEXTURES_VERSION = '246-building-facades-1';
 
 export type SurfaceTextureId =
-  'asphalt' | 'asphaltMacro' | 'marking' | 'sidewalk' | 'curb' | 'grass' | 'wear' | 'terrainDetail';
+  | 'asphalt'
+  | 'asphaltMacro'
+  | 'marking'
+  | 'sidewalk'
+  | 'curb'
+  | 'grass'
+  | 'wear'
+  | 'terrainDetail'
+  | 'facadeBrick'
+  | 'facadePlaster'
+  | 'facadeConcrete';
 
 export interface SurfaceTextureSpec {
   readonly id: SurfaceTextureId;
@@ -102,6 +112,31 @@ export const SURFACE_TEXTURE_SPECS: Readonly<Record<SurfaceTextureId, SurfaceTex
       hasOrm: false,
       description:
         'Modulare de luminanță pentru terenul de la orizont (înmulțește culoarea pe vârf)',
+    },
+    facadeBrick: {
+      id: 'facadeBrick',
+      tileM: { u: 4, v: 4 },
+      sizeFraction: { w: 0.5, h: 0.5 },
+      hasNormal: true,
+      hasOrm: true,
+      description:
+        'Cărămidă aparentă: cărămizi de 22×7 cm în legătură întinsă, rosturi de mortar, variație de ardere',
+    },
+    facadePlaster: {
+      id: 'facadePlaster',
+      tileM: { u: 4, v: 4 },
+      sizeFraction: { w: 0.5, h: 0.5 },
+      hasNormal: true,
+      hasOrm: true,
+      description: 'Tencuială: granulație fină, scurgeri verticale sub ferestre, reparații rare',
+    },
+    facadeConcrete: {
+      id: 'facadeConcrete',
+      tileM: { u: 4, v: 4 },
+      sizeFraction: { w: 0.5, h: 0.5 },
+      hasNormal: true,
+      hasOrm: true,
+      description: 'Beton cofrat: urme de panouri de 2 m, găuri de cofraj, variație de turnare',
     },
   });
 
@@ -623,6 +658,149 @@ function genTerrainDetail(w: number, h: number): SurfaceImage {
   return { id: 'terrainDetail', width: w, height: h, albedo, normal: null, orm: null };
 }
 
+// ---- pereți de clădire (246) ----------------------------------------------------------------------
+
+/**
+ * Cărămidă aparentă: cărămizi de 0,22 × 0,07 m în legătură întinsă (jumătate de cărămidă decalată
+ * pe rânduri impare), rosturi de mortar de ~12 mm mai deschise și mai rugoase, ardere variabilă.
+ */
+function genFacadeBrick(w: number, h: number): SurfaceImage {
+  const spec = SURFACE_TEXTURE_SPECS.facadeBrick;
+  const pixelMX = spec.tileM.u / w;
+  const pixelMY = spec.tileM.v / h;
+  const brickX = 0.22; // m
+  const brickY = 0.07;
+  const mortar = 0.012;
+  const mott = fbm(w, h, 3, 3, 4, 91);
+  const fine = valueNoise(w, h, w / 3, h / 3, 92);
+  const size = w * h;
+  const height = new Float32Array(size);
+  const ao = new Float32Array(size);
+  const rough = new Float32Array(size);
+  const lum = new Float32Array(size);
+  for (let y = 0; y < h; y += 1) {
+    const vM = (y / h) * spec.tileM.v;
+    const row = Math.floor(vM / brickY);
+    const rowOffset = row % 2 === 0 ? 0 : brickX / 2;
+    for (let x = 0; x < w; x += 1) {
+      const i = y * w + x;
+      const uM = (x / w) * spec.tileM.u;
+      const lx = (uM + rowOffset) % brickX;
+      const ly = vM % brickY;
+      const edgeM = Math.min(lx, brickX - lx, ly, brickY - ly);
+      const joint = 1 - smoothstep(mortar * 0.4, mortar, edgeM);
+      const col = Math.floor((uM + rowOffset) / brickX);
+      // Variația de ardere e per cărămidă (celulă), nu per pixel.
+      const bake = hash(col, row, 93);
+      const spall = smoothstep(0.86, 0.95, hash(col, row, 94));
+      let l = 0.5 * (0.72 + 0.5 * bake + 0.16 * (fine[i]! - 0.5) + 0.1 * (mott[i]! - 0.5));
+      l *= 1 - 0.25 * spall;
+      l = mix(l, 0.62, joint); // mortar mai deschis
+      lum[i] = l;
+      height[i] = -0.006 * joint + 0.0012 * (fine[i]! - 0.5) + 0.002 * (bake - 0.5);
+      ao[i] = 1 - 0.45 * joint;
+      rough[i] = mix(0.78 + 0.08 * (bake - 0.5), 0.92, joint);
+    }
+  }
+  const albedo = packAlbedo(w, h, (i) => {
+    // Roșu-cărămiziu neutru (tinta stilului vine din culoarea pe vârf / albedoColor).
+    const l = lum[i]!;
+    return [l * 1.06, l * 0.82, l * 0.66];
+  });
+  return {
+    id: 'facadeBrick',
+    width: w,
+    height: h,
+    albedo,
+    normal: normalFromHeight(height, w, h, pixelMX, pixelMY),
+    orm: packOrm(ao, rough),
+  };
+}
+
+/** Tencuială: granulație fină, mâzgă verticală sub linia ferestrelor, pete rare de reparație. */
+function genFacadePlaster(w: number, h: number): SurfaceImage {
+  const spec = SURFACE_TEXTURE_SPECS.facadePlaster;
+  const pixelMX = spec.tileM.u / w;
+  const pixelMY = spec.tileM.v / h;
+  const grain = valueNoise(w, h, w / 2, h / 2, 101);
+  const mott = fbm(w, h, 4, 4, 4, 102);
+  const streakField = valueNoise(w, h, w / 24, 2, 103); // constant pe verticală → dungi
+  const patchField = fbm(w, h, 2, 2, 3, 104);
+  const size = w * h;
+  const height = new Float32Array(size);
+  const ao = new Float32Array(size);
+  const rough = new Float32Array(size);
+  const albedo = packAlbedo(w, h, (i) => {
+    const streak = smoothstep(0.56, 0.72, streakField[i]!) * 0.5;
+    const patch = smoothstep(0.62, 0.7, patchField[i]!) * 0.4;
+    let l = 0.72 * (0.92 + 0.14 * (mott[i]! - 0.5) + 0.07 * (grain[i]! - 0.5));
+    l *= 1 - 0.12 * streak; // scurgeri mai închise
+    l *= 1 + 0.08 * patch; // reparații ușor mai deschise
+    return [l, l * 0.99, l * 0.95];
+  });
+  for (let i = 0; i < size; i += 1) {
+    height[i] = 0.0009 * (grain[i]! - 0.5) + 0.0004 * (mott[i]! - 0.5);
+    ao[i] = 0.94 + 0.06 * grain[i]!;
+    rough[i] = 0.82 + 0.08 * (grain[i]! - 0.5) + 0.05 * smoothstep(0.56, 0.72, streakField[i]!);
+  }
+  return {
+    id: 'facadePlaster',
+    width: w,
+    height: h,
+    albedo,
+    normal: normalFromHeight(height, w, h, pixelMX, pixelMY),
+    orm: packOrm(ao, rough),
+  };
+}
+
+/** Beton cofrat: panouri de 2 × 2 m cu rosturi adânci, găuri de cofraj la 1 m, variație de turnare. */
+function genFacadeConcrete(w: number, h: number): SurfaceImage {
+  const spec = SURFACE_TEXTURE_SPECS.facadeConcrete;
+  const pixelMX = spec.tileM.u / w;
+  const pixelMY = spec.tileM.v / h;
+  const pour = fbm(w, h, 3, 3, 4, 111);
+  const fine = valueNoise(w, h, w / 3, h / 3, 112);
+  const grain = valueNoise(w, h, w / 2, h / 2, 113);
+  const size = w * h;
+  const height = new Float32Array(size);
+  const ao = new Float32Array(size);
+  const rough = new Float32Array(size);
+  const lum = new Float32Array(size);
+  for (let y = 0; y < h; y += 1) {
+    const vM = (y / h) * spec.tileM.v;
+    for (let x = 0; x < w; x += 1) {
+      const i = y * w + x;
+      const uM = (x / w) * spec.tileM.u;
+      const jointU = Math.min(uM % 2, 2 - (uM % 2));
+      const jointV = Math.min(vM % 2, 2 - (vM % 2));
+      const seam = 1 - smoothstep(0.006, 0.018, Math.min(jointU, jointV));
+      // Găuri de cofraj: la 1 m în ambele axe, în afara rosturilor.
+      const hx = Math.abs(((uM + 0.5) % 1) - 0.5);
+      const hy = Math.abs(((vM + 0.5) % 1) - 0.5);
+      const tie = 1 - smoothstep(0.012, 0.02, Math.hypot(hx, hy));
+      let l =
+        0.58 * (0.88 + 0.2 * (pour[i]! - 0.5) + 0.1 * (fine[i]! - 0.5) + 0.05 * (grain[i]! - 0.5));
+      l *= 1 - 0.22 * seam - 0.3 * tie;
+      lum[i] = l;
+      height[i] = -0.008 * seam - 0.004 * tie + 0.0008 * (grain[i]! - 0.5);
+      ao[i] = 1 - 0.5 * seam - 0.4 * tie;
+      rough[i] = 0.74 + 0.1 * (fine[i]! - 0.5) + 0.08 * seam;
+    }
+  }
+  const albedo = packAlbedo(w, h, (i) => {
+    const l = lum[i]!;
+    return [l * 1.01, l, l * 0.97];
+  });
+  return {
+    id: 'facadeConcrete',
+    width: w,
+    height: h,
+    albedo,
+    normal: normalFromHeight(height, w, h, pixelMX, pixelMY),
+    orm: packOrm(ao, rough),
+  };
+}
+
 /** Generează textura `id` la rezoluția de bază `baseSize`. Determinist: aceeași intrare, aceiași octeți. */
 export function generateSurfaceTexture(id: SurfaceTextureId, baseSize: number): SurfaceImage {
   if (!SURFACE_TEXTURE_SPECS[id])
@@ -647,5 +825,11 @@ export function generateSurfaceTexture(id: SurfaceTextureId, baseSize: number): 
       return genWear(width, height);
     case 'terrainDetail':
       return genTerrainDetail(width, height);
+    case 'facadeBrick':
+      return genFacadeBrick(width, height);
+    case 'facadePlaster':
+      return genFacadePlaster(width, height);
+    case 'facadeConcrete':
+      return genFacadeConcrete(width, height);
   }
 }

@@ -28,6 +28,7 @@ import {
   type CityDecorPlan,
 } from '../rendering';
 import { createCityLayout, createNeighbourhoodMap } from '../world';
+import { GLB_ASSETS } from '../rendering';
 import { AUDIO_CUES, AUDIO_CUE_IDS, AUDIO_LIMITS, estimateAudioBufferBytes } from '../audio';
 import { PASSENGER_VISUAL_LIMITS, PASSENGER_VISUAL_VERSION } from '../ui';
 import {
@@ -256,10 +257,17 @@ function atmosphereRecords(): readonly AssetSourceRecord[] {
 }
 
 /**
- * PBI 245 — texturile procedurale ale suprafețelor (asfalt, marcaje, trotuar, bordură, iarbă, teren):
- * generate la încărcare din zgomot determinist (`src/rendering/surface-textures.ts`), fără fișier. Câte un
- * înregistrare pe textură; costul GPU este cel al presetului HIGH (1024 px de bază), LOW folosește 256.
+ * PBI 245/246 — texturile procedurale ale suprafețelor (asfalt, marcaje, trotuar, bordură, iarbă,
+ * teren) și ale fațadelor (cărămidă, tencuială, beton): generate la încărcare din zgomot determinist
+ * (`src/rendering/surface-textures.ts`), fără fișier. Câte o înregistrare pe textură; costul GPU este
+ * cel al presetului HIGH (1024 px de bază), LOW folosește 256.
  */
+const FACADE_TEXTURE_IDS: ReadonlySet<string> = new Set([
+  'facadeBrick',
+  'facadePlaster',
+  'facadeConcrete',
+]);
+
 function surfaceRecords(): readonly AssetSourceRecord[] {
   const largest = Math.max(...Object.values(SURFACE_PRESETS).map((t) => t.baseSize));
   return SURFACE_TEXTURE_IDS.map((id) => {
@@ -267,12 +275,13 @@ function surfaceRecords(): readonly AssetSourceRecord[] {
     const width = Math.max(8, Math.round(largest * spec.sizeFraction.w));
     const height = Math.max(8, Math.round(largest * spec.sizeFraction.h));
     const images = 1 + (spec.hasNormal ? 1 : 0) + (spec.hasOrm ? 1 : 0);
+    const owner = FACADE_TEXTURE_IDS.has(id) ? '246' : '245';
     return record({
       id: `surface:texture:${id}`,
       kind: 'MATERIAL_SET',
       role: 'CRITICAL',
       version: SURFACE_TEXTURES_VERSION,
-      source: `PBI 245 procedural surface texture src/rendering/surface-textures.ts (${spec.description})`,
+      source: `PBI ${owner} procedural surface texture src/rendering/surface-textures.ts (${spec.description})`,
       license:
         'Project license — original procedural texture, no photo, scan or third-party material',
       count: 1,
@@ -280,7 +289,7 @@ function surfaceRecords(): readonly AssetSourceRecord[] {
       placeholder: false,
       shaderVariants: id === 'asphalt' ? 2 : 0,
       residencyBasis: 'CONTRACT_ESTIMATE',
-      consumers: ['245'],
+      consumers: [owner],
       decoded: decoded({ textureBytes: Math.ceil(((width * height * 4 * 4) / 3) * images) }),
     });
   });
@@ -305,6 +314,40 @@ function audioRecords(): readonly AssetSourceRecord[] {
       decoded: decoded({ audioBytes: estimateAudioBufferBytes(cue.buffer) }),
     });
   });
+}
+
+/**
+ * PBI 254 — modelele 3D realiste (CC0, Innerscene). Fiecare GLB are un fișier real în
+ * `public/assets/models`, deci transferul este `IDENTITY` cu dimensiunea exactă de pe disc;
+ * geometria și texturile decodate sunt citite din accesoriile și imaginile GLB-ului.
+ */
+function glbRecords(): readonly AssetSourceRecord[] {
+  return GLB_ASSETS.map((asset) =>
+    record({
+      id: `glb:${asset.id}`,
+      kind: 'GLB',
+      role: asset.critical ? 'CRITICAL' : 'OPTIONAL',
+      version: asset.version,
+      source: `PBI 254 ${asset.source}`,
+      license: asset.license,
+      count: 1,
+      firstRide: asset.category === 'vehicle' || asset.category === 'character',
+      placeholder: false,
+      shaderVariants: asset.category === 'character' ? 1 : 0,
+      residencyBasis: 'DECLARED_ADMISSION_ESTIMATE',
+      consumers: ['254'],
+      wire: Object.freeze({
+        encoding: 'IDENTITY' as const,
+        rawBytes: asset.bytes,
+        encodedBytes: asset.bytes,
+        gzipBytes: null,
+      }),
+      decoded: decoded({
+        geometryBytes: asset.geometryBytes,
+        textureBytes: asset.textureBytes,
+      }),
+    }),
+  );
 }
 
 function passengerRecords(): readonly AssetSourceRecord[] {
@@ -461,6 +504,7 @@ export function collectAssetManifestSources(
     ...surfaceRecords(),
     ...audioRecords(),
     ...passengerRecords(),
+    ...glbRecords(),
     ...wasm.records,
     ...registry.records,
   ]);
