@@ -34,7 +34,7 @@ export default [
       '.camera-preview017/**',
       '.vite-camera017/**',
       '.playwright-cli/**',
-      'output/playwright/**',
+      'output/**',
     ],
   },
   {

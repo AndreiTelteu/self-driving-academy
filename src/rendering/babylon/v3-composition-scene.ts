@@ -23,6 +23,7 @@ import type { QualityPreferences } from '../../settings';
 import type { CityLayout } from '../../world';
 import type { RendererKind } from '../backend-policy';
 import { SURFACE_PRESETS, type QualityPreset } from '../quality-policy';
+import { VEHICLE_RIDE_HEIGHT_M } from '../vehicle-visuals';
 import type { VisualTransform } from '../scene-contract';
 import { planBuildingModules } from '../building-modules';
 import { createBuildingModuleBatches } from './city-buildings-glb';
@@ -142,12 +143,21 @@ function buildHeadlightBeamTexture(): Uint8Array {
   return data;
 }
 
+/**
+ * Înălțimea de repaus a șasiului deasupra solului (contractul 023): centrul caroseriei stă la 0,8 m,
+ * roțile ating asfaltul. Poziția autoritativă a vehiculului este la sol (y=0), deci prezentarea
+ * adaugă această cotă; altfel modelul GLB intră 0,8 m în asfalt și roțile dispar.
+ */
 function visualTransform(
   positionM: Readonly<{ x: number; y: number; z: number }>,
   yawRad: number,
 ): VisualTransform {
   return Object.freeze({
-    positionM: Object.freeze({ x: positionM.x, y: positionM.y, z: positionM.z }),
+    positionM: Object.freeze({
+      x: positionM.x,
+      y: positionM.y + VEHICLE_RIDE_HEIGHT_M,
+      z: positionM.z,
+    }),
     rotationQuaternion: Object.freeze({
       x: 0,
       y: Math.sin(yawRad / 2),
@@ -391,6 +401,9 @@ export function createV3CompositionScene(options: V3CompositionSceneOptions): V3
     apply(frame: CompositionFrame, characterFrame: CharacterRenderFrame): void {
       frames += 1;
       character.applyFrame(characterFrame);
+      // PBI 254/253: când autoritatea este mașina, personajul nu mai este în scenă. `setVisible`
+      // exista în contract dar nu era chemat, deci playerul rămânea înghețat pe stradă după intrare.
+      character.setVisible(frame.authority.consumer === 'CHARACTER');
       // PBI 254: the imported character picks its locomotion clip from the authoritative frame.
       character.setClip(frame.character.clipId, frame.character.speedMps);
       for (const vehicle of frame.vehicles) {

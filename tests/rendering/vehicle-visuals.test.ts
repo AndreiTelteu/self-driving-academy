@@ -5,6 +5,7 @@ import {
   RENDER_ASSET_CAPS,
   checkAssetManifest,
   VEHICLE_CONNECTION_Y_M,
+  VEHICLE_RIDE_HEIGHT_M,
   VEHICLE_COLLISION_HALF_EXTENTS_M,
   VEHICLE_LOD_LEVELS,
   VEHICLE_REST_SPRING_M,
@@ -22,6 +23,24 @@ import {
 } from '../../src/rendering';
 
 const CLASSES = ['sedan', 'compact'] as const;
+
+test('254: the visual root sits 0.8 m above the road so the wheels touch it', () => {
+  assert.equal(VEHICLE_RIDE_HEIGHT_M, 0.8);
+  for (const classId of ['sedan', 'compact'] as const) {
+    const visual = vehicleVisualClass(classId);
+    const mechanical = VEHICLE_CLASSES[classId];
+    // World Y of the lowest tyre point when the root is placed at the authoritative ground y=0.
+    const wheelBottomWorld = VEHICLE_RIDE_HEIGHT_M + visual.wheelBottomM;
+    assert.ok(
+      Math.abs(wheelBottomWorld) <= 0.05,
+      `${classId}: wheel bottom ${wheelBottomWorld.toFixed(3)} m`,
+    );
+    assert.ok(
+      visual.wheelBottomM < 0,
+      `${classId}: the chassis contract is above the tyre (${mechanical.wheels.radiusM} m radius)`,
+    );
+  }
+});
 
 test('vehicle pivots match the PBI 023 mechanical classes (track/wheelbase/radius/rest pose)', () => {
   const issues = vehicleVisualAlignment({

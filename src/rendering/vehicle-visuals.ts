@@ -24,6 +24,11 @@ export const VEHICLE_VISUAL_VERSION = '145-vehicle-visuals-v2';
 /** PBI 023 suspension contract: connection point -0.15 m, 0.35 m rest length. */
 export const VEHICLE_CONNECTION_Y_M = -0.15;
 export const VEHICLE_REST_SPRING_M = 0.35;
+/**
+ * Cota de repaus a rădăcinii vizuale deasupra solului: centrul șasiului stă la 0,8 m, roțile ating
+ * asfaltul. Poziția autoritativă a vehiculului este la sol (y=0), deci prezentarea adaugă cota.
+ */
+export const VEHICLE_RIDE_HEIGHT_M = 0.8;
 /** Fixed chassis collider of PBI 023 (`cuboid(0.85, 0.3, 2)`), independent of the visual class. */
 export const VEHICLE_COLLISION_HALF_EXTENTS_M = Object.freeze({ x: 0.85, y: 0.3, z: 2 });
 export type VehicleLodLevel = 'NEAR' | 'MID' | 'FAR';

@@ -58,6 +58,7 @@ import {
 import {
   VEHICLE_COLLISION_HALF_EXTENTS_M,
   createCityDecorPlan,
+  VEHICLE_RIDE_HEIGHT_M,
   vehicleGeometrySpec,
 } from '../rendering';
 import {
@@ -280,7 +281,8 @@ function vehicleAnchorHeightM(classId: 'sedan' | 'compact'): number {
   for (const part of vehicleGeometrySpec(classId).parts) {
     top = Math.max(top, part.center[1] + part.size[1] / 2);
   }
-  return top;
+  // The geometry spec is chassis-local; the presentation root sits 0.8 m above the road.
+  return top + VEHICLE_RIDE_HEIGHT_M;
 }
 
 function entryVehicle(vehicle: CompositionVehicle, tick: number): VehicleEntryVehicle {

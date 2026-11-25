@@ -42,7 +42,7 @@ ID-urile rămân stabile la mutarea între coloane. Găsește task-ul prin prefi
 | Catalog/director/UI provocări random | 231, 232, 233 | [Document](28-provocari-random-si-revenire.md) |
 | Savefile complet cu checksum | 234 | [Document](29-savefile-si-integritate.md) |
 | Regresii experiență și playtest | 235 | [Document](18-validare-si-release.md) |
-| Calitate vizuală V4 | 239 → 255 | [Document](30-calitate-vizuala-v4.md) |
+| Calitate vizuală V4 | 239 → 255, 258 | [Document](30-calitate-vizuala-v4.md) |
 
 ## Acoperirea celor 80 de parametri
 

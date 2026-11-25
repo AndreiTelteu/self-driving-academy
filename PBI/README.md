@@ -4,7 +4,7 @@
 | Asseturi și audio | Completed | 0 | 0 | 7 / 7 | `██████████` 100% |
 | Autonomie | Completed | 0 | 0 | 14 / 14 | `██████████` 100% |
 | Babylon | Completed | 0 | 0 | 11 / 11 | `██████████` 100% |
-| Calitate vizuala V4 | V4 | 1 | 0 | 16 / 17 | 94% |
+| Calitate vizuala V4 | V4 | 1 | 0 | 17 / 18 | 94% |
 | Control manual | Completed | 0 | 0 | 9 / 9 | `██████████` 100% |
 | Economie | Completed | 0 | 0 | 1 / 1 | `██████████` 100% |
 | Experiență | Completed | 0 | 0 | 2 / 2 | `██████████` 100% |
@@ -35,12 +35,12 @@
 | Validare și release | Completed | 0 | 0 | 12 / 12 | `██████████` 100% |
 | Validare V2 | Completed | 0 | 0 | 2 / 2 | `██████████` 100% |
 | Vehicule și fizică | Completed | 0 | 0 | 11 / 11 | `██████████` 100% |
-| Total | - | 1 | 0 | 256 / 257 | 99% |
+| Total | - | 1 | 0 | 257 / 258 | 99% |
 <!-- loop-pbi:progress:end -->
 
 # Backlog Kanban Self Driving Academy
 
-257 task-uri de implementare cu IDs stabile 001-257. Ordinea de implementare este definită de depends_on; IDs nu mai constituie o ordine topologică numerică. Toate sunt create inițial în To Do. Prefixele rămân stabile la mutarea între coloane.
+258 task-uri de implementare cu IDs stabile 001-257. Ordinea de implementare este definită de depends_on; IDs nu mai constituie o ordine topologică numerică. Toate sunt create inițial în To Do. Prefixele rămân stabile la mutarea între coloane.
 
 ## Coloane și workflow
 
@@ -322,6 +322,7 @@ Statutul curent se citește din coloana fișierului și frontmatter. Indexul pă
 | 255 | Modele 3D pentru clădiri și mobilierul stradal rămas | Calitate vizuală V4 | V4 | 254 |
 | 256 | Trafic AI vizibil în compunerea de browser | Flotă și curse | V3 | 058, 236 |
 | 257 | Mod AUTO/MANUAL, HUD de viteză și coliziune cu mașinile AI | Control manual | V3 | 236, 256, 067 |
+| 258 | Repară înălțimea vehiculelor, animația personajului și dispariția la intrare | Calitate vizuală V4 | V4 | 254 |
 
 ## Verificarea consistenței planului
 

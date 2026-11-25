@@ -35,7 +35,7 @@ export interface GlbModelLibrary {
     id: string,
     scene: Scene,
     suffix: string,
-    options?: Readonly<{ cloneMaterials?: boolean }>,
+    options?: Readonly<{ cloneMaterials?: boolean; instantiate?: boolean }>,
   ): InstantiatedEntries | null;
   dispose(): void;
 }
@@ -102,14 +102,16 @@ export async function loadGlbModelLibrary(
         id: string,
         _targetScene: Scene,
         suffix: string,
-        instantiateOptions: Readonly<{ cloneMaterials?: boolean }> = {},
+        instantiateOptions: Readonly<{ cloneMaterials?: boolean; instantiate?: boolean }> = {},
       ) {
         const container = containers.get(id);
         if (!container) return null;
         return container.instantiateModelsToScene(
           (name) => `${suffix}:${name}`,
           instantiateOptions.cloneMaterials === true,
-          { doNotInstantiate: instantiateOptions.cloneMaterials !== true },
+          // Instanțiere, nu clonare: clonarea skinned mesh-urilor nu remapează țintele oaselor și
+          // animation groups ajung cu zero animatables (personajul rămâne în prima poză).
+          { doNotInstantiate: instantiateOptions.instantiate !== true },
         );
       },
       dispose(): void {

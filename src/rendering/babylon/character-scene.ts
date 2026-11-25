@@ -14,12 +14,12 @@
  */
 import { Color3 } from '@babylonjs/core/Maths/math.color.js';
 import { PBRMaterial } from '@babylonjs/core/Materials/PBR/pbrMaterial.js';
-import { CreateCapsule } from '@babylonjs/core/Meshes/Builders/capsuleBuilder';
-import { CreateSphere } from '@babylonjs/core/Meshes/Builders/sphereBuilder';
-import { TransformNode } from '@babylonjs/core/Meshes/transformNode';
+import { CreateCapsule } from '@babylonjs/core/Meshes/Builders/capsuleBuilder.js';
+import { CreateSphere } from '@babylonjs/core/Meshes/Builders/sphereBuilder.js';
+import { TransformNode } from '@babylonjs/core/Meshes/transformNode.js';
 import type { Mesh } from '@babylonjs/core/Meshes/mesh.js';
 import type { AnimationGroup } from '@babylonjs/core/Animations/animationGroup.js';
-import type { Scene } from '@babylonjs/core/scene';
+import type { Scene } from '@babylonjs/core/scene.js';
 import {
   characterJointSpec,
   type CharacterAsset,
@@ -73,6 +73,11 @@ export interface CharacterSceneOptions {
 const GROUP_ORDER: readonly CharacterMaterialGroup[] = ['SKIN', 'TORSO', 'LEGS', 'BOOTS'];
 
 /** Clip routing: the imported locomotion set onto the PBI 191 clip ids. */
+/** Numele glTF al clipului, fără prefixul de instanțiere (`character:`). */
+export function characterGroupClipName(groupName: string): string {
+  return groupName.startsWith('character:') ? groupName.slice('character:'.length) : groupName;
+}
+
 const CLIP_ROUTES: Readonly<Record<CharacterClipId, string>> = Object.freeze({
   idle: 'Idle_Standing',
   walk: 'Walk_Relaxed',
@@ -97,12 +102,17 @@ export function createCharacterScene(
   const root = new TransformNode('character:root', scene);
   const entries = options.models?.instantiate('character:jordan', scene, 'character', {
     cloneMaterials: false,
+    instantiate: true,
   });
   if (entries) {
     for (const node of entries.rootNodes) node.parent = root;
     const meshes = glbMeshes(root);
     const groups = new Map<string, AnimationGroup>();
-    for (const group of entries.animationGroups) groups.set(group.name, group);
+    for (const group of entries.animationGroups) {
+      // `instantiateModelsToScene` aplică prefixul `character:` și numelor grupurilor, nu doar
+      // nodurilor; rutarea clipurilor folosește numele glTF originale (`Idle_Standing` etc.).
+      groups.set(characterGroupClipName(group.name), group);
+    }
     const skinned = root.getChildMeshes(false).find((mesh) => mesh.skeleton !== undefined);
     const joints = skinned?.skeleton?.bones.length ?? 0;
     let positionWrites = 0;
