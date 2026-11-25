@@ -277,13 +277,14 @@ test('validation rejects duplicate ids, invalid versions and empty input', () =>
 test('real inventories produce the versioned manifest with no fabricated assets', () => {
   const collection = realCollection();
   const manifest = createAssetManifest(collection.records);
-  assert.equal(manifest.entries.length, 49);
+  assert.equal(manifest.entries.length, 59);
   assert.equal(manifest.entries.filter((entry) => entry.role === 'CRITICAL').length, 33);
-  assert.equal(manifest.entries.filter((entry) => entry.role === 'OPTIONAL').length, 16);
+  assert.equal(manifest.entries.filter((entry) => entry.role === 'OPTIONAL').length, 26);
   assert.equal(manifest.entries.filter((entry) => entry.placeholder).length, 7);
   // 254: șapte modele CC0, core glTF, cu bytes reali pe wire și proveniență completă.
   const glb = manifest.entries.filter((entry) => entry.kind === 'GLB');
-  assert.equal(glb.length, 7);
+  // PBI 255: 7 modele 254 + 5 clădiri noi + 5 piese de mobilier = 17.
+  assert.equal(glb.length, 17);
   assert.equal(glb.filter((entry) => entry.role === 'CRITICAL').length, 3);
   assert.ok(
     glb.every(

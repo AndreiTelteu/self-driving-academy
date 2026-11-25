@@ -19,23 +19,31 @@ test('239: ?capture=1 citește presetul, backendul și sursa modelelor, valorile
     preset: 'HIGH',
     backend: 'AUTO',
     models: 'glb',
+    time: 'noon',
   });
   assert.deepEqual(readCaptureConfig('?capture=1&preset=low&backend=webgl2'), {
     preset: 'LOW',
     backend: 'WEBGL2',
     models: 'glb',
+    time: 'noon',
   });
   assert.deepEqual(readCaptureConfig('?capture=1&preset=ULTRA&backend=metal'), {
     preset: 'HIGH',
     backend: 'AUTO',
     models: 'glb',
+    time: 'noon',
   });
   // PBI 254: `models=procedural` păstrează rig-ul vechi pentru dovada înainte/după.
   assert.deepEqual(readCaptureConfig('?capture=1&models=procedural'), {
     preset: 'HIGH',
     backend: 'AUTO',
     models: 'procedural',
+    time: 'noon',
   });
+  // PBI 252: ora din zi este parte din configurația capturii; valorile necunoscute cad pe amiază.
+  assert.equal(readCaptureConfig('?capture=1&time=night')?.time, 'night');
+  assert.equal(readCaptureConfig('?capture=1&time=sunset')?.time, 'sunset');
+  assert.equal(readCaptureConfig('?capture=1&time=dawn')?.time, 'noon');
   assert.equal(readCaptureConfig('?capture=1&models=other')?.models, 'glb');
 });
 

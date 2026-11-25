@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { NullEngine } from '@babylonjs/core/Engines/nullEngine.js';
 import { Scene } from '@babylonjs/core/scene.js';
+import { PBRMaterial } from '@babylonjs/core/Materials/PBR/pbrMaterial.js';
 import { StandardMaterial } from '@babylonjs/core/Materials/standardMaterial.js';
 import type { AbstractMesh } from '@babylonjs/core/Meshes/abstractMesh.js';
 import { createCityScene } from '../../src/rendering/babylon/city-scene';
@@ -312,6 +313,61 @@ test('disposal returns the scene to zero resources and is idempotent', () => {
   assert.equal(scene.meshes.length, baseline);
   scene.dispose();
   engine.dispose();
+});
+
+test('252: night factor lights only the deterministic lit-window batch', () => {
+  const engine = new NullEngine();
+  const scene = new Scene(engine);
+  const glass = new PBRMaterial('test-glass', scene);
+  const lit = new PBRMaterial('test-glass-lit', scene);
+  const city = createCityScene(scene, layout, {
+    materials: { buildingGlass: glass, buildingGlassLit: lit },
+    facadeDetail: 'high',
+  });
+  try {
+    city.setNightFactor(0);
+    assert.deepEqual(lit.emissiveColor.asArray(), [0, 0, 0]);
+    city.setNightFactor(1);
+    assert.ok(lit.emissiveColor.r > 0.5 && lit.emissiveColor.g > 0.3);
+    assert.deepEqual(glass.emissiveColor.asArray(), [0, 0, 0], 'unlit glass stays dark');
+    city.setNightFactor(0.5);
+    assert.ok(Math.abs(lit.emissiveColor.r - 0.525) < 1e-6);
+    assert.throws(() => city.setNightFactor(1.5));
+  } finally {
+    city.dispose();
+    glass.dispose();
+    lit.dispose();
+    scene.dispose();
+    engine.dispose();
+  }
+});
+
+test('252: LOW facades emit no empty glass batches', () => {
+  const engine = new NullEngine();
+  const scene = new Scene(engine);
+  const glass = new PBRMaterial('test-glass-low', scene);
+  const lit = new PBRMaterial('test-glass-lit-low', scene);
+  const city = createCityScene(scene, layout, {
+    materials: { buildingGlass: glass, buildingGlassLit: lit },
+    facadeDetail: 'low',
+  });
+  try {
+    assert.equal(
+      scene.meshes.some((mesh) => mesh.name === 'city:batch:buildingGlass'),
+      false,
+    );
+    assert.equal(
+      scene.meshes.some((mesh) => mesh.name === 'city:batch:buildingGlassLit'),
+      false,
+    );
+    assert.ok(city.stats.meshes > 0);
+  } finally {
+    city.dispose();
+    glass.dispose();
+    lit.dispose();
+    scene.dispose();
+    engine.dispose();
+  }
 });
 
 test('two independent builds are byte-identical and borrow caller materials', () => {

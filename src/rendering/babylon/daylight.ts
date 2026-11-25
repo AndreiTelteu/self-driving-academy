@@ -409,6 +409,9 @@ export function createDaylight(
       atmosphereState = next;
       atmosphere.apply(next);
       applyAtmosphereLights();
+      // PBI 252: expunerea este parte din starea de atmosferă; materialele și pipeline-ul citesc
+      // aceeași valoare, deci noaptea nu rămâne subexpusă după ce cerul a fost reglat.
+      scene.imageProcessingConfiguration.exposure = next.exposure;
     },
     /** 0..1: scara ambientului hemisferic de rezervă; 245–249 îl coboară când IBL îl înlocuiește. */
     setLegacyAmbientScale(scale: number): void {

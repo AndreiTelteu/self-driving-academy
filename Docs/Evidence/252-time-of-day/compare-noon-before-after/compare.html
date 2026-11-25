@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ro"><head><meta charset="utf-8"><title>Comparație capturi V4</title>
+<style>
+body{font:14px/1.4 system-ui,sans-serif;margin:1.5rem;background:#10161a;color:#e6edf0}
+h1{margin:0 0 .25rem}.meta{color:#9fb3bd;margin:.1rem 0}
+table.sum{border-collapse:collapse;margin:1rem 0}.sum td,.sum th{border:1px solid #2c3a42;padding:.25rem .6rem;text-align:left}
+.pair{margin:1.5rem 0}.pair h2{font-size:1rem;margin:.2rem 0}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem}
+.grid figure{margin:0}.grid img{width:100%;display:block;background:#000}figcaption{color:#9fb3bd;font-size:12px}
+.ok{color:#7fd48a}.bad{color:#ff8a7a}
+</style></head><body>
+<h1>Comparație capturi V4</h1>
+<p class="meta">Înainte: HIGH / WEBGPU / amd rdna-2 / 26511205+local</p>
+<p class="meta">După: HIGH / WEBGPU / amd rdna-2 / 26511205+local</p>
+<p class="meta">Toleranță pe canal: 4/255. Cel mai mare procent: 6.186%.</p>
+<table class="sum"><tr><th>Cadru</th><th>Pixeli diferiți</th><th>CPU render înainte (ms)</th><th>CPU render după (ms)</th></tr>
+<tr><td><a href="#street-eye-level">street-eye-level</a></td><td class="ok">1.918%</td><td>20.99</td><td>17.59</td></tr>
+<tr><td><a href="#taxi-front-three-quarter">taxi-front-three-quarter</a></td><td class="ok">6.186%</td><td>19.18</td><td>13.52</td></tr>
+<tr><td><a href="#decor-lamp-shelter">decor-lamp-shelter</a></td><td class="ok">3.047%</td><td>15.85</td><td>19.45</td></tr>
+<tr><td><a href="#facades-close">facades-close</a></td><td class="ok">1.845%</td><td>15.51</td><td>17.52</td></tr>
+</table>
+<section class="pair" id="street-eye-level"><h2>Stradă la nivelul ochilor — 1.918% pixeli diferiți</h2>
+<div class="grid">
+<figure><img src="../noon-before-high-webgpu/street-eye-level.png" alt="înainte"><figcaption>înainte</figcaption></figure>
+<figure><img src="../noon-high-webgpu/street-eye-level.png" alt="după"><figcaption>după</figcaption></figure>
+<figure><img src="diff/street-eye-level.png" alt="diferență"><figcaption>diferență (roșu = peste toleranță)</figcaption></figure>
+</div></section>
+<section class="pair" id="taxi-front-three-quarter"><h2>Taxi aproape, 3/4 față — 6.186% pixeli diferiți</h2>
+<div class="grid">
+<figure><img src="../noon-before-high-webgpu/taxi-front-three-quarter.png" alt="înainte"><figcaption>înainte</figcaption></figure>
+<figure><img src="../noon-high-webgpu/taxi-front-three-quarter.png" alt="după"><figcaption>după</figcaption></figure>
+<figure><img src="diff/taxi-front-three-quarter.png" alt="diferență"><figcaption>diferență (roșu = peste toleranță)</figcaption></figure>
+</div></section>
+<section class="pair" id="decor-lamp-shelter"><h2>Decor: stâlp și adăpost — 3.047% pixeli diferiți</h2>
+<div class="grid">
+<figure><img src="../noon-before-high-webgpu/decor-lamp-shelter.png" alt="înainte"><figcaption>înainte</figcaption></figure>
+<figure><img src="../noon-high-webgpu/decor-lamp-shelter.png" alt="după"><figcaption>după</figcaption></figure>
+<figure><img src="diff/decor-lamp-shelter.png" alt="diferență"><figcaption>diferență (roșu = peste toleranță)</figcaption></figure>
+</div></section>
+<section class="pair" id="facades-close"><h2>Fațade aproape — 1.845% pixeli diferiți</h2>
+<div class="grid">
+<figure><img src="../noon-before-high-webgpu/facades-close.png" alt="înainte"><figcaption>înainte</figcaption></figure>
+<figure><img src="../noon-high-webgpu/facades-close.png" alt="după"><figcaption>după</figcaption></figure>
+<figure><img src="diff/facades-close.png" alt="diferență"><figcaption>diferență (roșu = peste toleranță)</figcaption></figure>
+</div></section>
+</body></html>

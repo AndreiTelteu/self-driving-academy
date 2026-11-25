@@ -37,6 +37,7 @@ function parseArgs(argv) {
     allowBackendFallback: false,
     measure: 30,
     models: 'glb',
+    time: 'noon',
   };
   for (let index = 0; index < argv.length; index += 1) {
     const arg = argv[index];
@@ -53,6 +54,7 @@ function parseArgs(argv) {
     else if (arg === '--dist') options.dist = resolve(next());
     else if (arg === '--measure') options.measure = Number(next());
     else if (arg === '--models') options.models = next().toLowerCase();
+    else if (arg === '--time') options.time = next().toLowerCase();
     else if (arg === '--headed') options.headed = true;
     else if (arg === '--software') options.software = true;
     else if (arg === '--allow-backend-fallback') options.allowBackendFallback = true;
@@ -64,11 +66,18 @@ function parseArgs(argv) {
     throw new Error('--backend trebuie să fie webgpu, webgl2 sau auto');
   if (!['glb', 'procedural'].includes(options.models))
     throw new Error('--models trebuie să fie glb sau procedural');
+  if (!['morning', 'noon', 'sunset', 'night'].includes(options.time))
+    throw new Error('--time trebuie să fie morning, noon, sunset sau night');
   if (options.port !== null && !(options.port > 0 && options.port < 65536))
     throw new Error('--port invalid');
   options.out = resolve(
     options.out ??
-      join(root, 'output', 'playwright', `visual-${options.preset}-${options.backend}`),
+      join(
+        root,
+        'output',
+        'playwright',
+        `visual-${options.preset}-${options.backend}-${options.time}`,
+      ),
   );
   return options;
 }
@@ -214,6 +223,7 @@ export async function run(argv) {
       preset: options.preset,
       backend: options.backend,
       models: options.models,
+      time: options.time,
     });
     await page.goto(`${origin}/?${query}`, { waitUntil: 'load' });
     await page.waitForFunction(() => globalThis.__visualCapture?.ready() === true, null, {

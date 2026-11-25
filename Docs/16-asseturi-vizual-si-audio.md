@@ -68,7 +68,7 @@ Din 2026-11-24 (PBI 254) personajul, taxiul, sedanul, copacii, lămpile și băn
 
 **Bugete.** Cele șapte modele au 3.641.524 B pe wire (IDENTITY) și 3.297.695 B decodați (geometrie și animații 2.532.320, texturi 765.375); diferența până la bytes-ii de pe disc este JSON-ul glTF și antetele GLB. Nu există decodor WASM sau workspace: check-ul `glb-core-only-no-decoder` din raportul 150 verifică exact asta, iar manifestul crește cu 7 intrări `GLB` (3 critice — taxi, sedan, personaj — și 4 opționale: casa și cele trei piese de decor).
 
-**Clădirile rămân procedurale.** Masa clădirilor este derivată din amprenta și înălțimea reală a lotului din layout-ul 042 (1–4 etaje), iar un singur model de casă nu poate acoperi acea variație fără deformare. `building:house-medium` este în catalog și în manifest, dar nu este încă folosit de `city-scene.ts`; folosirea lui rămâne un pas separat.
+**Modele de clădiri 255.** Layout-ul 042 are fronturi de bloc de 30–60 m, nu loturi de 4–6 m, deci masele rămân geometria 246 (amprenta și înălțimea reală), iar șase tipologii CC0 (casă mică/medie/înaltă, apartament mediu/înalt, magazin) se așază ca un rând de clădiri mici la nivelul străzii: fața la trotuar, corpul în interiorul blocului, scală uniformă pe înălțimea blocului. Planul pur `src/rendering/building-modules.ts` dă 541 de plasări deterministe pentru 86 blocuri; `city-buildings-glb.ts` le contopește pe material și le desenează cu thin instances (33 mesh-uri, 6 tipologii). Mobilierul rămas folosește GLB: hidrant, coș, adăpost de stație și două modele de indicator (nume de stradă / STOP), cu `parking-meter` procedural pentru că nu există o sursă CC0. Toate cele 17 modele sunt în catalog și în manifestul 150.
 
 ## Decor destructibil și feedback V1
 

@@ -7,9 +7,16 @@
  * poziția personajului.
  */
 import { FreeCamera } from '@babylonjs/core/Cameras/freeCamera';
-import { Vector3 } from '@babylonjs/core/Maths/math.vector';
+import { Constants } from '@babylonjs/core/Engines/constants';
+import { SpotLight } from '@babylonjs/core/Lights/spotLight';
+import { Color3 } from '@babylonjs/core/Maths/math.color';
+import { Matrix, Quaternion, Vector3 } from '@babylonjs/core/Maths/math.vector';
+import { StandardMaterial } from '@babylonjs/core/Materials/standardMaterial';
+import { RawTexture } from '@babylonjs/core/Materials/Textures/rawTexture';
+import { CreateGround } from '@babylonjs/core/Meshes/Builders/groundBuilder';
 import type { TransformNode } from '@babylonjs/core/Meshes/transformNode';
 import type { Scene } from '@babylonjs/core/scene';
+import { atmosphereAt, nextTimeOfDay, TIME_OF_DAY_NAMES, type TimeOfDayName } from '../time-of-day';
 import { createCharacterAsset, type CharacterRenderFrame } from '../../character';
 import type { CompositionFrame } from '../../app';
 import type { QualityPreferences } from '../../settings';
@@ -17,6 +24,8 @@ import type { CityLayout } from '../../world';
 import type { RendererKind } from '../backend-policy';
 import { SURFACE_PRESETS, type QualityPreset } from '../quality-policy';
 import type { VisualTransform } from '../scene-contract';
+import { planBuildingModules } from '../building-modules';
+import { createBuildingModuleBatches } from './city-buildings-glb';
 import { createCharacterScene, type CharacterScene } from './character-scene';
 import { createCityDecorScene, type CityDecorScene } from './city-decor-scene';
 import { createCityScene, type CityScene } from './city-scene';
@@ -64,6 +73,9 @@ export interface V3CompositionSceneStats {
   readonly edgeDrawCalls: number;
   readonly characterMeshes: number;
   readonly characterDrawCalls: number;
+  /** PBI 255: meshurile (submesh host) și plasările modulelor de clădire GLB. */
+  readonly buildingModuleMeshes: number;
+  readonly buildingModulePlacements: number;
   readonly vehicleMeshes: number;
   readonly vehicleDrawCalls: number;
   readonly vehicles: number;
@@ -75,6 +87,12 @@ export interface V3CompositionScene {
   readonly scene: Scene;
   readonly city: CityScene;
   readonly decor: CityDecorScene | null;
+  /** PBI 255: modulele GLB de la nivelul străzii (null fără biblioteca de modele). */
+  readonly buildingModules: Readonly<{
+    meshes: number;
+    placements: number;
+    models: number;
+  }> | null;
   readonly worldEdge: WorldEdgeScene;
   /** PBI 245: materialele PBR ale suprafețelor (texturi procedurale, anizotropie pe preset). */
   readonly surfaces: SurfaceMaterials;
@@ -89,9 +107,39 @@ export interface V3CompositionScene {
   representation(vehicleId: string): ReturnType<VehicleVisualStage['create']> | undefined;
   /** PBI 240: dimensiune CSS/DPR nouă; actualizează rezoluția internă fără a recrea scena. */
   resize(viewport: Readonly<{ width: number; height: number; dpr: number }>): void;
+  /** PBI 252: schimbă ora din zi (cer, soare/lună, IBL, expunere, lumină stradală). */
+  setTimeOfDay(name: TimeOfDayName): TimeOfDayName;
+  getTimeOfDay(): TimeOfDayName;
+  /** PBI 252: tasta T — următorul moment al zilei. */
+  cycleTimeOfDay(): TimeOfDayName;
   backendInfo(): V3BackendInfo;
   stats(): V3CompositionSceneStats;
   dispose(): void;
+}
+
+/**
+ * PBI 252 — textura conului de lumină al farurilor: alb cu alpha în formă de evantai, mai puternic
+ * lângă mașină. Este desenată pe un singur mesh thin-instanced pentru tot traficul.
+ */
+function buildHeadlightBeamTexture(): Uint8Array {
+  const size = 64;
+  const data = new Uint8Array(size * size * 4);
+  for (let y = 0; y < size; y += 1) {
+    const v = (y + 0.5) / size; // 0 = lângă mașină, 1 = departe
+    for (let x = 0; x < size; x += 1) {
+      const u = ((x + 0.5) / size) * 2 - 1;
+      const halfWidth = 0.22 + 0.62 * v;
+      const edge = Math.max(0, 1 - Math.abs(u) / halfWidth);
+      const along = Math.pow(1 - v, 0.65);
+      const alpha = Math.round(255 * Math.min(1, edge * edge * along * 1.15));
+      const index = (y * size + x) * 4;
+      data[index] = 255;
+      data[index + 1] = 244;
+      data[index + 2] = 220;
+      data[index + 3] = alpha;
+    }
+  }
+  return data;
 }
 
 function visualTransform(
@@ -135,6 +183,11 @@ export function createV3CompositionScene(options: V3CompositionSceneOptions): V3
   applyWear();
   for (const mesh of city.surfaceMeshes()) daylight.excludeFromLegacyAmbient(mesh);
   surfaces.freeze();
+  // PBI 255: rândul de clădiri mici de la nivelul străzii, peste masele de bloc 246.
+  const buildingModules = options.models
+    ? createBuildingModuleBatches(scene, city.root, planBuildingModules(layout), options.models)
+    : null;
+  for (const mesh of buildingModules?.meshes ?? []) daylight.excludeFromLegacyAmbient(mesh);
   const decor =
     options.decor === false
       ? null
@@ -155,9 +208,89 @@ export function createV3CompositionScene(options: V3CompositionSceneOptions): V3
   camera.maxZ = 3000;
   camera.fov = 1.4;
   scene.activeCamera = camera;
+
+  // ---- PBI 252: lumina de noapte -------------------------------------------------------------
+  const BEAM_CAPACITY = 128;
+  const beamTexture = new RawTexture(
+    buildHeadlightBeamTexture(),
+    64,
+    64,
+    Constants.TEXTUREFORMAT_RGBA,
+    scene,
+    true,
+    false,
+    Constants.TEXTURE_BILINEAR_SAMPLINGMODE,
+    Constants.TEXTURETYPE_UNSIGNED_BYTE,
+  );
+  beamTexture.hasAlpha = true;
+  const beamMaterial = new StandardMaterial('city:headlight-beam', scene);
+  beamMaterial.diffuseTexture = beamTexture;
+  beamMaterial.emissiveTexture = beamTexture;
+  beamMaterial.useAlphaFromDiffuseTexture = true;
+  beamMaterial.diffuseColor = Color3.Black();
+  beamMaterial.specularColor = Color3.Black();
+  beamMaterial.disableLighting = true;
+  beamMaterial.alphaMode = Constants.ALPHA_ADD;
+  beamMaterial.backFaceCulling = false;
+  beamMaterial.disableDepthWrite = true;
+  beamMaterial.fogEnabled = false;
+  const beamMesh = CreateGround('city:headlight-beams', { width: 1, height: 1 }, scene);
+  beamMesh.material = beamMaterial;
+  beamMesh.isPickable = false;
+  beamMesh.receiveShadows = false;
+  beamMesh.applyFog = false;
+  beamMesh.alwaysSelectAsActiveMesh = true;
+  const beamMatrices = new Float32Array(BEAM_CAPACITY * 16);
+  beamMesh.thinInstanceSetBuffer('matrix', beamMatrices, 16, true);
+  beamMesh.thinInstanceRefreshBoundingInfo(true);
+  beamMesh.setEnabled(false);
+  // Un singur spot real, atașat vehiculului urmărit: lumina de noapte promisă de 252 fără să
+  // depășească limita de lumini per material (maxSimultaneousLights = 2 pe PBR-ul suprafețelor).
+  const headlightSpot = new SpotLight(
+    'city:headlight-spot',
+    new Vector3(0, 0.65, 1.8),
+    new Vector3(0, -0.08, 1),
+    Math.PI / 5,
+    2.2,
+    scene,
+  );
+  headlightSpot.diffuse = new Color3(1, 0.9, 0.72);
+  headlightSpot.specular = new Color3(0.25, 0.22, 0.18);
+  headlightSpot.range = 34;
+  headlightSpot.intensity = 0;
+  headlightSpot.setEnabled(false);
+  let nightFactor = 0;
+  let currentTime: TimeOfDayName = 'noon';
+  /** PBI 252: amiaza de pornire este exact starea 243 din `daylight`, fără o regenerare IBL. */
+  let timeApplied = false;
+  const applyNightFactor = (factor: number): void => {
+    nightFactor = factor;
+    city.setNightFactor(factor);
+    decor?.setNightFactor(factor);
+    vehicles.setNightFactor(factor);
+    beamMaterial.emissiveColor = new Color3(0.78 * factor, 0.65 * factor, 0.45 * factor);
+    beamMesh.setEnabled(factor > 0.03);
+    // LOW rămâne fără lumini dinamice (criteriul 252): numai emisie, decal-uri și IBL.
+    headlightSpot.intensity = 7.2 * factor;
+    headlightSpot.setEnabled(factor > 0.03 && daylight.getQuality().preset !== 'LOW');
+  };
+  // Starea de zi este deja cea implicită a materialelor (niciun stâlp aprins, niciun far pornit);
+  // nu se reaplică la pornire, ca amiaza să rămână exact baseline-ul 239.
+  const setTimeOfDay = (name: TimeOfDayName): TimeOfDayName => {
+    if (!TIME_OF_DAY_NAMES.includes(name)) throw new Error(`Unknown time of day: ${name}`);
+    // Prima amiază este deja starea 243 creată de `daylight`; reaplicarea ar regenera IBL-ul degeaba.
+    if (name === 'noon' && !timeApplied) return currentTime;
+    const state = atmosphereAt(name);
+    daylight.setAtmosphere(state);
+    applyNightFactor(state.night);
+    currentTime = name;
+    timeApplied = true;
+    return currentTime;
+  };
   // PBI 241: AA și post-procesarea se atașează camerei de joc, nu camerei de bootstrap.
   daylight.attachCamera(camera);
   // 244: umbrele urmăresc camera reală și mișcarea reală a casterilor, în fiecare cadru randat.
+  let nightPreset = daylight.getQuality().preset;
   const shadowObserver = scene.onBeforeRenderObservable.add(() => {
     // 245: presetul se poate schimba live (setări, calitate adaptivă): texturile și anizotropia îl urmează.
     const activePreset = daylight.getQuality().preset;
@@ -165,6 +298,11 @@ export function createV3CompositionScene(options: V3CompositionSceneOptions): V3
       surfacePreset = activePreset;
       surfaces.setPreset(activePreset);
       applyWear();
+    }
+    if (activePreset !== nightPreset) {
+      nightPreset = activePreset;
+      // 252: aceeași oră, alt buget: spotul real se oprește pe LOW, decal-urile rămân.
+      applyNightFactor(nightFactor);
     }
     const target = camera.getFrontPosition(1);
     daylight.updateShadows({
@@ -178,6 +316,8 @@ export function createV3CompositionScene(options: V3CompositionSceneOptions): V3
   // PBI 244: casterii statici (clădiri, semafoare, decor) se înregistrează o dată; personajul și
   // vehiculele dinamice la apariție. Terenul, drumul și trotuarul doar primesc umbre.
   for (const mesh of city.shadowCasterMeshes()) daylight.addShadowCaster(mesh, 'optional');
+  // PBI 255: modulele de clădire primesc umbre, dar nu aruncă: ar fi 4 treceri CSM peste fiecare
+  // submesh al fiecărui model, pentru o umbră de câțiva centimetri la baza fațadei.
   for (const mesh of decor?.shadowCasterMeshes() ?? []) daylight.addShadowCaster(mesh, 'optional');
   for (const mesh of character.meshes) daylight.addShadowCaster(mesh, 'standard');
   const contactShadows = createContactShadows(scene);
@@ -234,6 +374,13 @@ export function createV3CompositionScene(options: V3CompositionSceneOptions): V3
     scene,
     city,
     decor,
+    buildingModules: buildingModules
+      ? Object.freeze({
+          meshes: buildingModules.meshes.length,
+          placements: buildingModules.placements,
+          models: buildingModules.models,
+        })
+      : null,
     worldEdge,
     surfaces,
     character,
@@ -270,6 +417,35 @@ export function createV3CompositionScene(options: V3CompositionSceneOptions): V3
         for (const mesh of representations.get(vehicle.vehicleId)?.shadowCasters ?? [])
           daylight.addShadowCaster(mesh, wanted);
       }
+      // 252: conurile de lumină ale farurilor, un singur mesh thin-instanced pentru tot traficul.
+      if (nightFactor > 0.03) {
+        let index = 0;
+        const local = Matrix.Compose(
+          new Vector3(4.6, 1, 9.4),
+          Quaternion.Identity(),
+          new Vector3(0, -0.63, 6.55),
+        );
+        for (const representation of representations.values()) {
+          if (index >= BEAM_CAPACITY) break;
+          representation.root.computeWorldMatrix(true);
+          representation.root
+            .getWorldMatrix()
+            .multiply(local)
+            .copyToArray(beamMatrices, index * 16);
+          index += 1;
+        }
+        for (; index < BEAM_CAPACITY; index += 1) {
+          Matrix.Compose(
+            new Vector3(1e-4, 1e-4, 1e-4),
+            Quaternion.Identity(),
+            new Vector3(0, -1000, 0),
+          ).copyToArray(beamMatrices, index * 16);
+        }
+        beamMesh.thinInstanceBufferUpdated('matrix');
+      }
+      const heroRepresentation = hero ? representations.get(hero) : undefined;
+      if (heroRepresentation && headlightSpot.parent !== heroRepresentation.root)
+        headlightSpot.parent = heroRepresentation.root;
       const cameraFrame = frame.camera;
       camera.position.set(
         cameraFrame.positionM.x,
@@ -310,6 +486,9 @@ export function createV3CompositionScene(options: V3CompositionSceneOptions): V3
     resize(viewport: Readonly<{ width: number; height: number; dpr: number }>): void {
       daylight.resize({ width: viewport.width, height: viewport.height, dpr: viewport.dpr });
     },
+    setTimeOfDay,
+    getTimeOfDay: () => currentTime,
+    cycleTimeOfDay: () => setTimeOfDay(nextTimeOfDay(currentTime)),
     backendInfo(): V3BackendInfo {
       const engine = scene.getEngine() as unknown as {
         readonly description: string;
@@ -347,6 +526,8 @@ export function createV3CompositionScene(options: V3CompositionSceneOptions): V3
         edgeDrawCalls: worldEdge.stats.drawCalls,
         characterMeshes: characterStats.meshes,
         characterDrawCalls: characterStats.drawCalls,
+        buildingModuleMeshes: buildingModules?.meshes.length ?? 0,
+        buildingModulePlacements: buildingModules?.placements ?? 0,
         vehicleMeshes: vehicleMetrics.meshes,
         vehicleDrawCalls: vehicleMetrics.drawCalls,
         vehicles: representations.size,
@@ -360,11 +541,15 @@ export function createV3CompositionScene(options: V3CompositionSceneOptions): V3
       representations.clear();
       vehicles.dispose();
       character.dispose();
+      buildingModules?.dispose();
       decor?.dispose();
       worldEdge.dispose();
       city.dispose();
       surfaces.dispose();
       daylight.dispose();
+      headlightSpot.dispose();
+      beamMesh.dispose(false, false);
+      beamMaterial.dispose(false, true);
       camera.dispose();
       options.models?.dispose();
     },

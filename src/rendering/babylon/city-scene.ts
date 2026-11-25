@@ -51,6 +51,7 @@ export type BuildingCityMaterialKey =
   | 'buildingWallPlaster'
   | 'buildingWallConcrete'
   | 'buildingGlass'
+  | 'buildingGlassLit'
   | 'buildingTrim';
 
 export type CityMaterialKey =
@@ -128,6 +129,8 @@ interface BuildingBatch {
 interface BuildingEmit {
   readonly wall: GeometryBuilder;
   readonly glass: GeometryBuilder;
+  /** 252: geamurile aprinse (submulțime deterministă) au lot propriu, ca să poată emite noaptea. */
+  readonly glassLit: GeometryBuilder;
   readonly trim: GeometryBuilder;
 }
 
@@ -166,6 +169,11 @@ export interface CityScene {
   /** World AABB of the element as `[minX, minY, minZ, maxX, maxY, maxZ]`. */
   elementBounds(elementId: string): readonly number[] | null;
   getResourceCounts(): CitySceneResourceCounts;
+  /**
+   * PBI 252: 0 = zi, 1 = noapte. Aprinde numai ferestrele marcate `lit` de planul 246 (lotul
+   * `buildingGlassLit`), nu toată sticla; determinismul planului rămâne sursa.
+   */
+  setNightFactor(factor: number): void;
   dispose(): void;
 }
 
@@ -209,6 +217,8 @@ const PALETTE: Readonly<Record<CityMaterialKey, readonly [number, number, number
     buildingWallPlaster: [0.78, 0.75, 0.68],
     buildingWallConcrete: [0.6, 0.6, 0.58],
     buildingGlass: [0.3, 0.4, 0.48],
+    // 252: ferestrele aprinse au propria bucată, ca emisia de noapte să fie per fereastră.
+    buildingGlassLit: [0.62, 0.5, 0.3],
     buildingTrim: [0.7, 0.68, 0.62],
   },
 );
@@ -231,6 +241,7 @@ const BUILDERS: readonly CityMaterialKey[] = [
   'buildingWallPlaster',
   'buildingWallConcrete',
   'buildingGlass',
+  'buildingGlassLit',
   'buildingTrim',
 ];
 /**
@@ -466,6 +477,7 @@ function emitBuildingFacades(
   detail: FacadeDetail,
   wallBuilder: GeometryBuilder,
   glassBuilder: GeometryBuilder,
+  glassLitBuilder: GeometryBuilder,
   trimBuilder: GeometryBuilder,
 ): void {
   const xs = element.footprintM.map((vertex) => vertex.x);
@@ -543,9 +555,9 @@ function emitBuildingFacades(
         if (win.a0 > cursor + 0.02)
           pushRect(wallBuilder, frame, cursor, win.a0, rowY, win.y1, 0, wallColor);
         cursor = Math.max(cursor, win.a1);
-        // Sticla retrasă + tâmplăria.
+        // Sticla retrasă + tâmplăria. Ferestrele aprinse merg în lotul lor (252).
         pushRect(
-          glassBuilder,
+          win.lit ? glassLitBuilder : glassBuilder,
           frame,
           win.a0,
           win.a1,
@@ -951,6 +963,7 @@ export function createCityScene(
   const buildingEmitFor = (
     wallKey: CityMaterialKey,
     glassKey: CityMaterialKey,
+    glassLitKey: CityMaterialKey,
     trimKey: CityMaterialKey,
   ): BuildingEmit => {
     const part = (key: CityMaterialKey): GeometryBuilder => {
@@ -960,7 +973,12 @@ export function createCityScene(
       batch.parts.push(builder);
       return builder;
     };
-    return { wall: part(wallKey), glass: part(glassKey), trim: part(trimKey) };
+    return {
+      wall: part(wallKey),
+      glass: part(glassKey),
+      glassLit: part(glassLitKey),
+      trim: part(trimKey),
+    };
   };
   /** PBI 246: lotul de zid al stilului (cărămidă/tencuială/beton PBR) sau `building` plat. */
   const wallKeyFor = (material: 'brick' | 'plaster' | 'concrete'): CityMaterialKey => {
@@ -1034,6 +1052,8 @@ export function createCityScene(
   const createBuildingMesh = (name: string, batch: BuildingBatch): Mesh => {
     const merged = newBuilder(batch.key);
     for (const part of batch.parts) {
+      // 252: geamurile aprinse există numai pe HIGH; pe MEDIUM lotul lor rămâne gol și nu se emite.
+      if (part.positions.length === 0) continue;
       const offset = merged.positions.length / 3;
       merged.positions.push(...part.positions);
       merged.colors.push(...part.colors);
@@ -1192,8 +1212,11 @@ export function createCityScene(
       const glassKey: CityMaterialKey = borrowed.has('buildingGlass')
         ? 'buildingGlass'
         : 'building';
+      const glassLitKey: CityMaterialKey = borrowed.has('buildingGlassLit')
+        ? 'buildingGlassLit'
+        : glassKey;
       const trimKey: CityMaterialKey = borrowed.has('buildingTrim') ? 'buildingTrim' : 'building';
-      const emit = buildingEmitFor(wallKey, glassKey, trimKey);
+      const emit = buildingEmitFor(wallKey, glassKey, glassLitKey, trimKey);
       builder = emit.wall;
       // 246: pe orice lot (plat sau PBR) fiecare clădire este o parte contiguă; offsetul slice-ului
       // este cumulatul vârfurilor emise până la ea în lot (nu poziția din partea ei, mereu 0).
@@ -1201,8 +1224,16 @@ export function createCityScene(
       // consumă vârfuri din același buffer, în ordinea zid → sticlă → tâmplărie.
       const batch = buildingBatches.get(wallKey)!;
       from = batch.vertexCount;
-      emitBuildingFacades(planar, plan, facadeDetail, emit.wall, emit.glass, emit.trim);
-      buildingParts = [emit.wall, emit.glass, emit.trim];
+      emitBuildingFacades(
+        planar,
+        plan,
+        facadeDetail,
+        emit.wall,
+        emit.glass,
+        emit.glassLit,
+        emit.trim,
+      );
+      buildingParts = [emit.wall, emit.glass, emit.glassLit, emit.trim];
       for (const part of buildingParts)
         if (part.color === wallKey) batch.vertexCount += part.positions.length / 3;
     } else {
@@ -1249,7 +1280,8 @@ export function createCityScene(
   for (const [key, batch] of [...buildingBatches].sort(([a], [b]) =>
     a < b ? -1 : a > b ? 1 : 0,
   )) {
-    if (batch.parts.length === 0) continue;
+    // Pe LOW nu există ferestre: loturile de sticlă/tâmplărie rămân goale și nu se emit deloc.
+    if (batch.parts.every((part) => part.positions.length === 0)) continue;
     const mesh = createBuildingMesh(`batch:${key}`, batch);
     hostByMaterial.set(key, mesh);
     batches.push(mesh);
@@ -1451,6 +1483,33 @@ export function createCityScene(
     elementsByKind: Object.freeze(byKind),
   });
   let disposed = false;
+  let nightFactor = 0;
+  const litGlass = hostByMaterial.get('buildingGlassLit')?.material ?? null;
+  const serviceMaterial = materials.get('service') ?? null;
+  const applyNightFactor = (): void => {
+    // Emisia este radianță liniară: la 1 aprinde geamurile cald, sub pragul de bloom (241), ca să
+    // nu transforme fiecare fereastră într-un bec. Geamurile neaprinse rămân sticla reflectorizantă.
+    if (litGlass) {
+      const emissive = (litGlass as { emissiveColor?: Color3 }).emissiveColor;
+      const color = new Color3(1.05 * nightFactor, 0.66 * nightFactor, 0.26 * nightFactor);
+      if (emissive) emissive.copyFrom(color);
+      else (litGlass as unknown as { emissiveColor: Color3 }).emissiveColor = color;
+    }
+    // Zonele de serviciu erau emisive cyan pentru lizibilitate pe timp de zi; noaptea rămânând
+    // un dreptunghi luminos pe carosabil, se sting treptat până la 20% din valoarea de zi.
+    if (serviceMaterial) {
+      const rgb = PALETTE.service;
+      const scale = 1 - 0.8 * nightFactor;
+      const color = new Color3(rgb[0] * scale, rgb[1] * scale, rgb[2] * scale);
+      const material = serviceMaterial as unknown as {
+        emissiveColor: Color3;
+        diffuseColor?: Color3;
+      };
+      material.emissiveColor = color;
+      if (material.diffuseColor) material.diffuseColor.copyFrom(color);
+    }
+  };
+  applyNightFactor();
   const corners = [-0.5, 0.5];
   const expand = (
     matrix: Matrix,
@@ -1596,6 +1655,13 @@ export function createCityScene(
       geometries: disposed ? 0 : meshes.filter((mesh) => !mesh.isDisposed()).length,
       nodes: disposed ? 0 : 1,
     }),
+    setNightFactor(factor: number): void {
+      if (!Number.isFinite(factor) || factor < 0 || factor > 1)
+        throw new Error('Night factor must be between 0 and 1');
+      if (disposed) return;
+      nightFactor = factor;
+      applyNightFactor();
+    },
     dispose(): void {
       if (disposed) return;
       disposed = true;

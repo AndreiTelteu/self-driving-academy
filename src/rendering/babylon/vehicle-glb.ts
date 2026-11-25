@@ -56,6 +56,8 @@ export interface GlbVehicleRig {
   applyLod(lod: VehicleLodLevel): void;
   applyWheels(wheels: readonly VehicleRenderWheel[]): void;
   setLights(state: VehicleLightState): void;
+  /** PBI 252: 0 = zi, 1 = noapte; aprinde lentilele farurilor fără a schimba contractul 145. */
+  setNightFactor(factor: number): void;
   dispose(): void;
 }
 
@@ -253,6 +255,7 @@ export function createGlbVehicleRig(options: GlbVehicleRigOptions): GlbVehicleRi
 
   let lod: VehicleLodLevel = 'NEAR';
   let lights: VehicleLightState = VEHICLE_LIGHTS_OFF;
+  let nightFactor = 0;
   const applyVisibility = (): void => {
     const visible = new Set(visibleGroupsFor(classId, lod));
     for (const [group, bucket] of byGroup) {
@@ -265,9 +268,14 @@ export function createGlbVehicleRig(options: GlbVehicleRigOptions): GlbVehicleRi
       for (const mesh of bucket) mesh.setEnabled(wheelsVisible);
     }
     for (const material of headlightMaterials) {
+      // Ziua lentila este stinsă; noaptea emite cald, iar `setLights` rămâne prioritar.
       material.emissiveColor = lights.headlights
-        ? new Color3(1, 0.94, 0.78)
-        : new Color3(0.16, 0.16, 0.15);
+        ? new Color3(1.6, 1.5, 1.24)
+        : new Color3(
+            0.16 + 2.1 * nightFactor,
+            0.16 + 1.75 * nightFactor,
+            0.15 + 1.05 * nightFactor,
+          );
     }
     for (const material of taillightMaterials) {
       material.emissiveColor = lights.brake
@@ -308,6 +316,11 @@ export function createGlbVehicleRig(options: GlbVehicleRigOptions): GlbVehicleRi
         brake: !!state.brake,
         turn: state.turn,
       });
+      applyVisibility();
+    },
+    setNightFactor(factor) {
+      if (!(factor >= 0 && factor <= 1)) throw new RangeError('Night factor out of range');
+      nightFactor = factor;
       applyVisibility();
     },
     dispose() {

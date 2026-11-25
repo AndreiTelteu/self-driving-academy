@@ -24,6 +24,7 @@ import { createCharacterHud, type CharacterHud } from '../../ui';
 import type { CityLayout, LaneGraph, RoadMap } from '../../world';
 import type { RendererKind } from '../backend-policy';
 import type { QualityPreset } from '../quality-policy';
+import type { TimeOfDayName } from '../time-of-day';
 import {
   createV3CompositionScene,
   type V3CompositionScene,
@@ -39,6 +40,8 @@ export const COMPOSITION_KEYS = Object.freeze({
   interact: 'KeyG',
   /** PBI 257: M comută MANUAL/AUTO pentru mașina condusă. */
   mode: 'KeyM',
+  /** PBI 252: T schimbă ora din zi (dimineață → amiază → apus → noapte). */
+  time: 'KeyT',
 });
 
 export interface V3BrowserCompositionOptions {
@@ -93,6 +96,10 @@ export interface V3BrowserComposition {
   stats(): V3CompositionSceneStats;
   /** PBI 240: propagă dimensiunea CSS și DPR-ul la rezoluția internă; nu recreează scena. */
   resize(viewport: Readonly<{ width: number; height: number; dpr: number }>): void;
+  /** PBI 252: ora din zi, schimbată din tastă, capturi sau debug; nu atinge simularea. */
+  setTimeOfDay(name: TimeOfDayName): TimeOfDayName;
+  getTimeOfDay(): string;
+  cycleTimeOfDay(): string;
   dispose(): void;
 }
 
@@ -188,6 +195,11 @@ export function createV3BrowserComposition(
     if (event.code === COMPOSITION_KEYS.mode) {
       event.preventDefault();
       if (event.type === 'keydown' && !event.repeat) composition.toggleVehicleMode();
+      return;
+    }
+    if (event.code === COMPOSITION_KEYS.time) {
+      event.preventDefault();
+      if (event.type === 'keydown' && !event.repeat) view.cycleTimeOfDay();
       return;
     }
     if (event.code !== COMPOSITION_KEYS.interact) return;
@@ -341,6 +353,12 @@ export function createV3BrowserComposition(
     resize(viewport: Readonly<{ width: number; height: number; dpr: number }>): void {
       if (!disposed) view.resize(viewport);
     },
+    setTimeOfDay(name: TimeOfDayName): TimeOfDayName {
+      if (disposed) throw new Error('Compunerea de browser este eliberată.');
+      return view.setTimeOfDay(name);
+    },
+    getTimeOfDay: () => view.getTimeOfDay(),
+    cycleTimeOfDay: () => view.cycleTimeOfDay(),
     stats(): V3CompositionSceneStats {
       return view.stats();
     },

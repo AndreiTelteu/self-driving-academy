@@ -113,6 +113,16 @@ export interface AtmosphereInput {
     readonly softness: number;
     readonly scale: number;
   };
+  /** PBI 252: 0 = zi, 1 = noapte. Stinge lumina de rezervă și aprinde stelele din cer. */
+  readonly night?: number;
+  /** PBI 252: radianța corpului ceresc (soarele sau luna). */
+  readonly discRadiance?: number;
+  readonly discAngularRadiusDeg?: number;
+  readonly glowColor?: Rgb;
+  readonly gradientRate?: number;
+  readonly mieStrength?: number;
+  readonly legacyAmbientIntensity?: number;
+  readonly environmentIntensity?: number;
 }
 
 /** Expunerea imaginii: o singură valoare pentru `LOOK.exposure` (241) și pentru culorile cerului. */
@@ -195,14 +205,29 @@ export interface AtmosphereState {
     readonly groundColor: Rgb;
   };
   readonly clouds: AtmosphereInput['clouds'];
+  /** PBI 252: 0 = zi, 1 = noapte; shaderul cerului aprinde stelele, restul scenei lumina stradală. */
+  readonly night: number;
 }
 
 export function createAtmosphereState(input: AtmosphereInput = DAYLIGHT_INPUT): AtmosphereState {
   const light = normalize(input.sunDirection);
   const toward: Vec3 = [-light[0], -light[1], -light[2]];
-  // Soarele sub orizont nu are model aici: ora din zi (252) va aduce noaptea ca stare separată.
+  // Corpul ceresc trebuie să fie deasupra orizontului; noaptea este luna, nu soarele.
   if (!(toward[1] > 0.05)) throw new Error('Soarele trebuie să fie deasupra orizontului');
   const elevation = Math.asin(toward[1]);
+  const night = input.night ?? 0;
+  if (!(night >= 0 && night <= 1)) throw new Error('Noaptea trebuie să fie între 0 și 1');
+  const discAngularRadiusDeg = input.discAngularRadiusDeg ?? 1.15;
+  if (!(discAngularRadiusDeg > 0 && discAngularRadiusDeg < 30))
+    throw new Error('Raza discului este invalidă');
+  const gradientRate = input.gradientRate ?? 3.1;
+  if (!(gradientRate > 0)) throw new Error('Gradientul cerului este invalid');
+  const legacyAmbientIntensity = input.legacyAmbientIntensity ?? 0.5;
+  const environmentIntensity = input.environmentIntensity ?? 1;
+  if (!(legacyAmbientIntensity >= 0 && legacyAmbientIntensity <= 2))
+    throw new Error('Ambientul de rezervă este invalid');
+  if (!(environmentIntensity >= 0 && environmentIntensity <= 4))
+    throw new Error('Intensitatea mediului este invalidă');
   const zenith = displayToRadiance(input.zenithDisplay, input.exposure);
   const horizon = displayToRadiance(input.horizonDisplay, input.exposure);
   const fogDisplay: Rgb = [toGamma(horizon[0]), toGamma(horizon[1]), toGamma(horizon[2])];
@@ -211,31 +236,32 @@ export function createAtmosphereState(input: AtmosphereInput = DAYLIGHT_INPUT): 
   return Object.freeze({
     version: ATMOSPHERE_VERSION,
     exposure: input.exposure,
+    night,
     sunToward: toward,
     sunLightDirection: light,
     sunElevationRad: elevation,
     sun: Object.freeze({
       lightColor: input.sunLightColor,
       lightIntensity: input.sunLightIntensity,
-      glowColor: [1, 0.84, 0.58] as const,
-      discRadiance: 34,
-      discAngularRadiusRad: (1.15 * Math.PI) / 180,
+      glowColor: input.glowColor ?? ([1, 0.84, 0.58] as const),
+      discRadiance: input.discRadiance ?? 34,
+      discAngularRadiusRad: (discAngularRadiusDeg * Math.PI) / 180,
       mieG: 0.76,
-      mieStrength: 0.1,
+      mieStrength: input.mieStrength ?? 0.1,
     }),
     zenith,
     horizon,
     ground: input.ground,
-    gradientRate: 3.1,
+    gradientRate,
     fog: Object.freeze({
       mode: 'EXP2' as const,
       density: input.fogDensity,
       colorLinear: horizon,
       colorGamma: fogDisplay,
     }),
-    environment: Object.freeze({ intensity: 1 }),
+    environment: Object.freeze({ intensity: environmentIntensity }),
     legacyAmbient: Object.freeze({
-      intensity: 0.5,
+      intensity: legacyAmbientIntensity,
       // Culoarea cerului normalizată, 88% spre alb (luminozitatea o dă `intensity`): o tentă
       // mai mare albăstrea asfaltul și trotuarul față de paleta de la 241.
       skyColor: mixRgb(

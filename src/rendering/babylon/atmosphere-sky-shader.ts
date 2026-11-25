@@ -37,7 +37,7 @@ uniform vec3 uGlowColor;
 uniform vec4 uSunParams;
 // x: gradientRate, y: mieG, z: 1 = aplică imaginea (LOW), w: expunerea
 uniform vec4 uSkyParams;
-// x: acoperire, y: moliciune, z: scara proiecției, w: nefolosit
+// x: acoperire, y: moliciune, z: scara proiecției, w: noaptea (0 = zi, 1 = noapte)
 uniform vec4 uCloudParams;
 
 float hash21(vec2 p) {
@@ -98,6 +98,20 @@ void main(void) {
   // Discul solar: radianță HDR (peste pragul bloomului), cu margine moale (~18% din rază).
   // Se adaugă înaintea norilor, ca un nor să poată acoperi soarele.
   color += uGlowColor * (smoothstep(uSunParams.y, uSunParams.z, cosSun) * uSunParams.x);
+  // Stele: numai noaptea, pe o grilă sferică stabilă la rotirea camerei. Fiecare celulă are cel
+  // mult o stea, cu poziția și strălucirea din hash; dispar sub orizont și lângă cerul luminos.
+  float night = uCloudParams.w;
+  if (night > 0.01 && h > -0.02) {
+    vec2 starUv = vec2(atan(dir.z, dir.x), asin(clamp(dir.y, -1.0, 1.0))) * 210.0;
+    vec2 cell = floor(starUv);
+    vec2 local = fract(starUv);
+    vec2 offset = vec2(hash21(cell + 0.7), hash21(cell + 5.3));
+    float distanceToStar = length(local - offset);
+    float bright = step(0.975, hash21(cell + 11.1));
+    float star = smoothstep(0.09, 0.0, distanceToStar) * bright;
+    star *= smoothstep(-0.02, 0.16, h) * night;
+    color += vec3(0.85, 0.9, 1.0) * star * (0.8 + 1.6 * hash21(cell + 2.9));
+  }
 
 #ifdef CLOUDS
   if (h > 0.0) {
@@ -113,6 +127,11 @@ void main(void) {
     float lit = clamp(0.55 + (n - shifted) * 3.2, 0.0, 1.0);
     vec3 cloudLit = mix(vec3(0.84), uHorizon * 2.2, 0.18) + uGlowColor * lobe * uSunParams.w * 0.5;
     vec3 cloudShade = mix(uHorizon, uZenith, 0.4) * 0.82;
+    // Noaptea norii nu mai reflectă un soare Puternic: rămân siluete reci, abia vizibile.
+    float nightDim = 1.0 - 0.86 * night;
+    cloudLit *= nightDim;
+    cloudShade *= nightDim;
+    density *= 1.0 - 0.35 * night;
     color = mix(color, mix(cloudShade, cloudLit, lit), density * 0.94);
   }
 #endif

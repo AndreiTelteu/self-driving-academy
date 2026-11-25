@@ -87,6 +87,8 @@ export interface VehicleRepresentation {
   /** Pivots follow the physical suspension/steering; wheels spin around +X. */
   applyWheels(wheels: readonly VehicleRenderWheel[]): void;
   setLights(state: VehicleLightState): void;
+  /** PBI 252: 0 = zi, 1 = noapte; farurile luminează fără a schimba starea de lumină 145. */
+  setNightFactor(factor: number): void;
   setTransform(transform: VisualTransform): void;
   readonly metrics: VehicleRepresentationMetrics;
   dispose(): void;
@@ -115,6 +117,8 @@ export interface VehicleVisualStage {
   /** Walks the scene graph; a LOD change never breaks this mapping. */
   entityIdFor(node: Node | null): string | undefined;
   updateLod(cameraPosition: Vector3, preset?: QualityPreset): void;
+  /** PBI 252: aprinde farurile tuturor reprezentărilor (prezentare, fără efect pe simulare). */
+  setNightFactor(factor: number): void;
   dispose(): void;
 }
 const LIGHT_GROUPS = [
@@ -217,6 +221,7 @@ export function createVehicleVisualStage(
   const entries = new Map<string, VehicleRepresentation>();
   const rootByEntity = new Map<TransformNode, string>();
   let disposed = false;
+  let stageNightFactor = 0;
   const assertLive = (): void => {
     if (disposed || scene.isDisposed) throw new Error('Vehicle visuals disposed');
   };
@@ -315,6 +320,10 @@ export function createVehicleVisualStage(
               turn: state.turn,
             });
             rig.setLights(glbLights);
+          },
+          setNightFactor(factor) {
+            if (disposed) return;
+            rig.setNightFactor(factor);
           },
           setTransform(next) {
             if (disposed) return;
@@ -421,11 +430,12 @@ export function createVehicleVisualStage(
       });
       let lod: VehicleLodLevel = 'NEAR';
       let lights: VehicleLightState = VEHICLE_LIGHTS_OFF;
+      let nightFactor = 0;
       const applyVisibility = (): void => {
         const visible = new Set(visibleGroupsFor(classId, lod));
         for (const [group, mesh] of groupMeshes) {
           let stateVisible = true;
-          if (group === 'HEADLIGHT') stateVisible = lights.headlights;
+          if (group === 'HEADLIGHT') stateVisible = lights.headlights || nightFactor > 0.02;
           else if (group === 'BRAKE') stateVisible = lights.brake;
           else if (group === 'SIGNAL_LEFT')
             stateVisible = lights.turn === 'LEFT' || lights.turn === 'HAZARD';
@@ -491,6 +501,12 @@ export function createVehicleVisualStage(
           });
           applyVisibility();
         },
+        setNightFactor(factor) {
+          if (disposed) return;
+          if (!(factor >= 0 && factor <= 1)) throw new RangeError('Night factor out of range');
+          nightFactor = factor;
+          applyVisibility();
+        },
         setTransform(transform) {
           if (disposed) return;
           copyTransform(root, transform);
@@ -525,6 +541,7 @@ export function createVehicleVisualStage(
       entries.set(entityId, representation);
       rootByEntity.set(root, entityId);
       applyVisibility();
+      representation.setNightFactor(stageNightFactor);
       return representation;
     },
     get(entityId) {
@@ -554,6 +571,13 @@ export function createVehicleVisualStage(
         const distance = Vector3.Distance(cameraPosition, representation.root.position);
         representation.setLod(selectVehicleLod(distance, representation.lod, activePreset));
       }
+    },
+    setNightFactor(factor) {
+      assertLive();
+      if (!(factor >= 0 && factor <= 1)) throw new RangeError('Night factor out of range');
+      if (stageNightFactor === factor) return;
+      stageNightFactor = factor;
+      for (const representation of entries.values()) representation.setNightFactor(factor);
     },
     dispose() {
       if (disposed) return;

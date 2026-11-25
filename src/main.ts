@@ -175,6 +175,8 @@ const application = createApplicationLifecycle({
             models,
           });
           composition = ownedComposition;
+          // PBI 252: capturile pot fixa ora din zi; jocul obișnuit pornește la amiază și T o schimbă.
+          if (captureConfig) ownedComposition.setTimeOfDay(captureConfig.time);
           const surface = ownedComposition;
           releaseSurface = observeDisplaySurface({
             canvas,
@@ -355,6 +357,9 @@ interface V3DebugGlobal {
   scene?(): unknown;
   /** PBI 244 (numai DEV, `?capture` sau `?debug`): daylight, pentru statistici de umbre/AO și efecte on/off. */
   daylight?(): unknown;
+  /** PBI 252 (numai DEV, `?capture` sau `?debug`): ora din zi, fără atingerea simulării. */
+  setTimeOfDay?(name: 'morning' | 'noon' | 'sunset' | 'night'): unknown;
+  timeOfDay?(): unknown;
   reset(): void;
   probeDoubleDelivery(): string;
 }
@@ -381,6 +386,8 @@ if (
   };
   debugGlobal.scene = () => composition?.view.scene ?? null;
   debugGlobal.daylight = () => composition?.view.daylight ?? null;
+  debugGlobal.setTimeOfDay = (name) => composition?.view.setTimeOfDay(name) ?? null;
+  debugGlobal.timeOfDay = () => composition?.view.getTimeOfDay() ?? null;
 }
 (globalThis as unknown as { __v3Composition?: V3DebugGlobal }).__v3Composition = debugGlobal;
 

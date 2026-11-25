@@ -17,6 +17,7 @@ import {
   VISUAL_CAPTURE_VERSION,
   captureView,
 } from '../visual-capture';
+import { TIME_OF_DAY_HOURS } from '../time-of-day';
 import type { V3BrowserComposition } from './v3-browser-composition';
 import type { VehicleRepresentation } from './vehicle-scene';
 
@@ -166,6 +167,11 @@ export function installVisualCapture(options: VisualCaptureOptions): () => void 
       current = viewId;
       await scene.whenReadyAsync();
       for (let index = 0; index < WARMUP_FRAMES; index += 1) await nextFrame();
+      // PBI 252: după teleport și compilarea shadere-urilor, harta de umbră cache-uită se cere încă o
+      // dată proaspătă. Altfel conținutul ei depinde de momentul în care s-a terminat compilarea și
+      // două capturi ale aceleiași build-uri diferă în zonele umbrite.
+      view.daylight.invalidateShadows('capture-ready');
+      for (let index = 0; index < 3; index += 1) await nextFrame();
       const measureFrames = Math.max(1, goOptions?.measureFrames ?? DEFAULT_MEASURE_FRAMES);
       const cpu: number[] = [];
       let startedAt = 0;
@@ -201,7 +207,11 @@ export function installVisualCapture(options: VisualCaptureOptions): () => void 
         preset: config.preset,
         requestedBackend: config.backend,
         seed: CAPTURE_SEED,
-        clock: CAPTURE_FIXED_CLOCK,
+        clock: {
+          ...CAPTURE_FIXED_CLOCK,
+          hourOfDay: TIME_OF_DAY_HOURS[composition.view.getTimeOfDay()],
+          timeOfDay: composition.view.getTimeOfDay(),
+        },
         viewport: CAPTURE_VIEWPORT,
         window: { width: window.innerWidth, height: window.innerHeight },
         devicePixelRatio: window.devicePixelRatio,

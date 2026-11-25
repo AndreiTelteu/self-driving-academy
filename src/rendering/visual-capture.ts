@@ -12,18 +12,18 @@
  * o vedere nouă adăugând o intrare în `CAPTURE_VIEWS`; ordinea este ordinea capturii.
  */
 import type { QualityPreset } from './quality-policy';
+import { TIME_OF_DAY_HOURS, type TimeOfDayName } from './time-of-day';
 
 export const VISUAL_CAPTURE_VERSION = '239-visual-capture-v1' as const;
 /** Rezoluția fixă a capturilor (identică pentru toate PBI-urile 240–253). */
 export const CAPTURE_VIEWPORT = Object.freeze({ width: 1920, height: 1080 });
 /**
- * Ora zilei fixată pentru capturi. Nu există încă un ciclu zi/noapte (apare în 252): soarele
- * din `daylight.ts` este constant. Valoarea este înregistrată în manifest ca să se vadă când se
- * schimbă ipoteza.
+ * Ora zilei implicită pentru capturi. PBI 252 a introdus ora din zi; `--time` o poate schimba,
+ * iar manifestul înregistrează momentul efectiv, nu doar ipoteza.
  */
 export const CAPTURE_FIXED_CLOCK = Object.freeze({
   hourOfDay: 12,
-  note: 'soare fix din daylight.ts; fără ciclu zi/noapte înainte de PBI 252',
+  note: 'ora implicită 252 = amiază; `?time=morning|noon|sunset|night` o schimbă',
 });
 /** Seed-ul scenariului fixat pentru capturi (scenariul 236 nu folosește aleatoriu în prezentare). */
 export const CAPTURE_SEED = 1;
@@ -35,6 +35,8 @@ export interface CaptureConfig {
   readonly backend: CaptureBackend;
   /** PBI 254: `procedural` photographs the fallback rig, `glb` (implicit) the imported models. */
   readonly models: CaptureModels;
+  /** PBI 252: momentul zilei fotografiat; implicit amiaza, ca baseline-ul 239. */
+  readonly time: TimeOfDayName;
 }
 
 const PRESETS: readonly QualityPreset[] = ['LOW', 'MEDIUM', 'HIGH'];
@@ -52,10 +54,14 @@ export function readCaptureConfig(search: string): CaptureConfig | null {
   const preset = (params.get('preset') ?? 'HIGH').toUpperCase();
   const backend = (params.get('backend') ?? 'auto').toUpperCase();
   const models = (params.get('models') ?? 'glb').toLowerCase();
+  const time = (params.get('time') ?? 'noon').toLowerCase();
   return Object.freeze({
     preset: PRESETS.find((candidate) => candidate === preset) ?? 'HIGH',
     backend: backend === 'WEBGPU' || backend === 'WEBGL2' ? backend : 'AUTO',
     models: models === 'procedural' ? 'procedural' : 'glb',
+    time:
+      (Object.keys(TIME_OF_DAY_HOURS) as TimeOfDayName[]).find((candidate) => candidate === time) ??
+      'noon',
   });
 }
 

@@ -23,7 +23,7 @@ export interface CharacterHud {
 }
 
 const CONTROLS_HINT =
-  'W/S accelerează/frână · A/D virează · F alergare · G intră/iese · M AUTO/MANUAL · Space frână de mână';
+  'W/S accelerează/frână · A/D virează · F alergare · G intră/iese · M AUTO/MANUAL · T ora din zi · Space frână de mână';
 
 export function createCharacterHud(
   root: HTMLElement,

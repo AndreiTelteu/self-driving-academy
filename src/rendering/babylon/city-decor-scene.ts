@@ -6,13 +6,17 @@
  * materials are scene-local and disposable; no collider, lane surface or simulation service is
  * created here.
  */
+import { Constants } from '@babylonjs/core/Engines/constants.js';
 import { Color3 } from '@babylonjs/core/Maths/math.color.js';
 import { Matrix, Quaternion, Vector3 } from '@babylonjs/core/Maths/math.vector.js';
 import { PBRMaterial } from '@babylonjs/core/Materials/PBR/pbrMaterial.js';
 import { PBRCustomMaterial } from '@babylonjs/materials/custom/pbrCustomMaterial.js';
+import { StandardMaterial } from '@babylonjs/core/Materials/standardMaterial.js';
+import { RawTexture } from '@babylonjs/core/Materials/Textures/rawTexture.js';
 import { Mesh } from '@babylonjs/core/Meshes/mesh.js';
 import { InstancedMesh } from '@babylonjs/core/Meshes/instancedMesh.js';
 import { VertexData } from '@babylonjs/core/Meshes/mesh.vertexData.js';
+import { CreateGround } from '@babylonjs/core/Meshes/Builders/groundBuilder.js';
 import { TransformNode } from '@babylonjs/core/Meshes/transformNode.js';
 import type { Scene } from '@babylonjs/core/scene.js';
 import type { CityLayout } from '../../world';
@@ -55,6 +59,11 @@ export interface CityDecorScene {
   shadowCasterMeshes(): readonly (Mesh | InstancedMesh)[];
   meshForCell(cell: string): Mesh | null;
   itemsInCell(cell: string): readonly CityDecorItem[];
+  /**
+   * PBI 252: 0 = zi, 1 = noapte. Aprinde fața caldă a lămpilor GLB și petele de lumină de pe sol
+   * (un singur mesh thin-instanced, fără lumini dinamice — valabil și pe LOW).
+   */
+  setNightFactor(factor: number): void;
   dispose(): void;
 }
 
@@ -154,6 +163,29 @@ function buildTreeTemplate(kind: CityDecorKind): {
   return { positions, normals, colors, indices };
 }
 
+/**
+ * PBI 252 — textura unui bazin de lumină: alb pur cu alpha radial, ca materialul aditiv să adauge
+ * numai lumina lămpii pe sol (fără geometrie suplimentară per stâlp).
+ */
+function buildLampPoolTexture(): Uint8Array {
+  const size = 64;
+  const data = new Uint8Array(size * size * 4);
+  for (let y = 0; y < size; y += 1) {
+    for (let x = 0; x < size; x += 1) {
+      const nx = ((x + 0.5) / size) * 2 - 1;
+      const ny = ((y + 0.5) / size) * 2 - 1;
+      const radius = Math.min(1, Math.hypot(nx, ny));
+      const falloff = Math.pow(1 - radius, 2.2);
+      const index = (y * size + x) * 4;
+      data[index] = 255;
+      data[index + 1] = 255;
+      data[index + 2] = 255;
+      data[index + 3] = Math.round(255 * falloff);
+    }
+  }
+  return data;
+}
+
 export function createCityDecorScene(
   scene: Scene,
   layout: CityLayout,
@@ -245,6 +277,81 @@ export function createCityDecorScene(
   let vertices = 0;
   let triangles = 0;
   let gpuBytes = 0;
+
+  // PBI 252 — petele de lumină ale lămpilor: un mesh thin-instanced, nu o lumină per stâlp.
+  const lampItems = plan.items.filter((entry) => entry.kind === 'street-lamp');
+  const lampLightMaterials: PBRMaterial[] = [...(glbBatches?.lampLightMaterials ?? [])];
+  let lampPoolMesh: Mesh | null = null;
+  let lampPoolMaterial: StandardMaterial | null = null;
+  let nightFactor = 0;
+  if (lampItems.length > 0) {
+    const size = 64;
+    const texture = new RawTexture(
+      buildLampPoolTexture(),
+      size,
+      size,
+      Constants.TEXTUREFORMAT_RGBA,
+      scene,
+      true,
+      false,
+      Constants.TEXTURE_BILINEAR_SAMPLINGMODE,
+      Constants.TEXTURETYPE_UNSIGNED_BYTE,
+    );
+    texture.hasAlpha = true;
+    lampPoolMaterial = new StandardMaterial('city-decor-lamp-pool', scene);
+    lampPoolMaterial.diffuseTexture = texture;
+    lampPoolMaterial.emissiveTexture = texture;
+    lampPoolMaterial.useAlphaFromDiffuseTexture = true;
+    lampPoolMaterial.diffuseColor = Color3.Black();
+    lampPoolMaterial.specularColor = Color3.Black();
+    lampPoolMaterial.disableLighting = true;
+    lampPoolMaterial.alphaMode = Constants.ALPHA_ADD;
+    lampPoolMaterial.backFaceCulling = false;
+    lampPoolMaterial.disableDepthWrite = true;
+    lampPoolMesh = CreateGround(
+      'city-decor:lamp-pool',
+      { width: 1, height: 1, subdivisions: 1 },
+      scene,
+    );
+    lampPoolMesh.parent = root;
+    lampPoolMesh.material = lampPoolMaterial;
+    lampPoolMesh.isPickable = false;
+    lampPoolMesh.receiveShadows = false;
+    lampPoolMesh.applyFog = false;
+    lampPoolMesh.alwaysSelectAsActiveMesh = true;
+    // Brațul lămpii iese 1,2 m înaintea stâlpului, pe direcția planului (Ry(rotationY) din 146).
+    const matrices = new Float32Array(lampItems.length * 16);
+    lampItems.forEach((item, index) => {
+      const reach = 1.15;
+      const matrix = Matrix.Compose(
+        new Vector3(6.2, 1, 6.2),
+        Quaternion.Identity(),
+        new Vector3(
+          item.x + Math.sin(item.rotationY) * reach,
+          0.152,
+          item.z + Math.cos(item.rotationY) * reach,
+        ),
+      );
+      matrix.copyToArray(matrices, index * 16);
+    });
+    lampPoolMesh.thinInstanceSetBuffer('matrix', matrices, 16, true);
+    lampPoolMesh.thinInstanceRefreshBoundingInfo(true);
+    lampPoolMesh.setEnabled(false);
+  }
+  const applyNightFactor = (): void => {
+    for (const lamp of lampLightMaterials) {
+      lamp.emissiveColor = new Color3(2.6 * nightFactor, 1.95 * nightFactor, 1.1 * nightFactor);
+    }
+    if (lampPoolMaterial) {
+      lampPoolMaterial.emissiveColor = new Color3(
+        0.38 * nightFactor,
+        0.29 * nightFactor,
+        0.16 * nightFactor,
+      );
+    }
+    lampPoolMesh?.setEnabled(nightFactor > 0.02);
+  };
+  applyNightFactor();
 
   for (const cell of geometry) {
     const mesh = new Mesh(`city-decor:${cell.cell}`, scene);
@@ -454,12 +561,21 @@ export function createCityDecorScene(
           ],
     meshForCell: (cell) => (disposed ? null : (byCell.get(cell) ?? null)),
     itemsInCell: (cell) => plan.items.filter((entry) => entry.cell === cell),
+    setNightFactor(factor: number): void {
+      if (!Number.isFinite(factor) || factor < 0 || factor > 1)
+        throw new Error('Night factor must be between 0 and 1');
+      if (disposed) return;
+      nightFactor = factor;
+      applyNightFactor();
+    },
     dispose(): void {
       if (disposed) return;
       disposed = true;
       glbBatches?.dispose();
       for (const mesh of treeSourceMeshes) if (!mesh.isDisposed()) mesh.dispose(false, false);
       if (grassSource && !grassSource.isDisposed()) grassSource.dispose(false, false);
+      if (lampPoolMesh && !lampPoolMesh.isDisposed()) lampPoolMesh.dispose(false, false);
+      lampPoolMaterial?.dispose(false, true);
       for (const mesh of meshes) if (!mesh.isDisposed()) mesh.dispose(false, false);
       meshes.length = 0;
       treeSourceMeshes.length = 0;

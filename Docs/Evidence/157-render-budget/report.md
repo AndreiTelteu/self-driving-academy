@@ -3,7 +3,7 @@
 Probe structurale în NullEngine pe contractele reale de prezentare (`157-render-budget-v1`). Bugetele sunt citate din manifestul `203-initial-1` și **nu** sunt modificate.
 
 - Înainte: `baseline înainte de optimizare (sursa neatinsă)` · commit `546fa29e5ac6` · 2026-11-12T06:06:49.434Z
-- După: `după optimizare (aceeași probă, același fixture)` · commit `93ea77eb540d` · 2026-11-20T15:56:08.761Z
+- După: `după optimizare (aceeași probă, același fixture)` · commit `26511205284a` · 2026-11-25T18:50:37.741Z
 - Sumar: **17 PASS**, **0 FAIL**, 2 NOT_MEASURED; gate structural `STRUCTURAL_PASS`, gate hardware `NOT_VALIDATED`
 
 ## Metrici structurale
@@ -14,8 +14,8 @@ Probe structurale în NullEngine pe contractele reale de prezentare (`157-render
 | instanțe thin în batchurile orașului | instances | 0 | 78 | 8192 (≤) | PASS | semnalele repetate sunt instanțiate pe geometrie unitară partajată |
 | obiecte Babylon deținute de scena orașului | objects | 155 | 12 | — | REPORTED | mesh-uri, nu instanțe: o instanță nu creează un obiect Babylon |
 | batchuri statice pe material (oraș + decor) | batches | 36 | 40 | 512 (≤) | PASS | celule de decor 146 plus hosturile thin ale orașului; un host înlocuiește zeci de mesh-uri per element |
-| draw calls ale decorului 146 (control neschimbat) | draw calls | 36 | 36 | 128 (≤) | PASS | 1585 itemuri în 36 celule |
-| draw calls totale ale scenei de referință (oraș + decor) | draw calls | 191 | 48 | 128 (≤) | PASS | suma celor două fixture-uri reale, aceeași scenă și același layout |
+| draw calls ale decorului 146 (control neschimbat) | draw calls | 36 | 40 | 128 (≤) | PASS | 1585 itemuri în 36 celule |
+| draw calls totale ale scenei de referință (oraș + decor) | draw calls | 191 | 52 | 128 (≤) | PASS | suma celor două fixture-uri reale, aceeași scenă și același layout |
 | abaterea maximă a limitelor unui element față de baseline | px | 0 | 0 | 0.0001 (≤) | PASS | 923 elemente comparate față de 122; elemente lipsă 0 |
 | digest-uri de vârfuri de bandă identice | count | 96 | 96 | — | PASS | diferite: 0 |
 | casters esențiali (taxiul selectat) în shadow map | count | 0 | 0 | 1 (≥) | PASS | preset LOW: harta de umbre e dezactivată prin contract, deci nimic nu intră |
@@ -35,7 +35,7 @@ Probe structurale în NullEngine pe contractele reale de prezentare (`157-render
 
 - 923 elemente randate înainte și 923 după; identitatea fiecărui element este păstrată
 - instanțe thin: 0 → 78; mesh-uri: 155 → 12
-- materiale înghețate: 0 → 17
+- materiale înghețate: 0 → 18
 - vârfuri/triunghiuri: 19172/10054 → 386796/194454
 - picking: 32/32 raze identice (7 nimeresc un vehicul)
 - LOD: LOW 1 tranziție/0 oscilații; MEDIUM 1 tranziție/0 oscilații; HIGH 1 tranziție/0 oscilații

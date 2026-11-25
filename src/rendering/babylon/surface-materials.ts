@@ -36,7 +36,12 @@ export type SurfaceMaterialKey =
 
 /** PBI 246 — materialele PBR ale fațadelor (zid + sticlă + tâmplărie), separate de lotul suprafețelor. */
 export type BuildingMaterialKey =
-  'buildingBrick' | 'buildingPlaster' | 'buildingConcrete' | 'buildingGlass' | 'buildingTrim';
+  | 'buildingBrick'
+  | 'buildingPlaster'
+  | 'buildingConcrete'
+  | 'buildingGlass'
+  | 'buildingGlassLit'
+  | 'buildingTrim';
 
 /** Dimensiunea dalei (m) pe care o folosește geometria pentru UV-uri: o sursă unică de adevăr. */
 export const SURFACE_TILE_M = Object.freeze({
@@ -84,6 +89,7 @@ export interface SurfaceMaterials {
         | 'buildingWallPlaster'
         | 'buildingWallConcrete'
         | 'buildingGlass'
+        | 'buildingGlassLit'
         | 'buildingTrim',
         Material
       >
@@ -257,15 +263,19 @@ export function createSurfaceMaterials(
     buildingPlaster: makeBuilding('buildingPlaster', {}),
     buildingConcrete: makeBuilding('buildingConcrete', {}),
     buildingGlass: makeBuilding('buildingGlass', { flatRoughness: 0.06 }),
+    // 252: geamurile aprinse au exact aceeași sticlă dielectrică, dar emisie proprie noaptea.
+    buildingGlassLit: makeBuilding('buildingGlassLit', { flatRoughness: 0.06 }),
     buildingTrim: makeBuilding('buildingTrim', { flatRoughness: 0.55 }),
   };
   // Sticla: reflexie IBL mai puternică decât zidurile (F0 dielectric, dar netedă).
   building.buildingGlass.environmentIntensity = LIGHTING.environment * 2.2;
+  building.buildingGlassLit.environmentIntensity = LIGHTING.environment * 2.2;
   const BUILDING_MATERIAL_KEYS: readonly BuildingMaterialKey[] = [
     'buildingBrick',
     'buildingPlaster',
     'buildingConcrete',
     'buildingGlass',
+    'buildingGlassLit',
     'buildingTrim',
   ];
 
@@ -380,6 +390,7 @@ export function createSurfaceMaterials(
         buildingWallPlaster: building.buildingPlaster,
         buildingWallConcrete: building.buildingConcrete,
         buildingGlass: building.buildingGlass,
+        buildingGlassLit: building.buildingGlassLit,
         buildingTrim: building.buildingTrim,
       }),
     freeze(): void {

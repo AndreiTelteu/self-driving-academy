@@ -127,7 +127,7 @@ export function createAtmosphereScene(
     );
     material.setVector4(
       'uCloudParams',
-      new Vector4(s.clouds.coverage, s.clouds.softness, s.clouds.scale, 0),
+      new Vector4(s.clouds.coverage, s.clouds.softness, s.clouds.scale, s.night),
     );
   };
 
