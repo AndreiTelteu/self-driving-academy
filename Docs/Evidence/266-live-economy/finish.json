@@ -1,0 +1,12 @@
+{
+  "id": "266",
+  "criteriaSatisfied": true,
+  "result": "The live economy composes the unchanged 209 ledger, reviews and KPI buckets over terminal 265 rides. One settlement and at most one review per ride, versioned fare/refund/service-fee rules, civilian refusal, day/month buckets, 1200s/30-day clock, pause suspension, per-session ledger and new epochs are live. Reviews consume real 139 comfort, real 028 collisions and real 137 blocked seconds; 088 windows exclude comfort samples without erasing the incident. Deterministic report 63/63 and browser probe 19/19 with revenue and rating visible.",
+  "limitations": "Live browser collision/blocked/088 scenarios are NOT_RUN because 028 has no live adapter (282) and 088/137 have no live owners (272); the ports are wired and proven deterministically against the real owners. Economy persistence/reload remains 278. Rides closed directly by the 265 SCENARIO_RESET are not settled; the reset starts a new epoch without rewriting history. The HUD is the compact 266 read model, not the 267 KPI popup. Browser evidence used installed Chrome via PLAYWRIGHT_MODULE; local Node is 24.19.0 below 24.21.0.",
+  "checks": [
+    ["node", "--import", "./scripts/register-typescript.mjs", "--test", "tests/economy/live-economy.test.ts", "tests/economy/live-economy-report.test.ts", "tests/ui/live-economy.test.ts"],
+    ["npm", "run", "economy:live", "--", "--check"],
+    ["npm", "run", "docs:check", "--", "--check"],
+    ["npm", "run", "typecheck"]
+  ]
+}

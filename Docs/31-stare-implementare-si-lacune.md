@@ -206,6 +206,8 @@ Nu sunt montate: LEARNING, pop-up-ul KPI și panoul companiei, misiuni, XP, salv
 
 **PBI:** [266](../PBI/README.md) · **Dependențe:** 265.
 
+**Stare:** Done la 26 noiembrie 2026. Economia live decontează cursele, produce review-uri cu incidente reale și KPI; popup-ul/dashboard-ul rămân 267, iar compania 268–270.
+
 ### 267 — Panoul KPI, tabloul orașului și feedbackul consecințelor în joc
 
 **Ce lipsește:** Pop-up-ul KPI, tabloul orașului și feedbackul 214 sunt implementate ca panouri, dar nu sunt montate; nu există buton sau hotkey în joc.
