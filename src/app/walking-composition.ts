@@ -363,7 +363,7 @@ function trafficActorVehicle(actor: CivilActorSnapshot, layout: CityLayout): Com
   const lane = layout.lanes.find((candidate) => candidate.laneId === actor.laneId);
   return Object.freeze({
     vehicleId: actor.vehicleId,
-    driverKind: 'CIVILIAN' as const,
+    driverKind: actor.driverKind,
     classId: actor.classId,
     positionM: point(actor.positionM.x, actor.positionM.y, actor.positionM.z),
     yawRad: compositionYawFromTrafficHeading(actor.headingRad),

@@ -324,10 +324,13 @@ export function createV3BrowserComposition(
         vehicles: frame.vehicles.map((vehicle) =>
           Object.freeze({
             vehicleId: vehicle.vehicleId,
+            driverKind: vehicle.driverKind,
+            classId: vehicle.classId,
             controlMode: vehicle.controlMode,
             positionM: vehicle.positionM,
             yawRad: vehicle.yawRad,
             speedMps: vehicle.speedMps,
+            laneId: vehicle.laneId,
           }),
         ),
         segments: Object.freeze({
