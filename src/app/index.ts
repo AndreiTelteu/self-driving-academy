@@ -701,3 +701,28 @@ export {
   createCompositionWorld,
   type CompositionWorld,
 } from './composition-world';
+
+export {
+  GAME_SHELL_DT_SECONDS,
+  GAME_SHELL_SURFACES,
+  GAME_SHELL_TICK_HZ,
+  GAME_SHELL_VERSION,
+  GAME_SYSTEMS,
+  createGameShell,
+  type GameMode,
+  type GamePortId,
+  type GameShell,
+  type GameShellCostSummary,
+  type GameShellOptions,
+  type GameShellStatus,
+  type GameShellTick,
+  type GameShellWorld,
+  type GameShellWorldStatus,
+  type GameSystemDeclaration,
+  type GameSystemId,
+  type GameSystemPhase,
+  type GameSystemStatus,
+  type GameTickContext,
+  type GameTickPort,
+  type GameTickPorts,
+} from './game-shell';

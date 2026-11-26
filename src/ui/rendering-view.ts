@@ -220,10 +220,14 @@ export function createRenderingView(root: HTMLDivElement) {
           status.textContent =
             state.reason === 'overload'
               ? 'Pauză de suprasarcină. Redu costul vizual înainte de reluare.'
-              : 'Sesiune în pauză';
+              : state.reason === 'panel'
+                ? 'Sesiune suspendată de un panou deschis.'
+                : 'Sesiune în pauză';
           startScreen.hidden = true;
-          pauseMenu.hidden = false;
-          gameHud.hidden = true;
+          // PBI 260: un panou deschis suspendă simularea fără să afișeze meniul de pauză; gazda
+          // shell-ului deține suprafața modală și o închide prin portul ei.
+          pauseMenu.hidden = state.reason === 'panel';
+          gameHud.hidden = state.reason === 'panel';
           break;
         case 'ERROR':
           status.textContent = `Randarea nu a pornit. ${state.message}`;
