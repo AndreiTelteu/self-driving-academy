@@ -1,13 +1,13 @@
 ---
 id: "270"
 title: "Panoul companiei: profit, costuri, cash, flotă și investiții"
-status: "To Do"
+status: "In Progress"
 release: "V1"
 module: "Interfață"
 depends_on: ["268","269"]
 performance_checks: ["ui","frame"]
-owner: null
-started_at: null
+owner: "loop-pbi/deepseek-270"
+started_at: "2026-11-26T22:23:58.119Z"
 completed_at: null
 ---
 
