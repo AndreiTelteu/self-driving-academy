@@ -118,13 +118,13 @@ Compunerea ține o epocă economică explicită. Fiecare sesiune (Academie/Haos)
 
 Dovezile reale sunt în [Evidence/266-live-economy](Evidence/266-live-economy/README.md): `npm run economy:live` produce un raport determinist cu 63/63 verificări pe fixture-ul real 24 taxiuri / 20 civili, revenue 553 SDA pentru cursa completă, rating 5, un singur settle și un singur review, 0 revenue pe `FAILED` și pe anularea fără pasager, taxa de serviciu pe anularea cu pasager, 600 de citiri fără `historyScans`, 600 de citiri fără pas fără avansarea ceasului și epoca a doua păstrând integral istoricul. Un incident 028 real produce `COLLISION` și rating 5 → 4, iar fereastra 088 reală exclude 4 eșantioane fără să șteargă impactul; un blocaj 137 real produce `BLOCKED_ROUTE`, penalizare 0,5 și rating 5 → 4.
 
-## Profit și evoluție companie — propunere 26 noiembrie 2026
+## Profit și evoluție companie — boundary 268 (26 noiembrie 2026)
 
-Contractul curent rămâne **revenue și ratings**, nu profit. Nu există costuri de operare, cash, valoare de flotă, nivel de companie sau investiții; acestea sunt descrise ca propunere neconfirmată în [Companie: profit și evoluție](32-companie-profit-si-evolutie.md).
+Contractul 209 rămâne **revenue și ratings**, nu profit: ledgerul comercial, review-urile și bucketurile KPI nu sunt modificate de companie. Compania are un ledger separat implementat de PBI 268, descris în [Companie: profit și evoluție](32-companie-profit-si-evolutie.md).
 
-- Revenue: încasarea curselor, după rambursări.
-- Profit: revenue minus costuri versionate; poate fi negativ.
-- Cash: numerarul companiei; nu poate deveni negativ.
-- Evoluție: nivel de companie, achiziții și upgrade-uri, separate de XP.
+- Revenue: încasarea curselor, după rambursări, copiată read-only din settle-ul 209.
+- Profit: revenue minus costuri versionate; poate fi negativ, fără să retragă XP.
+- Cash: numerarul companiei; plafonat la zero, cu pierderea neacoperită raportată separat.
+- Evoluție: nivel de companie, achiziții și upgrade-uri rămân 269; panoul rămâne 270.
 
-Taskurile propuse sunt 268 (finanțe), 269 (evoluție) și 270 (panou). Până la confirmarea produsului, ele rămân în To Do și nu schimbă formulele 209.
+Valorile de cost rămân propuneri de calibrare. Compania nu are cale către ledgerul XP și nu inventează achiziții sau upgrade-uri.

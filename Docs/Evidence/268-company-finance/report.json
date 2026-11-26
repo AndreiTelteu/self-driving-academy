@@ -1,0 +1,512 @@
+{
+  "version": "268-company-finance-report-v1",
+  "contract": "268-company-ledger-v1",
+  "liveContract": "268-live-company-finance-v1",
+  "schedule": {
+    "version": "268-company-cost-model-v1",
+    "currency": "SDA",
+    "initialCashMinorUnits": 50000,
+    "energyPerKmMinorUnits": 60,
+    "maintenancePerKmMinorUnits": 45,
+    "incidentMinorUnits": 2500,
+    "servicePerRideMinorUnits": 40,
+    "fixedMonthlyMinorUnits": 4000,
+    "insuranceMinorUnits": 1200,
+    "salariesMinorUnits": 2400,
+    "licensesMinorUnits": 400
+  },
+  "profitableRide": {
+    "rideId": "id-v1:4:ride14:test:265:rides51:id-v1:12:ride-request14:test:265:rides4:w0005:r0000",
+    "requestId": "id-v1:12:ride-request14:test:265:rides4:w0005:r0000",
+    "taxiId": "id-v1:7:vehicle13:v3:city:fleet4:TAXI4:0016",
+    "terminalState": "COMPLETED",
+    "passengerAboard": true,
+    "plannedDistanceMeters": 1027,
+    "revenueMinorUnits": 551,
+    "energyMinorUnits": 62,
+    "maintenanceMinorUnits": 46,
+    "incidentMinorUnits": 0,
+    "serviceMinorUnits": 40,
+    "grossCostMinorUnits": 148,
+    "grossProfitMinorUnits": 403,
+    "rating": 5,
+    "reasons": [
+      "EFFICIENT_DELIVERY",
+      "ON_TIME",
+      "SMOOTH_DRIVE"
+    ]
+  },
+  "lossRide": {
+    "rideId": "id-v1:4:ride14:test:265:rides51:id-v1:12:ride-request14:test:265:rides4:w0005:r0000",
+    "taxiId": "id-v1:7:vehicle13:v3:city:fleet4:TAXI4:0016",
+    "revenueMinorUnits": 551,
+    "incidentMinorUnits": 2500,
+    "grossCostMinorUnits": 2648,
+    "grossProfitMinorUnits": -2097,
+    "reviewImpacts": 1,
+    "rating": 4,
+    "reasons": [
+      "ON_TIME",
+      "SMOOTH_DRIVE",
+      "COLLISION"
+    ]
+  },
+  "cancellation": {
+    "rideId": "id-v1:4:ride14:test:265:rides51:id-v1:12:ride-request14:test:265:rides4:w0005:r0000",
+    "terminalState": "CANCELLED",
+    "passengerAboard": false,
+    "revenueMinorUnits": 0,
+    "entryGrossCostMinorUnits": 40,
+    "entryGrossCostAfterAdjustment": 0,
+    "adjustmentMinorUnits": -40,
+    "adjustmentCause": "SERVICE_NOT_DELIVERED",
+    "adjustmentsForRide": 1,
+    "netCostMinorUnits": 0,
+    "serviceRefunded": true
+  },
+  "duplicate": {
+    "applied": 0,
+    "duplicates": 1,
+    "entriesBefore": 1,
+    "entriesAfter": 1,
+    "revenueBefore": 551,
+    "revenueAfter": 551
+  },
+  "monthWithRides": {
+    "periodId": "m0000",
+    "revenueMinorUnits": 551,
+    "rideCostMinorUnits": 148,
+    "fixedCostMinorUnits": 4000,
+    "totalCostMinorUnits": 4148,
+    "profitMinorUnits": -3597,
+    "terminalRides": 1,
+    "fixedCostsApplied": true,
+    "hasRideData": true,
+    "completeness": "PARTIAL"
+  },
+  "emptyMonth": {
+    "periodId": "m0001",
+    "revenueMinorUnits": 0,
+    "fixedCostMinorUnits": 4000,
+    "totalCostMinorUnits": 4000,
+    "profitMinorUnits": -4000,
+    "terminalRides": 0,
+    "hasRideData": false,
+    "fixedCostsApplied": true,
+    "completeness": "PARTIAL",
+    "monthPresent": true,
+    "cashMinorUnits": 46000,
+    "uncoveredLossMinorUnits": 0
+  },
+  "fixedCosts": {
+    "applied": 3,
+    "duplicateApplied": 0,
+    "duplicateReason": "FIXED_COST_ALREADY_APPLIED",
+    "totalFixedCostMinorUnits": 4000,
+    "categories": [
+      "INSURANCE",
+      "SALARIES",
+      "LICENSES"
+    ]
+  },
+  "cash": {
+    "initialCashMinorUnits": 50000,
+    "revenueMinorUnits": 551,
+    "grossCostMinorUnits": 4148,
+    "adjustmentMinorUnits": 0,
+    "netCostMinorUnits": 4148,
+    "profitMinorUnits": -3597,
+    "cashMinorUnits": 46403,
+    "uncoveredLossMinorUnits": 0,
+    "formula": "initialCash + profit, clamped at zero"
+  },
+  "kpi": {
+    "revenueBefore": 551,
+    "revenueAfter": 551,
+    "settlementsBefore": 1,
+    "settlementsAfter": 1,
+    "reviewsBefore": 1,
+    "reviewsAfter": 1,
+    "dayRevenueBefore": 551,
+    "dayRevenueAfter": 551,
+    "historyScansBefore": 0,
+    "historyScansAfter": 0,
+    "same": true
+  },
+  "xp": {
+    "balanceBefore": 0,
+    "balanceAfter": 0,
+    "levelBefore": 1,
+    "levelAfter": 1,
+    "entriesBefore": 0,
+    "entriesAfter": 0,
+    "debits": 0,
+    "same": true
+  },
+  "boundary": {
+    "xpWrites": 0,
+    "economyWrites": 0,
+    "investmentWrites": 0,
+    "purchaseSurface": false,
+    "upgradeSurface": false,
+    "historyScans": 0
+  },
+  "checks": [
+    {
+      "name": "contract",
+      "expected": "268-company-ledger-v1",
+      "actual": "268-company-ledger-v1",
+      "pass": true,
+      "detail": "the company ledger version"
+    },
+    {
+      "name": "live-contract",
+      "expected": "268-live-company-finance-v1",
+      "actual": "268-live-company-finance-v1",
+      "pass": true,
+      "detail": "the live company port version"
+    },
+    {
+      "name": "schedule-version",
+      "expected": "268-company-cost-model-v1",
+      "actual": "268-company-cost-model-v1",
+      "pass": true,
+      "detail": "the versioned cost schedule"
+    },
+    {
+      "name": "profitable-terminal",
+      "expected": "COMPLETED",
+      "actual": "COMPLETED",
+      "pass": true,
+      "detail": "the real 061 ride completed"
+    },
+    {
+      "name": "profitable-passenger",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "a completed ride carried the passenger"
+    },
+    {
+      "name": "profitable-revenue",
+      "expected": 551,
+      "actual": 551,
+      "pass": true,
+      "detail": "revenue is copied from the 209 settlement"
+    },
+    {
+      "name": "profitable-distance",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "1027 planned metres"
+    },
+    {
+      "name": "profitable-energy",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "62 SDA energy"
+    },
+    {
+      "name": "profitable-maintenance",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "46 SDA maintenance"
+    },
+    {
+      "name": "profitable-service",
+      "expected": 40,
+      "actual": 40,
+      "pass": true,
+      "detail": "the per-ride service cost"
+    },
+    {
+      "name": "profitable-incident",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no incident on the clean ride"
+    },
+    {
+      "name": "profitable-gross-profit",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "403 SDA before fixed costs"
+    },
+    {
+      "name": "one-cost-entry",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "one cost entry for the terminal ride"
+    },
+    {
+      "name": "profit-formula",
+      "expected": -3597,
+      "actual": -3597,
+      "pass": true,
+      "detail": "profit = revenue - net cost"
+    },
+    {
+      "name": "cash-formula",
+      "expected": 46403,
+      "actual": 46403,
+      "pass": true,
+      "detail": "cash is initial cash plus profit, clamped at zero"
+    },
+    {
+      "name": "month-with-rides",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "1 terminal ride(s)"
+    },
+    {
+      "name": "month-fixed-costs",
+      "expected": 4000,
+      "actual": 4000,
+      "pass": true,
+      "detail": "the month carries the fixed monthly cost"
+    },
+    {
+      "name": "empty-month-present",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "a month with fixed costs is materialised"
+    },
+    {
+      "name": "empty-month-no-rides",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "zero terminal rides"
+    },
+    {
+      "name": "empty-month-fixed-costs",
+      "expected": 4000,
+      "actual": 4000,
+      "pass": true,
+      "detail": "fixed costs are real"
+    },
+    {
+      "name": "empty-month-negative-profit",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "-4000 SDA real loss"
+    },
+    {
+      "name": "empty-month-not-missing",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "no ride data, but the month is not NO_DATA"
+    },
+    {
+      "name": "empty-month-partial",
+      "expected": "PARTIAL",
+      "actual": "PARTIAL",
+      "pass": true,
+      "detail": "the current simulated month is partial"
+    },
+    {
+      "name": "fixed-costs-idempotent",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "3 duplicate fixed entries"
+    },
+    {
+      "name": "fixed-cost-count",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "insurance, salaries and licences"
+    },
+    {
+      "name": "loss-incident-cost",
+      "expected": 2500,
+      "actual": 2500,
+      "pass": true,
+      "detail": "a real 028 impact adds the versioned incident cost"
+    },
+    {
+      "name": "loss-real-review",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the review carries the real impact count"
+    },
+    {
+      "name": "loss-ride-negative",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "-2097 SDA ride loss"
+    },
+    {
+      "name": "cancellation-adjustment",
+      "expected": "SERVICE_NOT_DELIVERED",
+      "actual": "SERVICE_NOT_DELIVERED",
+      "pass": true,
+      "detail": "a cancellation is an adjustment"
+    },
+    {
+      "name": "cancellation-adjustment-amount",
+      "expected": -40,
+      "actual": -40,
+      "pass": true,
+      "detail": "the service cost is refunded explicitly"
+    },
+    {
+      "name": "cancellation-entry-immutable",
+      "expected": 40,
+      "actual": 40,
+      "pass": true,
+      "detail": "the original cost entry is not rewritten"
+    },
+    {
+      "name": "cancellation-net-cost",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the ride cost nets to zero after the adjustment"
+    },
+    {
+      "name": "cancellation-no-revenue",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "a pre-boarding cancellation keeps no fare"
+    },
+    {
+      "name": "duplicate-no-entry",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "a re-delivered terminal result is not costed twice"
+    },
+    {
+      "name": "duplicate-counted",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the duplicate is reported explicitly"
+    },
+    {
+      "name": "duplicate-stable",
+      "expected": 551,
+      "actual": 551,
+      "pass": true,
+      "detail": "revenue is unchanged by the duplicate"
+    },
+    {
+      "name": "duplicate-entries-stable",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the cost entry count is unchanged"
+    },
+    {
+      "name": "kpi-revenue",
+      "expected": 551,
+      "actual": 551,
+      "pass": true,
+      "detail": "the 209 revenue is unchanged by the company read"
+    },
+    {
+      "name": "kpi-settlements",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the 209 settlements are unchanged"
+    },
+    {
+      "name": "kpi-reviews",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the 209 reviews are unchanged"
+    },
+    {
+      "name": "kpi-history-scans",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the 209 read model still never scans history"
+    },
+    {
+      "name": "xp-balance",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "negative profit never withdraws XP"
+    },
+    {
+      "name": "xp-level",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the player level is unchanged"
+    },
+    {
+      "name": "xp-entries",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the XP ledger is untouched"
+    },
+    {
+      "name": "boundary-xp",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no XP write surface"
+    },
+    {
+      "name": "boundary-economy",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no 209 write surface"
+    },
+    {
+      "name": "boundary-investment",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no purchase or upgrade surface"
+    },
+    {
+      "name": "boundary-history",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "company reads use incremental totals"
+    },
+    {
+      "name": "no-purchase",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "PBI 269 owns purchases"
+    },
+    {
+      "name": "no-upgrade",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "PBI 269 owns upgrades"
+    }
+  ],
+  "summary": {
+    "version": "268-company-finance-report-v1",
+    "checks": 50,
+    "passed": 50,
+    "pass": true
+  }
+}
