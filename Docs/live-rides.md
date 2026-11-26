@@ -23,6 +23,7 @@ const live = createLiveRides({
   dispatchEveryTicks: 6,    // decizii la 10 Hz
   assignmentsPerDispatch: 2,
   maxRouteSearchesPerDispatch: 128,
+  keepPlayerClaims: true,   // PBI 265: preluarea păstrează cursa; implicit false păstrează 264
 });
 
 live.step({ tick, vehicles, playerVehicleId }); // cadrul compunerii după pasul autoritar
@@ -57,7 +58,7 @@ Pentru integrarea 265, `live.demand` și `live.dispatcher` sunt expuse ca exact 
 
 Ordinea este explicită și verificabilă:
 
-1. Un taxi condus de jucător (`playerVehicleId` sau `controlMode !== 'AUTO'`) este scos din registry-ul filtrat al dispecerului. Dacă avea o revendicare, este eliberată cu `CANCELLED` și cauza live `PLAYER_TAKEOVER`.
+1. Un taxi condus de jucător (`playerVehicleId` sau `controlMode !== 'AUTO'`) este scos din registry-ul filtrat al dispecerului. Cu `keepPlayerClaims: false` (implicit 264), o revendicare a lui este eliberată cu `CANCELLED` și cauza live `PLAYER_TAKEOVER`. Cu `keepPlayerClaims: true` (compoziția 265), revendicarea și cursa rămân la taxiul condus de jucător, iar taxiul este exclus numai din asignările noi; dispatcherul îl păstrează în registry cât timp are claim, ca validarea pasului 060 să nu eșueze.
 2. Faptele externe publicate prin `setTaxiStatus` și blocajul real 058 sunt fuzionate cu precedență `OFFLINE > DAMAGED > BLOCKED > AVAILABLE`.
 3. Un taxi revendicat care devine indisponibil este eliberat înainte de pasul 060, cu motivul închis corespunzător:
 
@@ -101,10 +102,12 @@ Stările unei cereri sunt un vocabular închis: `SCHEDULED`, `PENDING`, `ASSIGNE
 
 `src/main.ts` montează modulul o singură dată, după compunerea V3 și înainte de atașarea lumii, și înregistrează portul `rides` (`POST_WORLD`) în shell-ul 260:
 
-- portul citește cadrul autoritar după `world.step`, verifică egalitatea tick-ului și trimite pozițiile reale;
-- panoul `Curse` (`src/ui/live-rides-panel.ts`) este read-only, se actualizează la 10 Hz când este deschis și afișează cererile, coada, taxiurile alocate și costurile;
+- portul citește cadrul autoritar după `world.step`, verifică egalitatea tick-ului și trimite pozițiile reale către compunerea 265;
+- panoul `Curse` (`src/ui/live-rides-panel.ts`) este read-only, se actualizează la 10 Hz când este deschis și afișează cererile, coada, taxiurile alocate, iar cu read-model-ul 265 etapa cursei, pasagerul 147, ETA 064, progresul și motivul terminal;
 - shell-ul suspendă simularea cât timp un panou este deschis în MANUAL, ca orice suprafață 070;
-- `reset` este granița de scenariu: eliberează fiecare revendicare activă cu `CANCELLED`/`SCENARIO_RESET`, golește statusurile, faptele și jurnalele și rewindează 059/060. Un al doilea scenariu refolosește exact aceleași ID-uri 006 fără asignări duplicate.
+- `reset` este granița de scenariu: compunerea 265 închide întâi fiecare cursă activă cu `SCENARIO_RESET`, apoi 264 eliberează fiecare revendicare rămasă, golește statusurile, faptele și jurnalele și rewindează 059/060. Un al doilea scenariu refolosește exact aceleași ID-uri 006 fără asignări duplicate.
+
+Pentru pickup/dropoff fizic, pasager, ETA, HUD și markerii din lume, vezi [ciclul live al cursei](live-ride-lifecycle.md).
 
 ## Limite
 
@@ -136,7 +139,7 @@ Costul măsurat este un pas de subsistem în Node, pe flota reală, nu un cadru 
 
 ## Ce NU este
 
-- Nu este lifecycle-ul 061–064: nu creează `Ride`, pickup/dropoff fizic, pasager, ETA sau tarif. Acestea rămân PBI 265.
+- Nu este lifecycle-ul 061–064: nu creează `Ride`, pickup/dropoff fizic, pasager, ETA sau tarif. Acestea sunt compuse de [265](live-ride-lifecycle.md).
 - Nu detectează avarii sau blocaje: primește fapte explicite de la 029/030/065 și `blocked` de la 058.
 - Nu mișcă taxiurile și nu schimbă ruta AI a flotei după asignare; poziția rămâne a compunerii 058, iar executarea fizică a cursei aparține 265.
 - Nu creează un al doilea model de cerere, taxi, ledger sau store. Refolosește exact 032/033/041/057/058/059/060.

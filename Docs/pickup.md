@@ -90,6 +90,14 @@ npm run ride:pickup -- --check
 
 Runnerul scrie [report.json](Evidence/062-pickup/report.json) și [report.md](Evidence/062-pickup/report.md). `--check` eșuează dacă transcriptul comis diferă; `npm test` include aceeași comparație. Raportul are 19 verificări, inclusiv simularea celor 32 de cereri reale 059 cu asignări 060 și zone 032.
 
+## Compoziția live 265
+
+[Ciclul live al cursei](live-ride-lifecycle.md) cheamă `observe` cu poziția și viteza autoritare ale
+taxiului revendicat. Când prima observație este staționară în zona reală, compoziția scrie
+`ARRIVED_PICKUP` cu event id-ul stabil al modulului, deci faza `PICKUP` și markerul `S` rămân
+vizibile pe durata dwell-ului; `PICKUP_COMPLETE` este în continuare scris numai de acest modul după
+dwell. Un taxi condus de jucător este observat la fel, fără câmp de mod.
+
 ## Ce NU este
 
 - Nu este dropoff fizic 063, ETA 064, HUD 075, tarif/review/KPI 209 sau sănătatea flotei 065.

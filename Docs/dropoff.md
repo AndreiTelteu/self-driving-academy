@@ -99,6 +99,14 @@ npm run ride:dropoff -- --check
 
 Runnerul scrie [report.json](Evidence/063-dropoff/report.json) și [report.md](Evidence/063-dropoff/report.md). `--check` eșuează dacă transcriptul comis diferă; `npm test` include aceeași comparație. Raportul are 22 de verificări, inclusiv simularea celor 32 de cereri reale 059 cu pickup 062, asignări 060 și zone 032.
 
+## Compoziția live 265
+
+[Ciclul live al cursei](live-ride-lifecycle.md) cheamă `observe` cu poziția și viteza autoritare ale
+taxiului revendicat. Când prima observație este staționară în zona reală, compoziția scrie
+`ARRIVED_DROPOFF` cu event id-ul stabil al modulului, deci faza `DROPPING_OFF` și markerul `D` rămân
+vizibile pe durata dwell-ului; `DROPOFF_COMPLETE` este în continuare scris numai de acest modul după
+dwell, iar eliberarea 060 rămâne exact cea returnată de 061.
+
 ## Ce NU este
 
 - Nu este ETA 064, HUD 075, tarif/review/KPI 209 sau sănătatea flotei 065.

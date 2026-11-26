@@ -1,0 +1,161 @@
+{
+  "version": "265-live-ride-lifecycle-browser-v1",
+  "generatedAt": "2026-11-26T06:15:33.114Z",
+  "status": "MEASURED",
+  "run": {
+    "pass": true,
+    "browser": "157.0.8103.51",
+    "requestedBackend": "WEBGL2",
+    "actualBackend": "WEBGL2",
+    "viewport": "1440x900",
+    "url": "http://127.0.0.1:49671/?capture=1&backend=WEBGL2&preset=LOW&models=procedural&time=noon&debug=1",
+    "tickAtTakeover": 66,
+    "tickAtFailure": 10585,
+    "completedRideId": "id-v1:4:ride13:v3:city:rides50:id-v1:12:ride-request13:v3:city:rides4:w0005:r0000",
+    "completedTaxiId": "id-v1:7:vehicle13:v3:city:fleet4:TAXI4:0003",
+    "pickupZoneId": "sz:2-3",
+    "dropoffZoneId": "sz:3-2",
+    "boardingTick": 2359,
+    "completionTick": 10552,
+    "failedRideId": "id-v1:4:ride13:v3:city:rides50:id-v1:12:ride-request13:v3:city:rides4:w0005:r0001",
+    "failedTaxiId": "id-v1:7:vehicle13:v3:city:fleet4:TAXI4:0006",
+    "failedReason": "TAXI_BLOCKED",
+    "screenshots": [
+      "screenshots/01-pickup.png",
+      "screenshots/02-onboard.png",
+      "screenshots/03-dropoff.png",
+      "screenshots/04-completed.png",
+      "screenshots/05-failed.png",
+      "screenshots/06-panel.png"
+    ],
+    "checks": [
+      {
+        "name": "ride-survives-takeover",
+        "pass": true,
+        "detail": "the claimed taxi became MANUAL and kept its 061 ride and 060 claim"
+      },
+      {
+        "name": "player-claim-kept",
+        "pass": true,
+        "detail": "the assignment is still present for the player-driven taxi"
+      },
+      {
+        "name": "rides-port-present",
+        "pass": true,
+        "detail": "shell mounts the 265 rides port"
+      },
+      {
+        "name": "pickup-zone-arrival",
+        "pass": true,
+        "detail": "ride state PICKUP; pickup sz:2-3"
+      },
+      {
+        "name": "pickup-dwell",
+        "pass": true,
+        "detail": "required dwell 180"
+      },
+      {
+        "name": "passenger-boarding-visible",
+        "pass": true,
+        "detail": "passenger phase BOARDING"
+      },
+      {
+        "name": "hud-pickup",
+        "pass": true,
+        "detail": "Viteză0km/hMConduci · învățare oprităTaxi#3EtapăLa pasagerObiectivAșteaptă îmbarcarea în sz:2-3Rutăsz:2-3 → sz:3-2ETALa pasagerProgres100% · 0 mServiciuFlux lib"
+      },
+      {
+        "name": "hud-pickup-progress",
+        "pass": true,
+        "detail": "the HUD exposes the certified progress at the pickup anchor"
+      },
+      {
+        "name": "passenger-onboard",
+        "pass": true,
+        "detail": "phase ONBOARD, occupancy 1"
+      },
+      {
+        "name": "passenger-marker-onboard",
+        "pass": true,
+        "detail": "1 marker(s), visible true"
+      },
+      {
+        "name": "hud-trip",
+        "pass": true,
+        "detail": "Viteză0km/hMConduci · învățare oprităTaxi#3EtapăSpre destinațieObiectivDu pasagerul la sz:3-2Rutăsz:2-3 → sz:3-2ETA~1 min 28 sProgres7% · 1.2 kmServiciuFlux lib"
+      },
+      {
+        "name": "dropoff-zone-arrival",
+        "pass": true,
+        "detail": "ride state DROPOFF; dropoff sz:3-2"
+      },
+      {
+        "name": "passenger-dropping-off",
+        "pass": true,
+        "detail": "passenger phase DROPPING_OFF"
+      },
+      {
+        "name": "ride-completed",
+        "pass": true,
+        "detail": "terminal true, reason —"
+      },
+      {
+        "name": "completion-release",
+        "pass": true,
+        "detail": "release COMPLETED, claim removed"
+      },
+      {
+        "name": "passenger-hidden-after-dropoff",
+        "pass": true,
+        "detail": "phase NONE, reset true"
+      },
+      {
+        "name": "hud-after-completion",
+        "pass": true,
+        "detail": "the HUD no longer claims an active trip"
+      },
+      {
+        "name": "failure-health-port",
+        "pass": true,
+        "detail": "setTaxiHealth returned BLOCKED"
+      },
+      {
+        "name": "failure-terminal",
+        "pass": true,
+        "detail": "state FAILED, reason TAXI_BLOCKED"
+      },
+      {
+        "name": "failure-release",
+        "pass": true,
+        "detail": "release FAILED, claim removed"
+      },
+      {
+        "name": "failure-single-receipt",
+        "pass": true,
+        "detail": "1 receipt(s)"
+      },
+      {
+        "name": "panel-completed-row",
+        "pass": true,
+        "detail": "the panel shows the completed ride"
+      },
+      {
+        "name": "panel-failed-reason",
+        "pass": true,
+        "detail": "the panel shows FAILED and its closed reason"
+      },
+      {
+        "name": "no-page-errors",
+        "pass": true,
+        "detail": "0 page errors"
+      },
+      {
+        "name": "no-console-errors",
+        "pass": true,
+        "detail": "0 console errors"
+      }
+    ],
+    "pageErrors": [],
+    "consoleErrors": []
+  }
+}

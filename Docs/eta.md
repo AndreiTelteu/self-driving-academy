@@ -121,6 +121,13 @@ npm run ride:eta -- --check
 
 Runnerul scrie [report.json](Evidence/064-eta/report.json) și [report.md](Evidence/064-eta/report.md). `--check` eșuează dacă transcriptul comis diferă; `npm test` include aceeași comparație.
 
+## Compoziția live 265
+
+[Ciclul live al cursei](live-ride-lifecycle.md) observă fiecare cursă activă la tick-ul autoritar și
+păstrează ultima estimare 064 în read-model-ul panoului și al HUD-ului. Sosirea în `PICKUP`/`DROPOFF`
+este raportată ca `ARRIVED` cu progres 100%, iar `SERVICE_BLOCKED` rămâne `UNAVAILABLE` cu
+`etaSeconds: null`; compoziția nu afișează niciodată `0 s` pentru o rută lipsă sau blocată.
+
 ## Ce NU este
 
 - Nu este planner 041: nu creează, nu modifică și nu replanifică traseul cursei; citește traseul real al asignării 060.

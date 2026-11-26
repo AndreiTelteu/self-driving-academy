@@ -46,6 +46,8 @@ Profitul și evoluția companiei sunt o **propunere neconfirmată** în [Compani
 | [Calitate vizuală V4](30-calitate-vizuala-v4.md) | Imagine HD, lumină, umbre, materiale PBR, modele și UI de joc |
 | [Starea implementării și lacunele](31-stare-implementare-si-lacune.md) | Ce se joacă, ce este doar contract și ce lipsește, cu linkuri și PBI |
 | [Companie: profit și evoluție](32-companie-profit-si-evolutie.md) | Propunere pentru costuri, profit, cash, nivel și investiții; neconfirmată |
+| [Cereri și dispecerizare live](live-rides.md) | Cereri 059, coadă și asignări 060 peste flota live |
+| [Ciclul live al cursei](live-ride-lifecycle.md) | Pickup/dropoff, pasager, ETA, HUD și rezultate terminale |
 | [Shell-ul jocului și composition root](game-shell.md) | Tick autoritar unic, ordinea porturilor 261–286 și gazda UI |
 
 ## Implementare și Kanban
@@ -56,7 +58,7 @@ Profitul și evoluția companiei sunt o **propunere neconfirmată** în [Compani
 
 ## Stare și istoric
 
-Bootstrapul aplicației browser TypeScript/Vite/Babylon.js și [backendul WebGPU/WebGL2](rendering-backend.md) sunt implementate; [README-ul proiectului](../README.md) documentează versiunile și comenzile locale. Fundația include contracte validate, identitate/random determinist, setări, registry-ul parametrilor, [event bus](event-bus.md) și [protocol workers](worker-protocol.md). Buildul curent este sandboxul V3 de mers și condus montat sub [composition root-ul jocului](game-shell.md); sesiunile Academie/Haos din 261, flota din 262, [selectarea live 263](live-fleet-selection.md) și [cererile/dispecerizarea live 264](live-rides.md) sunt integrate, iar restul sistemelor 265-286 nu sunt încă integrate. Starea exactă și lacunele sunt în [Docs/31](31-stare-implementare-si-lacune.md). Valorile de calibrare și bugetele de performanță ale jocului sunt ținte de verificat. Task-urile nu sunt executate prin simpla creare a planului.
+Bootstrapul aplicației browser TypeScript/Vite/Babylon.js și [backendul WebGPU/WebGL2](rendering-backend.md) sunt implementate; [README-ul proiectului](../README.md) documentează versiunile și comenzile locale. Fundația include contracte validate, identitate/random determinist, setări, registry-ul parametrilor, [event bus](event-bus.md) și [protocol workers](worker-protocol.md). Buildul curent este sandboxul V3 de mers și condus montat sub [composition root-ul jocului](game-shell.md); sesiunile Academie/Haos din 261, flota din 262, [selectarea live 263](live-fleet-selection.md), [cererile/dispecerizarea live 264](live-rides.md) și [ciclul live al cursei 265](live-ride-lifecycle.md) sunt integrate, iar restul sistemelor 266-286 nu sunt încă integrate. Starea exactă și lacunele sunt în [Docs/31](31-stare-implementare-si-lacune.md). Valorile de calibrare și bugetele de performanță ale jocului sunt ținte de verificat. Task-urile nu sunt executate prin simpla creare a planului.
 
 [Planul inițial v0.1](Archive/GAME_DESIGN-v0.1.md) este păstrat pentru istoric. Page-ul creat anterior este tot o referință v0.1; nu este sincronizat automat cu documentele Markdown. Modificările viitoare de plan se fac în aceste module și în PBI-urile aferente.
 

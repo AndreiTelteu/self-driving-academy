@@ -112,6 +112,12 @@ export type {
   LiveRidesPanelOptions,
   LiveRidesPanelStats,
 } from './live-rides-panel';
+export { LIVE_RIDE_MARKERS_VERSION, createLiveRideMarkerLayer } from './live-ride-markers';
+export type {
+  LiveRideMarkerCamera,
+  LiveRideMarkerLayer,
+  LiveRideMarkerLayerStats,
+} from './live-ride-markers';
 export { createProfilePanel } from './profile-panel';
 export type { ProfilePanel, ProfilePanelOptions } from './profile-panel';
 export { createLearningNotifications } from './learning-notifications';

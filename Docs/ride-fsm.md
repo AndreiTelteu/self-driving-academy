@@ -141,3 +141,11 @@ Runnerul scrie [report.json](Evidence/061-ride-fsm/report.json) și [report.md](
 - Nu alege taxiuri, nu replanifică rute și nu modifică asignarea 060; un taxi schimbat în UI nu este o tranziție.
 - Nu persistă singur în savefile și nu citește ceasul de perete; snapshot-ul este o valoare pură oferită compoziției.
 - Raportul este o probă funcțională deterministă, nu o măsurătoare de FPS/GPU/Rapier/hardware.
+
+## Compoziția live 265
+
+[Ciclul live al cursei](live-ride-lifecycle.md) pornește fiecare `Ride` din asignarea 264 și aplică
+`ARRIVED_PICKUP`/`ARRIVED_DROPOFF` la începutul dwell-ului, astfel încât fazele `PICKUP`/`DROPOFF`,
+pasagerul 147 și markerii să fie vizibili. Închiderile pentru taxi blocat/avariat/offline se fac
+înainte de eliberarea 264, iar `keepPlayerClaims` păstrează cursa la preluarea de jucător. Contractul
+rămâne al acestui modul; compoziția nu inventează tranziții sau eliberări.

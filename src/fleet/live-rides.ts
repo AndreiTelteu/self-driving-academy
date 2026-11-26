@@ -128,6 +128,13 @@ export interface LiveRidesOptions {
   readonly dispatchEveryTicks?: number;
   readonly assignmentsPerDispatch?: number;
   readonly maxRouteSearchesPerDispatch?: number;
+  /**
+   * PBI 265: a taxi taken over by the player keeps its real ride claim instead of being released
+   * with `PLAYER_TAKEOVER`. It stays excluded from new dispatch while player-driven, and the ride
+   * lifecycle observes the player's authoritative position/speed. The 264 default remains `false`
+   * so its documented release behavior and evidence are unchanged.
+   */
+  readonly keepPlayerClaims?: boolean;
 }
 
 export interface LiveRideReleaseView {
@@ -272,12 +279,26 @@ export interface LiveRides {
   readonly version: typeof LIVE_RIDES_VERSION;
   readonly plan: RideDemandPlan;
   readonly namespace: string;
+  /** The real 057 registry this composition observes; it stays owned by the caller. */
+  readonly registry: FleetRegistry;
+  /** The real 033 graph used by the dispatcher and exposed to 064/265 compositions. */
+  readonly graph: LaneGraph;
+  /** The real 041 planner this composition owns when none was injected. */
+  readonly planner: RoutePlanner;
   readonly demand: RideDemand;
   readonly dispatcher: RideDispatcher;
+  /** PBI 265 explicit composition flag; see `LiveRidesOptions.keepPlayerClaims`. */
+  readonly keepPlayerClaims: boolean;
   /** One authoritative live step; the frame is the post-world composition frame. */
   step(input: unknown): LiveRideStepResult;
   /** Explicit external health fact (029/030/065); applied by the next step. */
   setTaxiStatus(taxiId: unknown, status: unknown): SettleableTaxiStatus;
+  /**
+   * Last explicit health fact for a taxi, without the frame-derived blockage. It is the exact input
+   * the next live step merges with `blocked`, so a 265 lifecycle can close the ride before the 264
+   * release removes the claim.
+   */
+  healthStatus(taxiId: unknown): SettleableTaxiStatus;
   snapshot(): LiveRideSnapshot;
   stats(): LiveRideStats;
   rejections(): readonly LiveRideRejectionView[];
@@ -312,6 +333,7 @@ const optionFields = [
   'dispatchEveryTicks',
   'assignmentsPerDispatch',
   'maxRouteSearchesPerDispatch',
+  'keepPlayerClaims',
 ] as const;
 
 const frameFields = ['vehicleId', 'driverKind', 'laneId', 'blocked', 'controlMode'] as const;
@@ -654,11 +676,17 @@ export function createLiveRides(options: unknown): LiveRides {
           RIDE_DISPATCH_LIMITS.maximumRouteSearchesPerStep,
           'Live ride route search budget',
         );
+  requireContract(
+    data.keepPlayerClaims === undefined || typeof data.keepPlayerClaims === 'boolean',
+    'Live ride keepPlayerClaims must be a boolean',
+  );
+  const keepPlayerClaims = data.keepPlayerClaims === true;
+  const laneGraph = graph ?? createLaneGraph(map);
   const ownedPlanner = data.planner === undefined;
   const planner =
     data.planner === undefined
       ? createRoutePlanner({
-          graph: graph ?? createLaneGraph(map),
+          graph: laneGraph,
           map,
           graphVersion: '033-lane-graph-v1',
           costVersion: ROUTE_COST_MODEL.version,
@@ -678,19 +706,29 @@ export function createLiveRides(options: unknown): LiveRides {
   }
   /** Player-driven taxis are removed from the dispatcher's registry view, never invented statuses. */
   const excluded = new Set<string>();
+  /**
+   * PBI 265: a player-driven taxi that still holds a ride claim must stay visible to the dispatcher,
+   * otherwise the next dispatch step cannot validate its assignment. Unclaimed player-driven taxis
+   * are still removed from the candidate registry.
+   */
+  let dispatcher!: RideDispatcher;
+  const claimedByDispatcher = (vehicleId: string): boolean =>
+    dispatcher?.assignments().some((assignment) => assignment.taxiId === vehicleId) ?? false;
+  const inDispatchRegistry = (vehicleId: string): boolean =>
+    !excluded.has(vehicleId) || (keepPlayerClaims && claimedByDispatcher(vehicleId));
   const dispatchRegistry = Object.freeze({
     list: () =>
-      Object.freeze(registry.list().filter((vehicle) => !excluded.has(vehicle.vehicleId))),
+      Object.freeze(registry.list().filter((vehicle) => inDispatchRegistry(vehicle.vehicleId))),
     get: (vehicleId: string): FleetVehicle | undefined =>
-      excluded.has(vehicleId) ? undefined : registry.get(vehicleId),
-    state: (vehicleId: string) => (excluded.has(vehicleId) ? undefined : registry.state(vehicleId)),
+      inDispatchRegistry(vehicleId) ? registry.get(vehicleId) : undefined,
+    state: (vehicleId: string) =>
+      inDispatchRegistry(vehicleId) ? registry.state(vehicleId) : undefined,
   });
   /** Current real lane per taxi, refreshed from the post-world frame before each dispatch step. */
   const lanes = new Map<string, string | null>();
   const positions: TaxiPositionSource = Object.freeze({
     laneFor: (taxiId: string): string | null => lanes.get(taxiId) ?? null,
   });
-  let dispatcher: RideDispatcher;
   try {
     dispatcher = createRideDispatcher({
       registry: dispatchRegistry,
@@ -810,6 +848,8 @@ export function createLiveRides(options: unknown): LiveRides {
     //    with the closed 060 reason. The dispatcher never loses a claim silently.
     for (const assignment of dispatcher.assignments()) {
       if (excluded.has(assignment.taxiId)) {
+        // 265 keeps the player-driven ride; 264's default releases the claim explicitly.
+        if (keepPlayerClaims) continue;
         releases.push(releaseView(assignment, 'PLAYER_TAKEOVER', 'CANCELLED', atTick));
         continue;
       }
@@ -1185,8 +1225,12 @@ export function createLiveRides(options: unknown): LiveRides {
     version: LIVE_RIDES_VERSION,
     plan,
     namespace: plan.namespace,
+    registry,
+    graph: laneGraph,
+    planner,
     demand,
     dispatcher,
+    keepPlayerClaims,
     step,
     setTaxiStatus(taxiId: unknown, status: unknown): SettleableTaxiStatus {
       assertLive();
@@ -1200,6 +1244,12 @@ export function createLiveRides(options: unknown): LiveRides {
       if (next === 'AVAILABLE') facts.delete(id);
       else facts.set(id, next);
       return next;
+    },
+    healthStatus(taxiId: unknown): SettleableTaxiStatus {
+      assertLive();
+      if (taxiId === undefined || taxiId === null) return 'AVAILABLE';
+      const id = boundedId(taxiId, 'taxi id');
+      return facts.get(id) ?? 'AVAILABLE';
     },
     snapshot,
     stats,

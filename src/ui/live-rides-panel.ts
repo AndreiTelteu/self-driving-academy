@@ -1,11 +1,15 @@
 import type {
   LiveRideAssignmentView,
+  LiveRideLifecycleRideView,
+  LiveRideLifecycleSnapshot,
   LiveRideReleaseCause,
   LiveRideRequestView,
   LiveRideSnapshot,
 } from '../fleet';
+import type { PassengerVisualFrame } from './passenger-visual-format';
+import { formatDistanceM, formatDuration, formatEtaRange, rideStageView } from './taxi-hud-format';
 
-export const LIVE_RIDES_PANEL_VERSION = '264-live-rides-panel-v1' as const;
+export const LIVE_RIDES_PANEL_VERSION = '265-live-rides-panel-v1' as const;
 /** The read model refreshes at 10 Hz, like the 263 fleet panel; a closed panel writes nothing. */
 export const LIVE_RIDES_PANEL_REFRESH_HZ = 10 as const;
 
@@ -22,8 +26,13 @@ export interface LiveRidesPanelStats {
   readonly open: boolean;
   readonly requests: number;
   readonly assignments: number;
+  readonly rides: number;
+  readonly activeRides: number;
+  readonly terminalRides: number;
+  readonly passengerMarkers: number;
   readonly createdRequestRows: number;
   readonly createdAssignmentRows: number;
+  readonly createdRideRows: number;
   readonly writes: number;
   readonly skipped: number;
   readonly updates: number;
@@ -36,7 +45,16 @@ export interface LiveRidesPanelStats {
 export interface LiveRidesPanel {
   readonly version: typeof LIVE_RIDES_PANEL_VERSION;
   readonly root: HTMLElement;
-  update(snapshot: LiveRideSnapshot, nowMs: number): void;
+  /**
+   * The 264 live queue/assignments plus the optional 265 lifecycle read model and 147 passenger
+   * frames. The two extra arguments are optional so the 264 panel contract stays usable alone.
+   */
+  update(
+    snapshot: LiveRideSnapshot,
+    nowMs: number,
+    rides?: LiveRideLifecycleSnapshot,
+    passenger?: Readonly<Record<string, PassengerVisualFrame>>,
+  ): void;
   open(): void;
   close(): void;
   isOpen(): boolean;
@@ -63,7 +81,7 @@ const STYLE_TEXT = `
 .live-rides button:hover { background: #22503f; }
 .live-rides button:focus-visible { outline: 3px solid #9fe0c5; outline-offset: 2px; }
 .live-rides__summary { margin: 0; color: #c6dbd1; }
-.live-rides__body { display: grid; grid-template-rows: minmax(0, 1.35fr) minmax(0, 1fr);
+.live-rides__body { display: grid; grid-template-rows: minmax(0, 1.2fr) minmax(0, 0.8fr) minmax(0, 1fr);
   gap: 0.6rem; min-height: 0; }
 .live-rides__section { display: flex; flex-direction: column; min-height: 0; gap: 0.25rem; }
 .live-rides__section h3 { margin: 0; font-size: 0.9rem; color: #9fe0c5; }
@@ -141,6 +159,62 @@ function requestTaxiLabel(request: LiveRideRequestView): string {
 
 function assignmentTaxiLabel(assignment: LiveRideAssignmentView): string {
   return assignment.taxiSlot === null ? assignment.taxiId : `Taxi #${assignment.taxiSlot}`;
+}
+
+function rideTaxiLabel(ride: LiveRideLifecycleRideView): string {
+  return ride.taxiSlot === null ? ride.taxiId : `Taxi #${ride.taxiSlot}`;
+}
+
+function ridePassengerLabel(
+  ride: LiveRideLifecycleRideView,
+  frame: PassengerVisualFrame | undefined,
+): string {
+  if (ride.terminal) return '—';
+  if (frame === undefined)
+    return ride.state === 'TO_DROPOFF' || ride.state === 'DROPOFF' ? 'la bord' : '—';
+  return `${frame.labels.passenger} · ${frame.labels.occupancy}`;
+}
+
+function rideEtaLabel(ride: LiveRideLifecycleRideView): string {
+  if (ride.terminal || ride.eta === null) return 'Fără estimare';
+  const eta = ride.eta;
+  switch (eta.status) {
+    case 'ESTIMATED': {
+      if (eta.etaSeconds === null) return 'Indisponibil';
+      const range = formatEtaRange(eta.etaMinSeconds, eta.etaMaxSeconds);
+      return range === '—'
+        ? `~${formatDuration(eta.etaSeconds)}`
+        : `~${formatDuration(eta.etaSeconds)} (${range})`;
+    }
+    case 'ARRIVED':
+      return ride.state === 'PICKUP' ? 'La pasager' : 'La destinație';
+    case 'UNAVAILABLE':
+      return eta.reason === null ? 'Indisponibil' : `Indisponibil (${eta.reason})`;
+  }
+}
+
+function rideProgressLabel(ride: LiveRideLifecycleRideView): string {
+  if (ride.terminal) return ride.state === 'COMPLETED' ? '100% · 0 m' : '—';
+  if (ride.eta === null) return '—';
+  const fraction = ride.eta.progressFraction,
+    remaining = ride.eta.remainingDistanceM;
+  if (fraction === null && remaining === null) return '—';
+  const percent =
+      fraction === null ? null : `${Math.min(100, Math.max(0, Math.round(fraction * 100)))}%`,
+    distance = formatDistanceM(remaining);
+  if (percent === null) return distance;
+  if (remaining === null) return percent;
+  return `${percent} · ${distance}`;
+}
+
+function rideReasonLabel(ride: LiveRideLifecycleRideView): string {
+  if (ride.terminal) return ride.reason ?? '—';
+  if (ride.eta?.status === 'UNAVAILABLE') return ride.eta.reason ?? 'Indisponibil';
+  return '—';
+}
+
+function rideStageLabel(ride: LiveRideLifecycleRideView): string {
+  return rideStageView(ride.state, ride.pickupZoneId, ride.dropoffZoneId).stage;
 }
 
 interface Row {
@@ -268,13 +342,50 @@ export function createLiveRidesPanel(
   assignmentsEmpty.textContent = 'Nicio alocare activă.';
   assignmentsSection.append(assignmentsHeading, assignmentsScroll, assignmentsEmpty);
 
-  body.append(requestsSection, assignmentsSection);
+  const ridesSection = doc.createElement('section');
+  ridesSection.className = 'live-rides__section';
+  const ridesHeading = doc.createElement('h3');
+  ridesHeading.textContent = 'Curse 061 live (pickup → dropoff → pasager)';
+  const ridesScroll = doc.createElement('div');
+  ridesScroll.className = 'live-rides__scroll';
+  const ridesTable = doc.createElement('table');
+  ridesTable.className = 'live-rides__table';
+  const ridesCaption = doc.createElement('caption');
+  ridesCaption.textContent =
+    'Cursa reală din revendicarea 060: etapa 061, pasagerul 147, ETA 064 și motivul terminal';
+  const ridesHead = doc.createElement('thead');
+  const ridesHeadRow = doc.createElement('tr');
+  for (const label of [
+    'Taxi',
+    'Cerere',
+    'Etapă',
+    'Pickup → dropoff',
+    'Pasager',
+    'ETA',
+    'Progres',
+    'Motiv',
+  ]) {
+    const th = doc.createElement('th');
+    th.setAttribute('scope', 'col');
+    th.textContent = label;
+    ridesHeadRow.append(th);
+  }
+  ridesHead.append(ridesHeadRow);
+  const ridesBody = doc.createElement('tbody');
+  ridesTable.append(ridesCaption, ridesHead, ridesBody);
+  ridesScroll.append(ridesTable);
+  const ridesEmpty = doc.createElement('p');
+  ridesEmpty.className = 'live-rides__empty';
+  ridesEmpty.textContent = 'Nicio cursă activă sau încheiată încă.';
+  ridesSection.append(ridesHeading, ridesScroll, ridesEmpty);
+
+  body.append(requestsSection, assignmentsSection, ridesSection);
 
   const description = doc.createElement('p');
   description.className = 'live-rides__description';
   description.id = DESCRIPTION_ID;
   description.textContent =
-    'Panoul citește programul 059 și revendicările 060 ale flotei live. Cererile apar determinist din scenariu; taxiurile blocate, avariate, offline sau conduse de jucător nu sunt propuse. Panoul nu creează curse, pasageri sau ETA (PBI 265); este read-only, iar shell-ul suspendă simularea cât timp este deschis în MANUAL, ca orice panou.';
+    'Panoul citește programul 059, revendicările 060, cursele 061, pickup/dropoff 062–063, ETA 064 și pasagerul 147. Cererile apar determinist din scenariu; taxiurile blocate, avariate, offline sau conduse de jucător nu sunt propuse. Este read-only, iar shell-ul suspendă simularea cât timp este deschis în MANUAL, ca orice panou.';
 
   root.append(header, summary, body, description);
   host.append(root);
@@ -289,6 +400,7 @@ export function createLiveRidesPanel(
 
   const requestRows = new Map<string, Row>();
   const assignmentRows = new Map<string, Row>();
+  const rideRows = new Map<string, Row>();
   let disposed = false,
     open = false,
     lastTick = -1,
@@ -300,6 +412,10 @@ export function createLiveRidesPanel(
     closes = 0,
     createdRequestRows = 0,
     createdAssignmentRows = 0,
+    createdRideRows = 0,
+    activeRides = 0,
+    terminalRides = 0,
+    passengerMarkers = 0,
     listeners = 0;
 
   const setText = (node: HTMLElement, value: string): void => {
@@ -383,7 +499,55 @@ export function createLiveRidesPanel(
     assignmentsScroll.hidden = assignments.length === 0;
   };
 
-  const render = (snapshot: LiveRideSnapshot): void => {
+  const renderRides = (
+    rides: LiveRideLifecycleSnapshot | null,
+    passenger: Readonly<Record<string, PassengerVisualFrame>>,
+  ): void => {
+    const rows = rides?.rides ?? [];
+    const wanted = new Set(rows.map((ride) => ride.rideId));
+    for (const [rideId, nodes] of rideRows) {
+      if (wanted.has(rideId)) continue;
+      nodes.row.remove();
+      rideRows.delete(rideId);
+    }
+    activeRides = rides?.counts.active ?? 0;
+    terminalRides = rides?.counts.terminals ?? 0;
+    passengerMarkers = 0;
+    for (let index = 0; index < rows.length; index += 1) {
+      const ride = rows[index]!;
+      let nodes = rideRows.get(ride.rideId);
+      if (nodes === undefined) {
+        nodes = createRow(doc, ['', '', '', '', '', '', '', '']);
+        rideRows.set(ride.rideId, nodes);
+        createdRideRows += 1;
+      }
+      const frame = passenger[ride.rideId];
+      passengerMarkers += frame?.markers.length ?? 0;
+      const currentChild = ridesBody.children[index] ?? null;
+      if (currentChild !== nodes.row) ridesBody.insertBefore(nodes.row, currentChild);
+      writeCells(nodes, [
+        rideTaxiLabel(ride),
+        `${ride.requestId.slice(-10)}`,
+        rideStageLabel(ride),
+        `${ride.pickupZoneId} → ${ride.dropoffZoneId}`,
+        ridePassengerLabel(ride, frame),
+        rideEtaLabel(ride),
+        rideProgressLabel(ride),
+        rideReasonLabel(ride),
+      ]);
+      setAttribute(nodes.row, 'data-state', ride.state);
+      setAttribute(nodes.row, 'data-ride-id', ride.rideId);
+      setAttribute(nodes.row, 'data-terminal', String(ride.terminal));
+    }
+    ridesEmpty.hidden = rows.length > 0;
+    ridesScroll.hidden = rows.length === 0;
+  };
+
+  const render = (
+    snapshot: LiveRideSnapshot,
+    rides: LiveRideLifecycleSnapshot | null,
+    passenger: Readonly<Record<string, PassengerVisualFrame>>,
+  ): void => {
     const counts = snapshot.counts,
       totals = snapshot.totals;
     setText(
@@ -395,21 +559,35 @@ export function createLiveRidesPanel(
       `Tick ${snapshot.tick} · cereri ${counts.valid}/${counts.requests} valide · ` +
         `coadă ${counts.pending}/${snapshot.queue.limit} (${snapshot.queue.policy}) · ` +
         `asignări ${totals.assignments} · eliberări ${totals.releases} · ` +
+        `curse ${rides?.counts.active ?? 0} active / ${rides?.counts.terminals ?? 0} terminale · ` +
+        `pasageri la bord ${rides?.counts.passengersOnBoard ?? 0} · ` +
         `căutări 041 ultimul pas ${totals.lastSearches}/${snapshot.queue.routeSearchBudget} ` +
         `(max ${totals.maxSearchesPerStep}) · pas la ${snapshot.queue.dispatchEveryTicks} tick-uri`,
     );
     renderRequests(snapshot.requests);
     renderAssignments(snapshot.assignments);
+    renderRides(rides, passenger);
     setAttribute(root, 'data-tick', String(snapshot.tick));
+    setAttribute(root, 'data-ride-count', String(rideRows.size));
     updates += 1;
   };
 
-  const update = (snapshot: LiveRideSnapshot, nowMs: number): void => {
+  const update = (
+    snapshot: LiveRideSnapshot,
+    nowMs: number,
+    rides?: LiveRideLifecycleSnapshot,
+    passenger?: Readonly<Record<string, PassengerVisualFrame>>,
+  ): void => {
     if (disposed) return;
     if (!Number.isFinite(nowMs)) throw new Error('Live rides panel clock');
     const atTick = snapshot?.tick;
     if (!Number.isSafeInteger(atTick) || atTick < 0) throw new Error('Live rides panel tick');
     if (lastTick >= 0 && atTick < lastTick) throw new Error('Stale live rides frame');
+    if (rides !== undefined) {
+      if (!Number.isSafeInteger(rides.tick) || rides.tick < 0)
+        throw new Error('Live rides ride tick');
+      if (rides.tick !== atTick) throw new Error('Live rides ride tick mismatch');
+    }
     lastTick = atTick;
     if (!Number.isFinite(nowMs)) throw new Error('Live rides panel clock');
     // A closed panel never writes; an open one refreshes at 10 Hz, not per frame.
@@ -422,7 +600,7 @@ export function createLiveRidesPanel(
       return;
     }
     lastWrite = nowMs;
-    render(snapshot);
+    render(snapshot, rides ?? null, passenger ?? {});
   };
 
   const openPanel = (): void => {
@@ -476,8 +654,13 @@ export function createLiveRidesPanel(
         open,
         requests: requestRows.size,
         assignments: assignmentRows.size,
+        rides: rideRows.size,
+        activeRides,
+        terminalRides,
+        passengerMarkers,
         createdRequestRows,
         createdAssignmentRows,
+        createdRideRows,
         writes,
         skipped,
         updates,
@@ -495,6 +678,8 @@ export function createLiveRidesPanel(
       requestRows.clear();
       for (const nodes of assignmentRows.values()) nodes.row.remove();
       assignmentRows.clear();
+      for (const nodes of rideRows.values()) nodes.row.remove();
+      rideRows.clear();
       styleElement?.remove();
       styleElement = null;
       listeners = 0;

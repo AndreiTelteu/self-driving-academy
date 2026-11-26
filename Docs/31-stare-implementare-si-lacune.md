@@ -27,7 +27,7 @@ Buildul curent pornește din `src/main.ts` și oferă:
 - un singur composition root (260) care deține tick-ul, pauza/focusul și ordinea porturilor, plus un panou de integrare care arată explicit sistemele 262–286 încă neintegrate;
 - panoul `Flotă` (263) care listează toate taxiurile și civilii live, mută doar camera la selecție și preia explicit `M` cu un singur scaun `PLAYER`.
 
-Nu sunt montate: LEARNING, curse, pasageri, KPI, misiuni, XP, salvare, companie, panourile de sistem (KPI, misiuni, profil, setări), first-person, minimapa, sunet, decorul destructibil și provocările Haos, fizica Rapier și regulile de trafic.
+Nu sunt montate: LEARNING, economia curselor (KPI, review, tarif), misiuni, XP, salvare, companie, panourile de sistem (KPI, misiuni, profil, setări), first-person, minimapa, sunet, decorul destructibil și provocările Haos, fizica Rapier și regulile de trafic. Cursele live, pickup/dropoff, pasagerul, ETA și HUD-ul de cursă sunt montate prin 265.
 
 ## Matricea lacunelor
 
@@ -179,16 +179,14 @@ Nu sunt montate: LEARNING, curse, pasageri, KPI, misiuni, XP, salvare, companie,
 
 ### 265 — Ciclul complet al cursei: pickup, dropoff, pasager, ETA și HUD
 
-**Ce lipsește:** Nu există ciclu de cursă în joc: pickup/dropoff fizic, pasager, ETA, progres și HUD de cursă lipsesc.
+**Stare:** Implementat local la 26 noiembrie 2026. `src/fleet/live-ride-lifecycle.ts` compune 061–064 peste revendicările 264, iar `src/app/live-ride-composition.ts` adaugă pasagerul 147 și HUD-ul 073. Cursa urmează `TO_PICKUP → PICKUP → TO_DROPOFF → DROPOFF → COMPLETED` numai în zonele reale 032, sub pragul de viteză și după dwell-ul cerut; pickup/dropoff publică sosirea la începutul dwell-ului, deci pasagerul și markerii rămân vizibili. `keepPlayerClaims` păstrează cursa la preluarea taxiului revendicat, iar taxiurile blocate/avariate/offline închid cursa cu `FAILED` și motiv închis înainte de eliberarea exactă a revendicării 060. HUD-ul afișează etapa, obiectivul, ETA cu interval, progresul și motivul indisponibil, niciodată `0 s` inventat; panoul `Curse` afișează aceleași rânduri plus pasagerul. Resetul închide fiecare cursă activă cu `SCENARIO_RESET` fără duplicate. Raportul determinist are 53 de verificări, iar proba de browser a trecut cu 25/25 verificări, o cursă completă condusă manual și una `FAILED/TAXI_BLOCKED`.
 
-- Modulele 061–064 și pasagerul 147 există, dar nu sunt compuse în browser.
-- Nu există marcaje de pickup/dropoff, pasager, boarding sau dropoff în lume.
-- Nu există HUD de cursă cu pickup, destinație, ETA, progres și stare.
-- Nu există păstrarea cursei la schimbarea modului sau a vehiculului.
-- Nu există rezultate `FAILED`/`CANCELLED` cu motive și eliberare de revendicare.
-- Nu există o probă de browser pentru o cursă completă condusă manual și autonom.
+**Ce lipsește:** Cursa autonomă completă (taxiurile AI nu primesc încă un traseu de cursă în compunere) și economia cursei (tarif, review, KPI), care rămâne PBI 266.
 
-**Documentație:** [Flotă și curse](07-flota-si-curse.md) · [Lifecycle-ul cursei](ride-fsm.md) · [Pickup](pickup.md) · [Dropoff](dropoff.md) · [ETA și progres](eta.md) · [Pasageri simplificați](passenger-visual.md) · [HUD](hud.md) · [Starea implementării și lacunele](31-stare-implementare-si-lacune.md)
+- **Dovezi:** [raport determinist](Evidence/265-ride-lifecycle/report.json), [probă de browser](Evidence/265-ride-lifecycle/browser.json), [README dovezi](Evidence/265-ride-lifecycle/README.md).
+- **Limite:** cursa autonomă completă rămâne deschisă (taxiurile AI nu primesc încă un traseu de cursă în compunere); tarifarea, review-ul și KPI-urile rămân 266.
+
+**Documentație:** [Flotă și curse](07-flota-si-curse.md) · [Ciclul live al cursei](live-ride-lifecycle.md) · [Lifecycle-ul cursei](ride-fsm.md) · [Pickup](pickup.md) · [Dropoff](dropoff.md) · [ETA și progres](eta.md) · [Pasageri simplificați](passenger-visual.md) · [HUD](hud.md) · [Starea implementării și lacunele](31-stare-implementare-si-lacune.md)
 
 **PBI:** [265](../PBI/README.md) · **Dependențe:** 264.
 

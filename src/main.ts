@@ -4,11 +4,13 @@ import {
   createApplicationLifecycle,
   createCompositionWorld,
   createGameShell,
+  createLiveRideComposition,
   createRendererRecovery,
   createSessionFlow,
   readLiveFleetSelectionSnapshot,
   readMinimapGeometry,
   type GameTickPort,
+  type LiveRideComposition,
   type RecoveryRenderer,
   type SessionFlow,
   type SessionFlowMenu,
@@ -35,9 +37,12 @@ import {
   createFpsCounter,
   createGameShellHost,
   createFleetSelectionPanel,
+  createLiveRideMarkerLayer,
   createLiveRidesPanel,
+  createPassengerVisualPresenter,
+  createTaxiHud,
 } from './ui';
-import { LIVE_RIDES_VERSION, createLiveRides } from './fleet';
+import { LIVE_RIDE_LIFECYCLE_VERSION, createLiveRides } from './fleet';
 import type { LiveRides } from './fleet';
 import { computeProfileVersionChecksum } from './profiles';
 import type { ProfileVersion, ProfileVersionContent } from './profiles';
@@ -104,24 +109,27 @@ const sessionTickPort: GameTickPort = {
   },
 };
 /**
- * PBI 264: portul POST_WORLD al curselor live. El citește cadrul compunerii după pasul autoritar și
- * trimite dispecerului poziția reală a fiecărui taxi. Nu creează o a doua lume și nu inventează
- * tick-uri; când modulul nu este montat, portul nu face nimic.
+ * PBI 265: portul POST_WORLD al curselor live. El citește cadrul compunerii după pasul autoritar și
+ * trimite poziția și viteza reală a fiecărui actor către compunerea 061–064 peste revendicările 264.
+ * Când modulul nu este montat, portul nu face nimic; nu inventează tick-uri sau poziții.
  */
-const ridesModules: { live: LiveRides | undefined } = { live: undefined };
+const ridesModules: {
+  composition: LiveRideComposition | undefined;
+  hud: ReturnType<typeof createTaxiHud> | undefined;
+} = { composition: undefined, hud: undefined };
 const ridesTickPort: GameTickPort = {
   id: 'rides',
-  version: LIVE_RIDES_VERSION,
+  version: LIVE_RIDE_LIFECYCLE_VERSION,
   step(context) {
-    const live = ridesModules.live;
-    if (live === undefined) return;
+    const rideComposition = ridesModules.composition;
+    if (rideComposition === undefined) return;
     const frame = composition?.composition.frame;
     if (frame === undefined) return;
     if (frame.tick !== context.tick)
       throw new Error(
         `Cadrul curselor (${frame.tick}) nu coincide cu tick-ul autoritar (${context.tick}).`,
       );
-    live.step({
+    rideComposition.step({
       tick: context.tick,
       vehicles: frame.vehicles.map((vehicle) => ({
         vehicleId: vehicle.vehicleId,
@@ -129,6 +137,13 @@ const ridesTickPort: GameTickPort = {
         laneId: vehicle.laneId,
         blocked: vehicle.blocked,
         controlMode: vehicle.controlMode,
+        positionM: {
+          x: vehicle.positionM.x,
+          y: vehicle.positionM.y,
+          z: vehicle.positionM.z,
+        },
+        speedMps: Math.abs(vehicle.speedMps),
+        headingRad: vehicle.yawRad,
       })),
       playerVehicleId: frame.playerVehicleId,
     });
@@ -211,6 +226,14 @@ const ridesPanel = createLiveRidesPanel(app, {
     if (application.getState().kind === 'PLAYING') view.getCanvas().focus();
   },
 });
+/**
+ * PBI 265: markerii 147 sunt proiectați în lume pe ancorele reale 032; presenterul nu citește
+ * simularea și nu creează pasageri. Stratul este singurul port de markeri al browsereului.
+ */
+const rideMarkerLayer = createLiveRideMarkerLayer(app);
+const passengerPresenter = createPassengerVisualPresenter(rideMarkerLayer.port);
+/** Ultimul taxi cu markere 147; schimbarea selecției nu lasă markerii vechi în urmă. */
+let lastMarkerTaxiId: string | null = null;
 /** Singura gazdă UI a shell-ului: start, pauză, reluare și panoul de integrare. */
 const shellHost = createGameShellHost({
   root: app,
@@ -252,8 +275,9 @@ const shellHost = createGameShellHost({
     if (!shell.openPanel('rides')) return false;
     // The panel skips writes while closed; open it first, then project the current read model.
     ridesPanel.open();
-    const snapshot = ridesModules.live?.snapshot();
-    if (snapshot !== undefined) ridesPanel.update(snapshot, performance.now());
+    const snapshot = ridesModules.composition?.snapshot();
+    if (snapshot !== undefined)
+      ridesPanel.update(snapshot.live, performance.now(), snapshot.rides, snapshot.passenger);
     return true;
   },
 });
@@ -308,6 +332,8 @@ const application = createApplicationLifecycle({
         let ownedComposition: V3BrowserComposition | undefined;
         let ownedTraffic: ReturnType<typeof createAmbientTraffic> | undefined;
         let ownedRides: LiveRides | undefined;
+        let ownedRideComposition: LiveRideComposition | undefined;
+        let ownedHud: ReturnType<typeof createTaxiHud> | undefined;
         let owned: BabylonDiagnostics | undefined;
         let releaseSurface: (() => void) | undefined;
         let models: GlbModelLibrary | undefined;
@@ -367,8 +393,20 @@ const application = createApplicationLifecycle({
             seed: ownedTraffic.seed,
             scenarioId: 'v3-live-city-264',
             namespace: 'v3:city:rides',
+            keepPlayerClaims: true,
           });
-          ridesModules.live = ownedRides;
+          // PBI 265: aceleași revendicări 060 intră în lifecycle-ul 061, pickup 062, dropoff 063,
+          // ETA 064 și pasagerul 147; niciun al doilea model de cursă nu este creat.
+          ownedRideComposition = createLiveRideComposition({
+            live: ownedRides,
+            map: world.map,
+            graph: world.graph,
+            sessionId: compositionContext.sessionId,
+            worldEpoch: compositionContext.worldEpoch,
+          });
+          ridesModules.composition = ownedRideComposition;
+          ownedHud = createTaxiHud(app);
+          ridesModules.hud = ownedHud;
           // PBI 260: compunerea V3 este singura lume autoritară a shell-ului. Nicio a doua
           // simulare nu este creată aici; shell-ul doar o atașează și o pașește pe tick.
           const ownedWorld = ownedComposition;
@@ -427,8 +465,12 @@ const application = createApplicationLifecycle({
               attachedShellWorld = false;
               shell.detachWorld();
             }
+            ownedRideComposition?.dispose();
+            if (ridesModules.composition === ownedRideComposition)
+              ridesModules.composition = undefined;
             ownedRides?.dispose();
-            if (ridesModules.live === ownedRides) ridesModules.live = undefined;
+            ownedHud?.dispose();
+            if (ridesModules.hud === ownedHud) ridesModules.hud = undefined;
             ownedComposition?.dispose();
           } finally {
             try {
@@ -462,8 +504,12 @@ const application = createApplicationLifecycle({
                   attachedShellWorld = false;
                   shell.detachWorld();
                 }
+                ownedRideComposition?.dispose();
+                if (ridesModules.composition === ownedRideComposition)
+                  ridesModules.composition = undefined;
                 ownedRides?.dispose();
-                if (ridesModules.live === ownedRides) ridesModules.live = undefined;
+                ownedHud?.dispose();
+                if (ridesModules.hud === ownedHud) ridesModules.hud = undefined;
                 ownedComposition?.dispose();
               } finally {
                 // PBI 256: compunerea nu deține traficul; registry-ul și actorii 058 se eliberează aici.
@@ -532,10 +578,39 @@ const application = createApplicationLifecycle({
       const snapshot = liveFleetSnapshot();
       if (snapshot !== null) fleetPanel.update(snapshot, performance.now());
     }
-    // PBI 264: panoul curselor citește doar snapshotul modulului, la aceeași cadență de 10 Hz.
+    // PBI 264/265: panoul curselor citește read model-ul live + lifecycle + pasagerul 147.
     if (ridesPanel.isOpen()) {
-      const snapshot = ridesModules.live?.snapshot();
-      if (snapshot !== undefined) ridesPanel.update(snapshot, performance.now());
+      const snapshot = ridesModules.composition?.snapshot();
+      if (snapshot !== undefined)
+        ridesPanel.update(snapshot.live, performance.now(), snapshot.rides, snapshot.passenger);
+    }
+    // PBI 265: HUD-ul 073 și markerii 147 citesc aceeași stare autoritară; nimic nu scrie în simulare.
+    const rideComposition = ridesModules.composition;
+    if (frame !== undefined && rideComposition !== undefined) {
+      const taxiId = frame.playerVehicleId ?? frame.selectedVehicleId ?? lastMarkerTaxiId;
+      if (taxiId !== null) {
+        lastMarkerTaxiId = taxiId;
+        passengerPresenter.update(rideComposition.passenger({ taxiId, tick: frame.tick }));
+      }
+      rideMarkerLayer.project({
+        positionM: frame.camera.positionM,
+        lookAtM: frame.camera.lookAtM,
+        up: frame.camera.up,
+        fovRadians: frame.camera.fovRadians,
+        widthPx: window.innerWidth,
+        heightPx: window.innerHeight,
+      });
+      const hud = ridesModules.hud;
+      if (hud !== undefined && frame.tick % 6 === 0)
+        hud.update(
+          rideComposition.hud({
+            taxiId: taxiId ?? '',
+            mode: frame.hud.mode,
+            tick: frame.tick,
+            speedMps: frame.hud.speedMps,
+          }),
+          performance.now(),
+        );
     }
   },
   show: showView,
@@ -625,9 +700,9 @@ const sessionWorld: SessionWorldPort = {
   },
   start(identity) {
     shell.setSessionContext(identity);
-    // PBI 264: granița de scenariu 065 pentru cereri/dispecer; revendicările active sunt eliberate
-    // explicit înainte de rewind, ca resetul să nu lase taxiuri blocate sau asignări duplicate.
-    ridesModules.live?.reset({
+    // PBI 265: granița de scenariu 065 pentru curse. Fiecare cursă activă este închisă întâi cu
+    // SCENARIO_RESET prin 061, apoi 264 rewindează cererile/dispecerul fără revendicări duplicate.
+    ridesModules.composition?.reset({
       tick: composition?.composition.frame.tick ?? shell.status().world.tick,
     });
     composition?.composition.releaseInput();
@@ -730,6 +805,10 @@ interface V3DebugGlobal {
   fleet(): unknown;
   /** PBI 264: cererile, coada, alocările și starea panoului de curse. */
   rides(): unknown;
+  /** PBI 265: geometria reală a benzinelor de rută, pentru proba de condus din browser. */
+  lanePath(laneIds: readonly string[]): unknown;
+  /** PBI 265 (numai DEV/capture): fapt de sănătate real pentru proba terminală FAILED. */
+  setTaxiHealth?(taxiId: string, status: 'AVAILABLE' | 'BLOCKED' | 'DAMAGED' | 'OFFLINE'): unknown;
   /** PBI 260: starea read-only a lifecycle-ului 012, pentru diagnosticul probei de browser. */
   lifecycle(): unknown;
   /** PBI 241: starea AA/post-procesării (cine aplică tone mappingul, HDR, efecte). */
@@ -772,13 +851,28 @@ const debugGlobal: V3DebugGlobal = {
         : null,
     };
   },
+  lanePath: (laneIds: readonly string[]): unknown =>
+    laneIds.flatMap((laneId) => {
+      const path = world.graph.getDirectedPath(laneId);
+      return path === null
+        ? []
+        : path.points.map((point) => ({ x: point.x, y: point.y, z: point.z }));
+    }),
   lifecycle: () => application.getState(),
-  rides: () => ({
-    snapshot: ridesModules.live?.snapshot() ?? null,
-    stats: ridesModules.live?.stats() ?? null,
-    panelOpen: ridesPanel.isOpen(),
-    panel: ridesPanel.getStats(),
-  }),
+  rides: () => {
+    const snapshot = ridesModules.composition?.snapshot();
+    return {
+      snapshot: snapshot?.live ?? null,
+      rides: snapshot?.rides ?? null,
+      passenger: snapshot?.passenger ?? null,
+      stats: ridesModules.composition?.stats() ?? null,
+      panelOpen: ridesPanel.isOpen(),
+      panel: ridesPanel.getStats(),
+      hud: ridesModules.hud?.getStats() ?? null,
+      markers: rideMarkerLayer.getStats(),
+      markerTaxiId: lastMarkerTaxiId,
+    };
+  },
   postProcessing: () => composition?.view.daylight.getPostProcessingState() ?? null,
   reset: () => composition?.reset(),
   probeDoubleDelivery: () => composition?.probeDoubleDelivery() ?? 'NO_COMPOSITION',
@@ -795,6 +889,8 @@ if (
     sessionQuality = { ...sessionQuality, preset };
     composition.view.daylight.applyPreferences(sessionQuality);
   };
+  debugGlobal.setTaxiHealth = (taxiId, status) =>
+    ridesModules.composition?.setTaxiStatus(taxiId, status) ?? null;
   debugGlobal.scene = () => composition?.view.scene ?? null;
   debugGlobal.daylight = () => composition?.view.daylight ?? null;
   debugGlobal.setTimeOfDay = (name) => composition?.view.setTimeOfDay(name) ?? null;
@@ -814,6 +910,8 @@ const dispose = (): void => {
     shellHost.dispose();
     fleetPanel.dispose();
     ridesPanel.dispose();
+    passengerPresenter.dispose();
+    rideMarkerLayer.dispose();
     shell.dispose();
     diagnosticsPanel.dispose();
     view.dispose();
