@@ -118,6 +118,22 @@ export type {
   LiveRideMarkerLayer,
   LiveRideMarkerLayerStats,
 } from './live-ride-markers';
+export {
+  LIVE_ECONOMY_SERVICE_VERSION,
+  LIVE_ECONOMY_TEXT,
+  LIVE_ECONOMY_UI_VERSION,
+  emptyLiveEconomyView,
+  parseLiveEconomySnapshot,
+  projectLiveEconomy,
+} from './live-economy-format';
+export type { LiveEconomyPeriodView, LiveEconomyView } from './live-economy-format';
+export { LIVE_ECONOMY_HUD_REFRESH_MS, createLiveEconomyHud } from './live-economy-hud';
+export type {
+  LiveEconomyHud,
+  LiveEconomyHudOptions,
+  LiveEconomyHudStats,
+  LiveEconomyHudStatus,
+} from './live-economy-hud';
 export { createProfilePanel } from './profile-panel';
 export type { ProfilePanel, ProfilePanelOptions } from './profile-panel';
 export { createLearningNotifications } from './learning-notifications';

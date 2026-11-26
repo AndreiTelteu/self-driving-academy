@@ -25,9 +25,10 @@ Buildul curent pornește din `src/main.ts` și oferă:
 - ecran de start, pauză, vitezometru și indicator de mod;
 - meniul Academie / Joacă liberă / Haos și „Oraș proaspăt, păstrează stilul” din panoul shell-ului, cu identitate, checkpoint și pauză/AUTO separate;
 - un singur composition root (260) care deține tick-ul, pauza/focusul și ordinea porturilor, plus un panou de integrare care arată explicit sistemele 262–286 încă neintegrate;
-- panoul `Flotă` (263) care listează toate taxiurile și civilii live, mută doar camera la selecție și preia explicit `M` cu un singur scaun `PLAYER`.
+- panoul `Flotă` (263) care listează toate taxiurile și civilii live, mută doar camera la selecție și preia explicit `M` cu un singur scaun `PLAYER`;
+- [economia live 266](live-economy.md) peste cursele 265: revenue, review 0–5, bucketuri KPI de zi/lună și un HUD compact cu ziua/luna simulată.
 
-Nu sunt montate: LEARNING, economia curselor (KPI, review, tarif), misiuni, XP, salvare, companie, panourile de sistem (KPI, misiuni, profil, setări), first-person, minimapa, sunet, decorul destructibil și provocările Haos, fizica Rapier și regulile de trafic. Cursele live, pickup/dropoff, pasagerul, ETA și HUD-ul de cursă sunt montate prin 265.
+Nu sunt montate: LEARNING, pop-up-ul KPI și panoul companiei, misiuni, XP, salvare, panourile de sistem (profil, setări), first-person, minimapa, sunet, decorul destructibil și provocările Haos, fizica Rapier și regulile de trafic. Cursele live, pickup/dropoff, pasagerul, ETA și HUD-ul de cursă sunt montate prin 265.
 
 ## Matricea lacunelor
 
@@ -194,16 +195,14 @@ Nu sunt montate: LEARNING, economia curselor (KPI, review, tarif), misiuni, XP, 
 
 ### 266 — Economia live: revenue, review-uri, KPI și ceasul economic
 
-**Ce lipsește:** Ledgerul 209, review-urile și bucketurile KPI există ca module, dar în joc nu se produce revenue, rating sau istoric.
+**Stare:** Implementat local la 26 noiembrie 2026. `src/app/live-economy-composition.ts` instanțiază economia 209 peste cursele terminale 265, iar `src/main.ts` montează portul `economy` după `rides`. Fiecare sesiune are propriul ledger, review-uri și bucketuri, create numai după resetul 265, deci nu moștenesc cursele celeilalte sesiuni. Fiecare cursă terminală produce o singură decontare: `COMPLETED` încasează tariful complet, `FAILED` și `CANCELLED` fără pasager rambursează integral, `CANCELLED` cu pasager păstrează doar taxa de serviciu. Review-ul 0–5 consumă un trace real 139 cu pasager, bucketurile de zi/lună păstrează revenue, curse, review-uri, `ratingSum`, histogramă și expunere, iar `historyScans` rămâne `0`. Pauza/focusul suspendă ceasul economic (1 200 s/zi, 30 zile/lună), civilii nu intră în revenue, un duplicat nu schimbă nimic, iar resetul de sesiune pornește o epocă nouă fără să rescrie istoricul. HUD-ul live arată ziua/luna simulată; pop-up-ul KPI rămâne 267.
 
-- `createFleetEconomy` nu este instanțiat în compunerea live.
-- Nu există ceas economic, zi/lună simulată sau expunere care să hrănească KPI-urile.
-- Nu există review-uri reale din cursele jucătorului sau din taxiurile AI.
-- Nu există legătura dintre incidente/confomfort și rating.
-- Nu există idempotență vizibilă între reload, reluare și dubla livrare.
-- Nu există o probă de browser cu revenue și rating după o cursă.
+**Ce lipsește:** Ferestrele 088 de suprimare a artefactelor și secundele blocate 137 nu sunt încă montate live; review-ul folosește confortul real, dar raportează acei termeni ca 0. Persistarea economiei după reload rămâne 278, iar cursele închise chiar de resetul 265 cu `SCENARIO_RESET` nu mai sunt vizibile ca `RideRecord` terminal și nu sunt decontate. Proba de browser a trecut 18/18 pe Chromium 157/WEBGL2, cu o cursă manuală `COMPLETED`, un settle și un review pentru cursa țintă, revenue 9 335 SDA în sesiune (inclusiv taxiurile AI) și `historyScans: 0` înainte/după panoul `Curse`.
 
-**Documentație:** [KPI-uri, economie și review-uri](22-kpi-economie-si-review-uri.md) · [Flotă și curse](07-flota-si-curse.md) · [Indicatorii de serviciu](metric-service.md) · [Indicatorii de comportament](behavior-metrics.md) · [Indicatorii de confort](comfort-metrics.md) · [Savefile și integritate](29-savefile-si-integritate.md) · [Starea implementării și lacunele](31-stare-implementare-si-lacune.md)
+- **Ce s-a livrat:** `src/app/live-economy-composition.ts`, `src/economy/live-economy.ts`, `src/ui/live-economy-format.ts`, `src/ui/live-economy-hud.ts`, portul `economy` și HUD-ul din `src/main.ts`; teste în `tests/economy/live-economy.test.ts`, `tests/economy/live-economy-report.test.ts` și `tests/ui/live-economy.test.ts`; raport în `tests/economy/live-economy-report.ts`.
+- **Dovezi:** [raport determinist](Evidence/266-live-economy/report.json), [probă de browser](Evidence/266-live-economy/browser.json), [README dovezi](Evidence/266-live-economy/README.md).
+
+**Documentație:** [KPI-uri, economie și review-uri](22-kpi-economie-si-review-uri.md) · [Flotă și curse](07-flota-si-curse.md) · [Economia live](live-economy.md) · [Indicatorii de serviciu](metric-service.md) · [Indicatorii de comportament](behavior-metrics.md) · [Indicatorii de confort](comfort-metrics.md) · [Starea implementării și lacunele](31-stare-implementare-si-lacune.md)
 
 **PBI:** [266](../PBI/README.md) · **Dependențe:** 265.
 

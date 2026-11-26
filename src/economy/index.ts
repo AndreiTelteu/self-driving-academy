@@ -5,4 +5,5 @@ export * from './ledger';
 export * from './kpi';
 export * from './kpi-history';
 export * from './kpi-impact';
+export * from './live-economy';
 export * from './economy';
