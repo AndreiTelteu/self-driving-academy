@@ -1,0 +1,12 @@
+{
+  "id": "264",
+  "criteriaSatisfied": true,
+  "result": "Live rides compose the real 059 queue, 060 dispatcher and 041 planner over 24 taxis and 32 civilians. The plan has 64 deterministic requests with real TAXI zones, dispatch runs at 10 Hz with bounded assignments/searches, both legs are replanned at assignment, and the available taxi with the real minimum pickup cost wins with stable ID tie-break. Player-driven, blocked, damaged and offline taxis are excluded and released with closed reasons. A rides POST_WORLD port is mounted, session reset releases claims and rewinds the queue without duplicate identities, and the live panel exposes the read model.",
+  "limitations": "Physical pickup/dropoff, passengers, ETA and the complete ride lifecycle remain 265. Assignments are 060 claims; the 24 taxis keep their 058 routes, and once all are claimed the remaining requests wait for 265 to release them. Cost evidence is a headless subsystem probe, not FPS/GPU/hardware. The browser probe used installed Chrome via PLAYWRIGHT_MODULE; shell:probe was not rerun for the new buttons. Local Node is 24.19.0 below >=24.21.0.",
+  "checks": [
+    ["node", "--import", "./scripts/register-typescript.mjs", "--test", "tests/fleet/live-rides.test.ts", "tests/ui/live-rides-panel.test.ts", "tests/ui/game-shell-host.test.ts"],
+    ["npm", "run", "ride:live", "--", "--check"],
+    ["npm", "run", "docs:check", "--", "--check"],
+    ["npm", "run", "typecheck"]
+  ]
+}
