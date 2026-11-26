@@ -261,8 +261,8 @@ try {
       const state = globalThis.__v3Composition.rides();
       return (
         state?.snapshot?.counts?.requests > 0 &&
-        state.snapshot.counts.assigned > 0 &&
-        state.snapshot.assignments.length > 0
+        state.snapshot.counts.assigned >= 4 &&
+        state.snapshot.assignments.length >= 4
       );
     },
     null,
