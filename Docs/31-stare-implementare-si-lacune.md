@@ -77,6 +77,8 @@ Nu sunt montate: LEARNING, curse, pasageri, flotă selectabilă, KPI, misiuni, X
 
 **PBI:** [259](../PBI/README.md) · **Dependențe:** niciuna.
 
+**Stare:** Done la 26 noiembrie 2026. `npm run docs:check` și testele aferente sunt active; textul de mai sus rămâne descrierea lacunii care a justificat taskul.
+
 ### 260 — Shell-ul jocului și composition root pentru Academia jucabilă
 
 **Ce lipsește:** `src/main.ts` montează doar compunerea V3; nu există un composition root care să ruleze împreună sesiunea, flota, cursele, learning-ul, economia, misiunile și salvarea.

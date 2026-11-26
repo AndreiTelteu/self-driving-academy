@@ -236,6 +236,40 @@ test('259 a complete fixture passes without errors', () => {
   });
 });
 
+test('259 a completed module uses Completed and 100%', () => {
+  withFixture((root) => {
+    for (const [id, slug] of [
+      ['259', 'alpha'],
+      ['260', 'beta'],
+    ] as const) {
+      const file = `${id}-${slug}.md`;
+      renameSync(join(root, 'PBI', 'To Do', file), join(root, 'PBI', 'Done', file));
+      replaceInFile(root, `PBI/Done/${file}`, 'status: "To Do"', 'status: "Done"');
+      replaceInFile(
+        root,
+        `PBI/Done/${file}`,
+        'completed_at: null',
+        'completed_at: "2026-11-26T00:00:00Z"',
+      );
+    }
+    replaceInFile(
+      root,
+      'PBI/README.md',
+      '| Documentație | V1 | 2 | 0 | 0 / 2 | `░░░░░░░░░░` 0% |',
+      '| Documentație | Completed | 0 | 0 | 2 / 2 | `██████████` 100% |',
+    );
+    replaceInFile(
+      root,
+      'PBI/README.md',
+      '| Total | - | 2 | 0 | 0 / 2 | `░░░░░░░░░░` 0% |',
+      '| Total | - | 0 | 0 | 2 / 2 | `██████████` 100% |',
+    );
+    const result = checkDocsSync({ root });
+    assert.deepEqual(result.errors, []);
+    assert.equal(result.summary.taskCount, 2);
+  });
+});
+
 test('259 a changed index title fails with the file and field', () => {
   withFixture((root) => {
     replaceInFile(root, 'PBI/README.md', '| 259 | Alpha task |', '| 259 | Alpha renamed |');

@@ -2,7 +2,7 @@
 | Module | Remaining phases | To Do | In Progress | Done / Total | Progress |
 |---|---|---:|---:|---:|---|
 | Companie | V1 | 2 | 0 | 0 / 2 | `░░░░░░░░░░` 0% |
-| Documentație | V1 | 0 | 1 | 0 / 1 | `░░░░░░░░░░` 0% |
+| Documentație | Completed | 0 | 0 | 1 / 1 | `██████████` 100% |
 | Economie | V1 | 1 | 0 | 0 / 1 | `░░░░░░░░░░` 0% |
 | Fizică | V1 | 1 | 0 | 0 / 1 | `░░░░░░░░░░` 0% |
 | Flotă și curse | V1 | 3 | 0 | 0 / 3 | `░░░░░░░░░░` 0% |
@@ -17,7 +17,7 @@
 | Release | V4 | 1 | 0 | 0 / 1 | `░░░░░░░░░░` 0% |
 | Sesiuni | V1 | 1 | 0 | 0 / 1 | `░░░░░░░░░░` 0% |
 | Trafic | V1 | 2 | 0 | 0 / 2 | `░░░░░░░░░░` 0% |
-| Total | - | 27 | 2 | 0 / 29 | `░░░░░░░░░░` 0% |
+| Total | - | 27 | 1 | 1 / 29 | `░░░░░░░░░░` 3% |
 <!-- loop-pbi:progress:end -->
 
 # Backlog Kanban Self Driving Academy

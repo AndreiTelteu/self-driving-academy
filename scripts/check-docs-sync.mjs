@@ -351,7 +351,8 @@ function progressRows(text) {
 
 function expectedPhaseLabel(group) {
   if (group.phases.size > 0) return [...group.phases].sort().join(', ');
-  if (group.done > 0 && group.done === group.total) return 'Completed';
+  const total = group.todo + group.progress + group.done;
+  if (group.done > 0 && group.done === total) return 'Completed';
   return '-';
 }
 

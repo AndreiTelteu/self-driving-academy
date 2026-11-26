@@ -1,0 +1,10 @@
+{
+  "id": "259",
+  "criteriaSatisfied": true,
+  "result": "The docs-sync guard compares the physical PBI board with PBI/README, Docs/21, Docs/31, root README and Docs/README. It validates task metadata, index rows, progress/stage counts, the 259-287 generation, the historical 001-258 rule, cross-document gap text and local links. npm run docs:check -- --check is read-only; npm run docs:check is the explicit diagnostic form. The guard is included in npm run check and in the loop-pbi validate configuration.",
+  "limitations": "Local Node is 24.19.0, below the declared >=24.21.0; all checks passed. The --pending-task={id} option is a narrow loop-pbi transition exception documented in Docs/18. One integrated npm run check run hit a timing-sensitive 229 assertion (600 frames cost 273.5 ms); the immediate targeted rerun passed 14/14 and the child worktree full check passed 3558/0 fail.",
+  "checks": [
+    ["npm", "run", "docs:check", "--", "--check"],
+    ["node", "--import", "./scripts/register-typescript.mjs", "--test", "tests/qa/docs-sync-guard.test.ts"]
+  ]
+}
