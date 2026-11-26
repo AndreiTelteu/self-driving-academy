@@ -41,6 +41,36 @@ export interface LiveRideLifecycleReport {
     pickupAnchor: Readonly<{ x: number; y: number; z: number }>;
     dropoffAnchor: Readonly<{ x: number; y: number; z: number }>;
   }>;
+  readonly autoRide: Readonly<{
+    rideId: string;
+    requestId: string;
+    taxiId: string;
+    pickupZoneId: string;
+    dropoffZoneId: string;
+    startedTick: number;
+    boardingTick: number;
+    completionTick: number;
+    pickupDwellTicks: number;
+    dropoffDwellTicks: number;
+    requiredDwellTicks: number;
+    transitions: number;
+    releaseReason: string | null;
+    pickupPathLanes: number;
+    tripPathLanes: number;
+    pickupPathMatches: boolean;
+    tripPathMatches: boolean;
+    pickupActorSpeedMps: number;
+    dropoffActorSpeedMps: number;
+    pickupRemainingM: number;
+    dropoffRemainingM: number;
+    maxRouteStepM: number;
+    maxPositionStepM: number;
+    maxSpeedMps: number;
+    distanceTravelledM: number;
+    serviceCleared: boolean;
+    overrides: number;
+    authority: string | null;
+  }>;
   readonly passenger: Readonly<{
     waitingPhase: string;
     waitingMarkers: readonly string[];
@@ -291,6 +321,136 @@ export function runLiveRideLifecycleReport(): LiveRideLifecycleReport {
     const duplicateTaxis =
       afterReset.live.assignments.length -
       new Set(afterReset.live.assignments.map((assignment) => assignment.taxiId)).size;
+
+    // AUTO: a second real scenario where the assigned 058 taxi executes its 041 pickup/dropoff
+    // route without any player input. The actor holds inside each 032 zone for the real dwell.
+    const autoFixture = createLiveRideLifecycleFixture({ dwellTicks: 180, civilianCount: 32 });
+    let autoCompleted: LiveRideLifecycleRideView | null = null,
+      autoSnapshot: LiveRideCompositionSnapshot | null = null,
+      autoBoardingTick = -1,
+      autoCompletionTick = -1,
+      autoPickupDwellTicks = -1,
+      autoDropoffDwellTicks = -1,
+      autoPickupRemainingM = Number.POSITIVE_INFINITY,
+      autoDropoffRemainingM = Number.POSITIVE_INFINITY,
+      autoPickupSpeedMps = -1,
+      autoDropoffSpeedMps = -1,
+      autoMaxRouteStepM = 0,
+      autoMaxPositionStepM = 0,
+      autoMaxSpeedMps = 0,
+      autoDistanceTravelledM = 0,
+      autoAuthority: string | null = null,
+      autoPickupPathMatches = false,
+      autoTripPathMatches = false,
+      autoServiceCleared = false,
+      autoOverrides = 0,
+      autoPickupPathLanes = 0,
+      autoTripPathLanes = 0;
+    let autoRideId = '',
+      autoRequestId = '',
+      autoTaxiId = '',
+      autoPickupZoneId = '',
+      autoDropoffZoneId = '',
+      autoStartedTick = -1,
+      autoTransitions = 0,
+      autoReleaseReason: string | null = null;
+    try {
+      autoFixture.runTo(120);
+      const initialAuto = autoFixture.snapshot(),
+        candidates = initialAuto.live.assignments
+          .filter(
+            (assignment) => assignment.pickupCostSeconds >= 5 && assignment.tripCostSeconds >= 20,
+          )
+          .slice()
+          .sort(
+            (left, right) =>
+              left.totalCostSeconds - right.totalCostSeconds ||
+              (left.requestId < right.requestId ? -1 : left.requestId > right.requestId ? 1 : 0),
+          );
+      const autoAssignment = candidates[0];
+      if (autoAssignment === undefined) throw new Error('No AUTO ride assignment at tick 120');
+      autoRideId = rideByRequest(initialAuto, autoAssignment.requestId).rideId;
+      autoRequestId = autoAssignment.requestId;
+      autoTaxiId = autoAssignment.taxiId;
+      autoPickupZoneId = autoAssignment.pickupZoneId;
+      autoDropoffZoneId = autoAssignment.dropoffZoneId;
+      autoPickupPathLanes = autoAssignment.pickupRouteLaneIds.length;
+      autoTripPathLanes = autoAssignment.tripRouteLaneIds.length;
+      const initialActor = autoFixture.ambient.get(autoTaxiId);
+      if (initialActor === undefined) throw new Error('The AUTO taxi actor is missing');
+      autoAuthority = initialActor.authority;
+      autoDistanceTravelledM = 0;
+      let previousPosition = initialActor.positionM,
+        previousRouteDistance = initialActor.distanceAlongRouteM,
+        previousServiceTick =
+          autoFixture.ambient.traffic.serviceRoute(autoTaxiId)?.assignedTick ?? null,
+        tick = 120,
+        lastSnapshotTick = -1;
+      while (tick < 20000) {
+        tick += 1;
+        autoFixture.step(tick);
+        const actor = autoFixture.ambient.get(autoTaxiId);
+        if (actor === undefined) throw new Error('The AUTO taxi actor disappeared');
+        const positionStepM = Math.hypot(
+          actor.positionM.x - previousPosition.x,
+          actor.positionM.y - previousPosition.y,
+          actor.positionM.z - previousPosition.z,
+        );
+        autoMaxPositionStepM = Math.max(autoMaxPositionStepM, positionStepM);
+        autoDistanceTravelledM += positionStepM;
+        previousPosition = actor.positionM;
+        const service = autoFixture.ambient.traffic.serviceRoute(autoTaxiId);
+        if (service !== null && service.assignedTick === previousServiceTick)
+          autoMaxRouteStepM = Math.max(
+            autoMaxRouteStepM,
+            actor.distanceAlongRouteM - previousRouteDistance,
+          );
+        previousServiceTick = service?.assignedTick ?? null;
+        previousRouteDistance = actor.distanceAlongRouteM;
+        autoMaxSpeedMps = Math.max(autoMaxSpeedMps, actor.speedMps);
+        autoAuthority = actor.authority;
+        const record = autoFixture.composition.lifecycle.lifecycle.ride(autoRideId);
+        if (record === undefined) throw new Error('The AUTO ride disappeared');
+        if (record.state === 'PICKUP' && lastSnapshotTick < 0) {
+          autoPickupRemainingM = service?.remainingToStopM ?? Number.POSITIVE_INFINITY;
+          autoPickupSpeedMps = actor.speedMps;
+          autoPickupPathMatches =
+            service !== null &&
+            service.path.join('|') === autoAssignment.pickupRouteLaneIds.join('|');
+          lastSnapshotTick = tick;
+        }
+        if (record.state === 'TO_DROPOFF' && autoBoardingTick < 0) {
+          autoTripPathMatches =
+            service !== null &&
+            service.path.join('|') === autoAssignment.tripRouteLaneIds.join('|');
+          autoBoardingTick =
+            record.transitions.find((entry) => entry.event === 'PICKUP_COMPLETE')?.tick ?? tick;
+          const snapshot = autoFixture.snapshot(),
+            view = rideByRequest(snapshot, autoRequestId);
+          autoPickupDwellTicks = view.pickup?.dwellTicks ?? -1;
+        }
+        if (record.state === 'DROPOFF' && autoDropoffSpeedMps < 0) {
+          autoDropoffRemainingM = service?.remainingToStopM ?? Number.POSITIVE_INFINITY;
+          autoDropoffSpeedMps = actor.speedMps;
+        }
+        if (record.terminal) {
+          autoSnapshot = autoFixture.snapshot();
+          autoCompleted = rideByRequest(autoSnapshot, autoRequestId);
+          autoCompletionTick = autoCompleted.completionTick ?? tick;
+          autoDropoffDwellTicks = autoCompleted.dropoff?.dwellTicks ?? -1;
+          autoStartedTick = autoCompleted.startedTick;
+          autoTransitions = autoCompleted.transitions;
+          autoReleaseReason = autoCompleted.release?.reason ?? null;
+          autoServiceCleared = autoFixture.ambient.traffic.serviceRoute(autoTaxiId) === null;
+          autoOverrides = autoFixture.overrides.size;
+          break;
+        }
+      }
+      if (autoCompleted === null || autoSnapshot === null)
+        throw new Error('The AUTO ride did not complete within the bound');
+    } finally {
+      autoFixture.dispose();
+    }
 
     const checks: LiveRideLifecycleReportCheck[] = [
       check(
@@ -558,6 +718,86 @@ export function runLiveRideLifecycleReport(): LiveRideLifecycleReport {
         'post-reset request map has no duplicate',
       ),
       check('reset-duplicate-taxis', 0, duplicateTaxis, 'post-reset taxi map has no duplicate'),
+      check(
+        'auto-ride-completed',
+        'COMPLETED',
+        autoCompleted?.state ?? 'MISSING',
+        'an assigned AI taxi completes a whole ride without player input',
+      ),
+      check(
+        'auto-ride-release',
+        'COMPLETED',
+        autoReleaseReason,
+        'the AUTO ride releases its 060 claim through the real 061 completion',
+      ),
+      check(
+        'auto-ride-authority',
+        'AUTO',
+        autoAuthority,
+        'the AUTO taxi was never taken over by the player',
+      ),
+      check(
+        'auto-pickup-path',
+        true,
+        autoPickupPathMatches,
+        'the 058 actor follows the assignment 041 pickup path',
+      ),
+      check(
+        'auto-trip-path',
+        true,
+        autoTripPathMatches,
+        'the 058 actor follows the assignment 041 dropoff path',
+      ),
+      check(
+        'auto-pickup-dwell',
+        180,
+        autoPickupDwellTicks,
+        'the AUTO pickup dwell is the required 180 ticks',
+      ),
+      check(
+        'auto-dropoff-dwell',
+        180,
+        autoDropoffDwellTicks,
+        'the AUTO dropoff dwell is the required 180 ticks',
+      ),
+      check(
+        'auto-pickup-stopped',
+        true,
+        autoPickupSpeedMps >= 0 && autoPickupSpeedMps <= 0.3 && autoPickupRemainingM <= 0.01,
+        `speed ${autoPickupSpeedMps}, remaining ${autoPickupRemainingM}`,
+      ),
+      check(
+        'auto-dropoff-stopped',
+        true,
+        autoDropoffSpeedMps >= 0 && autoDropoffSpeedMps <= 0.3 && autoDropoffRemainingM <= 0.01,
+        `speed ${autoDropoffSpeedMps}, remaining ${autoDropoffRemainingM}`,
+      ),
+      check(
+        'auto-route-motion',
+        true,
+        autoMaxSpeedMps > 3 && autoDistanceTravelledM > 100,
+        `max speed ${autoMaxSpeedMps.toFixed(2)} m/s, distance ${autoDistanceTravelledM.toFixed(1)} m`,
+      ),
+      check(
+        'auto-no-teleport',
+        true,
+        autoOverrides === 0 && autoMaxRouteStepM < 0.3,
+        `overrides ${autoOverrides}, largest route step ${autoMaxRouteStepM.toFixed(3)} m (position step ${autoMaxPositionStepM.toFixed(2)} m at lane junctions)`,
+      ),
+      check(
+        'auto-service-cleared',
+        true,
+        autoServiceCleared,
+        'the terminal ride returns the actor to its ambient 058 route',
+      ),
+      check(
+        'auto-ticks',
+        true,
+        autoStartedTick >= 0 &&
+          autoBoardingTick > autoStartedTick &&
+          autoCompletionTick > autoBoardingTick,
+        `started ${autoStartedTick}, boarding ${autoBoardingTick}, completion ${autoCompletionTick}`,
+      ),
     ];
     const passed = checks.filter((entry) => entry.pass).length;
     return {
@@ -587,6 +827,36 @@ export function runLiveRideLifecycleReport(): LiveRideLifecycleReport {
         releaseReason: completedRide.release?.reason ?? null,
         pickupAnchor,
         dropoffAnchor,
+      },
+      autoRide: {
+        rideId: autoRideId,
+        requestId: autoRequestId,
+        taxiId: autoTaxiId,
+        pickupZoneId: autoPickupZoneId,
+        dropoffZoneId: autoDropoffZoneId,
+        startedTick: autoStartedTick,
+        boardingTick: autoBoardingTick,
+        completionTick: autoCompletionTick,
+        pickupDwellTicks: autoPickupDwellTicks,
+        dropoffDwellTicks: autoDropoffDwellTicks,
+        requiredDwellTicks: autoCompleted?.pickup?.requiredDwellTicks ?? 0,
+        transitions: autoTransitions,
+        releaseReason: autoReleaseReason,
+        pickupPathLanes: autoPickupPathLanes,
+        tripPathLanes: autoTripPathLanes,
+        pickupPathMatches: autoPickupPathMatches,
+        tripPathMatches: autoTripPathMatches,
+        pickupActorSpeedMps: autoPickupSpeedMps,
+        dropoffActorSpeedMps: autoDropoffSpeedMps,
+        pickupRemainingM: autoPickupRemainingM,
+        dropoffRemainingM: autoDropoffRemainingM,
+        maxRouteStepM: autoMaxRouteStepM,
+        maxPositionStepM: autoMaxPositionStepM,
+        maxSpeedMps: autoMaxSpeedMps,
+        distanceTravelledM: autoDistanceTravelledM,
+        serviceCleared: autoServiceCleared,
+        overrides: autoOverrides,
+        authority: autoAuthority,
       },
       passenger: {
         waitingPhase: waitingFrame.phase,

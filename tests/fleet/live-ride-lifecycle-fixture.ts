@@ -79,6 +79,7 @@ export function createLiveRideLifecycleFixture(
     live,
     map: world.map,
     graph: world.graph,
+    actors: ambient.traffic,
     sessionId: LIFECYCLE_CONTEXT.sessionId,
     worldEpoch: LIFECYCLE_CONTEXT.worldEpoch,
     ...(options.dwellTicks === undefined ? {} : { dwellTicks: options.dwellTicks }),

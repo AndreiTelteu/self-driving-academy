@@ -34,6 +34,36 @@
       "z": 182.1
     }
   },
+  "autoRide": {
+    "rideId": "id-v1:4:ride14:test:265:rides51:id-v1:12:ride-request14:test:265:rides4:w0015:r0000",
+    "requestId": "id-v1:12:ride-request14:test:265:rides4:w0015:r0000",
+    "taxiId": "id-v1:7:vehicle13:v3:city:fleet4:TAXI4:0011",
+    "pickupZoneId": "sz:2-1",
+    "dropoffZoneId": "sz:0-1",
+    "startedTick": 120,
+    "boardingTick": 2682,
+    "completionTick": 5079,
+    "pickupDwellTicks": 180,
+    "dropoffDwellTicks": 180,
+    "requiredDwellTicks": 180,
+    "transitions": 5,
+    "releaseReason": "COMPLETED",
+    "pickupPathLanes": 3,
+    "tripPathLanes": 3,
+    "pickupPathMatches": true,
+    "tripPathMatches": true,
+    "pickupActorSpeedMps": 0,
+    "dropoffActorSpeedMps": 0,
+    "pickupRemainingM": 0,
+    "dropoffRemainingM": 0,
+    "maxRouteStepM": 0.22169834520434506,
+    "maxPositionStepM": 15.112513160019148,
+    "maxSpeedMps": 13.30190071226051,
+    "distanceTravelledM": 789.4774969076382,
+    "serviceCleared": true,
+    "overrides": 0,
+    "authority": "AUTO"
+  },
   "passenger": {
     "waitingPhase": "WAITING_PICKUP",
     "waitingMarkers": [
@@ -478,12 +508,103 @@
       "actual": 0,
       "pass": true,
       "detail": "post-reset taxi map has no duplicate"
+    },
+    {
+      "name": "auto-ride-completed",
+      "expected": "COMPLETED",
+      "actual": "COMPLETED",
+      "pass": true,
+      "detail": "an assigned AI taxi completes a whole ride without player input"
+    },
+    {
+      "name": "auto-ride-release",
+      "expected": "COMPLETED",
+      "actual": "COMPLETED",
+      "pass": true,
+      "detail": "the AUTO ride releases its 060 claim through the real 061 completion"
+    },
+    {
+      "name": "auto-ride-authority",
+      "expected": "AUTO",
+      "actual": "AUTO",
+      "pass": true,
+      "detail": "the AUTO taxi was never taken over by the player"
+    },
+    {
+      "name": "auto-pickup-path",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the 058 actor follows the assignment 041 pickup path"
+    },
+    {
+      "name": "auto-trip-path",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the 058 actor follows the assignment 041 dropoff path"
+    },
+    {
+      "name": "auto-pickup-dwell",
+      "expected": 180,
+      "actual": 180,
+      "pass": true,
+      "detail": "the AUTO pickup dwell is the required 180 ticks"
+    },
+    {
+      "name": "auto-dropoff-dwell",
+      "expected": 180,
+      "actual": 180,
+      "pass": true,
+      "detail": "the AUTO dropoff dwell is the required 180 ticks"
+    },
+    {
+      "name": "auto-pickup-stopped",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "speed 0, remaining 0"
+    },
+    {
+      "name": "auto-dropoff-stopped",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "speed 0, remaining 0"
+    },
+    {
+      "name": "auto-route-motion",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "max speed 13.30 m/s, distance 789.5 m"
+    },
+    {
+      "name": "auto-no-teleport",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "overrides 0, largest route step 0.222 m (position step 15.11 m at lane junctions)"
+    },
+    {
+      "name": "auto-service-cleared",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the terminal ride returns the actor to its ambient 058 route"
+    },
+    {
+      "name": "auto-ticks",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "started 120, boarding 2682, completion 5079"
     }
   ],
   "summary": {
     "version": "265-live-ride-lifecycle-report-v1",
-    "checks": 53,
-    "passed": 53,
+    "checks": 66,
+    "passed": 66,
     "pass": true
   }
 }

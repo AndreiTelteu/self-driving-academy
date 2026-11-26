@@ -401,6 +401,7 @@ const application = createApplicationLifecycle({
             live: ownedRides,
             map: world.map,
             graph: world.graph,
+            actors: ownedTraffic.traffic,
             sessionId: compositionContext.sessionId,
             worldEpoch: compositionContext.worldEpoch,
           });
@@ -865,6 +866,7 @@ const debugGlobal: V3DebugGlobal = {
       snapshot: snapshot?.live ?? null,
       rides: snapshot?.rides ?? null,
       passenger: snapshot?.passenger ?? null,
+      actorRoutes: snapshot?.actorRoutes ?? null,
       stats: ridesModules.composition?.stats() ?? null,
       panelOpen: ridesPanel.isOpen(),
       panel: ridesPanel.getStats(),

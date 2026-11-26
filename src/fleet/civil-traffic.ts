@@ -48,6 +48,7 @@ import type {
   RoadMap,
   RoutePlan,
   RoutePlanner,
+  ServiceZone,
 } from '../world';
 import { FLEET_LIMITS, fleetDriverKinds } from './registry';
 import type { ControlMode } from '../vehicles';
@@ -78,6 +79,13 @@ export const CIVIL_TRAFFIC_LIMITS = Object.freeze({
   minimumGapM: 0.25,
   /** A merging actor holds at the lane boundary while another actor is this close to its start. */
   entryClearanceM: 6,
+  /**
+   * PBI 265: deceleration used to stop a service route inside its real 032 destination zone.
+   * The stop point is part of the route, never a teleport to the zone anchor.
+   */
+  serviceRouteDecelMps2: 2.4,
+  /** Remaining-to-stop distance treated as the held stop point. */
+  serviceRouteStopToleranceM: 0.01,
   retainedHistory: 0,
 });
 
@@ -148,6 +156,29 @@ export interface CivilPoseReconciliation {
   readonly positionM: Vector3;
   /** Map-plane heading in radians: zero +X, positive toward +Z. */
   readonly headingRad: number;
+}
+
+/**
+ * PBI 265: a real 041 service route owned by one fleet actor. `stopDistanceM` is measured along
+ * the exact planned path and lies inside the destination 032 zone; the actor holds there until the
+ * caller clears the route. This is route execution, not a second router or a teleport.
+ */
+export interface CivilServiceRouteSnapshot {
+  readonly version: '058-service-route-v1';
+  readonly vehicleId: string;
+  readonly zoneId: string;
+  readonly laneId: string;
+  readonly destinationLaneId: string;
+  readonly path: readonly string[];
+  readonly assignedTick: number;
+  readonly stopDistanceM: number;
+  readonly distanceAlongRouteM: number;
+  readonly remainingToStopM: number;
+  readonly routeLaneIndex: number;
+  readonly routeLaneCount: number;
+  readonly speedMps: number;
+  readonly positionM: Vector3;
+  readonly stopped: boolean;
 }
 
 export interface CivilRouteSnapshot {
@@ -247,6 +278,16 @@ export interface CivilTraffic {
   reconcile(vehicleId: string, pose: CivilPoseReconciliation, atTick?: number): CivilActorSnapshot;
   /** Explicit release back to AUTO: route is kept, the active common style is re-read. */
   resume(vehicleId: string, atTick?: number): CivilActorSnapshot;
+  /**
+   * PBI 265: replace the ambient route with a real 041 route to a 032 service zone and hold at the
+   * zone anchor. The actor must be AUTO; a player-driven actor is never re-routed. The route starts
+   * from the actor's current lane and is projected without moving the car backwards or sideways.
+   */
+  assignServiceRoute(vehicleId: string, zoneId: string, atTick?: number): CivilActorSnapshot;
+  /** Release the service route; the actor continues along the remaining real path. */
+  clearServiceRoute(vehicleId: string, atTick?: number): CivilActorSnapshot;
+  /** Read-only service-route proof for evidence and the ride read model; `null` when none. */
+  serviceRoute(vehicleId: string): CivilServiceRouteSnapshot | null;
   refreshStyle(): Readonly<{ profileId: string; versionId: string }>;
   report(): CivilTrafficReport;
   getStats(): CivilTrafficStats;
@@ -299,6 +340,13 @@ interface ActorState {
   replans: number;
   ticks: number;
   blocked: boolean;
+  /** PBI 265: real 032 service destination and its stop distance along `route`. */
+  service: {
+    readonly zoneId: string;
+    readonly laneId: string;
+    readonly stopDistanceM: number;
+    readonly assignedTick: number;
+  } | null;
 }
 
 const CONTROL_MODES: readonly ControlMode[] = ['AUTO', 'MANUAL', 'LEARNING'];
@@ -620,6 +668,7 @@ class CivilTrafficImpl implements CivilTraffic {
   private readonly costVersion: string;
   private readonly seed: number;
   private readonly scenarioSeed: number;
+  private readonly zoneById: ReadonlyMap<string, ServiceZone>;
   private readonly spawnLanes: readonly string[];
   private readonly spawnOffsetsM: readonly number[];
   private readonly spawnLanesByKind: Readonly<
@@ -668,6 +717,7 @@ class CivilTrafficImpl implements CivilTraffic {
     this.contextRefresh = options.contextRefresh;
     this.styleSource = options.styleSource;
     this.commonStyle = style;
+    this.zoneById = new Map(map.serviceZones.map((zone) => [zone.id, zone]));
     const kinds = new Set(options.driverKinds);
     this.fleetVehicles = Object.freeze(
       this.registry
@@ -726,6 +776,7 @@ class CivilTrafficImpl implements CivilTraffic {
           replans: 0,
           ticks: 0,
           blocked: false,
+          service: null,
         } satisfies ActorState;
       });
     this.actors = states;
@@ -869,6 +920,167 @@ class CivilTrafficImpl implements CivilTraffic {
     actor.replans += 1;
     actor.blocked = false;
     return true;
+  }
+
+  /** Exact route distance of a 032 zone anchor on the planned path, measured from the route start. */
+  private stopDistanceFor(route: RouteState, zone: ServiceZone): number | null {
+    let stopDistanceM: number | null = null;
+    for (const entry of route.lanes) {
+      if (entry.laneId !== zone.laneId) continue;
+      const index = entry.path.nodeIds.indexOf(zone.anchorNodeId);
+      if (index < 0) continue;
+      let alongM = 0;
+      for (let pointIndex = 0; pointIndex < index; pointIndex += 1) {
+        const from = entry.path.points[pointIndex]!,
+          to = entry.path.points[pointIndex + 1]!;
+        alongM += Math.hypot(to.x - from.x, to.y - from.y, to.z - from.z);
+      }
+      // The last occurrence is the destination when a loop route passes the zone lane twice.
+      stopDistanceM = entry.startM + alongM;
+    }
+    return stopDistanceM;
+  }
+
+  /**
+   * Plans a real 041 route from the actor's current lane to the destination zone. When the zone
+   * anchor is already behind the actor on a direct same-lane plan, the route is extended through a
+   * deterministic successor so the car loops back instead of reversing or teleporting.
+   */
+  private buildServiceRoute(
+    actor: ActorState,
+    zone: ServiceZone,
+  ): { readonly route: RouteState; readonly distanceM: number; readonly stopDistanceM: number } {
+    const current = actor.route.lanes[actor.pose.laneIndex]!,
+      currentOffsetM = Math.max(
+        0,
+        Math.min(actor.distanceM - current.startM, current.path.lengthM),
+      );
+    const plan = this.planner.findRoute({
+      origin: actor.pose.laneId,
+      destination: zone.id,
+      access: actor.access,
+    });
+    let route: RouteState | null = null,
+      stopDistanceM: number | null = null;
+    if (
+      plan.status === 'READY' &&
+      plan.path !== null &&
+      plan.path.length > 0 &&
+      plan.path.length <= CIVIL_TRAFFIC_LIMITS.routeLanes
+    ) {
+      const candidate = this.routeFromPlan(plan, actor.access);
+      const stop = this.stopDistanceFor(candidate, zone);
+      if (stop !== null && stop >= currentOffsetM - 1e-6) {
+        route = candidate;
+        stopDistanceM = stop;
+      }
+    }
+    if (route === null || stopDistanceM === null) {
+      const successors = this.graph
+        .getConnections(actor.pose.laneId, actor.access)
+        .map((connection) => connection.toLaneId)
+        .sort();
+      for (const successor of successors) {
+        const loop = this.planner.findRoute({
+          origin: successor,
+          destination: zone.id,
+          access: actor.access,
+        });
+        if (
+          loop.status !== 'READY' ||
+          loop.path === null ||
+          loop.path.length === 0 ||
+          loop.path.length + 1 > CIVIL_TRAFFIC_LIMITS.routeLanes
+        )
+          continue;
+        const combined: RoutePlan = Object.freeze({
+          ...loop,
+          path: Object.freeze([actor.pose.laneId, ...loop.path]),
+        });
+        const candidate = this.routeFromPlan(combined, actor.access);
+        const stop = this.stopDistanceFor(candidate, zone);
+        if (stop !== null && stop >= currentOffsetM - 1e-6) {
+          route = candidate;
+          stopDistanceM = stop;
+          break;
+        }
+      }
+    }
+    requireContract(
+      route !== null && stopDistanceM !== null,
+      'No 041 service route reaches the destination zone',
+    );
+    return Object.freeze({
+      route,
+      distanceM: Math.min(currentOffsetM, route.lanes[0]!.path.lengthM),
+      stopDistanceM,
+    });
+  }
+
+  private serviceSnapshot(actor: ActorState): CivilServiceRouteSnapshot | null {
+    const service = actor.service;
+    if (service === null) return null;
+    const remainingToStopM = Math.max(0, service.stopDistanceM - actor.distanceM);
+    return Object.freeze({
+      version: '058-service-route-v1' as const,
+      vehicleId: actor.vehicle.vehicleId,
+      zoneId: service.zoneId,
+      laneId: actor.pose.laneId,
+      destinationLaneId: service.laneId,
+      path: actor.route.path,
+      assignedTick: service.assignedTick,
+      stopDistanceM: service.stopDistanceM,
+      distanceAlongRouteM: actor.distanceM,
+      remainingToStopM,
+      routeLaneIndex: actor.pose.laneIndex,
+      routeLaneCount: actor.route.path.length,
+      speedMps: actor.speedMps,
+      positionM: actor.pose.positionM,
+      stopped:
+        remainingToStopM <= CIVIL_TRAFFIC_LIMITS.serviceRouteStopToleranceM && actor.speedMps === 0,
+    });
+  }
+
+  assignServiceRoute(vehicleId: string, zoneId: string, atTick?: number): CivilActorSnapshot {
+    this.assertLive();
+    const actor = this.byId.get(boundedId(vehicleId));
+    requireContract(actor !== undefined, 'Unknown civil vehicle');
+    const zone = this.zoneById.get(boundedId(zoneId));
+    requireContract(zone !== undefined, 'Unknown service zone');
+    requireContract(zone.access.includes(actor.access), 'Service zone access mismatch');
+    const at = this.readAuthorityTick(atTick);
+    // A player-driven car is never re-routed: manual takeover keeps the wheel and the ride.
+    requireContract(actor.authority === 'AUTO', 'Civil service route requires AUTO authority');
+    if (actor.service?.zoneId === zone.id && actor.service.laneId === zone.laneId)
+      return this.snapshot(actor);
+    const planned = this.buildServiceRoute(actor, zone);
+    actor.route = planned.route;
+    actor.distanceM = planned.distanceM;
+    actor.pose = routePose(actor.route, actor.distanceM);
+    actor.routeView = null;
+    actor.service = Object.freeze({
+      zoneId: zone.id,
+      laneId: zone.laneId,
+      stopDistanceM: planned.stopDistanceM,
+      assignedTick: at,
+    });
+    actor.blocked = false;
+    return this.snapshot(actor);
+  }
+
+  clearServiceRoute(vehicleId: string, atTick?: number): CivilActorSnapshot {
+    this.assertLive();
+    const actor = this.byId.get(boundedId(vehicleId));
+    requireContract(actor !== undefined, 'Unknown civil vehicle');
+    this.readAuthorityTick(atTick);
+    actor.service = null;
+    return this.snapshot(actor);
+  }
+
+  serviceRoute(vehicleId: string): CivilServiceRouteSnapshot | null {
+    this.assertLive();
+    const actor = this.byId.get(boundedId(vehicleId));
+    return actor === undefined ? null : this.serviceSnapshot(actor);
   }
 
   private routeSnapshot(actor: ActorState): CivilRouteSnapshot {
@@ -1050,9 +1262,17 @@ class CivilTrafficImpl implements CivilTraffic {
   step(input: CivilTrafficStep): CivilTrafficFrame {
     this.assertLive();
     const { tick: atTick, dtSeconds, vehicles } = this.readStep(input);
-    // Finish the route after the previous tick, before this tick's frame is built.
+    // Finish the route after the previous tick, before this tick's frame is built. A service route
+    // holds its stop point instead of selecting an ambient successor.
     for (const actor of this.actors)
-      if (actor.distanceM >= actor.route.totalLengthM - 1e-6) this.successorRoute(actor);
+      if (actor.distanceM >= actor.route.totalLengthM - 1e-6) {
+        if (actor.service === null) this.successorRoute(actor);
+        else {
+          actor.distanceM = actor.route.totalLengthM;
+          actor.speedMps = 0;
+          actor.blocked = false;
+        }
+      }
 
     const frame = {
       sessionId: this.registry.configuration.sessionId,
@@ -1236,6 +1456,23 @@ class CivilTrafficImpl implements CivilTraffic {
           preferredFollowingMps: null,
         });
       }
+      if (actor.service !== null) {
+        const remainingM = Math.max(0, actor.service.stopDistanceM - actor.distanceM),
+          stopTargetMps =
+            remainingM <= CIVIL_TRAFFIC_LIMITS.serviceRouteStopToleranceM
+              ? 0
+              : Math.sqrt(2 * CIVIL_TRAFFIC_LIMITS.serviceRouteDecelMps2 * remainingM);
+        if (stopTargetMps < following.target.targetMps)
+          following = Object.freeze({
+            ...following,
+            reason: 'ROUTE_STOP',
+            target: Object.freeze({
+              ...following.target,
+              reason: 'ROUTE_STOP',
+              targetMps: Math.min(30, stopTargetMps),
+            }),
+          });
+      }
       const result = this.longitudinal.step(
         Object.freeze({
           sessionId: this.registry.configuration.sessionId,
@@ -1275,6 +1512,8 @@ class CivilTrafficImpl implements CivilTraffic {
           actor.route.totalLengthM,
           actor.distanceM + actor.speedMps * dtSeconds,
         );
+        if (actor.service !== null)
+          nextDistance = Math.min(nextDistance, actor.service.stopDistanceM);
         const nextPose = routePose(actor.route, nextDistance);
         if (nextPose.laneIndex > actor.pose.laneIndex) {
           const targetLane = this.occupancy.get(nextPose.laneId),
@@ -1289,6 +1528,14 @@ class CivilTrafficImpl implements CivilTraffic {
             nextDistance = Math.max(0, actor.route.lanes[actor.pose.laneIndex]!.endM - 1e-3);
             actor.speedMps = 0;
           }
+        }
+        if (
+          actor.service !== null &&
+          nextDistance >=
+            actor.service.stopDistanceM - CIVIL_TRAFFIC_LIMITS.serviceRouteStopToleranceM
+        ) {
+          nextDistance = Math.min(actor.service.stopDistanceM, actor.route.totalLengthM);
+          actor.speedMps = 0;
         }
         this.occupancy.get(actor.pose.laneId)?.delete(actor.vehicle.vehicleId);
         actor.distanceM = nextDistance;

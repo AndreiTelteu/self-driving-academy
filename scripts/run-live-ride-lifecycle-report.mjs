@@ -28,7 +28,7 @@ live taxis and ${report.fixture.civilians} civilians, seed ${report.fixture.seed
 ${report.fixture.dwellTicks} ticks, ${report.fixture.ticks} ticks with the scenario reset at
 ${report.fixture.resetTick}.
 
-## Completed ride
+## Completed ride (manual)
 
 | Metric | Value |
 | --- | --- |
@@ -40,6 +40,28 @@ ${report.fixture.resetTick}.
 | Transitions / release | ${report.completedRide.transitions} / ${report.completedRide.releaseReason} |
 | Pickup anchor (x, z) | ${report.completedRide.pickupAnchor.x.toFixed(3)}, ${report.completedRide.pickupAnchor.z.toFixed(3)} |
 | Dropoff anchor (x, z) | ${report.completedRide.dropoffAnchor.x.toFixed(3)}, ${report.completedRide.dropoffAnchor.z.toFixed(3)} |
+
+## Completed ride (AUTO, 058 actor)
+
+| Metric | Value |
+| --- | --- |
+| Ride | \`${report.autoRide.rideId}\` |
+| Request / taxi | ${report.autoRide.requestId} / ${report.autoRide.taxiId} |
+| Pickup → dropoff | ${report.autoRide.pickupZoneId} → ${report.autoRide.dropoffZoneId} |
+| Started / boarding / completion tick | ${report.autoRide.startedTick} / ${report.autoRide.boardingTick} / ${report.autoRide.completionTick} |
+| Pickup dwell / dropoff dwell / required | ${report.autoRide.pickupDwellTicks} / ${report.autoRide.dropoffDwellTicks} / ${report.autoRide.requiredDwellTicks} |
+| Transitions / release / authority | ${report.autoRide.transitions} / ${report.autoRide.releaseReason} / ${report.autoRide.authority} |
+| Pickup route lanes / matches assignment | ${report.autoRide.pickupPathLanes} / ${report.autoRide.pickupPathMatches} |
+| Trip route lanes / matches assignment | ${report.autoRide.tripPathLanes} / ${report.autoRide.tripPathMatches} |
+| Pickup actor speed / remaining | ${report.autoRide.pickupActorSpeedMps.toFixed(3)} m/s / ${report.autoRide.pickupRemainingM.toFixed(3)} m |
+| Dropoff actor speed / remaining | ${report.autoRide.dropoffActorSpeedMps.toFixed(3)} m/s / ${report.autoRide.dropoffRemainingM.toFixed(3)} m |
+| Max route / position step | ${report.autoRide.maxRouteStepM.toFixed(3)} m / ${report.autoRide.maxPositionStepM.toFixed(2)} m |
+| Max speed / driven distance | ${report.autoRide.maxSpeedMps.toFixed(2)} m/s / ${report.autoRide.distanceTravelledM.toFixed(1)} m |
+| Fixture overrides / service cleared | ${report.autoRide.overrides} / ${report.autoRide.serviceCleared} |
+
+The AUTO actor drove only by 041 route execution and 058 longitudinal control: no observation override
+was set. The largest per-tick route advance stays within the speed limit; larger position samples are
+the existing 058 discrete lane-junction geometry, not a destination teleport.
 
 ## Passenger 147
 
@@ -113,9 +135,11 @@ ${checks}
 ## Limits
 
 This is a deterministic headless functional probe on the real 032/033/041/057/058/059/060/061/062/063/064
-contracts. The observed positions are authored by the report fixture at the real zone anchors; the
-browser probe remains the end-to-end visual evidence. Economy, reviews and KPI remain PBI 266. The
-report is not a browser frame, GPU or FPS measurement.
+contracts. The manual scenario supplies the observed pose at the real zone anchors; the AUTO scenario
+drives the assigned 058 actor along its real 041 pickup/dropoff routes with no override. The browser
+probe remains the end-to-end visual evidence. Lane junctions keep the existing 058 discrete geometry,
+so the AUTO position may step at an intersection even though its route progress is continuous. Economy,
+reviews and KPI remain PBI 266. The report is not a browser frame, GPU or FPS measurement.
 `;
 }
 

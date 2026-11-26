@@ -1,4 +1,4 @@
-import { mkdir, readFile, stat, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import { createServer } from 'node:http';
 import { dirname, extname, join, resolve, sep } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -103,12 +103,17 @@ Nu este raportat niciun PASS simulat. Raportul determinist acoperă lifecycle-ul
 Generată de \`npm run ride:live:lifecycle:probe\`; Chromium ${run.browser}, backend ${run.actualBackend},
 viewport ${run.viewport}, tick ${run.tickAtTakeover}–${run.tickAtFailure}.
 
-Secvența reală: start → asignare 060 → preluarea taxiului revendicat (cursa supraviețuiește) → condus
-manual la ancora 032 de pickup → oprire pentru dwell → pasager 147 la bord → condus la ancora de
-dropoff → oprire pentru dwell → \`COMPLETED\` cu o singură eliberare → un alt taxi revendicat devine
-\`BLOCKED\` prin portul real de sănătate → \`FAILED / TAXI_BLOCKED\` cu o singură eliberare.
+Secvența reală: start → asignare 060 → un taxi revendicat conduce singur ruta 041 de pickup, oprește
+în zona 032 pentru dwell, ia pasagerul, conduce ruta de dropoff, oprește din nou și încheie
+\`COMPLETED\` cu o singură eliberare → al doilea taxi revendicat este preluat de jucător, cursa
+supraviețuiește, este condus manual la ancore și se încheie tot \`COMPLETED\` → un alt taxi revendicat
+devine \`BLOCKED\` prin portul real de sănătate → \`FAILED / TAXI_BLOCKED\` cu o singură eliberare.
 
-Cursă completă: ${run.completedRideId} (${run.completedTaxiId}), pickup ${run.pickupZoneId} → dropoff
+Cursă AUTO: ${run.autoRideId} (${run.autoTaxiId}), pickup ${run.autoPickupZoneId} → dropoff
+${run.autoDropoffZoneId}, boarding ${run.autoBoardingTick}, completion ${run.autoCompletionTick},
+dwell ${run.autoPickupDwellTicks}/${run.autoDropoffDwellTicks}, rute
+${run.autoPickupRouteLanes}/${run.autoTripRouteLanes} benzi, control ${run.autoControlMode}.
+Cursă manuală: ${run.completedRideId} (${run.completedTaxiId}), pickup ${run.pickupZoneId} → dropoff
 ${run.dropoffZoneId}, boarding ${run.boardingTick}, completion ${run.completionTick}.
 Cursă eșuată: ${run.failedRideId} (${run.failedTaxiId}), motiv ${run.failedReason}.
 
@@ -116,9 +121,9 @@ Capturi: ${run.screenshots.map((file) => `[${file}](${file})`).join(', ')}.
 
 ${checks}
 
-Limite: proba condusă manual folosește tastatura reală și poziția autoritară a compunerii; nu
-înlocuiește un playtest uman. Cursa autonomă completă rămâne o limitare explicită (taxiurile AI nu
-primesc încă un traseu de cursă în compunere). Nu măsoară FPS/GPU și nu înlocuiește gate-ul 287.
+Limite: cursa AUTO folosește execuția reală 058/041, fără override de poziție; camera este mutată pe
+taxiul AUTO doar pentru capturi. Proba manuală folosește tastatura reală și poziția autoritară a
+compunerii; nu înlocuiește un playtest uman. Nu măsoară FPS/GPU și nu înlocuiește gate-ul 287.
 `;
 }
 
@@ -140,6 +145,8 @@ function distance(left, right) {
 
 const playwright = await loadPlaywright();
 await mkdir(directory, { recursive: true });
+await rm(screenshots, { recursive: true, force: true });
+await mkdir(screenshots, { recursive: true });
 const generatedAt = new Date().toISOString();
 
 if (playwright === null) {
@@ -211,12 +218,6 @@ try {
   });
   await page.bringToFront();
   const url = `${origin}/?capture=1&backend=WEBGL2&preset=LOW&models=procedural&time=noon&debug=1`;
-  await page.goto(url, { waitUntil: 'load' });
-  await page.waitForFunction(() => globalThis.__v3Composition?.ready() === true, null, {
-    timeout: 180000,
-  });
-  const backend = await page.evaluate(() => globalThis.__v3Composition.backend());
-  const actualBackend = backend?.rendererKind ?? null;
   const rides = () => page.evaluate(() => globalThis.__v3Composition.rides());
   const shell = () => page.evaluate(() => globalThis.__v3Composition.shell());
   const read = () => page.evaluate(() => globalThis.__v3Composition.read());
@@ -225,16 +226,28 @@ try {
       const canvas = globalThis.document?.querySelector('canvas');
       if (canvas instanceof globalThis.HTMLCanvasElement) canvas.focus();
     });
-  await page.waitForFunction(
-    () => globalThis.document?.querySelector('.game-shell')?.getAttribute('data-state') === 'READY',
-    null,
-    { timeout: 180000 },
-  );
-  const play = page.getByRole('button', { name: 'Joacă' });
-  const resumeStart = page.getByRole('button', { name: 'Pornește' });
-  const startButton = (await play.count()) > 0 ? play : resumeStart;
-  await startButton.click();
-  await focusCanvas();
+  let actualBackend = null;
+  /** Starts a fresh real session; the AUTO and MANUAL evidence use separate sessions. */
+  const openGame = async () => {
+    await page.goto(url, { waitUntil: 'load' });
+    await page.waitForFunction(() => globalThis.__v3Composition?.ready() === true, null, {
+      timeout: 180000,
+    });
+    const backend = await page.evaluate(() => globalThis.__v3Composition.backend());
+    actualBackend = backend?.rendererKind ?? actualBackend;
+    await page.waitForFunction(
+      () =>
+        globalThis.document?.querySelector('.game-shell')?.getAttribute('data-state') === 'READY',
+      null,
+      { timeout: 180000 },
+    );
+    const play = page.getByRole('button', { name: 'Joacă' });
+    const resumeStart = page.getByRole('button', { name: 'Pornește' });
+    const startButton = (await play.count()) > 0 ? play : resumeStart;
+    await startButton.click();
+    await focusCanvas();
+  };
+  await openGame();
   const resumeOverload = async () => {
     const lifecycle = await page.evaluate(() => globalThis.__v3Composition.lifecycle());
     if (lifecycle?.kind !== 'PAUSED' || lifecycle.reason !== 'overload') return;
@@ -265,6 +278,7 @@ try {
     return relative;
   };
   const checks = [];
+  const screenshotsTaken = [];
   const check = (name, pass, detail) => checks.push({ name, pass, detail });
   const heldKeys = new Set();
   const keyDown = async (key) => {
@@ -457,24 +471,249 @@ try {
   await waitUntil(
     () => {
       const state = globalThis.__v3Composition.rides();
+      const active =
+        state?.rides?.rides?.filter((ride) => !ride.terminal && ride.state === 'TO_PICKUP') ?? [];
+      return state?.snapshot?.counts?.requests > 0 && active.length >= 6;
+    },
+    null,
+    180000,
+    'six live rides in TO_PICKUP',
+  );
+  let state = await rides();
+  const activePickups = state.rides.rides.filter(
+      (ride) => !ride.terminal && ride.state === 'TO_PICKUP',
+    ),
+    ranked = activePickups
+      .map((ride) => ({
+        ride,
+        assignment: state.snapshot.assignments.find((entry) => entry.requestId === ride.requestId),
+      }))
+      .filter(
+        (entry) =>
+          entry.assignment !== undefined &&
+          entry.assignment.pickupCostSeconds >= 5 &&
+          entry.assignment.tripCostSeconds >= 15,
+      )
+      .sort(
+        (left, right) =>
+          left.assignment.totalCostSeconds - right.assignment.totalCostSeconds ||
+          (left.ride.rideId < right.ride.rideId
+            ? -1
+            : left.ride.rideId > right.ride.rideId
+              ? 1
+              : 0),
+      );
+  const autoChoice = ranked[0];
+  if (autoChoice === undefined) throw new Error('No AUTO ride target');
+  const autoTarget = autoChoice.ride,
+    autoAssignment = autoChoice.assignment;
+
+  // AUTO first: the claimed taxi executes the real 041 pickup/dropoff route without any takeover.
+  // The camera is moved to it only, so the HUD and world screenshots are read-only evidence.
+  await page.locator('[data-shell-action="fleet"]').click();
+  await waitUntil(
+    () => globalThis.__v3Composition.fleet().open === true,
+    null,
+    30000,
+    'fleet panel open for the AUTO ride',
+  );
+  await page
+    .locator(`.fleet-selection__list button[data-vehicle-id="${autoTarget.taxiId}"]`)
+    .click();
+  await page.locator('[data-fleet-action="close"]').click();
+  await focusCanvas();
+  const autoStart = await rides();
+  const autoStartRoute = autoStart.actorRoutes?.[autoTarget.rideId] ?? null;
+  const autoStartVehicle = await vehicle(autoTarget.taxiId);
+  check(
+    'auto-route-assigned',
+    autoStartRoute !== null && autoStartVehicle?.controlMode === 'AUTO',
+    `route ${autoStartRoute === null ? 'missing' : autoStartRoute.route.zoneId}, control ${autoStartVehicle?.controlMode}`,
+  );
+  check(
+    'auto-route-matches-pickup',
+    JSON.stringify(autoStartRoute?.route.path ?? null) ===
+      JSON.stringify(autoAssignment.pickupRouteLaneIds),
+    `actor ${autoStartRoute?.route.path?.join(',') ?? '—'}`,
+  );
+  await waitUntil(
+    (rideId) => {
+      const state = globalThis.__v3Composition.rides();
+      const ride = state?.rides?.rides?.find((entry) => entry.rideId === rideId);
+      const route = state?.actorRoutes?.[rideId];
       return (
-        state?.snapshot?.counts?.requests > 0 &&
-        state?.rides?.rides?.length > 0 &&
-        state.rides.rides.some((ride) => !ride.terminal && ride.state === 'TO_PICKUP')
+        ride !== undefined &&
+        (ride.state === 'TO_DROPOFF' ||
+          (ride.state === 'PICKUP' &&
+            route?.leg === 'PICKUP' &&
+            route.route.remainingToStopM <= 0.01))
+      );
+    },
+    autoTarget.rideId,
+    600000,
+    'AUTO pickup hold',
+  );
+  const autoAtPickupState = await rides(),
+    autoPickupRide = autoAtPickupState.rides.rides.find(
+      (ride) => ride.rideId === autoTarget.rideId,
+    ),
+    autoPickupRoute = autoAtPickupState.actorRoutes?.[autoTarget.rideId] ?? null,
+    autoPickupVehicle = await vehicle(autoTarget.taxiId);
+  const autoPickupHoldObserved =
+    autoPickupRide?.state === 'PICKUP' &&
+    autoPickupRoute?.leg === 'PICKUP' &&
+    autoPickupRoute.route.remainingToStopM <= 0.01 &&
+    autoPickupRoute.route.stopped;
+  check(
+    'auto-pickup-hold',
+    autoPickupHoldObserved ||
+      (autoPickupRide?.state === 'TO_DROPOFF' && autoPickupRide.pickup !== null),
+    `state ${autoPickupRide?.state}, remaining ${autoPickupRoute?.route.remainingToStopM ?? '—'} m, stopped ${autoPickupRoute?.route.stopped ?? '—'}`,
+  );
+  check(
+    'auto-pickup-dwell',
+    autoPickupRide?.pickup?.requiredDwellTicks === 180 &&
+      (autoPickupRide.boardingTick === null || autoPickupRide.pickup?.dwellTicks === 180),
+    `required ${autoPickupRide?.pickup?.requiredDwellTicks}, observed ${autoPickupRide?.pickup?.dwellTicks}, boarding ${autoPickupRide?.boardingTick}`,
+  );
+  check(
+    'auto-pickup-control',
+    autoPickupVehicle?.controlMode === 'AUTO',
+    `control ${autoPickupVehicle?.controlMode}`,
+  );
+  check(
+    'auto-pickup-path',
+    JSON.stringify(autoStartRoute?.route.path ?? null) ===
+      JSON.stringify(autoAssignment.pickupRouteLaneIds),
+    `pickup lanes ${autoAssignment.pickupRouteLaneIds.length}`,
+  );
+  screenshotsTaken.push(await shot('01-auto-pickup'));
+
+  await waitUntil(
+    (rideId) =>
+      globalThis.__v3Composition
+        .rides()
+        .rides.rides.some((ride) => ride.rideId === rideId && ride.state === 'TO_DROPOFF'),
+    autoTarget.rideId,
+    300000,
+    'AUTO boarding',
+  );
+  const autoOnboardState = await rides(),
+    autoOnboardRide = autoOnboardState.rides.rides.find(
+      (ride) => ride.rideId === autoTarget.rideId,
+    ),
+    autoTripRoute = autoOnboardState.actorRoutes?.[autoTarget.rideId] ?? null,
+    autoOnboardPassenger = autoOnboardState.passenger?.[autoTarget.rideId] ?? null;
+  check(
+    'auto-trip-path',
+    JSON.stringify(autoTripRoute?.route.path ?? null) ===
+      JSON.stringify(autoAssignment.tripRouteLaneIds),
+    `actor ${autoTripRoute?.route.path?.join(',') ?? '—'}`,
+  );
+  check(
+    'auto-passenger-onboard',
+    autoOnboardPassenger?.phase === 'ONBOARD' && autoOnboardPassenger.occupancy === 1,
+    `phase ${autoOnboardPassenger?.phase}, occupancy ${autoOnboardPassenger?.occupancy}`,
+  );
+  check(
+    'auto-pickup-dwell-complete',
+    autoOnboardRide?.pickup?.dwellTicks === 180 && autoOnboardRide.boardingTick !== null,
+    `observed ${autoOnboardRide?.pickup?.dwellTicks}, boarding ${autoOnboardRide?.boardingTick}`,
+  );
+  screenshotsTaken.push(await shot('02-auto-onboard'));
+
+  await waitUntil(
+    (rideId) =>
+      globalThis.__v3Composition
+        .rides()
+        .rides.rides.some((ride) => ride.rideId === rideId && ride.state === 'DROPOFF'),
+    autoTarget.rideId,
+    900000,
+    'AUTO dropoff hold',
+  );
+  const autoAtDropoffState = await rides(),
+    autoDropoffRide = autoAtDropoffState.rides.rides.find(
+      (ride) => ride.rideId === autoTarget.rideId,
+    ),
+    autoDropoffRoute = autoAtDropoffState.actorRoutes?.[autoTarget.rideId] ?? null;
+  check(
+    'auto-dropoff-hold',
+    autoDropoffRide?.state === 'DROPOFF' &&
+      autoDropoffRoute?.leg === 'DROPOFF' &&
+      autoDropoffRoute.route.remainingToStopM <= 0.01,
+    `state ${autoDropoffRide?.state}, remaining ${autoDropoffRoute?.route.remainingToStopM ?? '—'} m`,
+  );
+  screenshotsTaken.push(await shot('03-auto-dropoff'));
+
+  await waitUntil(
+    (rideId) =>
+      globalThis.__v3Composition
+        .rides()
+        .rides.rides.some((ride) => ride.rideId === rideId && ride.state === 'COMPLETED'),
+    autoTarget.rideId,
+    300000,
+    'AUTO completion',
+  );
+  const autoCompletedState = await rides(),
+    autoCompletedRide = autoCompletedState.rides.rides.find(
+      (ride) => ride.rideId === autoTarget.rideId,
+    ),
+    autoCompletedPassenger = autoCompletedState.passenger?.[autoTarget.rideId] ?? null;
+  check(
+    'auto-ride-completed',
+    autoCompletedRide?.terminal === true && autoCompletedRide.reason === null,
+    `state ${autoCompletedRide?.state}, terminal ${autoCompletedRide?.terminal}`,
+  );
+  check(
+    'auto-completion-release',
+    autoCompletedRide?.release?.reason === 'COMPLETED' &&
+      !autoCompletedState.snapshot.assignments.some(
+        (entry) => entry.requestId === autoTarget.requestId,
+      ),
+    `release ${autoCompletedRide?.release?.reason}, claim removed`,
+  );
+  check(
+    'auto-passenger-hidden',
+    autoCompletedPassenger?.phase === 'NONE' && autoCompletedPassenger.reset === true,
+    `phase ${autoCompletedPassenger?.phase}, reset ${autoCompletedPassenger?.reset}`,
+  );
+  check(
+    'auto-dropoff-dwell-complete',
+    autoCompletedRide?.dropoff?.dwellTicks === 180,
+    `observed ${autoCompletedRide?.dropoff?.dwellTicks}`,
+  );
+  check(
+    'auto-actor-released',
+    autoCompletedState.actorRoutes?.[autoTarget.rideId] === undefined,
+    'the terminal ride cleared the 058 service route',
+  );
+  screenshotsTaken.push(await shot('04-auto-completed'));
+
+  // MANUAL evidence uses a fresh real session: take over a claimed taxi and keep its 061 ride.
+  await openGame();
+  await waitUntil(
+    () => {
+      const current = globalThis.__v3Composition.rides();
+      return (
+        current?.snapshot?.counts?.requests > 0 &&
+        current.rides.rides.some((ride) => !ride.terminal && ride.state === 'TO_PICKUP')
       );
     },
     null,
     180000,
-    'a live ride in TO_PICKUP',
+    'a manual ride in TO_PICKUP',
   );
-  let state = await rides();
-  const target =
-    state.rides.rides.find((ride) => !ride.terminal && ride.state === 'TO_PICKUP') ?? null;
-  if (target === null) throw new Error('No live ride to drive');
-  const assignment = state.snapshot.assignments.find(
-    (entry) => entry.requestId === target.requestId,
+  const manualState = await rides(),
+    manualRide = manualState.rides.rides.find(
+      (ride) => !ride.terminal && ride.state === 'TO_PICKUP',
+    );
+  if (manualRide === undefined || manualRide === null) throw new Error('No manual ride target');
+  const manualAssignment = manualState.snapshot.assignments.find(
+    (entry) => entry.requestId === manualRide.requestId,
   );
-  if (assignment === undefined) throw new Error('The ride lost its 060 claim');
+  if (manualAssignment === undefined) throw new Error('The manual ride lost its 060 claim');
+  const target = manualRide,
+    assignment = manualAssignment;
   const tickAtTakeover = (await read()).tick;
   await page.locator('[data-shell-action="fleet"]').click();
   await waitUntil(
@@ -570,7 +809,7 @@ try {
     (hudAtPickup ?? '').includes('100%') || (hudAtPickup ?? '').includes('Progres'),
     'the HUD exposes the certified progress at the pickup anchor',
   );
-  const screenshotsTaken = [await shot('01-pickup')];
+  screenshotsTaken.push(await shot('05-pickup'));
   await waitUntil(
     (rideId) =>
       globalThis.__v3Composition
@@ -599,7 +838,7 @@ try {
     (hudOnboard ?? '').includes('Spre destinație'),
     (hudOnboard ?? '').slice(0, 160),
   );
-  screenshotsTaken.push(await shot('02-onboard'));
+  screenshotsTaken.push(await shot('06-onboard'));
 
   // Drive to the real dropoff anchor and stop for the dwell.
   await driveTo(target.taxiId, assignment.tripRouteLaneIds, target.dropoffAnchor, 'dropoff');
@@ -624,7 +863,7 @@ try {
     dropoffPassenger?.phase === 'DROPPING_OFF',
     `passenger phase ${dropoffPassenger?.phase}`,
   );
-  screenshotsTaken.push(await shot('03-dropoff'));
+  screenshotsTaken.push(await shot('07-dropoff'));
   await waitUntil(
     (rideId) =>
       globalThis.__v3Composition
@@ -662,7 +901,7 @@ try {
     'the HUD no longer claims an active trip',
   );
   const completedTick = (await read()).tick;
-  screenshotsTaken.push(await shot('04-completed'));
+  screenshotsTaken.push(await shot('08-completed'));
 
   // Failed ride: another claimed taxi becomes BLOCKED through the real health port.
   const beforeFailure = await rides();
@@ -707,7 +946,7 @@ try {
       1,
     `${afterFailure.rides.terminals.filter((entry) => entry.rideId === failureTarget.rideId).length} receipt(s)`,
   );
-  screenshotsTaken.push(await shot('05-failed'));
+  screenshotsTaken.push(await shot('09-failed'));
 
   // The read-only panel shows the completed and failed rows with the real reasons.
   await page.locator('[data-shell-action="rides"]').click();
@@ -728,7 +967,7 @@ try {
     (panelText ?? '').includes('Cursă eșuată') && (panelText ?? '').includes('TAXI_BLOCKED'),
     'the panel shows FAILED and its closed reason',
   );
-  screenshotsTaken.push(await shot('06-panel'));
+  screenshotsTaken.push(await shot('10-panel'));
   await page.locator('[data-live-action="close"]').click();
   await focusCanvas();
   await releaseKeys();
@@ -749,6 +988,17 @@ try {
       url,
       tickAtTakeover,
       tickAtFailure,
+      autoRideId: autoTarget.rideId,
+      autoTaxiId: autoTarget.taxiId,
+      autoPickupZoneId: autoTarget.pickupZoneId,
+      autoDropoffZoneId: autoTarget.dropoffZoneId,
+      autoBoardingTick: autoOnboardRide?.boardingTick ?? null,
+      autoCompletionTick: autoCompletedRide?.completionTick ?? null,
+      autoPickupDwellTicks: autoOnboardRide?.pickup?.dwellTicks ?? null,
+      autoDropoffDwellTicks: autoCompletedRide?.dropoff?.dwellTicks ?? null,
+      autoPickupRouteLanes: autoAssignment.pickupRouteLaneIds.length,
+      autoTripRouteLanes: autoAssignment.tripRouteLaneIds.length,
+      autoControlMode: autoPickupVehicle?.controlMode ?? null,
       completedRideId: target.rideId,
       completedTaxiId: target.taxiId,
       pickupZoneId: target.pickupZoneId,
