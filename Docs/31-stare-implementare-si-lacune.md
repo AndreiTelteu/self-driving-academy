@@ -190,6 +190,8 @@ Nu sunt montate: LEARNING, economia curselor (KPI, review, tarif), misiuni, XP, 
 
 **PBI:** [265](../PBI/README.md) · **Dependențe:** 264.
 
+**Stare:** Done la 26 noiembrie 2026. Cursele MANUAL și AUTO sunt complete, pasagerul/ETA/HUD sunt live, iar taxiurile AI execută rutele pickup→dropoff. Economia rămâne 266.
+
 ### 266 — Economia live: revenue, review-uri, KPI și ceasul economic
 
 **Ce lipsește:** Ledgerul 209, review-urile și bucketurile KPI există ca module, dar în joc nu se produce revenue, rating sau istoric.

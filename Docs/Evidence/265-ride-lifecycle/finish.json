@@ -1,0 +1,13 @@
+{
+  "id": "265",
+  "criteriaSatisfied": true,
+  "result": "The live ride lifecycle composes 061/062/063/064 over 264 claims with real 032 zones, physical dwell, passenger/marker occupancy at real anchors, ETA/progress HUD, terminal reasons and exactly one claim release. Assigned AI taxis execute the real 041 route to pickup and dropoff through the 058 actor, stop in the zone anchor and hold dwell without teleporting. Deterministic report 66/66; browser probe 40/40 on WebGL2 with complete AUTO and MANUAL rides plus a failed ride.",
+  "limitations": "058 junction geometry remains discrete and can step across the unpainted intersection gap (largest observed 15.11 m), although route progress is continuous at <=0.222 m/tick and there is no teleport to the anchor; smoothing connectors is a follow-up. Passenger markers are a DOM overlay projected from real anchors, not a final 3D asset. LEARNING is not yet available (271); the ride state is mode-independent. Economy, fare, reviews and KPI remain 266. The browser probe used playwright-core installed --no-save via PLAYWRIGHT_MODULE, not a committed dependency. Local Node is 24.19.0; the child ran 24.21.0.",
+  "checks": [
+    ["node", "--import", "./scripts/register-typescript.mjs", "--test", "tests/fleet/live-ride-lifecycle.test.ts", "tests/ui/live-rides-panel.test.ts", "tests/ui/live-ride-markers.test.ts", "tests/ui/game-shell-host.test.ts"],
+    ["npm", "run", "ride:live:lifecycle", "--", "--check"],
+    ["npm", "run", "civil:traffic", "--", "--check"],
+    ["npm", "run", "docs:check", "--", "--check"],
+    ["npm", "run", "typecheck"]
+  ]
+}
