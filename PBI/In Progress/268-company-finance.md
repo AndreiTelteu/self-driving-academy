@@ -1,13 +1,13 @@
 ---
 id: "268"
 title: "Modelul financiar al companiei: costuri, profit, cash și P&L"
-status: "To Do"
+status: "In Progress"
 release: "V1"
 module: "Companie"
 depends_on: ["266"]
 performance_checks: ["simulation"]
-owner: null
-started_at: null
+owner: "loop-pbi/deepseek-268"
+started_at: "2026-11-26T20:22:23.940Z"
 completed_at: null
 ---
 
