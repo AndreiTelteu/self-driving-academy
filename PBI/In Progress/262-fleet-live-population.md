@@ -1,13 +1,13 @@
 ---
 id: "262"
 title: "Flota live: 20–30 taxiuri și 20–40 civili, nu doar date în registry"
-status: "To Do"
+status: "In Progress"
 release: "V1"
 module: "Flotă și curse"
 depends_on: ["260"]
 performance_checks: ["frame","simulation"]
-owner: null
-started_at: null
+owner: "loop-pbi/deepseek-262"
+started_at: "2026-11-26T01:02:11.528Z"
 completed_at: null
 ---
 
