@@ -26,9 +26,10 @@ Buildul curent pornește din `src/main.ts` și oferă:
 - meniul Academie / Joacă liberă / Haos și „Oraș proaspăt, păstrează stilul” din panoul shell-ului, cu identitate, checkpoint și pauză/AUTO separate;
 - un singur composition root (260) care deține tick-ul, pauza/focusul și ordinea porturilor, plus un panou de integrare care arată explicit sistemele 262–286 încă neintegrate;
 - panoul `Flotă` (263) care listează toate taxiurile și civilii live, mută doar camera la selecție și preia explicit `M` cu un singur scaun `PLAYER`;
-- [economia live 266](live-economy.md) peste cursele 265: revenue, review 0–5, bucketuri KPI de zi/lună și un HUD compact cu ziua/luna simulată.
+- [economia live 266](live-economy.md) peste cursele 265: revenue, review 0–5, bucketuri KPI de zi/lună și un HUD compact cu ziua/luna simulată;
+- panoul `Companie` (270) peste ledgerul 268 și evoluția 269: revenue, costuri, profit, cash, valoare de flotă, nivel, grafic și tabel lunar, detalierea costurilor și achiziții/upgrade-uri cu confirmare și refuzuri explicite.
 
-Nu sunt montate: LEARNING, pop-up-ul KPI și panoul companiei, misiuni, XP, salvare, panourile de sistem (profil, setări), first-person, minimapa, sunet, decorul destructibil și provocările Haos, fizica Rapier și regulile de trafic. Cursele live, pickup/dropoff, pasagerul, ETA și HUD-ul de cursă sunt montate prin 265.
+Nu sunt montate: LEARNING, pop-up-ul KPI, misiuni, XP, salvare, panourile de sistem (profil, setări), first-person, minimapa, sunet, decorul destructibil și provocările Haos, fizica Rapier și regulile de trafic. Cursele live, pickup/dropoff, pasagerul, ETA și HUD-ul de cursă sunt montate prin 265.
 
 ## Matricea lacunelor
 
@@ -238,7 +239,7 @@ Nu sunt montate: LEARNING, pop-up-ul KPI și panoul companiei, misiuni, XP, salv
 
 **PBI:** [268](../PBI/README.md) · **Dependențe:** 266.
 
-**Stare:** Done la 26 noiembrie 2026. Ledgerul de costuri/profit/cash este live; nivelul, achizițiile și upgrade-urile rămân 269, iar dashboard-ul 270.
+**Stare:** Done la 26 noiembrie 2026. Ledgerul de costuri/profit/cash este live; nivelul, achizițiile și upgrade-urile sunt livrate de 269, iar dashboard-ul de 270.
 
 ### 269 — Evoluția companiei: nivel, achiziții de vehicule și upgrade-uri
 
@@ -255,7 +256,7 @@ Nu sunt montate: LEARNING, pop-up-ul KPI și panoul companiei, misiuni, XP, salv
 
 **PBI:** [269](../PBI/README.md) · **Dependențe:** 268.
 
-**Stare:** Implementat local la 26 noiembrie 2026. Nivelul companiei, achizițiile reale în flota 057/058, upgrade-urile versionate cu efect în perioada următoare, refuzurile închise și read model-ul live sunt verificate; panoul rămâne 270, iar fișierul/reload-ul rămân 278.
+**Stare:** Implementat local la 26 noiembrie 2026. Nivelul companiei, achizițiile reale în flota 057/058, upgrade-urile versionate cu efect în perioada următoare, refuzurile închise și read model-ul live sunt verificate; panoul este livrat de 270, iar fișierul/reload-ul rămân 278.
 
 ### 270 — Panoul companiei: profit, costuri, cash, flotă și investiții
 
@@ -268,9 +269,22 @@ Nu sunt montate: LEARNING, pop-up-ul KPI și panoul companiei, misiuni, XP, salv
 - Nu există mesaje pentru fonduri insuficiente, nivel insuficient sau upgrade deținut.
 - Nu există reguli de focus, Escape, Tab și cost când panoul este închis.
 
+**Ce s-a livrat:** `src/ui/company-dashboard-format.ts` (`270-company-dashboard-v1`) proiectează read model-ul 269 în indicatori, grafic, tabele, costuri pe categorie, ultima cursă și liste de investiții. `src/ui/company-dashboard.ts` (`270-company-dashboard-panel-v1`) montează dialogul, iar `src/ui/game-shell-host.ts` montează butonul nativ `Companie`; `src/main.ts` leagă aceleași porturi 269 și suprafața 070 a shell-ului.
+
+- O lună fără bucket este `NO_DATA` / „fără date”, nu zero; un zero real rămâne `0 SDA`, iar profitul negativ rămâne vizibil.
+- Graficul și tabelul folosesc aceeași listă de luni și aceleași valori, fără medii ale mediilor.
+- Fiecare achiziție/upgrade afișează costul, efectul și starea; confirmarea este în panou, iar fondurile insuficiente, nivelul insuficient și upgrade-ul deținut blochează butonul cu text explicit.
+- Focusul intră în dialog, Tab/Shift+Tab se învârt în panou, Escape închide prin shell și focusul revine. Nu există listeneri globali.
+- Panoul deschis citește la 10 Hz; panoul închis nu citește și nu randează (`SKIPPED_CLOSED`), iar `historyScans` rămâne `0`.
+- Nu creează un al doilea ledger sau o a doua flotă: achiziția cheamă portul 269 peste registry-ul 057 existent.
+
+Dovezile sunt în [Evidence/270-company-dashboard](Evidence/270-company-dashboard/README.md): raport determinist 33/33 și probă de browser 29/29 pe fixture și pe buildul live.
+
 **Documentație:** [Companie: profit și evoluție](32-companie-profit-si-evolutie.md) · [KPI-uri, economie și review-uri](22-kpi-economie-si-review-uri.md) · [Accesibilitatea interfeței](ui-accessibility.md) · [Layout responsive](responsive-layout.md) · [Starea implementării și lacunele](31-stare-implementare-si-lacune.md)
 
 **PBI:** [270](../PBI/README.md) · **Dependențe:** 268, 269.
+
+**Stare:** Implementat local la 27 noiembrie 2026. Panoul este montat în shell; persistența de fișier/reload și importul atomic rămân 278.
 
 ### 271 — Cele trei moduri live: AUTO, MANUAL, LEARNING și toate tranzițiile
 

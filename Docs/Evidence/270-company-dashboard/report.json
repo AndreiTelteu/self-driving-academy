@@ -1,0 +1,336 @@
+{
+  "version": "270-company-dashboard-report-v1",
+  "generatedBy": "npm run company:dashboard",
+  "contract": {
+    "pbi": "270",
+    "ledger": "268-company-ledger-v1",
+    "evolution": "269-company-evolution-v1",
+    "ui": "270-company-dashboard-v1",
+    "panel": "270-company-dashboard-panel-v1",
+    "windowMonths": 12,
+    "refreshHz": 10
+  },
+  "metrics": {
+    "tick": 4320200,
+    "revenueMinorUnits": 16000,
+    "costMinorUnits": 10900,
+    "profitMinorUnits": 5100,
+    "cashMinorUnits": 55100,
+    "fleetValueMinorUnits": 0,
+    "companyLevel": 1,
+    "companyLevelMax": 6,
+    "months": 3,
+    "monthsWithData": 2,
+    "monthsWithoutData": 1,
+    "missingMonth": "Luna simulată 1",
+    "missingMonthRevenue": "fără date",
+    "zeroRevenueMonth": "Luna simulată 2",
+    "zeroRevenueLabel": "0 SDA",
+    "negativeProfitMonth": "Luna simulată 2",
+    "negativeProfitLabel": "-4000 SDA",
+    "historyScansBefore": 0,
+    "historyScansAfter": 0
+  },
+  "purchase": {
+    "offerId": "offer-city-compact-1",
+    "costMinorUnits": 12000,
+    "cashBeforeMinorUnits": 55100,
+    "cashAfterMinorUnits": 43100,
+    "taxisBefore": 20,
+    "taxisAfter": 21,
+    "levelBefore": 1,
+    "levelAfter": 2,
+    "state": "OWNED",
+    "confirmationVisible": true
+  },
+  "upgrade": {
+    "upgradeId": "upgrade-service-contract",
+    "costMinorUnits": 8000,
+    "category": "SERVICE",
+    "basisPoints": 5000,
+    "effectivePeriod": "m0003",
+    "pendingBefore": false,
+    "pendingAfter": 1,
+    "monthZeroServiceMinorUnits": 800,
+    "nextMonthServiceMinorUnits": 80,
+    "nextMonthRevenueMinorUnits": 5200,
+    "nextMonthProfitMinorUnits": 700,
+    "state": "OWNED"
+  },
+  "refusals": {
+    "insufficientCashState": "INSUFFICIENT_CASH",
+    "insufficientCashReason": "Taxi compact 1Cumpără12000 SDA · Adaugă un taxi compact în flota live.Fonduri insuficiente: Fonduri insuficiente: cost 12000 SDA, cash 10000 SDA.",
+    "insufficientCashBlocked": true,
+    "insufficientCashUnchanged": true,
+    "levelRequiredState": "LEVEL_REQUIRED",
+    "levelRequiredReason": "Taxi sedan 1Cumpără22000 SDA · Adaugă un taxi sedan în flota live.Nivel insuficient: Nivel insuficient: cere nivelul 2, compania are nivelul 1.",
+    "duplicateUiReason": "Deținut · efect activ",
+    "duplicateBlocked": true
+  },
+  "ui": {
+    "elements": 252,
+    "textNodes": 165,
+    "listeners": 2,
+    "globalListeners": 0,
+    "opens": 1,
+    "closes": 0,
+    "renders": 4,
+    "reads": 2,
+    "skippedClosed": 2,
+    "skippedThrottled": 0,
+    "skippedUnchanged": 0,
+    "bars": 12,
+    "tableRows": 11,
+    "offers": 6,
+    "upgrades": 5,
+    "escapes": 0,
+    "tabWraps": 0,
+    "focusMoves": 6,
+    "focusRestores": 0,
+    "surfaceCalls": 1,
+    "closedReads": 0,
+    "lastHistoryScans": 0
+  },
+  "checks": [
+    {
+      "name": "projection-revenue",
+      "pass": true,
+      "actual": "16000",
+      "expected": "16000",
+      "note": "panel revenue equals the 268 ledger revenue"
+    },
+    {
+      "name": "projection-cost",
+      "pass": true,
+      "actual": "10900",
+      "expected": "10900",
+      "note": "panel costs equal net cost, including signed adjustments"
+    },
+    {
+      "name": "projection-profit",
+      "pass": true,
+      "actual": "5100",
+      "expected": "5100",
+      "note": "panel profit equals the 268 profit"
+    },
+    {
+      "name": "projection-cash",
+      "pass": true,
+      "actual": "55100",
+      "expected": "55100",
+      "note": "panel cash equals the 269 cash formula"
+    },
+    {
+      "name": "projection-fleet-value",
+      "pass": true,
+      "actual": "0",
+      "expected": "0",
+      "note": "panel fleet value is the acquisition value of purchased vehicles"
+    },
+    {
+      "name": "projection-level",
+      "pass": true,
+      "actual": "1",
+      "expected": "1",
+      "note": "panel level is the company level, not XP"
+    },
+    {
+      "name": "missing-month",
+      "pass": true,
+      "actual": "NO_DATA",
+      "expected": "NO_DATA",
+      "note": "a month without a bucket is not zero"
+    },
+    {
+      "name": "missing-month-labels",
+      "pass": true,
+      "actual": "fără date/fără date",
+      "expected": "fără date/fără date",
+      "note": "a missing month prints fără date, never 0 SDA"
+    },
+    {
+      "name": "zero-revenue",
+      "pass": true,
+      "actual": "0 SDA",
+      "expected": "0 SDA",
+      "note": "a real zero revenue stays zero"
+    },
+    {
+      "name": "negative-profit",
+      "pass": true,
+      "actual": "-4000 SDA",
+      "expected": "-4000 SDA",
+      "note": "a real negative profit is visible and marked"
+    },
+    {
+      "name": "chart-table-aggregates",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "note": "chart bars and monthly table rows use the same aggregates"
+    },
+    {
+      "name": "closed-update",
+      "pass": true,
+      "actual": "SKIPPED_CLOSED",
+      "expected": "SKIPPED_CLOSED",
+      "note": "closed panel update does not read"
+    },
+    {
+      "name": "closed-refresh",
+      "pass": true,
+      "actual": "SKIPPED_CLOSED",
+      "expected": "SKIPPED_CLOSED",
+      "note": "closed panel explicit refresh does not read"
+    },
+    {
+      "name": "closed-reads",
+      "pass": true,
+      "actual": "1",
+      "expected": "1",
+      "note": "opening the panel reads exactly once"
+    },
+    {
+      "name": "purchase-card",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "note": "available offer has an enabled button"
+    },
+    {
+      "name": "purchase-confirmation",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "note": "purchase asks for confirmation with cost and effect"
+    },
+    {
+      "name": "purchase-accepted",
+      "pass": true,
+      "actual": "OWNED/43100",
+      "expected": "OWNED/43100",
+      "note": "purchase spends real cash in the same ledger"
+    },
+    {
+      "name": "purchase-fleet",
+      "pass": true,
+      "actual": "20->21",
+      "expected": "20->21",
+      "note": "purchase adds the real 057 taxi"
+    },
+    {
+      "name": "purchase-level",
+      "pass": true,
+      "actual": "1->2",
+      "expected": "1->2",
+      "note": "reinvested purchase profit raises the company level"
+    },
+    {
+      "name": "upgrade-card",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "note": "level 2 makes the service upgrade available"
+    },
+    {
+      "name": "upgrade-pending-before",
+      "pass": true,
+      "actual": "false",
+      "expected": "false",
+      "note": "no pending service effect before buying"
+    },
+    {
+      "name": "upgrade-owned",
+      "pass": true,
+      "actual": "OWNED",
+      "expected": "OWNED",
+      "note": "upgrade ownership is rendered"
+    },
+    {
+      "name": "upgrade-pending-after",
+      "pass": true,
+      "actual": "1",
+      "expected": "1",
+      "note": "the next-period effect is listed once"
+    },
+    {
+      "name": "upgrade-next-service",
+      "pass": true,
+      "actual": "80",
+      "expected": "80",
+      "note": "four rides at 40 SDA become four at 20 SDA in the next month"
+    },
+    {
+      "name": "upgrade-next-profit",
+      "pass": true,
+      "actual": "5200/700",
+      "expected": "5200/700",
+      "note": "next-month profit reflects the halved service cost (5200 - 4500)"
+    },
+    {
+      "name": "insufficient-cash",
+      "pass": true,
+      "actual": "INSUFFICIENT_CASH/true/true",
+      "expected": "INSUFFICIENT_CASH/true/true",
+      "note": "insufficient funds block the purchase and change nothing"
+    },
+    {
+      "name": "insufficient-cash-message",
+      "pass": true,
+      "actual": "Taxi compact 1Cumpără12000 SDA · Adaugă un taxi compact în flota live.Fonduri insuficiente: Fonduri insuficiente: cost 12000 SDA, cash 10000 SDA.",
+      "expected": "contains Fonduri insuficiente and cash 10000 SDA",
+      "note": "the refusal names the missing cash explicitly"
+    },
+    {
+      "name": "level-required",
+      "pass": true,
+      "actual": "LEVEL_REQUIRED",
+      "expected": "LEVEL_REQUIRED",
+      "note": "a level-locked offer is blocked with the required level text"
+    },
+    {
+      "name": "duplicate-upgrade",
+      "pass": true,
+      "actual": "Deținut · efect activ",
+      "expected": "Deținut",
+      "note": "an owned upgrade is refused explicitly"
+    },
+    {
+      "name": "no-history-scans",
+      "pass": true,
+      "actual": "0",
+      "expected": "0",
+      "note": "company read model keeps historyScans 0"
+    },
+    {
+      "name": "listeners",
+      "pass": true,
+      "actual": "2",
+      "expected": "2",
+      "note": "only the dialog keydown and click listeners"
+    },
+    {
+      "name": "global-listeners",
+      "pass": true,
+      "actual": "0",
+      "expected": "0",
+      "note": "no window/document listener"
+    },
+    {
+      "name": "determinism",
+      "pass": true,
+      "actual": "true",
+      "expected": "true",
+      "note": "two projections of the same read are identical"
+    }
+  ],
+  "summary": {
+    "checks": 33,
+    "passed": 33,
+    "pass": true
+  },
+  "determinism": {
+    "runs": 2,
+    "equal": true
+  }
+}

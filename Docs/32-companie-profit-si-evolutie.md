@@ -1,6 +1,6 @@
 # Companie: profit și evoluție
 
-Versiune 0.3 · 26 noiembrie 2026. **Boundary V1 confirmat prin PBI 268 și extins prin PBI 269.** Ledgerul de costuri, profitul, cash-ul și P&L-ul lunar sunt implementate separat de revenue-ul 209; nivelul companiei, achizițiile de vehicule și upgrade-urile versionate sunt implementate peste același ledger. Valorile numerice rămân propuneri de calibrare, panoul companiei (270) rămâne neimplementat, iar persistarea în fișier după reload rămâne 278. Revenue-ul și ratingurile din [KPI-uri și economie](22-kpi-economie-si-review-uri.md) nu sunt modificate de companie.
+Versiune 0.4 · 27 noiembrie 2026. **Boundary V1 confirmat prin PBI 268, extins prin PBI 269 și expus prin PBI 270.** Ledgerul de costuri, profitul, cash-ul și P&L-ul lunar sunt implementate separat de revenue-ul 209; nivelul companiei, achizițiile de vehicule și upgrade-urile versionate sunt implementate peste același ledger, iar panoul companiei citește aceleași read model-uri. Valorile numerice rămân propuneri de calibrare, iar persistarea în fișier după reload rămâne 278. Revenue-ul și ratingurile din [KPI-uri și economie](22-kpi-economie-si-review-uri.md) nu sunt modificate de companie.
 
 ## De ce există acest document
 
@@ -38,7 +38,7 @@ Implementarea V1 a modelului financiar este în `src/economy/company-finance.ts`
 - `profit = revenue - netCost`, unde `netCost = grossCost + adjustments`. Boundary-ul 268 raporta cash-ul ca `initialCash + profit`, plafonat la zero; 269 păstrează `cashBeforeInvestmentMinorUnits` cu aceeași formulă și scade investițiile separat. Pierderea neacoperită este raportată separat.
 - Citirea este incrementală (`historyScans: 0`) și expune `xpWrites: 0`, `economyWrites: 0`; `investmentWrites` numără doar investițiile 269 din același ledger (0 când nu există investiții). Profitul negativ nu are cale către XP.
 
-Read model-ul live este `createLiveCompanyFinance` (`268-live-company-finance-v1`), alimentat de rezultatele terminale deja acceptate ale economiei 266. El citește numărul real de impacturi 028 din `review.evidence.impacts`; fără dovezi de review nu inventează un incident. Portul `company` al shell-ului și read model-ul `company()` sunt disponibile pentru proba de browser; panoul rămâne 270.
+Read model-ul live este `createLiveCompanyFinance` (`268-live-company-finance-v1`), alimentat de rezultatele terminale deja acceptate ale economiei 266. El citește numărul real de impacturi 028 din `review.evidence.impacts`; fără dovezi de review nu inventează un incident. Portul `company` al shell-ului și read model-ul `company()` sunt disponibile pentru panoul 270 și proba de browser.
 
 Valorile implicite sunt în `DEFAULT_COMPANY_COST_SCHEDULE` și sunt **propuneri de calibrare**: 60 SDA/km energie, 45 SDA/km mentenanță, 2 500 SDA/incident, 40 SDA/cursă serviciu, 1 200 SDA/lună asigurări, 2 400 SDA/lună salarii, 400 SDA/lună licențe și 50 000 SDA cash inițial. Ele nu sunt tarife reale și nu modifică tariful 209.
 
@@ -53,10 +53,24 @@ Evoluția companiei este în `src/economy/company-evolution.ts` (`269-company-ev
 - **Achiziții.** Șase oferte one-time (`269-company-vehicle-catalog-v1`), fiecare cu clasă reală 023 (`sedan`/`compact`), cost și nivel cerut. O achiziție acceptată cheltuie cash-ul, adaugă taxiul în **același registry 057** și pornește actorul real 058 cu o rută 041; slotul returnat de registry este păstrat, iar capacitatea de 30 taxiuri este respectată. A doua achiziție a aceleiași oferte este `ALREADY_OWNED`.
 - **Upgrade-uri.** Cinci upgrade-uri (`269-company-upgrade-catalog-v1`), fiecare cu cost, nivel cerut și un efect plafonat între 5 000 și 10 000 basis points. Efectul este o reducere a unei singure categorii de cost, începe la **începutul lunii simulate următoare** și este înregistrat ca `CompanyCostModifierEntry` versionat în ledger. Intrările de cost deja existente nu sunt rescrise; următoarea perioadă folosește baza și basis points în linia nouă.
 - **Cash.** `cash = max(0, initialCash + profit - investments)`, iar `cashBeforeInvestmentMinorUnits = max(0, initialCash + profit)` păstrează formula 268. O achiziție sau un upgrade care ar depăși cash-ul este refuzat cu `INSUFFICIENT_CASH` și nu schimbă nici cash-ul, nici flota, nici jurnalul. Refuzurile sunt închise: `INSUFFICIENT_CASH`, `LEVEL_REQUIRED`, `ALREADY_OWNED`, `FLEET_UNAVAILABLE`, `FLEET_CAPACITY`, `FLEET_REFUSED`, `LEDGER_REJECTED`, `INVALID_OFFER`, `INVALID_INPUT`.
-- **Read model live.** `createLiveCompanyEvolution` (`269-live-company-evolution-v1`) citește tick-ul autoritar din finance-ul 268 și expune `company().evolution`: nivel, cash, oferte, upgrade-uri, efecte pending, refuzuri, contoare și read model-ul 268 complet. `companyPurchase`/`companyUpgrade` sunt comanda pe care o va apela panoul 270; ele nu scriu XP, profil sau ledgerul 209.
+- **Read model live.** `createLiveCompanyEvolution` (`269-live-company-evolution-v1`) citește tick-ul autoritar din finance-ul 268 și expune `company().evolution`: nivel, cash, oferte, upgrade-uri, efecte pending, refuzuri, contoare și read model-ul 268 complet. `companyPurchase`/`companyUpgrade` sunt comanda pe care o apelează panoul 270; ele nu scriu XP, profil sau ledgerul 209.
 - **Persistență.** Evoluția expune `snapshot()`/`restore()` (`269-company-evolution-snapshot-v1`). Restore cere ca ledgerul 268 să fie deja restaurat (aceeași stare operațională) și fie reia jurnalul 269 pe registry-ul real, fie adoptă investițiile și vehiculele deja restaurate de 278, verificând cash-ul, nivelul și slotul. Fișierul de save, reload-ul și importul atomic de sesiune rămân 278; 269 nu inventează un al doilea savefile.
 
 Dovezile sunt în [Evidence/269-company-evolution](Evidence/269-company-evolution/README.md): raport determinist 66/66, cost de simulare separat, testul de creștere a populației 058 și proba de browser (`NOT_RUN` când Playwright lipsește).
+
+## Interfață implementată în 270 (27 noiembrie 2026)
+
+Panoul companiei este o **proiecție** a read model-urilor 268/269: `src/ui/company-dashboard-format.ts` (`270-company-dashboard-v1`) transformă `company().evolution` în text, tabele și bare, iar `src/ui/company-dashboard.ts` (`270-company-dashboard-panel-v1`) montează dialogul. El nu are ledger, flotă, store sau ceas propriu; achizițiile și upgrade-urile cheamă exact porturile `companyPurchase`/`companyUpgrade` ale evoluției 269.
+
+- **Indicatori:** revenue, costuri nete, profit, cash, valoare de flotă și nivel companie, toate din `finance.totals`, `cash` și `companyLevel`. Profitul negativ este marcat, nu ascuns.
+- **Luni:** fereastra implicită este de 12 luni simulate, construită din `finance.months`. O lună fără bucket este `NO_DATA` cu valori `null` și text „fără date”; un zero real rămâne `0 SDA`, iar un profit negativ real rămâne negativ. Graficul și tabelul folosesc aceeași listă ordonată de luni, fără medii ale mediilor.
+- **Costuri:** tabel pe cele șapte categorii cu ultima lună, totalul ferestrei și ponderea; ultima cursă costată are detalierea pe categorie și cantitate.
+- **Investiții:** fiecare ofertă și upgrade afișează costul, efectul și starea. O acțiune disponibilă cere confirmare în panou; fondurile insuficiente, nivelul insuficient și deținerea duplicată sunt refuzuri explicite, iar butonul este blocat. Refuzul venit de la port este afișat cu codul și detaliul lui.
+- **Accesibilitate și cost:** butonul nativ `Companie` este montat în `src/ui/game-shell-host.ts`; dialogul are nume, focus mutat pe „Închide”, Tab/Shift+Tab ținute în panou, Escape prin portul de suprafață și restaurarea focusului. Nu există listeneri pe `window`/`document`. Panoul citește la 10 Hz numai cât timp este deschis; închis, `update()` și `refresh()` întorc `SKIPPED_CLOSED` fără citire și fără randare.
+- **Pauză:** suprafața `panel` este decisă tot de 070 prin shell, ca la celelalte panouri; panoul nu suspendă singur ceasul și nu schimbă modul de control.
+- **Separare:** panoul nu scrie XP, profil, stil sau ledgerul 209. `historyScans` rămâne structural `0`.
+
+Dovezile sunt în [Evidence/270-company-dashboard](Evidence/270-company-dashboard/README.md): raport determinist, probă de browser pe fixture și pe buildul live, plus testele de proiecție, zero vs. fără date, refuz și focus.
 
 ## Formula propusă
 
@@ -111,16 +125,16 @@ Evoluția are trei componente, toate implementate și versionate în 269:
 
 Un upgrade nu modifică pe ascuns stilul învățat. Efectele 269 sunt exclusiv reduceri de cost în ledgerul companiei, aplicate de la începutul perioadei următoare; ele nu creează o versiune de `DrivingProfile` și nu scriu în store-ul de profil. Dacă un upgrade viitor va afecta un parametru de driving, va trebui să treacă printr-o versiune de profil cu proveniență explicită, nu printr-un override invizibil.
 
-## Interfață propusă
+## Interfață implementată
 
 - Panou „Companie” cu: cash, revenue, costuri, profit, valoare flotă, nivel companie.
-- Grafic lunar revenue/costuri/profit și tabel cu perioade.
-- Detaliere pe categorie de cost și pe cursă.
+- Grafic lunar revenue/costuri/profit și tabel cu perioade; aceleași agregate în ambele.
+- Detaliere pe categorie de cost și pe ultima cursă costată.
 - Listă de achiziții/upgrade-uri cu cost, efect, stare și confirmare.
 - Mesaje explicite pentru „fonduri insuficiente”, „nivel insuficient”, „upgrade deja deținut”.
 - Accesibilitate conform [ui-accessibility](ui-accessibility.md), fără listeners globali.
 
-Read model-ul care alimentează panoul este deja expus de `company().evolution`: `companyLevel`, `cash`, `fleet` (inclusiv vehiculele cumpărate, slotul și starea de actor live), `offers`/`upgrades` cu starea și refuzul fiecăruia, `pendingEffects`, `refusals` și read model-ul 268 `finance`. Panoul 270 nu are nevoie de o a doua sursă de adevăr.
+Read model-ul care alimentează panoul este `company().evolution`: `companyLevel`, `cash`, `fleet` (inclusiv vehiculele cumpărate, slotul și starea de actor live), `offers`/`upgrades` cu starea și refuzul fiecăruia, `pendingEffects`, `refusals` și read model-ul 268 `finance`. Panoul 270 nu are o a doua sursă de adevăr.
 
 ## Separarea de XP și de stil
 
@@ -138,7 +152,7 @@ Read model-ul care alimentează panoul este deja expus de `company().evolution`:
 5. **Implementat 269.** Un upgrade aplicat reduce costul declarat de la începutul perioadei următoare, iar intrarea istorică rămâne neschimbată.
 6. **Implementat 268.** Profitul negativ, un accident și o misiune eșuată lasă soldul XP și nivelul jucătorului identice.
 7. **Rămâne 278.** Reload-ul păstrează compania, iar un import de sesiune o înlocuiește atomic, după confirmare. 269 expune `snapshot()`/`restore()` și verifică slotul, cash-ul și nivelul, dar fișierul și reload-ul rămân 278.
-8. **Implementat structural 268/269.** `historyScans` rămâne `0` în read model-ul companiei și al evoluției; panoul companiei rămâne 270.
+8. **Implementat 270.** Panoul afișează revenue, costuri, profit, cash, valoare de flotă și nivel; o lună fără date nu este zero, iar un profit zero sau negativ real rămâne vizibil. `historyScans` rămâne `0`, panoul închis nu citește ledgerul, iar cumpărările/upgrade-urile trec prin porturile 269 cu confirmare și refuzuri explicite.
 
 ## Decizii deschise
 
@@ -159,6 +173,7 @@ Read model-ul care alimentează panoul este deja expus de `company().evolution`:
 - [Starea implementării și lacunele](31-stare-implementare-si-lacune.md)
 - [Dovezile 268](Evidence/268-company-finance/README.md)
 - [Dovezile 269](Evidence/269-company-evolution/README.md)
+- [Dovezile 270](Evidence/270-company-dashboard/README.md)
 - [Backlogul curent](../PBI/README.md)
 
 ## Corespondență în backlog
@@ -167,4 +182,4 @@ Read model-ul care alimentează panoul este deja expus de `company().evolution`:
 - `269` — evoluția companiei: nivel, achiziții, upgrade-uri.
 - `270` — panoul companiei: grafice, costuri, achiziții.
 
-Boundary-urile 268 și 269 sunt implementate și verificate în [Evidence/268-company-finance](Evidence/268-company-finance/README.md) și [Evidence/269-company-evolution](Evidence/269-company-evolution/README.md). Panoul 270 și persistența de fișier/reload 278 rămân taskuri viitoare; valorile de calibrare nu sunt certificate și pot fi revizuite printr-o versiune nouă de schedule sau catalog, fără rescrierea istoricului.
+Boundary-urile 268, 269 și 270 sunt implementate și verificate în [Evidence/268-company-finance](Evidence/268-company-finance/README.md), [Evidence/269-company-evolution](Evidence/269-company-evolution/README.md) și [Evidence/270-company-dashboard](Evidence/270-company-dashboard/README.md). Persistența de fișier/reload 278 rămâne task viitor; valorile de calibrare nu sunt certificate și pot fi revizuite printr-o versiune nouă de schedule sau catalog, fără rescrierea istoricului.

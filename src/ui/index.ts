@@ -859,6 +859,46 @@ export type {
   KpiHistoryView,
 } from './kpi-history-format';
 
+export { createCompanyDashboard, COMPANY_DASHBOARD_PANEL_VERSION } from './company-dashboard';
+export type {
+  CompanyDashboard,
+  CompanyDashboardActionResult,
+  CompanyDashboardActionStatus,
+  CompanyDashboardOptions,
+  CompanyDashboardRefreshStatus,
+  CompanyDashboardStats,
+} from './company-dashboard';
+export {
+  COMPANY_COST_CATEGORY_LABELS,
+  COMPANY_DASHBOARD_REFRESH_MS,
+  COMPANY_DASHBOARD_TEXT,
+  COMPANY_DASHBOARD_UI_VERSION,
+  COMPANY_DASHBOARD_WINDOW_MONTHS,
+  COMPANY_OFFER_STATE_LABELS,
+  COMPANY_REFUSAL_LABELS,
+  emptyCompanyDashboardView,
+  formatCompanyDashboardMoney,
+  formatCompanyDashboardNumber,
+  projectCompanyDashboard,
+} from './company-dashboard-format';
+export type {
+  CompanyDashboardBar,
+  CompanyDashboardBarSeries,
+  CompanyDashboardBarState,
+  CompanyDashboardChart,
+  CompanyDashboardChartGroup,
+  CompanyDashboardEffectView,
+  CompanyDashboardMetricsView,
+  CompanyDashboardMonthState,
+  CompanyDashboardMonthView,
+  CompanyDashboardOfferCard,
+  CompanyDashboardRideLineView,
+  CompanyDashboardRideView,
+  CompanyDashboardTable,
+  CompanyDashboardUpgradeCard,
+  CompanyDashboardView,
+} from './company-dashboard-format';
+
 export { createMissionPanel } from './mission-panel';
 export type {
   MissionPanel,
