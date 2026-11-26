@@ -17,6 +17,7 @@ import {
   type SessionFlow,
   type SessionFlowMenu,
 } from './app';
+import { createLiveCompanyFinance, type LiveCompanyFinance } from './economy';
 import { createDefaultSettings } from './settings';
 import { bindPauseFocusInput } from './input';
 import {
@@ -160,7 +161,15 @@ const ridesTickPort: GameTickPort = {
 const economyModules: {
   compositions: Map<string, LiveEconomyComposition>;
   composition: LiveEconomyComposition | undefined;
-} = { compositions: new Map(), composition: undefined };
+  /** PBI 268: company ledger live, per sesiune, separat de revenue-ul 209. */
+  companies: Map<string, LiveCompanyFinance>;
+  company: LiveCompanyFinance | undefined;
+} = {
+  compositions: new Map(),
+  composition: undefined,
+  companies: new Map(),
+  company: undefined,
+};
 /** Activează economia sesiunii cerute; o sesiune nouă pornește cu istoric propriu gol. */
 function activateEconomy(sessionId: string): {
   economy: LiveEconomyComposition | undefined;
@@ -171,6 +180,13 @@ function activateEconomy(sessionId: string): {
   const existing = economyModules.compositions.get(sessionId);
   if (existing !== undefined) {
     economyModules.composition = existing;
+    economyModules.company =
+      economyModules.companies.get(sessionId) ??
+      createLiveCompanyFinance({
+        namespace: `v3:company:${sessionId}`,
+        clock: existing.clock,
+      });
+    economyModules.companies.set(sessionId, economyModules.company);
     return { economy: existing, created: false };
   }
   const economy = createLiveEconomyComposition({
@@ -178,14 +194,23 @@ function activateEconomy(sessionId: string): {
     graph: world.graph,
     namespace: `v3:city:economy:${sessionId}`,
   });
+  const company = createLiveCompanyFinance({
+    namespace: `v3:company:${sessionId}`,
+    clock: economy.clock,
+  });
   economyModules.compositions.set(sessionId, economy);
   economyModules.composition = economy;
+  economyModules.companies.set(sessionId, company);
+  economyModules.company = company;
   return { economy, created: true };
 }
 function disposeEconomies(): void {
   for (const economy of economyModules.compositions.values()) economy.dispose();
+  for (const company of economyModules.companies.values()) company.dispose();
   economyModules.compositions.clear();
+  economyModules.companies.clear();
   economyModules.composition = undefined;
+  economyModules.company = undefined;
 }
 const economyTickPort: GameTickPort = {
   id: 'economy',
@@ -199,7 +224,7 @@ const economyTickPort: GameTickPort = {
       throw new Error(
         `Cadrul economiei (${frame.tick}) nu coincide cu tick-ul autoritar (${context.tick}).`,
       );
-    economy.step({
+    const step = economy.step({
       tick: context.tick,
       vehicles: frame.vehicles.map((vehicle) => ({
         vehicleId: vehicle.vehicleId,
@@ -214,6 +239,10 @@ const economyTickPort: GameTickPort = {
         blocked: vehicle.blocked,
       })),
     });
+    // PBI 268: portul companiei citește exact settle-urile 209 deja acceptate. El nu scrie în
+    // ledgerul de revenue/review/KPI și nu are cale către XP; doar copiază revenue-ul net și
+    // înregistrează costul versionat al cursei.
+    economyModules.company?.step({ atTick: step.tick, settlements: step.settlements });
   },
 };
 const diagnosticsPanel = createDiagnosticsPanel(app, {
@@ -793,8 +822,13 @@ const sessionWorld: SessionWorldPort = {
     // PBI 266: decontează întâi cursele terminale ale sesiunii care iese, apoi pornește economia
     // sesiunii cerute. O sesiune existentă primește o epocă nouă fără să-și piardă istoricul; una
     // nouă pornește cu ledgerul ei gol, deci cursele celeilalte sesiuni nu ajung niciodată în ea.
-    const outgoing = economyModules.composition;
-    outgoing?.flush({ tick: boundaryTick });
+    const outgoing = economyModules.composition,
+      outgoingFlush = outgoing?.flush({ tick: boundaryTick });
+    if (outgoingFlush !== undefined)
+      economyModules.company?.step({
+        atTick: outgoingFlush.tick,
+        settlements: outgoingFlush.settlements,
+      });
     ridesModules.composition?.reset({ tick: boundaryTick });
     const activation = activateEconomy(identity.sessionId);
     if (!activation.created) activation.economy?.beginEpoch({ tick: boundaryTick });
@@ -901,6 +935,8 @@ interface V3DebugGlobal {
   rides(): unknown;
   /** PBI 266: economia live, KPI-urile curente și read model-ul HUD. */
   economy(): unknown;
+  /** PBI 268: ledgerul companiei, profitul, cash-ul și P&L-ul lunar, fără scriere în 209/XP. */
+  company(): unknown;
   /** PBI 265: geometria reală a benzinelor de rută, pentru proba de condus din browser. */
   lanePath(laneIds: readonly string[]): unknown;
   /** PBI 265 (numai DEV/capture): fapt de sănătate real pentru proba terminală FAILED. */
@@ -971,6 +1007,18 @@ const debugGlobal: V3DebugGlobal = {
     };
   },
   postProcessing: () => composition?.view.daylight.getPostProcessingState() ?? null,
+  company: () => {
+    const company = economyModules.company;
+    return {
+      read: company?.read() ?? null,
+      snapshot:
+        company === undefined || composition === undefined
+          ? null
+          : company.snapshot(composition.composition.frame.tick),
+      stats: company?.stats() ?? null,
+      port: shell.status().systems.find((system) => system.id === 'economy')?.status ?? null,
+    };
+  },
   economy: () => {
     const economy = economyModules.composition;
     return {
@@ -980,6 +1028,12 @@ const debugGlobal: V3DebugGlobal = {
           ? null
           : economy.snapshot(composition.composition.frame.tick),
       stats: economy?.stats() ?? null,
+      company: economyModules.company?.read() ?? null,
+      companySnapshot:
+        economyModules.company === undefined || composition === undefined
+          ? null
+          : economyModules.company.snapshot(composition.composition.frame.tick),
+      companyStats: economyModules.company?.stats() ?? null,
       hud: economyHud.getStats(),
       hudView: economyHud.getView(),
       hudText: economyHud.getElement().textContent,

@@ -44,6 +44,8 @@ export interface LiveEconomyFixture extends LiveRideLifecycleFixture {
   /** Real 028 facts queued for the next authoritative step. */
   readonly collisions: LiveEconomyCollisionFact[];
   economyStep(): LiveEconomyStepResult;
+  /** The result of the last economy step, including its terminal settlements. */
+  economyResult(): LiveEconomyStepResult | null;
   /** Selects the first assigned ride and returns its real target, without boarding it. */
   firstTarget(): LiveEconomyTarget;
   /** Drives the taxi to the real pickup anchor and waits for boarding. */
@@ -69,6 +71,7 @@ export function createLiveEconomyFixture(
     ...(options.blockedSeconds === undefined ? {} : { blockedSeconds: options.blockedSeconds }),
   });
   const collisions: LiveEconomyCollisionFact[] = [];
+  let lastEconomyResult: LiveEconomyStepResult | null = null;
 
   const observed = () =>
     rides.frame().map((vehicle) => ({
@@ -97,19 +100,22 @@ export function createLiveEconomyFixture(
     collisions,
     step(atTick = rides.currentTick() + 1) {
       const result = rides.step(atTick);
-      economy.step({
+      lastEconomyResult = economy.step({
         tick: result.tick,
         vehicles: observed(),
         ...(collisions.length === 0 ? {} : { collisions: takeCollisions() }),
       });
       return result;
     },
-    economyStep: () =>
-      economy.step({
+    economyStep: () => {
+      lastEconomyResult = economy.step({
         tick: rides.currentTick(),
         vehicles: observed(),
         ...(collisions.length === 0 ? {} : { collisions: takeCollisions() }),
-      }),
+      });
+      return lastEconomyResult;
+    },
+    economyResult: () => lastEconomyResult,
     firstTarget(): LiveEconomyTarget {
       const assignment = rides.snapshot().live.assignments[0];
       if (assignment === undefined) throw new Error('No live assignment');
