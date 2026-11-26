@@ -1,0 +1,12 @@
+{
+  "id": "269",
+  "criteriaSatisfied": true,
+  "result": "Company evolution builds on the 268 ledger: monotonic company levels from reinvested profit, versioned purchase and upgrade catalogs, cash spending, respected slots and capacity, bounded next-period upgrade effects, and snapshot/restore. A purchase adds a real vehicle to the same 057/058 live fleet; upgrades reduce declared operating cost. Insufficient cash, level and duplicate refusals change nothing. XP, driving profile and style remain untouched.",
+  "limitations": "Level, cost and effect values are calibration proposals. Fleet value is the acquisition sum without depreciation or resale in V1. Upgrades affect operational costs only, not physics, 209 KPI or driving profiles. The company panel remains 270. File persistence, browser reload and atomic import remain 278; 269 exposes snapshot/restore and adopts a ledger/fleet already restored by 278. The 269 journal is per session while the live city fleet is one shared 057 registry. Browser probe is NOT_RUN because Playwright is not installed. Local Node is 24.19.0.",
+  "checks": [
+    ["node", "--import", "./scripts/register-typescript.mjs", "--test", "tests/economy/company-evolution.test.ts", "tests/economy/company-evolution-report.test.ts", "tests/fleet/company-fleet-growth.test.ts", "tests/app/ambient-traffic.test.ts"],
+    ["npm", "run", "company:evolution", "--", "--check"],
+    ["npm", "run", "docs:check", "--", "--check"],
+    ["npm", "run", "typecheck"]
+  ]
+}
