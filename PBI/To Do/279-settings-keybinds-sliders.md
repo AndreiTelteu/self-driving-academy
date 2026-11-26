@@ -1,13 +1,13 @@
----
+﻿---
 id: "279"
 title: "Setări, remapare taste și slidere de control/stil în joc"
-status: "In Progress"
+status: "To Do"
 release: "V1"
 module: "Interfață"
 depends_on: ["260"]
 performance_checks: ["ui","frame"]
-owner: "loop-pbi/deepseek-279"
-started_at: "2026-11-26T02:37:28.827Z"
+owner: null
+started_at: null
 completed_at: null
 ---
 
