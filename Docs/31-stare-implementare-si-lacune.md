@@ -168,9 +168,14 @@ Nu sunt montate: LEARNING, curse, pasageri, KPI, misiuni, XP, salvare, companie,
 - Nu există legătura dintre starea de sănătate a flotei și cursa activă.
 - Nu există o probă de browser cu cereri care apar în timpul condusului.
 
-**Documentație:** [Flotă și curse](07-flota-si-curse.md) · [Cereri de curse](ride-demand.md) · [Dispecerizare](dispatcher.md) · [Sănătatea flotei](fleet-health.md) · [Starea implementării și lacunele](31-stare-implementare-si-lacune.md)
+**Documentație:** [Flotă și curse](07-flota-si-curse.md) · [Cereri de curse](ride-demand.md) · [Dispecerizare](dispatcher.md) · [Sănătatea flotei](fleet-health.md) · [Cereri și dispecerizare live](live-rides.md) · [Starea implementării și lacunele](31-stare-implementare-si-lacune.md)
 
 **PBI:** [264](../PBI/README.md) · **Dependențe:** 262.
+
+**Stare:** Implementat local la 26 noiembrie 2026. `src/fleet/live-rides.ts` compune 059/060 peste cele 24 de taxiuri live, cu 64 de cereri deterministe din seed, coadă plafonată, dispecerizare la 10 Hz și costul real minim 041. Portul `rides` al shell-ului și panoul `Curse` arată cererile și alocările; taxiurile blocate/avariate/offline/conduse de jucător sunt excluse, iar resetul eliberează revendicările fără duplicate. Raportul determinist are 39 de verificări, iar proba de browser a trecut pe WEBGL2 cu cereri vizibile și preluarea unui taxi alocat. Pickup/dropoff fizic, pasagerii și ETA rămân PBI 265.
+
+- **Ce s-a livrat:** `createLiveRidePlan` și `createLiveRides` în `src/fleet/live-rides.ts`; export în `src/fleet/index.ts`; portul `rides` și panoul read-only în `src/main.ts` și `src/ui/live-rides-panel.ts`; butonul `Curse` în gazda shell-ului; teste în `tests/fleet/live-rides.test.ts` și `tests/ui/live-rides-panel.test.ts`; raport în `tests/fleet/live-rides-report.ts`.
+- **Dovezi:** [raport determinist](Evidence/264-live-rides/report.json), [cost de subsistem](Evidence/264-live-rides/cost.json), [probă de browser](Evidence/264-live-rides/browser.json).
 
 ### 265 — Ciclul complet al cursei: pickup, dropoff, pasager, ETA și HUD
 

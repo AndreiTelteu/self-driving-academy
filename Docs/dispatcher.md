@@ -117,3 +117,7 @@ Runnerul scrie [report.json](Evidence/060-dispatcher/report.json) și [report.md
 - Nu mișcă taxiurile și nu actualizează poziția după asignare; poziția rămâne a compoziției 024/058, iar ETA live și HUD rămân PBI-urilor 064–065.
 - Nu rezolvă revendicarea unui taxi avariat în timpul cursei; apelantul folosește `release(..., 'TAXI_DAMAGED', tick)`, iar consecințele cursei aparțin lifecycle-ului.
 - Raportul este o probă funcțională deterministă, nu o măsurătoare de FPS/GPU/Rapier/hardware.
+
+## Integrarea live 264
+
+[Componența live 264](live-rides.md) apelează acest dispecer la 10 Hz cu pozițiile reale 058 și îi publică statusurile taxiurilor înainte de fiecare pas. Ea nu schimbă contractul 060: revendicările, motivele și bugetele rămân exact cele documentate aici.

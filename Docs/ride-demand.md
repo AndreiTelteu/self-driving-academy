@@ -123,3 +123,7 @@ Runnerul scrie [report.json](Evidence/059-ride-demand/report.json) și [report.m
 - Nu implementează feedback rating→cerere și nu inventează cerere ascunsă din revenue; programul rămâne scenariul controlat din V1.
 - Nu este fizică, trafic live, semafor sau rutare nouă. Refolosește harta 032, graful 033 și plannerul 041.
 - Raportul este o probă funcțională deterministă, nu o măsurătoare de FPS/GPU/Rapier/hardware.
+
+## Integrarea live 264
+
+[Componența live 264](live-rides.md) creează acest generator o singură dată peste flota reală și îl lasă să admită cererile în coada 059; contractul rămâne pur și nu cunoaște shell-ul, panoul sau compunerea V3. Dispecerizarea către taxiurile live este tot 060.
