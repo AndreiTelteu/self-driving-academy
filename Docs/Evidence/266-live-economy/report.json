@@ -1,0 +1,440 @@
+{
+  "version": "266-live-economy-report-v1",
+  "contract": "266-live-economy-v1",
+  "fixture": {
+    "taxis": 24,
+    "civilians": 20,
+    "seed": 262,
+    "dwellTicks": 24,
+    "terminalTick": 110
+  },
+  "completed": {
+    "rideId": "id-v1:4:ride14:test:265:rides51:id-v1:12:ride-request14:test:265:rides4:w0005:r0000",
+    "requestId": "id-v1:12:ride-request14:test:265:rides4:w0005:r0000",
+    "taxiId": "id-v1:7:vehicle13:v3:city:fleet4:TAXI4:0022",
+    "quotedMinorUnits": 553,
+    "netMinorUnits": 553,
+    "rating": 5,
+    "reasons": [
+      "EFFICIENT_DELIVERY",
+      "ON_TIME",
+      "SMOOTH_DRIVE"
+    ],
+    "reviewCount": 1,
+    "settlements": 1,
+    "reviews": 1,
+    "dayRevenueMinorUnits": 553,
+    "dayRides": 1,
+    "monthRevenueMinorUnits": 553,
+    "exposureSeconds": 0,
+    "comfortSamples": 5,
+    "comfortIntervals": 4,
+    "averageRating": 5,
+    "histogram": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "hudText": "Ziua simulată d0000 (parțială) · Venit: 553 SDA · Rating: 5.00 (1 review-uri)",
+    "historyScans": 0
+  },
+  "failed": {
+    "rideId": "id-v1:4:ride14:test:265:rides51:id-v1:12:ride-request14:test:265:rides4:w0005:r0000",
+    "rule": "FAILED_FULL_REFUND",
+    "refundedMinorUnits": 544,
+    "netMinorUnits": 0,
+    "failedRides": 1,
+    "reviews": 0
+  },
+  "cancellation": {
+    "beforeRideId": "id-v1:4:ride14:test:265:rides51:id-v1:12:ride-request14:test:265:rides4:w0005:r0000",
+    "beforeRule": "CANCELLED_BEFORE_PASSENGER_FULL_REFUND",
+    "beforeNetMinorUnits": 0,
+    "beforeReviews": 0,
+    "withPassengerRideId": "id-v1:4:ride14:test:265:rides51:id-v1:12:ride-request14:test:265:rides4:w0005:r0000",
+    "withPassengerRule": "CANCELLED_WITH_PASSENGER_SERVICE_FEE",
+    "withPassengerNetMinorUnits": 165,
+    "withPassengerReviews": 1,
+    "withPassengerReasons": [
+      "RIDE_CANCELLED"
+    ]
+  },
+  "idempotency": {
+    "revenueBefore": 553,
+    "revenueAfterDuplicate": 553,
+    "revenueAfterReplay": 553,
+    "settlements": 1,
+    "reviews": 1,
+    "duplicateTick": true,
+    "replayStatus": "DUPLICATE",
+    "reads": 600,
+    "revenueAfterReads": 553,
+    "historyScansAfterReads": 0,
+    "ticksWithoutStep": 600,
+    "tickAfterPauseReads": 110,
+    "revenueAfterPauseReads": 553
+  },
+  "civilians": {
+    "revenueBefore": 553,
+    "revenueAfterRefusedCivilian": 553,
+    "settlementsAfterRefusedCivilian": 1,
+    "reviewsAfterRefusedCivilian": 1,
+    "civiliansOutcomesRejected": 1,
+    "refusedReason": "CIVILIAN_NOT_BILLABLE"
+  },
+  "epoch": {
+    "indexBefore": 1,
+    "indexAfter": 2,
+    "revenueBefore": 553,
+    "revenueAfterStart": 553,
+    "revenueAfterNextRide": 1047,
+    "settlementsBefore": 1,
+    "settlementsAfterNextRide": 2,
+    "reviewsBefore": 1,
+    "reviewsAfterNextRide": 2,
+    "startTick": 111,
+    "preservedRevenue": 553,
+    "secondRideId": "id-v1:4:ride14:test:265:rides51:id-v1:12:ride-request14:test:265:rides4:w0005:r0006",
+    "secondRating": 5
+  },
+  "checks": [
+    {
+      "name": "completed-state",
+      "expected": "COMPLETED",
+      "actual": "COMPLETED",
+      "pass": true,
+      "detail": "the real 061 ride ends through 063"
+    },
+    {
+      "name": "completed-boarded",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the passenger boarded"
+    },
+    {
+      "name": "completed-full-fare",
+      "expected": 553,
+      "actual": 553,
+      "pass": true,
+      "detail": "COMPLETED keeps the whole quoted fare"
+    },
+    {
+      "name": "completed-single-settlement",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "one terminal ride produces one settlement"
+    },
+    {
+      "name": "completed-single-review",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "one evaluable ride produces one review"
+    },
+    {
+      "name": "completed-review-reasons",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "reasons EFFICIENT_DELIVERY, ON_TIME, SMOOTH_DRIVE"
+    },
+    {
+      "name": "completed-day-revenue",
+      "expected": 553,
+      "actual": 553,
+      "pass": true,
+      "detail": "the day bucket keeps the settled revenue"
+    },
+    {
+      "name": "completed-month-revenue",
+      "expected": 553,
+      "actual": 553,
+      "pass": true,
+      "detail": "the month bucket keeps the settled revenue"
+    },
+    {
+      "name": "completed-day-rides",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the day bucket keeps the terminal ride"
+    },
+    {
+      "name": "completed-day-reviews",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the day bucket keeps the review"
+    },
+    {
+      "name": "completed-rating-sum",
+      "expected": 5,
+      "actual": 5,
+      "pass": true,
+      "detail": "the rating sum is the emitted review"
+    },
+    {
+      "name": "completed-histogram",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the 0–5 histogram sums to the review count"
+    },
+    {
+      "name": "economy-clock",
+      "expected": "1200s/day, 30 days/month, 60 Hz",
+      "actual": "1200s/day, 30 days/month, 60 Hz",
+      "pass": true,
+      "detail": "the versioned economic clock is the module 22 proposal"
+    },
+    {
+      "name": "comfort-link",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "5 live samples → 4 139 intervals"
+    },
+    {
+      "name": "history-scans",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "a live read never rescans the ledger or KPI history"
+    },
+    {
+      "name": "failed-full-refund",
+      "expected": 544,
+      "actual": 544,
+      "pass": true,
+      "detail": "FAILED refunds the whole quoted fare"
+    },
+    {
+      "name": "failed-rule",
+      "expected": "FAILED_FULL_REFUND",
+      "actual": "FAILED_FULL_REFUND",
+      "pass": true,
+      "detail": "the versioned failure rule is stored"
+    },
+    {
+      "name": "failed-no-revenue",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "a failed ride contributes no revenue"
+    },
+    {
+      "name": "failed-day",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the day bucket counts the failed ride"
+    },
+    {
+      "name": "failed-no-review",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "a failure before boarding has no evaluable passenger experience"
+    },
+    {
+      "name": "cancel-before-rule",
+      "expected": "CANCELLED_BEFORE_PASSENGER_FULL_REFUND",
+      "actual": "CANCELLED_BEFORE_PASSENGER_FULL_REFUND",
+      "pass": true,
+      "detail": "cancellation before boarding refunds everything"
+    },
+    {
+      "name": "cancel-before-revenue",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no fare is kept without a passenger"
+    },
+    {
+      "name": "cancel-before-review",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no invented review for a ride without experience"
+    },
+    {
+      "name": "cancel-passenger-rule",
+      "expected": "CANCELLED_WITH_PASSENGER_SERVICE_FEE",
+      "actual": "CANCELLED_WITH_PASSENGER_SERVICE_FEE",
+      "pass": true,
+      "detail": "a post-boarding cancellation keeps only the service fee"
+    },
+    {
+      "name": "cancel-passenger-fee",
+      "expected": 165,
+      "actual": 165,
+      "pass": true,
+      "detail": "the cancellation policy is applied verbatim"
+    },
+    {
+      "name": "cancel-passenger-review",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the passenger experience produces one review"
+    },
+    {
+      "name": "cancel-passenger-reason",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "reasons RIDE_CANCELLED"
+    },
+    {
+      "name": "civilians-no-revenue",
+      "expected": 553,
+      "actual": 553,
+      "pass": true,
+      "detail": "a civilian outcome never changes revenue"
+    },
+    {
+      "name": "civilians-no-settlement",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "a civilian outcome never adds a settlement"
+    },
+    {
+      "name": "civilians-no-review",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "a civilian outcome never adds a review"
+    },
+    {
+      "name": "civilians-refused",
+      "expected": "CIVILIAN_NOT_BILLABLE",
+      "actual": "CIVILIAN_NOT_BILLABLE",
+      "pass": true,
+      "detail": "the ledger refuses the civilian before the quote"
+    },
+    {
+      "name": "duplicate-tick",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "a re-delivered tick is an explicit duplicate"
+    },
+    {
+      "name": "duplicate-no-revenue",
+      "expected": 553,
+      "actual": 553,
+      "pass": true,
+      "detail": "the duplicate changed nothing"
+    },
+    {
+      "name": "duplicate-single-settlement",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the replay kept one settlement"
+    },
+    {
+      "name": "replay-status",
+      "expected": "DUPLICATE",
+      "actual": "DUPLICATE",
+      "pass": true,
+      "detail": "the explicit replay is a duplicate"
+    },
+    {
+      "name": "reads-no-history-scan",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "600 live reads do not rescan history"
+    },
+    {
+      "name": "reads-stable-revenue",
+      "expected": 553,
+      "actual": 553,
+      "pass": true,
+      "detail": "reading the KPI does not mutate revenue"
+    },
+    {
+      "name": "pause-no-clock",
+      "expected": 110,
+      "actual": 110,
+      "pass": true,
+      "detail": "600 reads without an authoritative step leave the economic clock unchanged"
+    },
+    {
+      "name": "pause-no-revenue",
+      "expected": 553,
+      "actual": 553,
+      "pass": true,
+      "detail": "a paused/offline game cannot produce revenue"
+    },
+    {
+      "name": "epoch-index",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "the session reset starts a new economic epoch"
+    },
+    {
+      "name": "epoch-preserves-revenue",
+      "expected": 553,
+      "actual": 553,
+      "pass": true,
+      "detail": "the previous revenue is preserved"
+    },
+    {
+      "name": "epoch-preserves-settlements",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the settlement history is not cleared"
+    },
+    {
+      "name": "epoch-preserves-reviews",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the review history is not cleared"
+    },
+    {
+      "name": "epoch-start-tick",
+      "expected": 111,
+      "actual": 111,
+      "pass": true,
+      "detail": "the new epoch starts at the reset boundary"
+    },
+    {
+      "name": "epoch-adds-next-ride",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "the next epoch adds on top of the preserved series"
+    },
+    {
+      "name": "epoch-revenue-grows",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the second ride increases the preserved revenue"
+    },
+    {
+      "name": "epoch-history-scans",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the epoch transition does not rewrite or rescan history"
+    }
+  ],
+  "summary": {
+    "version": "266-live-economy-report-v1",
+    "checks": 47,
+    "passed": 47,
+    "pass": true
+  }
+}
