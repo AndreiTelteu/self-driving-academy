@@ -1,13 +1,13 @@
 ---
 id: "269"
 title: "Evoluția companiei: nivel, achiziții de vehicule și upgrade-uri"
-status: "To Do"
+status: "In Progress"
 release: "V1"
 module: "Companie"
 depends_on: ["268"]
 performance_checks: ["simulation"]
-owner: null
-started_at: null
+owner: "loop-pbi/deepseek-269"
+started_at: "2026-11-26T21:07:11.866Z"
 completed_at: null
 ---
 
