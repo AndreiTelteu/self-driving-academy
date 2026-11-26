@@ -255,6 +255,8 @@ Nu sunt montate: LEARNING, pop-up-ul KPI și panoul companiei, misiuni, XP, salv
 
 **PBI:** [269](../PBI/README.md) · **Dependențe:** 268.
 
+**Stare:** Implementat local la 26 noiembrie 2026. Nivelul companiei, achizițiile reale în flota 057/058, upgrade-urile versionate cu efect în perioada următoare, refuzurile închise și read model-ul live sunt verificate; panoul rămâne 270, iar fișierul/reload-ul rămân 278.
+
 ### 270 — Panoul companiei: profit, costuri, cash, flotă și investiții
 
 **Ce lipsește:** Nu există nicio interfață pentru companie: profit, costuri, cash, valoare de flotă și investiții nu pot fi inspectate.
