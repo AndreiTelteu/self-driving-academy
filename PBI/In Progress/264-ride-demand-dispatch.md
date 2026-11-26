@@ -1,13 +1,13 @@
 ---
 id: "264"
 title: "Cereri de curse live, coadă și dispecerizare către flota reală"
-status: "To Do"
+status: "In Progress"
 release: "V1"
 module: "Flotă și curse"
 depends_on: ["262"]
 performance_checks: ["simulation"]
-owner: null
-started_at: null
+owner: "loop-pbi/deepseek-264"
+started_at: "2026-11-26T03:50:56.352Z"
 completed_at: null
 ---
 
