@@ -117,6 +117,9 @@ export interface AmbientTraffic {
   refreshStyle(): Readonly<{ profileId: string; versionId: string }>;
   list(): readonly CivilActorSnapshot[];
   get(vehicleId: string): CivilActorSnapshot | undefined;
+  /** PBI 269: start simulating a taxi that a company purchase added to the same 057 registry. */
+  addVehicle(vehicleId: string): CivilActorSnapshot;
+  removeVehicle(vehicleId: string): boolean;
   route(vehicleId: string): CivilRouteSnapshot | undefined;
   report(): AmbientFleetReport;
   dispose(): void;
@@ -462,6 +465,8 @@ export function createAmbientTraffic(options: unknown): AmbientTraffic {
     refreshStyle: () => prepared.traffic.refreshStyle(),
     list: () => prepared.traffic.list(),
     get: (vehicleId: string) => prepared.traffic.get(vehicleId),
+    addVehicle: (vehicleId: string) => prepared.traffic.addVehicle(vehicleId),
+    removeVehicle: (vehicleId: string) => prepared.traffic.removeVehicle(vehicleId),
     route: (vehicleId: string) => prepared.traffic.get(vehicleId)?.route,
     report(): AmbientFleetReport {
       const actors = prepared.traffic.list();

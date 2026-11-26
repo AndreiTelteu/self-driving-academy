@@ -7,7 +7,7 @@ import type { EconomyCurrency, TariffOutcomeState } from './tariffs';
 import { tariffOutcomeStates } from './tariffs';
 
 /**
- * PBI 268 company finance.
+ * PBI 268 company finance, extended by PBI 269 with investments and versioned cost modifiers.
  *
  * A company owns a cost ledger that is deliberately separate from the 209 revenue/review/KPI
  * ledger and from the 213 XP ledger:
@@ -18,8 +18,10 @@ import { tariffOutcomeStates } from './tariffs';
  *   the history is never rewritten;
  * - fixed monthly costs (insurance, salaries, licences) are versioned period entries, applied once
  *   per simulated month; a month with no rides therefore has a real negative profit, not `NO_DATA`;
- * - cash is a separate balance: `initialCash + profit`, clamped at zero with the uncovered loss
- *   reported explicitly. No purchase or upgrade operation exists here; that is PBI 269.
+ * - 269 adds one immutable investment journal in this same ledger. Cash is
+ *   `initialCash + profit - investments`, clamped at zero, while `cashBeforeInvestmentMinorUnits`
+ *   keeps the unchanged 268 formula. A bounded versioned modifier can reduce one cost category from
+ *   a future tick onward; earlier entries are never rewritten.
  *
  * The ledger has no clock, renderer, store, profile or XP dependency. It reads only the economic
  * clock for the simulated month and keeps incremental totals, so a read never rescans history
@@ -28,6 +30,12 @@ import { tariffOutcomeStates } from './tariffs';
 export const COMPANY_LEDGER_VERSION = '268-company-ledger-v1' as const;
 export const COMPANY_FINANCE_VERSION = '268-company-finance-v1' as const;
 export const COMPANY_COST_MODEL_VERSION = '268-company-cost-model-v1' as const;
+/**
+ * PBI 269 investment journal version. Investments are recorded inside the same 268 ledger (not a
+ * second ledger): the cash balance becomes `initialCash + profit - investments`, and a versioned
+ * cost modifier can change the declared cost of a category from a future simulated period onward.
+ */
+export const COMPANY_INVESTMENT_MODEL_VERSION = '269-company-investment-v1' as const;
 
 /** Closed ride-cost categories; every terminal ride has one line per category. */
 export const companyRideCostCategories = ['ENERGY', 'MAINTENANCE', 'INCIDENT', 'SERVICE'] as const;
@@ -72,6 +80,8 @@ export const companyRejectionReasons = [
   'INCONSISTENT_STATE',
   'UNKNOWN_RIDE',
   'LIMIT_EXCEEDED',
+  'INSUFFICIENT_CASH',
+  'INVALID_EFFECT',
 ] as const;
 export type CompanyRejectionReason = (typeof companyRejectionReasons)[number];
 
@@ -79,14 +89,21 @@ export const companyDuplicateReasons = [
   'RIDE_ALREADY_COSTED',
   'ADJUSTMENT_ALREADY_APPLIED',
   'FIXED_COST_ALREADY_APPLIED',
+  'INVESTMENT_ALREADY_APPLIED',
 ] as const;
 export type CompanyDuplicateReason = (typeof companyDuplicateReasons)[number];
+
+/** Closed investment kinds; a vehicle purchase and an upgrade are both cash outflows. */
+export const companyInvestmentKinds = ['VEHICLE_PURCHASE', 'UPGRADE'] as const;
+export type CompanyInvestmentKind = (typeof companyInvestmentKinds)[number];
 
 export const COMPANY_LIMITS = Object.freeze({
   version: COMPANY_LEDGER_VERSION,
   retainedRideEntries: 4_096,
   retainedAdjustments: 4_096,
   retainedFixedEntries: 1_536,
+  retainedInvestments: 128,
+  retainedCostModifiers: 64,
   retainedMonths: 512,
   idCodeUnits: 1_024,
   versionCodeUnits: 64,
@@ -94,6 +111,8 @@ export const COMPANY_LIMITS = Object.freeze({
   maximumRideDistanceMeters: 1_000_000,
   maximumIncidentsPerRide: 1_000_000,
   maximumAdjustmentMinorUnits: 1_000_000_000,
+  /** 10 000 basis points is the unmodified price; a bounded modifier cannot raise a cost. */
+  maximumBasisPoints: 10_000,
 });
 
 export interface CompanyCategoryRate {
@@ -172,8 +191,14 @@ export interface CompanyCostLine {
   readonly kind: Exclude<CompanyCostKind, 'PER_MONTH'>;
   /** Distance in metres for PER_KM, incident count for PER_INCIDENT, `1` for PER_RIDE. */
   readonly quantity: number;
+  /** Base amount before the versioned modifier; the stored line keeps the applied amount below. */
+  readonly baseAmountMinorUnits: number;
   readonly amountMinorUnits: number;
   readonly costModelVersion: string;
+  /** PBI 269: the versioned upgrade modifier that produced this line, or `null`. */
+  readonly appliedModifierId: string | null;
+  readonly appliedModifierVersion: string | null;
+  readonly appliedBasisPoints: number;
 }
 
 /** One immutable cost entry per terminal ride; the idempotency key is the real `rideId`. */
@@ -202,10 +227,70 @@ export interface CompanyFixedCostEntry {
   readonly entryId: string;
   readonly periodId: string;
   readonly category: CompanyFixedCostCategory;
+  readonly baseAmountMinorUnits: number;
   readonly amountMinorUnits: number;
   readonly tick: number;
   readonly currency: string;
   readonly costModelVersion: string;
+  readonly appliedModifierId: string | null;
+  readonly appliedModifierVersion: string | null;
+  readonly appliedBasisPoints: number;
+}
+
+/**
+ * A versioned, bounded cost modifier granted by an upgrade. It is stored with the investment that
+ * paid for it and applies only from `effectiveFromTick` onward, so the history already recorded is
+ * never rewritten. `basisPoints` is at most 10 000 (no surcharge, no negative amount).
+ */
+export interface CompanyCostModifierEntry {
+  readonly modifierId: string;
+  readonly version: string;
+  readonly category: CompanyCostCategory;
+  readonly basisPoints: number;
+  readonly effectiveFromTick: number;
+  readonly investmentId: string;
+  readonly tick: number;
+  readonly currency: string;
+  readonly investmentModelVersion: string;
+}
+
+/** One immutable investment outflow with its optional versioned effect. */
+export interface CompanyInvestmentEntry {
+  readonly investmentId: string;
+  readonly kind: CompanyInvestmentKind;
+  readonly referenceId: string;
+  readonly amountMinorUnits: number;
+  readonly tick: number;
+  readonly currency: string;
+  readonly investmentModelVersion: string;
+  readonly modifierId: string | null;
+}
+
+export interface CompanyCostModifierInput {
+  readonly modifierId?: string;
+  readonly version: string;
+  readonly category: CompanyCostCategory;
+  readonly basisPoints: number;
+  /** First simulated tick at which the modifier is applied; usually the next month start. */
+  readonly effectiveFromTick: number;
+}
+
+export interface CompanyInvestmentInput {
+  readonly kind: CompanyInvestmentKind;
+  readonly referenceId: string;
+  readonly amountMinorUnits: number;
+  readonly tick: number;
+  readonly investmentModelVersion?: string;
+  readonly investmentId?: string;
+  readonly effect?: CompanyCostModifierInput | null;
+}
+
+export interface CompanyInvestmentOutcome {
+  readonly status: 'ACCEPTED' | 'DUPLICATE' | 'REJECTED';
+  readonly reason: CompanyRejectionReason | null;
+  readonly duplicateReason: CompanyDuplicateReason | null;
+  readonly investment: CompanyInvestmentEntry | null;
+  readonly modifier: CompanyCostModifierEntry | null;
 }
 
 /**
@@ -311,14 +396,29 @@ export interface CompanyLedgerTotals {
   readonly adjustmentMinorUnits: number;
   readonly netCostMinorUnits: number;
   readonly profitMinorUnits: number;
-  /** `max(0, initialCash + profit)`; operating losses never make cash negative. */
+  /** `max(0, initialCash + profit)` before 269 investments. */
+  readonly cashBeforeInvestmentMinorUnits: number;
+  /** Accepted vehicle purchases plus upgrades; a cash outflow that is not an operating cost. */
+  readonly investmentMinorUnits: number;
+  readonly vehiclePurchaseMinorUnits: number;
+  readonly upgradeInvestmentMinorUnits: number;
+  /** `max(0, initialCash + profit - investments)`; never negative. */
   readonly cashMinorUnits: number;
-  /** The part of a negative balance that the starting cash could not cover. */
+  /** The part of a negative balance that the starting cash and investments could not cover. */
   readonly uncoveredLossMinorUnits: number;
+  /** Highest cumulative operating profit observed; monotonically non-decreasing. */
+  readonly profitHighWaterMinorUnits: number;
+  /**
+   * Profit actually reinvested: `min(investments, profitHighWater)`. Both terms are monotonic, so
+   * the company level derived from this value never drops after a loss.
+   */
+  readonly reinvestedProfitMinorUnits: number;
   readonly costByCategory: CompanyCostTotals;
   readonly rideCostEntries: number;
   readonly fixedCostEntries: number;
   readonly adjustments: number;
+  readonly investments: number;
+  readonly costModifiers: number;
   readonly completedRides: number;
   readonly failedRides: number;
   readonly cancelledRides: number;
@@ -331,14 +431,19 @@ export interface CompanyFinanceCounters {
   readonly rideCostEntries: number;
   readonly fixedCostEntries: number;
   readonly adjustments: number;
+  readonly investments: number;
+  readonly costModifiers: number;
   readonly duplicateRides: number;
   readonly rejectedRides: number;
   readonly refundedRides: number;
   readonly fixedCostDuplicates: number;
+  readonly duplicateInvestments: number;
+  readonly rejectedInvestments: number;
   /** Structural proof that the company ledger has no path to XP or to the 209 ledger. */
   readonly xpWrites: 0;
   readonly economyWrites: 0;
-  readonly investmentWrites: 0;
+  /** PBI 269 investment writes live in this same ledger, never in another store. */
+  readonly investmentWrites: number;
 }
 
 export interface CompanyFinanceSnapshot {
@@ -349,6 +454,9 @@ export interface CompanyFinanceSnapshot {
   readonly month: CompanyMonthReport | null;
   readonly months: readonly CompanyMonthReport[];
   readonly lastRide: CompanyRideCostEntry | null;
+  readonly lastInvestment: CompanyInvestmentEntry | null;
+  readonly investments: readonly CompanyInvestmentEntry[];
+  readonly costModifiers: readonly CompanyCostModifierEntry[];
   readonly counters: CompanyFinanceCounters;
   readonly historyScans: 0;
   readonly disposed: boolean;
@@ -361,6 +469,8 @@ export interface CompanyLedgerSnapshot {
   readonly rideEntries: readonly CompanyRideCostEntry[];
   readonly fixedEntries: readonly CompanyFixedCostEntry[];
   readonly adjustments: readonly CompanyCostAdjustment[];
+  readonly investments: readonly CompanyInvestmentEntry[];
+  readonly costModifiers: readonly CompanyCostModifierEntry[];
   readonly months: readonly CompanyMonthReport[];
   readonly historyScans: 0;
 }
@@ -375,6 +485,10 @@ export interface CompanyLedgerStats {
   readonly fixedCostEntries: number;
   readonly fixedCostDuplicates: number;
   readonly adjustments: number;
+  readonly investments: number;
+  readonly duplicateInvestments: number;
+  readonly rejectedInvestments: number;
+  readonly costModifiers: number;
   readonly retainedRideEntries: number;
   readonly droppedRideEntries: number;
   readonly retainedMonths: number;
@@ -382,7 +496,7 @@ export interface CompanyLedgerStats {
   readonly lastRejection: CompanyRejectionReason | null;
   readonly xpWrites: 0;
   readonly economyWrites: 0;
-  readonly investmentWrites: 0;
+  readonly investmentWrites: number;
   readonly disposed: boolean;
 }
 
@@ -392,6 +506,8 @@ export interface CompanyLedgerOptions {
   readonly clock?: EconomyClock;
   readonly retainedRideEntries?: number;
   readonly retainedAdjustments?: number;
+  readonly retainedInvestments?: number;
+  readonly retainedCostModifiers?: number;
   readonly retainedMonths?: number;
 }
 
@@ -403,7 +519,12 @@ export interface CompanyLedger {
   postRide(input: unknown): CompanyRideOutcome;
   adjustRide(input: unknown): CompanyAdjustmentOutcome;
   accrueFixedCosts(input: unknown): CompanyFixedCostOutcome;
+  /** PBI 269: one cash outflow with an optional versioned, future-effective cost modifier. */
+  invest(input: unknown): CompanyInvestmentOutcome;
   entry(rideId: string): CompanyRideCostEntry | undefined;
+  investment(investmentId: string): CompanyInvestmentEntry | undefined;
+  investmentFor(referenceId: string): CompanyInvestmentEntry | undefined;
+  costModifier(modifierId: string): CompanyCostModifierEntry | undefined;
   adjustmentsFor(rideId: string): readonly CompanyCostAdjustment[];
   month(periodId: string): CompanyMonthReport | null;
   totals(): CompanyLedgerTotals;
@@ -685,6 +806,87 @@ function readFixedCostTick(value: unknown): number {
   return tick(data.tick);
 }
 
+const investmentFields = [
+  'kind',
+  'referenceId',
+  'amountMinorUnits',
+  'tick',
+  'investmentModelVersion',
+  'investmentId',
+  'effect',
+] as const;
+const requiredInvestmentFields = ['kind', 'referenceId', 'amountMinorUnits', 'tick'] as const;
+const modifierFields = [
+  'modifierId',
+  'version',
+  'category',
+  'basisPoints',
+  'effectiveFromTick',
+] as const;
+const requiredModifierFields = ['version', 'category', 'basisPoints', 'effectiveFromTick'] as const;
+
+function readCostModifier(
+  value: unknown,
+  investmentTick: number,
+): Readonly<Omit<CompanyCostModifierInput, 'modifierId'> & { readonly modifierId: string | null }> {
+  const data = record(value, 'company cost modifier');
+  exactFields(data, modifierFields, requiredModifierFields, 'company cost modifier');
+  const effectiveFromTick = tick(data.effectiveFromTick);
+  requireContract(
+    effectiveFromTick >= investmentTick,
+    'A company cost modifier cannot start before the investment that paid for it',
+  );
+  return Object.freeze({
+    ...(data.modifierId === undefined
+      ? { modifierId: null }
+      : { modifierId: identity(data.modifierId, 'cost modifier') }),
+    version: versionLabel(data.version, 'cost modifier'),
+    category: choice(data.category, companyCostCategories),
+    basisPoints: integerMinorUnits(
+      data.basisPoints,
+      1,
+      COMPANY_LIMITS.maximumBasisPoints,
+      'Company cost modifier',
+    ),
+    effectiveFromTick,
+  });
+}
+
+function readInvestment(value: unknown): Readonly<{
+  kind: CompanyInvestmentKind;
+  referenceId: string;
+  amountMinorUnits: number;
+  tick: number;
+  investmentModelVersion: string;
+  investmentId: string | null;
+  effect: ReturnType<typeof readCostModifier> | null;
+}> {
+  const data = record(value, 'company investment input');
+  exactFields(data, investmentFields, requiredInvestmentFields, 'company investment input');
+  const atTick = tick(data.tick);
+  return Object.freeze({
+    kind: choice(data.kind, companyInvestmentKinds),
+    referenceId: identity(data.referenceId, 'investment reference'),
+    amountMinorUnits: integerMinorUnits(
+      data.amountMinorUnits,
+      1,
+      COMPANY_LIMITS.maximumMinorUnits,
+      'Company investment',
+    ),
+    tick: atTick,
+    investmentModelVersion:
+      data.investmentModelVersion === undefined
+        ? COMPANY_INVESTMENT_MODEL_VERSION
+        : versionLabel(data.investmentModelVersion, 'investment model'),
+    investmentId:
+      data.investmentId === undefined ? null : identity(data.investmentId, 'investment'),
+    effect:
+      data.effect === undefined || data.effect === null
+        ? null
+        : readCostModifier(data.effect, atTick),
+  });
+}
+
 /** The company cost ledger; it owns no clock, renderer, store, profile or XP ledger. */
 export function createCompanyLedger(options: CompanyLedgerOptions = {}): CompanyLedger {
   const namespace = options.namespace === undefined ? 'city:company' : text(options.namespace),
@@ -692,6 +894,8 @@ export function createCompanyLedger(options: CompanyLedgerOptions = {}): Company
     clock = options.clock ?? ECONOMY_CLOCK,
     retainedRideEntries = options.retainedRideEntries ?? COMPANY_LIMITS.retainedRideEntries,
     retainedAdjustments = options.retainedAdjustments ?? COMPANY_LIMITS.retainedAdjustments,
+    retainedInvestments = options.retainedInvestments ?? COMPANY_LIMITS.retainedInvestments,
+    retainedCostModifiers = options.retainedCostModifiers ?? COMPANY_LIMITS.retainedCostModifiers,
     retainedMonths = options.retainedMonths ?? COMPANY_LIMITS.retainedMonths;
   requireContract(
     namespace.length > 0 && namespace.trim() === namespace,
@@ -710,6 +914,18 @@ export function createCompanyLedger(options: CompanyLedgerOptions = {}): Company
     'Company adjustment retention capacity is invalid',
   );
   requireContract(
+    Number.isSafeInteger(retainedInvestments) &&
+      retainedInvestments >= 1 &&
+      retainedInvestments <= COMPANY_LIMITS.retainedInvestments,
+    'Company investment retention capacity is invalid',
+  );
+  requireContract(
+    Number.isSafeInteger(retainedCostModifiers) &&
+      retainedCostModifiers >= 1 &&
+      retainedCostModifiers <= COMPANY_LIMITS.retainedCostModifiers,
+    'Company cost modifier retention capacity is invalid',
+  );
+  requireContract(
     Number.isSafeInteger(retainedMonths) &&
       retainedMonths >= 1 &&
       retainedMonths <= COMPANY_LIMITS.retainedMonths,
@@ -721,12 +937,20 @@ export function createCompanyLedger(options: CompanyLedgerOptions = {}): Company
     fixedOrder: string[] = [],
     adjustments = new Map<string, CompanyCostAdjustment>(),
     adjustmentOrder: string[] = [],
+    investments = new Map<string, CompanyInvestmentEntry>(),
+    investmentOrder: string[] = [],
+    costModifiers = new Map<string, CompanyCostModifierEntry>(),
+    modifierOrder: string[] = [],
+    modifiersByCategory = new Map<CompanyCostCategory, CompanyCostModifierEntry[]>(),
     months = new Map<string, MutableMonth>(),
     monthOrder: string[] = [],
     totals = {
       revenueMinorUnits: 0,
       grossCostMinorUnits: 0,
       adjustmentMinorUnits: 0,
+      investmentMinorUnits: 0,
+      vehiclePurchaseMinorUnits: 0,
+      upgradeInvestmentMinorUnits: 0,
       completedRides: 0,
       failedRides: 0,
       cancelledRides: 0,
@@ -740,7 +964,11 @@ export function createCompanyLedger(options: CompanyLedgerOptions = {}): Company
     fixedCostEntries = 0,
     fixedCostDuplicates = 0,
     adjustmentCount = 0,
+    investmentCount = 0,
+    duplicateInvestments = 0,
+    rejectedInvestments = 0,
     droppedRideEntries = 0,
+    profitHighWaterMinorUnits = 0,
     lastRejection: CompanyRejectionReason | null = null,
     disposed = false;
 
@@ -752,6 +980,65 @@ export function createCompanyLedger(options: CompanyLedgerOptions = {}): Company
     const next = add(current, delta, label);
     if (next < 0) reject('LIMIT_EXCEEDED');
     return next;
+  }
+
+  function currentProfitMinorUnits(): number {
+    return totals.revenueMinorUnits - (totals.grossCostMinorUnits + totals.adjustmentMinorUnits);
+  }
+
+  /** The high-water mark only rises; a later loss can never lower the company level. */
+  function updateProfitHighWater(): void {
+    const profit = currentProfitMinorUnits();
+    if (profit > profitHighWaterMinorUnits) profitHighWaterMinorUnits = profit;
+  }
+
+  /**
+   * The latest modifier whose `effectiveFromTick` is not after `atTick`. Modifiers are kept in a
+   * small per-category sorted array, so this is metadata lookup, not a history replay.
+   */
+  function effectiveModifier(
+    category: CompanyCostCategory,
+    atTick: number,
+  ): CompanyCostModifierEntry | null {
+    const entries = modifiersByCategory.get(category);
+    if (entries === undefined || entries.length === 0) return null;
+    let found: CompanyCostModifierEntry | null = null;
+    for (const entry of entries) {
+      if (entry.effectiveFromTick > atTick) break;
+      found = entry;
+    }
+    return found;
+  }
+
+  function modifiedAmount(
+    baseAmountMinorUnits: number,
+    modifier: CompanyCostModifierEntry | null,
+  ): Readonly<{
+    amountMinorUnits: number;
+    modifierId: string | null;
+    modifierVersion: string | null;
+    basisPoints: number;
+  }> {
+    if (modifier === null)
+      return Object.freeze({
+        amountMinorUnits: baseAmountMinorUnits,
+        modifierId: null,
+        modifierVersion: null,
+        basisPoints: COMPANY_LIMITS.maximumBasisPoints,
+      });
+    const amount = roundMinorUnits(
+      (baseAmountMinorUnits * modifier.basisPoints) / COMPANY_LIMITS.maximumBasisPoints,
+    );
+    requireContract(
+      Number.isSafeInteger(amount) && amount >= 0 && amount <= COMPANY_LIMITS.maximumMinorUnits,
+      'Company modified cost is outside the contract',
+    );
+    return Object.freeze({
+      amountMinorUnits: amount,
+      modifierId: modifier.modifierId,
+      modifierVersion: modifier.version,
+      basisPoints: modifier.basisPoints,
+    });
   }
 
   function bucketFor(atTick: number): MutableMonth {
@@ -837,9 +1124,15 @@ export function createCompanyLedger(options: CompanyLedgerOptions = {}): Company
   function totalsSnapshot(): CompanyLedgerTotals {
     const netCostMinorUnits = totals.grossCostMinorUnits + totals.adjustmentMinorUnits,
       profitMinorUnits = totals.revenueMinorUnits - netCostMinorUnits,
-      liquidMinorUnits = schedule.initialCashMinorUnits + profitMinorUnits,
+      cashBeforeInvestmentMinorUnits = Math.max(
+        0,
+        schedule.initialCashMinorUnits + profitMinorUnits,
+      ),
+      liquidMinorUnits =
+        schedule.initialCashMinorUnits + profitMinorUnits - totals.investmentMinorUnits,
       cashMinorUnits = Math.max(0, liquidMinorUnits),
-      uncoveredLossMinorUnits = Math.max(0, -liquidMinorUnits);
+      uncoveredLossMinorUnits = Math.max(0, -liquidMinorUnits),
+      reinvestedProfitMinorUnits = Math.min(totals.investmentMinorUnits, profitHighWaterMinorUnits);
     return Object.freeze({
       currency: schedule.currency,
       costModelVersion: schedule.version,
@@ -849,12 +1142,20 @@ export function createCompanyLedger(options: CompanyLedgerOptions = {}): Company
       adjustmentMinorUnits: totals.adjustmentMinorUnits,
       netCostMinorUnits,
       profitMinorUnits,
+      cashBeforeInvestmentMinorUnits,
+      investmentMinorUnits: totals.investmentMinorUnits,
+      vehiclePurchaseMinorUnits: totals.vehiclePurchaseMinorUnits,
+      upgradeInvestmentMinorUnits: totals.upgradeInvestmentMinorUnits,
       cashMinorUnits,
       uncoveredLossMinorUnits,
+      profitHighWaterMinorUnits,
+      reinvestedProfitMinorUnits,
       costByCategory: Object.freeze({ ...totals.costByCategory }),
       rideCostEntries: rideEntries.size,
       fixedCostEntries,
       adjustments: adjustmentCount,
+      investments: investmentCount,
+      costModifiers: costModifiers.size,
       completedRides: totals.completedRides,
       failedRides: totals.failedRides,
       cancelledRides: totals.cancelledRides,
@@ -869,13 +1170,17 @@ export function createCompanyLedger(options: CompanyLedgerOptions = {}): Company
       rideCostEntries: rideEntries.size,
       fixedCostEntries,
       adjustments: adjustmentCount,
+      investments: investmentCount,
+      costModifiers: costModifiers.size,
       duplicateRides,
       rejectedRides,
       refundedRides: totals.refundedRides,
       fixedCostDuplicates,
+      duplicateInvestments,
+      rejectedInvestments,
       xpWrites: 0 as const,
       economyWrites: 0 as const,
-      investmentWrites: 0 as const,
+      investmentWrites: investmentCount,
     });
   }
 
@@ -907,6 +1212,45 @@ export function createCompanyLedger(options: CompanyLedgerOptions = {}): Company
       rideEntries.delete(oldest);
       droppedRideEntries += 1;
     }
+  }
+
+  function storeModifier(entry: CompanyCostModifierEntry): void {
+    costModifiers.set(entry.modifierId, entry);
+    modifierOrder.push(entry.modifierId);
+    const entries = modifiersByCategory.get(entry.category) ?? [];
+    entries.push(entry);
+    entries.sort((left, right) =>
+      left.effectiveFromTick !== right.effectiveFromTick
+        ? left.effectiveFromTick - right.effectiveFromTick
+        : left.modifierId < right.modifierId
+          ? -1
+          : left.modifierId > right.modifierId
+            ? 1
+            : 0,
+    );
+    modifiersByCategory.set(entry.category, entries);
+    while (costModifiers.size > retainedCostModifiers) {
+      const oldest = modifierOrder.shift();
+      if (oldest === undefined) break;
+      const removed = costModifiers.get(oldest);
+      costModifiers.delete(oldest);
+      if (removed === undefined) continue;
+      const categoryEntries = modifiersByCategory.get(removed.category) ?? [],
+        index = categoryEntries.findIndex((candidate) => candidate.modifierId === oldest);
+      if (index >= 0) categoryEntries.splice(index, 1);
+      if (categoryEntries.length === 0) modifiersByCategory.delete(removed.category);
+      else modifiersByCategory.set(removed.category, categoryEntries);
+    }
+  }
+
+  function investmentOutcome(
+    status: CompanyInvestmentOutcome['status'],
+    reason: CompanyRejectionReason | null,
+    duplicateReason: CompanyDuplicateReason | null,
+    investment: CompanyInvestmentEntry | null,
+    modifier: CompanyCostModifierEntry | null,
+  ): CompanyInvestmentOutcome {
+    return Object.freeze({ status, reason, duplicateReason, investment, modifier });
   }
 
   function appendAdjustment(input: {
@@ -986,42 +1330,67 @@ export function createCompanyLedger(options: CompanyLedgerOptions = {}): Company
         maintenance = schedule.categories.MAINTENANCE,
         incident = schedule.categories.INCIDENT,
         service = schedule.categories.SERVICE,
-        lines: CompanyCostLine[] = [
-          Object.freeze({
-            category: 'ENERGY' as const,
-            kind: 'PER_KM' as const,
-            quantity: distanceMeters,
-            amountMinorUnits: perKilometre(energy.amountMinorUnits, distanceMeters),
-            costModelVersion: energy.costModelVersion,
-          }),
-          Object.freeze({
-            category: 'MAINTENANCE' as const,
-            kind: 'PER_KM' as const,
-            quantity: distanceMeters,
-            amountMinorUnits: perKilometre(maintenance.amountMinorUnits, distanceMeters),
-            costModelVersion: maintenance.costModelVersion,
-          }),
-          Object.freeze({
-            category: 'INCIDENT' as const,
-            kind: 'PER_INCIDENT' as const,
-            quantity: incidentCount,
-            amountMinorUnits: add(
-              0,
-              incidentCount * incident.amountMinorUnits,
-              'Company incident cost',
-            ),
-            costModelVersion: incident.costModelVersion,
-          }),
-          Object.freeze({
-            category: 'SERVICE' as const,
-            kind: 'PER_RIDE' as const,
-            quantity: 1,
-            amountMinorUnits: service.amountMinorUnits,
-            costModelVersion: service.costModelVersion,
-          }),
+        energyModifier = effectiveModifier('ENERGY', input.tick),
+        maintenanceModifier = effectiveModifier('MAINTENANCE', input.tick),
+        incidentModifier = effectiveModifier('INCIDENT', input.tick),
+        serviceModifier = effectiveModifier('SERVICE', input.tick);
+      const line = (
+        category: CompanyRideCostCategory,
+        kind: Exclude<CompanyCostKind, 'PER_MONTH'>,
+        quantity: number,
+        baseAmountMinorUnits: number,
+        costModelVersion: string,
+        modifier: CompanyCostModifierEntry | null,
+      ): CompanyCostLine => {
+        const applied = modifiedAmount(baseAmountMinorUnits, modifier);
+        return Object.freeze({
+          category,
+          kind,
+          quantity,
+          baseAmountMinorUnits,
+          amountMinorUnits: applied.amountMinorUnits,
+          costModelVersion,
+          appliedModifierId: applied.modifierId,
+          appliedModifierVersion: applied.modifierVersion,
+          appliedBasisPoints: applied.basisPoints,
+        });
+      };
+      const lines: CompanyCostLine[] = [
+          line(
+            'ENERGY',
+            'PER_KM',
+            distanceMeters,
+            perKilometre(energy.amountMinorUnits, distanceMeters),
+            energy.costModelVersion,
+            energyModifier,
+          ),
+          line(
+            'MAINTENANCE',
+            'PER_KM',
+            distanceMeters,
+            perKilometre(maintenance.amountMinorUnits, distanceMeters),
+            maintenance.costModelVersion,
+            maintenanceModifier,
+          ),
+          line(
+            'INCIDENT',
+            'PER_INCIDENT',
+            incidentCount,
+            add(0, incidentCount * incident.amountMinorUnits, 'Company incident cost'),
+            incident.costModelVersion,
+            incidentModifier,
+          ),
+          line(
+            'SERVICE',
+            'PER_RIDE',
+            1,
+            service.amountMinorUnits,
+            service.costModelVersion,
+            serviceModifier,
+          ),
         ],
         grossCostMinorUnits = lines.reduce(
-          (sum, line) => add(sum, line.amountMinorUnits, 'Company gross ride cost'),
+          (sum, entry) => add(sum, entry.amountMinorUnits, 'Company gross ride cost'),
           0,
         );
       const entry: CompanyRideCostEntry = Object.freeze({
@@ -1085,21 +1454,23 @@ export function createCompanyLedger(options: CompanyLedgerOptions = {}): Company
       noteTick(bucket, input.tick);
       acceptedRides += 1;
       let adjustment: CompanyCostAdjustment | null = null;
-      if (!input.passengerAboard && service.amountMinorUnits > 0) {
-        // The service line was still recorded gross; the explicit credit below proves that the entry
-        // is immutable and that a cancellation is an adjustment, not a rewrite.
+      const serviceLine = lines.find((line) => line.category === 'SERVICE')!;
+      if (!input.passengerAboard && serviceLine.amountMinorUnits > 0) {
+        // The service line was still recorded with its applied amount; the explicit credit below
+        // proves that the entry is immutable and that a cancellation is an adjustment, not a rewrite.
         const appliedAdjustment = appendAdjustment({
           rideId: input.rideId,
           referencesEntryId: entry.entryId,
           cause: 'SERVICE_NOT_DELIVERED',
           category: 'SERVICE',
-          amountMinorUnits: -service.amountMinorUnits,
+          amountMinorUnits: -serviceLine.amountMinorUnits,
           tick: input.tick,
         });
         adjustment = appliedAdjustment.adjustment;
         if (appliedAdjustment.created)
           totals.refundedRides = nextSum(totals.refundedRides, 1, 'Company refunded rides');
       }
+      updateProfitHighWater();
       return rideOutcome('ACCEPTED', null, null, entry, adjustment);
     } catch (error: unknown) {
       if (error instanceof CompanyLedgerRejection) {
@@ -1140,6 +1511,7 @@ export function createCompanyLedger(options: CompanyLedgerOptions = {}): Company
         referencesEntryId: entry.entryId,
         adjustmentId,
       });
+      updateProfitHighWater();
       return adjustmentOutcome('ACCEPTED', null, null, appliedAdjustment.adjustment);
     } catch (error: unknown) {
       if (error instanceof CompanyLedgerRejection) {
@@ -1170,14 +1542,20 @@ export function createCompanyLedger(options: CompanyLedgerOptions = {}): Company
           duplicates += 1;
           continue;
         }
+        const modifier = effectiveModifier(category, atTick),
+          cost = modifiedAmount(rate.amountMinorUnits, modifier);
         const entry: CompanyFixedCostEntry = Object.freeze({
           entryId,
           periodId: period.periodId,
           category,
-          amountMinorUnits: rate.amountMinorUnits,
+          baseAmountMinorUnits: rate.amountMinorUnits,
+          amountMinorUnits: cost.amountMinorUnits,
           tick: atTick,
           currency: schedule.currency,
           costModelVersion: rate.costModelVersion,
+          appliedModifierId: cost.modifierId,
+          appliedModifierVersion: cost.modifierVersion,
+          appliedBasisPoints: cost.basisPoints,
         });
         fixedEntries.set(entryId, entry);
         fixedOrder.push(entryId);
@@ -1212,6 +1590,7 @@ export function createCompanyLedger(options: CompanyLedgerOptions = {}): Company
         entries.push(entry);
         applied += 1;
       }
+      updateProfitHighWater();
       fixedCostEntries += applied;
       fixedCostDuplicates += duplicates;
       if (applied > 0)
@@ -1258,13 +1637,123 @@ export function createCompanyLedger(options: CompanyLedgerOptions = {}): Company
     }
   }
 
+  /**
+   * Records one investment paid from the real cash balance. The check happens against
+   * `initialCash + profit - previousInvestments`, so a refused purchase changes nothing and cash can
+   * never become negative. The optional effect is stored with the same identity and applies only
+   * from `effectiveFromTick` onward.
+   */
+  function invest(value: unknown): CompanyInvestmentOutcome {
+    assertLive();
+    try {
+      const input = readInvestment(value),
+        investmentId =
+          input.investmentId ??
+          createStableId('company-investment', namespace, [input.kind, input.referenceId]);
+      const existing = investments.get(investmentId);
+      if (existing !== undefined) {
+        duplicateInvestments += 1;
+        return investmentOutcome(
+          'DUPLICATE',
+          null,
+          'INVESTMENT_ALREADY_APPLIED',
+          existing,
+          existing.modifierId === null ? null : (costModifiers.get(existing.modifierId) ?? null),
+        );
+      }
+      if (input.amountMinorUnits > totalsSnapshot().cashMinorUnits) reject('INSUFFICIENT_CASH');
+      const nextInvestmentMinorUnits = add(
+          totals.investmentMinorUnits,
+          input.amountMinorUnits,
+          'Company investment',
+        ),
+        nextVehiclePurchaseMinorUnits =
+          input.kind === 'VEHICLE_PURCHASE'
+            ? add(
+                totals.vehiclePurchaseMinorUnits,
+                input.amountMinorUnits,
+                'Company vehicle investment',
+              )
+            : totals.vehiclePurchaseMinorUnits,
+        nextUpgradeInvestmentMinorUnits =
+          input.kind === 'UPGRADE'
+            ? add(
+                totals.upgradeInvestmentMinorUnits,
+                input.amountMinorUnits,
+                'Company upgrade investment',
+              )
+            : totals.upgradeInvestmentMinorUnits;
+      let modifier: CompanyCostModifierEntry | null = null;
+      if (input.effect !== null) {
+        const modifierId =
+          input.effect.modifierId ??
+          createStableId('company-cost-modifier', namespace, [
+            input.kind,
+            input.referenceId,
+            input.effect.category,
+            input.effect.version,
+          ]);
+        if (costModifiers.has(modifierId)) reject('INCONSISTENT_STATE');
+        modifier = Object.freeze({
+          modifierId,
+          version: input.effect.version,
+          category: input.effect.category,
+          basisPoints: input.effect.basisPoints,
+          effectiveFromTick: input.effect.effectiveFromTick,
+          investmentId,
+          tick: input.tick,
+          currency: schedule.currency,
+          investmentModelVersion: input.investmentModelVersion,
+        });
+      }
+      const investment: CompanyInvestmentEntry = Object.freeze({
+        investmentId,
+        kind: input.kind,
+        referenceId: input.referenceId,
+        amountMinorUnits: input.amountMinorUnits,
+        tick: input.tick,
+        currency: schedule.currency,
+        investmentModelVersion: input.investmentModelVersion,
+        modifierId: modifier === null ? null : modifier.modifierId,
+      });
+      investments.set(investmentId, investment);
+      investmentOrder.push(investmentId);
+      while (investments.size > retainedInvestments) {
+        const oldest = investmentOrder.shift();
+        if (oldest === undefined) break;
+        investments.delete(oldest);
+      }
+      if (modifier !== null) storeModifier(modifier);
+      totals.investmentMinorUnits = nextInvestmentMinorUnits;
+      totals.vehiclePurchaseMinorUnits = nextVehiclePurchaseMinorUnits;
+      totals.upgradeInvestmentMinorUnits = nextUpgradeInvestmentMinorUnits;
+      investmentCount += 1;
+      return investmentOutcome('ACCEPTED', null, null, investment, modifier);
+    } catch (error: unknown) {
+      if (error instanceof CompanyLedgerRejection) {
+        rejectedInvestments += 1;
+        lastRejection = error.reason;
+        return investmentOutcome('REJECTED', error.reason, null, null, null);
+      }
+      if (error instanceof Error && error.name === 'ContractValidationError') {
+        rejectedInvestments += 1;
+        lastRejection = 'INVALID_SHAPE';
+        return investmentOutcome('REJECTED', 'INVALID_SHAPE', null, null, null);
+      }
+      throw error;
+    }
+  }
+
   function read(atTick: unknown): CompanyFinanceSnapshot {
     assertLive();
     const at = tick(atTick),
       period = economyPeriod(at, 'MONTH', clock),
       bucket = months.get(period.periodId) ?? null,
       lastRideId = rideOrder.at(-1),
-      lastRide = lastRideId === undefined ? null : (rideEntries.get(lastRideId) ?? null);
+      lastRide = lastRideId === undefined ? null : (rideEntries.get(lastRideId) ?? null),
+      lastInvestmentId = investmentOrder.at(-1),
+      lastInvestment =
+        lastInvestmentId === undefined ? null : (investments.get(lastInvestmentId) ?? null);
     return Object.freeze({
       version: COMPANY_FINANCE_VERSION,
       tick: at,
@@ -1272,6 +1761,25 @@ export function createCompanyLedger(options: CompanyLedgerOptions = {}): Company
       month: bucket === null ? null : freezeMonth(bucket, at),
       months: sortedMonths(at),
       lastRide,
+      lastInvestment,
+      investments: Object.freeze(
+        [...investments.values()].sort(
+          (left, right) =>
+            left.tick - right.tick ||
+            (left.investmentId < right.investmentId
+              ? -1
+              : left.investmentId > right.investmentId
+                ? 1
+                : 0),
+        ),
+      ),
+      costModifiers: Object.freeze(
+        [...costModifiers.values()].sort(
+          (left, right) =>
+            left.effectiveFromTick - right.effectiveFromTick ||
+            (left.modifierId < right.modifierId ? -1 : left.modifierId > right.modifierId ? 1 : 0),
+        ),
+      ),
       counters: counters(),
       historyScans: 0 as const,
       disposed: false,
@@ -1310,6 +1818,24 @@ export function createCompanyLedger(options: CompanyLedgerOptions = {}): Company
                 : 0),
         ),
       ),
+      investments: Object.freeze(
+        [...investments.values()].sort(
+          (left, right) =>
+            left.tick - right.tick ||
+            (left.investmentId < right.investmentId
+              ? -1
+              : left.investmentId > right.investmentId
+                ? 1
+                : 0),
+        ),
+      ),
+      costModifiers: Object.freeze(
+        [...costModifiers.values()].sort(
+          (left, right) =>
+            left.effectiveFromTick - right.effectiveFromTick ||
+            (left.modifierId < right.modifierId ? -1 : left.modifierId > right.modifierId ? 1 : 0),
+        ),
+      ),
       months: sortedMonths(at),
       historyScans: 0 as const,
     });
@@ -1323,8 +1849,20 @@ export function createCompanyLedger(options: CompanyLedgerOptions = {}): Company
     postRide,
     adjustRide,
     accrueFixedCosts,
+    invest,
     entry(rideId: string): CompanyRideCostEntry | undefined {
       return disposed ? undefined : rideEntries.get(rideId);
+    },
+    investment(investmentId: string): CompanyInvestmentEntry | undefined {
+      return disposed ? undefined : investments.get(investmentId);
+    },
+    investmentFor(referenceId: string): CompanyInvestmentEntry | undefined {
+      if (disposed) return undefined;
+      for (const entry of investments.values()) if (entry.referenceId === referenceId) return entry;
+      return undefined;
+    },
+    costModifier(modifierId: string): CompanyCostModifierEntry | undefined {
+      return disposed ? undefined : costModifiers.get(modifierId);
     },
     adjustmentsFor(rideId: string): readonly CompanyCostAdjustment[] {
       if (disposed) return Object.freeze([]);
@@ -1361,6 +1899,10 @@ export function createCompanyLedger(options: CompanyLedgerOptions = {}): Company
         fixedCostEntries: disposed ? 0 : fixedCostEntries,
         fixedCostDuplicates: disposed ? 0 : fixedCostDuplicates,
         adjustments: disposed ? 0 : adjustmentCount,
+        investments: disposed ? 0 : investmentCount,
+        duplicateInvestments: disposed ? 0 : duplicateInvestments,
+        rejectedInvestments: disposed ? 0 : rejectedInvestments,
+        costModifiers: disposed ? 0 : costModifiers.size,
         retainedRideEntries: disposed ? 0 : rideEntries.size,
         droppedRideEntries: disposed ? 0 : droppedRideEntries,
         retainedMonths: disposed ? 0 : months.size,
@@ -1368,7 +1910,7 @@ export function createCompanyLedger(options: CompanyLedgerOptions = {}): Company
         lastRejection: disposed ? null : lastRejection,
         xpWrites: 0 as const,
         economyWrites: 0 as const,
-        investmentWrites: 0 as const,
+        investmentWrites: disposed ? 0 : investmentCount,
         disposed,
       });
     },
@@ -1380,11 +1922,19 @@ export function createCompanyLedger(options: CompanyLedgerOptions = {}): Company
       fixedOrder.length = 0;
       adjustments.clear();
       adjustmentOrder.length = 0;
+      investments.clear();
+      investmentOrder.length = 0;
+      costModifiers.clear();
+      modifierOrder.length = 0;
+      modifiersByCategory.clear();
       months.clear();
       monthOrder.length = 0;
       totals.revenueMinorUnits = 0;
       totals.grossCostMinorUnits = 0;
       totals.adjustmentMinorUnits = 0;
+      totals.investmentMinorUnits = 0;
+      totals.vehiclePurchaseMinorUnits = 0;
+      totals.upgradeInvestmentMinorUnits = 0;
       totals.completedRides = 0;
       totals.failedRides = 0;
       totals.cancelledRides = 0;
@@ -1397,7 +1947,11 @@ export function createCompanyLedger(options: CompanyLedgerOptions = {}): Company
       fixedCostEntries = 0;
       fixedCostDuplicates = 0;
       adjustmentCount = 0;
+      investmentCount = 0;
+      duplicateInvestments = 0;
+      rejectedInvestments = 0;
       droppedRideEntries = 0;
+      profitHighWaterMinorUnits = 0;
       lastRejection = null;
     },
     dispose(): void {
@@ -1409,11 +1963,19 @@ export function createCompanyLedger(options: CompanyLedgerOptions = {}): Company
       fixedOrder.length = 0;
       adjustments.clear();
       adjustmentOrder.length = 0;
+      investments.clear();
+      investmentOrder.length = 0;
+      costModifiers.clear();
+      modifierOrder.length = 0;
+      modifiersByCategory.clear();
       months.clear();
       monthOrder.length = 0;
       totals.revenueMinorUnits = 0;
       totals.grossCostMinorUnits = 0;
       totals.adjustmentMinorUnits = 0;
+      totals.investmentMinorUnits = 0;
+      totals.vehiclePurchaseMinorUnits = 0;
+      totals.upgradeInvestmentMinorUnits = 0;
       totals.completedRides = 0;
       totals.failedRides = 0;
       totals.cancelledRides = 0;
@@ -1426,7 +1988,11 @@ export function createCompanyLedger(options: CompanyLedgerOptions = {}): Company
       fixedCostEntries = 0;
       fixedCostDuplicates = 0;
       adjustmentCount = 0;
+      investmentCount = 0;
+      duplicateInvestments = 0;
+      rejectedInvestments = 0;
       droppedRideEntries = 0;
+      profitHighWaterMinorUnits = 0;
       lastRejection = null;
     },
   });
@@ -1488,10 +2054,11 @@ export interface LiveCompanyFinanceStats {
   readonly rejected: number;
   readonly fixedCostsApplied: number;
   readonly fixedCostsDuplicate: number;
+  readonly investments: number;
   readonly historyScans: 0;
   readonly xpWrites: 0;
   readonly economyWrites: 0;
-  readonly investmentWrites: 0;
+  readonly investmentWrites: number;
   readonly disposed: boolean;
 }
 
@@ -1676,10 +2243,11 @@ export function createLiveCompanyFinance(
         rejected: disposed ? 0 : rejected,
         fixedCostsApplied: disposed ? 0 : fixedCostsApplied,
         fixedCostsDuplicate: disposed ? 0 : fixedCostsDuplicate,
+        investments: disposed ? 0 : ledger.getStats().investments,
         historyScans: 0 as const,
         xpWrites: 0 as const,
         economyWrites: 0 as const,
-        investmentWrites: 0 as const,
+        investmentWrites: disposed ? 0 : ledger.getStats().investmentWrites,
         disposed,
       });
     },

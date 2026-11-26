@@ -460,3 +460,24 @@ test('262: fixture-ul 20/24/30 taxiuri și 20–40 civili este respectat', () =>
     }
   }
 });
+
+test('269: a company taxi added after creation enters the same live composition frame', () => {
+  const { ambient, composition } = fixture();
+  try {
+    const initial = composition.step({ tick: 1 }),
+      before = initial.vehicles.length;
+    const vehicle = ambient.registry.addVehicle('TAXI', 'compact', { tick: 1 });
+    const actor = ambient.addVehicle(vehicle.vehicleId);
+    assert.equal(actor.vehicleId, vehicle.vehicleId);
+    const frame = composition.step({ tick: 2 });
+    const found = frame.vehicles.find((entry) => entry.vehicleId === vehicle.vehicleId);
+    assert.ok(found !== undefined);
+    assert.equal(found!.driverKind, 'TAXI');
+    assert.equal(found!.slot, 25);
+    assert.equal(found!.classId, 'compact');
+    assert.equal(frame.vehicles.length, before + 1);
+  } finally {
+    composition.dispose();
+    ambient.dispose();
+  }
+});

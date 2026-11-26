@@ -252,6 +252,24 @@ export interface FleetRegistryOptions {
   readonly profileSource?: CityProfileSource;
 }
 
+/**
+ * PBI 269: the narrow fleet port a company purchase needs. The real `FleetRegistry` is assignable;
+ * the port exists so the economy never constructs a second registry or owns fleet state.
+ */
+export interface CompanyFleetPort {
+  counts(): FleetCounts;
+  list?(): readonly FleetVehicle[];
+  get?(vehicleId: string): FleetVehicle | undefined;
+  addVehicle(
+    driverKind: FleetDriverKind,
+    classId?: VehicleClassId,
+    options?: FleetAddOptions,
+  ): FleetVehicle;
+  removeVehicle?(vehicleId: string): boolean;
+  /** Optional live-simulation probe: whether the purchased vehicle has a real 058 actor. */
+  hasActor?(vehicleId: string): boolean;
+}
+
 export interface FleetRegistry {
   readonly configuration: FleetConfiguration;
   context(): ContractContext;

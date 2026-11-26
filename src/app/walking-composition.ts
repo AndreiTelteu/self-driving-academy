@@ -786,6 +786,16 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
       vehicles: trafficObservations(),
     });
     const updated = new Map(frame.actors.map((actor) => [actor.vehicleId, actor]));
+    // PBI 269: a company purchase can add a real 058 actor after composition creation. It enters
+    // the same frame next tick, never through a second composition or a synthetic vehicle.
+    const known = new Set(vehicles.map((vehicle) => vehicle.vehicleId)),
+      additions = frame.actors
+        .filter((actor) => !known.has(actor.vehicleId))
+        .map((actor) => trafficActorVehicle(actor, options.layout));
+    if (additions.length > 0) {
+      for (const vehicle of additions) trafficIds.add(vehicle.vehicleId);
+      vehicles = Object.freeze([...vehicles, ...additions]);
+    }
     const controlled = playerVehicle();
     vehicles = Object.freeze(
       vehicles.map((vehicle) => {

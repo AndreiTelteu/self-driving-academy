@@ -17,7 +17,13 @@ import {
   type SessionFlow,
   type SessionFlowMenu,
 } from './app';
-import { createLiveCompanyFinance, type LiveCompanyFinance } from './economy';
+import {
+  createLiveCompanyEvolution,
+  createLiveCompanyFinance,
+  type LiveCompanyEvolution,
+  type LiveCompanyFinance,
+} from './economy';
+import type { CompanyFleetPort } from './fleet';
 import { createDefaultSettings } from './settings';
 import { bindPauseFocusInput } from './input';
 import {
@@ -158,18 +164,70 @@ const ridesTickPort: GameTickPort = {
  * 061 și același cadru autoritar. El nu avansează ceasul când shell-ul este suspendat: un pas
  * lipsă înseamnă zero revenue, zero review și zero expunere economică.
  */
+/** PBI 269: the single live fleet owned by the ambient traffic composition, never a second one. */
+let liveFleet:
+  | Readonly<{
+      registry: ReturnType<typeof createAmbientTraffic>['registry'];
+      traffic: ReturnType<typeof createAmbientTraffic>['traffic'];
+    }>
+  | undefined;
 const economyModules: {
   compositions: Map<string, LiveEconomyComposition>;
   composition: LiveEconomyComposition | undefined;
   /** PBI 268: company ledger live, per sesiune, separat de revenue-ul 209. */
   companies: Map<string, LiveCompanyFinance>;
   company: LiveCompanyFinance | undefined;
+  /** PBI 269: evolution over the same company ledger and the same live fleet. */
+  evolutions: Map<string, LiveCompanyEvolution>;
+  evolution: LiveCompanyEvolution | undefined;
 } = {
   compositions: new Map(),
   composition: undefined,
   companies: new Map(),
   company: undefined,
+  evolutions: new Map(),
+  evolution: undefined,
 };
+/**
+ * PBI 269 fleet port: a purchase adds the taxi to the one 057 registry and starts its real 058
+ * actor, so the same live fleet and capacity grow without a second registry or composition.
+ */
+function companyFleetPort(): CompanyFleetPort | undefined {
+  const fleet = liveFleet;
+  if (fleet === undefined) return undefined;
+  return {
+    counts: () => fleet.registry.counts(),
+    list: () => fleet.registry.list(),
+    get: (vehicleId) => fleet.registry.get(vehicleId),
+    addVehicle: (driverKind, classId, options) => {
+      const vehicle = fleet.registry.addVehicle(driverKind, classId, options);
+      try {
+        fleet.traffic.addVehicle(vehicle.vehicleId);
+        return vehicle;
+      } catch (error) {
+        fleet.registry.removeVehicle(vehicle.vehicleId);
+        throw error;
+      }
+    },
+    removeVehicle: (vehicleId) => {
+      fleet.traffic.removeVehicle(vehicleId);
+      return fleet.registry.removeVehicle(vehicleId);
+    },
+    hasActor: (vehicleId) => fleet.traffic.get(vehicleId) !== undefined,
+  };
+}
+function createEvolutionFor(sessionId: string, company: LiveCompanyFinance): LiveCompanyEvolution {
+  const existing = economyModules.evolutions.get(sessionId);
+  if (existing !== undefined) return existing;
+  const fleet = companyFleetPort(),
+    evolution = createLiveCompanyEvolution({
+      finance: company,
+      ...(fleet === undefined ? {} : { fleet }),
+      namespace: `v3:company:evolution:${sessionId}`,
+    });
+  economyModules.evolutions.set(sessionId, evolution);
+  return evolution;
+}
 /** Activează economia sesiunii cerute; o sesiune nouă pornește cu istoric propriu gol. */
 function activateEconomy(sessionId: string): {
   economy: LiveEconomyComposition | undefined;
@@ -187,6 +245,7 @@ function activateEconomy(sessionId: string): {
         clock: existing.clock,
       });
     economyModules.companies.set(sessionId, economyModules.company);
+    economyModules.evolution = createEvolutionFor(sessionId, economyModules.company);
     return { economy: existing, created: false };
   }
   const economy = createLiveEconomyComposition({
@@ -202,15 +261,19 @@ function activateEconomy(sessionId: string): {
   economyModules.composition = economy;
   economyModules.companies.set(sessionId, company);
   economyModules.company = company;
+  economyModules.evolution = createEvolutionFor(sessionId, company);
   return { economy, created: true };
 }
 function disposeEconomies(): void {
   for (const economy of economyModules.compositions.values()) economy.dispose();
   for (const company of economyModules.companies.values()) company.dispose();
+  for (const evolution of economyModules.evolutions.values()) evolution.dispose();
   economyModules.compositions.clear();
   economyModules.companies.clear();
+  economyModules.evolutions.clear();
   economyModules.composition = undefined;
   economyModules.company = undefined;
+  economyModules.evolution = undefined;
 }
 const economyTickPort: GameTickPort = {
   id: 'economy',
@@ -468,6 +531,7 @@ const application = createApplicationLifecycle({
               })),
             ],
           });
+          liveFleet = { registry: ownedTraffic.registry, traffic: ownedTraffic.traffic };
           ownedComposition = createV3BrowserComposition({
             scene: backend.scene,
             surface: app,
@@ -588,6 +652,8 @@ const application = createApplicationLifecycle({
           } finally {
             try {
               ownedTraffic?.dispose();
+              if (ownedTraffic !== undefined && liveFleet?.traffic === ownedTraffic.traffic)
+                liveFleet = undefined;
             } finally {
               try {
                 models?.dispose();
@@ -628,6 +694,8 @@ const application = createApplicationLifecycle({
               } finally {
                 // PBI 256: compunerea nu deține traficul; registry-ul și actorii 058 se eliberează aici.
                 ownedTraffic?.dispose();
+                if (ownedTraffic !== undefined && liveFleet?.traffic === ownedTraffic.traffic)
+                  liveFleet = undefined;
                 if (composition === ownedComposition) composition = undefined;
                 if (diagnostics === owned) {
                   diagnostics = undefined;
@@ -937,6 +1005,9 @@ interface V3DebugGlobal {
   economy(): unknown;
   /** PBI 268: ledgerul companiei, profitul, cash-ul și P&L-ul lunar, fără scriere în 209/XP. */
   company(): unknown;
+  /** PBI 269 (numai DEV/capture/debug): aceeași acțiune ca viitorul panou 270. */
+  companyPurchase?(offerId: string): unknown;
+  companyUpgrade?(upgradeId: string): unknown;
   /** PBI 265: geometria reală a benzinelor de rută, pentru proba de condus din browser. */
   lanePath(laneIds: readonly string[]): unknown;
   /** PBI 265 (numai DEV/capture): fapt de sănătate real pentru proba terminală FAILED. */
@@ -1008,7 +1079,8 @@ const debugGlobal: V3DebugGlobal = {
   },
   postProcessing: () => composition?.view.daylight.getPostProcessingState() ?? null,
   company: () => {
-    const company = economyModules.company;
+    const company = economyModules.company,
+      evolution = economyModules.evolution;
     return {
       read: company?.read() ?? null,
       snapshot:
@@ -1016,9 +1088,13 @@ const debugGlobal: V3DebugGlobal = {
           ? null
           : company.snapshot(composition.composition.frame.tick),
       stats: company?.stats() ?? null,
+      evolution: evolution?.read() ?? null,
+      evolutionSnapshot: evolution?.snapshot() ?? null,
+      evolutionStats: evolution?.stats() ?? null,
       port: shell.status().systems.find((system) => system.id === 'economy')?.status ?? null,
     };
   },
+
   economy: () => {
     const economy = economyModules.composition;
     return {
@@ -1061,6 +1137,8 @@ if (
   debugGlobal.daylight = () => composition?.view.daylight ?? null;
   debugGlobal.setTimeOfDay = (name) => composition?.view.setTimeOfDay(name) ?? null;
   debugGlobal.timeOfDay = () => composition?.view.getTimeOfDay() ?? null;
+  debugGlobal.companyPurchase = (offerId) => economyModules.evolution?.purchase(offerId) ?? null;
+  debugGlobal.companyUpgrade = (upgradeId) => economyModules.evolution?.upgrade(upgradeId) ?? null;
 }
 (globalThis as unknown as { __v3Composition?: V3DebugGlobal }).__v3Composition = debugGlobal;
 
