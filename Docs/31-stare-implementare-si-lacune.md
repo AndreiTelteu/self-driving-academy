@@ -10,7 +10,7 @@ Versiune 0.1 · 26 noiembrie 2026. Acest document este sursa curentă pentru în
 | **Contract** | Modulul, testele și dovezile există, dar nu este compus în jocul live. |
 | **Lipsește** | Nu există nici contract, nici implementare. |
 
-Un PBI Done în generația 001–258 înseamnă, în cele mai multe cazuri, **Contract**, nu **Jucabil**. Boardul vechi a fost resetat pentru a nu mai amesteca cele două.
+Un PBI Done în generația 001–258 înseamnă, în cele mai multe cazuri, **Contract**, nu **Jucabil**. Boardul vechi a fost resetat pentru a nu mai amesteca cele două. Boardul curent începe la 259; ID-urile 001–258 sunt istorice și nu se reutilizează.
 
 ## Ce se joacă azi
 
@@ -524,6 +524,7 @@ Fișierele din `Docs/Evidence/` păstrează dovezi și linkuri către taskurile 
 ## Reguli de mentenanță
 
 - Orice schimbare de scope actualizează Docs/21, Docs/31 și PBI/README în același commit.
+- `npm run docs:check -- --check` trebuie să treacă înainte de commit; un task mutat fără index, tabel de progres și matrice actualizate este eșec.
 - Un task nou primește următorul ID liber; nu se reutilizează 001–258.
 - Un task nu se mută în Done fără comportament observabil, dovezi și verificarea din browser/playtest relevantă.
 - Un release nu se declară închis cât timp 287 are criterii deschise.

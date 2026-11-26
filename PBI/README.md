@@ -24,7 +24,7 @@
 
 **Resetat la 26 noiembrie 2026.** Taskurile 001–258 au fost retrase din board; istoricul și dovezile lor rămân în Git și în `Docs/Evidence/`. Boardul curent conține **29 taskuri** pentru tot ce lipsește din jocul jucabil, cu ID-uri noi care continuă de la **259**. Nu reutiliza ID-urile 001–258.
 
-Toate taskurile sunt în **To Do**. Nu s-a implementat niciunul; crearea planului nu este livrare. Fiecare task are obiectiv, ce lipsește, documentația completă, dependențe, criterii, verificare și dovadă.
+Starea fiecărui task este dată de coloana în care se află fișierul și de tabelul de progres de mai sus. Crearea planului nu este livrare. Fiecare task are obiectiv, ce lipsește, documentația completă, dependențe, criterii, verificare și dovadă.
 
 ## De ce a fost resetat boardul
 
@@ -111,10 +111,11 @@ Din rădăcină:
 ```powershell
 & './PBI/Validate-Board.ps1'
 & './PBI/Validate-Plan.ps1'
+npm run docs:check -- --check
 bun "$HOME/.agents/skills/loop-pbi/scripts/loop-pbi.ts" validate --root . --allow-project-commands
 ```
 
-`Validate-Board.ps1` verifică plasarea fizică, statusul, owner-ul, dependențele și ciclurile. `Validate-Plan.ps1` verifică indexul, counturile, matricea Docs/21, acoperirea Docs/31 și linkurile locale. `loop-pbi validate` rulează aceleași comenzi prin configurația proiectului.
+`Validate-Board.ps1` verifică plasarea fizică, statusul, owner-ul, dependențele și ciclurile. `Validate-Plan.ps1` verifică indexul, counturile, matricea Docs/21, acoperirea Docs/31 și linkurile locale. `loop-pbi validate` rulează aceleași comenzi prin configurația proiectului, inclusiv garda de documentație. `npm run docs:check -- --check` compară boardul cu documentele de stare (PBI/README, Docs/21, Docs/31, README, Docs/README, counturi, etape și linkuri locale), nu scrie fișiere și e inclus în `npm run check`; validatoarele PowerShell rămân autoritative.
 
 ## Reguli
 

@@ -4,7 +4,7 @@ Versiune 0.6 · 26 noiembrie 2026. Aceste fișiere Markdown sunt planul curent a
 
 ## Stare curentă (26 noiembrie 2026)
 
-Boardul a fost resetat. Taskurile 001–258 sunt istorice; boardul curent are **29 de taskuri**, de la **259** la **287**, toate în To Do. Detaliile, dovezile vechi și diferența dintre „contract” și „jucabil” sunt în [Starea implementării și lacunele](31-stare-implementare-si-lacune.md).
+Boardul a fost resetat. Taskurile 001–258 sunt istorice; boardul curent are **29 de taskuri**, de la **259** la **287**. Detaliile, dovezile vechi și diferența dintre „contract” și „jucabil” sunt în [Starea implementării și lacunele](31-stare-implementare-si-lacune.md).
 
 Jucabil în buildul curent: mers, intrare/ieșire, conducere de bază, AUTO/MANUAL, trafic AI civil, ora din zi și vizualul V4. **Nu** sunt montate: LEARNING, curse, pasageri, flotă selectabilă, KPI, misiuni, XP, salvare, companie, panouri, first-person, minimapă, sunet, decor destructibil, provocări, Haos, fizica Rapier și regulile de trafic.
 
@@ -49,7 +49,7 @@ Profitul și evoluția companiei sunt o **propunere neconfirmată** în [Compani
 
 ## Implementare și Kanban
 
-[Backlogul PBI](../PBI/README.md) conține **29 de taskuri** noi, de la **259** la **287**, toate în To Do. Ele acoperă exact ce lipsește din jocul jucabil, nu modulele deja livrate. ID-urile 001–258 au fost retrase la 26 noiembrie 2026; istoricul rămâne în Git și în `Docs/Evidence/`, iar ID-urile nu se reutilizează. [Regulile pentru agenți](../PBI/AGENTS.md) cer mutarea efectivă To Do → In Progress → Done și verificarea finală obligatorie.
+[Backlogul PBI](../PBI/README.md) conține **29 de taskuri** noi, de la **259** la **287**. Ele acoperă exact ce lipsește din jocul jucabil, nu modulele deja livrate. ID-urile 001–258 au fost retrase la 26 noiembrie 2026; istoricul rămâne în Git și în `Docs/Evidence/`, iar ID-urile nu se reutilizează. [Regulile pentru agenți](../PBI/AGENTS.md) cer mutarea efectivă To Do → In Progress → Done și verificarea finală obligatorie.
 
 [Catalogul JSON](driving-parameters.json) conține 80 de parametri propuși. [Matricea de acoperire](21-acoperire-functionalitati.md) leagă acum fiecare lacună rămasă de un singur PBI și de documentația ei; maparea istorică a celor 80 de chei pe taskurile 046–187 este arhivă în Git. V1 țintește 24 de chei; V2 extinde la 80; V3 adaugă mersul pe jos. V4 ridică calitatea vizuală la cererea utilizatorului din 16 noiembrie 2026.
 

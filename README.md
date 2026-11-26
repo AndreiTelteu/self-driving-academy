@@ -42,10 +42,11 @@ Verificările statice și formatul codului:
 npm run typecheck
 npm run lint
 npm run format:check
+npm run docs:check
 npm run check
 ```
 
-`npm run format` aplică formatul în cod/configuri, iar `npm run check` include și verificarea arhitecturii. [Convențiile de dezvoltare](Docs/development-conventions.md) explică unitățile SI, validarea datelor `unknown`, scope-ul comenzilor și separarea ESLint de verificarea semantică TypeScript.
+`npm run format` aplică formatul în cod/configuri, iar `npm run check` include verificarea arhitecturii, garda de sincronizare a documentației (`npm run docs:check -- --check`) și testele. [Convențiile de dezvoltare](Docs/development-conventions.md) explică unitățile SI, validarea datelor `unknown`, scope-ul comenzilor și separarea ESLint de verificarea semantică TypeScript.
 
 - [Planul modular](Docs/README.md): 32 de documente de produs și arhitectură.
 - [Backlog Kanban](PBI/README.md): 29 task-uri curente (259–287), cu dependențe explicite; 001–258 sunt istorice.
@@ -86,4 +87,4 @@ V1 include și Joacă liberă / Haos cu decor destructibil, provocări random, c
 
 ## Stare după resetarea boardului — 26 noiembrie 2026
 
-Mersul pe jos V3 este deja livrat, iar buildul curent este un sandbox de mers și condus. Boardul vechi 001–258 a fost retras; boardul curent are 29 de taskuri, 259–287, toate în To Do. Vezi [Docs/31](Docs/31-stare-implementare-si-lacune.md) și [PBI/README](PBI/README.md).
+Mersul pe jos V3 este deja livrat, iar buildul curent este un sandbox de mers și condus. Boardul vechi 001–258 a fost retras; boardul curent are 29 de taskuri, 259–287. Vezi [Docs/31](Docs/31-stare-implementare-si-lacune.md) și [PBI/README](PBI/README.md).

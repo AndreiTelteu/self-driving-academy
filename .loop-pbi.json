@@ -3,7 +3,8 @@
   "overview": { "file": "PBI/README.md", "phaseField": "release" },
   "validate": [
     ["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "PBI/Validate-Board.ps1"],
-    ["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "PBI/Validate-Plan.ps1"]
+    ["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "PBI/Validate-Plan.ps1"],
+    ["node", "scripts/check-docs-sync.mjs", "--check", "--pending-task={id}"]
   ],
   "requireDone": [
     [
