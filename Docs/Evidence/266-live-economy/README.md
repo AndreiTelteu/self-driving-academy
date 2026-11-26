@@ -12,8 +12,10 @@ economia neschimbată 209.
   fixture-ului), `FAILED` rambursează integral și nu inventează review, `CANCELLED` fără pasager
   rambursează integral, `CANCELLED` cu pasager păstrează exact taxa de serviciu de 30%.
 - **Review:** un review 0–5 per cursă evaluabilă, cu motive din vocabularul închis 209; cursa
-  completă primește rating 5 și motivele `ON_TIME`, `SMOOTH_DRIVE`, `EFFICIENT_DELIVERY`. Trace-ul
-  live a produs 140 de eșantioane și 128 de intervale 139 pe cursa completă.
+  completă primește rating 5 și motivele `EFFICIENT_DELIVERY`, `ON_TIME`, `SMOOTH_DRIVE`. Trace-ul
+  live a produs 18 956 de eșantioane și 18 931 de intervale 139 în proba de browser; pe fixture-ul
+  determinist, dwell-ul redus la 24 tick-uri a produs 5 eșantioane și 4 intervale. În ambele cazuri
+  review-ul citește exact agregatul 139 al cursei.
 - **KPI:** bucketurile de zi și lună păstrează revenue, curse, review-uri, `ratingSum`, histograma
   0–5 și expunerea. Ceasul este `209-economy-clock-v1` (1 200 s/zi, 30 zile/lună, 60 Hz).
 - **Idempotență:** un tick re-livrat este `duplicate: true`; replay-ul explicit este `DUPLICATE`;
