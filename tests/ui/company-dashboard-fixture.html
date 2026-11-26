@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ro">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="data:," />
+    <title>270 Company dashboard probe</title>
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: #07110d;
+        color: #f3f7fb;
+        font:
+          0.9rem/1.4 system-ui,
+          -apple-system,
+          'Segoe UI',
+          sans-serif;
+      }
+      #company-probe-bar {
+        padding: 0.75rem;
+        display: flex;
+        gap: 0.5rem;
+      }
+      #company-trigger {
+        font: inherit;
+        color: #f3f7fb;
+        background: #17352b;
+        border: 1px solid #3d6b58;
+        border-radius: 0.35rem;
+        padding: 0.35rem 0.7rem;
+        cursor: pointer;
+      }
+      #company-trigger:focus-visible {
+        outline: 3px solid #9fe0c5;
+        outline-offset: 2px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="company-probe-bar">
+      <button id="company-trigger" type="button" aria-haspopup="dialog">Companie</button>
+    </div>
+    <div id="company-host"></div>
+    <script type="module" src="./company-dashboard-browser.ts"></script>
+  </body>
+</html>

@@ -42,6 +42,7 @@ import {
 import { observeDisplaySurface, readDisplayMetrics } from './rendering';
 import {
   createRenderingView,
+  createCompanyDashboard,
   createDiagnosticsPanel,
   createFpsCounter,
   createGameShellHost,
@@ -398,6 +399,23 @@ const passengerPresenter = createPassengerVisualPresenter(rideMarkerLayer.port);
 const economyHud = createLiveEconomyHud(app, {
   read: () => economyModules.composition?.read() ?? null,
 });
+/**
+ * PBI 270: panoul companiei citește exact read model-ul 269 și cheltuie cash-ul real prin
+ * `purchase`/`upgrade`. El nu creează un al doilea ledger sau o a doua flotă; suprafața de pauză
+ * rămâne a shell-ului (070), iar panoul închis nu citește nimic.
+ */
+const companyDashboard = createCompanyDashboard(app, {
+  read: () => economyModules.evolution?.read() ?? null,
+  purchase: (offerId) => economyModules.evolution?.purchase(offerId) ?? null,
+  upgrade: (upgradeId) => economyModules.evolution?.upgrade(upgradeId) ?? null,
+  setSurface: (open) => {
+    if (open) shell.openPanel('company');
+    else shell.closePanel();
+  },
+  onClose: () => {
+    if (application.getState().kind === 'PLAYING') view.getCanvas().focus();
+  },
+});
 /** Ultimul taxi cu markere 147; schimbarea selecției nu lasă markerii vechi în urmă. */
 let lastMarkerTaxiId: string | null = null;
 /** Singura gazdă UI a shell-ului: start, pauză, reluare și panoul de integrare. */
@@ -408,6 +426,7 @@ const shellHost = createGameShellHost({
   onPause: () => {
     if (ridesPanel.isOpen()) ridesPanel.close();
     if (fleetPanel.isOpen()) fleetPanel.close();
+    if (companyDashboard.isOpen()) companyDashboard.close();
     shell.setMenuOpen(true);
   },
   onResume: () => resumeSession(),
@@ -421,6 +440,7 @@ const shellHost = createGameShellHost({
   onOpenPanel: () => {
     if (fleetPanel.isOpen()) fleetPanel.close();
     if (ridesPanel.isOpen()) ridesPanel.close();
+    if (companyDashboard.isOpen()) companyDashboard.close();
     return shell.openPanel('integration');
   },
   onClosePanel: () => {
@@ -430,6 +450,7 @@ const shellHost = createGameShellHost({
   onOpenFleet: () => {
     // The shell owns a single panel surface: a live panel is not left underneath another one.
     if (ridesPanel.isOpen()) ridesPanel.close();
+    if (companyDashboard.isOpen()) companyDashboard.close();
     if (!shell.openPanel('fleet')) return false;
     const snapshot = liveFleetSnapshot();
     if (snapshot !== null) fleetPanel.update(snapshot, performance.now());
@@ -438,6 +459,7 @@ const shellHost = createGameShellHost({
   },
   onOpenRides: () => {
     if (fleetPanel.isOpen()) fleetPanel.close();
+    if (companyDashboard.isOpen()) companyDashboard.close();
     if (!shell.openPanel('rides')) return false;
     // The panel skips writes while closed; open it first, then project the current read model.
     ridesPanel.open();
@@ -445,6 +467,12 @@ const shellHost = createGameShellHost({
     if (snapshot !== undefined)
       ridesPanel.update(snapshot.live, performance.now(), snapshot.rides, snapshot.passenger);
     return true;
+  },
+  onOpenCompany: () => {
+    if (fleetPanel.isOpen()) fleetPanel.close();
+    if (ridesPanel.isOpen()) ridesPanel.close();
+    if (companyDashboard.isOpen()) companyDashboard.close();
+    return companyDashboard.open();
   },
 });
 /** Fiecare tranziție de sesiune ajunge și în gazda shell-ului, nu doar în view-ul de randare. */
@@ -768,6 +796,8 @@ const application = createApplicationLifecycle({
     }
     // PBI 266: economia live are propriul read model, actualizat la 10 Hz cât timp este vizibil.
     economyHud.update(performance.now());
+    // PBI 270: panoul companiei citește la 10 Hz numai cât timp este deschis; închis nu atinge portul.
+    companyDashboard.update(performance.now());
     // PBI 265: HUD-ul 073 și markerii 147 citesc aceeași stare autoritară; nimic nu scrie în simulare.
     const rideComposition = ridesModules.composition;
     if (frame !== undefined && rideComposition !== undefined) {
@@ -1091,6 +1121,9 @@ const debugGlobal: V3DebugGlobal = {
       evolution: evolution?.read() ?? null,
       evolutionSnapshot: evolution?.snapshot() ?? null,
       evolutionStats: evolution?.stats() ?? null,
+      panelOpen: companyDashboard.isOpen(),
+      panel: companyDashboard.getStats(),
+      panelView: companyDashboard.getView(),
       port: shell.status().systems.find((system) => system.id === 'economy')?.status ?? null,
     };
   },
@@ -1154,6 +1187,7 @@ const dispose = (): void => {
     shellHost.dispose();
     fleetPanel.dispose();
     ridesPanel.dispose();
+    companyDashboard.dispose();
     passengerPresenter.dispose();
     rideMarkerLayer.dispose();
     economyHud.dispose();

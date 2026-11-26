@@ -6,9 +6,9 @@ Versiune 0.6 · 26 noiembrie 2026. Aceste fișiere Markdown sunt planul curent a
 
 Boardul a fost resetat. Taskurile 001–258 sunt istorice; boardul curent are **29 de taskuri**, de la **259** la **287**. Detaliile, dovezile vechi și diferența dintre „contract” și „jucabil” sunt în [Starea implementării și lacunele](31-stare-implementare-si-lacune.md).
 
-Jucabil în buildul curent: mers, intrare/ieșire, conducere de bază, AUTO/MANUAL, trafic AI civil, ora din zi și vizualul V4, sub un singur composition root cu tick autoritar și un panou de integrare, plus alegerea sesiunii Academie / Joacă liberă / Haos cu checkpoint și reset separat și panoul `Flotă` pentru selectarea oricărui taxi sau civil cu preluare explicită `M`. **Nu** sunt montate: LEARNING, curse, pasageri, KPI, misiuni, XP, salvare, companie, panourile de sistem (KPI, misiuni, profil, setări), first-person, minimapă, sunet, decor destructibil, provocările Haos, fizica Rapier și regulile de trafic.
+Jucabil în buildul curent: mers, intrare/ieșire, conducere de bază, AUTO/MANUAL, trafic AI civil, ora din zi și vizualul V4, sub un singur composition root cu tick autoritar și un panou de integrare, plus alegerea sesiunii Academie / Joacă liberă / Haos cu checkpoint și reset separat, panoul `Flotă` pentru selectarea oricărui taxi sau civil cu preluare explicită `M`, economia live cu HUD și panoul `Companie` cu profit, costuri, cash, flotă și investiții. **Nu** sunt montate: LEARNING, pop-up-ul KPI, misiuni, XP, salvare, panourile de sistem (KPI, misiuni, profil, setări), first-person, minimapă, sunet, decor destructibil, provocările Haos, fizica Rapier și regulile de trafic.
 
-Profitul și evoluția companiei sunt o **propunere neconfirmată** în [Companie: profit și evoluție](32-companie-profit-si-evolutie.md), nu funcționalitate V1. Docs/22 rămâne contractul pentru revenue și ratings.
+Profitul și evoluția companiei sunt implementate de 268/269, iar interfața lor este montată de 270; valorile de calibrare rămân propuneri, iar persistența după reload rămâne 278. Docs/22 rămâne contractul pentru revenue și ratings.
 
 ## Module
 
@@ -45,7 +45,7 @@ Profitul și evoluția companiei sunt o **propunere neconfirmată** în [Compani
 | [Savefile și integritate](29-savefile-si-integritate.md) | Backup complet, checksum în browser și încărcare atomică |
 | [Calitate vizuală V4](30-calitate-vizuala-v4.md) | Imagine HD, lumină, umbre, materiale PBR, modele și UI de joc |
 | [Starea implementării și lacunele](31-stare-implementare-si-lacune.md) | Ce se joacă, ce este doar contract și ce lipsește, cu linkuri și PBI |
-| [Companie: profit și evoluție](32-companie-profit-si-evolutie.md) | Propunere pentru costuri, profit, cash, nivel și investiții; neconfirmată |
+| [Companie: profit și evoluție](32-companie-profit-si-evolutie.md) | Costuri, profit, cash, nivel și investiții; ledger 268, evoluție 269, panou 270 |
 | [Cereri și dispecerizare live](live-rides.md) | Cereri 059, coadă și asignări 060 peste flota live |
 | [Ciclul live al cursei](live-ride-lifecycle.md) | Pickup/dropoff, pasager, ETA, HUD și rezultate terminale |
 | [Economia live](live-economy.md) | Revenue, review-uri, KPI de zi/lună și ceasul economic peste cursele 265 |
