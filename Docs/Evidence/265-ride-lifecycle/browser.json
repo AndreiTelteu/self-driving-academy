@@ -1,6 +1,6 @@
 {
   "version": "265-live-ride-lifecycle-browser-v1",
-  "generatedAt": "2026-11-26T06:15:33.114Z",
+  "generatedAt": "2026-11-26T16:58:32.586Z",
   "status": "MEASURED",
   "run": {
     "pass": true,
@@ -8,27 +8,117 @@
     "requestedBackend": "WEBGL2",
     "actualBackend": "WEBGL2",
     "viewport": "1440x900",
-    "url": "http://127.0.0.1:49671/?capture=1&backend=WEBGL2&preset=LOW&models=procedural&time=noon&debug=1",
-    "tickAtTakeover": 66,
-    "tickAtFailure": 10585,
+    "url": "http://127.0.0.1:51040/?capture=1&backend=WEBGL2&preset=LOW&models=procedural&time=noon&debug=1",
+    "tickAtTakeover": 63,
+    "tickAtFailure": 10567,
+    "autoRideId": "id-v1:4:ride13:v3:city:rides50:id-v1:12:ride-request13:v3:city:rides4:w0005:r0005",
+    "autoTaxiId": "id-v1:7:vehicle13:v3:city:fleet4:TAXI4:0012",
+    "autoPickupZoneId": "sz:1-1",
+    "autoDropoffZoneId": "sz:1-0",
+    "autoBoardingTick": 1898,
+    "autoCompletionTick": 6740,
+    "autoPickupDwellTicks": 180,
+    "autoDropoffDwellTicks": 180,
+    "autoPickupRouteLanes": 2,
+    "autoTripRouteLanes": 6,
+    "autoControlMode": "AUTO",
     "completedRideId": "id-v1:4:ride13:v3:city:rides50:id-v1:12:ride-request13:v3:city:rides4:w0005:r0000",
     "completedTaxiId": "id-v1:7:vehicle13:v3:city:fleet4:TAXI4:0003",
     "pickupZoneId": "sz:2-3",
     "dropoffZoneId": "sz:3-2",
-    "boardingTick": 2359,
-    "completionTick": 10552,
-    "failedRideId": "id-v1:4:ride13:v3:city:rides50:id-v1:12:ride-request13:v3:city:rides4:w0005:r0001",
-    "failedTaxiId": "id-v1:7:vehicle13:v3:city:fleet4:TAXI4:0006",
+    "boardingTick": 2344,
+    "completionTick": 10519,
+    "failedRideId": "id-v1:4:ride13:v3:city:rides50:id-v1:12:ride-request13:v3:city:rides4:w0035:r0000",
+    "failedTaxiId": "id-v1:7:vehicle13:v3:city:fleet4:TAXI4:0012",
     "failedReason": "TAXI_BLOCKED",
     "screenshots": [
-      "screenshots/01-pickup.png",
-      "screenshots/02-onboard.png",
-      "screenshots/03-dropoff.png",
-      "screenshots/04-completed.png",
-      "screenshots/05-failed.png",
-      "screenshots/06-panel.png"
+      "screenshots/01-auto-pickup.png",
+      "screenshots/02-auto-onboard.png",
+      "screenshots/03-auto-dropoff.png",
+      "screenshots/04-auto-completed.png",
+      "screenshots/05-pickup.png",
+      "screenshots/06-onboard.png",
+      "screenshots/07-dropoff.png",
+      "screenshots/08-completed.png",
+      "screenshots/09-failed.png",
+      "screenshots/10-panel.png"
     ],
     "checks": [
+      {
+        "name": "auto-route-assigned",
+        "pass": true,
+        "detail": "route sz:1-1, control AUTO"
+      },
+      {
+        "name": "auto-route-matches-pickup",
+        "pass": true,
+        "detail": "actor lane:21W0,lane:11W0"
+      },
+      {
+        "name": "auto-pickup-hold",
+        "pass": true,
+        "detail": "state PICKUP, remaining 0 m, stopped true"
+      },
+      {
+        "name": "auto-pickup-dwell",
+        "pass": true,
+        "detail": "required 180, observed 4, boarding null"
+      },
+      {
+        "name": "auto-pickup-control",
+        "pass": true,
+        "detail": "control AUTO"
+      },
+      {
+        "name": "auto-pickup-path",
+        "pass": true,
+        "detail": "pickup lanes 2"
+      },
+      {
+        "name": "auto-trip-path",
+        "pass": true,
+        "detail": "actor lane:11W0,lane:11N0,lane:12E1,lane:21S1,lane:20S1,lane:10W0"
+      },
+      {
+        "name": "auto-passenger-onboard",
+        "pass": true,
+        "detail": "phase ONBOARD, occupancy 1"
+      },
+      {
+        "name": "auto-pickup-dwell-complete",
+        "pass": true,
+        "detail": "observed 180, boarding 1898"
+      },
+      {
+        "name": "auto-dropoff-hold",
+        "pass": true,
+        "detail": "state DROPOFF, remaining 0 m"
+      },
+      {
+        "name": "auto-ride-completed",
+        "pass": true,
+        "detail": "state COMPLETED, terminal true"
+      },
+      {
+        "name": "auto-completion-release",
+        "pass": true,
+        "detail": "release COMPLETED, claim removed"
+      },
+      {
+        "name": "auto-passenger-hidden",
+        "pass": true,
+        "detail": "phase NONE, reset true"
+      },
+      {
+        "name": "auto-dropoff-dwell-complete",
+        "pass": true,
+        "detail": "observed 180"
+      },
+      {
+        "name": "auto-actor-released",
+        "pass": true,
+        "detail": "the terminal ride cleared the 058 service route"
+      },
       {
         "name": "ride-survives-takeover",
         "pass": true,

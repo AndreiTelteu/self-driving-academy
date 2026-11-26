@@ -1,19 +1,39 @@
 # 265 — proba de browser a ciclului de cursă
 
 Generată de `npm run ride:live:lifecycle:probe`; Chromium 157.0.8103.51, backend WEBGL2,
-viewport 1440x900, tick 66–10585.
+viewport 1440x900, tick 63–10567.
 
-Secvența reală: start → asignare 060 → preluarea taxiului revendicat (cursa supraviețuiește) → condus
-manual la ancora 032 de pickup → oprire pentru dwell → pasager 147 la bord → condus la ancora de
-dropoff → oprire pentru dwell → `COMPLETED` cu o singură eliberare → un alt taxi revendicat devine
-`BLOCKED` prin portul real de sănătate → `FAILED / TAXI_BLOCKED` cu o singură eliberare.
+Secvența reală: start → asignare 060 → un taxi revendicat conduce singur ruta 041 de pickup, oprește
+în zona 032 pentru dwell, ia pasagerul, conduce ruta de dropoff, oprește din nou și încheie
+`COMPLETED` cu o singură eliberare → al doilea taxi revendicat este preluat de jucător, cursa
+supraviețuiește, este condus manual la ancore și se încheie tot `COMPLETED` → un alt taxi revendicat
+devine `BLOCKED` prin portul real de sănătate → `FAILED / TAXI_BLOCKED` cu o singură eliberare.
 
-Cursă completă: id-v1:4:ride13:v3:city:rides50:id-v1:12:ride-request13:v3:city:rides4:w0005:r0000 (id-v1:7:vehicle13:v3:city:fleet4:TAXI4:0003), pickup sz:2-3 → dropoff
-sz:3-2, boarding 2359, completion 10552.
-Cursă eșuată: id-v1:4:ride13:v3:city:rides50:id-v1:12:ride-request13:v3:city:rides4:w0005:r0001 (id-v1:7:vehicle13:v3:city:fleet4:TAXI4:0006), motiv TAXI_BLOCKED.
+Cursă AUTO: id-v1:4:ride13:v3:city:rides50:id-v1:12:ride-request13:v3:city:rides4:w0005:r0005 (id-v1:7:vehicle13:v3:city:fleet4:TAXI4:0012), pickup sz:1-1 → dropoff
+sz:1-0, boarding 1898, completion 6740,
+dwell 180/180, rute
+2/6 benzi, control AUTO.
+Cursă manuală: id-v1:4:ride13:v3:city:rides50:id-v1:12:ride-request13:v3:city:rides4:w0005:r0000 (id-v1:7:vehicle13:v3:city:fleet4:TAXI4:0003), pickup sz:2-3 → dropoff
+sz:3-2, boarding 2344, completion 10519.
+Cursă eșuată: id-v1:4:ride13:v3:city:rides50:id-v1:12:ride-request13:v3:city:rides4:w0035:r0000 (id-v1:7:vehicle13:v3:city:fleet4:TAXI4:0012), motiv TAXI_BLOCKED.
 
-Capturi: [screenshots/01-pickup.png](screenshots/01-pickup.png), [screenshots/02-onboard.png](screenshots/02-onboard.png), [screenshots/03-dropoff.png](screenshots/03-dropoff.png), [screenshots/04-completed.png](screenshots/04-completed.png), [screenshots/05-failed.png](screenshots/05-failed.png), [screenshots/06-panel.png](screenshots/06-panel.png).
+Capturi: [screenshots/01-auto-pickup.png](screenshots/01-auto-pickup.png), [screenshots/02-auto-onboard.png](screenshots/02-auto-onboard.png), [screenshots/03-auto-dropoff.png](screenshots/03-auto-dropoff.png), [screenshots/04-auto-completed.png](screenshots/04-auto-completed.png), [screenshots/05-pickup.png](screenshots/05-pickup.png), [screenshots/06-onboard.png](screenshots/06-onboard.png), [screenshots/07-dropoff.png](screenshots/07-dropoff.png), [screenshots/08-completed.png](screenshots/08-completed.png), [screenshots/09-failed.png](screenshots/09-failed.png), [screenshots/10-panel.png](screenshots/10-panel.png).
 
+- `auto-route-assigned`: PASS — route sz:1-1, control AUTO
+- `auto-route-matches-pickup`: PASS — actor lane:21W0,lane:11W0
+- `auto-pickup-hold`: PASS — state PICKUP, remaining 0 m, stopped true
+- `auto-pickup-dwell`: PASS — required 180, observed 4, boarding null
+- `auto-pickup-control`: PASS — control AUTO
+- `auto-pickup-path`: PASS — pickup lanes 2
+- `auto-trip-path`: PASS — actor lane:11W0,lane:11N0,lane:12E1,lane:21S1,lane:20S1,lane:10W0
+- `auto-passenger-onboard`: PASS — phase ONBOARD, occupancy 1
+- `auto-pickup-dwell-complete`: PASS — observed 180, boarding 1898
+- `auto-dropoff-hold`: PASS — state DROPOFF, remaining 0 m
+- `auto-ride-completed`: PASS — state COMPLETED, terminal true
+- `auto-completion-release`: PASS — release COMPLETED, claim removed
+- `auto-passenger-hidden`: PASS — phase NONE, reset true
+- `auto-dropoff-dwell-complete`: PASS — observed 180
+- `auto-actor-released`: PASS — the terminal ride cleared the 058 service route
 - `ride-survives-takeover`: PASS — the claimed taxi became MANUAL and kept its 061 ride and 060 claim
 - `player-claim-kept`: PASS — the assignment is still present for the player-driven taxi
 - `rides-port-present`: PASS — shell mounts the 265 rides port
@@ -40,6 +60,6 @@ Capturi: [screenshots/01-pickup.png](screenshots/01-pickup.png), [screenshots/02
 - `no-page-errors`: PASS — 0 page errors
 - `no-console-errors`: PASS — 0 console errors
 
-Limite: proba condusă manual folosește tastatura reală și poziția autoritară a compunerii; nu
-înlocuiește un playtest uman. Cursa autonomă completă rămâne o limitare explicită (taxiurile AI nu
-primesc încă un traseu de cursă în compunere). Nu măsoară FPS/GPU și nu înlocuiește gate-ul 287.
+Limite: cursa AUTO folosește execuția reală 058/041, fără override de poziție; camera este mutată pe
+taxiul AUTO doar pentru capturi. Proba manuală folosește tastatura reală și poziția autoritară a
+compunerii; nu înlocuiește un playtest uman. Nu măsoară FPS/GPU și nu înlocuiește gate-ul 287.

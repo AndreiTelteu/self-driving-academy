@@ -8,7 +8,7 @@ live taxis and 32 civilians, seed 262, dwell
 180 ticks, 429 ticks with the scenario reset at
 429.
 
-## Completed ride
+## Completed ride (manual)
 
 | Metric | Value |
 | --- | --- |
@@ -20,6 +20,28 @@ live taxis and 32 civilians, seed 262, dwell
 | Transitions / release | 5 / COMPLETED |
 | Pickup anchor (x, z) | 90.000, 362.100 |
 | Dropoff anchor (x, z) | 90.000, 182.100 |
+
+## Completed ride (AUTO, 058 actor)
+
+| Metric | Value |
+| --- | --- |
+| Ride | `id-v1:4:ride14:test:265:rides51:id-v1:12:ride-request14:test:265:rides4:w0015:r0000` |
+| Request / taxi | id-v1:12:ride-request14:test:265:rides4:w0015:r0000 / id-v1:7:vehicle13:v3:city:fleet4:TAXI4:0011 |
+| Pickup → dropoff | sz:2-1 → sz:0-1 |
+| Started / boarding / completion tick | 120 / 2682 / 5079 |
+| Pickup dwell / dropoff dwell / required | 180 / 180 / 180 |
+| Transitions / release / authority | 5 / COMPLETED / AUTO |
+| Pickup route lanes / matches assignment | 3 / true |
+| Trip route lanes / matches assignment | 3 / true |
+| Pickup actor speed / remaining | 0.000 m/s / 0.000 m |
+| Dropoff actor speed / remaining | 0.000 m/s / 0.000 m |
+| Max route / position step | 0.222 m / 15.11 m |
+| Max speed / driven distance | 13.30 m/s / 789.5 m |
+| Fixture overrides / service cleared | 0 / true |
+
+The AUTO actor drove only by 041 route execution and 058 longitudinal control: no observation override
+was set. The largest per-tick route advance stays within the speed limit; larger position samples are
+the existing 058 discrete lane-junction geometry, not a destination teleport.
 
 ## Passenger 147
 
@@ -136,15 +158,30 @@ SERVICE_BLOCKED.
 | reset-rides-zero | 0 | 0 | PASS | the lifecycle is empty after reset |
 | reset-duplicate-requests | 0 | 0 | PASS | post-reset request map has no duplicate |
 | reset-duplicate-taxis | 0 | 0 | PASS | post-reset taxi map has no duplicate |
+| auto-ride-completed | COMPLETED | COMPLETED | PASS | an assigned AI taxi completes a whole ride without player input |
+| auto-ride-release | COMPLETED | COMPLETED | PASS | the AUTO ride releases its 060 claim through the real 061 completion |
+| auto-ride-authority | AUTO | AUTO | PASS | the AUTO taxi was never taken over by the player |
+| auto-pickup-path | true | true | PASS | the 058 actor follows the assignment 041 pickup path |
+| auto-trip-path | true | true | PASS | the 058 actor follows the assignment 041 dropoff path |
+| auto-pickup-dwell | 180 | 180 | PASS | the AUTO pickup dwell is the required 180 ticks |
+| auto-dropoff-dwell | 180 | 180 | PASS | the AUTO dropoff dwell is the required 180 ticks |
+| auto-pickup-stopped | true | true | PASS | speed 0, remaining 0 |
+| auto-dropoff-stopped | true | true | PASS | speed 0, remaining 0 |
+| auto-route-motion | true | true | PASS | max speed 13.30 m/s, distance 789.5 m |
+| auto-no-teleport | true | true | PASS | overrides 0, largest route step 0.222 m (position step 15.11 m at lane junctions) |
+| auto-service-cleared | true | true | PASS | the terminal ride returns the actor to its ambient 058 route |
+| auto-ticks | true | true | PASS | started 120, boarding 2682, completion 5079 |
 
 ## Summary
 
-- Checks: 53/53
+- Checks: 66/66
 - Overall: PASS
 
 ## Limits
 
 This is a deterministic headless functional probe on the real 032/033/041/057/058/059/060/061/062/063/064
-contracts. The observed positions are authored by the report fixture at the real zone anchors; the
-browser probe remains the end-to-end visual evidence. Economy, reviews and KPI remain PBI 266. The
-report is not a browser frame, GPU or FPS measurement.
+contracts. The manual scenario supplies the observed pose at the real zone anchors; the AUTO scenario
+drives the assigned 058 actor along its real 041 pickup/dropoff routes with no override. The browser
+probe remains the end-to-end visual evidence. Lane junctions keep the existing 058 discrete geometry,
+so the AUTO position may step at an intersection even though its route progress is continuous. Economy,
+reviews and KPI remain PBI 266. The report is not a browser frame, GPU or FPS measurement.

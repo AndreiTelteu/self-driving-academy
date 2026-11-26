@@ -6,6 +6,8 @@ import {
   LIVE_RIDE_LIFECYCLE_LIMITS,
   LIVE_RIDE_LIFECYCLE_VERSION,
   LIVE_RIDE_TERMINAL_CAUSES,
+  type CivilActorSnapshot,
+  type CivilServiceRouteSnapshot,
 } from '../../src/fleet';
 import { DROPOFF_DEFAULTS } from '../../src/fleet/dropoff';
 import { PICKUP_DEFAULTS } from '../../src/fleet/pickup';
@@ -24,6 +26,15 @@ function ride(
   rideId: string,
 ) {
   return snapshot.rides.rides.find((entry) => entry.rideId === rideId);
+}
+
+function rideByRequest(
+  snapshot: ReturnType<ReturnType<typeof createLiveRideLifecycleFixture>['snapshot']>,
+  requestId: string,
+) {
+  const current = snapshot.rides.rides.find((entry) => entry.requestId === requestId);
+  assert.ok(current, `Missing ride for ${requestId}`);
+  return current;
 }
 
 test('265 a live ride completes through the real pickup and dropoff zones with one release', () => {
@@ -150,6 +161,91 @@ test('265 a live ride completes through the real pickup and dropoff zones with o
     assert.equal(replay.completion?.release?.reason, 'COMPLETED');
     assert.equal(fixture.snapshot().rides.terminals.length, 1);
     assert.equal(fixture.snapshot().rides.counts.completed, 1);
+  } finally {
+    fixture.dispose();
+  }
+});
+
+test('265 an assigned AUTO taxi executes the real pickup and dropoff routes into COMPLETED', () => {
+  const fixture = createLiveRideLifecycleFixture({ dwellTicks: 3, civilianCount: 20, seed: 265 });
+  try {
+    fixture.runTo(120);
+    const initial = fixture.snapshot(),
+      candidates = initial.live.assignments
+        .filter((entry) => entry.pickupCostSeconds >= 5 && entry.tripCostSeconds >= 15)
+        .slice()
+        .sort((left, right) => left.totalCostSeconds - right.totalCostSeconds);
+    const assigned = candidates[0];
+    assert.ok(assigned, 'the live dispatcher claims a real taxi');
+    const rideId = rideByRequest(initial, assigned.requestId).rideId;
+    const pickupAnchor = fixture.anchorFor(assigned.pickupZoneId),
+      dropoffAnchor = fixture.anchorFor(assigned.dropoffZoneId);
+    const pickupService = fixture.ambient.traffic.serviceRoute(assigned.taxiId);
+    assert.ok(pickupService, 'the 058 actor received a real service route');
+    assert.equal(pickupService.zoneId, assigned.pickupZoneId);
+    assert.deepEqual(pickupService.path, assigned.pickupRouteLaneIds);
+    assert.equal(fixture.overrides.size, 0, 'the AUTO route is never a fixture override');
+
+    let tick = 120,
+      atPickup: { actor: CivilActorSnapshot; service: CivilServiceRouteSnapshot | null } | null =
+        null,
+      tripService: CivilServiceRouteSnapshot | null = null,
+      previousDistance = pickupService.distanceAlongRouteM,
+      previousServiceTick: number | null = pickupService.assignedTick,
+      maxRouteStepM = 0;
+    while (tick < 6000) {
+      tick += 1;
+      fixture.step(tick);
+      const actor = fixture.ambient.get(assigned.taxiId);
+      assert.ok(actor, 'the assigned actor stays live');
+      assert.equal(actor.authority, 'AUTO');
+      const service = fixture.ambient.traffic.serviceRoute(assigned.taxiId);
+      if (service !== null && service.assignedTick === previousServiceTick)
+        maxRouteStepM = Math.max(maxRouteStepM, actor.distanceAlongRouteM - previousDistance);
+      previousServiceTick = service?.assignedTick ?? null;
+      previousDistance = actor.distanceAlongRouteM;
+      const record = fixture.composition.lifecycle.lifecycle.ride(rideId);
+      assert.ok(record);
+      if (record.state === 'PICKUP' && atPickup === null)
+        atPickup = { actor: fixture.ambient.get(assigned.taxiId)!, service };
+      if (record.state === 'TO_DROPOFF' && tripService === null) {
+        tripService = service;
+        assert.ok(
+          record.transitions.some(
+            (entry) => entry.event === 'PICKUP_COMPLETE' && entry.tick === tick,
+          ),
+        );
+        assert.deepEqual(service?.path, assigned.tripRouteLaneIds);
+      }
+      if (record.terminal) break;
+    }
+    const snapshot = fixture.snapshot(),
+      completed = rideByRequest(snapshot, assigned.requestId);
+    assert.ok(atPickup, 'the AUTO taxi reached PICKUP');
+    assert.ok(atPickup.service, 'the pickup service route is observable at PICKUP');
+    assert.equal(atPickup.service.remainingToStopM, 0);
+    assert.ok(atPickup.actor.speedMps <= 0.3);
+    assert.ok(
+      Math.hypot(
+        atPickup.actor.positionM.x - pickupAnchor.x,
+        atPickup.actor.positionM.z - pickupAnchor.z,
+      ) < 0.01,
+    );
+    assert.equal(completed.state, 'COMPLETED');
+    assert.equal(completed.release?.reason, 'COMPLETED');
+    assert.equal(completed.pickup?.dwellTicks, 3);
+    assert.equal(completed.dropoff?.dwellTicks, 3);
+    assert.equal(tripService?.zoneId, assigned.dropoffZoneId);
+    assert.equal(completed.dropoff?.completedTick, completed.completionTick);
+    assert.ok(
+      Math.hypot(
+        fixture.ambient.get(assigned.taxiId)!.positionM.x - dropoffAnchor.x,
+        fixture.ambient.get(assigned.taxiId)!.positionM.z - dropoffAnchor.z,
+      ) < 0.01,
+    );
+    assert.ok(maxRouteStepM > 0 && maxRouteStepM <= 0.3, `route step ${maxRouteStepM}`);
+    assert.equal(fixture.ambient.traffic.serviceRoute(assigned.taxiId), null);
+    assert.equal(fixture.live.dispatcher.assignmentFor(assigned.requestId), undefined);
   } finally {
     fixture.dispose();
   }
@@ -381,6 +477,16 @@ test('265 committed lifecycle report is deterministic and every check passes', (
   assert.equal(report.completedRide.pickupDwellTicks, 180);
   assert.equal(report.completedRide.dropoffDwellTicks, 180);
   assert.equal(report.completedRide.releaseReason, 'COMPLETED');
+  assert.equal(report.autoRide.releaseReason, 'COMPLETED');
+  assert.equal(report.autoRide.pickupDwellTicks, 180);
+  assert.equal(report.autoRide.dropoffDwellTicks, 180);
+  assert.equal(report.autoRide.pickupPathMatches, true);
+  assert.equal(report.autoRide.tripPathMatches, true);
+  assert.equal(report.autoRide.overrides, 0);
+  assert.equal(report.autoRide.serviceCleared, true);
+  assert.equal(report.autoRide.authority, 'AUTO');
+  assert.ok(report.autoRide.maxRouteStepM > 0 && report.autoRide.maxRouteStepM <= 0.3);
+  assert.ok(report.autoRide.distanceTravelledM > 100);
   assert.equal(report.failure.state, 'FAILED');
   assert.equal(report.failure.reason, 'TAXI_BLOCKED');
   assert.equal(report.playerRide.stateWithPlayer, 'TO_PICKUP');

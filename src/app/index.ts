@@ -739,6 +739,8 @@ export {
 export {
   LIVE_RIDE_COMPOSITION_VERSION,
   createLiveRideComposition,
+  type LiveRideActorRouteControl,
+  type LiveRideActorRouteView,
   type LiveRideComposition,
   type LiveRideCompositionOptions,
   type LiveRideCompositionSnapshot,
