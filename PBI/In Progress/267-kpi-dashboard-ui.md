@@ -1,13 +1,13 @@
 ---
 id: "267"
 title: "Panoul KPI, tabloul orașului și feedbackul consecințelor în joc"
-status: "To Do"
+status: "In Progress"
 release: "V1"
 module: "Interfață"
 depends_on: ["266"]
 performance_checks: ["ui","frame"]
-owner: null
-started_at: null
+owner: "loop-pbi/deepseek-267"
+started_at: "2026-11-26T23:15:14.627Z"
 completed_at: null
 ---
 
