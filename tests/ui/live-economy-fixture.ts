@@ -134,6 +134,10 @@ export function liveEconomySnapshot(
       civilians: 0,
       comfortSamples: 140,
       comfortIntervals: 128,
+      comfortExcludedSamples: 0,
+      comfortExcludedIntervals: 0,
+      collisionImpacts: 0,
+      blockedSeconds: 0,
     }),
     historyScans: 0,
     ...overrides,
@@ -170,6 +174,10 @@ export function liveEconomyEmptyDay(): LiveEconomySnapshot {
       civilians: 0,
       comfortSamples: 0,
       comfortIntervals: 0,
+      comfortExcludedSamples: 0,
+      comfortExcludedIntervals: 0,
+      collisionImpacts: 0,
+      blockedSeconds: 0,
     }),
   });
 }

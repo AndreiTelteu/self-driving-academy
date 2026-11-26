@@ -1,6 +1,11 @@
 import { createLiveEconomyComposition } from '../../src/app';
-import type { LiveEconomyComposition, LiveEconomyStepResult } from '../../src/app';
-import type { LiveRideLifecycleRideView } from '../../src/fleet';
+import type {
+  LiveEconomyArtifactWindow,
+  LiveEconomyCollisionFact,
+  LiveEconomyComposition,
+  LiveEconomyStepResult,
+} from '../../src/app';
+import type { LiveRideLifecycleRideView, RideRecord } from '../../src/fleet';
 import {
   createLiveRideLifecycleFixture,
   type LiveRideLifecycleFixture,
@@ -18,6 +23,10 @@ export interface LiveEconomyFixtureOptions {
   readonly civilianCount?: number;
   readonly seed?: number;
   readonly sampleIntervalTicks?: number;
+  /** Real 088 windows of one ride, read at settlement. */
+  readonly artifactWindows?: (ride: RideRecord) => readonly LiveEconomyArtifactWindow[];
+  /** Real 137 blocked seconds; `null` falls back to the observed 058 blocked frames. */
+  readonly blockedSeconds?: (ride: RideRecord) => number | null;
 }
 
 export interface LiveEconomyTarget {
@@ -32,6 +41,8 @@ export interface LiveEconomyTarget {
 
 export interface LiveEconomyFixture extends LiveRideLifecycleFixture {
   readonly economy: LiveEconomyComposition;
+  /** Real 028 facts queued for the next authoritative step. */
+  readonly collisions: LiveEconomyCollisionFact[];
   economyStep(): LiveEconomyStepResult;
   /** Selects the first assigned ride and returns its real target, without boarding it. */
   firstTarget(): LiveEconomyTarget;
@@ -54,7 +65,10 @@ export function createLiveEconomyFixture(
     lifecycle: rides.composition.lifecycle.lifecycle,
     graph: rides.world.graph,
     sampleIntervalTicks: options.sampleIntervalTicks ?? 6,
+    ...(options.artifactWindows === undefined ? {} : { artifactWindows: options.artifactWindows }),
+    ...(options.blockedSeconds === undefined ? {} : { blockedSeconds: options.blockedSeconds }),
   });
+  const collisions: LiveEconomyCollisionFact[] = [];
 
   const observed = () =>
     rides.frame().map((vehicle) => ({
@@ -65,6 +79,7 @@ export function createLiveEconomyFixture(
         ? {}
         : { classId: rides.ambient.registry.get(vehicle.vehicleId)!.classId }),
       ...(vehicle.headingRad === undefined ? {} : { headingRad: vehicle.headingRad }),
+      blocked: vehicle.blocked,
     }));
 
   const ride = (rideId: string): LiveRideLifecycleRideView => {
@@ -73,15 +88,28 @@ export function createLiveEconomyFixture(
     return view;
   };
 
+  const takeCollisions = (): readonly LiveEconomyCollisionFact[] =>
+    collisions.length === 0 ? [] : collisions.splice(0, collisions.length);
+
   const fixture: LiveEconomyFixture = {
     ...rides,
     economy,
+    collisions,
     step(atTick = rides.currentTick() + 1) {
       const result = rides.step(atTick);
-      economy.step({ tick: result.tick, vehicles: observed() });
+      economy.step({
+        tick: result.tick,
+        vehicles: observed(),
+        ...(collisions.length === 0 ? {} : { collisions: takeCollisions() }),
+      });
       return result;
     },
-    economyStep: () => economy.step({ tick: rides.currentTick(), vehicles: observed() }),
+    economyStep: () =>
+      economy.step({
+        tick: rides.currentTick(),
+        vehicles: observed(),
+        ...(collisions.length === 0 ? {} : { collisions: takeCollisions() }),
+      }),
     firstTarget(): LiveEconomyTarget {
       const assignment = rides.snapshot().live.assignments[0];
       if (assignment === undefined) throw new Error('No live assignment');

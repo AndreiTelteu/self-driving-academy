@@ -1,11 +1,17 @@
 import { LIVE_ECONOMY_VERSION, reviewReasonCodes } from '../../src/economy';
 import type { LiveEconomySnapshot } from '../../src/economy';
 import { projectLiveEconomy } from '../../src/ui';
+import type { CollisionIncident } from '../../src/vehicles';
 import {
   createLiveEconomyFixture,
   type LiveEconomyFixture,
   type LiveEconomyTarget,
 } from './live-economy-fixture';
+import {
+  measureBlockedSeconds,
+  realArtifactWindow,
+  realCollisionFact,
+} from './live-economy-telemetry';
 
 export const LIVE_ECONOMY_REPORT_VERSION = '266-live-economy-report-v1' as const;
 
@@ -48,6 +54,37 @@ export interface LiveEconomyReport {
     histogram: readonly number[];
     hudText: string;
     historyScans: 0;
+  }>;
+  readonly collision: Readonly<{
+    rideId: string;
+    controlRideId: string;
+    taxiId: string;
+    collisionTick: number;
+    incidentId: string;
+    impulseNs: number;
+    rating: number | null;
+    controlRating: number | null;
+    ratingDrop: number | null;
+    reasons: readonly string[];
+    controlReasons: readonly string[];
+    incidentPenalty: number | null;
+    impacts: number | null;
+    peakImpulseNs: number | null;
+    controlIntervals: number | null;
+    controlControlIntervals: number | null;
+    excludedSamples: number;
+    collisionImpacts: number;
+  }>;
+  readonly blocked: Readonly<{
+    rideId: string;
+    controlRideId: string;
+    blockedSeconds: number;
+    evidenceBlockedSeconds: number | null;
+    rating: number | null;
+    controlRating: number | null;
+    reasons: readonly string[];
+    incidentPenalty: number | null;
+    blockedSecondsCounter: number;
   }>;
   readonly failed: Readonly<{
     rideId: string;
@@ -182,6 +219,41 @@ civilians, seed ${report.fixture.seed}, dwell ${report.fixture.dwellTicks} ticks
 | Comfort samples → intervals | ${report.completed.comfortSamples} → ${report.completed.comfortIntervals} |
 | HUD | ${report.completed.hudText} |
 
+## Real 028 collision and 088 suppression
+
+The collision ride is the same deterministic ride as the completed control (same seed, same 061
+lifecycle). One real 028 episode produced the incident, and the real 088 filter evaluated its window;
+the live economy applied that suppressed span to the passenger trace. The impact stays a separate 139
+fact.
+
+| Metric | Control | Collision |
+| --- | ---: | ---: |
+| Ride | \`${report.collision.controlRideId}\` | \`${report.collision.rideId}\` |
+| Rating | ${report.collision.controlRating ?? '—'} | ${report.collision.rating ?? '—'} |
+| Incident penalty / impacts | 0 / 0 | ${report.collision.incidentPenalty ?? '—'} / ${report.collision.impacts ?? '—'} |
+| 139 intervals | ${report.collision.controlControlIntervals ?? '—'} | ${report.collision.controlIntervals ?? '—'} |
+| Reasons | ${report.collision.controlReasons.join(', ') || '—'} | ${report.collision.reasons.join(', ') || '—'} |
+
+Incident \`${report.collision.incidentId}\` at tick ${report.collision.collisionTick}, impulse
+${report.collision.impulseNs} N·s. The 088 window excluded ${report.collision.excludedSamples} passenger
+samples; the collision penalty (${report.collision.incidentPenalty ?? '—'}) and the reason
+\`COLLISION\` remain, and the rating drops by ${report.collision.ratingDrop ?? '—'}.
+
+## Real 137 blocked service
+
+| Metric | Control | Blocked |
+| --- | ---: | ---: |
+| Ride | \`${report.blocked.controlRideId}\` | \`${report.blocked.rideId}\` |
+| Rating | ${report.blocked.controlRating ?? '—'} | ${report.blocked.rating ?? '—'} |
+| Blocked seconds (137) | 0 | ${report.blocked.blockedSeconds} |
+| Incident penalty | 0 | ${report.blocked.incidentPenalty ?? '—'} |
+| Reasons | — | ${report.blocked.reasons.join(', ') || '—'} |
+
+The real 137 metric service accepted the blocked interval and reported
+${report.blocked.evidenceBlockedSeconds ?? '—'} s; the live economy attached exactly that value to the
+evaluated ride, so the 209 review counts the blocked service instead of zero. The session counter is
+${report.blocked.blockedSecondsCounter} s.
+
 ## Terminal variants
 
 | Variant | Ride | Rule | Net SDA | Reviews |
@@ -234,11 +306,13 @@ ${checks}
 
 ## Limits
 
-The report uses the real 032/033/041/057/058/059/060/061/062/063/064/265 contracts and the unchanged
-209 economy. It is not a browser frame, GPU or FPS measurement. The live comfort trace samples the
-authoritative speed/heading/control mode at 10 Hz and does not yet consume 088 artefact-suppression
-windows or 137 blocked seconds (those owners are not wired live in 266); the review therefore uses
-the real comfort term but reports those two incident terms as 0. Persistence/reload of the economy
+The report uses the real 032/033/041/057/058/059/060/061/062/063/064/265 contracts, the real 028
+collision episode, the real 088 artifact filter, the real 137 metric service and the unchanged 209
+economy. It is not a browser frame, GPU or FPS measurement. The live comfort trace samples the
+authoritative speed/heading/control mode at 10 Hz and derives the 139 intervals once at settlement,
+with the 088 suppressed spans the caller supplies. The 137 blocked seconds are the value the real
+metric service accepted for the ride; the live composition also counts the authoritative 058 blocked
+frames when the 137 port is absent, so it never invents a duration. Persistence/reload of the economy
 remains 278. Scenario-reset closes active rides through 265 before the economy can see their terminal
 records, so those rides are not settled; the reset itself starts a new epoch without rewriting the
 preserved history.
@@ -247,10 +321,29 @@ preserved history.
 
 /** Deterministic 266 report on the real 061/265 lifecycle and the unchanged 209 economy. */
 export function runLiveEconomyReport(): LiveEconomyReport {
+  let collisionFact: CollisionIncident | null = null,
+    collisionRideId = '',
+    blockedTaxiId = '',
+    measuredBlockedSeconds = 0;
   const completedFixture = createLiveEconomyFixture({
       dwellTicks: 24,
       civilianCount: 20,
       seed: 262,
+    }),
+    collisionFixture = createLiveEconomyFixture({
+      dwellTicks: 24,
+      civilianCount: 20,
+      seed: 262,
+      artifactWindows: (ride) =>
+        collisionFact === null || ride.rideId !== collisionRideId
+          ? []
+          : [realArtifactWindow(ride, collisionFact)],
+    }),
+    blockedFixture = createLiveEconomyFixture({
+      dwellTicks: 24,
+      civilianCount: 20,
+      seed: 262,
+      blockedSeconds: (ride) => (ride.taxiId === blockedTaxiId ? measuredBlockedSeconds : 0),
     }),
     failedFixture = createLiveEconomyFixture({
       dwellTicks: 24,
@@ -271,8 +364,9 @@ export function runLiveEconomyReport(): LiveEconomyReport {
     // Completed ride: one settlement, full fare and one review.
     completedFixture.runTo(60);
     const completedTarget = completedFixture.firstTarget(),
-      boarded = completedFixture.board(completedTarget),
-      completedRide = completedFixture.complete(completedTarget),
+      boarded = completedFixture.board(completedTarget);
+    completedFixture.runTo(completedFixture.currentTick() + 60);
+    const completedRide = completedFixture.complete(completedTarget),
       completedRead = read(completedFixture),
       completedRecord = completedFixture.composition.lifecycle.lifecycle.ride(
         completedTarget.rideId,
@@ -281,6 +375,42 @@ export function runLiveEconomyReport(): LiveEconomyReport {
       completedReview = completedFixture.economy.economy.review(completedTarget.rideId),
       completedHud = projectLiveEconomy(completedRead),
       reasons = completedReview?.reasonCodes ?? [];
+
+    // Real 028 collision on the same deterministic ride; the real 088 window suppresses its tail.
+    collisionFixture.runTo(60);
+    const collisionTarget = collisionFixture.firstTarget();
+    collisionRideId = collisionTarget.rideId;
+    collisionFixture.board(collisionTarget);
+    collisionFixture.runTo(collisionFixture.currentTick() + 60);
+    const collisionTick = collisionFixture.currentTick() + 1;
+    collisionFact = realCollisionFact({
+      vehicleId: collisionTarget.taxiId,
+      otherEntityId: 'wall:266:report',
+      tick: collisionTick,
+      impulseNs: 4_400,
+    });
+    collisionFixture.collisions.push(collisionFact);
+    collisionFixture.step(collisionTick);
+    collisionFixture.complete(collisionTarget);
+    const collisionRead = read(collisionFixture),
+      collisionReview = collisionFixture.economy.economy.review(collisionTarget.rideId),
+      collisionReasons = collisionReview?.reasonCodes ?? [];
+
+    // Real 137 blocked interval on the same deterministic ride.
+    blockedFixture.runTo(60);
+    const blockedTarget = blockedFixture.firstTarget();
+    blockedTaxiId = blockedTarget.taxiId;
+    blockedFixture.board(blockedTarget);
+    blockedFixture.runTo(blockedFixture.currentTick() + 60);
+    measuredBlockedSeconds = measureBlockedSeconds({
+      taxiId: blockedTarget.taxiId,
+      tick: blockedFixture.currentTick(),
+      blockedSeconds: 90,
+    });
+    blockedFixture.complete(blockedTarget);
+    const blockedRead = read(blockedFixture),
+      blockedReview = blockedFixture.economy.economy.review(blockedTarget.rideId),
+      blockedReasons = blockedReview?.reasonCodes ?? [];
 
     // Idempotency and read cost: a duplicate tick, an explicit replay and 600 reads.
     const idempotencyBefore = read(completedFixture);
@@ -378,6 +508,104 @@ export function runLiveEconomyReport(): LiveEconomyReport {
         true,
         reasons.every((reason) => (reviewReasonCodes as readonly string[]).includes(reason)),
         `reasons ${reasons.join(', ')}`,
+      ),
+      check(
+        'collision-same-ride',
+        completedTarget.rideId,
+        collisionTarget.rideId,
+        'the collision scenario is the same deterministic 061 ride as the control',
+      ),
+      check(
+        'collision-impacts',
+        1,
+        collisionReview?.evidence.impacts ?? null,
+        'the real 028 incident reaches the 139 read model exactly once',
+      ),
+      check(
+        'collision-peak-impulse',
+        4_400,
+        collisionReview?.evidence.peakImpulseNs ?? null,
+        'the review keeps the real impulse of the 028 incident',
+      ),
+      check(
+        'collision-incident-penalty',
+        1,
+        collisionReview?.penalties.incident ?? null,
+        'the unchanged 209 incident term counts the real impact',
+      ),
+      check(
+        'collision-reason',
+        true,
+        collisionReasons.includes('COLLISION'),
+        `reasons ${collisionReasons.join(', ')}`,
+      ),
+      check(
+        'collision-rating-drop',
+        1,
+        (completedReview?.rating ?? 0) - (collisionReview?.rating ?? 0),
+        `${completedReview?.rating} → ${collisionReview?.rating}`,
+      ),
+      check(
+        'collision-088-suppression',
+        true,
+        collisionRead.counters.comfortExcludedSamples > 0,
+        `${collisionRead.counters.comfortExcludedSamples} passenger samples excluded by the real 088 window`,
+      ),
+      check(
+        'collision-comfort-prefix',
+        true,
+        (collisionReview?.controlIntervals ?? 0) < (completedReview?.controlIntervals ?? 0),
+        `${collisionReview?.controlIntervals} vs ${completedReview?.controlIntervals} 139 intervals`,
+      ),
+      check(
+        'collision-reason-vocabulary',
+        true,
+        collisionReasons.every((reason) =>
+          (reviewReasonCodes as readonly string[]).includes(reason),
+        ),
+        `reasons ${collisionReasons.join(', ')}`,
+      ),
+      check(
+        'collision-single-review',
+        1,
+        collisionRead.counters.reviews,
+        'one evaluable collision ride produces exactly one review',
+      ),
+      check(
+        'blocked-same-ride',
+        completedTarget.rideId,
+        blockedTarget.rideId,
+        'the blocked scenario is the same deterministic 061 ride as the control',
+      ),
+      check(
+        'blocked-seconds-137',
+        90,
+        blockedReview?.evidence.blockedSeconds ?? null,
+        'the real 137 accepted value reaches the 209 review fact',
+      ),
+      check(
+        'blocked-incident-penalty',
+        0.5,
+        blockedReview?.penalties.incident ?? null,
+        'the unchanged 209 blocked term counts the real blocked service',
+      ),
+      check(
+        'blocked-reason',
+        true,
+        blockedReasons.includes('BLOCKED_ROUTE'),
+        `reasons ${blockedReasons.join(', ')}`,
+      ),
+      check(
+        'blocked-rating-not-higher',
+        true,
+        (blockedReview?.rating ?? 0) <= (completedReview?.rating ?? 0),
+        `${blockedReview?.rating} vs ${completedReview?.rating}`,
+      ),
+      check(
+        'blocked-counter',
+        true,
+        blockedRead.counters.blockedSeconds >= 90,
+        `${blockedRead.counters.blockedSeconds} s attached to settled rides`,
       ),
       check(
         'completed-day-revenue',
@@ -654,6 +882,40 @@ export function runLiveEconomyReport(): LiveEconomyReport {
         hudText: `${completedHud.day.label} · ${completedHud.day.revenue} · ${completedHud.day.rating}`,
         historyScans: 0 as const,
       },
+      collision: {
+        rideId: collisionTarget.rideId,
+        controlRideId: completedTarget.rideId,
+        taxiId: collisionTarget.taxiId,
+        collisionTick,
+        incidentId: collisionFact?.incidentId ?? '',
+        impulseNs: collisionFact?.impulseNs ?? 0,
+        rating: collisionReview?.rating ?? null,
+        controlRating: completedReview?.rating ?? null,
+        ratingDrop:
+          collisionReview === undefined
+            ? null
+            : (completedReview?.rating ?? 0) - collisionReview.rating,
+        reasons: Object.freeze([...collisionReasons]),
+        controlReasons: Object.freeze([...reasons]),
+        incidentPenalty: collisionReview?.penalties.incident ?? null,
+        impacts: collisionReview?.evidence.impacts ?? null,
+        peakImpulseNs: collisionReview?.evidence.peakImpulseNs ?? null,
+        controlIntervals: collisionReview?.controlIntervals ?? null,
+        controlControlIntervals: completedReview?.controlIntervals ?? null,
+        excludedSamples: collisionRead.counters.comfortExcludedSamples,
+        collisionImpacts: collisionRead.counters.collisionImpacts,
+      },
+      blocked: {
+        rideId: blockedTarget.rideId,
+        controlRideId: completedTarget.rideId,
+        blockedSeconds: measuredBlockedSeconds,
+        evidenceBlockedSeconds: blockedReview?.evidence.blockedSeconds ?? null,
+        rating: blockedReview?.rating ?? null,
+        controlRating: completedReview?.rating ?? null,
+        reasons: Object.freeze([...blockedReasons]),
+        incidentPenalty: blockedReview?.penalties.incident ?? null,
+        blockedSecondsCounter: blockedRead.counters.blockedSeconds,
+      },
       failed: {
         rideId: failedTarget.rideId,
         rule: failedSettlement?.rule ?? null,
@@ -721,6 +983,8 @@ export function runLiveEconomyReport(): LiveEconomyReport {
     };
   } finally {
     completedFixture.dispose();
+    collisionFixture.dispose();
+    blockedFixture.dispose();
     failedFixture.dispose();
     cancelFixture.dispose();
     passengerCancelFixture.dispose();

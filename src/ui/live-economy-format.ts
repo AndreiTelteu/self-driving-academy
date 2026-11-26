@@ -194,11 +194,23 @@ export function parseLiveEconomySnapshot(value: unknown): LiveEconomySnapshot {
     civilians: integer(value.counters.civilians, 'civilians'),
     comfortSamples: integer(value.counters.comfortSamples, 'comfort samples'),
     comfortIntervals: integer(value.counters.comfortIntervals, 'comfort intervals'),
+    comfortExcludedSamples: integer(
+      value.counters.comfortExcludedSamples,
+      'excluded comfort samples',
+    ),
+    comfortExcludedIntervals: integer(
+      value.counters.comfortExcludedIntervals,
+      'excluded comfort intervals',
+    ),
+    collisionImpacts: integer(value.counters.collisionImpacts, 'collision impacts'),
+    blockedSeconds: numeric(value.counters.blockedSeconds, 'blocked seconds'),
   });
   if (counters.settlements + counters.duplicates + counters.rejected > counters.terminalRides)
     throw new Error('Live economy counters exceed the terminal rides');
   if (counters.reviews > counters.settlements)
     throw new Error('Live economy reviews exceed settle');
+  if (counters.comfortExcludedSamples > counters.comfortSamples)
+    throw new Error('Live economy excluded comfort samples exceed the observed samples');
   return Object.freeze({
     version: LIVE_ECONOMY_SERVICE_VERSION,
     tick,

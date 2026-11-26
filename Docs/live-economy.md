@@ -42,17 +42,36 @@ model și este afișată „fără date”, niciodată ca venit 0 sau rating per
 ## Comfortul folosit de review
 
 Cât timp pasagerul este la bord (`TO_DROPOFF`/`DROPOFF`), compunerea eșantionează la 10 Hz viteza,
-heading-ul și modul de control autoritare ale taxiului și derivă intervalele cu aceeași funcție 139
-(`deriveComfortIntervals`) pe care o citesc misiunea și tabloul. Intervalele intră într-un serviciu
-139 mărginit, per cursă, iar la terminal review-ul primește exact acel snapshot — deci termenul de
-confort nu este inventat și nu există un al doilea calcul. Capabilitatea laterală este a clasei reale
-a vehiculului (`grip × 9,81 m/s²`), nu o constantă.
+heading-ul și modul de control autoritare ale taxiului și ține eșantioanele într-un buffer mărginit
+per cursă. La terminal derivă intervalele o singură dată cu aceeași funcție 139
+(`deriveComfortIntervals`) pe care o citesc misiunea și tabloul, cu ferestrele 088 de suprimare ale
+cursei, și le ingeră într-un serviciu 139 mărginit, per cursă. Review-ul primește exact acel snapshot —
+deci termenul de confort nu este inventat și nu există un al doilea calcul. Capabilitatea laterală
+este a clasei reale a vehiculului (`grip × 9,81 m/s²`), nu o constantă.
 
-Limita acestei versiuni: ferestrele 088 de suprimare a artefactelor și secundele blocate 137 nu sunt
-încă montate live în 266, deci review-ul raportează acei termeni ca 0; impacturile 028 și filtrarea
-telemetriei rămân la 272/274. Review-ul este tot din vocabularul închis 209 și există cel mult o dată
-per cursă evaluabilă; un al doilea eveniment este `EXISTING`/`DUPLICATE`, iar rescrierea cere explicit
-`reissueReview`.
+## Incidente 028, blocaje 137 și ferestre 088
+
+Compunerea nu creează incidente sau blocaje; consumă faptele owner-ilor reali:
+
+- **028:** `step({ tick, vehicles, collisions })` primește incidentele reale livrate pentru tick-ul
+  autoritar. Un incident este păstrat până la decontarea cursei și, dacă `tick`-ul lui este între
+  `PICKUP_COMPLETE` și terminal, intră în serviciul 139 al cursei ca `PASSENGER_IMPACT`. Impactul
+  rămâne separat de agregatele de confort, exact cum cere 139; `comfortReviewModel` îl duce mai
+  departe în `incidentPenalty` și în motivul `COLLISION`.
+- **088:** `artifactWindows(ride)` este citit la decontare și întoarce ferestrele reale ale cursei.
+  Numai `suppressed` este folosit, ca span de excludere pentru `deriveComfortIntervals`; compunerea
+  nu creează, nu lărgește și nu inventează o fereastră. Eșantioanele și intervalele tăiate sunt
+  raportate în contoarele `comfortExcludedSamples`/`comfortExcludedIntervals`, iar impactul 028
+  rămâne în review: filtrarea confortului nu șterge consecința incidentului.
+- **137:** `blockedSeconds(ride)` este citit la decontare și întoarce secundele măsurate de owner-ul
+  137. Când portul lipsește, compunerea numără numai pașii autoritari în care cadrul 058 a marcat
+  taxiul cursei ca blocat cu pasagerul la bord; un tick lipsă nu devine secundă blocată. Valoarea
+  ajunge în `ReviewFacts.blockedSeconds`, deci în `incidentPenalty` și în motivul `BLOCKED_ROUTE`.
+
+Review-ul rămâne din vocabularul închis 209 și există cel mult o dată per cursă evaluabilă; un al
+doilea eveniment este `EXISTING`/`DUPLICATE`, iar rescrierea cere explicit `reissueReview`. Toate
+cele trei fapte sunt opționale: dacă owner-ul lor nu este montat, termenul respectiv rămâne 0, nu
+este inventat.
 
 ## Epoca economică și resetul
 
@@ -82,9 +101,11 @@ const economy = createLiveEconomyComposition({
   lifecycle: liveRideComposition.lifecycle.lifecycle, // 061 real
   graph, // 033 real
   namespace: 'v3:city:economy',
+  artifactWindows: (ride) => windowsFor(ride), // 088 real, opțional
+  blockedSeconds: (ride) => blockedFor(ride), // 137 real, opțional
 });
 
-economy.step({ tick, vehicles }); // o dată per pas autoritar, după `rides`
+economy.step({ tick, vehicles, collisions }); // o dată per pas autoritar, după `rides`
 economy.flush({ tick }); // decontează terminalele vizibile înainte de un reset
 economy.beginEpoch({ tick }); // serie nouă, istoric păstrat
 economy.read(); // LiveEconomySnapshot compact
@@ -111,4 +132,6 @@ npm run economy:live:probe
 ```
 
 Dovezile sunt în [Evidence/266-live-economy](Evidence/266-live-economy/README.md): raportul determinist
-acoperă curse mixte, anulări, eșec, civili, duplicat, pauză, reload de citire și epoca economică.
+acoperă curse mixte, anulări, eșec, civili, duplicat, pauză, reload de citire, epoca economică, un
+incident 028 real cu fereastră 088 reală (review `COLLISION`, rating 5 → 4) și un blocaj 137 real
+(review `BLOCKED_ROUTE`, rating 5 → 4).

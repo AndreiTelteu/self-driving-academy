@@ -6,7 +6,7 @@
     "civilians": 20,
     "seed": 262,
     "dwellTicks": 24,
-    "terminalTick": 110
+    "terminalTick": 170
   },
   "completed": {
     "rideId": "id-v1:4:ride14:test:265:rides51:id-v1:12:ride-request14:test:265:rides4:w0005:r0000",
@@ -27,8 +27,8 @@
     "dayRides": 1,
     "monthRevenueMinorUnits": 553,
     "exposureSeconds": 0,
-    "comfortSamples": 5,
-    "comfortIntervals": 4,
+    "comfortSamples": 15,
+    "comfortIntervals": 14,
     "averageRating": 5,
     "histogram": [
       0,
@@ -40,6 +40,49 @@
     ],
     "hudText": "Ziua simulată d0000 (parțială) · Venit: 553 SDA · Rating: 5.00 (1 review-uri)",
     "historyScans": 0
+  },
+  "collision": {
+    "rideId": "id-v1:4:ride14:test:265:rides51:id-v1:12:ride-request14:test:265:rides4:w0005:r0000",
+    "controlRideId": "id-v1:4:ride14:test:265:rides51:id-v1:12:ride-request14:test:265:rides4:w0005:r0000",
+    "taxiId": "id-v1:7:vehicle13:v3:city:fleet4:TAXI4:0022",
+    "collisionTick": 146,
+    "incidentId": "id-v1:9:collision29:session-266-economy-telemetry3:0281:13:1:23:146",
+    "impulseNs": 4400,
+    "rating": 4,
+    "controlRating": 5,
+    "ratingDrop": 1,
+    "reasons": [
+      "ON_TIME",
+      "SMOOTH_DRIVE",
+      "COLLISION"
+    ],
+    "controlReasons": [
+      "EFFICIENT_DELIVERY",
+      "ON_TIME",
+      "SMOOTH_DRIVE"
+    ],
+    "incidentPenalty": 1,
+    "impacts": 1,
+    "peakImpulseNs": 4400,
+    "controlIntervals": 10,
+    "controlControlIntervals": 14,
+    "excludedSamples": 4,
+    "collisionImpacts": 1
+  },
+  "blocked": {
+    "rideId": "id-v1:4:ride14:test:265:rides51:id-v1:12:ride-request14:test:265:rides4:w0005:r0000",
+    "controlRideId": "id-v1:4:ride14:test:265:rides51:id-v1:12:ride-request14:test:265:rides4:w0005:r0000",
+    "blockedSeconds": 90,
+    "evidenceBlockedSeconds": 90,
+    "rating": 4,
+    "controlRating": 5,
+    "reasons": [
+      "ON_TIME",
+      "SMOOTH_DRIVE",
+      "BLOCKED_ROUTE"
+    ],
+    "incidentPenalty": 0.5,
+    "blockedSecondsCounter": 90
   },
   "failed": {
     "rideId": "id-v1:4:ride14:test:265:rides51:id-v1:12:ride-request14:test:265:rides4:w0005:r0000",
@@ -74,7 +117,7 @@
     "revenueAfterReads": 553,
     "historyScansAfterReads": 0,
     "ticksWithoutStep": 600,
-    "tickAfterPauseReads": 110,
+    "tickAfterPauseReads": 170,
     "revenueAfterPauseReads": 553
   },
   "civilians": {
@@ -95,7 +138,7 @@
     "settlementsAfterNextRide": 2,
     "reviewsBefore": 1,
     "reviewsAfterNextRide": 2,
-    "startTick": 111,
+    "startTick": 171,
     "preservedRevenue": 553,
     "secondRideId": "id-v1:4:ride14:test:265:rides51:id-v1:12:ride-request14:test:265:rides4:w0005:r0006",
     "secondRating": 5
@@ -142,6 +185,118 @@
       "actual": true,
       "pass": true,
       "detail": "reasons EFFICIENT_DELIVERY, ON_TIME, SMOOTH_DRIVE"
+    },
+    {
+      "name": "collision-same-ride",
+      "expected": "id-v1:4:ride14:test:265:rides51:id-v1:12:ride-request14:test:265:rides4:w0005:r0000",
+      "actual": "id-v1:4:ride14:test:265:rides51:id-v1:12:ride-request14:test:265:rides4:w0005:r0000",
+      "pass": true,
+      "detail": "the collision scenario is the same deterministic 061 ride as the control"
+    },
+    {
+      "name": "collision-impacts",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the real 028 incident reaches the 139 read model exactly once"
+    },
+    {
+      "name": "collision-peak-impulse",
+      "expected": 4400,
+      "actual": 4400,
+      "pass": true,
+      "detail": "the review keeps the real impulse of the 028 incident"
+    },
+    {
+      "name": "collision-incident-penalty",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the unchanged 209 incident term counts the real impact"
+    },
+    {
+      "name": "collision-reason",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "reasons ON_TIME, SMOOTH_DRIVE, COLLISION"
+    },
+    {
+      "name": "collision-rating-drop",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "5 → 4"
+    },
+    {
+      "name": "collision-088-suppression",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "4 passenger samples excluded by the real 088 window"
+    },
+    {
+      "name": "collision-comfort-prefix",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "10 vs 14 139 intervals"
+    },
+    {
+      "name": "collision-reason-vocabulary",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "reasons ON_TIME, SMOOTH_DRIVE, COLLISION"
+    },
+    {
+      "name": "collision-single-review",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "one evaluable collision ride produces exactly one review"
+    },
+    {
+      "name": "blocked-same-ride",
+      "expected": "id-v1:4:ride14:test:265:rides51:id-v1:12:ride-request14:test:265:rides4:w0005:r0000",
+      "actual": "id-v1:4:ride14:test:265:rides51:id-v1:12:ride-request14:test:265:rides4:w0005:r0000",
+      "pass": true,
+      "detail": "the blocked scenario is the same deterministic 061 ride as the control"
+    },
+    {
+      "name": "blocked-seconds-137",
+      "expected": 90,
+      "actual": 90,
+      "pass": true,
+      "detail": "the real 137 accepted value reaches the 209 review fact"
+    },
+    {
+      "name": "blocked-incident-penalty",
+      "expected": 0.5,
+      "actual": 0.5,
+      "pass": true,
+      "detail": "the unchanged 209 blocked term counts the real blocked service"
+    },
+    {
+      "name": "blocked-reason",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "reasons ON_TIME, SMOOTH_DRIVE, BLOCKED_ROUTE"
+    },
+    {
+      "name": "blocked-rating-not-higher",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "4 vs 5"
+    },
+    {
+      "name": "blocked-counter",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "90 s attached to settled rides"
     },
     {
       "name": "completed-day-revenue",
@@ -197,7 +352,7 @@
       "expected": true,
       "actual": true,
       "pass": true,
-      "detail": "5 live samples → 4 139 intervals"
+      "detail": "15 live samples → 14 139 intervals"
     },
     {
       "name": "history-scans",
@@ -362,8 +517,8 @@
     },
     {
       "name": "pause-no-clock",
-      "expected": 110,
-      "actual": 110,
+      "expected": 170,
+      "actual": 170,
       "pass": true,
       "detail": "600 reads without an authoritative step leave the economic clock unchanged"
     },
@@ -404,8 +559,8 @@
     },
     {
       "name": "epoch-start-tick",
-      "expected": 111,
-      "actual": 111,
+      "expected": 171,
+      "actual": 171,
       "pass": true,
       "detail": "the new epoch starts at the reset boundary"
     },
@@ -433,8 +588,8 @@
   ],
   "summary": {
     "version": "266-live-economy-report-v1",
-    "checks": 47,
-    "passed": 47,
+    "checks": 63,
+    "passed": 63,
     "pass": true
   }
 }

@@ -1,8 +1,9 @@
 import {
   deriveComfortIntervals,
   createComfortMetrics,
-  type ComfortInterval,
   type ComfortMetrics,
+  type ComfortMetricsSnapshot,
+  type ComfortSampleFact,
 } from '../experiments';
 import { createFleetEconomy, readLiveEconomySnapshot, LIVE_ECONOMY_FIRST_EPOCH } from '../economy';
 import type {
@@ -25,17 +26,27 @@ import type { LaneGraph } from '../world';
 /**
  * 266 live economy composition over the real 265 ride lifecycle.
  *
- * The composition is a thin adapter between two already accepted owners:
+ * The composition is a thin adapter between the already accepted owners:
  *
  * - the real 061 lifecycle (`RideRecord`, transitions, planned route) supplies every terminal ride;
- * - the unchanged 209 economy settles that ride once and updates the day/month KPI buckets.
+ * - the unchanged 209 economy settles that ride once and updates the day/month KPI buckets;
+ * - the real 139 comfort derivation turns the passenger trace of the ride into the same intervals the
+ *   mission and dashboard read;
+ * - the real 028 collision facts reach the same 139 read model as passenger impacts, so the 209
+ *   review counts the incident instead of reporting zero;
+ * - the real 088 artifact windows, when the caller supplies them, suppress the telemetry that cannot
+ *   be comfort of the command; the incident itself stays a separate fact;
+ * - the real 137 blocked seconds, when the caller supplies them, reach the 209 review as the blocked
+ *   service term. Without that port the composition counts the authoritative 058 blockage frames of
+ *   the same ride, so a real blocked tick is never replaced by an invented duration.
  *
  * The live path adds two things the 209 module deliberately does not own:
  *
- * 1. **A live comfort trace.** While a passenger is aboard, the authoritative speed, heading and
- *    control mode of the observed taxi are reduced to the same 139 passenger intervals the mission
- *    and dashboard read. The trace is kept in a bounded, per-ride `ComfortMetrics` instance, so the
- *    review model consumes the shared 139 aggregates and never invents a comfort term.
+ * 1. **A per-ride passenger trace.** While a passenger is aboard, the authoritative speed, heading and
+ *    control mode of the observed taxi are sampled at a fixed cadence and kept in a bounded buffer.
+ *    At settlement the shared 139 derivation is called exactly once, with the 088 suppressed spans of
+ *    the ride, and the resulting intervals enter a bounded per-ride `ComfortMetrics` instance. The
+ *    review model consumes that snapshot; there is no second comfort calculation.
  * 2. **An explicit economic epoch.** A scenario/session reset closes the live rides and starts a new
  *    reporting series, but the ledger, reviews and KPI buckets are preserved. No history is
  *    rewritten and no wall clock is read.
@@ -55,11 +66,36 @@ export interface LiveEconomyObservedVehicle {
   readonly classId?: VehicleClassId;
   /** Authoritative map heading; with a real class it makes the lateral term measurable. */
   readonly headingRad?: number;
+  /** Real 058 blockage carried by the authoritative frame; never inferred from speed. */
+  readonly blocked?: boolean;
+}
+
+/**
+ * The subset of one real 028 `CollisionIncident` the economy needs. A full incident is assignable,
+ * so the caller passes the owner's fact unchanged instead of rebuilding a parallel one.
+ */
+export interface LiveEconomyCollisionFact {
+  readonly incidentId: string;
+  readonly vehicleId: string;
+  readonly otherEntityId: string;
+  readonly tick: number;
+  readonly impulseNs: number;
+}
+
+/**
+ * The subset of one real 088 `FilteredWindowRecord` the economy needs. A full window is assignable;
+ * `suppressed` is exactly the span the 088 owner already decided is not usable telemetry.
+ */
+export interface LiveEconomyArtifactWindow {
+  readonly vehicleId: string;
+  readonly suppressed: Readonly<{ fromTick: number; toTick: number }> | null;
 }
 
 export interface LiveEconomyStepInput {
   readonly tick: number;
   readonly vehicles: readonly LiveEconomyObservedVehicle[];
+  /** Real 028 incidents delivered for this authoritative tick. */
+  readonly collisions?: readonly LiveEconomyCollisionFact[];
 }
 
 export interface LiveEconomyStepResult {
@@ -98,6 +134,10 @@ export interface LiveEconomyCompositionStats {
   readonly civilians: number;
   readonly comfortSamples: number;
   readonly comfortIntervals: number;
+  readonly comfortExcludedSamples: number;
+  readonly comfortExcludedIntervals: number;
+  readonly collisionImpacts: number;
+  readonly blockedSeconds: number;
   readonly historyScans: 0;
   readonly disposed: boolean;
 }
@@ -111,6 +151,16 @@ export interface LiveEconomyCompositionOptions {
   readonly reviewModelVersion?: string;
   /** Authoritative sample cadence of the comfort trace; default 6 ticks (10 Hz at 60 Hz). */
   readonly sampleIntervalTicks?: number;
+  /**
+   * Real 088 windows of one ride, read at settlement. A clean window has `suppressed: null`; only a
+   * suppressed span removes telemetry. The composition never creates or widens a window.
+   */
+  readonly artifactWindows?: (ride: RideRecord) => readonly LiveEconomyArtifactWindow[];
+  /**
+   * Real 137 blocked seconds measured with the passenger aboard. `null`/`undefined` falls back to
+   * the authoritative 058 blocked frames observed during the ride, never to a guessed duration.
+   */
+  readonly blockedSeconds?: (ride: RideRecord) => number | null;
 }
 
 export interface LiveEconomyComposition {
@@ -128,22 +178,20 @@ export interface LiveEconomyComposition {
   dispose(): void;
 }
 
-interface ComfortSample {
-  readonly tick: number;
-  readonly speedMps: number;
-  readonly controlMode: ControlMode;
+interface ComfortSample extends ComfortSampleFact {
   readonly velocityMps?: Readonly<{ x: number; y: number; z: number }>;
 }
 
 interface ComfortTracker {
-  readonly service: ComfortMetrics;
-  readonly classId: VehicleClassId | null;
+  readonly classId: VehicleClassId;
   readonly lateralLimitMps2: number | null;
   readonly vehicleId: string;
-  previous: ComfortSample | null;
-  lastTick: number | null;
-  samples: number;
-  intervals: number;
+  /** Authoritative passenger samples in tick order, bounded per ride. */
+  readonly samples: ComfortSample[];
+  /** Authoritative steps the 058 frame marked blocked while the passenger was aboard. */
+  blockedTicks: number;
+  lastSampleTick: number | null;
+  droppedSamples: number;
 }
 
 const optionFields = [
@@ -154,9 +202,48 @@ const optionFields = [
   'schedule',
   'reviewModelVersion',
   'sampleIntervalTicks',
+  'artifactWindows',
+  'blockedSeconds',
 ] as const;
-const stepFields = ['tick', 'vehicles'] as const;
-const vehicleFields = ['vehicleId', 'speedMps', 'controlMode', 'classId', 'headingRad'] as const;
+const stepFields = ['tick', 'vehicles', 'collisions'] as const;
+const vehicleFields = [
+  'vehicleId',
+  'speedMps',
+  'controlMode',
+  'classId',
+  'headingRad',
+  'blocked',
+] as const;
+const collisionFields = [
+  // The economy reads only these five fields, but the real 028 incident is passed unchanged.
+  'incidentId',
+  'vehicleId',
+  'otherEntityId',
+  'tick',
+  'impulseNs',
+  'schemaVersion',
+  'units',
+  'sessionId',
+  'worldEpoch',
+  'first',
+  'second',
+] as const;
+
+/** Bounded live telemetry memory: real rides are minutes, the cap only protects the session. */
+export const LIVE_ECONOMY_TELEMETRY_LIMITS = Object.freeze({
+  /** 20 simulated minutes at the default 10 Hz sample cadence. */
+  maximumSamplesPerRide: 12_000,
+  /** 088 windows read for one ride at settlement. */
+  maximumArtifactWindowsPerRide: 256,
+  /** Real 028 incidents retained per vehicle until its ride settles. */
+  maximumCollisionsPerVehicle: 64,
+  /** Real 028 incidents retained across the live composition. */
+  maximumCollisionFacts: 4_096,
+  /** A review cannot describe a longer trip than one simulated day. */
+  maximumRideSeconds: 86_400,
+  /** Retained settlement identities; the lifecycle itself retains only terminal receipts. */
+  retainedSettledRides: 4_096,
+});
 
 function boundedId(value: unknown, label: string): string {
   const id = typeof value === 'string' ? value : '';
@@ -201,6 +288,10 @@ function readVehicles(value: unknown): readonly LiveEconomyObservedVehicle[] {
           : choice(data.classId, ['sedan', 'compact'] as const),
       heading = data.headingRad === undefined ? undefined : number(data.headingRad, -1e9, 1e9);
     requireContract(heading === undefined || Number.isFinite(heading), 'Invalid heading');
+    requireContract(
+      data.blocked === undefined || typeof data.blocked === 'boolean',
+      'Live economy blocked flag is invalid',
+    );
     vehicles.push(
       Object.freeze({
         vehicleId,
@@ -208,10 +299,38 @@ function readVehicles(value: unknown): readonly LiveEconomyObservedVehicle[] {
         controlMode,
         ...(classId === undefined ? {} : { classId }),
         ...(heading === undefined ? {} : { headingRad: heading }),
+        ...(data.blocked === undefined ? {} : { blocked: data.blocked }),
       }),
     );
   }
   return Object.freeze(vehicles);
+}
+
+function readCollisions(value: unknown): readonly LiveEconomyCollisionFact[] {
+  if (value === undefined) return Object.freeze([]);
+  requireContract(Array.isArray(value), 'Live economy collisions must be a list');
+  requireContract(value.length <= 64, 'Live economy collision frame is too large');
+  const facts: LiveEconomyCollisionFact[] = [];
+  for (const entry of value) {
+    const data = record(entry);
+    for (const key of Object.keys(data))
+      requireContract(
+        (collisionFields as readonly string[]).includes(key),
+        'Unknown live economy collision field',
+      );
+    const impulseNs = number(data.impulseNs, 0, 1e12);
+    requireContract(Number.isFinite(impulseNs), 'Live economy collision impulse is invalid');
+    facts.push(
+      Object.freeze({
+        incidentId: boundedId(data.incidentId, 'collision incident id'),
+        vehicleId: boundedId(data.vehicleId, 'collision vehicle id'),
+        otherEntityId: boundedId(data.otherEntityId, 'collision other entity id'),
+        tick: tick(data.tick),
+        impulseNs,
+      }),
+    );
+  }
+  return Object.freeze(facts);
 }
 
 function readStepInput(value: unknown): LiveEconomyStepInput {
@@ -225,6 +344,7 @@ function readStepInput(value: unknown): LiveEconomyStepInput {
   return Object.freeze({
     tick: tick(data.tick),
     vehicles: readVehicles(data.vehicles),
+    collisions: readCollisions(data.collisions),
   });
 }
 
@@ -236,6 +356,45 @@ function readAtTick(value: unknown, label: string): number {
   return tick(data.tick);
 }
 
+function readArtifactWindows(
+  value: unknown,
+  ride: RideRecord,
+): readonly Readonly<{ fromTick: number; toTick: number }>[] {
+  requireContract(Array.isArray(value), 'Live economy artifact windows must be a list');
+  requireContract(
+    value.length <= LIVE_ECONOMY_TELEMETRY_LIMITS.maximumArtifactWindowsPerRide,
+    'Live economy artifact window list is too large',
+  );
+  const spans: Readonly<{ fromTick: number; toTick: number }>[] = [];
+  for (const entry of value) {
+    const window = record(entry);
+    const vehicleId = boundedId(window.vehicleId, 'artifact window vehicle id');
+    requireContract(
+      window.suppressed === null ||
+        (typeof window.suppressed === 'object' && window.suppressed !== null),
+      'Artifact window suppressed span is invalid',
+    );
+    if (window.suppressed === null || vehicleId !== ride.taxiId) continue;
+    const suppressed = record(window.suppressed),
+      fromTick = tick(suppressed.fromTick),
+      toTick = tick(suppressed.toTick);
+    requireContract(toTick >= fromTick, 'Artifact window suppressed span is inverted');
+    spans.push(Object.freeze({ fromTick, toTick }));
+  }
+  return Object.freeze(spans);
+}
+
+function readBlockedSeconds(value: unknown): number {
+  requireContract(
+    typeof value === 'number' &&
+      Number.isFinite(value) &&
+      value >= 0 &&
+      value <= LIVE_ECONOMY_TELEMETRY_LIMITS.maximumRideSeconds,
+    'Live economy blocked seconds are invalid',
+  );
+  return value;
+}
+
 function zeroCounters(): {
   terminalRides: number;
   settlements: number;
@@ -245,6 +404,10 @@ function zeroCounters(): {
   civilians: number;
   comfortSamples: number;
   comfortIntervals: number;
+  comfortExcludedSamples: number;
+  comfortExcludedIntervals: number;
+  collisionImpacts: number;
+  blockedSeconds: number;
 } {
   return {
     terminalRides: 0,
@@ -255,11 +418,19 @@ function zeroCounters(): {
     civilians: 0,
     comfortSamples: 0,
     comfortIntervals: 0,
+    comfortExcludedSamples: 0,
+    comfortExcludedIntervals: 0,
+    collisionImpacts: 0,
+    blockedSeconds: 0,
   };
 }
 
 function passengerAboard(state: RideState): boolean {
   return state === 'TO_DROPOFF' || state === 'DROPOFF';
+}
+
+function rounded(value: number): number {
+  return Math.round(value * 1e6) / 1e6;
 }
 
 /** Builds the live economy over the real ride lifecycle; it owns no world, store or renderer. */
@@ -274,6 +445,14 @@ export function createLiveEconomyComposition(
     );
   requireContract(data.lifecycle !== undefined, 'Live economy requires the 061 lifecycle');
   requireContract(data.graph !== undefined, 'Live economy requires the real lane graph');
+  requireContract(
+    data.artifactWindows === undefined || typeof data.artifactWindows === 'function',
+    'Live economy artifact windows port is invalid',
+  );
+  requireContract(
+    data.blockedSeconds === undefined || typeof data.blockedSeconds === 'function',
+    'Live economy blocked seconds port is invalid',
+  );
   const lifecycle = readLifecycle(data.lifecycle),
     graph = data.graph as LaneGraph;
   requireContract(
@@ -298,6 +477,7 @@ export function createLiveEconomyComposition(
   );
   const clock = economy.clock;
   const trackers = new Map<string, ComfortTracker>(),
+    impactFacts = new Map<string, LiveEconomyCollisionFact[]>(),
     settled = new Set<string>(),
     settledOrder: string[] = [],
     counters = zeroCounters();
@@ -305,6 +485,7 @@ export function createLiveEconomyComposition(
     lastTick = 0,
     lastSettlement: RideSettlement | null = null,
     lastReview: RideReview | null = null,
+    retainedCollisionFacts = 0,
     disposed = false;
 
   function assertLive(): void {
@@ -319,7 +500,7 @@ export function createLiveEconomyComposition(
   function markSettled(rideId: string): void {
     settled.add(rideId);
     settledOrder.push(rideId);
-    while (settledOrder.length > 4_096) {
+    while (settledOrder.length > LIVE_ECONOMY_TELEMETRY_LIMITS.retainedSettledRides) {
       const oldest = settledOrder.shift();
       if (oldest !== undefined) settled.delete(oldest);
     }
@@ -335,15 +516,14 @@ export function createLiveEconomyComposition(
     if (existing !== undefined) return existing.classId === classId ? existing : null;
     const capability = vehicleClass(classId).grip * 9.81;
     const tracker: ComfortTracker = {
-      service: createComfortMetrics({ retainedKeys: 64, retainedRides: 4 }),
       classId,
       lateralLimitMps2:
         Number.isFinite(capability) && capability > 0 ? Math.round(capability * 1e6) / 1e6 : null,
       vehicleId: vehicle.vehicleId,
-      previous: null,
-      lastTick: null,
-      samples: 0,
-      intervals: 0,
+      samples: [],
+      blockedTicks: 0,
+      lastSampleTick: null,
+      droppedSamples: 0,
     };
     trackers.set(ride.rideId, tracker);
     return tracker;
@@ -356,7 +536,7 @@ export function createLiveEconomyComposition(
       tick: atTick,
       speedMps,
       controlMode: vehicle.controlMode,
-      ...(vehicle.classId === undefined || heading === undefined
+      ...(heading === undefined
         ? {}
         : {
             velocityMps: Object.freeze({
@@ -368,25 +548,26 @@ export function createLiveEconomyComposition(
     });
   }
 
-  function intervalEvent(
-    ride: RideRecord,
-    tracker: ComfortTracker,
-    interval: ComfortInterval,
-  ): unknown {
-    return {
-      eventId: `live-comfort:${ride.rideId}:${interval.fromTick}:${interval.toTick}`,
-      kind: 'PASSENGER_INTERVAL',
-      rideId: ride.rideId,
-      vehicleId: tracker.vehicleId,
-      controlMode: interval.controlMode ?? 'AUTO',
-      learningEligible: interval.controlMode === 'LEARNING',
-      fromTick: interval.fromTick,
-      toTick: interval.toTick,
-      durationSeconds: interval.durationSeconds,
-      longitudinalAccelerationMps2: interval.longitudinalAccelerationMps2,
-      lateralAccelerationMps2: interval.lateralAccelerationMps2,
-      lateralLimitMps2: interval.lateralLimitMps2,
-    };
+  /**
+   * Counts the authoritative blocked frames of every passenger ride. A missing frame or a missing
+   * ride is not a blocked second: the counter only moves on a real observed fact.
+   */
+  function observeBlocked(
+    atTick: number,
+    vehicles: ReadonlyMap<string, LiveEconomyObservedVehicle>,
+  ): void {
+    for (const ride of lifecycle.active()) {
+      if (!passengerAboard(ride.state)) continue;
+      const vehicle = vehicles.get(ride.taxiId);
+      if (vehicle?.blocked !== true) continue;
+      const tracker = trackerFor(ride, vehicle);
+      if (tracker === null) continue;
+      tracker.blockedTicks = Math.min(
+        tracker.blockedTicks + 1,
+        LIVE_ECONOMY_TELEMETRY_LIMITS.maximumRideSeconds * clock.tickHz,
+      );
+      if (tracker.lastSampleTick === null) tracker.lastSampleTick = atTick;
+    }
   }
 
   function sampleComfort(
@@ -400,46 +581,176 @@ export function createLiveEconomyComposition(
       if (vehicle === undefined) continue;
       const tracker = trackerFor(ride, vehicle);
       if (tracker === null) continue;
-      if (tracker.lastTick !== null && atTick - tracker.lastTick < sampleIntervalTicks) continue;
-      const current = sampleOf(vehicle, atTick);
-      if (tracker.previous !== null) {
-        const derivation = deriveComfortIntervals({
-          samples: [tracker.previous, current],
-          suppressedSpans: [],
-          lateralLimitMps2: tracker.lateralLimitMps2,
-          tickHz: clock.tickHz,
-        });
-        for (const interval of derivation.intervals) {
-          const outcome = tracker.service.ingest(intervalEvent(ride, tracker, interval));
-          if (outcome.status === 'ACCEPTED') {
-            tracker.intervals += 1;
-            counters.comfortIntervals += 1;
-          }
-        }
+      if (tracker.lastSampleTick !== null && atTick - tracker.lastSampleTick < sampleIntervalTicks)
+        continue;
+      tracker.lastSampleTick = atTick;
+      if (tracker.samples.length >= LIVE_ECONOMY_TELEMETRY_LIMITS.maximumSamplesPerRide) {
+        tracker.droppedSamples += 1;
+        continue;
       }
-      tracker.previous = current;
-      tracker.lastTick = atTick;
-      tracker.samples += 1;
+      tracker.samples.push(sampleOf(vehicle, atTick));
       counters.comfortSamples += 1;
       samples += 1;
     }
     return samples;
   }
 
+  /** Retains the real 028 facts until the ride they belong to is evaluated. */
+  function recordCollisions(collisions: readonly LiveEconomyCollisionFact[]): void {
+    for (const fact of collisions) {
+      const vehicleIds =
+        fact.otherEntityId === fact.vehicleId
+          ? [fact.vehicleId]
+          : [fact.vehicleId, fact.otherEntityId];
+      for (const vehicleId of vehicleIds) {
+        const facts = impactFacts.get(vehicleId) ?? [];
+        if (facts.some((entry) => entry.incidentId === fact.incidentId)) continue;
+        if (facts.length >= LIVE_ECONOMY_TELEMETRY_LIMITS.maximumCollisionsPerVehicle) {
+          facts.shift();
+          retainedCollisionFacts -= 1;
+        }
+        facts.push(fact);
+        retainedCollisionFacts += 1;
+        impactFacts.set(vehicleId, facts);
+        while (
+          retainedCollisionFacts > LIVE_ECONOMY_TELEMETRY_LIMITS.maximumCollisionFacts &&
+          impactFacts.size > 0
+        ) {
+          const oldest = impactFacts.keys().next().value;
+          if (oldest === undefined) break;
+          const dropped = impactFacts.get(oldest);
+          impactFacts.delete(oldest);
+          retainedCollisionFacts -= dropped?.length ?? 0;
+        }
+      }
+    }
+  }
+
+  /** Real 028 incidents of the ride with the passenger aboard, in deterministic order. */
+  function impactsForRide(ride: RideRecord): readonly LiveEconomyCollisionFact[] {
+    const facts = impactFacts.get(ride.taxiId);
+    if (facts === undefined || facts.length === 0) return Object.freeze([]);
+    let boardingTick: number | null = null;
+    for (const transition of ride.transitions) {
+      if (transition.event === 'PICKUP_COMPLETE') boardingTick = transition.tick;
+    }
+    if (boardingTick === null) return Object.freeze([]);
+    const matched = facts
+      .filter((fact) => fact.tick >= boardingTick! && fact.tick <= ride.updatedTick)
+      .sort((left, right) =>
+        left.tick !== right.tick
+          ? left.tick - right.tick
+          : left.incidentId < right.incidentId
+            ? -1
+            : left.incidentId > right.incidentId
+              ? 1
+              : 0,
+      );
+    return matched.length === 0 ? Object.freeze([]) : Object.freeze(matched);
+  }
+
+  /** Removes the impacts only after the settlement accepted them, so a failed settlement retries. */
+  function consumeRideImpacts(
+    ride: RideRecord,
+    impacts: readonly LiveEconomyCollisionFact[],
+  ): void {
+    if (impacts.length === 0) return;
+    const facts = impactFacts.get(ride.taxiId);
+    if (facts === undefined) return;
+    const consumed = new Set(impacts.map((fact) => fact.incidentId));
+    const remaining = facts.filter((fact) => !consumed.has(fact.incidentId));
+    retainedCollisionFacts -= facts.length - remaining.length;
+    if (remaining.length === 0) impactFacts.delete(ride.taxiId);
+    else impactFacts.set(ride.taxiId, remaining);
+  }
+
+  function artifactSpansForRide(
+    ride: RideRecord,
+  ): readonly Readonly<{ fromTick: number; toTick: number }>[] {
+    const provider = options.artifactWindows;
+    if (provider === undefined) return Object.freeze([]);
+    return readArtifactWindows(provider(ride), ride);
+  }
+
+  /**
+   * Derives the 139 terms of one ride exactly once, with the 088 spans known at settlement. The real
+   * impacts enter the same read model as a separate aggregate, so suppression never erases the
+   * incident consequence.
+   */
   function comfortSnapshot(
     ride: RideRecord,
     atTick: number,
-  ): ReturnType<ComfortMetrics['snapshot']> | null {
+    impacts: readonly LiveEconomyCollisionFact[],
+  ): ComfortMetricsSnapshot | null {
     const tracker = trackers.get(ride.rideId);
-    if (tracker === undefined || tracker.intervals === 0) return null;
-    return tracker.service.snapshot({ tick: atTick });
+    if (tracker === undefined) return null;
+    if (tracker.samples.length === 0 && impacts.length === 0) return null;
+    const suppressedSpans = artifactSpansForRide(ride);
+    const derivation = deriveComfortIntervals({
+      samples: tracker.samples,
+      suppressedSpans,
+      lateralLimitMps2: tracker.lateralLimitMps2,
+      tickHz: clock.tickHz,
+    });
+    counters.comfortExcludedSamples += derivation.excludedSamples;
+    counters.comfortExcludedIntervals += derivation.excludedIntervals;
+    const service: ComfortMetrics = createComfortMetrics({ retainedKeys: 128, retainedRides: 4 });
+    try {
+      for (const interval of derivation.intervals) {
+        const outcome = service.ingest({
+          eventId: `live-comfort:${ride.rideId}:${interval.fromTick}:${interval.toTick}`,
+          kind: 'PASSENGER_INTERVAL',
+          rideId: ride.rideId,
+          vehicleId: tracker.vehicleId,
+          controlMode: interval.controlMode ?? 'AUTO',
+          learningEligible: interval.controlMode === 'LEARNING',
+          fromTick: interval.fromTick,
+          toTick: interval.toTick,
+          durationSeconds: interval.durationSeconds,
+          longitudinalAccelerationMps2: interval.longitudinalAccelerationMps2,
+          lateralAccelerationMps2: interval.lateralAccelerationMps2,
+          lateralLimitMps2: interval.lateralLimitMps2,
+        });
+        if (outcome.status === 'ACCEPTED') counters.comfortIntervals += 1;
+      }
+      for (const fact of impacts) {
+        const outcome = service.ingest({
+          eventId: `live-comfort-impact:${fact.incidentId}`,
+          kind: 'PASSENGER_IMPACT',
+          rideId: ride.rideId,
+          vehicleId: tracker.vehicleId,
+          tick: fact.tick,
+          incidentId: fact.incidentId,
+          impulseNs: fact.impulseNs,
+        });
+        if (outcome.status === 'ACCEPTED') counters.collisionImpacts += 1;
+      }
+      const snapshot = service.snapshot({ tick: atTick });
+      return snapshot.rides.length === 0 ? null : snapshot;
+    } finally {
+      service.dispose();
+    }
+  }
+
+  /** Real 137 blocked seconds when the caller owns them, else the observed 058 blocked frames. */
+  function blockedSecondsForRide(ride: RideRecord): number {
+    const provider = options.blockedSeconds;
+    if (provider !== undefined) {
+      const provided = provider(ride);
+      if (provided !== null && provided !== undefined) return readBlockedSeconds(provided);
+    }
+    const tracker = trackers.get(ride.rideId);
+    if (tracker === undefined) return 0;
+    return rounded(
+      Math.min(
+        tracker.blockedTicks / clock.tickHz,
+        LIVE_ECONOMY_TELEMETRY_LIMITS.maximumRideSeconds,
+      ),
+    );
   }
 
   function releaseTracker(rideId: string): void {
-    const tracker = trackers.get(rideId);
-    if (tracker === undefined) return;
     trackers.delete(rideId);
-    tracker.service.dispose();
   }
 
   function settleVisibleTerminalRides(atTick: number): {
@@ -455,12 +766,17 @@ export function createLiveEconomyComposition(
     for (const ride of lifecycle.terminal()) {
       if (settled.has(ride.rideId)) continue;
       if (ride.updatedTick > atTick) continue;
-      const comfort = comfortSnapshot(ride, ride.updatedTick),
+      const impacts = impactsForRide(ride),
+        blockedSeconds = blockedSecondsForRide(ride),
+        comfort = comfortSnapshot(ride, ride.updatedTick, impacts),
         result = economy.ingestRideOutcome({
           ride,
           graph,
           comfort,
+          blockedSeconds,
         });
+      consumeRideImpacts(ride, impacts);
+      counters.blockedSeconds = rounded(counters.blockedSeconds + blockedSeconds);
       results.push(result);
       counters.terminalRides += 1;
       if (result.settlement.status === 'ACCEPTED') {
@@ -520,6 +836,8 @@ export function createLiveEconomyComposition(
     lastTick = request.tick;
     const frame = new Map<string, LiveEconomyObservedVehicle>();
     for (const vehicle of request.vehicles) frame.set(vehicle.vehicleId, vehicle);
+    recordCollisions(request.collisions ?? []);
+    observeBlocked(request.tick, frame);
     const samples = sampleComfort(request.tick, frame),
       settledResult = settleVisibleTerminalRides(request.tick);
     return result(
@@ -560,8 +878,9 @@ export function createLiveEconomyComposition(
     const preservedRevenueMinorUnits = economy.ledger.totals().netRevenueMinorUnits,
       preservedSettlements = economy.ledger.totals().settlements,
       preservedReviews = economy.reviews.getStats().accepted;
-    for (const tracker of trackers.values()) tracker.service.dispose();
     trackers.clear();
+    impactFacts.clear();
+    retainedCollisionFacts = 0;
     epoch = Object.freeze({
       index: epoch.index + 1,
       startTick: atTick,
@@ -613,6 +932,10 @@ export function createLiveEconomyComposition(
         civilians: disposed ? 0 : counters.civilians,
         comfortSamples: disposed ? 0 : counters.comfortSamples,
         comfortIntervals: disposed ? 0 : counters.comfortIntervals,
+        comfortExcludedSamples: disposed ? 0 : counters.comfortExcludedSamples,
+        comfortExcludedIntervals: disposed ? 0 : counters.comfortExcludedIntervals,
+        collisionImpacts: disposed ? 0 : counters.collisionImpacts,
+        blockedSeconds: disposed ? 0 : counters.blockedSeconds,
         historyScans: 0 as const,
         disposed,
       });
@@ -620,8 +943,9 @@ export function createLiveEconomyComposition(
     dispose(): void {
       if (disposed) return;
       disposed = true;
-      for (const tracker of trackers.values()) tracker.service.dispose();
       trackers.clear();
+      impactFacts.clear();
+      retainedCollisionFacts = 0;
       settled.clear();
       settledOrder.length = 0;
       economy.dispose();
