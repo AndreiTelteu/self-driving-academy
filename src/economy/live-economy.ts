@@ -62,6 +62,14 @@ export interface LiveEconomyCounters {
   readonly comfortSamples: number;
   /** Accepted 139 passenger intervals. */
   readonly comfortIntervals: number;
+  /** Passenger samples the real 088 windows excluded from the comfort derivation. */
+  readonly comfortExcludedSamples: number;
+  /** Intervals the real 088 windows cut; they never become comfort of the command. */
+  readonly comfortExcludedIntervals: number;
+  /** Real 028 impacts accepted by the per-ride 139 read model. */
+  readonly collisionImpacts: number;
+  /** Real 137 (or observed 058) blocked seconds attached to evaluated rides. */
+  readonly blockedSeconds: number;
 }
 
 export const EMPTY_LIVE_ECONOMY_COUNTERS: LiveEconomyCounters = Object.freeze({
@@ -73,6 +81,10 @@ export const EMPTY_LIVE_ECONOMY_COUNTERS: LiveEconomyCounters = Object.freeze({
   civilians: 0,
   comfortSamples: 0,
   comfortIntervals: 0,
+  comfortExcludedSamples: 0,
+  comfortExcludedIntervals: 0,
+  collisionImpacts: 0,
+  blockedSeconds: 0,
 });
 
 export interface LiveEconomySnapshot {
@@ -112,6 +124,14 @@ function counter(value: unknown, label: string): number {
   return value;
 }
 
+function seconds(value: unknown, label: string): number {
+  requireContract(
+    typeof value === 'number' && Number.isFinite(value) && value >= 0,
+    `Live economy ${label} seconds are invalid`,
+  );
+  return value;
+}
+
 export function parseLiveEconomyEpoch(value: unknown): LiveEconomyEpoch {
   requireContract(
     typeof value === 'object' && value !== null && !Array.isArray(value),
@@ -141,6 +161,10 @@ export function parseLiveEconomyCounters(value: unknown): LiveEconomyCounters {
     civilians: counter(data.civilians, 'civilian'),
     comfortSamples: counter(data.comfortSamples, 'comfort sample'),
     comfortIntervals: counter(data.comfortIntervals, 'comfort interval'),
+    comfortExcludedSamples: counter(data.comfortExcludedSamples, 'excluded comfort sample'),
+    comfortExcludedIntervals: counter(data.comfortExcludedIntervals, 'excluded comfort interval'),
+    collisionImpacts: counter(data.collisionImpacts, 'collision impact'),
+    blockedSeconds: seconds(data.blockedSeconds, 'blocked'),
   });
   requireContract(
     counters.settlements + counters.duplicates + counters.rejected <= counters.terminalRides,
@@ -149,6 +173,10 @@ export function parseLiveEconomyCounters(value: unknown): LiveEconomyCounters {
   requireContract(
     counters.reviews <= counters.settlements,
     'Live economy reviews exceed the settlements',
+  );
+  requireContract(
+    counters.comfortExcludedSamples <= counters.comfortSamples,
+    'Live economy excluded comfort samples exceed the observed samples',
   );
   return counters;
 }

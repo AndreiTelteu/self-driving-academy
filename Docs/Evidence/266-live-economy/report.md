@@ -17,8 +17,43 @@ civilians, seed 262, dwell 24 ticks.
 | Month revenue | 553 SDA |
 | Average / histogram | 5 / 0, 0, 0, 0, 0, 1 |
 | Exposure | 0.0 s |
-| Comfort samples → intervals | 5 → 4 |
+| Comfort samples → intervals | 15 → 14 |
 | HUD | Ziua simulată d0000 (parțială) · Venit: 553 SDA · Rating: 5.00 (1 review-uri) |
+
+## Real 028 collision and 088 suppression
+
+The collision ride is the same deterministic ride as the completed control (same seed, same 061
+lifecycle). One real 028 episode produced the incident, and the real 088 filter evaluated its window;
+the live economy applied that suppressed span to the passenger trace. The impact stays a separate 139
+fact.
+
+| Metric | Control | Collision |
+| --- | ---: | ---: |
+| Ride | `id-v1:4:ride14:test:265:rides51:id-v1:12:ride-request14:test:265:rides4:w0005:r0000` | `id-v1:4:ride14:test:265:rides51:id-v1:12:ride-request14:test:265:rides4:w0005:r0000` |
+| Rating | 5 | 4 |
+| Incident penalty / impacts | 0 / 0 | 1 / 1 |
+| 139 intervals | 14 | 10 |
+| Reasons | EFFICIENT_DELIVERY, ON_TIME, SMOOTH_DRIVE | ON_TIME, SMOOTH_DRIVE, COLLISION |
+
+Incident `id-v1:9:collision29:session-266-economy-telemetry3:0281:13:1:23:146` at tick 146, impulse
+4400 N·s. The 088 window excluded 4 passenger
+samples; the collision penalty (1) and the reason
+`COLLISION` remain, and the rating drops by 1.
+
+## Real 137 blocked service
+
+| Metric | Control | Blocked |
+| --- | ---: | ---: |
+| Ride | `id-v1:4:ride14:test:265:rides51:id-v1:12:ride-request14:test:265:rides4:w0005:r0000` | `id-v1:4:ride14:test:265:rides51:id-v1:12:ride-request14:test:265:rides4:w0005:r0000` |
+| Rating | 5 | 4 |
+| Blocked seconds (137) | 0 | 90 |
+| Incident penalty | 0 | 0.5 |
+| Reasons | — | ON_TIME, SMOOTH_DRIVE, BLOCKED_ROUTE |
+
+The real 137 metric service accepted the blocked interval and reported
+90 s; the live economy attached exactly that value to the
+evaluated ride, so the 209 review counts the blocked service instead of zero. The session counter is
+90 s.
 
 ## Terminal variants
 
@@ -41,7 +76,7 @@ The pre-boarding cancellation refunds everything; the post-boarding cancellation
 | Settlements / reviews | 1 / 1 |
 | Duplicate tick / replay status | true / DUPLICATE |
 | Reads / revenue after reads | 600 / 553 |
-| Reads without a step / tick after | 600 / 110 |
+| Reads without a step / tick after | 600 / 170 |
 | Paused revenue | 553 |
 | Refused civilian reason | CIVILIAN_NOT_BILLABLE |
 | Civilian revenue before / after | 553 / 553 |
@@ -52,7 +87,7 @@ The pre-boarding cancellation refunds everything; the post-boarding cancellation
 | Metric | Value |
 | --- | ---: |
 | Epoch before / after | 1 / 2 |
-| Start tick | 111 |
+| Start tick | 171 |
 | Preserved revenue | 553 |
 | Revenue at start / after next ride | 553 / 1047 |
 | Settlements before / after next ride | 1 / 2 |
@@ -69,6 +104,22 @@ The pre-boarding cancellation refunds everything; the post-boarding cancellation
 | completed-single-settlement | 1 | 1 | PASS | one terminal ride produces one settlement |
 | completed-single-review | 1 | 1 | PASS | one evaluable ride produces one review |
 | completed-review-reasons | true | true | PASS | reasons EFFICIENT_DELIVERY, ON_TIME, SMOOTH_DRIVE |
+| collision-same-ride | "id-v1:4:ride14:test:265:rides51:id-v1:12:ride-request14:test:265:rides4:w0005:r0000" | "id-v1:4:ride14:test:265:rides51:id-v1:12:ride-request14:test:265:rides4:w0005:r0000" | PASS | the collision scenario is the same deterministic 061 ride as the control |
+| collision-impacts | 1 | 1 | PASS | the real 028 incident reaches the 139 read model exactly once |
+| collision-peak-impulse | 4400 | 4400 | PASS | the review keeps the real impulse of the 028 incident |
+| collision-incident-penalty | 1 | 1 | PASS | the unchanged 209 incident term counts the real impact |
+| collision-reason | true | true | PASS | reasons ON_TIME, SMOOTH_DRIVE, COLLISION |
+| collision-rating-drop | 1 | 1 | PASS | 5 → 4 |
+| collision-088-suppression | true | true | PASS | 4 passenger samples excluded by the real 088 window |
+| collision-comfort-prefix | true | true | PASS | 10 vs 14 139 intervals |
+| collision-reason-vocabulary | true | true | PASS | reasons ON_TIME, SMOOTH_DRIVE, COLLISION |
+| collision-single-review | 1 | 1 | PASS | one evaluable collision ride produces exactly one review |
+| blocked-same-ride | "id-v1:4:ride14:test:265:rides51:id-v1:12:ride-request14:test:265:rides4:w0005:r0000" | "id-v1:4:ride14:test:265:rides51:id-v1:12:ride-request14:test:265:rides4:w0005:r0000" | PASS | the blocked scenario is the same deterministic 061 ride as the control |
+| blocked-seconds-137 | 90 | 90 | PASS | the real 137 accepted value reaches the 209 review fact |
+| blocked-incident-penalty | 0.5 | 0.5 | PASS | the unchanged 209 blocked term counts the real blocked service |
+| blocked-reason | true | true | PASS | reasons ON_TIME, SMOOTH_DRIVE, BLOCKED_ROUTE |
+| blocked-rating-not-higher | true | true | PASS | 4 vs 5 |
+| blocked-counter | true | true | PASS | 90 s attached to settled rides |
 | completed-day-revenue | 553 | 553 | PASS | the day bucket keeps the settled revenue |
 | completed-month-revenue | 553 | 553 | PASS | the month bucket keeps the settled revenue |
 | completed-day-rides | 1 | 1 | PASS | the day bucket keeps the terminal ride |
@@ -76,7 +127,7 @@ The pre-boarding cancellation refunds everything; the post-boarding cancellation
 | completed-rating-sum | 5 | 5 | PASS | the rating sum is the emitted review |
 | completed-histogram | 1 | 1 | PASS | the 0–5 histogram sums to the review count |
 | economy-clock | "1200s/day, 30 days/month, 60 Hz" | "1200s/day, 30 days/month, 60 Hz" | PASS | the versioned economic clock is the module 22 proposal |
-| comfort-link | true | true | PASS | 5 live samples → 4 139 intervals |
+| comfort-link | true | true | PASS | 15 live samples → 14 139 intervals |
 | history-scans | 0 | 0 | PASS | a live read never rescans the ledger or KPI history |
 | failed-full-refund | 544 | 544 | PASS | FAILED refunds the whole quoted fare |
 | failed-rule | "FAILED_FULL_REFUND" | "FAILED_FULL_REFUND" | PASS | the versioned failure rule is stored |
@@ -100,29 +151,31 @@ The pre-boarding cancellation refunds everything; the post-boarding cancellation
 | replay-status | "DUPLICATE" | "DUPLICATE" | PASS | the explicit replay is a duplicate |
 | reads-no-history-scan | 0 | 0 | PASS | 600 live reads do not rescan history |
 | reads-stable-revenue | 553 | 553 | PASS | reading the KPI does not mutate revenue |
-| pause-no-clock | 110 | 110 | PASS | 600 reads without an authoritative step leave the economic clock unchanged |
+| pause-no-clock | 170 | 170 | PASS | 600 reads without an authoritative step leave the economic clock unchanged |
 | pause-no-revenue | 553 | 553 | PASS | a paused/offline game cannot produce revenue |
 | epoch-index | 2 | 2 | PASS | the session reset starts a new economic epoch |
 | epoch-preserves-revenue | 553 | 553 | PASS | the previous revenue is preserved |
 | epoch-preserves-settlements | 1 | 1 | PASS | the settlement history is not cleared |
 | epoch-preserves-reviews | 1 | 1 | PASS | the review history is not cleared |
-| epoch-start-tick | 111 | 111 | PASS | the new epoch starts at the reset boundary |
+| epoch-start-tick | 171 | 171 | PASS | the new epoch starts at the reset boundary |
 | epoch-adds-next-ride | 2 | 2 | PASS | the next epoch adds on top of the preserved series |
 | epoch-revenue-grows | true | true | PASS | the second ride increases the preserved revenue |
 | epoch-history-scans | 0 | 0 | PASS | the epoch transition does not rewrite or rescan history |
 
 ## Summary
 
-- Checks: 47/47
+- Checks: 63/63
 - Overall: PASS
 
 ## Limits
 
-The report uses the real 032/033/041/057/058/059/060/061/062/063/064/265 contracts and the unchanged
-209 economy. It is not a browser frame, GPU or FPS measurement. The live comfort trace samples the
-authoritative speed/heading/control mode at 10 Hz and does not yet consume 088 artefact-suppression
-windows or 137 blocked seconds (those owners are not wired live in 266); the review therefore uses
-the real comfort term but reports those two incident terms as 0. Persistence/reload of the economy
+The report uses the real 032/033/041/057/058/059/060/061/062/063/064/265 contracts, the real 028
+collision episode, the real 088 artifact filter, the real 137 metric service and the unchanged 209
+economy. It is not a browser frame, GPU or FPS measurement. The live comfort trace samples the
+authoritative speed/heading/control mode at 10 Hz and derives the 139 intervals once at settlement,
+with the 088 suppressed spans the caller supplies. The 137 blocked seconds are the value the real
+metric service accepted for the ride; the live composition also counts the authoritative 058 blocked
+frames when the 137 port is absent, so it never invents a duration. Persistence/reload of the economy
 remains 278. Scenario-reset closes active rides through 265 before the economy can see their terminal
 records, so those rides are not settled; the reset itself starts a new epoch without rewriting the
 preserved history.

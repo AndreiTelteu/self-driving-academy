@@ -750,6 +750,8 @@ export {
 export {
   LIVE_ECONOMY_COMPOSITION_VERSION,
   createLiveEconomyComposition,
+  type LiveEconomyArtifactWindow,
+  type LiveEconomyCollisionFact,
   type LiveEconomyComposition,
   type LiveEconomyCompositionOptions,
   type LiveEconomyCompositionStats,
@@ -757,6 +759,7 @@ export {
   type LiveEconomyObservedVehicle,
   type LiveEconomyStepInput,
   type LiveEconomyStepResult,
+  LIVE_ECONOMY_TELEMETRY_LIMITS,
 } from './live-economy-composition';
 
 export {

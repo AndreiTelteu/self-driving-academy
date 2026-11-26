@@ -6,11 +6,17 @@ import {
   reviewReasonCodes,
   type LiveEconomySnapshot,
 } from '../../src/economy';
+import type { CollisionIncident } from '../../src/vehicles';
 import {
   createLiveEconomyFixture,
   type LiveEconomyFixture,
   type LiveEconomyTarget,
 } from './live-economy-fixture';
+import {
+  measureBlockedSeconds,
+  realArtifactWindow,
+  realCollisionFact,
+} from './live-economy-telemetry';
 
 function read(fixture: LiveEconomyFixture): LiveEconomySnapshot {
   const snapshot = fixture.economy.read();
@@ -328,5 +334,128 @@ test('266 live economy: a session reset starts a new epoch and preserves the his
     assert.equal(afterSecond.totals.settlements, before.totals.settlements + 1);
   } finally {
     fixture.dispose();
+  }
+});
+
+test('266 live economy: a real 028 collision adds COLLISION, lowers the rating and 088 keeps the incident', () => {
+  let collision: CollisionIncident | null = null,
+    collisionRideId = '';
+  const control = createLiveEconomyFixture({ dwellTicks: 24, civilianCount: 20, seed: 262 }),
+    collided = createLiveEconomyFixture({
+      dwellTicks: 24,
+      civilianCount: 20,
+      seed: 262,
+      // The real 088 owner decides the suppressed span; the live economy only applies it.
+      artifactWindows: (ride) =>
+        collision === null || ride.rideId !== collisionRideId
+          ? []
+          : [realArtifactWindow(ride, collision)],
+    });
+  try {
+    control.runTo(60);
+    const controlTarget = control.firstTarget();
+    control.board(controlTarget);
+    control.runTo(control.currentTick() + 60);
+    control.complete(controlTarget);
+    const controlReview = control.economy.economy.review(controlTarget.rideId);
+    assert.ok(controlReview !== undefined);
+
+    collided.runTo(60);
+    const target = collided.firstTarget();
+    collisionRideId = target.rideId;
+    collided.board(target);
+    collided.runTo(collided.currentTick() + 60);
+    const collisionTick = collided.currentTick() + 1;
+    collision = realCollisionFact({
+      vehicleId: target.taxiId,
+      otherEntityId: 'wall:266:collision',
+      tick: collisionTick,
+      impulseNs: 4_400,
+    });
+    collided.collisions.push(collision);
+    collided.step(collisionTick);
+    collided.complete(target);
+
+    const review = collided.economy.economy.review(target.rideId),
+      snapshot = read(collided);
+    assert.ok(review !== undefined);
+    assert.equal(review!.rideId, controlReview!.rideId);
+    assert.equal(review!.evidence.impacts, 1);
+    assert.equal(review!.evidence.peakImpulseNs, 4_400);
+    assert.equal(review!.penalties.incident, 1);
+    assert.ok(review!.reasonCodes.includes('COLLISION'));
+    assert.ok(!review!.reasonCodes.includes('EFFICIENT_DELIVERY'));
+    assert.equal(review!.rating, controlReview!.rating - 1);
+    assert.ok(review!.exposureSeconds < controlReview!.exposureSeconds);
+    assert.ok(review!.controlIntervals < controlReview!.controlIntervals);
+    assert.ok(snapshot.counters.comfortExcludedSamples > 0);
+    assert.equal(snapshot.counters.collisionImpacts, 1);
+    assert.equal(snapshot.counters.blockedSeconds, 0);
+
+    // Re-delivering the same tick and the same incident changes nothing.
+    const beforeDuplicate = read(collided);
+    const duplicate = collided.economy.step({
+      tick: collided.currentTick(),
+      vehicles: [],
+      collisions: [collision!],
+    });
+    assert.equal(duplicate.duplicate, true);
+    assert.equal(
+      read(collided).counters.collisionImpacts,
+      beforeDuplicate.counters.collisionImpacts,
+    );
+    assert.equal(collided.economy.economy.review(target.rideId)?.reviewId, review!.reviewId);
+  } finally {
+    control.dispose();
+    collided.dispose();
+  }
+});
+
+test('266 live economy: real 137 blocked seconds add BLOCKED_ROUTE and the blocked penalty', () => {
+  let measuredBlockedSeconds = 0,
+    blockedTaxiId = '';
+  const control = createLiveEconomyFixture({ dwellTicks: 24, civilianCount: 20, seed: 262 }),
+    blocked = createLiveEconomyFixture({
+      dwellTicks: 24,
+      civilianCount: 20,
+      seed: 262,
+      blockedSeconds: (ride) => (ride.taxiId === blockedTaxiId ? measuredBlockedSeconds : 0),
+    });
+  try {
+    control.runTo(60);
+    const controlTarget = control.firstTarget();
+    control.board(controlTarget);
+    control.runTo(control.currentTick() + 60);
+    control.complete(controlTarget);
+    const controlReview = control.economy.economy.review(controlTarget.rideId);
+    assert.ok(controlReview !== undefined);
+
+    blocked.runTo(60);
+    const target = blocked.firstTarget();
+    blockedTaxiId = target.taxiId;
+    blocked.board(target);
+    blocked.runTo(blocked.currentTick() + 60);
+    measuredBlockedSeconds = measureBlockedSeconds({
+      taxiId: target.taxiId,
+      tick: blocked.currentTick(),
+      blockedSeconds: 90,
+    });
+    assert.equal(measuredBlockedSeconds, 90);
+    blocked.complete(target);
+
+    const review = blocked.economy.economy.review(target.rideId),
+      snapshot = read(blocked);
+    assert.ok(review !== undefined);
+    assert.equal(review!.rideId, controlReview!.rideId);
+    assert.equal(review!.evidence.blockedSeconds, 90);
+    assert.equal(review!.penalties.incident, 0.5);
+    assert.ok(review!.reasonCodes.includes('BLOCKED_ROUTE'));
+    assert.ok(!review!.reasonCodes.includes('EFFICIENT_DELIVERY'));
+    assert.ok(review!.rating <= controlReview!.rating);
+    assert.ok(snapshot.counters.blockedSeconds >= 90);
+    assert.equal(snapshot.counters.collisionImpacts, 0);
+  } finally {
+    control.dispose();
+    blocked.dispose();
   }
 });

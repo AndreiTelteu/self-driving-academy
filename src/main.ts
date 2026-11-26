@@ -207,6 +207,11 @@ const economyTickPort: GameTickPort = {
         controlMode: vehicle.controlMode,
         classId: vehicle.classId,
         headingRad: vehicle.yawRad,
+        // Real 058 blockage of the authoritative frame; the economy counts its seconds only while
+        // the passenger is aboard. The optional 028 collision, 088 window and 137 blocked ports are
+        // wired in the composition and will be supplied by their live owners (272/282); until then
+        // the review keeps those terms at 0 instead of inventing a fact.
+        blocked: vehicle.blocked,
       })),
     });
   },

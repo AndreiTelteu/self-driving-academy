@@ -90,7 +90,8 @@ Generată de \`npm run economy:live:probe\`.
 
 **NOT_RUN** — ${result.reason}
 
-Nu este raportat niciun PASS simulat.
+Nu este raportat niciun PASS simulat. Lanțul real 028/088/137 este probat determinist în
+[report.md](report.md); compunerea de browser a V1 nu are încă owner-ii live 272/282.
 `;
   const run = result.run;
   const checks = run.checks
@@ -117,12 +118,32 @@ iar HUD-ul live a afișat revenue și rating.
 | Comfort samples → intervals | ${run.comfortSamples} → ${run.comfortIntervals} |
 | historyScans before / after panel | ${run.historyScansBeforePanel} / ${run.historyScansAfterPanel} |
 | Economy port | ${run.economyPort} |
+| AUTO fallback for a stuck corner | ${run.autoFallback} |
 
 HUD: \`${run.hudText}\`
+
+| Telemetry counter | Value |
+| --- | ---: |
+| 028 collision impacts | ${run.collisionImpacts} |
+| 137 blocked seconds | ${run.blockedSeconds} |
+| 088 excluded samples | ${run.comfortExcludedSamples} |
+| 088 excluded intervals | ${run.comfortExcludedIntervals} |
 
 Capturi: ${run.screenshots.map((file) => `[${file}](${file})`).join(', ')}.
 
 ${checks}
+
+## Telemetry limits in the live browser
+
+- **028 collision: NOT_RUN** — the live browser composition does not host the 028 collision adapter
+  (Rapier physics, PBI 282), so no real collision can be produced in the live world. The real 028 →
+  088 → 139 → 209 chain is proven deterministically in [report.md](report.md).
+- **088 artifact windows: NOT_RUN** — the live browser composition does not host the 088 artifact
+  filter/telemetry segment owner (PBI 272); the economy port is wired and the report exercises it with
+  the real filter.
+- **137 blocked seconds: NOT_RUN** — the live browser composition does not host the 065/137 blocked
+  interval owner (PBI 272); the economy still counts the authoritative 058 \`blocked\` frames of a
+  passenger ride, and the real 137 value is proven in [report.md](report.md).
 
 Limite: proba folosește tastatura reală și poziția autoritară a compunerii, dar nu înlocuiește un
 playtest uman. Nu măsoară FPS/GPU și nu înlocuiește gate-ul 287. Persistarea economiei după reload
@@ -230,7 +251,8 @@ try {
       const canvas = globalThis.document?.querySelector('canvas');
       if (canvas instanceof globalThis.HTMLCanvasElement) canvas.focus();
     });
-  let actualBackend = null;
+  let actualBackend = null,
+    autoFallback = false;
   await page.goto(url, { waitUntil: 'load' });
   await page.waitForFunction(() => globalThis.__v3Composition?.ready() === true, null, {
     timeout: 180000,
@@ -270,6 +292,26 @@ try {
       }
       await page.waitForTimeout(100);
     }
+  };
+  /**
+   * A stuck manual route is released to the real AUTO actor: the same 058/061 ride continues, but the
+   * actor route drives it. This is a probe fallback for tight corners, never a simulation write.
+   */
+  const releaseToAuto = async (taxiId) => {
+    await page.locator('[data-shell-action="fleet"]').click();
+    await waitUntil(
+      () => globalThis.__v3Composition.fleet().open === true,
+      null,
+      30000,
+      'fleet panel open for release',
+    );
+    await page.locator(`.fleet-selection__list button[data-vehicle-id="${taxiId}"]`).click();
+    const release = page.locator('[data-fleet-action="release"]');
+    if ((await release.count()) > 0) await release.click().catch(() => {});
+    const close = page.locator('[data-fleet-action="close"]');
+    if ((await close.count()) > 0) await close.click().catch(() => {});
+    await focusCanvas();
+    await page.waitForTimeout(500);
   };
   const shot = async (name) => {
     const relative = `screenshots/${name}.png`;
@@ -342,7 +384,8 @@ try {
     let lastProgressAt = Date.now(),
       lastTargetDistance = distance(current.positionM, anchor),
       missingSince = null,
-      lastLogAt = 0;
+      lastLogAt = 0,
+      stuckRecoveries = 0;
     for (;;) {
       if (Date.now() > deadline) throw new Error(`Drive timeout for ${label}`);
       await resumeOverload();
@@ -363,16 +406,19 @@ try {
       }
       let nearest = routeIndex,
         best = Infinity;
-      const searchEnd = Math.min(waypoints.length - 1, routeIndex + 120);
-      for (let candidate = routeIndex; candidate <= searchEnd; candidate += 1) {
+      const searchStart = Math.max(0, routeIndex - 24),
+        searchEnd = Math.min(waypoints.length - 1, routeIndex + 120);
+      for (let candidate = searchStart; candidate <= searchEnd; candidate += 1) {
         const value = distance(waypoints[candidate], position);
         if (value < best) {
           best = value;
           nearest = candidate;
         }
       }
-      routeIndex = Math.max(routeIndex, nearest);
-      const target = waypoints[Math.min(routeIndex + 6, waypoints.length - 1)],
+      // The nearest point may be behind after a tight corner; a shorter lookahead keeps the car on
+      // the authored lane instead of cutting through the next block.
+      routeIndex = nearest;
+      const target = waypoints[Math.min(routeIndex + 3, waypoints.length - 1)],
         desired = Math.atan2(target.x - position.x, target.z - position.z),
         error = normalizeAngle(desired - current.yawRad);
       if (Date.now() - lastLogAt > 2000) {
@@ -430,13 +476,35 @@ try {
         lastProgressAt = Date.now();
         lastTargetDistance = targetDistance;
       } else if (targetDistance > 10 && Date.now() - lastProgressAt > 4000) {
+        if (stuckRecoveries >= 2) {
+          // Two straight reversals did not free the body: continue the same real ride in AUTO.
+          await releaseKeys();
+          await releaseToAuto(taxiId);
+          autoFallback = true;
+          return;
+        }
+        stuckRecoveries += 1;
         await keyUp('KeyW');
         await keyDown('KeyS');
-        await page.waitForTimeout(900);
+        // Reverse with steering so a corner wedge is not repeated in a straight line.
+        await keyDown(error >= 0 ? 'KeyA' : 'KeyD');
+        await page.waitForTimeout(1400);
         await keyUp('KeyS');
+        await keyUp('KeyA');
+        await keyUp('KeyD');
         lastProgressAt = Date.now();
         current = await vehicle(taxiId);
-        if (current !== null) lastTargetDistance = distance(current.positionM, anchor);
+        if (current !== null) {
+          lastTargetDistance = distance(current.positionM, anchor);
+          let bestAfter = Infinity;
+          for (let candidate = 0; candidate < waypoints.length; candidate += 1) {
+            const value = distance(waypoints[candidate], current.positionM);
+            if (value < bestAfter) {
+              bestAfter = value;
+              routeIndex = candidate;
+            }
+          }
+        }
       }
       await page.waitForTimeout(70);
     }
@@ -662,7 +730,26 @@ try {
       hudText.includes('Rating:'),
     `${firstEconomy.hudView?.empty} · ${hudText.replace(/\s+/g, ' ').slice(0, 180)}`,
   );
+  check(
+    'telemetry-counters',
+    readState.counters.collisionImpacts === 0 &&
+      readState.counters.blockedSeconds === 0 &&
+      readState.counters.comfortExcludedSamples === 0 &&
+      readState.counters.comfortExcludedIntervals === 0,
+    `028 ${readState.counters.collisionImpacts}, 137 ${readState.counters.blockedSeconds}, 088 ${readState.counters.comfortExcludedSamples}/${readState.counters.comfortExcludedIntervals} (no live 028/088/137 owner in the V1 browser composition)`,
+  );
   screenshotsTaken.push(await shot('01-live-economy'));
+
+  // Pause the authoritative shell before the panel read: AUTO traffic may settle AI rides while the
+  // panel is open, and those real settlements must not be mistaken for a panel write.
+  await page.locator('[data-shell-action="pause"]').click();
+  await waitUntil(
+    () => globalThis.__v3Composition.lifecycle().kind === 'PAUSED',
+    null,
+    30000,
+    'shell pause before the panel',
+  );
+  const pausedBefore = (await economy()).read;
 
   await page.locator('[data-shell-action="rides"]').click();
   await waitUntil(
@@ -680,17 +767,24 @@ try {
   );
   check(
     'panel-revenue-stable',
-    panelRead.totals.netRevenueMinorUnits === hudBefore.revenue,
-    `${panelRead.totals.netRevenueMinorUnits} vs ${hudBefore.revenue}`,
+    panelRead.totals.netRevenueMinorUnits === pausedBefore.totals.netRevenueMinorUnits,
+    `${panelRead.totals.netRevenueMinorUnits} vs ${pausedBefore.totals.netRevenueMinorUnits} (paused baseline)`,
   );
   check(
     'panel-settlements-stable',
-    panelRead.totals.settlements === hudBefore.settlements &&
-      panelRead.counters.reviews === hudBefore.reviews,
-    `${panelRead.totals.settlements}/${panelRead.counters.reviews}`,
+    panelRead.totals.settlements === pausedBefore.totals.settlements &&
+      panelRead.counters.reviews === pausedBefore.counters.reviews,
+    `${panelRead.totals.settlements}/${panelRead.counters.reviews} vs ${pausedBefore.totals.settlements}/${pausedBefore.counters.reviews}`,
   );
   screenshotsTaken.push(await shot('02-economy-with-rides-panel'));
   await page.locator('[data-live-action="close"]').click();
+  await page.locator('[data-shell-action="resume"]').click();
+  await waitUntil(
+    () => globalThis.__v3Composition.lifecycle().kind === 'PLAYING',
+    null,
+    30000,
+    'shell resume after the panel',
+  );
   await focusCanvas();
 
   const shellState = await shell();
@@ -731,6 +825,11 @@ try {
     reasons: targetReview?.reasonCodes ?? [],
     comfortSamples: readState.counters.comfortSamples,
     comfortIntervals: readState.counters.comfortIntervals,
+    collisionImpacts: readState.counters.collisionImpacts,
+    blockedSeconds: readState.counters.blockedSeconds,
+    comfortExcludedSamples: readState.counters.comfortExcludedSamples,
+    comfortExcludedIntervals: readState.counters.comfortExcludedIntervals,
+    autoFallback,
     historyScansBeforePanel: hudBefore.historyScans,
     historyScansAfterPanel: panelRead.historyScans,
     economyPort: firstEconomy.port,
