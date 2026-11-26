@@ -137,6 +137,8 @@ Nu sunt montate: LEARNING, curse, pasageri, flota selectabilă, KPI, misiuni, XP
 
 **PBI:** [262](../PBI/README.md) · **Dependențe:** 260.
 
+**Stare:** Done la 26 noiembrie 2026. Taxiurile AI sunt simulate, dar rămân nepreluabile până la 263/284.
+
 ### 263 — Selectarea oricărui taxi sau civil, camera și un singur scaun PLAYER
 
 **Ce lipsește:** Nu există listă/hartă de flotă; mașinile AI refuză intrarea, iar în lume doar taxiul parcat și civilul static sunt preluabile.

@@ -1,0 +1,12 @@
+{
+  "id": "262",
+  "criteriaSatisfied": true,
+  "result": "The live composition now creates 24 taxis and 32 civilians as real 058 actors with stable 057 identities, 023 classes, per-tick registry state, deterministic spawn and the common city profile. All actors remain simulated off-camera; a new taxi and civilian read the active profile version. The 70-vehicle 058 cost p95 is 5.8229 ms against the provisional 8 ms budget. Dispose returns actors, controllers, context vehicles and registry ownership to zero.",
+  "limitations": "Browser probe is NOT_RUN because Playwright is not available in the implementation worktree and PLAYWRIGHT_MODULE is unset; evidence is structural and real-composition Node, not browser screenshots. The cost probe covers the 058 traffic subsystem, not the full authoritative tick or hardware FPS. Taxi AI actors remain non-enterable until route reconciliation in 263/284. main.ts was not edited; createAmbientTraffic already feeds the 56 actors, while explicit styleSource/refreshStyle and decor-obstacle wiring remain integration points for 263/273/285.",
+  "checks": [
+    ["node", "--import", "./scripts/register-typescript.mjs", "--test", "tests/fleet/live-fleet.test.ts", "tests/app/ambient-traffic.test.ts"],
+    ["npm", "run", "fleet:live", "--", "--check"],
+    ["npm", "run", "docs:check", "--", "--check"],
+    ["npm", "run", "typecheck"]
+  ]
+}
