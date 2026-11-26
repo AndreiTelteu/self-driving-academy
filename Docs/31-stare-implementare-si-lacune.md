@@ -118,6 +118,8 @@ Nu sunt montate: LEARNING, curse, pasageri, flota selectabilă, KPI, misiuni, XP
 
 **PBI:** [261](../PBI/README.md) · **Dependențe:** 260.
 
+**Stare:** Done la 26 noiembrie 2026. Checkpointul live este în memorie; adaptorul durabil și rehidratarea fizică rămân la 278/271.
+
 ### 262 — Flota live: 20–30 taxiuri și 20–40 civili, nu doar date în registry
 
 **Ce lipsește:** Registry-ul creează 20 de taxiuri doar ca date; în lume există un taxi și 24 de civili AI. Nu există flotă de taxiuri simulată.

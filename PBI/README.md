@@ -15,9 +15,9 @@
 | Pietoni și pericole | V2 | 1 | 0 | 0 / 1 | `░░░░░░░░░░` 0% |
 | Progres | V1 | 1 | 0 | 0 / 1 | `░░░░░░░░░░` 0% |
 | Release | V4 | 1 | 0 | 0 / 1 | `░░░░░░░░░░` 0% |
-| Sesiuni | V1 | 0 | 1 | 0 / 1 | `░░░░░░░░░░` 0% |
+| Sesiuni | Completed | 0 | 0 | 1 / 1 | `██████████` 100% |
 | Trafic | V1 | 2 | 0 | 0 / 2 | `░░░░░░░░░░` 0% |
-| Total | - | 25 | 2 | 2 / 29 | `░░░░░░░░░░` 7% |
+| Total | - | 25 | 1 | 3 / 29 | `█░░░░░░░░░` 10% |
 <!-- loop-pbi:progress:end -->
 
 # Backlog Kanban Self Driving Academy
