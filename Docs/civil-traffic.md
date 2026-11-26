@@ -32,6 +32,14 @@ traffic.dispose();
 
 `vehicles` este lista opțională de observații externe (`vehicleId`, `driverKind`, poziție, heading, viteză, rază) folosită pentru taxiurile și civilii care nu aparțin acestui modul. Ea intră în același cadru 044, deci un taxi aflat în față devine lider semantic și produce frânare prin 048/047. Un actor civil nu poate apărea și în listă.
 
+## Taxiuri și flota live (PBI 262)
+
+Modulul acceptă opțional `driverKinds: ['TAXI', 'CIVILIAN']` și `spawnLanesByKind`/`spawnOffsetsMByKind`. Taxiurile sunt actori ai aceluiași contract: primesc rute 041 cu acces `TAXI`, intră în același cadru 044, folosesc aceeași clasă mecanică 023 și aceeași buclă 047/048. Snapshot-ul publică `driverKind` real, `route.access`, clasa și autoritatea; nu există un al doilea model de simulare pentru taxiuri. Implicit, fără opțiuni, comportamentul 058 rămâne exact civilii (testele și raportul comis nu se schimbă).
+
+`contextRefresh: 'DECISION_PERIOD'` folosește cadența reală de decizii 10 Hz din Docs/25, păstrând controller-ul la 60 Hz. Liderul fizic este recalculat la fiecare tick din pozițiile curente, deci gap-ul 048 rămâne actual chiar între decizii. `'EVERY_TICK'` rămâne implicit și păstrează comportamentul istoric 058.
+
+Flota live folosește `'DECISION_PERIOD'`; costul măsurat pentru 70 de vehicule este raportat în [Evidence/262-live-fleet/cost.json](Evidence/262-live-fleet/cost.json).
+
 ## Rute și determinism
 
 La creare, civilii sunt luați din `registry.list()` filtrat cu `driverKind === 'CIVILIAN'`, în ordinea stabilă a ID-urilor. Pentru fiecare vehicul:

@@ -1,11 +1,12 @@
 /**
- * PBI 256 — traficul AI vizibil în jocul real.
+ * PBI 262 — flota live din compunerea jucabilă.
  *
- * PBI 058 livrează simularea civilă (rute 041, context 044, following 048, control 047), dar
- * compunerea jucabilă 236 nu o instanția. Modulul acesta este composition root-ul dintre hartă și
- * compunere: creează un registry 057 cu populația minimă impusă de contract, un stil comun al
- * orașului din valorile implicite 092 și traficul 058. Nu inventează o a doua fizică și nu citește
- * ceasul de perete; aceeași hartă, seed și populație produc aceleași poziții.
+ * PBI 256 a legat traficul civil 058 de compunerea V3 și de harta reală, dar taxiurile existau doar
+ * ca intrări în registry. Modulul acesta este composition root-ul live: creează populația 057
+ * (taxiuri plus civili), le dă fiecăruia o rută reală 041 și aceleași legi 044/047/048, și expune
+ * un singur profil comun al orașului, citit la creare și la orice vehicul nou. Prezentarea,
+ * selecția și vizibilitatea nu sunt intrări: simularea continuă identic pentru vehiculele din
+ * afara ferestrei de observare.
  *
  * Traficul este creat proaspăt pentru fiecare backend, pentru ca recuperarea GPU să nu refolosească
  * un `lastTick` vechi al contractului 058.
@@ -14,49 +15,92 @@ import {
   FLEET_LIMITS,
   createCivilTraffic,
   createFleetRegistry,
+  type CityProfileSource,
+  type CityStyleSource,
+  type CivilActorSnapshot,
+  type CivilRouteSnapshot,
   type CivilTraffic,
+  type CivilTrafficReport,
+  type FleetDriverKind,
+  type FleetPopulationReport,
   type FleetRegistry,
 } from '../fleet';
 import {
   parameterDefinitions,
+  parseDrivingProfile,
   parsePublishableDrivingProfile,
   type DrivingProfile,
 } from '../profiles';
 import type { ContractContext } from '../sessions';
-import { parseRoadMap, type LaneGraph } from '../world';
+import { parseRoadMap, type LaneGraph, type RoadAccess, type RoadMap } from '../world';
 
-export const AMBIENT_TRAFFIC_VERSION = '256-ambient-traffic-v1' as const;
+export const AMBIENT_TRAFFIC_VERSION = '262-live-fleet-v1' as const;
 
 export const AMBIENT_TRAFFIC_POLICY = Object.freeze({
   contract: AMBIENT_TRAFFIC_VERSION,
-  /** Populația minimă 057: 20 de taxiuri în registry, deși compunerea conduce doar civilii. */
-  taxis: FLEET_LIMITS.taxisMinimum,
+  /** Populația minimă 057: 20 de taxiuri; 24 este fixture-ul normal din Docs/25. */
+  taxis: 24,
   /** Destul de mulți pentru un oraș viu, sub limita de 40 a lui 058. */
-  civilians: 24,
-  /** Primele mașini pornesc pe benzile cu originea cea mai apropiată de jucător. */
-  nearSpawnLanes: 10,
+  civilians: 32,
+  /** Primele mașini din fiecare categorie pornesc pe benzile apropiate de jucător. */
+  nearSpawnLanesPerKind: 5,
   /** Doar benzile care pornesc în acest rayon sunt preferate; restul populației rămâne împrăștiată. */
   nearSpawnRadiusM: 80,
   /** Mașinile preferate pornesc deja avansate pe rută, ca să fie vizibile în fața jucătorului. */
   nearSpawnOffsetM: 20,
-  /** Nicio mașină AI nu pornește peste jucător sau peste vehiculele statice. */
+  /** Nicio mașină AI nu pornește peste jucător, vehiculele statice sau decor. */
   spawnClearanceM: 6,
   /** Încercări deterministe de seed înainte de a accepta cel mai bun candidat. */
   spawnAttempts: 12,
+  /** Fereastra folosită de probe pentru „în afara camerei”; nu este citită de simulare. */
+  outsideWindowM: 80,
 });
+
+export interface AmbientAvoidPosition {
+  readonly x: number;
+  readonly z: number;
+  /** Raza ocupată de obstacol; pozițiile fără rază sunt tratate ca puncte. */
+  readonly radiusM?: number;
+}
 
 export interface AmbientTrafficOptions {
   readonly map: unknown;
   readonly graph: LaneGraph;
   readonly context: ContractContext;
   readonly seed?: number;
+  readonly taxiCount?: number;
   readonly civilianCount?: number;
-  /** Poziții care nu trebuie ocupate la spawn (jucătorul și vehiculele deja prezente). */
-  readonly avoid?: readonly Readonly<{ x: number; z: number }>[];
+  /** Poziții care nu trebuie ocupate la spawn (jucătorul, vehiculele deja prezente, decor). */
+  readonly avoid?: readonly AmbientAvoidPosition[];
   /** Punctul de interes pentru primele spawn-uri vizibile; de regulă poziția jucătorului. */
   readonly focus?: Readonly<{ x: number; z: number }>;
   /** Stilul comun; implicit valorile implicite ale catalogului 092. */
   readonly style?: DrivingProfile;
+  /** Sursa activă a orașului; dacă există, vehiculele noi citesc versiunea curentă. */
+  readonly styleSource?: CityStyleSource;
+}
+
+export interface AmbientAuthorityCounts {
+  readonly AUTO: number;
+  readonly MANUAL: number;
+  readonly LEARNING: number;
+}
+
+export interface AmbientFleetReport {
+  readonly version: typeof AMBIENT_TRAFFIC_VERSION;
+  readonly seed: number;
+  readonly counts: Readonly<{ vehicles: number; taxis: number; civilians: number }>;
+  readonly population: FleetPopulationReport;
+  readonly routes: Readonly<{
+    ready: number;
+    fromPlanner: number;
+    blocked: number;
+    replans: number;
+    byKind: Readonly<Record<FleetDriverKind, number>>;
+  }>;
+  readonly byAuthority: AmbientAuthorityCounts;
+  readonly style: Readonly<{ profileId: string; versionId: string }>;
+  readonly traffic: CivilTrafficReport;
 }
 
 export interface AmbientTraffic {
@@ -65,7 +109,16 @@ export interface AmbientTraffic {
   readonly registry: FleetRegistry;
   readonly style: DrivingProfile;
   readonly seed: number;
+  readonly taxiCount: number;
   readonly civilianCount: number;
+  /** Versiunea activă a profilului, așa cum o folosește acum traficul. */
+  styleReference(): Readonly<{ profileId: string; versionId: string }>;
+  /** Propagarea explicită cerută de composition root după o activare 110. */
+  refreshStyle(): Readonly<{ profileId: string; versionId: string }>;
+  list(): readonly CivilActorSnapshot[];
+  get(vehicleId: string): CivilActorSnapshot | undefined;
+  route(vehicleId: string): CivilRouteSnapshot | undefined;
+  report(): AmbientFleetReport;
   dispose(): void;
 }
 
@@ -76,15 +129,29 @@ interface PreparedTraffic {
   readonly clearanceM: number;
 }
 
+interface SpawnPlan {
+  readonly lanesByKind: Readonly<Partial<Record<FleetDriverKind, readonly string[]>>>;
+  readonly offsetsByKind: Readonly<Partial<Record<FleetDriverKind, readonly number[]>>>;
+}
+
 interface ReadTrafficOptions {
-  readonly map: unknown;
+  readonly map: RoadMap;
   readonly graph: LaneGraph;
   readonly context: ContractContext;
   readonly seed: number;
+  readonly taxiCount: number;
   readonly civilianCount: number;
-  readonly avoid: readonly Readonly<{ x: number; z: number }>[];
+  readonly avoid: readonly AmbientAvoidPosition[];
   readonly focus: Readonly<{ x: number; z: number }> | null;
-  readonly style: DrivingProfile | undefined;
+  readonly style: DrivingProfile | null;
+  readonly styleSource: CityStyleSource | null;
+  readonly profileSource: CityProfileSource | null;
+}
+
+function readCount(value: unknown, minimum: number, maximum: number, label: string): number {
+  if (!Number.isSafeInteger(value) || (value as number) < minimum || (value as number) > maximum)
+    throw new RangeError(`${label} trebuie să respecte limitele 057.`);
+  return value as number;
 }
 
 function readOptions(value: unknown): ReadTrafficOptions {
@@ -95,34 +162,66 @@ function readOptions(value: unknown): ReadTrafficOptions {
   if (data.graph === undefined || typeof data.graph.getLane !== 'function')
     throw new Error('Traficul ambiental cere graful 033.');
   if (data.context === undefined) throw new Error('Traficul ambiental cere contextul sesiunii.');
-  const seed = data.seed ?? 256;
+  const seed = data.seed ?? 262;
   if (!Number.isSafeInteger(seed) || seed < 0 || seed > 0xffff_ffff)
     throw new RangeError('Seed-ul traficului ambiental trebuie să fie uint32.');
-  const civilianCount = data.civilianCount ?? AMBIENT_TRAFFIC_POLICY.civilians;
+  const taxiCount = readCount(
+    data.taxiCount ?? AMBIENT_TRAFFIC_POLICY.taxis,
+    FLEET_LIMITS.taxisMinimum,
+    FLEET_LIMITS.taxisMaximum,
+    'Numărul de taxiuri',
+  );
+  const civilianCount = readCount(
+    data.civilianCount ?? AMBIENT_TRAFFIC_POLICY.civilians,
+    FLEET_LIMITS.civiliansMinimum,
+    FLEET_LIMITS.civiliansMaximum,
+    'Populația civilă',
+  );
+  if (data.style !== undefined && data.styleSource !== undefined)
+    throw new Error('Traficul ambiental acceptă un singur profil comun.');
+  const style = data.style === undefined ? null : parseDrivingProfile(data.style);
+  const styleSource = data.styleSource ?? null;
   if (
-    !Number.isSafeInteger(civilianCount) ||
-    civilianCount < FLEET_LIMITS.civiliansMinimum ||
-    civilianCount > FLEET_LIMITS.civiliansMaximum
+    styleSource !== null &&
+    (typeof styleSource !== 'object' || typeof styleSource.activeStyle !== 'function')
   )
-    throw new RangeError('Populația civilă trebuie să respecte limitele 057.');
+    throw new Error('Sursa stilului comun al orașului este invalidă.');
+  const avoid: AmbientAvoidPosition[] = [];
   for (const position of data.avoid ?? []) {
     if (!Number.isFinite(position.x) || !Number.isFinite(position.z))
       throw new RangeError('Poziția de evitat nu este finită.');
+    const radiusM = position.radiusM ?? 0;
+    if (!Number.isFinite(radiusM) || radiusM < 0 || radiusM > 20)
+      throw new RangeError('Raza poziției de evitat este invalidă.');
+    avoid.push(Object.freeze({ x: position.x, z: position.z, radiusM }));
   }
   if (
     data.focus !== undefined &&
     (!Number.isFinite(data.focus.x) || !Number.isFinite(data.focus.z))
   )
     throw new RangeError('Punctul de interes al traficului nu este finit.');
+  const map = parseRoadMap(data.map);
+  const profileSource: CityProfileSource | null =
+    styleSource === null
+      ? null
+      : {
+          activeProfile: () => {
+            const active = parseDrivingProfile(styleSource.activeStyle());
+            return { profileId: active.profileId, versionId: active.versionId };
+          },
+        };
   return {
-    map: data.map,
+    map,
     graph: data.graph,
     context: data.context,
     seed,
+    taxiCount,
     civilianCount,
-    avoid: data.avoid ?? [],
+    avoid: Object.freeze(avoid),
     focus: data.focus === undefined ? null : { x: data.focus.x, z: data.focus.z },
-    style: data.style,
+    style,
+    styleSource,
+    profileSource,
   };
 }
 
@@ -164,6 +263,7 @@ export function createCityStyleProfile(
 function fleetConfiguration(
   context: ContractContext,
   seed: number,
+  taxiCount: number,
   civilianCount: number,
   style: DrivingProfile,
 ): Record<string, unknown> {
@@ -175,88 +275,122 @@ function fleetConfiguration(
     scenarioId: 'v3-composition-city',
     seed,
     namespace: 'v3:city:fleet',
-    taxiCount: AMBIENT_TRAFFIC_POLICY.taxis,
+    taxiCount,
     civilianCount,
     profile: { profileId: style.profileId, versionId: style.versionId },
   };
 }
 
 /**
- * Benzile cu originea cea mai apropiată de punctul de interes. Selecția măsoară primul punct al
- * path-ului direcționat, nu centrul benzii; `nearSpawnOffsetM` avansează apoi actorul pe aceeași
- * rută, ca să fie vizibil în fața jucătorului. Sortarea după ID face selecția stabilă la seed-uri
- * egale.
+ * Benzile cu originea cea mai apropiată de punctul de interes, pentru o singură clasă de acces.
+ * Selecția măsoară primul punct al path-ului direcționat, nu centrul benzii; offsetul avansează apoi
+ * actorul pe aceeași rută. Benzile deja folosite de cealaltă categorie sunt excluse, ca un taxi și un
+ * civil să nu pornească suprapuși.
  */
-function preferredSpawnLanes(
-  mapInput: unknown,
+function nearestPreferredLane(
+  map: RoadMap,
   graph: LaneGraph,
   focus: Readonly<{ x: number; z: number }> | null,
-  maximum: number,
-): readonly string[] {
-  if (focus === null) return Object.freeze([]);
-  const map = parseRoadMap(mapInput);
-  const candidates: { laneId: string; distanceM: number }[] = [];
+  access: RoadAccess,
+  excluded: ReadonlySet<string>,
+): string | null {
+  if (focus === null) return null;
+  let best: { laneId: string; distanceM: number } | null = null;
   for (const lane of map.lanes) {
-    if (!lane.access.includes('CIVIL')) continue;
+    if (!lane.access.includes(access) || excluded.has(lane.id)) continue;
     const path = graph.getDirectedPath(lane.id);
     if (path === null || path.points.length === 0) continue;
     const start = path.points[0]!;
-    candidates.push({
-      laneId: lane.id,
-      distanceM: Math.hypot(start.x - focus.x, start.z - focus.z),
-    });
+    const distanceM = Math.hypot(start.x - focus.x, start.z - focus.z);
+    if (distanceM > AMBIENT_TRAFFIC_POLICY.nearSpawnRadiusM) continue;
+    if (
+      best === null ||
+      distanceM < best.distanceM ||
+      (distanceM === best.distanceM && lane.id < best.laneId)
+    )
+      best = { laneId: lane.id, distanceM };
   }
-  candidates.sort(
-    (left, right) =>
-      left.distanceM - right.distanceM ||
-      (left.laneId < right.laneId ? -1 : left.laneId > right.laneId ? 1 : 0),
-  );
-  return Object.freeze(
-    candidates
-      .filter((candidate) => candidate.distanceM <= AMBIENT_TRAFFIC_POLICY.nearSpawnRadiusM)
-      .slice(0, maximum)
-      .map((candidate) => candidate.laneId),
+  return best?.laneId ?? null;
+}
+
+function spawnPlan(options: ReadTrafficOptions): SpawnPlan {
+  const used = new Set<string>();
+  const lanesByKind: Partial<Record<FleetDriverKind, readonly string[]>> = {};
+  const offsetsByKind: Partial<Record<FleetDriverKind, readonly number[]>> = {};
+  const lanes: Record<FleetDriverKind, string[]> = { TAXI: [], CIVILIAN: [] };
+  // Alternate between kinds so the two nearest lanes do not both go to the first kind.
+  for (let round = 0; round < AMBIENT_TRAFFIC_POLICY.nearSpawnLanesPerKind; round += 1)
+    for (const kind of ['TAXI', 'CIVILIAN'] as const) {
+      if (lanes[kind].length >= AMBIENT_TRAFFIC_POLICY.nearSpawnLanesPerKind) continue;
+      const laneId = nearestPreferredLane(
+        options.map,
+        options.graph,
+        options.focus,
+        kind === 'TAXI' ? 'TAXI' : 'CIVIL',
+        used,
+      );
+      if (laneId === null) continue;
+      used.add(laneId);
+      lanes[kind].push(laneId);
+    }
+  for (const kind of ['TAXI', 'CIVILIAN'] as const) {
+    lanesByKind[kind] = Object.freeze(lanes[kind]);
+    offsetsByKind[kind] = Object.freeze(
+      lanes[kind].map(() => AMBIENT_TRAFFIC_POLICY.nearSpawnOffsetM),
+    );
+  }
+  return { lanesByKind: Object.freeze(lanesByKind), offsetsByKind: Object.freeze(offsetsByKind) };
+}
+
+function distanceToAvoid(
+  actor: Readonly<{ positionM: Readonly<{ x: number; z: number }> }>,
+  position: AmbientAvoidPosition,
+): number {
+  return (
+    Math.hypot(actor.positionM.x - position.x, actor.positionM.z - position.z) -
+    (position.radiusM ?? 0)
   );
 }
 
 function minimumClearance(
-  traffic: CivilTraffic,
-  avoid: readonly Readonly<{ x: number; z: number }>[],
+  actors: readonly CivilActorSnapshot[],
+  avoid: readonly AmbientAvoidPosition[],
 ): number {
   if (avoid.length === 0) return Number.POSITIVE_INFINITY;
   let best = Number.POSITIVE_INFINITY;
-  for (const actor of traffic.list())
-    for (const position of avoid)
-      best = Math.min(
-        best,
-        Math.hypot(actor.positionM.x - position.x, actor.positionM.z - position.z),
-      );
+  for (const actor of actors)
+    for (const position of avoid) best = Math.min(best, distanceToAvoid(actor, position));
   return best;
 }
 
 function prepare(
-  options: ReturnType<typeof readOptions>,
+  options: ReadTrafficOptions,
   seed: number,
   style: DrivingProfile,
-  spawnLanes: readonly string[],
-  spawnOffsetsM: readonly number[],
+  plan: SpawnPlan,
 ): PreparedTraffic {
   const registry = createFleetRegistry(
-    fleetConfiguration(options.context, seed, options.civilianCount, style),
+    fleetConfiguration(options.context, seed, options.taxiCount, options.civilianCount, style),
+    options.profileSource === null ? {} : { profileSource: options.profileSource },
   );
   try {
     const traffic = createCivilTraffic({
       registry,
       map: options.map,
       graph: options.graph,
-      style,
+      driverKinds: ['TAXI', 'CIVILIAN'],
+      contextRefresh: 'DECISION_PERIOD',
       seed,
-      spawnLanes,
-      spawnOffsetsM,
+      spawnLanesByKind: plan.lanesByKind,
+      spawnOffsetsMByKind: plan.offsetsByKind,
+      ...(options.styleSource === null ? { style } : { styleSource: options.styleSource }),
     });
     const actors = traffic.list();
-    if (actors.length !== options.civilianCount)
+    if (actors.length !== options.taxiCount + options.civilianCount)
       throw new Error('Traficul ambiental nu a creat populația cerută.');
+    const taxis = actors.filter((actor) => actor.driverKind === 'TAXI').length;
+    if (taxis !== options.taxiCount)
+      throw new Error(`Traficul ambiental a creat ${taxis} taxiuri, nu ${options.taxiCount}.`);
     for (const actor of actors) {
       if (actor.route.status !== 'READY' || actor.route.path.length === 0)
         throw new Error(`Ruta AI ${actor.vehicleId} nu este READY.`);
@@ -265,7 +399,7 @@ function prepare(
       registry,
       traffic,
       seed,
-      clearanceM: minimumClearance(traffic, options.avoid ?? []),
+      clearanceM: minimumClearance(actors, options.avoid),
     };
   } catch (error) {
     registry.dispose();
@@ -275,23 +409,21 @@ function prepare(
 
 export function createAmbientTraffic(options: unknown): AmbientTraffic {
   const read = readOptions(options);
-  const style = read.style ?? createCityStyleProfile();
-  const spawnLanes = preferredSpawnLanes(
-    read.map,
-    read.graph,
-    read.focus,
-    Math.min(AMBIENT_TRAFFIC_POLICY.nearSpawnLanes, read.civilianCount),
-  );
-  const spawnOffsetsM = Object.freeze(
-    spawnLanes.map(() => AMBIENT_TRAFFIC_POLICY.nearSpawnOffsetM),
-  );
+  const style = read.style ?? read.styleSource?.activeStyle() ?? createCityStyleProfile();
+  if (
+    read.styleSource !== null &&
+    read.profileSource !== null &&
+    style.profileId !== read.profileSource.activeProfile().profileId
+  )
+    throw new Error('Sursa stilului comun nu respectă identitatea profilului.');
   let best: PreparedTraffic | null = null;
   let lastError: unknown = null;
+  const plan = spawnPlan(read);
   for (let attempt = 0; attempt < AMBIENT_TRAFFIC_POLICY.spawnAttempts; attempt += 1) {
     const seed = (read.seed + attempt) >>> 0;
     let candidate: PreparedTraffic;
     try {
-      candidate = prepare(read, seed, style, spawnLanes, spawnOffsetsM);
+      candidate = prepare(read, seed, style, plan);
     } catch (error) {
       lastError = error;
       continue;
@@ -324,7 +456,41 @@ export function createAmbientTraffic(options: unknown): AmbientTraffic {
     registry: prepared.registry,
     style,
     seed: prepared.seed,
+    taxiCount: read.taxiCount,
     civilianCount: read.civilianCount,
+    styleReference: () => prepared.traffic.style,
+    refreshStyle: () => prepared.traffic.refreshStyle(),
+    list: () => prepared.traffic.list(),
+    get: (vehicleId: string) => prepared.traffic.get(vehicleId),
+    route: (vehicleId: string) => prepared.traffic.get(vehicleId)?.route,
+    report(): AmbientFleetReport {
+      const actors = prepared.traffic.list();
+      const byAuthority = { AUTO: 0, MANUAL: 0, LEARNING: 0 };
+      const byKind: Record<FleetDriverKind, number> = { TAXI: 0, CIVILIAN: 0 };
+      let blocked = 0;
+      for (const actor of actors) {
+        byAuthority[actor.authority] += 1;
+        byKind[actor.driverKind] += 1;
+        if (actor.blocked) blocked += 1;
+      }
+      const traffic = prepared.traffic.report();
+      return Object.freeze({
+        version: AMBIENT_TRAFFIC_VERSION,
+        seed: prepared.seed,
+        counts: prepared.registry.counts(),
+        population: prepared.registry.report(),
+        routes: Object.freeze({
+          ready: actors.filter((actor) => actor.route.status === 'READY').length,
+          fromPlanner: traffic.routesFromPlanner,
+          blocked,
+          replans: traffic.replans,
+          byKind: Object.freeze(byKind),
+        }),
+        byAuthority: Object.freeze(byAuthority),
+        style: prepared.traffic.style,
+        traffic,
+      });
+    },
     dispose(): void {
       if (disposed) return;
       disposed = true;

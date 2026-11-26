@@ -1,24 +1,24 @@
-# Trafic AI vizibil în compunerea de browser (PBI 256)
+# Trafic AI vizibil în compunerea de browser (PBI 256, extins de 262)
 
-Status: implementat și verificat în browser real (WebGL2/SwiftShader) pe 25 noiembrie 2026.
-Contractul de simulare rămâne 058; modulul nou este numai composition root-ul dintre harta 032,
-registry-ul 057 și compunerea jucabilă 236.
+Status: implementat și verificat în browser real (WebGL2/SwiftShader) pe 25 noiembrie 2026;
+PBI 262 a extins compunerea la flota live de taxiuri. Contractul de simulare rămâne 058; modulul
+nou este numai composition root-ul dintre harta 032, registry-ul 057 și compunerea jucabilă 236.
 
 Până la acest PBI, `src/main.ts` afișa doar taxiul parcat și un singur civil static. Contractul
-[traficului civil 058](civil-traffic.md) exista și era testat, dar nu era instanțiat de joc. Acum
-`createAmbientTraffic` creează **24 de mașini conduse de AI** pe lângă taxi, iar compunerea le
-publică în același `CompositionFrame` de 60 Hz folosit de personaj, cameră, coliziuni, HUD și
-renderer.
+[traficului civil 058](civil-traffic.md) exista și era testat, dar nu era instanțiat de joc. PBI 256
+a adus primii 24 de civili AI; PBI 262 duce în lume **24 de taxiuri și 32 de civili** ca actori
+reali, fiecare cu ID, clasă, rută și stare proprie, iar compunerea le publică în același
+`CompositionFrame` de 60 Hz folosit de personaj, cameră, coliziuni, HUD și renderer.
 
 ## Compoziție
 
 ```text
 createCompositionWorld()  →  map 032 + graph 033 + layout 042
         │
-        ├─ createAmbientTraffic({ map, graph, context, seed, focus, avoid })
-        │     ├─ createFleetRegistry (20 taxiuri + 24 civili; 057 cere minim 20 taxiuri)
-        │     ├─ createCityStyleProfile (valorile implicite 092, toate BASE)
-        │     └─ createCivilTraffic (rute 041, context 044, following 048, control 047)
+        ├─ createAmbientTraffic({ map, graph, context, seed, focus, avoid, styleSource? })
+        │     ├─ createFleetRegistry (24 taxiuri + 32 civili; limitele 057)
+        │     ├─ createCityStyleProfile (valorile implicite 092, toate BASE) sau sursa activă
+        │     └─ createCivilTraffic (driverKinds TAXI+CIVILIAN, rute 041, context 044, 047/048)
         │
         └─ createV3Composition({ ..., traffic })
               ├─ step: 058 înaintea arbitrajului de input
@@ -27,11 +27,18 @@ createCompositionWorld()  →  map 032 + graph 033 + layout 042
 ```
 
 `createAmbientTraffic` alege determinist primele benzi după distanța originii lor față de
-`focus` (poziția jucătorului) și le avansează 20 m pe rută (`spawnOffsetsM`), astfel încât cel puțin
-o mașină AI să fie deja în fața jucătorului. Restul populației folosește căutarea de origine a
-contractului 058. Benzile și offseturile preferate sunt parametri opționali ai lui 058
-(`spawnLanes`/`spawnOffsetsM`), nu un al doilea router: ruta rămâne întotdeauna rezultatul
-planner-ului 041.
+`focus` (poziția jucătorului) și le avansează 20 m pe rută (`spawnOffsetsM`). Alocarea alternează
+între taxiuri și civili, astfel încât ambele categorii să fie vizibile în fața jucătorului. Restul
+populației folosește căutarea de origine a contractului 058. Benzile și offseturile preferate sunt
+parametri opționali ai lui 058 (`spawnLanesByKind`/`spawnOffsetsMByKind`), nu un al doilea router:
+ruta rămâne întotdeauna rezultatul planner-ului 041.
+
+## Profilul comun și vehiculele noi
+
+`createAmbientTraffic` acceptă `styleSource` și îl pasează atât registry-ului (`profileSource`), cât
+și traficului. O versiune nouă nu schimbă silent actorii existenți: `refreshStyle()` este propagarea
+explicită cerută de composition root după activarea 110. Un vehicul creat ulterior prin
+`registry.addVehicle()` citește versiunea activă în acel moment, pentru taxi și civil la fel.
 
 ## Conversia de heading
 
@@ -48,14 +55,18 @@ verifică un actor pe banda `lane:00N0`: avansează pe `+Z`, rămâne pe bandă 
 
 ## Reguli de joc
 
-- **Vizibilitate:** toți cei 24 de actori apar în `CompositionFrame.vehicles` cu poziție, yaw, viteză,
-  bandă și clasă; renderer-ul creează reprezentarea la primul cadru, ca pentru taxi.
+- **Vizibilitate:** toate cele 56 de actori apar în `CompositionFrame.vehicles` cu poziție, yaw, viteză,
+  bandă, clasă și `driverKind`; renderer-ul creează reprezentarea la primul cadru, inclusiv libréul
+  de taxi pentru taxiurile AI.
+- **Simulare continuă:** camera, selecția și renderer-ul nu sunt intrări în contractul 058. Actorii
+  din afara ferestrei de observare avansează pe aceleași tick-uri; proba 262 măsoară 54/54 actori
+  aflați la peste 80 m de jucător și fiecare se deplasează peste 1 m în 600 tick-uri.
 - **Interacțiune:** taxiul jucătorului și civilul static sunt trimise ca observații externe în cadrul
   044, deci devin lideri semantici și produc frânarea AI prin 048/047. Personajul pe jos nu este
   injectat ca vehicul: la spawn stă pe carosabil lângă bordură, iar tratarea lui ca lider ar opri o
   bandă întreagă în primul cadru.
-- **Preluare:** o mașină AI nu poate fi condusă de jucător. `requestEntry` o refuză cu
-  `ENTER_REFUSED: AI_TRAFFIC`, iar `nearestVehicle` o ignoră. Motivul este tehnic: 058 are propriul
+- **Preluare:** o mașină AI, taxi sau civil, nu poate fi condusă de jucător. `requestEntry` o refuză
+  cu `ENTER_REFUSED: AI_TRAFFIC`, iar `nearestVehicle` o ignoră. Motivul este tehnic: 058 are propriul
   progres de rută, iar o preluare fără reconcilierea poziției ar teleporta mașina la `resume`.
 - **Ownership:** `createAmbientTraffic` deține registry-ul și traficul; compunerea 236 doar le
   pașește. `main.ts` creează un trafic proaspăt pentru fiecare backend, deci recuperarea GPU nu
@@ -84,11 +95,31 @@ traficului este de aproximativ **3,2 ms/tick** față de baseline-ul 236. Interv
 Cele 24 de mașini s-au deplasat toate peste 1 m în timpul probei; scena a raportat 26 de vehicule,
 0 erori de pagină și 0 erori de consolă.
 
+## Costul flotei live (PBI 262)
+
+Proba headless pe contractele reale măsoară 40 de civili (baseline 058) și 70 de vehicule
+(30 taxiuri + 40 civili), 120 tick-uri warmup + 3 perechi × 600 tick-uri, pe aceeași hartă 032/033.
+Rezultatul comis este în [Evidence/262-live-fleet/cost.json](Evidence/262-live-fleet/cost.json):
+
+| Metrică | 40 civili | 70 vehicule |
+| --- | ---: | ---: |
+| p50 | 2,75 ms | 4,68 ms |
+| p95 | 3,51 ms | **5,82 ms** |
+| p99 | 4,05 ms | 6,55 ms |
+
+Costul suplimentar este **2,31 ms/tick** la p95, sub bugetul de 8 ms al tick-ului autoritar din
+Docs/25. Proba este a subsistemului 058, fără renderer sau GPU; nu înlocuiește măsurătoarea
+hardware a tick-ului complet și nu este raportată ca FPS. Deciziile 044 folosesc cadența reală de
+10 Hz fazată pe șase tick-uri, iar liderul fizic este recalculat la fiecare tick.
+
 ## Verificare
 
 ```powershell
 npm test -- tests/app/ambient-traffic.test.ts
 npm test -- tests/fleet/civil-traffic.test.ts
+npm test -- tests/fleet/live-fleet.test.ts
+npm run fleet:live -- --check
+npm run fleet:live -- --measure
 npm run composition:report -- --browser
 npm run composition:report -- --check
 ```

@@ -1,0 +1,50 @@
+{
+  "version": "262-live-fleet-v1",
+  "generatedBy": "npm run fleet:live -- --measure",
+  "measuredAt": "2026-11-26T02:21:51.638Z",
+  "protocol": {
+    "warmupTicks": 120,
+    "measuredTicks": 600,
+    "repetitions": 3,
+    "tickHz": 60,
+    "budgetMs": 8,
+    "budgetSource": "Docs/25 laptop authoritative tick p95",
+    "subsystem": "058 traffic step on the real 032/033 neighbourhood map"
+  },
+  "environment": {
+    "node": "v24.19.0",
+    "platform": "win32",
+    "arch": "x64",
+    "cpu": "AMD Ryzen 7 7735U with Radeon Graphics         ",
+    "totalMemoryBytes": 14702026752,
+    "renderer": "NONE_HEADLESS"
+  },
+  "baseline40Civilians": {
+    "actors": 40,
+    "taxis": 0,
+    "civilians": 40,
+    "samples": 1800,
+    "p50Ms": 2.7469,
+    "p95Ms": 3.5141,
+    "p99Ms": 4.0528,
+    "maxMs": 5.5426
+  },
+  "live70Vehicles": {
+    "actors": 70,
+    "taxis": 30,
+    "civilians": 40,
+    "samples": 1800,
+    "p50Ms": 4.6848,
+    "p95Ms": 5.8229,
+    "p99Ms": 6.5548,
+    "maxMs": 11.3603
+  },
+  "additionalCostMs": 2.3088,
+  "pass": true,
+  "limits": [
+    "Headless Node measurement; it is not a browser frame, GPU or hardware certificate.",
+    "Only the 058 traffic subsystem is measured, not the complete authoritative tick.",
+    "The 8 ms budget is the laptop tick p95 from Docs/25; the full tick remains the release gate.",
+    "The baseline registry keeps the required 20 taxis but simulates only its 40 civilians."
+  ]
+}

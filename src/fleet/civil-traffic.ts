@@ -1,4 +1,4 @@
-import {
+﻿import {
   compileCruiseProfile,
   compileFollowingProfile,
   compileLongitudinalProfile,
@@ -41,10 +41,17 @@ import {
   createRoutePlanner,
   parseRoadMap,
 } from '../world';
-import type { DirectedLanePath, LaneGraph, RoadMap, RoutePlan, RoutePlanner } from '../world';
-import { FLEET_LIMITS } from './registry';
+import type {
+  DirectedLanePath,
+  LaneGraph,
+  RoadAccess,
+  RoadMap,
+  RoutePlan,
+  RoutePlanner,
+} from '../world';
+import { FLEET_LIMITS, fleetDriverKinds } from './registry';
 import type { ControlMode } from '../vehicles';
-import type { FleetRegistry, FleetVehicle } from './registry';
+import type { FleetDriverKind, FleetRegistry, FleetVehicle } from './registry';
 
 export const CIVIL_TRAFFIC_VERSION = '058-civil-traffic-v1' as const;
 
@@ -93,10 +100,22 @@ export interface CivilTrafficOptions {
   readonly graphVersion?: string;
   readonly costVersion?: string;
   /**
+   * Fleet kinds simulated by this module. The 058 default is civilians only; PBI 262 passes both
+   * so taxis become real 041/044/047/048 actors instead of registry-only data.
+   */
+  readonly driverKinds?: readonly FleetDriverKind[];
+  /**
+   * How often the 044 road context is refreshed for each actor. `EVERY_TICK` preserves the 058
+   * default; `DECISION_PERIOD` uses the real 10 Hz phased decision cadence from Docs/25 and is the
+   * live-fleet setting that keeps 70 actors inside the tick budget. The controller still runs at
+   * 60 Hz in both modes.
+   */
+  readonly contextRefresh?: 'EVERY_TICK' | 'DECISION_PERIOD';
+  /**
    * Optional deterministic spawn lanes for the first actors (in stable vehicle-ID order). They must
-   * be CIVIL lanes; duplicates or unknown lanes are rejected. If a preferred origin has no route,
-   * that actor falls back to the seeded origin search. This lets the composition root place visible
-   * traffic near the player without inventing a second router.
+   * be accessible to the simulated kind; duplicates or unknown lanes are rejected. If a preferred
+   * origin has no route, that actor falls back to the seeded origin search. This lets the composition
+   * root place visible traffic near the player without inventing a second router.
    */
   readonly spawnLanes?: readonly string[];
   /**
@@ -105,6 +124,13 @@ export interface CivilTrafficOptions {
    * planner route, it never creates a route or a pose outside it.
    */
   readonly spawnOffsetsM?: readonly number[];
+  /**
+   * Per-kind spawn hints, aligned with the stable vehicle-ID order inside each kind. Every lane must
+   * be accessible to that kind and no lane may repeat across the whole population. This is the
+   * composition-root form used by the live fleet: taxis and civilians both get visible origins.
+   */
+  readonly spawnLanesByKind?: Partial<Record<FleetDriverKind, readonly string[]>>;
+  readonly spawnOffsetsMByKind?: Partial<Record<FleetDriverKind, readonly number[]>>;
 }
 
 export interface CivilTrafficVehicleObservation {
@@ -121,6 +147,7 @@ export interface CivilRouteSnapshot {
   /** Routes are always produced by the real PBI041 planner, never by a local follower. */
   readonly source: '041-route-planner';
   readonly status: RoutePlan['status'];
+  readonly access: RoadAccess;
   readonly path: readonly string[];
   readonly costSeconds: number;
   readonly costVersion: string;
@@ -140,7 +167,7 @@ export interface CivilInteraction {
 
 export interface CivilActorSnapshot {
   readonly vehicleId: string;
-  readonly driverKind: 'CIVILIAN';
+  readonly driverKind: FleetDriverKind;
   readonly slot: number;
   readonly classId: VehicleClassId;
   readonly authority: ControlMode;
@@ -244,10 +271,13 @@ interface Pose {
 interface ActorState {
   readonly vehicle: FleetVehicle;
   readonly actor: BehaviorActor;
+  /** Road access class of the planner route and lane projections; TAXI for taxis. */
+  readonly access: RoadAccess;
   authority: ControlMode;
   /** Each actor owns its applied version; the bundle is immutable and sourced from the city. */
   style: StyleBundle;
   route: RouteState;
+  routeView: CivilRouteSnapshot | null;
   distanceM: number;
   speedMps: number;
   pose: Pose;
@@ -259,6 +289,13 @@ interface ActorState {
 
 const CONTROL_MODES: readonly ControlMode[] = ['AUTO', 'MANUAL', 'LEARNING'];
 
+/** 60 Hz controller with 10 Hz decisions: six phases, one decision tick per actor. */
+const DECISION_PERIOD_TICKS = 6;
+
+function accessFor(driverKind: FleetDriverKind): RoadAccess {
+  return driverKind === 'TAXI' ? 'TAXI' : 'CIVIL';
+}
+
 function boundedId(value: unknown, maximum = 256): string {
   const id = text(value);
   requireContract(id.length <= maximum && id.trim() === id, 'Invalid civil traffic identifier');
@@ -267,6 +304,29 @@ function boundedId(value: unknown, maximum = 256): string {
 
 function finiteNumber(value: unknown, minimum: number, maximum: number): number {
   return number(value, minimum, maximum);
+}
+
+function readLaneIds(value: unknown, label: string, maximum: number): readonly string[] {
+  requireContract(Array.isArray(value), `${label} must be an array`);
+  requireContract(value.length <= maximum, `${label} capacity`);
+  const lanes: string[] = [];
+  for (const raw of value) {
+    const laneId = boundedId(raw);
+    requireContract(!lanes.includes(laneId), `Duplicate ${label.toLowerCase()}`);
+    lanes.push(laneId);
+  }
+  return Object.freeze(lanes);
+}
+
+function readOffsets(value: unknown, laneCount: number, label: string): readonly number[] {
+  requireContract(Array.isArray(value), `${label} must be an array`);
+  requireContract(value.length <= laneCount, `${label} requires a matching spawn lane`);
+  return Object.freeze(value.map((raw) => finiteNumber(raw, 0, 1_000_000)));
+}
+
+interface KindSpawnHints {
+  readonly lanes: readonly string[];
+  readonly offsetsM: readonly number[];
 }
 
 function readOptions(value: unknown): {
@@ -279,8 +339,11 @@ function readOptions(value: unknown): {
   seed: number | null;
   graphVersion: string;
   costVersion: string;
+  driverKinds: readonly FleetDriverKind[];
+  contextRefresh: 'EVERY_TICK' | 'DECISION_PERIOD';
   spawnLanes: readonly string[];
   spawnOffsetsM: readonly number[];
+  spawnLanesByKind: Readonly<Partial<Record<FleetDriverKind, KindSpawnHints>>> | null;
 } {
   const data = record(value);
   for (const key of Object.keys(data))
@@ -295,8 +358,12 @@ function readOptions(value: unknown): {
         'seed',
         'graphVersion',
         'costVersion',
+        'driverKinds',
+        'contextRefresh',
         'spawnLanes',
         'spawnOffsetsM',
+        'spawnLanesByKind',
+        'spawnOffsetsMByKind',
       ].includes(key),
       'Unknown civil traffic option',
     );
@@ -344,30 +411,75 @@ function readOptions(value: unknown): {
     data.graphVersion === undefined ? '033-lane-graph-v1' : boundedId(data.graphVersion, 128);
   const costVersion =
     data.costVersion === undefined ? ROUTE_COST_MODEL.version : boundedId(data.costVersion, 128);
-  const spawnLanes: string[] = [];
-  if (data.spawnLanes !== undefined) {
-    requireContract(Array.isArray(data.spawnLanes), 'Civil traffic spawn lanes must be an array');
-    requireContract(
-      data.spawnLanes.length <= CIVIL_TRAFFIC_LIMITS.actors,
-      'Civil traffic spawn lane capacity',
-    );
-    for (const raw of data.spawnLanes) {
-      const laneId = boundedId(raw);
-      requireContract(!spawnLanes.includes(laneId), 'Duplicate civil traffic spawn lane');
-      spawnLanes.push(laneId);
+  const driverKinds: FleetDriverKind[] = [];
+  if (data.driverKinds !== undefined) {
+    requireContract(Array.isArray(data.driverKinds), 'Civil traffic driver kinds must be an array');
+    requireContract(data.driverKinds.length > 0, 'Civil traffic needs at least one driver kind');
+    for (const raw of data.driverKinds) {
+      const kind = choice(raw, fleetDriverKinds);
+      requireContract(!driverKinds.includes(kind), 'Duplicate civil traffic driver kind');
+      driverKinds.push(kind);
     }
+  } else driverKinds.push('CIVILIAN');
+  const contextRefresh =
+    data.contextRefresh === undefined
+      ? 'EVERY_TICK'
+      : choice(data.contextRefresh, ['EVERY_TICK', 'DECISION_PERIOD']);
+  const spawnLanes =
+    data.spawnLanes === undefined
+      ? []
+      : readLaneIds(data.spawnLanes, 'Civil traffic spawn lanes', FLEET_LIMITS.vehicles);
+  const spawnOffsetsM =
+    data.spawnOffsetsM === undefined
+      ? []
+      : readOffsets(data.spawnOffsetsM, spawnLanes.length, 'Civil traffic spawn offsets');
+  if (data.spawnLanesByKind !== undefined) {
+    requireContract(
+      data.spawnLanes === undefined,
+      'Civil traffic spawn lanes cannot mix global and per-kind hints',
+    );
+    requireContract(
+      data.spawnOffsetsM === undefined,
+      'Civil traffic spawn offsets cannot mix global and per-kind hints',
+    );
   }
-  const spawnOffsetsM: number[] = [];
-  if (data.spawnOffsetsM !== undefined) {
-    requireContract(
-      Array.isArray(data.spawnOffsetsM),
-      'Civil traffic spawn offsets must be an array',
-    );
-    requireContract(
-      data.spawnOffsetsM.length <= spawnLanes.length,
-      'Civil traffic spawn offsets require a matching spawn lane',
-    );
-    for (const raw of data.spawnOffsetsM) spawnOffsetsM.push(finiteNumber(raw, 0, 1_000_000));
+  const perKind: Partial<Record<FleetDriverKind, KindSpawnHints>> = {};
+  const everyLane = new Set<string>();
+  const laneHints = data.spawnLanesByKind === undefined ? null : record(data.spawnLanesByKind);
+  const offsetHints =
+    data.spawnOffsetsMByKind === undefined ? null : record(data.spawnOffsetsMByKind);
+  if (laneHints !== null)
+    for (const key of Object.keys(laneHints))
+      requireContract(
+        (fleetDriverKinds as readonly string[]).includes(key),
+        'Unknown civil traffic spawn kind',
+      );
+  if (offsetHints !== null)
+    for (const key of Object.keys(offsetHints))
+      requireContract(
+        (fleetDriverKinds as readonly string[]).includes(key),
+        'Unknown civil traffic spawn offset kind',
+      );
+  for (const kind of driverKinds) {
+    const rawLanes = laneHints === null ? undefined : laneHints[kind];
+    const rawOffsets = offsetHints === null ? undefined : offsetHints[kind];
+    if (rawLanes === undefined) {
+      requireContract(
+        rawOffsets === undefined,
+        'Civil traffic per-kind offsets require spawn lanes',
+      );
+      continue;
+    }
+    const lanes = readLaneIds(rawLanes, `Civil traffic ${kind} spawn lanes`, FLEET_LIMITS.vehicles);
+    for (const laneId of lanes) {
+      requireContract(!everyLane.has(laneId), 'Duplicate civil traffic spawn lane across kinds');
+      everyLane.add(laneId);
+    }
+    const offsets =
+      rawOffsets === undefined
+        ? []
+        : readOffsets(rawOffsets, lanes.length, `Civil traffic ${kind} spawn offsets`);
+    perKind[kind] = Object.freeze({ lanes, offsetsM: offsets });
   }
   return {
     registry,
@@ -385,8 +497,14 @@ function readOptions(value: unknown): {
     seed,
     graphVersion,
     costVersion,
-    spawnLanes: Object.freeze(spawnLanes),
-    spawnOffsetsM: Object.freeze(spawnOffsetsM),
+    driverKinds: Object.freeze(driverKinds),
+    contextRefresh,
+    spawnLanes,
+    spawnOffsetsM,
+    spawnLanesByKind:
+      data.spawnLanesByKind === undefined && data.spawnOffsetsMByKind === undefined
+        ? null
+        : Object.freeze(perKind),
   };
 }
 
@@ -457,6 +575,13 @@ function roadKind(postedLimitMps: number): CruiseRoadFacts['roadKind'] {
   return postedLimitMps >= 12 ? 'URBAN' : 'RESIDENTIAL';
 }
 
+interface PhysicalLaneOccupation {
+  readonly id: string;
+  readonly longitudinalM: number;
+  readonly speedMps: number;
+  readonly radiusM: number;
+}
+
 function frozenInteraction(
   leader: RoadContext['leader'],
   kinds: ReadonlyMap<string, 'TAXI' | 'CIVILIAN'>,
@@ -483,12 +608,22 @@ class CivilTrafficImpl implements CivilTraffic {
   private readonly scenarioSeed: number;
   private readonly spawnLanes: readonly string[];
   private readonly spawnOffsetsM: readonly number[];
-  private readonly civilians: readonly FleetVehicle[];
-  private readonly civilianIds: ReadonlySet<string>;
+  private readonly spawnLanesByKind: Readonly<
+    Partial<Record<FleetDriverKind, KindSpawnHints>>
+  > | null;
+  /** Registry vehicles selected by `driverKinds`, in stable vehicle-ID order. */
+  private readonly fleetVehicles: readonly FleetVehicle[];
+  private readonly actorIds: ReadonlySet<string>;
   private readonly actors: ActorState[];
   private readonly byId: Map<string, ActorState>;
   private readonly road: ReturnType<typeof createRoadContext>;
   private readonly longitudinal: ReturnType<typeof createLongitudinalController>;
+  private readonly laneIdsByAccess = new Map<RoadAccess, readonly string[]>();
+  private readonly contextRefresh: 'EVERY_TICK' | 'DECISION_PERIOD';
+  private readonly contextPhase: ReadonlyMap<string, number>;
+  private readonly occupancy = new Map<string, Map<string, number>>();
+  private readonly physical = new Map<string, PhysicalLaneOccupation[]>();
+  private readonly kinds = new Map<string, FleetDriverKind>();
   private readonly styleSource: CityStyleSource | null;
   private commonStyle: StyleBundle;
   private lastTick: number | null = null;
@@ -515,16 +650,27 @@ class CivilTrafficImpl implements CivilTraffic {
     this.scenarioSeed = deriveScenarioSeed(this.seed, this.registry.configuration.scenarioId);
     this.spawnLanes = options.spawnLanes;
     this.spawnOffsetsM = options.spawnOffsetsM;
+    this.spawnLanesByKind = options.spawnLanesByKind;
+    this.contextRefresh = options.contextRefresh;
     this.styleSource = options.styleSource;
     this.commonStyle = style;
-    this.civilians = Object.freeze(
-      this.registry.list().filter((vehicle) => vehicle.driverKind === 'CIVILIAN'),
+    const kinds = new Set(options.driverKinds);
+    this.fleetVehicles = Object.freeze(
+      this.registry
+        .list()
+        .filter((vehicle) => kinds.has(vehicle.driverKind))
+        .sort((left, right) =>
+          left.vehicleId < right.vehicleId ? -1 : left.vehicleId > right.vehicleId ? 1 : 0,
+        ),
     );
-    requireContract(this.civilians.length <= CIVIL_TRAFFIC_LIMITS.actors, 'Civil population cap');
-    this.civilianIds = new Set(this.civilians.map((vehicle) => vehicle.vehicleId));
-    const identities = this.civilians.map((vehicle) => {
+    requireContract(
+      this.fleetVehicles.length <= FLEET_LIMITS.vehicles,
+      'Fleet traffic population cap',
+    );
+    this.actorIds = new Set(this.fleetVehicles.map((vehicle) => vehicle.vehicleId));
+    const identities = this.fleetVehicles.map((vehicle) => {
       const state = this.registry.state(vehicle.vehicleId);
-      requireContract(state !== undefined, 'Missing civilian fleet state');
+      requireContract(state !== undefined, 'Missing fleet state');
       return Object.freeze({ id: vehicle.vehicleId, incarnation: 1 });
     });
     this.longitudinal = createLongitudinalController({
@@ -537,34 +683,42 @@ class CivilTrafficImpl implements CivilTraffic {
     });
     this.road = createRoadContext(map);
     const usedOrigins = new Set<string>(),
-      states = this.civilians
-        .slice()
-        .sort((left, right) =>
-          left.vehicleId < right.vehicleId ? -1 : left.vehicleId > right.vehicleId ? 1 : 0,
-        )
-        .map((vehicle, index) => {
-          const actor = Object.freeze({ id: vehicle.vehicleId, incarnation: 1 });
-          const route = this.spawnRoute(vehicle.vehicleId, 0, usedOrigins, this.spawnLanes[index]);
-          const requestedOffset = this.spawnOffsetsM[index] ?? 0;
-          const distanceM = Math.min(requestedOffset, Math.max(0, route.totalLengthM - 1));
-          const pose = routePose(route, distanceM);
-          return {
-            vehicle,
-            actor,
-            authority: this.registry.state(vehicle.vehicleId)!.controlMode,
-            style,
-            route,
-            distanceM,
-            speedMps: 0,
-            pose,
-            leader: null,
-            replans: 0,
-            ticks: 0,
-            blocked: false,
-          } satisfies ActorState;
-        });
+      kindCursor: Record<FleetDriverKind, number> = { TAXI: 0, CIVILIAN: 0 },
+      states = this.fleetVehicles.map((vehicle, index) => {
+        const access = accessFor(vehicle.driverKind);
+        const actor = Object.freeze({ id: vehicle.vehicleId, incarnation: 1 });
+        const hintLanes = this.spawnLanesByKind?.[vehicle.driverKind]?.lanes ?? null;
+        const hintOffsets = this.spawnLanesByKind?.[vehicle.driverKind]?.offsetsM ?? null;
+        const cursor = kindCursor[vehicle.driverKind];
+        const requestedLane = hintLanes === null ? this.spawnLanes[index] : hintLanes[cursor];
+        const requestedOffset =
+          hintOffsets === null ? (this.spawnOffsetsM[index] ?? 0) : (hintOffsets[cursor] ?? 0);
+        kindCursor[vehicle.driverKind] = cursor + 1;
+        const route = this.spawnRoute(vehicle.vehicleId, 0, access, usedOrigins, requestedLane);
+        const distanceM = Math.min(requestedOffset, Math.max(0, route.totalLengthM - 1));
+        const pose = routePose(route, distanceM);
+        return {
+          vehicle,
+          actor,
+          access,
+          authority: this.registry.state(vehicle.vehicleId)!.controlMode,
+          style,
+          route,
+          routeView: null,
+          distanceM,
+          speedMps: 0,
+          pose,
+          leader: null,
+          replans: 0,
+          ticks: 0,
+          blocked: false,
+        } satisfies ActorState;
+      });
     this.actors = states;
     this.byId = new Map(states.map((state) => [state.vehicle.vehicleId, state]));
+    this.contextPhase = new Map(
+      states.map((state, index) => [state.vehicle.vehicleId, index % DECISION_PERIOD_TICKS]),
+    );
   }
 
   private assertLive(): void {
@@ -575,20 +729,31 @@ class CivilTrafficImpl implements CivilTraffic {
     return deriveVehicleSeed(this.scenarioSeed, vehicleId);
   }
 
-  private civilLaneIds(): readonly string[] {
-    return this.map.lanes
-      .filter((lane) => lane.access.includes('CIVIL'))
-      .map((lane) => lane.id)
-      .sort();
+  private laneIds(access: RoadAccess): readonly string[] {
+    const cached = this.laneIdsByAccess.get(access);
+    if (cached !== undefined) return cached;
+    const lanes = Object.freeze(
+      this.map.lanes
+        .filter((lane) => lane.access.includes(access))
+        .map((lane) => lane.id)
+        .sort(),
+    );
+    this.laneIdsByAccess.set(access, lanes);
+    return lanes;
   }
 
-  private buildRoute(origin: string, vehicleSeed: number, cycle: number): RouteState {
-    const lanes = this.civilLaneIds();
-    requireContract(lanes.length > 0, 'No CIVIL lane for civil traffic');
+  private buildRoute(
+    origin: string,
+    vehicleSeed: number,
+    cycle: number,
+    access: RoadAccess,
+  ): RouteState {
+    const lanes = this.laneIds(access);
+    requireContract(lanes.length > 0, 'No lane for fleet traffic access');
     const start = randomUint32(vehicleSeed, 'civil-destination', cycle) % lanes.length;
     for (let attempt = 0; attempt < CIVIL_TRAFFIC_LIMITS.routeAttempts; attempt += 1) {
       const destination = lanes[(start + attempt) % lanes.length]!;
-      const plan = this.planner.findRoute({ origin, destination, access: 'CIVIL' });
+      const plan = this.planner.findRoute({ origin, destination, access });
       if (
         plan.status === 'READY' &&
         plan.path !== null &&
@@ -604,7 +769,7 @@ class CivilTrafficImpl implements CivilTraffic {
         let cursor = 0;
         for (const laneId of plan.path) {
           const path = this.graph.getDirectedPath(laneId),
-            lane = this.graph.getLane(laneId, 'CIVIL');
+            lane = this.graph.getLane(laneId, access);
           requireContract(path !== null && lane !== null, 'Plan contains an inaccessible lane');
           routeLanes.push({ laneId, path, startM: cursor, endM: cursor + path.lengthM });
           cursor += path.lengthM;
@@ -625,16 +790,17 @@ class CivilTrafficImpl implements CivilTraffic {
   private spawnRoute(
     vehicleId: string,
     cycle: number,
+    access: RoadAccess,
     usedOrigins?: Set<string>,
     preferredOrigin?: string,
   ): RouteState {
     const vehicleSeed = this.vehicleSeed(vehicleId),
-      lanes = this.civilLaneIds();
+      lanes = this.laneIds(access);
     if (preferredOrigin !== undefined) {
-      requireContract(lanes.includes(preferredOrigin), 'Unknown civil traffic spawn lane');
+      requireContract(lanes.includes(preferredOrigin), 'Unknown fleet traffic spawn lane');
       if (!usedOrigins?.has(preferredOrigin)) {
         try {
-          const route = this.buildRoute(preferredOrigin, vehicleSeed, cycle);
+          const route = this.buildRoute(preferredOrigin, vehicleSeed, cycle, access);
           usedOrigins?.add(preferredOrigin);
           return route;
         } catch {
@@ -654,13 +820,13 @@ class CivilTrafficImpl implements CivilTraffic {
       }
       usedOrigins.add(origin);
     }
-    return this.buildRoute(origin, vehicleSeed, cycle);
+    return this.buildRoute(origin, vehicleSeed, cycle, access);
   }
 
   private successorRoute(actor: ActorState): boolean {
     const lastLane = actor.route.path[actor.route.path.length - 1]!;
     const successors = this.graph
-      .getConnections(lastLane, 'CIVIL')
+      .getConnections(lastLane, actor.access)
       .map((connection) => connection.toLaneId)
       .sort();
     if (successors.length === 0) {
@@ -672,7 +838,7 @@ class CivilTrafficImpl implements CivilTraffic {
     const origin =
       successors[randomUint32(seed, 'civil-successor', actor.replans) % successors.length]!;
     try {
-      actor.route = this.buildRoute(origin, seed, actor.replans + 1);
+      actor.route = this.buildRoute(origin, seed, actor.replans + 1, actor.access);
     } catch {
       actor.blocked = true;
       actor.speedMps = 0;
@@ -680,6 +846,7 @@ class CivilTrafficImpl implements CivilTraffic {
     }
     actor.distanceM = 0;
     actor.pose = routePose(actor.route, 0);
+    actor.routeView = null;
     actor.replans += 1;
     actor.blocked = false;
     return true;
@@ -689,6 +856,7 @@ class CivilTrafficImpl implements CivilTraffic {
     return Object.freeze({
       source: '041-route-planner',
       status: actor.route.plan.status,
+      access: actor.access,
       path: actor.route.path,
       costSeconds: actor.route.plan.costSeconds,
       costVersion: actor.route.costVersion,
@@ -703,7 +871,7 @@ class CivilTrafficImpl implements CivilTraffic {
   private snapshot(actor: ActorState): CivilActorSnapshot {
     return Object.freeze({
       vehicleId: actor.vehicle.vehicleId,
-      driverKind: 'CIVILIAN',
+      driverKind: actor.vehicle.driverKind,
       slot: actor.vehicle.slot,
       classId: actor.vehicle.classId,
       authority: actor.authority,
@@ -718,7 +886,7 @@ class CivilTrafficImpl implements CivilTraffic {
       styleProfileId: actor.style.profile.profileId,
       styleVersionId: actor.style.profile.versionId,
       leader: actor.leader,
-      route: this.routeSnapshot(actor),
+      route: actor.routeView ?? (actor.routeView = this.routeSnapshot(actor)),
       blocked: actor.blocked,
     });
   }
@@ -747,7 +915,7 @@ class CivilTrafficImpl implements CivilTraffic {
     if (value === undefined) return Object.freeze([]);
     requireContract(Array.isArray(value), 'Civil traffic vehicles must be an array');
     requireContract(
-      value.length + this.civilians.length <= CIVIL_TRAFFIC_LIMITS.frameVehicles,
+      value.length + this.actors.length <= CIVIL_TRAFFIC_LIMITS.frameVehicles,
       'Civil traffic frame capacity',
     );
     const result: CivilTrafficVehicleObservation[] = [],
@@ -763,10 +931,7 @@ class CivilTrafficImpl implements CivilTraffic {
         );
       const vehicleId = boundedId(item.vehicleId);
       requireContract(!seen.has(vehicleId), 'Duplicate civil traffic vehicle');
-      requireContract(
-        !this.civilianIds.has(vehicleId),
-        'Civil traffic observation duplicates actor',
-      );
+      requireContract(!this.actorIds.has(vehicleId), 'Civil traffic observation duplicates actor');
       seen.add(vehicleId);
       const position = record(item.positionM);
       for (const key of Object.keys(position))
@@ -820,6 +985,49 @@ class CivilTrafficImpl implements CivilTraffic {
     return { tick: atTick, dtSeconds, vehicles: this.readObservations(data.vehicles) };
   }
 
+  private currentRoadContext(
+    actor: ActorState,
+    physical: ReadonlyMap<string, readonly PhysicalLaneOccupation[]>,
+    atTick: number,
+  ): RoadContext | null {
+    const phase = this.contextPhase.get(actor.vehicle.vehicleId) ?? 0,
+      refresh =
+        this.contextRefresh === 'EVERY_TICK' ||
+        atTick === 1 ||
+        (atTick + phase) % DECISION_PERIOD_TICKS === 0,
+      context = refresh
+        ? this.road.getContext(actor.vehicle.vehicleId, { force: true })
+        : this.road.getContext(actor.vehicle.vehicleId);
+    if (context === null || this.contextRefresh === 'EVERY_TICK') return context;
+    // The 044 decision context is cached at the documented 10 Hz cadence. The physical leader is
+    // still read from this tick's positions (actors and external vehicles), so 047/048 see a
+    // current gap even between decisions.
+    const subjectM = actor.distanceM - actor.route.lanes[actor.pose.laneIndex]!.startM;
+    let leader: RoadContext['leader'] = null,
+      leaderM = Number.POSITIVE_INFINITY;
+    for (const candidate of physical.get(actor.pose.laneId) ?? [])
+      if (
+        candidate.id !== actor.vehicle.vehicleId &&
+        candidate.longitudinalM > subjectM &&
+        candidate.longitudinalM < leaderM
+      ) {
+        leaderM = candidate.longitudinalM;
+        leader = Object.freeze({
+          id: candidate.id,
+          incarnation: this.byId.get(candidate.id)?.actor.incarnation ?? 1,
+          gapM: Math.max(
+            0,
+            candidate.longitudinalM -
+              subjectM -
+              CIVIL_TRAFFIC_LIMITS.vehicleRadiusM -
+              candidate.radiusM,
+          ),
+          speedMps: candidate.speedMps,
+        });
+      }
+    return Object.freeze({ ...context, tick: atTick, leader });
+  }
+
   step(input: CivilTrafficStep): CivilTrafficFrame {
     this.assertLive();
     const { tick: atTick, dtSeconds, vehicles } = this.readStep(input);
@@ -837,7 +1045,7 @@ class CivilTrafficImpl implements CivilTraffic {
           incarnation: actor.actor.incarnation,
           positionM: actor.pose.positionM,
           headingRad: actor.pose.headingRad,
-          access: 'CIVIL' as const,
+          access: actor.access,
           speedMps: actor.speedMps,
           radiusM: CIVIL_TRAFFIC_LIMITS.vehicleRadiusM,
           route: null,
@@ -862,25 +1070,60 @@ class CivilTrafficImpl implements CivilTraffic {
       discontinuity: false,
     };
     this.road.updateFrame(frame);
-    const kinds = new Map<string, 'TAXI' | 'CIVILIAN'>(
-      this.civilians.map((vehicle) => [vehicle.vehicleId, 'CIVILIAN' as const]),
-    );
-    for (const vehicle of vehicles) kinds.set(vehicle.vehicleId, vehicle.driverKind);
-    const occupancy = new Map<string, Map<string, number>>();
+    this.kinds.clear();
+    for (const actor of this.actors)
+      this.kinds.set(actor.vehicle.vehicleId, actor.vehicle.driverKind);
+    for (const vehicle of vehicles) this.kinds.set(vehicle.vehicleId, vehicle.driverKind);
+    for (const lane of this.occupancy.values()) lane.clear();
     for (const actor of this.actors) {
-      const lane = occupancy.get(actor.pose.laneId) ?? new Map<string, number>();
+      const lane = this.occupancy.get(actor.pose.laneId) ?? new Map<string, number>();
       lane.set(
         actor.vehicle.vehicleId,
         actor.distanceM - actor.route.lanes[actor.pose.laneIndex]!.startM,
       );
-      occupancy.set(actor.pose.laneId, lane);
+      this.occupancy.set(actor.pose.laneId, lane);
+    }
+    // Current physical leader facts. Actors contribute their authoritative route progress; external
+    // observations (player taxi, static civil) are projected once onto the real lane graph.
+    for (const lane of this.physical.values()) lane.length = 0;
+    const addPhysical = (candidate: PhysicalLaneOccupation, laneId: string): void => {
+      const lane = this.physical.get(laneId) ?? [];
+      lane.push(candidate);
+      this.physical.set(laneId, lane);
+    };
+    for (const actor of this.actors)
+      addPhysical(
+        {
+          id: actor.vehicle.vehicleId,
+          longitudinalM: actor.distanceM - actor.route.lanes[actor.pose.laneIndex]!.startM,
+          speedMps: actor.speedMps,
+          radiusM: CIVIL_TRAFFIC_LIMITS.vehicleRadiusM,
+        },
+        actor.pose.laneId,
+      );
+    for (const vehicle of vehicles) {
+      const projection = this.graph.locateLane({
+        positionM: vehicle.positionM,
+        access: vehicle.driverKind === 'TAXI' ? 'TAXI' : 'CIVIL',
+        headingRad: vehicle.headingRad,
+      });
+      if (projection === null) continue;
+      addPhysical(
+        {
+          id: vehicle.vehicleId,
+          longitudinalM: projection.longitudinalM,
+          speedMps: vehicle.speedMps,
+          radiusM: vehicle.radiusM ?? CIVIL_TRAFFIC_LIMITS.vehicleRadiusM,
+        },
+        projection.lane.id,
+      );
     }
 
     for (const actor of this.actors) {
       actor.ticks += 1;
-      const context = this.road.getContext(actor.vehicle.vehicleId, { force: true }),
+      const context = this.currentRoadContext(actor, this.physical, atTick),
         projected = context === null ? null : projectBehaviorContext(context),
-        lane = this.graph.getLane(actor.pose.laneId, 'CIVIL');
+        lane = this.graph.getLane(actor.pose.laneId, actor.access);
       requireContract(lane !== null, 'Civil actor lost its lane');
       const behaviorContext: BehaviorContext = projected ?? {
         sessionId: this.registry.configuration.sessionId,
@@ -893,7 +1136,7 @@ class CivilTrafficImpl implements CivilTraffic {
         discontinuity: false,
       };
       const leader = context?.leader ?? null;
-      actor.leader = frozenInteraction(leader, kinds);
+      actor.leader = frozenInteraction(leader, this.kinds);
       if (actor.leader !== null) this.interactions += 1;
       const remainingOnLaneM = Math.max(
         0,
@@ -1015,7 +1258,7 @@ class CivilTrafficImpl implements CivilTraffic {
         );
         const nextPose = routePose(actor.route, nextDistance);
         if (nextPose.laneIndex > actor.pose.laneIndex) {
-          const targetLane = occupancy.get(nextPose.laneId),
+          const targetLane = this.occupancy.get(nextPose.laneId),
             occupiedAtEntry =
               targetLane !== undefined &&
               [...targetLane].some(
@@ -1028,15 +1271,15 @@ class CivilTrafficImpl implements CivilTraffic {
             actor.speedMps = 0;
           }
         }
-        occupancy.get(actor.pose.laneId)?.delete(actor.vehicle.vehicleId);
+        this.occupancy.get(actor.pose.laneId)?.delete(actor.vehicle.vehicleId);
         actor.distanceM = nextDistance;
         actor.pose = routePose(actor.route, actor.distanceM);
-        const lane = occupancy.get(actor.pose.laneId) ?? new Map<string, number>();
+        const lane = this.occupancy.get(actor.pose.laneId) ?? new Map<string, number>();
         lane.set(
           actor.vehicle.vehicleId,
           actor.distanceM - actor.route.lanes[actor.pose.laneIndex]!.startM,
         );
-        occupancy.set(actor.pose.laneId, lane);
+        this.occupancy.set(actor.pose.laneId, lane);
       } else {
         actor.speedMps = 0;
       }
