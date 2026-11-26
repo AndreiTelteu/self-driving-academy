@@ -47,6 +47,8 @@ export interface GameShellHostOptions {
   readonly onClosePanel: () => void;
   /** PBI 263: deschide panoul live de selecție a flotei; opțional, montat numai când există. */
   readonly onOpenFleet?: () => boolean;
+  /** PBI 264: deschide panoul live de cereri/dispecerizare; opțional, montat numai când există. */
+  readonly onOpenRides?: () => boolean;
   readonly now?: () => number;
   /** Testele pot opri injectarea de CSS; producția o lasă activă. */
   readonly style?: boolean;
@@ -193,10 +195,18 @@ export function createGameShellHost(options: GameShellHostOptions): GameShellHos
     fleetButton.setAttribute('data-shell-action', 'fleet');
     fleetButton.setAttribute('aria-haspopup', 'dialog');
   }
+  const ridesButton = options.onOpenRides === undefined ? null : doc.createElement('button');
+  if (ridesButton !== null) {
+    ridesButton.type = 'button';
+    ridesButton.textContent = 'Curse';
+    ridesButton.setAttribute('data-shell-action', 'rides');
+    ridesButton.setAttribute('aria-haspopup', 'dialog');
+  }
   bar.append(badge);
   if (sessionSelect !== null) bar.append(sessionSelect);
   bar.append(startButton, pauseButton, resumeButton, panelButton);
   if (fleetButton !== null) bar.append(fleetButton);
+  if (ridesButton !== null) bar.append(ridesButton);
 
   const panel = doc.createElement('div');
   panel.className = 'game-shell-host__panel';
@@ -273,7 +283,8 @@ export function createGameShellHost(options: GameShellHostOptions): GameShellHos
   let listeners =
     (sessionSelect === null ? 6 : 7) +
     (resetButton === null ? 0 : 1) +
-    (fleetButton === null ? 0 : 1);
+    (fleetButton === null ? 0 : 1) +
+    (ridesButton === null ? 0 : 1);
   const rows = new Map<string, Row>();
 
   const syncSession = (): void => {
@@ -333,6 +344,9 @@ export function createGameShellHost(options: GameShellHostOptions): GameShellHos
     panelButton.hidden = panelOpen;
     if (fleetButton !== null)
       fleetButton.hidden =
+        panelOpen || (kind !== 'READY' && kind !== 'PLAYING' && kind !== 'PAUSED');
+    if (ridesButton !== null)
+      ridesButton.hidden =
         panelOpen || (kind !== 'READY' && kind !== 'PLAYING' && kind !== 'PAUSED');
     badge.textContent = panelOpen ? 'PANOU' : kind;
     badge.setAttribute('data-shell-kind', panelOpen ? 'PANEL' : kind);
@@ -446,6 +460,10 @@ export function createGameShellHost(options: GameShellHostOptions): GameShellHos
     if (panelOpen) return;
     options.onOpenFleet?.();
   };
+  const onRides = (): void => {
+    if (panelOpen) return;
+    options.onOpenRides?.();
+  };
   const onPanelKeyDown = (event: KeyboardEvent): void => {
     if (event.key === 'Escape') {
       event.preventDefault();
@@ -466,6 +484,7 @@ export function createGameShellHost(options: GameShellHostOptions): GameShellHos
   resetButton?.addEventListener('click', onReset);
   panelButton.addEventListener('click', onPanel);
   fleetButton?.addEventListener('click', onFleet);
+  ridesButton?.addEventListener('click', onRides);
   closeButton.addEventListener('click', onClose);
   panel.addEventListener('keydown', onPanelKeyDown);
 
@@ -517,6 +536,7 @@ export function createGameShellHost(options: GameShellHostOptions): GameShellHos
       resetButton?.removeEventListener('click', onReset);
       panelButton.removeEventListener('click', onPanel);
       fleetButton?.removeEventListener('click', onFleet);
+      ridesButton?.removeEventListener('click', onRides);
       closeButton.removeEventListener('click', onClose);
       panel.removeEventListener('keydown', onPanelKeyDown);
       listeners = 0;

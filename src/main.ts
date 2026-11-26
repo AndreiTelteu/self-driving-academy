@@ -35,7 +35,10 @@ import {
   createFpsCounter,
   createGameShellHost,
   createFleetSelectionPanel,
+  createLiveRidesPanel,
 } from './ui';
+import { LIVE_RIDES_VERSION, createLiveRides } from './fleet';
+import type { LiveRides } from './fleet';
 import { computeProfileVersionChecksum } from './profiles';
 import type { ProfileVersion, ProfileVersionContent } from './profiles';
 import { copyProfileForChaos } from './persistence';
@@ -100,6 +103,37 @@ const sessionTickPort: GameTickPort = {
       );
   },
 };
+/**
+ * PBI 264: portul POST_WORLD al curselor live. El citește cadrul compunerii după pasul autoritar și
+ * trimite dispecerului poziția reală a fiecărui taxi. Nu creează o a doua lume și nu inventează
+ * tick-uri; când modulul nu este montat, portul nu face nimic.
+ */
+const ridesModules: { live: LiveRides | undefined } = { live: undefined };
+const ridesTickPort: GameTickPort = {
+  id: 'rides',
+  version: LIVE_RIDES_VERSION,
+  step(context) {
+    const live = ridesModules.live;
+    if (live === undefined) return;
+    const frame = composition?.composition.frame;
+    if (frame === undefined) return;
+    if (frame.tick !== context.tick)
+      throw new Error(
+        `Cadrul curselor (${frame.tick}) nu coincide cu tick-ul autoritar (${context.tick}).`,
+      );
+    live.step({
+      tick: context.tick,
+      vehicles: frame.vehicles.map((vehicle) => ({
+        vehicleId: vehicle.vehicleId,
+        driverKind: vehicle.driverKind,
+        laneId: vehicle.laneId,
+        blocked: vehicle.blocked,
+        controlMode: vehicle.controlMode,
+      })),
+      playerVehicleId: frame.playerVehicleId,
+    });
+  },
+};
 const diagnosticsPanel = createDiagnosticsPanel(app, {
   report: () => diagnostics?.report() ?? null,
   // Calitatea adaptivă are nevoie de eșantioane chiar și cu panoul închis.
@@ -125,7 +159,7 @@ let activeRecovery: ReturnType<typeof createRendererRecovery<BootstrapCheckpoint
  */
 const shell = createGameShell({
   context: compositionContext,
-  ports: { sessions: sessionTickPort },
+  ports: { sessions: sessionTickPort, rides: ridesTickPort },
   suspend: (cause) => application.pause(cause),
   resume: (cause) => {
     const state = application.getState();
@@ -170,12 +204,23 @@ const fleetPanel = createFleetSelectionPanel(app, {
   },
   geometry: fleetMapGeometry,
 });
+/** PBI 264: panoul read-only al cererilor și alocărilor; nu scrie în simulare. */
+const ridesPanel = createLiveRidesPanel(app, {
+  onClose: () => {
+    shell.closePanel();
+    if (application.getState().kind === 'PLAYING') view.getCanvas().focus();
+  },
+});
 /** Singura gazdă UI a shell-ului: start, pauză, reluare și panoul de integrare. */
 const shellHost = createGameShellHost({
   root: app,
   snapshot: () => shell.status(),
   onStart: () => startSession(),
-  onPause: () => shell.setMenuOpen(true),
+  onPause: () => {
+    if (ridesPanel.isOpen()) ridesPanel.close();
+    if (fleetPanel.isOpen()) fleetPanel.close();
+    shell.setMenuOpen(true);
+  },
   onResume: () => resumeSession(),
   sessionMenu: () => sessionModules.flow?.menu() ?? EMPTY_SESSION_MENU,
   onChooseSession: (kind) => {
@@ -184,16 +229,31 @@ const shellHost = createGameShellHost({
   onResetWorld: () => {
     void resetSessionWorld();
   },
-  onOpenPanel: () => shell.openPanel('integration'),
+  onOpenPanel: () => {
+    if (fleetPanel.isOpen()) fleetPanel.close();
+    if (ridesPanel.isOpen()) ridesPanel.close();
+    return shell.openPanel('integration');
+  },
   onClosePanel: () => {
     shell.closePanel();
     if (application.getState().kind === 'PLAYING') view.getCanvas().focus();
   },
   onOpenFleet: () => {
+    // The shell owns a single panel surface: a live panel is not left underneath another one.
+    if (ridesPanel.isOpen()) ridesPanel.close();
     if (!shell.openPanel('fleet')) return false;
     const snapshot = liveFleetSnapshot();
     if (snapshot !== null) fleetPanel.update(snapshot, performance.now());
     fleetPanel.open();
+    return true;
+  },
+  onOpenRides: () => {
+    if (fleetPanel.isOpen()) fleetPanel.close();
+    if (!shell.openPanel('rides')) return false;
+    // The panel skips writes while closed; open it first, then project the current read model.
+    ridesPanel.open();
+    const snapshot = ridesModules.live?.snapshot();
+    if (snapshot !== undefined) ridesPanel.update(snapshot, performance.now());
     return true;
   },
 });
@@ -247,6 +307,7 @@ const application = createApplicationLifecycle({
         );
         let ownedComposition: V3BrowserComposition | undefined;
         let ownedTraffic: ReturnType<typeof createAmbientTraffic> | undefined;
+        let ownedRides: LiveRides | undefined;
         let owned: BabylonDiagnostics | undefined;
         let releaseSurface: (() => void) | undefined;
         let models: GlbModelLibrary | undefined;
@@ -297,6 +358,17 @@ const application = createApplicationLifecycle({
             models,
           });
           composition = ownedComposition;
+          // PBI 264: cererile și dispecerizarea live peste exact aceleași 24 de taxiuri 057/058.
+          // Plannerul 041 este al acestui modul; harta, graful și registry-ul rămân ale compunerii.
+          ownedRides = createLiveRides({
+            registry: ownedTraffic.registry,
+            map: world.map,
+            graph: world.graph,
+            seed: ownedTraffic.seed,
+            scenarioId: 'v3-live-city-264',
+            namespace: 'v3:city:rides',
+          });
+          ridesModules.live = ownedRides;
           // PBI 260: compunerea V3 este singura lume autoritară a shell-ului. Nicio a doua
           // simulare nu este creată aici; shell-ul doar o atașează și o pașește pe tick.
           const ownedWorld = ownedComposition;
@@ -355,6 +427,8 @@ const application = createApplicationLifecycle({
               attachedShellWorld = false;
               shell.detachWorld();
             }
+            ownedRides?.dispose();
+            if (ridesModules.live === ownedRides) ridesModules.live = undefined;
             ownedComposition?.dispose();
           } finally {
             try {
@@ -388,6 +462,8 @@ const application = createApplicationLifecycle({
                   attachedShellWorld = false;
                   shell.detachWorld();
                 }
+                ownedRides?.dispose();
+                if (ridesModules.live === ownedRides) ridesModules.live = undefined;
                 ownedComposition?.dispose();
               } finally {
                 // PBI 256: compunerea nu deține traficul; registry-ul și actorii 058 se eliberează aici.
@@ -455,6 +531,11 @@ const application = createApplicationLifecycle({
     if (fleetPanel.isOpen()) {
       const snapshot = liveFleetSnapshot();
       if (snapshot !== null) fleetPanel.update(snapshot, performance.now());
+    }
+    // PBI 264: panoul curselor citește doar snapshotul modulului, la aceeași cadență de 10 Hz.
+    if (ridesPanel.isOpen()) {
+      const snapshot = ridesModules.live?.snapshot();
+      if (snapshot !== undefined) ridesPanel.update(snapshot, performance.now());
     }
   },
   show: showView,
@@ -544,6 +625,11 @@ const sessionWorld: SessionWorldPort = {
   },
   start(identity) {
     shell.setSessionContext(identity);
+    // PBI 264: granița de scenariu 065 pentru cereri/dispecer; revendicările active sunt eliberate
+    // explicit înainte de rewind, ca resetul să nu lase taxiuri blocate sau asignări duplicate.
+    ridesModules.live?.reset({
+      tick: composition?.composition.frame.tick ?? shell.status().world.tick,
+    });
     composition?.composition.releaseInput();
     // Sesiunea nouă nu moștenește poziția fizică a celei vechi; restaurarea completă a
     // snapshotului rămâne la 278.
@@ -642,6 +728,8 @@ interface V3DebugGlobal {
   sessionNotice(): string | null;
   /** PBI 263: lista/harta flotei, scaunul PLAYER și statisticile panoului. */
   fleet(): unknown;
+  /** PBI 264: cererile, coada, alocările și starea panoului de curse. */
+  rides(): unknown;
   /** PBI 260: starea read-only a lifecycle-ului 012, pentru diagnosticul probei de browser. */
   lifecycle(): unknown;
   /** PBI 241: starea AA/post-procesării (cine aplică tone mappingul, HDR, efecte). */
@@ -685,6 +773,12 @@ const debugGlobal: V3DebugGlobal = {
     };
   },
   lifecycle: () => application.getState(),
+  rides: () => ({
+    snapshot: ridesModules.live?.snapshot() ?? null,
+    stats: ridesModules.live?.stats() ?? null,
+    panelOpen: ridesPanel.isOpen(),
+    panel: ridesPanel.getStats(),
+  }),
   postProcessing: () => composition?.view.daylight.getPostProcessingState() ?? null,
   reset: () => composition?.reset(),
   probeDoubleDelivery: () => composition?.probeDoubleDelivery() ?? 'NO_COMPOSITION',
@@ -719,6 +813,7 @@ const dispose = (): void => {
     (globalThis as unknown as { __v3Composition?: V3DebugGlobal }).__v3Composition = undefined;
     shellHost.dispose();
     fleetPanel.dispose();
+    ridesPanel.dispose();
     shell.dispose();
     diagnosticsPanel.dispose();
     view.dispose();

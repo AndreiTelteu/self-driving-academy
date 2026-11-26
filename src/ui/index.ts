@@ -102,6 +102,16 @@ export type {
   FleetSelectionPanelSnapshot,
   FleetSelectionPanelStats,
 } from './fleet-selection-panel';
+export {
+  LIVE_RIDES_PANEL_REFRESH_HZ,
+  LIVE_RIDES_PANEL_VERSION,
+  createLiveRidesPanel,
+} from './live-rides-panel';
+export type {
+  LiveRidesPanel,
+  LiveRidesPanelOptions,
+  LiveRidesPanelStats,
+} from './live-rides-panel';
 export { createProfilePanel } from './profile-panel';
 export type { ProfilePanel, ProfilePanelOptions } from './profile-panel';
 export { createLearningNotifications } from './learning-notifications';

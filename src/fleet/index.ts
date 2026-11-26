@@ -8,6 +8,7 @@ export * from './pickup';
 export * from './dropoff';
 export * from './eta';
 export * from './fleet-health';
+export * from './live-rides';
 export * from './profile-activation';
 export * from './profile-continuity';
 export * from './scenario-fixture';

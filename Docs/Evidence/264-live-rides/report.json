@@ -1,0 +1,374 @@
+{
+  "version": "264-live-rides-report-v1",
+  "contract": "264-live-rides-v1",
+  "fixture": {
+    "taxis": 24,
+    "civilians": 32,
+    "seed": 262,
+    "scenarioId": "v3-live-city-264-report",
+    "namespace": "report:264:rides",
+    "planWindows": 8,
+    "requests": 64,
+    "ticks": 900,
+    "resetTick": 900
+  },
+  "plan": {
+    "valid": 64,
+    "invalid": 0,
+    "firstSpawnTick": 60,
+    "lastSpawnTick": 533,
+    "uniqueOrigins": 11,
+    "uniqueDestinations": 9,
+    "sameSeed": true,
+    "seedMovesZones": true,
+    "realZones": true
+  },
+  "queue": {
+    "limit": 64,
+    "peak": 39,
+    "policy": "REJECT_NEWEST",
+    "overflow": 0,
+    "bounded": true,
+    "overflowFixture": {
+      "limit": 8,
+      "peak": 8,
+      "overflow": 8,
+      "pending": 8,
+      "rejectedSecondWindow": true
+    }
+  },
+  "dispatch": {
+    "assignments": 25,
+    "releases": 4,
+    "dispatchSteps": 150,
+    "routeSearches": 334,
+    "maxSearchesPerStep": 25,
+    "routeSearchBudget": 128,
+    "maxAssignmentsPerStep": 1,
+    "assignmentsPerDispatch": 2,
+    "uniqueRequests": 21,
+    "uniqueTaxis": 21,
+    "minCost": {
+      "expectedTaxi": "id-v1:7:vehicle13:v3:city:fleet4:TAXI4:0005",
+      "expectedCost": 31.928171641791042,
+      "actualTaxi": "id-v1:7:vehicle13:v3:city:fleet4:TAXI4:0005",
+      "actualCost": 31.928171641791042,
+      "pass": true
+    },
+    "tripCostMismatch": 0,
+    "releasesByCause": {
+      "PLAYER_TAKEOVER": 1,
+      "BLOCKED": 1,
+      "DAMAGED": 1,
+      "OFFLINE": 1,
+      "SCENARIO_RESET": 0
+    }
+  },
+  "reset": {
+    "releasedAssignments": 21,
+    "preservedStats": true,
+    "activeAfterReset": 0,
+    "assignmentsAfterReset": 23,
+    "duplicateActive": 0,
+    "identityMismatches": 0,
+    "statesAfterReset": {
+      "ASSIGNED": 23,
+      "PENDING": 41
+    }
+  },
+  "state": {
+    "statesBeforeReset": {
+      "ASSIGNED": 21,
+      "RELEASED": 4,
+      "PENDING": 39
+    },
+    "statesAfterReset": {
+      "ASSIGNED": 23,
+      "PENDING": 41
+    },
+    "consumed": 0,
+    "activeRequests": 21,
+    "activeTaxis": 21
+  },
+  "checks": [
+    {
+      "name": "fleet-taxis",
+      "expected": 24,
+      "actual": 24,
+      "pass": true,
+      "detail": "the live 057 fleet is 24 taxis"
+    },
+    {
+      "name": "fleet-civilians",
+      "expected": 32,
+      "actual": 32,
+      "pass": true,
+      "detail": "the real live composition keeps 32 civilians"
+    },
+    {
+      "name": "plan-windows",
+      "expected": 8,
+      "actual": 8,
+      "pass": true,
+      "detail": "059 windows"
+    },
+    {
+      "name": "plan-requests",
+      "expected": 64,
+      "actual": 64,
+      "pass": true,
+      "detail": "8 windows x 8 requests"
+    },
+    {
+      "name": "first-spawn-tick",
+      "expected": 60,
+      "actual": 60,
+      "pass": true,
+      "detail": "first live request at tick 60"
+    },
+    {
+      "name": "spawn-tick-window",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "every request stays inside its authored window"
+    },
+    {
+      "name": "request-ids-unique",
+      "expected": 64,
+      "actual": 64,
+      "pass": true,
+      "detail": "stable 006 request identities"
+    },
+    {
+      "name": "zones-real",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "all pickup/dropoff ids exist in the real 032 map"
+    },
+    {
+      "name": "zones-taxi-access",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "TAXI access"
+    },
+    {
+      "name": "zones-kind",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "pickup and dropoff are different real service zones"
+    },
+    {
+      "name": "seed-deterministic",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "same seed yields identical request list"
+    },
+    {
+      "name": "seed-varies-zones",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "a different seed chooses different zones"
+    },
+    {
+      "name": "queue-policy",
+      "expected": "REJECT_NEWEST",
+      "actual": "REJECT_NEWEST",
+      "pass": true,
+      "detail": "explicit 059 policy"
+    },
+    {
+      "name": "queue-bounded",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "overflow fixture never exceeds 8 pending"
+    },
+    {
+      "name": "queue-overflow",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "newest requests rejected"
+    },
+    {
+      "name": "queue-rejects-only-second-window",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the first 8 requests stay queued; later ones are rejected"
+    },
+    {
+      "name": "dispatch-assignments",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "real claims exist"
+    },
+    {
+      "name": "assignment-requests-unique",
+      "expected": 21,
+      "actual": 21,
+      "pass": true,
+      "detail": "one active taxi per request"
+    },
+    {
+      "name": "assignment-taxis-unique",
+      "expected": 21,
+      "actual": 21,
+      "pass": true,
+      "detail": "one active request per taxi"
+    },
+    {
+      "name": "minimum-pickup-cost",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "expected id-v1:7:vehicle13:v3:city:fleet4:TAXI4:0005 31.928171641791042; actual id-v1:7:vehicle13:v3:city:fleet4:TAXI4:0005 31.928171641791042"
+    },
+    {
+      "name": "both-legs-replanned",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "pickup and trip paths with finite real costs"
+    },
+    {
+      "name": "trip-cost-matches-041",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "replanned trip cost equals a fresh 041 query"
+    },
+    {
+      "name": "search-budget",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "max 25 of 128"
+    },
+    {
+      "name": "assignment-budget",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "max 1 of 2"
+    },
+    {
+      "name": "exclusion-player",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "0 assignments while player-driven; 1 release"
+    },
+    {
+      "name": "exclusion-damaged",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "1 damaged releases, no reassignment"
+    },
+    {
+      "name": "exclusion-offline",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "1 offline releases, no reassignment"
+    },
+    {
+      "name": "exclusion-blocked",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "1 blocked releases, no reassignment"
+    },
+    {
+      "name": "exclusion-overall",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "no unavailable or player-driven taxi is proposed"
+    },
+    {
+      "name": "reset-releases-active",
+      "expected": 21,
+      "actual": 21,
+      "pass": true,
+      "detail": "reset releases every claim"
+    },
+    {
+      "name": "reset-zero-active",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no claim survives the reset"
+    },
+    {
+      "name": "reset-preserves-stats",
+      "expected": 25,
+      "actual": 25,
+      "pass": true,
+      "detail": "preserveStats keeps cumulative assignments; new claims add to them"
+    },
+    {
+      "name": "reset-no-duplicate-active",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "post-reset active request map has no duplicates"
+    },
+    {
+      "name": "reset-unique-taxis",
+      "expected": 23,
+      "actual": 23,
+      "pass": true,
+      "detail": "post-reset active taxi map has one claim per taxi"
+    },
+    {
+      "name": "reset-stable-identities",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "same request/taxi keeps the same assignment id"
+    },
+    {
+      "name": "state-no-consumed",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "every consumed request has a visible state"
+    },
+    {
+      "name": "state-assigned-consistent",
+      "expected": 23,
+      "actual": 23,
+      "pass": true,
+      "detail": "ASSIGNED rows equal active 060 claims"
+    },
+    {
+      "name": "state-closed",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "request states stay inside the documented vocabulary"
+    },
+    {
+      "name": "version",
+      "expected": "264-live-rides-v1",
+      "actual": "264-live-rides-v1",
+      "pass": true,
+      "detail": "live rides contract version"
+    }
+  ],
+  "summary": {
+    "version": "264-live-rides-report-v1",
+    "checks": 39,
+    "passed": 39,
+    "pass": true
+  }
+}
