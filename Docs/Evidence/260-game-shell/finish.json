@@ -1,0 +1,11 @@
+{
+  "id": "260",
+  "criteriaSatisfied": true,
+  "result": "The game shell owns one authoritative tick around the existing V3 world, declares the 16-system order for 261-287, exposes injectable ports with explicit ABSENT reporting, enforces one active world and 070 pause/focus/panel ownership, and mounts a start/pause/resume shell host with a single integration panel. The V3 composition is attached as the only world; no second simulation or renderer is created. Browser evidence is MEASURED on WebGL2 and WebGPU with drive, panel suspension, resume and reload.",
+  "limitations": "WebGL2 uses SwiftShader, so its frame times are not a hardware FPS gate. WebGPU ran on a real GPU but without a GPU timer or soak; 287 owns the final hardware gate. Fleet, rides, economy, learning, missions, persistence, settings, first-person, minimap, Rapier physics, traffic rules, destruction and pedestrians remain dependent tasks and are reported ABSENT. The parent cannot rerun npm run shell:probe because Playwright is not installed; the committed browser evidence was produced in the implementation worktree and verified as MEASURED with two PASS runs. Local Node is 24.19.0, below the declared >=24.21.0.",
+  "checks": [
+    ["node", "--import", "./scripts/register-typescript.mjs", "--test", "tests/app/game-shell.test.ts", "tests/ui/game-shell-host.test.ts"],
+    ["npm", "run", "docs:check", "--", "--check"],
+    ["npm", "run", "typecheck"]
+  ]
+}

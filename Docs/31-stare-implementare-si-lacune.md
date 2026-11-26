@@ -82,6 +82,8 @@ Nu sunt montate: LEARNING, curse, pasageri, flotă selectabilă, KPI, misiuni, X
 
 ### 260 — Shell-ul jocului și composition root pentru Academia jucabilă
 
+**Ce lipsește:** Sistemele reale 261–286 nu sunt încă montate în shell; porturile lor sunt declarate și raportate ca absente.
+
 **Ce s-a livrat:** un singur composition root montează compunerea V3 existentă pe tickul autoritar și expune explicit porturile sistemelor 261–286.
 
 - `src/app/game-shell.ts` deține tick-ul, ordinea declarată a fazelor, pauza/focusul prin owner-ul 070 și regula „o singură lume activă”; un port absent este raportat `ABSENT`, nu simulat.
@@ -95,6 +97,8 @@ Nu sunt montate: LEARNING, curse, pasageri, flotă selectabilă, KPI, misiuni, X
 **Documentație:** [Shell-ul jocului și composition root](game-shell.md) · [Arhitectură și contracte](02-arhitectura-si-contracte.md) · [Interfață, cameră și control](08-interfata-camera-si-control.md) · [Salvare și import/export](15-salvare-si-import-export.md) · [Contracte de performanță](25-performanta-contracte-si-benchmark.md)
 
 **PBI:** [260](../PBI/README.md) · **Dependențe:** niciuna.
+
+**Stare:** Done la 26 noiembrie 2026. Shell-ul este montat; sistemele 261–286 rămân taskurile dependente.
 
 ### 261 — Sesiuni Academie și Haos, schimbare, reset și recuperare
 
