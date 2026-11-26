@@ -748,6 +748,18 @@ export {
 } from './live-ride-composition';
 
 export {
+  LIVE_ECONOMY_COMPOSITION_VERSION,
+  createLiveEconomyComposition,
+  type LiveEconomyComposition,
+  type LiveEconomyCompositionOptions,
+  type LiveEconomyCompositionStats,
+  type LiveEconomyEpochResult,
+  type LiveEconomyObservedVehicle,
+  type LiveEconomyStepInput,
+  type LiveEconomyStepResult,
+} from './live-economy-composition';
+
+export {
   SESSION_FLOW_VERSION,
   createSessionFlow,
   type SessionFlow,

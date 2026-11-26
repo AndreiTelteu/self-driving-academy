@@ -4,12 +4,14 @@ import {
   createApplicationLifecycle,
   createCompositionWorld,
   createGameShell,
+  createLiveEconomyComposition,
   createLiveRideComposition,
   createRendererRecovery,
   createSessionFlow,
   readLiveFleetSelectionSnapshot,
   readMinimapGeometry,
   type GameTickPort,
+  type LiveEconomyComposition,
   type LiveRideComposition,
   type RecoveryRenderer,
   type SessionFlow,
@@ -37,6 +39,7 @@ import {
   createFpsCounter,
   createGameShellHost,
   createFleetSelectionPanel,
+  createLiveEconomyHud,
   createLiveRideMarkerLayer,
   createLiveRidesPanel,
   createPassengerVisualPresenter,
@@ -149,6 +152,65 @@ const ridesTickPort: GameTickPort = {
     });
   },
 };
+/**
+ * PBI 266: portul economiei rulează imediat după `rides`, deci vede exact aceleași curse terminale
+ * 061 și același cadru autoritar. El nu avansează ceasul când shell-ul este suspendat: un pas
+ * lipsă înseamnă zero revenue, zero review și zero expunere economică.
+ */
+const economyModules: {
+  compositions: Map<string, LiveEconomyComposition>;
+  composition: LiveEconomyComposition | undefined;
+} = { compositions: new Map(), composition: undefined };
+/** Activează economia sesiunii cerute; o sesiune nouă pornește cu istoric propriu gol. */
+function activateEconomy(sessionId: string): {
+  economy: LiveEconomyComposition | undefined;
+  created: boolean;
+} {
+  const rideComposition = ridesModules.composition;
+  if (rideComposition === undefined) return { economy: undefined, created: false };
+  const existing = economyModules.compositions.get(sessionId);
+  if (existing !== undefined) {
+    economyModules.composition = existing;
+    return { economy: existing, created: false };
+  }
+  const economy = createLiveEconomyComposition({
+    lifecycle: rideComposition.lifecycle.lifecycle,
+    graph: world.graph,
+    namespace: `v3:city:economy:${sessionId}`,
+  });
+  economyModules.compositions.set(sessionId, economy);
+  economyModules.composition = economy;
+  return { economy, created: true };
+}
+function disposeEconomies(): void {
+  for (const economy of economyModules.compositions.values()) economy.dispose();
+  economyModules.compositions.clear();
+  economyModules.composition = undefined;
+}
+const economyTickPort: GameTickPort = {
+  id: 'economy',
+  version: '266-live-economy-composition-v1',
+  step(context) {
+    const economy = economyModules.composition;
+    if (economy === undefined) return;
+    const frame = composition?.composition.frame;
+    if (frame === undefined) return;
+    if (frame.tick !== context.tick)
+      throw new Error(
+        `Cadrul economiei (${frame.tick}) nu coincide cu tick-ul autoritar (${context.tick}).`,
+      );
+    economy.step({
+      tick: context.tick,
+      vehicles: frame.vehicles.map((vehicle) => ({
+        vehicleId: vehicle.vehicleId,
+        speedMps: Math.abs(vehicle.speedMps),
+        controlMode: vehicle.controlMode,
+        classId: vehicle.classId,
+        headingRad: vehicle.yawRad,
+      })),
+    });
+  },
+};
 const diagnosticsPanel = createDiagnosticsPanel(app, {
   report: () => diagnostics?.report() ?? null,
   // Calitatea adaptivă are nevoie de eșantioane chiar și cu panoul închis.
@@ -174,7 +236,7 @@ let activeRecovery: ReturnType<typeof createRendererRecovery<BootstrapCheckpoint
  */
 const shell = createGameShell({
   context: compositionContext,
-  ports: { sessions: sessionTickPort, rides: ridesTickPort },
+  ports: { sessions: sessionTickPort, rides: ridesTickPort, economy: economyTickPort },
   suspend: (cause) => application.pause(cause),
   resume: (cause) => {
     const state = application.getState();
@@ -232,6 +294,13 @@ const ridesPanel = createLiveRidesPanel(app, {
  */
 const rideMarkerLayer = createLiveRideMarkerLayer(app);
 const passengerPresenter = createPassengerVisualPresenter(rideMarkerLayer.port);
+/**
+ * PBI 266: read model-ul economic compact, montat permanent. Nu este pop-up-ul KPI al 267: arată
+ * doar ziua/luna simulată curentă și ultima decontare, citind portul la 10 Hz.
+ */
+const economyHud = createLiveEconomyHud(app, {
+  read: () => economyModules.composition?.read() ?? null,
+});
 /** Ultimul taxi cu markere 147; schimbarea selecției nu lasă markerii vechi în urmă. */
 let lastMarkerTaxiId: string | null = null;
 /** Singura gazdă UI a shell-ului: start, pauză, reluare și panoul de integrare. */
@@ -406,6 +475,14 @@ const application = createApplicationLifecycle({
             worldEpoch: compositionContext.worldEpoch,
           });
           ridesModules.composition = ownedRideComposition;
+          // PBI 266: economia 209 peste exact aceleași închideri 061; niciun al doilea ledger sau
+          // model de cursă. Portul `economy` rulează după `rides` în același cadru autoritar.
+          disposeEconomies();
+          const economyActivation = activateEconomy(shell.status().sessionId);
+          if (economyActivation.created)
+            economyActivation.economy?.flush({
+              tick: ownedComposition.composition.frame.tick,
+            });
           ownedHud = createTaxiHud(app);
           ridesModules.hud = ownedHud;
           // PBI 260: compunerea V3 este singura lume autoritară a shell-ului. Nicio a doua
@@ -466,6 +543,7 @@ const application = createApplicationLifecycle({
               attachedShellWorld = false;
               shell.detachWorld();
             }
+            disposeEconomies();
             ownedRideComposition?.dispose();
             if (ridesModules.composition === ownedRideComposition)
               ridesModules.composition = undefined;
@@ -505,6 +583,7 @@ const application = createApplicationLifecycle({
                   attachedShellWorld = false;
                   shell.detachWorld();
                 }
+                disposeEconomies();
                 ownedRideComposition?.dispose();
                 if (ridesModules.composition === ownedRideComposition)
                   ridesModules.composition = undefined;
@@ -585,6 +664,8 @@ const application = createApplicationLifecycle({
       if (snapshot !== undefined)
         ridesPanel.update(snapshot.live, performance.now(), snapshot.rides, snapshot.passenger);
     }
+    // PBI 266: economia live are propriul read model, actualizat la 10 Hz cât timp este vizibil.
+    economyHud.update(performance.now());
     // PBI 265: HUD-ul 073 și markerii 147 citesc aceeași stare autoritară; nimic nu scrie în simulare.
     const rideComposition = ridesModules.composition;
     if (frame !== undefined && rideComposition !== undefined) {
@@ -703,9 +784,16 @@ const sessionWorld: SessionWorldPort = {
     shell.setSessionContext(identity);
     // PBI 265: granița de scenariu 065 pentru curse. Fiecare cursă activă este închisă întâi cu
     // SCENARIO_RESET prin 061, apoi 264 rewindează cererile/dispecerul fără revendicări duplicate.
-    ridesModules.composition?.reset({
-      tick: composition?.composition.frame.tick ?? shell.status().world.tick,
-    });
+    const boundaryTick = composition?.composition.frame.tick ?? shell.status().world.tick;
+    // PBI 266: decontează întâi cursele terminale ale sesiunii care iese, apoi pornește economia
+    // sesiunii cerute. O sesiune existentă primește o epocă nouă fără să-și piardă istoricul; una
+    // nouă pornește cu ledgerul ei gol, deci cursele celeilalte sesiuni nu ajung niciodată în ea.
+    const outgoing = economyModules.composition;
+    outgoing?.flush({ tick: boundaryTick });
+    ridesModules.composition?.reset({ tick: boundaryTick });
+    const activation = activateEconomy(identity.sessionId);
+    if (!activation.created) activation.economy?.beginEpoch({ tick: boundaryTick });
+    else activation.economy?.flush({ tick: boundaryTick });
     composition?.composition.releaseInput();
     // Sesiunea nouă nu moștenește poziția fizică a celei vechi; restaurarea completă a
     // snapshotului rămâne la 278.
@@ -806,6 +894,8 @@ interface V3DebugGlobal {
   fleet(): unknown;
   /** PBI 264: cererile, coada, alocările și starea panoului de curse. */
   rides(): unknown;
+  /** PBI 266: economia live, KPI-urile curente și read model-ul HUD. */
+  economy(): unknown;
   /** PBI 265: geometria reală a benzinelor de rută, pentru proba de condus din browser. */
   lanePath(laneIds: readonly string[]): unknown;
   /** PBI 265 (numai DEV/capture): fapt de sănătate real pentru proba terminală FAILED. */
@@ -876,6 +966,21 @@ const debugGlobal: V3DebugGlobal = {
     };
   },
   postProcessing: () => composition?.view.daylight.getPostProcessingState() ?? null,
+  economy: () => {
+    const economy = economyModules.composition;
+    return {
+      read: economy?.read() ?? null,
+      snapshot:
+        economy === undefined || composition === undefined
+          ? null
+          : economy.snapshot(composition.composition.frame.tick),
+      stats: economy?.stats() ?? null,
+      hud: economyHud.getStats(),
+      hudView: economyHud.getView(),
+      hudText: economyHud.getElement().textContent,
+      port: shell.status().systems.find((system) => system.id === 'economy')?.status ?? null,
+    };
+  },
   reset: () => composition?.reset(),
   probeDoubleDelivery: () => composition?.probeDoubleDelivery() ?? 'NO_COMPOSITION',
 };
@@ -914,6 +1019,7 @@ const dispose = (): void => {
     ridesPanel.dispose();
     passengerPresenter.dispose();
     rideMarkerLayer.dispose();
+    economyHud.dispose();
     shell.dispose();
     diagnosticsPanel.dispose();
     view.dispose();

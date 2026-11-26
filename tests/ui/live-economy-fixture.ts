@@ -1,0 +1,175 @@
+import type { FleetKpiBucket, LiveEconomySnapshot } from '../../src/economy';
+
+export const LIVE_ECONOMY_FIXTURE_TICK = 3_600;
+
+function bucket(
+  granularity: 'DAY' | 'MONTH',
+  overrides: Partial<FleetKpiBucket> = {},
+): FleetKpiBucket {
+  const reviewCount = overrides.reviewCount ?? 2,
+    ratingSum = overrides.ratingSum ?? 9,
+    ratingHistogram = overrides.ratingHistogram ?? [0, 0, 0, 0, 1, 1],
+    terminalRides =
+      (overrides.completedRides ?? 3) +
+      (overrides.failedRides ?? 1) +
+      (overrides.cancelledRides ?? 0);
+  return Object.freeze({
+    periodId: granularity === 'DAY' ? 'd0000' : 'm0000',
+    granularity,
+    startTick: granularity === 'DAY' ? 0 : 0,
+    endTick: granularity === 'DAY' ? 72_000 : 2_160_000,
+    economyClockVersion: '209-economy-clock-v1',
+    currency: 'SDA',
+    quotedMinorUnits: 1_800,
+    chargedMinorUnits: 1_800,
+    refundedMinorUnits: 400,
+    revenueMinorUnits: 1_400,
+    completedRides: 3,
+    failedRides: 1,
+    cancelledRides: 0,
+    terminalRides,
+    reviewCount,
+    ratingSum,
+    averageRating: reviewCount === 0 ? null : ratingSum / reviewCount,
+    ratingHistogram,
+    exposureSeconds: 42.5,
+    profileActivationMarkers: Object.freeze([]),
+    completeness: 'PARTIAL',
+    lastTick: 3_000,
+    ...overrides,
+  });
+}
+
+/** A valid live snapshot with one completed day/month and two real reviews. */
+export function liveEconomySnapshot(
+  overrides: Partial<LiveEconomySnapshot> = {},
+): LiveEconomySnapshot {
+  return Object.freeze({
+    version: '266-live-economy-v1',
+    tick: LIVE_ECONOMY_FIXTURE_TICK,
+    epoch: Object.freeze({ index: 1, startTick: 0, resets: 0 }),
+    clock: Object.freeze({
+      version: '209-economy-clock-v1',
+      secondsPerDay: 1_200,
+      daysPerMonth: 30,
+      tickHz: 60,
+    }),
+    totals: Object.freeze({
+      currency: 'SDA',
+      pricingVersion: '209-tariff-v1',
+      quotedMinorUnits: 1_800,
+      chargedMinorUnits: 1_800,
+      refundedMinorUnits: 400,
+      netRevenueMinorUnits: 1_400,
+      settlements: 4,
+      completedRides: 3,
+      failedRides: 1,
+      cancelledRides: 0,
+      completedRevenueMinorUnits: 1_400,
+      failedRevenueMinorUnits: 0,
+      cancellationRevenueMinorUnits: 0,
+      civilianOutcomesRejected: 0,
+    }),
+    today: bucket('DAY'),
+    month: bucket('MONTH'),
+    projection: Object.freeze({
+      status: 'INSUFFICIENT_DATA',
+      reason: 'FEW_RIDES',
+      terminalRides: 4,
+      exposureSeconds: 42.5,
+    }),
+    lastSettlement: Object.freeze({
+      settlementId: 'settlement:ride:266',
+      rideId: 'ride:266',
+      requestId: 'request:266',
+      taxiId: 'taxi:266',
+      terminalState: 'COMPLETED',
+      passengerAboard: true,
+      tick: 3_000,
+      currency: 'SDA',
+      pricingVersion: '209-tariff-v1',
+      policyVersion: '209-cancellation-v1',
+      rule: 'COMPLETED_FARE',
+      quotedMinorUnits: 551,
+      chargedMinorUnits: 551,
+      refundedMinorUnits: 0,
+      netMinorUnits: 551,
+      chargeEntryId: 'charge:266',
+      refundEntryId: null,
+    }),
+    lastReview: Object.freeze({
+      reviewId: 'review:266',
+      rideId: 'ride:266',
+      customerId: 'customer:request:266',
+      rating: 5,
+      reasonCodes: Object.freeze(['ON_TIME', 'SMOOTH_DRIVE', 'EFFICIENT_DELIVERY'] as const),
+      tick: 3_000,
+      reviewModelVersion: '209-review-v1',
+      exposureSeconds: 8,
+      controlIntervals: 8,
+      profileVersions: Object.freeze([]),
+      preferenceAdjustment: 0.1,
+      penalties: Object.freeze({ delay: 0, comfort: 0, incident: 0, failure: 0 }),
+      evidence: Object.freeze({
+        terminalState: 'COMPLETED',
+        passengerAboard: true,
+        delaySeconds: 0,
+        referenceTripDurationSeconds: 90,
+        actualTripDurationSeconds: 90,
+        comfortModelVersion: '139-comfort-metrics-v1',
+        comfortPenalty: 0,
+        impacts: 0,
+        peakImpulseNs: 0,
+        blockedSeconds: 0,
+      }),
+      supersedesReviewId: null,
+      revision: 0,
+    }),
+    counters: Object.freeze({
+      terminalRides: 5,
+      settlements: 4,
+      duplicates: 1,
+      rejected: 0,
+      reviews: 2,
+      civilians: 0,
+      comfortSamples: 140,
+      comfortIntervals: 128,
+    }),
+    historyScans: 0,
+    ...overrides,
+  });
+}
+
+/** A snapshot whose current day has no economic event yet: missing, not zero. */
+export function liveEconomyEmptyDay(): LiveEconomySnapshot {
+  return liveEconomySnapshot({
+    totals: Object.freeze({
+      ...liveEconomySnapshot().totals,
+      quotedMinorUnits: 0,
+      chargedMinorUnits: 0,
+      refundedMinorUnits: 0,
+      netRevenueMinorUnits: 0,
+      settlements: 0,
+      completedRides: 0,
+      failedRides: 0,
+      cancelledRides: 0,
+      completedRevenueMinorUnits: 0,
+      failedRevenueMinorUnits: 0,
+      cancellationRevenueMinorUnits: 0,
+    }),
+    today: null,
+    month: null,
+    lastSettlement: null,
+    lastReview: null,
+    counters: Object.freeze({
+      terminalRides: 0,
+      settlements: 0,
+      duplicates: 0,
+      rejected: 0,
+      reviews: 0,
+      civilians: 0,
+      comfortSamples: 0,
+      comfortIntervals: 0,
+    }),
+  });
+}
