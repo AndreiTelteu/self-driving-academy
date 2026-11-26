@@ -448,7 +448,7 @@ async function runConfig(playwright, origin, config) {
     };
     const reloadPass =
       reload.hostCount === 1 &&
-      reload.hostListeners === 6 &&
+      reload.hostListeners === 8 &&
       reload.hostGlobalListeners === 0 &&
       reload.ticksAtReady === 0 &&
       reload.worldTickAtReady === 1 &&
@@ -471,7 +471,7 @@ async function runConfig(playwright, origin, config) {
       shellAtPanel.paused === true &&
       panelRows >= 16 &&
       absentRows === finalShell.portsAbsent &&
-      finalShell.portsPresent === 0 &&
+      finalShell.portsPresent === 1 &&
       tickDuringPanel === tickAtPanelOpen &&
       resumedPlaying &&
       tickAfterPanel > tickDuringPanel &&

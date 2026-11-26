@@ -2,7 +2,7 @@
 
 Joc 3D pentru browser în care jucătorul conduce manual, iar taxiurile autonome și civilii îi adoptă stilul, inclusiv greșelile. Învățarea se face doar în LEARNING; MANUAL permite condus fără învățare. KPI-urile flotei, trei misiuni zilnice și XP urmăresc consecințele și progresul. Engine-ul ales este Babylon.js.
 
-Aplicația browser are bootstrap TypeScript/Vite și randare Babylon.js: preferă WebGPU, revine la WebGL2 verificat și oferă reîncercare după eșecul inițializării. Buildul curent este un **sandbox V3 de mers și condus**: personaj, intrare/ieșire, AUTO/MANUAL, trafic AI civil și vizualul V4. Bucla de Academie — flotă, curse, LEARNING, KPI, misiuni, XP, companie și salvare — nu este montată. Starea exactă și ce lipsește sunt în [Docs/31](Docs/31-stare-implementare-si-lacune.md); boardul curent are 29 de taskuri noi, 259–287.
+Aplicația browser are bootstrap TypeScript/Vite și randare Babylon.js: preferă WebGPU, revine la WebGL2 verificat și oferă reîncercare după eșecul inițializării. Buildul curent este un **sandbox V3 de mers și condus**: personaj, intrare/ieșire, AUTO/MANUAL, trafic AI civil și vizualul V4, plus alegerea sesiunii Academie / Joacă liberă / Haos cu checkpoint și reset separat. Bucla completă de Academie — flotă, curse, LEARNING, KPI, misiuni, XP, companie și salvare — nu este montată. Starea exactă și ce lipsește sunt în [Docs/31](Docs/31-stare-implementare-si-lacune.md); boardul curent are 29 de taskuri noi, 259–287.
 
 ## Stare curentă
 
@@ -11,7 +11,8 @@ Aplicația browser are bootstrap TypeScript/Vite și randare Babylon.js: prefer�
 | Mers, intrare/ieșire, conducere de bază, AUTO/MANUAL, trafic AI, ora din zi, vizual V4 | **Jucabil** |
 | LEARNING, profil, propagare în flotă | **Contract**, neconectat |
 | Flotă 20–30 taxiuri, curse, pasageri, ETA | **Contract/parțial**, neconectat |
-| KPI, review-uri, misiuni, XP, provocări, Haos | **Contract**, neconectat |
+| KPI, review-uri, misiuni, XP, provocări | **Contract**, neconectat |
+| Sesiuni Academie/Haos, checkpoint și reset | **Jucabil** (261); conținutul Haos rămâne la 262+ |
 | Companie: costuri, profit, cash, evoluție | **Propunere neconfirmată** în [Docs/32](Docs/32-companie-profit-si-evolutie.md) |
 | Persistență, setări, first-person, minimapă, audio, destructibile | **Contract**, neconectat |
 | Fizica Rapier și regulile de trafic live | **Lipsesc** din buildul jucabil |

@@ -5,7 +5,11 @@ import {
   createCompositionWorld,
   createGameShell,
   createRendererRecovery,
+  createSessionFlow,
+  type GameTickPort,
   type RecoveryRenderer,
+  type SessionFlow,
+  type SessionFlowMenu,
 } from './app';
 import { createDefaultSettings } from './settings';
 import { bindPauseFocusInput } from './input';
@@ -29,6 +33,10 @@ import {
   createFpsCounter,
   createGameShellHost,
 } from './ui';
+import { computeProfileVersionChecksum } from './profiles';
+import type { ProfileVersion, ProfileVersionContent } from './profiles';
+import { copyProfileForChaos } from './persistence';
+import type { SessionKind, SessionWorldPort } from './persistence';
 import './style.css';
 
 const app = document.querySelector<HTMLDivElement>('#app');
@@ -52,16 +60,43 @@ const settings = captureConfig
   : defaultSettings;
 /** Calitatea curentă a sesiunii: pornește din setări și urmează comutările de preset live (PBI 241). */
 let sessionQuality = settings.quality;
+/** PBI 261: cele două sesiuni au identități stabile, distincte; shell-ul le adoptă la tranziție. */
+const ACADEMY_SESSION_ID = 'session-261-academy' as const;
+const CHAOS_SESSION_ID = 'session-261-chaos' as const;
+const sessionBootedAt = new Date().toISOString();
 const compositionContext = Object.freeze({
   schemaVersion: 1 as const,
   units: 'SI' as const,
-  sessionId: 'v3-composition-236',
+  sessionId: ACADEMY_SESSION_ID,
   worldEpoch: 1,
+  learningEpoch: 0,
 });
 let composition: V3BrowserComposition | undefined;
 let diagnostics: BabylonDiagnostics | undefined;
 let inspectScene: (() => Promise<boolean>) | undefined;
 let releaseCapture: (() => void) | undefined;
+/** PBI 261: fluxul de sesiuni este compus după lifecycle, dar UI-ul îl interoghează de la început. */
+const sessionModules: { flow: SessionFlow | undefined } = { flow: undefined };
+let sessionNotice: string | null = null;
+const EMPTY_SESSION_MENU: SessionFlowMenu = Object.freeze({
+  version: '261-session-flow-v1',
+  live: null,
+  choices: Object.freeze([]),
+  ledgerIsolation: false,
+});
+/** PBI 261: portul PRE_WORLD verifică în fiecare tick identitatea adoptată de flux. */
+const sessionTickPort: GameTickPort = {
+  id: 'sessions',
+  version: '261-session-flow-v1',
+  step(context) {
+    const flow = sessionModules.flow;
+    if (!flow) return;
+    if (!flow.observeTick(context))
+      throw new Error(
+        `Sesiunea din tick (${context.sessionId}/${context.worldEpoch}/${context.learningEpoch}) nu este cea live.`,
+      );
+  },
+};
 const diagnosticsPanel = createDiagnosticsPanel(app, {
   report: () => diagnostics?.report() ?? null,
   // Calitatea adaptivă are nevoie de eșantioane chiar și cu panoul închis.
@@ -87,7 +122,7 @@ let activeRecovery: ReturnType<typeof createRendererRecovery<BootstrapCheckpoint
  */
 const shell = createGameShell({
   context: compositionContext,
-  ports: {},
+  ports: { sessions: sessionTickPort },
   suspend: (cause) => application.pause(cause),
   resume: (cause) => {
     const state = application.getState();
@@ -106,6 +141,13 @@ const shellHost = createGameShellHost({
   onStart: () => startSession(),
   onPause: () => shell.setMenuOpen(true),
   onResume: () => resumeSession(),
+  sessionMenu: () => sessionModules.flow?.menu() ?? EMPTY_SESSION_MENU,
+  onChooseSession: (kind) => {
+    void chooseSession(kind as SessionKind);
+  },
+  onResetWorld: () => {
+    void resetSessionWorld();
+  },
   onOpenPanel: () => shell.openPanel('integration'),
   onClosePanel: () => {
     shell.closePanel();
@@ -382,6 +424,129 @@ const application = createApplicationLifecycle({
     return () => document.removeEventListener('visibilitychange', changed);
   },
 });
+/** PBI 261: profilul de lucru al Academiei și copia explicită, independentă, a Haos. */
+function sessionProfile(profileId: string, versionId: string): ProfileVersion {
+  const content: ProfileVersionContent = {
+    schemaVersion: 1,
+    units: 'SI',
+    profileId,
+    versionId,
+    parentVersionId: null,
+    engineVersion: 'engine-261',
+    parameters: Object.freeze({ speed_delta_urban: 0, following_time_headway: 1.8 }),
+    provenance: Object.freeze({
+      origin: 'BASE',
+      sourceSegmentIds: Object.freeze([] as string[]),
+      sourceInterventionIds: Object.freeze([] as string[]),
+      delta: null,
+    }),
+    sourceSegmentIds: Object.freeze([] as string[]),
+    depth: 0,
+    createdAt: sessionBootedAt,
+  };
+  return Object.freeze({ ...content, checksum: computeProfileVersionChecksum(content) });
+}
+const academyProfile = sessionProfile('profile-261-academy', 'profile-261-academy@1');
+const chaosCopy = copyProfileForChaos({
+  source: academyProfile,
+  copyId: 'haos-261',
+  sessionId: CHAOS_SESSION_ID,
+  learningEpoch: 0,
+  copiedAt: sessionBootedAt,
+});
+if (chaosCopy.status !== 'COPIED')
+  throw new Error(`Copia Haos a profilului a fost refuzată: ${chaosCopy.rejection.code}`);
+/**
+ * Portul lumii vii pentru 225: o singură compunere V3, fără o a doua simulare. Captura este
+ * citirea la limita de tick, iar pornirea adoptă identitatea în shell și readuce scena în
+ * pauză/AUTO. Segmentul și joburile live aparțin 271/272; aici nu sunt inventate.
+ */
+const sessionWorld: SessionWorldPort = {
+  capture(identity) {
+    const frame = composition?.composition.frame;
+    const tick = frame?.tick ?? shell.status().world.tick;
+    const mode = frame?.hud.mode ?? 'AUTO';
+    return Object.freeze({
+      tick,
+      vehicles: composition?.stats().vehicles ?? 0,
+      manualVehicles: mode === 'MANUAL' ? 1 : 0,
+      body: Object.freeze({
+        sessionId: identity.sessionId,
+        worldEpoch: identity.worldEpoch,
+        learningEpoch: identity.learningEpoch,
+        tick,
+        mode,
+        launch: 'PAUSED_AUTO' as const,
+        composition: composition?.read() ?? null,
+      }),
+    });
+  },
+  closeSegment() {
+    // Owner-ul segmentului live este 272; până atunci nu există un segment de închis.
+    return 0;
+  },
+  invalidateJobs() {
+    // Owner-ul joburilor live este 272/278; un număr inventat ar ascunde lipsa lor.
+    return 0;
+  },
+  releaseInput() {
+    if (composition === undefined) return 0;
+    composition.composition.releaseInput();
+    return 1;
+  },
+  start(identity) {
+    shell.setSessionContext(identity);
+    composition?.composition.releaseInput();
+    // Sesiunea nouă nu moștenește poziția fizică a celei vechi; restaurarea completă a
+    // snapshotului rămâne la 278.
+    composition?.reset();
+    composition?.setVehicleMode('AUTO');
+    shell.setMode('AUTO');
+  },
+  stop() {
+    composition?.composition.releaseInput();
+  },
+  residentJobs() {
+    return 0;
+  },
+  listeners() {
+    return composition === undefined ? 0 : 1;
+  },
+};
+sessionModules.flow = createSessionFlow({
+  world: sessionWorld,
+  academyProfile,
+  chaosProfile: chaosCopy.copy,
+  academySessionId: ACADEMY_SESSION_ID,
+  chaosSessionId: CHAOS_SESSION_ID,
+  now: () => new Date().toISOString(),
+  onLaunch: () => {
+    shell.setMode('AUTO');
+    shell.setMenuOpen(true);
+    if (application.getState().kind === 'PLAYING') application.pause('menu');
+    shellHost.refreshSession();
+  },
+});
+/** PBI 261: alegerea explicită a sesiunii; shell-ul este suspendat înainte de orice captură. */
+async function chooseSession(kind: SessionKind): Promise<void> {
+  const flow = sessionModules.flow;
+  if (!flow) return;
+  shell.setMenuOpen(true);
+  const result = await flow.choose(kind);
+  sessionNotice = result.status === 'REJECTED' ? `${result.code}: ${result.message}` : null;
+  shellHost.setSessionState(application.getState().kind);
+  shellHost.refreshSession();
+}
+/** PBI 261: resetul aceleiași sesiuni, cu checkpoint înainte de epoci; stilul rămâne activ. */
+async function resetSessionWorld(): Promise<void> {
+  const flow = sessionModules.flow;
+  if (!flow) return;
+  shell.setMenuOpen(true);
+  const result = await flow.resetWorld();
+  sessionNotice = result.status === 'REJECTED' ? `${result.code}: ${result.message}` : null;
+  shellHost.setSessionState(application.getState().kind);
+  shellHost.refreshSession();
+}
 /** Reluare explicită: refuzată cât timp o suprafață sau focusul cere suspendarea (070). */
 function resumeSession(): void {
   shell.setMenuOpen(false);
@@ -411,6 +576,8 @@ view.onMode(() => {
   view.getCanvas().focus();
 });
 void application.load(preference);
+// Academia este alegerea implicită, dar meniul rămâne explicit pentru Haos sau revenire.
+void chooseSession('ACADEMY');
 
 /** Diagnostice read-only pentru probele de browser; nu expun nicio scriere de autoritate. */
 interface V3DebugGlobal {
@@ -421,6 +588,10 @@ interface V3DebugGlobal {
   /** PBI 260: starea composition root-ului, porturilor și costurile tick/prezentare. */
   shell(): unknown;
   shellHost(): unknown;
+  /** PBI 261: sesiunile Academie/Haos, checkpointurile și identitatea stabilă. */
+  session(): unknown;
+  sessionMenu(): unknown;
+  sessionNotice(): string | null;
   /** PBI 260: starea read-only a lifecycle-ului 012, pentru diagnosticul probei de browser. */
   lifecycle(): unknown;
   /** PBI 241: starea AA/post-procesării (cine aplică tone mappingul, HDR, efecte). */
@@ -444,6 +615,9 @@ const debugGlobal: V3DebugGlobal = {
   stats: () => composition?.stats() ?? null,
   shell: () => shell.status(),
   shellHost: () => shellHost.getStats(),
+  session: () => sessionModules.flow?.status() ?? null,
+  sessionMenu: () => sessionModules.flow?.menu() ?? EMPTY_SESSION_MENU,
+  sessionNotice: () => sessionNotice,
   lifecycle: () => application.getState(),
   postProcessing: () => composition?.view.daylight.getPostProcessingState() ?? null,
   reset: () => composition?.reset(),

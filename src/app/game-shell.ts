@@ -111,7 +111,16 @@ export interface GameTickContext {
   readonly dtSeconds: number;
   readonly sessionId: string;
   readonly worldEpoch: number;
+  /** Generația de learning a sesiunii; rezultatele vechi sunt refuzate de owner-ul 261. */
+  readonly learningEpoch: number;
   readonly mode: GameMode;
+}
+
+/** Identitatea unei sesiuni live; aceeași pereche (sessionId, worldEpoch) nu poate avea două lumi. */
+export interface GameSessionContext {
+  readonly sessionId: string;
+  readonly worldEpoch: number;
+  readonly learningEpoch: number;
 }
 
 export interface GameTickPort {
@@ -171,6 +180,9 @@ export interface GameShellStatus {
   readonly version: typeof GAME_SHELL_VERSION;
   readonly sessionId: string;
   readonly worldEpoch: number;
+  readonly learningEpoch: number;
+  /** Numărul de identități de sesiune adoptate prin `setSessionContext`. */
+  readonly contextSwitches: number;
   readonly tick: number;
   readonly started: boolean;
   readonly paused: boolean;
@@ -195,7 +207,7 @@ export interface GameShellStatus {
 }
 
 export interface GameShellOptions {
-  readonly context: Readonly<{ sessionId: string; worldEpoch: number }>;
+  readonly context: Readonly<{ sessionId: string; worldEpoch: number; learningEpoch?: number }>;
   /**
    * Porturile deja livrate. Cheile absente sunt raportate explicit; shell-ul nu inventează
    * implementări pentru ele.
@@ -217,6 +229,10 @@ export interface GameShell {
   step(tick: number): GameShellTick;
   present(): void;
   setMode(mode: GameMode): void;
+  /** Identitatea sesiunii pentru tick-urile următoare; refuzată în timpul unui pas. */
+  setSessionContext(
+    context: Readonly<{ sessionId: string; worldEpoch: number; learningEpoch?: number }>,
+  ): void;
   setFocusLost(lost: boolean): void;
   setMenuOpen(open: boolean): void;
   openPanel(panelId: string): boolean;
@@ -276,6 +292,15 @@ export function createGameShell(options: GameShellOptions): GameShell {
   const worldEpoch = options.context?.worldEpoch;
   if (!Number.isSafeInteger(worldEpoch) || worldEpoch < 0)
     throw new Error('Game shell: worldEpoch invalid.');
+  const initialLearningEpoch = options.context?.learningEpoch ?? 0;
+  if (!Number.isSafeInteger(initialLearningEpoch) || initialLearningEpoch < 0)
+    throw new Error('Game shell: learningEpoch invalid.');
+  let context: GameSessionContext = Object.freeze({
+    sessionId,
+    worldEpoch,
+    learningEpoch: initialLearningEpoch,
+  });
+  let contextSwitches = 0;
   if (typeof options.suspend !== 'function' || typeof options.resume !== 'function')
     throw new Error('Game shell: suspend/resume ports are required.');
   const now = options.now ?? (() => performance.now());
@@ -337,8 +362,10 @@ export function createGameShell(options: GameShellOptions): GameShell {
     ).length;
     return Object.freeze({
       version: GAME_SHELL_VERSION,
-      sessionId,
-      worldEpoch,
+      sessionId: context.sessionId,
+      worldEpoch: context.worldEpoch,
+      learningEpoch: context.learningEpoch,
+      contextSwitches,
       tick: lastTick,
       started,
       paused: pause.suspended,
@@ -420,12 +447,13 @@ export function createGameShell(options: GameShellOptions): GameShell {
         refusedTicks += 1;
         throw new Error(`Game shell: expected tick ${lastTick + 1}, received ${tick}.`);
       }
-      const context: GameTickContext = Object.freeze({
+      const tickContext: GameTickContext = Object.freeze({
         version: GAME_SHELL_VERSION,
         tick,
         dtSeconds: GAME_SHELL_DT_SECONDS,
-        sessionId,
-        worldEpoch,
+        sessionId: context.sessionId,
+        worldEpoch: context.worldEpoch,
+        learningEpoch: context.learningEpoch,
         mode,
       });
       stepping = true;
@@ -444,7 +472,7 @@ export function createGameShell(options: GameShellOptions): GameShell {
             portsAbsent += 1;
             continue;
           }
-          port.step(context);
+          port.step(tickContext);
           portsCalled += 1;
           systemSteps.set(system.id, (systemSteps.get(system.id) ?? 0) + 1);
         }
@@ -484,6 +512,29 @@ export function createGameShell(options: GameShellOptions): GameShell {
       requireActive();
       mode = next;
       pauseFocus.setMode(next);
+    },
+    setSessionContext(next): void {
+      requireActive();
+      if (stepping) throw new Error('Game shell: the session context cannot change during a tick.');
+      const nextSessionId = requireString(next?.sessionId, 'sessionId');
+      const nextWorldEpoch = next?.worldEpoch;
+      if (!Number.isSafeInteger(nextWorldEpoch) || nextWorldEpoch < 0)
+        throw new Error('Game shell: worldEpoch invalid.');
+      const nextLearningEpoch = next?.learningEpoch ?? 0;
+      if (!Number.isSafeInteger(nextLearningEpoch) || nextLearningEpoch < 0)
+        throw new Error('Game shell: learningEpoch invalid.');
+      if (
+        nextSessionId === context.sessionId &&
+        nextWorldEpoch === context.worldEpoch &&
+        nextLearningEpoch === context.learningEpoch
+      )
+        return;
+      context = Object.freeze({
+        sessionId: nextSessionId,
+        worldEpoch: nextWorldEpoch,
+        learningEpoch: nextLearningEpoch,
+      });
+      contextSwitches += 1;
     },
     setFocusLost(lost: boolean): void {
       requireActive();
