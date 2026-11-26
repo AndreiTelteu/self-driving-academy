@@ -238,6 +238,8 @@ Nu sunt montate: LEARNING, pop-up-ul KPI și panoul companiei, misiuni, XP, salv
 
 **PBI:** [268](../PBI/README.md) · **Dependențe:** 266.
 
+**Stare:** Done la 26 noiembrie 2026. Ledgerul de costuri/profit/cash este live; nivelul, achizițiile și upgrade-urile rămân 269, iar dashboard-ul 270.
+
 ### 269 — Evoluția companiei: nivel, achiziții de vehicule și upgrade-uri
 
 **Ce lipsește:** Nu există evoluție de companie: nici nivel, nici cash de investit, nici achiziții sau upgrade-uri. XP-ul jucătorului nu este evoluția companiei.

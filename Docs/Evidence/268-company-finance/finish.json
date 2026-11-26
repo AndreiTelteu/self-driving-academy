@@ -1,0 +1,12 @@
+{
+  "id": "268",
+  "criteriaSatisfied": true,
+  "result": "The company ledger is separate from 209 and XP: versioned per-ride energy, maintenance, incident and service costs plus monthly fixed costs, profit, cash, monthly P&L and signed refund/cancellation adjustments. One immutable idempotent entry per terminal ride, adjustments reference the original without rewriting it. The live port consumes accepted 209 settlements and real review impact counts. No purchase/upgrade, XP or 209 write surface exists.",
+  "limitations": "Costs use the planned 061 route distance, not a measured odometer, because 061 exposes no odometer; this is an explicit estimate. Incident cost comes from review evidence and is not invented without an impact. Company dashboard (270), evolution/purchases/upgrades (269) and persistence (278) remain future PBIs. Cost is a headless subsystem probe, not FPS/GPU/hardware. Browser probe is NOT_RUN because Playwright is not installed in the worktree. Local Node is 24.19.0.",
+  "checks": [
+    ["node", "--import", "./scripts/register-typescript.mjs", "--test", "tests/economy/company-finance.test.ts", "tests/economy/company-finance-live.test.ts", "tests/economy/company-finance-report.test.ts"],
+    ["npm", "run", "company:finance", "--", "--check"],
+    ["npm", "run", "docs:check", "--", "--check"],
+    ["npm", "run", "typecheck"]
+  ]
+}
