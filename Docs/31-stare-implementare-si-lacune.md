@@ -22,9 +22,10 @@ Buildul curent pornește din `src/main.ts` și oferă:
 - AUTO care urmează o rută 041 la ~80% din limita benzii;
 - 24 de mașini AI civile cu cruise/following;
 - `T` pentru ora din zi și vizualul V4;
-- ecran de start, pauză, vitezometru și indicator de mod.
+- ecran de start, pauză, vitezometru și indicator de mod;
+- un singur composition root (260) care deține tick-ul, pauza/focusul și ordinea porturilor, plus un panou de integrare care arată explicit sistemele 261–286 încă neintegrate.
 
-Nu sunt montate: LEARNING, curse, pasageri, flotă selectabilă, KPI, misiuni, XP, salvare, companie, panouri, first-person, minimapă, sunet, decor destructibil, provocări, Haos, fizica Rapier și regulile de trafic.
+Nu sunt montate: LEARNING, curse, pasageri, flotă selectabilă, KPI, misiuni, XP, salvare, companie, panourile de sistem (flotă, KPI, misiuni, profil, setări), first-person, minimapă, sunet, decor destructibil, provocări, Haos, fizica Rapier și regulile de trafic.
 
 ## Matricea lacunelor
 
@@ -81,16 +82,17 @@ Nu sunt montate: LEARNING, curse, pasageri, flotă selectabilă, KPI, misiuni, X
 
 ### 260 — Shell-ul jocului și composition root pentru Academia jucabilă
 
-**Ce lipsește:** `src/main.ts` montează doar compunerea V3; nu există un composition root care să ruleze împreună sesiunea, flota, cursele, learning-ul, economia, misiunile și salvarea.
+**Ce s-a livrat:** un singur composition root montează compunerea V3 existentă pe tickul autoritar și expune explicit porturile sistemelor 261–286.
 
-- `src/main.ts` creează doar `createRenderingView`, `createDiagnosticsPanel`, `createV3BrowserComposition` și HUD-ul de personaj.
-- Nu există un owner unic pentru tick, pauză, focus, schimbarea sesiunii și ordinea sistemelor.
-- Modulele de flotă, curse, economie, learning, misiuni și persistență nu sunt injectate în compunerea live.
-- Nu există un shell UI pentru Academie/Haos, flotă, misiuni, KPI, profil, setări și salvare.
-- Nu există o regulă de compunere care să împiedice două simulări sau două scrieri concurente.
-- Nu există o dovadă de browser pentru bucla completă, doar probe izolate de module.
+- `src/app/game-shell.ts` deține tick-ul, ordinea declarată a fazelor, pauza/focusul prin owner-ul 070 și regula „o singură lume activă”; un port absent este raportat `ABSENT`, nu simulat.
+- `src/main.ts` atașează compunerea V3 ca lume autoritară, rulează un singur `step` prin shell și leagă start/pauză/reluare/focusul de același owner.
+- `src/ui/game-shell-host.ts` montează Start/Pauză/Reia și un panou modal de integrare, cu focus, Escape și zero listeneri globali.
+- Porturile flotei, curselor, economiei, learning-ului, misiunilor, persistenței, setărilor, camerei, HUD-ului, traficului, distrugerii și pietonilor sunt declarate și raportate ca absente până la taskurile lor.
+- Proba `npm run shell:probe` rulează start → conducere → panou → reluare → reload pe WebGL2 și WebGPU, cu tickul înghețat cât timp panoul suspendă simularea și cu o singură lume/gazdă după reload.
 
-**Documentație:** [Arhitectură și contracte](02-arhitectura-si-contracte.md) · [Interfață, cameră și control](08-interfata-camera-si-control.md) · [Salvare și import/export](15-salvare-si-import-export.md) · [Contracte de performanță](25-performanta-contracte-si-benchmark.md) · [Starea implementării și lacunele](31-stare-implementare-si-lacune.md)
+**Ce rămâne:** sistemele reale din 261–286 nu sunt implementate aici. Flota, cursele, economia, learning-ul, misiunile, persistența, setările, camera first-person, minimapa, fizica Rapier, regulile de trafic, distrugerea și pietonii rămân dependențe ale taskurilor lor.
+
+**Documentație:** [Shell-ul jocului și composition root](game-shell.md) · [Arhitectură și contracte](02-arhitectura-si-contracte.md) · [Interfață, cameră și control](08-interfata-camera-si-control.md) · [Salvare și import/export](15-salvare-si-import-export.md) · [Contracte de performanță](25-performanta-contracte-si-benchmark.md)
 
 **PBI:** [260](../PBI/README.md) · **Dependențe:** niciuna.
 

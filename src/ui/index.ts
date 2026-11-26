@@ -1,6 +1,12 @@
 import type { BootstrapView } from '../rendering';
 export { createRenderingView } from './rendering-view';
 export { createDiagnosticsPanel } from './diagnostics-panel';
+export {
+  GAME_SHELL_HOST_REFRESH_MS,
+  GAME_SHELL_HOST_VERSION,
+  createGameShellHost,
+} from './game-shell-host';
+export type { GameShellHost, GameShellHostOptions, GameShellHostStats } from './game-shell-host';
 
 export function createBootstrapView(root: HTMLDivElement): BootstrapView {
   const title = document.createElement('h1');

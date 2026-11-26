@@ -12,6 +12,7 @@ export class HudElement {
   readonly attrs = new Map<string, string>();
   text = '';
   open = false;
+  hidden = false;
   /** Mirrors the DOM `value` property used by `select`/`option` elements. */
   value = '';
   private textNode: TextNode | null = null;

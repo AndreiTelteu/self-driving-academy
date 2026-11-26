@@ -3,7 +3,7 @@ import {
   createAmbientTraffic,
   createApplicationLifecycle,
   createCompositionWorld,
-  createPauseFocusOwner,
+  createGameShell,
   createRendererRecovery,
   type RecoveryRenderer,
 } from './app';
@@ -23,7 +23,12 @@ import {
   type V3BrowserComposition,
 } from './rendering/babylon';
 import { observeDisplaySurface, readDisplayMetrics } from './rendering';
-import { createRenderingView, createDiagnosticsPanel, createFpsCounter } from './ui';
+import {
+  createRenderingView,
+  createDiagnosticsPanel,
+  createFpsCounter,
+  createGameShellHost,
+} from './ui';
 import './style.css';
 
 const app = document.querySelector<HTMLDivElement>('#app');
@@ -75,18 +80,48 @@ interface BootstrapCheckpoint {
   readonly scene: RecoverySceneSnapshot;
 }
 let activeRecovery: ReturnType<typeof createRendererRecovery<BootstrapCheckpoint>> | undefined;
-const pauseFocus = createPauseFocusOwner({
+/**
+ * PBI 260: composition root-ul deține tick-ul autoritar, pauza/focusul și ordinea porturilor.
+ * Porturile sistemelor 261–286 nu sunt încă livrate; shell-ul le raportează explicit ca absente
+ * și nu le înlocuiește cu simulări paralele.
+ */
+const shell = createGameShell({
+  context: compositionContext,
+  ports: {},
   suspend: (cause) => application.pause(cause),
   resume: (cause) => {
     const state = application.getState();
-    if (state.kind === 'PAUSED' && state.reason === cause) application.play();
+    if (state.kind === 'PAUSED' && state.reason === cause) {
+      application.play();
+      // 025 blochează tastele cât timp un buton are focusul; reluarea readuce focusul pe canvas.
+      if (application.getState().kind === 'PLAYING') view.getCanvas().focus();
+    }
+  },
+  resetHeldCommands: () => composition?.composition.releaseInput(),
+});
+/** Singura gazdă UI a shell-ului: start, pauză, reluare și panoul de integrare. */
+const shellHost = createGameShellHost({
+  root: app,
+  snapshot: () => shell.status(),
+  onStart: () => startSession(),
+  onPause: () => shell.setMenuOpen(true),
+  onResume: () => resumeSession(),
+  onOpenPanel: () => shell.openPanel('integration'),
+  onClosePanel: () => {
+    shell.closePanel();
+    if (application.getState().kind === 'PLAYING') view.getCanvas().focus();
   },
 });
+/** Fiecare tranziție de sesiune ajunge și în gazda shell-ului, nu doar în view-ul de randare. */
+const showView = (state: Parameters<typeof view.show>[0]): void => {
+  view.show(state);
+  shellHost.setSessionState(state.kind);
+};
 /** Browser alt-tab/blur only *reports*; the authoritative suspension stays a 070 decision. */
 const focusBinding = bindPauseFocusInput({
   surface: app,
-  onFocusLost: () => pauseFocus.setFocusLost(true),
-  onFocusGained: () => pauseFocus.setFocusLost(false),
+  onFocusLost: () => shell.setFocusLost(true),
+  onFocusGained: () => shell.setFocusLost(false),
 });
 
 /** Snapshot compact pentru bucla fixă; compunerea rămâne proprietarul stării. */
@@ -114,9 +149,9 @@ const application = createApplicationLifecycle({
       },
       show: (state) => {
         if (activeRecovery !== recovery || !application.getSimulationState()) return;
-        if (state.kind === 'RECOVERING') view.show({ kind: 'LOADING' });
-        else if (state.kind === 'ERROR') view.show({ kind: 'ERROR', message: state.message });
-        else if (state.kind === 'READY') view.show(application.getState());
+        if (state.kind === 'RECOVERING') showView({ kind: 'LOADING' });
+        else if (state.kind === 'ERROR') showView({ kind: 'ERROR', message: state.message });
+        else if (state.kind === 'READY') showView(application.getState());
       },
       createRenderer: async (checkpoint, kind, onLost) => {
         const backend = await createBabylonRecoverySession(
@@ -130,6 +165,8 @@ const application = createApplicationLifecycle({
         let owned: BabylonDiagnostics | undefined;
         let releaseSurface: (() => void) | undefined;
         let models: GlbModelLibrary | undefined;
+        /** Shell-ul refuză o a doua lume activă; detașarea este perechea fiecărei atașări. */
+        let attachedShellWorld = false;
         try {
           const canvas = view.getCanvas();
           canvas.tabIndex = 0;
@@ -175,6 +212,17 @@ const application = createApplicationLifecycle({
             models,
           });
           composition = ownedComposition;
+          // PBI 260: compunerea V3 este singura lume autoritară a shell-ului. Nicio a doua
+          // simulare nu este creată aici; shell-ul doar o atașează și o pașește pe tick.
+          const ownedWorld = ownedComposition;
+          shell.attachWorld({
+            version: ownedWorld.version,
+            currentTick: () => ownedWorld.composition.frame.tick,
+            step: (tick) => ownedWorld.step(tick),
+            present: () => ownedWorld.present(),
+          });
+          attachedShellWorld = true;
+          shell.setMode(ownedComposition.composition.frame.hud.mode);
           // PBI 252: capturile pot fixa ora din zi; jocul obișnuit pornește la amiază și T o schimbă.
           if (captureConfig) ownedComposition.setTimeOfDay(captureConfig.time);
           const surface = ownedComposition;
@@ -218,6 +266,10 @@ const application = createApplicationLifecycle({
         } catch (error: unknown) {
           releaseSurface?.();
           try {
+            if (attachedShellWorld) {
+              attachedShellWorld = false;
+              shell.detachWorld();
+            }
             ownedComposition?.dispose();
           } finally {
             try {
@@ -247,6 +299,10 @@ const application = createApplicationLifecycle({
               releaseSurface?.();
               releaseSurface = undefined;
               try {
+                if (attachedShellWorld) {
+                  attachedShellWorld = false;
+                  shell.detachWorld();
+                }
                 ownedComposition?.dispose();
               } finally {
                 // PBI 256: compunerea nu deține traficul; registry-ul și actorii 058 se eliberează aici.
@@ -285,12 +341,15 @@ const application = createApplicationLifecycle({
     };
   },
   createSimulation: () => ({
-    // Compunerea a afișat deja tick-ul 1 la inițializare; bucla pornește de la el.
-    initialTick: 1,
+    // Compunerea a afișat deja tick-ul curent la inițializare; bucla pornește de la el.
+    initialTick: Math.max(1, shell.status().world.tick),
     captureSnapshot: captureCompositionSnapshot,
     step: (step) => {
       if (!composition) throw new Error('Compunerea V3 nu este inițializată.');
-      const frame = composition.step(step.tick);
+      // PBI 260: singurul pas autoritar trece prin shell, care avansează lumea V3 o dată și
+      // apelează porturile declarate. Aici nu există un al doilea `composition.step`.
+      shell.step(step.tick);
+      const frame = composition.composition.frame;
       // PBI 257: HUD-ul central se actualizează din frame-ul autoritativ, la ~10 Hz.
       if (step.tick % 6 === 0)
         view.updatePlayHud({
@@ -303,9 +362,12 @@ const application = createApplicationLifecycle({
     interpolate: (_previous, current) => current,
   }),
   present: () => {
-    composition?.present();
+    const frame = composition?.composition.frame;
+    if (frame !== undefined) shell.setMode(frame.hud.mode);
+    shell.present();
+    shellHost.refresh();
   },
-  show: view.show,
+  show: showView,
   now: () => performance.now(),
   scheduleFrame: (callback) => requestAnimationFrame(callback),
   cancelFrame: (handle) => cancelAnimationFrame(handle),
@@ -320,22 +382,29 @@ const application = createApplicationLifecycle({
     return () => document.removeEventListener('visibilitychange', changed);
   },
 });
+/** Reluare explicită: refuzată cât timp o suprafață sau focusul cere suspendarea (070). */
+function resumeSession(): void {
+  shell.setMenuOpen(false);
+  if (!shell.requestResume()) return;
+  if (activeRecovery?.getState().kind === 'READY') {
+    application.play();
+    // Butonul rămâne elementul activ după click; inputul 066 cere focus în afara butoanelor.
+    view.getCanvas().focus();
+  }
+}
+/** Start/reluare din orice control al shell-ului; owner-ul rămâne 070 + 012. */
+function startSession(): void {
+  shell.start();
+  resumeSession();
+}
 view.onRetry(() => {
   if (!activeRecovery || !application.getSimulationState()) void application.load(preference);
   else if (activeRecovery.getState().kind === 'ERROR' && activeRecovery.getSnapshot())
     void activeRecovery.retry();
   else void activeRecovery.recover('User requested renderer reload');
 });
-view.onPlay(() => {
-  // The owner refuses an explicit resume while a panel/menu/focus loss still demands suspension.
-  if (!pauseFocus.requestResume()) return;
-  if (activeRecovery?.getState().kind === 'READY') {
-    application.play();
-    // Butonul rămâne elementul activ după click; inputul 066 cere focus în afara butoanelor.
-    view.getCanvas().focus();
-  }
-});
-view.onPause(() => application.pause());
+view.onPlay(() => startSession());
+view.onPause(() => shell.setMenuOpen(true));
 view.onMode(() => {
   composition?.toggleVehicleMode();
   // Butonul HUD nu trebuie să rămână activ: altfel 025 blochează W/M în dialoguri/butoane.
@@ -343,12 +412,17 @@ view.onMode(() => {
 });
 void application.load(preference);
 
-/** Diagnostice read-only pentru proba de browser 236; nu expun nicio scriere de autoritate. */
+/** Diagnostice read-only pentru probele de browser; nu expun nicio scriere de autoritate. */
 interface V3DebugGlobal {
   ready(): boolean;
   read(): unknown;
   backend(): unknown;
   stats(): unknown;
+  /** PBI 260: starea composition root-ului, porturilor și costurile tick/prezentare. */
+  shell(): unknown;
+  shellHost(): unknown;
+  /** PBI 260: starea read-only a lifecycle-ului 012, pentru diagnosticul probei de browser. */
+  lifecycle(): unknown;
   /** PBI 241: starea AA/post-procesării (cine aplică tone mappingul, HDR, efecte). */
   postProcessing(): unknown;
   /** PBI 241 (numai DEV, `?capture` sau `?debug`): comutare live de preset prin `applyPreferences`. */
@@ -368,6 +442,9 @@ const debugGlobal: V3DebugGlobal = {
   read: () => composition?.read() ?? null,
   backend: () => composition?.backendInfo() ?? null,
   stats: () => composition?.stats() ?? null,
+  shell: () => shell.status(),
+  shellHost: () => shellHost.getStats(),
+  lifecycle: () => application.getState(),
   postProcessing: () => composition?.view.daylight.getPostProcessingState() ?? null,
   reset: () => composition?.reset(),
   probeDoubleDelivery: () => composition?.probeDoubleDelivery() ?? 'NO_COMPOSITION',
@@ -400,6 +477,8 @@ const dispose = (): void => {
     releaseCapture?.();
     releaseCapture = undefined;
     (globalThis as unknown as { __v3Composition?: V3DebugGlobal }).__v3Composition = undefined;
+    shellHost.dispose();
+    shell.dispose();
     diagnosticsPanel.dispose();
     view.dispose();
   }
