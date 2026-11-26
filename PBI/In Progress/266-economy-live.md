@@ -1,13 +1,13 @@
 ---
 id: "266"
 title: "Economia live: revenue, review-uri, KPI și ceasul economic"
-status: "To Do"
+status: "In Progress"
 release: "V1"
 module: "Economie"
 depends_on: ["265"]
 performance_checks: ["simulation","frame"]
-owner: null
-started_at: null
+owner: "loop-pbi/deepseek-266"
+started_at: "2026-11-26T17:35:32.357Z"
 completed_at: null
 ---
 
