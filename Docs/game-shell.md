@@ -50,9 +50,14 @@ fizică, nu ca o a doua buclă.
 ## Porturile
 
 Un port este `{ id, version?, step(context) }`. `id` trebuie să fie exact cheia declarată, iar
-`step` este sincron și primește `{ tick, dtSeconds, sessionId, worldEpoch, mode }` înghețat.
-Porturile se înregistrează la construcție; shell-ul copiază registrul, deci o modificare ulterioară
-a obiectului de opțiuni nu schimbă compunerea.
+`step` este sincron și primește `{ tick, dtSeconds, sessionId, worldEpoch, learningEpoch, mode }`
+înghețat. Porturile se înregistrează la construcție; shell-ul copiază registrul, deci o modificare
+ulterioară a obiectului de opțiuni nu schimbă compunerea.
+
+Shell-ul are o singură identitate de sesiune activă, schimbată numai prin `setSessionContext(...)`.
+O schimbare în timpul unui pas este refuzată, iar o identitate identică nu este o tranziție nouă.
+`status().learningEpoch` și `status().contextSwitches` raportează ce a fost adoptat; tick-ul nu este
+resetat de o schimbare de sesiune, pentru că o singură buclă rămâne autoritară.
 
 Un port absent nu este o eroare de rulare: `status().systems` îl raportează `ABSENT`, cu zero
 pași, iar panoul de integrare îl arată „Neintegrat”. Un task dependent înlocuiește absența
@@ -80,15 +85,32 @@ furnizând portul real; nu are voie să creeze o simulare paralelă în UI sau �
 
 ## Gazda UI
 
-`createGameShellHost` din `src/ui/game-shell-host.ts` montează bara Start/Pauză/Reia, butonul
-„Integrare” și un singur panou modal. Panoul listează ordinea declarată, owner-ul, starea
-`Prezent`/`Neintegrat` și numărul de pași. Se actualizează la cel mult 10 Hz și numai cât timp este
-deschis; închis nu citește read model-ul.
+`createGameShellHost` din `src/ui/game-shell-host.ts` montează bara Start/Pauză/Reia, meniul de
+sesiune, butonul „Integrare” și un singur panou modal. Panoul listează ordinea declarată, owner-ul,
+starea `Prezent`/`Neintegrat` și numărul de pași. Se actualizează la cel mult 10 Hz și numai cât timp
+este deschis; închis nu citește read model-ul.
+
+## Sesiuni Academie și Haos (261)
+
+`src/app/session-flow.ts` compune `createSessionKindHost` (225) peste portul lumii vii și expune
+`choose`, `resetWorld`, `restore`, `reload`, `acceptJobResult`, `menu`, `status` și `fingerprint`.
+Meniul `select` are `data-shell-action="session"` și valorile `ACADEMY`/`CHAOS`; butonul
+`data-shell-action="reset-world"` din panou cere resetul aceleiași sesiuni. Portul `sessions` este
+înregistrat în shell și verifică la fiecare tick că identitatea din `GameTickContext` este cea live;
+un context vechi produce un fault, nu un tick acceptat. `main.ts` adoptă identitatea în
+`setSessionContext`, readuce scena în AUTO și suspendă aplicația înainte de orice captură.
+
+Checkpointul, epocile, anularea joburilor și refuzul rezultatelor târzii rămân ale contractului 225;
+resetul comite în același store un checkpoint `SCENARIO_RESET` înainte de a avansa `worldEpoch` și
+`learningEpoch`. Reluarea fizică a snapshotului și adaptorul durabil rămân la 278; aici `restore`
+adoptă checkpointul și pornește în `PAUSED_AUTO`.
 
 ## Diagnostice de browser
 
 `__v3Composition.shell()` întoarce starea completă (sisteme, porturi, lume, pauză, costuri), iar
-`__v3Composition.shellHost()` starea gazdei (deschideri, focus, listeneri). Ambele sunt read-only.
+`__v3Composition.shellHost()` starea gazdei (deschideri, focus, listeneri). `__v3Composition.session()`
+și `__v3Composition.sessionMenu()` expun identitatea, epocile, checkpointurile, resetul și eroarea
+ultimei tranziții. Toate sunt read-only.
 
 ## Verificare
 
@@ -100,6 +122,7 @@ npm test
 npm run build
 npm run composition:report -- --check
 npm run shell:probe        # WebGL2 + WebGPU, secvență reală start→conducere→panou→reluare
+npm run session:probe      # Academie → reset → Haos → Academie, dacă Playwright este instalat
 ```
 
 Dovezile browser sunt în [Evidence/260-game-shell](Evidence/260-game-shell/README.md).

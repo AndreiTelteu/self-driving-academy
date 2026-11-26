@@ -23,9 +23,10 @@ Buildul curent pornește din `src/main.ts` și oferă:
 - 24 de mașini AI civile cu cruise/following;
 - `T` pentru ora din zi și vizualul V4;
 - ecran de start, pauză, vitezometru și indicator de mod;
-- un singur composition root (260) care deține tick-ul, pauza/focusul și ordinea porturilor, plus un panou de integrare care arată explicit sistemele 261–286 încă neintegrate.
+- meniul Academie / Joacă liberă / Haos și „Oraș proaspăt, păstrează stilul” din panoul shell-ului, cu identitate, checkpoint și pauză/AUTO separate;
+- un singur composition root (260) care deține tick-ul, pauza/focusul și ordinea porturilor, plus un panou de integrare care arată explicit sistemele 262–286 încă neintegrate.
 
-Nu sunt montate: LEARNING, curse, pasageri, flotă selectabilă, KPI, misiuni, XP, salvare, companie, panourile de sistem (flotă, KPI, misiuni, profil, setări), first-person, minimapă, sunet, decor destructibil, provocări, Haos, fizica Rapier și regulile de trafic.
+Nu sunt montate: LEARNING, curse, pasageri, flota selectabilă, KPI, misiuni, XP, salvare, companie, panourile de sistem (flotă, KPI, misiuni, profil, setări), first-person, minimapa, sunet, decorul destructibil și provocările Haos, fizica Rapier și regulile de trafic.
 
 ## Matricea lacunelor
 
@@ -103,6 +104,8 @@ Nu sunt montate: LEARNING, curse, pasageri, flotă selectabilă, KPI, misiuni, X
 ### 261 — Sesiuni Academie și Haos, schimbare, reset și recuperare
 
 **Ce lipsește:** Sesiunea este hardcodată `v3-composition-236`; nu există alegere Academie/Haos, checkpoint propriu, schimbare sau reset cu stil păstrat.
+
+**Ce s-a livrat:** `src/app/session-flow.ts` compune hostul 225 peste shell-ul 260; meniul oferă Academie și Haos, fiecare cu `sessionId`, `worldEpoch`, `learningEpoch`, profil și checkpoint propriu. `setSessionContext` adoptă identitatea în tick-ul următor, iar portul `sessions` refuză un context vechi. Schimbarea suspendă shell-ul, închide segmentul, comite un checkpoint, anulează joburile lumii vechi și pornește în `PAUSED_AUTO`; un commit refuzat păstrează lumea și epocile. „Oraș proaspăt, păstrează stilul” comite `SCENARIO_RESET` în același store înainte de a avansa epocile, păstrând profilul, XP, daily-ul, recompensele și KPI-ul. Rezultatele târzii primesc motivele închise 225. Checkpointul live este în memorie; adaptorul durabil și reluarea fizică a snapshotului rămân la 278. Proba `npm run session:probe` a trecut pe WEBGL2 și WEBGPU.
 
 - Nu există meniu de alegere a sesiunii; `sessionId`, `playerId` și `profileId` sunt fixe în compunere.
 - Nu există checkpoint propriu pentru Academie și Haos, nici izolarea daily/XP/KPI.

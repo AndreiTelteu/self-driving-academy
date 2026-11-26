@@ -6,7 +6,7 @@ Versiune 0.6 · 26 noiembrie 2026. Aceste fișiere Markdown sunt planul curent a
 
 Boardul a fost resetat. Taskurile 001–258 sunt istorice; boardul curent are **29 de taskuri**, de la **259** la **287**. Detaliile, dovezile vechi și diferența dintre „contract” și „jucabil” sunt în [Starea implementării și lacunele](31-stare-implementare-si-lacune.md).
 
-Jucabil în buildul curent: mers, intrare/ieșire, conducere de bază, AUTO/MANUAL, trafic AI civil, ora din zi și vizualul V4, sub un singur composition root cu tick autoritar și un panou de integrare. **Nu** sunt montate: LEARNING, curse, pasageri, flotă selectabilă, KPI, misiuni, XP, salvare, companie, panourile de sistem (flotă, KPI, misiuni, profil, setări), first-person, minimapă, sunet, decor destructibil, provocări, Haos, fizica Rapier și regulile de trafic.
+Jucabil în buildul curent: mers, intrare/ieșire, conducere de bază, AUTO/MANUAL, trafic AI civil, ora din zi și vizualul V4, sub un singur composition root cu tick autoritar și un panou de integrare, plus alegerea sesiunii Academie / Joacă liberă / Haos cu checkpoint și reset separat. **Nu** sunt montate: LEARNING, curse, pasageri, flotă selectabilă, KPI, misiuni, XP, salvare, companie, panourile de sistem (flotă, KPI, misiuni, profil, setări), first-person, minimapă, sunet, decor destructibil, provocările Haos, fizica Rapier și regulile de trafic.
 
 Profitul și evoluția companiei sunt o **propunere neconfirmată** în [Companie: profit și evoluție](32-companie-profit-si-evolutie.md), nu funcționalitate V1. Docs/22 rămâne contractul pentru revenue și ratings.
 
@@ -56,7 +56,7 @@ Profitul și evoluția companiei sunt o **propunere neconfirmată** în [Compani
 
 ## Stare și istoric
 
-Bootstrapul aplicației browser TypeScript/Vite/Babylon.js și [backendul WebGPU/WebGL2](rendering-backend.md) sunt implementate; [README-ul proiectului](../README.md) documentează versiunile și comenzile locale. Fundația include contracte validate, identitate/random determinist, setări, registry-ul parametrilor, [event bus](event-bus.md) și [protocol workers](worker-protocol.md). Buildul curent este sandboxul V3 de mers și condus montat sub [composition root-ul jocului](game-shell.md); sistemele Academiei 261–286 nu sunt încă integrate. Starea exactă și lacunele sunt în [Docs/31](31-stare-implementare-si-lacune.md). Valorile de calibrare și bugetele de performanță ale jocului sunt ținte de verificat. Task-urile nu sunt executate prin simpla creare a planului.
+Bootstrapul aplicației browser TypeScript/Vite/Babylon.js și [backendul WebGPU/WebGL2](rendering-backend.md) sunt implementate; [README-ul proiectului](../README.md) documentează versiunile și comenzile locale. Fundația include contracte validate, identitate/random determinist, setări, registry-ul parametrilor, [event bus](event-bus.md) și [protocol workers](worker-protocol.md). Buildul curent este sandboxul V3 de mers și condus montat sub [composition root-ul jocului](game-shell.md); sesiunile Academie/Haos din 261 sunt integrate, iar sistemele 262–286 nu sunt încă integrate. Starea exactă și lacunele sunt în [Docs/31](31-stare-implementare-si-lacune.md). Valorile de calibrare și bugetele de performanță ale jocului sunt ținte de verificat. Task-urile nu sunt executate prin simpla creare a planului.
 
 [Planul inițial v0.1](Archive/GAME_DESIGN-v0.1.md) este păstrat pentru istoric. Page-ul creat anterior este tot o referință v0.1; nu este sincronizat automat cu documentele Markdown. Modificările viitoare de plan se fac în aceste module și în PBI-urile aferente.
 
