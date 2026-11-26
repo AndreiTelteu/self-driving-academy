@@ -1,0 +1,11 @@
+{
+  "id": "263",
+  "criteriaSatisfied": true,
+  "result": "The live list and 076 map expose all 58 live vehicles with stable vehicleId. Row or marker click moves only the camera; M performs explicit takeover, reconciles an AI actor onto the lane graph without teleport, preserves or replans its route, and releases the old vehicle to AUTO. Maximum one PLAYER seat is enforced; L is refused until 271. The panel keeps focus, Tab, Escape, pause and zero global listeners at 10 Hz.",
+  "limitations": "L/LEARNING is explicitly refused until 271. A driven car that cannot be projected onto the lane graph is refused at takeover/release rather than teleported. Full minimap/HUD remains 281; the panel reuses 032/033 geometry and 076 markers. Physics remains the cinematic adapter until 282. Browser probe is NOT_RUN because Playwright is unavailable; the committed browser.json records the exact reason, and the evidence is contract plus real-composition Node.",
+  "checks": [
+    ["node", "--import", "./scripts/register-typescript.mjs", "--test", "tests/app/live-fleet-selection.test.ts", "tests/ui/fleet-selection.test.ts", "tests/ui/game-shell-host.test.ts"],
+    ["npm", "run", "docs:check", "--", "--check"],
+    ["npm", "run", "typecheck"]
+  ]
+}

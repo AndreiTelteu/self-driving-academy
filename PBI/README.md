@@ -8,7 +8,7 @@
 | Flotă și curse | V1 | 2 | 0 | 1 / 3 | `███░░░░░░░` 33% |
 | Haos | V1 | 1 | 0 | 0 / 1 | `░░░░░░░░░░` 0% |
 | Integrare joc | Completed | 0 | 0 | 1 / 1 | `██████████` 100% |
-| Interfață | V1 | 6 | 1 | 0 / 7 | `░░░░░░░░░░` 0% |
+| Interfață | V1 | 6 | 0 | 1 / 7 | `█░░░░░░░░░` 14% |
 | Misiuni | V1 | 2 | 0 | 0 / 2 | `░░░░░░░░░░` 0% |
 | Moduri și learning | V1 | 3 | 0 | 0 / 3 | `░░░░░░░░░░` 0% |
 | Persistență | V1 | 1 | 0 | 0 / 1 | `░░░░░░░░░░` 0% |
@@ -17,7 +17,7 @@
 | Release | V4 | 1 | 0 | 0 / 1 | `░░░░░░░░░░` 0% |
 | Sesiuni | Completed | 0 | 0 | 1 / 1 | `██████████` 100% |
 | Trafic | V1 | 2 | 0 | 0 / 2 | `░░░░░░░░░░` 0% |
-| Total | - | 24 | 1 | 4 / 29 | `█░░░░░░░░░` 14% |
+| Total | - | 24 | 0 | 5 / 29 | `█░░░░░░░░░` 17% |
 <!-- loop-pbi:progress:end -->
 
 # Backlog Kanban Self Driving Academy

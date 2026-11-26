@@ -1,4 +1,4 @@
-﻿---
+---
 id: "279"
 title: "Setări, remapare taste și slidere de control/stil în joc"
 status: "To Do"
