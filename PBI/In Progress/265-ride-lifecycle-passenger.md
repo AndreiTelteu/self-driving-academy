@@ -1,13 +1,13 @@
 ---
 id: "265"
 title: "Ciclul complet al cursei: pickup, dropoff, pasager, ETA și HUD"
-status: "To Do"
+status: "In Progress"
 release: "V1"
 module: "Flotă și curse"
 depends_on: ["264"]
 performance_checks: ["simulation","frame"]
-owner: null
-started_at: null
+owner: "loop-pbi/deepseek-265"
+started_at: "2026-11-26T04:58:00.520Z"
 completed_at: null
 ---
 
