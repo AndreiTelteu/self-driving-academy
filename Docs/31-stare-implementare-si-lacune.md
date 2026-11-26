@@ -24,9 +24,10 @@ Buildul curent pornește din `src/main.ts` și oferă:
 - `T` pentru ora din zi și vizualul V4;
 - ecran de start, pauză, vitezometru și indicator de mod;
 - meniul Academie / Joacă liberă / Haos și „Oraș proaspăt, păstrează stilul” din panoul shell-ului, cu identitate, checkpoint și pauză/AUTO separate;
-- un singur composition root (260) care deține tick-ul, pauza/focusul și ordinea porturilor, plus un panou de integrare care arată explicit sistemele 262–286 încă neintegrate.
+- un singur composition root (260) care deține tick-ul, pauza/focusul și ordinea porturilor, plus un panou de integrare care arată explicit sistemele 262–286 încă neintegrate;
+- panoul `Flotă` (263) care listează toate taxiurile și civilii live, mută doar camera la selecție și preia explicit `M` cu un singur scaun `PLAYER`.
 
-Nu sunt montate: LEARNING, curse, pasageri, flota selectabilă, KPI, misiuni, XP, salvare, companie, panourile de sistem (flotă, KPI, misiuni, profil, setări), first-person, minimapa, sunet, decorul destructibil și provocările Haos, fizica Rapier și regulile de trafic.
+Nu sunt montate: LEARNING, curse, pasageri, KPI, misiuni, XP, salvare, companie, panourile de sistem (KPI, misiuni, profil, setări), first-person, minimapa, sunet, decorul destructibil și provocările Haos, fizica Rapier și regulile de trafic.
 
 ## Matricea lacunelor
 
@@ -150,9 +151,11 @@ Nu sunt montate: LEARNING, curse, pasageri, flota selectabilă, KPI, misiuni, XP
 - Nu există verificarea unui singur scaun `PLAYER` la tranziții rapide.
 - Nu există comportament de focus, pauză și Escape pentru panoul de flotă.
 
-**Documentație:** [Interfață, cameră și control](08-interfata-camera-si-control.md) · [Panoul flotei](fleet-panel.md) · [Selectarea prin hartă](map-selection.md) · [Schimbarea vehiculului](vehicle-switch.md) · [Pickingul vehiculelor](vehicle-picking.md) · [Starea implementării și lacunele](31-stare-implementare-si-lacune.md)
+**Documentație:** [Interfață, cameră și control](08-interfata-camera-si-control.md) · [Panoul flotei](fleet-panel.md) · [Selectarea prin hartă](map-selection.md) · [Schimbarea vehiculului](vehicle-switch.md) · [Pickingul vehiculelor](vehicle-picking.md) · [Selectarea live 263](live-fleet-selection.md) · [Starea implementării și lacunele](31-stare-implementare-si-lacune.md)
 
 **PBI:** [263](../PBI/README.md) · **Dependențe:** 262.
+
+**Stare:** Implementat local la 26 noiembrie 2026. Panoul `Flotă` listează toate taxiurile și civilii live, un click/Enter/Space mută doar camera, `M` preia explicit cu un singur scaun `PLAYER`, iar vehiculul părăsit revine în AUTO cu ruta/cursea reconciliată. `L` este refuzat explicit până la 271; browserul și fizica rămân limitările de mai jos.
 
 ### 264 — Cereri de curse live, coadă și dispecerizare către flota reală
 

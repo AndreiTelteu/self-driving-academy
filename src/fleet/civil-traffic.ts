@@ -143,6 +143,13 @@ export interface CivilTrafficVehicleObservation {
   readonly radiusM?: number;
 }
 
+/** PBI 263: the authoritative pose a player-driven fleet car must hand back before AUTO resumes. */
+export interface CivilPoseReconciliation {
+  readonly positionM: Vector3;
+  /** Map-plane heading in radians: zero +X, positive toward +Z. */
+  readonly headingRad: number;
+}
+
 export interface CivilRouteSnapshot {
   /** Routes are always produced by the real PBI041 planner, never by a local follower. */
   readonly source: '041-route-planner';
@@ -231,6 +238,13 @@ export interface CivilTraffic {
   get(vehicleId: string): CivilActorSnapshot | undefined;
   step(input: CivilTrafficStep): CivilTrafficFrame;
   setAuthority(vehicleId: string, mode: ControlMode, atTick?: number): CivilActorSnapshot;
+  /**
+   * PBI 263: reconcile a pose driven by the player with the real route before an authority change.
+   * The car is projected onto the lane it actually occupies; when that lane is still on its route the
+   * route is preserved, otherwise a real 041 plan continues to the same destination. The pose itself
+   * is never teleported: the projection must be on the lane graph or the call is refused.
+   */
+  reconcile(vehicleId: string, pose: CivilPoseReconciliation, atTick?: number): CivilActorSnapshot;
   /** Explicit release back to AUTO: route is kept, the active common style is re-read. */
   resume(vehicleId: string, atTick?: number): CivilActorSnapshot;
   refreshStyle(): Readonly<{ profileId: string; versionId: string }>;
@@ -742,6 +756,32 @@ class CivilTrafficImpl implements CivilTraffic {
     return lanes;
   }
 
+  private routeFromPlan(plan: RoutePlan, access: RoadAccess): RouteState {
+    const routeLanes: {
+      laneId: string;
+      path: DirectedLanePath;
+      startM: number;
+      endM: number;
+    }[] = [];
+    let cursor = 0;
+    for (const laneId of plan.path ?? []) {
+      const path = this.graph.getDirectedPath(laneId),
+        lane = this.graph.getLane(laneId, access);
+      requireContract(path !== null && lane !== null, 'Plan contains an inaccessible lane');
+      routeLanes.push({ laneId, path, startM: cursor, endM: cursor + path.lengthM });
+      cursor += path.lengthM;
+    }
+    requireContract(routeLanes.length > 0, 'Plan contains no lane');
+    return {
+      plan,
+      path: plan.path ?? Object.freeze([]),
+      lanes: Object.freeze(routeLanes),
+      totalLengthM: cursor,
+      costVersion: this.costVersion,
+      graphVersion: this.graphVersion,
+    };
+  }
+
   private buildRoute(
     origin: string,
     vehicleSeed: number,
@@ -760,28 +800,7 @@ class CivilTrafficImpl implements CivilTraffic {
         plan.path.length > 0 &&
         plan.path.length <= CIVIL_TRAFFIC_LIMITS.routeLanes
       ) {
-        const routeLanes: {
-          laneId: string;
-          path: DirectedLanePath;
-          startM: number;
-          endM: number;
-        }[] = [];
-        let cursor = 0;
-        for (const laneId of plan.path) {
-          const path = this.graph.getDirectedPath(laneId),
-            lane = this.graph.getLane(laneId, access);
-          requireContract(path !== null && lane !== null, 'Plan contains an inaccessible lane');
-          routeLanes.push({ laneId, path, startM: cursor, endM: cursor + path.lengthM });
-          cursor += path.lengthM;
-        }
-        return {
-          plan,
-          path: plan.path,
-          lanes: Object.freeze(routeLanes),
-          totalLengthM: cursor,
-          costVersion: this.costVersion,
-          graphVersion: this.graphVersion,
-        };
+        return this.routeFromPlan(plan, access);
       }
     }
     throw new RangeError('No route for civil vehicle');
@@ -1316,6 +1335,75 @@ class CivilTrafficImpl implements CivilTraffic {
     if (active.versionId !== this.commonStyle.profile.versionId)
       this.commonStyle = compileStyle(active);
     return this.commonStyle;
+  }
+
+  reconcile(vehicleId: string, pose: CivilPoseReconciliation, atTick?: number): CivilActorSnapshot {
+    this.assertLive();
+    const actor = this.byId.get(boundedId(vehicleId));
+    requireContract(actor !== undefined, 'Unknown civil vehicle');
+    const at = this.readAuthorityTick(atTick),
+      positionM = pose?.positionM,
+      headingRad = pose?.headingRad;
+    requireContract(
+      positionM !== null &&
+        typeof positionM === 'object' &&
+        [positionM.x, positionM.y, positionM.z].every(
+          (value) => typeof value === 'number' && Number.isFinite(value),
+        ),
+      'Civil vehicle pose position must be finite',
+    );
+    requireContract(
+      typeof headingRad === 'number' && Number.isFinite(headingRad),
+      'Civil vehicle pose heading must be finite',
+    );
+    const projection =
+      this.graph.locateLane({
+        positionM,
+        access: actor.access,
+        headingRad,
+      }) ?? this.graph.locateLane({ positionM, access: actor.access });
+    requireContract(projection !== null, 'Civil vehicle pose is not on a lane of its access class');
+    const routeIndex = actor.route.path.indexOf(projection.lane.id);
+    if (routeIndex >= 0) {
+      const lane = actor.route.lanes[routeIndex]!,
+        distanceM = Math.min(
+          lane.endM,
+          Math.max(lane.startM, lane.startM + projection.longitudinalM),
+        );
+      actor.distanceM = distanceM;
+      actor.pose = routePose(actor.route, distanceM);
+    } else {
+      // The car left the planned path: keep the same destination and ask the real 041 planner for a
+      // continuation from the lane the player actually occupies. This is reconciliation, not a
+      // teleport; the returned pose is on the new path's first lane at the measured progress.
+      const destinationLaneId = actor.route.plan.destinationLaneId;
+      requireContract(destinationLaneId !== null, 'Civil vehicle route has no destination');
+      const plan = this.planner.findRoute({
+        origin: projection.lane.id,
+        destination: destinationLaneId,
+        access: actor.access,
+      });
+      requireContract(
+        plan.status === 'READY' &&
+          plan.path !== null &&
+          plan.path.length > 0 &&
+          plan.path.length <= CIVIL_TRAFFIC_LIMITS.routeLanes,
+        'Civil vehicle route cannot be reconciled to its destination',
+      );
+      actor.route = this.routeFromPlan(plan, actor.access);
+      actor.distanceM = Math.min(projection.longitudinalM, actor.route.totalLengthM);
+      actor.pose = routePose(actor.route, actor.distanceM);
+      actor.routeView = null;
+      actor.replans += 1;
+    }
+    actor.speedMps = 0;
+    actor.blocked = false;
+    this.registry.updateState(actor.vehicle.vehicleId, {
+      tick: at,
+      controlMode: actor.authority,
+      appliedProfileVersion: actor.style.profile.versionId,
+    });
+    return this.snapshot(actor);
   }
 
   setAuthority(vehicleId: string, mode: ControlMode, atTick?: number): CivilActorSnapshot {

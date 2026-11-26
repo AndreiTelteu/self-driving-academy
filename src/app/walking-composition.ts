@@ -140,6 +140,8 @@ export interface CompositionVehicle {
   readonly vehicleId: string;
   readonly driverKind: 'TAXI' | 'CIVILIAN';
   readonly classId: 'sedan' | 'compact';
+  /** 1-based 057 slot for a live traffic actor; `null` for a seeded composition car. */
+  readonly slot: number | null;
   readonly positionM: CharacterPoint;
   readonly yawRad: number;
   readonly speedMps: number;
@@ -154,6 +156,8 @@ export interface CompositionVehicle {
   readonly rideProgressM: number;
   readonly appliedProfileVersion: string;
   readonly maneuverState: VehicleEntryVehicle['state']['maneuverState'];
+  /** PBI 058 blockage, carried into the live fleet list and never inferred from speed. */
+  readonly blocked: boolean;
 }
 
 export interface CompositionEvent {
@@ -165,6 +169,12 @@ export interface CompositionEvent {
     | 'EXIT_REFUSED'
     | 'ENTRY_IGNORED'
     | 'EXIT_IGNORED'
+    | 'TAKEOVER_ACCEPTED'
+    | 'TAKEOVER_REFUSED'
+    | 'RELEASE_ACCEPTED'
+    | 'RELEASE_REFUSED'
+    | 'CAMERA_SELECTED'
+    | 'CAMERA_SELECTION_REFUSED'
     | 'RESET';
   readonly detail: string;
 }
@@ -208,6 +218,10 @@ export interface CompositionStats {
   readonly segmentCommands: number;
   readonly entryAttempts: number;
   readonly exitAttempts: number;
+  /** PBI 263: explicit live takeovers, successful and refused, plus AUTO releases. */
+  readonly takeoverAttempts: number;
+  readonly takeovers: number;
+  readonly releases: number;
   /** Un tick fără exact o livrare este o eroare de compunere, nu o stare normală. */
   readonly ticksWithoutDelivery: number;
 }
@@ -220,6 +234,9 @@ export interface CompositionFrame {
   readonly camera: CharacterCameraFrame;
   readonly hud: CompositionHud;
   readonly segments: WalkingSegmentsStats;
+  /** PBI 263: camera-only target and the single car in the PLAYER seat (MANUAL/LEARNING). */
+  readonly selectedVehicleId: string | null;
+  readonly playerVehicleId: string | null;
   readonly stats: CompositionStats;
   readonly lastCommand: AuthorityCommand['consumer'] | null;
   readonly lastSegmentAction: 'WALK' | 'FOCUS' | 'ENTER' | 'EXIT' | null;
@@ -251,6 +268,20 @@ export interface V3Composition {
   /** Cererea este consumată la următorul tick; fără id se alege cea mai apropiată mașină. */
   requestEntry(vehicleId?: string): void;
   requestExit(): void;
+  /**
+   * PBI 263: camera-only selection. The vehicle stays in AUTO and the authority does not change.
+   * `null` returns the camera to the controlled entity.
+   */
+  selectVehicle(vehicleId: string | null): boolean;
+  selectedVehicleId(): string | null;
+  /** The car in the single PLAYER seat (MANUAL/LEARNING), never an AUTO observation. */
+  playerVehicleId(): string | null;
+  /** Queues an explicit takeover of any live taxi/civil; processed at the next tick. */
+  requestTakeover(vehicleId: string, mode: 'MANUAL' | 'LEARNING'): boolean;
+  /** Queues the controlled car back to AUTO while keeping it as the camera target. */
+  requestRelease(): boolean;
+  /** M/L on the selected car: takeover when it differs, otherwise the existing controlled toggle. */
+  takeOverSelected(mode: 'MANUAL' | 'LEARNING'): boolean;
   /** PBI 257: modul mașinii conduse, `null` când autoritatea este pe personaj. */
   vehicleMode(): CompositionMode | null;
   /** PBI 257: AUTO cere hartă/graf și o rută READY; MANUAL oprește driverul AUTO. */
@@ -326,6 +357,7 @@ function vehicleFromSeed(seed: CompositionVehicleSeed): CompositionVehicle {
     vehicleId: seed.vehicleId,
     driverKind: seed.driverKind,
     classId: seed.classId,
+    slot: null,
     positionM: point(seed.positionM.x, 0, seed.positionM.z),
     yawRad: seed.yawRad,
     speedMps: 0,
@@ -343,6 +375,7 @@ function vehicleFromSeed(seed: CompositionVehicleSeed): CompositionVehicle {
     rideProgressM: 0,
     appliedProfileVersion: 'v3-composition-1',
     maneuverState: 'IDLE',
+    blocked: false,
   });
 }
 
@@ -365,6 +398,7 @@ function trafficActorVehicle(actor: CivilActorSnapshot, layout: CityLayout): Com
     vehicleId: actor.vehicleId,
     driverKind: actor.driverKind,
     classId: actor.classId,
+    slot: actor.slot,
     positionM: point(actor.positionM.x, actor.positionM.y, actor.positionM.z),
     yawRad: compositionYawFromTrafficHeading(actor.headingRad),
     speedMps: actor.speedMps,
@@ -382,6 +416,7 @@ function trafficActorVehicle(actor: CivilActorSnapshot, layout: CityLayout): Com
     rideProgressM: 0,
     appliedProfileVersion: actor.styleVersionId,
     maneuverState: 'IDLE',
+    blocked: actor.blocked,
   });
 }
 
@@ -510,8 +545,15 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
   let previousExit: Readonly<{ tick: number; vehicleId: string }> | null = null;
   let pendingEntry: Readonly<{ vehicleId: string | null }> | null = null;
   let pendingExit = false;
+  /** PBI 263: camera-only target, independent from input authority. */
+  let cameraFocusVehicleId: string | null = null;
+  let pendingTakeover: Readonly<{ vehicleId: string; mode: 'MANUAL' | 'LEARNING' }> | null = null;
+  let pendingRelease = false;
   let entryAttempts = 0;
   let exitAttempts = 0;
+  let takeoverAttempts = 0;
+  let takeovers = 0;
+  let releases = 0;
   let ticksWithoutDelivery = 0;
   let segmentCommands = 0;
   let disposed = false;
@@ -580,10 +622,38 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
     const authority = arbiter.snapshot().authority;
     return authority.consumer === 'VEHICLE' ? (vehicleById(authority.vehicleId) ?? null) : null;
   };
-  const applyVehicleMode = (mode: 'AUTO' | 'MANUAL'): CompositionMode | null => {
+  const playerVehicle = (): CompositionVehicle | null => {
     const vehicle = controlledVehicle();
-    if (vehicle === null || trafficIds.has(vehicle.vehicleId)) return null;
+    return vehicle === null || vehicle.controlMode === 'AUTO' ? null : vehicle;
+  };
+  const applyVehicleModeTo = (
+    vehicle: CompositionVehicle,
+    mode: 'AUTO' | 'MANUAL',
+  ): CompositionMode | null => {
     if (mode === 'AUTO') {
+      if (trafficIds.has(vehicle.vehicleId)) {
+        if (traffic === null) return null;
+        try {
+          traffic.reconcile(
+            vehicle.vehicleId,
+            {
+              positionM: Object.freeze({
+                x: vehicle.positionM.x,
+                y: vehicle.positionM.y,
+                z: vehicle.positionM.z,
+              }),
+              headingRad: trafficHeadingFromCompositionYaw(vehicle.yawRad),
+            },
+            tick,
+          );
+        } catch {
+          return null;
+        }
+        traffic.resume(vehicle.vehicleId, tick);
+        setVehicle(withVehicle(vehicle, { controlMode: 'AUTO', speedMps: 0 }));
+        arbiter.releaseAll();
+        return 'AUTO';
+      }
       const planner = ensureAutoPlanner();
       if (planner === null || options.map === undefined || options.graph === undefined) return null;
       let drive = autoDrives.get(vehicle.vehicleId);
@@ -612,15 +682,22 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
       drive.dispose();
       autoDrives.delete(vehicle.vehicleId);
     }
-    setVehicle(withVehicle(vehicle, { controlMode: 'MANUAL' }));
+    if (trafficIds.has(vehicle.vehicleId) && traffic !== null) {
+      traffic.setAuthority(vehicle.vehicleId, 'MANUAL', tick);
+    }
+    setVehicle(withVehicle(vehicle, { controlMode: 'MANUAL', speedMps: 0 }));
     arbiter.releaseAll();
     return 'MANUAL';
+  };
+  const applyVehicleMode = (mode: 'AUTO' | 'MANUAL'): CompositionMode | null => {
+    const vehicle = controlledVehicle();
+    return vehicle === null ? null : applyVehicleModeTo(vehicle, mode);
   };
   const toggleControlledVehicleMode = (): CompositionMode | null => {
     const vehicle = controlledVehicle();
     return vehicle === null
       ? null
-      : applyVehicleMode(vehicle.controlMode === 'AUTO' ? 'MANUAL' : 'AUTO');
+      : applyVehicleModeTo(vehicle, vehicle.controlMode === 'AUTO' ? 'MANUAL' : 'AUTO');
   };
   const stepAutoDrives = (dtSeconds: number): void => {
     if (autoDrives.size === 0) return;
@@ -709,12 +786,44 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
       vehicles: trafficObservations(),
     });
     const updated = new Map(frame.actors.map((actor) => [actor.vehicleId, actor]));
+    const controlled = playerVehicle();
     vehicles = Object.freeze(
       vehicles.map((vehicle) => {
+        // PBI 263: a traffic car in the PLAYER seat is driven by the composition, not by 058. Its
+        // reconciled pose was handed to 058 before this step, so overwriting it here would snap the
+        // car back to the frozen AI pose every tick.
+        if (controlled !== null && controlled.vehicleId === vehicle.vehicleId) return vehicle;
         const actor = updated.get(vehicle.vehicleId);
         return actor === undefined ? vehicle : trafficActorVehicle(actor, options.layout);
       }),
     );
+  };
+
+  /**
+   * PBI 263: while a 058 actor is in the PLAYER seat, its real lane occupancy/leader information is
+   * kept current from the composition pose. A failed projection (car off the lane graph) leaves the
+   * last reconciled pose in place and never teleports it.
+   */
+  const synchronizePlayerDrivenTraffic = (): void => {
+    if (traffic === null) return;
+    const vehicle = playerVehicle();
+    if (vehicle === null || !trafficIds.has(vehicle.vehicleId)) return;
+    try {
+      traffic.reconcile(
+        vehicle.vehicleId,
+        {
+          positionM: Object.freeze({
+            x: vehicle.positionM.x,
+            y: vehicle.positionM.y,
+            z: vehicle.positionM.z,
+          }),
+          headingRad: trafficHeadingFromCompositionYaw(vehicle.yawRad),
+        },
+        tick,
+      );
+    } catch {
+      // No valid lane under the driven pose: the next safe reconciliation point is used then.
+    }
   };
 
   const characterBody = (): VehicleEntryCharacterBody =>
@@ -886,6 +995,7 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
         speedMps: 0,
       }),
     );
+    cameraFocusVehicleId = target.vehicleId;
     resetCameraOrbit();
     arbiter.setAuthority(decision.authority);
     segments.step({
@@ -950,6 +1060,7 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
     }
     previousExit = decision.journal;
     takeover = null;
+    cameraFocusVehicleId = null;
     resetCameraOrbit();
     setVehicle(
       withVehicle(controlled, {
@@ -981,6 +1092,144 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
       `${decision.vehicleId} pe ${decision.exit.candidateId} la ${decision.exit.clearanceM.toFixed(3)} m`,
       atTick,
     );
+    return true;
+  };
+
+  const releaseVehicleToAuto = (vehicle: CompositionVehicle, atTick: number): boolean => {
+    // PBI 263: a 058 actor is handed back with its real driven pose reconciled first, so AUTO
+    // resumes from where the player left it instead of snapping to the frozen pre-takeover point.
+    if (trafficIds.has(vehicle.vehicleId)) {
+      if (traffic === null) return false;
+      try {
+        traffic.reconcile(
+          vehicle.vehicleId,
+          {
+            positionM: Object.freeze({
+              x: vehicle.positionM.x,
+              y: vehicle.positionM.y,
+              z: vehicle.positionM.z,
+            }),
+            headingRad: trafficHeadingFromCompositionYaw(vehicle.yawRad),
+          },
+          atTick,
+        );
+        traffic.resume(vehicle.vehicleId, atTick);
+      } catch (error: unknown) {
+        emit(
+          'RELEASE_REFUSED',
+          `${vehicle.vehicleId}: ${error instanceof Error ? error.message : String(error)}`,
+          atTick,
+        );
+        return false;
+      }
+      setVehicle(withVehicle(vehicle, { controlMode: 'AUTO', speedMps: 0 }));
+      return true;
+    }
+    return applyVehicleModeTo(vehicle, 'AUTO') === 'AUTO';
+  };
+
+  /**
+   * PBI 263: explicit takeover of any live taxi/civil. The old PLAYER seat is released to AUTO
+   * before the new one is claimed, inside the same tick, so there is never a second controlled car.
+   * The target keeps its exact pose (route reconciliation, no teleport) and stays AUTO until this
+   * explicit M/L command.
+   */
+  const processTakeover = (
+    atTick: number,
+    request: Readonly<{ vehicleId: string; mode: 'MANUAL' | 'LEARNING' }>,
+  ): boolean => {
+    takeoverAttempts += 1;
+    const target = vehicleById(request.vehicleId);
+    if (target === undefined) {
+      emit('TAKEOVER_REFUSED', `UNKNOWN_VEHICLE: ${request.vehicleId}`, atTick);
+      return false;
+    }
+    if (request.mode === 'LEARNING') {
+      // PBI 271 owns LEARNING, its segments and eligibility. Refusing explicitly is honest; the car
+      // remains AUTO and the current PLAYER seat is not disturbed.
+      emit('TAKEOVER_REFUSED', 'LEARNING_UNAVAILABLE: owner PBI 271', atTick);
+      return false;
+    }
+    const previousAuthority = arbiter.snapshot().authority;
+    const previous = playerVehicle();
+    if (previous !== null && previous.vehicleId === target.vehicleId) {
+      const mode = applyVehicleModeTo(target, 'MANUAL');
+      if (mode !== 'MANUAL') {
+        emit('TAKEOVER_REFUSED', `SAME_VEHICLE_MODE_FAILED: ${target.vehicleId}`, atTick);
+        return false;
+      }
+      cameraFocusVehicleId = target.vehicleId;
+      resetCameraOrbit();
+      takeovers += 1;
+      emit('TAKEOVER_ACCEPTED', `${target.vehicleId} already held`, atTick);
+      return false;
+    }
+    if (previous !== null && !releaseVehicleToAuto(previous, atTick)) {
+      emit('TAKEOVER_REFUSED', `RELEASE_HELD_VEHICLE_FAILED: ${previous.vehicleId}`, atTick);
+      return false;
+    }
+    const current = vehicleById(target.vehicleId) ?? target;
+    if (trafficIds.has(current.vehicleId) && traffic !== null) {
+      // Freeze the real 058 actor at the pose the composition already displays. No position is
+      // written into the car and no second authority exists: 058 keeps the route until release.
+      traffic.setAuthority(current.vehicleId, 'MANUAL', atTick);
+    }
+    const claimed = withVehicle(current, { controlMode: 'MANUAL', speedMps: 0 });
+    setVehicle(claimed);
+    takeover = entryVehicle(claimed, atTick);
+    cameraFocusVehicleId = claimed.vehicleId;
+    resetCameraOrbit();
+    arbiter.releaseAll();
+    arbiter.setAuthority(
+      Object.freeze({ consumer: 'VEHICLE' as const, vehicleId: claimed.vehicleId }),
+    );
+    segments.step({
+      tick: atTick,
+      transition: 'ENTER',
+      authority: Object.freeze({ consumer: 'VEHICLE' as const, vehicleId: claimed.vehicleId }),
+      previousAuthority,
+      vehicleId: claimed.vehicleId,
+      mode: 'MANUAL',
+      maneuverState: claimed.maneuverState,
+    });
+    segmentCommands += 1;
+    lastSegmentAction = 'ENTER';
+    takeovers += 1;
+    emit(
+      'TAKEOVER_ACCEPTED',
+      `${previousAuthority.consumer === 'VEHICLE' ? `released ${previousAuthority.vehicleId}` : 'from character'} → ${claimed.vehicleId} MANUAL`,
+      atTick,
+    );
+    return true;
+  };
+
+  /** PBI 263: controlled car back to AUTO while the camera keeps following it (observation). */
+  const processRelease = (atTick: number): boolean => {
+    const vehicle = controlledVehicle();
+    if (vehicle === null) {
+      emit('RELEASE_REFUSED', 'NO_CONTROLLED_VEHICLE', atTick);
+      return false;
+    }
+    if (vehicle.controlMode === 'AUTO') {
+      emit('RELEASE_REFUSED', `ALREADY_AUTO: ${vehicle.vehicleId}`, atTick);
+      return false;
+    }
+    if (!releaseVehicleToAuto(vehicle, atTick)) {
+      emit('RELEASE_REFUSED', `RECONCILIATION_FAILED: ${vehicle.vehicleId}`, atTick);
+      return false;
+    }
+    cameraFocusVehicleId = vehicle.vehicleId;
+    releases += 1;
+    const authority = arbiter.snapshot().authority;
+    segments.step({
+      tick: atTick,
+      transition: 'FOCUS',
+      authority,
+      vehicleId: vehicle.vehicleId,
+    });
+    segmentCommands += 1;
+    lastSegmentAction = 'FOCUS';
+    emit('RELEASE_ACCEPTED', `${vehicle.vehicleId} → AUTO, route kept`, atTick);
     return true;
   };
 
@@ -1036,6 +1285,8 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
       camera: lastCamera,
       hud,
       segments: segments.getStats(),
+      selectedVehicleId: cameraFocusVehicleId,
+      playerVehicleId: playerVehicle()?.vehicleId ?? null,
       stats: Object.freeze({
         ticks: atTick,
         deliveries: Object.freeze({ ...officer.delivered }),
@@ -1049,6 +1300,9 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
         segmentCommands,
         entryAttempts,
         exitAttempts,
+        takeoverAttempts,
+        takeovers,
+        releases,
         ticksWithoutDelivery,
       }),
       lastCommand,
@@ -1065,11 +1319,20 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
 
     // 257 înaintea traficului: taxiul AUTO are poziția tick-ului curent când devine observație 044.
     stepAutoDrives(V3_COMPOSITION_POLICY.dtSeconds);
+    // PBI 263: poziția condusă de jucător ajunge la 058 înainte ca acesta să calculeze ocuparea.
+    synchronizePlayerDrivenTraffic();
     // 058 înaintea arbitrajului: pozițiile AI sunt deja autoritare când intrarea/ieșirea, camera,
     // coliziunea walker-ului și HUD-ul citesc cadrul acestui tick.
     stepTraffic(atTick);
 
-    if (pendingEntry !== null) {
+    if (pendingTakeover !== null) {
+      const request = pendingTakeover;
+      pendingTakeover = null;
+      transitioned = processTakeover(atTick, request);
+    } else if (pendingRelease) {
+      pendingRelease = false;
+      transitioned = processRelease(atTick);
+    } else if (pendingEntry !== null) {
       const request = pendingEntry;
       pendingEntry = null;
       transitioned = processEntry(atTick, request);
@@ -1132,12 +1395,16 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
         }),
       ),
     ]);
-    const followed = authorityEntityId(authority);
+    const selected = cameraFocusVehicleId;
+    const followed =
+      selected !== null && vehicleById(selected) !== undefined
+        ? selected
+        : authorityEntityId(authority);
+    const followedVehicle = followed === entityId ? undefined : vehicleById(followed);
     const anchorY =
-      authority.consumer === 'CHARACTER'
+      followedVehicle === undefined
         ? walker.state.positionM.y + asset.measured.eyeHeightM
-        : (vehicleById(authority.vehicleId)?.positionM.y ?? 0) +
-          vehicleAnchorHeightM(vehicleById(authority.vehicleId)?.classId ?? 'sedan');
+        : followedVehicle.positionM.y + vehicleAnchorHeightM(followedVehicle.classId);
     const visibleObstacles = vehicles
       .filter(
         (vehicle) =>
@@ -1154,9 +1421,7 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
       orbit: Object.freeze({ yawRad: orbitYawRad }),
       obstacles: Object.freeze([...staticObstacles, ...visibleObstacles]),
       groundM:
-        authority.consumer === 'CHARACTER'
-          ? walker.state.groundHeightM
-          : (vehicleById(authority.vehicleId)?.positionM.y ?? 0),
+        followedVehicle === undefined ? walker.state.groundHeightM : followedVehicle.positionM.y,
     });
     // 194 raportează camera complet blocată sub distanța minimă. Compunerea rotește intenția de
     // orbită cu 90° la 0,1 s până găsește un cadru liber; altfel ieșirea pe flancul de la bordură
@@ -1239,10 +1504,79 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
     requestEntry(vehicleId?: string): void {
       pendingEntry = Object.freeze({ vehicleId: vehicleId ?? null });
       pendingExit = false;
+      pendingTakeover = null;
+      pendingRelease = false;
     },
     requestExit(): void {
       pendingExit = true;
       pendingEntry = null;
+      pendingTakeover = null;
+      pendingRelease = false;
+    },
+    selectVehicle(vehicleId: string | null): boolean {
+      if (vehicleId !== null && vehicleById(vehicleId) === undefined) {
+        emit('CAMERA_SELECTION_REFUSED', `UNKNOWN_VEHICLE: ${vehicleId}`, tick);
+        return false;
+      }
+      cameraFocusVehicleId = vehicleId;
+      emit('CAMERA_SELECTED', vehicleId ?? 'authority', tick);
+      return true;
+    },
+    selectedVehicleId(): string | null {
+      return cameraFocusVehicleId;
+    },
+    playerVehicleId(): string | null {
+      return playerVehicle()?.vehicleId ?? null;
+    },
+    requestTakeover(vehicleId: string, mode: 'MANUAL' | 'LEARNING'): boolean {
+      if (vehicleById(vehicleId) === undefined) {
+        emit('TAKEOVER_REFUSED', `UNKNOWN_VEHICLE: ${vehicleId}`, tick);
+        return false;
+      }
+      if (mode !== 'MANUAL' && mode !== 'LEARNING')
+        throw new Error('Preluarea cere modul MANUAL sau LEARNING.');
+      pendingTakeover = Object.freeze({ vehicleId, mode });
+      pendingEntry = null;
+      pendingExit = false;
+      pendingRelease = false;
+      return true;
+    },
+    requestRelease(): boolean {
+      const vehicle = controlledVehicle();
+      if (vehicle === null || vehicle.controlMode === 'AUTO') {
+        emit('RELEASE_REFUSED', vehicle === null ? 'NO_CONTROLLED_VEHICLE' : 'ALREADY_AUTO', tick);
+        return false;
+      }
+      pendingRelease = true;
+      pendingEntry = null;
+      pendingExit = false;
+      pendingTakeover = null;
+      return true;
+    },
+    takeOverSelected(mode: 'MANUAL' | 'LEARNING'): boolean {
+      const selected = cameraFocusVehicleId;
+      const controlled = controlledVehicle();
+      if (selected === null || (controlled !== null && controlled.vehicleId === selected)) {
+        if (mode === 'LEARNING') {
+          // LEARNING is refused through the same explicit path; M still toggles the held car.
+          if (controlled !== null) {
+            emit('TAKEOVER_REFUSED', 'LEARNING_UNAVAILABLE: owner PBI 271', tick);
+            return false;
+          }
+          emit('TAKEOVER_REFUSED', 'NO_SELECTED_VEHICLE', tick);
+          return false;
+        }
+        return toggleControlledVehicleMode() !== null;
+      }
+      if (vehicleById(selected) === undefined) {
+        emit('TAKEOVER_REFUSED', `UNKNOWN_VEHICLE: ${selected}`, tick);
+        return false;
+      }
+      pendingTakeover = Object.freeze({ vehicleId: selected, mode });
+      pendingEntry = null;
+      pendingExit = false;
+      pendingRelease = false;
+      return true;
     },
     vehicleMode(): CompositionMode | null {
       return controlledVehicle()?.controlMode ?? null;
@@ -1266,6 +1600,9 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
       takeover = null;
       pendingEntry = null;
       pendingExit = false;
+      pendingTakeover = null;
+      pendingRelease = false;
+      cameraFocusVehicleId = null;
       previousEntry = null;
       previousExit = null;
       resetCameraOrbit();

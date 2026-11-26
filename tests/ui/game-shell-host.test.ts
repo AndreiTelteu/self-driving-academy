@@ -126,6 +126,51 @@ test('260 host: mounts start/pause/panel controls and reports every declared por
   assert.equal(f.panel.getAttribute('aria-hidden'), 'true');
 });
 
+test('263 host: mounts the fleet button and opens the live panel through its own port', () => {
+  const doc = createHudDocument();
+  const root = doc.createElement('div');
+  const clock = { value: 0 };
+  const shell = createGameShell({
+    context: { sessionId: '263-host-test', worldEpoch: 1 },
+    suspend: () => {},
+    resume: () => {},
+    now: () => clock.value,
+  });
+  shell.attachWorld(world(1));
+  shell.start();
+  shell.step(2);
+  let opens = 0;
+  const host = createGameShellHost({
+    root: root as unknown as HTMLElement,
+    snapshot: () => shell.status(),
+    onStart: () => {},
+    onPause: () => {},
+    onResume: () => {},
+    onOpenPanel: () => shell.openPanel('integration'),
+    onClosePanel: () => shell.closePanel(),
+    onOpenFleet: () => {
+      opens += 1;
+      return true;
+    },
+    now: () => clock.value,
+  });
+  try {
+    host.setSessionState('PLAYING');
+    const bar = (root.children[0] as HudElement).children[0]!;
+    const fleetButton = bar.children.find(
+      (child) => child.getAttribute('data-shell-action') === 'fleet',
+    )!;
+    assert.ok(fleetButton);
+    fleetButton.dispatchEvent('click');
+    assert.equal(opens, 1);
+    assert.equal(host.getStats().globalListeners, 0);
+    assert.equal(host.getStats().listeners, 7);
+  } finally {
+    host.dispose();
+    shell.dispose();
+  }
+});
+
 test('260 host: pause, resume and start buttons call the injected ports only', () => {
   const f = fixture();
   f.host.setSessionState('READY');

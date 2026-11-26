@@ -6,6 +6,8 @@ import {
   createGameShell,
   createRendererRecovery,
   createSessionFlow,
+  readLiveFleetSelectionSnapshot,
+  readMinimapGeometry,
   type GameTickPort,
   type RecoveryRenderer,
   type SessionFlow,
@@ -32,6 +34,7 @@ import {
   createDiagnosticsPanel,
   createFpsCounter,
   createGameShellHost,
+  createFleetSelectionPanel,
 } from './ui';
 import { computeProfileVersionChecksum } from './profiles';
 import type { ProfileVersion, ProfileVersionContent } from './profiles';
@@ -134,6 +137,39 @@ const shell = createGameShell({
   },
   resetHeldCommands: () => composition?.composition.releaseInput(),
 });
+/** Geometria statică a hărții flotei; minima 074/281 rămâne separată de acest panou. */
+const fleetMapGeometry = readMinimapGeometry({ map: world.map, graph: world.graph });
+/**
+ * PBI 263: read model-ul listei/hărții. Compunerea rămâne singurul owner al selecției, autorității
+ * și stării vehiculelor; aici doar proiectăm cadrul acceptat.
+ */
+function liveFleetSnapshot() {
+  const frame = composition?.composition.frame;
+  if (frame === undefined) return null;
+  const status = shell.status();
+  return readLiveFleetSelectionSnapshot({
+    tick: frame.tick,
+    sessionId: status.sessionId,
+    worldEpoch: status.worldEpoch,
+    vehicles: frame.vehicles,
+    authority: frame.authority,
+    cameraEntityId: frame.camera.entityId,
+    characterEntityId: frame.character.entityId,
+    selectedVehicleId: frame.selectedVehicleId,
+    playerVehicleId: frame.playerVehicleId,
+  });
+}
+/** PBI 263: un singur panou live; click-ul selectează doar camera, preluarea este explicită. */
+const fleetPanel = createFleetSelectionPanel(app, {
+  select: (vehicleId) => composition?.composition.selectVehicle(vehicleId) ?? false,
+  takeover: (vehicleId) => composition?.composition.requestTakeover(vehicleId, 'MANUAL') ?? false,
+  release: () => composition?.composition.requestRelease() ?? false,
+  onClose: () => {
+    shell.closePanel();
+    if (application.getState().kind === 'PLAYING') view.getCanvas().focus();
+  },
+  geometry: fleetMapGeometry,
+});
 /** Singura gazdă UI a shell-ului: start, pauză, reluare și panoul de integrare. */
 const shellHost = createGameShellHost({
   root: app,
@@ -152,6 +188,13 @@ const shellHost = createGameShellHost({
   onClosePanel: () => {
     shell.closePanel();
     if (application.getState().kind === 'PLAYING') view.getCanvas().focus();
+  },
+  onOpenFleet: () => {
+    if (!shell.openPanel('fleet')) return false;
+    const snapshot = liveFleetSnapshot();
+    if (snapshot !== null) fleetPanel.update(snapshot, performance.now());
+    fleetPanel.open();
+    return true;
   },
 });
 /** Fiecare tranziție de sesiune ajunge și în gazda shell-ului, nu doar în view-ul de randare. */
@@ -408,6 +451,11 @@ const application = createApplicationLifecycle({
     if (frame !== undefined) shell.setMode(frame.hud.mode);
     shell.present();
     shellHost.refresh();
+    // PBI 263: lista/harta consumă cadrul autoritar la ~10 Hz; panoul închis nu scrie nimic.
+    if (fleetPanel.isOpen()) {
+      const snapshot = liveFleetSnapshot();
+      if (snapshot !== null) fleetPanel.update(snapshot, performance.now());
+    }
   },
   show: showView,
   now: () => performance.now(),
@@ -592,6 +640,8 @@ interface V3DebugGlobal {
   session(): unknown;
   sessionMenu(): unknown;
   sessionNotice(): string | null;
+  /** PBI 263: lista/harta flotei, scaunul PLAYER și statisticile panoului. */
+  fleet(): unknown;
   /** PBI 260: starea read-only a lifecycle-ului 012, pentru diagnosticul probei de browser. */
   lifecycle(): unknown;
   /** PBI 241: starea AA/post-procesării (cine aplică tone mappingul, HDR, efecte). */
@@ -618,6 +668,22 @@ const debugGlobal: V3DebugGlobal = {
   session: () => sessionModules.flow?.status() ?? null,
   sessionMenu: () => sessionModules.flow?.menu() ?? EMPTY_SESSION_MENU,
   sessionNotice: () => sessionNotice,
+  fleet: () => {
+    const snapshot = liveFleetSnapshot();
+    return {
+      snapshot,
+      open: fleetPanel.isOpen(),
+      stats: fleetPanel.getStats(),
+      selection: composition?.composition
+        ? {
+            selectedVehicleId: composition.composition.selectedVehicleId(),
+            playerVehicleId: composition.composition.playerVehicleId(),
+            authority: composition.composition.arbiter.snapshot().authority,
+            lastEvent: composition.composition.frame.events.at(-1) ?? null,
+          }
+        : null,
+    };
+  },
   lifecycle: () => application.getState(),
   postProcessing: () => composition?.view.daylight.getPostProcessingState() ?? null,
   reset: () => composition?.reset(),
@@ -652,6 +718,7 @@ const dispose = (): void => {
     releaseCapture = undefined;
     (globalThis as unknown as { __v3Composition?: V3DebugGlobal }).__v3Composition = undefined;
     shellHost.dispose();
+    fleetPanel.dispose();
     shell.dispose();
     diagnosticsPanel.dispose();
     view.dispose();

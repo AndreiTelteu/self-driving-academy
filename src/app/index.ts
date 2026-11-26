@@ -648,6 +648,14 @@ export {
 } from './ambient-traffic';
 
 export {
+  LIVE_FLEET_PRESENTATION_SLOTS,
+  LIVE_FLEET_SELECTION_VERSION,
+  readLiveFleetSelectionSnapshot,
+  type LiveFleetSelectionFrame,
+  type LiveFleetSelectionSnapshot,
+} from './live-fleet-selection';
+
+export {
   VEHICLE_AUTO_DRIVE_POLICY,
   VEHICLE_AUTO_DRIVE_VERSION,
   createVehicleAutoDrive,
