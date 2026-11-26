@@ -1,12 +1,12 @@
 ---
 id: "259"
 title: "Gardă de sincronizare pentru documentația de stare și board"
-status: "To Do"
+status: "In Progress"
 release: "V1"
 module: "Documentație"
 depends_on: []
-owner: null
-started_at: null
+owner: "loop-pbi/deepseek-259"
+started_at: "2026-11-25T23:36:52.531Z"
 completed_at: null
 ---
 
