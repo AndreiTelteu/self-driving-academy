@@ -126,6 +126,8 @@ Nu sunt montate: LEARNING, curse, pasageri, flotă selectabilă, KPI, misiuni, X
 - Nu există o limită și un cost măsurat pentru 70 de vehicule în compunerea reală.
 - Nu există verificarea faptului că un vehicul nou creat citește versiunea activă a profilului.
 
+**Ce s-a livrat:** `createAmbientTraffic` creează 24 de taxiuri și 32 de civili ca actori 058 reali, fiecare cu ID stabil, clasă 023, rută 041 pe accesul categoriei și autoritate proprie. Simularea nu depinde de cameră: 54/54 actori aflați la peste 80 m de jucător se deplasează în proba de 600 tick-uri. `styleSource` leagă registry-ul și traficul de același profil activ; `refreshStyle()` este propagarea explicită, iar un vehicul nou citește versiunea curentă. Spawn-ul este determinist, fără suprapuneri cu jucătorul, vehiculele statice sau decorul, iar `dispose()` readuce ownership-ul la zero. Costul pentru 70 de vehicule este 5,82 ms/tick la p95 față de bugetul de 8 ms, cu decizii 044 fazate la 10 Hz și lider fizic la 60 Hz. Cursele, pickup-ul și selecția rămân 264/265/263.
+
 **Documentație:** [Flotă și curse](07-flota-si-curse.md) · [Registry-ul flotei](fleet-registry.md) · [Traficul civil](civil-traffic.md) · [Stilul orașului](city-style.md) · [Starea implementării și lacunele](31-stare-implementare-si-lacune.md)
 
 **PBI:** [262](../PBI/README.md) · **Dependențe:** 260.

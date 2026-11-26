@@ -1,0 +1,341 @@
+{
+  "version": "262-live-fleet-v1",
+  "generatedBy": "npm run fleet:live",
+  "contract": {
+    "ambientVersion": "262-live-fleet-v1",
+    "trafficVersion": "058-civil-traffic-v1",
+    "normal": {
+      "taxis": 24,
+      "civilians": 32
+    },
+    "limits": {
+      "taxis": [
+        20,
+        30
+      ],
+      "civilians": [
+        20,
+        40
+      ],
+      "vehicles": 70
+    },
+    "driverKinds": [
+      "TAXI",
+      "CIVILIAN"
+    ],
+    "frameVehicles": 110,
+    "tickHz": 60,
+    "presentationFields": []
+  },
+  "fixtures": [
+    {
+      "taxis": 20,
+      "civilians": 20,
+      "actors": 40,
+      "uniqueIds": 40,
+      "classes": {
+        "compact": 21,
+        "sedan": 19
+      },
+      "readyRoutes": 40,
+      "routesFromPlanner": 40,
+      "routesByKind": {
+        "TAXI": 20,
+        "CIVILIAN": 20
+      },
+      "accessMatches": 40,
+      "uniqueOriginLanes": 40,
+      "onLane": 40
+    },
+    {
+      "taxis": 24,
+      "civilians": 32,
+      "actors": 56,
+      "uniqueIds": 56,
+      "classes": {
+        "compact": 31,
+        "sedan": 25
+      },
+      "readyRoutes": 56,
+      "routesFromPlanner": 56,
+      "routesByKind": {
+        "TAXI": 24,
+        "CIVILIAN": 32
+      },
+      "accessMatches": 56,
+      "uniqueOriginLanes": 56,
+      "onLane": 56
+    },
+    {
+      "taxis": 30,
+      "civilians": 40,
+      "actors": 70,
+      "uniqueIds": 70,
+      "classes": {
+        "compact": 37,
+        "sedan": 33
+      },
+      "readyRoutes": 70,
+      "routesFromPlanner": 70,
+      "routesByKind": {
+        "TAXI": 30,
+        "CIVILIAN": 40
+      },
+      "accessMatches": 70,
+      "uniqueOriginLanes": 70,
+      "onLane": 70
+    }
+  ],
+  "profile": {
+    "profileId": "v3-city-style",
+    "initialVersion": "v3-city-style-v1",
+    "activeVersion": "v3-city-style-v2",
+    "existingBeforeRefresh": 56,
+    "existingAfterRefresh": 56,
+    "uniqueVersionsAfterRefresh": 1,
+    "commonRegistryTick": 1,
+    "newTaxiVersion": "v3-city-style-v2",
+    "newCivilianVersion": "v3-city-style-v2"
+  },
+  "spawn": {
+    "clearanceToPlayerM": 14.97,
+    "clearanceToStaticVehiclesM": 14.602,
+    "minimumPairwiseCentreM": 3.7,
+    "overlappingPairs": 0,
+    "minimumDecorGapM": 1.03,
+    "uniqueOriginLanes": 56,
+    "deterministic": true
+  },
+  "offCamera": {
+    "windowM": 80,
+    "ticks": 600,
+    "actors": 56,
+    "outsideWindow": 54,
+    "outsideMoved": 54,
+    "minimumOutsideMoveM": 65.911,
+    "allMoved": 56,
+    "lastRegistryTick": 600
+  },
+  "cleanup": {
+    "disposed": true,
+    "actors": 0,
+    "longitudinalActors": 0,
+    "roadContextVehicles": 0,
+    "registryVehicles": 0,
+    "reportVehicles": 0,
+    "stepRejected": true
+  },
+  "checks": [
+    {
+      "name": "fixture-20-20",
+      "expected": {
+        "taxis": 20,
+        "civilians": 20,
+        "actors": 40
+      },
+      "actual": {
+        "taxis": 20,
+        "civilians": 20,
+        "actors": 40
+      },
+      "pass": true,
+      "detail": "Fixture 057 minimum."
+    },
+    {
+      "name": "fixture-24-32",
+      "expected": {
+        "taxis": 24,
+        "civilians": 32,
+        "actors": 56
+      },
+      "actual": {
+        "taxis": 24,
+        "civilians": 32,
+        "actors": 56
+      },
+      "pass": true,
+      "detail": "Normal live fleet."
+    },
+    {
+      "name": "fixture-30-40",
+      "expected": {
+        "taxis": 30,
+        "civilians": 40,
+        "actors": 70
+      },
+      "actual": {
+        "taxis": 30,
+        "civilians": 40,
+        "actors": 70
+      },
+      "pass": true,
+      "detail": "V1 maximum workload."
+    },
+    {
+      "name": "fixture-stable-ids",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Every actor keeps one stable 057 identity."
+    },
+    {
+      "name": "fixture-ready-routes",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Every actor route is READY and returned by 041."
+    },
+    {
+      "name": "fixture-kind-access",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Taxis plan on TAXI access and civilians on CIVIL access."
+    },
+    {
+      "name": "fixture-real-classes",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Classes are the real 023 sedan/compact identities."
+    },
+    {
+      "name": "fixture-unique-origins",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "No two actors spawn on the same lane."
+    },
+    {
+      "name": "fixture-on-lane",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Every spawn pose projects onto its own route lane."
+    },
+    {
+      "name": "profile-initial",
+      "expected": 56,
+      "actual": 56,
+      "pass": true,
+      "detail": "No hidden version change before refresh."
+    },
+    {
+      "name": "profile-active",
+      "expected": 56,
+      "actual": 56,
+      "pass": true,
+      "detail": "refreshStyle applies the active version."
+    },
+    {
+      "name": "profile-one-version",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "One common version after refresh."
+    },
+    {
+      "name": "profile-one-tick",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "All actors update at the common tick."
+    },
+    {
+      "name": "profile-new-taxi",
+      "expected": "v3-city-style-v2",
+      "actual": "v3-city-style-v2",
+      "pass": true,
+      "detail": "New taxi reads active version."
+    },
+    {
+      "name": "profile-new-civilian",
+      "expected": "v3-city-style-v2",
+      "actual": "v3-city-style-v2",
+      "pass": true,
+      "detail": "New civilian reads active version."
+    },
+    {
+      "name": "spawn-player-clearance",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "14.97 m to the player."
+    },
+    {
+      "name": "spawn-static-vehicle-clearance",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "14.602 m to a static vehicle."
+    },
+    {
+      "name": "spawn-no-vehicle-overlap",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "SAT pairs."
+    },
+    {
+      "name": "spawn-decor-gap",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "1.03 m gap."
+    },
+    {
+      "name": "spawn-unique-origins",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "56 unique origin lanes."
+    },
+    {
+      "name": "spawn-deterministic",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Same seed gives the same spawn."
+    },
+    {
+      "name": "off-camera-simulation",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "54/54 off-camera actors moved; minimum 65.911 m."
+    },
+    {
+      "name": "off-camera-all-moved",
+      "expected": 56,
+      "actual": 56,
+      "pass": true,
+      "detail": "All actors keep simulating."
+    },
+    {
+      "name": "off-camera-registry-tick",
+      "expected": 600,
+      "actual": 600,
+      "pass": true,
+      "detail": "Registry tick follows simulation."
+    },
+    {
+      "name": "cleanup-zero",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Dispose releases actors, controls, context and registry."
+    },
+    {
+      "name": "no-camera-presentation-fields",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "No renderer, camera or DOM token in the simulation path."
+    }
+  ],
+  "summary": {
+    "checks": 26,
+    "passed": 26,
+    "pass": true
+  }
+}

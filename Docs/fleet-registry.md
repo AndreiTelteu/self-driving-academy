@@ -68,6 +68,18 @@ Fiecare vehicul are propriul obiect înghețat. `updateState` validează câmpur
 
 Configurația leagă flota de `profileId`-ul profilului comun. Versiunea aplicată la creare este citită din `CityProfileSource.activeProfile()` când portul este injectat, altfel din `configuration.profile.versionId`. Un vehicul nou primește versiunea activă în acel moment; vehiculele existente păstrează referința până la o actualizare explicită sau la activarea atomică 110. Sursa trebuie să păstreze același `profileId`; o identitate străină este respinsă cu `City profile source identity mismatch`. Registry-ul nu publică, nu activează și nu migrează profiluri.
 
+## Populația live (PBI 262)
+
+Registry-ul rămâne sursa identităților, claselor și stării, dar în compunerea V3 populația este simulată, nu doar listată. `createAmbientTraffic` creează **24 de taxiuri și 32 de civili** (configurabil în limitele 057), pasează aceleași intrări către `createCivilTraffic` cu `driverKinds: ['TAXI', 'CIVILIAN']` și citește versiunea activă a profilului la fiecare vehicul nou. Taxiurile planifică pe accesul `TAXI`, civilii pe `CIVIL`, iar ambele categorii folosesc același lanț 041 → 044 → 047/048. `spawnLanesByKind`/`spawnOffsetsMByKind` permit composition root-ului să plaseze vizibil ambele categorii fără un al doilea router. Camera și selecția nu sunt campuri de contract și nu pot schimba starea.
+
+```powershell
+npm run fleet:live
+npm run fleet:live -- --check
+npm run fleet:live -- --measure
+```
+
+Raportul determinist este [Evidence/262-live-fleet/report.json](Evidence/262-live-fleet/report.json), iar proba de cost 70 de vehicule este [cost.json](Evidence/262-live-fleet/cost.json).
+
 ## Ownership și disposal
 
 Registry-ul deține numai intrările și stările flotei. Nu deține corpuri Rapier, mesh-uri, materiale, listeners sau timere; compoziția lumii și adaptoarele rămân ale composition root. `removeVehicle` eliberează o intrare, iar `dispose()` (idempotent) golește toate intrările și readuce contoarele și raportul la zero. După disposal, mutațiile sunt respinse, iar citirile returnează valori goale/zero.
