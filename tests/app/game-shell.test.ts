@@ -314,3 +314,57 @@ test('260: tick and presentation costs are sampled separately and capped', () =>
   for (let tick = 122; tick <= 821; tick += 1) shell.step(tick);
   assert.equal(shell.status().costs.tick.samples, 600);
 });
+
+test('261: the session context is adopted for the next tick, not during the current one', () => {
+  const contexts: GameTickContext[] = [];
+  let reenter = true;
+  const f = fixture({
+    control: {
+      id: 'control',
+      step: (context) => {
+        contexts.push(context);
+        if (!reenter) return;
+        reenter = false;
+        // O schimbare de sesiune �n timpul pasului ar produce doua identita?i �ntr-un tick.
+        assert.throws(
+          () =>
+            f.shell.setSessionContext({
+              sessionId: '260-next',
+              worldEpoch: 9,
+              learningEpoch: 4,
+            }),
+          /during a tick/,
+        );
+      },
+    },
+  });
+  f.shell.attachWorld(f.world);
+  f.shell.start();
+  const initial = f.shell.status();
+  assert.equal(initial.sessionId, '260-game-shell-test');
+  assert.equal(initial.worldEpoch, 7);
+  assert.equal(initial.learningEpoch, 0);
+  assert.equal(initial.contextSwitches, 0);
+  f.shell.step(2);
+  assert.equal(contexts[0]!.learningEpoch, 0);
+  f.shell.setSessionContext({ sessionId: '261-academy', worldEpoch: 2, learningEpoch: 1 });
+  assert.equal(f.shell.status().contextSwitches, 1);
+  assert.equal(f.shell.status().sessionId, '261-academy');
+  assert.equal(f.shell.status().worldEpoch, 2);
+  assert.equal(f.shell.status().learningEpoch, 1);
+  f.shell.step(3);
+  assert.equal(contexts[1]!.sessionId, '261-academy');
+  assert.equal(contexts[1]!.worldEpoch, 2);
+  assert.equal(contexts[1]!.learningEpoch, 1);
+  // Aceea?i identitate nu este o tranzi?ie noua; o valoare invalida este refuzata.
+  f.shell.setSessionContext({ sessionId: '261-academy', worldEpoch: 2, learningEpoch: 1 });
+  assert.equal(f.shell.status().contextSwitches, 1);
+  assert.throws(
+    () => f.shell.setSessionContext({ sessionId: '', worldEpoch: 2, learningEpoch: 1 }),
+    /sessionId invalid/,
+  );
+  assert.throws(
+    () => f.shell.setSessionContext({ sessionId: 'x', worldEpoch: -1, learningEpoch: 0 }),
+    /worldEpoch invalid/,
+  );
+});

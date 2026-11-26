@@ -15,12 +15,33 @@ export const GAME_SHELL_HOST_VERSION = '260-game-shell-host-v1' as const;
 export const GAME_SHELL_HOST_REFRESH_MS = 100;
 const PANEL_ID = 'integration';
 
+export interface GameShellSessionChoiceView {
+  readonly kind: string;
+  readonly label: string;
+  readonly live: boolean;
+  readonly profileId: string;
+  readonly worldEpoch: number;
+  readonly learningEpoch: number;
+  readonly checkpoints: number;
+}
+
+/** Read model for the session menu; owner-ul 261 furnizează valorile, gazda nu le deduce. */
+export interface GameShellSessionMenuView {
+  readonly live: string | null;
+  readonly choices: readonly GameShellSessionChoiceView[];
+}
+
 export interface GameShellHostOptions {
   readonly root: HTMLElement;
   readonly snapshot: () => GameShellStatus;
   readonly onStart: () => void;
   readonly onPause: () => void;
   readonly onResume: () => void;
+  /** Alegerea explicită Academie/Haos; absența portului nu montează meniul. */
+  readonly sessionMenu?: () => GameShellSessionMenuView;
+  readonly onChooseSession?: (kind: string) => void;
+  /** „Oraș proaspăt, păstrează stilul”: resetul aparține owner-ului 261, nu gazdei. */
+  readonly onResetWorld?: () => void;
   /** Host-ul cere shell-ului deschiderea; `false` înseamnă că panoul nu a fost acceptat. */
   readonly onOpenPanel: () => boolean;
   readonly onClosePanel: () => void;
@@ -34,6 +55,8 @@ export interface GameShellHostStats {
   readonly disposed: boolean;
   readonly panelOpen: boolean;
   readonly sessionKind: string | null;
+  readonly sessionChoices: number;
+  readonly sessionSelects: number;
   readonly opens: number;
   readonly closes: number;
   readonly restores: number;
@@ -50,6 +73,8 @@ export interface GameShellHost {
   readonly version: typeof GAME_SHELL_HOST_VERSION;
   readonly root: HTMLElement;
   setSessionState(kind: string): void;
+  /** Resincronizează meniul de sesiune din portul injectat, fără a aștepta un cadru. */
+  refreshSession(): void;
   refresh(force?: boolean): void;
   isPanelOpen(): boolean;
   getStats(): GameShellHostStats;
@@ -68,6 +93,9 @@ const STYLE_TEXT = `
   font: inherit; color: #f3f7fb; background: #17352b; border: 1px solid #3d6b58;
   border-radius: 0.35rem; padding: 0.3rem 0.55rem; cursor: pointer; }
 .game-shell-host__bar button:hover, .game-shell-host__panel button:hover { background: #22503f; }
+.game-shell-host__bar select { font: inherit; color: #f3f7fb; background: #102a22;
+  border: 1px solid #3d6b58; border-radius: 0.35rem; padding: 0.28rem 0.4rem; }
+.game-shell-host__bar select:focus-visible { outline: 3px solid #9fe0c5; outline-offset: 2px; }
 .game-shell-host__bar button:focus-visible, .game-shell-host__panel button:focus-visible {
   outline: 3px solid #9fe0c5; outline-offset: 2px; }
 .game-shell-host__panel { position: fixed; top: 4.2rem; right: 1rem; width: min(42rem, calc(100vw - 2rem));
@@ -129,6 +157,15 @@ export function createGameShellHost(options: GameShellHostOptions): GameShellHos
   const badge = doc.createElement('span');
   badge.className = 'game-shell-host__badge';
   badge.setAttribute('data-shell-kind', 'LOADING');
+  const sessionSelect =
+    options.sessionMenu !== undefined && options.onChooseSession !== undefined
+      ? doc.createElement('select')
+      : null;
+  if (sessionSelect !== null) {
+    sessionSelect.setAttribute('data-shell-action', 'session');
+    sessionSelect.setAttribute('aria-label', 'Sesiune');
+    sessionSelect.title = 'Alege Academie sau Joacă liberă / Haos';
+  }
   const startButton = doc.createElement('button');
   startButton.type = 'button';
   startButton.textContent = 'Start';
@@ -147,7 +184,9 @@ export function createGameShellHost(options: GameShellHostOptions): GameShellHos
   panelButton.setAttribute('data-shell-action', 'panel');
   panelButton.setAttribute('aria-haspopup', 'dialog');
   panelButton.setAttribute('aria-expanded', 'false');
-  bar.append(badge, startButton, pauseButton, resumeButton, panelButton);
+  bar.append(badge);
+  if (sessionSelect !== null) bar.append(sessionSelect);
+  bar.append(startButton, pauseButton, resumeButton, panelButton);
 
   const panel = doc.createElement('div');
   panel.className = 'game-shell-host__panel';
@@ -187,7 +226,15 @@ export function createGameShellHost(options: GameShellHostOptions): GameShellHos
   closeButton.type = 'button';
   closeButton.textContent = 'Închide panoul';
   closeButton.setAttribute('data-shell-action', 'close-panel');
-  panel.append(title, summary, table, note, closeButton);
+  const resetButton = options.onResetWorld === undefined ? null : doc.createElement('button');
+  if (resetButton !== null) {
+    resetButton.type = 'button';
+    resetButton.textContent = 'Oraș proaspăt, păstrează stilul';
+    resetButton.setAttribute('data-shell-action', 'reset-world');
+  }
+  panel.append(title, summary, table, note);
+  if (resetButton !== null) panel.append(resetButton);
+  panel.append(closeButton);
   host.append(bar, panel);
   root.append(host);
 
@@ -210,8 +257,39 @@ export function createGameShellHost(options: GameShellHostOptions): GameShellHos
   let refreshes = 0;
   let rowWrites = 0;
   let tabTraps = 0;
-  let listeners = 6;
+  let sessionChoices = 0;
+  let sessionSelects = 0;
+  let lastMenuSignature = '';
+  let listeners = (sessionSelect === null ? 6 : 7) + (resetButton === null ? 0 : 1);
   const rows = new Map<string, Row>();
+
+  const syncSession = (): void => {
+    if (disposed || sessionSelect === null || options.sessionMenu === undefined) return;
+    const menu = options.sessionMenu();
+    const signature = menu.choices
+      .map(
+        (choice) =>
+          `${choice.kind}:${choice.label}:${String(choice.checkpoints)}:${choice.profileId}:` +
+          `${String(choice.worldEpoch)}:${String(choice.learningEpoch)}`,
+      )
+      .join('|');
+    if (signature !== lastMenuSignature) {
+      while (sessionSelect.children.length > 0) sessionSelect.children[0]!.remove();
+      for (const choice of menu.choices) {
+        const option = doc.createElement('option');
+        option.value = choice.kind;
+        option.textContent = choice.label;
+        option.setAttribute('data-session-kind', choice.kind);
+        sessionSelect.append(option);
+      }
+      lastMenuSignature = signature;
+      sessionChoices = menu.choices.length;
+    }
+    const known = menu.choices.some((choice) => choice.kind === sessionSelect.value);
+    sessionSelect.value =
+      menu.live ?? (known ? sessionSelect.value : (menu.choices[0]?.kind ?? ''));
+    sessionSelects += 1;
+  };
 
   const initial = options.snapshot();
   for (const system of initial.systems) {
@@ -267,9 +345,13 @@ export function createGameShellHost(options: GameShellHostOptions): GameShellHos
     const at = now();
     if (!force && lastRefreshAt !== null && at - lastRefreshAt < GAME_SHELL_HOST_REFRESH_MS) return;
     const status = options.snapshot();
+    syncSession();
     const total = status.portsPresent + status.portsAbsent;
+    const liveSession =
+      options.sessionMenu?.().choices.find((choice) => choice.live)?.label ?? 'nealeasă';
     summary.textContent =
-      `Sesiune ${status.sessionId} · epoch ${status.worldEpoch} · tick ${status.tick} · ` +
+      `Sesiune ${liveSession} · ${status.sessionId} · epoch ${status.worldEpoch} · ` +
+      `learning ${status.learningEpoch} · tick ${status.tick} · ` +
       `mod ${status.mode} · ${status.paused ? `pauză (${status.cause ?? 'manual'})` : 'rulează'} · ` +
       `porturi ${status.portsPresent}/${total}`;
     const world = status.world;
@@ -325,6 +407,16 @@ export function createGameShellHost(options: GameShellHostOptions): GameShellHos
   const onStart = (): void => options.onStart();
   const onPause = (): void => options.onPause();
   const onResume = (): void => options.onResume();
+  const onSession = (): void => {
+    if (sessionSelect === null) return;
+    options.onChooseSession?.(sessionSelect.value);
+    syncSession();
+  };
+  const onReset = (): void => {
+    if (!panelOpen) return;
+    close();
+    options.onResetWorld?.();
+  };
   const onPanel = (): void => {
     if (panelOpen) {
       close();
@@ -350,10 +442,13 @@ export function createGameShellHost(options: GameShellHostOptions): GameShellHos
   startButton.addEventListener('click', onStart);
   pauseButton.addEventListener('click', onPause);
   resumeButton.addEventListener('click', onResume);
+  sessionSelect?.addEventListener('change', onSession);
+  resetButton?.addEventListener('click', onReset);
   panelButton.addEventListener('click', onPanel);
   closeButton.addEventListener('click', onClose);
   panel.addEventListener('keydown', onPanelKeyDown);
 
+  syncSession();
   updateControls();
 
   return Object.freeze({
@@ -363,7 +458,12 @@ export function createGameShellHost(options: GameShellHostOptions): GameShellHos
       if (disposed) throw new Error('Game shell host is disposed.');
       sessionKind = kind;
       updateControls();
+      syncSession();
       if (panelOpen) refresh(true);
+    },
+    refreshSession(): void {
+      if (disposed) return;
+      syncSession();
     },
     refresh,
     isPanelOpen: () => panelOpen,
@@ -373,6 +473,8 @@ export function createGameShellHost(options: GameShellHostOptions): GameShellHos
         disposed,
         panelOpen,
         sessionKind,
+        sessionChoices,
+        sessionSelects,
         opens,
         closes,
         restores,
@@ -390,6 +492,8 @@ export function createGameShellHost(options: GameShellHostOptions): GameShellHos
       startButton.removeEventListener('click', onStart);
       pauseButton.removeEventListener('click', onPause);
       resumeButton.removeEventListener('click', onResume);
+      sessionSelect?.removeEventListener('change', onSession);
+      resetButton?.removeEventListener('click', onReset);
       panelButton.removeEventListener('click', onPanel);
       closeButton.removeEventListener('click', onClose);
       panel.removeEventListener('keydown', onPanelKeyDown);

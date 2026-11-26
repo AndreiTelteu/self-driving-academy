@@ -187,3 +187,100 @@ test('260 host: an open panel refreshes at 10 Hz, never per frame, and disposal 
   assert.throws(() => f.host.setSessionState('PLAYING'), /disposed/);
   f.host.dispose();
 });
+
+test('261 host: the session menu offers Academy and Chaos and reports the chosen kind', () => {
+  const doc = createHudDocument();
+  const root = doc.createElement('div');
+  let live: string | null = 'ACADEMY';
+  const chosen: string[] = [];
+  let resets = 0;
+  const shell = createGameShell({
+    context: { sessionId: '261-host-test', worldEpoch: 2, learningEpoch: 1 },
+    suspend: () => {},
+    resume: () => {},
+    now: () => 0,
+  });
+  shell.attachWorld(world(1));
+  const host = createGameShellHost({
+    root: root as unknown as HTMLElement,
+    snapshot: () => shell.status(),
+    onStart: () => {},
+    onPause: () => {},
+    onResume: () => {},
+    sessionMenu: () => ({
+      live,
+      choices: [
+        {
+          kind: 'ACADEMY',
+          label: 'Academie',
+          live: live === 'ACADEMY',
+          profileId: 'profile-1',
+          worldEpoch: 2,
+          learningEpoch: 1,
+          checkpoints: 1,
+        },
+        {
+          kind: 'CHAOS',
+          label: 'Joaca libera / Haos',
+          live: live === 'CHAOS',
+          profileId: 'chaos:copy-1',
+          worldEpoch: 1,
+          learningEpoch: 0,
+          checkpoints: 0,
+        },
+      ],
+    }),
+    onChooseSession: (kind) => {
+      chosen.push(kind);
+      live = kind;
+    },
+    onResetWorld: () => {
+      resets += 1;
+    },
+    onOpenPanel: () => shell.openPanel('integration'),
+    onClosePanel: () => {
+      shell.closePanel();
+    },
+    now: () => 0,
+  });
+  const element = root.children[0] as HudElement;
+  const bar = element.children[0]!;
+  const select = bar.children.find(
+    (child) => child.getAttribute('data-shell-action') === 'session',
+  )!;
+  assert.ok(select !== undefined);
+  assert.equal(select.value, 'ACADEMY');
+  assert.equal(select.children.length, 2);
+  assert.equal(select.children[0]!.textContent, 'Academie');
+  assert.equal(select.children[1]!.textContent, 'Joaca libera / Haos');
+  assert.equal(host.getStats().sessionChoices, 2);
+  assert.equal(host.getStats().listeners, 8);
+  assert.equal(host.getStats().globalListeners, 0);
+
+  const panel = element.children[1]!;
+  const panelButton = bar.children.find(
+    (child) => child.getAttribute('data-shell-action') === 'panel',
+  )!;
+  panelButton.dispatchEvent('click');
+  const resetButton = panel.children.find(
+    (child) => child.getAttribute('data-shell-action') === 'reset-world',
+  )!;
+  assert.equal(resetButton.textContent, 'Oraș proaspăt, păstrează stilul');
+  resetButton.dispatchEvent('click');
+  assert.equal(resets, 1);
+  assert.equal(host.isPanelOpen(), false);
+
+  select.value = 'CHAOS';
+  select.dispatchEvent('change');
+  assert.deepEqual(chosen, ['CHAOS']);
+  host.refreshSession();
+  assert.equal(select.value, 'CHAOS');
+  host.setSessionState('PLAYING');
+  host.refresh(true);
+  assert.match(element.children[1]!.children[1]!.textContent, /porturi 0\/15/);
+
+  host.dispose();
+  assert.equal(select.listenerCount, 0);
+  assert.equal(host.getStats().listeners, 0);
+  assert.equal(host.getStats().sessionChoices, 2);
+});

@@ -711,6 +711,7 @@ export {
   createGameShell,
   type GameMode,
   type GamePortId,
+  type GameSessionContext,
   type GameShell,
   type GameShellCostSummary,
   type GameShellOptions,
@@ -726,3 +727,19 @@ export {
   type GameTickPort,
   type GameTickPorts,
 } from './game-shell';
+
+export {
+  SESSION_FLOW_VERSION,
+  createSessionFlow,
+  type SessionFlow,
+  type SessionFlowFingerprint,
+  type SessionFlowMenu,
+  type SessionFlowMenuChoice,
+  type SessionFlowOptions,
+  type SessionFlowPreserved,
+  type SessionFlowStatus,
+  type SessionResetAccepted,
+  type SessionResetOutcome,
+  type SessionResetPartial,
+  type SessionResetRejected,
+} from './session-flow';

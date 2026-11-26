@@ -860,7 +860,13 @@ export function evaluateSessionKindTransfer(value: unknown): SessionKindTransfer
 
 /* --------------------------------------------------------------- checkpoints */
 
-export const sessionCheckpointReasons = ['SESSION_SWITCH', 'AUTOSAVE', 'CLOSE'] as const;
+export const sessionCheckpointReasons = [
+  'SESSION_SWITCH',
+  'AUTOSAVE',
+  'CLOSE',
+  /** PBI 261: resetul sesiunii anunță un epoch nou, păstrând stilul și progresul. */
+  'SCENARIO_RESET',
+] as const;
 export type SessionCheckpointReason = (typeof sessionCheckpointReasons)[number];
 
 export interface SessionKindCheckpoint {
