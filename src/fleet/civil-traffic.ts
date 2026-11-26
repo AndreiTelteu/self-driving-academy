@@ -267,6 +267,14 @@ export interface CivilTraffic {
   readonly style: Readonly<{ profileId: string; versionId: string }>;
   list(): readonly CivilActorSnapshot[];
   get(vehicleId: string): CivilActorSnapshot | undefined;
+  /**
+   * PBI 269: start simulating a vehicle that was added to the same 057 registry after creation.
+   * The registry remains the owner of identity/class/state; this only creates the real 058 actor
+   * route for it. A vehicle already simulated is returned unchanged.
+   */
+  addVehicle(vehicleId: string): CivilActorSnapshot;
+  /** Stop simulating one actor; the 057 registry entry remains owned by the caller. */
+  removeVehicle(vehicleId: string): boolean;
   step(input: CivilTrafficStep): CivilTrafficFrame;
   setAuthority(vehicleId: string, mode: ControlMode, atTick?: number): CivilActorSnapshot;
   /**
@@ -676,14 +684,15 @@ class CivilTrafficImpl implements CivilTraffic {
   > | null;
   /** Registry vehicles selected by `driverKinds`, in stable vehicle-ID order. */
   private readonly fleetVehicles: readonly FleetVehicle[];
-  private readonly actorIds: ReadonlySet<string>;
+  private readonly allowedKinds: ReadonlySet<FleetDriverKind>;
+  private readonly actorIds: Set<string>;
   private readonly actors: ActorState[];
   private readonly byId: Map<string, ActorState>;
   private readonly road: ReturnType<typeof createRoadContext>;
   private readonly longitudinal: ReturnType<typeof createLongitudinalController>;
   private readonly laneIdsByAccess = new Map<RoadAccess, readonly string[]>();
   private readonly contextRefresh: 'EVERY_TICK' | 'DECISION_PERIOD';
-  private readonly contextPhase: ReadonlyMap<string, number>;
+  private readonly contextPhase: Map<string, number>;
   private readonly occupancy = new Map<string, Map<string, number>>();
   private readonly physical = new Map<string, PhysicalLaneOccupation[]>();
   private readonly kinds = new Map<string, FleetDriverKind>();
@@ -719,6 +728,7 @@ class CivilTrafficImpl implements CivilTraffic {
     this.commonStyle = style;
     this.zoneById = new Map(map.serviceZones.map((zone) => [zone.id, zone]));
     const kinds = new Set(options.driverKinds);
+    this.allowedKinds = kinds;
     this.fleetVehicles = Object.freeze(
       this.registry
         .list()
@@ -1140,6 +1150,81 @@ class CivilTrafficImpl implements CivilTraffic {
   get(vehicleId: string): CivilActorSnapshot | undefined {
     const actor = this.byId.get(vehicleId);
     return actor === undefined ? undefined : this.snapshot(actor);
+  }
+
+  addVehicle(vehicleIdValue: string): CivilActorSnapshot {
+    this.assertLive();
+    const vehicleId = boundedId(vehicleIdValue),
+      existing = this.byId.get(vehicleId);
+    if (existing !== undefined) return this.snapshot(existing);
+    const vehicle = this.registry.get(vehicleId);
+    requireContract(vehicle !== undefined, 'Unknown civil vehicle');
+    requireContract(
+      this.allowedKinds.has(vehicle.driverKind),
+      'Fleet vehicle kind is not simulated by this traffic',
+    );
+    requireContract(this.actors.length < FLEET_LIMITS.vehicles, 'Fleet traffic population cap');
+    const state = this.registry.state(vehicleId);
+    requireContract(state !== undefined, 'Missing fleet state');
+    const access = accessFor(vehicle.driverKind),
+      usedOrigins = new Set(
+        this.actors
+          .map((actor) => actor.route.plan.originLaneId)
+          .filter((laneId): laneId is string => laneId !== null),
+      ),
+      route = this.spawnRoute(vehicleId, 0, access, usedOrigins),
+      distanceM = 0,
+      pose = routePose(route, distanceM),
+      actor = Object.freeze({ id: vehicleId, incarnation: 1 }),
+      actorState: ActorState = {
+        vehicle,
+        actor,
+        access,
+        authority: state.controlMode,
+        style: this.commonStyle,
+        route,
+        routeView: null,
+        distanceM,
+        speedMps: 0,
+        pose,
+        leader: null,
+        replans: 0,
+        ticks: 0,
+        blocked: false,
+        service: null,
+      };
+    // Admit the longitudinal identity before touching local arrays, so a refused controller update
+    // cannot leave a half-added actor behind.
+    this.longitudinal.setActors([...this.actors.map((entry) => entry.actor), actor], {
+      sessionId: this.registry.configuration.sessionId,
+      worldEpoch: this.registry.configuration.worldEpoch,
+    });
+    this.actors.push(actorState);
+    this.byId.set(vehicleId, actorState);
+    this.actorIds.add(vehicleId);
+    this.contextPhase.set(vehicleId, this.actors.length % DECISION_PERIOD_TICKS);
+    this.kinds.set(vehicleId, vehicle.driverKind);
+    return this.snapshot(actorState);
+  }
+
+  removeVehicle(vehicleIdValue: string): boolean {
+    this.assertLive();
+    const vehicleId = boundedId(vehicleIdValue),
+      index = this.actors.findIndex((actor) => actor.vehicle.vehicleId === vehicleId);
+    if (index < 0) return false;
+    this.longitudinal.setActors(
+      this.actors.filter((_, actorIndex) => actorIndex !== index).map((entry) => entry.actor),
+      {
+        sessionId: this.registry.configuration.sessionId,
+        worldEpoch: this.registry.configuration.worldEpoch,
+      },
+    );
+    this.actors.splice(index, 1);
+    this.byId.delete(vehicleId);
+    this.actorIds.delete(vehicleId);
+    this.contextPhase.delete(vehicleId);
+    this.kinds.delete(vehicleId);
+    return true;
   }
 
   private readObservations(value: unknown): readonly CivilTrafficVehicleObservation[] {

@@ -1,0 +1,629 @@
+{
+  "version": "269-company-evolution-report-v1",
+  "contract": "269-company-evolution-v1",
+  "ledgerContract": "268-company-ledger-v1",
+  "liveContract": "269-live-company-evolution-v1",
+  "levelTable": {
+    "version": "269-company-levels-v1",
+    "thresholds": [
+      {
+        "level": 1,
+        "minimumReinvestedProfitMinorUnits": 0
+      },
+      {
+        "level": 2,
+        "minimumReinvestedProfitMinorUnits": 5000
+      },
+      {
+        "level": 3,
+        "minimumReinvestedProfitMinorUnits": 15000
+      },
+      {
+        "level": 4,
+        "minimumReinvestedProfitMinorUnits": 35000
+      },
+      {
+        "level": 5,
+        "minimumReinvestedProfitMinorUnits": 70000
+      },
+      {
+        "level": 6,
+        "minimumReinvestedProfitMinorUnits": 120000
+      }
+    ],
+    "monotonic": true
+  },
+  "catalogs": {
+    "vehicles": "269-company-vehicle-catalog-v1",
+    "upgrades": "269-company-upgrade-catalog-v1",
+    "vehicleOffers": 6,
+    "upgradeDefinitions": 5,
+    "boundedEffects": true
+  },
+  "purchase": {
+    "offerId": "offer-city-compact-1",
+    "costMinorUnits": 12000,
+    "cashBeforeMinorUnits": 55220,
+    "cashAfterMinorUnits": 43220,
+    "fleetTaxisBefore": 20,
+    "fleetTaxisAfter": 21,
+    "vehicleId": "id-v1:7:vehicle30:report:company:evolution:fleet4:TAXI4:0021",
+    "slot": 21,
+    "classId": "compact",
+    "simulated": null,
+    "levelBefore": 1,
+    "levelAfter": 2,
+    "investmentMinorUnits": 12000
+  },
+  "insufficientCash": {
+    "offerId": "offer-city-compact-1",
+    "cashMinorUnits": 10000,
+    "costMinorUnits": 12000,
+    "reason": "INSUFFICIENT_CASH",
+    "fleetTaxis": 20,
+    "investments": 0,
+    "changed": false
+  },
+  "levelRequired": {
+    "offerId": "offer-city-sedan-1",
+    "requiredLevel": 2,
+    "currentLevel": 1,
+    "reason": "LEVEL_REQUIRED",
+    "fleetTaxis": 0,
+    "investments": 0,
+    "changed": false
+  },
+  "duplicates": {
+    "purchaseReason": "ALREADY_OWNED",
+    "upgradeReason": "ALREADY_OWNED",
+    "investmentsBefore": 2,
+    "investmentsAfter": 2,
+    "fleetTaxis": 21
+  },
+  "upgrade": {
+    "upgradeId": "upgrade-service-contract",
+    "costMinorUnits": 8000,
+    "basisPoints": 5000,
+    "effectiveFromTick": 2160000,
+    "effectiveFromPeriodId": "m0001",
+    "currentPeriodServiceMinorUnits": 40,
+    "nextPeriodServiceMinorUnits": 20,
+    "nextPeriodBaseMinorUnits": 40,
+    "nextPeriodAppliedBasisPoints": 5000,
+    "modifierId": "id-v1:21:company-cost-modifier24:report:company:evolution7:UPGRADE24:upgrade-service-contract7:SERVICE31:269-upgrade-service-contract-v1",
+    "modifierVersion": "269-upgrade-service-contract-v1",
+    "historyEntryUnchanged": true,
+    "pendingBefore": true,
+    "effectiveAfter": true
+  },
+  "cash": {
+    "initialCashMinorUnits": 50000,
+    "revenueMinorUnits": 14000,
+    "profitMinorUnits": 6110,
+    "cashBeforeInvestmentMinorUnits": 56110,
+    "investmentMinorUnits": 20000,
+    "vehicleInvestmentMinorUnits": 12000,
+    "upgradeInvestmentMinorUnits": 8000,
+    "cashMinorUnits": 36110,
+    "uncoveredLossMinorUnits": 0,
+    "formula": "initialCash + profit - investments, clamped at zero"
+  },
+  "fleet": {
+    "taxis": 21,
+    "civilians": 20,
+    "vehicles": 41,
+    "purchasedTaxis": 1,
+    "capacityTaxis": 30,
+    "capacityRemaining": 9,
+    "fleetValueMinorUnits": 12000,
+    "sameRegistry": true
+  },
+  "reload": {
+    "snapshotPurchases": 1,
+    "snapshotUpgrades": 1,
+    "restoredPurchases": 1,
+    "restoredUpgrades": 1,
+    "levelBefore": 2,
+    "levelAfter": 2,
+    "cashBefore": 35655,
+    "cashAfter": 35655,
+    "slotBefore": 21,
+    "slotAfter": 21,
+    "guardRefused": true
+  },
+  "xp": {
+    "balanceBefore": 0,
+    "balanceAfter": 0,
+    "levelBefore": 1,
+    "levelAfter": 1,
+    "entriesBefore": 0,
+    "entriesAfter": 0,
+    "same": true
+  },
+  "style": {
+    "profileId": "profile:269:report",
+    "versionId": "profile:269:report:v1",
+    "checksum": "262-live-fleet-v1:profile:269:report:profile:269:report:v1",
+    "same": true
+  },
+  "boundary": {
+    "xpWrites": 0,
+    "profileWrites": 0,
+    "styleOverrides": 0,
+    "economyWrites": 0,
+    "investmentWrites": 2,
+    "historyScans": 0,
+    "purchaseSurface": true,
+    "upgradeSurface": true,
+    "secondFleet": false
+  },
+  "checks": [
+    {
+      "name": "contract",
+      "expected": "269-company-evolution-v1",
+      "actual": "269-company-evolution-v1",
+      "pass": true,
+      "detail": "the evolution contract"
+    },
+    {
+      "name": "ledger-contract",
+      "expected": "268-company-ledger-v1",
+      "actual": "268-company-ledger-v1",
+      "pass": true,
+      "detail": "the same 268 ledger"
+    },
+    {
+      "name": "level-table",
+      "expected": "269-company-levels-v1",
+      "actual": "269-company-levels-v1",
+      "pass": true,
+      "detail": "the versioned level table"
+    },
+    {
+      "name": "level-monotonic",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "strictly increasing thresholds"
+    },
+    {
+      "name": "level-1-zero",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "level 1 at zero reinvested profit"
+    },
+    {
+      "name": "level-2-5000",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "level 2 at 5 000 SDA"
+    },
+    {
+      "name": "level-3-15000",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "level 3 at 15 000 SDA"
+    },
+    {
+      "name": "level-not-xp",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "XP is never an input"
+    },
+    {
+      "name": "initial-level",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "a new company is level 1"
+    },
+    {
+      "name": "profit-not-reinvested",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "12 rides of profit alone do not raise the level before an investment"
+    },
+    {
+      "name": "catalog-offers",
+      "expected": 6,
+      "actual": 6,
+      "pass": true,
+      "detail": "six one-time vehicle offers"
+    },
+    {
+      "name": "catalog-upgrades",
+      "expected": 5,
+      "actual": 5,
+      "pass": true,
+      "detail": "five versioned upgrades"
+    },
+    {
+      "name": "effects-bounded",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "no upgrade raises a cost or discounts more than 50%"
+    },
+    {
+      "name": "purchase-accepted",
+      "expected": "ACCEPTED",
+      "actual": "ACCEPTED",
+      "pass": true,
+      "detail": "bought offer-city-compact-1"
+    },
+    {
+      "name": "purchase-cost",
+      "expected": 12000,
+      "actual": 12000,
+      "pass": true,
+      "detail": "declared cost"
+    },
+    {
+      "name": "purchase-cash",
+      "expected": 43220,
+      "actual": 43220,
+      "pass": true,
+      "detail": "cash is reduced by exactly the cost"
+    },
+    {
+      "name": "purchase-fleet",
+      "expected": 21,
+      "actual": 21,
+      "pass": true,
+      "detail": "the same registry grows by one taxi"
+    },
+    {
+      "name": "purchase-slot",
+      "expected": 21,
+      "actual": 21,
+      "pass": true,
+      "detail": "the next real 057 slot is respected"
+    },
+    {
+      "name": "purchase-class",
+      "expected": "compact",
+      "actual": "compact",
+      "pass": true,
+      "detail": "the offer class is real"
+    },
+    {
+      "name": "purchase-vehicle-real",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the returned vehicle exists in the live registry"
+    },
+    {
+      "name": "purchase-level",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "reinvested profit raises level"
+    },
+    {
+      "name": "purchase-investment",
+      "expected": 12000,
+      "actual": 12000,
+      "pass": true,
+      "detail": "the purchase is one investment entry"
+    },
+    {
+      "name": "purchase-live-simulated",
+      "expected": null,
+      "actual": null,
+      "pass": true,
+      "detail": "the report registry port has no actor probe; the 058 growth test and browser probe prove the actor"
+    },
+    {
+      "name": "insufficient-cash",
+      "expected": "INSUFFICIENT_CASH",
+      "actual": "INSUFFICIENT_CASH",
+      "pass": true,
+      "detail": "a purchase beyond cash is refused"
+    },
+    {
+      "name": "insufficient-unchanged",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "cash, fleet and investment journal"
+    },
+    {
+      "name": "level-required",
+      "expected": "LEVEL_REQUIRED",
+      "actual": "LEVEL_REQUIRED",
+      "pass": true,
+      "detail": "level 1 is below 2"
+    },
+    {
+      "name": "level-required-unchanged",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "no fleet or cash change"
+    },
+    {
+      "name": "duplicate-purchase",
+      "expected": "ALREADY_OWNED",
+      "actual": "ALREADY_OWNED",
+      "pass": true,
+      "detail": "the same offer cannot be bought twice"
+    },
+    {
+      "name": "duplicate-upgrade",
+      "expected": "ALREADY_OWNED",
+      "actual": "ALREADY_OWNED",
+      "pass": true,
+      "detail": "the same upgrade cannot be bought twice"
+    },
+    {
+      "name": "duplicates-stable",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "duplicates do not add investment entries"
+    },
+    {
+      "name": "upgrade-accepted",
+      "expected": "ACCEPTED",
+      "actual": "ACCEPTED",
+      "pass": true,
+      "detail": "bought upgrade-service-contract"
+    },
+    {
+      "name": "upgrade-cost",
+      "expected": 8000,
+      "actual": 8000,
+      "pass": true,
+      "detail": "declared cost"
+    },
+    {
+      "name": "upgrade-basis-points",
+      "expected": 5000,
+      "actual": 5000,
+      "pass": true,
+      "detail": "the declared bounded effect"
+    },
+    {
+      "name": "upgrade-next-period",
+      "expected": 2160000,
+      "actual": 2160000,
+      "pass": true,
+      "detail": "the effect starts at the next simulated month"
+    },
+    {
+      "name": "upgrade-period",
+      "expected": "m0001",
+      "actual": "m0001",
+      "pass": true,
+      "detail": "next period identity"
+    },
+    {
+      "name": "service-before",
+      "expected": 40,
+      "actual": 40,
+      "pass": true,
+      "detail": "the current period keeps the base price"
+    },
+    {
+      "name": "service-after",
+      "expected": 20,
+      "actual": 20,
+      "pass": true,
+      "detail": "the next period applies the declared effect"
+    },
+    {
+      "name": "service-base",
+      "expected": 40,
+      "actual": 40,
+      "pass": true,
+      "detail": "the base amount stays visible"
+    },
+    {
+      "name": "service-basis-points",
+      "expected": 5000,
+      "actual": 5000,
+      "pass": true,
+      "detail": "the applied basis points are recorded"
+    },
+    {
+      "name": "history-unchanged",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the earlier ride entry is never rewritten"
+    },
+    {
+      "name": "pending-before",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the next-period effect is visible before it applies"
+    },
+    {
+      "name": "effective-after",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the effect is visible in the next period read model"
+    },
+    {
+      "name": "cash-before-investment",
+      "expected": 56110,
+      "actual": 56110,
+      "pass": true,
+      "detail": "operating cash uses the unchanged 268 formula"
+    },
+    {
+      "name": "cash-formula",
+      "expected": 36110,
+      "actual": 36110,
+      "pass": true,
+      "detail": "cash = initial + profit - investments, clamped at zero"
+    },
+    {
+      "name": "investment-split",
+      "expected": 20000,
+      "actual": 20000,
+      "pass": true,
+      "detail": "vehicle and upgrade investment are separate"
+    },
+    {
+      "name": "fleet-value",
+      "expected": 12000,
+      "actual": 12000,
+      "pass": true,
+      "detail": "fleet value is the real purchase value"
+    },
+    {
+      "name": "same-registry",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the evolution uses the one live 057 registry"
+    },
+    {
+      "name": "reload-purchases",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the purchase journal is restored"
+    },
+    {
+      "name": "reload-upgrades",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the upgrade journal is restored"
+    },
+    {
+      "name": "reload-state",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "level, cash and next-period effect survive restore"
+    },
+    {
+      "name": "reload-slot",
+      "expected": 21,
+      "actual": 21,
+      "pass": true,
+      "detail": "the real fleet slot is restored"
+    },
+    {
+      "name": "reload-guard",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "a ledger restored without its 268 state is refused"
+    },
+    {
+      "name": "xp-balance",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "XP is untouched"
+    },
+    {
+      "name": "xp-level",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the player level is untouched"
+    },
+    {
+      "name": "xp-entries",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the XP ledger is untouched"
+    },
+    {
+      "name": "style-identity",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the style is untouched"
+    },
+    {
+      "name": "boundary-xp",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no XP write surface"
+    },
+    {
+      "name": "boundary-profile",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no profile write surface"
+    },
+    {
+      "name": "boundary-style",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no hidden driving-style override"
+    },
+    {
+      "name": "boundary-economy",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no 209 write surface"
+    },
+    {
+      "name": "boundary-investment",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "both outflows are in the same ledger"
+    },
+    {
+      "name": "boundary-history",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "reads use incremental totals"
+    },
+    {
+      "name": "purchase-surface",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "269 adds the purchase command"
+    },
+    {
+      "name": "upgrade-surface",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "269 adds the upgrade command"
+    },
+    {
+      "name": "no-second-fleet",
+      "expected": false,
+      "actual": false,
+      "pass": true,
+      "detail": "no second fleet is created"
+    },
+    {
+      "name": "live-contract",
+      "expected": "269-live-company-evolution-v1",
+      "actual": "269-live-company-evolution-v1",
+      "pass": true,
+      "detail": "the live evolution port is exposed"
+    }
+  ],
+  "summary": {
+    "checks": 66,
+    "passed": 66,
+    "pass": true
+  }
+}

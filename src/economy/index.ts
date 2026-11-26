@@ -7,4 +7,5 @@ export * from './kpi-history';
 export * from './kpi-impact';
 export * from './live-economy';
 export * from './company-finance';
+export * from './company-evolution';
 export * from './economy';
