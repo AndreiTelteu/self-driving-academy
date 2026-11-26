@@ -1,13 +1,13 @@
 ---
 id: "263"
 title: "Selectarea oricărui taxi sau civil, camera și un singur scaun PLAYER"
-status: "To Do"
+status: "In Progress"
 release: "V1"
 module: "Interfață"
 depends_on: ["262"]
 performance_checks: ["ui","frame"]
-owner: null
-started_at: null
+owner: "loop-pbi/deepseek-263"
+started_at: "2026-11-26T02:37:13.056Z"
 completed_at: null
 ---
 
