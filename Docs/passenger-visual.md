@@ -126,6 +126,14 @@ Runnerul scrie [report.json](Evidence/147-passenger-visual/report.json) și
 [report.md](Evidence/147-passenger-visual/report.md): 7 scenarii deterministe și 40 de verificări.
 `--check` eșuează dacă transcriptul comis diferă, iar `npm test` include aceeași comparație.
 
+## Compoziția live 265
+
+[Ciclul live al cursei](live-ride-lifecycle.md) compune `readPassengerVisualFrame` peste fiecare cursă
+061 și scrie comenzile 147 într-un port de markeri proiectați în lume. `WAITING_PICKUP` are `P`,
+`BOARDING` are `P`+`S`, `ONBOARD`/`DROPPING_OFF` au `D`, iar terminalul este `NONE` cu reset.
+Preluarea taxiului revendicat păstrează cursa și pasagerul, deci jucătorul poate conduce pickup-ul și
+dropoff-ul fără un al doilea model vizual.
+
 ## Ce NU este
 
 - Nu este un asset 3D, un GLB, o animație sau o captură de browser. Nu pretinde că pasagerul are mesh

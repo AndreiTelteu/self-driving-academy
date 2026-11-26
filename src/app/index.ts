@@ -737,6 +737,15 @@ export {
 } from './game-shell';
 
 export {
+  LIVE_RIDE_COMPOSITION_VERSION,
+  createLiveRideComposition,
+  type LiveRideComposition,
+  type LiveRideCompositionOptions,
+  type LiveRideCompositionSnapshot,
+  type LiveRidePassengerRequest,
+} from './live-ride-composition';
+
+export {
   SESSION_FLOW_VERSION,
   createSessionFlow,
   type SessionFlow,

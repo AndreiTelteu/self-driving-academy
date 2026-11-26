@@ -147,6 +147,14 @@ BLOCKED, COMPLETED, fără cursă, cursă a altui taxi) și 23 de verificări, i
 `npm test` include comparația cu transcriptul comis. Captura vizuală opțională este documentată în
 [Evidence/073-hud](Evidence/073-hud/README.md).
 
+## Compoziția live 265
+
+[Ciclul live al cursei](live-ride-lifecycle.md) montează HUD-ul 073 în browser și îl hrănește din
+registrul 057 real, lifecycle-ul 061 și ETA 064. În timpul cursei, rândurile arată etapa
+`Spre pasager`/`La pasager`/`Spre destinație`/`La destinație`, obiectivul cu zonele reale, ETA cu
+interval, progresul certificat și motivul `SERVICE_BLOCKED` în detalii. După terminal, HUD-ul nu mai
+pretinde o cursă activă; panoul `Curse` păstrează rândul terminal cu motivul.
+
 ## Ce NU este
 
 - Nu este 005/024: nu citește Poziția/Viteza din fizică și nu calculează magnitudinea; hostul îi dă

@@ -1,0 +1,489 @@
+{
+  "version": "265-live-ride-lifecycle-report-v1",
+  "contract": "265-live-ride-lifecycle-v1",
+  "fixture": {
+    "taxis": 24,
+    "civilians": 32,
+    "seed": 262,
+    "dwellTicks": 180,
+    "ticks": 429,
+    "resetTick": 429
+  },
+  "completedRide": {
+    "rideId": "id-v1:4:ride14:test:265:rides51:id-v1:12:ride-request14:test:265:rides4:w0005:r0000",
+    "requestId": "id-v1:12:ride-request14:test:265:rides4:w0005:r0000",
+    "taxiId": "id-v1:7:vehicle13:v3:city:fleet4:TAXI4:0022",
+    "pickupZoneId": "sz:0-2",
+    "dropoffZoneId": "sz:0-1",
+    "startedTick": 60,
+    "boardingTick": 241,
+    "completionTick": 422,
+    "pickupDwellTicks": 180,
+    "dropoffDwellTicks": 180,
+    "requiredDwellTicks": 180,
+    "transitions": 5,
+    "releaseReason": "COMPLETED",
+    "pickupAnchor": {
+      "x": 90,
+      "y": 0,
+      "z": 362.1
+    },
+    "dropoffAnchor": {
+      "x": 90,
+      "y": 0,
+      "z": 182.1
+    }
+  },
+  "passenger": {
+    "waitingPhase": "WAITING_PICKUP",
+    "waitingMarkers": [
+      "PICKUP"
+    ],
+    "boardingPhase": "BOARDING",
+    "boardingMarkers": [
+      "PICKUP",
+      "PASSENGER"
+    ],
+    "boardingAnchorMatches": true,
+    "onboardPhase": "ONBOARD",
+    "onboardMarkers": [
+      "DROPOFF"
+    ],
+    "onboardOccupancy": 1,
+    "droppingPhase": "DROPPING_OFF",
+    "droppingMarkers": [
+      "DROPOFF"
+    ],
+    "completedPhase": "NONE",
+    "completedReset": true
+  },
+  "hud": {
+    "pickupStage": "Spre pasager",
+    "pickupObjective": "Du-te la pasagerul din sz:0-2",
+    "pickupEta": "~15 s",
+    "onboardStage": "Spre destinație",
+    "onboardEta": "~1 min 20 s",
+    "onboardProgress": "8% · 965 m",
+    "droppingStage": "La destinație",
+    "droppingEta": "La destinație"
+  },
+  "failure": {
+    "rideId": "id-v1:4:ride14:test:265:rides51:id-v1:12:ride-request14:test:265:rides4:w0005:r0001",
+    "taxiId": "id-v1:7:vehicle13:v3:city:fleet4:TAXI4:0005",
+    "cause": "BLOCKED",
+    "state": "FAILED",
+    "reason": "TAXI_BLOCKED",
+    "dispatchReason": "FAILED",
+    "releaseTaxiId": "id-v1:7:vehicle13:v3:city:fleet4:TAXI4:0005",
+    "releaseReason": "FAILED",
+    "claimReleased": true,
+    "receiptsForRide": 1
+  },
+  "playerRide": {
+    "rideId": "id-v1:4:ride14:test:265:rides51:id-v1:12:ride-request14:test:265:rides4:w0005:r0002",
+    "taxiId": "id-v1:7:vehicle13:v3:city:fleet4:TAXI4:0007",
+    "stateWithPlayer": "TO_PICKUP",
+    "claimKeptWithPlayer": true,
+    "excludedPlayer": 1,
+    "terminalsWithPlayer": 0,
+    "stateAfterRelease": "TO_PICKUP",
+    "claimKeptAfterRelease": true,
+    "terminalsAfterRelease": 0
+  },
+  "eta": {
+    "blockedReason": "SERVICE_BLOCKED",
+    "blockedEtaSeconds": null,
+    "blockedRemainingM": 317.022107606189,
+    "hudEta": "Indisponibil",
+    "hudReason": "SERVICE_BLOCKED"
+  },
+  "reset": {
+    "activeBefore": 23,
+    "closedRides": 23,
+    "releasedAssignments": 23,
+    "activeAfter": 0,
+    "assignmentsAfter": 0,
+    "ridesAfter": 0,
+    "duplicateRequests": 0,
+    "duplicateTaxis": 0
+  },
+  "checks": [
+    {
+      "name": "passenger-contract-version",
+      "expected": "147-passenger-visual-v1",
+      "actual": "147-passenger-visual-v1",
+      "pass": true,
+      "detail": "the 147 passenger frame is accepted"
+    },
+    {
+      "name": "ride-starts",
+      "expected": "TO_PICKUP",
+      "actual": "TO_PICKUP",
+      "pass": true,
+      "detail": "a live assignment starts a real 061 ride"
+    },
+    {
+      "name": "ride-follows-claim",
+      "expected": "id-v1:7:vehicle13:v3:city:fleet4:TAXI4:0022",
+      "actual": "id-v1:7:vehicle13:v3:city:fleet4:TAXI4:0022",
+      "pass": true,
+      "detail": "the ride keeps the claimed taxi"
+    },
+    {
+      "name": "real-pickup-zone",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "sz:0-2"
+    },
+    {
+      "name": "real-dropoff-zone",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "sz:0-1"
+    },
+    {
+      "name": "pickup-arrival-visible",
+      "expected": "BOARDING",
+      "actual": "BOARDING",
+      "pass": true,
+      "detail": "the 147 passenger waits at the real pickup anchor"
+    },
+    {
+      "name": "pickup-marker",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "P marker is present during boarding"
+    },
+    {
+      "name": "pickup-marker-anchor",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the marker uses the validated 032 anchor"
+    },
+    {
+      "name": "passenger-marker",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the S marker accompanies the passenger"
+    },
+    {
+      "name": "pickup-dwell",
+      "expected": 180,
+      "actual": 180,
+      "pass": true,
+      "detail": "boarding happens after the required 180-tick dwell"
+    },
+    {
+      "name": "boarding-tick",
+      "expected": 241,
+      "actual": 241,
+      "pass": true,
+      "detail": "the real boarding tick from the assignment tick 60"
+    },
+    {
+      "name": "onboard-phase",
+      "expected": "ONBOARD",
+      "actual": "ONBOARD",
+      "pass": true,
+      "detail": "the passenger stays on board"
+    },
+    {
+      "name": "onboard-occupancy",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "exactly one passenger on board"
+    },
+    {
+      "name": "onboard-marker",
+      "expected": "DROPOFF",
+      "actual": "DROPOFF",
+      "pass": true,
+      "detail": "only the destination marker remains"
+    },
+    {
+      "name": "dropoff-arrival-visible",
+      "expected": "DROPPING_OFF",
+      "actual": "DROPPING_OFF",
+      "pass": true,
+      "detail": "the destination arrival is visible during the dwell"
+    },
+    {
+      "name": "dropoff-dwell",
+      "expected": 180,
+      "actual": 180,
+      "pass": true,
+      "detail": "completion happens after the required 180-tick dwell"
+    },
+    {
+      "name": "completed-state",
+      "expected": "COMPLETED",
+      "actual": "COMPLETED",
+      "pass": true,
+      "detail": "the ride completes through 061"
+    },
+    {
+      "name": "completed-release",
+      "expected": "COMPLETED",
+      "actual": "COMPLETED",
+      "pass": true,
+      "detail": "061 releases the real 060 claim"
+    },
+    {
+      "name": "completed-passenger-hidden",
+      "expected": "NONE",
+      "actual": "NONE",
+      "pass": true,
+      "detail": "the passenger disappears after dropoff"
+    },
+    {
+      "name": "completed-passenger-reset",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the 147 frame is a reset"
+    },
+    {
+      "name": "completed-markers-empty",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no marker survives the terminal ride"
+    },
+    {
+      "name": "hud-pickup-stage",
+      "expected": "Spre pasager",
+      "actual": "Spre pasager",
+      "pass": true,
+      "detail": "the 073 HUD names the pickup stage"
+    },
+    {
+      "name": "hud-pickup-objective",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "Du-te la pasagerul din sz:0-2"
+    },
+    {
+      "name": "hud-pickup-eta",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "~15 s"
+    },
+    {
+      "name": "hud-onboard-stage",
+      "expected": "Spre destinație",
+      "actual": "Spre destinație",
+      "pass": true,
+      "detail": "the 073 HUD names the trip stage"
+    },
+    {
+      "name": "hud-onboard-eta",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "~1 min 20 s"
+    },
+    {
+      "name": "hud-onboard-progress",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "8% · 965 m"
+    },
+    {
+      "name": "hud-dropoff-stage",
+      "expected": "La destinație",
+      "actual": "La destinație",
+      "pass": true,
+      "detail": "the 073 HUD names the dropoff stage"
+    },
+    {
+      "name": "hud-dropoff-eta",
+      "expected": "La destinație",
+      "actual": "La destinație",
+      "pass": true,
+      "detail": "ETA ARRIVED is not displayed as zero"
+    },
+    {
+      "name": "failure-cause",
+      "expected": "BLOCKED",
+      "actual": "BLOCKED",
+      "pass": true,
+      "detail": "a blocked taxi closes the ride explicitly"
+    },
+    {
+      "name": "failure-state",
+      "expected": "FAILED",
+      "actual": "FAILED",
+      "pass": true,
+      "detail": "the terminal state is FAILED"
+    },
+    {
+      "name": "failure-reason",
+      "expected": "TAXI_BLOCKED",
+      "actual": "TAXI_BLOCKED",
+      "pass": true,
+      "detail": "the closed 061 failure reason is preserved"
+    },
+    {
+      "name": "failure-dispatch-release",
+      "expected": "FAILED",
+      "actual": "FAILED",
+      "pass": true,
+      "detail": "the 060 release reason is FAILED"
+    },
+    {
+      "name": "failure-claim-released",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the claim is released exactly once"
+    },
+    {
+      "name": "failure-single-receipt",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "a terminal ride cannot close twice"
+    },
+    {
+      "name": "player-ride-survives",
+      "expected": "TO_PICKUP",
+      "actual": "TO_PICKUP",
+      "pass": true,
+      "detail": "the player-driven taxi keeps the live ride"
+    },
+    {
+      "name": "player-claim-kept",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the 060 claim survives the takeover"
+    },
+    {
+      "name": "player-excluded-from-new-dispatch",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the player-driven taxi is not offered to new requests"
+    },
+    {
+      "name": "player-no-terminal",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "taking over the ride does not close it"
+    },
+    {
+      "name": "player-ride-after-release",
+      "expected": "TO_PICKUP",
+      "actual": "TO_PICKUP",
+      "pass": true,
+      "detail": "the ride survives the return to AUTO"
+    },
+    {
+      "name": "player-claim-after-release",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the claim stays with the same taxi after release"
+    },
+    {
+      "name": "eta-blocked-reason",
+      "expected": "SERVICE_BLOCKED",
+      "actual": "SERVICE_BLOCKED",
+      "pass": true,
+      "detail": "a blocked service is an explicit unavailable reason"
+    },
+    {
+      "name": "eta-blocked-seconds",
+      "expected": null,
+      "actual": null,
+      "pass": true,
+      "detail": "no zero seconds are invented"
+    },
+    {
+      "name": "eta-blocked-distance",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the readable route keeps its real distance"
+    },
+    {
+      "name": "hud-blocked-eta",
+      "expected": "Indisponibil",
+      "actual": "Indisponibil",
+      "pass": true,
+      "detail": "the 073 HUD shows unavailable, not zero"
+    },
+    {
+      "name": "hud-blocked-reason",
+      "expected": "SERVICE_BLOCKED",
+      "actual": "SERVICE_BLOCKED",
+      "pass": true,
+      "detail": "the closed reason stays in the details"
+    },
+    {
+      "name": "reset-closes-active",
+      "expected": 23,
+      "actual": 23,
+      "pass": true,
+      "detail": "every active ride is closed with SCENARIO_RESET"
+    },
+    {
+      "name": "reset-releases-claims",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "every claim is released"
+    },
+    {
+      "name": "reset-active-zero",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no ride survives the reset"
+    },
+    {
+      "name": "reset-assignments-zero",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no claim survives the reset"
+    },
+    {
+      "name": "reset-rides-zero",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the lifecycle is empty after reset"
+    },
+    {
+      "name": "reset-duplicate-requests",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "post-reset request map has no duplicate"
+    },
+    {
+      "name": "reset-duplicate-taxis",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "post-reset taxi map has no duplicate"
+    }
+  ],
+  "summary": {
+    "version": "265-live-ride-lifecycle-report-v1",
+    "checks": 53,
+    "passed": 53,
+    "pass": true
+  }
+}

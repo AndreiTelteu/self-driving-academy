@@ -2,9 +2,12 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import type {
   LiveRideAssignmentView,
+  LiveRideLifecycleRideView,
+  LiveRideLifecycleSnapshot,
   LiveRideRequestView,
   LiveRideSnapshot,
 } from '../../src/fleet';
+import type { PassengerVisualFrame } from '../../src/ui';
 import { LIVE_RIDES_PANEL_VERSION, createLiveRidesPanel } from '../../src/ui';
 import { createHudDocument, type HudElement } from './hud-dom';
 
@@ -121,6 +124,212 @@ function snapshot(tick: number, state: 'PENDING' | 'ASSIGNED' = 'ASSIGNED'): Liv
     disposed: false,
   });
 }
+
+function lifecycleRide(state: 'TO_DROPOFF' | 'FAILED' = 'TO_DROPOFF'): LiveRideLifecycleRideView {
+  const terminal = state === 'FAILED';
+  return Object.freeze({
+    rideId: 'ride-1',
+    requestId: 'request-1',
+    taxiId: 'taxi-1',
+    taxiSlot: 3,
+    state,
+    terminal,
+    reason: terminal ? 'TAXI_BLOCKED' : null,
+    pickupZoneId: 'sz:0-0',
+    dropoffZoneId: 'sz:1-1',
+    pickupAnchor: Object.freeze({ x: 1, y: 0, z: 2 }),
+    dropoffAnchor: Object.freeze({ x: 3, y: 0, z: 4 }),
+    startedTick: 60,
+    updatedTick: 140,
+    transitions: terminal ? 2 : 3,
+    eta: terminal
+      ? null
+      : Object.freeze({
+          status: 'ESTIMATED' as const,
+          reason: null,
+          tick: 120,
+          rideId: 'ride-1',
+          taxiId: 'taxi-1',
+          state,
+          leg: 'TRIP' as const,
+          serviceState: 'FREE_FLOW' as const,
+          routeLaneIds: Object.freeze(['lane:01E0', 'lane:11E0']),
+          laneCount: 2,
+          totalDistanceM: 760,
+          traveledDistanceM: 320,
+          remainingDistanceM: 440,
+          progressFraction: 0.42,
+          segmentIndex: 0,
+          segmentLaneId: 'lane:01E0',
+          segmentKind: 'LANE' as const,
+          segmentProgressFraction: 0.5,
+          plannedSpeedMps: 8,
+          speedBasisMps: 8,
+          observedSpeedMps: 6.2,
+          plannedRemainingSeconds: 55,
+          etaSeconds: 55,
+          etaMinSeconds: 50,
+          etaMaxSeconds: 61,
+          offRouteDistanceM: null,
+          reprojected: false,
+          stale: false,
+        }),
+    pickup: terminal
+      ? Object.freeze({
+          inZone: true,
+          dwellTicks: 180,
+          dwellSeconds: 3,
+          requiredDwellTicks: 180,
+          lastTick: 140,
+          boardedTick: 140,
+        })
+      : Object.freeze({
+          inZone: true,
+          dwellTicks: 180,
+          dwellSeconds: 3,
+          requiredDwellTicks: 180,
+          lastTick: 140,
+          boardedTick: 140,
+        }),
+    dropoff: null,
+    boardingTick: terminal ? 140 : 140,
+    completionTick: null,
+    release: terminal
+      ? Object.freeze({
+          taxiId: 'taxi-1',
+          requestId: 'request-1',
+          assignmentId: 'assignment-1',
+          reason: 'FAILED' as const,
+          tick: 140,
+        })
+      : null,
+    terminalCause: terminal ? ('BLOCKED' as const) : null,
+  });
+}
+
+function lifecycleSnapshot(
+  state: 'TO_DROPOFF' | 'FAILED' = 'TO_DROPOFF',
+  tick = 120,
+): LiveRideLifecycleSnapshot {
+  const terminal = state === 'FAILED';
+  return Object.freeze({
+    version: '265-live-ride-lifecycle-v1',
+    tick,
+    namespace: 'test:265:rides',
+    counts: Object.freeze({
+      taxis: 24,
+      rides: 1,
+      active: terminal ? 0 : 1,
+      waitingPickup: 0,
+      boarding: 0,
+      onboard: terminal ? 0 : 1,
+      droppingOff: 0,
+      completed: 0,
+      failed: terminal ? 1 : 0,
+      cancelled: 0,
+      passengersOnBoard: terminal ? 0 : 1,
+      terminals: terminal ? 1 : 0,
+    }),
+    terminalsByCause: Object.freeze({
+      COMPLETED: 0,
+      PLAYER_TAKEOVER: 0,
+      BLOCKED: terminal ? 1 : 0,
+      DAMAGED: 0,
+      OFFLINE: 0,
+      SCENARIO_RESET: 0,
+    }),
+    rides: Object.freeze([lifecycleRide(state)]),
+    terminals: Object.freeze(
+      terminal
+        ? [
+            Object.freeze({
+              rideId: 'ride-1',
+              requestId: 'request-1',
+              taxiId: 'taxi-1',
+              tick: 140,
+              state: 'FAILED' as const,
+              reason: 'TAXI_BLOCKED' as const,
+              cause: 'BLOCKED' as const,
+              dispatchReason: 'FAILED' as const,
+              release: null,
+            }),
+          ]
+        : [],
+    ),
+    serviceState: 'FREE_FLOW',
+    disposed: false,
+  });
+}
+
+function passengerFrame(): PassengerVisualFrame {
+  return Object.freeze({
+    schemaVersion: 1,
+    units: 'SI',
+    version: '147-passenger-visual-v1',
+    sessionId: 'test:265:rides',
+    worldEpoch: 1,
+    tick: 120,
+    taxiId: 'taxi-1',
+    rideId: 'ride-1',
+    phase: 'ONBOARD',
+    occupancy: 1,
+    passengerVisible: true,
+    markers: Object.freeze([
+      Object.freeze({
+        markerId: 'passenger-marker:ride-1:DROPOFF',
+        role: 'DROPOFF' as const,
+        zoneId: 'sz:1-1',
+        x: 12,
+        z: 8,
+        label: 'D' as const,
+      }),
+    ]),
+    omissions: Object.freeze([]),
+    labels: Object.freeze({
+      phase: 'La bord',
+      occupancy: '1 pasager',
+      passenger: 'Pasager la bord',
+    }),
+    accessibleText: '1 pasager la bord; predare la zona sz:1-1.',
+    reset: false,
+  });
+}
+
+test('265 live rides panel renders the ride stage, passenger, ETA, progress and terminal reason', () => {
+  const doc = createHudDocument(),
+    host = doc.createElement('div'),
+    panel = createLiveRidesPanel(host as unknown as HTMLElement, {
+      onClose: () => {},
+      now: () => 0,
+      style: false,
+    });
+  try {
+    panel.open();
+    panel.update(snapshot(120), 0, lifecycleSnapshot(), {
+      'ride-1': passengerFrame(),
+    });
+    const stats = panel.getStats();
+    assert.equal(stats.rides, 1);
+    assert.equal(stats.activeRides, 1);
+    assert.equal(stats.terminalRides, 0);
+    assert.equal(stats.passengerMarkers, 1);
+    const text = panel.root.textContent ?? '';
+    assert.match(text, /Spre destinație/);
+    assert.match(text, /sz:0-0 → sz:1-1/);
+    assert.match(text, /Pasager la bord · 1 pasager/);
+    assert.match(text, /~55 s/);
+    assert.match(text, /42% · 440 m/);
+    assert.match(text, /pasageri la bord 1/);
+
+    panel.update(snapshot(121), 110, lifecycleSnapshot('FAILED', 121), {});
+    const failedText = panel.root.textContent ?? '';
+    assert.match(failedText, /Cursă eșuată/);
+    assert.match(failedText, /TAXI_BLOCKED/);
+    assert.equal(panel.getStats().terminalRides, 1);
+  } finally {
+    panel.dispose();
+  }
+});
 
 test('264 live rides panel renders the real queue and active claims from the read model', () => {
   const doc = createHudDocument(),

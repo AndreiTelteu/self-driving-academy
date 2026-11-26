@@ -9,6 +9,7 @@ export * from './dropoff';
 export * from './eta';
 export * from './fleet-health';
 export * from './live-rides';
+export * from './live-ride-lifecycle';
 export * from './profile-activation';
 export * from './profile-continuity';
 export * from './scenario-fixture';

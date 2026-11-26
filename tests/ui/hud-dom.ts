@@ -13,6 +13,8 @@ export class HudElement {
   text = '';
   open = false;
   hidden = false;
+  /** Inline style used by overlay adapters; serialization ignores it like the real CSSOM. */
+  readonly style: Record<string, string> = {};
   /** Mirrors the DOM `value` property used by `select`/`option` elements. */
   value = '';
   private textNode: TextNode | null = null;
