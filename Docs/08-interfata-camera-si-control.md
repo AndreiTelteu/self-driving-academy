@@ -10,6 +10,8 @@ Panoul flotei permite selectarea oricărui taxi fără a muta fizic vehiculele. 
 
 [Selectarea prin hartă 076](map-selection.md) materializează această regulă pentru toate taxiurile 057 și mașinile civile 058: markerii folosesc transformarea minimap-ului 074, identitatea stabilă este `vehicleId`-ul flotei, iar un click emite o singură intenție 068 `WORLD`. Modulul nu mișcă absolut camera, nu teleportează vehicule și nu revendică autoritatea PLAYER.
 
+[Selectarea live 263](live-fleet-selection.md) montează regula în jocul real: panoul `Flotă` listează cele 24 de taxiuri și 32 de civili ai lui 262 plus cele două mașini parcate, un click sau Enter/Space mută doar ținta camerei, iar `M` preia explicit orice mașină cu un singur scaun `PLAYER`. Vehiculul părăsit revine în AUTO cu ruta/cursea reconciliată de 058/041; `L` este refuzat explicit până la 271, iar minimapa completă rămâne la 281.
+
 Panoul profilului afișează valorile curente, diferența față de versiunea precedentă, situațiile care au susținut schimbarea, cantitatea de dovezi și parametrii încă neobservați. Notificarea poate spune: „Profil nou: distanță mai mică în mers și reacție mai rapidă la verde”. Valorile concrete provin exclusiv din datele sesiunii.
 
 [Panoul profilului 077](profile-panel.md) materializează regula pe schema catalogului: cele 80 de chei au câte un rând stabil, o valoare lipsă este „Neobservat” (niciodată 0), un zero real rămâne observat, iar cheile R sunt rezervate, `null` și neînvățabile în V1 chiar dacă recordul conține un număr. Fără o versiune publicată, panoul afișează explicit valorile ilustrative din catalog, cu bannerul „Date ilustrative”; publicarea și propagarea rămân la 110/112.

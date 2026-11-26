@@ -38,8 +38,10 @@ export const V3_BROWSER_COMPOSITION_VERSION = '236-v3-browser-composition-v1' as
 export const COMPOSITION_KEYS = Object.freeze({
   sprint: 'KeyF',
   interact: 'KeyG',
-  /** PBI 257: M comută MANUAL/AUTO pentru mașina condusă. */
+  /** PBI 257: M comută MANUAL/AUTO pentru mașina condusă sau preia ținta selectată. */
   mode: 'KeyM',
+  /** PBI 263: L cere explicit LEARNING; până la 271 refuzul este raportat, nu simulat. */
+  learning: 'KeyL',
   /** PBI 252: T schimbă ora din zi (dimineață → amiază → apus → noapte). */
   time: 'KeyT',
 });
@@ -88,6 +90,12 @@ export interface V3BrowserComposition {
   vehicleMode(): CompositionMode | null;
   setVehicleMode(mode: 'AUTO' | 'MANUAL'): CompositionMode | null;
   toggleVehicleMode(): CompositionMode | null;
+  /** PBI 263: camera-only target; `null` follows the controlled entity again. */
+  selectVehicle(vehicleId: string | null): boolean;
+  /** PBI 263: explicit M/L on the selected car, or the held car's existing toggle. */
+  takeOverSelected(mode: 'MANUAL' | 'LEARNING'): boolean;
+  selectedVehicleId(): string | null;
+  playerVehicleId(): string | null;
   reset(): void;
   probeDoubleDelivery(): string;
   costs(): Readonly<{ tick: CostSummary; present: CostSummary; frame: CostSummary }>;
@@ -194,7 +202,12 @@ export function createV3BrowserComposition(
     }
     if (event.code === COMPOSITION_KEYS.mode) {
       event.preventDefault();
-      if (event.type === 'keydown' && !event.repeat) composition.toggleVehicleMode();
+      if (event.type === 'keydown' && !event.repeat) composition.takeOverSelected('MANUAL');
+      return;
+    }
+    if (event.code === COMPOSITION_KEYS.learning) {
+      event.preventDefault();
+      if (event.type === 'keydown' && !event.repeat) composition.takeOverSelected('LEARNING');
       return;
     }
     if (event.code === COMPOSITION_KEYS.time) {
@@ -254,6 +267,18 @@ export function createV3BrowserComposition(
     toggleVehicleMode(): CompositionMode | null {
       return composition.toggleVehicleMode();
     },
+    selectVehicle(vehicleId: string | null): boolean {
+      return composition.selectVehicle(vehicleId);
+    },
+    takeOverSelected(mode: 'MANUAL' | 'LEARNING'): boolean {
+      return composition.takeOverSelected(mode);
+    },
+    selectedVehicleId(): string | null {
+      return composition.selectedVehicleId();
+    },
+    playerVehicleId(): string | null {
+      return composition.playerVehicleId();
+    },
     reset(): void {
       composition.resetScenario();
       latest = composition.frame;
@@ -303,6 +328,25 @@ export function createV3BrowserComposition(
           speedMps: frame.hud.speedMps,
           transitionRemainingTicks: frame.hud.transitionRemainingTicks,
         }),
+        selection: Object.freeze({
+          selectedVehicleId: frame.selectedVehicleId,
+          playerVehicleId: frame.playerVehicleId,
+          cameraEntityId: frame.camera.entityId,
+        }),
+        fleet: frame.vehicles.map((vehicle) =>
+          Object.freeze({
+            vehicleId: vehicle.vehicleId,
+            driverKind: vehicle.driverKind,
+            classId: vehicle.classId,
+            slot: vehicle.slot,
+            controlMode: vehicle.controlMode,
+            blocked: vehicle.blocked,
+            positionM: vehicle.positionM,
+            yawRad: vehicle.yawRad,
+            rideId: vehicle.rideId,
+            routeLaneIds: vehicle.routeLaneIds,
+          }),
+        ),
         character: Object.freeze({
           entityId: frame.character.entityId,
           tick: frame.character.tick,

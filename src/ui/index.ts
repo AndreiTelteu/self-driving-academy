@@ -95,6 +95,13 @@ export type {
 } from './passenger-visual-format';
 export { createFleetPanel } from './fleet-panel';
 export type { FleetPanel, FleetPanelOptions } from './fleet-panel';
+export { createFleetSelectionPanel } from './fleet-selection-panel';
+export type {
+  FleetSelectionPanel,
+  FleetSelectionPanelOptions,
+  FleetSelectionPanelSnapshot,
+  FleetSelectionPanelStats,
+} from './fleet-selection-panel';
 export { createProfilePanel } from './profile-panel';
 export type { ProfilePanel, ProfilePanelOptions } from './profile-panel';
 export { createLearningNotifications } from './learning-notifications';
@@ -385,6 +392,25 @@ export type {
   MapSelectionSnapshot,
   MapSelectionVehicle,
 } from './map-selection-format';
+export {
+  FLEET_SELECTION_FILTERS,
+  FLEET_SELECTION_FILTER_LABELS,
+  FLEET_SELECTION_LIMITS,
+  FLEET_SELECTION_STATE_LABELS,
+  FLEET_SELECTION_VERSION,
+  parseFleetSelectionSnapshot,
+  projectFleetSelection,
+} from './fleet-selection-format';
+export type {
+  FleetSelectionCounts,
+  FleetSelectionFilter,
+  FleetSelectionKind,
+  FleetSelectionRow,
+  FleetSelectionSnapshot,
+  FleetSelectionState,
+  FleetSelectionVehicle,
+  FleetSelectionView,
+} from './fleet-selection-format';
 export {
   fleetPanelBlockedSignature,
   FLEET_PANEL_FILTERS,
