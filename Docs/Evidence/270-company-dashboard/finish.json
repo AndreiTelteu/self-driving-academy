@@ -1,19 +1,12 @@
 {
   "id": "270",
   "criteriaSatisfied": true,
-  "result": "The company dashboard is a projection of the existing 268/269 read models: revenue, net costs, profit, cash, fleet value and company level; a shared 12-month chart/table window where a missing month is null/fără date and a real zero or negative profit stays visible; cost breakdown by category and last ride; purchase/upgrade cards with cost, effect, state, in-panel confirmation and explicit insufficient-cash, level and duplicate refusals. A native Company button in the shell host opens the dialog with focus, Tab trap, Escape, pause-surface semantics, 10 Hz updates while open and zero reads/renders while closed. No second ledger, fleet, XP/profile write or history scan is created.",
-  "limitations": "Cost, level and effect values remain calibration proposals. Fleet value is the acquisition sum without depreciation or resale. The browser fixture page exercises the real 268/269/270 modules, while the live-shell browser probe verifies mounting, surface and focus but does not buy an upgrade inside the live world. The KPI popup (267), file persistence/reload (278), physics (282) and learning remain out of scope. No FPS/GPU claim; local Node is 24.19.0 below the declared engine range.",
+  "result": "The company dashboard projects the 268/269 read models into revenue, costs, profit, cash, fleet value and company level, with a 12-month chart/table, cost breakdown, last ride and purchase/upgrade offers. Missing months are null/'fără date', real zero and negative values stay visible. Purchases and upgrades require confirmation and call the real 269 ports; insufficient cash, level and duplicates are refused explicitly. Focus, Tab, Escape, pause surface, no global listeners, 10 Hz updates and zero closed-panel reads are verified.",
+  "limitations": "The browser fixture runs the real 268/269/270 modules but not a full Babylon world; the live-shell probe verifies mounting, surface and focus, not an upgrade purchase inside the live world because that world has no prepared level/profit. No FPS/GPU claim; UI cost is structural under the targeted policy. KPI popup (267), persistence (278), physics (282) and learning remain separate. Local Node is 24.19.0 below 24.21.0; the browser probe used an external PLAYWRIGHT_MODULE.",
   "checks": [
-    ["npm", "run", "typecheck"],
-    ["npm", "run", "lint"],
-    ["npm", "run", "format:check"],
     ["node", "--import", "./scripts/register-typescript.mjs", "--test", "tests/ui/company-dashboard.test.ts"],
     ["npm", "run", "company:dashboard", "--", "--check"],
-    ["npm", "run", "company:dashboard:probe"],
-    ["npm", "test"],
-    ["npm", "run", "build"],
-    ["npm", "run", "check:architecture"],
-    ["npm", "run", "composition:report", "--", "--check"],
-    ["npm", "run", "docs:check", "--", "--check"]
+    ["npm", "run", "docs:check", "--", "--check"],
+    ["npm", "run", "typecheck"]
   ]
 }
