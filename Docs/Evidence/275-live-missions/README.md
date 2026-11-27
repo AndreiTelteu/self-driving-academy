@@ -47,7 +47,7 @@ Mediul măsurat: Chrome 157 headless prin `PLAYWRIGHT_MODULE`, backend WEBGL2, v
 2. preluarea unui taxi revendicat prin panoul `Flotă` (`MANUAL`) satisface pașii 1–2;
 3. `L` intră în LEARNING cu eligibilitate oprită de tutorial (pasul 3), `M` revine în AUTO (pasul 4);
    pipeline-ul 273 raportează apoi 1 segment ineligibil, 0 joburi și 0 versiuni;
-4. actorul 058 conduce ruta reală pickup→dropoff; `boardingTick` 1997 și `completionTick` 6794;
+4. actorul 058 conduce ruta reală pickup→dropoff; `boardingTick` 1998 și `completionTick` 6860;
 5. `DROPOFF` completează tutorialul și etapa 1; recompensa 125 este 100 XP + 1 deblocare, o singură dată;
 6. „Oraș proaspăt” real ridică `worldEpoch`; etapa 2 deschisă e închisă `FAILED/SCENARIO_RESET`;
 7. panoul arată etapa 1 `COMPLETED`, etapa 2 `FAILED`, `data-replay="true"`; XP și amprenta

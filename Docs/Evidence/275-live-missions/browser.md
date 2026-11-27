@@ -1,15 +1,15 @@
 # 275 — proba de browser a misiunilor live
 
 Generată de `npm run missions:live:probe`; Chromium Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36, backend WEBGL2,
-viewport 1024x640, tick 16–6925.
+viewport 1024x640, tick 15–6964.
 
 Secvența reală: start → tutorial selectat prin preluarea unui taxi revendicat → MANUAL → LEARNING
-eligibil oprit de tutorial → AUTO → pickup/dropoff 032 reale conduse de actorul 058 → etapa 1 `COMPLETED` cu
-recompensa 125 o singură dată → „Oraș proaspăt” real → etapa 2 `FAILED` cu motivul
+eligibil oprit de tutorial → AUTO → pickup/dropoff 032 reale conduse de actorul 058 → etapa 1
+`COMPLETED` cu recompensa 125 o singură dată → „Oraș proaspăt” real → etapa 2 `FAILED` cu motivul
 `SCENARIO_RESET` → panoul arată etapa 1 completă, etapa 2 eșuată, reluarea disponibilă.
 
 - Taxi: `id-v1:7:vehicle13:v3:city:fleet4:TAXI4:0012`; cursă: `id-v1:4:ride13:v3:city:rides50:id-v1:12:ride-request13:v3:city:rides4:w0005:r0005`; pickup `sz:1-1` → dropoff
-  `sz:1-0`; boarding 2002, completion 6800.
+  `sz:1-0`; boarding 1998, completion 6860.
 - Etapa 1: COMPLETED; XP 100; recompense acordate 2.
 - Etapa 2: AVAILABLE / SCENARIO_RESET; XP după eșec 100; amprenta
   profilului identică.
