@@ -91,11 +91,12 @@ First-person este confirmată ca funcționalitate V1, cu aceste limite reale:
 
 - `C` comută între camera din spate și first-person; preferința se salvează în setările dispozitivului.
 - Poziția este la ochiul șoferului, transformată prin poziția completă a mașinii (viraj, ruliu), nu o
-  cameră pe capotă. Caroseria exterioară este ascunsă, habitaclul rămâne vizibil.
+  cameră pe capotă. Buildul V3 nu are interior modelat, deci caroseria exterioară a mașinii conduse este
+  ascunsă în întregime; orașul, traficul și celelalte mașini rămân vizibile.
 - Câmpul vizual este reglabil 60–100°. „Mișcarea camerei” la 0 dă o cameră stabilă, fără head-bob
   impus.
-- Mouse look are yaw ±110° și pitch ±70°, cu recentrare explicită. Capturarea pointerului se cere printr-o
-  acțiune explicită; `Escape`, pierderea focusului și trecerea în background o eliberează.
+- Mouse look are yaw ±110° și pitch ±70°, cu recentrare explicită în contractul 017. Buildul live montează
+  `C`, ancora, FOV-ul și preferința salvată; captura pointerului și recentrarea rămân în fixture-ul 017.
 - Camera nu schimbă autoritatea, regulile sau limitele de preluare a altor mașini.
 - **Nu** există personaj controlabil sau mers pe jos în V1. First-person este o cameră, nu o schimbare de
   gameplay.
@@ -115,4 +116,4 @@ PBI-ul care a găsit aceste defecte nu avea voie să modifice `src/`, deci ele s
 și pași de reproducere, nu ascunse. Confortul subiectiv și lizibilitatea pentru oameni cer playtest, care
 este `NOT_RUN`.
 
-**Stare 26.11.2026:** panoul de setări, sliderele și camera first-person nu sunt montate; butonul „Setări” este TODO. Vezi [Docs/31](../31-stare-implementare-si-lacune.md).
+**Stare 28.11.2026:** panoul de setări, sliderele și camera first-person sunt montate în compunerea V3; `C` comută camera, iar preferința supraviețuiește reload-ului. Mouse look/pointer lock și un interior complet rămân în afara buildului. Vezi [Docs/31](../31-stare-implementare-si-lacune.md).

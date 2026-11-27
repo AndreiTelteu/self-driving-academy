@@ -74,6 +74,6 @@ contractele reale ale modulelor, cu tastele și pragurile exacte din cod.
 
 ## Stare la 26 noiembrie 2026
 
-Buildul curent este un **sandbox V3 de mers și condus**, nu doar un bootstrap de randare: personaj, intrare/ieșire, AUTO/MANUAL, trafic AI civil și vizual V4. Fluxurile descrise în capitole — LEARNING, Academie/Haos, KPI, misiuni zilnice, XP, provocări, slidere, first-person și savefile — rămân **contracte neconectate** la acest build.
+Buildul curent este un **sandbox V3 de mers și condus**, nu doar un bootstrap de randare: personaj, intrare/ieșire, AUTO/MANUAL, trafic AI civil, setările live cu slidere și camera first-person din poziția șoferului, plus vizualul V4. Fluxurile descrise în capitole - LEARNING, Academie/Haos, KPI, misiuni zilnice, XP, provocări și savefile - rămân **contracte neconectate** la acest build; mouse look/pointer lock și interiorul complet al mașinii rămân în afara lui.
 
 Capitolele descriu comportamentul țintă și contractele reale; nu trebuie citite ca o promisiune că fiecare ecran există deja. Starea exactă, pe zone, este în [Docs/31](../31-stare-implementare-si-lacune.md), iar boardul de integrare în [PBI/README](../../PBI/README.md).
