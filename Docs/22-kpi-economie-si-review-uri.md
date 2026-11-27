@@ -128,3 +128,23 @@ Contractul 209 rămâne **revenue și ratings**, nu profit: ledgerul comercial, 
 - Evoluție: nivel de companie, achiziții și upgrade-uri rămân 269; panoul rămâne 270.
 
 Valorile de cost rămân propuneri de calibrare. Compania nu are cale către ledgerul XP și nu inventează achiziții sau upgrade-uri.
+
+## Contract implementat în V1 (PBI 267): panourile KPI, oraș și consecințe în joc
+
+PBI 267 montează cele trei read model-uri existente în shell-ul jucabil, fără un al doilea ledger, fără un al doilea model de simulare și fără rescrierea istoricului. `src/app/kpi-dashboard.ts` (`267-kpi-dashboard-composition-v1`) este singurul adaptor de compunere: `readKpiHistory` cheamă selecția 210 peste snapshotul 209, `readKpiImpact` compune planul de serviciu 214 cu modul de control real și termenul de confort 139 al ultimului review, iar `rideTripDistanceM` reconstruiește distanța planificată a unei curse din aceleași benzi 033 folosite de tarif. `src/ui/city-dashboard-panel.ts` (`267-city-dashboard-panel-v1`) oferă tabloului 082 o suprafață de dialog cu focus, fără să recalculeze vreun indicator.
+
+**Butoane și taste.** Gazda shell-ului montează butoanele native `KPIs` și `Oraș`; `K` este un hotkey al hostului, nu al panoului. Popup-ul își păstrează butonul nativ 210, dar acesta este ascuns când hostul are deja butonul `KPIs`, ca să nu existe două controale pentru aceeași acțiune. `K` este ignorat în input/textarea/select, în timpul compoziției, când un alt dialog modal este vizibil și când aplicația nu este în `PLAYING`.
+
+**KPI.** Dialogul primește fereastra de 12 luni simulate când istoricul o acoperă; o lună fără bucket rămâne `NO_DATA` cu „fără date”, iar o lună cu revenue `0` rămâne `0 SDA` cu eșantionul ei. Luna curentă este `PARTIAL`, proiecția folosește pragurile 209 (10 curse terminale, 300 s) și nu înlocuiește încasarea realizată. Media este mereu `ratingSum / reviewCount`, histograma și punctele zilnice sunt cele 210, iar downsampling-ul rămâne doar vizual. O lume proaspătă are doar lunile scurse de la epoch, nu 12 sloturi inventate înainte de existența istoricului.
+
+**Cost și focus.** Popup-ul citește o dată la deschidere și apoi cel mult la 10 Hz cât timp este deschis; închis, `refresh()` întoarce `SKIPPED_CLOSED` fără citire și fără randare. Focusul intră pe butonul „Închide”, Tab/Shift+Tab se învârt în dialog, Escape închide și readuce focusul anterior, iar hostul readuce canvasul în `PLAYING`. Tabloul orașului citește numai cât timp este deschis, la cel mult 10 Hz, și are același contract de focus/Escape. Niciun panou nu atașează listener pe `window`/`document`; singurul listener global este hotkey-ul `K` al hostului. `historyScans` rămâne structural `0`.
+
+**Orașul.** `readCityDashboardSnapshot` rămâne compoziția 082 peste 061, 028 și 065. Buildul montează un `createFleetHealth` real peste dispatcher-ul, lifecycle-ul, cererea, ETA și registry-ul aceleiași flote 264/265. Producătorii live 028/029/137/138/139 nu sunt încă montați (282/283/272/273), deci coliziunile, încălcările și confortul sunt `UNAVAILABLE` cu motiv închis, nu zero; blocajele sunt zero real cât timp 065 nu a primit niciun fapt. Distanța totală este suma lungimilor reale ale rutelor planificate, iar expunerea este reținerea 061 sau `NOT_CERTIFIED` când a fost trunchiată.
+
+**Consecințe.** HUD-ul 214 citește cel mult o dată la 6 tick-uri (10 Hz la 60 Hz) și scrie numai planul schimbat; înainte de primul eveniment comercial read model-ul este `null`, deci HUD-ul rămâne ascuns. Planul de misiune este `NONE` cu `xpGranted: 0` până la 276, iar fidelitatea copiază modul real și termenul 139 al ultimului review. Nicio consecință nu are cale către XP; `xpLossMessages` rămâne `0`.
+
+**Corecție necesară la 025.** Un dialog închis păstrat în DOM pentru restaurarea focusului nu mai blochează tastele de condus: selectorul de modal al inputului ignoră `[hidden]`. Fără această corecție, popup-ul KPI montat ar fi blocat `W/S/A/D` și după închidere.
+
+**Limite.** 12 luni sunt afișate după ce istoricul le acoperă; într-o lume nouă există doar luna curentă. Coliziunile/încălcările/confortul rămân indisponibile până la owner-ii live 282/283/272/273; misiunea rămâne `NONE` până la 276; persistența panourilor după reload rămâne 278. Costul este structural (citiri, randări, scrieri, listeneri), nu FPS/GPU pe hardware real.
+
+Dovezile sunt în [Evidence/267-kpi-dashboard](Evidence/267-kpi-dashboard/README.md): raport determinist 15/15 și probă de browser 26/26 pe fixture și pe buildul live, cu 12 luni, lună fără date vs zero real, 7 indicatori, 2 incidente reale, 100 citiri/2 randări/4 scrieri pentru 600 tick-uri și `historyScans: 0`.

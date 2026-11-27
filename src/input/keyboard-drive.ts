@@ -52,7 +52,9 @@ export function bindKeyboardDriveInput(options: KeyboardDriveInputOptions): Keyb
     doc.hasFocus() &&
     (options.enabled?.() ?? true) &&
     !blocked(doc.activeElement) &&
-    doc.querySelector('dialog[open],[role="dialog"][aria-modal="true"]') === null;
+    // A hidden dialog (for example a closed popup kept mounted for focus restore) does not block
+    // driving; only the visible modal surface does.
+    doc.querySelector('dialog[open],[role="dialog"][aria-modal="true"]:not([hidden])') === null;
   const flush = () => {
     if (!disposed) options.port.clear();
   };

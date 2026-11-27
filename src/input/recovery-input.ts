@@ -80,7 +80,7 @@ export function bindRecoveryInput(options: {
       doc.hidden ||
       !doc.hasFocus() ||
       (blocked(doc.activeElement) && !focusedOwnHud) ||
-      doc.querySelector('dialog[open],[role="dialog"][aria-modal="true"]')
+      doc.querySelector('dialog[open],[role="dialog"][aria-modal="true"]:not([hidden])')
     )
       return false;
     const enabled = options.enabled?.() ?? true;

@@ -220,9 +220,20 @@ Nu sunt montate: LEARNING, pop-up-ul KPI, misiuni, XP, salvare, panourile de sis
 - Nu există feedback scurt după o scădere de KPI, fără mesaj de pierdere XP.
 - Nu există verificarea focusului, Escape, Tab și a costului când panoul este închis.
 
+**Ce s-a livrat:** `src/app/kpi-dashboard.ts` (`267-kpi-dashboard-composition-v1`) compune selecția 210, feedbackul 214 și distanța reală a curselor peste read model-urile existente. `src/ui/city-dashboard-panel.ts` (`267-city-dashboard-panel-v1`) montează tabloul 082 cu focus, Tab și Escape, iar `src/ui/game-shell-host.ts` adaugă butoanele `KPIs` și `Oraș`. `K` este hotkey-ul hostului; popup-ul KPI se actualizează la 10 Hz numai cât timp este deschis, iar HUD-ul 214 scrie doar planul schimbat.
+
+- O lună fără bucket este `NO_DATA` / „fără date”, iar un zero real rămâne `0 SDA`; luna curentă este `PARTIAL`, proiecția folosește pragurile 209, iar media este `ratingSum / reviewCount`.
+- Tabloul orașului randează șapte indicatori peste 061/065 și incidentele reale 028/065; sursele live încă nemontate sunt `UNAVAILABLE`, nu zero. Distanța este suma rutelor 033 planificate.
+- Feedbackul 214 apare numai după un eveniment comercial, are trei planuri separate și păstrează `xpLossMessages: 0`; planul de misiune este `NONE` până la 276.
+- Panourile închise nu citesc și nu randează; `historyScans` rămâne `0`. Inputul 025 ignoră dialogurile `[hidden]`, deci tastele de condus nu mai sunt blocate după închidere.
+
+Dovezile sunt în [Evidence/267-kpi-dashboard](Evidence/267-kpi-dashboard/README.md): raport determinist 15/15 și probă de browser 26/26 pe fixture și pe buildul live.
+
 **Documentație:** [KPI-uri, economie și review-uri](22-kpi-economie-si-review-uri.md) · [Tabloul orașului](city-dashboard.md) · [Accesibilitatea interfeței](ui-accessibility.md) · [Layout responsive](responsive-layout.md) · [Starea implementării și lacunele](31-stare-implementare-si-lacune.md)
 
 **PBI:** [267](../PBI/README.md) · **Dependențe:** 266.
+
+**Stare:** Implementat local la 27 noiembrie 2026. Panourile sunt montate în shell; 12 luni apar după ce istoricul le acoperă, iar owner-ii live 282/283/272/273, misiunea 276 și persistența 278 rămân limite explicite.
 
 ### 268 — Modelul financiar al companiei: costuri, profit, cash și P&L
 

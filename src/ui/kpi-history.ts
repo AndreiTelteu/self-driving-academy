@@ -16,6 +16,8 @@ export interface KpiHistoryPanelOptions {
    * clock itself and never changes the control mode.
    */
   readonly setSurface?: (open: boolean) => void;
+  /** Called after the dialog is hidden and focus restored; the host may return focus to the canvas. */
+  readonly onClose?: () => void;
   readonly open?: boolean;
   readonly idPrefix?: string;
 }
@@ -469,6 +471,7 @@ export function createKpiHistoryPanel(
       previousFocus = null;
       target.focus();
       focusRestores += 1;
+      options.onClose?.();
       changed = true;
     });
     return changed;

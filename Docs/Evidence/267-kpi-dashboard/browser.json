@@ -1,0 +1,223 @@
+{
+  "version": "267-kpi-dashboard-browser-v1",
+  "generatedAt": "2026-11-27T00:06:50.115Z",
+  "status": "PASS",
+  "reason": null,
+  "run": {
+    "browser": "159.0.8154.6",
+    "viewport": "1280x720",
+    "route": "http://127.0.0.1:53144/tests/ui/kpi-dashboard-fixture.html",
+    "liveRoute": "http://127.0.0.1:53144/?capture=1&backend=WEBGL2&preset=LOW&models=procedural&time=noon&debug=1",
+    "fixture": {
+      "kpi": {
+        "open": false,
+        "reads": 1,
+        "renders": 1,
+        "skippedClosed": 0,
+        "historyScans": 0,
+        "months": 12,
+        "missing": {
+          "state": "NO_DATA",
+          "revenueLabel": "fără date",
+          "averageLabel": "fără date"
+        },
+        "zero": {
+          "state": "COMPLETE",
+          "revenueLabel": "0 SDA",
+          "ridesLabel": "30"
+        },
+        "triggerHidden": true,
+        "focusRestores": 1
+      },
+      "city": {
+        "open": false,
+        "reads": 1,
+        "renders": 1,
+        "metrics": 7,
+        "rows": 2,
+        "focusRestores": 1
+      },
+      "impact": {
+        "version": "214-kpi-impact-feedback-v1",
+        "elements": 22,
+        "textNodes": 14,
+        "listeners": 0,
+        "globalListeners": 0,
+        "ticks": 600,
+        "reads": 100,
+        "forcedReads": 0,
+        "renders": 2,
+        "planeUpdates": 4,
+        "skippedThrottled": 500,
+        "skippedUnchanged": 98,
+        "skippedEmpty": 0,
+        "skippedHidden": 0,
+        "minimumReadIntervalTicks": 6,
+        "tickHz": 60,
+        "maximumReadHz": 10,
+        "planes": 3,
+        "visible": true,
+        "empty": false,
+        "historyRebuilds": 0,
+        "xpLossMessages": 0,
+        "disposed": false
+      },
+      "dom": {
+        "kpiMonthRows": 12,
+        "cityCards": 7,
+        "cityRows": 2
+      }
+    },
+    "live": {
+      "panelReadsClosed": 0,
+      "panelReadsOpen": 1,
+      "shellSurface": true,
+      "citySurface": true,
+      "closedSurface": false,
+      "activePanelId": "kpis",
+      "historyScans": 0
+    },
+    "screenshots": [
+      "screenshots/01-kpi-fixture.png",
+      "screenshots/02-city-fixture.png",
+      "screenshots/03-live-shell-kpi.png"
+    ],
+    "checks": [
+      {
+        "name": "closed-reads-nothing",
+        "pass": true,
+        "detail": "KPI 0 citiri, oraș 0, historyScans 0"
+      },
+      {
+        "name": "open-reads-once-and-12-months",
+        "pass": true,
+        "detail": "open true, reads 1, luni 12, rânduri 12"
+      },
+      {
+        "name": "open-surface",
+        "pass": true,
+        "detail": "surface true"
+      },
+      {
+        "name": "open-focus",
+        "pass": true,
+        "detail": "focus kpi-history__close"
+      },
+      {
+        "name": "no-data-vs-real-zero",
+        "pass": true,
+        "detail": "lipsă NO_DATA/fără date, zero COMPLETE/0 SDA"
+      },
+      {
+        "name": "tab-stays-inside",
+        "pass": true,
+        "detail": "focus kpi-history__body"
+      },
+      {
+        "name": "escape-closes-and-restores",
+        "pass": true,
+        "detail": "open false, surface false, focus kpi-trigger"
+      },
+      {
+        "name": "closed-after-escape-no-read",
+        "pass": true,
+        "detail": "reads 1, renders 1"
+      },
+      {
+        "name": "city-seven-indicators",
+        "pass": true,
+        "detail": "7 indicatori, 2 incidente, 1 citiri"
+      },
+      {
+        "name": "city-surface",
+        "pass": true,
+        "detail": "surface true"
+      },
+      {
+        "name": "city-escape-no-read",
+        "pass": true,
+        "detail": "open false, reads 1"
+      },
+      {
+        "name": "impact-10hz-no-xp",
+        "pass": true,
+        "detail": "600 tick-uri → 100 citiri, 2 randări, 4 scrieri"
+      },
+      {
+        "name": "history-scans-zero",
+        "pass": true,
+        "detail": "0"
+      },
+      {
+        "name": "no-page-errors",
+        "pass": true,
+        "detail": "0 page errors"
+      },
+      {
+        "name": "no-console-errors",
+        "pass": true,
+        "detail": "0 console errors"
+      },
+      {
+        "name": "live-buttons",
+        "pass": true,
+        "detail": "1 KPIs, 1 oraș"
+      },
+      {
+        "name": "live-closed-no-read",
+        "pass": true,
+        "detail": "0 citiri"
+      },
+      {
+        "name": "live-open-reads-once",
+        "pass": true,
+        "detail": "open true, reads 1"
+      },
+      {
+        "name": "live-shell-surface",
+        "pass": true,
+        "detail": "panel kpis, surface true"
+      },
+      {
+        "name": "live-focus",
+        "pass": true,
+        "detail": "focus kpi-history__close"
+      },
+      {
+        "name": "live-escape-close",
+        "pass": true,
+        "detail": "panel null, surface false, focus "
+      },
+      {
+        "name": "live-k-hotkey",
+        "pass": true,
+        "detail": "open true, opens 2"
+      },
+      {
+        "name": "live-city-seven",
+        "pass": true,
+        "detail": "7 indicatori, 7 carduri"
+      },
+      {
+        "name": "live-history-scans-zero",
+        "pass": true,
+        "detail": "0"
+      },
+      {
+        "name": "live-no-page-errors",
+        "pass": true,
+        "detail": "0 page errors"
+      },
+      {
+        "name": "live-no-console-errors",
+        "pass": true,
+        "detail": "0 console errors"
+      }
+    ],
+    "summary": {
+      "checks": 26,
+      "passed": 26,
+      "pass": true
+    }
+  }
+}

@@ -375,3 +375,53 @@ test('261 host: the session menu offers Academy and Chaos and reports the chosen
   assert.equal(host.getStats().listeners, 0);
   assert.equal(host.getStats().sessionChoices, 2);
 });
+
+test('267 host: mounts KPIs and Oras buttons without global listeners', () => {
+  const doc = createHudDocument();
+  const root = doc.createElement('div');
+  const clock = { value: 0 };
+  const shell = createGameShell({
+    context: { sessionId: '267-host-test', worldEpoch: 2 },
+    suspend: () => {},
+    resume: () => {},
+    now: () => clock.value,
+  });
+  shell.attachWorld(world(1));
+  shell.start();
+  shell.step(2);
+  const calls = { kpis: 0, city: 0 };
+  const host = createGameShellHost({
+    root: root as unknown as HTMLElement,
+    snapshot: () => shell.status(),
+    onStart: () => {},
+    onPause: () => {},
+    onResume: () => {},
+    onOpenPanel: () => shell.openPanel('integration'),
+    onClosePanel: () => shell.closePanel(),
+    onOpenKpis: () => {
+      calls.kpis += 1;
+      return true;
+    },
+    onOpenCity: () => {
+      calls.city += 1;
+      return true;
+    },
+    now: () => clock.value,
+  });
+  try {
+    host.setSessionState('PLAYING');
+    const bar = (root.children[0] as HudElement).children[0]!;
+    const kpis = bar.children.find((child) => child.getAttribute('data-shell-action') === 'kpis')!;
+    const city = bar.children.find((child) => child.getAttribute('data-shell-action') === 'city')!;
+    assert.equal(kpis.textContent, 'KPIs');
+    assert.equal(city.textContent, 'Oraș');
+    kpis.dispatchEvent('click');
+    city.dispatchEvent('click');
+    assert.deepEqual(calls, { kpis: 1, city: 1 });
+    assert.equal(host.getStats().globalListeners, 0);
+    assert.equal(host.getStats().listeners, 8);
+  } finally {
+    host.dispose();
+    shell.dispose();
+  }
+});
