@@ -117,3 +117,15 @@ reluarea AUTO dintr-o poziție condusă folosește un tick de coast și apoi rep
 Pauza 070 nu inventează tick-uri, iar reload-ul pornește fără segmente orfane. Dovezile sunt în
 [Evidence/271-live-three-modes](Evidence/271-live-three-modes/README.md).
 
+
+## Setarile live (PBI 279)
+
+Butonul �Setari� din ecranul de start, meniul de pauza ?i bara shell-ului deschide o singura suprafa?a
+nativa cu trei taburi: �Joc ?i control� (081), �Taste� (080) ?i �Stil ora?� (230). Unita?ile km/h?mph
+?i camera CHASE/FIRST_PERSON sunt preferin?e de prezentare: HUD-ul central afi?eaza unitatea aleasa,
+dar fizica, telemetria ?i profilul ram�n SI. Toate cele 15 ac?iuni sunt remapabile, conflictele ?i
+tastele invalide blocheaza salvarea, iar Escape anuleaza captura fara a �nchide panoul. Cele ?apte
+slidere de control ?i cele opt de stil se salveaza local; �Aplica� din stil este singura cale care
+publica o versiune `MANUAL_TUNING` prin bariera 205 ?i activarea 110. Setarile de dispozitiv nu scriu
+profilul �nva?at, XP-ul sau ledgerul. Focusul, Tab/Shift+Tab, contrastul ?i lipsa listenerilor globali
+urmeaza 083. Dovezile sunt �n [Evidence/279-live-settings](Evidence/279-live-settings/README.md).

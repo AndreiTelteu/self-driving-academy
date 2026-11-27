@@ -3370,3 +3370,170 @@ button:focus-visible {
   box-shadow: none;
   padding: 0;
 }
+
+/* 279: live settings surface. The overlay captures pointer input outside the dialog; the 083 focus
+   controller owns Tab/Escape and only the active tab pane is mounted, so hidden controls are never
+   tab stops. Colours reuse the measured 083 tokens. */
+.live-settings {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  overflow-y: auto;
+  background: rgba(4, 12, 9, 0.72);
+  color: #f3f7fb;
+  font:
+    0.9rem/1.45 system-ui,
+    -apple-system,
+    'Segoe UI',
+    sans-serif;
+}
+
+.live-settings[hidden] {
+  display: none;
+}
+
+.live-settings__surface {
+  width: min(72rem, 100%);
+  max-height: min(92vh, 56rem);
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  padding: 1rem 1.1rem 1.2rem;
+  background: #0b1a16;
+  border: 1px solid #2c4a3f;
+  border-radius: 0.65rem;
+  box-shadow: 0 1.4rem 3.2rem rgba(0, 0, 0, 0.55);
+  min-width: 0;
+}
+
+.live-settings__header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.35rem 0.8rem;
+  align-items: start;
+  position: sticky;
+  top: -1rem;
+  z-index: 2;
+  margin: -1rem -1.1rem 0.4rem;
+  padding: 1rem 1.1rem 0.55rem;
+  background: #0b1a16;
+  border-bottom: 1px solid #234437;
+}
+
+.live-settings__title {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #f3f7fb;
+}
+
+.live-settings__description {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: #b9cfc5;
+  overflow-wrap: anywhere;
+}
+
+.live-settings__close,
+.live-settings__tab {
+  font: inherit;
+  color: #f3f7fb;
+  background: #17352b;
+  border: 1px solid #3d6b58;
+  border-radius: 0.35rem;
+  padding: 0.35rem 0.65rem;
+  cursor: pointer;
+}
+
+.live-settings__close:hover,
+.live-settings__tab:hover {
+  background: #22503f;
+}
+
+.live-settings__close:focus-visible,
+.live-settings__tab:focus-visible {
+  outline: 3px solid #9edbb5;
+  outline-offset: 2px;
+}
+
+.live-settings__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.85rem 0 0.5rem;
+  padding-bottom: 0.45rem;
+  border-bottom: 1px solid #234437;
+}
+
+.live-settings__tab[aria-selected='true'] {
+  color: #07110d;
+  background: #9edbb5;
+  border-color: #9edbb5;
+  font-weight: 600;
+}
+
+.live-settings__tab[disabled] {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.live-settings__status {
+  margin: 0.35rem 0 0.6rem;
+  color: #ffd27f;
+  overflow-wrap: anywhere;
+}
+
+.live-settings__body {
+  min-width: 0;
+}
+
+.live-settings__body > * {
+  min-width: 0;
+}
+
+.live-settings__unavailable {
+  margin: 0.5rem 0;
+  color: #ffb3a7;
+}
+
+/* Inner adapters keep their own layout; the live surface only removes duplicated outer frames. */
+.live-settings .game-settings,
+.live-settings .key-remapping,
+.live-settings .style-sliders {
+  position: static;
+  inset: auto;
+  z-index: auto;
+  width: auto;
+  max-width: none;
+  max-height: none;
+  margin-inline: 0;
+  transform: none;
+  overflow: visible;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.live-settings .game-settings__header {
+  position: static;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: 0;
+}
+
+.live-settings .game-settings {
+  width: 100%;
+}
+
+.live-settings .game-settings__title {
+  display: none;
+}
+
+.live-settings .game-settings__title,
+.live-settings .key-remapping__title {
+  margin-top: 0;
+}

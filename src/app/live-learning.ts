@@ -240,6 +240,14 @@ export interface LiveLearningPipeline {
   readonly engineVersion: string;
   step(tick?: number): void;
   head(): string;
+  /** PBI 279: the real 205 owner of this pipeline, reused by the manual tuning session. */
+  epochBarrier(): LearningEpochBarrier;
+  /** PBI 279: the real 110 owner this pipeline activates through. */
+  activationOwner(): ProfileActivation;
+  /** PBI 279: adopts the barrier generation after a manual tuning without rotating the 069 target. */
+  refreshFromBarrier(): void;
+  /** PBI 279: immutable 109 head as a presentation profile (manual tuning provenance). */
+  profileForVersion(versionId: string): DrivingProfile | null;
   requestProfileChange(input: unknown): unknown;
   isCurrent(value: unknown): unknown;
   observeSegment(segmentId: string): Promise<LiveLearningResult>;
@@ -275,6 +283,7 @@ function fingerprint(parameters: Readonly<Record<string, number>>): string {
 function profileFromVersion(
   version: ProfileVersion,
   evidenceBySegment: ReadonlyMap<string, LiveEvidencePayload>,
+  manualProvenance = false,
 ): DrivingProfile {
   const parameters: Record<string, number> = Object.create(null);
   const unitsByParameter: Record<string, DrivingProfile['unitsByParameter'][string]> =
@@ -318,7 +327,9 @@ function profileFromVersion(
     } else {
       // A restored/imported target has no fresh local evidence; the immutable 109 version remains
       // the source of truth and the compiled city style is marked IMPORTED, never LEARNED.
-      provenanceByParameter[key] = 'IMPORTED';
+      // A manual-tuning session owns a delta without observations, so its changed keys keep the
+      // explicit MANUAL_TUNING provenance instead of being relabelled as an import.
+      provenanceByParameter[key] = manualProvenance ? 'MANUAL_TUNING' : 'IMPORTED';
       evidenceByParameter[key] = null;
     }
   }
@@ -732,7 +743,14 @@ export function createLiveLearningPipeline(services: LiveLearningServices): Live
       baseVersionId,
       history: historyLimit,
     });
-    modeSegments?.updateGeneration?.({ baseVersionId, learningEpoch });
+    // PBI 279: a manual-tuning barrier belongs to the 230 style session. The fleet/city style
+    // activation still applies, but the open 069 segment keeps its target until the next session or
+    // segment boundary; rotating it in the same tick would invalidate the 069 fence.
+    const manualTuning =
+      store
+        .getVersion(result.barrier.targetVersionId)
+        ?.provenance.delta?.reason?.startsWith('MANUAL_TUNING') === true;
+    if (!manualTuning) modeSegments?.updateGeneration?.({ baseVersionId, learningEpoch });
   }
 
   function handleResult(
@@ -1164,6 +1182,36 @@ export function createLiveLearningPipeline(services: LiveLearningServices): Live
       if (next !== null) handleClosedSegment(next);
     },
     head: () => headVersionId,
+    epochBarrier: () => barrier,
+    activationOwner: () => activation,
+    refreshFromBarrier(): void {
+      const generation = barrier.current();
+      learningEpoch = generation.learningEpoch;
+      baseVersionId = generation.baseVersionId;
+      headVersionId = generation.baseVersionId;
+      awaitingActivation = true;
+      pipeline.dispose();
+      pipeline = createProfilePipeline({
+        engineVersion,
+        playerId,
+        profileId,
+        learningEpoch,
+        sessionId,
+        worldEpoch,
+        queue: trackedQueue,
+        store,
+        activation,
+        tick,
+        baseVersionId,
+        history: historyLimit,
+      });
+    },
+    profileForVersion(versionId: string): DrivingProfile | null {
+      const version = store.getVersion(versionId);
+      return version === null
+        ? null
+        : profileFromVersion(version, new Map<string, LiveEvidencePayload>(), true);
+    },
     requestProfileChange(input: unknown) {
       const result = barrier.requestChange(input);
       if (result.status === 'PENDING') lastStatus = 'PENDING';

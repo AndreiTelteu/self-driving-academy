@@ -12,6 +12,8 @@ export interface KeyboardDriveInputOptions {
 export interface KeyboardDriveBinding {
   /** Root calls before a physical tick and after panel/authority changes. */
   sync(): boolean;
+  /** PBI 279: applies saved bindings without recreating the listener or the port. */
+  remap(bindings: InputPreferences['bindings']): void;
   getStats(): { readonly listeners: number; readonly disposed: boolean };
   dispose(): void;
 }
@@ -33,12 +35,18 @@ export function bindKeyboardDriveInput(options: KeyboardDriveInputOptions): Keyb
     'signalRight',
   ];
   const codes = new Map<string, KeyboardDriveAction>();
-  for (const action of actions) {
-    const code = options.bindings[action];
-    if (typeof code !== 'string' || code.length > 32 || codes.has(code))
-      throw new Error('Invalid driving key bindings');
-    codes.set(code, action);
-  }
+  const applyBindings = (bindings: InputPreferences['bindings']) => {
+    const next = new Map<string, KeyboardDriveAction>();
+    for (const action of actions) {
+      const code = bindings[action];
+      if (typeof code !== 'string' || code.length > 32 || next.has(code))
+        throw new Error('Invalid driving key bindings');
+      next.set(code, action);
+    }
+    codes.clear();
+    for (const [code, action] of next) codes.set(code, action);
+  };
+  applyBindings(options.bindings);
   let disposed = false;
   const blocked = (target: EventTarget | null) =>
     target instanceof win.HTMLElement &&
@@ -99,6 +107,11 @@ export function bindKeyboardDriveInput(options: KeyboardDriveInputOptions): Keyb
   win.addEventListener('pagehide', lost);
   return Object.freeze({
     sync,
+    remap(bindings: InputPreferences['bindings']) {
+      if (disposed) throw new Error('Keyboard input disposed');
+      flush();
+      applyBindings(bindings);
+    },
     getStats: () => Object.freeze({ listeners: disposed ? 0 : 6, disposed }),
     dispose() {
       if (disposed) return;
@@ -106,6 +119,7 @@ export function bindKeyboardDriveInput(options: KeyboardDriveInputOptions): Keyb
         flush();
       } finally {
         disposed = true;
+        codes.clear();
         doc.removeEventListener('keydown', keys);
         doc.removeEventListener('keyup', keys);
         doc.removeEventListener('focusin', focus);

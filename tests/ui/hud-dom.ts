@@ -124,6 +124,39 @@ export class HudElement {
     for (const listeners of this.eventListeners.values()) total += listeners.length;
     return total;
   }
+  focus(): void {
+    this.ownerDocument.activeElement = this;
+  }
+  querySelectorAll(selector: string): HudElement[] {
+    const rules = selector.split(',').map((rule) => rule.trim());
+    const matches = (node: HudElement): boolean =>
+      rules.some((rule) => {
+        if (
+          rule === 'button' ||
+          rule === 'input' ||
+          rule === 'select' ||
+          rule === 'textarea' ||
+          rule === 'summary'
+        )
+          return node.tagName === rule;
+        if (rule === '[href]') return node.hasAttribute('href');
+        if (rule === '[tabindex]:not([tabindex="-1"])')
+          return node.hasAttribute('tabindex') && node.getAttribute('tabindex') !== '-1';
+        return false;
+      });
+    const found: HudElement[] = [];
+    const visit = (node: HudElement): void => {
+      for (const child of node.children) {
+        if (matches(child)) found.push(child);
+        visit(child);
+      }
+    };
+    visit(this);
+    return found;
+  }
+  querySelector(selector: string): HudElement | null {
+    return this.querySelectorAll(selector)[0] ?? null;
+  }
   remove(): void {
     if (!this.parent) return;
     this.parent.children = this.parent.children.filter((node) => node !== this);
@@ -134,6 +167,7 @@ export class HudElement {
 
 export interface HudDocument {
   createElement(tagName: string): HudElement;
+  activeElement: HudElement | null;
 }
 
 export interface HudEventInit {
@@ -159,6 +193,7 @@ export type HudListener = (event: HudEvent) => void;
 
 export function createHudDocument(): HudDocument {
   const doc: HudDocument = {
+    activeElement: null,
     createElement(tagName: string) {
       const element = new HudElement(tagName);
       element.ownerDocument = doc;

@@ -86,6 +86,8 @@ export interface V3BrowserComposition {
   step(tick: number): CompositionFrame;
   present(forceHud?: boolean): void;
   syncInput(): boolean;
+  /** PBI 279: applies saved bindings, control preferences and quality without a new world. */
+  applySettings(settings: RuntimeSettings): void;
   /** PBI 257: modul mașinii conduse; `null` când jucătorul este pe jos. */
   vehicleMode(): CompositionMode | null;
   setVehicleMode(mode: 'AUTO' | 'MANUAL'): CompositionMode | null;
@@ -187,6 +189,10 @@ export function createV3BrowserComposition(
     enabled: options.enabled,
     onFocusLost: () => composition.releaseInput(),
   });
+  // PBI 279: M/L are part of the same 15 remappable actions; the host updates both codes and the
+  // driving map from the saved settings. Other composition keys (F/G/T) are not 009 actions.
+  let modeCode = options.settings.input.bindings.manualMode,
+    learningCode = options.settings.input.bindings.learningMode;
 
   const doc = options.surface.ownerDocument;
   const interact = (): void => {
@@ -204,12 +210,12 @@ export function createV3BrowserComposition(
       composition.setSprint(event.type === 'keydown');
       return;
     }
-    if (event.code === COMPOSITION_KEYS.mode) {
+    if (event.code === modeCode) {
       event.preventDefault();
       if (event.type === 'keydown' && !event.repeat) composition.requestModeAction('M');
       return;
     }
-    if (event.code === COMPOSITION_KEYS.learning) {
+    if (event.code === learningCode) {
       event.preventDefault();
       if (event.type === 'keydown' && !event.repeat) composition.requestModeAction('L');
       return;
@@ -261,6 +267,14 @@ export function createV3BrowserComposition(
     present,
     syncInput(): boolean {
       return keyboard.sync();
+    },
+    applySettings(next: RuntimeSettings): void {
+      if (disposed) throw new Error('Compunerea de browser este eliberată.');
+      keyboard.remap(next.input.bindings);
+      modeCode = next.input.bindings.manualMode;
+      learningCode = next.input.bindings.learningMode;
+      composition.setControlPreferences(next.input.control);
+      view.daylight.applyPreferences(next.quality);
     },
     vehicleMode(): CompositionMode | null {
       return composition.vehicleMode();

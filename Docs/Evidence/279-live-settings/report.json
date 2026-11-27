@@ -1,0 +1,299 @@
+{
+  "version": "279-live-settings-report-v1",
+  "contract": {
+    "settings": "081-game-settings-v1",
+    "keys": "080-key-remapping-v1",
+    "style": "230-style-sliders-v1",
+    "profile": "109/205/110",
+    "deviceSettingsOwnProfile": false,
+    "deviceSettingsOwnXp": false,
+    "controls": 7,
+    "styleSliders": 8,
+    "actions": 15
+  },
+  "scenarios": [
+    {
+      "name": "open",
+      "status": "OPENED",
+      "details": {
+        "settingsDraft": true,
+        "keyDraft": true,
+        "styleDraft": true,
+        "actions": 15,
+        "controls": 7,
+        "styleSliders": 8
+      }
+    },
+    {
+      "name": "conflict",
+      "status": "CONFLICT",
+      "details": {
+        "save": "REJECTED",
+        "bindingsUnchanged": "KeyS"
+      }
+    },
+    {
+      "name": "remap",
+      "status": "SAVED",
+      "details": {
+        "brake": "ArrowDown",
+        "controlVersion": 0
+      }
+    },
+    {
+      "name": "presentation",
+      "status": "SAVED",
+      "details": {
+        "units": "mph/ft",
+        "cameraMode": "FIRST_PERSON",
+        "controlVersion": 0,
+        "profileVersions": 1
+      }
+    },
+    {
+      "name": "comfort",
+      "status": "SAVED",
+      "details": {
+        "controlVersion": 1,
+        "steeringSensitivity": 80,
+        "projected": "Nicio modificare față de setările salvate."
+      }
+    },
+    {
+      "name": "reset",
+      "status": "DIRTY",
+      "details": {
+        "units": "km/h",
+        "cameraMode": "CHASE",
+        "changed": 3
+      }
+    },
+    {
+      "name": "style",
+      "status": "PUBLISHED",
+      "details": {
+        "queued": "QUEUED",
+        "versionId": "settings-279-session-279-report-1",
+        "changes": 1,
+        "learningEpoch": 5,
+        "barrier": 1,
+        "activationOrigin": "MANUAL_TUNING",
+        "fleetVersions": [
+          "settings-279-session-279-report-1"
+        ],
+        "xpWrites": 0
+      }
+    },
+    {
+      "name": "stats",
+      "status": "READ",
+      "details": {
+        "opens": 1,
+        "closes": 1,
+        "settingsSaves": 2,
+        "keySaves": 1,
+        "stylePublished": 1,
+        "styleActivated": 0,
+        "profileTouchedByDeviceSettings": 0,
+        "xpWrites": 0,
+        "saves": 3
+      }
+    }
+  ],
+  "checks": [
+    {
+      "name": "actions",
+      "expected": 15,
+      "actual": 15,
+      "pass": true,
+      "detail": "all 009 actions are listed"
+    },
+    {
+      "name": "control sliders",
+      "expected": 7,
+      "actual": 7,
+      "pass": true,
+      "detail": "the 081 comfort section has the seven 009 fields"
+    },
+    {
+      "name": "style sliders",
+      "expected": 8,
+      "actual": 8,
+      "pass": true,
+      "detail": "the 230 tab has eight keys"
+    },
+    {
+      "name": "conflict blocks save",
+      "expected": "CONFLICT",
+      "actual": "CONFLICT",
+      "pass": true,
+      "detail": "duplicate KeyW is refused"
+    },
+    {
+      "name": "conflict no write",
+      "expected": "KeyS",
+      "actual": "KeyS",
+      "pass": true,
+      "detail": "brake keeps KeyS"
+    },
+    {
+      "name": "remap saved",
+      "expected": "SAVED",
+      "actual": "SAVED",
+      "pass": true,
+      "detail": "a valid code is stored"
+    },
+    {
+      "name": "remap keeps control",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "bindings do not bump the control revision"
+    },
+    {
+      "name": "mph saved",
+      "expected": "mph",
+      "actual": "mph",
+      "pass": true,
+      "detail": "display unit is presentation only"
+    },
+    {
+      "name": "camera saved",
+      "expected": "FIRST_PERSON",
+      "actual": "FIRST_PERSON",
+      "pass": true,
+      "detail": "camera preference is presentation only"
+    },
+    {
+      "name": "presentation keeps control",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "units/camera do not bump the control revision"
+    },
+    {
+      "name": "presentation keeps profile",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "no profile version is created"
+    },
+    {
+      "name": "comfort bumps control once",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "one strictly newer 009 revision"
+    },
+    {
+      "name": "comfort keeps profile",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "a device setting never writes a profile"
+    },
+    {
+      "name": "comfort keeps XP",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "device settings have no XP path"
+    },
+    {
+      "name": "reset proposes defaults",
+      "expected": "DIRTY",
+      "actual": "DIRTY",
+      "pass": true,
+      "detail": "reset is a local proposal with confirmation"
+    },
+    {
+      "name": "style queued",
+      "expected": "QUEUED",
+      "actual": "QUEUED",
+      "pass": true,
+      "detail": "Aplică queues exactly one publication"
+    },
+    {
+      "name": "style published",
+      "expected": "PUBLISHED",
+      "actual": "PUBLISHED",
+      "pass": true,
+      "detail": "the 205 barrier commits one version"
+    },
+    {
+      "name": "style manual provenance",
+      "expected": "MANUAL_TUNING",
+      "actual": "MANUAL_TUNING",
+      "pass": true,
+      "detail": "the version is MANUAL_TUNING"
+    },
+    {
+      "name": "style barrier count",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "one 205 barrier"
+    },
+    {
+      "name": "style epoch advanced",
+      "expected": 5,
+      "actual": 5,
+      "pass": true,
+      "detail": "the generation advanced once"
+    },
+    {
+      "name": "style activation",
+      "expected": "MANUAL_TUNING",
+      "actual": "MANUAL_TUNING",
+      "pass": true,
+      "detail": "the real 110 activation"
+    },
+    {
+      "name": "style activation applied",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the fleet reaches the new version"
+    },
+    {
+      "name": "style profile version",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "the 109 store gains one immutable version"
+    },
+    {
+      "name": "device profile untouched",
+      "expected": "fnv1a64:949ca5320b60d4ed",
+      "actual": "fnv1a64:949ca5320b60d4ed",
+      "pass": true,
+      "detail": "the original profile checksum is unchanged"
+    },
+    {
+      "name": "profile untouched flag",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "structural separation from profiles"
+    },
+    {
+      "name": "xp untouched flag",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "structural separation from XP"
+    },
+    {
+      "name": "learning jobs",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "manual style never submits a 103 job"
+    }
+  ],
+  "summary": {
+    "checks": 27,
+    "passed": 27,
+    "pass": true
+  }
+}

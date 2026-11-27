@@ -357,6 +357,19 @@ export {
   type GameSettingsSettingsServices,
 } from './game-settings';
 export {
+  LIVE_SETTINGS_VERSION,
+  createLiveSettings,
+  liveSettingsCanonical,
+  liveSettingsDefaults,
+  type LiveSettings,
+  type LiveSettingsActionStatus,
+  type LiveSettingsOpenStatus,
+  type LiveSettingsOptions,
+  type LiveSettingsState,
+  type LiveSettingsStats,
+  type LiveSettingsStylePorts,
+} from './live-settings';
+export {
   isStaleNotification,
   learningNotificationEventId,
   learningNotificationGenerationKey,

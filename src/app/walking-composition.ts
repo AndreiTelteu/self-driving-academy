@@ -347,6 +347,8 @@ export interface V3Composition {
   vehicleMode(): CompositionMode | null;
   /** PBI 257: AUTO cere hartă/graf și o rută READY; MANUAL oprește driverul AUTO. */
   setVehicleMode(mode: 'AUTO' | 'MANUAL'): CompositionMode | null;
+  /** PBI 279: applies saved 009 control preferences to the camera without recreating the world. */
+  setControlPreferences(control: ControlPreferences): void;
   toggleVehicleMode(): CompositionMode | null;
   /** PBI 271: the real M/L action folded from the selected/held car, accepted on the next tick. */
   requestModeAction(action: 'M' | 'L', expectedVehicleId?: string): boolean;
@@ -2043,6 +2045,9 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
     },
     setVehicleMode(mode: 'AUTO' | 'MANUAL'): CompositionMode | null {
       return applyVehicleMode(mode);
+    },
+    setControlPreferences(control: ControlPreferences): void {
+      camera.setControlPreferences(control);
     },
     toggleVehicleMode(): CompositionMode | null {
       return toggleControlledVehicleMode();
