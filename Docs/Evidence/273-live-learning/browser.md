@@ -1,6 +1,6 @@
 # 273 — proba de browser a pipeline-ului live de learning
 
-Generată de `npm run learning:live:probe`; Chromium Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36, viewport 1280x720.
+Generată de `npm run learning:live:probe`; Chromium Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36, viewport 800x450.
 
 Flux real: start → panoul `Flotă` → preluare taxi → `L` LEARNING → condus pe ruta 041 →
 `L` MANUAL → `M` AUTO. Proba citește segmentul 272, coada 103/221, versiunea 109, activarea 110 și

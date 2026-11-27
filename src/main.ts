@@ -80,6 +80,7 @@ import type { FleetHealth, LiveRides, ProfileActivation } from './fleet';
 import {
   createCandidateProfileStore,
   createLearningQueueRuntime,
+  deriveLiveLearningPayload,
   type LearningQueueRuntime,
 } from './learning';
 import type { DrivingProfile, ProfileVersion } from './profiles';
@@ -1591,6 +1592,10 @@ interface V3DebugGlobal {
   companyUpgrade?(upgradeId: string): unknown;
   /** PBI 265: geometria reală a benzinelor de rută, pentru proba de condus din browser. */
   lanePath(laneIds: readonly string[]): unknown;
+  /** PBI 273 (numai DEV/capture/debug): liniile de semnal reale, pentru alegerea unei curse live. */
+  signalLanes?(): unknown;
+  /** PBI 273 (numai DEV/capture/debug): liniile STOP reale, pentru alegerea unei curse live. */
+  stopLanes?(): unknown;
   /** PBI 265 (numai DEV/capture): fapt de sănătate real pentru proba terminală FAILED. */
   setTaxiHealth?(taxiId: string, status: 'AVAILABLE' | 'BLOCKED' | 'DAMAGED' | 'OFFLINE'): unknown;
   /** PBI 260: starea read-only a lifecycle-ului 012, pentru diagnosticul probei de browser. */
@@ -1642,6 +1647,45 @@ const debugGlobal: V3DebugGlobal = {
         ? []
         : path.points.map((point) => ({ x: point.x, y: point.y, z: point.z }));
     }),
+  signalLanes: (): unknown => {
+    const nodes = new Map(world.map.geometry.nodes.map((node) => [node.id, node.positionM]));
+    const intersections = new Map(
+      world.map.intersections.map((intersection) => [intersection.id, intersection]),
+    );
+    return world.map.stopLines
+      .filter(
+        (line) => line.kind === 'SIGNAL' && line.intersectionId !== null && line.signalId !== null,
+      )
+      .flatMap((line) => {
+        const movement = intersections
+          .get(line.intersectionId ?? '')
+          ?.movements.find((candidate) => candidate.fromLaneId === line.laneId);
+        if (movement === undefined) return [];
+        const position = nodes.get(line.anchorNodeId) ?? null;
+        return [
+          {
+            laneId: line.laneId,
+            signalId: line.signalId,
+            intersectionId: line.intersectionId,
+            movementId: movement.id,
+            positionM: position === null ? null : { x: position.x, y: position.y, z: position.z },
+          },
+        ];
+      });
+  },
+  stopLanes: (): unknown => {
+    const nodes = new Map(world.map.geometry.nodes.map((node) => [node.id, node.positionM]));
+    return world.map.stopLines
+      .filter((line) => line.kind === 'STOP')
+      .map((line) => {
+        const position = nodes.get(line.anchorNodeId) ?? null;
+        return {
+          laneId: line.laneId,
+          stopLineId: line.id,
+          positionM: position === null ? null : { x: position.x, y: position.y, z: position.z },
+        };
+      });
+  },
   modes: () => {
     const segments = modeModules.segments;
     if (segments === undefined) return null;
@@ -1684,6 +1728,44 @@ const debugGlobal: V3DebugGlobal = {
               learningEligible: record.learningEligible,
             })),
             evidence: telemetryModules.live.read().evidence,
+            closedRead: (() => {
+              const live = telemetryModules.live;
+              const last = live?.read().closedSegments.at(-1);
+              if (live === undefined || last === undefined) return null;
+              const read = live.readClosedSegment(last.segmentId);
+              if (read === null) return null;
+              return {
+                segmentId: read.summary.segmentId,
+                samples: read.samples.length,
+                speedLimits: read.samples
+                  .slice(0, 8)
+                  .map((sample) => sample.observation.speedLimitMps),
+                artifactWindow: read.artifactWindow,
+                opportunities: read.opportunities.map((record) => ({
+                  id: record.id,
+                  kind: record.kind,
+                  state: record.state,
+                  outcome: record.outcome,
+                  learningEligible: record.learningEligible,
+                })),
+                payload: (() => {
+                  try {
+                    const payload = deriveLiveLearningPayload(read, { baseValue: () => 0 });
+                    return {
+                      key: payload.key,
+                      evidence: payload.evidence,
+                      observations: payload.observations,
+                      episodes: payload.episodes.length,
+                      candidates: payload.candidates,
+                      candidate: payload.candidate,
+                      reason: payload.reason,
+                    };
+                  } catch (error) {
+                    return { error: error instanceof Error ? error.message : String(error) };
+                  }
+                })(),
+              };
+            })(),
           }
         : null,
       port: shell.status().systems.find((system) => system.id === 'learning')?.status ?? null,

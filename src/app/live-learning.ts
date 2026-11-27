@@ -455,6 +455,8 @@ export function createLiveLearningPipeline(services: LiveLearningServices): Live
   const retained: LiveLearningResult[] = [];
   const processed = new Set<string>();
   const processedOrder: string[] = [];
+  /** 272 materializes the 088 window after the recorder closes; give it a few ticks. */
+  const deferred = new Map<string, number>();
   const evidenceBySegment = new Map<string, LiveEvidencePayload>();
   const segmentEvidenceOrder: string[] = [];
 
@@ -971,6 +973,29 @@ export function createLiveLearningPipeline(services: LiveLearningServices): Live
       summary.profileId !== profileId ||
       summary.learningEpoch !== learningEpoch;
     if (!skipWithoutJob && (processing || awaitingActivation)) return;
+    if (!skipWithoutJob) {
+      const read = telemetry.readClosedSegment(summary.segmentId);
+      const needsMaterialization =
+        read === null ||
+        (summary.artifacts === 0 && read.artifactWindow === null) ||
+        read.opportunities.length < summary.opportunities ||
+        read.windows.length < summary.eligibleWindows ||
+        read.opportunities.some(
+          (opportunity) => summary.learningEligible && !opportunity.learningEligible,
+        ) ||
+        (summary.eligibleWindows > 0 &&
+          !read.windows.some(
+            (window) => window.segmentId === summary.segmentId && window.windowClass === 'ELIGIBLE',
+          ));
+      if (needsMaterialization) {
+        const attempts = (deferred.get(summary.segmentId) ?? 0) + 1;
+        if (attempts <= 30) {
+          deferred.set(summary.segmentId, attempts);
+          return;
+        }
+      }
+      deferred.delete(summary.segmentId);
+    }
     markProcessed(summary.segmentId);
     counters.segments += 1;
     if (summary.completeness !== 'CLOSED') {

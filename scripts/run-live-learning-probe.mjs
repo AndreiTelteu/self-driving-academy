@@ -163,18 +163,20 @@ try {
     ...(executablePath === null ? {} : { executablePath }),
     ...(process.env.PLAYWRIGHT_CHANNEL ? { channel: process.env.PLAYWRIGHT_CHANNEL } : {}),
     args: [
-      '--use-gl=angle',
-      '--use-angle=swiftshader',
-      '--enable-unsafe-swiftshader',
+      ...(process.env.PLAYWRIGHT_SOFTWARE === '1'
+        ? ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader']
+        : ['--use-angle=default']),
       '--disable-gpu-sandbox',
       '--disable-background-timer-throttling',
       '--disable-backgrounding-occluded-windows',
       '--disable-renderer-backgrounding',
+      '--disable-frame-rate-limit',
+      '--disable-gpu-vsync',
       '--disable-features=CalculateNativeWinOcclusion',
     ],
   });
   const context = await browser.newContext({
-    viewport: { width: 1280, height: 720 },
+    viewport: { width: 800, height: 450 },
     deviceScaleFactor: 1,
   });
   const page = await context.newPage();
@@ -291,35 +293,71 @@ try {
   await ensurePlaying();
   const beforeLearning = await learning();
   const baseFingerprint = beforeLearning?.model?.profile?.fingerprint ?? null;
-  await page.locator('[data-shell-action="fleet"]').click();
-  await page.waitForFunction(() => globalThis.__v3Composition.fleet().open === true, null, {
-    timeout: 30000,
-  });
-  let opened = await fleet();
-  const movingTaxi = async () => {
+  const signalLanes = await page.evaluate(() => globalThis.__v3Composition.signalLanes?.() ?? []);
+  const stopLanes = await page.evaluate(() => globalThis.__v3Composition.stopLanes?.() ?? []);
+  const signalLaneIds = new Set(signalLanes.map((lane) => lane.laneId));
+  const lineByLane = new Map();
+  for (const lane of [...stopLanes, ...signalLanes]) {
+    if (!lineByLane.has(lane.laneId)) lineByLane.set(lane.laneId, lane);
+  }
+  // A lane is ~140 m long; a taxi that just entered it is too far from the line. Wait until a real
+  // taxi is 15-65 m before a real STOP/SIGNAL line on its route, then take it over and start
+  // LEARNING immediately, so the first 10 s of the segment contain the real 086/087 approach.
+  const approachTaxi = async (kind = 'ANY') => {
     const frame = await read();
     const rows = (frame?.vehicles ?? []).filter(
       (vehicle) =>
         vehicle.driverKind === 'TAXI' &&
         vehicle.controlMode === 'AUTO' &&
+        vehicle.blocked === false &&
         vehicle.laneId !== null &&
-        vehicle.speedMps > 2,
+        vehicle.speedMps > 0.5,
     );
-    const arterial = rows.filter((vehicle) => (vehicle.speedLimitMps ?? 0) > 12);
-    return (
-      [...(arterial.length > 0 ? arterial : rows)].sort(
-        (left, right) => right.speedMps - left.speedMps,
-      )[0] ?? null
-    );
+    let best = null;
+    let bestDistance = Infinity;
+    let bestLine = null;
+    for (const vehicle of rows) {
+      const route = vehicle.routeLaneIds ?? [];
+      const current = Math.max(0, route.indexOf(vehicle.laneId));
+      for (let index = current; index < Math.min(route.length, current + 6); index += 1) {
+        const line = lineByLane.get(route[index]);
+        if (!line?.positionM) continue;
+        const stop = line.stopLineId !== undefined;
+        if (kind === 'STOP' && (!stop || signalLaneIds.has(line.laneId))) continue;
+        if (kind === 'SIGNAL' && stop) continue;
+        const value = distance(line.positionM, vehicle.positionM);
+        if (value >= (stop ? 5 : 15) && value <= (stop ? 35 : 65) && value < bestDistance) {
+          best = vehicle;
+          bestDistance = value;
+          bestLine = line;
+        }
+        break;
+      }
+    }
+    return best === null ? null : { vehicle: best, distance: bestDistance, line: bestLine };
   };
-  let moving = await movingTaxi();
-  const taxiDeadline = Date.now() + 30000;
-  while (moving === null && Date.now() < taxiDeadline) {
+  let approach = await approachTaxi('ANY');
+  const approachDeadline = Date.now() + 60000;
+  while (approach === null && Date.now() < approachDeadline) {
     if (await ensurePlaying()) continue;
-    await page.waitForTimeout(200);
-    opened = await fleet();
-    moving = await movingTaxi();
+    await pumpFrame();
+    await page.waitForTimeout(50);
+    approach = await approachTaxi('ANY');
   }
+  let moving = approach?.vehicle ?? null;
+  if (moving === null) {
+    const frame = await read();
+    const fast = (frame?.vehicles ?? []).filter(
+      (vehicle) =>
+        vehicle.driverKind === 'TAXI' && vehicle.controlMode === 'AUTO' && vehicle.speedMps > 2,
+    );
+    moving = [...fast].sort((left, right) => right.speedMps - left.speedMps)[0] ?? null;
+  }
+  await page.locator('[data-shell-action="fleet"]').click();
+  await page.waitForFunction(() => globalThis.__v3Composition.fleet().open === true, null, {
+    timeout: 30000,
+  });
+  const opened = await fleet();
   const taxi =
     opened.snapshot.fleet.vehicles.find((vehicle) => vehicle.vehicleId === moving?.vehicleId) ??
     opened.snapshot.fleet.vehicles.find((vehicle) => vehicle.kind === 'TAXI');
@@ -335,6 +373,69 @@ try {
   );
   await focusCanvas();
   await waitMode('MANUAL');
+  // Steer the real taxi in MANUAL for a short approach before opening LEARNING. The 088 evidence
+  // prefix is the first 10 s of the segment; starting on top of the first real opportunity would
+  // leave the prefix without samples even though the drive is long enough.
+  const warmupDelay = Number(process.env.PROBE_LEARNING_DELAY_TICKS ?? 0);
+  const manualMode = await modes();
+  const warmupLanes = manualMode?.model?.active?.context?.routeLaneIds ?? [];
+  const warmupPath =
+    warmupLanes.length > 0
+      ? await page.evaluate((ids) => globalThis.__v3Composition.lanePath(ids), warmupLanes)
+      : [];
+  const warmupWaypoints = warmupPath.map((point) => ({ x: point.x, z: point.z }));
+  if (warmupWaypoints.length < 2) {
+    const current = await currentVehicle(taxi.vehicleId);
+    if (current) warmupWaypoints.push({ x: current.positionM.x, z: current.positionM.z + 20 });
+  }
+  const warmupStart = (await read()).tick;
+  let warmupIndex = 0;
+  while ((await read()).tick < warmupStart + warmupDelay) {
+    if (await ensurePlaying()) continue;
+    const current = await currentVehicle(taxi.vehicleId);
+    if (!current) break;
+    const position = current.positionM;
+    let nearest = warmupIndex;
+    let best = Infinity;
+    const from = Math.max(0, warmupIndex - 12);
+    const to = Math.min(warmupWaypoints.length - 1, warmupIndex + 120);
+    for (let index = from; index <= to; index += 1) {
+      const value = distance(warmupWaypoints[index], position);
+      if (value < best) {
+        best = value;
+        nearest = index;
+      }
+    }
+    warmupIndex = nearest;
+    const target =
+      warmupWaypoints[Math.min(warmupIndex + 4, warmupWaypoints.length - 1)] ??
+      warmupWaypoints[warmupWaypoints.length - 1];
+    const desired = Math.atan2(target.x - position.x, target.z - position.z);
+    const error = normalizeAngle(desired - current.yawRad);
+    if (error > 0.05) {
+      await keyUp('KeyA');
+      await keyDown('KeyD');
+    } else if (error < -0.05) {
+      await keyUp('KeyD');
+      await keyDown('KeyA');
+    } else {
+      await keyUp('KeyA');
+      await keyUp('KeyD');
+    }
+    if (current.speedMps < 8) {
+      await keyUp('Space');
+      await keyDown('KeyW');
+    } else if (current.speedMps > 10.5) {
+      await keyUp('KeyW');
+      await keyDown('Space');
+    } else {
+      await keyUp('KeyW');
+      await keyUp('Space');
+    }
+    await pumpFrame();
+    await page.waitForTimeout(40);
+  }
+  await releaseKeys();
   await pressKey('KeyL');
   await waitMode('LEARNING');
   await waitTicks(8);
@@ -357,12 +458,13 @@ try {
     if (current) waypoints.push({ x: current.positionM.x, z: current.positionM.z + 20 });
   }
   const driveStartTick = (await read()).tick;
+  const driveLimit = approach === null ? 2400 : 900;
   const driveUntil = Date.now() + 360000;
   let maxSpeed = 0;
   let endSpeed = 0;
   let iterations = 0;
   let routeIndex = 0;
-  while ((await read()).tick < driveStartTick + 2400 && Date.now() < driveUntil) {
+  while ((await read()).tick < driveStartTick + driveLimit && Date.now() < driveUntil) {
     if (await ensurePlaying()) continue;
     if (iterations++ % 20 === 0) {
       await page.bringToFront();
@@ -502,7 +604,7 @@ try {
   result.run = {
     browser: await page.evaluate(() => globalThis.navigator.userAgent),
     backend: backend?.rendererKind ?? null,
-    viewport: '1280x720',
+    viewport: '800x450',
     tick: (await read()).tick,
     driveTicks: (await read()).tick - driveStartTick,
     driveMaxSpeed: maxSpeed,
@@ -510,6 +612,13 @@ try {
     driveFocus,
     taxiSpeedAtTakeover,
     taxiLaneAtTakeover,
+    approachKind:
+      approach?.line?.signalId !== undefined
+        ? 'SIGNAL'
+        : approach?.line?.stopLineId !== undefined
+          ? 'STOP'
+          : null,
+    approachDistanceM: approach?.distance ?? null,
     segmentId: last?.segmentId ?? segmentId,
     jobs: model?.stats?.jobs ?? 0,
     versions: model?.stats?.versions ?? 0,
@@ -528,6 +637,7 @@ try {
     evidenceKeys: model?.evidenceKeys ?? null,
     style: after?.style ?? null,
     telemetry: after?.telemetry ?? null,
+    closedRead: after?.telemetry?.closedRead ?? null,
     checks,
     screenshots: screenshotsTaken,
     pageErrors,

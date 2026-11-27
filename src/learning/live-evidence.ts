@@ -130,12 +130,21 @@ function eligibilityWindowFor(
   );
   const usable = rows.filter((windowRecord) => windowRecord.windowClass !== 'EXCLUDED');
   const pool = usable.length > 0 ? usable : rows;
-  return (
+  const selected =
     [...pool].sort(
       (left, right) =>
         right.lastTick - left.lastTick || left.windowId.localeCompare(right.windowId),
-    )[0] ?? null
-  );
+    )[0] ?? null;
+  if (selected === null) return null;
+  // The 087 window can open while the same opportunity belongs to an AUTO context and then be
+  // adopted by the closed LEARNING segment. Its label/class are real; the owning segment's mode
+  // and eligibility are the closed segment's, not the stale AUTO header.
+  return Object.freeze({
+    ...selected,
+    controlMode: summary.controlMode,
+    learningEligible: summary.learningEligible,
+    segmentId: summary.segmentId,
+  }) as EligibilityWindowRecord;
 }
 
 /** Re-key the real segment artifact window to the 087 window identity without changing its facts. */
@@ -316,13 +325,15 @@ export function deriveLiveLearningPayload(
   const prefixTicks = segment.artifactWindow.prefix?.ticks ?? 0;
 
   for (const opportunity of segment.opportunities) {
-    if (opportunity.state !== 'RESOLVED' || opportunity.result === null) continue;
+    // A closed segment can still carry an ENTERED or TRUNCATED opportunity: the real 087 window
+    // and its samples remain valid speed evidence. Only stop evidence needs a resolved outcome.
     if (!opportunity.learningEligible) continue;
     const eligibilityWindow = eligibilityWindowFor(segment, opportunity);
     if (eligibilityWindow === null) continue;
     const artifacts = projectArtifacts(segment, eligibilityWindow);
     if (artifacts === null) continue;
-    resolvedOpportunities += 1;
+    const resolved = opportunity.state === 'RESOLVED' && opportunity.result !== null;
+    if (resolved) resolvedOpportunities += 1;
     if (eligibilityWindow.windowClass === 'ELIGIBLE') eligibleWindows += 1;
     const prefix = artifacts.prefix;
     const windowSamples =
@@ -335,6 +346,7 @@ export function deriveLiveLearningPayload(
     const postedLimitMps = median(limits);
     const roadKind = liveRoadType(postedLimitMps);
     const stopOutcome =
+      resolved &&
       opportunity.kind === 'STOP' &&
       (opportunity.outcome === 'STOPPED' || opportunity.outcome === 'CROSSED_WITHOUT_STOP')
         ? opportunity.outcome
