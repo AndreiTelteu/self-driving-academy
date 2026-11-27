@@ -1,13 +1,13 @@
 ---
 id: "276"
 title: "Trei misiuni zilnice, XP, nivel și progresul jucătorului în joc"
-status: "To Do"
+status: "In Progress"
 release: "V1"
 module: "Progres"
 depends_on: ["260","265","271"]
 performance_checks: ["simulation","frame"]
-owner: null
-started_at: null
+owner: "loop-pbi/deepseek-276"
+started_at: "2026-11-27T14:12:10.722Z"
 completed_at: null
 ---
 
