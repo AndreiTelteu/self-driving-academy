@@ -1,13 +1,13 @@
 ---
 id: "280"
 title: "Camera first-person din poziția șoferului"
-status: "To Do"
+status: "In Progress"
 release: "V1"
 module: "Interfață"
 depends_on: ["260","263"]
 performance_checks: ["frame"]
-owner: null
-started_at: null
+owner: "loop-pbi/deepseek-280"
+started_at: "2026-11-27T22:26:57.646Z"
 completed_at: null
 ---
 
