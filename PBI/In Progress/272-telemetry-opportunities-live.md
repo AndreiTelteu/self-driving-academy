@@ -1,13 +1,13 @@
 ---
 id: "272"
 title: "Telemetrie, oportunități și eligibilitate din condusul live"
-status: "To Do"
+status: "In Progress"
 release: "V1"
 module: "Moduri și learning"
 depends_on: ["271"]
 performance_checks: ["simulation","memory"]
-owner: null
-started_at: null
+owner: "loop-pbi/deepseek-272"
+started_at: "2026-11-27T02:07:43.902Z"
 completed_at: null
 ---
 
