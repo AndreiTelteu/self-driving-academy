@@ -1,13 +1,13 @@
 ---
 id: "277"
 title: "Provocările random, directorul, panoul și reluarea în joc"
-status: "To Do"
+status: "In Progress"
 release: "V1"
 module: "Misiuni"
 depends_on: ["260","265","271"]
 performance_checks: ["simulation","ui"]
-owner: null
-started_at: null
+owner: "loop-pbi/deepseek-277"
+started_at: "2026-11-27T15:41:59.041Z"
 completed_at: null
 ---
 
