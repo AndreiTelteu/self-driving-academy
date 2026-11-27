@@ -8,7 +8,7 @@ Machine-readable: [report.json](report.json).
 - Scenarii: **5/5** PASS.
 - Verdict: **PASS**.
 - Digest SHA-256: `7a47aa66c92c8728982dca887fcca8643c762b8bb80c2e1d83f1ec944a200e4c`.
-- Cost local tick p95: CHASE 0.086 ms, FIRST_PERSON 0.094 ms, delta 0.008 ms.
+- Cost local tick p95: CHASE 0.097 ms, FIRST_PERSON 0.096 ms, delta -0.002 ms.
 
 | Scenariu | Verdict | Detaliu |
 | --- | --- | --- |
@@ -37,8 +37,8 @@ Local tick CPU only; not a frame/FPS/GPU measurement and not the 203/287 hardwar
 
 | Mod | p50 median (ms) | p95 median (ms) | mean median (ms) |
 | --- | ---: | ---: | ---: |
-| CHASE | 0.0685 | 0.0864 | 0.0753 |
-| FIRST_PERSON | 0.0762 | 0.0944 | 0.0796 |
+| CHASE | 0.0785 | 0.0970 | 0.0820 |
+| FIRST_PERSON | 0.0722 | 0.0955 | 0.0775 |
 
 ## Limitări
 
