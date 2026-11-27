@@ -25,6 +25,8 @@ export interface FleetSelectionPanelSnapshot {
 export interface FleetSelectionPanelOptions {
   readonly select: (vehicleId: string) => boolean | void;
   readonly takeover: (vehicleId: string) => boolean | void;
+  /** PBI 271: explicit LEARNING takeover of the selected camera target. */
+  readonly learning?: (vehicleId: string) => boolean | void;
   readonly release: () => boolean | void;
   readonly onClose: () => void;
   /** Static 032/033 geometry for the fleet map; the full 281 minimap remains separate. */
@@ -283,9 +285,11 @@ export function createFleetSelectionPanel(
   learningButton.type = 'button';
   learningButton.textContent = 'Preia · învățare (L)';
   learningButton.setAttribute('data-fleet-action', 'learning');
-  learningButton.disabled = true;
-  learningButton.setAttribute('aria-disabled', 'true');
-  learningButton.title = 'LEARNING este deținut de PBI 271.';
+  if (typeof options.learning !== 'function') {
+    learningButton.disabled = true;
+    learningButton.setAttribute('aria-disabled', 'true');
+    learningButton.title = 'LEARNING nu are portul live.';
+  }
   const releaseButton = doc.createElement('button');
   releaseButton.type = 'button';
   releaseButton.textContent = 'Lasă AI-ul (AUTO)';
@@ -471,6 +475,8 @@ export function createFleetSelectionPanel(
     const selected = next.rows.find((row) => row.selected) ?? null;
     const player = next.rows.find((row) => row.playerControlled) ?? null;
     takeoverButton.disabled = selected === null || selected.playerControlled;
+    learningButton.disabled =
+      typeof options.learning !== 'function' || selected === null || selected.playerControlled;
     releaseButton.disabled = player === null;
     setAttribute(
       takeoverButton,
@@ -585,6 +591,19 @@ export function createFleetSelectionPanel(
     // applied on the next tick. A synchronous refusal keeps the panel open with its reason.
     if (accepted) close();
   };
+  const onLearning = (): void => {
+    if (typeof options.learning !== 'function') return;
+    const selected = view?.rows.find((row) => row.selected);
+    if (selected === undefined) {
+      notice.textContent = 'Selectează întâi un vehicul.';
+      return;
+    }
+    const accepted = options.learning(selected.vehicleId) !== false;
+    notice.textContent = accepted
+      ? `Learning cerut pentru ${selected.label}; se aplică la următorul tick.`
+      : `Learning pentru ${selected.label} a fost refuzat.`;
+    if (accepted) close();
+  };
   const onRelease = (): void => {
     releases += 1;
     const accepted = options.release() !== false;
@@ -619,6 +638,7 @@ export function createFleetSelectionPanel(
   filterSelect.addEventListener('change', onFilterChange);
   closeButton.addEventListener('click', onCloseClick);
   takeoverButton.addEventListener('click', onTakeover);
+  learningButton.addEventListener('click', onLearning);
   releaseButton.addEventListener('click', onRelease);
   root.addEventListener('keydown', onKeyDown);
   listeners += 5;
@@ -661,6 +681,7 @@ export function createFleetSelectionPanel(
       filterSelect.removeEventListener('change', onFilterChange);
       closeButton.removeEventListener('click', onCloseClick);
       takeoverButton.removeEventListener('click', onTakeover);
+      learningButton.removeEventListener('click', onLearning);
       releaseButton.removeEventListener('click', onRelease);
       root.removeEventListener('keydown', onKeyDown);
       for (const nodes of rows.values()) {

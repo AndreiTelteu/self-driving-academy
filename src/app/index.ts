@@ -665,6 +665,22 @@ export {
 } from './live-fleet-selection';
 
 export {
+  LIVE_THREE_MODES_VERSION,
+  createLiveModeSegments,
+  readLiveModeHud,
+  type LiveModeAuthoritySource,
+  type LiveModeCloseReason,
+  type LiveModeHudView,
+  type LiveModeLearningExposure,
+  type LiveModeSegmentView,
+  type LiveModeSegments,
+  type LiveModeSegmentsOptions,
+  type LiveModeSegmentsReadModel,
+  type LiveModeTickPlan,
+  type LiveModeVehicleContext,
+} from './live-three-modes';
+
+export {
   VEHICLE_AUTO_DRIVE_POLICY,
   VEHICLE_AUTO_DRIVE_VERSION,
   createVehicleAutoDrive,
@@ -689,6 +705,10 @@ export {
   type CompositionHud,
   type CompositionKind,
   type CompositionMode,
+  type CompositionModeCloseReason,
+  type CompositionModeSegmentPlan,
+  type CompositionModeSegmentPort,
+  type CompositionModeVehicleContext,
   type CompositionOptions,
   type CompositionStats,
   type CompositionStepRequest,

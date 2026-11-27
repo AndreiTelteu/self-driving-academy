@@ -61,10 +61,17 @@ export function createRenderingView(root: HTMLDivElement) {
       <output class="game-hud__speed-value">0</output>
       <span class="game-hud__speed-unit">km/h</span>
     </div>
-    <button type="button" class="game-hud__mode" data-action="mode" aria-keyshortcuts="M" title="M comută MANUAL/AUTO">
-      <span class="game-hud__mode-symbol">M</span>
-      <span class="game-hud__mode-text">Manual · M pentru AUTO</span>
-    </button>
+    <div class="game-hud__modes" role="group" aria-label="Mod de control">
+      <button type="button" class="game-hud__mode" data-action="mode" aria-keyshortcuts="M" title="M comută AUTO/MANUAL">
+        <span class="game-hud__mode-symbol">M</span>
+        <span class="game-hud__mode-text">Conduce AI-ul</span>
+      </button>
+      <button type="button" class="game-hud__mode game-hud__learning" data-action="learning" aria-keyshortcuts="L" title="L comută LEARNING">
+        <span class="game-hud__mode-symbol">L</span>
+        <span class="game-hud__mode-text">Learning</span>
+      </button>
+      <span class="game-hud__eligibility" role="status"></span>
+    </div>
     <div class="game-hud__hint" data-hint="enter-vehicle" hidden>
       <kbd>G</kbd> Intră în taxi
     </div>
@@ -99,18 +106,30 @@ export function createRenderingView(root: HTMLDivElement) {
   let onPlay = (): void => {};
   let onPause = (): void => {};
   let onMode = (): void => {};
+  let onLearning = (): void => {};
   const retryClick = (): void => onRetry();
   const playClick = (): void => onPlay();
   const pauseClick = (): void => onPause();
   const modeClick = (): void => onMode();
+  const learningClick = (): void => onLearning();
   retry.addEventListener('click', retryClick);
   play.addEventListener('click', playClick);
   pause.addEventListener('click', pauseClick);
   const speedValue = gameHud.querySelector<HTMLOutputElement>('.game-hud__speed-value');
-  const modeButton = gameHud.querySelector<HTMLButtonElement>('.game-hud__mode');
+  const modeButton = gameHud.querySelector<HTMLButtonElement>(
+    '.game-hud__mode[data-action="mode"]',
+  );
+  const learningButton = gameHud.querySelector<HTMLButtonElement>(
+    '.game-hud__mode[data-action="learning"]',
+  );
+  const learningText = gameHud.querySelector<HTMLElement>(
+    '.game-hud__learning .game-hud__mode-text',
+  );
   const modeSymbol = gameHud.querySelector<HTMLElement>('.game-hud__mode-symbol');
   const modeText = gameHud.querySelector<HTMLElement>('.game-hud__mode-text');
+  const eligibilityText = gameHud.querySelector<HTMLElement>('.game-hud__eligibility');
   modeButton?.addEventListener('click', modeClick);
+  learningButton?.addEventListener('click', learningClick);
 
   // 251: butoanele din ecranul de start și meniul de pauză
   startScreen.querySelector('[data-action="play"]')?.addEventListener('click', playClick);
@@ -146,40 +165,74 @@ export function createRenderingView(root: HTMLDivElement) {
     onMode(callback: () => void): void {
       onMode = callback;
     },
-    /** PBI 257: HUD-ul central citește frame-ul compunerii, nu starea statică din HTML. */
+    onLearning(callback: () => void): void {
+      onLearning = callback;
+    },
+    /** PBI 257/271: HUD-ul central citește frame-ul compunerii, nu starea statică din HTML. */
     updatePlayHud(view: {
       readonly speedMps: number;
       readonly mode: 'AUTO' | 'MANUAL' | 'LEARNING' | null;
       readonly controlledKind: 'CHARACTER' | 'VEHICLE';
       readonly canToggle: boolean;
+      readonly canLearn?: boolean;
+      readonly learningEligible?: boolean;
     }): void {
       const kmh = Math.max(0, Math.round(Math.abs(view.speedMps) * 3.6));
       if (speedValue && speedValue.textContent !== String(kmh))
         speedValue.textContent = String(kmh);
       const symbol =
-        view.mode === 'AUTO' ? 'AI' : view.mode === 'LEARNING' ? 'L' : view.mode ? 'M' : '—';
+        view.controlledKind === 'CHARACTER'
+          ? '—'
+          : view.mode === 'AUTO'
+            ? 'AI'
+            : view.mode === 'LEARNING'
+              ? 'L'
+              : 'M';
       const text =
         view.controlledKind === 'CHARACTER'
           ? 'Pe jos · M în mașină'
           : view.mode === 'AUTO'
-            ? 'AUTO · Conduce AI-ul (M)'
+            ? 'Conduce AI-ul'
             : view.mode === 'LEARNING'
-              ? 'LEARNING · Conduci tu (M)'
-              : 'MANUAL · Conduci tu (M)';
+              ? 'Conduci · orașul învață'
+              : 'Conduci · învățare oprită';
       if (modeSymbol && modeSymbol.textContent !== symbol) modeSymbol.textContent = symbol;
       if (modeText && modeText.textContent !== text) modeText.textContent = text;
+      if (learningText) {
+        const learning = view.controlledKind === 'CHARACTER' ? 'Learning' : 'Learning · L';
+        if (learningText.textContent !== learning) learningText.textContent = learning;
+      }
+      const canLearn = view.canLearn ?? view.canToggle;
       if (modeButton) {
         modeButton.disabled = !view.canToggle;
         modeButton.dataset.mode = view.mode ?? 'NONE';
         modeButton.title = view.canToggle
-          ? 'M comută MANUAL/AUTO'
-          : 'Intră într-o mașină pentru AUTO';
+          ? 'M: AUTO ↔ MANUAL (LEARNING → AUTO)'
+          : 'Intră într-o mașină';
         modeButton.setAttribute(
           'aria-label',
           view.canToggle
-            ? `Mod ${view.mode ?? 'necunoscut'}; M comută MANUAL/AUTO`
+            ? `Mod ${view.mode ?? 'necunoscut'}; M comută AUTO/MANUAL`
             : 'Mod indisponibil pe jos; intră într-o mașină',
         );
+      }
+      if (learningButton) {
+        learningButton.disabled = !canLearn;
+        learningButton.dataset.mode = view.mode ?? 'NONE';
+        learningButton.title = canLearn ? 'L: LEARNING ↔ MANUAL' : 'Întră într-o mașină';
+        learningButton.setAttribute(
+          'aria-label',
+          canLearn ? 'L comută LEARNING' : 'LEARNING indisponibil pe jos',
+        );
+      }
+      if (eligibilityText) {
+        const eligibility =
+          view.controlledKind === 'CHARACTER' || view.learningEligible === undefined
+            ? ''
+            : view.learningEligible
+              ? 'Eligibil pentru învățare'
+              : 'Învățare neeligibilă';
+        if (eligibilityText.textContent !== eligibility) eligibilityText.textContent = eligibility;
       }
     },
     show(state: RenderingState | ApplicationState): void {

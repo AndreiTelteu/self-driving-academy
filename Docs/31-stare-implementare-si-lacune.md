@@ -29,7 +29,7 @@ Buildul curent pornește din `src/main.ts` și oferă:
 - [economia live 266](live-economy.md) peste cursele 265: revenue, review 0–5, bucketuri KPI de zi/lună și un HUD compact cu ziua/luna simulată;
 - panoul `Companie` (270) peste ledgerul 268 și evoluția 269: revenue, costuri, profit, cash, valoare de flotă, nivel, grafic și tabel lunar, detalierea costurilor și achiziții/upgrade-uri cu confirmare și refuzuri explicite.
 
-Nu sunt montate: LEARNING, pop-up-ul KPI, misiuni, XP, salvare, panourile de sistem (profil, setări), first-person, minimapa, sunet, decorul destructibil și provocările Haos, fizica Rapier și regulile de trafic. Cursele live, pickup/dropoff, pasagerul, ETA și HUD-ul de cursă sunt montate prin 265.
+Nu sunt montate: pop-up-ul KPI, misiuni, XP, salvare, panourile de sistem (profil, setări), first-person, minimapa, sunet, decorul destructibil și provocările Haos, fizica Rapier și regulile de trafic. Cursele live, pickup/dropoff, pasagerul, ETA și HUD-ul de cursă sunt montate prin 265; AUTO/MANUAL/LEARNING și segmentele 069 sunt montate prin 271.
 
 ## Matricea lacunelor
 
@@ -157,7 +157,7 @@ Nu sunt montate: LEARNING, pop-up-ul KPI, misiuni, XP, salvare, panourile de sis
 
 **PBI:** [263](../PBI/README.md) · **Dependențe:** 262.
 
-**Stare:** Implementat local la 26 noiembrie 2026. Panoul `Flotă` listează toate taxiurile și civilii live, un click/Enter/Space mută doar camera, `M` preia explicit cu un singur scaun `PLAYER`, iar vehiculul părăsit revine în AUTO cu ruta/cursea reconciliată. `L` este refuzat explicit până la 271; browserul și fizica rămân limitările de mai jos.
+**Stare:** Implementat local la 26 noiembrie 2026. Panoul `Flotă` listează toate taxiurile și civilii live, un click/Enter/Space mută doar camera, `M` preia explicit cu un singur scaun `PLAYER`, iar vehiculul părăsit revine în AUTO cu ruta/cursea reconciliată. Din 271, `L` deschide LEARNING prin owner-ul live; browserul și fizica rămân limitările de mai jos.
 
 ### 264 — Cereri de curse live, coadă și dispecerizare către flota reală
 
@@ -299,7 +299,7 @@ Dovezile sunt în [Evidence/270-company-dashboard](Evidence/270-company-dashboar
 
 ### 271 — Cele trei moduri live: AUTO, MANUAL, LEARNING și toate tranzițiile
 
-**Ce lipsește:** Există doar `M` între AUTO și MANUAL. `L`, LEARNING, segmentele 069 și continuitatea la tranziție nu sunt montate.
+**Ce lipsește:** Telemetria, joburile și profilul live lipsesc; cele trei moduri și segmentele 069 sunt montate.
 
 - `applyVehicleMode` acceptă numai `AUTO` și `MANUAL`; nu există `L` sau `LEARNING`.
 - Segmentele live sunt 198 de walking/takeover, nu 069 de intervenție la volan.
@@ -307,6 +307,13 @@ Dovezile sunt în [Evidence/270-company-dashboard](Evidence/270-company-dashboar
 - Nu există păstrarea rutei/cursei la tranziție și nici reluarea stării fizice la AUTO.
 - Nu există raport de continuitate, autoritate unică sau verificare de tick pentru cele șase tranziții.
 - Nu există HUD cu textele și simbolurile AUTO/MANUAL/LEARNING.
+
+**Ce s-a livrat:** `src/app/live-three-modes.ts` compune ciclul real 069 peste compunerea V3; fiecare tick pregătește o singură graniță, compunerea aplică modul în același tick, iar 069 o închide cu poziția, ruta, clasa și profilul vehiculului. `requestModeAction` este singura cale pentru tastele `M`/`L`, butoanele HUD și butonul `L` din panoul `Flotă`; toate cele șase tranziții au fost rulate pe taxi și civil, cu un singur scaun `PLAYER`. Segmentele MANUAL au `learningEligible=false`, segmentele LEARNING sunt expuse pentru 272 fără job sau versiune de profil, iar AUTO reia poziția fizică curentă (un tick de coast, apoi reproiectarea pe graf). HUD-ul afișează „Conduce AI-ul”, „Conduci · învățare oprită” și „Conduci · orașul învață”. Pauza nu inventează tick-uri, iar schimbarea sesiunii închide segmentul cu un motiv terminal.
+
+- Dovezi: `npm run modes:live` (12 tranziții, 4 segmente LEARNING, 0 profiluri) și `npm run modes:live:probe` (11/11 în Chrome 157/WEBGL2), în [Evidence/271-live-three-modes](Evidence/271-live-three-modes/README.md).
+- Limitări: AUTO reia exact primul tick, dar reproiectarea completă pe banda grafului și reintrarea off-lane rămân 054/282; `G` intrare/ieșire rămâne traseul 195/196/198, nu deschide un segment 069; capacitatea 069 este 64 de segmente per ciclu de viață.
+
+**Stare:** Implementat local la 27 noiembrie 2026. Tastele și butoanele HUD folosesc aceeași intenție live, iar browserul Chrome 157 a trecut 11/11; mutarea în Done și validarea finală aparțin orchestratorului.
 
 **Documentație:** [Interfață, cameră și control](08-interfata-camera-si-control.md) · [Învățarea stilului](10-invatarea-stilului.md) · [Comenzile de mod](mode-controls.md) · [Integrarea celor trei moduri](three-modes.md) · [Cursa completă și intervenția](manual-trip.md) · [Continuitatea la preluare](takeover-continuity.md) · [Autoritatea de control](control-authority.md) · [Starea implementării și lacunele](31-stare-implementare-si-lacune.md)
 

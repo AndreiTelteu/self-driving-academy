@@ -10,7 +10,7 @@ Panoul flotei permite selectarea oricărui taxi fără a muta fizic vehiculele. 
 
 [Selectarea prin hartă 076](map-selection.md) materializează această regulă pentru toate taxiurile 057 și mașinile civile 058: markerii folosesc transformarea minimap-ului 074, identitatea stabilă este `vehicleId`-ul flotei, iar un click emite o singură intenție 068 `WORLD`. Modulul nu mișcă absolut camera, nu teleportează vehicule și nu revendică autoritatea PLAYER.
 
-[Selectarea live 263](live-fleet-selection.md) montează regula în jocul real: panoul `Flotă` listează cele 24 de taxiuri și 32 de civili ai lui 262 plus cele două mașini parcate, un click sau Enter/Space mută doar ținta camerei, iar `M` preia explicit orice mașină cu un singur scaun `PLAYER`. Vehiculul părăsit revine în AUTO cu ruta/cursea reconciliată de 058/041; `L` este refuzat explicit până la 271, iar minimapa completă rămâne la 281.
+[Selectarea live 263](live-fleet-selection.md) montează regula în jocul real: panoul `Flotă` listează cele 24 de taxiuri și 32 de civili ai lui 262 plus cele două mașini parcate, un click sau Enter/Space mută doar ținta camerei, iar `M` preia explicit orice mașină cu un singur scaun `PLAYER`. Vehiculul părăsit revine în AUTO cu ruta/cursea reconciliată de 058/041; `L` deschide LEARNING prin integrarea live 271, iar minimapa completă rămâne la 281.
 
 Panoul profilului afișează valorile curente, diferența față de versiunea precedentă, situațiile care au susținut schimbarea, cantitatea de dovezi și parametrii încă neobservați. Notificarea poate spune: „Profil nou: distanță mai mică în mers și reacție mai rapidă la verde”. Valorile concrete provin exclusiv din datele sesiunii.
 
@@ -102,4 +102,18 @@ afișează viteza reală în km/h și modul entității controlate. Butonul de m
 cu `aria-keyshortcuts="M"`; `M` și click-ul comută mașina condusă între MANUAL și AUTO. Simbolul
 AUTO este `AI` (nu tasta `A`, care rămâne viraj stânga), iar pe jos butonul este dezactivat.
 Detalii în [mod AUTO/MANUAL, HUD și coliziune](mode-auto-hud-collision.md).
+
+## Cele trei moduri live (PBI 271)
+
+`src/app/live-three-modes.ts` montează ciclul de viață real 069 peste compunerea V3. Fiecare tick
+pregătește o singură graniță, compunerea aplică modul în același tick autoritar, iar 069 o închide
+cu poziția, ruta, clasa și profilul vehiculului. `M`/`L` și butoanele HUD trec prin aceeași funcție
+`requestModeAction`; `M` face AUTO ↔ MANUAL (și LEARNING → AUTO), `L` face AUTO/MANUAL → LEARNING
+(și LEARNING → MANUAL). Segmentele MANUAL au `learningEligible=false`; segmentele LEARNING sunt
+expuse ca read model pentru 272, fără job, estimator sau versiune de profil (273). HUD-ul afișează
+„Conduce AI-ul”, „Conduci · învățare oprită” și „Conduci · orașul învață”, cu simbolurile `AI`, `M`
+și `L`. Un vehicul părăsit revine în AUTO cu ruta păstrată; tranziția nu rescrie viteza, iar
+reluarea AUTO dintr-o poziție condusă folosește un tick de coast și apoi reproiectarea pe graf.
+Pauza 070 nu inventează tick-uri, iar reload-ul pornește fără segmente orfane. Dovezile sunt în
+[Evidence/271-live-three-modes](Evidence/271-live-three-modes/README.md).
 
