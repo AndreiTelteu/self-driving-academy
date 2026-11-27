@@ -115,6 +115,9 @@ demolare refuzată înainte de afișare → reload cu același record și acela�
 - Rezultat: ${run.lastStatus}; XP ${run.xpAfter}; intrări ledger ${run.ledgerEntries};
   intrări de recompensă provocare ${run.challengeRewardEntries ?? 0} (${run.challengeCreditedXp ?? 0} XP);
   comparație ${run.comparison}; recorduri ${run.records}; cooldown rămas ${run.cooldownRemaining}.
+- Amprente: XP \`${run.xpFingerprintAfter}\` → \`${run.xpFingerprintReload}\`; profil
+  \`${String(run.profileBefore?.headVersionId)}\` / \`${String(run.profileBefore?.profileVersionId)}\`,
+  neschimbat ${run.profileUnchanged}.
 - Panou: acțiuni ofertă ${run.panelOfferActions.join(', ')}; acțiuni rezultat
   ${run.panelResultActions.join(', ')}; XP afișat „${run.panelXp}”; recorduri ${run.panelRecords}.
 - Reluare: \`${run.retryCode}\`; ledger după reluare ${run.entriesAfterRetry} (fără dublare).
@@ -236,6 +239,17 @@ try {
   const shell = () => page.evaluate(() => globalThis.__v3Composition.shell());
   const rides = () => page.evaluate(() => globalThis.__v3Composition.rides());
   const challenges = () => page.evaluate(() => globalThis.__v3Composition.challenges());
+  const profileSnapshot = () =>
+    page.evaluate(() => {
+      const progress = globalThis.__v3Composition.progress();
+      const learning = globalThis.__v3Composition.learning();
+      return {
+        xpFingerprint: progress?.read?.xpFingerprint ?? null,
+        headVersionId: learning?.model?.headVersionId ?? null,
+        profileVersionId: learning?.model?.profileVersionId ?? null,
+        style: learning?.style?.parameters ?? null,
+      };
+    });
   const focusCanvas = () =>
     page.evaluate(() => {
       const canvas = globalThis.document?.querySelector('canvas');
@@ -465,6 +479,27 @@ try {
     await releaseKeys();
     await page.waitForTimeout(300);
   };
+  const ensureDrivable = async (taxiId) => {
+    const current = await vehicle(taxiId);
+    if (current !== null && current.laneId !== null && current.speedMps > 0.5) return;
+    await focusCanvas();
+    await page.keyboard.press('KeyM');
+    await waitUntil(
+      () => globalThis.__v3Composition.modes()?.model?.mode === 'AUTO',
+      null,
+      15000,
+      'AUTO pre-roll',
+    ).catch(() => {});
+    await page.waitForTimeout(3000);
+    await page.keyboard.press('KeyM');
+    await waitUntil(
+      () => globalThis.__v3Composition.modes()?.model?.mode === 'MANUAL',
+      null,
+      15000,
+      'MANUAL pre-roll',
+    ).catch(() => {});
+    await focusCanvas();
+  };
 
   await page.goto(url, { waitUntil: 'load' });
   await page.waitForFunction(() => globalThis.__v3Composition?.ready() === true, null, {
@@ -550,14 +585,17 @@ try {
   let bestPlan = null;
   for (const candidate of taxiCandidates) {
     const meters = distance(candidate.positionM, firstCheckpoint.anchorM);
-    if (bestPlan === null || meters < bestPlan.meters) bestPlan = { taxi: candidate, meters };
+    const inside = meters < 3.5;
+    const score = inside ? -1000 + meters : meters + (candidate.speedMps > 1 ? 0 : 120);
+    if (bestPlan === null || score < bestPlan.score)
+      bestPlan = { taxi: candidate, meters, score, inside };
   }
   const taxi = bestPlan?.taxi ?? taxiCandidates[0];
   if (taxi === undefined) throw new Error('No unassigned taxi');
   const taxiId = taxi.vehicleId;
   const usedSeed = checkpointSeed;
   console.log(
-    `chosen taxi ${taxiId} seed ${usedSeed} checkpoints ${checkpointPreview.zoneIds.join(',')} distance ${bestPlan?.meters.toFixed(1) ?? 'none'}`,
+    `chosen taxi ${taxiId} seed ${usedSeed} checkpoints ${checkpointPreview.zoneIds.join(',')} distance ${bestPlan?.meters.toFixed(1) ?? 'none'} inside ${bestPlan?.inside ?? false}`,
   );
   await page.locator('[data-shell-action="fleet"]').click();
   await waitUntil(
@@ -575,6 +613,8 @@ try {
     'player takeover',
   );
   await focusCanvas();
+  if (bestPlan?.inside !== true) await ensureDrivable(taxiId);
+  const profileBefore = await profileSnapshot();
 
   const destruction = await page.evaluate(() =>
     globalThis.__v3Composition.challengeOffer('challenge-influencer-demolition'),
@@ -695,6 +735,7 @@ try {
     'challenge result',
   );
   const afterChallenge = await challenges();
+  const profileAfter = await profileSnapshot();
   const lastResult = afterChallenge.read.lastResult;
   check(
     'precision-challenge-completed',
@@ -710,6 +751,13 @@ try {
     lastResult?.recordComparison === 'FIRST_RECORD' &&
       afterChallenge.read.cooldownRemainingTicks > 0,
     `${lastResult?.recordComparison ?? 'none'}, cooldown ${afterChallenge.read.cooldownRemainingTicks}`,
+  );
+  check(
+    'profile-no-writes',
+    profileAfter.headVersionId === profileBefore.headVersionId &&
+      profileAfter.profileVersionId === profileBefore.profileVersionId &&
+      JSON.stringify(profileAfter.style) === JSON.stringify(profileBefore.style),
+    `head ${profileBefore.headVersionId ?? 'none'}, profile ${profileBefore.profileVersionId ?? 'none'}`,
   );
   const retry =
     lastResult?.status === 'COMPLETED'
@@ -772,6 +820,7 @@ try {
     'challenge checkpoint restore',
   );
   const reloaded = await challenges();
+  const profileReload = await profileSnapshot();
   check(
     'reload-keeps-record-and-reward',
     reloaded.read.records === 1 &&
@@ -818,9 +867,18 @@ try {
       completedTick: lastResult?.endedAtTick ?? null,
       lastStatus: lastResult?.status ?? null,
       xpAfter: afterChallenge.read.xpBalance,
+      xpFingerprintAfter: profileAfter.xpFingerprint,
+      xpFingerprintReload: profileReload.xpFingerprint,
       ledgerEntries: afterChallenge.read.ledgerEntries,
       challengeRewardEntries: afterChallenge.read.challengeRewardEntries,
       challengeCreditedXp: afterChallenge.read.challengeCreditedXp,
+      profileBefore,
+      profileAfter,
+      profileReload,
+      profileUnchanged:
+        profileAfter.headVersionId === profileBefore.headVersionId &&
+        profileAfter.profileVersionId === profileBefore.profileVersionId &&
+        JSON.stringify(profileAfter.style) === JSON.stringify(profileBefore.style),
       comparison: lastResult?.recordComparison ?? null,
       records: afterChallenge.read.records,
       cooldownRemaining: afterChallenge.read.cooldownRemainingTicks,
