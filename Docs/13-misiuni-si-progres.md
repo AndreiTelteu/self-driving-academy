@@ -261,6 +261,18 @@ Dovezile sunt în [Evidence/126-mission-panel](Evidence/126-mission-panel/README
 
 Comenzi: `npm run missions:live` derivă [Evidence/275-live-missions](Evidence/275-live-missions/README.md) (24/24 verificări deterministe), iar `npm run missions:live:probe` rulează proba de browser. Proba a trecut 22/22 în Chrome 157 headless/WEBGL2: tutorialul a parcurs cei cinci pași, etapa 1 a fost `COMPLETED` cu 100 XP și două recompense acordate o singură dată, iar pipeline-ul 273 a raportat 1 segment ineligibil și 0 versiuni; etapa 2 a eșuat cu `SCENARIO_RESET` după un reset real de scenariu, iar amprenta profilului și XP-ul au rămas identice. Limitările sunt: evenimentele 028 de coliziune nu au încă un producător live (bugetul este evaluat din 007 `COLLISION` când faptul are ambele entități), persistența după reload rămâne 278, XP-ul efectiv în `PlayerProgress` rămâne 276, iar panoul nu oferă buton de reluare — pornirea rămâne a hostului, conform contractului 126.
 
+## Contract implementat în V1 (PBI 276): trei daily, XP, nivel și panoul de progres în joc
+
+`src/app/live-daily-progress.ts` (`276-live-daily-progress-v1`) este singurul owner live al zilelor 211/212 și al ledgerului 213. El consumă exact aceleași evenimente 007 validate pe care 275 le publică pentru trackerul 116 și aceleași decontări 125; nu creează un al doilea generator, tracker, ledger sau store de profil. `resolveLocalDailyDay` derivă ziua reală din moment și fusul IANA, inclusiv zilele DST de 23 h/25 h, iar `advanceDailyCalendar` păstrează setul la reload, rollback și aceeași zi.
+
+- La prima intrare există exact trei misiuni, cu cel puțin una MANUAL fără learning; o deblocare ulterioară sau un reload nu rerandomizează setul.
+- O recompensă zilnică (100 XP) și o decontare 125 (100 XP) sunt plătite o singură dată prin identitățile 211/125; un eveniment sau un replay relivrat plătește 0. Timpul activ plătește 1 XP/minut real, în ferestre de maximum 30 s, cu fracții exacte: 30 s = 0,5 XP, 70 s = 1,166666 XP.
+- Pauza, focusul pierdut, background-ul, AFK-ul, Haos, replay-ul și offline-ul sunt refuzate cu motivele închise 213 și nu mișcă soldul. Nivelul este `levelForXpMicro(balance)` și nu scade; KPI-ul negativ, accidentul, misiunea eșuată și ziua ratată nu au cale către ledger.
+- Checkpointul de tab (`sessionStorage`, `276-reload-checkpoint-v1`) păstrează aceeași zi, sold, nivel și recompense la reload; fișierul durabil și importul rămân 278.
+- Panoul `Progres` (`276-live-progress-panel-v1`) arată soldul, nivelul, progresul nivelului, timpul activ, istoricul, cele trei obiective, fereastra, resetul, fusul și motivul expirării. Butonul shell-ului este `data-shell-action="progress"`; panoul are focus, Tab/Shift+Tab, Escape, zero listeners globali și citește la 10 Hz numai cât timp este deschis.
+
+Comenzi: `npm run progress:daily` derivă [Evidence/276-daily-xp-progress](Evidence/276-daily-xp-progress/README.md) (49/49 verificări deterministe), iar `npm run progress:daily:probe` rulează proba de browser. Proba a trecut în Chrome 157 headless/WEBGL2: două obiective zilnice `COMPLETED` (`MANUAL_DROPOFFS`, `CLEAN_DROPOFFS`), 2 recompense zilnice, sold 302,524383 XP, nivel 3, panoul a arătat `302.524383 XP` și 2/3 obiective, resetul a păstrat amprenta `fnv1a32:e61cce9a`, iar reload-ul a păstrat același set și același sold. Limite: `FULL_STOPS`/`LANE_CHANGES` există în catalogul 211, dar 275 nu publică încă evenimentele 272 corespunzătoare, iar `FULL_STOP` 272 nu are încă durata reală cerută de `minDurationS`; persistența durabilă rămâne 278, iar validarea este `targeted`, fără FPS/GPU pe hardware real.
+
 
 ## Contract implementat în V2 (PBI 188): provocările comportamentelor extinse
 

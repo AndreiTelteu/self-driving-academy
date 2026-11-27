@@ -737,6 +737,35 @@ export {
 } from './live-missions';
 
 export {
+  LIVE_DAILY_PROGRESS_ACTIVE_WINDOW_MS,
+  LIVE_DAILY_PROGRESS_CALENDAR_SYNC_MS,
+  LIVE_DAILY_PROGRESS_CHECKPOINT_VERSION,
+  LIVE_DAILY_PROGRESS_POLICY,
+  LIVE_DAILY_PROGRESS_RECOVERY_SESSION,
+  LIVE_DAILY_PROGRESS_VERSION,
+  createLiveDailyProgress,
+  dailyCalendarInputOf,
+  liveDailyProgressKinds,
+  liveDailyProgressStorageStates,
+  resolveLocalDailyDay,
+  zoneOffsetSeconds,
+  type LiveDailyProgress,
+  type LiveDailyProgressActiveWindow,
+  type LiveDailyProgressDayAction,
+  type LiveDailyProgressHostFacts,
+  type LiveDailyProgressKind,
+  type LiveDailyProgressOptions,
+  type LiveDailyProgressRead,
+  type LiveDailyProgressSessionInput,
+  type LiveDailyProgressStatus,
+  type LiveDailyProgressStorage,
+  type LiveDailyProgressStorageState,
+  type LiveDailyProgressTickInput,
+  type LiveDailyReloadCheckpoint,
+  type LocalDailyDay,
+} from './live-daily-progress';
+
+export {
   VEHICLE_AUTO_DRIVE_POLICY,
   VEHICLE_AUTO_DRIVE_VERSION,
   createVehicleAutoDrive,

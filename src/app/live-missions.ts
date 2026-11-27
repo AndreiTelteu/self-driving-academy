@@ -127,6 +127,13 @@ export interface LiveMissionOptions {
   readonly namespace?: string;
   readonly catalog?: unknown;
   readonly ports?: Partial<LiveMissionPorts>;
+  /**
+   * Read-only observer of every validated 007 event this composition publishes. The 276 daily/XP
+   * vertical consumes the same facts instead of translating them a second time.
+   */
+  readonly onEvent?: (event: SimulationEvent) => void;
+  /** Read-only observer of every real 125 completion settlement, paid at most once by its identity. */
+  readonly onSettled?: (settlement: MissionCompletionResult) => void;
 }
 
 export interface LiveMissionSessionInput {
@@ -387,6 +394,7 @@ export function createLiveMissions(options: LiveMissionOptions = {}): LiveMissio
       settledCompletions += 1;
       if (result.status === 'DUPLICATE') duplicateCompletions += 1;
       duplicateRewards += result.rewardsDuplicate;
+      options.onSettled?.(result);
       settledNow.push(instance.instanceId);
     }
     return Object.freeze(settledNow);
@@ -456,6 +464,7 @@ export function createLiveMissions(options: LiveMissionOptions = {}): LiveMissio
             }`,
           );
         }
+        options.onEvent?.(parsed);
       }
       lastPublishedTick = target;
       lastTick = Math.max(lastTick, target);
