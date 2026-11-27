@@ -339,7 +339,7 @@ Dovezile sunt în [Evidence/270-company-dashboard](Evidence/270-company-dashboar
 
 **PBI:** [272](../PBI/README.md) · **Dependențe:** 271.
 
-**Stare:** Implementat local la 27 noiembrie 2026. Telemetria, oportunitățile, ferestrele și artefactele live sunt montate; pipeline-ul de learning rămâne 273.
+**Stare:** Done la 27 noiembrie 2026. Telemetria, oportunitățile, ferestrele și artefactele live sunt montate; pipeline-ul de learning rămâne 273.
 
 ### 273 — Pipeline-ul de learning live: dovezi, worker, profil și activare
 

@@ -44,8 +44,8 @@ vehiculelor, iar 271 rămâne singurul owner al segmentelor.
 `npm run telemetry:live:cost` scrie [cost.json](cost.json). Pe AMD Ryzen 7 7735U / Node 24.19.0,
 58 vehicule și un segment MANUAL:
 
-- writer p50 **0,35 ms**, p95 **0,51 ms**, p99 **0,77 ms**, max **1,39 ms** per tick;
-- compunerea V3 p95 **5,58 ms** per tick, măsurată separat;
+- writer p50 **0,40 ms**, p95 **0,71 ms**, p99 **0,93 ms**, max **1,20 ms** per tick;
+- compunerea V3 p95 **4,74 ms** per tick, măsurată separat;
 - memorie deținută **1 882 706 B** din bugetul **33 554 432 B**, `withinBudget: true`;
 - heap măsurat cu `--expose-gc` este raportat separat, nu ca total exact.
 
@@ -88,4 +88,4 @@ Eticheta este `PROVISIONAL_UNCALIBRATED`; nu este o măsurătoare FPS/GPU/hardwa
 | `npm run docs:check -- --check` | PASS |
 | `npm run telemetry:live` | 12/12 PASS |
 | `npm run telemetry:live -- --check` | PASS |
-| `npm run telemetry:live:cost` | p95 0.51 ms, 1.88 MB |
+| `npm run telemetry:live:cost` | p95 0.71 ms, 1.88 MB |
