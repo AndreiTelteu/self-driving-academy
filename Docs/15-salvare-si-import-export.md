@@ -271,3 +271,51 @@ Migrarea nu inventează date de salvare: cheile V1 își păstrează valoarea, u
 
 Comenzi: `npm run profile:v2` și `npm run profile:v2 -- --check`; dovezile sunt în [Evidence/166-profile-v2](Evidence/166-profile-v2/README.md).
 
+
+## Contract implementat V1 (PBI 278) — persistența live: autosave, checkpoint și fișier
+
+`src/persistence/live-savefile.ts` (contract `278-live-save-v1`) și `src/app/live-persistence.ts`
+(`278-live-persistence-v1`) fac operativă salvarea verticalului live fără să inventeze un al doilea
+model de simulare. Payloadul este un `SessionKindCheckpoint` real 225, cu checksum-ul lui, iar în
+`body` stă manifestul `278-live-state-v1`: identitatea sesiunii, profilul 109 activ, checkpointul 276
+daily/XP, checkpointul 277 al provocărilor, compania 268/269 și snapshotul read-only 209/KPI. Fișierul
+este învelit în aceleași reguli `SDA-CJSON-1`/SHA-256 și poartă extensia `.sdasave` a lui 234, deci
+integritatea are un singur vocabular.
+
+**Autosave-ul este o generație, nu o scriere parțială.** Portul `persistence` rulează în faza
+`PERSISTENCE` a shell-ului la fiecare 900 tick-uri, ancorat la multiplii intervalului. El nu
+salvează la tick 0, nu citește ceasul pe un tick nescadent și ține o singură generație în pregătire
+și una în commit; cererile suprapuse se coalescează. `status()` raportează separat timpul simulat
+(`tick`, `lastSavedTick`, `unsavedTicks`, `nextDueTick`, `pendingTick`) de timpul salvării
+(`lastAttemptAt`, `lastSuccessAt`, `lastErrorAt`, `lastCommitMs`). Autosave-ul rămâne blocat până
+când rândul durabil a fost citit o dată, ca un tick de dinaintea restaurării să nu suprascrie
+generația coerentă.
+
+**Reload-ul este o decizie explicită.** Checkpointul poartă `launch: PAUSED_AUTO`, `inputReleased`,
+`previousSegment: INCOMPLETE` cu ID-urile segmentelor deschise, `offlineIncome: 0` și `offlineXp: 0`.
+La reluare jocul pornește în pauză/AUTO, segmentul anterior este numit incomplet, iar compania,
+daily-ul, XP-ul și profilul se aplică împreună; nu se decontează nimic pentru intervalul cât pagina a
+fost închisă.
+
+**Exportul, preview-ul și confirmarea sunt pași distincți.** Exportul capturează o generație
+proaspătă și produce un fișier cu checksum; un export nu pretinde că browserul a scris pe disc.
+Importul validează fișierul, întoarce un rezumat (sesiune, tick, XP, nivel, daily, companie, KPI,
+profil, dimensiune) și cere confirmarea exactă a checksum-ului preview-ului. Un fișier modificat
+(checksum greșit), un preview lipsă sau un preview pentru alt fișier este refuzat înainte de prima
+scriere. Înlocuirea aplică owner-ii într-o singură operație cu rollback: o eroare de staging sau de
+stocare readuce profilul, daily-ul, provocările și compania la starea anterioară și rescrie rândul
+vechi. Nu există `settle`, `creditMission`, `creditDaily` sau `recordDailyReward` pe această cale,
+deci un al doilea import are ΔXP 0, Δ recompense daily 0 și același revenue.
+
+**Compania este reconstruită prin replay real.** `src/app/live-company-persistence.ts` recreează
+ledgerul 268 dintr-un `CompanyLedgerSnapshot` folosind `invest`, `accrueFixedCosts`, `postRide` și
+`adjustRide`, verifică snapshotul rejucat byte cu byte și abia apoi restaurează jurnalul 269. Un
+rezultat care nu reproduce snapshotul este un refuz, nu o companie pe jumătate restaurată.
+
+**Limitele sunt declarate.** Snapshotul complet 206 al lumii și reluarea fizică nu fac parte din
+acest PBI; KPI-ul 209 este păstrat și verificat ca slot read-only, dar ledgerul live 209 nu este
+rehidratat fiindcă owner-ul 266 nu expune un `restore`. Un al doilea tab nu este tratat de această
+compoziție; lock-ul de scriitor rămâne contractul 127/234 pentru adaptorul durabil IndexedDB.
+
+Dovezi: [Evidence/278-live-persistence](Evidence/278-live-persistence/README.md). Comenzi:
+`npm run save:live`, `npm run save:live -- --check`, `npm run save:live:probe`.

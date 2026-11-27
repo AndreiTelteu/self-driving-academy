@@ -61,9 +61,40 @@ export interface GameShellHostOptions {
   readonly onOpenProgress?: () => boolean;
   /** PBI 277: deschide panoul provocărilor live; opțional, montat numai când există. */
   readonly onOpenChallenges?: () => boolean;
+  /** PBI 278: „Salvează jocul în fișier”; absența portului nu montează acțiunea. */
+  readonly onSaveGame?: () => GameShellFileResult | Promise<GameShellFileResult>;
+  /** PBI 278: un fișier citit este validat și rezumat; înlocuirea cere confirmarea separată. */
+  readonly onLoadGame?: (file: GameShellFile) => GameShellFileResult | Promise<GameShellFileResult>;
+  /** PBI 278: confirmarea explicită a preview-ului afișat. */
+  readonly onConfirmLoad?: () => GameShellFileResult | Promise<GameShellFileResult>;
+  readonly onCancelLoad?: () => void;
+  /** PBI 278: starea autosave-ului, separată de starea fișierului. */
+  readonly saveStatus?: () => GameShellSaveStatus;
   readonly now?: () => number;
   /** Testele pot opri injectarea de CSS; producția o lasă activă. */
   readonly style?: boolean;
+}
+
+export interface GameShellFile {
+  readonly fileName: string;
+  readonly text: string;
+}
+
+export interface GameShellFileResult {
+  readonly status: 'READY' | 'PREVIEW' | 'COMMITTED' | 'ERROR';
+  readonly message: string;
+  readonly fileName?: string | null;
+  readonly text?: string | null;
+  readonly checksum?: string | null;
+  readonly previewId?: string | null;
+  readonly lines?: readonly string[];
+}
+
+export interface GameShellSaveStatus {
+  readonly label: string;
+  readonly detail: string;
+  readonly tick: number | null;
+  readonly lastSavedTick: number | null;
 }
 
 export interface GameShellHostStats {
@@ -82,6 +113,10 @@ export interface GameShellHostStats {
   readonly listeners: number;
   readonly globalListeners: 0;
   readonly focusables: number;
+  readonly saveOpen: boolean;
+  readonly saveActions: number;
+  readonly loadPreviews: number;
+  readonly importsConfirmed: number;
   readonly lastRefreshAt: number | null;
 }
 
@@ -92,7 +127,10 @@ export interface GameShellHost {
   /** Resincronizează meniul de sesiune din portul injectat, fără a aștepta un cadru. */
   refreshSession(): void;
   refresh(force?: boolean): void;
+  /** PBI 278: același drum ca inputul de fișier, folosit de probe și de teste. */
+  loadFileText(fileName: string, text: string): Promise<void>;
   isPanelOpen(): boolean;
+  isSaveOpen(): boolean;
   getStats(): GameShellHostStats;
   dispose(): void;
 }
@@ -129,6 +167,15 @@ const STYLE_TEXT = `
 .game-shell-host__table tr[data-shell-status="ABSENT"] td { color: #c6dbd1; }
 .game-shell-host__table tr[data-shell-status="PRESENT"] td[data-shell-cell="status"] { color: #9fe0c5; }
 .game-shell-host__panel button { margin-top: 0.75rem; }
+.game-shell-host__save { position: fixed; top: 4.2rem; right: 1rem; width: min(34rem, calc(100vw - 2rem));
+  max-height: min(78vh, 40rem); overflow: auto; padding: 1rem 1.1rem; background: #0b1a16;
+  border: 1px solid #3d6b58; border-radius: 0.6rem; box-shadow: 0 1rem 2.4rem rgba(0, 0, 0, 0.5); }
+.game-shell-host__save[hidden] { display: none; }
+.game-shell-host__save h2 { margin: 0 0 0.4rem; font-size: 1.05rem; }
+.game-shell-host__save p { margin: 0.35rem 0; color: #c6dbd1; }
+.game-shell-host__save ul { margin: 0.35rem 0 0.6rem; padding-left: 1.1rem; color: #d7e7df; }
+.game-shell-host__save button { margin: 0.35rem 0.4rem 0 0; }
+.game-shell-host__save input[type="file"] { color: #c6dbd1; max-width: 100%; }
 `;
 
 interface Row {
@@ -137,8 +184,9 @@ interface Row {
   readonly steps: HTMLElement;
 }
 
-function focusQuietly(node: Element | null): boolean {
-  if (node === null || typeof (node as HTMLElement).focus !== 'function') return false;
+function focusQuietly(node: Element | null | undefined): boolean {
+  if (node === null || node === undefined) return false;
+  if (typeof (node as HTMLElement).focus !== 'function') return false;
   (node as HTMLElement).focus();
   return true;
 }
@@ -258,6 +306,23 @@ export function createGameShellHost(options: GameShellHostOptions): GameShellHos
     challengesButton.setAttribute('data-shell-action', 'challenges');
     challengesButton.setAttribute('aria-haspopup', 'dialog');
   }
+  const saveButton = options.onSaveGame === undefined ? null : doc.createElement('button');
+  if (saveButton !== null) {
+    saveButton.type = 'button';
+    saveButton.textContent = 'Salvează';
+    saveButton.title = 'Salvează jocul în fișier';
+    saveButton.setAttribute('data-shell-action', 'save-game');
+    saveButton.setAttribute('aria-label', 'Salvează jocul în fișier');
+  }
+  const loadButton = options.onLoadGame === undefined ? null : doc.createElement('button');
+  if (loadButton !== null) {
+    loadButton.type = 'button';
+    loadButton.textContent = 'Încarcă';
+    loadButton.title = 'Încarcă jocul din fișier';
+    loadButton.setAttribute('data-shell-action', 'load-game');
+    loadButton.setAttribute('aria-label', 'Încarcă jocul din fișier');
+    loadButton.setAttribute('aria-haspopup', 'dialog');
+  }
   bar.append(badge);
   if (sessionSelect !== null) bar.append(sessionSelect);
   bar.append(startButton, pauseButton, resumeButton, panelButton);
@@ -269,6 +334,8 @@ export function createGameShellHost(options: GameShellHostOptions): GameShellHos
   if (missionsButton !== null) bar.append(missionsButton);
   if (progressButton !== null) bar.append(progressButton);
   if (challengesButton !== null) bar.append(challengesButton);
+  if (saveButton !== null) bar.append(saveButton);
+  if (loadButton !== null) bar.append(loadButton);
 
   const panel = doc.createElement('div');
   panel.className = 'game-shell-host__panel';
@@ -317,7 +384,51 @@ export function createGameShellHost(options: GameShellHostOptions): GameShellHos
   panel.append(title, summary, table, note);
   if (resetButton !== null) panel.append(resetButton);
   panel.append(closeButton);
-  host.append(bar, panel);
+  const saveSurface = doc.createElement('div');
+  saveSurface.className = 'game-shell-host__save';
+  saveSurface.setAttribute('aria-labelledby', 'game-shell-save-title');
+  saveSurface.setAttribute('aria-hidden', 'true');
+  saveSurface.setAttribute('data-shell-save', 'file');
+  saveSurface.hidden = true;
+  const saveTitle = doc.createElement('h2');
+  saveTitle.id = 'game-shell-save-title';
+  saveTitle.textContent = 'Salvează / încarcă jocul';
+  const saveStatus = doc.createElement('p');
+  saveStatus.setAttribute('role', 'status');
+  saveStatus.setAttribute('aria-live', 'polite');
+  saveStatus.textContent = 'Nicio acțiune de fișier încă.';
+  const savePreview = doc.createElement('ul');
+  savePreview.setAttribute('data-shell-save-preview', 'none');
+  const fileLabel = doc.createElement('label');
+  fileLabel.textContent = 'Fișier .sdasave: ';
+  const fileInput = doc.createElement('input');
+  fileInput.type = 'file';
+  fileInput.accept = '.sdasave,application/json';
+  fileInput.setAttribute('data-shell-action', 'save-file');
+  fileLabel.append(fileInput);
+  const confirmLoadButton = doc.createElement('button');
+  confirmLoadButton.type = 'button';
+  confirmLoadButton.textContent = 'Confirmă înlocuirea';
+  confirmLoadButton.setAttribute('data-shell-action', 'confirm-load');
+  confirmLoadButton.disabled = true;
+  const cancelLoadButton = doc.createElement('button');
+  cancelLoadButton.type = 'button';
+  cancelLoadButton.textContent = 'Anulează';
+  cancelLoadButton.setAttribute('data-shell-action', 'cancel-load');
+  const closeSaveButton = doc.createElement('button');
+  closeSaveButton.type = 'button';
+  closeSaveButton.textContent = 'Închide';
+  closeSaveButton.setAttribute('data-shell-action', 'close-save');
+  saveSurface.append(
+    saveTitle,
+    saveStatus,
+    savePreview,
+    fileLabel,
+    confirmLoadButton,
+    cancelLoadButton,
+    closeSaveButton,
+  );
+  host.append(bar, panel, saveSurface);
   root.append(host);
 
   let styleElement: HTMLElement | null = null;
@@ -330,6 +441,13 @@ export function createGameShellHost(options: GameShellHostOptions): GameShellHos
 
   let disposed = false;
   let panelOpen = false;
+  let saveOpen = false;
+  let saveActions = 0;
+  let loadPreviews = 0;
+  let importsConfirmed = 0;
+  let pendingPreviewId: string | null = null;
+  let saveBusy = false;
+  let previousSaveFocus: Element | null = null;
   let sessionKind: string | null = null;
   let previousFocus: Element | null = null;
   let lastRefreshAt: number | null = null;
@@ -352,7 +470,12 @@ export function createGameShellHost(options: GameShellHostOptions): GameShellHos
     (cityButton === null ? 0 : 1) +
     (missionsButton === null ? 0 : 1) +
     (progressButton === null ? 0 : 1) +
-    (challengesButton === null ? 0 : 1);
+    (challengesButton === null ? 0 : 1) +
+    (saveButton === null ? 0 : 1) +
+    (loadButton === null ? 0 : 1) +
+    (options.onLoadGame === undefined
+      ? 0
+      : 2 + (options.onConfirmLoad === undefined ? 0 : 1) + 1 + 1);
   const rows = new Map<string, Row>();
 
   const syncSession = (): void => {
@@ -434,9 +557,15 @@ export function createGameShellHost(options: GameShellHostOptions): GameShellHos
     if (challengesButton !== null)
       challengesButton.hidden =
         panelOpen || (kind !== 'READY' && kind !== 'PLAYING' && kind !== 'PAUSED');
-    badge.textContent = panelOpen ? 'PANOU' : kind;
-    badge.setAttribute('data-shell-kind', panelOpen ? 'PANEL' : kind);
-    host.setAttribute('data-shell-state', panelOpen ? 'PANEL' : kind);
+    if (saveButton !== null)
+      saveButton.hidden =
+        panelOpen || saveOpen || (kind !== 'READY' && kind !== 'PLAYING' && kind !== 'PAUSED');
+    if (loadButton !== null)
+      loadButton.hidden =
+        panelOpen || saveOpen || (kind !== 'READY' && kind !== 'PLAYING' && kind !== 'PAUSED');
+    badge.textContent = panelOpen ? 'PANOU' : saveOpen ? 'FIȘIER' : kind;
+    badge.setAttribute('data-shell-kind', panelOpen ? 'PANEL' : saveOpen ? 'FILE' : kind);
+    host.setAttribute('data-shell-state', panelOpen ? 'PANEL' : saveOpen ? 'FILE' : kind);
   };
 
   const writeRow = (system: GameShellStatus['systems'][number]): void => {
@@ -476,6 +605,7 @@ export function createGameShellHost(options: GameShellHostOptions): GameShellHos
       `atașări ${world.attachments} · lumi active ${world.activeWorlds}/${world.maxActiveWorlds}. ` +
       'Porturile „Neintegrat” sunt dependențe ale taskurilor 261–286; shell-ul nu le simulează.';
     for (const system of status.systems) writeRow(system);
+    refreshSaveStatus();
     lastRefreshAt = at;
     refreshes += 1;
     updateControls();
@@ -587,6 +717,196 @@ export function createGameShellHost(options: GameShellHostOptions): GameShellHos
     }
   };
 
+  const renderFileResult = (result: GameShellFileResult): void => {
+    saveStatus.textContent = result.message;
+    saveStatus.setAttribute('data-save-status', result.status);
+    savePreview.textContent = '';
+    const lines = result.lines ?? [];
+    savePreview.setAttribute('data-shell-save-preview', result.status);
+    for (const line of lines) {
+      const item = doc.createElement('li');
+      item.textContent = line;
+      savePreview.append(item);
+    }
+    pendingPreviewId = result.status === 'PREVIEW' ? (result.previewId ?? null) : null;
+    confirmLoadButton.disabled =
+      pendingPreviewId === null || options.onConfirmLoad === undefined || saveBusy;
+    confirmLoadButton.setAttribute('data-preview-id', pendingPreviewId ?? '');
+  };
+
+  const refreshSaveStatus = (): void => {
+    if (options.saveStatus === undefined || saveBusy || pendingPreviewId !== null) return;
+    saveStatus.textContent = options.saveStatus().detail;
+  };
+
+  const download = (fileName: string, text: string): boolean => {
+    const view = doc.defaultView;
+    if (view === null || typeof view.Blob !== 'function' || view.URL === undefined) return false;
+    try {
+      const url = view.URL.createObjectURL(new view.Blob([text], { type: 'application/json' }));
+      const link = doc.createElement('a');
+      link.href = url;
+      link.download = fileName;
+      link.rel = 'noopener';
+      link.click();
+      view.URL.revokeObjectURL(url);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  const showSaveSurface = (): void => {
+    if (disposed || saveOpen) return;
+    if (panelOpen) close();
+    saveOpen = true;
+    saveActions += 1;
+    previousSaveFocus = doc.activeElement;
+    const current = options.saveStatus?.();
+    renderFileResult({
+      status: 'READY',
+      message:
+        current === undefined
+          ? 'Alege un fișier .sdasave; nimic nu este înlocuit înainte de confirmare.'
+          : `${current.label} · ${current.detail}. Alege un fișier .sdasave; nimic nu este înlocuit înainte de confirmare.`,
+      lines: [],
+    });
+    saveSurface.hidden = false;
+    saveSurface.setAttribute('aria-hidden', 'false');
+    saveSurface.setAttribute('role', 'dialog');
+    saveSurface.setAttribute('aria-modal', 'true');
+    loadButton?.setAttribute('aria-expanded', 'true');
+    updateControls();
+    focusQuietly(fileInput);
+  };
+
+  const hideSaveSurface = (): void => {
+    if (!saveOpen) return;
+    saveOpen = false;
+    saveSurface.hidden = true;
+    saveSurface.setAttribute('aria-hidden', 'true');
+    saveSurface.removeAttribute('role');
+    saveSurface.removeAttribute('aria-modal');
+    loadButton?.setAttribute('aria-expanded', 'false');
+    pendingPreviewId = null;
+    confirmLoadButton.disabled = true;
+    fileInput.value = '';
+    updateControls();
+    if (focusQuietly(previousSaveFocus)) restores += 1;
+    previousSaveFocus = null;
+  };
+
+  const runSave = async (): Promise<void> => {
+    if (saveBusy || options.onSaveGame === undefined) return;
+    saveBusy = true;
+    saveActions += 1;
+    renderFileResult({
+      status: 'READY',
+      message: 'Se pregătește fișierul...',
+      lines: [],
+    });
+    try {
+      const result = await options.onSaveGame();
+      if (result.status === 'READY' && result.text !== null && result.text !== undefined) {
+        const written = download(result.fileName ?? 'self-driving-academy.sdasave', result.text);
+        renderFileResult({
+          ...result,
+          message: written
+            ? `Fișier pregătit pentru descărcare · ${result.fileName ?? ''}`
+            : `${result.message} · descărcarea nu este disponibilă în acest browser`,
+        });
+      } else {
+        renderFileResult(result);
+      }
+    } catch (error) {
+      renderFileResult({
+        status: 'ERROR',
+        message: error instanceof Error ? error.message : String(error),
+        lines: [],
+      });
+    } finally {
+      saveBusy = false;
+    }
+  };
+
+  const loadFileText = async (fileName: string, text: string): Promise<void> => {
+    if (saveBusy || options.onLoadGame === undefined) return;
+    if (!saveOpen) showSaveSurface();
+    saveBusy = true;
+    loadPreviews += 1;
+    renderFileResult({
+      status: 'READY',
+      message: `Se verifică ${fileName}...`,
+      lines: [],
+    });
+    try {
+      const result = await options.onLoadGame({ fileName, text });
+      renderFileResult(result);
+    } catch (error) {
+      renderFileResult({
+        status: 'ERROR',
+        message: error instanceof Error ? error.message : String(error),
+        lines: [],
+      });
+    } finally {
+      saveBusy = false;
+      confirmLoadButton.disabled = pendingPreviewId === null || options.onConfirmLoad === undefined;
+    }
+  };
+
+  const runConfirm = async (): Promise<void> => {
+    if (saveBusy || pendingPreviewId === null || options.onConfirmLoad === undefined) return;
+    saveBusy = true;
+    try {
+      const result = await options.onConfirmLoad();
+      renderFileResult(result);
+      if (result.status === 'COMMITTED') importsConfirmed += 1;
+    } catch (error) {
+      renderFileResult({
+        status: 'ERROR',
+        message: error instanceof Error ? error.message : String(error),
+        lines: [],
+      });
+    } finally {
+      saveBusy = false;
+      confirmLoadButton.disabled = pendingPreviewId === null;
+    }
+  };
+
+  const onSave = (): void => {
+    void runSave();
+  };
+  const onLoad = (): void => {
+    showSaveSurface();
+  };
+  const onFileChange = (): void => {
+    const file = fileInput.files?.[0];
+    if (file === undefined) return;
+    void file.text().then((text) => loadFileText(file.name, text));
+  };
+  const onConfirm = (): void => {
+    void runConfirm();
+  };
+  const onCancel = (): void => {
+    pendingPreviewId = null;
+    confirmLoadButton.disabled = true;
+    options.onCancelLoad?.();
+    hideSaveSurface();
+  };
+  const onCloseSave = (): void => hideSaveSurface();
+  const onSaveKeyDown = (event: KeyboardEvent): void => {
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      onCancel();
+      return;
+    }
+    if (event.key === 'Tab') {
+      event.preventDefault();
+      tabTraps += 1;
+      focusQuietly(confirmLoadButton.disabled ? closeSaveButton : confirmLoadButton);
+    }
+  };
+
   startButton.addEventListener('click', onStart);
   pauseButton.addEventListener('click', onPause);
   resumeButton.addEventListener('click', onResume);
@@ -601,6 +921,13 @@ export function createGameShellHost(options: GameShellHostOptions): GameShellHos
   missionsButton?.addEventListener('click', onMissions);
   progressButton?.addEventListener('click', onProgress);
   challengesButton?.addEventListener('click', onChallenges);
+  saveButton?.addEventListener('click', onSave);
+  loadButton?.addEventListener('click', onLoad);
+  fileInput.addEventListener('change', onFileChange);
+  confirmLoadButton.addEventListener('click', onConfirm);
+  cancelLoadButton.addEventListener('click', onCancel);
+  closeSaveButton.addEventListener('click', onCloseSave);
+  saveSurface.addEventListener('keydown', onSaveKeyDown);
   closeButton.addEventListener('click', onClose);
   panel.addEventListener('keydown', onPanelKeyDown);
 
@@ -621,8 +948,10 @@ export function createGameShellHost(options: GameShellHostOptions): GameShellHos
       if (disposed) return;
       syncSession();
     },
+    loadFileText,
     refresh,
     isPanelOpen: () => panelOpen,
+    isSaveOpen: () => saveOpen,
     getStats: () =>
       Object.freeze({
         version: GAME_SHELL_HOST_VERSION,
@@ -639,7 +968,11 @@ export function createGameShellHost(options: GameShellHostOptions): GameShellHos
         tabTraps,
         listeners: disposed ? 0 : listeners,
         globalListeners: 0 as const,
-        focusables: panelOpen && !disposed ? 1 : 0,
+        focusables: (panelOpen || saveOpen) && !disposed ? 1 : 0,
+        saveOpen,
+        saveActions,
+        loadPreviews,
+        importsConfirmed,
         lastRefreshAt,
       }),
     dispose(): void {
@@ -659,11 +992,21 @@ export function createGameShellHost(options: GameShellHostOptions): GameShellHos
       missionsButton?.removeEventListener('click', onMissions);
       progressButton?.removeEventListener('click', onProgress);
       challengesButton?.removeEventListener('click', onChallenges);
+      saveButton?.removeEventListener('click', onSave);
+      loadButton?.removeEventListener('click', onLoad);
+      fileInput.removeEventListener('change', onFileChange);
+      confirmLoadButton.removeEventListener('click', onConfirm);
+      cancelLoadButton.removeEventListener('click', onCancel);
+      closeSaveButton.removeEventListener('click', onCloseSave);
+      saveSurface.removeEventListener('keydown', onSaveKeyDown);
       closeButton.removeEventListener('click', onClose);
       panel.removeEventListener('keydown', onPanelKeyDown);
       listeners = 0;
       panelOpen = false;
+      saveOpen = false;
+      pendingPreviewId = null;
       previousFocus = null;
+      previousSaveFocus = null;
       rows.clear();
       styleElement?.remove();
       styleElement = null;

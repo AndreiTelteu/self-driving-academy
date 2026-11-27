@@ -6,7 +6,14 @@ export {
   GAME_SHELL_HOST_VERSION,
   createGameShellHost,
 } from './game-shell-host';
-export type { GameShellHost, GameShellHostOptions, GameShellHostStats } from './game-shell-host';
+export type {
+  GameShellFile,
+  GameShellFileResult,
+  GameShellHost,
+  GameShellHostOptions,
+  GameShellHostStats,
+  GameShellSaveStatus,
+} from './game-shell-host';
 
 export function createBootstrapView(root: HTMLDivElement): BootstrapView {
   const title = document.createElement('h1');

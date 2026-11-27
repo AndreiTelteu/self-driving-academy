@@ -437,14 +437,17 @@ Refuzurile sunt închise: MANUAL/AUTO `SKIPPED_MANUAL`, LEARNING neeligibil `SKI
 
 ### 278 — Persistență live: autosave, checkpoint, savefile și recuperare
 
-**Ce lipsește:** Modulele de persistență există, dar jocul nu salvează nimic: nu există autosave, load, export/import sau recuperare după reload.
+**Ce lipsește:** KPI-ul 209 din slotul economic este păstrat și verificat, dar ledgerul live 209 nu este rehidratat pentru că owner-ul 266 nu expune un `restore`; snapshotul complet 206 al lumii și reluarea fizică rămân în afara acestui PBI. Shutdownul nu forțează un ultim commit.
 
-- Nu există autosave sau checkpoint periodic în shell.
-- Nu există meniu „Salvează jocul în fișier” / „Încarcă jocul din fișier”.
-- Nu există reluare după reload în pauză/AUTO, cu segment incomplet.
-- Nu există preview, confirmare și înlocuire atomică a sesiunii.
-- Nu există includerea companiei, daily-ului, XP-ului și profilului în același checkpoint.
-- Nu există probă de browser pentru export, import și al doilea import fără duplicate.
+**Ce s-a livrat:** `src/persistence/live-savefile.ts` (`278-live-save-v1`) și `src/app/live-persistence.ts` (`278-live-persistence-v1`) leagă autosave-ul periodic de 900 tick-uri la un checkpoint 225 real și la un fișier `.sdasave` cu SHA-256 `SDA-CJSON-1`. Generația cuprinde identitatea sesiunii, profilul 109 activ, checkpointul 276 daily/XP, checkpointul 277 al provocărilor, compania 268/269 și snapshotul read-only 209/KPI; timpul simulat (`tick`, `lastSavedTick`, `unsavedTicks`, `nextDueTick`) este raportat separat de timpul salvării (`lastAttemptAt`, `lastSuccessAt`, `lastCommitMs`). Exportul produce fișierul cu checksum, importul cere preview și confirmarea exactă a checksum-ului, iar înlocuirea aplică owner-ii într-un rollback complet dacă orice pas e refuzat. Reload-ul pornește `PAUSED_AUTO`, numește segmentele deschise `INCOMPLETE` și are `offlineIncome: 0`, `offlineXp: 0`. Compania este reconstruită prin replay real în ledgerul 268 și jurnalul 269; un al doilea import are ΔXP 0, Δ daily 0 și același revenue. Shell-ul are butoanele native „Salvează”/„Încarcă”, cu focus, Tab și Escape în suprafața de fișier și zero listeneri globali.
+
+- Autosave: 900 tick-uri; portul `persistence` este prezent în shell.
+- Fișier: `self-driving-academy-live-<stamp>.sdasave`, checksum SHA-256, preview + confirmare.
+- Reload: `PAUSED_AUTO`, segment anterior `INCOMPLETE`, fără venit offline.
+- Companie/daily/XP/profil: restaurare împreună; al doilea import nu dublează nimic.
+- Probe: raport determinist `npm run save:live` și browser `npm run save:live:probe`.
+
+**Dovezi:** [raport determinist](../Docs/Evidence/278-live-persistence/report.json), [proba de browser](../Docs/Evidence/278-live-persistence/browser.json), [README dovezi](../Docs/Evidence/278-live-persistence/README.md).
 
 **Documentație:** [Salvare și import/export](15-salvare-si-import-export.md) · [Savefile și integritate](29-savefile-si-integritate.md) · [Contracte de performanță](25-performanta-contracte-si-benchmark.md) · [Starea implementării și lacunele](31-stare-implementare-si-lacune.md)
 

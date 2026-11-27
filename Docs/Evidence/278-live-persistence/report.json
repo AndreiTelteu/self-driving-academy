@@ -1,0 +1,287 @@
+{
+  "version": "278-live-persistence-report-v1",
+  "generatedBy": "npm run save:live",
+  "oracleRule": "One 225 checkpoint + 278 envelope generation; the same owner snapshots restore, an edited file is refused and a second import adds no XP, daily reward or company revenue.",
+  "contract": "278-live-persistence-v1",
+  "numbers": {
+    "intervalTicks": 900,
+    "generation": 2,
+    "checkpointTick": 5,
+    "createdAt": "2026-11-27T18:20:31.000Z",
+    "checksum": "fa2e99b89186067c7497c5dba70459da0c276b664380c12e56ae4e817571fdf2",
+    "bytes": 24137,
+    "bodyBytes": 23220,
+    "maxFileBytes": 1048576,
+    "maxBodyBytes": 262144,
+    "commitMs": 3,
+    "simulatedTick": 3,
+    "lastSavedTick": 3,
+    "unsavedTicks": 0,
+    "nextDueTick": 6,
+    "previewId": "fa2e99b89186067c7497c5dba70459da0c276b664380c12e56ae4e817571fdf2",
+    "firstImportXpDelta": -1000000,
+    "secondImportXpDelta": 0,
+    "secondImportDailyRewardsDelta": 0,
+    "dailyRewards": 0,
+    "xp": 1,
+    "level": 1,
+    "kpiDays": 1,
+    "kpiRevenueMinorUnits": 0,
+    "companyCashMinorUnits": 46479,
+    "companyRevenueMinorUnits": 663,
+    "companyProfitMinorUnits": -3521,
+    "previousSegment": "INCOMPLETE",
+    "openSegments": [
+      "segment-report"
+    ],
+    "offlineIncome": 0,
+    "offlineXp": 0,
+    "refusals": [
+      {
+        "case": "CHECKSUM",
+        "code": "CHECKSUM_MISMATCH"
+      },
+      {
+        "case": "NO_CONFIRMATION",
+        "code": "LIVE_SAVE_PREVIEW_REQUIRED"
+      }
+    ]
+  },
+  "fingerprints": {
+    "xp": "fnv1a32:02819bd4",
+    "daily": "0e9b0df10a04ac0ee958e2f51ecd0acc",
+    "kpi": "456fac1a7626b5ed403adea704e8b9a5",
+    "company": "ff9a7a5c2093234fa0fc2ec5cdc48770",
+    "profile": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "challenges": "ad55c8d62d80edd2fda2a7c6a7c134f7",
+    "afterReloadXp": "fnv1a32:02819bd4",
+    "afterReloadKpi": "456fac1a7626b5ed403adea704e8b9a5",
+    "afterReloadCompany": "ff9a7a5c2093234fa0fc2ec5cdc48770",
+    "afterSecondImportXp": "fnv1a32:02819bd4",
+    "afterSecondImportCompany": "ff9a7a5c2093234fa0fc2ec5cdc48770"
+  },
+  "checks": [
+    {
+      "name": "contract",
+      "expected": "278-live-persistence-v1",
+      "actual": "278-live-persistence-v1",
+      "pass": true,
+      "detail": "278 live persistence contract"
+    },
+    {
+      "name": "interval",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "deterministic report interval"
+    },
+    {
+      "name": "autosave simulated tick",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "simulated time"
+    },
+    {
+      "name": "autosave last saved tick",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "durable tick"
+    },
+    {
+      "name": "autosave unsaved ticks",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "nothing unsaved"
+    },
+    {
+      "name": "autosave save time is separate",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "commit cost in ms"
+    },
+    {
+      "name": "export accepted",
+      "expected": "ACCEPTED",
+      "actual": "ACCEPTED",
+      "pass": true,
+      "detail": "one coherent generation"
+    },
+    {
+      "name": "checksum length",
+      "expected": 64,
+      "actual": 64,
+      "pass": true,
+      "detail": "SHA-256 lowercase hex"
+    },
+    {
+      "name": "file within budget",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "file budget"
+    },
+    {
+      "name": "body within budget",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "225 body budget"
+    },
+    {
+      "name": "preview identity",
+      "expected": "fa2e99b89186067c7497c5dba70459da0c276b664380c12e56ae4e817571fdf2",
+      "actual": "fa2e99b89186067c7497c5dba70459da0c276b664380c12e56ae4e817571fdf2",
+      "pass": true,
+      "detail": "confirmation names the file"
+    },
+    {
+      "name": "preview XP",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "owner XP appears in the summary"
+    },
+    {
+      "name": "checksum refusal",
+      "expected": "CHECKSUM_MISMATCH",
+      "actual": "CHECKSUM_MISMATCH",
+      "pass": true,
+      "detail": "edited file refused"
+    },
+    {
+      "name": "confirmation required",
+      "expected": "LIVE_SAVE_PREVIEW_REQUIRED",
+      "actual": "LIVE_SAVE_PREVIEW_REQUIRED",
+      "pass": true,
+      "detail": "no implicit replacement"
+    },
+    {
+      "name": "first import restores XP",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "modified state rolled back"
+    },
+    {
+      "name": "first import restores company",
+      "expected": "ff9a7a5c2093234fa0fc2ec5cdc48770",
+      "actual": "ff9a7a5c2093234fa0fc2ec5cdc48770",
+      "pass": true,
+      "detail": "company together"
+    },
+    {
+      "name": "first import restores daily rewards",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "daily retained"
+    },
+    {
+      "name": "second import XP delta",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no duplicate XP"
+    },
+    {
+      "name": "second import daily delta",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no duplicate reward"
+    },
+    {
+      "name": "second import company",
+      "expected": "ff9a7a5c2093234fa0fc2ec5cdc48770",
+      "actual": "ff9a7a5c2093234fa0fc2ec5cdc48770",
+      "pass": true,
+      "detail": "no duplicate revenue"
+    },
+    {
+      "name": "restore status",
+      "expected": "RESTORED",
+      "actual": "RESTORED",
+      "pass": true,
+      "detail": "autosave row restored"
+    },
+    {
+      "name": "restored checksum",
+      "expected": "fa2e99b89186067c7497c5dba70459da0c276b664380c12e56ae4e817571fdf2",
+      "actual": "fa2e99b89186067c7497c5dba70459da0c276b664380c12e56ae4e817571fdf2",
+      "pass": true,
+      "detail": "same generation"
+    },
+    {
+      "name": "restored XP",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "XP together"
+    },
+    {
+      "name": "restored company",
+      "expected": "ff9a7a5c2093234fa0fc2ec5cdc48770",
+      "actual": "ff9a7a5c2093234fa0fc2ec5cdc48770",
+      "pass": true,
+      "detail": "company together"
+    },
+    {
+      "name": "restored KPI fingerprint",
+      "expected": "456fac1a7626b5ed403adea704e8b9a5",
+      "actual": "456fac1a7626b5ed403adea704e8b9a5",
+      "pass": true,
+      "detail": "KPI snapshot in the file"
+    },
+    {
+      "name": "restored daily rewards",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "daily together"
+    },
+    {
+      "name": "restored profile",
+      "expected": "profile-278@1",
+      "actual": "profile-278@1",
+      "pass": true,
+      "detail": "active style together"
+    },
+    {
+      "name": "launch",
+      "expected": "PAUSED_AUTO",
+      "actual": "PAUSED_AUTO",
+      "pass": true,
+      "detail": "paused reload"
+    },
+    {
+      "name": "previous segment",
+      "expected": "INCOMPLETE",
+      "actual": "INCOMPLETE",
+      "pass": true,
+      "detail": "open segment named"
+    },
+    {
+      "name": "offline income",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no offline income"
+    },
+    {
+      "name": "offline XP",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no offline XP"
+    }
+  ],
+  "summary": {
+    "checks": 31,
+    "passed": 31,
+    "pass": true
+  }
+}
