@@ -777,6 +777,13 @@ export type {
   ControlSlidersSaveState,
 } from './control-sliders-format';
 export { createStyleSlidersTab, STYLE_SLIDERS_TAB_LIMITS } from './style-sliders';
+export { createLiveSettingsPanel, LIVE_SETTINGS_PANEL_VERSION } from './live-settings';
+export type {
+  LiveSettingsPanel,
+  LiveSettingsPanelOptions,
+  LiveSettingsPanelStats,
+  LiveSettingsTab,
+} from './live-settings';
 export type {
   StyleSlidersAction,
   StyleSlidersChrome,

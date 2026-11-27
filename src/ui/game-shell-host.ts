@@ -42,6 +42,8 @@ export interface GameShellHostOptions {
   readonly onChooseSession?: (kind: string) => void;
   /** „Oraș proaspăt, păstrează stilul”: resetul aparține owner-ului 261, nu gazdei. */
   readonly onResetWorld?: () => void;
+  /** PBI 279: deschide setările live din bara shell-ului; opțional. */
+  readonly onOpenSettings?: () => boolean;
   /** Host-ul cere shell-ului deschiderea; `false` înseamnă că panoul nu a fost acceptat. */
   readonly onOpenPanel: () => boolean;
   readonly onClosePanel: () => void;
@@ -117,6 +119,7 @@ export interface GameShellHostStats {
   readonly saveActions: number;
   readonly loadPreviews: number;
   readonly importsConfirmed: number;
+  readonly settingsOpens: number;
   readonly lastRefreshAt: number | null;
 }
 
@@ -306,6 +309,13 @@ export function createGameShellHost(options: GameShellHostOptions): GameShellHos
     challengesButton.setAttribute('data-shell-action', 'challenges');
     challengesButton.setAttribute('aria-haspopup', 'dialog');
   }
+  const settingsButton = options.onOpenSettings === undefined ? null : doc.createElement('button');
+  if (settingsButton !== null) {
+    settingsButton.type = 'button';
+    settingsButton.textContent = 'Setări';
+    settingsButton.setAttribute('data-shell-action', 'settings');
+    settingsButton.setAttribute('aria-haspopup', 'dialog');
+  }
   const saveButton = options.onSaveGame === undefined ? null : doc.createElement('button');
   if (saveButton !== null) {
     saveButton.type = 'button';
@@ -334,6 +344,7 @@ export function createGameShellHost(options: GameShellHostOptions): GameShellHos
   if (missionsButton !== null) bar.append(missionsButton);
   if (progressButton !== null) bar.append(progressButton);
   if (challengesButton !== null) bar.append(challengesButton);
+  if (settingsButton !== null) bar.append(settingsButton);
   if (saveButton !== null) bar.append(saveButton);
   if (loadButton !== null) bar.append(loadButton);
 
@@ -445,6 +456,7 @@ export function createGameShellHost(options: GameShellHostOptions): GameShellHos
   let saveActions = 0;
   let loadPreviews = 0;
   let importsConfirmed = 0;
+  let settingsOpens = 0;
   let pendingPreviewId: string | null = null;
   let saveBusy = false;
   let previousSaveFocus: Element | null = null;
@@ -471,6 +483,7 @@ export function createGameShellHost(options: GameShellHostOptions): GameShellHos
     (missionsButton === null ? 0 : 1) +
     (progressButton === null ? 0 : 1) +
     (challengesButton === null ? 0 : 1) +
+    (settingsButton === null ? 0 : 1) +
     (saveButton === null ? 0 : 1) +
     (loadButton === null ? 0 : 1) +
     (options.onLoadGame === undefined
@@ -556,6 +569,9 @@ export function createGameShellHost(options: GameShellHostOptions): GameShellHos
         panelOpen || (kind !== 'READY' && kind !== 'PLAYING' && kind !== 'PAUSED');
     if (challengesButton !== null)
       challengesButton.hidden =
+        panelOpen || (kind !== 'READY' && kind !== 'PLAYING' && kind !== 'PAUSED');
+    if (settingsButton !== null)
+      settingsButton.hidden =
         panelOpen || (kind !== 'READY' && kind !== 'PLAYING' && kind !== 'PAUSED');
     if (saveButton !== null)
       saveButton.hidden =
@@ -703,6 +719,11 @@ export function createGameShellHost(options: GameShellHostOptions): GameShellHos
   const onChallenges = (): void => {
     if (panelOpen) return;
     options.onOpenChallenges?.();
+  };
+  const onSettings = (): void => {
+    if (panelOpen || saveOpen) return;
+    settingsOpens += 1;
+    options.onOpenSettings?.();
   };
   const onPanelKeyDown = (event: KeyboardEvent): void => {
     if (event.key === 'Escape') {
@@ -921,6 +942,7 @@ export function createGameShellHost(options: GameShellHostOptions): GameShellHos
   missionsButton?.addEventListener('click', onMissions);
   progressButton?.addEventListener('click', onProgress);
   challengesButton?.addEventListener('click', onChallenges);
+  settingsButton?.addEventListener('click', onSettings);
   saveButton?.addEventListener('click', onSave);
   loadButton?.addEventListener('click', onLoad);
   fileInput.addEventListener('change', onFileChange);
@@ -973,6 +995,7 @@ export function createGameShellHost(options: GameShellHostOptions): GameShellHos
         saveActions,
         loadPreviews,
         importsConfirmed,
+        settingsOpens,
         lastRefreshAt,
       }),
     dispose(): void {
@@ -992,6 +1015,7 @@ export function createGameShellHost(options: GameShellHostOptions): GameShellHos
       missionsButton?.removeEventListener('click', onMissions);
       progressButton?.removeEventListener('click', onProgress);
       challengesButton?.removeEventListener('click', onChallenges);
+      settingsButton?.removeEventListener('click', onSettings);
       saveButton?.removeEventListener('click', onSave);
       loadButton?.removeEventListener('click', onLoad);
       fileInput.removeEventListener('change', onFileChange);

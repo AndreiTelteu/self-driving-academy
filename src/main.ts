@@ -13,6 +13,7 @@ import {
   createLiveLearningPipeline,
   createLiveMissions,
   createLiveModeSegments,
+  createLiveSettings,
   createLiveTelemetryComposition,
   createLiveRideComposition,
   createCityStyleProfile,
@@ -32,6 +33,7 @@ import {
   readMinimapGeometry,
   resolveLocalDailyDay,
   restoreLiveCompany,
+  restoreVersion,
   rideTripDistanceM,
   type GameTickPort,
   type LiveChallenges,
@@ -45,10 +47,14 @@ import {
   type LiveModeSegments,
   type LivePersistence,
   type LiveRideComposition,
+  type LiveSettings,
+  type LiveSettingsStylePorts,
   type LiveTelemetryComposition,
+  type ProfileRestoreServices,
   type RecoveryRenderer,
   type SessionFlow,
   type SessionFlowMenu,
+  type StyleSlidersTickResult,
 } from './app';
 import {
   createLiveCompanyEvolution,
@@ -57,7 +63,7 @@ import {
   type LiveCompanyFinance,
 } from './economy';
 import type { CompanyFleetPort } from './fleet';
-import { createDefaultSettings } from './settings';
+import { createDefaultSettings, createSettingsStore, type RuntimeSettings } from './settings';
 import { bindPauseFocusInput } from './input';
 import { createRoutePlanner } from './world';
 import {
@@ -89,6 +95,7 @@ import {
   createLiveRideMarkerLayer,
   createLiveRidesPanel,
   createLiveProgressPanel,
+  createLiveSettingsPanel,
   createMissionPanel,
   createMissionTutorialPanel,
   createPassengerVisualPresenter,
@@ -96,6 +103,8 @@ import {
   LIVE_PROGRESS_READ_VERSION,
   type GameShellFileResult,
   type LiveProgressSnapshot,
+  type LiveSettingsPanel,
+  type LiveSettingsTab,
 } from './ui';
 import {
   LIVE_RIDE_LIFECYCLE_VERSION,
@@ -138,16 +147,20 @@ const noFocusPause = new URLSearchParams(window.location.search).has('nofocuspau
 /** Contor FPS permanent (stânga-sus), independent de diagnostic; omis în capturile deterministe. */
 if (!captureConfig) createFpsCounter(app);
 const defaultSettings = createDefaultSettings('v3-composition');
-const settings = captureConfig
-  ? {
-      ...defaultSettings,
-      quality: {
-        ...defaultSettings.quality,
-        preset: captureConfig.preset,
-        preferredBackend: captureConfig.backend,
-      },
-    }
-  : defaultSettings;
+const settingsStore = createSettingsStore(
+  captureConfig
+    ? {
+        ...defaultSettings,
+        quality: {
+          ...defaultSettings.quality,
+          preset: captureConfig.preset,
+          preferredBackend: captureConfig.backend,
+        },
+      }
+    : defaultSettings,
+);
+/** PBI 279: the one live 009 snapshot; device Settings replace it atomically. */
+let settings = settingsStore.getSnapshot();
 /** Calitatea curentă a sesiunii: pornește din setări și urmează comutările de preset live (PBI 241). */
 let sessionQuality = settings.quality;
 /** PBI 261: cele două sesiuni au identități stabile, distincte; shell-ul le adoptă la tranziție. */
@@ -286,6 +299,31 @@ const learningModules: {
   pipeline: LiveLearningPipeline | undefined;
   activation: ProfileActivation | undefined;
 } = { queue: undefined, pipeline: undefined, activation: undefined };
+/**
+ * PBI 279: the live settings composition. It is created on demand because the style editor needs the
+ * real 205 barrier and 110 activation mounted by 273; it is discarded with that pipeline and rebuilt
+ * on the next open. Device settings still write only the one 009 store.
+ */
+const settingsModules: {
+  runtime: LiveSettings | undefined;
+  panel: LiveSettingsPanel | undefined;
+} = { runtime: undefined, panel: undefined };
+/**
+ * The tick currently being prepared by the shell. The style barrier reads it so PRE_WORLD style
+ * requests resolve against the same authoritative tick the shell is about to execute.
+ */
+let settingsTickAuthority: number | null = null;
+const settingsTickPort: GameTickPort = {
+  id: 'settings',
+  version: '279-live-settings-v1',
+  step(context) {
+    // PRE_WORLD: a queued style change resolves through 205/110 before the world step of this tick.
+    // The barrier shares this tick readback so a style request at tick N is not resolved against the
+    // previous composition frame (which would leave the pipeline to consume it out of order).
+    settingsTickAuthority = context.tick;
+    settingsModules.runtime?.step(context.tick);
+  },
+};
 /**
  * PBI 275: the single live mission owner. It composes the delivered 116 tracker, 117 tutorial and
  * 125 reward ledger over facts of the same live world; no second mission, XP or profile model is
@@ -634,6 +672,7 @@ let activeRecovery: ReturnType<typeof createRendererRecovery<BootstrapCheckpoint
 const shell = createGameShell({
   context: compositionContext,
   ports: {
+    settings: settingsTickPort,
     sessions: sessionTickPort,
     control: controlTickPort,
     rides: ridesTickPort,
@@ -1588,6 +1627,7 @@ const shellHost = createGameShellHost({
     if (progressPanel.isOpen()) progressPanel.close();
     return challengePanel.open();
   },
+  onOpenSettings: () => openSettings('GAME'),
   onSaveGame: saveGameToFile,
   onLoadGame: previewGameFile,
   onConfirmLoad: confirmGameImport,
@@ -1963,6 +2003,7 @@ const application = createApplicationLifecycle({
           controlledKind: frame.hud.controlledKind,
           canToggle: canControl,
           canLearn: canControl,
+          speedUnit: settings.units.speed,
           ...(modeState === undefined ? {} : { learningEligible: modeState.learning.eligible }),
         });
       }
@@ -2113,6 +2154,240 @@ function beginLiveMissions(): void {
 }
 function refocusGame(): void {
   if (application.getState().kind === 'PLAYING') view.getCanvas().focus();
+}
+/**
+ * PBI 279: the live settings surface. It reuses the one 009 store, the real 109/205/110 style path
+ * and the real 080/081 adapters. Opening it is a `menu` suspension through 070; closing it restores
+ * the previous menu state (the pause menu stays open) and never starts the simulation by itself.
+ */
+let settingsOwnsMenu = false;
+function liveSettingsRuntime(): LiveSettings | undefined {
+  if (composition === undefined) return undefined;
+  if (settingsModules.runtime !== undefined) return settingsModules.runtime;
+  const pipeline = learningModules.pipeline;
+  const style: LiveSettingsStylePorts | undefined =
+    pipeline === undefined || shell.status().sessionId === CHAOS_SESSION_ID
+      ? undefined
+      : {
+          playerId: 'v3-player',
+          profileId: pipeline.profileId,
+          engineVersion: liveLearningEngineVersion,
+          store: liveLearningStore,
+          barrier: pipeline.epochBarrier(),
+          activation: pipeline.activationOwner(),
+          readTarget: () => {
+            const barrier = pipeline.epochBarrier().current();
+            return {
+              sessionId: shell.status().sessionId,
+              worldEpoch: shell.status().worldEpoch,
+              playerId: 'v3-player',
+              profileId: pipeline.profileId,
+              baseVersionId: barrier.baseVersionId,
+              learningEpoch: barrier.learningEpoch,
+            };
+          },
+          restore: (versionId, tick) => {
+            const services: ProfileRestoreServices = {
+              playerId: 'v3-player',
+              profileId: pipeline.profileId,
+              engineVersion: liveLearningEngineVersion,
+              store: liveLearningStore,
+              barrier: pipeline.epochBarrier(),
+              activation: pipeline.activationOwner(),
+              tick: liveMissionTick,
+              now: () => new Date().toISOString(),
+            };
+            return restoreVersion(services, {
+              profileId: pipeline.profileId,
+              versionId,
+              tick,
+            });
+          },
+        };
+  const runtime = createLiveSettings({
+    store: settingsStore,
+    playerId: settings.playerId,
+    tick: liveMissionTick,
+    ...(style === undefined ? {} : { style }),
+    onSettingsSaved: applyLiveSettings,
+    onStyleResult: applyLiveSettingsStyleResult,
+  });
+  settingsModules.runtime = runtime;
+  return runtime;
+}
+function applyLiveSettings(saved: RuntimeSettings): void {
+  settings = saved;
+  sessionQuality = saved.quality;
+  try {
+    composition?.applySettings(saved);
+  } catch {
+    // A disposed renderer is already being torn down; the settings record remains valid.
+  }
+  shellHost.refresh();
+}
+function applyLiveSettingsStyleResult(result: StyleSlidersTickResult): void {
+  if (
+    result.status !== 'PUBLISHED' &&
+    result.status !== 'RESTORED' &&
+    result.status !== 'ACTIVATED'
+  )
+    return;
+  const pipeline = learningModules.pipeline;
+  const generation = pipeline?.epochBarrier().current();
+  const versionId =
+    result.versionId ?? (generation === undefined ? null : generation.baseVersionId);
+  if ((result.status === 'PUBLISHED' || result.status === 'RESTORED') && pipeline !== undefined)
+    pipeline.refreshFromBarrier();
+  // The 271 lifecycle keeps its current 069 target stable; the barrier/activation advance is
+  // applied to the fleet and city style here, and a later session/segment adopts the new base.
+  if (result.status === 'ACTIVATED' && versionId !== null && pipeline !== undefined) {
+    const profile = pipeline.profileForVersion(versionId);
+    if (profile !== null) {
+      liveCityStyleSource.set(profile);
+      liveFleet?.ambient.refreshStyle();
+    }
+  }
+  shellHost.refreshSession();
+}
+function openSettings(tab: LiveSettingsTab = 'GAME'): boolean {
+  if (settingsModules.panel?.isOpen() === true) return true;
+  if (composition === undefined || app === null) return false;
+  const runtime = liveSettingsRuntime();
+  if (runtime === undefined) return false;
+  const opened = runtime.open();
+  if (opened !== 'OPENED') return false;
+  const state = runtime.getState();
+  if (state.settingsDraft === null || state.keyDraft === null) {
+    runtime.close();
+    return false;
+  }
+  settingsOwnsMenu = !shell.pauseState().surfaces.menu;
+  if (settingsOwnsMenu) shell.setMenuOpen(true);
+  try {
+    const panel = createLiveSettingsPanel(app, {
+      settingsDraft: state.settingsDraft,
+      keyDraft: state.keyDraft,
+      styleDraft: state.styleDraft,
+      styleUnavailableReason: state.styleReason,
+      initialTab: tab,
+      settings: {
+        onChange: (draft) => runtime.adoptSettings(draft),
+        save: (draft) => {
+          const result = runtime.saveSettings(draft);
+          if (result.status === 'SAVED') {
+            const next = runtime.getSettingsDraft();
+            if (next !== null)
+              queueMicrotask(() => {
+                if (panel.isOpen()) panel.setSettingsDraft(next);
+              });
+          }
+          panel.announce(
+            result.status === 'SAVED'
+              ? runtime.getState().message
+              : result.status === 'REJECTED'
+                ? `Setările au fost refuzate: ${result.reason}.`
+                : 'Nicio modificare de salvat.',
+          );
+        },
+        cancel: () => {
+          runtime.cancelSettings();
+          panel.announce(runtime.getState().message);
+        },
+      },
+      keys: {
+        onChange: (draft) => runtime.adoptKeys(draft),
+        save: () => {
+          const draft = panel.getKeyDraft();
+          const result = runtime.saveKeys(draft);
+          if (result.status === 'SAVED') {
+            const next = runtime.getKeyDraft();
+            if (next !== null)
+              queueMicrotask(() => {
+                if (panel.isOpen()) panel.setKeyDraft(next);
+              });
+          }
+          panel.announce(
+            result.status === 'SAVED'
+              ? runtime.getState().message
+              : result.status === 'REJECTED'
+                ? `Tastele au fost refuzate: ${result.reason}.`
+                : 'Nicio modificare de salvat.',
+          );
+        },
+        cancel: () => {
+          runtime.cancelKeys();
+          panel.announce(runtime.getState().message);
+        },
+      },
+      style: {
+        onChange: (draft) => {
+          runtime.adoptStyle(draft);
+        },
+        apply: (draft) => {
+          runtime.adoptStyle(draft);
+          const status = runtime.queueStyleApply();
+          panel.announce(runtime.getState().message);
+          // Closing disposes the panel that is still inside its own apply handler; defer one
+          // microtask so the 230 adapter leaves its mutation before the host tears it down.
+          if (status === 'QUEUED') queueMicrotask(() => closeSettings());
+        },
+        cancel: (draft) => {
+          runtime.adoptStyle(draft);
+          runtime.withdrawStyle();
+          panel.announce(runtime.getState().message);
+        },
+        reset: (draft) => {
+          runtime.adoptStyle(draft);
+          panel.announce(runtime.getState().message);
+        },
+        rebase: () => {
+          const next = runtime.rebaseStyle();
+          if (next !== null) panel.setStyleDraft(next);
+          panel.announce(runtime.getState().message);
+        },
+        restore: (versionId) => {
+          runtime.restoreStyle(versionId);
+          panel.announce(runtime.getState().message);
+        },
+      },
+      close: () => closeSettings(),
+    });
+    settingsModules.panel = panel;
+    panel.openPanel();
+    return true;
+  } catch (error) {
+    settingsModules.runtime?.close();
+    if (settingsOwnsMenu) {
+      settingsOwnsMenu = false;
+      shell.setMenuOpen(false);
+    }
+    throw error;
+  }
+}
+function closeSettings(): void {
+  const panel = settingsModules.panel;
+  settingsModules.panel = undefined;
+  if (panel !== undefined) {
+    if (panel.isOpen()) panel.closePanel();
+    panel.dispose();
+  }
+  settingsModules.runtime?.close();
+  if (settingsOwnsMenu) {
+    settingsOwnsMenu = false;
+    shell.setMenuOpen(false);
+  }
+  refocusGame();
+}
+function disposeLiveSettings(): void {
+  const panel = settingsModules.panel;
+  settingsModules.panel = undefined;
+  if (panel !== undefined) {
+    if (panel.isOpen()) panel.closePanel();
+    panel.dispose();
+  }
+  settingsModules.runtime?.dispose();
+  settingsModules.runtime = undefined;
+  settingsOwnsMenu = false;
 }
 /** PBI 278: the autosave row is applied once, after the owners are mounted and before play resumes. */
 let livePersistenceRestored = false;
@@ -2286,6 +2561,7 @@ function mountLiveLearning(): void {
   if (model === undefined) return;
   const status = shell.status();
   if (status.sessionId === CHAOS_SESSION_ID) return;
+  settingsTickAuthority = null;
   const telemetry = telemetryModules.live;
   const segments = modeModules.segments;
   const activation = ensureLearningActivation();
@@ -2340,26 +2616,35 @@ function mountLiveLearning(): void {
       },
     },
     ...(segments === undefined ? {} : { modeSegments: segments }),
-    tick: () => composition?.composition.frame.tick ?? shell.status().world.tick,
+    tick: () =>
+      settingsTickAuthority ?? composition?.composition.frame.tick ?? shell.status().world.tick,
     physicalState: () => livePhysicalState(),
     onActivated: ({ versionId, profile }) => {
       liveCityStyleSource.set(profile);
       liveFleet?.ambient.refreshStyle();
+      const activatedVersion = liveLearningStore.getVersion(versionId);
+      const manualTuning =
+        activatedVersion?.provenance.delta?.reason?.startsWith('MANUAL_TUNING') === true;
       const epoch = learningModules.pipeline?.learningEpoch ?? status.learningEpoch;
-      modeModules.segments?.updateGeneration({ baseVersionId: versionId, learningEpoch: epoch });
-      // PBI 275: a real 110 activation is the only source of the campaign's learning objective.
-      liveMissions.observeLearningActivation({
-        profileId: profile.profileId,
-        versionId,
-        learningEpoch: epoch,
-        activationTick: liveMissionTick() + 1,
-        tick: liveMissionTick(),
-      });
+      // PBI 279: a manual style activation changes the fleet and the city style, but it is not a
+      // learning milestone and must not rotate the 069 target under an open segment. The next
+      // session/segment adopts the new base; LEARNING activations keep the existing rotation.
+      if (!manualTuning) {
+        modeModules.segments?.updateGeneration({ baseVersionId: versionId, learningEpoch: epoch });
+        liveMissions.observeLearningActivation({
+          profileId: profile.profileId,
+          versionId,
+          learningEpoch: epoch,
+          activationTick: liveMissionTick() + 1,
+          tick: liveMissionTick(),
+        });
+      }
     },
   });
   learningModules.pipeline = pipeline;
 }
 function disposeLiveLearning(): void {
+  disposeLiveSettings();
   const pipeline = learningModules.pipeline;
   learningModules.pipeline = undefined;
   if (pipeline !== undefined) pipeline.dispose();
@@ -2541,6 +2826,9 @@ view.onLearning(() => {
   composition?.requestModeAction('L');
   view.getCanvas().focus();
 });
+view.onSettings(() => {
+  openSettings('GAME');
+});
 void application.load(preference);
 // Academia este alegerea implicită, dar meniul rămâne explicit pentru Haos sau revenire.
 void chooseSession('ACADEMY');
@@ -2609,6 +2897,10 @@ interface V3DebugGlobal {
   challenges(): unknown;
   /** PBI 278: autosave status, the durable generation and the last import. */
   persistence(): unknown;
+  /** PBI 279: live settings drafts, style session and the untouched profile/XP fingerprints. */
+  settings(): unknown;
+  settingsOpen?(tab?: 'GAME' | 'KEYS' | 'STYLE'): unknown;
+  settingsClose?(): unknown;
   persistenceExport?(): unknown;
   persistencePreview?(text: string): unknown;
   persistenceConfirm?(): Promise<unknown>;
@@ -2741,6 +3033,7 @@ const debugGlobal: V3DebugGlobal = {
     const pipeline = learningModules.pipeline;
     return {
       model: pipeline?.read() ?? null,
+      activationCommands: pipeline?.activationOwner().commands() ?? [],
       queue: learningModules.queue?.queue.usage ?? null,
       measurements: learningModules.queue?.queue.measurements.slice(-8) ?? [],
       governor: learningModules.queue?.governor.usage ?? null,
@@ -2888,6 +3181,43 @@ const debugGlobal: V3DebugGlobal = {
     lastImport: persistenceModules.live?.status().lastImport ?? null,
     shell: shell.status().systems.find((system) => system.id === 'persistence')?.status ?? null,
   }),
+  settings: () => {
+    const runtime = settingsModules.runtime;
+    const panel = settingsModules.panel;
+    const learning = learningModules.pipeline?.read() ?? null;
+    const xp = dailyModules.runtime?.read().xpFingerprint ?? null;
+    const xpRead = dailyModules.runtime?.read().player ?? null;
+    return {
+      version: '279-live-settings-v1',
+      open: panel?.isOpen() ?? false,
+      tab: panel?.getTab() ?? null,
+      store: settingsStore.getSnapshot(),
+      state: runtime?.getState() ?? null,
+      stats: runtime?.getStats() ?? null,
+      panel: panel?.getStats() ?? null,
+      style: runtime?.getStyleDraft() ?? null,
+      styleVersion: runtime?.getStyleVersionSummary() ?? null,
+      profileFingerprint: learning?.profile.fingerprint ?? null,
+      profileVersionId: learning?.headVersionId ?? null,
+      profileLearningEpoch: learning?.barrier.learningEpoch ?? null,
+      profileVersions:
+        liveLearningStore
+          .listVersions(academyProfile.profileId)
+          .map((version) => version.versionId) ?? [],
+      xpFingerprint: xp,
+      xpBalance: dailyModules.runtime?.read().player.xpBalance ?? null,
+      xpEntries:
+        xpRead === null
+          ? []
+          : xpRead.entries.map((entry) => ({
+              entryId: entry.entryId,
+              causeType: entry.causeType,
+              causeId: entry.causeId,
+              amountXp: entry.amountXp,
+            })),
+      port: shell.status().systems.find((system) => system.id === 'settings')?.status ?? null,
+    };
+  },
   challengeRoute: (zoneId: string) => {
     const frame = composition?.composition.frame;
     const vehicleId = frame?.playerVehicleId ?? frame?.selectedVehicleId ?? null;
@@ -2990,6 +3320,11 @@ if (
   debugGlobal.persistenceConfirm = () => confirmGameImport();
   debugGlobal.persistenceSaveNow = (tick) =>
     persistenceModules.live?.saveNow(tick ?? livePersistenceTickNow()) ?? Promise.resolve(null);
+  debugGlobal.settingsOpen = (tab) => openSettings(tab ?? 'GAME');
+  debugGlobal.settingsClose = () => {
+    closeSettings();
+    return true;
+  };
   debugGlobal.probeActiveXp = (seconds) => {
     const totalMs = Math.max(0, Math.min(600_000, Math.floor(seconds * 1000)));
     const windows: unknown[] = [];
@@ -3026,6 +3361,7 @@ const dispose = (): void => {
     releaseCapture = undefined;
     (globalThis as unknown as { __v3Composition?: V3DebugGlobal }).__v3Composition = undefined;
     document.removeEventListener('keydown', onKpiHotkey);
+    disposeLiveSettings();
     shellHost.dispose();
     fleetPanel.dispose();
     ridesPanel.dispose();

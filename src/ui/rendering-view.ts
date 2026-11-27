@@ -107,15 +107,18 @@ export function createRenderingView(root: HTMLDivElement) {
   let onPause = (): void => {};
   let onMode = (): void => {};
   let onLearning = (): void => {};
+  let onSettings = (): void => {};
   const retryClick = (): void => onRetry();
   const playClick = (): void => onPlay();
   const pauseClick = (): void => onPause();
   const modeClick = (): void => onMode();
   const learningClick = (): void => onLearning();
+  const settingsClick = (): void => onSettings();
   retry.addEventListener('click', retryClick);
   play.addEventListener('click', playClick);
   pause.addEventListener('click', pauseClick);
   const speedValue = gameHud.querySelector<HTMLOutputElement>('.game-hud__speed-value');
+  const speedUnit = gameHud.querySelector<HTMLElement>('.game-hud__speed-unit');
   const modeButton = gameHud.querySelector<HTMLButtonElement>(
     '.game-hud__mode[data-action="mode"]',
   );
@@ -132,16 +135,12 @@ export function createRenderingView(root: HTMLDivElement) {
   learningButton?.addEventListener('click', learningClick);
 
   // 251: butoanele din ecranul de start și meniul de pauză
+  const startSettingsButton = startScreen.querySelector('[data-action="settings"]');
+  const pauseSettingsButton = pauseMenu.querySelector('[data-action="settings"]');
   startScreen.querySelector('[data-action="play"]')?.addEventListener('click', playClick);
-  startScreen.querySelector('[data-action="settings"]')?.addEventListener('click', () => {
-    // TODO: deschide setările
-    console.log('Settings clicked');
-  });
+  startSettingsButton?.addEventListener('click', settingsClick);
   pauseMenu.querySelector('[data-action="resume"]')?.addEventListener('click', playClick);
-  pauseMenu.querySelector('[data-action="settings"]')?.addEventListener('click', () => {
-    // TODO: deschide setările
-    console.log('Settings clicked');
-  });
+  pauseSettingsButton?.addEventListener('click', settingsClick);
   pauseMenu.querySelector('[data-action="restart"]')?.addEventListener('click', retryClick);
   pauseMenu.querySelector('[data-action="quit"]')?.addEventListener('click', () => {
     window.location.reload();
@@ -168,6 +167,10 @@ export function createRenderingView(root: HTMLDivElement) {
     onLearning(callback: () => void): void {
       onLearning = callback;
     },
+    /** PBI 279: the native Settings buttons of the start screen and pause menu. */
+    onSettings(callback: () => void): void {
+      onSettings = callback;
+    },
     /** PBI 257/271: HUD-ul central citește frame-ul compunerii, nu starea statică din HTML. */
     updatePlayHud(view: {
       readonly speedMps: number;
@@ -176,10 +179,18 @@ export function createRenderingView(root: HTMLDivElement) {
       readonly canToggle: boolean;
       readonly canLearn?: boolean;
       readonly learningEligible?: boolean;
+      /** PBI 279: presentation only; SI remains the authoritative value. */
+      readonly speedUnit?: 'km/h' | 'mph';
     }): void {
-      const kmh = Math.max(0, Math.round(Math.abs(view.speedMps) * 3.6));
-      if (speedValue && speedValue.textContent !== String(kmh))
-        speedValue.textContent = String(kmh);
+      const unit = view.speedUnit ?? 'km/h';
+      const speed = Math.max(
+        0,
+        Math.round(Math.abs(view.speedMps) * (unit === 'mph' ? 2.2369362920544 : 3.6)),
+      );
+      if (speedValue && speedValue.textContent !== String(speed))
+        speedValue.textContent = String(speed);
+      if (speedUnit && speedUnit.textContent !== unit) speedUnit.textContent = unit;
+      if (speedValue) speedValue.setAttribute('aria-label', `${speed} ${unit}`);
       const symbol =
         view.controlledKind === 'CHARACTER'
           ? '—'
@@ -312,6 +323,8 @@ export function createRenderingView(root: HTMLDivElement) {
       retry.removeEventListener('click', retryClick);
       play.removeEventListener('click', playClick);
       pause.removeEventListener('click', pauseClick);
+      startSettingsButton?.removeEventListener('click', settingsClick);
+      pauseSettingsButton?.removeEventListener('click', settingsClick);
       section.remove();
     },
   };
