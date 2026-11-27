@@ -16,9 +16,9 @@ eliberarea rămân comenzile proprietarului compunerii, nu ale panoului.
 - `M` este preluarea explicită. Dacă ținta selectată este deja mașina condusă, `M` păstrează
   comportamentul 257 AUTO↔MANUAL. Dacă este altă mașină, preluarea eliberează vehiculul vechi în AUTO
   și revendică noua mașină în același tick, deci există cel mult un scaun `PLAYER`.
-- `L` este recunoscut ca intenție explicită, dar refuzat cu `LEARNING_UNAVAILABLE: owner PBI 271`.
-  LEARNING, eligibilitatea și segmentele rămân ale taskului 271; panoul afișează butonul `L`
-  dezactivat, nu pretinde un mod care nu există.
+- `L` este tot o intenție explicită: din 271, preia ținta selectată în LEARNING sau comută mașina
+  condusă LEARNING ↔ MANUAL. Butonul `L` din panou este activ când există o țintă selectată;
+  eligibilitatea și segmentul sunt raportate de owner-ul 271, nu inventate de panou.
 - Filtrele `Toate`, `Disponibile`, `În cursă` și `Blocate` sunt decise înainte de sortare. Rândul
   țintei camerei și rândul scaunului `PLAYER` rămân vizibile indiferent de filtru, marcați
   `păstrat de filtru`; nu sunt duplicate.
@@ -115,7 +115,8 @@ validează imediat și aplică la următorul tick; `frame.selectedVehicleId`, `f
 
 - Nu este 262: nu creează taxiuri, civili, rute sau profiluri.
 - Nu este 264/265: nu creează curse, pasageri, pickup sau dropoff; `rideId` este citit.
-- Nu este 271: nu implementează LEARNING; `L` este refuzat explicit.
+- Nu este 271: trimite intenția `L`, dar modul, eligibilitatea și segmentul 069 rămân owner-ului
+  271.
 - Nu este 279: nu atinge setările, remaparea sau stilul.
 - Nu este 281: harta completă, minimapa HUD și layout-ul rămân acolo.
 - Nu este 282: mișcarea rămâne adaptorul cinematic al compunerii, nu fizica Rapier.

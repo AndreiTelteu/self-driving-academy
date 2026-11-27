@@ -176,9 +176,12 @@ test('263: explicit takeover keeps one PLAYER seat and reconciles the live AI ro
     assert.equal(modeCount(f.model, 'MANUAL'), 1);
     const taken = frame.vehicles.find((vehicle) => vehicle.vehicleId === target.vehicleId)!;
     const locked = f.ambient.get(target.vehicleId)!;
+    // PBI 271: the transition keeps the physical speed, so the takeover tick advances one normal
+    // step instead of teleporting to a zero-speed state.
+    const expectedStepM = Math.abs(target.speedMps) / 60;
     assert.ok(
-      Math.hypot(taken.positionM.x - locked.positionM.x, taken.positionM.z - locked.positionM.z) <
-        1e-9,
+      Math.hypot(taken.positionM.x - locked.positionM.x, taken.positionM.z - locked.positionM.z) <=
+        expectedStepM + 1e-6,
     );
     assert.deepEqual(f.ambient.get(target.vehicleId)!.route.path, targetRouteBefore.path);
 
@@ -230,7 +233,8 @@ test('263: explicit takeover keeps one PLAYER seat and reconciles the live AI ro
       Math.hypot(
         takenNext.positionM.x - lockedNext.positionM.x,
         takenNext.positionM.z - lockedNext.positionM.z,
-      ) < 1e-9,
+      ) <=
+        Math.abs(next.speedMps) / 60 + 1e-6,
     );
     assert.deepEqual(f.ambient.get(next.vehicleId)!.route.path, nextRouteBefore.path);
 
@@ -307,7 +311,7 @@ test('263: the seeded parked taxi can be taken over and released to its AUTO rou
   }
 });
 
-test('263: L is an explicit refusal until PBI 271 owns LEARNING; the seat does not move', () => {
+test('263/271: L selects LEARNING with one PLAYER seat; the seat does not move twice', () => {
   const f = fixture();
   try {
     f.model.step({ tick: 1 });
@@ -315,16 +319,15 @@ test('263: L is an explicit refusal until PBI 271 owns LEARNING; the seat does n
     f.model.selectVehicle(target.vehicleId);
     assert.equal(f.model.takeOverSelected('LEARNING'), true);
     const frame = f.model.step({ tick: 2 });
-    assert.equal(frame.authority.consumer, 'CHARACTER');
-    assert.equal(frame.playerVehicleId, null);
-    assert.equal(frame.stats.takeovers, 0);
-    const refusal = frame.events.find((event) => event.kind === 'TAKEOVER_REFUSED');
-    assert.ok(refusal);
-    assert.match(refusal.detail, /LEARNING_UNAVAILABLE: owner PBI 271/);
-    assert.equal(
-      frame.vehicles.find((vehicle) => vehicle.vehicleId === target.vehicleId)!.controlMode,
-      'AUTO',
-    );
+    assert.equal(frame.authority.consumer, 'VEHICLE');
+    assert.equal(frame.playerVehicleId, target.vehicleId);
+    assert.equal(frame.hud.mode, 'LEARNING');
+    assert.equal(frame.stats.takeovers, 1);
+    assert.equal(modeCount(f.model, 'LEARNING'), 1);
+    assert.equal(modeCount(f.model, 'MANUAL'), 0);
+    const accepted = frame.events.find((event) => event.kind === 'MODE_ACCEPTED');
+    assert.ok(accepted);
+    assert.match(accepted.detail, /LEARNING/);
   } finally {
     close(f);
   }

@@ -110,3 +110,17 @@ Dovezile sunt în [Docs/Evidence/217-three-modes](Evidence/217-three-modes/READM
 - Estimatoarele rulează în worker; harness-ul folosește blend-ul real 101, nu re-estimează stilul.
 - Nu există captură de browser și nicio pretenție de FPS/GPU/hardware; integrarea vizuală completă rămâne gate-ul de release.
 - HUD-ul este verificat prin DOM-ul determinist al testelor, cu aceleași contracte 067, nu printr-o captură de browser.
+
+## Integrarea live 271
+
+Contractul de mai sus rămâne harness-ul 217 cu autoritatea 066 de fixture. Jocul real folosește
+`src/app/live-three-modes.ts`, care montează ciclul 069 peste compunerea V3 și păstrează aceleași
+șase granițe: `M` face AUTO ↔ MANUAL și LEARNING → AUTO, `L` face AUTO/MANUAL → LEARNING și
+LEARNING → MANUAL. Fiecare tick pregătește o singură graniță, compunerea aplică modul în același
+tick, iar 069 o settlează cu poziția, ruta, clasa și profilul acceptate. Segmentele LEARNING sunt
+expuse pentru 272, dar 271 nu creează joburi, estimări sau versiuni de profil. HUD-ul live afișează
+„Conduce AI-ul”, „Conduci · învățare oprită” și „Conduci · orașul învață”, cu simbolurile `AI`, `M`
+și `L`. AUTO reia poziția și viteza curentă; primul tick este un coast, iar reproiectarea pe graful
+de benzi începe în tickul următor. Dovezile live sunt în
+[Evidence/271-live-three-modes](Evidence/271-live-three-modes/README.md), iar limitările rămân
+fizica completă 282, telemetria 272 și pipeline-ul 273.

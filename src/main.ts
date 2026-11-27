@@ -5,9 +5,11 @@ import {
   createCompositionWorld,
   createGameShell,
   createLiveEconomyComposition,
+  createLiveModeSegments,
   createLiveRideComposition,
   createRendererRecovery,
   createSessionFlow,
+  LIVE_THREE_MODES_VERSION,
   readCityDashboardSnapshot,
   readKpiHistory,
   readKpiImpact,
@@ -16,6 +18,7 @@ import {
   rideTripDistanceM,
   type GameTickPort,
   type LiveEconomyComposition,
+  type LiveModeSegments,
   type LiveRideComposition,
   type RecoveryRenderer,
   type SessionFlow,
@@ -203,6 +206,40 @@ const economyModules: {
  */
 const dashboardModules: { health: FleetHealth | undefined } = { health: undefined };
 /**
+ * PBI 271: the live 069 owner. It is attached to the single V3 composition and reads the accepted
+ * frame; no second mode, seat or segment model exists.
+ */
+const modeModules: { segments: LiveModeSegments | undefined } = { segments: undefined };
+const controlTickPort: GameTickPort = {
+  id: 'control',
+  version: LIVE_THREE_MODES_VERSION,
+  step(context) {
+    const segments = modeModules.segments;
+    if (segments === undefined) return;
+    const state = segments.observe();
+    if (state.disposed) throw new Error('Owner-ul segmentelor 271 este eliberat.');
+    if (state.acceptedTick !== context.tick - 1)
+      throw new Error(
+        `Segmentul 271 așteaptă tick-ul ${context.tick - 1}, are ${state.acceptedTick} și shell-ul cere ${context.tick}.`,
+      );
+    const frame = composition?.composition.frame;
+    if (frame !== undefined && frame.tick !== context.tick - 1)
+      throw new Error(
+        `Cadrul 271 (${frame.tick}) nu coincide cu tick-ul anterior al shell-ului (${context.tick - 1}).`,
+      );
+    if (frame !== undefined) {
+      const players = frame.vehicles.filter((vehicle) => vehicle.controlMode !== 'AUTO');
+      if (players.length > 1)
+        throw new Error(`Există ${players.length} scaune PLAYER în tick-ul ${frame.tick}.`);
+      const player = players[0];
+      if ((state.active?.vehicleId ?? null) !== (player?.vehicleId ?? null))
+        throw new Error('Segmentul 271 nu aparține vehiculului controlat.');
+      if (state.active !== null && state.active.mode !== player?.controlMode)
+        throw new Error('Modul segmentului 271 nu coincide cu modul acceptat.');
+    }
+  },
+};
+/**
  * PBI 269 fleet port: a purchase adds the taxi to the one 057 registry and starts its real 058
  * actor, so the same live fleet and capacity grow without a second registry or composition.
  */
@@ -347,7 +384,12 @@ let activeRecovery: ReturnType<typeof createRendererRecovery<BootstrapCheckpoint
  */
 const shell = createGameShell({
   context: compositionContext,
-  ports: { sessions: sessionTickPort, rides: ridesTickPort, economy: economyTickPort },
+  ports: {
+    sessions: sessionTickPort,
+    control: controlTickPort,
+    rides: ridesTickPort,
+    economy: economyTickPort,
+  },
   suspend: (cause) => application.pause(cause),
   resume: (cause) => {
     const state = application.getState();
@@ -434,6 +476,7 @@ function cityDashboardSnapshot() {
 const fleetPanel = createFleetSelectionPanel(app, {
   select: (vehicleId) => composition?.composition.selectVehicle(vehicleId) ?? false,
   takeover: (vehicleId) => composition?.composition.requestTakeover(vehicleId, 'MANUAL') ?? false,
+  learning: (vehicleId) => composition?.composition.requestTakeover(vehicleId, 'LEARNING') ?? false,
   release: () => composition?.composition.requestRelease() ?? false,
   onClose: () => {
     shell.closePanel();
@@ -696,7 +739,11 @@ const application = createApplicationLifecycle({
             enabled: () => application.getState().kind === 'PLAYING',
             models,
           });
+          // PBI 271: the single 069 live boundary owner over this composition, before the first
+          // shell tick. It closes/opens segments at the exact accepted tick without a second model.
+          disposeLiveModeSegments('SESSION_CHANGE');
           composition = ownedComposition;
+          mountLiveModeSegments();
           // PBI 264: cererile și dispecerizarea live peste exact aceleași 24 de taxiuri 057/058.
           // Plannerul 041 este al acestui modul; harta, graful și registry-ul rămân ale compunerii.
           ownedRides = createLiveRides({
@@ -794,6 +841,7 @@ const application = createApplicationLifecycle({
         } catch (error: unknown) {
           releaseSurface?.();
           try {
+            disposeLiveModeSegments('SHUTDOWN');
             if (attachedShellWorld) {
               attachedShellWorld = false;
               shell.detachWorld();
@@ -838,6 +886,7 @@ const application = createApplicationLifecycle({
               releaseSurface?.();
               releaseSurface = undefined;
               try {
+                disposeLiveModeSegments('SHUTDOWN');
                 if (attachedShellWorld) {
                   attachedShellWorld = false;
                   shell.detachWorld();
@@ -901,13 +950,19 @@ const application = createApplicationLifecycle({
       shell.step(step.tick);
       const frame = composition.composition.frame;
       // PBI 257: HUD-ul central se actualizează din frame-ul autoritativ, la ~10 Hz.
-      if (step.tick % 6 === 0)
+      if (step.tick % 6 === 0) {
+        const canControl =
+          frame.hud.controlledKind === 'VEHICLE' || frame.selectedVehicleId !== null;
+        const modeState = modeModules.segments?.observe();
         view.updatePlayHud({
           speedMps: frame.hud.speedMps,
           mode: frame.hud.mode,
           controlledKind: frame.hud.controlledKind,
-          canToggle: frame.hud.controlledKind === 'VEHICLE',
+          canToggle: canControl,
+          canLearn: canControl,
+          ...(modeState === undefined ? {} : { learningEligible: modeState.learning.eligible }),
         });
+      }
     },
     interpolate: (_previous, current) => current,
   }),
@@ -1017,6 +1072,55 @@ const chaosCopy = copyProfileForChaos({
 });
 if (chaosCopy.status !== 'COPIED')
   throw new Error(`Copia Haos a profilului a fost refuzată: ${chaosCopy.rejection.code}`);
+const chaosProfile = chaosCopy.copy;
+/**
+ * PBI 271: mount the 069 live boundary owner over the one V3 composition. The context is the shell's
+ * accepted session identity, so a session change retires the old segment and starts a new lifecycle.
+ */
+function mountLiveModeSegments(): void {
+  const model = composition;
+  if (model === undefined) return;
+  const status = shell.status();
+  const profile = status.sessionId === CHAOS_SESSION_ID ? chaosProfile.profile : academyProfile;
+  const segments = createLiveModeSegments({
+    context: Object.freeze({
+      schemaVersion: 1 as const,
+      units: 'SI' as const,
+      sessionId: status.sessionId,
+      worldEpoch: status.worldEpoch,
+    }),
+    playerId: 'v3-player',
+    profileId: profile.profileId,
+    baseVersionId: profile.versionId,
+    learningEpoch: status.learningEpoch,
+    controlPreferencesVersion: `control-${settings.input.control.version}`,
+    engineVersion: 'engine-271-live',
+    mapVersion: world.map.mapId,
+    learningEligible: status.sessionId !== CHAOS_SESSION_ID,
+    readAuthority: () => {
+      const authority = model.composition.modeAuthority();
+      return {
+        tick: authority.tick,
+        playerVehicleId: authority.playerVehicleId,
+        mode: authority.mode,
+        suspended: shell.pauseState().suspended,
+      };
+    },
+  });
+  model.composition.attachModeSegments(segments);
+  modeModules.segments = segments;
+}
+function disposeLiveModeSegments(reason: 'SESSION_CHANGE' | 'WORLD_RESET' | 'SHUTDOWN'): void {
+  const segments = modeModules.segments;
+  modeModules.segments = undefined;
+  composition?.composition.attachModeSegments(null);
+  if (segments === undefined) return;
+  try {
+    if (!segments.observe().disposed) segments.retire(reason);
+  } finally {
+    segments.dispose();
+  }
+}
 /**
  * Portul lumii vii pentru 225: o singură compunere V3, fără o a doua simulare. Captura este
  * citirea la limita de tick, iar pornirea adoptă identitatea în shell și readuce scena în
@@ -1030,7 +1134,7 @@ const sessionWorld: SessionWorldPort = {
     return Object.freeze({
       tick,
       vehicles: composition?.stats().vehicles ?? 0,
-      manualVehicles: mode === 'MANUAL' ? 1 : 0,
+      manualVehicles: mode === 'MANUAL' || mode === 'LEARNING' ? 1 : 0,
       body: Object.freeze({
         sessionId: identity.sessionId,
         worldEpoch: identity.worldEpoch,
@@ -1043,8 +1147,15 @@ const sessionWorld: SessionWorldPort = {
     });
   },
   closeSegment() {
-    // Owner-ul segmentului live este 272; până atunci nu există un segment de închis.
-    return 0;
+    // PBI 271: the live 069 owner closes the open segment with a terminal reason at the accepted
+    // tick; no synthetic count is returned when no segment is open.
+    const segments = modeModules.segments;
+    if (segments === undefined || segments.observe().disposed) return 0;
+    try {
+      return segments.retire('SESSION_CHANGE') ? 1 : 0;
+    } catch {
+      return 0;
+    }
   },
   invalidateJobs() {
     // Owner-ul joburilor live este 272/278; un număr inventat ar ascunde lipsa lor.
@@ -1075,11 +1186,15 @@ const sessionWorld: SessionWorldPort = {
     if (!activation.created) activation.economy?.beginEpoch({ tick: boundaryTick });
     else activation.economy?.flush({ tick: boundaryTick });
     composition?.composition.releaseInput();
+    // PBI 271: the old session's open segment is retired before the world identity changes, and a
+    // fresh 069 lifecycle starts in AUTO for the new accepted session context.
+    disposeLiveModeSegments('SESSION_CHANGE');
     // Sesiunea nouă nu moștenește poziția fizică a celei vechi; restaurarea completă a
     // snapshotului rămâne la 278.
     composition?.reset();
     composition?.setVehicleMode('AUTO');
     shell.setMode('AUTO');
+    mountLiveModeSegments();
   },
   stop() {
     composition?.composition.releaseInput();
@@ -1149,8 +1264,12 @@ view.onRetry(() => {
 view.onPlay(() => startSession());
 view.onPause(() => shell.setMenuOpen(true));
 view.onMode(() => {
-  composition?.toggleVehicleMode();
+  composition?.requestModeAction('M');
   // Butonul HUD nu trebuie să rămână activ: altfel 025 blochează W/M în dialoguri/butoane.
+  view.getCanvas().focus();
+});
+view.onLearning(() => {
+  composition?.requestModeAction('L');
   view.getCanvas().focus();
 });
 void application.load(preference);
@@ -1201,6 +1320,8 @@ interface V3DebugGlobal {
   sessionNotice(): string | null;
   /** PBI 263: lista/harta flotei, scaunul PLAYER și statisticile panoului. */
   fleet(): unknown;
+  /** PBI 271: the live 069 segments, LEARNING exposure and accepted mode. */
+  modes(): unknown;
   /** PBI 264: cererile, coada, alocările și starea panoului de curse. */
   rides(): unknown;
   /** PBI 266: economia live, KPI-urile curente și read model-ul HUD. */
@@ -1265,6 +1386,20 @@ const debugGlobal: V3DebugGlobal = {
         ? []
         : path.points.map((point) => ({ x: point.x, y: point.y, z: point.z }));
     }),
+  modes: () => {
+    const segments = modeModules.segments;
+    if (segments === undefined) return null;
+    return {
+      model: segments.observe(),
+      learning: segments.learningExposure(),
+      port: shell.status().systems.find((system) => system.id === 'control')?.status ?? null,
+      hud: {
+        mode: composition?.composition.frame.hud.mode ?? null,
+        selectedVehicleId: composition?.composition.frame.selectedVehicleId ?? null,
+        playerVehicleId: composition?.composition.frame.playerVehicleId ?? null,
+      },
+    };
+  },
   lifecycle: () => application.getState(),
   rides: () => {
     const snapshot = ridesModules.composition?.snapshot();

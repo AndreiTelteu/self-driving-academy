@@ -45,7 +45,9 @@ viitor) și titlu. Ordinea urmează contractul din [Docs/02](02-arhitectura-si-c
 | 16 | `hud` | 281 | PRESENTATION |
 
 `world` este pasul autoritar existent, nu un port. Fizica 282 se integrează în lume/adaptorul de
-fizică, nu ca o a doua buclă.
+fizică, nu ca o a doua buclă. Din 271, portul `control` este prezent: verifică la fiecare PRE_WORLD
+că segmentul 069 settlează exact tick-ul anterior, că există cel mult un scaun `PLAYER` și că modul
+segmentului coincide cu modul acceptat al vehiculului.
 
 ## Porturile
 

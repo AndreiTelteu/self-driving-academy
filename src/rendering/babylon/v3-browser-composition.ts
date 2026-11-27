@@ -94,6 +94,10 @@ export interface V3BrowserComposition {
   selectVehicle(vehicleId: string | null): boolean;
   /** PBI 263: explicit M/L on the selected car, or the held car's existing toggle. */
   takeOverSelected(mode: 'MANUAL' | 'LEARNING'): boolean;
+  /** PBI 271: real M/L action, accepted on the next authoritative tick. */
+  requestModeAction(action: 'M' | 'L', expectedVehicleId?: string): boolean;
+  /** PBI 271: explicit target mode, accepted on the next authoritative tick. */
+  requestMode(mode: 'AUTO' | 'MANUAL' | 'LEARNING', vehicleId?: string): boolean;
   selectedVehicleId(): string | null;
   playerVehicleId(): string | null;
   reset(): void;
@@ -202,12 +206,12 @@ export function createV3BrowserComposition(
     }
     if (event.code === COMPOSITION_KEYS.mode) {
       event.preventDefault();
-      if (event.type === 'keydown' && !event.repeat) composition.takeOverSelected('MANUAL');
+      if (event.type === 'keydown' && !event.repeat) composition.requestModeAction('M');
       return;
     }
     if (event.code === COMPOSITION_KEYS.learning) {
       event.preventDefault();
-      if (event.type === 'keydown' && !event.repeat) composition.takeOverSelected('LEARNING');
+      if (event.type === 'keydown' && !event.repeat) composition.requestModeAction('L');
       return;
     }
     if (event.code === COMPOSITION_KEYS.time) {
@@ -272,6 +276,12 @@ export function createV3BrowserComposition(
     },
     takeOverSelected(mode: 'MANUAL' | 'LEARNING'): boolean {
       return composition.takeOverSelected(mode);
+    },
+    requestModeAction(action: 'M' | 'L', expectedVehicleId?: string): boolean {
+      return composition.requestModeAction(action, expectedVehicleId);
+    },
+    requestMode(mode: 'AUTO' | 'MANUAL' | 'LEARNING', vehicleId?: string): boolean {
+      return composition.requestMode(mode, vehicleId);
     },
     selectedVehicleId(): string | null {
       return composition.selectedVehicleId();

@@ -84,6 +84,8 @@ export interface VehicleAutoDriveOptions {
   readonly vehicleId: string;
   readonly classId: VehicleClassId;
   readonly start: AutoDriveStart;
+  /** PBI 271: AUTO resume starts from the exact physical speed left by the player. */
+  readonly initialSpeedMps?: number;
   /** Seed for deterministic destination/route choices. */
   readonly seed?: RandomSeed;
 }
@@ -238,7 +240,7 @@ export function createVehicleAutoDrive(options: VehicleAutoDriveOptions): Vehicl
 
   let route: AutoRoute | null = null,
     distanceM = 0,
-    speedMps = 0,
+    speedMps = Math.max(0, options.initialSpeedMps ?? 0),
     routeCount = 0,
     blocked = false,
     disposed = false;
