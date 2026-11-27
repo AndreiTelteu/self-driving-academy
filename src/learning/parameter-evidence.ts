@@ -285,6 +285,16 @@ export interface ParameterEvidenceReadModel {
   readonly delta?: never;
 }
 
+/** One deduplicated occurrence behind a 093 read model, exposed for the 101 episode projection. */
+export interface ParameterEvidenceEpisode {
+  readonly opportunityId: string;
+  readonly occurrence: number;
+  readonly observedTicks: number;
+  readonly label: string;
+  readonly roadType: string;
+  readonly speedBand: string;
+}
+
 interface Episode {
   readonly occurrence: number;
   readonly label: string;
@@ -295,6 +305,8 @@ interface Episode {
 export interface ParameterEvidenceLedger {
   observe(input: EvidenceObservation): void;
   read(key: ParameterKey): ParameterEvidenceReadModel;
+  /** The exact deduplicated occurrences counted by `read(key)`; used to build 101 episodes. */
+  readEpisodes(key: ParameterKey): readonly ParameterEvidenceEpisode[];
   readAll(): readonly ParameterEvidenceReadModel[];
 }
 function validNumber(value: number): boolean {
@@ -306,8 +318,8 @@ function speedBand(speed: number | undefined): string {
 
 /** Descriptive evidence only. It cannot produce a profile value or parameter delta. */
 export function createParameterEvidenceLedger(): ParameterEvidenceLedger {
-  const episodes = new Map<ParameterKey, Map<string, Episode>>();
-  for (const spec of parameterEvidenceSpecs) episodes.set(spec.key, new Map());
+  const episodesByKey = new Map<ParameterKey, Map<string, Episode>>();
+  for (const spec of parameterEvidenceSpecs) episodesByKey.set(spec.key, new Map());
   function observe(input: EvidenceObservation): void {
     const { eligibility, opportunity, artifacts } = input;
     if (!eligibility || !opportunity || !artifacts)
@@ -401,7 +413,7 @@ export function createParameterEvidenceLedger(): ParameterEvidenceLedger {
           normalized.demandStatus !== 'INTENTIONAL')
       )
         continue;
-      const store = episodes.get(spec.key)!;
+      const store = episodesByKey.get(spec.key)!;
       const existing = store.get(occurrenceKey);
       store.set(
         occurrenceKey,
@@ -422,7 +434,7 @@ export function createParameterEvidenceLedger(): ParameterEvidenceLedger {
     const spec = specsByKey.get(key);
     if (!spec || !Object.hasOwn(parameterRegistry, key))
       throw new Error(`Unknown evidence key: ${key}`);
-    const values = [...episodes.get(key)!.values()];
+    const values = [...episodesByKey.get(key)!.values()];
     const distinctEpisodes = values.length;
     const speeds = new Set(
       values.map((item) => item.speedBand).filter((item) => item !== 'UNKNOWN'),
@@ -463,9 +475,26 @@ export function createParameterEvidenceLedger(): ParameterEvidenceLedger {
             : 'ESTIMATOR_NOT_IMPLEMENTED',
     });
   }
+  function readEpisodes(key: ParameterKey): readonly ParameterEvidenceEpisode[] {
+    const spec = specsByKey.get(key);
+    if (!spec) throw new Error(`Unknown evidence key: ${key}`);
+    const episodes = [...episodesByKey.get(key)!.entries()].map(([identity, episode]) => {
+      const separator = identity.indexOf('\u0000');
+      return Object.freeze({
+        opportunityId: identity.slice(0, separator),
+        occurrence: episode.occurrence,
+        observedTicks: episode.samples,
+        label: episode.label,
+        roadType: episode.roadType,
+        speedBand: episode.speedBand,
+      });
+    });
+    return Object.freeze(episodes);
+  }
   return Object.freeze({
     observe,
     read,
+    readEpisodes,
     readAll: () => Object.freeze(parameterEvidenceSpecs.map((spec) => read(spec.key))),
   });
 }

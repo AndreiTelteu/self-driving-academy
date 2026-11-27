@@ -30,6 +30,8 @@ export interface LearningQueueHarness {
   readonly tick: { now: number };
   plan(segmentId: string, kind: LearningQueueReplyKind): void;
   override(segmentId: string, patch: Partial<LearningEstimateResult>): void;
+  /** Hold the transport reply for a segment; the returned resolver releases it. */
+  defer(segmentId: string): () => void;
   dispose(): void;
 }
 
@@ -49,6 +51,7 @@ export function createLearningQueueHarness(options: {
   };
   const plans = new Map<string, LearningQueueReplyKind>();
   const patches = new Map<string, Partial<LearningEstimateResult>>();
+  const gates = new Map<string, { promise: Promise<void>; release: () => void }>();
   let receive: (value: unknown) => void = () => {};
   const port: Transport = {
     send(packet) {
@@ -62,7 +65,7 @@ export function createLearningQueueHarness(options: {
       identity.sessionId = packet.sessionId;
       identity.worldEpoch = packet.worldEpoch;
       starts.push(packet);
-      queueMicrotask(() => reply(packet));
+      queueMicrotask(() => void reply(packet));
     },
     listen(callback) {
       receive = callback;
@@ -110,7 +113,12 @@ export function createLearningQueueHarness(options: {
     });
   }
 
-  function reply(start: Packet): void {
+  async function reply(start: Packet): Promise<void> {
+    const gate = gates.get(start.segmentId);
+    if (gate !== undefined) {
+      await gate.promise;
+      gates.delete(start.segmentId);
+    }
     const kind = plans.get(start.segmentId) ?? 'result';
     if (kind === 'cancelled') {
       receive({
@@ -157,6 +165,17 @@ export function createLearningQueueHarness(options: {
     },
     override(segmentId: string, patch: Partial<LearningEstimateResult>): void {
       patches.set(segmentId, patch);
+    },
+    defer(segmentId: string): () => void {
+      let release!: () => void;
+      const promise = new Promise<void>((resolve) => {
+        release = resolve;
+      });
+      gates.set(segmentId, { promise, release });
+      return () => {
+        gates.delete(segmentId);
+        release();
+      };
     },
     dispose(): void {
       queue.dispose();

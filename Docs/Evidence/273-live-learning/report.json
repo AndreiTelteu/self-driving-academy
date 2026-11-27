@@ -1,0 +1,325 @@
+{
+  "version": "273-live-learning-report-v1",
+  "contract": "273-live-learning-v1",
+  "worker": {
+    "kind": "REAL_103_221_RUNTIME",
+    "engineVersion": "engine-1",
+    "queueVersion": "103-learning-estimator-queue-v1",
+    "governorVersion": "221-synthetic-1",
+    "storableRecords": 8
+  },
+  "scenarios": [
+    {
+      "name": "MANUAL",
+      "status": "SKIPPED_MANUAL",
+      "detail": {
+        "jobs": 0,
+        "versions": 0,
+        "profile": "profile-v1",
+        "fleet": 64
+      }
+    },
+    {
+      "name": "INELIGIBLE_LEARNING",
+      "status": "SKIPPED_INELIGIBLE",
+      "detail": {
+        "jobs": 0,
+        "versions": 0,
+        "eligible": 0
+      }
+    }
+  ],
+  "composite": {
+    "segmentId": "report-composed",
+    "key": "speed_delta_residential",
+    "baseVersionId": "profile-v1",
+    "versionId": "report-composed~112",
+    "parentVersionId": "profile-v1",
+    "candidate": -2.1999998092651367,
+    "baseValue": 0,
+    "composedValue": -0.33,
+    "jobCount": 1,
+    "versionCount": 1,
+    "activationStatus": "PENDING",
+    "activateAtTick": 2,
+    "appliedAtTick": 2,
+    "fleetBefore": [
+      "profile-v1"
+    ],
+    "fleetAfter": [
+      "report-composed~112"
+    ],
+    "profileFingerprintBefore": "1c4d32b2f4e3829a",
+    "profileFingerprintAfter": "af1274c24a841c31",
+    "xpFingerprintBefore": "681271edaa4119b4e650abb07af84d335b2c4f691ec94fff5da1f54995bd201e",
+    "xpFingerprintAfter": "681271edaa4119b4e650abb07af84d335b2c4f691ec94fff5da1f54995bd201e",
+    "evidence": "READY",
+    "candidateStatus": "CANDIDATE",
+    "episodes": 1,
+    "context": "FREE_TRAFFIC"
+  },
+  "noChange": {
+    "status": "INSUFFICIENT_EVIDENCE",
+    "jobs": 1,
+    "versions": 0,
+    "evidence": "NO_EVIDENCE",
+    "candidate": "REFUSED",
+    "reason": "INSUFFICIENT_EVIDENCE"
+  },
+  "stale": {
+    "status": "STALE_JOB",
+    "reason": "EPOCH_MISMATCH",
+    "jobs": 0,
+    "versions": 0,
+    "versionsInStore": 1
+  },
+  "restore": {
+    "epochBefore": 1,
+    "epochAfter": 2,
+    "targetVersionId": "report-target-v2",
+    "cancelledJobs": 1,
+    "lateStatus": "STALE_JOB",
+    "lateVersionId": null,
+    "physicalPreserved": true,
+    "fleetVersions": [
+      "report-target-v2"
+    ],
+    "versionsInStore": 2
+  },
+  "importScenario": {
+    "invalidStatus": "REJECTED",
+    "invalidEpoch": 1,
+    "validStatus": "PENDING",
+    "validEpoch": 2,
+    "validTarget": "report-import-v2",
+    "fleetVersions": [
+      "report-import-v2"
+    ]
+  },
+  "newProfile": {
+    "epoch": 2,
+    "targetVersionId": "report-new-profile-v2",
+    "fleetVersions": [
+      "report-new-profile-v2"
+    ]
+  },
+  "checks": [
+    {
+      "name": "contract-version",
+      "expected": "273-live-learning-v1",
+      "actual": "273-live-learning-v1",
+      "pass": true,
+      "detail": "pipeline contract"
+    },
+    {
+      "name": "manual-no-job",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "MANUAL never reaches the queue"
+    },
+    {
+      "name": "manual-no-version",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "MANUAL never produces a version"
+    },
+    {
+      "name": "ineligible-no-job",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "ineligible LEARNING never reaches the queue"
+    },
+    {
+      "name": "no-evidence-status",
+      "expected": "INSUFFICIENT_EVIDENCE",
+      "actual": "INSUFFICIENT_EVIDENCE",
+      "pass": true,
+      "detail": "no evidence does not become a version"
+    },
+    {
+      "name": "no-evidence-version",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no version without evidence"
+    },
+    {
+      "name": "composed-job",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "one eligible segment produced one job"
+    },
+    {
+      "name": "composed-version",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "one immutable version was derived"
+    },
+    {
+      "name": "composed-parent",
+      "expected": "profile-v1",
+      "actual": "profile-v1",
+      "pass": true,
+      "detail": "explicit parent"
+    },
+    {
+      "name": "composed-activation",
+      "expected": "PENDING",
+      "actual": "PENDING",
+      "pass": true,
+      "detail": "common-tick command"
+    },
+    {
+      "name": "composed-applied-tick",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "same tick"
+    },
+    {
+      "name": "composed-fleet",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "one version across the fleet"
+    },
+    {
+      "name": "composed-fleet-version",
+      "expected": "report-composed~112",
+      "actual": "report-composed~112",
+      "pass": true,
+      "detail": "all vehicles use the published version"
+    },
+    {
+      "name": "profile-changed",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the immutable profile changed"
+    },
+    {
+      "name": "xp-unchanged",
+      "expected": "681271edaa4119b4e650abb07af84d335b2c4f691ec94fff5da1f54995bd201e",
+      "actual": "681271edaa4119b4e650abb07af84d335b2c4f691ec94fff5da1f54995bd201e",
+      "pass": true,
+      "detail": "273 never writes XP"
+    },
+    {
+      "name": "stale-status",
+      "expected": "STALE_JOB",
+      "actual": "STALE_JOB",
+      "pass": true,
+      "detail": "foreign generation is stale"
+    },
+    {
+      "name": "stale-no-job",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "a stale segment creates no job"
+    },
+    {
+      "name": "stale-no-version",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "only the base version exists"
+    },
+    {
+      "name": "restore-epoch",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "restore increments learningEpoch once"
+    },
+    {
+      "name": "restore-target",
+      "expected": "report-target-v2",
+      "actual": "report-target-v2",
+      "pass": true,
+      "detail": "target active"
+    },
+    {
+      "name": "restore-cancelled",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "the in-flight 103 job was cancelled"
+    },
+    {
+      "name": "restore-late-version",
+      "expected": null,
+      "actual": null,
+      "pass": true,
+      "detail": "the late result published nothing"
+    },
+    {
+      "name": "restore-preserved",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "no teleport or speed reset"
+    },
+    {
+      "name": "restore-late",
+      "expected": "STALE_JOB",
+      "actual": "STALE_JOB",
+      "pass": true,
+      "detail": "the cancelled job publishes nothing"
+    },
+    {
+      "name": "import-invalid",
+      "expected": "REJECTED",
+      "actual": "REJECTED",
+      "pass": true,
+      "detail": "invalid import has no effect"
+    },
+    {
+      "name": "import-invalid-epoch",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "invalid import keeps the epoch"
+    },
+    {
+      "name": "import-valid-epoch",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "valid import advances the epoch"
+    },
+    {
+      "name": "import-valid-target",
+      "expected": "report-import-v2",
+      "actual": "report-import-v2",
+      "pass": true,
+      "detail": "target active"
+    },
+    {
+      "name": "new-profile-epoch",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "new profile advances the epoch"
+    },
+    {
+      "name": "new-profile-target",
+      "expected": "report-new-profile-v2",
+      "actual": "report-new-profile-v2",
+      "pass": true,
+      "detail": "new profile target active"
+    }
+  ],
+  "summary": {
+    "scenarios": 8,
+    "checks": 30,
+    "passed": 30,
+    "failed": 0,
+    "pass": true
+  }
+}

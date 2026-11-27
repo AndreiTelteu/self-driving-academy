@@ -120,3 +120,8 @@ Verificare: `node --import ./scripts/register-typescript.mjs --test tests/app/pr
 `npm run profile:pipeline`, `npm run profile:pipeline -- --check`, plus `npm run typecheck`,
 `npm run lint`, `npm run format:check`, `npm run check:architecture` și `npm test`. Dovezile sunt în
 [Evidence/112-profile-pipeline](Evidence/112-profile-pipeline/README.md).
+
+Consumatorul live este [live-learning](live-learning.md) (273): același pipeline primește un segment
+închis 272, iar adaptorul `273-live-evidence-v1` construiește dovezile 093 și candidatul 094/098 din
+faptele reale. Pipeline-ul nu este duplicat; 273 este composition root-ul live, nu o a doua
+implementare.

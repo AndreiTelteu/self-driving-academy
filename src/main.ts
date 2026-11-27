@@ -5,11 +5,14 @@ import {
   createCompositionWorld,
   createGameShell,
   createLiveEconomyComposition,
+  createLiveLearningPipeline,
   createLiveModeSegments,
   createLiveTelemetryComposition,
   createLiveRideComposition,
+  createCityStyleProfile,
   createRendererRecovery,
   createSessionFlow,
+  LIVE_LEARNING_VERSION,
   LIVE_TELEMETRY_COMPOSITION_VERSION,
   LIVE_THREE_MODES_VERSION,
   readCityDashboardSnapshot,
@@ -20,6 +23,7 @@ import {
   rideTripDistanceM,
   type GameTickPort,
   type LiveEconomyComposition,
+  type LiveLearningPipeline,
   type LiveModeSegments,
   type LiveRideComposition,
   type LiveTelemetryComposition,
@@ -66,10 +70,19 @@ import {
   createPassengerVisualPresenter,
   createTaxiHud,
 } from './ui';
-import { LIVE_RIDE_LIFECYCLE_VERSION, createFleetHealth, createLiveRides } from './fleet';
-import type { FleetHealth, LiveRides } from './fleet';
-import { computeProfileVersionChecksum } from './profiles';
-import type { ProfileVersion, ProfileVersionContent } from './profiles';
+import {
+  LIVE_RIDE_LIFECYCLE_VERSION,
+  createFleetHealth,
+  createLiveRides,
+  createProfileActivation,
+} from './fleet';
+import type { FleetHealth, LiveRides, ProfileActivation } from './fleet';
+import {
+  createCandidateProfileStore,
+  createLearningQueueRuntime,
+  type LearningQueueRuntime,
+} from './learning';
+import type { DrivingProfile, ProfileVersion } from './profiles';
 import { copyProfileForChaos } from './persistence';
 import type { SessionKind, SessionWorldPort } from './persistence';
 import './style.css';
@@ -80,6 +93,8 @@ const view = createRenderingView(app);
 const world = createCompositionWorld();
 /** PBI 239: `?capture=1` pornește harnessul de capturi; fără steag este `null` și nimic nu se schimbă. */
 const captureConfig = readCaptureConfig(window.location.search);
+/** Probe-only: a headless browser loses focus when Playwright drives; this flag keeps the clock. */
+const noFocusPause = new URLSearchParams(window.location.search).has('nofocuspause');
 /** Contor FPS permanent (stânga-sus), independent de diagnostic; omis în capturile deterministe. */
 if (!captureConfig) createFpsCounter(app);
 const defaultSettings = createDefaultSettings('v3-composition');
@@ -183,6 +198,7 @@ let liveFleet:
   | Readonly<{
       registry: ReturnType<typeof createAmbientTraffic>['registry'];
       traffic: ReturnType<typeof createAmbientTraffic>['traffic'];
+      ambient: ReturnType<typeof createAmbientTraffic>;
     }>
   | undefined;
 const economyModules: {
@@ -218,6 +234,52 @@ const modeModules: { segments: LiveModeSegments | undefined } = { segments: unde
  * it never drives a vehicle, never estimates a style and never publishes a profile.
  */
 const telemetryModules: { live: LiveTelemetryComposition | undefined } = { live: undefined };
+/**
+ * PBI 273: the live learning pipeline and the shared 103/221 runtime. The pipeline consumes the
+ * closed 272 segments; the queue is created lazily once and reused across session/backend changes,
+ * while the generation barrier invalidates jobs from an older epoch.
+ */
+const learningModules: {
+  queue: LearningQueueRuntime | undefined;
+  pipeline: LiveLearningPipeline | undefined;
+  activation: ProfileActivation | undefined;
+} = { queue: undefined, pipeline: undefined, activation: undefined };
+const liveLearningEngineVersion = 'engine-273-live' as const;
+/**
+ * PBI 273: the active city style read by the one 057/058 fleet. The 109 store remains the only
+ * writer of versions; this source is updated only after a real 110 activation has been applied.
+ */
+const liveCityStyleSource: {
+  activeStyle(): DrivingProfile;
+  set(profile: DrivingProfile): void;
+} = (() => {
+  let active = createCityStyleProfile('profile-261-academy', 'profile-261-academy@1');
+  return {
+    activeStyle: () => active,
+    set(profile: DrivingProfile): void {
+      active = profile;
+    },
+  };
+})();
+/** Exact read-only physical snapshot for the 205 barrier; it never advances a tick or moves a body. */
+function livePhysicalState(): string {
+  const frame = composition?.composition.frame;
+  if (frame === undefined) return 'NO_WORLD';
+  return JSON.stringify(
+    frame.vehicles
+      .map((vehicle) => [
+        vehicle.vehicleId,
+        vehicle.controlMode,
+        vehicle.positionM.x,
+        vehicle.positionM.y,
+        vehicle.positionM.z,
+        vehicle.yawRad,
+        vehicle.speedMps,
+        vehicle.appliedProfileVersion,
+      ])
+      .sort((left, right) => String(left[0]).localeCompare(String(right[0]))),
+  );
+}
 const telemetryTickPort: GameTickPort = {
   id: 'telemetry',
   version: LIVE_TELEMETRY_COMPOSITION_VERSION,
@@ -231,6 +293,13 @@ const telemetryTickPort: GameTickPort = {
         `Cadrul de telemetrie (${frame.tick}) nu coincide cu tick-ul autoritar (${context.tick}).`,
       );
     live.step(frame);
+  },
+};
+const learningTickPort: GameTickPort = {
+  id: 'learning',
+  version: LIVE_LEARNING_VERSION,
+  step(context) {
+    learningModules.pipeline?.step(context.tick);
   },
 };
 const controlTickPort: GameTickPort = {
@@ -413,6 +482,7 @@ const shell = createGameShell({
     rides: ridesTickPort,
     economy: economyTickPort,
     telemetry: telemetryTickPort,
+    learning: learningTickPort,
   },
   suspend: (cause) => application.pause(cause),
   resume: (cause) => {
@@ -677,8 +747,12 @@ const showView = (state: Parameters<typeof view.show>[0]): void => {
 /** Browser alt-tab/blur only *reports*; the authoritative suspension stays a 070 decision. */
 const focusBinding = bindPauseFocusInput({
   surface: app,
-  onFocusLost: () => shell.setFocusLost(true),
-  onFocusGained: () => shell.setFocusLost(false),
+  onFocusLost: () => {
+    if (!noFocusPause) shell.setFocusLost(true);
+  },
+  onFocusGained: () => {
+    if (!noFocusPause) shell.setFocusLost(false);
+  },
 });
 
 /** Snapshot compact pentru bucla fixă; compunerea rămâne proprietarul stării. */
@@ -753,8 +827,13 @@ const application = createApplicationLifecycle({
                 z: vehicle.positionM.z,
               })),
             ],
+            styleSource: liveCityStyleSource,
           });
-          liveFleet = { registry: ownedTraffic.registry, traffic: ownedTraffic.traffic };
+          liveFleet = {
+            registry: ownedTraffic.registry,
+            traffic: ownedTraffic.traffic,
+            ambient: ownedTraffic,
+          };
           ownedComposition = createV3BrowserComposition({
             scene: backend.scene,
             surface: app,
@@ -777,9 +856,11 @@ const application = createApplicationLifecycle({
           // shell tick. It closes/opens segments at the exact accepted tick without a second model.
           disposeLiveTelemetry('SESSION_CHANGE');
           disposeLiveModeSegments('SESSION_CHANGE');
+          disposeLiveLearning();
           composition = ownedComposition;
           mountLiveModeSegments();
           mountLiveTelemetry();
+          mountLiveLearning();
           // PBI 264: cererile și dispecerizarea live peste exact aceleași 24 de taxiuri 057/058.
           // Plannerul 041 este al acestui modul; harta, graful și registry-ul rămân ale compunerii.
           ownedRides = createLiveRides({
@@ -879,6 +960,9 @@ const application = createApplicationLifecycle({
           try {
             disposeLiveTelemetry('SHUTDOWN');
             disposeLiveModeSegments('SHUTDOWN');
+            disposeLiveLearning();
+            learningModules.queue?.dispose();
+            learningModules.queue = undefined;
             if (attachedShellWorld) {
               attachedShellWorld = false;
               shell.detachWorld();
@@ -925,6 +1009,9 @@ const application = createApplicationLifecycle({
               try {
                 disposeLiveTelemetry('SHUTDOWN');
                 disposeLiveModeSegments('SHUTDOWN');
+                disposeLiveLearning();
+                learningModules.queue?.dispose();
+                learningModules.queue = undefined;
                 if (attachedShellWorld) {
                   attachedShellWorld = false;
                   shell.detachWorld();
@@ -1078,29 +1165,30 @@ const application = createApplicationLifecycle({
     return () => document.removeEventListener('visibilitychange', changed);
   },
 });
-/** PBI 261: profilul de lucru al Academiei și copia explicită, independentă, a Haos. */
-function sessionProfile(profileId: string, versionId: string): ProfileVersion {
-  const content: ProfileVersionContent = {
-    schemaVersion: 1,
-    units: 'SI',
-    profileId,
-    versionId,
-    parentVersionId: null,
-    engineVersion: 'engine-261',
-    parameters: Object.freeze({ speed_delta_urban: 0, following_time_headway: 1.8 }),
-    provenance: Object.freeze({
-      origin: 'BASE',
-      sourceSegmentIds: Object.freeze([] as string[]),
-      sourceInterventionIds: Object.freeze([] as string[]),
-      delta: null,
-    }),
-    sourceSegmentIds: Object.freeze([] as string[]),
-    depth: 0,
-    createdAt: sessionBootedAt,
-  };
-  return Object.freeze({ ...content, checksum: computeProfileVersionChecksum(content) });
-}
-const academyProfile = sessionProfile('profile-261-academy', 'profile-261-academy@1');
+/**
+ * PBI 273: the Academy base profile is a real 109 version with the complete 092 catalog, so the
+ * live city style can learn any key. The style source and the mode segments read the same identity;
+ * the 109 store remains the only writer of versions. Haos is an explicit copy and is not learnable.
+ */
+const liveLearningStore = createCandidateProfileStore({
+  engineVersion: liveLearningEngineVersion,
+  now: () => sessionBootedAt,
+});
+const liveLearningBaseStyle = createCityStyleProfile(
+  'profile-261-academy',
+  'profile-261-academy@1',
+);
+const liveLearningBase = liveLearningStore.createBase({
+  profileId: 'profile-261-academy',
+  versionId: 'profile-261-academy@1',
+  parameters: liveLearningBaseStyle.parameters,
+  createdAt: sessionBootedAt,
+});
+if (liveLearningBase.status !== 'ACCEPTED')
+  throw new Error(`Profilul de bază 273 a fost refuzat: ${liveLearningBase.rejection.code}`);
+const academyProfileRecord = liveLearningStore.getVersion('profile-261-academy@1');
+if (academyProfileRecord === null) throw new Error('Profilul de bază 273 lipsește din store.');
+const academyProfile: ProfileVersion = academyProfileRecord;
 const chaosCopy = copyProfileForChaos({
   source: academyProfile,
   copyId: 'haos-261',
@@ -1119,7 +1207,9 @@ function mountLiveModeSegments(): void {
   const model = composition;
   if (model === undefined) return;
   const status = shell.status();
-  const profile = status.sessionId === CHAOS_SESSION_ID ? chaosProfile.profile : academyProfile;
+  const academyHead = liveLearningStore.getHistory('profile-261-academy').at(-1);
+  const profile =
+    status.sessionId === CHAOS_SESSION_ID ? chaosProfile.profile : (academyHead ?? academyProfile);
   const segments = createLiveModeSegments({
     context: Object.freeze({
       schemaVersion: 1 as const,
@@ -1191,6 +1281,78 @@ function disposeLiveTelemetry(reason: 'SESSION_CHANGE' | 'WORLD_RESET' | 'SHUTDO
   } finally {
     live.dispose();
   }
+}
+/**
+ * PBI 273: the learning port runs after telemetry on the same authoritative tick. It owns the real
+ * 103 queue/221 governor, the 109 store and the 110 activation; the gateway is the 272 closed
+ * LEARNING segment. No second simulation is created.
+ */
+function ensureLearningActivation(): ProfileActivation | undefined {
+  if (learningModules.activation !== undefined) return learningModules.activation;
+  const fleet = liveFleet;
+  if (fleet === undefined) return undefined;
+  const activation = createProfileActivation({
+    registry: fleet.registry,
+    engineVersion: liveLearningEngineVersion,
+    clock: () => composition?.composition.frame.tick ?? shell.status().world.tick,
+    now: () => new Date().toISOString(),
+  });
+  learningModules.activation = activation;
+  return activation;
+}
+function mountLiveLearning(): void {
+  const model = composition;
+  if (model === undefined) return;
+  const status = shell.status();
+  if (status.sessionId === CHAOS_SESSION_ID) return;
+  const telemetry = telemetryModules.live;
+  const segments = modeModules.segments;
+  const activation = ensureLearningActivation();
+  if (telemetry === undefined || activation === undefined) return;
+  if (learningModules.queue === undefined)
+    learningModules.queue = createLearningQueueRuntime({
+      engineVersion: liveLearningEngineVersion,
+    });
+  const head =
+    liveLearningStore.getHistory(academyProfile.profileId).at(-1)?.versionId ??
+    academyProfile.versionId;
+  const pipeline = createLiveLearningPipeline({
+    context: Object.freeze({
+      schemaVersion: 1 as const,
+      units: 'SI' as const,
+      sessionId: status.sessionId,
+      worldEpoch: status.worldEpoch,
+    }),
+    playerId: 'v3-player',
+    profileId: academyProfile.profileId,
+    engineVersion: liveLearningEngineVersion,
+    learningEpoch: status.learningEpoch,
+    baseVersionId: head,
+    sessionId: status.sessionId,
+    worldEpoch: status.worldEpoch,
+    queue: learningModules.queue.queue,
+    store: liveLearningStore,
+    activation,
+    telemetry,
+    ...(segments === undefined ? {} : { modeSegments: segments }),
+    tick: () => composition?.composition.frame.tick ?? shell.status().world.tick,
+    physicalState: () => livePhysicalState(),
+    onActivated: ({ versionId, profile }) => {
+      liveCityStyleSource.set(profile);
+      liveFleet?.ambient.refreshStyle();
+      const epoch = learningModules.pipeline?.learningEpoch ?? status.learningEpoch;
+      modeModules.segments?.updateGeneration({ baseVersionId: versionId, learningEpoch: epoch });
+    },
+  });
+  learningModules.pipeline = pipeline;
+}
+function disposeLiveLearning(): void {
+  const pipeline = learningModules.pipeline;
+  learningModules.pipeline = undefined;
+  if (pipeline !== undefined) pipeline.dispose();
+  const activation = learningModules.activation;
+  learningModules.activation = undefined;
+  if (activation !== undefined) activation.dispose();
 }
 /** PBI 272: a 070 suspension is a real artifact, never a fabricated slow reaction. */
 function noteLiveTelemetrySuspension(
@@ -1278,6 +1440,7 @@ const sessionWorld: SessionWorldPort = {
     // fresh 069 lifecycle starts in AUTO for the new accepted session context.
     disposeLiveTelemetry('SESSION_CHANGE');
     disposeLiveModeSegments('SESSION_CHANGE');
+    disposeLiveLearning();
     // Sesiunea nouă nu moștenește poziția fizică a celei vechi; restaurarea completă a
     // snapshotului rămâne la 278.
     composition?.reset();
@@ -1285,6 +1448,7 @@ const sessionWorld: SessionWorldPort = {
     shell.setMode('AUTO');
     mountLiveModeSegments();
     mountLiveTelemetry();
+    mountLiveLearning();
   },
   stop() {
     composition?.composition.releaseInput();
@@ -1412,6 +1576,8 @@ interface V3DebugGlobal {
   fleet(): unknown;
   /** PBI 271: the live 069 segments, LEARNING exposure and accepted mode. */
   modes(): unknown;
+  /** PBI 273: the live learning pipeline, its real 103/221 queue and the immutable profile. */
+  learning(): unknown;
   /** PBI 264: cererile, coada, alocările și starea panoului de curse. */
   rides(): unknown;
   /** PBI 266: economia live, KPI-urile curente și read model-ul HUD. */
@@ -1488,6 +1654,39 @@ const debugGlobal: V3DebugGlobal = {
         selectedVehicleId: composition?.composition.frame.selectedVehicleId ?? null,
         playerVehicleId: composition?.composition.frame.playerVehicleId ?? null,
       },
+    };
+  },
+  learning: () => {
+    const pipeline = learningModules.pipeline;
+    return {
+      model: pipeline?.read() ?? null,
+      queue: learningModules.queue?.queue.usage ?? null,
+      measurements: learningModules.queue?.queue.measurements.slice(-8) ?? [],
+      governor: learningModules.queue?.governor.usage ?? null,
+      style: liveCityStyleSource.activeStyle(),
+      telemetry: telemetryModules.live
+        ? {
+            closedSegments: telemetryModules.live.read().closedSegments,
+            windows: telemetryModules.live.read().windows.map((window) => ({
+              opportunityId: window.opportunityId,
+              label: window.label,
+              windowClass: window.windowClass,
+              segmentId: window.segmentId,
+              openedTick: window.openedTick,
+              lastTick: window.lastTick,
+            })),
+            opportunities: telemetryModules.live.read().opportunities.map((record) => ({
+              id: record.id,
+              kind: record.kind,
+              state: record.state,
+              outcome: record.outcome,
+              segmentIds: record.segmentIds,
+              learningEligible: record.learningEligible,
+            })),
+            evidence: telemetryModules.live.read().evidence,
+          }
+        : null,
+      port: shell.status().systems.find((system) => system.id === 'learning')?.status ?? null,
     };
   },
   lifecycle: () => application.getState(),

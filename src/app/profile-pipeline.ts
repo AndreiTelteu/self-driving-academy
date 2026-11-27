@@ -694,7 +694,7 @@ export function createProfilePipeline(services: ProfilePipelineServices): Profil
   }
 
   function advance(): ProfilePipelineActivationStep | null {
-    if (activation === undefined) return null;
+    if (disposed || activation === undefined) return null;
     const atTick = currentTick();
     const report = activation.applyAt(atTick);
     if (report.status === 'APPLIED') counters.activationsApplied += 1;
@@ -859,6 +859,20 @@ export function createProfilePipeline(services: ProfilePipelineServices): Profil
     composition: LearningComposition,
   ): ProfilePipelineResult {
     const compositionRecord = compositionOf(composition);
+    if (disposed) {
+      counters.stale += 1;
+      return push(
+        finish({
+          ...baseResult(segment, atTick),
+          status: 'STALE_JOB',
+          reason: 'EPOCH_MISMATCH',
+          detail: 'The pipeline was disposed before the composition committed',
+          baseVersionId: jobBase,
+          jobSubmitted: true,
+          composition: compositionRecord,
+        }),
+      );
+    }
     if (composition.learningEpoch !== learningEpoch || composition.baseVersionId !== jobBase) {
       counters.stale += 1;
       return push(

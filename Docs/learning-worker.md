@@ -12,7 +12,10 @@ Consumatorul de producție al cozii este [profile-pipeline](profile-pipeline.md)
 segmente `LEARNING` eligibile, așteaptă outcome-ul terminal, derivă cel mult o versiune 109 dintr-o
 compoziție schimbată și o publică în 110 la tick-ul următor. `MANUAL`, `AUTO`, segmentele
 neeligibile, rezultatele fără schimbare și erorile nu produc versiuni; un rezultat depășit în aceeași
-generație este raportat ca recompoziție explicită.
+generație este raportat ca recompoziție explicită. Consumatorul live este 273
+([live-learning](live-learning.md)); `src/learning/estimator-queue.ts` creează runtime-ul 103/221 cu
+`WorkerRuntime`, governorul și taskul reale, iar browserul poate folosi același runtime pe un port
+`Worker` sau pe loopback-ul în proces.
 
 ## Jobul și eligibilitatea
 

@@ -64,8 +64,10 @@ Costul local măsurat este în [Evidence/272-live-telemetry/cost.json](../Docs/E
 și fereastra 088. `readWorldSamples(query)` expune inelul whole-fleet. `readFollowEpisodes()` expune
 episoadele de urmărire deduplicate pe vehicul + lider + achiziție, nu pe cadre.
 
-Modulul **nu** rulează estimatoare, nu creează joburi, nu publică profiluri și nu scrie XP. Acelea
-rămân 273/274.
+Consumatorul este [live-learning](live-learning.md): pentru fiecare segment închis eligibil,
+`273-live-evidence-v1` proiectează faptele 085–088 în read model-ul 093 și cheamă estimatoarele reale
+094/098; telemetria însăși rămâne read-only. Modulul **nu** rulează estimatoare, nu creează joburi,
+nu publică profiluri și nu scrie XP.
 
 ## Ce NU este
 

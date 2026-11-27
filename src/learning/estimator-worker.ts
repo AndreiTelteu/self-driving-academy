@@ -395,6 +395,7 @@ export class LearningEstimatorQueue {
   private generation: LearningGeneration | null = null;
   private profileOwners = new Map<string, string>();
   private samples: LearningQueueMeasurement[] = [];
+  private settledKeys = new Map<string, string>();
   private idleWaiters: (() => void)[] = [];
   private sequence = 0;
   private jobSequence = 0;
@@ -645,6 +646,23 @@ export class LearningEstimatorQueue {
     return new Promise((resolve) => this.idleWaiters.push(resolve));
   }
 
+  /**
+   * Releases the protected 221 evidence of a settled segment after its publication was committed.
+   * Returns false when the key is unknown or the governor cannot retire it. It never touches a
+   * running job and never acknowledges a proposal that has not settled.
+   */
+  async acknowledge(segmentId: string): Promise<boolean> {
+    const key = this.settledKeys.get(segmentId);
+    if (key === undefined) return false;
+    try {
+      await this.governor.acknowledge(key);
+      this.settledKeys.delete(segmentId);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
   dispose(): void {
     if (this.disposed) return;
     this.disposed = true;
@@ -655,6 +673,7 @@ export class LearningEstimatorQueue {
       active.invalidated = true;
       if (active.ticketKey !== null) this.governor.cancel(active.ticketKey);
     }
+    this.settledKeys.clear();
   }
 
   private releaseOrder(entry: Entry): void {
@@ -998,6 +1017,14 @@ export class LearningEstimatorQueue {
     });
     this.samples.push(measurement);
     if (this.samples.length > this.historyLimit) this.samples.shift();
+    if (entry.ticketKey !== null) {
+      this.settledKeys.set(entry.job.segmentId, entry.ticketKey);
+      while (this.settledKeys.size > this.historyLimit) {
+        const oldest = this.settledKeys.keys().next();
+        if (oldest.done) break;
+        this.settledKeys.delete(oldest.value);
+      }
+    }
     entry.resolve(
       Object.freeze({
         status:

@@ -7,6 +7,12 @@ export type { Slice, TaskFactory } from './runtime';
 export { messageTransport } from './transport';
 export type { MessageEndpoint } from './transport';
 export { WorkerResourceGovernor, governorLimits, protectedJobKey } from './governor';
+export {
+  createMemoryProtectedJobStore,
+  GOVERNOR_MEMORY_STORE_VERSION,
+  type GovernorMemoryStore,
+  type GovernorMemoryStoreOptions,
+} from './memory-store';
 export type {
   ProtectedJobStore,
   RetainedJob,

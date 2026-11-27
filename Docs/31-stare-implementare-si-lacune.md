@@ -339,7 +339,7 @@ Dovezile sunt în [Evidence/270-company-dashboard](Evidence/270-company-dashboar
 
 **PBI:** [272](../PBI/README.md) · **Dependențe:** 271.
 
-**Stare:** Done la 27 noiembrie 2026. Telemetria, oportunitățile, ferestrele și artefactele live sunt montate; pipeline-ul de learning rămâne 273.
+**Stare:** Done la 27 noiembrie 2026. Telemetria, oportunitățile, ferestrele și artefactele live sunt montate; pipeline-ul live este livrat de 273.
 
 ### 273 — Pipeline-ul de learning live: dovezi, worker, profil și activare
 
@@ -352,9 +352,18 @@ Dovezile sunt în [Evidence/270-company-dashboard](Evidence/270-company-dashboar
 - Nu există refuz pentru MANUAL, segment incomplet, job învechit sau dovezi insuficiente.
 - Nu există o probă de browser în care stilul orașului se schimbă după o demonstrație.
 
-**Documentație:** [Învățarea stilului](10-invatarea-stilului.md) · [Profiluri și propagare](12-profiluri-si-propagare.md) · [Worker-ul de learning](learning-worker.md) · [Pipeline-ul de profil](profile-pipeline.md) · [Activarea profilului](profile-activation.md) · [Bariera de generație](learning-epoch.md) · [Bucla timpurie de learning](early-learning-loop.md) · [Starea implementării și lacunele](31-stare-implementare-si-lacune.md)
+**Ce s-a livrat:** `src/app/live-learning.ts` (`273-live-learning-v1`) consumă `readClosedSegment` din 272 și construiește un job 103 numai pentru un segment `LEARNING` închis, eligibil, din profilul și epoca curente. `src/learning/live-evidence.ts` (`273-live-evidence-v1`) proiectează faptele 085–088 în read model-ul 093, păstrează identitatea ferestrei 087 și cheamă estimatoarele reale 094/098; o singură cheie este aleasă determinist per segment (STOP, apoi viteză urbană, apoi rezidențială). Coada reală 103/221 rulează prin `src/learning/estimator-queue.ts` cu `WorkerRuntime`, governorul și taskul existente; 102 validează, 109 scrie o versiune imuabilă, iar 110 o activează la `tick + 1` pentru toată flota. Composition root-ul live actualizează sursa de stil a orașului și `refreshStyle()` după activare.
+
+Refuzurile sunt închise: MANUAL/AUTO `SKIPPED_MANUAL`, LEARNING neeligibil `SKIPPED_INELIGIBLE`, segment incomplet `SKIPPED_INCOMPLETE`, epocă/profil străin `STALE_JOB`, dovezi insuficiente `INSUFFICIENT_EVIDENCE` fără versiune, compoziție neschimbată `NO_CHANGE`. Restore/import/profil nou folosesc bariera 205: închid generația, anulează joburile 103, incrementează epoca, publică ținta și păstrează starea fizică; un import invalid nu are niciun efect. Un rezultat târziu este `STALE_JOB` și nu publică nimic, inclusiv când sosește după ce pipeline-ul a fost eliberat.
+
+- Dovezi: `npm run learning:live` (30/30), `npm run learning:live:cost`, `npm run learning:live:probe` (4/9, limitat de renderer), în [Evidence/273-live-learning](Evidence/273-live-learning/README.md).
+- Limitări: proba de browser headless cu SwiftShader intră în pauze de overload, iar singura fereastră eligibilă apare la finalul segmentului (tick 841 din 849), prea târziu pentru prefixul de 10 s; pipeline-ul este dovedit determinist pe segmentul real 272. UI-ul de profil rămâne 274, setările 279, fizica 282 și persistența 278.
+
+**Documentație:** [Învățarea stilului](10-invatarea-stilului.md) · [Profiluri și propagare](12-profiluri-si-propagare.md) · [Worker-ul de learning](learning-worker.md) · [Pipeline-ul de profil](profile-pipeline.md) · [Activarea profilului](profile-activation.md) · [Bariera de generație](learning-epoch.md) · [Pipeline-ul live](live-learning.md) · [Starea implementării și lacunele](31-stare-implementare-si-lacune.md)
 
 **PBI:** [273](../PBI/README.md) · **Dependențe:** 272.
+
+**Stare:** Implementat local la 27 noiembrie 2026. Raportul determinist 30/30 și testele țintă trec; proba de browser este 4/9 din cauza pauzelor de overload ale renderer-ului software, nu a pipeline-ului. Taskul rămâne In Progress până la integrarea orchestratorului și dovada de browser pe hardware/browser real.
 
 ### 274 — Interfața de learning și profil: notificări, explicații, istoric și restore
 
