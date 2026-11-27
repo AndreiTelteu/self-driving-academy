@@ -6,9 +6,11 @@ import {
   createGameShell,
   createLiveEconomyComposition,
   createLiveModeSegments,
+  createLiveTelemetryComposition,
   createLiveRideComposition,
   createRendererRecovery,
   createSessionFlow,
+  LIVE_TELEMETRY_COMPOSITION_VERSION,
   LIVE_THREE_MODES_VERSION,
   readCityDashboardSnapshot,
   readKpiHistory,
@@ -20,6 +22,7 @@ import {
   type LiveEconomyComposition,
   type LiveModeSegments,
   type LiveRideComposition,
+  type LiveTelemetryComposition,
   type RecoveryRenderer,
   type SessionFlow,
   type SessionFlowMenu,
@@ -210,6 +213,26 @@ const dashboardModules: { health: FleetHealth | undefined } = { health: undefine
  * frame; no second mode, seat or segment model exists.
  */
 const modeModules: { segments: LiveModeSegments | undefined } = { segments: undefined };
+/**
+ * PBI 272: the live telemetry writer. It reads the accepted frame and the 271 segment read model;
+ * it never drives a vehicle, never estimates a style and never publishes a profile.
+ */
+const telemetryModules: { live: LiveTelemetryComposition | undefined } = { live: undefined };
+const telemetryTickPort: GameTickPort = {
+  id: 'telemetry',
+  version: LIVE_TELEMETRY_COMPOSITION_VERSION,
+  step(context) {
+    const live = telemetryModules.live;
+    if (live === undefined) return;
+    const frame = composition?.composition.frame;
+    if (frame === undefined) return;
+    if (frame.tick !== context.tick)
+      throw new Error(
+        `Cadrul de telemetrie (${frame.tick}) nu coincide cu tick-ul autoritar (${context.tick}).`,
+      );
+    live.step(frame);
+  },
+};
 const controlTickPort: GameTickPort = {
   id: 'control',
   version: LIVE_THREE_MODES_VERSION,
@@ -389,6 +412,7 @@ const shell = createGameShell({
     control: controlTickPort,
     rides: ridesTickPort,
     economy: economyTickPort,
+    telemetry: telemetryTickPort,
   },
   suspend: (cause) => application.pause(cause),
   resume: (cause) => {
@@ -636,7 +660,17 @@ const shellHost = createGameShellHost({
   },
 });
 /** Fiecare tranziție de sesiune ajunge și în gazda shell-ului, nu doar în view-ul de randare. */
+let telemetrySuspended = false;
 const showView = (state: Parameters<typeof view.show>[0]): void => {
+  // PBI 272: orice suspendare a ceasului (070 focus/meniu/panou sau background-ul browserului)
+  // produce un artefact 088; reluarea închide intervalul, fără să inventeze tick-uri.
+  if (state.kind === 'PAUSED' && !telemetrySuspended) {
+    telemetrySuspended = true;
+    noteLiveTelemetrySuspension(state.reason === 'focus' ? 'FOCUS_LOST' : 'PAUSE');
+  } else if (state.kind === 'PLAYING' && telemetrySuspended) {
+    telemetrySuspended = false;
+    noteLiveTelemetryResume();
+  }
   view.show(state);
   shellHost.setSessionState(state.kind);
 };
@@ -741,9 +775,11 @@ const application = createApplicationLifecycle({
           });
           // PBI 271: the single 069 live boundary owner over this composition, before the first
           // shell tick. It closes/opens segments at the exact accepted tick without a second model.
+          disposeLiveTelemetry('SESSION_CHANGE');
           disposeLiveModeSegments('SESSION_CHANGE');
           composition = ownedComposition;
           mountLiveModeSegments();
+          mountLiveTelemetry();
           // PBI 264: cererile și dispecerizarea live peste exact aceleași 24 de taxiuri 057/058.
           // Plannerul 041 este al acestui modul; harta, graful și registry-ul rămân ale compunerii.
           ownedRides = createLiveRides({
@@ -841,6 +877,7 @@ const application = createApplicationLifecycle({
         } catch (error: unknown) {
           releaseSurface?.();
           try {
+            disposeLiveTelemetry('SHUTDOWN');
             disposeLiveModeSegments('SHUTDOWN');
             if (attachedShellWorld) {
               attachedShellWorld = false;
@@ -886,6 +923,7 @@ const application = createApplicationLifecycle({
               releaseSurface?.();
               releaseSurface = undefined;
               try {
+                disposeLiveTelemetry('SHUTDOWN');
                 disposeLiveModeSegments('SHUTDOWN');
                 if (attachedShellWorld) {
                   attachedShellWorld = false;
@@ -1122,6 +1160,54 @@ function disposeLiveModeSegments(reason: 'SESSION_CHANGE' | 'WORLD_RESET' | 'SHU
   }
 }
 /**
+ * PBI 272: mount the live telemetry writer over the one composition and the one 271 segment owner.
+ * It only reads the accepted frame; no second mode, seat, vehicle or clock is created here.
+ */
+function mountLiveTelemetry(): void {
+  const model = composition;
+  if (model === undefined) return;
+  const status = shell.status();
+  const live = createLiveTelemetryComposition({
+    context: Object.freeze({
+      schemaVersion: 1 as const,
+      units: 'SI' as const,
+      sessionId: status.sessionId,
+      worldEpoch: status.worldEpoch,
+    }),
+    map: world.map,
+    graph: world.graph,
+    playerId: 'v3-player',
+    inputType: 'KEYBOARD',
+    modeSegments: () => modeModules.segments,
+  });
+  telemetryModules.live = live;
+}
+function disposeLiveTelemetry(reason: 'SESSION_CHANGE' | 'WORLD_RESET' | 'SHUTDOWN'): void {
+  const live = telemetryModules.live;
+  telemetryModules.live = undefined;
+  if (live === undefined) return;
+  try {
+    live.retire(reason);
+  } finally {
+    live.dispose();
+  }
+}
+/** PBI 272: a 070 suspension is a real artifact, never a fabricated slow reaction. */
+function noteLiveTelemetrySuspension(
+  cause: 'focus' | 'menu' | 'panel' | 'PAUSE' | 'FOCUS_LOST',
+): void {
+  const live = telemetryModules.live;
+  if (live === undefined) return;
+  const atTick = composition?.composition.frame.tick ?? shell.status().world.tick;
+  live.noteSuspension(cause === 'focus' || cause === 'FOCUS_LOST' ? 'FOCUS_LOST' : 'PAUSE', atTick);
+}
+function noteLiveTelemetryResume(): void {
+  const live = telemetryModules.live;
+  if (live === undefined) return;
+  const atTick = composition?.composition.frame.tick ?? shell.status().world.tick;
+  live.noteResume(atTick);
+}
+/**
  * Portul lumii vii pentru 225: o singură compunere V3, fără o a doua simulare. Captura este
  * citirea la limita de tick, iar pornirea adoptă identitatea în shell și readuce scena în
  * pauză/AUTO. Segmentul și joburile live aparțin 271/272; aici nu sunt inventate.
@@ -1155,6 +1241,8 @@ const sessionWorld: SessionWorldPort = {
       return segments.retire('SESSION_CHANGE') ? 1 : 0;
     } catch {
       return 0;
+    } finally {
+      telemetryModules.live?.retire('SESSION_CHANGE');
     }
   },
   invalidateJobs() {
@@ -1188,6 +1276,7 @@ const sessionWorld: SessionWorldPort = {
     composition?.composition.releaseInput();
     // PBI 271: the old session's open segment is retired before the world identity changes, and a
     // fresh 069 lifecycle starts in AUTO for the new accepted session context.
+    disposeLiveTelemetry('SESSION_CHANGE');
     disposeLiveModeSegments('SESSION_CHANGE');
     // Sesiunea nouă nu moștenește poziția fizică a celei vechi; restaurarea completă a
     // snapshotului rămâne la 278.
@@ -1195,6 +1284,7 @@ const sessionWorld: SessionWorldPort = {
     composition?.setVehicleMode('AUTO');
     shell.setMode('AUTO');
     mountLiveModeSegments();
+    mountLiveTelemetry();
   },
   stop() {
     composition?.composition.releaseInput();

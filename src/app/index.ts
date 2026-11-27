@@ -681,6 +681,15 @@ export {
 } from './live-three-modes';
 
 export {
+  LIVE_TELEMETRY_COMPOSITION_VERSION,
+  createLiveTelemetryComposition,
+  type LiveTelemetryCloseReason,
+  type LiveTelemetryComposition,
+  type LiveTelemetryCompositionOptions,
+  type LiveTelemetryCompositionRead,
+} from './live-telemetry';
+
+export {
   VEHICLE_AUTO_DRIVE_POLICY,
   VEHICLE_AUTO_DRIVE_VERSION,
   createVehicleAutoDrive,

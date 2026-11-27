@@ -54,6 +54,7 @@ import {
   type AuthorityTickResult,
   type InputAuthority,
   type InputAuthorityArbiter,
+  type InputIntent,
 } from '../input';
 import {
   VEHICLE_COLLISION_HALF_EXTENTS_M,
@@ -70,7 +71,7 @@ import { createVehicleAutoDrive, type VehicleAutoDrive } from './vehicle-auto-dr
 import type { CivilActorSnapshot, CivilTraffic, CivilTrafficVehicleObservation } from '../fleet';
 import type { ContractContext } from '../sessions';
 import type { ControlPreferences } from '../settings';
-import { tractiveForceN, vehicleClass, type ControlMode } from '../vehicles';
+import { tractiveForceN, vehicleClass, type ControlMode, type VehicleCommand } from '../vehicles';
 import {
   createRoutePlanner,
   type CityLayout,
@@ -288,6 +289,10 @@ export interface CompositionFrame {
   readonly playerVehicleId: string | null;
   readonly stats: CompositionStats;
   readonly lastCommand: AuthorityCommand['consumer'] | null;
+  /** PBI 272: the exact raw intent of the authoritative tick (never a second input model). */
+  readonly inputIntent: InputIntent | null;
+  /** PBI 272: the exact filtered vehicle command of the authoritative tick, when one exists. */
+  readonly vehicleCommand: VehicleCommand | null;
   readonly lastSegmentAction: 'WALK' | 'FOCUS' | 'ENTER' | 'EXIT' | null;
   readonly events: readonly CompositionEvent[];
 }
@@ -1694,6 +1699,8 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
         ticksWithoutDelivery,
       }),
       lastCommand,
+      inputIntent: lastResult.intent,
+      vehicleCommand: lastResult.command.consumer === 'VEHICLE' ? lastResult.command.command : null,
       lastSegmentAction,
       events: Object.freeze([...events]),
     });
