@@ -1,0 +1,18 @@
+{
+  "id": "278",
+  "criteriaSatisfied": true,
+  "result": "One live persistence generation per 900-tick autosave, committed as a real 225 SessionKindCheckpoint inside a 278 .sdasave envelope with SHA-256 SDA-CJSON-1. The generation carries the session identity, active 109 profile, 276 daily/XP checkpoint, 277 challenge checkpoint, 268/269 company and the read-only 209/KPI snapshot; simulated time is reported separately from commit time. Export produces the file and checksum; import requires the exact preview checksum and an explicit confirmation before owners are replaced, with rollback on any staging or storage refusal. Reload starts PAUSED_AUTO, names the previous open segments INCOMPLETE and reports offlineIncome 0 / offlineXp 0. Company is rebuilt by replay in the real 268 ledger and 269 journal; a second import has XP delta 0, daily-reward delta 0 and the same company revenue. Native Save/Load buttons live in the shell with focus, Tab, Escape and zero global listeners.",
+  "limitations": "The full 206 world snapshot and physical world rehydration are not part of this PBI. KPI 209 is preserved and verified as a read-only slot but the live 209 ledger is not rehydrated because owner 266 exposes no restore. The durable row uses localStorage for the tab; the IndexedDB writer-lock adapter remains the 127/234 contract. Shutdown does not force a final generation. Browser evidence is headless Chrome 157/WEBGL2, not a human playtest or FPS/GPU measurement. Local Node is 24.19.0.",
+  "checks": [
+    ["npm", "run", "typecheck"],
+    ["npm", "run", "lint"],
+    ["npm", "run", "format:check"],
+    ["node", "--import", "./scripts/register-typescript.mjs", "--test", "tests/persistence/live-savefile.test.ts", "tests/persistence/live-persistence.test.ts", "tests/ui/game-shell-persistence.test.ts"],
+    ["npm", "run", "save:live", "--", "--check"],
+    ["npm", "run", "check:architecture"],
+    ["npm", "run", "composition:report", "--", "--check"],
+    ["npm", "run", "docs:check", "--", "--check"],
+    ["npm", "run", "build"],
+    ["npm", "test"]
+  ]
+}

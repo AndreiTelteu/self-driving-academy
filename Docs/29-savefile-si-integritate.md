@@ -349,3 +349,34 @@ poziția salvată (biți identici) și tick-ul walker-ului repornește de la 0, 
 rămâne cel salvat. Cablarea în aplicație (pauză, capturare la export, aplicare la reload) rămâne a
 consumatorului: acest contract nu scrie în IndexedDB și nu creează writer.
 
+
+## Contract implementat V1 (PBI 278) — fișierul live și suprafața de salvare
+
+`278-live-save-v1` refolosește envelope-ul de fișier al acestui document fără să schimbe sloturile
+135/215/234: `format = "self-driving-academy-live-save"`, `formatVersion = 1`,
+`integrityVersion = 1`, `schemaVersion = 1`, `createdAt`, `payload` și `checksum` SHA-256 peste forma
+canonică `SDA-CJSON-1` fără câmpul `checksum`. Payloadul are `versions` (engine/fizică/hartă/schemă),
+`generation`, un `SessionKindCheckpoint` 225 și bilanțul de mărime. Ordinea la citire este: buget de
+bytes/adâncime → parsare strictă → format/integritate → checksum → schema → checksum-ul 225 →
+identitatea și schema `body` → bilanțul de mărime. Un fișier trunchiat, cu chei duplicate, cu checksum
+modificat, cu identitate de altă sesiune, cu `offlineIncome` nenul sau peste buget este refuzat
+înainte ca vreun owner să fie atins.
+
+**Refuzurile închise.** `CHECKSUM_MISMATCH` pentru orice editare fără checksum nou;
+`FORMAT_VERSION_TOO_NEW`/`SCHEMA_TOO_NEW` pentru layouturi viitoare; `LIVE_SAVE_SESSION_MISMATCH`
+pentru altă sesiune; `LIVE_SAVE_STATE_INVALID` pentru un `body` care nu respectă manifestul;
+`LIVE_SAVE_SIZE_MISMATCH` pentru o declarație de mărime care nu corespunde; `LIVE_SAVE_TOO_LARGE`
+peste buget; `LIVE_SAVE_PREVIEW_REQUIRED` și `LIVE_SAVE_PREVIEW_STALE` pentru confirmare lipsă sau
+pentru alt fișier; `LIVE_SAVE_WRITE_FAILED` și `LIVE_SAVE_RESTORE_FAILED` pentru storage sau owner.
+Niciun refuz nu înlocuiește parțial sesiunea.
+
+**Suprafața nativă.** Shell-ul montează butoanele „Salvează” și „Încarcă” în bara de sesiune și o
+suprafață modală de fișier cu nume accesibil, focus pe primul control, Tab ținut în suprafață,
+Escape pentru anulare și revenirea focusului. Fișierul ales este citit, validat și afișat ca rezumat
+înainte ca butonul „Confirmă înlocuirea” să fie activ; nu există listeneri globali.
+
+**Măsurători.** Raportul determinist `npm run save:live` produce 31/31 verificări, iar proba de
+browser `npm run save:live:probe` produce 26/26 pe Chrome 157/WEBGL2, viewport 1024×640. Fișierul de
+probă are 70 762 de unități de cod (corp 225 69 816) sub bugetul de 1 048 576, commit-ul autosave
+1 ms, iar XP/compania/KPI sunt identice după import și după reload. Dovezile sunt în
+[Evidence/278-live-persistence](Evidence/278-live-persistence/README.md).

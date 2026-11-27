@@ -537,6 +537,15 @@ export interface LiveChallenges {
   read(): LiveChallengeRead;
   status(): LiveChallengeRead;
   checkpoint(): LiveChallengeCheckpoint;
+  /**
+   * PBI 278 restore hook: applies a validated 232/233 checkpoint without paying a reward. The
+   * director is rolled back if the experience snapshot is refused.
+   */
+  restore(value: unknown): Readonly<{
+    status: 'RESTORED' | 'REJECTED';
+    code: string | null;
+    message: string;
+  }>;
   save(): void;
   dispose(): void;
 }
@@ -766,8 +775,8 @@ interface CheckpointRead {
   readonly settled: readonly string[];
 }
 
-function readCheckpoint(
-  raw: string,
+function readCheckpointValue(
+  value: unknown,
   identity: Readonly<{
     sessionId: string;
     worldEpoch: number;
@@ -775,7 +784,7 @@ function readCheckpoint(
   }>,
 ): CheckpointRead | null {
   try {
-    const data = record(JSON.parse(raw));
+    const data = record(value);
     requireContract(
       data.version === LIVE_CHALLENGES_CHECKPOINT_VERSION,
       'Unsupported live challenge checkpoint version',
@@ -819,6 +828,21 @@ function readCheckpoint(
       facts: facts === null ? null : freezeFacts(facts),
     });
     return Object.freeze({ checkpoint, facts, lastResult, settled });
+  } catch {
+    return null;
+  }
+}
+
+function readCheckpoint(
+  raw: string,
+  identity: Readonly<{
+    sessionId: string;
+    worldEpoch: number;
+    sessionKind: ChallengeSessionKind;
+  }>,
+): CheckpointRead | null {
+  try {
+    return readCheckpointValue(JSON.parse(raw) as unknown, identity);
   } catch {
     return null;
   }
@@ -1937,6 +1961,58 @@ export function createLiveChallenges(options: LiveChallengeOptions): LiveChallen
     return read();
   }
 
+  function applyCheckpoint(
+    pending: CheckpointRead,
+  ): Readonly<{ status: 'RESTORED' | 'REJECTED'; code: string | null; message: string }> {
+    const beforeDirector = director.snapshot();
+    const restoredDirector = director.restore(pending.checkpoint.director);
+    if (restoredDirector.status !== 'RESTORED') {
+      return Object.freeze({
+        status: 'REJECTED' as const,
+        code: restoredDirector.code,
+        message: restoredDirector.message,
+      });
+    }
+    const restoredExperience = experience.restore(pending.checkpoint.experience);
+    if (restoredExperience.status !== 'RESTORED') {
+      // The director changed before the experience was validated; put it back exactly.
+      director.restore(beforeDirector);
+      return Object.freeze({
+        status: 'REJECTED' as const,
+        code: restoredExperience.code,
+        message: restoredExperience.message,
+      });
+    }
+    challengeTick = director.stats().simulatedTick;
+    offersEnabled = director.stats().enabled;
+    nextAutoOfferTick = pending.checkpoint.nextAutoOfferTick;
+    facts = pending.facts;
+    lastResult = pending.lastResult;
+    settled.clear();
+    for (const id of pending.settled) settled.add(id);
+    for (const instance of director.instances())
+      if (terminalStates.has(instance.state)) settled.add(instance.instanceId);
+    return Object.freeze({ status: 'RESTORED' as const, code: null, message: 'RESTORED' });
+  }
+
+  function restore(value: unknown): Readonly<{
+    status: 'RESTORED' | 'REJECTED';
+    code: string | null;
+    message: string;
+  }> {
+    requireContract(!disposed, 'Live challenges are disposed');
+    const pending = readCheckpointValue(value, { sessionId, worldEpoch, sessionKind });
+    if (pending === null)
+      return Object.freeze({
+        status: 'REJECTED' as const,
+        code: 'CHECKPOINT_INVALID',
+        message: 'The live challenge checkpoint is invalid',
+      });
+    const applied = applyCheckpoint(pending);
+    if (applied.status === 'RESTORED') save();
+    return applied;
+  }
+
   function checkpoint(): LiveChallengeCheckpoint {
     return buildCheckpoint();
   }
@@ -1978,22 +2054,14 @@ export function createLiveChallenges(options: LiveChallengeOptions): LiveChallen
     experience = createChallengeExperience({ ledger, catalog });
   }
   if (pending !== null) {
-    const restoredDirector = director.restore(pending.checkpoint.director);
-    if (restoredDirector.status === 'RESTORED') {
-      challengeTick = director.stats().simulatedTick;
-      offersEnabled = director.stats().enabled;
-      nextAutoOfferTick = pending.checkpoint.nextAutoOfferTick;
-      facts = pending.facts;
-      lastResult = pending.lastResult;
-      for (const id of pending.settled) settled.add(id);
-      for (const instance of director.instances())
-        if (terminalStates.has(instance.state)) settled.add(instance.instanceId);
+    const applied = applyCheckpoint(pending);
+    if (applied.status === 'RESTORED') {
       restored = true;
       persistence = 'SESSION_STORAGE';
       persistenceError = null;
     } else {
       director = createDirector();
-      persistenceError = restoredDirector.message;
+      persistenceError = applied.message;
     }
   }
 
@@ -2012,6 +2080,7 @@ export function createLiveChallenges(options: LiveChallengeOptions): LiveChallen
     read,
     status: read,
     checkpoint,
+    restore,
     save,
     dispose,
   });

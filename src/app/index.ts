@@ -802,6 +802,50 @@ export {
 } from './live-challenges';
 
 export {
+  LIVE_PERSISTENCE_BUDGET,
+  LIVE_PERSISTENCE_INTERVAL_TICKS,
+  LIVE_PERSISTENCE_VERSION,
+  createLivePersistence,
+  livePersistencePhases,
+  livePersistenceViewLabels,
+  type LivePersistence,
+  type LivePersistenceChallengeOwner,
+  type LivePersistenceCompanyOwner,
+  type LivePersistenceCurrent,
+  type LivePersistenceCycle,
+  type LivePersistenceError,
+  type LivePersistenceExport,
+  type LivePersistenceExportAccepted,
+  type LivePersistenceExportRejected,
+  type LivePersistenceIdentity,
+  type LivePersistenceImportAccepted,
+  type LivePersistenceImportRejected,
+  type LivePersistenceImportResult,
+  type LivePersistenceOptions,
+  type LivePersistenceOwner,
+  type LivePersistencePhase,
+  type LivePersistencePreview,
+  type LivePersistencePreviewAccepted,
+  type LivePersistencePreviewRejected,
+  type LivePersistenceRestoreResult,
+  type LivePersistenceSaveTime,
+  type LivePersistenceSegment,
+  type LivePersistenceSimulatedTime,
+  type LivePersistenceStatus,
+  type LivePersistenceStorage,
+  type LivePersistenceTickDecision,
+  type LivePersistenceViewLabel,
+} from './live-persistence';
+
+export {
+  LiveCompanyRestoreError,
+  restoreLiveCompany,
+  type LiveCompanyPersistenceState,
+  type LiveCompanyRestoreOptions,
+  type LiveCompanyRestored,
+} from './live-company-persistence';
+
+export {
   VEHICLE_AUTO_DRIVE_POLICY,
   VEHICLE_AUTO_DRIVE_VERSION,
   createVehicleAutoDrive,

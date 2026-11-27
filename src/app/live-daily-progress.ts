@@ -464,9 +464,55 @@ export function createLiveDailyProgress(options: LiveDailyProgressOptions): Live
   let player: PlayerProgress = freshPlayer();
   let daily: DailyProgress = freshDaily();
 
+  /**
+   * A stable facade over the one 213 ledger. PBI 278 restores the checkpoint by replacing the
+   * backing `PlayerProgress` instance; PBI 277 keeps a reference to this facade, so a reload or an
+   * imported file cannot leave a second ledger or a stale balance behind.
+   */
+  const ledgerFacade: PlayerProgress = Object.freeze({
+    version: player.version,
+    playerId,
+    ruleVersion: player.ruleVersion,
+    creditMission: (value: unknown) => player.creditMission(value),
+    creditDaily: (value: unknown) => player.creditDaily(value),
+    observeActiveTime: (value: unknown) => player.observeActiveTime(value),
+    read: () => player.read(),
+    entry: (entryId: string) => player.entry(entryId),
+    checkpoint: () => player.checkpoint(),
+    stats: () => player.stats(),
+  });
+
   function rememberCreditedRewards(): void {
+    creditedRewardIds.clear();
     for (const entry of player.read().entries)
       if (entry.causeType === 'DAILY_REWARD') creditedRewardIds.add(entry.causeId);
+  }
+
+  function applyCheckpoint(
+    stored: LiveDailyReloadCheckpoint,
+  ): Readonly<{ status: 'RESTORED' | 'REJECTED'; reason: string | null }> {
+    try {
+      if (stored.version !== LIVE_DAILY_PROGRESS_CHECKPOINT_VERSION)
+        return Object.freeze({ status: 'REJECTED' as const, reason: 'VERSION_MISMATCH' });
+      if (stored.playerId !== playerId)
+        return Object.freeze({ status: 'REJECTED' as const, reason: 'PLAYER_MISMATCH' });
+      const restoredPlayer = parsePlayerProgress(stored.player);
+      const restoredDaily = restoreDailyProgress(rebaseSnapshot(stored.daily), {
+        sessionId,
+        worldEpoch,
+      });
+      player = restoredPlayer;
+      daily = restoredDaily.progress;
+      rememberCreditedRewards();
+      restore = Object.freeze({
+        restored: true,
+        reason: restoredDaily.rebound ? 'REBOUND' : null,
+      });
+      storageState = options.storage === undefined ? 'MEMORY_ONLY' : 'SESSION_STORAGE';
+      return Object.freeze({ status: 'RESTORED' as const, reason: restore.reason });
+    } catch (error: unknown) {
+      return Object.freeze({ status: 'REJECTED' as const, reason: errorText(error) });
+    }
   }
 
   function restoreCheckpoint(raw: string): void {
@@ -475,33 +521,9 @@ export function createLiveDailyProgress(options: LiveDailyProgressOptions): Live
       restore = Object.freeze({ restored: false, reason: 'INVALID_JSON' });
       return;
     }
-    if (stored.version !== LIVE_DAILY_PROGRESS_CHECKPOINT_VERSION) {
-      restore = Object.freeze({ restored: false, reason: 'VERSION_MISMATCH' });
-      return;
-    }
-    if (stored.playerId !== playerId) {
-      restore = Object.freeze({ restored: false, reason: 'PLAYER_MISMATCH' });
-      return;
-    }
-    try {
-      const restoredPlayer = parsePlayerProgress(stored.player);
-      const restoredDaily = restoreDailyProgress(
-        rebaseSnapshot(stored.daily as DailyProgressSnapshot),
-        {
-          sessionId,
-          worldEpoch,
-        },
-      );
-      player = restoredPlayer;
-      daily = restoredDaily.progress;
-      rememberCreditedRewards();
-      restore = Object.freeze({
-        restored: true,
-        reason: restoredDaily.rebound ? 'REBOUND' : null,
-      });
-      storageState = 'SESSION_STORAGE';
-    } catch (error: unknown) {
-      restore = Object.freeze({ restored: false, reason: errorText(error) });
+    const result = applyCheckpoint(stored as LiveDailyReloadCheckpoint);
+    if (result.status === 'REJECTED') {
+      restore = Object.freeze({ restored: false, reason: result.reason });
       storageState = 'FAILED';
     }
   }
@@ -864,8 +886,17 @@ export function createLiveDailyProgress(options: LiveDailyProgressOptions): Live
     status,
     stats: status,
     checkpoint,
+    restore(checkpoint: LiveDailyReloadCheckpoint): Readonly<{
+      status: 'RESTORED' | 'REJECTED';
+      reason: string | null;
+    }> {
+      assertLive();
+      const result = applyCheckpoint(checkpoint);
+      if (result.status === 'RESTORED') save();
+      return result;
+    },
     save,
-    playerProgress: () => player,
+    playerProgress: () => ledgerFacade,
     dispose(): void {
       if (disposed) return;
       try {
@@ -901,6 +932,14 @@ export interface LiveDailyProgress {
   status(): LiveDailyProgressStatus;
   stats(): LiveDailyProgressStatus;
   checkpoint(atMs?: number): LiveDailyReloadCheckpoint;
+  /**
+   * PBI 278 restore hook: replaces the one 213 ledger and the 212 day from a validated checkpoint.
+   * It never credits a reward; a rejected checkpoint leaves both owners untouched.
+   */
+  restore(checkpoint: LiveDailyReloadCheckpoint): Readonly<{
+    status: 'RESTORED' | 'REJECTED';
+    reason: string | null;
+  }>;
   save(): void;
   /**
    * The one real 213 ledger owned by this composition. PBI 277 credits challenge rewards through it

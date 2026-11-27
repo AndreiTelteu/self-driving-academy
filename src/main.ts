@@ -9,6 +9,7 @@ import {
   createLiveChallenges,
   createLiveChallengeRoutePort,
   createLiveChallengeZones,
+  createLivePersistence,
   createLiveLearningPipeline,
   createLiveMissions,
   createLiveModeSegments,
@@ -21,6 +22,7 @@ import {
   LIVE_DAILY_PROGRESS_VERSION,
   LIVE_LEARNING_VERSION,
   LIVE_MISSIONS_VERSION,
+  LIVE_PERSISTENCE_VERSION,
   LIVE_TELEMETRY_COMPOSITION_VERSION,
   LIVE_THREE_MODES_VERSION,
   readCityDashboardSnapshot,
@@ -29,16 +31,19 @@ import {
   readLiveFleetSelectionSnapshot,
   readMinimapGeometry,
   resolveLocalDailyDay,
+  restoreLiveCompany,
   rideTripDistanceM,
   type GameTickPort,
   type LiveChallenges,
   type LiveChallengeFrameFact,
   type LiveChallengeVehicleFact,
   type LiveDailyProgress,
+  type LiveDailyReloadCheckpoint,
   type LiveEconomyComposition,
   type LiveLearningPipeline,
   type LiveMissions,
   type LiveModeSegments,
+  type LivePersistence,
   type LiveRideComposition,
   type LiveTelemetryComposition,
   type RecoveryRenderer,
@@ -89,6 +94,7 @@ import {
   createPassengerVisualPresenter,
   createTaxiHud,
   LIVE_PROGRESS_READ_VERSION,
+  type GameShellFileResult,
   type LiveProgressSnapshot,
 } from './ui';
 import {
@@ -105,10 +111,10 @@ import {
   type LearningQueueRuntime,
 } from './learning';
 import type { DrivingProfile, ProfileVersion } from './profiles';
-import { parameterDefinitions } from './profiles';
+import { parameterDefinitions, parseDrivingProfile } from './profiles';
 import { PLAYER_XP_POLICY } from './missions';
 import { VEHICLE_CLASSES } from './vehicles';
-import { copyProfileForChaos } from './persistence';
+import { copyProfileForChaos, liveSaveFingerprint } from './persistence';
 import type { SessionKind, SessionWorldPort } from './persistence';
 import './style.css';
 
@@ -291,6 +297,18 @@ const missionModules: { runtime: LiveMissions | undefined } = { runtime: undefin
  * director and the 233 experience over the real composition frame; it creates no second ledger.
  */
 const challengeModules: { runtime: LiveChallenges | undefined } = { runtime: undefined };
+/**
+ * PBI 278: the single live persistence owner. It reads the real 276/277/268/269/109 owners and
+ * commits one 225 checkpoint generation; it never creates a second simulation, ledger or store.
+ */
+const persistenceModules: { live: LivePersistence | undefined } = { live: undefined };
+const persistenceTickPort: GameTickPort = {
+  id: 'persistence',
+  version: LIVE_PERSISTENCE_VERSION,
+  step(context) {
+    persistenceModules.live?.onTick(context.tick);
+  },
+};
 /** Probe-only switch: the automatic offer door can be closed while a host-driven offer is tested. */
 let challengeAutoOffersSuppressed = false;
 /**
@@ -623,6 +641,7 @@ const shell = createGameShell({
     missions: missionsTickPort,
     telemetry: telemetryTickPort,
     learning: learningTickPort,
+    persistence: persistenceTickPort,
   },
   suspend: (cause) => application.pause(cause),
   resume: (cause) => {
@@ -853,6 +872,181 @@ challengeModules.runtime = createLiveChallenges({
     vehicleClasses: () => Object.keys(VEHICLE_CLASSES).sort(),
   },
 });
+/** PBI 278: the browser localStorage row is the durable autosave; the file export is separate. */
+const liveSaveStorage = (() => {
+  let memory: string | null = null;
+  const key = () => `278-live-save-autosave:${shell.status().sessionId}`;
+  try {
+    const store = window.localStorage;
+    return Object.freeze({
+      load: () => store.getItem(key()),
+      save: (value: string) => store.setItem(key(), value),
+      clear: () => store.removeItem(key()),
+    });
+  } catch {
+    return Object.freeze({
+      load: () => memory,
+      save: (value: string) => {
+        memory = value;
+      },
+      clear: () => {
+        memory = null;
+      },
+    });
+  }
+})();
+function livePersistenceTickNow(): number {
+  return composition?.composition.frame.tick ?? shell.status().world.tick;
+}
+function livePersistenceProfile(): DrivingProfile {
+  return liveCityStyleSource.activeStyle();
+}
+function livePersistenceCompany(): unknown | null {
+  const company = economyModules.company,
+    evolution = economyModules.evolution;
+  if (company === undefined || evolution === undefined) return null;
+  const tick = livePersistenceTickNow();
+  const ledger = company.snapshot(tick);
+  if (ledger === null) return null;
+  return Object.freeze({
+    finance: company.read(),
+    ledger,
+    evolution: evolution.snapshot(),
+  });
+}
+function livePersistenceEconomy(): unknown | null {
+  const economy = economyModules.composition;
+  if (economy === undefined) return null;
+  return economy.snapshot(livePersistenceTickNow());
+}
+function livePersistenceFingerprints() {
+  const company = livePersistenceCompany(),
+    economy = livePersistenceEconomy(),
+    challenges = challengeModules.runtime?.checkpoint() ?? null;
+  return Object.freeze({
+    xp: liveDaily.status().xpFingerprint,
+    kpi: economy === null ? 'none' : liveSaveFingerprint(economy),
+    company: company === null ? 'none' : liveSaveFingerprint(company),
+    profile: liveCityStyleSource.activeStyle().checksum,
+    daily: liveSaveFingerprint(liveDaily.checkpoint()),
+    challenges: challenges === null ? 'none' : liveSaveFingerprint(challenges),
+  });
+}
+function replaceLiveCompanyState(value: unknown | null): void {
+  const economy = economyModules.composition;
+  if (economy === undefined)
+    throw new Error('Compania nu poate fi restaurată înainte de economia live.');
+  const sessionId = shell.status().sessionId,
+    namespace = `v3:company:${sessionId}`,
+    fleet = companyFleetPort();
+  const oldCompany = economyModules.company,
+    oldEvolution = economyModules.evolution;
+  let company: LiveCompanyFinance, evolution: LiveCompanyEvolution;
+  if (value === null) {
+    company = createLiveCompanyFinance({ namespace, clock: economy.clock });
+    evolution = createLiveCompanyEvolution({
+      finance: company,
+      ...(fleet === undefined ? {} : { fleet }),
+      namespace,
+      clock: economy.clock,
+    });
+  } else {
+    const restored = restoreLiveCompany({
+      namespace,
+      clock: economy.clock,
+      ...(fleet === undefined ? {} : { fleet }),
+      state: value,
+    });
+    company = restored.company;
+    evolution = restored.evolution;
+  }
+  economyModules.companies.set(sessionId, company);
+  economyModules.evolutions.set(sessionId, evolution);
+  economyModules.company = company;
+  economyModules.evolution = evolution;
+  if (oldEvolution !== evolution) oldEvolution?.dispose();
+  if (oldCompany !== company) oldCompany?.dispose();
+}
+persistenceModules.live = createLivePersistence({
+  identity: () => {
+    const status = shell.status(),
+      frame = composition?.composition.frame,
+      profile = livePersistenceProfile();
+    return {
+      sessionKind: status.sessionId === CHAOS_SESSION_ID ? 'CHAOS' : 'ACADEMY',
+      sessionId: status.sessionId,
+      playerId: 'v3-player',
+      profileId: profile.profileId,
+      activeVersionId: profile.versionId,
+      worldEpoch: status.worldEpoch,
+      learningEpoch: status.learningEpoch,
+      tick: livePersistenceTickNow(),
+      mode: frame?.hud.mode ?? 'AUTO',
+      vehicles: frame?.vehicles.length ?? 0,
+      manualVehicles:
+        frame?.vehicles.filter((vehicle) => vehicle.controlMode !== 'AUTO').length ?? 0,
+    };
+  },
+  versions: Object.freeze({
+    engine: 'engine-278-live',
+    physics: 'physics-278-live',
+    map: world.map.mapId,
+  }),
+  profile: {
+    capture: () => livePersistenceProfile(),
+    restore: (value) => {
+      const profile = parseDrivingProfile(value);
+      liveCityStyleSource.set(profile);
+      liveFleet?.ambient.refreshStyle();
+      modeModules.segments?.updateGeneration({
+        baseVersionId: profile.versionId,
+        learningEpoch: shell.status().learningEpoch,
+      });
+    },
+  },
+  metrics: () => {
+    const read = liveDaily.read();
+    return {
+      xp: read.player.xpBalance,
+      xpMicroXp: read.player.xpBalanceMicroXp,
+      level: read.player.level,
+      dailyRewards: read.daily.rewards,
+    };
+  },
+  daily: {
+    capture: () => liveDaily.checkpoint(),
+    restore: (value) => liveDaily.restore(value as LiveDailyReloadCheckpoint),
+  },
+  challenges: {
+    capture: () => challengeModules.runtime?.checkpoint() ?? null,
+    restore: (value) =>
+      challengeModules.runtime?.restore(value) ?? {
+        status: 'REJECTED' as const,
+        code: 'CHECKPOINT_INVALID',
+        message: 'Owner-ul provocărilor nu este montat',
+      },
+  },
+  company: {
+    capture: () => livePersistenceCompany(),
+    restore: (value) => replaceLiveCompanyState(value),
+  },
+  economy: { capture: () => livePersistenceEconomy() },
+  segments: {
+    open: () => {
+      const state = modeModules.segments?.observe();
+      if (state === undefined) return [];
+      return state.segments
+        .filter((segment) => segment.endTick === null)
+        .map((segment) => ({
+          segmentId: segment.segmentId,
+          vehicleId: segment.vehicleId,
+          mode: segment.mode,
+        }));
+    },
+  },
+  fingerprints: livePersistenceFingerprints,
+  storage: liveSaveStorage,
+});
 /** PBI 275: the 126 panel is read-only; its own trigger is hidden because the shell owns the button. */
 const missionPanel = createMissionPanel(app, {
   read: () => missionModules.runtime?.snapshot() ?? null,
@@ -915,15 +1109,16 @@ app.append(tutorialHost);
 tutorialHost.hidden = true;
 const missionTutorialStyle = document.createElement('style');
 missionTutorialStyle.setAttribute('data-mission-tutorial-style', '117-mission-tutorial-ui-v1');
-missionTutorialStyle.textContent = `
-.live-mission-tutorial-host .mission-tutorial h2 { margin: 0 0 0.35rem; font-size: 0.95rem; color: #9fe0c5; }
-.live-mission-tutorial-host .mission-tutorial p { margin: 0.2rem 0; }
-.live-mission-tutorial-host .mission-tutorial button { margin: 0.35rem 0.3rem 0 0; font: inherit;
-  color: #f3f7fb; background: #17352b; border: 1px solid #3d6b58; border-radius: 0.35rem;
-  padding: 0.25rem 0.5rem; cursor: pointer; }
-.live-mission-tutorial-host .mission-tutorial button:hover { background: #22503f; }
-.live-mission-tutorial-host .mission-tutorial button:focus-visible { outline: 3px solid #9fe0c5;
-  outline-offset: 2px; }`;
+missionTutorialStyle.textContent = [
+  '.live-mission-tutorial-host .mission-tutorial h2 { margin: 0 0 0.35rem; font-size: 0.95rem; color: #9fe0c5; }',
+  '.live-mission-tutorial-host .mission-tutorial p { margin: 0.2rem 0; }',
+  '.live-mission-tutorial-host .mission-tutorial button { margin: 0.35rem 0.3rem 0 0; font: inherit;',
+  '  color: #f3f7fb; background: #17352b; border: 1px solid #3d6b58; border-radius: 0.35rem;',
+  '  padding: 0.25rem 0.5rem; cursor: pointer; }',
+  '.live-mission-tutorial-host .mission-tutorial button:hover { background: #22503f; }',
+  '.live-mission-tutorial-host .mission-tutorial button:focus-visible { outline: 3px solid #9fe0c5;',
+  '  outline-offset: 2px; }',
+].join('\n');
 app.ownerDocument.head?.append(missionTutorialStyle);
 const tutorialPanel = createMissionTutorialPanel(tutorialHost, {
   pause: () => {
@@ -1150,6 +1345,124 @@ const companyDashboard = createCompanyDashboard(app, {
 });
 /** Ultimul taxi cu markere 147; schimbarea selecției nu lasă markerii vechi în urmă. */
 let lastMarkerTaxiId: string | null = null;
+/** PBI 278: preview-ul afișat este singurul care poate fi confirmat. */
+let pendingGameImport: { readonly previewId: string; readonly text: string } | null = null;
+function persistenceStatusView(): {
+  label: string;
+  detail: string;
+  tick: number | null;
+  lastSavedTick: number | null;
+} {
+  const runtime = persistenceModules.live;
+  if (runtime === undefined)
+    return {
+      label: 'NOT_SAVED_YET',
+      detail: 'Persistența nu este montată',
+      tick: null,
+      lastSavedTick: null,
+    };
+  const status = runtime.status();
+  return {
+    label: status.view.label,
+    detail: status.view.detail,
+    tick: status.simulated.tick,
+    lastSavedTick: status.simulated.lastSavedTick,
+  };
+}
+async function saveGameToFile(): Promise<GameShellFileResult> {
+  const runtime = persistenceModules.live;
+  if (runtime === undefined)
+    return { status: 'ERROR', message: 'Persistența nu este montată.', lines: [] };
+  shell.setMenuOpen(true);
+  if (application.getState().kind === 'PLAYING') application.pause('menu');
+  await runtime.saveNow(livePersistenceTickNow());
+  const exported = runtime.exportFile();
+  if (exported.status === 'REJECTED')
+    return {
+      status: 'ERROR',
+      message: `${exported.rejection.code}: ${exported.rejection.message}`,
+      lines: [],
+    };
+  return {
+    status: 'READY',
+    message: 'Fișier pregătit pentru descărcare.',
+    fileName: exported.fileName,
+    text: exported.text,
+    checksum: exported.checksum,
+    lines: [
+      `Sesiune ${exported.summary.sessionId} · tick ${exported.summary.tick} · generația ${exported.summary.generation}`,
+      `XP ${exported.summary.xp} · nivel ${exported.summary.level} · daily ${exported.summary.dailyDate ?? '-'}`,
+      `Companie cash ${exported.summary.companyCashMinorUnits ?? '-'} · profit ${exported.summary.companyProfitMinorUnits ?? '-'}`,
+      `Checksum ${exported.checksum.slice(0, 16)}… · ${exported.bytes} bytes`,
+    ],
+  };
+}
+function previewGameFile(file: { fileName: string; text: string }): GameShellFileResult {
+  const runtime = persistenceModules.live;
+  if (runtime === undefined)
+    return { status: 'ERROR', message: 'Persistența nu este montată.', lines: [] };
+  const preview = runtime.preview(file.text);
+  if (preview.status === 'REJECTED') {
+    pendingGameImport = null;
+    return {
+      status: 'ERROR',
+      message: `${preview.rejection.code}: ${preview.rejection.message}`,
+      lines: [],
+    };
+  }
+  pendingGameImport = { previewId: preview.previewId, text: file.text };
+  return {
+    status: 'PREVIEW',
+    message: 'Fișier verificat. Confirmă înlocuirea sesiunii curente.',
+    fileName: file.fileName,
+    previewId: preview.previewId,
+    checksum: preview.summary.checksum,
+    lines: [
+      `Fișier: ${file.fileName} · ${preview.summary.bytes} bytes`,
+      `Sesiune ${preview.summary.sessionId} · tick ${preview.summary.tick} · generația ${preview.summary.generation}`,
+      `XP ${preview.summary.xp} · nivel ${preview.summary.level} · daily ${preview.summary.dailyDate ?? '-'} (${preview.summary.dailyRewards} recompense)`,
+      `Companie cash ${preview.summary.companyCashMinorUnits ?? '-'} · revenue ${preview.summary.companyRevenueMinorUnits ?? '-'}`,
+      `KPI zile ${preview.summary.kpiDays} · profil ${preview.summary.profileVersionId}`,
+      `Curent: XP ${preview.current?.xp ?? '-'} · nivel ${preview.current?.level ?? '-'}`,
+      `Checksum ${preview.summary.checksum.slice(0, 16)}…`,
+    ],
+  };
+}
+async function confirmGameImport(): Promise<GameShellFileResult> {
+  const runtime = persistenceModules.live,
+    pending = pendingGameImport;
+  if (runtime === undefined || pending === null)
+    return { status: 'ERROR', message: 'Niciun preview validat de confirmat.', lines: [] };
+  // The replacement is a paused operation: no tick is allowed between the preview and the atomic
+  // owner replacement, and the session resumes in AUTO afterwards.
+  shell.setMenuOpen(true);
+  if (application.getState().kind === 'PLAYING') application.pause('menu');
+  composition?.composition.releaseInput();
+  const result = await runtime.importFile(pending.text, { previewId: pending.previewId });
+  pendingGameImport = null;
+  if (result.status === 'REJECTED')
+    return {
+      status: 'ERROR',
+      message: `${result.rejection.code}: ${result.rejection.message}`,
+      lines: result.rollback ? ['Sesiunea curentă a fost păstrată.'] : [],
+    };
+  composition?.setVehicleMode('AUTO');
+  shell.setMode('AUTO');
+  sessionNotice = `Fișier importat: tick ${result.summary.tick}, XP ${result.summary.xp}`;
+  shellHost.refreshSession();
+  return {
+    status: 'COMMITTED',
+    message: 'Fișier importat. Jocul pornește în pauză/AUTO.',
+    checksum: result.checksum,
+    lines: [
+      `XP ${result.summary.xp} · nivel ${result.summary.level} · ΔXP ${result.xpDelta}`,
+      `Recompense daily ${result.summary.dailyRewards} · Δ ${result.dailyRewardsDelta}`,
+      `Companie ${result.companyFingerprint ?? '-'} · KPI ${result.kpiFingerprint}`,
+      `Segment anterior ${result.previousSegment}${result.openSegmentIds.length > 0 ? ` (${result.openSegmentIds.join(', ')})` : ''}`,
+      `Vânzări/XP adăugate: settle ${result.rewards.settled} · granted ${result.rewards.granted}`,
+    ],
+  };
+}
 /** Singura gazdă UI a shell-ului: start, pauză, reluare și panoul de integrare. */
 const shellHost = createGameShellHost({
   root: app,
@@ -1275,6 +1588,13 @@ const shellHost = createGameShellHost({
     if (progressPanel.isOpen()) progressPanel.close();
     return challengePanel.open();
   },
+  onSaveGame: saveGameToFile,
+  onLoadGame: previewGameFile,
+  onConfirmLoad: confirmGameImport,
+  onCancelLoad: () => {
+    pendingGameImport = null;
+  },
+  saveStatus: persistenceStatusView,
 });
 /** Fiecare tranziție de sesiune ajunge și în gazda shell-ului, nu doar în view-ul de randare. */
 let telemetrySuspended = false;
@@ -1456,6 +1776,8 @@ const application = createApplicationLifecycle({
             economyActivation.economy?.flush({
               tick: ownedComposition.composition.frame.tick,
             });
+          // PBI 278: the company restore needs the economy owner, which exists from here on.
+          restoreLivePersistence();
           ownedHud = createTaxiHud(app);
           ridesModules.hud = ownedHud;
           // PBI 260: compunerea V3 este singura lume autoritară a shell-ului. Nicio a doua
@@ -1792,6 +2114,38 @@ function beginLiveMissions(): void {
 function refocusGame(): void {
   if (application.getState().kind === 'PLAYING') view.getCanvas().focus();
 }
+/** PBI 278: the autosave row is applied once, after the owners are mounted and before play resumes. */
+let livePersistenceRestored = false;
+let livePersistenceRestoreAttempts = 0;
+function restoreLivePersistence(): void {
+  if (livePersistenceRestored) return;
+  livePersistenceRestoreAttempts += 1;
+  const runtime = persistenceModules.live;
+  if (runtime === undefined) return;
+  const result = runtime.restore();
+  if (result.status === 'RESTORED' && result.summary !== null) {
+    livePersistenceRestored = true;
+    composition?.composition.releaseInput();
+    composition?.setVehicleMode('AUTO');
+    shell.setMode('AUTO');
+    const resume = result.launch;
+    sessionNotice =
+      `Autosave restaurat la tick ${result.summary.tick} (generația ${result.summary.generation})` +
+      (resume?.previousSegment === 'INCOMPLETE'
+        ? ` · segment anterior INCOMPLETE (${resume.openSegmentIds.join(', ')})`
+        : ' · niciun segment deschis');
+    shellHost.refreshSession();
+  } else if (result.status === 'EMPTY') {
+    livePersistenceRestored = true;
+  } else if (result.status === 'REJECTED' && result.rejection !== null) {
+    sessionNotice = `Autosave refuzat: ${result.rejection.code}: ${result.rejection.message}`;
+    shellHost.refreshSession();
+    // The company owner needs the live economy; the first start can run before it exists. Retry
+    // once the backend has mounted the economy instead of declaring the save unusable.
+    if (result.rejection.code !== 'LIVE_SAVE_RESTORE_FAILED' || livePersistenceRestoreAttempts > 2)
+      livePersistenceRestored = true;
+  }
+}
 /**
  * PBI 273: the Academy base profile is a real 109 version with the complete 092 catalog, so the
  * live city style can learn any key. The style source and the mode segments read the same identity;
@@ -2109,6 +2463,7 @@ const sessionWorld: SessionWorldPort = {
     mountLiveModeSegments();
     mountLiveTelemetry();
     mountLiveLearning();
+    restoreLivePersistence();
   },
   stop() {
     composition?.composition.releaseInput();
@@ -2252,6 +2607,14 @@ interface V3DebugGlobal {
   progress(): unknown;
   /** PBI 277: read-only live challenges, zones and panel state. */
   challenges(): unknown;
+  /** PBI 278: autosave status, the durable generation and the last import. */
+  persistence(): unknown;
+  persistenceExport?(): unknown;
+  persistencePreview?(text: string): unknown;
+  persistenceConfirm?(): Promise<unknown>;
+  persistenceSaveNow?(tick?: number): Promise<unknown>;
+  /** Probe-only: credits real 213 active-time windows, never a synthetic XP entry. */
+  probeActiveXp?(seconds: number): unknown;
   challengeOffer?(templateId?: string, seed?: number): unknown;
   challengePreview?(templateId: string, seed: number): unknown;
   challengeAccept?(): unknown;
@@ -2519,6 +2882,12 @@ const debugGlobal: V3DebugGlobal = {
       port: shell.status().systems.find((system) => system.id === 'missions')?.status ?? null,
     };
   },
+  persistence: () => ({
+    status: persistenceModules.live?.status() ?? null,
+    restored: persistenceModules.live?.status().restored ?? null,
+    lastImport: persistenceModules.live?.status().lastImport ?? null,
+    shell: shell.status().systems.find((system) => system.id === 'persistence')?.status ?? null,
+  }),
   challengeRoute: (zoneId: string) => {
     const frame = composition?.composition.frame;
     const vehicleId = frame?.playerVehicleId ?? frame?.selectedVehicleId ?? null;
@@ -2615,10 +2984,39 @@ if (
     challengeAutoOffersSuppressed = suppressed === true;
     return challengeAutoOffersSuppressed;
   };
+  debugGlobal.persistenceExport = () => persistenceModules.live?.exportFile() ?? null;
+  debugGlobal.persistencePreview = (text) =>
+    previewGameFile({ fileName: 'probe-278.sdasave', text });
+  debugGlobal.persistenceConfirm = () => confirmGameImport();
+  debugGlobal.persistenceSaveNow = (tick) =>
+    persistenceModules.live?.saveNow(tick ?? livePersistenceTickNow()) ?? Promise.resolve(null);
+  debugGlobal.probeActiveXp = (seconds) => {
+    const totalMs = Math.max(0, Math.min(600_000, Math.floor(seconds * 1000)));
+    const windows: unknown[] = [];
+    const startedBase = Date.now() - totalMs - 120_000;
+    for (let offset = 0; offset < totalMs; offset += 30_000) {
+      const end = Math.min(totalMs, offset + 30_000);
+      windows.push(
+        dailyModules.runtime?.observeActiveWindow({
+          startedAtMs: startedBase + offset,
+          endedAtMs: startedBase + end,
+          controlMode: 'MANUAL',
+          paused: false,
+          focused: true,
+          visible: true,
+          afk: false,
+        }) ?? null,
+      );
+    }
+    dailyModules.runtime?.save();
+    return windows;
+  };
 }
 (globalThis as unknown as { __v3Composition?: V3DebugGlobal }).__v3Composition = debugGlobal;
 
 const dispose = (): void => {
+  // PBI 278: shutdown does not force a new generation. The last periodic or imported row is the
+  // coherent recovery point; capturing after disposal would overwrite it with an empty company.
   try {
     focusBinding.dispose();
     application.dispose();
