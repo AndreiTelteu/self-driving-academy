@@ -1,13 +1,13 @@
 ---
 id: "271"
 title: "Cele trei moduri live: AUTO, MANUAL, LEARNING și toate tranzițiile"
-status: "To Do"
+status: "In Progress"
 release: "V1"
 module: "Moduri și learning"
 depends_on: ["260","263"]
 performance_checks: ["simulation","frame"]
-owner: null
-started_at: null
+owner: "loop-pbi/deepseek-271"
+started_at: "2026-11-27T00:18:11.392Z"
 completed_at: null
 ---
 
