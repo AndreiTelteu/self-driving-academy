@@ -1,0 +1,12 @@
+{
+  "id": "277",
+  "criteriaSatisfied": true,
+  "result": "One visible offer and one active instance with a real 2,700-tick offer window and 10,800-tick cooldown. Refusal is free; accepting reserves the taxi without moving an existing passenger; an infeasible offer is refused before display. Objectives evaluate real zone/speed/heading/parking/drift facts; templates without a live source are disabled, never completed from HUD text. The native Challenges panel shows offer, objective, deadline, reward, record and actions. Academy credits once through 213/276; Chaos grants only a local record; reload keeps the record and credit without duplication.",
+  "limitations": "TIMED_DROPOFF, COMFORT, DISTRUCTION and LEARNING still lack a complete live source and are excluded before display; 285 remains required for destructible decor. Persistence is sessionStorage across tab reload; durable savefile remains 278. Drift has a live collector but no browser completion probe yet. Browser evidence is headless Chrome/WEBGL2, not a human playtest or FPS/GPU measurement. Local Node is 24.19.0.",
+  "checks": [
+    ["node", "--import", "./scripts/register-typescript.mjs", "--test", "tests/missions/live-challenges.test.ts", "tests/missions/live-challenges-report.test.ts", "tests/ui/game-shell-host.test.ts"],
+    ["npm", "run", "challenges:live", "--", "--check"],
+    ["npm", "run", "docs:check", "--", "--check"],
+    ["npm", "run", "typecheck"]
+  ]
+}
