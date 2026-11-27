@@ -1,0 +1,158 @@
+{
+  "version": "275-live-missions-browser-v1",
+  "generatedAt": "2026-11-27T13:44:30.494Z",
+  "status": "PASS",
+  "reason": null,
+  "run": {
+    "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36",
+    "backend": "WEBGL2",
+    "viewport": "1024x640",
+    "url": "http://127.0.0.1:60615/?capture=1&backend=WEBGL2&preset=LOW&models=procedural&time=noon&debug=1&nofocuspause",
+    "tickAtStart": 16,
+    "tickAtFailure": 6925,
+    "taxiId": "id-v1:7:vehicle13:v3:city:fleet4:TAXI4:0012",
+    "rideId": "id-v1:4:ride13:v3:city:rides50:id-v1:12:ride-request13:v3:city:rides4:w0005:r0005",
+    "pickupZoneId": "sz:1-1",
+    "dropoffZoneId": "sz:1-0",
+    "boardingTick": 2002,
+    "completionTick": 6800,
+    "stage1State": "COMPLETED",
+    "xpAfterStage1": 100,
+    "rewardsAfterStage1": 2,
+    "learningIneligibleSkipped": 1,
+    "learningVersions": 0,
+    "stage2State": "AVAILABLE",
+    "stage2Attempt": "FAILED",
+    "failureReason": "SCENARIO_RESET",
+    "xpAfterFailure": 100,
+    "profileFingerprintEqual": true,
+    "panelMissions": 8,
+    "stage1PanelState": "COMPLETED",
+    "stage2PanelAttemptState": "FAILED",
+    "stage2PanelFailure": "SCENARIO_RESET",
+    "stage2PanelReplay": "true",
+    "checks": [
+      {
+        "name": "missions-port-present",
+        "pass": true,
+        "detail": "the shell mounts the 275 missions port"
+      },
+      {
+        "name": "campaign-starts-stage-1",
+        "pass": true,
+        "detail": "active campaign-1-first-taxi"
+      },
+      {
+        "name": "tutorial-starts",
+        "pass": true,
+        "detail": "SELECT_TAXI/TUTORIAL_BLOCKS_LEARNING"
+      },
+      {
+        "name": "tutorial-select-and-manual",
+        "pass": true,
+        "detail": "step 2"
+      },
+      {
+        "name": "tutorial-learning-ineligible",
+        "pass": true,
+        "detail": "step 3 SATISFIED, jobs 0"
+      },
+      {
+        "name": "tutorial-auto-and-ride-step",
+        "pass": true,
+        "detail": "step 4"
+      },
+      {
+        "name": "tutorial-completed-by-play",
+        "pass": true,
+        "detail": "PLAY/5"
+      },
+      {
+        "name": "stage-1-completed",
+        "pass": true,
+        "detail": "stage 1 is COMPLETED in the real 125 progress"
+      },
+      {
+        "name": "stage-1-reward-once",
+        "pass": true,
+        "detail": "XP 100, granted 2"
+      },
+      {
+        "name": "stage-2-started",
+        "pass": true,
+        "detail": "active campaign-2-first-demonstration"
+      },
+      {
+        "name": "tutorial-no-learning",
+        "pass": true,
+        "detail": "zero jobs, versions and profile writes"
+      },
+      {
+        "name": "learning-gate-skipped-segment",
+        "pass": true,
+        "detail": "ineligible 1, versions 0, jobs 0"
+      },
+      {
+        "name": "panel-stage-1-completed",
+        "pass": true,
+        "detail": "COMPLETED/COMPLETED"
+      },
+      {
+        "name": "panel-replay-policy",
+        "pass": true,
+        "detail": "replay true"
+      },
+      {
+        "name": "failure-reason-scenario-reset",
+        "pass": true,
+        "detail": "stage 2 carries the closed failure reason"
+      },
+      {
+        "name": "failure-preserves-xp",
+        "pass": true,
+        "detail": "XP 100 -> 100"
+      },
+      {
+        "name": "failure-preserves-profile",
+        "pass": true,
+        "detail": "the learned style fingerprint is identical before and after the failure"
+      },
+      {
+        "name": "failure-no-profile-write",
+        "pass": true,
+        "detail": "zero profile writes and zero XP delta"
+      },
+      {
+        "name": "panel-failure-reason",
+        "pass": true,
+        "detail": "FAILED/SCENARIO_RESET"
+      },
+      {
+        "name": "panel-replay-available",
+        "pass": true,
+        "detail": "replay true"
+      },
+      {
+        "name": "panel-focus-and-no-global-listener",
+        "pass": true,
+        "detail": "global 0, surface 3"
+      },
+      {
+        "name": "page-errors-zero",
+        "pass": true,
+        "detail": "0 page, 0 console"
+      }
+    ],
+    "screenshots": [
+      "screenshots/01-manual.png",
+      "screenshots/02-learning.png",
+      "screenshots/03-pickup.png",
+      "screenshots/04-dropoff.png",
+      "screenshots/05-completed.png",
+      "screenshots/06-stage-1-complete.png",
+      "screenshots/07-panel-stage-1.png",
+      "screenshots/08-failed.png",
+      "screenshots/09-panel-failure.png"
+    ]
+  }
+}

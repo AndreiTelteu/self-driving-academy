@@ -89,6 +89,10 @@ Notificările sunt excluse din verificarea critică.
   flotei are propriul container de scroll, astfel încât cele 30 de rânduri rămân accesibile.
 - Fonturile micro-textului au fost ridicate la minimum 0.75rem (12 px), iar line-height-ul
   panourilor la 1.4; valorile sunt în CSS, nu inventate de raport.
+- Panoul `Misiuni` (275) păstrează `width: min(92vw, 52rem)` și `max-height: min(90vh, 44rem)` cu
+  scroll intern, iar tutorialul `117` stă într-o coloană de `min(24rem, calc(100vw - 2rem))` în
+  stânga jos; la viewport-ul probei (1024×640) ambele rămân în ecran, fără să ascundă controalele
+  esențiale ale shell-ului.
 
 Plafonul de rânduri este o limită superioară, nu o promisiune: la 1280×720, cu HUD-ul complet și
 notificări vizibile, în coloană încap mai puține rânduri decât plafonul de 10, iar lista derulează.

@@ -1,0 +1,274 @@
+{
+  "version": "275-live-missions-v1",
+  "generatedBy": "npm run missions:live",
+  "oracleRule": "Only validated 007 events advance 116 objectives; only a COMPLETED 116 instance is settled by 125; a failure never writes a profile or removes XP.",
+  "tutorial": {
+    "steps": [
+      "SELECT_TAXI",
+      "MODE_MANUAL",
+      "MODE_LEARNING",
+      "MODE_AUTO",
+      "COMPLETE_RIDE"
+    ],
+    "state": "COMPLETED",
+    "completedBy": "PLAY",
+    "skippedSteps": 0,
+    "learningJobs": 0,
+    "profileVersions": 0,
+    "learningGate": "OPEN"
+  },
+  "campaign": {
+    "missions": 8,
+    "stage1State": "COMPLETED",
+    "stage1Attempt": "COMPLETED",
+    "stage1RewardXp": 100,
+    "stage1RewardsGranted": 2,
+    "stage2State": "AVAILABLE",
+    "stage2Attempt": "FAILED"
+  },
+  "replay": {
+    "attempt": 2,
+    "previous": "id-v1:16:mission-instance12:campaign:11621:campaign-1-first-taxi5:a0001",
+    "settledCompletions": 2,
+    "duplicateRewards": 2,
+    "xpAfterReplay": 100,
+    "rewardsGrantedAfterReplay": 2
+  },
+  "failure": {
+    "missionId": "campaign-2-first-demonstration",
+    "state": "FAILED",
+    "reason": "SCENARIO_RESET",
+    "failedTick": 9,
+    "xpBefore": 100,
+    "xpAfter": 100,
+    "profileWrites": 0,
+    "replayAvailable": true,
+    "failureLabel": "Scenariul a fost resetat (SCENARIO_RESET)"
+  },
+  "windowFailure": {
+    "missionId": "campaign-3-following-distance",
+    "windowTicks": 18000,
+    "startedTick": 10,
+    "expiredTick": 18011,
+    "state": "FAILED",
+    "reason": "EVALUATION_WINDOW_EXPIRED"
+  },
+  "incidentFailure": {
+    "missionId": "budget-mission",
+    "budget": 1,
+    "incidents": 2,
+    "state": "FAILED",
+    "reason": "INCIDENT_BUDGET_EXCEEDED"
+  },
+  "panel": {
+    "version": "126-mission-panel-v1",
+    "missions": 8,
+    "stage1StateLabel": "Finalizat",
+    "stage1ReplayLabel": "Reluare disponibilă: încercarea 2 din 8, profil CURRENT (profilul curent).",
+    "failureLimitsLabel": "Fereastră: până la finalizare; fără buget de incidente",
+    "failureReplayLabel": "Reluare disponibilă: încercarea 2 din 8, profil CURRENT (profilul curent). Eșecul păstrează profilurile învățate."
+  },
+  "ledger": {
+    "rewards": 2,
+    "xp": 100,
+    "unlocks": 1,
+    "duplicates": 2
+  },
+  "checks": [
+    {
+      "name": "stage-1-settled",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "One real 116 completion settled."
+    },
+    {
+      "name": "stage-1-reward-xp",
+      "expected": 100,
+      "actual": 100,
+      "pass": true,
+      "detail": "The authored 100 XP reward is recorded once by 125."
+    },
+    {
+      "name": "stage-1-rewards-granted",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "XP and the authored challenge unlock."
+    },
+    {
+      "name": "stage-2-started",
+      "expected": "campaign-2-first-demonstration",
+      "actual": "campaign-2-first-demonstration",
+      "pass": true,
+      "detail": "The next campaign stage starts only after a real completion."
+    },
+    {
+      "name": "tutorial-completed",
+      "expected": "COMPLETED",
+      "actual": "COMPLETED",
+      "pass": true,
+      "detail": "The five-step tutorial completes on the same real dropoff."
+    },
+    {
+      "name": "tutorial-no-learning",
+      "expected": [
+        0,
+        0,
+        0
+      ],
+      "actual": [
+        0,
+        0,
+        0
+      ],
+      "pass": true,
+      "detail": "The tutorial never creates a job, version or profile write."
+    },
+    {
+      "name": "replay-creates-attempt",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "A real new 116 attempt."
+    },
+    {
+      "name": "replay-no-duplicate-xp",
+      "expected": 100,
+      "actual": 100,
+      "pass": true,
+      "detail": "Replay reports the reward as a duplicate and pays nothing again."
+    },
+    {
+      "name": "replay-duplicate-rewards",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "Both authored rewards are reported as duplicates on the replayed completion."
+    },
+    {
+      "name": "failure-count",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "Exactly the open attempt fails."
+    },
+    {
+      "name": "failure-preserves-xp",
+      "expected": 100,
+      "actual": 100,
+      "pass": true,
+      "detail": "Failure never removes XP or a granted reward."
+    },
+    {
+      "name": "failure-no-profile-write",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "The mission composition has no profile writer."
+    },
+    {
+      "name": "failure-reason",
+      "expected": "SCENARIO_RESET",
+      "actual": "SCENARIO_RESET",
+      "pass": true,
+      "detail": "The panel receives the closed 116 reason."
+    },
+    {
+      "name": "failure-replay-available",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "A failed attempt offers the next 116 replay."
+    },
+    {
+      "name": "window-expired-count",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "The authoritative tick expires the attempt."
+    },
+    {
+      "name": "window-reason",
+      "expected": "EVALUATION_WINDOW_EXPIRED",
+      "actual": "EVALUATION_WINDOW_EXPIRED",
+      "pass": true,
+      "detail": "The panel receives the closed window reason."
+    },
+    {
+      "name": "incident-budget",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "The second real collision exceeds the authored budget."
+    },
+    {
+      "name": "incident-reason",
+      "expected": "INCIDENT_BUDGET_EXCEEDED",
+      "actual": "INCIDENT_BUDGET_EXCEEDED",
+      "pass": true,
+      "detail": "The panel receives the closed incident reason."
+    },
+    {
+      "name": "panel-mission-count",
+      "expected": 8,
+      "actual": 8,
+      "pass": true,
+      "detail": "All eight authored campaign stages are listed."
+    },
+    {
+      "name": "panel-stage-1-completed",
+      "expected": "COMPLETED",
+      "actual": "COMPLETED",
+      "pass": true,
+      "detail": "The panel copies the 125 campaign state."
+    },
+    {
+      "name": "panel-stage-1-replay-label",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The panel displays the replay policy."
+    },
+    {
+      "name": "panel-failure-limits-label",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "The panel displays the evaluation window and incident budget line."
+    },
+    {
+      "name": "no-second-ledger",
+      "expected": [
+        1,
+        0
+      ],
+      "actual": [
+        1,
+        0
+      ],
+      "pass": true,
+      "detail": "An independent 116/125 pair is untouched by the live runtime."
+    },
+    {
+      "name": "skip-completes-tutorial-only",
+      "expected": [
+        "COMPLETED",
+        "campaign-1-first-taxi",
+        0
+      ],
+      "actual": [
+        "COMPLETED",
+        "campaign-1-first-taxi",
+        0
+      ],
+      "pass": true,
+      "detail": "Skipping the tutorial does not complete the campaign."
+    }
+  ],
+  "summary": {
+    "checks": 24,
+    "passed": 24,
+    "pass": true
+  }
+}
