@@ -384,7 +384,9 @@ export function createV3BrowserComposition(
             positionM: vehicle.positionM,
             yawRad: vehicle.yawRad,
             speedMps: vehicle.speedMps,
+            speedLimitMps: vehicle.speedLimitMps,
             laneId: vehicle.laneId,
+            routeLaneIds: vehicle.routeLaneIds,
           }),
         ),
         segments: Object.freeze({

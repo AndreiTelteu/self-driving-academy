@@ -146,6 +146,8 @@ export interface LiveModeSegments {
   rejectTick(plan: LiveModeTickPlan): void;
   observe(): LiveModeSegmentsReadModel;
   learningExposure(): LiveModeLearningExposure;
+  /** Update the base/epoch used by segments opened after a 205 barrier; an open segment keeps its own. */
+  updateGeneration(input: { readonly baseVersionId: string; readonly learningEpoch: number }): void;
   /** Close an open segment with a terminal 069 reason; used by session switching/disposal. */
   retire(
     reason: Extract<LiveModeCloseReason, 'SESSION_CHANGE' | 'WORLD_RESET' | 'SHUTDOWN'>,
@@ -262,6 +264,10 @@ export function createLiveModeSegments(options: LiveModeSegmentsOptions): LiveMo
   let settles = 0;
   let rejects = 0;
   let disposed = false;
+  let generation = Object.freeze({
+    baseVersionId: options.baseVersionId,
+    learningEpoch: options.learningEpoch,
+  });
   let pending: Readonly<{ ticket: InterventionBoundaryTicket; plan: LiveModeTickPlan }> | null =
     null;
 
@@ -271,8 +277,8 @@ export function createLiveModeSegments(options: LiveModeSegmentsOptions): LiveMo
       version: '069-intervention-target-v1' as const,
       playerId: options.playerId,
       profileId: options.profileId,
-      baseVersionId: options.baseVersionId,
-      learningEpoch: options.learningEpoch,
+      baseVersionId: generation.baseVersionId,
+      learningEpoch: generation.learningEpoch,
       controlPreferencesVersion: options.controlPreferencesVersion,
       engineVersion: options.engineVersion,
       mapVersion: options.mapVersion,
@@ -438,6 +444,20 @@ export function createLiveModeSegments(options: LiveModeSegmentsOptions): LiveMo
     },
     observe: observeInternal,
     learningExposure: () => observeInternal().learning,
+    updateGeneration(input: {
+      readonly baseVersionId: string;
+      readonly learningEpoch: number;
+    }): void {
+      if (disposed) return;
+      if (typeof input.baseVersionId !== 'string' || input.baseVersionId.length === 0)
+        throw new Error('271 generation base version is invalid.');
+      if (!Number.isSafeInteger(input.learningEpoch) || input.learningEpoch < 0)
+        throw new Error('271 generation learning epoch is invalid.');
+      generation = Object.freeze({
+        baseVersionId: input.baseVersionId,
+        learningEpoch: input.learningEpoch,
+      });
+    },
     retire(
       reason: Extract<LiveModeCloseReason, 'SESSION_CHANGE' | 'WORLD_RESET' | 'SHUTDOWN'>,
     ): boolean {

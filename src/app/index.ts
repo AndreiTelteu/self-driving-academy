@@ -690,6 +690,25 @@ export {
 } from './live-telemetry';
 
 export {
+  LIVE_LEARNING_LIMITS,
+  LIVE_LEARNING_VERSION,
+  createLiveLearningPipeline,
+  liveLearningReasons,
+  liveLearningStatuses,
+  type LiveLearningActivationView,
+  type LiveLearningModeGenerationPort,
+  type LiveLearningPipeline,
+  type LiveLearningQueue,
+  type LiveLearningReadModel,
+  type LiveLearningReason,
+  type LiveLearningResult,
+  type LiveLearningServices,
+  type LiveLearningStats,
+  type LiveLearningStatus,
+  type LiveLearningTelemetryPort,
+} from './live-learning';
+
+export {
   VEHICLE_AUTO_DRIVE_POLICY,
   VEHICLE_AUTO_DRIVE_VERSION,
   createVehicleAutoDrive,
