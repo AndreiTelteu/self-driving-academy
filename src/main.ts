@@ -63,7 +63,16 @@ import {
   type LiveCompanyFinance,
 } from './economy';
 import type { CompanyFleetPort } from './fleet';
-import { createDefaultSettings, createSettingsStore, type RuntimeSettings } from './settings';
+import {
+  createDefaultSettings,
+  createSettingsStore,
+  readCameraModePreference,
+  withCameraModePreference,
+  writeCameraModePreference,
+  type CameraModePreference,
+  type CameraPreferenceStorage,
+  type RuntimeSettings,
+} from './settings';
 import { bindPauseFocusInput } from './input';
 import { createRoutePlanner } from './world';
 import {
@@ -146,7 +155,18 @@ const captureConfig = readCaptureConfig(window.location.search);
 const noFocusPause = new URLSearchParams(window.location.search).has('nofocuspause');
 /** Contor FPS permanent (stânga-sus), independent de diagnostic; omis în capturile deterministe. */
 if (!captureConfig) createFpsCounter(app);
-const defaultSettings = createDefaultSettings('v3-composition');
+/** PBI 280: only the camera presentation preference survives a reload; 278 is not extended. */
+const cameraPreferenceStorage: CameraPreferenceStorage | undefined = (() => {
+  try {
+    return window.localStorage;
+  } catch {
+    return undefined;
+  }
+})();
+const defaultSettings = withCameraModePreference(
+  createDefaultSettings('v3-composition'),
+  readCameraModePreference(cameraPreferenceStorage),
+);
 const settingsStore = createSettingsStore(
   captureConfig
     ? {
@@ -1763,6 +1783,7 @@ const application = createApplicationLifecycle({
             viewport: initialMetrics,
             enabled: () => application.getState().kind === 'PLAYING',
             models,
+            onCameraModeChanged: rememberCameraMode,
           });
           // PBI 271: the single 069 live boundary owner over this composition, before the first
           // shell tick. It closes/opens segments at the exact accepted tick without a second model.
@@ -2218,11 +2239,25 @@ function liveSettingsRuntime(): LiveSettings | undefined {
 function applyLiveSettings(saved: RuntimeSettings): void {
   settings = saved;
   sessionQuality = saved.quality;
+  writeCameraModePreference(cameraPreferenceStorage, saved.input.cameraMode);
   try {
     composition?.applySettings(saved);
   } catch {
     // A disposed renderer is already being torn down; the settings record remains valid.
   }
+  shellHost.refresh();
+}
+/**
+ * PBI 280: a real C press changes only the 009 presentation field. The composition already switched
+ * its live view; this keeps the store, the settings surface and the reload preference in sync.
+ */
+function rememberCameraMode(mode: CameraModePreference): void {
+  try {
+    settings = settingsStore.replace(withCameraModePreference(settingsStore.getSnapshot(), mode));
+  } catch {
+    // The live presentation already changed; a rejected store write must not revert it.
+  }
+  writeCameraModePreference(cameraPreferenceStorage, mode);
   shellHost.refresh();
 }
 function applyLiveSettingsStyleResult(result: StyleSlidersTickResult): void {
