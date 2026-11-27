@@ -709,6 +709,34 @@ export {
 } from './live-learning';
 
 export {
+  LIVE_MISSIONS_REFRESH_HZ,
+  LIVE_MISSIONS_VERSION,
+  createLiveMissions,
+  liveMissionFailureCauses,
+  liveMissionFailureReason,
+  liveMissionSessionKinds,
+  type LiveMissionActivationInput,
+  type LiveMissionAuthorityFact,
+  type LiveMissionFailureCause,
+  type LiveMissionFollowEpisodeFact,
+  type LiveMissionHealthFact,
+  type LiveMissionModeSegmentFact,
+  type LiveMissionModesSnapshot,
+  type LiveMissionOptions,
+  type LiveMissionPorts,
+  type LiveMissionRewardFacts,
+  type LiveMissionRideFact,
+  type LiveMissionRidesSnapshot,
+  type LiveMissionSelectionFact,
+  type LiveMissionSessionInput,
+  type LiveMissionSessionKind,
+  type LiveMissionStatus,
+  type LiveMissions,
+  type LiveMissionStepInput,
+  type LiveMissionStepResult,
+} from './live-missions';
+
+export {
   VEHICLE_AUTO_DRIVE_POLICY,
   VEHICLE_AUTO_DRIVE_VERSION,
   createVehicleAutoDrive,
