@@ -1,0 +1,12 @@
+{
+  "id": "280",
+  "criteriaSatisfied": true,
+  "result": "C uses the 009 camera binding to switch CHASE and FIRST_PERSON during driving without advancing a tick or writing authority, position, speed or a 069 segment. FIRST_PERSON uses the real 017 controller from the driver anchor with the 009 FOV, hides the driven car shell and lowers minZ. Entry, exit, re-entry and vehicle switching stay coherent; the preference is saved in 009 and restored after reload. The visual proof covers both WebGL2 and WebGPU.",
+  "limitations": "V3 has no modelled cabin interior, so the whole exterior shell of the driven car is hidden in first person; road, city, traffic and lights remain. Mouse look, recenter and pointer lock remain the 017 fixture contract. There is no offset slider in the 009 schema; the driver offset is calibrated from 145 geometry. The probe defaults to headed Chrome because headless WebGPU can enter the overload pause; PLAYWRIGHT_HEADLESS=1 reports an unavailable backend as NOT_RUN. The local cost is not a hardware/FPS gate and the probe is not a human playtest. Local Node is 24.19.0.",
+  "checks": [
+    ["node", "--import", "./scripts/register-typescript.mjs", "--test", "tests/app/first-person-camera.test.ts", "tests/settings/camera-preference.test.ts", "tests/app/live-three-modes.test.ts"],
+    ["npm", "run", "camera:first-person", "--", "--check"],
+    ["npm", "run", "docs:check", "--", "--check"],
+    ["npm", "run", "typecheck"]
+  ]
+}

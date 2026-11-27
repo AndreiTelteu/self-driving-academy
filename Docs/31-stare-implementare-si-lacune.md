@@ -496,6 +496,8 @@ progres sau XP. Focusul, Tab, Escape, contrastul și lipsa listenerilor globali 
 
 **PBI:** [280](../PBI/README.md) · **Dependențe:** 260, 263.
 
+**Stare:** Done la 28 noiembrie 2026. Mouse look/pointer lock și un interior complet rămân în afara acestui PBI.
+
 ### 281 — Minimapa, harta de flotă și HUD-ul complet de joc
 
 **Ce lipsește:** HUD-ul live are doar viteză și mod; minimapa, ruta, markerii de flotă, obiectivul și sesiunea lipsesc.
