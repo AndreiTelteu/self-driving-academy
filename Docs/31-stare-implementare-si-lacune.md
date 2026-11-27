@@ -421,18 +421,19 @@ Refuzurile sunt închise: MANUAL/AUTO `SKIPPED_MANUAL`, LEARNING neeligibil `SKI
 
 ### 277 — Provocările random, directorul, panoul și reluarea în joc
 
-**Ce lipsește:** Catalogul, directorul și panoul de provocări există, dar nu sunt montate; jocul nu oferă provocări random sau reluare.
+**Ce lipsește:** TIMED_DROPOFF, COMFORT, DISTRUCTION si LEARNING nu au inca producator live; 278 si 285 raman.
 
-- Nu există oferte live, cooldown sau o singură instanță activă.
-- Nu există rezervarea taxiului și nici refuzul când există pasager.
-- Nu există evaluatori live pentru checkpoint, zonă, confort, parcare, drift, distrugere sau learning.
-- Nu există panou de provocări, accept/refuz, „Mai încearcă” sau „Continuă condusul”.
-- Nu există recompense idempotente și nici separarea Haos/Academie.
-- Nu există o probă de browser cu o provocare completă și una refuzată.
+**Stare:** implementat pe branch (`277-live-challenges-v1`), în așteptare pentru integrarea orchestratorului. `src/app/live-challenges.ts` compune 231/232/233 peste cadrul autoritar și ledgerul 213 al lui 276. O singură ofertă vizibilă și o singură instanță activă, cooldown de 10.800 tick-uri, fereastră de ofertă de 2.700 tick-uri, refuz gratuit, taxi rezervat fără a mișca pasagerul existent, verdict din fapte reale de zonă/viteză/orientare, recompensă idempotentă și record local în Haos. Panoul nativ `Provocări` are accept/refuz/„Mai încearcă”/„Continuă condusul”.
 
-**Documentație:** [Provocări random și revenire](28-provocari-random-si-revenire.md) · [Flotă și curse](07-flota-si-curse.md) · [Joacă liberă, Haos și distrugere](26-joaca-libera-haos-si-distrugere.md) · [Starea implementării și lacunele](31-stare-implementare-si-lacune.md)
+- TIMED_DROPOFF, COMFORT, DISTRUCTION și LEARNING sunt excluse înainte de ofertă: nu există încă un producător live de dropoff al cursei provocării, pasager îmbarcat, decor destructibil (285) sau observarea efectului LEARNING. Demolarea este refuzată cu `CAPABILITY:DESTRUCTIBLE_DECOR` înainte de afișare.
+- Checkpoint, zonă, parcare și drift au evaluatori live; checkpointurile și zonele sunt poligoanele reale 032, parcarea cere oprire aliniată, iar driftul cere viteză, unghi de derapaj și absența impulsului de coliziune.
+- Reload-ul de tab folosește un checkpoint `sessionStorage` peste snapshoturile 232/233; fișierul durabil rămâne 278.
 
-**PBI:** [277](../PBI/README.md) · **Dependențe:** 260, 265, 271.
+**Documentație:** [Provocări random și revenire](28-provocari-random-si-revenire.md) ↔ [Flotă și curse](07-flota-si-curse.md) ↔ [Joacă liberă, Haos și distrugere](26-joaca-libera-haos-si-distrugere.md) ↔ [Starea implementării și lacunele](31-stare-implementare-si-lacune.md)
+
+**PBI:** [277](../PBI/README.md) ↔ **Dependențe:** 260, 265, 271.
+
+**Dovezi:** [raport determinist](../Docs/Evidence/277-live-challenges/report.json), [probă de browser](../Docs/Evidence/277-live-challenges/browser.json), [README dovezi](../Docs/Evidence/277-live-challenges/README.md).
 
 ### 278 — Persistență live: autosave, checkpoint, savefile și recuperare
 

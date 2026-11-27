@@ -59,6 +59,8 @@ export interface GameShellHostOptions {
   readonly onOpenMissions?: () => boolean;
   /** PBI 276: deschide panoul de progres și misiuni zilnice; opțional. */
   readonly onOpenProgress?: () => boolean;
+  /** PBI 277: deschide panoul provocărilor live; opțional, montat numai când există. */
+  readonly onOpenChallenges?: () => boolean;
   readonly now?: () => number;
   /** Testele pot opri injectarea de CSS; producția o lasă activă. */
   readonly style?: boolean;
@@ -248,6 +250,14 @@ export function createGameShellHost(options: GameShellHostOptions): GameShellHos
     progressButton.setAttribute('data-shell-action', 'progress');
     progressButton.setAttribute('aria-haspopup', 'dialog');
   }
+  const challengesButton =
+    options.onOpenChallenges === undefined ? null : doc.createElement('button');
+  if (challengesButton !== null) {
+    challengesButton.type = 'button';
+    challengesButton.textContent = 'Provocări';
+    challengesButton.setAttribute('data-shell-action', 'challenges');
+    challengesButton.setAttribute('aria-haspopup', 'dialog');
+  }
   bar.append(badge);
   if (sessionSelect !== null) bar.append(sessionSelect);
   bar.append(startButton, pauseButton, resumeButton, panelButton);
@@ -258,6 +268,7 @@ export function createGameShellHost(options: GameShellHostOptions): GameShellHos
   if (cityButton !== null) bar.append(cityButton);
   if (missionsButton !== null) bar.append(missionsButton);
   if (progressButton !== null) bar.append(progressButton);
+  if (challengesButton !== null) bar.append(challengesButton);
 
   const panel = doc.createElement('div');
   panel.className = 'game-shell-host__panel';
@@ -340,7 +351,8 @@ export function createGameShellHost(options: GameShellHostOptions): GameShellHos
     (kpisButton === null ? 0 : 1) +
     (cityButton === null ? 0 : 1) +
     (missionsButton === null ? 0 : 1) +
-    (progressButton === null ? 0 : 1);
+    (progressButton === null ? 0 : 1) +
+    (challengesButton === null ? 0 : 1);
   const rows = new Map<string, Row>();
 
   const syncSession = (): void => {
@@ -418,6 +430,9 @@ export function createGameShellHost(options: GameShellHostOptions): GameShellHos
         panelOpen || (kind !== 'READY' && kind !== 'PLAYING' && kind !== 'PAUSED');
     if (progressButton !== null)
       progressButton.hidden =
+        panelOpen || (kind !== 'READY' && kind !== 'PLAYING' && kind !== 'PAUSED');
+    if (challengesButton !== null)
+      challengesButton.hidden =
         panelOpen || (kind !== 'READY' && kind !== 'PLAYING' && kind !== 'PAUSED');
     badge.textContent = panelOpen ? 'PANOU' : kind;
     badge.setAttribute('data-shell-kind', panelOpen ? 'PANEL' : kind);
@@ -555,6 +570,10 @@ export function createGameShellHost(options: GameShellHostOptions): GameShellHos
     if (panelOpen) return;
     options.onOpenProgress?.();
   };
+  const onChallenges = (): void => {
+    if (panelOpen) return;
+    options.onOpenChallenges?.();
+  };
   const onPanelKeyDown = (event: KeyboardEvent): void => {
     if (event.key === 'Escape') {
       event.preventDefault();
@@ -581,6 +600,7 @@ export function createGameShellHost(options: GameShellHostOptions): GameShellHos
   cityButton?.addEventListener('click', onCity);
   missionsButton?.addEventListener('click', onMissions);
   progressButton?.addEventListener('click', onProgress);
+  challengesButton?.addEventListener('click', onChallenges);
   closeButton.addEventListener('click', onClose);
   panel.addEventListener('keydown', onPanelKeyDown);
 
@@ -638,6 +658,7 @@ export function createGameShellHost(options: GameShellHostOptions): GameShellHos
       cityButton?.removeEventListener('click', onCity);
       missionsButton?.removeEventListener('click', onMissions);
       progressButton?.removeEventListener('click', onProgress);
+      challengesButton?.removeEventListener('click', onChallenges);
       closeButton.removeEventListener('click', onClose);
       panel.removeEventListener('keydown', onPanelKeyDown);
       listeners = 0;

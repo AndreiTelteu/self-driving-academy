@@ -865,6 +865,7 @@ export function createLiveDailyProgress(options: LiveDailyProgressOptions): Live
     stats: status,
     checkpoint,
     save,
+    playerProgress: () => player,
     dispose(): void {
       if (disposed) return;
       try {
@@ -901,6 +902,11 @@ export interface LiveDailyProgress {
   stats(): LiveDailyProgressStatus;
   checkpoint(atMs?: number): LiveDailyReloadCheckpoint;
   save(): void;
+  /**
+   * The one real 213 ledger owned by this composition. PBI 277 credits challenge rewards through it
+   * instead of creating a second ledger; no caller gets a second balance or a debit path.
+   */
+  playerProgress(): PlayerProgress;
   dispose(): void;
 }
 

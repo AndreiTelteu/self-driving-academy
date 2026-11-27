@@ -545,6 +545,12 @@ export interface ChallengeDirectorOptions {
   /** The saved director seed; the next offer seed is derived from it deterministically. */
   readonly seed: number;
   readonly enabled?: boolean;
+  /**
+   * Optional host gate over the delivered catalog. A composition that cannot produce the real facts
+   * of an objective excludes that template before it can be offered; the default accepts every
+   * template, so the 232 contract is unchanged.
+   */
+  readonly templateFilter?: (template: ChallengeTemplate) => boolean;
 }
 
 /* ---------------------------------------------------------------------------------------------
@@ -1090,16 +1096,25 @@ function instanceCodeUnits(instance: ChallengeDirectorInstance): number {
  * ------------------------------------------------------------------------------------------- */
 
 export function createChallengeDirector(options: unknown): ChallengeDirector {
-  const optionFields = ['catalog', 'routes', 'seed', 'enabled'] as const;
+  const optionFields = ['catalog', 'routes', 'seed', 'enabled', 'templateFilter'] as const;
   const data = plainFields(options, optionFields, 'challenge director option');
   for (const key of ['routes', 'seed'] as const)
     requireRequired(data, key, 'challenge director option');
   if (data.enabled !== undefined)
     requireContract(typeof data.enabled === 'boolean', 'Challenge director enabled flag');
+  if (data.templateFilter !== undefined)
+    requireContract(
+      typeof data.templateFilter === 'function',
+      'Challenge director template filter must be a function',
+    );
   const catalog = parseChallengeTemplateCatalog(
     data.catalog === undefined ? createChallengeTemplateCatalog() : data.catalog,
   );
   const routes = readRoutePort(data.routes);
+  const templateFilter =
+    data.templateFilter === undefined
+      ? null
+      : (data.templateFilter as (template: ChallengeTemplate) => boolean);
 
   let enabled = data.enabled === undefined ? true : data.enabled;
   let simulatedTick = 0;
@@ -1389,6 +1404,7 @@ export function createChallengeDirector(options: unknown): ChallengeDirector {
   function selectCandidate(
     world: ReadWorld,
     seed: number,
+    requestedTemplateId: string | null,
   ): { instance: ChallengeDirectorInstance } | ChallengeOfferRefusal {
     const eligibility = eligibleChallengeTemplates(catalog, world.capabilities);
     if (eligibility.eligible.length === 0)
@@ -1397,6 +1413,30 @@ export function createChallengeDirector(options: unknown): ChallengeDirector {
         'No catalog template is realisable in this session',
         eligibility.excluded.flatMap((entry) => entry.missing),
       );
+    if (requestedTemplateId !== null) {
+      const template = catalog.templates.find((entry) => entry.templateId === requestedTemplateId);
+      if (template === undefined)
+        return refusal(
+          'NO_ELIGIBLE_TEMPLATE',
+          'The requested challenge template is not in the catalog',
+          [`UNKNOWN_TEMPLATE:${requestedTemplateId}`],
+        );
+      const excluded = eligibility.excluded.find(
+        (entry) => entry.templateId === requestedTemplateId,
+      );
+      if (excluded !== undefined)
+        return refusal(
+          'NO_ELIGIBLE_TEMPLATE',
+          'The requested challenge template is not realisable in this session',
+          excluded.missing,
+        );
+      if (templateFilter !== null && !templateFilter(template))
+        return refusal(
+          'NO_ELIGIBLE_TEMPLATE',
+          'The requested challenge template has no live fact source in this session',
+          [`TEMPLATE_UNAVAILABLE:${requestedTemplateId}`],
+        );
+    }
     const recent = new Set(
       history
         .slice()
@@ -1405,11 +1445,26 @@ export function createChallengeDirector(options: unknown): ChallengeDirector {
         .filter((templateId, index, all) => all.indexOf(templateId) === index)
         .slice(0, CHALLENGE_DIRECTOR_LIMITS.recentTemplates),
     );
-    const preferred = eligibility.eligible.filter((templateId) => !recent.has(templateId));
-    const candidates = preferred.length > 0 ? preferred : eligibility.eligible;
+    const detail: string[] = [];
+    const allowed = eligibility.eligible.filter((templateId) => {
+      if (requestedTemplateId !== null && templateId !== requestedTemplateId) return false;
+      const template = templateFor(templateId);
+      if (templateFilter !== null && !templateFilter(template)) {
+        detail.push(`TEMPLATE_UNAVAILABLE:${templateId}`);
+        return false;
+      }
+      return true;
+    });
+    if (allowed.length === 0)
+      return refusal(
+        'NO_ELIGIBLE_TEMPLATE',
+        'Every deterministic candidate lacks a live fact source',
+        detail,
+      );
+    const preferred = allowed.filter((templateId) => !recent.has(templateId));
+    const candidates = preferred.length > 0 ? preferred : allowed;
     const start =
       randomUint32(seed, `${CHALLENGE_DIRECTOR_NAMESPACE}:template`, 0) % candidates.length;
-    const detail: string[] = [];
     const probes = Math.min(candidates.length, CHALLENGE_DIRECTOR_LIMITS.routeProbesPerOffer);
     for (let offset = 0; offset < probes; offset += 1) {
       const templateId = candidates[(start + offset) % candidates.length]!;
@@ -1529,13 +1584,21 @@ export function createChallengeDirector(options: unknown): ChallengeDirector {
   }
 
   function offer(value: unknown): ChallengeOfferResult {
-    const request = plainFields(value, ['world', 'seed'], 'challenge offer request');
+    const request = plainFields(value, ['world', 'seed', 'templateId'], 'challenge offer request');
     requireRequired(request, 'world', 'challenge offer request');
     const world = readWorld(request.world);
     requireContract(
       world.simulatedTick >= simulatedTick,
       'The challenge clock never moves backwards',
     );
+    const requestedTemplateId =
+      request.templateId === undefined
+        ? null
+        : boundedId(
+            request.templateId,
+            CHALLENGE_DIRECTOR_LIMITS.idCodeUnits,
+            'challenge offer template',
+          );
     simulatedTick = world.simulatedTick;
     // Close an expired offer first so the preflight counts a real, current window.
     expireAtTick();
@@ -1551,7 +1614,7 @@ export function createChallengeDirector(options: unknown): ChallengeDirector {
     }
     const seed =
       request.seed === undefined ? nextOfferSeed() : readSeed(request.seed, 'Challenge offer seed');
-    const selected = selectCandidate(world, seed);
+    const selected = selectCandidate(world, seed, requestedTemplateId);
     if (!('instance' in selected)) {
       refusedOffers += 1;
       return selected;
