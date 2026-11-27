@@ -6,6 +6,9 @@ import {
   createGameShell,
   createLiveEconomyComposition,
   createLiveDailyProgress,
+  createLiveChallenges,
+  createLiveChallengeRoutePort,
+  createLiveChallengeZones,
   createLiveLearningPipeline,
   createLiveMissions,
   createLiveModeSegments,
@@ -14,6 +17,7 @@ import {
   createCityStyleProfile,
   createRendererRecovery,
   createSessionFlow,
+  dailyCalendarInputOf,
   LIVE_DAILY_PROGRESS_VERSION,
   LIVE_LEARNING_VERSION,
   LIVE_MISSIONS_VERSION,
@@ -24,8 +28,12 @@ import {
   readKpiImpact,
   readLiveFleetSelectionSnapshot,
   readMinimapGeometry,
+  resolveLocalDailyDay,
   rideTripDistanceM,
   type GameTickPort,
+  type LiveChallenges,
+  type LiveChallengeFrameFact,
+  type LiveChallengeVehicleFact,
   type LiveDailyProgress,
   type LiveEconomyComposition,
   type LiveLearningPipeline,
@@ -46,6 +54,7 @@ import {
 import type { CompanyFleetPort } from './fleet';
 import { createDefaultSettings } from './settings';
 import { bindPauseFocusInput } from './input';
+import { createRoutePlanner } from './world';
 import {
   createBabylonRecoverySession,
   createV3BrowserComposition,
@@ -67,6 +76,7 @@ import {
   createFpsCounter,
   createGameShellHost,
   createCityDashboardPanel,
+  createChallengePanel,
   createFleetSelectionPanel,
   createKpiHistoryPanel,
   createKpiImpactHud,
@@ -106,6 +116,15 @@ const app = document.querySelector<HTMLDivElement>('#app');
 if (!app) throw new Error('Containerul aplicației #app lipsește.');
 const view = createRenderingView(app);
 const world = createCompositionWorld();
+/** PBI 277: the real 041 planner and the mapped 032 zones the live challenge preflight reads. */
+const challengePlanner = createRoutePlanner({
+  graph: world.graph,
+  map: world.map,
+  graphVersion: '033-lane-graph-v1',
+  costVersion: 'route-cost-v1',
+});
+const liveChallengeZones = createLiveChallengeZones({ map: world.map, graph: world.graph });
+const liveTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Europe/Bucharest';
 /** PBI 239: `?capture=1` pornește harnessul de capturi; fără steag este `null` și nimic nu se schimbă. */
 const captureConfig = readCaptureConfig(window.location.search);
 /** Probe-only: a headless browser loses focus when Playwright drives; this flag keeps the clock. */
@@ -171,6 +190,8 @@ const ridesModules: {
   composition: LiveRideComposition | undefined;
   hud: ReturnType<typeof createTaxiHud> | undefined;
 } = { composition: undefined, hud: undefined };
+/** PBI 277: the same 264 owner, exposed read-only to the live challenge frame port. */
+const rideRuntimeModules: { live: LiveRides | undefined } = { live: undefined };
 const ridesTickPort: GameTickPort = {
   id: 'rides',
   version: LIVE_RIDE_LIFECYCLE_VERSION,
@@ -266,6 +287,13 @@ const learningModules: {
  */
 const missionModules: { runtime: LiveMissions | undefined } = { runtime: undefined };
 /**
+ * PBI 277: the single live random-challenge owner. It composes the 231 catalog/evaluators, the 232
+ * director and the 233 experience over the real composition frame; it creates no second ledger.
+ */
+const challengeModules: { runtime: LiveChallenges | undefined } = { runtime: undefined };
+/** Probe-only switch: the automatic offer door can be closed while a host-driven offer is tested. */
+let challengeAutoOffersSuppressed = false;
+/**
  * PBI 276: the live daily/XP vertical. It consumes the same validated events and the same 125
  * settlements as 275, plus real active-time windows; it creates no second mission model.
  */
@@ -289,6 +317,20 @@ const dailyProgressStorage = (() => {
   try {
     const storage = window.sessionStorage,
       key = '276-daily-xp-checkpoint';
+    return Object.freeze({
+      load: () => storage.getItem(key),
+      save: (value: string) => storage.setItem(key, value),
+      clear: () => storage.removeItem(key),
+    });
+  } catch {
+    return undefined;
+  }
+})();
+/** PBI 277: the challenge offer, instance and record survive a tab reload; a savefile is 278. */
+const challengeProgressStorage = (() => {
+  try {
+    const storage = window.sessionStorage,
+      key = '277-live-challenges-checkpoint';
     return Object.freeze({
       load: () => storage.getItem(key),
       save: (value: string) => storage.setItem(key, value),
@@ -338,6 +380,7 @@ const missionsTickPort: GameTickPort = {
       nowMs: Date.now(),
       playing: true,
     });
+    challengeModules.runtime?.step({ tick: context.tick, paused: false });
   },
 };
 const liveLearningEngineVersion = 'engine-273-live' as const;
@@ -680,19 +723,135 @@ const liveMissions = createLiveMissions({
   },
 });
 missionModules.runtime = liveMissions;
-/**
- * PBI 276: the single live daily/XP owner. It starts with the current real day and the real
+/** PBI 276: the single live daily/XP owner. It starts with the current real day and the real
  * capability snapshot; `beginLiveMissions` rebinds it to the accepted session identity.
  */
-dailyModules.runtime = createLiveDailyProgress({
+const liveDaily = createLiveDailyProgress({
   playerId: 'v3-player',
-  timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'Europe/Bucharest',
+  timeZone: liveTimeZone,
   sessionId: compositionContext.sessionId,
   worldEpoch: compositionContext.worldEpoch,
   kind: 'ACADEMY',
   capabilities: liveDailyCapabilities([]),
   hostFacts: xpHostFacts,
   ...(dailyProgressStorage === undefined ? {} : { storage: dailyProgressStorage }),
+});
+dailyModules.runtime = liveDaily;
+/**
+ * PBI 277: the live challenge frame is the accepted composition frame plus the real 265 claim and
+ * passenger facts. The cache is one entry per authoritative tick, so the challenge step and its
+ * offer preflight never rebuild the ride snapshot twice.
+ */
+let challengeFrameCache: {
+  tick: number;
+  value: LiveChallengeFrameFact | null;
+} | null = null;
+function liveChallengeFrame(): LiveChallengeFrameFact | null {
+  const frame = composition?.composition.frame;
+  if (frame === undefined) return null;
+  if (challengeFrameCache?.tick === frame.tick) return challengeFrameCache.value;
+  const liveRides = rideRuntimeModules.live;
+  const rideSnapshot = ridesModules.composition?.lifecycle.snapshot() ?? null;
+  const liveSnapshot = liveRides?.snapshot() ?? null;
+  const playerId = frame.playerVehicleId;
+  const assignmentRaw =
+    playerId === null
+      ? null
+      : (liveSnapshot?.assignments.find((entry) => entry.taxiId === playerId) ?? null);
+  const vehicles: LiveChallengeVehicleFact[] = frame.vehicles.map((vehicle) => {
+    const taxiStatus =
+      assignmentRaw !== null && assignmentRaw.taxiId === vehicle.vehicleId
+        ? ('ASSIGNED' as const)
+        : (liveRides?.healthStatus(vehicle.vehicleId) ?? 'AVAILABLE');
+    const passengerAboard =
+      rideSnapshot?.rides.some(
+        (ride) => ride.taxiId === vehicle.vehicleId && !ride.terminal && ride.boardingTick !== null,
+      ) ?? false;
+    return Object.freeze({
+      vehicleId: vehicle.vehicleId,
+      driverKind: vehicle.driverKind,
+      laneId: vehicle.laneId,
+      positionM: Object.freeze({ x: vehicle.positionM.x, z: vehicle.positionM.z }),
+      yawRad: vehicle.yawRad,
+      speedMps: vehicle.speedMps,
+      controlMode: vehicle.controlMode,
+      classId: vehicle.classId,
+      status: taxiStatus,
+      passengerAboard,
+    });
+  });
+  const value = Object.freeze({
+    tick: frame.tick,
+    paused: application.getState().kind !== 'PLAYING',
+    playerVehicleId: frame.playerVehicleId,
+    selectedVehicleId: frame.selectedVehicleId,
+    vehicles: Object.freeze(vehicles),
+    assignment:
+      assignmentRaw === null
+        ? null
+        : Object.freeze({
+            assignmentId: assignmentRaw.assignmentId,
+            requestId: assignmentRaw.requestId,
+            taxiId: assignmentRaw.taxiId,
+            customerId: assignmentRaw.requestId,
+          }),
+    freeTaxis: liveSnapshot?.counts.availableTaxis ?? 0,
+  });
+  challengeFrameCache = { tick: frame.tick, value };
+  return value;
+}
+/** The real lane under a taxi, including a manually driven car that left the lane id unset. */
+function challengeLaneFor(frame: LiveChallengeFrameFact, taxiId: string): string | null {
+  const taxi = frame.vehicles.find((entry) => entry.vehicleId === taxiId);
+  if (taxi === undefined) return null;
+  if (taxi.laneId !== null) return taxi.laneId;
+  const located = world.graph.locateLane({
+    positionM: { x: taxi.positionM.x, y: 0, z: taxi.positionM.z },
+    access: 'TAXI',
+  });
+  return located?.lane.id ?? null;
+}
+challengeModules.runtime = createLiveChallenges({
+  sessionId: compositionContext.sessionId,
+  worldEpoch: compositionContext.worldEpoch,
+  sessionKind: 'ACADEMY',
+  playerId: 'v3-player',
+  seed: 277_000,
+  timeZone: liveTimeZone,
+  ledger: liveDaily.playerProgress(),
+  calendar: () => dailyCalendarInputOf(resolveLocalDailyDay(Date.now(), liveTimeZone)),
+  now: () => Date.now(),
+  ...(challengeProgressStorage === undefined ? {} : { storage: challengeProgressStorage }),
+  ports: {
+    frame: liveChallengeFrame,
+    zones: () => liveChallengeZones,
+    route: createLiveChallengeRoutePort({
+      planner: challengePlanner,
+      frame: liveChallengeFrame,
+      laneFor: challengeLaneFor,
+    }),
+    incidents: () =>
+      Object.freeze(
+        (dashboardModules.health?.history() ?? [])
+          .filter((entry) => entry.fact === 'COLLISION_DAMAGE')
+          .map((entry) =>
+            Object.freeze({
+              factId: entry.factId,
+              taxiId: entry.taxiId,
+              tick: entry.tick,
+            }),
+          ),
+      ),
+    offersAllowed: () => !challengeAutoOffersSuppressed && !liveMissions.tutorialLearningBlocked(),
+    campaignCompleted: () => liveMissions.status().campaign.completed,
+    learningKeys: () =>
+      parameterDefinitions
+        .filter((definition) => definition.implemented)
+        .map((definition) => definition.key)
+        .sort()
+        .slice(0, 64),
+    vehicleClasses: () => Object.keys(VEHICLE_CLASSES).sort(),
+  },
 });
 /** PBI 275: the 126 panel is read-only; its own trigger is hidden because the shell owns the button. */
 const missionPanel = createMissionPanel(app, {
@@ -718,6 +877,32 @@ const progressPanel = createLiveProgressPanel(app, {
   },
 });
 progressPanel.getTrigger().hidden = true;
+/**
+ * PBI 277: the 233 challenge panel is read-only; the host executes its four intents against the live
+ * 232/233 composition. Its trigger is hidden because the shell owns the `Provocări` button.
+ */
+const challengePanel = createChallengePanel(app, {
+  read: () => challengeModules.runtime?.panelSnapshot() ?? null,
+  onAction: (action) => {
+    if (action === 'ACCEPT') challengeModules.runtime?.accept();
+    else if (action === 'DECLINE') challengeModules.runtime?.decline();
+    else if (action === 'RETRY') challengeModules.runtime?.retry();
+    else if (action === 'CONTINUE') {
+      challengePanel.close();
+      refocusGame();
+      return;
+    }
+    challengePanel.refresh();
+  },
+  setSurface: (open) => {
+    if (open) shell.openPanel('challenges');
+    else {
+      shell.closePanel();
+      refocusGame();
+    }
+  },
+});
+challengePanel.getTrigger().hidden = true;
 /** PBI 275: the 117 tutorial panel stays separate from the campaign panel and from learning. */
 const tutorialHost = document.createElement('div');
 tutorialHost.className = 'live-mission-tutorial-host';
@@ -944,6 +1129,7 @@ let lastKpiPanelRefresh = -Infinity;
 /** PBI 275: the mission panel reads at 10 Hz only while open; the tutorial HUD at 10 Hz while live. */
 let lastMissionPanelRefresh = -Infinity;
 let lastProgressPanelRefresh = -Infinity;
+let lastChallengePanelRefresh = -Infinity;
 let lastTutorialPanelRefresh = -Infinity;
 /**
  * PBI 270: panoul companiei citește exact read model-ul 269 și cheltuie cash-ul real prin
@@ -977,6 +1163,7 @@ const shellHost = createGameShellHost({
     if (cityDashboardPanel.isOpen()) cityDashboardPanel.close();
     if (missionPanel.isOpen()) missionPanel.close();
     if (progressPanel.isOpen()) progressPanel.close();
+    if (challengePanel.isOpen()) challengePanel.close();
     shell.setMenuOpen(true);
   },
   onResume: () => resumeSession(),
@@ -995,6 +1182,7 @@ const shellHost = createGameShellHost({
     if (cityDashboardPanel.isOpen()) cityDashboardPanel.close();
     if (missionPanel.isOpen()) missionPanel.close();
     if (progressPanel.isOpen()) progressPanel.close();
+    if (challengePanel.isOpen()) challengePanel.close();
     return shell.openPanel('integration');
   },
   onClosePanel: () => {
@@ -1007,6 +1195,7 @@ const shellHost = createGameShellHost({
     if (companyDashboard.isOpen()) companyDashboard.close();
     if (missionPanel.isOpen()) missionPanel.close();
     if (progressPanel.isOpen()) progressPanel.close();
+    if (challengePanel.isOpen()) challengePanel.close();
     if (!shell.openPanel('fleet')) return false;
     const snapshot = liveFleetSnapshot();
     if (snapshot !== null) fleetPanel.update(snapshot, performance.now());
@@ -1018,6 +1207,7 @@ const shellHost = createGameShellHost({
     if (companyDashboard.isOpen()) companyDashboard.close();
     if (missionPanel.isOpen()) missionPanel.close();
     if (progressPanel.isOpen()) progressPanel.close();
+    if (challengePanel.isOpen()) challengePanel.close();
     if (!shell.openPanel('rides')) return false;
     // The panel skips writes while closed; open it first, then project the current read model.
     ridesPanel.open();
@@ -1032,6 +1222,7 @@ const shellHost = createGameShellHost({
     if (companyDashboard.isOpen()) companyDashboard.close();
     if (missionPanel.isOpen()) missionPanel.close();
     if (progressPanel.isOpen()) progressPanel.close();
+    if (challengePanel.isOpen()) challengePanel.close();
     return companyDashboard.open();
   },
   onOpenKpis: () => {
@@ -1041,6 +1232,7 @@ const shellHost = createGameShellHost({
     if (cityDashboardPanel.isOpen()) cityDashboardPanel.close();
     if (missionPanel.isOpen()) missionPanel.close();
     if (progressPanel.isOpen()) progressPanel.close();
+    if (challengePanel.isOpen()) challengePanel.close();
     return kpiHistoryPanel.open();
   },
   onOpenCity: () => {
@@ -1050,6 +1242,7 @@ const shellHost = createGameShellHost({
     if (kpiHistoryPanel.isOpen()) kpiHistoryPanel.close();
     if (missionPanel.isOpen()) missionPanel.close();
     if (progressPanel.isOpen()) progressPanel.close();
+    if (challengePanel.isOpen()) challengePanel.close();
     return cityDashboardPanel.open();
   },
   onOpenMissions: () => {
@@ -1059,6 +1252,7 @@ const shellHost = createGameShellHost({
     if (kpiHistoryPanel.isOpen()) kpiHistoryPanel.close();
     if (cityDashboardPanel.isOpen()) cityDashboardPanel.close();
     if (progressPanel.isOpen()) progressPanel.close();
+    if (challengePanel.isOpen()) challengePanel.close();
     return missionPanel.open();
   },
   onOpenProgress: () => {
@@ -1068,7 +1262,18 @@ const shellHost = createGameShellHost({
     if (kpiHistoryPanel.isOpen()) kpiHistoryPanel.close();
     if (cityDashboardPanel.isOpen()) cityDashboardPanel.close();
     if (missionPanel.isOpen()) missionPanel.close();
+    if (challengePanel.isOpen()) challengePanel.close();
     return progressPanel.open();
+  },
+  onOpenChallenges: () => {
+    if (fleetPanel.isOpen()) fleetPanel.close();
+    if (ridesPanel.isOpen()) ridesPanel.close();
+    if (companyDashboard.isOpen()) companyDashboard.close();
+    if (kpiHistoryPanel.isOpen()) kpiHistoryPanel.close();
+    if (cityDashboardPanel.isOpen()) cityDashboardPanel.close();
+    if (missionPanel.isOpen()) missionPanel.close();
+    if (progressPanel.isOpen()) progressPanel.close();
+    return challengePanel.open();
   },
 });
 /** Fiecare tranziție de sesiune ajunge și în gazda shell-ului, nu doar în view-ul de randare. */
@@ -1220,6 +1425,7 @@ const application = createApplicationLifecycle({
             namespace: 'v3:city:rides',
             keepPlayerClaims: true,
           });
+          rideRuntimeModules.live = ownedRides;
           // PBI 265: aceleași revendicări 060 intră în lifecycle-ul 061, pickup 062, dropoff 063,
           // ETA 064 și pasagerul 147; niciun al doilea model de cursă nu este creat.
           ownedRideComposition = createLiveRideComposition({
@@ -1319,6 +1525,7 @@ const application = createApplicationLifecycle({
             ownedRideComposition?.dispose();
             if (ridesModules.composition === ownedRideComposition)
               ridesModules.composition = undefined;
+            if (rideRuntimeModules.live === ownedRides) rideRuntimeModules.live = undefined;
             ownedRides?.dispose();
             ownedHealth?.dispose();
             if (dashboardModules.health === ownedHealth) dashboardModules.health = undefined;
@@ -1368,6 +1575,7 @@ const application = createApplicationLifecycle({
                 ownedRideComposition?.dispose();
                 if (ridesModules.composition === ownedRideComposition)
                   ridesModules.composition = undefined;
+                if (rideRuntimeModules.live === ownedRides) rideRuntimeModules.live = undefined;
                 ownedRides?.dispose();
                 ownedHealth?.dispose();
                 if (dashboardModules.health === ownedHealth) dashboardModules.health = undefined;
@@ -1478,6 +1686,11 @@ const application = createApplicationLifecycle({
         lastProgressPanelRefresh = at;
         progressPanel.refresh();
       }
+      // PBI 277: the challenge panel reads the real 232/233 contracts at 10 Hz only while open.
+      if (challengePanel.isOpen() && at - lastChallengePanelRefresh >= 100) {
+        lastChallengePanelRefresh = at;
+        challengePanel.refresh();
+      }
       // PBI 275: the 117 tutorial is a separate HUD; it is hidden once completed and never asks the
       // learning pipeline for anything.
       const tutorialSnapshot = liveMissions.tutorialSnapshot();
@@ -1544,6 +1757,9 @@ function liveMissionTick(): number {
 }
 function beginLiveMissions(): void {
   const status = shell.status();
+  // PBI 277: a session switch resets the authoritative tick; the one-entry frame cache must not
+  // serve the previous world's frame for the same tick number.
+  challengeFrameCache = null;
   liveMissions.beginSession({
     sessionId: status.sessionId,
     worldEpoch: status.worldEpoch,
@@ -1563,6 +1779,14 @@ function beginLiveMissions(): void {
     tick: liveMissionTick(),
     kind: status.sessionId === CHAOS_SESSION_ID ? 'CHAOS' : 'ACADEMY',
     capabilities: liveDailyCapabilities(completed),
+  });
+  // PBI 277: the challenge owner adopts the same session identity. A real session change interrupts
+  // the open offer/instance with the closed cancellation reason and starts a fresh director.
+  challengeModules.runtime?.beginSession({
+    sessionId: status.sessionId,
+    worldEpoch: status.worldEpoch,
+    sessionKind: status.sessionId === CHAOS_SESSION_ID ? 'CHAOS' : 'ACADEMY',
+    tick: liveMissionTick(),
   });
 }
 function refocusGame(): void {
@@ -2026,6 +2250,15 @@ interface V3DebugGlobal {
   missions(): unknown;
   /** PBI 276: daily-ul, ledgerul XP, nivelul, istoricul și panoul de progres, read-only. */
   progress(): unknown;
+  /** PBI 277: read-only live challenges, zones and panel state. */
+  challenges(): unknown;
+  challengeOffer?(templateId?: string, seed?: number): unknown;
+  challengePreview?(templateId: string, seed: number): unknown;
+  challengeAccept?(): unknown;
+  challengeDecline?(): unknown;
+  challengeRetry?(): unknown;
+  challengeRoute?(zoneId: string): unknown;
+  challengeSuppressAuto?(suppressed: boolean): unknown;
   /** PBI 269 (numai DEV/capture/debug): aceeași acțiune ca viitorul panou 270. */
   companyPurchase?(offerId: string): unknown;
   companyUpgrade?(upgradeId: string): unknown;
@@ -2275,6 +2508,43 @@ const debugGlobal: V3DebugGlobal = {
       port: shell.status().systems.find((system) => system.id === 'missions')?.status ?? null,
     };
   },
+  challenges: () => {
+    const runtime = challengeModules.runtime;
+    return {
+      read: runtime?.read() ?? null,
+      panel: challengePanel.getStats(),
+      panelOpen: challengePanel.isOpen(),
+      panelView: challengePanel.getView(),
+      zones: liveChallengeZones,
+      port: shell.status().systems.find((system) => system.id === 'missions')?.status ?? null,
+    };
+  },
+  challengeRoute: (zoneId: string) => {
+    const frame = composition?.composition.frame;
+    const vehicleId = frame?.playerVehicleId ?? frame?.selectedVehicleId ?? null;
+    const taxi =
+      vehicleId === null
+        ? null
+        : (frame?.vehicles.find((entry) => entry.vehicleId === vehicleId) ?? null);
+    if (taxi === null || taxi === undefined) return [];
+    let origin = taxi.laneId;
+    if (origin === null) {
+      const located = world.graph.locateLane({
+        positionM: { x: taxi.positionM.x, y: 0, z: taxi.positionM.z },
+        access: 'TAXI',
+      });
+      origin = located?.lane.id ?? null;
+    }
+    if (origin === null) return [];
+    const plan = challengePlanner.findRoute({ origin, destination: zoneId, access: 'TAXI' });
+    if (plan.status !== 'READY' || plan.path === null) return [];
+    return plan.path.flatMap((id) => {
+      const path = world.graph.getDirectedPath(id);
+      return path === null
+        ? []
+        : path.points.map((point) => ({ x: point.x, y: point.y, z: point.z }));
+    });
+  },
 
   economy: () => {
     const economy = economyModules.composition;
@@ -2331,6 +2601,20 @@ if (
   debugGlobal.companyUpgrade = (upgradeId) => economyModules.evolution?.upgrade(upgradeId) ?? null;
   debugGlobal.missionReplay = (missionId) =>
     missionModules.runtime?.replay(missionId, liveMissionTick()) ?? null;
+  debugGlobal.challengeOffer = (templateId, seed) =>
+    challengeModules.runtime?.offerNow({
+      ...(templateId === undefined ? {} : { templateId }),
+      ...(seed === undefined ? {} : { seed }),
+    }) ?? null;
+  debugGlobal.challengePreview = (templateId, seed) =>
+    challengeModules.runtime?.preview(templateId, seed) ?? null;
+  debugGlobal.challengeAccept = () => challengeModules.runtime?.accept() ?? null;
+  debugGlobal.challengeDecline = () => challengeModules.runtime?.decline() ?? null;
+  debugGlobal.challengeRetry = () => challengeModules.runtime?.retry() ?? null;
+  debugGlobal.challengeSuppressAuto = (suppressed) => {
+    challengeAutoOffersSuppressed = suppressed === true;
+    return challengeAutoOffersSuppressed;
+  };
 }
 (globalThis as unknown as { __v3Composition?: V3DebugGlobal }).__v3Composition = debugGlobal;
 
@@ -2352,11 +2636,14 @@ const dispose = (): void => {
     cityDashboardPanel.dispose();
     missionPanel.dispose();
     progressPanel.dispose();
+    challengePanel.dispose();
     tutorialPanel.dispose();
     missionTutorialStyle.remove();
     tutorialHost.remove();
     missionModules.runtime?.dispose();
     missionModules.runtime = undefined;
+    challengeModules.runtime?.dispose();
+    challengeModules.runtime = undefined;
     dailyModules.runtime?.dispose();
     dailyModules.runtime = undefined;
     xpActivityBinding.dispose();

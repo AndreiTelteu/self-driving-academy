@@ -145,3 +145,53 @@ distrugere și reluarea unei provocări, plus consemnarea celor care reîncearc�
 participanți, deci verdictul este `NOT_RUN`, iar secțiunea „Ce nu s-a măsurat” din
 [Evidence/235-fun-qa](Evidence/235-fun-qa/README.md) enumeră exact dovezile lipsă și condițiile unei
 sesiuni viitoare.
+
+## Contract implementat in V1 (PBI 277): provocarile live, panoul si reluarea
+
+`src/app/live-challenges.ts` livreaza `277-live-challenges-v1` si checkpointul de tab
+`277-live-challenges-checkpoint-v1`. Modulul compune contractele deja livrate - catalogul si
+evaluatorii 231, directorul si instanta 232, experienta, recordurile si reactiile 233, ledgerul 213
+al lui 276 - peste cadrul autoritar al compozitiei. Nu exista un al doilea director, un al doilea
+ledger, un al doilea store de recorduri sau un ceas de perete.
+
+**O oferta, o instanta, timp real.** Scheduler-ul cheama `offer` doar dupa 15 secunde active si doar
+cand jucatorul conduce un taxi liber, fara assignment si fara pasager; dupa orice rezultat terminal
+respecta cooldown-ul de 10.800 tick-uri al lui 232, iar fereastra ofertei este 2.700 tick-uri.
+Pauza ingheata timpul simulat. O a doua cerere este refuzata nominal (`OFFER_ALREADY_ACTIVE`,
+`INSTANCE_ALREADY_ACTIVE`), nu suprascrisa.
+
+**Fezabilitate inainte de afisare.** Portul de ruta este plannerul 041 real; directorul verifica
+sesiunea, taxiul liber, zonele accesibile, ruta si deadline-ul inainte de a crea oferta. Un candidat
+infezabil este sarit si refuzul numeste motivul (`DEADLINE_INFEASIBLE`, `ROUTE_UNREACHABLE`,
+`NO_ELIGIBLE_TEMPLATE`). Refuzul jucatorului este `DECLINED` cu `penalty: NONE`, `xpDelta: 0`,
+`reputationDelta: 0` si `rewardGranted: false`.
+
+**Acceptare si pasager.** Acceptarea cere taxiul jucatorului liber si fara assignment; cu pasager
+raspunde `PASSENGER_ABOARD`, iar oferta si pasagerul raman neatinse. Acceptarea rezerva taxiul
+(`dispatchSuspended: true`) si activeaza imediat instanta, folosind acelasi `rideRequestId` comun.
+
+**Fapte reale, nu text HUD.** In aceasta revizie au sursa live `CHECKPOINTS`, `ZONE_ORDER`,
+`PARKING` si `DRIFT`: intrarea in poligonul real 032, oprirea cu viteza si orientarea fata de banda
+zonei, respectiv esantioanele de viteza si unghi de derapaj fara impuls de coliziune. `TIMED_DROPOFF`,
+`COMFORT`, `DISTRUCTION` si `LEARNING` sunt excluse inainte de oferta, cu motivul nominal in
+`unavailableTemplates`; demolarea primeste `CAPABILITY:DESTRUCTIBLE_DECOR` (285 nu este montat) si nu
+este afisata. Un evaluator lipsa dezactiveaza sablonul, nu produce succes.
+
+**Recompense si Haos.** Prima finalizare a unei familii intr-o zi locala este creditata o singura
+data prin `PlayerProgress.creditMission` al lui 276; a doua reusita a aceleiasi familii si reload-ul
+intorc `DUPLICATE` cu 0 XP. In Haos, `credit` intoarce `SKIPPED`/`LOCAL_RECORD_ONLY`, soldul
+Academiei nu se schimba, iar recordul local 233 ramane. `challengeFastRetry` este oferit doar dupa
+esec; dupa succes, ?Mai incearca? este dezactivat cu motiv.
+
+**Panoul si persistarea.** Butonul nativ `Provocari` deschide panoul 233 existent, cu oferta,
+obiectivul, deadline-ul, recompensa, ultimul rezultat, reactia, recordurile, setul zilnic si
+actiunile Accepta/Refuza/Mai incearca/Continua condusul. Panoul citeste la deschidere si la 10 Hz
+numai cat timp este deschis; nu intra in bucla 3D. Un checkpoint `sessionStorage` peste snapshoturile
+232/233 pastreaza oferta, instanta, faptele, recordul si recompensa la reload-ul de tab; fisierul
+durabil ramane 278.
+
+**Dovezi.** `npm run challenges:live` produce raportul determinist 23/23, iar
+`npm run challenges:live:probe` conduce in Chrome o provocare de precizie cu checkpointuri reale:
+2/2 checkpointuri, 90 XP o singura data, record `FIRST_RECORD`, reload cu acelasi record si refuzul
+demolarii cu `CAPABILITY:DESTRUCTIBLE_DECOR`. Costul este structural: fapte marginite pe tick si
+evaluare la 10 Hz; FPS/GPU raman `NOT_MEASURED`.

@@ -517,3 +517,48 @@ test('276 host: mounts the Progres button without global listeners', () => {
     shell.dispose();
   }
 });
+
+test('277 host: mounts the Provocari button without global listeners', () => {
+  const doc = createHudDocument();
+  const root = doc.createElement('div');
+  const clock = { value: 0 };
+  const shell = createGameShell({
+    context: { sessionId: '277-host-test', worldEpoch: 2 },
+    suspend: () => {},
+    resume: () => {},
+    now: () => clock.value,
+  });
+  shell.attachWorld(world(1));
+  shell.start();
+  shell.step(2);
+  const calls = { challenges: 0 };
+  const host = createGameShellHost({
+    root: root as unknown as HTMLElement,
+    snapshot: () => shell.status(),
+    onStart: () => {},
+    onPause: () => {},
+    onResume: () => {},
+    onOpenPanel: () => shell.openPanel('integration'),
+    onClosePanel: () => shell.closePanel(),
+    onOpenChallenges: () => {
+      calls.challenges += 1;
+      return true;
+    },
+    now: () => clock.value,
+  });
+  try {
+    host.setSessionState('PLAYING');
+    const bar = (root.children[0] as HudElement).children[0]!;
+    const challenges = bar.children.find(
+      (child) => child.getAttribute('data-shell-action') === 'challenges',
+    )!;
+    assert.equal(challenges.textContent, 'Provocări');
+    assert.equal(challenges.getAttribute('aria-haspopup'), 'dialog');
+    challenges.dispatchEvent('click');
+    assert.deepEqual(calls, { challenges: 1 });
+    assert.equal(host.getStats().globalListeners, 0);
+  } finally {
+    host.dispose();
+    shell.dispose();
+  }
+});
