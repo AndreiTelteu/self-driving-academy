@@ -1006,6 +1006,36 @@ export type {
   DailyProgressSnapshot,
 } from './daily-progress-format';
 
+export { createLiveProgressPanel } from './live-progress-panel';
+export type {
+  LiveProgressPanel,
+  LiveProgressPanelAdapter,
+  LiveProgressPanelOptions,
+  LiveProgressPanelStats,
+  LiveProgressRefreshStatus,
+} from './live-progress-panel';
+export {
+  LIVE_PROGRESS_CAUSE_LABELS,
+  LIVE_PROGRESS_FORBIDDEN_FRAGMENTS,
+  LIVE_PROGRESS_HISTORY_LIMIT,
+  LIVE_PROGRESS_KINDS,
+  LIVE_PROGRESS_READ_VERSION,
+  LIVE_PROGRESS_UI_VERSION,
+  emptyLiveProgressView,
+  parseLiveProgressSnapshot,
+  projectLiveProgressPanel,
+} from './live-progress-format';
+export type {
+  LiveProgressCause,
+  LiveProgressHistoryRow,
+  LiveProgressKind,
+  LiveProgressPanelView,
+  LiveProgressPlayer,
+  LiveProgressSnapshot,
+  LiveProgressXpEntry,
+  ParsedLiveProgressSnapshot,
+} from './live-progress-format';
+
 export { createKpiImpactHud } from './kpi-impact-hud';
 export type {
   KpiImpactHud,

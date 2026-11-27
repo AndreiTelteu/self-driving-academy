@@ -79,6 +79,13 @@ Panoul `Misiuni` folosește aceeași suprafață `panel` și aceleași reguli: b
 `globalListeners` rămâne 0. Panoul citește la 10 Hz numai cât timp este deschis și nu are nicio
 acțiune de scriere: inspectarea unei misiuni mută doar pointerul de selecție.
 
+Panoul `Progres` (276) urmează aceleași reguli: buton nativ în bara shell-ului
+(`data-shell-action="progress"`), dialog cu nume și descriere, focus mutat pe „Închide”,
+`Tab`/`Shift+Tab` în interior, `Escape` prin suprafața 070 și restaurarea focusului. Toate listeners
+sunt pe elementele deținute; `globalListeners` rămâne 0. Panoul este read-only, citește la 10 Hz
+numai cât timp este deschis și afișează soldul XP, nivelul, istoricul, cele trei obiective,
+fereastra și motivul expirării. Nu afișează mesaje de pierdere XP.
+
 Tutorialul `117` este o regiune separată, cu patru butoane native (`Pauză`, `Reia`, `Sari peste pas`,
 `Sari peste tutorial`). Clicul și activarea nativă Enter/Space folosesc același drum; nu există
 listener global, deci tastele de condus nu sunt capturate. Butoanele dezactivate sunt marcate cu

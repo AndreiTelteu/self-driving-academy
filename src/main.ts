@@ -5,6 +5,7 @@ import {
   createCompositionWorld,
   createGameShell,
   createLiveEconomyComposition,
+  createLiveDailyProgress,
   createLiveLearningPipeline,
   createLiveMissions,
   createLiveModeSegments,
@@ -13,6 +14,7 @@ import {
   createCityStyleProfile,
   createRendererRecovery,
   createSessionFlow,
+  LIVE_DAILY_PROGRESS_VERSION,
   LIVE_LEARNING_VERSION,
   LIVE_MISSIONS_VERSION,
   LIVE_TELEMETRY_COMPOSITION_VERSION,
@@ -24,6 +26,7 @@ import {
   readMinimapGeometry,
   rideTripDistanceM,
   type GameTickPort,
+  type LiveDailyProgress,
   type LiveEconomyComposition,
   type LiveLearningPipeline,
   type LiveMissions,
@@ -70,10 +73,13 @@ import {
   createLiveEconomyHud,
   createLiveRideMarkerLayer,
   createLiveRidesPanel,
+  createLiveProgressPanel,
   createMissionPanel,
   createMissionTutorialPanel,
   createPassengerVisualPresenter,
   createTaxiHud,
+  LIVE_PROGRESS_READ_VERSION,
+  type LiveProgressSnapshot,
 } from './ui';
 import {
   LIVE_RIDE_LIFECYCLE_VERSION,
@@ -89,6 +95,9 @@ import {
   type LearningQueueRuntime,
 } from './learning';
 import type { DrivingProfile, ProfileVersion } from './profiles';
+import { parameterDefinitions } from './profiles';
+import { PLAYER_XP_POLICY } from './missions';
+import { VEHICLE_CLASSES } from './vehicles';
 import { copyProfileForChaos } from './persistence';
 import type { SessionKind, SessionWorldPort } from './persistence';
 import './style.css';
@@ -256,6 +265,65 @@ const learningModules: {
  * created here.
  */
 const missionModules: { runtime: LiveMissions | undefined } = { runtime: undefined };
+/**
+ * PBI 276: the live daily/XP vertical. It consumes the same validated events and the same 125
+ * settlements as 275, plus real active-time windows; it creates no second mission model.
+ */
+const dailyModules: { runtime: LiveDailyProgress | undefined } = { runtime: undefined };
+/** PBI 276: real user activity drives the AFK verdict; panels and the shell do not fake it. */
+let lastXpActivityAtMs = Date.now();
+const xpActivityBinding = (() => {
+  const events = ['keydown', 'pointerdown', 'pointermove', 'wheel'] as const;
+  const mark = (): void => {
+    lastXpActivityAtMs = Date.now();
+  };
+  for (const event of events) document.addEventListener(event, mark, { passive: true });
+  return Object.freeze({
+    dispose(): void {
+      for (const event of events) document.removeEventListener(event, mark);
+    },
+  });
+})();
+/** PBI 276: a tab reload keeps the same day and the same credits; a savefile remains 278. */
+const dailyProgressStorage = (() => {
+  try {
+    const storage = window.sessionStorage,
+      key = '276-daily-xp-checkpoint';
+    return Object.freeze({
+      load: () => storage.getItem(key),
+      save: (value: string) => storage.setItem(key, value),
+      clear: () => storage.removeItem(key),
+    });
+  } catch {
+    return undefined;
+  }
+})();
+/** PBI 278 owns durable saves; this checkpoint is session-scoped and reversible by the host. */
+function xpHostFacts(): { focused: boolean; visible: boolean; afk: boolean } {
+  return {
+    focused: document.hasFocus(),
+    visible: !document.hidden,
+    afk: Date.now() - lastXpActivityAtMs >= PLAYER_XP_POLICY.afkThresholdMs,
+  };
+}
+function liveDailyCapabilities(campaignCompleted: readonly string[]) {
+  const learningKeys = parameterDefinitions
+    .filter((definition) => definition.implemented)
+    .map((definition) => definition.key)
+    .sort()
+    .slice(0, 64);
+  return {
+    learningKeys,
+    zones: world.map.serviceZones
+      .map((zone) => zone.id)
+      .sort()
+      .slice(0, 64),
+    vehicleClasses: Object.keys(VEHICLE_CLASSES).sort(),
+    controlModes: ['AUTO', 'MANUAL', 'LEARNING'],
+    campaignCompleted,
+    unlocks: [],
+  };
+}
 const missionsTickPort: GameTickPort = {
   id: 'missions',
   version: LIVE_MISSIONS_VERSION,
@@ -264,6 +332,11 @@ const missionsTickPort: GameTickPort = {
       sessionId: context.sessionId,
       worldEpoch: context.worldEpoch,
       tick: context.tick,
+    });
+    dailyModules.runtime?.observeTick({
+      tick: context.tick,
+      nowMs: Date.now(),
+      playing: true,
     });
   },
 };
@@ -525,6 +598,8 @@ const shell = createGameShell({
  * not create a parallel simulation or a second mission ledger.
  */
 const liveMissions = createLiveMissions({
+  onEvent: (event) => dailyModules.runtime?.observeEvent(event, Date.now()),
+  onSettled: (settlement) => dailyModules.runtime?.observeMissionSettlement(settlement, Date.now()),
   ports: {
     modes: () => {
       const state = modeModules.segments?.observe();
@@ -605,6 +680,20 @@ const liveMissions = createLiveMissions({
   },
 });
 missionModules.runtime = liveMissions;
+/**
+ * PBI 276: the single live daily/XP owner. It starts with the current real day and the real
+ * capability snapshot; `beginLiveMissions` rebinds it to the accepted session identity.
+ */
+dailyModules.runtime = createLiveDailyProgress({
+  playerId: 'v3-player',
+  timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'Europe/Bucharest',
+  sessionId: compositionContext.sessionId,
+  worldEpoch: compositionContext.worldEpoch,
+  kind: 'ACADEMY',
+  capabilities: liveDailyCapabilities([]),
+  hostFacts: xpHostFacts,
+  ...(dailyProgressStorage === undefined ? {} : { storage: dailyProgressStorage }),
+});
 /** PBI 275: the 126 panel is read-only; its own trigger is hidden because the shell owns the button. */
 const missionPanel = createMissionPanel(app, {
   read: () => missionModules.runtime?.snapshot() ?? null,
@@ -617,6 +706,18 @@ const missionPanel = createMissionPanel(app, {
   },
 });
 missionPanel.getTrigger().hidden = true;
+/** PBI 276: the combined XP/daily panel is read-only and owns no ledger; the shell owns its button. */
+const progressPanel = createLiveProgressPanel(app, {
+  read: progressPanelSnapshot,
+  setSurface: (open) => {
+    if (open) shell.openPanel('progress');
+    else {
+      shell.closePanel();
+      refocusGame();
+    }
+  },
+});
+progressPanel.getTrigger().hidden = true;
 /** PBI 275: the 117 tutorial panel stays separate from the campaign panel and from learning. */
 const tutorialHost = document.createElement('div');
 tutorialHost.className = 'live-mission-tutorial-host';
@@ -728,6 +829,49 @@ function cityDashboardSnapshot() {
     { tick: frame.tick, selectedIncidentId: null },
   );
 }
+/** PBI 276: the panel projection reads the one live daily/XP ledger, never a second balance. */
+function progressPanelSnapshot(): LiveProgressSnapshot | null {
+  const runtime = dailyModules.runtime;
+  if (runtime === undefined) return null;
+  const read = runtime.read(Date.now()),
+    player = read.player;
+  const entries = player.entries.slice(-16).map((entry) =>
+    Object.freeze({
+      entryId: entry.entryId,
+      causeType: entry.causeType,
+      amountXp: entry.amountXp,
+      balanceAfterXp: entry.balanceAfterXp,
+      realTimeMs: entry.realTimeMs,
+      tick: entry.tick,
+    }),
+  );
+  return Object.freeze({
+    schemaVersion: 1 as const,
+    units: 'SI' as const,
+    version: LIVE_PROGRESS_READ_VERSION,
+    playerId: read.playerId,
+    sessionId: read.sessionId,
+    worldEpoch: read.worldEpoch,
+    kind: read.kind,
+    observedAtMs: read.observedAtMs,
+    daily: read.daily,
+    player: Object.freeze({
+      playerId: player.playerId,
+      xpBalance: player.xpBalance,
+      xpBalanceMicroXp: player.xpBalanceMicroXp,
+      level: player.level,
+      nextLevelXp: player.nextLevelXp,
+      levelProgress: player.levelProgress,
+      activePlaySeconds: player.activePlaySeconds,
+      entries: Object.freeze(entries),
+      credits: player.counters.credits,
+      duplicates: player.counters.duplicates,
+      debits: 0 as const,
+      balanceIsSumOfEntries: true as const,
+    }),
+    xpFingerprint: read.xpFingerprint,
+  });
+}
 /** PBI 263: un singur panou live; click-ul selectează doar camera, preluarea este explicită. */
 const fleetPanel = createFleetSelectionPanel(app, {
   select: (vehicleId) => composition?.composition.selectVehicle(vehicleId) ?? false,
@@ -799,6 +943,7 @@ const kpiImpactHud = createKpiImpactHud(impactHost, { read: kpiImpactSnapshot })
 let lastKpiPanelRefresh = -Infinity;
 /** PBI 275: the mission panel reads at 10 Hz only while open; the tutorial HUD at 10 Hz while live. */
 let lastMissionPanelRefresh = -Infinity;
+let lastProgressPanelRefresh = -Infinity;
 let lastTutorialPanelRefresh = -Infinity;
 /**
  * PBI 270: panoul companiei citește exact read model-ul 269 și cheltuie cash-ul real prin
@@ -831,6 +976,7 @@ const shellHost = createGameShellHost({
     if (kpiHistoryPanel.isOpen()) kpiHistoryPanel.close();
     if (cityDashboardPanel.isOpen()) cityDashboardPanel.close();
     if (missionPanel.isOpen()) missionPanel.close();
+    if (progressPanel.isOpen()) progressPanel.close();
     shell.setMenuOpen(true);
   },
   onResume: () => resumeSession(),
@@ -848,6 +994,7 @@ const shellHost = createGameShellHost({
     if (kpiHistoryPanel.isOpen()) kpiHistoryPanel.close();
     if (cityDashboardPanel.isOpen()) cityDashboardPanel.close();
     if (missionPanel.isOpen()) missionPanel.close();
+    if (progressPanel.isOpen()) progressPanel.close();
     return shell.openPanel('integration');
   },
   onClosePanel: () => {
@@ -859,6 +1006,7 @@ const shellHost = createGameShellHost({
     if (ridesPanel.isOpen()) ridesPanel.close();
     if (companyDashboard.isOpen()) companyDashboard.close();
     if (missionPanel.isOpen()) missionPanel.close();
+    if (progressPanel.isOpen()) progressPanel.close();
     if (!shell.openPanel('fleet')) return false;
     const snapshot = liveFleetSnapshot();
     if (snapshot !== null) fleetPanel.update(snapshot, performance.now());
@@ -869,6 +1017,7 @@ const shellHost = createGameShellHost({
     if (fleetPanel.isOpen()) fleetPanel.close();
     if (companyDashboard.isOpen()) companyDashboard.close();
     if (missionPanel.isOpen()) missionPanel.close();
+    if (progressPanel.isOpen()) progressPanel.close();
     if (!shell.openPanel('rides')) return false;
     // The panel skips writes while closed; open it first, then project the current read model.
     ridesPanel.open();
@@ -882,6 +1031,7 @@ const shellHost = createGameShellHost({
     if (ridesPanel.isOpen()) ridesPanel.close();
     if (companyDashboard.isOpen()) companyDashboard.close();
     if (missionPanel.isOpen()) missionPanel.close();
+    if (progressPanel.isOpen()) progressPanel.close();
     return companyDashboard.open();
   },
   onOpenKpis: () => {
@@ -890,6 +1040,7 @@ const shellHost = createGameShellHost({
     if (companyDashboard.isOpen()) companyDashboard.close();
     if (cityDashboardPanel.isOpen()) cityDashboardPanel.close();
     if (missionPanel.isOpen()) missionPanel.close();
+    if (progressPanel.isOpen()) progressPanel.close();
     return kpiHistoryPanel.open();
   },
   onOpenCity: () => {
@@ -898,6 +1049,7 @@ const shellHost = createGameShellHost({
     if (companyDashboard.isOpen()) companyDashboard.close();
     if (kpiHistoryPanel.isOpen()) kpiHistoryPanel.close();
     if (missionPanel.isOpen()) missionPanel.close();
+    if (progressPanel.isOpen()) progressPanel.close();
     return cityDashboardPanel.open();
   },
   onOpenMissions: () => {
@@ -906,12 +1058,26 @@ const shellHost = createGameShellHost({
     if (companyDashboard.isOpen()) companyDashboard.close();
     if (kpiHistoryPanel.isOpen()) kpiHistoryPanel.close();
     if (cityDashboardPanel.isOpen()) cityDashboardPanel.close();
+    if (progressPanel.isOpen()) progressPanel.close();
     return missionPanel.open();
+  },
+  onOpenProgress: () => {
+    if (fleetPanel.isOpen()) fleetPanel.close();
+    if (ridesPanel.isOpen()) ridesPanel.close();
+    if (companyDashboard.isOpen()) companyDashboard.close();
+    if (kpiHistoryPanel.isOpen()) kpiHistoryPanel.close();
+    if (cityDashboardPanel.isOpen()) cityDashboardPanel.close();
+    if (missionPanel.isOpen()) missionPanel.close();
+    return progressPanel.open();
   },
 });
 /** Fiecare tranziție de sesiune ajunge și în gazda shell-ului, nu doar în view-ul de randare. */
 let telemetrySuspended = false;
 const showView = (state: Parameters<typeof view.show>[0]): void => {
+  // PBI 276: only an actually playing, visible Academy window credits time. Suspension closes the
+  // window at the last real tick, so pause/menu/panel/focus never pay for the hidden interval.
+  if (state.kind === 'PLAYING') dailyModules.runtime?.resume(Date.now());
+  else dailyModules.runtime?.suspend(Date.now());
   // PBI 272: orice suspendare a ceasului (070 focus/meniu/panou sau background-ul browserului)
   // produce un artefact 088; reluarea închide intervalul, fără să inventeze tick-uri.
   if (state.kind === 'PAUSED' && !telemetrySuspended) {
@@ -1307,6 +1473,11 @@ const application = createApplicationLifecycle({
         lastMissionPanelRefresh = at;
         missionPanel.refresh();
       }
+      // PBI 276: the combined XP/daily panel reads at 10 Hz only while open; closed does nothing.
+      if (progressPanel.isOpen() && at - lastProgressPanelRefresh >= 100) {
+        lastProgressPanelRefresh = at;
+        progressPanel.refresh();
+      }
       // PBI 275: the 117 tutorial is a separate HUD; it is hidden once completed and never asks the
       // learning pipeline for anything.
       const tutorialSnapshot = liveMissions.tutorialSnapshot();
@@ -1378,6 +1549,20 @@ function beginLiveMissions(): void {
     worldEpoch: status.worldEpoch,
     tick: liveMissionTick(),
     kind: status.sessionId === CHAOS_SESSION_ID ? 'CHAOS' : 'ACADEMY',
+  });
+  // PBI 276: the same session identity and the real campaign completions feed the daily capability
+  // snapshot. A later completion never re-randomises the retained day; it applies to the next one.
+  const completed =
+    liveMissions
+      .snapshot()
+      ?.missions.filter((mission) => mission.state === 'COMPLETED')
+      .map((mission) => mission.missionId) ?? [];
+  dailyModules.runtime?.beginSession({
+    sessionId: status.sessionId,
+    worldEpoch: status.worldEpoch,
+    tick: liveMissionTick(),
+    kind: status.sessionId === CHAOS_SESSION_ID ? 'CHAOS' : 'ACADEMY',
+    capabilities: liveDailyCapabilities(completed),
   });
 }
 function refocusGame(): void {
@@ -1839,6 +2024,8 @@ interface V3DebugGlobal {
   company(): unknown;
   /** PBI 275: campania, tutorialul, recompensele și panoul de misiuni, read-only. */
   missions(): unknown;
+  /** PBI 276: daily-ul, ledgerul XP, nivelul, istoricul și panoul de progres, read-only. */
+  progress(): unknown;
   /** PBI 269 (numai DEV/capture/debug): aceeași acțiune ca viitorul panou 270. */
   companyPurchase?(offerId: string): unknown;
   companyUpgrade?(upgradeId: string): unknown;
@@ -2075,6 +2262,19 @@ const debugGlobal: V3DebugGlobal = {
       port: shell.status().systems.find((system) => system.id === 'missions')?.status ?? null,
     };
   },
+  progress: () => {
+    const runtime = dailyModules.runtime;
+    const read = runtime?.read(Date.now()) ?? null;
+    return {
+      version: LIVE_DAILY_PROGRESS_VERSION,
+      read,
+      status: runtime?.status() ?? null,
+      panel: progressPanel.getStats(),
+      panelOpen: progressPanel.isOpen(),
+      panelView: progressPanel.getView(),
+      port: shell.status().systems.find((system) => system.id === 'missions')?.status ?? null,
+    };
+  },
 
   economy: () => {
     const economy = economyModules.composition;
@@ -2151,11 +2351,15 @@ const dispose = (): void => {
     kpiHistoryPanel.dispose();
     cityDashboardPanel.dispose();
     missionPanel.dispose();
+    progressPanel.dispose();
     tutorialPanel.dispose();
     missionTutorialStyle.remove();
     tutorialHost.remove();
     missionModules.runtime?.dispose();
     missionModules.runtime = undefined;
+    dailyModules.runtime?.dispose();
+    dailyModules.runtime = undefined;
+    xpActivityBinding.dispose();
     kpiImpactHud.dispose();
     passengerPresenter.dispose();
     rideMarkerLayer.dispose();

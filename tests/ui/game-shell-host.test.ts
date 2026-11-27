@@ -472,3 +472,48 @@ test('267 host: mounts KPIs and Oras buttons without global listeners', () => {
     shell.dispose();
   }
 });
+
+test('276 host: mounts the Progres button without global listeners', () => {
+  const doc = createHudDocument();
+  const root = doc.createElement('div');
+  const clock = { value: 0 };
+  const shell = createGameShell({
+    context: { sessionId: '276-host-test', worldEpoch: 2 },
+    suspend: () => {},
+    resume: () => {},
+    now: () => clock.value,
+  });
+  shell.attachWorld(world(1));
+  shell.start();
+  shell.step(2);
+  const calls = { progress: 0 };
+  const host = createGameShellHost({
+    root: root as unknown as HTMLElement,
+    snapshot: () => shell.status(),
+    onStart: () => {},
+    onPause: () => {},
+    onResume: () => {},
+    onOpenPanel: () => shell.openPanel('integration'),
+    onClosePanel: () => shell.closePanel(),
+    onOpenProgress: () => {
+      calls.progress += 1;
+      return true;
+    },
+    now: () => clock.value,
+  });
+  try {
+    host.setSessionState('PLAYING');
+    const bar = (root.children[0] as HudElement).children[0]!;
+    const progress = bar.children.find(
+      (child) => child.getAttribute('data-shell-action') === 'progress',
+    )!;
+    assert.equal(progress.textContent, 'Progres');
+    assert.equal(progress.getAttribute('aria-haspopup'), 'dialog');
+    progress.dispatchEvent('click');
+    assert.deepEqual(calls, { progress: 1 });
+    assert.equal(host.getStats().globalListeners, 0);
+  } finally {
+    host.dispose();
+    shell.dispose();
+  }
+});

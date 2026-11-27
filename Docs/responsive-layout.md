@@ -92,7 +92,9 @@ Notificările sunt excluse din verificarea critică.
 - Panoul `Misiuni` (275) păstrează `width: min(92vw, 52rem)` și `max-height: min(90vh, 44rem)` cu
   scroll intern, iar tutorialul `117` stă într-o coloană de `min(24rem, calc(100vw - 2rem))` în
   stânga jos; la viewport-ul probei (1024×640) ambele rămân în ecran, fără să ascundă controalele
-  esențiale ale shell-ului.
+  esențiale ale shell-ului. Panoul `Progres` (276) folosește `width: min(94vw, 56rem)` și
+  `max-height: min(92vh, 48rem)`, cu corpul scrollabil la `min(64vh, 30rem)`; butonul `Progres` stă
+  în bara shell-ului, lângă `Misiuni`, iar dialogul se închide cu Escape și readuce focusul.
 
 Plafonul de rânduri este o limită superioară, nu o promisiune: la 1280×720, cu HUD-ul complet și
 notificări vizibile, în coloană încap mai puține rânduri decât plafonul de 10, iar lista derulează.

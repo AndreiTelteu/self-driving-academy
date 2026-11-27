@@ -57,6 +57,8 @@ export interface GameShellHostOptions {
   readonly onOpenCity?: () => boolean;
   /** PBI 275: deschide panoul de misiuni; opțional, montat numai când există. */
   readonly onOpenMissions?: () => boolean;
+  /** PBI 276: deschide panoul de progres și misiuni zilnice; opțional. */
+  readonly onOpenProgress?: () => boolean;
   readonly now?: () => number;
   /** Testele pot opri injectarea de CSS; producția o lasă activă. */
   readonly style?: boolean;
@@ -239,6 +241,13 @@ export function createGameShellHost(options: GameShellHostOptions): GameShellHos
     missionsButton.setAttribute('data-shell-action', 'missions');
     missionsButton.setAttribute('aria-haspopup', 'dialog');
   }
+  const progressButton = options.onOpenProgress === undefined ? null : doc.createElement('button');
+  if (progressButton !== null) {
+    progressButton.type = 'button';
+    progressButton.textContent = 'Progres';
+    progressButton.setAttribute('data-shell-action', 'progress');
+    progressButton.setAttribute('aria-haspopup', 'dialog');
+  }
   bar.append(badge);
   if (sessionSelect !== null) bar.append(sessionSelect);
   bar.append(startButton, pauseButton, resumeButton, panelButton);
@@ -248,6 +257,7 @@ export function createGameShellHost(options: GameShellHostOptions): GameShellHos
   if (kpisButton !== null) bar.append(kpisButton);
   if (cityButton !== null) bar.append(cityButton);
   if (missionsButton !== null) bar.append(missionsButton);
+  if (progressButton !== null) bar.append(progressButton);
 
   const panel = doc.createElement('div');
   panel.className = 'game-shell-host__panel';
@@ -329,7 +339,8 @@ export function createGameShellHost(options: GameShellHostOptions): GameShellHos
     (companyButton === null ? 0 : 1) +
     (kpisButton === null ? 0 : 1) +
     (cityButton === null ? 0 : 1) +
-    (missionsButton === null ? 0 : 1);
+    (missionsButton === null ? 0 : 1) +
+    (progressButton === null ? 0 : 1);
   const rows = new Map<string, Row>();
 
   const syncSession = (): void => {
@@ -404,6 +415,9 @@ export function createGameShellHost(options: GameShellHostOptions): GameShellHos
         panelOpen || (kind !== 'READY' && kind !== 'PLAYING' && kind !== 'PAUSED');
     if (missionsButton !== null)
       missionsButton.hidden =
+        panelOpen || (kind !== 'READY' && kind !== 'PLAYING' && kind !== 'PAUSED');
+    if (progressButton !== null)
+      progressButton.hidden =
         panelOpen || (kind !== 'READY' && kind !== 'PLAYING' && kind !== 'PAUSED');
     badge.textContent = panelOpen ? 'PANOU' : kind;
     badge.setAttribute('data-shell-kind', panelOpen ? 'PANEL' : kind);
@@ -537,6 +551,10 @@ export function createGameShellHost(options: GameShellHostOptions): GameShellHos
     if (panelOpen) return;
     options.onOpenMissions?.();
   };
+  const onProgress = (): void => {
+    if (panelOpen) return;
+    options.onOpenProgress?.();
+  };
   const onPanelKeyDown = (event: KeyboardEvent): void => {
     if (event.key === 'Escape') {
       event.preventDefault();
@@ -562,6 +580,7 @@ export function createGameShellHost(options: GameShellHostOptions): GameShellHos
   kpisButton?.addEventListener('click', onKpis);
   cityButton?.addEventListener('click', onCity);
   missionsButton?.addEventListener('click', onMissions);
+  progressButton?.addEventListener('click', onProgress);
   closeButton.addEventListener('click', onClose);
   panel.addEventListener('keydown', onPanelKeyDown);
 
@@ -618,6 +637,7 @@ export function createGameShellHost(options: GameShellHostOptions): GameShellHos
       kpisButton?.removeEventListener('click', onKpis);
       cityButton?.removeEventListener('click', onCity);
       missionsButton?.removeEventListener('click', onMissions);
+      progressButton?.removeEventListener('click', onProgress);
       closeButton.removeEventListener('click', onClose);
       panel.removeEventListener('keydown', onPanelKeyDown);
       listeners = 0;

@@ -1,0 +1,511 @@
+{
+  "version": "276-live-daily-progress-v1",
+  "generatedBy": "tests/missions/live-daily-progress-report.ts",
+  "oracleRule": "A daily objective is completed only by a validated 007 event inside its real day; its 211 reward pays 213 XP once; active time is exact real milliseconds; no path debits XP or writes a profile.",
+  "daily": {
+    "date": "2026-11-27",
+    "timeZone": "Europe/Bucharest",
+    "missions": [
+      {
+        "slot": 1,
+        "familyId": "daily-276-report-manual",
+        "objectiveKind": "MANUAL_DROPOFFS",
+        "controlRequirement": "MANUAL",
+        "target": 1,
+        "allowsManual": true,
+        "learningKey": null
+      },
+      {
+        "slot": 2,
+        "familyId": "daily-276-report-clean",
+        "objectiveKind": "CLEAN_DROPOFFS",
+        "controlRequirement": "ANY",
+        "target": 1,
+        "allowsManual": true,
+        "learningKey": null
+      },
+      {
+        "slot": 3,
+        "familyId": "daily-276-report-learning",
+        "objectiveKind": "LEARNING_ACTIVATIONS",
+        "controlRequirement": "LEARNING",
+        "target": 1,
+        "allowsManual": false,
+        "learningKey": "speed_delta_urban"
+      }
+    ],
+    "manualWithoutLearning": 2,
+    "signature": "daily-276-report-manual@1#1#zone:airport,daily-276-report-clean@1#1#zone:airport,daily-276-report-learning@1#1#zone:airport",
+    "sameDayStable": true,
+    "reloadStable": true,
+    "checkpointVersion": "276-reload-checkpoint-v1"
+  },
+  "dst": {
+    "springDate": "2026-03-29",
+    "springLength": 82800,
+    "fallDate": "2026-10-25",
+    "fallLength": 90000,
+    "springOffset": 7200,
+    "fallOffset": 10800,
+    "continuationGapMs": 0
+  },
+  "xp": {
+    "initial": 0,
+    "afterDaily": 200,
+    "afterMission": 300,
+    "duplicateEventCredited": 0,
+    "duplicateDailyCredited": 0,
+    "replayCredited": 0,
+    "active30sMicroXp": 500000,
+    "active70sMicroXp": 1166666,
+    "levelAfterDailyAndMission": 3,
+    "fingerprint": "fnv1a32:9d86f950",
+    "debits": 0,
+    "negativeCredits": false,
+    "balanceIsSumOfEntries": true
+  },
+  "rollback": {
+    "date": "2026-11-27",
+    "phase": "PENDING",
+    "xpBefore": 300,
+    "xpAfter": 300,
+    "rewards": 2
+  },
+  "expiry": {
+    "lastMillisecondPhase": "ACTIVE",
+    "boundaryStatus": "REJECTED",
+    "boundaryReason": "OUTSIDE_DAY",
+    "expiredPhase": "EXPIRED",
+    "expiredObjectiveReason": "EXPIRED",
+    "xpAtExpiry": 200
+  },
+  "exclusions": [
+    {
+      "cause": "pause",
+      "status": "SKIPPED",
+      "reason": "PAUSED",
+      "xpAfter": 1.166666
+    },
+    {
+      "cause": "focus",
+      "status": "SKIPPED",
+      "reason": "NOT_FOCUSED",
+      "xpAfter": 1.166666
+    },
+    {
+      "cause": "background",
+      "status": "SKIPPED",
+      "reason": "BACKGROUND",
+      "xpAfter": 1.166666
+    },
+    {
+      "cause": "afk",
+      "status": "SKIPPED",
+      "reason": "AFK",
+      "xpAfter": 1.166666
+    },
+    {
+      "cause": "haos",
+      "status": "SKIPPED",
+      "reason": "OUTSIDE_ACADEMY",
+      "xpAfter": 0
+    }
+  ],
+  "negative": {
+    "kpiFingerprintBefore": "fnv1a32:9d86f950",
+    "kpiFingerprintAfter": "fnv1a32:9d86f950",
+    "failedMissionFingerprint": "fnv1a32:9d86f950",
+    "replayCredited": 0,
+    "profileWrites": 0
+  },
+  "panel": {
+    "xpLabel": "300 XP",
+    "levelLabel": "Nivel 3",
+    "history": 3,
+    "dailyCompleted": 2,
+    "windowLabel": "Fereastră: 2026-11-27 00:00 → 2026-11-28 00:00 (24 h) · Activă",
+    "resetLabel": "Reset: 2026-11-28 00:00 (Europe/Bucharest (UTC+02:00))",
+    "expiryReason": "EXPIRED",
+    "forbiddenFragments": 0
+  },
+  "checks": [
+    {
+      "name": "three-daily",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "exactly three missions"
+    },
+    {
+      "name": "three-distinct-slots",
+      "expected": [
+        1,
+        2,
+        3
+      ],
+      "actual": [
+        1,
+        2,
+        3
+      ],
+      "pass": true,
+      "detail": "slots 1,2,3"
+    },
+    {
+      "name": "manual-without-learning",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "at least one MANUAL objective without a learning key"
+    },
+    {
+      "name": "same-day-stable",
+      "expected": [
+        "daily-v1:player:276-report:2026-11-27:s1:daily-276-report-manual@1",
+        "daily-v1:player:276-report:2026-11-27:s2:daily-276-report-clean@1",
+        "daily-v1:player:276-report:2026-11-27:s3:daily-276-report-learning@1"
+      ],
+      "actual": [
+        "daily-v1:player:276-report:2026-11-27:s1:daily-276-report-manual@1",
+        "daily-v1:player:276-report:2026-11-27:s2:daily-276-report-clean@1",
+        "daily-v1:player:276-report:2026-11-27:s3:daily-276-report-learning@1"
+      ],
+      "pass": true,
+      "detail": "a later read of the same day keeps the set"
+    },
+    {
+      "name": "reload-stable",
+      "expected": [
+        "daily-v1:player:276-report:2026-11-27:s1:daily-276-report-manual@1",
+        "daily-v1:player:276-report:2026-11-27:s2:daily-276-report-clean@1",
+        "daily-v1:player:276-report:2026-11-27:s3:daily-276-report-learning@1"
+      ],
+      "actual": [
+        "daily-v1:player:276-report:2026-11-27:s1:daily-276-report-manual@1",
+        "daily-v1:player:276-report:2026-11-27:s2:daily-276-report-clean@1",
+        "daily-v1:player:276-report:2026-11-27:s3:daily-276-report-learning@1"
+      ],
+      "pass": true,
+      "detail": "the checkpoint restores the same day"
+    },
+    {
+      "name": "reload-restored",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the checkpoint was accepted"
+    },
+    {
+      "name": "dst-spring-23h",
+      "expected": 82800,
+      "actual": 82800,
+      "pass": true,
+      "detail": "spring-forward local day"
+    },
+    {
+      "name": "dst-fall-25h",
+      "expected": 90000,
+      "actual": 90000,
+      "pass": true,
+      "detail": "fall-back local day"
+    },
+    {
+      "name": "dst-offsets",
+      "expected": [
+        7200,
+        10800
+      ],
+      "actual": [
+        7200,
+        10800
+      ],
+      "pass": true,
+      "detail": "offset at local midnight"
+    },
+    {
+      "name": "dst-continuity",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the next day starts at the previous expiry"
+    },
+    {
+      "name": "daily-xp-200",
+      "expected": 200,
+      "actual": 200,
+      "pass": true,
+      "detail": "two completed daily objectives pay their authored XP"
+    },
+    {
+      "name": "level-2",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "the level is derived from the balance"
+    },
+    {
+      "name": "balance-sum",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the balance is the sum of entries"
+    },
+    {
+      "name": "no-negative-entries",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "no XP entry is negative"
+    },
+    {
+      "name": "zero-debits",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the ledger has no debit operation"
+    },
+    {
+      "name": "duplicate-event",
+      "expected": "DUPLICATE",
+      "actual": "DUPLICATE",
+      "pass": true,
+      "detail": "the same event id pays nothing"
+    },
+    {
+      "name": "duplicate-event-xp",
+      "expected": 200,
+      "actual": 200,
+      "pass": true,
+      "detail": "the balance did not move"
+    },
+    {
+      "name": "mission-xp",
+      "expected": 100,
+      "actual": 100,
+      "pass": true,
+      "detail": "the real 125 settlement pays its authored XP"
+    },
+    {
+      "name": "mission-xp-once",
+      "expected": "DUPLICATE",
+      "actual": "DUPLICATE",
+      "pass": true,
+      "detail": "the same settlement pays once"
+    },
+    {
+      "name": "mission-replay-zero",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "a replay settlement pays zero"
+    },
+    {
+      "name": "mission-replay-fingerprint",
+      "expected": "fnv1a32:9d86f950",
+      "actual": "fnv1a32:9d86f950",
+      "pass": true,
+      "detail": "a replay leaves the fingerprint unchanged"
+    },
+    {
+      "name": "active-30s",
+      "expected": 500000,
+      "actual": 500000,
+      "pass": true,
+      "detail": "30 s is exactly 0.5 XP"
+    },
+    {
+      "name": "active-70s-total",
+      "expected": 1166666,
+      "actual": 1166666,
+      "pass": true,
+      "detail": "70 s is exactly 1.166666 XP"
+    },
+    {
+      "name": "excluded-pause",
+      "expected": "SKIPPED/PAUSED",
+      "actual": "SKIPPED/PAUSED",
+      "pass": true,
+      "detail": "pause pays nothing"
+    },
+    {
+      "name": "excluded-focus",
+      "expected": "SKIPPED/NOT_FOCUSED",
+      "actual": "SKIPPED/NOT_FOCUSED",
+      "pass": true,
+      "detail": "lost focus pays nothing"
+    },
+    {
+      "name": "excluded-background",
+      "expected": "SKIPPED/BACKGROUND",
+      "actual": "SKIPPED/BACKGROUND",
+      "pass": true,
+      "detail": "background pays nothing"
+    },
+    {
+      "name": "excluded-afk",
+      "expected": "SKIPPED/AFK",
+      "actual": "SKIPPED/AFK",
+      "pass": true,
+      "detail": "AFK pays nothing"
+    },
+    {
+      "name": "excluded-haos",
+      "expected": "SKIPPED/OUTSIDE_ACADEMY",
+      "actual": "SKIPPED/OUTSIDE_ACADEMY",
+      "pass": true,
+      "detail": "Chaos pays nothing"
+    },
+    {
+      "name": "excluded-xp-stable",
+      "expected": 1166666,
+      "actual": 1166666,
+      "pass": true,
+      "detail": "excluded windows do not pay"
+    },
+    {
+      "name": "rollback-date",
+      "expected": "2026-11-27",
+      "actual": "2026-11-27",
+      "pass": true,
+      "detail": "the retained date is not lowered"
+    },
+    {
+      "name": "rollback-xp",
+      "expected": 300,
+      "actual": 300,
+      "pass": true,
+      "detail": "rollback never re-awards or debits"
+    },
+    {
+      "name": "rollback-rewards",
+      "expected": 2,
+      "actual": 2,
+      "pass": true,
+      "detail": "the reward ledger is retained"
+    },
+    {
+      "name": "rollback-return-xp",
+      "expected": 300,
+      "actual": 300,
+      "pass": true,
+      "detail": "returning to the day pays nothing again"
+    },
+    {
+      "name": "expiry-last-ms",
+      "expected": "ACTIVE",
+      "actual": "ACTIVE",
+      "pass": true,
+      "detail": "the last millisecond is active"
+    },
+    {
+      "name": "expiry-xp",
+      "expected": 200,
+      "actual": 200,
+      "pass": true,
+      "detail": "the before-boundary ride pays"
+    },
+    {
+      "name": "expiry-boundary",
+      "expected": "REJECTED/OUTSIDE_DAY",
+      "actual": "REJECTED/OUTSIDE_DAY",
+      "pass": true,
+      "detail": "the exclusive boundary is refused"
+    },
+    {
+      "name": "expiry-phase",
+      "expected": "EXPIRED",
+      "actual": "EXPIRED",
+      "pass": true,
+      "detail": "the set is expired after the boundary"
+    },
+    {
+      "name": "expiry-reason",
+      "expected": "EXPIRED",
+      "actual": "EXPIRED",
+      "pass": true,
+      "detail": "an incomplete objective reports EXPIRED"
+    },
+    {
+      "name": "negative-kpi-fingerprint",
+      "expected": "fnv1a32:9d86f950",
+      "actual": "fnv1a32:9d86f950",
+      "pass": true,
+      "detail": "real failed KPI day has 1 buckets"
+    },
+    {
+      "name": "failed-mission-fingerprint",
+      "expected": "fnv1a32:9d86f950",
+      "actual": "fnv1a32:9d86f950",
+      "pass": true,
+      "detail": "no failed mission settlement was credited"
+    },
+    {
+      "name": "profile-writes-zero",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "XP never writes the driving profile"
+    },
+    {
+      "name": "panel-xp",
+      "expected": "300 XP",
+      "actual": "300 XP",
+      "pass": true,
+      "detail": "the panel shows the real balance"
+    },
+    {
+      "name": "panel-level",
+      "expected": "Nivel 3",
+      "actual": "Nivel 3",
+      "pass": true,
+      "detail": "the panel shows the derived level"
+    },
+    {
+      "name": "panel-history",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "the history is the real ledger"
+    },
+    {
+      "name": "panel-daily",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "the panel shows exactly three objectives"
+    },
+    {
+      "name": "panel-window",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the window is visible"
+    },
+    {
+      "name": "panel-reset",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the reset moment is visible"
+    },
+    {
+      "name": "panel-forbidden",
+      "expected": [],
+      "actual": [],
+      "pass": true,
+      "detail": "no XP loss message is rendered"
+    },
+    {
+      "name": "panel-expiry-reason",
+      "expected": "EXPIRED",
+      "actual": "EXPIRED",
+      "pass": true,
+      "detail": "the expiry reason is a closed value"
+    }
+  ],
+  "summary": {
+    "checks": 49,
+    "passed": 49,
+    "pass": true
+  }
+}
