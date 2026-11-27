@@ -1,13 +1,13 @@
 ---
 id: "275"
 title: "Campania, tutorialul și panoul de misiuni în jocul live"
-status: "To Do"
+status: "In Progress"
 release: "V1"
 module: "Misiuni"
 depends_on: ["260","265","271"]
 performance_checks: ["simulation","ui"]
-owner: null
-started_at: null
+owner: "loop-pbi/deepseek-275"
+started_at: "2026-11-27T12:27:46.934Z"
 completed_at: null
 ---
 
