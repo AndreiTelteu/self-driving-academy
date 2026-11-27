@@ -52,7 +52,7 @@ Raportul determinist este [report.json](report.json) / [report.md](report.md); p
 - Meshuri vizibile ale mașinii conduse: **15** în CHASE → **0** în FIRST_PERSON → **15** la revenire.
 - `minZ`: **0,10 m** în CHASE → **0,05 m** în FIRST_PERSON.
 - Autoritate înainte/după `C`: `VEHICLE:taxi-01`; segment `271-live-three-modes:segment:1`, start
-  tick **60** (WEBGL2) / **59** (WEBGPU), neschimbat; viteză **0** la comutarea de repaus.
+  tick **58** (WEBGL2) / **65** (WEBGPU), neschimbat; viteză **0** la comutarea de repaus.
 - Ieșire: autoritate `CHARACTER:player-character`, cameră CHASE pe personaj; reintrare: FIRST_PERSON
   pe `taxi-01`. Reload: store `FIRST_PERSON`, cameră `FIRST_PERSON` fără nicio apăsare `C`.
 - Cost local tick (Node 24, o compunere, 120 warmup + 600 tickuri × 3 repetări alternate): CHASE p95

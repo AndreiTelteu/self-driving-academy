@@ -300,8 +300,21 @@ try {
         }
       };
       const shot = async (name) => {
+        // WebGPU can enter the fixed-tick `overload` pause between two checks. Resume, render two
+        // stable frames, capture, and retake if the capture itself landed on a pause.
         const relative = `screenshots/${requestedBackend.toLowerCase()}-${name}.png`;
-        await page.screenshot({ path: join(directory, relative), timeout: 120000 });
+        for (let attempt = 0; attempt < 3; attempt += 1) {
+          for (let wait = 0; wait < 20; wait += 1) {
+            const state = await lifecycle();
+            if (state?.kind === 'PLAYING') break;
+            await ensurePlaying();
+            await page.waitForTimeout(100);
+          }
+          await pumpFrame();
+          await pumpFrame();
+          await page.screenshot({ path: join(directory, relative), timeout: 120000 });
+          if ((await lifecycle())?.kind === 'PLAYING') break;
+        }
         run.screenshots.push(relative);
         return relative;
       };
@@ -557,6 +570,7 @@ try {
         null,
         { timeout: 30000 },
       );
+      await waitTicks(20);
       await pumpFrame();
       await shot('07-first-person-reload');
       const reloadedFrame = await read();
