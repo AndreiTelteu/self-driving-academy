@@ -1,0 +1,154 @@
+{
+  "version": "272-live-telemetry-report-v1",
+  "contract": "272-live-telemetry-v1",
+  "fleet": {
+    "ticks": 180,
+    "vehicles": 58,
+    "distinctVehicles": 58,
+    "worldRows": 10440,
+    "dropped": 0,
+    "selectedVehicleId": null,
+    "playerVehicleId": null,
+    "byKind": {
+      "STOP": 0,
+      "RED": 9,
+      "GREEN": 6,
+      "YIELD": 0,
+      "LANE_CHANGE": 0
+    },
+    "followEpisodes": 1,
+    "cameraIndependent": true,
+    "memoryBytes": 1416464,
+    "budgetBytes": 33554432
+  },
+  "segment": {
+    "manualSamples": 90,
+    "learningSamples": 60,
+    "closedSegments": 2,
+    "learningClosedSegments": 1,
+    "demonstrations": 0,
+    "profilePublications": 0,
+    "learningJobs": 0,
+    "closedSamplesRead": 61,
+    "learningEligible": true
+  },
+  "stop": {
+    "kind": "STOP",
+    "state": "RESOLVED",
+    "outcome": "STOPPED",
+    "occurrence": 0,
+    "opportunities": 1,
+    "uniqueOccurrences": 1,
+    "duplicateObservations": 5,
+    "windowLabel": "FREE_TRAFFIC",
+    "windowClass": "ELIGIBLE",
+    "windowObservations": 4,
+    "eligibleOccurrences": 1,
+    "samples": 300
+  },
+  "signal": {
+    "kind": "GREEN",
+    "state": "TRUNCATED",
+    "outcome": null,
+    "occurrence": 0,
+    "opportunities": 1,
+    "uniqueOccurrences": 1,
+    "duplicateObservations": 0,
+    "windowLabel": "FREE_TRAFFIC",
+    "windowClass": "ELIGIBLE",
+    "windowObservations": 2,
+    "eligibleOccurrences": 1,
+    "samples": 300
+  },
+  "artifacts": {
+    "pauseCause": "SUSPENSION_FOCUS_LOST",
+    "teleportCause": "RECOVERY_TELEPORT",
+    "observationGap": false,
+    "prefixTicks": 39,
+    "completeness": "PARTIAL",
+    "suppressedEligibleWindows": 0,
+    "demonstrations": 0
+  },
+  "bounded": {
+    "capacity": 1024,
+    "retained": 1024,
+    "dropped": 176,
+    "memoryBytes": 86030,
+    "budgetBytes": 33554432,
+    "withinBudget": true
+  },
+  "dedupe": {
+    "uniqueOccurrences": 1,
+    "duplicateObservations": 5,
+    "dedupeDropped": 0
+  },
+  "profileFingerprint": "4ec212b3cc19e56a1c064490592a137db803ee039de3ef0b118099e5f939e518",
+  "checks": [
+    {
+      "name": "all-58-live-vehicles",
+      "pass": true,
+      "detail": "58/58 vehicles contribute"
+    },
+    {
+      "name": "camera-and-selection-independent",
+      "pass": true,
+      "detail": "no camera/selection filter is applied to the world ring or opportunity facts"
+    },
+    {
+      "name": "world-samples-bounded",
+      "pass": true,
+      "detail": "1024/1024 rows retained, 176 dropped"
+    },
+    {
+      "name": "manual-metrics-not-demonstration",
+      "pass": true,
+      "detail": "90 MANUAL samples, 0 demonstrations"
+    },
+    {
+      "name": "learning-segment-closed-and-exposed",
+      "pass": true,
+      "detail": "60 LEARNING samples, 61 readable"
+    },
+    {
+      "name": "follow-context-observed",
+      "pass": true,
+      "detail": "1 follower episode(s) deduped by vehicle+leader acquisition"
+    },
+    {
+      "name": "stop-opportunity-deduped",
+      "pass": true,
+      "detail": "1 unique occurrence, 5 duplicate frames"
+    },
+    {
+      "name": "stop-window-eligible",
+      "pass": true,
+      "detail": "ELIGIBLE/FREE_TRAFFIC, 1 eligible occurrence"
+    },
+    {
+      "name": "real-signal-opportunity",
+      "pass": true,
+      "detail": "GREEN from the real 036 movement, ELIGIBLE"
+    },
+    {
+      "name": "pause-focus-teleport-artifacts",
+      "pass": true,
+      "detail": "SUSPENSION_FOCUS_LOST, RECOVERY_TELEPORT, prefix 39 ticks"
+    },
+    {
+      "name": "no-learning-and-no-profile-publication",
+      "pass": true,
+      "detail": "0 jobs, 0 profile publications, 0 demonstrations"
+    },
+    {
+      "name": "memory-within-recorder-budget",
+      "pass": true,
+      "detail": "1416464 B live fleet, 86030 B bounded probe"
+    }
+  ],
+  "summary": {
+    "checks": 12,
+    "passed": 12,
+    "failed": 0,
+    "pass": true
+  }
+}

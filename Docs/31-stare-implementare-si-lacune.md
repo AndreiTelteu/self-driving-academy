@@ -330,9 +330,16 @@ Dovezile sunt în [Evidence/270-company-dashboard](Evidence/270-company-dashboar
 - Nu există includerea taxiurilor și civililor din afara camerei.
 - Nu există un cost măsurat pentru înregistrare și nici un buffer mărginit.
 
-**Documentație:** [Telemetrie și oportunități](09-telemetrie-si-oportunitati.md) · [Învățarea stilului](10-invatarea-stilului.md) · [Eșantioanele la tick](telemetry-samples.md) · [Dovezile de learning](learning-evidence.md) · [Indicatorii de comportament](behavior-metrics.md) · [Regresiile de intervenție](learning-edgecases.md) · [Starea implementării și lacunele](31-stare-implementare-si-lacune.md)
+**Ce s-a livrat:** `createLiveTelemetry` (`src/telemetry/live-telemetry.ts`) și adaptorul `createLiveTelemetryComposition` (`src/app/live-telemetry.ts`) leagă 085–088 de tick-ul autoritar al compunerii V3 și de segmentele 069 ale 271. Segmentele MANUAL/LEARNING scriu eșantioane 085 la 60 Hz cu input brut, comandă filtrată, viteză, bandă, semnal și clasă; toate taxiurile și civilii scriu într-un inel world mărginit, indiferent de cameră sau selecție. Oportunitățile 086 provin din linia STOP a benzii, mișcarea reală a semnalului 036 și schimbarea reală între benzi vecine, iar urmărirea este contextul `LEADER` al ferestrelor 087. Deduplicarea este pe `opportunity.id + occurrence`, nu pe cadre. Pauza, focusul pierdut și teleportarea produc artefacte 088 cu prefix utilizabil; MANUAL rămâne în metrici fără demonstrație eligibilă. `readClosedSegment` și `readWorldSamples` expun datele către 273, fără job, estimator sau publicare de profil. Raportul determinist are 12/12 verificări, iar costul local p95 măsurat este în `cost.json`.
+
+- Dovezi: `npm run telemetry:live` (12/12) și `npm run telemetry:live:cost`, în [Evidence/272-live-telemetry](Evidence/272-live-telemetry/README.md).
+- Limitări: regulile live de trafic (283) nu opresc încă vehiculele la semnal; semnalul este cel al controller-ului 036 construit din harta reală. Nu există owner de ocluzie live, deci conul camerei este conservator. Recuperarea/teleportarea este dovedită prin faptul 030 injectat de host, nu printr-un producător live (282). Proba de browser este `NOT_RUN` fără Playwright. Costul este software, nu FPS/GPU/hardware.
+
+**Documentație:** [Telemetrie și oportunități](09-telemetrie-si-oportunitati.md) · [Învățarea stilului](10-invatarea-stilului.md) · [Telemetria live](live-telemetry.md) · [Eșantioanele la tick](telemetry-samples.md) · [Dovezile de learning](learning-evidence.md) · [Indicatorii de comportament](behavior-metrics.md) · [Regresiile de intervenție](learning-edgecases.md) · [Starea implementării și lacunele](31-stare-implementare-si-lacune.md)
 
 **PBI:** [272](../PBI/README.md) · **Dependențe:** 271.
+
+**Stare:** Implementat local la 27 noiembrie 2026. Telemetria, oportunitățile, ferestrele și artefactele live sunt montate; pipeline-ul de learning rămâne 273.
 
 ### 273 — Pipeline-ul de learning live: dovezi, worker, profil și activare
 
