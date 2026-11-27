@@ -1,0 +1,177 @@
+{
+  "version": "267-kpi-dashboard-report-v1",
+  "generatedFrom": "real 209/210/214/082 fixtures and the delivered UI adapters",
+  "kpi": {
+    "tick": 24483600,
+    "months": 12,
+    "monthsWithData": 11,
+    "monthsWithoutData": 1,
+    "partialMonths": 1,
+    "revenueMinorUnits": 31960,
+    "reviewCount": 284,
+    "averageRating": 2.552817,
+    "meanOfMonthlyMeans": 2.5,
+    "distribution": [
+      49,
+      45,
+      45,
+      45,
+      45,
+      55
+    ],
+    "exactPoints": 310,
+    "visualPoints": 52,
+    "projection": "PROJECTED",
+    "popupReads": 1,
+    "popupRenders": 1,
+    "historyScans": 0
+  },
+  "impact": {
+    "serviceState": "COMPARABLE",
+    "revenueDirection": "UP",
+    "ratingDirection": "DOWN",
+    "hudTicks": 600,
+    "hudReads": 100,
+    "hudRenders": 2,
+    "hudPlaneUpdates": 4,
+    "xp": {
+      "debits": 0,
+      "credits": 0,
+      "negativeCredits": false
+    }
+  },
+  "city": {
+    "metrics": [
+      {
+        "id": "completedRides",
+        "state": "AVAILABLE",
+        "value": 1
+      },
+      {
+        "id": "averageRideSeconds",
+        "state": "AVAILABLE",
+        "value": 135.95495735607676
+      },
+      {
+        "id": "totalDistanceM",
+        "state": "UNAVAILABLE",
+        "value": null
+      },
+      {
+        "id": "violations",
+        "state": "UNAVAILABLE",
+        "value": null
+      },
+      {
+        "id": "collisions",
+        "state": "AVAILABLE",
+        "value": 1
+      },
+      {
+        "id": "blockages",
+        "state": "AVAILABLE",
+        "value": 1
+      },
+      {
+        "id": "comfortScore",
+        "state": "UNAVAILABLE",
+        "value": null
+      }
+    ],
+    "incidents": [
+      {
+        "incidentId": "id-v1:9:collision11:session:0653:0281:03:1:22:65",
+        "kind": "COLLISION",
+        "tick": 65
+      },
+      {
+        "incidentId": "blockage:city:082:traffic-block",
+        "kind": "BLOCKAGE",
+        "tick": 64
+      }
+    ],
+    "reads": 1
+  },
+  "checks": [
+    {
+      "name": "twelve-month-window",
+      "pass": true,
+      "detail": "12 luni în selecție, 12 rânduri în tabel"
+    },
+    {
+      "name": "partial-month-projection",
+      "pass": true,
+      "detail": "m0011 PARTIAL, proiecție PROJECTED, praguri 10/300"
+    },
+    {
+      "name": "no-data-is-not-zero",
+      "pass": true,
+      "detail": "luna 3 NO_DATA null, luna 6 COMPLETE revenue 0 cu 30 curse"
+    },
+    {
+      "name": "weighted-rating-not-mean-of-means",
+      "pass": true,
+      "detail": "ponderat 2.552817, media mediilor 2.5"
+    },
+    {
+      "name": "daily-points-and-distribution",
+      "pass": true,
+      "detail": "310 zile exacte → 52 puncte, distribuție 49/45/45/45/45/55"
+    },
+    {
+      "name": "closed-popup-reads-nothing",
+      "pass": true,
+      "detail": "SKIPPED_CLOSED, citiri 0, randări 0"
+    },
+    {
+      "name": "open-reads-once-and-focuses",
+      "pass": true,
+      "detail": "1 citire, focus în dialog, rol dialog"
+    },
+    {
+      "name": "tab-and-escape",
+      "pass": true,
+      "detail": "Tab true, Shift+Tab true, Escape 1, focus restaurat true"
+    },
+    {
+      "name": "closed-after-escape-reads-nothing",
+      "pass": true,
+      "detail": "1 citiri după închidere, 1 închideri"
+    },
+    {
+      "name": "history-scans-stay-zero",
+      "pass": true,
+      "detail": "historyScans 0/0, settle 310→310, review 284→284"
+    },
+    {
+      "name": "impact-three-planes-no-xp",
+      "pass": true,
+      "detail": "serviciu COMPARABLE, XP 0/0, misiune NONE"
+    },
+    {
+      "name": "impact-hud-10hz",
+      "pass": true,
+      "detail": "600 tick-uri → 100 citiri, 2 randări, 4 scrieri"
+    },
+    {
+      "name": "city-seven-indicators",
+      "pass": true,
+      "detail": "7 indicatori, 2 incidente, 1 citiri"
+    },
+    {
+      "name": "city-real-incidents",
+      "pass": true,
+      "detail": "COLLISION:id-v1:9:collision11:session:0653:0281:03:1:22:65, BLOCKAGE:blockage:city:082:traffic-block"
+    },
+    {
+      "name": "city-panel-escape-and-closed-read",
+      "pass": true,
+      "detail": "Escape true, citire când închis absentă"
+    }
+  ],
+  "summary": {
+    "checks": 15,
+    "passed": 15,
+    "pass": true
+  }
+}

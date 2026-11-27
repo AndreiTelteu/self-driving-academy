@@ -78,7 +78,7 @@ export function bindModeKeyboard(options: {
     return (
       enabled &&
       !blocked(doc.activeElement) &&
-      doc.querySelector('dialog[open],[role="dialog"][aria-modal="true"]') === null
+      doc.querySelector('dialog[open],[role="dialog"][aria-modal="true"]:not([hidden])') === null
     );
   };
   const clear = () => {

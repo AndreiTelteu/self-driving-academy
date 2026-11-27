@@ -8,8 +8,12 @@ import {
   createLiveRideComposition,
   createRendererRecovery,
   createSessionFlow,
+  readCityDashboardSnapshot,
+  readKpiHistory,
+  readKpiImpact,
   readLiveFleetSelectionSnapshot,
   readMinimapGeometry,
+  rideTripDistanceM,
   type GameTickPort,
   type LiveEconomyComposition,
   type LiveRideComposition,
@@ -46,15 +50,18 @@ import {
   createDiagnosticsPanel,
   createFpsCounter,
   createGameShellHost,
+  createCityDashboardPanel,
   createFleetSelectionPanel,
+  createKpiHistoryPanel,
+  createKpiImpactHud,
   createLiveEconomyHud,
   createLiveRideMarkerLayer,
   createLiveRidesPanel,
   createPassengerVisualPresenter,
   createTaxiHud,
 } from './ui';
-import { LIVE_RIDE_LIFECYCLE_VERSION, createLiveRides } from './fleet';
-import type { LiveRides } from './fleet';
+import { LIVE_RIDE_LIFECYCLE_VERSION, createFleetHealth, createLiveRides } from './fleet';
+import type { FleetHealth, LiveRides } from './fleet';
 import { computeProfileVersionChecksum } from './profiles';
 import type { ProfileVersion, ProfileVersionContent } from './profiles';
 import { copyProfileForChaos } from './persistence';
@@ -189,6 +196,12 @@ const economyModules: {
   evolutions: new Map(),
   evolution: undefined,
 };
+/**
+ * PBI 267: the city dashboard consumes the real 065 health owner of the same fleet. It records only
+ * external facts; the current build has no 028/029 live producer yet, so an absent fact stays absent
+ * instead of being invented as a zero.
+ */
+const dashboardModules: { health: FleetHealth | undefined } = { health: undefined };
 /**
  * PBI 269 fleet port: a purchase adds the taxi to the one 057 registry and starts its real 058
  * actor, so the same live fleet and capacity grow without a second registry or composition.
@@ -368,6 +381,55 @@ function liveFleetSnapshot() {
     playerVehicleId: frame.playerVehicleId,
   });
 }
+/**
+ * PBI 267: the three panels read the same 209/061/065 owners. A read is only requested when the host
+ * asks for it (popup open/refresh, dashboard open, HUD tick); no panel owns a ledger or a history.
+ */
+function currentKpiSnapshot() {
+  const economy = economyModules.composition;
+  if (economy === undefined) return null;
+  const tick = composition?.composition.frame.tick ?? economy.stats().tick;
+  return economy.economy.kpi.snapshot(tick);
+}
+function kpiHistorySelection() {
+  const kpi = currentKpiSnapshot();
+  return kpi === null ? null : readKpiHistory({ kpi });
+}
+function kpiImpactSnapshot() {
+  const economy = economyModules.composition,
+    frame = composition?.composition.frame,
+    kpi = currentKpiSnapshot();
+  if (economy === undefined || frame === undefined || kpi === null) return null;
+  // Before the first commercial event there is no consequence to report; the HUD stays hidden.
+  if (kpi.days.length === 0) return null;
+  const status = shell.status(),
+    read = economy.read();
+  return readKpiImpact({
+    kpi,
+    sessionId: status.sessionId,
+    worldEpoch: status.worldEpoch,
+    namespace: economy.economy.namespace,
+    controlMode: frame.hud.mode,
+    lastReview: read?.lastReview ?? null,
+  });
+}
+function cityDashboardSnapshot() {
+  const rideComposition = ridesModules.composition,
+    health = dashboardModules.health,
+    frame = composition?.composition.frame;
+  if (rideComposition === undefined || health === undefined || frame === undefined) return null;
+  const status = shell.status();
+  return readCityDashboardSnapshot(
+    {
+      context: { sessionId: status.sessionId, worldEpoch: status.worldEpoch },
+      lifecycle: rideComposition.lifecycle.lifecycle,
+      health,
+      // Real planned trip distance of the same 033 lanes the tariff used; no invented metre.
+      rideDistanceM: (ride) => rideTripDistanceM(world.graph, ride),
+    },
+    { tick: frame.tick, selectedIncidentId: null },
+  );
+}
 /** PBI 263: un singur panou live; click-ul selectează doar camera, preluarea este explicită. */
 const fleetPanel = createFleetSelectionPanel(app, {
   select: (vehicleId) => composition?.composition.selectVehicle(vehicleId) ?? false,
@@ -400,6 +462,43 @@ const economyHud = createLiveEconomyHud(app, {
   read: () => economyModules.composition?.read() ?? null,
 });
 /**
+ * PBI 267: KPI popup over the 210 selection. It reads only on open/refresh; the trigger mounted in
+ * the shell bar is the single native button, so the inline 210 trigger is hidden instead of leaving
+ * a second unreachable control.
+ */
+const kpiHistoryPanel = createKpiHistoryPanel(app, {
+  read: kpiHistorySelection,
+  setSurface: (open) => {
+    if (open) shell.openPanel('kpis');
+    else shell.closePanel();
+  },
+  onClose: () => {
+    if (application.getState().kind === 'PLAYING') view.getCanvas().focus();
+  },
+});
+kpiHistoryPanel.getTrigger().hidden = true;
+/** PBI 267: the 082 city dashboard inside a real host surface with focus, Tab and Escape. */
+const cityDashboardPanel = createCityDashboardPanel(app, {
+  read: cityDashboardSnapshot,
+  setSurface: (open) => {
+    if (open) shell.openPanel('city');
+    else shell.closePanel();
+  },
+  onClose: () => {
+    if (application.getState().kind === 'PLAYING') view.getCanvas().focus();
+  },
+});
+/** PBI 267: 214 consequence HUD, capped at 10 Hz by the adapter itself. */
+const impactHost = document.createElement('div');
+impactHost.className = 'kpi-impact-host';
+impactHost.style.cssText =
+  'position:fixed;left:50%;bottom:1rem;transform:translateX(-50%);z-index:20;' +
+  'max-width:min(92vw,34rem);pointer-events:none;';
+app.append(impactHost);
+const kpiImpactHud = createKpiImpactHud(impactHost, { read: kpiImpactSnapshot });
+/** The KPI popup is live only while open in observation AUTO; its reads stay capped at 10 Hz. */
+let lastKpiPanelRefresh = -Infinity;
+/**
  * PBI 270: panoul companiei citește exact read model-ul 269 și cheltuie cash-ul real prin
  * `purchase`/`upgrade`. El nu creează un al doilea ledger sau o a doua flotă; suprafața de pauză
  * rămâne a shell-ului (070), iar panoul închis nu citește nimic.
@@ -427,6 +526,8 @@ const shellHost = createGameShellHost({
     if (ridesPanel.isOpen()) ridesPanel.close();
     if (fleetPanel.isOpen()) fleetPanel.close();
     if (companyDashboard.isOpen()) companyDashboard.close();
+    if (kpiHistoryPanel.isOpen()) kpiHistoryPanel.close();
+    if (cityDashboardPanel.isOpen()) cityDashboardPanel.close();
     shell.setMenuOpen(true);
   },
   onResume: () => resumeSession(),
@@ -441,6 +542,8 @@ const shellHost = createGameShellHost({
     if (fleetPanel.isOpen()) fleetPanel.close();
     if (ridesPanel.isOpen()) ridesPanel.close();
     if (companyDashboard.isOpen()) companyDashboard.close();
+    if (kpiHistoryPanel.isOpen()) kpiHistoryPanel.close();
+    if (cityDashboardPanel.isOpen()) cityDashboardPanel.close();
     return shell.openPanel('integration');
   },
   onClosePanel: () => {
@@ -473,6 +576,20 @@ const shellHost = createGameShellHost({
     if (ridesPanel.isOpen()) ridesPanel.close();
     if (companyDashboard.isOpen()) companyDashboard.close();
     return companyDashboard.open();
+  },
+  onOpenKpis: () => {
+    if (fleetPanel.isOpen()) fleetPanel.close();
+    if (ridesPanel.isOpen()) ridesPanel.close();
+    if (companyDashboard.isOpen()) companyDashboard.close();
+    if (cityDashboardPanel.isOpen()) cityDashboardPanel.close();
+    return kpiHistoryPanel.open();
+  },
+  onOpenCity: () => {
+    if (fleetPanel.isOpen()) fleetPanel.close();
+    if (ridesPanel.isOpen()) ridesPanel.close();
+    if (companyDashboard.isOpen()) companyDashboard.close();
+    if (kpiHistoryPanel.isOpen()) kpiHistoryPanel.close();
+    return cityDashboardPanel.open();
   },
 });
 /** Fiecare tranziție de sesiune ajunge și în gazda shell-ului, nu doar în view-ul de randare. */
@@ -527,6 +644,7 @@ const application = createApplicationLifecycle({
         let ownedTraffic: ReturnType<typeof createAmbientTraffic> | undefined;
         let ownedRides: LiveRides | undefined;
         let ownedRideComposition: LiveRideComposition | undefined;
+        let ownedHealth: FleetHealth | undefined;
         let ownedHud: ReturnType<typeof createTaxiHud> | undefined;
         let owned: BabylonDiagnostics | undefined;
         let releaseSurface: (() => void) | undefined;
@@ -601,6 +719,17 @@ const application = createApplicationLifecycle({
             worldEpoch: compositionContext.worldEpoch,
           });
           ridesModules.composition = ownedRideComposition;
+          // PBI 267: the real 065 health owner of this same fleet. It starts with no external fact
+          // because 028/029 live producers are not mounted yet; the dashboard reports that honestly
+          // instead of inventing blockages or damages.
+          ownedHealth = createFleetHealth({
+            dispatcher: ownedRides.dispatcher,
+            lifecycle: ownedRideComposition.lifecycle.lifecycle,
+            demand: ownedRides.demand,
+            eta: ownedRideComposition.lifecycle.eta,
+            registry: ownedTraffic.registry,
+          });
+          dashboardModules.health = ownedHealth;
           // PBI 266: economia 209 peste exact aceleași închideri 061; niciun al doilea ledger sau
           // model de cursă. Portul `economy` rulează după `rides` în același cadru autoritar.
           disposeEconomies();
@@ -674,6 +803,8 @@ const application = createApplicationLifecycle({
             if (ridesModules.composition === ownedRideComposition)
               ridesModules.composition = undefined;
             ownedRides?.dispose();
+            ownedHealth?.dispose();
+            if (dashboardModules.health === ownedHealth) dashboardModules.health = undefined;
             ownedHud?.dispose();
             if (ridesModules.hud === ownedHud) ridesModules.hud = undefined;
             ownedComposition?.dispose();
@@ -716,6 +847,8 @@ const application = createApplicationLifecycle({
                 if (ridesModules.composition === ownedRideComposition)
                   ridesModules.composition = undefined;
                 ownedRides?.dispose();
+                ownedHealth?.dispose();
+                if (dashboardModules.health === ownedHealth) dashboardModules.health = undefined;
                 ownedHud?.dispose();
                 if (ridesModules.hud === ownedHud) ridesModules.hud = undefined;
                 ownedComposition?.dispose();
@@ -798,6 +931,16 @@ const application = createApplicationLifecycle({
     economyHud.update(performance.now());
     // PBI 270: panoul companiei citește la 10 Hz numai cât timp este deschis; închis nu atinge portul.
     companyDashboard.update(performance.now());
+    // PBI 267: pop-up-ul KPI se actualizează numai cât timp este deschis; orașul la fel.
+    if (frame !== undefined) {
+      kpiImpactHud.update(frame.tick);
+      const at = performance.now();
+      if (kpiHistoryPanel.isOpen() && at - lastKpiPanelRefresh >= 100) {
+        lastKpiPanelRefresh = at;
+        kpiHistoryPanel.refresh();
+      }
+      if (cityDashboardPanel.isOpen()) cityDashboardPanel.update(at);
+    }
     // PBI 265: HUD-ul 073 și markerii 147 citesc aceeași stare autoritară; nimic nu scrie în simulare.
     const rideComposition = ridesModules.composition;
     if (frame !== undefined && rideComposition !== undefined) {
@@ -1014,6 +1157,35 @@ void application.load(preference);
 // Academia este alegerea implicită, dar meniul rămâne explicit pentru Haos sau revenire.
 void chooseSession('ACADEMY');
 
+/**
+ * PBI 267: the host owns the `K` hotkey, exactly like the other panel bindings. The popup itself
+ * installs no global listener. `K` never fires while typing, while another dialog is visible or
+ * while the application is not playing.
+ */
+function kpiHotkeyBlocked(target: EventTarget | null): boolean {
+  if (!(target instanceof HTMLElement)) return false;
+  return (
+    target.isContentEditable ||
+    target.closest('input,textarea,select,[contenteditable]:not([contenteditable="false"])') !==
+      null
+  );
+}
+function onKpiHotkey(event: KeyboardEvent): void {
+  if (event.defaultPrevented || event.repeat || event.isComposing) return;
+  if (event.ctrlKey || event.altKey || event.metaKey) return;
+  if (event.code !== 'KeyK' && event.key.toLowerCase() !== 'k') return;
+  if (kpiHotkeyBlocked(event.target)) return;
+  if (kpiHistoryPanel.isOpen()) {
+    event.preventDefault();
+    kpiHistoryPanel.close();
+    return;
+  }
+  if (document.querySelector('[role="dialog"][aria-modal="true"]:not([hidden])') !== null) return;
+  if (application.getState().kind !== 'PLAYING') return;
+  if (kpiHistoryPanel.open()) event.preventDefault();
+}
+document.addEventListener('keydown', onKpiHotkey);
+
 /** Diagnostice read-only pentru probele de browser; nu expun nicio scriere de autoritate. */
 interface V3DebugGlobal {
   ready(): boolean;
@@ -1033,6 +1205,8 @@ interface V3DebugGlobal {
   rides(): unknown;
   /** PBI 266: economia live, KPI-urile curente și read model-ul HUD. */
   economy(): unknown;
+  /** PBI 267: panoul KPI, tabloul orașului și feedbackul consecințelor, read-only. */
+  kpi(): unknown;
   /** PBI 268: ledgerul companiei, profitul, cash-ul și P&L-ul lunar, fără scriere în 209/XP. */
   company(): unknown;
   /** PBI 269 (numai DEV/capture/debug): aceeași acțiune ca viitorul panou 270. */
@@ -1149,6 +1323,15 @@ const debugGlobal: V3DebugGlobal = {
       port: shell.status().systems.find((system) => system.id === 'economy')?.status ?? null,
     };
   },
+  kpi: () => ({
+    panel: kpiHistoryPanel.getStats(),
+    panelOpen: kpiHistoryPanel.isOpen(),
+    triggerHidden: kpiHistoryPanel.getTrigger().hidden,
+    city: cityDashboardPanel.getStats(),
+    cityOpen: cityDashboardPanel.isOpen(),
+    impact: kpiImpactHud.getStats(),
+    historyScans: 0 as const,
+  }),
   reset: () => composition?.reset(),
   probeDoubleDelivery: () => composition?.probeDoubleDelivery() ?? 'NO_COMPOSITION',
 };
@@ -1184,10 +1367,14 @@ const dispose = (): void => {
     releaseCapture?.();
     releaseCapture = undefined;
     (globalThis as unknown as { __v3Composition?: V3DebugGlobal }).__v3Composition = undefined;
+    document.removeEventListener('keydown', onKpiHotkey);
     shellHost.dispose();
     fleetPanel.dispose();
     ridesPanel.dispose();
     companyDashboard.dispose();
+    kpiHistoryPanel.dispose();
+    cityDashboardPanel.dispose();
+    kpiImpactHud.dispose();
     passengerPresenter.dispose();
     rideMarkerLayer.dispose();
     economyHud.dispose();

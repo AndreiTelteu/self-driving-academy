@@ -100,6 +100,15 @@ export {
   type CityFocusMapPort,
 } from './city-dashboard';
 export {
+  EMPTY_KPI_IMPACT_MISSION,
+  KPI_DASHBOARD_COMPOSITION_VERSION,
+  readKpiHistory,
+  readKpiImpact,
+  rideTripDistanceM,
+  type KpiHistoryReadInput,
+  type KpiImpactCompositionInput,
+} from './kpi-dashboard';
+export {
   CITY_METRIC_SOURCE_IDS,
   METRIC_APP_VERSION,
   METRIC_TO_CITY_REASON,

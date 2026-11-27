@@ -568,6 +568,18 @@ export type {
 export { createCityDashboard } from './city-dashboard';
 export type { CityDashboard, CityDashboardOptions } from './city-dashboard';
 export {
+  CITY_DASHBOARD_PANEL_REFRESH_MS,
+  CITY_DASHBOARD_PANEL_VERSION,
+  createCityDashboardPanel,
+} from './city-dashboard-panel';
+export type {
+  CityDashboardPanel,
+  CityDashboardPanelAdapter,
+  CityDashboardPanelOptions,
+  CityDashboardPanelStats,
+  CityDashboardPanelStatus,
+} from './city-dashboard-panel';
+export {
   CITY_DASHBOARD_LIMITS,
   CITY_DASHBOARD_NO_INCIDENT,
   CITY_DASHBOARD_UNAVAILABLE_POSITION,

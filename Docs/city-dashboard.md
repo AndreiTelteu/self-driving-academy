@@ -192,3 +192,11 @@ transcriptul comis.
 - Nu este 109/110/112: nu citeÈ™te, nu comparÄƒ È™i nu schimbÄƒ profilul; profilul este neatins prin construcÈ›ie.
 - Nu este 070: nu decide pauza; hostul aplicÄƒ regula panourilor.
 - Nu mÄƒsoarÄƒ FPS, GPU sau hardware; raportul este un transcript determinist, nu o probÄƒ de performanÈ›Äƒ.
+
+## Montarea în joc (PBI 267)
+
+`src/ui/city-dashboard-panel.ts` (`267-city-dashboard-panel-v1`) învele?te adaptorul 082 într-un dialog real al hostului: buton nativ de închidere, focus mutat în tablou, Tab/Shift+Tab ?inut în interior, Escape închide ?i readuce focusul anterior. Înveli?ul nu calculeaza indicatori ?i nu creeaza incidente; `createCityDashboard` ramâne singurul adaptor 082. `src/style.css` muta doar pozi?ionarea sec?iunii 082 în fluxul dialogului, fara sa schimbe culorile, valorile sau contractul de accesibilitate al panoului.
+
+Buildul monteaza un `createFleetHealth` real peste dispatcher-ul, lifecycle-ul, cererea, ETA ?i registry-ul aceleia?i flote 264/265. `readCityDashboardSnapshot` prime?te acel owner 065, lifecycle-ul 061 real ?i distan?a planificata a fiecarei curse, calculata din lungimile reale ale rutelor 033. `readCityDashboardSnapshot` este citit numai cât timp dialogul este deschis, la cel mult 10 Hz; când este închis, `update()` întoarce `SKIPPED_CLOSED` fara citire ?i fara scriere. `historyScans` ramâne `0`.
+
+În buildul curent producatorii live 028/029/137/138/139 nu sunt monta?i (282/283/272/273). Prin urmare coliziunile, încalcarile ?i confortul sunt `UNAVAILABLE` cu motiv închis, niciodata `0`; blocajele sunt zero real cât timp 065 nu a primit niciun fapt. Cei ?apte indicatori ramân întotdeauna randate, iar un incident fara pozi?ie ramâne explicit nelocalizabil.
