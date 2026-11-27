@@ -1,0 +1,12 @@
+{
+  "id": "279",
+  "criteriaSatisfied": true,
+  "result": "Native Settings from the start screen, pause menu and shell bar with three real tabs: 081 settings, 080 remapping for all 15 actions, and 230 style. Save writes only SettingsStore 009; Apply publishes a MANUAL_TUNING version through the 205 barrier and 110 activation without a 103 job, progression or XP. Remap updates live input without rebuilding the world; conflicts block saving and Escape cancels capture. The seven control and eight style sliders apply and save without touching the learned profile; units and CHASE/FIRST_PERSON are presentation only; reset confirms and restores the real 009 values.",
+  "limitations": "FIRST_PERSON is stored and validated as a presentation preference; first-person rendering remains 280. The central HUD switches to mph while the older taxi HUD 073 still formats km/h. A manual style activation updates the profile/fleet/city style immediately, while an open 069 segment adopts the new generation at the next session/segment boundary. The browser probe uses ?nofocuspause and headless Chrome, not a human playtest or FPS/GPU/hardware. Settings persistence is the real 009 store with no second durable store. Local Node is 24.19.0.",
+  "checks": [
+    ["node", "--import", "./scripts/register-typescript.mjs", "--test", "tests/settings/live-settings.test.ts", "tests/ui/live-settings-panel.test.ts", "tests/ui/game-shell-host.test.ts"],
+    ["npm", "run", "settings:live", "--", "--check"],
+    ["npm", "run", "docs:check", "--", "--check"],
+    ["npm", "run", "typecheck"]
+  ]
+}

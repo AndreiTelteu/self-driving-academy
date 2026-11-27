@@ -479,6 +479,8 @@ progres sau XP. Focusul, Tab, Escape, contrastul și lipsa listenerilor globali 
 
 **PBI:** [279](../PBI/README.md) · **Dependențe:** 260.
 
+**Stare:** Done la 28 noiembrie 2026. Randarea first-person (280) și minimapa (281) rămân taskuri separate; integrarea 069 adoptă o versiune manuală de stil la următorul segment, nu în același tick.
+
 ### 280 — Camera first-person din poziția șoferului
 
 **Ce lipsește:** Există doar camera de urmărire; `C` și camera first-person din scaunul șoferului nu sunt montate.
