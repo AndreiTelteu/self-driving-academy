@@ -1,13 +1,13 @@
 ---
 id: "281"
 title: "Minimapa, harta de flotă și HUD-ul complet de joc"
-status: "To Do"
+status: "In Progress"
 release: "V1"
 module: "Interfață"
 depends_on: ["260","263"]
 performance_checks: ["ui","frame"]
-owner: null
-started_at: null
+owner: "loop-pbi/deepseek-281"
+started_at: "2026-11-27T23:43:55.053Z"
 completed_at: null
 ---
 
