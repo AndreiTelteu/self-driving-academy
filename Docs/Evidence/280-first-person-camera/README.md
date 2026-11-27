@@ -47,12 +47,12 @@ Raportul determinist este [report.json](report.json) / [report.md](report.md); p
 ## Numerele probei de browser
 
 - FOV setat prin suprafața reală 081/279 la **75°**; first-person la repaus măsoară **75,0000°** pe
-  ambele backenduri. La condus: **77,3214°** (WEBGL2) și **77,2905°** (WEBGPU) la ~5,7 m/s.
+  ambele backenduri. La condus: **77,2905°** (WEBGL2, 5,73 m/s) și **77,2595°** (WEBGPU, 5,65 m/s).
 - Ancoră first-person: `(9.857600, 1.460000, 2.393200)` m; `distanceM = 0`; look-at la 1 m înainte.
 - Meshuri vizibile ale mașinii conduse: **15** în CHASE → **0** în FIRST_PERSON → **15** la revenire.
 - `minZ`: **0,10 m** în CHASE → **0,05 m** în FIRST_PERSON.
 - Autoritate înainte/după `C`: `VEHICLE:taxi-01`; segment `271-live-three-modes:segment:1`, start
-  tick **67**, neschimbat; viteză **0** la comutarea de repaus.
+  tick **60** (WEBGL2) / **59** (WEBGPU), neschimbat; viteză **0** la comutarea de repaus.
 - Ieșire: autoritate `CHARACTER:player-character`, cameră CHASE pe personaj; reintrare: FIRST_PERSON
   pe `taxi-01`. Reload: store `FIRST_PERSON`, cameră `FIRST_PERSON` fără nicio apăsare `C`.
 - Cost local tick (Node 24, o compunere, 120 warmup + 600 tickuri × 3 repetări alternate): CHASE p95
@@ -63,8 +63,9 @@ Raportul determinist este [report.json](report.json) / [report.md](report.md); p
 
 - **WEBGL2:** PASS 12/12, capturi `webgl2-01..07`.
 - **WEBGPU:** PASS 12/12, capturi `webgpu-01..07`.
-- Proba a rulat Chrome 157 **headed** pentru a evita pauza `overload` a tickului fix sub headless
-  WebGPU. Nu este un playtest uman și nu măsoară FPS/GPU/hardware.
+- Proba a rulat Chrome 157 **headed** (implicit) pentru a evita pauza `overload` a tickului fix sub
+  headless WebGPU; `PLAYWRIGHT_HEADLESS=1` este opt-in și raportează `NOT_RUN` dacă un backend nu
+  poate rula. Nu este un playtest uman și nu măsoară FPS/GPU/hardware.
 
 ## Limitări
 

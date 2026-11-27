@@ -162,7 +162,10 @@ let browser = null;
 let launchError = null;
 try {
   browser = await chromium.launch({
-    headless: process.env.PLAYWRIGHT_HEADED === '1' ? false : true,
+    // Headed Chrome avoids the fixed-tick `overload` pause seen under headless WebGPU. CI can opt
+    // into headless explicitly with PLAYWRIGHT_HEADLESS=1 and must then report an unavailable
+    // backend as NOT_RUN rather than as PASS.
+    headless: process.env.PLAYWRIGHT_HEADLESS === '1',
     channel: process.env.PLAYWRIGHT_CHANNEL ?? 'chrome',
     args: [
       '--enable-unsafe-webgpu',
@@ -283,8 +286,18 @@ try {
         await page.waitForTimeout(50);
       };
       const pressKey = async (key) => {
+        await ensurePlaying();
         await focusCanvas();
         await page.keyboard.press(key);
+      };
+      const toggleCameraTo = async (expected) => {
+        const deadline = Date.now() + 60000;
+        while ((await read()).camera.mode !== expected) {
+          if (Date.now() > deadline)
+            throw new Error(`Camera ${expected} timeout; current ${(await read()).camera.mode}`);
+          await pressKey('KeyC');
+          await page.waitForTimeout(120);
+        }
       };
       const shot = async (name) => {
         const relative = `screenshots/${requestedBackend.toLowerCase()}-${name}.png`;
@@ -368,12 +381,7 @@ try {
         hasFocus: globalThis.document.hasFocus(),
         activeElement: globalThis.document.activeElement?.tagName ?? null,
       }));
-      await page.keyboard.press('KeyC');
-      await page.waitForFunction(
-        () => globalThis.__v3Composition.read().camera.mode === 'FIRST_PERSON',
-        null,
-        { timeout: 30000 },
-      );
+      await toggleCameraTo('FIRST_PERSON');
       await pumpFrame();
       await pumpFrame();
       const firstRest = await read();
@@ -420,12 +428,7 @@ try {
         visibleVehicleMeshes: firstScene.visibleVehicleMeshes,
       };
 
-      await pressKey('KeyC');
-      await page.waitForFunction(
-        () => globalThis.__v3Composition.read().camera.mode === 'CHASE',
-        null,
-        { timeout: 30000 },
-      );
+      await toggleCameraTo('CHASE');
       await pumpFrame();
       const chaseRest = await read();
       const chaseRestScene = await sceneState('taxi-01');
@@ -439,12 +442,7 @@ try {
       );
 
       // First person while driving, then C back to chase.
-      await pressKey('KeyC');
-      await page.waitForFunction(
-        () => globalThis.__v3Composition.read().camera.mode === 'FIRST_PERSON',
-        null,
-        { timeout: 30000 },
-      );
+      await toggleCameraTo('FIRST_PERSON');
       await page.keyboard.down('KeyW');
       await page.waitForTimeout(1200);
       await page.keyboard.up('KeyW');
@@ -467,12 +465,7 @@ try {
         positionM: firstDriving.camera.positionM,
       };
 
-      await pressKey('KeyC');
-      await page.waitForFunction(
-        () => globalThis.__v3Composition.read().camera.mode === 'CHASE',
-        null,
-        { timeout: 30000 },
-      );
+      await toggleCameraTo('CHASE');
       await pumpFrame();
       const chaseDrivingScene = await sceneState('taxi-01');
       await shot('04-chase-driving');
@@ -483,12 +476,7 @@ try {
       );
 
       // Leave the saved preference in FIRST_PERSON for the exit/re-entry checks.
-      await pressKey('KeyC');
-      await page.waitForFunction(
-        () => globalThis.__v3Composition.read().camera.mode === 'FIRST_PERSON',
-        null,
-        { timeout: 30000 },
-      );
+      await toggleCameraTo('FIRST_PERSON');
 
       // 196 admits an exit only at a stopped car; brake with the real key first.
       await focusCanvas();

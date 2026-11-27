@@ -10,7 +10,7 @@ Generată de `npm run camera:first-person:probe`. Status general: **PASS**.
   - `no-car-body-in-first-person`: PASS — visible car meshes 0/15, minZ 0.05
   - `camera-only-switch`: PASS — authority VEHICLE:taxi-01, segment 271-live-three-modes:segment:1, speed 0
   - `back-to-chase`: PASS — mode CHASE, visible car meshes 15
-  - `first-person-driving`: PASS — speed 5.804 m/s, fov 77.321°, visible car meshes 0
+  - `first-person-driving`: PASS — speed 5.726 m/s, fov 77.290°, visible car meshes 0
   - `chase-driving-body-visible`: PASS — visible car meshes 15/15
   - `exit-keeps-camera-coherent`: PASS — mode CHASE, camera player-character
   - `re-enter-first-person`: PASS — re-entry returned to the driver seat
@@ -27,7 +27,7 @@ Capturi: [screenshots/webgl2-01-chase-rest.png](screenshots/webgl2-01-chase-rest
   - `no-car-body-in-first-person`: PASS — visible car meshes 0/15, minZ 0.05
   - `camera-only-switch`: PASS — authority VEHICLE:taxi-01, segment 271-live-three-modes:segment:1, speed 0
   - `back-to-chase`: PASS — mode CHASE, visible car meshes 15
-  - `first-person-driving`: PASS — speed 5.726 m/s, fov 77.290°, visible car meshes 0
+  - `first-person-driving`: PASS — speed 5.649 m/s, fov 77.260°, visible car meshes 0
   - `chase-driving-body-visible`: PASS — visible car meshes 15/15
   - `exit-keeps-camera-coherent`: PASS — mode CHASE, camera player-character
   - `re-enter-first-person`: PASS — re-entry returned to the driver seat
