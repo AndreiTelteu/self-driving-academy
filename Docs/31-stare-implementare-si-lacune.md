@@ -313,7 +313,7 @@ Dovezile sunt în [Evidence/270-company-dashboard](Evidence/270-company-dashboar
 - Dovezi: `npm run modes:live` (12 tranziții, 4 segmente LEARNING, 0 profiluri) și `npm run modes:live:probe` (11/11 în Chrome 157/WEBGL2), în [Evidence/271-live-three-modes](Evidence/271-live-three-modes/README.md).
 - Limitări: AUTO reia exact primul tick, dar reproiectarea completă pe banda grafului și reintrarea off-lane rămân 054/282; `G` intrare/ieșire rămâne traseul 195/196/198, nu deschide un segment 069; capacitatea 069 este 64 de segmente per ciclu de viață.
 
-**Stare:** Implementat local la 27 noiembrie 2026. Tastele și butoanele HUD folosesc aceeași intenție live, iar browserul Chrome 157 a trecut 11/11; mutarea în Done și validarea finală aparțin orchestratorului.
+**Stare:** Done la 27 noiembrie 2026. Tastele și butoanele HUD folosesc aceeași intenție live, iar browserul Chrome 157 a trecut 11/11; taskul este mutat în Done și validat pe board.
 
 **Documentație:** [Interfață, cameră și control](08-interfata-camera-si-control.md) · [Învățarea stilului](10-invatarea-stilului.md) · [Comenzile de mod](mode-controls.md) · [Integrarea celor trei moduri](three-modes.md) · [Cursa completă și intervenția](manual-trip.md) · [Continuitatea la preluare](takeover-continuity.md) · [Autoritatea de control](control-authority.md) · [Starea implementării și lacunele](31-stare-implementare-si-lacune.md)
 

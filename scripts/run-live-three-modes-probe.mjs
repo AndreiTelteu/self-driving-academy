@@ -207,7 +207,6 @@ try {
   const read = () => page.evaluate(() => globalThis.__v3Composition.read());
   const fleet = () => page.evaluate(() => globalThis.__v3Composition.fleet());
   const modes = () => page.evaluate(() => globalThis.__v3Composition.modes());
-  const shell = () => page.evaluate(() => globalThis.__v3Composition.shell());
   const hudText = () =>
     page.evaluate(() => ({
       mode: globalThis.document?.querySelector(

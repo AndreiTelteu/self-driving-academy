@@ -1,0 +1,12 @@
+{
+  "id": "271",
+  "criteriaSatisfied": true,
+  "result": "Live 069 segments over the V3 composition cover all six AUTO/MANUAL/LEARNING transitions for taxis and civilians at the accepted tick, with mode, eligibility, position, route, class and profile. M/L are folded per tick with one PLAYER seat, position/speed/yaw continuity and AUTO resume from the current physical state. LEARNING exposes descriptors to 272 without publishing a profile; MANUAL produces no intake. The HUD has the mandated labels and the live LEARNING button is active.",
+  "limitations": "G entry/exit remains the 195/196/198 path and does not create a separate 069 segment. AUTO resumes exactly on the first tick, but full lane re-projection and off-lane re-entry remain 054/282. The 069 lifecycle capacity is 64 segments per session. Telemetry 272, learning pipeline 273 and settings 279 remain separate. The browser probe is Chrome 157 / WEBGL2 without an FPS/GPU/hardware claim. Local Node is 24.19.0.",
+  "checks": [
+    ["node", "--import", "./scripts/register-typescript.mjs", "--test", "tests/app/live-three-modes.test.ts", "tests/app/live-fleet-selection.test.ts"],
+    ["npm", "run", "modes:live", "--", "--check"],
+    ["npm", "run", "docs:check", "--", "--check"],
+    ["npm", "run", "typecheck"]
+  ]
+}
