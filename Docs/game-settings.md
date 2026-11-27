@@ -142,3 +142,13 @@ nu o captură de browser, o probă audio sau o măsurătoare hardware.
 - Nu este 230: nu editează parametri învățați și nu publică stil.
 - Nu este 148: nu inventează volum, mut sau redare audio.
 - Nu persistă singur: fără portul `save` și fără `SettingsStore.replace` nimic nu este scris.
+
+## Montarea live (PBI 279)
+
+`src/app/live-settings.ts` ?i `src/ui/live-settings.ts` monteaza panoul 081 ca tab �Joc ?i control� �n
+suprafa?a reala deschisa din start, pauza ?i bara shell-ului. Draftul ram�ne local; �Salveaza� scrie
+exact o data `SettingsStore` ?i anun?a `V3BrowserComposition.applySettings` pentru camera, tastatura,
+FOV ?i calitate. Tabul are cele ?apte slidere de control, unita?ile, camera, grafica ?i audio
+indisponibil; remaparea ?i stilul sunt taburi separate. Setarile de dispozitiv nu creeaza versiuni de
+profil ?i nu ating XP-ul. Raportul determinist este `npm run settings:live`, iar proba de browser
+este �n [Evidence/279-live-settings](Evidence/279-live-settings/README.md).

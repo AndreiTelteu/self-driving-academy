@@ -562,3 +562,49 @@ test('277 host: mounts the Provocari button without global listeners', () => {
     shell.dispose();
   }
 });
+
+test('279 host: mounts the Settings button and opens the live surface through its port', () => {
+  const doc = createHudDocument();
+  const root = doc.createElement('div');
+  const clock = { value: 0 };
+  const shell = createGameShell({
+    context: { sessionId: '279-host-test', worldEpoch: 2 },
+    suspend: () => {},
+    resume: () => {},
+    now: () => clock.value,
+  });
+  shell.attachWorld(world(1));
+  shell.start();
+  shell.step(2);
+  const calls = { settings: 0 };
+  const host = createGameShellHost({
+    root: root as unknown as HTMLElement,
+    snapshot: () => shell.status(),
+    onStart: () => {},
+    onPause: () => {},
+    onResume: () => {},
+    onOpenPanel: () => shell.openPanel('integration'),
+    onClosePanel: () => shell.closePanel(),
+    onOpenSettings: () => {
+      calls.settings += 1;
+      return true;
+    },
+    now: () => clock.value,
+  });
+  try {
+    host.setSessionState('PLAYING');
+    const bar = (root.children[0] as HudElement).children[0]!;
+    const settings = bar.children.find(
+      (child) => child.getAttribute('data-shell-action') === 'settings',
+    )!;
+    assert.equal(settings.textContent, 'Setări');
+    assert.equal(settings.getAttribute('aria-haspopup'), 'dialog');
+    settings.dispatchEvent('click');
+    assert.deepEqual(calls, { settings: 1 });
+    assert.equal(host.getStats().settingsOpens, 1);
+    assert.equal(host.getStats().globalListeners, 0);
+  } finally {
+    host.dispose();
+    shell.dispose();
+  }
+});

@@ -187,3 +187,11 @@ probă de input fizic în browser.
 - Nu este profil, learning, telemetrie sau XP; nu publică, nu restaurează și nu compară profiluri.
 - Nu persistă singur: fără portul `save` și fără `SettingsStore.replace` nimic nu este scris.
 - Nu măsoară FPS, GPU sau hardware; raportul este un transcript determinist.
+
+## Remaparea live (PBI 279)
+
+Tabul �Taste� al suprafe?ei live 279 refolose?te exact adaptorul 080: cele 15 ac?iuni, captura pe
+buton, conflictele ?i Escape. Dupa �Salveaza�, `V3BrowserComposition.applySettings` apeleaza
+`KeyboardDriveBinding.remap` ?i actualizeaza ?i tastele M/L, fara sa recreeze compunerea. Bindingurile
+ram�n stare de dispozitiv: `input.control.version` nu cre?te, iar profilul �nva?at ?i XP-ul ram�n
+neschimbate. Dovezile sunt �n [Evidence/279-live-settings](Evidence/279-live-settings/README.md).

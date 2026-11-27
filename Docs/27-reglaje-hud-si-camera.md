@@ -110,3 +110,12 @@ defectele sunt raportate cu captură și pași de reproducere în [Evidence/153-
 dovedește pornirea și linia WEBGL2; poarta de start nu a fost apăsată, deci inputul, focusul, senzația
 de condus și lizibilitatea textului rămân `NOT_RUN`. Confortul subiectiv cere playtest uman, care nu a
 fost executat.
+
+## Suprafa?a live 279
+
+Setarile montate �n joc unesc 081, 080 ?i 230 �ntr-un singur dialog cu taburi. Cele ?apte slidere de
+control ?i cele opt de stil se aplica ?i se salveaza fara sa atinga profilul �nva?at; numai �Aplica�
+din stil publica o versiune `MANUAL_TUNING` prin bariera 205 ?i activarea 110. Unita?ile ?i camera
+schimba doar prezentarea, iar resetarea cere confirmare ?i pastreaza bindingurile. Focusul, Tab,
+Escape ?i contrastul urmeaza 083. Dovezile sunt �n
+[Evidence/279-live-settings](Evidence/279-live-settings/README.md).

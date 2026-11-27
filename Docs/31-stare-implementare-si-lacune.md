@@ -31,7 +31,7 @@ Buildul curent pornește din `src/main.ts` și oferă:
 - campania live 275 peste trackerul 116, tutorialul 117 și ledgerul 125: etapa 1 pornește automat, obiectivele se calculează din evenimente 007 reale, tutorialul are cinci pași separați de learning, iar panoul `Misiuni` arată progresul, fereastra, bugetul, motivul de eșec și reluarea;
 - misiunile zilnice și XP-ul 276 peste 211/212/213/125: exact trei obiective pe ziua reală, cel puțin unul MANUAL fără learning, XP idempotent din daily, campanie și timp activ, nivel monoton și panoul `Progres` cu sold, istoric, fereastră și motivul expirării.
 
-Nu sunt montate: provocările random (277), salvare, panourile de sistem (profil, setări), first-person, minimapa, sunet, decorul destructibil și provocările Haos, fizica Rapier și regulile de trafic. Cursele live, pickup/dropoff, pasagerul, ETA și HUD-ul de cursă sunt montate prin 265; AUTO/MANUAL/LEARNING și segmentele 069 sunt montate prin 271.
+Nu sunt montate: first-person (280), minimapa (281), sunet, decorul destructibil și provocările Haos, fizica Rapier și regulile de trafic. Cursele live, pickup/dropoff, pasagerul, ETA și HUD-ul de cursă sunt montate prin 265; AUTO/MANUAL/LEARNING și segmentele 069 sunt montate prin 271; persistența prin 278, iar setările, remaparea și sliderele prin 279.
 
 ## Matricea lacunelor
 
@@ -457,16 +457,25 @@ Refuzurile sunt închise: MANUAL/AUTO `SKIPPED_MANUAL`, LEARNING neeligibil `SKI
 
 ### 279 — Setări, remapare taste și slidere de control/stil în joc
 
-**Ce lipsește:** Butonul „Setări” din start și pauză face `console.log`; panourile de setări, remapare și slidere nu sunt montate.
+**Ce lipsește:** randarea first-person (280) și minimapa (281) rămân taskuri separate; integrarea 069
+la o versiune manuală de stil adoptă noua generație la următorul segment, nu în același tick.
 
-- Butonul „Setări” din ecranul de start și meniul de pauză este TODO.
-- Nu există panoul de unități, cameră, confort, grafică și audio montat.
-- Nu există remapare de taste cu detectarea conflictelor.
-- Nu există sliderele de control (7) și stil (8) montate.
-- Nu există aplicarea `MANUAL_TUNING` prin bariera 205 și activarea 110.
-- Nu există resetare cu confirmare și nici separarea setărilor de profil.
+**Ce este livrat:** suprafața reală „Setări” este montată din ecranul de start și meniul de pauză.
+Tabul „Joc și control” folosește contractul 081 (unități, cameră, șapte slidere de control, grafică,
+audio indisponibil), tabul „Taste” folosește contractul 080 pentru toate cele 15 acțiuni, iar tabul
+„Stil oraș” folosește contractul 230 pentru cele opt slidere. „Salvează” scrie numai `SettingsStore`
+009; „Aplică” publică o versiune `MANUAL_TUNING` prin bariera 205 și activarea 110, fără job 103,
+progres sau XP. Focusul, Tab, Escape, contrastul și lipsa listenerilor globali respectă 083.
 
-**Documentație:** [Interfață, cameră și control](08-interfata-camera-si-control.md) · [Reglaje HUD și cameră](27-reglaje-hud-si-camera.md) · [Setările jocului](game-settings.md) · [Remaparea comenzilor](key-remapping.md) · [Accesibilitatea interfeței](ui-accessibility.md) · [Starea implementării și lacunele](31-stare-implementare-si-lacune.md)
+- „Setări” este buton nativ în start, pauză și bara shell-ului; dialogul are trei taburi native.
+- Remaparea celor 15 acțiuni detectează conflictele, blochează salvarea și anulează captura cu Escape.
+- Cele șapte slidere de control și cele opt de stil se aplică și se salvează; profilul învățat și XP-ul
+  rămân neschimbate la setările de dispozitiv.
+- Unitățile km/h/mph și camera CHASE/FIRST_PERSON sunt preferințe de prezentare; HUD-ul central
+  afișează unitatea aleasă.
+- Resetarea cere confirmare, păstrează tastele și readuce valorile reale 009.
+
+**Documentație:** [Interfață, cameră și control](08-interfata-camera-si-control.md) · [Reglaje HUD și cameră](27-reglaje-hud-si-camera.md) · [Setările jocului](game-settings.md) · [Remaparea comenzilor](key-remapping.md) · [Accesibilitatea interfeței](ui-accessibility.md) · [Dovezile 279](Evidence/279-live-settings/README.md)
 
 **PBI:** [279](../PBI/README.md) · **Dependențe:** 260.
 
