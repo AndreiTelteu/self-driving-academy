@@ -8,14 +8,14 @@ Joc 3D pentru browser în care jucătorul conduce manual, iar taxiurile autonome
 
 | Zonă | Stare |
 | --- | --- |
-| Mers, intrare/ieșire, conducere de bază, AUTO/MANUAL, trafic AI, ora din zi, vizual V4 | **Jucabil** |
+| Mers, intrare/ieșire, conducere de bază, AUTO/MANUAL, setări live, camera first-person, trafic AI, ora din zi, vizual V4 | **Jucabil** |
 | LEARNING, profil, propagare în flotă | **Contract**, neconectat |
 | Flotă 20–30 taxiuri, curse, pasageri, ETA | **Contract/parțial**, neconectat |
 
 
 | Sesiuni Academie/Haos, checkpoint și reset | **Jucabil** (261); conținutul Haos rămâne la 262+ |
 | Companie: costuri, profit, cash, evoluție | **Propunere neconfirmată** în [Docs/32](Docs/32-companie-profit-si-evolutie.md) |
-| Persistență, setări, first-person, minimapă, audio, destructibile | **Contract**, neconectat |
+| Minimapă, audio, destructibile | **Contract**, neconectat |
 | Fizica Rapier și regulile de trafic live | **Lipsesc** din buildul jucabil |
 
 ## Dezvoltare locală

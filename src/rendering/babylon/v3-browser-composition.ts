@@ -7,10 +7,12 @@
  *
  * Modulul nu conține reguli de joc: orice decizie aparține contractelor chemate de compunere.
  */
+import type { AbstractMesh } from '@babylonjs/core/Meshes/abstractMesh';
 import type { Scene } from '@babylonjs/core/scene';
 import {
   V3_COMPOSITION_VERSION,
   createV3Composition,
+  type CompositionCameraMode,
   type CompositionFrame,
   type CompositionMode,
   type CompositionVehicleSeed,
@@ -67,6 +69,8 @@ export interface V3BrowserCompositionOptions {
   readonly enabled: () => boolean;
   /** PBI 254: the already decoded GLB models; the composition owns them afterwards. */
   readonly models?: GlbModelLibrary;
+  /** PBI 280: called only after a real C press changed the presentation preference. */
+  readonly onCameraModeChanged?: (mode: CompositionCameraMode) => void;
 }
 
 export interface CostSummary {
@@ -100,6 +104,10 @@ export interface V3BrowserComposition {
   requestModeAction(action: 'M' | 'L', expectedVehicleId?: string): boolean;
   /** PBI 271: explicit target mode, accepted on the next authoritative tick. */
   requestMode(mode: 'AUTO' | 'MANUAL' | 'LEARNING', vehicleId?: string): boolean;
+  /** PBI 280: presentation-only camera preference; no authority, tick or segment is written. */
+  cameraMode(): CompositionCameraMode;
+  setCameraMode(mode: CompositionCameraMode): CompositionCameraMode;
+  toggleCameraMode(): CompositionCameraMode;
   selectedVehicleId(): string | null;
   playerVehicleId(): string | null;
   reset(): void;
@@ -169,6 +177,7 @@ export function createV3BrowserComposition(
     layout: options.layout,
     start: options.spawn,
     control: options.settings.input.control,
+    cameraMode: options.settings.input.cameraMode,
     context: options.context,
     vehicles: options.vehicles,
     ...(options.traffic === undefined ? {} : { traffic: options.traffic }),
@@ -192,7 +201,8 @@ export function createV3BrowserComposition(
   // PBI 279: M/L are part of the same 15 remappable actions; the host updates both codes and the
   // driving map from the saved settings. Other composition keys (F/G/T) are not 009 actions.
   let modeCode = options.settings.input.bindings.manualMode,
-    learningCode = options.settings.input.bindings.learningMode;
+    learningCode = options.settings.input.bindings.learningMode,
+    cameraCode = options.settings.input.bindings.camera;
 
   const doc = options.surface.ownerDocument;
   const interact = (): void => {
@@ -220,6 +230,14 @@ export function createV3BrowserComposition(
       if (event.type === 'keydown' && !event.repeat) composition.requestModeAction('L');
       return;
     }
+    if (event.code === cameraCode) {
+      event.preventDefault();
+      if (event.type === 'keydown' && !event.repeat) {
+        const mode = composition.toggleCameraMode();
+        options.onCameraModeChanged?.(mode);
+      }
+      return;
+    }
     if (event.code === COMPOSITION_KEYS.time) {
       event.preventDefault();
       if (event.type === 'keydown' && !event.repeat) view.cycleTimeOfDay();
@@ -232,6 +250,36 @@ export function createV3BrowserComposition(
   doc.addEventListener('keydown', intentKeys);
   doc.addEventListener('keyup', intentKeys);
 
+  /**
+   * PBI 280: the driven shell is hidden only while FIRST_PERSON is the published view. The helper
+   * restores the exact previous `isVisible` values when the view, the vehicle or the world changes;
+   * it touches presentation meshes only and never a body, collider or authority.
+   */
+  const hiddenMeshes = new Map<AbstractMesh, boolean>();
+  let hiddenVehicleId: string | null = null;
+  const restoreHiddenMeshes = (): void => {
+    for (const [mesh, visible] of hiddenMeshes) if (!mesh.isDisposed()) mesh.isVisible = visible;
+    hiddenMeshes.clear();
+    hiddenVehicleId = null;
+  };
+  const applyFirstPersonVisibility = (vehicleId: string | null): void => {
+    if (vehicleId === null) {
+      restoreHiddenMeshes();
+      return;
+    }
+    const representation = view.representation(vehicleId);
+    if (representation === undefined) return;
+    const stale = [...hiddenMeshes.keys()].some((mesh) => mesh.isDisposed());
+    if (hiddenVehicleId === vehicleId && !stale) return;
+    restoreHiddenMeshes();
+    for (const mesh of representation.root.getChildMeshes(false)) {
+      if (mesh.isDisposed()) continue;
+      hiddenMeshes.set(mesh, mesh.isVisible);
+      mesh.isVisible = false;
+    }
+    hiddenVehicleId = vehicleId;
+  };
+
   let disposed = false;
   const present = (forceHud = false): void => {
     if (disposed || latest === null) return;
@@ -243,7 +291,14 @@ export function createV3BrowserComposition(
     lastPresentAt = now;
     const started = now;
     const characterFrame = composition.characterFrame();
+    // PBI 280: the driver-seat camera keeps the 017 near plane and the car up vector; the body is
+    // hidden after `apply` because that call may create the representation on its first frame.
+    view.camera.minZ = latest.camera.mode === 'FIRST_PERSON' ? 0.05 : 0.1;
+    view.camera.upVector.set(latest.camera.up.x, latest.camera.up.y, latest.camera.up.z);
     view.apply(latest, characterFrame);
+    applyFirstPersonVisibility(
+      latest.camera.mode === 'FIRST_PERSON' ? latest.camera.entityId : null,
+    );
     hud.update(latest, forceHud);
     if (presentSamples.length >= MAX_SAMPLES) presentSamples.shift();
     presentSamples.push(performance.now() - started);
@@ -273,7 +328,9 @@ export function createV3BrowserComposition(
       keyboard.remap(next.input.bindings);
       modeCode = next.input.bindings.manualMode;
       learningCode = next.input.bindings.learningMode;
+      cameraCode = next.input.bindings.camera;
       composition.setControlPreferences(next.input.control);
+      composition.setCameraMode(next.input.cameraMode);
       view.daylight.applyPreferences(next.quality);
     },
     vehicleMode(): CompositionMode | null {
@@ -296,6 +353,15 @@ export function createV3BrowserComposition(
     },
     requestMode(mode: 'AUTO' | 'MANUAL' | 'LEARNING', vehicleId?: string): boolean {
       return composition.requestMode(mode, vehicleId);
+    },
+    cameraMode(): CompositionCameraMode {
+      return composition.cameraMode();
+    },
+    setCameraMode(mode: CompositionCameraMode): CompositionCameraMode {
+      return composition.setCameraMode(mode);
+    },
+    toggleCameraMode(): CompositionCameraMode {
+      return composition.toggleCameraMode();
     },
     selectedVehicleId(): string | null {
       return composition.selectedVehicleId();
@@ -382,8 +448,11 @@ export function createV3BrowserComposition(
         }),
         camera: Object.freeze({
           entityId: frame.camera.entityId,
+          mode: frame.camera.mode,
           positionM: frame.camera.positionM,
           lookAtM: frame.camera.lookAtM,
+          anchorM: frame.camera.anchorM,
+          up: frame.camera.up,
           distanceM: frame.camera.distanceM,
           fovRadians: frame.camera.fovRadians,
           transitioning: frame.camera.transitioning,
@@ -441,6 +510,7 @@ export function createV3BrowserComposition(
       doc.removeEventListener('keydown', intentKeys);
       doc.removeEventListener('keyup', intentKeys);
       keyboard.dispose();
+      restoreHiddenMeshes();
       composition.dispose();
       hud.dispose();
       view.dispose();

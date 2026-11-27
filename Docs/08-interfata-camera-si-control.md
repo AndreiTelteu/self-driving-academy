@@ -129,3 +129,17 @@ slidere de control ?i cele opt de stil se salveaza local; �Aplica� din stil 
 publica o versiune `MANUAL_TUNING` prin bariera 205 ?i activarea 110. Setarile de dispozitiv nu scriu
 profilul �nva?at, XP-ul sau ledgerul. Focusul, Tab/Shift+Tab, contrastul ?i lipsa listenerilor globali
 urmeaza 083. Dovezile sunt �n [Evidence/279-live-settings](Evidence/279-live-settings/README.md).
+
+## Camera first-person live (PBI 280)
+
+`C` (bindingul 009 `camera`, remapabil) comută numai prezentarea dintre camera de urmărire 194 și
+camera 017 din scaunul șoferului. FIRST_PERSON se publică exclusiv cât timp autoritatea este pe
+mașina condusă; o selecție doar de cameră rămâne CHASE până la preluarea explicită. Ancorele reale
+sunt derivate din geometria 145 (sedan `(-0.343, 1.460, 0.058)` m, compact
+`(-0.317, 1.477, -0.014)` m), FOV-ul este exact `ControlPreferences.fov`, iar caroseria mașinii
+conduse este ascunsă în first-person cu `minZ` 0,05 m. Intrarea, ieșirea, reintrarea și schimbarea
+vehiculului păstrează camera coerentă; G este acum o graniță 069 reală (intrarea deschide segmentul
+MANUAL, ieșirea îl închide cu `RETURN_TO_AUTO`). Comutarea nu schimbă autoritatea, poziția, viteza
+sau segmentul. Preferința se salvează în 009 și într-o singură cheie `localStorage`
+(`009-camera-mode-v1`), deci reload-ul pornește în camera aleasă fără o nouă apăsare. Dovezile și
+numerele sunt în [Evidence/280-first-person-camera](Evidence/280-first-person-camera/README.md).

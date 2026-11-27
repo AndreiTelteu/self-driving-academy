@@ -23,7 +23,7 @@ export interface CharacterHud {
 }
 
 const CONTROLS_HINT =
-  'W/S accelerează/frână · A/D virează · F alergare · G intră/iese · M AUTO/MANUAL · T ora din zi · Space frână de mână';
+  'W/S accelerează/frână · A/D virează · F alergare · G intră/iese · C cameră · M AUTO/MANUAL · T ora din zi · Space frână de mână';
 
 export function createCharacterHud(
   root: HTMLElement,
@@ -78,7 +78,7 @@ export function createCharacterHud(
     update(frame: CompositionFrame, force = false): void {
       if (disposed) return;
       const hud = frame.hud;
-      const key = `${hud.controlledKind}:${hud.controlledEntityId}:${hud.mode}`;
+      const key = `${hud.controlledKind}:${hud.controlledEntityId}:${hud.mode}:${hud.cameraMode}`;
       if (!force && key === lastKey && frame.tick - lastTick < interval) return;
       lastTick = frame.tick;
       lastKey = key;
@@ -86,16 +86,19 @@ export function createCharacterHud(
       mode.textContent = hud.mode;
       mode.style.background = hud.mode === 'MANUAL' ? '#1f6f8b' : '#3f7a3f';
       line.textContent = `${hud.clipId ?? 'vehicul'} · ${hud.speedMps.toFixed(2)} m/s · tick ${frame.tick}`;
+      const cameraLabel =
+        hud.cameraMode === 'FIRST_PERSON' ? 'first-person · poziția șoferului' : 'din spate';
       detail.textContent =
         hud.cameraDivergent === true
-          ? `cameră pe ${hud.cameraEntityId} · tranziție ${hud.transitionRemainingTicks}`
-          : `cameră pe ${hud.cameraEntityId}`;
+          ? `cameră ${cameraLabel} pe ${hud.cameraEntityId} · tranziție ${hud.transitionRemainingTicks}`
+          : `cameră ${cameraLabel} pe ${hud.cameraEntityId}`;
       panel.dataset.state = hud.controlledKind;
       panel.dataset.controlled = hud.controlledEntityId;
       panel.dataset.mode = hud.mode;
       panel.dataset.clip = hud.clipId ?? 'vehicle';
       panel.dataset.tick = String(frame.tick);
       panel.dataset.camera = hud.cameraEntityId;
+      panel.dataset.cameraMode = hud.cameraMode;
     },
     dispose(): void {
       if (disposed) return;

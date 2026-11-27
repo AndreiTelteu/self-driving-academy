@@ -58,9 +58,11 @@ import {
 } from '../input';
 import {
   VEHICLE_COLLISION_HALF_EXTENTS_M,
+  VehicleCameraController,
   createCityDecorPlan,
   VEHICLE_RIDE_HEIGHT_M,
   vehicleGeometrySpec,
+  type CameraTarget,
 } from '../rendering';
 import {
   createVehicleCollisionWorld,
@@ -103,6 +105,14 @@ export const V3_COMPOSITION_POLICY = Object.freeze({
 
 export type CompositionKind = 'CHARACTER' | 'VEHICLE';
 export type CompositionMode = ControlMode;
+
+/** PBI 280: the two camera views; the preference is 009 state, not a simulation mode. */
+export type CompositionCameraMode = 'CHASE' | 'FIRST_PERSON';
+
+/** PBI 280: the published camera keeps the 194 shape and adds the active view. */
+export interface CompositionCameraFrame extends CharacterCameraFrame {
+  readonly mode: CompositionCameraMode;
+}
 
 /** PBI 271: close vocabulary subset used by live mode boundaries (069). */
 export type CompositionModeCloseReason = 'RETURN_TO_AUTO' | 'MODE_CHANGE' | 'VEHICLE_SWITCH' | null;
@@ -165,6 +175,8 @@ export interface CompositionOptions {
   readonly context: ContractContext;
   readonly vehicles: readonly CompositionVehicleSeed[];
   readonly orbit?: Partial<CharacterCameraOrbit>;
+  /** PBI 280: saved 009 camera preference; FIRST_PERSON applies only while the player drives. */
+  readonly cameraMode?: CompositionCameraMode;
   /**
    * PBI 256: traficul 058 care devine parte vizibilă a compunerii. Compunerea îl pașește înaintea
    * arbitrajului de input și publică actorii în `frame.vehicles`, dar NU îl deține: caller-ul îl
@@ -199,6 +211,8 @@ export interface CompositionVehicle {
   readonly rideId: string | null;
   readonly rideProgressM: number;
   readonly appliedProfileVersion: string;
+  /** PBI 280: calibrated driver eye in the authoritative ground frame. */
+  readonly driverEyeM?: CharacterPoint;
   readonly maneuverState: VehicleEntryVehicle['state']['maneuverState'];
   /** PBI 058 blockage, carried into the live fleet list and never inferred from speed. */
   readonly blocked: boolean;
@@ -244,6 +258,7 @@ export interface CompositionHud {
   readonly controlledEntityId: string;
   readonly controlledLabel: string;
   readonly mode: CompositionMode;
+  readonly cameraMode: CompositionCameraMode;
   readonly cameraEntityId: string;
   readonly cameraDivergent: boolean;
   /** Clipul personajului; null când entitatea controlată este o mașină. */
@@ -281,7 +296,7 @@ export interface CompositionFrame {
   readonly authority: InputAuthority;
   readonly character: CompositionCharacterFrame;
   readonly vehicles: readonly CompositionVehicle[];
-  readonly camera: CharacterCameraFrame;
+  readonly camera: CompositionCameraFrame;
   readonly hud: CompositionHud;
   readonly segments: WalkingSegmentsStats;
   /** PBI 263: camera-only target and the single car in the PLAYER seat (MANUAL/LEARNING). */
@@ -349,6 +364,11 @@ export interface V3Composition {
   setVehicleMode(mode: 'AUTO' | 'MANUAL'): CompositionMode | null;
   /** PBI 279: applies saved 009 control preferences to the camera without recreating the world. */
   setControlPreferences(control: ControlPreferences): void;
+  /** PBI 280: the saved camera preference; FIRST_PERSON is published only while driving. */
+  cameraMode(): CompositionCameraMode;
+  /** PBI 280: presentation-only switch; it schedules no tick and writes no authority. */
+  setCameraMode(mode: CompositionCameraMode): CompositionCameraMode;
+  toggleCameraMode(): CompositionCameraMode;
   toggleVehicleMode(): CompositionMode | null;
   /** PBI 271: the real M/L action folded from the selected/held car, accepted on the next tick. */
   requestModeAction(action: 'M' | 'L', expectedVehicleId?: string): boolean;
@@ -383,6 +403,26 @@ function vehicleAnchorHeightM(classId: 'sedan' | 'compact'): number {
   }
   // The geometry spec is chassis-local; the presentation root sits 0.8 m above the road.
   return top + VEHICLE_RIDE_HEIGHT_M;
+}
+
+/**
+ * PBI 280 — the real driver eye, calibrated from the delivered 145 cabin box.
+ *
+ * The cabin is the tallest BODY volume above the hood; the eye sits just above its centre, on the
+ * left seat (negative X), slightly ahead of the cabin centre. The result is
+ * in the authoritative ground frame (the frame the 017 vehicle camera consumes), so the same
+ * values work for the parked seeds and for every live 058 actor without a second vehicle model.
+ */
+export function vehicleDriverEyeM(classId: 'sedan' | 'compact'): CharacterPoint {
+  const cabin = vehicleGeometrySpec(classId)
+    .parts.filter((part) => part.group === 'BODY' && part.size[1] >= 0.3 && part.center[1] > 0.3)
+    .sort((left, right) => right.size[1] - left.size[1])[0];
+  if (!cabin) throw new Error(`Vehicle class ${classId} has no cabin volume`);
+  return point(
+    -cabin.size[0] * 0.22,
+    VEHICLE_RIDE_HEIGHT_M + cabin.center[1] + cabin.size[1] * 0.28,
+    cabin.center[2] + cabin.size[2] * 0.12,
+  );
 }
 
 function entryVehicle(vehicle: CompositionVehicle, tick: number): VehicleEntryVehicle {
@@ -443,6 +483,7 @@ function vehicleFromSeed(seed: CompositionVehicleSeed): CompositionVehicle {
     rideId: null,
     rideProgressM: 0,
     appliedProfileVersion: 'v3-composition-1',
+    driverEyeM: vehicleDriverEyeM(seed.classId),
     maneuverState: 'IDLE',
     blocked: false,
   });
@@ -484,6 +525,7 @@ function trafficActorVehicle(actor: CivilActorSnapshot, layout: CityLayout): Com
     rideId: null,
     rideProgressM: 0,
     appliedProfileVersion: actor.styleVersionId,
+    driverEyeM: vehicleDriverEyeM(actor.classId),
     maneuverState: 'IDLE',
     blocked: actor.blocked,
   });
@@ -588,6 +630,19 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
       ...options.orbit,
     },
   });
+  let cameraModePreference: CompositionCameraMode = options.cameraMode ?? 'CHASE';
+  if (cameraModePreference !== 'CHASE' && cameraModePreference !== 'FIRST_PERSON')
+    throw new Error(`Unknown camera mode: ${String(cameraModePreference)}`);
+  /**
+   * PBI 280: the existing 017 controller owns the driver-seat pose. 194 still computes the chase
+   * pose every tick, so C back to CHASE is coherent and no second camera state is introduced.
+   */
+  const driverCamera = new VehicleCameraController({
+    mode: 'FIRST_PERSON',
+    fovDegrees: camera.control.fovDegrees,
+    motion: camera.control.cameraMotion,
+    distanceM: 4.5,
+  });
   const segments = createWalkingSegments({
     ownerId: '236-v3-composition',
     characterId: entityId,
@@ -607,7 +662,7 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
   let lastResult: AuthorityTickResult | null = null;
   let lastCommand: AuthorityCommand['consumer'] | null = null;
   let lastSegmentAction: CompositionFrame['lastSegmentAction'] = null;
-  let lastCamera: CharacterCameraFrame | null = null;
+  let lastCamera: CompositionCameraFrame | null = null;
   let frame: CompositionFrame | null = null;
   let takeover: VehicleEntryVehicle | null = null;
   let previousEntry: Readonly<{ tick: number; vehicleId: string }> | null = null;
@@ -651,6 +706,28 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
 
   const vehicleById = (id: string): CompositionVehicle | undefined =>
     vehicles.find((vehicle) => vehicle.vehicleId === id);
+
+  /** PBI 280: the exact 017 target; the eye and heading are read, never written back. */
+  const cameraTargetOf = (vehicle: CompositionVehicle): CameraTarget =>
+    Object.freeze({
+      entityId: vehicle.vehicleId,
+      incarnation: `${vehicle.vehicleId}:${vehicle.classId}:${vehicle.driverKind}`,
+      transform: Object.freeze({
+        positionM: Object.freeze({
+          x: vehicle.positionM.x,
+          y: vehicle.positionM.y,
+          z: vehicle.positionM.z,
+        }),
+        rotationQuaternion: Object.freeze({
+          x: 0,
+          y: Math.sin(vehicle.yawRad / 2),
+          z: 0,
+          w: Math.cos(vehicle.yawRad / 2),
+        }),
+      }),
+      speedMps: Math.abs(vehicle.speedMps),
+      driverEyeM: vehicle.driverEyeM ?? vehicleDriverEyeM(vehicle.classId),
+    });
 
   const setVehicle = (next: CompositionVehicle): void => {
     vehicles = Object.freeze(
@@ -1453,6 +1530,26 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
         nextMode = 'AUTO';
         reason = 'RETURN_TO_AUTO';
       }
+    } else if (pendingEntry !== null) {
+      // PBI 280: G entry is a real authority boundary (CHARACTER → VEHICLE MANUAL). The 069 plan
+      // must describe it before the tick, otherwise an active segment would see a phase mismatch.
+      const target =
+        pendingEntry.vehicleId === null
+          ? (nearestVehicle() ?? null)
+          : (vehicleById(pendingEntry.vehicleId) ?? null);
+      if (target !== null) {
+        nextVehicleId = target.vehicleId;
+        nextMode = 'MANUAL';
+        vehicle = target;
+        reason = current === null ? null : 'VEHICLE_SWITCH';
+      }
+    } else if (pendingExit) {
+      // PBI 280: G exit returns the seat to AUTO and closes the same 069 segment.
+      if (current !== null) {
+        nextVehicleId = null;
+        nextMode = 'AUTO';
+        reason = 'RETURN_TO_AUTO';
+      }
     }
 
     return Object.freeze({
@@ -1658,6 +1755,7 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
           ? `Personaj (${entityId})`
           : `${controlledVehicle?.driverKind === 'TAXI' ? 'Taxi' : 'Vehicul'} (${authority.vehicleId})`,
       mode,
+      cameraMode: lastCamera.mode,
       cameraEntityId: lastCamera.entityId,
       cameraDivergent: lastCamera.entityId !== controlled,
       clipId: authority.consumer === 'CHARACTER' ? walker.state.clipId : null,
@@ -1714,7 +1812,12 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
     const characterBefore = walker.state.positionM;
     let transitioned = false;
     const modePlan = resolveModePlan(atTick);
-    const modeIntent = pendingMode !== null || pendingTakeover !== null || pendingRelease;
+    const modeIntent =
+      pendingMode !== null ||
+      pendingTakeover !== null ||
+      pendingRelease ||
+      pendingEntry !== null ||
+      pendingExit;
     let modeAccepted = !modeIntent;
     let modeBoundaryPrepared = false;
     const modeOwner = modeSegments;
@@ -1836,7 +1939,7 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
             vehicle.topM > anchorY + 0.01,
         )
         .map(vehicleCameraObstacle);
-      lastCamera = camera.step({
+      const chaseCamera = camera.step({
         tick: atTick,
         authorityEntityId: followed,
         targets,
@@ -1849,16 +1952,16 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
       // orbită cu 90° la 0,1 s până găsește un cadru liber; altfel ieșirea pe flancul de la bordură
       // ar lăsa camera lipită de propria mașină.
       if (
-        lastCamera.obstructedBy !== null &&
-        lastCamera.distanceM < CHARACTER_CAMERA_POLICY.minDistanceM &&
+        chaseCamera.obstructedBy !== null &&
+        chaseCamera.distanceM < CHARACTER_CAMERA_POLICY.minDistanceM &&
         atTick - lastOrbitAdjustTick >= 6
       ) {
         orbitYawRad = normalizeAngle(orbitYawRad + Math.PI / 2);
         lastOrbitAdjustTick = atTick;
         clearOrbitTicks = 0;
       } else if (
-        lastCamera.obstructedBy === null &&
-        lastCamera.distanceM >= CHARACTER_CAMERA_POLICY.minDistanceM
+        chaseCamera.obstructedBy === null &&
+        chaseCamera.distanceM >= CHARACTER_CAMERA_POLICY.minDistanceM
       ) {
         // PBI 257: o orbită rotită pentru a ieși dintr-un obstacol nu este permanentă. După 0,5 s
         // fără obstrucție, camera revine în spatele entității; altfel rămânea lateral după depășire.
@@ -1870,6 +1973,58 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
       } else {
         clearOrbitTicks = 0;
       }
+      /**
+       * PBI 280: FIRST_PERSON is a view of the driven seat, never of an observed car. The 017
+       * controller publishes the exact anchor; when the preference is off (or the selected car is
+       * different) the already computed 194 chase frame is published unchanged.
+       */
+      const firstPersonActive =
+        cameraModePreference === 'FIRST_PERSON' &&
+        authority.consumer === 'VEHICLE' &&
+        followedVehicle !== undefined &&
+        followed === authority.vehicleId;
+      let publishedCamera: CompositionCameraFrame = Object.freeze({
+        ...chaseCamera,
+        mode: 'CHASE' as const,
+      });
+      if (firstPersonActive && followedVehicle !== undefined) {
+        if (driverCamera.selectedEntityId !== followedVehicle.vehicleId)
+          driverCamera.select(followedVehicle.vehicleId);
+        const pose = driverCamera.update(
+          cameraTargetOf(followedVehicle),
+          V3_COMPOSITION_POLICY.dtSeconds,
+        );
+        if (pose !== null) {
+          publishedCamera = Object.freeze({
+            tick: atTick,
+            entityId: followedVehicle.vehicleId,
+            targetKind: 'VEHICLE' as const,
+            anchorM: pose.positionM,
+            positionM: pose.positionM,
+            lookAtM: pose.lookAtM,
+            up: pose.up,
+            fovRadians: pose.fovRadians,
+            orbit: Object.freeze({
+              yawRad: 0,
+              pitchRad: 0,
+              distanceM: 0,
+              invertYaw: false,
+              invertPitch: false,
+            }),
+            yawRad: followedVehicle.yawRad,
+            pitchRad: 0,
+            distanceM: 0,
+            requestedDistanceM: 0,
+            obstructedBy: null,
+            transitioning: false,
+            transitionRemainingTicks: 0,
+            mode: 'FIRST_PERSON' as const,
+          });
+        }
+      } else {
+        driverCamera.select(null);
+      }
+      lastCamera = publishedCamera;
 
       if (!transitioned) {
         if (authority.consumer === 'CHARACTER') {
@@ -2048,6 +2203,31 @@ export function createV3Composition(options: CompositionOptions): V3Composition 
     },
     setControlPreferences(control: ControlPreferences): void {
       camera.setControlPreferences(control);
+      // The 194 parser has already validated the record; the 017 controller receives the same
+      // canvas values and stays an independent, presentation-only pose owner.
+      driverCamera.setPreferences({
+        mode: 'FIRST_PERSON',
+        fovDegrees: camera.control.fovDegrees,
+        motion: camera.control.cameraMotion,
+        distanceM: 4.5,
+      });
+    },
+    cameraMode(): CompositionCameraMode {
+      return cameraModePreference;
+    },
+    setCameraMode(mode: CompositionCameraMode): CompositionCameraMode {
+      if (mode !== 'CHASE' && mode !== 'FIRST_PERSON')
+        throw new Error(`Unknown camera mode: ${String(mode)}`);
+      cameraModePreference = mode;
+      if (mode === 'CHASE') driverCamera.select(null);
+      return cameraModePreference;
+    },
+    toggleCameraMode(): CompositionCameraMode {
+      const mode: CompositionCameraMode =
+        cameraModePreference === 'CHASE' ? 'FIRST_PERSON' : 'CHASE';
+      cameraModePreference = mode;
+      if (mode === 'CHASE') driverCamera.select(null);
+      return cameraModePreference;
     },
     toggleVehicleMode(): CompositionMode | null {
       return toggleControlledVehicleMode();

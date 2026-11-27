@@ -119,3 +119,14 @@ din stil publica o versiune `MANUAL_TUNING` prin bariera 205 ?i activarea 110. U
 schimba doar prezentarea, iar resetarea cere confirmare ?i pastreaza bindingurile. Focusul, Tab,
 Escape ?i contrastul urmeaza 083. Dovezile sunt �n
 [Evidence/279-live-settings](Evidence/279-live-settings/README.md).
+
+## Camera first-person live (PBI 280)
+
+`C` comută în joc între camera din spate 194 și camera 017 din poziția șoferului numai cât timp
+jucătorul conduce; ieșirea revine la urmărirea personajului, iar reintrarea și schimbarea mașinii
+reiau FIRST_PERSON. Ancora este calibrată din geometria sedan/compact, FOV-ul sliderului 009 este
+aplicat exact la repaus (60/75/100° măsurate), iar la viteză rămâne extensia existentă a contractului
+017. Caroseria mașinii conduse este ascunsă (15 meshuri → 0) și `minZ` coboară la 0,05 m; V3 nu are
+încă interior modelat. Comutarea nu atinge autoritatea, poziția, viteza sau segmentul 069, iar
+preferința se salvează în 009 și supraviețuiește reload-ului. Dovezile deterministe și cele două
+backenduri reale sunt în [Evidence/280-first-person-camera](Evidence/280-first-person-camera/README.md).

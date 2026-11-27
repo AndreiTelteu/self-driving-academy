@@ -31,7 +31,7 @@ Buildul curent pornește din `src/main.ts` și oferă:
 - campania live 275 peste trackerul 116, tutorialul 117 și ledgerul 125: etapa 1 pornește automat, obiectivele se calculează din evenimente 007 reale, tutorialul are cinci pași separați de learning, iar panoul `Misiuni` arată progresul, fereastra, bugetul, motivul de eșec și reluarea;
 - misiunile zilnice și XP-ul 276 peste 211/212/213/125: exact trei obiective pe ziua reală, cel puțin unul MANUAL fără learning, XP idempotent din daily, campanie și timp activ, nivel monoton și panoul `Progres` cu sold, istoric, fereastră și motivul expirării.
 
-Nu sunt montate: first-person (280), minimapa (281), sunet, decorul destructibil și provocările Haos, fizica Rapier și regulile de trafic. Cursele live, pickup/dropoff, pasagerul, ETA și HUD-ul de cursă sunt montate prin 265; AUTO/MANUAL/LEARNING și segmentele 069 sunt montate prin 271; persistența prin 278, iar setările, remaparea și sliderele prin 279.
+Nu sunt montate: minimapa (281), sunet, decorul destructibil și provocările Haos, fizica Rapier și regulile de trafic. Cursele live, pickup/dropoff, pasagerul, ETA și HUD-ul de cursă sunt montate prin 265; AUTO/MANUAL/LEARNING și segmentele 069 sunt montate prin 271; persistența prin 278, iar setările, remaparea și sliderele prin 279.
 
 ## Matricea lacunelor
 
@@ -483,14 +483,14 @@ progres sau XP. Focusul, Tab, Escape, contrastul și lipsa listenerilor globali 
 
 ### 280 — Camera first-person din poziția șoferului
 
-**Ce lipsește:** Există doar camera de urmărire; `C` și camera first-person din scaunul șoferului nu sunt montate.
+**Ce lipsește:** Randarea first-person este montată și verificată local pe WEBGL2 și WEBGPU; mouse look/pointer lock și un interior complet rămân în afara acestui PBI, iar mutarea în Done aparține orchestratorului.
 
-- Nu există binding `C` în compunerea live.
-- Camera V3 este third-person/character; nu există ancoră în scaunul șoferului.
-- Nu există tranziție între camere la intrare/ieșire sau schimbarea vehiculului.
-- Nu există FOV/offset din setări aplicate camerei first-person.
-- Nu există ocluzie și clipping pentru caroserie în first-person.
-- Nu există probă în browser pe ambele backenduri.
+- `C` folosește bindingul 009 `camera` și comută CHASE ↔ FIRST_PERSON fără autoritate, poziție, viteză sau segment.
+- Ancoră calibrată în scaunul șoferului pentru sedan și compact; camera 017 este activă doar cât timp jucătorul conduce.
+- Intrarea, ieșirea, reintrarea și schimbarea vehiculului păstrează camera coerentă; G este graniță 069 reală.
+- FOV-ul 009 este aplicat exact la repaus, iar preferința supraviețuiește reload-ului prin cheia `009-camera-mode-v1`.
+- Caroseria mașinii conduse este ascunsă în first-person, cu `minZ` 0,05 m; nu există interior modelat în V3.
+- Probele reale acoperă ambele camere pe WEBGL2 și WEBGPU, cu capturi înainte/după și verificarea FOV.
 
 **Documentație:** [Interfață, cameră și control](08-interfata-camera-si-control.md) · [Reglaje HUD și cameră](27-reglaje-hud-si-camera.md) · [Camera vehiculului](vehicle-camera.md) · [Input de tastatură](keyboard-input.md) · [Starea implementării și lacunele](31-stare-implementare-si-lacune.md)
 

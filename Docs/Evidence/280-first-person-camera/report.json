@@ -1,0 +1,424 @@
+{
+  "version": "280-first-person-camera-report-v1",
+  "generatedAt": "2026-11-27T23:27:18.274Z",
+  "generatedBy": "npm run camera:first-person",
+  "contract": "280-first-person-camera-v1",
+  "settings": {
+    "defaultCameraMode": "CHASE",
+    "controlVersion": 0,
+    "controlMappingVersion": "025-keyboard-v1",
+    "fovDegrees": 60,
+    "cameraMotion": 50
+  },
+  "summary": {
+    "scenarios": 5,
+    "passed": 5,
+    "allPassed": true,
+    "digest": "7a47aa66c92c8728982dca887fcca8643c762b8bb80c2e1d83f1ec944a200e4c",
+    "deterministic": true
+  },
+  "anchor": {
+    "sedan": {
+      "x": -0.3432,
+      "y": 1.46,
+      "z": 0.057599999999999985
+    },
+    "compact": {
+      "x": -0.31679999999999997,
+      "y": 1.4768000000000001,
+      "z": -0.013600000000000001
+    }
+  },
+  "scenarios": [
+    {
+      "id": "switch-and-back",
+      "label": "C: CHASE → FIRST_PERSON → CHASE",
+      "pass": true,
+      "firstPerson": {
+        "mode": "FIRST_PERSON",
+        "positionM": {
+          "x": 9.857600000000012,
+          "y": 1.46,
+          "z": 2.3932
+        },
+        "lookAtM": {
+          "x": 10.857600000000012,
+          "y": 1.46,
+          "z": 2.3932
+        },
+        "distanceM": 0,
+        "fovDegrees": 59.99999999999999
+      },
+      "chase": {
+        "mode": "CHASE",
+        "positionM": {
+          "x": 6.419259607988272,
+          "y": 2.5489736537435963,
+          "z": 3.054869684499314
+        },
+        "distanceM": 3.644678484761076
+      },
+      "authority": {
+        "consumer": "VEHICLE",
+        "vehicleId": "taxi-01"
+      },
+      "speedMps": 0,
+      "positionM": {
+        "x": 9.800000000000011,
+        "y": 0,
+        "z": 2.0500000000000003
+      },
+      "segment": {
+        "segmentId": "271-live-three-modes:segment:1",
+        "vehicleId": "taxi-01",
+        "mode": "MANUAL",
+        "learningEligible": false,
+        "startTick": 2,
+        "endTick": null,
+        "completeness": "OPEN",
+        "closeReason": null,
+        "samples": 0,
+        "playerId": "player:280",
+        "profileId": "profile:280",
+        "baseVersionId": "profile:280@1",
+        "learningEpoch": 0,
+        "context": {
+          "vehicleId": "taxi-01",
+          "classId": "sedan",
+          "driverKind": "TAXI",
+          "positionM": {
+            "x": 9.800000000000011,
+            "y": 0,
+            "z": 2.0500000000000003
+          },
+          "yawRad": 1.5707963267948966,
+          "speedMps": 0,
+          "laneId": null,
+          "routeLaneIds": [],
+          "rideId": null,
+          "appliedProfileVersion": "v3-composition-1"
+        }
+      },
+      "untouchedByToggle": true,
+      "segmentUnchangedByToggle": true,
+      "segmentUnchangedOnNextTick": true
+    },
+    {
+      "id": "fov",
+      "label": "ControlPreferences.fov → first-person FOV",
+      "pass": true,
+      "rows": [
+        {
+          "settingDegrees": 60,
+          "measuredDegrees": 59.99999999999999,
+          "mode": "FIRST_PERSON"
+        },
+        {
+          "settingDegrees": 75,
+          "measuredDegrees": 75,
+          "mode": "FIRST_PERSON"
+        },
+        {
+          "settingDegrees": 100,
+          "measuredDegrees": 100,
+          "mode": "FIRST_PERSON"
+        }
+      ],
+      "note": "At rest; the existing 017 speed extension is not part of the saved base FOV."
+    },
+    {
+      "id": "exit-reenter-switch",
+      "label": "exit → walk → re-enter → switch taxi/civil",
+      "pass": true,
+      "walked": {
+        "authority": "CHARACTER",
+        "mode": "CHASE",
+        "cameraEntityId": "player-character",
+        "characterEntityId": "player-character",
+        "selectedVehicleId": null,
+        "activeSegment": null,
+        "closedSegment": {
+          "segmentId": "271-live-three-modes:segment:1",
+          "vehicleId": "taxi-01",
+          "mode": "MANUAL",
+          "learningEligible": false,
+          "startTick": 2,
+          "endTick": 4,
+          "completeness": "CLOSED",
+          "closeReason": "RETURN_TO_AUTO",
+          "samples": 0,
+          "playerId": "player:280",
+          "profileId": "profile:280",
+          "baseVersionId": "profile:280@1",
+          "learningEpoch": 0,
+          "context": {
+            "vehicleId": "taxi-01",
+            "classId": "sedan",
+            "driverKind": "TAXI",
+            "positionM": {
+              "x": 9.800000000000011,
+              "y": 0,
+              "z": 2.0500000000000003
+            },
+            "yawRad": 1.5707963267948966,
+            "speedMps": 0,
+            "laneId": null,
+            "routeLaneIds": [],
+            "rideId": null,
+            "appliedProfileVersion": "v3-composition-1"
+          }
+        }
+      },
+      "taxiEntry": {
+        "authority": "VEHICLE",
+        "mode": "FIRST_PERSON",
+        "cameraEntityId": "taxi-01",
+        "activeSegment": {
+          "segmentId": "271-live-three-modes:segment:2",
+          "vehicleId": "taxi-01",
+          "mode": "MANUAL",
+          "learningEligible": false,
+          "startTick": 5,
+          "endTick": null,
+          "completeness": "OPEN",
+          "closeReason": null,
+          "samples": 0,
+          "playerId": "player:280",
+          "profileId": "profile:280",
+          "baseVersionId": "profile:280@1",
+          "learningEpoch": 0,
+          "context": {
+            "vehicleId": "taxi-01",
+            "classId": "sedan",
+            "driverKind": "TAXI",
+            "positionM": {
+              "x": 9.800000000000011,
+              "y": 0,
+              "z": 2.0500000000000003
+            },
+            "yawRad": 1.5707963267948966,
+            "speedMps": 0,
+            "laneId": null,
+            "routeLaneIds": [],
+            "rideId": null,
+            "appliedProfileVersion": "v3-composition-1"
+          }
+        }
+      },
+      "switched": {
+        "authority": {
+          "consumer": "VEHICLE",
+          "vehicleId": "civil-01"
+        },
+        "playerVehicleId": "civil-01",
+        "camera": {
+          "entityId": "civil-01",
+          "mode": "FIRST_PERSON",
+          "positionM": {
+            "x": 39.786400000000015,
+            "y": 1.4768000000000001,
+            "z": 2.3668000000000005
+          }
+        },
+        "activeSegment": {
+          "segmentId": "271-live-three-modes:segment:3",
+          "vehicleId": "civil-01",
+          "mode": "MANUAL",
+          "learningEligible": false,
+          "startTick": 6,
+          "endTick": null,
+          "completeness": "OPEN",
+          "closeReason": null,
+          "samples": 0,
+          "playerId": "player:280",
+          "profileId": "profile:280",
+          "baseVersionId": "profile:280@1",
+          "learningEpoch": 0,
+          "context": {
+            "vehicleId": "civil-01",
+            "classId": "compact",
+            "driverKind": "CIVILIAN",
+            "positionM": {
+              "x": 39.80000000000001,
+              "y": 0,
+              "z": 2.0500000000000003
+            },
+            "yawRad": 1.5707963267948966,
+            "speedMps": 0,
+            "laneId": null,
+            "routeLaneIds": [],
+            "rideId": null,
+            "appliedProfileVersion": "v3-composition-1"
+          }
+        },
+        "closedSegment": {
+          "segmentId": "271-live-three-modes:segment:2",
+          "vehicleId": "taxi-01",
+          "mode": "MANUAL",
+          "learningEligible": false,
+          "startTick": 5,
+          "endTick": 6,
+          "completeness": "CLOSED",
+          "closeReason": "VEHICLE_SWITCH",
+          "samples": 0,
+          "playerId": "player:280",
+          "profileId": "profile:280",
+          "baseVersionId": "profile:280@1",
+          "learningEpoch": 0,
+          "context": {
+            "vehicleId": "taxi-01",
+            "classId": "sedan",
+            "driverKind": "TAXI",
+            "positionM": {
+              "x": 9.800000000000011,
+              "y": 0,
+              "z": 2.0500000000000003
+            },
+            "yawRad": 1.5707963267948966,
+            "speedMps": 0,
+            "laneId": null,
+            "routeLaneIds": [],
+            "rideId": null,
+            "appliedProfileVersion": "v3-composition-1"
+          }
+        },
+        "anchor": {
+          "vehicleId": "civil-01",
+          "classId": "compact",
+          "expectedM": {
+            "x": 39.786400000000015,
+            "y": 1.4768000000000001,
+            "z": 2.3668000000000005
+          },
+          "actualM": {
+            "x": 39.786400000000015,
+            "y": 1.4768000000000001,
+            "z": 2.3668000000000005
+          },
+          "errorM": 0,
+          "lookDotForward": 1
+        }
+      }
+    },
+    {
+      "id": "anchor-taxi",
+      "label": "sedan driver anchor",
+      "pass": true,
+      "anchor": {
+        "vehicleId": "taxi-01",
+        "classId": "sedan",
+        "expectedM": {
+          "x": 9.857600000000012,
+          "y": 1.46,
+          "z": 2.3932
+        },
+        "actualM": {
+          "x": 9.857600000000012,
+          "y": 1.46,
+          "z": 2.3932
+        },
+        "errorM": 0,
+        "lookDotForward": 1
+      }
+    },
+    {
+      "id": "anchor-civil",
+      "label": "compact driver anchor",
+      "pass": true,
+      "anchor": {
+        "vehicleId": "civil-01",
+        "classId": "compact",
+        "expectedM": {
+          "x": 39.786400000000015,
+          "y": 1.4768000000000001,
+          "z": 2.3668000000000005
+        },
+        "actualM": {
+          "x": 39.786400000000015,
+          "y": 1.4768000000000001,
+          "z": 2.3668000000000005
+        },
+        "errorM": 0,
+        "lookDotForward": 1
+      }
+    }
+  ],
+  "cost": {
+    "method": "Node v24.19.0, one V3 composition with one driven taxi, no ambient traffic; 120 warmup + 600 measured fixed ticks × 3 alternating repetitions.",
+    "scope": "Local tick CPU only; not a frame/FPS/GPU measurement and not the 203/287 hardware gate.",
+    "chase": {
+      "p50MsMedian": 0.0685,
+      "p95MsMedian": 0.0864,
+      "meanMsMedian": 0.07528416666666668
+    },
+    "firstPerson": {
+      "p50MsMedian": 0.0762,
+      "p95MsMedian": 0.0944,
+      "meanMsMedian": 0.07961333333333345
+    },
+    "incrementalP95Ms": 0.007999999999999993,
+    "budgetReferenceMs": 18.5,
+    "runs": [
+      {
+        "mode": "CHASE",
+        "repeat": 0,
+        "samples": 600,
+        "meanMs": 0.09897249999999998,
+        "p50Ms": 0.0888,
+        "p95Ms": 0.1569,
+        "maxMs": 0.8811
+      },
+      {
+        "mode": "FIRST_PERSON",
+        "repeat": 0,
+        "samples": 600,
+        "meanMs": 0.07961333333333345,
+        "p50Ms": 0.0762,
+        "p95Ms": 0.0951,
+        "maxMs": 0.8399
+      },
+      {
+        "mode": "CHASE",
+        "repeat": 1,
+        "samples": 600,
+        "meanMs": 0.07380883333333331,
+        "p50Ms": 0.0674,
+        "p95Ms": 0.0854,
+        "maxMs": 0.9941
+      },
+      {
+        "mode": "FIRST_PERSON",
+        "repeat": 1,
+        "samples": 600,
+        "meanMs": 0.08164583333333321,
+        "p50Ms": 0.0781,
+        "p95Ms": 0.0944,
+        "maxMs": 0.7505
+      },
+      {
+        "mode": "CHASE",
+        "repeat": 2,
+        "samples": 600,
+        "meanMs": 0.07528416666666668,
+        "p50Ms": 0.0685,
+        "p95Ms": 0.0864,
+        "maxMs": 1.1095
+      },
+      {
+        "mode": "FIRST_PERSON",
+        "repeat": 2,
+        "samples": 600,
+        "meanMs": 0.0708799999999999,
+        "p50Ms": 0.0674,
+        "p95Ms": 0.0777,
+        "maxMs": 1.1609
+      }
+    ]
+  },
+  "limitations": [
+    "The report is a local Node tick measurement, not a browser frame/FPS/GPU result and not the 203/287 hardware gate.",
+    "The live first-person view is a presentation choice of the driven car; a camera-only selection of another car stays in CHASE until that car is explicitly taken over.",
+    "The live V3 car has no modelled cabin interior, so the whole exterior shell of the driven car is hidden in first person; the road, traffic, city and lights remain rendered.",
+    "Mouse look/recenter and pointer capture remain the 017 fixture contract; PBI 280 only mounts C, the driver anchor and the saved presentation preference."
+  ]
+}
