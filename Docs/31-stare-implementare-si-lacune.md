@@ -400,7 +400,7 @@ Refuzurile sunt închise: MANUAL/AUTO `SKIPPED_MANUAL`, LEARNING neeligibil `SKI
 
 **PBI:** [275](../PBI/README.md) · **Dependențe:** 260, 265, 271.
 
-**Stare:** Implementat local la 27 noiembrie 2026. Raportul determinist 24/24 și proba de browser 22/22 trec; taskul rămâne In Progress până la integrarea orchestratorului, iar XP-ul zilnic (276), provocările (277) și persistența (278) rămân dependențe explicite.
+**Stare:** Done la 27 noiembrie 2026. Raportul determinist 24/24 și proba de browser 22/22 trec; XP-ul zilnic (276), provocările (277) și persistența (278) rămân dependențe explicite.
 
 ### 276 — Trei misiuni zilnice, XP, nivel și progresul jucătorului în joc
 
