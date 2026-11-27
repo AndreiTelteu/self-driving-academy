@@ -38,7 +38,7 @@ PBI-ul rămâne In Progress până când orchestratorul îl integrează și îl 
 | `npm run check:architecture` | PASS (486 fișiere TypeScript) |
 | `npm run composition:report -- --check` | PASS |
 | `npm run docs:check -- --check` | PASS |
-| `npm run camera:first-person` | 5/5 scenarii PASS, digest `00edc97e40d9697e35e873c6311117b536355d08ade191c7efde9581e0e549ec` |
+| `npm run camera:first-person` | 5/5 scenarii PASS, digest `7a47aa66c92c8728982dca887fcca8643c762b8bb80c2e1d83f1ec944a200e4c` |
 | `npm run camera:first-person:probe` | Chrome 157 headed, 1280×720, **WEBGL2 PASS 12/12**, **WEBGPU PASS 12/12** |
 
 Raportul determinist este [report.json](report.json) / [report.md](report.md); proba de browser este
@@ -56,7 +56,7 @@ Raportul determinist este [report.json](report.json) / [report.md](report.md); p
 - Ieșire: autoritate `CHARACTER:player-character`, cameră CHASE pe personaj; reintrare: FIRST_PERSON
   pe `taxi-01`. Reload: store `FIRST_PERSON`, cameră `FIRST_PERSON` fără nicio apăsare `C`.
 - Cost local tick (Node 24, o compunere, 120 warmup + 600 tickuri × 3 repetări alternate): CHASE p95
-  median **0,1777 ms**, FIRST_PERSON **0,1779 ms**, delta **+0,0002 ms**. Nu este FPS/GPU/hardware.
+  median **0,0864 ms**, FIRST_PERSON **0,0944 ms**, delta **+0,0080 ms**. Nu este FPS/GPU/hardware.
 - Zero erori de pagină în ambele backenduri.
 
 ## Backenduri

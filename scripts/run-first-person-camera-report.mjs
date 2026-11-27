@@ -444,13 +444,10 @@ const transcript = {
     sedan: app.vehicleDriverEyeM('sedan'),
     compact: app.vehicleDriverEyeM('compact'),
   },
-  cost: {
-    chase: cost.chase,
-    firstPerson: cost.firstPerson,
-    incrementalP95Ms: cost.incrementalP95Ms,
-  },
   deterministicDigest: createHash('sha256').update(deterministicFirst).digest('hex'),
 };
+// The digest covers scenarios and anchors only; local timing is reported separately and never
+// changes whether the accepted transcript is current.
 const digest = createHash('sha256').update(JSON.stringify(transcript)).digest('hex');
 
 const report = {
