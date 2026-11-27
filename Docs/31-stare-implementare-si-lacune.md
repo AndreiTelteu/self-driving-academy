@@ -453,6 +453,8 @@ Refuzurile sunt închise: MANUAL/AUTO `SKIPPED_MANUAL`, LEARNING neeligibil `SKI
 
 **PBI:** [278](../PBI/README.md) · **Dependențe:** 260, 266, 276.
 
+**Stare:** Done la 27 noiembrie 2026. Autosave-ul, reload-ul, export/import și rollback-ul sunt verificate; snapshot-ul 206 complet și IndexedDB rămân în afara scope-ului.
+
 ### 279 — Setări, remapare taste și slidere de control/stil în joc
 
 **Ce lipsește:** Butonul „Setări” din start și pauză face `console.log`; panourile de setări, remapare și slidere nu sunt montate.
