@@ -417,7 +417,7 @@ Refuzurile sunt închise: MANUAL/AUTO `SKIPPED_MANUAL`, LEARNING neeligibil `SKI
 
 **PBI:** [276](../PBI/README.md) · **Dependențe:** 260, 265, 271.
 
-**Stare:** Implementat local la 27 noiembrie 2026. Așteaptă integrarea orchestratorului și mutarea fizică în Done; 278 rămâne persistența durabilă.
+**Stare:** Done la 27 noiembrie 2026. 278 rămâne persistența durabilă.
 
 ### 277 — Provocările random, directorul, panoul și reluarea în joc
 

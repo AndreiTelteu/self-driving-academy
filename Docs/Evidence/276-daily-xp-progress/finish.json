@@ -1,0 +1,12 @@
+{
+  "id": "276",
+  "criteriaSatisfied": true,
+  "result": "Exactly three daily missions on the real local day, at least one MANUAL without learning, stable across re-entry and reload. Mission/daily/active-time XP is idempotent with exact fractions, no negative credit, zero debits and no profile writes. Level is monotone from the balance; negative KPI, collision, failed mission and missed day never reach the ledger. Pause, background, lost focus, AFK and Chaos award no Academy XP. The native Progress panel shows XP, level, history, three objectives, window and expiry reason.",
+  "limitations": "FULL_STOPS and LANE_CHANGES exist in the 211 catalog but 275 does not yet publish the matching 272 events, and 272 FULL_STOP still carries durationS 0 below minDurationS; those objectives stay active until a follow-up. The reload checkpoint is sessionStorage (tab reload), not a durable savefile; persistence/autosave/import remain 278. Browser evidence is headless Chrome/WEBGL2, not a human playtest or FPS/GPU/hardware. Local Node is 24.19.0.",
+  "checks": [
+    ["node", "--import", "./scripts/register-typescript.mjs", "--test", "tests/missions/live-daily-progress.test.ts", "tests/ui/live-progress.test.ts", "tests/ui/game-shell-host.test.ts"],
+    ["npm", "run", "progress:daily", "--", "--check"],
+    ["npm", "run", "docs:check", "--", "--check"],
+    ["npm", "run", "typecheck"]
+  ]
+}
