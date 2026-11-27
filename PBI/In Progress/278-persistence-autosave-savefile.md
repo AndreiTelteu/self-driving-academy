@@ -1,13 +1,13 @@
 ---
 id: "278"
 title: "Persistență live: autosave, checkpoint, savefile și recuperare"
-status: "To Do"
+status: "In Progress"
 release: "V1"
 module: "Persistență"
 depends_on: ["260","266","276"]
 performance_checks: ["storage","frame"]
-owner: null
-started_at: null
+owner: "loop-pbi/deepseek-278"
+started_at: "2026-11-27T18:20:31.197Z"
 completed_at: null
 ---
 
