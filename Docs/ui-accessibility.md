@@ -70,6 +70,20 @@ perechile de contrast.
 „Tab stopuri” numără selectorii focalizabili declarați, nu elementele dinamice. Butonul de închidere al
 notificărilor are `tabindex="-1"` intenționat, deci nu fură focusul de la condus.
 
+## Panourile de misiuni (275)
+
+Panoul `Misiuni` folosește aceeași suprafață `panel` și aceleași reguli: buton nativ
+`<button type="button">`, `aria-haspopup="dialog"`, `aria-expanded` sincronizat, dialog cu
+`role="dialog"` și `aria-modal="true"`, focus mutat în panou, `Tab`/`Shift+Tab` în interior,
+`Escape` prin portul hostului și restaurarea focusului. Toate listeners sunt pe elementele deținute;
+`globalListeners` rămâne 0. Panoul citește la 10 Hz numai cât timp este deschis și nu are nicio
+acțiune de scriere: inspectarea unei misiuni mută doar pointerul de selecție.
+
+Tutorialul `117` este o regiune separată, cu patru butoane native (`Pauză`, `Reia`, `Sari peste pas`,
+`Sari peste tutorial`). Clicul și activarea nativă Enter/Space folosesc același drum; nu există
+listener global, deci tastele de condus nu sunt capturate. Butoanele dezactivate sunt marcate cu
+`disabled` și `aria-disabled="true"`, iar starea este purtată și de text, nu doar de culoare.
+
 ## Reguli de focus
 
 1. `open(panelId, element)` reține focusul anterior, mută focusul pe primul control focalizabil și

@@ -179,7 +179,7 @@ export interface CampaignMissionProgress {
   readonly state: CampaignMissionState;
   readonly prerequisites: readonly string[];
   readonly missingPrerequisites: readonly string[];
-  /** Completed attempts retained for this mission in the current campaign run. */
+  /** Highest attempt consumed by a completion or a recorded 116 failure in this campaign run. */
   readonly attempts: number;
   /** Next attempt that can be completed, or `null` when the 116 replay capacity is exhausted. */
   readonly nextAttempt: number | null;
@@ -306,6 +306,21 @@ export interface MissionResetInfo {
   readonly profileWrites: 0;
 }
 
+/** A failed 116 attempt consumes an attempt number but never a completion or a reward. */
+export interface MissionAttemptFailureInfo {
+  readonly version: typeof REWARDS_SCHEMA_VERSION;
+  readonly namespace: string;
+  readonly missionId: string;
+  readonly attempt: number;
+  readonly failedTick: number;
+  readonly duplicate: boolean;
+  readonly attempts: number;
+  readonly nextAttempt: number | null;
+  readonly rewardsGranted: 0;
+  readonly xpGranted: 0;
+  readonly profileWrites: 0;
+}
+
 export interface MissionRewardsStats {
   readonly version: typeof REWARDS_SCHEMA_VERSION;
   readonly namespace: string;
@@ -322,6 +337,8 @@ export interface MissionRewardsLedger {
   catalog(): MissionCatalog;
   /** Consumes one real completed 116 instance; a repeat changes nothing. */
   settle(value: unknown): MissionCompletionResult;
+  /** Records a failed 116 attempt so the next replay number stays the tracker's real number. */
+  recordAttemptFailure(value: unknown): MissionAttemptFailureInfo;
   /** Campaign progress: which challenges are locked, available or completed. */
   progress(): CampaignProgress;
   /** Granted rewards, once per authored 116 reward identity. */
@@ -372,6 +389,7 @@ export interface MissionVehicleAccess {
 }
 
 const settleFields = ['instance'] as const;
+const attemptFailureFields = ['missionId', 'attempt', 'tick'] as const;
 const resetFields = ['missionId', 'tick'] as const;
 const ledgerFields = ['catalog'] as const;
 
@@ -476,6 +494,8 @@ export function createMissionRewardsLedger(options: unknown): MissionRewardsLedg
   /** Monotone capability list keyed by capability id. */
   const capabilities = new Map<string, MissionCapability>();
   const resets = new Map<string, number>();
+  /** Highest attempt consumed by a completion or a recorded failure, per mission. */
+  const attemptFloor = new Map<string, number>();
 
   let lastTick = 0;
   let duplicateCompletions = 0;
@@ -501,7 +521,7 @@ export function createMissionRewardsLedger(options: unknown): MissionRewardsLedg
       : missing.length === 0
         ? 'AVAILABLE'
         : 'LOCKED';
-    const attempts = entries.length;
+    const attempts = Math.max(entries.length, attemptFloor.get(definition.missionId) ?? 0);
     const nextAttempt = attempts < REWARDS_LIMITS.completionsPerMission ? attempts + 1 : null;
     const grants = [...rewardLedger.values()].filter(
       (grant) => grant.missionId === definition.missionId,
@@ -671,15 +691,20 @@ export function createMissionRewardsLedger(options: unknown): MissionRewardsLedg
     }
 
     const previousAttempts = completed.get(facts.missionId) ?? [];
+    const previousAttempt = Math.max(
+      attemptFloor.get(facts.missionId) ?? 0,
+      previousAttempts.at(-1)?.attempt ?? 0,
+    );
     requireContract(facts.completedTick >= lastTick, 'Stale mission completion tick');
     requireContract(
-      facts.attempt === previousAttempts.length + 1,
-      `Mission completion attempt ${facts.attempt} is not the next attempt of ${facts.missionId}`,
+      facts.attempt === previousAttempt + 1,
+      `Mission completion attempt ${facts.attempt} is not the next attempt after ${previousAttempt} of ${facts.missionId}`,
     );
     requireContract(
       completions.size < REWARDS_LIMITS.completions,
       'Mission completion capacity exceeded',
     );
+    attemptFloor.set(facts.missionId, facts.attempt);
 
     const rows: MissionSettledReward[] = [];
     const unlocked: string[] = [];
@@ -798,6 +823,54 @@ export function createMissionRewardsLedger(options: unknown): MissionRewardsLedg
     });
   }
 
+  function recordAttemptFailure(value: unknown): MissionAttemptFailureInfo {
+    const data = plainFields(value, attemptFailureFields, 'mission attempt failure');
+    for (const key of attemptFailureFields) requireRequired(data, key, 'mission attempt failure');
+    const missionId = boundedId(data.missionId, REWARDS_LIMITS.idCodeUnits, 'mission');
+    definitionOf(missionId);
+    const attempt = tick(data.attempt);
+    requireContract(
+      attempt >= 1 && attempt <= REWARDS_LIMITS.completionsPerMission,
+      'Failed mission attempt is outside the 116 replay capacity',
+    );
+    const atTick = tick(data.tick);
+    requireContract(atTick >= lastTick, 'Stale mission attempt failure tick');
+    const previous = Math.max(
+      attemptFloor.get(missionId) ?? 0,
+      (completed.get(missionId) ?? []).at(-1)?.attempt ?? 0,
+    );
+    if (attempt <= previous) {
+      return Object.freeze({
+        version: REWARDS_SCHEMA_VERSION,
+        namespace,
+        missionId,
+        attempt,
+        failedTick: atTick,
+        duplicate: true,
+        attempts: previous,
+        nextAttempt: previous < REWARDS_LIMITS.completionsPerMission ? previous + 1 : null,
+        rewardsGranted: 0 as const,
+        xpGranted: 0 as const,
+        profileWrites: 0 as const,
+      });
+    }
+    attemptFloor.set(missionId, attempt);
+    lastTick = atTick;
+    return Object.freeze({
+      version: REWARDS_SCHEMA_VERSION,
+      namespace,
+      missionId,
+      attempt,
+      failedTick: atTick,
+      duplicate: false,
+      attempts: attempt,
+      nextAttempt: attempt < REWARDS_LIMITS.completionsPerMission ? attempt + 1 : null,
+      rewardsGranted: 0 as const,
+      xpGranted: 0 as const,
+      profileWrites: 0 as const,
+    });
+  }
+
   function resetMission(value: unknown): MissionResetInfo {
     const data = plainFields(value, resetFields, 'mission reset');
     for (const key of resetFields) requireRequired(data, key, 'mission reset');
@@ -808,6 +881,7 @@ export function createMissionRewardsLedger(options: unknown): MissionRewardsLedg
     const entries = completed.get(missionId) ?? [];
     for (const entry of entries) completions.delete(entry.completionId);
     completed.delete(missionId);
+    attemptFloor.delete(missionId);
     const resetsForMission = (resets.get(missionId) ?? 0) + 1;
     resets.set(missionId, resetsForMission);
     lastTick = atTick;
@@ -843,6 +917,7 @@ export function createMissionRewardsLedger(options: unknown): MissionRewardsLedg
     namespace,
     catalog: () => catalog,
     settle,
+    recordAttemptFailure,
     progress,
     rewards,
     unlocks,

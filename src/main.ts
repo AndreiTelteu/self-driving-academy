@@ -6,6 +6,7 @@ import {
   createGameShell,
   createLiveEconomyComposition,
   createLiveLearningPipeline,
+  createLiveMissions,
   createLiveModeSegments,
   createLiveTelemetryComposition,
   createLiveRideComposition,
@@ -13,6 +14,7 @@ import {
   createRendererRecovery,
   createSessionFlow,
   LIVE_LEARNING_VERSION,
+  LIVE_MISSIONS_VERSION,
   LIVE_TELEMETRY_COMPOSITION_VERSION,
   LIVE_THREE_MODES_VERSION,
   readCityDashboardSnapshot,
@@ -24,6 +26,7 @@ import {
   type GameTickPort,
   type LiveEconomyComposition,
   type LiveLearningPipeline,
+  type LiveMissions,
   type LiveModeSegments,
   type LiveRideComposition,
   type LiveTelemetryComposition,
@@ -67,6 +70,8 @@ import {
   createLiveEconomyHud,
   createLiveRideMarkerLayer,
   createLiveRidesPanel,
+  createMissionPanel,
+  createMissionTutorialPanel,
   createPassengerVisualPresenter,
   createTaxiHud,
 } from './ui';
@@ -245,6 +250,23 @@ const learningModules: {
   pipeline: LiveLearningPipeline | undefined;
   activation: ProfileActivation | undefined;
 } = { queue: undefined, pipeline: undefined, activation: undefined };
+/**
+ * PBI 275: the single live mission owner. It composes the delivered 116 tracker, 117 tutorial and
+ * 125 reward ledger over facts of the same live world; no second mission, XP or profile model is
+ * created here.
+ */
+const missionModules: { runtime: LiveMissions | undefined } = { runtime: undefined };
+const missionsTickPort: GameTickPort = {
+  id: 'missions',
+  version: LIVE_MISSIONS_VERSION,
+  step(context) {
+    missionModules.runtime?.step({
+      sessionId: context.sessionId,
+      worldEpoch: context.worldEpoch,
+      tick: context.tick,
+    });
+  },
+};
 const liveLearningEngineVersion = 'engine-273-live' as const;
 /**
  * PBI 273: the active city style read by the one 057/058 fleet. The 109 store remains the only
@@ -482,6 +504,7 @@ const shell = createGameShell({
     control: controlTickPort,
     rides: ridesTickPort,
     economy: economyTickPort,
+    missions: missionsTickPort,
     telemetry: telemetryTickPort,
     learning: learningTickPort,
   },
@@ -490,11 +513,149 @@ const shell = createGameShell({
     const state = application.getState();
     if (state.kind === 'PAUSED' && state.reason === cause) {
       application.play();
-      // 025 blochează tastele cât timp un buton are focusul; reluarea readuce focusul pe canvas.
+      // 025 blochează tastele cât timp un buton are focusul; reluarea readduce focusul pe canvas.
       if (application.getState().kind === 'PLAYING') view.getCanvas().focus();
     }
   },
   resetHeldCommands: () => composition?.composition.releaseInput(),
+});
+/**
+ * PBI 275: the mission runtime reads only the real owner read models. The ports below are the same
+ * 265 rides, 271 segments, 065 health and 272 follow episodes mounted in this composition; they do
+ * not create a parallel simulation or a second mission ledger.
+ */
+const liveMissions = createLiveMissions({
+  ports: {
+    modes: () => {
+      const state = modeModules.segments?.observe();
+      if (state === undefined) return null;
+      return Object.freeze({
+        segments: state.segments.map((segment) =>
+          Object.freeze({
+            segmentId: segment.segmentId,
+            vehicleId: segment.vehicleId,
+            mode: segment.mode,
+            learningEligible: segment.learningEligible,
+            startTick: segment.startTick,
+            endTick: segment.endTick,
+            completeness: segment.completeness,
+          }),
+        ),
+      });
+    },
+    rides: () => {
+      const snapshot = ridesModules.composition?.snapshot();
+      if (snapshot === undefined) return null;
+      return Object.freeze({
+        rides: snapshot.rides.rides.map((ride) =>
+          Object.freeze({
+            rideId: ride.rideId,
+            taxiId: ride.taxiId,
+            boardingTick: ride.boardingTick,
+            completionTick: ride.completionTick,
+          }),
+        ),
+      });
+    },
+    health: () =>
+      Object.freeze(
+        (dashboardModules.health?.history() ?? []).map((entry) =>
+          Object.freeze({
+            factId: entry.factId,
+            taxiId: entry.taxiId,
+            fact: entry.fact,
+            tick: entry.tick,
+          }),
+        ),
+      ),
+    follow: () =>
+      Object.freeze(
+        (telemetryModules.live?.readFollowEpisodes() ?? []).map((episode) =>
+          Object.freeze({
+            episodeId: episode.episodeId,
+            vehicleId: episode.vehicleId,
+            leaderId: episode.leaderId,
+            startTick: episode.startTick,
+            minGapM: episode.minGapM,
+            maxGapM: episode.maxGapM,
+          }),
+        ),
+      ),
+    authority: () => {
+      const authority = composition?.composition.modeAuthority();
+      if (authority === undefined) return null;
+      return Object.freeze({
+        tick: authority.tick,
+        playerVehicleId: authority.playerVehicleId,
+        mode: authority.mode,
+        suspended: shell.pauseState().suspended,
+      });
+    },
+    selection: () => {
+      const frame = composition?.composition.frame;
+      if (frame === undefined) return null;
+      const vehicleId = frame.playerVehicleId ?? frame.selectedVehicleId;
+      if (vehicleId === null || vehicleId === undefined) return null;
+      const state = liveFleet?.registry.get(vehicleId);
+      return Object.freeze({
+        vehicleId,
+        kind: state?.driverKind === 'TAXI' ? ('TAXI' as const) : ('CIVIL' as const),
+      });
+    },
+  },
+});
+missionModules.runtime = liveMissions;
+/** PBI 275: the 126 panel is read-only; its own trigger is hidden because the shell owns the button. */
+const missionPanel = createMissionPanel(app, {
+  read: () => missionModules.runtime?.snapshot() ?? null,
+  setSurface: (open) => {
+    if (open) shell.openPanel('missions');
+    else {
+      shell.closePanel();
+      refocusGame();
+    }
+  },
+});
+missionPanel.getTrigger().hidden = true;
+/** PBI 275: the 117 tutorial panel stays separate from the campaign panel and from learning. */
+const tutorialHost = document.createElement('div');
+tutorialHost.className = 'live-mission-tutorial-host';
+tutorialHost.style.cssText =
+  'position:fixed;left:1rem;bottom:1rem;z-index:24;width:min(24rem,calc(100vw - 2rem));' +
+  'max-height:min(50vh,26rem);overflow:auto;padding:0.7rem 0.8rem;background:#0b1a16f2;' +
+  'border:1px solid #3d6b58;border-radius:0.55rem;color:#f3f7fb;' +
+  'font:0.82rem/1.4 system-ui,-apple-system,"Segoe UI",sans-serif;';
+app.append(tutorialHost);
+tutorialHost.hidden = true;
+const missionTutorialStyle = document.createElement('style');
+missionTutorialStyle.setAttribute('data-mission-tutorial-style', '117-mission-tutorial-ui-v1');
+missionTutorialStyle.textContent = `
+.live-mission-tutorial-host .mission-tutorial h2 { margin: 0 0 0.35rem; font-size: 0.95rem; color: #9fe0c5; }
+.live-mission-tutorial-host .mission-tutorial p { margin: 0.2rem 0; }
+.live-mission-tutorial-host .mission-tutorial button { margin: 0.35rem 0.3rem 0 0; font: inherit;
+  color: #f3f7fb; background: #17352b; border: 1px solid #3d6b58; border-radius: 0.35rem;
+  padding: 0.25rem 0.5rem; cursor: pointer; }
+.live-mission-tutorial-host .mission-tutorial button:hover { background: #22503f; }
+.live-mission-tutorial-host .mission-tutorial button:focus-visible { outline: 3px solid #9fe0c5;
+  outline-offset: 2px; }`;
+app.ownerDocument.head?.append(missionTutorialStyle);
+const tutorialPanel = createMissionTutorialPanel(tutorialHost, {
+  pause: () => {
+    liveMissions.tutorialPause(liveMissionTick());
+    refocusGame();
+  },
+  resume: () => {
+    liveMissions.tutorialResume(liveMissionTick());
+    refocusGame();
+  },
+  skipStep: () => {
+    liveMissions.tutorialSkipStep(liveMissionTick());
+    refocusGame();
+  },
+  skipAll: () => {
+    liveMissions.tutorialSkipAll(liveMissionTick());
+    refocusGame();
+  },
 });
 /** Geometria statică a hărții flotei; minima 074/281 rămâne separată de acest panou. */
 const fleetMapGeometry = readMinimapGeometry({ map: world.map, graph: world.graph });
@@ -636,6 +797,9 @@ app.append(impactHost);
 const kpiImpactHud = createKpiImpactHud(impactHost, { read: kpiImpactSnapshot });
 /** The KPI popup is live only while open in observation AUTO; its reads stay capped at 10 Hz. */
 let lastKpiPanelRefresh = -Infinity;
+/** PBI 275: the mission panel reads at 10 Hz only while open; the tutorial HUD at 10 Hz while live. */
+let lastMissionPanelRefresh = -Infinity;
+let lastTutorialPanelRefresh = -Infinity;
 /**
  * PBI 270: panoul companiei citește exact read model-ul 269 și cheltuie cash-ul real prin
  * `purchase`/`upgrade`. El nu creează un al doilea ledger sau o a doua flotă; suprafața de pauză
@@ -666,6 +830,7 @@ const shellHost = createGameShellHost({
     if (companyDashboard.isOpen()) companyDashboard.close();
     if (kpiHistoryPanel.isOpen()) kpiHistoryPanel.close();
     if (cityDashboardPanel.isOpen()) cityDashboardPanel.close();
+    if (missionPanel.isOpen()) missionPanel.close();
     shell.setMenuOpen(true);
   },
   onResume: () => resumeSession(),
@@ -682,6 +847,7 @@ const shellHost = createGameShellHost({
     if (companyDashboard.isOpen()) companyDashboard.close();
     if (kpiHistoryPanel.isOpen()) kpiHistoryPanel.close();
     if (cityDashboardPanel.isOpen()) cityDashboardPanel.close();
+    if (missionPanel.isOpen()) missionPanel.close();
     return shell.openPanel('integration');
   },
   onClosePanel: () => {
@@ -692,6 +858,7 @@ const shellHost = createGameShellHost({
     // The shell owns a single panel surface: a live panel is not left underneath another one.
     if (ridesPanel.isOpen()) ridesPanel.close();
     if (companyDashboard.isOpen()) companyDashboard.close();
+    if (missionPanel.isOpen()) missionPanel.close();
     if (!shell.openPanel('fleet')) return false;
     const snapshot = liveFleetSnapshot();
     if (snapshot !== null) fleetPanel.update(snapshot, performance.now());
@@ -701,6 +868,7 @@ const shellHost = createGameShellHost({
   onOpenRides: () => {
     if (fleetPanel.isOpen()) fleetPanel.close();
     if (companyDashboard.isOpen()) companyDashboard.close();
+    if (missionPanel.isOpen()) missionPanel.close();
     if (!shell.openPanel('rides')) return false;
     // The panel skips writes while closed; open it first, then project the current read model.
     ridesPanel.open();
@@ -713,6 +881,7 @@ const shellHost = createGameShellHost({
     if (fleetPanel.isOpen()) fleetPanel.close();
     if (ridesPanel.isOpen()) ridesPanel.close();
     if (companyDashboard.isOpen()) companyDashboard.close();
+    if (missionPanel.isOpen()) missionPanel.close();
     return companyDashboard.open();
   },
   onOpenKpis: () => {
@@ -720,6 +889,7 @@ const shellHost = createGameShellHost({
     if (ridesPanel.isOpen()) ridesPanel.close();
     if (companyDashboard.isOpen()) companyDashboard.close();
     if (cityDashboardPanel.isOpen()) cityDashboardPanel.close();
+    if (missionPanel.isOpen()) missionPanel.close();
     return kpiHistoryPanel.open();
   },
   onOpenCity: () => {
@@ -727,7 +897,16 @@ const shellHost = createGameShellHost({
     if (ridesPanel.isOpen()) ridesPanel.close();
     if (companyDashboard.isOpen()) companyDashboard.close();
     if (kpiHistoryPanel.isOpen()) kpiHistoryPanel.close();
+    if (missionPanel.isOpen()) missionPanel.close();
     return cityDashboardPanel.open();
+  },
+  onOpenMissions: () => {
+    if (fleetPanel.isOpen()) fleetPanel.close();
+    if (ridesPanel.isOpen()) ridesPanel.close();
+    if (companyDashboard.isOpen()) companyDashboard.close();
+    if (kpiHistoryPanel.isOpen()) kpiHistoryPanel.close();
+    if (cityDashboardPanel.isOpen()) cityDashboardPanel.close();
+    return missionPanel.open();
   },
 });
 /** Fiecare tranziție de sesiune ajunge și în gazda shell-ului, nu doar în view-ul de randare. */
@@ -744,6 +923,7 @@ const showView = (state: Parameters<typeof view.show>[0]): void => {
   }
   view.show(state);
   shellHost.setSessionState(state.kind);
+  if (state.kind !== 'PLAYING') tutorialHost.hidden = true;
 };
 /** Browser alt-tab/blur only *reports*; the authoritative suspension stays a 070 decision. */
 const focusBinding = bindPauseFocusInput({
@@ -859,6 +1039,7 @@ const application = createApplicationLifecycle({
           disposeLiveModeSegments('SESSION_CHANGE');
           disposeLiveLearning();
           composition = ownedComposition;
+          beginLiveMissions();
           mountLiveModeSegments();
           mountLiveTelemetry();
           mountLiveLearning();
@@ -1121,6 +1302,23 @@ const application = createApplicationLifecycle({
         kpiHistoryPanel.refresh();
       }
       if (cityDashboardPanel.isOpen()) cityDashboardPanel.update(at);
+      // PBI 275: the 126 panel reads the real 116/125 read models only while open, at 10 Hz.
+      if (missionPanel.isOpen() && at - lastMissionPanelRefresh >= 100) {
+        lastMissionPanelRefresh = at;
+        missionPanel.refresh();
+      }
+      // PBI 275: the 117 tutorial is a separate HUD; it is hidden once completed and never asks the
+      // learning pipeline for anything.
+      const tutorialSnapshot = liveMissions.tutorialSnapshot();
+      if (tutorialSnapshot === null || tutorialSnapshot.state === 'COMPLETED') {
+        tutorialHost.hidden = true;
+      } else {
+        tutorialHost.hidden = false;
+        if (at - lastTutorialPanelRefresh >= 100) {
+          lastTutorialPanelRefresh = at;
+          tutorialPanel.update(tutorialSnapshot, at);
+        }
+      }
     }
     // PBI 265: HUD-ul 073 și markerii 147 citesc aceeași stare autoritară; nimic nu scrie în simulare.
     const rideComposition = ridesModules.composition;
@@ -1166,6 +1364,25 @@ const application = createApplicationLifecycle({
     return () => document.removeEventListener('visibilitychange', changed);
   },
 });
+/**
+ * PBI 275: the shared host tick and focus helpers. They are read-only: mission actions never move a
+ * vehicle, pause a surface or write a profile.
+ */
+function liveMissionTick(): number {
+  return composition?.composition.frame.tick ?? shell.status().world.tick;
+}
+function beginLiveMissions(): void {
+  const status = shell.status();
+  liveMissions.beginSession({
+    sessionId: status.sessionId,
+    worldEpoch: status.worldEpoch,
+    tick: liveMissionTick(),
+    kind: status.sessionId === CHAOS_SESSION_ID ? 'CHAOS' : 'ACADEMY',
+  });
+}
+function refocusGame(): void {
+  if (application.getState().kind === 'PLAYING') view.getCanvas().focus();
+}
 /**
  * PBI 273: the Academy base profile is a real 109 version with the complete 092 catalog, so the
  * live city style can learn any key. The style source and the mode segments read the same identity;
@@ -1334,7 +1551,31 @@ function mountLiveLearning(): void {
     queue: learningModules.queue.queue,
     store: liveLearningStore,
     activation,
-    telemetry,
+    // PBI 275: the tutorial is a learning-free classroom. While it is not finished, the host gate
+    // answers the 273 port with ineligible segments, so no job or profile version can be produced.
+    telemetry: {
+      read: () => {
+        const read = telemetry.read();
+        if (!liveMissions.tutorialLearningBlocked()) return read;
+        return Object.freeze({
+          ...read,
+          closedSegments: read.closedSegments.map((summary) =>
+            summary.learningEligible
+              ? Object.freeze({ ...summary, learningEligible: false as const })
+              : summary,
+          ),
+        });
+      },
+      readClosedSegment: (segmentId: string) => {
+        const read = telemetry.readClosedSegment(segmentId);
+        if (read === null || !liveMissions.tutorialLearningBlocked()) return read;
+        if (!read.summary.learningEligible) return read;
+        return Object.freeze({
+          ...read,
+          summary: Object.freeze({ ...read.summary, learningEligible: false as const }),
+        });
+      },
+    },
     ...(segments === undefined ? {} : { modeSegments: segments }),
     tick: () => composition?.composition.frame.tick ?? shell.status().world.tick,
     physicalState: () => livePhysicalState(),
@@ -1343,6 +1584,14 @@ function mountLiveLearning(): void {
       liveFleet?.ambient.refreshStyle();
       const epoch = learningModules.pipeline?.learningEpoch ?? status.learningEpoch;
       modeModules.segments?.updateGeneration({ baseVersionId: versionId, learningEpoch: epoch });
+      // PBI 275: a real 110 activation is the only source of the campaign's learning objective.
+      liveMissions.observeLearningActivation({
+        profileId: profile.profileId,
+        versionId,
+        learningEpoch: epoch,
+        activationTick: liveMissionTick() + 1,
+        tick: liveMissionTick(),
+      });
     },
   });
   learningModules.pipeline = pipeline;
@@ -1447,6 +1696,7 @@ const sessionWorld: SessionWorldPort = {
     composition?.reset();
     composition?.setVehicleMode('AUTO');
     shell.setMode('AUTO');
+    beginLiveMissions();
     mountLiveModeSegments();
     mountLiveTelemetry();
     mountLiveLearning();
@@ -1587,9 +1837,13 @@ interface V3DebugGlobal {
   kpi(): unknown;
   /** PBI 268: ledgerul companiei, profitul, cash-ul și P&L-ul lunar, fără scriere în 209/XP. */
   company(): unknown;
+  /** PBI 275: campania, tutorialul, recompensele și panoul de misiuni, read-only. */
+  missions(): unknown;
   /** PBI 269 (numai DEV/capture/debug): aceeași acțiune ca viitorul panou 270. */
   companyPurchase?(offerId: string): unknown;
   companyUpgrade?(upgradeId: string): unknown;
+  /** PBI 275 (numai DEV/capture/debug): reluarea reală a unei misiuni terminale. */
+  missionReplay?(missionId: string): unknown;
   /** PBI 265: geometria reală a benzinelor de rută, pentru proba de condus din browser. */
   lanePath(laneIds: readonly string[]): unknown;
   /** PBI 273 (numai DEV/capture/debug): liniile de semnal reale, pentru alegerea unei curse live. */
@@ -1807,6 +2061,20 @@ const debugGlobal: V3DebugGlobal = {
       port: shell.status().systems.find((system) => system.id === 'economy')?.status ?? null,
     };
   },
+  missions: () => {
+    const runtime = missionModules.runtime;
+    return {
+      status: runtime?.status() ?? null,
+      snapshot: runtime?.snapshot() ?? null,
+      tutorial: runtime?.tutorialSnapshot() ?? null,
+      tutorialInstance: runtime?.tutorialInstance() ?? null,
+      panel: missionPanel.getStats(),
+      panelOpen: missionPanel.isOpen(),
+      tutorialPanel: tutorialPanel.getStats(),
+      tutorialHostHidden: tutorialHost.hidden,
+      port: shell.status().systems.find((system) => system.id === 'missions')?.status ?? null,
+    };
+  },
 
   economy: () => {
     const economy = economyModules.composition;
@@ -1861,6 +2129,8 @@ if (
   debugGlobal.timeOfDay = () => composition?.view.getTimeOfDay() ?? null;
   debugGlobal.companyPurchase = (offerId) => economyModules.evolution?.purchase(offerId) ?? null;
   debugGlobal.companyUpgrade = (upgradeId) => economyModules.evolution?.upgrade(upgradeId) ?? null;
+  debugGlobal.missionReplay = (missionId) =>
+    missionModules.runtime?.replay(missionId, liveMissionTick()) ?? null;
 }
 (globalThis as unknown as { __v3Composition?: V3DebugGlobal }).__v3Composition = debugGlobal;
 
@@ -1880,6 +2150,12 @@ const dispose = (): void => {
     companyDashboard.dispose();
     kpiHistoryPanel.dispose();
     cityDashboardPanel.dispose();
+    missionPanel.dispose();
+    tutorialPanel.dispose();
+    missionTutorialStyle.remove();
+    tutorialHost.remove();
+    missionModules.runtime?.dispose();
+    missionModules.runtime = undefined;
     kpiImpactHud.dispose();
     passengerPresenter.dispose();
     rideMarkerLayer.dispose();

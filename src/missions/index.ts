@@ -382,6 +382,7 @@ export type {
   CampaignMissionProgress,
   CampaignMissionState,
   CampaignProgress,
+  MissionAttemptFailureInfo,
   MissionCapability,
   MissionCapabilityKind,
   MissionCompletionRef,

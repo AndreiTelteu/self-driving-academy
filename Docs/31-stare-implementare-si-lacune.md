@@ -27,9 +27,10 @@ Buildul curent pornește din `src/main.ts` și oferă:
 - un singur composition root (260) care deține tick-ul, pauza/focusul și ordinea porturilor, plus un panou de integrare care arată explicit sistemele 262–286 încă neintegrate;
 - panoul `Flotă` (263) care listează toate taxiurile și civilii live, mută doar camera la selecție și preia explicit `M` cu un singur scaun `PLAYER`;
 - [economia live 266](live-economy.md) peste cursele 265: revenue, review 0–5, bucketuri KPI de zi/lună și un HUD compact cu ziua/luna simulată;
-- panoul `Companie` (270) peste ledgerul 268 și evoluția 269: revenue, costuri, profit, cash, valoare de flotă, nivel, grafic și tabel lunar, detalierea costurilor și achiziții/upgrade-uri cu confirmare și refuzuri explicite.
+- panoul `Companie` (270) peste ledgerul 268 și evoluția 269: revenue, costuri, profit, cash, valoare de flotă, nivel, grafic și tabel lunar, detalierea costurilor și achiziții/upgrade-uri cu confirmare și refuzuri explicite;
+- campania live 275 peste trackerul 116, tutorialul 117 și ledgerul 125: etapa 1 pornește automat, obiectivele se calculează din evenimente 007 reale, tutorialul are cinci pași separați de learning, iar panoul `Misiuni` arată progresul, fereastra, bugetul, motivul de eșec și reluarea.
 
-Nu sunt montate: pop-up-ul KPI, misiuni, XP, salvare, panourile de sistem (profil, setări), first-person, minimapa, sunet, decorul destructibil și provocările Haos, fizica Rapier și regulile de trafic. Cursele live, pickup/dropoff, pasagerul, ETA și HUD-ul de cursă sunt montate prin 265; AUTO/MANUAL/LEARNING și segmentele 069 sunt montate prin 271.
+Nu sunt montate: misiunile zilnice și XP (276), provocările random (277), salvare, panourile de sistem (profil, setări), first-person, minimapa, sunet, decorul destructibil și provocările Haos, fizica Rapier și regulile de trafic. Cursele live, pickup/dropoff, pasagerul, ETA și HUD-ul de cursă sunt montate prin 265; AUTO/MANUAL/LEARNING și segmentele 069 sunt montate prin 271.
 
 ## Matricea lacunelor
 
@@ -391,9 +392,15 @@ Refuzurile sunt închise: MANUAL/AUTO `SKIPPED_MANUAL`, LEARNING neeligibil `SKI
 - Nu există recompense idempotente și nici reluare fără dublare.
 - Nu există o probă de browser pentru etapa 1 și etapa 2.
 
+**Ce s-a livrat:** `src/app/live-missions.ts` (`275-live-missions-v1`) compune un singur tracker 116, un singur ledger 125 și un singur tutorial 117 peste faptele live: `PICKUP`/`DROPOFF` din 265, `MANUAL_START`/`MANUAL_END` din segmentele 271, `LEADER_ACQUIRED` din 272, `PROFILE_ACTIVATE` din 110/273 și `COLLISION` numai din incidente cu ambele entități reale. Etapa 1 pornește automat; următoarea etapă pornește numai după o finalizare reală, iar o misiune eșuată nu este reluată automat. Tutorialul observă cei cinci pași din selecția și modul real, inclusiv AUTO după eliberarea scaunului `PLAYER`, iar cât timp este activ hostul face segmentele LEARNING ineligibile pentru 273; tutorialul nu creează job, versiune sau scriere de profil. 125 a primit `recordAttemptFailure`, astfel încât o încercare eșuată consumă numărul real de încercare fără recompensă, iar reluarea următoare se decontează normal și fără dublare. Shell-ul montează butonul nativ `Misiuni`, panoul 126 cu focus/Tab/Escape, suprafața 070 și citiri la 10 Hz numai cât timp este deschis; panoul arată fereastra, bugetul, motivul și reluarea. `npm run missions:live` are 24/24 verificări deterministe, iar `npm run missions:live:probe` a trecut 22/22 în Chrome 157/WEBGL2: tutorial 5/5, etapa 1 `COMPLETED` cu 100 XP și 2 recompense acordate o singură dată, etapa 2 `FAILED/SCENARIO_RESET` după reset real, XP și amprenta profilului neschimbate.
+
+**Ce rămâne:** 276 aduce XP-ul efectiv în `PlayerProgress` și misiunile zilnice; 277 aduce provocările random; 278 aduce persistența după reload. Producătorul live 028 de coliziuni nu este montat, deci bugetul de incidente este evaluat din 007 `COLLISION` numai când faptul are ambele entități; panoul afișează reluarea, dar pornirea ei rămâne a hostului, conform contractului 126.
+
 **Documentație:** [Misiuni și progres](13-misiuni-si-progres.md) · [Interfață, cameră și control](08-interfata-camera-si-control.md) · [Starea implementării și lacunele](31-stare-implementare-si-lacune.md)
 
 **PBI:** [275](../PBI/README.md) · **Dependențe:** 260, 265, 271.
+
+**Stare:** Implementat local la 27 noiembrie 2026. Raportul determinist 24/24 și proba de browser 22/22 trec; taskul rămâne In Progress până la integrarea orchestratorului, iar XP-ul zilnic (276), provocările (277) și persistența (278) rămân dependențe explicite.
 
 ### 276 — Trei misiuni zilnice, XP, nivel și progresul jucătorului în joc
 

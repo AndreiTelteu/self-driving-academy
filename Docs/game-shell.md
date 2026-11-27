@@ -47,7 +47,10 @@ viitor) și titlu. Ordinea urmează contractul din [Docs/02](02-arhitectura-si-c
 `world` este pasul autoritar existent, nu un port. Fizica 282 se integrează în lume/adaptorul de
 fizică, nu ca o a doua buclă. Din 271, portul `control` este prezent: verifică la fiecare PRE_WORLD
 că segmentul 069 settlează exact tick-ul anterior, că există cel mult un scaun `PLAYER` și că modul
-segmentului coincide cu modul acceptat al vehiculului.
+segmentului coincide cu modul acceptat al vehiculului. Din 275, portul `missions` este prezent:
+citește numai read model-urile reale 265/271/272/273 și pașește trackerul 116, tutorialul 117 și
+ledgerul 125 pe același tick; nu are ceas, renderer sau store propriu. Cât timp tutorialul nu este
+încheiat, același host răspunde pipeline-ului 273 cu segmente LEARNING ineligibile.
 
 ## Porturile
 
@@ -90,7 +93,10 @@ furnizând portul real; nu are voie să creeze o simulare paralelă în UI sau �
 `createGameShellHost` din `src/ui/game-shell-host.ts` montează bara Start/Pauză/Reia, meniul de
 sesiune, butonul „Integrare” și un singur panou modal. Panoul listează ordinea declarată, owner-ul,
 starea `Prezent`/`Neintegrat` și numărul de pași. Se actualizează la cel mult 10 Hz și numai cât timp
-este deschis; închis nu citește read model-ul.
+este deschis; închis nu citește read model-ul. Din 275, bara montează și butonul nativ `Misiuni`,
+care deschide panoul 126 prin portul `onOpenMissions`; panoul folosește aceeași suprafață 070,
+păstrează `Tab`/`Shift+Tab` în dialog, închide cu `Escape` și citește la 10 Hz numai cât timp este
+deschis. Butonul propriu al panoului 126 rămâne ascuns, ca să existe o singură intrare.
 
 ## Sesiuni Academie și Haos (261)
 
@@ -112,7 +118,8 @@ adoptă checkpointul și pornește în `PAUSED_AUTO`.
 `__v3Composition.shell()` întoarce starea completă (sisteme, porturi, lume, pauză, costuri), iar
 `__v3Composition.shellHost()` starea gazdei (deschideri, focus, listeneri). `__v3Composition.session()`
 și `__v3Composition.sessionMenu()` expun identitatea, epocile, checkpointurile, resetul și eroarea
-ultimei tranziții. Toate sunt read-only.
+ultimei tranziții. `__v3Composition.missions()` expune starea campaniei, snapshotul panoului 126,
+tutorialul 117, statisticile panourilor și portul; totul este read-only.
 
 ## Verificare
 
