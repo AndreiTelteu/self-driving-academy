@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="ro">
+  <head>
+    <meta charset="utf-8" />
+    <title>273 live learning pipeline browser fixture</title>
+    <style>
+      body {
+        margin: 0;
+        background: #0d1b22;
+        color: #e8f4f8;
+        font:
+          14px/1.45 system-ui,
+          sans-serif;
+        display: grid;
+        grid-template-columns: 900px 400px;
+        gap: 12px;
+        padding: 12px;
+      }
+      canvas {
+        width: 900px;
+        height: 620px;
+        background: #12242c;
+        border: 1px solid #2b414c;
+        border-radius: 8px;
+      }
+      aside {
+        padding: 12px;
+        background: #10222b;
+        border: 1px solid #2b414c;
+        border-radius: 8px;
+        height: 620px;
+        overflow: hidden;
+      }
+      h1 {
+        font-size: 18px;
+        margin: 0 0 8px;
+      }
+      .badge {
+        display: inline-block;
+        padding: 2px 10px;
+        border-radius: 999px;
+        background: #1f6f5c;
+        font-weight: 600;
+      }
+      .badge.red {
+        background: #8a2f2f;
+      }
+      .badge.amber {
+        background: #8a6f2f;
+      }
+      dl {
+        display: grid;
+        grid-template-columns: 132px 1fr;
+        gap: 2px 8px;
+        margin: 8px 0;
+        font-size: 12px;
+      }
+      dt {
+        color: #9fc2ce;
+      }
+      dd {
+        margin: 0;
+        word-break: break-word;
+      }
+      #checks {
+        display: grid;
+        gap: 2px;
+        font-size: 12px;
+        max-height: 200px;
+        overflow: auto;
+      }
+      .check {
+        display: grid;
+        grid-template-columns: 150px 44px 1fr;
+        gap: 6px;
+        padding: 1px 0;
+      }
+      .check .verdict {
+        font-weight: 600;
+      }
+      .check .pass {
+        color: #7fe0b4;
+      }
+      .check .fail {
+        color: #ff9f80;
+      }
+      .check .name {
+        color: #cfe6ee;
+      }
+      pre {
+        max-height: 110px;
+        overflow: auto;
+        white-space: pre-wrap;
+        font-size: 11px;
+        background: #0b1a20;
+        border: 1px solid #213943;
+        border-radius: 6px;
+        padding: 8px;
+      }
+      .muted {
+        color: #9fc2ce;
+        font-size: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="view" width="900" height="620"></canvas>
+    <aside>
+      <h1>273 — pipeline-ul de learning live</h1>
+      <p><span id="phase" class="badge">BOOT</span> <span id="detail" class="muted"></span></p>
+      <dl id="facts"></dl>
+      <h2 style="font-size: 14px; margin: 10px 0 4px">Verificări reale</h2>
+      <div id="checks"></div>
+      <h2 style="font-size: 14px; margin: 10px 0 4px">Rezultat brut</h2>
+      <pre id="report"></pre>
+    </aside>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>
