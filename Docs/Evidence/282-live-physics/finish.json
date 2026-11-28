@@ -1,0 +1,12 @@
+{
+  "id": "282",
+  "criteriaSatisfied": true,
+  "result": "One live Rapier world reuses 022/024/028/029/030. Player and AUTONOMY apply identical commands through the same controller at 60 Hz; real dynamic taxi and seeded civil bodies have wheels and suspension, 058 actors use stable kinematic proxies with exact takeover bodies. Real contacts create 028/029 damage; R uses the 030 recovery port to place the body, zero velocity and record TELEPORT. Mode and vehicle changes preserve pose, speed and yaw. Sedan and compact differ in measured braking and turning on the same surface. Physics cost is reported separately from render and stays within the V1 budget.",
+  "limitations": "058 traffic remains on kinematic proxies, not fully simulated civil bodies; 284 owns complete civil autonomy. Decor remains on the static 026 resolver; named Rapier colliders cover buildings and vehicles. Recovery reuses the 030 port/ledger and 029 recovery but does not yet publish the 007 VEHICLE_RECOVERED event or close a 069 segment. Damage is not yet fed into 065 fleet health or the 267 dashboard. Chrome/ANGLE frame numbers are real but not a hardware/FPS gate. Local Node is 24.19.0.",
+  "checks": [
+    ["node", "--import", "./scripts/register-typescript.mjs", "--test", "tests/vehicles/live-physics.test.ts", "tests/app/live-physics.test.ts", "tests/vehicles/rapier-factory-ownership.test.ts"],
+    ["npm", "run", "physics:live", "--", "--check"],
+    ["npm", "run", "docs:check", "--", "--check"],
+    ["npm", "run", "typecheck"]
+  ]
+}

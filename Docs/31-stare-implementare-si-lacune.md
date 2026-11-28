@@ -529,7 +529,7 @@ progres sau XP. Focusul, Tab, Escape, contrastul și lipsa listenerilor globali 
 
 **PBI:** [282](../PBI/README.md) · **Dependențe:** 260, 262.
 
-**Stare:** Implementat local la 28 noiembrie 2026. Integrarea finală, mutarea în Done și validarea boardului rămân orchestratorului.
+**Stare:** Done la 28 noiembrie 2026. Proxy-urile 058 rămân cinematice până la 284, decorul rămâne resolver 026, iar frame-ul Chrome nu este un gate hardware.
 
 ### 283 — Regulile de trafic live: semafoare, STOP, prioritate, yield și benzi
 
