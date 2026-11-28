@@ -258,9 +258,10 @@ test('084 every CSS variable and breakpoint rule exists in src/style.css', () =>
   assert.match(css, /\.fleet-panel \{[\s\S]*?overflow: hidden;/);
   assert.match(css, /scrollbar-width: thin/);
   assert.match(css, /overflow-wrap: anywhere/);
-  // Essential controls are never hidden by a breakpoint.
+  // Essential controls are never hidden by a breakpoint. The host `[hidden]` state is explicit and
+  // is not a responsive rule; it removes the map outside play.
   assert.doesNotMatch(css, /\.taxi-hud(?:__speed|__mode)?[^{]*\{[^}]*display:\s*none/);
-  assert.doesNotMatch(css, /\.minimap[^{]*\{[^}]*display:\s*none/);
+  assert.doesNotMatch(css, /\.minimap(?!\[hidden\])[^{]*\{[^}]*display:\s*none/);
 });
 
 test('084 compact panel typography stays at or above 0.75rem', () => {

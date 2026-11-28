@@ -62,10 +62,10 @@ export interface LiveEconomyHud {
 }
 
 const ROOT_STYLE =
-  'position:absolute;left:12px;top:48px;z-index:12;display:flex;flex-direction:column;gap:0.15rem;' +
+  'display:flex;flex-direction:column;gap:0.15rem;' +
   'padding:0.4rem 0.6rem;border-radius:0.4rem;background:rgba(8,20,26,0.78);color:#f3f7fb;' +
   'font:600 11px/1.35 ui-monospace,Consolas,monospace;pointer-events:none;user-select:none;' +
-  'max-width:min(92vw,38rem);white-space:pre;';
+  'white-space:pre-wrap;';
 const TITLE_STYLE = 'color:#9fe0c5;font-size:11px;letter-spacing:0.02em;';
 const MUTED_STYLE = 'color:#b9cfc5;font-size:10px;font-weight:500;';
 

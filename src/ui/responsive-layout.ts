@@ -179,7 +179,7 @@ const REGION_RULES: Readonly<Record<ResponsiveRegion, RegionRules>> = Object.fre
   STANDARD: Object.freeze({
     gapRem: 0.75,
     hudWidthRem: 22,
-    hudReserveRem: 22,
+    hudReserveRem: 24,
     hudFontRem: 0.95,
     minimapWidthRem: 15,
     minimapFontRem: 0.8,
@@ -196,7 +196,7 @@ const REGION_RULES: Readonly<Record<ResponsiveRegion, RegionRules>> = Object.fre
   LARGE: Object.freeze({
     gapRem: 0.75,
     hudWidthRem: 22,
-    hudReserveRem: 22,
+    hudReserveRem: 24,
     hudFontRem: 1,
     minimapWidthRem: 15,
     minimapFontRem: 0.85,

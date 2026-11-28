@@ -6,8 +6,8 @@ export const TAXI_HUD_VERSION = '073-taxi-hud-v1' as const;
 export const TAXI_HUD_LIMITS = Object.freeze({
   version: TAXI_HUD_VERSION,
   maximumHz: 10,
-  elements: 45,
-  textNodes: 38,
+  elements: 50,
+  textNodes: 43,
   listeners: 0,
   retainedProjections: 1,
   idCodeUnits: 512,
@@ -49,6 +49,14 @@ export interface TaxiHudRide {
   readonly eta: TaxiHudEta;
 }
 
+/** PBI 281: the session identity shown in the driving HUD. */
+export type TaxiHudSessionKind = 'ACADEMY' | 'CHAOS' | 'UNKNOWN';
+
+export interface TaxiHudSession {
+  readonly id: string;
+  readonly kind: TaxiHudSessionKind;
+}
+
 /** One accepted HUD frame. Every value is a read model; the HUD invents none of them. */
 export interface TaxiHudSnapshot {
   readonly schemaVersion: 1;
@@ -60,6 +68,8 @@ export interface TaxiHudSnapshot {
   /** Authoritative physical speed magnitude in m/s; `null` when no vehicle is read. */
   readonly speedMps: number | null;
   readonly mode: ControlMode;
+  /** PBI 281: the real 261 session; `UNKNOWN` shows the id instead of inventing a kind. */
+  readonly session: TaxiHudSession;
   readonly taxi: TaxiHudTaxi | null;
   readonly ride: TaxiHudRide | null;
 }
@@ -193,6 +203,51 @@ const SERVICE_LABELS: Readonly<Record<TaxiHudServiceState, string>> = Object.fre
   BLOCKED: 'Serviciu blocat',
 });
 
+export interface TaxiHudSessionView {
+  readonly value: string;
+  readonly accessible: string;
+}
+
+/** PBI 281: the visible session is a real 261 kind; an unknown kind falls back to its id. */
+export function sessionView(session: TaxiHudSession): TaxiHudSessionView {
+  const label =
+    session.kind === 'ACADEMY' ? 'Academia' : session.kind === 'CHAOS' ? 'Haos' : session.id;
+  return Object.freeze({
+    value: label,
+    accessible:
+      session.kind === 'UNKNOWN'
+        ? `Sesiune necunoscută: ${session.id}`
+        : `Sesiune ${label}: ${session.id}`,
+  });
+}
+
+export type TaxiHudStanceKey = 'NONE' | 'FOREIGN' | 'ACTIVE' | 'COMPLETED' | 'FAILED' | 'CANCELLED';
+
+export interface TaxiHudStanceView {
+  readonly stance: string;
+  readonly key: TaxiHudStanceKey;
+}
+
+/** PBI 281: the explicit ride state, distinct from the player-facing stage text. */
+export function rideStanceView(
+  ride: TaxiHudRide | null,
+  taxi: TaxiHudTaxi | null,
+): TaxiHudStanceView {
+  if (ride === null) return Object.freeze({ stance: 'Fără cursă', key: 'NONE' as const });
+  if (taxi === null || ride.taxiId !== taxi.vehicleId)
+    return Object.freeze({ stance: 'Cursă a altui taxi', key: 'FOREIGN' as const });
+  switch (ride.state) {
+    case 'COMPLETED':
+      return Object.freeze({ stance: 'Încheiată', key: 'COMPLETED' as const });
+    case 'FAILED':
+      return Object.freeze({ stance: 'Eșuată', key: 'FAILED' as const });
+    case 'CANCELLED':
+      return Object.freeze({ stance: 'Anulată', key: 'CANCELLED' as const });
+    default:
+      return Object.freeze({ stance: 'În desfășurare', key: 'ACTIVE' as const });
+  }
+}
+
 export interface TaxiHudDetail {
   readonly label: string;
   readonly value: string;
@@ -201,10 +256,14 @@ export interface TaxiHudDetail {
 export interface TaxiHudProjection {
   readonly speed: TaxiHudSpeedView;
   readonly mode: TaxiHudModeView;
+  readonly session: string;
+  readonly sessionAccessible: string;
   readonly taxi: string;
   readonly taxiAccessible: string;
   readonly stage: string;
   readonly objective: string;
+  readonly stance: string;
+  readonly stanceKey: TaxiHudStanceKey;
   readonly route: string;
   readonly eta: string;
   readonly etaAccessible: string;
@@ -280,9 +339,15 @@ export function projectTaxiHud(snapshot: TaxiHudSnapshot): TaxiHudProjection {
         value: formatDistanceM(ride?.eta.remainingDistanceM),
       }),
       Object.freeze({ label: 'Motiv ETA', value: ride?.eta.reason ?? '—' }),
+      Object.freeze({
+        label: 'Sesiune',
+        value: `${snapshot.session.kind} · ${snapshot.session.id}`,
+      }),
     ]);
   const mode = modeView(snapshot.mode),
     speed = formatSpeedKmh(snapshot.speedMps),
+    session = sessionView(snapshot.session),
+    stance = rideStanceView(snapshot.ride, snapshot.taxi),
     taxi = snapshot.taxi ? `#${snapshot.taxi.slot}` : 'Niciun taxi selectat',
     taxiAccessible = snapshot.taxi
       ? `Taxi #${snapshot.taxi.slot}: ${snapshot.taxi.vehicleId}`
@@ -291,10 +356,14 @@ export function projectTaxiHud(snapshot: TaxiHudSnapshot): TaxiHudProjection {
     return Object.freeze({
       speed,
       mode,
+      session: session.value,
+      sessionAccessible: session.accessible,
       taxi,
       taxiAccessible,
       stage: 'Nicio cursă activă',
       objective: 'Fără obiectiv',
+      stance: stance.stance,
+      stanceKey: stance.key,
       route: 'Fără rută',
       eta: 'Fără estimare',
       etaAccessible: 'ETA indisponibil: nicio cursă activă',
@@ -311,10 +380,14 @@ export function projectTaxiHud(snapshot: TaxiHudSnapshot): TaxiHudProjection {
     return Object.freeze({
       speed,
       mode,
+      session: session.value,
+      sessionAccessible: session.accessible,
       taxi,
       taxiAccessible,
       stage: 'Cursă a altui taxi',
       objective: 'Fără obiectiv',
+      stance: stance.stance,
+      stanceKey: stance.key,
       route: 'Fără rută',
       eta: 'Fără estimare',
       etaAccessible: 'ETA indisponibil: cursa aparține altui taxi',
@@ -338,10 +411,14 @@ export function projectTaxiHud(snapshot: TaxiHudSnapshot): TaxiHudProjection {
     return Object.freeze({
       speed,
       mode,
+      session: session.value,
+      sessionAccessible: session.accessible,
       taxi,
       taxiAccessible,
       stage: stage.stage,
       objective: stage.objective,
+      stance: stance.stance,
+      stanceKey: stance.key,
       route,
       eta: '—',
       etaAccessible: 'ETA indisponibil: cursa este închisă',
@@ -356,10 +433,14 @@ export function projectTaxiHud(snapshot: TaxiHudSnapshot): TaxiHudProjection {
   return Object.freeze({
     speed,
     mode,
+    session: session.value,
+    sessionAccessible: session.accessible,
     taxi,
     taxiAccessible,
     stage: stage.stage,
     objective: stage.objective,
+    stance: stance.stance,
+    stanceKey: stance.key,
     route,
     eta: rows.eta,
     etaAccessible: rows.etaAccessible,
@@ -508,6 +589,7 @@ export function parseTaxiHudSnapshot(value: unknown): TaxiHudSnapshot {
       'tick',
       'speedMps',
       'mode',
+      'session',
       'taxi',
       'ride',
     ],
@@ -519,7 +601,14 @@ export function parseTaxiHudSnapshot(value: unknown): TaxiHudSnapshot {
   const sessionId = id(data.sessionId, 'HUD session'),
     worldEpoch = count(data.worldEpoch, 'HUD world epoch'),
     tick = count(data.tick, 'HUD tick'),
-    speedMps = optionalNumber(data.speedMps, 'HUD speed', 0, null);
+    speedMps = optionalNumber(data.speedMps, 'HUD speed', 0, null),
+    sessionEntry = exact(data.session, ['id', 'kind'], 'HUD session identity'),
+    sessionKind = sessionEntry.kind;
+  if (!['ACADEMY', 'CHAOS', 'UNKNOWN'].includes(sessionKind as string)) fail('HUD session kind');
+  const session: TaxiHudSession = Object.freeze({
+    id: id(sessionEntry.id, 'HUD session identity'),
+    kind: sessionKind as TaxiHudSessionKind,
+  });
   let taxi: TaxiHudTaxi | null = null;
   if (data.taxi !== null) {
     const entry = exact(
@@ -566,6 +655,7 @@ export function parseTaxiHudSnapshot(value: unknown): TaxiHudSnapshot {
     tick,
     speedMps,
     mode: data.mode as ControlMode,
+    session,
     taxi,
     ride,
   });

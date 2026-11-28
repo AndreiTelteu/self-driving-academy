@@ -27,18 +27,18 @@ speed-output, mode-buttons, minimap-status, pause-control, recovery-control.
 
 | Scenario | Region | Effective viewport | HUD / minimap / fleet caps (px) | Panel width (px) | Panel max height | Visible / max rows | Declared overlaps |
 | --- | --- | --- | --- | ---: | --- | --- | ---: |
-| 1280×720 profile | STANDARD | 1280×720 | 352 / 240 / 384 | 416 | min(90vh, 42rem) | 5 / 10 | 0 |
+| 1280×720 profile | STANDARD | 1280×720 | 352 / 240 / 384 | 416 | min(90vh, 42rem) | 4 / 10 | 0 |
 | 1920×1080 profile | LARGE | 1920×1080 | 352 / 240 / 416 | 512 | min(90vh, 54rem) | 12 / 14 | 0 |
 | 150% zoom (853×480 effective) | COMPACT | 853.33×480 | 240 / 160 / 224 | 384 | min(90vh, calc(100vh - 2rem)) | 0 / 8 | 0 |
 | 1920×700 compact height | COMPACT | 1920×700 | 240 / 160 / 224 | 384 | min(90vh, calc(100vh - 2rem)) | 5 / 8 | 0 |
-| fleet 30 rows | STANDARD | 1280×720 | 352 / 240 / 384 | 416 | min(90vh, 42rem) | 5 / 10 | 0 |
-| profile scroll | STANDARD | 1280×720 | 352 / 240 / 384 | 416 | min(90vh, 42rem) | 5 / 10 | 0 |
+| fleet 30 rows | STANDARD | 1280×720 | 352 / 240 / 384 | 416 | min(90vh, 42rem) | 4 / 10 | 0 |
+| profile scroll | STANDARD | 1280×720 | 352 / 240 / 384 | 416 | min(90vh, 42rem) | 4 / 10 | 0 |
 | overlap-free essentials | COMPACT | 853.33×480 | 240 / 160 / 224 | 384 | min(90vh, calc(100vh - 2rem)) | 0 / 8 | 0 |
 
 ### 1280×720 profile
 
 - STANDARD band: HUD 22rem top-left, minimap 15rem top-right, fleet 24rem below the HUD.
-- The contract reserves room for 5 rows; text wrapping may show fewer. The 30-row list scrolls inside the column.
+- The contract reserves room for 4 rows; text wrapping may show fewer. The 30-row list scrolls inside the column.
 
 ### 1920×1080 profile
 
@@ -83,7 +83,7 @@ speed-output, mode-buttons, minimap-status, pause-control, recovery-control.
 | 1920-region | LARGE | LARGE | PASS | 1920×1080 is the large band |
 | 1920-panel-width | 512 | 512 | PASS | 32rem centre panel |
 | 1920-fleet-width | 416 | 416 | PASS | 26rem fleet column |
-| 1920-more-rows | true | true | PASS | 12 visible rows at 1080p vs 5 at 720p |
+| 1920-more-rows | true | true | PASS | 12 visible rows at 1080p vs 4 at 720p |
 | 1920-overlap-free | 0 | 0 | PASS | large layout keeps the same anchors |
 | zoom-region | COMPACT | COMPACT | PASS | 150% zoom reduces the CSS viewport |
 | zoom-effective-width | 853.33 | 853.33 | PASS | 1280 / 1.5 |

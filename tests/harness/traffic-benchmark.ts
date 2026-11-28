@@ -1265,6 +1265,7 @@ async function runTrafficRow(input: RowRunInput): Promise<RunResult> {
       tick,
       speedMps: speedOf(states.get(selected.id)!),
       mode: 'AUTO',
+      session: { id: context.sessionId, kind: 'UNKNOWN' as const },
       taxi: {
         vehicleId: selected.id,
         slot: 1,

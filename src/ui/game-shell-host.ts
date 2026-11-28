@@ -139,7 +139,8 @@ export interface GameShellHost {
 }
 
 const STYLE_TEXT = `
-.game-shell-host { position: fixed; top: 1rem; right: 1rem; z-index: 30; color: #f3f7fb;
+.game-shell-host { position: fixed; top: 1rem; left: calc(var(--layout-hud-width) + var(--layout-gap) * 2);
+  right: calc(var(--layout-minimap-width) + var(--layout-gap) * 2); z-index: 30; color: #f3f7fb;
   font: 0.82rem/1.4 system-ui, -apple-system, "Segoe UI", sans-serif; }
 .game-shell-host__bar { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.4rem;
   align-items: center; max-width: min(52rem, calc(100vw - 2rem)); padding: 0.35rem 0.5rem;

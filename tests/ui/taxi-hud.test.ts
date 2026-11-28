@@ -68,6 +68,7 @@ function snapshot(overrides: Partial<TaxiHudSnapshot> = {}): TaxiHudSnapshot {
     tick: 10,
     speedMps: 0,
     mode: 'AUTO' as const,
+    session: Object.freeze({ id: 'session:073', kind: 'ACADEMY' as const }),
     taxi: taxi(),
     ride: ride(),
     ...overrides,
@@ -293,10 +294,15 @@ test('073 real 057/061/064 binding drives taxi, profile, stage, speed, ETA and p
     assert.equal(p.details[3]!.value, 'style-v9');
     assert.equal(p.details[4]!.value, rideRecord.rideId);
     assert.equal(p.details[5]!.value, rideRecord.state);
+    assert.equal(p.session, view.session.id, 'an unknown session kind shows the real id');
+    assert.equal(p.stance, 'În desfășurare');
+    assert.equal(p.stanceKey, 'ACTIVE');
 
     const rendered = render(view);
     assert.equal(rendered.root.children[0]!.children[1]!.textContent, '45');
     assert.equal(rendered.root.children[0]!.children[2]!.textContent, 'km/h');
+    assert.equal(rendered.root.children[2]!.children[2]!.textContent, view.session.id);
+    assert.equal(rideValue(rendered.root, 6), 'În desfășurare');
     assert.equal(
       rendered.root.children[0]!.children[1]!.getAttribute('aria-label'),
       'Viteză: 45 kilometri pe oră',
@@ -316,6 +322,25 @@ test('073 real 057/061/064 binding drives taxi, profile, stage, speed, ETA and p
   } finally {
     disposeEtaWorld(world);
   }
+});
+
+test('281 session and ride stance are visible and the kind is never invented', () => {
+  const academy = render(snapshot({ session: { id: 'session:281', kind: 'ACADEMY' } }));
+  assert.equal(academy.root.children[2]!.children[2]!.textContent, 'Academia');
+  assert.equal(projectTaxiHud(academy.hud.getView()!.snapshot).stanceKey, 'ACTIVE');
+  academy.hud.dispose();
+  const unknown = render(snapshot({ session: { id: 'session:281', kind: 'UNKNOWN' } }));
+  assert.equal(unknown.root.children[2]!.children[2]!.textContent, 'session:281');
+  assert.equal(unknown.root.getAttribute('data-session'), 'UNKNOWN');
+  assert.equal(
+    projectTaxiHud(unknown.hud.getView()!.snapshot).sessionAccessible,
+    'Sesiune necunoscută: session:281',
+  );
+  unknown.hud.dispose();
+  const empty = render(snapshot({ ride: null }));
+  assert.equal(rideValue(empty.root, 6), 'Fără cursă');
+  assert.equal(projectTaxiHud(empty.hud.getView()!.snapshot).stanceKey, 'NONE');
+  empty.hud.dispose();
 });
 
 test('073 a taxi without a ride shows explicit empty state and never a fake completion', () => {

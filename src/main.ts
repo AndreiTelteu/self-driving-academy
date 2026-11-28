@@ -30,11 +30,16 @@ import {
   readKpiHistory,
   readKpiImpact,
   readLiveFleetSelectionSnapshot,
+  readMinimapFrame,
   readMinimapGeometry,
+  readMinimapIncidents,
   resolveLocalDailyDay,
   restoreLiveCompany,
   restoreVersion,
   rideTripDistanceM,
+  LIVE_FLEET_PRESENTATION_SLOTS,
+  mapHeadingFromCompositionYaw,
+  type CompositionFrame,
   type GameTickPort,
   type LiveChallenges,
   type LiveChallengeFrameFact,
@@ -101,6 +106,7 @@ import {
   createKpiHistoryPanel,
   createKpiImpactHud,
   createLiveEconomyHud,
+  createLiveMinimap,
   createLiveRideMarkerLayer,
   createLiveRidesPanel,
   createLiveProgressPanel,
@@ -1200,6 +1206,21 @@ const tutorialPanel = createMissionTutorialPanel(tutorialHost, {
 /** Geometria statică a hărții flotei; minima 074/281 rămâne separată de acest panou. */
 const fleetMapGeometry = readMinimapGeometry({ map: world.map, graph: world.graph });
 /**
+ * PBI 281: minimapa live montează 074 + 076 + incidentele 281 peste exact aceeași geometrie 032/033.
+ * Un click pe un marker cheamă doar `selectVehicle` din compunere (contractul 263) și readuce focusul
+ * pe canvas, deci tastele de condus nu rămân captate de butonul markerului.
+ */
+const liveMinimap = createLiveMinimap(app, {
+  geometry: fleetMapGeometry,
+  select: (vehicleId) => {
+    const accepted = composition?.composition.selectVehicle(vehicleId) ?? false;
+    if (!accepted) return;
+    liveMinimap.setFollowed(vehicleId);
+    view.getCanvas().focus();
+  },
+});
+if (liveMinimap.getRoot() !== null) liveMinimap.getRoot()!.hidden = true;
+/**
  * PBI 263: read model-ul listei/hărții. Compunerea rămâne singurul owner al selecției, autorității
  * și stării vehiculelor; aici doar proiectăm cadrul acceptat.
  */
@@ -1218,6 +1239,86 @@ function liveFleetSnapshot() {
     selectedVehicleId: frame.selectedVehicleId,
     playerVehicleId: frame.playerVehicleId,
   });
+}
+/**
+ * PBI 281: the minimap follows the camera-selected vehicle, then the PLAYER seat, then the first
+ * real active ride and finally the first taxi. A missing vehicle is not replaced with a fake one.
+ */
+function minimapVehicleOf(frame: CompositionFrame): CompositionFrame['vehicles'][number] | null {
+  const selected =
+    frame.selectedVehicleId === null
+      ? undefined
+      : frame.vehicles.find((vehicle) => vehicle.vehicleId === frame.selectedVehicleId);
+  if (selected !== undefined) return selected;
+  const player =
+    frame.playerVehicleId === null
+      ? undefined
+      : frame.vehicles.find((vehicle) => vehicle.vehicleId === frame.playerVehicleId);
+  if (player !== undefined) return player;
+  const ride = ridesModules.composition?.lifecycle.lifecycle.active()[0],
+    rideTaxi =
+      ride === undefined
+        ? undefined
+        : frame.vehicles.find((vehicle) => vehicle.vehicleId === ride.taxiId);
+  return rideTaxi ?? frame.vehicles.find((vehicle) => vehicle.driverKind === 'TAXI') ?? null;
+}
+function minimapTaxiSlot(vehicleId: string): number | undefined {
+  const slot = liveFleet?.registry.get(vehicleId)?.slot;
+  if (slot !== undefined) return slot;
+  if (vehicleId.startsWith('taxi-')) return LIVE_FLEET_PRESENTATION_SLOTS.taxi;
+  if (vehicleId.startsWith('civil-')) return LIVE_FLEET_PRESENTATION_SLOTS.civil;
+  return undefined;
+}
+/**
+ * PBI 281: one minimap/HUD frame over the real 032/033 geometry, 057 registry, 061/064 ride state
+ * and 065 incidents. It advances no tick and creates no route or ride of its own.
+ */
+function updateLiveMinimap(frame: CompositionFrame, status: ReturnType<typeof shell.status>): void {
+  const fleet = liveFleet,
+    rideComposition = ridesModules.composition;
+  if (fleet === undefined || rideComposition === undefined) return;
+  const vehicle = minimapVehicleOf(frame),
+    taxiSlot = vehicle === null ? undefined : minimapTaxiSlot(vehicle.vehicleId),
+    now = performance.now(),
+    selection = liveFleetSnapshot();
+  if (selection === null) return;
+  const positions = new Map(
+      frame.vehicles.map((entry) => [
+        entry.vehicleId,
+        Object.freeze({ x: entry.positionM.x, z: entry.positionM.z }),
+      ]),
+    ),
+    incidents = readMinimapIncidents(
+      { health: dashboardModules.health },
+      {
+        sessionId: status.sessionId,
+        worldEpoch: status.worldEpoch,
+        tick: frame.tick,
+        positions: (vehicleId) => positions.get(vehicleId) ?? null,
+      },
+    ),
+    minimapFrame = readMinimapFrame(
+      {
+        fleet: fleet.registry,
+        lifecycle: rideComposition.lifecycle.lifecycle,
+        eta: rideComposition.lifecycle.eta,
+      },
+      {
+        taxiId: vehicle?.vehicleId ?? '',
+        ...(taxiSlot === undefined ? {} : { taxiSlot }),
+        tick: frame.tick,
+        positionM:
+          vehicle === null
+            ? null
+            : Object.freeze({
+                x: vehicle.positionM.x,
+                y: vehicle.positionM.y,
+                z: vehicle.positionM.z,
+              }),
+        headingRad: vehicle === null ? null : mapHeadingFromCompositionYaw(vehicle.yawRad),
+      },
+    );
+  liveMinimap.update(minimapFrame, selection.map, incidents, now);
 }
 /**
  * PBI 267: the three panels read the same 209/061/065 owners. A read is only requested when the host
@@ -1404,6 +1505,9 @@ const companyDashboard = createCompanyDashboard(app, {
 });
 /** Ultimul taxi cu markere 147; schimbarea selecției nu lasă markerii vechi în urmă. */
 let lastMarkerTaxiId: string | null = null;
+/** PBI 281: 10 Hz wall-clock gate for the minimap and the complete HUD, independent of tick rate. */
+let lastMinimapPaintAt = -Infinity;
+let lastLiveHudPaintAt = -Infinity;
 /** PBI 278: preview-ul afișat este singurul care poate fi confirmat. */
 let pendingGameImport: { readonly previewId: string; readonly text: string } | null = null;
 function persistenceStatusView(): {
@@ -1675,6 +1779,14 @@ const showView = (state: Parameters<typeof view.show>[0]): void => {
   view.show(state);
   shellHost.setSessionState(state.kind);
   if (state.kind !== 'PLAYING') tutorialHost.hidden = true;
+  // PBI 281: the minimap is a driving surface. A live panel may keep it during AUTO observation;
+  // the start screen, pause menu and focus loss hide it instead of leaving a stale map on screen.
+  const minimapRoot = liveMinimap.getRoot();
+  if (minimapRoot !== null)
+    minimapRoot.hidden = !(
+      state.kind === 'PLAYING' ||
+      (state.kind === 'PAUSED' && state.reason === 'panel')
+    );
 };
 /** Browser alt-tab/blur only *reports*; the authoritative suspension stays a 070 decision. */
 const focusBinding = bindPauseFocusInput({
@@ -2055,6 +2167,12 @@ const application = createApplicationLifecycle({
     if (frame !== undefined) {
       kpiImpactHud.update(frame.tick);
       const at = performance.now();
+      // PBI 281: minimap, route, fleet markers and incidents read the accepted frame at 10 Hz wall
+      // clock, so a slow render loop cannot starve the map or the complete HUD.
+      if (at - lastMinimapPaintAt >= 100) {
+        lastMinimapPaintAt = at;
+        updateLiveMinimap(frame, shell.status());
+      }
       if (kpiHistoryPanel.isOpen() && at - lastKpiPanelRefresh >= 100) {
         lastKpiPanelRefresh = at;
         kpiHistoryPanel.refresh();
@@ -2105,16 +2223,24 @@ const application = createApplicationLifecycle({
         heightPx: window.innerHeight,
       });
       const hud = ridesModules.hud;
-      if (hud !== undefined && frame.tick % 6 === 0)
+      const hudNow = performance.now();
+      if (hud !== undefined && hudNow - lastLiveHudPaintAt >= 100) {
+        lastLiveHudPaintAt = hudNow;
+        const hudVehicle =
+          taxiId === null
+            ? undefined
+            : frame.vehicles.find((vehicle) => vehicle.vehicleId === taxiId);
         hud.update(
           rideComposition.hud({
             taxiId: taxiId ?? '',
-            mode: frame.hud.mode,
+            mode: hudVehicle?.controlMode ?? frame.hud.mode,
             tick: frame.tick,
             speedMps: frame.hud.speedMps,
+            sessionKind: shell.status().sessionId === CHAOS_SESSION_ID ? 'CHAOS' : 'ACADEMY',
           }),
-          performance.now(),
+          hudNow,
         );
+      }
     }
   },
   show: showView,
@@ -2912,6 +3038,8 @@ interface V3DebugGlobal {
   sessionNotice(): string | null;
   /** PBI 263: lista/harta flotei, scaunul PLAYER și statisticile panoului. */
   fleet(): unknown;
+  /** PBI 281: minimapa live, ruta, markerii, incidentele și HUD-ul complet, read-only. */
+  minimap(): unknown;
   /** PBI 271: the live 069 segments, LEARNING exposure and accepted mode. */
   modes(): unknown;
   /** PBI 273: the live learning pipeline, its real 103/221 queue and the immutable profile. */
@@ -2962,6 +3090,8 @@ interface V3DebugGlobal {
   stopLanes?(): unknown;
   /** PBI 265 (numai DEV/capture): fapt de sănătate real pentru proba terminală FAILED. */
   setTaxiHealth?(taxiId: string, status: 'AVAILABLE' | 'BLOCKED' | 'DAMAGED' | 'OFFLINE'): unknown;
+  /** PBI 281 (numai DEV/capture/debug): un fapt 065 real COLLISION_DAMAGE pentru proba incidentului. */
+  probeIncident?(taxiId: string): unknown;
   /** PBI 260: starea read-only a lifecycle-ului 012, pentru diagnosticul probei de browser. */
   lifecycle(): unknown;
   /** PBI 241: starea AA/post-procesării (cine aplică tone mappingul, HDR, efecte). */
@@ -3002,6 +3132,41 @@ const debugGlobal: V3DebugGlobal = {
             lastEvent: composition.composition.frame.events.at(-1) ?? null,
           }
         : null,
+    };
+  },
+  minimap: () => {
+    const frame = composition?.composition.frame;
+    const view = liveMinimap.getView();
+    return {
+      rootHidden: liveMinimap.getRoot()?.hidden ?? true,
+      stats: liveMinimap.getStats(),
+      view,
+      canvas: (() => {
+        const root = liveMinimap.getRoot(),
+          staticCanvas = root?.querySelector<HTMLCanvasElement>('.minimap__static') ?? null,
+          dynamicCanvas = root?.querySelector<HTMLCanvasElement>('.minimap__dynamic') ?? null;
+        return {
+          staticWidth: staticCanvas?.width ?? 0,
+          staticHeight: staticCanvas?.height ?? 0,
+          dynamicWidth: dynamicCanvas?.width ?? 0,
+          dynamicHeight: dynamicCanvas?.height ?? 0,
+        };
+      })(),
+      hud: {
+        hidden: document.querySelector<HTMLElement>('.taxi-hud')?.hidden ?? true,
+        view: ridesModules.hud?.getView() ?? null,
+        stats: ridesModules.hud?.getStats() ?? null,
+      },
+      frame:
+        frame === undefined
+          ? null
+          : {
+              tick: frame.tick,
+              selectedVehicleId: frame.selectedVehicleId,
+              playerVehicleId: frame.playerVehicleId,
+              cameraEntityId: frame.camera.entityId,
+              authority: frame.authority.consumer,
+            },
     };
   },
   lanePath: (laneIds: readonly string[]): unknown =>
@@ -3327,6 +3492,13 @@ if (
   };
   debugGlobal.setTaxiHealth = (taxiId, status) =>
     ridesModules.composition?.setTaxiStatus(taxiId, status) ?? null;
+  debugGlobal.probeIncident = (taxiId) =>
+    dashboardModules.health?.apply({
+      taxiId,
+      fact: 'COLLISION_DAMAGE',
+      factId: `probe-281:collision:${taxiId}`,
+      tick: liveMissionTick(),
+    }) ?? null;
   debugGlobal.scene = () => composition?.view.scene ?? null;
   debugGlobal.daylight = () => composition?.view.daylight ?? null;
   debugGlobal.setTimeOfDay = (name) => composition?.view.setTimeOfDay(name) ?? null;
@@ -3420,6 +3592,7 @@ const dispose = (): void => {
     passengerPresenter.dispose();
     rideMarkerLayer.dispose();
     economyHud.dispose();
+    liveMinimap.dispose();
     shell.dispose();
     diagnosticsPanel.dispose();
     view.dispose();

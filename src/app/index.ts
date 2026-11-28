@@ -292,8 +292,11 @@ export {
 export {
   readMinimapFrame,
   readMinimapGeometry,
+  readMinimapIncidents,
   type MinimapFrameInput,
   type MinimapGeometrySources,
+  type MinimapIncidentFrame,
+  type MinimapIncidentSources,
   type MinimapSources,
 } from './minimap';
 export {
@@ -672,6 +675,7 @@ export {
 export {
   LIVE_FLEET_PRESENTATION_SLOTS,
   LIVE_FLEET_SELECTION_VERSION,
+  mapHeadingFromCompositionYaw,
   readLiveFleetSelectionSnapshot,
   type LiveFleetSelectionFrame,
   type LiveFleetSelectionSnapshot,

@@ -20,6 +20,12 @@ export interface MinimapOptions {
   readonly paddingPx?: number;
   /** Repaint ceiling for markers and route. Defaults to 10 Hz; never tied to the tick rate. */
   readonly maximumHz?: number;
+  /**
+   * PBI 281: wrap both canvases in a positioned `.minimap__map` box so the 076 selection and the
+   * 281 incident markers can be laid over the exact map area. The default DOM (8 fixed nodes) is
+   * unchanged for callers that only paint the 074 canvas.
+   */
+  readonly markerOverlay?: boolean;
   /** Test/renderer port. The browser default is the two canvases' own 2D contexts. */
   readonly contexts?: { readonly static: MinimapContext; readonly dynamic: MinimapContext };
 }
@@ -55,11 +61,16 @@ export function createMinimap(
     routeValue = element('span'),
     etaValue = element('span'),
     progressValue = element('span'),
-    description = element('p');
+    description = element('p'),
+    mapHost: HTMLDivElement | null = options.markerOverlay ? element('div') : null;
   root.className = 'minimap';
   root.setAttribute('aria-label', 'Minimapă nord-sus');
   staticCanvas.className = 'minimap__static';
   dynamicCanvas.className = 'minimap__dynamic';
+  if (mapHost !== null) {
+    mapHost.className = 'minimap__map';
+    mapHost.append(staticCanvas, dynamicCanvas);
+  }
   for (const canvas of [staticCanvas, dynamicCanvas]) {
     canvas.width = scene.transform.widthPx;
     canvas.height = scene.transform.heightPx;
@@ -77,7 +88,8 @@ export function createMinimap(
   description.className = 'minimap__description';
   description.id = DESCRIPTION_ID;
   root.setAttribute('aria-describedby', DESCRIPTION_ID);
-  root.append(staticCanvas, dynamicCanvas, status, description);
+  if (mapHost === null) root.append(staticCanvas, dynamicCanvas, status, description);
+  else root.append(mapHost, status, description);
   host.append(root);
 
   const contextFor = (canvas: HTMLCanvasElement): MinimapContext => {
@@ -200,6 +212,17 @@ export function createMinimap(
         retainedFrames: disposed ? 0 : current === null ? 0 : 1,
         disposed,
       }),
+    /** The fixed minimap `<section>`; the host may hide it without disposing the adapter. */
+    getRoot: () => (disposed ? null : root),
+    /** The exact positioned map box reserved for 076 and 281 markers, or `null` by default. */
+    getMapHost: () => (disposed ? null : mapHost),
+    /** The north-up transform currently used by the canvases and every marker layer. */
+    getTransform: () => (disposed || scene === null ? null : scene.transform),
+    /** The retained frame and its projection; `null` before the first accepted update. */
+    getView: () =>
+      disposed || current === null || projection === null
+        ? null
+        : Object.freeze({ frame: current, projection }),
     dispose() {
       mutate(() => {
         if (disposed) return;

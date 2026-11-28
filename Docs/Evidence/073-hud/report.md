@@ -8,8 +8,8 @@ ETA fixture through `readTaxiHudSnapshot`, then renders the real `createTaxiHud`
 
 ## Default and detail rows
 
-Default: Viteză, Mod, Taxi, Etapă, Obiectiv, Rută, ETA, Progres, Serviciu. Details on request:
-Taxi, Clasă, Profil, Versiune profil, Cursă, Etapă tehnică, Interval ETA, Distanță rămasă, Motiv ETA. Modes: AUTO, MANUAL, LEARNING.
+Default: Viteză, Mod, Taxi, Sesiune, Etapă, Obiectiv, Stare, Rută, ETA, Progres, Serviciu. Details on request:
+Taxi, Clasă, Profil, Versiune profil, Cursă, Etapă tehnică, Interval ETA, Distanță rămasă, Motiv ETA, Sesiune. Modes: AUTO, MANUAL, LEARNING.
 
 ### AUTO · TO_PICKUP
 
@@ -26,7 +26,7 @@ Taxi, Clasă, Profil, Versiune profil, Cursă, Etapă tehnică, Interval ETA, Di
 | Service | Flux liber |
 
 ```html
-<section aria-label="HUD de condus · Conduce AI-ul · #1 · Spre pasager" class="taxi-hud" data-mode="AUTO" data-ride="id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000" data-service="FREE_FLOW" data-stance="ACTIVE">
+<section aria-label="HUD de condus · Conduce AI-ul · #1 · sesiune Academia · Spre pasager · În desfășurare" class="taxi-hud" data-mode="AUTO" data-ride="id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000" data-service="FREE_FLOW" data-session="ACADEMY" data-stance="ACTIVE">
   <div class="taxi-hud__speed">
     <span>Viteză</span>
     <output aria-label="Viteză: 29 kilometri pe oră" aria-live="off">29</output>
@@ -39,6 +39,7 @@ Taxi, Clasă, Profil, Versiune profil, Cursă, Etapă tehnică, Interval ETA, Di
   <div class="taxi-hud__taxi">
     <span>Taxi</span>
     <span aria-label="Taxi #1: id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0001">#1</span>
+    <span aria-label="Sesiune Academia: session:060" class="taxi-hud__session">Academia</span>
   </div>
   <dl class="taxi-hud__ride">
     <dt>Etapă</dt>
@@ -53,6 +54,8 @@ Taxi, Clasă, Profil, Versiune profil, Cursă, Etapă tehnică, Interval ETA, Di
     <dd>0% · 1.1 km</dd>
     <dt>Serviciu</dt>
     <dd>Flux liber</dd>
+    <dt>Stare</dt>
+    <dd class="taxi-hud__stance" data-stance="ACTIVE">În desfășurare</dd>
   </dl>
   <details class="taxi-hud__details">
     <summary>Detalii</summary>
@@ -75,6 +78,8 @@ Taxi, Clasă, Profil, Versiune profil, Cursă, Etapă tehnică, Interval ETA, Di
       <dd>1.1 km</dd>
       <dt>Motiv ETA</dt>
       <dd>—</dd>
+      <dt>Sesiune</dt>
+      <dd>ACADEMY · session:060</dd>
     </dl>
   </details>
 </section>
@@ -95,7 +100,7 @@ Taxi, Clasă, Profil, Versiune profil, Cursă, Etapă tehnică, Interval ETA, Di
 | Service | Flux liber |
 
 ```html
-<section aria-label="HUD de condus · Conduci · învățare oprită · #1 · Spre pasager" class="taxi-hud" data-mode="MANUAL" data-ride="id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000" data-service="FREE_FLOW" data-stance="ACTIVE">
+<section aria-label="HUD de condus · Conduci · învățare oprită · #1 · sesiune Academia · Spre pasager · În desfășurare" class="taxi-hud" data-mode="MANUAL" data-ride="id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000" data-service="FREE_FLOW" data-session="ACADEMY" data-stance="ACTIVE">
   <div class="taxi-hud__speed">
     <span>Viteză</span>
     <output aria-label="Viteză: 29 kilometri pe oră" aria-live="off">29</output>
@@ -108,6 +113,7 @@ Taxi, Clasă, Profil, Versiune profil, Cursă, Etapă tehnică, Interval ETA, Di
   <div class="taxi-hud__taxi">
     <span>Taxi</span>
     <span aria-label="Taxi #1: id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0001">#1</span>
+    <span aria-label="Sesiune Academia: session:060" class="taxi-hud__session">Academia</span>
   </div>
   <dl class="taxi-hud__ride">
     <dt>Etapă</dt>
@@ -122,6 +128,8 @@ Taxi, Clasă, Profil, Versiune profil, Cursă, Etapă tehnică, Interval ETA, Di
     <dd>0% · 1.1 km</dd>
     <dt>Serviciu</dt>
     <dd>Flux liber</dd>
+    <dt>Stare</dt>
+    <dd class="taxi-hud__stance" data-stance="ACTIVE">În desfășurare</dd>
   </dl>
   <details class="taxi-hud__details">
     <summary>Detalii</summary>
@@ -144,6 +152,8 @@ Taxi, Clasă, Profil, Versiune profil, Cursă, Etapă tehnică, Interval ETA, Di
       <dd>1.1 km</dd>
       <dt>Motiv ETA</dt>
       <dd>—</dd>
+      <dt>Sesiune</dt>
+      <dd>ACADEMY · session:060</dd>
     </dl>
   </details>
 </section>
@@ -164,7 +174,7 @@ Taxi, Clasă, Profil, Versiune profil, Cursă, Etapă tehnică, Interval ETA, Di
 | Service | Flux liber |
 
 ```html
-<section aria-label="HUD de condus · Conduci · orașul învață · #1 · Spre pasager" class="taxi-hud" data-mode="LEARNING" data-ride="id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000" data-service="FREE_FLOW" data-stance="ACTIVE">
+<section aria-label="HUD de condus · Conduci · orașul învață · #1 · sesiune Academia · Spre pasager · În desfășurare" class="taxi-hud" data-mode="LEARNING" data-ride="id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000" data-service="FREE_FLOW" data-session="ACADEMY" data-stance="ACTIVE">
   <div class="taxi-hud__speed">
     <span>Viteză</span>
     <output aria-label="Viteză: 29 kilometri pe oră" aria-live="off">29</output>
@@ -177,6 +187,7 @@ Taxi, Clasă, Profil, Versiune profil, Cursă, Etapă tehnică, Interval ETA, Di
   <div class="taxi-hud__taxi">
     <span>Taxi</span>
     <span aria-label="Taxi #1: id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0001">#1</span>
+    <span aria-label="Sesiune Academia: session:060" class="taxi-hud__session">Academia</span>
   </div>
   <dl class="taxi-hud__ride">
     <dt>Etapă</dt>
@@ -191,6 +202,8 @@ Taxi, Clasă, Profil, Versiune profil, Cursă, Etapă tehnică, Interval ETA, Di
     <dd>0% · 1.1 km</dd>
     <dt>Serviciu</dt>
     <dd>Flux liber</dd>
+    <dt>Stare</dt>
+    <dd class="taxi-hud__stance" data-stance="ACTIVE">În desfășurare</dd>
   </dl>
   <details class="taxi-hud__details">
     <summary>Detalii</summary>
@@ -213,6 +226,8 @@ Taxi, Clasă, Profil, Versiune profil, Cursă, Etapă tehnică, Interval ETA, Di
       <dd>1.1 km</dd>
       <dt>Motiv ETA</dt>
       <dd>—</dd>
+      <dt>Sesiune</dt>
+      <dd>ACADEMY · session:060</dd>
     </dl>
   </details>
 </section>
@@ -233,7 +248,7 @@ Taxi, Clasă, Profil, Versiune profil, Cursă, Etapă tehnică, Interval ETA, Di
 | Service | Serviciu blocat |
 
 ```html
-<section aria-label="HUD de condus · Conduce AI-ul · #1 · Spre pasager" class="taxi-hud" data-mode="AUTO" data-ride="id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000" data-service="BLOCKED" data-stance="ACTIVE">
+<section aria-label="HUD de condus · Conduce AI-ul · #1 · sesiune Academia · Spre pasager · În desfășurare" class="taxi-hud" data-mode="AUTO" data-ride="id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000" data-service="BLOCKED" data-session="ACADEMY" data-stance="ACTIVE">
   <div class="taxi-hud__speed">
     <span>Viteză</span>
     <output aria-label="Viteză: 29 kilometri pe oră" aria-live="off">29</output>
@@ -246,6 +261,7 @@ Taxi, Clasă, Profil, Versiune profil, Cursă, Etapă tehnică, Interval ETA, Di
   <div class="taxi-hud__taxi">
     <span>Taxi</span>
     <span aria-label="Taxi #1: id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0001">#1</span>
+    <span aria-label="Sesiune Academia: session:060" class="taxi-hud__session">Academia</span>
   </div>
   <dl class="taxi-hud__ride">
     <dt>Etapă</dt>
@@ -260,6 +276,8 @@ Taxi, Clasă, Profil, Versiune profil, Cursă, Etapă tehnică, Interval ETA, Di
     <dd>0% · 1.1 km</dd>
     <dt>Serviciu</dt>
     <dd>Serviciu blocat</dd>
+    <dt>Stare</dt>
+    <dd class="taxi-hud__stance" data-stance="ACTIVE">În desfășurare</dd>
   </dl>
   <details class="taxi-hud__details">
     <summary>Detalii</summary>
@@ -282,6 +300,8 @@ Taxi, Clasă, Profil, Versiune profil, Cursă, Etapă tehnică, Interval ETA, Di
       <dd>1.1 km</dd>
       <dt>Motiv ETA</dt>
       <dd>SERVICE_BLOCKED</dd>
+      <dt>Sesiune</dt>
+      <dd>ACADEMY · session:060</dd>
     </dl>
   </details>
 </section>
@@ -302,7 +322,7 @@ Taxi, Clasă, Profil, Versiune profil, Cursă, Etapă tehnică, Interval ETA, Di
 | Service | — |
 
 ```html
-<section aria-label="HUD de condus · Conduce AI-ul · #1 · Cursă încheiată" class="taxi-hud" data-mode="AUTO" data-ride="id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000" data-service="BLOCKED" data-stance="TERMINAL">
+<section aria-label="HUD de condus · Conduce AI-ul · #1 · sesiune Academia · Cursă încheiată · Încheiată" class="taxi-hud" data-mode="AUTO" data-ride="id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000" data-service="BLOCKED" data-session="ACADEMY" data-stance="TERMINAL">
   <div class="taxi-hud__speed">
     <span>Viteză</span>
     <output aria-label="Viteză: 0 kilometri pe oră" aria-live="off">0</output>
@@ -315,6 +335,7 @@ Taxi, Clasă, Profil, Versiune profil, Cursă, Etapă tehnică, Interval ETA, Di
   <div class="taxi-hud__taxi">
     <span>Taxi</span>
     <span aria-label="Taxi #1: id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0001">#1</span>
+    <span aria-label="Sesiune Academia: session:060" class="taxi-hud__session">Academia</span>
   </div>
   <dl class="taxi-hud__ride">
     <dt>Etapă</dt>
@@ -329,6 +350,8 @@ Taxi, Clasă, Profil, Versiune profil, Cursă, Etapă tehnică, Interval ETA, Di
     <dd>100% · 0 m</dd>
     <dt>Serviciu</dt>
     <dd>—</dd>
+    <dt>Stare</dt>
+    <dd class="taxi-hud__stance" data-stance="COMPLETED">Încheiată</dd>
   </dl>
   <details class="taxi-hud__details">
     <summary>Detalii</summary>
@@ -351,6 +374,8 @@ Taxi, Clasă, Profil, Versiune profil, Cursă, Etapă tehnică, Interval ETA, Di
       <dd>—</dd>
       <dt>Motiv ETA</dt>
       <dd>—</dd>
+      <dt>Sesiune</dt>
+      <dd>ACADEMY · session:060</dd>
     </dl>
   </details>
 </section>
@@ -371,7 +396,7 @@ Taxi, Clasă, Profil, Versiune profil, Cursă, Etapă tehnică, Interval ETA, Di
 | Service | — |
 
 ```html
-<section aria-label="HUD de condus · Conduce AI-ul · #2 · Nicio cursă activă" class="taxi-hud" data-mode="AUTO" data-ride="NONE" data-service="NONE" data-stance="ACTIVE">
+<section aria-label="HUD de condus · Conduce AI-ul · #2 · sesiune session:060 · Nicio cursă activă · Fără cursă" class="taxi-hud" data-mode="AUTO" data-ride="NONE" data-service="NONE" data-session="UNKNOWN" data-stance="ACTIVE">
   <div class="taxi-hud__speed">
     <span>Viteză</span>
     <output aria-label="Viteză: 0 kilometri pe oră" aria-live="off">0</output>
@@ -384,6 +409,7 @@ Taxi, Clasă, Profil, Versiune profil, Cursă, Etapă tehnică, Interval ETA, Di
   <div class="taxi-hud__taxi">
     <span>Taxi</span>
     <span aria-label="Taxi #2: id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0002">#2</span>
+    <span aria-label="Sesiune necunoscută: session:060" class="taxi-hud__session">session:060</span>
   </div>
   <dl class="taxi-hud__ride">
     <dt>Etapă</dt>
@@ -398,6 +424,8 @@ Taxi, Clasă, Profil, Versiune profil, Cursă, Etapă tehnică, Interval ETA, Di
     <dd>—</dd>
     <dt>Serviciu</dt>
     <dd>—</dd>
+    <dt>Stare</dt>
+    <dd class="taxi-hud__stance" data-stance="NONE">Fără cursă</dd>
   </dl>
   <details class="taxi-hud__details">
     <summary>Detalii</summary>
@@ -420,6 +448,8 @@ Taxi, Clasă, Profil, Versiune profil, Cursă, Etapă tehnică, Interval ETA, Di
       <dd>—</dd>
       <dt>Motiv ETA</dt>
       <dd>—</dd>
+      <dt>Sesiune</dt>
+      <dd>UNKNOWN · session:060</dd>
     </dl>
   </details>
 </section>
@@ -440,7 +470,7 @@ Taxi, Clasă, Profil, Versiune profil, Cursă, Etapă tehnică, Interval ETA, Di
 | Service | — |
 
 ```html
-<section aria-label="HUD de condus · Conduce AI-ul · #2 · Cursă a altui taxi" class="taxi-hud" data-mode="AUTO" data-ride="id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000" data-service="BLOCKED" data-stance="FOREIGN">
+<section aria-label="HUD de condus · Conduce AI-ul · #2 · sesiune session:060 · Cursă a altui taxi · Cursă a altui taxi" class="taxi-hud" data-mode="AUTO" data-ride="id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000" data-service="BLOCKED" data-session="UNKNOWN" data-stance="FOREIGN">
   <div class="taxi-hud__speed">
     <span>Viteză</span>
     <output aria-label="Viteză: 0 kilometri pe oră" aria-live="off">0</output>
@@ -453,6 +483,7 @@ Taxi, Clasă, Profil, Versiune profil, Cursă, Etapă tehnică, Interval ETA, Di
   <div class="taxi-hud__taxi">
     <span>Taxi</span>
     <span aria-label="Taxi #2: id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0002">#2</span>
+    <span aria-label="Sesiune necunoscută: session:060" class="taxi-hud__session">session:060</span>
   </div>
   <dl class="taxi-hud__ride">
     <dt>Etapă</dt>
@@ -467,6 +498,8 @@ Taxi, Clasă, Profil, Versiune profil, Cursă, Etapă tehnică, Interval ETA, Di
     <dd>—</dd>
     <dt>Serviciu</dt>
     <dd>—</dd>
+    <dt>Stare</dt>
+    <dd class="taxi-hud__stance" data-stance="FOREIGN">Cursă a altui taxi</dd>
   </dl>
   <details class="taxi-hud__details">
     <summary>Detalii</summary>
@@ -489,6 +522,8 @@ Taxi, Clasă, Profil, Versiune profil, Cursă, Etapă tehnică, Interval ETA, Di
       <dd>—</dd>
       <dt>Motiv ETA</dt>
       <dd>—</dd>
+      <dt>Sesiune</dt>
+      <dd>UNKNOWN · session:060</dd>
     </dl>
   </details>
 </section>
@@ -517,7 +552,7 @@ Taxi, Clasă, Profil, Versiune profil, Cursă, Etapă tehnică, Interval ETA, Di
 | no-ride-no-estimate | Fără estimare | Fără estimare | PASS | missing ETA is never rendered as 0 s |
 | foreign-ride-explicit | Cursă a altui taxi | Cursă a altui taxi | PASS | a ride claimed by another taxi is never carried over |
 | profile-at-request | true | true | PASS | details are collapsed while profile id/version stay available |
-| deterministic-dom | <section aria-label="HUD de condus · Conduce AI-ul · #1 · Spre pasager" class="taxi-hud" data-mode="AUTO" data-ride="id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000" data-service="FREE_FLOW" data-stance="ACTIVE">
+| deterministic-dom | <section aria-label="HUD de condus · Conduce AI-ul · #1 · sesiune Academia · Spre pasager · În desfășurare" class="taxi-hud" data-mode="AUTO" data-ride="id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000" data-service="FREE_FLOW" data-session="ACADEMY" data-stance="ACTIVE">
   <div class="taxi-hud__speed">
     <span>Viteză</span>
     <output aria-label="Viteză: 29 kilometri pe oră" aria-live="off">29</output>
@@ -530,6 +565,7 @@ Taxi, Clasă, Profil, Versiune profil, Cursă, Etapă tehnică, Interval ETA, Di
   <div class="taxi-hud__taxi">
     <span>Taxi</span>
     <span aria-label="Taxi #1: id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0001">#1</span>
+    <span aria-label="Sesiune Academia: session:060" class="taxi-hud__session">Academia</span>
   </div>
   <dl class="taxi-hud__ride">
     <dt>Etapă</dt>
@@ -544,6 +580,8 @@ Taxi, Clasă, Profil, Versiune profil, Cursă, Etapă tehnică, Interval ETA, Di
     <dd>0% · 1.1 km</dd>
     <dt>Serviciu</dt>
     <dd>Flux liber</dd>
+    <dt>Stare</dt>
+    <dd class="taxi-hud__stance" data-stance="ACTIVE">În desfășurare</dd>
   </dl>
   <details class="taxi-hud__details">
     <summary>Detalii</summary>
@@ -566,9 +604,11 @@ Taxi, Clasă, Profil, Versiune profil, Cursă, Etapă tehnică, Interval ETA, Di
       <dd>1.1 km</dd>
       <dt>Motiv ETA</dt>
       <dd>—</dd>
+      <dt>Sesiune</dt>
+      <dd>ACADEMY · session:060</dd>
     </dl>
   </details>
-</section> | <section aria-label="HUD de condus · Conduce AI-ul · #1 · Spre pasager" class="taxi-hud" data-mode="AUTO" data-ride="id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000" data-service="FREE_FLOW" data-stance="ACTIVE">
+</section> | <section aria-label="HUD de condus · Conduce AI-ul · #1 · sesiune Academia · Spre pasager · În desfășurare" class="taxi-hud" data-mode="AUTO" data-ride="id-v1:4:ride18:city:fixture:rides59:id-v1:12:ride-request18:city:fixture:rides8:w:single5:r0000" data-service="FREE_FLOW" data-session="ACADEMY" data-stance="ACTIVE">
   <div class="taxi-hud__speed">
     <span>Viteză</span>
     <output aria-label="Viteză: 29 kilometri pe oră" aria-live="off">29</output>
@@ -581,6 +621,7 @@ Taxi, Clasă, Profil, Versiune profil, Cursă, Etapă tehnică, Interval ETA, Di
   <div class="taxi-hud__taxi">
     <span>Taxi</span>
     <span aria-label="Taxi #1: id-v1:7:vehicle18:city:fixture:fleet4:TAXI4:0001">#1</span>
+    <span aria-label="Sesiune Academia: session:060" class="taxi-hud__session">Academia</span>
   </div>
   <dl class="taxi-hud__ride">
     <dt>Etapă</dt>
@@ -595,6 +636,8 @@ Taxi, Clasă, Profil, Versiune profil, Cursă, Etapă tehnică, Interval ETA, Di
     <dd>0% · 1.1 km</dd>
     <dt>Serviciu</dt>
     <dd>Flux liber</dd>
+    <dt>Stare</dt>
+    <dd class="taxi-hud__stance" data-stance="ACTIVE">În desfășurare</dd>
   </dl>
   <details class="taxi-hud__details">
     <summary>Detalii</summary>
@@ -617,6 +660,8 @@ Taxi, Clasă, Profil, Versiune profil, Cursă, Etapă tehnică, Interval ETA, Di
       <dd>1.1 km</dd>
       <dt>Motiv ETA</dt>
       <dd>—</dd>
+      <dt>Sesiune</dt>
+      <dd>ACADEMY · session:060</dd>
     </dl>
   </details>
 </section> | PASS | the same snapshot renders byte-identical HTML |
