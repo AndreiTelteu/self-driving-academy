@@ -1,7 +1,14 @@
 import type { FleetRegistry, RideEta, RideLifecycle, RideRecord } from '../fleet';
 import type { ControlMode } from '../vehicles';
 import type { EtaSnapshot } from '../fleet';
-import type { TaxiHudEta, TaxiHudRide, TaxiHudSnapshot, TaxiHudTaxi } from '../ui';
+import type {
+  TaxiHudEta,
+  TaxiHudRide,
+  TaxiHudSession,
+  TaxiHudSessionKind,
+  TaxiHudSnapshot,
+  TaxiHudTaxi,
+} from '../ui';
 
 /** The real modules whose accepted read models feed one 073 HUD frame. */
 export interface TaxiHudSources {
@@ -16,6 +23,8 @@ export interface TaxiHudFrame {
   readonly mode: ControlMode;
   readonly tick: number;
   readonly speedMps: number | null;
+  /** PBI 281: the accepted 261 session kind; omitted frames show the real id only. */
+  readonly sessionKind?: TaxiHudSessionKind;
   /** Optional explicit ride binding; otherwise the active 061 ride of `taxiId` is used. */
   readonly rideId?: string | null;
 }
@@ -74,6 +83,10 @@ function activeRideFor(lifecycle: RideLifecycle, taxiId: string): RideRecord | u
  */
 export function readTaxiHudSnapshot(sources: TaxiHudSources, frame: TaxiHudFrame): TaxiHudSnapshot {
   const context = sources.fleet.context(),
+    session: TaxiHudSession = Object.freeze({
+      id: context.sessionId,
+      kind: frame.sessionKind ?? 'UNKNOWN',
+    }),
     vehicle = sources.fleet.get(frame.taxiId),
     state = sources.fleet.state(frame.taxiId),
     taxi: TaxiHudTaxi | null =
@@ -116,6 +129,7 @@ export function readTaxiHudSnapshot(sources: TaxiHudSources, frame: TaxiHudFrame
         ? null
         : frame.speedMps,
     mode: frame.mode,
+    session,
     taxi,
     ride: rideView,
   });

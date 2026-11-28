@@ -4,7 +4,7 @@ Status: implementare și validare funcțională locală. `src/ui/minimap-format.
 transformarea world→map, proiecția comenzilor de desen și textul accesibil; `src/ui/minimap.ts` este
 adaptorul DOM/canvas; `src/app/minimap.ts` compune geometria reală 032/033 cu taxiul 057, cursa 061 și
 ETA/progresul 064. Modulul nu creează hartă, rută, taxi, zonă sau ETA și nu deschide o a doua cameră
-Babylon.
+Babylon. Montarea live din 281 adaugă `src/ui/minimap-live.ts` peste exact aceleași contracte.
 
 ## Ce desenează
 
@@ -111,6 +111,28 @@ marker per taxi 057 și per mașină civilă 058, proiectat cu transformarea de 
 stabil prin `vehicleId`. Un click pe marker emite doar intenția 068 `WORLD`; nu desenează o a doua
 hartă, nu deschide o cameră Babylon și nu teleportează vehicule.
 
+## Montarea live 281
+
+`src/ui/minimap-live.ts` (`281-live-minimap-v1`) montează 074, 076 și incidentele 281 peste exact
+același pătrat de hartă. `createMinimap(..., { markerOverlay: true })` creează un singur
+`.minimap__map`; canvasurile și markerii sunt copii absolute ale aceleiași cutii, deci o schimbare CSS
+a minimap-ului mută toate straturile împreună.
+
+- `src/app/minimap.ts` alege vehiculul afișat în ordinea: ținta camerei 263, scaunul `PLAYER`, primul
+  taxi cu cursă activă, apoi primul taxi. Un vehicul din compunere care nu este în registrul 057
+  păstrează slotul de prezentare 9998/9999 (aceeași regulă ca 263); nu se inventează un `vehicleId`.
+- `readMinimapIncidents` citește exclusiv 065: un taxi `DAMAGED` cu cauza `COLLISION_DAMAGE` produce
+  un marker la poziția lui autoritară curentă. Identitatea stabilă este `factId`; un taxi fără poziție
+  este omis, iar un 065 absent este raportat `UNAVAILABLE`, nu „zero incidente”.
+- Un click pe un marker cheamă numai `composition.selectVehicle(vehicleId)` și readuce focusul pe
+  canvas. Markerul nu preia autoritatea, nu mișcă mașina și nu instalează listener de tastatură.
+- `main.ts` actualizează minimapa la un plafon de 10 Hz pe ceas de perete, nu la fiecare cadru și nu
+  la `tick % N`; un render lent nu mai subțiază harta.
+
+Incidentele apar doar când un producător real 028/029 publică un fapt 065. Buildul curent nu are încă
+acel producător live; proba de browser injectează un fapt `COLLISION_DAMAGE` real prin portul 065 de
+probă și marchează explicit această limitare.
+
 ## Stări explicite
 
 | Situație | Rută | Taxi | Text |
@@ -148,12 +170,14 @@ desen.
 | Limită | Valoare |
 | --- | ---: |
 | Elemente DOM | 8 |
+| Elemente DOM cu overlay live | 9 |
 | Noduri de text | 4 |
 | Listeners | 0 |
 | Frecvență markeri | 10 Hz |
 | Dimensiune implicită | 240×240 px |
 | Benzi de rută | 256 |
 | Benzi în geometrie | 4096 |
+| Incidente pe hartă | 64 |
 | Code units per identitate | 512 |
 
 ## Verificare
@@ -172,6 +196,18 @@ Runnerul scrie [report.json](Evidence/074-minimap/report.json) și
 [report.md](Evidence/074-minimap/report.md): 6 scenarii deterministe și 25 de verificări, inclusiv
 comenzile de desen și DOM-ul serializat. `npm test` include comparația cu transcriptul comis.
 Captura Chromium opțională este documentată în [Evidence/074-minimap](Evidence/074-minimap/README.md).
+
+Pentru montarea live 281:
+
+```powershell
+npm run minimap:hud
+npm run minimap:hud -- --check
+npm run minimap:hud:probe
+```
+
+`tests/ui/minimap-live.test.ts` (4 teste) acoperă cele trei straturi pe aceeași cutie, identitatea
+stabilă la mișcare și click, identitatea `factId` a incidentelor și plafonul de 10 Hz. Raportul
+determinist 36/36 și proba de browser sunt în [Evidence/281-minimap-hud](Evidence/281-minimap-hud/README.md).
 
 ## Ce NU este
 

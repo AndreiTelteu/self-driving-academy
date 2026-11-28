@@ -45,7 +45,9 @@ export interface LiveFleetSelectionSnapshot {
   readonly followedVehicleId: string | null;
 }
 
-function mapHeadingFromCompositionYaw(yawRad: number): number {
+/** PBI 281: the same yaw→map-heading conversion used by the 263 map markers. */
+export function mapHeadingFromCompositionYaw(yawRad: number): number {
+  if (!Number.isFinite(yawRad)) throw new Error('Map heading requires a finite yaw.');
   const value = Math.PI / 2 - yawRad;
   return ((((value + Math.PI) % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2)) - Math.PI;
 }

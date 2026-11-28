@@ -25,7 +25,7 @@
   --layout-inset: 1rem;
   --layout-gap: 0.75rem;
   --layout-hud-width: 22rem;
-  --layout-hud-reserve: 22rem;
+  --layout-hud-reserve: 24rem;
   --layout-hud-font: 0.95rem;
   --layout-minimap-width: 15rem;
   --layout-minimap-font: 0.8rem;
@@ -533,13 +533,23 @@ button:focus-visible {
   font-weight: 600;
 }
 
-/* Responsive: sub 1100px HUD-ul se mută jos */
+/* 281: below 1100 px the bottom HUD is centred in the free band between the HUD column and the
+   minimap column instead of moving over the speed output. */
 @media (max-width: 1100px) {
   .game-hud {
-    bottom: auto;
-    top: var(--layout-inset);
+    left: calc(var(--layout-hud-width) + var(--layout-gap) * 2);
+    right: calc(var(--layout-minimap-width) + var(--layout-gap) * 2);
+    transform: none;
     flex-direction: column;
     gap: 0.75rem;
+    justify-content: center;
+    width: auto;
+  }
+
+  /* The secondary economy status keeps a narrow left column under the HUD at compact widths. */
+  .live-economy-hud {
+    width: min(14rem, calc(100vw - var(--layout-minimap-width) - 4rem));
+    max-height: calc(100vh - var(--layout-inset) * 2 - var(--layout-hud-reserve));
   }
 }
 
@@ -560,6 +570,18 @@ button:focus-visible {
   border-radius: 0.4rem;
   color: var(--ui-error);
   font-size: 0.78rem;
+}
+
+/* 266 live economy readout: a secondary status under the driving HUD, never over it. */
+.live-economy-hud {
+  position: fixed;
+  top: calc(var(--layout-inset) + var(--layout-hud-reserve));
+  left: var(--layout-inset);
+  z-index: 1;
+  width: min(38rem, calc(100vw - 2rem));
+  max-height: calc(100vh - var(--layout-inset) - var(--layout-hud-reserve) - 6rem);
+  overflow-y: auto;
+  scrollbar-width: thin;
 }
 
 /* 073 HUD: readable while driving. Text and symbols carry the mode; colour only reinforces. */
@@ -630,9 +652,30 @@ button:focus-visible {
 }
 
 .taxi-hud__taxi {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem;
   margin-top: 0.35rem;
   color: #c6dbd1;
   overflow-wrap: anywhere;
+}
+
+/* PBI 281: the real 261 session stays visible next to the selected taxi. */
+.taxi-hud__session {
+  padding-left: 0.4rem;
+  border-left: 1px solid #ffffff3d;
+  color: #9fe0c5;
+  font-weight: 600;
+}
+
+.taxi-hud__stance {
+  color: #c6dbd1;
+}
+
+.taxi-hud[data-stance='FOREIGN'] .taxi-hud__stance,
+.taxi-hud[data-session='UNKNOWN'] .taxi-hud__session {
+  color: #ffd28a;
 }
 
 .taxi-hud__ride,
@@ -712,6 +755,11 @@ button:focus-visible {
   pointer-events: none;
 }
 
+/* PBI 281: the host hides the driving minimap outside play; `display: grid` must not override it. */
+.minimap[hidden] {
+  display: none;
+}
+
 .minimap__static,
 .minimap__dynamic {
   grid-area: map;
@@ -719,6 +767,20 @@ button:focus-visible {
   width: 100%;
   height: auto;
   border-radius: 0.5rem;
+}
+
+/* PBI 281: both canvases and every marker layer share the exact map box. */
+.minimap__map {
+  position: relative;
+  grid-area: map;
+  display: grid;
+  grid-template-areas: 'map';
+  min-width: 0;
+}
+
+.minimap__map .minimap__static,
+.minimap__map .minimap__dynamic {
+  grid-area: map;
 }
 
 .minimap__static {
@@ -746,6 +808,43 @@ button:focus-visible {
 }
 
 .minimap__description {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* PBI 281 incident markers: real 065 DAMAGED taxis, below the 076 buttons and pointer-inert. */
+.minimap-incidents {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  margin: 0;
+  pointer-events: none;
+}
+
+.minimap-incidents__marker {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 1.1rem;
+  height: 1.1rem;
+  transform: translate(-50%, -50%);
+  border: 2px dashed #ffb4a8;
+  border-radius: 0.2rem;
+  background: #3b1712e6;
+  color: #fff3f0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.minimap-incidents__description {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -3341,7 +3440,7 @@ button:focus-visible {
    same anchors and the same scroll contract. */
 @media (min-width: 1920px) and (min-height: 1080px) {
   :root {
-    --layout-hud-reserve: 22rem;
+    --layout-hud-reserve: 24rem;
     --layout-hud-font: 1rem;
     --layout-minimap-font: 0.85rem;
     --layout-fleet-width: 26rem;

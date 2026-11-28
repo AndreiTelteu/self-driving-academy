@@ -1,0 +1,420 @@
+{
+  "version": "281-live-minimap-hud-report-v1",
+  "contract": {
+    "liveMinimap": "281-live-minimap-v1",
+    "layers": [
+      "074 minimap",
+      "076 selection",
+      "281 incidents"
+    ],
+    "hudRows": [
+      "Viteză",
+      "Mod",
+      "Taxi",
+      "Sesiune",
+      "Etapă",
+      "Obiectiv",
+      "Stare",
+      "Rută",
+      "ETA",
+      "Progres",
+      "Serviciu"
+    ],
+    "updateHz": 10,
+    "sessions": [
+      "Academia",
+      "Haos"
+    ],
+    "incidents": "065 COLLISION_DAMAGE / DAMAGED at the current authoritative position"
+  },
+  "scenarios": [
+    {
+      "name": "ruta live + vehicul selectat",
+      "route": {
+        "status": "READY",
+        "laneIds": [
+          "lane:00N0",
+          "lane:01E0",
+          "lane:10S0",
+          "lane:00W0"
+        ],
+        "pointCount": 33
+      },
+      "markers": {
+        "vehicles": 23,
+        "taxis": 20,
+        "civilians": 3,
+        "incidents": 1,
+        "selected": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0002",
+        "incidentIds": [
+          "281:report:collision"
+        ]
+      },
+      "hud": {
+        "speed": "29 km/h",
+        "mode": "Conduce AI-ul",
+        "session": "Academia",
+        "taxi": "#2",
+        "objective": "Du-te la pasagerul din sz:0-0",
+        "stance": "În desfășurare",
+        "rideState": "ACTIVE",
+        "eta": "~52 s",
+        "progress": "0% · 697 m"
+      },
+      "dom": "<section aria-describedby=\"minimap-description\" aria-label=\"Minimapă nord-sus · Rută: 4 benzi · 0% · 697 m · ~52 s\" class=\"minimap\" data-position=\"AVAILABLE\" data-route=\"READY\" data-tick=\"60\">\n  <div class=\"minimap__map\">\n    <canvas aria-hidden=\"true\" class=\"minimap__static\" height=\"240\" width=\"240\"></canvas>\n    <canvas aria-hidden=\"true\" class=\"minimap__dynamic\" height=\"240\" width=\"240\"></canvas>\n    <div aria-describedby=\"map-selection-description\" aria-label=\"Selectare vehicule pe hartă · 20 taxiuri · 3 civile\" class=\"map-selection\" data-civilians=\"3\" data-followed=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0002\" data-markers=\"23\" data-taxis=\"20\" data-tick=\"60\" role=\"group\">\n      <p class=\"map-selection__description\">Selectare pe hartă: 20 taxiuri și 3 mașini civile. 23 markeri selectabili. Taxi #2 (id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0002); simbol T; poziție x 2.1 m, z 3.8 m; vehicul urmărit de cameră; selectabil; tip Taxi Un click schimbă doar ținta camerei; vehiculul rămâne în AUTO până la preluarea explicită și nu este teleportat.</p>\n      <button aria-label=\"Taxi #1 (id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0001); simbol T; poziție x 3.8 m, z -2.1 m; neurmărit; selectabil; tip Taxi\" aria-pressed=\"false\" class=\"map-selection__marker\" data-kind=\"TAXI\" data-label=\"Taxi #1\" data-marker-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0001\" data-selectable=\"true\" data-selected=\"false\" data-slot=\"1\" data-vehicle-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0001\" style=\"left: 9.1854%; top: 91.4906%;\" type=\"button\">T</button>\n      <button aria-label=\"Taxi #2 (id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0002); simbol T; poziție x 2.1 m, z 3.8 m; vehicul urmărit de cameră; selectabil; tip Taxi\" aria-pressed=\"true\" class=\"map-selection__marker\" data-kind=\"TAXI\" data-label=\"Taxi #2\" data-marker-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0002\" data-selectable=\"true\" data-selected=\"true\" data-slot=\"2\" data-vehicle-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0002\" style=\"left: 8.9906%; top: 90.8146%;\" type=\"button\">T</button>\n      <button aria-label=\"Taxi #3 (id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0003); simbol T; poziție x -2.1 m, z 176.2 m; neurmărit; selectabil; tip Taxi\" aria-pressed=\"false\" class=\"map-selection__marker\" data-kind=\"TAXI\" data-label=\"Taxi #3\" data-marker-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0003\" data-selectable=\"true\" data-selected=\"false\" data-slot=\"3\" data-vehicle-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0003\" style=\"left: 8.5094%; top: 71.0604%;\" type=\"button\">T</button>\n      <button aria-label=\"Taxi #4 (id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0004); simbol T; poziție x 176.2 m, z 2.1 m; neurmărit; selectabil; tip Taxi\" aria-pressed=\"false\" class=\"map-selection__marker\" data-kind=\"TAXI\" data-label=\"Taxi #4\" data-marker-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0004\" data-selectable=\"true\" data-selected=\"false\" data-slot=\"4\" data-vehicle-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0004\" style=\"left: 28.9396%; top: 91.0094%;\" type=\"button\">T</button>\n      <button aria-label=\"Taxi #5 (id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0005); simbol T; poziție x 3.8 m, z 177.9 m; neurmărit; selectabil; tip Taxi\" aria-pressed=\"false\" class=\"map-selection__marker\" data-kind=\"TAXI\" data-label=\"Taxi #5\" data-marker-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0005\" data-selectable=\"true\" data-selected=\"false\" data-slot=\"5\" data-vehicle-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0005\" style=\"left: 9.1854%; top: 70.8656%;\" type=\"button\">T</button>\n      <button aria-label=\"Taxi #6 (id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0006); simbol T; poziție x 2.1 m, z 183.8 m; neurmărit; selectabil; tip Taxi\" aria-pressed=\"false\" class=\"map-selection__marker\" data-kind=\"TAXI\" data-label=\"Taxi #6\" data-marker-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0006\" data-selectable=\"true\" data-selected=\"false\" data-slot=\"6\" data-vehicle-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0006\" style=\"left: 8.9906%; top: 70.1896%;\" type=\"button\">T</button>\n      <button aria-label=\"Taxi #7 (id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0007); simbol T; poziție x -2.1 m, z 352.5 m; neurmărit; selectabil; tip Taxi\" aria-pressed=\"false\" class=\"map-selection__marker\" data-kind=\"TAXI\" data-label=\"Taxi #7\" data-marker-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0007\" data-selectable=\"true\" data-selected=\"false\" data-slot=\"7\" data-vehicle-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0007\" style=\"left: 8.5094%; top: 50.8594%;\" type=\"button\">T</button>\n      <button aria-label=\"Taxi #8 (id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0008); simbol T; poziție x 176.2 m, z 182.1 m; neurmărit; selectabil; tip Taxi\" aria-pressed=\"false\" class=\"map-selection__marker\" data-kind=\"TAXI\" data-label=\"Taxi #8\" data-marker-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0008\" data-selectable=\"true\" data-selected=\"false\" data-slot=\"8\" data-vehicle-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0008\" style=\"left: 28.9396%; top: 70.3844%;\" type=\"button\">T</button>\n      <button aria-label=\"Taxi #9 (id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0009); simbol T; poziție x 3.8 m, z 357.9 m; neurmărit; selectabil; tip Taxi\" aria-pressed=\"false\" class=\"map-selection__marker\" data-kind=\"TAXI\" data-label=\"Taxi #9\" data-marker-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0009\" data-selectable=\"true\" data-selected=\"false\" data-slot=\"9\" data-vehicle-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0009\" style=\"left: 9.1854%; top: 50.2406%;\" type=\"button\">T</button>\n      <button aria-label=\"Taxi #10 (id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0010); simbol T; poziție x 3.8 m, z 354.2 m; neurmărit; selectabil; tip Taxi\" aria-pressed=\"false\" class=\"map-selection__marker\" data-kind=\"TAXI\" data-label=\"Taxi #10\" data-marker-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0010\" data-selectable=\"true\" data-selected=\"false\" data-slot=\"10\" data-vehicle-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0010\" style=\"left: 9.1854%; top: 50.6646%;\" type=\"button\">T</button>\n      <button aria-label=\"Taxi #11 (id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0011); simbol T; poziție x 2.1 m, z 367.5 m; neurmărit; selectabil; tip Taxi\" aria-pressed=\"false\" class=\"map-selection__marker\" data-kind=\"TAXI\" data-label=\"Taxi #11\" data-marker-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0011\" data-selectable=\"true\" data-selected=\"false\" data-slot=\"11\" data-vehicle-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0011\" style=\"left: 8.9906%; top: 49.1406%;\" type=\"button\">T</button>\n      <button aria-label=\"Taxi #12 (id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0012); simbol T; poziție x -2.1 m, z 536.2 m; neurmărit; selectabil; tip Taxi\" aria-pressed=\"false\" class=\"map-selection__marker\" data-kind=\"TAXI\" data-label=\"Taxi #12\" data-marker-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0012\" data-selectable=\"true\" data-selected=\"false\" data-slot=\"12\" data-vehicle-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0012\" style=\"left: 8.5094%; top: 29.8104%;\" type=\"button\">T</button>\n      <button aria-label=\"Taxi #13 (id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0013); simbol T; poziție x 176.2 m, z 362.1 m; neurmărit; selectabil; tip Taxi\" aria-pressed=\"false\" class=\"map-selection__marker\" data-kind=\"TAXI\" data-label=\"Taxi #13\" data-marker-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0013\" data-selectable=\"true\" data-selected=\"false\" data-slot=\"13\" data-vehicle-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0013\" style=\"left: 28.9396%; top: 49.7594%;\" type=\"button\">T</button>\n      <button aria-label=\"Taxi #14 (id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0014); simbol T; poziție x 176.2 m, z 365.8 m; neurmărit; selectabil; tip Taxi\" aria-pressed=\"false\" class=\"map-selection__marker\" data-kind=\"TAXI\" data-label=\"Taxi #14\" data-marker-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0014\" data-selectable=\"true\" data-selected=\"false\" data-slot=\"14\" data-vehicle-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0014\" style=\"left: 28.9396%; top: 49.3354%;\" type=\"button\">T</button>\n      <button aria-label=\"Taxi #15 (id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0015); simbol T; poziție x 3.8 m, z 537.9 m; neurmărit; selectabil; tip Taxi\" aria-pressed=\"false\" class=\"map-selection__marker\" data-kind=\"TAXI\" data-label=\"Taxi #15\" data-marker-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0015\" data-selectable=\"true\" data-selected=\"false\" data-slot=\"15\" data-vehicle-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0015\" style=\"left: 9.1854%; top: 29.6156%;\" type=\"button\">T</button>\n      <button aria-label=\"Taxi #16 (id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0016); simbol T; poziție x 2.1 m, z 543.8 m; neurmărit; selectabil; tip Taxi\" aria-pressed=\"false\" class=\"map-selection__marker\" data-kind=\"TAXI\" data-label=\"Taxi #16\" data-marker-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0016\" data-selectable=\"true\" data-selected=\"false\" data-slot=\"16\" data-vehicle-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0016\" style=\"left: 8.9906%; top: 28.9396%;\" type=\"button\">T</button>\n      <button aria-label=\"Taxi #17 (id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0017); simbol T; poziție x -2.1 m, z 716.2 m; neurmărit; selectabil; tip Taxi\" aria-pressed=\"false\" class=\"map-selection__marker\" data-kind=\"TAXI\" data-label=\"Taxi #17\" data-marker-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0017\" data-selectable=\"true\" data-selected=\"false\" data-slot=\"17\" data-vehicle-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0017\" style=\"left: 8.5094%; top: 9.1854%;\" type=\"button\">T</button>\n      <button aria-label=\"Taxi #18 (id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0018); simbol T; poziție x 176.2 m, z 542.1 m; neurmărit; selectabil; tip Taxi\" aria-pressed=\"false\" class=\"map-selection__marker\" data-kind=\"TAXI\" data-label=\"Taxi #18\" data-marker-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0018\" data-selectable=\"true\" data-selected=\"false\" data-slot=\"18\" data-vehicle-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0018\" style=\"left: 28.9396%; top: 29.1344%;\" type=\"button\">T</button>\n      <button aria-label=\"Taxi #19 (id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0019); simbol T; poziție x 3.8 m, z 717.9 m; neurmărit; selectabil; tip Taxi\" aria-pressed=\"false\" class=\"map-selection__marker\" data-kind=\"TAXI\" data-label=\"Taxi #19\" data-marker-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0019\" data-selectable=\"true\" data-selected=\"false\" data-slot=\"19\" data-vehicle-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0019\" style=\"left: 9.1854%; top: 8.9906%;\" type=\"button\">T</button>\n      <button aria-label=\"Taxi #20 (id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0020); simbol T; poziție x 176.2 m, z 722.1 m; neurmărit; selectabil; tip Taxi\" aria-pressed=\"false\" class=\"map-selection__marker\" data-kind=\"TAXI\" data-label=\"Taxi #20\" data-marker-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0020\" data-selectable=\"true\" data-selected=\"false\" data-slot=\"20\" data-vehicle-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0020\" style=\"left: 28.9396%; top: 8.5094%;\" type=\"button\">T</button>\n      <button aria-label=\"Civil #21 (id-v1:7:vehicle20:city:fleet-065:fleet8:CIVILIAN4:0021); simbol C; poziție x 3.8 m, z -2.1 m; neurmărit; selectabil; tip Civil\" aria-pressed=\"false\" class=\"map-selection__marker\" data-kind=\"CIVIL\" data-label=\"Civil #21\" data-marker-id=\"id-v1:7:vehicle20:city:fleet-065:fleet8:CIVILIAN4:0021\" data-selectable=\"true\" data-selected=\"false\" data-slot=\"21\" data-vehicle-id=\"id-v1:7:vehicle20:city:fleet-065:fleet8:CIVILIAN4:0021\" style=\"left: 9.1854%; top: 91.4906%;\" type=\"button\">C</button>\n      <button aria-label=\"Civil #22 (id-v1:7:vehicle20:city:fleet-065:fleet8:CIVILIAN4:0022); simbol C; poziție x 2.1 m, z 3.8 m; neurmărit; selectabil; tip Civil\" aria-pressed=\"false\" class=\"map-selection__marker\" data-kind=\"CIVIL\" data-label=\"Civil #22\" data-marker-id=\"id-v1:7:vehicle20:city:fleet-065:fleet8:CIVILIAN4:0022\" data-selectable=\"true\" data-selected=\"false\" data-slot=\"22\" data-vehicle-id=\"id-v1:7:vehicle20:city:fleet-065:fleet8:CIVILIAN4:0022\" style=\"left: 8.9906%; top: 90.8146%;\" type=\"button\">C</button>\n      <button aria-label=\"Civil #23 (id-v1:7:vehicle20:city:fleet-065:fleet8:CIVILIAN4:0023); simbol C; poziție x -2.1 m, z 176.2 m; neurmărit; selectabil; tip Civil\" aria-pressed=\"false\" class=\"map-selection__marker\" data-kind=\"CIVIL\" data-label=\"Civil #23\" data-marker-id=\"id-v1:7:vehicle20:city:fleet-065:fleet8:CIVILIAN4:0023\" data-selectable=\"true\" data-selected=\"false\" data-slot=\"23\" data-vehicle-id=\"id-v1:7:vehicle20:city:fleet-065:fleet8:CIVILIAN4:0023\" style=\"left: 8.5094%; top: 71.0604%;\" type=\"button\">C</button>\n    </div>\n    <div aria-describedby=\"minimap-incidents-description\" aria-label=\"Incidente pe hartă · 1 active · AVAILABLE\" class=\"minimap-incidents\" data-count=\"1\" data-health=\"AVAILABLE\" data-tick=\"61\" role=\"group\">\n      <p class=\"minimap-incidents__description\">1 incidente active.</p>\n      <span aria-label=\"Incident COLLISION_DAMAGE la id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0001, tick 61\" class=\"minimap-incidents__marker\" data-incident-id=\"281:report:collision\" data-kind=\"COLLISION_DAMAGE\" data-tick=\"61\" data-vehicle-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0001\" role=\"img\" style=\"left: 9.1854%; top: 91.4906%;\">!</span>\n    </div>\n  </div>\n  <p aria-live=\"polite\" class=\"minimap__status\" role=\"status\">\n    <span class=\"minimap__route\">Rută: 4 benzi · 0% · 697 m</span>\n    <span class=\"minimap__eta\">~52 s</span>\n    <span class=\"minimap__progress\">0% · 697 m</span>\n  </p>\n  <p class=\"minimap__description\">Minimapă nord-sus (X est, Z nord), harta neighbourhood-compact-v1. Taxi #2 (id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0002). Poziție x 2.1 m, z 3.8 m, direcție 90°. Progres 0% · 697 m. Rută: 4 benzi · 0% · 697 m. ETA ~52 s. Ridicare la zona sz:0-0; predare la zona sz:0-1.</p>\n</section>",
+      "stats": {
+        "version": "281-live-minimap-v1",
+        "mapDynamicPaints": 1,
+        "mapRouteLanes": 4,
+        "selectionMarkers": 23,
+        "selectionWrites": 170,
+        "incidentMarkers": 1,
+        "listeners": 23,
+        "globalListeners": 0
+      }
+    },
+    {
+      "name": "fără poziție și fără cursă",
+      "route": {
+        "status": "READY",
+        "laneIds": [
+          "lane:00N0",
+          "lane:01E0",
+          "lane:10S0",
+          "lane:00W0"
+        ],
+        "pointCount": 33
+      },
+      "markers": {
+        "vehicles": 23,
+        "taxis": 20,
+        "civilians": 3,
+        "incidents": 0,
+        "selected": null,
+        "incidentIds": []
+      },
+      "hud": {
+        "speed": "— km/h",
+        "mode": "Conduce AI-ul",
+        "session": "session:065",
+        "taxi": "#1",
+        "objective": "Fără obiectiv",
+        "stance": "Fără cursă",
+        "rideState": "NONE",
+        "eta": "Fără estimare",
+        "progress": "—"
+      },
+      "dom": "<section aria-describedby=\"minimap-description\" aria-label=\"Minimapă nord-sus · Rută: 4 benzi · 0% · 697 m · ~52 s\" class=\"minimap\" data-position=\"MISSING\" data-route=\"READY\" data-tick=\"62\">\n  <div class=\"minimap__map\">\n    <canvas aria-hidden=\"true\" class=\"minimap__static\" height=\"240\" width=\"240\"></canvas>\n    <canvas aria-hidden=\"true\" class=\"minimap__dynamic\" height=\"240\" width=\"240\"></canvas>\n    <div aria-describedby=\"map-selection-description\" aria-label=\"Selectare vehicule pe hartă · 20 taxiuri · 3 civile\" class=\"map-selection\" data-civilians=\"3\" data-followed=\"\" data-markers=\"23\" data-taxis=\"20\" data-tick=\"62\" role=\"group\">\n      <p class=\"map-selection__description\">Selectare pe hartă: 20 taxiuri și 3 mașini civile. 23 markeri selectabili. Niciun vehicul urmărit. Un click schimbă doar ținta camerei; vehiculul rămâne în AUTO până la preluarea explicită și nu este teleportat.</p>\n      <button aria-label=\"Taxi #1 (id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0001); simbol T; poziție x 3.8 m, z -2.1 m; neurmărit; selectabil; tip Taxi\" aria-pressed=\"false\" class=\"map-selection__marker\" data-kind=\"TAXI\" data-label=\"Taxi #1\" data-marker-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0001\" data-selectable=\"true\" data-selected=\"false\" data-slot=\"1\" data-vehicle-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0001\" style=\"left: 9.1854%; top: 91.4906%;\" type=\"button\">T</button>\n      <button aria-label=\"Taxi #2 (id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0002); simbol T; poziție x 2.1 m, z 3.8 m; neurmărit; selectabil; tip Taxi\" aria-pressed=\"false\" class=\"map-selection__marker\" data-kind=\"TAXI\" data-label=\"Taxi #2\" data-marker-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0002\" data-selectable=\"true\" data-selected=\"false\" data-slot=\"2\" data-vehicle-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0002\" style=\"left: 8.9906%; top: 90.8146%;\" type=\"button\">T</button>\n      <button aria-label=\"Taxi #3 (id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0003); simbol T; poziție x -2.1 m, z 176.2 m; neurmărit; selectabil; tip Taxi\" aria-pressed=\"false\" class=\"map-selection__marker\" data-kind=\"TAXI\" data-label=\"Taxi #3\" data-marker-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0003\" data-selectable=\"true\" data-selected=\"false\" data-slot=\"3\" data-vehicle-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0003\" style=\"left: 8.5094%; top: 71.0604%;\" type=\"button\">T</button>\n      <button aria-label=\"Taxi #4 (id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0004); simbol T; poziție x 176.2 m, z 2.1 m; neurmărit; selectabil; tip Taxi\" aria-pressed=\"false\" class=\"map-selection__marker\" data-kind=\"TAXI\" data-label=\"Taxi #4\" data-marker-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0004\" data-selectable=\"true\" data-selected=\"false\" data-slot=\"4\" data-vehicle-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0004\" style=\"left: 28.9396%; top: 91.0094%;\" type=\"button\">T</button>\n      <button aria-label=\"Taxi #5 (id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0005); simbol T; poziție x 3.8 m, z 177.9 m; neurmărit; selectabil; tip Taxi\" aria-pressed=\"false\" class=\"map-selection__marker\" data-kind=\"TAXI\" data-label=\"Taxi #5\" data-marker-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0005\" data-selectable=\"true\" data-selected=\"false\" data-slot=\"5\" data-vehicle-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0005\" style=\"left: 9.1854%; top: 70.8656%;\" type=\"button\">T</button>\n      <button aria-label=\"Taxi #6 (id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0006); simbol T; poziție x 2.1 m, z 183.8 m; neurmărit; selectabil; tip Taxi\" aria-pressed=\"false\" class=\"map-selection__marker\" data-kind=\"TAXI\" data-label=\"Taxi #6\" data-marker-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0006\" data-selectable=\"true\" data-selected=\"false\" data-slot=\"6\" data-vehicle-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0006\" style=\"left: 8.9906%; top: 70.1896%;\" type=\"button\">T</button>\n      <button aria-label=\"Taxi #7 (id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0007); simbol T; poziție x -2.1 m, z 352.5 m; neurmărit; selectabil; tip Taxi\" aria-pressed=\"false\" class=\"map-selection__marker\" data-kind=\"TAXI\" data-label=\"Taxi #7\" data-marker-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0007\" data-selectable=\"true\" data-selected=\"false\" data-slot=\"7\" data-vehicle-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0007\" style=\"left: 8.5094%; top: 50.8594%;\" type=\"button\">T</button>\n      <button aria-label=\"Taxi #8 (id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0008); simbol T; poziție x 176.2 m, z 182.1 m; neurmărit; selectabil; tip Taxi\" aria-pressed=\"false\" class=\"map-selection__marker\" data-kind=\"TAXI\" data-label=\"Taxi #8\" data-marker-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0008\" data-selectable=\"true\" data-selected=\"false\" data-slot=\"8\" data-vehicle-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0008\" style=\"left: 28.9396%; top: 70.3844%;\" type=\"button\">T</button>\n      <button aria-label=\"Taxi #9 (id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0009); simbol T; poziție x 3.8 m, z 357.9 m; neurmărit; selectabil; tip Taxi\" aria-pressed=\"false\" class=\"map-selection__marker\" data-kind=\"TAXI\" data-label=\"Taxi #9\" data-marker-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0009\" data-selectable=\"true\" data-selected=\"false\" data-slot=\"9\" data-vehicle-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0009\" style=\"left: 9.1854%; top: 50.2406%;\" type=\"button\">T</button>\n      <button aria-label=\"Taxi #10 (id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0010); simbol T; poziție x 3.8 m, z 354.2 m; neurmărit; selectabil; tip Taxi\" aria-pressed=\"false\" class=\"map-selection__marker\" data-kind=\"TAXI\" data-label=\"Taxi #10\" data-marker-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0010\" data-selectable=\"true\" data-selected=\"false\" data-slot=\"10\" data-vehicle-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0010\" style=\"left: 9.1854%; top: 50.6646%;\" type=\"button\">T</button>\n      <button aria-label=\"Taxi #11 (id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0011); simbol T; poziție x 2.1 m, z 367.5 m; neurmărit; selectabil; tip Taxi\" aria-pressed=\"false\" class=\"map-selection__marker\" data-kind=\"TAXI\" data-label=\"Taxi #11\" data-marker-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0011\" data-selectable=\"true\" data-selected=\"false\" data-slot=\"11\" data-vehicle-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0011\" style=\"left: 8.9906%; top: 49.1406%;\" type=\"button\">T</button>\n      <button aria-label=\"Taxi #12 (id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0012); simbol T; poziție x -2.1 m, z 536.2 m; neurmărit; selectabil; tip Taxi\" aria-pressed=\"false\" class=\"map-selection__marker\" data-kind=\"TAXI\" data-label=\"Taxi #12\" data-marker-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0012\" data-selectable=\"true\" data-selected=\"false\" data-slot=\"12\" data-vehicle-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0012\" style=\"left: 8.5094%; top: 29.8104%;\" type=\"button\">T</button>\n      <button aria-label=\"Taxi #13 (id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0013); simbol T; poziție x 176.2 m, z 362.1 m; neurmărit; selectabil; tip Taxi\" aria-pressed=\"false\" class=\"map-selection__marker\" data-kind=\"TAXI\" data-label=\"Taxi #13\" data-marker-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0013\" data-selectable=\"true\" data-selected=\"false\" data-slot=\"13\" data-vehicle-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0013\" style=\"left: 28.9396%; top: 49.7594%;\" type=\"button\">T</button>\n      <button aria-label=\"Taxi #14 (id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0014); simbol T; poziție x 176.2 m, z 365.8 m; neurmărit; selectabil; tip Taxi\" aria-pressed=\"false\" class=\"map-selection__marker\" data-kind=\"TAXI\" data-label=\"Taxi #14\" data-marker-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0014\" data-selectable=\"true\" data-selected=\"false\" data-slot=\"14\" data-vehicle-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0014\" style=\"left: 28.9396%; top: 49.3354%;\" type=\"button\">T</button>\n      <button aria-label=\"Taxi #15 (id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0015); simbol T; poziție x 3.8 m, z 537.9 m; neurmărit; selectabil; tip Taxi\" aria-pressed=\"false\" class=\"map-selection__marker\" data-kind=\"TAXI\" data-label=\"Taxi #15\" data-marker-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0015\" data-selectable=\"true\" data-selected=\"false\" data-slot=\"15\" data-vehicle-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0015\" style=\"left: 9.1854%; top: 29.6156%;\" type=\"button\">T</button>\n      <button aria-label=\"Taxi #16 (id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0016); simbol T; poziție x 2.1 m, z 543.8 m; neurmărit; selectabil; tip Taxi\" aria-pressed=\"false\" class=\"map-selection__marker\" data-kind=\"TAXI\" data-label=\"Taxi #16\" data-marker-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0016\" data-selectable=\"true\" data-selected=\"false\" data-slot=\"16\" data-vehicle-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0016\" style=\"left: 8.9906%; top: 28.9396%;\" type=\"button\">T</button>\n      <button aria-label=\"Taxi #17 (id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0017); simbol T; poziție x -2.1 m, z 716.2 m; neurmărit; selectabil; tip Taxi\" aria-pressed=\"false\" class=\"map-selection__marker\" data-kind=\"TAXI\" data-label=\"Taxi #17\" data-marker-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0017\" data-selectable=\"true\" data-selected=\"false\" data-slot=\"17\" data-vehicle-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0017\" style=\"left: 8.5094%; top: 9.1854%;\" type=\"button\">T</button>\n      <button aria-label=\"Taxi #18 (id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0018); simbol T; poziție x 176.2 m, z 542.1 m; neurmărit; selectabil; tip Taxi\" aria-pressed=\"false\" class=\"map-selection__marker\" data-kind=\"TAXI\" data-label=\"Taxi #18\" data-marker-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0018\" data-selectable=\"true\" data-selected=\"false\" data-slot=\"18\" data-vehicle-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0018\" style=\"left: 28.9396%; top: 29.1344%;\" type=\"button\">T</button>\n      <button aria-label=\"Taxi #19 (id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0019); simbol T; poziție x 3.8 m, z 717.9 m; neurmărit; selectabil; tip Taxi\" aria-pressed=\"false\" class=\"map-selection__marker\" data-kind=\"TAXI\" data-label=\"Taxi #19\" data-marker-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0019\" data-selectable=\"true\" data-selected=\"false\" data-slot=\"19\" data-vehicle-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0019\" style=\"left: 9.1854%; top: 8.9906%;\" type=\"button\">T</button>\n      <button aria-label=\"Taxi #20 (id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0020); simbol T; poziție x 176.2 m, z 722.1 m; neurmărit; selectabil; tip Taxi\" aria-pressed=\"false\" class=\"map-selection__marker\" data-kind=\"TAXI\" data-label=\"Taxi #20\" data-marker-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0020\" data-selectable=\"true\" data-selected=\"false\" data-slot=\"20\" data-vehicle-id=\"id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0020\" style=\"left: 28.9396%; top: 8.5094%;\" type=\"button\">T</button>\n      <button aria-label=\"Civil #21 (id-v1:7:vehicle20:city:fleet-065:fleet8:CIVILIAN4:0021); simbol C; poziție x 3.8 m, z -2.1 m; neurmărit; selectabil; tip Civil\" aria-pressed=\"false\" class=\"map-selection__marker\" data-kind=\"CIVIL\" data-label=\"Civil #21\" data-marker-id=\"id-v1:7:vehicle20:city:fleet-065:fleet8:CIVILIAN4:0021\" data-selectable=\"true\" data-selected=\"false\" data-slot=\"21\" data-vehicle-id=\"id-v1:7:vehicle20:city:fleet-065:fleet8:CIVILIAN4:0021\" style=\"left: 9.1854%; top: 91.4906%;\" type=\"button\">C</button>\n      <button aria-label=\"Civil #22 (id-v1:7:vehicle20:city:fleet-065:fleet8:CIVILIAN4:0022); simbol C; poziție x 2.1 m, z 3.8 m; neurmărit; selectabil; tip Civil\" aria-pressed=\"false\" class=\"map-selection__marker\" data-kind=\"CIVIL\" data-label=\"Civil #22\" data-marker-id=\"id-v1:7:vehicle20:city:fleet-065:fleet8:CIVILIAN4:0022\" data-selectable=\"true\" data-selected=\"false\" data-slot=\"22\" data-vehicle-id=\"id-v1:7:vehicle20:city:fleet-065:fleet8:CIVILIAN4:0022\" style=\"left: 8.9906%; top: 90.8146%;\" type=\"button\">C</button>\n      <button aria-label=\"Civil #23 (id-v1:7:vehicle20:city:fleet-065:fleet8:CIVILIAN4:0023); simbol C; poziție x -2.1 m, z 176.2 m; neurmărit; selectabil; tip Civil\" aria-pressed=\"false\" class=\"map-selection__marker\" data-kind=\"CIVIL\" data-label=\"Civil #23\" data-marker-id=\"id-v1:7:vehicle20:city:fleet-065:fleet8:CIVILIAN4:0023\" data-selectable=\"true\" data-selected=\"false\" data-slot=\"23\" data-vehicle-id=\"id-v1:7:vehicle20:city:fleet-065:fleet8:CIVILIAN4:0023\" style=\"left: 8.5094%; top: 71.0604%;\" type=\"button\">C</button>\n    </div>\n    <div aria-describedby=\"minimap-incidents-description\" aria-label=\"Incidente pe hartă · 0 active · AVAILABLE\" class=\"minimap-incidents\" data-count=\"0\" data-health=\"AVAILABLE\" data-tick=\"62\" role=\"group\">\n      <p class=\"minimap-incidents__description\">Niciun incident activ.</p>\n    </div>\n  </div>\n  <p aria-live=\"polite\" class=\"minimap__status\" role=\"status\">\n    <span class=\"minimap__route\">Rută: 4 benzi · 0% · 697 m</span>\n    <span class=\"minimap__eta\">~52 s</span>\n    <span class=\"minimap__progress\">0% · 697 m</span>\n  </p>\n  <p class=\"minimap__description\">Minimapă nord-sus (X est, Z nord), harta neighbourhood-compact-v1. Taxi #2 (id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0002). Poziția taxiului nu este disponibilă. Progres 0% · 697 m. Rută: 4 benzi · 0% · 697 m. ETA ~52 s. Ridicare la zona sz:0-0; predare la zona sz:0-1.</p>\n</section>",
+      "stats": {
+        "version": "281-live-minimap-v1",
+        "mapDynamicPaints": 1,
+        "mapRouteLanes": 4,
+        "selectionMarkers": 23,
+        "selectionWrites": 168,
+        "incidentMarkers": 0,
+        "listeners": 23,
+        "globalListeners": 0
+      }
+    }
+  ],
+  "layouts": [
+    {
+      "id": "1280x720",
+      "region": "STANDARD",
+      "effectiveWidthPx": 1280,
+      "effectiveHeightPx": 720,
+      "hudWidthPx": 352,
+      "minimapWidthPx": 240,
+      "overlaps": 0,
+      "overlapsDetail": "",
+      "essentialsVisible": 5,
+      "minFontPx": 12,
+      "legible": true
+    },
+    {
+      "id": "1920x1080",
+      "region": "LARGE",
+      "effectiveWidthPx": 1920,
+      "effectiveHeightPx": 1080,
+      "hudWidthPx": 352,
+      "minimapWidthPx": 240,
+      "overlaps": 0,
+      "overlapsDetail": "",
+      "essentialsVisible": 5,
+      "minFontPx": 12,
+      "legible": true
+    },
+    {
+      "id": "zoom-150",
+      "region": "COMPACT",
+      "effectiveWidthPx": 853.33,
+      "effectiveHeightPx": 480,
+      "hudWidthPx": 240,
+      "minimapWidthPx": 160,
+      "overlaps": 0,
+      "overlapsDetail": "",
+      "essentialsVisible": 5,
+      "minFontPx": 18,
+      "legible": true
+    }
+  ],
+  "checks": [
+    {
+      "name": "live-version",
+      "expected": "281-live-minimap-v1",
+      "actual": "281-live-minimap-v1",
+      "pass": true,
+      "detail": "the live composition mounts 074/076/281"
+    },
+    {
+      "name": "route-ready",
+      "expected": "READY",
+      "actual": "READY",
+      "pass": true,
+      "detail": "the minimap draws the certified route"
+    },
+    {
+      "name": "route-lanes",
+      "expected": 4,
+      "actual": 4,
+      "pass": true,
+      "detail": "exactly the 064 route lane count"
+    },
+    {
+      "name": "route-points",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "the route has projected geometry"
+    },
+    {
+      "name": "markers-all",
+      "expected": 23,
+      "actual": 23,
+      "pass": true,
+      "detail": "all real taxis and civilians from the registry"
+    },
+    {
+      "name": "markers-taxis",
+      "expected": 20,
+      "actual": 20,
+      "pass": true,
+      "detail": "real taxi markers"
+    },
+    {
+      "name": "markers-civilians",
+      "expected": 3,
+      "actual": 3,
+      "pass": true,
+      "detail": "real civilian markers"
+    },
+    {
+      "name": "incidents",
+      "expected": 1,
+      "actual": 1,
+      "pass": true,
+      "detail": "one real 065 collision marker"
+    },
+    {
+      "name": "incident-identity",
+      "expected": "281:report:collision",
+      "actual": "281:report:collision",
+      "pass": true,
+      "detail": "the incident keeps the 065 factId"
+    },
+    {
+      "name": "selected-vehicle",
+      "expected": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0002",
+      "actual": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0002",
+      "pass": true,
+      "detail": "the followed vehicle is the selected taxi"
+    },
+    {
+      "name": "hud-session",
+      "expected": "Academia",
+      "actual": "Academia",
+      "pass": true,
+      "detail": "the HUD shows the real session kind"
+    },
+    {
+      "name": "hud-objective",
+      "expected": "Du-te la pasagerul din sz:0-0",
+      "actual": "Du-te la pasagerul din sz:0-0",
+      "pass": true,
+      "detail": "the HUD objective comes from the real ride zones"
+    },
+    {
+      "name": "hud-stance",
+      "expected": "În desfășurare",
+      "actual": "În desfășurare",
+      "pass": true,
+      "detail": "the HUD shows the real ride state"
+    },
+    {
+      "name": "hud-mode",
+      "expected": "Conduce AI-ul",
+      "actual": "Conduce AI-ul",
+      "pass": true,
+      "detail": "the HUD mode is the accepted AUTO mode"
+    },
+    {
+      "name": "marker-identity-stable",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "a moved vehicle reuses the same marker node"
+    },
+    {
+      "name": "click-selection",
+      "expected": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0002",
+      "actual": "id-v1:7:vehicle20:city:fleet-065:fleet4:TAXI4:0002",
+      "pass": true,
+      "detail": "the marker click emits the camera-only intention"
+    },
+    {
+      "name": "no-position-explicit",
+      "expected": "MISSING",
+      "actual": "MISSING",
+      "pass": true,
+      "detail": "a missing position stays null, not zero"
+    },
+    {
+      "name": "no-invented-speed",
+      "expected": "— km/h",
+      "actual": "— km/h",
+      "pass": true,
+      "detail": "a missing speed is a dash, not 0 km/h"
+    },
+    {
+      "name": "no-invented-eta",
+      "expected": "Fără estimare",
+      "actual": "Fără estimare",
+      "pass": true,
+      "detail": "a missing ride has no ETA"
+    },
+    {
+      "name": "no-invented-progress",
+      "expected": "—",
+      "actual": "—",
+      "pass": true,
+      "detail": "a missing ride has no progress"
+    },
+    {
+      "name": "empty-session",
+      "expected": "session:065",
+      "actual": "session:065",
+      "pass": true,
+      "detail": "an unknown session kind shows the real id"
+    },
+    {
+      "name": "empty-stance",
+      "expected": "Fără cursă",
+      "actual": "Fără cursă",
+      "pass": true,
+      "detail": "the HUD says there is no ride"
+    },
+    {
+      "name": "position-state-attr",
+      "expected": "MISSING",
+      "actual": "MISSING",
+      "pass": true,
+      "detail": "the minimap exposes the explicit position state"
+    },
+    {
+      "name": "rate-map",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "1 dynamic paints in 1 s"
+    },
+    {
+      "name": "rate-selection",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "1 selection updates in 1 s"
+    },
+    {
+      "name": "rate-incidents",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "1 incident updates in 1 s"
+    },
+    {
+      "name": "no-global-listeners",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "the overlay installs no global key listener"
+    },
+    {
+      "name": "layout-1280x720-overlap",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no critical overlap"
+    },
+    {
+      "name": "layout-1280x720-essentials",
+      "expected": 5,
+      "actual": 5,
+      "pass": true,
+      "detail": "all five essential controls stay visible"
+    },
+    {
+      "name": "layout-1280x720-font",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "12 CSS px at the requested zoom"
+    },
+    {
+      "name": "layout-1920x1080-overlap",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no critical overlap"
+    },
+    {
+      "name": "layout-1920x1080-essentials",
+      "expected": 5,
+      "actual": 5,
+      "pass": true,
+      "detail": "all five essential controls stay visible"
+    },
+    {
+      "name": "layout-1920x1080-font",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "12 CSS px at the requested zoom"
+    },
+    {
+      "name": "layout-zoom-150-overlap",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": "no critical overlap"
+    },
+    {
+      "name": "layout-zoom-150-essentials",
+      "expected": 5,
+      "actual": 5,
+      "pass": true,
+      "detail": "all five essential controls stay visible"
+    },
+    {
+      "name": "layout-zoom-150-font",
+      "expected": true,
+      "actual": true,
+      "pass": true,
+      "detail": "18 CSS px at the requested zoom"
+    }
+  ],
+  "summary": {
+    "checks": 36,
+    "passed": 36,
+    "pass": true
+  }
+}

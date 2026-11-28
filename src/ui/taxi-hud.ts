@@ -35,11 +35,14 @@ export function createTaxiHud(host: HTMLElement) {
     taxiRow = element('div'),
     taxiCaption = leaf('span', 'Taxi'),
     taxiValue = leaf('span', ''),
+    sessionValue = leaf('span', ''),
     rideList = element('dl'),
     stageLabel = leaf('dt', 'Etapă'),
     stageValue = leaf('dd', ''),
     objectiveLabel = leaf('dt', 'Obiectiv'),
     objectiveValue = leaf('dd', ''),
+    stanceLabel = leaf('dt', 'Stare'),
+    stanceValue = leaf('dd', ''),
     routeLabel = leaf('dt', 'Rută'),
     routeValue = leaf('dd', ''),
     etaLabel = leaf('dt', 'ETA'),
@@ -61,13 +64,15 @@ export function createTaxiHud(host: HTMLElement) {
   modeSymbol.setAttribute('aria-hidden', 'true');
   modeSymbol.className = 'taxi-hud__symbol';
   taxiRow.className = 'taxi-hud__taxi';
+  sessionValue.className = 'taxi-hud__session';
   rideList.className = 'taxi-hud__ride';
+  stanceValue.className = 'taxi-hud__stance';
   details.className = 'taxi-hud__details';
   speedValue.setAttribute('aria-live', 'off');
   speedUnit.className = 'taxi-hud__unit';
   speedRow.append(speedCaption, speedValue, speedUnit);
   modeRow.append(modeSymbol, modeLabel);
-  taxiRow.append(taxiCaption, taxiValue);
+  taxiRow.append(taxiCaption, taxiValue, sessionValue);
   rideList.append(
     stageLabel,
     stageValue,
@@ -81,6 +86,8 @@ export function createTaxiHud(host: HTMLElement) {
     progressValue,
     serviceLabel,
     serviceValue,
+    stanceLabel,
+    stanceValue,
   );
   const DETAIL_LABELS = [
     'Taxi',
@@ -92,6 +99,7 @@ export function createTaxiHud(host: HTMLElement) {
     'Interval ETA',
     'Distanță rămasă',
     'Motiv ETA',
+    'Sesiune',
   ] as const;
   const detailLabels: HTMLElement[] = [],
     detailValues: HTMLElement[] = [];
@@ -122,10 +130,13 @@ export function createTaxiHud(host: HTMLElement) {
     modeLabel,
     taxiCaption,
     taxiValue,
+    sessionValue,
     stageLabel,
     stageValue,
     objectiveLabel,
     objectiveValue,
+    stanceLabel,
+    stanceValue,
     routeLabel,
     routeValue,
     etaLabel,
@@ -168,8 +179,12 @@ export function createTaxiHud(host: HTMLElement) {
     attribute(root, 'data-mode', view.mode);
     set(taxiValue, p.taxi);
     attribute(taxiValue, 'aria-label', p.taxiAccessible);
+    set(sessionValue, p.session);
+    attribute(sessionValue, 'aria-label', p.sessionAccessible);
     set(stageValue, p.stage);
     set(objectiveValue, p.objective);
+    set(stanceValue, p.stance);
+    attribute(stanceValue, 'data-stance', p.stanceKey);
     set(routeValue, p.route);
     set(etaValue, p.eta);
     attribute(etaValue, 'aria-label', p.etaAccessible);
@@ -177,8 +192,13 @@ export function createTaxiHud(host: HTMLElement) {
     set(serviceValue, p.service);
     attribute(root, 'data-ride', p.rideKey);
     attribute(root, 'data-stance', p.foreign ? 'FOREIGN' : p.terminal ? 'TERMINAL' : 'ACTIVE');
+    attribute(root, 'data-session', view.session.kind);
     attribute(root, 'data-service', view.ride?.eta.serviceState ?? 'NONE');
-    attribute(root, 'aria-label', `HUD de condus · ${p.mode.label} · ${p.taxi} · ${p.stage}`);
+    attribute(
+      root,
+      'aria-label',
+      `HUD de condus · ${p.mode.label} · ${p.taxi} · sesiune ${p.session} · ${p.stage} · ${p.stance}`,
+    );
     const values = p.details.map((detail) => detail.value);
     for (let index = 0; index < detailValues.length; index += 1)
       set(detailValues[index]!, values[index] ?? '—');
@@ -200,6 +220,8 @@ export function createTaxiHud(host: HTMLElement) {
         const changedIdentity =
           current === null ||
           current.mode !== view.mode ||
+          current.session.id !== view.session.id ||
+          current.session.kind !== view.session.kind ||
           (current.taxi?.vehicleId ?? null) !== (view.taxi?.vehicleId ?? null) ||
           (current.ride?.rideId ?? null) !== (view.ride?.rideId ?? null) ||
           (current.ride?.state ?? null) !== (view.ride?.state ?? null);
@@ -225,6 +247,11 @@ export function createTaxiHud(host: HTMLElement) {
         disposed,
         retainedProjections: current ? 1 : 0,
       }),
+    /** The retained accepted snapshot and its projection; `null` before the first update. */
+    getView: () =>
+      disposed || current === null
+        ? null
+        : Object.freeze({ snapshot: current, projection: projectTaxiHud(current) }),
     dispose() {
       mutate(() => {
         if (disposed) return;

@@ -159,8 +159,14 @@ Fixture-ul a expus câteva defecte reale, reparate fără redesign:
   contract coincid cu dreptunghiurile reale (padding și bordură incluse). Fără această regulă,
   coloana flotei depășea panoul central cu ~11 px la 1280×720.
 - Butoanele din rândul de mod al HUD-ului au padding compact, ca rândul să nu umfle HUD-ul, iar
-  rezerva `--layout-hud-reserve` (22rem) acoperă HUD-ul real (~337 px la 1280×720), astfel încât
-  coloana flotei să înceapă sub el, nu peste el.
+  rezerva `--layout-hud-reserve` (24rem din 281) acoperă HUD-ul real (~338 px la 1280×720), astfel
+  încât coloana flotei să înceapă sub el, nu peste el.
+- Bara shell-ului 260 stă în banda centrală dintre coloana HUD și minimapă
+  (`left`/`right` = lățimea coloanelor + 2×gap), deci nu acoperă nici viteza, nici harta, nici
+  minimapa. La 150% zoom banda are ~405 px și bara se rearanjează pe trei rânduri, nu peste HUD.
+- HUD-ul economiei live 266 este un status secundar sub HUD, în aceeași coloană stângă, cu scroll
+  intern; nu mai acoperă viteza sau modul. La compact este îngustat la 14rem, ca să nu intre peste
+  game HUD-ul central.
 
 ## Fixture și măsurare
 
@@ -176,6 +182,12 @@ efectiv), plus tabloul și setările la 1280×720, și verifică: nicio suprapun
 și controalele esențiale, toate esențialele vizibile, 30 de rânduri, lista scrollabilă, panoul central
 scrollabil, `minFontPx >= 12`, line-height ≥ 1.4 și încadrarea în viewport. Fără Playwright scriptul
 scrie un SKIP explicit și iese cu 0; PNG-urile și `capture.json` apar numai după o rulare reală.
+
+Proba reală 281 (`npm run minimap:hud:probe`) măsoară în Chrome exact HUD-ul, minimapa, bara
+shell-ului, game HUD-ul și statusul economiei la cele trei breakpoint-uri. Rezultatul local:
+0 suprapuneri între HUD/minimapă/bară/game HUD/economie, HUD 352×338 px la 1280×720, minimapă
+240×389 px, font minim 12 px la zoom 150%; capturile sunt în
+[Evidence/281-minimap-hud](Evidence/281-minimap-hud/README.md).
 
 ## Verificare
 

@@ -74,6 +74,7 @@ hud.update(
     tick: 120,
     speedMps: 12.5,
     mode: 'AUTO',
+    session: { id: 'session:153', kind: 'ACADEMY' },
     taxi: {
       vehicleId: 'taxi:153:07',
       slot: 7,

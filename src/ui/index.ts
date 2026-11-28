@@ -67,6 +67,25 @@ export type {
 } from './mission-tutorial-format';
 export { createMinimap } from './minimap';
 export type { MinimapOptions } from './minimap';
+export { createLiveMinimap, LIVE_MINIMAP_VERSION } from './minimap-live';
+export type { LiveMinimap, LiveMinimapOptions } from './minimap-live';
+export {
+  createMinimapIncidentLayer,
+  MINIMAP_INCIDENT_LIMITS,
+  MINIMAP_INCIDENTS_VERSION,
+  parseMinimapIncidentSnapshot,
+  projectMinimapIncidents,
+} from './minimap-incidents';
+export type {
+  MinimapIncident,
+  MinimapIncidentHealth,
+  MinimapIncidentKind,
+  MinimapIncidentLayer,
+  MinimapIncidentLayerOptions,
+  MinimapIncidentMarker,
+  MinimapIncidentsProjection,
+  MinimapIncidentSnapshot,
+} from './minimap-incidents';
 export {
   createPassengerVisualPresenter,
   PASSENGER_VISUAL_ADAPTER_LIMITS,
@@ -556,6 +575,8 @@ export {
   parseTaxiHudSnapshot,
   projectTaxiHud,
   rideStageView,
+  rideStanceView,
+  sessionView,
   TAXI_HUD_LIMITS,
   TAXI_HUD_VERSION,
 } from './taxi-hud-format';
@@ -567,8 +588,13 @@ export type {
   TaxiHudProjection,
   TaxiHudRide,
   TaxiHudServiceState,
+  TaxiHudSession,
+  TaxiHudSessionKind,
+  TaxiHudSessionView,
   TaxiHudSnapshot,
   TaxiHudSpeedView,
+  TaxiHudStanceKey,
+  TaxiHudStanceView,
   TaxiHudStageView,
   TaxiHudTaxi,
 } from './taxi-hud-format';

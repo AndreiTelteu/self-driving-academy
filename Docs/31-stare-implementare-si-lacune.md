@@ -31,7 +31,7 @@ Buildul curent pornește din `src/main.ts` și oferă:
 - campania live 275 peste trackerul 116, tutorialul 117 și ledgerul 125: etapa 1 pornește automat, obiectivele se calculează din evenimente 007 reale, tutorialul are cinci pași separați de learning, iar panoul `Misiuni` arată progresul, fereastra, bugetul, motivul de eșec și reluarea;
 - misiunile zilnice și XP-ul 276 peste 211/212/213/125: exact trei obiective pe ziua reală, cel puțin unul MANUAL fără learning, XP idempotent din daily, campanie și timp activ, nivel monoton și panoul `Progres` cu sold, istoric, fereastră și motivul expirării.
 
-Nu sunt montate: minimapa (281), sunet, decorul destructibil și provocările Haos, fizica Rapier și regulile de trafic. Cursele live, pickup/dropoff, pasagerul, ETA și HUD-ul de cursă sunt montate prin 265; AUTO/MANUAL/LEARNING și segmentele 069 sunt montate prin 271; persistența prin 278, iar setările, remaparea și sliderele prin 279.
+Sunt montate minimapa (281) și HUD-ul complet; nu sunt montate sunetul, decorul destructibil și provocările Haos, fizica Rapier și regulile de trafic. Cursele live, pickup/dropoff, pasagerul, ETA și HUD-ul de cursă sunt montate prin 265; AUTO/MANUAL/LEARNING și segmentele 069 sunt montate prin 271; persistența prin 278, iar setările, remaparea și sliderele prin 279.
 
 ## Matricea lacunelor
 
@@ -512,6 +512,11 @@ progres sau XP. Focusul, Tab, Escape, contrastul și lipsa listenerilor globali 
 **Documentație:** [Interfață, cameră și control](08-interfata-camera-si-control.md) · [Reglaje HUD și cameră](27-reglaje-hud-si-camera.md) · [Minimapa](minimap.md) · [HUD](hud.md) · [Layout responsive](responsive-layout.md) · [Starea implementării și lacunele](31-stare-implementare-si-lacune.md)
 
 **PBI:** [281](../PBI/README.md) · **Dependențe:** 260, 263.
+
+**Stare:** implementare locală la 28 noiembrie 2026. Minimapa 074/076/281 este montată în joc,
+HUD-ul 073 arată sesiunea și starea cursei, iar raportul determinist și proba de browser sunt în
+[Evidence/281-minimap-hud](Evidence/281-minimap-hud/README.md). Mutarea pe board și integrarea
+rămân în sarcina orchestratorului.
 
 ### 282 — Fizica Rapier live pentru jucător și AI
 

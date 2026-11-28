@@ -1,6 +1,19 @@
-import type { EtaSnapshot, FleetRegistry, RideEta, RideLifecycle, RideRecord } from '../fleet';
+import type {
+  EtaSnapshot,
+  FleetHealth,
+  FleetRegistry,
+  RideEta,
+  RideLifecycle,
+  RideRecord,
+} from '../fleet';
 import type { LaneGraph, RoadMap } from '../world';
-import type { MinimapFrame, MinimapFrameRoute, MinimapGeometry, MinimapRouteReason } from '../ui';
+import type {
+  MinimapFrame,
+  MinimapFrameRoute,
+  MinimapGeometry,
+  MinimapIncidentSnapshot,
+  MinimapRouteReason,
+} from '../ui';
 
 /** The real 032 map and 033 graph that own every line and marker drawn by 074. */
 export interface MinimapGeometrySources {
@@ -11,6 +24,11 @@ export interface MinimapGeometrySources {
 /** One host frame: accepted taxi selection and 005 readback plus the real 061/064 ride state. */
 export interface MinimapFrameInput {
   readonly taxiId: string;
+  /**
+   * PBI 281: presentation-only slot for a composition car that is not in the 057 registry (the
+   * two seeded cars use the same 9998/9999 slots as 263). It never creates a fleet identity.
+   */
+  readonly taxiSlot?: number;
   readonly tick: number;
   readonly positionM: { readonly x: number; readonly y: number; readonly z: number } | null;
   readonly headingRad?: number | null;
@@ -162,15 +180,18 @@ export function readMinimapGeometry(sources: MinimapGeometrySources): MinimapGeo
 export function readMinimapFrame(sources: MinimapSources, frame: MinimapFrameInput): MinimapFrame {
   const context = sources.fleet.context(),
     vehicle = sources.fleet.get(frame.taxiId),
+    slot = vehicle?.slot ?? frame.taxiSlot,
     taxi =
-      vehicle === undefined
-        ? null
-        : Object.freeze({ vehicleId: vehicle.vehicleId, slot: vehicle.slot }),
+      vehicle !== undefined
+        ? Object.freeze({ vehicleId: vehicle.vehicleId, slot: vehicle.slot })
+        : slot === undefined
+          ? null
+          : Object.freeze({ vehicleId: frame.taxiId, slot }),
     ride =
-      taxi === null
+      vehicle === undefined
         ? undefined
         : frame.rideId === undefined || frame.rideId === null
-          ? activeRideFor(sources.lifecycle, taxi.vehicleId)
+          ? activeRideFor(sources.lifecycle, frame.taxiId)
           : sources.lifecycle.ride(frame.rideId),
     rideView =
       ride === undefined
@@ -213,5 +234,73 @@ export function readMinimapFrame(sources: MinimapSources, frame: MinimapFrameInp
     headingRad,
     ride: rideView,
     route,
+  });
+}
+
+/** One host frame for the incident markers: accepted tick and the current 005/024 readback. */
+export interface MinimapIncidentFrame {
+  readonly sessionId: string;
+  readonly worldEpoch: number;
+  readonly tick: number;
+  /** Current real position of a vehicle; `null` when the host does not know it. */
+  readonly positions: (vehicleId: string) => { readonly x: number; readonly z: number } | null;
+}
+
+export interface MinimapIncidentSources {
+  /** The real 065 health owner; `undefined` is reported as unavailable, never as zero incidents. */
+  readonly health: FleetHealth | undefined;
+}
+
+/**
+ * PBI 281 composition root for incident markers. Only a currently `DAMAGED` taxi whose 065 cause is
+ * `COLLISION_DAMAGE` produces a marker, at its current authoritative position. The stable identity
+ * is the 065 `factId`; a taxi with a missing position is omitted instead of being placed at (0, 0).
+ */
+export function readMinimapIncidents(
+  sources: MinimapIncidentSources,
+  frame: MinimapIncidentFrame,
+): MinimapIncidentSnapshot {
+  if (sources.health === undefined)
+    return Object.freeze({
+      schemaVersion: 1 as const,
+      units: 'SI' as const,
+      version: '281-minimap-incidents-v1' as const,
+      sessionId: frame.sessionId,
+      worldEpoch: frame.worldEpoch,
+      tick: frame.tick,
+      health: 'UNAVAILABLE' as const,
+      incidents: Object.freeze([]),
+    });
+  const incidents = sources.health
+    .list()
+    .filter((entry) => entry.state === 'DAMAGED' && entry.cause === 'COLLISION_DAMAGE')
+    .flatMap((entry) => {
+      const factId = entry.factId,
+        position = frame.positions(entry.taxiId);
+      if (factId === null || position === null) return [];
+      if (!Number.isFinite(position.x) || !Number.isFinite(position.z)) return [];
+      return [
+        Object.freeze({
+          incidentId: factId,
+          vehicleId: entry.taxiId,
+          kind: 'COLLISION_DAMAGE' as const,
+          positionM: Object.freeze({ x: position.x, z: position.z }),
+          tick: entry.tick,
+          label: entry.taxiId,
+        }),
+      ];
+    })
+    .sort((left, right) =>
+      left.incidentId < right.incidentId ? -1 : left.incidentId > right.incidentId ? 1 : 0,
+    );
+  return Object.freeze({
+    schemaVersion: 1 as const,
+    units: 'SI' as const,
+    version: '281-minimap-incidents-v1' as const,
+    sessionId: frame.sessionId,
+    worldEpoch: frame.worldEpoch,
+    tick: frame.tick,
+    health: 'AVAILABLE' as const,
+    incidents: Object.freeze(incidents),
   });
 }

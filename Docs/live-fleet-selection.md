@@ -23,7 +23,7 @@ eliberarea rămân comenzile proprietarului compunerii, nu ale panoului.
   țintei camerei și rândul scaunului `PLAYER` rămân vizibile indiferent de filtru, marcați
   `păstrat de filtru`; nu sunt duplicate.
 - Harta refolosește markerii 076 (`vehicleId`, `T`/`C`, `aria-pressed`) peste geometria reală 032/033
-  și transformarea 074. Minimapa completă și HUD-ul rămân la 281.
+  și transformarea 074. Minimapa completă și HUD-ul sunt montate prin 281.
 
 ## Preluarea unei mașini AI
 
